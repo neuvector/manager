@@ -1,0 +1,68 @@
+<div
+  ng-controller="FederalConfigController as sysCtrl"
+>
+  <div class="col-sm-12">
+    <label class="form-title">
+      {{'setting.WEBHOOKS' | translate}}
+    </label>
+  </div>
+  <div class="col-sm-12">
+    <table class="table table-bordered table-hover bg-white">
+      <tr style="font-weight: bold; background-color: #edf3f7;">
+         <td style="width:20%" translate="{{'setting.webhook.NAME'}}"></td>
+         <td style="width:30%" translate="{{'setting.webhook.URL'}}"></td>
+         <td style="width:17%" translate="{{'setting.webhook.WH_TYPE'}}"></td>
+         <td style="width:10%" translate="{{'setting.webhook.STATUS'}}"></td>
+         <td style="width:13%" translate="{{'setting.webhook.TYPE'}}"></td>
+         <td style="width:10%" ng-show="isWebhookAuthorized" translate="{{group.dlp.gridHeader.ACTION}}"></td>
+      </tr>
+      <tr ng-repeat="webhook in sysCtrl.webhooks track by $index">
+        <td class="webhook-text-box-1">
+          <span ng-if="sysCtrl.webhooks[$index].isNew" editable-text="webhook.name" e-name="name" e-id="{{'webhook_name_' + $index}}" e-form="webhookForm" e-ng-style="{'width': widthOfUrlBox1}" onbeforesave="sysCtrl.checkName($data, $index)" e-required="">{{ webhook.name || &apos;empty&apos; }}</span>
+          <span ng-if="!sysCtrl.webhooks[$index].isNew">{{ webhook.name || &apos;empty&apos; }}</span>
+        </td>
+        <td class="auto-hide webhook-text-box-2" style="max-width: 220px;" uib-tooltip="{{webhook.url}}" tooltip-enable="false" show-tooltip-on-text-overflow>
+          <span editable-text="webhook.url" e-name="url" e-form="webhookForm" e-ng-style="{'width': widthOfUrlBox2}" onbeforesave="sysCtrl.checkUrl($data, $index)" e-required="">{{ webhook.url || &apos;empty&apos; }}</span>
+        </td>
+        <td>
+          <span editable-select="webhook.type" e-name="type" onshow="sysCtrl.loadTypes()" e-form="webhookForm" e-ng-options="type.id as type.text for type in webhookTypes">
+            <span ng-if="sysCtrl.showType(webhook) === 'Slack'" class="label label-info"><em class="fa fa-slack"></em>Slack</span>
+            <span ng-if="sysCtrl.showType(webhook) === 'JSON'" class="label label-info">JSON</span>
+            <span ng-if="sysCtrl.showType(webhook) !== 'JSON' && sysCtrl.showType(webhook) !== 'Slack'">{{sysCtrl.showType(webhook)}}</span>
+          </span>
+        </td>
+        <td>
+          <div class="md-switch2 pull-left">
+            <label class="nv-modal-item-title">
+              <input type="checkbox" ng-model="webhook.enable" ng-change="sysCtrl.changeStatus($index)" ng-disabled="!isWebhookAuthorized">
+              <span class="toggle"></span>
+            </label>
+          </div>
+        </td>
+        <td>
+          <span class="action-label nv-label {{webhook.typeClass}}">{{webhook.displayType}}</span>
+        </td>
+        <td style="white-space: nowrap" ng-show="isWebhookAuthorized">
+            <!-- form-->
+          <form class="form-buttons form-inline" editable-form="" name="webhookForm" onbeforesave="sysCtrl.saveWebhook($data, $index)" ng-show="webhookForm.$visible" shown="sysCtrl.inserted == webhook">
+            <button class="btn btn-sm btn-success" type="submit" ng-disabled="webhookForm.$waiting" title="Save">
+              <em class="fa fa-save"></em>
+            </button>
+            <button class="btn btn-sm btn-danger" type="button" ng-disabled="webhookForm.$waiting" ng-click="webhookForm.$cancel(); sysCtrl.cancel($index);" title="Cancel">
+              <em class="fa fa-times"></em>
+            </button>
+          </form>
+          <div class="buttons" ng-show="!webhookForm.$visible">
+            <button class="btn btn-sm btn-info" ng-click="webhookForm.$show(); sysCtrl.showEdit($index)" title="Edit">
+              <em class="fa fa-edit"></em>
+            </button>
+            <button class="btn btn-sm btn-default" ng-click="sysCtrl.removeWebhook($index)" title="Delete">
+              <em class="fa fa-trash"></em>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </table>
+    <button class="btn btn-default mt" ng-show="isWebhookAuthorized && !sysCtrl.hasNewRow" ng-click="sysCtrl.addRow()">{{ 'setting.webhook.NEW' | translate}}</button>
+  </div>
+</div>

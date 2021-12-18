@@ -1,0 +1,81 @@
+$margin-base: 10px;
+$margin-sm:   5px;
+$margin-lg:   15px;
+$margin-xl:   30px;
+
+$padding-xl:   30px;
+$padding-lg:   15px;
+$padding-base: 10px;
+$padding-sm:   5px;
+
+$text-alpha:            rgba(255,255,255,.5);
+$text-alpha-inverse:    rgba(0,0,0,.5);
+
+$text-sm:               $font-size-base * .85;
+$text-md:               $font-size-base * 1.9;
+$text-lg:               $font-size-base * 3;
+
+$border-color:          rgba(0,0,0,.12);
+
+$wd-xxs:                60px;
+$wd-xs:                 90px;
+$wd-sm:                 150px;
+$wd-sd:                 200px; // sd == standard
+$wd-md:                 240px;
+$wd-lg:                 280px;
+$wd-xl:                 320px;
+$wd-xxl:                360px;
+$wd-wide:               100%;
+$wd-auto:               auto;
+$wd-zero:               0;
+
+
+$colors: (
+  'success-light': $nv-success-light,
+  'success':       $nv-success,
+  'success-dark':  $nv-success-dark,
+  'info-light':    $nv-info-light,
+  'info':          $nv-info,
+  'info-dark':     $nv-info-dark,
+  'warning-light': $nv-warning-light,
+  'warning':       $nv-warning,
+  'warning-dark':  $nv-warning-dark,
+  'danger-light':  $nv-danger-light,
+  'danger':        $nv-danger,
+  'danger-dark':   $nv-danger-dark,
+  'inverse-light': $nv-inverse-light,
+  'inverse':       $nv-inverse,
+  'inverse-dark':  $nv-inverse-dark,
+);
+
+@function color($key) {
+  @return map-get($colors, $key);
+}
+
+@mixin bgcolor-variant($bgcolor, $text-color: #fff)
+{
+  $amountOfLight: 10%;
+  & {
+    background-color: color($bgcolor);
+    color: $text-color !important;
+  }
+  &-light {
+    $col: color($bgcolor + '-light');
+    background-color: #{$col};
+    color: $text-color !important;
+  }
+  &-dark {
+    $col: color($bgcolor + '-dark');
+    background-color: #{$col};
+    color: $text-color !important;
+  }
+  small {
+    color: inherit;
+  }
+}
+
+@mixin make-bg($bgcolor, $text-color: #fff)
+{
+  background-color: $bgcolor;
+  color: $text-color !important;
+}

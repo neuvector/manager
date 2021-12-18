@@ -1,0 +1,56 @@
+//*nv-tooltip
+.nv-tooltip-blue-top {
+  .tooltip-inner {
+    background-color: $mdc-light-blue-600;
+  }
+  .tooltip-arrow {
+    border-top-color: $mdc-light-blue-600 !important;
+  }
+}
+
+.nv-tooltip-dark-top {
+  .tooltip-inner {
+    background-color: $neuvector-grey-900;
+  }
+  .tooltip-arrow {
+    border-top-color: $neuvector-grey-900 !important;
+  }
+}
+
+.nv-tooltip-light-top {
+  .tooltip-inner {
+    background-color: #fff;
+    color: #000;
+    box-shadow: 0 2px 6px 0 $neuvector-grey-200;
+  }
+  .tooltip-arrow {
+    border-top-color: #fff !important;
+  }
+}
+
+//Overwrite bootstrap color
+.text-primary {
+  color: $neuvector-mid-green-500;
+}
+
+//Overwrite tab
+.uib-tab.active {
+  border-bottom: none;
+}
+
+.nav-tabs > li.active > a {
+  background-color: $neuvector-grey-200;
+}
+
+.nav-tabs > li > a {
+  background-color: $neuvector-grey-50;
+  color: $neuvector-grey-500 !important;
+  margin-right: 2px;
+}
+
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+  background-color: $neuvector-grey-200;
+  color: $neuvector-grey-900 !important;
+}

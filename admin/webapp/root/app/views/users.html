@@ -1,0 +1,585 @@
+<div
+  ng-controller="UserController"
+  backdrop="true"
+  class="container-fluid"
+  ng-cloak
+>
+  <!-- <div class="panel mb0">
+    <div class="panel-body"> -->
+      <div class="clearfix">
+        <label class="text-primary pull-left mt-sm ml" ng-show="!userErr"
+          >{{count}}
+        </label>
+        <div ng-show="!userErr && !isRemote" display-control="write_users" class="nv-global-policy-operation pull-left ml">
+            <ul class="list-inline" >
+                <li class="policy-top-button" ng-click="addUser($event)"">
+                    <div class="button">
+                        <em class="fa fa-plus-circle mr-sm text-action" aria-hidden="true"></em>
+                        {{'role.ADD' | translate}}
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="pull-left ml">
+          <ul class="list-inline" style="height: 34px;">
+            <li
+              class="policy-top-button"
+              ng-if="removable"
+              display-control="write_users"
+              ng-click="removeUsers()"
+            >
+              <div id="remove-selected-row" class="button fade-in-left">
+                <em class="fa fa-trash mr-sm text-action"></em>
+                {{'user.deleteUser.title' | translate}}
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="left-inner-addon pull-right">
+          <em class="fa fa-filter text-filter" />
+          <input
+            class="search form-control"
+            placeholder="{{'general.FILTER' | translate}}"
+            type="text"
+            maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+            ng-model="search"
+            ng-paste="onFilterChanged(search)"
+            ng-keyup="onFilterChanged(search)"
+          />
+        </div>
+        <div class="pull-right mr" style="padding-top: 5px;" ng-click="reset()">
+            <em class="fa fa-refresh text-action hand" aria-hidden="true"/>
+            <label class="text-gray-label hand">{{'general.REFRESH' | translate}}</label>
+        </div>
+      </div>
+      <div
+        ag-grid="gridOptions"
+        class="ag-grid mt-sm"
+        style="width: 100%; height: 200px;"
+      ></div>
+
+      <div class="mt-lg ml-lg mr-lg">
+        <div class="row justify-content-center">
+            <div style="height: calc(100vh - 540px); overflow: scroll">
+                <div class="timeline timeline-line-solid">
+                    <span class="timeline-label">
+                        <span class="label">{{'user.USER_EVENT_HEAD' | translate}}</span>
+                    </span>
+                    <div class="timeline-item" ng-repeat="event in events | filter: search">
+                        <div class="timeline-point timeline-point"></div>
+                        <div class="timeline-event">
+                            <div class="widget has-shadow">
+                                <div class="alert alert-success" role="alert">
+                                    <strong>{{event.name}}:&nbsp;</strong>{{event.message}}
+                                </div>
+                            </div>
+                            <div class="time-right">{{event.reported_at | relativeDate}}</div>
+                        </div>
+                    </div>
+
+                    <span class="timeline-label">
+                        <span class="label bg-primary">...</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div ng-if="eventErr">
+          <div class="server-error">
+            <div>
+              <em
+                class="fa fa-times-circle error-signal"
+                aria-hidden="true"
+              ></em>
+            </div>
+            <div>
+              <span class="error-text">
+                {{eventErrMsg}}
+              </span>
+            </div>
+          </div>
+        </div>
+      <!-- </div>
+    </div> -->
+
+    <script type="text/ng-template" id="dialog.addUser.html">
+      <md-dialog aria-label="Add User" ng-cloak style="overflow: visible; max-height: 1000px;">
+        <form name="registerForm" novalidate="" class="form-validate" style="max-width: 1290px; overflow: visible;">
+          <md-toolbar>
+            <div class="md-toolbar-tools">
+              <h2 class="text-dark">{{'user.addUser.TITLE' | translate}}</h2>
+              <span flex></span>
+              <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+              </md-button>
+            </div>
+          </md-toolbar>
+          <md-dialog-content style="overflow: visible;">
+            <div>
+              <div class="card-body">
+                <div>
+                  <div class="row m0">
+                    <div class="col-sm-5 col-sm-offset-1 mt-sm">
+                      <md-input-container class="md-block nv-container">
+                        <label>{{'user.addUser.USER_NAME' | translate}}</label>
+                        <md-icon >
+                          <div class="circle-icon">
+                            <em class="icon-user-follow fa-lg text-primary"/>
+                          </div>
+                        </md-icon>
+                        <input name="username" ng-model="user.username" required
+                               class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                      </md-input-container>
+                    </div>
+                    <div class="col-sm-5 mt-sm">
+                      <md-input-container class="md-block nv-container">
+                        <label>{{'user.addUser.EMAIL' | translate}}</label>
+                        <md-icon >
+                          <div class="circle-icon">
+                            <em class="fa fa-envelope-o fa-lg text-primary"/>
+                          </div>
+                        </md-icon>
+                        <input type="email" ng-model="user.email" class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                      </md-input-container>
+                    </div>
+
+                    <div class="col-sm-5 col-sm-offset-1">
+                      <md-input-container class="nv-container">
+                        <label translate="{{'user.addUser.ROLE_PLACEHOLDER'}}"></label>
+                        <md-icon>
+                          <div class="circle-icon">
+                            <em class="fa fa-user-secret text-primary fa-lg"/>
+                          </div>
+                        </md-icon>
+                        <md-select ng-model="user.role" aria-label="select role" style="min-width: 100px;min-height: 29.99px" ng-change="changeRole()">
+                          <md-option ng-repeat="role in roles" ng-value="role.id"
+                                     ng-selected="$index===0">{{role.name}}</md-option>
+                        </md-select>
+                      </md-input-container>
+                    </div>
+                    <div class="col-sm-5 ">
+                      <md-input-container class="nv-container">
+                        <label translate="{{'profile.LOCALE'}}"></label>
+                        <md-icon>
+                          <div class="circle-icon">
+                            <em class="fa fa-language text-primary fa-lg"/>
+                          </div>
+                        </md-icon>
+                        <md-select ng-model="user.locale" aria-label="select locale" style="min-height: 29.99px">
+                          <md-option ng-repeat="(localeId, langName) in language.languageOptions" value="{{localeId}}"
+                                     ng-selected="$first">
+                            {{langName}}</md-option>
+                        </md-select>
+                      </md-input-container>
+                    </div>
+
+                    <div class="col-sm-5 col-sm-offset-1">
+                      <md-input-container class="md-block nv-container">
+                        <label>{{'user.addUser.PASSWORD' | translate}}</label>
+                        <md-icon >
+                          <div class="circle-icon">
+                            <em class="icon-key fa-lg text-primary"/>
+                          </div>
+                        </md-icon>
+                        <input name="password"
+                               ng-attr-type="{{ showPassword ? 'text':'password'}}" ng-trim="false"
+                               ng-model="user.password" required ng-keyup="checkPassword(user.password)"
+                               maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+                        />
+                        <md-icon
+                                ng-show="registerForm.password.$dirty"
+                                ng-click="showPassword=!showPassword" class="mt-lg"
+                                ng-class="showPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"
+                                style="cursor: pointer; pointer-events: all;">
+                        </md-icon>
+                        <div ng-messages="registerForm.password.$error" ng-show="registerForm.password.$touched">
+                          <div ng-message="required">{{'user.PASSWORD_REQUIRED' | translate}}</div>
+                        </div>
+                      </md-input-container>
+                    </div>
+
+                    <div class="col-sm-5 ">
+                      <md-input-container class="md-block nv-container">
+                        <label>{{'user.addUser.CONFIRM_PASSWORD' | translate}}</label>
+                        <md-icon>
+                          <div class="circle-icon">
+                            <em class="icon-key fa-lg text-primary"/>
+                          </div>
+                        </md-icon>
+                        <input
+                               type="password"
+                               name="confirm_match" ng-model="passwordMatch" required
+                               ng-trim="false"
+                               maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+                               ui-validate="'$value==user.password'"
+                               ui-validate-watch="'user.password'" />
+                        <div ng-messages="registerForm.password.$error" ng-show="registerForm.confirm_match.$touched">
+                              <span ng-show="registerForm.confirm_match.$error.validator"
+                                    class="text-danger">{{'user.addUser.PASSWORD_ALERT' | translate}}</span>
+                        </div>
+                      </md-input-container>
+                    </div>
+                    <div class="col-sm-10 col-sm-offset-1" ng-if="!isPasswordValid">
+                      <div class="col-sm-6" ng-if="passwordProfile.min_len > 0">
+                        <em class="fa" ng-class="{'fa-check text-success-tran': isReachingMinLength, 'fa-times text-danger pl-xs': !isReachingMinLength}"></em>
+                        <span class="pl-lg" ng-class="{'text-light-grey': isReachingMinLength, 'text-dark': !isReachingMinLength}">{{minLengthTxt}}</span>
+                      </div>
+                      <div class="col-sm-6" ng-if="passwordProfile.min_uppercase_count > 0">
+                        <em class="fa" ng-class="{'fa-check text-success-tran': isCharReqValid.isReachingMinUpper, 'fa-times text-danger pl-xs': !isCharReqValid.isReachingMinUpper}"></em>
+                        <span class="pl-lg" ng-class="{'text-light-grey': isCharReqValid.isReachingMinUpper, 'text-dark': !isCharReqValid.isReachingMinUpper}">{{minUpperTxt}}</span>
+                      </div>
+                      <div class="col-sm-6" ng-if="passwordProfile.min_lowercase_count > 0">
+                        <em class="fa" ng-class="{'fa-check text-success-tran': isCharReqValid.isReachingMinLower, 'fa-times text-danger pl-xs': !isCharReqValid.isReachingMinLower}"></em>
+                        <span class="pl-lg" ng-class="{'text-light-grey': isCharReqValid.isReachingMinLower, 'text-dark': !isCharReqValid.isReachingMinLower}">{{minLowerTxt}}</span>
+                      </div>
+                      <div class="col-sm-6" ng-if="passwordProfile.min_digit_count > 0">
+                        <em class="fa" ng-class="{'fa-check text-success-tran': isCharReqValid.isReachingMinDigit, 'fa-times text-danger pl-xs': !isCharReqValid.isReachingMinDigit}"></em>
+                        <span class="pl-lg" ng-class="{'text-light-grey': isCharReqValid.isReachingMinDigit, 'text-dark': !isCharReqValid.isReachingMinDigit}">{{minDigitTxt}}</span>
+                      </div>
+                      <div class="col-sm-12" ng-if="passwordProfile.min_special_count > 0">
+                        <em class="fa" ng-class="{'fa-check text-success-tran': isCharReqValid.isReachingMinSpChar, 'fa-times text-danger pl-xs': !isCharReqValid.isReachingMinSpChar}"></em>
+                        <span class="pl-lg" ng-class="{'text-light-grey': isCharReqValid.isReachingMinSpChar, 'text-dark': !isCharReqValid.isReachingMinSpChar}">{{minSpCharTxt}}</span>
+                      </div>
+                    </div>
+                    <div class="col-sm-10 col-sm-offset-1 password-confirm-alert text-center" ng-if="isPasswordValid && registerForm.confirm_match.$error.validator">
+                      {{"user.passwordRequirement.PASSWORD_SECURE" | translate}}
+                    </div>
+                    <div class="col-sm-10 col-sm-offset-1 password-success text-center" ng-if="isPasswordValid && !registerForm.confirm_match.$error.validator">
+                      {{"user.passwordRequirement.ALL_SET" | translate}}
+                    </div>
+                  </div>
+                  <div class="col-sm-10 col-sm-offset-1" ng-if="isKube && (user.role !=='admin' && user.role !== 'fedAdmin' && user.role !== '')">
+                    <a ng-click="toggleAdvSetting()">{{advSettingText}}</a>
+                  </div>
+                  <div ng-show="(showAdvSetting || (user.role === '')) && (user.role !=='admin' && user.role !== 'fedAdmin')">
+                    <div class="col-sm-10 col-sm-offset-1 mt">
+                      <div class="text-muted">*&nbsp;{{'ldap.ROLE_DOMAIN_INSTRUCTION' | translate}}</div>
+                      <div ag-grid="namespaceRoleGirdOptions"
+                          class="ag-grid"
+                          style="width: 100%; height: 160px;"
+                      ></div>
+                    </div>
+                    <div class="col-sm-10 col-sm-offset-1 mt-sm">
+                      <div class="form-group tags-input-with-icon">
+                        <md-icon>
+                          <div class="circle-icon">
+                            <em class="fa fa-id-card text-primary fa-lg"/>
+                          </div>
+                        </md-icon>
+                        <label class="col-sm-12 control-label" style="padding-left: 30px;">{{roleName}} {{'user.gridHeader.NS_ROLE_MAP' | translate}}
+                          <div class="lable-hint">{{'group.editGroup.CONDITION_HINT' | translate}}</div>
+                        </label>
+                        <div class="col-sm-12 p0">
+                          <tags-input ng-model="namespaces" name="aGrp"
+                                      placeholder="{{'user.addUser.ADD_NS' | translate}}" min-length="2"
+                                      replace-spaces-with-dashes="false"
+                                      display-property="name" template="group-template" ng-disabled="user.role==='admin' || user.role==='fedAdmin'"
+                                      on-tag-adding="tagChanging($tag)"
+                                      on-tag-removing="tagChanging($tag)"
+                                      on-tag-clicked="showTagDetail($tag)"
+                                      max-length="{{'general.FILTER_MAX_LEN' | translate}}">
+                            <auto-complete source="loadTags($query)" min-length="1" max-results-to-show="128" max-length="{{'general.FILTER_MAX_LEN' | translate}}"></auto-complete>
+                          </tags-input>
+                          <div ng-show="isShowingEditDomain">
+                            <div class="col-sm-11 pl0">
+                              <div class="md-block mb0">
+                                <input id="tagEditor" ng-model="singleDomain.value" placeholder="{{'ldap.SINGLE_DOMAIN_HINT' | translate}}"
+                                       uib-typeahead="domain for domain in domainOptions4SingleDomainEditor | filter:$viewValue | limitTo:16"
+                                       class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}" ng-keyup="checkDuplicated()"  ng-keydown="preventFormSubmit($event)"/>
+                              </div>
+                            </div>
+                            <div class="col-sm-1 pr0">
+                              <md-button class="fa fa-pencil-square-o md-raised md-primary pull-right mr0" aria-hidden="true" style="min-width: 36px; margin-top: -3px;" aria-hidden="true" ng-click="editDomain(singleDomain)"
+                                         ng-disabled="singleDomain.value.length===0 || isInvalidTag">
+                              </md-button>
+                            </div>
+                          </div>
+                          <span class="help-block">{{namespaceRoleHint}}</span>
+                          <span ng-show="onFormatError" class="text-danger" translate="{{'group.BAD_FORMAT'}}"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </md-dialog-content>
+          <md-dialog-actions class="layout-row">
+            <button ng-click="add(user, user.adminNS, user.readerNS)" class="btn btn-wide btn-default " ng-disabled="registerForm.$invalid || !isPasswordValid">
+              {{'user.addUser.ADD' | translate}}
+            </button>
+            <a ng-click="cancel()" class="nv-link">
+              {{'profile.CANCEL' | translate}}
+            </a>
+          </md-dialog-actions>
+        </form>
+      </md-dialog>
+    </script>
+    <script type="text/ng-template" id="dialog.editUser.html">
+      <md-dialog aria-label="Edit User" ng-cloak style="width: 80vw; overflow: visible; max-height: 1000px;">
+        <form name="editUserForm" novalidate="" class="form-validate"  style="overflow: visible;">
+          <md-toolbar>
+            <div class="md-toolbar-tools">
+              <h2 class="text-dark">{{'user.editUser.TITLE' | translate}}</h2>
+              <span flex></span>
+              <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+              </md-button>
+            </div>
+          </md-toolbar>
+          <md-dialog-content style="overflow: visible;">
+            <div>
+              <div class="card-body">
+                <div>
+                  <div class="col-sm-5 col-sm-offset-1 mt-sm">
+                    <md-input-container class="md-block nv-container">
+                      <label>{{'user.addUser.USER_NAME' | translate}}</label>
+                      <md-icon >
+                        <div class="circle-icon">
+                          <em class="icon-user-follow fa-lg text-primary"/>
+                        </div>
+                      </md-icon>
+                      <input name="username" ng-model="user.username" required disabled
+                             class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                    </md-input-container>
+                  </div>
+                  <div class="col-sm-5 mt-sm">
+                    <md-input-container class="md-block nv-container">
+                      <label>{{'user.addUser.EMAIL' | translate}}</label>
+                      <md-icon >
+                        <div class="circle-icon">
+                          <em class="fa fa-envelope-o fa-lg text-primary"/>
+                        </div>
+                      </md-icon>
+                      <input type="email" ng-disabled="isReadOnly" ng-model="user.email" class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                    </md-input-container>
+                  </div>
+
+                  <div class="col-sm-5 col-sm-offset-1">
+                    <md-input-container class="nv-container">
+                      <label translate="{{'user.addUser.ROLE_PLACEHOLDER' | translate}}"></label>
+                      <md-icon>
+                        <div class="circle-icon">
+                          <em class="fa fa-user-secret text-primary fa-lg"/>
+                        </div>
+                      </md-icon>
+                      <md-select ng-model="user.role" ng-disabled="user.fullname === 'admin' || !isEditAuthorized || isReadOnly"
+                                 aria-label="select role" style="min-width: 100px;" ng-change="changeRole()">
+                        <md-option ng-disabled="(role.id === 'fedAdmin') && !isFedAdmin" ng-repeat="role in roles" value={{role.id}}>{{role.name}}</md-option>
+                      </md-select>
+                    </md-input-container>
+                  </div>
+                  <div class="col-sm-10 col-sm-offset-1" ng-if="isKube && (user.role !=='admin' && user.role !== 'fedAdmin' && user.role !== '') && (user.server === ''|| user.server === 'openshift')" ng-class="{'mb-lg': isReadOnly}">
+                    <a ng-click="toggleAdvSetting()">{{advSettingText}}</a>
+                  </div>
+                  <div ng-show="(showAdvSetting || (user.role === '')) && (user.server==='' || user.server === 'openshift') && (user.role !=='admin' && user.role !== 'fedAdmin')">
+                    <div class="col-sm-10 col-sm-offset-1 mt" ng-class="{'mb-lg': isReadOnly}">
+                      <div class="text-muted">*&nbsp;{{'ldap.ROLE_DOMAIN_INSTRUCTION' | translate}}</div>
+                      <div ag-grid="namespaceRoleGirdOptions"
+                          class="ag-grid"
+                          style="width: 100%; height: 160px;"
+                      ></div>
+                    </div>
+                    <div class="col-sm-10 col-sm-offset-1 mt-sm" ng-if="!isReadOnly">
+                      <div class="form-group tags-input-with-icon">
+                        <md-icon>
+                          <div class="circle-icon">
+                            <em class="fa fa-id-card text-primary fa-lg"/>
+                          </div>
+                        </md-icon>
+                        <label class="col-sm-12 control-label" style="padding-left: 30px;">{{roleName}} {{'user.gridHeader.NS_ROLE_MAP' | translate}}
+                          <div class="lable-hint">{{'group.editGroup.CONDITION_HINT' | translate}}</div>
+                        </label>
+                        <div class="col-sm-12 p0">
+                          <tags-input ng-model="namespaces" name="aGrp"
+                                      placeholder="{{'user.addUser.ADD_NS' | translate}}" min-length="2"
+                                      replace-spaces-with-dashes="false"
+                                      display-property="name" template="group-template" ng-disabled="user.role==='admin' || user.role==='fedAdmin' "
+                                      on-tag-adding="tagChanging($tag)"
+                                      on-tag-removing="tagChanging($tag)"
+                                      on-tag-clicked="showTagDetail($tag)"
+                                      max-length="{{'general.FILTER_MAX_LEN' | translate}}">
+                            <auto-complete source="loadTags($query)" min-length="1" max-results-to-show="128" max-length="{{'general.FILTER_MAX_LEN' | translate}}"></auto-complete>
+                          </tags-input>
+                          <div ng-show="isShowingEditDomain">
+                            <div class="col-sm-11 pl0">
+                              <div class="md-block mb0">
+                                <input id="tagEditor" ng-model="singleDomain.value" placeholder="{{'ldap.SINGLE_DOMAIN_HINT' | translate}}"
+                                       uib-typeahead="domain for domain in domainOptions4SingleDomainEditor | filter:$viewValue | limitTo:16"
+                                       class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}" ng-keyup="checkDuplicated()"  ng-keydown="preventFormSubmit($event)"/>
+                              </div>
+                            </div>
+                            <div class="col-sm-1 pr0">
+                              <md-button class="fa fa-pencil-square-o md-raised md-primary pull-right mr0" aria-hidden="true" style="min-width: 36px; margin-top: -3px;" aria-hidden="true" ng-click="editDomain(singleDomain)"
+                                         ng-disabled="singleDomain.value.length===0 || isInvalidTag">
+                              </md-button>
+                            </div>
+                          </div>
+                          <span class="help-block">{{namespaceRoleHint}}</span>
+                          <span ng-show="onFormatError" class="text-danger" translate="{{'group.BAD_FORMAT'}}"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </md-dialog-content>
+          <md-dialog-actions class="layout-row" ng-if="!isReadOnly">
+            <button ng-click="update(user)" class="btn btn-wide btn-default " ng-disabled="editUserForm.$invalid || editUserForm.$pristine">
+              {{'user.editUser.EDIT' | translate}}
+            </button>
+            <a ng-click="cancel()" class="nv-link">
+              {{'profile.CANCEL' | translate}}
+            </a>
+          </md-dialog-actions>
+        </form>
+      </md-dialog>
+    </script>
+    <script type="text/ng-template" id="group-template">
+      <div class="tag-template">
+        <div>
+          <em class="fa fa-folder-open text-primary"></em>
+        </div>
+        <div>
+          <span>{{$getDisplayText()}}</span>
+          <a class="remove-button" ng-click="$removeTag()">&#10006;</a>
+        </div>
+      </div>
+    </script>
+    <script type="text/ng-template" id="dialog.resetPassword.html">
+      <md-dialog aria-label="Reset Password" ng-cloak style="width: 80vw; overflow: visible; max-height: 1000px;">
+        <form name="resetPasswordForm" novalidate="" class="form-validate">
+          <md-toolbar>
+            <div class="md-toolbar-tools">
+              <h2 class="text-dark">{{'user.resetPassword.TITLE' | translate}}</h2>
+              <span flex></span>
+              <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+              </md-button>
+            </div>
+          </md-toolbar>
+          <md-dialog-content style="overflow: visible;">
+            <div>
+              <div class="card-body">
+                <div>
+                  <div class="row m0">
+                    <div class="col-sm-5 col-sm-offset-1 mt-sm">
+                      <md-input-container class="md-block nv-container">
+                        <label>{{'user.addUser.USER_NAME' | translate}}</label>
+                        <md-icon >
+                          <div class="circle-icon">
+                            <em class="icon-user-follow fa-lg text-primary"/>
+                          </div>
+                        </md-icon>
+                        <input name="username" ng-model="username" disabled
+                               class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                      </md-input-container>
+                    </div>
+                  </div>
+                  <div class="row m0">
+                    <div class="col-sm-5 col-sm-offset-1">
+                      <md-input-container class="md-block nv-container">
+                        <label>{{'user.addUser.PASSWORD' | translate}}</label>
+                        <md-icon >
+                          <div class="circle-icon">
+                            <em class="icon-key fa-lg text-primary"/>
+                          </div>
+                        </md-icon>
+                        <input name="password"
+                               ng-trim="false"
+                               ng-attr-type="{{ showPassword ? 'text':'password'}}"
+                               ng-model="password" required ng-keyup="checkPassword(password)"
+                               maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+                        />
+                        <md-icon
+                                ng-show="resetPasswordForm.password.$dirty"
+                                ng-click="showPassword=!showPassword" class="mt-lg"
+                                ng-class="showPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"
+                                style="cursor: pointer; pointer-events: all;">
+                        </md-icon>
+                        <div ng-messages="resetPasswordForm.password.$error" ng-show="resetPasswordForm.password.$touched">
+                          <div ng-message="required">{{'user.PASSWORD_REQUIRED' | translate}}</div>
+                        </div>
+                      </md-input-container>
+                    </div>
+
+                    <div class="col-sm-5 ">
+                      <md-input-container class="md-block nv-container">
+                        <label>{{'user.addUser.CONFIRM_PASSWORD' | translate}}</label>
+                        <md-icon>
+                          <div class="circle-icon">
+                            <em class="icon-key fa-lg text-primary"/>
+                          </div>
+                        </md-icon>
+                        <input
+                                type="password"
+                                name="confirm_match" ng-model="passwordMatch" required
+                                ng-trim="false"
+                                maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+                               ui-validate="'$value==password'"
+                               ui-validate-watch="'password'" />
+                        <div ng-messages="resetPasswordForm.password.$error" ng-show="resetPasswordForm.confirm_match.$touched">
+                              <span ng-show="resetPasswordForm.confirm_match.$error.validator"
+                                    class="text-danger">{{'user.addUser.PASSWORD_ALERT' | translate}}</span>
+                        </div>
+                      </md-input-container>
+                    </div>
+                    <div class="col-sm-10 col-sm-offset-1" ng-if="!isPasswordValid">
+                      <div class="col-sm-6" ng-if="passwordProfile.min_len > 0">
+                        <em class="fa" ng-class="{'fa-check text-success-tran': isReachingMinLength, 'fa-times text-danger pl-xs': !isReachingMinLength}"></em>
+                        <span class="pl-lg" ng-class="{'text-light-grey': isReachingMinLength, 'text-dark': !isReachingMinLength}">{{minLengthTxt}}</span>
+                      </div>
+                      <div class="col-sm-6" ng-if="passwordProfile.min_uppercase_count > 0">
+                        <em class="fa" ng-class="{'fa-check text-success-tran': isCharReqValid.isReachingMinUpper, 'fa-times text-danger pl-xs': !isCharReqValid.isReachingMinUpper}"></em>
+                        <span class="pl-lg" ng-class="{'text-light-grey': isCharReqValid.isReachingMinUpper, 'text-dark': !isCharReqValid.isReachingMinUpper}">{{minUpperTxt}}</span>
+                      </div>
+                      <div class="col-sm-6" ng-if="passwordProfile.min_lowercase_count > 0">
+                        <em class="fa" ng-class="{'fa-check text-success-tran': isCharReqValid.isReachingMinLower, 'fa-times text-danger pl-xs': !isCharReqValid.isReachingMinLower}"></em>
+                        <span class="pl-lg" ng-class="{'text-light-grey': isCharReqValid.isReachingMinLower, 'text-dark': !isCharReqValid.isReachingMinLower}">{{minLowerTxt}}</span>
+                      </div>
+                      <div class="col-sm-6" ng-if="passwordProfile.min_digit_count > 0">
+                        <em class="fa" ng-class="{'fa-check text-success-tran': isCharReqValid.isReachingMinDigit, 'fa-times text-danger pl-xs': !isCharReqValid.isReachingMinDigit}"></em>
+                        <span class="pl-lg" ng-class="{'text-light-grey': isCharReqValid.isReachingMinDigit, 'text-dark': !isCharReqValid.isReachingMinDigit}">{{minDigitTxt}}</span>
+                      </div>
+                      <div class="col-sm-12" ng-if="passwordProfile.min_special_count > 0">
+                        <em class="fa" ng-class="{'fa-check text-success-tran': isCharReqValid.isReachingMinSpChar, 'fa-times text-danger pl-xs': !isCharReqValid.isReachingMinSpChar}"></em>
+                        <span class="pl-lg" ng-class="{'text-light-grey': isCharReqValid.isReachingMinSpChar, 'text-dark': !isCharReqValid.isReachingMinSpChar}">{{minSpCharTxt}}</span>
+                      </div>
+                    </div>
+                    <div class="col-sm-10 col-sm-offset-1 password-confirm-alert text-center" ng-if="isPasswordValid && resetPasswordForm.confirm_match.$error.validator">
+                      {{"user.passwordRequirement.PASSWORD_SECURE" | translate}}
+                    </div>
+                    <div class="col-sm-10 col-sm-offset-1 password-success text-center" ng-if="isPasswordValid && !resetPasswordForm.confirm_match.$error.validator">
+                      {{"user.passwordRequirement.ALL_SET" | translate}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </md-dialog-content>
+          <md-dialog-actions class="layout-row">
+            <button ng-click="resetPassword(username, password)" class="btn btn-wide btn-default " ng-disabled="resetPasswordForm.$invalid || !isPasswordValid">
+              {{'user.resetPassword.RESET' | translate}}
+            </button>
+            <a ng-click="cancel()" class="nv-link">
+              {{'profile.CANCEL' | translate}}
+            </a>
+          </md-dialog-actions>
+        </form>
+      </md-dialog>
+    </script>
+    <script type="text/ng-template" id="group-template">
+      <div class="tag-template">
+        <div>
+          <em class="fa fa-folder-open text-primary"></em>
+        </div>
+        <div>
+          <span>{{$getDisplayText()}}</span>
+          <a class="remove-button" ng-click="$removeTag()">&#10006;</a>
+        </div>
+      </div>
+    </script>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+[
+  {
+    "heading": "true",
+    "translate": "sidebar.heading.HEADER"
+  },
+  {
+    "stateName": "app.dashboard",
+    "icon": "icon-speedometer",
+    "translate": "sidebar.nav.DASHBOARD"
+  }
+]

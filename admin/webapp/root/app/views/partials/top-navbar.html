@@ -1,0 +1,230 @@
+<nav
+  role="navigation"
+  class="navbar topnavbar"
+  ng-controller="NavbarController as navCtrl"
+>
+  <div class="navbar-header nv-logo-wrap" style="min-width: 220px">
+    <a href="" class="navbar-brand logo-height nv-logo"> </a>
+    <ul class="nav navbar-nav pull-right">
+      <li>
+        <a
+          href=""
+          trigger-resize=""
+          ng-if="!app.layout.isCollapsed"
+          ng-click="app.layout.isCollapsed = !app.layout.isCollapsed"
+          class="hidden-xs nv-expand-toggle"
+        >
+          <em class="fa fa-angle-double-left"></em>
+        </a>
+        <a
+          href=""
+          trigger-resize=""
+          ng-if="app.layout.isCollapsed"
+          ng-click="app.layout.isCollapsed = !app.layout.isCollapsed"
+          class="hidden-xs nv-expand-toggle"
+        >
+          <em class="fa fa-angle-double-right"></em>
+        </a>
+        <a
+          href=""
+          ng-click="app.asideToggled = !app.asideToggled"
+          class="visible-xs sidebar-toggle"
+        >
+          <em class="fa fa-navicon"></em>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="nav-wrapper">
+    <ul class="nav navbar-nav navbar-right">
+      <li>
+        <a
+          class="fa fa-question-circle-o icon-size nv-help"
+          href="{{navCtrl.homepage}}"
+          target="_blank"
+        ></a>
+      </li>
+      <li
+        class="nav-setting nav-profile"
+        ng-controller="ProfileController"
+        ng-cloak
+      >
+        <div class="btn-group" uib-dropdown keyboard-nav>
+          <button
+            id="simple-btn-keyboard-nav2"
+            type="button"
+            class="settings-arrow"
+            uib-dropdown-toggle
+            style="height: 64px; box-shadow: none; -webkit-box-shadow: none;"
+          >
+            <div class="nav-photo">
+              <img
+                ng-src="{{getAvatar()}}"
+                alt="{{user.username}}"
+                ng-class="{'remote-user-icon-lg': user.server}"
+                class="img-thumbnail img-circle"
+              />
+            </div>
+            <div class="nav-username">
+              <div class="pull-left">
+                <div>{{user.username}}</div>
+                <div>{{displayRole}}</div>
+              </div>
+              <em
+                class="pull-right fa fa-caret-down"
+                ng-click="toggleCollapse()"
+              ></em>
+            </div>
+          </button>
+          <div class="dropdown-menu setting-options" uib-dropdown-menu>
+            <div class="user-dropdown-arrow"></div>
+            <ul role="menu" aria-labelledby="simple-btn-keyboard-nav">
+              <li class="p0">
+                <a class="disdecerate-anchor" href="#/app/profile">
+                  <em
+                    class="fa fa-user text-muted"
+                    aria-hidden="true"
+                    style="margin-right: 24px;"
+                  ></em>
+                  {{'enum.MY_PROFILE' | translate}}
+                </a>
+              </li>
+              <li class="p0" ng-if="!isRemote && canJoinLeaveCluster">
+                <a class="disdecerate-anchor" href="#/app/multi-cluster">
+                  <em class="fa fa-sitemap text-muted" aria-hidden="true"></em>
+                  {{'enum.MULTI_CLUSTER' | translate}}
+                </a>
+              </li>
+              <li class="p0" ng-if="isMaster" display-control="multi_cluster">
+                <a class="disdecerate-anchor" href="#/app/fed-policy">
+                  <em class="fa fa-umbrella text-muted" aria-hidden="true"></em>
+                  {{'enum.FED_POLICY' | translate}}
+                </a>
+              </li>
+              <li ng-controller="LogoutController" ng-click="logout()">
+                <em class="fa fa-arrow-left text-muted" aria-hidden="true"></em>
+                {{'enum.LOGOUT' | translate}}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <div ng-if="!(isMaster && isRedirectAuth || isMember)" class="pull-right">
+      <div uib-dropdown class="btn-group v-center" style="height: 64px; right: 20px;">
+        <span class="selected-cluster-text" uib-tooltip="{{clusterName}}" tooltip-enable="{{clusterName.length > 20}}" tooltip-placement="auto">{{clusterName|shortenName: 20}}</span>
+      </div>
+    </div>
+    <div ng-if="isMaster && isRedirectAuth" class="pull-right">
+      <div uib-dropdown class="btn-group v-center" style="height: 64px;">
+        <button
+          type="button"
+          uib-dropdown-toggle
+          class="cluster-nav"
+          style="height: 64px; border: transparent;
+                    box-shadow: none; -webkit-box-shadow: none; background: inherit;"
+        >
+          <div>
+            <i
+              class="fa-lg mr-lg text-gray-light"
+              ng-class="{'fa fa-laptop': $root.isRemote, 'fa fa-home': !$root.isRemote} "
+            ></i>
+            <label
+              class="selected-cluster-text hand"
+              uib-tooltip="{{selectedCluster.name}}"
+              tooltip-placement="auto"
+              tooltip-enable="{{selectedCluster.name.length >= 20}}"
+              >{{selectedCluster.name| shortenName: 20}}
+            </label>
+            <em class="fa fa-caret-down text-action text-lg mh-lg"></em>
+          </div>
+        </button>
+        <div class="dropdown-menu setting-options" uib-dropdown-menu>
+          <div class="user-dropdown-arrow"></div>
+          <ul role="menu" aria-labelledby="simple-btn-keyboard-nav">
+            <li
+              tooltip-placement="auto"
+              uib-tooltip="{{cluster.name}}"
+              tooltip-enable="{{cluster.name.length >= 18}}"
+              ng-click="redirectCluster(cluster.id)"
+              role="menuitem"
+              ng-repeat="cluster in clusters"
+              ng-class="{'linkDisabled':cluster.status === 'disconnected' || cluster.status === 'left' || cluster.status === 'joint_upgrade_required'}"
+            >
+              <i
+                class="mr-lg"
+                ng-class="{'fa fa-home fa-lg': cluster.clusterType === 'master', 'fa  fa-laptop': cluster.clusterType !== 'master'}"
+              ></i>
+              {{cluster.name|shortenName: 18}}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div ng-if="isMember" class="cursorDisabled pull-right">
+      <div class="v-center cluster-nav" style="height: 64px;">
+        <i class="fa fa-home fa-lg mr-lg text-gray-light brightness-70"></i>
+        <label
+          class="selected-cluster-text mr-lg brightness-70"
+          uib-tooltip="{{masterCluster.name}}"
+          tooltip-placement="auto"
+          tooltip-class="word-break"
+          tooltip-enable="{{masterCluster.name.length >= 20}}"
+          >{{masterCluster.name | shortenName: 20}} &nbsp;&nbsp;&nbsp;/</label
+        >
+        <i class="fa fa-laptop fa-lg mr-lg text-gray-light"></i>
+        <label
+          class="selected-cluster-text mr-lg"
+          uib-tooltip="{{managedCluster.name}}"
+          tooltip-placement="auto"
+          tooltip-class="word-break"
+          tooltip-enable="{{managedCluster.name.length >= 20}}"
+          >{{managedCluster.name | shortenName: 20}}</label
+        >
+      </div>
+    </div>
+  </div>
+
+  <script type="text/ng-template" id="toast.expiring.html">
+    <md-toast role="alert" layout="row" layout-align="space-between center"
+              aria-relevant="all">
+      <div class="mr-sm" ng-if="isScannerOld">
+        <a href="#/app/controllers">
+          <div class="label label-warning">
+            {{oldScannerWarning}}
+          </div>
+        </a>
+      </div>
+      <div class="mr-sm" ng-if="(summary.component_versions.length > 1 && $summary.component_versions[0] === $summary.component_versions[1]) || version !== summary.component_versions[0]">
+        <a href="#/app/controllers">
+          <div class="label label-warning">
+            {{ 'login.VERSION_MISMATCHED' | translate}}
+          </div>
+        </a>
+      </div>
+      <div class="mr-sm" ng-if="!isOnProfile && user.token.password_days_until_expire >= 1 && user.token.password_days_until_expire < 10">
+        <a ui-sref="app.profile({isChangingPassword: true})">
+          <div class="label label-warning">
+            {{passwordExpiringTxt}}
+          </div>
+        </a>
+      </div>
+      <div class="mr-sm" ng-if="!isOnProfile && user.token.password_days_until_expire >= 0 && user.token.password_days_until_expire < 1">
+        <a ui-sref="app.profile({isChangingPassword: true})">
+          <div class="label label-danger">
+            {{passwordExpiringTxt}}
+          </div>
+        </a>
+      </div>
+      <div class="mr-sm" ng-if="!isOnProfile && user.token.default_password">
+        <a ui-sref="app.profile({isChangingPassword: true})">
+          <div class="label label-warning">
+            {{'login.CHANGE_DEFAULT_PASSWORD' | translate}}
+          </div>
+        </a>
+      </div>
+      <md-button ng-click="ctrl.closeToast()" class="fa fa-times pull-right">
+      </md-button>
+    </md-toast>
+  </script>
+</nav>

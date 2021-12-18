@@ -1,0 +1,32 @@
+<div class="col-sm-10 col-sm-offset-1" >
+  <!-- START panel-->
+  <h3 class="text-center" translate="{{'partner.license.HEAD'}}"></h3>
+  <div class="panel widget b0 ">
+    <div class="eulaContent p-lg" ng-include="'app/views/partials/eulaContent.html'">
+    </div>
+  </div>
+  <!-- END panel-->
+</div>
+<div class="col-sm-10 col-sm-offset-1" ng-controller="EulaController">
+  <form role="form" name="eulaForm">
+    <div class="clearfix">
+      <div class="pull-left mt-sm">
+        <button type="button" ng-click="deny()" class="btn btn-sm btn-primary"
+                translate="{{'license.NOT_ACCEPTED'}}"></button>
+      </div>
+      <div class="pull-right">
+        <!-- Change this button type to submit to send the form data-->
+        <button type="button" ng-click="accept()" class="btn btn-sm btn-primary"
+                translate="{{'license.ACCEPTED'}}"></button>
+      </div>
+    </div>
+  </form>
+  <div class="p-lg text-center">
+    <span>&copy;</span>
+    <span ng-bind="app.year"></span>
+    <span>-</span>
+    <span ng-bind="app.name"></span>
+    <br/>
+    <span ng-bind="app.description"></span>
+  </div>
+</div>

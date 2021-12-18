@@ -1,0 +1,1223 @@
+<div ng-controller="GroupController as gpCtrl" ng-cloak>
+  <div ng-show="isSwitchingMode" class="dashboard-error" style="text-align: center;">
+    <div class="loader5" style="text-align: center; margin: 0 auto;"></div>
+  </div>
+  <div class="clearfix" ng-class="{'nv-blur': isSwitchingMode}">
+    <div ng-if="eof">
+      <div class="pull-right mt-sm" ng-click="refresh()" ng-show="eof || groupErr">
+        <em class="fa fa-refresh text-action"></em>
+        <label class="text-gray-label hand">{{'general.REFRESH' | translate}}</label>
+      </div>
+    </div>
+    <div ng-if="eof" class="pull-right mt-sm mr-lg"
+         ng-click="hideSystemGroup = !hideSystemGroup; toggleSystemGroup(hideSystemGroup)">
+      <em class="fa text-action" ng-class="hideSystemGroup ? 'fa-eye' : 'fa-eye-slash'"></em>
+      <label class="text-gray-label hand">{{hideSystemGroup ? 'group.SHOW_SYS_GROUPS' : 'group.HIDE_SYS_GROUPS' | translate}}</label>
+    </div>
+    <div class="pull-right mt-sm mr-lg" ng-if="isWriteGroupAuthorized"
+         ng-click="openImportDialog()">
+      <em class="fa fa-caret-square-o-up text-action"></em>
+      <label class="text-gray-label hand">{{'group.IMPORT_GROUP_POLICY' | translate | uppercase}}</label>
+    </div>
+    <div class="content-title">{{'sidebar.nav.GROUP' | translate}}</div>
+  </div>
+
+  <div class="panel mb0" ng-class="{'nv-blur': isSwitchingMode}">
+    <div class="panel-body">
+      <div class="clearfix">
+        <label class="text-primary pull-left mt-sm" ng-show="!groupErr" style="position: relative;">{{count}}
+          <div ng-if="groups.length>0 && !eof" class="loader5" style="position: absolute; top: 6px; right: 20px;"></div>
+        </label>
+        <label class="text-info pull-left mt-sm ml" ng-show="!groupErr">Selected Group: {{selectedCount}}</label>
+        <div class="left-inner-addon pull-right" style="margin-bottom: 10px">
+          <em class="fa fa-filter text-filter"></em>
+          <input class="search form-control" placeholder="{{'general.FILTER' | translate}}" type="text" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+                 ng-model="search"
+                 ng-disabled="!eof"
+                 ng-paste="onFilterChanged(search)"
+                 ng-keyup="onFilterChanged(search)"/>
+        </div>
+        <div ng-show="isWriteGroupAuthorized && !onMax" class="pull-left ml-lg">
+            <ul class="list-inline" >
+                <li class="policy-top-button" ng-click="addGroup($event)">
+                    <div class="button">
+                        <em class="fa fa-plus-circle mr-sm text-action" aria-hidden="true"></em>
+                        {{'role.ADD' | translate}}
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div ng-if="!noChecked" class="pull-right mt-sm mr"
+             ng-show="isWriteGroupAuthorized">
+           <div ng-if="isWriteGroupAuthorized" class="nv-checkbox" tooltip-enable="isNotAble2SwitchScorable" tooltip-placement="left" uib-tooltip-html="disabledScorableHtml" tooltip-class="customClass">
+             <input id="switch-scorable" type="checkbox" ng-disabled="isNotAble2SwitchScorable" ng-model="scorable" ng-click="switchScorable(scorable)">
+             <em></em>
+             <label class="text-gray-label" ng-class="{'disabled': isNotAble2SwitchScorable}" style="margin-left: -15px;">{{"group.SWITCH_SCORABLE" | translate | uppercase}}</label>
+           </div>
+        </div>
+        <div ng-if="!noChecked" class="pull-right" style="margin-right: 20px;">
+          <div class="mt-sm" ng-if="isIncludingNoMode">
+            <div tooltip-placement="right" uib-tooltip-html="disabledSwitchModeHtml" tooltip-class="customClass" tooltip-enable="{{isIncludingNoMode}}">
+              <label class="text-gray-label" ng-class="{'disabled': isIncludingNoMode}">{{'service.SWITCH_MODE' | translate}}</label>
+              <em class="fa fa-caret-down text-action" ng-class="{'disabled': isIncludingNoMode}"/>
+            </div>
+          </div>
+          <div uib-dropdown dropdown-append-to-body class="mt-sm" ng-if="!isIncludingNoMode">
+            <div uib-dropdown-toggle>
+              <div>
+                <label class="text-gray-label hand">{{'service.SWITCH_MODE' | translate}}</label>
+                <em class="fa fa-caret-down text-action" ng-click="toggleCollapse()"/>
+              </div>
+            </div>
+            <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+              <li role="menuitem">
+                <a ng-click="switchServiceMode('Discover')">
+                  <em class="fa fa-binoculars fa-fw text-discover mr-sm"></em>{{'enum.DISCOVER' |
+                                                                              translate}}
+                </a>
+              </li>
+              <li role="menuitem">
+                <a ng-click="switchServiceMode('Monitor')">
+                  <em class="fa fa-bell fa-fw text-monitor mr-sm"></em>{{'enum.MONITOR' | translate}}
+                </a>
+              </li>
+              <li class="menuitem">
+                <a type="button" ng-click="switchServiceMode('Protect')">
+                  <em class="fa fa-shield fa-fw text-protect mr-sm"></em>{{'enum.PROTECT' | translate}}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div ng-if="!noChecked" class="pull-right" style="margin-right: 20px;"
+             ng-show="isWriteGroupAuthorized">
+          <div uib-dropdown dropdown-append-to-body class="mt-sm">
+            <div uib-dropdown-toggle>
+              <div>
+                <em class="fa fa-download text-action"></em>
+                <label class="text-gray-label hand">{{'group.export.TITLE' | translate}}</label>
+                <em class="fa fa-caret-down text-action"/>
+              </div>
+            </div>
+            <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+              <li role="menuitem">
+                <a ng-click="exportGroups()">
+                  <em class="fa fa-asterisk fa-fw text-primary mr-sm"></em>{{'enum.DEFAULT' |
+                                                                              translate}}
+                </a>
+              </li>
+              <li role="menuitem">
+                <a ng-click="exportGroups('Discover')">
+                  <em class="fa fa-binoculars fa-fw text-discover mr-sm"></em>{{'enum.DISCOVER' |
+                                                                              translate}}
+                </a>
+              </li>
+              <li role="menuitem">
+                <a ng-click="exportGroups('Monitor')">
+                  <em class="fa fa-bell fa-fw text-monitor mr-sm"></em>{{'enum.MONITOR' | translate}}
+                </a>
+              </li>
+              <li class="menuitem">
+                <a type="button" ng-click="exportGroups('Protect')">
+                  <em class="fa fa-shield fa-fw text-protect mr-sm"></em>{{'enum.PROTECT' | translate}}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div ag-grid="gridGroup" class="ag-grid mt-sm" style="width: 100%; position: relative;"
+           ng-style="{ height: gridHeight + 'px'}">
+           <div ng-class="{'sorting-mask': !eof}"></div>
+           <div ng-if="isWriteGroupAuthorized" class="nv-checkbox" style="position: absolute; left: 7px; top: 5px; z-index: 2;">
+             <input id="all-groups" type="checkbox" ng-click="onCheckedAll()">
+             <em></em>
+           </div>
+           <div class="nv-checkbox" style="position: absolute; right: 7px; top: 5px; z-index: 2; width:20px; height: 20px;" uib-tooltip="{{'group.SWITCH_SCORABLE' | translate}}">
+           </div>
+      </div>
+    </div>
+  </div>
+  <div class="text-center panel-divider" ng-if="!groupErr">
+    <em class="fa fa-align-justify text-muted" aria-hidden="true" ng-mousedown="grabResizeBar($event)"></em>
+  </div>
+  <div class="panel mb0" ng-show="hasGroups && hasSelectedGroups" ng-class="{'nv-blur': isSwitchingMode}">
+    <div
+      class="panel-heading panel-default pv0 clearfix panel-title pt pb auto-hide"
+      uib-tooltip="{{group.comment}}"
+      tooltip-enable="false"
+      show-tooltip-on-text-overflow>
+        <strong class="panel-text-title mt-sm">{{group.name}}</strong><small ng-if="group.comment" style="color: #909fa7;">&nbsp;-&nbsp;{{group.comment}}</small>
+    </div>
+    <div class="panel-body" ng-show="!isMultipleSelecting && !onMax">
+      <md-tabs id="group-tabs" md-no-ink md-dynamic-height="" md-border-bottom
+               md-selected="selectedIndex" class="p0">
+        <md-tab label="{{'group.gridHeader.MEMBERS' | translate}}" ng-click="onMember()" id="0">
+          <md-content class="pb0 mt-sm mb0">
+            <div class="left-inner-addon mb-sm pull-right" style="margin-bottom: 10px">
+              <em class="fa fa-filter text-filter"></em>
+              <input class="search form-control" placeholder="{{'general.FILTER' | translate}}" type="text" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+                     ng-model="searchMember"
+                     ng-paste="onDetailsFilterChanged('memberGridOptions', searchMember)"
+                     ng-keyup="onDetailsFilterChanged('memberGridOptions', searchMember)"/>
+            </div>
+            <div class="col-sm-12 ph0">
+              <div ag-grid="memberGridOptions" class="ag-grid" style="width: 100%;"
+                   ng-style="{ height: memberGridHeight + 'px'}">
+              </div>
+            </div>
+          </md-content>
+        </md-tab>
+        <md-tab label="{{'group.script.TITLE' | translate}}" ng-if="(group.kind==='container' || group.kind==='node') && group.cfg_type!==CFG_TYPE.FED"
+                ng-click="getCustomCheck(group.name)" id="1">
+          <md-content class="pb0 mt-sm mb0" style="overflow-y: scroll;" ng-style="{height: scriptViewHeight + 'px'}">
+            <div class="row m0">
+              <div class="col-xs-6 pl0">
+                <md-input-container class="md-block mb0">
+                  <label>{{'group.script.NAME' | translate}}</label>
+                  <input id="scriptName" ng-model="gpCtrl.scriptEntry.name" ng-disabled="writeMode===WRITE_MODE.UPDATE"/>
+                </md-input-container>
+                <div class="md-block mb0">
+                  <label class="text-muted">{{'group.script.SCRIPT' | translate}}</label>
+                  <textarea id="scriptContent" ng-model="gpCtrl.scriptEntry.script" class="form-control"
+                            ng-style="{height: scriptHeight + 'px'}" style="resize: none; min-height: 50px;"/>
+                </div>
+                <div class="md-block mb0 mt-lg" display-control="write_script">
+                  <md-button ng-if="writeMode===WRITE_MODE.ADD" ng-click="addScript()" class="md-raised md-primary pull-right mr0 mb0"
+                             ng-disabled="!gpCtrl.scriptEntry || (!gpCtrl.scriptEntry.name || !gpCtrl.scriptEntry.script)">
+                    <span>{{'group.script.ADD' | translate}}</span>
+                  </md-button>
+                  <md-button ng-if="writeMode===WRITE_MODE.UPDATE" ng-click="editScript()" class="md-raised md-primary pull-right mr0 mb0"
+                             ng-disabled="!gpCtrl.scriptEntry || (!gpCtrl.scriptEntry.name || !gpCtrl.scriptEntry.script)">
+                    <span>{{'group.script.UPDATE' | translate}}</span>
+                  </md-button>
+                </div>
+              </div>
+              <div class="col-xs-6 pr0">
+                <div class="row m0 p0">
+                  <div class="left-inner-addon mb-sm pull-right" style="margin-bottom: 10px">
+                    <em class="fa fa-filter text-filter"></em>
+                    <input class="search form-control" placeholder="{{'general.FILTER' | translate}}" type="text" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+                           ng-model="searchScript"
+                           ng-paste="onDetailsFilterChanged('gridScript', searchScript)"
+                           ng-keyup="onDetailsFilterChanged('gridScript', searchScript)"/>
+                  </div>
+                </div>
+                <div class="row m0 p0">
+                  <div ag-grid="gridScript" class="ag-grid" style="width: 100%; min-height: 185px;"
+                       ng-style="{ height: scriptGridHeight + 'px'}">
+                  </div>
+                  <div class="policy-select-all" style="left: auto; top: 40px; right: 3px;" ng-if="isWriteGroupAuthorized">
+                    <div>
+                      <em class="fa fa-plus fa-lg mr-sm text-action" id="remove-form-action"
+                          ng-click="prepareAdd()">
+                      </em>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </md-content>
+        </md-tab>
+        <md-tab label="{{'service.PROCESS_PROFILE' | translate}}" ng-if="group.kind==='container' || group.kind==='node'"
+                ng-click="getProcessProfile(group.name)" id="2">
+          <md-content class="pb0 mt-sm">
+            <div class="clearfix">
+              <div class="left-inner-addon mb-sm pull-right" style="margin-bottom: 10px">
+                <em class="fa fa-filter text-filter"></em>
+                <input class="search form-control" placeholder="{{'general.FILTER' | translate}}" type="text" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+                       ng-model="searchProcess"
+                       ng-paste="onDetailsFilterChanged('gridProfile', searchProcess)"
+                       ng-keyup="onDetailsFilterChanged('gridProfile', searchProcess)"/>
+              </div>
+              <div class="pull-right mr-lg" style="margin-top: 4px"
+                   ng-if="isWriteGroupAuthorized"
+                   ng-show="profile.length && selectedRows4Profile.length===1 && isProcessProfileRuleEditable && isGroupRuleAddable"
+                   ng-click="editProfile(profileEntry)">
+                <em class="fa fa-lg fa-edit text-action mr-sm"></em>
+              </div>
+              <div class="pull-right mr-lg" style="margin-top: 4px"
+                   ng-if="isWriteGroupAuthorized"
+                   ng-show="profile.length && selectedRows4Profile.length>0 && isProcessProfileRuleEditable && isGroupRuleAddable"
+                   ng-click="removeProfile()">
+                <em class="fa fa-lg fa-trash text-action mr-sm"></em>
+              </div>
+              <div class="pull-right mr-lg" style="margin-top: 4px"
+                   ng-if="isWriteGroupAuthorized"
+                   ng-show="isGroupRuleAddable"
+                   ng-click="addProfile()">
+                <em class="fa fa-lg fa-plus text-action mr-sm"></em>
+              </div>
+            </div>
+            <div ag-grid="gridProfile" class="ag-grid" style="width: 100%;"
+                 ng-style="{ height: ruleGridHeightWithBtn + 'px'}">
+            </div>
+          </md-content>
+        </md-tab>
+        <md-tab label="{{'service.FILE_PROFILE' | translate}}" ng-if="group.kind==='container'"
+                ng-click="getFileProfile(group.name)" id="3">
+          <md-content class="pb0 mt-sm">
+            <div class="clearfix">
+              <div class="left-inner-addon mb-sm pull-right" style="margin-bottom: 10px">
+                <em class="fa fa-filter text-filter"></em>
+                <input class="search form-control" placeholder="{{'general.FILTER' | translate}}" type="text" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+                       ng-model="searchFile"
+                       ng-paste="onDetailsFilterChanged('gridFile', searchFile)"
+                       ng-keyup="onDetailsFilterChanged('gridFile', searchFile)"/>
+              </div>
+              <div class="pull-right mr-lg" style="margin-top: 4px"
+                   ng-if="isWriteGroupAuthorized"
+                   ng-show="fileProfile.length && fileEntry && isFileAccessRuleEditable"
+                   ng-click="editFilter(filter)">
+                <em class="fa fa-lg fa-edit text-action mr-sm"></em>
+              </div>
+              <div class="pull-right mr-lg" style="margin-top: 4px"
+                   ng-if="isWriteGroupAuthorized"
+                   ng-show="fileProfile.length && fileEntry && isFileAccessRuleEditable"
+                   ng-click="removeFilter(fileEntry)">
+                <em class="fa fa-lg fa-trash text-action mr-sm"></em>
+              </div>
+              <div class="pull-right mr-lg" style="margin-top: 4px"
+                   ng-if="isWriteGroupAuthorized"
+                   ng-show="isGroupRuleAddable"
+                   ng-click="addFilter()">
+                <em class="fa fa-lg fa-plus text-action mr-sm"></em>
+              </div>
+              <div class="pull-right mr-lg" style="margin-top: 4px"
+                   ng-click="showPredefinedFilters()"
+                   ng-show="group.cfg_type!==CFG_TYPE.FED && group.cfg_type!==CFG_TYPE.CUSTOMER">
+                <em class="fa fa-info-circle text-action"></em>
+                <label class="text-gray-label hand mb0">
+                  {{'service.PREDEFINED_FILTERS' | translate}}</label>
+              </div>
+            </div>
+            <div ag-grid="gridFile" class="ag-grid" style="width: 100%;"
+                 ng-style="{ height: ruleGridHeightWithBtn + 'px'}">
+            </div>
+          </md-content>
+        </md-tab>
+        <md-tab label="{{'service.POLICY_RULES' | translate}}"
+                ng-click="getServiceRules(group.name)" id="4">
+          <md-content class="pb0 mt-sm mb0">
+            <div class="row m0 p0">
+              <div class="left-inner-addon mb-sm pull-right" style="margin-bottom: 10px">
+                <em class="fa fa-filter text-filter"></em>
+                <input class="search form-control" placeholder="{{'general.FILTER' | translate}}" type="text" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+                       ng-model="searchNetworkRule"
+                       ng-paste="onDetailsFilterChanged('gridRules', searchNetworkRule)"
+                       ng-keyup="onDetailsFilterChanged('gridRules', searchNetworkRule)"/>
+              </div>
+            </div>
+            <div class="row m0 p0">
+              <div ag-grid="gridRules" class="ag-grid" style="width: 100%;"
+                   ng-style="{ height: ruleGridHeight + 'px'}">
+              </div>
+            </div>
+          </md-content>
+        </md-tab>
+        <md-tab label="{{'group.RESPONSE_RULES' | translate}}"
+                ng-click="getServiceResponseRules(group.name)" id="5">
+          <md-content class="pb0 mt-sm mb0">
+            <div class="row m0 p0">
+              <div class="left-inner-addon mb-sm pull-right" style="margin-bottom: 10px">
+                <em class="fa fa-filter text-filter"></em>
+                <input class="search form-control" placeholder="{{'general.FILTER' | translate}}" type="text" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+                       ng-model="searchResponseRule"
+                       ng-paste="onDetailsFilterChanged('gridResponseRules', searchResponseRule)"
+                       ng-keyup="onDetailsFilterChanged('gridResponseRules', searchResponseRule)"/>
+              </div>
+            </div>
+            <div class="row m0 p0">
+              <div ag-grid="gridResponseRules" class="ag-grid" style="width: 100%;"
+                   ng-style="{ height: ruleGridHeight + 'px'}">
+              </div>
+            </div>
+          </md-content>
+        </md-tab>
+        <md-tab label="{{'group.dlp.TITLE' | translate}}" ng-if="group.kind==='container' && group.cfg_type!==CFG_TYPE.FED"
+                ng-click="getDLPSensors(group.name)" id="6">
+          <md-content class="pb0 mt-sm">
+            <div class="clearfix">
+              <div class="left-inner-addon mb-sm pull-right" style="margin-bottom: 10px">
+                <em class="fa fa-filter text-filter"></em>
+                <input class="search form-control" placeholder="{{'general.FILTER' | translate}}" type="text" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+                       ng-model="searchDLP"
+                       ng-paste="onDetailsFilterChanged('gridDLP', searchDLP)"
+                       ng-keyup="onDetailsFilterChanged('gridDLP', searchDLP)"/>
+              </div>
+              <div class="pull-right ml-lg" style="margin-top: 4px; padding-top: 2px;"
+                   ng-if="isWriteGroupAuthorized"
+                   ng-click="editDLPSensor()">
+                <em class="fa fa-lg fa-edit text-action mr-sm"></em>
+              </div>
+              <div class="pull-right" style="padding-top: 5px; margin-left: 10px; width: 160px;" ng-if="isWriteGroupAuthorized" >
+                <label class="pull-left nv-modal-item-title text-gray-label mb0" style="padding-top: 2px;">{{'responsePolicy.gridHeader.STATUS' | translate | uppercase}}</label>
+                <div class="pull-left">
+                  <div class="md-switch2">
+                    <label class="nv-modal-item-title mb0">
+                      <input id="adm-state" type="checkbox" ng-model="dlpGroup.status" ng-click="toggleDLPGroupStatus(dlpGroup.status)">
+                      <span class="toggle hand" style="margin-right: 5px;"></span>
+                      {{(!dlpGroup.status ? "policy.status.DISABLED" : "policy.status.ENABLED") | translate}}
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div ag-grid="gridDLP" class="ag-grid" style="width: 100%;"
+                 ng-style="{ height: ruleGridHeightWithBtn2 + 'px'}">
+            </div>
+          </md-content>
+        </md-tab>
+        <md-tab label="{{'group.waf.TITLE' | translate}}" ng-if="group.kind==='container' && group.cfg_type!==CFG_TYPE.FED"
+                ng-click="getWAFSensors(group.name)" id="7">
+          <md-content class="pb0 mt-sm">
+            <div class="clearfix">
+              <div class="left-inner-addon mb-sm pull-right" style="margin-bottom: 10px">
+                <em class="fa fa-filter text-filter"></em>
+                <input class="search form-control" placeholder="{{'general.FILTER' | translate}}" type="text" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+                       ng-model="searchWAF"
+                       ng-paste="onDetailsFilterChanged('gridWAF', searchWAF)"
+                       ng-keyup="onDetailsFilterChanged('gridWAF', searchWAF)"/>
+              </div>
+              <div class="pull-right ml-lg" style="margin-top: 4px; padding-top: 2px;"
+                   ng-if="isWriteGroupAuthorized"
+                   ng-click="editWAFSensor()">
+                <em class="fa fa-lg fa-edit text-action mr-sm"></em>
+              </div>
+              <div class="pull-right" style="padding-top: 5px; margin-left: 10px; width: 160px;" ng-if="isWriteGroupAuthorized" >
+                <label class="pull-left nv-modal-item-title text-gray-label mb0" style="padding-top: 2px;">{{'responsePolicy.gridHeader.STATUS' | translate | uppercase}}</label>
+                <div class="pull-left">
+                  <div class="md-switch2">
+                    <label class="nv-modal-item-title mb0">
+                      <input id="adm-state" type="checkbox" ng-model="wafGroup.status" ng-click="toggleWAFGroupStatus(wafGroup.status)">
+                      <span class="toggle hand" style="margin-right: 5px;"></span>
+                      {{(!wafGroup.status ? "policy.status.DISABLED" : "policy.status.ENABLED") | translate}}
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div ag-grid="gridWAF" class="ag-grid" style="width: 100%;"
+                 ng-style="{ height: ruleGridHeightWithBtn2 + 'px'}">
+            </div>
+          </md-content>
+        </md-tab>
+      </md-tabs>
+    </div>
+    <div class="panel-body" ng-show="isMultipleSelecting && !onMax">
+      <div class="multi-group-list" ng-style="{ height: (ruleGridHeight + 55) + 'px'}">
+        <span ng-repeat="group in displayedMultiGroup" class="{{'mr mb ph-sm action-label nv-label ' + (group.policy_mode ? group.policy_mode.toLowerCase() : colorMap[group.cfg_type.toUpperCase()])}}">
+          {{group.name}}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <script type="text/ng-template" id="dialog.importGroupPolicy.html">
+      <md-dialog aria-label="import group policy" class="dialog-lg" style="overflow: visible">
+        <form name="addGroupForm" ng-submit="$event.preventDefault()" novalidate="" class="form-validate" style="overflow: visible">
+          <md-toolbar>
+            <div class="md-toolbar-tools">
+              <h2 class="text-dark">{{'group.IMPORT_GROUP_POLICY' | translate | uppercase}}</h2>
+              <span flex></span>
+              <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+              </md-button>
+            </div>
+          </md-toolbar>
+          <md-dialog-content style="overflow: visible" class="mt">
+            <div class="col-sm-3">
+              <div ng-show="uploader.isHTML5">
+                <div
+                  nv-file-drop
+                  uploader="uploader"
+                  over-class="bg-info"
+                  class="file-drop-zone"
+                  translate="{{'setting.DROP_ZONE'}}"
+                ></div>
+              </div>
+              <hr/>
+
+              <input
+                id="groupPolicyFile"
+                filestyle
+                type="file"
+                data-button-text
+                data-class-button="btn btn-default"
+                data-classinput="form-control inline"
+                data-placeholder="or select file..."
+                nv-file-select
+                uploader="uploader"
+                class="form-control"
+              />
+            </div>
+
+            <div style="margin-bottom: 40px" class="col-sm-9">
+              <div ng-if="uploader.queue.length">
+                <table ng-if="uploader.queue.length" class="table">
+                  <thead>
+                  <tr class="text-muted">
+                    <th width="50%">{{'setting.FILE_NAME' | translate}}</th>
+                    <th ng-show="uploader.isHTML5">
+                      {{'setting.FILE_SIZE' | translate}}
+                    </th>
+                    <th ng-show="uploader.isHTML5">
+                      {{'setting.PROGRESS' | translate}}
+                    </th>
+                    <th>{{'setting.STATUS' | translate}}</th>
+                    <th>{{'setting.ACTIONS' | translate}}</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr ng-repeat="item in uploader.queue">
+                    <td>
+                      <strong>{{ item.file.name | shorten2: 30}}</strong>
+                    </td>
+                    <td ng-show="uploader.isHTML5" nowrap>
+                      {{ item.file.size / 1024 | number:2 }} KB
+                    </td>
+                    <td ng-show="uploader.isHTML5">
+                      <div style="margin-bottom: 0;" class="progress progress-xs">
+                        <div
+                          role="progressbar"
+                          ng-style="{ 'width': percentage + '%' }"
+                          class="progress-bar"
+                        ></div>
+                      </div>
+                      <div style="height: 12px;">
+                        <div ng-if="!!percentage" class="text-center text-muted" style="font-size: 9px;">{{percentage}}%</div>
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <span ng-show="status === 'done'">
+                        <em class="fa fa-check fa-fw text-success"/>
+                      </span>
+                      <span ng-show="status === 'preparing'">
+                        <em class="fa fa-spinner fa-spin text-info"/>
+                      </span>
+                      <span ng-show="status === 'importing'">
+                        <em class="fa fa-cog fa-spin text-info"/>
+                      </span>
+                      <span ng-show="item.isCancel">
+                        <em class="fa fa-ban-circle fa-fw"/>
+                      </span>
+                      <span ng-show="status && status !== '' && status !== 'preparing' && status !== 'importing' && status !== 'done'">
+                        <em class="fa fa-times fa-fw text-danger" uib-tooltip="{{status}}" tooltip-class="customClass"/>
+                      </span>
+                    </td>
+                    <td nowrap>
+                      <button
+                        type="button"
+                        ng-click="item.upload()"
+                        ng-disabled="item.isReady || item.isUploading || item.isSuccess || item.isError"
+                        class="btn btn-info btn-xs"
+                      >
+                        <span class="mr-sm"/>
+                        {{'setting.UPLOAD' | translate}}
+                      </button>
+                      <button
+                        type="button"
+                        ng-click="item.remove()"
+                        ng-disabled="item.isReady || item.isUploading || item.isSuccess"
+                        class="btn btn-default btn-xs"
+                      >
+                        <span class="mr-sm"/>
+                        {{'setting.REMOVE' | translate}}
+                      </button>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="col-sm-12 mt mb">
+              <small class="text-muted mt-lg">
+                <em class="fa fa-exclamation text-warning mr-sm"/>
+                {{'group.IMPORT_NOTICE' | translate}}
+              </small>
+            </div>
+          </md-dialog-content>
+        </form>
+      </md-dialog>
+    </script>
+  </div>
+
+  <div>
+    <script type="text/ng-template" id="dialog.addGroup.html">
+      <md-dialog aria-label="Add group" class="dialog-lg" style="overflow: visible">
+        <form name="addGroupForm" ng-submit="$event.preventDefault()" novalidate="" class="form-validate" style="overflow: visible">
+          <md-toolbar>
+            <div class="md-toolbar-tools">
+              <h2 class="text-dark">{{'group.addGroup.TITLE' | translate}}</h2>
+              <span flex></span>
+              <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+              </md-button>
+            </div>
+          </md-toolbar>
+          <md-dialog-content style="overflow: visible">
+            <div>
+              <div class="card-body">
+                <div>
+                  <div class="row m0" style="min-height: 95px;">
+                    <div class="col-sm-4">
+                      <md-input-container class="md-block mb0" >
+                        <label>{{'group.editGroup.GROUP_NAME' | translate}}</label>
+                        <input ng-model="group.name"  required name="groupName" ng-pattern="nameRegex"
+                               class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                        <div ng-messages="addGroupForm.groupName.$error">
+                        <span ng-show="addGroupForm.groupName.$dirty &amp;&amp; addGroupForm.groupName.$error.required"
+                              class="text-danger">Group name is required</span>
+                          <span ng-show="addGroupForm.groupName.$dirty &amp;&amp; addGroupForm.groupName.$error.pattern"
+                                class="text-danger">
+                        {{'group.NAME_INVALID' | translate}} fed., nv., external, Host:, Workload:(reserved) </span>
+                        </div>
+                      </md-input-container>
+                    </div>
+                    <div class="col-sm-8">
+                      <md-input-container class="md-block mb0" >
+                        <label>{{'policy.addPolicy.COMMENT' | translate}}</label>
+                        <input ng-model="group.comment" name="groupComment"
+                               class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                      </md-input-container>
+                    </div>
+                  </div>
+                  <div class="row m0">
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label class="col-sm-2 nv-modal-item-title control-label pl0" style="padding-left: 36px;">
+                          {{'responsePolicy.gridHeader.CRITERIA' | translate}}
+                          <div class="text-sm text-muted">{{'group.editGroup.CONDITION_HINT' | translate}}</div>
+                        </label>
+                        <div class="col-sm-9">
+                          <tags-input ng-model="group.criteria" name="condition"
+                                      ng-disabled="group.reserved || group.learned"
+                                      placeholder="{{'group.editGroup.ADD_CRITERIA' | translate}} {{'group.editGroup.CRITERIA_RELATIONSHIP' | translate}}"
+                                      replace-spaces-with-dashes="false" add-on-comma="false"
+                                      display-property="name" ng-required="!group.reserved" template="my-custom-template"
+                                      on-tag-clicked="showTagDetail($tag)"
+                                      on-tag-adding="tagAdding($tag)"
+                                      on-tag-removing="tagRemoving($tag)"
+                                      max-length="{{'general.FILTER_MAX_LEN' | translate}}">
+                          </tags-input>
+                          <div ng-show="isShowingEditCriterion">
+                            <div class="col-sm-11 pl0">
+                              <div class="md-block mb0">
+                                <input id="tagEditor" ng-model="singleCriterion.value" placeholder="{{'group.SINGLE_CRITERION_HINT' | translate}}"
+                                       class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}" ng-keyup="checkDuplicated()" ng-keydown="preventFormSubmit($event)"/>
+                              </div>
+                            </div>
+                            <div class="col-sm-1 pr0">
+                              <md-button class="fa fa-pencil-square-o md-raised md-primary pull-right mr0" aria-hidden="true" style="min-width: 36px; margin-top: -3px;" aria-hidden="true" ng-click="editCriterion(singleCriterion)"
+                                         ng-disabled="singleCriterion.value.length===0 || isInvalidTag">
+                              </md-button>
+                            </div>
+                          </div>
+                          <div>
+                            <span class="help-block" translate="{{'partner.group.CRITERIA_HINT'}}"></span>
+                            <span ng-show="onFormatError" class="text-danger" >{{errorMessage}}</span>
+                          </div>
+                        </div>
+                        <div class="col-sm-1" style="margin-top: 10px;">
+                          <div ng-if="group.reserved" class="label label-inverse ml-sm"  translate="{{'group.RESERVED'}}">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row m0">
+                    <div ng-show="duplicatedPolicy" style="color:#ff0000;" class="col-sm-12" ng-cloak>
+                      {{'policy.addPolicy.DUPLICATED_POLICY' | translate}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </md-dialog-content>
+          <div class="md-actions" layout="row" style="border: 0;">
+            <md-button ng-click="addGroup()" class="md-raised md-primary"
+                       ng-disabled="addGroupForm.$invalid || group.criteria.length===0">
+              {{'group.addGroup.ADD' | translate}}
+            </md-button>
+            <a ng-click="cancel()" class="nv-link">
+              {{'group.editGroup.CANCEL' | translate}}
+            </a>
+          </div>
+        </form>
+      </md-dialog>
+    </script>
+  </div>
+
+  <div>
+    <script type="text/ng-template" id="dialog.editGroup.html">
+      <md-dialog aria-label="Add group" class="dialog-lg" style="overflow: visible">
+        <form name="groupForm" ng-submit="$event.preventDefault()" novalidate="" class="form-validate" style="overflow: visible">
+          <md-toolbar>
+            <div class="md-toolbar-tools">
+              <h2 class="text-dark" ng-if="isEditable">{{'group.editGroup.TITLE' | translate}}</h2>
+              <h2 class="text-dark" ng-if="!isEditable">{{'group.VIEW_GROUP' | translate}}</h2>
+              <span flex></span>
+              <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+              </md-button>
+            </div>
+          </md-toolbar>
+          <md-dialog-content style="overflow: visible" ng-class="{'mb-lg': !isEditable}">
+            <div>
+              <div class="card-body">
+                <div>
+                  <div class="row m0">
+                    <div class="col-sm-4">
+                      <md-input-container class="md-block mb0" >
+                        <label>{{'group.editGroup.GROUP_NAME' | translate}}</label>
+                        <input ng-model="group.name"  name="groupName"
+                               class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}" disabled/>
+                      </md-input-container>
+                    </div>
+                    <div class="col-sm-8">
+                      <md-input-container class="md-block mb0" >
+                        <label>{{'policy.addPolicy.COMMENT' | translate}}</label>
+                        <input ng-model="group.comment" name="groupComment"
+                               class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}" ng-disabled="!isEditable"/>
+                      </md-input-container>
+                    </div>
+                  </div>
+                  <div class="row m0">
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label class="col-sm-2 nv-modal-item-title control-label pl0" style="padding-left: 36px;">
+                          {{'responsePolicy.gridHeader.CRITERIA' | translate}}
+                          <div class="text-sm text-muted" ng-if="isEditable">{{'group.editGroup.CONDITION_HINT' | translate}}</div>
+                        </label>
+                        <div class="col-sm-9">
+                          <tags-input ng-model="group.criteria" name="condition"
+                                      ng-disabled="!isEditable"
+                                      placeholder="{{isEditable ? 'group.editGroup.ADD_CRITERIA' : '' | translate}} {{'group.editGroup.CRITERIA_RELATIONSHIP' | translate}}"
+                                      replace-spaces-with-dashes="false" add-on-comma="false"
+                                      on-tag-clicked="showTagDetail($tag)"
+                                      on-tag-adding="tagAdding($tag)"
+                                      on-tag-removing="tagRemoving($tag)"
+                                      display-property="name" template="my-custom-template" required
+                                      max-length="{{'general.FILTER_MAX_LEN' | translate}}">
+                          </tags-input>
+                          <div ng-show="isShowingEditCriterion && isEditable">
+                            <div class="col-sm-11 pl0">
+                              <div class="md-block mb0">
+                                <input id="tagEditor" ng-model="singleCriterion.value" placeholder="{{'group.SINGLE_CRITERION_HINT' | translate}}"
+                                       class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}" ng-keyup="checkDuplicated()" ng-keydown="preventFormSubmit($event)"/>
+                              </div>
+                            </div>
+                            <div class="col-sm-1 pr0">
+                              <md-button class="fa fa-pencil-square-o md-raised md-primary pull-right mr0" aria-hidden="true" style="min-width: 36px; margin-top: -3px;" aria-hidden="true" ng-click="editCriterion(singleCriterion)"
+                                         ng-disabled="singleCriterion.value.length===0 || isInvalidTag">
+                              </md-button>
+                            </div>
+                          </div>
+                          <div>
+                            <span ng-show="isEditable" class="help-block" translate="{{'partner.group.CRITERIA_HINT'}}"></span>
+                            <span ng-show="onFormatError" class="text-danger" >{{errorMessage}}</span>
+                          </div>
+                        </div>
+                        <div class="col-sm-1" style="margin-top: 10px;">
+                          <div ng-if="group.reserved" class="label label-inverse ml-sm"  translate="{{'group.RESERVED'}}">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </md-dialog-content>
+          <div class="md-actions" layout="row" style="border: 0;" ng-if="isEditable">
+            <md-button ng-click="editGroup(group)" class="md-raised md-primary"
+                       ng-disabled=groupForm.$invalid || group.criteria.length===0">
+              {{'group.editGroup.UPDATE' | translate}}
+            </md-button>
+            <a ng-click="cancel()" class="nv-link">
+              {{'group.editGroup.CANCEL' | translate}}
+            </a>
+          </div>
+        </form>
+      </md-dialog>
+    </script>
+  </div>
+
+  <div>
+    <script type="text/ng-template" id="my-custom-template">
+      <div class="tag-template" uib-tooltip="{{$getDisplayText()}}">
+        <div>
+          <em class="fa text-primary"
+              ng-class="data.name.indexOf('image') === 0 ? 'fa-archive': (
+                    data.name.indexOf('node') === 0 ? 'fa-server': (
+                    data.name.indexOf('container') === 0 ? 'fa-square-o': (
+                    data.name.indexOf('service') === 0 ? 'fa-gears': (
+                    data.name.indexOf('domain') === 0 ? 'fa-building-o': (
+                    data.name.indexOf('address') === 0 ? 'fa-map-marker': 'fa-tag')))))">
+          </em>
+        </div>
+        <div>
+          <span>{{$getDisplayText().length > 40 ? $getDisplayText().substring(0, 40) + '...' : $getDisplayText()}}</span>
+          <a class="remove-button" ng-click="$removeTag()">&#10005;</a>
+        </div>
+      </div>
+    </script>
+
+  </div>
+
+  <div id="predefinedFilter" class="dataBox middleRight longBoxLimited pl-sm"
+       ng-show="onPredefinedFilterView">
+    <button class="btn btn-xs btn-link pull-right" ng-click="onPredefinedFilterView=false">
+      <em class="fa fa-times fa-lg text-muted"></em>
+    </button>
+    <h4>{{'service.PREDEFINED_FILTERS_TITLE' | translate}}</h4>
+    <div class="">
+      <div ag-grid="gridFilePre" class="ag-grid" style="width: 700px; height: 295px;">
+      </div>
+    </div>
+  </div>
+
+  <script type="text/ng-template" id="modeTemplate.html">
+    <dl class="dl">
+      <dt><em class="fa fa-binoculars text-info mr-sm"></em>{{'topbar.mode.LEARNING' | translate}}
+      </dt>
+      <dd translate="{{'topbar.tip.LEARNING'}}"></dd>
+      <dt><em class="fa fa-bell text-primary mr-sm"></em>{{'topbar.mode.EVALUATION' | translate}}
+      </dt>
+      <dd translate="{{'topbar.tip.EVALUATING'}}"></dd>
+      <dt><em class="fa fa-shield text-green mr-sm"></em>{{'topbar.mode.ENFORCE' | translate}}</dt>
+      <dd translate="{{'topbar.tip.ENFORCING'}}"></dd>
+    </dl>
+  </script>
+
+  <script type="text/ng-template" id="profile.add.html">
+    <md-dialog aria-label="Add profile rule">
+      <form name="profileForm" novalidate="" class="form-validate">
+        <md-toolbar>
+          <div class="md-toolbar-tools">
+            <h2 class="text-dark">{{'service.ADD_RULE' | translate}}</h2>
+            <span flex>
+              <sup><em class="ml fa fa-info-circle text-muted" uib-tooltip-html="processProfileSample"></em></sup>
+            </span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+              <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"/>
+            </md-button>
+          </div>
+        </md-toolbar>
+        <md-dialog-content>
+          <div class="mt-sm">
+            <div class="col-sm-6">
+              <md-input-container class="md-block mb0">
+                <label>{{'service.gridHeader.NAME' | translate}}</label>
+                <input ng-model="rule.name" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+                       required/>
+              </md-input-container>
+            </div>
+            <div class="col-sm-6">
+              <md-input-container class="md-block mb0">
+                <label>{{'service.gridHeader.PATH' | translate}}</label>
+                <input ng-model="rule.path" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+              </md-input-container>
+            </div>
+
+            <div class="col-sm-6 mb0">
+              <label class="nv-modal-item-title">{{'service.ALLOW_ALERT' | translate}}</label>
+              <div>
+                <div class="md-switch4" style="width: 100px;">
+                  <label class="nv-modal-item-title">
+                    <input type="checkbox" ng-model="rule.allowed" required>
+                    <span class="toggle"></span>
+                    <span ng-class="{'text-deny': !rule.allowed,'text-success': rule.allowed}">{{(rule.allowed ? "policy.action.ALLOW" : "policy.action.DENY") | translate}}</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-12 pb-sm">
+              <button class="btn btn-wide btn-default pull-right"
+                      ng-click="addProfile(rule)">
+                <em class="fa fa-save mr-sm"></em>{{'policy.portlet.SUBMIT' | translate}}
+              </button>
+            </div>
+          </div>
+        </md-dialog-content>
+      </form>
+    </md-dialog>
+  </script>
+
+  <script type="text/ng-template" id="profile.edit.html">
+    <md-dialog aria-label="Edit profile rule">
+      <form name="profileEditForm" novalidate="" class="form-validate">
+        <md-toolbar>
+          <div class="md-toolbar-tools">
+            <h2 class="text-dark">{{'service.EDIT_RULE' | translate}}</h2>
+            <span flex>
+              <sup><em class="ml fa fa-info-circle text-muted" uib-tooltip-html="processProfileSample"></em></sup>
+            </span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+              <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"/>
+            </md-button>
+          </div>
+        </md-toolbar>
+        <md-dialog-content>
+          <div class="mt-sm">
+            <div class="col-sm-6">
+              <md-input-container class="md-block mb0">
+                <label>{{'service.gridHeader.NAME' | translate}}</label>
+                <input disabled ng-model="rule.name"/>
+              </md-input-container>
+            </div>
+            <div class="col-sm-6">
+              <md-input-container class="md-block mb0">
+                <label>{{'service.gridHeader.PATH' | translate}}</label>
+                <input ng-model="rule.path" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+              </md-input-container>
+            </div>
+
+            <div class="col-sm-6 mb0">
+              <label class="nv-modal-item-title">{{'service.ALLOW_ALERT' | translate}}</label>
+              <div>
+                <div class="md-switch4" style="width: 100px;">
+                  <label class="nv-modal-item-title">
+                    <input type="checkbox" ng-model="rule.allowed" required>
+                    <span class="toggle"></span>
+                    <span ng-class="{'text-deny': !rule.allowed,'text-success': rule.allowed}">{{(rule.allowed ? "policy.action.ALLOW" : "policy.action.DENY") | translate}}</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-12 pb-sm">
+              <button class="btn btn-wide btn-default pull-right"
+                      ng-click="updateProfile(rule)">
+                <em class="fa fa-save mr-sm"></em>{{'policy.portlet.SUBMIT' | translate}}
+              </button>
+            </div>
+          </div>
+        </md-dialog-content>
+      </form>
+    </md-dialog>
+  </script>
+
+  <script type="text/ng-template" id="filter.add.html">
+    <md-dialog aria-label="Add file monitor profile rule">
+      <form name="fileForm" novalidate="" class="form-validate">
+        <md-toolbar>
+          <div class="md-toolbar-tools">
+            <h2 class="text-dark">{{'service.ADD_RULE' | translate}}</h2>
+            <span flex>
+              <sup><em class="ml fa fa-info-circle text-muted" uib-tooltip-html="fileAccessFilterSample"></em></sup>
+            </span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+              <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+            </md-button>
+          </div>
+        </md-toolbar>
+        <md-dialog-content>
+          <div class="mt-sm">
+            <div class="col-sm-4">
+              <md-input-container class="md-block">
+                <label>{{'service.gridHeader.FILTER' | translate}}</label>
+                <input ng-model="rule.filter" style="min-width:200px;width:auto;"
+                       maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+                       ng-pattern="/^\/(\S)*/" required/>
+              </md-input-container>
+            </div>
+
+            <div class="col-sm-2">
+              <md-input-container class="md-block">
+                <md-checkbox class="md-primary" ng-model="rule.recursive">
+                  {{'service.gridHeader.RECURSIVE' | translate}}
+                </md-checkbox>
+              </md-input-container>
+            </div>
+
+            <div class="col-sm-6 mb0" style="margin-top: 18px">
+              <label class="nv-modal-item-title mr-sm">{{'service.ALLOW_ALERT' | translate}}</label>
+              <div class="radio-inline c-radio mr-lg" ng-class="inputMaskDisabledClass">
+                <label class="text-gray-label" ng-class="inputMaskDisabledClass">
+                  <input type="radio" name="behavior" value="monitor_change"
+                         ng-init="rule.behavior='monitor_change'"
+                         ng-model="rule.behavior" required
+                  />
+                  <span class="fa fa-binoculars text-discover"
+                        ng-class="inputMaskDisabledClass"></span>
+                  {{'enum.MONITOR_CHANGE' | translate}}
+                </label>
+              </div>
+              <div class="radio-inline c-radio pl-sm mr-lg" ng-class="inputMaskDisabledClass">
+                <label class="text-gray-label" ng-class="inputMaskDisabledClass">
+                  <input type="radio" name="behavior" value="block_access"
+                         ng-model="rule.behavior" required
+                  />
+                  <span class="fa fa-shield text-protect" ng-class="inputMaskDisabledClass"></span>
+                  {{'enum.BLOCK_ACCESS' | translate}}
+                </label>
+              </div>
+            </div>
+
+            <div class="col-sm-12 mb-sm mt-sm">
+              <div class="form-group">
+                <label class="col-sm-2 nv-modal-item-title control-label pl0"
+                       style="padding-left: 36px;">
+                  {{'service.gridHeader.APPLICATIONS' | translate}}
+                  <div class="text-sm text-muted">{{'policy.addPolicy.APP_TIP' | translate}}</div>
+                </label>
+                <div class="col-sm-10  pr0">
+                  <tags-input ng-model="rule.apps"
+                              placeholder="{{'policy.message.ADD_APP' | translate}}"
+                              display-property="name" class="nv-input-text"
+                              max-length="{{'general.FILTER_MAX_LEN' | translate}}"
+                              ng-disabled="rule.behavior==='monitor_change'"
+                              min-length="2">
+                  </tags-input>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-12 pb-sm">
+              <button class="btn btn-wide btn-default pull-right"
+                      ng-disabled="fileForm.$invalid || !fileForm.$dirty"
+                      ng-click="addFilter(rule)" >
+                <em class="fa fa-save mr-sm"></em>{{'policy.portlet.SUBMIT' | translate}}
+              </button>
+            </div>
+
+          </div>
+        </md-dialog-content>
+      </form>
+    </md-dialog>
+  </script>
+
+  <script type="text/ng-template" id="filter.edit.html">
+    <md-dialog aria-label="Edit file profile rule">
+      <form name="fileEditForm" novalidate="" class="form-validate">
+        <md-toolbar>
+          <div class="md-toolbar-tools">
+            <h2 class="text-dark">{{'service.EDIT_RULE' | translate}}</h2>
+            <span flex>
+              <sup><em class="ml fa fa-info-circle text-muted" uib-tooltip-html="fileAccessFilterSample"></em></sup>
+            </span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+              <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+            </md-button>
+          </div>
+        </md-toolbar>
+        <md-dialog-content>
+          <div class="mt-sm">
+            <div class="col-sm-4">
+              <md-input-container class="md-block">
+                <label>{{'service.gridHeader.FILTER' | translate}}</label>
+                <input ng-model="rule.filter" style="min-width:200px;width:auto;"
+                       disabled/>
+              </md-input-container>
+            </div>
+
+            <div class="col-sm-2">
+              <md-input-container class="md-block mb0">
+                <md-checkbox class="md-primary" ng-model="rule.recursive">
+                  {{'service.gridHeader.RECURSIVE' | translate}}
+                </md-checkbox>
+              </md-input-container>
+            </div>
+
+            <div class="col-sm-6 mb0" style="margin-top: 18px">
+              <label class="nv-modal-item-title mr-sm">{{'service.ALLOW_ALERT' | translate}}</label>
+              <div class="radio-inline c-radio mr-lg" ng-class="inputMaskDisabledClass">
+                <label class="text-gray-label" ng-class="inputMaskDisabledClass">
+                  <input type="radio" name="behavior" value="monitor_change"
+                         ng-model="rule.behavior" required
+                  />
+                  <span class="fa fa-binoculars text-discover"
+                        ng-class="inputMaskDisabledClass"></span>
+                  {{'enum.MONITOR_CHANGE' | translate}}
+                </label>
+              </div>
+              <div class="radio-inline c-radio pl-sm mr-lg" ng-class="inputMaskDisabledClass">
+                <label class="text-gray-label" ng-class="inputMaskDisabledClass">
+                  <input type="radio" name="behavior" value="block_access"
+                         ng-model="rule.behavior" required
+                  />
+                  <span class="fa fa-shield text-protect" ng-class="inputMaskDisabledClass"></span>
+                  {{'enum.BLOCK_ACCESS' | translate}}
+                </label>
+              </div>
+            </div>
+
+            <div class="col-sm-12 mb-sm mt-sm">
+              <div class="form-group">
+                <label class="col-sm-2 nv-modal-item-title control-label pl0"
+                       style="padding-left: 36px;">
+                  {{'service.gridHeader.APPLICATIONS' | translate}}
+                  <div class="text-sm text-muted">{{'policy.addPolicy.APP_TIP' | translate}}</div>
+                </label>
+                <div class="col-sm-10  pr0">
+                  <tags-input ng-model="rule.apps"
+                              placeholder="{{'policy.message.ADD_APP' | translate}}"
+                              display-property="name" class="nv-input-text"
+                              max-length="{{'general.FILTER_MAX_LEN' | translate}}"
+                              ng-disabled="rule.behavior==='monitor_change'"
+                              min-length="2">
+                  </tags-input>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-12 pb-sm">
+              <button class="btn btn-wide btn-default pull-right"
+                      ng-disabled="fileEditForm.$invalid || !fileEditForm.$dirty"
+                      ng-click="updateFilter(rule)">
+                <em class="fa fa-save mr-sm"></em>{{'policy.portlet.SUBMIT' | translate}}
+              </button>
+            </div>
+          </div>
+        </md-dialog-content>
+      </form>
+    </md-dialog>
+  </script>
+
+  <script type="text/ng-template" id="dlp.setting.html">
+    <md-dialog aria-label="Edit DLP setting" style="width: 80vw;">
+      <form name="dlpSettingForm" novalidate="" class="form-validate">
+        <md-toolbar>
+          <div class="md-toolbar-tools">
+            <h2 class="text-dark">{{'group.dlp.setting.TITLE' | translate}}</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+              <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+            </md-button>
+          </div>
+        </md-toolbar>
+        <md-dialog-content>
+          <div class="mt-sm">
+            <div class="col-sm-12 pb-sm">
+              <div class="clearfix mt-sm">
+                <label class="text-primary mt-sm pull-left mt-sm" ng-show="!eventsErr">{{count}}
+                </label>
+                <h6 ng-if="warning" class="ml-lg text-warning pull-left">{{warning}}</h6>
+                <div class="left-inner-addon pull-right" style="margin-bottom: 10px">
+                  <em class="fa fa-filter text-filter"></em>
+                  <input class="search form-control"
+                         placeholder="{{'general.FILTER' | translate}}"
+                         type="text"
+                         maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+                         ng-model="search"
+                         ng-paste="onFilterChanged(search)"
+                         ng-keyup="onFilterChanged(search)">
+                </div>
+              </div>
+              <div ag-grid="gridSensor" class="ag-grid mt-sm" style="width: 100%; position: relative;"
+                   ng-style="{ height: gridHeight4Sensor + 'px'}">
+<!--                <div class="policy-select-all" style="top: 8px; left: 7px;" ng-if="isWriteGroupAuthorized">-->
+<!--                  <input id="all-sensor-checkbox" type="checkbox">-->
+<!--                  <span class="toggle" ng-click="checkAll()"></span>-->
+<!--                </div>-->
+              </div>
+            </div>
+            <div class="col-sm-12 pb-sm">
+              <button class="btn btn-wide btn-default pull-right"
+                      ng-click="adopt()">
+                <em class="fa fa-plus-square-o mr-sm"></em>{{'group.dlp.setting.ADOPT' | translate}}
+              </button>
+            </div>
+          </div>
+        </md-dialog-content>
+      </form>
+    </md-dialog>
+  </script>
+
+  <script type="text/ng-template" id="waf.setting.html">
+    <md-dialog aria-label="Edit WAF setting" style="width: 80vw;">
+      <form name="wafSettingForm" novalidate="" class="form-validate">
+        <md-toolbar>
+          <div class="md-toolbar-tools">
+            <h2 class="text-dark">{{'group.waf.setting.TITLE' | translate}}</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+              <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+            </md-button>
+          </div>
+        </md-toolbar>
+        <md-dialog-content>
+          <div class="mt-sm">
+            <div class="col-sm-12 pb-sm">
+              <div class="clearfix mt-sm">
+                <label class="text-primary mt-sm pull-left mt-sm" ng-show="!eventsErr">{{count}}
+                </label>
+                <h6 ng-if="warning" class="ml-lg text-warning pull-left">{{warning}}</h6>
+                <div class="left-inner-addon pull-right" style="margin-bottom: 10px">
+                  <em class="fa fa-filter text-filter"></em>
+                  <input class="search form-control"
+                         placeholder="{{'general.FILTER' | translate}}"
+                         type="text"
+                         maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+                         ng-model="search"
+                         ng-paste="onFilterChanged(search)"
+                         ng-keyup="onFilterChanged(search)">
+                </div>
+              </div>
+              <div ag-grid="gridSensor" class="ag-grid mt-sm" style="width: 100%; position: relative;"
+                   ng-style="{ height: gridHeight4Sensor + 'px'}">
+              </div>
+            </div>
+            <div class="col-sm-12 pb-sm">
+              <button class="btn btn-wide btn-default pull-right"
+                      ng-click="adopt()">
+                <em class="fa fa-plus-square-o mr-sm"></em>{{'group.waf.setting.ADOPT' | translate}}
+              </button>
+            </div>
+          </div>
+        </md-dialog-content>
+      </form>
+    </md-dialog>
+  </script>
+
+  <script type="text/ng-template" id="groups.export.html">
+    <md-dialog aria-label="Export group policy" style="width: 80vw;">
+      <form name="groupExportForm" novalidate="" class="form-validate">
+        <md-toolbar>
+          <div class="md-toolbar-tools">
+            <h2 class="text-dark">{{'group.export.TITLE' | translate}}</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+              <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+            </md-button>
+          </div>
+        </md-toolbar>
+        <md-dialog-content>
+          <div class="mt-sm">
+            <div class="col-sm-12 pb-sm">
+              <div class="clearfix mt-sm">
+                <label class="text-primary mt-sm" ng-show="!eventsErr">{{count}}
+                </label>
+                <div class="left-inner-addon pull-right" style="margin-bottom: 10px">
+                  <em class="fa fa-filter text-filter"></em>
+                  <input class="search form-control"
+                         placeholder="{{'general.FILTER' | translate}}"
+                         type="text"
+                         maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+                         ng-model="search"
+                         ng-paste="onFilterChanged(search)"
+                         ng-keyup="onFilterChanged(search)">
+                </div>
+              </div>
+              <div ag-grid="gridExportGroups" class="ag-grid mt-sm" style="width: 100%; position: relative;"
+                   ng-style="{ height: gridHeight4ExportGroup + 'px'}">
+              </div>
+            </div>
+            <div class="col-sm-12 pb-sm">
+              <button class="btn btn-wide btn-default pull-right"
+                      ng-click="exportGroups()">
+                <em class="fa fa-plus-square-o mr-sm"></em>{{'group.export.EXPORT' | translate}}
+              </button>
+            </div>
+          </div>
+        </md-dialog-content>
+      </form>
+    </md-dialog>
+  </script>
+
+
+</div>

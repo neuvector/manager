@@ -1,0 +1,401 @@
+<div ng-controller="ResponsePolicyController" >
+  <div class="pull-right mt-sm" style="padding-top: 5px; margin-left: 10px;" ng-click="reset()">
+    <em class="fa fa-refresh text-action hand"/>
+    <label class="text-gray-label hand">{{'general.REFRESH' | translate}}</label>
+  </div>
+  <div class="clearfix">
+    <div class="content-title">{{'responsePolicy.head.TITLE' | translate}}</div>
+  </div>
+  <div class="panel mb0">
+    <div class="panel-body">
+      <div class="clearfix">
+        <label class="text-primary pull-left mt-sm" ng-show="!responsePolicyErr">{{count}}</label>
+        <div class="nv-global-policy-operation pull-left ml">
+          <ul class="list-inline" ng-show="!responsePolicyErr">
+            <li class="policy-top-button" ng-click="addPolicy($event, 0)" ng-if="isWriteResponseRuleAuthorized">
+              <div class="button">
+                <em class="fa fa-share mr-sm text-action" ></em>
+                {{'policy.toolBar.INSERT_TO_TOP' | translate}}
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="left-inner-addon pull-right">
+          <em class="fa fa-filter text-filter"></em>
+          <input class="search form-control" placeholder="{{'general.FILTER' | translate}}"
+            ng-model="search"
+            ng-paste="onFilterChanged(search)"
+            ng-keyup="onFilterChanged(search)"
+            maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+        </div>
+      </div>
+      <div id="policy-grid" ag-grid="gridOptions" class="ag-grid mt-sm nv-policy-type"
+           style="width: 100%;" ng-style="{ height: graphHeight + 'px'}">
+      </div>
+    </div>
+    <div>
+      <script type="text/ng-template" id="dialog.addPolicy.html">
+        <md-dialog aria-label="Add rule" class="dialog-lg" style="overflow: visible">
+          <form name="addPolicyForm" ng-submit="$event.preventDefault()" novalidate="" class="form-validate" style="overflow: visible">
+            <md-toolbar>
+              <div class="md-toolbar-tools">
+                <h2 class="text-dark">{{'policy.addPolicy.TITLE' | translate}}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                  <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+              </div>
+            </md-toolbar>
+            <md-dialog-content style="min-height: 260px;" ng-show="conditionOptionErr || containerGroupErr">
+              <div class="server-error">
+                <div>
+                  <em class="fa fa-times-circle error-signal" aria-hidden="true"></em>
+                </div>
+                <div>
+                  <div class="error-text" ng-show="conditionOptionErr">Condition autocomplete Error: {{conditionOptionErrMSG}}</div>
+                  <div class="error-text" ng-show="containerGroupErr">Group autocomplete Error: {{containerGroupErrMSG}}</div>
+                </div>
+              </div>
+            </md-dialog-content>
+            <md-dialog-content style="overflow: visible" ng-show="!conditionOptionErr && !containerGroupErr">
+              <div>
+                <div class="card-body">
+                  <div>
+                    <div class="col-sm-6">
+                      <div class="form-group" >
+                        <label class="col-sm-2 nv-modal-item-title control-label pl0" style="padding-left: 36px; margin-top: 22px;">
+                          {{'responsePolicy.gridHeader.TYPE' | translate}}*
+                        </label>
+                        <div class="col-sm-10  pr0">
+                          <md-select ng-model="newRule.event" aria-label="select category" ng-change="changeCategory()">
+                            <md-option ng-repeat="category in categories" ng-value="category"
+                                       ng-selected="$first">{{'responsePolicy.categories.' + category.toUpperCase() | translate}}</md-option>
+                          </md-select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6" ng-show="needGroup">
+                      <md-autocomplete ng-disabled="isDisabled" md-no-cache="noCache"
+                                       md-input-name="autocompleteGroup"
+                                       md-selected-item="selectedItemGroup" md-search-text="searchTextGroup"
+                                       md-items="item in groups | filter: searchTextGroup"
+                                       md-item-text="item.display"
+                                       md-floating-label="{{'responsePolicy.gridHeader.GROUP' | translate}}"
+                                       md-search-text-change="cutStringByMaxLength(searchTextGroup, 'searchTextGroup')">
+                        <md-item-template>
+                          <span md-highlight-text="searchTextGroup">{{item.display}}</span>
+                        </md-item-template>
+                        <md-not-found>
+                          No matches found.
+                        </md-not-found>
+                      </md-autocomplete>
+                    </div>
+                    <div class="col-sm-6" ng-show="!needGroup" style="height: 92px; width: 1px;">
+                    </div>
+                    <div class="col-sm-12 mb-lg">
+                      <div class="form-group" >
+                        <label class="col-sm-2 nv-modal-item-title control-label pl0" style="padding-left: 36px;">
+                          {{'responsePolicy.gridHeader.CRITERIA' | translate}}
+                          <div class="text-sm text-muted">{{'group.editGroup.CONDITION_HINT' | translate}}</div>
+                        </label>
+                        <div class="col-sm-10  pr0">
+                          <tags-input id="newuser-conditions" ng-model="conditions" placeholder="{{'group.editGroup.ADD_CRITERIA' | translate}} {{'group.editGroup.CRITERIA_RELATIONSHIP' | translate}}"
+                                      display-property="name" class="nv-input-text" add-from-autocomplete-only="false" on-tag-adding="tagAdding($tag)"
+                                      on-tag-clicked="showTagDetail($tag)" on-tag-removing="tagRemoving($tag)">
+                            <auto-complete source="loadTags($query)" min-length="1" max-results-to-show="128" max-length="{{'general.FILTER_MAX_LEN' | translate}}"></auto-complete>
+                          <!-- <tags-input ng-model="newRule.criteria" placeholder="{{'group.editGroup.ADD_CRITERIA' | translate}}"
+                                      display-property="name" add-from-autocomplete-only="true" class="nv-input-text">
+                            <auto-complete source="loadTags($query)" min-length="1" ></auto-complete> -->
+                          </tags-input>
+                          <div ng-show="isShowingEditCriterion">
+                            <div class="col-sm-11 pl0">
+                              <div class="md-block mb0">
+                                <input id="tagEditor" ng-model="singleCriterion.value" placeholder="{{'group.SINGLE_CRITERION_HINT' | translate}}"
+                                       uib-typeahead="condition for condition in conditionOptions4SingleConditionEditor | filter:$viewValue | limitTo:16"
+                                       class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}" ng-keyup="checkDuplicated()" ng-keydown="preventFormSubmit($event)"/>
+                              </div>
+                            </div>
+                            <div class="col-sm-1 pr0">
+                              <md-button class="fa fa-pencil-square-o md-raised md-primary pull-right mr0" aria-hidden="true" style="min-width: 36px; margin-top: -3px;" aria-hidden="true" ng-click="editCriterion(singleCriterion)"
+                                         ng-disabled="singleCriterion.value.length===0 || isInvalidTag">
+                              </md-button>
+                            </div>
+                          </div>
+                          <div class="text-muted">{{conditionHint}}{{conditionPatternSample}}</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 mb">
+                      <div class="col-sm-2 pl0">
+                        <label class="nv-modal-item-title control-label">{{'responsePolicy.gridHeader.ACTION' | translate}}*
+                        </label>
+                      </div>
+                      <div class="col-sm-10" layout-gt-sm="row">
+                        <div ng-repeat="action in actions" flex-gt-sm ng-if="canQuarantine">
+                          <md-checkbox class="md-primary"
+                            ng-checked="exists(action, newRule.actions)"
+                            ng-click="toggle(action, newRule.actions, 'action');"
+                            >{{ 'responsePolicy.actions.' + action.toUpperCase() | translate}}
+                          </md-checkbox>
+                        </div>
+                        <div ng-repeat="action in actions4Event" flex-gt-sm ng-if="!canQuarantine">
+                          <md-checkbox class="md-primary"
+                                       ng-checked="exists(action, newRule.actions)"
+                                       ng-click="toggle(action, newRule.actions, 'action');"
+                          >{{ 'responsePolicy.actions.' + action.toUpperCase() | translate}}
+                          </md-checkbox>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 mb pt" ng-if="isWebhookSelected && webhookList.length > 0" style="background-color: #f6f6f6;">
+                      <div class="col-sm-2 pl0">
+                        <label class="nv-modal-item-title control-label">{{'setting.WEBHOOKS' | translate}}
+                        </label>
+                      </div>
+                      <div class="col-sm-10 p0">
+                        <div ng-repeat="webhook in webhookList" class="col-sm-3">
+                          <md-checkbox class="md-primary"
+                            ng-checked="exists(webhook, newRule.webhooks)"
+                            ng-click="toggle(webhook, newRule.webhooks, 'webhook');"
+                            >{{webhook}}
+                          </md-checkbox>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 mb">
+                      <div class="col-sm-2 pl0">
+                        <label class="nv-modal-item-title">{{'responsePolicy.gridHeader.STATUS' | translate}}</label>
+                      </div>
+                      <div class="col-sm-10" layout-gt-sm="row">
+                        <div>
+                          <div class="md-switch2">
+                            <label class="nv-modal-item-title">
+                              <input type="checkbox" ng-model="enable">
+                              <span class="toggle"></span>
+                              {{(!enable ? "policy.status.DISABLED" : "policy.status.ENABLED") | translate}}
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div ng-show="duplicatedPolicy" style="color:#ff0000;" class="col-sm-12" ng-cloak>
+                      {{'policy.addPolicy.DUPLICATED_POLICY' | translate}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </md-dialog-content>
+            <div class="md-actions" layout="row" style="min-height: 50px;" ng-show="conditionOptionErr || containerGroupErr"></div>
+            <div class="md-actions" layout="row" style="border: 0;" ng-show="!conditionOptionErr && !containerGroupErr">
+              <md-button ng-click="addNewRule($event)" class="md-raised md-primary"
+                         ng-disabled="addPolicyForm.$invalid || newRule.actions.length === 0">
+                {{'policy.addPolicy.ADD' | translate}}
+              </md-button>
+              <a ng-click="cancel()" class="nv-link">
+                {{'policy.addPolicy.CANCEL' | translate}}
+              </a>
+            </div>
+          </form>
+        </md-dialog>
+      </script>
+    </div>
+    <div>
+      <script type="text/ng-template" id="dialog.editPolicy.html">
+        <md-dialog aria-label="Edit policy" class="dialog-lg" style="overflow: visible;">
+          <form name="editPolicyForm" novalidate="" class="form-validate" style="overflow: visible;">
+            <md-toolbar>
+              <div class="md-toolbar-tools">
+                <h2 class="text-dark" ng-if="!isReadonly">{{'policy.editPolicy.TITLE' | translate}}</h2>
+                <h2 class="text-dark" ng-if="isReadonly">{{'policy.editPolicy.VIEW' | translate | uppercase}}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                  <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+              </div>
+            </md-toolbar>
+            <md-dialog-content style="min-height: 260px;" ng-show="conditionOptionErr || containerGroupErr">
+              <div class="server-error">
+                <div>
+                  <em class="fa fa-times-circle error-signal" aria-hidden="true"></em>
+                </div>
+                <div>
+                  <div class="error-text" ng-show="conditionOptionErr">Condition autocomplete Error: {{conditionOptionErrMSG}}</div>
+                  <div class="error-text" ng-show="containerGroupErr">Group autocomplete Error: {{containerGroupErrMSG}}</div>
+                </div>
+              </div>
+            </md-dialog-content>
+            <md-dialog-content style="overflow: visible;" ng-show="!conditionOptionErr && !containerGroupErr">
+              <div>
+                <div class="card-body mt-sm">
+                  <div>
+                    <div class="col-sm-3">
+                      <md-input-container class="md-block mb0">
+                        <label>{{'responsePolicy.gridHeader.ID' | translate}}</label>
+                        <input disabled="disabled" ng-model="rule.id" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                      </md-input-container>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="form-group" >
+                        <label class="col-sm-2 nv-modal-item-title control-label pl0" style="padding-left: 36px; margin-top: 22px;">
+                          {{'responsePolicy.gridHeader.TYPE' | translate}}*
+                        </label>
+                        <div class="col-sm-10  pr0">
+                          <md-select ng-model="rule.event" ng-disabled="isReadonly" aria-label="select category" ng-change="changeCategory()">
+                            <md-option ng-repeat="category in categories" ng-value="category">{{'responsePolicy.categories.' + category.toUpperCase() | translate}}</md-option>
+                          </md-select>
+                          <!-- <md-select ng-model="newRule.event" aria-label="select category">
+                            <md-option ng-repeat="category in categories" ng-value="category"
+                                       ng-selected="$first">{{category}}</md-option>
+                          </md-select> -->
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-5" ng-show="needGroup">
+                      <md-autocomplete ng-disabled="isDisabled || isReadonly" md-no-cache="noCache"
+                                       md-input-name="autocompleteGroup"
+                                       md-selected-item="selectedItemGroup" md-search-text="searchTextGroup"
+                                       md-items="item in groups | filter: searchTextGroup"
+                                       md-item-text="item.display"
+                                       md-floating-label="{{'responsePolicy.gridHeader.GROUP' | translate}}"
+                                       md-search-text-change="cutStringByMaxLength(searchTextGroup, 'searchTextGroup')">
+                        <md-item-template>
+                          <span md-highlight-text="searchTextGroup">{{item.display}}</span>
+                        </md-item-template>
+                        <md-not-found>
+                          No matches found.
+                        </md-not-found>
+                      </md-autocomplete>
+                    </div>
+                    <div class="col-sm-5" ng-show="!needGroup" style="height: 92px; width: 1px;">
+                    </div>
+                    <div class="col-sm-12 mb-lg">
+                      <div class="form-group">
+                        <label class="col-sm-2 nv-modal-item-title control-label pl0" style="padding-left: 36px;">
+                          {{'responsePolicy.gridHeader.CRITERIA' | translate}}
+                          <div class="text-sm text-muted" ng-if="!isReadonly">{{'group.editGroup.CONDITION_HINT' | translate}}</div>
+                        </label>
+                        <div class="col-sm-10  pr0">
+                          <tags-input ng-model="rule.conditions" placeholder="{{isReadonly ? '' : 'group.editGroup.ADD_CRITERIA' | translate}} {{'group.editGroup.CRITERIA_RELATIONSHIP' | translate}}"
+                                      display-property="name" class="nv-input-text" add-from-autocomplete-only="false" on-tag-adding="tagAdding($tag)"
+                                      on-tag-clicked="showTagDetail($tag)" on-tag-removing="tagRemoving($tag)" ng-disabled="isReadonly">
+                                  <auto-complete source="loadTags($query)" min-length="1" max-results-to-show="128" max-length="{{'general.FILTER_MAX_LEN' | translate}}"></auto-complete>
+                          <!-- <tags-input ng-model="rule.criteria" placeholder="{{'group.editGroup.ADD_CRITERIA' | translate}}"
+                                      display-property="name" add-from-autocomplete-only="true" class="nv-input-text">
+                            <auto-complete source="loadTags($query)" min-length="1" ></auto-complete> -->
+                          </tags-input>
+                          <div ng-show="isShowingEditCriterion">
+                            <div class="col-sm-11 pl0">
+                              <div class="md-block mb0">
+                                <input id="tagEditor" ng-model="singleCriterion.value" placeholder="{{'group.SINGLE_CRITERION_HINT' | translate}}"
+                                       uib-typeahead="condition for condition in conditionOptions4SingleConditionEditor | filter:$viewValue | limitTo:16"
+                                       class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}" ng-keyup="checkDuplicated()" ng-keydown="preventFormSubmit($event)"/>
+                              </div>
+                            </div>
+                            <div class="col-sm-1 pr0">
+                              <md-button class="fa fa-pencil-square-o md-raised md-primary pull-right mr0" aria-hidden="true" style="min-width: 36px; margin-top: -3px;" aria-hidden="true" ng-click="editCriterion(singleCriterion)"
+                                         ng-disabled="singleCriterion.value.length===0 || isInvalidTag">
+                              </md-button>
+                            </div>
+                          </div>
+                          <div class="text-muted">{{conditionHint}}{{conditionPatternSample}}</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 mb">
+                      <div class="col-sm-2 pl0">
+                        <label class="nv-modal-item-title control-label">{{'responsePolicy.gridHeader.ACTION' | translate}}*
+                        </label>
+                      </div>
+                      <div class="col-sm-10" layout-gt-sm="row">
+                        <div ng-repeat="action in actions" flex-gt-sm ng-if="canQuarantine">
+                          <md-checkbox class="md-primary"
+                            ng-checked="exists(action, rule.actions)"
+                            ng-disabled="isReadonly"
+                            ng-click="toggle(action, rule.actions, 'action');"
+                            >{{ 'responsePolicy.actions.' + action.toUpperCase() | translate}}
+                          </md-checkbox>
+                        </div>
+                        <div ng-repeat="action in actions4Event" flex-gt-sm ng-if="!canQuarantine">
+                          <md-checkbox class="md-primary"
+                                       ng-checked="exists(action, rule.actions)"
+                                      ng-disabled="isReadonly"
+                                       ng-click="toggle(action, rule.actions, 'action');"
+                          >{{ 'responsePolicy.actions.' + action.toUpperCase() | translate}}
+                          </md-checkbox>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 mb pt"
+                      ng-if="isWebhookSelected && webhookList.length > 0 && rule.cfg_type !== CFG_TYPE.FED && rule.cfg_type !== CFG_TYPE.CRD"
+                      style="background-color: #f6f6f6;">
+                      <div class="col-sm-2 pl0">
+                        <label class="nv-modal-item-title control-label">{{'setting.WEBHOOKS' | translate}}
+                        </label>
+                      </div>
+                      <div class="col-sm-10 p0">
+                        <div ng-repeat="webhook in webhookList" class="col-sm-3">
+                          <md-checkbox class="md-primary"
+                            ng-checked="exists(webhook, rule.webhooks)"
+                            ng-disabled="isReadonly"
+                            ng-click="toggle(webhook, rule.webhooks, 'webhook');"
+                            >{{webhook}}
+                          </md-checkbox>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 mb pt"
+                      ng-if="rule.webhooks.length > 0 && (rule.cfg_type === CFG_TYPE.FED || rule.cfg_type === CFG_TYPE.CRD)"
+                      style="background-color: #f6f6f6;">
+                      <div class="col-sm-2 pl0">
+                        <label class="nv-modal-item-title control-label">{{'setting.WEBHOOKS' | translate}}
+                        </label>
+                      </div>
+                      <div class="col-sm-10 p0">
+                        <div ng-repeat="webhook in rule.webhooks" class="col-sm-3">
+                          <md-checkbox class="md-primary"
+                            ng-checked="true"
+                            ng-disabled="isReadonly"
+                            >{{webhook}}
+                          </md-checkbox>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 mb">
+                      <div class="col-sm-2 pl0">
+                        <label class="nv-modal-item-title">{{'responsePolicy.gridHeader.STATUS' | translate}}</label>
+                      </div>
+                      <div class="col-sm-10" layout-gt-sm="row">
+                        <div>
+                          <div class="md-switch2">
+                            <label class="nv-modal-item-title">
+                              <input type="checkbox" ng-model="rule.enable" ng-disabled="isReadonly">
+                              <span class="toggle"></span>
+                              {{(!rule.enable ? "policy.status.DISABLED" : "policy.status.ENABLED") | translate}}
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div ng-show="duplicatedPolicy" style="color:#ff0000;" class="col-sm-12" >
+                      {{'policy.addPolicy.DUPLICATED_POLICY' | translate}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </md-dialog-content>
+            <div class="md-actions" layout="row" style="min-height: 50px;" ng-show="conditionOptionErr || containerGroupErr"></div>
+            <div class="md-actions" layout="row" ng-show="!conditionOptionErr && !containerGroupErr && !isReadonly">
+              <md-button ng-click="editRule($event)" class="md-raised md-primary"
+                         ng-disabled="editPolicyForm.$invalid || rule.actions.length === 0">
+                {{'policy.editPolicy.UPDATE' | translate}}
+              </md-button>
+              <a ng-click="cancel()" class="nv-link">
+                {{'policy.editPolicy.CANCEL' | translate}}
+              </a>
+            </div>
+          </form>
+        </md-dialog>
+      </script>
+    </div>
+  </div>
+</div>

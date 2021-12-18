@@ -1,0 +1,1571 @@
+<div ng-controller="RegistryScanController">
+  <div class="clearfix">
+    <div ng-show="!registryErr">
+      <div class="pull-right mt-sm" ng-click="reset()">
+        <em class="fa fa-refresh text-action"></em>
+        <label class="text-gray-label hand"
+          >{{'general.REFRESH' | translate}}</label
+        >
+      </div>
+    </div>
+
+    <div class="content-title">{{'sidebar.nav.REG_SCAN' | translate}}</div>
+  </div>
+
+  <div class="panel mb0">
+    <div class="panel-body" style="padding-bottom: 10px">
+      <div class="clearfix">
+        <label class="pull-left text-primary" ng-show="!registryErr">{{count}} </label>
+        <div display-control="registry_scan" class="pull-left ml-lg" style="margin-top: -5px;">
+            <ul class="list-inline" >
+                <li class="policy-top-button" ng-click="addRepo()">
+                    <div class="button">
+                        <em class="fa fa-plus-circle mr-sm text-action" aria-hidden="true"></em>
+                        {{'role.ADD' | translate}}
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="left-inner-addon pull-right mb-sm">
+          <em class="fa fa-filter text-filter" />
+          <input
+            class="search form-control"
+            placeholder="{{'general.FILTER' | translate}}"
+            type="text"
+            maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+            ng-model="search"
+            ng-paste="onFilterChanged(search)"
+            ng-keyup="onFilterChanged(search)"
+          />
+        </div>
+      </div>
+
+      <div>
+        <div
+          ag-grid="gridOptions"
+          class="ag-grid"
+          style="width: 100%;"
+          ng-style="{ height: gridHeight + 'px'}"
+        ></div>
+
+        <div style="padding-top: 10px" ng-cloak ng-show="!registryErr">
+          <button
+            type="button"
+            class="btn btn-default btn-wide pull-right"
+            ng-disabled="registry.status === 'idle' || registry.status === 'err' || registries.length === 0 || !isScanning"
+            display-control="registry_scan"
+            ng-click="stopScan(registry)"
+          >
+            {{'registry.STOP_SCAN' | translate}}
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-default btn-wide pull-right mr-lg"
+            ng-disabled="(registry.status !== 'idle' && registry.status !== 'err')
+            || registries.length === 0 || isScanning || registry.filters.length === 0"
+            display-control="registry_scan"
+            ng-click="scan(registry.name)"
+          >
+            {{'registry.START_SCAN' | translate}}
+          </button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="text-center panel-divider" ng-show="!registryErr && hasRegistry">
+    <em class="fa fa-align-justify text-muted" aria-hidden="true" ng-mousedown="grabResizeBar($event)"></em>
+  </div>
+  <div class="panel mb0" ng-show="!registryErr && hasRegistry">
+    <div class="panel-heading panel-default clearfix">
+      <div
+        class="pull-right ml-lg mt-sm"
+        ng-show="onBriefView"
+        display-control="download_reg_scan_report"
+        ng-click="exportCsv()"
+      >
+        <em class="fa fa-download text-action"></em>
+        <label class="text-gray-label hand"
+          >{{'general.CSV_DOWNLOAD' | translate}}
+        </label>
+      </div>
+      <div class="left-inner-addon pull-right" ng-show="!onBriefView && onDetails">
+        <em class="fa fa-filter text-filter"></em>
+        <input
+          class="search form-control"
+          placeholder="{{'general.FILTER' | translate}}"
+          type="text"
+          maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+          ng-model="searchImage"
+          ng-paste="onCveFilterChanged(searchImage)"
+          ng-keyup="onCveFilterChanged(searchImage)"
+        />
+      </div>
+      <div class="left-inner-addon pull-right" ng-show="onBriefView">
+        <em class="fa fa-filter text-filter"></em>
+        <input
+          class="search form-control"
+          placeholder="{{'general.FILTER' | translate}}"
+          type="text"
+          maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+          ng-model="searchReport"
+          ng-paste="onReportFilterChanged(searchReport)"
+          ng-keyup="onReportFilterChanged(searchReport)"
+        />
+      </div>
+      <div class="panel-title">
+        <label class="panel-text-title"> {{selectedRegistry.name}} ( {{selectedRegistry.registry}} )</label>
+      </div>
+    </div>
+    <div ng-if="!onBriefView" class="panel-body">
+      <md-tabs
+        md-no-ink
+        md-dynamic-height=""
+        md-border-bottom=""
+        md-selected="selectedIndex"
+        class="p0"
+      >
+        <md-tab
+          ng-click="toDetails()"
+        >
+          <md-tab-label>
+            {{'registry.DETAILS' | translate}}
+          </md-tab-label>
+          <md-tab-body>
+            <md-content>
+              <div
+                ag-grid="summaryGridOptions"
+                class="ag-grid mb0 fade-in-left"
+                style="width: 100%;"
+                ng-style="{height: (detailViewHeight - 20) + 'px'}"
+              ></div>
+            </md-content>
+          </md-tab-body>
+        </md-tab>
+        <md-tab ng-click="toOverview()">
+          <md-tab-label>
+            {{'registry.OVERVIEW' | translate}}
+          </md-tab-label>
+          <md-tab-body>
+            <md-content
+              class="pb0"
+              ng-style="{height: overviewHeight + 'px'}"
+            >
+              <div ng-if="images.length>0">
+                <div class="row mt-sm ml-sm mr-sm">
+                  <div class="ml">
+                    <label class="text-muted">{{'registry.TOP_RISKIEST_IMG' | translate}}</label>
+                  </div>
+                  <div ng-show="isRepoPieChartReady">
+                    <div class="col-md-6" style="height: 180px">
+                      <canvas id="vul-pie-chart" class="chart chart-pie" chart-data="vulPieData" chart-options="vulPieOptions"
+                              chart-labels="vulPieLabels"  chart-colors="vulPieColors" />
+                    </div>
+                    <div class="col-md-6" style="height: 180px">
+                      <canvas id="vul-pie-node" class="chart chart-horizontal-bar" chart-data="vulBarData" chart-dataset-override="vulBarDatasetOverride"
+                        chart-labels="vulBarLabels" chart-series="vulBarSerials" chart-colors="vulBarColors" chart-options="vulBarOptions"/>
+                    </div>
+                  </div>
+                  <div ng-show="!isRepoPieChartReady && registry.status!=='idle'" class="text-center" style="height: 150px">
+                    <div class="mt-xl">
+                      <span class="text-muted">{{'registry.message.NO_IMAGE_FINISHED' | translate}}</span>
+                    </div>
+                  </div>
+                  <div ng-if="!isRepoPieChartReady && registry.status==='idle'" class="safe" style="padding-top: 30px;">
+                    <div>
+                      <em class="fa fa-check-circle-o safe-signal" aria-hidden="true"></em>
+                    </div>
+                    <div class="safe-text">
+                      {{'registry.message.NO_VULS' | translate}}
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-sm ml-sm mr-sm">
+                  <div class="ml">
+                    <label class="text-muted">{{'registry.SCAN_PROGRESS' | translate}}</label>
+                  </div>
+                  <div class="ml mr">
+                    <uib-progress>
+                      <uib-bar ng-repeat="progress in progresses track by $index" value="progress.value" type="{{progress.type}}">
+                        <span>{{progress.name}}: {{progress.value}}%</span>
+                      </uib-bar>
+                    </uib-progress>
+                  </div>
+                </div>
+              </div>
+              <div ng-if="images.length===0">
+                <div class="text-center server-error" style="margin-top: 30px;" ng-if="registry.error_message.length===0">
+                  <em class="fa fa-info-circle info-signal" aria-hidden="true"></em>
+                  <div class="text-muted">{{'registry.message.NO_IMG' | translate}}</div>
+                </div>
+                <div class="text-center server-error" style="margin-top: 30px;" ng-if="registry.error_message.length>0">
+                  <em class="fa fa-times-circle error-signal" aria-hidden="true"></em>
+                  <div class="text-muted">{{registry.error_message}}</div>
+                </div>
+              </div>
+            </md-content>
+          </md-tab-body>
+        </md-tab>
+      </md-tabs>
+    </div>
+
+    <div class="panel-body" ng-if="onBriefView">
+      <div class="col-sm-3 fade-in-right pl0">
+        <div
+          ag-grid="briefGridOptions"
+          class="ag-grid mb0"
+          style="width: 100%;"
+          ng-style="{height: gridHeight + 'px'}"
+        ></div>
+      </div>
+      <div class="col-sm-9 cve-grid-wrap fade-in-right pr0">
+        <div class="collapse-arrow" ng-click="toSummary()">
+          <em class="fa fa-angle-double-right fa-lg"></em>
+        </div>
+        <div
+          ag-grid="cveGridOptions"
+          class="ag-grid mb0"
+          style="width: 100%;"
+          ng-style="{height: gridHeight + 'px'}"
+        ></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="cve" class="dataBox middleLeft pl-sm" ng-show="onCVE">
+    <em class="fa fa-times pull-right pr-sm pt-sm" ng-click="onCVE=false"></em>
+    <h4>
+      {{cveName}}
+      <a ng-href="{{cveLink}}" target="_blank"
+        ><em class="fa fa-external-link"></em
+      ></a>
+    </h4>
+    <blockquote style="font-size: 13px">
+      <p>{{cveDescription}}</p>
+    </blockquote>
+  </div>
+
+  <script type="text/ng-template" id="registry.add.html">
+    <md-dialog aria-label="Add registry" style="width: 80%">
+      <form name="registryAddForm" novalidate="" class="form-validate">
+        <md-toolbar>
+          <div class="md-toolbar-tools">
+            <h2 class="text-dark" ng-if="!isOnTestView">{{'registry.ADD_REPO' | translate}}</h2>
+            <h2 class="text-dark" ng-if="isOnTestView">{{'registry.TEST_REPO' | translate}}</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+              <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"/>
+            </md-button>
+          </div>
+        </md-toolbar>
+        <md-dialog-content ng-show="!isOnTestView">
+          <div class="mt-sm">
+            <div class="col-sm-3" style="margin-top: 20px; padding-bottom: 26px">
+              <div uib-dropdown class="mt-sm" style="position: relative">
+                <div uib-dropdown-toggle>
+                  <div>
+                    <label class="text-gray-label hand" style="font-size: 14px">{{registryType}}</label>
+                    <em class="fa fa-caret-down text-action" ng-click=""></em>
+                  </div>
+                </div>
+                <ul class="dropdown-menu" uib-dropdown-menu style="position: absolute; top: 30px;"
+                    role="menu" aria-labelledby="single-button">
+                  <li role="menuitem" ng-repeat="regType in registryTypes">
+                    <a ng-click="setRegistryType(regType)">
+                      <em class="fa mr-sm"
+                          ng-class="regType===registryType ? 'fa-circle text-success' : 'fa-circle-o text-muted'"></em>
+                      {{regType}}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <md-input-container class="md-block nv-container mv-sm">
+                <label>{{'general.NAME' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="fa fa-tag text-primary fa-lg"></em>
+                  </div>
+                </md-icon>
+                <input ng-model="newRegistry.name" name="registryName" maxlength="{{'general.FILTER_MAX_LEN' | translate}}" required/>
+                <div ng-messages="registryAddForm.registryName.$error" role="alert">
+                  <div ng-message="required">{{'general.REQUIRED' | translate}}
+                  </div>
+                </div>
+              </md-input-container>
+            </div>
+            <div class="col-sm-6">
+              <md-input-container class="md-block nv-container mt-sm" ng-if="!registrySample">
+                <label>{{'registry.gridHeader.REGISTRY' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="fa fa-registered text-primary fa-lg"></em>
+                  </div>
+                </md-icon>
+                <input ng-model="newRegistry.registry" name="registryUrl"
+                       ng-disabled="registryType.indexOf('Amazon') >= 0"
+                       type="url" ng-required="registryType.indexOf('Amazon') < 0"
+                       maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                <div ng-messages="registryAddForm.registryUrl.$error" role="alert" multiple>
+                  <div ng-message="required"
+                       class="my-message">{{'setting.message.URL_REQUIRED' | translate}}
+                  </div>
+                  <div ng-message="url"
+                       class="my-message">{{'setting.message.URL_INVALID' | translate}}
+                  </div>
+                </div>
+              </md-input-container>
+              <md-input-container class="md-block nv-container mt-sm" style="margin-bottom: -12px;" ng-if="registrySample">
+                <label>{{'registry.gridHeader.REGISTRY' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="fa fa-registered text-primary fa-lg"></em>
+                  </div>
+                </md-icon>
+                <input ng-model="newRegistry.registry" name="registryUrl"
+                       ng-disabled="registryType.indexOf('Amazon') >= 0"
+                       type="url" ng-required="registryType.indexOf('Amazon') < 0"
+                       maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                <div ng-messages="registryAddForm.registryUrl.$error" role="alert" multiple>
+                  <div ng-message="required"
+                       class="my-message">{{'setting.message.URL_REQUIRED' | translate}}
+                  </div>
+                  <div ng-message="url"
+                       class="my-message">{{'setting.message.URL_INVALID' | translate}}
+                  </div>
+                </div>
+              </md-input-container>
+              <div class="text-muted" style="padding-left: 52px; position: relative; z-index: 99;">{{registrySample}}</div>
+            </div>
+            <div class="col-sm-12 mv-lg" ng-if="registryType.toLowerCase().indexOf('google') >= 0">
+              <label class="col-sm-2 control-label text-muted pl0">{{'registry.gridHeader.JSON_KEY' | translate}}*</label>
+              <div class="col-sm-10 ph0">
+                <textarea name="jsonKey" ng-model="newRegistry.jsonKey" rows="6" class="form-control" ng-change="checkEmpty(newRegistry.jsonKey, registryAddForm)"></textarea>
+                <div ng-messages="registryAddForm.jsonKey.$error" role="alert" multiple>
+                  <div ng-message="required"
+                       class="my-message">{{'general.REQUIRED' | translate}}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6" ng-if="registryType.indexOf('Amazon') < 0 && registryType.toLowerCase().indexOf('google') < 0 && registryType.indexOf('OpenShift') < 0 && registryType.indexOf('JFrog') < 0">
+              <md-input-container class="md-block mt-sm nv-container" style="margin-bottom: -12px;">
+                <label>{{'ldap.USERNAME' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="fa fa-user-o text-primary fa-lg"></em>
+                  </div>
+                </md-icon>
+                <input ng-model="newRegistry.username"
+                       maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+              </md-input-container>
+            </div>
+
+            <div class="col-sm-3" ng-show="registryType.indexOf('OpenShift') >= 0">
+              <div class="mb-sm">
+                <label class="radio-inline c-radio">
+                  <input id="authByUserPwd"
+                    type="radio"
+                    name="export"
+                    ng-model="authMode"
+                    value="user-pwd"
+                    required>
+                  <span class="fa fa-check"/>
+                  {{'registry.AUTH_BY_UN' | translate}}
+                </label>
+              </div>
+              <div>
+                <label class="radio-inline c-radio">
+                  <input id="authByToken"
+                    type="radio"
+                    name="export"
+                    ng-model="authMode"
+                    value="token"
+                    required>
+                  <span class="fa fa-check"/>
+                  {{'registry.AUTH_BY_TOKEN' | translate}}
+                </label>
+              </div>
+            </div>
+
+            <div class="col-sm-3" ng-if="registryType.indexOf('JFrog') >= 0">
+              <md-input-container class="nv-container mv-sm md-block">
+                <label translate="{{'registry.JFROG_MODE' | translate}}"></label>
+                <md-icon>
+                  <div class="circle-icon">
+                    <em class="fa fa-list-ul text-primary fa-lg"/>
+                  </div>
+                </md-icon>
+                <md-select ng-model="newRegistry.jfrog_mode" aria-label="select role" style="min-width: 100px;" ng-change="changeJfrogMode(newRegistry.jfrog_mode)">
+                  <md-option ng-repeat="jfrogMode in jfrogModes" ng-value="jfrogMode"
+                             ng-selected="$index===0">{{jfrogMode}}</md-option>
+                </md-select>
+                <div style="height: 24px; width:1px;"></div>
+              </md-input-container>
+            </div>
+
+            <div class="col-sm-3" ng-if="(registryType.indexOf('OpenShift') >= 0 && authMode === 'user-pwd') || registryType.indexOf('JFrog') >= 0">
+              <md-input-container class="md-block mv-sm nv-container">
+                <label>{{'ldap.USERNAME' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="fa fa-user-o text-primary fa-lg"/>
+                  </div>
+                </md-icon>
+                <input ng-model="newRegistry.username" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+              </md-input-container>
+            </div>
+
+            <div class="col-sm-9" ng-if="registryType.indexOf('OpenShift') >= 0 && authMode === 'token'">
+              <md-input-container class="md-block mv-sm nv-container">
+                <label>{{'ldap.TOKEN' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="fa fa-user-o text-primary fa-lg"/>
+                  </div>
+                </md-icon>
+                <input ng-model="newRegistry.auth_token" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+              </md-input-container>
+            </div>
+
+            <div class="col-sm-6" ng-if="registryType.indexOf('Amazon') < 0 && registryType.toLowerCase().indexOf('google') < 0 && registryType.indexOf('OpenShift') < 0 || (registryType.indexOf('OpenShift') >= 0 && authMode === 'user-pwd')">
+              <md-input-container class="md-block mt-sm nv-container" style="margin-bottom: -12px;" >
+                <label>{{'ldap.PASSWORD' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="icon-key text-primary fa-lg"/>
+                  </div>
+                </md-icon>
+                <input ng-model="newRegistry.password"
+                       name="newRegistryPassword"
+                       ng-attr-type="{{ showRegistryPassword ? 'text':'password'}}"
+                       maxlength="3000"/>
+                <md-icon
+                        ng-show="registryAddForm.newRegistryPassword.$dirty"
+                        ng-click="showRegistryPassword=!showRegistryPassword"
+                        class="mt-lg"
+                        ng-class="showRegistryPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"
+                        style="cursor: pointer; pointer-events: all;"
+                >
+                </md-icon>
+              </md-input-container>
+              <div ng-show="registryType.toLowerCase().indexOf('ibm')>=0"
+                   class="text-muted"
+                   style="padding-left: 52px; position: relative; z-index: 99;">
+                {{'registry.IBM.GET_PASSWORD_HINT' | translate}}
+              </div>
+
+            </div>
+
+            <!--<div class="col-sm-12 mb" ng-if="registryType.indexOf('JFrog') >= 0">
+              <md-checkbox
+                class="md-primary ml"
+                ng-checked="newRegistry.jfrog_aql"
+                ng-click="toggleJfrogAql(newRegistry.jfrog_aql)"
+                ng-disabled="newRegistry.jfrog_mode !== 'Subdomain'"
+              >{{ 'registry.JFROG_AQL' | translate}}
+              </md-checkbox>
+            </div>-->
+
+            <div class="col-sm-6" ng-if="registryType.toLowerCase().indexOf('ibm') >= 0" >
+              <md-input-container class="md-block mt-sm nv-container" style="margin-bottom: -12px;">
+                <label>{{'registry.IBM.ACCOUNT' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="fa fa-globe text-primary fa-lg"/>
+                  </div>
+                </md-icon>
+                <input ng-model="newRegistry.ibm_cloud_account" name="ibm_cloud_account"
+                       maxlength="{{'general.FILTER_MAX_LEN' | translate}}" required/>
+              </md-input-container>
+              <div ng-if="registryType.toLowerCase().indexOf('ibm')>=0"
+                   class="text-muted mb-lg"
+                   style="padding-left: 52px; position: relative; z-index: 99;">
+                {{'registry.IBM.GET_ACCOUNT_HINT' | translate}}
+              </div>
+            </div>
+
+            <div class="col-sm-6" ng-if="registryType.toLowerCase().indexOf('gitlab') >= 0" >
+              <md-input-container class="md-block mv-sm nv-container">
+                <label>{{'registry.GITLAB_EXTERNAL_URL' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="fa fa-globe text-primary fa-lg"/>
+                  </div>
+                </md-icon>
+                <input ng-model="newRegistry.gitlab_external_url" name="gitlab_external_url"
+                       maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+                       type="url" required/>
+                <div ng-messages="registryAddForm.gitlab_external_url.$error" role="alert" multiple>
+                  <div ng-message="required"
+                       class="my-message">{{'setting.message.URL_REQUIRED' | translate}}
+                  </div>
+                  <div ng-message="url"
+                       class="my-message">{{'setting.message.URL_INVALID' | translate}}
+                  </div>
+                </div>
+              </md-input-container>
+            </div>
+
+            <div class="col-sm-6" ng-if="registryType.toLowerCase().indexOf('gitlab') >= 0" >
+              <md-input-container class="md-block mv-sm nv-container" >
+                <label>{{'registry.GITLAB_PRIVATE_TOKEN' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="icon-key text-primary fa-lg"/>
+                  </div>
+                </md-icon>
+                <input ng-model="newRegistry.gitlab_private_token" ng-focus="unmask('private_token')"
+                       ng-blur="mask('private_token')" maxlength="{{'general.FILTER_MAX_LEN' | translate}}" />
+              </md-input-container>
+            </div>
+
+            <div class="col-sm-4" ng-if="registryType.indexOf('Amazon') >=0">
+              <md-input-container class="md-block mv-sm nv-container">
+                <label>{{'registry.AWS_ID' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="fa fa-id-card-o text-primary fa-lg"/>
+                  </div>
+                </md-icon>
+                <input ng-model="newRegistry.aws_key.id" ng-required="registryType.indexOf('Amazon') >= 0" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+              </md-input-container>
+            </div>
+
+            <div class="col-sm-8" ng-if="registryType.indexOf('Amazon') >= 0">
+              <md-input-container class="md-block mv-sm nv-container">
+                <label>{{'registry.AWS_ACCESS_KEY' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="icon-key text-primary fa-lg"/>
+                  </div>
+                </md-icon>
+                <input ng-model="newRegistry.aws_key.access_key_id" ng-focus="unmask('access_key_id')"
+                       ng-blur="mask('access_key_id')" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+              </md-input-container>
+            </div>
+
+            <div class="col-sm-4" ng-if="registryType.indexOf('Amazon') >= 0">
+              <md-input-container class="md-block mv-sm nv-container">
+                <label>{{'registry.AWS_REGION' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="fa fa-globe text-primary fa-lg"/>
+                  </div>
+                </md-icon>
+                <input ng-model="newRegistry.aws_key.region" ng-required="registryType.indexOf('Amazon') >= 0"
+                       maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+              </md-input-container>
+            </div>
+
+            <div class="col-sm-8" ng-if="registryType.indexOf('Amazon') >=0">
+              <md-input-container class="md-block mv-sm nv-container">
+                <label>{{'registry.AWS_SECRET_KEY' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="icon-key text-primary fa-lg"/>
+                  </div>
+                </md-icon>
+                <input ng-model="newRegistry.aws_key.secret_access_key" ng-focus="unmask('secret_access_key')"
+                       ng-blur="mask('secret_access_key')" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+              </md-input-container>
+            </div>
+
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label class="col-sm-2 control-label ph0">{{'registry.gridHeader.FILTER' | translate}}
+                  <div class="text-sm text-muted">{{'group.editGroup.CONDITION_HINT' | translate}}</div>
+                </label>
+                <div class="col-sm-10 p0 registry-filters">
+                  <div class="filter-box">
+                    <tags-input ng-model="newRegistry.filters" name="filters"
+                                placeholder="{{'registry.ADD_FILTER' | translate}}"
+                                replace-spaces-with-dashes="false" ng-required="true"
+                                min-length="1" display-property="name"
+                                on-tag-clicked="showTagDetail($tag)"
+                                on-tag-adding="tagAdding($tag)"
+                                on-tag-removing="tagRemoving($tag)"
+                                max-length="{{'general.FILTER_MAX_LEN' | translate}}">
+                    </tags-input>
+                    <div ng-show="isShowingEditFilter">
+                      <div class="col-sm-11 pl0">
+                        <div class="md-block mb0">
+                          <input id="tagEditor" ng-model="singleFilter.value" placeholder="{{'registry.SINGLE_FILTER_HINT' | translate}}"
+                                 class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}" ng-keyup="checkDuplicated()" ng-keydown="preventFormSubmit($event)"/>
+                        </div>
+                      </div>
+                      <div class="col-sm-1 pr0">
+                        <md-button class="fa fa-pencil-square-o md-raised md-primary pull-right mr0" aria-hidden="true" style="min-width: 36px; margin-top: -3px;" aria-hidden="true" ng-click="editFilter(singleFilter)"
+                                   ng-disabled="singleFilter.value.length===0 || isInvalidTag">
+                        </md-button>
+                      </div>
+                    </div>
+                    <div>
+                      <span class="help-block" translate="{{'registry.FILTER_HINT'}}"/>
+                      <span ng-show="onFormatError" class="text-danger" >{{errorMessage}}</span>
+                    </div>
+                  </div>
+                  <div class="test-button">
+                    <button class="btn btn-wide btn-default pull-right mt-sm mr-sm pl-sm pr-sm"
+                            ng-disabled="!newRegistry.filters || newRegistry.filters.length === 0 || !newRegistry.registry"
+                            ng-if="(registryType.indexOf('JFrog') >= 0 || registryType.indexOf('Docker') >= 0)"
+                            ng-click="move2Test()" >
+                      <em class="fa fa-handshake-o mr-sm"></em>
+                      {{'registry.TEST_REPO' | translate}}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mt">
+              <div class="form-group">
+                <div class="mb0 pl0">
+                  <label class="text-muted pl0">{{'registry.RESCAN_AFTER_DB_UPDATED' | translate}}</label>
+                  <div class="md-switch2 pl0">
+                    <label class="small text-muted">
+                      <input type="checkbox" ng-model="newRegistry.rescan_after_db_update" >
+                      <span class="toggle"/>
+                    </label>
+                  </div>
+                </div>
+                <div style="clear: both;"></div>
+              </div>
+            </div>
+
+            <div class="col-lg-2 col-md-6 mt">
+              <div class="form-group">
+                <div class="mb0 pl0">
+                  <label class="text-muted pl0">{{'registry.SCAN_LAYERS' | translate}}</label>
+                  <div class="md-switch2 pl0">
+                    <label class="small text-muted">
+                      <input type="checkbox" ng-model="newRegistry.scan_layers" >
+                      <span class="toggle"/>
+                    </label>
+                  </div>
+                </div>
+                <div style="clear: both;"></div>
+              </div>
+            </div>
+
+            <div class="col-lg-7 col-md-12 mt" ng-if="registryType.indexOf('OpenShift') < 0">
+              <div class="form-group">
+                <div class="col-xs-3 mb0 pl0">
+                  <label class="text-muted">{{'registry.SCHEDULE2' | translate}}</label>
+                  <div class="md-switch2 pl0">
+                    <label class="small text-muted">
+                      <input type="checkbox" ng-model="newRegistry.isScheduled" >
+                      <span class="toggle"/>
+                    </label>
+                  </div>
+                  <div style="clear: both;"></div>
+                </div>
+                <div class="col-xs-9 pl0" ng-if="newRegistry.isScheduled">
+                  <div class="col-xs-9 pl0">
+                    <div class="text-bold text-muted">{{'registry.INTERVAL' | translate}}</div>
+                    <md-slider-container>
+                      <md-slider style="height: 36px; margin-top: -10px;" ng-model="newRegistry.slideNum" min="0" max="{{newRegistry.interval.length - 1}}" aria-label={{'registry.INTERVAL' | translate}} id="blue-slider" class="md-primary">
+                      </md-slider>
+                      <span class="text-muted">{{newRegistry.interval[newRegistry.slideNum].display_unit | translate: {time: newRegistry.interval[newRegistry.slideNum].display_num} }}</span>
+                    </md-slider-container>
+                  </div>
+                </div>
+              </div>
+              <div style="clear: both;"></div>
+            </div>
+
+            <div class="col-sm-10 mt" ng-if="registryType.indexOf('OpenShift') >= 0">
+              <div class="form-group">
+                <div class="col-sm-3 mb0 pl0">
+                  <label class="text-muted pl0">{{'registry.SCHEDULE' | translate}}</label>
+                  <div class="md-switch2 pl0">
+                    <label class="small text-muted">
+                      <input type="checkbox" ng-model="newRegistry.isScheduled" >
+                      <span class="toggle"/>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style="clear: both;"></div>
+            <div class="col-sm-12 pb-sm">
+              <a ng-click="cancel()" class="nv-link pull-right mv-sm">
+                {{'policy.editPolicy.CANCEL' | translate}}
+              </a>
+              <button class="btn btn-wide btn-default pull-right"
+                      ng-disabled="registryAddForm.$invalid"
+                      ng-click="addRegistry(newRegistry, registryAddForm)" >
+                <em class="fa fa-save mr-sm"/>{{'setting.SUBMIT' | translate}}
+              </button>
+            </div>
+          </div>
+        </md-dialog-content>
+        <md-dialog-content ng-show="isOnTestView">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <label class="col-sm-2 control-label ph0">{{'registry.TEST_FILTER' | translate}}
+                <div class="text-sm text-muted">{{'group.editGroup.CONDITION_HINT' | translate}}</div>
+              </label>
+              <div class="col-sm-10 p0 registry-filters">
+                <div class="filter-box">
+                  <tags-input ng-model="newRegistry.filters" name="filters"
+                              placeholder="{{'registry.ADD_FILTER' | translate}}"
+                              replace-spaces-with-dashes="false" ng-required="true"
+                              min-length="1" display-property="name"
+                              on-tag-clicked="showTagDetail($tag)"
+                              on-tag-adding="tagAdding($tag)"
+                              on-tag-removing="tagRemoving($tag)"
+                              max-length="{{'general.FILTER_MAX_LEN' | translate}}">
+                  </tags-input>
+                  <div ng-show="isShowingEditFilter">
+                    <div class="col-sm-11 pl0">
+                      <div class="md-block mb0">
+                        <input id="tagEditor" ng-model="singleFilter.value" placeholder="{{'registry.SINGLE_FILTER_HINT' | translate}}"
+                               class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}" ng-keyup="checkDuplicated()" ng-keydown="preventFormSubmit($event)"/>
+                      </div>
+                    </div>
+                    <div class="col-sm-1 pr0">
+                      <md-button class="fa fa-pencil-square-o md-raised md-primary pull-right mr0" aria-hidden="true" style="min-width: 36px; margin-top: -3px;" aria-hidden="true" ng-click="editFilter(singleFilter)"
+                                 ng-disabled="singleFilter.value.length===0 || isInvalidTag">
+                      </md-button>
+                    </div>
+                  </div>
+                  <div>
+                    <span class="help-block" translate="{{'registry.FILTER_HINT'}}"/>
+                    <span ng-show="onFormatError" class="text-danger" >{{errorMessage}}</span>
+                  </div>
+                </div>
+                <div class="test-button">
+                  <button class="btn btn-default ml-lg mt-sm" ng-click="copyFilters2Config()">
+                    <i class="fa fa-clipboard mr-sm"></i>{{'registry.COPY_FILTER' | translate}}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 pb-sm">
+            <md-input-container class="md-block mv-sm">
+              <div
+                ag-grid="testInfoGridOptions"
+                class="ag-grid"
+                style="width: 100%; height: 500px;"
+              ></div>
+            </md-input-container>
+          </div>
+          <div class="col-sm-12 pb-sm">
+            <div class="pull-left" ng-if="!isTesting && isTestDone" >
+              <!--<div ng-if="!isPdfPreparing4TestInfo">
+                <div ng-if="progress4TestInfo<100">
+                  <em class="fa fa-file-pdf-o disabled" style="margin-left:10px;"></em>
+                  <span class="text-disabled-label disabled">PDF</span>
+                </div>
+                <div
+                  ng-if="progress4TestInfo<100"
+                  class="loader5"
+                  style="position: absolute; top: 6px; left: 30px;"
+                ></div>
+                <div
+                  ng-if="progress4TestInfo<100"
+                  style="position: absolute; top: 2px; left: 22px; font-size: 12px; color: #11330f"
+                >
+                  {{progress4TestInfo}}%
+                </div>
+                <div ng-click="downloadTestInfoPdf()" ng-if="progress4TestInfo===100">
+                  <em
+                    class="fa fa-file-pdf-o pdf-color hand"
+                    style="margin-left:10px;"
+                  ></em>
+                  <span class="text-gray-label link">PDF</span>
+                </div>
+              </div>
+              <div ng-if="isPdfPreparing4TestInfo">
+                <em class="fa fa-file-pdf-o disabled" style="margin-left:10px;"></em>
+                <span class="text-disabled-label disabled">PDF</span>
+                <div
+                  class="loader5"
+                  style="position: absolute; top: 6px; left: 30px;"
+                ></div>
+              </div>-->
+              <div ng-click="downloadTestInfoTxt()">
+                <em
+                  class="fa fa-file-text-o txt-color hand"
+                  style="margin-left:10px;"
+                ></em>
+                <span class="text-gray-label link">TXT</span>
+              </div>
+            </div>
+            <button cloak class="btn btn-wide btn-default pull-right mr-sm"
+                    ng-disabled="!newRegistry.filters || newRegistry.filters.length === 0 || !newRegistry.registry"
+                    ng-if="(registryType.indexOf('JFrog') >= 0 || registryType.indexOf('Docker') >= 0)"
+                    ng-click="testRegistry(newRegistry, registryAddForm, isTesting)" >
+              <em class="fa mr-sm" ng-class="{'fa-ban': isTesting, 'fa-flask': !isTesting}"></em>{{isTesting ? 'registry.STOP_TEST' : 'registry.START_TEST' | translate}}
+            </button>
+            <a ng-click="back2Config()" class="nv-link pull-right mv-sm">
+              {{'registry.BACK' | translate}}
+            </a>
+          </div>
+        </md-dialog-content>
+      </form>
+    </md-dialog>
+  </script>
+
+  <script type="text/ng-template" id="registry.edit.html">
+    <md-dialog aria-label="Edit registry" style="width: 80%">
+      <form name="registryEditForm" novalidate="" class="form-validate">
+        <md-toolbar>
+          <div class="md-toolbar-tools">
+            <h2 class="text-dark" ng-if="!isOnTestView">{{hasWriteAuth ? 'registry.EDIT_REPO' : 'registry.VIEW_REPO' | translate}}</h2>
+            <h2 class="text-dark" ng-if="isOnTestView">{{'registry.TEST_REPO' | translate}}</h2>
+            <span flex/>
+            <md-button class="md-icon-button" ng-click="cancel()">
+              <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"/>
+            </md-button>
+          </div>
+        </md-toolbar>
+        <md-dialog-content ng-show="!isOnTestView">
+          <div class="mt-sm">
+            <div class="col-sm-3" style="margin-top: 20px; padding-bottom: 33px">
+              <div uib-dropdown class="mt-sm" style="position: relative">
+                <div uib-dropdown-toggle ng-disabled="true">
+                  <div>
+                    <label class="text-muted" >{{registryType}}</label>
+                    <!-- <em class="fa fa-caret-down text-action"/> -->
+                  </div>
+                </div>
+                <ul class="dropdown-menu" uib-dropdown-menu style="position: absolute; top: 30px;"
+                    role="menu" aria-labelledby="single-button">
+                  <li role="menuitem" ng-repeat="regType in registryTypes">
+                    <a ng-click="setRegistryType(regType)">
+                      <em class="fa mr-sm"
+                          ng-class="regType===registryType ? 'fa-circle text-success' : 'fa-circle-o text-muted'"/>
+                      {{regType}}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <md-input-container class="md-block nv-container mv-sm">
+                <label>{{'general.NAME' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="fa fa-tag text-primary fa-lg"/>
+                  </div>
+                </md-icon>
+                <input ng-model="registry.name" disabled/>
+              </md-input-container>
+            </div>
+            <div class="col-sm-6">
+              <md-input-container class="md-block nv-container mt-sm" style="margin-bottom: -12px;">
+                <label>{{'registry.gridHeader.REGISTRY' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="fa fa-registered text-primary fa-lg"/>
+                  </div>
+                </md-icon>
+                <input ng-if="registryType.indexOf('Amazon') < 0" ng-model="registry.registry" name="registryUrl" ng-disabled="!hasWriteAuth"
+                       type="url" maxlength="{{'general.FILTER_MAX_LEN' | translate}}" required/>
+                <input ng-if="registryType.indexOf('Amazon') >= 0" ng-model="registry.registry" name="registryUrl" ng-disabled="!hasWriteAuth"
+                       type="url" maxlength="{{'general.FILTER_MAX_LEN' | translate}}" disabled/>
+                <div ng-messages="registryEditForm.registryUrl.$error" role="alert" multiple>
+                  <div ng-message="required"
+                       class="my-message">{{'setting.message.URL_REQUIRED' | translate}}
+                  </div>
+                  <div ng-message="url"
+                       class="my-message">{{'setting.message.URL_INVALID' | translate}}
+                  </div>
+                </div>
+              </md-input-container>
+              <div class="text-muted" style="padding-left: 52px; position: relative; z-index: 99;">{{registrySample}}</div>
+            </div>
+            <div class="col-sm-12 mv" ng-if="registryType.toLowerCase().indexOf('google') >= 0">
+              <label class="col-sm-2 control-label pl0">{{'registry.gridHeader.JSON_KEY' | translate}}</label>
+              <div class="col-sm-10 ph0">
+                <textarea name="jsonKey" ng-model="registry.jsonKey" rows="6" class="form-control" ng-change="checkEmpty(registry.jsonKey, registryEditForm)"  ng-disabled="!hasWriteAuth"/>
+                <div ng-messages="registryEditForm.jsonKey.$error" role="alert" multiple>
+                  <div ng-message="required"
+                       class="my-message">{{'general.REQUIRED' | translate}}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-3" ng-show="registryType.indexOf('OpenShift') >= 0">
+              <div class="mb-sm">
+                <label class="radio-inline c-radio">
+                  <input id="authByUserPwd2"
+                    type="radio"
+                    name="export"
+                    ng-model="authMode"
+                    value="user-pwd"
+                    ng-disabled="!hasWriteAuth"
+                    required>
+                  <span class="fa fa-check"></span>
+                  {{'registry.AUTH_BY_UN' | translate}}
+                </label>
+              </div>
+              <div>
+                <label class="radio-inline c-radio">
+                  <input id="authByToken2"
+                    type="radio"
+                    name="export"
+                    ng-model="authMode"
+                    value="token"
+                    ng-disabled="!hasWriteAuth"
+                    required>
+                  <span class="fa fa-check"></span>
+                  {{'registry.AUTH_BY_TOKEN' | translate}}
+                </label>
+              </div>
+            </div>
+
+            <div class="col-sm-3" ng-if="registryType.indexOf('JFrog') >= 0">
+              <md-input-container class="nv-container mv-sm md-block">
+                <label translate="{{'registry.JFROG_MODE' | translate}}"></label>
+                <md-icon>
+                  <div class="circle-icon">
+                    <em class="fa fa-list-ul text-primary fa-lg"></em>
+                  </div>
+                </md-icon>
+                <md-select ng-model="registry.jfrog_mode" aria-label="select role" style="min-width: 100px;" ng-disabled="!hasWriteAuth" ng-change="changeJfrogMode(registry.jfrog_mode)">
+                  <md-option ng-repeat="jfrogMode in jfrogModes" ng-value="jfrogMode">{{jfrogMode}}</md-option>
+                </md-select>
+                <div style="height: 24px; width:1px;"></div>
+              </md-input-container>
+            </div>
+
+            <div class="col-sm-3" ng-if="(registryType.indexOf('OpenShift') >= 0 && authMode === 'user-pwd') || registryType.indexOf('JFrog') >= 0">
+              <md-input-container class="md-block mv-sm nv-container">
+                <label>{{'ldap.USERNAME' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="fa fa-user-o text-primary fa-lg"></em>
+                  </div>
+                </md-icon>
+                <input ng-model="registry.username" ng-disabled="!hasWriteAuth" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+              </md-input-container>
+            </div>
+
+            <div class="col-sm-9" ng-if="registryType.indexOf('OpenShift') >= 0 && authMode === 'token'">
+              <md-input-container class="md-block mv-sm nv-container">
+                <label>{{'ldap.TOKEN' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="fa fa-user-o text-primary fa-lg"></em>
+                  </div>
+                </md-icon>
+                <input name="ocAuthToken" ng-disabled="!hasWriteAuth" ng-model="registry.auth_token" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+              </md-input-container>
+            </div>
+
+            <div class="col-sm-6" ng-if="registryType.indexOf('Amazon') < 0 && registryType.toLowerCase().indexOf('google') < 0 && registryType.indexOf('OpenShift') < 0 && registryType.indexOf('JFrog') < 0">
+              <md-input-container class="md-block mt-sm nv-container" style="margin-bottom: -12px;">
+                <label>{{'ldap.USERNAME' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="fa fa-user-o text-primary fa-lg"></em>
+                  </div>
+                </md-icon>
+                <input ng-model="registry.username" ng-disabled="!hasWriteAuth" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+              </md-input-container>
+            </div>
+
+            <div class="col-sm-6" ng-if="registryType.indexOf('Amazon') < 0 && registryType.toLowerCase().indexOf('google') < 0 && registryType.indexOf('OpenShift') < 0 || (registryType.indexOf('OpenShift') >= 0 && authMode === 'user-pwd')">
+              <md-input-container class="md-block mt-sm nv-container" style="margin-bottom: -12px;" >
+                <label>{{'ldap.PASSWORD' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="icon-key text-primary fa-lg"></em>
+                  </div>
+                </md-icon>
+                <input ng-model="registryPassword"
+                       placeholder="******"
+                       ng-focus="setPasswordFn()"
+                       name="registryPassword"
+                       ng-disabled="!hasWriteAuth"
+                       ng-attr-type="{{showldapPassword ? 'text':'password'}}" maxlength="3000"/>
+                <md-icon
+                        ng-show="registryEditForm.registryPassword.$dirty"
+                        ng-click="showldapPassword=!showldapPassword"
+                        class="mt-lg"
+                        ng-class="showldapPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"
+                        style="cursor: pointer; pointer-events: all;"
+                >
+                </md-icon>
+              </md-input-container>
+              <div ng-if="registryType.toLowerCase().indexOf('ibm')>=0"
+                   class="text-muted"
+                   style="padding-left: 52px; position: relative; z-index: 99;">
+                {{'registry.IBM.GET_PASSWORD_HINT' | translate}}
+              </div>
+            </div>
+
+            <!--<div class="col-sm-12 mb" ng-if="registryType.indexOf('JFrog') >= 0">
+              <md-checkbox
+                class="md-primary ml"
+                ng-checked="registry.jfrog_aql"
+                ng-click="toggleJfrogAql(registry.jfrog_aql)"
+                ng-disabled="registry.jfrog_mode !== 'Subdomain'"
+              >{{ 'registry.JFROG_AQL' | translate}}
+              </md-checkbox>
+            </div>-->
+
+            <div class="col-sm-6" ng-if="registryType.toLowerCase().indexOf('ibm') >= 0" >
+              <md-input-container class="md-block mt-sm nv-container" style="margin-bottom: -12px;">
+                <label>{{'registry.IBM.ACCOUNT' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="fa fa-globe text-primary fa-lg"></em>
+                  </div>
+                </md-icon>
+                <input ng-model="registry.ibm_cloud_account" name="ibm_cloud_account" ng-disabled="!hasWriteAuth"
+                       maxlength="{{'general.FILTER_MAX_LEN' | translate}}" required/>
+              </md-input-container>
+              <div ng-show="registryType.toLowerCase().indexOf('ibm')>=0"
+                   class="text-muted mb-lg" ng-disabled="!hasWriteAuth"
+                   style="padding-left: 52px; position: relative; z-index: 99;">
+                {{'registry.IBM.GET_ACCOUNT_HINT' | translate}}
+              </div>
+            </div>
+
+            <div class="col-sm-6" ng-if="registryType.toLowerCase().indexOf('gitlab') >= 0" >
+              <md-input-container class="md-block mv-sm nv-container">
+                <label>{{'registry.GITLAB_EXTERNAL_URL' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="fa fa-globe text-primary fa-lg"></em>
+                  </div>
+                </md-icon>
+                <input ng-model="registry.gitlab_external_url" name="gitlab_external_url"
+                       maxlength="{{'general.FILTER_MAX_LEN' | translate}}" ng-disabled="!hasWriteAuth"
+                       type="url" required/>
+                <div ng-messages="registryEditForm.gitlab_external_url.$error" role="alert" multiple>
+                  <div ng-message="required"
+                       class="my-message">{{'setting.message.URL_REQUIRED' | translate}}
+                  </div>
+                  <div ng-message="url"
+                       class="my-message">{{'setting.message.URL_INVALID' | translate}}
+                  </div>
+                </div>
+              </md-input-container>
+            </div>
+
+            <div class="col-sm-6" ng-if="registryType.toLowerCase().indexOf('gitlab') >= 0" >
+              <md-input-container class="md-block mv-sm nv-container">
+                <label>{{'registry.GITLAB_PRIVATE_TOKEN' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="icon-key text-primary fa-lg"></em>
+                  </div>
+                </md-icon>
+                <input name="gitPrivateToken" ng-disabled="!hasWriteAuth" ng-focus="unmask('private_token')"
+                       ng-blur="mask('private_token')"ng-model="registry.gitlab_private_token" maxlength="{{'general.FILTER_MAX_LEN' | translate}}" />
+              </md-input-container>
+            </div>
+
+            <div class="col-sm-4" ng-if="registryType.indexOf('Amazon') >=0">
+              <md-input-container class="md-block mv-sm nv-container">
+                <label>{{'registry.AWS_ID' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="fa fa-id-card-o text-primary fa-lg"></em>
+                  </div>
+                </md-icon>
+                <input ng-model="registry.aws_key.id" ng-disabled="!hasWriteAuth" ng-required="registryType.indexOf('Amazon') >= 0" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+              </md-input-container>
+            </div>
+
+            <div class="col-sm-8" ng-if="registryType.indexOf('Amazon') >= 0">
+              <md-input-container class="md-block mv-sm nv-container">
+                <label>{{'registry.AWS_ACCESS_KEY' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="icon-key text-primary fa-lg"></em>
+                  </div>
+                </md-icon>
+                <input name="access_key_id" ng-disabled="!hasWriteAuth" ng-model="registry.aws_key.access_key_id" ng-focus="unmask('access_key_id')"
+                       ng-blur="mask('access_key_id')" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+              </md-input-container>
+            </div>
+
+            <div class="col-sm-4" ng-if="registryType.indexOf('Amazon') >= 0">
+              <md-input-container class="md-block mv-sm nv-container">
+                <label>{{'registry.AWS_REGION' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="fa fa-globe text-primary fa-lg"></em>
+                  </div>
+                </md-icon>
+                <input ng-model="registry.aws_key.region" ng-disabled="!hasWriteAuth" ng-required="registryType.indexOf('Amazon') >= 0"
+                       maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+              </md-input-container>
+            </div>
+
+            <div class="col-sm-8" ng-if="registryType.indexOf('Amazon') >=0">
+              <md-input-container class="md-block mv-sm nv-container">
+                <label>{{'registry.AWS_SECRET_KEY' | translate}}</label>
+                <md-icon aria-label="Registry type">
+                  <div class="circle-icon">
+                    <em class="icon-key text-primary fa-lg"></em>
+                  </div>
+                </md-icon>
+                <input name="secret_access_key" ng-model="registry.aws_key.secret_access_key" ng-focus="unmask('secret_access_key')"
+                       ng-blur="mask('secret_access_key')" ng-disabled="!hasWriteAuth" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+              </md-input-container>
+            </div>
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label class="col-sm-2 control-label ph0">{{'registry.gridHeader.FILTER' | translate}}
+                  <div class="text-sm text-muted">{{'group.editGroup.CONDITION_HINT' | translate}}</div>
+                </label>
+                <div class="col-sm-10 p0 registry-filters">
+                  <div class="filter-box">
+                    <tags-input ng-model="registry.filters" name="filters"
+                                placeholder="{{'registry.ADD_FILTER' | translate}}"
+                                replace-spaces-with-dashes="false" ng-required="true"
+                                min-length="1" display-property="name"
+                                on-tag-clicked="showTagDetail($tag)"
+                                on-tag-adding="tagAdding($tag)"
+                                on-tag-removing="tagRemoving($tag)"
+                                ng-disabled="!hasWriteAuth"
+                                max-length="{{'general.FILTER_MAX_LEN' | translate}}">
+                    </tags-input>
+                    <div ng-show="isShowingEditFilter && hasWriteAuth">
+                      <div class="col-sm-11 pl0">
+                        <div class="md-block mb0">
+                          <input id="tagEditor" ng-model="singleFilter.value" placeholder="{{'registry.SINGLE_FILTER_HINT' | translate}}"
+                                 class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}" ng-keyup="checkDuplicated()" ng-keydown="preventFormSubmit($event)"/>
+                        </div>
+                      </div>
+                      <div class="col-sm-1 pr0">
+                        <md-button class="fa fa-pencil-square-o md-raised md-primary pull-right mr0" aria-hidden="true" style="min-width: 36px; margin-top: -3px;" aria-hidden="true" ng-click="editFilter(singleFilter)"
+                                   ng-disabled="singleFilter.value.length===0 || isInvalidTag">
+                        </md-button>
+                      </div>
+                    </div>
+                    <div>
+                      <span class="help-block" translate="{{'registry.FILTER_HINT'}}"/>
+                      <span ng-show="onFormatError" class="text-danger" >{{errorMessage}}</span>
+                    </div>
+                  </div>
+                  <div class="test-button">
+                    <button class="btn btn-wide btn-default pull-right mt-sm mr-sm pl-sm pr-sm"
+                            ng-disabled="!registry.filters || registry.filters.length === 0 || !registry.registry"
+                            ng-if="(registryType.indexOf('JFrog') >= 0 || registryType.indexOf('Docker') >= 0) && hasWriteAuth"
+                            ng-click="move2Test()" >
+                      <em class="fa fa-handshake-o mr-sm"></em>
+                      {{'registry.TEST_REPO' | translate}}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3 mt">
+              <div class="form-group">
+                <div class="mb0 pl0">
+                  <label class="text-muted pl0">{{'registry.RESCAN_AFTER_DB_UPDATED' | translate}}</label>
+                  <div class="md-switch2 pl0">
+                    <label class="small text-muted">
+                      <input type="checkbox" ng-disabled="!hasWriteAuth" ng-model="registry.rescan_after_db_update" >
+                      <span class="toggle"></span>
+                    </label>
+                  </div>
+                </div>
+                <div style="clear: both;"></div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-2 mt">
+              <div class="form-group">
+                <div class="mb0 pl0">
+                  <label class="text-muted pl0">{{'registry.SCAN_LAYERS' | translate}}</label>
+                  <div class="md-switch2 pl0">
+                    <label class="small text-muted">
+                      <input type="checkbox" ng-disabled="!hasWriteAuth" ng-model="registry.scan_layers" >
+                      <span class="toggle"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div style="clear: both;"></div>
+            </div>
+
+            <div class="col-md-12 col-lg-7 mt" ng-if="registryType.indexOf('OpenShift') < 0">
+              <div class="form-group">
+                <div class="col-xs-3 mb0 pl0">
+                  <label class="text-muted pl0">{{'registry.SCHEDULE2' | translate}}</label>
+                  <div class="md-switch2 pl0">
+                    <label class="small text-muted">
+                      <input type="checkbox" ng-disabled="!hasWriteAuth" ng-model="registry.isScheduled" >
+                      <span class="toggle"></span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-xs-9 pl0" ng-if="registry.isScheduled">
+                  <div class="col-xs-9 pl0">
+                    <div class="text-bold text-muted">{{'registry.INTERVAL' | translate}}</div>
+                    <md-slider-container>
+                      <md-slider style="height: 36px; margin-top: -10px;" ng-disabled="!hasWriteAuth" ng-model="registry.slideNum" min="0" max="{{registry.interval.length - 1}}" aria-label={{'registry.INTERVAL' | translate}} id="blue-slider" class="md-primary">
+                      </md-slider>
+                      <span class="text-muted">{{registry.interval[registry.slideNum].display_unit | translate: {time: registry.interval[registry.slideNum].display_num} }}</span>
+                    </md-slider-container>
+                  </div>
+                </div>
+              </div>
+              <div style="clear: both;"></div>
+            </div>
+
+            <div class="col-sm-9 mt" ng-if="registryType.indexOf('OpenShift') >= 0">
+              <div class="form-group">
+                <div class="col-sm-2 mb0 pl0">
+                  <label class="text-muted pl-sm pull-left">{{'registry.SCHEDULE' | translate}}</label>
+                  <div class="md-switch2 pull-left">
+                    <label class="small text-muted">
+                      <input type="checkbox" ng-disabled="!hasWriteAuth" ng-model="registry.isScheduled" >
+                      <span class="toggle"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div style="clear: both;"></div>
+            </div>
+          </div>
+          <div class="col-sm-12 pb-sm" ng-if="hasWriteAuth">
+            <a ng-click="cancel()" class="nv-link pull-right mv-sm">
+              {{'policy.editPolicy.CANCEL' | translate}}
+            </a>
+            <button class="btn btn-wide btn-default pull-right"
+                    ng-disabled="registryEditForm.$invalid"
+                    ng-click="updateRegistry(registry, registryEditForm)" >
+              <em class="fa fa-save mr-sm"></em>{{'setting.SUBMIT' | translate}}
+            </button>
+          </div>
+        </md-dialog-content>
+        <md-dialog-content ng-show="isOnTestView">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <label class="col-sm-2 control-label ph0">{{'registry.TEST_FILTER' | translate}}
+                <div class="text-sm text-muted">{{'group.editGroup.CONDITION_HINT' | translate}}</div>
+              </label>
+              <div class="col-sm-10 p0 registry-filters">
+                <div class="filter-box">
+                  <tags-input ng-model="registry.filters" name="filters"
+                              placeholder="{{'registry.ADD_FILTER' | translate}}"
+                              replace-spaces-with-dashes="false" ng-required="true"
+                              min-length="1" display-property="name"
+                              on-tag-clicked="showTagDetail($tag)"
+                              on-tag-adding="tagAdding($tag)"
+                              on-tag-removing="tagRemoving($tag)"
+                              max-length="{{'general.FILTER_MAX_LEN' | translate}}">
+                  </tags-input>
+                  <div ng-show="isShowingEditFilter">
+                    <div class="col-sm-11 pl0">
+                      <div class="md-block mb0">
+                        <input id="tagEditor" ng-model="singleFilter.value" placeholder="{{'registry.SINGLE_FILTER_HINT' | translate}}"
+                               class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}" ng-keyup="checkDuplicated()" ng-keydown="preventFormSubmit($event)"/>
+                      </div>
+                    </div>
+                    <div class="col-sm-1 pr0">
+                      <md-button class="fa fa-pencil-square-o md-raised md-primary pull-right mr0" aria-hidden="true" style="min-width: 36px; margin-top: -3px;" aria-hidden="true" ng-click="editFilter(singleFilter)"
+                                 ng-disabled="singleFilter.value.length===0 || isInvalidTag">
+                      </md-button>
+                    </div>
+                  </div>
+                  <div>
+                    <span class="help-block" translate="{{'registry.FILTER_HINT'}}"/>
+                    <span ng-show="onFormatError" class="text-danger" >{{errorMessage}}</span>
+                  </div>
+                </div>
+                <div class="test-button">
+                  <button class="btn btn-default ml-lg mt-sm" ng-click="copyFilters2Config()">
+                    <i class="fa fa-clipboard mr-sm"></i> {{'registry.COPY_FILTER' | translate}}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 pb-sm">
+            <md-input-container class="md-block mv-sm">
+              <div
+                ag-grid="testInfoGridOptions"
+                class="ag-grid"
+                style="width: 100%; height: 500px;"
+              ></div>
+            </md-input-container>
+          </div>
+          <div class="col-sm-12 pb-sm">
+            <div class="pull-left" ng-if="!isTesting && isTestDone" >
+              <!--<div ng-if="!isPdfPreparing4TestInfo">
+                <div ng-if="progress4TestInfo<100">
+                  <em class="fa fa-file-pdf-o disabled" style="margin-left:10px;"></em>
+                  <span class="text-disabled-label disabled">PDF</span>
+                </div>
+                <div
+                  ng-if="progress4TestInfo<100"
+                  class="loader5"
+                  style="position: absolute; top: 6px; left: 30px;"
+                ></div>
+                <div
+                  ng-if="progress4TestInfo<100"
+                  style="position: absolute; top: 2px; left: 22px; font-size: 12px; color: #11330f"
+                >
+                  {{progress4TestInfo}}%
+                </div>
+                <div ng-click="downloadTestInfoPdf()" ng-if="progress4TestInfo===100">
+                  <em
+                    class="fa fa-file-pdf-o pdf-color hand"
+                    style="margin-left:10px;"
+                  ></em>
+                  <span class="text-gray-label link">PDF</span>
+                </div>
+              </div>
+              <div ng-if="isPdfPreparing4TestInfo">
+                <em class="fa fa-file-pdf-o disabled" style="margin-left:10px;"></em>
+                <span class="text-disabled-label disabled">PDF</span>
+                <div
+                  class="loader5"
+                  style="position: absolute; top: 6px; left: 30px;"
+                ></div>
+              </div>-->
+              <div ng-click="downloadTestInfoTxt()">
+                <em
+                  class="fa fa-file-text-o txt-color hand"
+                  style="margin-left:10px;"
+                ></em>
+                <span class="text-gray-label link">TXT</span>
+              </div>
+            </div>
+
+            <button cloak class="btn btn-wide btn-default pull-right mr-sm"
+                    ng-disabled="!registry.filters || registry.filters.length === 0 || !registry.registry"
+                    ng-if="(registryType.indexOf('JFrog') >= 0 || registryType.indexOf('Docker') >= 0)"
+                    ng-click="testRegistry(registry, registryEditForm, isTesting)" >
+              <em class="fa mr-sm" ng-class="{'fa-ban': isTesting, 'fa-flask': !isTesting}"></em>{{isTesting ? 'registry.STOP_TEST' : 'registry.START_TEST' | translate}}
+            </button>
+            <a ng-click="back2Config()" class="nv-link pull-right mv-sm">
+              {{'registry.BACK' | translate}}
+            </a>
+          </div>
+        </md-dialog-content>
+      </form>
+    </md-dialog>
+  </script>
+
+  <script type="text/ng-template" id="registry.layers.html">
+    <md-dialog aria-label="Edit registry" style="height: 80vh; width: 80vw;">
+      <form name="registryEditForm" novalidate="" class="form-validate">
+            <md-toolbar>
+              <div class="md-toolbar-tools">
+                <h2 class="text-dark">{{madelTitleWithTag}}</h2>
+                <span flex/>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                  <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"/>
+                </md-button>
+              </div>
+            </md-toolbar>
+            <md-dialog-content>
+              <md-tabs
+                md-no-ink
+                md-dynamic-height=""
+                md-border-bottom
+                md-selected="selectedIndex"
+              >
+                <md-tab
+                  label="{{'sidebar.nav.SCAN' | translate}}"
+                >
+                  <div class="clearfix mt-sm">
+                    <div class="pull-left mt-sm"><label class="text-primary mb0">{{cveDBVersion}}<em class="ml-sm fa fa-info-circle" uib-tooltip="{{cveDBCreateTime}}"></em></label></div>
+                    <div class="pull-right mt-sm" ng-click="exportCsv()">
+                      <em
+                        class="fa fa-file-excel-o xls-color hand"
+                        style="margin-left:10px;"
+                      ></em>
+                      <span class="text-gray-label link" ng-show="hasLayers">CSV ({{'registry.CVE_REPORT' | translate}})</span>
+                      <span class="text-gray-label link" ng-show="!hasLayers">CSV</span>
+                    </div>
+                    <div class="pull-right mt-sm" ng-click="exportLayerCsv()" ng-show="hasLayers">
+                      <em
+                        class="fa fa-file-excel-o xls-color hand"
+                        style="margin-left:10px;"
+                      ></em>
+                      <span class="text-gray-label link">CSV ({{'registry.CVE_REPORT_BY_LAYER' | translate}})</span>
+                    </div>
+                    <div class="pull-right mr" ng-if="isVulsAuthorized">
+                      <div uib-dropdown dropdown-append-to-body class="mt-sm">
+                        <div uib-dropdown-toggle>
+                          <div>
+                            <label class="text-gray-label hand">{{'network.SETTING' | translate}}</label>
+                            <em class="fa fa-caret-down text-action"/>
+                          </div>
+                        </div>
+                        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                          <li role="menuitem" ng-if="isVulsAuthorized">
+                            <a ng-click="toggleShowingAcceptedVuls(isShowingAccepted)">
+                              <em class="fa mr-sm" ng-class="{'fa-eye': !isShowingAccepted, 'fa-eye-slash': isShowingAccepted}"></em>
+                              {{ isShowingAccepted ? 'enum.HIDE_ACCEPTED_VULS' : 'enum.SHOW_ACCEPTED_VULS' | translate}}
+                            </a>
+                          </li>
+                          <li role="menuitem" ng-if="cve && !isAccepted && isWriteVulsAuthorized">
+                            <a ng-click="acceptVulnerability($event, cve)">
+                              <em class="fa fa-check-square-o mr"></em>{{ 'cveProfile.ACCEPT_VUL' | translate}}
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <!--<div class="pull-right mr" style="margin-top: 2px;" display-control="vuls_profile" ng-show="!isSimpleButton">
+                      <button
+                        type="button"
+                        style="padding: 3px 3px;"
+                        class="btn btn-default pull-right"
+                        ng-click="toggleShowingAcceptedVuls(isShowingAccepted)"
+                      >
+                        <em class="fa mr-sm" ng-class="{'fa-eye': !isShowingAccepted, 'fa-eye-slash': isShowingAccepted}"></em>
+                        {{ isShowingAccepted ? 'enum.HIDE_ACCEPTED_VULS' : 'enum.SHOW_ACCEPTED_VULS' | translate}}
+                      </button>
+                    </div>
+                    <div class="pull-right text-muted hand mt-sm" ng-show="isSimpleButton" ng-click="toggleShowingAcceptedVuls(isShowingAccepted)" display-control="vuls_profile">
+                      <em class="fa"
+                        ng-class="{'fa-eye': !isShowingAccepted, 'fa-eye-slash': isShowingAccepted}"
+                        uib-tooltip="{{ isShowingAccepted ? 'enum.HIDE_ACCEPTED_VULS' : 'enum.SHOW_ACCEPTED_VULS' | translate }}"
+                      ></em>
+                    </div>
+                    <div class="pull-right mr" style="margin-top: 2px;"
+                      ng-show="cve && !isAccepted && !isSimpleButton" display-control="write_vuls_profile">
+                      <button
+                        type="button"
+                        style="padding: 3px 3px;"
+                        class="btn btn-default pull-right"
+                        ng-click="acceptVulnerability($event, cve)"
+                      >
+                        <em class="fa fa-check-square-o mr-sm"></em>{{ 'cveProfile.ACCEPT' | translate}}
+                      </button>
+                    </div>
+                    <div role="button" ng-show="cve && !isAccepted && isSimpleButton" display-control="write_vuls_profile"
+                      class="pull-right text-muted mr mt-sm"
+                      ng-click="acceptVulnerability($event, cve)"
+                    >
+                      <em class="fa fa-check-square-o" uib-tooltip="{{ 'cveProfile.ACCEPT' | translate }}"></em>
+                    </div>-->
+                  </div>
+                  <div ng-show="hasLayers">
+                    <div class="col-sm-4 mt-sm pl0">
+                      <div ag-grid="layersGridOptions" class="ag-grid image-layer-grid"></div>
+                    </div>
+                    <div class="col-sm-8 mt-sm pl0-mb-up pr0">
+                      <div class="cmds-wrap">
+                        <div class="cmds" ng-bind-html="cmds"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 mv-sm pl0 pr0" ng-show="hasLayers">
+                    <hr class="solid mv-sm">
+                  </div>
+                  <div class="mt">
+                    <div class="col-sm-8 mb0 pl0">
+                      <div ag-grid="layerVulsGridOptions" style="position: relative;" class="ag-grid" ng-class="{'image-layer-grid': hasLayers, 'image-grid': !hasLayers}">
+                      </div>
+                    </div>
+                    <div class="col-sm-4 mb0 pl0-mb-up pr0">
+                      <div class="cve-wrap">
+                        <div class="title">{{title}}&nbsp;&nbsp;<a ng-href="{{link}}" target="_blank" ng-if="link"><em class="fa fa-external-link"/></a></div>
+                        <div class="content" ng-class="{'has-layers': hasLayers, 'no-layers': !hasLayers}">{{content}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </md-tab>
+                <md-tab
+                  label="{{'sidebar.nav.BENCH' | translate}}"
+                  ng-click="openComplianceTab()"
+                >
+                  <div class="clearfix mt-sm">
+                    <div class="pull-right" ng-click="exportComplianceCsv()">
+                      <em
+                        class="fa fa-file-excel-o xls-color hand"
+                        style="margin-left:10px;"
+                      ></em>
+                      <span class="text-gray-label link">CSV</span>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="col-sm-12 mt-sm pl0 pr0">
+                      <div ag-grid="complianceGridOptions" class="ag-grid image-grid"></div>
+                    </div>
+                  </div>
+                </md-tab>
+                <md-tab
+                  label="{{'registry.MODULES' | translate}}"
+                  ng-click="openModuleTab()"
+                >
+                  <div class="clearfix mt-sm">
+                    <div class="pull-right" ng-click="exportModuleCsv()">
+                      <em
+                        class="fa fa-file-excel-o xls-color hand"
+                        style="margin-left:10px;"
+                      ></em>
+                      <span class="text-gray-label link">CSV</span>
+                    </div>
+                    <div
+                      class="pull-right mr-lg"
+                      ng-click="hideSafeModules = !hideSafeModules; toggleSafeModule(hideSafeModules)"
+                    >
+                      <em
+                        class="fa text-action"
+                        ng-class="hideSafeModules ? 'fa-eye' : 'fa-eye-slash'"
+                      ></em>
+                      <label class="text-gray-label hand"
+                        >{{hideSafeModules ? 'registry.SHOW_ALL_MODULES' :
+                        'registry.HIDE_SAFE_MODULES' | translate}}</label
+                      >
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      <div class="image-module-chart">
+                        <div class="col-sm-12 pl0">
+                          <label class="text-muted">{{'registry.TOP_RISKIEST_MODULE' | translate}}</label>
+                        </div>
+                        <div class="row m0">
+                          <div ng-if="!hasModuleVuls" class="safe">
+                            <div>
+                              <em class="fa fa-check-circle-o safe-signal" aria-hidden="true"></em>
+                            </div>
+                            <div class="safe-text">
+                              {{'registry.message.NO_VULS' | translate}}
+                            </div>
+                          </div>
+                          <div ng-if="hasModuleVuls">
+                            <div class="col-xs-6 mt-sm pl0" style="height: 200px;">
+                              <canvas id="module-vul-pie-chart" class="chart chart-pie" chart-data="moduleVulPieData" chart-options="moduleVulPieOptions"
+                                      chart-labels="moduleVulPieLabels"  chart-colors="moduleVulPieColors" />
+                            </div>
+                            <div class="col-xs-6 mt-sm pl0" style="height: 200px;">
+                              <canvas id="module-vul-stacked-bar-chart" class="chart chart-horizontal-bar" chart-data="moduleStackedBarData" chart-options="moduleStackedBarOptions"
+                                      chart-labels="moduleStackedBarLabels"  chart-colors="moduleStackedBarColors" chart-series="moduleStackedBarSerie" chart-dataset-override = "moduleStackedBarOverride"/>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 mv-sm pl0 pr0">
+                      <hr class="solid mv-sm">
+                    </div>
+                    <div>
+                      <div class="col-sm-8 pl0 pr0">
+                        <div ag-grid="moduleGridOptions" class="ag-grid image-layer-grid"></div>
+                      </div>
+                      <div class="col-sm-4 grid-with-arrow pr0">
+                        <div ag-grid="moduleCveGridOptions" class="ag-grid image-layer-grid"></div>
+                      </div>
+                    </div>
+                  </div>
+                </md-tab>
+              </md-tabs>
+            </md-dialog-content>
+      </form>
+    </md-dialog>
+  </script>
+</div>

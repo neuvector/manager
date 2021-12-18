@@ -1,0 +1,117 @@
+[
+  {
+    "stateName": "app.dashboard",
+    "icon": "icon-speedometer",
+    "translate": "sidebar.nav.DASHBOARD"
+  },
+  {
+    "stateName": "app.nodechart",
+    "icon": "icon-globe",
+    "translate": "sidebar.nav.NETWORK_ACTIVITY"
+  },
+  {
+    "stateName": "_",
+    "icon": "fa fa-cubes",
+    "translate": "sidebar.nav.RESOURCE",
+    "submenu": [
+      {
+        "stateName": "app.platforms",
+        "translate": "scan.PLATFORM"
+      },
+      {
+        "stateName": "app.hosts",
+        "translate": "sidebar.nav.NODES"
+      },
+      {
+        "stateName": "app.workloads",
+        "translate": "sidebar.nav.CONTAINERS"
+      },
+      {
+        "stateName": "app.regScan",
+        "translate": "sidebar.nav.REG_SCAN"
+      },
+      {
+        "stateName": "app.controllers",
+        "translate": "sidebar.nav.SYSTEM_COMPONENTS"
+      }
+    ]
+  },
+  {
+    "stateName": "_",
+    "icon": "fa fa-gavel",
+    "translate": "sidebar.nav.SECURITY",
+    "submenu": [
+      {
+        "stateName": "app.admissionControl",
+        "translate": "sidebar.nav.ADMISSION_CONTROL"
+      },
+      {
+        "stateName": "app.group",
+        "translate": "sidebar.nav.GROUP"
+      },
+      {
+        "stateName": "app.policy",
+        "translate": "sidebar.nav.POLICY"
+      },
+      {
+        "stateName": "app.responsePolicy",
+        "translate": "sidebar.nav.RESPONSE_POLICY"
+      },
+      {
+        "stateName": "app.dlpSensors",
+        "translate": "sidebar.nav.DLP_SENSORS"
+      },
+      {
+        "stateName": "app.wafSensors",
+        "translate": "sidebar.nav.WAF_SENSORS"
+      }
+    ]
+  },
+  {
+    "stateName": "_",
+    "icon": "fa fa-bug",
+    "translate": "sidebar.nav.RISK",
+    "submenu": [
+      {
+        "stateName": "app.scan",
+        "translate": "sidebar.nav.SCAN"
+      },
+      {
+        "stateName": "app.cveProfile",
+        "translate": "cveProfile.TITLE"
+      },
+      {
+        "stateName": "app.bench",
+        "translate": "sidebar.nav.BENCH"
+      },
+      {
+        "stateName": "app.cisProfile",
+        "translate": "cis.COMPLIANCE_PROFILE"
+      }
+    ]
+  },
+  {
+    "stateName": "_",
+    "icon": "icon-call-in",
+    "translate": "sidebar.nav.NOTIFICATIONS",
+    "submenu": [
+      {
+        "stateName": "app.securityEvent",
+        "translate": "sidebar.nav.SECURITY_EVENT"
+      },
+      {
+        "stateName": "app.audit",
+        "translate": "sidebar.nav.AUDIT"
+      },
+      {
+        "stateName": "app.event",
+        "translate": "sidebar.nav.EVENT"
+      }
+    ]
+  },
+  {
+    "stateName": "app.settingsHome",
+    "icon": "fa fa-wrench",
+    "translate": "sidebar.nav.SETTING"
+  }
+]

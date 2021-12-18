@@ -1,0 +1,201 @@
+<div>
+  <style>
+      /* Specify styling for tooltip contents */
+      .tooltip.customClass .tooltip-inner {
+          background-color: #d6e1ea;
+          box-shadow: 0 6px 12px rgba(0,0,0,.175);
+      }
+      /* Hide arrow */
+      .tooltip.customClass .tooltip-arrow {
+          display: none;
+      }
+  </style>
+  <div class="mt mb">
+    <div class="policy-top-button mb-sm" style="width: 150px;" ng-click="addGroup(-1)">
+      <div class="button">
+        <em class="fa fa-plus-circle mr-sm"
+             uib-tooltip="{{'ldap.dialog.title.ADD' | translate}}">
+        </em>
+        {{'policy.toolBar.INSERT_TO_TOP' | translate}}
+      </div>
+    </div>
+    <div style="width: 100%; height: 30px; font-size: 12px; border-bottom: 1px solid #d6e1ea;" class="grid-outer-header row ml0 mr0 text-bold group-domain-role-grid">
+      <div class="group-name mt-sm auto-hide mr" style="padding-left: 40px;">{{'ldap.gridHeader.GROUP' | translate}}</div>
+      <div class="global-role mt-sm auto-hide pl" style="border-left: 1px solid #d6e1ea;">{{'ldap.gridHeader.GLOBAL_ROLE' | translate}}</div>
+      <div class="domain-role mt-sm auto-hide pl" style="border-left: 1px solid #d6e1ea;">{{'ldap.gridHeader.DOMAIN_ROLES' | translate}}</div>
+      <div class="action"></div>
+    </div>
+    <div class="row m0 grid-body" style="height: 300px; overflow-y: scroll">
+      <div ng-if="groups.length===0">
+        <div style="margin-top: 80px;" class="text-center">No rows to show</div>
+      </div>
+      <div class="list-group" ui-sortable="sortableOptions" ng-model="groups" ng-if="groups.length>0" ui-sortable-update="onOrderUpdate()">
+        <div class="list-group-item row m0 group-domain-role-grid" ng-repeat="group in groups track by $index">
+          <div class="group-name auto-hide"
+               style="height: 16px; font-size: 12px;"
+               uib-tooltip="{{group.group}}"
+               tooltip-enable="false"
+               show-tooltip-on-text-overflow
+          >
+            <em class="fa fa-reorder fa-fw text-muted mr-lg"></em>{{group.group}}
+          </div>
+          <div class="global-role auto-hide pl-sm pr-sm" style="border-left: 1px solid #d6e1ea; min-height: 18px;" ng-style="{'height': group.domainRoles.length * 22 - 2}">
+            <div class="ml-sm">
+              <div class="label label-info" style="min-width: 60px; height: 16px;">
+                {{group.global_role}}
+              </div>
+            </div>
+          </div>
+          <div class="domain-role auto-hide pl-sm pr-sm" style="border-left: 1px solid #d6e1ea; min-height: 18px;" ng-style="{'height': group.domainRoles.length * 22 - 2}">
+            <div ng-repeat="domainRole in group.domainRoles" class="ml-sm">
+              <div class="label label-info-o mb-sm auto-hide" style="min-width: 60px; display: block; text-align: left;">
+                <span>{{domainRole.domain_role}}</span>&nbsp;<span class="text-muted">{{'ldap.ROLE_DOMAIN' | translate}}</span>&nbsp;<span>{{domainRole.domains.join(", ")}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="action auto-hide pl-sm pr-sm text-right" style="border-left: 1px solid #d6e1ea; min-height: 18px;"  ng-style="{'height': group.domainRoles.length * 22 - 2}" ng-if="isWriteGroupsAuthorized">
+            <em class="fa fa-plus-circle mr-sm text-action"
+                ng-click="addGroup($index)" uib-tooltip="{{'ldap.dialog.title.ADD' | translate}}">
+            </em>
+            <em class="fa fa-edit mr-sm text-action"
+                ng-click="editGroup(group, $index)" uib-tooltip="{{'ldap.dialog.title.EDIT' | translate}}">
+            </em>
+            <em class="fa fa-trash mr-sm text-action" id="remove-form-action"
+                ng-click="removeGroup($index)" uib-tooltip="{{'ldap.dialog.title.REMOVE' | translate}}">
+            </em>
+          </div>
+        </div>
+     </div>
+    </div>
+  </div>
+  <script type="text/ng-template" id="dialog.addEditGroup.html">
+    <md-dialog aria-label="Add Edit Group" class="dialog-lg" style="overflow: visible; top: 150px;">
+      <form name="groupForm" ng-submit="$event.preventDefault()" novalidate="" class="form-validate" style="overflow: visible">
+        <md-toolbar>
+          <div class="md-toolbar-tools">
+            <h2 class="text-dark" ng-if="op==='edit'">{{'ldap.dialog.title.EDIT' | translate}}</h2>
+            <h2 class="text-dark" ng-if="op==='add'">{{'ldap.dialog.title.ADD' | translate}}</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+              <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+            </md-button>
+          </div>
+        </md-toolbar>
+        <md-dialog-content style="overflow: visible" ng-class="{'mb-lg': !isEditable}">
+          <div>
+            <div class="card-body">
+              <div>
+                <div class="row m0">
+                  <div class="col-sm-12">
+                    <md-input-container class="md-block mb0" >
+                      <label>{{'ldap.gridHeader.GROUP' | translate}}</label>
+                      <input ng-model="group.group"  name="groupName" ng-disabled="op==='edit'" required
+                             class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                    </md-input-container>
+                  </div>
+                </div>
+                <div class="row m0">
+                  <div class="col-sm-6">
+                    <label class="col-sm-4 nv-modal-item-title control-label pl0" style="padding-left: 36px; margin-top: 22px;">
+                      {{'ldap.gridHeader.GLOBAL_ROLE' | translate}}
+                    </label>
+                    <div class="col-sm-8  pr0">
+                      <md-select ng-model="group.global_role" aria-label="select category" ng-change="changeGlobalRole()" required>
+                        <md-option ng-repeat="globalRole in globalRoleList" ng-value="globalRole">{{globalRole}}</md-option>
+                      </md-select>
+                    </div>
+                  </div>
+                </div>
+                <div class="row m0" ng-show="group.global_role!=='admin' && group.global_role!=='fedAdmin'">
+                  <div class="col-sm-12 mt-lg">
+                    <div class="form-group">
+                      <div class="text-muted">*&nbsp;{{'ldap.ROLE_DOMAIN_INSTRUCTION' | translate}}</div>
+                      <div class="mb">
+                        <div ag-grid="gridOptions4DomainRoles"
+                            class="ag-grid"
+                            style="width: 100%; height: 160px;"
+                        ></div>
+                      </div>
+                      <label class="col-sm-2 control-label pl0"
+                        >{{selectedDomainRole}}  {{'ldap.GROUP_ADMIN' | translate}}
+                        <div class="text-sm text-muted">
+                          {{'group.editGroup.CONDITION_HINT' | translate}}
+                        </div>
+                      </label>
+                      <div class="col-sm-10 pr0">
+                        <tags-input
+                          ng-model="domainTags"
+                          name="aGrp"
+                          placeholder="{{'ldap.ADD_DOMAIN' | translate}}"
+                          min-length="2"
+                          replace-spaces-with-dashes="false"
+                          display-property="name"
+                          template="domain-template"
+                          on-tag-adding="tagChanging($tag)"
+                          on-tag-removing="tagChanging($tag)"
+                          on-tag-clicked="showTagDetail($tag)"
+                          max-length="{{'general.FILTER_MAX_LEN' | translate}}"
+                        >
+                          <auto-complete
+                            source="loadTags($query)"
+                            min-length="1"
+                            max-results-to-show="128"
+                            max-length="{{'general.FILTER_MAX_LEN' | translate}}">
+                          </auto-complete>
+                        </tags-input>
+                        <div ng-show="isShowingEditDomain">
+                          <div class="col-sm-11 pl0">
+                            <div class="md-block mb0">
+                              <input id="tagEditor" ng-model="singleDomain.value" placeholder="{{'ldap.SINGLE_DOMAIN_HINT' | translate}}"
+                                     uib-typeahead="domain for domain in domainOptions4SingleDomainEditor | filter:$viewValue | limitTo:16"
+                                     class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}" ng-keyup="checkDuplicated()"  ng-keydown="preventFormSubmit($event)"/>
+                            </div>
+                          </div>
+                          <div class="col-sm-1 pr0">
+                            <md-button class="fa fa-pencil-square-o md-raised md-primary pull-right mr0" aria-hidden="true" style="min-width: 36px; margin-top: -3px;" aria-hidden="true" ng-click="editDomain(singleDomain)"
+                                       ng-disabled="singleDomain.value.length===0 || isInvalidTag">
+                            </md-button>
+                          </div>
+                        </div>
+                        <span class="help-block">{{domainRoleHint}}</span>
+                        <span
+                          ng-show="onFormatError"
+                          class="text-danger"
+                          translate="{{'group.BAD_FORMAT'}}"
+                        ></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </md-dialog-content>
+        <div class="md-actions" layout="row" style="border: 0;">
+          <md-button ng-click="editGroupRoleMap()" class="md-raised md-primary" ng-if="op==='edit'"
+                     ng-disabled=groupForm.$invalid || group.criteria.length===0">
+            {{'group.editGroup.UPDATE' | translate}}
+          </md-button>
+          <md-button ng-click="addGroupRoleMap()" class="md-raised md-primary" ng-if="op==='add'"
+                     ng-disabled=groupForm.$invalid || group.criteria.length===0">
+            {{'group.addGroup.ADD' | translate}}
+          </md-button>
+          <a ng-click="cancel()" class="nv-link">
+            {{'group.editGroup.CANCEL' | translate}}
+          </a>
+        </div>
+      </form>
+    </md-dialog>
+  </script>
+  <script type="text/ng-template" id="domain-template">
+    <div class="tag-template">
+      <div>
+        <em class="fa fa-building-o text-primary"></em>
+      </div>
+      <div>
+        <span>{{$getDisplayText()}}</span>
+        <a class="remove-button" ng-click="$removeTag()">&#10006;</a>
+      </div>
+    </div>
+  </script>
+</div>

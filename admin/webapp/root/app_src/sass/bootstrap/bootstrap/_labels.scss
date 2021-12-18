@@ -1,0 +1,123 @@
+//
+// Labels
+// --------------------------------------------------
+
+.label {
+  display: table-cell;
+  padding: .3em .6em .2em;
+  font-size: 75%;
+  font-weight: bold;
+  line-height: 1;
+  color: $label-color;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: .25em;
+
+  // [converter] extracted a& to a.label
+
+  // Empty labels collapse automatically (not available in IE8)
+  &:empty {
+    display: none;
+  }
+
+  // Quick fix for labels in buttons
+  .btn & {
+    position: relative;
+    top: -1px;
+  }
+}
+
+// Add hover effects, but only for links
+a.label {
+  &:hover,
+  &:focus {
+    color: $label-link-hover-color;
+    text-decoration: none;
+    cursor: pointer;
+  }
+}
+
+// Colors
+// Contextual variations (linked labels get darker on :hover)
+
+.label-default {
+  @include label-variant($label-default-bg);
+}
+
+.label-primary {
+  @include label-variant($label-primary-bg);
+}
+
+.label-primary-tran {
+  @include label-variant(rgba(63, 81, 181, 0.8));
+}
+
+.label-success {
+  @include label-variant($label-success-bg);
+}
+
+.label-success-tran {
+  @include label-variant(rgba(92, 184, 92, 0.8));
+}
+
+.label-info {
+  @include label-variant($label-info-bg);
+}
+
+.label-info-o {
+  box-sizing: border-box;
+  border: 1px solid $label-info-bg;
+  color: $label-info-bg;
+}
+
+.label-info-tran {
+  @include label-variant(rgba(91, 192, 222, 0.8));
+}
+
+
+.label-warning {
+  @include label-variant($label-warning-bg);
+}
+
+.label-warning-tran {
+  @include label-variant(rgba(240, 173, 78, 0.8));
+}
+
+.label-note {
+  @include label-variant(rgba(255, 182, 97, 0.8));
+}
+
+.label-danger {
+  @include label-variant($label-danger-bg);
+}
+
+.label-danger-tran {
+  @include label-variant(rgba(217, 83, 79, 0.8));
+}
+
+.label-pink-tran {
+  @include label-variant(rgba(233, 30, 99, 0.8));
+}
+
+.label-fs {
+  min-width: 80px;
+  display: inline-block;
+  line-height: 14px;
+}
+
+.label-discover {
+  @include label-variant(#2196F3);
+}
+
+.label-monitor {
+  @include label-variant(#4e39c1);
+}
+
+.label-protect {
+  @include label-variant(#186d33);
+}
+
+.label-idle {
+  @include label-variant($neuvector-grey-500);
+}

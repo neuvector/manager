@@ -1,0 +1,67 @@
+<div ng-controller="ThreatController" class="pt0">
+
+  <div class="clearfix">
+    <div ng-show="!threatsErr">
+      <div class="pull-right mt-sm" ng-click="refresh()">
+        <em class="fa fa-refresh text-action"/>
+        <label class="text-gray-label hand">{{'general.REFRESH' | translate}}</label>
+      </div>
+      <div class="pull-right mt-sm mr-lg" ng-if="threats.length" ng-click="exportCsv()">
+        <em class="fa fa-download text-action"/>
+        <label class="text-gray-label hand">{{'general.CSV_DOWNLOAD' | translate}}</label>
+      </div>
+    </div>
+    <div class="content-title">{{'sidebar.nav.THREAT' | translate}}</div>
+  </div>
+
+  <div class="panel mb0 ">
+    <div class="panel-body">
+      <div class="clearfix">
+        <label class="text-primary" ng-show="!threatsErr">{{count}}</label>
+        <div class="left-inner-addon pull-right" style="margin-bottom: 10px">
+          <em class="fa fa-filter text-filter"/>
+          <input class="search form-control" placeholder="{{'general.FILTER' | translate}}" type="text"
+                 maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+                 ng-model="search"
+                 ng-paste="onFilterChanged(search)"
+                 ng-keyup="onFilterChanged(search)"/>
+        </div>
+      </div>
+      <div ag-grid="gridOptions" class="ag-grid loading-grid-warp" style="width: 100%;"
+           ng-style="{ height: graphHeight + 'px'}">
+           <div ng-show="loadingPacket" class="overlay loading-grid">
+              {{'enum.LOADING' | translate}}......
+           </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="packetPreview" class="packetPreview pl-sm pr" ng-show="onPacketPreview">
+    <button class="btn btn-xs btn-link pull-right fixed-close" ng-click="onPacketPreview=!onPacketPreview">
+      <em class="fa fa-times"/>
+    </button>
+    <div class="pull-right mt-sm mr-lg fixed-download" ng-click="exportPcap()" ng-if="!packetErr">
+      <em class="fa fa-download text-action"/>
+      <label class="text-gray-label hand">{{'general.PCAP_DOWNLOAD' | translate}}</label>
+    </div>
+    <div class="packetContent">
+      <div class="view view-offset" ng-show="!packetErr">
+        <b ng-repeat="pos in positions">{{pos}}</b>
+      </div>
+      <div class="view view-hex" ng-show="!packetErr">
+        <span ng-repeat="hex in hexItems track by $index" ng-class="{current: current == $index + offset}"
+              ng-click="setCurrent($index + offset)">{{hex}}</span>
+      </div>
+      <div class="view view-char mr-sm" ng-show="!packetErr">
+        <span ng-repeat="character in chars track by $index" ng-class="{current: current == $index + offset}"
+              ng-click="setCurrent($index + offset)">{{character}}</span>
+      </div>
+      <div ng-show="packetErr">
+        <div class="server-error" style="margin: 0 30px;">
+          <div><em class="fa fa-times-circle error-signal" aria-hidden="true"></em></div>
+          <div><span class="error-text">{{packetErrMSG}}</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

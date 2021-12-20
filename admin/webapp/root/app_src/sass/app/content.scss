@@ -2437,8 +2437,10 @@ div.ag-root .ag-cell-focus,
   background-color: $neuvector-grey-200 !important;
 }
 
-.cell-wrap-text {
+.cell-wrap-text-fix-height {
   white-space: normal !important;
+  overflow-y: auto;
+  align-items: baseline !important;
 }
 
 .cell-wrap-text-break-word {

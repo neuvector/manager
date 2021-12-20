@@ -1,0 +1,410 @@
+<div ng-controller="LdapController as ldap">
+  <div class="clearfix">
+    <div class="content-title pull-left">
+      <a href="#/app/settings">{{'sidebar.nav.SETTING' | translate}}</a>
+      &nbsp;>&nbsp;&nbsp;{{'ldap.head.TITLE' | translate}}
+    </div>
+    <div class="ladp-setting-guide pull-right">
+      <div class="text-guide">{{'ldap.head.GUIDE' | translate}}</div>
+    </div>
+  </div>
+
+  <div class="panel layout-padding">
+    <form name="ldapForm" novalidate class="form-validate">
+      <div layout="row" style="margin: 18px 0;">
+        <div
+          class="md-block mb0 col-sm-12 nv-container"
+          style="margin-top: 18px; height: 60px;"
+        >
+          <md-icon class="radio-icon">
+            <div class="circle-icon">
+              <em class="fa fa-clipboard text-primary fa-lg " />
+            </div>
+          </md-icon>
+          <label class="radio-label"
+            >{{'ldap.DIRECTORY_TYPE' | translate}}</label
+          >
+          <div class="radio-set" ng-class="inputMaskDisabledClass">
+            <label
+              class="radio-inline c-radio"
+              ng-class="inputMaskDisabledClass"
+            >
+              <input
+                id="ldap"
+                type="radio"
+                name="directoryType"
+                ng-model="ldap.server.directory"
+                value="OpenLDAP"
+                required
+                ng-disabled="!isTestAuthorized"
+              />
+              <span class="fa fa-check" ng-class="inputMaskDisabledClass" />
+              {{'setting.directory_type.OPEN_LDAP' | translate}}
+            </label>
+            <label
+              class="radio-inline c-radio"
+              ng-class="inputMaskDisabledClass"
+            >
+              <input
+                id="msad"
+                type="radio"
+                name="directoryType"
+                ng-model="ldap.server.directory"
+                value="MicrosoftAD"
+                required
+                ng-disabled="!isTestAuthorized"
+              />
+              <span class="fa fa-check" ng-class="inputMaskDisabledClass" />
+              {{'setting.directory_type.MS_AD' | translate}}
+            </label>
+          </div>
+        </div>
+      </div>
+      <div layout="row">
+        <md-input-container class="col-sm-6 nv-container">
+          <label>{{'ldap.HOST' | translate}}</label>
+          <md-icon>
+            <div class="circle-icon">
+              <em class="fa fa-server text-primary fa-lg " />
+            </div>
+          </md-icon>
+          <input
+            name="hostname"
+            ng-model="ldap.server.hostname"
+            required
+            ng-disabled="!isTestAuthorized"
+            maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+          />
+          <div
+            ng-messages="ldapForm.hostname.$error"
+            ng-show="ldapForm.hostname.$dirty"
+          >
+            <div ng-message="required">
+              {{'ldap.HOST_REQUIRED' | translate }}
+            </div>
+          </div>
+        </md-input-container>
+        <md-input-container class="col-sm-4 nv-container ml-xl">
+          <label>{{'ldap.PORT' | translate}}</label>
+          <md-icon>
+            <div class="circle-icon">
+              <em class="fa fa-dot-circle-o text-primary fa-lg " />
+            </div>
+          </md-icon>
+          <input
+            name="port"
+            ng-model="ldap.server.port"
+            type="number"
+            pattern="\d*"
+            ng-disabled="!isTestAuthorized"
+            maxlength="10"
+          />
+          <div
+            ng-messages="ldapForm.port.$error"
+            ng-show="ldapForm.port.$dirty"
+          >
+            <div ng-message="required">
+              {{'ldap.PORT_REQUIRED' | translate }}
+            </div>
+          </div>
+        </md-input-container>
+        <md-input-container class="col-sm-2 mt-lg">
+          <md-checkbox
+            ng-model="ldap.server.ssl"
+            class="green mt-lg"
+            ng-disabled="!isTestAuthorized"
+          >
+            {{'ldap.SSL' | translate}}
+          </md-checkbox>
+        </md-input-container>
+      </div>
+
+      <div layout="row">
+        <md-input-container class="col-sm-6 nv-container">
+          <label>{{'ldap.USERNAME' | translate}}</label>
+          <md-icon>
+            <div class="circle-icon">
+              <em class="fa fa-user-o text-primary fa-lg " />
+            </div>
+          </md-icon>
+          <input
+            ng-model="ldap.server.bind_dn"
+            ng-disabled="!isTestAuthorized"
+            maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+          />
+        </md-input-container>
+        <md-input-container class="col-sm-6 nv-container md-icon-right ml-xl">
+          <label>{{'ldap.PASSWORD' | translate}}</label>
+          <md-icon>
+            <div class="circle-icon">
+              <em class="icon-key text-primary fa-lg " />
+            </div>
+          </md-icon>
+          <input
+            name="ldapPassword"
+            placeholder="{{ldap.onCreate ? '' : '******'}}"
+            ng-model="ldap.server.bind_password"
+            ng-attr-type="{{ showPassword ? 'text':'password'}}"
+            ng-disabled="!isTestAuthorized"
+            maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+          />
+          <md-icon
+            ng-show="ldapForm.ldapPassword.$dirty"
+            ng-click="showPassword=!showPassword"
+            class="mt-lg"
+            ng-class="showPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"
+            style="cursor: pointer; pointer-events: all;"
+          >
+          </md-icon>
+        </md-input-container>
+      </div>
+
+      <div layout="row">
+        <md-input-container class="md-block mb0 col-sm-12 nv-container">
+          <label class="with-placeholder">{{'ldap.BASE_DN' | translate}}</label>
+          <md-icon>
+            <div class="circle-icon">
+              <em class="fa fa-sitemap text-primary fa-lg " />
+            </div>
+          </md-icon>
+          <input
+            name="baseDn"
+            ng-model="ldap.server.base_dn"
+            required
+            ng-disabled="!isTestAuthorized"
+            maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+          />
+          <div class="help-block">{{'partner.ldap.BASE_DN_HINT' | translate}}</div>
+          <div style="height: 19px;">
+            <div
+              ng-messages="ldapForm.baseDn.$error"
+              ng-show="ldapForm.baseDn.$dirty"
+            >
+              <div ng-message="required">
+                {{'ldap.BASE_DN_MESSAGE' | translate}}
+              </div>
+            </div>
+          </div>
+        </md-input-container>
+      </div>
+
+      <div layout="row">
+        <md-input-container class="md-block mb0 col-sm-12 nv-container">
+          <label class="with-placeholder"
+            >{{'ldap.USERNAME_ATTR' | translate}}</label
+          >
+          <md-icon>
+            <div class="circle-icon">
+              <em class="fa fa-address-card-o text-primary fa-lg " />
+            </div>
+          </md-icon>
+          <input
+            name="usernameAttr"
+            ng-model="ldap.server.username_attr"
+            ng-disabled="!isTestAuthorized"
+            placeholder="{{'ldap.USERNAME_ATTR_PLACEHOLDER' | translate}}"
+            maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+          />
+          <div class="help-block">
+            {{'ldap.USERNAME_ATTR_HINT' | translate}}
+          </div>
+          <div style="height: 19px;">
+            <div
+              ng-messages="ldapForm.usernameAttr.$error"
+              ng-show="ldapForm.usernameAttr.$dirty"
+            >
+              <div ng-message="required">
+                {{'ldap.USERNAME_ATTR_MESSAGE' | translate}}
+              </div>
+            </div>
+          </div>
+        </md-input-container>
+      </div>
+
+      <div layout="row">
+        <md-input-container class="md-block mb0 col-sm-12 nv-container">
+          <label class="with-placeholder"
+            >{{'ldap.GROUP_MEMBER_ATTR' | translate}}</label
+          >
+          <md-icon>
+            <div class="circle-icon">
+              <em class="fa fa-list-alt text-primary fa-lg " />
+            </div>
+          </md-icon>
+          <input
+            name="groupMemberAttr"
+            ng-model="ldap.server.group_member_attr"
+            ng-disabled="!isTestAuthorized"
+            placeholder="{{'ldap.GROUP_MEMBER_ATTR_PLACEHOLDER' | translate}}"
+            maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+          />
+          <div class="help-block">
+            {{'ldap.GROUP_MEMBER_ATTR_HINT' | translate}}
+          </div>
+          <div style="height: 19px;">
+            <div
+              ng-messages="ldapForm.groupMemberAttr.$error"
+              ng-show="ldapForm.groupMemberAttr.$dirty"
+            >
+              <div ng-message="required">
+                {{'ldap.GROUP_MEMBER_ATTR_MESSAGE' | translate}}
+              </div>
+            </div>
+          </div>
+        </md-input-container>
+      </div>
+
+      <div layout="row" layout-align="end center" class="mr">
+        <md-button
+          class="md-raised md-primary md-small"
+          ng-click="ldap.test($event)"
+          ng-disabled="ldapForm.$invalid"
+          ng-if="isTestAuthorized"
+        >
+          {{'ldap.TEST_CONNECTION' | translate}}
+        </md-button>
+      </div>
+    </form>
+    <form name="ldapGroupForm" novalidate class="form-validate">
+      <div class="col-sm-12">
+        <div class="form-group">
+          <label
+            class="col-sm-2 control-label pl0"
+            translate="{{'ldap.DEFAULT_ROLE'}}"
+            style="margin-bottom: 0; margin-top: 5px;"
+          ></label>
+          <div class="col-sm-2">
+            <md-select
+              ng-model="ldap.server.default_role"
+              ng-disabled="!isSubmitSettingAuthorized"
+              class="m0"
+            >
+              <md-option ng-repeat="role in ldap.roles" ng-value="role"
+                >{{role}}</md-option
+              >
+            </md-select>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12 mt-lg mb-lg">
+        <group-role-map connection="groupRoleMapData"></group-role-map>
+      </div>
+      <script type="text/ng-template" id="group-template">
+        <div class="tag-template">
+          <div>
+            <em class="icon-people text-primary"></em>
+          </div>
+          <div>
+            <span>{{$getDisplayText()}}</span>
+            <a class="remove-button" ng-click="$removeTag()">&#10006;</a>
+          </div>
+        </div>
+      </script>
+      <div class="pull-right">
+        <md-button
+          class="md-raised md-primary md-small"
+          ng-click="ldap.addOrUpdate(ldapForm, ldap.server);"
+          ng-disabled="ldapForm.$invalid"
+          ng-if="isSubmitSettingAuthorized"
+        >
+          {{'setting.SUBMIT' | translate}}
+        </md-button>
+      </div>
+      <div class=" mt-lg ml-lg">
+        <md-checkbox
+          ng-model="ldap.server.enable"
+          ng-disabled="!isSubmitSettingAuthorized"
+          class="green"
+        >
+          {{'ldap.ENABLE_LDAP' | translate}}
+        </md-checkbox>
+      </div>
+    </form>
+  </div>
+
+  <script type="text/ng-template" id="dialog.ldap.html">
+    <md-dialog aria-label="Test Ldap">
+      <form name="testForm" novalidate="" class="form-validate">
+        <md-toolbar>
+          <div class="md-toolbar-tools">
+            <h2 class="text-dark">{{'ldap.test.TITLE' | translate}}</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+              <md-icon md-svg-src="app/img/icons/ic_close_24px.svg"
+                       aria-label="Close dialog"></md-icon>
+            </md-button>
+          </div>
+        </md-toolbar>
+        <md-dialog-content>
+          <div>
+            <div class="card-body">
+              <div>
+                <div class="col-sm-5 col-sm-offset-1 mt-lg">
+                  <md-input-container class="md-icon-float md-block">
+                    <label>{{'user.addUser.USER_NAME' | translate}}</label>
+                    <md-icon class="icon-user fa-lg text-primary"></md-icon>
+                    <input name="username" ng-model="user.username"
+                           maxlength="{{'general.FILTER_MAX_LEN' | translate}}" required/>
+                  </md-input-container>
+                </div>
+                <div class="col-sm-5 mt-lg">
+                  <md-input-container class="md-icon-float md-icon-right md-block">
+                    <label>{{'user.addUser.PASSWORD' | translate}}</label>
+                    <md-icon class="icon-key fa-lg text-primary"></md-icon>
+                    <input name="password"
+                           ng-attr-type="{{ showDiagPassword ? 'text':'password'}}"
+                           ng-model="user.password"
+                           maxlength="{{'general.FILTER_MAX_LEN' | translate}}" required/>
+                    <div ng-messages="registerForm.password.$error"
+                         ng-show="registerForm.password.$touched">
+                      <div ng-message="required">{{'user.PASSWORD_REQUIRED' | translate}}</div>
+                    </div>
+                    <md-icon
+                            ng-show="testForm.password.$dirty"
+                      ng-click="showDiagPassword=!showDiagPassword"
+                      ng-class="showDiagPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"
+                      style="cursor: pointer; pointer-events: all;">
+                    </md-icon>
+                  </md-input-container>
+                </div>
+                <div id="loadingBar" class="col-sm-10 col-sm-offset-1 mb-sm"
+                     ng-hide="!inprogress || testFinished ">
+                  <md-progress-linear md-mode="indeterminate">
+                  </md-progress-linear>
+                </div>
+                <div class="col-sm-10 col-sm-offset-1" ng-show="!inprogress && !testFinished ">
+                  <em class="icon-note text-info mr-lg"></em>
+                  {{'ldap.test.NOTE' | translate}}
+                </div>
+                <div class="col-sm-10 col-sm-offset-1" ng-show="inprogress">
+                  <em class="icon-info text-info mr-lg"></em>
+                  {{'ldap.test.INFO' | translate}}
+                </div>
+                <div class="col-sm-10 col-sm-offset-1" ng-show="testFinished && !failed">
+                  <em class="icon-check text-green mr-lg"></em>
+                  {{connectedMessage}}
+                  <md-chips input-aria-label="Groups" ng-model="groups"
+                            readonly="true" md-removable="false" class="cursor-noclick" >
+                  </md-chips>
+                </div>
+                <div class="col-sm-10 col-sm-offset-1" ng-show="testFinished && failed">
+                  <em class="icon-close text-danger mr-lg"></em>
+                  {{'ldap.test.FAILED' | translate}}&nbsp;{{errorMessage}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </md-dialog-content>
+        <md-dialog-actions class="layout-row layout-align-end-end mb-sm">
+          <md-button ng-click="check(user)" class="md-small md-raised"
+                     ng-disabled="testForm.$invalid">
+            {{'ldap.test.CHECK' | translate}}
+          </md-button>
+          <md-button ng-click="cancel()" class="md-small md-raised">
+            {{'user.addUser.CANCEL' | translate}}
+          </md-button>
+        </md-dialog-actions>
+      </form>
+    </md-dialog>
+  </script>
+</div>

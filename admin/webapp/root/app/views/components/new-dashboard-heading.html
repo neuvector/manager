@@ -1,0 +1,52 @@
+<div class="nv-dashboard-heading">
+  <div class="titles">
+    <div class="title">
+      {{category.title}}
+    </div>
+    <div class="subtitle">
+      {{category.subtitle? "(" + category.subtitle + ")" : ""}}
+    </div>
+  </div>
+  <div>
+    <div class="pull-left primary-number">
+      <ng-gauge size="125" type="arch" thick="12" ng-if="!category.isInit"
+                min="0" max="100" value="category.score"
+                cap="round" label="{{category.eval}}" append="" foreground-color="F00"
+                thresholds="category.thresholds" background-color="#EEE">
+      </ng-gauge>
+      <div ng-if="category.isInit" class="gauge-warning">
+        <em class="fa fa-exclamation-triangle text-caution" style="font-size: 50px;" aria-hidden="true"></em>
+        <div class="gauge-warning-text">
+          {{"dashboard.heading.message.NON_SCAN_WARNING1" | translate}}&nbsp;
+          <a href="#/app/admission-control">{{"dashboard.heading.message.ADM_RULE" | translate}}</a>&nbsp;
+          {{"dashboard.heading.message.NON_SCAN_WARNING2" | translate}}&nbsp;
+          <a href="#/app/regScan">{{"sidebar.nav.REG_SCAN" | translate}}</a>&nbsp;
+          {{"dashboard.heading.message.NON_SCAN_WARNING3" | translate}}
+        </div>
+      </div>
+    </div>
+    <div class="pull-right details">
+      <table class="mt-sm">
+        <tr>
+          <th>&nbsp;</th>
+          <th style="text-align: right;" ng-if="category.detailColTitle">{{category.detailColTitle.title1}}</th>
+          <th style="text-align: right;" ng-if="category.detailColTitle">{{category.detailColTitle.title2}}</th>
+        </tr>
+        <tr ng-repeat="detail in category.details">
+          <td>{{detail.title}}</td>
+          <td style="text-align: right;">{{detail.amount}}</td>
+          <td style="text-align: right;">{{detail.amount2}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <!--<div class="titles" style="margin-top: -30px;">-->
+    <!--<div class="subtitle">-->
+      <!--{{category.subtitle? "(" + category.subtitle + ")" : ""}}-->
+    <!--</div>-->
+  <!--</div>-->
+  <script type="text/ng-template" id="tooltipTemplate.html">
+    <div translate="{{'scan.AUTO_TIP'}}">
+    </div>
+  </script>
+</div>

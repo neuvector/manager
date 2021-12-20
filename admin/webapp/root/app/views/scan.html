@@ -1,0 +1,195 @@
+<div ng-controller="ScanController">
+  <div class="clearfix">
+    <div>
+      <div class="pull-right mt-sm" ng-click="refresh()">
+        <em class="fa fa-refresh text-action"></em>
+        <label class="text-gray-label hand">{{'general.REFRESH' | translate}}</label>
+      </div>
+
+      <div class="pull-right mt-sm mr-lg" ng-if="isAutoScanAuthorized && ((active===0 && !containersErr && containers.length>0)
+        || (active===1 && !nodesErr && hosts.length>0) || (active===2 && !platformsErr && platforms.length>0))">
+        <div class="md-switch2 ">
+          <label class="text-gray-label">
+            <input
+              type="checkbox" ng-model="scanConfig.auto_scan"
+              ng-change="configAutoScan(scanConfig)"
+            >
+            <span class="toggle mr-sm"></span>
+            {{'scan.AUTO' | translate}}
+          </label>
+          <a>
+            <em
+              class="icon-info text-gray-label" uib-tooltip-template="'tooltipTemplate.html'"
+              tooltip-placement="bottom"
+            ></em>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-title">{{'sidebar.nav.SCAN' | translate}}</div>
+  </div>
+
+  <div class="panel ">
+    <div class="panel-body">
+      <div class="clearfix">
+        <label class="text-primary" ng-show="active===1 && !nodesErr">{{count1}}
+        </label>
+        <label class="text-primary" ng-show="active===0 && !containersErr">{{count2}}
+        </label>
+        <label class="text-primary" ng-show="active===2 && !platformsErr">{{count3}}
+        </label>
+        <div class="left-inner-addon pull-right mb-sm">
+          <em class="fa fa-filter text-filter"></em>
+          <input
+            class="search form-control"
+            placeholder="{{'general.FILTER' | translate}}"
+            type="text"
+            maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+            ng-model="search"
+            ng-paste="onFilterChanged(search)"
+            ng-keyup="onFilterChanged(search)"
+          >
+        </div>
+      </div>
+
+      <div class="mb-lg">
+        <uib-tabset class="p0" active="active">
+          <uib-tab select="onContainers()" index="0">
+            <uib-tab-heading>
+              <em class="fa fa-square-o mr-sm text-primary"></em>
+              {{'sidebar.nav.CONTAINERS' | translate}}
+            </uib-tab-heading>
+            <div ag-grid="gridOptions" class="ag-grid" style="width: 100%; height: 210px;">
+            </div>
+          </uib-tab>
+          <uib-tab select="onNodes()" index="1">
+            <uib-tab-heading>
+              <em class="fa fa-server mr-sm text-primary"></em>
+              {{'sidebar.nav.NODES' | translate}}
+            </uib-tab-heading>
+            <div ag-grid="hostGridOptions" class="ag-grid" style="width: 100%; height: 210px;">
+            </div>
+          </uib-tab>
+          <uib-tab select="onPlatforms()" index="2">
+            <uib-tab-heading>
+              <em class="fa fa-sitemap mr-sm text-primary"></em>
+              {{'scan.PLATFORM' | translate}}
+            </uib-tab-heading>
+            <div ag-grid="platformGridOptions" class="ag-grid" style="width: 100%; height: 210px;">
+            </div>
+          </uib-tab>
+        </uib-tabset>
+      </div>
+
+      <div ng-cloak>
+        <button
+          type="button" class="btn btn-default btn-wide pull-right"
+          ng-show="(active===0 && !containersErr && containers.length>0 && isScanAuthorized)
+          || (active===1 && !nodesErr && hosts.length>0 && isNodeScanAuthorized) || (active===2 && !platformsErr && platforms.length>0 && isPlatformScanAuthorized)"
+          ng-click="scan()"
+        >{{'scan.SCAN' | translate}}
+        </button>
+
+        <ul
+          class="list-inline text-muted"
+          ng-show="(active===0 && !containersErr) || (active===1 && !nodesErr)
+          || (active===2 && !platformsErr)"
+        >
+          <li uib-tooltip="{{scanStatus.scanned}}">{{'scan.status.SCANNED' | translate}}
+            <span
+              data-peity='{ "fill": ["#5cb85c", "#777777"], "innerRadius": 3, "radius": 9}'
+              class="pie mt-sm"
+            >{{scanStatus.scanned}}/{{size}}</span>
+          </li>
+          <li uib-tooltip="{{scanStatus.failed}}">{{'scan.status.FAILED' | translate}}
+            <span
+              data-peity='{ "fill": ["#d9534f", "#777777"], "innerRadius": 3, "radius": 9}'
+              class="pie mt-sm"
+            >{{scanStatus.failed}}/{{size}}</span>
+          </li>
+          <li uib-tooltip="{{scanStatus.scanning}}">{{'scan.status.SCANNING' | translate}}
+            <span
+              data-peity='{ "fill": ["#2196F3", "#777777"], "innerRadius": 3, "radius": 9}'
+              class="pie mt-sm"
+            >{{scanStatus.scanning}}/{{size}}</span>
+          </li>
+          <li uib-tooltip="{{scanStatus.scheduled}}">{{'scan.status.SCHEDULED' | translate}}
+            <span
+              data-peity='{ "fill": ["#2196F3", "#777777"], "innerRadius": 3, "radius": 9}'
+              class="pie mt-sm"
+            >{{scanStatus.scheduled}}/{{size}}</span>
+          </li>
+          <li>{{'scan.status.VERSION' | translate}}: {{scanStatus.scanner_version}}
+              {{'dashboard.heading.CVE_DB_DATE' | translate}}: {{scanStatus.scanner_created_date}}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <div
+    class="panel mb0" ng-show="(active===0 && !containersErr && hasContainer) ||
+    (active===1 && !nodesErr  && hasNode) || (active===2 && !platformsErr  && hasPlatform)"
+  >
+    <div class="panel-heading panel-default clearfix">
+      <div class="pull-right mt-sm" ng-click="refreshReport()">
+        <em class="fa fa-refresh text-action"></em>
+        <label class="text-gray-label hand">{{'general.REFRESH' | translate}}</label>
+      </div>
+      <div
+        class="pull-right mr-lg mt-sm"
+        ng-show="(active===0 && vulnerabilities.length) ||
+        (active===1 && nodeVulnerabilities.length) ||
+        (active===2 && platformVulnerabilities.length)"
+        ng-click="exportCsv()"
+      >
+        <em class="fa fa-download text-action"></em>
+        <label class="text-gray-label hand">{{'general.CSV_DOWNLOAD' | translate}}
+        </label>
+      </div>
+      <div class="left-inner-addon pull-right mr-lg">
+        <em class="fa fa-filter text-filter"></em>
+        <input
+          class="search form-control" placeholder="{{'general.FILTER' | translate}}" type="text"
+          maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+          ng-model="searchCve"
+          ng-paste="onCveFilterChanged(searchCve)"
+          ng-keyup="onCveFilterChanged(searchCve)"
+        />
+      </div>
+      <div class="panel-title">
+        <label class="panel-text-title" ng-if="active===1">
+          <em class="fa fa-server fa-lg mr-sm text-primary"></em>
+          {{selectedNode.display_name}}</label>
+        <label class="panel-text-title" ng-if="active===0">
+          <em
+            class="fa fa-square-o fa-lg mr-sm text-primary"
+          ></em>{{container.display_name}}</label>
+        <label class="panel-text-title" ng-if="active===2">
+          <em class="fa fa-sitemap fa-lg mr-sm text-primary"></em>
+          {{selectedPlatform.id}}</label>
+      </div>
+    </div>
+    <div
+      ag-grid="contGridOptions" class="panel-body ag-grid mb0" style="width: 100%;"
+      ng-style="{height: gridHeight + 'px'}"
+    ></div>
+  </div>
+
+  <div id="cve" class="dataBox middleLeft pl-sm" ng-show="onCVE">
+    <em class="fa fa-times pull-right pr-sm pt-sm" ng-click="onCVE=false"></em>
+    <h4>{{cveName}} <a ng-href="{{cveLink}}" target="_blank"><em
+      class="fa fa-external-link"
+    ></em></a></h4>
+    <blockquote style="font-size: 13px">
+      <p>{{cveDescription}}</p>
+    </blockquote>
+  </div>
+
+  <script type="text/ng-template" id="tooltipTemplate.html">
+    <div translate="{{'scan.AUTO_TIP'}}">
+    </div>
+  </script>
+</div>

@@ -1,0 +1,184 @@
+<div ng-controller="FederalPolicyProcessProfileRulesController" ng-cloak>
+    <div>
+        <div>
+            <div class="clearfix">
+                <div class="pull-left" ng-show="!profileErr">
+                    <label class="text-primary mt-sm">{{count}}</label>
+                </div>
+                <div class="left-inner-addon pull-right ">
+                    <em class="fa fa-filter text-filter"></em>
+                    <input class="search form-control" placeholder="{{'general.FILTER' | translate}}"
+                           type="text"
+                           maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+                           ng-model="search"
+                           ng-paste="onFilterChanged(search)"
+                           ng-keyup="onFilterChanged(search)"/>
+                </div>
+                <div class="pull-right mr-lg" style="margin-top: 4px"
+                     ng-if="isWriteRuleAuthorized"
+                     ng-show="profiles.length && selectedRows.length>0"
+                     ng-click="removeProfile()">
+                    <em class="fa fa-lg fa-trash text-action mr-sm"/>
+                </div>
+                <div class="pull-right mr-lg" style="margin-top: 4px"
+                     ng-if="isWriteRuleAuthorized"
+                     ng-show="profiles.length && selectedRows.length===1"
+                     ng-click="editProfile(profileEntry)">
+                    <em class="fa fa-lg fa-edit text-action mr-sm"/>
+                </div>
+                <div class="pull-right mr-lg" style="margin-top: 4px"
+                     ng-if="fullGroupList.length && isWriteRuleAuthorized"
+                     ng-click="addProfile()">
+                    <em class="fa fa-lg fa-plus text-action mr-sm"/>
+                </div>
+                <div class="pull-right mr-lg" style="margin-top: 4px"
+                     ng-if="!fullGroupList.length && isWriteRuleAuthorized">
+                    <span class="text-warning">{{'group.ADD_PROFILE_RULE_WARNING' | translate}}</span>
+                </div>
+                <div class="pull-right pr0 mr-lg" ng-if="profiles.length">
+                    <label class="pull-left text-muted mv0 mr" style="line-height: 30px;">{{"group.GROUP" | translate}}</label>
+                    <md-select style="width: 200px;" class="pull-left m0" ng-model="selectedGroup" aria-label="select category" ng-change="changeName(selectedGroup)">
+                        <md-option>
+                            All
+                        </md-option>
+                        <md-option ng-repeat="group in groups" ng-value="group">
+                            {{group}}
+                        </md-option>
+                    </md-select>
+                </div>
+            </div>
+            <md-content class="pb0">
+                <div class="mt-sm mb0">
+                    <div ag-grid="gridProfile" class="ag-grid" style="width: 100%;"
+                         ng-style="{ height: ruleGridHeight + 'px'}">
+                    </div>
+                </div>
+            </md-content>
+        </div>
+    </div>
+
+    <script type="text/ng-template" id="profile.add.html">
+        <md-dialog aria-label="Add profile rule">
+            <form name="profileForm" novalidate="" class="form-validate">
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <h2 class="text-dark">{{'service.ADD_RULE' | translate}}</h2>
+                        <span flex>
+                          <sup><em class="ml fa fa-info-circle text-muted" uib-tooltip-html="processProfileSample"></em></sup>
+                        </span>
+                        <md-button class="md-icon-button" ng-click="cancel()">
+                            <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"/>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+                <md-dialog-content>
+                    <div class="mt-sm">
+                        <div class="col-sm-6">
+                            <label class="pull-left text-muted mr" style="margin-top: 25px;">{{"group.GROUP" | translate}}</label>
+                            <md-select ng-model="selectedGroup" aria-label="select category" ng-change="changeName(selectedGroup)">
+                                <md-option ng-repeat="group in groups" ng-value="group" ng-selected="selectedGroup===group">
+                                    {{group}}
+                                </md-option>
+                            </md-select>
+                        </div>
+                        <div class="col-sm-6">
+                            <md-input-container class="md-block mb0">
+                                <label>{{'service.gridHeader.NAME' | translate}}</label>
+                                <input ng-model="rule.name" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+                                       required/>
+                            </md-input-container>
+                        </div>
+                        <div class="col-sm-6">
+                            <md-input-container class="md-block mb0">
+                                <label>{{'service.gridHeader.PATH' | translate}}</label>
+                                <input ng-model="rule.path" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                            </md-input-container>
+                        </div>
+
+                        <div class="col-sm-6 mb0">
+                            <label class="nv-modal-item-title">{{'service.ALLOW_ALERT' | translate}}</label>
+                            <div>
+                                <div class="md-switch4" style="width: 100px;">
+                                    <label class="nv-modal-item-title">
+                                        <input type="checkbox" ng-model="rule.allowed" required>
+                                        <span class="toggle"></span>
+                                        <span ng-class="{'text-deny': !rule.allowed,'text-success': rule.allowed}">{{(rule.allowed ? "policy.action.ALLOW" : "policy.action.DENY") | translate}}</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 pb-sm">
+                            <button class="btn btn-wide btn-default pull-right"
+                                    ng-click="addProfile(rule)">
+                                <em class="fa fa-save mr-sm"></em>{{'policy.portlet.SUBMIT' | translate}}
+                            </button>
+                        </div>
+                    </div>
+                </md-dialog-content>
+            </form>
+        </md-dialog>
+    </script>
+
+    <script type="text/ng-template" id="profile.edit.html">
+        <md-dialog aria-label="Edit profile rule">
+            <form name="profileEditForm" novalidate="" class="form-validate">
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <h2 class="text-dark">{{'service.EDIT_RULE' | translate}}</h2>
+                        <span flex>
+                          <sup><em class="ml fa fa-info-circle text-muted" uib-tooltip-html="processProfileSample"></em></sup>
+                        </span>
+                        <md-button class="md-icon-button" ng-click="cancel()">
+                            <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"/>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+                <md-dialog-content>
+                    <div class="mt-sm">
+                        <div class="col-sm-6">
+                            <label class="pull-left text-muted mr" style="margin-top: 25px;">{{"group.GROUP" | translate}}</label>
+                            <md-select ng-model="selectedGroup" aria-label="select category" ng-change="changeName(selectedGroup)" disabled>
+                                <md-option ng-repeat="group in groups" ng-value="group" ng-selected="selectedGroup===group">
+                                    {{group}}
+                                </md-option>
+                            </md-select>
+                        </div>
+                        <div class="col-sm-6">
+                            <md-input-container class="md-block mb0">
+                                <label>{{'service.gridHeader.NAME' | translate}}</label>
+                                <input disabled ng-model="rule.name"/>
+                            </md-input-container>
+                        </div>
+                        <div class="col-sm-6">
+                            <md-input-container class="md-block mb0">
+                                <label>{{'service.gridHeader.PATH' | translate}}</label>
+                                <input ng-model="rule.path" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                            </md-input-container>
+                        </div>
+
+                        <div class="col-sm-6 mb0">
+                            <label class="nv-modal-item-title">{{'service.ALLOW_ALERT' | translate}}</label>
+                            <div>
+                                <div class="md-switch4" style="width: 100px;">
+                                    <label class="nv-modal-item-title">
+                                        <input type="checkbox" ng-model="rule.allowed" required>
+                                        <span class="toggle"></span>
+                                        <span ng-class="{'text-deny': !rule.allowed,'text-success': rule.allowed}">{{(rule.allowed ? "policy.action.ALLOW" : "policy.action.DENY") | translate}}</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 pb-sm">
+                            <button class="btn btn-wide btn-default pull-right"
+                                    ng-click="updateProfile(rule)">
+                                <em class="fa fa-save mr-sm"></em>{{'policy.portlet.SUBMIT' | translate}}
+                            </button>
+                        </div>
+                    </div>
+                </md-dialog-content>
+            </form>
+        </md-dialog>
+    </script>
+</div>

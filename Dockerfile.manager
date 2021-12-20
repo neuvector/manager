@@ -1,0 +1,18 @@
+ARG BASE_PREFIX
+FROM 10.1.127.12:5000/neuvector/${BASE_PREFIX}manager_base:jdk11
+
+COPY stage /
+
+ARG NV_TAG
+LABEL name="manager" \
+      vendor="NeuVector Inc." \
+      version=${NV_TAG} \
+      release=${NV_TAG} \
+      neuvector.image="neuvector/manager" \
+      neuvector.role="manager" \
+      neuvector.rev="git.xxxx"
+
+RUN adduser -S manager
+USER manager
+
+ENTRYPOINT ["java", "-Xms256m", "-Xmx2048m", "-Djdk.tls.rejectClientInitiatedRenegotiation=true", "-jar", "/usr/local/bin/admin-assembly-1.0.jar"]

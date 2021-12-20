@@ -1,0 +1,28 @@
+<div class="nv-dashboard-heading">
+  <div class="clearfix">
+    <div class="pull-left primary-number">
+      {{category.total}}
+    </div>
+    <div class="pull-right details">
+      <ul class="pl0">
+        <li ng-repeat="detail in category.details">
+          <div class="pull-left">{{"dashboard.heading." + detail.title.toUpperCase() | translate}}</div>
+          <div class="pull-right">
+            {{detail.amount}}
+            <span class="text-danger">
+              {{detail.unhealthy_amount || detail.unhealthy_amount === 0 ? "(" + detail.unhealthy_amount + ")" : ""}}
+            </span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="titles">
+    <div class="title">
+      {{category.title}}
+    </div>
+    <div class="subtitle">
+      {{category.subtitle? "(" + category.subtitle + ")" : ""}}
+    </div>
+  </div>
+</div>

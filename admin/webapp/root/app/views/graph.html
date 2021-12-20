@@ -1,0 +1,1754 @@
+<div ng-controller="GraphController">
+  <div class="panel m0">
+    <div class="panel-body p-sm">
+      <div id="mountNode"></div>
+    </div>
+  </div>
+  <div
+    id="loadingBar"
+    class="loadingBar"
+    style="width: 100%;"
+    ng-if="inProgress"
+  >
+    <md-progress-linear
+      class="md-warn"
+      md-mode="buffer"
+      value="{{nodeViewProgres}}"
+      md-buffer-value="{{nodeViewProgres2}}"
+    ></md-progress-linear>
+  </div>
+
+  <div
+    ng-show="onQuickSearch"
+    class="dataBox graphSearch"
+    style="border: none;"
+  >
+    <div layout="row" layout-align="space-between center" class="ml0 mr0">
+      <h4 class="text-bold mb0 pl-lg">
+        {{"network.popup.QUICK_SEARCH_TITLE" | translate}}
+      </h4>
+      <div>
+        <md-button class="md-icon-button" ng-click="onQuickSearch=false">
+          <md-icon
+            md-svg-src="app/img/icons/ic_close_24px.svg"
+            aria-label="Close dialog"
+          ></md-icon>
+        </md-button>
+      </div>
+    </div>
+    <hr class="fancy mv-sm" />
+    <md-input-container md-no-float class="md-block pl">
+      <input
+        ng-model="endpointOnFocus"
+        type="text"
+        ng-keyup="$event.keyCode === 13 ? doFocus(endpointOnFocus) : null"
+        placeholder=""
+        aria-label="Endpoint"
+      />
+      <md-icon
+        md-svg-src="app/img/icons/graph/focus.svg"
+        ng-click="onQuickSearch=!onQuickSearch; doFocus(endpointOnFocus)"
+        style="display:inline-block;width: 24px; height: 24px"
+      ></md-icon>
+    </md-input-container>
+  </div>
+
+  <div
+    id="filter"
+    class="dataBox graphFilter"
+    ng-show="onAdvFilter"
+    style="border: none;"
+  >
+    <div layout="row" layout-align="space-between center" class="ml0 mr0">
+      <h4 class="text-bold mb0 pl-lg">
+        {{"general.FILTER_MATCH_ALL" | translate}}
+      </h4>
+      <div>
+        <md-button class="md-icon-button" ng-click="onAdvFilter=false">
+          <md-icon
+            md-svg-src="app/img/icons/ic_close_24px.svg"
+            aria-label="Close dialog"
+          ></md-icon>
+        </md-button>
+      </div>
+    </div>
+    <hr class="fancy mv-sm" />
+    <div layout="row">
+      <div flex="20" class="pl-lg mt text-bold text-muted">
+        {{"cveProfile.gridHeader.DOMAINS" | translate}}
+      </div>
+      <div flex="70" class="fancy-tag-input">
+        <tags-input
+          id="domain"
+          ng-if="isAdvFilterTextInit"
+          ng-model="advFilter.domains"
+          display-property="name"
+          class="auto-complete"
+          placeholder="Add namespace"
+          add-from-autocomplete-only="false"
+          on-tag-adding="tagAdding($tag, 'domain')"
+        >
+          <auto-complete
+            source="loadDomainTags($query)"
+            min-length="1"
+            max-results-to-show="128"
+            max-length="{{'general.FILTER_MAX_LEN' | translate}}"
+          >
+          </auto-complete>
+        </tags-input>
+      </div>
+    </div>
+    <div layout="row">
+      <div flex="20" class="pl-lg mt text-bold text-muted">
+        {{'dlp.gridHeader.GROUPS' | translate}}
+      </div>
+      <div flex="70" class="fancy-tag-input">
+        <tags-input
+          id="service"
+          ng-if="isAdvFilterTextInit"
+          ng-model="advFilter.groups"
+          display-property="name"
+          class="auto-complete"
+          placeholder="Add group"
+          add-from-autocomplete-only="false"
+          on-tag-adding="tagAdding($tag, 'group')"
+        >
+          <auto-complete
+            source="loadGroupTags($query)"
+            min-length="1"
+            max-results-to-show="128"
+            max-length="{{'general.FILTER_MAX_LEN' | translate}}"
+          >
+          </auto-complete>
+        </tags-input>
+      </div>
+    </div>
+    <div layout="row" class="mt-lg">
+      <div flex="20" class="text-bold text-muted ph-lg">
+        {{"network.protocolFilter.VULNERABILITY" | translate}}
+      </div>
+
+      <div flex="80">
+        <md-radio-group layout="row" ng-model="advFilter.cve">
+          <md-radio-button value="all" flex="33" class="md-primary">
+            <label class="text-muted-label">
+              {{"setting.ALL" | translate}}
+            </label>
+          </md-radio-button>
+          <md-radio-button value="withCve" flex="33" class="md-warn">
+            <label class="text-muted-label">
+              {{"network.protocolFilter.VULNERABLE_ONLY" | translate}}
+            </label>
+          </md-radio-button>
+        </md-radio-group>
+      </div>
+    </div>
+    <div layout="row" class="mt-lg">
+      <div flex="20" class="text-bold text-muted ph-lg">
+        {{"dashboard.body.panel_title.PROTOCOLS" | translate}}
+      </div>
+      <div flex="80">
+        <div layout="row">
+          <div flex="33">
+            <md-checkbox
+              class="md-primary mr-lg mb-sm"
+              ng-model="advFilter.protocol.tcp"
+            >
+              <label class="text-muted-label">
+                TCP
+              </label>
+            </md-checkbox>
+          </div>
+          <div flex="33">
+            <md-checkbox
+              class="md-primary mh-lg mb-sm"
+              ng-model="advFilter.protocol.udp"
+            >
+              <label class="text-muted-label">
+                UDP
+              </label>
+            </md-checkbox>
+          </div>
+          <div flex="33">
+            <md-checkbox
+              class="md-primary mh-lg mb-sm"
+              ng-model="advFilter.protocol.icmp"
+            >
+              <label class="text-muted-label">
+                ICMP
+              </label>
+            </md-checkbox>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div layout="row" class="mt-lg">
+      <div flex="20" class="text-bold text-muted ph-lg">
+        {{"network.protocolFilter.RISK" | translate}}
+      </div>
+      <div flex="80">
+        <md-radio-group layout="row" ng-model="advFilter.risk">
+          <md-radio-button value="all" flex="33" class="md-primary">
+            <label class="text-muted-label">
+              {{"setting.ALL" | translate}}
+            </label>
+          </md-radio-button>
+          <md-radio-button value="withRisk" flex="" class="md-warn">
+            <label class="text-muted-label">
+              {{"network.protocolFilter.RISKY_ONLY" | translate}}
+            </label>
+          </md-radio-button>
+        </md-radio-group>
+      </div>
+    </div>
+    <hr class="fancy mv-sm mt-lg" />
+    <div layout="row" class="mt-lg">
+      <div flex="50" class="ph-lg">
+        <md-checkbox
+          class="md-primary mr-lg mb-sm"
+          ng-model="settings.showSysNode"
+        >
+          <label class="text-muted-label">
+            {{"network.protocolFilter.SYSTEM_NODE" | translate}}
+          </label>
+        </md-checkbox>
+      </div>
+      <div flex="50" style="margin-left: -5px;">
+        <md-checkbox
+          class="md-primary mr-lg mb-sm"
+          ng-model="settings.showSysApp"
+        >
+          <label class="text-muted-label">
+            {{"network.protocolFilter.SYSTEM" | translate}}
+          </label>
+        </md-checkbox>
+      </div>
+    </div>
+
+    <div layout="row" class="mt">
+      <div flex="60" class="ph-lg">
+        <md-checkbox
+          class="md-primary mr-lg mb-sm"
+          ng-model="settings.persistent"
+        >
+          <label class="text-muted-label">
+            {{"network.protocolFilter.PERSISTENT" | translate}}
+          </label>
+        </md-checkbox>
+      </div>
+    </div>
+
+    <div layout="row" class="mt">
+      <div flex="60" class="ph-lg">
+        <md-checkbox
+          class="md-primary mr-lg mb-sm"
+          ng-model="settings.gpuEnabled"
+        >
+          <label class="text-muted-label">
+            {{"network.protocolFilter.GPU_ENABLED" | translate}}
+          </label>
+        </md-checkbox>
+      </div>
+      <div flex="20">
+        <button
+          ng-click="applyAdvFilter()"
+          style="background-color: rgba(255, 255, 255, 0.5);"
+          class="btn btn-wide btn-default"
+        >
+          {{'securityEvent.APPLY' | translate}}
+        </button>
+      </div>
+
+      <div flex="20">
+        <button
+          ng-click="resetAdvFilter()"
+          style="background-color: rgba(255, 255, 255, 0.5);"
+          class="btn btn-wide btn-default  "
+        >
+          {{'enum.RESET' | translate}}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div
+    id="blacklist"
+    class="dataBox graphFilter"
+    ng-show="onBlacklist"
+    style="border: none;"
+  >
+    <div layout="row" layout-align="space-between center" class="ml0 mr0">
+      <h4 class="text-bold mb0 pl-lg">
+        {{"network.groupFilter.BLACKLIST_TITLE" | translate}}
+      </h4>
+      <div>
+        <md-button class="md-icon-button" ng-click="onBlacklist = false">
+          <md-icon
+            md-svg-src="app/img/icons/ic_close_24px.svg"
+            aria-label="Close dialog"
+          ></md-icon>
+        </md-button>
+      </div>
+    </div>
+    <hr class="fancy mv-sm" />
+    <div layout="row">
+      <div flex="20" class="pl-lg mt text-bold text-muted">
+        {{"cveProfile.gridHeader.DOMAINS" | translate}}
+      </div>
+      <div flex="70" class="fancy-tag-input">
+        <tags-input
+          id="hiddenDomains"
+          ng-model="blacklist.domains"
+          display-property="name"
+          class="auto-complete"
+          placeholder="Add namespace"
+          add-from-autocomplete-only="false"
+          on-tag-adding="tagAdding($tag, 'domain')"
+        >
+          <auto-complete
+            source="loadDomainTags($query)"
+            min-length="1"
+            max-results-to-show="128"
+            max-length="{{'general.FILTER_MAX_LEN' | translate}}"
+          >
+          </auto-complete>
+        </tags-input>
+      </div>
+    </div>
+    <div layout="row">
+      <div flex="20" class="pl-lg mt text-bold text-muted">
+        {{'dlp.gridHeader.GROUPS' | translate}}
+      </div>
+      <div flex="70" class="fancy-tag-input">
+        <tags-input
+          id="hiddenServices"
+          ng-model="blacklist.groups"
+          display-property="name"
+          class="auto-complete"
+          placeholder="Add group"
+          add-from-autocomplete-only="false"
+          on-tag-adding="tagAdding($tag, 'group')"
+        >
+          <auto-complete
+            source="loadGroupTags($query)"
+            min-length="1"
+            max-results-to-show="128"
+            max-length="{{'general.FILTER_MAX_LEN' | translate}}"
+          >
+          </auto-complete>
+        </tags-input>
+      </div>
+    </div>
+    <div layout="row">
+      <div flex="20" class="pl-lg mt text-bold text-muted">
+        {{"network.groupFilter.ENDPOINTS" | translate}}
+      </div>
+      <div flex="70" class="fancy-tag-input">
+        <tags-input
+          id="endpoints"
+          ng-model="blacklist.endpoints"
+          display-property="name"
+          placeholder="Add endpoint"
+        >
+          <auto-complete
+            source="loadEndpoints($query)"
+            min-length="1"
+            max-results-to-show="128"
+            max-length="{{'general.FILTER_MAX_LEN' | translate}}"
+          >
+          </auto-complete>
+        </tags-input>
+      </div>
+    </div>
+
+    <hr class="fancy mv-sm mt-lg" />
+    <div layout="row" class="mt">
+      <div flex="60" class="ph-lg"></div>
+      <div flex="20">
+        <button
+          ng-click="applyBlacklist()"
+          style="background-color: rgba(255, 255, 255, 0.5);"
+          class="btn btn-wide btn-default"
+        >
+          {{'securityEvent.APPLY' | translate}}
+        </button>
+      </div>
+
+      <div flex="20">
+        <button
+          ng-click="resetBlackList()"
+          style="background-color: rgba(255, 255, 255, 0.5);"
+          class="btn btn-wide btn-default  "
+        >
+          {{'enum.RESET' | translate}}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div
+    id="domainInfo"
+    class="dataBox topLeftFloat-domain pt0"
+    style="border: none;"
+    ng-show="onDomain"
+    ng-cloak
+  >
+    <div class="col-sm-12 ph0" id="domainInfoHeader">
+      <div
+        class="pull-left auto-hide mt mb"
+        uib-tooltip="{{domain.domain}}"
+        tooltip-enable="false"
+        show-tooltip-on-text-overflow
+        style="display: block; width: 350px;"
+      >
+        <md-icon
+          md-svg-src="app/img/icons/graph/domain.svg"
+          aria-label="Container"
+          style="width:24px;height:24px;"
+        ></md-icon>
+        {{domain.domain}}
+      </div>
+      <button
+        class="btn btn-xs btn-link pull-right mt"
+        ng-click="onDomain=!onDomain"
+      >
+        <em class="fa fa-times fa-lg text-muted"></em>
+      </button>
+    </div>
+    <div class="col-sm-12 ph0">
+      <div
+        ag-grid="getGridOptions4Domain"
+        class="ag-angle mt-sm"
+        style="width: 100%; height: 200px;"
+      ></div>
+    </div>
+  </div>
+
+  <div
+    id="groupNodeInfo"
+    class="dataBox topLeftFloat pt0"
+    ng-show="onGroupNode"
+    style="border: none;"
+  >
+    <div>
+      <div class="col-sm-12 ph0 pv-sm" id="groupNodeInfoHeader">
+        <div
+          class="pull-left auto-hide mt mb"
+          uib-tooltip="{{group.name}}{{isPodNode ? ' / ' + container.display_name : ''}}"
+          tooltip-enable="false"
+          show-tooltip-on-text-overflow
+          style="display: block; width: 500px;"
+        >
+          <span>
+            <md-icon
+              md-svg-src="app/img/icons/graph/cluster.svg"
+              aria-label="Group"
+              style="width:24px;height:24px;"
+            ></md-icon>
+            <span ng-class="{'text-bold': active > 0 && isPodNode}"
+              >{{group.name}}</span
+            >
+          </span>
+          <span ng-if="isPodNode">
+            &nbsp;/&nbsp;
+            <md-icon
+              md-svg-src="app/img/icons/graph/container.svg"
+              aria-label="Container"
+              style="width:24px;height:24px;"
+            ></md-icon>
+            <span ng-class="{'text-bold': active === 0 && isPodNode}"
+              >{{container.display_name}}</span
+            >
+          </span>
+        </div>
+        <button
+          class="btn btn-xs btn-link pull-right mt"
+          ng-click="onGroupNode=!onGroupNode"
+        >
+          <em class="fa fa-times fa-lg text-muted"></em>
+        </button>
+        <div class="pull-right mr mt" ng-bind-html="typeHtml"></div>
+        <div class="pull-right mr mt-sm">
+          <div uib-dropdown dropdown-append-to-body class="mt-sm">
+            <div uib-dropdown-toggle>
+              <div ng-bind-html="modeHtml"></div>
+            </div>
+            <ul
+              class="dropdown-menu"
+              uib-dropdown-menu
+              role="menu"
+              aria-labelledby="single-button"
+            >
+              <li role="menuitem" ng-hide="group.policy_mode === 'Discover'">
+                <a
+                  type="button"
+                  ng-click="switchServiceModeOnPopup('Discover', item)"
+                >
+                  <em class="fa fa-binoculars fa-fw text-discover mr-sm"></em
+                  >{{'enum.DISCOVER' | translate}}
+                </a>
+              </li>
+              <li role="menuitem" ng-hide="group.policy_mode === 'Monitor'">
+                <a
+                  type="button"
+                  ng-click="switchServiceModeOnPopup('Monitor', item)"
+                >
+                  <em class="fa fa-bell fa-fw text-monitor mr-sm"></em
+                  >{{'enum.MONITOR' | translate}}
+                </a>
+              </li>
+              <li class="menuitem" ng-hide="group.policy_mode === 'Protect'">
+                <a
+                  type="button"
+                  ng-click="switchServiceModeOnPopup('Protect', item)"
+                >
+                  <em class="fa fa-shield fa-fw text-protect mr-sm"></em
+                  >{{'enum.PROTECT' | translate}}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <uib-tabset justified="true" id="groupBox" active="active">
+        <uib-tab index="0" ng-if="isPodNode">
+          <uib-tab-heading>
+            {{'network.nodeDetails.POD' | translate}}
+          </uib-tab-heading>
+          <div style="width: 100%; height: 400px; overflow-y: auto;">
+            <ul class="mda-list row m0">
+              <li class="col-sm-12 p0">
+                <div class="pb0 pt-sm">
+                  <span class="text-bold pod-item-key">ID</span>
+                  <span
+                    class="ml text-muted auto-hide pod-item-value"
+                    uib-tooltip="{{container.id}}"
+                    tooltip-enable="false"
+                    show-tooltip-on-text-overflow
+                  >
+                    {{container.id}}
+                  </span>
+                </div>
+              </li>
+              <li class="col-sm-12 p0">
+                <div
+                  class="pb0 pt-sm"
+                  ng-if="container.children && container.children.length > 1"
+                >
+                  <div>
+                    <span
+                      class="text-bold pod-item-key"
+                      translate="{{'network.nodeDetails.IMAGE'}}"
+                    ></span>
+                  </div>
+                  <div class="ml pod-item-value">
+                    <div
+                      class="row"
+                      ng-repeat="child in container.children | filter:{state: '!exit'}"
+                    >
+                      <!-- <div class="pull-left">
+
+                      </div> -->
+
+                      <div
+                        style="margin-top: 2px; width: 620px;"
+                        class="auto-hide"
+                        uib-tooltip="{{child.image}}"
+                        show-tooltip-on-text-overflow
+                        tooltip-enable="false"
+                      >
+                        <span
+                          class="text-muted text-bold pl-lg"
+                          style="display: inline-block;"
+                        >
+                          <em class="fa fa-square-o text-muted mr-sm"></em>
+                          {{child.display_name | limitTo:
+                          55}}{{child.display_name.length > 35 ? '...' : ''}}
+                        </span>
+                        <label
+                          style="display: inline-block;"
+                          class="label label-info-tran ml-lg mt-sm"
+                          ng-if="child.service_mesh_sidecar"
+                        >
+                          Sidecar
+                        </label>
+                        <em class="fa fa-archive text-muted pl-lg mr-sm"></em>
+                        <span
+                          class="text-muted auto-hide"
+                          style="margin-top: -2px;"
+                        >
+                          {{child.image}}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="pb0 pt-sm"
+                  ng-if="!container.children  ||
+                           container.children.length <= 1"
+                >
+                  <div>
+                    <span
+                      class="text-bold pod-item-key"
+                      translate="{{'network.nodeDetails.IMAGE'}}"
+                    ></span>
+                  </div>
+                  <div class="ml pod-item-value">
+                    <div class="row m0" ng-repeat="image in container.images">
+                      <span
+                        class="text-muted auto-hide pod-item-value"
+                        style="display: block;"
+                        uib-tooltip="{{image}}"
+                        tooltip-enable="false"
+                        show-tooltip-on-text-overflow
+                      >
+                        {{image}}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li class="col-sm-12 p0">
+                <div class="pb0 pt-sm">
+                  <span class="text-bold pod-item-key">
+                    {{'network.nodeDetails.ENFORCER' | translate}}
+                  </span>
+                  <span
+                    class="ml text-muted auto-hide pod-item-value"
+                    uib-tooltip="{{container.enforcer_id}}"
+                    tooltip-enable="false"
+                    show-tooltip-on-text-overflow
+                  >
+                    {{container.enforcer_id}}
+                  </span>
+                </div>
+              </li>
+              <li class="col-sm-12 p0">
+                <div class="col-sm-6 pl0 pb0 pt-sm">
+                  <span class="text-bold pod-item-key">
+                    {{'group.gridHeader.DOMAIN' | translate}}
+                  </span>
+                  <span
+                    class="ml text-muted auto-hide pod-item-value"
+                    uib-tooltip="{{container.domain}}"
+                    tooltip-enable="false"
+                    show-tooltip-on-text-overflow
+                  >
+                    {{container.domain}}
+                  </span>
+                </div>
+                <div class="col-sm-6 pl0 pb0 pt-sm">
+                  <span class="text-bold pod-item-key">
+                    {{'network.gridHeader.SERVICE' | translate}}
+                  </span>
+                  <span
+                    class="ml text-muted auto-hide pod-item-value"
+                    uib-tooltip="{{container.service}}"
+                    tooltip-enable="false"
+                    show-tooltip-on-text-overflow
+                  >
+                    {{container.service}}
+                  </span>
+                </div>
+              </li>
+              <li class="col-sm-12 p0">
+                <div class="col-sm-6 pl0 pb0 pt-sm">
+                  <span class="text-bold pod-item-key">
+                    {{'network.nodeDetails.LOCATION' | translate}}
+                  </span>
+                  <span
+                    class="ml text-muted auto-hide pod-item-value"
+                    uib-tooltip="{{container.host_name}}"
+                    tooltip-enable="false"
+                    show-tooltip-on-text-overflow
+                  >
+                    {{container.host_name}}
+                  </span>
+                </div>
+                <div class="col-sm-6 pl0 pb0 pt-sm">
+                  <span class="text-bold pod-item-key">
+                    {{'network.nodeDetails.STATE' | translate}}
+                  </span>
+                  <span class="ml pull-left" ng-bind-html="stateHtml"></span>
+                  <span
+                    class="text-danger mr-lg auto-hide pod-item-value"
+                    ng-if="container.state === 'quarantined'"
+                    style="display: block; width: 180px;"
+                  >
+                    {{container.quarantine_reason}}
+                  </span>
+                </div>
+              </li>
+              <li class="col-sm-12 p0">
+                <div class="col-sm-6 pl0 pb0 pt-sm">
+                  <span class="text-bold pod-item-key">
+                    {{'network.nodeDetails.CREATED_AT' | translate}}
+                  </span>
+                  <span class="ml text-muted auto-hide pod-item-value">
+                    {{container.started_at | date:'MMM dd, y HH:mm:ss'}}
+                  </span>
+                </div>
+                <div
+                  class="col-sm-6 pl0 pb0 pt-sm"
+                  ng-if="!!container.scan_summary.scanned_at"
+                >
+                  <span class="text-bold pod-item-key">
+                    {{'network.nodeDetails.SCANNED_AT' | translate}}
+                  </span>
+                  <span
+                    class="ml text-muted mr-lg auto-hide pod-item-value"
+                    style="display: block; width: 150px;"
+                  >
+                    {{container.scan_summary.scanned_at | date:'MMM dd, y
+                    HH:mm:ss'}}
+                  </span>
+                </div>
+              </li>
+              <li class="col-sm-12 p0">
+                <div class="col-sm-6 pl0 mda-list-item-text pb0 pt-sm">
+                  <span class="text-bold pod-item-key">
+                    {{'network.nodeDetails.PRIVILEGED' | translate}}
+                  </span>
+                  <span class="ml text-muted mr-lg auto-hide pod-item-value">
+                    {{container.privileged}}
+                  </span>
+                </div>
+                <div class="col-sm-6 pl0 mda-list-item-text pb0 pt-sm">
+                  <span class="text-bold pod-item-key">
+                    {{'network.nodeDetails.RUN_AS_ROOT' | translate}}
+                  </span>
+                  <span class="ml text-muted mr-lg auto-hide pod-item-value">
+                    {{container.run_as_root}}
+                  </span>
+                </div>
+              </li>
+              <li class="col-sm-12 p0">
+                <div class="pb0 pt-sm">
+                  <span class="text-bold pod-item-key">
+                    {{'group.gridHeader.VULNERABILITIES' | translate}}
+                  </span>
+                  <div class="pod-item-value">
+                    <label
+                      class="ml label label-danger mr-sm pull-left"
+                      ng-if="container.risk.high"
+                    >
+                      {{container.risk.high}}</label
+                    >
+                    <label
+                      class="label label-warning pull-left"
+                      ng-if="container.risk.medium"
+                    >
+                      {{container.risk.medium}}</label
+                    >
+                    <a
+                      ui-sref="app.workloads({imageId: container.id})"
+                      style="
+                        display: table-cell;
+                        font-size: 11px;
+                        line-height: 15px;
+                      "
+                      ng-if="container.risk.high || container.risk.medium"
+                    >
+                      <em class="fa fa-external-link ml-lg"></em>
+                    </a>
+
+                    <div
+                      class="ml mt-sm pull-left"
+                      ng-if="container.scan_summary.scanned_at && container.risk.high === 0 && container.risk.medium === 0"
+                    >
+                      <label class="mt-sm label label-success-tran">
+                        <em class="fa fa-smile-o mr-sm"></em> Clean
+                      </label>
+                    </div>
+
+                    <button
+                      type="button"
+                      ng-if="!container.scan_summary.scanned_at && !container.scan_summary.status && !isScanStarted4Pod"
+                      class="ml btn btn-default btn-wide pt0 pb0"
+                      ng-disabled="!isWriteNetworkAuthorized"
+                      ng-click="scanPod(container.id)"
+                    >
+                      {{'scan.SCAN' | translate}}
+                    </button>
+
+                    <div class="ml mt-sm pull-left" ng-if="isScanStarted4Pod">
+                      <label class="mt-sm label label-info-tran">
+                        <em class="fa fa-cog fa-spin mr-sm"></em> Scanning...
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li class="col-sm-6 p0" ng-if="container.network_mode">
+                <div class="pb0 pt-sm">
+                  <span
+                    class="text-bold pod-item-key"
+                    translate="{{'network.nodeDetails.NETWORK_MODE'}}"
+                  ></span>
+                  <span
+                    class="ml text-muted auto-hide pod-item-value"
+                    uib-tooltip="{{container.network_mode}}"
+                    tooltip-enable="false"
+                    show-tooltip-on-text-overflow
+                  >
+                    {{container.network_mode}}
+                  </span>
+                </div>
+              </li>
+              <li
+                class="col-sm-12 p0"
+                ng-if="(!container.children || container.children.length <= 1) && hasApps"
+              >
+                <div class="pb0 pt-sm">
+                  <div>
+                    <span class="text-bold pod-item-key">
+                      {{'network.nodeDetails.APPLICATIONS' | translate}}
+                    </span>
+                  </div>
+                  <div
+                    class="ml text-muted auto-hide pod-item-value"
+                    uib-tooltip="{{apps}}"
+                    tooltip-enable="false"
+                    show-tooltip-on-text-overflow
+                  >
+                    {{apps}}
+                  </div>
+                </div>
+              </li>
+              <li class="col-sm-12 p0" ng-if="hasInterfaces">
+                <div class="pb0 pt-sm">
+                  <div>
+                    <span
+                      class="text-bold"
+                      translate="{{'containers.detail.NETWORK_INTERFACES'}}"
+                    ></span>
+                  </div>
+                  <div
+                    class="row ml"
+                    style="width: 380px;"
+                    ng-repeat="(name, nets) in container.interfaces"
+                  >
+                    <div class="col-sm-2 text-left pr0">
+                      {{name}}
+                    </div>
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-9 pl0">
+                      <div ng-repeat="net in nets" class="text-muted">
+                        <div class="col-sm-12">
+                          <div class="col-sm-6">
+                            IP:{{net.ip}}/{{net.ip_prefix}}
+                          </div>
+                          <div class="col-sm-6" ng-if="net.gateway">
+                            {{"general.GATEWAY" | translate}}:{{net.gateway}}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </uib-tab>
+        <uib-tab index="1" ng-click="clickTabOnGroupPop()">
+          <uib-tab-heading>
+            {{'group.gridHeader.MEMBERS' | translate}}
+            ({{group.members.length}})
+          </uib-tab-heading>
+          <div class="uib-tab-content">
+            <div
+              ag-grid="memberGridOptions"
+              class="ag-angle"
+              style="width: 100%; height: 350px;"
+            ></div>
+          </div>
+        </uib-tab>
+        <uib-tab index="2" ng-click="clickTabOnGroupPop()">
+          <uib-tab-heading>
+            {{'network.groupFilter.NETWORK_RULES' | translate}}
+            ({{group.policy_rules.length}})
+          </uib-tab-heading>
+          <div class="uib-tab-content">
+            <div
+              ag-grid="gridRules"
+              class="ag-angle"
+              style="width: 100%; height: 350px;"
+            ></div>
+          </div>
+        </uib-tab>
+        <uib-tab index="3" ng-click="clickTabOnGroupPop()">
+          <uib-tab-heading>
+            {{'network.groupFilter.RESPONSE_RULES' | translate}}
+            ({{group.response_rules.length}})
+          </uib-tab-heading>
+          <div class="uib-tab-content">
+            <div
+              ag-grid="gridResponseRules"
+              class="ag-angle"
+              style="width: 100%; height: 350px;"
+            ></div>
+          </div>
+        </uib-tab>
+      </uib-tabset>
+    </div>
+  </div>
+
+  <div
+    id="hostInfo"
+    class="dataBox topLeftFloat-host pt0"
+    ng-show="onHost"
+    ng-cloak
+    style="border: none;"
+  >
+    <div>
+      <div class="col-sm-12 ph0" id="hostInfoHeader">
+        <div
+          class="pull-left auto-hide mt mb"
+          uib-tooltip="{{host.name}}"
+          tooltip-enable="false"
+          show-tooltip-on-text-overflow
+          style="display: block; width: 350px;"
+        >
+          <md-icon
+            md-svg-src="app/img/icons/graph/host.svg"
+            aria-label="Node"
+            style="width:24px;height:24px;"
+          ></md-icon>
+          {{host.name}}
+        </div>
+        <button
+          class="btn btn-xs btn-link pull-right mt-sm"
+          ng-click="onHost=!onHost"
+        >
+          <em class="fa fa-times fa-lg text-muted"></em>
+        </button>
+      </div>
+      <div style="width: 100%; height: 230px; overflow-y: auto;">
+        <div>
+          <ul class="mda-list row m0">
+            <li class="col-sm-12 p0">
+              <div class="mda-list-item-text pb0 pt-sm">
+                <span class="text-bold host-item-key">ID</span>
+                <span
+                  class="ml text-muted auto-hide host-item-value"
+                  uib-tooltip="{{host.id}}"
+                  tooltip-enable="false"
+                  show-tooltip-on-text-overflow
+                >
+                  {{host.id}}
+                </span>
+              </div>
+            </li>
+            <li class="col-sm-6 p0">
+              <div class="mda-list-item-text pb0 pt-sm">
+                <span class="text-bold host-item-key">
+                  {{'nodes.detail.NUM_OF_CPUS' | translate}}
+                </span>
+                <span
+                  class="ml text-muted auto-hide host-item-value"
+                  uib-tooltip="{{host.cpus}}"
+                  tooltip-enable="false"
+                  show-tooltip-on-text-overflow
+                >
+                  {{host.cpus}}
+                </span>
+              </div>
+            </li>
+            <li class="col-sm-6 p0">
+              <div class="mda-list-item-text pb0 pt-sm">
+                <span class="text-bold host-item-key">
+                  {{'nodes.detail.MEMORY' | translate}}
+                </span>
+                <span
+                  class="ml text-muted auto-hide host-item-value"
+                  uib-tooltip="{{host.memory | bytes}}"
+                  tooltip-enable="false"
+                  show-tooltip-on-text-overflow
+                >
+                  {{host.memory | bytes}}
+                </span>
+              </div>
+            </li>
+            <li class="col-sm-6 p0">
+              <div class="mda-list-item-text pb0 pt-sm">
+                <span class="text-bold host-item-key">
+                  {{'nodes.detail.OS' | translate}}
+                </span>
+                <span
+                  class="ml text-muted auto-hide host-item-value"
+                  uib-tooltip="{{host.os}}"
+                  tooltip-enable="false"
+                  show-tooltip-on-text-overflow
+                >
+                  {{host.os}}
+                </span>
+              </div>
+            </li>
+            <li class="col-sm-6 p0">
+              <div class="mda-list-item-text pb0 pt-sm">
+                <span class="text-bold host-item-key">
+                  {{'nodes.detail.KERNEL_VERSION' | translate}}
+                </span>
+                <span
+                  class="ml text-muted auto-hide host-item-value"
+                  uib-tooltip="{{host.kernel}}"
+                  tooltip-enable="false"
+                  show-tooltip-on-text-overflow
+                >
+                  {{host.kernel}}
+                </span>
+              </div>
+            </li>
+            <li class="col-sm-6 p0">
+              <div class="mda-list-item-text pb0 pt-sm">
+                <span class="text-bold host-item-key">
+                  {{host.runtime | capitalize}}&nbsp;{{'nodes.detail.VERSION' |
+                  translate}}
+                </span>
+                <span
+                  class="ml text-muted auto-hide host-item-value"
+                  uib-tooltip="{{host.runtime}}"
+                  tooltip-enable="false"
+                  show-tooltip-on-text-overflow
+                >
+                  {{host.runtime_version}}
+                </span>
+              </div>
+            </li>
+            <li class="col-sm-6 p0">
+              <div class="mda-list-item-text pb0 pt-sm">
+                <span class="text-bold host-item-key">
+                  {{host.runtime |
+                  capitalize}}&nbsp;{{'nodes.detail.API_VERSION' | translate}}
+                </span>
+                <span
+                  class="ml text-muted auto-hide host-item-value"
+                  uib-tooltip="{{host.runtime_version}}"
+                  tooltip-enable="false"
+                  show-tooltip-on-text-overflow
+                >
+                  {{host.runtime_api_version}}
+                </span>
+              </div>
+            </li>
+            <li class="col-sm-6 p0">
+              <div class="mda-list-item-text pb0 pt-sm">
+                <span class="text-bold host-item-key">
+                  {{'network.hostDetails.CONTAINERS' | translate}}
+                </span>
+                <span
+                  class="ml text-muted auto-hide host-item-value"
+                  uib-tooltip="{{host.containers}}"
+                  tooltip-enable="false"
+                  show-tooltip-on-text-overflow
+                >
+                  {{host.containers}}
+                </span>
+              </div>
+            </li>
+            <li class="col-sm-6 p0" ng-if="!!host.scan_summary.scanned_at">
+              <div class="mda-list-item-text pb0 pt-sm">
+                <span
+                  class="text-bold host-item-key"
+                  translate="{{'network.nodeDetails.SCANNED_AT'}}"
+                ></span>
+                <span
+                  class="ml text-muted mr-lg auto-hide host-item-key"
+                  style="display: block; width: 150px;"
+                >
+                  {{host.scan_summary.scanned_at | date:'MMM dd, y HH:mm:ss'}}
+                </span>
+              </div>
+            </li>
+            <li class="col-sm-6 p0">
+              <div class="mda-list-item-text pb0 pt-sm">
+                <span
+                  class="text-bold host-item-key"
+                  translate="{{'group.gridHeader.VULNERABILITIES'}}"
+                />
+                <div class="ml host-item-value">
+                  <label
+                    class="label label-danger mr-sm"
+                    ng-if="host.scan_summary.high"
+                  >
+                    {{host.scan_summary.high}}</label
+                  >
+                  <label
+                    class="label label-warning"
+                    ng-if="host.scan_summary.medium"
+                  >
+                    {{host.scan_summary.medium}}</label
+                  >
+                  <a
+                    ui-sref="app.hosts({nodeId: host.id})"
+                    style="
+                      display: table-cell;
+                      font-size: 11px;
+                      line-height: 15px;
+                    "
+                    ng-if="host.scan_summary.high || host.scan_summary.medium"
+                  >
+                    <em class="fa fa-external-link ml-lg"></em>
+                  </a>
+
+                  <label
+                    class="label label-success-tran"
+                    ng-if="host.scan_summary.scanned_at && host.scan_summary.high === 0 && host.scan_summary.medium === 0"
+                  >
+                    <em class="fa fa-smile-o mr-sm"></em> Clean
+                  </label>
+
+                  <button
+                    type="button"
+                    ng-if="!host.scan_summary.scanned_at && !host.scan_summary.status && !isScanStarted4Host"
+                    class="ml btn btn-default btn-wide pt0 pb0"
+                    ng-disabled="!isWriteNetworkAuthorized"
+                    ng-click="scanHost(host.id)"
+                  >
+                    {{'scan.SCAN' | translate}}
+                  </button>
+
+                  <div class="ml mt-sm pull-left" ng-if="isScanStarted4Host">
+                    <label class="mt-sm label label-info-tran">
+                      <em class="fa fa-cog fa-spin mr-sm"></em> Scanning...
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="col-sm-12 p0" ng-if="hasInterfaces">
+              <div class="mda-list-item-text pb0 pt-sm">
+                <div
+                  class="text-bold"
+                  translate="{{'containers.detail.NETWORK_INTERFACES'}}"
+                ></div>
+                <div
+                  class="row pl"
+                  style="width: 380px;"
+                  ng-repeat="(name, nets) in host.interfaces"
+                >
+                  <div class="col-sm-2 text-right pr0">
+                    {{name}}
+                  </div>
+                  <div class="col-sm-1"></div>
+                  <div class="col-sm-9 pl0">
+                    <div ng-repeat="net in nets" class="text-muted">
+                      <div class="col-sm-12">
+                        <div class="col-sm-6">
+                          IP:{{net.ip}}/{{net.ip_prefix}}
+                        </div>
+                        <div class="col-sm-6" ng-if="net.gateway">
+                          {{"general.GATEWAY" | translate}}:{{net.gateway}}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    id="conversationHistory"
+    class="dataBox topLeftSession resizable"
+    style="border: none;"
+    ng-show="onEdge"
+  >
+    <div class="clearfix" id="conversationHistoryHeader">
+      <button
+        class="btn btn-xs btn-link pull-right"
+        ng-click="onEdge=!onEdge; onRule=false"
+      >
+        <em class="fa fa-times fa-lg text-muted"></em>
+      </button>
+      <div>
+        <h4 class="text-muted mb0 pull-left">
+          {{conversationDetail.from.display_name}}
+          <em class="fa fa-long-arrow-right text-info"></em>
+          {{conversationDetail.to.display_name}}
+        </h4>
+      </div>
+    </div>
+    <div class="clearfix" ng-if="entries && entries.length > 0">
+      <div class="left-inner-addon pull-right mb-sm">
+        <em class="fa fa-filter text-filter"></em>
+        <input
+          class="search form-control"
+          placeholder="{{'general.FILTER' | translate}}"
+          type="text"
+          maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+          style="background: rgba(255, 255, 255, 0.85);"
+          ng-model="search"
+          ng-paste="onConvHisFilterChanged(search)"
+          ng-keyup="onConvHisFilterChanged(search)"
+        />
+      </div>
+    </div>
+    <div ng-if="entries && entries.length > 0">
+      <div
+        ag-grid="convHisGridOptions"
+        class="ag-angle"
+        style="width: 100%;"
+        ng-style="{ height: entriesGridHeight + 'px'}"
+      ></div>
+    </div>
+    <div ng-if="!entries || entries.length === 0" class="pv-lg">
+      <div class="text-info" style="font-size: 16px;">
+        <em class="fa fa-info-circle mr-lg" aria-hidden="true"></em>
+        {{'general.NO_CONVERSATIONS' | translate}}
+      </div>
+    </div>
+    <div class="col-sm-5 mt-sm">
+      <span ng-if="entries && entries.length > 0" class="text-muted mr-lg"
+        >{{'network.edgeDetails.SESSIONS' | translate}} {{sessionCount}}</span
+      >
+      <span class="label label-warning" ng-if="onViolation"
+        ><em class="fa fa-ban mr-sm"></em> {{'network.edgeDetails.VIOLATION' |
+        translate}}
+      </span>
+      <span class="label label-danger" ng-if="onThreat"
+        ><em class="fa fa-bug mr-sm"></em> {{'network.edgeDetails.THREAT' |
+        translate}}
+      </span>
+    </div>
+    <div class="col-sm-4 col-sm-offset-3">
+      <div class="pull-right">
+        <button
+          ng-show="showRuleId && traffic.policy_action !== 'open'"
+          type="button"
+          class="btn btn-wide btn-default mt-sm"
+          ng-disabled="!isWriteNetworkAuthorized"
+          ng-click="overrideRule(traffic, selectedEdge)"
+        >
+          <em class="fa fa-pencil-square-o"></em>
+          {{'network.edgeDetails.OVERRIDE_RULE' | translate}}
+        </button>
+        <button
+          type="button"
+          class="btn btn-wide btn-default mt-sm"
+          ng-if="isClearSessionAuthorized && entries && entries.length > 0"
+          ng-disabled="!isWriteNetworkAuthorized"
+          ng-click="clearSessions(conversationDetail.from.id, conversationDetail.to.id)"
+        >
+          <em class="fa fa-magic mr-sm"></em>{{'network.edgeDetails.CLEAR' |
+          translate}}
+        </button>
+      </div>
+    </div>
+    <div ng-show="onRule" class="col-sm-12">
+      <hr class="fancy" />
+      <h4 ng-show="rule.id !== 0">
+        {{'policy.RULE_DETAILS' | translate}}
+        <em class="fa fa-hand-o-right ml-sm text-primary"></em>
+        <small>{{rule.id}}</small>
+      </h4>
+      <h4 ng-show="rule.id === 0">
+        {{'policy.NEW_RULE' | translate}}
+        <em class="fa fa-plus-square-o ml-sm text-primary"></em>
+      </h4>
+      <div>
+        <form name="ruleForm" novalidate="">
+          <div class="col-sm-6">
+            <md-input-container class="md-block mb0">
+              <label>{{'policy.editPolicy.FROM' | translate}}</label>
+              <input disabled ng-model="rule.from" />
+            </md-input-container>
+          </div>
+          <div class="col-sm-6">
+            <md-input-container class="md-block mb0">
+              <label>{{'policy.editPolicy.TO' | translate}}</label>
+              <input disabled ng-model="rule.to" />
+            </md-input-container>
+          </div>
+          <div class="col-sm-6 mb0">
+            <md-input-container class="md-block mb0">
+              <label>{{'policy.addPolicy.APP' | translate}}</label>
+              <input disabled value="{{rule.applications.join(', ')}}" />
+            </md-input-container>
+          </div>
+          <div class="col-sm-6 mb0">
+            <md-input-container class="md-block mb0">
+              <label>{{'policy.editPolicy.PORT' | translate}}</label>
+              <input disabled value="{{rule.ports}}" />
+            </md-input-container>
+          </div>
+
+          <div class="col-sm-4 mb0" ng-if="rule.created_timestamp">
+            <md-input-container class="md-block">
+              <label>{{'controllers.detail.CREATED_AT' | translate}}</label>
+              <input
+                disabled
+                value="{{rule.created_timestamp * 1000 | date:'MMM dd, y HH:mm:ss'}}"
+              />
+            </md-input-container>
+          </div>
+          <div class="col-sm-4 mb0" ng-if="rule.last_modified_timestamp">
+            <md-input-container class="md-block">
+              <label>{{'policy.gridHeader.UPDATE_AT' | translate}}</label>
+              <input
+                disabled
+                value="{{rule.last_modified_timestamp * 1000 | date:'MMM dd, y HH:mm:ss'}}"
+              />
+            </md-input-container>
+          </div>
+          <div class="col-sm-2 mb0" style="margin-top: 25px;">
+            <div
+              ng-if="rule.learned"
+              class="action-label nv-label learn-rule"
+              translate="{{'group.LEARNED'}}"
+            ></div>
+            <div
+              ng-if="!rule.learned"
+              class="action-label nv-label customer-rule"
+              translate="{{'group.CUSTOM'}}"
+            ></div>
+          </div>
+          <div class="col-sm-2 mb0">
+            <label class="text-muted"
+              >{{'policy.editPolicy.DENY_ALLOW' | translate}}</label
+            >
+            <div>
+              <nz-toggle
+                class="mt0"
+                width="50"
+                color-false="'#ff8a65'"
+                color-true="'#81c784'"
+                ng-model="rule.allowed"
+                ng-disabled="!isWriteNetworkAuthorized || rule.action === 'open'"
+                val-true="true"
+                val-false="false"
+              >
+              </nz-toggle>
+            </div>
+          </div>
+          <button
+            ng-if="isWriteNetworkAuthorized"
+            class="btn btn-wide btn-default mt-sm pull-right"
+            ng-click="closeRuleDetail()"
+          >
+            <em class="fa fa-window-close-o mr-sm"></em>{{'policy.portlet.CLOSE'
+            | translate}}
+          </button>
+          <button
+            ng-if="isWriteNetworkAuthorized"
+            class="btn btn-wide btn-default mt-sm pull-right mr-sm"
+            ng-click="updateRule(rule)"
+          >
+            <em class="fa fa-save mr-sm"></em>{{'policy.portlet.SUBMIT' |
+            translate}}
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div
+    id="activeSessions"
+    ng-show="onActiveSession"
+    class="dataBox topLeftSession resizable"
+    style="border: none;"
+  >
+    <div class="clearfix" id="activeSessionsHeader">
+      <button
+        class="btn btn-xs btn-link pull-right"
+        ng-click="stopRefreshSession(); onActiveSession = false; makePopupBackToOriginalLocation()"
+      >
+        <em class="fa fa-times fa-lg text-muted"></em>
+      </button>
+      <div class="pull-right">
+        <div class="md-switch2">
+          <label class="pull-right mr-sm">
+            <em
+              class="fa fa-spinner fa-spin text-info"
+              ng-show="autoRefresh"
+            ></em>
+            <small class="text-muted"
+              >{{'network.AUTO_REFRESH' | translate}}</small
+            >
+            <input
+              type="checkbox"
+              ng-model="autoRefresh"
+              ng-change="toggleRefresh(autoRefresh)"
+            />
+            <span class="toggle"></span>
+          </label>
+        </div>
+      </div>
+      <h4 class="text-dark mb0">
+        {{'dashboard.panelItems.NETWORK_TRAFFIC' |
+        translate}}&nbsp;-&nbsp;{{currentName}}
+      </h4>
+    </div>
+    <div class="clearfix" ng-if="conversations && conversations.length > 0">
+      <div class="left-inner-addon pull-right mb-sm">
+        <em class="fa fa-filter text-filter" />
+        <input
+          class="search form-control"
+          placeholder="{{'general.FILTER' | translate}}"
+          type="text"
+          maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+          ng-model="search"
+          ng-paste="onActiveSessionFilterChanged(search)"
+          ng-keyup="onActiveSessionFilterChanged(search)"
+        />
+      </div>
+    </div>
+    <div ng-if="conversations && conversations.length > 0">
+      <div
+        ag-grid="activeGridOptions"
+        class="ag-angle"
+        style="width: 100%;"
+        ng-style="{ height: activeSessionGridHeight + 'px'}"
+      ></div>
+    </div>
+    <div class="mv-sm" ng-if="conversations.length==0">
+      <span translate="{{'network.NO_ACTIVE_SESSIONS'}}"> </span>
+    </div>
+  </div>
+
+  <div
+    id="sniffer"
+    class="dataBox topLeftSession resizable"
+    style="border: none;"
+    ng-show="onSniffer"
+  >
+    <div id="snifferHeader">
+      <button
+        class="btn btn-xs btn-link pull-right"
+        ng-click="onSniffer=!onSniffer; stopRefreshSniffer()"
+      >
+        <em class="fa fa-times fa-lg text-muted"></em>
+      </button>
+      <h4 class="text-dark">
+        {{'network.nodeDetails.SNIFF' | translate}}
+        <em class="fa fa-long-arrow-right text-info mh-sm"></em
+        >{{containerName}}
+      </h4>
+    </div>
+    <div style="padding-bottom: 10px;">
+      <div
+        ag-grid="sniffGridOptions"
+        class="ag-angle"
+        style="width: 100%;"
+        ng-style="{ height: snifferGridHeight + 'px'}"
+      ></div>
+    </div>
+    <div layout="row" class="mb">
+      <div flex="20">
+        <md-checkbox
+          class="md-primary ml-sm mt-lg"
+          ng-checked="!pcap.options.disabled"
+          ng-disabled=""
+          ng-click="toggleSchedule()"
+        >
+          <label
+            ng-class="pcap.options.disabled ? 'text-muted' : 'text-primary'"
+          >
+            {{'network.SCHEDULE_JOB' | translate}}
+          </label>
+        </md-checkbox>
+      </div>
+      <div flex="50">
+        <rzslider
+          class="custom-slider"
+          rz-slider-model="pcap.seconds"
+          rz-slider-options="pcap.options"
+        >
+        </rzslider>
+      </div>
+    </div>
+    <div layout="row">
+      <div flex="70">
+        <button
+          class="btn btn-xs btn-circle btn-primary pull-left"
+          ng-disabled="!isPacketCapAuthorized || disableStart()"
+          ng-click="startSniff(containerId)"
+        >
+          <em class="fa fa-play"></em>
+        </button>
+        <div ng-if="isSnifferErr" class="pull-left mt-sm ml">
+          <span class="text-danger">{{snifferErrMsg}}</span>
+        </div>
+      </div>
+      <div flex="20">
+        <a
+          type="submit"
+          class="btn btn-primary btn-xs"
+          target="_self"
+          ng-show="sniffer && downloadId === sniffer.id"
+          download="{{exportFilename}}"
+          ng-href="{{exportUrl}}"
+        >
+          <span>
+            <em class="fa fa-cloud-download"
+              >&nbsp;{{'network.DOWNLOAD' | translate}}</em
+            >
+          </span>
+        </a>
+      </div>
+      <div flex="30">
+        <div class="pull-right">
+          <button
+            class="btn btn-xs btn-circle btn-primary"
+            ng-disabled="!isPacketCapAuthorized || !sniffer || sniffer.status === 'stopped'"
+            ng-click="stopSniff(sniffer.id)"
+          >
+            <em class="fa fa-stop"></em>
+          </button>
+          <button
+            class="btn btn-xs btn-circle btn-primary"
+            ng-disabled="!isPacketCapAuthorized || !sniffer"
+            ng-click="downloadPacket(sniffer.id)"
+          >
+            <em class="fa fa-file-archive-o"></em>
+          </button>
+          <button
+            class="btn btn-xs btn-circle btn-pink"
+            ng-disabled="!isPacketCapAuthorized || !sniffer"
+            ng-click="deleteSniff(sniffer.id)"
+          >
+            <em class="fa fa-trash"></em>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    id="legend"
+    class="dataBox rightBottomLegend"
+    ng-show="settings.showLegend"
+    style="border: none; height: 550px; padding-top: 0"
+  >
+    <div
+      layout="row"
+      layout-align="space-between center"
+      class="ml0 mr0"
+      id="legendHeader"
+    >
+      <h4 class="text-bold mb0 pl-lg">
+        {{'network.legend.TITLE' | translate}}
+      </h4>
+      <div>
+        <md-button
+          class="md-icon-button"
+          ng-click="settings.showLegend = !settings.showLegend"
+          style="padding-top: 10px"
+        >
+          <md-icon
+            md-svg-src="app/img/icons/ic_close_24px.svg"
+            aria-label="Close dialog"
+          ></md-icon>
+        </md-button>
+      </div>
+    </div>
+    <hr class="fancy mv-sm" />
+    <div class="ml-lg mt">
+      <div>
+        <md-icon
+          md-svg-src="app/img/icons/graph/cloud.svg"
+          aria-label="External"
+          style="width:24px;height:24px;"
+        ></md-icon>
+        <span class="ml text-muted"
+          >{{'network.legend.EXTERNAL' | translate}}</span
+        >
+      </div>
+      <div>
+        <md-icon
+          md-svg-src="app/img/icons/graph/domain.svg"
+          aria-label="Namespace"
+          style="width:24px;height:24px;"
+        ></md-icon>
+        <span class="ml text-muted"
+          >{{'network.legend.DOMAIN' | translate}}</span
+        >
+      </div>
+      <div>
+        <md-icon
+          md-svg-src="app/img/icons/graph/cluster-d.svg"
+          aria-label="Group"
+          style="width:24px;height:24px;"
+        ></md-icon>
+        <span class="ml text-muted"
+          >{{'network.legend.GROUP_DISCOVER' | translate}}</span
+        >
+      </div>
+      <div>
+        <md-icon
+          md-svg-src="app/img/icons/graph/cluster-m.svg"
+          aria-label="Group"
+          style="width:24px;height:24px;"
+        ></md-icon>
+        <span class="ml text-muted"
+          >{{'network.legend.GROUP_MONITOR' | translate}}</span
+        >
+      </div>
+      <div>
+        <md-icon
+          md-svg-src="app/img/icons/graph/cluster-p.svg"
+          aria-label="Group"
+          style="width:24px;height:24px;"
+        ></md-icon>
+        <span class="ml text-muted"
+          >{{'network.legend.GROUP_PROTECT' | translate}}</span
+        >
+      </div>
+      <div>
+        <md-icon
+          md-svg-src="app/img/icons/graph/host.svg"
+          aria-label="Node"
+          style="width:24px;height:24px;"
+        ></md-icon>
+        <span class="ml text-muted">{{'network.legend.HOST' | translate}}</span>
+      </div>
+      <div>
+        <md-icon
+          md-svg-src="app/img/icons/graph/nodeIp.svg"
+          aria-label="Unmanaged Node"
+          style="width:24px;height:24px;"
+        ></md-icon>
+        <span class="ml text-muted"
+          >{{'network.legend.IP_HOST' | translate}}</span
+        >
+      </div>
+      <div>
+        <md-icon
+          md-svg-src="app/img/icons/graph/container-x.svg"
+          aria-label="Container"
+          style="width:24px;height:24px;"
+        ></md-icon>
+        <span class="ml text-muted"
+          >{{'network.legend.CONTAINER_EXIT' | translate}}</span
+        >
+      </div>
+      <div>
+        <md-icon
+          md-svg-src="app/img/icons/graph/container-d.svg"
+          aria-label="Container"
+          style="width:24px;height:24px;"
+        ></md-icon>
+        <span class="ml text-muted"
+          >{{'network.legend.CONTAINER_DISCOVER' | translate}}</span
+        >
+      </div>
+      <div>
+        <md-icon
+          md-svg-src="app/img/icons/graph/container-m.svg"
+          aria-label="Container"
+          style="width:24px;height:24px;"
+        ></md-icon>
+        <span class="ml text-muted"
+          >{{'network.legend.CONTAINER_MONITOR' | translate}}</span
+        >
+      </div>
+      <div>
+        <md-icon
+          md-svg-src="app/img/icons/graph/container-p.svg"
+          aria-label="Container"
+          style="width:24px;height:24px;"
+        ></md-icon>
+        <span class="ml text-muted"
+          >{{'network.legend.CONTAINER_PROTECT' | translate}}</span
+        >
+      </div>
+      <div>
+        <md-icon
+          md-svg-src="app/img/icons/graph/workload-ip.svg"
+          aria-label="Unmanaged Container"
+          style="width:24px;height:24px;"
+        ></md-icon>
+        <span class="ml text-muted"
+          >{{'network.legend.WORKLOAD' | translate}}</span
+        >
+      </div>
+      <div>
+        <md-icon
+          md-svg-src="app/img/icons/graph/serviceMesh-d.svg"
+          aria-label="Service Mesh"
+          style="width:24px;height:24px;"
+        ></md-icon>
+        <span class="ml text-muted"
+          >{{'network.legend.CONTAINER_PROXY_DISCOVER' | translate}}</span
+        >
+      </div>
+      <div>
+        <md-icon
+          md-svg-src="app/img/icons/graph/serviceMesh-m.svg"
+          aria-label="Service Mesh"
+          style="width:24px;height:24px;"
+        ></md-icon>
+        <span class="ml text-muted"
+          >{{'network.legend.CONTAINER_PROXY_MONITOR' | translate}}</span
+        >
+      </div>
+      <div>
+        <md-icon
+          md-svg-src="app/img/icons/graph/serviceMesh-p.svg"
+          aria-label="Service Mesh"
+          style="width:24px;height:24px;"
+        ></md-icon>
+        <span class="ml text-muted"
+          >{{'network.legend.CONTAINER_PROXY_PROTECT' | translate}}</span
+        >
+      </div>
+      <div>
+        <md-icon
+          md-svg-src="app/img/icons/graph/service.svg"
+          aria-label="IP Service"
+          style="width:24px;height:24px;"
+        ></md-icon>
+        <span class="ml text-muted"
+          >{{'network.legend.IP_GROUP' | translate}}</span
+        >
+      </div>
+      <div>
+        <em class="fa fa-circle-thin text-danger ml-sm"></em>
+        <span class="text-muted" style="margin-left: 18px;"
+          >{{'network.legend.QUARANTINED' | translate}}</span
+        >
+      </div>
+      <div>
+        <em
+          class="fa fa-arrow-right text-light-grey ml-sm"
+          style="transform: scale(1.5, 0.8); line-height: 10px; padding-top:3px;"
+        ></em>
+        <span class="text-muted" style="margin-left: 18px;"
+          >{{'network.legend.CONV_INTERNAL' | translate}}</span
+        >
+      </div>
+      <div>
+        <em
+          class="fa fa-long-arrow-right text-info ml-sm"
+          style="transform: scale(1.3, 1.5); line-height: 10px; padding-top:3px;"
+        ></em>
+        <span class="text-muted ml-lg"
+          >{{'network.legend.CONV' | translate}}</span
+        >
+      </div>
+      <div>
+        <em
+          class="fa fa-long-arrow-right text-warning ml-sm"
+          style="transform: scale(1.3, 1.5); line-height: 10px; padding-top:3px;"
+        ></em>
+        <span class="text-muted ml-lg"
+          >{{'network.legend.CONV_ALERT' | translate}}</span
+        >
+      </div>
+      <div>
+        <em
+          class="fa fa-long-arrow-right text-danger ml-sm"
+          style="transform: scale(1.3, 1.5); line-height: 10px; padding-top:3px;"
+        ></em>
+        <span class="text-muted ml-lg"
+          >{{'network.legend.CONV_DENY' | translate}}</span
+        >
+      </div>
+    </div>
+  </div>
+</div>

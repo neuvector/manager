@@ -1,0 +1,1027 @@
+<div ng-controller="AdmissionControlController as admCtrl" >
+  <div class="pull-right mt-sm" style="padding-top: 5px; margin-left: 10px;" ng-click="reset()">
+    <em class="fa fa-refresh text-action hand" aria-hidden="true"/>
+    <label class="text-gray-label hand">{{'general.REFRESH' | translate}}</label>
+  </div>
+  <div class="pull-right mt-sm" style="margin-right: 20px;">
+    <div class="mt-sm" ng-if="isIncludingNoMode">
+      <div tooltip-placement="right" uib-tooltip-html="disabledSwitchModeHtml" tooltip-class="customClass" tooltip-enable="{{isIncludingNoMode}}">
+        <label class="text-gray-label" ng-class="{'disabled': isIncludingNoMode}">{{'service.SWITCH_MODE' | translate}}</label>
+        <em class="fa fa-caret-down text-action" ng-class="{'disabled': isIncludingNoMode}"/>
+      </div>
+    </div>
+    <div uib-dropdown dropdown-append-to-body class="mt-sm"
+      ng-if="!isIncludingNoMode && !admissionRuleErr && isWriteAdmissionRuleAuthorized">
+      <div uib-dropdown-toggle>
+        <div>
+          <label class="text-gray-label hand">{{'admissionControl.MORE' | translate | uppercase }}</label>
+          <em class="fa fa-caret-down text-action"/>
+        </div>
+      </div>
+      <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+        <li role="menuitem" ng-if="admCtrl.state && isWriteAdmissionRuleAuthorized && canConfig">
+          <div class="pl" ng-click="showGlobalActions($event)">
+            <em class="fa fa-cogs text-action hand" aria-hidden="true"/>
+            <label class="text-gray-label hand">{{'admissionControl.GLOBAL_OPS' | translate | uppercase}}</label>
+          </div>
+        </li>
+        <li class="menuitem" ng-if="isWriteAdmissionRuleAuthorized">
+          <div class="pl" ng-click="openExportPopup()">
+            <div>
+              <em class="fa fa-download text-action"></em>
+              <label class="text-gray-label hand">{{'admissionControl.EXPORT' | translate | uppercase}}</label>
+            </div>
+          </div>
+        </li>
+        <li class="menuitem" ng-if="isWriteAdmissionRuleAuthorized">
+          <div class="pl" ng-click="openImportPopup()">
+            <div>
+              <em class="fa fa-caret-square-o-up text-action"></em>
+              <label class="text-gray-label hand">{{'admissionControl.IMPORT' | translate | uppercase}}</label>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div role="button" class="pull-right mt-sm mr policy-top-button" ng-if="isWriteAdmissionRuleAuthorized" ng-click="openAdmissionTestDialog()" style="">
+    <div class="hightlighted-button">
+      <em class="fa fa-flask text-action"></em>
+      <label class="text-gray-label hand">{{'admissionControl.MATCHING_TEST' | translate | uppercase}}</label>
+    </div>
+  </div>
+  <div class="clearfix">
+    <div class="content-title">{{'sidebar.nav.ADMISSION_CONTROL' | translate}}</div>
+  </div>
+
+  <div class="panel mb0">
+    <div class="panel-body">
+      <div class="clearfix">
+        <label class="text-primary pull-left mt-sm" ng-show="!admissionRuleErr">{{count}}</label>
+        <div ng-if="isWriteAdmissionRuleAuthorized"  class="nv-global-policy-operation pull-left ml">
+          <ul class="list-inline" >
+            <li class="policy-top-button" ng-click="addPolicy($event, 0)">
+              <div class="button">
+                <em class="fa fa-plus-circle mr-sm text-action" aria-hidden="true"></em>
+                {{'admissionControl.INSERT' | translate}}
+              </div>
+            </li>
+            <li ng-if="isMaster && selectedRows && selectedRows.length > 0 && !hasSelectedDefaultRule" display-control="multi_cluster" class="policy-top-button fade-in-left" ng-click="promoteRule($event)">
+              <div class="button">
+                <em class="fa fa-level-up mr-sm text-action" aria-hidden="true"></em>
+                {{'policy.PROMOTE' | translate}}
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="left-inner-addon pull-right">
+          <em class="fa fa-filter text-filter" aria-hidden="true"></em>
+          <input class="search form-control" placeholder="{{'general.FILTER' | translate}}"
+                 ng-model="search"
+                 ng-paste="onFilterChanged(search)"
+                 ng-keyup="onFilterChanged(search)"
+                 maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+        </div>
+        <div ng-if="isAdmissionRuleAuthorized" class="pull-right" style="padding-top: 5px; margin-left: 10px; width: 160px;">
+          <label class="pull-left nv-modal-item-title text-gray-label" style="padding-top: 2px;">{{'responsePolicy.gridHeader.STATUS' | translate | uppercase}}</label>
+          <div class="pull-left">
+            <div class="md-switch2">
+              <label class="nv-modal-item-title" uib-tooltip="{{ 'admissionControl.CAN_NOT_CONFIG' | translate }}" tooltip-enable="{{!canConfig}}" tooltip-class="customClass">
+                <input id="adm-state" type="checkbox" ng-disabled="!isK8s || !canConfig || !isWriteAdmissionRuleAuthorized"
+                  ng-model="admCtrl.state" ng-click="switchState(admCtrl.state)">
+                <span class="toggle hand" style="margin-right: 5px;" ng-class="{'disabled': !canConfig}"></span>
+                {{(!admCtrl.state ? "policy.status.DISABLED" : "policy.status.ENABLED") | translate}}
+              </label>
+            </div>
+          </div>
+        </div>
+        <div ng-if="isK8s && admCtrl.state && isAdmissionRuleAuthorized" class="pull-right mode-switcher" style="padding-top: 3px; margin-left: 10px; width: 175px;">
+          <span class="pull-left nv-modal-item-title text-gray-label" style="padding-top: 4px">{{'admissionControl.MODE' | translate | uppercase}}</span>
+          <!--<div class="pull-left">-->
+          <!--<div class="md-switch3">-->
+          <!--<label class="nv-modal-item-title">-->
+          <!--<input id="adm-mode" type="checkbox" ng-model="isProtect" ng-click="switchMode(isProtect)">-->
+          <!--<span class="toggle hand"></span>-->
+          <!--{{(isProtect ? "enum.PROTECT" : "enum.MONITOR") | translate}}-->
+          <!--</label>-->
+          <!--</div>-->
+          <!--</div>-->
+          <div ng-if="isWriteAdmissionRuleAuthorized">
+            <div class="mb button left text-muted ml" ng-class="{'actived-monitor': !isProtect}" ng-click="switchMode(false)">{{"enum.MONITOR" | translate}}</div>
+            <div class="mb button right text-muted" ng-class="{'actived-protect': isProtect}" style="margin-left: -5px;" ng-click="switchMode(true)">{{"enum.PROTECT" | translate}}</div>
+          </div>
+          <div ng-if="!isWriteAdmissionRuleAuthorized">
+            <div class="mb button left text-muted ml disabled" ng-class="{'actived-monitor': !isProtect}">{{"enum.MONITOR" | translate}}</div>
+            <div class="mb button right text-muted disabled" ng-class="{'actived-protect': isProtect}" style="margin-left: -5px;">{{"enum.PROTECT" | translate}}</div>
+          </div>
+        </div>
+      </div>
+      <div id="policy-grid" ag-grid="gridOptions" class="ag-grid mt-sm nv-policy-type"
+           style="width: 100%;" ng-style="{ height: graphHeight + 'px'}">
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <script type="text/ng-template" id="dialog.addPolicy.html">
+      <md-dialog aria-label="Add rule" class="dialog-lg" style="overflow: visible">
+        <form name="addPolicyForm" ng-submit="$event.preventDefault()" novalidate="" class="form-validate" style="overflow: visible">
+          <md-toolbar>
+            <div class="md-toolbar-tools">
+              <h2 class="text-dark">{{'admissionControl.addRule.TITLE' | translate}}</h2>
+              <span flex></span>
+              <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+              </md-button>
+            </div>
+          </md-toolbar>
+          <md-dialog-content style="min-height: 260px;" ng-show="conditionOptionErr">
+            <div class="server-error">
+              <div>
+                <em class="fa fa-times-circle error-signal" aria-hidden="true"></em>
+              </div>
+              <div>
+                <div class="error-text" ng-show="conditionOptionErr">Condition autocomplete Error: {{conditionOptionErrMSG}}</div>
+              </div>
+            </div>
+          </md-dialog-content>
+          <md-dialog-content style="overflow: visible" ng-show="!conditionOptionErr">
+            <div>
+              <div class="card-body mt">
+                <div>
+                  <div class="row m0" style="min-height: 92px;">
+                    <div class="col-sm-3 mt-lg">
+                      <div class="col-sm-4 pl0">
+                        <label class="nv-modal-item-title">{{'admissionControl.TYPE' | translate}}</label>
+                      </div>
+                      <div class="col-sm-8 pl0">
+                        <div class="md-switch4">
+                          <label class="nv-modal-item-title">
+                            <input type="checkbox" ng-model="isAllowed" ng-change="toggleType(isAllowed)">
+                            <span class="toggle"></span>
+                            <span ng-class="{'text-deny': !isAllowed,'text-success': isAllowed}">{{(isAllowed ? "admissionControl.ALLOW" : "admissionControl.DENY") | translate}}</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-9">
+                      <md-input-container class="md-block mb0" >
+                        <label>{{'admissionControl.COMMENT' | translate}}</label>
+                        <input ng-model="newRule.comment"
+                               class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                      </md-input-container>
+                    </div>
+                    <div class="col-sm-11">
+                      <div class="col-sm-5 pl0">
+                        <div class="form-group" >
+                          <label class="col-sm-2 nv-modal-item-title control-label pl0" style="padding-left: 36px; margin-top: 22px;">
+                            {{'admissionControl.NAME' | translate}}*
+                          </label>
+                          <div class="col-sm-10  pr0">
+                            <md-select class="pl-lg" ng-model="newRule.name" aria-label="select category" ng-change="changeName(newRule.name)"
+                                       uib-tooltip="{{isRegistryScanRelatedOptions(newRule.name) ? ('admissionControl.TIP.REGISTRY_SCAN_REL_OPTION' | translate) : ''}}">
+                              <md-option id="{{name.originalName}}" ng-repeat="name in names" ng-value="name" ng-selected="name.originalName===newRule.name.originalName">
+                                <span>
+                                  {{'admissionControl.names.' + name.displayName.toUpperCase() | translate}}
+                                  <span class="ml">
+                                    <em ng-if="name.matchSrc === 'image' || name.matchSrc === 'both'" class="fa fa-database text-muted" style="font-size: 10px;" aria-hidden="true" uib-tooltip="{{ 'admissionControl.TIP.scanRequirementHint.IMAGE' | translate}}"></em>
+                                    <em ng-if="name.matchSrc === 'yaml' || name.matchSrc === 'both'" class="fa fa-file-code-o text-muted" style="font-size: 10px;" aria-hidden="true" uib-tooltip="{{ 'admissionControl.TIP.scanRequirementHint.YAML' | translate}}"></em>
+                                  </span>
+                                </span>
+                              </md-option>
+                            </md-select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-4" ng-if="!isBooleanCriteria">
+                        <div class="form-group" >
+                          <label class="col-lg-3 col-md-5 col-sm-6 nv-modal-item-title control-label pl0" style="padding-left: 36px; margin-top: 22px;">
+                            {{'admissionControl.OP' | translate}}*
+                          </label>
+                          <div class="col-lg-9 col-md-7 col-sm-6  pr0">
+                            <md-select ng-if="operators.length>1" ng-model="newRule.operator" aria-label="select category" ng-change="changeOperator(newRule.operator)">
+                              <md-option ng-repeat="operator in operators" ng-value="operator" ng-selected="operator===newRule.operator">{{'admissionControl.operators.' + operator.toUpperCase() | translate}}</md-option>
+                            </md-select>
+                            <div ng-if="operators.length===1" style="margin-top: 22px;">{{operators[0]}}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-3" ng-if="!isBooleanCriteria">
+                        <div class="form-group" ng-if="values.length>0">
+                          <label class="col-lg-3 col-md-5 col-sm-6 nv-modal-item-title control-label pl0" style="padding-left: 36px; margin-top: 22px;">
+                            {{'admissionControl.VALUE' | translate}}*
+                          </label>
+                          <div class="col-lg-9 col-md-7 col-sm-6 pr0">
+                            <md-select ng-model="newRule.value" aria-label="select category">
+                              <md-option ng-repeat="value in values" ng-value="value">{{'admissionControl.values.' + value.toUpperCase() | translate}}</md-option>
+                            </md-select>
+                          </div>
+                        </div>
+                        <md-input-container class="md-block mb0" ng-if="values.length===0 && !hasMultiValue">
+                          <label>{{'admissionControl.VALUE' | translate}}*</label>
+                          <input ng-model="newRule.value"
+                                 class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                        </md-input-container>
+                        <div ng-if="hasMultiValue">
+                          <label class="text-muted">{{'admissionControl.VALUE' | translate}}*</label>
+                          <textarea  ng-model="newRule.value" rows="3" class="mda-form-control" ng-paste="validateValueSet(newRule.value)" ng-keyup="validateValueSet(newRule.value)"/>
+                          <div class="text-muted">{{'admissionControl.sample.MULTI_VAL' | translate}}</div>
+                          <div ng-show="!isValueSetValid" class="text-danger">{{'admissionControl.sample.IMG_REG_HINT' | translate}}</div>
+                        </div>
+                        <!--<md-autocomplete ng-if="values.length===0" ng-disabled="isDisabled" md-no-cache="true"-->
+                                         <!--md-input-name="autocompleteValue"-->
+                                         <!--md-selected-item="addAdmCtrl.selectedItemValue" md-search-text="addAdmCtrl.searchTextValue"-->
+                                         <!--md-items="item in addAdmCtrl.autoValues | filter: addAdmCtrl.searchTextValue"-->
+                                         <!--md-item-text="item.display"-->
+                                         <!--md-floating-label="{{'admissionControl.VALUE' | translate}}"-->
+                                         <!--md-search-text-change="cutStringByMaxLength(addAdmCtrl.searchTextValue, 'searchTextValue')">-->
+                          <!--<md-item-template>-->
+                            <!--<span md-highlight-text="addAdmCtrl.searchTextValue">{{item.display}}</span>-->
+                          <!--</md-item-template>-->
+                          <!--<md-not-found>-->
+                            <!--No matches found.-->
+                          <!--</md-not-found>-->
+                        <!--</md-autocomplete>-->
+                      </div>
+                    </div>
+                    <div class="col-sm-1">
+                      <md-button class="fa fa-plus md-raised md-primary pull-right mr0 mt" aria-hidden="true" style="min-width: 36px;" aria-hidden="true" ng-click="addAdmCtrl.addCriteria()"
+                                 ng-disabled="!isValueSetValid || !newRule.name || !newRule.operator || (!newRule.value && !addAdmCtrl.selectedItemValue && !addAdmCtrl.searchTextValue)">
+                      </md-button>
+                    </div>
+                    <div class="col-sm-11" ng-if="subNames.length>0 && (newRule.name.originalName==='cveScoreCount' || newRule.name.originalName==='cveHighCount' || newRule.name.originalName==='cveHighWithFixCount' || newRule.name.originalName==='cveMediumCount')">
+                      <div class="col-sm-5 pl0">
+                        <div class="form-group" >
+                          <div class="col-sm-offset-2 col-sm-10  pr0">
+                            <md-select ng-if="subNames.length>1"  class="pl-lg mb0" ng-model="newRule.subName" aria-label="select category" ng-change="changeSubNames(newRule.name, newRule.subName)"
+                                       uib-tooltip="{{isRegistryScanRelatedOptions(newRule.subName) ? ('admissionControl.TIP.REGISTRY_SCAN_REL_OPTION' | translate) : ''}}">
+                              <md-option id="{{subName.originalName}}" ng-repeat="subName in subNames" ng-value="subName" ng-selected="subName.originalName===newRule.subName.originalName">
+                                <span>
+                                  {{'admissionControl.names.' + subName.displayName.toUpperCase() | translate}}
+                                  <span class="ml">
+                                    <em ng-if="subName.matchSrc === 'image' || subName.matchSrc === 'both'" class="fa fa-database text-muted" style="font-size: 10px;" aria-hidden="true" uib-tooltip="{{ 'admissionControl.TIP.scanRequirementHint.IMAGE' | translate}}"></em>
+                                    <em ng-if="subName.matchSrc === 'yaml' || subName.matchSrc === 'both'" class="fa fa-file-code-o text-muted" style="font-size: 10px;" aria-hidden="true" uib-tooltip="{{ 'admissionControl.TIP.scanRequirementHint.YAML' | translate}}"></em>
+                                  </span>
+                                </span>
+                              </md-option>
+                            </md-select>
+                            <div ng-if="subNames.length===1" class="pl-lg" style="margin-top: 22px;">{{'admissionControl.names.' + subNames[0].displayName.toUpperCase() | translate}}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-4" ng-if="!isBooleanCriteria">
+                        <div class="form-group" >
+                          <label class="col-lg-3 col-md-5 col-sm-6 nv-modal-item-title control-label pl0" style="padding-left: 36px; margin-top: 22px;">
+                            {{'admissionControl.OP' | translate}}
+                          </label>
+                          <div class="col-lg-9 col-md-7 col-sm-6  pr0">
+                            <md-select ng-if="subOperators.length>1"  ng-model="newRule.subOperator" aria-label="select category">
+                              <md-option ng-repeat="subOperator in subOperators" ng-value="subOperator" ng-selected="subOperator===newRule.subOperator">{{getSubOperatorText(newRule.subName, subOperator)}}</md-option>
+                            </md-select>
+                            <div ng-if="subOperators.length===1" style="margin-top: 22px;">{{getSubOperatorText(newRule.subName, subOperators[0])}}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-3">
+                        <md-input-container class="col-lg-9 col-md-8 col-sm-7 pl0 md-block mb0">
+                          <label>{{'admissionControl.VALUE' | translate}}</label>
+                          <input ng-model="newRule.subValue"
+                                 class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                        </md-input-container>
+                        <div ng-if="newRule.subName.originalName==='publishDays'" class="col-lg-3 col-md-4 col-sm-5" style="margin-top: 22px;">{{"admissionControl.values.DAYS" | translate}}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row m0">
+                    <div class="col-sm-12 mb-lg">
+                      <div class="form-group" >
+                        <label class="col-sm-2 nv-modal-item-title control-label pl0" style="padding-left: 36px;">
+                          {{'responsePolicy.gridHeader.CRITERIA' | translate}}
+                          <div class="text-sm text-muted">{{'group.editGroup.CONDITION_HINT' | translate}}</div>
+                        </label>
+                        <div class="col-sm-10  p0">
+                          <tags-input id="newuser-conditions" ng-model="newRule.conditions" placeholder="{{'group.editGroup.ADD_CRITERIA' | translate}} {{'group.editGroup.CRITERIA_RELATIONSHIP' | translate}}" add-from-autocomplete-only="true"
+                                      display-property="name" class="nv-input-text" add-from-autocomplete-only="false" on-tag-removing="tagRemoving($tag)" on-tag-clicked="showTagDetail($tag)">
+                          </tags-input>
+                          <div class="text-muted">{{conditionHint}}{{conditionPatternSample}}</div>
+                          <div class="text-muted" ng-if="isPspInstructionVisible">{{pspCriteria}}</div>
+                          <div class="text-warning" ng-if="isPspInstructionVisible">{{'admissionControl.PSP_INSTRUCTION'| translate}}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row m0">
+                    <div class="col-sm-3 mt-lg">
+                      <div class="col-sm-4 pl0">
+                        <label class="nv-modal-item-title">{{'responsePolicy.gridHeader.STATUS' | translate}}</label>
+                      </div>
+                      <div class="col-sm-8 pl0">
+                        <div class="md-switch2">
+                          <label class="nv-modal-item-title">
+                            <input type="checkbox" ng-model="enable">
+                            <span class="toggle"></span>
+                            {{(!enable ? "policy.status.DISABLED" : "policy.status.ENABLED") | translate}}
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row m0">
+                    <div ng-show="duplicatedPolicy" style="color:#ff0000;" class="col-sm-12" ng-cloak>
+                      {{'policy.addPolicy.DUPLICATED_POLICY' | translate}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </md-dialog-content>
+          <div class="md-actions" layout="row" style="min-height: 50px;" ng-show="conditionOptionErr"></div>
+          <div class="md-actions" layout="row" style="border: 0;" ng-show="!conditionOptionErr">
+            <md-button ng-click="addNewRule(ev)" class="md-raised md-primary"
+                       ng-disabled="addPolicyForm.$invalid || newRule.conditions.length===0">
+              {{'policy.addPolicy.ADD' | translate}}
+            </md-button>
+            <a ng-click="cancel()" class="nv-link">
+              {{'policy.addPolicy.CANCEL' | translate}}
+            </a>
+          </div>
+        </form>
+      </md-dialog>
+    </script>
+  </div>
+  <div>
+    <script type="text/ng-template" id="dialog.editPolicy.html">
+      <md-dialog aria-label="Add rule" class="dialog-lg" style="overflow: visible">
+        <form name="addPolicyForm" ng-submit="$event.preventDefault()" novalidate="" class="form-validate" style="overflow: visible">
+          <md-toolbar>
+            <div class="md-toolbar-tools">
+              <h2 class="text-dark" ng-if="isViewOnly">{{'admissionControl.editRule.TITLE2' | translate}}</h2>
+              <h2 class="text-dark" ng-if="!isViewOnly">{{'admissionControl.editRule.TITLE' | translate}}</h2>
+              <span flex></span>
+              <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+              </md-button>
+            </div>
+          </md-toolbar>
+          <md-dialog-content style="min-height: 260px;" ng-show="conditionOptionErr">
+            <div class="server-error">
+              <div>
+                <em class="fa fa-times-circle error-signal" aria-hidden="true"></em>
+              </div>
+              <div>
+                <div class="error-text" ng-show="conditionOptionErr">Condition autocomplete Error: {{conditionOptionErrMSG}}</div>
+              </div>
+            </div>
+          </md-dialog-content>
+          <md-dialog-content style="overflow: visible" ng-show="!conditionOptionErr && !containerGroupErr">
+            <div>
+              <div class="card-body mt">
+                <div>
+                  <div class="row m0" style="min-height: 92px;">
+                    <div class="col-sm-1">
+                      <md-input-container class="md-block mb0" >
+                        <label>{{'admissionControl.ID' | translate}}</label>
+                        <input ng-model="admissionRule.id"
+                               class="mda-form-control" disabled/>
+                      </md-input-container>
+                    </div>
+                    <div class="col-sm-1 mt-lg">
+                      <span class="label" ng-class="labelColor" style="font-size: 14px;">{{labeValue}}</span>
+                    </div>
+                    <div class="col-sm-10">
+                      <md-input-container class="md-block mb0" >
+                        <label>{{'admissionControl.COMMENT' | translate}}</label>
+                        <input ng-model="admissionRule.comment" ng-disabled="isViewOnly"
+                               class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                      </md-input-container>
+                    </div>
+                    <div class="col-sm-11">
+                      <div class="col-sm-5 pl0">
+                        <div class="form-group" >
+                          <label class="col-sm-2 nv-modal-item-title control-label pl0" style="padding-left: 36px; margin-top: 22px;">
+                            {{'admissionControl.NAME' | translate}}*
+                          </label>
+                          <div class="col-sm-10 pr0">
+                            <md-select class="pl" ng-model="admissionRule.name" aria-label="select category" ng-change="changeName(admissionRule.name)" ng-disabled="isViewOnly"
+                                       uib-tooltip="{{isRegistryScanRelatedOptions(admissionRule.name) ? ('admissionControl.TIP.REGISTRY_SCAN_REL_OPTION' | translate) : ''}}">
+                              <md-option id="{{name.originalName}}" ng-repeat="name in names" ng-value="name" ng-selected="name.originalName===admissionRule.name.originalName">
+                                <span>
+                                  {{'admissionControl.names.' + name.displayName.toUpperCase() | translate}}
+                                  <span class="ml">
+                                    <em ng-if="name.matchSrc === 'image' || name.matchSrc === 'both'" class="fa fa-database text-muted" style="font-size: 10px;" aria-hidden="true" uib-tooltip="{{ 'admissionControl.TIP.scanRequirementHint.IMAGE' | translate}}"></em>
+                                    <em ng-if="name.matchSrc === 'yaml' || name.matchSrc === 'both'" class="fa fa-file-code-o text-muted" style="font-size: 10px;" aria-hidden="true" uib-tooltip="{{ 'admissionControl.TIP.scanRequirementHint.YAML' | translate}}"></em>
+                                  </span>
+                                </span>
+                              </md-option>
+                            </md-select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-4" ng-if="!isBooleanCriteria">
+                        <div class="form-group" >
+                          <label class="col-lg-3 col-md-5 col-sm-6 nv-modal-item-title control-label pl0" style="padding-left: 36px; margin-top: 22px;">
+                            {{'admissionControl.OP' | translate}}*
+                          </label>
+                          <div class="col-lg-9 col-md-7 col-sm-6 pr0">
+                            <md-select ng-if="operators.length>1" ng-model="admissionRule.operator" aria-label="select category" ng-change="changeOperator(admissionRule.operator)" ng-disabled="isViewOnly">
+                              <md-option ng-repeat="operator in operators" ng-value="operator" ng-selected="operator===admissionRule.operator">{{'admissionControl.operators.' + operator.toUpperCase() | translate}}</md-option>
+                            </md-select>
+                            <div ng-if="operators.length===1" style="margin-top: 22px;">{{operators[0]}}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-3" ng-if="!isBooleanCriteria">
+                        <div class="form-group" ng-if="values.length>0">
+                          <label class="col-lg-3 col-md-5 col-sm-6 nv-modal-item-title control-label pl0" style="padding-left: 36px; margin-top: 22px;">
+                            {{'admissionControl.VALUE' | translate}}*
+                          </label>
+                          <div class="col-lg-9 col-md-7 col-sm-6 pr0">
+                            <md-select ng-model="admissionRule.value" aria-label="select category" ng-disabled="isViewOnly">
+                              <md-option ng-repeat="value in values" ng-value="value">{{'admissionControl.values.' + value.toUpperCase() | translate}}</md-option>
+                            </md-select>
+                          </div>
+                        </div>
+                        <md-input-container class="md-block mb0" ng-if="values.length===0 && !hasMultiValue">
+                          <label>{{'admissionControl.VALUE' | translate}}*</label>
+                          <input ng-model="admissionRule.value" ng-disabled="isViewOnly"
+                                 class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                        </md-input-container>
+                        <div ng-if="hasMultiValue">
+                          <label class="text-muted">{{'admissionControl.VALUE' | translate}}*</label>
+                          <textarea  ng-model="admissionRule.value" rows="3" class="mda-form-control" ng-disabled="isViewOnly" ng-paste="validateValueSet(admissionRule.value)" ng-keyup="validateValueSet(admissionRule.value)" />
+                          <div ng-if="!isViewOnly" class="text-muted">{{'admissionControl.sample.MULTI_VAL' | translate}}</div>
+                          <div ng-show="!isValueSetValid" class="text-danger">{{'admissionControl.sample.IMG_REG_HINT' | translate}}</div>
+                        </div>
+                        <!--<md-autocomplete ng-if="values.length===0" ng-disabled="isDisabled" md-no-cache="true"-->
+                                         <!--md-input-name="autocompleteValue"-->
+                                         <!--md-selected-item="editAdmCtrl.selectedItemValue" md-search-text="editAdmCtrl.searchTextValue"-->
+                                         <!--md-items="item in editAdmCtrl.autoValues | filter: editAdmCtrl.searchTextValue"-->
+                                         <!--md-item-text="item.display"-->
+                                         <!--md-floating-label="{{'admissionControl.VALUE' | translate}}"-->
+                                         <!--md-search-text-change="cutStringByMaxLength(editAdmCtrl.searchTextValue, 'searchTextValue')">-->
+                          <!--<md-item-template>-->
+                            <!--<span md-highlight-text="editAdmCtrl.searchTextValue">{{item.display}}</span>-->
+                          <!--</md-item-template>-->
+                          <!--<md-not-found>-->
+                            <!--No matches found.-->
+                          <!--</md-not-found>-->
+                        <!--</md-autocomplete>-->
+                      </div>
+                    </div>
+                    <div class="col-sm-1" ng-if="!isViewOnly">
+                      <md-button class="fa fa-plus md-raised md-primary pull-right mr0 mt" style="min-width: 36px;" aria-hidden="true" ng-click="editAdmCtrl.addCriteria()"
+                      ng-disabled=
+                       "!isValueSetValid || !admissionRule.name || !admissionRule.operator || (!admissionRule.value && !editAdmCtrl.selectedItemValue && !editAdmCtrl.searchTextValue)">
+                      </md-button>
+                    </div>
+                    <div class="col-sm-11" ng-if="subNames.length>0 && (admissionRule.name.originalName==='cveScoreCount' || admissionRule.name.originalName==='cveHighCount' || admissionRule.name.originalName==='cveHighWithFixCount' || admissionRule.name.originalName==='cveMediumCount')">
+                      <div class="col-sm-5 pl0">
+                        <div class="form-group" >
+                          <div class="col-sm-offset-2 col-sm-10  pr0">
+                            <md-select ng-if="subNames.length>1" class="pl-lg" ng-model="admissionRule.subName" aria-label="select category" ng-change="changeSubNames(admissionRule.name, admissionRule.subName)" ng-disabled="isViewOnly"
+                                       uib-tooltip="{{isRegistryScanRelatedOptions(admissionRule.subName) ? ('admissionControl.TIP.REGISTRY_SCAN_REL_OPTION' | translate) : ''}}">
+                              <md-option id="{{subName.originalName}}" ng-repeat="subName in subNames" ng-value="subName" ng-selected="subName.originalName===admissionRule.subName.originalName">
+                                <span>
+                                  {{'admissionControl.names.' + subName.displayName.toUpperCase() | translate}}
+                                  <span class="ml">
+                                    <em ng-if="subName.matchSrc === 'image' || subName.matchSrc === 'both'" class="fa fa-database text-muted" style="font-size: 10px;" aria-hidden="true" uib-tooltip="{{ 'admissionControl.TIP.scanRequirementHint.IMAGE' | translate}}"></em>
+                                    <em ng-if="subName.matchSrc === 'yaml' || subName.matchSrc === 'both'" class="fa fa-file-code-o text-muted" style="font-size: 10px;" aria-hidden="true" uib-tooltip="{{ 'admissionControl.TIP.scanRequirementHint.YAML' | translate}}"></em>
+                                  </span>
+                                </span>
+                              </md-option>
+                            </md-select>
+                            <div ng-if="subNames.length===1" class="pl-lg" style="margin-top: 22px;">{{'admissionControl.names.' + subNames[0].displayName.toUpperCase() | translate}}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-4" ng-if="!isBooleanCriteria">
+                        <div class="form-group" >
+                          <label class="col-lg-3 col-md-5 col-sm-6 nv-modal-item-title control-label pl0" style="padding-left: 36px; margin-top: 22px;">
+                            {{'admissionControl.OP' | translate}}
+                          </label>
+                          <div class="col-lg-9 col-md-7 col-sm-6 pr0">
+                            <md-select ng-if="subOperators.length>1" ng-model="admissionRule.subOperator" aria-label="select category" ng-disabled="isViewOnly">
+                              <md-option ng-repeat="subOperator in subOperators" ng-value="subOperator" ng-selected="subOperator===admissionRule.subOperator">{{getSubOperatorText(admissionRule.subName, subOperator)}}</md-option>
+                            </md-select>
+                            <div ng-if="subOperators.length===1" style="margin-top: 22px;">{{getSubOperatorText(admissionRule.subName, subOperators[0])}}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-3" ng-if="!isBooleanCriteria">
+                        <md-input-container class="col-lg-9 col-md-8 col-sm-7 pl0 md-block mb0">
+                          <label>{{'admissionControl.VALUE' | translate}}</label>
+                          <input ng-model="admissionRule.subValue" ng-disabled="isViewOnly"
+                                 class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                        </md-input-container>
+                        <div ng-if="admissionRule.subName.originalName==='publishDays'" class="col-lg-3 col-md-4 col-sm-5" style="margin-top: 22px;">{{"admissionControl.values.DAYS" | translate}}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row m0">
+                    <div class="col-sm-12 mb-lg">
+                      <div class="form-group" >
+                        <label class="col-sm-2 nv-modal-item-title control-label pl0" style="padding-left: 36px;">
+                          {{'responsePolicy.gridHeader.CRITERIA' | translate}}
+                          <div class="text-sm text-muted" ng-if="!isViewOnly">{{'group.editGroup.CONDITION_HINT' | translate}}</div>
+                        </label>
+                        <div class="col-sm-10  p0">
+                          <tags-input id="conditions" ng-model="admissionRule.criteria" placeholder="{{isViewOnly ? '' : 'group.editGroup.ADD_CRITERIA' | translate}} {{'group.editGroup.CRITERIA_RELATIONSHIP' | translate}}" add-from-autocomplete-only="true" ng-disabled="isViewOnly"
+                                      display-property="tagged" class="nv-input-text" add-from-autocomplete-only="false" on-tag-removing="tagRemoving($tag)" on-tag-clicked="showTagDetail($tag)">
+                          </tags-input>
+                          <div class="text-muted">{{conditionHint}}{{conditionPatternSample}}</div>
+                          <div class="text-muted" ng-if="isPspInstructionVisible">{{pspCriteria}}</div>
+                          <div class="text-warning" ng-if="isPspInstructionVisible">{{'admissionControl.PSP_INSTRUCTION'| translate}}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row m0" ng-if="!isViewOnly">
+                    <div class="col-sm-12 mb">
+                      <div class="col-sm-1 pl0">
+                        <label class="nv-modal-item-title">{{'responsePolicy.gridHeader.STATUS' | translate}}</label>
+                      </div>
+                      <div class="col-sm-11 pl0" layout-gt-sm="row">
+                        <div>
+                          <div class="md-switch2">
+                            <label class="nv-modal-item-title">
+                              <input type="checkbox" ng-model="editAdmCtrl.enable">
+                              <span class="toggle"></span>
+                              {{(!editAdmCtrl.enable ? "policy.status.DISABLED" : "policy.status.ENABLED") | translate}}
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row m0">
+                    <div ng-show="duplicatedPolicy" style="color:#ff0000;" class="col-sm-12" ng-cloak>
+                      {{'policy.addPolicy.DUPLICATED_POLICY' | translate}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </md-dialog-content>
+          <div class="md-actions" layout="row" style="min-height: 50px;" ng-show="conditionOptionErr"></div>
+          <div ng-if="!isViewOnly" class="md-actions" layout="row" style="border: 0;" ng-show="!conditionOptionErr">
+            <md-button ng-click="editRule($event)" class="md-raised md-primary"
+                       ng-disabled="addPolicyForm.$invalid || admissionRule.criteria.length===0">
+              {{'policy.editPolicy.UPDATE' | translate}}
+            </md-button>
+            <a ng-click="cancel()" class="nv-link">
+              {{'policy.editPolicy.CANCEL' | translate}}
+            </a>
+          </div>
+        </form>
+      </md-dialog>
+    </script>
+  </div>
+  <div>
+    <script type="text/ng-template" id="dialog.globalActions.html">
+      <md-dialog aria-label="Global actions" class="dialog-md" style="overflow: visible">
+        <div class="form-validate">
+          <md-toolbar>
+            <div class="md-toolbar-tools">
+              <h2 class="text-dark">{{'admissionControl.GLOBAL_OPS' | translate | uppercase}}</h2>
+              <span flex></span>
+              <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+              </md-button>
+            </div>
+          </md-toolbar>
+          <md-dialog-content>
+            <div class="ml-xl mode-switcher mt-lg" name="clientModeForm">
+              <div class="mb-sm">
+                <span class="nv-modal-item-title" style="padding-top: 2px">{{'admissionControl.CLIENT_MODE' | translate}}</span>
+              </div>
+              <form class="mb-sm" name="gblActCtrl.clientModeForm">
+                <div class="mb-sm" ng-if="adm_client_mode_options.service">
+                  <label class="radio-inline c-radio pull-left">
+                    <input id="serviceMode"
+                           type="radio"
+                           name="client-mode"
+                           ng-model="gblActCtrl.adm_client_mode"
+                           value="service"
+                           required>
+                    <span class="fa fa-check"/>
+                    {{'admissionControl.SERVICE' | translate}}
+                    ({{adm_client_mode_options.service}})
+                  </label>
+                  <button
+                          clipboard class="btn btn-default ml-lg pull-left" text="adm_client_mode_options.service" style="padding: 3px 8px;"
+                          on-copied="success('service')" uib-tooltip="{{'license.COPY_CODE' | translate}}"
+                  >
+                    <i class="fa fa-clipboard"></i>
+                  </button>
+                  <div class="label label-info ml-lg pull-left mt-sm" ng-show="copied.service">{{'general.COPIED' | translate}}
+                  </div>
+                </div>
+                <div class="mb-sm" ng-if="adm_client_mode_options.url">
+                  <label class="radio-inline c-radio pull-left">
+                    <input id="UrlMode"
+                           type="radio"
+                           name="client-mode"
+                           ng-model="gblActCtrl.adm_client_mode"
+                           value="url"
+                           required>
+                    <span class="fa fa-check"/>
+                    {{'admissionControl.URL' | translate}}
+                    ({{adm_client_mode_options.url}})
+                  </label>
+                  <button
+                          clipboard class="btn btn-default ml-lg pull-left" text="adm_client_mode_options.url"
+                          on-copied="success('url')" uib-tooltip="{{'license.COPY_CODE' | translate}}" style="padding: 3px 8px;"
+                  >
+                    <i class="fa fa-clipboard"></i>
+                  </button>
+                  <div class="label label-info ml-lg pull-left mt-sm" ng-show="copied.url">{{'general.COPIED' | translate}}
+                  </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="text-warning" style="min-height: 21px;"><span ng-if="gblActCtrl.clientModeForm.$dirty">{{"admissionControl.msg.SAVE_CLIENT_MODE" | translate}}</span></div>
+                <div>
+                  <div class="pull-right mr-xl">
+                    <a type="submit"
+                       class="btn btn-primary btn-xs pull-right"
+                       ng-disabled="!gblActCtrl.clientModeForm.$dirty"
+                       ng-click="submitClientMode(gblActCtrl.clientModeForm)">{{'setting.SUBMIT' | translate}}
+                    </a>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="col-sm-12 mb-sm">
+              <hr class="solid" style="margin: 8px 0;">
+            </div>
+            <div class="mt-lg ml-xl mode-switcher" style="padding-top: 3px; margin-left: 10px; margin-right: 15px;">
+              <div class="nv-modal-item-title" style="padding-top: 2px;">{{'admissionControl.TEST_K8S' | translate}}</div>
+              <div class="row m0">
+                <div class="col-xs-10 text-muted text-thin pl0">
+                  <small>{{'admissionControl.TEST_K8S_INSTRUCTION' | translate}}</small>
+                  <div ng-show="isK8sTestErr" class="server-error" style="padding: 10px 0;">
+                    <div>
+                      <em class="fa fa-times-circle error-signal" aria-hidden="true"></em>
+                    </div>
+                    <div>
+                      <span class="error-text">
+                        {{testErrMsg}}
+                      </span>
+                    </div>
+                  </div>
+                  <div ng-show="isK8sTestOK" class="safe" style="padding: 10px 0;">
+                    <div>
+                      <em class="fa fa-check-circle-o safe-signal" aria-hidden="true"></em>
+                    </div>
+                    <div>
+                      <span class="error-text">
+                        {{'admissionControl.msg.TEST_K8S_OK' | translate}}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-2 pull-right mb-lg mr0" style="position: relative;">
+                  <a type="submit"
+                     class="btn btn-primary btn-xs pull-right" ng-disabled="gblActCtrl.clientModeForm.$dirty || isTesting"
+                     ng-click="testK8s()">{{'admissionControl.TEST' | translate}}
+                  </a>
+                  <div class="loader5" style="position: absolute; top: 10px; left: 85px;" ng-if="isTesting"></div>
+                </div>
+              </div>
+            </div>
+          </md-dialog-content>
+        </div>
+      </md-dialog>
+    </script>
+  </div>
+  <div>
+    <script type="text/ng-template" id="dialog.admTest.html">
+      <md-dialog aria-label="Test Admission Control" class="dialog-lg" style="overflow: visible">
+        <form name="admTestForm" ng-submit="$event.preventDefault()" novalidate="" class="form-validate" style="overflow: visible">
+          <md-toolbar>
+            <div class="md-toolbar-tools">
+              <h2 class="text-dark">{{'admissionControl.MATCHING_TEST' | translate | uppercase}}</h2>
+              <span flex></span>
+              <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+              </md-button>
+            </div>
+          </md-toolbar>
+          <md-dialog-content style="overflow: visible" class="mt mb">
+            <div class="col-sm-3">
+              <div ng-show="uploader.isHTML5">
+                <div
+                  nv-file-drop
+                  uploader="uploader"
+                  over-class="bg-info"
+                  class="file-drop-zone"
+                  translate="{{'setting.DROP_ZONE'}}"
+                ></div>
+              </div>
+              <hr/>
+
+              <input
+                id="admissionTestFile"
+                filestyle
+                type="file"
+                data-button-text
+                data-class-button="btn btn-default"
+                data-classinput="form-control inline"
+                data-placeholder="or select file..."
+                nv-file-select
+                ng-if="!isFileInputDestroyed"
+                uploader="uploader"
+                class="form-control"
+              />
+            </div>
+
+            <div class="col-sm-9">
+              <div ng-if="uploader.queue.length">
+                <table ng-if="uploader.queue.length" class="table">
+                  <thead>
+                  <tr class="text-muted">
+                    <th width="50%">{{'setting.FILE_NAME' | translate}}</th>
+                    <th ng-show="uploader.isHTML5">
+                      {{'setting.FILE_SIZE' | translate}}
+                    </th>
+                    <th ng-show="uploader.isHTML5">
+                      {{'setting.PROGRESS' | translate}}
+                    </th>
+                    <th>{{'setting.STATUS' | translate}}</th>
+                    <th>{{'setting.ACTIONS' | translate}}</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr ng-repeat="item in uploader.queue">
+                    <td>
+                      <strong>{{ item.file.name | shorten2: 30}}</strong>
+                    </td>
+                    <td ng-show="uploader.isHTML5" nowrap>
+                      {{ item.file.size / 1024 | number:2 }} KB
+                    </td>
+                    <td ng-show="uploader.isHTML5">
+                      <div style="margin-bottom: 0;" class="progress progress-xs">
+                        <div
+                          role="progressbar"
+                          ng-style="{ 'width': percentage + '%' }"
+                          class="progress-bar"
+                        ></div>
+                      </div>
+                      <div style="height: 12px;">
+                        <div ng-if="!!percentage" class="text-center text-muted" style="font-size: 9px;">{{percentage}}%</div>
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <span ng-show="status === 200">
+                        <em class="fa fa-check fa-fw text-success"/>
+                      </span>
+                      <span ng-show="item.isCancel">
+                        <em class="fa fa-ban-circle fa-fw"/>
+                      </span>
+                      <span ng-show="status !== 200 && status !== 0 && status !== ''">
+                        <em class="fa fa-times fa-fw text-danger" uib-tooltip="{{errMsg}}" tooltip-class="customClass"/>
+                      </span>
+                    </td>
+                    <td nowrap>
+                      <button
+                        type="button"
+                        ng-click="item.upload()"
+                        ng-disabled="item.isReady || item.isUploading || item.isError"
+                        class="btn btn-info btn-xs"
+                      >
+                        <span class="mr-sm"/>
+                        {{'admissionControl.TEST' | translate}}
+                      </button>
+                      <button
+                        type="button"
+                        ng-click="item.remove();hideResult();resetFileInput();"
+                        ng-disabled="item.isReady || item.isUploading"
+                        class="btn btn-default btn-xs"
+                      >
+                        <span class="mr-sm"/>
+                        {{'setting.REMOVE' | translate}}
+                      </button>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="col-sm-12 mt mb" ng-if="status === 200">
+              <div class="clearfix mb-sm">
+                <div class="pull-left"><strong>{{ 'admissionControl.matchingTestGrid.TITLE' | translate}}</strong></div>
+                <div class="pull-right">
+                  <div ng-if="!isPdfPreparing" style="position: relative;">
+                    <div ng-if="progress<100">
+                      <em class="fa fa-file-pdf-o disabled" style="margin-left:10px;"></em>
+                      <span class="text-disabled-label disabled">PDF</span>
+                    </div>
+                    <div
+                      ng-if="progress<100"
+                      class="loader5"
+                      style="position: absolute; top: 6px; left: 30px;"
+                    ></div>
+                    <div
+                      ng-if="progress<100"
+                      style="position: absolute; top: 2px; left: 22px; font-size: 12px; color: #11330f"
+                    >
+                      {{progress}}%
+                    </div>
+                    <div ng-click="downloadPdf()" ng-if="progress===100">
+                      <em
+                        class="fa fa-file-pdf-o pdf-color hand"
+                        style="margin-left:10px;"
+                      ></em>
+                      <span class="text-gray-label link">PDF</span>
+                    </div>
+                  </div>
+                  <div ng-if="isPdfPreparing" style="position: relative;">
+                    <em class="fa fa-file-pdf-o disabled" style="margin-left:10px;"></em>
+                    <span class="text-disabled-label disabled">PDF</span>
+                    <div
+                      class="loader5"
+                      style="position: absolute; top: 6px; left: 30px;"
+                    ></div>
+                  </div>
+                </div>
+                <div
+                  ng-click="exportCsv()"
+                  class="pull-right"
+                >
+                  <em
+                    class="fa fa-file-excel-o xls-color hand"
+                    style="margin-left:10px;"
+                  ></em>
+                  <span class="text-gray-label link">CSV</span>
+                </div>
+              </div>
+              <div class="clearfix">
+                <div class="text-muted"><strong>{{ 'admissionControl.matchingTestGrid.UNAVAILABLE_PROP' | translate}}:&nbsp;</strong>{{propUnavailable}}</div>
+                <div id="matching-test-grid" ag-grid="gridOptions4MatchingTest" class="ag-grid mt-sm"
+                     style="width: 100%; height: 300px;"></div>
+              </div>
+            </div>
+          </md-dialog-content>
+        </form>
+      </md-dialog>
+    </script>
+  </div>
+  <!--Export Admission Control-->
+  <div>
+    <script type="text/ng-template" id="dialog.admExport.html">
+      <md-dialog aria-label="Export Admission Control" class="dialog-sm" style="overflow: visible">
+        <form name="admExportForm" ng-submit="$event.preventDefault()" novalidate="" class="form-validate" style="overflow: visible">
+          <md-toolbar>
+            <div class="md-toolbar-tools">
+              <h2 class="text-dark">{{'admissionControl.EXPORT' | translate | uppercase}}</h2>
+              <span flex></span>
+              <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+              </md-button>
+            </div>
+          </md-toolbar>
+          <md-dialog-content class="mt mb-sm pl-lg pr-lg">
+            <div>
+              <md-checkbox
+                class="md-primary"
+                ng-model="isConfigSelected"
+              >{{ 'admissionControl.CONFIG' | translate}}
+              </md-checkbox>
+            </div>
+            <div class="pull-right mb mr0">
+              <md-button ng-click="downloadAdmCtrl($event)" class="md-raised md-primary m0"
+                         ng-disabled="!(isConfigSelected || selectedAdmissionRulesCnt > 0)">
+                {{'admissionControl.DOWNLOAD' | translate}}
+              </md-button>
+            </div>
+          </md-dialog-content>
+        </form>
+      </md-dialog>
+    </script>
+  </div>
+  <!--Import Admission Control-->
+  <div>
+    <script type="text/ng-template" id="dialog.admImport.html">
+      <md-dialog aria-label="Import Admission Control" class="dialog-lg" style="overflow: visible">
+        <form name="admImportForm" ng-submit="$event.preventDefault()" novalidate="" class="form-validate" style="overflow: visible">
+          <md-toolbar>
+            <div class="md-toolbar-tools">
+              <h2 class="text-dark">{{'admissionControl.IMPORT' | translate | uppercase}}</h2>
+              <span flex></span>
+              <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+              </md-button>
+            </div>
+          </md-toolbar>
+          <md-dialog-content style="overflow: visible" class="mt mb">
+            <div class="col-sm-3">
+              <div ng-show="uploader.isHTML5">
+                <div
+                  nv-file-drop
+                  uploader="uploader"
+                  over-class="bg-info"
+                  class="file-drop-zone"
+                  translate="{{'setting.DROP_ZONE'}}"
+                ></div>
+              </div>
+              <hr/>
+
+              <input
+                filestyle
+                type="file"
+                data-button-text
+                data-class-button="btn btn-default"
+                data-classinput="form-control inline"
+                data-placeholder="or select file..."
+                ng-if="!isFileInputDestroyed"
+                nv-file-select
+                uploader="uploader"
+                class="form-control"
+              />
+            </div>
+
+            <div style="margin-bottom: 40px" class="col-sm-9">
+              <div ng-if="uploader.queue.length">
+                <table ng-if="uploader.queue.length" class="table">
+                  <thead>
+                  <tr class="text-muted">
+                    <th width="50%">{{'setting.FILE_NAME' | translate}}</th>
+                    <th ng-show="uploader.isHTML5">
+                      {{'setting.FILE_SIZE' | translate}}
+                    </th>
+                    <th ng-show="uploader.isHTML5">
+                      {{'setting.PROGRESS' | translate}}
+                    </th>
+                    <th>{{'setting.STATUS' | translate}}</th>
+                    <th>{{'setting.ACTIONS' | translate}}</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr ng-repeat="item in uploader.queue">
+                    <td>
+                      <strong>{{ item.file.name | shorten2: 30}}</strong>
+                    </td>
+                    <td ng-show="uploader.isHTML5" nowrap>
+                      {{ item.file.size / 1024 | number:2 }} KB
+                    </td>
+                    <td ng-show="uploader.isHTML5">
+                      <div style="margin-bottom: 0;" class="progress progress-xs">
+                        <div
+                          role="progressbar"
+                          ng-style="{ 'width': percentage + '%' }"
+                          class="progress-bar"
+                        ></div>
+                      </div>
+                      <div style="height: 12px;">
+                        <div ng-if="!!percentage" class="text-center text-muted" style="font-size: 9px;">{{percentage}}%</div>
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <span ng-show="status === 'done'">
+                        <em class="fa fa-check fa-fw text-success"/>
+                      </span>
+                      <span ng-show="status === 'preparing'">
+                        <em class="fa fa-spinner fa-spin text-info"/>
+                      </span>
+                      <span ng-show="status === 'importing'">
+                        <em class="fa fa-cog fa-spin text-info"/>
+                      </span>
+                      <span ng-show="item.isCancel">
+                        <em class="fa fa-ban-circle fa-fw"/>
+                      </span>
+                      <span ng-show="status && status !== '' && status !== 'preparing' && status !== 'importing' && status !== 'done'">
+                        <em class="fa fa-times fa-fw text-danger" uib-tooltip="{{status}}" tooltip-class="customClass"/>
+                      </span>
+                    </td>
+                    <td nowrap>
+                      <button
+                        type="button"
+                        ng-click="item.upload()"
+                        ng-disabled="item.isReady || item.isUploading || item.isError"
+                        class="btn btn-info btn-xs"
+                      >
+                        <span class="mr-sm"/>
+                        {{'setting.UPLOAD' | translate}}
+                      </button>
+                      <button
+                        type="button"
+                        ng-click="item.remove();resetFileInput();"
+                        ng-disabled="item.isUploading"
+                        class="btn btn-default btn-xs"
+                      >
+                        <span class="mr-sm"/>
+                        {{'setting.REMOVE' | translate}}
+                      </button>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </md-dialog-content>
+        </form>
+      </md-dialog>
+    </script>
+  </div>
+</div>

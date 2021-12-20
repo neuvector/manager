@@ -1,0 +1,293 @@
+<div ng-controller="DLPSensorsController as dlpCtrl" >
+    <div class="pull-right mt-sm" style="padding-top: 5px; margin-left: 10px;" ng-click="reset()">
+        <em class="fa fa-refresh text-action hand" aria-hidden="true"/>
+        <label class="text-gray-label hand">{{'general.REFRESH' | translate}}</label>
+    </div>
+    <div class="clearfix">
+        <div class="content-title">{{'sidebar.nav.DLP_SENSORS' | translate}}</div>
+    </div>
+
+    <div class="panel mb0">
+        <div class="panel-body">
+            <div class="clearfix">
+                <label class="text-primary pull-left mt-sm" ng-show="!dlpSensorsErr">{{count}}</label>
+                <div ng-if="isWriteDLPSensorAuthorized"  class="nv-global-policy-operation pull-left ml">
+                    <ul class="list-inline" >
+                        <li class="policy-top-button" ng-click="addSensor()">
+                            <div class="button">
+                                <em class="fa fa-plus-circle mr-sm text-action" aria-hidden="true"></em>
+                                {{'admissionControl.INSERT' | translate}}
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="left-inner-addon pull-right">
+                    <em class="fa fa-filter text-filter" aria-hidden="true"></em>
+                    <input class="search form-control" placeholder="{{'general.FILTER' | translate}}"
+                           ng-model="search"
+                           ng-paste="onFilterChanged(search)"
+                           ng-keyup="onFilterChanged(search)"
+                           maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                </div>
+            </div>
+            <div id="dlp-grid" ag-grid="gridOptions" class="ag-grid mt-sm nv-policy-type"
+                 style="width: 100%;" ng-style="{ height: gridHeight + 'px'}">
+            </div>
+        </div>
+    </div>
+    <div class="text-center panel-divider">
+      <em class="fa fa-align-justify text-muted" aria-hidden="true" ng-mousedown="grabResizeBar($event)"></em>
+    </div>
+    <div class="panel mb0" ng-if="hasSelectedSensor">
+        <div class="panel-heading panel-default clearfix">
+            <div class="panel-title pull-left mt-sm">
+                <label class="panel-text-title mt-sm">
+                    {{sensor.name}}
+                </label>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="col-sm-3 pl0 pr0">
+              <div ag-grid="gridOptions4Rules" class="ag-grid mt-sm nv-policy-type"
+                   style="width: 100%; position: relative;" ng-style="{ height: detailViewHeight + 'px'}">
+                   <div class="button" ng-if="!sensor.predefine" ng-click="addEditRule(sensor, data, 'add')" style="position: absolute; right: 10px; top: 5px; z-index: 10;">
+                       <em class="fa fa-plus mr-sm text-action" aria-hidden="true" uib-tooltip="{{'dlp.TIP.ADD_RULE' | translate}}"></em>
+                   </div>
+              </div>
+            </div>
+            <div class="col-sm-9 pr0">
+              <div ag-grid="gridOptions4Patterns" class="ag-grid mt-sm nv-policy-type"
+                   style="width: 100%;" ng-style="{ height: detailViewHeight + 'px'}">
+              </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <script type="text/ng-template" id="dialog.addEditSensor.html">
+            <md-dialog aria-label="Add rule" class="dialog-lg" style="overflow: visible">
+                <form name="addEditSensorForm" ng-submit="$event.preventDefault()" novalidate="" class="form-validate" style="overflow: visible">
+                    <md-toolbar>
+                        <div class="md-toolbar-tools">
+                            <h2 ng-if="type!=='edit'" class="text-dark">{{'dlp.sensorModal.ADD_SENSOR' | translate}}</h2>
+                            <h2 ng-if="type==='edit'" class="text-dark">{{'dlp.sensorModal.EDIT_SENSOR' | translate}}</h2>
+                            <span flex></span>
+                            <md-button class="md-icon-button" ng-click="cancel()">
+                                <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                            </md-button>
+                        </div>
+                    </md-toolbar>
+                    <md-dialog-content style="overflow: visible">
+                        <div class="card-body">
+                            <div class="row m0" style="min-height: 92px;">
+                                <div class="col-sm-3">
+                                    <md-input-container class="md-block mb0" >
+                                        <label>{{'dlp.sensorModal.SENSOR_NAME' | translate}}</label>
+                                        <input ng-model="sensor.name" required ng-disabled="type==='edit'"
+                                               class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                                    </md-input-container>
+                                </div>
+                                <div class="col-sm-9">
+                                    <md-input-container class="md-block mb0" >
+                                        <label>{{'dlp.sensorModal.COMMENT' | translate}}</label>
+                                        <input ng-model="sensor.comment"
+                                               class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                                    </md-input-container>
+                                </div>
+                            </div>
+                        </div>
+                    </md-dialog-content>
+                    <div class="md-actions" layout="row" style="border: 0;">
+                        <md-button ng-if="type==='add'" ng-click="addNewSensor(ev)" class="md-raised md-primary"
+                                   ng-disabled="addEditSensorForm.$invalid">
+                            {{'dlp.sensorModal.ADD' | translate}}
+                        </md-button>
+                        <md-button ng-if="type==='edit'" ng-click="editSensor(ev)" class="md-raised md-primary"
+                                   ng-disabled="addEditSensorForm.$invalid">
+                            {{'dlp.sensorModal.UPDATE' | translate}}
+                        </md-button>
+                        <a ng-click="cancel()" class="nv-link">
+                            {{'dlp.sensorModal.CANCEL' | translate}}
+                        </a>
+                    </div>
+                </form>
+            </md-dialog>
+        </script>
+    </div>
+
+    <div>
+        <script type="text/ng-template" id="dialog.addEditRule.html">
+            <md-dialog aria-label="Add Edit Rule" class="dialog-lg" style="overflow: visible">
+                <form name="addEditRuleForm" ng-submit="$event.preventDefault()" novalidate="" class="form-validate" style="overflow: visible">
+                    <md-toolbar>
+                        <div class="md-toolbar-tools">
+                            <h2 ng-if="!isEdit" class="text-dark">{{'dlp.ruleModal.ADD_RULE' | translate | uppercase}}</h2>
+                            <h2 ng-if="isEdit" class="text-dark">{{'dlp.ruleModal.EDIT_RULE' | translate | uppercase}}</h2>
+                            <span flex></span>
+                            <md-button class="md-icon-button" ng-click="cancel()">
+                                <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                            </md-button>
+                        </div>
+                    </md-toolbar>
+                    <md-dialog-content style="overflow: visible">
+                        <div class="mt">
+                            <div class="card-body">
+                                <div>
+                                    <div class="row ml0 mr0 mb">
+                                        <div class="col-sm-3">
+                                            <md-input-container class="md-block mb0 no-error" >
+                                                <label>{{'dlp.ruleModal.SENSOR_NAME' | translate}}</label>
+                                                <input ng-model="editingRule.sensorName" disabled
+                                                       class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                                            </md-input-container>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <md-input-container class="md-block mb0 no-error" >
+                                                <label>{{'dlp.ruleModal.COMMENT' | translate}}</label>
+                                                <input ng-model="editingRule.sensorComment" disabled
+                                                       class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                                            </md-input-container>
+                                        </div>
+                                    </div>
+                                    <div class="row m0">
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <md-input-container class="md-block mb0 no-error">
+                                                    <label>{{'dlp.ruleModal.PATTERN_NAME' | translate}}</label>
+                                                    <input ng-model="editingRule.ruleName"
+                                                           class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                                                </md-input-container>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ml mr">
+                                      <hr class="solid mv-sm"/>
+                                    </div>
+                                    <div class="row m0">
+                                      <div class="col-sm-2">
+                                        <label class="text-muted" style="color: rgba(0,0,0,0.54); font-size: 14px;"><small>{{'dlp.patternGrid.LOGIC_IS_NOT' | translate}}</small></label>
+                                        <md-select class="mt0 mb0" ng-model="pattern.op" aria-label="select operator">
+                                          <md-option ng-repeat="operator in operators" ng-value="operator"
+                                                     ng-selected="$first">{{'dlp.patternGrid.' + operator.toUpperCase() | translate}}</md-option>
+                                        </md-select>
+                                      </div>
+                                      <div class="col-sm-7 mt-sm">
+                                        <md-input-container class="md-block mb0 no-error" style="position: relative;">
+                                          <label>{{'dlp.ruleModal.PATTERN' | translate}}</label>
+                                          <input ng-model="pattern.value" style="padding-right: 60px;" ng-keyup="initTestArea(pattern.value)"
+                                             class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                                          <md-button class="md-raised mr0" aria-hidden="true" style="position: absolute; right: 0; top: -5px; line-height: 21px; z-index:10; min-height: 24px; min-width: 60px;" aria-hidden="true" ng-click="isShowingTestPattern = true"
+                                                     ng-disabled="!pattern.value">{{ 'dlp.sensorModal.TEST_BTN' |translate}}
+                                          </md-button>
+                                        </md-input-container>
+                                      </div>
+
+                                      <div class="col-sm-2">
+                                        <label class="text-muted" style="color: rgba(0,0,0,0.54); font-size: 14px;"><small>{{'dlp.patternGrid.CONTEXT' | translate}}</small></label>
+                                        <md-select class="mt0 mb0" ng-model="pattern.context" aria-label="select context">
+                                          <md-option ng-repeat="context in contexts" ng-value="context"
+                                                     ng-selected="$first">{{context}}</md-option>
+                                        </md-select>
+                                      </div>
+                                      <div class="col-sm-1">
+                                        <md-button class="fa fa-plus md-raised md-primary pull-right mr0 mt-lg" aria-hidden="true" style="min-width: 36px;" aria-hidden="true" ng-click="addPattern()"
+                                                   ng-disabled="!pattern.value || !pattern.op || !pattern.context">
+                                        </md-button>
+                                      </div>
+                                      <div class="col-sm-12" ng-if="isShowingTestPattern">
+                                          <div class="md-block mb0">
+                                              <label class="text-muted" style="color: rgba(0,0,0,0.54); font-size: 14px;"><small>{{'dlp.ruleModal.TEST' | translate}}</small>
+                                                  <em uib-tooltip="{{'dlp.ruleModal.TEST_INFO' | translate}}" class="fa fa-info-circle text-muted"></em>
+                                                  <span ng-style="{'color' : isMatched ? '#4caf50' : '#F44336'}">{{testResult}}</span>
+                                              </label>
+                                              <textarea ng-model="addEditRuleCtrl.testCase"
+                                                        class="regex-test-area"
+                                                        ng-disabled="!pattern.value"
+                                                        ng-style="{'color' : isMatched ? '#4caf50' : '#F44336'}"
+                                                        ng-keyup="testRegex(pattern.value, addEditRuleCtrl.testCase)"
+                                                        ng-paste="testRegex(pattern.value, addEditRuleCtrl.testCase)"
+                                              />
+                                          </div>
+                                      </div>
+                                    </div>
+                                    <div class="row m0">
+                                      <div class="col-sm-12">
+                                        <div id="pattern-grid" ag-grid="gridOptions4EditPatterns" class="ag-grid mt-sm"
+                                             style="width: 100%; height: 200px;">
+                                        </div>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </md-dialog-content>
+                    <div class="md-actions" layout="row" style="border: 0;">
+                        <md-button ng-click="addUpdateRule(ev, isEdit)" class="md-raised md-primary"
+                                   ng-disabled="addEditRuleForm.$invalid">
+                            {{isEdit ? 'dlp.ruleModal.UPDATE' : 'dlp.ruleModal.ADD' | translate}}
+                        </md-button>
+                        <a ng-click="cancel()" class="nv-link">
+                            {{'dlp.ruleModal.CANCEL' | translate}}
+                        </a>
+                    </div>
+                </form>
+            </md-dialog>
+        </script>
+    </div>
+
+    <div>
+        <script type="text/ng-template" id="dialog.switchContext.html">
+            <md-dialog aria-label="Switch Context for Predefined Sensor" class="dialog-lg" style="overflow: visible">
+                <form name="switchContextForm" ng-submit="$event.preventDefault()" novalidate="" class="form-validate" style="overflow: visible">
+                    <md-toolbar>
+                        <div class="md-toolbar-tools">
+                            <h2 class="text-dark">{{'dlp.ruleModal.SWITCH_CONTEXT' | translate | uppercase}}</h2>
+                            <span flex></span>
+                            <md-button class="md-icon-button" ng-click="cancel()">
+                                <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                            </md-button>
+                        </div>
+                    </md-toolbar>
+                    <md-dialog-content style="overflow: visible">
+                        <div class="mt">
+                            <div class="card-body">
+                                <div>
+                                    <div class="row ml0 mr0 mb">
+                                        <div class="col-sm-3">
+                                            <md-input-container class="md-block mb0 no-error" >
+                                                <label>{{'dlp.ruleModal.SENSOR_NAME' | translate}}</label>
+                                                <input ng-model="switchRule.sensorName" disabled
+                                                       class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                                            </md-input-container>
+                                        </div>
+                                        <div class="col-sm-7">
+                                            <md-input-container class="md-block mb0 no-error" >
+                                                <label>{{'dlp.ruleModal.COMMENT' | translate}}</label>
+                                                <input ng-model="switchRule.sensorComment" disabled
+                                                       class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                                            </md-input-container>
+                                        </div>
+                                        <div class="col-sm-2">
+                                          <label class="text-muted mb0" style="color: rgba(0,0,0,0.54); font-size: 12px;"><small>{{'dlp.patternGrid.CONTEXT' | translate}}</small></label>
+                                          <md-select class="mt0 mb0" ng-model="currContext" aria-label="select context">
+                                              <md-option ng-repeat="context in contexts" ng-value="context">{{context}}</md-option>
+                                          </md-select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </md-dialog-content>
+                    <div class="md-actions" layout="row" style="border: 0;">
+                        <md-button ng-click="updateContext(ev)" class="md-raised md-primary">
+                            {{'dlp.ruleModal.SWITCH' | translate}}
+                        </md-button>
+                        <a ng-click="cancel()" class="nv-link">
+                            {{'dlp.ruleModal.CANCEL' | translate}}
+                        </a>
+                    </div>
+                </form>
+            </md-dialog>
+        </script>
+    </div>
+</div>

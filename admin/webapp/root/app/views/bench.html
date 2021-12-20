@@ -1,0 +1,101 @@
+<div ng-controller="BenchController as bench">
+  <div class="clearfix">
+    <div class="pull-right mt-sm" ng-click="refresh()" ng-if="!nodesErr">
+      <em class="fa fa-refresh text-action"/>
+      <label class="text-gray-label hand">{{'general.REFRESH' | translate}}</label>
+    </div>
+    <div class="pull-right mr-lg mt-sm"
+         ng-click="exportDockerBenchmarkCsv()" ng-if="benches.length && bench.selectedIndex === 0 && !nodesErr">
+      <em class="fa fa-download text-action"/>
+      <label class="text-gray-label hand">{{'general.CSV_DOWNLOAD' | translate}}
+      </label>
+    </div>
+    <div class="pull-right mr-lg mt-sm"
+         ng-click="exportK8sBenchmarkCsv()" ng-if="k8sBenches.length && bench.selectedIndex === 1 && !nodesErr">
+      <em class="fa fa-download text-action"/>
+      <label class="text-gray-label hand">{{'general.CSV_DOWNLOAD' | translate}}
+      </label>
+    </div>
+    <div class="pull-right mr-lg mt-sm"
+         ng-click="scanDocker(host.id)" ng-if="host.docker_bench_status === 'finished' && bench.selectedIndex === 0 && !nodesErr && isScanBenchmarkAuthorized">
+      <em class="fa fa-barcode text-action"/>
+      <label class="text-gray-label hand">{{'registry.START_SCAN' | translate  | uppercase}}
+      </label>
+    </div>
+    <div class="pull-right mr-lg mt-sm"
+         ng-click="scanK8s(host.id)" ng-if="host.kube_bench_status === 'finished' && bench.selectedIndex === 1 && !nodesErr && isScanBenchmarkAuthorized">
+      <em class="fa fa-barcode text-action"/>
+      <label class="text-gray-label hand">{{'registry.START_SCAN' | translate  | uppercase}}
+      </label>
+    </div>
+
+    <div class="content-title">{{'sidebar.nav.BENCH' | translate}}</div>
+  </div>
+  <div class="panel">
+    <div class="panel-body">
+      <div class="clearfix">
+        <div class="left-inner-addon pull-right">
+          <em class="fa fa-filter text-filter"/>
+          <input class="search form-control" placeholder="{{'general.FILTER' | translate}}" type="text" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+                 ng-model="search"
+                 ng-paste="onFilterChanged(search)"
+                 ng-keyup="onFilterChanged(search)"/>
+        </div>
+        <div class="sub-title " >{{'dashboard.panelItems.NODES' | translate}}</div>
+      </div>
+      <div ag-grid="gridOptions" class="ag-grid mt-sm"
+           style="width: 100%" ng-style="{ height: hostGridHeight + 'px'}">
+      </div>
+
+      <!--<div class="pull-right mt-lg " ng-if="kubeBenchStatus" ng-cloak>-->
+        <!--<span class="text-muted mr-sm">{{'cis.KUBERNETES_STATUS' | translate}}</span>-->
+        <!--<label class="label label-info">{{kubeBenchStatus}}</label>-->
+      <!--</div>-->
+      <!--<div class="pull-right mt-lg mr-lg" ng-if="dockerBenchStatus" ng-cloak>-->
+        <!--<span class="text-muted mr-sm">{{'cis.DOCKER_STATUS' | translate}}</span>-->
+        <!--<label class="label label-info">{{dockerBenchStatus}}</label>-->
+      <!--</div>-->
+    </div>
+  </div>
+
+  <div class="panel" ng-show="!nodesErr && hasNode">
+    <div class="panel-body">
+      <md-tabs md-no-ink md-dynamic-height="" md-border-bottom="" md-selected="bench.selectedIndex" class="ph0">
+        <div class="clearfix">
+          <div class="left-inner-addon " ng-show="bench.selectedIndex===0">
+            <em class="fa fa-filter text-filter"/>
+            <input class="search form-control" placeholder="{{'general.FILTER' | translate}}" type="text" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+                   ng-model="searchDockerCve"
+                   ng-paste="onDockerBenchFilterChanged(searchDockerCve)"
+                   ng-keyup="onDockerBenchFilterChanged(searchDockerCve)"/>
+          </div>
+          <div class="left-inner-addon " ng-show="bench.selectedIndex===1">
+            <em class="fa fa-filter text-filter"/>
+            <input class="search form-control" placeholder="{{'general.FILTER' | translate}}" type="text" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+                  ng-model="searchK8sCve"
+                  ng-paste="onK8sBenchFilterChanged(searchK8sCve)"
+                  ng-keyup="onK8sBenchFilterChanged(searchK8sCve)"/>
+          </div>
+        </div>
+        <md-tab label="{{'cis.tab.DOCKER' | translate}}" md-on-select="onTabSelectionChanged()"
+                ng-disabled="!onContainer" >
+          <md-content class="pb0">
+            <div class="mt-sm mb0" >
+              <div ag-grid="contGridOptions" class=" ag-grid" style="width: 100%"
+                 ng-style="{ height: gridHeight + 'px'}"></div>
+            </div>
+          </md-content>
+        </md-tab>
+        <md-tab label="{{'cis.tab.KUBERNETES' | translate}}" md-on-select="onTabSelectionChanged()"
+                ng-disabled="!onKubernetes" >
+          <md-content  class="pb0" >
+            <div class="mt-sm mb0" >
+              <div ag-grid="k8sGridOptions" class="ag-grid" style="width: 100%"
+                   ng-style="{ height: gridHeight + 'px'}"></div>
+            </div>
+          </md-content>
+        </md-tab>
+      </md-tabs>
+    </div>
+  </div>
+</div>

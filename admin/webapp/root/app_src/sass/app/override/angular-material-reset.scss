@@ -1,0 +1,390 @@
+//Overwrite md-button
+.md-button.md-raised[disabled] {
+  background-color: rgba(0, 0, 0, 0.12);
+}
+
+.md-button.md-raised[disabled],
+.md-button[disabled] {
+  color: rgba(0, 0, 0, 0.38);
+  cursor: default;
+}
+
+.md-button.md-primary.md-raised:not([disabled]) {
+  color: rgba(255, 255, 255, 0.87);
+  background-color: $neuvector-mid-green-500;
+  &:hover {
+    background-color: $neuvector-mid-green-500;
+  }
+  &:active {
+    background-color: $neuvector-mid-green-800;
+  }
+}
+
+//Overwrite md-input-container
+md-input-container:not(.md-input-invalid).md-input-focused .md-input {
+  border-color: $mdc-light-blue-700;
+}
+
+md-input-container.md-input-invalid .md-input {
+  border-color: $mdc-red-400;
+}
+
+md-input-container .md-input,
+md-input-container .md-input[disabled] {
+  border-color: $neuvector-grey-200;
+}
+
+md-input-container.md-input-invalid .md-input-message-animation,
+md-input-container.md-input-invalid label {
+  color: $mdc-red-400;
+}
+
+md-input-container:not(.md-input-invalid).md-input-focused label {
+  color: $mdc-light-blue-700;
+}
+
+md-input-container .md-input:enabled + label:after {
+  color: #000;
+}
+
+//Overwrite md-checkbox
+md-checkbox:not([disabled]).md-primary.md-checked .md-ink-ripple {
+  color: $mdc-light-blue-500;
+}
+
+md-checkbox:not([disabled]).md-primary.md-checked .md-icon {
+  background-color: $mdc-light-blue-500;
+}
+
+md-checkbox:not([disabled]).md-primary .md-ink-ripple {
+  color: $neuvector-grey-500;
+}
+
+md-checkbox:not([disabled]).md-checked .md-ink-ripple {
+  background-color: $mdc-light-blue-500;
+  color: $mdc-light-blue-500;
+}
+
+md-checkbox.md-checked .md-icon {
+  background-color: transparent;
+}
+
+//Overwirte md-radio-button
+md-radio-button .md-on {
+  background-color: $mdc-light-blue-500;
+}
+
+md-radio-button.md-checked .md-off {
+  border-color: $mdc-light-blue-500;
+}
+
+md-radio-group:not([disabled]).md-checked .md-ink-ripple {
+  color: $mdc-light-blue-500;
+}
+
+md-radio-button .md-off {
+  border-color: $neuvector-grey-500;
+}
+
+.c-radio input[type="radio"]:checked + span {
+  border-color: $mdc-light-blue-500;
+}
+
+.c-checkbox input[type="radio"]:checked + span:before,
+.c-radio input[type="radio"]:checked + span:before {
+  color: $mdc-light-blue-500;
+}
+
+.c-radio span:hover {
+  border-color: $mdc-light-blue-500;
+}
+
+//Overwrite md-toolbar
+md-toolbar:not(.md-menu-toolbar) {
+  background-color: $neuvector-light-green-50;
+  color: #000;
+  md-icon {
+    fill: $neuvector-grey-500;
+  }
+}
+
+md-toolbar {
+  min-height: 50px;
+}
+.md-toolbar-tools {
+  height: 50px;
+  min-height: 50px;
+}
+
+md-dialog {
+  border: solid 2px $neuvector-light-green-300;
+  border-radius: 5px;
+}
+
+//Overwrite tabs
+md-tabs-canvas {
+  border-bottom: solid 6px $neuvector-grey-200;
+  height: 40px;
+}
+md-tabs {
+  padding: 10px 17px;
+}
+.md-tab {
+  padding-top: 5px;
+}
+
+md-content {
+  background-color: #fff;
+}
+
+/*
+ * The bar:
+ */
+
+md-switch.md-checked .md-bar {
+  background-color: $neuvector-dark-green-300; /* set selected bar color */
+}
+
+//md-switch[disabled] .md-bar {
+//  background-color: rgba(51, 51, 51, .15); /* set disabled bar color */
+//}
+
+/*
+ * The switch:
+ */
+
+md-switch .md-thumb {
+  color: rgb(158, 158, 158); /* not selected switch color */
+}
+
+md-switch.md-checked .md-thumb {
+  background-color: rgb(255, 255, 255); /* selected switch color */
+}
+
+md-switch[disabled] .md-thumb {
+  background-color: rgb(255, 255, 255); /* disabled switch color */
+}
+
+/*
+ * Ripple effect
+ */
+
+md-switch .md-ink-ripple {
+  color: $neuvector-dark-green-500; /* not selected switch ripple color */
+}
+md-switch.md-checked .md-ink-ripple {
+  color: $neuvector-grey-a400; /* selected switch ripple color */
+}
+
+md-progress-linear .md-container {
+  background-color: $neuvector-mid-green-50;
+}
+
+md-progress-linear .md-bar {
+  background-color: $neuvector-mid-green-500;
+}
+
+// md-autocomplete md-autocomplete-wrap md-input-container {
+//   margin-bottom: 0 !important;
+// }
+
+//tags-input .tags {
+//  // border-top: 0 solid transparent !important;
+//  // border-left: 0 solid transparent !important;
+//  // border-right: 0 solid transparent !important;
+//  // border-bottom: 1px solid #d6e1ea !important;
+//  box-shadow: 0 0 0 0 !important;
+//  &.focused {
+//    border-color: $mdc-light-blue-700 !important;
+//    box-shadow: 0 0 0 0 !important;;
+//  }
+//}
+
+md-select.md-default-theme:not([disabled]):focus .md-select-value,
+md-select:not([disabled]):focus .md-select-value {
+  border-bottom-color: $mdc-light-blue-700 !important;
+}
+
+md-select-menu.md-default-theme md-content md-option[selected],
+md-select-menu md-content md-option[selected] {
+  color: $mdc-light-blue-700 !important;
+}
+
+md-select-menu,
+md-select-menu md-content {
+  max-height: 400px !important;
+}
+
+md-slider-container > :first-child:not(md-slider) {
+  max-width: 100px !important;
+}
+
+md-slider-container > :last-child:not(md-slider) {
+  max-width: 150px !important;
+}
+
+// md-input-container .md-input {
+//   border: none !important;
+// }
+
+md-slider .md-track.md-track-fill {
+  background-color: $neuvector-mid-green-500 !important;
+}
+
+md-slider .md-track {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+md-slider .md-thumb:after {
+  border-color: $neuvector-mid-green-500 !important;
+  background-color: #fff; //$neuvector-mid-green-200 !important;
+}
+
+md-slider .md-thumb,
+md-slider .md-thumb:after {
+  width: 14px;
+  height: 14px;
+  border-radius: 14px;
+}
+
+md-slider .md-thumb {
+  top: 17px;
+  left: -5px;
+}
+
+md-slider.md-primary .md-focus-ring {
+  background-color: rgba(97, 135, 72, 0.38);
+}
+
+md-slider.md-primary .md-sign,
+md-slider.md-primary .md-thumb:after {
+  background-color: $neuvector-mid-green-500;
+}
+
+.hide-validation-error .md-errors-spacer {
+  display: none;
+}
+
+.md-chips {
+  font-size: 13px;
+}
+.md-chips md-chip {
+  border-radius: 3px;
+  height: 26px;
+  line-height: 25px;
+}
+.md-chips md-chip ._md-chip-remove md-icon {
+  height: 14px;
+  width: 14px;
+}
+md-icon {
+  height: 14px;
+  width: 14px;
+  min-height: 14px;
+  min-width: 14px;
+}
+.md-contact-chips .md-chips md-chip .md-contact-avatar img {
+  border-radius: 3px;
+}
+.md-chips md-chip .md-chip-remove {
+  width: 25px;
+  height: 25px;
+}
+
+.dashboard-url > md-input-container .md-errors-spacer {
+  min-height: 0;
+}
+
+
+.nv-checkbox {
+  position: relative;
+  display: inline-block;
+  padding-left: 20px;
+  margin: 0;
+  cursor: pointer;
+
+  input {
+    position: absolute;
+    z-index: 1;
+    width: 20px;
+    height: 20px;
+    margin-left: -20px;
+    cursor: pointer;
+    opacity: 0;
+    &:checked + em:before {
+      background-color: inherit;
+      border: 1px solid #2f9adf;
+      border-radius: 3px;
+    }
+
+    &:checked + span .active {
+      display: inherit;
+    }
+  }
+
+  // Checkbox
+  input[type="checkbox"]:checked + em:after {
+    position: absolute;
+    top: 2px;
+    left: 4px;
+    display: table;
+    width: 5px;
+    height: 8px;
+    border-top: 0;
+    border-left: 0;
+    border-right: 1px solid #2f9adf;
+    border-bottom: 1px solid #2f9adf;
+    content: ' ';
+    @include rotate(45deg);
+  }
+
+  input[type="checkbox"].partial-checked + em:after {
+    position: absolute;
+    display: table;
+    top: 7px;
+    left: 3px;
+    width: 8px;
+    border-bottom: 1px solid rgba(0,0,0,0.4);
+    content: ' ';
+  }
+}
+
+// Disable states
+.nv-checkbox input[disabled]+em:before,
+fieldset[disabled] .nv-checkbox input+em:before {
+  border-color: rgba(0,0,0,0.26);
+}
+// disable background color for icon
+.nv-checkbox input[disabled]:checked+em {
+  background-color: rgba(0,0,0,0.26);
+}
+
+.nv-checkbox input[disabled]:checked+em:before {
+  background-color: rgba(0,0,0,0.26);
+}
+
+// Icon style
+.nv-checkbox > em {
+  position: relative;
+  display: inline-block;
+  width: 0;
+  height: 15px;
+  margin-top: -2px;
+  margin-right: 28px;
+  margin-left: -20px;
+  line-height: 1;
+  vertical-align: middle;
+  &:before {
+    content: "";
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border: 1px solid rgba(0,0,0,0.4);
+    border-radius: 3px;
+    @include transition(all .2s);
+  }
+  // Empty box with not icons
+  &.empty:after {
+    display: none !important;
+  }
+}

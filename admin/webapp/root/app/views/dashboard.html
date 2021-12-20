@@ -1,0 +1,959 @@
+<div ng-controller="DashboardController as dashboard">
+  <div ng-if="isSecEventReady">
+    <!-- <div ng-if="isSwitchNamespaceAuthorized && !isPdfPreparing && isKube && !dashboardErr" class="pull-right mr-lg mt-sm" style="position: relative;">
+      <div uib-dropdown class="mt-sm">
+        <div uib-dropdown-toggle>
+          <div ng-click="toggleCollapse()">
+            <em class="fa fa-file-pdf-o pdf-color hand" style="margin-left:10px;"></em>
+            <span class="text-gray-label link">PDF</span>
+            <em class="fa fa-caret-down text-action"></em>
+          </div>
+        </div>
+        <ul class="dropdown-menu" uib-dropdown-menu style="position: absolute; top: 30px; left: -100px;"
+            role="menu" aria-labelledby="single-button">
+          <li role="menuitem">
+            <a ng-click="downloadPdfByDomain('all')">{{'dashboard.ALL_NAMESPACE' | translate}}</a>
+          </li>
+          <li class="divider"></li>
+          <li role="menuitem" ng-repeat="namesapce in namesapces">
+            <a ng-click="downloadPdfByDomain(namesapce)">{{namesapce}}</a>
+          </li>
+        </ul>
+      </div>
+    </div> -->
+    <div ng-if="isKube && !dashboardErr" class="pull-right mr-lg mt-sm" style="position: relative;" display-control="download_dashboard_report">
+      <span ng-click="showDownloadModal()">
+        <em class="fa fa-file-pdf-o pdf-color hand" style="margin-left:10px;"></em>
+        <span class="text-gray-label link">PDF</span>
+      </span>
+    </div>
+    <div class="mt pull-right text-muted ml mr-lg"  ng-if="!isPdfPreparing && !isKube && !dashboardErr" display-control="download_dashboard_report">
+      <span ng-click="downloadPdfByDomain('no-namespace')">
+        <em class="fa fa-file-pdf-o pdf-color hand" style="margin-left:10px;"></em>
+        <span class="text-gray-label link">PDF</span>
+      </span>
+    </div>
+    <div class="mt pull-right ml mr-lg" style="color: rgba(144, 159, 167, .4); position: relative;" ng-if="isPdfPreparing && !isKube && !dashboardErr" display-control="download_dashboard_report">
+      <!--<span class="text-gray-label">{{'general.REPORT_DOWNLOAD' | translate}}</span>-->
+      <em class="fa fa-file-pdf-o disabled" style="margin-left:10px;"></em>
+      <span class="text-disabled-label disabled">PDF</span>
+      <div class="loader5" style="position: absolute; top: 6px; left: 25px;"></div>
+    </div>
+
+    <div
+      class="dataBox advFilter"
+      ng-show="onPDFDownload"
+      style="border: none; z-index:1000;  width: auto; min-width: 250px;"
+    >
+      <div layout="row" layout-align="space-between center" class="ml0 mr0">
+        <h5 class="text-bold mv0 pl-lg">
+          {{"general.DOWNLOAD_PDF" | translate}}
+        </h5>
+        <div>
+          <md-button class="md-icon-button" ng-click="hideDownloadModal()">
+            <md-icon
+              md-svg-src="app/img/icons/ic_close_24px.svg"
+              aria-label="Close dialog"
+            ></md-icon>
+          </md-button>
+        </div>
+      </div>
+      <hr class="fancy mv-sm" />
+      <div style="max-height: 200px; overflow-y: scroll">
+        <ul style="list-style-type: none; padding: 10px 20px;">
+          <li id="all" role="menuitem" style="position: relative;">
+            <div ng-show="!isPdfPreparing4Namespaces" ><em class="fa fa-file-pdf-o pdf-color mr"></em><a ng-click="downloadPdfByDomain('all')">{{'dashboard.ALL_NAMESPACE' | translate}}</a></div>
+            <div ng-show="isPdfPreparing4Namespaces" ><em class="fa fa-file-pdf-o pdf-color mr disabled"></em><a class="disabled">{{'dashboard.ALL_NAMESPACE' | translate}}</a></div>
+            <div ng-if="isPdfPreparing4AllNamespace" class="loader5" style="position: absolute; top: 6px; left: 3px;"></div>
+          </li>
+          <li  id="{{'namespace-' + $index}}" role="menuitem" ng-repeat="namesapce in namesapces track by $index" style="position: relative;">
+            <div ng-show="!isPdfPreparing4Namespaces"><em class="fa fa-file-pdf-o pdf-color mr"></em><a ng-show="!isPdfPreparing4AllNamespace" ng-click="downloadPdfByDomain(namesapce, $index)">{{namesapce}}</a></div>
+            <div ng-show="isPdfPreparing4Namespaces"><em class="fa fa-file-pdf-o pdf-color mr disabled"></em><a class="disabled">{{namesapce}}</a></div>
+            <div ng-if="isPdfPreparing4Namespace[$index]" class="loader5" style="position: absolute; top: 6px; left: 3px;"></div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!--<div id="summary-droplist" class="summary-list" ng-class="{'move-up': !isShowingSummary, 'move-down': isShowingSummary}">-->
+    <!--<div class="content">-->
+      <!--<div class="text-center text-gray-label pt" style="font-size: 20px;">{{"enum.SUMMARY" | translate}}</div>-->
+      <!--<div class="col-xs-3 pt text-muted">-->
+        <!--<div class="col-xs-6 text-bold">-->
+          <!--<div>{{"dashboard.summary.HOST" | translate}}:</div>-->
+          <!--<div>{{"dashboard.summary.POD" | translate}}:</div>-->
+        <!--</div>-->
+        <!--<div class="col-xs-6">-->
+          <!--<div><a href="#/app/hosts">{{summary.hosts}}</a></div>-->
+          <!--<div><a href="#/app/workloads">{{podCnt}}</a></div>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="col-xs-4 pt text-muted">-->
+        <!--<div class="col-xs-8 text-bold">-->
+          <!--<div>{{"dashboard.summary.CONTROLLER" | translate}}:</div>-->
+          <!--<div>{{"dashboard.summary.ENFORCER" | translate}}:</div>-->
+        <!--</div>-->
+        <!--<div class="col-xs-4">-->
+          <!--<div><a href="#/app/controllers">{{summary.controllers}}</a></div>-->
+          <!--<div><a href="#/app/devices">{{summary.enforcers}}</a></div>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="col-xs-5 pt text-muted">-->
+        <!--<div class="col-xs-8 text-bold">-->
+          <!--<div>{{"dashboard.summary.SERVICE" | translate}}:</div>-->
+          <!--<div>{{"dashboard.summary.POLICY_RULE" | translate}}:</div>-->
+        <!--</div>-->
+        <!--<div class="col-xs-4">-->
+          <!--<div><a href="#/app/service">{{summary.services}}</a></div>-->
+          <!--<div><a href="#/app/policy">{{summary.policy_rules}}</a></div>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+    <!--<div class="drag-bar" ng-click="toggleSummary($event)">-->
+      <!--&#9868;-->
+    <!--</div>-->
+  <!--</div>-->
+  <!--<div class="mt-sm pull-right ml mr-lg text-primary text-bold" >-->
+    <!--{{hostCnt}}&nbsp;&nbsp;&nbsp;&nbsp;{{podCnt}}-->
+  <!--</div>-->
+  <div class="clearfix">
+    <div class="pull-left content-title">{{'dashboard.TITLE' | translate}}</div>
+  </div>
+  <div ng-show="dashboardErr" class="server-error dashboard-error">
+    <div>
+      <em class="fa fa-times-circle error-signal" aria-hidden="true"></em>
+    </div>
+    <div>
+      <span class="error-text">
+        {{dashboardErrMSG}}
+      </span>
+    </div>
+  </div>
+  <div class="clearfix nv-dashboard" ng-class="{'nv-blur': dashboardErr}">
+    <!-- <div class="namespace-waterprint" ng-if="namespaceName.value!=='all'"><strong>{{'dashboard.CURR_NAMESPACE_VIEW' | translate}}:</strong> {{namespaceName.text}}</div> -->
+    <div ng-show="isShowingScore">
+      <!--<ul class="clearfix tab-headings" style="list-style: none; padding-left: 0; margin-left: -5px;">-->
+        <!--&lt;!&ndash; <li tabIndex="0" id="tab-1" ng-click="switchTab('tab-1', 'tab-content-1')" class="current col-sm-3"> &ndash;&gt;-->
+        <!--<li tabIndex="0" id="tab-1" class="col-sm-4 col-xs-4 col-xxs-12">-->
+          <!--<dashboard-heading category="criticalSecurityEvent"></dashboard-heading>-->
+        <!--</li>-->
+        <!--&lt;!&ndash; <li tabIndex="1" id="tab-2" ng-click="switchTab('tab-2', 'tab-content-2')" class="col-sm-3"> &ndash;&gt;-->
+        <!--<li tabIndex="1" id="tab-2" class="col-sm-4 col-xs-4 col-xxs-12">-->
+          <!--<dashboard-heading category="highPriorityVulnerabilities"></dashboard-heading>-->
+        <!--</li>-->
+        <!--&lt;!&ndash; <li tabIndex="2" id="tab-3" ng-click="switchTab('tab-3', 'tab-content-3')" class="col-sm-3"> &ndash;&gt;-->
+        <!--<li tabIndex="2" id="tab-3" class="col-sm-4 col-xs-4 col-xxs-12">-->
+          <!--<dashboard-heading category="containers"></dashboard-heading>-->
+        <!--</li>-->
+        <!--&lt;!&ndash; <li tabIndex="3" id="tab-4" ng-click="switchTab('tab-4', 'tab-content-4')" class="col-sm-3"> &ndash;&gt;-->
+        <!--&lt;!&ndash; <li tabIndex="3" id="tab-4" class="col-sm-3 col-xs-6">-->
+          <!--<dashboard-heading category="systemHealth"></dashboard-heading>-->
+        <!--</li> &ndash;&gt;-->
+      <!--</ul>-->
+      <!--<ul class="clearfix tab-headings" style="list-style: none; padding-left: 0; margin-left: -5px;">-->
+        <!--&lt;!&ndash; <li tabIndex="0" id="tab-1" ng-click="switchTab('tab-1', 'tab-content-1')" class="current col-sm-3"> &ndash;&gt;-->
+        <!--<li tabIndex="0" id="tab-1" class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-xxs-12">-->
+          <!--<new-dashboard-heading category="serviceConnectionRisk"></new-dashboard-heading>-->
+        <!--</li>-->
+        <!--&lt;!&ndash; <li tabIndex="1" id="tab-2" ng-click="switchTab('tab-2', 'tab-content-2')" class="col-sm-3"> &ndash;&gt;-->
+        <!--<li tabIndex="1" id="tab-2" class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-xxs-12">-->
+          <!--<new-dashboard-heading category="ingressEgressRisk"></new-dashboard-heading>-->
+        <!--</li>-->
+        <!--&lt;!&ndash; <li tabIndex="2" id="tab-3" ng-click="switchTab('tab-3', 'tab-content-3')" class="col-sm-3"> &ndash;&gt;-->
+        <!--<li tabIndex="2" id="tab-3" class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-xxs-12">-->
+          <!--<new-dashboard-heading category="vulnerabilityExploitRisk"></new-dashboard-heading>-->
+        <!--</li>-->
+        <!--&lt;!&ndash; <li tabIndex="3" id="tab-4" ng-click="switchTab('tab-4', 'tab-content-4')" class="col-sm-3"> &ndash;&gt;-->
+        <!--&lt;!&ndash; <li tabIndex="3" id="tab-4" class="col-sm-3 col-xs-6">-->
+          <!--<dashboard-heading category="systemHealth"></dashboard-heading>-->
+        <!--</li> &ndash;&gt;-->
+      <!--</ul>-->
+      <ul class="clearfix tab-headings" style="list-style: none; padding-left: 0; margin-left: -5px;">
+        <!-- <li tabIndex="0" id="tab-1" ng-click="switchTab('tab-1', 'tab-content-1')" class="current col-sm-3"> -->
+        <li tabIndex="0" id="tab-1" class="col-lg-12">
+          <div class="nv-dashboard-heading">
+            <div class="col-lg-2 col-md-3 col-sm-12 heading-divider-1" ng-mouseenter="hoverHeading(1)">
+              <div class="titles">
+                <div class="title">
+                  {{"dashboard.heading.SECURITY_RISK_SCORE" | translate}}
+                </div>
+              </div>
+              <div style="margin: 0 auto; width: 125px; height: 153px;">
+                <div class="primary-number" style="display: table-cell; position: relative;">
+                  <!-- <em style="position: absolute; top: 5px; right: 0; font-size: 20px; z-index: 100; transform: rotateY(180deg);" display-control="improve_score" ng-if="isGaugeReady" class="fa fa-wrench text-muted" aria-hidden="true" ng-click="openConsole($event)" uib-tooltip="{{'dashboard.heading.IMPROVE_SCORE' | translate}}">
+                  </em> -->
+                  <ng-gauge ng-show="!dashboardErr && !securityRiskScoreError" size="125" type="arch" thick="12"
+                            min="0" max="100" value="securityScoreValue"
+                            cap="round" label="{{securityScoreText}}" append="" foreground-color="F00"
+                            thresholds="securityRiskThresholds" background-color="#EEE">
+                  </ng-gauge>
+                  <ng-gauge ng-show="dashboardErr" size="125" type="arch" thick="12"
+                            min="0" max="100" value="0"
+                            cap="round" label="{{securityScoreText}}" append="" foreground-color="F00"
+                            thresholds="securityRiskThresholds" background-color="#EEE">
+                  </ng-gauge>
+                  <div ng-show="securityRiskScoreError" class="server-error-sm details" style="height: 145px; padding-top: 30px;">
+                    <div>
+                      <em class="fa fa-times-circle error-signal" aria-hidden="true"></em>
+                    </div>
+                    <div>
+                      <span class="error-text">
+                        {{securityRiskScoreErrorMessage}}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="text-bold asset-statistics">
+                    <table style="margin: 0 auto;">
+                      <tr class="mb-sm text-sm text-center summary-title">
+                        <td>{{"dashboard.heading.NODES" | translate}}</td>
+                        <td>{{"dashboard.heading.PODS" | translate}}</td>
+                      </tr>
+                      <tr class="mb-sm text-sm text-center summary-value">
+                        <td>{{hostCnt}}</td>
+                        <td>{{podCnt}}</td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-7 col-md-9 col-sm-12 heading-divider-2">
+              <div class="col-sm-4 pl0 risk-section" ng-mouseenter="hoverHeading(2)">
+                <div class="titles">
+                  <div class="title">
+                    {{"dashboard.heading.SERVICE_CONN" | translate}}
+                  </div>
+                  <div class="subtitle">
+                    {{serviceConnectionRisk.subtitle? "(" + serviceConnectionRisk.subtitle + ")" : ""}}
+                  </div>
+                </div>
+                <div class="details divider" ng-show="!targetScore1Error">
+                  <table class="mt-sm pull-left">
+                    <tr>
+                      <th>&nbsp;</th>
+                      <th style="text-align: right;" ng-if="serviceConnectionRisk.detailColTitle">{{serviceConnectionRisk.detailColTitle.title1}}</th>
+                    </tr>
+                    <tr ng-repeat="detail in serviceConnectionRisk.details">
+                      <td>{{detail.title}}</td>
+                      <td style="text-align: right;">{{detail.amount}}</td>
+                    </tr>
+                  </table>
+                  <div class="pull-right">
+                    <div class="secure-rank-wrap">
+                      <div class="secure-rank"></div>
+                      <div class="empty" ng-style="score1"></div>
+                    </div>
+                  </div>
+                </div>
+                <div ng-show="targetScore1Error" class="server-error-sm details divider">
+                  <div>
+                    <em class="fa fa-times-circle error-signal" aria-hidden="true"></em>
+                  </div>
+                  <div>
+                    <span class="error-text">
+                      {{targetScore1ErrorMessage}}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4 pl0 risk-section" ng-mouseenter="hoverHeading(3)">
+                <div class="titles">
+                  <div class="title">
+                    {{"dashboard.heading.INGRESS_EGRESS" | translate}}
+                  </div>
+                  <div class="subtitle">
+                    {{ingressEgressRisk.subtitle? "(" + ingressEgressRisk.subtitle + ")" : ""}}
+                  </div>
+                </div>
+                <div class="details divider" ng-show="!targetScore2Error">
+                  <table class="mt-sm pull-left">
+                    <tr>
+                      <th>&nbsp;</th>
+                      <th style="text-align: right;" ng-if="ingressEgressRisk.detailColTitle">{{ingressEgressRisk.detailColTitle.title1}}</th>
+                    </tr>
+                    <tr ng-repeat="detail in ingressEgressRisk.details">
+                      <td>{{detail.title}}</td>
+                      <td style="text-align: right;">{{detail.amount}}</td>
+                    </tr>
+                  </table>
+                  <div class="pull-right">
+                    <div class="secure-rank-wrap">
+                      <div class="secure-rank"></div>
+                      <div class="empty" ng-style="score2"></div>
+                    </div>
+                  </div>
+                </div>
+                <div ng-show="targetScore2Error" class="server-error-sm details divider">
+                  <div>
+                    <em class="fa fa-times-circle error-signal" aria-hidden="true"></em>
+                  </div>
+                  <div>
+                    <span class="error-text">
+                      {{targetScore2ErrorMessage}}
+                    </span>
+                  </div>
+                </div>
+                <div style="width: 100%;" class="text-center">
+                  <em class="fa fa-wrench text-muted"></em>
+                  <a class="link" ng-click="openConsole($event)">{{'dashboard.heading.IMPROVE_SCORE' | translate}}</a>
+                </div>
+              </div>
+              <div class="col-sm-4 pl0 pr0 risk-section" style="position: relative;" ng-mouseenter="hoverHeading(4)">
+                <div class="titles">
+                  <div class="title">
+                    {{"dashboard.heading.VUL_EXPLOIT" | translate}}
+                  </div>
+                  <div class="subtitle">
+                  </div>
+                </div>
+                <div class="details" ng-show="!targetScore3Error">
+                  <table class="mt-sm pull-left">
+                    <tr>
+                      <th>&nbsp;</th>
+                      <th style="text-align: right;" ng-if="vulnerabilityExploitRisk.detailColTitle2">{{vulnerabilityExploitRisk.detailColTitle2.title1}}</th>
+                    </tr>
+                    <tr ng-repeat="detail in vulnerabilityExploitRisk.details">
+                      <td>{{detail.title}}</td>
+                      <td style="text-align: right;">{{detail.amount}}</td>
+                    </tr>
+                  </table>
+                  <div class="pull-right">
+                    <div class="secure-rank-wrap">
+                      <div class="secure-rank"></div>
+                      <div class="empty" ng-style="score3"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="pl-sm" style="position: absolute; top: 120px; font-size: 10px;">
+                  <strong class="text-muted">{{highPriorityVulnerabilities.subtitle1}}</strong><br/>
+                  <strong class="text-muted">{{highPriorityVulnerabilities.subtitle2}}</strong>
+                </div>
+                <div ng-show="targetScore3Error" class="server-error-sm details">
+                  <div>
+                    <em class="fa fa-times-circle error-signal" aria-hidden="true"></em>
+                  </div>
+                  <div>
+                    <span class="error-text">
+                      {{targetScore3ErrorMessage}}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-12 col-sm-12 heading-divider-3 pr0">
+              <div class="details instruction pt0" style="color: #000;">
+                <div uib-carousel="uib-carousel" active="active" interval="" no-wrap="false" class="pr0">
+                  <div uib-slide="uib-slide" ng-repeat="slide in securityGuideline.slides track by $index" index="$index">
+                    <div class="titles">
+                      <div class="title" style="color: #000;">
+                        {{slide.title}}
+                      </div>
+                    </div>
+                    <div compile="slide.description"  class="instruction-content-wrap pt"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <script type="text/ng-template" id="tooltipTemplate.html">
+              <div translate="{{'scan.AUTO_TIP'}}">
+              </div>
+            </script>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div id="tab-content-1" class="nv-dashboard-body">
+      <div class="row m0">
+        <div class="col-sm-12 nv-dashboard-panel-wrapper">
+          <curtain-panel html-content="{{htmlInfoExposure}}" width="60" default-open="false" type="info-click" button-top="10" button-right="10"></curtain-panel>
+          <div class="panel nv-dashboard-panel">
+            <div class="panel-body nv-chart">
+              <div class="chart-title col-sm-12 col-xs-12 pl0" style="position: relative;">
+                <div class="pull-left">{{'dashboard.body.panel_title.CONTAINER_SEC' | translate}}</div>
+                <div ng-if="!isExposureReportErr && !noExposedContainers">
+                  <div class="pull-left ml-lg" ng-show="isExposureReportReady" ng-click="downloadExpousreReport()">
+                    <em class="fa  fa-file-excel-o xls-color hand"></em>
+                    <span class="text-gray-label link hand">Exposure Report</span>
+                  </div>
+                  <div class="pull-left ml-lg" ng-show="!isExposureReportReady">
+                    <em class="fa  fa-file-excel-o disabled"></em>
+                    <span class="text-disabled-label disabled">Exposure Report</span>
+                  </div>
+                  <div
+                    class="loader5" ng-show="!isExposureReportReady"
+                    style="position: absolute; top: 12px; left: 280px;"
+                  ></div>
+                </div>
+              </div>
+              <div class="col-sm-4 col-xs-4 pl0">
+                <!--<div ng-show="!noExposedContainers && !dashboardErr" class="chart-title-2 text-muted">{{'dashboard.body.panel_title.EXPOSED_RATIO' | translate}}</div>-->
+                <div ng-show="!noExposedContainers && !dashboardErr && !ExposureConversationsError" style="height: 240px; margin-top: 10px;">
+                  <canvas id="containers-sec-chart2" class="chart chart-bar" chart-data="containersSecData2" chart-options="containersSecOptions2" chart-hover="onHover"
+                          chart-labels="containersSecLabels2"  chart-colors="containersSecColors2" chart-series="containersSecSerie2"/>
+                </div>
+                <div ng-show="!noExposedContainers && !dashboardErr && !ExposureConversationsError" style="width: 400px; height: 180px; visibility: hidden; position: absolute; left: 0px; top: 0px;">
+                  <canvas id="containers-sec-chart-pdf2" class="chart chart-bar" chart-data="containersSecData24Pdf" chart-options="containersSecOptions24Pdf" chart-hover="onHover"
+                          chart-labels="containersSecLabels24Pdf"  chart-colors="containersSecColors24Pdf" chart-series="containersSecSerie24Pdf"/>
+                </div>
+              </div>
+              <div class="col-sm-8 col-xs-8 pl0">
+                <md-tabs md-no-ink md-dynamic-height="" md-border-bottom
+                         md-selected="dashboard.containerSecIndex" class="pb0" style="margin-top: -12px;" ng-show="!noExposedContainers && !dashboardErr && !ExposureConversationsError">
+                  <md-tab label="{{'dashboard.body.panel_title.INGRESS' | translate}}">
+                    <div ag-grid="gridIngressContainer" class="ag-grid" style="width: 100%; margin-top: 10px; height: 225px"></div>
+                  </md-tab>
+                  <md-tab label="{{'dashboard.body.panel_title.EGRESS' | translate}}">
+                    <div ag-grid="gridEgressContainer" class="ag-grid" style="width: 100%; margin-top: 10px; height: 225px"></div>
+                  </md-tab>
+                </md-tabs>
+              </div>
+              <div ng-show="noExposedContainers && !dashboardErr" class="safe">
+                <div>
+                  <em class="fa fa-check-circle-o safe-signal" aria-hidden="true"></em>
+                </div>
+                <div class="safe-text">
+                  {{'dashboard.body.message.NO_EXPOSURE' | translate}}
+                </div>
+              </div>
+              <div ng-show="ExposureConversationsError" class="server-error">
+                <div>
+                  <em class="fa fa-times-circle error-signal" aria-hidden="true"></em>
+                </div>
+                <div>
+                  <span class="error-text">
+                    {{ExposureConversationsErrorMessage}}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row m0">
+        <div class="col-sm-12 nv-dashboard-panel-wrapper">
+          <curtain-panel html-content="{{htmlInfoCriticalEvents}}" width="60" default-open="false" type="info-click" button-top="10" button-right="10"></curtain-panel>
+          <div class="panel nv-dashboard-panel">
+            <div class="panel-body nv-chart">
+              <div class="chart-title">
+                {{'dashboard.body.panel_title.CRITICAL_SECURITY_EVENT' | translate}}
+              </div>
+              <div ng-show="!noCriticalSecurityEventsCombined && !dashboardErr && !securityEventError && isSecEventReady" style="height: 250px;">
+                <canvas id="critical-security-event-combined-chart" class="chart chart-line" chart-data="criticalSecurityEventsCombinedData" chart-options="criticalSecurityEventsCombinedOptions"
+                  chart-labels="criticalSecurityEventsCombinedLabels"  chart-series="criticalSecurityEventsCombinedSeries" chart-colors="criticalSecurityEventsCombinedColors" chart-dataset-override="criticalSecurityEventsCombinedDatasetOverride"/>
+              </div>
+              <div ng-show="!noCriticalSecurityEventsCombined4Pdf && !dashboardErr && !securityEventError && isSecEventReady" style="width: 1130px; height: 250px; visibility: hidden; position: absolute; left: 0px; top: 0px;" >
+                <canvas id="critical-security-event-combined-chart-pdf" class="chart chart-line" chart-data="criticalSecurityEventsCombinedData4Pdf" chart-options="criticalSecurityEventsCombinedOptions4Pdf"
+                        chart-labels="criticalSecurityEventsCombinedLabels4Pdf"  chart-series="criticalSecurityEventsCombinedSeries4Pdf" chart-colors="criticalSecurityEventsCombinedColors4Pdf" chart-dataset-override="criticalSecurityEventsCombinedDatasetOverride4Pdf"/>
+              </div>
+              <div ng-show="noCriticalSecurityEventsCombined && !dashboardErr && !securityEventError && isSecEventReady" class="safe">
+                <div>
+                  <em class="fa fa-check-circle-o safe-signal" aria-hidden="true"></em>
+                </div>
+                <div class="safe-text">
+                  {{'dashboard.body.message.NO_CRITICAL_SECURITY_EVENT' | translate}}
+                </div>
+              </div>
+              <div ng-show="securityEventError && isSecEventReady" class="server-error">
+                <div>
+                  <em class="fa fa-times-circle error-signal" aria-hidden="true"></em>
+                </div>
+                <div>
+                  <span class="error-text">
+                    {{securityEventErrorMessage}}
+                  </span>
+                </div>
+              </div>
+              <div ng-show="!isSecEventReady" class="server-error">
+                <div>
+                  <em class="fa fa-spin fa-spinner fa-3x text-primary" aria-hidden="true"></em>
+                </div>
+                <div>
+                  <span class="text-primary">
+                    {{'enum.LOADING' | translate}}...
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row m0">
+        <div class="cardWrapper col-md-6 col-sm-12 col-xs-12 nv-dashboard-panel-wrapper">
+          <div class="card" ng-class="card[0].flip">
+            <div class="cardFace front" ng-class="card[0].frontAspect">
+              <curtain-panel html-content="{{htmlInfoTopSecurityEventsSource}}" width="60" height="330" default-open="false" type="info-click" button-top="10" button-right="10"></curtain-panel>
+              <div class="panel nv-dashboard-panel">
+                <div class="panel-body nv-chart">
+                  <div class="chart-title">
+                    {{'dashboard.body.panel_title.TOP_SEC_EVENTS' | translate}} - {{'threat.gridHeader.SOURCE' | translate}}
+                  </div>
+                 <div md-no-ink md-dynamic-height="" md-border-bottom
+                      class="ph0 pb0" ng-show="!noTopSecurityEventsSource && !dashboardErr && !securityEventError && isSecEventReady">
+                    <div style="height: 240px;">
+                      <canvas id="top-sec-event-source" class="chart chart-horizontal-bar" chart-data="topSecurityEventsSourceData"
+                        chart-labels="topSecurityEventsSourceLabels" chart-colors="topSecurityEventsColors" chart-options="topSecurityEventsOptions" chart-dataset-override="topSecurityEventsDatasetOverride" chart-hover="onHover"/>
+                    </div>
+                    <div style="width:539px; height: 220px; visibility: hidden; position: absolute; left: 0px; top: 0px;">
+                      <canvas id="top-sec-event-source-pdf" class="chart chart-horizontal-bar" chart-data="topSecurityEventsSourceData4Pdf"
+                               chart-labels="topSecurityEventsSourceLabels4Pdf" chart-colors="topSecurityEventsColors4Pdf" chart-options="topSecurityEventsOptions4Pdf" chart-dataset-override="topSecurityEventsDatasetOverride4Pdf"/>
+                    </div>
+                  </div>
+                  <div ng-show="noTopSecurityEventsSource && !dashboardErr && !securityEventError && isSecEventReady" class="safe">
+                    <div>
+                      <em class="fa fa-check-circle-o safe-signal" aria-hidden="true"></em>
+                    </div>
+                    <div class="safe-text">
+                      {{'dashboard.body.message.NO_SEC_EVENTS' | translate}}
+                    </div>
+                  </div>
+                  <div ng-show="securityEventError && isSecEventReady" class="server-error">
+                    <div>
+                      <em class="fa fa-times-circle error-signal" aria-hidden="true"></em>
+                    </div>
+                    <div>
+                      <span class="error-text">
+                        {{securityEventErrorMessage}}
+                      </span>
+                    </div>
+                  </div>
+                  <div ng-show="!isSecEventReady" class="server-error">
+                    <div>
+                      <em class="fa fa-spin fa-spinner fa-3x text-primary" aria-hidden="true"></em>
+                    </div>
+                    <div>
+                      <span class="text-primary">
+                        {{'enum.LOADING' | translate}}...
+                      </span>
+                    </div>
+                  </div>
+                  <div class="pull-right policy-top-button view-all-btn" style="margin: 20px 10px; z-index: 0;" ng-show="!noTopSecurityEventsSource && !dashboardErr && !securityEventError && isSecEventReady">
+                    <a class="button" style="text-decoration: none;" href="#/app/security-event">
+                      {{'dashboard.body.button.VIEW_ALL_SEC_EVENTS' | translate}}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="cardFace back" ng-class="card[0].backAspect">
+              <div class="panel nv-dashboard-panel">
+                <div class="panel-body nv-chart">
+                  <strong>{{securityEventsWorkloadSource}}</strong>
+                  <div ag-grid="gridSecurityEventsSource" class="ag-grid" style="width: 100%; margin-top: 10px; height: 230px"></div>
+                  <div class="pull-right policy-top-button view-all-btn" style="margin: 20px 10px; z-index: 0;" >
+                    <div class="button" style="text-decoration: none;" ng-click="flipping(0)">
+                      {{'dashboard.body.panel_title.BACK_TO_CHART' | translate}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="cardWrapper col-md-6 col-sm-12 col-xs-12 nv-dashboard-panel-wrapper">
+          <div class="card" ng-class="card[1].flip">
+            <div class="cardFace front" ng-class="card[1].frontAspect">
+              <curtain-panel html-content="{{htmlInfoTopSecurityEventsDestination}}" width="60" height="330" default-open="false" type="info-click" button-top="10" button-right="10"></curtain-panel>
+              <div class="panel nv-dashboard-panel">
+                <div class="panel-body nv-chart">
+                  <div class="chart-title">
+                    {{'dashboard.body.panel_title.TOP_SEC_EVENTS' | translate}} - {{'threat.gridHeader.DESTINATION' | translate}}
+                  </div>
+                  <div md-no-ink md-dynamic-height="" md-border-bottom
+                       class="ph0 pb0" ng-show="!noTopSecurityEventsDestination && !dashboardErr && !securityEventError && isSecEventReady">
+                    <div style="height: 240px;">
+                      <canvas id="top-sec-event-destination" class="chart chart-horizontal-bar" chart-data="topSecurityEventsDestinationData"
+                      chart-labels="topSecurityEventsDestinationLabels" chart-colors="topSecurityEventsColors" chart-options="topDestinationSecurityEventsOptions" chart-dataset-override="topSecurityEventsDatasetOverride" chart-hover="onHover"/>
+                    </div>
+                    <div style="width:539px; height: 220px; visibility: hidden; position: absolute; left: 0px; top: 0px;">
+                      <canvas id="top-sec-event-destination-pdf" class="chart chart-horizontal-bar" chart-data="topSecurityEventsDestinationData4Pdf"
+                           chart-labels="topSecurityEventsDestinationLabels4Pdf" chart-colors="topSecurityEventsColors4Pdf" chart-options="topDestinationSecurityEventsOptions4Pdf" chart-dataset-override="topSecurityEventsDatasetOverride4Pdf"/>
+                    </div>
+                  </div>
+                  <div ng-show="noTopSecurityEventsDestination && !dashboardErr && !securityEventError && isSecEventReady" class="safe">
+                    <div>
+                      <em class="fa fa-check-circle-o safe-signal" aria-hidden="true"></em>
+                    </div>
+                    <div class="safe-text">
+                      {{'dashboard.body.message.NO_SEC_EVENTS' | translate}}
+                    </div>
+                  </div>
+                  <div ng-show="securityEventError && isSecEventReady" class="server-error">
+                    <div>
+                      <em class="fa fa-times-circle error-signal" aria-hidden="true"></em>
+                    </div>
+                    <div>
+                      <span class="error-text">
+                        {{securityEventErrorMessage}}
+                      </span>
+                    </div>
+                  </div>
+                  <div ng-show="!isSecEventReady" class="server-error">
+                    <div>
+                      <em class="fa fa-spin fa-spinner fa-3x text-primary" aria-hidden="true"></em>
+                    </div>
+                    <div>
+                      <span class="text-primary">
+                        {{'enum.LOADING' | translate}}...
+                      </span>
+                    </div>
+                  </div>
+                  <div class="pull-right policy-top-button view-all-btn" style="margin: 20px 10px; z-index: 0;" ng-show="!noTopSecurityEventsDestination && !dashboardErr && !securityEventError && isSecEventReady">
+                    <a class="button" style="text-decoration: none;" href="#/app/security-event">
+                      {{'dashboard.body.button.VIEW_ALL_SEC_EVENTS' | translate}}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="cardFace back" ng-class="card[1].backAspect">
+              <div class="panel nv-dashboard-panel" >
+                <div class="panel-body nv-chart">
+                  <strong>{{securityEventsWorkloadDestination}}</strong>
+                  <div ag-grid="gridSecurityEventsDestination" class="ag-grid" style="width: 100%; margin-top: 10px; height: 230px"></div>
+                  <div class="pull-right policy-top-button view-all-btn" style="margin: 20px 10px; z-index: 0;" >
+                    <div class="button" style="text-decoration: none;" ng-click="flipping(1)">
+                      {{'dashboard.body.panel_title.BACK_TO_CHART' | translate}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row m0">
+        <div class="col-md-6 nv-dashboard-panel-wrapper">
+          <curtain-panel html-content="{{htmlInfoTopVulPod}}" width="60" default-open="false" type="info-click" button-top="10" button-right="10"></curtain-panel>
+          <div class="panel nv-dashboard-panel">
+            <div class="panel-body nv-chart">
+              <div class="chart-title">
+                {{'dashboard.body.panel_title.TOP_VULNERABLE_CONTAINERS' | translate}}
+              </div>
+              <div style="height: 220px;" ng-show="!noTopVulnerabileContainers && !dashboardErr && !topVulnerabileContainersError && isDashboardDetailsReady">
+                <canvas id="top-vuls-container" class="chart chart-horizontal-bar" chart-data="topVulnerabileContainersData"
+                  chart-labels="topVulnerabileContainersLabels" chart-series="topVulnerabileContainersSerials" chart-colors="topVulnerabileContainersColors" chart-options="topVulnerabileContainersOptions"/>
+              </div>
+              <div style="width: 540px; height: 220px; visibility: hidden; position: absolute;" ng-show="!noTopVulnerabileContainers4Pdf && !dashboardErr && !topVulnerabileContainersError4Pdf">
+                <canvas id="top-vuls-container-pdf" class="chart chart-horizontal-bar" chart-data="topVulnerabileContainersData4Pdf"
+                        chart-labels="topVulnerabileContainersLabels4Pdf" chart-series="topVulnerabileContainersSerials4Pdf" chart-colors="topVulnerabileContainersColors4Pdf" chart-options="topVulnerabileContainersOptions4Pdf"/>
+              </div>
+              <div ng-show="noTopVulnerabileContainers && !dashboardErr && !topVulnerabileContainersError && isDashboardDetailsReady" class="safe">
+                <div>
+                  <em class="fa fa-check-circle-o safe-signal" aria-hidden="true"></em>
+                </div>
+                <div class="safe-text">
+                  {{'dashboard.body.message.NO_VULNERABLE_CONTAINER' | translate}}
+                </div>
+              </div>
+              <div ng-show="topVulnerabileContainersError && isDashboardDetailsReady" class="server-error">
+                <div>
+                  <em class="fa fa-times-circle error-signal" aria-hidden="true"></em>
+                </div>
+                <div>
+                  <span class="error-text">
+                    {{topVulnerabileContainersErrorMessage}}
+                  </span>
+                </div>
+              </div>
+              <div ng-show="!isDashboardDetailsReady" class="server-error">
+                <div>
+                  <em class="fa fa-spin fa-spinner fa-3x text-primary" aria-hidden="true"></em>
+                </div>
+                <div>
+                  <span class="text-primary">
+                    {{'enum.LOADING' | translate}}...
+                  </span>
+                </div>
+              </div>
+              <div class="pull-left text-muted mt-lg ml">
+                <div>{{'dashboard.body.panel_title.VUL_POD' | translate}}: {{highPriorityVulnerabilities.total}}</div>
+              </div>
+              <div class="pull-right policy-top-button view-all-btn" style="margin: 20px 10px;" ng-show="!noTopVulnerabileContainers && !dashboardErr && !topVulnerabileContainersError && isDashboardDetailsReady">
+                <a class="button" style="text-decoration: none" ui-sref="app.scan({tabId: 0})">
+                  {{'general.VIEW_ALL' | translate}}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 nv-dashboard-panel-wrapper">
+          <curtain-panel html-content="{{htmlInfoTopVulNode}}" width="60" default-open="false" type="info-click" button-top="10" button-right="10"></curtain-panel>
+          <div class="panel nv-dashboard-panel">
+            <div class="panel-body nv-chart">
+              <div class="chart-title">
+                {{'dashboard.body.panel_title.TOP_VULNERABLE_NODES' | translate}}
+              </div>
+              <div style="height: 220px;" ng-show="!noTopVulnerabileNodes && !dashboardErr && !topVulnerabileNodesError && isDashboardDetailsReady">
+                <canvas id="top-vuls-node" class="chart chart-horizontal-bar" chart-data="topVulnerabileNodesData"
+                  chart-labels="topVulnerabileNodesLabels" chart-series="topVulnerabileNodesSerials" chart-colors="topVulnerabileNodesColors" chart-options="topVulnerabileNodesOptions"/>
+              </div>
+              <div style="width: 540px; height: 220px; visibility: hidden; position: absolute;" ng-show="!noTopVulnerabileNodes4Pdf && !dashboardErr && !topVulnerabileNodesError4Pdf">
+                <canvas id="top-vuls-node-pdf" class="chart chart-horizontal-bar" chart-data="topVulnerabileNodesData4Pdf"
+                        chart-labels="topVulnerabileNodesLabels4Pdf" chart-series="topVulnerabileNodesSerials4Pdf" chart-colors="topVulnerabileNodesColors4Pdf" chart-options="topVulnerabileNodesOptions4Pdf"/>
+              </div>
+              <div ng-show="noTopVulnerabileNodes && !dashboardErr && !topVulnerabileNodesError && isDashboardDetailsReady" class="safe">
+                <div>
+                  <em class="fa fa-check-circle-o safe-signal" aria-hidden="true"></em>
+                </div>
+                <div class="safe-text">
+                  {{'dashboard.body.message.NO_VULNERABLE_NODE' | translate}}
+                </div>
+              </div>
+              <div ng-show="topVulnerabileNodesError && isDashboardDetailsReady" class="server-error">
+                <div>
+                  <em class="fa fa-times-circle error-signal" aria-hidden="true"></em>
+                </div>
+                <div>
+                  <span class="error-text">
+                    {{topVulnerabileNodesErrorMessage}}
+                  </span>
+                </div>
+              </div>
+              <div ng-show="!isDashboardDetailsReady" class="server-error">
+                <div>
+                  <em class="fa fa-spin fa-spinner fa-3x text-primary" aria-hidden="true"></em>
+                </div>
+                <div>
+                  <span class="text-primary">
+                    {{'enum.LOADING' | translate}}...
+                  </span>
+                </div>
+              </div>
+              <div class="pull-left text-muted mt-lg ml">
+                <div>{{'dashboard.body.panel_title.VUL_NODE' | translate}}: {{highPriorityVulnerabilities.details[0].amount}}</div>
+              </div>
+              <div class="pull-right policy-top-button view-all-btn" style="margin: 20px 10px;" ng-show="!noTopVulnerabileNodes && !dashboardErr && !topVulnerabileNodesError && isDashboardDetailsReady">
+                <a class="button" style="text-decoration: none" ui-sref="app.scan({tabId: 1})">
+                  {{'general.VIEW_ALL' | translate}}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row m0">
+        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 nv-dashboard-panel-wrapper">
+          <curtain-panel html-content="{{htmlInfoPolModePod}}" width="60" default-open="false" type="info-click" button-top="10" button-right="10"></curtain-panel>
+          <div class="panel nv-dashboard-panel">
+            <div class="panel-body nv-chart">
+              <div class="chart-title">
+                {{'dashboard.body.panel_title.SERVICE_MODE' | translate}}
+              </div>
+              <div ng-show="!noManagedServices && !dashboardErr && !servicePolicyModeError && isDashboardDetailsReady">
+                <div class="col-md-7 col-sm-7 col-xs-7">
+                  <div style="height: 180px; width: 240px; margin-top: 35px;" >
+                    <canvas id="service-policy-mode-chart" class="chart chart-pie" chart-data="servicePolicyModeData" chart-options="servicePolicyModeOptions"
+                            chart-labels="servicePolicyModeLabels"  chart-colors="servicePolicyModeColors" />
+                  </div>
+                </div>
+                <div class="col-md-5 col-sm-5 col-xs-5 policy-coverage-comment">
+                  <div>
+                    <span class="label label-fs" ng-class="commentLabel">{{commentLabelText}}</span>
+                  </div>
+                  <div class="text-muted policy-coverage-comment-text">{{serviceCoverageComment}}</div>
+                </div>
+              </div>
+              <div ng-show="!noManagedServices && !dashboardErr" style="width: 270px; height: 180px; visibility: hidden; position: absolute;">
+                <canvas id="service-policy-mode-chart-pdf" class="chart chart-pie" chart-data="servicePolicyModeData4Pdf" chart-options="servicePolicyModeOptions4Pdf"
+                        chart-labels="servicePolicyModeLabels4Pdf"  chart-colors="servicePolicyModeColors4Pdf"/>
+              </div>
+              <div ng-show="noManagedServices && !dashboardErr && isDashboardDetailsReady" class="unsafe">
+                <div>
+                  <em class="fa fa-exclamation-triangle unsafe-signal" aria-hidden="true"></em>
+                </div>
+                <div class="unsafe-text">
+                  {{'dashboard.body.message.NO_MANAGED_CONTAINERS' | translate}}
+                </div>
+              </div>
+              <div ng-show="servicePolicyModeError && isDashboardDetailsReady" class="server-error">
+                <div>
+                  <em class="fa fa-times-circle error-signal" aria-hidden="true"></em>
+                </div>
+                <div>
+                  <span class="error-text">
+                    {{servicePolicyModeErrorMessage}}
+                  </span>
+                </div>
+              </div>
+              <div ng-show="!isDashboardDetailsReady" class="server-error">
+                <div>
+                  <em class="fa fa-spin fa-spinner fa-3x text-primary" aria-hidden="true"></em>
+                </div>
+                <div>
+                  <span class="text-primary">
+                    {{'enum.LOADING' | translate}}...
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 nv-dashboard-panel-wrapper">
+          <curtain-panel html-content="{{htmlInfoPolModePod}}" width="60" default-open="false" type="info-click" button-top="10" button-right="10"></curtain-panel>
+          <div class="panel nv-dashboard-panel">
+            <div class="panel-body nv-chart">
+              <div class="chart-title">
+                {{'dashboard.body.panel_title.CONTAINER_MODE' | translate}}
+              </div>
+              <div ng-show="!noManagedContainers && !dashboardErr && !containerModeError && isDashboardDetailsReady">
+                <div class="col-md-7 col-sm-7 col-xs-7">
+                  <div style="height: 180px; width: 240px; margin-top: 35px;" >
+                    <canvas id="container-mode-chart" class="chart chart-pie" chart-data="containerModesData" chart-options="containerModesOptions"
+                            chart-labels="containerModesLabels"  chart-colors="containerModesColors" />
+                  </div>
+                </div>
+                <div class="col-md-5 col-sm-5 col-xs-5 policy-coverage-comment">
+                  <div>
+                    <span class="label label-fs" ng-class="commentLabel">{{commentLabelText}}</span>
+                  </div>
+                  <div class="text-muted policy-coverage-comment-text">{{podCoverageComment}}</div>
+                </div>
+              </div>
+              <div ng-show="!noManagedContainers && !dashboardErr && !containerModeError" style="width: 300px; height: 200px; visibility: hidden; position: absolute;">
+                <canvas id="container-mode-chart-pdf" class="chart chart-pie" chart-data="containerModesData4Pdf" chart-options="containerModesOptions4Pdf"
+                        chart-labels="containerModesLabels4Pdf"  chart-colors="containerModesColors"/>
+              </div>
+              <div ng-show="noManagedContainers && !dashboardErr && !containerModeError && isDashboardDetailsReady" class="unsafe">
+                <div>
+                  <em class="fa fa-exclamation-triangle unsafe-signal" aria-hidden="true"></em>
+                </div>
+                <div class="unsafe-text">
+                  {{'dashboard.body.message.NO_MANAGED_CONTAINERS' | translate}}
+                </div>
+              </div>
+              <div ng-show="containerModeError && isDashboardDetailsReady" class="server-error">
+                <div>
+                  <em class="fa fa-times-circle error-signal" aria-hidden="true"></em>
+                </div>
+                <div>
+                    <span class="error-text">
+                      {{containerModeErrorMessage}}
+                    </span>
+                </div>
+              </div>
+              <div ng-show="!isDashboardDetailsReady" class="server-error">
+                <div>
+                  <em class="fa fa-spin fa-spinner fa-3x text-primary" aria-hidden="true"></em>
+                </div>
+                <div>
+                  <span class="text-primary">
+                    {{'enum.LOADING' | translate}}...
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--<div class="row m0">-->
+        <!--<div class="col-sm-12 nv-dashboard-panel-wrapper">-->
+          <!--<div class="panel nv-dashboard-panel">-->
+            <!--<div class="panel-body nv-chart">-->
+              <!--<div class="chart-title">-->
+                <!--{{'dashboard.body.panel_title.PROTOCOL_APPS_IN_POLICY' | translate}}-->
+              <!--</div>-->
+              <!--<div ng-show="!noPolicyApplication && !dashboardErr" style="height: 250px; margin-top: 20px;">-->
+                <!--<canvas id="policy-apps-chart" class="chart chart-bar" chart-data="policyAppsData" chart-options="policyAppsOptions"-->
+                        <!--chart-labels="policyAppsLabels"  chart-colors="policyAppsColors" />-->
+              <!--</div>-->
+              <!--<div ng-show="!noPolicyApplication && !dashboardErr" style="width: 1130px; height: 250px; visibility: hidden; position: absolute; left: 0px; top: 0px;">-->
+                <!--<canvas id="policy-apps-chart-pdf" class="chart chart-bar" chart-data="policyAppsData" chart-options="policyAppsOptions"-->
+                        <!--chart-labels="policyAppsLabels"  chart-colors="policyAppsColors" />-->
+              <!--</div>-->
+              <!--<div ng-show="noPolicyApplication && !dashboardErr" class="safe">-->
+                <!--<div>-->
+                  <!--<em class="fa fa-check-circle-o safe-signal" aria-hidden="true"></em>-->
+                <!--</div>-->
+                <!--<div class="safe-text">-->
+                  <!--{{'dashboard.body.message.NO_POLICY_APPLICATION' | translate}}-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div ng-show="dashboardErr" class="server-error">-->
+                <!--<div>-->
+                  <!--<em class="fa fa-times-circle error-signal" aria-hidden="true"></em>-->
+                <!--</div>-->
+                <!--<div>-->
+                  <!--<span class="error-text">-->
+                    <!--{{dashboardErrMSG}}-->
+                  <!--</span>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+      <div class="row m0">
+        <div class="col-md-12 col-sm-12 nv-dashboard-panel-wrapper">
+          <curtain-panel html-content="{{htmlInfoApp}}" width="60" default-open="false" type="info-click" button-top="10" button-right="10"></curtain-panel>
+          <div class="panel nv-dashboard-panel">
+            <div class="panel-body nv-chart">
+              <div class="chart-title">
+                {{'dashboard.body.panel_title.PROTOCOL_APPS_IN_POLICY' | translate}}
+              </div>
+              <md-tabs md-no-ink md-dynamic-height="" md-border-bottom
+                       md-selected="dashboard.appProtoIndex" class="ph0 pb0" ng-show="!noPolicyApplication2 && !dashboardErr && !application2Error && isDashboardDetailsReady">
+                <md-tab label="{{'dashboard.body.panel_title.POLICY_COUNT' | translate}}">
+                  <div  style="height: 220px; margin-top: 20px;">
+                    <canvas id="policy-apps2-chart" class="chart chart-bar" chart-data="policyApps2Data" chart-options="policyApps2Options"
+                            chart-labels="policyApps2Labels"  chart-colors="policyApps2Colors" />
+                  </div>
+                  <div ng-show="!noPolicyApplication2 && !dashboardErr" style="width: 430px; height: 220px; visibility: hidden; position: absolute; left: 0px; top: 0px;">
+                    <canvas id="policy-apps2-chart-pdf" class="chart chart-bar" chart-data="policyApps2Data4Pdf" chart-options="policyApps2Options4Pdf"
+                            chart-labels="policyApps2Labels4Pdf"  chart-colors="policyApps2Colors4Pdf" />
+                  </div>
+                </md-tab>
+                <md-tab label="{{'dashboard.body.panel_title.BYTES' | translate}}">
+                  <div  style="height: 220px; margin-top: 20px;">
+                    <canvas id="policy-apps3-chart" class="chart chart-bar" chart-data="policyApps3Data" chart-options="policyApps3Options"
+                            chart-labels="policyApps3Labels"  chart-colors="policyApps3Colors" />
+                  </div>
+                  <div ng-show="!noPolicyApplication2 && !dashboardErr" style="width: 430px; height: 220px; visibility: hidden; position: absolute; left: 0px; top: 0px;">
+                    <canvas id="policy-apps3-chart-pdf" class="chart chart-bar" chart-data="policyApps3Data4Pdf" chart-options="policyApps3Options"
+                            chart-labels="policyApps3Labels4Pdf"  chart-colors="policyApps3Colors4Pdf" />
+                  </div>
+                </md-tab>
+              </md-tabs>
+
+              <div ng-show="noPolicyApplication2 && !dashboardErr && isDashboardDetailsReady" class="unsafe">
+                <div>
+                  <em class="fa fa-exclamation-triangle unsafe-signal" aria-hidden="true"></em>
+                </div>
+                <div class="unsafe-text">
+                  {{'dashboard.body.message.NO_POLICY_APPLICATION' | translate}}
+                </div>
+              </div>
+              <div ng-show="application2Error && isDashboardDetailsReady" class="server-error">
+                <div>
+                  <em class="fa fa-times-circle error-signal" aria-hidden="true"></em>
+                </div>
+                <div>
+                  <span class="error-text">
+                    {{application2ErrorMessage}}
+                  </span>
+                </div>
+              </div>
+              <div ng-show="!isDashboardDetailsReady" class="server-error">
+                <div>
+                  <em class="fa fa-spin fa-spinner fa-3x text-primary" aria-hidden="true"></em>
+                </div>
+                <div>
+                  <span class="text-primary">
+                    {{'enum.LOADING' | translate}}...
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="tab-content-2" class="hide nv-dashboard-body">
+  </div>
+  <div id="tab-content-3" class="hide nv-dashboard-body">
+  </div>
+  <div id="tab-content-4" class="hide nv-dashboard-body">
+    System Health
+  </div>
+</div>

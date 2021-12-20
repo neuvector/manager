@@ -1,0 +1,433 @@
+<div ng-controller="EventController">
+  <div class="clearfix">
+    <div ng-show="!eventsErr">
+      <div class="pull-right mt-sm" ng-click="refresh()">
+        <em class="fa fa-refresh text-action"/>
+        <label class="text-gray-label hand">{{'general.REFRESH' | translate}}</label>
+      </div>
+      <div class="pull-right mt-sm mr-lg" ng-click="exportCsv()">
+        <em
+          class="fa fa-file-excel-o xls-color hand"
+          style="margin-left:10px;"
+        ></em>
+        <span class="text-gray-label link">CSV</span>
+      </div>
+    </div>
+    <div class="content-title">{{'sidebar.nav.EVENT' | translate}}</div>
+  </div>
+  <div class="panel mb0">
+    <div class="panel-body">
+      <div class="clearfix">
+        <label class="text-primary" ng-show="!eventsErr">{{count}}
+        </label>
+        <div class="left-inner-addon pull-right" style="margin-bottom: 10px">
+          <em class="fa fa-filter text-filter" />
+          <input class="search form-control"
+            placeholder="{{'general.FILTER' | translate}}"
+            type="text"
+            maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+            ng-model="search"
+            ng-paste="onFilterChanged(search)"
+            ng-keyup="onFilterChanged(search)"
+            ng-disabled="isAdvFilterInUse">
+        </div>
+        <div
+          class="left-inner-addon pull-right ml mr-lg"
+          style="margin: 5px auto;"
+          ng-click="onAdvFilter=true"
+          ng-show="!isOnQuickFilter && events.length>0"
+        >
+          <i ng-if="!isAdvFilterInUse" class="fa fa-search text-filter"></i>
+          <i ng-if="isAdvFilterInUse" class="fa fa-check text-primary"></i>
+          <span
+            class="ml-sm text-muted"
+            ng-class="{'text-primary': isAdvFilterInUse}"
+            >{{'general.ADV_FILTER' | translate}}</span
+          >
+        </div>
+        <div
+          class="left-inner-addon pull-right ml mr-lg disabled"
+          style="margin: 5px auto;"
+          ng-if="isOnQuickFilter && events.length>0"
+        >
+          <i ng-if="!isAdvFilterInUse" class="fa fa-search text-filter"></i>
+          <i ng-if="isAdvFilterInUse" class="fa fa-check text-success"></i>
+          <span
+            class="ml-sm text-muted"
+            ng-class="{'text-success': isAdvFilterInUse}"
+            >{{'general.ADV_FILTER' | translate}}</span
+          >
+        </div>
+      </div>
+      <div ag-grid="gridOptions"
+        class="ag-grid"
+        style="width: 100%;"
+        ng-style="{ height: graphHeight + 'px'}">
+      </div>
+    </div>
+  </div>
+  <!--advanced filter modal-->
+  <div
+    id="filter"
+    class="dataBox advFilter"
+    ng-show="onAdvFilter"
+    style="border: none; z-index: 1000"
+  >
+    <form name="advFilterForm" novalidate>
+      <div layout="row" layout-align="space-between center" class="ml0 mr0">
+        <h4 class="text-bold mb0 pl-lg">
+          {{"general.FILTER_MATCH_ALL" | translate}}
+        </h4>
+        <div>
+          <md-button class="md-icon-button" ng-click="onAdvFilter=false">
+            <md-icon
+              md-svg-src="app/img/icons/ic_close_24px.svg"
+              aria-label="Close dialog"
+            ></md-icon>
+          </md-button>
+        </div>
+      </div>
+      <hr class="fancy mv-sm" />
+      <div class="clearfix mh sec-adv-filter-content">
+        <div class="row mv mh0 pr-lg">
+          <div
+            class="text-muted col col-sm-4 mt"
+          >
+            {{"general.REPORTED_FROM" | translate}}
+            <em
+              class="fa mr-sm"
+              ng-class="advFilter.dt ? 'fa-calendar-check-o text-primary' : 'fa-calendar-o text-action'"
+            ></em>
+          </div>
+          <div class="col col-sm-8 p0">
+            <div class="input-group mt">
+              <input
+                type="text"
+                class="form-control"
+                uib-datepicker-popup="{{format}}"
+                ng-paste="checkDateRange()"
+                ng-keyup="checkDateRange()"
+                ng-model="reportedFrom"
+                is-open="popup.opened1"
+                datepicker-options="dateOptionsFrom"
+                name="advDateFrom"
+                style="height: 25px; line-height: 25px; border-color: rgb(213, 219, 152); padding: 2px 5px;"
+              />
+              <span class="input-group-btn">
+                <button
+                  type="button"
+                  class="btn btn-default"
+                  style="height: 25px; line-height: 25px; padding: 0px 6px; border-color: rgb(213, 219, 152); color: #789831;"
+                  ng-click="openDate1()"
+                >
+                  <em class="fa fa-calendar"></em>
+                </button>
+              </span>
+            </div>
+            <span class="text-danger" ng-show="!advFilterForm.advDateFrom.$valid">
+              {{"scan.INVALID_DATE" | translate}}</span>
+            <span class="text-danger" ng-show="isInvalidDateRange">
+              {{"scan.INVALID_DATE_RANGE" | translate}}</span>
+          </div>
+          <div
+            class="text-muted col col-sm-4 mt"
+          >
+            {{"general.REPORTED_TO" | translate}}
+            <em
+              class="fa mr-sm"
+              ng-class="advFilter.dt ? 'fa-calendar-check-o text-primary' : 'fa-calendar-o text-action'"
+            ></em>
+          </div>
+          <div class="col col-sm-8 p0">
+            <div class="input-group mt">
+              <input
+                type="text"
+                class="form-control"
+                uib-datepicker-popup="{{format}}"
+                ng-paste="checkDateRange()"
+                ng-keyup="checkDateRange()"
+                ng-model="reportedTo"
+                is-open="popup.opened2"
+                datepicker-options="dateOptionsTo"
+                name="advDateTo"
+                style="height: 25px; line-height: 25px; border-color: rgb(213, 219, 152); padding: 2px 5px;"
+              />
+              <span class="input-group-btn">
+                <button
+                  type="button"
+                  class="btn btn-default"
+                  style="height: 25px; line-height: 25px; padding: 0px 6px; border-color: rgb(213, 219, 152); color: #789831;"
+                  ng-click="openDate2()"
+                >
+                  <em class="fa fa-calendar"></em>
+                </button>
+              </span>
+            </div>
+            <span class="text-danger" ng-show="!advFilterForm.advDateTo.$valid">
+              {{"scan.INVALID_DATE" | translate}}</span>
+            <span class="text-danger" ng-show="isInvalidDateRange">
+              {{"scan.INVALID_DATE_RANGE" | translate}}</span>
+          </div>
+        </div>
+        <div class="row mv">
+          <div class="col col-sm-3 text-muted">
+            {{'audit.LEVEL' | translate}}:
+          </div>
+          <div class="col col-sm-9" style="padding-left: 48px;">
+            <div layout="row" class="mb-sm ml0 mr0 pb-sm">
+              <div flex="20">
+                <input
+                  type="checkbox"
+                  id="check-error"
+                  name="level-filter"
+                  ng-model="levelFilter.isFilteringError"
+                />
+                <label
+                  class="sec-event-label audit-error"
+                  for="check-error"
+                  >{{'enum.ERROR' | translate}}</label
+                >
+              </div>
+              <div flex="20">
+                <input
+                  type="checkbox"
+                  id="check-critical-audit"
+                  name="level-filter"
+                  ng-model="levelFilter.isFilteringCritical"
+                />
+                <label
+                  class="sec-event-label audit-critical"
+                  for="check-critical-audit"
+                  >{{'enum.CRITICAL' | translate}}</label
+                >
+              </div>
+              <div flex="20">
+                <input
+                  type="checkbox"
+                  id="check-warning"
+                  name="level-filter"
+                  ng-model="levelFilter.isFilteringWarning"
+                />
+                <label
+                  class="sec-event-label sec-event-warning"
+                  for="check-warning"
+                  >{{'enum.WARNING' | translate}}</label
+                >
+              </div>
+              <div flex="20">
+                <input
+                  type="checkbox"
+                  id="check-info"
+                  name="level-filter"
+                  ng-model="levelFilter.isFilteringInfo"
+                />
+                <label class="sec-event-label sec-event-info" for="check-info"
+                  >{{'enum.INFO' | translate}}</label
+                >
+              </div>
+              <div flex="20">
+                <input
+                  type="checkbox"
+                  id="check-notice"
+                  name="level-filter"
+                  ng-model="levelFilter.isFilteringNotice"
+                />
+                <label class="sec-event-label event-notice" for="check-notice"
+                  >{{'enum.NOTICE' | translate}}</label
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr class="mv-sm" />
+        <div class="row mv">
+          <div class="col col-sm-4 text-muted">
+            {{'event.gridHeader.NAME' | translate}}:
+          </div>
+          <div class="col col-sm-8 pl0">
+            <md-autocomplete
+              class="filter-autocomplete"
+              required="false"
+              ng-disabled="isDisabled"
+              md-no-cache="noCache"
+              md-input-name="autocompleteName"
+              md-selected-item="selectedItemName"
+              md-search-text="searchTextName"
+              md-items="name in autocompleteNames | filter: searchTextName"
+              md-item-text="name.display"
+            >
+              <md-item-template>
+                <span md-highlight-text="searchTextName">{{name.display}}</span>
+              </md-item-template>
+              <md-not-found>
+                No matches found.
+              </md-not-found>
+            </md-autocomplete>
+          </div>
+        </div>
+        <div class="row mv">
+          <div class="col col-sm-4 text-muted">
+            {{'event.gridHeader.USER_NAME' | translate}}:
+          </div>
+          <div class="col col-sm-8 pl0">
+            <md-autocomplete
+              class="filter-autocomplete"
+              required="false"
+              ng-disabled="isDisabled"
+              md-no-cache="noCache"
+              md-input-name="autocompleteUserName"
+              md-selected-item="selectedItemUserName"
+              md-search-text="searchTextUserName"
+              md-items="userName in autocompleteUserNames | filter: searchTextUserName"
+              md-item-text="userName.display"
+            >
+              <md-item-template>
+                <span md-highlight-text="searchTextUserName">{{userName.display}}</span>
+              </md-item-template>
+              <md-not-found>
+                No matches found.
+              </md-not-found>
+            </md-autocomplete>
+          </div>
+        </div>
+        <div class="row mv">
+          <div class="col col-sm-4 text-muted">
+            {{'securityEvent.HOST' | translate}}:
+          </div>
+          <div class="col col-sm-8 pl0">
+            <md-autocomplete
+              class="filter-autocomplete"
+              required="false"
+              ng-disabled="isDisabled"
+              md-no-cache="noCache"
+              md-input-name="autocompleteNode"
+              md-selected-item="selectedItemNode"
+              md-search-text="searchTextNode"
+              md-items="node in autocompleteNodes | filter: searchTextNode"
+              md-item-text="node.display"
+            >
+              <md-item-template>
+                <span md-highlight-text="searchTextNode">{{node.display}}</span>
+              </md-item-template>
+              <md-not-found>
+                No matches found.
+              </md-not-found>
+            </md-autocomplete>
+          </div>
+        </div>
+        <div class="row mv">
+          <div class="col col-sm-4 text-muted">
+            {{'audit.gridHeader.CONTAINER' | translate}}:
+          </div>
+          <div class="col col-sm-8 pl0">
+            <md-autocomplete
+              class="filter-autocomplete"
+              required="false"
+              ng-disabled="isDisabled"
+              md-no-cache="noCache"
+              md-input-name="autocompleteContainer"
+              md-selected-item="selectedItemContainer"
+              md-search-text="searchTextContainer"
+              md-items="container in autocompleteContainers | filter: searchTextContainer"
+              md-item-text="container.display"
+            >
+              <md-item-template>
+                <span md-highlight-text="searchTextContainer"
+                  >{{container.display}}</span
+                >
+              </md-item-template>
+              <md-not-found>
+                No matches found.
+              </md-not-found>
+            </md-autocomplete>
+          </div>
+        </div>
+        <div class="row mv">
+          <div class="col col-sm-4 text-muted">
+            {{'audit.gridHeader.IMAGE' | translate}}:
+          </div>
+          <div class="col col-sm-8 pl0">
+            <md-autocomplete
+              class="filter-autocomplete"
+              required="false"
+              ng-disabled="isDisabled"
+              md-no-cache="noCache"
+              md-input-name="autocompleteImage"
+              md-selected-item="selectedItemImage"
+              md-search-text="searchTextImage"
+              md-items="image in autocompleteImages | filter: searchTextImage"
+              md-item-text="image.display"
+            >
+              <md-item-template>
+                <span md-highlight-text="searchTextImage"
+                  >{{image.display}}</span
+                >
+              </md-item-template>
+              <md-not-found>
+                No matches found.
+              </md-not-found>
+            </md-autocomplete>
+          </div>
+        </div>
+        <div class="row mv">
+          <div class="col col-sm-4 text-muted">
+            {{'securityEvent.DOMAIN' | translate}}:
+          </div>
+          <div class="col col-sm-8 pl0">
+            <tags-input
+              id="domain"
+              ng-model="selectedDomains"
+              display-property="name"
+              class="filter-autocomplete"
+              placeholder="{{'securityEvent.DOMAIN_PLACEHOLDER' | translate}}"
+              add-from-autocomplete-only="true">
+              <auto-complete
+                source="loadTags($query)"
+                min-length="1"
+                max-results-to-show="128"
+                max-length="{{'general.FILTER_MAX_LEN' | translate}}">
+              </auto-complete>
+            </tags-input>
+          </div>
+        </div>
+        <div class="row mv">
+          <div class="col col-sm-4 text-muted">
+            {{'securityEvent.OTHER_KEYWORD' | translate}}:
+          </div>
+          <div class="col col-sm-8 pl0">
+            <input
+              class="filter-text"
+              ng-model="otherKey"
+              maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+            />
+          </div>
+        </div>
+        <div class="row mv">
+          <div class="col col-sm-4 text-muted">
+            {{'securityEvent.EXCLUDED_KEYWORD' | translate}}:
+          </div>
+          <div class="col col-sm-8 pl0">
+            <input
+              class="filter-text"
+              ng-model="excludedKey"
+              maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+            />
+          </div>
+        </div>
+        <button
+          ng-click="resetAdvFilter()"
+          class="btn btn-wide btn-default pull-right mt-sm"
+        >
+          {{'enum.RESET' | translate}}
+        </button>
+        <button
+          ng-click="onAdvFilterChanged()"
+          class="btn btn-wide btn-default pull-right mr-lg mt-sm"
+          ng-disabled="isInvalidDateRange || !advFilterForm.advDateFrom.$valid || !advFilterForm.advDateTo.$valid"
+        >
+          {{'securityEvent.APPLY' | translate}}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

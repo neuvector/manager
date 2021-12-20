@@ -1,0 +1,56 @@
+<div
+  ng-controller="RolesUsersController"
+  backdrop="true"
+  class="container-fluid"
+  ng-cloak
+>
+  <div class="clearfix">
+    <div class="content-title">
+      <a href="#/app/settings">{{'sidebar.nav.SETTING' | translate}}</a>
+      &nbsp;>&nbsp;&nbsp;{{'user.TITLE' | translate}}
+    </div>
+  </div>
+  <div class="panel mb0" ng-class="{'modal-panel-height-limit': selectedIndex===0}">
+    <div class="panel-body fed-policy">
+      <md-tabs
+        md-no-ink
+        md-dynamic-height=""
+        md-border-bottom
+        md-selected="selectedIndex"
+        class="ph0"
+      >
+        <md-tab
+          label="{{'user.USERS' | translate}}"
+        >
+          <md-content class="pb0 fed-policy-tab"
+            >&nbsp;
+            <users
+              ng-if="selectedIndex===0"
+            ></users>
+          </md-content>
+        </md-tab>
+        <md-tab
+          label="{{'role.ROLES' | translate}}"
+        >
+          <md-content class="pb0 fed-policy-tab"
+            >&nbsp;
+            <roles
+              ng-if="selectedIndex===1"
+            ></roles>
+          </md-content>
+        </md-tab>
+        <md-tab
+          label="{{'passwordProfile.PWD_PROFILE' | translate}}"
+          ng-if="isUpdatePasswordProfileAuthorized || isReadPasswordProfileAuthorized"
+        >
+          <md-content class="pb0 fed-policy-tab"
+            >&nbsp;
+            <password-profile
+              ng-if="selectedIndex===2"
+            ></password-profile>
+          </md-content>
+        </md-tab>
+      </md-tabs>
+    </div>
+  </div>
+</div>

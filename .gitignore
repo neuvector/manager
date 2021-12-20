@@ -1,0 +1,69 @@
+*.class
+*.log
+apis.yaml
+
+# sbt specific
+.cache
+.history
+.lib/
+dist/*
+target/
+lib_managed/
+src_managed/
+project/boot/
+project/plugins/project/
+
+# Scala-IDE specific
+.scala_dependencies
+.worksheet
+*.sc
+
+#IntelliJ specific
+.idea
+
+# eclipse specific
+*.pydevproject
+.project
+.metadata
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
+.loadpath
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+# Downloaded dependencies
+admin/webapp/root/app_src/node_modules/
+
+admin/webapp/root/app/css/
+admin/webapp/root/app/js/
+admin/webapp/root/index.html
+admin/webapp/root/index-appsafe.html
+
+*.DS_Store
+.DS_Store
+
+.sass-cache
+.sass-cache/*
+
+
+admin/webapp/root/app/metadata/js-version.json
+admin/webapp/root/app/i18n
+.metals
+admin/test/REST_API/output
+admin/webapp/root/app_src/test/ut/coverage
+admin/webapp/root/app_src/bower_components/
+admin/webapp/root/bower_components
+admin/webapp/root/node_modules
+admin/webapp/root/vendor

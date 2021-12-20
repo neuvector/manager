@@ -1,0 +1,44 @@
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
+         updateCheck="true"
+         monitoring="autodetect"
+         dynamicConfig="true">
+
+    <diskStore path="/tmp" />
+
+    <sizeOfPolicy maxDepth="50000000" maxDepthExceededBehavior="continue"/>
+
+    <cache name="posCache"
+           maxEntriesLocalHeap="10000"
+           maxEntriesLocalDisk="100000"
+           diskSpoolBufferSizeMB="20"
+           overflowToDisk="true"
+           diskPersistent="true"
+           memoryStoreEvictionPolicy="LFU">
+    </cache>
+    <cache name="pgCache"
+           maxEntriesLocalHeap="100000"
+           maxEntriesLocalDisk="1000000"
+           diskSpoolBufferSizeMB="60"
+           overflowToDisk="true"
+           diskPersistent="false"
+           memoryStoreEvictionPolicy="LRU">
+    </cache>
+    <cache name="jsonCache"
+           maxBytesLocalHeap="5M"
+           maxBytesLocalDisk="10M"
+           diskSpoolBufferSizeMB="2"
+           overflowToDisk="true"
+           diskPersistent="true"
+           memoryStoreEvictionPolicy="LFU">
+    </cache>
+    <cache name="blacklistCache"
+           maxEntriesLocalHeap="1000"
+           maxEntriesLocalDisk="10000"
+           diskSpoolBufferSizeMB="10"
+           overflowToDisk="true"
+           diskPersistent="true"
+           memoryStoreEvictionPolicy="LFU">
+    </cache>
+
+</ehcache>

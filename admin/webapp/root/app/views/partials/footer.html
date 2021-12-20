@@ -1,0 +1,7 @@
+<span ng-controller="FooterController">
+  <span class="visible-xs">
+    &copy; {{app.year}}&nbsp;-&nbsp;
+    <a href="{{'partner.general.WEB_URL' | translate}}" target="_blank">{{ app.name}}</a> &nbsp;
+    <span ng-if="!versionErr">{{'general.VERSION' | translate}}&nbsp;-&nbsp;{{version}}</span>
+  </span>
+</span>

@@ -1,0 +1,6 @@
+<header ng-include="topNav" class="topnavbar-wrapper"></header>
+<aside ng-include="sideBar" class="aside"></aside>
+<section ng-if="sidebarDone && versionDone && isFooterReady">
+   <div ui-view="" autoscroll="false" ng-class="app.viewAnimation" class="content-wrapper"></div>
+</section>
+<footer ng-if="versionDone" class="visible-xs" ng-include="footer" style="z-index: 999;"></footer>

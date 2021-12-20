@@ -1,0 +1,568 @@
+<div ng-controller="NodeController as host">
+  <div class="clearfix">
+    <div>
+      <div class="pull-right mt-sm" ng-click="refresh()">
+        <em class="fa fa-refresh text-action"></em>
+        <label class="text-gray-label hand"
+          >{{'general.REFRESH' | translate}}</label
+        >
+      </div>
+
+      <div
+        class="pull-right mt-sm mr-lg"
+        ng-if="isAutoScanAuthorized &&
+        (!nodesErr && hosts.length>0)"
+      >
+        <div class="md-switch2 ">
+          <label class="text-gray-label">
+            <input
+              type="checkbox"
+              ng-model="scanConfig.auto_scan"
+              ng-change="configAutoScan(scanConfig)"
+            />
+            <span class="toggle mr-sm"></span>
+            {{'scan.AUTO' | translate}}
+          </label>
+          <a>
+            <em
+              class="icon-info text-gray-label"
+              uib-tooltip-template="'tooltipTemplate.html'"
+              tooltip-placement="bottom"
+            ></em>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="content-title">
+      {{'dashboard.panelItems.NODES' | translate}}
+    </div>
+  </div>
+  <div class="panel mb0">
+    <div class="panel-body">
+      <div class="clearfix">
+        <label class="text-primary" ng-show="!nodeErr">{{count}}</label>
+        <div class="left-inner-addon pull-right" style="margin-bottom: 10px">
+          <em class="fa fa-filter text-filter"></em>
+          <input
+            class="search form-control"
+            placeholder="{{'general.FILTER' | translate}}"
+            type="text"
+            maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+            ng-model="search"
+            ng-paste="onFilterChanged(search)"
+            ng-keyup="onFilterChanged(search)"
+          />
+        </div>
+        <div class="pull-right mr" style="margin-top: 2px;">
+          <button
+            type="button"
+            style="padding: 3px 3px;"
+            class="btn btn-default ph"
+            ng-disabled="disableScan"
+            ng-show="hosts.length>0"
+            display-control="runtime_scan"
+            ng-click="scan(host.id)"
+          >
+            {{'scan.SCAN' | translate}}
+          </button>
+        </div>
+        <div class="pull-right mr-lg" ng-if="selectedIndex === 1">
+          <label
+            ng-if="compliance.docker_cis_version"
+            class="pull-left text-primary mt-sm"
+          >
+            Docker &nbsp;{{'containers.CIS_VERSION' | translate}}:&nbsp;
+            {{compliance.docker_cis_version}}&nbsp;&nbsp;
+          </label>
+          <label
+            ng-if="compliance.kubernetes_cis_version"
+            class="pull-left text-primary mt-sm"
+          >
+            {{cisLabel}}&nbsp;&nbsp;
+          </label>
+          <label class="pull-left text-primary mt-sm">
+            <em
+              ng-if="compliance.run_at"
+              class="fa fa-info-circle"
+              uib-tooltip="{{'scan.gridHeader.TIME' | translate}}: {{compliance.run_at | date:'MMM dd, y HH:mm:ss'}}"
+            >
+            </em>
+          </label>
+        </div>
+        <div class="pull-right mr-lg" ng-if="selectedIndex === 2">
+          <label
+            ng-if="host.scan_summary.scanner_version"
+            class="pull-left text-primary mt-sm"
+          >
+            {{'audit.gridHeader.CVE_DB_VERSION' | translate}}:&nbsp;
+            {{host.scan_summary.scanner_version}}&nbsp;&nbsp;
+            <em
+              ng-if="host.scan_summary.cvedb_create_time"
+              class="fa fa-info-circle"
+              uib-tooltip="{{'registry.CVE_DB_DATE' | translate}}: {{host.scan_summary.cvedb_create_time | date:'MMM dd, y HH:mm:ss'}}"
+            >
+            </em>
+          </label>
+        </div>
+      </div>
+      <div
+        ag-grid="gridOptions"
+        class="ag-grid"
+        style="width: 100%;"
+        ng-style="{ height: gridHeight + 'px'}"
+      ></div>
+    </div>
+  </div>
+  <div class="text-center panel-divider">
+    <em class="fa fa-align-justify text-muted" aria-hidden="true" ng-mousedown="grabResizeBar($event)"></em>
+  </div>
+  <div class="panel mb0" ng-show="hasNode">
+    <div class="panel-body" style="position: relative;">
+      <div style="position: absolute; right: 15px; top: 15px; z-index: 10;">
+        <div class="left-inner-addon pull-right ml-sm"
+             ng-show="selectedIndex >= 1 && selectedIndex <= 3"
+        >
+          <em class="fa fa-filter text-filter"></em>
+          <input
+            class="search form-control"
+            placeholder="{{'general.FILTER' | translate}}"
+            maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+            ng-model="searchBottom"
+            ng-paste="onFilterChangedOnBottom(selectedIndex, searchBottom)"
+            ng-keyup="onFilterChangedOnBottom(selectedIndex, searchBottom)"
+          />
+        </div>
+        <!--<div class="pull-right" style="margin-top: 2px;">
+          <button
+            type="button"
+            style="padding: 3px 3px;"
+            class="btn btn-default"
+            ng-disabled="disableScan"
+            ng-show="hosts.length>0"
+            display-control="runtime_scan"
+            ng-click="scan(host.id)"
+          >
+            <em class="fa fa-search mr-sm"></em>{{'scan.SCAN' | translate}}
+          </button>
+        </div> -->
+        <div class="pull-right mr" ng-if="selectedIndex === 2 && isVulsAuthorized">
+          <div uib-dropdown dropdown-append-to-body class="mt-sm">
+            <div uib-dropdown-toggle>
+              <div>
+                <label class="text-gray-label hand">{{'network.SETTING' | translate}}</label>
+                <em class="fa fa-caret-down text-action"/>
+              </div>
+            </div>
+            <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+              <li role="menuitem" ng-if="isVulsAuthorized">
+                <a ng-click="toggleShowingAcceptedVuls(isShowingAccepted)">
+                  <em class="fa mr-sm" ng-class="{'fa-eye': !isShowingAccepted, 'fa-eye-slash': isShowingAccepted}"></em>
+                  {{ isShowingAccepted ? 'enum.HIDE_ACCEPTED_VULS' : 'enum.SHOW_ACCEPTED_VULS' | translate}}
+                </a>
+              </li>
+              <li role="menuitem" ng-if="cve && !isAccepted && isWriteVulsAuthorized">
+                <a ng-click="acceptVulnerability($event, cve)">
+                  <em class="fa fa-check-square-o mr"></em>{{ 'cveProfile.ACCEPT_VUL' | translate}}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- <div class="pull-right mr" style="margin-top: 2px;" display-control="vuls_profile" ng-if="selectedIndex === 2" ng-show="!isSimpleButton">
+          <button
+            type="button"
+            style="padding: 3px 3px;"
+            class="btn btn-default pull-right"
+            ng-click="toggleShowingAcceptedVuls(isShowingAccepted)"
+          >
+            <em class="fa mr-sm" ng-class="{'fa-eye': !isShowingAccepted, 'fa-eye-slash': isShowingAccepted}"></em>
+            {{ isShowingAccepted ? 'enum.HIDE_ACCEPTED_VULS' : 'enum.SHOW_ACCEPTED_VULS' | translate}}
+          </button>
+        </div>
+        <div
+          class="pull-right mr mt-sm text-muted hand"  ng-show="isSimpleButton"
+          ng-if="selectedIndex === 2" display-control="vuls_profile"
+          ng-click="toggleShowingAcceptedVuls(isShowingAccepted)"
+        >
+          <em class="fa" uib-tooltip="{{ isShowingAccepted ? 'enum.HIDE_ACCEPTED_VULS' : 'enum.SHOW_ACCEPTED_VULS' | translate }}"
+            ng-class="{'fa-eye': !isShowingAccepted, 'fa-eye-slash': isShowingAccepted}"
+          ></em>
+        </div>
+        <div class="pull-right mr" style="margin-top: 2px;" ng-if="selectedIndex === 2"
+          ng-show="cve && !isAccepted && !isSimpleButton" display-control="write_vuls_profile">
+          <button
+            type="button"
+            style="padding: 3px 3px;"
+            class="btn btn-default pull-right"
+            ng-click="acceptVulnerability($event, cve)"
+          >
+            <em class="fa fa-check-square-o mr-sm"></em>{{ 'cveProfile.ACCEPT' | translate}}
+          </button>
+        </div>
+        <div role="button" ng-show="cve && !isAccepted && isSimpleButton"
+          ng-if="selectedIndex === 2" display-control="write_vuls_profile"
+          class="pull-right text-muted mr mt-sm"
+          ng-click="acceptVulnerability($event, cve)"
+        >
+          <em class="fa fa-check-square-o" uib-tooltip="{{ 'cveProfile.ACCEPT' | translate }}"></em>
+        </div> -->
+        <div class="pull-right mt-sm mr" ng-if="selectedIndex === 2 && nodeVulnerabilities && nodeVulnerabilities.length" ng-click="exportCve()">
+          <em
+            class="fa fa-file-excel-o xls-color hand"
+            style="margin-left:10px;"
+          ></em>
+          <span class="text-gray-label link">CSV</span>
+        </div>
+        <div class="pull-right mt-sm mr" ng-click="exportCsv()" ng-if="selectedIndex === 1 && compliance.items && compliance.items.length && !containerErr">
+          <em
+            class="fa fa-file-excel-o xls-color hand"
+            style="margin-left:10px;"
+          ></em>
+          <span class="text-gray-label link">CSV</span>
+        </div>
+        <div class="pull-right" ng-if="selectedIndex === 3">
+          <div
+            class="clearfix mv-sm"
+            ng-click="hideSystemNode = !hideSystemNode; toggleSystemNode(hideSystemNode)"
+          >
+            <em
+              class="fa text-action pull-right mr mt-sm"
+              ng-class="hideExitedProcess ? 'fa-eye' : 'fa-eye-slash'"
+              uib-tooltip="{{hideSystemNode ? 'nodes.containers.SHOW_SYS_NODE' :
+              'nodes.containers.HIDE_SYS_NODE' | translate}}"
+            ></em>
+          </div>
+        </div>
+      </div>
+      <md-content style="padding-bottom: 0;">
+        <md-tabs
+          md-no-ink
+          md-dynamic-height=""
+          md-border-bottom=""
+          md-selected="selectedIndex"
+          class="p0"
+        >
+          <md-tab>
+            <md-tab-label>
+              <em class="fa fa-address-card-o" uib-tooltip="{{'nodes.detail.TAB_TITLE' | translate}}" tooltip-enable="{{isSimpleTab}}"/>
+              <span ng-show="!isSimpleTab">{{'nodes.detail.TAB_TITLE' | translate}}</span>
+            </md-tab-label>
+            <md-tab-body>
+              <md-content
+                class="pb0 no-padding-l no-padding-r no-x-scroll"
+                ng-style="{height: detailViewHeight + 'px'}"
+              >
+                <div class="no-padding-l no-padding-r">
+                  <div class="containers-detail-sec">
+                    <div class="row mt-lg">
+                      <div class="col-sm-4">
+                        <div class="nv-resources-detail">
+                          <div>{{'nodes.detail.NAME' | translate}}</div>
+                          <div class="icon">
+                            <em class="fa fa-credit-card text-primary fa-lg"></em>
+                          </div>
+                          <div class="auto-hide text-muted" uib-tooltip="{{host.name}}" tooltip-enable="false" show-tooltip-on-text-overflow>
+                            {{host.name}}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-4">
+                        <div class="nv-resources-detail">
+                          <div>{{'nodes.detail.OS' | translate}}</div>
+                          <div class="icon">
+                            <em class="fa fa-linux text-primary fa-lg"></em>
+                          </div>
+                          <div class="auto-hide text-muted" uib-tooltip="{{host.os}}" tooltip-enable="false" show-tooltip-on-text-overflow>
+                            {{host.os}}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-4">
+                        <div class="nv-resources-detail">
+                          <div>{{'nodes.detail.KERNEL_VERSION' | translate}}</div>
+                          <div class="icon">
+                            <em class="fa fa-tag text-primary fa-lg"></em>
+                          </div>
+                          <div class="auto-hide text-muted" uib-tooltip="{{host.kernel}}" tooltip-enable="false" show-tooltip-on-text-overflow>
+                            {{host.kernel}}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-4">
+                        <div class="nv-resources-detail">
+                          <div>{{'nodes.detail.MEMORY' | translate}}</div>
+                          <div class="icon">
+                            <em class="fa fa-microchip text-primary fa-lg"></em>
+                          </div>
+                          <div class="auto-hide text-muted" uib-tooltip="{{host.memory | bytes}}" tooltip-enable="false" show-tooltip-on-text-overflow>
+                            {{host.memory | bytes}}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-4">
+                        <div class="nv-resources-detail">
+                          <div>{{'nodes.detail.NUM_OF_CPUS' | translate}}</div>
+                          <div class="icon">
+                            <em class="fa fa-microchip text-primary fa-lg"></em>
+                          </div>
+                          <div class="auto-hide text-muted" uib-tooltip="{{host.cpus}}" tooltip-enable="false" show-tooltip-on-text-overflow>
+                            {{host.cpus}}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-4">
+                        <div class="nv-resources-detail">
+                          <div>
+                            {{'nodes.detail.NUM_OF_CONTAINERS' | translate}}
+                          </div>
+                          <div class="icon">
+                            <em class="fa fa-cubes text-primary fa-lg"></em>
+                          </div>
+                          <div class="auto-hide text-muted" uib-tooltip="{{host.containers}}" tooltip-enable="false" show-tooltip-on-text-overflow>
+                            {{host.containers}}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-4">
+                        <div class="nv-resources-detail">
+                          <div>
+                            {{host.runtime | capitalize}} {{'nodes.detail.VERSION'
+                            | translate}}
+                          </div>
+                          <div class="icon">
+                            <em class="fa fa-tag text-primary fa-lg"></em>
+                          </div>
+                          <div class="auto-hide text-muted" uib-tooltip="{{host.runtime_version}}" tooltip-enable="false" show-tooltip-on-text-overflow>
+                            {{host.runtime_version}}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-4">
+                        <div class="nv-resources-detail">
+                          <div>
+                            {{host.runtime | capitalize}}
+                            {{'nodes.detail.API_VERSION' | translate}}
+                          </div>
+                          <div class="icon">
+                            <em class="fa fa-tag text-primary fa-lg"></em>
+                          </div>
+                          <div class="auto-hide text-muted" uib-tooltip="{{host.runtime_api_version}}" tooltip-enable="false" show-tooltip-on-text-overflow>
+                            {{host.runtime_api_version}}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-4" ng-if="host.scan_summary">
+                        <div class="nv-resources-detail">
+                          <div>
+                            {{'group.gridHeader.VULNERABILITIES' | translate}}
+                          </div>
+                          <div class="icon">
+                            <em class="fa fa-bug text-warning fa-lg"></em>
+                          </div>
+                          <div class="auto-hide " uib-tooltip="{{host.scan_summary.high}}" tooltip-enable="false" show-tooltip-on-text-overflow>
+                            <label
+                              class="label label-danger mr-sm"
+                              ng-if="host.scan_summary.high"
+                            >
+                              {{host.scan_summary.high}}</label
+                            >
+                            <label
+                              class="label label-warning"
+                              ng-if="host.scan_summary.medium"
+                            >
+                              {{host.scan_summary.medium}}</label
+                            >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    ng-if="!isEmpty(host.interfaces)"
+                    class="containers-detail-sec"
+                  >
+                    <div class="title">
+                      {{'containers.detail.NETWORK_INTERFACES' | translate}}
+                    </div>
+                    <div class="list-details">
+                      <div
+                        class="row"
+                        ng-repeat="(name, nets) in host.interfaces"
+                        ng-class-even="'bg-gray-lighter-1'"
+                      >
+                        <div class="col-sm-2 text-right">
+                          {{name}}
+                        </div>
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-9 text-muted">
+                          <div ng-repeat="net in nets">
+                            IP:{{net.ip}}/{{net.ip_prefix}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            {{"general.GATEWAY" | translate}}:{{net.gateway}}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    ng-if="!isEmpty(host.labels)"
+                    class="containers-detail-sec"
+                  >
+                    <div class="title">
+                      {{'containers.detail.LABELS' | translate}}
+                    </div>
+                    <div class="list-details">
+                      <div
+                        class="table-row"
+                        ng-repeat="(label, value) in host.labels"
+                      >
+                        <div class="row m0" ng-class-even="'bg-gray-lighter-1'">
+                          <div
+                            class="col-sm-4 text-right auto-hide"
+                            uib-tooltip="{{label}}"
+                            tooltip-enable="false"
+                            show-tooltip-on-text-overflow
+                          >
+                            {{label}}
+                          </div>
+                          <div class="col-sm-8 text-muted">
+                            {{value || "&nbsp;"}}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    ng-if="!isEmpty(host.annotations)"
+                    class="containers-detail-sec"
+                  >
+                    <div class="title">
+                      {{'nodes.detail.ANNONTATIONS' | translate}}
+                    </div>
+                    <div class="list-details">
+                      <div
+                        class="table-row"
+                        ng-repeat="(key, value) in host.annotations"
+                      >
+                        <div class="row m0" ng-class-even="'bg-gray-lighter-1'">
+                          <div
+                            class="col-sm-4 text-right auto-hide"
+                            uib-tooltip="{{key}}"
+                            tooltip-enable="false"
+                            show-tooltip-on-text-overflow
+                          >
+                            {{key}}
+                          </div>
+                          <div class="col-sm-8 text-muted">
+                            {{value || "&nbsp;"}}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </md-content>
+            </md-tab-body>
+          </md-tab>
+          <md-tab ng-click="getCompliance(host.id)">
+            <md-tab-label>
+              <em class="fa fa-gavel" uib-tooltip="{{'cis.tab.COMPLIANCE' | translate}}" tooltip-enable="{{isSimpleTab}}"/>
+              <span ng-show="!isSimpleTab">{{'cis.tab.COMPLIANCE' | translate}}</span>
+            </md-tab-label>
+            <md-tab-body>
+              <md-content class="pb0">
+                <div
+                  ag-grid="complianceGridOptions"
+                  class="ag-grid mt-sm"
+                  style="width: 100%"
+                  ng-style="{ height: (detailViewHeight - 5) + 'px'}"
+                ></div>
+              </md-content>
+            </md-tab-body>
+          </md-tab>
+          <md-tab
+            label="{{'sidebar.nav.SCAN' | translate}}"
+            ng-click="getNodeScanReport(host.id)"
+          >
+            <md-tab-label>
+              <em class="fa fa-bug" uib-tooltip="{{'sidebar.nav.SCAN' | translate}}" tooltip-enable="{{isSimpleTab}}"/>
+              <span ng-show="!isSimpleTab">{{'sidebar.nav.SCAN' | translate}}</span>
+            </md-tab-label>
+            <md-tab-body>
+              <md-content class="pb0">
+                <div
+                  ag-grid="cveGridOptions"
+                  class="ag-grid mb0 mt-sm"
+                  style="width: 100%;"
+                  ng-style="{height: (detailViewHeight - 5) + 'px'}"
+                ></div>
+              </md-content>
+            </md-tab-body>
+          </md-tab>
+          <md-tab
+            label="{{'nodes.containers.TAB_TITLE' | translate}}"
+            ng-click="getContainers(host.id)"
+          >
+            <md-tab-label>
+              <em class="fa fa-square-o" uib-tooltip="{{'nodes.containers.TAB_TITLE' | translate}}" tooltip-enable="{{isSimpleTab}}"/>
+              <span ng-show="!isSimpleTab">{{'nodes.containers.TAB_TITLE' | translate}}</span>
+            </md-tab-label>
+            <md-tab-body>
+              <md-content class="pb0">
+                <div
+                  ag-grid="contGridOptions"
+                  class="ag-grid no-padding-l no-padding-r mt-sm"
+                  style="width: 100%;"
+                  ng-style="{height: (detailViewHeight - 5) + 'px'}"
+                ></div>
+              </md-content>
+            </md-tab-body>
+          </md-tab>
+        </md-tabs>
+      </md-content>
+    </div>
+  </div>
+
+  <div id="cve" class="dataBox middleLeft pl-sm" ng-show="onCVE">
+    <em class="fa fa-times pull-right pr-sm pt-sm" ng-click="onCVE=false"></em>
+    <h4>
+      {{cveName}}
+      <a ng-href="{{cveLink}}" target="_blank"
+        ><em class="fa fa-external-link"></em
+      ></a>
+    </h4>
+    <blockquote style="font-size: 13px">
+      <p>{{cveDescription}}</p>
+    </blockquote>
+  </div>
+
+  <div id="compliance" class="dataBox middleRight pl-sm" ng-show="onCompliance">
+    <em
+      class="fa fa-times pull-right pr-sm pt-sm"
+      ng-click="onCompliance=false"
+    ></em>
+    <h4 class="ml-lg">
+      {{'cis.REMEDIATION' | translate}}
+    </h4>
+    <blockquote style="font-size: 13px">
+      <p>{{complianceRemediation}}</p>
+    </blockquote>
+    <h4 class="ml-lg" ng-if="complianceMessage">
+      {{'nodes.gridHeader.MESSAGE' | translate}}
+    </h4>
+    <blockquote style="font-size: 13px" ng-if="complianceMessage">
+      <p>{{complianceMessage}}</p>
+      <p ng-if="complianceGroup">
+        {{complianceGroup}}
+      </p>
+    </blockquote>
+  </div>
+
+  <script type="text/ng-template" id="tooltipTemplate.html">
+    <div translate="{{'scan.AUTO_TIP'}}">
+    </div>
+  </script>
+</div>

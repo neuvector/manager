@@ -33,5 +33,5 @@ jar:
 	docker volume rm prebuild_manager || true
 	docker run --rm --name store -v prebuild_manager:/prebuild/manager $(REPO_REL_URL)/neuvector/store
 	@echo "Running build ..."
-	docker run --rm -ia STDOUT --name build -v prebuild_manager:/prebuild/manager -v $(CURDIR):/manager $(REPO_REL_URL)/neuvector/build:latest manager
+	docker run --rm -ia STDOUT --name build -v prebuild_manager:/prebuild/manager -v $(CURDIR):/manager -w /manager --entrypoint ./make_jar.sh $(REPO_REL_URL)/neuvector/build:latest
 	docker volume rm prebuild_manager

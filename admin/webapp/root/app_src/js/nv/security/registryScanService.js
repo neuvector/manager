@@ -767,10 +767,10 @@
 
         RegistryScanFactory.getComplianceGridOptions = () => {
           if (_complianceGridOptions === null) _complianceGridOptions = Utils.createGridOptions(complianceColumns);
+          _complianceGridOptions.rowHeight = 90;
           _complianceGridOptions.defaultColDef = {
             flex: 1,
-            cellClass: 'cell-wrap-text',
-            autoHeight: true,
+            cellClass: 'cell-wrap-text-fix-height',
             sortable: true,
             resizable: true,
           };

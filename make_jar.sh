@@ -3,7 +3,7 @@
 export CHROME_BIN=/usr/bin/google-chrome
 
 rm -rf admin/target
-pushd admin/webapp/root/master
+pushd admin/webapp/root/app_src
 if [[ $# > 0 ]]; then
     case $1 in
         -d)
@@ -34,24 +34,24 @@ else
         exit 1
     fi
 fi
-# npm install -g bower-npm-resolver
-# if [ $? -eq 0 ]; then
-#     echo Bower resolver installation SUCCEED
-# else
-#     echo ================================
-#     echo Bower resolver installation FAILED
-#     echo ================================
-#     exit 1
-# fi
-# bower install --allow-root
-# if [ $? -eq 0 ]; then
-#     echo Bower package installation SUCCEED
-# else
-#     echo ================================
-#     echo Bower package installation FAILED
-#     echo ================================
-#     exit 1
-# fi
+npm install -g bower-npm-resolver
+if [ $? -eq 0 ]; then
+    echo Bower resolver installation SUCCEED
+else
+    echo ================================
+    echo Bower resolver installation FAILED
+    echo ================================
+    exit 1
+fi
+bower install --allow-root
+if [ $? -eq 0 ]; then
+    echo Bower package installation SUCCEED
+else
+    echo ================================
+    echo Bower package installation FAILED
+    echo ================================
+    exit 1
+fi
 gulp vendor:app 2>&1
 gulp build 2>&1
 if [ $? -eq 0 ]; then

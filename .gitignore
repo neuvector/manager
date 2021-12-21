@@ -58,7 +58,7 @@ admin/webapp/root/index-appsafe.html
 .sass-cache/*
 
 
-admin/webapp/root/app/metadata/js-version.json
+#admin/webapp/root/app/metadata/js-version.json
 admin/webapp/root/app/i18n
 .metals
 admin/test/REST_API/output

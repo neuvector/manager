@@ -15,7 +15,8 @@ describe('Network rule - ', function() {
   // let UiFramework;
   beforeEach(angular.mock.module('app.assets'));
   beforeEach(angular.mock.module('app.utils'));
-  beforeEach(angular.mock.module('app.navsearch'));
+  beforeEach(angular.mock.module('app.common'));
+
 
   //Make mock for dependencies
   beforeEach(module('app.assets', ($provide) => {

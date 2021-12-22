@@ -51,6 +51,7 @@ SingleValueCrt = {  "cveHighCount":         True,
                     "shareIpcWithHost":     True,
                     "shareNetWithHost":     True,
                     "count":                True,
+                    "resourceLimit":        True,
                  }
 
 NamesDisplay = { "cveHighCount":        "High severity CVE count",
@@ -78,6 +79,11 @@ NamesDisplay = { "cveHighCount":        "High severity CVE count",
                  "sharePidWithHost":    "Share PID namespace with host",
                  "shareIpcWithHost":    "Share IPC namespace with host",
                  "shareNetWithHost":    "Share network with host",
+                 "resourceLimit":       "Resource Limit",
+                 "cpuRequest":          "CPU request",
+                 "cpuLimit":            "CPU limit",
+                 "memoryRequest":       "memory request",
+                 "memoryLimit":         "memory limit",
                 }
 
 NamesDisplay2 = {   # for criteria that has sub-criteria
@@ -85,6 +91,7 @@ NamesDisplay2 = {   # for criteria that has sub-criteria
                     "cveMediumCount": "More than {v1} medium severity CVEs that were reported before {v2} days ago",
                     "cveHighWithFixCount": "More than {v1} high severity CVEs with fix that were reported before {v2} days ago",
                     "cveScoreCount":       "More than {v1} CVEs whose score >= {v2}",
+                    "resourceLimit":  "Resource limit{v1}: {v2}",
                 }
 
 
@@ -197,13 +204,25 @@ def _list_admission_rule_display_format(rule):
                         if len(subCriteria) == 0:
                             criterion = "({} {} {})".format(NamesDisplay[c["name"]], opDisplay, value)
                         else:
-                            if len(subCriteria) == 1:
+                            if c["name"] == "resourceLimit":
+                                subCritStr = ""
                                 for subCriterion in subCriteria:
                                     subOpDisplay, subValue = _get_criterion_op_value(subCriterion)
-                                    criterion = "({})".format(NamesDisplay2[c["name"]].format(v1=value, v2=subValue))
-                                    break
+                                    #subStr = "({} {} {})".format(NamesDisplay[subCriterion["name"]].format(v1=subValue, v2=subValue))
+                                    str = "({} {} {})".format(NamesDisplay[subCriterion["name"]], subCriterion["op"], subCriterion["value"])
+                                    if subCritStr == "":
+                                        subCritStr = str
+                                    else:
+                                        subCritStr = "{} or {}".format(subCritStr, str)
+                                criterion = "({})".format(NamesDisplay2[c["name"]].format(v1=value, v2=subCritStr))
                             else:
-                                criterion = "(unsupported sub-criteria number: {})".format(len(subCriteria))
+                                if len(subCriteria) == 1:
+                                    for subCriterion in subCriteria:
+                                        subOpDisplay, subValue = _get_criterion_op_value(subCriterion)
+                                        criterion = "({})".format(NamesDisplay2[c["name"]].format(v1=value, v2=subValue))
+                                        break
+                                else:
+                                    criterion = "(unsupported sub-criteria number: {})".format(len(subCriteria))
                     elif c["name"] in NamesDisplay:
                         criterion = "({} {} {})".format(NamesDisplay[c["name"]], opDisplay, value)
                     else:
@@ -289,13 +308,20 @@ def _list_admission_rule_options(data, ruleType, category, ruleOptionsObj):
         option = ruleOptions[name]
         if "sub_options" in option:
             subOptions = option["sub_options"]
+            subOptionsStr = ""
             for name in subOptions:
+                str = ""
                 subOption = subOptions[name]
                 _get_criterion_option(subOption)
                 if subOption["values"] == "":
-                    option["sub-options"] = "{}  {}".format(subOption["name"], subOption["ops"])
+                    str = "{}  {}".format(subOption["name"], subOption["ops"])
                 else:
-                    option["sub-options"] = "{} {}  {}".format(subOption["name"], subOption["ops"], subOption["values"])
+                    str = "{} {}  {}".format(subOption["name"], subOption["ops"], subOption["values"])
+                if subOptionsStr == "":
+                    subOptionsStr = str
+                else:
+                    subOptionsStr = "{}\n{}".format(subOptionsStr, str)
+            option["sub-options"] = subOptionsStr
         else:
             option["sub-options"] = ""
         _get_criterion_option(option)
@@ -349,9 +375,12 @@ def _parse_adm_criterion(c):
 def _parse_adm_criteria(criteria):
     crits = []
     for c in criteria:
+        c0 = c.split("/")
         mainCrit = {}
         c3 = c.split(":")
-        if len(c3) < 3:
+        if len(c0) > 0 and c0[0] == "resourceLimit":
+            c3 = [c0[0]]
+        elif len(c3) < 3:
             msg = "Error: Incorrect criteria option: {}".format(c)
             click.echo(msg)
             return False, None
@@ -359,7 +388,7 @@ def _parse_adm_criteria(criteria):
         if crtName == "cveHighCount" or crtName == "cveMediumCount" or crtName == "cveHighWithFixCount" or crtName == "cveScoreCount":
             c2 = c.split("/")
             if len(c2) == 0:
-                click.echo("""Error: Missing option value "--criteria".""")
+                click.echo("""Error: Invalid option value "--criteria".""")
                 return False, None
             if len(c2) > 1: # meaning there is sub-criteria
                 subCrits = []
@@ -371,6 +400,18 @@ def _parse_adm_criteria(criteria):
             else: # meaning there is no sub-criteria
                 mainCrit = _parse_adm_criterion(c)
             crits.append(mainCrit)
+        elif crtName == "resourceLimit":
+            c2 = c.split("/")
+            if len(c2) == 0:
+                click.echo("""Error: Invalid option value "--criteria".""")
+                return False, None
+            if len(c2) > 1: # meaning there is sub-criteria
+                subCrits = []
+                for c in c2[1:]:
+                    subCrit = _parse_adm_criterion(c)
+                    subCrits.append(subCrit)
+                mainCrit = {"name":"resourceLimit", "sub_criteria": subCrits}
+            crits.append(mainCrit)
         else:
             mainCrit = _parse_adm_criterion(c)
             mainCrit["sub_criteria"] = None
@@ -381,7 +422,7 @@ def _parse_adm_criteria(criteria):
 @click.option("--type", default="deny", type=click.Choice(['deny', 'allow']), show_default=True, help="Rule type")
 @click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=True, help="It's a local or federal rule")
 #@click.option("--category", default="Kubernetes", help="rule category. default: Kubernetes")
-@click.option("--criteria",  multiple=True, help="Format is name:op:value{/subName:op:value}. name can be image, namespace, user, labels, mountVolumes, cveNames, cveHighCount, cveHighWithFixCount, cveMediumCount, cveScoreCount, imageScanned, imageSigned, runAsRoot, allowPrivEscalation, pspCompliance, userGroups, imageCompliance, envVarSecrets, imageNoOS, sharePidWithHost, shareIpcWithHost, shareNetWithHost. subName can be publishDays, count. See command: show admission rule options")
+@click.option("--criteria",  multiple=True, help="Format is name:op:value{/subName:op:value}. name can be image, namespace, user, labels, mountVolumes, cveNames, cveHighCount, cveHighWithFixCount, cveMediumCount, cveScoreCount, imageScanned, imageSigned, runAsRoot, allowPrivEscalation, pspCompliance, userGroups, imageCompliance, envVarSecrets, imageNoOS, sharePidWithHost, shareIpcWithHost, shareNetWithHost, resourceLimit. subName can be publishDays, count, cpuRequest, cpuLimit, memoryRequest, memoryLimit. See command: show admission rule options")
 @click.option("--disable/--enable", default=False, help="Disable/enable the admission control rule [default: --enable]")
 @click.option("--comment", default="", help="Rule comment")
 @click.pass_obj
@@ -467,7 +508,7 @@ def set_admission_state(data, disable, mode, client_mode):
 @click.option("--id", type=int, required=True, help="Rule id")
 @click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=True, help="Obsolete")
 #@click.option("--category", default="Kubernetes", show_default=True, help="Rule category")
-@click.option("--criteria",  multiple=True, help="Format is name:op:value{/subName:op:value}. name can be image, namespace, user, labels, mountVolumes, cveNames, cveHighCount, cveHighWithFixCount, cveMediumCount, cveScoreCount, imageScanned, imageSigned, runAsRoot, allowPrivEscalation, pspCompliance, userGroups, imageCompliance, envVarSecrets, imageNoOS, sharePidWithHost, shareIpcWithHost, shareNetWithHost. subName can be publishDays, count. See command: show admission rule options")
+@click.option("--criteria",  multiple=True, help="Format is name:op:value{/subName:op:value}. name can be image, namespace, user, labels, mountVolumes, cveNames, cveHighCount, cveHighWithFixCount, cveMediumCount, cveScoreCount, imageScanned, imageSigned, runAsRoot, allowPrivEscalation, pspCompliance, userGroups, imageCompliance, envVarSecrets, imageNoOS, sharePidWithHost, shareIpcWithHost, shareNetWithHost, resourceLimit. subName can be publishDays, count, cpuRequest, cpuLimit, memoryRequest, memoryLimit. See command: show admission rule options")
 @click.option("--enable", "state", flag_value='enable', help="Enable the admission control rule")
 @click.option("--disable", "state", flag_value='disable', help="Enable the admission control rule")
 @click.option("--comment", help="Rule comment")

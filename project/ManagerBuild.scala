@@ -26,7 +26,7 @@ object ManagerBuild extends Build {
     // https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
     libraryDependencies += "javax.xml.bind" % "jaxb-api" % "2.3.0",
     // https://github.com/stagemonitor/stagemonitor/issues/455
-    libraryDependencies += "com.sun.xml.ws" % "jaxws-ri" % "2.3.0",
+    libraryDependencies += "com.sun.xml.ws" % "jaxws-ri" % "2.3.3",
     // https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-core
     //libraryDependencies += "com.sun.xml.bind" % "jaxb-core" % "2.3.0.1"
     // https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-impl

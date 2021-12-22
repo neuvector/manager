@@ -4,7 +4,6 @@ REPO_REL_URL = 10.1.127.12:5000
 STAGE_DIR = stage
 
 copy_mgr:
-	cp manager/licenses/* ${STAGE_DIR}/licenses/
 	cp manager/cli/cli ${STAGE_DIR}/usr/local/bin/
 	cp -r manager/cli/prog ${STAGE_DIR}/usr/local/bin/
 	cp manager/scripts/* ${STAGE_DIR}/usr/local/bin/

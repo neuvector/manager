@@ -540,7 +540,7 @@ class RestClient(object):
             self._handle_common_error(resp.status_code, resp.json())
         return resp
 
-    def importConfig(self, path, filename, raw, tid, iter, tempToken):
+    def importConfig(self, path, filename, raw, standalone, tid, iter, tempToken):
         # iter=0 means triggers import. iter>=1 means starting query import status
         if not self._token():
             raise Unauthorized()
@@ -554,6 +554,8 @@ class RestClient(object):
                 # this is a request for remote cluster
                 url = "{}/v1/fed/cluster/{}{}".format(self.url, RemoteCluster["id"], uri)
         headers = {"X-Auth-Token": self._token()}
+        if standalone != None:
+            headers["X-As-Standalone"] = standalone
 
         if self.debug:
             print "URL: POST " + url
@@ -598,7 +600,7 @@ class RestClient(object):
             if self._errcode(resp.json()) == self.RESTErrUnauthorized and (resp.status_code == 401 or resp.status_code == 408):
                 # Use temp token
                 self.sess.headers.update({"X-Auth-Token": tempToken})
-                resp = self.importConfig(path, filename, raw, tid, iter, "")
+                resp = self.importConfig(path, filename, raw, standalone, tid, iter, "")
                 self._clear_token()
                 return resp
 

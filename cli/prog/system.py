@@ -910,13 +910,14 @@ def request_import(data):
 @request_import.command("config")
 @click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))
 @click.option("--raw", default=False, is_flag=True, help="Upload in raw format")
+@click.option("--standalone", "ignoreFed", flag_value="true", help="Force to import from a federal-managed cluster to standalone cluster(no federal information is reserved)")
 @click.pass_obj
-def import_config(data, filename, raw):
+def import_config(data, filename, raw, ignoreFed):
     """Import system configurations."""
     try:
         tid = ""
         tempToken = ""
-        resp = data.client.importConfig("file/config", filename, raw, tid, 0, "")
+        resp = data.client.importConfig("file/config", filename, raw, ignoreFed, tid, 0, "")
         if tid == "":
             if resp.status_code == requests.codes.partial:
                 respJson = resp.json()
@@ -932,7 +933,7 @@ def import_config(data, filename, raw):
             #click.echo("Info: import task transaction id is {}".format(tid))
             while resp.status_code == requests.codes.partial:
                 time.sleep(3)
-                resp = data.client.importConfig("file/config", filename, raw, tid, i, tempToken)
+                resp = data.client.importConfig("file/config", filename, raw, ignoreFed, tid, i, tempToken)
                 respJson = resp.json()
                 if "data" in respJson:
                     respData = respJson["data"]
@@ -967,7 +968,7 @@ def import_group(data, filename):
     """Import group policy."""
     try:
         tid = ""
-        resp = data.client.importConfig("file/group/config", filename, True, tid, 0, "")
+        resp = data.client.importConfig("file/group/config", filename, True, None, tid, 0, "")
         if tid == "":
             if resp.status_code == requests.codes.partial:
                 respJson = resp.json()
@@ -981,7 +982,7 @@ def import_group(data, filename):
             #click.echo("Info: import task transaction id is {}".format(tid))
             while resp.status_code == requests.codes.partial:
                 time.sleep(2)
-                resp = data.client.importConfig("file/group/config", filename, True, tid, i, "")
+                resp = data.client.importConfig("file/group/config", filename, True, None, tid, i, "")
                 respJson = resp.json()
                 if "data" in respJson:
                     respData = respJson["data"]
@@ -1016,7 +1017,7 @@ def import_admission(data, filename):
     """Import admission control configuration/rules."""
     try:
         tid = ""
-        resp = data.client.importConfig("file/admission/config", filename, True, tid, 0, "")
+        resp = data.client.importConfig("file/admission/config", filename, True, None, tid, 0, "")
         if tid == "":
             if resp.status_code == requests.codes.partial:
                 respJson = resp.json()
@@ -1030,7 +1031,7 @@ def import_admission(data, filename):
             #click.echo("Info: import task transaction id is {}".format(tid))
             while resp.status_code == requests.codes.partial:
                 time.sleep(2)
-                resp = data.client.importConfig("file/admission/config", filename, True, tid, i, "")
+                resp = data.client.importConfig("file/admission/config", filename, True, None, tid, i, "")
                 respJson = resp.json()
                 if "data" in respJson:
                     respData = respJson["data"]
@@ -1064,7 +1065,7 @@ def import_waf(data, filename):
     """Import WAF sensors/rules."""
     try:
         tid = ""
-        resp = data.client.importConfig("file/waf/config", filename, True, tid, 0, "")
+        resp = data.client.importConfig("file/waf/config", filename, True, None, tid, 0, "")
         if tid == "":
             if resp.status_code == requests.codes.partial:
                 respJson = resp.json()
@@ -1078,7 +1079,7 @@ def import_waf(data, filename):
             #click.echo("Info: import task transaction id is {}".format(tid))
             while resp.status_code == requests.codes.partial:
                 time.sleep(2)
-                resp = data.client.importConfig("file/waf/config", filename, True, tid, i, "")
+                resp = data.client.importConfig("file/waf/config", filename, True, None, tid, i, "")
                 respJson = resp.json()
                 if "data" in respJson:
                     respData = respJson["data"]

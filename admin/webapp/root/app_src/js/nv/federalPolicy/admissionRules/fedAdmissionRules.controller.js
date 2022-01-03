@@ -1008,7 +1008,7 @@
             if (!$scope.conditionOptionErr) {
                 activate();
             }
-            $scope.enable = false;
+            $scope.enable = true;
             $scope.newRule = {
                 comment: "",
                 conditions: [],

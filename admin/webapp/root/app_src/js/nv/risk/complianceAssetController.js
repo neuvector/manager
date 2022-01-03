@@ -956,6 +956,7 @@
         const resolveExcelCellLimit = function(entryData) {
           let maxLen = Math.max(entryData.images.length, entryData.workloads.length, entryData.services.length, entryData.domains.length);
           let maxRow4Entry = Math.ceil(maxLen / EXCEL_CELL_LIMIT);
+          maxRow4Entry = maxRow4Entry === 0 ? 1 : maxRow4Entry;
           let row = {};
           for (let i = 0; i < maxRow4Entry; i++) {
             row = {

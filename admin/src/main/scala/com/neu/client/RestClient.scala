@@ -124,27 +124,49 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig {
   private val TOKEN_HEADER: String = "X-Auth-Token"
   private val X_NV_PAGE: String = "X-Nv-Page"
   private val X_TRN_ID: String = "X-Transaction-Id"
+  private val X_AS_STANDALONE: String = "X-As-Standalone"
 
   def httpRequestWithHeader(
     uri: String,
     method: HttpMethod = GET,
     data: String = "",
     token: String,
-    transactionId: Option[String] = None
+    transactionId: Option[String] = None,
+    asStandalone: Option[String] = None
   ): Future[HttpResponse] = {
     val pipeline = sendAndReceive
     transactionId.fold(
-      pipeline {
-        createHttpRequest(uri, method, data) ~> addHeader(TOKEN_HEADER, token) ~>
-          addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
-          addHeader(`Cache-Control`(CacheDirectives.`no-cache`))
+      asStandalone.fold(
+        pipeline {
+          createHttpRequest(uri, method, data) ~> addHeader(TOKEN_HEADER, token) ~>
+            addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
+            addHeader(`Cache-Control`(CacheDirectives.`no-cache`))
+        }
+      ) {
+        asStandalone =>
+        pipeline {
+          createHttpRequest(uri, method, data) ~> addHeader(TOKEN_HEADER, token) ~>
+            addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
+            addHeader(`Cache-Control`(CacheDirectives.`no-cache`)) ~> addHeader(X_AS_STANDALONE, asStandalone)
+        }
       }
+
     ){
       transactionId =>
-      pipeline {
-        createHttpRequest(uri, method, data) ~> addHeader(TOKEN_HEADER, token) ~>
-          addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
-          addHeader(`Cache-Control`(CacheDirectives.`no-cache`)) ~> addHeader(X_TRN_ID, transactionId)
+      asStandalone.fold(
+        pipeline {
+          createHttpRequest(uri, method, data) ~> addHeader(TOKEN_HEADER, token) ~>
+            addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
+            addHeader(`Cache-Control`(CacheDirectives.`no-cache`)) ~> addHeader(X_TRN_ID, transactionId)
+        }
+      ) {
+        asStandalone =>
+        pipeline {
+          createHttpRequest(uri, method, data) ~> addHeader(TOKEN_HEADER, token) ~>
+            addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
+            addHeader(`Cache-Control`(CacheDirectives.`no-cache`)) ~> addHeader(X_TRN_ID, transactionId) ~>
+            addHeader(X_AS_STANDALONE, asStandalone)
+        }
       }
     }
   }
@@ -168,21 +190,42 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig {
     method: HttpMethod = GET,
     data: MultipartFormData,
     token: String,
-    transactionId: Option[String] = None
+    transactionId: Option[String] = None,
+    asStandalone: Option[String] = None
   ): Future[HttpResponse] = {
     val pipeline = sendAndReceive
     transactionId.fold(
-      pipeline {
-        Post(uri, data) ~> addHeader(TOKEN_HEADER, token) ~>
-          addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
-          addHeader(`Cache-Control`(CacheDirectives.`no-cache`))
+      asStandalone.fold(
+        pipeline {
+          Post(uri, data) ~> addHeader(TOKEN_HEADER, token) ~>
+            addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
+            addHeader(`Cache-Control`(CacheDirectives.`no-cache`))
+        }
+      ) {
+        asStandalone =>
+        pipeline {
+          Post(uri, data) ~> addHeader(TOKEN_HEADER, token) ~>
+            addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
+            addHeader(`Cache-Control`(CacheDirectives.`no-cache`)) ~> addHeader(X_AS_STANDALONE, asStandalone)
+        }
       }
+
     ){
       transactionId =>
-      pipeline {
-        Post(uri, data) ~> addHeader(TOKEN_HEADER, token) ~>
-          addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
-          addHeader(`Cache-Control`(CacheDirectives.`no-cache`)) ~> addHeader(X_TRN_ID, transactionId)
+      asStandalone.fold(
+        pipeline {
+          Post(uri, data) ~> addHeader(TOKEN_HEADER, token) ~>
+            addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
+            addHeader(`Cache-Control`(CacheDirectives.`no-cache`)) ~> addHeader(X_TRN_ID, transactionId)
+        }
+      ) {
+        asStandalone =>
+        pipeline {
+          Post(uri, data) ~> addHeader(TOKEN_HEADER, token) ~>
+            addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
+            addHeader(`Cache-Control`(CacheDirectives.`no-cache`)) ~> addHeader(X_TRN_ID, transactionId) ~>
+            addHeader(X_AS_STANDALONE, asStandalone)
+        }
       }
     }
   }

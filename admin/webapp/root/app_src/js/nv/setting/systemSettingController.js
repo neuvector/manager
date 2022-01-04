@@ -205,7 +205,8 @@
               {
                 headers: {
                   Token: token.token.token,
-                  "X-Transaction-Id": params.transactionId
+                  "X-Transaction-Id": params.transactionId,
+                  "X-As-Standalone": params.asStandalone
                 }
               }
             )
@@ -220,6 +221,7 @@
                   {
                     transactionId,
                     tempToken,
+                    asStandalone: params.asStandalone,
                     percentage: $scope.percentage
                   }
                 );
@@ -238,13 +240,22 @@
           }
       };
 
+      $scope.asStandalone = false;
+      $scope.checkAsStandalone = function() {
+        $timeout(() => {
+          $scope.asStandalone = !$scope.asStandalone;
+          uploader.headers["X-As-Standalone"] = $scope.asStandalone.toString();
+        }, 100);
+      };
+
       let uploader = (vm.uploader = new FileUploader({
         url: "/file/config",
         alias: "configuration",
         headers: {
           Token: token.token.token,
-          Accept: "application/octet-stream"
-        },
+          Accept: "application/octet-stream",
+          "X-As-Standalone": $scope.asStandalone.toString()
+        }
       }));
 
       // FILTERS
@@ -279,6 +290,7 @@
             {
               transactionId,
               tempToken,
+              asStandalone: $scope.asStandalone.toString(),
               percentage: $scope.percentage
             }
           );

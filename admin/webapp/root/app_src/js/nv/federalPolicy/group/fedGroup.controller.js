@@ -1545,7 +1545,8 @@
             };
             $scope.group = {
               name: "fed.",
-              criteria: []
+              criteria: [],
+              comment: ""
             };
             $scope.nameRegex = /^(fed\.)/;
 

@@ -361,32 +361,68 @@ class DeviceService()(implicit executionContext: ExecutionContext)
             } ~
             post {
               headerValueByName("X-Transaction-Id") { transactionId =>
-                entity(as[String]) { tempToken =>
-                  Utils.respondWithNoCacheControl() {
-                    complete {
-                      try {
-                        setBaseUrl(tokenId, transactionId)
-                        Thread.sleep(1000)
-                        val importResFuture = RestClient.httpRequestWithHeader(
-                          s"${baseClusterUri(tokenId)}/file/config",
-                          POST,
-                          "",
-                          tokenId,
-                          Some(transactionId)
-                        )
-                        val importRes =
-                          Await.result(importResFuture, RestClient.waitingLimit.seconds)
-                        if (importRes.toString.contains("408 Request Timeout")) {
-                          RestClient.httpRequestWithHeader(
+                headerValueByName("X-As-Standalone") { asStandalone =>
+                  entity(as[String]) { tempToken =>
+                    Utils.respondWithNoCacheControl() {
+                      complete {
+                        try {
+                          setBaseUrl(tokenId, transactionId)
+                          Thread.sleep(1000)
+                          val importResFuture = RestClient.httpRequestWithHeader(
                             s"${baseClusterUri(tokenId)}/file/config",
                             POST,
                             "",
-                            tempToken,
-                            Some(transactionId)
+                            tokenId,
+                            Some(transactionId),
+                            Some(asStandalone)
                           )
-                        } else {
-                          importRes
+                          val importRes =
+                            Await.result(importResFuture, RestClient.waitingLimit.seconds)
+                          if (importRes.toString.contains("408 Request Timeout")) {
+
+                            RestClient.httpRequestWithHeader(
+                              s"${baseClusterUri(tokenId)}/file/config",
+                              POST,
+                              "",
+                              tempToken,
+                              Some(transactionId),
+                              Some(asStandalone)
+                            )
+                          } else {
+                            importRes
+                          }
+                        } catch {
+                          case NonFatal(e) =>
+                            RestClient.handleError(
+                              timeOutStatus,
+                              authenticationFailedStatus,
+                              serverErrorStatus,
+                              e
+                            )
                         }
+                      }
+                    }
+                  }
+                }
+              } ~
+              entity(as[MultipartFormData]) { formData =>
+                headerValueByName("X-As-Standalone") { asStandalone =>
+                  Utils.respondWithNoCacheControl() {
+                    complete {
+                      try {
+                        val baseUrl = baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
+                        logger.info("test baseUrl: {}", baseUrl)
+                        logger.info("No Transaction ID(Post),{}", asStandalone.getClass.toString)
+                        AuthenticationManager.setBaseUrl(tokenId, baseUrl)
+                        Thread.sleep(1000)
+                        RestClient.binaryWithHeader(
+                          s"${baseClusterUri(tokenId)}/file/config",
+                          POST,
+                          formData,
+                          tokenId,
+                          None,
+                          Some(asStandalone)
+                        )
                       } catch {
                         case NonFatal(e) =>
                           RestClient.handleError(
@@ -396,33 +432,6 @@ class DeviceService()(implicit executionContext: ExecutionContext)
                             e
                           )
                       }
-                    }
-                  }
-                }
-              } ~
-              entity(as[MultipartFormData]) { formData =>
-                Utils.respondWithNoCacheControl() {
-                  complete {
-                    try {
-                      val baseUrl = baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
-                      logger.info("test baseUrl: {}", baseUrl)
-                      logger.info("No Transaction ID(Post)")
-                      AuthenticationManager.setBaseUrl(tokenId, baseUrl)
-                      Thread.sleep(1000)
-                      RestClient.binaryWithHeader(
-                        s"${baseClusterUri(tokenId)}/file/config",
-                        POST,
-                        formData,
-                        tokenId
-                      )
-                    } catch {
-                      case NonFatal(e) =>
-                        RestClient.handleError(
-                          timeOutStatus,
-                          authenticationFailedStatus,
-                          serverErrorStatus,
-                          e
-                        )
                     }
                   }
                 }

@@ -749,8 +749,20 @@
       </form>
 
       <div class="row m0" ng-if="isImportAuthorized">
-        <div class="col-sm-12 mb-lg">
+        <div class="col-sm-12 mb">
           <label class="form-title" translate="{{'setting.IMPORT'}}"/>
+        </div>
+        <div class="col-sm-12 mb">
+          <md-checkbox
+            class="md-primary ml mb0"
+            ng-model="asStandalone"
+            ng-click="checkAsStandalone()"
+          >
+          </md-checkbox>
+          <label
+            class="text-muted mr-lg"
+          >{{'setting.AS_STANDALONE' | translate}}
+          </label>
         </div>
         <div class="col-sm-3">
           <div ng-show="sysCtrl.uploader.isHTML5">

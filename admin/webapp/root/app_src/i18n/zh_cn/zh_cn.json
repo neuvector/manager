@@ -916,7 +916,8 @@
       "NUM_OF_CONTAINERS": "容器数",
       "VERSION": "版本",
       "API_VERSION": "API版本",
-      "ANNONTATIONS": "注释"
+      "ANNONTATIONS": "注释",
+      "CGROUP_VERSION": "Cgroup版本"
     },
     "containers": {
       "TAB_TITLE": "容器信息",

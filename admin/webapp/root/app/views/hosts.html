@@ -315,13 +315,13 @@
                       <div class="col-sm-4">
                         <div class="nv-resources-detail">
                           <div>
-                            {{'nodes.detail.NUM_OF_CONTAINERS' | translate}}
+                            {{'nodes.detail.CGROUP_VERSION' | translate}}
                           </div>
                           <div class="icon">
                             <em class="fa fa-cubes text-primary fa-lg"></em>
                           </div>
-                          <div class="auto-hide text-muted" uib-tooltip="{{host.containers}}" tooltip-enable="false" show-tooltip-on-text-overflow>
-                            {{host.containers}}
+                          <div class="auto-hide text-muted" >
+                            {{host.cgroup_version}}
                           </div>
                         </div>
                       </div>

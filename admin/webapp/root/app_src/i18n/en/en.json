@@ -916,7 +916,8 @@
       "NUM_OF_CONTAINERS": "Containers",
       "VERSION": "Version",
       "API_VERSION": "API Version",
-      "ANNONTATIONS": "Annotations"
+      "ANNONTATIONS": "Annotations",
+      "CGROUP_VERSION": "Cgroup Version"
     },
     "containers": {
       "TAB_TITLE": "Containers",

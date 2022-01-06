@@ -657,7 +657,7 @@
       "DETAILS": "详细内容",
       "EXPAND": "展开",
       "COLLAPSE": "合并",
-      "HIDE_NODE": "隐藏节点",
+      "HIDE_NODE": "隐藏",
       "HIDE_INCOMING": "隐藏传入流量",
       "SHOW_INCOMING": "显示传入流量",
       "HIDE_OUTGOING": "隐藏传出流量",

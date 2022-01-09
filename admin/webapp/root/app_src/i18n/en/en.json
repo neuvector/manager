@@ -2383,7 +2383,8 @@
       "NO_UPD_PROMISSION": "NeuVector default service account doesn't have UPDATE permission for service resource.",
       "ERR_SRV2WEBHOOK": "Failed to receive a request from Kube-apiserver. Please try different client mode",
       "TEST_K8S_OK": "Kubernetes system connection is normal.",
-      "SAVE_CLIENT_MODE": "Submit the chosen mode to Kubernetes configuration in order to test the Kubernetes request connection."
+      "SAVE_CLIENT_MODE": "Submit the chosen mode to Kubernetes configuration in order to test the Kubernetes request connection.",
+      "NOT_NUMBER_ERR": "Not a Number"
     },
     "addRule": {
       "TITLE": "ADD RULE"
@@ -2451,7 +2452,12 @@
       "COUNT": "Count",
       "PSP": "PSP best practice",
       "ALLOW_PRIV_ESCALATION": "Allow Privilege Escalation",
-      "PSP_COMPLIANCE": "PSP Best Practice"
+      "PSP_COMPLIANCE": "PSP Best Practice",
+      "RESOURCE_LIMIT": "Resource Limit Configuration",
+      "CPU_LIMIT": "CPU Limit",
+      "CPU_REQUEST": "CPU Request",
+      "MEMORY_LIMIT": "Memory Limit",
+      "MEMORY_REQUEST": "Memory Request"
     },
     "operators": {
       "=": "=",
@@ -2484,7 +2490,8 @@
       "MEDIUM": "medium",
       "LOW": "low",
       "NONE": "none",
-      "DAYS": "days"
+      "DAYS": "days",
+      "CORE": "Core(s)"
     },
     "display": {
       "<=": "within {{days}} day(s)",
@@ -2493,6 +2500,7 @@
       "CVE_HIGH_WITH_FIX_COUNT_WITH_REPORT_DAYS": "{{comparison}} {{count}} high severity CVEs with fix that were reported",
       "CVE_MEDIUM_COUNT_WITH_REPORT_DAYS": "{{comparison}} {{count}} medium severity CVEs that were reported",
       "CVE_SCORE_COUNT_WITH_COUNT": "{{countComparison}} {{count}} CVEs whose score {{scoreComparison}} {{score}}",
+      "RESOURCE_LIMIT": "Resource Limit: {{details}}",
       "cveScore": {
         "<=": "is lower than",
         ">=": "is higher than"

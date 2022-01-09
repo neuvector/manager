@@ -20,6 +20,7 @@
     "admissionControlService",
     "$controller",
     "$sanitize",
+    "$filter",
     "AuthorizationFactory"
   ];
   function AdmissionControlController(
@@ -39,6 +40,7 @@
     admissionControlService,
     $controller,
     $sanitize,
+    $filter,
     AuthorizationFactory
   ) {
     $scope.isSupported = false;
@@ -328,6 +330,17 @@
                   }
                 )
               );
+            } else if (criteria.name === "resourceLimit") {
+              criteriaArray.push($translate.instant(
+                `admissionControl.display.${Utils.parseDivideStyle(
+                  criteria.name
+                ).toUpperCase()}`,
+                {
+                  details: criteria.sub_criteria.map(subCriterion => {
+                    return `${$translate.instant(`admissionControl.names.${Utils.parseDivideStyle(subCriterion.name).toUpperCase()}`)}${subCriterion.op}${$filter("bytes")(subCriterion.value, 2)}`
+                  }).join(", ")
+                }
+              ).replace(/\&gt\;/g, ">").replace(/\&lt\;/g, "<"));
             } else {
               let value =
                 criteria.value.length > 30
@@ -728,15 +741,17 @@
       let success = function() {
         $mdDialog
           .show({
-            controller: DialogController4AddPolicy,
-            controllerAs: "addAdmCtrl",
-            templateUrl: "dialog.addPolicy.html",
+            controller: DialogController4AddEditPolicy,
+            controllerAs: "addEditAdmCtrl",
+            templateUrl: "dialog.addEditPolicy.html",
             targetEvent: ev,
             locals: {
               ruleType: $scope.showedRuleType,
               RULE_TYPE: $scope.RULE_TYPE,
               SINGLE_VALUE_CRITERIA: SINGLE_VALUE_CRITERIA,
-              isSingleValueCriterion: isSingleValueCriterion
+              isSingleValueCriterion: isSingleValueCriterion,
+              isEdit: false,
+              isViewOnly: false,
             }
           })
           .then(
@@ -771,15 +786,16 @@
         admissionControlService.admissionRule4Edit = angular.copy(data);
         $mdDialog
           .show({
-            controller: DialogController4EditPolicy,
-            controllerAs: "editAdmCtrl",
-            templateUrl: "dialog.editPolicy.html",
+            controller: DialogController4AddEditPolicy,
+            controllerAs: "addEditAdmCtrl",
+            templateUrl: "dialog.addEditPolicy.html",
             targetEvent: ev,
             locals: {
               ruleType: $scope.showedRuleType,
               isViewOnly: $scope.isViewOnly,
               SINGLE_VALUE_CRITERIA: SINGLE_VALUE_CRITERIA,
-              isSingleValueCriterion: isSingleValueCriterion
+              isSingleValueCriterion: isSingleValueCriterion,
+              isEdit: true
             }
           })
           .then(
@@ -1109,7 +1125,7 @@
 
     baseCtl.doOnClusterRedirected($state.reload);
 
-    DialogController4AddPolicy.$inject = [
+    DialogController4AddEditPolicy.$inject = [
       "$scope",
       "$mdDialog",
       "$translate",
@@ -1118,9 +1134,11 @@
       "ruleType",
       "SINGLE_VALUE_CRITERIA",
       "isSingleValueCriterion",
+      "isEdit",
+      "isViewOnly",
       "Utils"
     ];
-    function DialogController4AddPolicy(
+    function DialogController4AddEditPolicy(
       $scope,
       $mdDialog,
       $translate,
@@ -1128,7 +1146,10 @@
       admissionControlService,
       ruleType,
       SINGLE_VALUE_CRITERIA,
-      isSingleValueCriterion
+      isSingleValueCriterion,
+      isEdit,
+      isViewOnly,
+      Utils
     ) {
       let vm = this;
       const KUBE = "Kubernetes";
@@ -1138,6 +1159,8 @@
             admissionControlService.conditionDenyOptions);
       };
 
+      $scope.isEdit = isEdit;
+      $scope.isViewOnly = isViewOnly;
       $scope.hasMultiValue = false;
       $scope.isValueSetValid = true;
       $scope.conditionOptionErr = admissionControlService.conditionOptionErr;
@@ -1152,13 +1175,51 @@
       if (!$scope.conditionOptionErr) {
         activate();
       }
-      $scope.enable = true;
-      $scope.newRule = {
-        comment: "",
-        conditions: [],
-        actions: [],
-        disable: false
-      };
+
+      if ($scope.isEdit) {
+        $scope.newRule = admissionControlService.admissionRule4Edit;
+        $scope.enable = !$scope.newRule.disable;
+        $scope.newRule.conditions = $scope.newRule.criteria.map(
+          function(criteria) {
+            let isBooleanCriteria =
+              criteria.name === "imageSigned" ||
+              criteria.name === "runAsRoot" ||
+              criteria.name === "runAsPrivileged" ||
+              criteria.name === "allowPrivEscalation" ||
+              criteria.name === "pspCompliance";
+            let hasSubOptions =
+              (
+                criteria.name === "cveScoreCount" ||
+                criteria.name === "cveHighCount" ||
+                criteria.name === "cveHighWithFixCount" ||
+                criteria.name === "cveMediumCount" ||
+                criteria.name === "resourceLimit"
+              ) && criteria.sub_criteria;
+            if (criteria.name === "pspCompliance") {
+              $scope.isPspInstructionVisible = true;
+            }
+            return {
+              criteria: criteria,
+              name: admissionControlService.admissionConditionObjToString(
+                criteria,
+                isBooleanCriteria,
+                hasSubOptions,
+                isSingleValueCriterion(criteria.name)
+              )
+            };
+          }
+        );
+        console.log("$scope.newRule.conditions", $scope.newRule.conditions)
+      } else {
+        $scope.enable = true;
+        $scope.newRule = {
+          comment: "",
+          conditions: [],
+          actions: [],
+          disable: false
+        };
+      }
+
       function getCriteriaName(options) {
         return Object.entries(options).map(
               ([name, obj]) => {
@@ -1189,10 +1250,11 @@
         makeAutoCompleteList();
         $scope.isAllowed = false;
         initializeCriteriaName();
-        $scope.subNames = [];
         $scope.operators = [];
-        $scope.subOperators = [];
         $scope.values = [];
+        $scope.subNames = [];
+        $scope.subOperators = [];
+        $scope.subValues = [];
         $scope.pspCriteria = `${$translate.instant("admissionControl.PSP_CRITERIA")} ${admissionControlService.psp_collection.map(pspCriterion => {
           return $translate.instant(`admissionControl.names.${Utils.parseDivideStyle(pspCriterion.name).toUpperCase()}`);
         }).join(", ")}`;
@@ -1227,22 +1289,54 @@
 
         $timeout(function() {
           if (tag.criteria.sub_criteria && Array.isArray(tag.criteria.sub_criteria) && tag.criteria.sub_criteria.length > 0) {
-            $scope.newRule.subName = {
-              originalName: tag.criteria.sub_criteria[0].name,
-              displayName: Utils.parseDivideStyle(tag.criteria.sub_criteria[0].name)
-            };
-            $timeout(function() {
-              $scope.newRule.subOperator = tag.criteria.sub_criteria[0].op;
-              $scope.newRule.subValue = tag.criteria.sub_criteria[0].value;
-            }, 200);
+            let tagDetails = tag.criteria.sub_criteria.map(subCriterion => {
+              return {
+                name: {
+                  originalName: subCriterion.name,
+                  displayName: Utils.parseDivideStyle(subCriterion.name)
+                },
+                op: subCriterion.op,
+                value: subCriterion.value
+              };
+            });
+            $scope.newRule.subNames = $scope.subNames;
+            let tagDetailIndex = 0;
+            $scope.newRule.subOperators = $scope.newRule.subNames.map((entryName) => {
+              if (tagDetails[tagDetailIndex] && entryName.originalName === tagDetails[tagDetailIndex].name.originalName) {
+                let operator = tagDetails[tagDetailIndex].op;
+                tagDetailIndex++;
+                return operator;
+              } else {
+                return undefined;
+              }
+            });
+            tagDetailIndex = 0;
+            $scope.newRule.memoryUnits = ["", "", "MB", "MB"];
+            $scope.newRule.subValues = $scope.newRule.subNames.map((entryName, index) => {
+              if (tagDetails[tagDetailIndex]) console.log(entryName.originalName, tagDetails[tagDetailIndex].name.originalName)
+              if (tagDetails[tagDetailIndex] && entryName.originalName === tagDetails[tagDetailIndex].name.originalName) {
+                tagDetailIndex++;
+                if (tagDetails[tagDetailIndex - 1].name.originalName.toLowerCase().includes("memory")) {
+                  let memoryString = $filter("bytes")(tagDetails[tagDetailIndex - 1].value, 2);
+                  $scope.newRule.memoryUnits[index] = memoryString.substring(memoryString.length - 2, memoryString.length);
+                  return memoryString.substring(0, memoryString.length - 3);
+                } else {
+                  return tagDetails[tagDetailIndex - 1].value;
+                }
+              } else {
+                return undefined;
+              }
+            });
           }
           if (isSingleValueCriterion(tag.criteria.name)) {
             $scope.newRule.operator = `${tag.criteria.op}_SINGLE`;
           } else {
             $scope.newRule.operator = tag.criteria.op;
           }
-          $scope.hasMultiValue =
-            $scope.newRule.operator.toLowerCase().indexOf("contains") >= 0;
+          if ($scope.newRule.operator) {
+            $scope.hasMultiValue =
+              $scope.newRule.operator.toLowerCase().indexOf("contains") >= 0;
+          }
           $timeout(function() {
             $scope.newRule.value = tag.criteria.value;
           }, 200);
@@ -1254,15 +1348,18 @@
         vm.selectedItemValue = null;
         $scope.newRule.value = null;
         $scope.newRule.name = null;
-        $scope.newRule.subName = null;
+        $scope.newRule.subNames = [];
         $scope.newRule.operator = null;
-        $scope.newRule.subOperator = null;
+        $scope.newRule.subOperators = [];
+        $scope.newRule.subValues = [];
+        $scope.newRule.memoryUnits = ["", "", "MB", "MB"];
         initializeCriteriaName();
         $scope.newRule.conditions = [];
         $scope.subNames = [];
         $scope.operators = [];
         $scope.subOperators = [];
         $scope.values = [];
+        $scope.subValues = [];
       };
 
       $scope.changeName = function(name) {
@@ -1270,9 +1367,11 @@
         vm.selectedItemValue = null;
         $scope.newRule.value = null;
         $scope.newRule.operator = null;
-        $scope.newRule.subName = null;
-        $scope.newRule.subOperator = null;
-        $scope.newRule.subValue = null;
+        $scope.newRule.subNames = [];
+        $scope.newRule.subOperators = [];
+        $scope.newRule.subValues = [];
+        $scope.newRule.memoryUnits = ["", "", "MB", "MB"];
+        $scope.subNames.length = 0;
         $scope.operators = $scope.isAllowed
           ? admissionControlService.conditionExceptionOptions[
               name.originalName
@@ -1329,10 +1428,10 @@
           }
         }
 
-        if ($scope.subNames.length === 1) {
-          $scope.newRule.subName = $scope.subNames[0];
-          $scope.changeSubNames(name, $scope.newRule.subName);
-        }
+        $scope.subNames.forEach((subName, index) => {
+          $scope.newRule.subNames[index] = $scope.subNames[index];
+          $scope.changeSubNames(name, $scope.newRule.subNames[index], index);
+        });
 
         if (
           $scope.newRule.name.originalName === "imageSigned" ||
@@ -1347,7 +1446,7 @@
         }
       };
 
-      $scope.changeSubNames = function(name, subName) {
+      $scope.changeSubNames = function(name, subName, index) {
         if ($scope.isAllowed) {
           if (admissionControlService.conditionExceptionOptions[name.originalName] &&
             admissionControlService.conditionExceptionOptions[name.originalName].sub_options) {
@@ -1365,9 +1464,7 @@
                                   .ops;
           }
         }
-        if ($scope.subOperators.length === 1) {
-          $scope.newRule.subOperator = $scope.subOperators[0];
-        }
+        $scope.newRule.subOperators[index] = $scope.subOperators[index];
       };
 
       $scope.getSubOperatorText = function(subName, op) {
@@ -1411,6 +1508,15 @@
       }
 
       const checkAndPushCriteria = function(name, newRule) {
+        const parseValue = function(value, unit) {
+          let numberVal = Number(value);
+          if (isNaN(numberVal)) return "";
+          switch (unit) {
+            case "MB": return (numberVal * (1 << 20)).toString();
+            case "GB": return (numberVal * (1 << 30)).toString();
+            default: return value;
+          }
+        };
         let isDuplicated = false;
         $scope.newRule.conditions = $scope.newRule.conditions.filter(function(
           condition
@@ -1423,25 +1529,29 @@
         $scope.newRule.conditions.forEach(function(condition) {
           if (name === condition.name) isDuplicated = true;
         });
-        if (!isDuplicated) {
-          let subCriteia = [];
-          if (newRule.subValue) {
-            subCriteia.push({
-              name: newRule.subName.originalName,
-              op: newRule.subOperator,
-              value: newRule.subValue
-            });
-          }
-          $scope.newRule.conditions.push({
-            name: name,
-            criteria: {
-              sub_criteria: subCriteia,
-              name: newRule.name.originalName,
-              op: newRule.operator,
-              value: newRule.value
+        let subCriteia = [];
+        if (!isDuplicated && (newRule.subValues && newRule.subValues.some(subValue => subValue !== ""))) {
+          newRule.subNames.forEach((subName, index) => {
+            if (newRule.subValues[index]) {
+              subCriteia.push({
+                name: subName.originalName,
+                op: newRule.subOperators[index],
+                value: newRule.name.originalName.toLowerCase() === "resourcelimit" ?
+                  parseValue(newRule.subValues[index], newRule.memoryUnits[index]) :
+                  newRule.subValues[index]
+              });
             }
           });
         }
+        $scope.newRule.conditions.push({
+          name: name,
+          criteria: {
+            sub_criteria: subCriteia,
+            name: newRule.name.originalName,
+            op: newRule.operator,
+            value: newRule.value
+          }
+        });
       };
 
       vm.addCriteria = function() {
@@ -1475,7 +1585,7 @@
             $scope.newRule.name.originalName === "cveHighCount" ||
             $scope.newRule.name.originalName === "cveHighWithFixCount" ||
             $scope.newRule.name.originalName === "cveMediumCount"
-          ) && $scope.newRule.subValue
+          ) && ($scope.newRule.subValues && $scope.newRule.subValues[0])
         ) {
           name = $translate.instant(
             `admissionControl.display.${Utils.parseDivideStyle(
@@ -1490,22 +1600,38 @@
             `admissionControl.display.${Utils.parseDivideStyle(
               $scope.newRule.operator)}`,
             {
-              days: $scope.newRule.subValue
+              days: $scope.newRule.subValues[0]
             }
           );
           checkAndPushCriteria(name, $scope.newRule);
-        } else if ($scope.newRule.name.originalName === "cveScoreCount" && $scope.newRule.subValue) {
+        } else if ($scope.newRule.name.originalName === "cveScoreCount" && ($scope.newRule.subValues && $scope.newRule.subValues[0])) {
           name = $translate.instant(
             `admissionControl.display.${Utils.parseDivideStyle(
               $scope.newRule.name.originalName
             ).toUpperCase()}_WITH_COUNT`,
             {
               score: $scope.newRule.value,
-              count: $scope.newRule.subValue,
+              count: $scope.newRule.subValues[0],
               countComparison: Utils.capitalizeWord($translate.instant(`admissionControl.operators.text.${$scope.newRule.operator}`)),
-              scoreComparison: $translate.instant(`admissionControl.display.cveScore.${$scope.newRule.subOperator}`)
+              scoreComparison: $translate.instant(`admissionControl.display.cveScore.${$scope.newRule.subOperators[0]}`)
             }
           );
+          checkAndPushCriteria(name, $scope.newRule);
+        } else if ($scope.newRule.name.originalName === "resourceLimit") {
+          name = $translate.instant(
+            `admissionControl.display.${Utils.parseDivideStyle(
+              $scope.newRule.name.originalName
+            ).toUpperCase()}`,
+            {
+              details: $scope.newRule.subNames
+              .map((subName, index) => {
+                console.log(subName.originalName, $scope.newRule.subOperators[index], $scope.newRule.subValues[index], $scope.newRule.memoryUnits[index])
+                return `${$translate.instant(`admissionControl.names.${Utils.parseDivideStyle(subName.originalName).toUpperCase()}`)}${$scope.newRule.subOperators[index] ? $scope.newRule.subOperators[index] : undefined}${$scope.newRule.subValues[index] ? $scope.newRule.subValues[index] : undefined}${$scope.newRule.memoryUnits[index]}`
+              })
+              .filter(tag => !tag.includes("undefined"))
+              .join(", ")
+            }
+          ).replace(/\&gt\;/g, ">").replace(/\&lt\;/g, "<");
           checkAndPushCriteria(name, $scope.newRule);
         } else {
           let value =
@@ -1532,19 +1658,22 @@
         $scope.newRule.value = null;
         $scope.newRule.name = null;
         $scope.newRule.operator = null;
+        $scope.subNames.length = 0;
         $scope.operators = [];
         $scope.values = [];
         $scope.hasMultiValue = false;
         $scope.isBooleanCriteria = false;
       };
 
+      $scope.decimal = /^([0-9]+\.?[0-9]*|\.[0-9]+)$/;
+
       //
-      $scope.addNewRule = function(ev) {
+      $scope.addEditRule = function(ev) {
         $scope.newRule.disable = !$scope.enable;
 
         let payload = {
           config: {
-            id: 0,
+            id: $scope.isEdit ? $scope.newRule.id : 0,
             category: KUBE,
             comment: $scope.newRule.comment,
             criteria: $scope.newRule.conditions.map(function(condition) {
@@ -1552,518 +1681,49 @@
             }),
             disable: $scope.newRule.disable,
             rule_type: $scope.isAllowed ? "exception" : "deny",
-            cfg_type: "user_created"
+            cfg_type: CFG_TYPE.CUSTOMER
           }
         };
-        $http
-          .post(ADMISSION_SINGLE_URL, payload)
-          .then(function(response) {
-            Alertify.set({ delay: ALERTIFY_SUCCEED_DELAY });
-            Alertify.success(
-              $translate.instant("admissionControl.msg.INSERT_OK")
-            );
-          })
-          .catch(function(e) {
-            console.warn(e);
-            if (USER_TIMEOUT.indexOf(e.status) < 0) {
-              Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
-              Alertify.error(
-                Utils.getAlertifyMsg(e,  $translate.instant("admissionControl.msg.INSERT_NG"), false)
+
+        if ($scope.isEdit) {
+          $http
+            .patch(ADMISSION_SINGLE_URL, payload)
+            .then(function(response) {
+              Alertify.set({ delay: ALERTIFY_SUCCEED_DELAY });
+              Alertify.success(
+                $translate.instant("admissionControl.msg.UPDATE_OK") +
+                  " - ID=" +
+                  $sanitize(payload.config.id)
               );
-            }
-          });
-        $mdDialog.hide();
-        $scope.isPspInstructionVisible = false;
-      };
-    }
-    DialogController4EditPolicy.$inject = [
-      "$scope",
-      "$mdDialog",
-      "$translate",
-      "$sanitize",
-      "admissionControlService",
-      "ruleType",
-      "isViewOnly",
-      "SINGLE_VALUE_CRITERIA",
-      "isSingleValueCriterion",
-      "Utils"
-    ];
-    function DialogController4EditPolicy(
-      $scope,
-      $mdDialog,
-      $translate,
-      $sanitize,
-      admissionControlService,
-      ruleType,
-      isViewOnly,
-      SINGLE_VALUE_CRITERIA,
-      isSingleValueCriterion,
-      Utils
-    ) {
-      let vm = this;
-      const KUBE = "Kubernetes";
-      $scope.isViewOnly = isViewOnly;
-      $scope.isAllowed = false;
-      $scope.hasMultiValue = false;
-      $scope.isValueSetValid = true;
-      $scope.conditionOptionErr = admissionControlService.conditionOptionErr;
-      $scope.conditionOptionErrMSG =
-        admissionControlService.conditionOptionErrMSG;
-      $scope.hide = function() {
-        $mdDialog.hide();
-      };
-      $scope.cancel = function() {
-        $mdDialog.cancel();
-      };
-      function getCriteriaName(options) {
-        return Object.entries(options).map(
-              ([name, obj]) => {
-                return {
-                  originalName: name,
-                  displayName: Utils.parseDivideStyle(name),
-                  matchSrc: obj.match_src || "",
-                  hasMatchSrc: obj.match_src && obj.match_src.length > 0
-                };
+            })
+            .catch(function(e) {
+              if (USER_TIMEOUT.indexOf(e.status) < 0) {
+                Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
+                console.log(e.data);
+                Alertify.error(
+                  Utils.getAlertifyMsg(e, $translate.instant("admissionControl.msg.UPDATE_NG"), false)
+                );
               }
-            );
-      }
-
-      $scope.validateValueSet = function(valueSet) {
-        let res = true;
-        if (
-          $scope.admissionRule.name.originalName.toLowerCase() ===
-          "imageregistry"
-        ) {
-          valueSet.split(",").forEach(curr => {
-            let currValid = /localhost|.+\..+/gm.test(curr.trim());
-            res = res && currValid;
-          });
-        }
-        $scope.isValueSetValid = res;
-      };
-
-      if (!$scope.conditionOptionErr) {
-        activate();
-      }
-      function activate() {
-        makeAutoCompleteList();
-        $scope.admissionRule = admissionControlService.admissionRule4Edit;
-        $scope.isAllowed = $scope.admissionRule.rule_type === "exception";
-        $scope.labelColor =
-          colourMap[$scope.admissionRule.rule_type.toLowerCase()];
-        $scope.labeValue = $translate.instant(
-          "admissionControl." + $scope.admissionRule.rule_type.toUpperCase()
-        );
-        console.log($scope.labelColor, $scope.labeValue)
-        $scope.names = getCriteriaName($scope.isAllowed ?
-            admissionControlService.conditionExceptionOptions :
-            admissionControlService.conditionDenyOptions);
-        $scope.subNames = [];
-        $scope.operators = [];
-        $scope.subOperators = [];
-        $scope.values = [];
-        $scope.pspCriteria = `${$translate.instant("admissionControl.PSP_CRITERIA")} ${admissionControlService.psp_collection.map(pspCriterion => {
-          return $translate.instant(`admissionControl.names.${Utils.parseDivideStyle(pspCriterion.name).toUpperCase()}`);
-        }).join(", ")}`;
-
-        vm.enable = !$scope.admissionRule.disable;
-
-        $scope.admissionRule.criteria = $scope.admissionRule.criteria.map(
-          function(criteria) {
-            let isBooleanCriteria =
-              criteria.name === "imageSigned" ||
-              criteria.name === "runAsRoot" ||
-              criteria.name === "runAsPrivileged" ||
-              criteria.name === "allowPrivEscalation" ||
-              criteria.name === "pspCompliance";
-            let hasSubOptions =
-              (
-                criteria.name === "cveScoreCount" ||
-                criteria.name === "cveHighCount" ||
-                criteria.name === "cveHighWithFixCount" ||
-                criteria.name === "cveMediumCount"
-              ) && criteria.sub_criteria;
-            if (criteria.name === "pspCompliance") {
-              $scope.isPspInstructionVisible = true;
-            }
-            return {
-              origin: criteria,
-              tagged: admissionControlService.admissionConditionObjToString(
-                criteria,
-                isBooleanCriteria,
-                hasSubOptions,
-                isSingleValueCriterion(criteria.name)
-              )
-            };
-          }
-        );
-
-        $scope.cutStringByMaxLength = function(str, itemName) {
-          let cutStr = Utils.restrictLength4Autocomplete(
-            str,
-            parseInt($translate.instant("general.FILTER_MAX_LEN"), 10)
-          );
-          if (itemName === "searchTextValue") {
-            vm.searchTextValue = cutStr;
-          }
-        };
-      }
-
-      let prevTag = null;
-
-      $scope.tagRemoving = function(tag) {
-        if (tag.origin.name === "pspCompliance") {
-          $scope.isPspInstructionVisible = false;
-        }
-      };
-
-      $scope.showTagDetail = function(tag) {
-        if (
-          !$scope.admissionRule.name ||
-          tag.origin.name !== $scope.admissionRule.name.originalName
-        ) {
-          $scope.admissionRule.name = {
-            originalName: tag.origin.name,
-            displayName: Utils.parseDivideStyle(tag.origin.name)
-          };
-        }
-
-        $timeout(function() {
-          console.log(tag, $scope.subOperators, $scope.subName)
-          if (tag.origin.sub_criteria && Array.isArray(tag.origin.sub_criteria) && tag.origin.sub_criteria.length > 0) {
-            $scope.admissionRule.subName = {
-              originalName: tag.origin.sub_criteria[0].name,
-              displayName: Utils.parseDivideStyle(tag.origin.sub_criteria[0].name)
-            };
-            $timeout(function() {
-              $scope.admissionRule.subOperator = tag.origin.sub_criteria[0].op;
-              $scope.admissionRule.subValue = tag.origin.sub_criteria[0].value;
-              console.log($scope.admissionRule)
-            }, 200);
-          }
-
-          if (isSingleValueCriterion(tag.origin.name)) {
-            $scope.admissionRule.operator = `${tag.origin.op}_SINGLE`;
-          } else {
-            $scope.admissionRule.operator = tag.origin.op;
-          }
-          $scope.hasMultiValue =
-            $scope.admissionRule.operator.toLowerCase().indexOf("contains") >=
-            0;
-          $timeout(function() {
-            $scope.admissionRule.value = tag.origin.value;
-          }, 200);
-        }, 200);
-        prevTag = tag;
-      };
-
-      $scope.changeName = function(name) {
-        vm.searchTextValue = "";
-        vm.selectedItemValue = null;
-        $scope.admissionRule.value = null;
-        $scope.admissionRule.operator = null;
-        $scope.admissionRule.subName = null;
-        $scope.admissionRule.subOperator = null;
-        $scope.admissionRule.subValue = null;
-        $scope.operators = $scope.isAllowed
-          ? admissionControlService.conditionExceptionOptions[
-              name.originalName
-            ].ops
-          : admissionControlService.conditionDenyOptions[name.originalName]
-              .ops;
-
-        if ($scope.isAllowed) {
-          if (admissionControlService.conditionExceptionOptions[name.originalName] &&
-            admissionControlService.conditionExceptionOptions[name.originalName].sub_options) {
-            $scope.subNames = getCriteriaName(
-              admissionControlService
-              .conditionExceptionOptions[name.originalName]
-              .sub_options
-            );
-          }
-        } else {
-          if (admissionControlService.conditionDenyOptions[name.originalName] &&
-            admissionControlService.conditionDenyOptions[name.originalName].sub_options) {
-            $scope.subNames = getCriteriaName(
-              admissionControlService
-              .conditionDenyOptions[name.originalName]
-              .sub_options
-            );
-          }
-        }
-
-        $scope.values =
-          $scope.isAllowed
-            ? admissionControlService.conditionExceptionOptions[
-                name.originalName
-              ].values || []
-            : admissionControlService.conditionDenyOptions[name.originalName]
-                .values || [];
-
-        if (isSingleValueCriterion(name.originalName)) {
-          $scope.operators = $scope.operators.map(function(op) {
-            return `${op}_SINGLE`;
-          });
-        }
-
-        $scope.hasMultiValue = false;
-        if ($scope.operators.length === 1) {
-          $scope.admissionRule.operator = $scope.operators[0];
-          if ($scope.admissionRule.name.originalName === "imageSigned") {
-            $scope.admissionRule.value = "false";
-          }
-          if (
-            $scope.admissionRule.name.originalName === "runAsRoot" ||
-            $scope.admissionRule.name.originalName === "runAsPrivileged" ||
-            $scope.admissionRule.name.originalName === "allowPrivEscalation" ||
-            $scope.admissionRule.name.originalName === "pspCompliance"
-          ) {
-            $scope.admissionRule.value = "true";
-          }
-        }
-
-        if ($scope.subNames.length === 1) {
-          $scope.admissionRule.subName = $scope.subNames[0];
-          $scope.changeSubNames(name, $scope.admissionRule.subName);
-        }
-
-        if (
-          $scope.admissionRule.name.originalName === "imageSigned" ||
-          $scope.admissionRule.name.originalName === "runAsRoot" ||
-          $scope.admissionRule.name.originalName === "runAsPrivileged" ||
-          $scope.admissionRule.name.originalName === "allowPrivEscalation" ||
-          $scope.admissionRule.name.originalName === "pspCompliance"
-        ) {
-          $scope.isBooleanCriteria = true;
-        } else {
-          $scope.isBooleanCriteria = false;
-        }
-      };
-
-      $scope.changeSubNames = function(name, subName) {
-        if ($scope.isAllowed) {
-          if (admissionControlService.conditionExceptionOptions[name.originalName] &&
-            admissionControlService.conditionExceptionOptions[name.originalName].sub_options) {
-            $scope.subOperators = admissionControlService
-                                  .conditionExceptionOptions[name.originalName]
-                                  .sub_options[subName.originalName]
-                                  .ops;
-          }
-        } else {
-          if (admissionControlService.conditionDenyOptions[name.originalName] &&
-            admissionControlService.conditionDenyOptions[name.originalName].sub_options) {
-            $scope.subOperators = admissionControlService
-                                  .conditionDenyOptions[name.originalName]
-                                  .sub_options[subName.originalName]
-                                  .ops;
-          }
-        }
-        if ($scope.subOperators.length === 1) {
-          $scope.admissionRule.subOperator = $scope.subOperators[0];
-        }
-      };
-
-      $scope.getSubOperatorText = function(subName, op) {
-        if (subName.originalName === "publishDays") {
-          return $translate.instant(`admissionControl.operators.text.${op}`);
-        } else {
-          return $translate.instant(`admissionControl.operators.${op}`);
-        }
-      };
-
-      $scope.changeOperator = function(op) {
-        $scope.hasMultiValue = op.toLowerCase().indexOf("contains") >= 0;
-        if (
-          $scope.admissionRule.name.originalName !== "imageSigned" &&
-          $scope.admissionRule.name.originalName !== "runAsRoot" &&
-          $scope.admissionRule.name.originalName !== "runAsPrivileged" &&
-          $scope.admissionRule.name.originalName !== "allowPrivEscalation" &&
-          $scope.admissionRule.name.originalName !== "pspCompliance"
-        ) {
-          vm.searchTextValue = "";
-          vm.selectedItemValue = null;
-          $scope.admissionRule.value = null;
-        }
-      };
-
-      function makeAutoCompleteList() {
-        vm.autoValues = loadAll();
-        vm.selectedItemValue = null;
-        vm.searchTextValue = null;
-        function loadAll() {
-          let allGroup = admissionControlService.groupList
-            ? admissionControlService.groupList
-            : [];
-          return allGroup.map(function(group) {
-            return {
-              value: group,
-              display: group
-            };
-          });
-        }
-      }
-
-      const checkAndPushCriteria = function(name, admissionRule) {
-        let isDuplicated = false;
-        $scope.admissionRule.criteria = $scope.admissionRule.criteria.filter(function(
-          condition
-        ) {
-          return (
-            condition.origin.name !== admissionRule.name.originalName ||
-            condition.origin.op !== admissionRule.operator
-          );
-        });
-        $scope.admissionRule.criteria.forEach(function(condition) {
-          if (name === condition.tagged) isDuplicated = true;
-        });
-        if (!isDuplicated) {
-          let subCriteia = [];
-          if (admissionRule.subValue) {
-            subCriteia.push({
-              name: admissionRule.subName.originalName,
-              op: admissionRule.subOperator,
-              value: admissionRule.subValue
             });
-          }
-          $scope.admissionRule.criteria.push({
-            tagged: name,
-            origin: {
-              sub_criteria: subCriteia,
-              name: admissionRule.name.originalName,
-              op: admissionRule.operator,
-              value: admissionRule.value
-            }
-          });
-        }
-      };
-
-      vm.addCriteria = function() {
-        // if ($scope.values.length === 0) {
-        //   if (vm.selectedItemValue === null) {
-        //     $scope.admissionRule.value = vm.searchTextValue;
-        //   } else {
-        //     $scope.admissionRule.value = vm.selectedItemValue.value;
-        //   }
-        // }
-        if (isSingleValueCriterion($scope.admissionRule.name.originalName)) {
-          $scope.admissionRule.operator = $scope.admissionRule.operator.split(
-            "_SINGLE"
-          )[0];
-        }
-        let tag = "";
-        if (
-          $scope.admissionRule.name.originalName === "imageSigned" ||
-          $scope.admissionRule.name.originalName === "runAsRoot" ||
-          $scope.admissionRule.name.originalName === "runAsPrivileged" ||
-          $scope.admissionRule.name.originalName === "allowPrivEscalation" ||
-          $scope.admissionRule.name.originalName === "pspCompliance"
-        ) {
-          if ($scope.admissionRule.name.originalName === "pspCompliance") {
-            $scope.isPspInstructionVisible = true;
-          }
-          tag = $translate.instant(
-            `admissionControl.names.${$scope.admissionRule.name.displayName.toUpperCase()}`
-          );
-          checkAndPushCriteria(tag, $scope.admissionRule);
-        } else if (
-          (
-            $scope.admissionRule.name.originalName === "cveHighCount" ||
-            $scope.admissionRule.name.originalName === "cveHighWithFixCount" ||
-            $scope.admissionRule.name.originalName === "cveMediumCount"
-          ) && $scope.admissionRule.subValue
-        ) {
-          tag = $translate.instant(
-            `admissionControl.display.${Utils.parseDivideStyle(
-              $scope.admissionRule.name.originalName
-            ).toUpperCase()}_WITH_REPORT_DAYS`,
-            {
-              comparison: Utils.capitalizeWord($translate.instant(`admissionControl.operators.text.${$scope.admissionRule.operator}`)),
-              count: $scope.admissionRule.value
-            }
-          ) + " " +
-          $translate.instant(
-            `admissionControl.display.${Utils.parseDivideStyle(
-              $scope.admissionRule.operator)}`,
-            {
-              days: $scope.admissionRule.subValue
-            }
-          );
-          checkAndPushCriteria(tag, $scope.admissionRule);
-        } else if ($scope.admissionRule.name.originalName === "cveScoreCount" && $scope.admissionRule.subValue) {
-          tag = $translate.instant(
-            `admissionControl.display.${Utils.parseDivideStyle(
-              $scope.admissionRule.name.originalName
-            ).toUpperCase()}_WITH_COUNT`,
-            {
-              score: $scope.admissionRule.value,
-              count: $scope.admissionRule.subValue,
-              countComparison: Utils.capitalizeWord($translate.instant(`admissionControl.operators.text.${$scope.admissionRule.operator}`)),
-              scoreComparison: $translate.instant(`admissionControl.display.cveScore.${$scope.admissionRule.subOperator}`)
-            }
-          );
-          checkAndPushCriteria(tag, $scope.admissionRule);
         } else {
-          let value =
-            $scope.admissionRule.value.length > 30
-              ? `${$scope.admissionRule.value.substring(0, 30)}...`
-              : $scope.admissionRule.value;
-          value = $scope.hasMultiValue ? `[${value}]` : value;
-          tag = `${$translate.instant(
-            `admissionControl.names.${$scope.admissionRule.name.displayName.toUpperCase()}`
-          )} ${$translate.instant(
-            `admissionControl.operators.${
-              isSingleValueCriterion($scope.admissionRule.name.originalName)
-                ? `${$scope.admissionRule.operator.toUpperCase()}_SINGLE`
-                : $scope.admissionRule.operator.toUpperCase()
-            }`
-          )} ${value}`;
-          checkAndPushCriteria(tag, $scope.admissionRule);
-        }
-        vm.searchTextValue = "";
-        vm.selectedItemValue = null;
-        $scope.admissionRule.value = null;
-        $scope.admissionRule.name = null;
-        $scope.admissionRule.operator = null;
-        $scope.operators = [];
-        $scope.values = [];
-        $scope.hasMultiValue = false;
-        $scope.isBooleanCriteria = false;
-      };
-
-      $scope.editRule = function(ev) {
-        let payload = {
-          config: {
-            id: $scope.admissionRule.id,
-            category: KUBE,
-            comment: $scope.admissionRule.comment,
-            criteria: $scope.admissionRule.criteria.map(function(condition) {
-              return condition.origin;
-            }),
-            disable: !vm.enable,
-            rule_type: $scope.isAllowed ? "exception" : "deny",
-            cfg_type: "user_created"
-          }
-        };
-
-        $http
-          .patch(ADMISSION_SINGLE_URL, payload)
-          .then(function(response) {
-            Alertify.set({ delay: ALERTIFY_SUCCEED_DELAY });
-            Alertify.success(
-              $translate.instant("admissionControl.msg.UPDATE_OK") +
-                " - ID=" +
-                $sanitize(payload.config.id)
-            );
-          })
-          .catch(function(e) {
-            if (USER_TIMEOUT.indexOf(e.status) < 0) {
-              Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
-              console.log(e.data);
-              Alertify.error(
-                Utils.getAlertifyMsg(e, $translate.instant("admissionControl.msg.UPDATE_NG"), false)
+          $http
+            .post(ADMISSION_SINGLE_URL, payload)
+            .then(function(response) {
+              Alertify.set({ delay: ALERTIFY_SUCCEED_DELAY });
+              Alertify.success(
+                $translate.instant("admissionControl.msg.INSERT_OK")
               );
-            }
-          });
+            })
+            .catch(function(e) {
+              console.warn(e);
+              if (USER_TIMEOUT.indexOf(e.status) < 0) {
+                Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
+                Alertify.error(
+                  Utils.getAlertifyMsg(e,  $translate.instant("admissionControl.msg.INSERT_NG"), false)
+                );
+              }
+            });
+        }
         $mdDialog.hide();
         $scope.isPspInstructionVisible = false;
       };

@@ -226,7 +226,7 @@
 <!--        </div>-->
 <!--    </div>-->
 
-    <div id="rulePreview" class="dataBox middleRight longBoxLimited pl-sm" ng-show="onRulePreview">
+    <div id="rulePreview" class="dataBox middleRight longBoxLimited pl-sm" ng-if="onRulePreview">
         <em class="fa fa-times text-muted pull-right pr-sm pt-sm" ng-click="onRulePreview=false"/>
         <div class="p-sm pt-lg">
             <div class="col-sm-6">
@@ -278,7 +278,7 @@
         </div>
     </div>
 
-    <div id="responseRulePreview" class="dataBox middleRight longBoxLimited pl-sm" ng-show="onResponseRulePreview">
+    <div id="responseRulePreview" class="dataBox middleRight longBoxLimited pl-sm" ng-if="onResponseRulePreview">
         <em class="fa fa-times text-muted pull-right pr-sm pt-sm" ng-click="onResponseRulePreview=false"/>
         <div class="p-sm pt-lg">
             <div class="col-sm-9" style="margin-top: 5px">

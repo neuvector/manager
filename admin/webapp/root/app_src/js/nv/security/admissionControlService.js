@@ -190,7 +190,7 @@
               ).toUpperCase()}`,
               {
                 details: criteria.sub_criteria.map((subCriterion) => {
-                  return `${$translate.instant(`admissionControl.names.${Utils.parseDivideStyle(subCriterion.name).toUpperCase()}`)}${subCriterion.op}${$filter("bytes")(subCriterion.value)}`
+                  return `${$translate.instant(`admissionControl.names.${Utils.parseDivideStyle(subCriterion.name).toUpperCase()}_S`)}${subCriterion.op}${$filter("bytes")(subCriterion.value)}`
                 }).join(", ")
               }
             ).replace(/\&gt\;/g, ">").replace(/\&lt\;/g, "<");

@@ -337,7 +337,7 @@
                 ).toUpperCase()}`,
                 {
                   details: criteria.sub_criteria.map(subCriterion => {
-                    return `${$translate.instant(`admissionControl.names.${Utils.parseDivideStyle(subCriterion.name).toUpperCase()}`)}${subCriterion.op}${$filter("bytes")(subCriterion.value, 2)}`
+                    return `${$translate.instant(`admissionControl.names.${Utils.parseDivideStyle(subCriterion.name).toUpperCase()}_S`)}${subCriterion.op}${$filter("bytes")(subCriterion.value, 2)}`
                   }).join(", ")
                 }
               ).replace(/\&gt\;/g, ">").replace(/\&lt\;/g, "<"));
@@ -1626,7 +1626,7 @@
               details: $scope.newRule.subNames
               .map((subName, index) => {
                 console.log(subName.originalName, $scope.newRule.subOperators[index], $scope.newRule.subValues[index], $scope.newRule.memoryUnits[index])
-                return `${$translate.instant(`admissionControl.names.${Utils.parseDivideStyle(subName.originalName).toUpperCase()}`)}${$scope.newRule.subOperators[index] ? $scope.newRule.subOperators[index] : undefined}${$scope.newRule.subValues[index] ? $scope.newRule.subValues[index] : undefined}${$scope.newRule.memoryUnits[index]}`
+                return `${$translate.instant(`admissionControl.names.${Utils.parseDivideStyle(subName.originalName).toUpperCase()}_S`)}${$scope.newRule.subOperators[index] ? $scope.newRule.subOperators[index] : undefined}${$scope.newRule.subValues[index] ? $scope.newRule.subValues[index] : undefined}${$scope.newRule.memoryUnits[index]}`
               })
               .filter(tag => !tag.includes("undefined"))
               .join(", ")

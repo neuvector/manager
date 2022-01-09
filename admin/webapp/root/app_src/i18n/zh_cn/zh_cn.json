@@ -2457,7 +2457,11 @@
       "CPU_LIMIT": "CPU限制",
       "CPU_REQUEST": "CPU请求",
       "MEMORY_LIMIT": "内存限制",
-      "MEMORY_REQUEST": "内存请求"
+      "MEMORY_REQUEST": "内存请求",
+      "CPU_LIMIT_S": "CPU限制",
+      "CPU_REQUEST_S": "CPU请求",
+      "MEMORY_LIMIT_S": "内存限制",
+      "MEMORY_REQUEST_S": "内存请求"
     },
     "operators": {
       "=": "=",

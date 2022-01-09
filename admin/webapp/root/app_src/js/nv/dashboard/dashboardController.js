@@ -3865,7 +3865,7 @@
         self.onmessage = (event) => {
           let baseUrl = event.srcElement.origin;
           let inputObj = JSON.parse(event.data);
-          let apiUrl = baseUrl + inputObj.apiUrl;
+          let apiUrl = `${baseUrl}/${inputObj.apiUrl}`;
           let domain = inputObj.domain;
           let query = domain ? `?domain=${encodeURIComponent(domain)}` : "";
           let xhttp = new XMLHttpRequest();
@@ -3891,7 +3891,7 @@
         self.onmessage = (event) => {
           let baseUrl = event.srcElement.origin;
           let inputObj = JSON.parse(event.data);
-          let apiUrl = baseUrl + inputObj.apiUrl;
+          let apiUrl = `${baseUrl}/${inputObj.apiUrl}`;
           let isGlobalUser = inputObj.isGlobalUser;
           let query = isGlobalUser ? `?isGlobalUser=${isGlobalUser.toString()}` : "?isGlobalUser=false";
           let xhttp = new XMLHttpRequest();
@@ -3917,7 +3917,7 @@
         self.onmessage = (event) => {
           let baseUrl = event.srcElement.origin;
           let inputObj = JSON.parse(event.data);
-          let apiUrl = baseUrl + inputObj.apiUrl;
+          let apiUrl = `${baseUrl}/${inputObj.apiUrl}`;
           let isGlobalUser = inputObj.isGlobalUser;
           let exposures = inputObj.exposures;
           let exposureList = [];

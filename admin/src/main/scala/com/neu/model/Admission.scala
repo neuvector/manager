@@ -9,8 +9,8 @@ case class AdmRuleSubCriterion(
 case class AdmRuleCriterion(
   sub_criteria: Option[Array[AdmRuleSubCriterion]],
   name: String,
-  op: String,
-  value: String
+  op: Option[String],
+  value: Option[String]
 )
 
 case class AdmRule(

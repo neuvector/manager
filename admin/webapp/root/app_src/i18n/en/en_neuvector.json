@@ -34,7 +34,8 @@
 			}
 		},
 		"license": {
-      "HEAD": "NEUVECTOR END USER LICENSE AGREEMENT",
+      "HEAD": "END USER LICENSE AGREEMENT",
+      "SUB_HEAD": "for NeuVector open source products",
       "server": {
         "APPLY_DESC": "Enter code received from NeuVector support",
         "EMAIL": "support@neuvector.com"

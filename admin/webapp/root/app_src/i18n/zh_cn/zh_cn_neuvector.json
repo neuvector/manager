@@ -34,7 +34,8 @@
 			}
 		},
 		"license": {
-      "HEAD": "软件许可证协议",
+      "HEAD": " 用户许可证协议",
+      "SUB_HEAD": "NeuVector开源产品",
       "server": {
         "APPLY_DESC": "请输入我们发送回的授权码",
         "EMAIL": "support@neuvector.com"

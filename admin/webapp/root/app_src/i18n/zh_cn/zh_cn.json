@@ -2384,7 +2384,8 @@
       "NO_UPD_PROMISSION": "NeuVector默认服务账户没有服务资源的更新权限.",
       "ERR_SRV2WEBHOOK": "Kube-apiserver的请求接收失败. 请尝试别的客户模式.",
       "TEST_K8S_OK": "Kubernetes系统连接正常.",
-      "SAVE_CLIENT_MODE": "将选定的模式提交到Kubernetes设置以便进行Kubernetes请求连接的测试."
+      "SAVE_CLIENT_MODE": "将选定的模式提交到Kubernetes设置以便进行Kubernetes请求连接的测试.",
+      "NOT_NUMBER_ERR": "不是数字"
     },
     "addRule": {
       "TITLE": "添加规则"
@@ -2452,7 +2453,16 @@
       "COUNT": "数量",
       "PSP": "PSP最佳实践",
       "ALLOW_PRIV_ESCALATION": "允许特权升级",
-      "PSP_COMPLIANCE": "PSP最佳实施"
+      "PSP_COMPLIANCE": "PSP最佳实施",
+      "RESOURCE_LIMIT": "资源限制设置",
+      "CPU_LIMIT": "CPU限制",
+      "CPU_REQUEST": "CPU请求",
+      "MEMORY_LIMIT": "内存限制",
+      "MEMORY_REQUEST": "内存请求",
+      "CPU_LIMIT_S": "CPU限制",
+      "CPU_REQUEST_S": "CPU请求",
+      "MEMORY_LIMIT_S": "内存限制",
+      "MEMORY_REQUEST_S": "内存请求"
     },
     "operators": {
       "=": "=",
@@ -2485,7 +2495,8 @@
       "MEDIUM": "中",
       "LOW": "低",
       "NONE": "没有",
-      "DAYS": "天"
+      "DAYS": "天",
+      "CORE": "核心"
     },
     "display": {
       "<=": "（{{days}}天之内报告的）",
@@ -2494,6 +2505,7 @@
       "CVE_HIGH_WITH_FIX_COUNT_WITH_REPORT_DAYS": "{{comparison}}{{count}}条高危CVE",
       "CVE_MEDIUM_COUNT_WITH_REPORT_DAYS": "{{comparison}}{{count}}条中危CVE",
       "CVE_SCORE_COUNT_WITH_COUNT": "{{countComparison}}{{count}}评分{{scoreComparison}}{{score}}的CVE",
+      "RESOURCE_LIMIT": "资源限制: {{details}}",
       "cveScore": {
         "<=": "低于",
         ">=": "高于"
@@ -2598,7 +2610,7 @@
   },
   "license": {
     "TITLE": "许可证",
-    "HEAD": "软件许可证协议",
+    "HEAD": "用户许可证协议",
     "METERED": "计量版",
     "METERED_TRIAL": "计量测试版",
     "STANDARD": "标准版",

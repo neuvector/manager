@@ -4,7 +4,7 @@
     .module("app.assets")
     .factory("admissionControlService", admissionControlService);
 
-  function admissionControlService($translate, Utils) {
+  function admissionControlService($translate, $filter, Utils) {
     const setGrid = function() {
       const columnDefs4MatchingTest = [
         {
@@ -180,6 +180,20 @@
                       days: criteria.sub_criteria[0].value
                     }
                   );
+          } else if (
+            criteria.name === "resourceLimit"
+          ) {
+            console.log("criteria", criteria);
+            return $translate.instant(
+              `admissionControl.display.${Utils.parseDivideStyle(
+                criteria.name
+              ).toUpperCase()}`,
+              {
+                details: criteria.sub_criteria.map((subCriterion) => {
+                  return `${$translate.instant(`admissionControl.names.${Utils.parseDivideStyle(subCriterion.name).toUpperCase()}_S`)}${subCriterion.op}${$filter("bytes")(subCriterion.value)}`
+                }).join(", ")
+              }
+            ).replace(/\&gt\;/g, ">").replace(/\&lt\;/g, "<");
           }
         }
         let value = criteria.value.length > 30 ? `${criteria.value.substring(0, 30)}...` : criteria.value;

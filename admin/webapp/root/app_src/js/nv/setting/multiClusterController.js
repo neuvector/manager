@@ -535,7 +535,7 @@
         if (inputObj.rancherCookie) {
           baseUrl = `${inputObj.currUrl.split(inputObj.neuvectorProxy)[0]}${inputObj.neuvectorProxy}`;
         }
-        let apiUrl = baseUrl + inputObj.apiUrl;
+        let apiUrl = `${baseUrl}/${inputObj.apiUrl}`;
         let isGlobalUser = inputObj.isGlobalUser;
         let isMaster = inputObj.isMaster;
         let clusterId = inputObj.clusterId;

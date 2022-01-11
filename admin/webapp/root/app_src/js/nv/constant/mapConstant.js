@@ -37,6 +37,8 @@ const PERMISSION_MAP = {
   "vuls_profile": ["vulnerability_w", "vulnerability_r"]
 }
 
+const PROXY_VALUE = "neuvector-service-webui:8443/proxy";
+
 const EDGE_STATUS_MAP = {
   OK: "#2196F3",
   allow: "#2196F3",

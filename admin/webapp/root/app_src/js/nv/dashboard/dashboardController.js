@@ -22,6 +22,7 @@
     "$sce",
     "$sanitize",
     "$mdDialog",
+    "$cookies",
     "ImproveScoreFactory",
     "AuthorizationFactory",
     "$controller",
@@ -43,6 +44,7 @@
     $sce,
     $sanitize,
     $mdDialog,
+    $cookies,
     ImproveScoreFactory,
     AuthorizationFactory,
     $controller
@@ -70,6 +72,8 @@
         namespace: 1,
       },
     };
+
+    let rancherCookie = $cookies.get("R_SESS");
 
     $scope.isShowingScore = Utils.isAuthorized(
       $scope.user.roles,
@@ -3865,6 +3869,9 @@
         self.onmessage = (event) => {
           let baseUrl = event.srcElement.origin;
           let inputObj = JSON.parse(event.data);
+          if (inputObj.rancherCookie) {
+            baseUrl = `${inputObj.currUrl.split(inputObj.neuvectorProxy)[0]}${inputObj.neuvectorProxy}`;
+          }
           let apiUrl = `${baseUrl}/${inputObj.apiUrl}`;
           let domain = inputObj.domain;
           let query = domain ? `?domain=${encodeURIComponent(domain)}` : "";
@@ -3891,6 +3898,9 @@
         self.onmessage = (event) => {
           let baseUrl = event.srcElement.origin;
           let inputObj = JSON.parse(event.data);
+          if (inputObj.rancherCookie) {
+            baseUrl = `${inputObj.currUrl.split(inputObj.neuvectorProxy)[0]}${inputObj.neuvectorProxy}`;
+          }
           let apiUrl = `${baseUrl}/${inputObj.apiUrl}`;
           let isGlobalUser = inputObj.isGlobalUser;
           let query = isGlobalUser ? `?isGlobalUser=${isGlobalUser.toString()}` : "?isGlobalUser=false";
@@ -3917,6 +3927,9 @@
         self.onmessage = (event) => {
           let baseUrl = event.srcElement.origin;
           let inputObj = JSON.parse(event.data);
+          if (inputObj.rancherCookie) {
+            baseUrl = `${inputObj.currUrl.split(inputObj.neuvectorProxy)[0]}${inputObj.neuvectorProxy}`;
+          }
           let apiUrl = `${baseUrl}/${inputObj.apiUrl}`;
           let isGlobalUser = inputObj.isGlobalUser;
           let exposures = inputObj.exposures;
@@ -3987,6 +4000,9 @@
             JSON.stringify({
               apiUrl: DASHBOARD_NOTIFICATIONS_URL,
               token: $scope.user.token.token,
+              currUrl: window.location.href,
+              rancherCookie: rancherCookie ? rancherCookie : "",
+              neuvectorProxy: PROXY_VALUE
             })
           );
           $scope.worker.onmessage = (event) => {
@@ -4026,7 +4042,10 @@
             JSON.stringify({
               apiUrl: DASHBOARD_DETAILS_URL,
               token: $scope.user.token.token,
-              isGlobalUser: $scope.isGlobalUser
+              isGlobalUser: $scope.isGlobalUser,
+              currUrl: window.location.href,
+              rancherCookie: rancherCookie ? rancherCookie : "",
+              neuvectorProxy: PROXY_VALUE
             })
           );
           $scope.worker2.onmessage = (event) => {
@@ -4056,8 +4075,11 @@
                 egress: scoreData.egress
               },
               apiUrl: CONVERSATION_HISTORY_URL,
+              currUrl: window.location.href,
               token: $scope.user.token.token,
-              isGlobalUser: $scope.isGlobalUser
+              isGlobalUser: $scope.isGlobalUser,
+              rancherCookie: rancherCookie ? rancherCookie : "",
+              neuvectorProxy: PROXY_VALUE
             })
           );
           $scope.worker3.onmessage = (event) => {

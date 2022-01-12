@@ -44,7 +44,7 @@ def request_federation(data):
 @click.option("--name", help="The name to use for this cluster")
 @click.option("--server", help="Exposed rest ip/fqdn of this primary cluster")
 @click.option("--port", help="Exposed rest port of this primary cluster")
-@click.option("--use_proxy", default=None, type=click.Choice(['true', 'false', None]), help="Use configured system https proxy or not when connecting to managed cluster")
+@click.option("--use_proxy", default="", type=click.Choice(["http","https",""]), help="Use configured system https proxy or not when connecting to managed cluster")
 @click.pass_obj
 def request_federation_promote(data, name, server, port, use_proxy):
     """Promote a cluster to primary cluster in the federation."""
@@ -61,11 +61,10 @@ def request_federation_promote(data, name, server, port, use_proxy):
     if name != None and name != "":
         req["name"] = name
 
-    req["use_https_proxy"] = False
-    if "use_https_proxy" in resp:
-        req["use_https_proxy"] = resp["use_https_proxy"]
-    if use_proxy == 'true':
-        req["use_https_proxy"] = True
+    if "use_proxy" in resp:
+        req["use_proxy"] = resp["use_proxy"]
+    if use_proxy != "":
+        req["use_proxy"] = use_proxy
 
     resp = data.client.request("fed", "promote", None, req)
     #click.echo("Federation promotion response object: {}".format(json.dumps(resp)))
@@ -121,7 +120,7 @@ def request_federation_join_token(data, duration):
 @click.option("--local_server", help="Exposed rest ip/fqdn of this cluster")
 @click.option("--local_port", help="Exposed rest port of this cluster")
 @click.option("--token", required=True, help="join-token issed by primary cluster")
-@click.option("--use_proxy", default=None, type=click.Choice(['true', 'false', None]), help="Use proxy when connecting to primary cluster")
+@click.option("--use_proxy", default="", type=click.Choice(["http","https","", None]), help="Use proxy when connecting to primary cluster")
 @click.pass_obj
 def request_federation_join(data, name, server, port, local_server, local_port, token, use_proxy):
     """Join a cluster to primary cluster in the federation."""
@@ -138,14 +137,8 @@ def request_federation_join(data, name, server, port, local_server, local_port, 
     if joint_rest_info is None or joint_rest_info["server"] == "" or int(joint_rest_info["port"]) == 0:
         click.echo("Failed because local cluster info is not configured yet.")
         return
-    req = {"join_token": token, "joint_rest_info": joint_rest_info}
+    req = {"join_token": token, "joint_rest_info": joint_rest_info, "use_proxy": use_proxy}
     
-    req["use_https_proxy"] = False
-    if "use_https_proxy" in resp:
-        req["use_https_proxy"] = resp["use_https_proxy"]
-    if use_proxy == 'true':
-        req["use_https_proxy"] = True
-
     prompt = False
     if server == None or server == "":
         req["server"] = joinToken["s"]
@@ -227,8 +220,8 @@ def show_federation_config(data):
     click.echo("")
     if resp is None or (resp["fed_role"] == clusterRoleNone):
         useProxy = False
-        if "use_https_proxy" in resp:
-            useProxy = resp["use_https_proxy"]
+        if "use_proxy" in resp:
+            useProxy = resp["use_proxy"]
         click.echo("Not in federation")
         click.echo("--------------------------------------------")
         click.echo("Local cluster rest info:")
@@ -251,8 +244,8 @@ def show_federation_config(data):
             master["status"] = "self"
             master["use proxy"] = False
             master[proxyRequiredTitle] = ""
-            if "use_https_proxy" in resp:
-                master["use proxy"] = resp["use_https_proxy"]
+            if "use_proxy" in resp:
+                master["use proxy"] = resp["use_proxy"]
             clusters.append(master)
             if "joint_clusters" in resp:
                 joint_clusters = resp["joint_clusters"]
@@ -277,8 +270,8 @@ def show_federation_config(data):
                 joint["rest server/port"] = "{}:{}".format(joint_cluster["rest_info"]["server"], joint_cluster["rest_info"]["port"])
                 joint["status"] = joint_cluster["status"]
                 joint["use proxy"] = False
-                if "use_https_proxy" in resp:
-                    joint["use proxy"] = resp["use_https_proxy"]
+                if "use_proxy" in resp:
+                    joint["use proxy"] = resp["use_proxy"]
                 clusters.append(joint)
         output.list(columns, clusters)
     #click.echo("")
@@ -301,7 +294,7 @@ def set_federation(data):
 @click.option("--name", help="The name to use for this cluster")
 @click.option("--server", help="Exposed rest ip/fqdn of this cluster")
 @click.option("--port", help="Exposed rest port of this cluster")
-@click.option("--use_proxy", default=None, type=click.Choice(['true', 'false', None]), help="Use proxy when connecting to remote cluster")
+@click.option("--use_proxy", default="", type=click.Choice(["http","https",""]), help="Use proxy when connecting to remote cluster")
 @click.pass_obj
 def set_federation_config(data, name, server, port, use_proxy):
     """Configure the exposed rest info of this cluster."""
@@ -314,11 +307,7 @@ def set_federation_config(data, name, server, port, use_proxy):
     if port is not None:
         rest_info["port"] = int(port)
     body = {"rest_info": rest_info}
-    if use_proxy is not None:
-        if use_proxy == "true":
-            body["use_https_proxy"] = True
-        else:
-            body["use_https_proxy"] = False
+    body["use_proxy"] = use_proxy
     if name != None and name != "":
         body["name"] = name
     ret = data.client.config("fed", "config", body)

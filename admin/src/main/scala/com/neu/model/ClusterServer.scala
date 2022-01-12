@@ -17,7 +17,7 @@ case class FedMemberData(
   fed_role: String,
   local_rest_info: Option[ClusterServerInfo] = None,
   clusters: Option[Seq[ClusterServer]] = None,
-  user_proxy: Option[String] = None
+  use_proxy: Option[String] = None
 )
 
 case class ClusterServerInfo(
@@ -59,10 +59,10 @@ case class FedMembershipData(
 case class FedPromptRequest(
   name: String,
   master_rest_info: Option[ClusterServerInfo],
-  user_proxy: Option[String]
+  use_proxy: Option[String]
 )
 
-case class FedConfigData(poll_interval: Int, name: Option[String], user_proxy: Option[String],rest_info: Option[ClusterServerInfo])
+case class FedConfigData(poll_interval: Int, name: Option[String], use_proxy: Option[String],rest_info: Option[ClusterServerInfo])
 
 case class FedJoinRequest(
   name: String,
@@ -70,7 +70,7 @@ case class FedJoinRequest(
   port: Int,
   join_token: String,
   joint_rest_info: Option[ClusterServerInfo],
-  user_proxy: Option[String]
+  use_proxy: Option[String]
 )
 
 case class FedLeaveRequest(force: Boolean = true)

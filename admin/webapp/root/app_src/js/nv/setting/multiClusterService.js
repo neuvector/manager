@@ -11,14 +11,18 @@
         return $http.get(FED_MEMBER_URL);
       }
 
-      function updateCluster(data) {
-        let payload = {
+      function updateCluster(data, isEditable, userProxy) {
+        let payload = isEditable ? {
           poll_interval: 2,
           name: data.name,
           rest_info: {
             server: data.api_server,
             port: parseInt(data.api_port)
-          }
+          },
+          user_proxy: userProxy
+        } : {
+          poll_interval: 2,
+          user_proxy: userProxy
         };
         return $http.patch(FED_CFG_URL, payload);
       }
@@ -31,13 +35,14 @@
         return $http.get(DASHBOARD_SUMMARY_URL)
       }
 
-      function promote(data) {
+      function promote(data, userProxy) {
         let payload = {
           name: data.name,
           master_rest_info: {
             server: data.server,
             port: parseInt(data.port)
-          }
+          },
+          user_proxy: userProxy
         };
         return $http.post(FED_PROMOTE_URL, payload);
       }
@@ -55,7 +60,8 @@
           joint_rest_info: {
             server: data.server,
             port: parseInt(data.port)
-          }
+          },
+          user_proxy: userProxy
         };
         return $http.post(FED_JOIN_URL, payload);
       }

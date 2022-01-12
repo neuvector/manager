@@ -111,6 +111,45 @@
                                                    class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
                                         </md-input-container>
                                     </div>
+                                    <div class="col-sm-10 col-sm-offset-1 mt-sm">
+                                      <label class="radio-inline c-radio">
+                                        <input
+                                          id="https"
+                                          type="radio"
+                                          name="proxy"
+                                          ng-model="userProxy"
+                                          value="https"
+                                        />
+                                        <span class="fa fa-check text-discover"/>
+                                        {{'multiCluster.USE_HTTPS_PROXY' | translate}}
+                                      </label>
+                                    </div>
+                                    <div class="col-sm-10 col-sm-offset-1 mt-sm">
+                                      <label class="radio-inline c-radio">
+                                        <input
+                                          id="http"
+                                          type="radio"
+                                          name="proxy"
+                                          ng-model="userProxy"
+                                          value="http"
+                                        />
+                                        <span class="fa fa-check text-discover"/>
+                                        {{'multiCluster.USE_HTTP_PROXY' | translate}}
+                                      </label>
+                                    </div>
+                                    <div class="col-sm-10 col-sm-offset-1 mt-sm">
+                                      <label class="radio-inline c-radio">
+                                        <input
+                                          id="none"
+                                          type="radio"
+                                          name="proxy"
+                                          ng-model="userProxy"
+                                          value=""
+                                        />
+                                        <span class="fa fa-check text-discover"/>
+                                        {{'multiCluster.NO_PROXY' | translate}}
+                                      </label>
+                                    </div>
                                     <div class="col-sm-10 col-sm-offset-1 mt-sm line-breaker">
                                         {{ "multiCluster.promotion.hint" | translate }}
                                     </div>
@@ -244,10 +283,48 @@
                                                    class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
                                         </md-input-container>
                                     </div>
+                                    <div class="col-sm-10 col-sm-offset-1 mt-sm">
+                                      <label class="radio-inline c-radio">
+                                        <input
+                                          id="https"
+                                          type="radio"
+                                          name="proxy"
+                                          ng-model="userProxy"
+                                          value="https"
+                                        />
+                                        <span class="fa fa-check text-discover"/>
+                                        {{'multiCluster.USE_HTTPS_PROXY' | translate}}
+                                      </label>
+                                    </div>
+                                    <div class="col-sm-10 col-sm-offset-1 mt-sm">
+                                      <label class="radio-inline c-radio">
+                                        <input
+                                          id="http"
+                                          type="radio"
+                                          name="proxy"
+                                          ng-model="userProxy"
+                                          value="http"
+                                        />
+                                        <span class="fa fa-check text-discover"/>
+                                        {{'multiCluster.USE_HTTP_PROXY' | translate}}
+                                      </label>
+                                    </div>
+                                    <div class="col-sm-10 col-sm-offset-1 mt-sm">
+                                      <label class="radio-inline c-radio">
+                                        <input
+                                          id="none"
+                                          type="radio"
+                                          name="proxy"
+                                          ng-model="userProxy"
+                                          value=""
+                                        />
+                                        <span class="fa fa-check text-discover"/>
+                                        {{'multiCluster.NO_PROXY' | translate}}
+                                      </label>
+                                    </div>
                                     <div class="col-sm-10 col-sm-offset-1 mt-sm line-breaker">
                                         {{ "multiCluster.joining.hint" | translate }}
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -332,7 +409,7 @@
                                                     <em class="fa fa-id-card fa-lg text-primary"/>
                                                 </div>
                                             </md-icon>
-                                            <input name="name" ng-model="cluster.name" required
+                                            <input name="name" ng-model="cluster.name" required ng-disabled="!isEditable"
                                                    class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
                                         </md-input-container>
                                     </div>
@@ -344,7 +421,7 @@
                                                     <em class="fa fa-server fa-lg text-primary"/>
                                                 </div>
                                             </md-icon>
-                                            <input name="ip" ng-model="cluster.api_server" required
+                                            <input name="ip" ng-model="cluster.api_server" required ng-disabled="!isEditable"
                                                    placeholder=" {{'multiCluster.tips.serverType' | translate}} "
                                                    class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
                                         </md-input-container>
@@ -357,12 +434,53 @@
                                                     <em class="fa fa-gear fa-lg text-primary"/>
                                                 </div>
                                             </md-icon>
-                                            <input name="port" ng-model="cluster.api_port" required
+                                            <input name="port" ng-model="cluster.api_port" required ng-disabled="!isEditable"
                                                    ng-pattern="/^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$/"
                                                    placeholder=" 0 ~ 65535 "
                                                    class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
                                         </md-input-container>
                                     </div>
+                                </div>
+                                <div class="row m0">
+                                  <div class="col-sm-10 col-sm-offset-1 mt-sm">
+                                    <label class="radio-inline c-radio">
+                                      <input
+                                        id="https"
+                                        type="radio"
+                                        name="proxy"
+                                        ng-model="userProxy"
+                                        value="https"
+                                      />
+                                      <span class="fa fa-check text-discover"/>
+                                      {{'multiCluster.USE_HTTPS_PROXY' | translate}}
+                                    </label>
+                                  </div>
+                                  <div class="col-sm-10 col-sm-offset-1 mt-sm">
+                                    <label class="radio-inline c-radio">
+                                      <input
+                                        id="http"
+                                        type="radio"
+                                        name="proxy"
+                                        ng-model="userProxy"
+                                        value="http"
+                                      />
+                                      <span class="fa fa-check text-discover"/>
+                                      {{'multiCluster.USE_HTTP_PROXY' | translate}}
+                                    </label>
+                                  </div>
+                                  <div class="col-sm-10 col-sm-offset-1 mt-sm">
+                                    <label class="radio-inline c-radio">
+                                      <input
+                                        id="none"
+                                        type="radio"
+                                        name="proxy"
+                                        ng-model="userProxy"
+                                        value=""
+                                      />
+                                      <span class="fa fa-check text-discover"/>
+                                      {{'multiCluster.NO_PROXY' | translate}}
+                                    </label>
+                                  </div>
                                 </div>
                             </div>
                         </div>
@@ -370,7 +488,7 @@
                 </md-dialog-content>
                 <div class="md-actions" layout="row" style="border: 0;">
 
-                    <md-button ng-click="update(cluster)" class="md-raised md-primary"
+                    <md-button ng-click="update(cluster, false)" class="md-raised md-primary"
                                ng-disabled="editClusterForm.$invalid">
                         {{'general.SUBMIT' | translate}}
                     </md-button>

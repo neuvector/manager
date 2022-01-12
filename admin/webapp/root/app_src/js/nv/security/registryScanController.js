@@ -2698,6 +2698,7 @@
         $scope.cancel = function() {
           $mdDialog.cancel();
         };
+        $scope.searchImage = "";
         $scope.isVulsAuthorized = AuthorizationFactory.getDisplayFlag("vuls_profile");
         $scope.isWriteVulsAuthorized = AuthorizationFactory.getDisplayFlag("write_vuls_profile");
         $scope.isAccepted = true;
@@ -2726,6 +2727,20 @@
           parentInfo.cveDBCreateTime,
           "MMM dd, y HH:mm:ss"
         )}`;
+        $scope.onFilterChangedOnImage = function(tabIndex, searchImage) {
+          switch (tabIndex) {
+            case 0:
+              $scope.layerVulsGridOptions.api.setQuickFilter(searchImage);
+              break;
+            case 1:
+              $scope.complianceGridOptions.api.setQuickFilter(searchImage);
+              break;
+            case 2:
+              $scope.moduleGridOptions.api.setQuickFilter(searchImage);
+              break;
+          }
+        };
+
         let convertedLayers = layers.map(function(layer, index) {
           layer.digestFull = layer.digest;
           if (index < layers.length - 1) {

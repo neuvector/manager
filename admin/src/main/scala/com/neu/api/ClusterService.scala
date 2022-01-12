@@ -219,7 +219,8 @@ class ClusterService()(implicit executionContext: ExecutionContext)
           FedMemberData(
             fedMembershipData.fed_role,
             fedMembershipData.local_rest_info,
-            Some(clusters)
+            Some(clusters),
+            Some(fedMembershipData.use_proxy.fold("") {user_proxy => user_proxy})
           )
 
       }

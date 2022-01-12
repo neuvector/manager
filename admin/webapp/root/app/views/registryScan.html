@@ -1372,7 +1372,19 @@
                 md-dynamic-height=""
                 md-border-bottom
                 md-selected="selectedIndex"
+                style="position: relative;"
               >
+                <div class="left-inner-addon pull-right ml-sm">
+                  <em class="fa fa-filter text-filter"></em>
+                  <input
+                    class="search form-control"
+                    placeholder="{{'general.FILTER' | translate}}"
+                    maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
+                    ng-model="searchImage"
+                    ng-paste="onFilterChangedOnImage(selectedIndex, searchImage)"
+                    ng-keyup="onFilterChangedOnImage(selectedIndex, searchImage)"
+                  />
+                </div>
                 <md-tab
                   label="{{'sidebar.nav.SCAN' | translate}}"
                 >

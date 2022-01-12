@@ -2525,6 +2525,9 @@
     "title": "Federation Management",
     "joint": "Managed",
     "master": "Primary",
+    "USE_HTTP_PROXY":"Use http proxy configured in Settings > Configuration page",
+    "USE_HTTPS_PROXY": "Use https proxy configured in Settings > Configuration page",
+    "NO_PROXY": "Does not use any proxy",
     "tips": {
       "policy": "Manage Federated Policy",
       "demote": "Demote",
@@ -2710,7 +2713,7 @@
     "NEED_SUBMIT": "Need submit",
     "ENABLED": "Enabled",
     "DISABLED": "Disabled",
-    "REG_PROXY": "Registry Proxy",
+    "REG_PROXY": "Proxy",
     "REG_HTTP_PROXY": "Http Proxy",
     "REG_HTTPS_PROXY": "Https Proxy",
     "XFF_MATCH": "X-Forwarded-For based policy match",

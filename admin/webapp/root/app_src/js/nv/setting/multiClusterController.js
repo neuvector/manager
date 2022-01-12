@@ -309,6 +309,9 @@
                 '       <em class="fa fa-key fa-lg text-action" ' +
                 '         ng-click="showGetTokenDialog()" uib-tooltip="{{\'multiCluster.tips.token\' | translate}}">' +
                 "       </em>" +
+                '       <em class="fa fa-edit fa-lg text-action" ' +
+                '         ng-click="showEditClusterDialog($event, data, false)" uib-tooltip="{{\'multiCluster.tips.edit\' | translate}}">' +
+                "       </em>" +
                 "     </div>" +
                 "     <div ng-show='demoteWaiting'>" +
                 '       <em class="fa fa-gavel fa-lg mr-sm text-action"' +
@@ -319,6 +322,9 @@
                 "       </em>" +
                 '       <em class="fa fa-key fa-lg text-action" ' +
                 '         ng-click="showGetTokenDialog()" uib-tooltip="{{\'multiCluster.tips.token\' | translate}}">' +
+                "       </em>" +
+                '       <em class="fa fa-edit fa-lg text-action" ' +
+                '         ng-click="showEditClusterDialog($event, data, false)" uib-tooltip="{{\'multiCluster.tips.edit\' | translate}}">' +
                 "       </em>" +
                 "     </div>";
             } else {
@@ -334,7 +340,7 @@
                 '         ng-click="showGetTokenDialog()" uib-tooltip="{{\'multiCluster.tips.token\' | translate}}">' +
                 "       </em>" +
                 '       <em class="fa fa-edit fa-lg text-action" ' +
-                '         ng-click="showEditClusterDialog($event, data)" uib-tooltip="{{\'multiCluster.tips.edit\' | translate}}">' +
+                '         ng-click="showEditClusterDialog($event, data, true)" uib-tooltip="{{\'multiCluster.tips.edit\' | translate}}">' +
                 "       </em>" +
                 "     </div>" +
                 "     <div ng-show='demoteWaiting'>" +
@@ -348,7 +354,7 @@
                 '         ng-click="showGetTokenDialog()" uib-tooltip="{{\'multiCluster.tips.token\' | translate}}">' +
                 "       </em>" +
                 '       <em class="fa fa-edit fa-lg text-action" ' +
-                '         ng-click="showEditClusterDialog($event, data)" uib-tooltip="{{\'multiCluster.tips.edit\' | translate}}">' +
+                '         ng-click="showEditClusterDialog($event, data, true)" uib-tooltip="{{\'multiCluster.tips.edit\' | translate}}">' +
                 "       </em>" +
                 "     </div>";
             }
@@ -392,16 +398,17 @@
         if (isMember) {
           if (params.data && params.data.clusterType === FED_ROLES.MEMBER)
             renderHTML =
-              "     <div ng-show='!leaveWaiting'>" +
-              '       <em class="fa fa-user-times fa-lg mr-sm text-action" ' +
-              '         ng-click="leave()" uib-tooltip="{{\'multiCluster.tips.leave\' | translate}}">' +
-              "       </em>" +
-              "     </div>" +
-              "     <div ng-show='leaveWaiting'>" +
-              '       <em class="fa fa-spinner fa-spin fa-lg text-action" ' +
-              '         ng-click="leave()" uib-tooltip="{{\'multiCluster.tips.leave\' | translate}}">' +
-              "       </em>" +
-              "     </div>";
+              `<div>
+                <em class="fa fa-edit fa-lg mr-sm text-action"
+                  ng-click="showEditClusterDialog($event, data, false)" uib-tooltip="{{'multiCluster.tips.edit' | translate}}">
+                </em>
+                <em ng-if="!leaveWaiting" class="fa fa-user-times fa-lg mr-sm text-action"
+                  ng-click="leave()" uib-tooltip="{{'multiCluster.tips.leave' | translate}}">
+                </em>
+                <em  ng-if="leaveWaiting" class="fa fa-spinner fa-spin fa-lg text-action"
+                  ng-click="leave()" uib-tooltip="{{'multiCluster.tips.leave' | translate}}">
+                </em>
+              </div>`;
         }
 
         return renderHTML;
@@ -634,6 +641,7 @@
       $scope.isFederal = !$scope.isOrdinary;
       $scope.clusters = fedData.clusters || [];
       $scope.local = fedData.local_rest_info;
+      $scope.userProxy = fedData.user_proxy || "";
       if (!($scope.gridOptions && $scope.gridOptions.api)) {
         setGrid($scope.isMaster, $scope.isMember);
       }
@@ -690,6 +698,7 @@
           $scope.clusters = payload.data.clusters || [];
           $scope.isMaster = payload.data.fed_role === FED_ROLES.MASTER;
           $scope.isMember = payload.data.fed_role === FED_ROLES.MEMBER;
+          $scope.userProxy = fedData.user_proxy || "";
           $rootScope.$broadcast("reloadClusters",$scope.clusters);
           if ($scope.gridOptions && $scope.gridOptions.api) {
             $scope.gridOptions.api.setRowData($scope.clusters);
@@ -892,7 +901,9 @@
         controller: PromoteDialogController,
         controllerAs: "promoteCtl",
         templateUrl: "dialog.promote.html",
-        locals: {}
+        locals: {
+          userProxy: $scope.userProxy
+        }
       });
     };
 
@@ -902,7 +913,10 @@
           controller: JoinDialogController,
           controllerAs: "joinCtrl",
           templateUrl: "dialog.join.html",
-          targetEvent: event
+          targetEvent: event,
+          locals: {
+            userProxy: $scope.userProxy
+          }
         })
         .finally(function() {
           $timeout(function() {
@@ -919,13 +933,17 @@
       });
     };
 
-    $scope.showEditClusterDialog = function(event, data) {
+    $scope.showEditClusterDialog = function(event, data, isEditable) {
       multiClusterService.cluster4Edit = data;
       $mdDialog
         .show({
           controller: EditClusterDialogController,
           templateUrl: "dialog.edit.html",
-          targetEvent: event
+          targetEvent: event,
+          locals: {
+            isEditable: isEditable,
+            userProxy: $scope.userProxy
+          }
         })
         .then(function() {
           $timeout(function() {
@@ -972,7 +990,8 @@
       "$location",
       "$state",
       "$rootScope",
-      "$http"
+      "$http",
+      "userProxy"
     ];
 
     function PromoteDialogController(
@@ -984,7 +1003,8 @@
       $location,
       $state,
       $rootScope,
-      $http
+      $http,
+      userProxy
     ) {
       $scope.hide = function() {
         $mdDialog.hide();
@@ -998,6 +1018,8 @@
         server: "",
         port: FED_PORT.MASTER
       };
+
+      $scope.userProxy = userProxy;
 
       $scope.getName = function() {
         $http
@@ -1014,7 +1036,7 @@
         $scope.promotionProcessing = true;
 
         multiClusterService
-          .promote(cluster)
+          .promote(cluster, $scope.userProxy)
           .then(function() {
             popupMsg("multiCluster.messages.promotion_ok");
             setTimeout(function() {
@@ -1061,14 +1083,16 @@
       "$scope",
       "$mdDialog",
       "$translate",
-      "multiClusterService"
+      "multiClusterService",
+      "userProxy"
     ];
 
     function JoinDialogController(
       $scope,
       $mdDialog,
       $translate,
-      multiClusterService
+      multiClusterService,
+      userProxy
     ) {
       $scope.hide = function() {
         $mdDialog.hide();
@@ -1087,6 +1111,8 @@
         master_server: "",
         master_port: ""
       };
+
+      $scope.userProxy = userProxy;
 
       $scope.getName = function() {
         $http
@@ -1188,14 +1214,18 @@
       "$scope",
       "$mdDialog",
       "$translate",
-      "multiClusterService"
+      "multiClusterService",
+      "isEditable",
+      "userProxy"
     ];
 
     function EditClusterDialogController(
       $scope,
       $mdDialog,
       $translate,
-      multiClusterService
+      multiClusterService,
+      isEditable,
+      userProxy
     ) {
       $scope.hide = function() {
         $mdDialog.hide();
@@ -1204,11 +1234,14 @@
         $mdDialog.cancel();
       };
 
-      $scope.cluster = multiClusterService.cluster4Edit;
+      $scope.isEditable = isEditable;
 
-      $scope.update = function(data) {
+      $scope.cluster = multiClusterService.cluster4Edit;
+      $scope.userProxy = userProxy;
+
+      $scope.update = function(data, isEditable) {
         multiClusterService
-          .updateCluster(data)
+          .updateCluster(data, isEditable, $scope.userProxy)
           .then(function() {
             popupMsg("multiCluster.messages.update_ok");
             $mdDialog.hide();

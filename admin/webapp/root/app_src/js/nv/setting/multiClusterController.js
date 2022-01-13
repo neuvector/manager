@@ -21,8 +21,7 @@
     "filterFilter",
     "multiClusterService",
     "$controller",
-    "$sanitize",
-    "$cookies"
+    "$sanitize"
   ];
 
   function MultiClusterController(
@@ -42,8 +41,7 @@
     filterFilter,
     multiClusterService,
     $controller,
-    $sanitize,
-    $cookies
+    $sanitize
   ) {
     $scope.graphHeight = $window.innerHeight - 280;
     angular.element($window).bind("resize", function() {
@@ -57,7 +55,6 @@
     let worker = new Array(MAX_WEB_WORKER_CNT);
     worker.fill(null);
     let timer = null;
-    let rancherCookie = $cookies.get("R_SESS");
     $scope.demoteWaiting = false;
     $scope.leaveWaiting = false;
 
@@ -539,9 +536,6 @@
       self.onmessage = (event) => {
         let baseUrl = event.srcElement.origin;
         let inputObj = JSON.parse(event.data);
-        if (inputObj.rancherCookie) {
-          baseUrl = `${inputObj.currUrl.split(inputObj.neuvectorProxy)[0]}${inputObj.neuvectorProxy}`;
-        }
         let apiUrl = `${baseUrl}/${inputObj.apiUrl}`;
         let isGlobalUser = inputObj.isGlobalUser;
         let isMaster = inputObj.isMaster;
@@ -582,10 +576,7 @@
             token: $scope.user.token.token,
             isGlobalUser: true,
             isMaster: $scope.clusters[index].clusterType === FED_ROLES.MASTER,
-            clusterId: $scope.clusters[index].id,
-            currUrl: window.location.href,
-            rancherCookie: rancherCookie ? rancherCookie : "",
-            neuvectorProxy: PROXY_VALUE
+            clusterId: $scope.clusters[index].id
           })
         );
 

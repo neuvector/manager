@@ -632,7 +632,7 @@
       $scope.isFederal = !$scope.isOrdinary;
       $scope.clusters = fedData.clusters || [];
       $scope.local = fedData.local_rest_info;
-      $scope.useProxy = fedData.use_proxy || "";
+      $rootScope.useProxy = fedData.use_proxy || "";
       if (!($scope.gridOptions && $scope.gridOptions.api)) {
         setGrid($scope.isMaster, $scope.isMember);
       }
@@ -690,7 +690,7 @@
           $scope.clusters = payload.data.clusters || [];
           $scope.isMaster = payload.data.fed_role === FED_ROLES.MASTER;
           $scope.isMember = payload.data.fed_role === FED_ROLES.MEMBER;
-          $scope.useProxy = payload.data.use_proxy || "";
+          $rootScope.useProxy = payload.data.use_proxy || "";
           $rootScope.$broadcast("reloadClusters",$scope.clusters);
           if ($scope.gridOptions && $scope.gridOptions.api) {
             $scope.gridOptions.api.setRowData($scope.clusters);
@@ -894,7 +894,7 @@
         controllerAs: "promoteCtl",
         templateUrl: "dialog.promote.html",
         locals: {
-          useProxy: $scope.useProxy
+          useProxy: $rootScope.useProxy
         }
       });
     };
@@ -907,7 +907,7 @@
           templateUrl: "dialog.join.html",
           targetEvent: event,
           locals: {
-            useProxy: $scope.useProxy
+            useProxy: $rootScope.useProxy
           }
         })
         .finally(function() {
@@ -934,7 +934,7 @@
           targetEvent: event,
           locals: {
             isEditable: isEditable,
-            useProxy: $scope.useProxy
+            useProxy: $rootScope.useProxy
           }
         })
         .then(function() {

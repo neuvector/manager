@@ -1,6 +1,7 @@
 *.class
 *.log
 apis.yaml
+docker-compose.yml
 
 # sbt specific
 .cache

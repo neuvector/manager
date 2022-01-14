@@ -96,6 +96,7 @@
     //--------------------------------------------------------
     $scope.initClusters = function() {
       multiClusterService.getClusters().then(function(payload) {
+        $rootScope.useProxy = payload.data.use_proxy;
         $scope.clusters = payload.data.clusters || [];
         $rootScope.isMaster = payload.data.fed_role === FED_ROLES.MASTER;
         $rootScope.isMember = payload.data.fed_role === FED_ROLES.MEMBER;
@@ -143,6 +144,7 @@
         $scope.clusters = clusters || [];
       } else {
         multiClusterService.getClusters().then(function(payload) {
+          $rootScope.useProxy = payload.data.use_proxy;
           $scope.clusters = payload.data.clusters || [];
         });
       }

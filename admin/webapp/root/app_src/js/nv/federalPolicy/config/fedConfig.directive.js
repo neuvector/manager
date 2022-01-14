@@ -7,7 +7,7 @@
     function federalConfig() {
         return {
             restrict: "E",
-            templateUrl: "/app/views/components/federalPolicy/federal-config.html"
+            templateUrl: "app/views/components/federalPolicy/federal-config.html"
         }
     }
 

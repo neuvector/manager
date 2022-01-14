@@ -57,7 +57,7 @@
     let worker = new Array(MAX_WEB_WORKER_CNT);
     worker.fill(null);
     let timer = null;
-    let rancherCookie = $cookies.get("R_SESS");
+    let rancherCookie = "rancher";//$cookies.get("R_SESS");
     $scope.demoteWaiting = false;
     $scope.leaveWaiting = false;
 
@@ -641,7 +641,7 @@
       $scope.isFederal = !$scope.isOrdinary;
       $scope.clusters = fedData.clusters || [];
       $scope.local = fedData.local_rest_info;
-      $scope.userProxy = fedData.user_proxy || "";
+      $scope.useProxy = fedData.use_proxy || "";
       if (!($scope.gridOptions && $scope.gridOptions.api)) {
         setGrid($scope.isMaster, $scope.isMember);
       }
@@ -692,13 +692,14 @@
     };
 
     $scope.refreshGrid = function(seletedRow = null) {
+      taskCursor = -1;
       multiClusterService
         .getClusters()
         .then(function(payload) {
           $scope.clusters = payload.data.clusters || [];
           $scope.isMaster = payload.data.fed_role === FED_ROLES.MASTER;
           $scope.isMember = payload.data.fed_role === FED_ROLES.MEMBER;
-          $scope.userProxy = fedData.user_proxy || "";
+          $scope.useProxy = payload.data.use_proxy || "";
           $rootScope.$broadcast("reloadClusters",$scope.clusters);
           if ($scope.gridOptions && $scope.gridOptions.api) {
             $scope.gridOptions.api.setRowData($scope.clusters);
@@ -902,7 +903,7 @@
         controllerAs: "promoteCtl",
         templateUrl: "dialog.promote.html",
         locals: {
-          userProxy: $scope.userProxy
+          useProxy: $scope.useProxy
         }
       });
     };
@@ -915,7 +916,7 @@
           templateUrl: "dialog.join.html",
           targetEvent: event,
           locals: {
-            userProxy: $scope.userProxy
+            useProxy: $scope.useProxy
           }
         })
         .finally(function() {
@@ -942,7 +943,7 @@
           targetEvent: event,
           locals: {
             isEditable: isEditable,
-            userProxy: $scope.userProxy
+            useProxy: $scope.useProxy
           }
         })
         .then(function() {
@@ -991,7 +992,7 @@
       "$state",
       "$rootScope",
       "$http",
-      "userProxy"
+      "useProxy"
     ];
 
     function PromoteDialogController(
@@ -1004,7 +1005,7 @@
       $state,
       $rootScope,
       $http,
-      userProxy
+      useProxy
     ) {
       $scope.hide = function() {
         $mdDialog.hide();
@@ -1019,7 +1020,7 @@
         port: FED_PORT.MASTER
       };
 
-      $scope.userProxy = userProxy;
+      $scope.useProxy = useProxy;
 
       $scope.getName = function() {
         $http
@@ -1036,7 +1037,7 @@
         $scope.promotionProcessing = true;
 
         multiClusterService
-          .promote(cluster, $scope.userProxy)
+          .promote(cluster, $scope.useProxy)
           .then(function() {
             popupMsg("multiCluster.messages.promotion_ok");
             setTimeout(function() {
@@ -1084,7 +1085,7 @@
       "$mdDialog",
       "$translate",
       "multiClusterService",
-      "userProxy"
+      "useProxy"
     ];
 
     function JoinDialogController(
@@ -1092,7 +1093,7 @@
       $mdDialog,
       $translate,
       multiClusterService,
-      userProxy
+      useProxy
     ) {
       $scope.hide = function() {
         $mdDialog.hide();
@@ -1112,7 +1113,7 @@
         master_port: ""
       };
 
-      $scope.userProxy = userProxy;
+      $scope.useProxy = useProxy;
 
       $scope.getName = function() {
         $http
@@ -1150,7 +1151,7 @@
       $scope.join = function(cluster) {
         $scope.joiningProcessing = true;
         multiClusterService
-          .join(cluster)
+          .join(cluster, $scope.useProxy)
           .then(function() {
             popupMsg("multiCluster.messages.joining_ok");
             $mdDialog.cancel();
@@ -1216,7 +1217,7 @@
       "$translate",
       "multiClusterService",
       "isEditable",
-      "userProxy"
+      "useProxy"
     ];
 
     function EditClusterDialogController(
@@ -1225,7 +1226,7 @@
       $translate,
       multiClusterService,
       isEditable,
-      userProxy
+      useProxy
     ) {
       $scope.hide = function() {
         $mdDialog.hide();
@@ -1237,11 +1238,11 @@
       $scope.isEditable = isEditable;
 
       $scope.cluster = multiClusterService.cluster4Edit;
-      $scope.userProxy = userProxy;
+      $scope.useProxy = useProxy;
 
       $scope.update = function(data, isEditable) {
         multiClusterService
-          .updateCluster(data, isEditable, $scope.userProxy)
+          .updateCluster(data, isEditable, $scope.useProxy)
           .then(function() {
             popupMsg("multiCluster.messages.update_ok");
             $mdDialog.hide();

@@ -80,7 +80,7 @@
         scope: {
           submenu: "=submenu"
         },
-        templateUrl: "/app/views/components/settings-widget.html"
+        templateUrl: "app/views/components/settings-widget.html"
       };
     });
 })();

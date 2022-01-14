@@ -7,7 +7,7 @@
     function passwordProfile() {
         return {
             restrict: "E",
-            templateUrl: "/app/views/password-profile.html"
+            templateUrl: "app/views/password-profile.html"
         }
     }
 

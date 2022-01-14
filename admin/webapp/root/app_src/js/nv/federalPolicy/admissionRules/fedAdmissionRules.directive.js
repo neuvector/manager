@@ -7,7 +7,7 @@
     function federalPolicyAdmissionRules() {
         return {
             restrict: "E",
-            templateUrl: "/app/views/components/federalPolicy/federal-policy-admission-rules.html"
+            templateUrl: "app/views/components/federalPolicy/federal-policy-admission-rules.html"
         }
     }
 

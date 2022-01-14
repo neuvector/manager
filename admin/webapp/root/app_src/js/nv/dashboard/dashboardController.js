@@ -73,7 +73,7 @@
       },
     };
 
-    let rancherCookie = $cookies.get("R_SESS");
+    let rancherCookie = "rancher";//$cookies.get("R_SESS");
 
     $scope.isShowingScore = Utils.isAuthorized(
       $scope.user.roles,
@@ -3869,10 +3869,13 @@
         self.onmessage = (event) => {
           let baseUrl = event.srcElement.origin;
           let inputObj = JSON.parse(event.data);
+          console.log("inputObj.rancherCookie: ", inputObj.rancherCookie);
           if (inputObj.rancherCookie) {
             baseUrl = `${inputObj.currUrl.split(inputObj.neuvectorProxy)[0]}${inputObj.neuvectorProxy}`;
+            console.log("Rewritten base url:", baseUrl);
           }
           let apiUrl = `${baseUrl}/${inputObj.apiUrl}`;
+          console.log("Notification API Url:", apiUrl);
           let domain = inputObj.domain;
           let query = domain ? `?domain=${encodeURIComponent(domain)}` : "";
           let xhttp = new XMLHttpRequest();
@@ -4344,7 +4347,7 @@
               isGlobalUser: $scope.isGlobalUser
             },
             controller: ImproveScoreController,
-            templateUrl: "/app/views/components/improve-score-modal.html",
+            templateUrl: "app/views/components/improve-score-modal.html",
             controllerAs: "ImpvCtrl",
             targetEvent: event,
           })

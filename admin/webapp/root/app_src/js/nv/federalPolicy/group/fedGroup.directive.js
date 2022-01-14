@@ -7,7 +7,7 @@
     function federalPolicyGroup() {
         return {
             restrict: "E",
-            templateUrl: "/app/views/components/federalPolicy/federal-policy-group.html"
+            templateUrl: "app/views/components/federalPolicy/federal-policy-group.html"
         }
     }
 

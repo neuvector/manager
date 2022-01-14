@@ -7,7 +7,7 @@
     function users() {
         return {
             restrict: "E",
-            templateUrl: "/app/views/users.html"
+            templateUrl: "app/views/users.html"
         }
     }
 

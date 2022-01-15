@@ -854,8 +854,8 @@
                   </button>
                   <button
                     type="button"
-                    ng-click="item.remove()"
-                    ng-disabled="item.isReady || item.isUploading|| item.isSuccess"
+                    ng-click="item.remove(); removeFile()"
+                    ng-disabled="(item.isReady || item.isUploading || item.isSuccess || isContinuelyImporting) && !hasImportError"
                     class="btn btn-default btn-xs"
                   >
                     <span class="mr-sm"/>

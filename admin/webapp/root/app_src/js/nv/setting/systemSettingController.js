@@ -211,12 +211,15 @@
               }
             )
             .then((res) => {
+              $scope.hasImportError = false;
               if (res.status === 200) {
                 finishImport(res.data);
+                $scope.isContinuelyImporting = false;
               } else if (res.status === 206) {
                 let transactionId = res.data.data.tid;
                 $scope.percentage = res.data.data.percentage;
                 $scope.status = res.data.data.status;
+                $scope.isContinuelyImporting = true;
                 getImportProgressInfo(
                   {
                     transactionId,
@@ -230,6 +233,8 @@
             .catch((err) => {
               console.warn(err);
               $scope.status = Utils.getAlertifyMsg(err, $translate.instant("setting.IMPORT_FAILED"), false);
+              $scope.hasImportError = true;
+              $scope.isContinuelyImporting = false;
               if (status !== USER_TIMEOUT) {
                 Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
                 Alertify.error(
@@ -241,6 +246,8 @@
       };
 
       $scope.asStandalone = false;
+      $scope.hasImportError = false;
+      $scope.isContinuelyImporting = false;
       $scope.checkAsStandalone = function() {
         $timeout(() => {
           $scope.asStandalone = !$scope.asStandalone;
@@ -274,17 +281,22 @@
       ) {};
       uploader.onAfterAddingFile = function (fileItem) {};
       uploader.onAfterAddingAll = function (addedFileItems) {};
-      uploader.onBeforeUploadItem = function (item) {};
+      uploader.onBeforeUploadItem = function (item) {
+        $scope.isContinuelyImporting = true;
+      };
       uploader.onProgressItem = function (fileItem, progress) {};
       uploader.onProgressAll = function (progress) {};
       uploader.onSuccessItem = function (fileItem, response, status, headers) {
+        $scope.hasImportError = false;
         if (status === 200) {
           finishImport(response);
+          $scope.isContinuelyImporting = false;
         } else if (status === 206) {
           let transactionId = response.data.tid;
           let tempToken = response.data.temp_token;
           $scope.percentage = response.data.percentage;
           $scope.status = response.data.status;
+          $scope.isContinuelyImporting = true;
 
           getImportProgressInfo(
             {
@@ -298,6 +310,8 @@
       };
       uploader.onErrorItem = function (fileItem, response, status, headers) {
         $scope.status = Utils.getAlertifyMsg(response.message, $translate.instant("setting.IMPORT_FAILED"), false);
+        $scope.hasImportError = true;
+        $scope.isContinuelyImporting = false;
         $scope.percentage = 0;
         if (status !== USER_TIMEOUT) {
           Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
@@ -314,6 +328,13 @@
         headers
       ) {};
       uploader.onCompleteAll = function () {};
+      $scope.removeFile = function () {
+        $scope.status = "";
+        $scope.asStandalone = false;
+        $scope.hasImportError = false;
+        $scope.isContinuelyImporting = false;
+        $scope.percentage = 0;
+      };
 
       const eventName = $translate.instant("enum.EVENT");
       const securityEventName = $translate.instant("enum.SECURITY_EVENT");

@@ -3,7 +3,7 @@
     "general": {
       "WEB_URL": "http://www.neuvector.com",
       "PROVIDER": "NeuVector",
-      "DOCUMENT_URL": "https://docs.neuvector.com/",
+      "DOCUMENT_URL": "https://open-docs.neuvector.com",
       "LOGO_NAME": "LOGO"
     },
     "top_security_events": {

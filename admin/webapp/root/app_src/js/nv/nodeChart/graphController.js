@@ -161,14 +161,10 @@
       let gpuEnabled;
       if ($window.localStorage.getItem("_gpuEnabled") !== "undefined") {
         gpuEnabled = JSON.parse($window.localStorage.getItem("_gpuEnabled"));
-        console.log(gpuEnabled);
         if (gpuEnabled !== null) return gpuEnabled;
       }
-      gpuEnabled =
-        navigator.appVersion.indexOf("Win") === -1 &&
-        navigator.appVersion.indexOf("Linux") === -1;
-      console.log(gpuEnabled);
-      return gpuEnabled;
+      else
+        return false;
     };
 
     $scope.gpuEnabled = useGpu();

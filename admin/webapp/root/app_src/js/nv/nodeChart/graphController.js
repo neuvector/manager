@@ -1991,8 +1991,8 @@
         type: "fruchterman",
         // workerEnabled: true,
         gpuEnabled: useGpu(),
-        gravity: 5,
-        clusterGravity: 1,
+        gravity: 6,
+        clusterGravity: 4,
         clustering: true,
         maxIteration: 1000
       },

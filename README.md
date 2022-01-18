@@ -1,5 +1,12 @@
 ﻿# Overview
-NeuVector Security Center Admin Console.
+NeuVector Security Center Admin Console for the SUSE NeuVector Container Security Platform.
+A viewable version of docs can be see at https://open-docs.neuvector.com
+The container images for the preview version can be pulled from the NeuVector Docker Hub registry at:
++ neuvector/manager.preview:5.0.0-preview.1
++ neuvector/controller.preview:5.0.0-preview.1
++ neuvector/enforcer.preview:5.0.0-preview.1
++ neuvector/scanner.preview:latest
++ neuvector/updater.preview:latest
 
 # Requirements
 This project is based on Scala 2.10 and managed by sbt, please follow [this](http://www.scala-sbt.org/release/tutorial/Setup.html) to setup sbt on your platform.

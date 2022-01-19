@@ -62,7 +62,7 @@
     "karma-jasmine": "^4.0.1",
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-requirejs": "^1.1.0",
-    "marked": "^2.0.3",
+    "marked": "^4.0.10",
     "merge-stream": "^2.0.0",
     "requirejs": "^2.3.6",
     "rev-hash": "^2.0.0",

@@ -79,8 +79,8 @@ describe('Federated network rule - ', function() {
       $scope2 = $rootScope.$new();
       _policyService = policyService;
 
-      $httpBackend.expectGET("/group-list?scope=fed").respond(200);
-      $httpBackend.expectPATCH("/policy?scope=fed").respond(200);
+      $httpBackend.expectGET("group-list?scope=fed").respond(200);
+      $httpBackend.expectPATCH("policy?scope=fed").respond(200);
 
       FederalPolicyNetworkRulesController = $controller('FederalPolicyNetworkRulesController', {
         $rootScope,

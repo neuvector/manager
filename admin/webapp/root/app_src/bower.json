@@ -40,7 +40,6 @@
     "moment": "2.18.1",
     "jquery-ui": "1.11.4",
     "jquery": "2.1.4",
-    "modernizr": "https://modernizr.com/download?backgroundsize-bgpositionshorthand-bgpositionxy-bgrepeatspace_bgrepeatround-bgsizecover-borderradius-cssanimations-csscalc-csstransforms-csstransforms3d-csstransitions-flexboxtweener-fontface-inlinesvg-localstorage-multiplebgs-preserve3d-sessionstorage-smil-svgclippaths-svgfilters-svgforeignobject-todataurljpeg_todataurlpng_todataurlwebp-setclasses&q=background.zip",
     "bootstrap-filestyle": "1.2.3",
     "angular-sanitize": "1.5.8",
     "angular-resource": "1.5.8",

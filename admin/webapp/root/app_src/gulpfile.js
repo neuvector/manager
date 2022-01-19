@@ -97,7 +97,7 @@ const log = msg => {
   $.util.log($.util.colors.blue(msg));
 };
 
-const handleError = err => {
+const handleError = function(err)  {
   log(err.toString());
   this.emit("end");
 };
@@ -375,4 +375,3 @@ gulp.task("sourcemaps", gulp.series("useSources", "default"));
 
 // dev build without watch (no minify)
 gulp.task("build:dev", gulp.parallel("vendor", "assets"));
-

@@ -97,7 +97,7 @@ const log = msg => {
   $.util.log($.util.colors.blue(msg));
 };
 
-const handleError = function(err)  {
+const handleError = err => {
   log(err.toString());
   this.emit("end");
 };

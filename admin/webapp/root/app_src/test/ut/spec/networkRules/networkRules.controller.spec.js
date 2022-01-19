@@ -111,8 +111,8 @@ describe('Network rule - ', function() {
       $scope2 = $rootScope.$new();
       _policyService = policyService;
 
-      $httpBackend.expectGET("/group-list?scope=local").respond(200);
-      $httpBackend.expectPATCH("/policy?scope=local").respond(200);
+      $httpBackend.expectGET("group-list?scope=local").respond(200);
+      $httpBackend.expectPATCH("policy?scope=local").respond(200);
 
       $rootScope.toastWarnings = () => {};
 

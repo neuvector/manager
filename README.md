@@ -8,31 +8,26 @@ The container images for the preview version can be pulled from the NeuVector Do
 + neuvector/scanner.preview:latest
 + neuvector/updater.preview:latest
 
-# Requirements
-This project is based on Scala 2.10 and managed by sbt, please follow [this](http://www.scala-sbt.org/release/tutorial/Setup.html) to setup sbt on your platform.
+# Bugs & Issues
+Please submit bugs and issues to [neuvector/neuvector](//github.com/neuvector/neuvector/issues) with a title starting with `[UI] `.
 
-Follwing are the major libraries we used:
+Or just [click here](//github.com/neuvector/neuvector/issues/new?title=%5BUI%5D%20) to create a new issue.
 
-  * Spray 1.3.1
-  * Akka 2.3
-  * Angular Js
-  * Bootstrap
-  
-# Quickstart
-If you are using Intellij, just import the sbt project, to use Eclipse you need generate Eclipse project first, just run sbt eclipse, it will genertae the project for you.
+# License
 
-For Intellij, in case import sbt not working, in sbt run gen-idea, it will create Intellij project for you, load the project afterwards.
+Copyright © 2016-2022 [NeuVector Inc](https://neuvector.com). All Rights Reserved
 
-For command line, just go to the project root, run sbt, go to project admin.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-To start web server, on sbt prompt type "~ re-start" without double quotes, this will start web
-server in hot deploy mode, means your changes (html, css even scala/java classes) will be auto
-reloaded without restarting web server.
+[http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
-If you prefer simple mode on sbt prompt just type "run" without double quotes.
-
-To browse the web UI: https://localhost:8443
-
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 
 # Coding standard
 ### Naming Convention
@@ -78,20 +73,4 @@ string contains "foo"
 
 // But overloaded operators should be invoked in infix style
 arrayBuffer += elem
-```
-
-### Make special build of manager container
-
-Build locally
-
-```
-make jar
-make manager_image
-```
-
-An image called 'neuvector/manager' will be created locally. Give it a special tag and push to the local registry.
-
-```
-docker tag neuvector/manager 10.1.127.3:5000/neuvector/manager:gary
-docker push 10.1.127.3:5000/neuvector/manager:gary
 ```

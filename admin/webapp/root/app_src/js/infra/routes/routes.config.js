@@ -25,7 +25,6 @@
         abstract: true,
         templateUrl: helper.basePath("app.html"),
         resolve: helper.resolveFor(
-          "modernizr",
           "moment",
           "icons",
           "screenfull",
@@ -483,7 +482,7 @@
       .state("page", {
         url: "/page",
         templateUrl: "app/pages/page.html",
-        resolve: helper.resolveFor("modernizr", "icons"),
+        resolve: helper.resolveFor("icons"),
         controller: [
           "$rootScope",
           function ($rootScope) {

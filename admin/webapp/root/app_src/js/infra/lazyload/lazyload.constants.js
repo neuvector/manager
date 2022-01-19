@@ -7,7 +7,6 @@
       classyloader: [
         "vendor/jquery-classyloader/js/jquery.classyloader.min.js",
       ],
-      modernizr: ["vendor/modernizr/modernizr.custom.js"],
       icons: [
         "vendor/fontawesome/css/font-awesome.min.css",
         "vendor/simple-line-icons/css/simple-line-icons.css",

@@ -61,6 +61,7 @@ const CONFIG_URL = "config";
 const DASHBOARD_SUMMARY_URL = "summary";
 const NETWORK_INFO_URL = "network/graph";
 const NETWORK_LAYOUT_URL = "network/graph/layout";
+const NETWORK_BLACKLIST_URL = "/network/graph/blacklist";
 const POLICY_GRAPH_URL = "policy/graph";
 const NODES_URL = "host";
 const NODE_WORKLOADS_URL = "host/workload";

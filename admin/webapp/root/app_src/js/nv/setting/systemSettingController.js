@@ -187,6 +187,7 @@
           }, 8000);
         } else {
           $scope.status = Utils.getAlertifyMsg($scope.status, $translate.instant("setting.IMPORT_FAILED"), false);
+          $scope.status4Tooltip = $scope.status.replace(/&#34;/g, "\"");
           Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
           Alertify.error(
             $scope.status
@@ -233,6 +234,7 @@
             .catch((err) => {
               console.warn(err);
               $scope.status = Utils.getAlertifyMsg(err, $translate.instant("setting.IMPORT_FAILED"), false);
+              $scope.status4Tooltip = $scope.status.replace(/&#34;/g, "\"");
               $scope.hasImportError = true;
               $scope.isContinuelyImporting = false;
               if (status !== USER_TIMEOUT) {
@@ -310,6 +312,7 @@
       };
       uploader.onErrorItem = function (fileItem, response, status, headers) {
         $scope.status = Utils.getAlertifyMsg(response.message, $translate.instant("setting.IMPORT_FAILED"), false);
+        $scope.status4Tooltip = $scope.status.replace(/&#34;/g, "\"");
         $scope.hasImportError = true;
         $scope.isContinuelyImporting = false;
         $scope.percentage = 0;

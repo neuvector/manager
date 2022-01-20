@@ -303,6 +303,13 @@
       $scope.$apply();
     };
 
+
+    ELEM_CONV_HISTORY.addEventListener("mouseup", function(event) {
+      $scope.entriesGridHeight = ELEM_CONV_HISTORY.clientHeight - 130;
+      $scope.convHisGridOptions.api.resetRowHeights();
+      $scope.convHisGridOptions.api.sizeColumnsToFit();
+    });
+
     $scope.convHisGridOptions = {
       enableSorting: true,
       animateRows: true,
@@ -514,6 +521,12 @@
 
     const activeColumns = NetworkFactory.activeColumns;
 
+    ELEM_ACTIVE_SESSIONS.addEventListener("mouseup", function(event) {
+      $scope.activeSessionGridHeight = ELEM_ACTIVE_SESSIONS.clientHeight - 90;
+      $scope.activeGridOptions.api.resetRowHeights();
+      $scope.activeGridOptions.api.sizeColumnsToFit();
+    });
+
     $scope.activeGridOptions = {
       deltaRowDataMode: true,
       animateRows: true,
@@ -555,6 +568,8 @@
             30 + 25 * $scope.conversations.length;
         else $scope.activeSessionGridHeight = 30 + 25 * 5;
         $timeout(function() {
+          $scope.activeSessionGridHeight = Math.max($scope.activeSessionGridHeight, ELEM_ACTIVE_SESSIONS.clientHeight - 90);
+          $scope.activeGridOptions.api.resetRowHeights();
           $scope.activeGridOptions.api.setRowData($scope.conversations);
         }, 100);
       }
@@ -634,6 +649,13 @@
       GraphFactory.keepLive();
       $scope.$apply();
     };
+
+    ELEM_SNIFFER.addEventListener("mouseup", function(event) {
+      $scope.snifferGridHeight = ELEM_SNIFFER.clientHeight - 160;
+      $scope.sniffGridOptions.api.resetRowHeights();
+      $scope.sniffGridOptions.api.sizeColumnsToFit();
+    }, true);
+
     $scope.sniffGridOptions = {
       deltaRowDataMode: true,
       animateRows: true,
@@ -732,6 +754,8 @@
           $scope.snifferGridHeight = 40 + 25 * $scope.sniffers.length;
         else $scope.snifferGridHeight = 40 + 25 * 5;
         $timeout(() => {
+          $scope.snifferGridHeight = Math.max($scope.snifferGridHeight, ELEM_SNIFFER.clientHeight - 130);
+          $scope.sniffGridOptions.api.resetRowHeights();
           $scope.sniffGridOptions.api.setRowData($scope.sniffers);
           if ($scope.sniffers && $scope.sniffers.length > 0) {
             let runningSniffer = $scope.sniffers.find(
@@ -1903,7 +1927,7 @@
             </li>
             <li code='quickSearch'>
               <svg class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
-                <path d="M416 192C537.6 192 640 294.4 640 416S537.6 640 416 640 192 537.6 192 416 294.4 192 416 192M416 128C256 128 128 256 128 416S256 704 416 704 704 576 704 416 576 128 416 128L416 128z">              
+                <path d="M416 192C537.6 192 640 294.4 640 416S537.6 640 416 640 192 537.6 192 416 294.4 192 416 192M416 128C256 128 128 256 128 416S256 704 416 704 704 576 704 416 576 128 416 128L416 128z">
                 </path>
                 <path d="M832 864c-6.4 0-19.2 0-25.6-6.4l-192-192c-12.8-12.8-12.8-32 0-44.8s32-12.8 44.8 0l192 192c12.8 12.8 12.8 32 0 44.8C851.2 864 838.4 864 832 864z">
                 </path>
@@ -2322,6 +2346,8 @@
             else $scope.entriesGridHeight = 40 + 25 * $scope.entries.length;
           } else $scope.entriesGridHeight = 40 + 25 * 5;
           $timeout(() => {
+            $scope.entriesGridHeight = Math.max($scope.entriesGridHeight, ELEM_CONV_HISTORY.clientHeight - 130);
+            $scope.convHisGridOptions.api.resetRowHeights();
             let ipList = $scope.entries.flatMap(entry => {
               let ips = [];
               if (entry.client_ip) {

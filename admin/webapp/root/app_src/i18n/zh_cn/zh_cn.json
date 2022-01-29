@@ -2385,7 +2385,7 @@
       "ERR_SRV2WEBHOOK": "Kube-apiserver的请求接收失败. 请尝试别的客户模式.",
       "TEST_K8S_OK": "Kubernetes系统连接正常.",
       "SAVE_CLIENT_MODE": "将选定的模式提交到Kubernetes设置以便进行Kubernetes请求连接的测试.",
-      "NOT_NUMBER_ERR": "不是数字"
+      "NOT_NUMBER_ERR": "不是有效数字"
     },
     "addRule": {
       "TITLE": "添加规则"

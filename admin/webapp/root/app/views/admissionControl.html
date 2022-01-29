@@ -124,7 +124,7 @@
 
   <div>
     <script type="text/ng-template" id="dialog.addEditPolicy.html">
-      <md-dialog aria-label="Add rule" class="dialog-lg" style="overflow: visible">
+      <md-dialog aria-label="Add rule" class="dialog-lg" style="overflow: scroll">
         <form name="addEditPolicyForm" ng-submit="$event.preventDefault()" novalidate="" class="form-validate" style="overflow: visible">
           <md-toolbar>
             <div class="md-toolbar-tools">
@@ -247,7 +247,7 @@
                     </div>
                     <div class="col-sm-1">
                       <md-button class="fa fa-plus md-raised md-primary pull-right mr0 mt" aria-hidden="true" style="min-width: 36px;" aria-hidden="true" ng-click="addEditAdmCtrl.addCriteria()"
-                                 ng-disabled="newRule.name.originalName!=='resourceLimit' && (!isValueSetValid || !newRule.name || !newRule.operator || (!newRule.value && !addEditAdmCtrl.selectedItemValue && !addEditAdmCtrl.searchTextValue)) || isViewOnly">
+                                 ng-disabled="newRule.name.originalName!=='resourceLimit' && (!isValueSetValid || !newRule.name || !newRule.operator || (!newRule.value && !addEditAdmCtrl.selectedItemValue && !addEditAdmCtrl.searchTextValue)) || isViewOnly || isInvalidSubValue">
                       </md-button>
                     </div>
                     <div class="col-sm-12" style="max-height: 300px; overflow-y: scroll;" ng-if="subNames.length>0">
@@ -276,7 +276,7 @@
                           <md-input-container class="col-lg-9 col-md-8 col-sm-7 pl0 md-block mb0">
                             <label>{{'admissionControl.VALUE' | translate}}</label>
                             <input ng-model="newRule.subValues[$index]" ng-pattern="decimal" name="subValue{{$index}}" ng-disabled="isViewOnly"
-                                   class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}"/>
+                                   class="mda-form-control" maxlength="{{'general.FILTER_MAX_LEN' | translate}}" ng-keyup="validateNumbers(newRule.subValues, subNames.length)"/>
                             <div ng-messages="addEditPolicyForm['subValue' + $index].$error">
                               <span ng-show="addEditPolicyForm['subValue' + $index].$dirty &amp;&amp; addEditPolicyForm['subValue' + $index].$error.pattern"
                                      class="text-danger">
@@ -336,17 +336,17 @@
                 </div>
               </div>
             </div>
+            <div class="md-actions" layout="row" style="min-height: 50px;" ng-show="conditionOptionErr"></div>
+            <div class="md-actions" layout="row" style="border: 0;" ng-show="!conditionOptionErr && !isViewOnly">
+              <md-button ng-click="addEditRule(ev)" class="md-raised md-primary"
+                         ng-disabled="addPolicyForm.$invalid || newRule.conditions.length===0">
+                {{isEdit ? 'policy.editPolicy.UPDATE' : 'policy.addPolicy.ADD' | translate}}
+              </md-button>
+              <a ng-click="cancel()" class="nv-link">
+                {{'policy.addPolicy.CANCEL' | translate}}
+              </a>
+            </div>
           </md-dialog-content>
-          <div class="md-actions" layout="row" style="min-height: 50px;" ng-show="conditionOptionErr"></div>
-          <div class="md-actions" layout="row" style="border: 0;" ng-show="!conditionOptionErr && !isViewOnly">
-            <md-button ng-click="addEditRule(ev)" class="md-raised md-primary"
-                       ng-disabled="addPolicyForm.$invalid || newRule.conditions.length===0">
-              {{isEdit ? 'policy.editPolicy.UPDATE' : 'policy.addPolicy.ADD' | translate}}
-            </md-button>
-            <a ng-click="cancel()" class="nv-link">
-              {{'policy.addPolicy.CANCEL' | translate}}
-            </a>
-          </div>
         </form>
       </md-dialog>
     </script>

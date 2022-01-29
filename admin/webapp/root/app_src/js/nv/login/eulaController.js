@@ -5,8 +5,8 @@
     .module('app.eula')
     .controller('EulaController', EulaController);
 
-  EulaController.$inject = ['$window', '$rootScope', '$scope', '$http', '$state', '$translate', 'Alertify'];
-  function EulaController($window, $rootScope, $scope, $http, $state, $translate, Alertify) {
+  EulaController.$inject = ['$window', '$rootScope', '$scope', '$http', '$state', '$translate', 'Alertify', 'Utils'];
+  function EulaController($window, $rootScope, $scope, $http, $state, $translate, Alertify, Utils) {
     activate();
 
     function activate() {

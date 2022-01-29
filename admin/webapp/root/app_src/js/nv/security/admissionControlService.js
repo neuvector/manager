@@ -190,7 +190,11 @@
               ).toUpperCase()}`,
               {
                 details: criteria.sub_criteria.map((subCriterion) => {
-                  return `${$translate.instant(`admissionControl.names.${Utils.parseDivideStyle(subCriterion.name).toUpperCase()}_S`)}${subCriterion.op}${$filter("bytes")(subCriterion.value)}`
+                  if (subCriterion.name.toLowerCase().startsWith("cpu")) {
+                    return `${$translate.instant(`admissionControl.names.${Utils.parseDivideStyle(subCriterion.name).toUpperCase()}_S`)}${subCriterion.op}${subCriterion.value}`
+                  } else {
+                    return `${$translate.instant(`admissionControl.names.${Utils.parseDivideStyle(subCriterion.name).toUpperCase()}_S`)}${subCriterion.op}${$filter("bytes")(subCriterion.value, 2)}`
+                  }
                 }).join(", ")
               }
             ).replace(/\&gt\;/g, ">").replace(/\&lt\;/g, "<");

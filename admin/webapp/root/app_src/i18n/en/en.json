@@ -2385,7 +2385,7 @@
       "ERR_SRV2WEBHOOK": "Failed to receive a request from Kube-apiserver. Please try different client mode",
       "TEST_K8S_OK": "Kubernetes system connection is normal.",
       "SAVE_CLIENT_MODE": "Submit the chosen mode to Kubernetes configuration in order to test the Kubernetes request connection.",
-      "NOT_NUMBER_ERR": "Not a Number"
+      "NOT_NUMBER_ERR": "Not a valid mumber"
     },
     "addRule": {
       "TITLE": "ADD RULE"

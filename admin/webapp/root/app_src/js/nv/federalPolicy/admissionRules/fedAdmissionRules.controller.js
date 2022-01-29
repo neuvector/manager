@@ -295,7 +295,11 @@
                             ).toUpperCase()}`,
                             {
                               details: criteria.sub_criteria.map(subCriterion => {
-                                return `${$translate.instant(`admissionControl.names.${Utils.parseDivideStyle(subCriterion.name).toUpperCase()}_S`)}${subCriterion.op}${$filter("bytes")(subCriterion.value, 2)}`
+                                if (subCriterion.name.toLowerCase().startsWith("cpu")) {
+                                  return `${$translate.instant(`admissionControl.names.${Utils.parseDivideStyle(subCriterion.name).toUpperCase()}_S`)}${subCriterion.op}${subCriterion.value}`
+                                } else {
+                                  return `${$translate.instant(`admissionControl.names.${Utils.parseDivideStyle(subCriterion.name).toUpperCase()}_S`)}${subCriterion.op}${$filter("bytes")(subCriterion.value, 2)}`
+                                }
                               }).join(", ")
                             }
                           ).replace(/\&gt\;/g, ">").replace(/\&lt\;/g, "<"));
@@ -1487,7 +1491,12 @@
                   .join(", ")
                 }
               ).replace(/\&gt\;/g, ">").replace(/\&lt\;/g, "<");
-              checkAndPushCriteria(name, $scope.newRule);
+
+              if (name !== $translate.instant(`admissionControl.display.${Utils.parseDivideStyle(
+                $scope.newRule.name.originalName
+              ).toUpperCase()}`,{details: ""})) {
+                checkAndPushCriteria(name, $scope.newRule);
+              }
             } else {
               let value =
                 $scope.newRule.value.length > 30
@@ -1520,7 +1529,13 @@
             $scope.isBooleanCriteria = false;
           };
 
-          $scope.decimal = /^([0-9]+\.?[0-9]*|\.[0-9]+)$/;
+          $scope.decimal = /^([1-9][0-9]*\.?[0-9]*|0\.[0-9]+)$/;
+          $scope.validateNumbers = function(values, numOfSubValues) {
+            $scope.isInvalidSubValue = values.length === 0;
+            for (let i = 0; i < numOfSubValues; i++) {
+              $scope.isInvalidSubValue = $scope.isInvalidSubValue || ($scope.addEditPolicyForm['subValue' + i].$dirty && ($scope.addEditPolicyForm['subValue' + i].$error.pattern || false));
+            }
+          };
 
           //
           $scope.addEditRule = function(ev) {

@@ -98,7 +98,8 @@ case class UserTokenNew(
                     token: TokenNew,
                     emailHash: String = "",
                     roles: Option[Map[String,String]],
-                    login_timestamp: Option[String])
+                    login_timestamp: Option[String],
+                    is_suse_authenticated: Boolean = false)
 
 case class UserProfile(fullname: String,
                        username: String,

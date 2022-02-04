@@ -814,7 +814,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
 
 
   private def loginWithSUSEToken(suseCookieValue: String) = {
-    logger.info("cookie value:" + suseCookieValue)
+    logger.info("suse cookie value:" + suseCookieValue)
     clientIP { ip =>
       entity(as[Password]) { userPwd =>
         def login: Route = {
@@ -823,10 +823,12 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
               s"$baseUri/$auth",
               POST,
               authRequestToJson(AuthRequest(userPwd, ip.toString())),
-              ""
+              suseCookieValue
             )
           val response = Await.result(result, RestClient.waitingLimit.seconds)
-          val authToken = AuthenticationManager.parseToken(response)
+          var authToken = AuthenticationManager.parseToken(response)
+          authToken = UserTokenNew(authToken.token, authToken.emailHash, authToken.roles, authToken.login_timestamp, if (suseCookieValue != "") true else false )
+          logger.info("login with SUSE cookie: {} ", authToken.is_suse_authenticated)
           logger.info("Client ip {}", ip)
           logger.info("{} login", authToken.token.username)
           Utils.respondWithNoCacheControl() {

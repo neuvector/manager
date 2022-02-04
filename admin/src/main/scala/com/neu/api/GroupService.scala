@@ -130,6 +130,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
                       POST,
                       "",
                       tokenId,
+                      "",
                       Some(transactionId)
                     )
                   }
@@ -878,6 +879,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
                           POST,
                           "",
                           tokenId,
+                          "",
                           Some(transactionId)
                         )
                       } catch {

@@ -38,6 +38,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
   val openId   = "openId_auth"
   val rootPath = "/"
   val samlKey  = "samlSso"
+  val suseCookie = "R_SESS"
 
   val authRoute: Route =
     (get & path(openId)) {
@@ -232,80 +233,11 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
       }
     } ~
     (post & path(auth)) {
-      clientIP { ip =>
-        entity(as[Password]) { userPwd =>
-          def login = {
-            val result =
-              RestClient.httpRequest(
-                s"$baseUri/$auth",
-                POST,
-                authRequestToJson(AuthRequest(userPwd, ip.toString()))
-              )
-            val response  = Await.result(result, RestClient.waitingLimit.seconds)
-            val authToken = AuthenticationManager.parseToken(response)
-            logger.info("Client ip {}", ip)
-            logger.info("{} login", authToken.token.username)
-            Utils.respondWithNoCacheControl() {
-              complete(StatusCodes.OK, authToken)
-            }
-          }
-          {
-            try {
-              logger.info(s"post path auth")
-              login
-            } catch {
-              case NonFatal(e) =>
-                logger.warn(e.getMessage)
-
-                if (e.getMessage.contains("Status: 401") || e.getMessage.contains("Status: 403")) {
-                  Utils.respondWithNoCacheControl() {
-                    onUnauthorized(e)
-                  }
-                } else {
-                  logger.warn(e.getClass.toString)
-                  reloadCtrlIp()
-                  try {
-                    login
-                  } catch {
-                    case NonFatal(`e`) =>
-                      logger.warn(e.getMessage)
-                      if (e.getMessage.contains("Status: 401") || e.getMessage.contains(
-                            "Status: 403"
-                          )) {
-                        Utils.respondWithNoCacheControl() {
-                          onUnauthorized(e)
-                        }
-                      } else {
-                        Utils.respondWithNoCacheControl() {
-                          complete(StatusCodes.InternalServerError, "Controller unavailable!")
-                        }
-                      }
-                    case e: TimeoutException =>
-                      logger.warn(e.getMessage)
-                      Utils.respondWithNoCacheControl() {
-                        complete(StatusCodes.NetworkConnectTimeout, "Network connect timeout error")
-                      }
-                    case e: ConnectionAttemptFailedException =>
-                      logger.warn(e.getMessage)
-                      Utils.respondWithNoCacheControl() {
-                        complete(StatusCodes.NetworkConnectTimeout, "Network connect timeout error")
-                      }
-                  }
-                }
-              case e: TimeoutException =>
-                logger.warn(e.getMessage)
-                Utils.respondWithNoCacheControl() {
-                  complete(StatusCodes.NetworkConnectTimeout, "Network connect timeout error")
-                }
-              case e: ConnectionAttemptFailedException =>
-                logger.warn(e.getMessage)
-                Utils.respondWithNoCacheControl() {
-                  complete(StatusCodes.NetworkConnectTimeout, "Network connect timeout error")
-                }
-            }
-          }
-        }
+      optionalCookie(suseCookie) {
+        case Some(sCookie) => loginWithSUSEToken(sCookie.content)
+        case None => loginWithSUSEToken("")
       }
+
     } ~
     headerValueByName("Token") { tokenId =>
       {
@@ -880,4 +812,83 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
       }
     }
 
+
+  private def loginWithSUSEToken(suseCookieValue: String) = {
+    logger.info("cookie value:" + suseCookieValue)
+    clientIP { ip =>
+      entity(as[Password]) { userPwd =>
+        def login: Route = {
+          val result =
+            RestClient.httpRequestWithTokenHeader(
+              s"$baseUri/$auth",
+              POST,
+              authRequestToJson(AuthRequest(userPwd, ip.toString())),
+              ""
+            )
+          val response = Await.result(result, RestClient.waitingLimit.seconds)
+          val authToken = AuthenticationManager.parseToken(response)
+          logger.info("Client ip {}", ip)
+          logger.info("{} login", authToken.token.username)
+          Utils.respondWithNoCacheControl() {
+            complete(StatusCodes.OK, authToken)
+          }
+        }
+        {
+          try {
+            logger.info(s"post path auth")
+            login
+          } catch {
+            case NonFatal(e) =>
+              logger.warn(e.getMessage)
+
+              if (e.getMessage.contains("Status: 401") || e.getMessage.contains("Status: 403")) {
+                Utils.respondWithNoCacheControl() {
+                  onUnauthorized(e)
+                }
+              } else {
+                logger.warn(e.getClass.toString)
+                reloadCtrlIp()
+                try {
+                  login
+                } catch {
+                  case NonFatal(`e`) =>
+                    logger.warn(e.getMessage)
+                    if (e.getMessage.contains("Status: 401") || e.getMessage.contains(
+                      "Status: 403"
+                    )) {
+                      Utils.respondWithNoCacheControl() {
+                        onUnauthorized(e)
+                      }
+                    } else {
+                      Utils.respondWithNoCacheControl() {
+                        complete(StatusCodes.InternalServerError, "Controller unavailable!")
+                      }
+                    }
+                  case e: TimeoutException =>
+                    logger.warn(e.getMessage)
+                    Utils.respondWithNoCacheControl() {
+                      complete(StatusCodes.NetworkConnectTimeout, "Network connect timeout error")
+                    }
+                  case e: ConnectionAttemptFailedException =>
+                    logger.warn(e.getMessage)
+                    Utils.respondWithNoCacheControl() {
+                      complete(StatusCodes.NetworkConnectTimeout, "Network connect timeout error")
+                    }
+                }
+              }
+            case e: TimeoutException =>
+              logger.warn(e.getMessage)
+              Utils.respondWithNoCacheControl() {
+                complete(StatusCodes.NetworkConnectTimeout, "Network connect timeout error")
+              }
+            case e: ConnectionAttemptFailedException =>
+              logger.warn(e.getMessage)
+              Utils.respondWithNoCacheControl() {
+                complete(StatusCodes.NetworkConnectTimeout, "Network connect timeout error")
+              }
+          }
+        }
+      }
+    }
+  }
 }

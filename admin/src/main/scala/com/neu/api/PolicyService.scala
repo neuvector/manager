@@ -737,6 +737,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
                             POST,
                             registryConfigWrapToJson(registryConfig),
                             tokenId,
+                            "",
                             Some(transactionId)
                           )
                         } catch {
@@ -796,6 +797,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
                             DELETE,
                             "",
                             tokenId,
+                            "",
                             Some(transactionId)
                           )
                         } catch {
@@ -1165,6 +1167,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
                         POST,
                         "",
                         tokenId,
+                        "",
                         Some(transactionId)
                       )
                     } catch {

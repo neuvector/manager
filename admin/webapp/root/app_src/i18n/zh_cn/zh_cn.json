@@ -421,7 +421,11 @@
         "AUTO_SCAN_DISABLE_OK": "自动扫描禁用成功!",
         "AUTO_SCAN_ENABLE_NG": "自动扫描启用失败.",
         "AUTO_SCAN_DISABLE_NG": "自动扫描禁用失败.",
-        "DISABLE_AUTOSCAN_CONFIRM": "如果自动扫描被禁用, 今后的漏洞不会被及时发现."
+        "DISABLE_AUTOSCAN_CONFIRM": "如果自动扫描被禁用, 今后的漏洞不会被及时发现.",
+        "RBAC_ERR_TITLE": "RBAC角色错误",
+        "CLUSTERROLE_ERRORS": "集群角色",
+        "CLUSTERROLEBINDING_ERRORS": "集群角色绑定",
+        "ROLEBINDING_ERRORS": "角色绑定"
       }
     },
     "help": {

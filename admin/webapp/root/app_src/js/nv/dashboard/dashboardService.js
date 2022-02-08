@@ -5,8 +5,58 @@
     .factory("DashboardFactory", function DashboardFactory(
       $translate,
       $filter,
+      $sanitize,
       Utils
     ) {
+      let _rbacErrorGridOptions = null;
+      DashboardFactory.setGrid = function() {
+        const rbacErrorColumn = [
+          {
+            headerName: "",
+            field: "errorType",
+            cellRenderer: (params) => {
+              if (params && params.value) {
+                return `<span class="pt-sm pb-sm label label-danger">
+                              ${$translate.instant(`dashboard.body.message.${params.value.toUpperCase()}`)}
+                        </span>`;
+              }
+            },
+            minWidth: 130,
+            maxWidth: 130,
+            width: 130
+          },
+          {
+            headerName: "",
+            field: "errorDetail",
+            cellRenderer: (params) => {
+              if (params && params.value) {
+                return `<span class="text-danger">${$sanitize(params.value)}</span>`
+              }
+            },
+            width: 500
+          }
+        ];
+
+        DashboardFactory.rbacErrorGridOptions = function() {
+          if (_rbacErrorGridOptions === null) {
+            _rbacErrorGridOptions = Utils.createGridOptions(rbacErrorColumn);
+            _rbacErrorGridOptions.defaultColDef = {
+              flex: 1,
+              cellClass: 'cell-wrap-text-break-word',
+              autoHeight: true,
+              sortable: true,
+              resizable: true,
+            };
+            _rbacErrorGridOptions.onColumnResized = function(params) {
+              params.api.resetRowHeights();
+            };
+            _rbacErrorGridOptions.headerHeight = 0;
+            _rbacErrorGridOptions.enableSorting = false;
+            _rbacErrorGridOptions.suppressScrollOnNewData = true;
+          }
+          return _rbacErrorGridOptions;
+        };
+      };
       DashboardFactory.defineDoc = function(pdfData) {
         return {
           info: {

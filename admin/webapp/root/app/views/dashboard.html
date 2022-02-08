@@ -956,4 +956,31 @@
   <div id="tab-content-4" class="hide nv-dashboard-body">
     System Health
   </div>
+  <div
+    id="rbacErrorBox"
+    ng-show="hasRBACError"
+    class="dataBox topLeftSession"
+    style="border: none;"
+  >
+    <div class="clearfix" id="rbacErrorBoxHeader">
+      <h4 class="text-bold text-danger mb0 pl-lg pull-left">
+        {{"dashboard.body.message.RBAC_ERR_TITLE" | translate}}
+      </h4>
+      <button
+        class="btn btn-xs btn-link pull-right"
+        ng-click="hasRBACError = false;"
+      >
+        <em class="fa fa-times fa-lg text-muted"></em>
+      </button>
+    </div>
+    <div class="clearfix">
+      <md-input-container class="md-block mv-sm">
+        <div
+          ag-grid="rbacErrorGridOptions"
+          class="ag-grid"
+          style="width: 100%; height: 150px;"
+        ></div>
+      </md-input-container>
+    </div>
+  </div>
 </div>

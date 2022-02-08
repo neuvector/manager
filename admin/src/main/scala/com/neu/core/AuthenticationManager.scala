@@ -25,6 +25,8 @@ object AuthenticationManager extends LazyLogging {
 
   val tokenBaseUrlMap:  mutable.Map[String, String] = scala.collection.mutable.Map[String, String]()
 
+  val suseTokenMap: mutable.Map[String, String] =
+    scala.collection.mutable.Map[String, String]()
   def getCluster(tokenId: String): Option[String] = tokenClusterMap.get(tokenId)
   def switchCluster(tokenId: String, clusterId: Option[String]): Unit =
     clusterId.fold(
@@ -40,6 +42,7 @@ object AuthenticationManager extends LazyLogging {
   def invalidate(tokenId: String): Unit = {
     tokenMap -= tokenId
     tokenClusterMap -= tokenId
+    suseTokenMap -= tokenId
   }
 
   def setBaseUrl(tokenId: String, baseUrl: String): Unit = {

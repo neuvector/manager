@@ -19,7 +19,6 @@ import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, TimeoutException}
 import scala.util.control.NonFatal
 import java.io.{PrintWriter, StringWriter}
-
 import scala.concurrent.Future
 
 object Constant {
@@ -125,6 +124,24 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig {
   private val X_NV_PAGE: String = "X-Nv-Page"
   private val X_TRN_ID: String = "X-Transaction-Id"
   private val X_AS_STANDALONE: String = "X-As-Standalone"
+  private val X_SUSE_TOKEN: String = "X-R_SESS"
+
+  /**
+    * Makes HTTP request
+    *
+    * @param uri    The request uri
+    * @param data   The payload
+    * @param method The method of the request
+    * @param token  The token header
+    * @return
+    */
+  def httpRequestWithTokenHeader(uri: String, method: HttpMethod = GET, data: String = "", suseToken: String = ""): Future[String] = {
+    val pipeline: HttpRequest => Future[String] = sendAndReceive ~> unmarshal[String]
+    pipeline {
+      createHttpRequest(uri, method, data) ~>
+        addHeader(X_SUSE_TOKEN, suseToken)
+    }
+  }
 
   def httpRequestWithHeader(
     uri: String,
@@ -139,6 +156,7 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig {
       asStandalone.fold(
         pipeline {
           createHttpRequest(uri, method, data) ~> addHeader(TOKEN_HEADER, token) ~>
+            addHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.get(token).getOrElse("")) ~>
             addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
             addHeader(`Cache-Control`(CacheDirectives.`no-cache`))
         }
@@ -146,6 +164,7 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig {
         asStandalone =>
         pipeline {
           createHttpRequest(uri, method, data) ~> addHeader(TOKEN_HEADER, token) ~>
+            addHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.get(token).getOrElse("")) ~>
             addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
             addHeader(`Cache-Control`(CacheDirectives.`no-cache`)) ~> addHeader(X_AS_STANDALONE, asStandalone)
         }
@@ -156,6 +175,7 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig {
       asStandalone.fold(
         pipeline {
           createHttpRequest(uri, method, data) ~> addHeader(TOKEN_HEADER, token) ~>
+            addHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.get(token).getOrElse("")) ~>
             addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
             addHeader(`Cache-Control`(CacheDirectives.`no-cache`)) ~> addHeader(X_TRN_ID, transactionId)
         }
@@ -163,6 +183,7 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig {
         asStandalone =>
         pipeline {
           createHttpRequest(uri, method, data) ~> addHeader(TOKEN_HEADER, token) ~>
+            addHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.get(token).getOrElse("")) ~>
             addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
             addHeader(`Cache-Control`(CacheDirectives.`no-cache`)) ~> addHeader(X_TRN_ID, transactionId) ~>
             addHeader(X_AS_STANDALONE, asStandalone)
@@ -180,6 +201,7 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig {
     val pipeline = sendAndReceive ~> decode(Gzip)
     pipeline {
       createHttpRequest(uri, method, data) ~> addHeader(TOKEN_HEADER, token) ~>
+        addHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.get(token).getOrElse("")) ~>
         addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
         addHeader(`Cache-Control`(CacheDirectives.`no-cache`))
     }
@@ -198,6 +220,7 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig {
       asStandalone.fold(
         pipeline {
           Post(uri, data) ~> addHeader(TOKEN_HEADER, token) ~>
+            addHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.get(token).getOrElse("")) ~>
             addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
             addHeader(`Cache-Control`(CacheDirectives.`no-cache`))
         }
@@ -205,6 +228,7 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig {
         asStandalone =>
         pipeline {
           Post(uri, data) ~> addHeader(TOKEN_HEADER, token) ~>
+            addHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.get(token).getOrElse("")) ~>
             addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
             addHeader(`Cache-Control`(CacheDirectives.`no-cache`)) ~> addHeader(X_AS_STANDALONE, asStandalone)
         }
@@ -215,6 +239,7 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig {
       asStandalone.fold(
         pipeline {
           Post(uri, data) ~> addHeader(TOKEN_HEADER, token) ~>
+            addHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.get(token).getOrElse("")) ~>
             addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
             addHeader(`Cache-Control`(CacheDirectives.`no-cache`)) ~> addHeader(X_TRN_ID, transactionId)
         }
@@ -222,6 +247,7 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig {
         asStandalone =>
         pipeline {
           Post(uri, data) ~> addHeader(TOKEN_HEADER, token) ~>
+            addHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.get(token).getOrElse("")) ~>
             addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
             addHeader(`Cache-Control`(CacheDirectives.`no-cache`)) ~> addHeader(X_TRN_ID, transactionId) ~>
             addHeader(X_AS_STANDALONE, asStandalone)
@@ -239,6 +265,7 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig {
     val pipeline = sendAndReceive ~> unmarshal[String]
     pipeline {
       createHttpRequest(uri, method, data) ~> addHeader(TOKEN_HEADER, token) ~>
+        addHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.get(token).getOrElse("")) ~>
         addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
         addHeader(`Cache-Control`(CacheDirectives.`no-cache`))
     }
@@ -255,12 +282,14 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig {
     if (!nvPage.equals("dashboard")) {
       pipeline {
         createHttpRequest(uri, method, data) ~> addHeader(TOKEN_HEADER, token) ~>
+          addHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.get(token).getOrElse("")) ~>
           addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
           addHeader(`Cache-Control`(CacheDirectives.`no-cache`))
       }
     } else {
       pipeline {
         createHttpRequest(uri, method, data) ~> addHeader(TOKEN_HEADER, token) ~>
+          addHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.get(token).getOrElse("")) ~>
           addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
           addHeader(`Cache-Control`(CacheDirectives.`no-cache`)) ~>
           addHeader(X_NV_PAGE, "dashboard")

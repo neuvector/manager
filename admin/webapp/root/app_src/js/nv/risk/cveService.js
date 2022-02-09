@@ -262,6 +262,14 @@
             },
             {
               headerName: "",
+              cellRenderer: (params) => {
+                return `<em class="fa fa-download text-muted" ng-click="exportCsv(data)"></em>`
+              },
+              maxWidth: 30,
+              minWidth: 30
+            },
+            {
+              headerName: "",
               // cellRenderer: params => {
               //   if (params && params.data && params.data.tags && params.data.tags.some(tag => tag === "accepted")) {
               //     return null;

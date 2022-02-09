@@ -173,6 +173,7 @@
               $rootScope.user.domain_permissions =
                 response.data.token.domain_permissions;
               $rootScope.language.set($rootScope.user.token.locale);
+              $rootScope.isSUSESSO = response.data.is_suse_authenticated;
               $window.sessionStorage.setItem(
                 "token",
                 JSON.stringify($rootScope.user)

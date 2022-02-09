@@ -57,7 +57,7 @@
     let worker = new Array(MAX_WEB_WORKER_CNT);
     worker.fill(null);
     let timer = null;
-    let rancherCookie = "rancher";//$cookies.get("R_SESS");
+    let isSUSESSO = $rootScope.isSUSESSO;
     $scope.demoteWaiting = false;
     $scope.leaveWaiting = false;
 
@@ -539,7 +539,7 @@
       self.onmessage = (event) => {
         let baseUrl = event.srcElement.origin;
         let inputObj = JSON.parse(event.data);
-        if (inputObj.rancherCookie) {
+        if (inputObj.isSUSESSO) {
           baseUrl = `${inputObj.currUrl.split(inputObj.neuvectorProxy)[0]}${inputObj.neuvectorProxy}`;
         }
         let apiUrl = `${baseUrl}/${inputObj.apiUrl}`;
@@ -584,7 +584,7 @@
             isMaster: $scope.clusters[index].clusterType === FED_ROLES.MASTER,
             clusterId: $scope.clusters[index].id,
             currUrl: window.location.href,
-            rancherCookie: rancherCookie ? rancherCookie : "",
+            isSUSESSO: isSUSESSO ? isSUSESSO : "",
             neuvectorProxy: PROXY_VALUE
           })
         );

@@ -184,6 +184,10 @@
     "HIDE_ACCEPTED_VULS": "Hide Accepted Vulnerabilities",
     "SHOW_ACCEPTED_VULS": "Show Accepted Vulnerabilities"
   },
+  "logout": {
+    "SIGN_OUT": "Signed Out Already",
+    "SIGN_OUT_DESC": "You can close this browser window and go to Rancher."
+  },
   "login": {
     "SIGN_IN": "SIGN IN TO CONTINUE",
     "USERNAME": "Username",

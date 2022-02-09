@@ -16,7 +16,7 @@
   ];
   function LogoutController($window, $state, $rootScope, $http, $mdToast, $location, $translate) {
     const doLogoout = function(isTimeout) {
-      const user = $rootScope.user.token.username;
+      const user = $rootScope.user ? $rootScope.user.token.username : null;
       $http
         .delete("/auth")
         .then(function (response) {

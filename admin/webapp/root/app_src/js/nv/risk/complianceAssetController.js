@@ -895,7 +895,7 @@
 
       $scope.refresh();
 
-      $scope.exportCsv = function () {
+      $scope.exportCsv = function (compEntry) {
         let compliance4Csv = [];
         const prepareEntryData = function(compliance) {
           compliance.description = `${compliance.description.replace(
@@ -953,13 +953,53 @@
           return compliance;
         };
 
+        const listAssets = function(entryData) {
+          let imageList = entryData.images.map(image => image.display_name);
+          let workloadList = entryData.workloads.map(workload => workload.display_name);
+          let serviceList = entryData.services;
+          let domainList = entryData.domains;
+          let nodeList = entryData.nodes.map(node => node.display_name);
+          let platformList = entryData.platforms.map(platform => platform.display_name);
+          let maxRow4Entry = Math.max(
+            imageList.length,
+            workloadList.length,
+            serviceList.length,
+            domainList.length,
+            nodeList.length,
+            platformList.length
+          );
+          maxRow4Entry = maxRow4Entry === 0 ? 1 : maxRow4Entry;
+          let rows = [];
+          for (let i = 0; i < maxRow4Entry; i++) {
+            rows.push({
+              name: i === 0 ? entryData.name : "",
+              description: i === 0 ? entryData.description : "",
+              catalog: i === 0 ? entryData.catalog : "",
+              level: i === 0 ? entryData.level : "",
+              message: i === 0 ? entryData.message : "",
+              profile: i === 0 ? entryData.profile : "",
+              remediation: i === 0 ? entryData.remediation : "",
+              scored: i === 0 ? entryData.scored : "",
+              tags: i === 0 ? entryData.tags : "",
+              type: i === 0 ? entryData.type : "",
+              platforms: i > platformList.length - 1 ? "" : platformList[i],
+              nodes: i > nodeList.length - 1 ? "" : nodeList[i],
+              domains: i > domainList.length - 1 ? "" : domainList[i],
+              services: i > serviceList.length - 1 ? "" : serviceList[i],
+              workloads: i > workloadList.length - 1 ? "" : workloadList[i],
+              images: i > imageList.length - 1 ? "" : imageList[i]
+            });
+          }
+          return rows
+        };
+
         const resolveExcelCellLimit = function(entryData) {
           let maxLen = Math.max(entryData.images.length, entryData.workloads.length, entryData.services.length, entryData.domains.length);
           let maxRow4Entry = Math.ceil(maxLen / EXCEL_CELL_LIMIT);
           maxRow4Entry = maxRow4Entry === 0 ? 1 : maxRow4Entry;
-          let row = {};
+          let rows = [];
           for (let i = 0; i < maxRow4Entry; i++) {
-            row = {
+            rows.push({
               name: i === 0 ? entryData.name : "",
               description: i === 0 ? entryData.description : "",
               catalog: i === 0 ? entryData.catalog : "",
@@ -984,21 +1024,28 @@
               images: entryData.images.length > EXCEL_CELL_LIMIT * (i + 1) ?
                 entryData.images.substring(EXCEL_CELL_LIMIT * i, EXCEL_CELL_LIMIT * (i + 1)) :
                 entryData.images.substring(EXCEL_CELL_LIMIT * i),
-            };
+            });
           }
-          return row;
+          return rows;
         };
 
         if ($scope.filteredCis && $scope.filteredCis.length > 0) {
-          const complianceList = $scope.filteredCis
-            .forEach(compliance => {
-              let entryData = prepareEntryData(angular.copy(compliance));
-              compliance4Csv.push(resolveExcelCellLimit(entryData));;
-            });
+          if (compEntry) {
+            compliance4Csv = compliance4Csv.concat(listAssets(compEntry));
+          } else {
+            const complianceList = $scope.filteredCis
+              .forEach(compliance => {
+                let entryData = prepareEntryData(angular.copy(compliance));
+                compliance4Csv = compliance4Csv.concat(resolveExcelCellLimit(entryData));;
+              });
+          }
           let csv = Utils.arrayToCsv(compliance4Csv);
           let blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
-          let filename = `compliance_${Utils.parseDatetimeStr(new Date())}.csv`;
-          FileSaver.saveAs(blob, filename);
+          let filename =
+            compEntry && compEntry.name ?
+            `${compEntry.name}_${Utils.parseDatetimeStr(new Date())}.csv` :
+            `compliance_${Utils.parseDatetimeStr(new Date())}.csv`;
+            FileSaver.saveAs(blob, filename);
         }
       };
 

@@ -182,6 +182,20 @@ class DashboardService()(implicit executionContext: ExecutionContext)
         }
       } ~
       pathPrefix("dashboard") {
+        path("rbac") {
+          get {
+            Utils.respondWithNoCacheControl() {
+              complete {
+                RestClient.httpRequestWithHeader(
+                  s"${baseClusterUri(tokenId)}/system/rbac",
+                  GET,
+                  "",
+                  tokenId
+                )
+              }
+            }
+          }
+        } ~
         path("scores2") {
           get {
             parameters('isGlobalUser, 'domain.?, 'clusterId.?) {

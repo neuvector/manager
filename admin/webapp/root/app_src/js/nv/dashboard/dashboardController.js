@@ -84,6 +84,9 @@
       $scope.onPDFDownload = false;
     };
 
+    const ELEM_RBAC_ERROR_BOX = document.getElementById("rbacErrorBox");
+    Utils.dragElement(ELEM_RBAC_ERROR_BOX);
+
     function preparePdfData() {
       let criticalSecurityEventCanvas = document
         .getElementById("critical-security-event-combined-chart-pdf")
@@ -4303,6 +4306,37 @@
         }
       }
 
+      function getRBACErrors() {
+        DashboardFactory.setGrid();
+        $scope.rbacErrorGridOptions = DashboardFactory.rbacErrorGridOptions();
+        $scope.hasRBACError = false;
+        $http
+          .get(SYSTEM_RBAC_URL)
+          .then((res) => {
+            $scope.RBACErrorMap = res.data;
+
+            let rbacErrorsRowData = [];
+
+            for (let errorkey in $scope.RBACErrorMap) {
+              let hasErrorLength = $scope.RBACErrorMap[errorkey].length;
+              $scope.hasRBACError = hasErrorLength > 0 || $scope.hasRBACError;
+              $scope.RBACErrorMap[errorkey].forEach((errorItem, index) => {
+                rbacErrorsRowData.push({
+                  "errorType": index === 0 ? errorkey : "",
+                  "errorDetail": $scope.RBACErrorMap[errorkey][index]
+                });
+              });
+            }
+
+            if ($scope.hasRBACError) {
+              $scope.rbacErrorGridOptions.api.setRowData(rbacErrorsRowData);
+            }
+          })
+          .catch((err) => {
+            console.warn(err);
+          });
+      }
+
       $scope.isGoodLevel = $scope.securityScoreValue < LEVEL.FAIR;
       $scope.openConsole = function (event) {
         Utils.keepAlive();
@@ -4418,6 +4452,7 @@
 
       initHtmlInfo();
       getSystemSummary();
+      getRBACErrors();
     }
 
     $scope.$on("$destroy", function () {

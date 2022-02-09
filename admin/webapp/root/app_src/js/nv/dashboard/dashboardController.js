@@ -73,7 +73,7 @@
       },
     };
 
-    let rancherCookie = "rancher";//$cookies.get("R_SESS");
+    let isSUSESSO = $rootScope.isSUSESSO;
 
     $scope.isShowingScore = Utils.isAuthorized(
       $scope.user.roles,
@@ -3869,8 +3869,8 @@
         self.onmessage = (event) => {
           let baseUrl = event.srcElement.origin;
           let inputObj = JSON.parse(event.data);
-          console.log("inputObj.rancherCookie: ", inputObj.rancherCookie);
-          if (inputObj.rancherCookie) {
+          console.log("inputObj.isSUSESSO: ", inputObj.isSUSESSO);
+          if (inputObj.isSUSESSO) {
             baseUrl = `${inputObj.currUrl.split(inputObj.neuvectorProxy)[0]}${inputObj.neuvectorProxy}`;
             console.log("Rewritten base url:", baseUrl);
           }
@@ -3901,7 +3901,7 @@
         self.onmessage = (event) => {
           let baseUrl = event.srcElement.origin;
           let inputObj = JSON.parse(event.data);
-          if (inputObj.rancherCookie) {
+          if (inputObj.isSUSESSO) {
             baseUrl = `${inputObj.currUrl.split(inputObj.neuvectorProxy)[0]}${inputObj.neuvectorProxy}`;
           }
           let apiUrl = `${baseUrl}/${inputObj.apiUrl}`;
@@ -3930,7 +3930,7 @@
         self.onmessage = (event) => {
           let baseUrl = event.srcElement.origin;
           let inputObj = JSON.parse(event.data);
-          if (inputObj.rancherCookie) {
+          if (inputObj.isSUSESSO) {
             baseUrl = `${inputObj.currUrl.split(inputObj.neuvectorProxy)[0]}${inputObj.neuvectorProxy}`;
           }
           let apiUrl = `${baseUrl}/${inputObj.apiUrl}`;
@@ -4004,7 +4004,7 @@
               apiUrl: DASHBOARD_NOTIFICATIONS_URL,
               token: $scope.user.token.token,
               currUrl: window.location.href,
-              rancherCookie: rancherCookie ? rancherCookie : "",
+              isSUSESSO: isSUSESSO ? isSUSESSO : "",
               neuvectorProxy: PROXY_VALUE
             })
           );
@@ -4047,7 +4047,7 @@
               token: $scope.user.token.token,
               isGlobalUser: $scope.isGlobalUser,
               currUrl: window.location.href,
-              rancherCookie: rancherCookie ? rancherCookie : "",
+              isSUSESSO: isSUSESSO ? isSUSESSO : "",
               neuvectorProxy: PROXY_VALUE
             })
           );
@@ -4081,7 +4081,7 @@
               currUrl: window.location.href,
               token: $scope.user.token.token,
               isGlobalUser: $scope.isGlobalUser,
-              rancherCookie: rancherCookie ? rancherCookie : "",
+              isSUSESSO: isSUSESSO ? isSUSESSO : "",
               neuvectorProxy: PROXY_VALUE
             })
           );

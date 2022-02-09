@@ -184,6 +184,10 @@
     "HIDE_ACCEPTED_VULS": "隐藏接受的漏洞",
     "SHOW_ACCEPTED_VULS": "显示接受的漏洞"
   },
+  "logout": {
+    "SIGN_OUT": "已经登出了",
+    "SIGN_OUT_DESC": "您可以关闭此浏览器窗口, 然后回到Rancher."
+  },
   "login": {
     "SIGN_IN": "请登录",
     "USERNAME": "用户名",

@@ -68,6 +68,7 @@
             token.roles = $rootScope.user.roles;
             $rootScope.user.token = token.token;
             $window.sessionStorage.setItem("token", JSON.stringify(token));
+            $rootScope.isSUSESSO = response.data.is_suse_authenticated;
 
             $http
               .get(CONFIG_URL)

@@ -286,6 +286,7 @@
                           <div ng-if="newRule.subNames[$index].originalName==='publishDays'" class="col-lg-3 col-md-4 col-sm-5" style="margin-top: 22px;">{{"admissionControl.values.DAYS" | translate}}</div>
                           <div ng-if="newRule.subNames[$index].originalName.toLowerCase().includes('cpu')" class="col-lg-3 col-md-4 col-sm-5" style="margin-top: 22px;">{{"admissionControl.values.CORE" | translate}}</div>
                           <md-select class="col-lg-3 col-md-4 col-sm-5" ng-if="newRule.subNames[$index].originalName.toLowerCase().includes('memory')"  ng-model="newRule.memoryUnits[$index]" aria-label="select category" ng-disabled="isViewOnly">
+                            <md-option value="KB">KB</md-option>
                             <md-option value="MB">MB</md-option>
                             <md-option value="GB">GB</md-option>
                           </md-select>

@@ -282,7 +282,7 @@ def workload(data, sort, sort_dir, first):
         return
 
     for v in status:
-	_list_violation_wl_display_format(v)
+        _list_violation_wl_display_format(v)
     column_map = (("name", "Name"),
                   ("count", "Violation Count"))
     output.list_with_map(column_map, status)

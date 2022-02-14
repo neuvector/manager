@@ -218,6 +218,7 @@ const ALERTIFY_ERROR_DELAY = 10000;
 const REPORT_TABLE_ROW_LIMIT = 60000;
 const KUBE = "kubernetes";
 const OPENSHIFT = "Kubernetes-OpenShift";
+const RANCHER = "Kubernetes-Rancher";
 const OC = "openshift";
 const FED_ROLES = {
   FEDADMIN: "fedAdmin",

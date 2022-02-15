@@ -1,18 +1,19 @@
 import click
 
-from cli import create
-from cli import delete
-from cli import set
-from cli import show
-from cli import unset
-import client
-import output
-import utils
+from prog.cli import create
+from prog.cli import delete
+from prog.cli import set
+from prog.cli import show
+from prog.cli import unset
+from prog import client
+from prog import output
+from prog import utils
 import json
 from argparse import Namespace
 
 CriteriaOpRegex = "regex"
 CriteriaOpNotRegex = "!regex"
+
 
 def _list_waf_rule_display_format(rule):
     f = "name"
@@ -34,33 +35,36 @@ def _list_waf_rule_display_format(rule):
             elif crt["op"] == CriteriaOpNotRegex:
                 op = "!~"
             s += "%s %s context:%s; \n" % (op, crt["value"], crt["context"])
-        rule[fo]= s.rstrip("\n")
+        rule[fo] = s.rstrip("\n")
 
 
 def _list_waf_multival_display_format(rule, f):
     sens = ""
     if f in rule:
         for s in rule[f]:
-           if sens == "":
-               sens = s
-           else:
-               sens = sens + ", " + s
+            if sens == "":
+                sens = s
+            else:
+                sens = sens + ", " + s
     rule[f] = sens
+
 
 def _list_waf_multival_group_list_display_format(rule, f):
     sens = ""
     if f in rule:
         for s in rule[f]:
-           if sens == "":
-               sens = s
-           else:
-               sens = sens + ", " + s
+            if sens == "":
+                sens = s
+            else:
+                sens = sens + ", " + s
     rule[f] = sens
+
 
 @show.group("waf")
 @click.pass_obj
 def show_waf(data):
     """Show waf configuration."""
+
 
 @show_waf.group("rule", invoke_without_command=True)
 @click.option("--page", default=5, type=click.IntRange(1), help="list page size, default=5")
@@ -79,7 +83,7 @@ def show_waf_rule(ctx, data, page, sort_dir):
         columns = ("name", "id", "patterns")
         for dr in drs:
             _list_waf_rule_display_format(dr)
-        
+
         output.list(columns, drs)
 
         if args["limit"] > 0 and len(drs) < args["limit"]:
@@ -90,6 +94,7 @@ def show_waf_rule(ctx, data, page, sort_dir):
             break
         args["start"] += page
 
+
 @show_waf_rule.command()
 @click.argument("name")
 @click.pass_obj
@@ -98,7 +103,7 @@ def detail(data, name):
     rentry = data.client.show("waf/rule", "rule", name)
     if not rentry:
         return
-    
+
     fdr = "sensors"
     if fdr not in rentry:
         rentry[fdr] = ""
@@ -111,6 +116,7 @@ def detail(data, name):
     for r in rentry["rules"]:
         _list_waf_rule_display_format(r)
     output.list(columns, rentry["rules"])
+
 
 @show_waf.group("sensor", invoke_without_command=True)
 @click.option("--page", default=5, type=click.IntRange(1), help="list page size, default=5")
@@ -133,7 +139,7 @@ def show_waf_sensor(ctx, data, page, sort_dir):
             if gr not in dr:
                 dr[gr] = ""
             else:
-                _list_waf_multival_group_list_display_format(dr,gr)
+                _list_waf_multival_group_list_display_format(dr, gr)
             click.echo("Used by group(s):%s" % (dr[gr]))
 
             gr = "comment"
@@ -169,6 +175,7 @@ def show_waf_sensor(ctx, data, page, sort_dir):
             break
         args["start"] += page
 
+
 @show_waf_sensor.command()
 @click.argument("name")
 @click.option("--page", default=5, type=click.IntRange(1), help="list page size, default=5")
@@ -185,7 +192,7 @@ def detail(data, page, sort_dir, name):
     if gr not in dr:
         dr[gr] = ""
     else:
-        _list_waf_multival_group_list_display_format(dr,gr)
+        _list_waf_multival_group_list_display_format(dr, gr)
     click.echo("Used by group(s):%s" % (dr[gr]))
 
     gr = "comment"
@@ -209,9 +216,10 @@ def detail(data, page, sort_dir, name):
     else:
         for r in dr["rules"]:
             _list_waf_rule_display_format(r)
-        #columns = ("name", "id", "pattern")
+        # columns = ("name", "id", "pattern")
         columns = ("name", "patterns")
         output.list(columns, dr["rules"])
+
 
 # create
 def _add_waf_criterion(key, value, context):
@@ -234,6 +242,7 @@ def _add_waf_criterion(key, value, context):
 
     return {"key": k, "value": v, "op": op, "context": ctxt}
 
+
 def _add_waf_criteria(pct, key, value, context):
     e = _add_waf_criterion(key, value, context)
     if not e:
@@ -242,10 +251,12 @@ def _add_waf_criteria(pct, key, value, context):
     pct.append(e)
     return True
 
+
 @create.group("waf")
 @click.pass_obj
 def create_waf(data):
     """Create waf object. """
+
 
 @create_waf.group("sensor")
 @click.argument('name')
@@ -256,10 +267,12 @@ def create_waf_sensor(data, name, comment):
     data.id_or_name = name
     data.comment = comment
 
+
 @create_waf_sensor.command("rule")
 @click.argument('name')
 @click.argument('pattern')
-@click.option("--context", default="packet", type=click.Choice(['url', 'header', 'body', 'packet']), help="Set pattern match context, eg. HTTP URL, HEADER , BODY or PACKET")
+@click.option("--context", default="packet", type=click.Choice(['url', 'header', 'body', 'packet']),
+              help="Set pattern match context, eg. HTTP URL, HEADER , BODY or PACKET")
 @click.pass_obj
 def create_waf_sensor_rule(data, name, pattern, context):
     """Create waf sensor with rule
@@ -278,12 +291,14 @@ def create_waf_sensor_rule(data, name, pattern, context):
     cfg = {"name": data.id_or_name, "rules": [rule], "comment": data.comment}
     data.client.create("waf/sensor", {"config": cfg})
 
+
 # delete
 
 @delete.group("waf")
 @click.pass_obj
 def delete_waf(data):
     """Delete waf object. """
+
 
 @delete_waf.command("sensor")
 @click.argument('name')
@@ -292,12 +307,14 @@ def delete_waf_sensor(data, name):
     """Delete waf sensor."""
     data.client.delete("waf/sensor", name)
 
+
 # set
 
 @set.group("waf")
 @click.pass_obj
 def set_waf(data):
     """Set waf configuration. """
+
 
 @set_waf.group("sensor")
 @click.argument('name')
@@ -308,10 +325,12 @@ def set_waf_sensor(data, name, comment):
     data.id_or_name = name
     data.comment = comment
 
+
 @set_waf_sensor.command("rule")
 @click.argument('name')
 @click.argument('pattern')
-@click.option("--context", default="packet", type=click.Choice(['url', 'header', 'body', 'packet']), help="Set pattern match context, eg. HTTP URL, HEADER , BODY or PACKET")
+@click.option("--context", default="packet", type=click.Choice(['url', 'header', 'body', 'packet']),
+              help="Set pattern match context, eg. HTTP URL, HEADER , BODY or PACKET")
 @click.pass_obj
 def set_waf_sensor_rule(data, name, pattern, context):
     """Add waf rule to sensor
@@ -328,13 +347,15 @@ def set_waf_sensor_rule(data, name, pattern, context):
         return
 
     rule = {"name": name, "patterns": pct}
-    cfg = {"name": data.id_or_name, "change": [rule], "comment":data.comment}
+    cfg = {"name": data.id_or_name, "change": [rule], "comment": data.comment}
     data.client.config("waf/sensor", data.id_or_name, {"config": cfg})
+
 
 @unset.group("waf")
 @click.pass_obj
 def unset_waf(data):
     """Unset waf configuration. """
+
 
 @unset_waf.group("sensor")
 @click.argument('name')

@@ -1,15 +1,16 @@
 import click
 import io
 
-from cli import delete
-from cli import show
-from cli import request
-import client
-import multipart
-import output
-import utils
+from prog.cli import delete
+from prog.cli import show
+from prog.cli import request
+from prog import client
+from prog import multipart
+from prog import output
+from prog import utils
 
 MAX_PAGE_SIZE = 256
+
 
 # --- sessions
 
@@ -21,13 +22,13 @@ def _output_one_session(s):
                 "tap" if s.get("tap") else "",
                 "mid-stream" if s.get("mid_stream") else ""))
     click.echo("  eth: %s -> %s" % (s["client_mac"], s["server_mac"]))
-    if s["ip_proto"] == 1 or s["ip_proto"] == 58: # ICMP or ICMPv6
+    if s["ip_proto"] == 1 or s["ip_proto"] == 58:  # ICMP or ICMPv6
         click.echo("  addr: %s -> %s type=%d code=%d" %
                    (s["client_ip"], s["server_ip"], s["icmp_type"], s["icmp_code"]))
     else:
         click.echo("  addr: %s:%d -> %s:%d" %
                    (s["client_ip"], s["client_port"], s["server_ip"], s["server_port"]))
-    if s["ip_proto"] == 6: # TCP
+    if s["ip_proto"] == 6:  # TCP
         click.echo("  len: %d:%d (%s) -> %d:%d (%s) application=%s" %
                    (s["client_pkts"], s["client_bytes"], s["client_state"],
                     s["server_pkts"], s["server_bytes"], s["server_state"], s["application"]))
@@ -43,16 +44,19 @@ def _output_one_session(s):
     click.echo("  xff ip: %s port: %d application: %s" %
                (s["xff_ip"], s["xff_port"], s["xff_app"]))
 
+
 @show.group()
 @click.pass_obj
 def session(data):
     """Show sessions."""
 
+
 @session.command()
 @click.option("-e", "--enforcer", default=None, help="filter sessions by enforcer")
 @click.option("-c", "--container", default=None, help="filter sessions by container")
 @click.option("--id", default=None, help="filter sessions by session id")
-@click.option("--page", default=20, type=click.IntRange(1, MAX_PAGE_SIZE, clamp=True), help="list page size [1, %s], default=20" % MAX_PAGE_SIZE)
+@click.option("--page", default=20, type=click.IntRange(1, MAX_PAGE_SIZE, clamp=True),
+              help="list page size [1, %s], default=20" % MAX_PAGE_SIZE)
 @click.pass_obj
 def list(data, enforcer, container, id, page):
     """list session."""
@@ -70,7 +74,7 @@ def list(data, enforcer, container, id, page):
             filter["id"] = id
             page = 0
 
-        filter["start"] = 0 
+        filter["start"] = 0
         filter["limit"] = page
         while True:
             sessions = data.client.list("session", "session", **filter)
@@ -96,6 +100,7 @@ def list(data, enforcer, container, id, page):
     except client.NotEnoughFilter:
         click.echo("Error: 'enforcer' or 'container' filter must be specified.")
 
+
 @session.command()
 @click.option("-e", "--enforcer", default=None, help="filter sessions by enforcer")
 @click.pass_obj
@@ -119,6 +124,7 @@ def summary(data, enforcer):
     except client.NotEnoughFilter:
         click.echo("Error: 'enforcer' filter must be specified.")
 
+
 @delete.command("session")
 @click.option("-e", "--enforcer", default=None, help="filter sessions by enforcer")
 @click.option("--id", default=None, help="filter sessions by session id")
@@ -139,24 +145,27 @@ def delete_session(data, enforcer, id):
     except client.NotEnoughFilter:
         click.echo("Error: 'enforcer' filter must be specified.")
 
+
 # --- meters
 
 def _output_one_meter(s):
     if s["span"] == 1:
         click.echo("type=%s container=%s peer=%s count=%d pps=%d idle=%d %s" %
-                (s["type"], s["workload_id"][:output.SHORT_ID_LENGTH],
-                 s["peer_ip"], s["cur_count"], s["span_count"], s["idle"],
-                 "tap" if s["tap"] else ""))
+                   (s["type"], s["workload_id"][:output.SHORT_ID_LENGTH],
+                    s["peer_ip"], s["cur_count"], s["span_count"], s["idle"],
+                    "tap" if s["tap"] else ""))
     else:
         click.echo("type=%s container=%s peer=%s count=%d rate=%d/%ds idle=%d %s" %
-                (s["type"], s["workload_id"][:output.SHORT_ID_LENGTH],
-                 s["peer_ip"], s["cur_count"], s["span_count"], s["span"], s["idle"],
-                 "tap" if s["tap"] else ""))
+                   (s["type"], s["workload_id"][:output.SHORT_ID_LENGTH],
+                    s["peer_ip"], s["cur_count"], s["span_count"], s["span"], s["idle"],
+                    "tap" if s["tap"] else ""))
+
 
 @show.group(invoke_without_command=True)
 @click.option("-e", "--enforcer", default=None, help="filter meters by enforcer")
 @click.option("-c", "--container", default=None, help="filter meters by container")
-@click.option("--page", default=20, type=click.IntRange(1, MAX_PAGE_SIZE, clamp=True), help="list page size [1, %s], default=20" % MAX_PAGE_SIZE)
+@click.option("--page", default=20, type=click.IntRange(1, MAX_PAGE_SIZE, clamp=True),
+              help="list page size [1, %s], default=20" % MAX_PAGE_SIZE)
 @click.pass_obj
 @click.pass_context
 def meter(ctx, data, enforcer, container, page):
@@ -175,7 +184,7 @@ def meter(ctx, data, enforcer, container, page):
             if obj:
                 filter["workload"] = obj["id"]
 
-        filter["start"] = 0 
+        filter["start"] = 0
         filter["limit"] = page
         while True:
             meters = data.client.list("meter", "meter", **filter)
@@ -201,6 +210,7 @@ def meter(ctx, data, enforcer, container, page):
     except client.NotEnoughFilter:
         click.echo("Error: 'enforcer' or 'container' filter must be specified.")
 
+
 # --- sniffers
 
 def _list_sniffer_format(wl):
@@ -211,10 +221,12 @@ def _list_sniffer_format(wl):
     if wl.get(f):
         wl[f] = wl[f][:output.SHORT_ID_LENGTH]
 
+
 @request.group('sniffer')
 @click.pass_obj
 def request_sniffer(data):
     """Sniffer"""
+
 
 @request_sniffer.command("start")
 @click.argument("id_or_name")
@@ -241,6 +253,7 @@ def start_sniffer(data, id_or_name, file_count, duration, options):
 
     data.client.create("sniffer", {"sniffer": info}, **filter)
 
+
 @request_sniffer.command("stop")
 @click.argument("id")
 @click.pass_obj
@@ -249,6 +262,7 @@ def stop_sniffer(data, id):
     filter = {}
     data.client.config("sniffer/stop", id, None, **filter)
 
+
 @request_sniffer.command("remove")
 @click.argument("id")
 @click.pass_obj
@@ -256,6 +270,7 @@ def remove_sniffer(data, id):
     """Remove sniffer."""
     filter = {}
     data.client.delete("sniffer", id, **filter)
+
 
 def _write_part(part, filename):
     if filename and len(filename) > 0:
@@ -273,6 +288,7 @@ def _write_part(part, filename):
         except IOError:
             click.echo("Error: Failed to get file from part")
 
+
 @request_sniffer.command("pcap")
 @click.option('--filename', '-f', type=click.Path(dir_okay=False, writable=True, resolve_path=True))
 @click.option("--limit", '-l', default=100, type=click.IntRange(1), help="limit the pcap size, default=20MB")
@@ -289,7 +305,7 @@ def pcap(data, filename, limit, id):
     kwargs = {'strict': True}
     clen = int(headers.get('Content-Length', '-1'))
     ctype, options = multipart.parse_options_header(headers.get("Content-Type"))
-    boundary = options.get('boundary','')
+    boundary = options.get('boundary', '')
     if ctype != 'multipart/form-data' or not boundary:
         click.echo("Unsupported content type.")
         return
@@ -304,6 +320,7 @@ def pcap(data, filename, limit, id):
         click.echo("Unable to export configurations.")
     except Exception as e:
         click.echo(e)
+
 
 @show.group('sniffer', invoke_without_command=True)
 @click.option("-e", "--enforcer", default=None, help="Show sniffers by enforcer")
@@ -333,6 +350,7 @@ def show_sniffer(ctx, data, enforcer, container):
     click.echo("Total sniffers: %s" % len(sniffers))
     column = ("id", "status", "enforcer_id", "container_id", "size", "file_number")
     output.list(column, sniffers)
+
 
 @show_sniffer.command()
 @click.argument("id_or_name")

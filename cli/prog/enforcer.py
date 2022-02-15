@@ -1,12 +1,13 @@
 import click
 import string
 
-from cli import set as cli_set
-from cli import show
-from cli import request
-import client
-import output
-import utils
+from prog.cli import set as cli_set
+from prog.cli import show
+from prog.cli import request
+from prog import client
+from prog import output
+from prog import utils
+
 
 def _list_display_format(dev, id):
     f = id
@@ -38,6 +39,7 @@ def enforcer(ctx, data, sort, sort_dir):
     columns = ("id", "name", "host_name", "version", "joined_at", "cluster_ip", "connection_state", "disconnected_at")
     output.list(columns, enforcers)
 
+
 @enforcer.command()
 @click.argument("id_or_name")
 @click.pass_obj
@@ -54,6 +56,7 @@ def detail(data, id_or_name):
     columns = ("id", "name", "display_name", "host_name", "version",
                "created_at", "started_at", "joined_at", "memory_limit", "cluster_ip", "nv_protect")
     output.show(columns, enforcer)
+
 
 @enforcer.command()
 @click.argument("id_or_name")
@@ -101,6 +104,7 @@ def stats(data, id_or_name):
                   ("byte_in", "In Tput"),
                   ("byte_out", "Out Tput"))
     output.list_with_map(column_map, display)
+
 
 @enforcer.command()
 @click.argument("id_or_name")
@@ -189,6 +193,7 @@ def setting(data, id_or_name):
     columns = ("debug",)
     output.show(columns, conf)
 
+
 @enforcer.command()
 @click.argument("id_or_name")
 @click.pass_obj
@@ -206,6 +211,7 @@ def probe_summary(data, id_or_name):
     columns = ["containers", "pid_containers", "pid_procs", "new_procs", "new_suspicious_procs",
                "stopped_container", "removed_containers", "pids", "host_sessions"]
     output.show(columns, info)
+
 
 @enforcer.command()
 @click.argument("id_or_name")
@@ -226,6 +232,7 @@ def probe_process(data, id_or_name):
 
     columns = ["pid", "ppid", "name", "euid", "container"]
     output.list(columns, procs)
+
 
 @enforcer.command()
 @click.argument("id_or_name")
@@ -251,6 +258,7 @@ def probe_container(data, id_or_name):
 
     output.list(columns, cons)
 
+
 # -- Set
 
 @cli_set.group("enforcer")
@@ -260,9 +268,12 @@ def set_enforcer(data, id_or_name):
     """Set enforcer configuration."""
     data.id_or_name = id_or_name
 
+
 @set_enforcer.command()
 @click.option('--category', '-c', multiple=True,
-              type=click.Choice(['all', 'cpath', 'conn', 'error', 'ctrl', 'packet', 'session', 'timer', 'tcp', 'parser', 'log', 'ddos', 'cluster', 'policy', 'dlp', 'monitor'])
+              type=click.Choice(
+                  ['all', 'cpath', 'conn', 'error', 'ctrl', 'packet', 'session', 'timer', 'tcp', 'parser', 'log',
+                   'ddos', 'cluster', 'policy', 'dlp', 'monitor'])
               )
 @click.pass_obj
 def debug(data, category):
@@ -276,7 +287,8 @@ def debug(data, category):
     s = set()
     for c in category:
         if c == 'all':
-            s |= set(['error', 'cpath', 'conn', 'packet', 'ctrl', 'session', 'timer', 'tcp', 'parser', 'log', 'ddos', 'cluster', 'policy', 'dlp', 'monitor'])
+            s |= set(['error', 'cpath', 'conn', 'packet', 'ctrl', 'session', 'timer', 'tcp', 'parser', 'log', 'ddos',
+                      'cluster', 'policy', 'dlp', 'monitor'])
         else:
             s.add(c)
     # Can't use list(s) because we overwrite list with our own function
@@ -286,6 +298,7 @@ def debug(data, category):
     conf["debug"] = l
 
     data.client.config("enforcer", enforcer["id"], {"config": conf})
+
 
 @set_enforcer.command("protect")
 @click.option("--disable", default='false', type=click.Choice(['true', 'false']), help="set protect mode")
@@ -299,12 +312,13 @@ def set_enforcer_protect(data, disable):
     conf = {}
     conf["disable_nvprotect"] = False
     state = "enabled"
-    if disable == 'true' :
+    if disable == 'true':
         conf["disable_nvprotect"] = True
         state = "disabled"
 
     click.echo("Set [%s] Protect mode .... : %s" % (enforcer["id"], state))
     data.client.config("enforcer", enforcer["id"], {"config": conf})
+
 
 @set_enforcer.command("kvcctl")
 @click.option("--disable", default='false', type=click.Choice(['true', 'false']), help="disable kv congestion control")
@@ -318,12 +332,13 @@ def set_enforcer_kvcctl(data, disable):
     conf = {}
     conf["disable_kvcctl"] = False
     state = "enabled"
-    if disable == 'true' :
+    if disable == 'true':
         conf["disable_kvcctl"] = True
         state = "disabled"
 
     click.echo("Set [%s] kv congestion control .... : %s" % (enforcer["id"], state))
     data.client.config("enforcer", enforcer["id"], {"config": conf})
+
 
 # -- Request
 
@@ -333,6 +348,7 @@ def set_enforcer_kvcctl(data, disable):
 def request_enforcer(data, id_or_name):
     """Request enforcer """
     data.id_or_name = id_or_name
+
 
 @request_enforcer.command("profile")
 @click.option('--category', '-c', multiple=True, type=click.Choice(['all', 'cpu', 'memory']))
@@ -359,6 +375,7 @@ def request_enforcer_profile(data, category, duration):
     prof["methods"] = l
 
     data.client.request("enforcer", "%s/profiling" % enforcer["id"], None, {"profiling": prof})
+
 
 @request_enforcer.command('logs')
 @click.option('--filename', '-f', type=click.Path(dir_okay=False, writable=True, resolve_path=True))

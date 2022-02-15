@@ -1,10 +1,11 @@
 import click
 
-from cli import request
-from cli import show
-import client
-import output
-import utils
+from prog.cli import request
+from prog.cli import show
+from prog import client
+from prog import output
+from prog import utils
+
 
 def _list_display_format(host):
     f = "id"
@@ -19,6 +20,7 @@ def _list_display_format(host):
             for addr in host[f][iface]:
                 s += "%s:%s/%s\n" % (iface, addr["ip"], addr["ip_prefix"])
         host[fo] = s.rstrip()
+
 
 @show.group("node", invoke_without_command=True)
 @click.option('--sort', default=None, help="sort field.")
@@ -43,6 +45,7 @@ def show_host(ctx, data, sort, sort_dir, cluster):
     columns = ("id", "name", "runtime", "cpus", "memory", "containers", "interfaces")
     output.list(columns, hosts)
 
+
 @show_host.command()
 @click.argument("id_or_name")
 @click.pass_obj
@@ -55,6 +58,7 @@ def detail(data, id_or_name):
     columns = ("id", "name", "runtime", "runtime_version",
                "os", "kernel", "cpus", "memory", "containers")
     output.show(columns, host)
+
 
 @show_host.command()
 @click.argument("id_or_name")
@@ -73,6 +77,7 @@ def ip_2_container(data, id_or_name):
     columns = ["ip", "id", "name"]
     output.list(columns, wls)
 
+
 @show_host.command()
 @click.argument("id_or_name")
 @click.pass_obj
@@ -88,7 +93,7 @@ def profile_process(data, id_or_name):
         return
 
     for p in profile:
-          p["type"] = client.CfgTypeDisplay[p["cfg_type"]]
+        p["type"] = client.CfgTypeDisplay[p["cfg_type"]]
 
     columns = ("name", "path", "action", "type", "group")
     output.list(columns, profile)

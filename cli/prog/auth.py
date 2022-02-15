@@ -1,17 +1,18 @@
 import click
 
-from cli import cli
-from cli import set
-from cli import unset
-from cli import create
-from cli import delete
-from cli import show
-from role import GetUserGlobalRoleOptions
-import client
-import output
-import utils
+from prog.cli import cli
+from prog.cli import set
+from prog.cli import unset
+from prog.cli import create
+from prog.cli import delete
+from prog.cli import show
+from prog.role import GetUserGlobalRoleOptions
+from prog import client
+from prog import output
+from prog import utils
 
 DEFAULT_PWD_WARNING = "The administrative account is using the default password. This is a security risk. It is recommended that you change the default password for this account.\n"
+
 
 def user_blocked_format(u):
     u["blocked for login"] = ""
@@ -20,6 +21,7 @@ def user_blocked_format(u):
         u["blocked for login"] = "Y"
     if "blocked_for_password_expired" in u and u["blocked_for_password_expired"] is True:
         u["password expired"] = "Y"
+
 
 @cli.command()
 @click.option('--username', prompt=True)
@@ -47,12 +49,14 @@ def login(data, username, password):
     if password_days_until_expire >= 0:
         click.echo(msg)
 
+
 @cli.command()
 @click.pass_obj
 def logout(data):
     """Clear local authentication credentials."""
     data.client.logout()
     data.username = None
+
 
 @cli.command()
 @click.pass_obj
@@ -63,6 +67,7 @@ def exit(data):
     except client.RestException:
         pass
     data.username = None
+
 
 # -- user
 
@@ -79,8 +84,11 @@ def show_user(ctx, data):
         utils.user_role_domains_display_format(u)
         user_blocked_format(u)
 
-    columns = ("username", "server", "role", "email", "timeout", "locale", utils.RoleDomains, "last_login_at", "login_count", "blocked for login", "password expired")
+    columns = (
+    "username", "server", "role", "email", "timeout", "locale", utils.RoleDomains, "last_login_at", "login_count",
+    "blocked for login", "password expired")
     output.list(columns, users)
+
 
 @show_user.command()
 @click.argument("username")
@@ -91,8 +99,11 @@ def detail(data, username):
     utils.user_role_domains_display_format(user)
     user_blocked_format(user)
 
-    columns = ("username", "server", "role", "email", "timeout", "locale", utils.RoleDomains, "last_login_at", "login_count", "blocked for login", "password expired")
+    columns = (
+    "username", "server", "role", "email", "timeout", "locale", utils.RoleDomains, "last_login_at", "login_count",
+    "blocked for login", "password expired")
     output.show(columns, user)
+
 
 # --
 
@@ -100,6 +111,7 @@ def detail(data, username):
 @click.pass_obj
 def create_user(data):
     """Create user."""
+
 
 @create_user.command("local")
 @click.argument('username')
@@ -135,10 +147,12 @@ def create_user_local(data, username, global_role, email, locale, password, pass
         user["locale"] = locale
     data.client.create("user", {"user": user})
 
+
 @set.group('user')
 @click.pass_obj
 def set_user(data):
     """Set user configuration."""
+
 
 @set_user.group("local")
 @click.argument('username')
@@ -147,6 +161,7 @@ def set_user(data):
 def set_user_local(ctx, data, username):
     """Set local user."""
     data.id_or_name = username
+
 
 @set_user_local.command("config")
 @click.option('--global_role')
@@ -188,7 +203,7 @@ def set_user_local_config(data, global_role, timeout, email, locale, password):
             click.echo("Passwords do not match")
             return
 
-        doitPassword=True
+        doitPassword = True
         if data.username == data.id_or_name:
             user["password"] = current
         user["new_password"] = pass1
@@ -205,6 +220,7 @@ def set_user_local_config(data, global_role, timeout, email, locale, password):
                 # this api allows resetting another user's password if it has been expired
                 data.client.create("user/{}/password".format(data.id_or_name), {"config": user})
 
+
 @set_user_local.command("role")
 @click.argument('role')
 @click.option('--domain', '-d', multiple=True, help="Domains of the role.")
@@ -218,6 +234,7 @@ def set_user_local_role(data, role, domain):
     else:
         click.echo("Please specify at least one domain.")
 
+
 @set_user_local.command("unblock")
 @click.pass_obj
 def set_user_local_unblock(data):
@@ -226,10 +243,12 @@ def set_user_local_unblock(data):
     cfg = {"fullname": data.id_or_name, "clear_failed_login": True}
     data.client.create("user/{}/password".format(data.id_or_name), {"config": cfg})
 
+
 @unset.group('user')
 @click.pass_obj
 def unset_user(data):
     """Unset user configuration."""
+
 
 @unset_user.group("local")
 @click.argument('username')
@@ -238,6 +257,7 @@ def unset_user(data):
 def unset_user_local(ctx, data, username):
     """Unset local user."""
     data.id_or_name = username
+
 
 @unset_user_local.command("config")
 @click.option('--global_role', is_flag=True, help="Unset user global role")
@@ -263,6 +283,7 @@ def unset_user_local_config(data, global_role, timeout, email):
     else:
         click.echo("Please specify configurations to be unset.")
 
+
 @unset_user_local.command("role")
 @click.argument('role')
 @click.pass_obj
@@ -280,10 +301,12 @@ def unset_user_local_role(data, role):
     user = {"fullname": data.id_or_name, "role": role}
     data.client.config("user", "%s/role/%s" % (data.id_or_name, role), {"config": user})
 
+
 @delete.group('user')
 @click.pass_obj
 def delete_user(data):
     """Delete user."""
+
 
 @delete_user.command('local')
 @click.argument('username')
@@ -291,6 +314,7 @@ def delete_user(data):
 def delete_user_local(data, username):
     """Delete local user."""
     data.client.delete("user", username)
+
 
 # -- remote
 
@@ -303,6 +327,7 @@ def set_user_remote(ctx, data, username, server):
     """Set remote user."""
     data.id_or_name = username
     data.server = server
+
 
 @set_user_remote.command("config")
 @click.option('--global_role')
@@ -339,6 +364,7 @@ def set_user_remote_config(data, global_role, timeout, email, locale):
     else:
         click.echo("Please specify configurations to be set.")
 
+
 @set_user_remote.command("role")
 @click.argument('role')
 @click.option('--domain', '-d', multiple=True, help="Domains of the role.")
@@ -357,6 +383,7 @@ def set_user_remote_role(data, role, domain):
     else:
         click.echo("Please specify at least one domain.")
 
+
 @unset_user.group("remote")
 @click.argument('username')
 @click.argument('server')
@@ -366,6 +393,7 @@ def unset_user_remote(ctx, data, username, server):
     """Unset remote user."""
     data.id_or_name = username
     data.server = server
+
 
 @unset_user_remote.command("config")
 @click.option('--global_role', is_flag=True, help="Unset user global role")
@@ -392,6 +420,7 @@ def unset_user_remote_config(data, global_role, timeout, email):
     else:
         click.echo("Please specify configurations to be unset.")
 
+
 @unset_user_remote.command("role")
 @click.argument('role', type=click.Choice(['admin', 'reader']))
 @click.pass_obj
@@ -405,6 +434,7 @@ def unset_user_remote_role(data, role):
     fullname = "%s:%s" % (data.server, data.id_or_name)
     user = {"fullname": fullname, "role": role}
     data.client.config("user", "%s/role/%s" % (data.id_or_name, role), {"config": user})
+
 
 @delete_user.command('remote')
 @click.argument('username')

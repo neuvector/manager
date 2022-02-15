@@ -1,15 +1,17 @@
 import base64
 import click
 
-from cli import show
-import client
-import output
-import utils
+from prog.cli import show
+from prog import client
+from prog import output
+from prog import utils
+
 
 @show.group()
 @click.pass_obj
 def log(data):
     """Show logs."""
+
 
 @log.command()
 @click.option("--page", default=20, type=click.IntRange(1), help="list page size, default=20")
@@ -36,6 +38,7 @@ def activity(data, page):
 
         filter["start"] += page
 
+
 @log.command()
 @click.option("--page", default=20, type=click.IntRange(1), help="list page size, default=20")
 @click.pass_obj
@@ -61,6 +64,7 @@ def event(data, page):
 
         filter["start"] += page
 
+
 def _list_audit_display_format(audit):
     f = "items"
     fo = output.key_output(f)
@@ -68,9 +72,10 @@ def _list_audit_display_format(audit):
         s = ""
         for item in audit[f]:
             s += "%s\n" % item
-        audit[fo]= s.rstrip("\n")
+        audit[fo] = s.rstrip("\n")
     else:
-        audit[fo]= ""
+        audit[fo] = ""
+
 
 @log.command()
 @click.option("--page", default=20, type=click.IntRange(1), help="list page size, default=20")
@@ -85,7 +90,7 @@ def audit(data, page, cluster):
             logs = data.client.list("log/audit", "audit", **filter)
         else:
             logs = data.client.list("experimental/cluster/%s/v1/log/audit" % cluster, "audit", **filter)
-        if logs == None:
+        if logs is None:
             break
 
         for log in logs:
@@ -150,6 +155,7 @@ def threat(ctx, data, page):
 
         filter["start"] += page
 
+
 @threat.command("detail")
 @click.argument("id")
 @click.pass_obj
@@ -185,6 +191,7 @@ def threat_detail(data, id):
         except TypeError:
             pass
 
+
 def _list_display_format(log):
     f = "client_name"
     if f in log:
@@ -217,6 +224,7 @@ def _list_display_format(log):
     f = "id"
     if f not in log:
         log[f] = ""
+
 
 @log.group(invoke_without_command=True)
 @click.option("--page", default=20, type=click.IntRange(1), help="list page size, default=20")
@@ -251,7 +259,9 @@ def violation(ctx, data, client, server, page):
         for log in logs:
             _list_display_format(log)
 
-        columns = ("reported_at", "id", "client", "server", "server_port", "applications", "policy_action", "bytes", "client_ip", "server_ip", "sessions", "xff")
+        columns = (
+        "reported_at", "id", "client", "server", "server_port", "applications", "policy_action", "bytes", "client_ip",
+        "server_ip", "sessions", "xff")
         output.list(columns, logs)
 
         if filter["limit"] > 0 and len(logs) < filter["limit"]:
@@ -264,9 +274,11 @@ def violation(ctx, data, client, server, page):
 
         filter["start"] += page
 
+
 def _list_violation_wl_display_format(violate):
-   wl = violate["workload"]
-   violate["name"] = wl["name"]
+    wl = violate["workload"]
+    violate["name"] = wl["name"]
+
 
 @violation.command()
 @click.option('--sort', type=click.Choice(['client', 'server']), default='client', help="sort field, default is client")
@@ -282,10 +294,11 @@ def workload(data, sort, sort_dir, first):
         return
 
     for v in status:
-	_list_violation_wl_display_format(v)
+        _list_violation_wl_display_format(v)
     column_map = (("name", "Name"),
                   ("count", "Violation Count"))
     output.list_with_map(column_map, status)
+
 
 @log.command()
 @click.option("--page", default=20, type=click.IntRange(1), help="list page size, default=20")
@@ -299,7 +312,9 @@ def incident(data, page):
         if logs == None:
             break
 
-        local = "workload_name"; remote = "remote_workload_name"; ingress = "conn_ingress"
+        local = "workload_name";
+        remote = "remote_workload_name";
+        ingress = "conn_ingress"
         for log in logs:
             if log.get(local) and log.get(remote) and log[local] and log[remote]:
                 if log.get(ingress):

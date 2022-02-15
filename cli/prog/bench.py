@@ -1,10 +1,11 @@
 import click
 
-from cli import request
-from cli import show
-import client
-import output
-import utils
+from prog.cli import request
+from prog.cli import show
+from prog import client
+from prog import output
+from prog import utils
+
 
 def _comp_list_display_format(comp):
     comp["counts"] = "%d:%d" % (len(comp["workloads"]), len(comp["nodes"]))
@@ -18,15 +19,18 @@ def _comp_list_display_format(comp):
             comp["protected"] = False
             return
 
+
 @show.group('bench')
 @click.pass_obj
 def show_bench(data):
     """Show benchmark information."""
 
+
 @show_bench.group("node")
 @click.pass_obj
 def show_bench_host(data):
     """Show node CIS benchmark report."""
+
 
 @show_bench_host.command()
 @click.argument("id_or_name")
@@ -41,6 +45,7 @@ def docker(data, id_or_name):
     columns = ("level", "test_number", "scored", "profile", "description")
     output.list(columns, report)
 
+
 @show_bench_host.command()
 @click.argument("id_or_name")
 @click.pass_obj
@@ -53,6 +58,7 @@ def kubernetes(data, id_or_name):
     report = data.client.show("bench/host", "items", "%s/kubernetes" % host["id"])
     columns = ("level", "test_number", "scored", "profile", "description")
     output.list(columns, report)
+
 
 @show_bench_host.command()
 @click.argument("id_or_name")
@@ -68,7 +74,7 @@ def compliance(data, id_or_name):
     except client.ObjectNotFound:
         return
 
-    columns = ("catalog","type","level", "test_number", "scored", "profile",  "description")
+    columns = ("catalog", "type", "level", "test_number", "scored", "profile", "description")
     output.list(columns, report)
 
 
@@ -76,6 +82,7 @@ def compliance(data, id_or_name):
 @click.pass_obj
 def show_bench_workload(data):
     """Show node CIS benchmark report."""
+
 
 @show_bench_workload.command()
 @click.argument("id_or_name")
@@ -93,6 +100,7 @@ def compliance(data, id_or_name):
 
     columns = ("level", "test_number", "scored", "profile", "description", "group", "message")
     output.list(columns, items)
+
 
 @show_bench.command()
 @click.pass_obj
@@ -114,10 +122,12 @@ def all(data):
 def request_bench(data):
     """Request CIS benchmark."""
 
+
 @request_bench.group("node")
 @click.pass_obj
 def request_bench_host(data):
     """Request node CIS benchmark."""
+
 
 @request_bench_host.command()
 @click.argument("id_or_name")
@@ -129,6 +139,7 @@ def docker(data, id_or_name):
         return
 
     data.client.request("bench/host", host["id"], "docker", None)
+
 
 @request_bench_host.command()
 @click.argument("id_or_name")

@@ -124,7 +124,7 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig {
   private val X_NV_PAGE: String = "X-Nv-Page"
   private val X_TRN_ID: String = "X-Transaction-Id"
   private val X_AS_STANDALONE: String = "X-As-Standalone"
-  private val X_SUSE_TOKEN: String = "X-R_SESS"
+  private val X_SUSE_TOKEN: String = "X-R-SESS"
 
   /**
     * Makes HTTP request

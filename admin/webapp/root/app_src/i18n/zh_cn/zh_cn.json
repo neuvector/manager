@@ -2714,7 +2714,7 @@
     "IMPORT_FAILED": "输入失败 ",
     "NEW_SERVICE_POLICY_MODE": "新增服务的策略模式",
     "NEW_SERVICE": "新增服务",
-    "AUTH_BY_OPENSHIFT": "用OpenShift RBAC’s验证",
+    "AUTH_BY_OPENSHIFT": "用OpenShift RBAC或Rancher验证",
     "NEED_SUBMIT": "需要提交",
     "ENABLED": "启用",
     "DISABLED": "禁用",

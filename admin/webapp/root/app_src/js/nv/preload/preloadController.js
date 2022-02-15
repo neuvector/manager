@@ -82,7 +82,7 @@
               .get(DASHBOARD_SUMMARY_URL)
               .then(function(response) {
                 $rootScope.isOpenShift =
-                  response.data.summary.platform === OPENSHIFT;
+                  response.data.summary.platform === OPENSHIFT || response.data.summary.platform ===  RANCHER;
                 $rootScope.summary = response.data.summary;
                 $rootScope.hasInitializedSummary = true;
               })

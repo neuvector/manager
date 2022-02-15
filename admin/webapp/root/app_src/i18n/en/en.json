@@ -2714,7 +2714,7 @@
     "IMPORT_FAILED": "Import failed ",
     "NEW_SERVICE_POLICY_MODE": "Default mode for new services",
     "NEW_SERVICE": "New Services Mode",
-    "AUTH_BY_OPENSHIFT": "Authenticate using OpenShift RBAC’s",
+    "AUTH_BY_OPENSHIFT": "Authenticate using OpenShift RBAC’s or Rancher’s",
     "NEED_SUBMIT": "Need submit",
     "ENABLED": "Enabled",
     "DISABLED": "Disabled",

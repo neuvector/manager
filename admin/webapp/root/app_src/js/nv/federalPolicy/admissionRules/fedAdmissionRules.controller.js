@@ -1148,6 +1148,16 @@
 
             $timeout(function() {
               if (tag.criteria.sub_criteria && Array.isArray(tag.criteria.sub_criteria) && tag.criteria.sub_criteria.length > 0) {
+                if (tag.criteria.name === "resourceLimit") {
+                  tag.criteria.sub_criteria.sort((a, b) => {
+                    if (a.name > b.name) {
+                      return 1;
+                    } else {
+                      return -1;
+                    }
+                  });
+                  console.log("$scope.newRule.subNames", $scope.newRule.subNames, tag.criteria.sub_criteria, tag.criteria.name);
+                }
                 let tagDetails = tag.criteria.sub_criteria.map(subCriterion => {
                   return {
                     name: {
@@ -1371,6 +1381,7 @@
               let numberVal = Number(value);
               if (isNaN(numberVal)) return "";
               switch (unit) {
+                case "KB": return (numberVal * (1 << 10)).toString();
                 case "MB": return (numberVal * (1 << 20)).toString();
                 case "GB": return (numberVal * (1 << 30)).toString();
                 default: return value;

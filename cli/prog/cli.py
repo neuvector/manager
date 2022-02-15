@@ -2,10 +2,11 @@ import os
 
 import click
 
-import client
+from prog import client
 
 ENV_CTRL_SERVER_IP = "CTRL_SERVER_IP"
 ENV_CTRL_SERVER_PORT = "CTRL_SERVER_PORT"
+
 
 class CtxData(object):
     def __init__(self, debug, server, port):
@@ -18,7 +19,7 @@ class CtxData(object):
             self.server_ip = server
         elif ENV_CTRL_SERVER_IP in os.environ:
             self.server_ip = os.environ.get(ENV_CTRL_SERVER_IP)
-        else: 
+        else:
             self.server_ip = "127.0.0.1"
 
         if port:
@@ -31,6 +32,7 @@ class CtxData(object):
         url = "https://%s:%s" % (self.server_ip, self.port)
         self.client = client.RestClient(url, debug)
 
+
 def init_context_data(debug, server, port):
     global ctx_data
 
@@ -40,7 +42,9 @@ def init_context_data(debug, server, port):
     else:
         return ctx_data
 
+
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+
 
 @click.group(context_settings=CONTEXT_SETTINGS)
 @click.pass_context
@@ -50,14 +54,16 @@ def cli(ctx):
 
     ctx.obj = ctx_data
 
+
 @cli.group()
 @click.pass_obj
 def show(data):
     """Show operations"""
 
-#@cli.group()
-#@click.pass_obj
-#def diag(data):
+
+# @cli.group()
+# @click.pass_obj
+# def diag(data):
 #    """Diagnose operations"""
 
 @cli.group()
@@ -65,20 +71,24 @@ def show(data):
 def set(data):
     """Set operations"""
 
+
 @cli.group()
 @click.pass_obj
 def unset(data):
     """Unset operations"""
+
 
 @cli.group()
 @click.pass_obj
 def create(data):
     """Create operations"""
 
+
 @cli.group()
 @click.pass_obj
 def delete(data):
     """Delete operations"""
+
 
 @cli.group()
 @click.pass_obj

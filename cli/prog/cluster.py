@@ -1,15 +1,16 @@
 import click
 
-from cli import cli
-from cli import create
-from cli import delete
-from cli import request
-from cli import set
-from cli import unset
-from cli import show
-import client
-import output
-import utils
+from prog.cli import cli
+from prog.cli import create
+from prog.cli import delete
+from prog.cli import request
+from prog.cli import set
+from prog.cli import unset
+from prog.cli import show
+from prog import client
+from prog import output
+from prog import utils
+
 
 @show.group("cluster", invoke_without_command=True)
 @click.pass_obj
@@ -20,11 +21,12 @@ def show_cluster(ctx, data):
         return
 
     clusters = data.client.list("experimental/cluster", "cluster")
-    if clusters == None:
+    if clusters is None:
         return
 
     columns = ("name", "api_server", "api_port", "username")
     output.list(columns, clusters)
+
 
 @show_cluster.command()
 @click.argument("id_or_name")
@@ -37,6 +39,7 @@ def detail(data, id_or_name):
 
     columns = ("name", "api_server", "api_port", "username")
     output.show(columns, cluster)
+
 
 @create.command("cluster")
 @click.argument('name')
@@ -53,9 +56,10 @@ def create_cluster(data, name, server, port, username):
         return
 
     cfg = {"name": name, "api_server": server, "api_port": port,
-              "username": username, "password": pass1}
+           "username": username, "password": pass1}
 
     data.client.create("experimental/cluster", {"config": cfg})
+
 
 @set.command("cluster")
 @click.argument('name')
@@ -68,13 +72,13 @@ def set_cluster(data, name, server, port, username, password):
     """Set cluster configuration."""
     cfg = {"name": name}
     doit = False
-    if server != None:
+    if server is not None:
         doit = True
         cfg["api_server"] = server
-    if port != None:
+    if port is not None:
         doit = True
         cfg["api_port"] = port
-    if username != None:
+    if username is not None:
         doit = True
         cfg["username"] = username
     if password:
@@ -91,6 +95,7 @@ def set_cluster(data, name, server, port, username, password):
     else:
         click.echo("Please specify configurations to be set.")
 
+
 @delete.command("cluster")
 @click.argument('name')
 @click.pass_obj
@@ -98,10 +103,12 @@ def delete_cluster(data, name):
     """Delete cluster."""
     data.client.delete("experimental/cluster", name)
 
+
 @request.group('cluster')
 @click.pass_obj
 def request_cluster(data):
     """Request cluster"""
+
 
 @request_cluster.command("test")
 @click.argument('name')
@@ -117,4 +124,3 @@ def test_cluster(data, name, server, port, username):
            "username": username, "password": pass1}
 
     data.client.request("experimental/debug", "cluster", "test", {"test": cfg})
-

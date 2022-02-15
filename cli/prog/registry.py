@@ -1,20 +1,20 @@
 import click
 
-from cli import create
-from cli import delete
-from cli import request
-from cli import set
-from cli import show
-from cli import unset
-import client
-import output
-import utils
+from prog.cli import create
+from prog.cli import delete
+from prog.cli import request
+from prog.cli import set
+from prog.cli import show
+from prog.cli import unset
+from prog import client
+from prog import output
+from prog import utils
 
 _reg_types = {
     "amazon": "Amazon ECR Registry",
     "azure": "Azure Container Registry",
     "docker": "Docker Registry",
-    "jfrog":  "JFrog Artifactory",
+    "jfrog": "JFrog Artifactory",
     "redhat": "Red Hat Public Registry",
     "openshift": "OpenShift Registry",
     "nexus": "Sonatype Nexus",
@@ -22,6 +22,7 @@ _reg_types = {
     "gitlab": "Gitlab",
     "ibmcloud": "IBM Cloud Container Registry",
 }
+
 
 def _list_image_display_format(img):
     if "repository" in img and "tag" in img:
@@ -34,11 +35,13 @@ def _list_image_display_format(img):
         else:
             img[fo] = img[f][:output.SHORT_ID_LENGTH]
 
+
 def _list_registry_display_format(config):
     f = "filters"
     if f in config:
         fo = output.key_output(f)
         config[fo] = "\n".join(config[f])
+
 
 def _show_registry_report_vulns_display_format(vul):
     f = "tags"
@@ -63,11 +66,12 @@ def show_registry(ctx, data):
         return
 
     for s in summarys:
-        output.lift_fields(s, "schedule", ("schedule", ))
+        output.lift_fields(s, "schedule", ("schedule",))
         _list_registry_display_format(s)
 
     columns = ("name", "registry", "username", "filters", "status", "rescan_after_db_update", "schedule", "scan_layers")
     output.list(columns, summarys)
+
 
 @show_registry.command()
 @click.argument("name")
@@ -78,11 +82,14 @@ def detail(data, name):
     if not summary:
         return
 
-    output.lift_fields(summary, "schedule", ("schedule", ))
+    output.lift_fields(summary, "schedule", ("schedule",))
     _list_registry_display_format(summary)
-    columns = ("name", "registry_type", "registry", "username", "filters", "rescan_after_db_update", "schedule", "status", "error_message",
-               "scanned", "scheduled", "scanning", "failed")
+    columns = (
+    "name", "registry_type", "registry", "username", "filters", "rescan_after_db_update", "schedule", "status",
+    "error_message",
+    "scanned", "scheduled", "scanning", "failed")
     output.show(columns, summary)
+
 
 @show_registry.command()
 @click.argument("name")
@@ -108,7 +115,7 @@ def images(data, name, filter_domain, filter_repo, page):
         for img in images:
             _list_image_display_format(img)
 
-        #columns = ("image", "image_id", "status", "result", "signed", "high", "medium", "base_os") # comment out until we can accurately tell it
+        # columns = ("image", "image_id", "status", "result", "signed", "high", "medium", "base_os") # comment out until we can accurately tell it
         columns = ("image", "image_id", "status", "result", "high", "medium", "base_os")
         output.list(columns, images)
 
@@ -121,6 +128,7 @@ def images(data, name, filter_domain, filter_repo, page):
             break
 
         args["start"] += page
+
 
 @show_registry.command()
 @click.argument("name")
@@ -173,6 +181,7 @@ def report(data, name, image, show_accepted):
         else:
             click.echo("No SetUid/SetGid Report")
 
+
 @show_registry.command()
 @click.argument("name")
 @click.argument("image")
@@ -209,6 +218,7 @@ def layers(data, name, image):
         output.list(columns, result)
     else:
         click.echo("No Layers Report")
+
 
 @show_registry.command()
 @click.argument("source", type=click.Choice(['openshift']))
@@ -263,20 +273,25 @@ def source(data, source, filter_domain, filter_repo, page):
 
         args["start"] += page
 
+
 # config
 
 @create.command("registry")
-@click.argument("registry_type", type=click.Choice(['amazon', 'azure', 'docker', 'jfrog', 'openshift', 'redhat', 'nexus', 'gcr', 'gitlab', 'ibmcloud']))
+@click.argument("registry_type", type=click.Choice(
+    ['amazon', 'azure', 'docker', 'jfrog', 'openshift', 'redhat', 'nexus', 'gcr', 'gitlab', 'ibmcloud']))
 @click.argument("name")
 @click.option("-r", "--registry", help="Registry URL")
 @click.option("-u", "--username", help="Registry Username")
 @click.option("-p", "--password", is_flag=True, help="Registry Password")
 @click.option("--token", help="Registry Token")
 @click.option("--auth_with_token", is_flag=True, help="Registry authenticated with token")
-@click.option("-f", "--filter", multiple=True, help="Registry image filters, as organization/repository_regex:tag_regex")
-@click.option('--rescan', default="enable", help="Rescan scanned images after database update", type=click.Choice(['enable', 'disable']))
+@click.option("-f", "--filter", multiple=True,
+              help="Registry image filters, as organization/repository_regex:tag_regex")
+@click.option('--rescan', default="enable", help="Rescan scanned images after database update",
+              type=click.Choice(['enable', 'disable']))
 @click.option('--scan_layers', default="enable", help="Scan image layers", type=click.Choice(['enable', 'disable']))
-@click.option("--schedule", default="manual", help="Registry scan schedule", type=click.Choice(['manual', 'auto', 'periodical']))
+@click.option("--schedule", default="manual", help="Registry scan schedule",
+              type=click.Choice(['manual', 'auto', 'periodical']))
 @click.option("--schedule_interval", default=300, type=int, help="Polling interval in seconds")
 @click.option("--repolimit", type=int, help="Repository number limit")
 @click.option("--taglimit", type=int, help="Tag number limit")
@@ -287,9 +302,9 @@ def source(data, source, filter_domain, filter_repo, page):
 @click.option('--ibmcloud_token_url', help="ibm cloud iam oauth-tokens url")
 @click.pass_obj
 def registry_create(data, registry_type, name, registry, username, password, token, auth_with_token,
-        filter, rescan, scan_layers, schedule, repolimit, taglimit,
-        jfrog_mode, schedule_interval, gitlab_api_url, gitlab_private_token,
-        ibmcloud_account, ibmcloud_token_url):
+                    filter, rescan, scan_layers, schedule, repolimit, taglimit,
+                    jfrog_mode, schedule_interval, gitlab_api_url, gitlab_private_token,
+                    ibmcloud_account, ibmcloud_token_url):
     """Create registry."""
 
     info = {"registry_type": _reg_types[registry_type], "name": name}
@@ -365,18 +380,23 @@ def registry_create(data, registry_type, name, registry, username, password, tok
 
     data.client.create("scan/registry", {"config": info})
 
+
 @set.command("registry")
 @click.argument("name")
 @click.option("-r", "--registry", help="Registry URL")
 @click.option("-u", "--username", help="Registry Username")
 @click.option("-p", "--password", is_flag=True, help="Registry Password")
 @click.option("--token", help="Registry Token")
-@click.option("--auth_with_token", default=None, help="Registry authenticated with token", type=click.Choice(['enable', 'disable']))
+@click.option("--auth_with_token", default=None, help="Registry authenticated with token",
+              type=click.Choice(['enable', 'disable']))
 @click.option("-a", "--aws", is_flag=True, help="AWS ECR key")
-@click.option("-f", "--filter", multiple=True, help="Registry image filters, as organization/repository_regex:tag_regex")
-@click.option('--rescan', default=None, help="Rescan scanned images after database update", type=click.Choice(['enable', 'disable']))
+@click.option("-f", "--filter", multiple=True,
+              help="Registry image filters, as organization/repository_regex:tag_regex")
+@click.option('--rescan', default=None, help="Rescan scanned images after database update",
+              type=click.Choice(['enable', 'disable']))
 @click.option('--scan_layers', default=None, help="Scan image layers", type=click.Choice(['enable', 'disable']))
-@click.option("--schedule", default=None, help="Registry scan schedule", type=click.Choice(['manual', 'auto', 'periodical']))
+@click.option("--schedule", default=None, help="Registry scan schedule",
+              type=click.Choice(['manual', 'auto', 'periodical']))
 @click.option("--schedule_interval", type=int, help="Polling interval in seconds")
 @click.option("--repolimit", type=int, help="Repository number limit")
 @click.option("--taglimit", type=int, help="Tag number limit")
@@ -387,9 +407,9 @@ def registry_create(data, registry_type, name, registry, username, password, tok
 @click.option('--ibmcloud_token_url', help="ibm cloud iam oauth-tokens url")
 @click.pass_obj
 def set_registry(data, name, registry, username, password, token, auth_with_token,
-        aws, filter, rescan, scan_layers, schedule, repolimit, taglimit,
-        schedule_interval, gitlab_api_url, gitlab_private_token,
-        ibmcloud_account, ibmcloud_token_url):
+                 aws, filter, rescan, scan_layers, schedule, repolimit, taglimit,
+                 schedule_interval, gitlab_api_url, gitlab_private_token,
+                 ibmcloud_account, ibmcloud_token_url):
     """Configure registry."""
 
     info = {"name": name}
@@ -474,6 +494,7 @@ def set_registry(data, name, registry, username, password, token, auth_with_toke
 
     data.client.config("scan/registry", name, {"config": info})
 
+
 @unset.command("registry")
 @click.argument('name')
 @click.option("-u", "--username", is_flag=True, help="Registry Username")
@@ -509,6 +530,7 @@ def registry_delete(data, name):
 
     data.client.delete("scan/registry", name)
 
+
 # request
 
 @request.group('registry')
@@ -518,12 +540,14 @@ def request_registry(data, name):
     """Request registry."""
     data.id_or_name = name
 
+
 @request_registry.command("start")
 @click.pass_obj
 def registry_start(data):
     """Request to start scanning registry."""
 
     data.client.request("scan/registry", data.id_or_name, "scan", None)
+
 
 @request_registry.command("stop")
 @click.pass_obj

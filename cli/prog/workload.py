@@ -2,15 +2,16 @@ import click
 import io
 import string
 
-from cli import show
-from cli import request
-from cli import set
-import client
-import multipart
-import output
-import utils
+from prog.cli import show
+from prog.cli import request
+from prog.cli import set
+from prog import client
+from prog import multipart
+from prog import output
+from prog import utils
 
 WidthApplication = 25
+
 
 def _show_display_format(wl):
     f = "finished_at"
@@ -56,6 +57,7 @@ def _show_display_format(wl):
             s += "%s/%s => %s:%s\n" % (ipproto, p["port"], p["host_ip"], p["host_port"])
         wl[fo] = s.rstrip("\n")
 
+
 def _list_display_format(wl):
     f = "id"
     if wl.get(f):
@@ -63,6 +65,7 @@ def _list_display_format(wl):
         wl[fo] = wl[f][:output.SHORT_ID_LENGTH]
 
     _show_display_format(wl)
+
 
 @show.group('container', invoke_without_command=True)
 @click.option('-b', '--brief', is_flag=True, default=False, help="brief output")
@@ -77,7 +80,8 @@ def _list_display_format(wl):
               help="sort direction.")
 @click.pass_obj
 @click.pass_context
-def show_workload(ctx, data, brief, view, filter_container, filter_image, filter_node, filter_domain, page, sort, sort_dir):
+def show_workload(ctx, data, brief, view, filter_container, filter_image, filter_node, filter_domain, page, sort,
+                  sort_dir):
     """Show container."""
     if ctx.invoked_subcommand is not None:
         return
@@ -122,6 +126,7 @@ def show_workload(ctx, data, brief, view, filter_container, filter_image, filter
 
         args["start"] += page
 
+
 @show_workload.command()
 @click.argument("id_or_name")
 @click.pass_obj
@@ -137,6 +142,7 @@ def detail(data, id_or_name):
                "platform_role", "network_mode", "interfaces", "ports", "labels",
                "memory_limit", "cpus")
     output.show(columns, wl)
+
 
 @show_workload.command()
 @click.argument("id_or_name")
@@ -155,6 +161,7 @@ def process(data, id_or_name):
     columns = ("name", "pid", "parent", "group", "session", "cmdline", "root", "action")
     output.list(columns, procs)
 
+
 @show_workload.command()
 @click.argument("id_or_name")
 @click.pass_obj
@@ -172,6 +179,7 @@ def process_history(data, id_or_name):
     columns = ("name", "pid", "parent", "cmdline", "status", "root", "action")
     output.list(columns, procs)
 
+
 @show_workload.command()
 @click.argument("id_or_name")
 @click.pass_obj
@@ -187,10 +195,11 @@ def profile_process(data, id_or_name):
         return
 
     for p in profile:
-         p["type"] = client.CfgTypeDisplay[p["cfg_type"]]
+        p["type"] = client.CfgTypeDisplay[p["cfg_type"]]
 
     columns = ("name", "path", "action", "type", "group")
     output.list(columns, profile)
+
 
 @show_workload.command()
 @click.argument("id_or_name")
@@ -217,6 +226,7 @@ def profile_file(data, id_or_name):
 
     columns = ("filter", "recursive", "behavior", "applications", "type", "group")
     output.list(columns, profile)
+
 
 @show_workload.command()
 @click.argument("id_or_name")
@@ -265,6 +275,7 @@ def stats(data, id_or_name):
                   ("byte_out", "Out Tput"))
     output.list_with_map(column_map, display)
 
+
 @show_workload.command()
 @click.argument("id_or_name")
 @click.pass_obj
@@ -281,6 +292,7 @@ def setting(data, id_or_name):
 
     columns = ("wire", "quarantine", "quarantine_reason")
     output.show(columns, conf)
+
 
 @show_workload.command()
 @click.argument("id_or_name")
@@ -312,12 +324,14 @@ def intercept(data, id_or_name):
     for p in resp["ports"]:
         output.show_with_map(column_map, p)
 
+
 @set.group('container')
 @click.argument("id_or_name")
 @click.pass_obj
 def set_workload(data, id_or_name):
     """Set container configuration."""
     data.id_or_name = id_or_name
+
 
 @set_workload.command()
 @click.argument("mode", type=click.Choice(['default', 'inline']))
@@ -329,6 +343,7 @@ def wire(data, mode):
         return
 
     data.client.config("workload", wl["id"], {"config": {"wire": mode}})
+
 
 @set_workload.command()
 @click.argument('status', type=click.Choice(['enable', 'disable']))
@@ -344,6 +359,7 @@ def quarantine(data, status):
     else:
         data.client.config("workload", wl["id"], {"config": {"quarantine": False}})
 
+
 # -- Request
 
 @request.group('container')
@@ -352,6 +368,7 @@ def quarantine(data, status):
 def request_workload(data, id_or_name):
     """Container"""
     data.id_or_name = id_or_name
+
 
 @request_workload.command('stop')
 @click.pass_obj
@@ -362,10 +379,11 @@ def request_workload_stop(data):
         return
 
     try:
-        data.client.request("workload", "request", wl["id"], {"request": {"command":"stop"}})
+        data.client.request("workload", "request", wl["id"], {"request": {"command": "stop"}})
     except client.ObjectNotFound:
         click.echo("Error: cannot find the container")
         return
+
 
 @request_workload.command('start')
 @click.pass_obj
@@ -376,10 +394,11 @@ def request_workload_start(data):
         return
 
     try:
-        data.client.request("workload", "request", wl["id"], {"request": {"command":"start"}})
+        data.client.request("workload", "request", wl["id"], {"request": {"command": "start"}})
     except client.ObjectNotFound:
         click.echo("Error: cannot find the container")
         return
+
 
 @request_workload.command('logs')
 @click.option('--filename', '-f', type=click.Path(dir_okay=False, writable=True, resolve_path=True))
@@ -413,4 +432,3 @@ def request_workload_logs(data, filename, dir, size):
     with click.open_file(filepath, 'w') as wfp:
         click.echo("Save logs to: %s" % filepath)
         wfp.write(body.content)
-

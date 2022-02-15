@@ -1,15 +1,12 @@
 import click
 
-from cli import create
-from cli import delete
-from cli import request
-from cli import set
-from cli import show
-from cli import unset
+from prog.cli import request
+from prog.cli import set
+from prog.cli import show
+from prog.cli import unset
 import base64
-import client
-import output
-import utils
+from prog import client
+from prog import output
 import json
 
 clusterRoleNone = ""
@@ -17,22 +14,23 @@ clusterRoleMaster = "master"
 clusterRoleJoint = "joint"
 
 deployResultDisplay = {
-                        0:   "successful",
-                        1:   "unknown command",
-                        2:   "notified",
-                        3:   "failed",
-                        101: "failed because primary cluster version is too old",
-                        102: "failed because managed cluster version is too old",
-                        103: "failed because cluster upgrade is ongoing",
-                        200: "connected",
-                        201: "joined",
-                        202: "out of sync",
-                        203: "synced",
-                        204: "disconnected",
-                        205: "kicked",
-                        206: "left",
-                        207: "license_disallow"
-                      }
+    0: "successful",
+    1: "unknown command",
+    2: "notified",
+    3: "failed",
+    101: "failed because primary cluster version is too old",
+    102: "failed because managed cluster version is too old",
+    103: "failed because cluster upgrade is ongoing",
+    200: "connected",
+    201: "joined",
+    202: "out of sync",
+    203: "synced",
+    204: "disconnected",
+    205: "kicked",
+    206: "left",
+    207: "license_disallow"
+}
+
 
 # multi-clusters -----
 @request.group("federation")
@@ -40,11 +38,13 @@ deployResultDisplay = {
 def request_federation(data):
     """Request multi-clusters operation."""
 
+
 @request_federation.command("promote")
 @click.option("--name", help="The name to use for this cluster")
 @click.option("--server", help="Exposed rest ip/fqdn of this primary cluster")
 @click.option("--port", help="Exposed rest port of this primary cluster")
-@click.option("--use_proxy", default="", type=click.Choice(["http","https",""]), help="Use configured system https proxy or not when connecting to managed cluster")
+@click.option("--use_proxy", default="", type=click.Choice(["http", "https", ""]),
+              help="Use configured system https proxy or not when connecting to managed cluster")
 @click.pass_obj
 def request_federation_promote(data, name, server, port, use_proxy):
     """Promote a cluster to primary cluster in the federation."""
@@ -67,10 +67,10 @@ def request_federation_promote(data, name, server, port, use_proxy):
         req["use_proxy"] = use_proxy
 
     resp = data.client.request("fed", "promote", None, req)
-    #click.echo("Federation promotion response object: {}".format(json.dumps(resp)))
+    # click.echo("Federation promotion response object: {}".format(json.dumps(resp)))
     click.echo("")
-    #click.echo("new_token: {}".format(new_token))
-    #data.client.reset_token(resp["new_token"])
+    # click.echo("new_token: {}".format(new_token))
+    # data.client.reset_token(resp["new_token"])
     data.client.logout()
     data.username = None
     click.echo("This cluster has been promoted as the primary cluster. Other clusters can join this cluster now.")
@@ -78,22 +78,25 @@ def request_federation_promote(data, name, server, port, use_proxy):
     click.echo("Please login again.")
     click.echo("")
 
+
 @request_federation.command("demote")
 @click.pass_obj
 def request_federation_deomote(data):
     """Deomote a cluster from primary cluster in the federation."""
     resp = data.client.request("fed", "demote", None, {})
-    #click.echo("Federation demotion response object: {}".format(json.dumps(resp)))
+    # click.echo("Federation demotion response object: {}".format(json.dumps(resp)))
     click.echo("")
     client.RemoteCluster["id"] = ""
-    #click.echo("new_token: {}".format(new_token))
-    #data.client.reset_token(resp["new_token"])
+    # click.echo("new_token: {}".format(new_token))
+    # data.client.reset_token(resp["new_token"])
     data.client.logout()
     data.username = None
-    click.echo("This cluster has been demoted from the primary cluster. It cannot connect to other clusters and other clusters cannot join this cluster anymore.")
+    click.echo(
+        "This cluster has been demoted from the primary cluster. It cannot connect to other clusters and other clusters cannot join this cluster anymore.")
     click.echo("")
     click.echo("Please login again.")
     click.echo("")
+
 
 @request_federation.command("join_token")
 @click.option("--duration", default="1", help="The duration(in hour) that the join_token is valid")
@@ -108,10 +111,11 @@ def request_federation_join_token(data, duration):
     dn = int(df)
     args["token_duration"] = dn
     resp = data.client.show("fed/join_token", "join_token", None, **args)
-    #click.echo("Federation join_token response object: {}".format(json.dumps(resp)))
+    # click.echo("Federation join_token response object: {}".format(json.dumps(resp)))
     click.echo("")
     click.echo("join_token: {}".format(resp))
     click.echo("")
+
 
 @request_federation.command("join")
 @click.option("--name", help="The name to use for this cluster")
@@ -120,7 +124,8 @@ def request_federation_join_token(data, duration):
 @click.option("--local_server", help="Exposed rest ip/fqdn of this cluster")
 @click.option("--local_port", help="Exposed rest port of this cluster")
 @click.option("--token", required=True, help="join-token issed by primary cluster")
-@click.option("--use_proxy", default="", type=click.Choice(["http","https","", None]), help="Use proxy when connecting to primary cluster")
+@click.option("--use_proxy", default="", type=click.Choice(["http", "https", "", None]),
+              help="Use proxy when connecting to primary cluster")
 @click.pass_obj
 def request_federation_join(data, name, server, port, local_server, local_port, token, use_proxy):
     """Join a cluster to primary cluster in the federation."""
@@ -138,7 +143,7 @@ def request_federation_join(data, name, server, port, local_server, local_port, 
         click.echo("Failed because local cluster info is not configured yet.")
         return
     req = {"join_token": token, "joint_rest_info": joint_rest_info, "use_proxy": use_proxy}
-    
+
     prompt = False
     if server == None or server == "":
         req["server"] = joinToken["s"]
@@ -151,15 +156,17 @@ def request_federation_join(data, name, server, port, local_server, local_port, 
         click.echo("It will join the federation with primary cluster {}:{}".format(req["server"], req["port"]))
     if name != None and name != "":
         req["name"] = name
-    #click.echo("Joining federation request object: {}".format(json.dumps(req)))
+    # click.echo("Joining federation request object: {}".format(json.dumps(req)))
     resp = data.client.request("fed", "join", None, req)
-    #click.echo("Joining federation response object: {}".format(json.dumps(resp)))
+    # click.echo("Joining federation response object: {}".format(json.dumps(resp)))
     click.echo("")
     click.echo("This cluster has joined the primary cluster successfully")
     click.echo("")
-    
+
+
 @request_federation.command("leave")
-@click.option("--force", default="true", type=click.Choice(["true", "false"]), show_default=True, help="Force leaving the federation no matter primary cluster returns success or not")
+@click.option("--force", default="true", type=click.Choice(["true", "false"]), show_default=True,
+              help="Force leaving the federation no matter primary cluster returns success or not")
 @click.pass_obj
 def request_federation_leave(data, force):
     """Leave the federation."""
@@ -173,6 +180,7 @@ def request_federation_leave(data, force):
     click.echo("This cluster has left the federation successfully")
     click.echo("")
 
+
 @request_federation.command("remove")
 @click.option("--id", required=True, help="ID of the managed cluster to remove out of the federation")
 @click.pass_obj
@@ -182,6 +190,7 @@ def request_federation_remove(data, id):
     click.echo("")
     click.echo("The managed cluster {} has been removed out of the federation successfully".format(id))
     click.echo("")
+
 
 @request_federation.command("deploy")
 @click.option("--id", required=False, multiple=True, help="ID of the managed clusters to deploy federation settings")
@@ -205,18 +214,20 @@ def request_federation_deploy(data, id, force):
         click.echo(" {}     {}".format(id, deployResultDisplay[int(results[id])]))
     click.echo("")
 
-#####  
+
+#####
 @show.group("federation")
 @click.pass_obj
 def show_federation(data):
     """Show multi-clusters configuration."""
+
 
 @show_federation.command("member")
 @click.pass_obj
 def show_federation_config(data):
     """Show multi-clusters members this cluster knows."""
     resp = data.client.show("fed/member", None, None)
-    #click.echo("Federation organization object: {}".format(json.dumps(resp)))
+    # click.echo("Federation organization object: {}".format(json.dumps(resp)))
     click.echo("")
     if resp is None or (resp["fed_role"] == clusterRoleNone):
         useProxy = False
@@ -225,7 +236,8 @@ def show_federation_config(data):
         click.echo("Not in federation")
         click.echo("--------------------------------------------")
         click.echo("Local cluster rest info:")
-        click.echo("  REST server/port:        {}:{}".format(resp["local_rest_info"]["server"], resp["local_rest_info"]["port"]))
+        click.echo("  REST server/port:        {}:{}".format(resp["local_rest_info"]["server"],
+                                                             resp["local_rest_info"]["port"]))
         click.echo("")
         click.echo("Use proxy for inter-cluster communications: {}".format(useProxy))
         click.echo("")
@@ -239,7 +251,8 @@ def show_federation_config(data):
         master["role"] = "primary"
         master["id"] = resp["master_cluster"]["id"]
         master["name"] = resp["master_cluster"]["name"]
-        master["rest server/port"] = "{}:{}".format(resp["master_cluster"]["rest_info"]["server"], resp["master_cluster"]["rest_info"]["port"])
+        master["rest server/port"] = "{}:{}".format(resp["master_cluster"]["rest_info"]["server"],
+                                                    resp["master_cluster"]["rest_info"]["port"])
         if resp["fed_role"] == clusterRoleMaster:
             master["status"] = "self"
             master["use proxy"] = False
@@ -251,7 +264,8 @@ def show_federation_config(data):
                 joint_clusters = resp["joint_clusters"]
                 for cluster in joint_clusters:
                     cluster["role"] = "managed"
-                    cluster["rest server/port"] = "{}:{}".format(cluster["rest_info"]["server"], cluster["rest_info"]["port"])
+                    cluster["rest server/port"] = "{}:{}".format(cluster["rest_info"]["server"],
+                                                                 cluster["rest_info"]["port"])
                     cluster["use proxy"] = ""
                     cluster[proxyRequiredTitle] = ""
                     if "proxy_required" in cluster:
@@ -267,15 +281,17 @@ def show_federation_config(data):
                 joint["role"] = "managed"
                 joint["id"] = joint_cluster["id"]
                 joint["name"] = joint_cluster["name"]
-                joint["rest server/port"] = "{}:{}".format(joint_cluster["rest_info"]["server"], joint_cluster["rest_info"]["port"])
+                joint["rest server/port"] = "{}:{}".format(joint_cluster["rest_info"]["server"],
+                                                           joint_cluster["rest_info"]["port"])
                 joint["status"] = joint_cluster["status"]
                 joint["use proxy"] = False
                 if "use_proxy" in resp:
                     joint["use proxy"] = resp["use_proxy"]
                 clusters.append(joint)
         output.list(columns, clusters)
-    #click.echo("")
-    
+    # click.echo("")
+
+
 @show_federation.command("remote")
 @click.pass_obj
 def show_federation_remote(data):
@@ -284,17 +300,20 @@ def show_federation_remote(data):
     else:
         click.echo("Working on remote cluster - id: {})".format(client.RemoteCluster["id"]))
 
-#####    
+
+#####
 @set.group("federation")
 @click.pass_obj
 def set_federation(data):
     """Set federation configuration."""
 
+
 @set_federation.command("config")
 @click.option("--name", help="The name to use for this cluster")
 @click.option("--server", help="Exposed rest ip/fqdn of this cluster")
 @click.option("--port", help="Exposed rest port of this cluster")
-@click.option("--use_proxy", default="", type=click.Choice(["http","https",""]), help="Use proxy when connecting to remote cluster")
+@click.option("--use_proxy", default="", type=click.Choice(["http", "https", ""]),
+              help="Use proxy when connecting to remote cluster")
 @click.pass_obj
 def set_federation_config(data, name, server, port, use_proxy):
     """Configure the exposed rest info of this cluster."""
@@ -312,13 +331,14 @@ def set_federation_config(data, name, server, port, use_proxy):
         body["name"] = name
     ret = data.client.config("fed", "config", body)
 
+
 @set_federation.command("remote")
 @click.option("--id", required=True, help="ID of the cluster to work on")
 @click.pass_obj
 def set_federation_remote(data, id):
     """Set joined cluster to work on."""
     resp = data.client.show("fed/member", None, None)
-    #click.echo("Tokens data object: {}".format(json.dumps(resp)))
+    # click.echo("Tokens data object: {}".format(json.dumps(resp)))
     if resp is None or (resp["fed_role"] != clusterRoleMaster):
         click.echo("This operation is only allowed on primary cluster in fedaration")
         return
@@ -331,7 +351,7 @@ def set_federation_remote(data, id):
             for cluster in joint_clusters:
                 # click.echo("cluster: {}".format(json.dumps(cluster))) ######
                 if cluster["id"] == id:
-                    client.RemoteCluster["id"]     = cluster["id"]
+                    client.RemoteCluster["id"] = cluster["id"]
                     click.echo("Done.")
                     return
         else:
@@ -339,11 +359,13 @@ def set_federation_remote(data, id):
     click.echo("Error: Invalid cluster id!")
     return
 
-#####    
+
+#####
 @unset.group("federation")
 @click.pass_obj
 def unset_federation(data):
     """Unset federation configuration."""
+
 
 @unset_federation.command("remote")
 @click.pass_obj

@@ -1,12 +1,13 @@
 import click
 
-from cli import set
-from cli import delete
-from cli import show
-import client
-import output
-import utils
+from prog.cli import set
+from prog.cli import delete
+from prog.cli import show
+from prog import client
+from prog import output
+from prog import utils
 from argparse import Namespace
+
 
 def _list_filter_display_format(flt):
     apps = flt["applications"]
@@ -16,14 +17,17 @@ def _list_filter_display_format(flt):
             v.append(a["name"])
     flt["applications"] = v
 
+
 @show.group("file_access")
 @click.pass_obj
 def show_file_access(data):
     """Show file monitor."""
 
+
 @show_file_access.group("profile", invoke_without_command=True)
-@click.option('--scope', default="all", type=click.Choice(['fed', 'local', 'all']), help="Show federal, local or all profiles")
-@click.option('-p','--predefined', is_flag=True, help="show predefined")
+@click.option('--scope', default="all", type=click.Choice(['fed', 'local', 'all']),
+              help="Show federal, local or all profiles")
+@click.option('-p', '--predefined', is_flag=True, help="show predefined")
 @click.pass_obj
 @click.pass_context
 def show_file_access_profile(ctx, data, scope, predefined):
@@ -33,7 +37,7 @@ def show_file_access_profile(ctx, data, scope, predefined):
 
     args = {}
     if predefined:
-        args['predefined']=True
+        args['predefined'] = True
     if scope == 'fed' or scope == 'local':
         args['scope'] = scope
 
@@ -46,15 +50,16 @@ def show_file_access_profile(ctx, data, scope, predefined):
             filter["type"] = client.CfgTypeDisplay[filter["cfg_type"]]
         output.list(columns, filters)
 
+
 @show_file_access_profile.command("")
 @click.argument("group")
-@click.option('-p','--predefined', is_flag=True, help="show predefined")
+@click.option('-p', '--predefined', is_flag=True, help="show predefined")
 @click.pass_obj
 def detail(data, group, predefined):
     """Show file monitor profile."""
     args = {}
     if predefined:
-        args['predefined']=True
+        args['predefined'] = True
     profile = data.client.show("file_monitor", "profile", group, **args)
     if not profile:
         return
@@ -63,6 +68,7 @@ def detail(data, group, predefined):
         filter["type"] = client.CfgTypeDisplay[filter["cfg_type"]]
     columns = ("filter", "recursive", "applications", "behavior", "type")
     output.list(columns, filters)
+
 
 @show_file_access.command("file")
 @click.argument("id_or_name")
@@ -86,16 +92,19 @@ def file(data, id_or_name):
     files = resp["files"]
     output.list(columns, files)
 
+
 @set.group("file_access")
 @click.pass_obj
 def set_file_access(data):
     """Set file_access configuration."""
 
+
 @set_file_access.command("profile")
 @click.argument('group')
 @click.option('--add_filter', help="add filter, example: /home/*/.ssh/*")
-@click.option('-r','--recursive', type=click.Choice(['enable', 'disable']), help="recursive")
-@click.option('-o','--option', default='monitor_change', type=click.Choice(['block_access', 'monitor_change']), help="behavior")
+@click.option('-r', '--recursive', type=click.Choice(['enable', 'disable']), help="recursive")
+@click.option('-o', '--option', default='monitor_change', type=click.Choice(['block_access', 'monitor_change']),
+              help="behavior")
 @click.pass_obj
 def set_file_access_profile(data, group, add_filter, recursive, option):
     """Create file monitor filters for group."""
@@ -108,15 +117,18 @@ def set_file_access_profile(data, group, add_filter, recursive, option):
     if recursive == 'enable':
         recur = True
 
-    config["add_filters"] = [{"filter":add_filter, "recursive": recur, "behavior": option}]
+    config["add_filters"] = [{"filter": add_filter, "recursive": recur, "behavior": option}]
     ret = data.client.config("file_monitor", group, {"config": config})
+
 
 @set_file_access.command("rule")
 @click.argument('group')
 @click.option('-f', '--flt', help="filter")
 @click.option('--path', help="application path")
-@click.option('-r','--recursive', default='no_change', type=click.Choice(['enable', 'disable','no_change']), help="recursive")
-@click.option('-o','--option', default='monitor_change', type=click.Choice(['block_access', 'monitor_change']), help="behavior")
+@click.option('-r', '--recursive', default='no_change', type=click.Choice(['enable', 'disable', 'no_change']),
+              help="recursive")
+@click.option('-o', '--option', default='monitor_change', type=click.Choice(['block_access', 'monitor_change']),
+              help="behavior")
 @click.pass_obj
 def set_file_access_rule(data, group, flt, path, recursive, option):
     """Update file access apps for group."""
@@ -150,10 +162,13 @@ def set_file_access_rule(data, group, flt, path, recursive, option):
 
     click.echo("can not find the rule")
 
+
 @delete.group("file_access")
 @click.pass_obj
 def delete_file_access(data):
     """Delete file access profile and rule. """
+
+
 @delete_file_access.command("profile")
 @click.argument('group')
 @click.option('--del_filter', help="filter")
@@ -166,5 +181,5 @@ def delete_file_access_profile(data, group, del_filter):
         return
     config = {}
 
-    config["delete_filters"] = [{"filter":del_filter}]
+    config["delete_filters"] = [{"filter": del_filter}]
     ret = data.client.config("file_monitor", group, {"config": config})

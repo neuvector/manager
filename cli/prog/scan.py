@@ -1,16 +1,17 @@
 import click
 import string
-import StringIO
 
-from cli import create
-from cli import delete
-from cli import show
-from cli import set
-from cli import request
-import client
-import output
-import utils
+from io import StringIO
+from prog.cli import create
+from prog.cli import delete
+from prog.cli import show
+from prog.cli import set
+from prog.cli import request
+from prog import client
+from prog import output
+from prog import utils
 import time
+
 
 def _list_display_format(dev):
     f = "id"
@@ -18,16 +19,19 @@ def _list_display_format(dev):
         fo = output.key_output(f)
         dev[fo] = dev[f][:output.SHORT_ID_LENGTH]
 
+
 def _scanner_list_display_format(scanner):
     f = "joined_timestamp"
     if f in scanner:
         scanner[f] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(scanner[f]))
 
+
 def _vuln_list_display_format(vuln):
     f = "scores"
     fo = output.key_output(f)
     vuln[fo] = "%s/%s" % (vuln["score"], vuln["score_v3"])
-    vuln["counts"] = "%d:%d:%d:%d" % (len(vuln["platforms"]), len(vuln["workloads"]), len(vuln["nodes"]), len(vuln["images"]))
+    vuln["counts"] = "%d:%d:%d:%d" % (
+    len(vuln["platforms"]), len(vuln["workloads"]), len(vuln["nodes"]), len(vuln["images"]))
 
     vuln["protected"] = True
     for e in vuln["platforms"]:
@@ -47,6 +51,7 @@ def _vuln_list_display_format(vuln):
             vuln["protected"] = False
             return
 
+
 def _vuln_profile_list_display_format(e):
     f = "domains"
     if e.get(f):
@@ -59,10 +64,12 @@ def _vuln_profile_list_display_format(e):
     else:
         e[output.key_output(f)] = ""
 
+
 @show.group('scan')
 @click.pass_obj
 def show_scan(data):
     """Show scan information."""
+
 
 @show_scan.command()
 @click.pass_obj
@@ -71,10 +78,11 @@ def config(data):
     cfg = data.client.show("scan", "config", "config")
     column_map = (("auto_scan", "auto"),)
     if cfg["auto_scan"] == True:
-       cfg["auto_scan"] = "enable"
+        cfg["auto_scan"] = "enable"
     else:
-       cfg["auto_scan"] = "disable"
+        cfg["auto_scan"] = "disable"
     output.show_with_map(column_map, cfg)
+
 
 @show_scan.command()
 @click.pass_obj
@@ -95,6 +103,7 @@ def scanner(data):
                ("scanned_serverless", "serverless"))
     output.list_with_map(columns, scanners)
 
+
 @show_scan.command()
 @click.pass_obj
 def status(data):
@@ -109,10 +118,12 @@ def status(data):
                   ("cvedb_create_time", "CVE-DB created at"))
     output.show_with_map(column_map, status)
 
+
 @show_scan.group()
 @click.pass_obj
 def summary(data):
     """Show scan summary"""
+
 
 @summary.command()
 @click.option("--page", default=40, type=click.IntRange(1), help="list page size, default=40")
@@ -145,6 +156,7 @@ def image(data, page, sort, sort_dir):
 
         args["start"] += page
 
+
 @summary.command()
 @click.pass_obj
 def platform(data):
@@ -159,10 +171,12 @@ def platform(data):
     columns = ("id", "status", "result", "scanned_at", "high", "medium")
     output.list(columns, platforms)
 
+
 @show_scan.group()
 @click.pass_obj
 def report(data):
     """Show scan report"""
+
 
 @report.command()
 @click.argument("id_or_name")
@@ -193,6 +207,7 @@ def image(data, name):
             columns = ("name", "severity", "package_name", "package_version", "fixed_version")
             output.list(columns, report["vulnerabilities"])
 
+
 @report.command()
 @click.argument("id_or_name")
 @click.pass_obj
@@ -209,6 +224,7 @@ def node(data, id_or_name):
             columns = ("name", "severity", "package_name", "package_version", "fixed_version")
             output.list(columns, report["vulnerabilities"])
 
+
 @report.command()
 @click.pass_obj
 def platform(data):
@@ -219,6 +235,7 @@ def platform(data):
         if report["vulnerabilities"] != None:
             columns = ("name", "severity", "package_name", "package_version", "fixed_version")
             output.list(columns, report["vulnerabilities"])
+
 
 @report.command()
 @click.pass_obj
@@ -232,6 +249,7 @@ def all(data):
 
         columns = ("name", "severity", "scores", "counts", "protected")
         output.list(columns, report)
+
 
 @show_scan.command("profile")
 @click.argument("name")
@@ -249,12 +267,14 @@ def show_scan_profile(data, name):
     columns = ("id", "name", "domains", "images", "days")
     output.list(columns, profile["entries"])
 
+
 # --
 
 @set.group('scan')
 @click.pass_obj
 def set_scan(data):
     """Set scan configuration."""
+
 
 @set_scan.command()
 @click.argument('status', type=click.Choice(['enable', 'disable']))
@@ -266,10 +286,12 @@ def auto(data, status):
     else:
         data.client.config("scan", "config", {"config": {"auto_scan": False}})
 
+
 @set_scan.group("profile")
 @click.pass_obj
 def set_scan_profile(data):
     """Set vulnerability profile."""
+
 
 @set_scan_profile.command("entry")
 @click.argument("id", type=int)
@@ -292,6 +314,7 @@ def set_scan_profile_entry(data, id, name, comment, days, images, domains):
         p["domains"] = domains
     data.client.config("vulnerability/profile/default/entry", id, {"config": p})
 
+
 # --
 
 @create.group('scan')
@@ -299,10 +322,12 @@ def set_scan_profile_entry(data, id, name, comment, days, images, domains):
 def create_scan(data):
     """create scan configuration."""
 
+
 @create_scan.group("profile")
 @click.pass_obj
 def create_scan_profile(data):
     """Create vulnerability profile."""
+
 
 @create_scan_profile.command("entry")
 @click.argument("name")
@@ -324,6 +349,7 @@ def set_scan_profile_entry(data, name, comment, days, images, domains):
         p["domains"] = domains
     data.client.create("vulnerability/profile/default/entry", {"config": p})
 
+
 # --
 
 @delete.group('scan')
@@ -331,10 +357,12 @@ def set_scan_profile_entry(data, name, comment, days, images, domains):
 def delete_scan(data):
     """Delete scan."""
 
+
 @delete_scan.group("profile")
 @click.pass_obj
 def delete_scan_profile(data):
     """Delete vulnerability profile."""
+
 
 @delete_scan_profile.command("entry")
 @click.argument("id")
@@ -343,12 +371,14 @@ def delete_scan_profile_entry(data, id):
     """Delete vulnerability profile entry."""
     data.client.delete("vulnerability/profile/default/entry", id)
 
+
 # --
 
 @request.group('scan')
 @click.pass_obj
 def request_scan(data):
     """Request scan."""
+
 
 @request_scan.command()
 @click.argument("id_or_name")
@@ -361,6 +391,7 @@ def container(data, id_or_name):
 
     data.client.request("scan", "workload", obj["id"], None)
 
+
 @request_scan.command()
 @click.argument("id_or_name")
 @click.pass_obj
@@ -372,9 +403,9 @@ def node(data, id_or_name):
 
     data.client.request("scan", "host", obj["id"], None)
 
+
 @request_scan.command()
 @click.pass_obj
 def platform(data):
     """Request to scan platform"""
     data.client.request("scan", "platform", "platform", None)
-

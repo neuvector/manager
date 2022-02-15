@@ -5,21 +5,23 @@ import string
 import time
 import zlib
 
-from cli import request
-from cli import create
-from cli import delete
-from cli import show
-from cli import set as cli_set
-from cli import unset
-import client
-import multipart
-import output
-import utils
+from prog.cli import request
+from prog.cli import create
+from prog.cli import delete
+from prog.cli import show
+from prog.cli import set as cli_set
+from prog.cli import unset
+from prog import client
+from prog import multipart
+from prog import output
+from prog import utils
+
 
 @show.group('system')
 @click.pass_obj
 def show_system(data):
     """Show system information."""
+
 
 @show_system.command()
 @click.pass_obj
@@ -29,6 +31,7 @@ def usage(data):
 
     columns = ["reported_at", "platform", "hosts", "cores", "cvedb_version", "domains", "running_pods"]
     output.list(columns, usage)
+
 
 @show_system.command()
 @click.pass_obj
@@ -51,6 +54,7 @@ def summary(data):
                   ("cvedb_create_time", "CVE-DB created at"))
     output.show_with_map(column_map, summary)
 
+
 @show_system.command()
 @click.pass_obj
 def stats(data):
@@ -61,6 +65,7 @@ def stats(data):
                   ("scan_state_keys", "Scan state keys"),
                   ("scan_data_keys", "Scan data keys"),)
     output.show_with_map(column_map, stats)
+
 
 def _show_system_setting_display_format(s):
     f = "syslog_categories"
@@ -88,8 +93,10 @@ def _show_system_setting_display_format(s):
         else:
             s[output.key_output(f)] = s[f]["url"]
 
+
 @show_system.command()
-@click.option("--scope", default="all", type=click.Choice(['fed', 'local', 'all']), show_default=True, help="Show federal, local or all system configuration")
+@click.option("--scope", default="all", type=click.Choice(['fed', 'local', 'all']), show_default=True,
+              help="Show federal, local or all system configuration")
 @click.pass_obj
 def setting(data, scope):
     """Show system configuration."""
@@ -97,6 +104,7 @@ def setting(data, scope):
         showFedSystemConfig(data, scope)
     else:
         showLocalSystemConfig(data, scope)
+
 
 def showFedSystemConfig(data, scope):
     args = {}
@@ -113,6 +121,7 @@ def showFedSystemConfig(data, scope):
             wh["scope"] = client.CfgTypeDisplay[wh["cfg_type"]]
     columns = ("name", "url", "type", "enable", "scope")
     output.list(columns, conf["webhooks"])
+
 
 def showLocalSystemConfig(data, scope):
     args = {}
@@ -191,15 +200,18 @@ def showLocalSystemConfig(data, scope):
     columns = ("name", "url", "type", "enable", "scope")
     output.list(columns, conf["webhooks"])
 
+
 @show_system.group("partner")
 @click.pass_obj
 def show_partner(data):
     """Show partner data."""
 
+
 @show_partner.group("ibmsa")
 @click.pass_obj
 def show_ibmsa(data):
     """Show IBM Security Advisor setup data."""
+
 
 @show_ibmsa.command("config")
 @click.pass_obj
@@ -221,6 +233,7 @@ def show_ibmsa_config(data):
 
     output.show_with_map(column_map, conf)
 
+
 @show_ibmsa.command("setup_uri")
 @click.pass_obj
 def get_ibmsa_setup_url(data):
@@ -230,6 +243,7 @@ def get_ibmsa_setup_url(data):
         click.echo("")
         click.echo("URI: {}".format(conf["url"]))
     click.echo("")
+
 
 def _show_system_internal_subnets_display_format(s):
     f = "configured_internal_subnets"
@@ -244,6 +258,7 @@ def _show_system_internal_subnets_display_format(s):
     if s.get(f):
         s[output.key_output(f)] = ",".join(s[f])
 
+
 @show_system.command()
 @click.pass_obj
 def internal_subnets(data):
@@ -254,6 +269,7 @@ def internal_subnets(data):
                   ("effective_internal_subnets", "Effective"),)
     _show_system_internal_subnets_display_format(subnets)
     output.show_with_map(column_map, subnets)
+
 
 @show_system.command()
 @click.option("--page", default=20, type=click.IntRange(1), help="list page size, default=20")
@@ -279,12 +295,13 @@ def ip_2_container(data, page):
 
         filter["start"] += page
 
+
 def _display_license(lic):
     column_map = (("name", "Name"),
                   ("email", "Email"),
                   ("phone", "Phone"),
-                  #("id", "ID"),
-                  #("id_type", "ID type"),
+                  # ("id", "ID"),
+                  # ("id_type", "ID type"),
                   ("expire", "Expire"),
                   ("node_limit", "Supported Number of Enforcers"),
                   ("cpu_limit", "Supported Number of CPUs"),
@@ -294,20 +311,21 @@ def _display_license(lic):
                   ("serverless", "Allow Serverless scan"))
 
     if lic["serverless"] == True:
-       lic["serverless"] = "Y"
+        lic["serverless"] = "Y"
     else:
-       lic["serverless"] = "N"
+        lic["serverless"] = "N"
 
     if lic["scan"] == True:
-       lic["scan"] = "Y"
+        lic["scan"] = "Y"
     else:
-       lic["scan"] = "N"
+        lic["scan"] = "N"
 
     if lic["enforce"] == True:
-       lic["enforce"] = "Y"
+        lic["enforce"] = "Y"
     else:
-       lic["enforce"] = "N"
+        lic["enforce"] = "N"
     output.show_with_map(column_map, lic)
+
 
 @show_system.command()
 @click.pass_obj
@@ -317,11 +335,13 @@ def license(data):
     if lic != None:
         _display_license(lic["info"])
 
+
 # request
 @request.group('system')
 @click.pass_obj
 def request_system(data):
     """System"""
+
 
 @request_system.command('policy_mode')
 @click.argument('mode', type=click.Choice(['discover', 'monitor', 'protect']))
@@ -330,9 +350,10 @@ def request_system_policy_mode(data, mode):
     """Set policy mode for all existing services"""
     data.client.request("system", "request", None, {"request": {"policy_mode": mode.title()}})
 
+
 @request_system.command('unquarantine')
-@click.option('--group','-g')
-@click.option('--rule','-r', type=int)
+@click.option('--group', '-g')
+@click.option('--rule', '-r', type=int)
 @click.pass_obj
 def request_system_unquarantine(data, group, rule):
     """Unquarantine containers"""
@@ -348,17 +369,20 @@ def request_system_unquarantine(data, group, rule):
 
     data.client.request("system", "request", None, {"request": {"unquarantine": unquar}})
 
+
 # create
 @create.group('system')
 @click.pass_obj
 def create_system(data):
     """Create system configuration."""
 
+
 @create_system.command("webhook")
 @click.argument('name')
 @click.argument('url')
 @click.option("--type", default="", help="webhook type", type=click.Choice(['Slack', 'JSON']))
-@click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=True, help="It's for local or federal response rule")
+@click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=True,
+              help="It's for local or federal response rule")
 @click.option("--enable/--disable", default=True, is_flag=True, help="Enable/Disable the webhook")
 @click.pass_obj
 def create_system_webhook_url(data, name, url, type, scope, enable):
@@ -374,15 +398,18 @@ def create_system_webhook_url(data, name, url, type, scope, enable):
         body["cfg_type"] = "user_created"
     data.client.create("system/config/webhook", {"config": body})
 
+
 # delete
 @delete.group('system')
 @click.pass_obj
 def delete_system(data):
     """Delete system configuration."""
 
+
 @delete_system.command("webhook")
 @click.argument('name')
-@click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=True, help="It's for local or federal response rule")
+@click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=True,
+              help="It's for local or federal response rule")
 @click.pass_obj
 def delete_system_webhook_url(data, name, scope):
     """Delete webhook settings"""
@@ -390,16 +417,19 @@ def delete_system_webhook_url(data, name, scope):
     args["scope"] = scope
     data.client.delete("system/config/webhook", name, **args)
 
+
 # set
 @cli_set.group('system')
 @click.pass_obj
 def set_system(data):
     """Set system configuration."""
 
+
 @set_system.group('new_service')
 @click.pass_obj
 def set_system_new_service(data):
     """Set system new service configruation"""
+
 
 @set_system_new_service.command("policy_mode")
 @click.argument('mode', type=click.Choice(['discover', 'monitor', 'protect']))
@@ -408,6 +438,7 @@ def set_system_new_service_policy_mode(data, mode):
     """Set system new service policy mode."""
     data.client.config_system(new_service_policy_mode=mode.title())
 
+
 @set_system_new_service.command("profile_baseline")
 @click.argument('baseline', type=click.Choice(['Default', 'Shield']))
 @click.pass_obj
@@ -415,25 +446,31 @@ def set_system_new_service_profile_baseline(data, baseline):
     """Set system new service profile baseline."""
     data.client.config_system(new_service_profile_baseline=baseline.title())
 
+
 @set_system.group('unused_group')
 @click.pass_obj
 def set_system_unused_group(data):
     """Set system unused group configruation"""
 
+
 @set_system_unused_group.command("aging")
-@click.option("--time", default=24, type=click.IntRange(0, 168), help="unused group aging, default=24hr, 0 means no aging")
+@click.option("--time", default=24, type=click.IntRange(0, 168),
+              help="unused group aging, default=24hr, 0 means no aging")
 @click.pass_obj
 def set_system_unused_group_aging(data, time):
     """Set system unused group aging time."""
     data.client.config_system(unused_group_aging=time)
+
 
 @set_system.group("partner")
 @click.pass_obj
 def set_system_partner(data):
     """Set partner integration settings"""
 
+
 @set_system_partner.group("ibmsa", invoke_without_command=True)
-@click.option("--disable/--enable", default=None, required=False, help="Enable/disable IBM Security Advisor integration")
+@click.option("--disable/--enable", default=None, required=False,
+              help="Enable/disable IBM Security Advisor integration")
 @click.option("--dashboard", default=None, required=False, help="NeuVector dashboard URL")
 @click.pass_obj
 def set_system_ibmsa(data, disable, dashboard):
@@ -458,10 +495,12 @@ def set_system_ibmsa(data, disable, dashboard):
     elif dashboard is not None and dashboard != "":
         data.client.config_system(ibmsa_ep_dashboard_url=dashboard)
 
+
 @set_system.group("syslog")
 @click.pass_obj
 def set_system_syslog(data):
     """Set syslog settings"""
+
 
 @set_system_syslog.command("status")
 @click.argument('status', type=click.Choice(['enable', 'disable']))
@@ -473,6 +512,7 @@ def set_system_syslog_status(data, status):
     else:
         data.client.config_system(syslog_status=False)
 
+
 @set_system_syslog.command("in-json")
 @click.argument('in_json', type=click.Choice(['enable', 'disable']))
 @click.pass_obj
@@ -483,8 +523,9 @@ def set_system_syslog_in_json(data, in_json):
     else:
         data.client.config_system(syslog_in_json=False)
 
+
 @set_system_syslog.command("category")
-@click.option('--category','-c', multiple=True,
+@click.option('--category', '-c', multiple=True,
               type=click.Choice(['all', 'event', 'security-event', 'audit'])
               )
 @click.pass_obj
@@ -498,8 +539,9 @@ def set_system_syslog_categories(data, category):
         else:
             s.add(c)
     for c in s:
-            l.append(c)
+        l.append(c)
     data.client.config_system(syslog_categories=l)
+
 
 @set_system_syslog.command("server")
 @click.argument('address')
@@ -514,6 +556,7 @@ def set_system_syslog_server(data, address):
     else:
         click.echo("Error: Invalid address format")
 
+
 @set_system_syslog.command("protocol")
 @click.argument('protocol', type=click.Choice(['UDP', 'TCP']))
 @click.pass_obj
@@ -524,12 +567,14 @@ def set_system_syslog_protocol(data, protocol):
     else:
         data.client.config_system(syslog_ip_proto=17)
 
+
 @set_system_syslog.command("level")
 @click.argument('level', type=click.Choice(['Critical', 'Error', 'Warning', 'Notice', 'Info']))
 @click.pass_obj
 def set_system_syslog_level(data, level):
     """Set syslog level"""
     data.client.config_system(syslog_level=level)
+
 
 @set_system.command("single_cve_per_syslog")
 @click.argument('status', type=click.Choice(['enable', 'disable']))
@@ -540,6 +585,7 @@ def set_system_single_cve_per_syslog(data, status):
         data.client.config_system(single_cve_per_syslog=True)
     else:
         data.client.config_system(single_cve_per_syslog=False)
+
 
 @set_system.command("controller_debug")
 @click.option('--category', '-c', multiple=True,
@@ -560,6 +606,7 @@ def set_system_controller_debug(data, category):
         l.append(c)
     data.client.config_system(controller_debug=l)
 
+
 @set_system.command("auth_order")
 @click.argument('order')
 @click.pass_obj
@@ -567,6 +614,7 @@ def set_system_auth_order(data, order):
     """Set authentication order in comma-seperated server names"""
     servers = order.split(",")
     data.client.config_system(auth_order=servers)
+
 
 @set_system.command("auth_openshift")
 @click.argument('status', type=click.Choice(['enable', 'disable']))
@@ -578,6 +626,7 @@ def set_system_auth_openshift(data, status):
     else:
         data.client.config_system(auth_by_platform=False)
 
+
 @set_system.command("cluster_name")
 @click.argument('name')
 @click.pass_obj
@@ -585,11 +634,13 @@ def set_system_cluster_name(data, name):
     """Set cluster name"""
     data.client.config_system(cluster_name=name)
 
+
 @set_system.command("webhook")
 @click.argument('name')
 @click.argument('url')
 @click.option("--type", default="", help="webhook type", type=click.Choice(['Slack', 'JSON']))
-@click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=True, help="It's for local or federal response rule")
+@click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=True,
+              help="It's for local or federal response rule")
 @click.option("--enable/--disable", default=True, is_flag=True, help="Enable/Disable the webhook")
 @click.pass_obj
 def set_system_webhook_url(data, name, url, type, scope, enable):
@@ -601,10 +652,12 @@ def set_system_webhook_url(data, name, url, type, scope, enable):
     args["scope"] = scope
     data.client.config("system/config/webhook", name, {"config": body}, **args)
 
+
 @set_system.group("monitor_service_mesh")
 @click.pass_obj
 def set_system_monitor_service_mesh(data):
     """Set monitor service mesh settings"""
+
 
 @set_system_monitor_service_mesh.command("status")
 @click.argument('status', type=click.Choice(['enable', 'disable']))
@@ -616,10 +669,12 @@ def set_system_monitor_service_mesh_status(data, status):
     else:
         data.client.config_system(monitor_service_mesh=False)
 
+
 @set_system.group("xff_enabled")
 @click.pass_obj
 def set_system_xff_enabled(data):
     """Set xff based policy matching"""
+
 
 @set_system_xff_enabled.command("status")
 @click.argument('status', type=click.Choice(['enable', 'disable']))
@@ -631,10 +686,12 @@ def set_system_xff_enabled_status(data, status):
     else:
         data.client.config_system(xff_enabled=False)
 
+
 @set_system.group("registry")
 @click.pass_obj
 def set_system_registry(data):
     """Set registry settings"""
+
 
 @set_system_registry.command("http_proxy_status")
 @click.argument('status', type=click.Choice(['enable', 'disable']))
@@ -645,6 +702,7 @@ def set_system_registry_proxy_http_status(data, status):
         data.client.config_system(registry_http_proxy_status=True)
     else:
         data.client.config_system(registry_http_proxy_status=False)
+
 
 @set_system_registry.command("https_proxy_status")
 @click.argument('status', type=click.Choice(['enable', 'disable']))
@@ -667,6 +725,7 @@ def set_system_registry_http_proxy(data, url, username, password):
     proxy = {"url": url, "username": username, "password": password}
     data.client.config_system(registry_http_proxy=proxy)
 
+
 @set_system_registry.command("https_proxy")
 @click.argument('url')
 @click.option('--username', help="https proxy username")
@@ -677,6 +736,7 @@ def set_system_registry_https_proxy(data, url, username, password):
     proxy = {"url": url, "username": username, "password": password}
     data.client.config_system(registry_https_proxy=proxy)
 
+
 # unset
 
 @unset.group('system')
@@ -684,15 +744,18 @@ def set_system_registry_https_proxy(data, url, username, password):
 def unset_system(data):
     """Unset system configuration."""
 
+
 @unset_system.group("syslog")
 @click.pass_obj
 def unset_system_syslog(data):
     """Set syslog settings"""
 
+
 @unset_system.group("registry")
 @click.pass_obj
 def unset_system_registry(data):
     """Unset registry settings"""
+
 
 @unset_system_syslog.command("server")
 @click.pass_obj
@@ -700,11 +763,13 @@ def unset_system_syslog_server(data):
     """Unset syslog server address."""
     data.client.config_system(syslog_ip="", syslog_port=0)
 
+
 @unset_system_syslog.command("protocol")
 @click.pass_obj
 def unset_system_syslog_protocol(data):
     """Unset syslog protocol."""
     data.client.config_system(syslog_ip_proto=0)
+
 
 @unset_system_syslog.command("level")
 @click.pass_obj
@@ -712,17 +777,20 @@ def unset_system_syslog_level(data):
     """Unset syslog level."""
     data.client.config_system(syslog_level="")
 
+
 @unset_system_syslog.command("category")
 @click.pass_obj
 def unset_system_syslog_category(data):
     """Unset categories to default."""
     data.client.config_system(syslog_categories=['event', 'security-event', 'audit'])
 
+
 @unset_system.command("single_cve_per_syslog")
 @click.pass_obj
 def unset_system_single_cve_per_syslog(data):
     """Unset single CVE per syslog."""
     data.client.config_system(single_cve_per_syslog=False)
+
 
 @unset_system.command("new_service")
 @click.pass_obj
@@ -731,11 +799,13 @@ def unset_system_new_service(data):
     data.client.config_system(new_service_policy_mode="")
     data.client.config_system(new_service_profile_setting="")
 
+
 @unset_system.command("unused_group")
 @click.pass_obj
 def unset_system_unused_group(data):
     """Unset system unused group aging"""
     data.client.config_system(unused_group_aging=0)
+
 
 @unset_system.command("auth_order")
 @click.pass_obj
@@ -743,11 +813,13 @@ def unset_system_auth_order(data):
     """Unset system authentication order"""
     data.client.config_system(auth_order=[])
 
+
 @unset_system.command("cluster_name")
 @click.pass_obj
 def unset_system_auth_order(data):
     """Unset system cluster name"""
     data.client.config_system(cluster_name="")
+
 
 @unset_system_registry.command("http_proxy")
 @click.pass_obj
@@ -755,11 +827,13 @@ def unset_system_registry_http_proxy(data):
     """Unset registry http proxy."""
     data.client.config_system(registry_http_proxy={"url": "", "username": "", "password": ""})
 
+
 @unset_system_registry.command("https_proxy")
 @click.pass_obj
 def unset_system_registry_https_proxy(data):
     """Unset registry https proxy."""
     data.client.config_system(registry_https_proxy={"url": "", "username": "", "password": ""})
+
 
 # export
 
@@ -773,13 +847,15 @@ def _write_part(part, filename):
             click.echo("Error: Failed to write %s to %s" % (part.name, click.format_filename(filename)))
     else:
         # gzip
-        cfg = zlib.decompress(part.raw, 16+zlib.MAX_WBITS)
+        cfg = zlib.decompress(part.raw, 16 + zlib.MAX_WBITS)
         click.echo(cfg)
+
 
 @request.group('export')
 @click.pass_obj
 def request_export(data):
     """Export"""
+
 
 @request_export.command("config")
 @click.option('--section', '-s', multiple=True, type=click.Choice(['user', 'policy']))
@@ -817,7 +893,7 @@ def export_config(data, section, raw, filename):
     kwargs = {'strict': True}
     clen = int(headers.get('Content-Length', '-1'))
     ctype, options = multipart.parse_options_header(headers.get("Content-Type"))
-    boundary = options.get('boundary','')
+    boundary = options.get('boundary', '')
     if ctype != 'multipart/form-data' or not boundary:
         click.echo("Unsupported content type.")
         return
@@ -832,8 +908,9 @@ def export_config(data, section, raw, filename):
     except Exception as e:
         click.echo(e)
 
+
 @request_export.command('group')
-@click.option("--name",  multiple=True, help="Name of group to export")
+@click.option("--name", multiple=True, help="Name of group to export")
 @click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True))
 @click.pass_obj
 def request_export_group(data, name, filename):
@@ -855,9 +932,10 @@ def request_export_group(data, name, filename):
         click.echo(respData)
     return
 
+
 @request_export.command('admission')
 @click.option("--config", "-c", default=False, is_flag=True, help="Export admission control configuration")
-@click.option("--id",  multiple=True, help="ID of admission control rule to export")
+@click.option("--id", multiple=True, help="ID of admission control rule to export")
 @click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True))
 @click.pass_obj
 def request_export_admission(data, config, id, filename):
@@ -879,8 +957,9 @@ def request_export_admission(data, config, id, filename):
         click.echo(respData)
     return
 
+
 @request_export.command('waf')
-@click.option("--name",  multiple=True, help="Name of WAF sensor to export")
+@click.option("--name", multiple=True, help="Name of WAF sensor to export")
 @click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True))
 @click.pass_obj
 def request_export_admission(data, name, filename):
@@ -902,15 +981,18 @@ def request_export_admission(data, name, filename):
         click.echo(respData)
     return
 
+
 @request.group('import')
 @click.pass_obj
 def request_import(data):
     """Import"""
 
+
 @request_import.command("config")
 @click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))
 @click.option("--raw", default=False, is_flag=True, help="Upload in raw format")
-@click.option("--standalone", "ignoreFed", flag_value="true", help="Force to import from a federal-managed cluster to standalone cluster(no federal information is reserved)")
+@click.option("--standalone", "ignoreFed", flag_value="true",
+              help="Force to import from a federal-managed cluster to standalone cluster(no federal information is reserved)")
 @click.pass_obj
 def import_config(data, filename, raw, ignoreFed):
     """Import system configurations."""
@@ -930,7 +1012,7 @@ def import_config(data, filename, raw, ignoreFed):
         status = ""
         if tid != "":
             i = 1
-            #click.echo("Info: import task transaction id is {}".format(tid))
+            # click.echo("Info: import task transaction id is {}".format(tid))
             while resp.status_code == requests.codes.partial:
                 time.sleep(3)
                 resp = data.client.importConfig("file/config", filename, raw, ignoreFed, tid, i, tempToken)
@@ -942,7 +1024,7 @@ def import_config(data, filename, raw, ignoreFed):
                     if status != "":
                         click.echo("[progress: {:3d}%] {}".format(respData["percentage"], status))
                 i = i + 1
-            #click.echo("--------------------------")
+            # click.echo("--------------------------")
             if resp.status_code == requests.codes.ok:
                 respJson = resp.json()
                 if "data" in respJson:
@@ -960,9 +1042,10 @@ def import_config(data, filename, raw, ignoreFed):
         click.echo("[2] Error: Failed to upload configuration file %s" % click.format_filename(filename))
     click.echo("")
 
+
 @request_import.command("group")
 @click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))
-#@click.option("--raw", default=False, is_flag=True, help="Upload in raw format")
+# @click.option("--raw", default=False, is_flag=True, help="Upload in raw format")
 @click.pass_obj
 def import_group(data, filename):
     """Import group policy."""
@@ -979,7 +1062,7 @@ def import_group(data, filename):
         status = ""
         if tid != "":
             i = 1
-            #click.echo("Info: import task transaction id is {}".format(tid))
+            # click.echo("Info: import task transaction id is {}".format(tid))
             while resp.status_code == requests.codes.partial:
                 time.sleep(2)
                 resp = data.client.importConfig("file/group/config", filename, True, None, tid, i, "")
@@ -991,7 +1074,7 @@ def import_group(data, filename):
                     if status != "":
                         click.echo("[progress: {:3d}%] {}".format(respData["percentage"], status))
                 i = i + 1
-            #click.echo("--------------------------")
+            # click.echo("--------------------------")
             if resp.status_code == requests.codes.ok:
                 respJson = resp.json()
                 if "data" in respJson:
@@ -1009,9 +1092,10 @@ def import_group(data, filename):
         click.echo("[2] Error: Failed to import group policy %s" % click.format_filename(filename))
     click.echo("")
 
+
 @request_import.command('admission')
 @click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))
-#@click.option("--raw", default=False, is_flag=True, help="Upload in raw format")
+# @click.option("--raw", default=False, is_flag=True, help="Upload in raw format")
 @click.pass_obj
 def import_admission(data, filename):
     """Import admission control configuration/rules."""
@@ -1028,7 +1112,7 @@ def import_admission(data, filename):
         status = ""
         if tid != "":
             i = 1
-            #click.echo("Info: import task transaction id is {}".format(tid))
+            # click.echo("Info: import task transaction id is {}".format(tid))
             while resp.status_code == requests.codes.partial:
                 time.sleep(2)
                 resp = data.client.importConfig("file/admission/config", filename, True, None, tid, i, "")
@@ -1040,7 +1124,7 @@ def import_admission(data, filename):
                     if status != "":
                         click.echo("[progress: {:3d}%] {}".format(respData["percentage"], status))
                 i = i + 1
-            #click.echo("--------------------------")
+            # click.echo("--------------------------")
             if resp.status_code == requests.codes.ok:
                 respJson = resp.json()
                 if "data" in respJson:
@@ -1052,11 +1136,14 @@ def import_admission(data, filename):
         if resp.status_code == requests.codes.ok and status == "done":
             click.echo("Imported admission control configuration/rules {}.".format(click.format_filename(filename)))
         else:
-            click.echo("[1] Error: Failed to import admission control configuration/rules {}".format(click.format_filename(filename)))
+            click.echo("[1] Error: Failed to import admission control configuration/rules {}".format(
+                click.format_filename(filename)))
     except IOError:
         click.echo("")
-        click.echo("[2] Error: Failed to import admission control configuration/rules %s" % click.format_filename(filename))
+        click.echo(
+            "[2] Error: Failed to import admission control configuration/rules %s" % click.format_filename(filename))
     click.echo("")
+
 
 @request_import.command('waf')
 @click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))
@@ -1076,7 +1163,7 @@ def import_waf(data, filename):
         status = ""
         if tid != "":
             i = 1
-            #click.echo("Info: import task transaction id is {}".format(tid))
+            # click.echo("Info: import task transaction id is {}".format(tid))
             while resp.status_code == requests.codes.partial:
                 time.sleep(2)
                 resp = data.client.importConfig("file/waf/config", filename, True, None, tid, i, "")
@@ -1088,7 +1175,7 @@ def import_waf(data, filename):
                     if status != "":
                         click.echo("[progress: {:3d}%] {}".format(respData["percentage"], status))
                 i = i + 1
-            #click.echo("--------------------------")
+            # click.echo("--------------------------")
             if resp.status_code == requests.codes.ok:
                 respJson = resp.json()
                 if "data" in respJson:
@@ -1106,10 +1193,12 @@ def import_waf(data, filename):
         click.echo("[2] Error: Failed to import WAF sensors/rules %s" % click.format_filename(filename))
     click.echo("")
 
+
 @request_export.command()
 @click.option("-e", "--enforcer", default="", help="enforcer to collect log from, default is all")
 @click.option("-t", "--tail", default=0, help="number of lines to show from the end of debug logs ")
-@click.option("-f", "--filename", default="/var/neuvector/nv_debug", type=click.Path(dir_okay=False, writable=True, resolve_path=True),\
+@click.option("-f", "--filename", default="/var/neuvector/nv_debug",
+              type=click.Path(dir_okay=False, writable=True, resolve_path=True), \
               help="location to store the ouput")
 @click.pass_obj
 def debug(data, enforcer, tail, filename):
@@ -1128,12 +1217,12 @@ def debug(data, enforcer, tail, filename):
         filter += "f_tail=%d&" % tai
     if filter != "":
         filter = string.rstrip(filter, "&")
-        url += "?"+ filter
+        url += "?" + filter
 
     headers, body = data.client.download(url, None)
     clen = int(headers.get('Content-Length', '-1'))
     ctype, options = multipart.parse_options_header(headers.get("Content-Type"))
-    boundary = options.get('boundary','')
+    boundary = options.get('boundary', '')
     if ctype != 'multipart/form-data' or not boundary:
         click.echo("Unsupported content type.")
         return
@@ -1154,6 +1243,7 @@ def debug(data, enforcer, tail, filename):
 def request_license(data):
     """Request license """
 
+
 @request_license.command()
 @click.option("--name", default="", help="user name")
 @click.option("--email", default="", help="email")
@@ -1161,7 +1251,8 @@ def request_license(data):
 @click.option("--months", default=1, help="duration in months")
 @click.option("--node_limit", default=3, help="number of hosts supported")
 @click.option("--cpu_limit", default=2, help="number of cpus supported")
-@click.option("--multi_cluster_limit", default=0, help="number of managed clusters(excluding primary cluster) supported")
+@click.option("--multi_cluster_limit", default=0,
+              help="number of managed clusters(excluding primary cluster) supported")
 @click.option("--scan", default="disable", help="Allow container scan", type=click.Choice(['enable', 'disable']))
 @click.option("--enforce", default="disable", help="Allow enforce mode", type=click.Choice(['enable', 'disable']))
 @click.pass_obj
@@ -1180,12 +1271,12 @@ def generate(data, name, email, phone, months, node_limit, cpu_limit, multi_clus
     if serverless == "enable":
         serverlessAllowed = True
 
-
-    lc = {"name": name, "email": email, "phone": phone, "months":months,
+    lc = {"name": name, "email": email, "phone": phone, "months": months,
           "node_limit": node_limit, "cpu_limit": cpu_limit, "multi_cluster_limit": multi_cluster_limit,
           "scan": scanAllowed, "enforce": enforceAllowed, "serverless": serverlessAllowed}
     reply = data.client.create("system/license/request", {"license_request": lc})
     click.echo("License code: %s" % reply["license_code"])
+
 
 @request_license.command()
 @click.argument("license")
@@ -1196,6 +1287,7 @@ def load(data, license):
     reply = data.client.create("system/license/update", {"license_key": license})
     if reply != None:
         _display_license(reply["license"]["info"])
+
 
 @request_license.command()
 @click.pass_obj

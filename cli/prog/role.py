@@ -1,15 +1,16 @@
 import click
 
-from cli import cli
-from cli import set
-from cli import create
-from cli import delete
-from cli import show
-import client
-import output
+from prog.cli import cli
+from prog.cli import set
+from prog.cli import create
+from prog.cli import delete
+from prog.cli import show
+from prog import client
+from prog import output
 
 GlobalPermissionOptions = None
 DomainPermissionOptions = None
+
 
 # -- role
 
@@ -32,7 +33,7 @@ def getPermissionOptions(data):
                 option["modify supported"] = False
             pOptions[option["id"]] = option
         GlobalPermissionOptions = pOptions
-        
+
         pOptions = {}
         domain_options = options["domain_options"]
         for option in domain_options:
@@ -49,6 +50,7 @@ def getPermissionOptions(data):
 
         return global_options, domain_options
     return None, None
+
 
 def user_role_permission_display_format(role):
     global GlobalPermissionOptions
@@ -78,14 +80,15 @@ def user_role_permission_display_format(role):
                     w = "N/A"
                 plist.append("{0: <18}  {1: <19}   {2: <20}".format(p["id"], r, w))
         role["permissions"] = "\n".join(plist)
-        
+
+
 def getPermissions(data, permissions):
     global GlobalPermissionOptions
     global DomainPermissionOptions
-    
+
     if GlobalPermissionOptions is None or DomainPermissionOptions is None:
         getPermissionOptions(data)
-    
+
     plist = []
     ops = {"r": "r", "w": "w", "rw": "rw"}
     for permission in permissions:
@@ -109,9 +112,10 @@ def getPermissions(data, permissions):
                 plist.append(p)
         else:
             return None, "invalid permission: {}".format(permission)
-    
+
     return plist, ""
-    
+
+
 def GetUserGlobalRoleOptions(data):
     roles = data.client.show("user_role", "roles", None)
     user_roles = []
@@ -123,7 +127,8 @@ def GetUserGlobalRoleOptions(data):
     if not hasNone:
         user_roles.append("")
     return user_roles
-    
+
+
 @show.group('role', invoke_without_command=True)
 @click.pass_obj
 @click.pass_context
@@ -137,6 +142,7 @@ def show_role(ctx, data):
     columns = ("name", "reserved", "comment")
     click.echo("Roles:")
     output.list(columns, roles)
+
 
 @show_role.command()
 @click.argument("name")
@@ -158,11 +164,12 @@ def detail(data, name):
     _roles.append(role)
     output.list(columns, _roles)
 
+
 @show_role.command()
 @click.pass_obj
 def permissions(data):
     """Show permissions."""
-    
+
     global_options, domain_options = getPermissionOptions(data)
     click.echo("")
     columns = ("id", "view supported", "modify supported")
@@ -172,6 +179,7 @@ def permissions(data):
     if domain_options is not None:
         click.echo("Permissions that are supported in user's domain role(s):")
         output.list(columns, domain_options)
+
 
 # --
 
@@ -192,6 +200,7 @@ def create_role(data, name, comment, permissions):
     else:
         data.client.create("user_role", {"config": role})
 
+
 # --
 
 @set.command('role')
@@ -201,7 +210,7 @@ def create_role(data, name, comment, permissions):
 @click.pass_obj
 def set_role(data, name, comment, permissions):
     """Set local role configuration."""
-    
+
     role = {"name": name}
     if comment is not None:
         role["comment"] = comment
@@ -210,6 +219,7 @@ def set_role(data, name, comment, permissions):
         click.echo(errMsg)
     else:
         data.client.config("user_role", name, {"config": role})
+
 
 # --
 

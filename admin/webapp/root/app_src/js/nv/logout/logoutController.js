@@ -31,9 +31,12 @@
             $rootScope.isFooterReady = false;
             $window.localStorage.setItem("version", version);
             $window.localStorage.setItem("_gpuEnabled", gpuEnabled);
+            $mdToast.hide("undo").then(function () {});
+            $state.go("page.login");
+          } else {
+            $mdToast.hide("undo").then(function () {});
+            $state.go($rootScope.isSUSESSO ? "page.logout" : "page.login");
           }
-          $mdToast.hide("undo").then(function () {});
-          $state.go("page.login");
         })
         .catch(function (err) {
           console.log(err);

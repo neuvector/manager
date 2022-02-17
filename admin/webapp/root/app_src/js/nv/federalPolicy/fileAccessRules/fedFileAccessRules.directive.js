@@ -7,7 +7,7 @@
     function federalPolicyFileAccessRules() {
         return {
             restrict: "E",
-            templateUrl: "/app/views/components/federalPolicy/federal-policy-file-access-rules.html"
+            templateUrl: "app/views/components/federalPolicy/federal-policy-file-access-rules.html"
         }
     }
 

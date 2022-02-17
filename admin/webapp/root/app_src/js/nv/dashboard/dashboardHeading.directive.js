@@ -15,7 +15,7 @@
         scope: {
           category: "=category"
         },
-        templateUrl: "/app/views/components/dashboard-heading.html"
+        templateUrl: "app/views/components/dashboard-heading.html"
       }
     }
 
@@ -25,7 +25,7 @@
         scope: {
           category: "=category"
         },
-        templateUrl: "/app/views/components/new-dashboard-heading.html"
+        templateUrl: "app/views/components/new-dashboard-heading.html"
       }
     }
 })();

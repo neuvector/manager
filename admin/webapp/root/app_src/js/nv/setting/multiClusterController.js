@@ -55,6 +55,7 @@
     let worker = new Array(MAX_WEB_WORKER_CNT);
     worker.fill(null);
     let timer = null;
+    let isSUSESSO = $rootScope.isSUSESSO;
     $scope.demoteWaiting = false;
     $scope.leaveWaiting = false;
 
@@ -536,6 +537,9 @@
       self.onmessage = (event) => {
         let baseUrl = event.srcElement.origin;
         let inputObj = JSON.parse(event.data);
+        if (inputObj.isSUSESSO) {
+          baseUrl = `${inputObj.currUrl.split(inputObj.neuvectorProxy)[0]}${inputObj.neuvectorProxy}`;
+        }
         let apiUrl = `${baseUrl}/${inputObj.apiUrl}`;
         let isGlobalUser = inputObj.isGlobalUser;
         let isMaster = inputObj.isMaster;
@@ -576,7 +580,10 @@
             token: $scope.user.token.token,
             isGlobalUser: true,
             isMaster: $scope.clusters[index].clusterType === FED_ROLES.MASTER,
-            clusterId: $scope.clusters[index].id
+            clusterId: $scope.clusters[index].id,
+            currUrl: window.location.href,
+            isSUSESSO: isSUSESSO ? isSUSESSO : "",
+            neuvectorProxy: PROXY_VALUE
           })
         );
 
@@ -632,7 +639,7 @@
       $scope.isFederal = !$scope.isOrdinary;
       $scope.clusters = fedData.clusters || [];
       $scope.local = fedData.local_rest_info;
-      $rootScope.useProxy = fedData.use_proxy || "";
+      $scope.useProxy = fedData.use_proxy || "";
       if (!($scope.gridOptions && $scope.gridOptions.api)) {
         setGrid($scope.isMaster, $scope.isMember);
       }
@@ -690,7 +697,7 @@
           $scope.clusters = payload.data.clusters || [];
           $scope.isMaster = payload.data.fed_role === FED_ROLES.MASTER;
           $scope.isMember = payload.data.fed_role === FED_ROLES.MEMBER;
-          $rootScope.useProxy = payload.data.use_proxy || "";
+          $scope.useProxy = payload.data.use_proxy || "";
           $rootScope.$broadcast("reloadClusters",$scope.clusters);
           if ($scope.gridOptions && $scope.gridOptions.api) {
             $scope.gridOptions.api.setRowData($scope.clusters);
@@ -829,7 +836,7 @@
             //update the platform info after redirecting
             $http.get(DASHBOARD_SUMMARY_URL).then(function(response) {
               $rootScope.isOpenShift =
-                response.data.summary.platform === OPENSHIFT;
+                response.data.summary.platform === OPENSHIFT || response.data.summary.platform ===  RANCHER;
               $rootScope.summary = response.data.summary;
               $rootScope.hasInitializedSummary = true;
             });
@@ -894,7 +901,7 @@
         controllerAs: "promoteCtl",
         templateUrl: "dialog.promote.html",
         locals: {
-          useProxy: $rootScope.useProxy
+          useProxy: $scope.useProxy
         }
       });
     };
@@ -907,7 +914,7 @@
           templateUrl: "dialog.join.html",
           targetEvent: event,
           locals: {
-            useProxy: $rootScope.useProxy
+            useProxy: $scope.useProxy
           }
         })
         .finally(function() {
@@ -934,7 +941,7 @@
           targetEvent: event,
           locals: {
             isEditable: isEditable,
-            useProxy: $rootScope.useProxy
+            useProxy: $scope.useProxy
           }
         })
         .then(function() {

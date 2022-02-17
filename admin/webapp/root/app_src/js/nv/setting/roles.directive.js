@@ -7,7 +7,7 @@
     function roles() {
         return {
             restrict: "E",
-            templateUrl: "/app/views/customRoles.html"
+            templateUrl: "app/views/customRoles.html"
         }
     }
 

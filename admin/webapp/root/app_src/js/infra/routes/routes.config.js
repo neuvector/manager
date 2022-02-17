@@ -495,6 +495,11 @@
         title: "Login",
         templateUrl: helper.pagePath("login.html"),
       })
+      .state("page.logout", {
+        url: "/logout",
+        title: "Logout",
+        templateUrl: helper.pagePath("logout.html"),
+      })
       .state("page.eula", {
         url: "/eula",
         title: "EULA",

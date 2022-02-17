@@ -7,7 +7,7 @@
     function federalPolicyNetworkRules() {
         return {
             restrict: "E",
-            templateUrl: "/app/views/components/federalPolicy/federal-policy-network-rules.html"
+            templateUrl: "app/views/components/federalPolicy/federal-policy-network-rules.html"
         }
     }
 

@@ -73,7 +73,7 @@
           ) {
             let $state = $injector.get("$state");
             let origin = $location.url();
-            if (origin !== "/page/login") {
+            if (origin !== "/page/login" && origin !== "/page/logout" ) {
               $window.sessionStorage.setItem(
                 "from",
                 JSON.stringify($location.url())
@@ -86,6 +86,8 @@
             $rootScope.isFooterReady = false;
             if ($rootScope.logout) {
               $rootScope.logout(true);
+            } else {
+              $state.go($rootScope.isSUSESSO ? "page.logout" : "page.login");
             }
             console.log("reject back");
             if(rejection.status === 408){

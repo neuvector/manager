@@ -409,7 +409,7 @@ def set_system_new_service_policy_mode(data, mode):
     data.client.config_system(new_service_policy_mode=mode.title())
 
 @set_system_new_service.command("profile_baseline")
-@click.argument('baseline', type=click.Choice(['Default', 'Shield']))
+@click.argument('baseline', type=click.Choice(['basic', 'zero-drift']))
 @click.pass_obj
 def set_system_new_service_profile_baseline(data, baseline):
     """Set system new service profile baseline."""

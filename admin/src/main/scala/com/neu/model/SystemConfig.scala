@@ -21,6 +21,7 @@ case class SystemConfig(
   syslog_status: Option[Boolean] = None,
   syslog_in_json: Option[Boolean] = None,
   new_service_policy_mode: Option[String] = None,
+  new_service_profile_baseline: Option[String] = None,
   // auth_order: Option[Array[String]] = None,
   syslog_categories: Option[Array[String]] = None,
   single_cve_per_syslog: Option[Boolean] = None,

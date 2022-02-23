@@ -124,7 +124,7 @@ test in assembly := {}
 
 Revolver.settings : Seq[sbt.Def.Setting[_]]
 
-//ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
+scalafmtOnCompile := true
 
 assembly / assemblyMergeStrategy := {
   case PathList(ps @ _*) if ps.last endsWith  "io.netty.versions.properties" => MergeStrategy.first

@@ -1512,7 +1512,8 @@
       "TAG": "Tag",
       "RESPONSE_RULE_ID": "Response Rule ID",
       "OCCURRENCES": "Count",
-      "DURATION": "Duration"
+      "DURATION": "Duration",
+      "ZERO_DRIFT": "Zero Drift"
     },
     "COUNT_POSTFIX": "risk reports found",
     "LEVEL": "Level",

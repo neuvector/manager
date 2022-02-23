@@ -1,19 +1,17 @@
 test in assembly := {}
 
-unmanagedResourceDirectories in Compile <++= baseDirectory {
-  base => Seq(base / "webapp", base / "lib")
-}
+unmanagedResourceDirectories in Compile += baseDirectory.value / "webapp"
+
+unmanagedResourceDirectories in Compile += baseDirectory.value / "lib"
 
 excludeFilter in unmanagedResources := HiddenFileFilter || "node_modules*" || "project*" || "target*" || "bower_components*" || "app_src*"
 
 Revolver.settings : Seq[sbt.Def.Setting[_]]
 
-ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
-
-assemblyMergeStrategy in assembly := {
+assembly / assemblyMergeStrategy  := {
   case PathList(ps @ _*) if ps.last endsWith  "io.netty.versions.properties" => MergeStrategy.first
   case x =>
-    val strategy = (assemblyMergeStrategy in assembly).value(x)
+    val strategy = (assembly / assemblyMergeStrategy).value(x)
     if (strategy == MergeStrategy.deduplicate) MergeStrategy.first
     else strategy
 }

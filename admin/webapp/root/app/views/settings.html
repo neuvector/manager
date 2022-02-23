@@ -141,7 +141,7 @@
                     ng-disabled="!isNewServiceModeAuthorized"
                     ng-true-value="'zero-drift'"
                     ng-false-value="'basic'"
-                    ng-click="isSettingFormDirty = true"
+                    ng-click="sysCtrl.changeFieldValue()"
                   />
                   <span class="toggle hand" ng-disabled="!isNewServiceModeAuthorized"></span>
                 </label>

@@ -71,12 +71,13 @@
                 <div>{{displayRole}}</div>
               </div>
               <em
+                ng-hide="hideFrame"
                 class="pull-right fa fa-caret-down"
                 ng-click="toggleCollapse()"
               ></em>
             </div>
           </button>
-          <div class="dropdown-menu setting-options" uib-dropdown-menu>
+          <div class="dropdown-menu setting-options" uib-dropdown-menu ng-hide="hideFrame">
             <div class="user-dropdown-arrow"></div>
             <ul role="menu" aria-labelledby="simple-btn-keyboard-nav">
               <li class="p0">
@@ -141,10 +142,10 @@
                 {{useProxy | uppercase}} Proxy
               </span>
             </label>
-            <em class="fa fa-caret-down text-action text-lg mh-lg"></em>
+            <em  ng-hide="hideFrame" class="fa fa-caret-down text-action text-lg mh-lg"></em>
           </div>
         </button>
-        <div class="dropdown-menu setting-options" uib-dropdown-menu>
+        <div class="dropdown-menu setting-options" uib-dropdown-menu ng-hide="hideFrame">
           <div class="user-dropdown-arrow"></div>
           <ul role="menu" aria-labelledby="simple-btn-keyboard-nav">
             <li

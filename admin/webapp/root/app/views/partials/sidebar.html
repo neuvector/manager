@@ -22,7 +22,7 @@
 
 <div class="aside-inner" ng-controller="SidebarController" >
   <nav sidebar="" sidebar-anyclick-close="" ng-class="{'show-scrollbar': app.layout.asideScrollbar}" class="sidebar">
-    <ul class="nav">
+    <ul class="nav" ng-hide="hideFrame">
       <li ng-if="!item.heading" ng-class="getMenuItemClass(item)" ng-repeat="item in menuItems"
           ng-init="pIndex = $index" ng-include="'sidebar-renderer.html'" ng-click="toggleSubmenuCollapse(pIndex, true)"></li>
     </ul>

@@ -12,9 +12,20 @@
     "$http",
     "$mdToast",
     "$location",
-    "$translate"
+    "$translate",
+    "$timeout"
   ];
-  function LogoutController($window, $state, $rootScope, $http, $mdToast, $location, $translate) {
+  function LogoutController($window, $state, $rootScope, $http, $mdToast, $location, $translate, $timeout) {
+    const rejectBack = function() {
+      if ($rootScope.isSUSESSO) {
+        $rootScope.hideFrame = true;
+        $timeout(() => {
+          alert(`${$translate.instant("logout.SIGN_OUT")}\n${$translate.instant("logout.SIGN_OUT_DESC")}`);
+        }, 500);
+      } else {
+        $state.go("page.login");
+      }
+    };
     const doLogoout = function(isTimeout) {
       const user = $rootScope.user ? $rootScope.user.token.username : null;
       $http
@@ -35,13 +46,13 @@
             $state.go("page.login");
           } else {
             $mdToast.hide("undo").then(function () {});
-            $state.go($rootScope.isSUSESSO ? "page.logout" : "page.login");
+            rejectBack();
           }
         })
         .catch(function (err) {
           console.log(err);
           $mdToast.hide("undo").then(function () {});
-          $state.go("page.login");
+          rejectBack();
         });
     };
     $rootScope.logout = function (isTimeout) {

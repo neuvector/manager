@@ -59,7 +59,7 @@ case class SystemConfig4DashboardWrap(
 
 case class SystemRequestContent(policy_mode: Option[String])
 
-case class ServiceConfigParam(policy_mode: Option[String], services: Option[Array[String]], not_scored: Option[Boolean])
+case class ServiceConfigParam(policy_mode: Option[String], baseline_profile: Option[String], services: Option[Array[String]], not_scored: Option[Boolean])
 
 case class ServiceConfig(config: ServiceConfigParam)
 

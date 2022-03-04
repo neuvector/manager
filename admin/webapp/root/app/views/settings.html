@@ -129,11 +129,13 @@
                   />{{'topbar.mode.ENFORCE' | translate}}
                 </label>
               </div>
+            </div>
+            <div class="col-sm-8 mt-lg">
               <div
                 class="radio-inline c-radio pl-sm md-switch2"
                 ng-class="inputMaskDisabledClass"
               >
-                <label class="text-muted">
+                <label class="text-gray-label">
                   {{'audit.gridHeader.ZERO_DRIFT' | translate}}
                   <input
                     type="checkbox"
@@ -145,6 +147,9 @@
                   />
                   <span class="toggle hand" ng-disabled="!isNewServiceModeAuthorized"></span>
                 </label>
+              </div>
+              <div class="text-muted text-sm mb-lg pull-right mr-lg">
+                {{'setting.ZERODRIFT_COMMENT' | translate}}
               </div>
             </div>
           </div>

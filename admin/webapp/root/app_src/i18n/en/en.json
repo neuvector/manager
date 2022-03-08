@@ -2723,6 +2723,7 @@
     "ENABLED": "Enabled",
     "DISABLED": "Disabled",
     "REG_PROXY": "Proxy",
+    "PROXY_HINT": "Proxy for accessing external services (such as webhooks, registry servers). Proxy is also supported for communications among NeuVector clusters in the same federation when direct access between clusters is not allowed.",
     "REG_HTTP_PROXY": "Http Proxy",
     "REG_HTTPS_PROXY": "Https Proxy",
     "XFF_MATCH": "X-Forwarded-For based policy match",

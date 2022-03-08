@@ -444,7 +444,6 @@
         $scope.selectedCount = 0;
         if (isCheckAll) {
           $scope.gridGroup.api.forEachNodeAfterFilter(node => {
-            console.log(node);
             node.data.checked = true;
             $scope.selectedCount++;
           });
@@ -496,7 +495,6 @@
             return {"policy_mode": params.data.policy_mode, "baseline_profile": params.data.baseline_profile};
           },
           cellRenderer: function(params) {
-            console.log(params);
             let mode = "";
             let zeroDrift = params.value.baseline_profile === "zero-drift";
             if (params.value.policy_mode) {
@@ -2398,7 +2396,6 @@
           "general.NO_ROWS"
         )}</span>`,
         isRowSelectable: function(node) {
-          console.log(node.data)
           return node.data
             ? node.data.cfg_type === CFG_TYPE.CUSTOMER || node.data.cfg_type === CFG_TYPE.LEARNED
             : false;
@@ -3016,7 +3013,6 @@
           let data = {
             config: { services: serviceList, policy_mode: mode.mode, baseline_profile: mode.zeroDrift }
           };
-          console.log('data', data);
           data = pako.gzip(JSON.stringify(data));
           data = new Blob([data], {type: 'application/gzip'});
           let config = {

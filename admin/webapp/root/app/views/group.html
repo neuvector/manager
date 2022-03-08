@@ -46,15 +46,17 @@
                     </div>
                 </li>
                 <li ng-if="!noChecked" class="policy-top-button">
-                  <div class="button" ng-if="isIncludingNoMode" ng-class="{'disabled': isIncludingNoMode}">
+                  <!-- <div class="button" ng-if="isIncludingNoMode" ng-class="{'disabled': isIncludingNoMode}">
                     <div tooltip-placement="right" uib-tooltip-html="disabledSwitchModeHtml" tooltip-class="customClass" tooltip-enable="{{isIncludingNoMode}}">
-                      <em class="fa fa-plus-circle mr-sm text-action" aria-hidden="true"></em>
+                      <em class="fa fa-caret-square-o-down mr-sm text-action" aria-hidden="true"></em>
                       {{'service.SWITCH_MODE' | translate | capitalizeEach }}
                     </div>
-                  </div>
-                  <div class="button" ng-if="!isIncludingNoMode" ng-click="openSwitchModeDialog()">
-                    <em class="fa fa-plus-circle mr-sm text-action" aria-hidden="true"></em>
-                    {{'service.SWITCH_MODE' | translate | capitalizeEach }}
+                  </div> -->
+                  <div class="button" ng-click="openSwitchModeDialog()">
+                    <div tooltip-placement="right" uib-tooltip-html="disabledSwitchModeHtml" tooltip-class="customClass" tooltip-enable="{{isIncludingNoMode}}">
+                      <em class="fa fa-caret-square-o-down mr-sm text-action" aria-hidden="true"></em>
+                      {{'service.SWITCH_MODE' | translate | capitalizeEach }}
+                    </div>
                   </div>
                 </li>
             </ul>
@@ -227,23 +229,17 @@
                 <em class="fa fa-lg fa-plus text-action mr-sm"></em>
               </div>
               <div class="pull-left mr-lg" style="margin-top: 4px">
-                <div
-                class="radio-inline c-radio pl-sm md-switch2"
+                <span
+                class="radio-inline c-radio pl-sm"
                 ng-class="inputMaskDisabledClass"
+                ng-show="group.baseline_profile === 'zero-drift'"
                 >
+                  <md-icon md-svg-src="app/img/icons/anchor.svg" 
+                       aria-label="Zero Drift"></md-icon>
                   <label class="text-gray-label">
                     {{'audit.gridHeader.ZERO_DRIFT' | translate}}
-                    <input
-                      type="checkbox"
-                      onclick="return false;"
-                      ng-disabled="!group.baseline_profile"
-                      ng-model="group.baseline_profile"
-                      ng-true-value="'zero-drift'"
-                      ng-false-value="'basic'"
-                    />
-                    <span class="toggle hand" ng-disabled="!isNewServiceModeAuthorized"></span>
                   </label>
-                </div>
+                </span>
               </div>
             </div>
             <div ag-grid="gridProfile" class="ag-grid" style="width: 100%;"
@@ -497,6 +493,8 @@
               class="radio-inline c-radio pl-sm md-switch2"
               ng-class="inputMaskDisabledClass"
               >
+                <md-icon md-svg-src="app/img/icons/anchor.svg" 
+                aria-label="Zero Drift"></md-icon>
                 <label class="text-gray-label">
                   {{'audit.gridHeader.ZERO_DRIFT' | translate}}
                   <input

@@ -68,6 +68,7 @@
             token.roles = $rootScope.user.roles;
             $rootScope.user.token = token.token;
             $window.sessionStorage.setItem("token", JSON.stringify(token));
+            $rootScope.isSUSESSO = response.data.is_suse_authenticated;
 
             $http
               .get(CONFIG_URL)
@@ -81,7 +82,7 @@
               .get(DASHBOARD_SUMMARY_URL)
               .then(function(response) {
                 $rootScope.isOpenShift =
-                  response.data.summary.platform === OPENSHIFT;
+                  response.data.summary.platform === OPENSHIFT || response.data.summary.platform ===  RANCHER;
                 $rootScope.summary = response.data.summary;
                 $rootScope.hasInitializedSummary = true;
               })

@@ -24,7 +24,7 @@
   ) {
     return {
       restrict: "EA",
-      templateUrl: "/app/views/components/curtain-panel.html",
+      templateUrl: "app/views/components/curtain-panel.html",
       scope: {
         htmlContent: "@",
         dimension: "@",

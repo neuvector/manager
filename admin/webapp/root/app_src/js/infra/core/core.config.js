@@ -57,7 +57,9 @@
       $q,
       $location,
       $window,
-      $rootScope
+      $rootScope,
+      $translate,
+      $timeout
     ) {
       return {
         response: function(response) {
@@ -73,7 +75,7 @@
           ) {
             let $state = $injector.get("$state");
             let origin = $location.url();
-            if (origin !== "/page/login") {
+            if (origin !== "/page/login" && origin !== "/page/logout" ) {
               $window.sessionStorage.setItem(
                 "from",
                 JSON.stringify($location.url())
@@ -86,6 +88,15 @@
             $rootScope.isFooterReady = false;
             if ($rootScope.logout) {
               $rootScope.logout(true);
+            } else {
+              if ($rootScope.isSUSESSO) {
+                $rootScope.hideFrame = true;
+                $timeout(() => {
+                  alert(`${$translate.instant("logout.SIGN_OUT")}\n${$translate.instant("logout.SIGN_OUT_DESC")}`);
+                }, 500);
+              } else {
+                $state.go("page.login");
+              }
             }
             console.log("reject back");
             if(rejection.status === 408){

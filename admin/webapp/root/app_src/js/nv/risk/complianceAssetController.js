@@ -943,11 +943,11 @@
               new Set()
             )).join(" ");
 
-            compliance.images = Array.from(filteredWorkload
+            compliance.images = compliance.images.concat(Array.from(filteredWorkload
             .reduce(
               (acc, curr) => acc.add(curr.image),
               new Set()
-            )).join(" ");
+            )).join(" "));
             console.log("compliance.workloads: ", compliance.workloads, "compliance.services", compliance.services, "compliance.domains:", compliance.domains, "compliance.images:", compliance.images);
           }
           return compliance;

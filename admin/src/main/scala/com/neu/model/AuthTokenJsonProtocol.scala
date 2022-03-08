@@ -27,7 +27,7 @@ object AuthTokenJsonProtocol extends DefaultJsonProtocol {
   implicit val selfWrapFormat: RootJsonFormat[SelfWrap]         = jsonFormat2(SelfWrap)
   implicit val userWrapFormat: RootJsonFormat[UserWrap]         = jsonFormat1(UserWrap)
   implicit val userTokenFormat: RootJsonFormat[UserToken]       = jsonFormat4(UserToken)
-  implicit val userTokenNewFormat: RootJsonFormat[UserTokenNew] = jsonFormat4(UserTokenNew)
+  implicit val userTokenNewFormat: RootJsonFormat[UserTokenNew] = jsonFormat5(UserTokenNew)
 
   implicit val userProfileFormat: RootJsonFormat[UserProfile]         = jsonFormat11(UserProfile)
   implicit val userProfileWrapFormat: RootJsonFormat[UserProfileWrap] = jsonFormat1(UserProfileWrap)

@@ -71,6 +71,8 @@
       },
     };
 
+    let isSUSESSO = $rootScope.isSUSESSO;
+
     $scope.isShowingScore = Utils.isAuthorized(
       $scope.user.roles,
       resource.seeScore
@@ -3868,7 +3870,13 @@
         self.onmessage = (event) => {
           let baseUrl = event.srcElement.origin;
           let inputObj = JSON.parse(event.data);
+          console.log("inputObj.isSUSESSO: ", inputObj.isSUSESSO);
+          if (inputObj.isSUSESSO) {
+            baseUrl = `${inputObj.currUrl.split(inputObj.neuvectorProxy)[0]}${inputObj.neuvectorProxy}`;
+            console.log("Rewritten base url:", baseUrl);
+          }
           let apiUrl = `${baseUrl}/${inputObj.apiUrl}`;
+          console.log("Notification API Url:", apiUrl);
           let domain = inputObj.domain;
           let query = domain ? `?domain=${encodeURIComponent(domain)}` : "";
           let xhttp = new XMLHttpRequest();
@@ -3894,6 +3902,9 @@
         self.onmessage = (event) => {
           let baseUrl = event.srcElement.origin;
           let inputObj = JSON.parse(event.data);
+          if (inputObj.isSUSESSO) {
+            baseUrl = `${inputObj.currUrl.split(inputObj.neuvectorProxy)[0]}${inputObj.neuvectorProxy}`;
+          }
           let apiUrl = `${baseUrl}/${inputObj.apiUrl}`;
           let isGlobalUser = inputObj.isGlobalUser;
           let query = isGlobalUser ? `?isGlobalUser=${isGlobalUser.toString()}` : "?isGlobalUser=false";
@@ -3920,6 +3931,9 @@
         self.onmessage = (event) => {
           let baseUrl = event.srcElement.origin;
           let inputObj = JSON.parse(event.data);
+          if (inputObj.isSUSESSO) {
+            baseUrl = `${inputObj.currUrl.split(inputObj.neuvectorProxy)[0]}${inputObj.neuvectorProxy}`;
+          }
           let apiUrl = `${baseUrl}/${inputObj.apiUrl}`;
           let isGlobalUser = inputObj.isGlobalUser;
           let exposures = inputObj.exposures;
@@ -3989,7 +4003,10 @@
           $scope.worker.postMessage(
             JSON.stringify({
               apiUrl: DASHBOARD_NOTIFICATIONS_URL,
-              token: $scope.user.token.token
+              token: $scope.user.token.token,
+              currUrl: window.location.href,
+              isSUSESSO: isSUSESSO ? isSUSESSO : "",
+              neuvectorProxy: PROXY_VALUE
             })
           );
           $scope.worker.onmessage = (event) => {
@@ -4029,7 +4046,10 @@
             JSON.stringify({
               apiUrl: DASHBOARD_DETAILS_URL,
               token: $scope.user.token.token,
-              isGlobalUser: $scope.isGlobalUser
+              isGlobalUser: $scope.isGlobalUser,
+              currUrl: window.location.href,
+              isSUSESSO: isSUSESSO ? isSUSESSO : "",
+              neuvectorProxy: PROXY_VALUE
             })
           );
           $scope.worker2.onmessage = (event) => {
@@ -4059,8 +4079,11 @@
                 egress: scoreData.egress
               },
               apiUrl: CONVERSATION_HISTORY_URL,
+              currUrl: window.location.href,
               token: $scope.user.token.token,
-              isGlobalUser: $scope.isGlobalUser
+              isGlobalUser: $scope.isGlobalUser,
+              isSUSESSO: isSUSESSO ? isSUSESSO : "",
+              neuvectorProxy: PROXY_VALUE
             })
           );
           $scope.worker3.onmessage = (event) => {
@@ -4356,7 +4379,7 @@
               isGlobalUser: $scope.isGlobalUser
             },
             controller: ImproveScoreController,
-            templateUrl: "/app/views/components/improve-score-modal.html",
+            templateUrl: "app/views/components/improve-score-modal.html",
             controllerAs: "ImpvCtrl",
             targetEvent: event,
           })

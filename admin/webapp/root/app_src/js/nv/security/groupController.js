@@ -444,6 +444,7 @@
         $scope.selectedCount = 0;
         if (isCheckAll) {
           $scope.gridGroup.api.forEachNodeAfterFilter(node => {
+            console.log(node);
             node.data.checked = true;
             $scope.selectedCount++;
           });
@@ -491,16 +492,27 @@
         {
           headerName: $translate.instant("group.gridHeader.POLICY_MODE"),
           field: "policy_mode",
+          valueGetter: function(params) {
+            return {"policy_mode": params.data.policy_mode, "baseline_profile": params.data.baseline_profile};
+          },
           cellRenderer: function(params) {
+            console.log(params);
             let mode = "";
-            if (params.value) {
-              mode = Utils.getI18Name(params.value);
-              let labelCode = colourMap[params.value];
+            let zeroDrift = params.value.baseline_profile === "zero-drift";
+            if (params.value.policy_mode) {
+              mode = Utils.getI18Name(params.value.policy_mode);
+              let labelCode = colourMap[params.value.policy_mode];
               if (!labelCode) return null;
-              else
-                return `<span class="label label-fs label-${labelCode}">${$sanitize(
+              else {
+                let modeLabel = `<span class="label label-fs label-${labelCode}">${$sanitize(
                   mode
                 )}</span>`;
+                if (zeroDrift)
+                  return modeLabel + `<md-icon md-svg-src="app/img/icons/anchor.svg" 
+                                        aria-label="Zero Drift"></md-icon>`;
+                else
+                  return modeLabel;
+              };
             } else return null;
           },
           width: 100,

@@ -4,6 +4,7 @@
     angular
         .module('app.core')
         .filter('capitalize', capitalize)
+        .filter('capitalizeEach', capitalizeEach)
         .filter('shortenName', shortenName)
         .filter('bytes', bytes)
         .filter('bytesBy1000', bytesBy1000)
@@ -16,6 +17,12 @@
     function capitalize() {
       return function(word) {
         return (!!word) ? `${word.charAt(0).toUpperCase()}${word.substring(1).toLowerCase()}` : "";
+      }
+    }
+
+    function capitalizeEach() {
+      return function(sentence) {
+        return sentence.split(" ").map(w => capitalize()(w)).join(" ");
       }
     }
 

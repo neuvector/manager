@@ -45,6 +45,18 @@
                         {{'role.ADD' | translate}}
                     </div>
                 </li>
+                <li ng-if="!noChecked" class="policy-top-button">
+                  <div class="button" ng-if="isIncludingNoMode" ng-class="{'disabled': isIncludingNoMode}">
+                    <div tooltip-placement="right" uib-tooltip-html="disabledSwitchModeHtml" tooltip-class="customClass" tooltip-enable="{{isIncludingNoMode}}">
+                      <em class="fa fa-plus-circle mr-sm text-action" aria-hidden="true"></em>
+                      {{'service.SWITCH_MODE' | translate | capitalizeEach }}
+                    </div>
+                  </div>
+                  <div class="button" ng-if="!isIncludingNoMode" ng-click="openSwitchModeDialog()">
+                    <em class="fa fa-plus-circle mr-sm text-action" aria-hidden="true"></em>
+                    {{'service.SWITCH_MODE' | translate | capitalizeEach }}
+                  </div>
+                </li>
             </ul>
         </div>
         <div ng-if="!noChecked" class="pull-right mt-sm mr"
@@ -55,54 +67,6 @@
              <label class="text-gray-label" ng-class="{'disabled': isNotAble2SwitchScorable}" style="margin-left: -15px;">{{"group.SWITCH_SCORABLE" | translate | uppercase}}</label>
            </div>
         </div>
-        <div ng-if="!noChecked" class="pull-right" style="margin-right: 20px;">
-          <div class="mt-sm" ng-if="isIncludingNoMode">
-            <div tooltip-placement="right" uib-tooltip-html="disabledSwitchModeHtml" tooltip-class="customClass" tooltip-enable="{{isIncludingNoMode}}">
-              <label class="text-gray-label" ng-class="{'disabled': isIncludingNoMode}">{{'service.SWITCH_MODE' | translate}}</label>
-              <em class="fa fa-caret-down text-action" ng-class="{'disabled': isIncludingNoMode}"/>
-            </div>
-          </div>
-          <div class="mt-sm" ng-if="!isIncludingNoMode" ng-click="openSwitchModeDialog()">
-            <div>
-              <label class="text-gray-label hand">{{'service.SWITCH_MODE' | translate}}</label>
-              <em class="fa fa-caret-down text-action" ng-click="toggleCollapse()"/>
-            </div>
-          </div>
-        </div>
-        <!-- <div ng-if="!noChecked" class="pull-right" style="margin-right: 20px;">
-          <div class="mt-sm" ng-if="isIncludingNoMode">
-            <div tooltip-placement="right" uib-tooltip-html="disabledSwitchModeHtml" tooltip-class="customClass" tooltip-enable="{{isIncludingNoMode}}">
-              <label class="text-gray-label" ng-class="{'disabled': isIncludingNoMode}">{{'service.SWITCH_MODE' | translate}}</label>
-              <em class="fa fa-caret-down text-action" ng-class="{'disabled': isIncludingNoMode}"/>
-            </div>
-          </div>
-          <div uib-dropdown dropdown-append-to-body class="mt-sm" ng-if="!isIncludingNoMode">
-            <div uib-dropdown-toggle>
-              <div>
-                <label class="text-gray-label hand">{{'service.SWITCH_MODE' | translate}}</label>
-                <em class="fa fa-caret-down text-action" ng-click="toggleCollapse()"/>
-              </div>
-            </div>
-            <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
-              <li role="menuitem">
-                <a ng-click="switchServiceMode('Discover')">
-                  <em class="fa fa-binoculars fa-fw text-discover mr-sm"></em>{{'enum.DISCOVER' |
-                                                                              translate}}
-                </a>
-              </li>
-              <li role="menuitem">
-                <a ng-click="switchServiceMode('Monitor')">
-                  <em class="fa fa-bell fa-fw text-monitor mr-sm"></em>{{'enum.MONITOR' | translate}}
-                </a>
-              </li>
-              <li class="menuitem">
-                <a type="button" ng-click="switchServiceMode('Protect')">
-                  <em class="fa fa-shield fa-fw text-protect mr-sm"></em>{{'enum.PROTECT' | translate}}
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div> -->
         <div ng-if="!noChecked" class="pull-right" style="margin-right: 20px;"
              ng-show="isWriteGroupAuthorized">
           <div uib-dropdown dropdown-append-to-body class="mt-sm">
@@ -261,6 +225,25 @@
                    ng-show="isGroupRuleAddable"
                    ng-click="addProfile()">
                 <em class="fa fa-lg fa-plus text-action mr-sm"></em>
+              </div>
+              <div class="pull-left mr-lg" style="margin-top: 4px">
+                <div
+                class="radio-inline c-radio pl-sm md-switch2"
+                ng-class="inputMaskDisabledClass"
+                >
+                  <label class="text-gray-label">
+                    {{'audit.gridHeader.ZERO_DRIFT' | translate}}
+                    <input
+                      type="checkbox"
+                      onclick="return false;"
+                      ng-disabled="!group.baseline_profile"
+                      ng-model="group.baseline_profile"
+                      ng-true-value="'zero-drift'"
+                      ng-false-value="'basic'"
+                    />
+                    <span class="toggle hand" ng-disabled="!isNewServiceModeAuthorized"></span>
+                  </label>
+                </div>
               </div>
             </div>
             <div ag-grid="gridProfile" class="ag-grid" style="width: 100%;"
@@ -435,7 +418,7 @@
         <form name="switchModeForm" ng-submit="$event.preventDefault()" novalidate="" class="form-validate" style="overflow: visible">
           <md-toolbar>
             <div class="md-toolbar-tools">
-              <h2 class="text-dark">{{'service.SWITCH_MODE' | translate}}</h2>
+              <h2 class="text-dark">{{'service.SWITCH_MODE' | translate | capitalizeEach}}</h2>
               <span flex></span>
               <md-button class="md-icon-button" ng-click="cancel()">
                 <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>

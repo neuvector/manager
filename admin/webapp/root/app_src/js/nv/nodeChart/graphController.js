@@ -1213,7 +1213,7 @@
               activeSessions:
                 model.group && model.group.startsWith("container"),
               sniff:
-                model.group &&
+                model.group && model.cap_sniff &&
                 (model.group.startsWith("container") ||
                   model.group.startsWith("mesh")),
               quarantine:

@@ -29,7 +29,7 @@
     const doLogoout = function(isTimeout) {
       const user = $rootScope.user ? $rootScope.user.token.username : null;
       $http
-        .delete("/auth")
+        .delete(LOGIN_URL)
         .then(function (response) {
           let version = $window.localStorage.getItem("version");
           let gpuEnabled = $window.localStorage.getItem("_gpuEnabled");

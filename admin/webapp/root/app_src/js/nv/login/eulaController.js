@@ -19,7 +19,7 @@
       }
 
       $scope.accept = function () {
-        $http.post('/eula', {accepted: true}).then(function () {
+        $http.post(EULA_URL, {accepted: true}).then(function () {
           $state.go('app.dashboard');
         }).catch(function(err){
           console.warn(err);
@@ -32,8 +32,8 @@
       };
 
       $scope.deny = function () {
-        $http.post('/eula', {accepted: false}).then(function () {
-          $http.delete('/auth').then(function () {
+        $http.post(EULA_URL, {accepted: false}).then(function () {
+          $http.delete(LOGIN_URL).then(function () {
             $window.localStorage.clear();
             $rootScope.user = null;
             $state.go('page.login');

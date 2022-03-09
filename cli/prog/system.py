@@ -160,7 +160,9 @@ def showLocalSystemConfig(data, scope):
     if "auth_order" in conf:
         column_map += (("auth_order", "Authentication order"),)
     if "auth_by_platform" in conf:
-        column_map += (("auth_by_platform", "Authentication by OpenShift"),)
+        column_map += (("auth_by_platform", "Authentication by platform(Rancher or OpenShift)"),)
+    if "rancher_ep" in conf:
+        column_map += (("rancher_ep", "Rancher endpoint url"),)
     if "configured_internal_subnets" in conf:
         column_map += (("configured_internal_subnets", "Configured internal subnets"),)
     if "cluster_name" in conf:
@@ -581,6 +583,23 @@ def set_system_auth_openshift(data, status):
         data.client.config_system(auth_by_platform=True)
     else:
         data.client.config_system(auth_by_platform=False)
+
+@set_system.command("auth_platform")
+@click.argument('status', type=click.Choice(['enable', 'disable']))
+@click.pass_obj
+def set_system_auth_platform(data, status):
+    """Enable/disable authentication by platform(Rancher or OpenShift)"""
+    if status == 'enable':
+        data.client.config_system(auth_by_platform=True)
+    else:
+        data.client.config_system(auth_by_platform=False)
+
+@set_system.command("rancher_ep")
+@click.argument('url')
+@click.pass_obj
+def set_system_rancher_ep(data, url):
+    """Rancher endpoint url"""
+    data.client.config_system(rancher_ep=url)
 
 @set_system.command("cluster_name")
 @click.argument('name')

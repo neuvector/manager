@@ -179,6 +179,10 @@ def showLocalSystemConfig(data, scope):
         column_map += (("registry_https_proxy", "HTTPS Proxy"),)
     if "xff_enabled" in conf:
         column_map += (("xff_enabled", "Enable xff based policy match"),)
+    if "net_service_status" in conf:
+        column_map += (("net_service_status", "Enable Network Service Policy Mode"),)
+    if "net_service_policy_mode" in conf:
+        column_map += (("net_service_policy_mode", "Network Service Policy Mode"),)
 
     _show_system_setting_display_format(conf)
     output.show_with_map(column_map, conf)
@@ -630,6 +634,28 @@ def set_system_xff_enabled_status(data, status):
         data.client.config_system(xff_enabled=True)
     else:
         data.client.config_system(xff_enabled=False)
+
+@set_system.group('net_service')
+@click.pass_obj
+def set_system_net_service(data):
+    """Set global network service configuration"""
+
+@set_system_net_service.command("status")
+@click.argument('status', type=click.Choice(['enable', 'disable']))
+@click.pass_obj
+def set_system_net_service_status(data, status):
+    """Enable/disable global network service"""
+    if status == 'enable':
+        data.client.config_system(net_service_status=True)
+    else:
+        data.client.config_system(net_service_status=False)
+
+@set_system_net_service.command("policy_mode")
+@click.argument('mode', type=click.Choice(['discover', 'monitor', 'protect']))
+@click.pass_obj
+def set_system_net_service_policy_mode(data, mode):
+    """Set system global network service policy mode."""
+    data.client.config_system(net_service_policy_mode=mode.title())
 
 @set_system.group("registry")
 @click.pass_obj

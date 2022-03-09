@@ -21,7 +21,8 @@
     "dlpSensorsService",
     "$controller",
     "$sanitize",
-    "AuthorizationFactory"
+    "AuthorizationFactory",
+    "$filter"
   ];
   function DLPSensorsController(
     $rootScope,
@@ -41,7 +42,8 @@
     dlpSensorsService,
     $controller,
     $sanitize,
-    AuthorizationFactory
+    AuthorizationFactory,
+    $filter
   ) {
     $scope.isSupported = false;
 
@@ -284,7 +286,7 @@
       rowNode = $scope.gridOptions.api.getDisplayedRowAtIndex(index4delete);
       rowNode.setSelected(true);
       let confirmBox =
-        $translate.instant("dlp.msg.REMOVE_CFM") + $sanitize(sensor.name);
+        $translate.instant("dlp.msg.REMOVE_CFM") + $sanitize($filter("shorten2")(sensor.name, 30));
       Alertify.confirm(confirmBox).then(
         function toOK() {
           $http
@@ -400,7 +402,7 @@
       rowNode = $scope.gridOptions.api.getDisplayedRowAtIndex(index4edit);
       rowNode.setSelected(true);
       let confirmBox =
-        $translate.instant("dlp.msg.REMOVE_CFM") + $sanitize(rule.name);
+        $translate.instant("dlp.msg.REMOVE_CFM") + $sanitize($filter("shorten2")(rule.name, 30));
       Alertify.confirm(confirmBox).then(
         function toOK() {
           let payload = {
@@ -692,6 +694,7 @@
       };
 
       $scope.addUpdateRule = function() {
+        console.log("$scope.editingRule.ruleName", $scope.editingRule.ruleName);
         if ($scope.isEdit) {
           let indexOfRule = selectedSensor.rules.findIndex(rule => rule.id === selectedRule.id);
           console.log("indexOfRule", indexOfRule);
@@ -701,6 +704,7 @@
             patterns: $scope.editingRule.rulePatterns
           });
         } else {
+          selectedSensor.rules = [];
           selectedSensor.rules.push({
             name: $scope.editingRule.ruleName,
             patterns: $scope.editingRule.rulePatterns

@@ -71,12 +71,13 @@
                 <div>{{displayRole}}</div>
               </div>
               <em
+                ng-hide="hideFrame"
                 class="pull-right fa fa-caret-down"
                 ng-click="toggleCollapse()"
               ></em>
             </div>
           </button>
-          <div class="dropdown-menu setting-options" uib-dropdown-menu>
+          <div class="dropdown-menu setting-options" uib-dropdown-menu ng-hide="hideFrame">
             <div class="user-dropdown-arrow"></div>
             <ul role="menu" aria-labelledby="simple-btn-keyboard-nav">
               <li class="p0">
@@ -136,15 +137,11 @@
               tooltip-placement="auto"
               tooltip-enable="{{selectedCluster.name.length >= 20}}"
               >{{selectedCluster.name| shortenName: 20}}
-              <span ng-if="useProxy" class="label" ng-class="{'label-info': useProxy==='http', 'label-success': useProxy==='https'}"
-                style="position: absolute; right: 0px; top: -10px; font-size: 9px;">
-                {{useProxy | uppercase}} Proxy
-              </span>
             </label>
-            <em class="fa fa-caret-down text-action text-lg mh-lg"></em>
+            <em  ng-hide="hideFrame" class="fa fa-caret-down text-action text-lg mh-lg"></em>
           </div>
         </button>
-        <div class="dropdown-menu setting-options" uib-dropdown-menu>
+        <div class="dropdown-menu setting-options" uib-dropdown-menu ng-hide="hideFrame">
           <div class="user-dropdown-arrow"></div>
           <ul role="menu" aria-labelledby="simple-btn-keyboard-nav">
             <li
@@ -186,10 +183,6 @@
           tooltip-class="word-break"
           tooltip-enable="{{managedCluster.name.length >= 20}}"
           >{{managedCluster.name | shortenName: 20}}
-          <span ng-if="useProxy" class="label" ng-class="{'label-info': useProxy==='http', 'label-success': useProxy==='https'}"
-            style="position: absolute; right: 0px; top: -10px; font-size: 9px;">
-            {{useProxy | uppercase}} Proxy
-          </span>
         </label>
       </div>
     </div>

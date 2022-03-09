@@ -57,7 +57,9 @@
       $q,
       $location,
       $window,
-      $rootScope
+      $rootScope,
+      $translate,
+      $timeout
     ) {
       return {
         response: function(response) {
@@ -87,7 +89,14 @@
             if ($rootScope.logout) {
               $rootScope.logout(true);
             } else {
-              $state.go($rootScope.isSUSESSO ? "page.logout" : "page.login");
+              if ($rootScope.isSUSESSO) {
+                $rootScope.hideFrame = true;
+                $timeout(() => {
+                  alert(`${$translate.instant("logout.SIGN_OUT")}\n${$translate.instant("logout.SIGN_OUT_DESC")}`);
+                }, 500);
+              } else {
+                $state.go("page.login");
+              }
             }
             console.log("reject back");
             if(rejection.status === 408){

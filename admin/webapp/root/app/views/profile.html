@@ -203,7 +203,7 @@
                 type="password"
                 name="confirm_match"
                 ng-trim="false"
-                ng-model="passwordMatch"
+                ng-model="newPassword.match"
                 ui-validate="'$value==user.new_password'"
                 maxlength="{{'general.FILTER_MAX_LEN' | translate}}"
                 ui-validate-watch="'user.new_password'"

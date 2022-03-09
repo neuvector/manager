@@ -22,7 +22,8 @@
     "$controller",
     "$sanitize",
     "FileSaver",
-    "AuthorizationFactory"
+    "AuthorizationFactory",
+    "$filter"
   ];
   function WAFSensorsController(
     $rootScope,
@@ -43,7 +44,8 @@
     $controller,
     $sanitize,
     FileSaver,
-    AuthorizationFactory
+    AuthorizationFactory,
+    $filter
   ) {
     $scope.isSupported = false;
 
@@ -286,7 +288,7 @@
       rowNode = $scope.gridOptions.api.getDisplayedRowAtIndex(index4delete);
       rowNode.setSelected(true);
       let confirmBox =
-        $translate.instant("waf.msg.REMOVE_CFM") + $sanitize(sensor.name);
+        $translate.instant("waf.msg.REMOVE_CFM") + $sanitize($filter("shorten2")(sensor.name, 30));
       Alertify.confirm(confirmBox).then(
         function toOK() {
           $http
@@ -402,7 +404,7 @@
       rowNode = $scope.gridOptions.api.getDisplayedRowAtIndex(index4edit);
       rowNode.setSelected(true);
       let confirmBox =
-        $translate.instant("waf.msg.REMOVE_CFM") + $sanitize(rule.name);
+        $translate.instant("waf.msg.REMOVE_CFM") + $sanitize($filter("shorten2")(rule.name, 30));
       Alertify.confirm(confirmBox).then(
         function toOK() {
           let payload = {
@@ -755,6 +757,7 @@
             patterns: $scope.editingRule.rulePatterns
           });
         } else {
+          selectedSensor.rules = [];
           selectedSensor.rules.push({
             name: $scope.editingRule.ruleName,
             patterns: $scope.editingRule.rulePatterns

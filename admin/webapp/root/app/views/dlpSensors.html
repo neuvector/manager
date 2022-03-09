@@ -42,7 +42,7 @@
         <div class="panel-heading panel-default clearfix">
             <div class="panel-title pull-left mt-sm">
                 <label class="panel-text-title mt-sm">
-                    {{sensor.name}}
+                    {{sensor.name | shorten2: 30}}
                 </label>
             </div>
         </div>
@@ -84,7 +84,7 @@
                                     <md-input-container class="md-block mb0" >
                                         <label>{{'dlp.sensorModal.SENSOR_NAME' | translate}}</label>
                                         <input ng-model="sensor.name" required ng-disabled="type==='edit'"
-                                               class="mda-form-control" maxlength="256"/>
+                                               class="mda-form-control" maxlength="255"/>
                                     </md-input-container>
                                 </div>
                                 <div class="col-sm-9">
@@ -138,7 +138,7 @@
                                             <md-input-container class="md-block mb0 no-error" >
                                                 <label>{{'dlp.ruleModal.SENSOR_NAME' | translate}}</label>
                                                 <input ng-model="editingRule.sensorName" disabled
-                                                       class="mda-form-control" maxlength="256"/>
+                                                       class="mda-form-control" maxlength="255"/>
                                             </md-input-container>
                                         </div>
                                         <div class="col-sm-9">
@@ -155,7 +155,7 @@
                                                 <md-input-container class="md-block mb0 no-error">
                                                     <label>{{'dlp.ruleModal.PATTERN_NAME' | translate}}</label>
                                                     <input ng-model="editingRule.ruleName"
-                                                           class="mda-form-control" maxlength="256"/>
+                                                           class="mda-form-control" maxlength="255"/>
                                                 </md-input-container>
                                             </div>
                                         </div>
@@ -257,7 +257,7 @@
                                             <md-input-container class="md-block mb0 no-error" >
                                                 <label>{{'dlp.ruleModal.SENSOR_NAME' | translate}}</label>
                                                 <input ng-model="switchRule.sensorName" disabled
-                                                       class="mda-form-control" maxlength="256"/>
+                                                       class="mda-form-control" maxlength="255"/>
                                             </md-input-container>
                                         </div>
                                         <div class="col-sm-7">

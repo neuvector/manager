@@ -137,7 +137,7 @@
         }
 
         $http
-          .patch("/user", payload)
+          .patch(USERS_URL, payload)
           .then(function (response) {
             $rootScope.language.set(user.locale);
             if (user.locale !== "zh_cn") moment.locale("en");

@@ -849,7 +849,7 @@
 
     function keepLive() {
       $http
-        .patch("/heartbeat")
+        .patch(HEART_BEAT_URL)
         .then(function (response) {})
         .catch(function (err) {
           console.warn(err);

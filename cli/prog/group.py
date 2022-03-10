@@ -613,7 +613,7 @@ def show_service(ctx, data, cap, page, sort, sort_dir):
         for service in services:
             _list_service_display_format(service)
 
-        columns = ("name", "policy_mode", "profile_mode", "members", "policy_rules", "platform_role", "ingress_exposure", "egress_exposure")
+        columns = ("name", "policy_mode", "profile_mode", "members", "policy_rules", "platform_role", "ingress_exposure", "egress_exposure", "baseline_profile")
         output.list(columns, services)
 
         if args["limit"] > 0 and len(services) < args["limit"]:
@@ -652,11 +652,12 @@ def detail(data, id_or_name, cap):
 @click.argument('name')
 @click.argument('domain')
 @click.option("-m", "--policy_mode", type=click.Choice(['discover', 'monitor', 'protect']))
+@click.option("-b", "--baseline", type=click.Choice(['basic', 'zero-drift']))
 @click.pass_obj
-def create_service(data, name, domain, policy_mode):
+def create_service(data, name, domain, policy_mode, baseline):
     """Set service configuration."""
     if policy_mode != None:
-        data.client.create("service", {"config": {"name": name, "domain": domain, "policy_mode": policy_mode.title()}})
+        data.client.create("service", {"config": {"name": name, "domain": domain, "policy_mode": policy_mode.title(), "baseline_profile": baseline}})
     else:
         data.client.create("service", {"config": {"name": name, "domain": domain}})
 
@@ -669,10 +670,11 @@ def set_service(data, name):
 
 @set_service.command()
 @click.argument("policy_mode", type=click.Choice(['discover', 'monitor', 'protect']))
+@click.option("-b", "--baseline", type=click.Choice(['basic', 'zero-drift']))
 @click.pass_obj
-def policy_mode(data, policy_mode):
-    """Set service policy modes."""
-    config = {"services": data.id_or_name.split(","), "policy_mode": policy_mode.title()}
+def policy_mode(data, policy_mode, baseline):
+    """Set service policy mode and baseline profile."""
+    config = {"services": data.id_or_name.split(","), "policy_mode": policy_mode.title(), "baseline_profile": baseline}
     data.client.config("service", "config", {"config": config})
 
 @set_service.command("network")
@@ -685,8 +687,9 @@ def net_policy_mode(data, policy_mode):
 
 @set_service.command("profile")
 @click.argument("profile_mode", type=click.Choice(['discover', 'monitor', 'protect']))
+@click.option("-b", "baseline", type=click.Choice(['basic', 'zero-drift']))
 @click.pass_obj
-def profile_mode(data, profile_mode):
-    """Set service profile mode."""
-    config = {"services": data.id_or_name.split(","), "policy_mode": profile_mode.title()}
+def profile_mode(data, profile_mode, baseline):
+    """Set service profile mode and baseline profile"""
+    config = {"services": data.id_or_name.split(","), "policy_mode": profile_mode.title(), "baseline_profile": baseline}
     data.client.config("service", "config/profile", {"config": config})

@@ -67,11 +67,10 @@
         },
 
         responseError: function(rejection) {
-          console.log(rejection);
+          console.log("rejection", rejection);
           if (
             (rejection.status === 408 || rejection.status === 401) &&
-            rejection.config.url !== "/login" &&
-            rejection.config.url !== "/auth"
+            rejection.config.url !== LOGIN_URL
           ) {
             let $state = $injector.get("$state");
             let origin = $location.url();
@@ -91,9 +90,6 @@
             } else {
               if ($rootScope.isSUSESSO) {
                 $rootScope.hideFrame = true;
-                $timeout(() => {
-                  alert(`${$translate.instant("logout.SIGN_OUT")}\n${$translate.instant("logout.SIGN_OUT_DESC")}`);
-                }, 500);
               } else {
                 $state.go("page.login");
               }

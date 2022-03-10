@@ -831,7 +831,7 @@
       "OPENID": "OpenID Connect配置",
       "REQ_POLICY_PULLING": "通知策略已部署",
       "DEPLOY_FED_POLICY_ERR": "通知各集群获取全局策略时发生错误!",
-      "DEPLOY_FED_POLICY_OK": "成功通知个集群获取全局策略!",
+      "DEPLOY_FED_POLICY_OK": "成功通知各集群获取全局策略!",
       "resource": {}
     }
   },
@@ -2334,6 +2334,7 @@
     "DOWNLOAD": "下载",
     "CONFIG": "包含配置",
     "CAN_NOT_CONFIG": "由于配置是通过CRD部署的，配置设定被禁用.",
+    "NOT_SUPPORT": " 由于要求的绑定不存在，配置设定被禁用.",
     "EXCLUDE_RULES": "排除缺省规则",
     "DEFAULT_RULES": "缺省规则",
     "SHOW_DENY_RULES": "显示拒绝规则",
@@ -2723,6 +2724,7 @@
     "ENABLED": "启用",
     "DISABLED": "禁用",
     "REG_PROXY": "代理",
+    "PROXY_HINT": "外部访问代理(比如网络挂接、镜像库服务器), 代理还被支持于当不允许直接集群访问时，在同一集群全局的NeuVector集群之间的交互",
     "REG_HTTP_PROXY": "Http代理",
     "REG_HTTPS_PROXY": "Https代理",
     "XFF_MATCH": "基于X-Forwarded-For的策略匹配",

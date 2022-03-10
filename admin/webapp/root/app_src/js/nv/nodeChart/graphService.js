@@ -1036,7 +1036,7 @@
 
       GraphFactory.keepLive = () => {
         $http
-          .patch("/heartbeat")
+          .patch(HEART_BEAT_URL)
           .then(response => {})
           .catch(err => {
             console.warn(err);

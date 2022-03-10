@@ -97,7 +97,7 @@
 
     function shorten2() {
       return function(str, len) {
-        if (str.length > len) {
+        if (str && str.length > len) {
           return `${str.substring(0, len - 8)}...${str.substring(
             str.length - 8,
             str.length

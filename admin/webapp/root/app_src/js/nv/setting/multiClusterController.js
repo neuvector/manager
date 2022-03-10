@@ -83,7 +83,7 @@
 
     $scope.logout = function() {
       $http
-        .delete("/auth")
+        .delete(LOGIN_URL)
         .then(function() {
           $window.localStorage.clear();
           $window.sessionStorage.clear();
@@ -1053,7 +1053,7 @@
 
       $scope.logout = function() {
         $http
-          .delete("/auth")
+          .delete(LOGIN_URL)
           .then(function() {
             $window.sessionStorage.removeItem("token");
             $window.sessionStorage.removeItem("cluster");

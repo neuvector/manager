@@ -2965,7 +2965,7 @@
         const switchAll = function(mode) {
           $scope.isSwitchingMode = true;
           $http
-            .patch("/service/all", { policy_mode: mode.mode, baseline_profile: mode.zeroDrift })
+            .patch(SERVICE_ALL, { policy_mode: mode.mode, baseline_profile: mode.zeroDrift })
             .then(function() {
               Alertify.set({ delay: ALERTIFY_SUCCEED_DELAY });
               Alertify.success($translate.instant("service.ALL_SUBMIT_OK"));

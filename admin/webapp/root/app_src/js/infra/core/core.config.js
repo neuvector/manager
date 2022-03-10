@@ -90,9 +90,6 @@
             } else {
               if ($rootScope.isSUSESSO) {
                 $rootScope.hideFrame = true;
-                $timeout(() => {
-                  alert(`${$translate.instant("logout.SIGN_OUT")}\n${$translate.instant("logout.SIGN_OUT_DESC")}`);
-                }, 500);
               } else {
                 $state.go("page.login");
               }

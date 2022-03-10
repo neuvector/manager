@@ -86,10 +86,10 @@
           <label class="pull-left nv-modal-item-title text-gray-label" style="padding-top: 2px;">{{'responsePolicy.gridHeader.STATUS' | translate | uppercase}}</label>
           <div class="pull-left">
             <div class="md-switch2">
-              <label class="nv-modal-item-title" uib-tooltip="{{ 'admissionControl.CAN_NOT_CONFIG' | translate }}" tooltip-enable="{{!canConfig}}" tooltip-class="customClass">
+              <label class="nv-modal-item-title" uib-tooltip="{{ !canConfig ? 'admissionControl.CAN_NOT_CONFIG' : 'admissionControl.NOT_SUPPORT' | translate}}" tooltip-enable="{{!canConfig || !isK8s}}" tooltip-class="customClass">
                 <input id="adm-state" type="checkbox" ng-disabled="!isK8s || !canConfig || !isWriteAdmissionRuleAuthorized"
                   ng-model="admCtrl.state" ng-click="switchState(admCtrl.state)">
-                <span class="toggle hand" style="margin-right: 5px;" ng-class="{'disabled': !canConfig}"></span>
+                <span class="toggle hand" style="margin-right: 5px;" ng-class="{'disabled': !isK8s || !canConfig || !isWriteAdmissionRuleAuthorized}"></span>
                 {{(!admCtrl.state ? "policy.status.DISABLED" : "policy.status.ENABLED") | translate}}
               </label>
             </div>

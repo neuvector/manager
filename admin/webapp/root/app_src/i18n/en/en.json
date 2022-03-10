@@ -2334,6 +2334,7 @@
     "DOWNLOAD": "Download",
     "CONFIG": "Include configurations",
     "CAN_NOT_CONFIG": "Configuration is disabled, as it is deployed through CRD.",
+    "NOT_SUPPORT": "Configuration is disabled, as required bindings does not exist.",
     "EXCLUDE_RULES": "Exclude default rules",
     "DEFAULT_RULES": "Default rules",
     "SHOW_DENY_RULES": "SHOW DENY RULES",

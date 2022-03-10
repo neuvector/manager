@@ -372,7 +372,7 @@
             };
           }
           $http
-            .post("/debug", payload)
+            .post(DEBUG_URL, payload)
             .then(function(response) {
               $scope.testFinished = true;
               $scope.inprogress = false;

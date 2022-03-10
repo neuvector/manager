@@ -1691,7 +1691,7 @@
 
     const showPodInfo = nodeId => {
       $http
-        .get("/container", { params: { id: nodeId } })
+        .get(PLAIN_CONTAINER_URL, { params: { id: nodeId } })
         .then(function(response) {
           $scope.container = response.data.workload;
           let theNode =
@@ -1772,7 +1772,7 @@
       const hostId = nodeId.slice(startIndex + 5);
       if (startIndex > -1) {
         $http
-          .get("/host", { params: { id: hostId } })
+          .get(NODES_URL, { params: { id: hostId } })
           .then(function(response) {
             $scope.host = response.data.host;
 

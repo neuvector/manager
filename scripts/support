@@ -32,7 +32,6 @@ support_global = [
     "/v1/scan/platform",
     "/v1/scan/platform/platform",
     "/v1/scan/registry",
-    "/v1/cloud/aws/project", 
     "/v1/admission/state",
     "/v1/admission/rules",
 

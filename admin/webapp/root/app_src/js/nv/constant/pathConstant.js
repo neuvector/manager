@@ -187,3 +187,5 @@ const PROMOTE_ADMISSION_RULE = "admission/promote";
 const CVE_PROFILE = "risk/cve/profile";
 const CVE_PROFILE_ENTRY = "risk/cve/profile/entry";
 const SYSTEM_RBAC_URL = "dashboard/rbac";
+const SERVICE_ALL = "service/all";
+const DEBUG_URL = "debug";

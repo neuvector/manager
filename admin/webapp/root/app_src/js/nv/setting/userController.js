@@ -592,7 +592,7 @@
             let promises = [];
             selectedRows.forEach((item) => {
               promises.push(
-                $http.delete("/user", { params: { userId: item.fullname } })
+                $http.delete(USERS_URL, { params: { userId: item.fullname } })
               );
             });
 
@@ -625,7 +625,7 @@
           })
         ).then(function () {
           $http
-            .delete("/user", { params: { userId: user.fullname } })
+            .delete(USERS_URL, { params: { userId: user.fullname } })
             .success(function () {
               Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
               Alertify.success($translate.instant("user.REMOVE_USER_OK"));
@@ -1010,7 +1010,7 @@
           );
           if (UserFactory.getHasSetAuthorized(user)) {
             $http
-              .post("/user", user)
+              .post(USERS_URL, user)
               .then(function (response) {
                 Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
                 Alertify.success($translate.instant("user.ADD_USER_OK"));
@@ -1320,7 +1320,7 @@
           );
           if (UserFactory.getHasSetAuthorized(user)) {
             $http
-              .patch("/user", user)
+              .patch(USERS_URL, user)
               .then(function (response) {
                 Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
                 Alertify.success($translate.instant("user.editUser.SUBMIT_OK"));

@@ -316,7 +316,7 @@
       },
       keepAlive(success, error) {
         $http
-          .patch("/heartbeat")
+          .patch(HEART_BEAT_URL)
           .then(function(response) {
             if (success) success(response);
           })

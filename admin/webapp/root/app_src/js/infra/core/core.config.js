@@ -67,11 +67,10 @@
         },
 
         responseError: function(rejection) {
-          console.log(rejection);
+          console.log("rejection", rejection);
           if (
             (rejection.status === 408 || rejection.status === 401) &&
-            rejection.config.url !== "/login" &&
-            rejection.config.url !== "/auth"
+            rejection.config.url !== LOGIN_URL
           ) {
             let $state = $injector.get("$state");
             let origin = $location.url();

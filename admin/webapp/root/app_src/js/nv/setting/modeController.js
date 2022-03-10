@@ -18,7 +18,7 @@
         "Protect": $translate.instant('topbar.mode.ENFORCE')
       };
 
-      $http.get('/config').then(function (response) {
+      $http.get(CONFIG_URL).then(function (response) {
         if(response)
           vm.selectedMode = vm.modes[response.data.config.policy_mode];
       }).catch(function (error) {
@@ -34,7 +34,7 @@
         else {
           Alertify.confirm(getMessage(id))
             .then(function onOk() {
-                $http.patch('/config', {policy_mode: id}).then(function () {
+                $http.patch(CONFIG_URL, {policy_mode: id}).then(function () {
                   vm.selectedMode = vm.modes[id];
                 }).catch(function (error) {
                   console.log(error);

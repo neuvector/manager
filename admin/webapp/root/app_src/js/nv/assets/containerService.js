@@ -804,7 +804,7 @@
 
       ContainerFactory.getContainer = id => {
         return $http
-          .get("/container", { params: { id: id } })
+          .get(PLAIN_CONTAINER_URL, { params: { id: id } })
           .then(function(response) {
             let container = response.data.workload;
             if (

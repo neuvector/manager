@@ -28,7 +28,7 @@ object GroupJsonProtocol extends DefaultJsonProtocol {
   implicit val workloadBriefFormat: RootJsonFormat[WorkloadBrief] = rootFormat(
     lazyFormat(jsonFormat15(WorkloadBrief))
   )
-  implicit val groupFormat: RootJsonFormat[Group]         = jsonFormat16(Group)
+  implicit val groupFormat: RootJsonFormat[Group]         = jsonFormat17(Group)
   implicit val groupWrapFormat: RootJsonFormat[GroupWrap] = jsonFormat1(GroupWrap)
 
   implicit val groupConfigFormat: RootJsonFormat[GroupConfig]         = jsonFormat4(GroupConfig)
@@ -39,12 +39,12 @@ object GroupJsonProtocol extends DefaultJsonProtocol {
   implicit val criteriaItemFormat: RootJsonFormat[CriteriaItem]     = jsonFormat1(CriteriaItem)
   implicit val groupConfigDTOFormat: RootJsonFormat[GroupConfigDTO] = jsonFormat4(GroupConfigDTO)
   implicit val serviceAddressFormat: RootJsonFormat[ServiceAddress] = jsonFormat2(ServiceAddress)
-  implicit val groupDTOFormat: RootJsonFormat[GroupDTO]             = jsonFormat16(GroupDTO)
+  implicit val groupDTOFormat: RootJsonFormat[GroupDTO]             = jsonFormat17(GroupDTO)
   implicit val groupDTOsFormat: RootJsonFormat[GroupDTOs]           = jsonFormat1(GroupDTOs)
   implicit val groupDTOWrapFormat: RootJsonFormat[GroupDTOWrap]     = jsonFormat1(GroupDTOWrap)
-  implicit val group4SingleFormat: RootJsonFormat[Group4Single]         = jsonFormat16(Group4Single)
+  implicit val group4SingleFormat: RootJsonFormat[Group4Single]         = jsonFormat17(Group4Single)
   implicit val group4SingleWrapFormat: RootJsonFormat[Group4SingleWrap]         = jsonFormat1(Group4SingleWrap)
-  implicit val grou4SingleDTOFormat: RootJsonFormat[Group4SingleDTO]      = jsonFormat16(Group4SingleDTO)
+  implicit val grou4SingleDTOFormat: RootJsonFormat[Group4SingleDTO]      = jsonFormat17(Group4SingleDTO)
   implicit val group4SingleDTOWrapFormat: RootJsonFormat[Group4SingleDTOWrap]     = jsonFormat1(Group4SingleDTOWrap)
 
   def groupsToJson(groups: Groups): String                      = groups.toJson.compactPrint
@@ -118,6 +118,7 @@ object GroupJsonProtocol extends DefaultJsonProtocol {
       group.policy_rules,
       group.response_rules.getOrElse(Array()),
       group.policy_mode,
+      group.baseline_profile,
       group.platform_role,
       group.cap_change_mode,
       group.cap_scorable,
@@ -140,6 +141,7 @@ object GroupJsonProtocol extends DefaultJsonProtocol {
       group.policy_rules,
       group.response_rules,
       group.policy_mode,
+      group.baseline_profile,
       group.platform_role,
       group.cap_change_mode,
       group.cap_scorable,

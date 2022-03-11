@@ -337,7 +337,7 @@
                 uib-tooltip="${$translate.instant("user.tooltips.UNLOCK")}" ng-click="unlockUser(data.username)">
               </em>
               <em class="fa fa-lg fa-trash mr-sm text-action"
-                ng-show=\"!(data.fullname === 'admin')\"
+                ng-show=\"!(data.fullname === 'admin') && ${!params.data.server.toLowerCase().includes(SERVER_TYPE.RANCHER)} \"
                 uib-tooltip="${$translate.instant("user.tooltips.REMOVE")}" ng-click=\"!(data.fullname === 'admin') && removeUser(data)\">
               </em>
               <em class="fa fa-lg fa-edit text-action"
@@ -371,7 +371,7 @@
         suppressRowClickSelection: true,
         isRowSelectable: function (node) {
           return node.data
-            ? node.data.fullname !== "admin" && $scope.isAuthoredUserWrite
+            ? node.data.fullname !== "admin" && $scope.isAuthoredUserWrite && !node.data.server.toLowerCase().includes(SERVER_TYPE.RANCHER)
             : false;
         },
         onSelectionChanged: onSelectionChanged,

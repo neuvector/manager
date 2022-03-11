@@ -102,7 +102,7 @@
                   {{'enum.FED_POLICY' | translate}}
                 </a>
               </li>
-              <li ng-if="!isSUSESSO" ng-controller="LogoutController" ng-click="logout()">
+              <li ng-show="!isSUSESSO" ng-controller="LogoutController" ng-click="logout()">
                 <em class="fa fa-arrow-left text-muted" aria-hidden="true"></em>
                 {{'enum.LOGOUT' | translate}}
               </li>

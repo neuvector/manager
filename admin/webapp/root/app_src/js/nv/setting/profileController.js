@@ -151,7 +151,7 @@
             $scope.profileForm.$setPristine();
             Alertify.set({ delay: ALERTIFY_SUCCEED_DELAY });
             Alertify.success($translate.instant("profile.SUBMIT_OK"));
-            $rootScope.logout();
+            $rootScope.logout(false, false);
           })
           .catch(function (error) {
             console.warn(error);

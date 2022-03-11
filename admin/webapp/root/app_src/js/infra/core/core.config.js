@@ -86,9 +86,9 @@
             $rootScope.versionDone = false;
             $rootScope.isFooterReady = false;
             if ($rootScope.logout) {
-              $rootScope.logout(true);
+              $rootScope.logout(true, rejection.data.code === 51);
             } else {
-              if ($rootScope.isSUSESSO) {
+              if ($rootScope.isSUSESSO && rejection.data.code === 51) {
                 $rootScope.hideFrame = true;
               } else {
                 $state.go("page.login");

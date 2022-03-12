@@ -541,6 +541,7 @@
       }
       function requestConditionOption() {
         admissionControlService.conditionOptionErr = false;
+        $scope.stateWarning = "";
         $http
           .get(ADMCTL_CONDITION_OPTION_URL)
           .then(function(response) {
@@ -573,23 +574,24 @@
             $scope.adm_client_mode = response.data.state.adm_client_mode;
             $scope.canConfig = response.data.state.cfg_type !== CFG_TYPE.GROUND;
             $scope.isK8s = response.data.k8s_env;
+            if (!$scope.canConfig) {
+              $scope.stateWarning = $translate.instant("admissionControl.CAN_NOT_CONFIG");
+            } else if (!$scope.isK8s) {
+              $scope.stateWarning = $translate.instant("admissionControl.NOT_SUPPORT");
+            }
             requestAdmissionRules();
           })
           .catch(function(error) {
             console.log(error);
-            $scope.admissionRuleErr = true;
+            $scope.admissionStateErr = true;
             if (
-              error.status === 404 &&
-              error.data.code === INTERNAL_ERR_CODE.UNSUPPORTED
+              error.status === 404
             ) {
-              $scope.isSupported = false;
-              $scope.gridOptions.overlayNoRowsTemplate =
-                '<div class="server-error">' +
-                '<div><em class="fa fa-times-circle error-signal" aria-hidden="true"></em></div>' +
-                '<div><span class="error-text">' +
-                $translate.instant("admissionControl.msg.UNSUPPORTED") +
-                "</span></div></div>";
-              $scope.gridOptions.api.setRowData();
+              $scope.gridOptions.overlayNoRowsTemplate = Utils.getOverlayTemplateMsg(error);
+              if ($scope.gridOptions && $scope.gridOptions.api) {
+                $scope.gridOptions.api.setRowData();
+              }
+              $scope.stateWarning = $translate.instant("admissionControl.NOT_BINDING");
             } else if (error.status === 403) {
               $scope.gridOptions.overlayNoRowsTemplate = $translate.instant("general.NO_ROWS")
               if ($scope.gridOptions && $scope.gridOptions.api) {

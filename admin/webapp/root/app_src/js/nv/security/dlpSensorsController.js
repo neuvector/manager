@@ -704,7 +704,6 @@
             patterns: $scope.editingRule.rulePatterns
           });
         } else {
-          selectedSensor.rules = [];
           selectedSensor.rules.push({
             name: $scope.editingRule.ruleName,
             patterns: $scope.editingRule.rulePatterns
@@ -727,6 +726,7 @@
           })
           .catch(function(e) {
             console.warn(e);
+            if (!$scope.isEdit) selectedSensor.rules.pop();
             if (USER_TIMEOUT.indexOf(e.status) < 0) {
               Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
               Alertify.error(

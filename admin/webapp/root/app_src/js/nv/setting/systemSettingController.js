@@ -485,6 +485,8 @@
             $rootScope.clusterName = vm.config.clusterName;
             vm.config.newServiceMode =
               response.data.config.new_service_policy_mode;
+            vm.config.newServiceProfileBaseline =
+              response.data.config.new_service_profile_baseline;
             let emptyProxy = { url: "", username: "", password: "" };
             vm.config.regHttpProxy = response.data.config.registry_http_proxy
               ? {
@@ -656,6 +658,7 @@
           auth_by_platform: vm.config.authByOpenshift.enabled,
           unused_group_aging: vm.groupAge.enabled ? vm.groupAge.hours : 0,
           new_service_policy_mode: vm.config.newServiceMode,
+          new_service_profile_baseline: vm.config.newServiceProfileBaseline,
           cluster_name: vm.config.clusterName,
           webhooks: vm.webhooks
                       .filter(webhook => webhook.cfg_type === CFG_TYPE.CUSTOMER || !webhook.cfg_type)

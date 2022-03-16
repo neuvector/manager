@@ -20,6 +20,7 @@ case class ProcessProfileEntry(name: String,
 case class ProcessProfileConfig(group: String,
                                 alert_disabled: Option[Boolean] = None,
                                 hash_enabled: Option[Boolean] = None,
+                                baseline: Option[String],
                                 process_delete_list: Option[Array[ProcessProfileEntry]],
                                 process_change_list: Option[Array[ProcessProfileEntry]],
                                 process_replace_list: Option[Array[ProcessProfileEntry]])
@@ -30,7 +31,7 @@ object ProcessProfileJsonProtocol extends DefaultJsonProtocol {
   implicit val processProfileEntryFormat: RootJsonFormat[ProcessProfileEntry] = jsonFormat5(
     ProcessProfileEntry
   )
-  implicit val processProfileFormat: RootJsonFormat[ProcessProfileConfig] = jsonFormat6(
+  implicit val processProfileFormat: RootJsonFormat[ProcessProfileConfig] = jsonFormat7(
     ProcessProfileConfig
   )
   implicit val ProcessProfileConfigDataFormat: RootJsonFormat[ProcessProfileConfigData] =

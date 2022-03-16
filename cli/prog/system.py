@@ -646,16 +646,16 @@ def set_system_net_service(data):
 def set_system_net_service_status(data, status):
     """Enable/disable global network service"""
     if status == 'enable':
-        data.client.config_system(net_service_status=True)
+        data.client.config_system_net(net_service_status=True)
     else:
-        data.client.config_system(net_service_status=False)
+        data.client.config_system_net(net_service_status=False)
 
 @set_system_net_service.command("policy_mode")
 @click.argument('mode', type=click.Choice(['discover', 'monitor', 'protect']))
 @click.pass_obj
 def set_system_net_service_policy_mode(data, mode):
     """Set system global network service policy mode."""
-    data.client.config_system(net_service_policy_mode=mode.title())
+    data.client.config_system_net(net_service_policy_mode=mode.title())
 
 @set_system.group("registry")
 @click.pass_obj

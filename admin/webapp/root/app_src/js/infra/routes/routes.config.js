@@ -292,7 +292,10 @@
           "ngDialog",
           "ngTagsInput",
           "angularGrid",
-          "angular-clipboard"
+          "angular-clipboard",
+          "filestyle",
+          "angularFileUpload",
+          "ngFileSaver"
         ),
       })
       .state("app.wafSensors", {

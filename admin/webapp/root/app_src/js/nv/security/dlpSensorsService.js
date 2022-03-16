@@ -109,6 +109,9 @@
                     {
                         headerName: $translate.instant("dlp.gridHeader.SENSOR_NAME"),
                         field: "name",
+                        headerCheckboxSelection: isWriteDLPSensorAuthorized,
+                        headerCheckboxSelectionFilteredOnly: isWriteDLPSensorAuthorized,
+                        checkboxSelection: isWriteDLPSensorAuthorized,
                         width: 100,
                         minWidth: 100
                     },
@@ -240,6 +243,8 @@
                     gridOptions4Patterns: Utils.createGridOptions(columnDefs4Patterns),
                     gridOptions4EditPatterns: Utils.createGridOptions([...columnDefs4Patterns, ...editPatternColumn])
                 };
+
+                grid.gridOptions.rowSelection = "multiple";
 
                 grid.gridOptions.rowClassRules = {
                     "disabled-row": function(params) {

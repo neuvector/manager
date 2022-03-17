@@ -54,14 +54,7 @@
                     ng-model="sysCtrl.config.newServiceMode"
                     ng-if="isNewServiceModeAuthorized"
                     ng-change="sysCtrl.changeFieldValue()"
-                  />
-                  <input
-                    type="radio"
-                    name="mode"
-                    value="Discover"
-                    ng-model="sysCtrl.config.newServiceMode"
-                    ng-if="!isNewServiceModeAuthorized"
-                    disabled
+                    ng-disabled="!isNewServiceModeAuthorized"
                   />
                   <span
                     class="fa fa-binoculars text-discover"
@@ -84,14 +77,7 @@
                     ng-model="sysCtrl.config.newServiceMode"
                     ng-if="isNewServiceModeAuthorized"
                     ng-change="sysCtrl.changeFieldValue()"
-                  />
-                  <input
-                    type="radio"
-                    name="mode"
-                    value="Monitor"
-                    ng-model="sysCtrl.config.newServiceMode"
-                    ng-if="!isNewServiceModeAuthorized"
-                    disabled
+                    ng-disabled="!isNewServiceModeAuthorized"
                   />
                   <span
                     class="fa fa-bell text-monitor"
@@ -114,14 +100,7 @@
                     ng-model="sysCtrl.config.newServiceMode"
                     ng-if="isNewServiceModeAuthorized"
                     ng-change="sysCtrl.changeFieldValue()"
-                  />
-                  <input
-                    type="radio"
-                    name="mode"
-                    value="Protect"
-                    ng-model="sysCtrl.config.newServiceMode"
-                    ng-if="!isNewServiceModeAuthorized"
-                    disabled
+                    ng-disalbed="!isNewServiceModeAuthorized"
                   />
                   <span
                     class="fa fa-shield text-protect"
@@ -130,9 +109,9 @@
                 </label>
               </div>
             </div>
-            <div class="col-sm-8 mt-lg">
+            <div class="col-sm-12 mt-lg">
               <div
-                class="radio-inline c-radio pl-sm md-switch2"
+                class="radio-inline c-radio pl-sm md-switch2 pull-left ml-lg mr-xl mb"
                 ng-class="inputMaskDisabledClass"
               >
                 <label class="text-gray-label">
@@ -148,7 +127,7 @@
                   <span class="toggle hand" ng-disabled="!isNewServiceModeAuthorized"></span>
                 </label>
               </div>
-              <div class="text-muted text-sm mb-lg pull-right mr-lg">
+              <div class="text-muted text-sm mb ml-lg pull-left">
                 {{'setting.ZERODRIFT_COMMENT' | translate}}
               </div>
             </div>
@@ -158,6 +137,105 @@
         <div class="col-sm-12 mb-sm sub-line">
           <hr class="dashed"/>
         </div>
+
+        <div class="form-group">
+          <div class="col-sm-12 mb-lg md-switch2">
+            <label class="form-title">
+              {{'setting.NET_SERVICE_POLICY_MODE' | translate}}
+              <input
+                type="checkbox"
+                ng-model="sysCtrl.config.netServiceStatus"
+                ng-if="isNewServiceModeAuthorized"
+                ng-change="sysCtrl.changeFieldValue()"
+              />
+              <span class="toggle" style="margin-left: 3px;" ng-if="isRegHttpProxyAuthorized"></span>
+            </label>
+          </div>
+          <div class="col-sm-12 ">
+            <div class="pull-left ml-lg mr-xl mb">
+              <div
+                class="radio-inline c-radio mr-lg"
+                ng-class="inputMaskDisabledClass"
+              >
+                <label
+                  class="text-gray-label"
+                  ng-class="inputMaskDisabledClass"
+                >
+                  <input
+                    type="radio"
+                    name="netServiceMode"
+                    value="Discover"
+                    ng-model="sysCtrl.config.netServicePolicyMode"
+                    ng-if="isNewServiceModeAuthorized"
+                    ng-change="sysCtrl.changeFieldValue()"
+                    ng-disabled="!isNewServiceModeAuthorized"
+                  />
+                  <span
+                    class="fa fa-binoculars text-discover"
+                    ng-class="inputMaskDisabledClass"
+                  />{{'topbar.mode.LEARNING' | translate}}
+                </label>
+              </div>
+              <div
+                class="radio-inline c-radio pl-sm mr-lg"
+                ng-class="inputMaskDisabledClass"
+              >
+                <label
+                  class="text-gray-label"
+                  ng-class="inputMaskDisabledClass"
+                >
+                  <input
+                    type="radio"
+                    name="netServiceMode"
+                    value="Monitor"
+                    ng-model="sysCtrl.config.netServicePolicyMode"
+                    ng-if="isNewServiceModeAuthorized"
+                    ng-change="sysCtrl.changeFieldValue()"
+                    ng-disabled="!isNewServiceModeAuthorized"
+                  />
+                  <span
+                    class="fa fa-bell text-monitor"
+                    ng-class="inputMaskDisabledClass"
+                  />{{'topbar.mode.EVALUATION' | translate}}
+                </label>
+              </div>
+              <div
+                class="radio-inline c-radio pl-sm"
+                ng-class="inputMaskDisabledClass"
+              >
+                <label
+                  class="text-gray-label"
+                  ng-class="inputMaskDisabledClass"
+                >
+                  <input
+                    type="radio"
+                    name="netServiceMode"
+                    value="Protect"
+                    ng-model="sysCtrl.config.netServicePolicyMode"
+                    ng-if="isNewServiceModeAuthorized"
+                    ng-change="sysCtrl.changeFieldValue()"
+                    ng-disabled="!isNewServiceModeAuthorized"
+                  />
+                  <span
+                    class="fa fa-shield text-protect"
+                    ng-class="inputMaskDisabledClass"
+                  />{{'topbar.mode.ENFORCE' | translate}}
+                </label>
+              </div>
+            </div>
+            <div class="text-muted text-sm mb ml-lg pull-left" ng-if="sysCtrl.config.netServiceStatus">
+              {{ 'setting.description.ENABLED_NET_POLICY_MODE' | translate }}
+            </div>
+            <div class="text-muted text-sm mb ml-lg pull-left" ng-if="!sysCtrl.config.netServiceStatus">
+              {{ 'setting.description.DISABLED_NET_POLICY_MODE' | translate }}
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-12 mb-sm sub-line">
+          <hr class="dashed"/>
+        </div>
+
         <div class="col-sm-12">
           <label class="form-title" translate="{{'setting.CLUSTER'}}"/>
           <div class="text-muted text-sm mb-lg">

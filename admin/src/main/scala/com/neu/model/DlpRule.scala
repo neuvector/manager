@@ -59,3 +59,7 @@ case class DlpSensorConfigData(config: DlpSensorConfig)
 case class DlpRuleConfig(name: String, patterns: Seq[Pattern])
 
 case class DlpRuleConfigData(config: DlpRuleConfig)
+
+case class ExportedDlpSensorList(
+  names: Array[String]
+)

@@ -21,6 +21,7 @@
     "dlpSensorsService",
     "$controller",
     "$sanitize",
+    "FileSaver",
     "AuthorizationFactory",
     "$filter"
   ];
@@ -42,6 +43,7 @@
     dlpSensorsService,
     $controller,
     $sanitize,
+    FileSaver,
     AuthorizationFactory,
     $filter
   ) {
@@ -119,6 +121,7 @@
       const onSelectionChanged = function() {
         $scope.hasSelectedGroups = true;
         let selectedRows = $scope.gridOptions.api.getSelectedRows();
+        $scope.checkedSensors = selectedRows;
         $scope.sensor = angular.copy(selectedRows[0]);
         $scope.gridOptions4Rules.api.setRowData();
         $scope.gridOptions4Patterns.api.setRowData();
@@ -432,6 +435,58 @@
         },
         function toCancel() {}
       );
+    };
+
+    $scope.exportSensors = function() {
+      let payload = {
+        names: $scope.checkedSensors.map(sensor => sensor.name)
+      }
+      $http
+        .post(DLP_SENSORS_EXPORT_URL, payload)
+        .then(function(res) {
+          let fileName = res
+            .headers("Content-Disposition")
+            .split("=")[1]
+            .trim()
+            .split(".");
+          let yamlContent = res.data;
+          let exportedFileName = `${fileName[0]}_${Utils.parseDatetimeStr(new Date())}.${fileName[1]}`;
+          let blob = new Blob([yamlContent], {
+            type: "text/plain;charset=utf-8"
+          });
+          FileSaver.saveAs(blob, exportedFileName);
+          Alertify.set({ delay: ALERTIFY_SUCCEED_DELAY });
+          Alertify.success($translate.instant("dlp.msg.EXPORT_SENSOR_OK"));
+        })
+        .catch(function(err) {
+          if (USER_TIMEOUT.indexOf(err.status) < 0) {
+            Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
+            Alertify.error(
+              Utils.getAlertifyMsg(err, $translate.instant("dlp.msg.EXPORT_SENSOR_NG"), false)
+            );
+          }
+        });
+    };
+
+    $scope.openImportPopup = function () {
+      let success = function() {
+        $mdDialog
+          .show({
+            controller: DialogController4Import,
+            locals: {
+              reload: $scope.reload
+            },
+            templateUrl: "dialog.sensorImport.html"
+          })
+          .then(
+            function() {},
+            function() {}
+          );
+      };
+
+      let error = function() {};
+
+      Utils.keepAlive(success, error);
     };
 
     $scope.reset = function() {
@@ -798,5 +853,185 @@
         $mdDialog.hide();
       };
     }
+  }
+  DialogController4Import.$inject = [
+    "$rootScope",
+    "$scope",
+    "$http",
+    "$mdDialog",
+    "$timeout",
+    "$sanitize",
+    "$interval",
+    "$window",
+    "Utils",
+    "Alertify",
+    "$translate",
+    "FileUploader",
+    "reload"
+  ];
+  function DialogController4Import(
+    $rootScope,
+    $scope,
+    $http,
+    $mdDialog,
+    $timeout,
+    $sanitize,
+    $interval,
+    $window,
+    Utils,
+    Alertify,
+    $translate,
+    FileUploader,
+    reload
+  ) {
+    let token = JSON.parse($window.sessionStorage.getItem("token"));
+    $scope.cancel = function() {
+      $mdDialog.cancel();
+    };
+
+    const finishImport = function(res) {
+      $scope.percentage = res.data.percentage;
+      $scope.status = res.data.status;
+
+      if ($scope.status === "done") {
+        Alertify.set({ delay: 8000 });
+        Alertify.success(
+          $translate.instant("dlp.msg.IMPORT_FINISH")
+        );
+        $timeout(() => {
+          reload();
+        }, 1000);
+      } else {
+        $scope.status = Utils.getAlertifyMsg($scope.status, $translate.instant("dlp.msg.IMPORT_FAILED"), false);
+        Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
+        Alertify.error(
+          $scope.status
+        );
+      }
+    };
+
+    const getImportProgressInfo = function(params) {
+        console.log("getImportProgressInfo");
+        let tempToken = params.tempToken;
+        if (params.transactionId) {
+          $http
+          .post(
+            DLP_SENSORS_IMPORT_URL,
+            tempToken,
+            {
+              headers: {
+                Token: token.token.token,
+                "X-Transaction-Id": params.transactionId
+              }
+            }
+          )
+          .then((res) => {
+            if (res.status === 200) {
+              finishImport(res.data);
+            } else if (res.status === 206) {
+              let transactionId = res.data.data.tid;
+              $scope.percentage = res.data.data.percentage;
+              $scope.status = res.data.data.status;
+              getImportProgressInfo(
+                {
+                  transactionId,
+                  tempToken,
+                  percentage: $scope.percentage
+                }
+              );
+            }
+          })
+          .catch((err) => {
+            console.warn(err);
+            $scope.status = Utils.getAlertifyMsg(err, $translate.instant("dlp.msg.IMPORT_FAILED"), false);
+            if (status !== USER_TIMEOUT) {
+              Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
+              Alertify.error(
+                $scope.status
+              );
+            }
+          });
+        }
+    };
+
+    let uploader = ($scope.uploader = new FileUploader({
+      url: DLP_SENSORS_IMPORT_URL,
+      alias: "ImportAdmission",
+      queueLimit: 1,
+      headers: {
+        Token: $rootScope.user.token.token,
+        Accept: "application/octet-stream"
+      }
+    }));
+    $scope.resetFileInput = function() {
+      $scope.isFileInputDestroyed = true;
+      $scope.status = "";
+      $scope.percentage = 0;
+      $timeout(() => {
+        $scope.isFileInputDestroyed = false;
+      }, 100);
+    };
+
+    // FILTERS
+    uploader.filters.push({
+      name: "customFilter",
+      fn: function (/*item, options*/) {
+        return this.queue.length < 1;
+      },
+    });
+
+    // CALLBACKS
+    uploader.onWhenAddingFileFailed = function (
+      item /*{File|FileLikeObject}*/,
+      filter,
+      options
+    ) {
+      uploader.clearQueue();
+      uploader.addToQueue(item, filter, options);
+      $scope.status = "";
+      $scope.percentage = 0;
+    };
+    uploader.onAfterAddingFile = function (fileItem) {};
+    uploader.onAfterAddingAll = function (addedFileItems) {};
+    uploader.onBeforeUploadItem = function (item) {};
+    uploader.onProgressItem = function (fileItem, progress) {};
+    uploader.onProgressAll = function (progress) {};
+    uploader.onSuccessItem = function (fileItem, response, status, headers) {
+      if (status === 200) {
+        finishImport(response);
+      } else if (status === 206) {
+        let transactionId = response.data.tid;
+        let tempToken = response.data.temp_token;
+        $scope.percentage = response.data.percentage;
+        $scope.status = response.data.status;
+
+        getImportProgressInfo(
+          {
+            transactionId,
+            tempToken,
+            percentage: $scope.percentage
+          }
+        );
+      }
+    };
+    uploader.onErrorItem = function (fileItem, response, status, headers) {
+      $scope.status = status;
+      $scope.errMsg = Utils.getAlertifyMsg(response.message, $translate.instant("dlp.msg.IMPORT_FAILED"), false);
+      $scope.percentage = 0;
+      if (status !== USER_TIMEOUT) {
+        Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
+        Alertify.error(
+          $scope.errMsg
+        );
+      }
+    };
+    uploader.onCancelItem = function (fileItem, response, status, headers) {};
+    uploader.onCompleteItem = function (
+      fileItem,
+      response,
+      status,
+      headers
+    ) {};
+    uploader.onCompleteAll = function () {};
   }
 })();

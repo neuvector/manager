@@ -3,6 +3,14 @@
         <em class="fa fa-refresh text-action hand" aria-hidden="true"/>
         <label class="text-gray-label hand">{{'general.REFRESH' | translate}}</label>
     </div>
+    <div class="pull-right mt mr-lg"  ng-if="isWriteDLPSensorAuthorized && checkedSensors.length > 0" ng-click="exportSensors()">
+      <em class="fa fa-download text-action"></em>
+      <label class="text-gray-label hand">{{'admissionControl.EXPORT' | translate | uppercase}}</label>
+    </div>
+    <div class="pull-right mt mr-lg" ng-click="openImportPopup()" ng-if="isWriteDLPSensorAuthorized">
+      <em class="fa fa-caret-square-o-up text-action"></em>
+      <label class="text-gray-label hand">{{'admissionControl.IMPORT' | translate | uppercase}}</label>
+    </div>
     <div class="clearfix">
         <div class="content-title">{{'sidebar.nav.DLP_SENSORS' | translate}}</div>
     </div>
@@ -289,5 +297,129 @@
                 </form>
             </md-dialog>
         </script>
+    </div>
+    <!--Import Sensor-->
+    <div>
+      <script type="text/ng-template" id="dialog.sensorImport.html">
+        <md-dialog aria-label="Import Sensor" class="dialog-lg" style="overflow: visible">
+          <form name="admImportForm" ng-submit="$event.preventDefault()" novalidate="" class="form-validate" style="overflow: visible">
+            <md-toolbar>
+              <div class="md-toolbar-tools">
+                <h2 class="text-dark">{{'admissionControl.IMPORT' | translate | uppercase}}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                  <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+              </div>
+            </md-toolbar>
+            <md-dialog-content style="overflow: visible" class="mt mb">
+              <div class="col-sm-3">
+                <div ng-show="uploader.isHTML5">
+                  <div
+                    nv-file-drop
+                    uploader="uploader"
+                    over-class="bg-info"
+                    class="file-drop-zone"
+                    translate="{{'setting.DROP_ZONE'}}"
+                  ></div>
+                </div>
+                <hr/>
+
+                <input
+                  filestyle
+                  type="file"
+                  data-button-text
+                  data-class-button="btn btn-default"
+                  data-classinput="form-control inline"
+                  data-placeholder="or select file..."
+                  ng-if="!isFileInputDestroyed"
+                  nv-file-select
+                  uploader="uploader"
+                  class="form-control"
+                />
+              </div>
+
+              <div style="margin-bottom: 40px" class="col-sm-9">
+                <div ng-if="uploader.queue.length">
+                  <table ng-if="uploader.queue.length" class="table">
+                    <thead>
+                    <tr class="text-muted">
+                      <th width="50%">{{'setting.FILE_NAME' | translate}}</th>
+                      <th ng-show="uploader.isHTML5">
+                        {{'setting.FILE_SIZE' | translate}}
+                      </th>
+                      <th ng-show="uploader.isHTML5">
+                        {{'setting.PROGRESS' | translate}}
+                      </th>
+                      <th>{{'setting.STATUS' | translate}}</th>
+                      <th>{{'setting.ACTIONS' | translate}}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="item in uploader.queue">
+                      <td>
+                        <strong>{{ item.file.name | shorten2: 30}}</strong>
+                      </td>
+                      <td ng-show="uploader.isHTML5" nowrap>
+                        {{ item.file.size / 1024 | number:2 }} KB
+                      </td>
+                      <td ng-show="uploader.isHTML5">
+                        <div style="margin-bottom: 0;" class="progress progress-xs">
+                          <div
+                            role="progressbar"
+                            ng-style="{ 'width': percentage + '%' }"
+                            class="progress-bar"
+                          ></div>
+                        </div>
+                        <div style="height: 12px;">
+                          <div ng-if="!!percentage" class="text-center text-muted" style="font-size: 9px;">{{percentage}}%</div>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        <span ng-show="status === 'done'">
+                          <em class="fa fa-check fa-fw text-success"/>
+                        </span>
+                        <span ng-show="status === 'preparing'">
+                          <em class="fa fa-spinner fa-spin text-info"/>
+                        </span>
+                        <span ng-show="status === 'importing'">
+                          <em class="fa fa-cog fa-spin text-info"/>
+                        </span>
+                        <span ng-show="item.isCancel">
+                          <em class="fa fa-ban-circle fa-fw"/>
+                        </span>
+                        <span ng-show="status && status !== '' && status !== 'preparing' && status !== 'importing' && status !== 'done'">
+                          <em class="fa fa-times fa-fw text-danger" uib-tooltip="{{status}}" tooltip-class="customClass"/>
+                        </span>
+                      </td>
+                      <td nowrap>
+                        <button
+                          type="button"
+                          ng-click="item.upload()"
+                          ng-disabled="item.isReady || item.isUploading || item.isError"
+                          class="btn btn-info btn-xs"
+                        >
+                          <span class="mr-sm"/>
+                          {{'setting.UPLOAD' | translate}}
+                        </button>
+                        <button
+                          type="button"
+                          ng-click="item.remove();resetFileInput();"
+                          ng-disabled="item.isUploading"
+                          class="btn btn-default btn-xs"
+                        >
+                          <span class="mr-sm"/>
+                          {{'setting.REMOVE' | translate}}
+                        </button>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </md-dialog-content>
+          </form>
+        </md-dialog>
+      </script>
     </div>
 </div>

@@ -109,6 +109,18 @@
                     {
                         headerName: $translate.instant("dlp.gridHeader.SENSOR_NAME"),
                         field: "name",
+                        headerCheckboxSelection: isWriteDLPSensorAuthorized,
+                        headerCheckboxSelectionFilteredOnly: isWriteDLPSensorAuthorized,
+                        checkboxSelection: (params) => {
+                          if (params.data)
+                            return isWriteDLPSensorAuthorized && !params.data.predefine;
+                        },
+                        cellRenderer: (params) => {
+                          if (params.value)
+                            return `<span ng-class="{'left-margin-32': ${!isWriteDLPSensorAuthorized || params.data.predefine}}">
+                                      ${params.value}
+                                    </span>`;
+                        },
                         width: 100,
                         minWidth: 100
                     },
@@ -240,6 +252,8 @@
                     gridOptions4Patterns: Utils.createGridOptions(columnDefs4Patterns),
                     gridOptions4EditPatterns: Utils.createGridOptions([...columnDefs4Patterns, ...editPatternColumn])
                 };
+
+                grid.gridOptions.rowSelection = "multiple";
 
                 grid.gridOptions.rowClassRules = {
                     "disabled-row": function(params) {

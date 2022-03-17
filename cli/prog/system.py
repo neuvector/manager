@@ -160,7 +160,9 @@ def showLocalSystemConfig(data, scope):
     if "auth_order" in conf:
         column_map += (("auth_order", "Authentication order"),)
     if "auth_by_platform" in conf:
-        column_map += (("auth_by_platform", "Authentication by OpenShift"),)
+        column_map += (("auth_by_platform", "Authentication by platform(Rancher or OpenShift)"),)
+    if "rancher_ep" in conf:
+        column_map += (("rancher_ep", "Rancher endpoint url"),)
     if "configured_internal_subnets" in conf:
         column_map += (("configured_internal_subnets", "Configured internal subnets"),)
     if "cluster_name" in conf:
@@ -179,6 +181,10 @@ def showLocalSystemConfig(data, scope):
         column_map += (("registry_https_proxy", "HTTPS Proxy"),)
     if "xff_enabled" in conf:
         column_map += (("xff_enabled", "Enable xff based policy match"),)
+    if "net_service_status" in conf:
+        column_map += (("net_service_status", "Enable Network Service Policy Mode"),)
+    if "net_service_policy_mode" in conf:
+        column_map += (("net_service_policy_mode", "Network Service Policy Mode"),)
 
     _show_system_setting_display_format(conf)
     output.show_with_map(column_map, conf)
@@ -409,7 +415,7 @@ def set_system_new_service_policy_mode(data, mode):
     data.client.config_system(new_service_policy_mode=mode.title())
 
 @set_system_new_service.command("profile_baseline")
-@click.argument('baseline', type=click.Choice(['Default', 'Shield']))
+@click.argument('baseline', type=click.Choice(['basic', 'zero-drift']))
 @click.pass_obj
 def set_system_new_service_profile_baseline(data, baseline):
     """Set system new service profile baseline."""
@@ -578,6 +584,23 @@ def set_system_auth_openshift(data, status):
     else:
         data.client.config_system(auth_by_platform=False)
 
+@set_system.command("auth_platform")
+@click.argument('status', type=click.Choice(['enable', 'disable']))
+@click.pass_obj
+def set_system_auth_platform(data, status):
+    """Enable/disable authentication by platform(Rancher or OpenShift)"""
+    if status == 'enable':
+        data.client.config_system(auth_by_platform=True)
+    else:
+        data.client.config_system(auth_by_platform=False)
+
+@set_system.command("rancher_ep")
+@click.argument('url')
+@click.pass_obj
+def set_system_rancher_ep(data, url):
+    """Rancher endpoint url"""
+    data.client.config_system(rancher_ep=url)
+
 @set_system.command("cluster_name")
 @click.argument('name')
 @click.pass_obj
@@ -630,6 +653,28 @@ def set_system_xff_enabled_status(data, status):
         data.client.config_system(xff_enabled=True)
     else:
         data.client.config_system(xff_enabled=False)
+
+@set_system.group('net_service')
+@click.pass_obj
+def set_system_net_service(data):
+    """Set global network service configuration"""
+
+@set_system_net_service.command("status")
+@click.argument('status', type=click.Choice(['enable', 'disable']))
+@click.pass_obj
+def set_system_net_service_status(data, status):
+    """Enable/disable global network service"""
+    if status == 'enable':
+        data.client.config_system(net_service_status=True)
+    else:
+        data.client.config_system(net_service_status=False)
+
+@set_system_net_service.command("policy_mode")
+@click.argument('mode', type=click.Choice(['discover', 'monitor', 'protect']))
+@click.pass_obj
+def set_system_net_service_policy_mode(data, mode):
+    """Set system global network service policy mode."""
+    data.client.config_system(net_service_policy_mode=mode.title())
 
 @set_system.group("registry")
 @click.pass_obj

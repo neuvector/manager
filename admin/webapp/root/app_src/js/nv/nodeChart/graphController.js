@@ -811,22 +811,24 @@
     };
 
     const showSniffer = container => {
-      $scope.containerId = container.id;
-      $scope.containerName =
-        container.label.length > container.oriLabel.length
-          ? container.label
-          : container.oriLabel;
-      clearPopup();
+      if(container && container.cap_sniff) {
+        $scope.containerId = container.id;
+        $scope.containerName =
+            container.label.length > container.oriLabel.length
+                ? container.label
+                : container.oriLabel;
+        clearPopup();
 
-      $http
-        .get(SNIFF_URL, { params: { id: container.id } })
-        .then(function(response) {
-          getSniffers(response);
-          $scope.sniffer = null;
-        })
-        .catch(function(err) {
-          console.warn(err);
-        });
+        $http
+            .get(SNIFF_URL, {params: {id: container.id}})
+            .then(function (response) {
+              getSniffers(response);
+              $scope.sniffer = null;
+            })
+            .catch(function (err) {
+              console.warn(err);
+            });
+      }
     };
 
     $scope.startSniff = containerId => {
@@ -1211,7 +1213,7 @@
               activeSessions:
                 model.group && model.group.startsWith("container"),
               sniff:
-                model.group &&
+                model.group && model.cap_sniff &&
                 (model.group.startsWith("container") ||
                   model.group.startsWith("mesh")),
               quarantine:

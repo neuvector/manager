@@ -69,3 +69,4 @@ admin/webapp/root/bower_components
 admin/webapp/root/node_modules
 admin/webapp/root/vendor
 admin/webapp/root/server
+/.bsp/*

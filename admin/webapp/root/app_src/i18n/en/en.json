@@ -78,6 +78,7 @@
     "DISCOVER": "Discover",
     "MONITOR": "Monitor",
     "PROTECT": "Protect",
+    "ZERODRIFT": "Zero Drift",
     "DEFAULT": "Default",
     "UNMANAGED": "Un-managed",
     "DISCONNECTED": "Disconnected",
@@ -1516,7 +1517,8 @@
       "TAG": "Tag",
       "RESPONSE_RULE_ID": "Response Rule ID",
       "OCCURRENCES": "Count",
-      "DURATION": "Duration"
+      "DURATION": "Duration",
+      "ZERO_DRIFT": "Zero Drift"
     },
     "COUNT_POSTFIX": "risk reports found",
     "LEVEL": "Level",
@@ -2683,6 +2685,7 @@
     "WEBHOOKS": "Webhooks",
     "CLUSTER": "Cluster",
     "CLUSTER_COMMENT": "Used to identify the cluster in notifications",
+    "ZERODRIFT_COMMENT": "Automated process and file protections based on drift detection from original image",
     "CLUSTER_NAME": "Cluster Name:",
     "SERVER": "Server",
     "PROTOCOL": "Protocol",

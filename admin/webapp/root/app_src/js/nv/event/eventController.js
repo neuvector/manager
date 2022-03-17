@@ -351,7 +351,6 @@
         let description = "";
         const itemMap = {
           "Level": "",
-          "UsageRatio": "",
           "NetUsage": "",
           "UsageLimit": "",
           "ActiveAnon": "",
@@ -368,11 +367,7 @@
             description = `<div class="col-sm-12 text-warning">${v}</div>`;
           } else {
             if (k !== "Level" && k !== "Failcnt" &&  k !== "PageFaults") {
-              if (k === "UsageRatio") {
-                itemMap[k] = `<div class="col-sm-6"><span class="text-bold">${$translate.instant(`event.msg.${Utils.parseDivideStyle(k).toUpperCase()}`)}:</span>&nbsp;<span>${v}%</span></div>`;
-              } else {
                 itemMap[k] = `<div class="col-sm-6"><span class="text-bold">${$translate.instant(`event.msg.${Utils.parseDivideStyle(k).toUpperCase()}`)}:</span>&nbsp;<span>${$filter("bytes")(v)}</span></div>`;
-              }
             } else {
               itemMap[k] = `<div class="col-sm-6"><span class="text-bold">${$translate.instant(`event.msg.${Utils.parseDivideStyle(k).toUpperCase()}`)}:</span>&nbsp;<span>${Utils.numberWithCommas(v)}</span></div>`;
             }

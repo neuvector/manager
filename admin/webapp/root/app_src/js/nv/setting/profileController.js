@@ -42,7 +42,7 @@
         }
         $scope.emailHash = $rootScope.user.emailHash;
         $scope.isLocalUser = $rootScope.user.token.server === "";
-        $scope.passwordMatch = "";
+        $scope.newPassword = {};
         $rootScope.toastWarnings();
       }
 
@@ -110,7 +110,7 @@
 
       $scope.openEdit = function () {
         $scope.editMode = !$scope.editMode;
-        $scope.passwordMatch = "";
+        $scope.newPassword = {};
         if ($scope.editMode === false) {
           init();
           $scope.profileForm.$setPristine();
@@ -167,6 +167,13 @@
               $scope.passwordProfile = error.data.password_profile_basic || $scope.passwordProfile;
               preparePasswordCheckList();
               $scope.checkPassword();
+              
+              // reset password form on failure
+              $scope.user.password = "";
+              $scope.user.new_password = "";
+              $scope.newPassword.match = "";
+              $scope.profileForm.$setPristine();
+              $scope.profileForm.$setUntouched();
             }
           });
       };

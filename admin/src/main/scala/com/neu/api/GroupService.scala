@@ -472,6 +472,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
                               Some(serviceConfigParam.policy_mode.getOrElse("Discover"))
                           )
                         ),
+                        None,
                         None
                       )
                     )

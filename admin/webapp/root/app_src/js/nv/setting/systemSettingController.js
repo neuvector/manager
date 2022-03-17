@@ -549,6 +549,8 @@
                 );
             }
             vm.config.controller_debug = response.data.config.controller_debug;
+            vm.config.netServiceStatus = response.data.config.net_service_status;
+            vm.config.netServicePolicyMode = response.data.config.net_service_policy_mode;
             vm.controllerDebugEnabled =
               vm.config.controller_debug.length > 0 &&
               vm.config.controller_debug[0] === "cpath";
@@ -710,8 +712,16 @@
 
         console.log(configBody);
 
+        let payload = {
+          config: configBody,
+          net_config: {
+            net_service_status: vm.config.netServiceStatus,
+            net_service_policy_mode: vm.config.netServicePolicyMode
+          }
+        }
+
         $http
-          .patch(CONFIG_URL, configBody)
+          .patch(CONFIG_URL, payload)
           .then(function () {
             vm.catDirty = false;
             vm.hookCatDirty = false;

@@ -2797,7 +2797,9 @@
       "LDAP": "配置一个LDAP/AD目录以启用用户授权.",
       "SAML": "用SAML配置单一登录.",
       "LICENSE": "浏览账单以及管理许可证.",
-      "OPENID": "用OpenID Connect配置单一登录."
+      "OPENID": "用OpenID Connect配置单一登录.",
+      "ENABLED_NET_POLICY_MODE": "网络服务策略模式将全局性地设置为选定的模式",
+      "DISABLED_NET_POLICY_MODE": "各组级别的策略模式将应用在网络和配置文件中"
     }
   },
   "ldap": {

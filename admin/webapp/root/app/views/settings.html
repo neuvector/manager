@@ -109,9 +109,9 @@
                 </label>
               </div>
             </div>
-            <div class="col-sm-8 mt-lg">
+            <div class="col-sm-12 mt-lg">
               <div
-                class="radio-inline c-radio pl-sm md-switch2"
+                class="radio-inline c-radio pl-sm md-switch2 pull-left ml-lg mr-xl mb"
                 ng-class="inputMaskDisabledClass"
               >
                 <label class="text-gray-label">
@@ -127,7 +127,7 @@
                   <span class="toggle hand" ng-disabled="!isNewServiceModeAuthorized"></span>
                 </label>
               </div>
-              <div class="text-muted text-sm mb-lg pull-right mr-lg">
+              <div class="text-muted text-sm mb ml-lg pull-left">
                 {{'setting.ZERODRIFT_COMMENT' | translate}}
               </div>
             </div>
@@ -152,7 +152,7 @@
             </label>
           </div>
           <div class="col-sm-12 ">
-            <div class="col-sm-8">
+            <div class="pull-left ml-lg mr-xl mb">
               <div
                 class="radio-inline c-radio mr-lg"
                 ng-class="inputMaskDisabledClass"
@@ -222,6 +222,12 @@
                   />{{'topbar.mode.ENFORCE' | translate}}
                 </label>
               </div>
+            </div>
+            <div class="text-muted text-sm mb ml-lg pull-left" ng-if="sysCtrl.config.netServiceStatus">
+              {{ 'setting.description.ENABLED_NET_POLICY_MODE' | translate }}
+            </div>
+            <div class="text-muted text-sm mb ml-lg pull-left" ng-if="!sysCtrl.config.netServiceStatus">
+              {{ 'setting.description.DISABLED_NET_POLICY_MODE' | translate }}
             </div>
           </div>
         </div>

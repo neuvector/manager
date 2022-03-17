@@ -2800,7 +2800,9 @@
       "LDAP": "Configure an LDAP directory or Microsoft active directory to enable authentication of users.",
       "SAML": "Configure single sign on using SAML.",
       "LICENSE": "View billing and manage licenses.",
-      "OPENID": "Configure single sign on using OpenID Connect."
+      "OPENID": "Configure single sign on using OpenID Connect.",
+      "ENABLED_NET_POLICY_MODE": "Network service policy mode will be globally set to selected mode",
+      "DISABLED_NET_POLICY_MODE": "Per group level policy mode will apply to both network and profile"
     }
   },
   "ldap": {

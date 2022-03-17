@@ -924,11 +924,34 @@ def request_export_admission(data, config, id, filename):
         click.echo(respData)
     return
 
+@request_export.command('dlp')
+@click.option("--name",  multiple=True, help="Name of DLP sensor to export")
+@click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True))
+@click.pass_obj
+def request_export_dlp(data, name, filename):
+    """Export DLP sensors/rules."""
+
+    names = []
+    for n in name:
+        names.append(n)
+
+    respData = data.client.requestDownload("file", "dlp", None, {"names": names})
+    if filename and len(filename) > 0:
+        try:
+            with click.open_file(filename, 'w') as wfp:
+                wfp.write(respData)
+            click.echo("Wrote to %s" % click.format_filename(filename))
+        except IOError:
+            click.echo("Error: Failed to write to %s" % click.format_filename(filename))
+    else:
+        click.echo(respData)
+    return
+
 @request_export.command('waf')
 @click.option("--name",  multiple=True, help="Name of WAF sensor to export")
 @click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True))
 @click.pass_obj
-def request_export_admission(data, name, filename):
+def request_export_waf(data, name, filename):
     """Export WAF sensors/rules."""
 
     names = []
@@ -1101,6 +1124,54 @@ def import_admission(data, filename):
     except IOError:
         click.echo("")
         click.echo("[2] Error: Failed to import admission control configuration/rules %s" % click.format_filename(filename))
+    click.echo("")
+
+@request_import.command('dlp')
+@click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))
+@click.pass_obj
+def import_dlp(data, filename):
+    """Import DLP sensors/rules."""
+    try:
+        tid = ""
+        resp = data.client.importConfig("file/dlp/config", filename, True, None, tid, 0, "")
+        if tid == "":
+            if resp.status_code == requests.codes.partial:
+                respJson = resp.json()
+                if "data" in respJson:
+                    respData = respJson["data"]
+                    tid = respData["tid"]
+                    click.echo("[progress: {:3d}%] {}".format(respData["percentage"], respData["status"]))
+        status = ""
+        if tid != "":
+            i = 1
+            #click.echo("Info: import task transaction id is {}".format(tid))
+            while resp.status_code == requests.codes.partial:
+                time.sleep(2)
+                resp = data.client.importConfig("file/dlp/config", filename, True, None, tid, i, "")
+                respJson = resp.json()
+                if "data" in respJson:
+                    respData = respJson["data"]
+                    if "status" in respData:
+                        status = respData["status"]
+                    if status != "":
+                        click.echo("[progress: {:3d}%] {}".format(respData["percentage"], status))
+                i = i + 1
+            #click.echo("--------------------------")
+            if resp.status_code == requests.codes.ok:
+                respJson = resp.json()
+                if "data" in respJson:
+                    respData = respJson["data"]
+                    if "status" in respData:
+                        status = respData["status"]
+
+        click.echo("")
+        if resp.status_code == requests.codes.ok and status == "done":
+            click.echo("Imported DLP sensors/rules {}.".format(click.format_filename(filename)))
+        else:
+            click.echo("[1] Error: Failed to import DLP sensors/rules {}".format(click.format_filename(filename)))
+    except IOError:
+        click.echo("")
+        click.echo("[2] Error: Failed to import DLP sensors/rules %s" % click.format_filename(filename))
     click.echo("")
 
 @request_import.command('waf')

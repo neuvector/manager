@@ -111,7 +111,16 @@
                         field: "name",
                         headerCheckboxSelection: isWriteDLPSensorAuthorized,
                         headerCheckboxSelectionFilteredOnly: isWriteDLPSensorAuthorized,
-                        checkboxSelection: isWriteDLPSensorAuthorized,
+                        checkboxSelection: (params) => {
+                          if (params.data)
+                            return isWriteDLPSensorAuthorized && !params.data.predefine;
+                        },
+                        cellRenderer: (params) => {
+                          if (params.value)
+                            return `<span ng-class="{'left-margin-32': ${!isWriteDLPSensorAuthorized || params.data.predefine}}">
+                                      ${params.value}
+                                    </span>`;
+                        },
                         width: 100,
                         minWidth: 100
                     },

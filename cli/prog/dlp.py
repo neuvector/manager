@@ -268,6 +268,7 @@ def show_dlp_sensor(ctx, data, page, sort_dir):
             if gr not in dr:
                 dr[gr] = ""
             click.echo("Comment:\"%s\"" % (dr[gr]))
+            click.echo("Type: %s" % (client.CfgTypeDisplay[dr["cfg_type"]]))
 
             gr = "predefine"
             if gr not in dr:
@@ -319,6 +320,7 @@ def detail(data, page, sort_dir, name):
     if gr not in dr:
         dr[gr] = ""
     click.echo("Comment:\"%s\"" % (dr[gr]))
+    click.echo("Type: %s" % (client.CfgTypeDisplay[dr["cfg_type"]]))
 
     gr = "predefine"
     if gr not in dr:

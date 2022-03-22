@@ -506,7 +506,7 @@
                   mode
                 )}</span>`;
                 if (zeroDrift)
-                  return modeLabel + `<md-icon md-svg-src="app/img/icons/anchor.svg" 
+                  return modeLabel + `<md-icon md-svg-src="app/img/icons/anchor.svg"
                                         aria-label="Zero Drift"></md-icon>`;
                 else
                   return modeLabel;
@@ -1184,11 +1184,7 @@
               }
             })
             .then(
-              function() {
-                $timeout(() => {
-                  $scope.refresh();
-                }, 3000);
-              },
+              function() {},
               function() {}
             );
         };
@@ -2858,7 +2854,7 @@
           return (
             $translate.instant("topbar.mode.SWITCH") +
             $translate.instant("enum." + id.mode.toUpperCase()) +
-            $translate.instant("topbar.mode.MODE") + 
+            $translate.instant("topbar.mode.MODE") +
             " - " + $translate.instant("enum." + id.zeroDrift.split("-").join("").toUpperCase()) +
             "?"
           );
@@ -2866,7 +2862,7 @@
         return (
           $translate.instant("topbar.mode.SWITCH") +
           $translate.instant("enum." + id.mode.toUpperCase()) +
-          $translate.instant("topbar.mode.MODE") + 
+          $translate.instant("topbar.mode.MODE") +
           "?"
         );
       }

@@ -160,7 +160,7 @@
               "/fff" +
               '" class="img-thumbnail img-circle ' +
               $sanitize(
-                params.data.fullname === "admin" && $scope.isAuthoredUserWrite
+                (params.data.fullname === "admin" && $scope.isAuthoredUserWrite) || params.data.server.toLowerCase().includes(SERVER_TYPE.RANCHER)
                   ? "left-margin-32"
                   : ""
               ) +

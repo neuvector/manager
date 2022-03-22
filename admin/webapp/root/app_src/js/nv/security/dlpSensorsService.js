@@ -139,6 +139,23 @@
                         width: 200
                     },
                     {
+                        headerName: $translate.instant("admissionControl.TYPE"),
+                        field: "cfg_type",
+                        cellRenderer: (params) => {
+                          if (params) {
+                            if (params.data.predefine) return "";
+                            let cfgType = params.value ? params.value.toUpperCase() : CFG_TYPE.CUSTOMER.toUpperCase();
+                            let type = colourMap[cfgType];
+                            return `<div class="action-label nv-label ${type}">${$sanitize(
+                              $translate.instant(`group.${cfgType}`)
+                            )}</div>`;
+                          }
+                        },
+                        width: 90,
+                        minWidth: 90,
+                        maxWidth: 90
+                    },
+                    {
                         cellClass: "grid-right-align",
                         suppressSorting: true,
                         cellRenderer: function(params) {

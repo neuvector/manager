@@ -160,7 +160,7 @@
               "/fff" +
               '" class="img-thumbnail img-circle ' +
               $sanitize(
-                (params.data.fullname === "admin" && $scope.isAuthoredUserWrite) || params.data.server.toLowerCase().includes(SERVER_TYPE.RANCHER)
+                (params.data.fullname === "admin" && $scope.isAuthoredUserWrite)
                   ? "left-margin-32"
                   : ""
               ) +
@@ -337,7 +337,7 @@
                 uib-tooltip="${$translate.instant("user.tooltips.UNLOCK")}" ng-click="unlockUser(data.username)">
               </em>
               <em class="fa fa-lg fa-trash mr-sm text-action"
-                ng-show=\"!(data.fullname === 'admin') && ${!params.data.server.toLowerCase().includes(SERVER_TYPE.RANCHER)} \"
+                ng-show=\"!(data.fullname === 'admin')\"
                 uib-tooltip="${$translate.instant("user.tooltips.REMOVE")}" ng-click=\"!(data.fullname === 'admin') && removeUser(data)\">
               </em>
               <em class="fa fa-lg fa-edit text-action"
@@ -371,7 +371,7 @@
         suppressRowClickSelection: true,
         isRowSelectable: function (node) {
           return node.data
-            ? node.data.fullname !== "admin" && $scope.isAuthoredUserWrite && !node.data.server.toLowerCase().includes(SERVER_TYPE.RANCHER)
+            ? node.data.fullname !== "admin" && $scope.isAuthoredUserWrite
             : false;
         },
         onSelectionChanged: onSelectionChanged,

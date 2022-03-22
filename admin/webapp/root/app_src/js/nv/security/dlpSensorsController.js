@@ -164,6 +164,7 @@
             $scope.gridOptions.api.setRowData(response.data.sensors);
             setTimeout(function() {
               $scope.gridOptions.api.sizeColumnsToFit();
+              $scope.gridOptions.api.deselectAll();
               if (index) {
                 let rowNode = $scope.gridOptions.api.getDisplayedRowAtIndex(
                   index
@@ -235,7 +236,7 @@
           .then(
             function() {
               $timeout(function() {
-                $scope.reload($scope.sensors.length);
+                $scope.reload();
               }, 3000);
             },
             function() {}
@@ -248,13 +249,13 @@
     };
 
     $scope.editSensor = function() {
-      let index4Edit = dlpSensorsService.getIndex(
-        $scope.sensors,
-        $scope.sensor.name
-      );
-      let rowNode = $scope.gridOptions.api.getDisplayedRowAtIndex(index4Edit);
-      rowNode.setSelected(true);
       let success = function() {
+        let index4Edit = dlpSensorsService.getIndex(
+          $scope.sensors,
+          $scope.sensor.name
+        );
+        let rowNode = $scope.gridOptions.api.getDisplayedRowAtIndex(index4Edit);
+        rowNode.setSelected(true);
         $mdDialog
           .show({
             controller: DialogController4AddEditSensor,

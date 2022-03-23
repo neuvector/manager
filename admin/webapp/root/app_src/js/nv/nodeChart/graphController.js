@@ -3473,6 +3473,12 @@
 
     $scope.refresh = () => {
       // cachePositions = cacheNodePositions(graph.getNodes());
+      if($scope.onActiveSession){
+        $scope.stopRefreshSession();
+        $scope.onActiveSession = false;
+        $scope.makePopupBackToOriginalLocation();
+      }
+
       if (graph) {
         graph.clear();
       }

@@ -155,14 +155,14 @@
               <div class="col-xs-6 pl0">
                 <md-input-container class="md-block mb0">
                   <label>{{'group.script.NAME' | translate}}</label>
-                  <input id="scriptName" ng-model="gpCtrl.scriptEntry.name" ng-disabled="writeMode===WRITE_MODE.UPDATE"/>
+                  <input id="scriptName" ng-model="gpCtrl.scriptEntry.name" ng-disabled="writeMode===WRITE_MODE.UPDATE || !isGroupRuleAddable"/>
                 </md-input-container>
                 <div class="md-block mb0">
                   <label class="text-muted">{{'group.script.SCRIPT' | translate}}</label>
-                  <textarea id="scriptContent" ng-model="gpCtrl.scriptEntry.script" class="form-control"
+                  <textarea id="scriptContent" ng-model="gpCtrl.scriptEntry.script" class="form-control" ng-disabled="!isGroupRuleAddable"
                             ng-style="{height: scriptHeight + 'px'}" style="resize: none; min-height: 50px;"/>
                 </div>
-                <div class="md-block mb0 mt-lg" display-control="write_script">
+                <div class="md-block mb0 mt-lg" display-control="write_script" ng-if="isGroupRuleAddable">
                   <md-button ng-if="writeMode===WRITE_MODE.ADD" ng-click="addScript()" class="md-raised md-primary pull-right mr0 mb0"
                              ng-disabled="!gpCtrl.scriptEntry || (!gpCtrl.scriptEntry.name || !gpCtrl.scriptEntry.script)">
                     <span>{{'group.script.ADD' | translate}}</span>
@@ -187,7 +187,7 @@
                   <div ag-grid="gridScript" class="ag-grid" style="width: 100%; min-height: 185px;"
                        ng-style="{ height: scriptGridHeight + 'px'}">
                   </div>
-                  <div class="policy-select-all" style="left: auto; top: 40px; right: 3px;" ng-if="isWriteGroupAuthorized">
+                  <div class="policy-select-all" style="left: auto; top: 40px; right: 3px;" ng-if="isWriteGroupAuthorized && isGroupRuleAddable">
                     <div>
                       <em class="fa fa-plus fa-lg mr-sm text-action" id="remove-form-action"
                           ng-click="prepareAdd()">
@@ -234,7 +234,7 @@
                 ng-class="inputMaskDisabledClass"
                 ng-show="group.baseline_profile === 'zero-drift'"
                 >
-                  <md-icon md-svg-src="app/img/icons/anchor.svg" 
+                  <md-icon md-svg-src="app/img/icons/anchor.svg"
                        aria-label="Zero Drift"></md-icon>
                   <label class="text-gray-label">
                     {{'audit.gridHeader.ZERO_DRIFT' | translate}}
@@ -339,7 +339,7 @@
                        ng-keyup="onDetailsFilterChanged('gridDLP', searchDLP)"/>
               </div>
               <div class="pull-right ml-lg" style="margin-top: 4px; padding-top: 2px;"
-                   ng-if="isWriteGroupAuthorized"
+                   ng-if="isWriteGroupAuthorized && isGroupRuleAddable"
                    ng-click="editDLPSensor()">
                 <em class="fa fa-lg fa-edit text-action mr-sm"></em>
               </div>
@@ -348,7 +348,7 @@
                 <div class="pull-left">
                   <div class="md-switch2">
                     <label class="nv-modal-item-title mb0">
-                      <input id="adm-state" type="checkbox" ng-model="dlpGroup.status" ng-click="toggleDLPGroupStatus(dlpGroup.status)">
+                      <input id="adm-state" type="checkbox" ng-disabled="!isGroupRuleAddable" ng-model="dlpGroup.status" ng-click="toggleDLPGroupStatus(dlpGroup.status)">
                       <span class="toggle hand" style="margin-right: 5px;"></span>
                       {{(!dlpGroup.status ? "policy.status.DISABLED" : "policy.status.ENABLED") | translate}}
                     </label>
@@ -373,7 +373,7 @@
                        ng-keyup="onDetailsFilterChanged('gridWAF', searchWAF)"/>
               </div>
               <div class="pull-right ml-lg" style="margin-top: 4px; padding-top: 2px;"
-                   ng-if="isWriteGroupAuthorized"
+                   ng-if="isWriteGroupAuthorized && isGroupRuleAddable"
                    ng-click="editWAFSensor()">
                 <em class="fa fa-lg fa-edit text-action mr-sm"></em>
               </div>
@@ -382,7 +382,7 @@
                 <div class="pull-left">
                   <div class="md-switch2">
                     <label class="nv-modal-item-title mb0">
-                      <input id="adm-state" type="checkbox" ng-model="wafGroup.status" ng-click="toggleWAFGroupStatus(wafGroup.status)">
+                      <input id="adm-state" type="checkbox" ng-disabled="!isGroupRuleAddable" ng-model="wafGroup.status" ng-click="toggleWAFGroupStatus(wafGroup.status)">
                       <span class="toggle hand" style="margin-right: 5px;"></span>
                       {{(!wafGroup.status ? "policy.status.DISABLED" : "policy.status.ENABLED") | translate}}
                     </label>
@@ -493,7 +493,7 @@
               class="radio-inline c-radio pl-sm md-switch2"
               ng-class="inputMaskDisabledClass"
               >
-                <md-icon md-svg-src="app/img/icons/anchor.svg" 
+                <md-icon md-svg-src="app/img/icons/anchor.svg"
                 aria-label="Zero Drift"></md-icon>
                 <label class="text-gray-label">
                   {{'audit.gridHeader.ZERO_DRIFT' | translate}}

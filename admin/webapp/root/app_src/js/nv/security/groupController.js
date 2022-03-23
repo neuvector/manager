@@ -2124,9 +2124,17 @@
               let labelCode =
                 colourMap[params.value === "allow" ? "alert" : params.value];
               if (!labelCode) labelCode = "info";
-              return `<span class="label label-fs label-${labelCode}">${$sanitize(
-                mode
-              )}</span>`;
+              if (params.data) {
+                if (params.data.exist) {
+                  return `<span class="label label-fs label-${labelCode}">${$sanitize(
+                    mode
+                  )}</span>`;
+                } else {
+                  return `<span class="label label-fs disabled-action">${$sanitize(
+                    mode
+                  )}</span>`;
+                }
+              }
             } else return null;
           },
           width: 90,
@@ -2476,6 +2484,15 @@
       };
 
       $scope.gridDLP = Utils.createGridOptions(dlpColumnDefs);
+      $scope.gridDLP.rowClassRules = {
+        "disabled-row": function(params) {
+          if (params.data) {
+            return !params.data.exist;
+          } else {
+            return false;
+          }
+        }
+      };
       $scope.gridWAF = Utils.createGridOptions(wafColumnDefs);
       $scope.gridWAF.rowClassRules = {
         "disabled-row": function(params) {

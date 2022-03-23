@@ -160,7 +160,7 @@
               "/fff" +
               '" class="img-thumbnail img-circle ' +
               $sanitize(
-                params.data.fullname === "admin" && $scope.isAuthoredUserWrite
+                (params.data.fullname === "admin" && $scope.isAuthoredUserWrite)
                   ? "left-margin-32"
                   : ""
               ) +
@@ -222,6 +222,9 @@
               }
               if (server.toLowerCase().includes(SERVER_TYPE.OPENSHIFT)) {
                 result = AUTH_PROVIDER.OPENSHIFT;
+              }
+              if (server.toLowerCase().includes(SERVER_TYPE.RANCHER)) {
+                result = AUTH_PROVIDER.RANCHER;
               }
             } else {
               result = defaultProvider;

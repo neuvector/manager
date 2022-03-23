@@ -8,9 +8,7 @@
         return {
             id: null,
             getIndex: function(array, name) {
-                for (let i = 0; i < array.length; i++) {
-                    if (array[i].name === name) return i;
-                }
+                return array.findIndex(elem => elem.name === name);
             },
             getPattern: function(event) {
                 let pattern = [];
@@ -109,6 +107,18 @@
                     {
                         headerName: $translate.instant("dlp.gridHeader.SENSOR_NAME"),
                         field: "name",
+                        headerCheckboxSelection: isWriteDLPSensorAuthorized,
+                        headerCheckboxSelectionFilteredOnly: isWriteDLPSensorAuthorized,
+                        checkboxSelection: (params) => {
+                          if (params.data)
+                            return isWriteDLPSensorAuthorized && !params.data.predefine;
+                        },
+                        cellRenderer: (params) => {
+                          if (params.value)
+                            return `<span ng-class="{'left-margin-32': ${!isWriteDLPSensorAuthorized || params.data.predefine}}">
+                                      ${params.value}
+                                    </span>`;
+                        },
                         width: 100,
                         minWidth: 100
                     },
@@ -127,6 +137,23 @@
                             }
                         },
                         width: 200
+                    },
+                    {
+                        headerName: $translate.instant("admissionControl.TYPE"),
+                        field: "cfg_type",
+                        cellRenderer: (params) => {
+                          if (params) {
+                            if (params.data.predefine) return "";
+                            let cfgType = params.value ? params.value.toUpperCase() : CFG_TYPE.CUSTOMER.toUpperCase();
+                            let type = colourMap[cfgType];
+                            return `<div class="action-label nv-label ${type}">${$sanitize(
+                              $translate.instant(`group.${cfgType}`)
+                            )}</div>`;
+                          }
+                        },
+                        width: 90,
+                        minWidth: 90,
+                        maxWidth: 90
                     },
                     {
                         cellClass: "grid-right-align",
@@ -240,6 +267,8 @@
                     gridOptions4Patterns: Utils.createGridOptions(columnDefs4Patterns),
                     gridOptions4EditPatterns: Utils.createGridOptions([...columnDefs4Patterns, ...editPatternColumn])
                 };
+
+                grid.gridOptions.rowSelection = "multiple";
 
                 grid.gridOptions.rowClassRules = {
                     "disabled-row": function(params) {

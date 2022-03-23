@@ -39,13 +39,20 @@ case class SystemConfig(
   ibmsa_ep_enabled: Option[Boolean] = None,
   controller_debug: Option[Array[String]] = None
 )
+
+case class SystemNetConfig (
+  net_service_status: Option[Boolean],
+  net_service_policy_mode: Option[String]
+)
+
 case class SystemConfig4Dashboard(
   new_service_policy_mode: Option[String] = None
 )
 
 case class SystemConfigWrap(
   config: Option[SystemConfig],
-  fed_config: Option[SystemConfig]
+  fed_config: Option[SystemConfig],
+  net_config: Option[SystemNetConfig]
 )
 
 case class WebhookConfigWrap(

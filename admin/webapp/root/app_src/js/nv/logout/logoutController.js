@@ -52,24 +52,27 @@
           rejectBack();
         });
     };
-    $rootScope.logout = function (isTimeout) {
+    $rootScope.logout = function (isTimeout, isFromSSO) {
       const NEED_CONFIRM_SUBMIT = ["/app/policy", "/app/fed-policy", "/app/configuration"];
-      if (!isTimeout && NEED_CONFIRM_SUBMIT.includes($location.path())) {
-        if ($rootScope.isSettingFormDirty) {
-          if (window.confirm($translate.instant("setting.webhook.LEAVE_PAGE"))) {
-            doLogoout(isTimeout);
-          }
-        } else if ($rootScope.isPolicyDirty) {
-          if (!$rootScope.isReset) {
-            if (window.confirm($translate.instant("policy.dialog.reminder.MESSAGE"))) {
+      if ($rootScope.isSUSESSO && !isTimeout && !isFromSSO) $state.go("page.login");
+      else {
+        if (!isTimeout && NEED_CONFIRM_SUBMIT.includes($location.path())) {
+          if ($rootScope.isSettingFormDirty) {
+            if (window.confirm($translate.instant("setting.webhook.LEAVE_PAGE"))) {
               doLogoout(isTimeout);
             }
+          } else if ($rootScope.isPolicyDirty) {
+            if (!$rootScope.isReset) {
+              if (window.confirm($translate.instant("policy.dialog.reminder.MESSAGE"))) {
+                doLogoout(isTimeout);
+              }
+            }
+          } else {
+            doLogoout(isTimeout);
           }
         } else {
           doLogoout(isTimeout);
         }
-      } else {
-        doLogoout(isTimeout);
       }
     };
   }

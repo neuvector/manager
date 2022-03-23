@@ -8,9 +8,7 @@
         return {
             id: null,
             getIndex: function(array, name) {
-                for (let i = 0; i < array.length; i++) {
-                    if (array[i].name === name) return i;
-                }
+                return array.findIndex(elem => elem.name === name);
             },
             getPattern: function(event) {
                 let pattern = [];

@@ -264,8 +264,12 @@
 
         console.log(configBody);
 
+        let payload = {
+          fed_config: configBody
+        }
+
         $http
-          .patch(CONFIG_URL, configBody, {params: {scope: "fed"}})
+          .patch(CONFIG_URL, payload, {params: {scope: "fed"}})
           .then(function () {
             Alertify.set({ delay: ALERTIFY_SUCCEED_DELAY });
             Alertify.success($translate.instant("setting.SUBMIT_OK"));

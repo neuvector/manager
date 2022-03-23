@@ -628,5 +628,24 @@ class RestClient(object):
 
         self._handle_common_error(status, data)
 
+    def config_system_net(self, **kwargs):
+        if not self._token():
+            raise Unauthorized()
+
+        conf = {}
+        for key, value in kwargs.iteritems():
+            conf[key] = value
+
+        body = {"net_config": conf}
+
+        status, _, _, data = self._request("PATCH",
+                                           "%s/v1/system/config" % self.url,
+                                           body=body)
+
+        if status == requests.codes.ok:
+            return True
+
+        self._handle_common_error(status, data)
+
     def reset_token(self, token):
         self.sess.headers.update({"X-Auth-Token": token})

@@ -244,7 +244,8 @@ const SERVER_TYPE = {
   OPENSHIFT: "openshift",
   OPENID: "openid",
   SAML: "saml",
-  LDAP: "ldap"
+  LDAP: "ldap",
+  RANCHER: "rancher"
 };
 
 const AUTH_PROVIDER = {
@@ -252,7 +253,8 @@ const AUTH_PROVIDER = {
   OPENID: "OpenID Connect",
   SAML: "SAML",
   LDAP: "LDAP/AD",
-  NEUVECTOR: "NeuVector"
+  NEUVECTOR: "NeuVector",
+  RANCHER: "Rancher"
 };
 
 const KIND_EXCEPTION_MAP = {

@@ -17,6 +17,7 @@ if [[ $# > 0 ]]; then
     esac
 fi
 npm i -g gulp-cli 2>&1
+git config --global url."https://".insteadOf git://
 npm install 2>&1
 if [ $? -eq 0 ]; then
     echo npm package installation SUCCEED

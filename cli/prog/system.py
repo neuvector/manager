@@ -185,6 +185,12 @@ def showLocalSystemConfig(data, scope):
         column_map += (("net_service_status", "Enable Network Service Policy Mode"),)
     if "net_service_policy_mode" in conf:
         column_map += (("net_service_policy_mode", "Network Service Policy Mode"),)
+    if "mode_auto_d2m" in conf:
+        column_map += (("mode_auto_d2m", "Auto Mode Upgrader: Discover -> Monitor"),
+                   ("mode_auto_d2m_duration", "       Duration"),)
+    if "mode_auto_m2p" in conf:
+        column_map += (("mode_auto_m2p", "Auto Mode Upgrader: Monitor -> Protect"),
+                   ("mode_auto_m2p_duration", "       Duration"),)
 
     _show_system_setting_display_format(conf)
     output.show_with_map(column_map, conf)
@@ -1319,3 +1325,24 @@ def delete(data):
     """Delete current license"""
 
     data.client.delete("system", "license")
+
+@set_system.group('auto_mode')
+@click.pass_obj
+def set_system_config_atmo(data):
+    """Set system auto mode upgrader configruation"""
+
+@set_system_config_atmo.command("config")
+@click.option("-p","--path", type=click.Choice(['d2m', 'm2p']), help="d2m: Discover to Monitor, m2p: Monitor to Protect")
+@click.option("-e","--enable", type=click.Choice(['true', 'false']))
+@click.option("-d","--duration", type=click.IntRange(300), default=600, help="in seconds, default: 600,")
+@click.pass_obj
+def set_system_atmo_config(data, path, enable, duration):
+    """Set system auto mode upgrader."""
+    enabled = False
+    if enable == "true":
+        enabled = True
+
+    if path == "d2m":
+        data.client.config_system(mode_auto_d2m=enabled, mode_auto_d2m_duration=duration)
+    else:
+        data.client.config_system(mode_auto_m2p=enabled, mode_auto_m2p_duration=duration)

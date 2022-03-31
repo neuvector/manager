@@ -74,7 +74,8 @@
     $scope.webhookTypes = [
       {id: 0, text: "Slack"},
       {id: 1, text: "JSON"},
-      {id: 2, text: OTHER_TYPE}
+      {id: 2, text: "Teams"},
+      {id: 3, text: OTHER_TYPE}
     ];
     $rootScope.isSettingFormDirty = false;
     $scope.inputMaskDisabledClass = "";

@@ -281,7 +281,7 @@
         <md-button
           class="md-raised md-primary md-small mr0"
           ng-click="openId.addOrUpdate(oktaForm, openId.server); resetEyeIcon();"
-          ng-disabled="oktaForm.$invalid || !oktaForm.$dirty"
+          ng-disabled="oktaForm.$invalid"
           ng-if="isSubmitSettingAuthorized"
         >
           {{'setting.SUBMIT' | translate}}

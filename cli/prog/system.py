@@ -1332,8 +1332,8 @@ def set_system_config_atmo(data):
     """Set system auto mode upgrader configruation"""
 
 @set_system_config_atmo.command("config")
-@click.option("-p","--path", type=click.Choice(['d2m', 'm2p']), help="d2m: Discover to Monitor, m2p: Monitor to Protect")
-@click.option("-e","--enable", type=click.Choice(['true', 'false']))
+@click.option("-p","--path", default="d2m", type=click.Choice(["d2m", "m2p"]), help="d2m: Discover to Monitor, m2p: Monitor to Protect")
+@click.option("-e","--enable", default="false", type=click.Choice(["true", "false"]))
 @click.option("-d","--duration", type=click.IntRange(300), default=600, help="in seconds, default: 600,")
 @click.pass_obj
 def set_system_atmo_config(data, path, enable, duration):
@@ -1343,6 +1343,6 @@ def set_system_atmo_config(data, path, enable, duration):
         enabled = True
 
     if path == "d2m":
-        data.client.config_system(mode_auto_d2m=enabled, mode_auto_d2m_duration=duration)
+        data.client.config_system_atmo(mode_auto_d2m=enabled, mode_auto_d2m_duration=duration)
     else:
-        data.client.config_system(mode_auto_m2p=enabled, mode_auto_m2p_duration=duration)
+        data.client.config_system_atmo(mode_auto_m2p=enabled, mode_auto_m2p_duration=duration)

@@ -58,6 +58,7 @@ const VERSION_URL = "app/metadata/js-version.json";
 // Load from remote server, replace with remote API once server is ready
 const HEART_BEAT_URL = "heartbeat";
 const CONFIG_URL = "config";
+const CONFIG_IMPORT_URL = "file/config";
 const DASHBOARD_SUMMARY_URL = "summary";
 const NETWORK_INFO_URL = "network/graph";
 const NETWORK_LAYOUT_URL = "network/graph/layout";

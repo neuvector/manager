@@ -258,7 +258,7 @@
       };
 
       let uploader = (vm.uploader = new FileUploader({
-        url: "/file/config",
+        url: CONFIG_IMPORT_URL,
         alias: "configuration",
         headers: {
           Token: token.token.token,

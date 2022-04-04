@@ -45,6 +45,13 @@ case class SystemNetConfig (
   net_service_policy_mode: Option[String]
 )
 
+case class SystemAtmoConfig (
+  mode_auto_d2m: Boolean,
+  mode_auto_d2m_duration: Long,
+  mode_auto_m2p: Boolean,
+  mode_auto_m2p_duration: Long
+)
+
 case class SystemConfig4Dashboard(
   new_service_policy_mode: Option[String] = None
 )
@@ -52,7 +59,8 @@ case class SystemConfig4Dashboard(
 case class SystemConfigWrap(
   config: Option[SystemConfig],
   fed_config: Option[SystemConfig],
-  net_config: Option[SystemNetConfig]
+  net_config: Option[SystemNetConfig],
+  atmo_config: Option[SystemAtmoConfig]
 )
 
 case class WebhookConfigWrap(

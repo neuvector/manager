@@ -1066,12 +1066,24 @@
         $("#all-groups").prop("checked", false);
       };
 
+      const getNetworkServicePolicyModeStatus = function() {
+        $http
+          .get(CONFIG_URL)
+          .then(response => {
+            $scope.netServiceStatus = response.data.config.net_service_status;
+          })
+          .catch(err => {
+            $scope.netServiceStatus = undefined;
+          });
+      }
+
       $scope.refresh = function() {
         $scope.onFormatError = false;
         $scope.groupErr = false;
         $scope.eof = false;
         $scope.groups = [];
         $scope.selectedCount = 0;
+        getNetworkServicePolicyModeStatus();
         Utils.loadPagedData(
           GROUP_URL,
           {

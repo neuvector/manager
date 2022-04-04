@@ -259,7 +259,7 @@
       };
 
       let uploader = (vm.uploader = new FileUploader({
-        url: "/file/config",
+        url: CONFIG_IMPORT_URL,
         alias: "configuration",
         headers: {
           Token: token.token.token,
@@ -426,6 +426,58 @@
         },
       };
 
+      vm.autoD2MDuration = {
+        hours: 0,
+        enabled: true,
+        options: {
+          floor: 0,
+          ceil: 720,
+          minValue: 1,
+          disabled: !isSettingAuth,
+          showSelectionBar: true,
+          ticksArray: [24, 48, 72, 96, 120, 240, 360, 480, 720],
+          minRange: 1,
+          onChange: function () {
+            vm.groupAgeHourChanged = true;
+            vm.autoD2MDuration.enabled = !!vm.autoD2MDuration.hours;
+            vm.config.mode_auto_d2m = !!vm.autoD2MDuration.hours;
+            $rootScope.isSettingFormDirty = true;
+          },
+          translate: convertHours,
+        },
+      };
+
+      vm.autoM2PDuration = {
+        hours: 0,
+        enabled: true,
+        options: {
+          floor: 0,
+          ceil: 720,
+          minValue: 1,
+          disabled: !isSettingAuth,
+          showSelectionBar: true,
+          ticksArray: [24, 48, 72, 96, 120, 240, 360, 480, 720],
+          minRange: 1,
+          onChange: function () {
+            vm.groupAgeHourChanged = true;
+            vm.autoM2PDuration.enabled = !!vm.autoM2PDuration.hours;
+            vm.config.mode_auto_m2p = !!vm.autoM2PDuration.hours;
+            $rootScope.isSettingFormDirty = true;
+          },
+          translate: convertHours,
+        },
+      };
+
+      vm.toggleD2M = (state) => {
+        vm.autoD2MDuration.options.disabled = !state;
+        $rootScope.isSettingFormDirty = true;
+      };
+
+      vm.toggleM2P = (state) => {
+        vm.autoM2PDuration.options.disabled = !state;
+        $rootScope.isSettingFormDirty = true;
+      };
+
       vm.toggleGroupAge = (state) => {
         vm.groupAge.options.disabled = !state;
         $rootScope.isSettingFormDirty = true;
@@ -552,6 +604,12 @@
             vm.config.controller_debug = response.data.config.controller_debug;
             vm.config.netServiceStatus = response.data.config.net_service_status;
             vm.config.netServicePolicyMode = response.data.config.net_service_policy_mode;
+            vm.config.mode_auto_d2m = response.data.config.mode_auto_d2m;
+            vm.autoD2MDuration.options.disabled = !response.data.config.mode_auto_d2m;
+            vm.autoD2MDuration.hours = Math.ceil(response.data.config.mode_auto_d2m_duration / 3600);
+            vm.config.mode_auto_m2p = response.data.config.mode_auto_m2p;
+            vm.autoM2PDuration.options.disabled = !response.data.config.mode_auto_m2p;
+            vm.autoM2PDuration.hours = Math.ceil(response.data.config.mode_auto_m2p_duration / 3600);
             vm.controllerDebugEnabled =
               vm.config.controller_debug.length > 0 &&
               vm.config.controller_debug[0] === "cpath";
@@ -718,6 +776,12 @@
           net_config: {
             net_service_status: vm.config.netServiceStatus,
             net_service_policy_mode: vm.config.netServicePolicyMode
+          },
+          atmo_config: {
+            mode_auto_d2m: vm.config.mode_auto_d2m,
+            mode_auto_d2m_duration: vm.autoD2MDuration.hours * 3600,
+            mode_auto_m2p: vm.config.mode_auto_m2p,
+            mode_auto_m2p_duration: vm.autoM2PDuration.hours * 3600,
           }
         }
 

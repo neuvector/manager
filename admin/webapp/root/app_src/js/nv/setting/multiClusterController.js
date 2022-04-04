@@ -1238,9 +1238,9 @@
       $scope.cluster = multiClusterService.cluster4Edit;
       $scope.useProxy = useProxy;
 
-      $scope.update = function(data, isEditable) {
+      $scope.update = function(data) {
         multiClusterService
-          .updateCluster(data, isEditable, $scope.useProxy)
+          .updateCluster(data, $scope.isEditable, $scope.useProxy)
           .then(function() {
             popupMsg("multiCluster.messages.update_ok");
             $mdDialog.hide();

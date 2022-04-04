@@ -236,6 +236,74 @@
           <hr class="dashed"/>
         </div>
 
+        <div class="col-sm-12 mb-sm sub-line">
+          <hr class="dashed"/>
+        </div>
+        <div class="col-sm-12">
+          <label class="form-title">
+            {{'setting.MODE_AUTO_SWITCH' | translate}}
+          </label>
+          <div class="text-muted text-sm mb-lg">
+            {{'setting.MODE_AUTO_SWITCH_HINT' | translate}}
+          </div>
+        </div>
+        <div class="col-sm-12 mt-lg">
+          <div class="col-sm-3">
+            <div style="margin-top: -10px">
+              <div class="md-switch2">
+                <label class="text-muted">
+                  {{'setting.D2M' | translate}}
+                  <input
+                    type="checkbox"
+                    ng-model="sysCtrl.config.mode_auto_d2m"
+                    ng-disabled="!isSyslogAuthorized"
+                    ng-click="sysCtrl.toggleD2M(sysCtrl.config.mode_auto_d2m)"
+                  />
+                  <span class="toggle hand" ng-disabled="!isSyslogAuthorized"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-8" style="margin-top: -30px">
+            <rzslider
+              class="custom-slider"
+              rz-slider-model="sysCtrl.autoD2MDuration.hours"
+              rz-slider-options="sysCtrl.autoD2MDuration.options"
+            >
+            </rzslider>
+          </div>
+        </div>
+        <div class="col-sm-12 mt-lg">
+          <div class="col-sm-3">
+            <div style="margin-top: -10px">
+              <div class="md-switch2">
+                <label class="text-muted">
+                  {{'setting.M2P' | translate}}&nbsp;&nbsp;
+                  <input
+                    type="checkbox"
+                    ng-model="sysCtrl.config.mode_auto_m2p"
+                    ng-disabled="!isSyslogAuthorized"
+                    ng-click="sysCtrl.toggleM2P(sysCtrl.config.mode_auto_m2p)"
+                  />
+                  <span class="toggle hand" ng-disabled="!isSyslogAuthorized"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-8" style="margin-top: -30px">
+            <rzslider
+              class="custom-slider"
+              rz-slider-model="sysCtrl.autoM2PDuration.hours"
+              rz-slider-options="sysCtrl.autoM2PDuration.options"
+            >
+            </rzslider>
+          </div>
+        </div>
+
+        <div class="col-sm-12 mb-sm sub-line">
+          <hr class="dashed"/>
+        </div>
+
         <div class="col-sm-12">
           <label class="form-title" translate="{{'setting.CLUSTER'}}"/>
           <div class="text-muted text-sm mb-lg">
@@ -274,7 +342,7 @@
           </div>
         </div>
         <div class="col-sm-12 mt-lg">
-          <div class="col-sm-2">
+          <div class="col-sm-3">
             <div style="margin-top: -10px">
               <div class="md-switch2">
                 <label class="text-muted">
@@ -290,7 +358,7 @@
               </div>
             </div>
           </div>
-          <div class="col-sm-6" style="margin-top: -30px">
+          <div class="col-sm-8" style="margin-top: -30px">
             <rzslider
               class="custom-slider"
               rz-slider-model="sysCtrl.groupAge.hours"

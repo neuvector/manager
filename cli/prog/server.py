@@ -1,17 +1,18 @@
 import click
 
-from cli import cli
-from cli import create
-from cli import delete
-from cli import request
-from cli import set
-from cli import unset
-from cli import show
-import client
-import output
-import utils
+from prog.cli import cli
+from prog.cli import create
+from prog.cli import delete
+from prog.cli import request
+from prog.cli import set
+from prog.cli import unset
+from prog.cli import show
+from prog import client
+from prog import output
+from prog import utils
 
 RoleMapping = "role mapping"
+
 
 def _get_mappable_roles(data, arg):
     mappable_roles = data.client.list("server", "mappable_role", **arg)
@@ -23,6 +24,7 @@ def _get_mappable_roles(data, arg):
     mappable_group_domain_roles.sort(key=roleSortFunc)
 
     return mappable_default_roles, mappable_group_roles, mappable_group_domain_roles
+
 
 def verify_default_role(data, arg, default_role):
     mappable_default_roles, mappable_group_roles, mappable_group_domain_roles = _get_mappable_roles(data, arg)
@@ -39,6 +41,7 @@ def verify_default_role(data, arg, default_role):
 
     return True
 
+
 def showMappableGlobalRoles(role, mappable_group_roles):
     display_roles = []
     for r in mappable_group_roles:
@@ -46,12 +49,16 @@ def showMappableGlobalRoles(role, mappable_group_roles):
             r = "none"
         display_roles.append(r)
 
-    click.echo("Role {} is invalid for global domain. Supported roles for global domain: {}".format(role, ', '.join(display_roles)))
+    click.echo("Role {} is invalid for global domain. Supported roles for global domain: {}".format(role, ', '.join(
+        display_roles)))
     click.echo("")
 
+
 def showMappableDomainRoles(role, mappable_group_domain_roles):
-    click.echo("Role {} is invalid for namespaces. Supported roles for namespaces: {}".format(role, ', '.join(mappable_group_domain_roles)))
+    click.echo("Role {} is invalid for namespaces. Supported roles for namespaces: {}".format(role, ', '.join(
+        mappable_group_domain_roles)))
     click.echo("")
+
 
 # [4.1-] for role -> groups mapping
 def verify_group_role(data, arg, role):
@@ -61,6 +68,7 @@ def verify_group_role(data, arg, role):
         return False
 
     return True
+
 
 # [4.2+] for supporting per-group's role -> domains mapping
 def verify_group_role_ex(data, arg, group, global_role, role_domains):
@@ -75,9 +83,10 @@ def verify_group_role_ex(data, arg, group, global_role, role_domains):
 
     return True
 
+
 def _show_role_mapping_display_format(server, server_type):
     server[RoleMapping] = ""
-    #if server.get(server_type) and server[server_type].get("role_groups"):
+    # if server.get(server_type) and server[server_type].get("role_groups"):
     if server.get(server_type) and server[server_type].get("group_mapped_roles"):
         aaa = server[server_type].get("group_mapped_roles")
         mlist = []
@@ -86,17 +95,20 @@ def _show_role_mapping_display_format(server, server_type):
             if mapped_roles["global_role"] != "":
                 mlist.append("   global domain -> %s" % (mapped_roles["global_role"]))
             if "role_domains" in mapped_roles:
-                for role, domains in mapped_roles["role_domains"].iteritems():
+                for role, domains in iter(mapped_roles["role_domains"].items()):
                     mlist.append("   namespace(s) %s -> %s" % (",".join(domains), role))
         server[RoleMapping] = "\n".join(mlist)
+
 
 @show.group("server")
 @click.pass_obj
 def show_server(data):
     """Show server."""
 
+
 def roleSortFunc(p):
     return p
+
 
 @show_server.command("mappable_roles")
 @click.pass_obj
@@ -119,6 +131,7 @@ def show_server_mappable_roles(data):
     click.echo("Supported mappable roles to namespaces for group: {}".format(', '.join(mappable_group_domain_roles)))
     click.echo("")
 
+
 @show_server.command("ldap")
 @click.pass_obj
 def show_server_ldap(data):
@@ -126,12 +139,18 @@ def show_server_ldap(data):
     arg = {"type": "ldap"}
     servers = data.client.list("server", "server", **arg)
     for s in servers:
-        output.lift_fields(s, "ldap", ("directory", "hostname", "port", "base_dn", "ssl", "bind_dn", "enable", "group_member_attr", "username_attr", "default_role"))
+        output.lift_fields(s, "ldap", (
+            "directory", "hostname", "port", "base_dn", "ssl", "bind_dn", "enable", "group_member_attr",
+            "username_attr",
+            "default_role"))
         _show_role_mapping_display_format(s, "ldap")
 
     click.echo("Total LDAP servers: %s" % len(servers))
-    columns = ("server_name", "enable", "directory", "hostname", "port", "base_dn", "ssl", "bind_dn", "group_member_attr", "username_attr", "default_role", RoleMapping)
+    columns = (
+        "server_name", "enable", "directory", "hostname", "port", "base_dn", "ssl", "bind_dn", "group_member_attr",
+        "username_attr", "default_role", RoleMapping)
     output.list(columns, servers)
+
 
 @show_server.command("saml")
 @click.pass_obj
@@ -147,6 +166,7 @@ def show_server_saml(data):
     columns = ("sso_url", "issuer", "enable", "default_role", RoleMapping)
     output.list(columns, servers)
 
+
 @show_server.command("oidc")
 @click.pass_obj
 def show_server_oidc(data):
@@ -154,12 +174,14 @@ def show_server_oidc(data):
     arg = {"type": "oidc"}
     servers = data.client.list("server", "server", **arg)
     for s in servers:
-        output.lift_fields(s, "oidc", ("issuer", "authorization_endpoint", "token_endpoint", "user_info_endpoint", "enable", "default_role"))
+        output.lift_fields(s, "oidc", (
+            "issuer", "authorization_endpoint", "token_endpoint", "user_info_endpoint", "enable", "default_role"))
         _show_role_mapping_display_format(s, "oidc")
 
     click.echo("Total OpenID Connect servers: %s" % len(servers))
     columns = ("issuer", "authorization_endpoint", "token_endpoint", "user_info_endpoint", "enable", "default_role")
     output.list(columns, servers)
+
 
 @show_server.command("detail")
 @click.argument("name")
@@ -168,20 +190,25 @@ def show_server_detail(data, name):
     """Show server detail."""
     server = data.client.show("server", "server", name)
 
-    if server["server_type"] == "ldap": 
-        output.lift_fields(server, "ldap", ("directory", "hostname", "port", "base_dn", "ssl", "bind_dn", "enable", "default_role"))
+    if server["server_type"] == "ldap":
+        output.lift_fields(server, "ldap",
+                           ("directory", "hostname", "port", "base_dn", "ssl", "bind_dn", "enable", "default_role"))
         _show_role_mapping_display_format(server, "ldap")
-        columns = ("server_name", "enable", "directory", "hostname", "port", "base_dn", "ssl", "bind_dn", "default_role", RoleMapping)
+        columns = (
+            "server_name", "enable", "directory", "hostname", "port", "base_dn", "ssl", "bind_dn", "default_role",
+            RoleMapping)
         output.show(columns, server)
-    elif server["server_type"] == "saml": 
+    elif server["server_type"] == "saml":
         output.lift_fields(server, "saml", ("sso_url", "issuer", "enable", "default_role"))
         _show_role_mapping_display_format(server, "saml")
         columns = ("sso_url", "issuer", "enable", "default_role", RoleMapping)
         output.show(columns, server)
-    elif server["server_type"] == "oidc": 
-        output.lift_fields(server, "oidc", ("issuer", "authorization_endpoint", "token_endpoint", "user_info_endpoint", "enable", "default_role"))
+    elif server["server_type"] == "oidc":
+        output.lift_fields(server, "oidc", (
+            "issuer", "authorization_endpoint", "token_endpoint", "user_info_endpoint", "enable", "default_role"))
         columns = ("issuer", "authorization_endpoint", "token_endpoint", "user_info_endpoint", "enable", "default_role")
         output.show(columns, server)
+
 
 @show_server.command("user")
 @click.argument("name")
@@ -195,10 +222,12 @@ def show_server_user(data, name):
     columns = ("username", "role", "email", "timeout", "locale", utils.RoleDomains)
     output.list(columns, users)
 
+
 @create.group("server")
 @click.pass_obj
 def create_server(data):
     """Create server."""
+
 
 @create_server.command("oidc")
 @click.argument("name")
@@ -242,7 +271,8 @@ def create_server_oidc(data, name, issuer, client_id, client_secret, enable, def
 @click.option("--username_attr", help="Username attribute")
 @click.option("--bind", help="Bind distinguish name")
 @click.pass_obj
-def create_server_ldap(data, name, hostname, base, enable, default_role, directory, port, ssl, group_member_attr, username_attr, bind):
+def create_server_ldap(data, name, hostname, base, enable, default_role, directory, port, ssl, group_member_attr,
+                       username_attr, bind):
     """Create LDAP server."""
     if default_role == "none":
         default_role = ""
@@ -269,12 +299,14 @@ def create_server_ldap(data, name, hostname, base, enable, default_role, directo
 
     data.client.create("server", {"config": {"name": name, "ldap": ldap}})
 
+
 # set
 
 @set.group("server")
 @click.pass_obj
 def set_server(data):
     """Set server configuration."""
+
 
 @set_server.group("oidc")
 @click.argument('name')
@@ -283,6 +315,7 @@ def set_server(data):
 def set_server_oidc(ctx, data, name):
     """Set OpenID Connect server."""
     data.id_or_name = name
+
 
 @set_server_oidc.command("config")
 @click.option("--issuer", help="Server URL")
@@ -330,6 +363,7 @@ def set_server_oidc_config(data, issuer, client_id, client_secret, scopes, group
     else:
         click.echo("Please specify configurations to be set.")
 
+
 @set_server.group("ldap")
 @click.argument('name')
 @click.pass_obj
@@ -337,6 +371,7 @@ def set_server_oidc_config(data, issuer, client_id, client_secret, scopes, group
 def set_server_ldap(ctx, data, name):
     """Set LDAP server."""
     data.id_or_name = name
+
 
 @set_server_ldap.command("config")
 @click.option("--hostname", help="Server hostname or IP")
@@ -350,7 +385,8 @@ def set_server_ldap(ctx, data, name):
 @click.option("--username_attr", default=None, help="Username attribute")
 @click.option("--bind", help="Bind distinguish name")
 @click.pass_obj
-def set_server_ldap_config(data, hostname, base, enable, default_role, directory, port, ssl, group_member_attr, username_attr, bind):
+def set_server_ldap_config(data, hostname, base, enable, default_role, directory, port, ssl, group_member_attr,
+                           username_attr, bind):
     """Set LDAP server configuration."""
     ldap = {}
     doit = False
@@ -403,6 +439,7 @@ def set_server_ldap_config(data, hostname, base, enable, default_role, directory
     else:
         click.echo("Please specify configurations to be set.")
 
+
 @set_server_ldap.command("role")
 @click.argument('role', required=True)
 @click.option('--group', '-g', multiple=True, help="Groups mapped to the role.")
@@ -419,10 +456,12 @@ def set_server_ldap_role(data, role, group):
     else:
         click.echo("Please specify at least one group.")
 
+
 @set_server_ldap.command("group_role")
 @click.option('--group', required=True, help="Group name.")
 @click.option('--global_role', required=False, help="Group's mapped role for global domain.")
-@click.option('--role_domains', multiple=True, help="Group's mapped role for namespaces. Format: {role}:{namespace1,namespace2,...}")
+@click.option('--role_domains', multiple=True,
+              help="Group's mapped role for namespaces. Format: {role}:{namespace1,namespace2,...}")
 @click.pass_obj
 def set_server_ldap_group_role(data, group, global_role, role_domains):
     """Set one group's role mapping of an LDAP server."""
@@ -449,13 +488,17 @@ def set_server_ldap_group_role(data, group, global_role, role_domains):
     group_role_domains = {"name": data.id_or_name, "mapped_roles": mapped_roles}
     data.client.config("server", "%s/group/%s" % (data.id_or_name, group), {"config": group_role_domains})
 
+
 @set_server_ldap.command("group_mapping_order")
 @click.option('--group', multiple=True, help="Group name in role matching order.")
 @click.pass_obj
 def set_server_ldap_groups_mapping_order(data, group):
-    """Set the matching order of groups' roles mapping of LDAP server. Unspecified groups are ordered after specified groups in their original sequence. Groups that have fedAdmin/fedReader role mapping for global domain have higher priority"""
+    """Set the matching order of groups' roles mapping of LDAP server. Unspecified groups are ordered after specified
+    groups in their original sequence. Groups that have fedAdmin/fedReader role mapping for global domain have higher
+    priority """
     groups_order = {"name": data.id_or_name, "groups": group}
     data.client.config("server", "%s/groups" % (data.id_or_name), {"config": groups_order})
+
 
 # unset
 
@@ -463,6 +506,7 @@ def set_server_ldap_groups_mapping_order(data, group):
 @click.pass_obj
 def unset_server(data):
     """Unset server configuration."""
+
 
 @unset_server.group('ldap')
 @click.argument('name')
@@ -472,6 +516,7 @@ def unset_server_ldap(ctx, data, name):
     """Unset LDAP server."""
     data.id_or_name = name
 
+
 @unset_server_ldap.command("config")
 @click.option("--port", is_flag=True, help="Unset port")
 @click.option("--bind", is_flag=True, help="Remove bind DN")
@@ -480,7 +525,7 @@ def unset_server_ldap_config(data, port, bind):
     """Unset LDAP configuration."""
     ldap = {}
     unset = False
-    if port != None:
+    if port is not None:
         unset = True
         ldap["port"] = 0
     if bind != None:
@@ -494,6 +539,7 @@ def unset_server_ldap_config(data, port, bind):
     else:
         click.echo("Please specify configurations to be unset.")
 
+
 @unset_server_ldap.command("role")
 @click.argument('role', required=True)
 @click.pass_obj
@@ -506,6 +552,7 @@ def unset_server_ldap_role(data, role):
     role_group = {"name": data.id_or_name, "role": role}
     data.client.config("server", "%s/role/%s" % (data.id_or_name, role), {"config": role_group})
 
+
 @unset_server_ldap.command("group_role")
 @click.option('--group', required=True, help="Group name.")
 @click.pass_obj
@@ -514,6 +561,7 @@ def unset_server_ldap_group_role(data, group):
     mapped_roles = {"group": group}
     group_role_domains = {"name": data.id_or_name, "group": group, "mapped_roles": mapped_roles}
     data.client.config("server", "%s/group/%s" % (data.id_or_name, group), {"config": group_role_domains})
+
 
 # delete
 
@@ -524,15 +572,18 @@ def delete_server(data, name):
     """Delete server."""
     data.client.delete("server", name)
 
+
 @request.group('server')
 @click.pass_obj
 def request_server(data):
     """Request server"""
 
+
 @request_server.group("ldap")
 @click.pass_obj
 def request_server_ldap(data):
     """Request server LDAP"""
+
 
 @request_server_ldap.command("test")
 @click.argument('name')
@@ -544,7 +595,7 @@ def request_server_ldap_test(data, name, username, password):
     test = {"username": username, "password": password}
     resp = data.client.request("debug", "server", "test", {"test": {"name": name, "test_ldap": test}})
 
-    if resp == None:
+    if resp is None:
         click.echo("Server test succeeded.")
     else:
         click.echo("Server test failed.")

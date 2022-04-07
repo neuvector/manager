@@ -1,12 +1,13 @@
 import click
 
-from cli import delete
-from cli import set
-from cli import show
-import client
-import output
-import utils
+from prog.cli import delete
+from prog.cli import set
+from prog.cli import show
+from prog import client
+from prog import output
+from prog import utils
 import time
+
 
 def _list_profile_display_format(rule):
     rule["type"] = client.CfgTypeDisplay[rule["cfg_type"]]
@@ -22,13 +23,16 @@ def _list_profile_display_format(rule):
     if f not in rule:
         rule[f] = ""
 
+
 @show.group("process")
 @click.pass_obj
 def show_process(data):
     """Show process profile."""
 
+
 @show_process.group("profile", invoke_without_command=True)
-@click.option('--scope', default="all", type=click.Choice(['fed', 'local', 'all']), help="Show federal, local or all profiles")
+@click.option('--scope', default="all", type=click.Choice(['fed', 'local', 'all']),
+              help="Show federal, local or all profiles")
 @click.option("--page", default=5, type=click.IntRange(1), help="list page size, default=5")
 @click.option('--sort_dir', type=click.Choice(['asc', 'desc']), default='asc', help="sort direction.")
 @click.pass_obj
@@ -42,7 +46,7 @@ def show_process_profile(ctx, data, scope, page, sort_dir):
     if scope == 'fed' or scope == 'local':
         args['scope'] = scope
 
-    #args = {'sort': "group", 'sort_dir': sort_dir, 'start': 0, 'limit': page}
+    # args = {'sort': "group", 'sort_dir': sort_dir, 'start': 0, 'limit': page}
     while True:
         pfs = data.client.list("process_profile", "process_profile", **args)
         for p in pfs:
@@ -80,10 +84,12 @@ def group(data, group):
     columns = ("name", "path", "user", "action", "type", "uuid", "allow_update")
     output.list(columns, profile["process_list"])
 
+
 @set.group("process")
 @click.pass_obj
 def set_process(data):
     """Set process profile. """
+
 
 @set_process.command("profile")
 @click.argument('group')
@@ -93,12 +99,13 @@ def set_process(data):
 @click.option("--action", type=click.Choice(['allow', 'deny']), help="process action")
 @click.option("--disable_alert", type=click.Choice(['true', 'false']), help="disable_alert")
 @click.option("--baseline", type=click.Choice(['basic', 'zero-drift']), help="profile baseline")
-@click.option("--allow_update", default='false', type=click.Choice(['true', 'false']), help="allow modified executable file")
+@click.option("--allow_update", default='false', type=click.Choice(['true', 'false']),
+        help="allow modified executable file")
 @click.pass_obj
 def set_process_profile(data, group, path, name, user, action, disable_alert, baseline, allow_update):
     """Set process profile. """
 
-    cfg = {"group":group}
+    cfg = {"group": group}
     if name == None and disable_alert == None and baseline == None:
         click.echo("Missing config")
         return
@@ -107,23 +114,26 @@ def set_process_profile(data, group, path, name, user, action, disable_alert, ba
         if action == None:
             click.echo("Rule must have an action")
             return
-        cfg["process_change_list"] = [{"name": name, "path":path, "user": user, "action":action, "allow_update":allow_update=="true",}]
+        cfg["process_change_list"] = [
+            {"name": name, "path": path, "user": user, "action": action, "allow_update": allow_update == "true", }]
 
     if disable_alert != None:
-        cfg["alert_disabled"] = (disable_alert=="true")
+        cfg["alert_disabled"] = (disable_alert == "true")
 
     if baseline != None:
-         cfg["baseline"] = baseline
+        cfg["baseline"] = baseline
 
-    #if enable_hash != None:
+    # if enable_hash != None:
     #    cfg["hash_enabled"] = (enable_hash=="true")
 
-    data.client.config("process_profile", group, {"process_profile_config":cfg})
+    data.client.config("process_profile", group, {"process_profile_config": cfg})
+
 
 @delete.group("process")
 @click.pass_obj
 def delete_process(data):
     """Delete process profile. """
+
 
 @delete_process.command("profile")
 @click.argument('group')
@@ -135,12 +145,13 @@ def delete_process_profile(data, group, path, name, user):
     """Delete process profile. """
 
     if name != None:
-        cfg = {"group":group, "process_delete_list": [{"name": name, "path":path, "user": user}]}
+        cfg = {"group": group, "process_delete_list": [{"name": name, "path": path, "user": user}]}
     else:
         click.echo("Invalid config!")
         return
 
-    data.client.config("process_profile", group, {"process_profile_config":cfg})
+    data.client.config("process_profile", group, {"process_profile_config": cfg})
+
 
 @show_process.command("rule")
 @click.argument("uuid")

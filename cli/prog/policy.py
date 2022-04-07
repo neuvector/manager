@@ -1,32 +1,35 @@
 import click
 
-from cli import create
-from cli import delete
-from cli import request
-from cli import set
-from cli import show
-from cli import unset
-import client
-import output
-import utils
+from prog.cli import create
+from prog.cli import delete
+from prog.cli import request
+from prog.cli import set
+from prog.cli import show
+from prog.cli import unset
+from prog import client
+from prog import output
+from prog import utils
 import json
 from argparse import Namespace
 
 PolicyFedRuleIDBase = 100000
-PolicyFedRuleIDMax =  110000
+PolicyFedRuleIDMax = 110000
 
-PolicyCfgTypeDisplay = {"learned":"learned", "user_created":"user created", "ground":"crd", "federal":"federated"}
+PolicyCfgTypeDisplay = {"learned": "learned", "user_created": "user created", "ground": "crd", "federal": "federated"}
+
 
 # policy ---
 
 def _isFedNwRule(id):
     return (id > PolicyFedRuleIDBase and id < PolicyFedRuleIDMax)
 
+
 def _common_policy_display_format(pol):
     f = "applications"
     if pol.get(f):
         fo = output.key_output(f)
         pol[fo] = ",".join(pol[f])
+
 
 def list_policy_display_format(pol):
     _common_policy_display_format(pol)
@@ -41,6 +44,7 @@ def list_policy_display_format(pol):
         if pol[f]:
             pol["status"] = "disable"
 
+
 def _show_policy_display_format(pol):
     _common_policy_display_format(pol)
     f = "disable"
@@ -49,13 +53,16 @@ def _show_policy_display_format(pol):
         if pol[f]:
             pol["status"] = "disable"
 
+
 @show.group("policy")
 @click.pass_obj
 def show_policy(data):
     """Show policy."""
 
+
 @show_policy.group("rule", invoke_without_command=True)
-@click.option("--scope", default="all", type=click.Choice(['fed', 'local', 'all']), help="Show federal, local or all policies")
+@click.option("--scope", default="all", type=click.Choice(['fed', 'local', 'all']),
+              help="Show federal, local or all policies")
 @click.option("--page", default=40, type=click.IntRange(1), help="list page size, default=40")
 @click.pass_obj
 @click.pass_context
@@ -89,6 +96,7 @@ def show_policy_rule(ctx, data, scope, page):
 
         args["start"] += page
 
+
 @show_policy_rule.command()
 @click.argument("id")
 @click.pass_obj
@@ -109,6 +117,7 @@ def _list_derived_policy_display_format(pol):
         fo = output.key_output(f)
         pol[fo] = ""
 
+
 def _output_one_derived(p):
     id = p["workload"]["id"]
     click.echo("Container: id=%s name=%s rules=%d" %
@@ -117,6 +126,7 @@ def _output_one_derived(p):
         _list_derived_policy_display_format(pol)
     columns = ("policy_id", "from", "to", "port", "application", "action", "ingress", "domain")
     output.list(columns, p["rules"])
+
 
 @show_policy.command()
 @click.option("-e", "--enforcer", default=None, help="filter sessions by enforcer")
@@ -142,21 +152,25 @@ def derived(data, enforcer, container):
     except client.NotEnoughFilter:
         click.echo("Error: 'enforcer' or 'container' filter must be specified.")
 
+
 @create.group("policy")
 @click.pass_obj
 def create_policy(data):
     """Create policy."""
 
+
 @create_policy.command("rule")
 @click.argument("from")
 @click.argument("to")
-@click.option("--scope", default="local", type=click.Choice(["fed", "local"]), show_default=True, help="It's a local or federal rule")
+@click.option("--scope", default="local", type=click.Choice(["fed", "local"]), show_default=True,
+              help="It's a local or federal rule")
 @click.option("--id", type=int, default=0, help="Policy rule ID. (Optional)")
 @click.option("--ports", default="any", help="Port list. eg: any or 80,8080,8500-8508,tcp/443,tcp/3306-3307,udp/53")
 @click.option("--applications", default="any", help="Application list. eg: http,kafka")
 @click.option("--action", default="allow", type=click.Choice(['allow', 'deny']))
 @click.option("--disable", default=False, is_flag=True, help="Disable the policy rule")
-@click.option("--after", type=int, help="Specify policy rule ID that the new rule is inserted after. Use 0 to insert to the first; default to the end")
+@click.option("--after", type=int,
+              help="Specify policy rule ID that the new rule is inserted after. Use 0 to insert to the first; default to the end")
 @click.option("--comment")
 @click.pass_obj
 @utils.rename_kwargs(from_group="from")
@@ -170,7 +184,7 @@ def create_policy_rule(data, from_group, to_group, scope, id, ports, application
         apps = applications.split(",")
 
     rule1 = {"id": id, "from": from_group, "to": to_group, "ports": ports, "applications": apps,
-            "action": action, "disable": disable, "comment": comment, "cfg_type": client.UserCreatedCfg}
+             "action": action, "disable": disable, "comment": comment, "cfg_type": client.UserCreatedCfg}
     args["scope"] = scope
     if scope == "fed" or _isFedNwRule(id):
         rule1["cfg_type"] = client.FederalCfg
@@ -185,10 +199,12 @@ def create_policy_rule(data, from_group, to_group, scope, id, ports, application
             rules["after"] = 0
     data.client.config("policy", "rule", {"insert": rules}, **args)
 
+
 @set.group("policy")
 @click.pass_obj
 def set_policy(data):
     """Set policy configuration."""
+
 
 @set_policy.command("rule")
 @click.argument("id", type=int)
@@ -198,7 +214,8 @@ def set_policy(data):
 @click.option("--applications", help="Application list. eg: http,kafka")
 @click.option("--action", type=click.Choice(['allow', 'deny']))
 @click.option("--disable/--enable", default=None, help="Disable/Enable the policy rule")
-@click.option("--after", type=int, help="Specify policy rule ID that the new rule is inserted after. Use 0 to insert to the first.")
+@click.option("--after", type=int,
+              help="Specify policy rule ID that the new rule is inserted after. Use 0 to insert to the first.")
 @click.option("--comment")
 @click.pass_obj
 def set_policy_rule(data, id, from_group, to_group, ports, applications, action, disable, after, comment):
@@ -238,10 +255,12 @@ def set_policy_rule(data, id, from_group, to_group, ports, applications, action,
         move = {"id": id, "after": after}
         data.client.config("policy", "rule", {"move": move})
 
+
 @delete.group("policy")
 @click.pass_obj
 def delete_policy(data):
     """Delete policy."""
+
 
 @delete_policy.command("rule")
 @click.argument('id', type=int)
@@ -249,6 +268,7 @@ def delete_policy(data):
 def delete_policy(data, id):
     """Delete policy rule."""
     data.client.delete("policy/rule", id)
+
 
 # response rule ---
 
@@ -265,31 +285,32 @@ def _list_response_rule_display_format(rule):
     conds = ""
     if f in rule:
         for c in rule[f]:
-           if conds == "":
-               conds = c["type"] + ":" + c["value"]
-           else:
-               conds = conds + ", " + c["type"] + ":" +c["value"]
+            if conds == "":
+                conds = c["type"] + ":" + c["value"]
+            else:
+                conds = conds + ", " + c["type"] + ":" + c["value"]
     rule[f] = conds
 
     f = "actions"
     acts = ""
     if f in rule:
         for a in rule[f]:
-           if acts == "":
-               acts = a
-           else:
-               acts = acts + ", " + a
+            if acts == "":
+                acts = a
+            else:
+                acts = acts + ", " + a
     rule[f] = acts
 
     f = "webhooks"
     acts = ""
     if f in rule:
         for a in rule[f]:
-           if acts == "":
-               acts = a
-           else:
-               acts = acts + ", " + a
+            if acts == "":
+                acts = a
+            else:
+                acts = acts + ", " + a
     rule[f] = acts
+
 
 def get_response_rules(data, scope, container):
     """Get response rules."""
@@ -301,22 +322,25 @@ def get_response_rules(data, scope, container):
     if container != None:
         obj = utils.get_managed_object(data.client, "workload", "workload", container)
         if obj == None:
-           click.echo("Cannot find the workload")
-           return
+            click.echo("Cannot find the workload")
+            return
         rules = data.client.show("response/workload_rules", "rules", obj["id"])
     else:
         rules = data.client.show("response/rule", "rules", None, **args)
 
     return rules
 
+
 @show.group("response")
 @click.pass_obj
 def show_response(data):
     """Show response rule."""
 
+
 @show_response.group("rule", invoke_without_command=True)
-@click.option("-c","--container")
-@click.option("--scope", default="all", type=click.Choice(['fed', 'local', 'all']), help="Show federal, local or all response rules")
+@click.option("-c", "--container")
+@click.option("--scope", default="all", type=click.Choice(['fed', 'local', 'all']),
+              help="Show federal, local or all response rules")
 @click.pass_obj
 @click.pass_context
 def show_response_rule(ctx, data, container, scope):
@@ -334,18 +358,21 @@ def show_response_rule(ctx, data, container, scope):
             _list_response_rule_display_format(rule)
         output.list(columns, fedRules)
 
+
 def _show_response_rule_option_display_format(option):
     for tag in option:
         val = ""
         for item in option[tag]:
-           if val == "":
-               val = item
-           else:
-               val = val + ", " + item
+            if val == "":
+                val = item
+            else:
+                val = val + ", " + item
         option[tag] = val
 
+
 @show_response_rule.command("options")
-@click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=True, help="Show federal, local response rule options")
+@click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=True,
+              help="Show federal, local response rule options")
 @click.pass_obj
 def show_response_rule_options(data, scope):
     args = {}
@@ -367,20 +394,25 @@ def show_response_rule_options(data, scope):
     for wh in webhooks:
         click.echo("  {}".format(wh))
 
+
 @create.group("response")
 @click.pass_obj
 def create_response(data):
     """Create response rules."""
 
+
 @create_response.command("rule")
-@click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=True, help="It's a local or federal rule")
+@click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=True,
+              help="It's a local or federal rule")
 @click.option("--group", help="Group name that the rule is applied to. Not applicable for admission and event")
 @click.option("--event", help="event, cve-report, security-event, admission-control, compliance")
-@click.option("--condition",  multiple=True, help="type:value, type can be name, cve-high, cve-medium, level and process")
+@click.option("--condition", multiple=True,
+              help="type:value, type can be name, cve-high, cve-medium, level and process")
 @click.option("--action", default=None, multiple=True, help="quarantine, suppress-log, webhook")
 @click.option("--webhook", "-w", multiple=True, help="webhook names")
 @click.option("--id", type=int, default=0, help="Response rule ID. (Optional)")
-@click.option("--after", type=int, help="Specify response rule ID that the new rule is inserted after. Use 0 to insert to the first; default to the end")
+@click.option("--after", type=int,
+              help="Specify response rule ID that the new rule is inserted after. Use 0 to insert to the first; default to the end")
 @click.option("--disable/--enable", default=None, help="Disable/Enable the response rule")
 @click.option("--comment")
 @click.pass_obj
@@ -422,7 +454,7 @@ def create_response_rule(data, scope, group, event, condition, action, webhook, 
         if len(d) != 2:
             click.echo("Error: Must provide both condition type and value")
             return
-        r = {"type": d[0], "value":d[1]}
+        r = {"type": d[0], "value": d[1]}
         conds.append(r)
 
     if len(conds) != 0:
@@ -433,23 +465,28 @@ def create_response_rule(data, scope, group, event, condition, action, webhook, 
     if after != None:
         rules["after"] = after
 
-    data.client.config("response", "rule", {"insert":rules}, **args)
+    data.client.config("response", "rule", {"insert": rules}, **args)
+
 
 @set.group("response")
 @click.pass_obj
 def set_response(data):
     """Set reponse rule configuration."""
 
+
 @set_response.command("rule")
 @click.argument("id", type=int)
-@click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=False, required=False, help="obsolete")
+@click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=False, required=False,
+              help="obsolete")
 @click.option("--group", "group")
 @click.option("--event", help="event, cve-report, security-event, benchmark, admission-control")
-@click.option("--condition",  multiple=True, help="type:value, type can be name, cve-high, cve-medium, level and process")
+@click.option("--condition", multiple=True,
+              help="type:value, type can be name, cve-high, cve-medium, level and process")
 @click.option("--action", multiple=True, help="quarantine, suppress-log, webhook")
 @click.option("--webhook", "-w", multiple=True, help="webhook names")
 @click.option("--no_webhook", default=False, is_flag=True, help="clear webhooks")
-@click.option("--after", type=int, help="Specify response rule ID that the new rule is inserted after. Use 0 to insert to the first.")
+@click.option("--after", type=int,
+              help="Specify response rule ID that the new rule is inserted after. Use 0 to insert to the first.")
 @click.option("--disable/--enable", default=None, help="Disable/Enable the response rule")
 @click.option("--comment")
 @click.pass_obj
@@ -473,7 +510,7 @@ def set_response_rule(data, id, scope, group, event, condition, action, webhook,
             if len(d) != 2:
                 click.echo("Error: Must provide both condition type and value")
                 return
-            r = {"type": d[0], "value":d[1]}
+            r = {"type": d[0], "value": d[1]}
             conds.append(r)
         rule["conditions"] = conds
         modify = True
@@ -500,7 +537,7 @@ def set_response_rule(data, id, scope, group, event, condition, action, webhook,
 
     if after != None:
         move = {"id": id, "after": after}
-        data.client.config("response", "rule", {"move":move})
+        data.client.config("response", "rule", {"move": move})
 
 
 @unset.group("response")
@@ -508,36 +545,44 @@ def set_response_rule(data, id, scope, group, event, condition, action, webhook,
 def unset_response(data):
     """Unset reponse rule configuration."""
 
+
 @unset_response.group("rule")
 @click.pass_obj
 def unset_response_rule(data):
     """Unset reponse rule configuration."""
 
+
 @unset_response_rule.command("group")
-@click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=False, required=False, help="obsolete")
+@click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=False, required=False,
+              help="obsolete")
 @click.argument("id", type=int)
 @click.pass_obj
 def unset_response_rule_group(data, scope, id):
     args = {}
-    rule = {"id": id, "group":""}
+    rule = {"id": id, "group": ""}
     data.client.config("response/rule", id, {"config": rule}, **args)
 
+
 @unset_response_rule.command("conditions")
-@click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=False, required=False, help="obsolete")
+@click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=False, required=False,
+              help="obsolete")
 @click.argument("id", type=int)
 @click.pass_obj
 def unset_response_rule_conditions(data, scope, id, **args):
     args = {}
-    rule = {"id": id, "conditions":[]}
+    rule = {"id": id, "conditions": []}
     data.client.config("response/rule", id, {"config": rule}, **args)
+
 
 @delete.group("response")
 @click.pass_obj
 def delete_response(data):
     """Delete response rule."""
 
+
 @delete_response.command("rule")
-@click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=False, required=False, help="obsolete")
+@click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=False, required=False,
+              help="obsolete")
 @click.argument('id', type=int)
 @click.pass_obj
 def delete_response_rule(data, scope, id):
@@ -545,18 +590,21 @@ def delete_response_rule(data, scope, id):
     args = {}
     data.client.delete("response/rule", id, **args)
 
+
 @request.group("policy")
 @click.pass_obj
 def request_policy(data):
     """Request policy operation."""
+
 
 @request_policy.group('rule')
 @click.pass_obj
 def request_policy_rules(data):
     """Request policies."""
 
+
 @request_policy_rules.command("promote")
-@click.option("--id",  multiple=True, help="id of the policies to promote to federate level on master cluster")
+@click.option("--id", multiple=True, help="id of the policies to promote to federate level on master cluster")
 @click.pass_obj
 def request_policy_rule_promote(data, id):
     """Promote policies to federate level."""
@@ -571,5 +619,5 @@ def request_policy_rule_promote(data, id):
     req = {"ids": ids}
     body = dict()
     body["request"] = req
-    #click.echo("Policies request object: {}".format(json.dumps(body)))
+    # click.echo("Policies request object: {}".format(json.dumps(body)))
     data = data.client.request("policy/rules", "promote", None, body)

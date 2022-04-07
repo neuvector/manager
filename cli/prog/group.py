@@ -1,15 +1,14 @@
 import click
 
-from cli import create
-from cli import delete
-from cli import set
-from cli import show
-from cli import unset
-import client
-import output
-from policy import list_policy_display_format
-import utils
-import json
+from prog.cli import create
+from prog.cli import delete
+from prog.cli import set
+from prog.cli import show
+from prog.cli import unset
+from prog import client
+from prog import output
+from prog.policy import list_policy_display_format
+from prog import utils
 from argparse import Namespace
 
 # group ---
@@ -21,6 +20,7 @@ CriteriaOpPrefix = "prefix"
 CriteriaOpRegex = "regex"
 CriteriaOpNotRegex = "!regex"
 
+
 def get_groups(data, scope, args):
     """Get groups."""
     groups = {}
@@ -30,6 +30,7 @@ def get_groups(data, scope, args):
     groups = data.client.list("group", "group", **args)
 
     return groups
+
 
 def _list_group_display_format(group):
     group["type"] = client.CfgTypeDisplay[group["cfg_type"]]
@@ -62,16 +63,16 @@ def _list_group_display_format(group):
             elif crt["op"] == CriteriaOpNotRegex:
                 op = "!~"
             s += "%s %s %s\n" % (crt["key"], op, crt["value"])
-        group[fo]= s.rstrip("\n")
+        group[fo] = s.rstrip("\n")
     f = "policy_mode"
     if f not in group:
         fo = output.key_output(f)
         group[fo] = ""
-    #f = "dlp_status"
-    #if f not in group:
+    # f = "dlp_status"
+    # if f not in group:
     #    fo = output.key_output(f)
     #    group[fo] = ""
-    #else:
+    # else:
     #    fo = output.key_output(f)
     #    s = ""
     #    if group[f]:
@@ -79,22 +80,25 @@ def _list_group_display_format(group):
     #    else:
     #        s = "disable"
     #    group[fo] = s
-    #f = "sensors"
-    #if f not in group:
+    # f = "sensors"
+    # if f not in group:
     #    fo = output.key_output(f)
     #    group[fo] = ""
-    #if f in group:
+    # if f in group:
     #    fo = output.key_output(f)
     #    group[fo] = len(group[f])
 
+
 def _show_group_display_format(group):
     _list_group_display_format(group)
+
 
 @show.group("group", invoke_without_command=True)
 @click.option('-b', '--brief', is_flag=True, default=False, help="brief output")
 @click.option('--cap', is_flag=True, default=False, help="with cap")
 @click.option('-t', '--filter_type', default=None, help="filter by type: container, ip_service, address")
-@click.option('--scope', default='all', type=click.Choice(['fed', 'local', 'all']), help="Show federal, local or all groups")
+@click.option('--scope', default='all', type=click.Choice(['fed', 'local', 'all']),
+              help="Show federal, local or all groups")
 @click.option("--page", default=40, type=click.IntRange(1), help="list page size, default=40")
 @click.option('--sort', default=None, help="sort field.")
 @click.option('--sort_dir', type=click.Choice(['asc', 'desc']), default='asc', help="sort direction.")
@@ -123,8 +127,10 @@ def show_group(ctx, data, brief, cap, scope, page, sort, sort_dir, filter_type):
         for group in groups:
             _list_group_display_format(group)
 
-        #columns = ("name", "learned", "criteria", "members", "policy_rules", "policy_mode", "scope", "dlp_status", "sensors")
-        columns = ("name", "learned", "criteria", "members", "policy_rules", "platform_role", "policy_mode", "profile_mode", "type")
+        # columns = ("name", "learned", "criteria", "members", "policy_rules", "policy_mode", "scope", "dlp_status", "sensors")
+        columns = (
+        "name", "learned", "criteria", "members", "policy_rules", "platform_role", "policy_mode", "profile_mode",
+        "type")
         output.list(columns, groups)
 
         if args["limit"] > 0 and len(groups) < args["limit"]:
@@ -136,6 +142,7 @@ def show_group(ctx, data, brief, cap, scope, page, sort, sort_dir, filter_type):
             break
 
         args["start"] += page
+
 
 @show_group.command()
 @click.argument("id_or_name")
@@ -149,9 +156,10 @@ def detail(data, id_or_name, cap):
         return
 
     _show_group_display_format(group)
-    #columns = ("name", "learned", "criteria", "members", "policy_rules", "dlp_status", "sensors")
+    # columns = ("name", "learned", "criteria", "members", "policy_rules", "dlp_status", "sensors")
     columns = ("name", "learned", "criteria", "platform_role", "members", "policy_rules", "type")
     output.show(columns, group)
+
 
 def _list_dlp_group_display_format(group):
     f = "status"
@@ -177,10 +185,11 @@ def _list_dlp_group_display_format(group):
         s = ""
         for sen in group[f]:
             if "comment" not in sen:
-                s += "(\"%s\", %s)\n" % (sen["name"],sen["action"])
+                s += "(\"%s\", %s)\n" % (sen["name"], sen["action"])
             else:
-                s += "(\"%s\", %s, \"%s\")\n" % (sen["name"],sen["action"], sen["comment"])
-        group[fo]= s.rstrip("\n")
+                s += "(\"%s\", %s, \"%s\")\n" % (sen["name"], sen["action"], sen["comment"])
+        group[fo] = s.rstrip("\n")
+
 
 @show_group.group("dlp", invoke_without_command=True)
 @click.option("--page", default=5, type=click.IntRange(1), help="list page size, default=5")
@@ -200,10 +209,10 @@ def show_group_dlp(ctx, data, page, sort_dir):
             break
         for dr in drs:
             _list_dlp_group_display_format(dr)
-            #click.echo("Group: %s, Status: %s" % (dr["name"], dr["status"]))
-            #columns = ("name", "action")
+            # click.echo("Group: %s, Status: %s" % (dr["name"], dr["status"]))
+            # columns = ("name", "action")
         columns = ("name", "status", "sensors")
-        #output.list(columns, dr["sensors"])
+        # output.list(columns, dr["sensors"])
         output.list(columns, drs)
 
         if args["limit"] > 0 and len(drs) < args["limit"]:
@@ -213,6 +222,7 @@ def show_group_dlp(ctx, data, page, sort_dir):
         if ord(c) == 27:
             break
         args["start"] += page
+
 
 @show_group_dlp.command()
 @click.argument("name")
@@ -229,11 +239,12 @@ def detail(data, page, sort_dir, name):
     _list_dlp_group_display_format(dr)
     columns = ("name", "status", "sensors")
     output.show(columns, dr)
-    #click.echo("Group: %s, Status: %s" % (dr["name"], dr["status"]))
-    #columns = ("name", "action")
-    #output.list(columns, dr["sensors"])
+    # click.echo("Group: %s, Status: %s" % (dr["name"], dr["status"]))
+    # columns = ("name", "action")
+    # output.list(columns, dr["sensors"])
 
-#waf
+
+# waf
 def _list_waf_group_display_format(group):
     f = "status"
     if f not in group:
@@ -265,10 +276,12 @@ def _list_waf_group_display_format(group):
             else:
                 sen["exist"] = "non-exist"
             if "comment" not in sen:
-                s += "(\"%s\", %s, %s, %s)\n" % (sen["name"],sen["action"], senType, sen["exist"])
+                s += "(\"%s\", %s, %s, %s)\n" % (sen["name"], sen["action"], senType, sen["exist"])
             else:
-                s += "(\"%s\", %s, %s, %s, \"%s\")\n" % (sen["name"], sen["action"], senType, sen["exist"], sen["comment"])
-        group[fo]= s.rstrip("\n")
+                s += "(\"%s\", %s, %s, %s, \"%s\")\n" % (
+                sen["name"], sen["action"], senType, sen["exist"], sen["comment"])
+        group[fo] = s.rstrip("\n")
+
 
 @show_group.group("waf", invoke_without_command=True)
 @click.option("--page", default=5, type=click.IntRange(1), help="list page size, default=5")
@@ -300,6 +313,7 @@ def show_group_waf(ctx, data, page, sort_dir):
             break
         args["start"] += page
 
+
 @show_group_waf.command()
 @click.argument("name")
 @click.option("--page", default=5, type=click.IntRange(1), help="list page size, default=5")
@@ -316,6 +330,7 @@ def detail(data, page, sort_dir, name):
     columns = ("name", "status", "sensors", "type")
     output.show(columns, dr)
 
+
 @show_group.command()
 @click.argument("id_or_name")
 @click.pass_obj
@@ -329,6 +344,7 @@ def custom_check(data, id_or_name):
 
     columns = ("name", "script")
     output.list(columns, group["scripts"])
+
 
 def _add_criterion(key, value):
     k = key
@@ -384,6 +400,7 @@ def _add_criterion(key, value):
 
     return {"key": k, "value": v, "op": op}
 
+
 def _add_criteria(ct, key, values):
     for v in values:
         e = _add_criterion(key, v)
@@ -393,9 +410,11 @@ def _add_criteria(ct, key, values):
         ct.append(e)
     return True
 
+
 @create.command("group")
 @click.argument('name')
-@click.option('--scope', default="local", type=click.Choice(['fed', 'local']), show_default=True, help="It's a local or federal group")
+@click.option('--scope', default="local", type=click.Choice(['fed', 'local']), show_default=True,
+              help="It's a local or federal group")
 @click.option('--image', multiple=True, help="container image name.")
 @click.option('--node', multiple=True, help="node name.")
 @click.option('--domain', multiple=True, help="container domain.")
@@ -439,6 +458,7 @@ def create_group(data, name, scope, image, node, domain, container, service, lab
 
     data.client.create("group", {"config": {"name": name, "criteria": ct, "cfg_type": cfg_type}})
 
+
 @set.group("group")
 @click.argument("name")
 @click.pass_obj
@@ -446,6 +466,7 @@ def create_group(data, name, scope, image, node, domain, container, service, lab
 def set_group(ctx, data, name):
     """Set group configuration."""
     data.id_or_name = name
+
 
 @set_group.command("setting")
 @click.option('--image', multiple=True, help="container image name.")
@@ -455,9 +476,9 @@ def set_group(ctx, data, name):
 @click.option('--service', multiple=True, help="container service name.")
 @click.option('--label', multiple=True, help="container label.")
 @click.option('--address', multiple=True, help="ip address range list.")
-#@click.option("--dlp", type=click.Choice(['enable', 'disable']), default=None, help="dlp status")
+# @click.option("--dlp", type=click.Choice(['enable', 'disable']), default=None, help="dlp status")
 @click.pass_obj
-#def set_group_setting(data, image, node, domain, container, service, label, address, dlp):
+# def set_group_setting(data, image, node, domain, container, service, label, address, dlp):
 def set_group_setting(data, image, node, domain, container, service, label, address):
     """Set group configuration.
 
@@ -486,10 +507,11 @@ def set_group_setting(data, image, node, domain, container, service, label, addr
     group = {"name": data.id_or_name}
     if len(ct) > 0:
         group["criteria"] = ct
-    #if dlp != None:
+    # if dlp != None:
     #    group["dlp_status"] = dlp == "enable"
 
     data.client.config("group", data.id_or_name, {"config": group})
+
 
 @set_group.command("dlp")
 @click.argument("status", type=click.Choice(['enable', 'disable']))
@@ -500,8 +522,9 @@ def set_group_dlp(data, status, sensor, action):
     """Set group dlp sensor."""
     cfg = []
     cfg.append({"name": sensor, "action": action})
-    group = {"name": data.id_or_name, "status":status=='enable', "sensors": cfg}
+    group = {"name": data.id_or_name, "status": status == 'enable', "sensors": cfg}
     data.client.config("dlp/group", data.id_or_name, {"config": group})
+
 
 @set_group.command("waf")
 @click.argument("status", type=click.Choice(['enable', 'disable']))
@@ -512,8 +535,9 @@ def set_group_waf(data, status, sensor, action):
     """Set group waf sensor."""
     cfg = []
     cfg.append({"name": sensor, "action": action})
-    group = {"name": data.id_or_name, "status":status=='enable', "sensors": cfg}
+    group = {"name": data.id_or_name, "status": status == 'enable', "sensors": cfg}
     data.client.config("waf/group", data.id_or_name, {"config": group})
+
 
 # -- unset
 @unset.group("group")
@@ -524,6 +548,7 @@ def unset_group(ctx, data, name):
     """Unset group configuration."""
     data.id_or_name = name
 
+
 @unset_group.command("dlp")
 @click.argument("status", type=click.Choice(['enable', 'disable']))
 @click.argument("sensor")
@@ -532,8 +557,9 @@ def unset_group_dlp(data, status, sensor):
     """Unset group dlp sensor."""
     cfg = []
     cfg.append(sensor)
-    group = {"name": data.id_or_name, "status":status=='enable', "delete": cfg}
+    group = {"name": data.id_or_name, "status": status == 'enable', "delete": cfg}
     data.client.config("dlp/group", data.id_or_name, {"config": group})
+
 
 @unset_group.command("waf")
 @click.argument("status", type=click.Choice(['enable', 'disable']))
@@ -543,19 +569,21 @@ def unset_group_waf(data, status, sensor):
     """Unset group waf sensor."""
     cfg = []
     cfg.append(sensor)
-    group = {"name": data.id_or_name, "status":status=='enable', "delete": cfg}
+    group = {"name": data.id_or_name, "status": status == 'enable', "delete": cfg}
     data.client.config("waf/group", data.id_or_name, {"config": group})
+
 
 @set.command("custom_check")
 @click.argument('name')
-@click.option('--title',  help="script title.")
-@click.option('--script',  help="test script.")
+@click.option('--title', help="script title.")
+@click.option('--script', help="test script.")
 @click.pass_obj
 def set_custom_check(data, name, title, script):
     """Set custom_check configuration."""
 
-    group = {"add": {"scripts":[{"name": title, "script": script}]}}
+    group = {"add": {"scripts": [{"name": title, "script": script}]}}
     data.client.config("custom_check", name, {"config": group})
+
 
 # -- delete
 @delete.command("group")
@@ -564,6 +592,7 @@ def set_custom_check(data, name, title, script):
 def delete_group(data, name):
     """Delete group."""
     data.client.delete("group", name)
+
 
 # service -----
 
@@ -578,6 +607,7 @@ def _list_service_display_format(service):
         fo = output.key_output(f)
         service[fo] = len(service[f])
 
+
 def _show_service_display_format(service):
     for wl in service["members"]:
         f = "id"
@@ -587,6 +617,7 @@ def _show_service_display_format(service):
 
     for pol in service["policy_rules"]:
         list_policy_display_format(pol)
+
 
 @show.group("service", invoke_without_command=True)
 @click.option('--cap', is_flag=True, default=False, help="with cap")
@@ -613,7 +644,9 @@ def show_service(ctx, data, cap, page, sort, sort_dir):
         for service in services:
             _list_service_display_format(service)
 
-        columns = ("name", "policy_mode", "profile_mode", "members", "policy_rules", "platform_role", "ingress_exposure", "egress_exposure", "baseline_profile")
+        columns = (
+                "name", "policy_mode", "profile_mode", "members", "policy_rules", "platform_role",
+                "ingress_exposure", "egress_exposure", "baseline_profile")
         output.list(columns, services)
 
         if args["limit"] > 0 and len(services) < args["limit"]:
@@ -625,6 +658,7 @@ def show_service(ctx, data, cap, page, sort, sort_dir):
             break
 
         args["start"] += page
+
 
 @show_service.command()
 @click.argument("id_or_name")
@@ -648,6 +682,7 @@ def detail(data, id_or_name, cap):
     columns = ("id", "from", "to", "applications", "ports", "action", "learned", "status", "platform_role")
     output.list(columns, service["policy_rules"])
 
+
 @create.command("service")
 @click.argument('name')
 @click.argument('domain')
@@ -661,12 +696,14 @@ def create_service(data, name, domain, policy_mode, baseline):
     else:
         data.client.create("service", {"config": {"name": name, "domain": domain}})
 
+
 @set.group("service")
 @click.argument('name')
 @click.pass_obj
 def set_service(data, name):
     """Set service configuration."""
     data.id_or_name = name
+
 
 @set_service.command()
 @click.argument("policy_mode", type=click.Choice(['discover', 'monitor', 'protect']))
@@ -677,6 +714,7 @@ def policy_mode(data, policy_mode, baseline):
     config = {"services": data.id_or_name.split(","), "policy_mode": policy_mode.title(), "baseline_profile": baseline}
     data.client.config("service", "config", {"config": config})
 
+
 @set_service.command("network")
 @click.argument("policy_mode", type=click.Choice(['discover', 'monitor', 'protect']))
 @click.pass_obj
@@ -684,6 +722,7 @@ def net_policy_mode(data, policy_mode):
     """Set service network policy mode."""
     config = {"services": data.id_or_name.split(","), "policy_mode": policy_mode.title()}
     data.client.config("service", "config/network", {"config": config})
+
 
 @set_service.command("profile")
 @click.argument("profile_mode", type=click.Choice(['discover', 'monitor', 'protect']))

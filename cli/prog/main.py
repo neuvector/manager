@@ -3,41 +3,41 @@ import itertools
 import shlex
 import sys
 
-from client import Unauthorized
-from client import RestException
+from prog.client import Unauthorized
+from prog.client import RestException
 
-import admission
-import assessment
-import auth
-import bench
-import cli
-import client
-import cluster
-import compliance
-import controller
-import convers
-import diag
-import dlp
-import waf
-import domain
-import enforcer
-import federation
-import file_access
-import host
-import log
-import group
-import policy
-import process
-import pwd_profile
-import registry
-import repository
-import role
-import scan
-import server
-import system
-import workload
+from prog import admission
+from prog import assessment
+from prog import auth
+from prog import bench
+from prog import cli
+from prog import client
+from prog import cluster
+from prog import compliance
+from prog import controller
+from prog import convers
+from prog import diag
+from prog import dlp
+from prog import waf
+from prog import domain
+from prog import enforcer
+from prog import federation
+from prog import file_access
+from prog import host
+from prog import log
+from prog import group
+from prog import policy
+from prog import process
+from prog import pwd_profile
+from prog import registry
+from prog import repository
+from prog import role
+from prog import scan
+from prog import server
+from prog import system
+from prog import workload
 
-#_BUILTIN_CMDS = set(
+# _BUILTIN_CMDS = set(
 #    ["_load", "_relative_load", "cmdenvironment", "ed", "edit",
 #     "hi", "history", "l", "li", "list", "load", "pause", "py",
 #     "r", "run", "save", "set", "shell", "shortcuts", "show"])
@@ -48,6 +48,7 @@ Error: Invalid argument.
 To use comparison operators(>, >=, <, <=) in the --criteria option value, enclose it in double quotation marks.
 Example:  --criteria "cveHighCount:>=:5"
 """
+
 
 class InteractiveCLI(cmd2.Cmd, object):
     intro = 'Welcome to the NeuVector command line. Type help or ? to list commands.\n'
@@ -100,7 +101,7 @@ class InteractiveCLI(cmd2.Cmd, object):
         self.default(args)
 
     def precmd(self, line):
-        args = shlex.split(line.parsed.raw)
+        args = shlex.split(line.raw)
         if len(args) > 0:
             if args[0] == "help":
                 return line
@@ -108,13 +109,13 @@ class InteractiveCLI(cmd2.Cmd, object):
                 return "help"
             if self._is_builtin_cmd([args[0]]):
                 # Modify the command to disable builtin commands
-                return "builtin " + line.parsed.raw
+                return "builtin " + line.raw
 
-        return line.parsed.raw
+        return "cli " + line.raw
 
     def postcmd(self, stop, line):
         self._set_prompt(self.ctx.username, self.ctx.domain, self.ctx.server_ip)
-        if line == "builtin exit" or line == "exit":
+        if line == "cli exit" or line == "exit":
             return True
         return stop
 
@@ -134,9 +135,9 @@ class InteractiveCLI(cmd2.Cmd, object):
         except Unauthorized:
             self.ctx.username = None
             self.ctx.domain = None
-            print "Error: Unauthorized! Login first."
+            print("Error: Unauthorized! Login first.")
         except RestException as e:
-            print "Error: %s" % e.msg
+            print("Error: %s" % e.msg)
         except SystemExit:
             pass
 

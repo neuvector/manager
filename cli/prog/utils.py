@@ -2,8 +2,8 @@ import click
 import functools
 import socket
 
-import client
-import output
+from prog import client
+from prog import output
 
 RoleDomains = "domain role"
 
@@ -11,16 +11,20 @@ clusterRoleNone = ""
 clusterRoleMaster = "master"
 clusterRoleJoint = "joint"
 
+
 def rename_kwargs(**replacements):
     def actual_decorator(func):
         @functools.wraps(func)
         def decorated_func(*args, **kwargs):
-            for external_arg, internal_arg in replacements.iteritems():
+            for external_arg, internal_arg in iter(replacements.items()):
                 if internal_arg in kwargs:
                     kwargs[external_arg] = kwargs.pop(internal_arg)
                 return func(*args, **kwargs)
+
         return decorated_func
+
     return actual_decorator
+
 
 def keypress():
     try:
@@ -37,6 +41,7 @@ def keypress():
             termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
         return ch
 
+
 def convert_byte(byte, span):
     if span == 0:
         if byte < 1024 * 1024:
@@ -50,6 +55,7 @@ def convert_byte(byte, span):
             return "%.2f (Kbps)" % (float(byte) * 8 / 1024 / span)
         else:
             return "%.2f (Mbps)" % (float(byte) * 8 / 1024 / 1024 / span)
+
 
 def stats_display_format(stats, span):
     f = "cpu"
@@ -87,13 +93,15 @@ def stats_display_format(stats, span):
         fo = output.key_output(f)
         stats[fo] = convert_byte(stats[f], span)
 
+
 def user_role_domains_display_format(user):
     user[RoleDomains] = ""
     if user.get("role_domains"):
         rlist = []
-        for role, domains in user["role_domains"].iteritems():
+        for role, domains in iter(user["role_domains"].items()):
             rlist.append("%s -> %s" % (",".join(domains), role))
         user[RoleDomains] = "\n".join(rlist)
+
 
 def get_managed_object_id(clt, path, obj, id_or_name):
     item = None
@@ -107,6 +115,7 @@ def get_managed_object_id(clt, path, obj, id_or_name):
 
         if len(items) == 1:
             return items[0]["id"] if "id" in items[0] else ""
+
 
 def get_managed_object(clt, path, obj, id_or_name):
     item = None
@@ -131,6 +140,7 @@ def get_managed_object(clt, path, obj, id_or_name):
 
     return item
 
+
 def is_valid_ipv4_address(address):
     try:
         socket.inet_pton(socket.AF_INET, address)
@@ -145,6 +155,7 @@ def is_valid_ipv4_address(address):
 
     return True
 
+
 def parse_username_domain(full):
     tokens = full.split(client.UserDomainDelimiter)
     if len(tokens) == 1:
@@ -154,11 +165,13 @@ def parse_username_domain(full):
     else:
         return None, None
 
+
 def get_username_domain(username, domain):
     if domain:
         return username + client.UserDomainDelimiter + domain
     else:
         return username
+
 
 def list_format_ip2workload(wl):
     if wl.get("workload"):
@@ -171,14 +184,17 @@ def list_format_ip2workload(wl):
             fo = output.key_output(f)
             wl[fo] = wl["workload"][f]
 
+
 def filter_value_include(f):
     return "in,%s" % f
+
 
 def is_fed_master(data):
     resp = data.client.show("fed/member", None, None)
     if resp is None or (resp["fed_role"] != clusterRoleMaster):
         return False
     return True
+
 
 def is_fed_joint(data):
     resp = data.client.show("fed/member", None, None)

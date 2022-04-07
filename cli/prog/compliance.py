@@ -1,8 +1,9 @@
 import click
 
-from cli import show
-import client
-import output
+from prog.cli import show
+from prog import client
+from prog import output
+
 
 def _list_compliance_entry_display_format(e):
     f = "tags"
@@ -14,6 +15,7 @@ def _list_compliance_entry_display_format(e):
 @click.pass_obj
 def show_compliance(data):
     """Show compliance information."""
+
 
 @show_compliance.command("profile")
 @click.argument("name")
@@ -30,4 +32,3 @@ def show_compliance_profile(data, name):
 
     columns = ("test_number", "tags")
     output.list(columns, profile["entries"])
-

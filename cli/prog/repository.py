@@ -1,14 +1,15 @@
 import click
 
-from cli import create
-from cli import delete
-from cli import request
-from cli import set
-from cli import show
-from cli import unset
-import client
-import output
-import utils
+from prog.cli import create
+from prog.cli import delete
+from prog.cli import request
+from prog.cli import set
+from prog.cli import show
+from prog.cli import unset
+from prog import client
+from prog import output
+from prog import utils
+
 
 @request.command("repository")
 @click.option("-r", "--registry", default=None, help="Registry URL")
@@ -43,7 +44,7 @@ def repository(data, registry, username, password, repository, tag, scan_layers)
         else:
             info["scan_layers"] = False
     while True:
-        data = data.client.request("scan", "repository", None, {"request":info} )
+        data = data.client.request("scan", "repository", None, {"request": info})
         if data != None:
             report = data["report"]
             if report["vulnerabilities"] != None:

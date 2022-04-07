@@ -1,21 +1,15 @@
 import click
 import requests
 
-from cli import create
-from cli import delete
-from cli import request
-from cli import set
-from cli import show
-from cli import unset
-import client
-import output
-import utils
-import json
+from prog.cli import request
+from prog import output
+
 
 @request.group("assessment")
 @click.pass_obj
 def request_assessment(data):
     """Request assessment operation."""
+
 
 @request_assessment.command("admission_rule")
 @click.option('--filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))

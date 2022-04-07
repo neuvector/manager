@@ -1,12 +1,13 @@
 import click
 
-from cli import cli
-from cli import set
-from cli import create
-from cli import delete
-from cli import show
-import client
-import output
+from prog.cli import cli
+from prog.cli import set
+from prog.cli import create
+from prog.cli import delete
+from prog.cli import show
+from prog import client
+from prog import output
+
 
 # -- password profile
 
@@ -28,11 +29,12 @@ def show_pwd_profile(ctx, data):
     click.echo("")
     for profile in profiles:
         if profile["name"] == activeName:
-            profile["active"] ="Y"
+            profile["active"] = "Y"
         else:
-            profile["active"] =""
+            profile["active"] = ""
     columns = ("name", "comment", "active")
     output.list(columns, profiles)
+
 
 @show_pwd_profile.command()
 @click.argument("name")
@@ -43,11 +45,16 @@ def detail(data, name):
     header2 = "password is valid for days"
     header3 = "keep password hash history"
     profile = data.client.show("password_profile", "pwd_profile", name)
-    columns = ("name", "comment", "min_len", "min_uppercase_count", "min_lowercase_count", "min_digit_count", "min_special_count", header1, header2, header3)
+    columns = (
+    "name", "comment", "min_len", "min_uppercase_count", "min_lowercase_count", "min_digit_count", "min_special_count",
+    header1, header2, header3)
     profiles = []
 
-    if profile["enable_block_after_failed_login"] is True and profile["block_after_failed_login_count"] > 0 and profile["block_minutes"] > 0:
-        profile[header1] = "block {} minutes after {} consecutive login faulures".format(profile["block_minutes"], profile["block_after_failed_login_count"])
+    if profile["enable_block_after_failed_login"] is True and profile["block_after_failed_login_count"] > 0 and profile[
+        "block_minutes"] > 0:
+        profile[header1] = "block {} minutes after {} consecutive login faulures".format(profile["block_minutes"],
+                                                                                         profile[
+                                                                                             "block_after_failed_login_count"])
     else:
         profile[header1] = "not enabled"
 
@@ -64,6 +71,7 @@ def detail(data, name):
     profiles.append(profile)
     output.list(columns, profiles)
 
+
 @show_pwd_profile.command()
 @click.pass_obj
 def basic_rule(data):
@@ -75,13 +83,15 @@ def basic_rule(data):
     rule2 = {"rule": "minimum uppercase character count", "value": profile["min_uppercase_count"], "comment": "A ~ Z"}
     rule3 = {"rule": "minimum lowercase character count", "value": profile["min_lowercase_count"], "comment": "a ~ z"}
     rule4 = {"rule": "minimum digit character count", "value": profile["min_digit_count"], "comment": "0 ~ 9"}
-    rule5 = {"rule": "minimum special character count", "value": profile["min_special_count"], "comment": "!\"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~"}
+    rule5 = {"rule": "minimum special character count", "value": profile["min_special_count"],
+             "comment": "!\"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~"}
     rules.append(rule1)
     rules.append(rule2)
     rules.append(rule3)
     rules.append(rule4)
     rules.append(rule5)
     output.list(columns, rules)
+
 
 # --
 
@@ -93,18 +103,23 @@ def basic_rule(data):
 @click.option('--min_lowercase_count', type=int, help="minimum lowercase letter count")
 @click.option('--min_digit_count', type=int, help="minimum digit character count")
 @click.option('--min_special_count', type=int, help="minimum special character count")
-@click.option('--enable_block_after_failed_login', type=bool, help="enable to block user after consecutive login failures")
-@click.option('--block_after_failed_login_count', type=int, help="block user after number of consecutive login failures")
+@click.option('--enable_block_after_failed_login', type=bool,
+              help="enable to block user after consecutive login failures")
+@click.option('--block_after_failed_login_count', type=int,
+              help="block user after number of consecutive login failures")
 @click.option('--block_minutes', type=int, help="how long to block user after consecutive login failures")
 @click.option('--enable_password_expiration', type=bool, help="enable password expiration")
-@click.option('--password_expire_after_days', type=int, help="a user password is valid for number of days. User needs to reset password before it expires.")
+@click.option('--password_expire_after_days', type=int,
+              help="a user password is valid for number of days. User needs to reset password before it expires.")
 @click.option('--enable_password_history', type=bool, help="enable password hash history")
 @click.option('--password_keep_history_count', type=int, help="password hash history count to keep (max: 32)")
 @click.pass_obj
-def set_pwd_profile(data, name, comment, min_len, min_uppercase_count, min_lowercase_count, min_digit_count, min_special_count, enable_block_after_failed_login,
-    block_after_failed_login_count, block_minutes, enable_password_expiration, password_expire_after_days, enable_password_history, password_keep_history_count):
+def set_pwd_profile(data, name, comment, min_len, min_uppercase_count, min_lowercase_count, min_digit_count,
+                    min_special_count, enable_block_after_failed_login,
+                    block_after_failed_login_count, block_minutes, enable_password_expiration,
+                    password_expire_after_days, enable_password_history, password_keep_history_count):
     """Set password profile configuration."""
-    
+
     profile = {"name": name}
     if comment is not None:
         profile["comment"] = comment

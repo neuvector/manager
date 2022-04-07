@@ -1,5 +1,4 @@
 import click
-import string
 
 from prog.cli import set as cli_set
 from prog.cli import show

@@ -98,9 +98,9 @@ def set_process(data):
 @click.option("--user", default="", help="allowed user")
 @click.option("--action", type=click.Choice(['allow', 'deny']), help="process action")
 @click.option("--disable_alert", type=click.Choice(['true', 'false']), help="disable_alert")
-@click.option("--baseline", type=click.Choice(['Default', 'Shield']), help="profile baseline")
+@click.option("--baseline", type=click.Choice(['basic', 'zero-drift']), help="profile baseline")
 @click.option("--allow_update", default='false', type=click.Choice(['true', 'false']),
-              help="allow modified executable file")
+        help="allow modified executable file")
 @click.pass_obj
 def set_process_profile(data, group, path, name, user, action, disable_alert, baseline, allow_update):
     """Set process profile. """

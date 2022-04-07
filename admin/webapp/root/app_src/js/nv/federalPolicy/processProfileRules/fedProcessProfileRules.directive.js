@@ -7,7 +7,7 @@
     function federalPolicyProcessProfileRules() {
         return {
             restrict: "E",
-            templateUrl: "/app/views/components/federalPolicy/federal-policy-process-profile-rules.html"
+            templateUrl: "app/views/components/federalPolicy/federal-policy-process-profile-rules.html"
         }
     }
 

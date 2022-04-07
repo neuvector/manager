@@ -811,22 +811,24 @@
     };
 
     const showSniffer = container => {
-      $scope.containerId = container.id;
-      $scope.containerName =
-        container.label.length > container.oriLabel.length
-          ? container.label
-          : container.oriLabel;
-      clearPopup();
+      if(container && container.cap_sniff) {
+        $scope.containerId = container.id;
+        $scope.containerName =
+            container.label.length > container.oriLabel.length
+                ? container.label
+                : container.oriLabel;
+        clearPopup();
 
-      $http
-        .get(SNIFF_URL, { params: { id: container.id } })
-        .then(function(response) {
-          getSniffers(response);
-          $scope.sniffer = null;
-        })
-        .catch(function(err) {
-          console.warn(err);
-        });
+        $http
+            .get(SNIFF_URL, {params: {id: container.id}})
+            .then(function (response) {
+              getSniffers(response);
+              $scope.sniffer = null;
+            })
+            .catch(function (err) {
+              console.warn(err);
+            });
+      }
     };
 
     $scope.startSniff = containerId => {
@@ -1211,7 +1213,7 @@
               activeSessions:
                 model.group && model.group.startsWith("container"),
               sniff:
-                model.group &&
+                model.group && model.cap_sniff &&
                 (model.group.startsWith("container") ||
                   model.group.startsWith("mesh")),
               quarantine:
@@ -1691,7 +1693,7 @@
 
     const showPodInfo = nodeId => {
       $http
-        .get("/container", { params: { id: nodeId } })
+        .get(PLAIN_CONTAINER_URL, { params: { id: nodeId } })
         .then(function(response) {
           $scope.container = response.data.workload;
           let theNode =
@@ -1772,7 +1774,7 @@
       const hostId = nodeId.slice(startIndex + 5);
       if (startIndex > -1) {
         $http
-          .get("/host", { params: { id: hostId } })
+          .get(NODES_URL, { params: { id: hostId } })
           .then(function(response) {
             $scope.host = response.data.host;
 
@@ -3471,6 +3473,12 @@
 
     $scope.refresh = () => {
       // cachePositions = cacheNodePositions(graph.getNodes());
+      if($scope.onActiveSession){
+        $scope.stopRefreshSession();
+        $scope.onActiveSession = false;
+        $scope.makePopupBackToOriginalLocation();
+      }
+
       if (graph) {
         graph.clear();
       }

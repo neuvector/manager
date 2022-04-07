@@ -6,10 +6,13 @@
       <div>
         <div class="login-logo"></div>
         <div class="panel-body p0">
-          <div id="loadingBar" ng-if="login.inProgress" style="width: 100%">
-            <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+          <div id="loadingBar" ng-if="(login.inProgress || login.isFromSSO)" style="width: 100%">
+            <md-progress-linear ng-if="!login.authMsg" md-mode="indeterminate"></md-progress-linear>
+            <div class="text-danger text-center clearfix" ng-show="login.authMsg" style="padding: 0 10px; clear:both">
+              {{login.authMsg}}
+            </div>
           </div>
-          <div class="login-panel" ng-class="{'login-panel-extra': login.servers && login.servers.length === 2}">
+          <div class="login-panel" ng-class="{'login-panel-extra': login.servers && login.servers.length === 2}" ng-if="!login.isFromSSO">
             <p class="text-center login-title" translate="{{'login.SIGN_IN'}}"></p>
             <form
               class="form-validate mb-lg login-form" name="login.loginForm" novalidate=""

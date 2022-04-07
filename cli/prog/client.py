@@ -1,6 +1,5 @@
 import json
 import requests
-import string
 
 UserDomainDelimiter = "@"
 
@@ -348,7 +347,7 @@ class RestClient(object):
                     url += "token_duration=%s&" % value
                 else:
                     url += "f_%s=%s&" % (key, value)
-            url = string.rstrip(url, "&")
+            url = url.rstrip("&")
         status, _, _, data = self._request("GET", url)
 
         json_header = obj
@@ -371,7 +370,7 @@ class RestClient(object):
             url += "?"
             for key, value in iter(kwargs.items()):
                 url += "f_%s=%s&" % (key, value)
-            url = string.rstrip(url, "&")
+            url = url.rstrip("&")
 
         status, _, _, data = self._request("POST", url, body=body)
 
@@ -392,7 +391,7 @@ class RestClient(object):
                     url += "scope=%s&" % value
                 else:
                     url += "f_%s=%s&" % (key, value)
-            url = string.rstrip(url, "&")
+            url = url.rstrip("&")
         status, _, _, data = self._request("PATCH", url, body=body)
 
         if status == requests.codes.ok:
@@ -415,7 +414,7 @@ class RestClient(object):
                     url += "scope=%s&" % value
                 else:
                     url += "f_%s=%s&" % (key, value)
-            url = string.rstrip(url, "&")
+            url = url.rstrip("&")
 
         status, _, _, data = self._request("DELETE", url)
         if status == requests.codes.ok:
@@ -471,7 +470,7 @@ class RestClient(object):
                     url += "limit=%s&" % value
                 else:
                     url += "f_%s=%s&" % (key, value)
-            url = string.rstrip(url, "&")
+            url = url.rstrip("&")
 
         if body is None:
             status, headers, _, data = self._request("GET", url, decode_resp=False)
@@ -641,6 +640,44 @@ class RestClient(object):
             conf[key] = value
 
         body = {"config": conf}
+
+        status, _, _, data = self._request("PATCH",
+                                           "%s/v1/system/config" % self.url,
+                                           body=body)
+
+        if status == requests.codes.ok:
+            return True
+
+        self._handle_common_error(status, data)
+
+    def config_system_net(self, **kwargs):
+        if not self._token():
+            raise Unauthorized()
+
+        conf = {}
+        for key, value in kwargs.iteritems():
+            conf[key] = value
+
+        body = {"net_config": conf}
+
+        status, _, _, data = self._request("PATCH",
+                                           "%s/v1/system/config" % self.url,
+                                           body=body)
+
+        if status == requests.codes.ok:
+            return True
+
+        self._handle_common_error(status, data)
+
+    def config_system_atmo(self, **kwargs):
+        if not self._token():
+            raise Unauthorized()
+
+        conf = {}
+        for key, value in kwargs.iteritems():
+            conf[key] = value
+
+        body = {"atmo_config": conf}
 
         status, _, _, data = self._request("PATCH",
                                            "%s/v1/system/config" % self.url,

@@ -1433,7 +1433,7 @@
                     Alertify.confirm(getMessage(mode)).then(
                         function onOk() {
                             $http
-                                .patch("/service/all", { policy_mode: mode })
+                                .patch(SERVICE_ALL, { policy_mode: mode })
                                 .then(function() {
                                     Alertify.set({ delay: ALERTIFY_SUCCEED_DELAY });
                                     Alertify.success($translate.instant("service.ALL_SUBMIT_OK"));

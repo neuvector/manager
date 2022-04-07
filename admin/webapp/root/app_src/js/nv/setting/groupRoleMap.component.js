@@ -6,7 +6,7 @@
         .component("groupRoleMap", {
           controller: GroupRoleMapController,
           controllerAs: "grpMapCtrl",
-          templateUrl: "/app/views/components/group-role-map.html",
+          templateUrl: "app/views/components/group-role-map.html",
           bindings: {
             connection: '='
           }

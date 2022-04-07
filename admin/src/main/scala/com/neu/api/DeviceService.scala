@@ -241,14 +241,14 @@ class DeviceService()(implicit executionContext: ExecutionContext)
             }
           } ~
           patch {
-            entity(as[SystemConfig]) { systemConfig =>
+            entity(as[SystemConfigWrap]) { systemConfigWrap =>
               parameter('scope.?) { scope =>
                 {
                   Utils.respondWithNoCacheControl() {
                     complete {
                       scope.fold {
                         val payload =
-                          systemConfigWrapToJson(SystemConfigWrap(Some(systemConfig), None))
+                          systemConfigWrapToJson(systemConfigWrap)
                         logger.info("Updating config: {}", payload)
                         RestClient.httpRequestWithHeader(
                           s"${baseClusterUri(tokenId)}/system/config",
@@ -258,7 +258,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
                         )
                       } { scope =>
                         val fedPayload =
-                          systemConfigWrapToJson(SystemConfigWrap(None, Some(systemConfig)))
+                          systemConfigWrapToJson(systemConfigWrap)
                         logger.info("Updating fed config: {}", fedPayload)
                         RestClient.httpRequestWithHeader(
                           s"${baseClusterUri(tokenId)}/system/config?scope=$scope",

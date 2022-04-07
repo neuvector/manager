@@ -1,5 +1,4 @@
 import click
-import string
 
 from io import StringIO
 from prog.cli import create

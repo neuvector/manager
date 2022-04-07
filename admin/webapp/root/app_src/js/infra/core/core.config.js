@@ -57,7 +57,9 @@
       $q,
       $location,
       $window,
-      $rootScope
+      $rootScope,
+      $translate,
+      $timeout
     ) {
       return {
         response: function(response) {
@@ -65,15 +67,14 @@
         },
 
         responseError: function(rejection) {
-          console.log(rejection);
+          console.log("rejection", rejection);
           if (
             (rejection.status === 408 || rejection.status === 401) &&
-            rejection.config.url !== "/login" &&
-            rejection.config.url !== "/auth"
+            rejection.config.url !== LOGIN_URL
           ) {
             let $state = $injector.get("$state");
             let origin = $location.url();
-            if (origin !== "/page/login") {
+            if (origin !== "/page/login" && origin !== "/page/logout" ) {
               $window.sessionStorage.setItem(
                 "from",
                 JSON.stringify($location.url())
@@ -85,7 +86,13 @@
             $rootScope.versionDone = false;
             $rootScope.isFooterReady = false;
             if ($rootScope.logout) {
-              $rootScope.logout(true);
+              $rootScope.logout(true, rejection.data.code === 51);
+            } else {
+              if ($rootScope.isSUSESSO && rejection.data.code === 51) {
+                $rootScope.hideFrame = true;
+              } else {
+                $state.go("page.login");
+              }
             }
             console.log("reject back");
             if(rejection.status === 408){

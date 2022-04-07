@@ -21,6 +21,7 @@ case class SystemConfig(
   syslog_status: Option[Boolean] = None,
   syslog_in_json: Option[Boolean] = None,
   new_service_policy_mode: Option[String] = None,
+  new_service_profile_baseline: Option[String] = None,
   // auth_order: Option[Array[String]] = None,
   syslog_categories: Option[Array[String]] = None,
   single_cve_per_syslog: Option[Boolean] = None,
@@ -38,13 +39,28 @@ case class SystemConfig(
   ibmsa_ep_enabled: Option[Boolean] = None,
   controller_debug: Option[Array[String]] = None
 )
+
+case class SystemNetConfig (
+  net_service_status: Option[Boolean],
+  net_service_policy_mode: Option[String]
+)
+
+case class SystemAtmoConfig (
+  mode_auto_d2m: Boolean,
+  mode_auto_d2m_duration: Long,
+  mode_auto_m2p: Boolean,
+  mode_auto_m2p_duration: Long
+)
+
 case class SystemConfig4Dashboard(
   new_service_policy_mode: Option[String] = None
 )
 
 case class SystemConfigWrap(
   config: Option[SystemConfig],
-  fed_config: Option[SystemConfig]
+  fed_config: Option[SystemConfig],
+  net_config: Option[SystemNetConfig],
+  atmo_config: Option[SystemAtmoConfig]
 )
 
 case class WebhookConfigWrap(
@@ -58,7 +74,7 @@ case class SystemConfig4DashboardWrap(
 
 case class SystemRequestContent(policy_mode: Option[String])
 
-case class ServiceConfigParam(policy_mode: Option[String], services: Option[Array[String]], not_scored: Option[Boolean])
+case class ServiceConfigParam(policy_mode: Option[String], baseline_profile: Option[String], services: Option[Array[String]], not_scored: Option[Boolean])
 
 case class ServiceConfig(config: ServiceConfigParam)
 

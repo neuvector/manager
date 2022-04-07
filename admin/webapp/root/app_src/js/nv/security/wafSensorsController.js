@@ -22,7 +22,8 @@
     "$controller",
     "$sanitize",
     "FileSaver",
-    "AuthorizationFactory"
+    "AuthorizationFactory",
+    "$filter"
   ];
   function WAFSensorsController(
     $rootScope,
@@ -43,7 +44,8 @@
     $controller,
     $sanitize,
     FileSaver,
-    AuthorizationFactory
+    AuthorizationFactory,
+    $filter
   ) {
     $scope.isSupported = false;
 
@@ -161,6 +163,7 @@
             $scope.gridOptions.api.setRowData(response.data.sensors);
             setTimeout(function() {
               $scope.gridOptions.api.sizeColumnsToFit();
+              $scope.gridOptions.api.deselectAll();
               if (index) {
                 let rowNode = $scope.gridOptions.api.getDisplayedRowAtIndex(
                   index
@@ -232,7 +235,7 @@
           .then(
             function() {
               $timeout(function() {
-                $scope.reload($scope.sensors.length);
+                $scope.reload();
               }, 3000);
             },
             function() {}
@@ -245,13 +248,13 @@
     };
 
     $scope.editSensor = function() {
-      let index4Edit = wafSensorsService.getIndex(
-        $scope.sensors,
-        $scope.sensor.name
-      );
-      let rowNode = $scope.gridOptions.api.getDisplayedRowAtIndex(index4Edit);
-      rowNode.setSelected(true);
       let success = function() {
+        let index4Edit = wafSensorsService.getIndex(
+          $scope.sensors,
+          $scope.sensor.name
+        );
+        let rowNode = $scope.gridOptions.api.getDisplayedRowAtIndex(index4Edit);
+        rowNode.setSelected(true);
         $mdDialog
           .show({
             controller: DialogController4AddEditSensor,
@@ -273,7 +276,6 @@
       };
 
       let error = function() {};
-
       Utils.keepAlive(success, error);
     };
 
@@ -286,7 +288,7 @@
       rowNode = $scope.gridOptions.api.getDisplayedRowAtIndex(index4delete);
       rowNode.setSelected(true);
       let confirmBox =
-        $translate.instant("waf.msg.REMOVE_CFM") + $sanitize(sensor.name);
+        $translate.instant("waf.msg.REMOVE_CFM") + $sanitize($filter("shorten2")(sensor.name, 30));
       Alertify.confirm(confirmBox).then(
         function toOK() {
           $http
@@ -402,7 +404,7 @@
       rowNode = $scope.gridOptions.api.getDisplayedRowAtIndex(index4edit);
       rowNode.setSelected(true);
       let confirmBox =
-        $translate.instant("waf.msg.REMOVE_CFM") + $sanitize(rule.name);
+        $translate.instant("waf.msg.REMOVE_CFM") + $sanitize($filter("shorten2")(rule.name, 30));
       Alertify.confirm(confirmBox).then(
         function toOK() {
           let payload = {
@@ -777,6 +779,7 @@
           })
           .catch(function(e) {
             console.warn(e);
+            if (!$scope.isEdit) selectedSensor.rules.pop();
             if (USER_TIMEOUT.indexOf(e.status) < 0) {
               Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
               Alertify.error(

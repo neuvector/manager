@@ -1,7 +1,6 @@
 import click
 import io
 import requests
-import string
 import time
 import zlib
 
@@ -169,7 +168,9 @@ def showLocalSystemConfig(data, scope):
     if "auth_order" in conf:
         column_map += (("auth_order", "Authentication order"),)
     if "auth_by_platform" in conf:
-        column_map += (("auth_by_platform", "Authentication by OpenShift"),)
+        column_map += (("auth_by_platform", "Authentication by platform(Rancher or OpenShift)"),)
+    if "rancher_ep" in conf:
+        column_map += (("rancher_ep", "Rancher endpoint url"),)
     if "configured_internal_subnets" in conf:
         column_map += (("configured_internal_subnets", "Configured internal subnets"),)
     if "cluster_name" in conf:
@@ -188,6 +189,16 @@ def showLocalSystemConfig(data, scope):
         column_map += (("registry_https_proxy", "HTTPS Proxy"),)
     if "xff_enabled" in conf:
         column_map += (("xff_enabled", "Enable xff based policy match"),)
+    if "net_service_status" in conf:
+        column_map += (("net_service_status", "Enable Network Service Policy Mode"),)
+    if "net_service_policy_mode" in conf:
+        column_map += (("net_service_policy_mode", "Network Service Policy Mode"),)
+    if "mode_auto_d2m" in conf:
+        column_map += (("mode_auto_d2m", "Auto Mode Upgrader: Discover -> Monitor"),
+                   ("mode_auto_d2m_duration", "       Duration"),)
+    if "mode_auto_m2p" in conf:
+        column_map += (("mode_auto_m2p", "Auto Mode Upgrader: Monitor -> Protect"),
+                   ("mode_auto_m2p_duration", "       Duration"),)
 
     _show_system_setting_display_format(conf)
     output.show_with_map(column_map, conf)
@@ -440,7 +451,7 @@ def set_system_new_service_policy_mode(data, mode):
 
 
 @set_system_new_service.command("profile_baseline")
-@click.argument('baseline', type=click.Choice(['Default', 'Shield']))
+@click.argument('baseline', type=click.Choice(['basic', 'zero-drift']))
 @click.pass_obj
 def set_system_new_service_profile_baseline(data, baseline):
     """Set system new service profile baseline."""
@@ -548,7 +559,7 @@ def set_system_syslog_categories(data, category):
 @click.pass_obj
 def set_system_syslog_server(data, address):
     """Set syslog server address and port (1.2.3.4:514)"""
-    tokens = string.split(address, ":")
+    tokens = address.split(":")
     if len(tokens) == 1:
         data.client.config_system(syslog_ip=address, syslog_port=0)
     elif len(tokens) == 2:
@@ -626,6 +637,22 @@ def set_system_auth_openshift(data, status):
     else:
         data.client.config_system(auth_by_platform=False)
 
+@set_system.command("auth_platform")
+@click.argument('status', type=click.Choice(['enable', 'disable']))
+@click.pass_obj
+def set_system_auth_platform(data, status):
+    """Enable/disable authentication by platform(Rancher or OpenShift)"""
+    if status == 'enable':
+        data.client.config_system(auth_by_platform=True)
+    else:
+        data.client.config_system(auth_by_platform=False)
+
+@set_system.command("rancher_ep")
+@click.argument('url')
+@click.pass_obj
+def set_system_rancher_ep(data, url):
+    """Rancher endpoint url"""
+    data.client.config_system(rancher_ep=url)
 
 @set_system.command("cluster_name")
 @click.argument('name')
@@ -686,6 +713,27 @@ def set_system_xff_enabled_status(data, status):
     else:
         data.client.config_system(xff_enabled=False)
 
+@set_system.group('net_service')
+@click.pass_obj
+def set_system_net_service(data):
+    """Set global network service configuration"""
+
+@set_system_net_service.command("status")
+@click.argument('status', type=click.Choice(['enable', 'disable']))
+@click.pass_obj
+def set_system_net_service_status(data, status):
+    """Enable/disable global network service"""
+    if status == 'enable':
+        data.client.config_system_net(net_service_status=True)
+    else:
+        data.client.config_system_net(net_service_status=False)
+
+@set_system_net_service.command("policy_mode")
+@click.argument('mode', type=click.Choice(['discover', 'monitor', 'protect']))
+@click.pass_obj
+def set_system_net_service_policy_mode(data, mode):
+    """Set system global network service policy mode."""
+    data.client.config_system_net(net_service_policy_mode=mode.title())
 
 @set_system.group("registry")
 @click.pass_obj
@@ -957,12 +1005,34 @@ def request_export_admission(data, config, id, filename):
         click.echo(respData)
     return
 
+@request_export.command('dlp')
+@click.option("--name",  multiple=True, help="Name of DLP sensor to export")
+@click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True))
+@click.pass_obj
+def request_export_dlp(data, name, filename):
+    """Export DLP sensors/rules."""
+
+    names = []
+    for n in name:
+        names.append(n)
+
+    respData = data.client.requestDownload("file", "dlp", None, {"names": names})
+    if filename and len(filename) > 0:
+        try:
+            with click.open_file(filename, 'w') as wfp:
+                wfp.write(respData)
+            click.echo("Wrote to %s" % click.format_filename(filename))
+        except IOError:
+            click.echo("Error: Failed to write to %s" % click.format_filename(filename))
+    else:
+        click.echo(respData)
+    return
 
 @request_export.command('waf')
 @click.option("--name", multiple=True, help="Name of WAF sensor to export")
 @click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True))
 @click.pass_obj
-def request_export_admission(data, name, filename):
+def request_export_waf(data, name, filename):
     """Export WAF sensors/rules."""
 
     names = []
@@ -1144,6 +1214,53 @@ def import_admission(data, filename):
             "[2] Error: Failed to import admission control configuration/rules %s" % click.format_filename(filename))
     click.echo("")
 
+@request_import.command('dlp')
+@click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))
+@click.pass_obj
+def import_dlp(data, filename):
+    """Import DLP sensors/rules."""
+    try:
+        tid = ""
+        resp = data.client.importConfig("file/dlp/config", filename, True, None, tid, 0, "")
+        if tid == "":
+            if resp.status_code == requests.codes.partial:
+                respJson = resp.json()
+                if "data" in respJson:
+                    respData = respJson["data"]
+                    tid = respData["tid"]
+                    click.echo("[progress: {:3d}%] {}".format(respData["percentage"], respData["status"]))
+        status = ""
+        if tid != "":
+            i = 1
+            #click.echo("Info: import task transaction id is {}".format(tid))
+            while resp.status_code == requests.codes.partial:
+                time.sleep(2)
+                resp = data.client.importConfig("file/dlp/config", filename, True, None, tid, i, "")
+                respJson = resp.json()
+                if "data" in respJson:
+                    respData = respJson["data"]
+                    if "status" in respData:
+                        status = respData["status"]
+                    if status != "":
+                        click.echo("[progress: {:3d}%] {}".format(respData["percentage"], status))
+                i = i + 1
+            #click.echo("--------------------------")
+            if resp.status_code == requests.codes.ok:
+                respJson = resp.json()
+                if "data" in respJson:
+                    respData = respJson["data"]
+                    if "status" in respData:
+                        status = respData["status"]
+
+        click.echo("")
+        if resp.status_code == requests.codes.ok and status == "done":
+            click.echo("Imported DLP sensors/rules {}.".format(click.format_filename(filename)))
+        else:
+            click.echo("[1] Error: Failed to import DLP sensors/rules {}".format(click.format_filename(filename)))
+    except IOError:
+        click.echo("")
+        click.echo("[2] Error: Failed to import DLP sensors/rules %s" % click.format_filename(filename))
+    click.echo("")
 
 @request_import.command('waf')
 @click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))
@@ -1216,7 +1333,7 @@ def debug(data, enforcer, tail, filename):
     if tail != 0:
         filter += "f_tail=%d&" % tai
     if filter != "":
-        filter = string.rstrip(filter, "&")
+        filter = filter.rstrip("&")
         url += "?" + filter
 
     headers, body = data.client.download(url, None)
@@ -1295,3 +1412,24 @@ def delete(data):
     """Delete current license"""
 
     data.client.delete("system", "license")
+
+@set_system.group('auto_mode')
+@click.pass_obj
+def set_system_config_atmo(data):
+    """Set system auto mode upgrader configruation"""
+
+@set_system_config_atmo.command("config")
+@click.option("-p","--path", default="d2m", type=click.Choice(["d2m", "m2p"]), help="d2m: Discover to Monitor, m2p: Monitor to Protect")
+@click.option("-e","--enable", default="false", type=click.Choice(["true", "false"]))
+@click.option("-d","--duration", type=click.IntRange(300), default=600, help="in seconds, default: 600,")
+@click.pass_obj
+def set_system_atmo_config(data, path, enable, duration):
+    """Set system auto mode upgrader."""
+    enabled = False
+    if enable == "true":
+        enabled = True
+
+    if path == "d2m":
+        data.client.config_system_atmo(mode_auto_d2m=enabled, mode_auto_d2m_duration=duration)
+    else:
+        data.client.config_system_atmo(mode_auto_m2p=enabled, mode_auto_m2p_duration=duration)

@@ -1,6 +1,5 @@
 import click
 import io
-import string
 
 from prog.cli import show
 from prog.cli import request

@@ -472,6 +472,8 @@ class GroupService()(implicit executionContext: ExecutionContext)
                               Some(serviceConfigParam.policy_mode.getOrElse("Discover"))
                           )
                         ),
+                        None,
+                        None,
                         None
                       )
                     )
@@ -648,77 +650,163 @@ class GroupService()(implicit executionContext: ExecutionContext)
           }
         } ~
         pathPrefix("dlp") {
-          path("sensor") {
-            post {
-              entity(as[DlpSensorConfigData]) { dlpSensorConfigData =>
-                {
-                  logger.info("Adding sensor: {}", dlpSensorConfigData.config.name)
-                  Utils.respondWithNoCacheControl() {
-                    complete {
-                      RestClient.httpRequestWithHeader(
-                        s"${baseClusterUri(tokenId)}/dlp/sensor",
-                        POST,
-                        dlpSensorConfigToJson(dlpSensorConfigData),
-                        tokenId
-                      )
+          pathPrefix("sensor") {
+            pathEnd {
+              post {
+                entity(as[DlpSensorConfigData]) { dlpSensorConfigData =>
+                  {
+                    logger.info("Adding sensor: {}", dlpSensorConfigData.config.name)
+                    Utils.respondWithNoCacheControl() {
+                      complete {
+                        RestClient.httpRequestWithHeader(
+                          s"${baseClusterUri(tokenId)}/dlp/sensor",
+                          POST,
+                          dlpSensorConfigToJson(dlpSensorConfigData),
+                          tokenId
+                        )
+                      }
                     }
                   }
                 }
-              }
-            } ~
-            get {
-              parameter('name.?) { name =>
-                Utils.respondWithNoCacheControl() {
-                  complete {
-                    if (name.isEmpty) {
-                      logger.info("Getting sensors")
+              } ~
+              get {
+                parameter('name.?) { name =>
+                  Utils.respondWithNoCacheControl() {
+                    complete {
+                      if (name.isEmpty) {
+                        logger.info("Getting sensors")
+                        RestClient.httpRequestWithHeader(
+                          s"${baseClusterUri(tokenId)}/dlp/sensor",
+                          GET,
+                          "",
+                          tokenId
+                        )
+                      } else {
+                        logger.info(s"Getting sensor ${name.get}")
+                        RestClient.httpRequestWithHeader(
+                          s"${baseClusterUri(tokenId)}/dlp/sensor/${name.get}",
+                          GET,
+                          "",
+                          tokenId
+                        )
+                      }
+                    }
+                  }
+                }
+              } ~
+              patch {
+                entity(as[DlpSensorConfigData]) { dlpSensorConfigData =>
+                  {
+                    logger.info("Updating sensor {}", dlpSensorConfigData.config.name)
+                    Utils.respondWithNoCacheControl() {
+                      complete {
+                        RestClient.httpRequestWithHeader(
+                          s"${baseClusterUri(tokenId)}/dlp/sensor/${dlpSensorConfigData.config.name}",
+                          PATCH,
+                          dlpSensorConfigToJson(dlpSensorConfigData),
+                          tokenId
+                        )
+                      }
+                    }
+                  }
+                }
+              } ~
+              delete {
+                parameter('name) { name =>
+                  Utils.respondWithNoCacheControl() {
+                    complete {
+                      logger.info("Deleting sensor: {}", name)
                       RestClient.httpRequestWithHeader(
-                        s"${baseClusterUri(tokenId)}/dlp/sensor",
-                        GET,
+                        s"${baseClusterUri(tokenId)}/dlp/sensor/$name",
+                        DELETE,
                         "",
                         tokenId
                       )
-                    } else {
-                      logger.info(s"Getting sensor ${name.get}")
-                      RestClient.httpRequestWithHeader(
-                        s"${baseClusterUri(tokenId)}/dlp/sensor/${name.get}",
-                        GET,
-                        "",
-                        tokenId
-                      )
                     }
                   }
                 }
               }
             } ~
-            patch {
-              entity(as[DlpSensorConfigData]) { dlpSensorConfigData =>
-                {
-                  logger.info("Updating sensor {}", dlpSensorConfigData.config.name)
+            path("export") {
+              post {
+                entity(as[ExportedDlpSensorList]) { ExportedDlpSensorList =>
+                  {
+                    Utils.respondWithNoCacheControl() {
+                      logger.info("Export sensors")
+                      complete {
+                        RestClient.httpRequestWithHeader(
+                          s"${baseClusterUri(tokenId)}/file/dlp",
+                          POST,
+                          exportedDlpSensorListToJson(ExportedDlpSensorList),
+                          tokenId
+                        )
+                      }
+                    }
+                  }
+                }
+              }
+            } ~
+            path("import") {
+              post {
+                headerValueByName("X-Transaction-Id") { transactionId =>
                   Utils.respondWithNoCacheControl() {
                     complete {
-                      RestClient.httpRequestWithHeader(
-                        s"${baseClusterUri(tokenId)}/dlp/sensor/${dlpSensorConfigData.config.name}",
-                        PATCH,
-                        dlpSensorConfigToJson(dlpSensorConfigData),
-                        tokenId
-                      )
+                      try {
+                        val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
+                        val baseUrl = cachedBaseUrl.fold {
+                          baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
+                        }(
+                          cachedBaseUrl => cachedBaseUrl
+                        )
+                        AuthenticationManager.setBaseUrl(tokenId, baseUrl)
+                        logger.info("test baseUrl: {}", baseUrl)
+                        logger.info("Transaction ID(Post): {}", transactionId)
+                        RestClient.httpRequestWithHeader(
+                          s"$baseUrl/file/dlp/config",
+                          POST,
+                          "",
+                          tokenId,
+                          Some(transactionId)
+                        )
+                      } catch {
+                        case NonFatal(e) =>
+                          RestClient.handleError(
+                            timeOutStatus,
+                            authenticationFailedStatus,
+                            serverErrorStatus,
+                            e
+                          )
+                      }
                     }
                   }
-                }
-              }
-            } ~
-            delete {
-              parameter('name) { name =>
-                Utils.respondWithNoCacheControl() {
-                  complete {
-                    logger.info("Deleting sensor: {}", name)
-                    RestClient.httpRequestWithHeader(
-                      s"${baseClusterUri(tokenId)}/dlp/sensor/$name",
-                      DELETE,
-                      "",
-                      tokenId
-                    )
+                } ~
+                entity(as[String]) { formData =>
+                  Utils.respondWithNoCacheControl() {
+                    complete {
+                      try {
+                        val baseUrl = baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
+                        AuthenticationManager.setBaseUrl(tokenId, baseUrl)
+                        logger.info("test baseUrl: {}", baseUrl)
+                        logger.info("No Transaction ID(Post)")
+                        val lines: Array[String] = formData.split("\n")
+                        val contentLines         = lines.slice(4, lines.length - 1)
+                        val bodyData             = contentLines.mkString("\n").substring(3)
+                        RestClient.httpRequestWithHeader(
+                          s"$baseUrl/file/dlp/config",
+                          POST,
+                          bodyData,
+                          tokenId
+                        )
+                      } catch {
+                        case NonFatal(e) =>
+                          RestClient.handleError(
+                            timeOutStatus,
+                            authenticationFailedStatus,
+                            serverErrorStatus,
+                            e
+                          )
+                      }
+                    }
                   }
                 }
               }

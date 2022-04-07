@@ -44,7 +44,8 @@
       $scope.webhookTypes = [
         {id: 0, text: "Slack"},
         {id: 1, text: "JSON"},
-        {id: 2, text: OTHER_TYPE}
+        {id: 2, text: "Teams"},
+        {id: 3, text: OTHER_TYPE}
       ];
       $scope.webhookEntry = {
         name: "",
@@ -264,8 +265,12 @@
 
         console.log(configBody);
 
+        let payload = {
+          fed_config: configBody
+        }
+
         $http
-          .patch(CONFIG_URL, configBody, {params: {scope: "fed"}})
+          .patch(CONFIG_URL, payload, {params: {scope: "fed"}})
           .then(function () {
             Alertify.set({ delay: ALERTIFY_SUCCEED_DELAY });
             Alertify.success($translate.instant("setting.SUBMIT_OK"));

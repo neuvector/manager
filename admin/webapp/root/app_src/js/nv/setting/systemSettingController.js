@@ -74,7 +74,8 @@
     $scope.webhookTypes = [
       {id: 0, text: "Slack"},
       {id: 1, text: "JSON"},
-      {id: 2, text: OTHER_TYPE}
+      {id: 2, text: "Teams"},
+      {id: 3, text: OTHER_TYPE}
     ];
     $rootScope.isSettingFormDirty = false;
     $scope.inputMaskDisabledClass = "";
@@ -258,7 +259,7 @@
       };
 
       let uploader = (vm.uploader = new FileUploader({
-        url: "/file/config",
+        url: CONFIG_IMPORT_URL,
         alias: "configuration",
         headers: {
           Token: token.token.token,
@@ -425,6 +426,58 @@
         },
       };
 
+      vm.autoD2MDuration = {
+        hours: 0,
+        enabled: true,
+        options: {
+          floor: 0,
+          ceil: 720,
+          minValue: 1,
+          disabled: !isSettingAuth,
+          showSelectionBar: true,
+          ticksArray: [24, 48, 72, 96, 120, 240, 360, 480, 720],
+          minRange: 1,
+          onChange: function () {
+            vm.groupAgeHourChanged = true;
+            vm.autoD2MDuration.enabled = !!vm.autoD2MDuration.hours;
+            vm.config.mode_auto_d2m = !!vm.autoD2MDuration.hours;
+            $rootScope.isSettingFormDirty = true;
+          },
+          translate: convertHours,
+        },
+      };
+
+      vm.autoM2PDuration = {
+        hours: 0,
+        enabled: true,
+        options: {
+          floor: 0,
+          ceil: 720,
+          minValue: 1,
+          disabled: !isSettingAuth,
+          showSelectionBar: true,
+          ticksArray: [24, 48, 72, 96, 120, 240, 360, 480, 720],
+          minRange: 1,
+          onChange: function () {
+            vm.groupAgeHourChanged = true;
+            vm.autoM2PDuration.enabled = !!vm.autoM2PDuration.hours;
+            vm.config.mode_auto_m2p = !!vm.autoM2PDuration.hours;
+            $rootScope.isSettingFormDirty = true;
+          },
+          translate: convertHours,
+        },
+      };
+
+      vm.toggleD2M = (state) => {
+        vm.autoD2MDuration.options.disabled = !state;
+        $rootScope.isSettingFormDirty = true;
+      };
+
+      vm.toggleM2P = (state) => {
+        vm.autoM2PDuration.options.disabled = !state;
+        $rootScope.isSettingFormDirty = true;
+      };
+
       vm.toggleGroupAge = (state) => {
         vm.groupAge.options.disabled = !state;
         $rootScope.isSettingFormDirty = true;
@@ -485,6 +538,8 @@
             $rootScope.clusterName = vm.config.clusterName;
             vm.config.newServiceMode =
               response.data.config.new_service_policy_mode;
+            vm.config.newServiceProfileBaseline =
+              response.data.config.new_service_profile_baseline;
             let emptyProxy = { url: "", username: "", password: "" };
             vm.config.regHttpProxy = response.data.config.registry_http_proxy
               ? {
@@ -547,6 +602,14 @@
                 );
             }
             vm.config.controller_debug = response.data.config.controller_debug;
+            vm.config.netServiceStatus = response.data.config.net_service_status;
+            vm.config.netServicePolicyMode = response.data.config.net_service_policy_mode;
+            vm.config.mode_auto_d2m = response.data.config.mode_auto_d2m;
+            vm.autoD2MDuration.options.disabled = !response.data.config.mode_auto_d2m;
+            vm.autoD2MDuration.hours = Math.ceil(response.data.config.mode_auto_d2m_duration / 3600);
+            vm.config.mode_auto_m2p = response.data.config.mode_auto_m2p;
+            vm.autoM2PDuration.options.disabled = !response.data.config.mode_auto_m2p;
+            vm.autoM2PDuration.hours = Math.ceil(response.data.config.mode_auto_m2p_duration / 3600);
             vm.controllerDebugEnabled =
               vm.config.controller_debug.length > 0 &&
               vm.config.controller_debug[0] === "cpath";
@@ -656,6 +719,7 @@
           auth_by_platform: vm.config.authByOpenshift.enabled,
           unused_group_aging: vm.groupAge.enabled ? vm.groupAge.hours : 0,
           new_service_policy_mode: vm.config.newServiceMode,
+          new_service_profile_baseline: vm.config.newServiceProfileBaseline,
           cluster_name: vm.config.clusterName,
           webhooks: vm.webhooks
                       .filter(webhook => webhook.cfg_type === CFG_TYPE.CUSTOMER || !webhook.cfg_type)
@@ -707,8 +771,22 @@
 
         console.log(configBody);
 
+        let payload = {
+          config: configBody,
+          net_config: {
+            net_service_status: vm.config.netServiceStatus,
+            net_service_policy_mode: vm.config.netServicePolicyMode
+          },
+          atmo_config: {
+            mode_auto_d2m: vm.config.mode_auto_d2m,
+            mode_auto_d2m_duration: vm.autoD2MDuration.hours * 3600,
+            mode_auto_m2p: vm.config.mode_auto_m2p,
+            mode_auto_m2p_duration: vm.autoM2PDuration.hours * 3600,
+          }
+        }
+
         $http
-          .patch(CONFIG_URL, configBody)
+          .patch(CONFIG_URL, payload)
           .then(function () {
             vm.catDirty = false;
             vm.hookCatDirty = false;
@@ -846,7 +924,7 @@
 
     function keepLive() {
       $http
-        .patch("/heartbeat")
+        .patch(HEART_BEAT_URL)
         .then(function (response) {})
         .catch(function (err) {
           console.warn(err);

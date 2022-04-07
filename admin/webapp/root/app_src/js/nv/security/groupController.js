@@ -491,16 +491,26 @@
         {
           headerName: $translate.instant("group.gridHeader.POLICY_MODE"),
           field: "policy_mode",
+          valueGetter: function(params) {
+            return {"policy_mode": params.data.policy_mode, "baseline_profile": params.data.baseline_profile};
+          },
           cellRenderer: function(params) {
             let mode = "";
-            if (params.value) {
-              mode = Utils.getI18Name(params.value);
-              let labelCode = colourMap[params.value];
+            let zeroDrift = params.value.baseline_profile === "zero-drift";
+            if (params.value.policy_mode) {
+              mode = Utils.getI18Name(params.value.policy_mode);
+              let labelCode = colourMap[params.value.policy_mode];
               if (!labelCode) return null;
-              else
-                return `<span class="label label-fs label-${labelCode}">${$sanitize(
+              else {
+                let modeLabel = `<span class="label label-fs label-${labelCode}">${$sanitize(
                   mode
                 )}</span>`;
+                if (zeroDrift)
+                  return modeLabel + `<md-icon md-svg-src="app/img/icons/anchor.svg"
+                                        aria-label="Zero Drift"></md-icon>`;
+                else
+                  return modeLabel;
+              };
             } else return null;
           },
           width: 100,
@@ -1056,12 +1066,24 @@
         $("#all-groups").prop("checked", false);
       };
 
+      const getNetworkServicePolicyModeStatus = function() {
+        $http
+          .get(CONFIG_URL)
+          .then(response => {
+            $scope.netServiceStatus = response.data.config.net_service_status;
+          })
+          .catch(err => {
+            $scope.netServiceStatus = undefined;
+          });
+      }
+
       $scope.refresh = function() {
         $scope.onFormatError = false;
         $scope.groupErr = false;
         $scope.eof = false;
         $scope.groups = [];
         $scope.selectedCount = 0;
+        getNetworkServicePolicyModeStatus();
         Utils.loadPagedData(
           GROUP_URL,
           {
@@ -1160,6 +1182,29 @@
           }
         }
       }
+
+      $scope.openSwitchModeDialog = function() {
+        let success = function () {
+          $mdDialog
+            .show({
+              controller: DialogController4SwitchMode,
+              templateUrl: "dialog.switchMode.html",
+              locals: {
+                refresh: $scope.refresh,
+                callback: $scope.switchServiceMode,
+                counts: getModeCounts()
+              }
+            })
+            .then(
+              function() {},
+              function() {}
+            );
+        };
+
+        let error = function() {};
+
+        Utils.keepAlive(success, error);
+      };
 
       $scope.openImportDialog = function() {
         let success = function() {
@@ -2060,6 +2105,27 @@
           field: "comment"
         },
         {
+            headerName: $translate.instant("admissionControl.TYPE"),
+            field: "cfg_type",
+            cellRenderer: (params) => {
+              if (params) {
+                if (params.data && params.data.predefine) {
+                  return `<div class="action-label nv-label success">${$sanitize(
+                    $translate.instant("group.PREDEFINED")
+                  )}</div>`;
+                }
+                let cfgType = params.value ? params.value.toUpperCase() : CFG_TYPE.CUSTOMER.toUpperCase();
+                let type = colourMap[cfgType];
+                return `<div class="action-label nv-label ${type}">${$sanitize(
+                  $translate.instant(`group.${cfgType}`)
+                )}</div>`;
+              }
+            },
+            width: 90,
+            minWidth: 90,
+            maxWidth: 90
+        },
+        {
           headerName: $translate.instant("group.dlp.gridHeader.ACTION"),
           field: "action",
           cellRenderer: function(params) {
@@ -2070,9 +2136,17 @@
               let labelCode =
                 colourMap[params.value === "allow" ? "alert" : params.value];
               if (!labelCode) labelCode = "info";
-              return `<span class="label label-fs label-${labelCode}">${$sanitize(
-                mode
-              )}</span>`;
+              if (params.data) {
+                if (params.data.exist) {
+                  return `<span class="label label-fs label-${labelCode}">${$sanitize(
+                    mode
+                  )}</span>`;
+                } else {
+                  return `<span class="label label-fs disabled-action">${$sanitize(
+                    mode
+                  )}</span>`;
+                }
+              }
             } else return null;
           },
           width: 90,
@@ -2359,7 +2433,6 @@
           "general.NO_ROWS"
         )}</span>`,
         isRowSelectable: function(node) {
-          console.log(node.data)
           return node.data
             ? node.data.cfg_type === CFG_TYPE.CUSTOMER || node.data.cfg_type === CFG_TYPE.LEARNED
             : false;
@@ -2423,6 +2496,15 @@
       };
 
       $scope.gridDLP = Utils.createGridOptions(dlpColumnDefs);
+      $scope.gridDLP.rowClassRules = {
+        "disabled-row": function(params) {
+          if (params.data) {
+            return !params.data.exist;
+          } else {
+            return false;
+          }
+        }
+      };
       $scope.gridWAF = Utils.createGridOptions(wafColumnDefs);
       $scope.gridWAF.rowClassRules = {
         "disabled-row": function(params) {
@@ -2818,9 +2900,18 @@
       };
 
       function getMessage(id) {
+        if (id.zeroDrift !== "basic") {
+          return (
+            $translate.instant("topbar.mode.SWITCH") +
+            $translate.instant("enum." + id.mode.toUpperCase()) +
+            $translate.instant("topbar.mode.MODE") +
+            " - " + $translate.instant("enum." + id.zeroDrift.split("-").join("").toUpperCase()) +
+            "?"
+          );
+        }
         return (
           $translate.instant("topbar.mode.SWITCH") +
-          $translate.instant("enum." + id.toUpperCase()) +
+          $translate.instant("enum." + id.mode.toUpperCase()) +
           $translate.instant("topbar.mode.MODE") +
           "?"
         );
@@ -2841,7 +2932,7 @@
           protect: 2
         };
         let currMode = nodesGroup.policy_mode.toLowerCase();
-        let targetMode = mode.toLowerCase();
+        let targetMode = mode.mode.toLowerCase();
         let isSwitchingSameMode = currMode === targetMode;
         let isDowngradingMode = modeGradeMap[targetMode] === 0;
         console.log(
@@ -2863,21 +2954,49 @@
           monitor: 0,
           protect: 0
         };
+        let baselineCountMap = {
+          basic: 0,
+          zerodrift: 0
+        };
         getCheckedRows().forEach(group => {
           if (group.cap_change_mode)
             modeCountMap[group.policy_mode.toLowerCase()]++;
+            baselineCountMap[group.baseline_profile.split("-").join("").toLowerCase()]++;
         });
         let areAllGroupsInSameTargetMode =
-          modeCountMap[mode.toLowerCase()] ===
+          modeCountMap[mode.mode.toLowerCase()] ===
           Object.values(modeCountMap).reduce(
             (accumulator, currentValue) => accumulator + currentValue
           );
-        return areAllGroupsInSameTargetMode;
+        let areAllGroupsInSameTargetBaseline =
+          baselineCountMap[mode.zeroDrift.split("-").join("").toLowerCase()] ===
+          Object.values(modeCountMap).reduce(
+            (accumulator, currentValue) => accumulator + currentValue
+          );
+        return areAllGroupsInSameTargetMode && areAllGroupsInSameTargetBaseline;
+      };
+
+      const getModeCounts = function() {
+        let modeCountMap = {
+          discover: 0,
+          monitor: 0,
+          protect: 0
+        };
+        let baselineCountMap = {
+          basic: 0,
+          zerodrift: 0
+        };
+        getCheckedRows().forEach(group => {
+          if (group.cap_change_mode)
+            modeCountMap[group.policy_mode.toLowerCase()]++;
+            baselineCountMap[group.baseline_profile.split("-").join("").toLowerCase()]++;
+        });
+        return {modeCount: modeCountMap, baselineCount: baselineCountMap}
       };
 
       const selectNodesAlert = function(cb, mode, nodesGroup) {
         if (!suppressShowNodesAlerts(mode, nodesGroup)) {
-          Alertify.confirm(getMessage4NodesSelected(mode)).then(
+          Alertify.confirm(getMessage4NodesSelected(mode.mode)).then(
             function onOk() {
               cb(mode, true);
             },
@@ -2892,7 +3011,7 @@
         const switchAll = function(mode) {
           $scope.isSwitchingMode = true;
           $http
-            .patch("/service/all", { policy_mode: mode })
+            .patch(SERVICE_ALL, { policy_mode: mode.mode, baseline_profile: mode.zeroDrift })
             .then(function() {
               Alertify.set({ delay: ALERTIFY_SUCCEED_DELAY });
               Alertify.success($translate.instant("service.ALL_SUBMIT_OK"));
@@ -2938,7 +3057,7 @@
           });
           $scope.isSwitchingMode = true;
           let data = {
-            config: { services: serviceList, policy_mode: mode }
+            config: { services: serviceList, policy_mode: mode.mode, baseline_profile: mode.zeroDrift }
           };
           data = pako.gzip(JSON.stringify(data));
           data = new Blob([data], {type: 'application/gzip'});
@@ -3550,6 +3669,80 @@
       };
     }
   }
+
+  DialogController4SwitchMode.$inject = [
+    "$rootScope",
+    "$scope",
+    "$http",
+    "$mdDialog",
+    "$timeout",
+    "$sanitize",
+    "Utils",
+    "Alertify",
+    "$translate",
+    "FileUploader",
+    "refresh",
+    "callback",
+    "counts"
+  ]
+  function DialogController4SwitchMode(
+    $rootScope,
+    $scope,
+    $http,
+    $mdDialog,
+    $timeout,
+    $sanitize,
+    Utils,
+    Alertify,
+    $translate,
+    FileUploader,
+    refresh,
+    callback,
+    counts
+  ) {
+
+    $scope.cancel = function() {
+      $mdDialog.cancel();
+    };
+
+    activate();
+
+    function activate() {
+      $scope.switch = {
+        zeroDrift: 'basic'
+      };
+
+      $scope.updateServiceMode = function() {
+        $mdDialog.hide();
+        $scope.switch.mode = $scope.switch.mode.charAt(0).toUpperCase() + $scope.switch.mode.slice(1);
+        callback($scope.switch);
+      };
+
+      $scope.getDefaultMode = function(modeCount) {
+        let countSum = Object.values(modeCount).reduce((a, b) => a + b);
+        if (countSum == 0)
+          return "";
+        if (modeCount["monitor"] == countSum)
+          return "monitor";
+        if (modeCount["protect"] == countSum)
+          return "protect";
+        if (modeCount["discover"] == countSum)
+          return "discover";
+      };
+
+      $scope.getDefaultBaseline = function(baselineCount) {
+        if (baselineCount["zerodrift"] !== 0 && baselineCount["basic"] == 0) {
+          return "zero-drift";
+        } else {
+          return "basic";
+        }
+      };
+
+      $scope.switch.mode = $scope.getDefaultMode(counts.modeCount);
+      $scope.switch.zeroDrift = $scope.getDefaultBaseline(counts.baselineCount);
+    }
+  }
+
 
   DialogController4ImportGroupPolicy.$inject = [
     "$rootScope",

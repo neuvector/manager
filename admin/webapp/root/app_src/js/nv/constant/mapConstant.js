@@ -218,6 +218,7 @@ const ALERTIFY_ERROR_DELAY = 10000;
 const REPORT_TABLE_ROW_LIMIT = 60000;
 const KUBE = "kubernetes";
 const OPENSHIFT = "Kubernetes-OpenShift";
+const RANCHER = "Kubernetes-Rancher";
 const OC = "openshift";
 const FED_ROLES = {
   FEDADMIN: "fedAdmin",
@@ -243,7 +244,8 @@ const SERVER_TYPE = {
   OPENSHIFT: "openshift",
   OPENID: "openid",
   SAML: "saml",
-  LDAP: "ldap"
+  LDAP: "ldap",
+  RANCHER: "rancher"
 };
 
 const AUTH_PROVIDER = {
@@ -251,7 +253,8 @@ const AUTH_PROVIDER = {
   OPENID: "OpenID Connect",
   SAML: "SAML",
   LDAP: "LDAP/AD",
-  NEUVECTOR: "NeuVector"
+  NEUVECTOR: "NeuVector",
+  RANCHER: "Rancher"
 };
 
 const KIND_EXCEPTION_MAP = {

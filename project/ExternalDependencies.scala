@@ -52,7 +52,7 @@ object ExternalDependencies {
 
   val typesafeConfig = "com.typesafe"               % "config"         % "1.3.0"
   val slf4jLog4j     = "org.slf4j"                  % "slf4j-log4j12"  % "1.7.21"
-  val scalaLogging   = "com.typesafe.scala-logging" %% "scala-logging" % "3.4.0"
+  val scalaLogging   = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4"
 
   val akka           = "com.typesafe.akka" %% "akka-actor" % akkaV akkaExclude
   val akkaLog        = "com.typesafe.akka" %% "akka-slf4j" % akkaV

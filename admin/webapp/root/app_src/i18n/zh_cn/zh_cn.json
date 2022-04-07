@@ -184,6 +184,10 @@
     "HIDE_ACCEPTED_VULS": "隐藏接受的漏洞",
     "SHOW_ACCEPTED_VULS": "显示接受的漏洞"
   },
+  "logout": {
+    "SIGN_OUT": "已经登出了",
+    "SIGN_OUT_DESC": "您可以关闭此浏览器窗口, 然后回到Rancher."
+  },
   "login": {
     "SIGN_IN": "请登录",
     "USERNAME": "用户名",
@@ -827,7 +831,7 @@
       "OPENID": "OpenID Connect配置",
       "REQ_POLICY_PULLING": "通知策略已部署",
       "DEPLOY_FED_POLICY_ERR": "通知各集群获取全局策略时发生错误!",
-      "DEPLOY_FED_POLICY_OK": "成功通知个集群获取全局策略!",
+      "DEPLOY_FED_POLICY_OK": "成功通知各集群获取全局策略!",
       "resource": {}
     }
   },
@@ -2119,6 +2123,10 @@
       "REMOVE_NG": "删除检测器时发生错误!",
       "REMOVE_RULE_OK": "成功删除规则!",
       "REMOVE_RULE_NG": "删除规则时发生错误!",
+      "EXPORT_SENSOR_OK": "检测器成功导出!",
+      "EXPORT_SENSOR_NG": "检测器导出时发生错误",
+      "IMPORT_FINISH": "检测器成功导入!",
+      "IMPORT_FAILED": "检测器导入时发生错误",
       "MATCH": "匹配",
       "MISMATCH": "不匹配",
       "ADD_PATTERN_NG": "正则形式的最大数量为16",
@@ -2330,6 +2338,8 @@
     "DOWNLOAD": "下载",
     "CONFIG": "包含配置",
     "CAN_NOT_CONFIG": "由于配置是通过CRD部署的，配置设定被禁用.",
+    "NOT_SUPPORT": " 由于不是Kubernates系统，配置设定被禁用.",
+    "NOT_BINDING": " 由于要求的绑定不存在，配置设定被禁用.",
     "EXCLUDE_RULES": "排除缺省规则",
     "DEFAULT_RULES": "缺省规则",
     "SHOW_DENY_RULES": "显示拒绝规则",
@@ -2714,11 +2724,17 @@
     "IMPORT_FAILED": "输入失败 ",
     "NEW_SERVICE_POLICY_MODE": "新增服务的策略模式",
     "NEW_SERVICE": "新增服务",
-    "AUTH_BY_OPENSHIFT": "用OpenShift RBAC’s验证",
+    "NET_SERVICE_POLICY_MODE": "网络服务策略模式",
+    "MODE_AUTO_SWITCH": "服务组模式自动化",
+    "MODE_AUTO_SWITCH_HINT": "它将通过计时器升级组策略模式. 它将不会影响CRD组和隐性网络策略模式.",
+    "D2M": "学习模式到监视模式",
+    "M2P": "监视模式到保护模式",
+    "AUTH_BY_OPENSHIFT": "用OpenShift RBAC或Rancher验证",
     "NEED_SUBMIT": "需要提交",
     "ENABLED": "启用",
     "DISABLED": "禁用",
     "REG_PROXY": "代理",
+    "PROXY_HINT": "外部访问代理(比如镜像库服务器), 代理还被支持于当不允许直接集群访问时，在同一集群全局的NeuVector集群之间的交互",
     "REG_HTTP_PROXY": "Http代理",
     "REG_HTTPS_PROXY": "Https代理",
     "XFF_MATCH": "基于X-Forwarded-For的策略匹配",
@@ -2785,7 +2801,9 @@
       "LDAP": "配置一个LDAP/AD目录以启用用户授权.",
       "SAML": "用SAML配置单一登录.",
       "LICENSE": "浏览账单以及管理许可证.",
-      "OPENID": "用OpenID Connect配置单一登录."
+      "OPENID": "用OpenID Connect配置单一登录.",
+      "ENABLED_NET_POLICY_MODE": "网络服务策略模式将全局性地设置为选定的模式",
+      "DISABLED_NET_POLICY_MODE": "各组级别的策略模式将应用在网络和配置文件中"
     }
   },
   "ldap": {

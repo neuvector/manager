@@ -12,13 +12,21 @@
     "$http",
     "$mdToast",
     "$location",
-    "$translate"
+    "$translate",
+    "$timeout"
   ];
-  function LogoutController($window, $state, $rootScope, $http, $mdToast, $location, $translate) {
+  function LogoutController($window, $state, $rootScope, $http, $mdToast, $location, $translate, $timeout) {
+    const rejectBack = function() {
+      if ($rootScope.isSUSESSO) {
+        $rootScope.hideFrame = true;
+      } else {
+        $state.go("page.login");
+      }
+    };
     const doLogoout = function(isTimeout) {
       const user = $rootScope.user ? $rootScope.user.token.username : null;
       $http
-        .delete("/auth")
+        .delete(LOGIN_URL)
         .then(function (response) {
           let version = $window.localStorage.getItem("version");
           let gpuEnabled = $window.localStorage.getItem("_gpuEnabled");
@@ -31,34 +39,40 @@
             $rootScope.isFooterReady = false;
             $window.localStorage.setItem("version", version);
             $window.localStorage.setItem("_gpuEnabled", gpuEnabled);
+            $mdToast.hide("undo").then(function () {});
+            $state.go("page.login");
+          } else {
+            $mdToast.hide("undo").then(function () {});
+            rejectBack();
           }
-          $mdToast.hide("undo").then(function () {});
-          $state.go("page.login");
         })
         .catch(function (err) {
           console.log(err);
           $mdToast.hide("undo").then(function () {});
-          $state.go("page.login");
+          rejectBack();
         });
     };
-    $rootScope.logout = function (isTimeout) {
+    $rootScope.logout = function (isTimeout, isFromSSO) {
       const NEED_CONFIRM_SUBMIT = ["/app/policy", "/app/fed-policy", "/app/configuration"];
-      if (!isTimeout && NEED_CONFIRM_SUBMIT.includes($location.path())) {
-        if ($rootScope.isSettingFormDirty) {
-          if (window.confirm($translate.instant("setting.webhook.LEAVE_PAGE"))) {
-            doLogoout(isTimeout);
-          }
-        } else if ($rootScope.isPolicyDirty) {
-          if (!$rootScope.isReset) {
-            if (window.confirm($translate.instant("policy.dialog.reminder.MESSAGE"))) {
+      if ($rootScope.isSUSESSO && !isTimeout && !isFromSSO) $state.go("page.login");
+      else {
+        if (!isTimeout && NEED_CONFIRM_SUBMIT.includes($location.path())) {
+          if ($rootScope.isSettingFormDirty) {
+            if (window.confirm($translate.instant("setting.webhook.LEAVE_PAGE"))) {
               doLogoout(isTimeout);
             }
+          } else if ($rootScope.isPolicyDirty) {
+            if (!$rootScope.isReset) {
+              if (window.confirm($translate.instant("policy.dialog.reminder.MESSAGE"))) {
+                doLogoout(isTimeout);
+              }
+            }
+          } else {
+            doLogoout(isTimeout);
           }
         } else {
           doLogoout(isTimeout);
         }
-      } else {
-        doLogoout(isTimeout);
       }
     };
   }

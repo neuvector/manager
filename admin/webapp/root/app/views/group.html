@@ -19,7 +19,20 @@
       <em class="fa fa-caret-square-o-up text-action"></em>
       <label class="text-gray-label hand">{{'group.IMPORT_GROUP_POLICY' | translate | uppercase}}</label>
     </div>
-    <div class="content-title">{{'sidebar.nav.GROUP' | translate}}</div>
+    <div class="pull-left content-title">{{'sidebar.nav.GROUP' | translate}}</div>
+    <div class="pull-left ml mt" ng-if="netServiceStatus !== undefined">
+      <span class="text-muted">
+        {{'setting.NET_SERVICE_POLICY_MODE' | translate}}:&nbsp;
+      </span>
+      <span
+        class="text-bold"
+        ng-class="{'text-muted': !netServiceStatus, 'text-success': netServiceStatus}"
+      >
+        {{netServiceStatus ? 'ON' : 'OFF'}}
+      </span>
+      <em class="fa fa-info-circle text-info" uib-tooltip="{{netServiceStatus ? 'setting.description.ENABLED_NET_POLICY_MODE' : 'setting.description.DISABLED_NET_POLICY_MODE' | translate}}">
+      </em>
+    </div>
   </div>
 
   <div class="panel mb0" ng-class="{'nv-blur': isSwitchingMode}">
@@ -45,6 +58,20 @@
                         {{'role.ADD' | translate}}
                     </div>
                 </li>
+                <li ng-if="!noChecked" class="policy-top-button">
+                  <!-- <div class="button" ng-if="isIncludingNoMode" ng-class="{'disabled': isIncludingNoMode}">
+                    <div tooltip-placement="right" uib-tooltip-html="disabledSwitchModeHtml" tooltip-class="customClass" tooltip-enable="{{isIncludingNoMode}}">
+                      <em class="fa fa-caret-square-o-down mr-sm text-action" aria-hidden="true"></em>
+                      {{'service.SWITCH_MODE' | translate | capitalizeEach }}
+                    </div>
+                  </div> -->
+                  <div class="button" ng-click="openSwitchModeDialog()">
+                    <div tooltip-placement="right" uib-tooltip-html="disabledSwitchModeHtml" tooltip-class="customClass" tooltip-enable="{{isIncludingNoMode}}">
+                      <em class="fa fa-caret-square-o-down mr-sm text-action" aria-hidden="true"></em>
+                      {{'service.SWITCH_MODE' | translate | capitalizeEach }}
+                    </div>
+                  </div>
+                </li>
             </ul>
         </div>
         <div ng-if="!noChecked" class="pull-right mt-sm mr"
@@ -54,40 +81,6 @@
              <em></em>
              <label class="text-gray-label" ng-class="{'disabled': isNotAble2SwitchScorable}" style="margin-left: -15px;">{{"group.SWITCH_SCORABLE" | translate | uppercase}}</label>
            </div>
-        </div>
-        <div ng-if="!noChecked" class="pull-right" style="margin-right: 20px;">
-          <div class="mt-sm" ng-if="isIncludingNoMode">
-            <div tooltip-placement="right" uib-tooltip-html="disabledSwitchModeHtml" tooltip-class="customClass" tooltip-enable="{{isIncludingNoMode}}">
-              <label class="text-gray-label" ng-class="{'disabled': isIncludingNoMode}">{{'service.SWITCH_MODE' | translate}}</label>
-              <em class="fa fa-caret-down text-action" ng-class="{'disabled': isIncludingNoMode}"/>
-            </div>
-          </div>
-          <div uib-dropdown dropdown-append-to-body class="mt-sm" ng-if="!isIncludingNoMode">
-            <div uib-dropdown-toggle>
-              <div>
-                <label class="text-gray-label hand">{{'service.SWITCH_MODE' | translate}}</label>
-                <em class="fa fa-caret-down text-action" ng-click="toggleCollapse()"/>
-              </div>
-            </div>
-            <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
-              <li role="menuitem">
-                <a ng-click="switchServiceMode('Discover')">
-                  <em class="fa fa-binoculars fa-fw text-discover mr-sm"></em>{{'enum.DISCOVER' |
-                                                                              translate}}
-                </a>
-              </li>
-              <li role="menuitem">
-                <a ng-click="switchServiceMode('Monitor')">
-                  <em class="fa fa-bell fa-fw text-monitor mr-sm"></em>{{'enum.MONITOR' | translate}}
-                </a>
-              </li>
-              <li class="menuitem">
-                <a type="button" ng-click="switchServiceMode('Protect')">
-                  <em class="fa fa-shield fa-fw text-protect mr-sm"></em>{{'enum.PROTECT' | translate}}
-                </a>
-              </li>
-            </ul>
-          </div>
         </div>
         <div ng-if="!noChecked" class="pull-right" style="margin-right: 20px;"
              ng-show="isWriteGroupAuthorized">
@@ -175,14 +168,14 @@
               <div class="col-xs-6 pl0">
                 <md-input-container class="md-block mb0">
                   <label>{{'group.script.NAME' | translate}}</label>
-                  <input id="scriptName" ng-model="gpCtrl.scriptEntry.name" ng-disabled="writeMode===WRITE_MODE.UPDATE"/>
+                  <input id="scriptName" ng-model="gpCtrl.scriptEntry.name" ng-disabled="writeMode===WRITE_MODE.UPDATE || !isGroupRuleAddable"/>
                 </md-input-container>
                 <div class="md-block mb0">
                   <label class="text-muted">{{'group.script.SCRIPT' | translate}}</label>
-                  <textarea id="scriptContent" ng-model="gpCtrl.scriptEntry.script" class="form-control"
+                  <textarea id="scriptContent" ng-model="gpCtrl.scriptEntry.script" class="form-control" ng-disabled="!isGroupRuleAddable"
                             ng-style="{height: scriptHeight + 'px'}" style="resize: none; min-height: 50px;"/>
                 </div>
-                <div class="md-block mb0 mt-lg" display-control="write_script">
+                <div class="md-block mb0 mt-lg" display-control="write_script" ng-if="isGroupRuleAddable">
                   <md-button ng-if="writeMode===WRITE_MODE.ADD" ng-click="addScript()" class="md-raised md-primary pull-right mr0 mb0"
                              ng-disabled="!gpCtrl.scriptEntry || (!gpCtrl.scriptEntry.name || !gpCtrl.scriptEntry.script)">
                     <span>{{'group.script.ADD' | translate}}</span>
@@ -207,7 +200,7 @@
                   <div ag-grid="gridScript" class="ag-grid" style="width: 100%; min-height: 185px;"
                        ng-style="{ height: scriptGridHeight + 'px'}">
                   </div>
-                  <div class="policy-select-all" style="left: auto; top: 40px; right: 3px;" ng-if="isWriteGroupAuthorized">
+                  <div class="policy-select-all" style="left: auto; top: 40px; right: 3px;" ng-if="isWriteGroupAuthorized && isGroupRuleAddable">
                     <div>
                       <em class="fa fa-plus fa-lg mr-sm text-action" id="remove-form-action"
                           ng-click="prepareAdd()">
@@ -247,6 +240,19 @@
                    ng-show="isGroupRuleAddable"
                    ng-click="addProfile()">
                 <em class="fa fa-lg fa-plus text-action mr-sm"></em>
+              </div>
+              <div class="pull-left mr-lg" style="margin-top: 4px">
+                <span
+                class="radio-inline c-radio pl-sm"
+                ng-class="inputMaskDisabledClass"
+                ng-show="group.baseline_profile === 'zero-drift'"
+                >
+                  <md-icon md-svg-src="app/img/icons/anchor.svg"
+                       aria-label="Zero Drift"></md-icon>
+                  <label class="text-gray-label">
+                    {{'audit.gridHeader.ZERO_DRIFT' | translate}}
+                  </label>
+                </span>
               </div>
             </div>
             <div ag-grid="gridProfile" class="ag-grid" style="width: 100%;"
@@ -346,7 +352,7 @@
                        ng-keyup="onDetailsFilterChanged('gridDLP', searchDLP)"/>
               </div>
               <div class="pull-right ml-lg" style="margin-top: 4px; padding-top: 2px;"
-                   ng-if="isWriteGroupAuthorized"
+                   ng-if="isWriteGroupAuthorized && isGroupRuleAddable"
                    ng-click="editDLPSensor()">
                 <em class="fa fa-lg fa-edit text-action mr-sm"></em>
               </div>
@@ -355,7 +361,7 @@
                 <div class="pull-left">
                   <div class="md-switch2">
                     <label class="nv-modal-item-title mb0">
-                      <input id="adm-state" type="checkbox" ng-model="dlpGroup.status" ng-click="toggleDLPGroupStatus(dlpGroup.status)">
+                      <input id="adm-state" type="checkbox" ng-disabled="!isGroupRuleAddable" ng-model="dlpGroup.status" ng-click="toggleDLPGroupStatus(dlpGroup.status)">
                       <span class="toggle hand" style="margin-right: 5px;"></span>
                       {{(!dlpGroup.status ? "policy.status.DISABLED" : "policy.status.ENABLED") | translate}}
                     </label>
@@ -380,7 +386,7 @@
                        ng-keyup="onDetailsFilterChanged('gridWAF', searchWAF)"/>
               </div>
               <div class="pull-right ml-lg" style="margin-top: 4px; padding-top: 2px;"
-                   ng-if="isWriteGroupAuthorized"
+                   ng-if="isWriteGroupAuthorized && isGroupRuleAddable"
                    ng-click="editWAFSensor()">
                 <em class="fa fa-lg fa-edit text-action mr-sm"></em>
               </div>
@@ -389,7 +395,7 @@
                 <div class="pull-left">
                   <div class="md-switch2">
                     <label class="nv-modal-item-title mb0">
-                      <input id="adm-state" type="checkbox" ng-model="wafGroup.status" ng-click="toggleWAFGroupStatus(wafGroup.status)">
+                      <input id="adm-state" type="checkbox" ng-disabled="!isGroupRuleAddable" ng-model="wafGroup.status" ng-click="toggleWAFGroupStatus(wafGroup.status)">
                       <span class="toggle hand" style="margin-right: 5px;"></span>
                       {{(!wafGroup.status ? "policy.status.DISABLED" : "policy.status.ENABLED") | translate}}
                     </label>
@@ -411,6 +417,124 @@
         </span>
       </div>
     </div>
+  </div>
+
+  <div>
+
+  <div>
+    <script type="text/ng-template" id="dialog.switchMode.html">
+      <md-dialog aria-label="switch policy mode" class="dialog-lg" style="overflow: visible">
+        <form name="switchModeForm" ng-submit="$event.preventDefault()" novalidate="" class="form-validate" style="overflow: visible">
+          <md-toolbar>
+            <div class="md-toolbar-tools">
+              <h2 class="text-dark">{{'service.SWITCH_MODE' | translate | capitalizeEach}}</h2>
+              <span flex></span>
+              <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon md-svg-src="app/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+              </md-button>
+            </div>
+          </md-toolbar>
+          <md-dialog-content style="overflow: visible" class="mt-lg">
+            <div class="col-sm-12 ">
+              <div class="col-sm-8">
+                <div
+                  class="radio-inline c-radio mr-lg"
+                  ng-class="inputMaskDisabledClass"
+                >
+                  <label
+                    class="text-gray-label"
+                    ng-class="inputMaskDisabledClass"
+                  >
+                    <input
+                      type="radio"
+                      name="mode"
+                      value="discover"
+                      ng-model="switch.mode"
+                      ng-click="switchServiceMode('Discover')"
+                    />
+                    <span
+                      class="fa fa-binoculars text-discover"
+                      ng-class="inputMaskDisabledClass"
+                    />{{'topbar.mode.LEARNING' | translate}}
+                  </label>
+                </div>
+                <div
+                  class="radio-inline c-radio pl-sm mr-lg"
+                  ng-class="inputMaskDisabledClass"
+                >
+                  <label
+                    class="text-gray-label"
+                    ng-class="inputMaskDisabledClass"
+                  >
+                    <input
+                      type="radio"
+                      name="mode"
+                      value="monitor"
+                      ng-model="switch.mode"
+                      ng-click="switchServiceMode('Monitor')"
+                    />
+                    <span
+                      class="fa fa-bell text-monitor"
+                      ng-class="inputMaskDisabledClass"
+                    />{{'topbar.mode.EVALUATION' | translate}}
+                  </label>
+                </div>
+                <div
+                  class="radio-inline c-radio pl-sm"
+                  ng-class="inputMaskDisabledClass"
+                >
+                  <label
+                    class="text-gray-label"
+                    ng-class="inputMaskDisabledClass"
+                  >
+                    <input
+                      type="radio"
+                      name="mode"
+                      value="protect"
+                      ng-model="switch.mode"
+                      ng-click="switchServiceMode('Protect')"
+                    />
+                    <span
+                      class="fa fa-shield text-protect"
+                      ng-class="inputMaskDisabledClass"
+                    />{{'topbar.mode.ENFORCE' | translate}}
+                  </label>
+                </div>
+              </div>
+            <div class="col-sm-12 mt-lg">
+              <div
+              class="radio-inline c-radio pl-sm md-switch2"
+              ng-class="inputMaskDisabledClass"
+              >
+                <md-icon md-svg-src="app/img/icons/anchor.svg"
+                aria-label="Zero Drift"></md-icon>
+                <label class="text-gray-label">
+                  {{'audit.gridHeader.ZERO_DRIFT' | translate}}
+                  <input
+                    type="checkbox"
+                    ng-model="switch.zeroDrift"
+                    ng-true-value="'zero-drift'"
+                    ng-false-value="'basic'"
+                  />
+                  <span class="toggle hand" ng-disabled="!isNewServiceModeAuthorized"></span>
+                </label>
+                <div class="text-muted text-sm mb-lg pull-right">
+                  {{'setting.ZERODRIFT_COMMENT' | translate}}
+                </div>
+              </div>
+            </div>
+              <div class="col-sm-12 pb-sm">
+                <button class="btn btn-wide btn-default pull-right"
+                        ng-disabled="!switchModeForm.$dirty || !switch.mode"
+                        ng-click="updateServiceMode()">
+                  <em class="fa fa-send mr-sm"></em>{{'setting.SUBMIT' | translate}}
+                </button>
+              </div>
+            </div>
+          </md-dialog-content>
+        </form>
+      </md-dialog>
+    </script>
   </div>
 
   <div>

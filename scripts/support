@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3
+#!/usr/bin/python3
 
 import argparse
 import gzip
@@ -6,7 +6,6 @@ import json
 import os
 import requests
 import socket
-import string
 import sys
 import time
 

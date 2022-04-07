@@ -101,7 +101,7 @@ class InteractiveCLI(cmd2.Cmd, object):
         self.default(args)
 
     def precmd(self, line):
-        args = shlex.split(line.parsed.raw)
+        args = shlex.split(line.raw)
         if len(args) > 0:
             if args[0] == "help":
                 return line
@@ -109,13 +109,13 @@ class InteractiveCLI(cmd2.Cmd, object):
                 return "help"
             if self._is_builtin_cmd([args[0]]):
                 # Modify the command to disable builtin commands
-                return "builtin " + line.parsed.raw
+                return "builtin " + line.raw
 
-        return line.parsed.raw
+        return "cli " + line.raw
 
     def postcmd(self, stop, line):
         self._set_prompt(self.ctx.username, self.ctx.domain, self.ctx.server_ip)
-        if line == "builtin exit" or line == "exit":
+        if line == "cli exit" or line == "exit":
             return True
         return stop
 

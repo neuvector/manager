@@ -16,7 +16,7 @@ def rename_kwargs(**replacements):
     def actual_decorator(func):
         @functools.wraps(func)
         def decorated_func(*args, **kwargs):
-            for external_arg, internal_arg in replacements.iteritems():
+            for external_arg, internal_arg in iter(replacements.items()):
                 if internal_arg in kwargs:
                     kwargs[external_arg] = kwargs.pop(internal_arg)
                 return func(*args, **kwargs)
@@ -98,7 +98,7 @@ def user_role_domains_display_format(user):
     user[RoleDomains] = ""
     if user.get("role_domains"):
         rlist = []
-        for role, domains in user["role_domains"].iteritems():
+        for role, domains in iter(user["role_domains"].items()):
             rlist.append("%s -> %s" % (",".join(domains), role))
         user[RoleDomains] = "\n".join(rlist)
 

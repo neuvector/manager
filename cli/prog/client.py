@@ -290,7 +290,7 @@ class RestClient(object):
                     sort_dir = "asc"
 
                 url += "s_%s=%s&" % (sort, sort_dir)
-            for key, value in kwargs.iteritems():
+            for key, value in iter(kwargs.items()):
                 if key == 'start':
                     url += "start=%s&" % value
                 elif key == 'limit':
@@ -307,7 +307,7 @@ class RestClient(object):
                     url += "scope=%s&" % value
                 else:
                     url += "f_%s=%s&" % (key, value)
-            url = string.rstrip(url, "&")
+            url = url.rstrip("&")
 
         status, _, _, data = self._request("GET", url)
 
@@ -331,7 +331,7 @@ class RestClient(object):
             url = "%s/v1/%s/%s" % (self.url, path, obj_id)
         if len(kwargs) > 0:
             url += "?"
-            for key, value in kwargs.iteritems():
+            for key, value in iter(kwargs.items()):
                 if key == 'brief':
                     url += "brief=%s&" % value
                 elif key == 'with_cap':
@@ -369,7 +369,7 @@ class RestClient(object):
         url = "%s/v1/%s" % (self.url, path)
         if len(kwargs) > 0:
             url += "?"
-            for key, value in kwargs.iteritems():
+            for key, value in iter(kwargs.items()):
                 url += "f_%s=%s&" % (key, value)
             url = string.rstrip(url, "&")
 
@@ -387,7 +387,7 @@ class RestClient(object):
         url = "%s/v1/%s/%s" % (self.url, path, obj_id)
         if len(kwargs) > 0:
             url += "?"
-            for key, value in kwargs.iteritems():
+            for key, value in iter(kwargs.items()):
                 if key == 'scope':
                     url += "scope=%s&" % value
                 else:
@@ -410,7 +410,7 @@ class RestClient(object):
             url = "%s/v1/%s/%s" % (self.url, path, obj_id)
         if len(kwargs) > 0:
             url += "?"
-            for key, value in kwargs.iteritems():
+            for key, value in iter(kwargs.items()):
                 if key == 'scope':
                     url += "scope=%s&" % value
                 else:
@@ -464,7 +464,7 @@ class RestClient(object):
         url = "%s/v1/%s" % (self.url, path)
         if len(kwargs) > 0:
             url += "?"
-            for key, value in kwargs.iteritems():
+            for key, value in iter(kwargs.items()):
                 if key == 'start':
                     url += "start=%s&" % value
                 elif key == 'limit':
@@ -637,7 +637,7 @@ class RestClient(object):
             raise Unauthorized()
 
         conf = {}
-        for key, value in kwargs.iteritems():
+        for key, value in iter(kwargs.items()):
             conf[key] = value
 
         body = {"config": conf}

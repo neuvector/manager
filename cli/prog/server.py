@@ -95,7 +95,7 @@ def _show_role_mapping_display_format(server, server_type):
             if mapped_roles["global_role"] != "":
                 mlist.append("   global domain -> %s" % (mapped_roles["global_role"]))
             if "role_domains" in mapped_roles:
-                for role, domains in mapped_roles["role_domains"].iteritems():
+                for role, domains in iter(mapped_roles["role_domains"].items()):
                     mlist.append("   namespace(s) %s -> %s" % (",".join(domains), role))
         server[RoleMapping] = "\n".join(mlist)
 

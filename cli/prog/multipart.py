@@ -66,7 +66,7 @@ class MultiDict(DictMixin):
 
     def __init__(self, *a, **k):
         self.dict = dict()
-        for k, v in dict(*a, **k).iteritems():
+        for k, v in iter(dict(*a, **k).items()):
             self[k] = v
 
     def __len__(self):
@@ -105,7 +105,7 @@ class MultiDict(DictMixin):
         return self.dict[key][index]
 
     def iterallitems(self):
-        for key, values in self.dict.iteritems():
+        for key, values in iter(self.dict.items()):
             for value in values:
                 yield key, value
 
@@ -447,7 +447,7 @@ def parse_form_data(environ, charset='utf8', strict=False, **kw):
             if stream.read(1):  # These is more that does not fit mem_limit
                 raise MultipartError("Request to big. Increase MAXMEM.")
             data = parse_qs(data, keep_blank_values=True)
-            for key, values in data.iteritems():
+            for key, values in iter(data.items()):
                 for value in values:
                     forms[key] = value
         else:

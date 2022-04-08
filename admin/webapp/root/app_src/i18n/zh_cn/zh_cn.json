@@ -715,7 +715,8 @@
       "TIME": "时间",
       "START_TIME": "启动时间",
       "STOP_TIME": "停止时间",
-      "SERVICE": "服务"
+      "SERVICE": "服务",
+      "SERVICE_ACCOUNT": "服务账户"
     },
     "groupFilter": {
       "TITLE": "添加组/命名空间",
@@ -2683,6 +2684,7 @@
     "WEBHOOK": "网络挂接",
     "CLUSTER": "集群",
     "CLUSTER_COMMENT": "用于在通知里识别集群",
+    "ZERODRIFT_COMMENT": "对于新的组, 启用/禁用基于从原始镜像Drift检测自动处理和文件保护.",
     "CLUSTER_NAME": "集群名:",
     "SERVER": "服务器",
     "PROTOCOL": "协议",
@@ -2724,11 +2726,14 @@
     "IMPORT_FAILED": "输入失败 ",
     "NEW_SERVICE_POLICY_MODE": "新增服务的策略模式",
     "NEW_SERVICE": "新增服务",
+    "NEW_SERVICE_COMMENT": "为检测出之前没有学习或配置的新组的默认服务模式.",
     "NET_SERVICE_POLICY_MODE": "网络服务策略模式",
     "MODE_AUTO_SWITCH": "服务组模式自动化",
-    "MODE_AUTO_SWITCH_HINT": "它将通过计时器升级组策略模式. 它将不会影响CRD组和隐性网络策略模式.",
+    "MODE_AUTO_SWITCH_HINT": "基于消耗时间和条件的升级组的保护模式. 它不应用于CRD创建的组.",
     "D2M": "学习模式到监视模式",
     "M2P": "监视模式到保护模式",
+    "D2M_HINT": "条件: 学习全部网络的消耗时间和至少组里的一个活跃Pod处理活动.",
+    "M2P_HINT": "条件: 时间线集合没有组的安全事件 (网络， 进程等).",
     "AUTH_BY_OPENSHIFT": "用OpenShift RBAC或Rancher验证",
     "NEED_SUBMIT": "需要提交",
     "ENABLED": "启用",
@@ -2802,8 +2807,9 @@
       "SAML": "用SAML配置单一登录.",
       "LICENSE": "浏览账单以及管理许可证.",
       "OPENID": "用OpenID Connect配置单一登录.",
-      "ENABLED_NET_POLICY_MODE": "网络服务策略模式将全局性地设置为选定的模式",
-      "DISABLED_NET_POLICY_MODE": "各组级别的策略模式将应用在网络和配置文件中"
+      "ENABLED_NET_POLICY_MODE": "选定的策略模式将全局地应用于所有组的网络规则上, 每个组各自的策略模式将只应用于进程和文件规则上.",
+      "ENABLED_NET_POLICY_MODE_GROUP": "模式将全局地应用于所有组的网络规则上, 每个组各自的策略模式将只应用于进程和文件规则上.",
+      "DISABLED_NET_POLICY_MODE": "各组的策略模式将应用在网络规则，进程及文件规则上"
     }
   },
   "ldap": {

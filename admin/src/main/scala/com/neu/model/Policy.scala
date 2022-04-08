@@ -249,3 +249,79 @@ case class RuleIds (
 case class PromoteConfig (
   request: RuleIds
 )
+
+case class WorkloadBriefV2 (
+  id: String,
+  name: String,
+  display_name: String,
+  host_name: String,
+  host_id: String,
+  image: String,
+  image_id: String,
+  domain: String,
+  state: String,
+  service: String,
+  author: String,
+  service_group: String
+)
+
+case class WorkloadSecurityV2 (
+  cap_sniff: Boolean,
+  cap_quarantine: Boolean,
+  cap_change_mode: Boolean,
+  service_mesh: Boolean,
+  service_mesh_sidecar: Boolean,
+  network_mode: String,
+  policy_mode: String,
+  profile_mode: String,
+  baseline_profile: String,
+  quarantine_reason: Option[String] = Some(""),
+  scan_summary: ScanSummary,
+  interfaces: Option[Map[String, Array[IpAddress]]] = None,
+  ports: Option[Array[ProtoPort]] = Some(Array()),
+  applications: Option[Array[String]] = Some(Array())
+)
+
+case class WorkloadRtAttribesV2 (
+  pod_name: String,
+  share_ns_with: Option[String] = Some(""),
+  privileged: Boolean,
+  run_as_root: Boolean,
+  labels: Option[Map[String, String]] = None,
+  memory_limit: Long,
+  cpus: String,
+  service_account: String
+)
+
+case class WorkloadV2Child (
+  wl_brief: WorkloadBriefV2,
+  wl_security: WorkloadSecurityV2,
+  wl_rt_attributes: WorkloadRtAttribesV2,
+  enforcer_id: String,
+  platform_role: String,
+  created_at: String,
+  started_at: String,
+  finished_at: String,
+  secured_at: String,
+  running: Boolean,
+  exit_code: Int
+)
+
+case class WorkloadV2 (
+  wl_brief: WorkloadBriefV2,
+  wl_security: WorkloadSecurityV2,
+  wl_rt_attributes: WorkloadRtAttribesV2,
+  children: Array[WorkloadV2Child],
+  enforcer_id: String,
+  platform_role: String,
+  created_at: String,
+  started_at: String,
+  finished_at: String,
+  secured_at: String,
+  running: Boolean,
+  exit_code: Int
+)
+
+case class WorkloadsWrapV2 (
+  workloads: Array[WorkloadV2]
+)

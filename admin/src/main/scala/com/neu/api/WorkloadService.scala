@@ -76,12 +76,12 @@ class WorkloadService()(implicit executionContext: ExecutionContext)
             parameter('start.?, 'limit.?) { (start, limit) =>
               Utils.respondWithNoCacheControl() {
                 val cacheKey                                         = if (tokenId.length > 20) tokenId.substring(0, 20) else tokenId
-                var convertedScannedWorkloads: ScannedWorkloadsWrap2 = null
-                var elements: Array[ScannedWorkloads2]               = null
+                var convertedScannedWorkloads: WorkloadsWrapV2 = null
+                var elements: Array[WorkloadV2]               = null
                 complete {
                   try {
                     if (start.isEmpty || start.get.toInt == 0) {
-                      val url = s"${baseClusterUri(tokenId)}/workload?view=pod"
+                      val url = s"${baseClusterUriV2(tokenId)}/workload?view=pod"
                       logger.info("Get workloads data from {}", url)
                       val scannedWorkloads = RestClient.requestWithHeaderDecode(
                         url,
@@ -89,31 +89,33 @@ class WorkloadService()(implicit executionContext: ExecutionContext)
                         "",
                         tokenId
                       )
-                      convertedScannedWorkloads = convertScannedWorkloads2(
-                        jsonToScannedWorkloadsWrap2(
+                      logger.info("Waiting....")
+                      convertedScannedWorkloads = convertWorkloadV2(
+                        jsonToWorkloadsWrapV2(
                           Await.result(scannedWorkloads, RestClient.waitingLimit.seconds)
                         )
                       )
+                      logger.info("convertedScannedWorkloads {}", convertedScannedWorkloads)
                       if (start.isDefined && start.get.toInt == 0) {
-                        paginationCacheManager[Array[ScannedWorkloads2]]
+                        paginationCacheManager[Array[WorkloadV2]]
                           .savePagedData(s"$cacheKey-workload", convertedScannedWorkloads.workloads)
                       }
                     }
                     if (start.isDefined && limit.isDefined) {
                       if (elements == null) {
-                        elements = paginationCacheManager[Array[ScannedWorkloads2]]
+                        elements = paginationCacheManager[Array[WorkloadV2]]
                           .getPagedData(s"$cacheKey-workload")
-                          .getOrElse(Array[ScannedWorkloads2]())
+                          .getOrElse(Array[WorkloadV2]())
                       }
                       val output =
                         elements.slice(start.get.toInt, start.get.toInt + limit.get.toInt)
                       if (output.length < limit.get.toInt) {
-                        paginationCacheManager[Array[ScannedWorkloads2]]
+                        paginationCacheManager[Array[WorkloadV2]]
                           .removePagedData(s"$cacheKey-workload")
                       }
-                      val cachedData = paginationCacheManager[Array[ScannedWorkloads2]]
+                      val cachedData = paginationCacheManager[Array[WorkloadV2]]
                         .getPagedData(s"$cacheKey-workload")
-                        .getOrElse(Array[ScannedWorkloads2]())
+                        .getOrElse(Array[WorkloadV2]())
                       logger.info("Cached data size: {}", cachedData.length)
                       logger.info("Paged response size: {}", output.length)
                       output
@@ -122,7 +124,7 @@ class WorkloadService()(implicit executionContext: ExecutionContext)
                     }
                   } catch {
                     case NonFatal(e) =>
-                      paginationCacheManager[Array[ScannedWorkloads2]]
+                      paginationCacheManager[Array[WorkloadV2]]
                         .removePagedData(s"$cacheKey-workload")
                       if (e.getMessage.contains("Status: 408") || e.getMessage.contains(
                             "Status: 401"

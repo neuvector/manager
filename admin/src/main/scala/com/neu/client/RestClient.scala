@@ -55,6 +55,15 @@ object RestClient extends RestClient with LazyLogging {
     )
   }
 
+  def baseClusterUriV2(tokenId: String, ctrlHostIp: String = ctrlHost): String = {
+    val clusterId: Option[String] = AuthenticationManager.getCluster(tokenId)
+    clusterId.fold(
+      s"https://$ctrlHost:$ctrlPort/v2"
+    )(
+      id => s"https://$ctrlHost:$ctrlPort/v1/fed/cluster/$id/v2"
+    )
+  }
+
 }
 
 class RestClient extends DefaultJsonFormats with ClientSslConfig {

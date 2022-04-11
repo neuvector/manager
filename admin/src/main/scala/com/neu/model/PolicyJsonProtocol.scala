@@ -3,11 +3,12 @@ package com.neu.model
 import spray.json.DefaultJsonProtocol
 import spray.json._
 import com.neu.model.DashboardJsonProtocol._
+import com.typesafe.scalalogging.LazyLogging
 
 /**
  * Created by bxu on 4/29/16.
  */
-object PolicyJsonProtocol extends DefaultJsonProtocol {
+object PolicyJsonProtocol extends DefaultJsonProtocol with LazyLogging {
   implicit val deployFedRulesConfigFormat: RootJsonFormat[DeployFedRulesConfig] = jsonFormat2(
     DeployFedRulesConfig
   )
@@ -72,6 +73,13 @@ object PolicyJsonProtocol extends DefaultJsonProtocol {
   implicit val ruleIdsFormat: RootJsonFormat[RuleIds] = jsonFormat1(RuleIds)
   implicit val promoteConfigFormat: RootJsonFormat[PromoteConfig] = jsonFormat1(PromoteConfig)
 
+  implicit val workloadBriefV2Format: RootJsonFormat[WorkloadBriefV2] = jsonFormat12(WorkloadBriefV2)
+  implicit val workloadSecurityV2Format: RootJsonFormat[WorkloadSecurityV2] = jsonFormat14(WorkloadSecurityV2)
+  implicit val workloadRtAttribesV2Format: RootJsonFormat[WorkloadRtAttribesV2] = jsonFormat8(WorkloadRtAttribesV2)
+  implicit val workloadV2ChildFormat: RootJsonFormat[WorkloadV2Child] = jsonFormat11(WorkloadV2Child)
+  implicit val workloadV2Format: RootJsonFormat[WorkloadV2] = jsonFormat12(WorkloadV2)
+  implicit val workloadsWrapV2Format: RootJsonFormat[WorkloadsWrapV2] = jsonFormat1(WorkloadsWrapV2)
+
   def policyToJson(policy: Policy): String    = policy.toJson.compactPrint
   def policy2ToJson(policy2: Policy2): String = policy2.toJson.compactPrint
   def responseRuleConfigToJson(responseRuleConfig: ResponseRuleConfig): String =
@@ -99,6 +107,9 @@ object PolicyJsonProtocol extends DefaultJsonProtocol {
     response.parseJson.convertTo[ScannedWorkloadsWrap]
   def jsonToScannedWorkloadsWrap2(response: String): ScannedWorkloadsWrap2 =
     response.parseJson.convertTo[ScannedWorkloadsWrap2]
+
+  def jsonToWorkloadsWrapV2(response: String): WorkloadsWrapV2 =
+    response.parseJson.convertTo[WorkloadsWrapV2]
 
   def groupToNode(group: Group): Node =
     Node(
@@ -215,6 +226,47 @@ object PolicyJsonProtocol extends DefaultJsonProtocol {
       )
 
     ScannedWorkloadsWrap2(
+      convertedWorkloads
+    )
+  }
+
+  def convertWorkloadV2(workloadsWrapV2: WorkloadsWrapV2): WorkloadsWrapV2 = {
+    val convertedWorkloads = workloadsWrapV2.workloads
+      .map(
+        workload => {
+
+          var high   = workload.wl_security.scan_summary.high;
+          var medium = workload.wl_security.scan_summary.medium;
+          workload.children.foreach(
+            child => {
+              high += child.wl_security.scan_summary.high
+              medium += child.wl_security.scan_summary.medium
+            }
+          )
+
+          val wlSecurity = workload.wl_security.copy(
+            scan_summary = ScanSummary(
+              workload.wl_security.scan_summary.status,
+              workload.wl_security.scan_summary.high,
+              workload.wl_security.scan_summary.medium,
+              Option(high),
+              Option(medium),
+              workload.wl_security.scan_summary.result,
+              workload.wl_security.scan_summary.scanned_timestamp,
+              workload.wl_security.scan_summary.scanned_at,
+              workload.wl_security.scan_summary.base_os,
+              workload.wl_security.scan_summary.scanner_version,
+              workload.wl_security.scan_summary.cvedb_create_time
+            )
+          )
+
+          workload.copy(
+            wl_security = wlSecurity
+          )
+        }
+      )
+
+    WorkloadsWrapV2(
       convertedWorkloads
     )
   }

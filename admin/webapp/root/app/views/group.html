@@ -30,7 +30,7 @@
       >
         {{netServiceStatus ? 'ON' : 'OFF'}}
       </span>
-      <em class="fa fa-info-circle text-info" uib-tooltip="{{netServiceStatus ? 'setting.description.ENABLED_NET_POLICY_MODE' : 'setting.description.DISABLED_NET_POLICY_MODE' | translate}}">
+      <em class="fa fa-info-circle text-info" uib-tooltip="{{netServiceStatus ? netServicePolicyMode : ''}}{{netServiceStatus ? 'setting.description.ENABLED_NET_POLICY_MODE_GROUP' : 'setting.description.DISABLED_NET_POLICY_MODE' | translate }}">
       </em>
     </div>
   </div>

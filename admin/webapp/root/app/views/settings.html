@@ -37,81 +37,86 @@
           <div class="col-sm-12 mb-lg">
             <div class="form-title">{{'setting.NEW_SERVICE' | translate}}</div>
           </div>
-          <div class="col-sm-12 ">
-            <div class="col-sm-8">
-              <div
-                class="radio-inline c-radio mr-lg"
-                ng-class="inputMaskDisabledClass"
-              >
-                <label
-                  class="text-gray-label"
+          <div class="col-sm-12">
+            <div class="col-sm-10">
+              <div class="pull-left" style="width: 240px; margin-right: 4px;">
+                <div
+                  class="radio-inline c-radio mr-lg"
                   ng-class="inputMaskDisabledClass"
                 >
-                  <input
-                    type="radio"
-                    name="mode"
-                    value="Discover"
-                    ng-model="sysCtrl.config.newServiceMode"
-                    ng-if="isNewServiceModeAuthorized"
-                    ng-change="sysCtrl.changeFieldValue()"
-                    ng-disabled="!isNewServiceModeAuthorized"
-                  />
-                  <span
-                    class="fa fa-binoculars text-discover"
+                  <label
+                    class="text-gray-label"
                     ng-class="inputMaskDisabledClass"
-                  />{{'topbar.mode.LEARNING' | translate}}
-                </label>
+                  >
+                    <input
+                      type="radio"
+                      name="mode"
+                      value="Discover"
+                      ng-model="sysCtrl.config.newServiceMode"
+                      ng-if="isNewServiceModeAuthorized"
+                      ng-change="sysCtrl.changeFieldValue()"
+                      ng-disabled="!isNewServiceModeAuthorized"
+                    />
+                    <span
+                      class="fa fa-binoculars text-discover"
+                      ng-class="inputMaskDisabledClass"
+                    />{{'topbar.mode.LEARNING' | translate}}
+                  </label>
+                </div>
+                <div
+                  class="radio-inline c-radio pl-sm mr-lg"
+                  ng-class="inputMaskDisabledClass"
+                >
+                  <label
+                    class="text-gray-label"
+                    ng-class="inputMaskDisabledClass"
+                  >
+                    <input
+                      type="radio"
+                      name="mode"
+                      value="Monitor"
+                      ng-model="sysCtrl.config.newServiceMode"
+                      ng-if="isNewServiceModeAuthorized"
+                      ng-change="sysCtrl.changeFieldValue()"
+                      ng-disabled="!isNewServiceModeAuthorized"
+                    />
+                    <span
+                      class="fa fa-bell text-monitor"
+                      ng-class="inputMaskDisabledClass"
+                    />{{'topbar.mode.EVALUATION' | translate}}
+                  </label>
+                </div>
+                <div
+                  class="radio-inline c-radio pl-sm"
+                  ng-class="inputMaskDisabledClass"
+                >
+                  <label
+                    class="text-gray-label"
+                    ng-class="inputMaskDisabledClass"
+                  >
+                    <input
+                      type="radio"
+                      name="mode"
+                      value="Protect"
+                      ng-model="sysCtrl.config.newServiceMode"
+                      ng-if="isNewServiceModeAuthorized"
+                      ng-change="sysCtrl.changeFieldValue()"
+                      ng-disalbed="!isNewServiceModeAuthorized"
+                    />
+                    <span
+                      class="fa fa-shield text-protect"
+                      ng-class="inputMaskDisabledClass"
+                    />{{'topbar.mode.ENFORCE' | translate}}
+                  </label>
+                </div>
               </div>
-              <div
-                class="radio-inline c-radio pl-sm mr-lg"
-                ng-class="inputMaskDisabledClass"
-              >
-                <label
-                  class="text-gray-label"
-                  ng-class="inputMaskDisabledClass"
-                >
-                  <input
-                    type="radio"
-                    name="mode"
-                    value="Monitor"
-                    ng-model="sysCtrl.config.newServiceMode"
-                    ng-if="isNewServiceModeAuthorized"
-                    ng-change="sysCtrl.changeFieldValue()"
-                    ng-disabled="!isNewServiceModeAuthorized"
-                  />
-                  <span
-                    class="fa fa-bell text-monitor"
-                    ng-class="inputMaskDisabledClass"
-                  />{{'topbar.mode.EVALUATION' | translate}}
-                </label>
-              </div>
-              <div
-                class="radio-inline c-radio pl-sm"
-                ng-class="inputMaskDisabledClass"
-              >
-                <label
-                  class="text-gray-label"
-                  ng-class="inputMaskDisabledClass"
-                >
-                  <input
-                    type="radio"
-                    name="mode"
-                    value="Protect"
-                    ng-model="sysCtrl.config.newServiceMode"
-                    ng-if="isNewServiceModeAuthorized"
-                    ng-change="sysCtrl.changeFieldValue()"
-                    ng-disalbed="!isNewServiceModeAuthorized"
-                  />
-                  <span
-                    class="fa fa-shield text-protect"
-                    ng-class="inputMaskDisabledClass"
-                  />{{'topbar.mode.ENFORCE' | translate}}
-                </label>
+              <div class="text-muted text-sm mb ml-lg pull-left">
+                {{'setting.NEW_SERVICE_COMMENT' | translate}}
               </div>
             </div>
             <div class="col-sm-12 mt-lg">
               <div
-                class="radio-inline c-radio pl-sm md-switch2 pull-left ml-lg mr-xl mb"
+                class="radio-inline c-radio pl-sm md-switch2 pull-left ml-lg mb" style="width: 240px;"
                 ng-class="inputMaskDisabledClass"
               >
                 <label class="text-gray-label">
@@ -127,7 +132,7 @@
                   <span class="toggle hand" ng-disabled="!isNewServiceModeAuthorized"></span>
                 </label>
               </div>
-              <div class="text-muted text-sm mb ml-lg pull-left">
+              <div class="text-muted text-sm mb pull-left">
                 {{'setting.ZERODRIFT_COMMENT' | translate}}
               </div>
             </div>
@@ -235,10 +240,6 @@
         <div class="col-sm-12 mb-sm sub-line">
           <hr class="dashed"/>
         </div>
-
-        <div class="col-sm-12 mb-sm sub-line">
-          <hr class="dashed"/>
-        </div>
         <div class="col-sm-12">
           <label class="form-title">
             {{'setting.MODE_AUTO_SWITCH' | translate}}
@@ -253,6 +254,7 @@
               <div class="md-switch2">
                 <label class="text-muted">
                   {{'setting.D2M' | translate}}
+                  <em class="fa fa-info-circle text-muted" uib-tooltip="{{ 'setting.D2M_HINT' | translate }}"></em>
                   <input
                     type="checkbox"
                     ng-model="sysCtrl.config.mode_auto_d2m"
@@ -278,7 +280,8 @@
             <div style="margin-top: -10px">
               <div class="md-switch2">
                 <label class="text-muted">
-                  {{'setting.M2P' | translate}}&nbsp;&nbsp;
+                  {{'setting.M2P' | translate}}
+                  <em class="fa fa-info-circle text-muted" uib-tooltip="{{ 'setting.M2P_HINT' | translate }}"></em>&nbsp;&nbsp;
                   <input
                     type="checkbox"
                     ng-model="sysCtrl.config.mode_auto_m2p"

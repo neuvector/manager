@@ -108,7 +108,7 @@
             ng-disabled="disableScan"
             ng-show="workloads.length>0"
             display-control="runtime_scan"
-            ng-click="scan(workload.id)"
+            ng-click="scan(workload.wl_brief.id)"
           >
             {{'scan.SCAN' | translate}}
           </button>
@@ -138,15 +138,15 @@
         </div>
         <div class="pull-right mr-lg" ng-if="selectedIndex === 2">
           <label
-            ng-if="workload.scan_summary.scanner_version"
+            ng-if="workload.wl_security.scan_summary.scanner_version"
             class="pull-left text-primary mt-sm"
           >
             {{'audit.gridHeader.CVE_DB_VERSION' | translate}}:&nbsp;
-            {{workload.scan_summary.scanner_version}}&nbsp;&nbsp;
+            {{workload.wl_security.scan_summary.scanner_version}}&nbsp;&nbsp;
             <em
-              ng-if="workload.scan_summary.cvedb_create_time"
+              ng-if="workload.wl_security.scan_summary.cvedb_create_time"
               class="fa fa-info-circle"
-              uib-tooltip="{{'registry.CVE_DB_DATE' | translate}}: {{workload.scan_summary.cvedb_create_time | date:'MMM dd, y HH:mm:ss'}}"
+              uib-tooltip="{{'registry.CVE_DB_DATE' | translate}}: {{workload.wl_security.scan_summary.cvedb_create_time | date:'MMM dd, y HH:mm:ss'}}"
             >
             </em>
           </label>
@@ -210,7 +210,7 @@
             ng-disabled="disableScan"
             ng-show="workloads.length>0"
             display-control="runtime_scan"
-            ng-click="scan(workload.id)"
+            ng-click="scan(workload.wl_brief.id)"
           >
             <em class="fa fa-search mr-sm"></em>{{'scan.SCAN' | translate}}
           </button>
@@ -332,11 +332,11 @@
                           </div>
                           <div
                             class="auto-hide text-muted"
-                            uib-tooltip="{{workload.id}}"
+                            uib-tooltip="{{workload.wl_brief.id}}"
                             tooltip-enable="false"
                             show-tooltip-on-text-overflow
                           >
-                            {{workload.id}}
+                            {{workload.wl_brief.id}}
                           </div>
                         </div>
                       </div>
@@ -348,14 +348,32 @@
                           </div>
                           <div
                             class="auto-hide text-muted"
-                            uib-tooltip="{{workload.service}}"
+                            uib-tooltip="{{workload.wl_brief.service}}"
                             tooltip-enable="false"
                             show-tooltip-on-text-overflow
                           >
-                            {{workload.service}}
+                            {{workload.wl_brief.service}}
                           </div>
                         </div>
                       </div>
+                      <div class="col-sm-4">
+                        <div class="nv-resources-detail">
+                          <div>{{'network.gridHeader.SERVICE_ACCOUNT' | translate}}</div>
+                          <div class="icon">
+                            <em class="fa fa-credit-card text-primary fa-lg"></em>
+                          </div>
+                          <div
+                            class="auto-hide text-muted"
+                            uib-tooltip="{{workload.wl_rt_attributes.service_account}}"
+                            tooltip-enable="false"
+                            show-tooltip-on-text-overflow
+                          >
+                            {{workload.wl_rt_attributes.service_account}}
+                          </div>
+                        </div>
+                      </div>
+                    <!-- </div>
+                    <div class="row"> -->
                       <div class="col-sm-4">
                         <div class="nv-resources-detail">
                           <div>
@@ -366,16 +384,14 @@
                           </div>
                           <div
                             class="auto-hide text-muted"
-                            uib-tooltip="{{workload.network_mode}}"
+                            uib-tooltip="{{workload.wl_security.network_mode}}"
                             tooltip-enable="false"
                             show-tooltip-on-text-overflow
                           >
-                            {{workload.network_mode}}
+                            {{workload.wl_security.network_mode}}
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div class="row">
                       <div class="col-sm-4">
                         <div class="nv-resources-detail">
                           <div>{{'containers.detail.IMAGE' | translate}}</div>
@@ -384,15 +400,15 @@
                           </div>
                           <div
                             class="auto-hide text-muted"
-                            uib-tooltip="{{workload.image}}"
+                            uib-tooltip="{{workload.wl_brief.image}}"
                             tooltip-enable="false"
                             show-tooltip-on-text-overflow
                           >
-                            {{workload.image}}
+                            {{workload.wl_brief.image}}
                           </div>
                         </div>
                       </div>
-                      <div class="col-sm-4" ng-if="workload.scan_summary.base_os">
+                      <div class="col-sm-4" ng-if="workload.wl_security.scan_summary.base_os">
                         <div class="nv-resources-detail">
                           <div>{{'containers.detail.BASE_OS' | translate}}</div>
                           <div class="icon">
@@ -400,11 +416,11 @@
                           </div>
                           <div
                             class="auto-hide text-muted"
-                            uib-tooltip="{{workload.scan_summary.base_os}}"
+                            uib-tooltip="{{workload.wl_security.scan_summary.base_os}}"
                             tooltip-enable="false"
                             show-tooltip-on-text-overflow
                           >
-                            {{workload.scan_summary.base_os}}
+                            {{workload.wl_security.scan_summary.base_os}}
                           </div>
                         </div>
                       </div>
@@ -416,16 +432,16 @@
                           <div class="icon">
                             <em
                               class="text-primary fa-lg"
-                              ng-class="workload.privileged ? 'icon-user-unfollow' : 'icon-user-following'"
+                              ng-class="workload.wl_rt_attributes.privileged ? 'icon-user-unfollow' : 'icon-user-following'"
                             ></em>
                           </div>
                           <div
                             class="auto-hide text-muted"
-                            uib-tooltip="{{workload.privileged}}"
+                            uib-tooltip="{{workload.wl_rt_attributes.privileged}}"
                             tooltip-enable="false"
                             show-tooltip-on-text-overflow
                           >
-                            {{workload.privileged}}
+                            {{workload.wl_rt_attributes.privileged}}
                           </div>
                         </div>
                       </div>
@@ -445,9 +461,9 @@
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-sm-4" ng-if="workload.state === 'exit'">
+                    <!-- </div>
+                    <div class="row"> -->
+                      <div class="col-sm-4" ng-if="workload.wl_brief.state === 'exit'">
                         <div class="nv-resources-detail">
                           <div>
                             {{'enforcers.detail.DISCONNECTED_AT' | translate}}
@@ -459,14 +475,14 @@
                           uib-tooltip="{{workload.finished_at | date:'MMM dd, y HH:mm:ss'}}"
                           tooltip-enable="false"
                           show-tooltip-on-text-overflow> {{workload.finished_at |
-                          date:'MMM dd, y HH:mm:ss'}}
+                            date:'MMM dd, y HH:mm:ss'}}
+                          </div>
                         </div>
                       </div>
-                    </div>
                   </div>
                 </div>
                 <div
-                  ng-if="!isEmpty(workload.interfaces)"
+                  ng-if="!isEmpty(workload.wl_security.interfaces)"
                   class="containers-detail-sec"
                 >
                   <div class="title">
@@ -475,7 +491,7 @@
                   <div class="list-details">
                     <div
                       class="row"
-                      ng-repeat="(name, nets) in workload.interfaces"
+                      ng-repeat="(name, nets) in workload.wl_security.interfaces"
                     >
                       <div class="col-sm-2 text-right" ng-class-even="'bg-gray'">
                         {{name}}
@@ -495,7 +511,7 @@
                   </div>
                 </div>
                 <div
-                  ng-if="workload.ports.length > 0"
+                  ng-if="workload.wl_security.ports.length > 0"
                   class="containers-detail-sec"
                 >
                   <div class="title">
@@ -504,7 +520,7 @@
                   <div class="list-details">
                     <div
                       class="row m0"
-                      ng-repeat="mapping in workload.ports"
+                      ng-repeat="mapping in workload.wl_security.ports"
                       ng-class-even="'bg-gray-lighter-1'"
                     >
                       <div class="col-sm-2 text-right">
@@ -523,7 +539,7 @@
                   </div>
                 </div>
                 <div
-                  ng-if="!isEmpty(workload.labels)"
+                  ng-if="!isEmpty(workload.wl_rt_attributes.labels)"
                   class="containers-detail-sec"
                 >
                   <div class="title">
@@ -532,7 +548,7 @@
                   <div class="list-details">
                     <div
                       class="table-row"
-                      ng-repeat="(label, value) in workload.labels"
+                      ng-repeat="(label, value) in workload.wl_rt_attributes.labels"
                     >
                       <div class="row m0" ng-class-even="'bg-gray-lighter-1'">
                         <div
@@ -553,7 +569,7 @@
               </md-content>
             </md-tab-body>
           </md-tab>
-          <md-tab ng-click="getCompliance(workload.id)">
+          <md-tab ng-click="getCompliance(workload.wl_brief.id)">
             <md-tab-label>
               <em class="fa fa-gavel" uib-tooltip="{{'cis.tab.COMPLIANCE' | translate}}" tooltip-enable="{{isSimpleTab}}"/>
               <span ng-show="!isSimpleTab">{{'cis.tab.COMPLIANCE' | translate}}</span>
@@ -569,7 +585,7 @@
               </md-content>
             </md-tab-body>
           </md-tab>
-          <md-tab ng-click="getScanReport(workload.id)">
+          <md-tab ng-click="getScanReport(workload.wl_brief.id)">
             <md-tab-label>
               <em class="fa fa-bug" uib-tooltip="{{'sidebar.nav.SCAN' | translate}}" tooltip-enable="{{isSimpleTab}}"/>
               <span ng-show="!isSimpleTab">{{'sidebar.nav.SCAN' | translate}}</span>
@@ -601,7 +617,7 @@
               </md-content>
             </md-tab-body>
           </md-tab>
-          <md-tab ng-click="refreshStats(workload.id)">
+          <md-tab ng-click="refreshStats(workload.wl_brief.id)">
             <md-tab-label>
               <em class="fa fa-line-chart" uib-tooltip="{{'containers.detail.TAB_STATS' | translate}}" tooltip-enable="{{isSimpleTab}}"/>
               <span ng-show="!isSimpleTab">{{'containers.detail.TAB_STATS' | translate}}</span>

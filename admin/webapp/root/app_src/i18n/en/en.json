@@ -716,7 +716,8 @@
       "TIME": "Time",
       "START_TIME": "Start Time",
       "STOP_TIME": "Stop Time",
-      "SERVICE": "Service"
+      "SERVICE": "Service",
+      "SERVICE_ACCOUNT": "Service Account"
     },
     "groupFilter": {
       "TITLE": "Add Group/NS",
@@ -2685,7 +2686,7 @@
     "WEBHOOKS": "Webhooks",
     "CLUSTER": "Cluster",
     "CLUSTER_COMMENT": "Used to identify the cluster in notifications",
-    "ZERODRIFT_COMMENT": "Automated process and file protections based on drift detection from original image",
+    "ZERODRIFT_COMMENT": "For new Groups, enable/disable automated process and file protections based drift detection from the original image.",
     "CLUSTER_NAME": "Cluster Name:",
     "SERVER": "Server",
     "PROTOCOL": "Protocol",
@@ -2727,11 +2728,14 @@
     "IMPORT_FAILED": "Import failed ",
     "NEW_SERVICE_POLICY_MODE": "Default mode for new services",
     "NEW_SERVICE": "New Services Mode",
+    "NEW_SERVICE_COMMENT": "The default services mode for new Groups detected which have not been previously learned or configured.",
     "NET_SERVICE_POLICY_MODE": "Network Service Policy Mode",
     "MODE_AUTO_SWITCH": "Service Group Mode Automation",
-    "MODE_AUTO_SWITCH_HINT": "It's promotes group's policy modes with their accumulated time counters. It will not affect the CRD groups and the implicit network policy mode.",
+    "MODE_AUTO_SWITCH_HINT": "Promotes a Group’s protection Mode based on elapsed time and criteria. Does not apply to CRD created Groups.",
     "D2M": "Discover to Monitor",
     "M2P": "Monitor to Protect",
+    "D2M_HINT": "Criteria: Elapsed time for learning all network and process activity of at least one live pod in the Group.",
+    "M2P_HINT": "Criteria: There are no security events (network, process etc) for the timeframe set for the Group.",
     "AUTH_BY_OPENSHIFT": "Authenticate using OpenShift RBAC’s or Rancher’s",
     "NEED_SUBMIT": "Need submit",
     "ENABLED": "Enabled",
@@ -2805,8 +2809,9 @@
       "SAML": "Configure single sign on using SAML.",
       "LICENSE": "View billing and manage licenses.",
       "OPENID": "Configure single sign on using OpenID Connect.",
-      "ENABLED_NET_POLICY_MODE": "Network service policy mode will be globally set to selected mode",
-      "DISABLED_NET_POLICY_MODE": "Per group level policy mode will apply to both network and profile"
+      "ENABLED_NET_POLICY_MODE": "The selected policy mode will apply globally to the network rules for all groups, and each Group’s individual policy mode will only apply to process and file rules.",
+      "ENABLED_NET_POLICY_MODE_GROUP": " mode will apply globally to the network rules for all groups, and each Group’s individual policy mode will only apply to process and file rules.",
+      "DISABLED_NET_POLICY_MODE": "Per group level policy mode will apply to network rules, process and file rules"
     }
   },
   "ldap": {

@@ -1071,6 +1071,7 @@
           .get(CONFIG_URL)
           .then(response => {
             $scope.netServiceStatus = response.data.config.net_service_status;
+            $scope.netServicePolicyMode = $translate.instant(`enum.${response.data.config.net_service_policy_mode.toUpperCase()}`);
           })
           .catch(err => {
             $scope.netServiceStatus = undefined;

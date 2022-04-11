@@ -6,8 +6,8 @@ The container images for the beta version can be pulled from the NeuVector Docke
 + neuvector/manager:5.0.0-b1
 + neuvector/controller:5.0.0-b1
 + neuvector/enforcer:5.0.0-b1
-+ neuvector/scanner.preview:latest
-+ neuvector/updater.preview:latest
++ neuvector/scanner:latest
++ neuvector/updater:latest
 
 # Bugs & Issues
 Please submit bugs and issues to [neuvector/neuvector](//github.com/neuvector/neuvector/issues) with a title starting with `[UI] `.

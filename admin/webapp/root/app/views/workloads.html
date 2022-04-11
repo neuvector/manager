@@ -108,7 +108,7 @@
             ng-disabled="disableScan"
             ng-show="workloads.length>0"
             display-control="runtime_scan"
-            ng-click="scan(workload.wl_brief.id)"
+            ng-click="scan(workload.brief.id)"
           >
             {{'scan.SCAN' | translate}}
           </button>
@@ -138,15 +138,15 @@
         </div>
         <div class="pull-right mr-lg" ng-if="selectedIndex === 2">
           <label
-            ng-if="workload.wl_security.scan_summary.scanner_version"
+            ng-if="workload.security.scan_summary.scanner_version"
             class="pull-left text-primary mt-sm"
           >
             {{'audit.gridHeader.CVE_DB_VERSION' | translate}}:&nbsp;
-            {{workload.wl_security.scan_summary.scanner_version}}&nbsp;&nbsp;
+            {{workload.security.scan_summary.scanner_version}}&nbsp;&nbsp;
             <em
-              ng-if="workload.wl_security.scan_summary.cvedb_create_time"
+              ng-if="workload.security.scan_summary.cvedb_create_time"
               class="fa fa-info-circle"
-              uib-tooltip="{{'registry.CVE_DB_DATE' | translate}}: {{workload.wl_security.scan_summary.cvedb_create_time | date:'MMM dd, y HH:mm:ss'}}"
+              uib-tooltip="{{'registry.CVE_DB_DATE' | translate}}: {{workload.security.scan_summary.cvedb_create_time | date:'MMM dd, y HH:mm:ss'}}"
             >
             </em>
           </label>
@@ -210,7 +210,7 @@
             ng-disabled="disableScan"
             ng-show="workloads.length>0"
             display-control="runtime_scan"
-            ng-click="scan(workload.wl_brief.id)"
+            ng-click="scan(workload.brief.id)"
           >
             <em class="fa fa-search mr-sm"></em>{{'scan.SCAN' | translate}}
           </button>
@@ -332,11 +332,11 @@
                           </div>
                           <div
                             class="auto-hide text-muted"
-                            uib-tooltip="{{workload.wl_brief.id}}"
+                            uib-tooltip="{{workload.brief.id}}"
                             tooltip-enable="false"
                             show-tooltip-on-text-overflow
                           >
-                            {{workload.wl_brief.id}}
+                            {{workload.brief.id}}
                           </div>
                         </div>
                       </div>
@@ -348,11 +348,11 @@
                           </div>
                           <div
                             class="auto-hide text-muted"
-                            uib-tooltip="{{workload.wl_brief.service}}"
+                            uib-tooltip="{{workload.brief.service}}"
                             tooltip-enable="false"
                             show-tooltip-on-text-overflow
                           >
-                            {{workload.wl_brief.service}}
+                            {{workload.brief.service}}
                           </div>
                         </div>
                       </div>
@@ -364,11 +364,11 @@
                           </div>
                           <div
                             class="auto-hide text-muted"
-                            uib-tooltip="{{workload.wl_rt_attributes.service_account}}"
+                            uib-tooltip="{{workload.rt_attributes.service_account}}"
                             tooltip-enable="false"
                             show-tooltip-on-text-overflow
                           >
-                            {{workload.wl_rt_attributes.service_account}}
+                            {{workload.rt_attributes.service_account}}
                           </div>
                         </div>
                       </div>
@@ -384,11 +384,11 @@
                           </div>
                           <div
                             class="auto-hide text-muted"
-                            uib-tooltip="{{workload.wl_security.network_mode}}"
+                            uib-tooltip="{{workload.attributes.network_mode}}"
                             tooltip-enable="false"
                             show-tooltip-on-text-overflow
                           >
-                            {{workload.wl_security.network_mode}}
+                            {{workload.attributes.network_mode}}
                           </div>
                         </div>
                       </div>
@@ -400,15 +400,15 @@
                           </div>
                           <div
                             class="auto-hide text-muted"
-                            uib-tooltip="{{workload.wl_brief.image}}"
+                            uib-tooltip="{{workload.brief.image}}"
                             tooltip-enable="false"
                             show-tooltip-on-text-overflow
                           >
-                            {{workload.wl_brief.image}}
+                            {{workload.brief.image}}
                           </div>
                         </div>
                       </div>
-                      <div class="col-sm-4" ng-if="workload.wl_security.scan_summary.base_os">
+                      <div class="col-sm-4" ng-if="workload.security.scan_summary.base_os">
                         <div class="nv-resources-detail">
                           <div>{{'containers.detail.BASE_OS' | translate}}</div>
                           <div class="icon">
@@ -416,11 +416,11 @@
                           </div>
                           <div
                             class="auto-hide text-muted"
-                            uib-tooltip="{{workload.wl_security.scan_summary.base_os}}"
+                            uib-tooltip="{{workload.security.scan_summary.base_os}}"
                             tooltip-enable="false"
                             show-tooltip-on-text-overflow
                           >
-                            {{workload.wl_security.scan_summary.base_os}}
+                            {{workload.security.scan_summary.base_os}}
                           </div>
                         </div>
                       </div>
@@ -432,16 +432,16 @@
                           <div class="icon">
                             <em
                               class="text-primary fa-lg"
-                              ng-class="workload.wl_rt_attributes.privileged ? 'icon-user-unfollow' : 'icon-user-following'"
+                              ng-class="workload.rt_attributes.privileged ? 'icon-user-unfollow' : 'icon-user-following'"
                             ></em>
                           </div>
                           <div
                             class="auto-hide text-muted"
-                            uib-tooltip="{{workload.wl_rt_attributes.privileged}}"
+                            uib-tooltip="{{workload.rt_attributes.privileged}}"
                             tooltip-enable="false"
                             show-tooltip-on-text-overflow
                           >
-                            {{workload.wl_rt_attributes.privileged}}
+                            {{workload.rt_attributes.privileged}}
                           </div>
                         </div>
                       </div>
@@ -463,7 +463,7 @@
                       </div>
                     <!-- </div>
                     <div class="row"> -->
-                      <div class="col-sm-4" ng-if="workload.wl_brief.state === 'exit'">
+                      <div class="col-sm-4" ng-if="workload.brief.state === 'exit'">
                         <div class="nv-resources-detail">
                           <div>
                             {{'enforcers.detail.DISCONNECTED_AT' | translate}}
@@ -482,7 +482,7 @@
                   </div>
                 </div>
                 <div
-                  ng-if="!isEmpty(workload.wl_security.interfaces)"
+                  ng-if="!isEmpty(workload.attributes.interfaces)"
                   class="containers-detail-sec"
                 >
                   <div class="title">
@@ -491,7 +491,7 @@
                   <div class="list-details">
                     <div
                       class="row"
-                      ng-repeat="(name, nets) in workload.wl_security.interfaces"
+                      ng-repeat="(name, nets) in workload.attributes.interfaces"
                     >
                       <div class="col-sm-2 text-right" ng-class-even="'bg-gray'">
                         {{name}}
@@ -511,7 +511,7 @@
                   </div>
                 </div>
                 <div
-                  ng-if="workload.wl_security.ports.length > 0"
+                  ng-if="workload.attributes.ports.length > 0"
                   class="containers-detail-sec"
                 >
                   <div class="title">
@@ -520,7 +520,7 @@
                   <div class="list-details">
                     <div
                       class="row m0"
-                      ng-repeat="mapping in workload.wl_security.ports"
+                      ng-repeat="mapping in workload.attributes.ports"
                       ng-class-even="'bg-gray-lighter-1'"
                     >
                       <div class="col-sm-2 text-right">
@@ -539,7 +539,7 @@
                   </div>
                 </div>
                 <div
-                  ng-if="!isEmpty(workload.wl_rt_attributes.labels)"
+                  ng-if="!isEmpty(workload.rt_attributes.labels)"
                   class="containers-detail-sec"
                 >
                   <div class="title">
@@ -548,7 +548,7 @@
                   <div class="list-details">
                     <div
                       class="table-row"
-                      ng-repeat="(label, value) in workload.wl_rt_attributes.labels"
+                      ng-repeat="(label, value) in workload.rt_attributes.labels"
                     >
                       <div class="row m0" ng-class-even="'bg-gray-lighter-1'">
                         <div
@@ -569,7 +569,7 @@
               </md-content>
             </md-tab-body>
           </md-tab>
-          <md-tab ng-click="getCompliance(workload.wl_brief.id)">
+          <md-tab ng-click="getCompliance(workload.brief.id)">
             <md-tab-label>
               <em class="fa fa-gavel" uib-tooltip="{{'cis.tab.COMPLIANCE' | translate}}" tooltip-enable="{{isSimpleTab}}"/>
               <span ng-show="!isSimpleTab">{{'cis.tab.COMPLIANCE' | translate}}</span>
@@ -585,7 +585,7 @@
               </md-content>
             </md-tab-body>
           </md-tab>
-          <md-tab ng-click="getScanReport(workload.wl_brief.id)">
+          <md-tab ng-click="getScanReport(workload.brief.id)">
             <md-tab-label>
               <em class="fa fa-bug" uib-tooltip="{{'sidebar.nav.SCAN' | translate}}" tooltip-enable="{{isSimpleTab}}"/>
               <span ng-show="!isSimpleTab">{{'sidebar.nav.SCAN' | translate}}</span>
@@ -617,7 +617,7 @@
               </md-content>
             </md-tab-body>
           </md-tab>
-          <md-tab ng-click="refreshStats(workload.wl_brief.id)">
+          <md-tab ng-click="refreshStats(workload.brief.id)">
             <md-tab-label>
               <em class="fa fa-line-chart" uib-tooltip="{{'containers.detail.TAB_STATS' | translate}}" tooltip-enable="{{isSimpleTab}}"/>
               <span ng-show="!isSimpleTab">{{'containers.detail.TAB_STATS' | translate}}</span>

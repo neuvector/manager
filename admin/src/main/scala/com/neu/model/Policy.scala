@@ -271,15 +271,11 @@ case class WorkloadSecurityV2 (
   cap_change_mode: Boolean,
   service_mesh: Boolean,
   service_mesh_sidecar: Boolean,
-  network_mode: String,
   policy_mode: String,
   profile_mode: String,
   baseline_profile: String,
   quarantine_reason: Option[String] = Some(""),
-  scan_summary: ScanSummary,
-  interfaces: Option[Map[String, Array[IpAddress]]] = None,
-  ports: Option[Array[ProtoPort]] = Some(Array()),
-  applications: Option[Array[String]] = Some(Array())
+  scan_summary: ScanSummary
 )
 
 case class WorkloadRtAttribesV2 (
@@ -290,14 +286,19 @@ case class WorkloadRtAttribesV2 (
   labels: Option[Map[String, String]] = None,
   memory_limit: Long,
   cpus: String,
-  service_account: String
+  service_account: String,
+  network_mode: String,
+  interfaces: Option[Map[String, Array[IpAddress]]] = None,
+  ports: Option[Array[ProtoPort]] = Some(Array()),
+  applications: Option[Array[String]] = Some(Array())
 )
 
 case class WorkloadV2Child (
-  wl_brief: WorkloadBriefV2,
-  wl_security: WorkloadSecurityV2,
-  wl_rt_attributes: WorkloadRtAttribesV2,
+  brief: WorkloadBriefV2,
+  security: WorkloadSecurityV2,
+  rt_attributes: WorkloadRtAttribesV2,
   enforcer_id: String,
+  enforcer_name: String,
   platform_role: String,
   created_at: String,
   started_at: String,
@@ -308,11 +309,12 @@ case class WorkloadV2Child (
 )
 
 case class WorkloadV2 (
-  wl_brief: WorkloadBriefV2,
-  wl_security: WorkloadSecurityV2,
-  wl_rt_attributes: WorkloadRtAttribesV2,
+  brief: WorkloadBriefV2,
+  security: WorkloadSecurityV2,
+  rt_attributes: WorkloadRtAttribesV2,
   children: Array[WorkloadV2Child],
   enforcer_id: String,
+  enforcer_name: String,
   platform_role: String,
   created_at: String,
   started_at: String,

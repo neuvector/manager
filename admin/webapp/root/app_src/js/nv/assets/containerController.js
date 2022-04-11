@@ -174,7 +174,7 @@
         }
         if (!$scope.showExitNode) {
           $scope.workloads = $scope.workloads.filter(function (item) {
-            return item.wl_brief.state !== "exit";
+            return item.brief.state !== "exit";
           });
         }
         $scope.gridOptions.api.setRowData($scope.workloads);
@@ -191,7 +191,7 @@
           $scope.workloads = angular.copy($scope.workloadsBackup);
         } else {
           $scope.workloads = $scope.workloads.filter(function (item) {
-            return item.wl_brief.state !== "exit";
+            return item.brief.state !== "exit";
           });
         }
         if ($scope.hideSystemNode) {
@@ -213,40 +213,40 @@
         if ($scope.selectedIndex === 3) {
           $scope.getProcess($scope.workload);
         }
-        if ($scope.workload.wl_brief.state === "monitor") {
+        if ($scope.workload.brief.state === "monitor") {
           $scope.protect = false;
           $scope.toggledMode = "Monitor";
         } else {
           $scope.protect = true;
           $scope.toggledMode = "Protect";
         }
-        $scope.workloadMode = $scope.workload.wl_brief.state;
+        $scope.workloadMode = $scope.workload.brief.state;
         if ($scope.selectedIndex === 4) {
           $scope.stopRefresh();
           resetChartData();
           initData();
-          $scope.refreshStats($scope.workload.wl_brief.id);
+          $scope.refreshStats($scope.workload.brief.id);
         }
         if ($scope.selectedIndex === 2) {
           $scope.disableScan = !!(
-            ($scope.workload.wl_security.scan_summary &&
-              $scope.workload.wl_security.scan_summary.status &&
-              $scope.workload.wl_security.scan_summary.status === "scanning") ||
+            ($scope.workload.security.scan_summary &&
+              $scope.workload.security.scan_summary.status &&
+              $scope.workload.security.scan_summary.status === "scanning") ||
             node.data.state === "exit"
           );
-          if (node.data.wl_brief.state === "exit")
-            $scope.getScanReport($scope.workload.wl_brief.id, true);
-          else $scope.getScanReport($scope.workload.wl_brief.id, false);
+          if (node.data.brief.state === "exit")
+            $scope.getScanReport($scope.workload.brief.id, true);
+          else $scope.getScanReport($scope.workload.brief.id, false);
           if (
-            $scope.workload.wl_security.scan_summary &&
-            $scope.workload.wl_security.scan_summary.status &&
-            $scope.workload.wl_security.scan_summary.status === "scanning"
+            $scope.workload.security.scan_summary &&
+            $scope.workload.security.scan_summary.status &&
+            $scope.workload.security.scan_summary.status === "scanning"
           ) {
-            getContainerInfo($scope.workload.wl_brief.id);
+            getContainerInfo($scope.workload.brief.id);
           }
         }
         if ($scope.selectedIndex === 1) {
-          $scope.getCompliance($scope.workload.wl_brief.id);
+          $scope.getCompliance($scope.workload.brief.id);
         }
         console.log($scope.workload);
       }
@@ -327,19 +327,19 @@
         $scope.eof = data.length < PAGE_SIZE;
         $scope.workloads = $scope.workloads.concat(data);
         $scope.workloads.map(function (workload) {
-          $scope.workloadsMap[workload.wl_brief.id] = workload;
+          $scope.workloadsMap[workload.brief.id] = workload;
         });
 
         if (imageId && imageId !== "null") {
           $scope.workloads = $scope.workloads.filter(function (item) {
-            return item.wl_brief.id === imageId;
+            return item.brief.id === imageId;
           });
           $scope.selectedIndex = 2;
         }
 
         if ($scope.workloads.length > 0) {
           $scope.hasContainer = true;
-          if ($scope.workloads[0].wl_brief.name.startsWith("k8s_")) {
+          if ($scope.workloads[0].brief.name.startsWith("k8s_")) {
             entityName = podPostFix;
           } else {
             entityName = containerPostFix;
@@ -352,7 +352,7 @@
 
         if (!$scope.showExitNode) {
           $scope.workloads = $scope.workloads.filter(function (item) {
-            return item.wl_brief.state !== "exit";
+            return item.brief.state !== "exit";
           });
         }
 
@@ -363,7 +363,7 @@
         setTimeout(function () {
           $scope.gridOptions.api.forEachNode(function (node, index) {
             if (currSelectedWorkload) {
-              if (node.data.id === currSelectedWorkload.wl_brief.id) {
+              if (node.data.id === currSelectedWorkload.brief.id) {
                 node.setSelected(true, true);
                 if (!noAutoScan) onRow(node);
                 $scope.gridOptions.api.ensureNodeVisible(node, "middle");
@@ -381,7 +381,7 @@
         //prepare pdf charts
 
         $scope.quarantineData = $scope.workloads.filter(function (item) {
-          return item.wl_brief.state === "quarantined";
+          return item.brief.state === "quarantined";
         });
 
         $scope.hasQuarantineData = $scope.quarantineData.length > 0;
@@ -432,13 +432,13 @@
 
       $scope.getProcess = function (workload) {
         $scope.stopRefresh();
-        if (workload.wl_brief.state !== "exit") {
+        if (workload.brief.state !== "exit") {
           let url = CONTAINER_PROCESS_URL;
           if (!$scope.hideExitedProcess) {
             url = CONTAINER_PROCESS_HISTORY_URL;
           }
           $http
-            .get(url, { params: { id: workload.wl_brief.id } })
+            .get(url, { params: { id: workload.brief.id } })
             .then(function (response) {
               /** @namespace response.data.processes */
               $scope.procGridOptions.overlayNoRowsTemplate =
@@ -484,7 +484,7 @@
         $scope.stopRefresh();
         resetChartData();
         initData();
-        $scope.refreshStats($scope.workload.wl_brief.id);
+        $scope.refreshStats($scope.workload.brief.id);
       };
     }
 
@@ -868,7 +868,7 @@
         setTimeout(function () {
           $scope.gridOptions.api.forEachNode((node, index) => {
             if ($scope.workload) {
-              if (node.data.id === $scope.workload.wl_brief.id) {
+              if (node.data.id === $scope.workload.brief.id) {
                 node.setSelected(true, true);
                 $scope.gridOptions.api.ensureNodeVisible(node, "middle");
               }
@@ -898,7 +898,7 @@
       if (
         containerId === null ||
         typeof containerId === "undefined" ||
-        $scope.workload.wl_brief.state === "unmanaged"
+        $scope.workload.brief.state === "unmanaged"
       ) {
         $scope.noStats = true;
         return;
@@ -1064,12 +1064,12 @@
         return (
           $scope.workloads
             .filter((workload) => {
-              return workload.wl_brief.state !== "exit";
+              return workload.brief.state !== "exit";
             })
             .findIndex(function (item) {
               return (
-                item.wl_security.scan_summary.status !== "finished" &&
-                item.wl_security.scan_summary.status !== "failed"
+                item.security.scan_summary.status !== "finished" &&
+                item.security.scan_summary.status !== "failed"
               );
             }) < 0
         );
@@ -1115,7 +1115,7 @@
 
     $scope.toggleShowingAcceptedVuls = function(isShowingAccepted) {
       $scope.isShowingAccepted = !isShowingAccepted;
-      $scope.getScanReport($scope.workload.wl_brief.id, $scope.workload.wl_brief.state === "exit", $scope.isShowingAccepted);
+      $scope.getScanReport($scope.workload.brief.id, $scope.workload.brief.state === "exit", $scope.isShowingAccepted);
     };
 
     $scope.configAutoScan = function (scanConfig) {
@@ -1178,10 +1178,10 @@
     const getContainerInfo = function (id) {
       stopInterval();
       onScanInterval = $interval(function () {
-        if ($scope.workload.wl_brief.id === id) {
+        if ($scope.workload.brief.id === id) {
           if (
-            $scope.workload.wl_security.scan_summary.status === "finished" ||
-            $scope.workload.wl_security.scan_summary.status === "failed"
+            $scope.workload.security.scan_summary.status === "finished" ||
+            $scope.workload.security.scan_summary.status === "failed"
           )
             $scope.$broadcast("stop-manual-loading");
         }
@@ -1192,7 +1192,7 @@
     $scope.scan = function (id) {
       ScanFactory.startScan(SCAN_CONTAINER_URL, id)
         .then(function () {
-          $scope.workload.wl_security.scan_summary.status = "scanning";
+          $scope.workload.security.scan_summary.status = "scanning";
           getContainerInfo(id);
         })
         .catch(function (err) {
@@ -1252,7 +1252,7 @@
         csvTitle = csvTitle.filter((title) => title).join(",");
         let csv = Utils.arrayToCsv(benches4Csv, csvTitle);
         let blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
-        let filename = `compliance-${$scope.workload.wl_brief.name}_${Utils.parseDatetimeStr(new Date())}.csv`;
+        let filename = `compliance-${$scope.workload.brief.name}_${Utils.parseDatetimeStr(new Date())}.csv`;
         FileSaver.saveAs(blob, filename);
       }
     };
@@ -1275,7 +1275,7 @@
         let csv = Utils.arrayToCsv(vulnerabilities4Csv);
         let blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
         let filename =
-          `vulnerabilities-${$scope.workload.wl_brief.display_name}_${Utils.parseDatetimeStr(new Date())}.csv`;
+          `vulnerabilities-${$scope.workload.brief.display_name}_${Utils.parseDatetimeStr(new Date())}.csv`;
         FileSaver.saveAs(blob, filename);
       }
     };
@@ -1287,9 +1287,9 @@
             {
               name: data.name,
               days: 0,
-              comment: `Vulnerability was accepted on ${$scope.workload.wl_brief.display_name} at ${$filter("date")(new Date(), "MMM dd, y HH:mm:ss")} from Containers page`,
+              comment: `Vulnerability was accepted on ${$scope.workload.brief.display_name} at ${$filter("date")(new Date(), "MMM dd, y HH:mm:ss")} from Containers page`,
               images: [],
-              domains: [$scope.workload.wl_brief.domain]
+              domains: [$scope.workload.brief.domain]
             }
           ],
           name: "default"

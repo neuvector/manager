@@ -31,14 +31,14 @@
         }
 
         function innerCellRenderer(params) {
-          return $sanitize(params.data.wl_brief.display_name);
+          return $sanitize(params.data.brief.display_name);
         }
 
         function dateComparator(value1, value2, node1, node2) {
           /** @namespace node1.data.started_at */
           return (
-            node1.data.wl_security.scan_summary.scanned_timestamp -
-            node2.data.wl_security.scan_summary.scanned_timestamp
+            node1.data.security.scan_summary.scanned_timestamp -
+            node2.data.security.scan_summary.scanned_timestamp
           );
         }
 
@@ -57,45 +57,45 @@
         const containerColumns = [
           {
             headerName: $translate.instant("containers.detail.NAME"),
-            field: "wl_brief.display_name",
+            field: "brief.display_name",
             cellRenderer: "agGroupCellRenderer",
             cellRendererParams: { innerRenderer: innerCellRenderer }
           },
           {
             headerName: $translate.instant("containers.detail.NAME"),
-            field: "wl_brief.name",
+            field: "brief.name",
             hide: true
           },
           {
             headerName: "Id",
-            field: "wl_brief.id",
+            field: "brief.id",
             hide: true
           },
           {
             headerName: $translate.instant("group.gridHeader.DOMAIN"),
-            field: "wl_brief.domain"
+            field: "brief.domain"
           },
           {
             headerName: $translate.instant("containers.detail.HOST_NAME"),
-            field: "wl_brief.host_name"
+            field: "brief.host_name"
           },
           {
             headerName: $translate.instant(
               "containers.detail.NETWORK_INTERFACES"
             ),
             valueGetter: function(params) {
-              /** @namespace params.data.wl_security.interfaces */
-              return getIps(params.data.wl_security.interfaces);
+              /** @namespace params.data.rt_attributes.interfaces */
+              return getIps(params.data.rt_attributes.interfaces);
             },
             hide: true
           },
           {
             headerName: $translate.instant("containers.detail.APPLICATIONS"),
-            field: "wl_security.applications"
+            field: "rt_attributes.applications"
           },
           {
             headerName: $translate.instant("containers.detail.STATE"),
-            field: "wl_brief.state",
+            field: "brief.state",
             cellRenderer: function(params) {
               let displayState = Utils.getI18Name(params.value);
 
@@ -111,14 +111,14 @@
           },
           {
             headerName: $translate.instant("scan.gridHeader.STATUS"),
-            field: "wl_security.scan_summary.status",
+            field: "security.scan_summary.status",
             cellRenderer: function(params) {
               let labelCode = colourMap[params.value];
               if (!labelCode) return null;
               else {
                 if (
-                  params.data.wl_security.scan_summary.result &&
-                  params.data.wl_security.scan_summary.result !== "succeeded"
+                  params.data.security.scan_summary.result &&
+                  params.data.security.scan_summary.result !== "succeeded"
                 ) {
                   let html = $sanitize(
                     `<div>${params.data.scan_summary.result}</div>`
@@ -142,16 +142,16 @@
           },
           {
             headerName: $translate.instant("scan.gridHeader.HIGH"),
-            field: "wl_security.scan_summary.high",
+            field: "security.scan_summary.high",
             cellRenderer: function(params) {
               if (
                 params.data.children &&
                 params.data.children.length > 0 &&
-                (params.data.wl_security.scan_summary.hidden_high ||
-                  params.data.wl_security.scan_summary.hidden_high === 0)
+                (params.data.security.scan_summary.hidden_high ||
+                  params.data.security.scan_summary.hidden_high === 0)
               ) {
                 return $sanitize(
-                  `${params.value} (${params.data.wl_security.scan_summary.hidden_high})`
+                  `${params.value} (${params.data.security.scan_summary.hidden_high})`
                 );
               } else {
                 return $sanitize(params.value);
@@ -169,16 +169,16 @@
           },
           {
             headerName: $translate.instant("scan.gridHeader.MEDIUM"),
-            field: "wl_security.scan_summary.medium",
+            field: "security.scan_summary.medium",
             cellRenderer: function(params) {
               if (
                 params.data.children &&
                 params.data.children.length > 0 &&
-                (params.data.wl_security.scan_summary.hidden_medium ||
-                  params.data.wl_security.scan_summary.hidden_medium === 0)
+                (params.data.security.scan_summary.hidden_medium ||
+                  params.data.security.scan_summary.hidden_medium === 0)
               ) {
                 return $sanitize(
-                  `${params.value} (${params.data.wl_security.scan_summary.hidden_medium})`
+                  `${params.value} (${params.data.security.scan_summary.hidden_medium})`
                 );
               } else {
                 return $sanitize(params.value);
@@ -194,7 +194,7 @@
           },
           {
             headerName: $translate.instant("scan.gridHeader.TIME"),
-            field: "wl_security.scan_summary.scanned_at",
+            field: "security.scan_summary.scanned_at",
             cellRenderer: function(params) {
               return $sanitize(
                 $filter("date")(params.value, "MMM dd, y HH:mm:ss")
@@ -211,18 +211,18 @@
         ];
 
         function highComparator(value1, value2, node1, node2) {
-          /** @namespace node1.data.wl_security.scan_summary.hidden_high */
+          /** @namespace node1.data.security.scan_summary.hidden_high */
           return (
-            node1.data.wl_security.scan_summary.hidden_high -
-            node2.data.wl_security.scan_summary.hidden_high
+            node1.data.security.scan_summary.hidden_high -
+            node2.data.security.scan_summary.hidden_high
           );
         }
 
         function mediumComparator(value1, value2, node1, node2) {
-          /** @namespace node1.data.wl_security.scan_summary.hidden_medium */
+          /** @namespace node1.data.security.scan_summary.hidden_medium */
           return (
-            node1.data.wl_security.scan_summary.hidden_medium -
-            node2.data.wl_security.scan_summary.hidden_medium
+            node1.data.security.scan_summary.hidden_medium -
+            node2.data.security.scan_summary.hidden_medium
           );
         }
 
@@ -808,13 +808,13 @@
           .then(function(response) {
             let container = response.data.workload;
             if (
-              response.data.workload.wl_rt_attributes.labels &&
-              response.data.workload.wl_rt_attributes.labels["io.kubernetes.container.name"] ===
+              response.data.workload.rt_attributes.labels &&
+              response.data.workload.rt_attributes.labels["io.kubernetes.container.name"] ===
                 "POD"
             ) {
               container.images = [];
             } else {
-              container.images = [response.data.workload.wl_brief.image];
+              container.images = [response.data.workload.brief.image];
             }
             if (container.children && container.children.length > 0) {
               container.children.forEach(function(child) {

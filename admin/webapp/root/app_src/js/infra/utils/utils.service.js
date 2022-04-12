@@ -593,7 +593,7 @@
           applications: workload.applications ? `'${workload.applications.join(", ")}'` : "",
           service_group: workload.service_group,
           network_mode: workload.network_mode,
-          enforcer_id: workload.enforcer_id,
+          enforcer_name: workload.enforcer_name,
           privileged: workload.privileged,
           interfaces: workload.interfaces ? `'${Object.entries(workload.interfaces).map(([key, value]) => {
             //IP: ${value.ip}/${value.ip_prefix}, Gateway: ${value.gateway ? value.gateway : ""}

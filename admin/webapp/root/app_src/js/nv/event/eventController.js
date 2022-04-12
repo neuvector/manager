@@ -215,16 +215,16 @@
                                  ${params.data.controller_id}
                                </span><br/>`;
                 }
-                if (params.data.enforcer_id) {
+                if (params.data.enforcer_name) {
                   location += `<strong>${$translate.instant("event.gridHeader.ENFORCER_ID")} :</strong><span>
-                                 ${params.data.enforcer_id}
+                                 ${params.data.enforcer_name}
                                </span><br/>`;
                 }
               }
               if (params.data.name === "Agent.Memory.Pressure" || params.data.name === "Agent.Memory.Overusage") {
-                if (params.data.enforcer_id) {
+                if (params.data.enforcer_name) {
                   location += `<strong>${$translate.instant("event.gridHeader.ENFORCER_ID")} :</strong><span>
-                                 ${params.data.enforcer_id}
+                                 ${params.data.enforcer_name}
                                </span><br/>`;
                 }
               }

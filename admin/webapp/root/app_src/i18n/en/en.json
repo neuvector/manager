@@ -183,7 +183,9 @@
     "CLUSTER.STATUS.LICENSE_DISALLOW": "IMPROPER LICENSE",
     "CLUSTER.STATUS.KICKED": "KICKED",
     "HIDE_ACCEPTED_VULS": "Hide Accepted Vulnerabilities",
-    "SHOW_ACCEPTED_VULS": "Show Accepted Vulnerabilities"
+    "SHOW_ACCEPTED_VULS": "Show Accepted Vulnerabilities",
+    "HIDE_DETAILS": "Hide Details",
+    "SHOW_DETAILS": "Show Details"
   },
   "logout": {
     "SIGN_OUT": "Signed Out Already",
@@ -1556,7 +1558,7 @@
       "NODE": "Node",
       "CONTAINER": "Container",
       "CONTROLLER_ID": "Controller ID",
-      "ENFORCER_ID": "Enforcer ID",
+      "ENFORCER_ID": "Enforcer",
       "LOCATION": "Location",
       "USER_NAME": "User Name",
       "USER_ADDR": "User Address",
@@ -1858,7 +1860,7 @@
     "HIDE_SYS_GROUPS": "HIDE SYSTEM GROUPS",
     "SHOW_SYS_GROUPS": "SHOW SYSTEM GROUPS",
     "SELECT_ALL_ALERT": "The selection contains 'nodes' group. Please confirm if you want to switch this group to ",
-    "SWITCH_MODE_DISABLED": "Policy mode cannot be switched for one or more currently selected groups.",
+    "SWITCH_MODE_DISABLED": "Policy mode in following {{noModeGroupCount}} group(s) cannot be switched.",
     "SCORED_DISABLED": "Cannot turn on/off scorable attribute for one or more currently selected groups.",
     "MODE_NODES": " mode or unselect it.",
     "SWITCH_SCORABLE": "Scorable",

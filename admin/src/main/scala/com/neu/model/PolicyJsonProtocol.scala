@@ -74,10 +74,10 @@ object PolicyJsonProtocol extends DefaultJsonProtocol with LazyLogging {
   implicit val promoteConfigFormat: RootJsonFormat[PromoteConfig] = jsonFormat1(PromoteConfig)
 
   implicit val workloadBriefV2Format: RootJsonFormat[WorkloadBriefV2] = jsonFormat12(WorkloadBriefV2)
-  implicit val workloadSecurityV2Format: RootJsonFormat[WorkloadSecurityV2] = jsonFormat14(WorkloadSecurityV2)
-  implicit val workloadRtAttribesV2Format: RootJsonFormat[WorkloadRtAttribesV2] = jsonFormat8(WorkloadRtAttribesV2)
-  implicit val workloadV2ChildFormat: RootJsonFormat[WorkloadV2Child] = jsonFormat11(WorkloadV2Child)
-  implicit val workloadV2Format: RootJsonFormat[WorkloadV2] = jsonFormat12(WorkloadV2)
+  implicit val workloadSecurityV2Format: RootJsonFormat[WorkloadSecurityV2] = jsonFormat10(WorkloadSecurityV2)
+  implicit val workloadRtAttribesV2Format: RootJsonFormat[WorkloadRtAttribesV2] = jsonFormat12(WorkloadRtAttribesV2)
+  implicit val workloadV2ChildFormat: RootJsonFormat[WorkloadV2Child] = jsonFormat12(WorkloadV2Child)
+  implicit val workloadV2Format: RootJsonFormat[WorkloadV2] = jsonFormat13(WorkloadV2)
   implicit val workloadsWrapV2Format: RootJsonFormat[WorkloadsWrapV2] = jsonFormat1(WorkloadsWrapV2)
 
   def policyToJson(policy: Policy): String    = policy.toJson.compactPrint
@@ -235,33 +235,33 @@ object PolicyJsonProtocol extends DefaultJsonProtocol with LazyLogging {
       .map(
         workload => {
 
-          var high   = workload.wl_security.scan_summary.high;
-          var medium = workload.wl_security.scan_summary.medium;
+          var high   = workload.security.scan_summary.high;
+          var medium = workload.security.scan_summary.medium;
           workload.children.foreach(
             child => {
-              high += child.wl_security.scan_summary.high
-              medium += child.wl_security.scan_summary.medium
+              high += child.security.scan_summary.high
+              medium += child.security.scan_summary.medium
             }
           )
 
-          val wlSecurity = workload.wl_security.copy(
+          val wlSecurity = workload.security.copy(
             scan_summary = ScanSummary(
-              workload.wl_security.scan_summary.status,
-              workload.wl_security.scan_summary.high,
-              workload.wl_security.scan_summary.medium,
+              workload.security.scan_summary.status,
+              workload.security.scan_summary.high,
+              workload.security.scan_summary.medium,
               Option(high),
               Option(medium),
-              workload.wl_security.scan_summary.result,
-              workload.wl_security.scan_summary.scanned_timestamp,
-              workload.wl_security.scan_summary.scanned_at,
-              workload.wl_security.scan_summary.base_os,
-              workload.wl_security.scan_summary.scanner_version,
-              workload.wl_security.scan_summary.cvedb_create_time
+              workload.security.scan_summary.result,
+              workload.security.scan_summary.scanned_timestamp,
+              workload.security.scan_summary.scanned_at,
+              workload.security.scan_summary.base_os,
+              workload.security.scan_summary.scanner_version,
+              workload.security.scan_summary.cvedb_create_time
             )
           )
 
           workload.copy(
-            wl_security = wlSecurity
+            security = wlSecurity
           )
         }
       )

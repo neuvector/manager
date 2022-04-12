@@ -356,7 +356,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-sm-4">
+                      <div class="col-sm-4" ng-if="workload.rt_attributes.service_account">
                         <div class="nv-resources-detail">
                           <div>{{'network.gridHeader.SERVICE_ACCOUNT' | translate}}</div>
                           <div class="icon">
@@ -374,7 +374,7 @@
                       </div>
                     <!-- </div>
                     <div class="row"> -->
-                      <div class="col-sm-4">
+                      <div class="col-sm-4" ng-if="workload.rt_attributes.network_mode">
                         <div class="nv-resources-detail">
                           <div>
                             {{'containers.detail.NETWORK_MODE' | translate}}
@@ -384,11 +384,11 @@
                           </div>
                           <div
                             class="auto-hide text-muted"
-                            uib-tooltip="{{workload.attributes.network_mode}}"
+                            uib-tooltip="{{workload.rt_attributes.network_mode}}"
                             tooltip-enable="false"
                             show-tooltip-on-text-overflow
                           >
-                            {{workload.attributes.network_mode}}
+                            {{workload.rt_attributes.network_mode}}
                           </div>
                         </div>
                       </div>
@@ -453,11 +453,11 @@
                           </div>
                           <div
                             class="auto-hide text-muted"
-                            uib-tooltip="{{workload.enforcer_id}}"
+                            uib-tooltip="{{workload.enforcer_name}}"
                             tooltip-enable="false"
                             show-tooltip-on-text-overflow
                           >
-                            {{workload.enforcer_id}}
+                            {{workload.enforcer_name}}
                           </div>
                         </div>
                       </div>
@@ -482,7 +482,7 @@
                   </div>
                 </div>
                 <div
-                  ng-if="!isEmpty(workload.attributes.interfaces)"
+                  ng-if="!isEmpty(workload.rt_attributes.interfaces)"
                   class="containers-detail-sec"
                 >
                   <div class="title">
@@ -491,7 +491,7 @@
                   <div class="list-details">
                     <div
                       class="row"
-                      ng-repeat="(name, nets) in workload.attributes.interfaces"
+                      ng-repeat="(name, nets) in workload.rt_attributes.interfaces"
                     >
                       <div class="col-sm-2 text-right" ng-class-even="'bg-gray'">
                         {{name}}
@@ -511,7 +511,7 @@
                   </div>
                 </div>
                 <div
-                  ng-if="workload.attributes.ports.length > 0"
+                  ng-if="workload.rt_attributes.ports.length > 0"
                   class="containers-detail-sec"
                 >
                   <div class="title">
@@ -520,7 +520,7 @@
                   <div class="list-details">
                     <div
                       class="row m0"
-                      ng-repeat="mapping in workload.attributes.ports"
+                      ng-repeat="mapping in workload.rt_attributes.ports"
                       ng-class-even="'bg-gray-lighter-1'"
                     >
                       <div class="col-sm-2 text-right">

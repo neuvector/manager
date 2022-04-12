@@ -1554,7 +1554,7 @@
       "NODE": "主机",
       "CONTAINER": "容器",
       "CONTROLLER_ID": "控制器ID",
-      "ENFORCER_ID": "代理ID",
+      "ENFORCER_ID": "代理",
       "LOCATION": "定位",
       "USER_NAME": "用户名",
       "USER_ADDR": "用户地址",

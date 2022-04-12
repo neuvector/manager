@@ -84,14 +84,14 @@
               "containers.detail.NETWORK_INTERFACES"
             ),
             valueGetter: function(params) {
-              /** @namespace params.data.attributes.interfaces */
-              return getIps(params.data.attributes.interfaces);
+              /** @namespace params.data.rt_attributes.interfaces */
+              return getIps(params.data.rt_attributes.interfaces);
             },
             hide: true
           },
           {
             headerName: $translate.instant("containers.detail.APPLICATIONS"),
-            field: "attributes.applications"
+            field: "rt_attributes.applications"
           },
           {
             headerName: $translate.instant("containers.detail.STATE"),

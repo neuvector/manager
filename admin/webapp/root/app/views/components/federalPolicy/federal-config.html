@@ -25,9 +25,9 @@
           <span editable-text="webhook.url" e-name="url" e-form="webhookForm" e-ng-style="{'width': widthOfUrlBox2}" onbeforesave="sysCtrl.checkUrl($data, $index)" e-required="">{{ webhook.url || &apos;empty&apos; }}</span>
         </td>
         <td>
-          <span editable-select="webhook.type" e-name="type" onshow="sysCtrl.loadTypes()" e-form="webhookForm" e-ng-options="type.id as type.text for type in webhookTypes">
+          <span editable-select="webhook.type" e-name="type" onshow="sysCtrl.loadTypes()" e-form="webhookForm" e-ng-options="type.id as type.display for type in webhookTypes">
             <span ng-if="sysCtrl.showType(webhook) === 'Slack'" class="label label-info"><em class="fa fa-slack"></em>Slack</span>
-            <span ng-if="sysCtrl.showType(webhook) === 'Teams'" class="label label-info">Teams</span>
+            <span ng-if="sysCtrl.showType(webhook) === 'Teams'" class="label label-info">MS Teams</span>
             <span ng-if="sysCtrl.showType(webhook) === 'JSON'" class="label label-info">JSON</span>
             <span ng-if="sysCtrl.showType(webhook) !== 'Teams' && sysCtrl.showType(webhook) !== 'JSON' && sysCtrl.showType(webhook) !== 'Slack'">{{sysCtrl.showType(webhook)}}</span>
           </span>

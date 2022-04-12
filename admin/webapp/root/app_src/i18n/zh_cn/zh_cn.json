@@ -182,7 +182,9 @@
     "CLUSTER.STATUS.LICENSE_DISALLOW": "不适当许可证",
     "CLUSTER.STATUS.KICKED": "已被移除",
     "HIDE_ACCEPTED_VULS": "隐藏接受的漏洞",
-    "SHOW_ACCEPTED_VULS": "显示接受的漏洞"
+    "SHOW_ACCEPTED_VULS": "显示接受的漏洞",
+    "HIDE_DETAILS": "隐藏详细内容",
+    "SHOW_DETAILS": "显示详细内容"
   },
   "logout": {
     "SIGN_OUT": "已经登出了",
@@ -1856,7 +1858,7 @@
     "HIDE_SYS_GROUPS": "隐藏系统组",
     "SHOW_SYS_GROUPS": "显示系统组",
     "SELECT_ALL_ALERT": "已选组里含有 \"nodes\" 组， 请确认是否将此组切换成",
-    "SWITCH_MODE_DISABLED": "在一些现在选中的组上策略模式不能被切换",
+    "SWITCH_MODE_DISABLED": "以下{{noModeGroupCount}}组上策略模式不能被切换",
     "SCORED_DISABLED": "在一些现在选中的组上评分属性不能被开关",
     "MODE_NODES": "模式或者不选择此组的。",
     "SWITCH_SCORABLE": "参与评分",

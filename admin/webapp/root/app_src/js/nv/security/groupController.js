@@ -1193,7 +1193,8 @@
               locals: {
                 refresh: $scope.refresh,
                 callback: $scope.switchServiceMode,
-                counts: getModeCounts()
+                counts: getModeCounts(),
+                noModeList: $scope.noModeList || []
               }
             })
             .then(
@@ -3684,7 +3685,8 @@
     "FileUploader",
     "refresh",
     "callback",
-    "counts"
+    "counts",
+    "noModeList"
   ]
   function DialogController4SwitchMode(
     $rootScope,
@@ -3699,7 +3701,8 @@
     FileUploader,
     refresh,
     callback,
-    counts
+    counts,
+    noModeList
   ) {
 
     $scope.cancel = function() {
@@ -3709,6 +3712,10 @@
     activate();
 
     function activate() {
+      $scope.noModeList = noModeList;
+      $scope.isExpandingGroupList = false;
+      $scope.noModeGroupMsg = $scope.noModeList.length > 0 ?
+        $translate.instant("group.SWITCH_MODE_DISABLED", {noModeGroupCount: $scope.noModeList.length}): "";
       $scope.switch = {
         zeroDrift: 'basic'
       };

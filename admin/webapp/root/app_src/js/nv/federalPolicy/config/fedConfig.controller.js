@@ -42,10 +42,10 @@
       $scope.isWebhookAuthorized = AuthorizationFactory.getDisplayFlag("write_config") && isFed;
       const OTHER_TYPE = $translate.instant("setting.webhook.OTHER_TYPE");
       $scope.webhookTypes = [
-        {id: 0, text: "Slack"},
-        {id: 1, text: "JSON"},
-        {id: 2, text: "Teams"},
-        {id: 3, text: OTHER_TYPE}
+        {id: 0, text: "Slack", display: "Slack"},
+        {id: 1, text: "Teams", display: "MS Teams"},
+        {id: 2, text: "JSON", display: "JSON"},
+        {id: 3, text: OTHER_TYPE, display: OTHER_TYPE}
       ];
       $scope.webhookEntry = {
         name: "",

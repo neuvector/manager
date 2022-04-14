@@ -125,6 +125,7 @@ const colourMap = {
   FED: "fed-rule",
   USER_CREATED: "customer-rule",
   FEDERAL: "fed-rule",
+  SYSTEM_DEFINED: "success",
   "learn-rule": "learn-rule",
   "customer-rule": "customer-rule",
   "new-rule": "new-rule",

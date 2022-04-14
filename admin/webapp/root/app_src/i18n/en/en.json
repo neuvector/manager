@@ -1847,6 +1847,7 @@
     "LEARNED": "Learned",
     "CUSTOM": "User Created",
     "GROUND": "CRD",
+    "SYSTEM_DEFINED": "Predefined",
     "LOCAL": "Local",
     "FED": "Federated",
     "USER_CREATED": "User Created",

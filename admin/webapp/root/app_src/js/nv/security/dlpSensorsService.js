@@ -143,11 +143,6 @@
                         field: "cfg_type",
                         cellRenderer: (params) => {
                           if (params) {
-                            if (params.data && params.data.predefine) {
-                              return `<div class="action-label nv-label success">${$sanitize(
-                                $translate.instant("group.PREDEFINED")
-                              )}</div>`;
-                            }
                             let cfgType = params.value ? params.value.toUpperCase() : CFG_TYPE.CUSTOMER.toUpperCase();
                             let type = colourMap[cfgType];
                             return `<div class="action-label nv-label ${type}">${$sanitize(

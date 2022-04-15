@@ -43,7 +43,7 @@ def request_federation(data):
 @click.option("--name", help="The name to use for this cluster")
 @click.option("--server", help="Exposed rest ip/fqdn of this primary cluster")
 @click.option("--port", help="Exposed rest port of this primary cluster")
-@click.option("--use_proxy", default="", type=click.Choice(["http", "https", ""]),
+@click.option("--use_proxy", default="", type=click.Choice(["https", ""]),
               help="Use configured system https proxy or not when connecting to managed cluster")
 @click.pass_obj
 def request_federation_promote(data, name, server, port, use_proxy):
@@ -124,7 +124,7 @@ def request_federation_join_token(data, duration):
 @click.option("--local_server", help="Exposed rest ip/fqdn of this cluster")
 @click.option("--local_port", help="Exposed rest port of this cluster")
 @click.option("--token", required=True, help="join-token issed by primary cluster")
-@click.option("--use_proxy", default="", type=click.Choice(["http", "https", "", None]),
+@click.option("--use_proxy", default="", type=click.Choice("https", "", None]),
               help="Use proxy when connecting to primary cluster")
 @click.pass_obj
 def request_federation_join(data, name, server, port, local_server, local_port, token, use_proxy):
@@ -312,7 +312,7 @@ def set_federation(data):
 @click.option("--name", help="The name to use for this cluster")
 @click.option("--server", help="Exposed rest ip/fqdn of this cluster")
 @click.option("--port", help="Exposed rest port of this cluster")
-@click.option("--use_proxy", default="", type=click.Choice(["http", "https", ""]),
+@click.option("--use_proxy", default="", type=click.Choice(["https", ""]),
               help="Use proxy when connecting to remote cluster")
 @click.pass_obj
 def set_federation_config(data, name, server, port, use_proxy):

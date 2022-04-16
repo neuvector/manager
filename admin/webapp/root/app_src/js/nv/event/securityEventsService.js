@@ -404,7 +404,7 @@
       };
 
       SecurityEventsFactory.getContainer = function(id) {
-        return $http.get(`${CONTAINER_URL}${CONTAINER_BY_ID}`, {
+        return $http.get(CONTAINER_BY_ID, {
           params: { id: id }
         });
       };

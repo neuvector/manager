@@ -699,6 +699,12 @@
           document.onmouseup = null;
           document.onmousemove = null;
         }
+      },
+      sortByDisplayName: function (a,b) {
+          const name_a = a.display_name.toLowerCase();
+          const name_b = b.display_name.toLowerCase();
+          if (name_a === name_b) return 0;
+          return name_a > name_b ? 1 : -1;
       }
     };
   }

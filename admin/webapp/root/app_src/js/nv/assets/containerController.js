@@ -130,7 +130,7 @@
     function activate() {
       let imageId = decodeURIComponent($stateParams.imageId);
 
-      ContainerFactory.prepareGrids();
+      ContainerFactory.prepareGrids(true);
       ContainerFactory.prepareProcessGrids();
       ComplianceFactory.prepareGrids();
       ScanFactory.setGrids();

@@ -935,7 +935,9 @@
       $timeout(() => {
         vm.isUpdatingConfig = true;
         let configBody = {
-          controller_debug: vm.controllerDebugEnabled ? ["cpath"] : []
+          config: {
+            controller_debug: vm.controllerDebugEnabled ? ["cpath"] : []
+          }
         }
         $http
           .patch(CONFIG_URL, configBody)

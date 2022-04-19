@@ -20,18 +20,23 @@
       <label class="text-gray-label hand">{{'group.IMPORT_GROUP_POLICY' | translate | uppercase}}</label>
     </div>
     <div class="pull-left content-title">{{'sidebar.nav.GROUP' | translate}}</div>
-    <div class="pull-left ml mt" ng-if="netServiceStatus !== undefined">
-      <span class="text-muted">
-        {{'setting.NET_SERVICE_POLICY_MODE' | translate}}:&nbsp;
-      </span>
-      <span
-        class="text-bold"
-        ng-class="{'text-muted': !netServiceStatus, 'text-success': netServiceStatus}"
-      >
-        {{netServiceStatus ? 'ON' : 'OFF'}}
-      </span>
-      <em class="fa fa-info-circle text-info" uib-tooltip="{{netServiceStatus ? netServicePolicyMode : ''}}{{netServiceStatus ? 'setting.description.ENABLED_NET_POLICY_MODE_GROUP' : 'setting.description.DISABLED_NET_POLICY_MODE' | translate }}">
-      </em>
+    <div class="pull-left ml" ng-if="netServiceStatus !== undefined">
+      <div>
+        <span class="text-muted">
+          {{'setting.NET_SERVICE_POLICY_MODE' | translate}}:&nbsp;
+        </span>
+        <span
+          class="text-bold"
+          ng-class="{'text-muted': !netServiceStatus, 'text-success': netServiceStatus}"
+        >
+          {{netServiceStatus ? 'ON' : 'OFF'}}
+        </span>
+        <em class="fa fa-info-circle text-info" uib-tooltip="{{netServiceStatus ? netServicePolicyMode : ''}}{{netServiceStatus ? 'setting.description.ENABLED_NET_POLICY_MODE_GROUP' : 'setting.description.DISABLED_NET_POLICY_MODE' | translate }}">
+        </em>
+      </div>
+      <div>
+        <a href="#/app/configuration">{{'sidebar.nav.SETTING' | translate}}&nbsp;>&nbsp;{{'sidebar.nav.CONFIGURATION' | translate}}</a>
+      </div>
     </div>
   </div>
 

@@ -14,7 +14,7 @@
     ) {
       let ContainerFactory = {};
 
-      ContainerFactory.prepareGrids = function() {
+      ContainerFactory.prepareGrids = function(isFromV2) {
         let _gridOptions = null;
         let _processGridOptions = null;
 
@@ -31,15 +31,24 @@
         }
 
         function innerCellRenderer(params) {
-          return $sanitize(params.data.brief.display_name);
+          return isFromV2 ?
+            $sanitize(params.data.brief.display_name) :
+            $sanitize(params.data.display_name);
         }
 
         function dateComparator(value1, value2, node1, node2) {
           /** @namespace node1.data.started_at */
-          return (
-            node1.data.security.scan_summary.scanned_timestamp -
-            node2.data.security.scan_summary.scanned_timestamp
-          );
+          if (isFromV2) {
+            return (
+              node1.data.security.scan_summary.scanned_timestamp -
+              node2.data.security.scan_summary.scanned_timestamp
+            );
+          } else {
+            return (
+              node1.data.scan_summary.scanned_timestamp -
+              node2.data.scan_summary.scanned_timestamp
+            );
+          }
         }
 
         function getWorkloadChildDetails(rowItem) {
@@ -57,27 +66,27 @@
         const containerColumns = [
           {
             headerName: $translate.instant("containers.detail.NAME"),
-            field: "brief.display_name",
+            field: isFromV2 ? "brief.display_name" : "display_name",
             cellRenderer: "agGroupCellRenderer",
             cellRendererParams: { innerRenderer: innerCellRenderer }
           },
           {
             headerName: $translate.instant("containers.detail.NAME"),
-            field: "brief.name",
+            field: isFromV2 ? "brief.name" : "name",
             hide: true
           },
           {
             headerName: "Id",
-            field: "brief.id",
+            field: isFromV2 ? "brief.id" : "id",
             hide: true
           },
           {
             headerName: $translate.instant("group.gridHeader.DOMAIN"),
-            field: "brief.domain"
+            field: isFromV2 ? "brief.domain" : "domain"
           },
           {
             headerName: $translate.instant("containers.detail.HOST_NAME"),
-            field: "brief.host_name"
+            field: isFromV2 ? "brief.host_name" : "host_name"
           },
           {
             headerName: $translate.instant(
@@ -85,17 +94,17 @@
             ),
             valueGetter: function(params) {
               /** @namespace params.data.rt_attributes.interfaces */
-              return getIps(params.data.rt_attributes.interfaces);
+              return getIps(isFromV2 ? params.data.rt_attributes.interfaces : params.data.interfaces);
             },
             hide: true
           },
           {
             headerName: $translate.instant("containers.detail.APPLICATIONS"),
-            field: "rt_attributes.applications"
+            field: isFromV2 ? "rt_attributes.applications" : "applications"
           },
           {
             headerName: $translate.instant("containers.detail.STATE"),
-            field: "brief.state",
+            field: isFromV2 ? "brief.state" : "state",
             cellRenderer: function(params) {
               let displayState = Utils.getI18Name(params.value);
 
@@ -111,17 +120,18 @@
           },
           {
             headerName: $translate.instant("scan.gridHeader.STATUS"),
-            field: "security.scan_summary.status",
+            field: isFromV2 ? "security.scan_summary.status" : "scan_summary.status",
             cellRenderer: function(params) {
               let labelCode = colourMap[params.value];
               if (!labelCode) return null;
               else {
+                let scanResult = isFromV2 ? params.data.security.scan_summary.result : params.data.scan_summary.result;
                 if (
-                  params.data.security.scan_summary.result &&
-                  params.data.security.scan_summary.result !== "succeeded"
+                  scanResult &&
+                  scanResult !== "succeeded"
                 ) {
                   let html = $sanitize(
-                    `<div>${params.data.scan_summary.result}</div>`
+                    `<div>${scanResult}</div>`
                   );
                   return `<span class="label label-fs label-${labelCode}" uib-tooltip-html="'${html}'" tooltip-class="customClass">${Utils.getI18Name(
                     $sanitize(params.value)
@@ -142,16 +152,16 @@
           },
           {
             headerName: $translate.instant("scan.gridHeader.HIGH"),
-            field: "security.scan_summary.high",
+            field: isFromV2 ? "security.scan_summary.high" : "scan_summary.high",
             cellRenderer: function(params) {
+              let hiddenHighNumber = isFromV2 ? params.data.security.scan_summary.hidden_high : params.data.scan_summary.hidden_high ;
               if (
                 params.data.children &&
                 params.data.children.length > 0 &&
-                (params.data.security.scan_summary.hidden_high ||
-                  params.data.security.scan_summary.hidden_high === 0)
+                (hiddenHighNumber || hiddenHighNumber === 0)
               ) {
                 return $sanitize(
-                  `${params.value} (${params.data.security.scan_summary.hidden_high})`
+                  `${params.value} (${hiddenHighNumber})`
                 );
               } else {
                 return $sanitize(params.value);
@@ -169,16 +179,16 @@
           },
           {
             headerName: $translate.instant("scan.gridHeader.MEDIUM"),
-            field: "security.scan_summary.medium",
+            field: isFromV2 ? "security.scan_summary.medium" : "scan_summary.medium",
             cellRenderer: function(params) {
+              let hiddenMediumNumber = isFromV2 ? params.data.security.scan_summary.hidden_medium : params.data.scan_summary.hidden_medium;
               if (
                 params.data.children &&
                 params.data.children.length > 0 &&
-                (params.data.security.scan_summary.hidden_medium ||
-                  params.data.security.scan_summary.hidden_medium === 0)
+                (hiddenMediumNumber || hiddenMediumNumber === 0)
               ) {
                 return $sanitize(
-                  `${params.value} (${params.data.security.scan_summary.hidden_medium})`
+                  `${params.value} (${hiddenMediumNumber})`
                 );
               } else {
                 return $sanitize(params.value);
@@ -194,7 +204,7 @@
           },
           {
             headerName: $translate.instant("scan.gridHeader.TIME"),
-            field: "security.scan_summary.scanned_at",
+            field: isFromV2 ? "security.scan_summary.scanned_at" : "scan_summary.scanned_at",
             cellRenderer: function(params) {
               return $sanitize(
                 $filter("date")(params.value, "MMM dd, y HH:mm:ss")
@@ -212,18 +222,32 @@
 
         function highComparator(value1, value2, node1, node2) {
           /** @namespace node1.data.security.scan_summary.hidden_high */
-          return (
-            node1.data.security.scan_summary.hidden_high -
-            node2.data.security.scan_summary.hidden_high
-          );
+          if (isFromV2) {
+            return (
+              node1.data.security.scan_summary.hidden_high -
+              node2.data.security.scan_summary.hidden_high
+            );
+          } else {
+            return (
+              node1.data.scan_summary.hidden_high -
+              node2.data.scan_summary.hidden_high
+            );
+          }
         }
 
         function mediumComparator(value1, value2, node1, node2) {
           /** @namespace node1.data.security.scan_summary.hidden_medium */
-          return (
-            node1.data.security.scan_summary.hidden_medium -
-            node2.data.security.scan_summary.hidden_medium
-          );
+          if (isFromV2) {
+            return (
+              node1.data.security.scan_summary.hidden_medium -
+              node2.data.security.scan_summary.hidden_medium
+            );
+          } else {
+            return (
+              node1.data.scan_summary.hidden_medium -
+              node2.data.scan_summary.hidden_medium
+            );
+          }
         }
 
         ContainerFactory.getGridOptions = function() {

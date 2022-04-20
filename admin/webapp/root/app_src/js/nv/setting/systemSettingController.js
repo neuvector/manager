@@ -966,7 +966,7 @@
     };
 
     vm.collectLog = function () {
-      let enforcerParam = [];
+      let enforcerParam = "";
       if (vm.selectedRows) {
         console.log(vm.selectedRows);
         enforcerParam = vm.selectedRows.length === vm.enforcers.length ? "ALL" : vm.selectedRows.map(enforcer => {

@@ -124,7 +124,7 @@ def request_federation_join_token(data, duration):
 @click.option("--local_server", help="Exposed rest ip/fqdn of this cluster")
 @click.option("--local_port", help="Exposed rest port of this cluster")
 @click.option("--token", required=True, help="join-token issed by primary cluster")
-@click.option("--use_proxy", default="", type=click.Choice("https", "", None]),
+@click.option("--use_proxy", default="", type=click.Choice(["https", ""]),
               help="Use proxy when connecting to primary cluster")
 @click.pass_obj
 def request_federation_join(data, name, server, port, local_server, local_port, token, use_proxy):

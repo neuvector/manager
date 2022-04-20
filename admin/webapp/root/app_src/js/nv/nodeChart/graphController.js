@@ -222,7 +222,7 @@
 
     const TOP_BAR = 65;
     const SIDE_BAR = 220;
-    const PADDING = 24 * 2 + 5 * 2;
+    const PADDING = 26 * 2 + 5 * 2;
     const height = $window.innerHeight - TOP_BAR - PADDING;
     const width = $window.innerWidth - SIDE_BAR - PADDING;
     const container = document.getElementById("mountNode");
@@ -3084,12 +3084,15 @@
       } else return false;
     };
 
+    const unmanagedEndpoints = ["node_ip", "workload_ip"];
+
     const filterHiddenNodes = data => {
       return data.nodes.filter(
         node =>
           !inHiddenDomain(node) &&
           !inHiddenGroup(node) &&
-          !isHiddenEndpoint(node)
+          !isHiddenEndpoint(node) &&
+          !($scope.blacklist.hideUnmanaged && unmanagedEndpoints.includes(node.group))
       );
     };
 
@@ -3118,12 +3121,20 @@
       } else return false;
     };
 
+    const unmanagedDomains = ["nvUnmanagedWorkload", "nvUnmanagedNode"];
+    const edgeWithUnmanagedEndpoint = edge => {
+      if ($scope.blacklist.hideUnmanaged) {
+        return unmanagedDomains.includes(edge.fromDomain) || unmanagedDomains.includes(edge.toDomain);
+      } else return false;
+    };
+
     const filterHiddenEdges = data => {
       return data.edges.filter(
         edge =>
           !edgeWithHiddenDomain(edge) &&
           !edgeWithHiddenGroup(edge) &&
-          !edgeWithHiddenEndpoint(edge)
+          !edgeWithHiddenEndpoint(edge) &&
+          !edgeWithUnmanagedEndpoint(edge)
       );
     };
 

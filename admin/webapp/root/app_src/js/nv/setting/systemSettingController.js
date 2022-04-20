@@ -935,7 +935,9 @@
       $timeout(() => {
         vm.isUpdatingConfig = true;
         let configBody = {
-          controller_debug: vm.controllerDebugEnabled ? ["cpath"] : []
+          config: {
+            controller_debug: vm.controllerDebugEnabled ? ["cpath"] : []
+          }
         }
         $http
           .patch(CONFIG_URL, configBody)
@@ -964,7 +966,7 @@
     };
 
     vm.collectLog = function () {
-      let enforcerParam = [];
+      let enforcerParam = "";
       if (vm.selectedRows) {
         console.log(vm.selectedRows);
         enforcerParam = vm.selectedRows.length === vm.enforcers.length ? "ALL" : vm.selectedRows.map(enforcer => {

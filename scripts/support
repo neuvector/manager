@@ -2,6 +2,7 @@
 
 import argparse
 import gzip
+import io
 import json
 import os
 import requests
@@ -308,7 +309,8 @@ if __name__ == "__main__":
 
         tmpfile = os.path.join(path, "." + name)
         with gzip.open(tmpfile, 'wb') as output:
-            rc = support(client,  args.joint, args.enforcers, output)
+            with io.TextIOWrapper(output, encoding='utf-8') as encode:
+                rc = support(client,  args.joint, args.enforcers, encode)
         os.rename(tmpfile, args.output)
     else:
         rc = support(client, args.joint, args.enforcers, sys.stdout)

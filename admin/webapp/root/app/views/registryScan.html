@@ -1579,5 +1579,17 @@
             </md-dialog-content>
       </form>
     </md-dialog>
+    <div id="compliance" class="dataBox middleRight pl-sm" style="z-index: 100;" ng-if="onCompliance">
+      <em
+        class="fa fa-times pull-right pr-sm pt-sm"
+        ng-click="closeRemediation()"
+      ></em>
+      <h4 class="ml-lg">
+        {{'cis.REMEDIATION' | translate}}
+      </h4>
+      <blockquote style="font-size: 13px;">
+        <p>{{remediation}}</p>
+      </blockquote>
+    </div>
   </script>
 </div>

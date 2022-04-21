@@ -60,20 +60,42 @@
         const level1 = $translate.instant("cis.LEVEL1");
         const scored = $translate.instant("cis.SCORED");
 
+        const getWorkloadChildDetails = function(rowItem) {
+          if (rowItem.children && rowItem.children.length > 0) {
+            return {
+              group: true,
+              children: rowItem.children,
+              expanded: false
+            };
+          } else {
+            return null;
+          }
+        };
+
+        const innerCellRenderer = function(params) {
+          if (params.data && params.value) {
+            if (params.data.children && params.data.children.length > 1) {
+              return `<span class="label label-fs label-info">${$sanitize(
+                params.value
+              )}</span>`;
+            } else {
+              return `<span class="ml-lg label label-fs label-info">${$sanitize(
+                params.value
+              )}</span>`;
+            }
+
+          } else return null;
+        };
+
         const columnDefs = [
           {
             headerName: $translate.instant("nodes.gridHeader.CATEGORY"),
             field: "catalog",
-            cellRenderer: function (params) {
-              if (params.value) {
-                return `<span class="label label-fs label-info">${$sanitize(
-                  params.value
-                )}</span>`;
-              } else return null;
-            },
-            width: 90,
-            maxWidth: 90,
-            minWidth: 90
+            cellRenderer: "agGroupCellRenderer",
+            cellRendererParams: { innerRenderer: innerCellRenderer },
+            width: 160,
+            maxWidth: 160,
+            minWidth: 160,
           },
           {
             headerName: $translate.instant("nodes.gridHeader.TEST_NUM"),
@@ -95,7 +117,7 @@
                 } else return params.value;
               }
             },
-            width: 40,
+            width: 50,
             minWidth: 30
           },
           {
@@ -155,26 +177,16 @@
           // }
         ];
         gridOptions = Utils.createGridOptions(columnDefs);
-        gridOptions.defaultColDef = {
-          flex: 1,
-          cellClass: 'cell-wrap-text',
-          autoHeight: true,
-          sortable: true,
-          resizable: true,
-        };
-        gridOptions.getNodeChildDetails = function (rowItem) {
-          if (rowItem.children && rowItem.children.length > 0) {
-            return {
-              group: true,
-              children: rowItem.children,
-              expanded: rowItem.children.length > 0
-            };
-          } else {
-            return null;
-          }
-        };
+        // gridOptions.defaultColDef = {
+        //   flex: 1,
+        //   cellClass: 'cell-wrap-text',
+        //   autoHeight: true,
+        //   sortable: true,
+        //   resizable: true,
+        // };
+        gridOptions.getNodeChildDetails = getWorkloadChildDetails;
         ComplianceFactory.getGridOptions = function () {
-          return Utils.createGridOptions(columnDefs);
+          return gridOptions;
         };
       };
 
@@ -198,6 +210,19 @@
           disables: disables,
         };
         ComplianceProfileFactory.saveTemplate(payload);
+      };
+
+      ComplianceFactory.remodelCompliance = (compliance) => {
+        let hierarchicalData = [];
+        let groupedData = Utils.groupBy(compliance, "test_number");
+        Object.entries(groupedData).forEach(([k, v]) => {
+          let entry = angular.copy(v[0]);
+          if (v.length > 1) entry.description = "";
+          entry.children = v.length > 1 ? v : [];
+          hierarchicalData.push(entry);
+        });
+        console.log("hierarchicalData:", hierarchicalData);
+        return hierarchicalData;
       };
 
       return ComplianceFactory;

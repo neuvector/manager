@@ -2678,7 +2678,8 @@
       "layers",
       "parentInfo",
       "CveProfileFactory",
-      "AuthorizationFactory"
+      "AuthorizationFactory",
+      "ComplianceFactory"
     ];
     function ShowLayersController(
       $scope,
@@ -2690,7 +2691,8 @@
       layers,
       parentInfo,
       CveProfileFactory,
-      AuthorizationFactory
+      AuthorizationFactory,
+      ComplianceFactory
     ) {
       activate();
 
@@ -2705,13 +2707,15 @@
         $scope.cve = [];
         $scope.hideSafeModules = false;
         $scope.isShowingAccepted = false;
+        $scope.onCompliance = false;
         $scope.isSimpleButton = $window.innerWidth < 1000;
         $scope.hasLayers = layers.length > 0;
         $scope.layersGridOptions = RegistryScanFactory.layersGridOptions;
         $scope.layersGridOptions.onRowClicked = onLayerChanged;
         $scope.layerVulsGridOptions = RegistryScanFactory.layerVulsGridOptions;
         $scope.layerVulsGridOptions.onRowClicked = onLayerVulChanged;
-        $scope.complianceGridOptions = RegistryScanFactory.getComplianceGridOptions();
+        ComplianceFactory.prepareGrids();
+        $scope.complianceGridOptions = ComplianceFactory.getGridOptions();
         $scope.complianceGridOptions.onSelectionChanged = onComplianceChanged;
         $scope.moduleGridOptions = RegistryScanFactory.getModuleGridOptions();
         $scope.moduleGridOptions.onSelectionChanged = onModuleChanged;
@@ -2811,7 +2815,8 @@
         }, 200);
 
         $scope.openComplianceTab = function() {
-          $scope.complianceGridOptions.api.setRowData(parentInfo.imageCompliance);
+          let compliancelist = ComplianceFactory.remodelCompliance(parentInfo.imageCompliance);
+          $scope.complianceGridOptions.api.setRowData(compliancelist);
           $timeout(function() {
             if (parentInfo.imageCompliance.length > 0) {
               $scope.complianceGridOptions.api.getRowNode(0).setSelected(true);
@@ -3262,6 +3267,20 @@
               );
             }
           });
+        };
+
+        $scope.showRemediation = function (event, compliance) {
+          event.stopPropagation();
+          $scope.complianceName = compliance.name;
+          $scope.remediation = compliance.remediation;
+          $scope.onCompliance = true;
+          $timeout(function () {
+            $scope.onCompliance = false;
+          }, 10000);
+        };
+
+        $scope.closeRemediation = function () {
+          $scope.onCompliance=false;
         };
       }
     }

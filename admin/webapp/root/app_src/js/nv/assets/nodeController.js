@@ -639,8 +639,9 @@
             $scope.compliance = response.data;
             $scope.cisLabel = getCisLabel($scope.compliance);
             setTimeout(function () {
+              let compliancelist = ComplianceFactory.remodelCompliance($scope.compliance.items);
               $scope.complianceGridOptions.api.setRowData(
-                $scope.compliance.items
+                compliancelist
               );
               $scope.complianceGridOptions.api.sizeColumnsToFit();
             }, 300);

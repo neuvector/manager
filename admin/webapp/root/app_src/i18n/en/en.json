@@ -2739,7 +2739,7 @@
     "M2P": "Monitor to Protect",
     "D2M_HINT": "Criteria: Elapsed time for learning all network and process activity of at least one live pod in the Group.",
     "M2P_HINT": "Criteria: There are no security events (network, process etc) for the timeframe set for the Group.",
-    "AUTH_BY_OPENSHIFT": "Authenticate using OpenShift RBAC’s or Rancher’s",
+    "AUTH_BY_OPENSHIFT": "Authenticate using OpenShift’s or Rancher’s RBAC",
     "NEED_SUBMIT": "Need submit",
     "ENABLED": "Enabled",
     "DISABLED": "Disabled",

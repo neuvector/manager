@@ -92,10 +92,13 @@
             headerName: $translate.instant("nodes.gridHeader.CATEGORY"),
             field: "catalog",
             cellRenderer: "agGroupCellRenderer",
-            cellRendererParams: { innerRenderer: innerCellRenderer },
-            width: 160,
-            maxWidth: 160,
-            minWidth: 160,
+            cellRendererParams: {
+              suppressCount: true,
+              innerRenderer: innerCellRenderer
+            },
+            width: 130,
+            maxWidth: 130,
+            minWidth: 130,
           },
           {
             headerName: $translate.instant("nodes.gridHeader.TEST_NUM"),
@@ -169,6 +172,12 @@
           {
             headerName: $translate.instant("nodes.gridHeader.DESCRIPTION"),
             field: "description",
+            cellRenderer: (params) => {
+              if (params.value && params.data) {
+                return `<span ng-class="{'text-muted': ${params.data.children && params.data.children.length > 1}}">${params.value}</span>`;
+              }
+              return "";
+            }
           }//,
           // {
           //   headerName: $translate.instant("registry.gridHeader.REMEDIATION"),
@@ -217,7 +226,7 @@
         let groupedData = Utils.groupBy(compliance, "test_number");
         Object.entries(groupedData).forEach(([k, v]) => {
           let entry = angular.copy(v[0]);
-          if (v.length > 1) entry.description = "";
+          if (v.length > 1) entry.description = `${v.length} reported entries in the check`;
           entry.children = v.length > 1 ? v : [];
           hierarchicalData.push(entry);
         });

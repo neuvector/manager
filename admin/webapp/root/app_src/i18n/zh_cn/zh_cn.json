@@ -2739,7 +2739,7 @@
     "M2P": "监视模式到保护模式",
     "D2M_HINT": "条件: 学习全部网络的消耗时间和至少组里的一个活跃Pod处理活动.",
     "M2P_HINT": "条件: 时间线集合没有组的安全事件 (网络， 进程等).",
-    "AUTH_BY_OPENSHIFT": "用OpenShift RBAC或Rancher验证",
+    "AUTH_BY_OPENSHIFT": "用OpenShift或Rancher的RBAC验证",
     "NEED_SUBMIT": "需要提交",
     "ENABLED": "启用",
     "DISABLED": "禁用",

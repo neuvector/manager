@@ -11,6 +11,7 @@ import java.io.{PrintWriter, StringWriter}
 
 class BaseService() extends Directives with LazyLogging {
   val authError                  = "Authentication failed!"
+  val authSSODisabledError       = "Authenticate using OpenShift’s or Rancher’s RBAC was disabled!"
   val blocked                    = "Temporarily blocked because of too many login failures"
   val passwordExpired            = "Password expired"
   val timeOutStatus              = "Status: 408"
@@ -43,6 +44,8 @@ class BaseService() extends Directives with LazyLogging {
       complete(StatusCodes.Unauthorized, blocked)
     } else if (e.getMessage.contains("\"code\":48")) {
       complete(StatusCodes.Unauthorized, passwordExpired)
+    } else if (e.getMessage.contains("\"code\":50")) {
+      complete(StatusCodes.Unauthorized, authSSODisabledError)
     } else {
       complete(StatusCodes.Unauthorized, authError)
     }

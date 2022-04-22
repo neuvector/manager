@@ -2111,11 +2111,15 @@
             field: "cfg_type",
             cellRenderer: (params) => {
               if (params) {
-                let cfgType = params.value ? params.value.toUpperCase() : CFG_TYPE.CUSTOMER.toUpperCase();
-                let type = colourMap[cfgType];
-                return `<div class="action-label nv-label ${type}">${$sanitize(
-                  $translate.instant(`group.${cfgType}`)
-                )}</div>`;
+                let cfgType = params.value ? params.value.toUpperCase() : "";
+                let type = cfgType ? colourMap[cfgType] : "";
+                if (params.data && params.data.exist && !cfgType) {
+                  cfgType = CFG_TYPE.CUSTOMER.toUpperCase();
+                }
+                return cfgType ?
+                  `<div class="action-label nv-label ${type}">${$sanitize(
+                    $translate.instant(`group.${cfgType}`)
+                  )}</div>` : "";
               }
             },
             width: 90,
@@ -2168,11 +2172,15 @@
             field: "cfg_type",
             cellRenderer: (params) => {
               if (params) {
-                let cfgType = params.value ? params.value.toUpperCase() : CFG_TYPE.CUSTOMER.toUpperCase();
-                let type = colourMap[cfgType];
-                return `<div class="action-label nv-label ${type}">${$sanitize(
-                  $translate.instant(`group.${cfgType}`)
-                )}</div>`;
+                let cfgType = params.value ? params.value.toUpperCase() : "";
+                let type = cfgType ? colourMap[cfgType] : "";
+                if (params.data && params.data.exist && !cfgType) {
+                  cfgType = CFG_TYPE.CUSTOMER.toUpperCase();
+                }
+                return cfgType ?
+                  `<div class="action-label nv-label ${type}">${$sanitize(
+                    $translate.instant(`group.${cfgType}`)
+                  )}</div>` : "";
               }
             },
             width: 90,

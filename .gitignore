@@ -64,6 +64,7 @@ admin/webapp/root/app/i18n
 .metals
 admin/test/REST_API/output
 admin/webapp/root/app_src/test/ut/coverage
+admin/webapp/root/app_src/bower_components
 admin/webapp/root/app_src/bower_components_bak/
 admin/webapp/root/bower_components
 admin/webapp/root/node_modules

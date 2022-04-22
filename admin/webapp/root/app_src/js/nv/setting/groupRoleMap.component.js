@@ -34,7 +34,7 @@
       GroupRoleMapService.groups = [];
 
       $scope.$watch("grpMapCtrl.connection", function(newValue, oldValue){
-        if(newValue != oldValue){
+        if(newValue){
           console.log("newValue: ", newValue);
           getParentElementInput(newValue);
         }

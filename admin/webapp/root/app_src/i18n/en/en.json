@@ -205,6 +205,7 @@
     "AUTH_ERROR": "Authentication failed!",
     "SESSION_TIMEOUT": "Session has expired. Please relogin.",
     "CHANGE_DEFAULT_PASSWORD": "You should change the default password!",
+    "CHANGE_DEFAULT_PASSWORD_RANCHER": "NeuVector default admin user's password should be changed!",
     "CHANGE_EXPIRING_PASSWORD": "You should change password, as it is expiring within {{expiring_Days}} day(s)!",
     "CHANGE_EXPIRING_PASSWORD_NOW": "You should change password immediately, as it is expiring today!",
     "UNSUPPORTED_ROLE": "This user account is only for CI integration.",

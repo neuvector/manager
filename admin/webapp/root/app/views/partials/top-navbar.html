@@ -222,7 +222,7 @@
       <div class="mr-sm" ng-if="!isOnProfile && user.token.default_password">
         <a ui-sref="app.profile({isChangingPassword: true})">
           <div class="label label-warning">
-            {{'login.CHANGE_DEFAULT_PASSWORD' | translate}}
+            {{user.token.server.toLowerCase() === 'rancher' ? 'login.CHANGE_DEFAULT_PASSWORD_RANCHER' :'login.CHANGE_DEFAULT_PASSWORD' | translate}}
           </div>
         </a>
       </div>

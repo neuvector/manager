@@ -1421,7 +1421,7 @@ def set_system_config_atmo(data):
 @set_system_config_atmo.command("config")
 @click.option("-p","--path", default="d2m", type=click.Choice(["d2m", "m2p"]), help="d2m: Discover to Monitor, m2p: Monitor to Protect")
 @click.option("-e","--enable", default="false", type=click.Choice(["true", "false"]))
-@click.option("-d","--duration", type=click.IntRange(300), default=600, help="in seconds, default: 600,")
+@click.option("-d","--duration", type=click.IntRange(3600), default=3600, help="in seconds, default: 3600")
 @click.pass_obj
 def set_system_atmo_config(data, path, enable, duration):
     """Set system auto mode upgrader."""

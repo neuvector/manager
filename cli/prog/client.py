@@ -655,7 +655,7 @@ class RestClient(object):
             raise Unauthorized()
 
         conf = {}
-        for key, value in kwargs.iteritems():
+        for key, value in kwargs.items():
             conf[key] = value
 
         body = {"net_config": conf}
@@ -674,7 +674,7 @@ class RestClient(object):
             raise Unauthorized()
 
         conf = {}
-        for key, value in kwargs.iteritems():
+        for key, value in kwargs.items():
             conf[key] = value
 
         body = {"atmo_config": conf}

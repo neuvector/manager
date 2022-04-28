@@ -470,11 +470,13 @@
 
       vm.toggleD2M = (state) => {
         vm.autoD2MDuration.options.disabled = !state;
+        vm.autoD2MDuration.hours = 1;
         $rootScope.isSettingFormDirty = true;
       };
 
       vm.toggleM2P = (state) => {
         vm.autoM2PDuration.options.disabled = !state;
+        vm.autoM2PDuration.hours = 1;
         $rootScope.isSettingFormDirty = true;
       };
 
@@ -775,7 +777,7 @@
           config: configBody,
           net_config: {
             net_service_status: vm.config.netServiceStatus,
-            net_service_policy_mode: vm.config.netServicePolicyMode
+            net_service_policy_mode: vm.config.netServiceStatus ? vm.config.netServicePolicyMode : undefined
           },
           atmo_config: {
             mode_auto_d2m: vm.config.mode_auto_d2m,

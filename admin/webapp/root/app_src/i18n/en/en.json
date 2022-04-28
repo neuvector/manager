@@ -727,6 +727,7 @@
       "NETWORK_RULES": "Network rules",
       "RESPONSE_RULES": "Response rules",
       "BLACKLIST_TITLE": "Hidden Namespaces/Groups/Endpoints",
+      "HIDE_UNMANAGED_ENDPOINTS": "Hide unmanaged workloads/hosts",
       "ENDPOINTS": "Endpoints"
     },
     "protocolFilter": {

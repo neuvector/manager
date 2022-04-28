@@ -361,6 +361,19 @@
       </div>
     </div>
 
+    <div layout="row" class="mt">
+      <div flex="60" class="ph-lg">
+        <md-checkbox
+                class="md-primary mr-lg mb-sm"
+                ng-model="blacklist.hideUnmanaged"
+        >
+          <label class="text-muted-label">
+            {{"network.groupFilter.HIDE_UNMANAGED_ENDPOINTS" | translate}}
+          </label>
+        </md-checkbox>
+      </div>
+    </div>
+
     <hr class="fancy mv-sm mt-lg" />
     <div layout="row" class="mt">
       <div flex="60" class="ph-lg"></div>

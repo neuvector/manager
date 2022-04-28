@@ -176,7 +176,8 @@
       const blacklist = {
         domains: [],
         groups: [],
-        endpoints: []
+        endpoints: [],
+        hideUnmanaged: false
       };
 
       GraphFactory.getBlacklist = () => blacklist;
@@ -184,12 +185,14 @@
         blacklist.domains = bl.domains;
         blacklist.groups = bl.groups;
         blacklist.endpoints = bl.endpoints;
+        blacklist.hideUnmanaged = bl.hideUnmanaged;
       };
 
       GraphFactory.initBlacklist = () => {
         blacklist.domains = [];
         blacklist.groups = [];
         blacklist.endpoints = [];
+        blacklist.hideUnmanaged = false;
       };
 
       /**
@@ -357,12 +360,12 @@
         meshProtect: "serviceMesh-p",
         ip_service: "service",
         address: "address",
-        node_ip: "nodeIp",
+        node_ip: "host",
         host: "host",
         hostDiscover: "host-d",
         hostMonitor: "host-m",
         hostProtect: "host-p",
-        workload_ip: "workload-ip",
+        workload_ip: "container-x",
         meshProxy: "meshProxy",
         external: "cloud"
       };

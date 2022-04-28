@@ -78,6 +78,7 @@
     "DISCOVER": "学习",
     "MONITOR": "监视",
     "PROTECT": "保护",
+    "ZERODRIFT": "零漂移",
     "DEFAULT": "缺省",
     "UNMANAGED": "未管理",
     "DISCONNECTED": "断开",
@@ -726,6 +727,7 @@
       "NETWORK_RULES": "网络规则",
       "RESPONSE_RULES": "响应规则",
       "BLACKLIST_TITLE": "隐藏的命名空间/组/端点",
+      "HIDE_UNMANAGED_ENDPOINTS": "隐藏未管理端点",
       "ENDPOINTS": "端点"
     },
     "protocolFilter": {

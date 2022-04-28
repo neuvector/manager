@@ -506,6 +506,11 @@
       function onRowChanged() {
         let selectedRows = $scope.gridOptions.api.getSelectedRows();
         $scope.compliance = selectedRows[0];
+        if($scope.compliance){
+            $scope.compliance.nodes.sort(Utils.sortByDisplayName);
+            $scope.compliance.workloads.sort(Utils.sortByDisplayName);
+            $scope.compliance.images.sort(Utils.sortByDisplayName);
+        }
         if ($scope.onCompliance) {
           $scope.complianceName = selectedRows[0].name;
           $scope.complianceMessage =
@@ -516,7 +521,7 @@
           $scope.complianceDescription = selectedRows[0].description;
         }
         $scope.$apply();
-      }
+      };
 
       $scope.onFilterChanged = function (value) {
         $scope.progress = 0;

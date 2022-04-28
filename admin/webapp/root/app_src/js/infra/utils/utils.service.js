@@ -700,7 +700,31 @@
           document.onmousemove = null;
         }
       },
-      sortByDisplayName: function (a,b) {
+      mapAssetsBrief(report, reportType) {
+        let start = new Date(); //For profiling
+        let count = 0;//For profiling
+        let res = report[reportType].map(record => {
+          record.images = record.images.map(imageId => {
+            report.images[imageId][0].id = imageId;
+            count++;
+            return report.images[imageId][0];
+          });
+          record.nodes = record.nodes.map(nodeId => {
+            report.nodes[nodeId][0].id = nodeId;
+            count++;
+            return report.nodes[nodeId][0];
+          });
+          record.workloads = record.workloads.map(workloadId => {
+            report.workloads[workloadId][0].id = workloadId;
+            count++;
+            return report.workloads[workloadId][0];
+          });
+          return record;
+        });
+        console.log("mapAssetsBrief - Duration, Count", new Date() - start, count);
+        return res;
+      },
+      sortByDisplayName(a,b) {
           const name_a = a.display_name.toLowerCase();
           const name_b = b.display_name.toLowerCase();
           if (name_a === name_b) return 0;

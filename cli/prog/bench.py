@@ -7,17 +7,27 @@ from prog import output
 from prog import utils
 
 
-def _comp_list_display_format(comp):
-    comp["counts"] = "%d:%d" % (len(comp["workloads"]), len(comp["nodes"]))
+def _comp_list_display_format(report, comp):
+    comp["counts"] = "%d:%d:%d" % (len(comp["workloads"]), len(comp["nodes"]), len(comp["images"]))
     comp["protected"] = True
-    for e in comp["workloads"]:
-        if e["policy_mode"] == "Discover":
-            comp["protected"] = False
-            return
-    for e in comp["nodes"]:
-        if e["policy_mode"] == "Discover":
-            comp["protected"] = False
-            return
+    for i in comp["workloads"]:
+        if i in report["workloads"]:
+            for e in report["workloads"][i]:
+                if e["policy_mode"] == "Discover":
+                    comp["protected"] = False
+                    return
+    for i in comp["nodes"]:
+        if i in report["nodes"]:
+            for e in report["nodes"][i]:
+                if e["policy_mode"] == "Discover":
+                    comp["protected"] = False
+                    return
+    for i in comp["images"]:
+        if i in report["images"]:
+            for e in report["images"][i]:
+                if e["policy_mode"] == "Discover":
+                    comp["protected"] = False
+                    return
 
 
 @show.group('bench')
@@ -106,13 +116,13 @@ def compliance(data, id_or_name):
 @click.pass_obj
 def all(data):
     """Show compliance report of all assets"""
-    report = data.client.show("compliance/asset", "compliances", None)
-    if report != None:
-        for v in report:
-            _comp_list_display_format(v)
+    report = data.client.show("compliance/asset", None, None)
+    if "compliances" in report:
+        for v in report["compliances"]:
+            _comp_list_display_format(report, v)
 
         columns = ("level", "catalog", "type", "name", "scored", "profile", "description", "counts", "protected")
-        output.list(columns, report)
+        output.list(columns, report["compliances"])
 
 
 # -- request

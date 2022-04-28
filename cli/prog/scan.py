@@ -25,7 +25,7 @@ def _scanner_list_display_format(scanner):
         scanner[f] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(scanner[f]))
 
 
-def _vuln_list_display_format(vuln):
+def _vuln_list_display_format(report, vuln):
     f = "scores"
     fo = output.key_output(f)
     vuln[fo] = "%s/%s" % (vuln["score"], vuln["score_v3"])
@@ -33,22 +33,30 @@ def _vuln_list_display_format(vuln):
     len(vuln["platforms"]), len(vuln["workloads"]), len(vuln["nodes"]), len(vuln["images"]))
 
     vuln["protected"] = True
-    for e in vuln["platforms"]:
-        if e["policy_mode"] == "Discover":
-            vuln["protected"] = False
-            return
-    for e in vuln["workloads"]:
-        if e["policy_mode"] == "Discover":
-            vuln["protected"] = False
-            return
-    for e in vuln["nodes"]:
-        if e["policy_mode"] == "Discover":
-            vuln["protected"] = False
-            return
-    for e in vuln["images"]:
-        if e["policy_mode"] == "Discover":
-            vuln["protected"] = False
-            return
+    for i in vuln["platforms"]:
+        if i in report["platforms"]:
+            for e in report["platforms"][i]:
+                if e["policy_mode"] == "Discover":
+                    vuln["protected"] = False
+                    return
+    for i in vuln["workloads"]:
+        if i in report["workloads"]:
+            for e in report["workloads"][i]:
+                if e["policy_mode"] == "Discover":
+                    vuln["protected"] = False
+                    return
+    for i in vuln["nodes"]:
+        if i in report["nodes"]:
+            for e in report["nodes"][i]:
+                if e["policy_mode"] == "Discover":
+                    vuln["protected"] = False
+                    return
+    for i in vuln["images"]:
+        if i in report["images"]:
+            for e in report["images"][i]:
+                if e["policy_mode"] == "Discover":
+                    vuln["protected"] = False
+                    return
 
 
 def _vuln_profile_list_display_format(e):
@@ -241,13 +249,13 @@ def platform(data):
 def all(data):
     """Show vulnerability report of all assets"""
 
-    report = data.client.show("scan/asset", "vulnerabilities", None)
-    if report != None:
-        for v in report:
-            _vuln_list_display_format(v)
+    report = data.client.show("scan/asset", None, None)
+    if "vulnerabilities" in report:
+        for v in report["vulnerabilities"]:
+            _vuln_list_display_format(report, v)
 
         columns = ("name", "severity", "scores", "counts", "protected")
-        output.list(columns, report)
+        output.list(columns, report["vulnerabilities"])
 
 
 @show_scan.command("profile")

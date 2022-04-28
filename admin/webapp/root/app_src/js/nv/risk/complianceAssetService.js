@@ -128,7 +128,7 @@
         .get(RISK_COMPLIANCE_URL, {params: {id: name}})
         .then(function (response) {
           if (response.data.compliances) {
-            const complianceList = response.data.compliances;
+            const complianceList = Utils.mapAssetsBrief(response.data, "compliances");
 
             let countDis = {
               error: 0,

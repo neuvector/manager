@@ -315,7 +315,7 @@
             .get(RISK_CVE_URL, { params: { show: isShowingAccepted ? "accepted" : null } })
             .then(function (response) {
               if (response.data.vulnerabilities) {
-                const vulnerabilities = response.data.vulnerabilities;
+                const vulnerabilities = Utils.mapAssetsBrief(response.data, "vulnerabilities");
                 let countDistribution = {
                   high: 0,
                   medium: 0,

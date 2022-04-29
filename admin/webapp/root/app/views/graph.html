@@ -1536,7 +1536,7 @@
     id="legend"
     class="dataBox rightBottomLegend"
     ng-show="settings.showLegend"
-    style="border: none; height: 550px; padding-top: 0"
+    style="border: none; height: 610px; padding-top: 0"
   >
     <div
       layout="row"
@@ -1614,15 +1614,30 @@
       </div>
       <div>
         <md-icon
-          md-svg-src="app/img/icons/graph/host.svg"
-          aria-label="Node"
-          style="width:24px;height:24px;"
+                md-svg-src="app/img/icons/graph/host-d.svg"
+                aria-label="Node"
+                style="width:24px;height:24px;"
         ></md-icon>
-        <span class="ml text-muted">{{'network.legend.HOST' | translate}}</span>
+        <span class="ml text-muted">{{'network.legend.HOST_DISCOVER' | translate}}</span>
       </div>
       <div>
         <md-icon
-          md-svg-src="app/img/icons/graph/nodeIp.svg"
+                md-svg-src="app/img/icons/graph/host-m.svg"
+                aria-label="Node"
+                style="width:24px;height:24px;"
+        ></md-icon>
+        <span class="ml text-muted">{{'network.legend.HOST_MONITOR' | translate}}</span>
+      </div><div>
+      <md-icon
+              md-svg-src="app/img/icons/graph/host-p.svg"
+              aria-label="Node"
+              style="width:24px;height:24px;"
+      ></md-icon>
+      <span class="ml text-muted">{{'network.legend.HOST_PROTECT' | translate}}</span>
+    </div>
+      <div>
+        <md-icon
+          md-svg-src="app/img/icons/graph/host.svg"
           aria-label="Unmanaged Node"
           style="width:24px;height:24px;"
         ></md-icon>

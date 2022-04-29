@@ -1831,7 +1831,7 @@
 
     $scope.toggleLegend = () => {
       if (!ELEM_LEGEND.style.top) {
-        ELEM_LEGEND.style.top = window.innerHeight - 650 + "px";
+        ELEM_LEGEND.style.top = window.innerHeight - 720 + "px";
         ELEM_LEGEND.style.left = window.innerWidth - 560 + "px";
       }
     };

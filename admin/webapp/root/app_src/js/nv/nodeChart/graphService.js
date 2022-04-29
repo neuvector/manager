@@ -365,7 +365,7 @@
         hostDiscover: "host-d",
         hostMonitor: "host-m",
         hostProtect: "host-p",
-        workload_ip: "container-x",
+        workload_ip: "workload-ip",
         meshProxy: "meshProxy",
         external: "cloud"
       };

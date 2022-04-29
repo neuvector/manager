@@ -949,16 +949,18 @@
         console.log($scope.rule);
         $scope.needGroup = EVENT_WITHOUT_GROUP.indexOf($scope.rule.event) === -1;
         $scope.canQuarantine = EVENT_WITHOUT_QUARANTINE.indexOf($scope.rule.event) === -1;
-        if (!$scope.canQuarantine) {
+        if (!$scope.needGroup) {
           $scope.searchTextGroup = "";
           $scope.selectedItemGroup = null;
-          if ($scope.rule.actions.includes("quarantine")) {
-            $scope.rule.actions.splice(
-              $scope.rule.actions.indexOf("quarantine"),
-              1
-            );
-          }
-          console.log($scope.rule.actions);
+        }
+        if (!$scope.canQuarantine) {
+            if ($scope.rule.actions.includes("quarantine")) {
+                $scope.rule.actions.splice(
+                    $scope.rule.actions.indexOf("quarantine"),
+                    1
+                );
+            }
+            console.log($scope.rule.actions);
         }
         $scope.isWebhookSelected = $scope.rule.actions.includes("webhook");
         $scope.hide = function() {
@@ -991,16 +993,18 @@
         console.log("conditionOptions4SingleConditionEditor:", conditionOptions4SingleConditionEditor);
         $scope.needGroup = EVENT_WITHOUT_GROUP.indexOf($scope.rule.event) === -1;
         $scope.canQuarantine = EVENT_WITHOUT_QUARANTINE.indexOf($scope.rule.event) === -1;
-        if (!$scope.canQuarantine) {
+        if (!$scope.needGroup) {
           $scope.searchTextGroup = "";
           $scope.selectedItemGroup = null;
-          if ($scope.rule.actions.includes("quarantine")) {
-            $scope.rule.actions.splice(
-              $scope.rule.actions.indexOf("quarantine"),
-              1
-            );
-          }
-          console.log($scope.rule.actions);
+        }
+        if (!$scope.canQuarantine) {
+            if ($scope.rule.actions.includes("quarantine")) {
+                $scope.rule.actions.splice(
+                    $scope.rule.actions.indexOf("quarantine"),
+                    1
+                );
+            }
+            console.log($scope.rule.actions);
         }
       };
       $scope.loadTags = function(query) {

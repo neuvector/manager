@@ -941,9 +941,11 @@
                 console.log($scope.rule);
                 $scope.needGroup = EVENT_WITHOUT_GROUP.indexOf($scope.rule.event) === -1;
                 $scope.canQuarantine = EVENT_WITHOUT_QUARANTINE.indexOf($scope.rule.event) === -1;
+                if (!$scope.needGroup) {
+                  $scope.searchTextGroup = "";
+                  $scope.selectedItemGroup = null;
+                }
                 if (!$scope.canQuarantine) {
-                    $scope.searchTextGroup = "";
-                    $scope.selectedItemGroup = null;
                     if ($scope.rule.actions.includes("quarantine")) {
                         $scope.rule.actions.splice(
                             $scope.rule.actions.indexOf("quarantine"),
@@ -982,9 +984,11 @@
                 makeTypeAheadList4Editor();
                 $scope.needGroup = EVENT_WITHOUT_GROUP.indexOf($scope.rule.event) === -1;
                 $scope.canQuarantine = EVENT_WITHOUT_QUARANTINE.indexOf($scope.rule.event) === -1;
-                if (!$scope.canQuarantine) {
+                if (!$scope.needGroup) {
                     $scope.searchTextGroup = "";
                     $scope.selectedItemGroup = null;
+                }
+                if (!$scope.canQuarantine) {
                     if ($scope.rule.actions.includes("quarantine")) {
                         $scope.rule.actions.splice(
                             $scope.rule.actions.indexOf("quarantine"),

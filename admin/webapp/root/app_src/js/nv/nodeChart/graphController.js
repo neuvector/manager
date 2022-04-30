@@ -3141,13 +3141,16 @@
     const getNetworkData = (onRefresh = true, callback) =>
       $http
         .get(NETWORK_INFO_URL, { params: { user: user } })
-        .then(response => {
+        .then(response => {``
           console.profile("copying data");
-          $scope.blacklist = response.data.blacklist;
-          if (!$scope.blacklist) {
-            $scope.blacklist = GraphFactory.getBlacklist();
-          } else {
-            GraphFactory.setBlacklist($scope.blacklist);
+
+          if(!$scope.blacklist){
+            $scope.blacklist = response.data.blacklist;
+            if (!$scope.blacklist) {
+              $scope.blacklist = GraphFactory.getBlacklist();
+            } else {
+              GraphFactory.setBlacklist($scope.blacklist);
+            }
           }
 
           $window.localStorage.setItem(

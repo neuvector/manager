@@ -189,7 +189,9 @@
   },
   "logout": {
     "SIGN_OUT": "Signed Out Already",
-    "SIGN_OUT_DESC": "You can close this browser window and go to Rancher."
+    "SIGN_OUT_DESC": "You can close this browser window and go to Rancher.",
+    "DENY_EULA": "Agreement Was Denied",
+    "DENY_EULA_DESC": "Your use of the software is expressly conditioned on your acceptance of the terms and conditions of this agreement. If you do not agree to all of the terms and conditions of this agreement, you may not install or use the software."
   },
   "login": {
     "SIGN_IN": "SIGN IN TO CONTINUE",

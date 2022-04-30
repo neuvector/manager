@@ -31,18 +31,27 @@
         });
       };
 
+      const doAfterDenyEula = function() {
+        if ($rootScope.isSUSESSO) {
+          $rootScope.isSSODenyEula = true;
+        } else {
+          $state.go('page.login');
+        }
+      }
+
       $scope.deny = function () {
         $http.post(EULA_URL, {accepted: false}).then(function () {
           $http.delete(LOGIN_URL).then(function () {
             $window.localStorage.clear();
             $rootScope.user = null;
-            $state.go('page.login');
+            doAfterDenyEula();
           }).catch(function (err) {
             console.warn(err);
+            doAfterDenyEula();
           });
         }).catch(function(err){
           console.warn(err);
-          $state.go('page.login');
+          doAfterDenyEula();
         });
       };
 

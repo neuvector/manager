@@ -189,7 +189,9 @@
   },
   "logout": {
     "SIGN_OUT": "已经登出了",
-    "SIGN_OUT_DESC": "您可以关闭此浏览器窗口, 然后回到Rancher."
+    "SIGN_OUT_DESC": "您可以关闭此浏览器窗口, 然后回到Rancher.",
+    "DENY_EULA": "同意书被否决",
+    "DENY_EULA_DESC": "软件实使用需要接受同意书里的条款和条件. 如果没有同意所有条款和条件，不可以安装和实用此软件."
   },
   "login": {
     "SIGN_IN": "请登录",

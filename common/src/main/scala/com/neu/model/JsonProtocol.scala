@@ -35,7 +35,7 @@ object JsonProtocol extends DefaultJsonProtocol {
 
   implicit val graphEndpointFormat: RootJsonFormat[GraphEndpoint] = jsonFormat2(GraphEndpoint)
   implicit val graphItemFormat: RootJsonFormat[GraphItem] = jsonFormat1(GraphItem)
-  implicit val blacklist: RootJsonFormat[Blacklist]       = jsonFormat3(Blacklist)
+  implicit val blacklist: RootJsonFormat[Blacklist]       = jsonFormat4(Blacklist)
   implicit val userBlacklist: RootJsonFormat[UserBlacklist] = jsonFormat2(UserBlacklist)
 
   implicit val positionFormat: RootJsonFormat[Position]               = jsonFormat2(Position)

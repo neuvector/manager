@@ -65,7 +65,8 @@ case class GraphItem(name: String)
 case class Blacklist(
   domains: Array[GraphItem],
   groups: Array[GraphItem],
-  endpoints: Array[GraphEndpoint]
+  endpoints: Array[GraphEndpoint],
+  hideUnmanaged: Boolean
 )
 
 case class UserBlacklist(user: String, blacklist: Option[Blacklist])

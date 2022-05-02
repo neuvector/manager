@@ -1,6 +1,7 @@
 package com.neu.api
 
 import akka.actor.{ Actor, ActorContext, ActorLogging }
+import akka.pattern.AskTimeoutException
 import com.typesafe.scalalogging.LazyLogging
 import spray.can.Http.{ Bound, CommandFailed, ConnectionAttemptFailedException }
 import spray.http.ContentTypes._
@@ -93,6 +94,11 @@ class RoutedHttpService(route: Route) extends Actor with HttpService with ActorL
         ctx.complete(StatusCodes.InternalServerError, "Controller is not available ...")
       }
 
+    case e: AskTimeoutException ⇒
+      ctx ⇒ {
+        log.warning("Unable to get data from controller." + e.getMessage)
+        ctx.complete(StatusCodes.InternalServerError, "Unable to get data from controller.")
+      }
   }
 
   def receive: Receive =

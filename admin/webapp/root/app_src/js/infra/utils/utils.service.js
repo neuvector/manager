@@ -704,6 +704,11 @@
         let start = new Date(); //For profiling
         let count = 0;//For profiling
         let res = report[reportType].map(record => {
+          record.platforms = record.platforms.map(platformId => {
+            report.platforms[platformId][0].id = platformId;
+            count++;
+            return report.platforms[platformId][0];
+          });
           record.images = record.images.map(imageId => {
             report.images[imageId][0].id = imageId;
             count++;

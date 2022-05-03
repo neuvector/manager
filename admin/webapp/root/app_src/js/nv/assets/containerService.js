@@ -832,13 +832,13 @@
           .then(function(response) {
             let container = response.data.workload;
             if (
-              response.data.workload.rt_attributes.labels &&
-              response.data.workload.rt_attributes.labels["io.kubernetes.container.name"] ===
+              response.data.workload.labels &&
+              response.data.workload.labels["io.kubernetes.container.name"] ===
                 "POD"
             ) {
               container.images = [];
             } else {
-              container.images = [response.data.workload.brief.image];
+              container.images = [response.data.workload.image];
             }
             if (container.children && container.children.length > 0) {
               container.children.forEach(function(child) {

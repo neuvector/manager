@@ -820,361 +820,616 @@
   </div>
 
   <div
-    class="dataBox topLeftLimited pt0"
-    ng-show="onContainer"
+    id="hostInfo"
+    class="dataBox topLeftFloat-host pt0"
+    ng-show="onHost"
     ng-cloak
+    style="border: none;"
   >
-    <div id="containerDetails">
-      <div class="col-sm-12 ph0">
+    <div>
+      <div class="col-sm-12 ph0" id="hostInfoHeader">
+        <div
+          class="pull-left auto-hide mt mb"
+          uib-tooltip="{{host.name}}"
+          tooltip-enable="false"
+          show-tooltip-on-text-overflow
+          style="display: block; width: 350px;"
+        >
+          <md-icon
+            md-svg-src="app/img/icons/graph/host.svg"
+            aria-label="Node"
+            style="width:24px;height:24px;"
+          ></md-icon>
+          {{host.name}}
+        </div>
         <button
           class="btn btn-xs btn-link pull-right mt-sm"
+          ng-click="onHost=!onHost"
+        >
+          <em class="fa fa-times fa-lg text-muted"></em>
+        </button>
+      </div>
+      <div style="width: 100%; height: 230px; overflow-y: auto;">
+        <div>
+          <ul class="mda-list row m0">
+            <li class="col-sm-12 p0">
+              <div class="mda-list-item-text pb0 pt-sm">
+                <span class="text-bold host-item-key">ID</span>
+                <span
+                  class="ml text-muted auto-hide host-item-value"
+                  uib-tooltip="{{host.id}}"
+                  tooltip-enable="false"
+                  show-tooltip-on-text-overflow
+                >
+                  {{host.id}}
+                </span>
+              </div>
+            </li>
+            <li class="col-sm-6 p0">
+              <div class="mda-list-item-text pb0 pt-sm">
+                <span class="text-bold host-item-key">
+                  {{'nodes.detail.NUM_OF_CPUS' | translate}}
+                </span>
+                <span
+                  class="ml text-muted auto-hide host-item-value"
+                  uib-tooltip="{{host.cpus}}"
+                  tooltip-enable="false"
+                  show-tooltip-on-text-overflow
+                >
+                  {{host.cpus}}
+                </span>
+              </div>
+            </li>
+            <li class="col-sm-6 p0">
+              <div class="mda-list-item-text pb0 pt-sm">
+                <span class="text-bold host-item-key">
+                  {{'nodes.detail.MEMORY' | translate}}
+                </span>
+                <span
+                  class="ml text-muted auto-hide host-item-value"
+                  uib-tooltip="{{host.memory | bytes}}"
+                  tooltip-enable="false"
+                  show-tooltip-on-text-overflow
+                >
+                  {{host.memory | bytes}}
+                </span>
+              </div>
+            </li>
+            <li class="col-sm-6 p0">
+              <div class="mda-list-item-text pb0 pt-sm">
+                <span class="text-bold host-item-key">
+                  {{'nodes.detail.OS' | translate}}
+                </span>
+                <span
+                  class="ml text-muted auto-hide host-item-value"
+                  uib-tooltip="{{host.os}}"
+                  tooltip-enable="false"
+                  show-tooltip-on-text-overflow
+                >
+                  {{host.os}}
+                </span>
+              </div>
+            </li>
+            <li class="col-sm-6 p0">
+              <div class="mda-list-item-text pb0 pt-sm">
+                <span class="text-bold host-item-key">
+                  {{'nodes.detail.KERNEL_VERSION' | translate}}
+                </span>
+                <span
+                  class="ml text-muted auto-hide host-item-value"
+                  uib-tooltip="{{host.kernel}}"
+                  tooltip-enable="false"
+                  show-tooltip-on-text-overflow
+                >
+                  {{host.kernel}}
+                </span>
+              </div>
+            </li>
+            <li class="col-sm-6 p0">
+              <div class="mda-list-item-text pb0 pt-sm">
+                <span class="text-bold host-item-key">
+                  {{host.runtime | capitalize}}&nbsp;{{'nodes.detail.VERSION' |
+                  translate}}
+                </span>
+                <span
+                  class="ml text-muted auto-hide host-item-value"
+                  uib-tooltip="{{host.runtime}}"
+                  tooltip-enable="false"
+                  show-tooltip-on-text-overflow
+                >
+                  {{host.runtime_version}}
+                </span>
+              </div>
+            </li>
+            <li class="col-sm-6 p0">
+              <div class="mda-list-item-text pb0 pt-sm">
+                <span class="text-bold host-item-key">
+                  {{host.runtime |
+                  capitalize}}&nbsp;{{'nodes.detail.API_VERSION' | translate}}
+                </span>
+                <span
+                  class="ml text-muted auto-hide host-item-value"
+                  uib-tooltip="{{host.runtime_version}}"
+                  tooltip-enable="false"
+                  show-tooltip-on-text-overflow
+                >
+                  {{host.runtime_api_version}}
+                </span>
+              </div>
+            </li>
+            <li class="col-sm-6 p0">
+              <div class="mda-list-item-text pb0 pt-sm">
+                <span class="text-bold host-item-key">
+                  {{'network.hostDetails.CONTAINERS' | translate}}
+                </span>
+                <span
+                  class="ml text-muted auto-hide host-item-value"
+                  uib-tooltip="{{host.containers}}"
+                  tooltip-enable="false"
+                  show-tooltip-on-text-overflow
+                >
+                  {{host.containers}}
+                </span>
+              </div>
+            </li>
+            <li class="col-sm-6 p0" ng-if="!!host.scan_summary.scanned_at">
+              <div class="mda-list-item-text pb0 pt-sm">
+                <span
+                  class="text-bold host-item-key"
+                  translate="{{'network.nodeDetails.SCANNED_AT'}}"
+                ></span>
+                <span
+                  class="ml text-muted mr-lg auto-hide host-item-key"
+                  style="display: block; width: 150px;"
+                >
+                  {{host.scan_summary.scanned_at | date:'MMM dd, y HH:mm:ss'}}
+                </span>
+              </div>
+            </li>
+            <li class="col-sm-6 p0">
+              <div class="mda-list-item-text pb0 pt-sm">
+                <span
+                  class="text-bold host-item-key"
+                  translate="{{'group.gridHeader.VULNERABILITIES'}}"
+                />
+                <div class="ml host-item-value">
+                  <label
+                    class="label label-danger mr-sm"
+                    ng-if="host.scan_summary.high"
+                  >
+                    {{host.scan_summary.high}}</label
+                  >
+                  <label
+                    class="label label-warning"
+                    ng-if="host.scan_summary.medium"
+                  >
+                    {{host.scan_summary.medium}}</label
+                  >
+                  <a
+                    ui-sref="app.hosts({nodeId: host.id})"
+                    style="
+                      display: table-cell;
+                      font-size: 11px;
+                      line-height: 15px;
+                    "
+                    ng-if="host.scan_summary.high || host.scan_summary.medium"
+                  >
+                    <em class="fa fa-external-link ml-lg"></em>
+                  </a>
+
+                  <label
+                    class="label label-success-tran"
+                    ng-if="host.scan_summary.scanned_at && host.scan_summary.high === 0 && host.scan_summary.medium === 0"
+                  >
+                    <em class="fa fa-smile-o mr-sm"></em> Clean
+                  </label>
+                </div>
+              </div>
+            </li>
+            <li class="col-sm-12 p0" ng-if="host.interfaces !== {}">
+              <div class="mda-list-item-text pb0 pt-sm">
+                <div
+                  class="text-bold"
+                  translate="{{'containers.detail.NETWORK_INTERFACES'}}"
+                ></div>
+                <div
+                  class="row pl"
+                  style="width: 380px;"
+                  ng-repeat="(name, nets) in host.interfaces"
+                >
+                  <div class="col-sm-2 text-right pr0">
+                    {{name}}
+                  </div>
+                  <div class="col-sm-1"></div>
+                  <div class="col-sm-9 pl0">
+                    <div ng-repeat="net in nets" class="text-muted">
+                      <div class="col-sm-12">
+                        <div class="col-sm-6">
+                          IP:{{net.ip}}/{{net.ip_prefix}}
+                        </div>
+                        <div class="col-sm-6" ng-if="net.gateway">
+                          {{"general.GATEWAY" | translate}}:{{net.gateway}}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    id="containerInfo"
+    class="dataBox topLeftFloat pt0"
+    ng-show="onContainer"
+    style="border: none;"
+  >
+    <div>
+      <div class="col-sm-12 ph0 pv-sm" id="containerInfoHeader">
+        <div
+          class="pull-left auto-hide mt mb"
+          uib-tooltip="{{container.display_name}}"
+          tooltip-enable="false"
+          show-tooltip-on-text-overflow
+          style="display: block; width: 500px;"
+        >
+          <span>
+            <md-icon
+              md-svg-src="app/img/icons/graph/container.svg"
+              aria-label="Container"
+              style="width:24px;height:24px;"
+            ></md-icon>
+            <span
+              >{{container.display_name}}
+            </span>
+          </span>
+        </div>
+        <button
+          class="btn btn-xs btn-link pull-right mt"
           ng-click="onContainer=!onContainer"
         >
           <em class="fa fa-times fa-lg text-muted"></em>
         </button>
       </div>
-      <uib-tabset justified="true" id="nodeBox">
-        <uib-tab index="0">
-          <uib-tab-heading>
-            {{'enum.SUMMARY' | translate}}
-          </uib-tab-heading>
-          <ul class="mda-list">
-            <li class="mda-list-item">
-              <div class="mda-list-item-icon ">
-                <em class="fa fa-credit-card text-muted fa-lg"></em>
-              </div>
-              <div class="mda-list-item-text pb0">
-                <h3 translate="{{'network.nodeDetails.NAME'}}"></h3>
-                <small class="text-muted auto-hide" style="display:block; width: 250px;"
-                       uib-tooltip="{{container.display_name}}"
-                       tooltip-enable="false"
-                       show-tooltip-on-text-overflow>
-                  {{container.display_name}}
-                </small>
-              </div>
-            </li>
-            <li class="mda-list-item">
-              <div class="mda-list-item-icon ">
-                <em class="fa fa-building-o text-muted fa-lg"></em>
-              </div>
-              <div class="mda-list-item-text pb0">
-                <h3 translate="{{'group.gridHeader.DOMAIN'}}"></h3>
-                <small class="text-muted auto-hide" style="display:block; width: 250px;"
-                       uib-tooltip="{{container.domain}}"
-                       tooltip-enable="false"
-                       show-tooltip-on-text-overflow>
-                  {{container.domain}}
-                </small>
-              </div>
-            </li>
-            <li class="mda-list-item">
-              <div class="mda-list-item-icon ">
-                <em class="fa fa-gears text-muted fa-lg"></em>
-              </div>
-              <div class="mda-list-item-text pb0">
-                <h3 translate="{{'network.gridHeader.SERVICE'}}"></h3>
-                <small class="text-muted mr-lg auto-hide" style="display:block; width: 250px;"
-                       uib-tooltip="{{container.service}}"
-                       tooltip-enable="false"
-                       show-tooltip-on-text-overflow>
-                  {{container.service}}
-                </small>
-              </div>
-            </li>
-            <li class="mda-list-item">
-              <div class="mda-list-item-icon ">
-                <em class="fa fa-shield text-muted fa-lg"></em>
-              </div>
-              <div class="mda-list-item-text pb0">
-                <h3 translate="{{'network.nodeDetails.STATE'}}"></h3>
-                <small
-                  class="text-muted mr-lg"
-                  ng-if="container.state !== 'quarantined'"
-                >
-                  {{container.state}}
-                </small>
-                <small
-                  class="text-danger mr-lg"
-                  ng-if="container.state === 'quarantined'"
-                >
-                  {{container.state}}:&nbsp; {{container.quarantine_reason}}
-                </small>
-              </div>
-            </li>
-            <li class="mda-list-item">
-              <div class="mda-list-item-icon ">
-                <em class="fa fa-server text-muted fa-lg" />
-              </div>
-              <div class="mda-list-item-text pb0">
-                <h3 translate="{{'network.nodeDetails.ON_NODE'}}" />
-                <small style="display:block; width: 250px;"
-                       uib-tooltip="{{container.host_name}}"
-                       tooltip-enable="false"
-                       show-tooltip-on-text-overflow>
-                  <a ui-sref="app.hosts({nodeId: container.host_id})">
-                    {{container.host_name}}
-                  </a>
-                </small>
-              </div>
-            </li>
-          </ul>
-        </uib-tab>
-        <uib-tab index="1">
-          <uib-tab-heading>
-            {{'enum.DETAIL' | translate}}
-          </uib-tab-heading>
-          <ul class="mda-list">
-            <li
-              class="mda-list-item"
-              ng-if="!container.children || container.children.length <= 1"
-            >
-              <div class="mda-list-item-icon ">
-                <em class="fa fa-code text-muted fa-lg" />
-              </div>
-              <div class="mda-list-item-text pb0">
-                <h3 translate="{{'network.nodeDetails.APPLICATIONS'}}"></h3>
-                <div
-                  class="row"
-                  ng-repeat="(name, ports) in container.app_ports"
-                >
-                  <div class="col-sm-12 text-left">
-                    <strong class="text-muted mr-lg"> {{name}} </strong>
-                    <small class="text-muted auto-hide" style="display:block; width: 200px;"
-                           uib-tooltip="{{ports}}"
-                           tooltip-enable="false"
-                           show-tooltip-on-text-overflow>
-                      {{ports}}
-                    </small>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li class="mda-list-item">
-              <div class="mda-list-item-icon ">
-                <em
-                  class="fa fa-stop-circle-o text-muted"
-                  style="font-size: 1.5em;"
-                  ng-if="container.children && container.children.length > 1"
-                ></em>
-                <em
-                  class="fa fa-archive text-muted"
-                  ng-if="!container.children ||
-                container.children.length <= 1"
-                ></em>
-              </div>
-              <div
-                class="mda-list-item-text pb0"
-                ng-if="container.children && container.children.length > 1"
+      <div style="width: 100%; height: 400px; overflow-y: auto;">
+        <ul class="mda-list row m0">
+          <li class="col-sm-12 p0">
+            <div class="pb0 pt-sm">
+              <span class="text-bold pod-item-key">ID</span>
+              <span
+                class="ml text-muted auto-hide pod-item-value"
+                uib-tooltip="{{container.id}}"
+                tooltip-enable="false"
+                show-tooltip-on-text-overflow
               >
-                <h3 translate="{{'network.nodeDetails.POD'}}"></h3>
+                {{container.id}}
+              </span>
+            </div>
+          </li>
+          <li class="col-sm-12 p0">
+            <div
+              class="pb0 pt-sm"
+              ng-if="container.children && container.children.length > 1"
+            >
+              <div>
+                <span
+                  class="text-bold pod-item-key"
+                  translate="{{'network.nodeDetails.IMAGE'}}"
+                ></span>
+              </div>
+              <div class="ml pod-item-value">
                 <div
                   class="row"
                   ng-repeat="child in container.children | filter:{state: '!exit'}"
                 >
+                  <!-- <div class="pull-left">
+
+                  </div> -->
+
                   <div
-                    class="text-muted text-bold pl-lg"
-                    style="display: inline-block"
+                    style="margin-top: 2px; width: 620px;"
+                    class="auto-hide"
+                    uib-tooltip="{{child.image}}"
+                    show-tooltip-on-text-overflow
+                    tooltip-enable="false"
                   >
-                    <em class="fa fa-square-o text-muted mr-sm"></em>
-                    {{child.display_name | limitTo:
-                    35}}{{child.display_name.length > 35 ? '...' : ''}}
-                  </div>
-                  <label
-                    class="label label-info-tran ml-lg"
-                    ng-if="child.service_mesh_sidecar"
-                  >
-                    Sidecar
-                  </label>
-                  <div class="row" ng-repeat="(name, ports) in child.app_ports">
-                    <div class="col-sm-12 text-left">
-                      <em class="fa fa-code text-muted ml-xl mr-sm pull-left"></em>
-                      <small class="text-muted text-sm mr-lg pull-left"> {{name}}</small>
-                      <small class="text-muted auto-hide pull-left" style="display:block; width: 160px;"
-                             uib-tooltip="{{ports}}"
-                             tooltip-enable="false"
-                             show-tooltip-on-text-overflow>
-                        {{ports}}
-                      </small>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <em class="fa fa-archive text-muted ml-xl pl-lg mr-sm pull-left"></em>
-                    <small class="text-muted auto-hide pull-left"  style="display:block; width: 200px;"
-                           uib-tooltip="{{child.image}}"
-                           tooltip-enable="false"
-                           show-tooltip-on-text-overflow>
+                    <span
+                      class="text-muted text-bold pl-lg"
+                      style="display: inline-block;"
+                    >
+                      <em class="fa fa-square-o text-muted mr-sm"></em>
+                      {{child.display_name | limitTo:
+                      55}}{{child.display_name.length > 35 ? '...' : ''}}
+                    </span>
+                    <label
+                      style="display: inline-block;"
+                      class="label label-info-tran ml-lg mt-sm"
+                      ng-if="child.service_mesh_sidecar"
+                    >
+                      Sidecar
+                    </label>
+                    <em class="fa fa-archive text-muted pl-lg mr-sm"></em>
+                    <span
+                      class="text-muted auto-hide"
+                      style="margin-top: -2px;"
+                    >
                       {{child.image}}
-                    </small>
+                    </span>
                   </div>
                 </div>
+              </div>
+            </div>
+            <div
+              class="pb0 pt-sm"
+              ng-if="!container.children  ||
+                       container.children.length <= 1"
+            >
+              <div>
+                <span
+                  class="text-bold pod-item-key"
+                  translate="{{'network.nodeDetails.IMAGE'}}"
+                ></span>
+              </div>
+              <div class="ml pod-item-value">
+                <div class="row m0" ng-repeat="image in container.images">
+                  <span
+                    class="text-muted auto-hide pod-item-value"
+                    style="display: block;"
+                    uib-tooltip="{{image}}"
+                    tooltip-enable="false"
+                    show-tooltip-on-text-overflow
+                  >
+                    {{image}}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="col-sm-12 p0">
+            <div class="pb0 pt-sm">
+              <span class="text-bold pod-item-key">
+                {{'network.nodeDetails.ENFORCER' | translate}}
+              </span>
+              <span
+                class="ml text-muted auto-hide pod-item-value"
+                uib-tooltip="{{container.enforcer_name}}"
+                tooltip-enable="false"
+                show-tooltip-on-text-overflow
+              >
+                {{container.enforcer_name}}
+              </span>
+            </div>
+          </li>
+          <li class="col-sm-12 p0">
+            <div class="col-sm-6 pl0 pb0 pt-sm">
+              <span class="text-bold pod-item-key">
+                {{'group.gridHeader.DOMAIN' | translate}}
+              </span>
+              <span
+                class="ml text-muted auto-hide pod-item-value"
+                uib-tooltip="{{container.domain}}"
+                tooltip-enable="false"
+                show-tooltip-on-text-overflow
+              >
+                {{container.domain}}
+              </span>
+            </div>
+            <div class="col-sm-6 pl0 pb0 pt-sm">
+              <span class="text-bold pod-item-key">
+                {{'network.gridHeader.SERVICE' | translate}}
+              </span>
+              <span
+                class="ml text-muted auto-hide pod-item-value"
+                uib-tooltip="{{container.service}}"
+                tooltip-enable="false"
+                show-tooltip-on-text-overflow
+              >
+                {{container.service}}
+              </span>
+            </div>
+          </li>
+          <li class="col-sm-12 p0">
+            <div class="col-sm-6 pl0 pb0 pt-sm">
+              <span class="text-bold pod-item-key">
+                {{'network.nodeDetails.LOCATION' | translate}}
+              </span>
+              <span
+                class="ml text-muted auto-hide pod-item-value"
+                uib-tooltip="{{container.host_name}}"
+                tooltip-enable="false"
+                show-tooltip-on-text-overflow
+              >
+                {{container.host_name}}
+              </span>
+            </div>
+            <div class="col-sm-6 pl0 pb0 pt-sm">
+              <span class="text-bold pod-item-key">
+                {{'network.nodeDetails.STATE' | translate}}
+              </span>
+              <span class="ml pull-left" ng-bind-html="stateHtml"></span>
+              <span
+                class="text-danger mr-lg auto-hide pod-item-value"
+                ng-if="container.state === 'quarantined'"
+                style="display: block; width: 180px;"
+              >
+                {{container.quarantine_reason}}
+              </span>
+            </div>
+          </li>
+          <li class="col-sm-12 p0">
+            <div class="col-sm-6 pl0 pb0 pt-sm">
+              <span class="text-bold pod-item-key">
+                {{'network.nodeDetails.CREATED_AT' | translate}}
+              </span>
+              <span class="ml text-muted auto-hide pod-item-value">
+                {{container.started_at | date:'MMM dd, y HH:mm:ss'}}
+              </span>
+            </div>
+            <div
+              class="col-sm-6 pl0 pb0 pt-sm"
+              ng-if="!!container.scan_summary.scanned_at"
+            >
+              <span class="text-bold pod-item-key">
+                {{'network.nodeDetails.SCANNED_AT' | translate}}
+              </span>
+              <span
+                class="ml text-muted mr-lg auto-hide pod-item-value"
+                style="display: block; width: 150px;"
+              >
+                {{container.scan_summary.scanned_at | date:'MMM dd, y
+                HH:mm:ss'}}
+              </span>
+            </div>
+          </li>
+          <li class="col-sm-12 p0">
+            <div class="col-sm-6 pl0 mda-list-item-text pb0 pt-sm">
+              <span class="text-bold pod-item-key">
+                {{'network.nodeDetails.PRIVILEGED' | translate}}
+              </span>
+              <span class="ml text-muted mr-lg auto-hide pod-item-value">
+                {{container.privileged}}
+              </span>
+            </div>
+            <div class="col-sm-6 pl0 mda-list-item-text pb0 pt-sm">
+              <span class="text-bold pod-item-key">
+                {{'network.nodeDetails.RUN_AS_ROOT' | translate}}
+              </span>
+              <span class="ml text-muted mr-lg auto-hide pod-item-value">
+                {{container.run_as_root}}
+              </span>
+            </div>
+          </li>
+          <li class="col-sm-12 p0">
+            <div class="pb0 pt-sm">
+              <span class="text-bold pod-item-key">
+                {{'group.gridHeader.VULNERABILITIES' | translate}}
+              </span>
+              <div class="pod-item-value">
+                <label
+                  class="ml label label-danger mr-sm pull-left"
+                  ng-if="container.scan_summary.high"
+                >
+                  {{container.scan_summary.high}}</label
+                >
+                <label
+                  class="label label-warning pull-left"
+                  ng-if="container.scan_summary.medium"
+                >
+                  {{container.scan_summary.medium}}</label
+                >
+                <a
+                  ui-sref="app.workloads({imageId: container.id})"
+                  style="
+                    display: table-cell;
+                    font-size: 11px;
+                    line-height: 15px;
+                  "
+                  ng-if="container.risk.high || container.risk.medium"
+                >
+                  <em class="fa fa-external-link ml-lg"></em>
+                </a>
+
+                <div
+                  class="ml mt-sm pull-left"
+                  ng-if="container.scan_summary.scanned_at && container.risk.high === 0 && container.risk.medium === 0"
+                >
+                  <label class="mt-sm label label-success-tran">
+                    <em class="fa fa-smile-o mr-sm"></em> Clean
+                  </label>
+                </div>
+
+                <button
+                  type="button"
+                  ng-if="!container.scan_summary.scanned_at && !container.scan_summary.status && !isScanStarted4Pod"
+                  class="ml btn btn-default btn-wide pt0 pb0"
+                  ng-disabled="!isWriteNetworkAuthorized"
+                  ng-click="scanPod(container.id)"
+                >
+                  {{'scan.SCAN' | translate}}
+                </button>
+
+                <div class="ml mt-sm pull-left" ng-if="isScanStarted4Pod">
+                  <label class="mt-sm label label-info-tran">
+                    <em class="fa fa-cog fa-spin mr-sm"></em> Scanning...
+                  </label>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="col-sm-6 p0" ng-if="container.network_mode">
+            <div class="pb0 pt-sm">
+              <span
+                class="text-bold pod-item-key"
+                translate="{{'network.nodeDetails.NETWORK_MODE'}}"
+              ></span>
+              <span
+                class="ml text-muted auto-hide pod-item-value"
+                uib-tooltip="{{container.network_mode}}"
+                tooltip-enable="false"
+                show-tooltip-on-text-overflow
+              >
+                {{container.network_mode}}
+              </span>
+            </div>
+          </li>
+          <li
+            class="col-sm-12 p0"
+            ng-if="(!container.children || container.children.length <= 1) && hasApps"
+          >
+            <div class="pb0 pt-sm">
+              <div>
+                <span class="text-bold pod-item-key">
+                  {{'network.nodeDetails.APPLICATIONS' | translate}}
+                </span>
               </div>
               <div
-                class="mda-list-item-text pb0"
-                ng-if="!container.children  ||
-               container.children.length <= 1"
+                class="ml text-muted auto-hide pod-item-value"
+                uib-tooltip="{{apps}}"
+                tooltip-enable="false"
+                show-tooltip-on-text-overflow
               >
-                <h3 translate="{{'network.nodeDetails.IMAGE'}}"></h3>
-                <div class="row" ng-repeat="image in container.images" style="width: 250px;">
-                  <small class="text-muted pl-lg auto-hide" style="display:block;"
-                         uib-tooltip="{{image}}"
-                         tooltip-enable="false"
-                         show-tooltip-on-text-overflow>
-                    {{image}}
-                  </small>
+                {{apps}}
+              </div>
+            </div>
+          </li>
+          <li class="col-sm-12 p0" ng-if="hasInterfaces">
+            <div class="pb0 pt-sm">
+              <div>
+                <span
+                  class="text-bold"
+                  translate="{{'containers.detail.NETWORK_INTERFACES'}}"
+                ></span>
+              </div>
+              <div
+                class="row ml"
+                style="width: 380px;"
+                ng-repeat="(name, nets) in container.interfaces"
+              >
+                <div class="col-sm-2 text-left pr0">
+                  {{name}}
                 </div>
-              </div>
-            </li>
-            <li class="mda-list-item">
-              <div class="mda-list-item-icon ">
-                <em class="fa fa-clone text-muted fa-lg"></em>
-              </div>
-              <div class="mda-list-item-text pb0">
-                <h3 translate="{{'sidebar.nav.GROUP'}}"></h3>
-                <div class="row" ng-repeat="group in container.groups" style="width: 250px;">
-                  <small class="text-muted pl-lg" style="display:block;"
-                         uib-tooltip="{{group}}"
-                         tooltip-enable="false"
-                         show-tooltip-on-text-overflow>
-                    {{group}}
-                  </small>
-                </div>
-              </div>
-            </li>
-            <li class="mda-list-item">
-              <div class="mda-list-item-icon ">
-                <em class="fa fa-map-marker text-muted fa-lg"></em>
-              </div>
-              <div class="mda-list-item-text pb0">
-                <h3 translate="{{'network.nodeDetails.IP'}}"></h3>
-                <div
-                  class="row"
-                  ng-repeat="(name, nets) in container.interfaces"
-                >
-                  <div class="col-sm-3 text-left">
-                    <strong class="text-muted"> {{name}} </strong>
-                  </div>
-                  <div class="col-sm-8  col-sm-offset-1 text-muted">
-                    <div ng-repeat="net in nets">
-                      <small>{{net.ip}}</small>
+                <div class="col-sm-1"></div>
+                <div class="col-sm-9 pl0">
+                  <div ng-repeat="net in nets" class="text-muted">
+                    <div class="col-sm-12">
+                      <div class="col-sm-6">
+                        IP:{{net.ip}}/{{net.ip_prefix}}
+                      </div>
+                      <div class="col-sm-6" ng-if="net.gateway">
+                        {{"general.GATEWAY" | translate}}:{{net.gateway}}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </li>
-
-            <li class="mda-list-item">
-              <div class="mda-list-item-icon ">
-                <em class="fa fa-calendar-plus-o text-muted fa-lg"></em>
-              </div>
-              <div class="mda-list-item-text pb0">
-                <h3 translate="{{'controllers.detail.STARTED_AT'}}" />
-                <small class="text-muted"
-                >{{container.started_at | date:'MMM dd, y HH:mm:ss'}}
-                </small>
-              </div>
-            </li>
-            <li class="mda-list-item">
-              <div class="mda-list-item-icon ">
-                <em class="fa fa-calendar-check-o text-muted fa-lg"></em>
-              </div>
-              <div class="mda-list-item-text pb0">
-                <h3 translate="{{'network.nodeDetails.SECURED_AT'}}"></h3>
-                <small class="text-muted"
-                >{{container.secured_at | date:'MMM dd, y HH:mm:ss'}}
-                </small>
-              </div>
-            </li>
-          </ul>
-        </uib-tab>
-      </uib-tabset>
-    </div>
-  </div>
-
-  <div class="dataBox topLeftLimited pt0" ng-show="onHost" ng-cloak style="min-width: 350px">
-    <button class="btn btn-xs btn-link pull-right mt-sm" ng-click="onHost=!onHost">
-      <em class="fa fa-times fa-lg text-muted"></em>
-    </button>
-    <div>
-      <h4 class="text-muted" translate="{{'network.hostDetails.TITLE'}}"></h4>
-      <ul class="mda-list">
-        <li class="mda-list-item">
-          <div class="mda-list-item-icon ">
-            <em class="fa fa-credit-card text-muted fa-lg"></em>
-          </div>
-          <div class="mda-list-item-text pb0">
-            <h3 translate="{{'network.nodeDetails.NAME'}}"></h3>
-            <small class="text-muted">
-              {{host.name | limitTo: 35}}{{host.name.length > 35 ?
-              '...' : ''}}
-            </small>
-          </div>
-        </li>
-        <li class="mda-list-item">
-          <div class="mda-list-item-icon ">
-            <em class="fa fa-building-o text-muted fa-lg"></em>
-          </div>
-          <div class="mda-list-item-text pb0">
-            <h3 translate="{{'nodes.detail.OS'}}"></h3>
-            <small class="text-muted">
-              {{host.os | limitTo: 35}}{{host.os.length > 35 ? '...' : ''}}
-            </small>
-          </div>
-        </li>
-        <li class="mda-list-item">
-          <div class="mda-list-item-icon ">
-            <em class="fa fa-gears text-muted fa-lg"></em>
-          </div>
-          <div class="mda-list-item-text pb0">
-            <h3 translate="{{'nodes.detail.NUM_OF_CPUS'}}"></h3>
-            <small class="text-muted mr-lg">
-              {{host.cpus}}
-            </small>
-          </div>
-        </li>
-        <li class="mda-list-item">
-          <div class="mda-list-item-icon ">
-            <em class="fa fa-shield text-muted fa-lg"></em>
-          </div>
-          <div class="mda-list-item-text pb0">
-            <h3 translate="{{'nodes.detail.MEMORY'}}"></h3>
-            <small class="text-muted mr-lg">
-              {{host.memory | bytes}}
-            </small>
-          </div>
-        </li>
-        <li class="mda-list-item">
-          <div class="mda-list-item-icon ">
-            <em class="fa fa-server text-muted fa-lg"/>
-          </div>
-          <div class="mda-list-item-text pb0">
-            <h3 translate="{{'nodes.detail.KERNEL_VERSION'}}"/>
-            <small class="text-muted mr-lg">
-              {{host.kernel}}
-            </small>
-          </div>
-        </li>
-        <li class="mda-list-item">
-          <div class="mda-list-item-icon ">
-            <em class="fa fa-bug text-muted fa-lg"/>
-          </div>
-          <div class="mda-list-item-text pb0">
-            <h3 translate="{{'group.gridHeader.VULNERABILITIES'}}"/>
-            <label class="label label-danger mr-sm" ng-if="host.scan_summary.high">
-              {{host.scan_summary.high}}</label>
-            <label class="label label-warning" ng-if="host.scan_summary.medium">
-              {{host.scan_summary.medium}}</label>
-            <a ui-sref="app.hosts({nodeId: host.id})"
-               style="display: table-cell; font-size: 11px; line-height: 15px;"
-               ng-if="host.scan_summary.high || host.scan_summary.medium">
-              <em class="fa fa-external-link ml-lg"></em>
-            </a>
-
-            <label class="label label-success-tran"
-                   ng-if="!host.scan_summary.high && !host.scan_summary.medium">
-              <em class="fa fa-smile-o mr-sm"></em> Clean </label>
-          </div>
-        </li>
-      </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 

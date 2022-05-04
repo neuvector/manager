@@ -2905,29 +2905,35 @@
       };
 
       function getMessage(id) {
-        if (id.zeroDrift !== "basic") {
-          return (
-            $translate.instant("topbar.mode.SWITCH") +
+        let msgArray = [];
+        if (id.mode !== "") {
+          msgArray.push(
             $translate.instant("enum." + id.mode.toUpperCase()) +
-            $translate.instant("topbar.mode.MODE") +
-            " - " + $translate.instant("enum." + id.zeroDrift.split("-").join("").toUpperCase()) +
-            "?"
+            $translate.instant("topbar.mode.MODE")
           );
         }
-        return (
-          $translate.instant("topbar.mode.SWITCH") +
-          $translate.instant("enum." + id.mode.toUpperCase()) +
-          $translate.instant("topbar.mode.MODE") +
-          "?"
-        );
+        if (id.zeroDrift === "zero-drift") {
+          msgArray.push(
+            $translate.instant("enum." + id.zeroDrift.split("-").join("").toUpperCase())
+          );
+        }
+        return `${$translate.instant("topbar.mode.SWITCH")} ${msgArray.join(", ")}?`
       }
 
       function getMessage4NodesSelected(id) {
-        return (
-          $translate.instant("group.SELECT_ALL_ALERT") +
-          $translate.instant("enum." + id.toUpperCase()) +
-          $translate.instant("group.MODE_NODES")
-        );
+        let msgArray = [];
+        if (id.mode !== "") {
+          msgArray.push(
+            $translate.instant("enum." + id.mode.toUpperCase()) +
+            $translate.instant("topbar.mode.MODE")
+          );
+        }
+        if (id.zeroDrift === "zero-drift") {
+          msgArray.push(
+            $translate.instant("enum." + id.zeroDrift.split("-").join("").toUpperCase())
+          );
+        }
+        return `${$translate.instant("group.SELECT_ALL_ALERT")}  ${msgArray.join(", ")}.`;
       }
 
       const suppressShowNodesAlerts = function(mode, nodesGroup) {
@@ -3001,7 +3007,7 @@
 
       const selectNodesAlert = function(cb, mode, nodesGroup) {
         if (!suppressShowNodesAlerts(mode, nodesGroup)) {
-          Alertify.confirm(getMessage4NodesSelected(mode.mode)).then(
+          Alertify.confirm(getMessage4NodesSelected(mode)).then(
             function onOk() {
               cb(mode, true);
             },
@@ -3015,8 +3021,16 @@
       const switchAllMode = function(mode, isAlerted) {
         const switchAll = function(mode) {
           $scope.isSwitchingMode = true;
+          let payload = {};
+          if (mode.zeroDrift !== "no-change") {
+            payload = Object.assign({baseline_profile: mode.zeroDrift}, payload);
+          }
+          if (mode.mode !== "") {
+            payload = Object.assign({policy_mode: mode.mode}, payload);
+          }
+          console.log("payload on switchAllMode:", payload);
           $http
-            .patch(SERVICE_ALL, { policy_mode: mode.mode, baseline_profile: mode.zeroDrift })
+            .patch(SERVICE_ALL, payload)
             .then(function() {
               Alertify.set({ delay: ALERTIFY_SUCCEED_DELAY });
               Alertify.success($translate.instant("service.ALL_SUBMIT_OK"));
@@ -3061,10 +3075,17 @@
               : element.name;
           });
           $scope.isSwitchingMode = true;
-          let data = {
-            config: { services: serviceList, policy_mode: mode.mode, baseline_profile: mode.zeroDrift }
-          };
-          data = pako.gzip(JSON.stringify(data));
+          let payload = {services: serviceList};
+          if (mode.zeroDrift !== "no-change") {
+            payload = Object.assign({baseline_profile: mode.zeroDrift}, payload);
+          }
+          if (mode.mode !== "") {
+            payload = Object.assign({policy_mode: mode.mode}, payload);
+          }
+
+          console.log("payload on switchSomeMode:", payload);
+
+          let data = pako.gzip(JSON.stringify({config: payload}));
           data = new Blob([data], {type: 'application/gzip'});
           let config = {
             headers: {
@@ -3725,7 +3746,7 @@
 
       $scope.updateServiceMode = function() {
         $mdDialog.hide();
-        $scope.switch.mode = $scope.switch.mode.charAt(0).toUpperCase() + $scope.switch.mode.slice(1);
+        $scope.switch.mode = $scope.switch.mode ? $scope.switch.mode.charAt(0).toUpperCase() + $scope.switch.mode.slice(1) : "";
         callback($scope.switch);
       };
 
@@ -3742,15 +3763,32 @@
       };
 
       $scope.getDefaultBaseline = function(baselineCount) {
-        if (baselineCount["zerodrift"] !== 0 && baselineCount["basic"] == 0) {
+        if (baselineCount["zerodrift"] !== 0 && baselineCount["basic"] === 0) {
           return "zero-drift";
-        } else {
+        } else if (baselineCount["zerodrift"] === 0 && baselineCount["basic"] !== 0) {
           return "basic";
+        } else {
+          return "no-change";
+        }
+      };
+
+      $scope.switchZeroDrift = () => {
+        if (!canCauseViolatedSwitch) return;
+        $scope.zeroDriftHint = "";
+        $scope.isViolatedSwitch = false;
+        if ($scope.switch.zeroDrift === 'basic') {
+          if ($scope.switch.mode !== 'discover') {
+            $scope.zeroDriftHint = $translate.instant('group.ZERO_DRIFT_HINT');
+            $scope.switch.mode = 'discover';
+            $scope.isViolatedSwitch = true;
+          }
         }
       };
 
       $scope.switch.mode = $scope.getDefaultMode(counts.modeCount);
       $scope.switch.zeroDrift = $scope.getDefaultBaseline(counts.baselineCount);
+      $scope.showNoChange = $scope.switch.zeroDrift === "no-change";
+      let canCauseViolatedSwitch = ($scope.switch.zeroDrift === 'zero-drift' || $scope.showNoChange) && $scope.switch.mode !== 'discover';
     }
   }
 

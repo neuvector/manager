@@ -1866,6 +1866,11 @@
     "SELECT_ALL_ALERT": "已选组里含有 \"nodes\" 组， 请确认是否将此组切换成",
     "SWITCH_MODE_DISABLED": "以下{{noModeGroupCount}}组上策略模式不能被切换",
     "SCORED_DISABLED": "在一些现在选中的组上评分属性不能被开关",
+    "ZERODRIFT_COMMENT": "启用/禁用防止选定组的进程和文件系统漂移的自动保护.",
+    "ZERO_DRIFT_HINT": "禁用ZeroDrift时需要将模式转换为学习",
+    "ZERO_DRIFT": "Zero Drift",
+    "NO_CHANGE": "不更改",
+    "BASIC": "基本",
     "MODE_NODES": "模式或者不选择此组的。",
     "SWITCH_SCORABLE": "参与评分",
     "RESPONSE_RULES": "响应规则",
@@ -2692,7 +2697,7 @@
     "WEBHOOK": "网络挂接",
     "CLUSTER": "集群",
     "CLUSTER_COMMENT": "用于在通知里识别集群",
-    "ZERODRIFT_COMMENT": "对于新的组, 启用/禁用基于从原始镜像Drift检测自动处理和文件保护.",
+    "ZERODRIFT_COMMENT": "启用/禁用防止新建组的进程和文件系统漂移的自动保护.",
     "CLUSTER_NAME": "集群名:",
     "SERVER": "服务器",
     "PROTOCOL": "协议",
@@ -2734,10 +2739,10 @@
     "IMPORT_FAILED": "输入失败 ",
     "NEW_SERVICE_POLICY_MODE": "新增服务的策略模式",
     "NEW_SERVICE": "新增服务",
-    "NEW_SERVICE_COMMENT": "为检测出之前没有学习或配置的新组的默认服务模式.",
+    "NEW_SERVICE_COMMENT": "新建组的默认策略模式没有被提前监测到.",
     "NET_SERVICE_POLICY_MODE": "网络服务策略模式",
     "MODE_AUTO_SWITCH": "服务组模式自动化",
-    "MODE_AUTO_SWITCH_HINT": "基于消耗时间和条件的升级组的保护模式. 它不应用于CRD创建的组.",
+    "MODE_AUTO_SWITCH_HINT": "自动升级组的策略模式. 这不会影响CRD创建的组.",
     "D2M": "学习模式到监视模式",
     "M2P": "监视模式到保护模式",
     "D2M_HINT": "从学习模式到监视模式的条件: 至少组里一个活跃Pod学习全部网络和进程活动所需时间. 例如, 如果设置为7天, 则一个组里运行的Pod和检测到的7天后, 模式将自动升级到监视模式.",
@@ -2817,7 +2822,7 @@
       "OPENID": "用OpenID Connect配置单一登录.",
       "ENABLED_NET_POLICY_MODE": "选定的策略模式将全局地应用于所有组的网络规则上, 每个组各自的策略模式将只应用于进程和文件规则上.",
       "ENABLED_NET_POLICY_MODE_GROUP": "模式将全局地应用于所有组的网络规则上, 每个组各自的策略模式将只应用于进程和文件规则上.",
-      "DISABLED_NET_POLICY_MODE": "各组的策略模式将应用在网络规则，进程及文件规则上"
+      "DISABLED_NET_POLICY_MODE": "在全局级别设置网络策略模式"
     }
   },
   "ldap": {

@@ -1867,6 +1867,11 @@
     "SELECT_ALL_ALERT": "The selection contains 'nodes' group. Please confirm if you want to switch this group to ",
     "SWITCH_MODE_DISABLED": "Policy mode in following {{noModeGroupCount}} group(s) cannot be switched.",
     "SCORED_DISABLED": "Cannot turn on/off scorable attribute for one or more currently selected groups.",
+    "ZERODRIFT_COMMENT": "Enable/disable automated protection that prevents processes and file system drift for selected groups.",
+    "ZERO_DRIFT_HINT": "To disable zeroDrift we need switch the mode to discover",
+    "ZERO_DRIFT": "Zero Drift",
+    "NO_CHANGE": "No Change",
+    "BASIC": "Basic",
     "MODE_NODES": " mode or unselect it.",
     "SWITCH_SCORABLE": "Scorable",
     "RESPONSE_RULES": "Response rules",
@@ -2693,7 +2698,7 @@
     "WEBHOOKS": "Webhooks",
     "CLUSTER": "Cluster",
     "CLUSTER_COMMENT": "Used to identify the cluster in notifications",
-    "ZERODRIFT_COMMENT": "For new Groups, enable/disable automated process and file protections based drift detection from the original image.",
+    "ZERODRIFT_COMMENT": "Enable/disable automated protection that prevents processes and file system drift for new groups.",
     "CLUSTER_NAME": "Cluster Name:",
     "SERVER": "Server",
     "PROTOCOL": "Protocol",
@@ -2735,10 +2740,10 @@
     "IMPORT_FAILED": "Import failed ",
     "NEW_SERVICE_POLICY_MODE": "Default mode for new services",
     "NEW_SERVICE": "New Services Mode",
-    "NEW_SERVICE_COMMENT": "The default services mode for new Groups detected which have not been previously learned or configured.",
+    "NEW_SERVICE_COMMENT": "The default policy mode for new groups that have not been previously detected.",
     "NET_SERVICE_POLICY_MODE": "Network Service Policy Mode",
     "MODE_AUTO_SWITCH": "Service Group Mode Automation",
-    "MODE_AUTO_SWITCH_HINT": "Promotes a Group’s protection Mode based on elapsed time and criteria. Does not apply to CRD created Groups.",
+    "MODE_AUTO_SWITCH_HINT": "Promote groups' policy mode automatically. This does not affect CRD created groups.",
     "D2M": "Discover to Monitor",
     "M2P": "Monitor to Protect",
     "D2M_HINT": "The criterion for moving from Discover to Monitor mode is: elapsed time for learning all network and process activity of at least one live pod in the Group. For example, if this is set to 7 days, then 7 days after a running pod for the group is detected, the mode will be automatically promoted to Monitor.",
@@ -2818,7 +2823,7 @@
       "OPENID": "Configure single sign on using OpenID Connect.",
       "ENABLED_NET_POLICY_MODE": "The selected policy mode will apply globally to the network rules for all groups, and each Group’s individual policy mode will only apply to process and file rules.",
       "ENABLED_NET_POLICY_MODE_GROUP": " mode will apply globally to the network rules for all groups, and each Group’s individual policy mode will only apply to process and file rules.",
-      "DISABLED_NET_POLICY_MODE": "Per group level policy mode will apply to network rules, process and file rules"
+      "DISABLED_NET_POLICY_MODE": "Set the network policy mode at the global level"
     }
   },
   "ldap": {

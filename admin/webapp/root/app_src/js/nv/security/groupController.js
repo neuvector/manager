@@ -3775,12 +3775,10 @@
       $scope.switchZeroDrift = () => {
         if (!canCauseViolatedSwitch) return;
         $scope.zeroDriftHint = "";
-        $scope.isViolatedSwitch = false;
         if ($scope.switch.zeroDrift === 'basic') {
           if ($scope.switch.mode !== 'discover') {
             $scope.zeroDriftHint = $translate.instant('group.ZERO_DRIFT_HINT');
             $scope.switch.mode = 'discover';
-            $scope.isViolatedSwitch = true;
           }
         }
       };

@@ -2904,36 +2904,20 @@
           });
       };
 
-      function getMessage(id) {
+      function getMessage(id, hasNodeGroups = false) {
         let msgArray = [];
         if (id.mode !== "") {
           msgArray.push(
-            $translate.instant("enum." + id.mode.toUpperCase()) +
-            $translate.instant("topbar.mode.MODE")
+            `${$translate.instant("group.gridHeader.POLICY_MODE")}: ${$translate.instant("enum." + id.mode.toUpperCase())}`
           );
         }
-        if (id.zeroDrift === "zero-drift") {
+        if (id.zeroDrift !== "no-change") {
           msgArray.push(
-            $translate.instant("enum." + id.zeroDrift.split("-").join("").toUpperCase())
+            `${$translate.instant("group.BASELINE_PROFILE")}: ${$translate.instant("enum." + id.zeroDrift.split("-").join("").toUpperCase())}`
           );
         }
-        return `${$translate.instant("topbar.mode.SWITCH")} ${msgArray.join(", ")}?`
-      }
-
-      function getMessage4NodesSelected(id) {
-        let msgArray = [];
-        if (id.mode !== "") {
-          msgArray.push(
-            $translate.instant("enum." + id.mode.toUpperCase()) +
-            $translate.instant("topbar.mode.MODE")
-          );
-        }
-        if (id.zeroDrift === "zero-drift") {
-          msgArray.push(
-            $translate.instant("enum." + id.zeroDrift.split("-").join("").toUpperCase())
-          );
-        }
-        return `${$translate.instant("group.SELECT_ALL_ALERT")}  ${msgArray.join(", ")}.`;
+        return `${hasNodeGroups? $translate.instant("group.SELECT_ALL_ALERT") : $translate.instant("topbar.mode.SWITCH_CONFIRM")}
+                <br/>(${msgArray.join(", ")})`
       }
 
       const suppressShowNodesAlerts = function(mode, nodesGroup) {
@@ -3007,7 +2991,7 @@
 
       const selectNodesAlert = function(cb, mode, nodesGroup) {
         if (!suppressShowNodesAlerts(mode, nodesGroup)) {
-          Alertify.confirm(getMessage4NodesSelected(mode)).then(
+          Alertify.confirm(getMessage(mode, true)).then(
             function onOk() {
               cb(mode, true);
             },
@@ -3772,23 +3756,18 @@
         }
       };
 
-      $scope.switchZeroDrift = () => {
-        if (!canCauseViolatedSwitch) return;
+      $scope.checkZeroDrift = () => {
+        if ($scope.zeroDriftHint) return;
         $scope.zeroDriftHint = "";
-        $scope.isViolatedSwitch = false;
-        if ($scope.switch.zeroDrift === 'basic') {
-          if ($scope.switch.mode !== 'discover') {
+        if (($scope.switch.zeroDrift === 'basic' || $scope.switch.zeroDrift === "no-change") && $scope.switch.mode !== 'discover') {
             $scope.zeroDriftHint = $translate.instant('group.ZERO_DRIFT_HINT');
             $scope.switch.mode = 'discover';
-            $scope.isViolatedSwitch = true;
-          }
         }
       };
 
       $scope.switch.mode = $scope.getDefaultMode(counts.modeCount);
       $scope.switch.zeroDrift = $scope.getDefaultBaseline(counts.baselineCount);
       $scope.showNoChange = $scope.switch.zeroDrift === "no-change";
-      let canCauseViolatedSwitch = ($scope.switch.zeroDrift === 'zero-drift' || $scope.showNoChange) && $scope.switch.mode !== 'discover';
     }
   }
 

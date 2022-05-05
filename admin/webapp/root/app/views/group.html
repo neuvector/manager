@@ -440,132 +440,129 @@
             </div>
           </md-toolbar>
           <md-dialog-content style="overflow: visible" class="mt-lg">
-            <div class="col-sm-12 ">
-              <div class="col-sm-8">
-                <div class="pull-left mr-lg">
-                  <div
-                    class="radio-inline c-radio mr-lg"
+            <div class="col-sm-12">
+              <div class="pull-left mr-lg">
+                <div
+                  class="radio-inline c-radio mr-lg"
+                  ng-class="inputMaskDisabledClass"
+                >
+                  <label
+                    class="text-gray-label"
                     ng-class="inputMaskDisabledClass"
                   >
-                    <label
-                      class="text-gray-label"
-                      ng-class="inputMaskDisabledClass"
-                    >
-                      <input
-                        type="radio"
-                        name="mode"
-                        value="discover"
-                        ng-model="switch.mode"
-                        ng-click="switchServiceMode('Discover')"
-                      />
-                      <span
-                        class="fa fa-binoculars text-discover"
-                        ng-class="inputMaskDisabledClass"
-                      />{{'topbar.mode.LEARNING' | translate}}
-                    </label>
-                  </div>
-                  <div
-                    class="radio-inline c-radio pl-sm mr-lg"
-                    ng-class="inputMaskDisabledClass"
-                  >
-                    <label
-                      class="text-gray-label"
-                      ng-class="inputMaskDisabledClass"
-                    >
-                      <input
-                        type="radio"
-                        name="mode"
-                        value="monitor"
-                        ng-model="switch.mode"
-                        ng-click="switchServiceMode('Monitor')"
-                      />
-                      <span
-                        class="fa fa-bell text-monitor"
-                        ng-class="inputMaskDisabledClass"
-                      />{{'topbar.mode.EVALUATION' | translate}}
-                    </label>
-                  </div>
-                  <div
-                    class="radio-inline c-radio pl-sm"
-                    ng-class="inputMaskDisabledClass"
-                  >
-                    <label
-                      class="text-gray-label"
-                      ng-class="inputMaskDisabledClass"
-                    >
-                      <input
-                        type="radio"
-                        name="mode"
-                        value="protect"
-                        ng-model="switch.mode"
-                        ng-click="switchServiceMode('Protect')"
-                      />
-                      <span
-                        class="fa fa-shield text-protect"
-                        ng-class="inputMaskDisabledClass"
-                      />{{'topbar.mode.ENFORCE' | translate}}
-                    </label>
-                  </div>
-                </div>
-                <div class="text-warning text-sm pull-left">
-                  {{zeroDriftHint}}
-                </div>
-              </div>
-              <div class="col-sm-12 mt-lg">
-                <div class="pull-left mr-lg">
-                  <label class="radio-inline c-radio text-gray-label"
-                    ng-class="inputMaskDisabledClass">
                     <input
-                      id="zeroDrift"
                       type="radio"
-                      name="zero-drift-switch"
-                      ng-model="switch.zeroDrift"
-                      value="zero-drift"
-                      ng-click="switchZeroDrift()"
-                      required
+                      name="mode"
+                      value="discover"
+                      ng-model="switch.mode"
                     />
-                    <span class="fa fa-check text-discover"
-                      ng-class="inputMaskDisabledClass" />
-                    {{'group.ZERO_DRIFT' | translate}}
-                  </label>
-                  <label class="radio-inline c-radio text-gray-label"
-                    ng-class="inputMaskDisabledClass">
-                    <input
-                      id="basic"
-                      type="radio"
-                      name="zero-drift-switch"
-                      ng-model="switch.zeroDrift"
-                      value="basic"
-                      ng-click="switchZeroDrift()"
-                      required
-                    />
-                    <span class="fa fa-check text-discover"
-                      ng-class="inputMaskDisabledClass" />
-                    {{'group.BASIC' | translate}}
+                    <span
+                      class="fa fa-binoculars text-discover"
+                      ng-class="inputMaskDisabledClass"
+                    />{{'topbar.mode.LEARNING' | translate}}
                   </label>
                 </div>
-                <div class="text-muted text-sm mb-lg pull-left">
-                  {{'group.ZERODRIFT_COMMENT' | translate}}
+                <div
+                  class="radio-inline c-radio pl-sm mr-lg"
+                  ng-class="inputMaskDisabledClass"
+                >
+                  <label
+                    class="text-gray-label"
+                    ng-class="inputMaskDisabledClass"
+                  >
+                    <input
+                      type="radio"
+                      name="mode"
+                      value="monitor"
+                      ng-model="switch.mode"
+                      ng-click="checkZeroDrift()"
+                    />
+                    <span
+                      class="fa fa-bell text-monitor"
+                      ng-class="inputMaskDisabledClass"
+                    />{{'topbar.mode.EVALUATION' | translate}}
+                  </label>
+                </div>
+                <div
+                  class="radio-inline c-radio pl-sm"
+                  ng-class="inputMaskDisabledClass"
+                >
+                  <label
+                    class="text-gray-label"
+                    ng-class="inputMaskDisabledClass"
+                  >
+                    <input
+                      type="radio"
+                      name="mode"
+                      value="protect"
+                      ng-model="switch.mode"
+                      ng-click="checkZeroDrift()"
+                    />
+                    <span
+                      class="fa fa-shield text-protect"
+                      ng-class="inputMaskDisabledClass"
+                    />{{'topbar.mode.ENFORCE' | translate}}
+                  </label>
                 </div>
               </div>
-              <div class="col-sm-12 pb-sm" ng-show="noModeList.length > 0">
-                <div class="mb-lg mt-lg">
-                  <span>{{noModeGroupMsg}}</span>
-                  <span role="button" class="link pl-lg" ng-click="isExpandingGroupList = !isExpandingGroupList">
-                    {{isExpandingGroupList ? 'enum.HIDE_DETAILS' : 'enum.SHOW_DETAILS' | translate}}
-                  </span>
-                </div>
-                <div ng-show="isExpandingGroupList" class="pt-sm pb-sm pl pr" style="max-height: 150px; overflow-y: scroll; background-color: #eee;">
-                  <div ng-repeat="noModeGroup in noModeList">{{noModeGroup.name}}</div>
-                </div>
+              <div class="text-warning text-sm pull-left">
+                {{zeroDriftHint}}
               </div>
-              <div class="col-sm-12 pb-sm">
-                <button class="btn btn-wide btn-default pull-right"
-                        ng-disabled="!switchModeForm.$dirty || (!switch.mode && !switch.zeroDrift)"
-                        ng-click="updateServiceMode()">
-                  <em class="fa fa-send mr-sm"></em>{{'setting.SUBMIT' | translate}}
-                </button>
+            </div>
+            <div class="col-sm-12 mt-lg">
+              <div class="pull-left mr-lg">
+                <label class="radio-inline c-radio text-gray-label"
+                  ng-class="inputMaskDisabledClass">
+                  <input
+                    id="basic"
+                    type="radio"
+                    name="zero-drift-switch"
+                    ng-model="switch.zeroDrift"
+                    value="basic"
+                    ng-click="checkZeroDrift()"
+                    required
+                  />
+                  <span class="fa fa-check text-discover"
+                    ng-class="inputMaskDisabledClass" />
+                  {{'group.BASIC' | translate}}
+                </label>
+                <label class="radio-inline c-radio text-gray-label"
+                  ng-class="inputMaskDisabledClass">
+                  <input
+                    id="zeroDrift"
+                    type="radio"
+                    name="zero-drift-switch"
+                    ng-model="switch.zeroDrift"
+                    value="zero-drift"
+                    ng-click="checkZeroDrift()"
+                    required
+                  />
+                  <span class="fa fa-check text-discover"
+                    ng-class="inputMaskDisabledClass" />
+                  {{'group.ZERO_DRIFT' | translate}}
+                </label>
               </div>
+              <div class="text-muted text-sm mb-lg pull-left">
+                {{'group.ZERODRIFT_COMMENT' | translate}}
+              </div>
+            </div>
+            <div class="col-sm-12 pb-sm" ng-show="noModeList.length > 0">
+              <div class="mb-lg mt-lg">
+                <span>{{noModeGroupMsg}}</span>
+                <span role="button" class="link pl-lg" ng-click="isExpandingGroupList = !isExpandingGroupList">
+                  {{isExpandingGroupList ? 'enum.HIDE_DETAILS' : 'enum.SHOW_DETAILS' | translate}}
+                </span>
+              </div>
+              <div ng-show="isExpandingGroupList" class="pt-sm pb-sm pl pr" style="max-height: 150px; overflow-y: scroll; background-color: #eee;">
+                <div ng-repeat="noModeGroup in noModeList">{{noModeGroup.name}}</div>
+              </div>
+            </div>
+            <div class="col-sm-12 pb-sm">
+              <button class="btn btn-wide btn-default pull-right"
+                      ng-disabled="!switchModeForm.$dirty || (!switch.mode && !switch.zeroDrift)"
+                      ng-click="updateServiceMode()">
+                <em class="fa fa-send mr-sm"></em>{{'setting.SUBMIT' | translate}}
+              </button>
             </div>
           </md-dialog-content>
         </form>

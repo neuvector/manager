@@ -2738,6 +2738,7 @@
     "SUPPORT_IN_PROGRESS": "Collecting logs for Manager, Controller and Enforcer...",
     "SUPPORT_INFO": "Please send to support@neuvector.com",
     "EXPORT_FAILED": "Failed to export file",
+    "DOWNLOAD_FAILED": "Failed to download file",
     "SUBMIT_OK": "System config updated.",
     "SUBMIT_FAILED": "Failed to update system config",
     "IMPORT_FAILED": "Import failed ",

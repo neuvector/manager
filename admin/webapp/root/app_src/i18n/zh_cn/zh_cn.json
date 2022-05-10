@@ -2737,6 +2737,7 @@
     "SUPPORT_IN_PROGRESS": "正收集系统各组件日志...",
     "SUPPORT_INFO": "请发送support@neuvector.com",
     "EXPORT_FAILED": "文件导出失败",
+    "DOWNLOAD_FAILED": "文件下载失败",
     "SUBMIT_OK": "系统设置更新成功!",
     "SUBMIT_FAILED": "系统设置更新失败",
     "IMPORT_FAILED": "输入失败 ",

@@ -2,12 +2,15 @@
 NeuVector Security Center Admin Console for the SUSE NeuVector Container Security Platform.
 
 A viewable version of docs can be seen at https://open-docs.neuvector.com
-The container images for the beta version can be pulled from the NeuVector Docker Hub registry at:
-+ neuvector/manager:5.0.0-b1
-+ neuvector/controller:5.0.0-b1
-+ neuvector/enforcer:5.0.0-b1
+
+The images are on the NeuVector Docker Hub registry. Use the appropriate version tag for the manager, controller, enforcer, and leave the version as 'latest' for scanner and updater. For example:
++ neuvector/manager:5.0.0
++ neuvector/controller:5.0.0
++ neuvector/enforcer:5.0.0
 + neuvector/scanner:latest
 + neuvector/updater:latest
+
+Note: Deploying from the Rancher Manager 2.6.5+ NeuVector chart pulls from the rancher-mirrored repo and deploys into the cattle-neuvector-system namespace.
 
 # Bugs & Issues
 Please submit bugs and issues to [neuvector/neuvector](//github.com/neuvector/neuvector/issues) with a title starting with `[UI] `.

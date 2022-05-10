@@ -814,7 +814,6 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
 
 
   private def loginWithSUSEToken(suseCookieValue: String) = {
-    logger.info("suse cookie value:" + suseCookieValue)
     clientIP { ip =>
       entity(as[Password]) { userPwd =>
         def login: Route = {

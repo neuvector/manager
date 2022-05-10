@@ -1118,7 +1118,6 @@
                 applications: [],
                 policy_mode: "",
                 service_group: "",
-                scanned_at: "",
                 complianceCnt: 0,
                 evaluation: 0,
                 complianceList: []
@@ -1152,12 +1151,11 @@
                   } else {
                     compWorkload = JSON.parse(JSON.stringify(compWorkloadInit));
                     let workloadInfo = masterData.workloadMap4Pdf[workload.id];
-                    compWorkload.pod_name = workload.display_name;
-                    compWorkload.domain = workloadInfo.domain;
-                    compWorkload.applications = workloadInfo.applications;
-                    compWorkload.policy_mode = workload.policy_mode;
-                    compWorkload.service_group = workloadInfo.service_group;
-                    compWorkload.scanned_at = workloadInfo.scanned_at;
+                    compWorkload.pod_name = workload.display_name || "";
+                    compWorkload.domain = workloadInfo.domain || "";
+                    compWorkload.applications = workloadInfo.applications || "";
+                    compWorkload.policy_mode = workload.policy_mode || "";
+                    compWorkload.service_group = workloadInfo.service_group || "";
                     compWorkload.complianceCnt++;
                     compWorkload.evaluation = compWorkload.complianceCnt > 0 ? 1 : 0;
                     compWorkload.complianceList.push({text: compliance.name.padEnd(12), style: compliance.level.toLowerCase()});
@@ -1175,7 +1173,6 @@
                 memory: 0,
                 containers: 0,
                 policy_mode: "",
-                scanned_at: "",
                 complianceCnt: 0,
                 evaluation: 0,
                 complianceList: []
@@ -1191,14 +1188,13 @@
                   } else {
                     compHost = JSON.parse(JSON.stringify(compHostInit));
                     let hostInfo = masterData.hostMap4Pdf[host.id];
-                    compHost.name = host.display_name;
-                    compHost.os = hostInfo.os;
-                    compHost.kernel = hostInfo.kernel;
-                    compHost.cpus = hostInfo.cpus;
-                    compHost.memory = hostInfo.memory;
-                    compHost.containers = hostInfo.containers;
-                    compHost.policy_mode = host.policy_mode;
-                    compHost.scanned_at = host.scanned_at;
+                    compHost.name = host.display_name || "";
+                    compHost.os = hostInfo.os || "";
+                    compHost.kernel = hostInfo.kernel || "";
+                    compHost.cpus = hostInfo.cpus || "";
+                    compHost.memory = hostInfo.memory || "";
+                    compHost.containers = hostInfo.containers || "";
+                    compHost.policy_mode = host.policy_mode || "";
                     compHost.complianceCnt++;
                     compHost.evaluation = compHost.complianceCnt > 0 ? 1 : 0;
                     compHost.complianceList.push({text: compliance.name.padEnd(12), style: compliance.level.toLowerCase()});
@@ -1224,7 +1220,7 @@
                     compImage.complianceList.push({text: compliance.name.padEnd(12), style: compliance.level.toLowerCase()});
                   } else {
                     compImage = JSON.parse(JSON.stringify(compImageInit));
-                    compImage.image_name = image.display_name;
+                    compImage.image_name = image.display_name || "";
                     compImage.complianceCnt++;
                     compImage.evaluation = compImage.complianceCnt > 0 ? 1 : 0;
                     compImage.complianceList.push({text: compliance.name.padEnd(12), style: compliance.level.toLowerCase()});
@@ -1293,7 +1289,7 @@
                 } else {
                   let otherCompImage = JSON.parse(JSON.stringify(otherCompImageInit));
                   otherCompImage.image_id = image.id;
-                  otherCompImage.image_name = image.display_name;
+                  otherCompImage.image_name = image.display_name || "";
                   otherCompImage.complianceList.push({text: compliance.name.padEnd(12), style: compliance.level.toLowerCase()});
                   otherCompImage.complianceCnt++;
                   otherCompImage.evaluation = otherCompImage.complianceCnt > 0 ? 1 : 0;
@@ -1487,7 +1483,7 @@
                 table: {
                   headerRows: 1,
                   dontBreakRows: false,
-                  widths: ["15%", "10%", "15%", "8%", "12%", "9%", "25%", "6%"],
+                  widths: ["15%", "10%", "15%", "8%", "12%", "9%", "31%"],
                   body: [
                     [
                       { text: metadata.wlHeader.name, style: "tableHeader" },
@@ -1496,8 +1492,7 @@
                       { text: metadata.wlHeader.policyMode, style: "tableHeader" },
                       { text: metadata.wlHeader.group, style: "tableHeader" },
                       { text: metadata.header.complianceCnt, style: "tableHeader" },
-                      { text: metadata.header.complianceList, style: "tableHeader" },
-                      { text: metadata.wlHeader.scanned_at, style: "tableHeader" }
+                      { text: metadata.header.complianceList, style: "tableHeader" }
                     ]
                   ]
                 },
@@ -1517,7 +1512,7 @@
                 table: {
                   headerRows: 1,
                   dontBreakRows: false,
-                  widths: ["11%", "6%", "11%", "7%", "7%", "9%", "10%", "9%", "23%", "7%"],
+                  widths: ["11%", "6%", "11%", "7%", "7%", "9%", "10%", "9%", "30%"],
                   body: [
                     [
                       { text: metadata.htHeader.name, style: "tableHeader" },
@@ -1528,8 +1523,7 @@
                       { text: metadata.htHeader.containers, style: "tableHeader" },
                       { text: metadata.htHeader.policyMode, style: "tableHeader" },
                       { text: metadata.header.complianceCnt, style: "tableHeader" },
-                      { text: metadata.header.complianceList, style: "tableHeader" },
-                      { text: metadata.wlHeader.scanned_at, style: "tableHeader" }
+                      { text: metadata.header.complianceList, style: "tableHeader" }
                     ]
                   ]
                 },
@@ -1783,9 +1777,8 @@
             let group = `${item.service_group}`;
             let cnt = item.complianceCnt;
             let complianceList = _getStyledComplianceList(item.complianceList);
-            let scanned_at = item.scanned_at;
 
-            return [name, domain, apps, policyMode, group, cnt, complianceList, scanned_at];
+            return [name, domain, apps, policyMode, group, cnt, complianceList];
           };
 
           const _getRowData4Hosts = function(item) {
@@ -1798,9 +1791,8 @@
             let policyMode = {text: item.policy_mode, style: item.policy_mode.toLowerCase()};
             let cnt = item.complianceCnt;
             let complianceList = _getStyledComplianceList(item.complianceList);
-            let scanned_at = item.scanned_at;
 
-            return [name, os, kernel, cpus, memory, containers, policyMode, cnt, complianceList, scanned_at];
+            return [name, os, kernel, cpus, memory, containers, policyMode, cnt, complianceList];
           };
 
           const _getRowData4Platforms = function(item) {
@@ -2610,12 +2602,6 @@
               {},
               "",
               "en"
-            ),
-            scanned_at: $translate.instant(
-              "scan.gridHeader.TIME",
-              {},
-              "",
-              "en"
             )
           },
           htHeader: {
@@ -2657,12 +2643,6 @@
             ),
             policyMode: $translate.instant(
               "containers.detail.POLICY_MODE",
-              {},
-              "",
-              "en"
-            ),
-            scanned_at: $translate.instant(
-              "scan.gridHeader.TIME",
               {},
               "",
               "en"

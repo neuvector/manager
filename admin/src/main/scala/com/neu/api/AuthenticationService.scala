@@ -71,7 +71,6 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
               }
             }
           } else {
-            logger.info(s"openId-g: state is ${state.get}.")
             logger.info(s"openId-g: code is ${code.getOrElse("no code")}")
             optionalHeaderValueByName("Host") { host =>
               logger.info(s"openId-g:  host is ${host.get}")
@@ -99,7 +98,6 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                   )
                   val response = Await.result(result, RestClient.waitingLimit.seconds)
                   logger.info("openId-g: OpenId Login. ")
-                  logger.info("openId-g: response.entity: {}", response.entity.asString)
 
                   response.status match {
                     case StatusCodes.OK =>
@@ -209,10 +207,6 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
               val response = Await.result(result, RestClient.waitingLimit.seconds)
 
               logger.info("saml-p: added temp cookie.")
-              logger.debug(
-                s"saml-p: added temp cookie. response entity is {}",
-                response.entity.asString
-              )
 
               response.status match {
                 case StatusCodes.OK =>
@@ -316,7 +310,6 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                 Utils.respondWithNoCacheControl() {
                   complete {
                     val payload = roleWrapToJson(roleWrap)
-                    logger.info("Add role: {}", payload)
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/user_role",
                       POST,
@@ -333,7 +326,6 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                   complete {
                     val payload = roleWrapToJson(roleWrap)
                     val name    = roleWrap.config.name
-                    logger.info("Add role: {}", payload)
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/user_role/${UrlEscapers.urlFragmentEscaper().escape(name)}",
                       PATCH,
@@ -365,7 +357,6 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
           get {
             parameter('name.?) { name =>
               logger.info("name: {}", name)
-              logger.info("tokenId: {}", tokenId)
               Utils.respondWithNoCacheControl() {
                 complete {
                   if (name.nonEmpty) {
@@ -381,7 +372,6 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                       val userWrap =
                         jsonToUserWrap(Await.result(result, RestClient.waitingLimit.seconds))
                       val user = userWrap.user
-                      logger.info("user: {}", user)
                       val token1 = TokenWrap(
                         None,
                         Token(
@@ -398,7 +388,6 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                           user.role_domains
                         )
                       )
-                      logger.info("user token: {}", token1)
                       val authToken = AuthenticationManager.parseToken(tokenWrapToJson(token1))
                       authToken
                     } catch {
@@ -521,7 +510,6 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
             parameter('isOnNV.?) { isOnNV =>
               Utils.respondWithNoCacheControl() {
                 complete {
-                  logger.debug("tokenId: {}", tokenId)
                   try {
                     logger.info("Getting self ..")
                     val result =
@@ -534,7 +522,6 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                     val selfWrap =
                       jsonToSelfWrap(Await.result(result, RestClient.waitingLimit.seconds))
                     val user = selfWrap.user
-                    logger.info("user: {}", user)
                     val token1 = TokenWrap(
                       selfWrap.password_days_until_expire,
                       Token(
@@ -551,7 +538,6 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                         user.role_domains
                       )
                     )
-                    logger.debug("user token: {}", token1)
                     val authToken = AuthenticationManager.parseToken(tokenWrapToJson(token1))
                     authToken
                   } catch {
@@ -743,7 +729,6 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                   Utils.respondWithNoCacheControl() {
                     complete {
                       logger.info("Adding ldap/saml server")
-                      logger.debug(ldapSettingWrapToJson(ldapSettingWrap))
                       RestClient.httpRequestWithHeader(
                         s"${baseClusterUri(tokenId)}/server",
                         POST,
@@ -761,7 +746,6 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                   Utils.respondWithNoCacheControl() {
                     complete {
                       logger.info("Updating Ldap/saml server")
-                      logger.debug(ldapSettingWrapToJson(ldapSettingWrap))
                       RestClient.httpRequestWithHeader(
                         s"${baseClusterUri(tokenId)}/server/${ldapSettingWrap.config.name}",
                         PATCH,
@@ -814,7 +798,6 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
 
 
   private def loginWithSUSEToken(suseCookieValue: String) = {
-    logger.info("suse cookie value:" + suseCookieValue)
     clientIP { ip =>
       entity(as[Password]) { userPwd =>
         def login: Route = {

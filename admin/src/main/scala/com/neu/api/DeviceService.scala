@@ -19,6 +19,7 @@ import scala.concurrent.duration._
 import scala.concurrent.{ Await, ExecutionContext }
 import scala.sys.process._
 import scala.util.control.NonFatal
+import com.neu.cache.SupportLogAuthCacheManager
 
 class DeviceService()(implicit executionContext: ExecutionContext)
     extends Directives
@@ -443,15 +444,35 @@ class DeviceService()(implicit executionContext: ExecutionContext)
               Utils.respondWithNoCacheControl() {
                 complete {
                   logger.info("Getting debug log: {}", logFile)
-                  purgeDebugFiles(new File("/tmp"))
-
-                  val byteArray = Files.readAllBytes(Paths.get(logFile))
-                  HttpResponse(
-                    StatusCodes.OK,
-                    entity = HttpEntity(MediaTypes.`application/x-gzip`, byteArray)
-                  ).withHeaders(
-                    HttpHeaders.`Content-Disposition`.apply("inline", Map("filename" -> "debug.gz"))
-                  )
+                  try {
+                    val authRes = RestClient.httpRequestWithHeader(
+                      s"${baseClusterUri(tokenId)}/$auth",
+                      PATCH,
+                      "",
+                      tokenId
+                    )
+                    val result = Await.result(authRes, RestClient.waitingLimit.seconds)
+                    if (SupportLogAuthCacheManager.getSupportLogAuth(tokenId).isDefined) {
+                      val byteArray = Files.readAllBytes(Paths.get(logFile))
+                      purgeDebugFiles(new File("/tmp"))
+                      HttpResponse(
+                        StatusCodes.OK,
+                        entity = HttpEntity(MediaTypes.`application/x-gzip`, byteArray)
+                      ).withHeaders(
+                        HttpHeaders.`Content-Disposition`.apply("inline", Map("filename" -> "debug.gz"))
+                      )
+                    } else {
+                      (StatusCodes.Forbidden, "File can not be accessed.")
+                    }
+                  } catch {
+                    case NonFatal(e) =>
+                      RestClient.handleError(
+                        timeOutStatus,
+                        authenticationFailedStatus,
+                        serverErrorStatus,
+                        e
+                      )
+                  }
                 }
               }
             } ~
@@ -464,6 +485,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
 
                     val id       = AuthenticationManager.getCluster(tokenId).getOrElse("")
                     val ctrlHost = new URL(baseUri).getHost
+                    SupportLogAuthCacheManager.saveSupportLogAuth(tokenId, logFile)
                     if (debuggedEnforcer.nonEmpty) {
                       logger.info("With enforcer debug log")
                       val proc =

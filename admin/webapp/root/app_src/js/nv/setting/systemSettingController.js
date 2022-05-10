@@ -1085,9 +1085,8 @@
           if (USER_TIMEOUT.indexOf(err.status) < 0) {
             Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
             Alertify.error(
-              $translate.instant("setting.SUBMIT_FAILED") +
-                " " +
-                error.data.message
+              $translate.instant("setting.DOWNLOAD_FAILED") +
+              " - " + String.fromCharCode.apply(null, new Uint8Array(err.data))
             );
           }
         });
@@ -1109,9 +1108,11 @@
           if (USER_TIMEOUT.indexOf(err.status) < 0) {
             Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
             Alertify.error(
-              $translate.instant("setting.EXPORT_FAILED") +
-                " " +
-                error.data.message
+              Utils.getAlertifyMsg(
+                err,
+                $translate.instant("setting.EXPORT_FAILED"),
+                false
+              )
             );
           }
         });

@@ -183,3 +183,6 @@
 .label-pink {
   @include label-variant($nv-pink);
 }
+.label-green {
+  @include label-variant($nv-green);
+}

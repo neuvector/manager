@@ -1422,7 +1422,7 @@
                           </li>
                           <li role="menuitem" ng-if="cve && !isAccepted && isWriteVulsAuthorized">
                             <a ng-click="acceptVulnerability($event, cve)">
-                              <em class="fa fa-check-square-o mr"></em>{{ 'cveProfile.ACCEPT_VUL' | translate}}
+                              <em class="fa fa-check mr"></em>{{ 'cveProfile.ACCEPT_VUL' | translate}}
                             </a>
                           </li>
                         </ul>
@@ -1453,14 +1453,14 @@
                         class="btn btn-default pull-right"
                         ng-click="acceptVulnerability($event, cve)"
                       >
-                        <em class="fa fa-check-square-o mr-sm"></em>{{ 'cveProfile.ACCEPT' | translate}}
+                        <em class="fa fa-check mr-sm"></em>{{ 'cveProfile.ACCEPT' | translate}}
                       </button>
                     </div>
                     <div role="button" ng-show="cve && !isAccepted && isSimpleButton" display-control="write_vuls_profile"
                       class="pull-right text-muted mr mt-sm"
                       ng-click="acceptVulnerability($event, cve)"
                     >
-                      <em class="fa fa-check-square-o" uib-tooltip="{{ 'cveProfile.ACCEPT' | translate }}"></em>
+                      <em class="fa fa-check" uib-tooltip="{{ 'cveProfile.ACCEPT' | translate }}"></em>
                     </div>-->
                   </div>
                   <div ng-show="hasLayers">

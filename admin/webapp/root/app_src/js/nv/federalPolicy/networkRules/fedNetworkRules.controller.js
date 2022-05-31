@@ -112,7 +112,7 @@
                     field: "id",
                     checkboxSelection: function(params) {
                         if (params.data) {
-                            return params.data.state !== STATE_GROUND_RULE;
+                            return params.data.state !== STATE_GROUND_RULE && params.data.id !== "";
                         }
                         return false;
                     },
@@ -124,6 +124,12 @@
                 {
                     headerName: $translate.instant("policy.gridHeader.FROM"),
                     field: "from",
+                    colSpan: function(params) {
+                      if (params.data && params.data.id === "") {
+                        return 8;
+                      }
+                      return 1;
+                    },
                     cellRenderer: fromRenderFunc,
                     cellClass: ["wrap-word-in-cell"],
                     width: 280
@@ -270,10 +276,16 @@
 
             function fromRenderFunc(params) {
                 if (params.value)
+                  if (params.data.id === "") {
+                    return `<div style="word-wrap: break-word;">
+                      ${$sanitize(params.value)}
+                    </div>`;
+                  } else {
                     return `<div style="word-wrap: break-word;" ng-class="{\'policy-remove\': data.remove}" tooltip-enable="${params.value.length > 50}"
                       uib-tooltip="${$sanitize(params.value)}">
                       ${$sanitize(Utils.shortenString(params.value, 50))}
                     </div>`;
+                  }
             }
 
             function toRenderFunc(params) {
@@ -569,6 +581,15 @@
             // };
             // $scope.gridOptions.api.setDatasource($scope.dataSource);
             $scope.gridDataIds = content.map(row => row.id);
+            content.push({
+              id: "",
+              from: "Deny deployments that don't match any of above allowed rules for any applications/ports.",
+              to: "",
+              application: [],
+              ports: "",
+              action: "",
+              last_modified_timestamp: ""
+            });
             $scope.gridOptions.api.setRowData(content);
         };
         $scope.reload();

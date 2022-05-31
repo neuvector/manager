@@ -1300,6 +1300,11 @@
       .then((res) => {
         Alertify.set({ delay: ALERTIFY_SUCCEED_DELAY });
         Alertify.success($translate.instant("cveProfile.msg.ADD_OK"));
+        $timeout(() => {
+          if ($scope.workload.brief.state === "exit")
+            $scope.getScanReport($scope.workload.brief.id, true);
+          else $scope.getScanReport($scope.workload.brief.id, false);
+        }, 2000);
       })
       .catch((err) => {
         if (USER_TIMEOUT.indexOf(err.status) < 0) {

@@ -728,7 +728,9 @@
       ServiceModeFactory.switchNewServiceMode = function(mode) {
         if (ServiceModeFactory.originalMode !== mode) {
           let configBody = {
-            new_service_policy_mode: mode
+            config: {
+              new_service_policy_mode: mode
+            }
           };
           $http
             .patch(CONFIG_URL, configBody)

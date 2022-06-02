@@ -581,9 +581,12 @@
             // };
             // $scope.gridOptions.api.setDatasource($scope.dataSource);
             $scope.gridDataIds = content.map(row => row.id);
+            if (content.some(row => row.id === "")) {
+              content.pop();
+            }
             content.push({
               id: "",
-              from: "Deny deployments that don't match any of above allowed rules for any applications/ports.",
+              from: "Deny network connections that don't match any of above allowed rules for any applications/ports.",
               to: "",
               application: [],
               ports: "",
@@ -968,7 +971,9 @@
                       }
                     })
                     .filter(x => !!x);
-
+                    if (submittingRules.some(rule => rule.id === "")) {
+                      submittingRules.pop();
+                    }
                     submittingRules = submittingRules
                         .map(function(rule) {
                             if (rule.state !== STATE_NEW && rule.state !== STATE_MODIFIED && !rule.remove){

@@ -586,7 +586,7 @@
             }
             content.push({
               id: "",
-              from: "Deny deployments that don't match any of above allowed rules for any applications/ports.",
+              from: "Deny network connections that don't match any of above allowed rules for any applications/ports.",
               to: "",
               application: [],
               ports: "",

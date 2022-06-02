@@ -961,6 +961,9 @@
       // };
       // $scope.gridOptions.api.setDatasource($scope.dataSource);
       $scope.gridDataIds = content.map(row => row.id);
+      if (content.some(row => row.id === "")) {
+        content.pop();
+      }
       content.push({
         id: "",
         from: "Deny deployments that don't match any of above allowed rules for any applications/ports.",
@@ -1487,6 +1490,9 @@
               }
             })
             .filter(x => !!x);
+          if (submittingRules.some(rule => rule.id === "")) {
+            submittingRules.pop();
+          }
           if ($scope.onlyRemove && deletedRules.length > 0) {
             $scope.payload = { delete: deletedRules };
           } else {

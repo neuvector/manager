@@ -106,7 +106,7 @@
 
       vm.server = {};
 
-      function initialSaml(response) {
+      function initialLdap(response) {
         vm.server.default_role = "none";
         vm.server.hostname = "";
         vm.server.port = null;
@@ -130,7 +130,7 @@
           .get(LDAP_URL)
           .then(function(response) {
             vm.onCreate = true;
-            initialSaml(response);
+            initialLdap(response);
             vm.roles = response.data.mappable_roles.default_roles.map(default_role => {
               return parseRole(default_role);
             });
@@ -159,20 +159,8 @@
                   console.log(vm.server);
                   vm.server.name = server.server_name;
                   vm.onCreate = false;
-                } else {
-                  $scope.groupRoleMapData = JSON.stringify({
-                    isWriteGroupsAuthorized: $scope.isSubmitSettingAuthorized,
-                    groupRoleMap: [],
-                    mappableRoles: response.data.mappable_roles
-                  });
                 }
               }
-            } else {
-              $scope.groupRoleMapData = JSON.stringify({
-                isWriteGroupsAuthorized: $scope.isSubmitSettingAuthorized,
-                groupRoleMap: [],
-                mappableRoles: response.data.mappable_roles
-              });
             }
             vm.server.directory =
               vm.server.directory === "" ||

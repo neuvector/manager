@@ -123,10 +123,6 @@
       </div>
       <div id="policy-grid" ag-grid="gridOptions" class="ag-grid mt-sm nv-policy-type"
            style="width: 100%;" ng-style="{ height: graphHeight + 'px'}">
-           <div class="policy-select-all" ng-hide="!isWriteRuleAuthorized">
-             <input id="global-checkbox" type="checkbox">
-             <span class="toggle" ng-click="check()"></span>
-           </div>
            <div id="all-ports" class="ports-panel-wrap" ng-show="isAllPortsShown" ng-style="panelPosition">
              <div class="row m0">
                <div class="pull-left"><h4>{{'policy.ALL_PORTS' | translate}}:</h4></div><div class="pull-right"><em class="fa fa-times all-ports-close" aria-hidden="true" ng-click="hideAllPorts()"></em></div>

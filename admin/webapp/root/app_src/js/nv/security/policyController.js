@@ -264,27 +264,11 @@
       let $win = $($window);
       let columnDefs = [
         {
-          headerName: $scope.isWriteRuleAuthorized
-            ? `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${$translate.instant(
-                "policy.gridHeader.ID"
-              )}`
-            : $translate.instant("policy.gridHeader.ID"),
+          headerName: $translate.instant("policy.gridHeader.ID"),
+          headerCheckboxSelection: $scope.isWriteRuleAuthorized,
+          headerCheckboxSelectionFilteredOnly: $scope.isWriteRuleAuthorized,
           field: "id",
-          checkboxSelection: function(params) {
-            if (params.data) {
-              return (
-                params.data.state !== STATE_GROUND_RULE &&
-                params.data.state !== STATE_FED &&
-                !(
-                  params.data.state === STATE_DISABLED &&
-                  params.data.cfg_type === CFG_TYPE.FED
-                ) &&
-                $scope.isWriteRuleAuthorized &&
-                params.data.id !== ""
-              );
-            }
-            return false;
-          },
+          checkboxSelection: idSelectionFunc,
           cellRenderer: ruleIdRenderFunc,
           width: 100,
           minWidth: 100,
@@ -295,7 +279,7 @@
           field: "from",
           colSpan: function(params) {
             if (params.data && params.data.id === "") {
-              return 8;
+              return $scope.isWriteRuleAuthorized ? 8 : 7;
             }
             return 1;
           },
@@ -369,6 +353,23 @@
       ];
       if (!$scope.isWriteRuleAuthorized) {
         columnDefs.splice(columnDefs.length - 1, 1);
+      }
+      console.log("columnDefs",columnDefs);
+
+      function idSelectionFunc(params) {
+        if (params.data) {
+          return (
+            params.data.state !== STATE_GROUND_RULE &&
+            params.data.state !== STATE_FED &&
+            !(
+              params.data.state === STATE_DISABLED &&
+              params.data.cfg_type === CFG_TYPE.FED
+            ) &&
+            $scope.isWriteRuleAuthorized &&
+            params.data.id !== ""
+          );
+        }
+        return false;
       }
 
       function dateComparator(value1, value2, node1, node2) {
@@ -668,6 +669,7 @@
         columnDefs: columnDefs,
         rowData: null,
         onSelectionChanged: onSelectionChanged,
+        isRowSelectable: idSelectionFunc,
         rowSelection: "multiple",
         suppressRowClickSelection: true,
         suppressScrollOnNewData: true,
@@ -1046,22 +1048,10 @@
     function onSelectionChanged(event) {
       $scope.selectedRules = $scope.gridOptions.api.getSelectedRows();
       let rowCount = $scope.selectedRules.length;
-      let globalCheckboxElem = document.getElementById("global-checkbox");
       if (rowCount > 0) {
         $scope.removable = true;
         $scope.containsUnpromotableEndpoint = $scope.selectedRules.some(rule => UNPROMOTABLE_ENDPOINT_PATTERN.test(rule.from) || UNPROMOTABLE_ENDPOINT_PATTERN.test(rule.to));
-        if (rowCount === policyService.rules.length) {
-          globalCheckboxElem.checked = true;
-        } else {
-          let partialCheckedClass = document.getElementsByClassName(
-            "partial-checked"
-          );
-          if (partialCheckedClass.length === 0) {
-            globalCheckboxElem.classList.add("partial-checked");
-          }
-        }
       } else {
-        globalCheckboxElem.classList.remove("partial-checked");
         $scope.removable = false;
         $scope.containsUnpromotableEndpoint = false;
       }

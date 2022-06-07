@@ -192,10 +192,10 @@
     initSettings();
 
     const loadAdvFilters = () => {
-      $scope.advFilters = JSON.parse(
-        $window.localStorage.getItem(user + "-advFilters")
+      $scope.advFilter = JSON.parse(
+        $window.localStorage.getItem(user + "-advFilter")
       );
-      if ($scope.advFilters) GraphFactory.setAdvFilter($scope.advFilter);
+      if ($scope.advFilter) GraphFactory.setAdvFilter($scope.advFilter);
       else {
         GraphFactory.initAdvFilter();
         $scope.advFilter = GraphFactory.getAdvFilter();

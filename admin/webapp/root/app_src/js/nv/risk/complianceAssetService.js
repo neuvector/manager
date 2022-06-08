@@ -20,7 +20,7 @@
 
       ComplianceAssetFactory.getDomains = () => $http.get(DOMAIN_URL);
 
-      ComplianceAssetFactory.prepareGrids = () => {
+      ComplianceAssetFactory.prepareGrids = (kubeType) => {
 
         const level1 = $translate.instant("cis.LEVEL1");
         const scored = $translate.instant("cis.SCORED");
@@ -28,11 +28,18 @@
         const columns = [
           {
             headerName: $translate.instant("nodes.gridHeader.CATEGORY"),
-            field: "catalog",
+            field: "category",
             cellRenderer: function(params) {
               if (params.value) {
+                let category = params.value;
+                if (kubeType) {
+                  if (kubeType.includes("-")) {
+                    let kubeCisVersionStrArray = kubeType.split("-");
+                    category = kubeCisVersionStrArray[0];
+                  }
+                }
                 return `<span class="label label-fs label-info">${$sanitize(
-                  params.value
+                  category
                 )}</span>`;
               } else return null;
             },
@@ -164,6 +171,7 @@
               .slice(0, 5);
             return {
               complianceList: complianceList,
+              kubernetes_cis_version: response.data.kubernetes_cis_version,
               counts: countDis,
               topWorkloadCompliance: topWorkloadCompliance,
               topCompliance: topCompliance
@@ -171,6 +179,7 @@
           } else {
             return {
               complianceList: [],
+              kubernetes_cis_version: "",
               counts: {
                 warning: 0,
                 info: 0,

@@ -293,13 +293,13 @@
             !$scope.advFilter.category.image
           ) {
             if (!$scope.advFilter.category.docker)
-              result = result && node.data.catalog !== "docker";
+              result = result && node.data.category !== "docker";
             if (!$scope.advFilter.category.custom)
-              result = result && node.data.catalog !== "custom";
+              result = result && node.data.category !== "custom";
             if (!$scope.advFilter.category.kubernetes)
-              result = result && node.data.catalog !== "kubernetes";
+              result = result && node.data.category !== "kubernetes";
             if (!$scope.advFilter.category.image)
-              result = result && node.data.catalog !== "image";
+              result = result && node.data.category !== "image";
           }
           if (
             $scope.advFilter.tags.gdpr ||
@@ -463,34 +463,37 @@
         $scope.clearSelection();
       };
 
-      ComplianceAssetFactory.prepareGrids();
-      $scope.gridOptions = ComplianceAssetFactory.getGridOptions();
-      $scope.gridOptions.onSelectionChanged = onRowChanged;
       $scope.REPORT_TABLE_ROW_LIMIT = REPORT_TABLE_ROW_LIMIT;
-
-      $scope.gridOptions.isExternalFilterPresent = isExternalFilterPresent;
-      $scope.gridOptions.doesExternalFilterPass = doesExternalFilterPass;
-
       function drawPeity() {
         setTimeout(function () {
           $("span.pie").peity("pie");
         }, 0);
       }
-      let $win = angular.element($window);
-      $scope.gridOptions.onGridReady = (params) => {
-        setTimeout(function () {
-          params.api.sizeColumnsToFit();
-          drawPeity();
-        }, 500);
-        $win.on("resize.#agGrid", function () {
+
+      const createGrid = (kubeType) => {
+        ComplianceAssetFactory.prepareGrids(kubeType);
+        $scope.gridOptions = ComplianceAssetFactory.getGridOptions();
+        $scope.gridOptions.onSelectionChanged = onRowChanged;
+
+        $scope.gridOptions.isExternalFilterPresent = isExternalFilterPresent;
+        $scope.gridOptions.doesExternalFilterPass = doesExternalFilterPass;
+
+        let $win = angular.element($window);
+        $scope.gridOptions.onGridReady = (params) => {
           setTimeout(function () {
             params.api.sizeColumnsToFit();
             drawPeity();
-          }, 300);
-        });
-      };
-      $scope.gridOptions.onSortChanged = (params) => {
-        drawPeity();
+          }, 500);
+          $win.on("resize.#agGrid", function () {
+            setTimeout(function () {
+              params.api.sizeColumnsToFit();
+              drawPeity();
+            }, 300);
+          });
+        };
+        $scope.gridOptions.onSortChanged = (params) => {
+          drawPeity();
+        };
       };
 
       $scope.onHover = (points, evt) => Utils.onHover(points, evt);
@@ -634,6 +637,7 @@
         $scope.onContainer = false;
         $scope.onHost = false;
         $scope.compliance = null;
+        $scope.gridOptions = null;
 
         Promise.all([
           ContainerFactory.getWorkloadMap(),
@@ -642,6 +646,7 @@
           ComplianceAssetFactory.getReport(),
         ])
           .then(([workloadMaps, nodeMap, platformMap, report]) => {
+            createGrid(report.kubernetes_cis_version);
             $scope.complianceList = report.complianceList;
             $scope.workloadMap4Pdf = workloadMaps.workloadMap4Pdf;
             $scope.imageMap4Pdf = workloadMaps.imageMap4Pdf;
@@ -676,254 +681,262 @@
                   return 1;
                 return 0;
               });
-            console.log("$scope.complianceList:", $scope.complianceList.filter(comp => comp.services.length>0));
-            $scope.gridOptions.api.setRowData($scope.complianceList);
-            $scope.gridOptions.api.sizeColumnsToFit();
+
             $timeout(() => {
-              $scope.gridOptions.api.getRowNode(0).setSelected(true);
-            }, 200);
-            $scope.onFilterChanged(filter);
-            $scope.gridOptions.onBodyScroll = function (params) {
+              console.log("$scope.complianceList:", $scope.complianceList.filter(comp => comp.services.length>0));
+              $scope.gridOptions.api.setRowData($scope.complianceList);
+              $scope.gridOptions.api.sizeColumnsToFit();
+              $timeout(() => {
+                $scope.gridOptions.api.getRowNode(0).setSelected(true);
+              }, 200);
+              $scope.onFilterChanged(filter);
+              $scope.gridOptions.onBodyScroll = function (params) {
+                drawPeity();
+              };
               drawPeity();
-            };
-            drawPeity();
-            const countDis = report.counts;
-            $scope.sdColors = [
-              "#f22d3a",
-              "#ef5350",
-              "#ff9800",
-              "#ffb661",
-              "#36A2EB",
-              "#6A8E6D",
-            ];
-            $scope.sdData = [
-              countDis.error,
-              countDis.high,
-              countDis.warning,
-              countDis.node,
-              countDis.info,
-              countDis.pass,
-            ];
-            $scope.sdName = [
-              "Error",
-              "High",
-              "Warning",
-              "Note",
-              "Info",
-              "Pass",
-            ];
-            $scope.sdLegend = {
-              maintainAspectRatio: false,
-              title: {
-                display: true,
-                text: $translate.instant("cis.report.others.SEVERITY_DIS"),
-              },
-              legend: {
-                display: true,
-                labels: {
-                  boxWidth: 12,
+              const countDis = report.counts;
+              $scope.sdColors = [
+                "#f22d3a",
+                "#ef5350",
+                "#ff9800",
+                "#ffb661",
+                "#36A2EB",
+                "#6A8E6D",
+              ];
+              $scope.sdData = [
+                countDis.error,
+                countDis.high,
+                countDis.warning,
+                countDis.node,
+                countDis.info,
+                countDis.pass,
+              ];
+              $scope.sdName = [
+                "Error",
+                "High",
+                "Warning",
+                "Note",
+                "Info",
+                "Pass",
+              ];
+              $scope.sdLegend = {
+                maintainAspectRatio: false,
+                title: {
+                  display: true,
+                  text: $translate.instant("cis.report.others.SEVERITY_DIS"),
                 },
-              },
-              cutoutPercentage: 60,
-              elements: {
-                arc: {
-                  borderWidth: 0,
+                legend: {
+                  display: true,
+                  labels: {
+                    boxWidth: 12,
+                  },
                 },
-              },
-            };
-            $scope.sdOverride = [{}];
+                cutoutPercentage: 60,
+                elements: {
+                  arc: {
+                    borderWidth: 0,
+                  },
+                },
+              };
+              $scope.sdOverride = [{}];
 
-            $scope.entData = [
-              countDis.platform,
-              countDis.image,
-              countDis.node,
-              countDis.container,
-            ];
-            $scope.entLegend = {
-              maintainAspectRatio: false,
-              title: {
-                display: true,
-                text: $translate.instant("cis.report.others.TARGET_DIS"),
-              },
-              legend: {
-                display: true,
-                labels: {
-                  boxWidth: 12,
+              $scope.entData = [
+                countDis.platform,
+                countDis.image,
+                countDis.node,
+                countDis.container,
+              ];
+              $scope.entLegend = {
+                maintainAspectRatio: false,
+                title: {
+                  display: true,
+                  text: $translate.instant("cis.report.others.TARGET_DIS"),
                 },
-              },
-              cutoutPercentage: 60,
-              elements: {
-                arc: {
-                  borderWidth: 0,
+                legend: {
+                  display: true,
+                  labels: {
+                    boxWidth: 12,
+                  },
                 },
-              },
-            };
-            $scope.entOverride = [{}];
+                cutoutPercentage: 60,
+                elements: {
+                  arc: {
+                    borderWidth: 0,
+                  },
+                },
+              };
+              $scope.entOverride = [{}];
 
-            $scope.labels = report.topCompliance.map(
-              (compliance) => compliance.name
-            );
-            const platforms = report.topCompliance.map(
-              (compliance) => compliance.platforms.length
-            );
-            const images = report.topCompliance.map(
-              (compliance) => compliance.images.length
-            );
-            const nodes = report.topCompliance.map(
-              (compliance) => compliance.nodes.length
-            );
-            const containers = report.topCompliance.map(
-              (compliance) => compliance.workloads.length
-            );
-            $scope.series = ["Platform", "Image", "Node", "Container"];
-            $scope.colors = ["#f22d3a", "#86aec2", "#4D5360", "#36A2EB"];
-            $scope.options = {
-              onClick: function (e) {
-                const element = this.getElementAtEvent(e);
-                if (element.length) {
-                  onCompliance(element[0]._model.label);
-                }
-              },
-              maintainAspectRatio: false,
-              title: {
-                display: true,
-                text: $translate.instant(
-                  "cis.report.others.TOP_IMPACTFUL_COMP"
-                ),
-              },
-              legend: {
-                display: true,
-                labels: {
-                  boxWidth: 12,
-                },
-              },
-              scales: {
-                yAxes: [
-                  {
-                    ticks: {
-                      beginAtZero: true,
-                    },
-                  },
-                ],
-                xAxes: [
-                  {
-                    barPercentage: 0.4,
-                    ticks: {
-                      display: false,
-                    },
-                  },
-                ],
-              },
-            };
-            $scope.options4Pdf = {
-              maintainAspectRatio: false,
-              title: {
-                display: true,
-                text: "Top Impactful Compliance",
-              },
-              legend: {
-                display: true,
-                labels: {
-                  boxWidth: 12,
-                },
-              },
-              scales: {
-                yAxes: [
-                  {
-                    ticks: {
-                      beginAtZero: true,
-                    },
-                  },
-                ],
-                xAxes: [
-                  {
-                    barPercentage: 0.4,
-                    ticks: {
-                      display: true,
-                    },
-                  },
-                ],
-              },
-            };
-            $scope.data = [platforms, images, nodes, containers];
-
-            $scope.complianceLabels = report.topWorkloadCompliance.map(
-              (compliance) => compliance.name
-            );
-            $scope.complianceSeries = [
-              $translate.instant("cis.report.others.TOP_COMP_CONTAINER"),
-            ];
-            $scope.complianceColors = ["#ef5350"];
-            $scope.complianceOptions = {
-              onClick: function (e) {
-                const element = this.getElementAtEvent(e);
-                if (element.length) {
-                  onCompliance(element[0]._model.label);
-                }
-              },
-              maintainAspectRatio: false,
-              legend: {
-                display: true,
-                labels: {
-                  boxWidth: 12,
-                },
-              },
-              scales: {
-                yAxes: [
-                  {
-                    ticks: {
-                      beginAtZero: true,
-                    },
-                  },
-                ],
-                xAxes: [
-                  {
-                    barPercentage: 0.4,
-                    ticks: {
-                      display: false,
-                    },
-                  },
-                ],
-              },
-            };
-            $scope.complianceOptions4Pdf = {
-              maintainAspectRatio: false,
-              legend: {
-                display: true,
-                labels: {
-                  boxWidth: 12,
-                },
-              },
-              scales: {
-                yAxes: [
-                  {
-                    ticks: {
-                      beginAtZero: true,
-                    },
-                  },
-                ],
-                xAxes: [
-                  {
-                    barPercentage: 0.4,
-                    ticks: {
-                      display: true,
-                    },
-                  },
-                ],
-              },
-            };
-            $scope.complianceData = [
-              report.topWorkloadCompliance.map(
+              $scope.labels = report.topCompliance.map(
+                (compliance) => compliance.name
+              );
+              const platforms = report.topCompliance.map(
+                (compliance) => compliance.platforms.length
+              );
+              const images = report.topCompliance.map(
+                (compliance) => compliance.images.length
+              );
+              const nodes = report.topCompliance.map(
+                (compliance) => compliance.nodes.length
+              );
+              const containers = report.topCompliance.map(
                 (compliance) => compliance.workloads.length
-              ),
-            ];
+              );
+              $scope.series = ["Platform", "Image", "Node", "Container"];
+              $scope.colors = ["#f22d3a", "#86aec2", "#4D5360", "#36A2EB"];
+              $scope.options = {
+                onClick: function (e) {
+                  const element = this.getElementAtEvent(e);
+                  if (element.length) {
+                    onCompliance(element[0]._model.label);
+                  }
+                },
+                maintainAspectRatio: false,
+                title: {
+                  display: true,
+                  text: $translate.instant(
+                    "cis.report.others.TOP_IMPACTFUL_COMP"
+                  ),
+                },
+                legend: {
+                  display: true,
+                  labels: {
+                    boxWidth: 12,
+                  },
+                },
+                scales: {
+                  yAxes: [
+                    {
+                      ticks: {
+                        beginAtZero: true,
+                      },
+                    },
+                  ],
+                  xAxes: [
+                    {
+                      barPercentage: 0.4,
+                      ticks: {
+                        display: false,
+                      },
+                    },
+                  ],
+                },
+              };
+              $scope.options4Pdf = {
+                maintainAspectRatio: false,
+                title: {
+                  display: true,
+                  text: "Top Impactful Compliance",
+                },
+                legend: {
+                  display: true,
+                  labels: {
+                    boxWidth: 12,
+                  },
+                },
+                scales: {
+                  yAxes: [
+                    {
+                      ticks: {
+                        beginAtZero: true,
+                      },
+                    },
+                  ],
+                  xAxes: [
+                    {
+                      barPercentage: 0.4,
+                      ticks: {
+                        display: true,
+                      },
+                    },
+                  ],
+                },
+              };
+              $scope.data = [platforms, images, nodes, containers];
+
+              $scope.complianceLabels = report.topWorkloadCompliance.map(
+                (compliance) => compliance.name
+              );
+              $scope.complianceSeries = [
+                $translate.instant("cis.report.others.TOP_COMP_CONTAINER"),
+              ];
+              $scope.complianceColors = ["#ef5350"];
+              $scope.complianceOptions = {
+                onClick: function (e) {
+                  const element = this.getElementAtEvent(e);
+                  if (element.length) {
+                    onCompliance(element[0]._model.label);
+                  }
+                },
+                maintainAspectRatio: false,
+                legend: {
+                  display: true,
+                  labels: {
+                    boxWidth: 12,
+                  },
+                },
+                scales: {
+                  yAxes: [
+                    {
+                      ticks: {
+                        beginAtZero: true,
+                      },
+                    },
+                  ],
+                  xAxes: [
+                    {
+                      barPercentage: 0.4,
+                      ticks: {
+                        display: false,
+                      },
+                    },
+                  ],
+                },
+              };
+              $scope.complianceOptions4Pdf = {
+                maintainAspectRatio: false,
+                legend: {
+                  display: true,
+                  labels: {
+                    boxWidth: 12,
+                  },
+                },
+                scales: {
+                  yAxes: [
+                    {
+                      ticks: {
+                        beginAtZero: true,
+                      },
+                    },
+                  ],
+                  xAxes: [
+                    {
+                      barPercentage: 0.4,
+                      ticks: {
+                        display: true,
+                      },
+                    },
+                  ],
+                },
+              };
+              $scope.complianceData = [
+                report.topWorkloadCompliance.map(
+                  (compliance) => compliance.workloads.length
+                ),
+              ];
+
+            }, 500);
           })
           .catch(function (err) {
+            createGrid(report.kubernetes_cis_version);
             $scope.complianceList = [];
-            $scope.gridOptions.overlayNoRowsTemplate = Utils.getOverlayTemplateMsg(
-              err
-            );
-            $scope.gridOptions.api.setRowData();
+            $timeout(() => {
+              $scope.gridOptions.overlayNoRowsTemplate = Utils.getOverlayTemplateMsg(
+                err
+              );
+              $scope.gridOptions.api.setRowData();
+            }, 500);
+
           });
 
         ComplianceAssetFactory.getDomains()
@@ -1019,7 +1032,7 @@
             rows.push({
               name: i === 0 ? entryData.name : "",
               description: i === 0 ? entryData.description : "",
-              catalog: i === 0 ? entryData.catalog : "",
+              category: i === 0 ? entryData.category : "",
               level: i === 0 ? entryData.level : "",
               message: i === 0 ? entryData.message : "",
               profile: i === 0 ? entryData.profile : "",
@@ -1047,7 +1060,7 @@
             rows.push({
               name: i === 0 ? entryData.name : "",
               description: i === 0 ? entryData.description : "",
-              catalog: i === 0 ? entryData.catalog : "",
+              category: i === 0 ? entryData.category : "",
               level: i === 0 ? entryData.level : "",
               message: i === 0 ? entryData.message : "",
               profile: i === 0 ? entryData.profile : "",
@@ -1325,7 +1338,7 @@
         };
 
         const _getRowData2 = function (item, id, metadata) {
-          let category = item.catalog;
+          let category = item.category;
           let name = item.name;
           let description = item.description;
           let level = _getLevelInfo(item);
@@ -2841,7 +2854,7 @@
       };
 
       const _getRowData = function (item, id, metadata) {
-        let category = item.catalog;
+        let category = item.category;
         let name = item.name;
         let description = item.description;
         let level = _getLevelInfo(item);

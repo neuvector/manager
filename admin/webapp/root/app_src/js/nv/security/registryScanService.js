@@ -694,7 +694,7 @@
         let complianceColumns = [
           {
             headerName: $translate.instant("nodes.gridHeader.CATEGORY"),
-            field: "catalog",
+            field: "category",
             cellRenderer: function(params) {
               if (params.value) {
                 return `<span class="label label-fs label-info">${$sanitize(

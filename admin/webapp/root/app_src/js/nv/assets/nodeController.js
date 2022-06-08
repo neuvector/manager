@@ -124,15 +124,6 @@
     function activate() {
       ContainerFactory.prepareGrids();
       ScanFactory.setGrids();
-      ComplianceFactory.prepareGrids();
-      $scope.complianceGridOptions = ComplianceFactory.getGridOptions();
-      $scope.complianceGridOptions.onSelectionChanged = () => {
-        const acceptedRows = $scope.complianceGridOptions.api.getSelectedRows();
-        $scope.onAccept = acceptedRows.length > 0;
-        setTimeout(function () {
-          $scope.$apply();
-        }, 50);
-      };
 
       getScanConfig();
 
@@ -622,13 +613,11 @@
       };
 
       const getCisLabel = (compliance) => {
-        if (
-          compliance.kubernetes_cis_version.toLowerCase().includes("openshift-")
-        ) {
-          const version = compliance.kubernetes_cis_version.substring(10);
-          return `OpenShift ${$translate.instant(
+        if (compliance.kubernetes_cis_version.includes("-")) {
+          let kubeCisVersionStrArray = compliance.kubernetes_cis_version.split("-");
+          return `${kubeCisVersionStrArray[0]} ${$translate.instant(
             "containers.CIS_VERSION"
-          )}: ${version}`;
+          )}: ${kubeCisVersionStrArray[1]}`;
         } else {
           return `Kubernetes ${$translate.instant("containers.CIS_VERSION")}: ${
             compliance.kubernetes_cis_version
@@ -636,10 +625,24 @@
         }
       };
 
+      const createComplianceGrid = (kubernetes_cis_version) => {
+        ComplianceFactory.prepareGrids(kubernetes_cis_version);
+        $scope.complianceGridOptions = ComplianceFactory.getGridOptions();
+        $scope.complianceGridOptions.onSelectionChanged = () => {
+          const acceptedRows = $scope.complianceGridOptions.api.getSelectedRows();
+          $scope.onAccept = acceptedRows.length > 0;
+          setTimeout(function () {
+            $scope.$apply();
+          }, 50);
+        };
+      };
+
       $scope.getCompliance = function (id) {
+        $scope.complianceGridOptions = null;
         ComplianceFactory.getNodeCompliance(id)
           .then(function (response) {
             $scope.compliance = response.data;
+            createComplianceGrid($scope.compliance.kubernetes_cis_version);
             $scope.cisLabel = getCisLabel($scope.compliance);
             setTimeout(function () {
               let compliancelist = ComplianceFactory.remodelCompliance($scope.compliance.items);
@@ -658,7 +661,10 @@
               $scope.complianceGridOptions.overlayNoRowsTemplate =
                 Utils.getOverlayTemplateMsg(err);
             }
-            $scope.complianceGridOptions.api.setRowData();
+            createComplianceGrid();
+            setTimeout(function () {
+              $scope.complianceGridOptions.api.setRowData();
+            }, 300);
           });
       };
     }

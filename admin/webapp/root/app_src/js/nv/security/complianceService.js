@@ -54,7 +54,7 @@
         }
       };
 
-      ComplianceFactory.prepareGrids = function () {
+      ComplianceFactory.prepareGrids = function (kubeType) {
         let gridOptions = null;
 
         const level1 = $translate.instant("cis.LEVEL1");
@@ -74,23 +74,29 @@
 
         const innerCellRenderer = function(params) {
           if (params.data && params.value) {
+            let category = params.value;
+            if (kubeType) {
+              if (kubeType.includes("-")) {
+                let kubeCisVersionStrArray = kubeType.split("-");
+                category = kubeCisVersionStrArray[0];
+              }
+            }
             if (params.data.children && params.data.children.length > 1) {
               return `<span class="label label-fs label-info">${$sanitize(
-                params.value
+                category
               )}</span>`;
             } else {
               return `<span class="ml-lg label label-fs label-info">${$sanitize(
-                params.value
+                category
               )}</span>`;
             }
-
           } else return null;
         };
 
         const columnDefs = [
           {
             headerName: $translate.instant("nodes.gridHeader.CATEGORY"),
-            field: "catalog",
+            field: "category",
             cellRenderer: "agGroupCellRenderer",
             cellRendererParams: {
               suppressCount: true,

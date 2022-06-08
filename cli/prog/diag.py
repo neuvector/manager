@@ -275,14 +275,14 @@ def remove_sniffer(data, id):
 def _write_part(part, filename):
     if filename and len(filename) > 0:
         try:
-            with click.open_file(filename, 'w') as wfp:
+            with click.open_file(filename, 'wb') as wfp:
                 wfp.write(part.raw)
             click.echo("Wrote %s to %s" % (part.name, click.format_filename(filename)))
         except IOError:
             click.echo("Error: Failed to write %s to %s" % (part.name, click.format_filename(filename)))
     else:
         try:
-            with click.open_file(part.filename, 'w') as wfp:
+            with click.open_file(part.filename, 'wb') as wfp:
                 wfp.write(part.raw)
             click.echo("Wrote to %s" % part.filename)
         except IOError:

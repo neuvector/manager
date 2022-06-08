@@ -888,7 +888,7 @@ def unset_system_registry_https_proxy(data):
 def _write_part(part, filename):
     if filename and len(filename) > 0:
         try:
-            with click.open_file(filename, 'w') as wfp:
+            with click.open_file(filename, 'wb') as wfp:
                 wfp.write(part.raw)
             click.echo("Wrote %s to %s" % (part.name, click.format_filename(filename)))
         except IOError:

@@ -37,6 +37,8 @@ case class UserWrap(
 )
 
 case class SelfWrap(
+  global_permissions: Option[Array[Permission]] = None,
+  domain_permissions: Option[Map[String, Array[Permission]]] = None,
   password_days_until_expire: Option[Int],
   user: User
 )

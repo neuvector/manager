@@ -16,8 +16,9 @@ support_test = [
 
 support_global = [
     "/v1/system/license",
+    "/v1/internal/system",
     "/v1/system/summary",
-    "/v1/system/config",
+    "/v2/system/config",
     "/v1/system/rbac",
     "/v1/fed/member",
     "/v1/user_role",
@@ -94,7 +95,7 @@ support_enforcer = [
 
 # Very expensive to call every workload one by one
 support_workload = [
-    "/v1/workload?view=pod",
+    "/v2/workload?view=pod",
     # "/v1/workload/%s/process_history",
 ]
 

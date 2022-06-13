@@ -3,7 +3,7 @@
   "version": "5.0.0",
   "description": "Security console",
   "dependencies": {
-    "@antv/g6": "^4.5.3",
+    "@antv/g6": "^4.6.4",
     "braces": "^3.0.2",
     "clean-css": "^4.2.3",
     "license-extractor": "^1.0.4",

@@ -72,7 +72,7 @@
           },
           {
             headerName: $translate.instant("nodes.detail.NUM_OF_CONTAINERS"),
-            field: "containers",
+            field: "pods",
             icons: {
               sortAscending: '<em class="fa fa-sort-amount-asc"></em>',
               sortDescending: '<em class="fa fa-sort-amount-desc"></em>'

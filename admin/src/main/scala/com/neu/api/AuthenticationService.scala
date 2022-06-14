@@ -535,7 +535,9 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                         if (isOnNV.getOrElse("") == "true") user.timeout else Some(300),
                         user.default_password,
                         user.modify_password,
-                        user.role_domains
+                        user.role_domains,
+                        selfWrap.global_permissions,
+                        selfWrap.domain_permissions
                       )
                     )
                     val authToken = AuthenticationManager.parseToken(tokenWrapToJson(token1))

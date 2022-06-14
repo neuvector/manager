@@ -277,7 +277,7 @@ def support(client, jointID, enforcers, output):
     data = support_request(path, output)
     entries = data.get("workloads")
     if len(entries):
-        ids = [entry["id"] for entry in entries]
+        ids = [entry["brief"]["id"] for entry in entries]
         for _, _path in enumerate(support_workload[1:]):
             path = _path
             if jointID:

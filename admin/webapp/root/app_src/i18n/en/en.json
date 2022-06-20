@@ -933,7 +933,7 @@
       "KERNEL_VERSION": "Kernel Version",
       "MEMORY": "Memory",
       "NUM_OF_CPUS": "CPUs",
-      "NUM_OF_CONTAINERS": "Containers",
+      "NUM_OF_CONTAINERS": "Pods",
       "VERSION": "Version",
       "API_VERSION": "API Version",
       "ANNONTATIONS": "Annotations",

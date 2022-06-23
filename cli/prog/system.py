@@ -200,6 +200,27 @@ def showLocalSystemConfig(data, scope):
         column_map += (("mode_auto_m2p", "Auto Mode Upgrader: Monitor -> Protect"),
                    ("mode_auto_m2p_duration", "       Duration"),)
 
+    scannerAutoscaleStrategy = "Disabled"
+    minScanners = 0
+    maxScanners = 0
+    allowed = {"immediate":"Immediate", "delayed": "Delayed", "": "Disabled", "n/a": "Not supported"}
+    if "scanner_autoscale" in conf:
+        scannerAutoscale = conf["scanner_autoscale"]
+        if scannerAutoscale["strategy"] in allowed:
+            scannerAutoscaleStrategy = allowed[scannerAutoscale["strategy"]]
+        if "min_pods" in scannerAutoscale:
+            minScanners = scannerAutoscale["min_pods"]
+        if "max_pods" in scannerAutoscale:
+            maxScanners = scannerAutoscale["max_pods"]
+    conf["scanner_autoscale_category"] = ""
+    conf["scanner_autoscale_strategy"] = scannerAutoscaleStrategy
+    conf["min_scanners"] = str(minScanners)
+    conf["max_scanners"] = str(maxScanners)
+    column_map += (("scanner_autoscale_category", "Scanner Autoscaling"),
+                   ("scanner_autoscale_strategy", "       Strategy"),
+                   ("min_scanners", "       Minimum Scanners"),
+                   ("max_scanners", "       Maximum Scanners"),)
+
     _show_system_setting_display_format(conf)
     output.show_with_map(column_map, conf)
 
@@ -784,6 +805,52 @@ def set_system_registry_https_proxy(data, url, username, password):
     proxy = {"url": url, "username": username, "password": password}
     data.client.config_system(registry_https_proxy=proxy)
 
+@set_system.group("autoscale")
+@click.pass_obj
+def set_system_autoscale(data):
+    """Set autoscaling settings"""
+
+@set_system_autoscale.command("scanner")
+@click.option("--strategy", type=click.Choice(['disable', 'immediate', 'delayed']), help="scanner autoscaling strategy")
+@click.option("--min", help="minimum scanner pods")
+@click.option("--max", help="maximum scanner pods")
+@click.pass_obj
+def set_system_scanner_autoscale(data, strategy, min, max):
+    """Configure scanner autoscaling"""
+    config = {}
+    if strategy is not None:
+        if strategy == 'disable':
+            strategy = ''
+        config["strategy"] = strategy
+    if min is not None:
+        err = ""
+        try:
+            minScanners = int(min)
+            if minScanners >= 0:
+                config["min_pods"] = minScanners
+            else:
+                err = "Invalid option value for --min"
+        except:
+            err = "Invalid option value for --min"
+        if err != "":
+            click.echo(err)
+            return
+
+    if max is not None:
+        err = ""
+        try:
+            maxScanners = int(max)
+            if maxScanners >= 0:
+                config["max_pods"] = maxScanners
+            else:
+                err = "Invalid option value for --max"
+        except:
+            err = "Invalid option value for --max"
+        if err != "":
+            click.echo(err)
+            return
+
+    data.client.config_system(scanner_autoscale=config)
 
 # unset
 

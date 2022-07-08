@@ -38,6 +38,9 @@ local.properties
 .settings/
 .loadpath
 
+#Visual Studio Code Specific
+.vscode
+
 # External tool builders
 .externalToolBuilders/
 

@@ -48,6 +48,7 @@ SingleValueCrt = {"cveHighCount": True,
                   "shareNetWithHost": True,
                   "count": True,
                   "resourceLimit": True,
+                  "modules": False
                   }
 
 NamesDisplay = {"cveHighCount": "High severity CVE count",
@@ -80,6 +81,7 @@ NamesDisplay = {"cveHighCount": "High severity CVE count",
                 "cpuLimit": "CPU limit",
                 "memoryRequest": "memory request",
                 "memoryLimit": "memory limit",
+                "modules": "Image Modules/Packages"
                 }
 
 NamesDisplay2 = {  # for criteria that has sub-criteria

@@ -444,7 +444,7 @@ def _parse_adm_criteria(criteria):
               help="It's a local or federal rule")
 # @click.option("--category", default="Kubernetes", help="rule category. default: Kubernetes")
 @click.option("--criteria", multiple=True,
-              help="Format is name:op:value{/subName:op:value}. name can be image, namespace, user, labels, mountVolumes, cveNames, cveHighCount, cveHighWithFixCount, cveMediumCount, cveScoreCount, imageScanned, imageSigned, runAsRoot, allowPrivEscalation, pspCompliance, userGroups, imageCompliance, envVarSecrets, imageNoOS, sharePidWithHost, shareIpcWithHost, shareNetWithHost, resourceLimit. subName can be publishDays, count, cpuRequest, cpuLimit, memoryRequest, memoryLimit. See command: show admission rule options")
+              help="Format is name:op:value{/subName:op:value}. name can be image, namespace, user, labels, mountVolumes, cveNames, cveHighCount, cveHighWithFixCount, cveMediumCount, cveScoreCount, imageScanned, imageSigned, runAsRoot, allowPrivEscalation, pspCompliance, userGroups, imageCompliance, envVarSecrets, imageNoOS, sharePidWithHost, shareIpcWithHost, shareNetWithHost, resourceLimit. subName can be publishDays, count, cpuRequest, cpuLimit, memoryRequest, memoryLimit, modules. See command: show admission rule options")
 @click.option("--disable/--enable", default=False, help="Disable/enable the admission control rule [default: --enable]")
 @click.option("--comment", default="", help="Rule comment")
 @click.pass_obj
@@ -535,7 +535,7 @@ def set_admission_state(data, disable, mode, client_mode):
 @click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=True, help="Obsolete")
 # @click.option("--category", default="Kubernetes", show_default=True, help="Rule category")
 @click.option("--criteria", multiple=True,
-              help="Format is name:op:value{/subName:op:value}. name can be image, namespace, user, labels, mountVolumes, cveNames, cveHighCount, cveHighWithFixCount, cveMediumCount, cveScoreCount, imageScanned, imageSigned, runAsRoot, allowPrivEscalation, pspCompliance, userGroups, imageCompliance, envVarSecrets, imageNoOS, sharePidWithHost, shareIpcWithHost, shareNetWithHost, resourceLimit. subName can be publishDays, count, cpuRequest, cpuLimit, memoryRequest, memoryLimit. See command: show admission rule options")
+              help="Format is name:op:value{/subName:op:value}. name can be image, namespace, user, labels, mountVolumes, cveNames, cveHighCount, cveHighWithFixCount, cveMediumCount, cveScoreCount, imageScanned, imageSigned, runAsRoot, allowPrivEscalation, pspCompliance, userGroups, imageCompliance, envVarSecrets, imageNoOS, sharePidWithHost, shareIpcWithHost, shareNetWithHost, resourceLimit. subName can be publishDays, count, cpuRequest, cpuLimit, memoryRequest, memoryLimit, modules. See command: show admission rule options")
 @click.option("--enable", "state", flag_value='enable', help="Enable the admission control rule")
 @click.option("--disable", "state", flag_value='disable', help="Enable the admission control rule")
 @click.option("--comment", help="Rule comment")

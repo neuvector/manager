@@ -616,6 +616,7 @@
               vm.config.controller_debug.length > 0 &&
               vm.config.controller_debug[0] === "cpath";
             vm.isUpdatingConfig = false;
+            vm.config.rancher_ep = response.data.config.rancher_ep;
           })
           .catch(function (error) {
             console.warn(error);

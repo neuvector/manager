@@ -2789,6 +2789,7 @@
     "ENFORCERS_HINT": "Select enforcers to include their support log if necessary. Up to {{maxSlectedEnforcer}} enforcers can be selected.",
     "MAX_SELECTED_ENFORCER_HINT": "Please select no more than {{maxSlectedEnforcer}} enforcers for support log.",
     "AS_STANDALONE": "Import configuration as standalone cluster",
+    "RANCHER_EP": "Rancher Endpoint",
     "webhook": {
       "NAME": "Name",
       "URL": "URL",

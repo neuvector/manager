@@ -4,9 +4,18 @@
   uploader="sysCtrl.uploader"
   filters="queueLimit, customFilter"
 >
-  <div class="content-title">
-    <a href="#/app/settings">{{'sidebar.nav.SETTING' | translate}}</a>
-    &nbsp;>&nbsp;&nbsp;{{'sidebar.nav.CONFIGURATION' | translate}}
+  <div class="clearfix">
+    <div class="content-title pull-left">
+      <a href="#/app/settings">{{'sidebar.nav.SETTING' | translate}}</a>
+      &nbsp;>&nbsp;&nbsp;{{'sidebar.nav.CONFIGURATION' | translate}}
+    </div>
+    <div class="ml-lg text-sm pull-left" ng-if="sysCtrl.config.rancher_ep">
+      <div class="rancher-bg pull-left">
+      </div>
+      <div class="pull-left text-gray-dark mt">
+        <strong>{{'setting.RANCHER_EP' | translate}}:&nbsp;</strong><span class="link">{{sysCtrl.config.rancher_ep}}</span>
+      </div>
+    </div>
   </div>
 
   <div class="panel">

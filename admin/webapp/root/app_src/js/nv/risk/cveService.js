@@ -16,8 +16,6 @@
         $sanitize
       ) {
         let CveFactory = {};
-        let _imageMap = new Map();
-        let _hostMap = new Map();
 
         CveFactory.prepareGrids = () => {
           const compareScore = (node1, score1, node2, score2) => {
@@ -316,6 +314,8 @@
             .then(function (response) {
               if (response.data.vulnerabilities) {
                 const vulnerabilities = Utils.mapAssetsBrief(response.data, "vulnerabilities");
+                let _imageMap = new Map();
+                let _hostMap = new Map();
                 let countDistribution = {
                   high: 0,
                   medium: 0,

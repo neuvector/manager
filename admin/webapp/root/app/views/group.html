@@ -87,8 +87,7 @@
              <label class="text-gray-label" ng-class="{'disabled': isNotAble2SwitchScorable}" style="margin-left: -15px;">{{"group.SWITCH_SCORABLE" | translate | uppercase}}</label>
            </div>
         </div>
-        <div ng-if="!noChecked" class="pull-right" style="margin-right: 20px;"
-             ng-show="isWriteGroupAuthorized">
+        <div ng-if="!noChecked" class="pull-right" style="margin-right: 20px;">
           <div uib-dropdown dropdown-append-to-body class="mt-sm">
             <div uib-dropdown-toggle>
               <div>
@@ -127,7 +126,7 @@
       <div ag-grid="gridGroup" class="ag-grid mt-sm" style="width: 100%; position: relative;"
            ng-style="{ height: gridHeight + 'px'}">
            <div ng-class="{'sorting-mask': !eof}"></div>
-           <div ng-if="isWriteGroupAuthorized" class="nv-checkbox" style="position: absolute; left: 7px; top: 5px; z-index: 2;">
+           <div class="nv-checkbox" style="position: absolute; left: 7px; top: 5px; z-index: 2;">
              <input id="all-groups" type="checkbox" ng-click="onCheckedAll()">
              <em></em>
            </div>

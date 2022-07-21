@@ -635,10 +635,6 @@
         }
       ];
 
-      if (!$scope.isWriteGroupAuthorized) {
-        columnDefs4Group.shift();
-      }
-
       $scope.onEnter = function(id) {
         timer = $timeout(function() {
           $scope.showRule(id);

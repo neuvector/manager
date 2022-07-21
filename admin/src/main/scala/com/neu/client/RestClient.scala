@@ -317,6 +317,7 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig {
   }
 
   def handleError(timeOutStatus: String, authenticationFailedStatus: String, serverErrorStatus: String, e: Throwable) = {
+    val PERMISSION_DENIED = "Permission denied"
     val sw = new StringWriter
     e.printStackTrace(new PrintWriter(sw))
     logger.warn(sw.toString)
@@ -326,6 +327,8 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig {
       (StatusCodes.Unauthorized, "Authentication failed!")
     } else if (e.getMessage.contains(serverErrorStatus)) {
       (StatusCodes.ServiceUnavailable, "Server is not available!")
+    } else if (e.getMessage.contains(PERMISSION_DENIED)) {
+      (StatusCodes.Forbidden, PERMISSION_DENIED)
     } else {
       (StatusCodes.InternalServerError, "Internal server error")
     }

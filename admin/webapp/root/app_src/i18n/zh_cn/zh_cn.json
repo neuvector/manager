@@ -2743,6 +2743,7 @@
     "SUBMIT_OK": "系统设置更新成功!",
     "SUBMIT_FAILED": "系统设置更新失败",
     "IMPORT_FAILED": "输入失败 ",
+    "COLLOECT_FAILED": "支持日志收集失败",
     "NEW_SERVICE_POLICY_MODE": "新增服务的策略模式",
     "NEW_SERVICE": "新增服务",
     "NEW_SERVICE_COMMENT": "新建组的默认策略模式没有被提前监测到.",
@@ -2788,6 +2789,7 @@
     "ENFORCERS_HINT": "如果需要可以选择代理以加入它们的支持日志. 最多可以选择{{maxSlectedEnforcer}}个",
     "MAX_SELECTED_ENFORCER_HINT": "请为支持日志选择不超过{{maxSlectedEnforcer}}个代理.",
     "AS_STANDALONE": "作为独立集群导入配置",
+    "RANCHER_EP": "Rancher端点",
     "webhook": {
       "NAME": "名称",
       "URL": "URL",

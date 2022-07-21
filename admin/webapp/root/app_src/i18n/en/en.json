@@ -2744,6 +2744,7 @@
     "SUBMIT_OK": "System config updated.",
     "SUBMIT_FAILED": "Failed to update system config",
     "IMPORT_FAILED": "Import failed ",
+    "COLLOECT_FAILED": "Failed to collect support log",
     "NEW_SERVICE_POLICY_MODE": "Default mode for new services",
     "NEW_SERVICE": "New Services Mode",
     "NEW_SERVICE_COMMENT": "The default policy mode for new groups that have not been previously detected.",
@@ -2789,6 +2790,7 @@
     "ENFORCERS_HINT": "Select enforcers to include their support log if necessary. Up to {{maxSlectedEnforcer}} enforcers can be selected.",
     "MAX_SELECTED_ENFORCER_HINT": "Please select no more than {{maxSlectedEnforcer}} enforcers for support log.",
     "AS_STANDALONE": "Import configuration as standalone cluster",
+    "RANCHER_EP": "Rancher Endpoint",
     "webhook": {
       "NAME": "Name",
       "URL": "URL",

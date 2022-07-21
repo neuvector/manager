@@ -123,7 +123,7 @@ class RequestError(RestException):
 
 class RestClient(object):
 
-    def __init__(self, server, port, token):
+    def __init__(self, server, port, token, cookie):
         if server:
             self.server = server
         elif ENV_CTRL_SERVER_IP in os.environ:
@@ -143,6 +143,9 @@ class RestClient(object):
         self.sess = requests.Session()
         self.sess.headers.update({"Content-Type": "application/json"})
         self.sess.headers.update({"X-Auth-Token": token})
+        if cookie is not None:
+            self.sess.headers.update({"X-R-Sess": cookie})
+
         try:
             if hasattr(requests.packages.urllib3, "disable_warnings"):
                 requests.packages.urllib3.disable_warnings()
@@ -295,12 +298,13 @@ if __name__ == "__main__":
     parser.add_argument('-s', '--server', help='controller IP address.')
     parser.add_argument('-p', '--port', type=int, help='controller port.')
     parser.add_argument('-t', '--token', help='login token.')
+    parser.add_argument('-r', '--ress', help='Rancher cookie.')
     parser.add_argument('-o', '--output', help='output filename.')
     parser.add_argument('-e', '--enforcers', help='comma separated enforcer ids.') # if not specified means all enforcers
     parser.add_argument('-j', '--joint', help='remote joint cluster id.') # if not specified, meaning get local support logs
     args = parser.parse_args()
 
-    client = RestClient(args.server, args.port, args.token)
+    client = RestClient(args.server, args.port, args.token, args.ress)
 
     rc = 0
     if args.output:

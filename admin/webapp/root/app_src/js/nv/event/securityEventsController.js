@@ -2365,7 +2365,7 @@
           let blob = new Blob([blockHeader, sectionLen, sectionLen, pcap], {
             type: "application/octet-stream"
           });
-          FileSaver.saveAs(blob, `pocket_${Utils.parseDatetimeStr(new Date())}.pcap`);
+          FileSaver.saveAs(blob, `packet_${Utils.parseDatetimeStr(new Date())}.pcap`);
         }
       };
 

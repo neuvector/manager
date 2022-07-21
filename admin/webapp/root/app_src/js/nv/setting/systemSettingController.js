@@ -991,7 +991,7 @@
           Alertify.error(
             Utils.getAlertifyMsg(
               err,
-              $translate.instant("service.SUBMIT_FAILED"),
+              $translate.instant("setting.COLLOECT_FAILED"),
               false
             )
           );

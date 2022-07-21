@@ -480,46 +480,77 @@ class DeviceService()(implicit executionContext: ExecutionContext)
               Utils.respondWithNoCacheControl() {
                 entity(as[String]) { debuggedEnforcer =>
                   complete {
-                    logFile = "/tmp/debug" + new Date().getTime + ".gz"
-                    purgeDebugFiles(new File("/tmp"))
+                    try {
+                      logFile = "/tmp/debug" + new Date().getTime + ".gz"
+                      purgeDebugFiles(new File("/tmp"))
 
-                    val id       = AuthenticationManager.getCluster(tokenId).getOrElse("")
-                    val ctrlHost = new URL(baseUri).getHost
-                    SupportLogAuthCacheManager.saveSupportLogAuth(tokenId, logFile)
-                    if (debuggedEnforcer.nonEmpty) {
-                      logger.info("With enforcer debug log")
-                      val proc =
-                        Seq(
-                          "/usr/local/bin/support",
-                          "-s",
-                          ctrlHost,
-                          "-t",
-                          tokenId,
-                          "-j",
-                          id,
-                          "-e",
-                          debuggedEnforcer,
-                          "-o",
-                          logFile
-                        ).run
-                      logger.info("Process {} is running ", proc.toString)
-                      HttpResponse(StatusCodes.Accepted, "Started to collect debug log.")
-                    } else {
-                      logger.info("Without enforcer debug log")
-                      val proc =
-                        Seq(
-                          "/usr/local/bin/support",
-                          "-s",
-                          ctrlHost,
-                          "-t",
-                          tokenId,
-                          "-j",
-                          id,
-                          "-o",
-                          logFile
-                        ).run
-                      logger.info("Process {} is running ", proc.toString)
-                      HttpResponse(StatusCodes.Accepted, "Started to collect debug log.")
+                      val id       = AuthenticationManager.getCluster(tokenId).getOrElse("")
+                      val ctrlHost = new URL(baseUri).getHost
+                      SupportLogAuthCacheManager.saveSupportLogAuth(tokenId, logFile)
+                      if (debuggedEnforcer.nonEmpty) {
+                        logger.info("With enforcer debug log")
+                        logger.info(
+                          "Process is running {}",
+                          "/usr/local/bin/support" +
+                          " -s " + ctrlHost +
+                          " -t " + tokenId +
+                          " -r " + AuthenticationManager.suseTokenMap.getOrElse(tokenId, "") +
+                          " -j " + id +
+                          " -e " + debuggedEnforcer +
+                          " -o " + logFile
+                        )
+                        val proc =
+                          Seq(
+                            "/usr/local/bin/support",
+                            "-s",
+                            ctrlHost,
+                            "-t",
+                            tokenId,
+                            "-r",
+                            AuthenticationManager.suseTokenMap.getOrElse(tokenId, ""),
+                            "-j",
+                            id,
+                            "-e",
+                            debuggedEnforcer,
+                            "-o",
+                            logFile
+                          ).run
+                        HttpResponse(StatusCodes.Accepted, "Started to collect debug log.")
+                      } else {
+                        logger.info("Without enforcer debug log")
+                        logger.info(
+                          "Process is running {}",
+                          "/usr/local/bin/support" +
+                          " -s " + ctrlHost +
+                          " -t " + tokenId +
+                          " -r " + AuthenticationManager.suseTokenMap.getOrElse(tokenId, "") +
+                          " -j " + id +
+                          " -o " + logFile
+                        )
+                        val proc =
+                          Seq(
+                            "/usr/local/bin/support",
+                            "-s",
+                            ctrlHost,
+                            "-t",
+                            tokenId,
+                            "-r",
+                            AuthenticationManager.suseTokenMap.getOrElse(tokenId, ""),
+                            "-j",
+                            id,
+                            "-o",
+                            logFile
+                          ).run
+                        HttpResponse(StatusCodes.Accepted, "Started to collect debug log.")
+                      }
+                    } catch {
+                      case NonFatal(e) =>
+                        RestClient.handleError(
+                          timeOutStatus,
+                          authenticationFailedStatus,
+                          serverErrorStatus,
+                          e
+                        )
                     }
                   }
                 }

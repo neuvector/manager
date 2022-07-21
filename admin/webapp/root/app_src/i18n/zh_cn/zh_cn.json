@@ -2743,6 +2743,7 @@
     "SUBMIT_OK": "系统设置更新成功!",
     "SUBMIT_FAILED": "系统设置更新失败",
     "IMPORT_FAILED": "输入失败 ",
+    "COLLOECT_FAILED": "支持日志收集失败",
     "NEW_SERVICE_POLICY_MODE": "新增服务的策略模式",
     "NEW_SERVICE": "新增服务",
     "NEW_SERVICE_COMMENT": "新建组的默认策略模式没有被提前监测到.",

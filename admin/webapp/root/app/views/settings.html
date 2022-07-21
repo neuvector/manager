@@ -9,13 +9,6 @@
       <a href="#/app/settings">{{'sidebar.nav.SETTING' | translate}}</a>
       &nbsp;>&nbsp;&nbsp;{{'sidebar.nav.CONFIGURATION' | translate}}
     </div>
-    <div class="ml-lg text-sm pull-left" ng-if="sysCtrl.config.rancher_ep">
-      <div class="rancher-bg pull-left">
-      </div>
-      <div class="pull-left text-gray-dark mt">
-        <strong>{{'setting.RANCHER_EP' | translate}}:&nbsp;</strong><span class="link">{{sysCtrl.config.rancher_ep}}</span>
-      </div>
-    </div>
   </div>
 
   <div class="panel">
@@ -35,6 +28,13 @@
                 <span class="toggle"></span>
               </label>
               <label ng-bind-html="sysCtrl.openShiftStatus"></label>
+            </div>
+          </div>
+          <div class="col-sm-8" ng-if="sysCtrl.config.rancher_ep">
+            <div class="rancher-bg pull-left">
+            </div>
+            <div class="pull-left text-gray-dark mt">
+              <strong>{{'setting.RANCHER_EP' | translate}}:&nbsp;</strong><span class="link">{{sysCtrl.config.rancher_ep}}</span>
             </div>
           </div>
         </div>

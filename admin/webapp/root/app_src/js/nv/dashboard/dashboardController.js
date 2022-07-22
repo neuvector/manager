@@ -4548,6 +4548,7 @@
     $scope.view = $scope.STEP[0];
     $scope.securityRiskThresholds = scoreInfo.securityRiskThresholds;
     $scope.isGlobalUser = isGlobalUser;
+    $scope.baselineProfile = 'no-change';
 
     ImproveScoreFactory.init(isGlobalUser, scoreInfo.scoreOutput);
     ServiceModeFactory.init();
@@ -4656,11 +4657,16 @@
         if (ServiceModeFactory.gridService.api) {
           let selectedRows = ServiceModeFactory.gridService.api.getSelectedRows();
           let selectedNodes = ServiceModeFactory.gridService.api.getSelectedNodes();
+          $scope.baselineProfile = 'no-change';
+          ServiceModeFactory.hasSelectedService[0] = false;
           if (selectedRows.length > 0) {
             ServiceModeFactory.isMultipleSelecting = selectedRows.length > 1;
-            ServiceModeFactory.hasSelectedService[0] = true;
+            $timeout(() => {
+              ServiceModeFactory.hasSelectedService[0] = true;
+            }, 0);
             ServiceModeFactory.gridService.api.sizeColumnsToFit();
             ServiceModeFactory.service = angular.copy(selectedRows[0]);
+            $scope.baselineProfile = getSelectedBaselineProfile(selectedRows);
             let firstSelectedNode = selectedNodes[0].rowIndex;
             ServiceModeFactory.gridService.getRowClass = function(params) {
               if (params.node.rowIndex === firstSelectedNode) {
@@ -4690,6 +4696,17 @@
         }
       };
 
+      const getSelectedBaselineProfile = function(selectedRows) {
+        let zeroDriftServices = selectedRows.filter(row => row.baseline_profile === 'zero-drift');
+        if (zeroDriftServices.length > 0 && zeroDriftServices.length === selectedRows.length) {
+          return 'zero-drift';
+        } else if (zeroDriftServices.length === 0 && selectedRows.length > 0) {
+          return 'basic';
+        } else {
+          return 'no-change';
+        }
+      };
+
       const renderServiceMode = function () {
         $scope.serviceMode.currScore.text = scoreInfo.securityScoreText;
         $scope.serviceMode.currScore.value = scoreInfo.securityScoreValue;
@@ -4712,6 +4729,7 @@
         $scope.isSwitchModeAuthorized =
           ServiceModeFactory.isSwitchModeAuthorized;
         $scope.switchServiceMode = ServiceModeFactory.switchServiceMode;
+        $scope.toggleBaselineProfile = ServiceModeFactory.toggleBaselineProfile;
         $scope.isSwitchingMode = ServiceModeFactory.isSwitchingMode;
         $scope.currentNewServiceMode = ServiceModeFactory.currentNewServiceMode;
         $scope.switchNewServiceMode = ServiceModeFactory.switchNewServiceMode;
@@ -4819,6 +4837,7 @@
         $scope.isSwitchModeAuthorized =
           ServiceModeFactory.isSwitchModeAuthorized;
         $scope.switchServiceMode = ServiceModeFactory.switchServiceMode;
+        $scope.toggleBaselineProfile = ServiceModeFactory.toggleBaselineProfile;
         $scope.isSwitchingMode = ServiceModeFactory.isSwitchingMode;
         $scope.currentNewServiceMode = ServiceModeFactory.currentNewServiceMode;
         $scope.switchNewServiceMode = ServiceModeFactory.switchNewServiceMode;

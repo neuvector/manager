@@ -696,6 +696,7 @@ case class ServiceLevelConversationWrap(
     discover_groups: Int,
     monitor_groups: Int,
     protect_groups: Int,
+    discover_groups_zero_drift: Int,
     running_pods: Int,
     groups: Int,
     host_cves: Int,
@@ -881,7 +882,7 @@ case class ServiceLevelConversationWrap(
     implicit val dashboardScoreDTOFormat: RootJsonFormat[DashboardScoreDTO] = jsonFormat10(DashboardScoreDTO)
     implicit val dashboardDTOFormat: RootJsonFormat[DashboardDTO] = jsonFormat12(DashboardDTO)
 
-    implicit val metricsFormat: RootJsonFormat[Metrics] = jsonFormat21(Metrics)
+    implicit val metricsFormat: RootJsonFormat[Metrics] = jsonFormat22(Metrics)
     implicit val exposureFormat: RootJsonFormat[Exposure] = jsonFormat11(Exposure)
     implicit val scoreOutput2Format: RootJsonFormat[ScoreOutput2] = jsonFormat4(ScoreOutput2)
     implicit val internalSystemDataFormat: RootJsonFormat[InternalSystemData] = jsonFormat4(InternalSystemData)

@@ -1958,14 +1958,15 @@
             {
               title: $translate.instant("dashboard.body.panel_title.DISCOVER"),
               amount: 0,
+              zeroDrift: 0
             },
             {
               title: $translate.instant("dashboard.body.panel_title.MONITOR"),
-              amount: 0,
+              amount: 0
             },
             {
               title: $translate.instant("dashboard.body.panel_title.PROTECT"),
-              amount: 0,
+              amount: 0
             },
           ],
         };
@@ -3644,6 +3645,8 @@
 
           $scope.serviceConnectionRisk.details[0].amount =
             scoreInput.discover_groups;
+          $scope.serviceConnectionRisk.details[0].zeroDrift =
+            scoreInput.discover_groups_zero_drift;
           $scope.serviceConnectionRisk.details[1].amount =
             scoreInput.monitor_groups;
           $scope.serviceConnectionRisk.details[2].amount =

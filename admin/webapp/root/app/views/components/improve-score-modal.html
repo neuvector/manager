@@ -161,6 +161,15 @@
                                         </ul>
                                     </div>
                                 </div>
+                                <div style="height: 42px;">
+                                  <div class="pull-left" style="margin-left: 12px; margin-top: 2px;" ng-show="!servicesErr && hasSelectedService[0]">
+                                    <label class="text-gray-label pull-left mr mt-sm">{{ 'group.BASELINE_PROFILE' | translate | uppercase }}</label>
+                                    <md-radio-group ng-if="hasSelectedService[0]" ng-model="baselineProfile" ng-change="toggleBaselineProfile(baselineProfile, false)">
+                                      <md-radio-button class="pull-left mr-lg" style="margin-top: 2px;" value="basic" class="md-primary">{{'group.BASIC' | translate}}</md-radio-button>
+                                      <md-radio-button class="pull-left" style="margin-top: 2px;" value="zero-drift" class="md-primary">{{'group.ZERO_DRIFT' | translate}}</md-radio-button>
+                                    </md-radio-group>
+                                  </div>
+                                </div>
                             </div>
                             <div ag-grid="gridService" class="ag-grid" style="width: 100%; margin-top: 10px"
                                  ng-style="{ height: serviceGridHeight + 'px'}" ></div>
@@ -285,6 +294,15 @@
                                                 </li>
                                             </ul>
                                         </div>
+                                    </div>
+                                    <div style="height: 42px;">
+                                      <div class="pull-left" style="margin-left: 12px; margin-top: 2px;" ng-show="!servicesErr && hasSelectedService[0]">
+                                        <label class="text-gray-label pull-left mr mt-sm">{{ 'group.BASELINE_PROFILE' | translate | uppercase }}</label>
+                                        <md-radio-group ng-if="hasSelectedService[0]" ng-model="baselineProfile" ng-change="toggleBaselineProfile(baselineProfile, true)">
+                                          <md-radio-button class="pull-left mr-lg" style="margin-top: 2px;" value="basic" class="md-primary">{{'group.BASIC' | translate}}</md-radio-button>
+                                          <md-radio-button class="pull-left" style="margin-top: 2px;" value="zero-drift" class="md-primary">{{'group.ZERO_DRIFT' | translate}}</md-radio-button>
+                                        </md-radio-group>
+                                      </div>
                                     </div>
                                 </div>
                                 <div ag-grid="gridService" class="ag-grid" style="width: 100%; margin-top: 10px"

@@ -236,7 +236,14 @@
                     </tr>
                     <tr ng-repeat="detail in serviceConnectionRisk.details">
                       <td>{{detail.title}}</td>
-                      <td style="text-align: right;">{{detail.amount}}</td>
+                      <td style="text-align: left;">
+                        <span>
+                          {{detail.amount}}
+                        </span>
+                        <span class="ml" ng-if="!!detail.zeroDrift && detail.zeroDrift > 0">
+                          (<em class="fa fa-anchor mr-sm"></em>{{detail.zeroDrift}})
+                        </span>
+                      </td>
                     </tr>
                   </table>
                   <div class="pull-right">

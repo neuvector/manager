@@ -1819,7 +1819,7 @@
     "SUBMIT_FAILED": "Failed to update service policy mode",
     "ALL_SUBMIT_OK": "Policy mode is updated.",
     "ALL_SUBMIT_FAILED": "Failed to update policy mode",
-    "BASELINE_PROFILE_WARNING": "Your selection is including nodes group which can not configure baseline profile.",
+    "BASELINE_PROFILE_WARNING": "Your selection is including nodes group whose baseline profile cannot be configured.",
     "BASELINE_PROFILE_SUBMIT_OK": "Service baseline profile is updated.",
     "BASELINE_PROFILE_SUBMIT_FAILED": "Failed to update service baseline profile.",
     "PROFILE_DELETE_FAILED": "Failed to delete profile rule",

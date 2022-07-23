@@ -441,18 +441,30 @@
           {
             headerName: $translate.instant("group.gridHeader.POLICY_MODE"),
             field: "policy_mode",
+            valueGetter: function(params) {
+              return {"policy_mode": params.data.policy_mode, "baseline_profile": params.data.baseline_profile};
+            },
             cellRenderer: function(params) {
               let mode = "";
-              if (params.value) {
-                mode = Utils.getI18Name(params.value);
-                let labelCode = colourMap[params.value];
+              let zeroDrift = params.value.baseline_profile === "zero-drift";
+              if (params.value.policy_mode) {
+                mode = Utils.getI18Name(params.value.policy_mode);
+                let labelCode = colourMap[params.value.policy_mode];
                 if (!labelCode) return null;
-                else
-                  return `<span class="label label-fs label-${labelCode}">${$sanitize(mode)}</span>`;
+                else {
+                  let modeLabel = `<span class="label label-fs label-${labelCode}">${$sanitize(
+                    mode
+                  )}</span>`;
+                  if (zeroDrift)
+                    return modeLabel + `<md-icon md-svg-src="app/img/icons/anchor.svg"
+                                          aria-label="Zero Drift"></md-icon>`;
+                  else
+                    return modeLabel;
+                };
               } else return null;
             },
-            width: 100,
-            minWidth: 100
+            width: 110,
+            minWidth: 110
           },
           {
             headerName: $translate.instant("service.gridHeader.MEMBERS"),
@@ -704,6 +716,54 @@
             switchSomeMode(mode, false, isExposure);
           }
         };
+      };
+
+      ServiceModeFactory.toggleBaselineProfile = function(baselineProfile, isExposure) {
+        let serviceList = ServiceModeFactory.gridService.api.getSelectedRows().map(function(element) {
+          return element.name.indexOf("nv.") >= 0
+            ? element.name.substring(3)
+            : element.name;
+        });
+        let data = {
+          config: { services: serviceList, baseline_profile: baselineProfile }
+        };
+        console.log("payload: ", data);
+        data = pako.gzip(JSON.stringify(data));
+        data = new Blob([data], {type: 'application/gzip'});
+        let config = {
+          headers: {
+            'Content-Type': 'application/json',
+            'Content-Encoding': 'gzip'
+          }
+        };
+        Alertify.confirm($translate.instant('service.BASELINE_PROFILE_WARNING')).then(
+          function onOk() {
+            $http
+              .patch(SERVICE_URL, data, config)
+              .then(function() {
+                Alertify.set({ delay: ALERTIFY_SUCCEED_DELAY });
+                Alertify.success(
+                  $translate.instant("service.BASELINE_PROFILE_SUBMIT_OK")
+                );
+                $timeout(function() {
+                  ServiceModeFactory.refresh(isExposure);
+                }, 2000);
+              })
+              .catch(function(error) {
+                console.warn(error);
+                if (USER_TIMEOUT.indexOf(error.status) < 0) {
+                  Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
+                  Alertify.error(
+                    Utils.getAlertifyMsg(error, $translate.instant("service.BASELINE_PROFILE_SUBMIT_FAILED"), false)
+                  );
+                }
+                ServiceModeFactory.isSwitchingMode[0] = false;
+                ServiceModeFactory.refresh(isExposure);
+              });
+          },
+          function onCancel() {}
+        );
+
       };
 
       ServiceModeFactory.getConfig = function() {

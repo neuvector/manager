@@ -440,108 +440,30 @@ class DeviceService()(implicit executionContext: ExecutionContext)
             }
           } ~
           pathPrefix("debug") {
-            get {
-              Utils.respondWithNoCacheControl() {
-                complete {
-                  logger.info("Getting debug log: {}", logFile)
-                  try {
-                    val authRes = RestClient.httpRequestWithHeader(
-                      s"${baseClusterUri(tokenId)}/$auth",
-                      PATCH,
-                      "",
-                      tokenId
-                    )
-                    val result = Await.result(authRes, RestClient.waitingLimit.seconds)
-                    if (SupportLogAuthCacheManager.getSupportLogAuth(tokenId).isDefined) {
-                      val byteArray = Files.readAllBytes(Paths.get(logFile))
-                      purgeDebugFiles(new File("/tmp"))
-                      HttpResponse(
-                        StatusCodes.OK,
-                        entity = HttpEntity(MediaTypes.`application/x-gzip`, byteArray)
-                      ).withHeaders(
-                        HttpHeaders.`Content-Disposition`.apply("inline", Map("filename" -> "debug.gz"))
-                      )
-                    } else {
-                      (StatusCodes.Forbidden, "File can not be accessed.")
-                    }
-                  } catch {
-                    case NonFatal(e) =>
-                      RestClient.handleError(
-                        timeOutStatus,
-                        authenticationFailedStatus,
-                        serverErrorStatus,
-                        e
-                      )
-                  }
-                }
-              }
-            } ~
-            post {
-              Utils.respondWithNoCacheControl() {
-                entity(as[String]) { debuggedEnforcer =>
+            pathEnd {
+              get {
+                Utils.respondWithNoCacheControl() {
                   complete {
+                    logger.info("Getting debug log: {}", logFile)
                     try {
-                      logFile = "/tmp/debug" + new Date().getTime + ".gz"
-                      purgeDebugFiles(new File("/tmp"))
-
-                      val id       = AuthenticationManager.getCluster(tokenId).getOrElse("")
-                      val ctrlHost = new URL(baseUri).getHost
-                      SupportLogAuthCacheManager.saveSupportLogAuth(tokenId, logFile)
-                      if (debuggedEnforcer.nonEmpty) {
-                        logger.info("With enforcer debug log")
-                        logger.info(
-                          "Process is running {}",
-                          "/usr/local/bin/support" +
-                          " -s " + ctrlHost +
-                          " -t " + tokenId +
-                          " -r " + AuthenticationManager.suseTokenMap.getOrElse(tokenId, "") +
-                          " -j " + id +
-                          " -e " + debuggedEnforcer +
-                          " -o " + logFile
+                      val authRes = RestClient.httpRequestWithHeader(
+                        s"${baseClusterUri(tokenId)}/$auth",
+                        PATCH,
+                        "",
+                        tokenId
+                      )
+                      val result = Await.result(authRes, RestClient.waitingLimit.seconds)
+                      if (SupportLogAuthCacheManager.getSupportLogAuth(tokenId).isDefined) {
+                        val byteArray = Files.readAllBytes(Paths.get(logFile))
+                        purgeDebugFiles(new File("/tmp"))
+                        HttpResponse(
+                          StatusCodes.OK,
+                          entity = HttpEntity(MediaTypes.`application/x-gzip`, byteArray)
+                        ).withHeaders(
+                          HttpHeaders.`Content-Disposition`.apply("inline", Map("filename" -> "debug.gz"))
                         )
-                        val proc =
-                          Seq(
-                            "/usr/local/bin/support",
-                            "-s",
-                            ctrlHost,
-                            "-t",
-                            tokenId,
-                            "-r",
-                            AuthenticationManager.suseTokenMap.getOrElse(tokenId, ""),
-                            "-j",
-                            id,
-                            "-e",
-                            debuggedEnforcer,
-                            "-o",
-                            logFile
-                          ).run
-                        HttpResponse(StatusCodes.Accepted, "Started to collect debug log.")
                       } else {
-                        logger.info("Without enforcer debug log")
-                        logger.info(
-                          "Process is running {}",
-                          "/usr/local/bin/support" +
-                          " -s " + ctrlHost +
-                          " -t " + tokenId +
-                          " -r " + AuthenticationManager.suseTokenMap.getOrElse(tokenId, "") +
-                          " -j " + id +
-                          " -o " + logFile
-                        )
-                        val proc =
-                          Seq(
-                            "/usr/local/bin/support",
-                            "-s",
-                            ctrlHost,
-                            "-t",
-                            tokenId,
-                            "-r",
-                            AuthenticationManager.suseTokenMap.getOrElse(tokenId, ""),
-                            "-j",
-                            id,
-                            "-o",
-                            logFile
-                          ).run
-                        HttpResponse(StatusCodes.Accepted, "Started to collect debug log.")
+                        (StatusCodes.Forbidden, "File can not be accessed.")
                       }
                     } catch {
                       case NonFatal(e) =>
@@ -554,20 +476,100 @@ class DeviceService()(implicit executionContext: ExecutionContext)
                     }
                   }
                 }
+              } ~
+              post {
+                Utils.respondWithNoCacheControl() {
+                  entity(as[String]) { debuggedEnforcer =>
+                    complete {
+                      try {
+                        logFile = "/tmp/debug" + new Date().getTime + ".gz"
+                        purgeDebugFiles(new File("/tmp"))
+
+                        val id       = AuthenticationManager.getCluster(tokenId).getOrElse("")
+                        val ctrlHost = new URL(baseUri).getHost
+                        SupportLogAuthCacheManager.saveSupportLogAuth(tokenId, logFile)
+                        if (debuggedEnforcer.nonEmpty) {
+                          logger.info("With enforcer debug log")
+                          logger.info(
+                            "Process is running {}",
+                            "/usr/local/bin/support" +
+                            " -s " + ctrlHost +
+                            " -t " + tokenId +
+                            " -r " + AuthenticationManager.suseTokenMap.getOrElse(tokenId, "") +
+                            " -j " + id +
+                            " -e " + debuggedEnforcer +
+                            " -o " + logFile
+                          )
+                          val proc =
+                            Seq(
+                              "/usr/local/bin/support",
+                              "-s",
+                              ctrlHost,
+                              "-t",
+                              tokenId,
+                              "-r",
+                              AuthenticationManager.suseTokenMap.getOrElse(tokenId, ""),
+                              "-j",
+                              id,
+                              "-e",
+                              debuggedEnforcer,
+                              "-o",
+                              logFile
+                            ).run
+                          HttpResponse(StatusCodes.Accepted, "Started to collect debug log.")
+                        } else {
+                          logger.info("Without enforcer debug log")
+                          logger.info(
+                            "Process is running {}",
+                            "/usr/local/bin/support" +
+                            " -s " + ctrlHost +
+                            " -t " + tokenId +
+                            " -r " + AuthenticationManager.suseTokenMap.getOrElse(tokenId, "") +
+                            " -j " + id +
+                            " -o " + logFile
+                          )
+                          val proc =
+                            Seq(
+                              "/usr/local/bin/support",
+                              "-s",
+                              ctrlHost,
+                              "-t",
+                              tokenId,
+                              "-r",
+                              AuthenticationManager.suseTokenMap.getOrElse(tokenId, ""),
+                              "-j",
+                              id,
+                              "-o",
+                              logFile
+                            ).run
+                          HttpResponse(StatusCodes.Accepted, "Started to collect debug log.")
+                        }
+                      } catch {
+                        case NonFatal(e) =>
+                          RestClient.handleError(
+                            timeOutStatus,
+                            authenticationFailedStatus,
+                            serverErrorStatus,
+                            e
+                          )
+                      }
+                    }
+                  }
+                }
               }
             } ~
             path("check") {
-              patch {
+              get {
                 Utils.respondWithNoCacheControl() {
                   complete {
-                    val isFileReady = Files.exists(Paths.get(logFile)) & Files.isReadable(
+                    val isFileReady = Files.exists(Paths.get(logFile)) && Files.isReadable(
                         Paths.get(logFile)
                       )
                     logger.info(s"Log file $logFile  is ready: $isFileReady")
                     if (isFileReady) {
                       HttpResponse(StatusCodes.OK, "Ready")
                     } else {
-                      HttpResponse(StatusCodes.NoContent, "In progress")
+                      HttpResponse(StatusCodes.PartialContent, "In progress")
                     }
                   }
                 }

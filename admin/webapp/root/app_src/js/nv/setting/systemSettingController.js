@@ -1009,7 +1009,7 @@
 
     function checkDebugLog() {
       $http
-        .patch(DEBUG_CHECK_URL)
+        .get(DEBUG_CHECK_URL)
         .then(function (response) {
           if (response.status === 200) {
             vm.debugInProgress = false;

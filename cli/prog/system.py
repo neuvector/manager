@@ -199,6 +199,11 @@ def showLocalSystemConfig(data, scope):
     if "mode_auto_m2p" in conf:
         column_map += (("mode_auto_m2p", "Auto Mode Upgrader: Monitor -> Protect"),
                    ("mode_auto_m2p_duration", "       Duration"),)
+    if "no_telemetry_report" not in conf:
+        conf["telemetry"] = True
+    else:
+        conf["telemetry"] = not conf["no_telemetry_report"]
+    column_map += (("telemetry", "Send telemetry data(non-PII under GDPR) to SUSE"),)
 
     scannerAutoscaleStrategy = "Disabled"
     minScanners = 0
@@ -699,6 +704,20 @@ def set_system_webhook_url(data, name, url, type, scope, enable):
     args = {}
     args["scope"] = scope
     data.client.config("system/config/webhook", name, {"config": body}, **args)
+
+
+@set_system.command("telemetry")
+@click.argument('status', type=click.Choice(['enable', 'disable']))
+@click.pass_obj
+def set_system_telemetry(data, status):
+    """Enable/disable sending telemetry data(non-PII under GDPR) to SUSE"""
+    noTelemetry = False
+    if status == 'disable':
+        noTelemetry = True
+    if status == 'enable':
+        data.client.config_system(no_telemetry_report=noTelemetry)
+    else:
+        data.client.config_system(no_telemetry_report=noTelemetry)
 
 
 @set_system.group("monitor_service_mesh")

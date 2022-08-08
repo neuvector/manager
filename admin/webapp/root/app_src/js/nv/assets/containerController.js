@@ -237,7 +237,6 @@
         if ($scope.selectedIndex === 1) {
           $scope.getCompliance($scope.workload.brief.id);
         }
-        console.log($scope.workload);
       }
 
       function onRowWithDigest(node) {
@@ -352,7 +351,7 @@
         setTimeout(function () {
           $scope.gridOptions.api.forEachNode(function (node, index) {
             if (currSelectedWorkload) {
-              if (node.data.id === currSelectedWorkload.brief.id) {
+              if (node.data.brief.id === currSelectedWorkload.brief.id) {
                 node.setSelected(true, true);
                 if (!noAutoScan) onRow(node);
                 $scope.gridOptions.api.ensureNodeVisible(node, "middle");
@@ -1170,7 +1169,8 @@
         if ($scope.workload.brief.id === id) {
           if (
             $scope.workload.security.scan_summary.status === "finished" ||
-            $scope.workload.security.scan_summary.status === "failed"
+            $scope.workload.security.scan_summary.status === "failed" ||
+            $scope.workload.security.scan_summary.status === ""
           )
             $scope.$broadcast("stop-manual-loading");
         }

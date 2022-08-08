@@ -106,7 +106,7 @@
             style="padding: 3px 3px;"
             class="btn btn-default ph"
             ng-disabled="disableScan"
-            ng-show="workloads.length>0"
+            ng-show="workloads.length>0 && workload.brief.state !== 'exit'"
             display-control="runtime_scan"
             ng-click="scan(workload.brief.id)"
           >

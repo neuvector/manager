@@ -433,7 +433,7 @@
         "AUTO_SCAN_ENABLE_NG": "Auto scan enabling failed.",
         "AUTO_SCAN_DISABLE_NG": "Auto scan disabling failed.",
         "DISABLE_AUTOSCAN_CONFIRM": "If auto scan is disabled, future vulnerability will not be found immediately.",
-        "RBAC_ERR_TITLE": "RBAC Role Error",
+        "RBAC_ERR_TITLE": "RBAC Role Prompt",
         "CLUSTERROLE_ERRORS": "Cluster Role",
         "CLUSTERROLEBINDING_ERRORS": "Cluster Role Binding",
         "ROLEBINDING_ERRORS": "Role Binding"

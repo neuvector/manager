@@ -16,7 +16,7 @@
             field: "errorType",
             cellRenderer: (params) => {
               if (params && params.value) {
-                return `<span class="pt-sm pb-sm label label-danger">
+                return `<span class="pt-sm pb-sm label label-${params.value.endsWith("errors") ? "danger" : "info"}">
                               ${$translate.instant(`dashboard.body.message.${params.value.toUpperCase()}`)}
                         </span>`;
               }

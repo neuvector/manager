@@ -4344,14 +4344,16 @@
             let rbacErrorsRowData = [];
 
             for (let errorkey in $scope.RBACErrorMap) {
-              let hasErrorLength = $scope.RBACErrorMap[errorkey].length;
+              let hasErrorLength = $scope.RBACErrorMap[errorkey] && $scope.RBACErrorMap[errorkey].length > 0;
               $scope.hasRBACError = hasErrorLength > 0 || $scope.hasRBACError;
-              $scope.RBACErrorMap[errorkey].forEach((errorItem, index) => {
-                rbacErrorsRowData.push({
-                  "errorType": index === 0 ? errorkey : "",
-                  "errorDetail": $scope.RBACErrorMap[errorkey][index]
+              if (hasErrorLength) {
+                $scope.RBACErrorMap[errorkey].forEach((errorItem, index) => {
+                  rbacErrorsRowData.push({
+                    "errorType": index === 0 ? errorkey : "",
+                    "errorDetail": $scope.RBACErrorMap[errorkey][index]
+                  });
                 });
-              });
+              }
             }
 
             if ($scope.hasRBACError) {

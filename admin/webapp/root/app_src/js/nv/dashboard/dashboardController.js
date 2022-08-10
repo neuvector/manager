@@ -4339,18 +4339,18 @@
         $http
           .get(SYSTEM_RBAC_URL)
           .then((res) => {
-            $scope.RBACErrorMap = res.data;
+            $scope.RBACInfoMap = res.data;
 
             let rbacErrorsRowData = [];
 
-            for (let errorkey in $scope.RBACErrorMap) {
-              let hasErrorLength = $scope.RBACErrorMap[errorkey] && $scope.RBACErrorMap[errorkey].length > 0;
+            for (let key in $scope.RBACInfoMap) {
+              let hasErrorLength = key.endsWith("errors") && $scope.RBACInfoMap[key] && $scope.RBACInfoMap[key].length > 0;
               $scope.hasRBACError = hasErrorLength > 0 || $scope.hasRBACError;
               if (hasErrorLength) {
-                $scope.RBACErrorMap[errorkey].forEach((errorItem, index) => {
+                $scope.RBACInfoMap[key].forEach((errorItem, index) => {
                   rbacErrorsRowData.push({
-                    "errorType": index === 0 ? errorkey : "",
-                    "errorDetail": $scope.RBACErrorMap[errorkey][index]
+                    "errorType": index === 0 ? key : "",
+                    "errorDetail": $scope.RBACInfoMap[key][index]
                   });
                 });
               }

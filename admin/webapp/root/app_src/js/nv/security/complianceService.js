@@ -240,6 +240,19 @@
         return hierarchicalData;
       };
 
+      ComplianceFactory.flatCompliance = (complianceList) => {
+        let flatedComplianceList = [];
+        complianceList.forEach(compliance => {
+          if (compliance.children.length > 0) {
+            flatedComplianceList = flatedComplianceList.concat(compliance.children);
+          } else {
+            delete compliance.children;
+            flatedComplianceList.push(compliance);
+          }
+        });
+        return flatedComplianceList;
+      };
+
       return ComplianceFactory;
     });
 })();

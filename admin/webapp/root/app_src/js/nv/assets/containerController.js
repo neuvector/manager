@@ -1194,6 +1194,7 @@
       let benchList = $scope.complianceGridOptions.api
         .getModel()
         .rootNode.childrenAfterFilter.map((node) => node.data);
+      benchList = ComplianceFactory.flatCompliance(benchList);
       if (benchList.length > 0) {
         benchList.forEach((bench) => {
           if (bench.hasOwnProperty("test_number"))

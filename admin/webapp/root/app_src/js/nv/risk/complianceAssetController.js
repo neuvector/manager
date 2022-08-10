@@ -74,6 +74,7 @@
       $scope.showLegend = false;
       $scope.progress = 0;
       $scope.filteredCis = [];
+      $scope.gridOptions = null;
 
       const TOP_LEFT_FLOAT_TOP = 72 + "px";
       const TOP_LEFT_FLOAT_LEFT = 30 + "px";
@@ -470,8 +471,8 @@
         }, 0);
       }
 
-      const createGrid = (kubeType) => {
-        ComplianceAssetFactory.prepareGrids(kubeType);
+      const createGrid = () => {
+        ComplianceAssetFactory.prepareGrids();
         $scope.gridOptions = ComplianceAssetFactory.getGridOptions();
         $scope.gridOptions.onSelectionChanged = onRowChanged;
 
@@ -632,12 +633,13 @@
         });
       };
 
+      createGrid();
+
       $scope.refresh = function () {
         $scope.complianceErr = false;
         $scope.onContainer = false;
         $scope.onHost = false;
         $scope.compliance = null;
-        $scope.gridOptions = null;
 
         Promise.all([
           ContainerFactory.getWorkloadMap(),
@@ -646,7 +648,6 @@
           ComplianceAssetFactory.getReport(),
         ])
           .then(([workloadMaps, nodeMap, platformMap, report]) => {
-            createGrid(report.kubernetes_cis_version);
             $scope.complianceList = report.complianceList;
             $scope.workloadMap4Pdf = workloadMaps.workloadMap4Pdf;
             $scope.imageMap4Pdf = workloadMaps.imageMap4Pdf;
@@ -684,6 +685,13 @@
 
             $timeout(() => {
               console.log("$scope.complianceList:", $scope.complianceList.filter(comp => comp.services.length>0));
+              $scope.complianceList = $scope.complianceList.map(compliance => {
+                if (report.kubernetes_cis_version && report.kubernetes_cis_version.includes("-")) {
+                  let kubeCisVersionStrArray = report.kubernetes_cis_version.split("-");
+                  compliance.category =  kubeCisVersionStrArray[0];
+                }
+                return compliance;
+              });
               $scope.gridOptions.api.setRowData($scope.complianceList);
               $scope.gridOptions.api.sizeColumnsToFit();
               $timeout(() => {
@@ -928,7 +936,6 @@
             }, 500);
           })
           .catch(function (err) {
-            createGrid(report.kubernetes_cis_version);
             $scope.complianceList = [];
             $timeout(() => {
               $scope.gridOptions.overlayNoRowsTemplate = Utils.getOverlayTemplateMsg(

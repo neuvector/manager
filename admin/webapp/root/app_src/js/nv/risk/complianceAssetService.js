@@ -20,7 +20,7 @@
 
       ComplianceAssetFactory.getDomains = () => $http.get(DOMAIN_URL);
 
-      ComplianceAssetFactory.prepareGrids = (kubeType) => {
+      ComplianceAssetFactory.prepareGrids = () => {
 
         const level1 = $translate.instant("cis.LEVEL1");
         const scored = $translate.instant("cis.SCORED");
@@ -31,15 +31,8 @@
             field: "category",
             cellRenderer: function(params) {
               if (params.value) {
-                let category = params.value;
-                if (kubeType) {
-                  if (kubeType.includes("-")) {
-                    let kubeCisVersionStrArray = kubeType.split("-");
-                    category = kubeCisVersionStrArray[0];
-                  }
-                }
                 return `<span class="label label-fs label-info">${$sanitize(
-                  category
+                  params.value
                 )}</span>`;
               } else return null;
             },

@@ -4,6 +4,7 @@
   angular.module("app.assets").controller("AuditController", AuditController);
 
   AuditController.$inject = [
+    "$rootScope",
     "$scope",
     "$filter",
     "$http",
@@ -19,6 +20,7 @@
     "$sanitize"
   ];
   function AuditController(
+    $rootScope,
     $scope,
     $filter,
     $http,
@@ -1452,6 +1454,11 @@
         console.log("Worker is starting...");
         self.onmessage = event => {
           let docData = JSON.parse(event.data);
+          let currUrl = docData.currUrl;
+          let neuvectorProxy = docData.neuvectorProxy;
+          let isSUSESSO = docData.isSUSESSO;
+          console.log("Rancher SSO data", currUrl, neuvectorProxy, isSUSESSO);
+
           const showProgress = (function(self) {
             return function(progress) {
               if (Math.floor(progress * 100000) % 1000 === 0) {
@@ -1463,6 +1470,10 @@
             let docDefinition = _formatContent(docData);
 
             let baseURL = event.srcElement.origin;
+            if (isSUSESSO) {
+              baseURL = `${currUrl.split(neuvectorProxy)[0]}${neuvectorProxy}`;
+              console.log("Rewritten base url:", baseURL);
+            }
             self.importScripts(
               baseURL + "/vendor/pdfmake/build/pdfmake.js",
               baseURL + "/vendor/pdfmake/build/vfs_fonts.js"
@@ -2141,7 +2152,10 @@
                   { charts: getChartsForPDF() },
                   { distByLevel: $scope.distByLevel },
                   { distByName: $scope.distByName },
-                  { rowLimit: $scope.REPORT_TABLE_ROW_LIMIT }
+                  { rowLimit: $scope.REPORT_TABLE_ROW_LIMIT },
+                  { currUrl: window.location.href },
+                  { neuvectorProxy: PROXY_VALUE },
+                  { isSUSESSO: $rootScope.isSUSESSO}
                 )
               )
             );

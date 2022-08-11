@@ -183,7 +183,10 @@
                   images: imageMap,
                   charts: policyService.getCharts4Pdf(),
                   distByType: $scope.distByType,
-                  rowLimit: REPORT_TABLE_ROW_LIMIT
+                  rowLimit: REPORT_TABLE_ROW_LIMIT,
+                  currUrl: window.location.href,
+                  neuvectorProxy: PROXY_VALUE,
+                  isSUSESSO: $rootScope.isSUSESSO
                 }
               )
             );

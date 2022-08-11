@@ -1002,10 +1002,19 @@
           };
         })(self);
         self.onmessage = (event) => {
-          let docDefinition = JSON.parse(event.data);
+          let pdfData = JSON.parse(event.data);
+          let docDefinition = pdfData.docDefinition;
+          let currUrl = pdfData.currUrl;
+          let neuvectorProxy = pdfData.neuvectorProxy;
+          let isSUSESSO = pdfData.isSUSESSO;
+          console.log("Rancher SSO data", currUrl, neuvectorProxy, isSUSESSO);
 
           const drawReportInWebWorker = function (docDefinition) {
             let baseURL = event.srcElement.origin;
+            if (isSUSESSO) {
+              baseURL = `${currUrl.split(neuvectorProxy)[0]}${neuvectorProxy}`;
+              console.log("Rewritten base url:", baseURL);
+            }
             self.importScripts(
               baseURL + "/vendor/pdfmake/build/pdfmake.js",
               baseURL + "/vendor/pdfmake/build/vfs_fonts.js"
@@ -1042,7 +1051,12 @@
             };
             console.log("Post message to test info worker...", docData);
             $scope.worker4TestInfo.postMessage(
-              JSON.stringify(formatContent4TestInfo(docData))
+              JSON.stringify(Object.assign(
+                { docDefinition: formatContent4TestInfo(docData) },
+                { currUrl: window.location.href },
+                { neuvectorProxy: PROXY_VALUE },
+                { isSUSESSO: $rootScope.isSUSESSO}
+              ))
             );
           } else {
             console.warn("no data in test info.");

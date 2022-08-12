@@ -238,6 +238,9 @@
             let rowLimit = pdfRawData.rowLimit;
             let charts = pdfRawData.charts;
             let distByEvtType = pdfRawData.distByEventType;
+            let currUrl = pdfRawData.currUrl;
+            let neuvectorProxy = pdfRawData.neuvectorProxy;
+            let isSUSESSO = pdfRawData.isSUSESSO;
 
             const _organizeSecEventPdfTblRow = function(secEvent, index) {
               // const severityColor = {
@@ -781,6 +784,12 @@
             });
 
             self.postMessage({ type: "csv", data: csvTbl });
+
+            if (isSUSESSO) {
+              baseUrl = `${currUrl.split(neuvectorProxy)[0]}${neuvectorProxy}`;
+              console.log("Rewritten base url:", baseUrl);
+            }
+
             self.importScripts(
               baseUrl + "/vendor/pdfmake/build/pdfmake.js",
               baseUrl + "/vendor/pdfmake/build/vfs_fonts.js"
@@ -1203,6 +1212,9 @@
                 JSON.stringify(
                   Object.assign(
                     { data: $scope.filteredSecEvents },
+                    { currUrl: window.location.href },
+                    { neuvectorProxy: PROXY_VALUE },
+                    { isSUSESSO: $rootScope.isSUSESSO},
                     { distByEventType: $scope.distByEventType },
                     {
                       metadata: _i18n4Pdf({

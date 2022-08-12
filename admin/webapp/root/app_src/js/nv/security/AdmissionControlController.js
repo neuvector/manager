@@ -2297,7 +2297,12 @@
         };
       })(self);
       self.onmessage = event => {
-        let docDefinition = JSON.parse(event.data);
+        let pdfData = JSON.parse(event.data);
+        let docDefinition = pdfData.docDefinition;
+        let currUrl = pdfData.currUrl;
+        let neuvectorProxy = pdfData.neuvectorProxy;
+        let isSUSESSO = pdfData.isSUSESSO;
+        console.log("Rancher SSO data", currUrl, neuvectorProxy, isSUSESSO);
 
         docDefinition.header = function(currentPage) {
           if (currentPage === 2 || currentPage === 3) {
@@ -2325,6 +2330,11 @@
 
         const drawReportInWebWorker = function(docDefinition) {
           let baseURL = event.srcElement.origin;
+          if (isSUSESSO) {
+            baseURL = `${currUrl.split(neuvectorProxy)[0]}${neuvectorProxy}`;
+            console.log("Rewritten base url:", baseURL);
+          }
+
           self.importScripts(
             baseURL + "/vendor/pdfmake/build/pdfmake.js",
             baseURL + "/vendor/pdfmake/build/vfs_fonts.js"
@@ -2364,7 +2374,12 @@
           );
           console.log("Post message to worker...", testResult);
           $scope.worker.postMessage(
-            JSON.stringify(_formatContent(docData))
+            JSON.stringify(Object.assign(
+              { docDefinition: _formatContent(docData) },
+              { currUrl: window.location.href },
+              { neuvectorProxy: PROXY_VALUE },
+              { isSUSESSO: $rootScope.isSUSESSO}
+            ))
           );
         } else {
           console.warn("no data in admission control matching test.");

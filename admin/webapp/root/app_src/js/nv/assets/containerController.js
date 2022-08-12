@@ -66,6 +66,7 @@
     $scope.isShowingAccepted = false;
     $scope.isAccepted = true;
     $scope.cve = [];
+    $scope.complianceGridOptions = null;
     $scope.isScanAuthorized =
       AuthorizationFactory.getDisplayFlag("runtime_scan");
     console.log("$scope.isAutoScanAuthorized: ", $scope.isAutoScanAuthorized);
@@ -1193,6 +1194,7 @@
       let benchList = $scope.complianceGridOptions.api
         .getModel()
         .rootNode.childrenAfterFilter.map((node) => node.data);
+      benchList = ComplianceFactory.flatCompliance(benchList);
       if (benchList.length > 0) {
         benchList.forEach((bench) => {
           if (bench.hasOwnProperty("test_number"))
@@ -1318,8 +1320,8 @@
       }
     };
 
-    const createComplianceGrid = (kubernetes_cis_version) => {
-      ComplianceFactory.prepareGrids(kubernetes_cis_version);
+    const createComplianceGrid = () => {
+      ComplianceFactory.prepareGrids();
       $scope.complianceGridOptions = ComplianceFactory.getGridOptions();
       $scope.complianceGridOptions.onColumnResized = function (params) {
         params.api.resetRowHeights();
@@ -1333,13 +1335,20 @@
       };
     };
 
+    createComplianceGrid();
+
     $scope.getCompliance = function (id) {
       $scope.stopRefresh();
-      $scope.complianceGridOptions = null;
       ComplianceFactory.getCompliance(id)
         .then(function (response) {
           $scope.compliance = response.data;
-          createComplianceGrid($scope.compliance.kubernetes_cis_version);
+          $scope.compliance.items = $scope.compliance.items.map(compliance => {
+            if ($scope.compliance.kubernetes_cis_version && $scope.compliance.kubernetes_cis_version.includes("-")) {
+              let kubeCisVersionStrArray = $scope.compliance.kubernetes_cis_version.split("-");
+              compliance.category =  kubeCisVersionStrArray[0];
+            }
+            return compliance;
+          });
           $scope.cisLabel = getCisLabel($scope.compliance);
           setTimeout(function () {
             let compliancelist = ComplianceFactory.remodelCompliance($scope.compliance.items);
@@ -1358,7 +1367,6 @@
             $scope.complianceGridOptions.overlayNoRowsTemplate =
               Utils.getOverlayTemplateMsg(err);
           }
-          createComplianceGrid();
           setTimeout(function () {
             $scope.complianceGridOptions.api.setRowData();
           }, 300);

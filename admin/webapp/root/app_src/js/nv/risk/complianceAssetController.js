@@ -6,6 +6,7 @@
     .controller("ComplianceAssetController", ComplianceAssetController);
 
   ComplianceAssetController.$inject = [
+    "$rootScope",
     "$scope",
     "$filter",
     "$http",
@@ -25,6 +26,7 @@
     "$interval",
   ];
   function ComplianceAssetController(
+    $rootScope,
     $scope,
     $filter,
     $http,
@@ -74,6 +76,7 @@
       $scope.showLegend = false;
       $scope.progress = 0;
       $scope.filteredCis = [];
+      $scope.gridOptions = null;
 
       const TOP_LEFT_FLOAT_TOP = 72 + "px";
       const TOP_LEFT_FLOAT_LEFT = 30 + "px";
@@ -470,8 +473,8 @@
         }, 0);
       }
 
-      const createGrid = (kubeType) => {
-        ComplianceAssetFactory.prepareGrids(kubeType);
+      const createGrid = () => {
+        ComplianceAssetFactory.prepareGrids();
         $scope.gridOptions = ComplianceAssetFactory.getGridOptions();
         $scope.gridOptions.onSelectionChanged = onRowChanged;
 
@@ -632,12 +635,13 @@
         });
       };
 
+      createGrid();
+
       $scope.refresh = function () {
         $scope.complianceErr = false;
         $scope.onContainer = false;
         $scope.onHost = false;
         $scope.compliance = null;
-        $scope.gridOptions = null;
 
         Promise.all([
           ContainerFactory.getWorkloadMap(),
@@ -646,7 +650,6 @@
           ComplianceAssetFactory.getReport(),
         ])
           .then(([workloadMaps, nodeMap, platformMap, report]) => {
-            createGrid(report.kubernetes_cis_version);
             $scope.complianceList = report.complianceList;
             $scope.workloadMap4Pdf = workloadMaps.workloadMap4Pdf;
             $scope.imageMap4Pdf = workloadMaps.imageMap4Pdf;
@@ -684,6 +687,13 @@
 
             $timeout(() => {
               console.log("$scope.complianceList:", $scope.complianceList.filter(comp => comp.services.length>0));
+              $scope.complianceList = $scope.complianceList.map(compliance => {
+                if (report.kubernetes_cis_version && report.kubernetes_cis_version.includes("-")) {
+                  let kubeCisVersionStrArray = report.kubernetes_cis_version.split("-");
+                  compliance.category =  kubeCisVersionStrArray[0];
+                }
+                return compliance;
+              });
               $scope.gridOptions.api.setRowData($scope.complianceList);
               $scope.gridOptions.api.sizeColumnsToFit();
               $timeout(() => {
@@ -928,7 +938,6 @@
             }, 500);
           })
           .catch(function (err) {
-            createGrid(report.kubernetes_cis_version);
             $scope.complianceList = [];
             $timeout(() => {
               $scope.gridOptions.overlayNoRowsTemplate = Utils.getOverlayTemplateMsg(
@@ -1919,7 +1928,12 @@
           };
         })(self);
         self.onmessage = event => {
-          let docDefinition = _formatContent2(JSON.parse(event.data));
+          let pdfData = JSON.parse(event.data);
+          let docDefinition = _formatContent2(pdfData.docDefinition);
+          let currUrl = pdfData.currUrl;
+          let neuvectorProxy = pdfData.neuvectorProxy;
+          let isSUSESSO = pdfData.isSUSESSO;
+          console.log("Rancher SSO data", currUrl, neuvectorProxy, isSUSESSO);
 
           docDefinition.header = function(currentPage) {
             if (currentPage === 2 || currentPage === 3) {
@@ -1947,6 +1961,10 @@
 
           const drawReportInWebWorker2 = function(docDefinition) {
             let baseURL = event.srcElement.origin;
+            if (isSUSESSO) {
+              baseURL = `${currUrl.split(neuvectorProxy)[0]}${neuvectorProxy}`;
+              console.log("Rewritten base url:", baseURL);
+            }
             self.importScripts(
               baseURL + "/vendor/pdfmake/build/pdfmake.js",
               baseURL + "/vendor/pdfmake/build/vfs_fonts.js"
@@ -1998,7 +2016,12 @@
           );
           console.log("Post message to worker2...");
           $scope.worker2.postMessage(
-            JSON.stringify(docData)
+            JSON.stringify(Object.assign(
+              { docDefinition: docData },
+              { currUrl: window.location.href },
+              { neuvectorProxy: PROXY_VALUE },
+              { isSUSESSO: $rootScope.isSUSESSO}
+            ))
           );
           $scope.worker2.onmessage = event => {
             $scope.pdfBlob2 = event.data.blob;
@@ -2946,7 +2969,12 @@
           };
         })(self);
         self.onmessage = (event) => {
-          let docDefinition = JSON.parse(event.data);
+          let pdfData = JSON.parse(event.data);
+          let docDefinition = pdfData.docDefinition;
+          let currUrl = pdfData.currUrl;
+          let neuvectorProxy = pdfData.neuvectorProxy;
+          let isSUSESSO = pdfData.isSUSESSO;
+          console.log("Rancher SSO data", currUrl, neuvectorProxy, isSUSESSO);
 
           let drawReportInWebWorker = function (docDefinition) {
             docDefinition.header = function (currentPage) {
@@ -2973,6 +3001,10 @@
               }
             };
             let baseURL = event.srcElement.origin;
+            if (isSUSESSO) {
+              baseURL = `${currUrl.split(neuvectorProxy)[0]}${neuvectorProxy}`;
+              console.log("Rewritten base url:", baseURL);
+            }
             self.importScripts(
               baseURL + "/vendor/pdfmake/build/pdfmake.js",
               baseURL + "/vendor/pdfmake/build/vfs_fonts.js"
@@ -3036,7 +3068,12 @@
               );
               console.log("Post message to worker...");
               $scope.worker.postMessage(
-                JSON.stringify(_formatContent(docData))
+                JSON.stringify(Object.assign(
+                  { docDefinition: _formatContent(docData) },
+                  { currUrl: window.location.href },
+                  { neuvectorProxy: PROXY_VALUE },
+                  { isSUSESSO: $rootScope.isSUSESSO}
+                ))
               );
             }, 2000);
           } else {

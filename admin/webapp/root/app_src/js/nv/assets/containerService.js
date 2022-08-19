@@ -883,19 +883,13 @@
                 complianceList: []
               };
               if (workload.state !== "exit") {
-                imageMap4Pdf[workload.image_id] = {
-                  image_id: workload.image_id,
-                  image_name: workload.image,
-                  high: 0,
-                  medium: 0,
-                  evaluation: 0, //0: compliant, 1: risky
-                  complianceCnt: 0,
-                  vulnerabilites: [],
-                  complianceList: []
-                };
+
                 if (workload.children) {
                   workload.children.forEach(child => {
-                    workloadMap.set(child.id, workload);
+                    let containerInfo = angular.copy(workload);
+                    containerInfo.image_id = child.image_id,
+                    containerInfo.image = child.image,
+                    workloadMap.set(child.id, containerInfo);
                     workloadMap4Pdf[child.id] = {
                       id: child.id,
                       pod_id: workload.id || "",
@@ -905,8 +899,19 @@
                       policy_mode: workload.policy_mode || "",
                       service: workload.service || "",
                       service_group: workload.service_group || "",
-                      image: workload.image,
+                      image: child.image,
                       scanned_at: workload.scan_summary ? $filter("date")(workload.scan_summary.scanned_at, "MMM dd, y HH:mm:ss") : "",
+                      high: 0,
+                      medium: 0,
+                      evaluation: 0, //0: compliant, 1: risky
+                      complianceCnt: 0,
+                      vulnerabilites: [],
+                      complianceList: []
+                    };
+                    imageMap4Pdf[child.image_id] = {
+                      workloadId: child.id,
+                      image_id: child.image_id,
+                      image_name: child.image,
                       high: 0,
                       medium: 0,
                       evaluation: 0, //0: compliant, 1: risky
@@ -918,6 +923,7 @@
                 }
               }
             });
+            console.log("workloadMap", workloadMap);
             return {
               workloadMap,
               workloadMap4Pdf,

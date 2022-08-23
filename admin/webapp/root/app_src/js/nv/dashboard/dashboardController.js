@@ -4747,6 +4747,7 @@
             scoreInput.monitor_ext_eps;
           scoreInput.monitor_ext_eps = 0;
           scoreInput.discover_ext_eps = 0;
+          scoreInput.discover_groups_zero_drift = 0;
           const success = function (response) {
             $scope.serviceMode.currScore.value =
               ImproveScoreFactory.realtimeScore.output.securityRiskScore;
@@ -4852,6 +4853,7 @@
           scoreInput.discover_ext_eps = 0;
           scoreInput.threat_ext_eps = 0;
           scoreInput.violation_ext_eps = 0;
+          scoreInput.discover_groups_zero_drift = 0;
 
           const success = function (response) {
             $scope.exposure.currScore.value =
@@ -5038,7 +5040,7 @@
         $scope.admission.currScore.value = scoreInfo.securityScoreValue;
 
         const getExstimateScore = function (scoreInput) {
-          scoreInput.hasAdmissionRuls = true;
+          scoreInput.deny_adm_ctrl_rules = 1;
           const success = function (response) {
             $scope.admission.currScore.value =
               ImproveScoreFactory.realtimeScore.output.securityRiskScore;

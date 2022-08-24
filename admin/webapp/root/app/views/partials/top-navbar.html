@@ -198,7 +198,7 @@
           </div>
         </a>
       </div>
-      <div class="mr-sm" ng-if="(summary.component_versions.length > 1 && $summary.component_versions[0] === $summary.component_versions[1]) || version !== summary.component_versions[0]">
+      <div class="mr-sm" ng-if="(summary.component_versions.length > 1 && summary.component_versions[0] === summary.component_versions[1]) || version !== summary.component_versions[0]">
         <a href="#/app/controllers">
           <div class="label label-warning">
             {{ 'login.VERSION_MISMATCHED' | translate}}

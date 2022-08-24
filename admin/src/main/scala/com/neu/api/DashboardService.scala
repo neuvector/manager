@@ -1899,7 +1899,7 @@ class DashboardService()(implicit executionContext: ExecutionContext)
 
     val runAsRootScore = getRunAsRootScore(metrics.root_wls > 0)
 
-    val admissionRuleScore = getAdmissionRuleScore(metrics.deny_adm_ctrl_rules == 0)
+    val admissionRuleScore = getAdmissionRuleScore(metrics.deny_adm_ctrl_rules > 0)
 
     var podScore: Double  = 0.0
     var hostScore: Double = 0.0

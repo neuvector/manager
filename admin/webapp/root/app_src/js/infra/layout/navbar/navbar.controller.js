@@ -303,6 +303,8 @@
       const callback = function() {
         $mdToast.cancel().then(function() {
           $rootScope.isOnProfile = location.hash === "#/app/profile";
+          let isOnSystemComponentPage = location.hash === "#/app/controllers";
+
           let currentTime = new Date().getTime();
           let cveDBCreateTime = $rootScope.summary.cvedb_create_time ? Date.parse($rootScope.summary.cvedb_create_time) : 0;
           let unUpdateDays = cveDBCreateTime > 0 ? (currentTime - cveDBCreateTime) / (24 * 3600 * 1000) : 0;
@@ -312,7 +314,7 @@
             (!$rootScope.isOnProfile && $rootScope.user.token.default_password) ||
             (!$rootScope.isOnProfile && $rootScope.user.token.password_days_until_expire >= 0 && $rootScope.user.token.password_days_until_expire < 10) ||
             ($rootScope.expiredDays <= 0 && $rootScope.licenseModel !== 'metered') ||
-            ($rootScope.summary.component_versions && ($rootScope.summary.component_versions.length > 1 || $rootScope.version !== $rootScope.summary.component_versions[0])) ||
+            (isOnSystemComponentPage && $rootScope.summary.component_versions && (($rootScope.summary.component_versions.length > 1 && $rootScope.summary.component_versions[0] === $rootScope.summary.component_versions[1]) || $rootScope.version !== $rootScope.summary.component_versions[0])) ||
             $rootScope.invalidLicense ||
             $rootScope.isScannerOld
           ) {

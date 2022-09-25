@@ -65,8 +65,6 @@
           function(response) {
             $rootScope.isOpenShift = false;
             token.token = response.data.token;
-            $rootScope.user.global_permissions = token.token.global_permissions;
-            $rootScope.user.domain_permissions = token.token.domain_permissions;
             token.roles = $rootScope.user.roles;
             $rootScope.user.token = token.token;
             $window.sessionStorage.setItem("token", JSON.stringify(token));

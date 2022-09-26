@@ -1,0 +1,15 @@
+<ng-container *ngIf="labelCode">
+  <span
+    *ngIf="tooltip"
+    class="badge ag-badge ag-badge-60"
+    [class]="'badge-' + labelCode"
+    [matTooltip]="result">
+    {{ displayStatus }}
+  </span>
+  <span
+    *ngIf="!tooltip"
+    class="badge ag-badge ag-badge-60"
+    [class]="'badge-' + labelCode">
+    {{ displayStatus }}
+  </span>
+</ng-container>

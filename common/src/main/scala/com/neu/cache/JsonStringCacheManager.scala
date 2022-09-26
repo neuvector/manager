@@ -2,10 +2,10 @@ package com.neu.cache
 import net.sf.ehcache.CacheManager
 
 /**
-  * Created by bxu on 2/2/18.
-  * Manager graph layout for node and group view. [[com.neu.model.Position]] saved in cache which is disk
-  * backed, check the ehcache.xml for disk store.
-  */
+ * Created by bxu on 2/2/18.
+ * Manager graph layout for node and group view. [[com.neu.model.Position]] saved in cache which is disk
+ * backed, check the ehcache.xml for disk store.
+ */
 object JsonStringCacheManager {
   implicit val cacheKeyGenerator: ToStringCacheKeyGenerator.type = ToStringCacheKeyGenerator
   implicit val cacheManager: CacheManager                        = CacheManager.getInstance()
@@ -15,9 +15,8 @@ object JsonStringCacheManager {
   val cache: Cache[String, String] =
     Ehcache[String, String](cacheName)
 
-  def saveJson(key: String, json: String): Unit = {
+  def saveJson(key: String, json: String): Unit =
     cache.put(key, json)
-  }
 
   def getJson(key: String): Option[String] = cache.get(key)
 

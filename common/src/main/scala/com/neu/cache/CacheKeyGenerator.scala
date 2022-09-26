@@ -1,8 +1,8 @@
 package com.neu.cache
 
 /**
-  * @tparam A type of cache key
-  */
+ * @tparam A type of cache key
+ */
 trait CacheKeyGenerator[A] {
   def generate(data: Any*): A
 }

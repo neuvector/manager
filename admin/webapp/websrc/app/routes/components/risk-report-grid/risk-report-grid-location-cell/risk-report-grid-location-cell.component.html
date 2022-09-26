@@ -1,0 +1,43 @@
+<div *ngIf="params.data.project_name">
+  <strong>{{ 'audit.gridHeader.PROJECT' | translate }} :</strong>
+  <span> {{ params.data.project_name }} </span>
+</div>
+<div *ngIf="params.data.region">
+  <strong>{{ 'audit.gridHeader.REGION' | translate }} :</strong>
+  <span> {{ params.data.region }} </span>
+</div>
+<div *ngIf="params.data.host_name">
+  <strong>{{ 'audit.gridHeader.NODE' | translate }} :</strong>
+  <span> {{ params.data.host_name }} </span>
+</div>
+<div *ngIf="params.data.workload_name">
+  <strong>{{ 'audit.gridHeader.CONTAINER' | translate }} :</strong>
+  <span> {{ displayWorkload }} </span>
+</div>
+<div *ngIf="params.data.registry">
+  <strong>{{ 'audit.gridHeader.REGISTRY' | translate }} :</strong>
+  <span> {{ params.data.registry }} </span>
+</div>
+<div *ngIf="params.data.workload_image">
+  <strong>{{ 'audit.gridHeader.IMAGE' | translate }} :</strong>
+  <span> {{ displayImage }} </span>
+</div>
+<div *ngIf="params.data.repository && params.data.tag">
+  <strong>{{ 'audit.gridHeader.IMAGE' | translate }} :</strong>
+  <span> {{ params.data.repository }}:{{ params.data.tag }} </span>
+</div>
+<div *ngIf="params.data.platform">
+  <strong>{{ 'audit.gridHeader.PLATFORM' | translate }} :</strong>
+  <span *ngIf="params.data.platform_version">
+    {{ params.data.platform }}&nbsp;({{
+      'audit.gridHeader.VERSION' | translate
+    }}:&nbsp;{{ params.data.platform_version }})
+  </span>
+  <span *ngIf="!params.data.platform_version">
+    {{ params.data.platform }}
+  </span>
+</div>
+<div *ngIf="params.data.items && index >= 0">
+  <strong>{{ 'audit.gridHeader.IMAGE' }} :</strong>
+  <span> {{ displayItem }} </span>
+</div>

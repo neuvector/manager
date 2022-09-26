@@ -667,6 +667,11 @@ class PolicyService()(implicit executionContext: ExecutionContext)
                 entity(as[RegistryConfigWrap]) { registryConfig =>
                   Utils.respondWithNoCacheControl() {
                     complete {
+                      logger.info(
+                        "Adding scan registry: {}",
+                        jsonToMaskedRegistryConfig(registryConfigToJson(registryConfig.config))
+                      )
+                      logger.debug("config in json: {}", registryConfigWrapToJson(registryConfig))
                       RestClient.httpRequestWithHeader(
                         s"${baseClusterUri(tokenId)}/$scanRegistryPath",
                         POST,
@@ -681,6 +686,11 @@ class PolicyService()(implicit executionContext: ExecutionContext)
                 entity(as[RegistryConfigDTO]) { registryConfig =>
                   Utils.respondWithNoCacheControl() {
                     complete {
+                      logger.info("Updating scan registry: {}", registryConfig.name)
+                      logger.debug(
+                        "config in json: {}",
+                        registryConfigWrapToJson(registryConfig.wrap)
+                      )
                       RestClient.httpRequestWithHeader(
                         s"${baseClusterUri(tokenId)}/$scanRegistryPath/${UrlEscapers.urlFragmentEscaper().escape(registryConfig.name)}",
                         PATCH,
@@ -1010,7 +1020,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
               }
             } ~
             delete {
-              parameter('scope.?, 'ruleType, 'id) { (scope, _, id) =>
+              parameter('scope.?, 'id) { (scope, id) =>
                 Utils.respondWithNoCacheControl() {
                   complete {
                     logger.info("Removing admission deny rules {}", id)

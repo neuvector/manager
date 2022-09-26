@@ -1,0 +1,37 @@
+/* Cards dark theme
+   ========================================================================== */
+/* Variables file: assets/stylesheets/eos-custom-components/card/dark-theme.variables.scss */
+.dark-theme {
+  .card {
+    background: $eos-dark-card-body;
+    color: $eos-dark-card-color;
+
+    &.clickable h3, p, .card-text {
+      color: $eos-dark-card-color;
+    }
+
+    .card-header {
+      border: 0;
+    }
+
+    .card-subtitle, small {
+      color: $eos-dark-card-subtitle;
+    }
+
+    .card-body {
+      background: $eos-dark-card-body;
+    }
+  }
+
+  .card-header, .card-with-icon, .card-footer {
+    background: $eos-dark-card-header-footer;
+  }
+
+  .card-vertical {
+    footer {
+      background: $eos-dark-card-header-footer;
+      color: $eos-dark-card-color;
+    }
+  }
+
+}

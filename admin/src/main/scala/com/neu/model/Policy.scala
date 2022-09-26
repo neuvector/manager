@@ -3,15 +3,35 @@ package com.neu.model
 import com.neu.model.DashboardJsonProtocol._
 
 /**
-  * Created by bxu on 4/29/16.
-  */
-case class Rule(id: Option[Int], comment: Option[String], from: String, to: String, applications: Option[Array[String]],
-                 ports: Option[String], action: String, learned: Boolean,
-                 cfg_type: Option[String] = Some("user_created"), disable: Boolean, last_modified_timestamp: Option[Long] = None)
+ * Created by bxu on 4/29/16.
+ */
+case class Rule(
+  id: Option[Int],
+  comment: Option[String],
+  from: String,
+  to: String,
+  applications: Option[Array[String]],
+  ports: Option[String],
+  action: String,
+  learned: Boolean,
+  cfg_type: Option[String] = Some("user_created"),
+  disable: Boolean,
+  last_modified_timestamp: Option[Long] = None
+)
 
-case class Rule2(id: Option[Int], comment: Option[String], from: Option[String], to: Option[String], applications: Option[Array[String]],
-                ports: Option[String], action: Option[String], learned: Option[Boolean],
-                cfg_type: Option[String] = Some("user_created"), disable: Option[Boolean], last_modified_timestamp: Option[Long] = None)
+case class Rule2(
+  id: Option[Int],
+  comment: Option[String],
+  from: Option[String],
+  to: Option[String],
+  applications: Option[Array[String]],
+  ports: Option[String],
+  action: Option[String],
+  learned: Option[Boolean],
+  cfg_type: Option[String] = Some("user_created"),
+  disable: Option[Boolean],
+  last_modified_timestamp: Option[Long] = None
+)
 
 case class CLUSEventCondition(
   `type`: String,
@@ -59,11 +79,11 @@ case class DeployFedRulesConfig(
 )
 
 /**
-  * New rules to insert into policy
-  * @param after the id of the rule before new rules, use 0 to insert in
-  *              front, -1 to put on the end
-  * @param rules the rules
-  */
+ * New rules to insert into policy
+ * @param after the id of the rule before new rules, use 0 to insert in
+ *              front, -1 to put on the end
+ * @param rules the rules
+ */
 case class RuleInsert(after: Int = 0, rules: Array[Rule])
 
 case class Policy(rules: Array[Rule])
@@ -76,13 +96,20 @@ case class ApplicationList(application: Option[String])
 
 case class ApplicationListWrap(list: ApplicationList)
 
-case class RuleConfig(id: Int, comment: Option[String], from: Option[String], to: Option[String],
-                      applications: Option[Array[String]], ports: Option[String], action: Option[String],
-                      disable: Option[Boolean])
+case class RuleConfig(
+  id: Int,
+  comment: Option[String],
+  from: Option[String],
+  to: Option[String],
+  applications: Option[Array[String]],
+  ports: Option[String],
+  action: Option[String],
+  disable: Option[Boolean]
+)
 
-case class RuleConfigData (config: RuleConfig, replicate: Option[Boolean])
+case class RuleConfigData(config: RuleConfig, replicate: Option[Boolean])
 
-case class ScanSummary (
+case class ScanSummary(
   status: String,
   high: Int,
   medium: Int,
@@ -93,23 +120,23 @@ case class ScanSummary (
   scanned_at: String,
   base_os: String,
   scanner_version: String,
-	cvedb_create_time: String
+  cvedb_create_time: String
 )
 
-case class IpAddress (
+case class IpAddress(
   ip: String,
-	ip_prefix: Int,
-	gateway: String
+  ip_prefix: Int,
+  gateway: String
 )
 
-case class ProtoPort (
+case class ProtoPort(
   ip_proto: Int,
-	port: Long,
+  port: Long,
   host_ip: String,
-	host_port: Long
+  host_port: Long
 )
 
-case class ScannedWorkloadChildren2 (
+case class ScannedWorkloadChildren2(
   id: String,
   name: String,
   display_name: String,
@@ -123,17 +150,17 @@ case class ScannedWorkloadChildren2 (
   privileged: Boolean,
   run_as_root: Boolean,
   host_name: String,
-	enforcer_name: String,
-	network_mode: String,
-	started_at: String,
-	finished_at: String,
-	interfaces: Option[Map[String, Array[IpAddress]]] = None,
-	ports: Option[Array[ProtoPort]] = Some(Array()),
-	labels: Option[Map[String, String]] = None,
-	applications: Option[Array[String]] = Some(Array())
+  enforcer_id: String,
+  network_mode: String,
+  started_at: String,
+  finished_at: String,
+  interfaces: Option[Map[String, Array[IpAddress]]] = None,
+  ports: Option[Array[ProtoPort]] = Some(Array()),
+  labels: Option[Map[String, String]] = None,
+  applications: Option[Array[String]] = Some(Array())
 )
 
-case class ScannedWorkloads2 (
+case class ScannedWorkloads2(
   id: String,
   name: String,
   display_name: String,
@@ -147,18 +174,18 @@ case class ScannedWorkloads2 (
   privileged: Boolean,
   run_as_root: Boolean,
   host_name: String,
-	enforcer_name: String,
-	network_mode: String,
-	started_at: String,
-	finished_at: String,
-	interfaces: Option[Map[String, Array[IpAddress]]] = None,
-	ports: Option[Array[ProtoPort]] = Some(Array()),
-	labels: Option[Map[String, String]] = None,
-	applications: Option[Array[String]] = Some(Array()),
+  enforcer_id: String,
+  network_mode: String,
+  started_at: String,
+  finished_at: String,
+  interfaces: Option[Map[String, Array[IpAddress]]] = None,
+  ports: Option[Array[ProtoPort]] = Some(Array()),
+  labels: Option[Map[String, String]] = None,
+  applications: Option[Array[String]] = Some(Array()),
   children: Array[ScannedWorkloadChildren2]
 )
 
-case class ScannedWorkloadChildren (
+case class ScannedWorkloadChildren(
   id: String,
   name: String,
   base_os: String,
@@ -180,7 +207,7 @@ case class ScannedWorkloadChildren (
   scanned_at: String
 )
 
-case class ScannedWorkloads (
+case class ScannedWorkloads(
   id: String,
   name: String,
   base_os: String,
@@ -203,16 +230,16 @@ case class ScannedWorkloads (
   scanned_at: String
 )
 
-case class ScannedWorkloadsWrap2 (
+case class ScannedWorkloadsWrap2(
   workloads: Array[ScannedWorkloads2]
 )
 
-case class ScannedWorkloadsWrap (
+case class ScannedWorkloadsWrap(
   workloads: Array[ScannedWorkloads],
   status: WorkloadsStatus
 )
 
-case class ConvertedScannedWorkloads (
+case class ConvertedScannedWorkloads(
   id: String,
   name: String,
   base_os: String,
@@ -237,20 +264,20 @@ case class ConvertedScannedWorkloads (
   scanned_at: String
 )
 
-case class ConvertedScannedWorkloadsWrap (
+case class ConvertedScannedWorkloadsWrap(
   workloads: Array[ConvertedScannedWorkloads],
   status: WorkloadsStatus
 )
 
-case class RuleIds (
+case class RuleIds(
   ids: Array[Int]
 )
 
-case class PromoteConfig (
+case class PromoteConfig(
   request: RuleIds
 )
 
-case class WorkloadBriefV2 (
+case class WorkloadBriefV2(
   id: String,
   name: String,
   display_name: String,
@@ -265,7 +292,7 @@ case class WorkloadBriefV2 (
   service_group: String
 )
 
-case class WorkloadSecurityV2 (
+case class WorkloadSecurityV2(
   cap_sniff: Boolean,
   cap_quarantine: Boolean,
   cap_change_mode: Boolean,
@@ -278,7 +305,7 @@ case class WorkloadSecurityV2 (
   scan_summary: ScanSummary
 )
 
-case class WorkloadRtAttribesV2 (
+case class WorkloadRtAttribesV2(
   pod_name: String,
   share_ns_with: Option[String] = Some(""),
   privileged: Boolean,
@@ -293,7 +320,7 @@ case class WorkloadRtAttribesV2 (
   applications: Option[Array[String]] = Some(Array())
 )
 
-case class WorkloadV2Child (
+case class WorkloadV2Child(
   brief: WorkloadBriefV2,
   security: WorkloadSecurityV2,
   rt_attributes: WorkloadRtAttribesV2,
@@ -308,7 +335,7 @@ case class WorkloadV2Child (
   exit_code: Int
 )
 
-case class WorkloadV2 (
+case class WorkloadV2(
   brief: WorkloadBriefV2,
   security: WorkloadSecurityV2,
   rt_attributes: WorkloadRtAttribesV2,
@@ -324,6 +351,6 @@ case class WorkloadV2 (
   exit_code: Int
 )
 
-case class WorkloadsWrapV2 (
+case class WorkloadsWrapV2(
   workloads: Array[WorkloadV2]
 )

@@ -1,0 +1,16 @@
+/* z-index variables for use cases
+   ========================================================================== */
+$eos-zindex-navbar: 1000 !default;
+$eos-zindex-dropdown: 1000 !default;
+$eos-zindex-popover: 1060 !default;
+$eos-zindex-tooltip: 1070 !default;
+$eos-zindex-navbar-fixed: 1030 !default;
+$eos-zindex-modal-background: 1040 !default;
+$eos-zindex-modal: 1050 !default;
+$eos-ft: 1060 !default;
+$eos-zindex-banner: 1001 !default;
+
+/* z-index values for content */
+$eos-zindex-negative: -1;
+$eos-zindex-middle: 5;
+$eos-zindex-top: 10;

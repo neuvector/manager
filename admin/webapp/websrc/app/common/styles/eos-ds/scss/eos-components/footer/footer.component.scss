@@ -1,0 +1,78 @@
+/* ==========================================================================
+  Footer style
+========================================================================== */
+footer {
+  height: $eos-footer-collapsed-height;
+
+  ul.footer-list {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    font-size: $eos-footer-side-menu-font-size;
+    justify-content: center;
+    margin: 0;
+    padding: $eos-footer-padding;
+  }
+
+  li.footer-list-item {
+    list-style: none;
+    padding: $eos-footer-list-padding;
+
+    img {
+      height: $eos-footer-list-image;
+    }
+  }
+
+  /* Style for side-menu footer.
+   ========================================================================== */
+  &.footer-side-menu {
+    align-items: center;
+    background-color: $eos-footer-side-menu-color;
+    border-top: 1px solid $eos-footer-border-top-color;
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    font-size: $eos-footer-side-menu-font-size;
+    justify-content: space-between;
+    position: fixed;
+
+    ul.footer-list {
+      color: $eos-footer-side-menu-text-color;
+      display: flex;
+      justify-content: flex-start;
+      width: $eos-footer-side-menu-width;
+    }
+  }
+
+  /* Style for content footer.
+   ========================================================================== */
+  &.footer-content {
+    align-items: center;
+    border-top: $eos-footer-collapsed-border-top;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+
+    ul.footer-list {
+      color: $eos-footer-content-color;
+    }
+  }
+
+  /* Devices and when menu is collapsed.
+   ========================================================================== */
+  @media screen and (min-width: $eos-md-min) {
+    /* Hide footer for Devices */
+    &.footer-content {
+      display: none;
+    }
+  }
+
+  &.display-collapsed {
+    display: flex;
+    margin-left: $eos-footer-margin-collapsed-menu;
+    width: auto;
+    @media screen and (max-width: $eos-sd-max) {
+      margin-left: 0;
+    }
+  }
+}

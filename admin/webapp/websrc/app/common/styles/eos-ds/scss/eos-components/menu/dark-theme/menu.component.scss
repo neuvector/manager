@@ -1,0 +1,106 @@
+.dark-theme {
+  .main-menu {
+    background: $eos-dark-main-menu-background;
+
+    header {
+      background: $eos-dark-main-menu-background;
+    }
+
+    .menu-title {
+      color: $eos-dark-main-menu-color;
+    }
+
+    hr {
+      border-top-color: $eos-dark-main-menu-border;
+    }
+
+    .menu-togglable .menu-dropdown-list {
+      background: $eos-dark-main-menu-background;
+
+      li a {
+        background: transparent;
+        color: $eos-dark-main-menu-color;
+        text-decoration: none;
+
+        &:hover {
+          background: transparent;
+          text-decoration: underline;
+        }
+
+        &.selected {
+          color: $eos-dark-main-menu-color-hover;
+          text-decoration: none;
+        }
+      }
+    }
+
+    .menu-dropdown input[type='checkbox']:checked ~ .menu-title, .menu-dropdown.selected ~ .menu-title {
+      background: $eos-dark-main-menu-background;
+      color: $eos-dark-main-menu-color;
+    }
+
+    .footer-side-menu {
+      background-color: $eos-dark-main-menu-background;
+      border-top: 1px solid $eos-dark-main-menu-border;
+    }
+  }
+
+  .mobile-menu {
+    header {
+      background: $eos-dark-mobile-header-background;
+    }
+
+    nav {
+      background-color: $eos-dark-main-menu-background;
+
+      hr {
+        border-top-color: $eos-dark-main-menu-border;
+      }
+
+      .menu-togglable {
+        .menu-dropdown-list {
+          background: $eos-dark-main-menu-background;
+        }
+
+        li .menu-title {
+          color: $eos-dark-main-menu-color;
+        }
+      }
+
+      .menu-dropdown input[type='checkbox']:checked ~ .menu-title, .menu-dropdown.selected ~ .menu-title {
+        background-color: $eos-dark-main-menu-background;
+        color: $eos-dark-main-menu-color;
+      }
+    }
+  }
+
+  .collapsed-sidebar {
+    .menu-collapsed-title {
+      background-color: $eos-mm-background-navigation-darktheme;
+      color: $eos-mm-background-navigation-text-darktheme;
+    }
+
+    .main-collapsed-single {
+      background: $eos-bc-dt-gray-100;
+      border: $eos-mm-dropdown-dark;
+      color: $eos-mm-background-navigation-text-darktheme;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      &.selected {
+        color: $eos-dark-main-menu-color-hover;
+      }
+    }
+
+    .menu-dropdown-list {
+      border: $eos-mm-dropdown-dark;
+    }
+  }
+
+  .collapsed-sidebar.main-menu .menu-togglable .menu-item .menu-dropdown-list {
+    border: $eos-mm-dropdown-dark;
+  }
+}

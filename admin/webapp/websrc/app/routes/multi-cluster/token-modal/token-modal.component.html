@@ -1,0 +1,46 @@
+<div class="nv-dialog">
+  <div mat-dialog-title class="dialog-header">
+    <div class="pull-left">
+      {{ "multiCluster.joining.token" | translate }}
+    </div>
+    <div class="pull-right">
+      <em class="icon-close hand" (click)="onCancel()"></em>
+    </div>
+  </div>
+
+  <div mat-dialog-content class="dialog-content p0 m0">
+    <div
+      fxLayout="column"
+      fxLayoutAlign="start"
+      fxFlex="1 0 auto"
+      class="pt-lg"
+    >
+      <div
+        fxLayout="row"
+        fxLayoutAlign="start center"
+        fxFlex="1 0 auto"
+        class="pl-4"
+      >
+        <mat-form-field appearance="outline" fxFlex="100" class="pr-4">
+          <label>{{ "multiCluster.joining.token" | translate }}</label>
+          <textarea
+            matInput
+            [value]="data.token"
+            name="name"
+            required
+          ></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+  <div
+    mat-dialog-actions
+    class="dialog-actions pull-right"
+    style="margin-right: 24px;"
+  >
+    <button mat-button class="" (click)="onCancel()">
+      {{ "general.CLOSE" | translate }}
+    </button>
+  </div>
+</div>

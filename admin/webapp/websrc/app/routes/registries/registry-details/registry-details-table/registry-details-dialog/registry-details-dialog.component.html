@@ -1,0 +1,69 @@
+<ng-container
+  *ngIf="imageAndLayers$ | async as imageAndLayers; else loadingTemplate">
+  <div class="dialog-header d-flex justify-content-between align-items-center">
+    <h2 class="mb-0 h4 font-weight-bold">
+      {{ data.selectedRegistry.registry + data.image.repository }}
+    </h2>
+    <button
+      aria-label="Close dialog button"
+      id="registry-details-dialog-close-button"
+      mat-icon-button>
+      <i (click)="onNoClick()" class="eos-icons">close</i>
+    </button>
+  </div>
+  <div style="min-height: 700px; height: calc(100% - 70px)">
+    <div class="filter">
+      <mat-form-field appearance="standard">
+        <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
+        <input [formControl]="filter" matInput />
+      </mat-form-field>
+    </div>
+    <mat-tab-group
+      (selectedTabChange)="resizeChildGrids()"
+      class="h-100 registry-dialog-tab-group">
+      <mat-tab label="Vulnerabilities">
+        <app-registry-vulnerabilities
+          (acceptVulnerability)="onAcceptVulnerability($event)"
+          (showAcceptedVulnerability)="toggleAcceptedVulnerability()"
+          [acceptedVulnerabilityStatus]="acceptedVulnerabilityStatus"
+          [baseOS]="data.image.base_os"
+          [cveDBVersion]="data.selectedRegistry.cvedb_version"
+          [imageId]="data.image.image_id"
+          [layers]="imageAndLayers.layer.report.layers"
+          [path]="data.selectedRegistry.registry"
+          [refreshing]="refreshing"
+          [repository]="data.image.repository"
+          [resize]="resize"
+          [scannerDate]="data.selectedRegistry.cvedb_create_time"
+          [scannerVersion]="data.image.scanner_version">
+        </app-registry-vulnerabilities>
+      </mat-tab>
+      <mat-tab label="Compliance">
+        <app-compliance-grid
+          [baseOS]="data.image.base_os"
+          [imageId]="data.image.image_id"
+          [path]="data.selectedRegistry.registry"
+          [repository]="data.image.repository"
+          [resize]="resize"
+          [rowData]="imageAndLayers.image.report.checks"
+          [useQuickFilterService]="true"
+          tableHeight="calc(100% - 42px)">
+        </app-compliance-grid>
+      </mat-tab>
+      <mat-tab label="Modules">
+        <app-registry-modules
+          [baseOS]="data.image.base_os"
+          [imageId]="data.image.image_id"
+          [modules]="imageAndLayers.image.report.modules"
+          [path]="data.selectedRegistry.registry"
+          [repository]="data.image.repository"
+          [resize]="resize"
+          [vulnerabilities]="imageAndLayers.image.report.vulnerabilities">
+        </app-registry-modules>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</ng-container>
+<ng-template #loadingTemplate>
+  <app-loading-template></app-loading-template>
+</ng-template>

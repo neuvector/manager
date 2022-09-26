@@ -1,0 +1,18 @@
+.filter {
+  position: relative;
+  left: calc(100% - 184px);
+  top: -28px;
+  z-index: 10000;
+  display: inline-block;
+}
+
+.registry-dialog-tab-group {
+  margin-top: -83px;
+}
+
+.dialog-header {
+  padding: 10px 30px;
+  margin: -24px -24px 30px -24px;
+  background-color: #f8f8f8;
+  border: #babfc7 1px solid;
+}

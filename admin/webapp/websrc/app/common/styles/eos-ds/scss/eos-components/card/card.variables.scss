@@ -1,0 +1,56 @@
+/* Card variables
+   ========================================================================== */
+/**
+* Colors and borders
+*
+* Colors variables: /assets/stylesheets/eos-base/variables/branding.scss
+* Shadows variables: /assets/stylesheets/eos-base/variables/shadows.scss
+* $eos-body-color: /assets/stylesheets/eos-base/variables/layout.scss
+* Spacing variables: /assets/stylesheets/eos-base/variables/branding.scss
+*/
+
+$eos-card-bg: $eos-bc-gray-50;
+$eos-card-bg-header: $eos-bc-gray-100;
+$eos-card-bg-header-border-color: $eos-bc-gray-100;
+$eos-card-text: $eos-body-color;
+$eos-card-content-padding: $eos-l;
+$eos-card-margin: $eos-m;
+$eos-card-font-size: $eos-font-size-base;
+$eos-card-divider-color: $eos-bc-gray-100;
+$eos-card-hover-box-shadow: 0 16px 32px rgba(0, 0, 0, .16);
+$eos-card-footer-color: $eos-bc-cerulean-900;
+$eos-card-footer-disabled: $eos-bc-gray-500;
+$eos-card-inactive-circle-gradient-from: $eos-bc-gray-300;
+$eos-card-inactive-circle-gradient-to: $eos-bc-gray-500;
+$eos-card-footer-disable-color: $eos-bc-gray-500;
+$eos-card-subtitle-color: $eos-bc-gray-900;
+/* Spacing variables: /assets/stylesheets/eos-base/variables/spacings.scss */
+$eos-card-hover-anim-height: $eos-m;
+$eos-card-height: 400px;
+$eos-card-padding: $eos-m $eos-l;
+$eos-card-footer-icon-margin: $eos-s;
+$eos-card-figure-wrap-margin: $eos-xl;
+
+/* Vertical card */
+$eos-card-vertical-h3-margin-bottom: $eos-m;
+
+/* Horizontal card variables */
+$eos-card-horizontal-width: 490px;
+$eos-card-horizontal-height: 185px;
+$eos-card-horizontal-z-index: $eos-zindex-top;
+$eos-card-horizontal-footer-height: $eos-xxl;
+$eos-card-horizontal-image-width: 200px;
+$eos-card-horizontal-image-news: 134px;
+$eos-card-horizontal-bottom-margin: -5px;
+$eos-card-horizontal-footer-hover: 55px;
+$eos-card-horizontal-icon-position: $eos-l;
+$eos-card-horizontal-icon-bottom-margin: $eos-m;
+$eos-card-horizontal-footer-zindex: 10;
+$eos-card-horizontal-date-color: $eos-bc-gray-900;
+
+$eos-card-horizontal-footer-transition: all .3s ease-in-out;
+$eos-card-horizontal-default-color: $eos-bc-blue-500;
+$eos-card-horizontal-default-text-color: $eos-bc-white;
+$eos-card-horizontal-link-color: $eos-body-color;
+$eos-card-horizontal-small-image-max-height: 70px;
+$eos-card-default-border: 1px solid $eos-base-border-color;

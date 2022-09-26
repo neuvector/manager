@@ -1,0 +1,13 @@
+/* Shadow variables
+   ========================================================================== */
+/* Colors variables: /assets/stylesheets/eos-base/variables/branding.scss */
+$eos-shadow-color: $eos-bc-gray-100;
+
+/* Box shadow */
+$eos-box-shadow: 0 3px 30px rgba(0, 0, 0, .13);
+
+/* Box shadow for dark theme */
+$eos-box-shadow-dark-theme: 0 3px 30px rgba(255, 255, 255, .13);
+
+/* Element focus shadow */
+$eos-select-focus-shadow: 0 0 1px #00b2e2;

@@ -14,9 +14,10 @@ import com.neu.api.Utils
 import com.google.common.net.UrlEscapers
 
 trait StaticResources extends HttpService with LazyLogging {
-  val shortPath = 10
+  val shortPath           = 10
   val isUsingSSL: Boolean = sys.env.getOrElse("MANAGER_SSL", "on") == "on"
-  val acceptFrameAncestors = sys.env.getOrElse("FRAME_ANCESTOR_WHITELIST", "none").replaceAll(",", " ")
+  val acceptFrameAncestors =
+    sys.env.getOrElse("FRAME_ANCESTOR_WHITELIST", "none").replaceAll(",", " ")
 
   //# Rewrite redirect-implementation base on "spray/spray-routing/src/main/scala/spray/routing/RequestContext.scala, added strict transport security header"
   def redirectMe(uri: Uri, redirectionType: Redirection) =
@@ -25,36 +26,53 @@ trait StaticResources extends HttpService with LazyLogging {
         status = redirectionType,
         headers =
           if (isUsingSSL)
-            Location(uri) :: RawHeader("Content-Security-Policy", s"frame-ancestors ${acceptFrameAncestors}") :: RawHeader("X-Frame-Options", "DENY") :: RawHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload") :: Nil
+            Location(uri) :: RawHeader(
+              "Content-Security-Policy",
+              s"frame-ancestors ${acceptFrameAncestors}"
+            ) :: RawHeader("X-Frame-Options", "DENY") :: RawHeader(
+              "Strict-Transport-Security",
+              "max-age=31536000; includeSubDomains; preload"
+            ) :: Nil
           else
-            Location(uri) :: RawHeader("Content-Security-Policy", s"frame-ancestors ${acceptFrameAncestors}") :: RawHeader("X-Frame-Options", "DENY") :: Nil,
+            Location(uri) :: RawHeader(
+              "Content-Security-Policy",
+              s"frame-ancestors ${acceptFrameAncestors}"
+            ) :: RawHeader("X-Frame-Options", "DENY") :: Nil,
         entity = redirectionType.htmlTemplate match {
           case ""       ⇒ HttpEntity.Empty
           case template ⇒ HttpEntity(`text/html`, template format uri)
-        })
+        }
+      )
     }
-
 
   val staticResources: Route = get {
     path("") {
-      redirectMe(UrlEscapers.urlFragmentEscaper().escape("/index.html?v=" + Md5.hash(managerVersion).take(shortPath)),
-               StatusCodes.MovedPermanently)
+      redirectMe(
+        UrlEscapers
+          .urlFragmentEscaper()
+          .escape("/index.html?v=" + Md5.hash(managerVersion).take(shortPath)),
+        StatusCodes.MovedPermanently
+      )
     } ~
     path("index.html") {
       parameters('v.?) { v =>
         {
           val hash = Md5.hash(managerVersion).take(shortPath)
           if (v.isEmpty) {
-            redirectMe(UrlEscapers.urlFragmentEscaper().escape("/index.html?v=" + hash),
-                     StatusCodes.MovedPermanently)
+            redirectMe(
+              UrlEscapers.urlFragmentEscaper().escape("/index.html?v=" + hash),
+              StatusCodes.MovedPermanently
+            )
           } else {
             if (v.get.equals(hash)) {
               getFromResource("/index.html")
             } else {
               logger.info("Previous version hash: {}", v.get)
               logger.info("Current version hash: {}", hash)
-              redirectMe(UrlEscapers.urlFragmentEscaper().escape("/index.html?v=" + hash),
-                       StatusCodes.MovedPermanently)
+              redirectMe(
+                UrlEscapers.urlFragmentEscaper().escape("/index.html?v=" + hash),
+                StatusCodes.MovedPermanently
+              )
             }
           }
         }

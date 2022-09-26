@@ -1,0 +1,32 @@
+/* Sign in variables
+   ========================================================================== */
+$eos-signin-layout-content-height: calc(100vh);
+/* Colors variables: /assets/stylesheets/eos-base/variables/branding.scss */
+$eos-sign-in-brand-container-bg-color: $eos-bc-pine-500;
+$eos-sign-in-brand-container-color: $eos-bc-white;
+$eos-sign-in-form-container-bg-color: $eos-bc-white;
+$eos-signin-layout-content-background: url('../../../images/sign-in-bg.svg') #0c322c no-repeat center fixed;
+$eos-suse-logo-mobile-background: url('../../../images/suse-logo-mobile.svg') no-repeat left center;
+/* Spacing variables: /assets/stylesheets/eos-base/variables/spacings.scss */
+$eos-sign-in-box-width: 1120px;
+$eos-sign-in-box-height: 700px;
+$eos-sign-in-box-shadow: 0 3px 30px rgba(0, 0, 0, .16);
+$eos-sign-in-brand-container-padding: $eos-xl;
+$eos-sign-in-brand-container-width: 445px;
+$eos-sign-in-brand-container-margin: 50px;
+$eos-sign-in-line-img-margin: -$eos-xl;
+$eos-sign-in-line-img-margin-top: $eos-xl;
+$eos-sign-in-h1-color: $eos-bc-green-500;
+$eos-sign-in-form-container-width: 675px;
+$eos-sign-in-form-container-header-padding: $eos-xl;
+$eos-sign-in-form-container-form-width: 75%;
+$eos-sign-in-form-container-margin-bottom: 50px;
+$eos-sign-in-form-container-footer-bg: $eos-bc-dt-gray-100;
+$eos-sign-in-form-container-footer-ul-margin: $eos-l $eos-xl;
+$eos-sign-in-form-container-footer-li-margin-right: $eos-s;
+$eos-sign-in-form-container-footer-li-padding: 0 0 $eos-xs 0;
+$eos-sign-in-container-left-small-width: 335px;
+$eos-sign-in-footer-border-top: 1px solid $eos-bc-gray-100;
+$eos-sign-in-cookies-box-shadow: 0 0 8px -2px $eos-bc-gray-300;
+$eos-sign-in-cookies-padding: $eos-m $eos-xl $eos-l $eos-xl;
+$eos-sign-in-form-mobile-padding: $eos-xl;

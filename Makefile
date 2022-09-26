@@ -23,12 +23,12 @@ pull_base:
 	docker pull $(REPO_REL_URL)/neuvector/manager_base:latest
 
 manager_image: pull_base stage_mgr
-	docker build --build-arg NV_TAG=$(NV_TAG) --no-cache=true -t neuvector/manager -f manager/Dockerfile.manager .
+	docker build --build-arg NV_TAG=$(NV_TAG) --no-cache=true -t neuvector/gemini -f manager/Dockerfile.manager .
 
 jar:
 	@echo "Pulling images ..."
 	docker pull $(REPO_REL_URL)/neuvector/store
-	docker pull $(REPO_REL_URL)/neuvector/build:latest
+	docker pull $(REPO_REL_URL)/neuvector/build_manager:latest
 	@echo "Making $@ ..."
 	docker volume rm prebuild_manager || true
 	docker run --rm --name store -v prebuild_manager:/prebuild/manager $(REPO_REL_URL)/neuvector/store

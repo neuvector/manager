@@ -1,0 +1,39 @@
+<carousel
+  [noWrap]="false"
+  [interval]="0"
+  class="risk-section-details instruction">
+  <slide
+    *ngFor="let instruction of instructions; let index = index"
+    [active]="instruction.active">
+    <div class="risk-section-titles">
+      <div class="title" style="color: #000">{{ instruction.title }}</div>
+      <div class="instruction-content-wrap">
+        <div class="instruction-content">
+          <div
+            *ngIf="
+              instruction.type !== RiskType.Score &&
+              instruction.type !== RiskType.Vulnerability
+            ">
+            {{ instruction.description }}
+          </div>
+          <!-- <app-good-score-instruction
+            *ngIf="isGoodScore() && instruction.type === RiskType.Score"
+          >
+          </app-good-score-instruction>
+          <app-not-good-score-instruction
+            *ngIf="!isGoodScore() && instruction.type === RiskType.Score"
+            [score]="score"
+          >
+          </app-not-good-score-instruction> -->
+          <app-score-instruction
+            *ngIf="instruction.type === RiskType.Score"
+            [scoreInfo]="scoreInfo">
+          </app-score-instruction>
+          <app-vulnerability-instruction
+            *ngIf="instruction.type === RiskType.Vulnerability">
+          </app-vulnerability-instruction>
+        </div>
+      </div>
+    </div>
+  </slide>
+</carousel>

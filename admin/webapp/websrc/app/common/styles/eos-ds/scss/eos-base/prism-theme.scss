@@ -1,0 +1,116 @@
+/* PrismJS 1.19.0
+https://prismjs.com/download.html#themes=prism-okaidia&languages=markup+css+clike+javascript */
+/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+pre {
+  border-bottom: 0;
+}
+
+code {
+  color: $eos-prism-theme-color;
+  font-family: $eos-prism-theme-font;
+}
+
+code[class*='language-'], pre[class*='language-'] {
+  background: none;
+  color: $eos-prism-theme-light-yellow;
+  display: block;
+  font-family: $eos-prism-theme-font;
+  font-size: $eos-prism-theme-font-size;
+  hyphens: none;
+  line-height: 1.5;
+  tab-size: 2;
+  text-align: left;
+  text-shadow: 0 1px rgba(0, 0, 0, .3);
+  white-space: pre;
+  word-break: normal;
+  word-spacing: normal;
+  word-wrap: normal;
+}
+
+/* Code blocks */
+pre[class*='language-'] {
+  border-radius: 0;
+  margin: .5em 0;
+  overflow: auto;
+  padding: 10px;
+}
+
+:not(pre) > code[class*='language-'], pre[class*='language-'] {
+  background: $eos-prism-theme-pre-background;
+}
+
+
+/* Inline code */
+:not(pre) > code[class*='language-'] {
+  border-radius: .3em;
+  padding: .1em;
+  white-space: normal;
+}
+
+.token.comment, .token.prolog, .token.doctype, .token.cdata {
+  color: $eos-prism-theme-gray;
+}
+
+.token.punctuation {
+  color: $eos-prism-theme-light-yellow;
+}
+
+.token.namespace {
+  opacity: .7;
+}
+
+.token.property, .token.tag, .token.constant, .token.symbol, .token.deleted {
+  color: $eos-prism-theme-red;
+}
+
+.token.boolean, .token.number {
+  color: $eos-prism-theme-purple;
+}
+
+.token.selector, .token.attr-name, .token.string, .token.char, .token.builtin, .token.inserted {
+  color: $eos-prism-theme-light-green;
+}
+
+.token.operator, .token.entity, .token.url, .language-css .token.string, .style .token.string, .token.variable {
+  color: $eos-prism-theme-light-yellow;
+}
+
+.token.atrule, .token.attr-value, .token.function, .token.class-name {
+  color: $eos-prism-theme-dark-yellow;
+}
+
+.token.keyword {
+  color: $eos-prism-theme-cerulean;
+}
+
+.token.regex, .token.important {
+  color: $eos-prism-theme-orange;
+}
+
+.token.important, .token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+.token.entity {
+  cursor: help;
+}
+
+/* Dark theme */
+.dark-theme {
+  :not(pre) > code[class*='language-'], pre[class*='language-'] {
+    background: $eos-prism-theme-pre-background-dark-theme;
+  }
+
+  pre {
+    color: $eos-bc-white;
+  }
+}

@@ -1,0 +1,100 @@
+/* Tables styling
+   ========================================================================== */
+.table {
+  overflow: hidden;
+
+  td, th {
+    vertical-align: middle;
+
+    &:first-child {
+      padding-left: $table-cell-v-p;
+    }
+  }
+
+  td {
+    border-top: 1px solid $table-td-border;
+  }
+
+  thead {
+    th {
+      border-bottom: 1px solid $table-th-border-b;
+      border-top: 0;
+      color: $table-th-color;
+      padding: $table-cell-h-p $table-cell-v-p;
+    }
+  }
+
+  tr {
+    transition: background-color .35s ease;
+
+    &:hover {
+      background-color: $eos-bc-gray-100;
+    }
+  }
+
+  // hide the checkbox label
+  .form-check-label {
+    text-indent: -9999px;
+  }
+
+  .eos-table-actions {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .dropdown > button {
+    .eos-icons-outlined {
+      margin: 0;
+    }
+  }
+
+  .dropdown > button, .dropdown > button:hover {
+    color: $table-actions-link;
+  }
+
+  // TODO: This ooverwrites the toggle - should probably be moved to the toggle component
+  .form-group {
+    margin-bottom: 0;
+    min-height: $table-form-group-h;
+  }
+
+  //small table
+  &.table-sm td {
+    padding: $table-cell-h-p 4px;
+
+    &:first-child {
+      padding-left: $table-cell-v-p;
+    }
+  }
+
+}
+
+.eos-table-card {
+  .card-header {
+    align-content: center;
+    border-bottom: 1px solid $eos-bc-gray-100;
+    display: flex;
+    justify-content: space-between;
+    line-height: 1.6;
+    padding: $table-cell-h-p $table-cell-v-p;
+
+    .eos-table-card-title {
+      @extend h5;
+    }
+
+    ul {
+      margin: 0;
+    }
+
+    li {
+      margin: 0;
+      padding: 0;
+
+      &:last-child {
+        .eos-icons-outlined {
+          margin: 0;
+        }
+      }
+    }
+  }
+}

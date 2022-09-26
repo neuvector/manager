@@ -1,0 +1,31 @@
+<div class="d-flex justify-content-between align-items-center">
+  <h1 class="font-weight-light">
+    <a [routerLink]="['../']" class="font-weight-light">
+      {{ 'sidebar.nav.SETTING' | translate }}
+    </a>
+    >&nbsp;{{ 'sidebar.nav.CONFIGURATION' | translate }}
+  </h1>
+</div>
+<ng-container *ngIf="config; else loadingTemplate">
+  <mat-card>
+    <app-config-form
+      [config]="config"
+      (refreshConfig)="refreshConfig()"></app-config-form>
+  </mat-card>
+  <br />
+  <mat-card>
+    <app-export-form></app-export-form>
+  </mat-card>
+  <br />
+  <mat-card>
+    <app-support-form [debug_enabled]="debug_enabled"></app-support-form>
+  </mat-card>
+</ng-container>
+<ng-template #errorTemplate let-error>
+  {{ error | json }}
+</ng-template>
+<ng-template #loadingTemplate>
+  <mat-card>
+    <app-loading-template></app-loading-template>
+  </mat-card>
+</ng-template>

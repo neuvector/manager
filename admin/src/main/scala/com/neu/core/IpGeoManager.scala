@@ -7,16 +7,16 @@ import scala.collection.mutable._
 import scala.io.Source
 import scala.math._
 import scala.collection.mutable.Map
-import java.net.{Inet4Address, Inet6Address, InetAddress}
+import java.net.{ Inet4Address, Inet6Address, InetAddress }
 
 /**
  * Created by bxu on 3/25/16.
  */
 object IpGeoManager extends LazyLogging {
-  val fileStreamIpV4 = getClass.getResourceAsStream("/IP2LOCATION-LITE-DB1.CSV")
-  val fileStreamIpV6 = getClass.getResourceAsStream("/IP2LOCATION-LITE-DB1.IPV6.CSV")
-  val fileStreamBufferIpV4 = Source.fromInputStream(fileStreamIpV4)
-  val fileStreamBufferIpV6 = Source.fromInputStream(fileStreamIpV6)
+  val fileStreamIpV4                = getClass.getResourceAsStream("/IP2LOCATION-LITE-DB1.CSV")
+  val fileStreamIpV6                = getClass.getResourceAsStream("/IP2LOCATION-LITE-DB1.IPV6.CSV")
+  val fileStreamBufferIpV4          = Source.fromInputStream(fileStreamIpV4)
+  val fileStreamBufferIpV6          = Source.fromInputStream(fileStreamIpV6)
   var arrayIpV4: ArrayBuffer[IpGeo] = ArrayBuffer()
   var arrayIpV6: ArrayBuffer[IpGeo] = ArrayBuffer()
   for (line <- fileStreamBufferIpV4.getLines) {
@@ -40,16 +40,15 @@ object IpGeoManager extends LazyLogging {
   fileStreamBufferIpV4.close
   fileStreamBufferIpV6.close
 
-  def ipV4ToNum(ip: String): BigInt = {
+  def ipV4ToNum(ip: String): BigInt =
     InetAddress.getByName(ip).getAddress.foldLeft(0L)((acc, b) => (acc << 8) + (b & 0xff))
-  }
 
-  def ipV6ToNum(ip: String): BigInt = {
+  def ipV6ToNum(ip: String): BigInt =
     BigInt(1, InetAddress.getByName(ip).getAddress)
-  }
 
   def isIpV4(ip: String): Boolean = {
-    val regexIPv4 = "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$".r
+    val regexIPv4 =
+      "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$".r
     ip.trim match {
       case regexIPv4(_*) => true
       case _             => false
@@ -57,7 +56,8 @@ object IpGeoManager extends LazyLogging {
   }
 
   def isIpV6(ip: String): Boolean = {
-    val regexIPv6 = "^(?:(?:(?:[A-F0-9]{1,4}:){6}|(?=(?:[A-F0-9]{0,4}:){0,6}(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$)(([0-9A-F]{1,4}:){0,5}|:)((:[0-9A-F]{1,4}){1,5}:|:))(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)|(?:[A-F0-9]{1,4}:){7}[A-F0-9]{1,4}|(?=(?:[A-F0-9]{0,4}:){0,7}[A-F0-9]{0,4}$)(([0-9A-F]{1,4}:){1,7}|:)((:[0-9A-F]{1,4}){1,7}|:))$".r
+    val regexIPv6 =
+      "^(?:(?:(?:[A-F0-9]{1,4}:){6}|(?=(?:[A-F0-9]{0,4}:){0,6}(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$)(([0-9A-F]{1,4}:){0,5}|:)((:[0-9A-F]{1,4}){1,5}:|:))(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)|(?:[A-F0-9]{1,4}:){7}[A-F0-9]{1,4}|(?=(?:[A-F0-9]{0,4}:){0,7}[A-F0-9]{0,4}$)(([0-9A-F]{1,4}:){1,7}|:)((:[0-9A-F]{1,4}){1,7}|:))$".r
     ip.trim match {
       case regexIPv6(_*) => true
       case _             => false
@@ -66,9 +66,9 @@ object IpGeoManager extends LazyLogging {
 
   private def binarySearch(data: ArrayBuffer[IpGeo], key: BigInt): IpGeo = {
     var start: Int = 0
-    var end: Int = data.length - 1
-    var mid: Int = 0
-    while(start <= end) {
+    var end: Int   = data.length - 1
+    var mid: Int   = 0
+    while (start <= end) {
       mid = start - (start - end) / 2
       if (data(mid).from <= key && data(mid).to >= key) {
         return data(mid)
@@ -86,7 +86,7 @@ object IpGeoManager extends LazyLogging {
     )
   }
 
-  def getCountry(ip: String): IpGeo = {
+  def getCountry(ip: String): IpGeo =
     if (isIpV4(ip)) {
       binarySearch(arrayIpV4, ipV4ToNum(ip))
     } else if (isIpV6(ip)) {
@@ -99,14 +99,13 @@ object IpGeoManager extends LazyLogging {
         "-"
       )
     }
-  }
 
-  def getCountries(ipList: Array[String]):IpMap = {
+  def getCountries(ipList: Array[String]): IpMap = {
     var ipMap: scala.collection.mutable.Map[String, IpGeo] = scala.collection.mutable.Map();
     ipList.foreach(ip => {
       ipMap.get(ip) match {
         case Some(ipGeo) => None
-        case None => ipMap += (ip -> getCountry(ip))
+        case None        => ipMap += (ip -> getCountry(ip))
       }
     })
     IpMap(ipMap.toMap)

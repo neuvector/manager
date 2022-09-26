@@ -242,6 +242,45 @@ class DeviceService()(implicit executionContext: ExecutionContext)
             }
           } ~
           patch {
+            entity(as[SystemConfig]) { systemConfig =>
+              parameter('scope.?) { scope =>
+                {
+                  Utils.respondWithNoCacheControl() {
+                    complete {
+                      scope.fold {
+                        val payload =
+                          systemConfigWrapToJson(
+                            SystemConfigWrap(Some(systemConfig), None, None, None, None)
+                          )
+                        logger.info("Updating config: {}", payload)
+                        RestClient.httpRequestWithHeader(
+                          s"${baseClusterUri(tokenId)}/system/config",
+                          PATCH,
+                          payload,
+                          tokenId
+                        )
+                      } { scope =>
+                        val fedPayload =
+                          systemConfigWrapToJson(
+                            SystemConfigWrap(None, None, Some(systemConfig), None, None)
+                          )
+                        logger.info("Updating fed config: {}", fedPayload)
+                        RestClient.httpRequestWithHeader(
+                          s"${baseClusterUri(tokenId)}/system/config?scope=$scope",
+                          PATCH,
+                          fedPayload,
+                          tokenId
+                        )
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        } ~
+        path("config-v2") {
+          patch {
             entity(as[SystemConfigWrap]) { systemConfigWrap =>
               parameter('scope.?) { scope =>
                 {
@@ -252,7 +291,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
                           systemConfigWrapToJson(systemConfigWrap)
                         logger.info("Updating config: {}", payload)
                         RestClient.httpRequestWithHeader(
-                          s"${baseClusterUri(tokenId)}/system/config",
+                          s"${baseClusterUriV2(tokenId)}/system/config",
                           PATCH,
                           payload,
                           tokenId
@@ -262,7 +301,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
                           systemConfigWrapToJson(systemConfigWrap)
                         logger.info("Updating fed config: {}", fedPayload)
                         RestClient.httpRequestWithHeader(
-                          s"${baseClusterUri(tokenId)}/system/config?scope=$scope",
+                          s"${baseClusterUriV2(tokenId)}/system/config?scope=$scope",
                           PATCH,
                           fedPayload,
                           tokenId
@@ -460,7 +499,8 @@ class DeviceService()(implicit executionContext: ExecutionContext)
                           StatusCodes.OK,
                           entity = HttpEntity(MediaTypes.`application/x-gzip`, byteArray)
                         ).withHeaders(
-                          HttpHeaders.`Content-Disposition`.apply("inline", Map("filename" -> "debug.gz"))
+                          HttpHeaders.`Content-Disposition`
+                            .apply("inline", Map("filename" -> "debug.gz"))
                         )
                       } else {
                         (StatusCodes.Forbidden, "File can not be accessed.")

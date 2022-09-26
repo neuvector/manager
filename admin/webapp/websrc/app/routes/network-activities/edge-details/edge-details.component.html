@@ -1,0 +1,81 @@
+<div id="conversationHistory" class="infoBox topLeftSession " cdkDrag>
+  <button
+    class="btn btn-xs btn-link pull-right ml-1"
+    (click)="popupState.leave()">
+    <em class="fa fa-times fa-lg text-muted"></em>
+  </button>
+  <div
+    *ngIf="conversationDetail.entries && conversationDetail.entries.length > 4">
+    <app-quick-filter [gridOptions]="gridOptions" [showCount]="false">
+    </app-quick-filter>
+  </div>
+  <div class="clearfix handle" cdkDragHandle >
+    <h4 class="text-muted mb-0">
+      {{ conversationDetail.from.display_name }}
+      <em class="fa fa-long-arrow-right text-info"></em>
+      {{ conversationDetail.to.display_name }}
+    </h4>
+  </div>
+  <hr class="fancy mx-0 my-0" />
+  <ag-grid-angular
+    id="conversationHis-grid"
+    class="ag-theme-alpine"
+    style="width: 100%; margin-top: 10px"
+    [ngStyle]="{ height: entriesGridHeight + 'px' }"
+    [rowData]="conversationDetail.entries"
+    [gridOptions]="gridOptions">
+  </ag-grid-angular>
+
+  <div
+    *ngIf="
+      !conversationDetail.entries || conversationDetail.entries.length === 0
+    "
+    class="pv-lg">
+    <div class="text-info" style="font-size: 16px">
+      <em class="fa fa-info-circle mr-2" aria-hidden="true"></em>
+      {{ 'general.NO_CONVERSATIONS' | translate }}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-5 mt-1">
+      <span
+        *ngIf="
+          conversationDetail.entries && conversationDetail.entries.length > 0
+        "
+        class="text-muted mr-2"
+        >{{ 'network.edgeDetails.SESSIONS' | translate }}
+        {{ conversationDetail.sessions }}</span
+      >
+      <span class="action-label nv-label warning" *ngIf="onViolation"
+        ><em class="fa fa-ban mr-1"></em>
+        {{ 'network.edgeDetails.VIOLATION' | translate }}
+      </span>
+      <span class="action-label nv-label danger" *ngIf="onThreat"
+        ><em class="fa fa-bug mr-1"></em>
+        {{ 'network.edgeDetails.THREAT' | translate }}
+      </span>
+    </div>
+    <div class="col-sm-7">
+      <div class="pull-right">
+        <button
+          *ngIf="showRuleId && traffic.policy_action !== 'open'"
+          type="button"
+          class="primary-button mt-1 mr-1">
+          <!--        (click)="overrideRule(traffic, edgeDetail)"-->
+          <em class="fa fa-pencil-square-o"></em>
+          {{ 'network.edgeDetails.OVERRIDE_RULE' | translate }}
+        </button>
+        <button
+          type="button"
+          class="primary-button mt-1"
+          *ngIf="
+            conversationDetail.entries && conversationDetail.entries.length > 0
+          ">
+          <!--        (click)="clearSessions(conversationDetail.from.id, conversationDetail.to.id)"-->
+          <em class="fa fa-magic mr-1"></em
+          >{{ 'network.edgeDetails.CLEAR' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,154 @@
+/* ==========================================================================
+  Sign in style
+========================================================================== */
+// .signin-bg {
+//   background: $eos-signin-layout-content-background;
+// }
+
+.signin-content {
+  align-content: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  background: $eos-signin-layout-content-background;
+}
+
+.sign-in-box {
+  box-shadow: $eos-sign-in-box-shadow;
+  display: flex;
+  height: $eos-sign-in-box-height;
+  margin: auto;
+  overflow: auto;
+  width: $eos-sign-in-box-width;
+}
+
+.brand-container {
+  background-color: $eos-sign-in-brand-container-bg-color;
+  color: $eos-sign-in-brand-container-color;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: $eos-sign-in-brand-container-padding;
+  width: $eos-sign-in-brand-container-width;
+
+  .sign-in-img {
+    margin: $eos-sign-in-line-img-margin-top $eos-sign-in-line-img-margin;
+  }
+
+  h1 {
+    color: $eos-sign-in-h1-color;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.form-container {
+  background-color: $eos-sign-in-form-container-bg-color;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: auto;
+  width: $eos-sign-in-form-container-width;
+
+  .sign-in-header {
+    padding: $eos-sign-in-form-container-header-padding;
+  }
+
+  .container {
+    background-color: $eos-sign-in-brand-container-color;
+    margin-bottom: 0;
+    overflow: inherit;
+    padding: 0;
+  }
+
+  .logo-right {
+    display: none;
+  }
+
+  h1 {
+    color: $eos-sign-in-h1-color;
+  }
+
+  .sign-in-form {
+    margin: 0 auto;
+    margin-bottom: $eos-sign-in-form-container-margin-bottom;
+    width: $eos-sign-in-form-container-form-width;
+  }
+
+  .form-links {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .sign-in-footer {
+    background-color: $eos-sign-in-brand-container-color;
+    width: 100%;
+
+    ul {
+      margin: $eos-sign-in-form-container-footer-ul-margin;
+      padding: 0;
+
+      li {
+        display: inline-flex;
+        list-style: none;
+        margin-right: $eos-sign-in-form-container-footer-li-margin-right;
+        padding: $eos-sign-in-form-container-footer-li-padding;
+      }
+    }
+
+    .sign-in-cookies {
+      display: none;
+    }
+  }
+}
+
+@media only screen and (max-width: 1120px) {
+  .sign-in-box {
+    background: $eos-sign-in-brand-container-bg-color;
+    height: 100%;
+    width: 100%;
+  }
+
+  .form-container {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+
+  .brand-container {
+    margin: 0;
+    width: $eos-sign-in-container-left-small-width;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .brand-container {
+    display: none;
+  }
+
+  .form-container {
+    width: 100%;
+    .sign-in-header {
+      padding: $eos-sign-in-form-container-header-padding;
+      background: $eos-suse-logo-mobile-background;
+      background-origin: content-box;
+      background-size: 70px 35px;
+    }
+    .sign-in-form {
+      padding: $eos-sign-in-form-mobile-padding;
+      width: 100%;
+    }
+
+    .logo-right {
+      display: inline-flex;
+    }
+
+    .sign-in-footer .sign-in-cookies {
+      box-shadow: $eos-sign-in-cookies-box-shadow;
+      display: block;
+      margin: 0;
+      padding: $eos-sign-in-cookies-padding;
+    }
+  }
+}

@@ -1,0 +1,264 @@
+<div id="podInfo" class="infoBox topLeftFloat pt-0" cdkDrag>
+  <button
+    class="btn btn-xs btn-link pull-right mt-2"
+    (click)="popupState.leave()">
+    <em class="fa fa-times fa-lg text-muted"></em>
+  </button>
+  <div class="clearfix handle" cdkDragHandle id="domainInfoHeader">
+    <div class="auto-hide mt-2" style="display: block; width: 350px">
+      <img
+        src="assets/img/icons/graph/container-d.svg"
+        aria-label="Pod icon"
+        style="width: 24px; height: 24px"
+        alt="Pod Icon" />
+      {{ pod.workload.display_name }}
+    </div>
+  </div>
+  <hr class="fancy mx-0 my-0" />
+
+  <div>
+    <ul class="row">
+      <li class="col-sm-12 p-2">
+        <div class="mda-list-item-text pb-0 pt-sm">
+          <span class="font-weight-bold host-item-key">ID:</span>
+          <span class="ml auto-hide host-item-value">
+            {{ pod.workload.id }}
+          </span>
+        </div>
+      </li>
+      <li class="col-sm-12 p-2">
+        <div
+          class="mda-list-item-text pb-0 pt-sm"
+          *ngIf="pod.workload.children && pod.workload.children.length > 1">
+          <div>
+            <span class="font-weight-bold host-item-key">
+              {{ 'network.nodeDetails.IMAGE' | translate }}:
+            </span>
+          </div>
+          <div class="ml pod-item-value">
+            <ng-container *ngFor="let child of pod.workload.children">
+              <div class="row" *ngIf="child.state !== 'exit'">
+                <div style="margin-top: 2px; width: 620px" class="auto-hide">
+                <span
+                  class="text-muted text-bold pl-lg"
+                  style="display: inline-block">
+                  <em class="fa fa-square-o text-muted mr-2"></em>
+                  {{ child.display_name }}
+                </span>
+                <label
+                  style="display: inline-block"
+                  class="label label-info-tran ml-2 mt-1"
+                  *ngIf="child.service_mesh_sidecar">
+                  Sidecar
+                </label>
+                <em class="fa fa-archive text-info pl-2 mr-1"></em>
+                <span class="text-muted auto-hide" style="margin-top: -2px">
+                  {{ child.image }}
+                </span>
+              </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+
+        <div
+          class="mda-list-item-text pb-0 pt-sm"
+          *ngIf="pod.workload.children && pod.workload.children.length <= 1">
+          <div>
+            <span
+              class="text-bold host-item-key"
+              translate="{{ 'network.nodeDetails.IMAGE' }}"></span>
+          </div>
+          <div class="ml host-item-value">
+            <div *ngFor="let image of pod.workload.images">
+              <span class="d-block text-muted auto-hide pod-item-value">
+                <mat-icon
+                  aria-hidden="false"
+                  aria-label="Image icon"
+                  class="details-icon text-info"
+                  fontSet="fa"
+                  fontIcon="fa-archive">
+              </mat-icon>{{ image }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="col-sm-12 p-2">
+        <div class="mda-list-item-text pb-0 pt-sm">
+          <span class="font-weight-bold host-item-key">
+            {{ 'network.nodeDetails.ENFORCER' | translate }}:
+          </span>
+          <span class="ml auto-hide host-item-value">
+            {{ pod.workload.enforcer_name }}
+          </span>
+        </div>
+      </li>
+      <li class="col-sm-6 p-2">
+        <div class="mda-list-item-text pb-0 pt-sm">
+          <span class="font-weight-bold host-item-key">
+            {{ 'group.gridHeader.DOMAIN' | translate }}:
+          </span>
+          <span class="ml auto-hide host-item-value">
+            {{ pod.workload.domain }}
+          </span>
+        </div>
+      </li>
+      <li class="col-sm-6 p-2">
+        <div class="mda-list-item-text pb-0 pt-sm">
+          <span class="font-weight-bold host-item-key">
+            {{ 'network.gridHeader.SERVICE' | translate }}:
+          </span>
+          <span class="ml auto-hide host-item-value">
+            {{ pod.workload.service }}
+          </span>
+          <a
+            mat-icon-button
+            aria-label="External link button"
+            (click)="showPodGroup()"
+            class="external-link text-primary"
+            *ngIf="pod.workload.service_group">
+            <mat-icon style="font-size:24px; width:24px; height: 24px">open_in_new</mat-icon>
+          </a>
+        </div>
+      </li>
+      <li class="col-sm-6 p-2">
+        <div class="mda-list-item-text pb-0 pt-sm">
+          <span class="font-weight-bold host-item-key">
+            {{ 'network.nodeDetails.LOCATION' | translate }}:
+          </span>
+          <span class="ml auto-hide host-item-value">
+            {{ pod.workload.host_name }}
+          </span>
+        </div>
+      </li>
+      <li class="col-sm-6 p-2">
+        <div class="mda-list-item-text pb-0 pt-sm">
+          <span class="font-weight-bold host-item-key">
+            {{ 'network.nodeDetails.STATE' | translate }}:
+          </span>
+          <span class="badge" [class]="'badge-' + labelCode">
+            {{ displayState }}
+          </span>
+          <span
+            class="text-danger mr-2 auto-hide host-item-value"
+            *ngIf="pod.workload.state === 'quarantined'"
+            style="display: block; width: 180px">
+            {{ pod.workload.quarantine_reason }}
+          </span>
+        </div>
+      </li>
+      <li class="col-sm-6 p-2">
+        <div class="mda-list-item-text pb-0 pt-sm">
+          <span class="font-weight-bold host-item-key">
+            {{ 'network.nodeDetails.CREATED_AT' | translate }}:
+          </span>
+          <span class="ml auto-hide host-item-value">
+            {{ pod.workload.started_at | date: 'MMM dd, y HH:mm:ss' }}
+          </span>
+        </div>
+      </li>
+      <li *ngIf="!!pod.workload.scan_summary?.scanned_at" class="col-sm-6 p-2">
+        <div class="mda-list-item-text pb-0 pt-sm">
+          <span class="font-weight-bold host-item-key"
+            >{{ 'network.nodeDetails.SCANNED_AT' | translate }}:</span
+          >
+          <span class="ml mr-lg auto-hide host-item-key">
+            {{ pod.workload.scan_summary.scanned_at | date: 'MMM dd, y HH:mm:ss' }}
+          </span>
+        </div>
+      </li>
+
+      <li class="col-sm-6 p-2">
+        <div class="mda-list-item-text pb-0 pt-sm">
+          <span class="font-weight-bold host-item-key">
+            {{ 'network.nodeDetails.PRIVILEGED' | translate }}:
+          </span>
+          <span class="ml auto-hide host-item-value">
+            {{ pod.workload.privileged }}
+          </span>
+        </div>
+      </li>
+      <li class="col-sm-6 p-2">
+        <div class="mda-list-item-text pb-0 pt-sm">
+          <span class="font-weight-bold host-item-key">
+            {{ 'network.nodeDetails.RUN_AS_ROOT' | translate }}:
+          </span>
+          <span class="ml auto-hide host-item-value">
+            {{ pod.workload.run_as_root }}
+          </span>
+        </div>
+      </li>
+      <li class="col-sm-6 p-2">
+        <div class="mda-list-item-text pb-0 pt-sm">
+          <span class="font-weight-bold host-item-key"
+            >{{ 'group.gridHeader.VULNERABILITIES' | translate }}:</span
+          >
+          <div class="d-inline">
+            <span
+              *ngIf="pod.risk?.high"
+              class="badge badge-danger mr-sm">
+              {{ pod.risk.high }}</span
+            >
+            <span *ngIf="pod.risk?.medium" class="badge badge-warning">
+              {{ pod.risk.medium }}</span
+            >
+            <a
+              *ngIf="pod.risk?.high || pod.risk?.medium"
+              style="display: table-cell; font-size: 11px; line-height: 15px">
+              <em class="fa fa-external-link ml-lg"></em>
+            </a>
+
+            <span
+              *ngIf="
+                pod.workload.scan_summary?.scanned_at &&
+                pod.risk?.high === 0 &&
+                pod.risk?.medium === 0
+              "
+              class="badge badge-success">
+              <em class="fa fa-shield-alt text-protect mr-1"></em> Clean
+            </span>
+          </div>
+        </div>
+      </li>
+      <li class="col-sm-6 p-2">
+        <div class="mda-list-item-text pb-0 pt-sm">
+          <span class="font-weight-bold host-item-key">
+            {{ 'network.nodeDetails.NETWORK_MODE' | translate }}:
+          </span>
+          <span class="ml auto-hide host-item-value">
+            {{ pod.workload.network_mode }}
+          </span>
+        </div>
+      </li>
+      <li *ngIf="pod.workload.interfaces" class="col-sm-12 p-2">
+        <div class="mda-list-item-text pb-0 pt-sm">
+          <div class="font-weight-bold text-muted">
+            {{ 'containers.detail.NETWORK_INTERFACES' | translate }}:
+          </div>
+          <div
+            *ngFor="let item of pod.workload.interfaces | keyvalue"
+            class="row pl"
+            style="width: 380px">
+            <div class="col-sm-2 text-right pr-0 text-muted">
+              {{ item.key }}
+            </div>
+            <div class="col-sm-1"></div>
+            <div class="col-sm-9 pl0">
+              <div *ngFor="let net of item.value">
+                <div class="col-sm-12">
+                  <div class="col-sm-6 text-muted">
+                    IP:{{ net.ip }}/{{ net.ip_prefix }}
+                  </div>
+                  <div *ngIf="net.gateway" class="col-sm-6 text-muted">
+                    {{ 'general.GATEWAY' | translate }}:{{ net.gateway }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

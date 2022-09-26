@@ -2,7 +2,7 @@ package com.neu.api
 
 import spray.http.StatusCode
 import spray.httpx.SprayJsonSupport
-import spray.httpx.marshalling.{CollectingMarshallingContext, Marshaller, MetaMarshallers}
+import spray.httpx.marshalling.{ CollectingMarshallingContext, Marshaller, MetaMarshallers }
 import spray.json._
 
 import java.util.UUID
@@ -19,7 +19,7 @@ trait DefaultJsonFormats extends DefaultJsonProtocol with SprayJsonSupport with 
    * Computes ``RootJsonFormat`` for type ``A`` if ``A`` is object
    */
   def jsonObjectFormat[A: ClassTag]: RootJsonFormat[A] = new RootJsonFormat[A] {
-    val ct: ClassTag[A] = implicitly[ClassTag[A]]
+    val ct: ClassTag[A]        = implicitly[ClassTag[A]]
     def write(obj: A): JsValue = JsObject("value" -> JsString(ct.runtimeClass.getSimpleName))
     def read(json: JsValue): A = ct.runtimeClass.newInstance().asInstanceOf[A]
   }
@@ -31,7 +31,7 @@ trait DefaultJsonFormats extends DefaultJsonProtocol with SprayJsonSupport with 
     def write(x: UUID): JsValue = JsString(x.toString)
     def read(value: JsValue): UUID = value match {
       case JsString(x) => UUID.fromString(x)
-      case x: JsValue => deserializationError("Expected UUID as JsString, but got " + x)
+      case x: JsValue  => deserializationError("Expected UUID as JsString, but got " + x)
     }
   }
 
@@ -50,10 +50,10 @@ trait DefaultJsonFormats extends DefaultJsonProtocol with SprayJsonSupport with 
    * @return marshaller
    */
   implicit def errorSelectingEitherMarshaller[A, B](
-                                                     implicit ma: Marshaller[A],
-                                                     mb: Marshaller[B],
-                                                     esa: ErrorSelector[A]
-                                                   ): Marshaller[Either[A, B]] =
+    implicit ma: Marshaller[A],
+    mb: Marshaller[B],
+    esa: ErrorSelector[A]
+  ): Marshaller[Either[A, B]] =
     Marshaller[Either[A, B]] { (value, ctx) =>
       value match {
         case Left(a) =>

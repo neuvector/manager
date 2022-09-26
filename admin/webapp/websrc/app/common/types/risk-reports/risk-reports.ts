@@ -1,0 +1,36 @@
+export interface Audit {
+  name: string;
+  level: string;
+  reported_timestamp: number;
+  reported_at: string;
+  cluster_name: string;
+  response_rule_id?: number;
+  host_id: string;
+  host_name: string;
+  enforcer_id: string;
+  enforcer_name: string;
+  workload_id?: string;
+  workload_name?: string;
+  workload_domain?: string;
+  workload_image?: string;
+  workload_service?: string;
+  image_id?: string;
+  registry?: string;
+  registry_name?: string;
+  repository?: string;
+  tag?: string;
+  base_os: string;
+  high_vul_cnt: number;
+  medium_vul_cnt: number;
+  high_vuls?: string[];
+  medium_vuls?: string[];
+  cvedb_version: string;
+  message: string;
+  user: string;
+  error: string;
+  aggregation_from: number;
+  count: number;
+  items?: string[];
+  platform: string;
+  platform_version: string;
+}

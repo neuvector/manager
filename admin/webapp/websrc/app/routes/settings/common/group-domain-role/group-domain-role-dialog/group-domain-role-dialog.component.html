@@ -1,0 +1,55 @@
+<ng-container *ngIf="data.isEdit; else addTitleTemplate">
+  <h1 mat-dialog-title>{{ 'ldap.dialog.title.EDIT' | translate }}</h1>
+</ng-container>
+<ng-template #addTitleTemplate>
+  <h1 mat-dialog-title>{{ 'ldap.dialog.title.ADD' | translate }}</h1>
+</ng-template>
+<div mat-dialog-content>
+  <div class="d-flex flex-column" style="max-width: 50%">
+    <mat-form-field appearance="standard">
+      <mat-label>{{ 'ldap.gridHeader.GROUP' | translate }}</mat-label>
+      <input #groupInput="ngModel" [(ngModel)]="data.group" matInput required />
+    </mat-form-field>
+    <mat-form-field appearance="standard">
+      <mat-label>{{ 'ldap.gridHeader.GLOBAL_ROLE' | translate }}</mat-label>
+      <mat-select
+        (selectionChange)="updateTable()"
+        [(ngModel)]="data.global_role"
+        name="role">
+        <mat-option *ngFor="let role of data.group_roles" [value]="role"
+        >{{ role ? role : 'none' }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <app-group-domain-role-table
+    [activeRole]="activeRole"
+    [dataSource]="data.dataSource"
+    [domains]="data.domains"
+    [global_role]="data.global_role"
+    [group_roles]="data.group_roles">
+  </app-group-domain-role-table>
+</div>
+<div class="align-items-center justify-content-end" mat-dialog-actions>
+  <button (click)="onNoClick()" mat-stroked-button>
+    {{ 'general.CANCEL' | translate }}
+  </button>
+  <ng-container *ngIf="data.isEdit; else addButtonTemplate">
+    <button
+      [disabled]="!groupInput.valid"
+      [mat-dialog-close]="data"
+      color="primary"
+      mat-raised-button>
+      {{ 'general.SUBMIT' | translate }}
+    </button>
+  </ng-container>
+  <ng-template #addButtonTemplate>
+    <button
+      [disabled]="!groupInput.valid"
+      [mat-dialog-close]="data"
+      color="primary"
+      mat-raised-button>
+      {{ 'role.ADD' | translate }}
+    </button>
+  </ng-template>
+</div>

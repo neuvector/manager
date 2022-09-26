@@ -1,0 +1,94 @@
+/* Main menu variables
+   ========================================================================== */
+/* Typography variables: /assets/stylesheets/eos-base/variables/typography.scss */
+$eos-menu-font-weight: $eos-font-weight-normal-base;
+
+/* Media query variables: /assets/stylesheets/eos-base/variables/media-query.scss */
+$eos-menu-sd-max: $eos-sd-max;
+
+/* Border variables: /assets/stylesheets/eos-base/variables/borders.scss */
+$eos-selected-border-radius: 0;
+
+/* z-index variables: /assets/stylesheets/eos-base/variables/z-index.scss */
+$eos-menu-zindex: $eos-zindex-navbar;
+
+/* Spacing variables: /assets/stylesheets/eos-base/variables/spacings.scss */
+$eos-menu-hr-margin: $eos-m 0;
+$eos-menu-height: 48px;
+$eos-menu-spacing: $eos-m;
+$eos-menu-spacing-burger: $eos-l - 3;
+$eos-menu-li-no-link-margin: 0 $eos-m 0 0;
+$eos-menu-li-no-link-padding: $eos-s 0 $eos-s $eos-l - 8;
+$eos-menu-li-h6-padding: $eos-m;
+$eos-menu-i-size: $eos-m + 2;
+$eos-menu-i-font-size: $eos-m + 2;
+$eos-menu-ul-margin-bottom: $eos-xxl - 8;
+$eos-menu-item-hover-spacing: 5px;
+$eos-menu-collapsed-title-list-padding: $eos-s $eos-m;
+$eos-menu-collapsed-title-margin-left: -1px;
+$eos-menu-collapsed-title-padding: $eos-s $eos-m;
+$eos-menu-collapsed-padding: 0 0 $eos-xxl 0;
+/* Collapsed menu variables */
+$eos-menu-collapsed-width: $eos-xxxl - 4;
+$eos-menu-collapsed-max-width: $eos-xxxl - 4;
+$eos-menu-collapsed-max-height: 53px;
+$eos-mm-collapsed-content-margin: $eos-xxxl - 4;
+$eos-menu-sub-padding: $eos-xxl;
+$eos-menu-navigation-close-margin-right: -$eos-m;
+$eos-menu-navigation-close-padding: $eos-m;
+
+/* Colors variables: /assets/stylesheets/eos-base/variables/branding.scss */
+$eos-menu-border: 0;
+$eos-menu-bg: $eos-bc-gray-50;
+$eos-menu-link-color: $eos-bc-gray-1000;
+$eos-menu-title-color: $eos-bc-gray-1000;
+$eos-menu-hr-color: $eos-bc-gray-100;
+$eos-menu-selected-color: $eos-bc-white;
+$eos-menu-selected-bg: $eos-color-main;
+$eos-menu-item-hover: $eos-color-main;
+$eos-menu-collapsed-sub-item: $eos-bc-gray-1000;
+$eos-menu-collapsed-sub-item-bg: $eos-bc-white;
+
+/* Layout */
+/* Layout variables: /assets/stylesheets/eos-base/variables/layout.scss */
+$eos-menu-aside-width: $eos-layout-aside-width;
+$eos-menu-collapsed-sub-width: 200px;
+$eos-menu-collapsed-sub-position: $eos-menu-collapsed-width;
+$eos-menu-navbar-max-height: calc(100vh - 141px); // 141px is the sum of the height of an global alert + header + footer + 16px margin from header
+
+/* for temporary styles */
+$eos-menu-svg-icon-size: 18px;
+$eos-menu-svg-icon-marign: 8px;
+
+/* Mobile menu section / $eos-mm = mobile-menu
+   ========================================================================== */
+/* Colors variables: /assets/stylesheets/eos-base/variables/branding.scss */
+$eos-mm-background: $eos-bc-pine-500;
+$eos-mm-burger-icon-color: $eos-bc-white;
+$eos-mm-background-navigation: $eos-bc-gray-50;
+$eos-mm-background-navigation-darktheme: $eos-bc-gray-1000;
+$eos-mm-background-navigation-text-darktheme: $eos-bc-gray-100;
+$eos-mm-navigation-submenu-link: $eos-bc-pine-500;
+$eos-mm-navigation-border: $eos-bc-pine-500;
+$eos-mm-navigation-link: $eos-bc-gray-1000;
+$eos-mm-navigation-background-link-active: $eos-bc-green-900;
+$eos-mm-navigation-background-link-active-darktheme: $eos-bc-green-500;
+$eos-mm-dropdown-hover: $eos-bc-pine-500;
+$eos-mm-title-color: $eos-bc-white;
+$eos-mm-hr-border: 1px solid $eos-bc-gray-100;
+$eos-mm-dropdown-border: 1px solid $eos-bc-gray-50;
+$eos-mm-menuitem-focus: 0 0 0 2px $eos-bc-cerulean-500;
+/* Spacing variables: /assets/stylesheets/eos-base/variables/spacings.scss */
+/* z-index variables: /assets/stylesheets/eos-base/variables/z-index.scss */
+$eos-mm-height: $eos-menu-height;
+$eos-mm-nav-min-height: 1200px;
+$eos-mm-header-padding: 12px;
+$eos-mm-burger-menu-right: $eos-m;
+$eos-mm-nav-li-a-padding: $eos-s $eos-l;
+$eos-mm-title-padding: $eos-s $eos-l;
+$eos-mm-mobile-submenu-span-padding: $eos-s $eos-l;
+$eos-mm-mobile-submenu-a-padding: $eos-xxl;
+$eos-mm-mobile-submenu-a-dashboard-padding: $eos-l;
+$eos-mm-zindex: $eos-zindex-modal-background;
+$eos-mm-nav-wrap-padding-top: $eos-m;
+$eos-mm-navbar-max-height: calc(100vh - 85px); // 1px is the sum of the height of an global alert 37px + header 48px

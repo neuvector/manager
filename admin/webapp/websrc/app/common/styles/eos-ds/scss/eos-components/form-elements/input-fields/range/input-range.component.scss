@@ -1,0 +1,124 @@
+/* Input range
+  ========================================================================== */
+/**
+*  These rules overwrite existing Bootstrap rules
+*
+* Variables file: assets/stylesheets/eos-components/input-fields/range/input-range.variables.scss
+*/
+
+@function makelongshadow($color, $size) {
+  $val: 5px 0 0 $size $color;
+  @for $i from 6 through $eos-range-width-number {
+    $val: #{$val}, #{$i}px 0 0 $size #{$color};
+  }
+  @return $val;
+}
+
+/* stylelint-disable */
+input[type='range'] {
+  -webkit-appearance: none;
+  background: transparent;
+  border-bottom: 0;
+  cursor: pointer;
+  display: block;
+  min-height: 25px;
+  overflow: hidden;
+  width: $eos-range-width;
+
+  &::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+    background: $eos-range-background-filled-slider;
+    height: $eos-range-height;
+  }
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background: $eos-range-thumb-background;
+    border: $eos-range-thumb-border;
+    border-radius: $eos-range-thumb-radius;
+    box-shadow: makelongshadow($eos-range-background, $eos-range-shadow-size);
+    height: $eos-range-thumb-height;
+    margin-top: $eos-range-thumb-margin-top;
+    width: $eos-range-thumb-width;
+  }
+
+  &::-moz-range-track {
+    background: $eos-range-background;
+    height: $eos-range-height;
+    width: $eos-range-width;
+  }
+
+  &::-moz-range-thumb {
+    background: $eos-range-thumb-background;
+    border: $eos-range-thumb-border;
+    border-radius: $eos-range-thumb-radius;
+    box-sizing: border-box;
+    height: $eos-range-thumb-height;
+    position: relative;
+    width: $eos-range-thumb-width;
+  }
+
+  &::-moz-range-progress {
+    background: $eos-range-background-filled-slider;
+    border: 0;
+    height: $eos-range-height;
+    margin-top: 0;
+  }
+
+  &::-ms-track {
+    background: transparent;
+    border: 0;
+    border-color: transparent;
+    border-radius: 0;
+    border-width: 0;
+    color: transparent;
+    height: $eos-range-height;
+    margin-top: 10px;
+    width: $eos-range-width;
+  }
+
+  &::-ms-thumb {
+    background: $eos-range-thumb-background;
+    border: $eos-range-thumb-border;
+    border-radius: $eos-range-thumb-radius;
+    height: $eos-range-thumb-height;
+    width: $eos-range-thumb-width;
+  }
+
+  &::-ms-fill-lower {
+    background: $eos-range-background-filled-slider;
+    border-radius: 0;
+  }
+
+  &::-ms-fill-upper {
+    background: $eos-range-background;
+    border-radius: 0;
+  }
+
+  &::-ms-tooltip {
+    display: none;
+  }
+
+  &:disabled {
+    background: transparent;
+    box-shadow: none;
+    outline: none;
+    @mixin range-disabled {
+      border-color: $eos-range-background-disabled;
+      box-shadow: makelongshadow($eos-range-background-disabled, $eos-range-shadow-size);
+    }
+
+    &::-webkit-slider-thumb {
+      @include range-disabled;
+    }
+
+    &::-moz-range-thumb {
+      @include range-disabled;
+    }
+
+    &::-ms-thumb {
+      @include range-disabled;
+    }
+  }
+}
+/* stylelint-enable */

@@ -2,10 +2,12 @@ package com.neu.model
 
 import spray.json.{ DefaultJsonProtocol, _ }
 
-case class FileMonitorFilter(filter: String,
-                             recursive: Boolean = false,
-                             behavior: String,
-                             applications: Option[Array[String]] = None)
+case class FileMonitorFilter(
+  filter: String,
+  recursive: Boolean = false,
+  behavior: String,
+  applications: Option[Array[String]] = None
+)
 
 case class FileMonitorProfile(group: String, filters: Array[FileMonitorFilter])
 
@@ -13,9 +15,11 @@ case class FileMonitorProfileData(profile: FileMonitorProfile)
 
 case class FileMonitorProfilesData(profiles: Array[FileMonitorProfile])
 
-case class FileMonitorConfig(add_filters: Option[Array[FileMonitorFilter]],
-                             delete_filters: Option[Array[FileMonitorFilter]],
-                             update_filters: Option[Array[FileMonitorFilter]])
+case class FileMonitorConfig(
+  add_filters: Option[Array[FileMonitorFilter]],
+  delete_filters: Option[Array[FileMonitorFilter]],
+  update_filters: Option[Array[FileMonitorFilter]]
+)
 
 case class FileMonitorConfigData(config: FileMonitorConfig)
 

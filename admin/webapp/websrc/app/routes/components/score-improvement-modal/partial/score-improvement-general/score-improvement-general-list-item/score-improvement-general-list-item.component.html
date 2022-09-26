@@ -1,0 +1,191 @@
+<mat-accordion>
+  <mat-expansion-panel
+    [(expanded)]="expanded.serviceRisk"
+    *appDisplayControl="'improve_score_on_service_mode'"
+    class="mat-elevation-z0"
+    hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{
+          'dashboard.improveScoreModal.summary.serviceMode.brief_1' | translate
+        }}
+      </mat-panel-title>
+      <mat-panel-description class="justify-content-end mr-0">
+        <div class="row align-items-center improvement-item-actions">
+          <div class="col">
+            <mat-icon>
+              {{ expanded.serviceRisk ? 'expand_less' : 'expand_more' }}
+            </mat-icon>
+          </div>
+          <div class="col d-flex justify-content-end">
+            <a
+              (click)="go('service-risk', $event)"
+              *ngIf="!isComplete('service-risk'); else completed">
+              {{
+                'dashboard.improveScoreModal.summary.IMPROVE_IT' | translate
+              }}>>
+            </a>
+          </div>
+        </div>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <p>
+      {{
+        'dashboard.improveScoreModal.summary.serviceMode.advice_1' | translate
+      }}
+    </p>
+    <p>
+      {{
+        'dashboard.improveScoreModal.summary.serviceMode.advice_2' | translate
+      }}
+    </p>
+  </mat-expansion-panel>
+  <mat-expansion-panel
+    [(expanded)]="expanded.exposure"
+    *appDisplayControl="'improve_score_on_exposure'"
+    class="mat-elevation-z0"
+    hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{ 'dashboard.improveScoreModal.summary.exposure.brief_1' | translate }}
+      </mat-panel-title>
+      <mat-panel-description class="justify-content-end mr-0">
+        <div class="row align-items-center improvement-item-actions">
+          <div class="col">
+            <mat-icon>
+              {{ expanded.exposure ? 'expand_less' : 'expand_more' }}
+            </mat-icon>
+          </div>
+          <div class="col d-flex justify-content-end">
+            <a
+              (click)="go('exposure', $event)"
+              *ngIf="!isComplete('exposure'); else completed">
+              {{
+                'dashboard.improveScoreModal.summary.IMPROVE_IT' | translate
+              }}>>
+            </a>
+          </div>
+        </div>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <p>
+      {{ 'dashboard.improveScoreModal.summary.exposure.advice_1' | translate }}
+    </p>
+    <p>
+      {{ 'dashboard.improveScoreModal.summary.exposure.advice_2' | translate }}
+    </p>
+    <p>
+      {{ 'dashboard.improveScoreModal.summary.exposure.advice_3' | translate }}
+    </p>
+    <p>
+      {{ 'dashboard.improveScoreModal.summary.exposure.advice_4' | translate }}
+    </p>
+  </mat-expansion-panel>
+  <mat-expansion-panel
+    [(expanded)]="expanded.runAsPrivileged"
+    *appDisplayControl="'improve_score_on_privileged'"
+    class="mat-elevation-z0"
+    hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{
+          'dashboard.improveScoreModal.summary.privilege.brief_1' | translate
+        }}
+      </mat-panel-title>
+      <mat-panel-description class="justify-content-end mr-0">
+        <div class="row align-items-center improvement-item-actions">
+          <div class="col">
+            <mat-icon>
+              {{ expanded.runAsPrivileged ? 'expand_less' : 'expand_more' }}
+            </mat-icon>
+          </div>
+          <div class="col d-flex justify-content-end">
+            <a
+              (click)="go('run-as-privileged', $event)"
+              *ngIf="!isComplete('run-as-privileged'); else completed">
+              {{
+                'dashboard.improveScoreModal.summary.VIEW_LIST' | translate
+              }}>>
+            </a>
+          </div>
+        </div>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <p>
+      {{ 'dashboard.improveScoreModal.summary.privilege.advice_1' | translate }}
+    </p>
+  </mat-expansion-panel>
+  <mat-expansion-panel
+    [(expanded)]="expanded.runAsRoot"
+    *appDisplayControl="'improve_score_on_runasroot'"
+    class="mat-elevation-z0"
+    hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{
+          'dashboard.improveScoreModal.summary.runAsRoot.brief_1' | translate
+        }}
+      </mat-panel-title>
+      <mat-panel-description class="justify-content-end mr-0">
+        <div class="row align-items-center improvement-item-actions">
+          <div class="col">
+            <mat-icon>
+              {{ expanded.runAsRoot ? 'expand_less' : 'expand_more' }}
+            </mat-icon>
+          </div>
+          <div class="col d-flex justify-content-end">
+            <a
+              (click)="go('run-as-root', $event)"
+              *ngIf="!isComplete('run-as-root'); else completed">
+              {{
+                'dashboard.improveScoreModal.summary.VIEW_LIST' | translate
+              }}>>
+            </a>
+          </div>
+        </div>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <p>
+      {{ 'dashboard.improveScoreModal.summary.runAsRoot.advice_1' | translate }}
+    </p>
+  </mat-expansion-panel>
+  <mat-expansion-panel
+    [(expanded)]="expanded.admissionControl"
+    *appDisplayControl="'improve_score_on_admission'"
+    class="mat-elevation-z0"
+    hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{
+          'dashboard.improveScoreModal.summary.admission.brief_1' | translate
+        }}
+      </mat-panel-title>
+      <mat-panel-description class="justify-content-end mr-0">
+        <div class="row align-items-center improvement-item-actions">
+          <div class="col">
+            <mat-icon>
+              {{ expanded.admissionControl ? 'expand_less' : 'expand_more' }}
+            </mat-icon>
+          </div>
+          <div class="col d-flex justify-content-end">
+            <a
+              (click)="go('admission-control', $event)"
+              *ngIf="!isComplete('admission-control'); else completed">
+              {{
+                'dashboard.improveScoreModal.summary.LEARN_HOW' | translate
+              }}>>
+            </a>
+          </div>
+        </div>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <p>
+      {{ 'dashboard.improveScoreModal.summary.admission.advice_1' | translate }}
+    </p>
+  </mat-expansion-panel>
+</mat-accordion>
+<ng-template #completed>
+  <span class="text-success text-bold">{{
+    'dashboard.improveScoreModal.summary.COMPLETED' | translate
+  }}</span>
+</ng-template>

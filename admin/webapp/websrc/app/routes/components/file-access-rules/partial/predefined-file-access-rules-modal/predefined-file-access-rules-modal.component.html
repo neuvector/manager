@@ -1,0 +1,21 @@
+<div class="nv-dialog">
+  <div mat-dialog-title class="dialog-header">
+    <div class="pull-left">
+      {{ 'service.PREDEFINED_FILTERS_TITLE' | translate }}
+    </div>
+    <div class="pull-right">
+      <em class="icon-close hand" (click)="onCancel()"></em>
+    </div>
+  </div>
+  <div mat-dialog-content class="dialog-content ph pv m0 fresh-bg">
+    <ag-grid-angular
+      #agGrid
+      id="predefined-file-access-rules-grid"
+      style="width: 100%"
+      [ngStyle]="{ height: gridHeight + 'px' }"
+      class="ag-theme-balham"
+      [gridOptions]="gridOptions4PredefinedFileAccessRules"
+      [rowData]="predefinedFileAccessRules">
+    </ag-grid-angular>
+  </div>
+</div>

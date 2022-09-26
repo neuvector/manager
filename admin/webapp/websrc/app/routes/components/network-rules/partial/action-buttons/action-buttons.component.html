@@ -1,0 +1,24 @@
+<div class="rule-actions-expand fade-in-right" *ngIf="params.data.id > -1">
+  <em class="eos-icons icon-18 hand" *ngIf="buttonDisplayMap.add"
+    (click)="addNetworkRule(params.data.id)" matTooltip="{{'policy.TIP.ADD' | translate}}"> add
+  </em>
+  <em class="eos-icons icon-18 hand" *ngIf="buttonDisplayMap.edit"
+    (click)="editNetworkRule(params.data.id)" matTooltip="{{'policy.TIP.EDIT' | translate}}">edit
+  </em>
+  <em class="eos-icons icon-18 hand" id="remove-form-action" *ngIf="buttonDisplayMap.delete"
+    (click)="deleteNetworkRule(params.data.id)" matTooltip="{{'policy.TIP.DELETE' | translate}}">delete
+  </em>
+  <em class="eos-icons icon-18 hand" id="remove-form-action" *ngIf="buttonDisplayMap.undelete"
+    (click)="undeleteNetworkRule(params.data.id)" matTooltip="{{'policy.TIP.UNDELETE' | translate}}">recycling
+  </em>
+  <em class="eos-icons icon-18 hand" id="promote-from-action" *ngIf="buttonDisplayMap.prmote"
+    (click)="promoteNeworkRuleOnEntry(params.data)" matTooltip="{{'policy.PROMOTE' | translate}}">ingress
+  </em>
+  <em class="eos-icons icon-18 hand" id="remove-form-action" *ngIf="buttonDisplayMap.revert"
+    ng-click="revertNetworkRule(params.data.id)" matTooltip="{{'policy.TIP.REVERT' | translate}}">settings_backup_restore
+  </em>
+</div>
+<div class="rule-actions-collapse">
+  <em class="fa fa-ellipsis-h fa-lg mr-sm text-action hand">
+  </em>
+</div>

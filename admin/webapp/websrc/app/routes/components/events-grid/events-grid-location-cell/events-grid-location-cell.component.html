@@ -1,0 +1,29 @@
+<div *ngIf="params.data.host_name">
+  <strong>{{ 'event.gridHeader.NODE' | translate }} :</strong>
+  <span> {{ params.data.host_name }} </span>
+</div>
+<div *ngIf="params.data.workload_name">
+  <strong>{{ 'event.gridHeader.CONTAINER' | translate }} :</strong>
+  <span> {{ displayWorkload }} </span>
+</div>
+<div *ngIf="params.data.workload_image">
+  <strong>{{ 'event.gridHeader.IMAGE' | translate }} :</strong>
+  <span> {{ displayImage }} </span>
+</div>
+<ng-container *ngIf="isPressureOverusage(params.data.name, 'Controller')">
+  <div *ngIf="params.data.controller_id">
+    <strong>{{ 'event.gridHeader.CONTROLLER_ID' | translate }} :</strong>
+    <span> {{ params.data.controller_id }} </span>
+  </div>
+  <div *ngIf="params.data.enforcer_name">
+    <strong>{{ 'event.gridHeader.ENFORCER_ID' | translate }} :</strong>
+    <span> {{ params.data.enforcer_name }} </span>
+  </div>
+</ng-container>
+<div
+  *ngIf="
+    isPressureOverusage(params.data.name, 'Agent') && params.data.enforcer_name
+  ">
+  <strong>{{ 'event.gridHeader.ENFORCER_ID' | translate }} :</strong>
+  <span> {{ params.data.enforcer_name }} </span>
+</div>

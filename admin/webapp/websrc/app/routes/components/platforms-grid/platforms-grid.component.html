@@ -1,0 +1,30 @@
+<div class="d-flex align-items-center justify-content-end">
+  <div *ngIf="isScanAuthorized">
+    <ng-container *ngIf="selectedPlatform$ | async as selectedPlatform">
+      <button
+        mat-stroked-button
+        aria-label="Scan action"
+        type="button"
+        class="mr-3"
+        (click)="scan.emit(selectedPlatform)"
+        [disabled]="!selectedPlatform">
+        {{ 'scan.SCAN' | translate }}
+      </button>
+    </ng-container>
+  </div>
+  <app-quick-filter
+    [gridOptions]="gridOptions"
+    (filterCountChange)="filterCountChanged($event)"
+    [showCount]="false">
+  </app-quick-filter>
+</div>
+<ag-grid-angular
+  #agGrid
+  (window:resize)="onResize()"
+  [ngStyle]="{ height: gridHeight + 'px' }"
+  [gridOptions]="gridOptions"
+  [rowData]="platformsService.platforms"
+  id="platforms-grid"
+  style="width: 100%"
+  class="ag-theme-balham">
+</ag-grid-angular>

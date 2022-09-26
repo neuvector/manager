@@ -1,0 +1,64 @@
+<div class="d-flex align-items-center justify-content-between">
+  <h1 mat-dialog-title>{{ 'registry.TEST_REPO' | translate }}</h1>
+  <button
+    (click)="saveFilters()"
+    class="mr-1"
+    color="primary"
+    id="test-connection-copy-filters-button"
+    mat-raised-button
+    type="button">
+    {{ 'registry.COPY_FILTER' | translate }}
+  </button>
+</div>
+<formly-form [fields]="fields" [form]="form" [model]="model"></formly-form>
+<div class="mt-4" style="height: 4px">
+  <mat-progress-bar
+    *ngIf="testingSwitch"
+    mode="indeterminate"></mat-progress-bar>
+</div>
+<ag-grid-angular
+  [gridOptions]="gridOptions"
+  class="ag-theme-alpine mb-4"
+  style="width: 100%; height: 350px">
+</ag-grid-angular>
+<div class="d-flex justify-content-between align-items-center">
+  <button
+    (click)="downloadTxt()"
+    class="d-flex justify-content-center align-items-center"
+    mat-button>
+    <i class="eos-icons" id="test-connection-download-text-button"
+      >description</i
+    >
+    TXT
+  </button>
+  <div class="d-flex">
+    <button
+      (click)="onNoClick()"
+      class="mr-2"
+      id="test-connection-cancel-button"
+      mat-stroked-button
+      type="button">
+      {{ 'registry.BACK' | translate }}
+    </button>
+    <button
+      (click)="testConnection()"
+      *ngIf="!testingSwitch"
+      class="mr-1 d-flex justify-content-center align-items-center"
+      color="primary"
+      id="test-connection-start-test-button"
+      mat-raised-button
+      type="button">
+      <i class="eos-icons mr-2">flask</i>{{ 'registry.START_TEST' | translate }}
+    </button>
+    <button
+      (click)="stopTest()"
+      *ngIf="testingSwitch"
+      class="mr-1 d-flex justify-content-center align-items-center"
+      color="primary"
+      id="test-connection-stop-test-button"
+      mat-raised-button
+      type="button">
+      <i class="eos-icons mr-2">block</i>{{ 'registry.STOP_TEST' | translate }}
+    </button>
+  </div>
+</div>

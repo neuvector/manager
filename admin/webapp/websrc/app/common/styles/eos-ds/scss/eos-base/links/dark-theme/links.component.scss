@@ -1,0 +1,58 @@
+/* Links
+   ========================================================================== */
+/**
+*
+* Links variables: /assets/stylesheets/eos-base/variables/links.scss
+*/
+
+/* Set the link color to our blue and not the bootstrap default */
+/* Remove the default text decoration from link status */
+.dark-theme {
+  a, a:active, a:visited, a:focus {
+    color: $eos-dark-link-default-color;
+    text-decoration: underline;
+  }
+
+  a,
+  .link-default,
+  // Bootstrap 4 overwrite - used only for demo purposes
+  a:not([href]):not([tabindex]),
+  .card-horizontal .card-link {
+    color: $eos-dark-link-default-color;
+    font-weight: bold;
+    text-decoration: underline;
+
+    &:hover {
+      color: $eos-dark-link-default-color;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    &.menu-title, &.submenu-item {
+      text-decoration: none;
+    }
+  }
+
+  /* Links demo page */
+  a.link-dark,
+  // Bootstrap 4 overwrite - used only for demo purposes
+  a.link-dark:not([href]):not([tabindex]) {
+    color: $eos-link-dark-color;
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  a.link-light,
+  // Bootstrap 4 overwrite - used only for demo purposes
+  a.link-light:not([href]):not([tabindex]) {
+    color: $eos-link-light-color;
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}

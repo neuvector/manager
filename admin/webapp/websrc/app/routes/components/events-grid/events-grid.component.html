@@ -1,0 +1,36 @@
+<div class="d-flex align-items-center justify-content-between">
+  <div class="d-flex align-items-center justify-content-start">
+    <span class="mr-2">
+      <span *ngIf="filtered$ | async">
+        {{ 'enum.FOUND' | translate }}
+        {{ filteredCount }}&nbsp;/&nbsp;
+      </span>
+      {{ eventsCount }}
+      {{ 'event.COUNT_POSTFIX' | translate }}
+    </span>
+  </div>
+  <div class="d-flex align-items-center justify-content-end">
+    <button
+      (click)="openAdvancedFilter()"
+      class="mx-2 d-flex justify-content-end align-items-center"
+      mat-button>
+      <i class="eos-icons">search</i>{{ 'general.ADV_FILTER' | translate }}
+    </button>
+    <app-quick-filter
+      [gridOptions]="gridOptions"
+      (filterCountChange)="filterCountChanged($event)"
+      [showCount]="false"
+      [condition]="isParent">
+    </app-quick-filter>
+  </div>
+</div>
+<ag-grid-angular
+  #agGrid
+  (window:resize)="onResize()"
+  [ngStyle]="{ height: gridHeight + 'px' }"
+  [gridOptions]="gridOptions"
+  [rowData]="eventsService.displayEvents"
+  id="events-grid"
+  style="width: 100%"
+  class="ag-theme-balham">
+</ag-grid-angular>

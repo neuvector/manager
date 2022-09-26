@@ -1,0 +1,46 @@
+<div class="d-flex justify-content-between align-items-center">
+  <h1 class="font-weight-light">
+    <a [routerLink]="['../']" class="font-weight-light">
+      {{ 'sidebar.nav.SETTING' | translate }}
+    </a>
+    >&nbsp;{{ 'sidebar.nav.USERS' | translate }}
+  </h1>
+</div>
+<mat-card>
+  <mat-tab-group (selectedTabChange)="activateTab($event)">
+    <mat-tab label="{{ 'user.USERS' | translate }}">
+      <ng-container
+        *ngIf="userData$ | async as userData; else loadingOrErrorTemplate">
+        <app-users-grid
+          [userData]="userData"
+          [globalRoles]="globalRoles"
+          (refreshData)="refreshUsers()"></app-users-grid>
+      </ng-container>
+    </mat-tab>
+    <mat-tab label="{{ 'role.ROLES' | translate }}">
+      <ng-container
+        *ngIf="roleData$ | async as roleData; else loadingOrErrorTemplate">
+        <app-roles-grid
+          [rowData]="roleData"
+          (refreshData)="refreshRoles()"></app-roles-grid>
+      </ng-container>
+    </mat-tab>
+    <mat-tab label="{{ 'passwordProfile.PWD_PROFILE' | translate }}">
+      <ng-container
+        *ngIf="pwdProfile$ | async as pwdProfile; else loadingOrErrorTemplate">
+        <app-password-profile
+          [passwordProfile]="pwdProfile"></app-password-profile>
+      </ng-container>
+    </mat-tab>
+  </mat-tab-group>
+</mat-card>
+<ng-template #loadingOrErrorTemplate>
+  <ng-container *ngIf="error; else loadingTemplate">
+    <mat-card>
+      {{ error | json }}
+    </mat-card>
+  </ng-container>
+  <ng-template #loadingTemplate>
+    <app-loading-template></app-loading-template>
+  </ng-template>
+</ng-template>

@@ -1,0 +1,41 @@
+<app-score-prediction-header
+  message="{{
+    'dashboard.improveScoreModal.serviceMode.DESCRIPTION' | translate
+  }}"
+  [score]="score"
+  [projectedScore]="projectedScore">
+</app-score-prediction-header>
+<mat-divider class="mt-2 mb-3"></mat-divider>
+<section id="service-risk-groups-section" class="mx-2">
+  <div class="d-flex">
+    <span class="mat-small font-weight-bold mr-3">{{
+      'setting.NEW_SERVICE' | translate | uppercase
+    }}</span>
+    <mat-radio-group
+      [(ngModel)]="newServiceMode"
+      (change)="switchNewServiceMode()"
+      aria-label="New services policy mode"
+      class="d-flex">
+      <mat-radio-button
+        *ngFor="let type of serviceModes"
+        [value]="type.value"
+        class="mr-3">
+        <span class="mat-small font-weight-bold">
+          {{ type.viewValue | translate }}
+        </span>
+      </mat-radio-button>
+    </mat-radio-group>
+  </div>
+  <app-groups
+    [height]="210"
+    [isScoreImprovement]="true"
+    (selectedGroup)="setSelectedGroup($event)"></app-groups>
+  <app-group-details
+    *ngIf="selectedGroup"
+    [resizableHeight]="120"
+    [isScoreImprovement]="true"
+    [selectedGroupName]="selectedGroup.name"
+    [members]="selectedGroup.members"
+    [kind]="selectedGroup.kind">
+  </app-group-details>
+</section>

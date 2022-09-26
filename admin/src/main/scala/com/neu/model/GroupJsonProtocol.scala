@@ -4,8 +4,8 @@ import spray.json.DefaultJsonProtocol
 import spray.json._
 
 /**
-  * Created by bxu on 4/25/16.
-  */
+ * Created by bxu on 4/25/16.
+ */
 object GroupJsonProtocol extends DefaultJsonProtocol {
   val equalOp    = "="
   val notEqualOp = "!="
@@ -21,8 +21,11 @@ object GroupJsonProtocol extends DefaultJsonProtocol {
   val ops          = Seq(equalOp, notEqualOp, containsOp, prefixOp, regexOp, notRegexOp)
 
   implicit val rule4GroupFormat: RootJsonFormat[Rule4Group] = jsonFormat11(Rule4Group)
-  implicit val CLUSEventCondition4GroupFormat: RootJsonFormat[CLUSEventCondition4Group] = jsonFormat2(CLUSEventCondition4Group)
-  implicit val responseRule4GroupFormat: RootJsonFormat[ResponseRule4Group] = jsonFormat8(ResponseRule4Group)
+  implicit val CLUSEventCondition4GroupFormat: RootJsonFormat[CLUSEventCondition4Group] =
+    jsonFormat2(CLUSEventCondition4Group)
+  implicit val responseRule4GroupFormat: RootJsonFormat[ResponseRule4Group] = jsonFormat8(
+    ResponseRule4Group
+  )
   implicit val criteriaEntryFormat: RootJsonFormat[CriteriaEntry] = jsonFormat3(CriteriaEntry)
   implicit val scanBriefFormat: RootJsonFormat[ScanBrief]         = jsonFormat3(ScanBrief)
   implicit val workloadBriefFormat: RootJsonFormat[WorkloadBrief] = rootFormat(
@@ -42,10 +45,14 @@ object GroupJsonProtocol extends DefaultJsonProtocol {
   implicit val groupDTOFormat: RootJsonFormat[GroupDTO]             = jsonFormat17(GroupDTO)
   implicit val groupDTOsFormat: RootJsonFormat[GroupDTOs]           = jsonFormat1(GroupDTOs)
   implicit val groupDTOWrapFormat: RootJsonFormat[GroupDTOWrap]     = jsonFormat1(GroupDTOWrap)
-  implicit val group4SingleFormat: RootJsonFormat[Group4Single]         = jsonFormat17(Group4Single)
-  implicit val group4SingleWrapFormat: RootJsonFormat[Group4SingleWrap]         = jsonFormat1(Group4SingleWrap)
-  implicit val grou4SingleDTOFormat: RootJsonFormat[Group4SingleDTO]      = jsonFormat17(Group4SingleDTO)
-  implicit val group4SingleDTOWrapFormat: RootJsonFormat[Group4SingleDTOWrap]     = jsonFormat1(Group4SingleDTOWrap)
+  implicit val group4SingleFormat: RootJsonFormat[Group4Single]     = jsonFormat17(Group4Single)
+  implicit val group4SingleWrapFormat: RootJsonFormat[Group4SingleWrap] = jsonFormat1(
+    Group4SingleWrap
+  )
+  implicit val grou4SingleDTOFormat: RootJsonFormat[Group4SingleDTO] = jsonFormat17(Group4SingleDTO)
+  implicit val group4SingleDTOWrapFormat: RootJsonFormat[Group4SingleDTOWrap] = jsonFormat1(
+    Group4SingleDTOWrap
+  )
 
   def groupsToJson(groups: Groups): String                      = groups.toJson.compactPrint
   def groups4ExportToJson(groups4Export: Groups4Export): String = groups4Export.toJson.compactPrint
@@ -58,7 +65,8 @@ object GroupJsonProtocol extends DefaultJsonProtocol {
   def jsonToGroups(response: String): Groups = response.parseJson.convertTo[Groups]
 
   def jsonToGroupWrap(response: String): GroupWrap = response.parseJson.convertTo[GroupWrap]
-  def jsonToGroup4SingleWrap(response: String): Group4SingleWrap = response.parseJson.convertTo[Group4SingleWrap]
+  def jsonToGroup4SingleWrap(response: String): Group4SingleWrap =
+    response.parseJson.convertTo[Group4SingleWrap]
 
   def groupDTOsToJson(groups: GroupDTOs): String = groups.toJson.compactPrint
 
@@ -131,7 +139,8 @@ object GroupJsonProtocol extends DefaultJsonProtocol {
   def toGroup4SingleDTO: Group4Single => Group4SingleDTO = (group: Group4Single) => {
     val item =
       group.criteria.map((criteriaEntry: CriteriaEntry) => criteriaEntryToItem(criteriaEntry))
-    Group4SingleDTO(group.name,
+    Group4SingleDTO(
+      group.name,
       group.comment,
       group.domain,
       group.learned,
@@ -147,7 +156,8 @@ object GroupJsonProtocol extends DefaultJsonProtocol {
       group.cap_scorable,
       group.kind,
       group.cfg_type,
-      group.not_scored)
+      group.not_scored
+    )
   }
 }
 

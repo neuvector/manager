@@ -1,0 +1,41 @@
+<div class="d-flex align-items-center justify-content-between">
+  <div class="d-flex align-items-center justify-content-start">
+    <span class="mr-2">
+      <span *ngIf="filtered">
+        {{ 'enum.FOUND' | translate }}
+        {{ filteredCount }}&nbsp;/&nbsp;
+      </span>
+      {{ scannerCount }}
+      {{ 'scan.COUNT_SCANNER_POSTFIX' | translate }}
+    </span>
+  </div>
+  <div class="d-flex align-items-center justify-content-end">
+    <app-quick-filter
+      [gridOptions]="gridOptions"
+      (filterCountChange)="filterCountChanged($event)"
+      [showCount]="false">
+    </app-quick-filter>
+    <app-loading-button
+      (btnClick)="refresh()"
+      [appearance]="'mat-button'"
+      [buttonClasses]="'d-flex justify-content-center align-items-center'"
+      [disabled]="!!(refreshing$ | async)"
+      [iconClasses]="'eos-icons'"
+      [iconName]="'refresh'"
+      [id]="'scanners-refresh-button'"
+      [loading]="!!(refreshing$ | async)"
+      [text]="'network.REFRESH' | translate"
+      [type]="'button'">
+    </app-loading-button>
+  </div>
+</div>
+<ag-grid-angular
+  #agGrid
+  (window:resize)="onResize()"
+  [ngStyle]="{ height: gridHeight + 'px' }"
+  [gridOptions]="gridOptions"
+  [rowData]="scannersService.scanners"
+  id="scanners-grid"
+  style="width: 100%"
+  class="ag-theme-balham">
+</ag-grid-angular>

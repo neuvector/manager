@@ -1,0 +1,219 @@
+$gray-darker: #232735;
+$gray-dark: #3a3f51;
+$gray: #dde6e9;
+$gray-light: #e4eaec;
+$gray-lighter: #edf1f2;
+
+$inverse: #263238;
+$purple: #673ab7;
+$pink: #e91e63;
+$yellow: #ffeb3b;
+$green: #009688;
+
+$primary: #fe7c3f;
+$secondary: #fff;
+$success: #4caf50;
+$info: #2196f3;
+$warning: #ff9800;
+$danger: #f44336;
+$dark: #607d8b;
+
+$discover: $info;
+$monitor: #4e39c1;
+$protect: #186d33;
+$idle: #9aaabc;
+$allow: #8bc34a;
+$deny: #ef5350;
+
+$amountOfLight: 10%;
+
+$primary-light: lighten($primary, $amountOfLight);
+$success-light: lighten($success, $amountOfLight);
+$info-light: lighten($info, $amountOfLight);
+$warning-light: lighten($warning, $amountOfLight);
+$danger-light: lighten($danger, $amountOfLight);
+$inverse-light: lighten($inverse, $amountOfLight);
+$green-light: lighten($green, $amountOfLight);
+$pink-light: lighten($pink, $amountOfLight);
+$purple-light: lighten($purple, $amountOfLight);
+$yellow-light: lighten($yellow, $amountOfLight);
+$primary-dark: darken($primary, $amountOfLight);
+$success-dark: darken($success, $amountOfLight);
+$info-dark: darken($info, $amountOfLight);
+$warning-dark: darken($warning, $amountOfLight);
+$danger-dark: darken($danger, $amountOfLight);
+$inverse-dark: darken($inverse, $amountOfLight);
+$green-dark: darken($green, $amountOfLight);
+$pink-dark: darken($pink, $amountOfLight);
+$purple-dark: darken($purple, $amountOfLight);
+$yellow-dark: darken($yellow, $amountOfLight);
+
+$navbar-height: 65px;
+
+$btn-secondary-color: #333;
+$btn-secondary-bg: #fff;
+$btn-secondary-border: #eaeaea;
+
+$card-default-border-color: #cfdbe2;
+
+$text-alpha: rgba(255, 255, 255, 0.5);
+$text-alpha-inverse: rgba(0, 0, 0, 0.5);
+
+$font-size-base: 1rem;
+$text-sm: $font-size-base * 0.74375;
+$text-md: $font-size-base * 1.6625;
+$text-lg: $font-size-base * 2.625;
+
+$border-color: rgba(0, 0, 0, 0.12);
+
+$wd-xxs: 60px;
+$wd-xs: 90px;
+$wd-sm: 150px;
+$wd-sd: 200px;
+$wd-md: 240px;
+$wd-lg: 280px;
+$wd-xl: 320px;
+$wd-xxl: 360px;
+$wd-wide: 100%;
+$wd-auto: auto;
+$wd-zero: 0;
+
+$colors: (
+  'purple': $purple,
+  'pink': $pink,
+  'yellow': $yellow,
+  'green': $green,
+  'primary': $primary,
+  'success': $success,
+  'info': $info,
+  'warning': $warning,
+  'danger': $danger,
+  'inverse': $inverse,
+
+  'primary-light': $primary-light,
+  'primary-dark': $primary-dark,
+  'success-light': $success-light,
+  'success-dark': $success-dark,
+  'info-light': $info-light,
+  'info-dark': $info-dark,
+  'warning-light': $warning-light,
+  'warning-dark': $warning-dark,
+  'danger-light': $danger-light,
+  'danger-dark': $danger-dark,
+  'green-light': $green-light,
+  'green-dark': $green-dark,
+  'pink-light': $pink-light,
+  'pink-dark': $pink-dark,
+  'purple-light': $purple-light,
+  'purple-dark': $purple-dark,
+  'inverse-light': $inverse-light,
+  'inverse-dark': $inverse-dark,
+  'yellow-light': $yellow-light,
+  'yellow-dark': $yellow-dark,
+);
+
+$theme-colors: (
+  'primary': $primary,
+  'secondary': $secondary,
+  'success': $success,
+  'info': $info,
+  'warning': $warning,
+  'danger': $danger,
+  'inverse': $inverse,
+);
+
+$nv-colors: (
+  'discover': $discover,
+  'monitor': $monitor,
+  'protect': $protect,
+  'idle': $idle,
+  'allow': $allow,
+  'deny': $deny,
+);
+
+$body-bg: #f5f7fa;
+$body-color: rgba(0, 0, 0, 0.8);
+
+$link-color: #106cc8;
+
+$border-radius: 0.25rem;
+$border-radius-lg: 0.375rem;
+
+$line-height-base: 1.528571429;
+
+$headings-line-height: 1.1;
+
+$text-muted: #909fa7;
+
+$table-accent-bg: #fafbfc;
+$table-hover-bg: #fafbfc;
+
+$table-border-color: #eee;
+
+$input-btn-padding-y: 0.375rem;
+$input-btn-padding-x: 1rem;
+
+$input-btn-padding-y-sm: 0.3125rem;
+$input-btn-padding-x-sm: 0.625rem;
+
+$input-btn-padding-y-lg: 0.625rem;
+$input-btn-padding-x-lg: 1.25rem;
+
+$input-height: 2.1875rem; // 35px
+
+$input-disabled-bg: $gray-lighter;
+$input-border-color: $gray;
+$input-focus-border-color: #66afe9;
+$input-placeholder-color: #b7bac9;
+
+$form-feedback-icon-valid: none;
+$form-feedback-icon-invalid: none;
+
+$custom-control-indicator-active-bg: lighten($primary, 25%);
+
+$dropdown-border-color: #e1e1e1;
+
+$nav-tabs-link-active-bg: #fff;
+
+$jumbotron-bg: #fcfcfc;
+
+$list-group-border-color: #e4eaec;
+
+$thumbnail-padding: 0.125rem;
+
+$pagination-color: $body-color;
+
+$breadcrumb-bg: #fafafa;
+$breadcrumb-divider-color: #c1c2c3;
+$breadcrumb-active-color: $body-color;
+
+$nv-tablet-width: 768px;
+
+$font-size-base: 1rem !default; // Assumes the browser default, typically `16px`
+$font-size-lg: $font-size-base * 1.25 !default;
+$font-size-sm: $font-size-base * 0.875 !default;
+
+$padding-small-vertical: 0.3125rem;
+$padding-small-horizontal: 0.625rem;
+
+$padding-base-vertical: 0.375rem;
+$padding-base-horizontal: 1rem;
+
+$padding-large-vertical: 0.625rem;
+$padding-large-horizontal: 1.25rem;
+
+$line-height-base: 1.5 !default;
+$line-height-large: 1.33;
+$line-height-small: 1.5;
+$line-height-computed: floor(($font-size-base * $line-height-base)) !default;
+
+//** Default `.form-control` height
+$input-height-base: ($line-height-computed + ($padding-base-vertical * 2) + 2);
+//** Large `.form-control` height
+$input-height-large: (
+  ceil($font-size-lg * $line-height-large) + ($padding-large-vertical * 2) + 2
+);
+//** Small `.form-control` height
+$input-height-small: (
+  floor($font-size-sm * $line-height-small) + ($padding-small-vertical * 2) + 2
+);

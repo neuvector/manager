@@ -1,0 +1,61 @@
+<div class="row h-100">
+  <div class="col-6">
+    <canvas
+      [data]="complianceChartData.data"
+      [labels]="complianceChartData.data.labels"
+      [options]="complianceChartData.options"
+      [type]="complianceChartData.type"
+      baseChart>
+    </canvas>
+  </div>
+  <div class="col-6">
+    <canvas
+      [data]="containerChartData.data"
+      [labels]="containerChartData.data.labels"
+      [options]="containerChartData.options"
+      [type]="containerChartData.type"
+      baseChart>
+    </canvas>
+  </div>
+</div>
+
+<div
+  style="
+        width: 1100px;
+        height: 250px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        visibility: hidden;
+      "
+>
+  <canvas
+    [data]="complianceChartData.data"
+    [labels]="complianceChartData.data.labels"
+    [options]="complianceChartData.options"
+    [type]="complianceChartData.type"
+    baseChart
+    id="bar12PDF"
+  >
+  </canvas>
+</div>
+<div
+  style="
+        width: 1100px;
+        height: 250px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        visibility: hidden;
+      "
+>
+  <canvas
+    [data]="containerChartData.data"
+    [labels]="containerChartData.data.labels"
+    [options]="containerChartData.options"
+    [type]="containerChartData.type"
+    baseChart
+    id="bar22PDF"
+  >
+  </canvas>
+</div>

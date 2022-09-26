@@ -1,0 +1,97 @@
+<div class="nv-dialog">
+  <div mat-dialog-title class="dialog-header">
+    <div class="pull-left">
+      {{'securityEvent.REVIEW_RULE' | translate}}
+    </div>
+    <div class="pull-right">
+      <em class="icon-close hand" (click)="dialogRef.close()"></em>
+    </div>
+  </div>
+  <div mat-dialog-content [ngClass]="{'mb-lg': !data.isEditable}">
+    <div class="margin-top-s margin-bottom-s">
+      <h5 *ngIf="isReadOnlyRule">{{'securityEvent.PROC_RULE' | translate}}</h5>
+      <h5 *ngIf="!isReadOnlyRule">
+        {{'securityEvent.PROPOSED_RULE' | translate}}
+        <span class="label-success-tran" style="display: inline; font-size: 12px;">
+          {{ 'policy.head.NEW_RULE' | translate }}
+        </span>
+      </h5>
+    </div>
+    <div>
+      <form name="ruleForm" [formGroup]="processRuleFromGroup">
+        <div class="row ">
+          <div class="col-sm-4">
+            <mat-form-field appearance="fill">
+              <mat-label>{{'securityEvent.GROUP' | translate}}</mat-label>
+              <input type="text" matInput readonly formControlName="group">
+            </mat-form-field>
+          </div>
+          <div class="col-sm-4">
+            <mat-form-field appearance="fill">
+              <mat-label>{{'service.gridHeader.NAME' | translate}}</mat-label>
+              <input type="text" matInput readonly formControlName="procName">
+            </mat-form-field>
+          </div>
+          <div class="col-sm-4">
+            <mat-form-field appearance="fill">
+              <mat-label>{{'service.gridHeader.PATH' | translate}}</mat-label>
+              <input type="text" matInput readonly formControlName="procPath">
+            </mat-form-field>
+          </div>
+          <div class="col-sm-2 mb0" style="margin-top: 25px;" *ngIf="isReadOnlyRule && data.processRule.cfg_type">
+            <div *ngIf="data.processRule.cfg_type === CFG_TYPE.LEARNED" class="label learn-rule">
+              {{ 'group.LEARNED' | translate }}
+            </div>
+            <div *ngIf="data.processRule.cfg_type === CFG_TYPE.CUSTOMER" class="label customer-rule">
+              {{ 'group.CUSTOM' | translate }}
+            </div>
+            <div *ngIf="data.processRule.cfg_type === CFG_TYPE.GROUND" class="label ground-rule">
+              {{ 'group.GROUND' | translate }}
+            </div>
+            <div *ngIf="data.processRule.cfg_type === CFG_TYPE.FED" class="label fed-rule">
+              {{ 'group.FED' | translate }}
+            </div>
+          </div>
+          <div class="col-sm-2 mb0">
+            <label>{{ 'policy.editPolicy.DENY_ALLOW' | translate }}</label>
+            <div>
+              <mat-slide-toggle
+                [(ngModel)]="newAction"
+                [ngModelOptions]="{ standalone: true }"
+                disabled
+                color="primary">
+                <span
+                  [ngClass]="{
+                    'text-deny': !newAction,
+                    'text-success': newAction
+                  }">
+                  {{
+                    (newAction ? 'policy.action.ALLOW' : 'policy.action.DENY')
+                      | translate
+                  }}
+                </span>
+              </mat-slide-toggle>
+            </div>
+          </div>
+        </div>
+        <div class="clearfix" *ngIf="!isReadOnlyRule && data.isEditable">
+          <div class="proposed-rule-warning pull-left margin-right-m margin-bottom-m" style="width: 100%;">{{'securityEvent.NEW_RULE_WARNING' | translate}}</div>
+          <div class="margin-top-s">
+            <app-loading-button
+              [appearance]="'mat-raised-button'"
+              [color]="'primary'"
+              [loading]="submittingUpdate"
+              [text]="'policy.portlet.SUBMIT' | translate"
+              (click)="updateProcessRule()"
+              class="pull-right"
+            >
+            </app-loading-button>
+            <button class="pull-right margin-right-m" (click)="dialogRef.close()">
+              {{'group.editGroup.CANCEL' | translate}}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

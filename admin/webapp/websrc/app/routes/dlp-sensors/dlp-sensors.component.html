@@ -1,0 +1,96 @@
+<div class="screen-area">
+  <div class="clearfix" style="height: 40px;">
+    <div class="pull-right margin-top-s margin-left-xl" (click)="refresh()">
+      <em class="eos-icons icon-18">cached</em>
+      <label class="text-gray-label hand">{{'general.REFRESH' | translate}}</label>
+    </div>
+    <div class="pull-right margin-top-s margin-left-xl" (click)="exportDlpSensors()">
+      <em class="eos-icons icon-18">download</em>
+      <label class="text-gray-label hand">{{'admissionControl.EXPORT' | translate | uppercase}}</label>
+    </div>
+    <div class="pull-right margin-top-s margin-left-xl" (click)="openImportDlpSensorsModal()" *appDisplayControl="'write_dlp_rule'">
+      <em class="eos-icons icon-18">upload</em>
+      <label class="text-gray-label hand">{{'admissionControl.IMPORT' | translate | uppercase}}</label>
+    </div>
+    <div class="clearfix">
+      <div class="content-title">
+        {{'sidebar.nav.DLP_SENSORS' | translate}}
+      </div>
+    </div>
+  </div>
+  <ng-container>
+    <app-adjustable-div [minHeightOne]="163" [minHeightTwo]="140">
+      <ng-container *appContainerOne="let height">
+        <mat-card [ngStyle]="{ height: height + 'px' }" class="pt-0">
+          <div class="clearfix">
+            <app-quick-filter
+              class="pull-left"
+              [gridOptions]="gridOptions4Sensors"
+              [filteredCount]="filteredCount"
+              [count]="dlpSensors.length"
+            >
+            </app-quick-filter>
+            <button class="pull-left margin-top-l margin-left-m primary-button" (click)="openAddEditDlpSensorModal()" *appDisplayControl="'write_dlp_rule'">
+              <em class="eos-icons icon-18">add</em>
+              {{ "admissionControl.INSERT" | translate }}
+            </button>
+          </div>
+          <div class="clearfix">
+            <ag-grid-angular
+              #dlpSensorsGrid
+              id="dlp-sensors-grid"
+              style="width: 100%;"
+              [ngStyle]="{ height: (height - 90) + 'px' }"
+              class="ag-theme-balham"
+              [gridOptions]="gridOptions4Sensors"
+              [rowData]="dlpSensors"
+              [context]="context"
+              >
+            </ag-grid-angular>
+          </div>
+        </mat-card>
+      </ng-container>
+      <ng-container *appContainerTwo="let height">
+        <mat-card [ngStyle]="{ height: height + 'px' }">
+          <div *ngIf="selectedSensor">
+            <label class="panel-text-title mt-sm">
+              {{selectedSensor.name | shortenFromMiddle: 30}}
+            </label>
+          </div>
+          <div class="row margin-top-m">
+            <div class="col-sm-3" style="position: relative;">
+              <button
+                *ngIf="!isPredefine && isWriteDLPSensorAuthorized"
+                style="position: absolute; z-index: 10; right: 17px; top: 2px;"
+                (click)="openAddDlpRuleModal()">
+                <em class="eos-icons icon-18">add</em>
+              </button>
+              <ag-grid-angular
+                #dlpRulesGrid
+                id="dlp-rules-grid"
+                style="width: 100%;"
+                [ngStyle]="{ height: (height - 90) + 'px' }"
+                class="ag-theme-balham"
+                [gridOptions]="gridOptions4Rules"
+                [context]="context"
+                >
+              </ag-grid-angular>
+            </div>
+            <div class="col-sm-9">
+              <ag-grid-angular
+                #dlpPatternsGrid
+                id="dlp-patterns-grid"
+                style="width: 100%;"
+                [ngStyle]="{ height: (height - 90) + 'px' }"
+                class="ag-theme-balham"
+                [gridOptions]="gridOptions4Patterns"
+                [context]="context"
+                >
+              </ag-grid-angular>
+            </div>
+          </div>
+        </mat-card>
+      </ng-container>
+    </app-adjustable-div>
+  </ng-container>
+</div>

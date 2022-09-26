@@ -1,0 +1,52 @@
+<div id="activeSessions" class="infoBox topLeftSession resizable" cdkDrag>
+  <button
+    id="closeActiveSessions"
+    class="btn btn-xs btn-link pull-right"
+    (click)="stopRefreshSession(); popupState.leave()">
+    <em class="fa fa-times fa-lg text-muted ml-sm"></em>
+  </button>
+  <div class="pull-right ml-lg">
+    <mat-slide-toggle
+      id="autoRefresh"
+      name="refreshStatus"
+      [(ngModel)]="autoRefresh"
+      (ngModelChange)="onAutoRefreshToggle(autoRefresh)">
+      <span
+        [ngClass]="{
+          'text-muted': !autoRefresh,
+          'text-success': autoRefresh
+        }">
+        {{ 'network.AUTO_REFRESH' | translate }}
+      </span>
+    </mat-slide-toggle>
+  </div>
+  <div *ngIf="conversations && conversations.length > 4">
+    <app-quick-filter
+      [gridOptions]="gridOptions"
+      (filterCountChange)="filterCountChanged($event)"
+      [showCount]="false">
+    </app-quick-filter>
+  </div>
+  <div class="clearfix handle" cdkDragHandle>
+    <h4 class="text-dark mb0">
+      {{ 'dashboard.panelItems.NETWORK_TRAFFIC' | translate }}&nbsp;-&nbsp;{{
+        currentName
+      }}
+    </h4>
+  </div>
+  <div *ngIf="conversations && conversations.length > 0">
+    <ag-grid-angular
+      id="activeSessionGrid"
+      (window:resize)="onResize()"
+      [rowData]="conversations"
+      [gridOptions]="gridOptions"
+      class="ag-theme-alpine"
+      style="width: 100%; margin-top: 10px"
+      [ngStyle]="{ height: entriesGridHeight + 'px' }">
+    </ag-grid-angular>
+  </div>
+
+  <div class="mv-sm" *ngIf="conversations.length == 0">
+    <span translate="{{ 'network.NO_ACTIVE_SESSIONS' }}"> </span>
+  </div>
+</div>

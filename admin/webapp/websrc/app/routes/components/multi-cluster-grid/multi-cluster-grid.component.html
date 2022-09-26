@@ -1,0 +1,19 @@
+<div class="d-flex align-items-center justify-content-between">
+  <app-quick-filter
+    [gridOptions]="gridOptions"
+    (filterCountChange)="filterCountChanged($event)"
+    [showCount]="false"
+    [condition]="quickFilterParents">
+  </app-quick-filter>
+</div>
+<ag-grid-angular
+  #agGrid
+  id="multi-clusters-grid"
+  class="ag-theme-alpine"
+  style="width: 100%"
+  (window:resize)="onResize()"
+  [gridOptions]="gridOptions"
+  [ngStyle]="{ height: gridHeight + 'px' }"
+  [context]="context">
+
+</ag-grid-angular>

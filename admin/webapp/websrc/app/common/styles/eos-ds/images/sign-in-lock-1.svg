@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="110" height="87.279" viewBox="0 0 110 87.279">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_2269" data-name="Rectangle 2269" width="110" height="87.279" transform="translate(0)" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="Lock" transform="translate(55 43.639)">
+    <g id="Group_825" data-name="Group 825" transform="translate(-55 -43.639)" clip-path="url(#clip-path)">
+      <path id="Path_638" data-name="Path 638" d="M24.619,70.592H8.5V50.984a16.23,16.23,0,0,1,16.119-16.34h3.224v-9.8A16.23,16.23,0,0,1,43.961,8.5H79.422A16.23,16.23,0,0,1,95.541,24.84V41.18a16.231,16.231,0,0,1,16.119,16.34V70.592H95.541" transform="translate(-5.429 -5.414)" fill="none" stroke="#efefef" stroke-miterlimit="10" stroke-width="6.131"/>
+      <rect id="Rectangle_2267" data-name="Rectangle 2267" width="19.342" height="19.608" transform="translate(28.86 65.179)" fill="none" stroke="#fe7c3f" stroke-miterlimit="10" stroke-width="6.131"/>
+      <path id="Path_639" data-name="Path 639" d="M102.395,141.036a6.448,6.448,0,1,0-12.895,0v9.8h12.895" transform="translate(-57.416 -85.661)" fill="none" stroke="#fe7c3f" stroke-miterlimit="10" stroke-width="6.131"/>
+      <rect id="Rectangle_2268" data-name="Rectangle 2268" width="19.342" height="19.608" transform="translate(61.098 65.179)" fill="none" stroke="#fe7c3f" stroke-miterlimit="10" stroke-width="6.131"/>
+      <path id="Path_640" data-name="Path 640" d="M185.947,134.5h0a6.492,6.492,0,0,0-6.447,6.536v9.8h12.895v-9.8A6.492,6.492,0,0,0,185.947,134.5Z" transform="translate(-115.178 -85.661)" fill="none" stroke="#fe7c3f" stroke-miterlimit="10" stroke-width="6.131"/>
+    </g>
+  </g>
+</svg>

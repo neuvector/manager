@@ -1,0 +1,218 @@
+<div class="row w-100 mx-0">
+  <div class="col-md-4">
+    <div class="my-md-4 details-item">
+      <mat-icon
+        aria-hidden="false"
+        aria-label="ID icon"
+        class="details-icon"
+        fontSet="fa"
+        fontIcon="fa-credit-card">
+      </mat-icon>
+      <div class="ml-3 overflow-hidden">
+        {{ 'controllers.detail.ID' | translate }}
+        <div class="text-muted text-truncate">
+          {{ container.brief.id }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="my-md-4 details-item">
+      <mat-icon
+        aria-hidden="false"
+        aria-label="Service icon"
+        class="details-icon"
+        fontSet="fa"
+        fontIcon="fa-cogs">
+      </mat-icon>
+      <div class="ml-3 overflow-hidden">
+        {{ 'network.gridHeader.SERVICE' | translate }}
+        <div class="text-muted text-truncate">
+          {{ container.brief.service || '&nbsp;' }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="col-md-4 my-md-4 details-item"
+    *ngIf="container.rt_attributes.service_account">
+    <mat-icon
+      aria-hidden="false"
+      aria-label="Account icon"
+      class="details-icon"
+      fontSet="fa"
+      fontIcon="fa-credit-card">
+    </mat-icon>
+    <div class="ml-3 overflow-hidden">
+      {{ 'network.gridHeader.SERVICE_ACCOUNT' | translate }}
+      <div class="text-muted text-truncate">
+        {{ container.rt_attributes.service_account }}
+      </div>
+    </div>
+  </div>
+  <div
+    class="col-md-4 my-md-4 details-item"
+    *ngIf="container.rt_attributes.network_mode">
+    <mat-icon
+      aria-hidden="false"
+      aria-label="Network icon"
+      class="details-icon"
+      fontSet="fa"
+      fontIcon="fa-globe">
+    </mat-icon>
+    <div class="ml-3 overflow-hidden">
+      {{ 'containers.detail.NETWORK_MODE' | translate }}
+      <div class="text-muted text-truncate">
+        {{ container.rt_attributes.network_mode }}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 my-md-4 details-item">
+    <mat-icon
+      aria-hidden="false"
+      aria-label="Image icon"
+      class="details-icon"
+      fontSet="fa"
+      fontIcon="fa-archive">
+    </mat-icon>
+    <div class="ml-3 overflow-hidden">
+      {{ 'containers.detail.IMAGE' | translate }}
+      <div class="text-muted text-truncate">
+        {{ container.brief.image }}
+      </div>
+    </div>
+  </div>
+  <div
+    class="col-md-4 my-md-4 details-item"
+    *ngIf="container.security.scan_summary.base_os">
+    <mat-icon
+      aria-hidden="false"
+      aria-label="OS icon"
+      class="details-icon"
+      fontSet="fa"
+      fontIcon="fa-archive">
+    </mat-icon>
+    <div class="ml-3 overflow-hidden">
+      {{ 'containers.detail.BASE_OS' | translate }}
+      <div class="text-muted text-truncate">
+        {{ container.security.scan_summary.base_os }}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 my-md-4 details-item">
+    <mat-icon
+      aria-hidden="false"
+      aria-label="Priviledge icon"
+      class="details-icon"
+      fontSet="fa"
+      [fontIcon]="
+        container.rt_attributes.priviledged ? 'fa-user-times' : 'fa-user-check'
+      ">
+    </mat-icon>
+    <div class="ml-3 overflow-hidden">
+      {{ 'containers.detail.ROOT_PRIVILEGED' | translate }}
+      <div class="text-muted text-truncate">
+        {{ !!container.rt_attributes.priviledged }}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 my-md-4 details-item">
+    <mat-icon
+      aria-hidden="false"
+      aria-label="Enforcer icon"
+      class="details-icon"
+      fontSet="fa"
+      fontIcon="fa-shield-alt">
+    </mat-icon>
+    <div class="ml-3 overflow-hidden">
+      {{ 'containers.detail.ENFORCER' | translate }}
+      <div class="text-muted text-truncate">
+        {{ container.enforcer_name }}
+      </div>
+    </div>
+  </div>
+  <div
+    class="col-md-4 my-md-4 details-item"
+    *ngIf="container.brief.state === 'exit'">
+    <mat-icon
+      aria-hidden="false"
+      aria-label="Disconnected icon"
+      class="details-icon"
+      fontSet="fa"
+      fontIcon="fa-calendar">
+    </mat-icon>
+    <div class="ml-3 overflow-hidden">
+      {{ 'enforcers.detail.DISCONNECTED_AT' | translate }}
+      <div class="text-muted text-truncate">
+        {{ container.finished_at | date: 'MMM dd, y HH:mm:ss' }}
+      </div>
+    </div>
+  </div>
+</div>
+<mat-divider class="position-relative"></mat-divider>
+<ng-container
+  *ngIf="
+    container.rt_attributes.interfaces &&
+    hasObject(container.rt_attributes.interfaces)
+  ">
+  <div class="my-sm-4">
+    <div class="h4">
+      {{ 'containers.detail.NETWORK_INTERFACES' | translate }}
+    </div>
+    <div
+      class="row"
+      *ngFor="let interface of container.rt_attributes.interfaces | keyvalue">
+      <div class="col-sm-2 text-right">
+        {{ interface.key }}
+      </div>
+      <div class="col-sm-9 offset-sm-1">
+        <div *ngFor="let net of interface.value" class="row text-muted">
+          <div class="col-sm-4">IP: {{ net.ip }}/{{ net.ip_prefix }}</div>
+          <div class="col-sm-8">
+            {{ 'general.GATEWAY' | translate }}:{{ net.gateway }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <mat-divider class="position-relative"></mat-divider>
+</ng-container>
+<ng-container
+  *ngIf="
+    container.rt_attributes.ports && !!container.rt_attributes.ports.length
+  ">
+  <div class="my-sm-4">
+    <div class="h4">
+      {{ 'containers.detail.PORT_MAPPING' | translate }}
+    </div>
+    <div class="row" *ngFor="let mapping of container.rt_attributes.ports">
+      <div class="col-sm-2 text-right">
+        {{ mapping.host_ip }}/{{ mapping.host_port }}
+      </div>
+      <div class="col-sm-1 text-center">
+        <em class="fa fa-long-arrow-alt-right text-success fa-lg"></em>
+      </div>
+      <div class="col-sm-9 text-muted">
+        {{ mapping.ip_proto === 6 ? 'TCP' : 'UDP' }}/{{ mapping.port }}
+      </div>
+    </div>
+  </div>
+  <mat-divider class="position-relative"></mat-divider>
+</ng-container>
+<ng-container
+  *ngIf="
+    container.rt_attributes.labels && hasObject(container.rt_attributes.labels)
+  ">
+  <div class="my-sm-4">
+    <div class="h4">
+      {{ 'containers.detail.LABELS' | translate }}
+    </div>
+    <div class="row" *ngFor="let label of labels">
+      <div class="col-sm-4 text-right">{{ label }}</div>
+      <div class="col-sm-8 text-muted">
+        {{ container.rt_attributes.labels[label] || '&nbsp;' }}
+      </div>
+    </div>
+  </div>
+  <mat-divider class="position-relative"></mat-divider>
+</ng-container>

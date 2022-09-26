@@ -1,0 +1,42 @@
+<div class="padding-left-0 padding-right-0 risk-section" style="position: relative;" ng-mouseenter="">
+  <div class="risk-section-titles">
+    <div class="title">
+      {{riskFactor.factorTitle}}
+    </div>
+    <div class="subtitle">
+    </div>
+  </div>
+  <div class="risk-section-details" *ngIf="!riskFactor.isFactorError">
+    <table class="margin-top-s pull-left">
+      <tr *ngFor="let factor of riskFactor.factors">
+        <td>{{factor.title}}</td>
+        <td style="text-align: left;">
+          {{factor.amount}}
+          <span class="margin-left-s" *ngIf="factor.comment">
+            (<em class="eos-icons icon-18">anchor</em>{{factor.comment}})
+          </span>
+        </td>
+      </tr>
+    </table>
+    <div class="pull-right">
+      <div class="secure-rank-wrap">
+        <div class="secure-rank"></div>
+        <div class="empty" [ngStyle]="riskFactor.subScore"></div>
+      </div>
+    </div>
+  </div>
+  <div class="pl-sm" style="position: absolute; top: 100px; font-size: 10px;" *ngIf="riskFactor.factorComment">
+    <strong class="text-muted">{{riskFactor.factorComment![0]}}</strong><br/>
+    <strong class="text-muted">{{riskFactor.factorComment![1]}}</strong>
+  </div>
+  <div *ngIf="riskFactor.isFactorError" class="server-error-sm risk-section-details">
+    <div>
+      <em class="eos-icons text-danger">dangerous</em>
+    </div>
+    <div>
+      <span class="text-label">
+        {{riskFactor.factorErrorMessage}}
+      </span>
+    </div>
+  </div>
+</div>

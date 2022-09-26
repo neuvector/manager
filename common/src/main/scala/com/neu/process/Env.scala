@@ -3,16 +3,16 @@ package com.neu.process
 import java.io.File
 
 /**
-  * Environment variables for running script or command.
-  */
+ * Environment variables for running script or command.
+ */
 class Env(var vars: Map[String, String] = Map(), var pwd: String = System getProperty "user.dir") {
   implicit var self: Env = this
 
   override def toString: String = pwd + vars.toString
 
   /**
-    * Change current working directory in this environment.
-    */
+   * Change current working directory in this environment.
+   */
   def cd(newPwd: String)(fun: => Unit) {
     val oldPwd = pwd
     pwd = newPwd
@@ -24,8 +24,8 @@ class Env(var vars: Map[String, String] = Map(), var pwd: String = System getPro
   }
 
   /**
-    * Give more environment variables to this environment.
-    */
+   * Give more environment variables to this environment.
+   */
   def env(extra: Map[String, String])(fun: => Unit) {
     val oldVars = vars
     vars ++= extra

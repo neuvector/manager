@@ -1,0 +1,14 @@
+<form [formGroup]="permissionForm">
+  <mat-checkbox
+    class="mx-2"
+    formControlName="read"
+    (change)="readChanged($event)">
+    {{ 'role.roleModal.VIEW' | translate }}
+  </mat-checkbox>
+  <mat-checkbox
+    class="mx-2"
+    formControlName="write"
+    (change)="writeChanged($event)">
+    {{ 'role.roleModal.MODIFY' | translate }}
+  </mat-checkbox>
+</form>

@@ -1,0 +1,313 @@
+/* Alerts
+   ========================================================================== */
+/**
+*  These rules overwrite existing Bootstrap rules
+*  Alerts depend on 3 classes: alert alert-position alert-type
+*  Use it in HTML as
+*  <div class='alert alert-global alert-danger'>
+*    Alert content goes here
+*  </div>
+*
+*
+* Variables file: assets/stylesheets/eos-components/alerts/alerts.variables.scss
+*/
+
+/* Shared styles */
+.alert {
+  border: 0;
+  border-radius: 0;
+  display: flex;
+  padding: $eos-alert-padding;
+  position: relative;
+
+  .close {
+    color: $eos-alert-close-dark;
+    display: inherit;
+    margin-left: $eos-alert-close-margin-left;
+    opacity: 1;
+    text-shadow: none;
+
+    i {
+      margin-right: 0;
+    }
+
+    &:hover {
+      opacity: .7;
+    }
+
+  }
+
+  > i {
+    margin-top: $eos-alert-global-i-margin-top;
+  }
+
+  a {
+    font-weight: bold;
+    text-decoration: underline;
+  }
+
+  &-body {
+    flex: 1;
+  }
+}
+
+/*
+  Affects all danger alerts:
+  Given that alert-danger do not have a close button, the alert requires an extra padding on the right
+  to avoid getting too close to the right edge and look consistent with the rest of the alerts
+*/
+
+.alert-danger {
+  padding-right: $eos-alert-danger-padding-right;
+}
+
+/* Global alerts
+   ========================================================================== */
+.alert-global {
+  color: $eos-alert-global-text;
+  height: $eos-alert-global-height;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: $eos-alert-global-zindex;
+
+  a:not([href]):not([tabindex]), a {
+    color: $eos-alert-global-link;
+    text-decoration: underline;
+
+    &:hover {
+      color: $eos-alert-global-link;
+      text-decoration: none;
+    }
+  }
+
+  .close {
+    color: $eos-alert-close-white;
+  }
+
+  /* Success alert */
+  &.alert-success {
+    background-color: $eos-alert-global-success-bg;
+  }
+
+  /* Info alert */
+  &.alert-info {
+    background-color: $eos-alert-global-info-bg;
+  }
+
+  /* Warning alert */
+  &.alert-warning {
+    background-color: $eos-alert-global-warning-bg;
+  }
+
+  /* Danger alert */
+  &.alert-danger {
+    background-color: $eos-alert-global-danger-bg;
+    color: $eos-alert-global-danger-color;
+  }
+
+  &-mobile {
+    display: none;
+  }
+  @media screen and (max-width: $eos-sd-max) {
+    &-desktop {
+      display: none;
+    }
+
+    &-mobile {
+      display: block;
+    }
+  }
+
+  // modify the main menu and content when a alert-global is present
+  // so then the alert-global stays on top and doesnt overlap the rest
+  ~ .main-menu, ~ .content .submenu {
+    top: $eos-alert-global-height;
+  }
+
+  // if the alert-global is visible and the main-menu is as well, the footer-content
+  // requires a margin-bottom to be fully visible on screen
+  ~ .main-menu .footer-content {
+    margin-bottom: $eos-alert-global-height;
+  }
+
+  // if mobile-menu is open in conjuntion with a alert-global, then the menu needs
+  // extra spacing on top
+  @media screen and (max-width: $eos-sd-max) {
+    ~ .mobile-menu {
+      top: $eos-alert-global-height;
+
+      // if alert-global and mobile-menu are present, add the alert-global height
+      // plus the mobile height to .content
+      ~ .content {
+        padding-top: $eos-alert-global-mm-height + $eos-alert-global-height;
+      }
+    }
+
+    ~ .content .submenu {
+      top: $eos-alert-global-mm-height + $eos-alert-global-height;
+    }
+  }
+
+  // if only alert-global is open, add $eos-alert-global-height-mobile as margin-top
+  ~ .content {
+    padding-top: $eos-alert-global-height;
+    @media screen and (max-width: $eos-sd-max) {
+      margin-left: 0;
+      padding-top: $eos-alert-global-mm-height;
+    }
+  }
+}
+
+// hide alert if present in DOM & reset paddings & heights
+/* stylelint-disable scss/selector-no-redundant-nesting-selector */
+.alert-global.alert-hidden {
+  display: none;
+  @media screen and (max-width: $eos-sd-max) {
+    & ~ .mobile-menu {
+      top: 0;
+
+      // if alert-global and mobile-menu are present, add the alert-global height
+      // plus the mobile height to .content
+      & ~ .content {
+        padding-top: $eos-alert-global-mm-height;
+      }
+    }
+
+    ~ .content .submenu {
+      top: 0;
+    }
+  }
+  @media screen and (min-width: $eos-sd-max) {
+    ~ .content {
+      padding: 0;
+    }
+
+    ~ .main-menu, ~ .content .submenu {
+      top: 0;
+    }
+  }
+}
+/* stylelint-enable */
+/* Section alerts
+   ========================================================================== */
+.alert-section {
+  // reset Bootstrap default border colours
+  border-left: $eos-alert-section-border-left;
+  color: $eos-alert-section-text;
+
+  a:not([href]):not([tabindex]), a {
+    color: $eos-alert-section-link-color;
+    text-decoration: underline;
+
+    &:hover {
+      color: $eos-alert-section-link-color;
+      text-decoration: none;
+    }
+  }
+
+  .alert-title {
+    font-size: $eos-alert-section-title;
+    font-weight: bold;
+    margin-bottom: $eos-alert-section-title-margin-bottom;
+  }
+
+  /* Success alert */
+  &.alert-success {
+    background-color: $eos-alert-section-success-bg;
+    border-color: $eos-alert-section-success-border;
+
+    .alert-icon {
+      color: $eos-alert-icon-dark;
+    }
+  }
+
+  /* Info alert */
+  &.alert-info {
+    background-color: $eos-alert-section-info-bg;
+    border-color: $eos-alert-section-info-border;
+
+    .alert-icon {
+      color: $eos-alert-icon-dark;
+    }
+  }
+
+  /* Warning alert */
+  &.alert-warning {
+    background-color: $eos-alert-section-warning-bg;
+    border-color: $eos-alert-section-warning-border;
+
+    .alert-icon {
+      color: $eos-alert-icon-dark;
+    }
+  }
+
+  /* Danger alert */
+  &.alert-danger {
+    background-color: $eos-alert-section-danger-bg;
+    border-color: $eos-alert-section-danger-border;
+
+    .alert-icon {
+      color: $eos-alert-icon-dark;
+    }
+  }
+}
+
+/* Inline alerts
+   ========================================================================== */
+.alert-inline {
+  // reset inherited border properties
+  border-left: $eos-alert-section-border-left;
+  color: $eos-alert-inline-text;
+
+  a:not([href]):not([tabindex]), a {
+    color: $eos-alert-inline-link-color;
+    text-decoration: underline;
+
+    &:hover {
+      color: $eos-alert-inline-link-color;
+      text-decoration: none;
+    }
+  }
+
+  /* Success alert */
+  &.alert-success {
+    background-color: $eos-alert-inline-success-bg;
+    border-color: $eos-alert-inline-success-color;
+
+    .alert-icon {
+      color: $eos-alert-icon-dark;
+    }
+  }
+
+  /* Info alert */
+  &.alert-info {
+    background-color: $eos-alert-inline-info-bg;
+    border-color: $eos-alert-inline-info-color;
+
+    .alert-icon {
+      color: $eos-alert-icon-dark;
+    }
+  }
+
+  /* Warning alert */
+  &.alert-warning {
+    background-color: $eos-alert-inline-warning-bg;
+    border-color: $eos-alert-inline-warning-color;
+
+    .alert-icon {
+      color: $eos-alert-icon-dark;
+    }
+  }
+
+  /* Danger alert */
+  &.alert-danger {
+    background-color: $eos-alert-inline-danger-bg;
+    border-color: $eos-alert-inline-danger-color;
+
+    .alert-icon {
+      color: $eos-alert-icon-dark;
+    }
+  }
+}

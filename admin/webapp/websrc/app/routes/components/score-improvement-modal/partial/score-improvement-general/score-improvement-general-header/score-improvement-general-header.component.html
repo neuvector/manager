@@ -1,0 +1,23 @@
+<div class="d-flex align-items-center score-header">
+  <div class="score-container score-container-flex">
+    <mwl-gauge
+      class="score"
+      [max]="100"
+      [value]="score"
+      [animated]="true"
+      [animationDuration]="1"
+      [color]="getGaugeColor"
+      [showValue]="true"
+      [dialRadius]="40">
+    </mwl-gauge>
+    <div
+      class="score-label"
+      *ngIf="gaugeLabelColor"
+      [ngStyle]="{ color: gaugeLabelColor }">
+      {{ gaugeLabel }}
+    </div>
+  </div>
+  <div class="m-4 text-muted mat-h4">
+    {{ 'dashboard.improveScoreModal.summary.INSTRUCTION' | translate }}
+  </div>
+</div>

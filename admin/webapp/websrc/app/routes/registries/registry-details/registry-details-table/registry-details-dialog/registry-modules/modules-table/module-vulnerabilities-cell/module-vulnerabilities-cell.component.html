@@ -1,0 +1,7 @@
+<ng-container *ngIf="fixed; else noneTemplate">
+  <strong
+    ><span class="text-danger">Fixable: {{ fixable }}</span> / Fixed:
+    {{ fixed }}</strong
+  >
+</ng-container>
+<ng-template #noneTemplate> Total: 0 </ng-template>

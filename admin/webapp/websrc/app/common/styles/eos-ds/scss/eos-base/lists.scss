@@ -1,0 +1,74 @@
+/* List styles
+   ========================================================================== */
+/* Spacing variables: /assets/stylesheets/eos-base/variables/spacings.scss */
+/* Reset list styles */
+.no-list-style {
+  list-style: none;
+  padding-left: 0;
+
+  ul {
+    list-style: none;
+    padding-left: 0;
+    padding-top: $eos-no-list-style-ul-padding-top;
+
+    li {
+      a {
+        padding-left: $eos-no-list-style-li-a-padding-left;
+      }
+
+      &:last-of-type {
+        padding-bottom: 0;
+      }
+    }
+  }
+}
+
+/* List without padding */
+.list-no-padding {
+  list-style-position: inside;
+  padding-left: 0;
+}
+
+.ul-horizontal {
+  &.no-list-style {
+    li {
+      margin-right: $eos-ul-horizontal-li-margin-right;
+    }
+  }
+
+  li {
+    display: inline-block;
+  }
+}
+
+li {
+  padding: $eos-li-padding;
+}
+
+ol > li {
+  padding-left: $eos-ol-li-padding-left;
+
+  .fa {
+    margin-right: $eos-ol-li-fa-margin-right;
+  }
+}
+
+/* Description List */
+
+dt {
+  display: inline-block;
+  width: 20%;
+}
+
+dd {
+  display: inline-block;
+  margin-left: 0;
+  width: 80%;
+}
+
+@media screen and (max-width: $eos-list-sd-max) {
+  dt, dd {
+    display: block;
+    width: auto;
+  }
+}

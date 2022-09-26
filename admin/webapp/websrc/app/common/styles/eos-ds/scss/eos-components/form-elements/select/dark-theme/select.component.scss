@@ -1,0 +1,25 @@
+/* Select dark theme css */
+
+.dark-theme {
+  .custom-select {
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiIHdpZHRoPSIxOHB4IiBoZWlnaHQ9IjE4cHgiPjxwYXRoIGQ9Ik0wIDBoMjR2MjRIMFYweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik03LjQxIDguNTlMMTIgMTMuMTdsNC41OS00LjU4TDE4IDEwbC02IDYtNi02IDEuNDEtMS40MXoiLz48L3N2Zz4=');
+    color: $eos-dark-select-txt-color;
+
+    &:disabled {
+      background: $eos-select-bg-disabled;
+    }
+  }
+
+  .custom-multiple-select {
+    background-image: none;
+    color: $eos-dark-select-txt-color;
+  }
+
+  .custom-select, .custom-multiple-select {
+    &:disabled {
+      background-color: transparent;
+      color: $eos-form-element-disabled;
+    }
+  }
+
+}

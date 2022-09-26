@@ -1,0 +1,513 @@
+$left-side-wd: 220px;
+$left-side-wd-collapsed: 70px;
+$left-side-wd-collapsed-text: 90px;
+$left-side-bg: #f2f2f2;
+
+$content-bg: $body-bg;
+$content-heading-bg: #fafbfc;
+$content-heading-border: #cfdbe2;
+$content-padding: 20px;
+
+$footer-hg: 60px;
+
+$navbar-hg: $navbar-height;
+
+$boxed-max-width: 1140px;
+$z-index-main-section: 111;
+
+html {
+  direction: ltr;
+  height: 100%;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  font-size: 16px;
+}
+
+html,
+body {
+  height: 100%;
+  background-color: $content-bg;
+}
+
+// NeuVector page frame
+// -----------------------------
+.nv-frame {
+  position: relative;
+  width: 100%;
+  height: auto;
+  min-height: 100%;
+  overflow-x: hidden;
+  .left-side-container {
+    position: absolute;
+    width: $left-side-wd;
+
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: $z-index-main-section + 5;
+    backface-visibility: hidden;
+    background-color: $left-side-bg;
+
+    .left-side {
+      padding-top: $navbar-hg;
+      height: 100%;
+      width: $left-side-wd;
+      overflow: hidden;
+    }
+
+    .sidebar-floating {
+      // position: handled from directive
+      left: inherit;
+      margin-left: $left-side-wd;
+      z-index: $z-index-main-section * 10;
+
+      min-width: 190px;
+      overflow: auto;
+    }
+  }
+  // Contains the main content
+  .section-container {
+    position: relative;
+    height: 100%;
+    margin-left: 0;
+    z-index: $z-index-main-section;
+    background-color: $content-bg;
+    //margin-bottom: $footer-hg !important;
+  }
+  .footer-container {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: $footer-hg;
+    padding: $content-padding;
+    z-index: $z-index-main-section - 2;
+    font-size: 0.875rem;
+    p {
+      margin: 0;
+    }
+  }
+}
+
+.modal-open .nv-frame .section-container {
+  z-index: inherit;
+  transform: none !important;
+  -webkit-transform: none !important;
+}
+
+// Page main content
+// -----------------------------
+.nv-section {
+  padding: 15px;
+  width: 100%;
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+  margin-top: -1px;
+
+  .unwrap {
+    margin: -15px;
+    @include media-breakpoint-up(md) {
+      margin: -20px;
+    }
+  }
+
+  .content-heading {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    line-height: $headings-line-height;
+    color: #929292;
+    margin: -15px;
+    margin-bottom: 20px;
+    padding: 15px;
+    font-weight: normal;
+    background-color: $content-heading-bg;
+    border-bottom: 1px solid $content-heading-border;
+    small {
+      display: block;
+      font-size: 12px;
+      color: $text-muted;
+    }
+  }
+
+  .container,
+  .container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  @include media-breakpoint-up(md) {
+    padding: $content-padding;
+    .content-heading {
+      margin: -$content-padding;
+      margin-bottom: $content-padding;
+      padding: $content-padding;
+      button,
+      .btn {
+        margin: 0;
+      }
+    }
+  }
+}
+
+// Desktop layout
+// -----------------------------
+@include media-breakpoint-up(md) {
+  body {
+    min-height: 100%;
+  }
+
+  .nv-frame {
+    .left-side-container {
+      .left-side {
+      }
+    }
+
+    .section-container {
+      margin-left: $left-side-wd;
+    }
+
+    .footer-container {
+      margin-left: 0;
+    }
+
+    .section-container {
+      &.has-sidebar-right {
+        margin-right: $left-side-wd + 20;
+        + .offsidebar {
+          z-index: 1;
+        }
+      }
+    }
+  }
+}
+
+// Aside toggled layout
+// -----------------------------
+@include media-breakpoint-down(sm) {
+  .nv-frame {
+    .left-side-container {
+      margin-left: -$left-side-wd;
+    }
+  }
+  .left-side-toggled {
+    .nv-frame {
+      .section-container {
+        margin-left: $left-side-wd;
+      }
+
+      .footer-container {
+        margin-left: 0;
+      }
+
+      .left-side-container {
+        margin-left: 0;
+      }
+    }
+  }
+
+  .csstransforms3d {
+    .nv-frame {
+      backface-visibility: hidden;
+      .section-container,
+      .footer-container {
+        margin-left: 0;
+        transform: translate3d(0, 0, 0);
+        transition: transform 0.3s ease;
+      }
+      .left-side-container {
+        margin-left: 0;
+        transform: translate3d(-$left-side-wd, 0, 0);
+        transition: transform 0.3s ease;
+      }
+    }
+
+    .left-side-toggled {
+      .nv-frame {
+        .section-container,
+        .footer-container {
+          transform: translate3d($left-side-wd, 0, 0);
+        }
+        .left-side-container {
+          transform: translate3d(0, 0, 0);
+        }
+      }
+    }
+  }
+}
+
+// Toggle and collapsed behavior overrides
+@include media-breakpoint-down(sm) {
+  .left-side-collapsed .nv-frame {
+    .left-side-container {
+      margin-left: -$left-side-wd-collapsed;
+    }
+  }
+
+  .left-side-collapsed.left-side-toggled {
+    .nv-frame {
+      .section-container,
+      .footer-container {
+        margin-left: $left-side-wd-collapsed;
+      }
+
+      .left-side-container {
+        margin-left: 0;
+      }
+    }
+  }
+
+  .csstransforms3d {
+    .left-side-collapsed .nv-frame {
+      backface-visibility: hidden;
+      .section-container,
+      .footer-container {
+        margin-left: 0;
+        transform: translate3d(0, 0, 0);
+        transition: transform 0.3s ease;
+      }
+      .left-side-container {
+        margin-left: 0;
+        transform: translate3d(-$left-side-wd-collapsed, 0, 0);
+        transition: transform 0.3s ease;
+      }
+    }
+
+    .left-side-collapsed.left-side-toggled {
+      .nv-frame {
+        .section-container,
+        .footer-container {
+          transform: translate3d($left-side-wd-collapsed, 0, 0);
+        }
+        .left-side-container {
+          transform: translate3d(0, 0, 0);
+        }
+      }
+    }
+  }
+}
+
+// Aside collapsed layout
+// -------------------------------
+// Aside status toggled via JS
+.left-side-collapsed {
+  overflow-y: auto;
+  .nv-frame {
+    .left-side-container {
+      &,
+      .left-side {
+        width: $left-side-wd-collapsed;
+      }
+      .sidebar-floating {
+        margin-left: $left-side-wd-collapsed;
+      }
+    }
+  }
+}
+
+// Margin only exists above tablet
+@include media-breakpoint-up(md) {
+  // Aside status toggled via JS
+  .left-side-collapsed {
+    .nv-frame {
+      .section-container,
+      .footer-container {
+        margin-left: $left-side-wd-collapsed;
+      }
+    }
+  }
+}
+
+// ------------------------------
+// Collapsed variation with text
+// ------------------------------
+@include media-breakpoint-down(sm) {
+  .left-side-collapsed-text .nv-frame {
+    .left-side-container {
+      margin-left: -$left-side-wd-collapsed-text;
+    }
+  }
+
+  .left-side-collapsed-text.left-side-toggled {
+    .nv-frame {
+      .section-container,
+      .footer-container {
+        margin-left: $left-side-wd-collapsed-text;
+      }
+
+      .left-side-container {
+        margin-left: 0;
+      }
+    }
+  }
+
+  .csstransforms3d {
+    .left-side-collapsed-text .nv-frame {
+      backface-visibility: hidden;
+      .section-container,
+      .footer-container {
+        margin-left: 0;
+        transform: translate3d(0, 0, 0);
+        transition: transform 0.3s ease;
+      }
+      .left-side-container {
+        margin-left: 0;
+        transform: translate3d(-$left-side-wd-collapsed-text, 0, 0);
+        transition: transform 0.3s ease;
+      }
+    }
+
+    .left-side-collapsed-text.left-side-toggled {
+      .nv-frame {
+        .section-container,
+        .footer-container {
+          transform: translate3d($left-side-wd-collapsed-text, 0, 0);
+        }
+        .left-side-container {
+          transform: translate3d(0, 0, 0);
+        }
+      }
+    }
+  }
+}
+
+// Aside collapsed layout
+// -------------------------------
+.left-side-collapsed-text {
+  overflow-y: auto;
+  .nv-frame {
+    .left-side-container {
+      &,
+      .left-side {
+        width: $left-side-wd-collapsed-text;
+      }
+      .sidebar-floating {
+        margin-left: $left-side-wd-collapsed-text;
+      }
+    }
+  }
+}
+
+// Margin only exists above tablet
+@include media-breakpoint-up(md) {
+  // Aside status toggled via JS
+  .left-side-collapsed-text {
+    .nv-frame {
+      .section-container,
+      .footer-container {
+        margin-left: $left-side-wd-collapsed-text;
+      }
+    }
+  }
+}
+
+// end collapsed variation with text
+// mixin to remove transformations
+@mixin disable-transform() {
+  -webkit-transform: none;
+  -moz-transform: none;
+  -opera-transform: none;
+  -ms-transform: none;
+  transform: none;
+}
+
+// Fixed layout
+// -----------------------------
+.layout-fixed {
+  @media (max-width: $boxed-max-width) {
+    &.left-side-toggled,
+    &.offsidebar-open {
+      overflow-y: hidden;
+    }
+  }
+
+  .nv-frame {
+    .topnavbar-wrapper {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: $z-index-main-section + 10;
+    }
+    .left-side-container,
+    .offsidebar {
+      position: fixed;
+    }
+
+    .left-side-container {
+      height: 1px;
+      min-height: 100%;
+
+      .left-side {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+      }
+    }
+    .section-container {
+      margin-top: $navbar-hg;
+    }
+  }
+}
+
+_:-ms-lang(x),
+.layout-fixed .nv-frame .left-side-container .left-side {
+  position: static !important;
+}
+
+// Boxed layout (only for desktops)
+// -----------------------------
+.layout-boxed {
+  @include media-breakpoint-up(lg) {
+    overflow: auto !important;
+    .nv-frame {
+      margin: 0 auto;
+      overflow: hidden;
+      box-shadow: 0 0 13px rgba(0, 0, 0, 0.25);
+
+      .offsidebar {
+        position: absolute !important;
+      }
+
+      .left-side-container {
+        left: inherit;
+      }
+      &,
+      & .topnavbar-wrapper {
+        width: 970px;
+      }
+    }
+
+    &.layout-fixed {
+      .nv-frame .left-side-container .left-side {
+        left: inherit;
+      }
+    }
+  }
+  @include media-breakpoint-up(xl) {
+    .nv-frame {
+      &,
+      & .topnavbar-wrapper {
+        width: $boxed-max-width;
+      }
+    }
+  }
+}
+
+// Sidebar backdrop
+.sidebar-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: $left-side-wd;
+  z-index: $z-index-main-section + 1;
+  .left-side-collapsed & {
+    left: $left-side-wd-collapsed;
+  }
+  .left-side-collapsed-text & {
+    left: $left-side-wd-collapsed-text;
+  }
+}
+
+.col-sm-offset-8 {
+  margin-left: 66.66667%;
+}

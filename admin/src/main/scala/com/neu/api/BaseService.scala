@@ -5,13 +5,12 @@ import com.neu.client.RestClient.baseClusterUri
 import com.neu.core.AuthenticationManager
 import com.typesafe.scalalogging.LazyLogging
 import spray.http.StatusCodes
-import spray.routing.{Directives, StandardRoute}
+import spray.routing.{ Directives, StandardRoute }
 
-import java.io.{PrintWriter, StringWriter}
+import java.io.{ PrintWriter, StringWriter }
 
 class BaseService() extends Directives with LazyLogging {
   val authError                  = "Authentication failed!"
-  val authSSODisabledError       = "Authentication using OpenShift's or Rancher's RBAC was disabled!"
   val blocked                    = "Temporarily blocked because of too many login failures"
   val passwordExpired            = "Password expired"
   val timeOutStatus              = "Status: 408"
@@ -19,8 +18,10 @@ class BaseService() extends Directives with LazyLogging {
 
   protected def onExpiredOrInternalError(e: Throwable) = {
     logger.warn(e.getMessage)
-    if (e.getMessage.contains("Status: 408")) {
+    if (e.getMessage.contains(timeOutStatus)) {
       (StatusCodes.RequestTimeout, "Session expired!")
+    } else if (e.getMessage.contains(authenticationFailedStatus)) {
+      (StatusCodes.Unauthorized, authError)
     } else {
       (StatusCodes.InternalServerError, "Internal server error")
     }
@@ -31,8 +32,8 @@ class BaseService() extends Directives with LazyLogging {
     e.printStackTrace(new PrintWriter(sw))
     logger.warn(sw.toString)
     if (e.getMessage.contains(timeOutStatus) || e.getMessage.contains(
-      authenticationFailedStatus
-    )) {
+          authenticationFailedStatus
+        )) {
       (StatusCodes.RequestTimeout, "Session expired!")
     } else {
       (StatusCodes.InternalServerError, "Internal server error")
@@ -44,8 +45,6 @@ class BaseService() extends Directives with LazyLogging {
       complete(StatusCodes.Unauthorized, blocked)
     } else if (e.getMessage.contains("\"code\":48")) {
       complete(StatusCodes.Unauthorized, passwordExpired)
-    } else if (e.getMessage.contains("\"code\":50")) {
-      complete(StatusCodes.Unauthorized, authSSODisabledError)
     } else {
       complete(StatusCodes.Unauthorized, authError)
     }

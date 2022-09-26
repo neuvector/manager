@@ -1,0 +1,58 @@
+/* Radio button styles */
+.eos-radio-btn {
+  opacity: 0;
+  position: absolute;
+  z-index: $eos-radio-btn-zindex;
+}
+
+// apply the style to the labels, Bootstrap style
+.eos-radio-btn ~ .form-check-label {
+  margin-left: $eos-radio-btn-label-margin;
+
+  &::before, &::after {
+    border: 1px solid $eos-radio-btn-border;
+    border-radius: 50%;
+    content: '';
+    display: block;
+    height: $eos-radio-btn-height;
+    left: 0;
+    position: absolute;
+    top: $eos-radio-btn-top;
+    width: $eos-radio-btn-width;
+  }
+
+  &::before {
+    pointer-events: none;
+    user-select: none;
+  }
+
+}
+
+.eos-radio-btn:checked ~ .form-check-label::before {
+  background-color: $eos-radio-btn-checked-bg-color;
+  background-image: $eos-radio-btn-checked;
+  background-position: center center;
+  background-repeat: no-repeat;
+  border: 0;
+}
+
+
+// disabled state
+.eos-radio-btn:disabled ~ .form-check-label {
+  color: $eos-radio-btn-disabled;
+
+  &::before {
+    background-color: $eos-radio-btn-disabled;
+    border: 1px solid $eos-radio-btn-disabled;
+  }
+}
+
+
+.dark-theme {
+  .eos-radio-btn ~ .form-check-label {
+    &::before {
+      background-color: transparent;
+    }
+
+  }
+}

@@ -9,36 +9,38 @@ import spray.http.HttpMethods._
 import spray.routing.Route
 
 import scala.concurrent.duration._
-import scala.concurrent.{Await, ExecutionContext}
+import scala.concurrent.{ Await, ExecutionContext }
 import scala.util.control.NonFatal
 
 class ClusterService()(implicit executionContext: ExecutionContext)
-  extends BaseService
+    extends BaseService
     with DefaultJsonFormats
     with LazyLogging {
 
   val clusterRoute: Route =
     headerValueByName("Token") { tokenId =>
-    {
-      pathPrefix("fed") {
-        path("member") {
-          get {
-            Utils.respondWithNoCacheControl() {
-              complete {
-                logger.info(s"Getting cluster..")
-                try {
-                  val result =
-                    RestClient.requestWithHeaderDecode(s"$fedUri/member", GET, "", tokenId)
+      {
+        pathPrefix("fed") {
+          path("member") {
+            get {
+              Utils.respondWithNoCacheControl() {
+                complete {
+                  logger.info(s"Getting cluster..")
+                  try {
+                    val result =
+                      RestClient.requestWithHeaderDecode(s"$fedUri/member", GET, "", tokenId)
 
-                  toClusters(jsonToFedMembershipData(Await.result(result, RestClient.waitingLimit.seconds)))
-                } catch {
-                  case NonFatal(e) =>
-                    onNonFatal(e)
+                    toClusters(
+                      jsonToFedMembershipData(Await.result(result, RestClient.waitingLimit.seconds))
+                    )
+                  } catch {
+                    case NonFatal(e) =>
+                      onNonFatal(e)
+                  }
                 }
               }
             }
-          }
-        } ~
+          } ~
           path("switch") {
             get {
               parameter('id.?) { id =>
@@ -192,8 +194,8 @@ class ClusterService()(implicit executionContext: ExecutionContext)
               }
             }
           }
+        }
       }
-    }
     }
 
   lazy val toClusters: FedMembershipData => FedMemberData =
@@ -220,7 +222,9 @@ class ClusterService()(implicit executionContext: ExecutionContext)
             fedMembershipData.fed_role,
             fedMembershipData.local_rest_info,
             Some(clusters),
-            Some(fedMembershipData.use_proxy.fold("") {use_proxy => use_proxy})
+            Some(fedMembershipData.use_proxy.fold("") { use_proxy =>
+              use_proxy
+            })
           )
 
       }

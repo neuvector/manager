@@ -1,0 +1,74 @@
+/* Post styles
+   ========================================================================== */
+/**
+*  Use it in HTML as
+*  <section class='post'></section>
+*
+*  This rule wraps a section with a max width of 1116px and applies a box box-shadow
+*  Titles: /assets/stylesheets/eos-base/variables/typography.scss
+*  Media-query: /assets/stylesheets/eos-base/variables/media-query.scss
+*  Spacing: /assets/stylesheets/eos-base/variables/spacings.scss
+*  Variables: /assets/stylesheets/eos-layout/layout.variables.scss
+*/
+html {
+  position: relative;
+}
+
+html, body {
+  font-size: $eos-font-size-base;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  height: 100%;
+}
+
+body {
+  background-color: $eos-body-bg;
+  color: $eos-body-color;
+  font-family: $eos-font-type-base;
+  font-weight: $eos-font-weight-normal-base;
+  line-height: $eos-line-height;
+}
+
+.content {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin-left: $eos-layout-aside-width;
+  min-height: $eos-layout-content-height-padding;
+  min-width: $eos-sd-min;
+  @media screen and (max-width: $eos-sd-max) {
+    margin-left: 0;
+    padding-top: $eos-onmobile-content-margin-top;
+  }
+}
+
+.container {
+  margin-bottom: $eos-xxxl;
+  max-width: $eos-container-max-width;
+  padding: $eos-xl;
+  position: relative;
+  width: 100%;
+}
+
+hr {
+  border-top-color: $eos-hr-color;
+  margin: $eos-hr-margin 0;
+}
+
+eos-alert ~ .main-menu, eos-alert ~ .content .submenu {
+  top: $eos-layout-eos-alert-main-menu-top;
+}
+
+eos-alert ~ .content {
+  margin-top: $eos-layout-eos-alert-main-menu-top;
+}
+
+@media screen and (max-width: $eos-sd-max) {
+  eos-alert ~ .mobile-menu {
+    top: $eos-layout-eos-alert-main-menu-top;
+  }
+
+  eos-alert ~ .content .submenu {
+    top: $eos-layout-eos-alert-main-menu-top-mobile;
+  }
+}

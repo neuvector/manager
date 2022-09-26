@@ -1,0 +1,53 @@
+/* Badges
+   ========================================================================== */
+/**
+*  Use it in HTML as
+*  <div class='badge'>HAWK</div>
+*
+* Variables file: assets/stylesheets/eos-elements/badge/badge.variables.scss
+*/
+.badge {
+  border-radius: $eos-badge-border-radius;
+  color: $eos-badge-color;
+  font-size: $eos-badge-font-size;
+  line-height: 1.5;
+  margin-left: $eos-badge-margin-left;
+  padding: 4px 8px;
+
+  .eos-icons-outlined {
+    color: $eos-badge-color;
+  }
+
+  &.badge-dark {
+    background-color: $eos-badge-dark-background;
+  }
+
+  span {
+    background: $eos-badge-span-background;
+  }
+
+  &-primary, &-success {
+    background-color: $eos-badge-primary;
+  }
+
+  &-secondary, &-light {
+    background-color: $eos-badge-secondary-bg;
+  }
+
+  &-info {
+    background-color: $eos-badge-info;
+  }
+
+  &-danger {
+    background-color: $eos-badge-danger;
+    color: $eos-badge-color-white;
+
+    .eos-icons-outlined {
+      color: $eos-badge-color-white;
+    }
+  }
+
+  &-warning {
+    background-color: $eos-badge-warning;
+  }
+}

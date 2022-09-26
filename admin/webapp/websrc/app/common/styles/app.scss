@@ -1,0 +1,38 @@
+/*!
+ *
+ * NeuVector - Bootstrap Admin Template
+ *
+ * Version: 4.8.1
+ *
+ */
+
+// Variables
+@import "app/variables";
+// Globals
+@import "app/material/colors";
+@import "app/utils-mixins";
+// Layout
+@import "app/layout";
+@import "app/layout-extra";
+@import "app/layout-animation";
+@import "app/top-navbar";
+@import "app/sidebar";
+@import "app/offsidebar";
+@import "app/settings";
+// Common
+@import "app/typo";
+// Material
+@import "app/material/welcome";
+@import "app/material/cards";
+@import "app/material/md-forms";
+@import "app/material/md-list";
+@import "app/material/md-inputs";
+@import "app/material/ngmaterial";
+@import "app/material/overrides";
+// ag-grid
+@import "ag-grid-community/dist/styles/ag-grid.css";
+@import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+
+//Custom
+@import "app/common";
+@import "app/security-event";

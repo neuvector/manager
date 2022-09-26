@@ -1,0 +1,7 @@
+<em
+  *ngIf="params.data.parent_id"
+  (click)="params.clearConversation(params.data.id)"
+  class="fa fa-trash fa-lg m-auto"
+  s
+  matTooltip="{{ 'dashboard.improveScoreModal.REMOVE' | translate }}">
+</em>

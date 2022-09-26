@@ -158,7 +158,6 @@ class DashboardService()(implicit executionContext: ExecutionContext)
 
                   JsonStringCacheManager.saveJson(summaryOwner, summary)
                   val internalSystem = jsonToInternalSystemData(multiClusterSummary._2)
-                  logger.info("Score factors: {}", internalSystem)
 
                   MultiClusterSummary(
                     getScore2(
@@ -187,6 +186,7 @@ class DashboardService()(implicit executionContext: ExecutionContext)
         path("rbac") {
           get {
             Utils.respondWithNoCacheControl() {
+              logger.info("Loading RBAC information ...")
               complete {
                 RestClient.httpRequestWithHeader(
                   s"${baseClusterUri(tokenId)}/system/rbac",
@@ -1868,7 +1868,12 @@ class DashboardService()(implicit executionContext: ExecutionContext)
 
     val serviceModeScoreBy100 = metrics.groups match {
       case 0 => 0
-      case _ => math.ceil(((metrics.discover_groups - metrics.discover_groups_zero_drift) + metrics.discover_groups_zero_drift * 0.5) / metrics.groups.toDouble * 100).toInt
+      case _ =>
+        math
+          .ceil(
+            ((metrics.discover_groups - metrics.discover_groups_zero_drift) + metrics.discover_groups_zero_drift * 0.5) / metrics.groups.toDouble * 100
+          )
+          .toInt
     }
 
     val serviceModeScore = math.ceil(serviceModeScoreBy100 / 100.0 * MAX_SERVICE_MODE_SCORE).toInt

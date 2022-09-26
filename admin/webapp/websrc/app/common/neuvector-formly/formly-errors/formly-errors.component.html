@@ -1,0 +1,18 @@
+<ng-container *ngIf="field.formControl.hasError(formlyValidators.REQUIRED)">
+  {{ 'general.REQUIRED' | translate }}
+</ng-container>
+<ng-container *ngIf="field.formControl.hasError('maxLength')">
+  {{ 'general.FILTER_MAX_LEN' | translate }}
+</ng-container>
+<ng-container *ngIf="field.formControl.hasError(formlyValidators.URL)">
+  {{ 'okta.INVALID_URL' | translate }}
+</ng-container>
+<ng-container *ngIf="field.formControl.hasError(formlyValidators.ObjName)">
+  {{ 'setting.webhook.NAME_NG' | translate }}
+</ng-container>
+<ng-container *ngIf="field.formControl.hasError(formlyValidators.FedName)">
+  {{ 'setting.webhook.LOCAL_NAME_PATTERN_NG' | translate }}
+</ng-container>
+<ng-container *ngIf="field.formControl.hasError(formlyValidators.PortRange)">
+  {{ 'setting.message.PORT_RANGE' | translate }}
+</ng-container>

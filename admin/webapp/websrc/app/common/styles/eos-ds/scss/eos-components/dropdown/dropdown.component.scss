@@ -1,0 +1,83 @@
+/* Dropdown
+   ========================================================================== */
+/* Variables file: assets/stylesheets/eos-custom-components/dropdown/dropdown.variables.scss */
+
+.dropdown-menu {
+  &.show {
+    border-color: $eos-btn-dropdown-border-color;
+    border-radius: $eos-dropdown-border-radius;
+
+    > li {
+      padding: 0;
+    }
+  }
+}
+
+.show .dropdown-toggle {
+  &.btn-secondary {
+    background-color: transparent;
+    border-color: $eos-btn-dropdown-color;
+    color: $eos-btn-dropdown-color;
+
+    &:focus, &.focus {
+      background-color: transparent;
+      border-color: $eos-btn-dropdown-color-active;
+      box-shadow: none;
+      color: $eos-btn-dropdown-color-active;
+    }
+  }
+}
+
+.submenu .dropdown .dropdown-menu .dropdown-item, .dropdown-item {
+  color: $eos-btn-dropdown-color;
+
+  .eos-icons-outlined {
+    color: $eos-btn-dropdown-color;
+  }
+
+  &:hover {
+    background-color: $eos-btn-dropdown-item-background-hover;
+    color: $eos-btn-dropdown-item-color-hover;
+
+    .eos-icons-outlined {
+      color: $eos-btn-dropdown-item-color-hover;
+    }
+  }
+
+  &:active, &.active {
+    background-color: $eos-btn-dropdown-item-background-active;
+    color: $eos-btn-dropdown-item-color-active;
+  }
+
+  &.selected {
+    color: $eos-btn-dropdown-item-color-active-dropdown;
+  }
+}
+
+.dropdown, .dropright, .dropleft, .dropup {
+  .dropdown-toggle {
+    .eos-icons-outlined {
+      cursor: pointer;
+    }
+
+    &::before, &::after {
+      content: none;
+    }
+  }
+}
+
+.dropdown-header {
+  color: $eos-btn-dropdown-color;
+
+  h5 {
+    margin-bottom: 0;
+  }
+
+  .subtitle {
+    color: $eos-btn-dropdown-subtitle-color;
+  }
+}
+
+.dropdown-divider {
+  border-top-color: $eos-btn-dropdown-border-color;
+}

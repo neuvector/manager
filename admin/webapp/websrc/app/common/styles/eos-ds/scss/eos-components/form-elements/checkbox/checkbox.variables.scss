@@ -1,0 +1,21 @@
+/* Checkbox variables
+   ========================================================================== */
+/**
+*
+*  Z-index variables: /assets/stylesheets/eos-base/variables/z-index.scss
+*  Spacing variables: /assets/stylesheets/eos-base/variables/spacings.scss
+*  Color variables: /assets/stylesheets/eos-base/variables/branding.scss
+*
+*/
+
+$eos-checkbox-label-margin: $eos-s;
+$eos-checkbox-zindex: $eos-zindex-negative;
+$eos-checkbox-height: 16px;
+$eos-checkbox-width: 16px;
+$eos-checkbox-top: .25rem;
+$eos-checkbox-border: $eos-form-element-color;
+$eos-checkbox-checked: $eos-form-element-approved;
+$eos-checkbox-disabled: $eos-bc-gray-300;
+$eos-checkbox-border-radius: 0;
+$eos-checkbox-checked-bg: $eos-bc-white;
+$eos-checkbox-icon-size: 16px;

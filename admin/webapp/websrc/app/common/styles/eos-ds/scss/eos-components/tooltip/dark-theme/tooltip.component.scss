@@ -1,0 +1,24 @@
+.dark-theme {
+  .tooltip {
+    &-inner {
+      background-color: $eos-dark-tooltip-bg;
+      color: $eos-dark-tooltip-color;
+    }
+
+    &.bs-tooltip-right .arrow::before {
+      border-right-color: $eos-dark-tooltip-bg;
+    }
+
+    &.bs-tooltip-left .arrow::before {
+      border-left-color: $eos-dark-tooltip-bg;
+    }
+
+    &.bs-tooltip-bottom .arrow::before {
+      border-bottom-color: $eos-dark-tooltip-bg;
+    }
+
+    &.bs-tooltip-top .arrow::before {
+      border-top-color: $eos-dark-tooltip-bg;
+    }
+  }
+}

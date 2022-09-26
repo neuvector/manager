@@ -1,0 +1,11 @@
+<div class="full-width-panel">
+  <div class="full-width-flag">
+    <em class="fa fa-3x text-success" [class]="iconCode"></em>
+  </div>
+  <div class="full-width-summary">
+    <span class="badge" [class]="'badge-' + labelCode">
+      {{ 'nodes.gridHeader.MESSAGE' | translate }}
+    </span>
+  </div>
+  <div class="full-width-center" role="cell" [innerHTML]="message"></div>
+</div>

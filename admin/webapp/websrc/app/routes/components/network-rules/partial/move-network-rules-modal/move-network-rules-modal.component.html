@@ -1,0 +1,51 @@
+<div class="nv-dialog">
+  <div mat-dialog-title class="dialog-header">
+    <div class="pull-left">
+      <span>{{'policy.TIP.MOVE' | translate}}</span>
+    </div>
+    <div class="pull-right">
+      <em class="icon-close hand" (click)="onCancel()"></em>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <form class="margin-top-s">
+      <mat-radio-group
+        aria-label="Rule moving position"
+        [(ngModel)]="movingPosition"
+        [ngModelOptions]="{standalone: true}"
+        class="margin-right-xl"
+      >
+        <mat-radio-button [value]="updateType.MoveUp" class="margin-right-m">{{'policy.toolBar.BEFORE_ROWS' | translate}}</mat-radio-button>
+        <mat-radio-button [value]="updateType.MoveDown">{{'policy.toolBar.AFTER_ROWS' | translate}}</mat-radio-button>
+      </mat-radio-group>
+      <mat-form-field class="example-full-width" appearance="standard">
+        <mat-label>ID</mat-label>
+        <input
+          type="number"
+          matInput
+          [formControl]="idFormCtrl"
+        >
+        <mat-error *ngIf="idFormCtrl.hasError('number') && !idFormCtrl.hasError('required')">
+          {{'policy.toolBar.ID_VAL_ERR' | translate}}
+        </mat-error>
+        <mat-error *ngIf="idFormCtrl.hasError('required')">
+          {{'policy.toolBar.ID_EMPTY_ERR' | translate}}
+        </mat-error>
+      </mat-form-field>
+      <div class="clearfix">
+        <app-loading-button
+          [appearance]="'mat-raised-button'"
+          [color]="'primary'"
+          [loading]="submittingUpdate"
+          [text]="'policy.toolBar.MOVE' | translate"
+          (click)="moveNetworkRules()"
+          class="pull-right"
+        >
+        </app-loading-button>
+        <button class="pull-right margin-right-m" (click)="onCancel()">
+          {{ "policy.addPolicy.CANCEL" | translate }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

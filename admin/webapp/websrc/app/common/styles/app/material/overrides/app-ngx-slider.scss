@@ -1,0 +1,39 @@
+app-ngx-slider .nv-range-slider.ngx-slider {
+  .ngx-slider-bar {
+    background: #ffe4d1;
+    height: 2px;
+  }
+  .ngx-slider-selection {
+    background: orange;
+  }
+  .ngx-slider-pointer {
+    width: 8px;
+    height: 16px;
+    top: auto; /* to remove the default positioning */
+    bottom: 0;
+    background-color: #333;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+  }
+  .ngx-slider-pointer:after {
+    display: none;
+  }
+  .ngx-slider-bubble {
+    bottom: 14px;
+  }
+  .ngx-slider-limit {
+    font-weight: bold;
+    color: orange;
+  }
+  .ngx-slider-tick {
+    width: 1px;
+    height: 10px;
+    margin-left: 4px;
+    border-radius: 0;
+    background: #ffe4d1;
+    top: -1px;
+  }
+  .ngx-slider-tick.ngx-slider-selected {
+    background: orange;
+  }
+}

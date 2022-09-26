@@ -1,0 +1,66 @@
+<section id="containers-section">
+  <div class="d-flex flew-row align-items-center justify-content-between">
+    <h1 class="font-weight-light" id="containers-title">
+      {{ 'scan.PLATFORM' | translate }}
+    </h1>
+    <div class="d-flex align-items-center justify-content-end">
+      <ng-container *ngIf="!error">
+        <div class="mr-3" *ngIf="autoScanAuthorized && platforms.length > 0">
+          <mat-slide-toggle
+            [formControl]="autoScan"
+            (change)="configAutoScan(auto_scan)">
+            {{ 'scan.AUTO' | translate }}
+            <em
+              class="fa fa-info-circle"
+              matTooltip="{{ 'scan.AUTO_TIP' | translate }}">
+            </em>
+          </mat-slide-toggle>
+        </div>
+      </ng-container>
+      <app-loading-button
+        (btnClick)="refresh()"
+        [appearance]="'mat-button'"
+        [buttonClasses]="'d-flex justify-content-center align-items-center'"
+        [disabled]="!!(refreshing$ | async)"
+        [iconClasses]="'eos-icons'"
+        [iconName]="'refresh'"
+        [id]="'platforms-refresh-button'"
+        [loading]="!!(refreshing$ | async)"
+        [text]="'network.REFRESH' | translate"
+        [type]="'button'">
+      </app-loading-button>
+    </div>
+  </div>
+  <ng-container *ngIf="loaded; else loadingOrErrorTemplate">
+    <app-adjustable-div [minHeightOne]="163" [minHeightTwo]="140">
+      <ng-container *appContainerOne="let height">
+        <mat-card [ngStyle]="{ height: height + 'px' }" class="pt-0">
+          <app-platforms-grid
+            [gridHeight]="height - 85"
+            [isScanAuthorized]="isAutoScanAuthorized"
+            (scan)="configScan($event)">
+          </app-platforms-grid>
+        </mat-card>
+      </ng-container>
+      <ng-container *appContainerTwo="let height">
+        <mat-card [ngStyle]="{ height: height + 'px' }" class="pt-0">
+          <app-platform-details
+            [gridHeight]="height - 80"
+            [platform]="selectedPlatform"
+            *ngIf="selectedPlatform">
+          </app-platform-details>
+        </mat-card>
+      </ng-container>
+    </app-adjustable-div>
+  </ng-container>
+  <ng-template #loadingOrErrorTemplate>
+    <ng-container *ngIf="error; else loadingTemplate">
+      <mat-card>
+        {{ error | json }}
+      </mat-card>
+    </ng-container>
+    <ng-template #loadingTemplate>
+      <app-loading-template></app-loading-template>
+    </ng-template>
+  </ng-template>
+</section>

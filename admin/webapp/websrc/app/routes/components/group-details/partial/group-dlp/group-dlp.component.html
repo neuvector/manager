@@ -1,0 +1,48 @@
+<div>
+  <div class="clearfix">
+    <app-quick-filter
+      class="pull-left"
+      [gridOptions]="gridOptions4GroupDlpSensors"
+      [filteredCount]="filteredCount"
+      [count]="groupDlpSensors.length">
+    </app-quick-filter>
+    <mat-slide-toggle
+      class="padding-top-s pull-right margin-top-l"
+      id="group-dlp-sensor-status-toggle"
+      [disabled]="!isWriteDlpAuthorized"
+      [(ngModel)]="enabled"
+      [ngModelOptions]="{standalone: true}"
+    >
+      <span
+        [ngClass]="{
+          'text-muted': !enabled,
+          'text-success': enabled
+        }"
+      >
+        {{
+          (enabled
+            ? "policy.status.ENABLED"
+            : "policy.status.DISABLED") | translate
+        }}
+      </span>
+    </mat-slide-toggle>
+    <div
+      role="button"
+      class="pull-right margin-right-s margin-top-l hand"
+      *appDisplayControl="'write_dlp_rule'"
+      (click)="openEditGroupSensorModal()">
+      <em class="eos-icons">edit</em>
+    </div>
+  </div>
+  <div class="clearfix">
+    <ag-grid-angular
+      #groupDlpSensorsGrid
+      id="group-dlp-sensors-grid"
+      style="width: 100%;"
+      [ngStyle]="{ height: (resizableHeight - 150) + 'px' }"
+      class="ag-theme-balham"
+      [gridOptions]="gridOptions4GroupDlpSensors"
+      >
+    </ag-grid-angular>
+  </div>
+</div>

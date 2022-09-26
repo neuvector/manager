@@ -1,0 +1,58 @@
+<section id="registries-section">
+  <div class="d-flex flew-row align-items-center justify-content-between">
+    <h1 class="font-weight-light" id="registries-title">
+      {{ 'sidebar.nav.REG_SCAN' | translate }}
+    </h1>
+    <app-loading-button
+      (btnClick)="refresh()"
+      [appearance]="'mat-button'"
+      [buttonClasses]="'d-flex justify-content-center align-items-center'"
+      [disabled]="!!(refreshingDetails$ | async)"
+      [iconClasses]="'eos-icons'"
+      [iconName]="'refresh'"
+      [id]="'registries-refresh-button'"
+      [loading]="!!(refreshingDetails$ | async)"
+      [text]="'network.REFRESH' | translate"
+      [type]="'button'">
+    </app-loading-button>
+  </div>
+  <ng-container
+    *ngIf="registries$ | async as registries; else loadingOrErrorTemplate">
+    <ng-container *ngIf="registries.summarys.length; else noRegistriesTemplate">
+      <app-adjustable-div [minHeightOne]="163" [minHeightTwo]="140">
+        <ng-container *appContainerOne="let height">
+          <mat-card [ngStyle]="{ height: height + 'px' }" class="pt-0">
+            <app-registries-table
+              [gridHeight]="height - 150"
+              [rowData]="registries.summarys">
+            </app-registries-table>
+          </mat-card>
+        </ng-container>
+        <ng-container *appContainerTwo="let height">
+          <mat-card [ngStyle]="{ height: height + 'px' }" class="pt-0">
+            <app-registry-details [gridHeight]="height - 150">
+            </app-registry-details>
+          </mat-card>
+        </ng-container>
+      </app-adjustable-div>
+    </ng-container>
+    <ng-template #noRegistriesTemplate>
+      <mat-card class="pt-0">
+        <app-registries-table
+          [gridHeight]="450"
+          [rowData]="registries.summarys">
+        </app-registries-table>
+      </mat-card>
+    </ng-template>
+  </ng-container>
+  <ng-template #loadingOrErrorTemplate>
+    <ng-container *ngIf="error; else loadingTemplate">
+      <mat-card>
+        {{ error | json }}
+      </mat-card>
+    </ng-container>
+    <ng-template #loadingTemplate>
+      <app-loading-template></app-loading-template>
+    </ng-template>
+  </ng-template>
+</section>

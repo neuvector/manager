@@ -1,0 +1,55 @@
+<ng-container *ngIf="registryDetails.length; else noneScannedTemplate">
+  <ng-container *ngIf="gridHeight > 100">
+    <ng-container *ngIf="noVulnerabilities; else vulnerabilitiesTemplate">
+      <div
+        [ngStyle]="{ height: gridHeight + 'px' }"
+        class="d-flex flex-column justify-content-center align-items-center">
+        <i class="eos-icons mb-2">security</i>
+        <span class="d-block display-3 mat-h3">{{
+          'registry.message.NO_VULS' | translate
+        }}</span>
+      </div>
+    </ng-container>
+    <ng-template #vulnerabilitiesTemplate>
+      <span class="mt-4 d-block font-weight-bold">{{
+        'registry.TOP_RISKIEST_IMG' | translate
+      }}</span>
+      <div
+        [ngStyle]="{ height: gridHeight - 60 + 'px' }"
+        class="d-flex justify-content-around align-items-center">
+        <div class="registry-images-chart mr-4">
+          <canvas
+            [data]="pieChartData.data"
+            [labels]="pieChartData.data.labels"
+            [options]="pieChartData.options"
+            [type]="pieChartData.type"
+            baseChart
+            id="registry-scanned-images-pie-chart">
+          </canvas>
+        </div>
+        <div class="registry-images-chart">
+          <canvas
+            [data]="barChartData.data"
+            [labels]="barChartData.data.labels"
+            [options]="barChartData.options"
+            [type]="barChartData.type"
+            baseChart
+            id="registry-scanned-images-bar-chart">
+          </canvas>
+        </div>
+      </div>
+      {{ 'registry.SCAN_PROGRESS' | translate }} {{ percent }}%
+      <mat-progress-bar [value]="percent" mode="determinate"></mat-progress-bar>
+    </ng-template>
+  </ng-container>
+</ng-container>
+<ng-template #noneScannedTemplate>
+  <div
+    [ngStyle]="{ height: gridHeight + 'px' }"
+    class="d-flex flex-column justify-content-center align-items-center">
+    <i class="eos-icons" id="registries-no-scanned-images-icon">info</i>
+    <span class="d-block mat-h3" id="registries-no-scanned-images-text">{{
+      'registry.message.NO_IMG' | translate
+    }}</span>
+  </div>
+</ng-template>

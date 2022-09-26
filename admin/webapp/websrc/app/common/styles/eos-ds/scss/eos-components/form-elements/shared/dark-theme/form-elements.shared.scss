@@ -1,0 +1,13 @@
+/* Form elements shared styles for dark theme
+  ========================================================================== */
+.dark-theme {
+  label {
+    color: $eos-dark-form-element-label-color;
+
+
+  }
+
+  .disabled {
+    color: $eos-form-element-disabled;
+  }
+}

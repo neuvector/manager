@@ -1,8 +1,8 @@
 package com.neu.utils
 
 /**
-  * Created by bxu on 5/6/16.
-  */
+ * Created by bxu on 5/6/16.
+ */
 object EnumUtils {
   val info = "info"
 

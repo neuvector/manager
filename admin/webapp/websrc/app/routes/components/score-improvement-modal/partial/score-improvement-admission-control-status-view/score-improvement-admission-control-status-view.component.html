@@ -1,0 +1,28 @@
+<app-score-prediction-header
+  message="{{
+    'dashboard.improveScoreModal.admission.DESCRIPTION' | translate
+  }}"
+  [score]="score"
+  [projectedScore]="projectedScore">
+</app-score-prediction-header>
+<mat-divider class="mt-2 mb-3"></mat-divider>
+<div class="container">
+  <div class="row align-items-center">
+    <div class="col-md-5">
+      <img
+        class="mx-auto d-block adm-sample"
+        src="assets/img/adm-sample1.png"
+        alt="Admission control before" />
+    </div>
+    <div class="col-md-2 text-center">
+      <em
+        class="fa fa-long-arrow-alt-right fa-4x text-success adm-sample-arrow"></em>
+    </div>
+    <div class="col-md-5">
+      <img
+        class="mx-auto d-block adm-sample"
+        src="assets/img/adm-sample2.png"
+        alt="Admission control after" />
+    </div>
+  </div>
+</div>

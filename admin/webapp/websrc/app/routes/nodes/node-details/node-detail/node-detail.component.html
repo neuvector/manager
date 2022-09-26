@@ -1,0 +1,200 @@
+<div class="row w-100 mx-0">
+  <div class="col-md-4">
+    <div class="my-md-4 details-item">
+      <mat-icon
+        aria-hidden="false"
+        aria-label="Name icon"
+        class="details-icon"
+        fontSet="fa"
+        fontIcon="fa-credit-card">
+      </mat-icon>
+      <div class="ml-3 overflow-hidden">
+        {{ 'nodes.detail.NAME' | translate }}
+        <div class="text-muted text-truncate">
+          {{ node.name }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 my-md-4 details-item">
+    <mat-icon
+      aria-hidden="false"
+      aria-label="OS icon"
+      class="details-icon"
+      fontSet="fab"
+      fontIcon="fa-linux">
+    </mat-icon>
+    <div class="ml-3 overflow-hidden">
+      {{ 'nodes.detail.OS' | translate }}
+      <div class="text-muted text-truncate">
+        {{ node.os }}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 my-md-4 details-item">
+    <mat-icon
+      aria-hidden="false"
+      aria-label="Version icon"
+      class="details-icon"
+      fontSet="fa"
+      fontIcon="fa-tag">
+    </mat-icon>
+    <div class="ml-3 overflow-hidden">
+      {{ 'nodes.detail.KERNEL_VERSION' | translate }}
+      <div class="text-muted text-truncate">
+        {{ node.kernel }}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 my-md-4 details-item">
+    <mat-icon
+      aria-hidden="false"
+      aria-label="Memory icon"
+      class="details-icon"
+      fontSet="fa"
+      fontIcon="fa-microchip">
+    </mat-icon>
+    <div class="ml-3 overflow-hidden">
+      {{ 'nodes.detail.MEMORY' | translate }}
+      <div class="text-muted text-truncate">
+        {{ node.memory + '' | bytes }}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 my-md-4 details-item">
+    <mat-icon
+      aria-hidden="false"
+      aria-label="CPU icon"
+      class="details-icon"
+      fontSet="fa"
+      fontIcon="fa-microchip">
+    </mat-icon>
+    <div class="ml-3 overflow-hidden">
+      {{ 'nodes.detail.NUM_OF_CPUS' | translate }}
+      <div class="text-muted text-truncate">
+        {{ node.cpus }}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 my-md-4 details-item">
+    <mat-icon
+      aria-hidden="false"
+      aria-label="Group icon"
+      class="details-icon"
+      fontSet="fa"
+      fontIcon="fa-cubes">
+    </mat-icon>
+    <div class="ml-3 overflow-hidden">
+      {{ 'nodes.detail.CGROUP_VERSION' | translate }}
+      <div class="text-muted text-truncate">
+        {{ node.cgroup_version }}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 my-md-4 details-item">
+    <mat-icon
+      aria-hidden="false"
+      aria-label="Version icon"
+      class="details-icon"
+      fontSet="fa"
+      fontIcon="fa-tag">
+    </mat-icon>
+    <div class="ml-3 overflow-hidden">
+      {{ node.runtime | capitalizeWord }}
+      {{ 'nodes.detail.VERSION' | translate }}
+      <div class="text-muted text-truncate">
+        {{ node.runtime_version }}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 my-md-4 details-item">
+    <mat-icon
+      aria-hidden="false"
+      aria-label="Version icon"
+      class="details-icon"
+      fontSet="fa"
+      fontIcon="fa-tag">
+    </mat-icon>
+    <div class="ml-3 overflow-hidden">
+      {{ node.runtime | capitalizeWord }}
+      {{ 'nodes.detail.API_VERSION' | translate }}
+      <div class="text-muted text-truncate">
+        {{ node.runtime_api_version }}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 my-md-4 details-item" *ngIf="node.scan_summary">
+    <mat-icon
+      aria-hidden="false"
+      aria-label="Vulnerabilities icon"
+      class="details-icon"
+      fontSet="fa"
+      fontIcon="fa-bug">
+    </mat-icon>
+    <div class="ml-3 overflow-hidden">
+      {{ 'group.gridHeader.VULNERABILITIES' | translate }}
+      <div class="text-muted text-truncate">
+        <span
+          class="badge badge-danger details-badge"
+          *ngIf="node.scan_summary.high">
+          {{ node.scan_summary.high }}
+        </span>
+        <span
+          class="badge badge-warning details-badge"
+          *ngIf="node.scan_summary.medium">
+          {{ node.scan_summary.medium }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+<mat-divider class="position-relative"></mat-divider>
+<ng-container *ngIf="hasObject(node.interfaces)">
+  <div class="my-sm-4">
+    <div class="h4">
+      {{ 'containers.detail.NETWORK_INTERFACES' | translate }}
+    </div>
+    <div class="row" *ngFor="let interface of node.interfaces | keyvalue">
+      <div class="col-sm-2 text-right">
+        {{ interface.key }}
+      </div>
+      <div class="col-sm-9 offset-sm-1">
+        <div *ngFor="let net of interface.value" class="row text-muted">
+          <div class="col-sm-4">IP: {{ net.ip }}/{{ net.ip_prefix }}</div>
+          <div class="col-sm-8">
+            {{ 'general.GATEWAY' | translate }}:{{ net.gateway }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <mat-divider class="position-relative"></mat-divider>
+</ng-container>
+<ng-container *ngIf="hasObject(node.labels)">
+  <div class="my-sm-4">
+    <div class="h4">
+      {{ 'containers.detail.LABELS' | translate }}
+    </div>
+    <div class="row" *ngFor="let label of labels">
+      <div class="col-sm-4 text-right">{{ label }}</div>
+      <div class="col-sm-8 text-muted">
+        {{ node.labels[label] || '&nbsp;' }}
+      </div>
+    </div>
+  </div>
+  <mat-divider class="position-relative"></mat-divider>
+</ng-container>
+<ng-container *ngIf="hasObject(node.annotations)">
+  <div class="my-sm-4">
+    <div class="h4">
+      {{ 'nodes.detail.ANNONTATIONS' | translate }}
+    </div>
+    <div class="row" *ngFor="let annotation of node.annotations | keyvalue">
+      <div class="col-sm-4 text-right">{{ annotation.key }}</div>
+      <div class="col-sm-8 text-muted">
+        {{ annotation.value || '&nbsp;' }}
+      </div>
+    </div>
+  </div>
+  <mat-divider class="position-relative"></mat-divider>
+</ng-container>

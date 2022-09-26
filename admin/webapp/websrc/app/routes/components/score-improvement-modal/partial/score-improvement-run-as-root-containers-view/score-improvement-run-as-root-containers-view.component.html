@@ -1,0 +1,32 @@
+<app-score-prediction-header
+  message="{{
+    'dashboard.improveScoreModal.runAsRoot.DESCRIPTION' | translate
+  }}"
+  [score]="score"
+  [projectedScore]="projectedScore">
+</app-score-prediction-header>
+<mat-divider class="mt-2"></mat-divider>
+<section id="score-improvement-run-as-root-containers-section">
+  <div class="d-flex align-items-center justify-content-end">
+    <button
+      mat-button
+      aria-label="Export run-as-root containers CSV"
+      type="button"
+      class="d-flex align-items-center mr-3"
+      (click)="exportCSV()">
+      <i class="eos-icons mr-2">csv_file</i>CSV
+    </button>
+    <mat-form-field appearance="standard">
+      <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
+      <input [formControl]="filter" matInput />
+    </mat-form-field>
+  </div>
+  <app-containers-grid
+    [gridHeight]="163"
+    [useQuickFilterService]="true"
+    [gridOnly]="true"></app-containers-grid>
+  <div class="container-details mt-2" *ngIf="selectedContainer">
+    <app-container-detail
+      [container]="selectedContainer"></app-container-detail>
+  </div>
+</section>

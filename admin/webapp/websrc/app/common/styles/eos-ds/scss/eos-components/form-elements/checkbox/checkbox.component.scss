@@ -1,0 +1,62 @@
+/* Checkbox component
+   ========================================================================== */
+
+.eos-checkbox {
+  opacity: 0;
+  position: absolute;
+  z-index: $eos-checkbox-zindex;
+}
+
+.eos-checkbox ~ label {
+  margin-left: $eos-checkbox-label-margin;
+
+  &::before, &::after {
+    content: '';
+    display: block;
+    height: $eos-checkbox-height;
+    left: 0;
+    position: absolute;
+    top: $eos-checkbox-top;
+    width: $eos-checkbox-width;
+  }
+
+  &::before {
+    border: 1px solid $eos-checkbox-border;
+    border-radius: $eos-checkbox-border-radius;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  &::after {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 50% 50%;
+    content: '';
+  }
+}
+
+
+// checked
+.eos-checkbox:checked ~ .form-check-label::before {
+  background-color: $eos-checkbox-checked-bg;
+  border-color: $eos-checkbox-checked;
+}
+
+.eos-checkbox:checked ~ .form-check-label::after {
+  color: $eos-bc-pine-500;
+  content: 'check';
+  font-family: 'eos-icons-outlined';
+  font-size: $eos-checkbox-icon-size;
+  line-height: 1;
+  text-align: center;
+}
+
+// disabled state
+.eos-checkbox:disabled ~ .form-check-label {
+  color: $eos-checkbox-disabled;
+
+  &::before {
+    background-color: $eos-checkbox-disabled;
+    border: 1px solid $eos-checkbox-disabled;
+  }
+}

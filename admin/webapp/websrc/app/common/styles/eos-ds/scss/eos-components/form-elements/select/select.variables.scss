@@ -1,0 +1,27 @@
+/* Select element variables
+   ========================================================================== */
+/**
+*
+*  Spacing variables: /assets/stylesheets/eos-base/variables/spacings.scss
+*  Color variables: /assets/stylesheets/eos-base/variables/branding.scss
+*
+*/
+
+// Main
+$eos-select-padding: $eos-xs + 1 $eos-s $eos-s $eos-l;
+$eos-select-bg-active: $eos-bc-white url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNNy40MSA3Ljg0TDEyIDEyLjQybDQuNTktNC41OEwxOCA5LjI1bC02IDYtNi02eiIvPjwvc3ZnPg==') no-repeat left center;
+$eos-select-bg-size: 18px;
+$eos-select-border-radius: 2px;
+$eos-select-txt-color: $eos-bc-gray-1000;
+$eos-select-font: $eos-font-size-base;
+$eos-multiple-select-border-radius: $eos-xs - 2px;
+// Option
+$eos-select-option-font-weight: bold;
+$eos-select-option-padding: $eos-s;
+
+// Disabled
+// prettier-ignore
+$eos-select-bg-disabled: $eos-bc-white url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI0I2QjRCNCIgd2lkdGg9IjI0cHgiIGhlaWdodD0iMjRweCI+PHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0xNi41OSA4LjU5TDEyIDEzLjE3IDcuNDEgOC41OSA2IDEwbDYgNiA2LTZ6Ii8+PC9zdmc+') no-repeat left center;
+
+// Multiple
+$eos-select-multiple-font: bold;

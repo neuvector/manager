@@ -1,0 +1,22 @@
+/* Variables
+  ========================================================================== */
+/**
+* This folder contains all our variables
+*
+* When variables are component specific, place the file in the /components folder
+*/
+
+@import 'branding';
+@import 'colors';
+@import 'typography';
+@import 'paragraphs';
+@import 'titles';
+@import 'z-index';
+@import 'spacings';
+@import 'borders';
+/*@import 'links';*/
+
+@import 'shadows';
+@import 'media-query';
+@import 'lists';
+@import 'prism-theme';

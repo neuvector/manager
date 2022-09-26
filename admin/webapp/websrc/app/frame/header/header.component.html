@@ -1,0 +1,90 @@
+<!-- START Top Navbar-->
+<nav class="navbar topnavbar" role="navigation" aria-label="navbar">
+  <!-- START navbar header-->
+  <div class="navbar-header">
+    <a class="navbar-brand" href="#/">
+      <div class="brand-logo">
+        <img class="img-fluid" src="assets/img/logo.png" alt="App Logo" />
+      </div>
+      <div class="brand-logo-collapsed">
+        <img
+          class="img-fluid"
+          src="assets/img/logo-single.png"
+          alt="App Logo" />
+      </div>
+    </a>
+  </div>
+  <!-- END navbar header-->
+  <!-- START Left navbar-->
+  <ul class="navbar-nav mr-auto flex-row">
+    <li class="nav-item">
+      <!-- Button used to collapse the left sidebar. Only visible on tablet and desktops-->
+      <a
+        class="nav-link d-none d-md-block d-lg-block d-xl-block"
+        trigger-resize=""
+        (click)="toggleCollapsedSideabar()"
+        *ngIf="!isCollapsedText()">
+        <em class="fas fa-bars"></em>
+      </a>
+      <!-- Button to show/hide the sidebar on mobile. Visible on mobile only.-->
+      <a
+        class="nav-link sidebar-toggle d-md-none"
+        (click)="
+          switchers.toggleFrameSwitcher('leftSideToggled');
+          $event.stopPropagation()
+        ">
+        <em class="fas fa-bars"></em>
+      </a>
+    </li>
+  </ul>
+  <!-- END Left navbar-->
+  <!-- START Right Navbar-->
+  <div class="navbar-nav flex-row">
+    <div *ngIf="isOrdinaryRole">
+      <span>{{clusterName}}</span>
+    </div>
+    <div *ngIf="isMasterRole">
+      <button mat-button [matMenuTriggerFor]="dropdown_multiCluster"
+              [matMenuTriggerData]="clusters"
+              class="cluster-info">
+        <i class="fa-lg mr-lg text-gray-light" [ngClass]="isOnRemoteCluster? 'fa fa-laptop': 'fa fa-home'"></i>
+        <label
+          class="selected-cluster-text hand" style="position: relative; margin-bottom: 0"
+        >{{selectedCluster?.name}}</label>
+      </button>
+      <mat-menu #dropdown_multiCluster="matMenu">
+          <ng-container *ngFor="let cluster of clusters; last as last">
+            <button  mat-menu-item (click)="redirectCluster(cluster)" >
+              <i class="fa-md mr-md text-gray-light" [ngClass]="cluster.clusterType==='master'? 'fa fa-home': 'fa fa-laptop'"></i>
+              {{cluster?.name}}
+            </button>
+            <mat-divider *ngIf="!last"></mat-divider>
+          </ng-container>
+      </mat-menu>
+    </div>
+
+    <button mat-button [matMenuTriggerFor]="menu" class="user-info">
+      User Info
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="goProfile()">
+        <i class="eos-icons icon-18 margin-right-s">badge</i>
+        {{ 'enum.MY_PROFILE' | translate }}
+      </button>
+      <button mat-menu-item (click)="goMultiCluster()">
+        <i class="eos-icons icon-18 margin-right-s">organisms</i>
+        {{ 'enum.MULTI_CLUSTER' | translate }}
+      </button>
+      <button mat-menu-item (click)="goFederatedPolicy()">
+        <i class="eos-icons icon-18 margin-right-s">policy</i>
+        {{ 'enum.FED_POLICY' | translate }}
+      </button>
+      <button *ngIf="!isSUSESSO" mat-menu-item (click)="logout()">
+        <i class="eos-icons icon-18 margin-right-s">logout</i>
+        {{ 'enum.LOGOUT' | translate }}
+      </button>
+    </mat-menu>
+  </div>
+  <!-- END Right Navbar-->
+</nav>
+<!-- END Top Navbar-->

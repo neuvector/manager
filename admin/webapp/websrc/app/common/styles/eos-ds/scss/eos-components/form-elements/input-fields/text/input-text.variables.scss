@@ -1,0 +1,20 @@
+/* Text input variables
+   ========================================================================== */
+/**
+*
+*  Spacing variables: /assets/stylesheets/eos-base/variables/spacings.scss
+*  Color variables: /assets/stylesheets/eos-base/variables/branding.scss
+*
+*/
+
+$eos-text-input-padding: $eos-s $eos-xs;
+$eos-input-file-margin-right: $eos-s;
+$eos-text-input-password-strength-meter-height: $eos-l - 4px;
+$eos-text-input-password-meter-height: $eos-xs - 1px;
+$eos-text-input-password-meter-margin-right: $eos-xs + 1px;
+$eos-text-input-password-meter-text-size: $eos-m - 2px;
+
+$eos-input-group-top: 10px;
+$eos-input-group-padding: $eos-xl;
+$eos-input-group-right: -8px;
+$eos-text-input-color: $eos-bc-gray-1000;

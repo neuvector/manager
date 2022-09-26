@@ -3,28 +3,24 @@
 export CHROME_BIN=/usr/bin/google-chrome
 
 rm -rf admin/target
-pushd admin/webapp/root/app_src
+pushd admin/webapp
 if [[ $# > 0 ]]; then
     case $1 in
         -d)
         mkdir -p /root/.ivy2
         ln -s /prebuild/manager/cache /root/.ivy2/cache
-        # ln -s /prebuild/manager/bower_components bower_components
         # ln -s /prebuild/manager/node_modules node_modules
         ;;
         *)
         ;;
     esac
 fi
-npm i -g gulp-cli 2>&1
-git config --global url."https://".insteadOf git://
 npm install 2>&1
 if [ $? -eq 0 ]; then
     echo npm package installation SUCCEED
 else
     npm cache clean --force 2>&1
     sleep 10
-    npm i -g gulp-cli 2>&1
     npm install 2>&1
     if [ $? -eq 0 ]; then
         echo npm package installation SUCCEED
@@ -35,26 +31,7 @@ else
         exit 1
     fi
 fi
-npm install -g bower-npm-resolver
-if [ $? -eq 0 ]; then
-    echo Bower resolver installation SUCCEED
-else
-    echo ================================
-    echo Bower resolver installation FAILED
-    echo ================================
-    exit 1
-fi
-bower install --allow-root
-if [ $? -eq 0 ]; then
-    echo Bower package installation SUCCEED
-else
-    echo ================================
-    echo Bower package installation FAILED
-    echo ================================
-    exit 1
-fi
-gulp vendor:app 2>&1
-gulp build 2>&1
+npm run build 2>&1
 if [ $? -eq 0 ]; then
     echo UI build SUCCEED
 else
@@ -63,7 +40,7 @@ else
     echo ================================
     exit 1
 fi
-npm run unittest
+# npm run unittest
 popd
 env JAVA_OPTS="-Xms2g -Xmx3g" sbt admin/assembly
 zip -d admin/target/scala-2.11/admin-assembly-1.0.jar rest-management-private-classpath\*

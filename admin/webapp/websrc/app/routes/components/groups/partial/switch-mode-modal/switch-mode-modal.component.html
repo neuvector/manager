@@ -1,0 +1,45 @@
+<div class="nv-dialog">
+  <div mat-dialog-title class="dialog-header">
+    <div class="pull-left">
+      {{ 'service.SWITCH_MODE' | translate }}
+    </div>
+    <div class="pull-right">
+      <em class="icon-close hand" (click)="onCancel()"></em>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <form>
+      <div class="clearfix margin-top-m">
+        <mat-radio-group class="pull-left margin-right-m" aria-label="Select a mode" [(ngModel)]="mode" [ngModelOptions]="{standalone: true}">
+          <mat-radio-button value="discover" class="margin-right-s">{{'topbar.mode.LEARNING' | translate}}</mat-radio-button>
+          <mat-radio-button value="monitor" class="margin-right-s">{{'topbar.mode.EVALUATION' | translate}}</mat-radio-button>
+          <mat-radio-button value="protect" class="margin-right-s">{{'topbar.mode.ENFORCE' | translate}}</mat-radio-button>
+        </mat-radio-group>
+        <div class="text-warning text-sm pull-left">
+          {{zeroDriftHint}}
+        </div>
+      </div>
+      <div class="clearfix margin-top-m">
+        <mat-radio-group aria-label="Select a baseline profile" class="pull-left margin-right-m" [(ngModel)]="baselineProfile" [ngModelOptions]="{standalone: true}" (change)="checkZeroDrift()">
+          <mat-radio-button value="basic" class="margin-right-s">{{'enum.BASIC' | translate}}</mat-radio-button>
+          <mat-radio-button value="zero-drift" class="margin-right-s">{{'enum.ZERODRIFT' | translate}}</mat-radio-button>
+        </mat-radio-group>
+        <div class="pull-left text-muted">{{'group.ZERODRIFT_COMMENT' | translate}}</div>
+      </div>
+      <div class="clearfix">
+        <app-loading-button
+          [appearance]="'mat-raised-button'"
+          [color]="'primary'"
+          [loading]="submittingUpdate"
+          [text]="'setting.SUBMIT' | translate"
+          (click)="switchMode()"
+          class="pull-right"
+        >
+        </app-loading-button>
+        <button class="pull-right margin-right-m" (click)="onCancel()">
+          {{'waf.ruleModal.CANCEL' | translate}}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

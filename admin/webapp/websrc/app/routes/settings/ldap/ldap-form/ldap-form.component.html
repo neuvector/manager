@@ -1,0 +1,143 @@
+<form (ngSubmit)="submitForm()" [formGroup]="ldapForm">
+  <div class="d-flex align-items-center mt-4 mb-2 mb-md-4">
+    <mat-icon aria-hidden="false" aria-label="Directory icon" class="mr-3"
+      >assignment
+    </mat-icon>
+    <div>
+      <span class="d-block mb-2">{{ 'ldap.DIRECTORY_TYPE' | translate }}</span>
+      <mat-radio-group aria-label="Directory Type" formControlName="directory">
+        <mat-radio-button value="OpenLDAP">{{
+          'setting.directory_type.OPEN_LDAP' | translate
+        }}</mat-radio-button>
+        <mat-radio-button value="MicrosoftAD">{{
+          'setting.directory_type.MS_AD' | translate
+        }}</mat-radio-button>
+      </mat-radio-group>
+    </div>
+  </div>
+  <div class="row align-items-center my-0 my-md-4">
+    <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
+      <i class="eos-icons mr-3">cluster</i>
+      <mat-form-field appearance="standard" class="w-100">
+        <mat-label>{{ 'ldap.HOST' | translate }}</mat-label>
+        <input formControlName="hostname" matInput />
+        <mat-error *ngIf="ldapForm.controls.hostname.hasError('required')">
+          {{ 'ldap.HOST_REQUIRED' | translate }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-12 col-md-4 d-flex align-items-center my-2 my-md-0">
+      <mat-icon aria-hidden="false" aria-label="License icon" class="mr-3"
+        >adjust
+      </mat-icon>
+      <mat-form-field appearance="standard" class="w-100">
+        <mat-label>{{ 'ldap.PORT' | translate }}</mat-label>
+        <input formControlName="port" matInput type="number" />
+      </mat-form-field>
+    </div>
+    <div
+      class="col-12 col-md-2 d-flex align-items-center my-2 my-md-0 pt-3 pt-md-0">
+      <mat-checkbox formControlName="ssl"
+        >{{ 'ldap.SSL' | translate }}L</mat-checkbox
+      >
+    </div>
+  </div>
+  <div class="row align-items-center my-0 my-md-4">
+    <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
+      <mat-icon aria-hidden="false" aria-label="License icon" class="mr-3"
+        >person_outline
+      </mat-icon>
+      <mat-form-field appearance="standard" class="w-100">
+        <mat-label>{{ 'ldap.USERNAME' | translate }}</mat-label>
+        <input formControlName="bind_dn" matInput />
+      </mat-form-field>
+    </div>
+    <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
+      <mat-icon aria-hidden="false" aria-label="License icon" class="mr-3"
+        >vpn_key
+      </mat-icon>
+      <mat-form-field appearance="standard" class="w-100">
+        <mat-label>{{ 'ldap.PASSWORD' | translate }}</mat-label>
+        <input
+          [type]="passwordVisible ? 'text' : 'password'"
+          formControlName="bind_password"
+          matInput />
+      </mat-form-field>
+      <button
+        (click)="passwordVisible = !passwordVisible"
+        *ngIf="ldapForm.controls.bind_password.value"
+        aria-label="Visibility icon to toggle password visibility"
+        mat-icon-button
+        type="button">
+        <i class="eos-icons">{{
+          passwordVisible ? 'visibility' : 'visibility_off'
+        }}</i>
+      </button>
+    </div>
+  </div>
+  <div class="d-flex align-items-center my-2 my-md-4">
+    <i class="eos-icons mr-3">organization</i>
+    <mat-form-field appearance="standard" class="w-100">
+      <mat-label>{{ 'ldap.BASE_DN' | translate }}</mat-label>
+      <input formControlName="base_dn" matInput />
+      <mat-hint>{{ 'ldap.BASE_DN_HINT' | translate }}</mat-hint>
+      <mat-error *ngIf="ldapForm.controls.base_dn.hasError('required')">
+        {{ 'ldap.BASE_DN_MESSAGE' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div class="d-flex align-items-center my-2 my-md-4">
+    <mat-icon aria-hidden="false" aria-label="License icon" class="mr-3"
+      >portrait
+    </mat-icon>
+    <mat-form-field appearance="standard" class="w-100">
+      <mat-label>{{ 'ldap.USERNAME_ATTR' | translate }}</mat-label>
+      <input formControlName="username_attr" matInput />
+      <mat-hint>{{ 'ldap.USERNAME_ATTR_HINT' | translate }}</mat-hint>
+    </mat-form-field>
+  </div>
+  <div class="d-flex align-items-center my-2 my-md-4">
+    <i class="eos-icons mr-3">recent_actors</i>
+    <mat-form-field appearance="standard" class="w-100">
+      <mat-label>{{ 'group.GROUP_MEMBER' | translate }}</mat-label>
+      <input formControlName="group_member_attr" matInput />
+      <mat-hint>{{ 'ldap.GROUP_MEMBER_ATTR_HINT' | translate }}</mat-hint>
+    </mat-form-field>
+  </div>
+  <button
+    (click)="openDialog()"
+    class="d-block ml-auto"
+    color="primary"
+    mat-raised-button
+    type="button">
+    {{ 'ldap.TEST_CONNECTION' | translate }}
+  </button>
+  <mat-form-field appearance="standard">
+    <mat-label>{{ 'ldap.DEFAULT_ROLE' | translate }}</mat-label>
+    <mat-select formControlName="default_role">
+      <mat-option
+        *ngFor="let role of ldapData.server.mappable_roles.group_roles"
+        [value]="role">
+        {{ role ? role : 'none' }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <app-group-domain-role
+    (updateGroupMappedRoles)="updateGroupMappedRoles($event)"
+    [domains]="ldapData.domains"
+    [groupMappedRoles]="groupMappedRoles"
+    [mappableRoles]="ldapData.server.mappable_roles"></app-group-domain-role>
+  <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
+    <mat-checkbox formControlName="enable">{{
+      'ldap.ENABLE_LDAP' | translate
+    }}</mat-checkbox>
+    <app-loading-button
+      [appearance]="'mat-raised-button'"
+      [color]="'primary'"
+      [disabled]="!ldapForm.valid || submittingForm"
+      [loading]="submittingForm"
+      [text]="'setting.SUBMIT' | translate"
+      [type]="'submit'">
+    </app-loading-button>
+  </div>
+</form>

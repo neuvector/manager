@@ -1,0 +1,32 @@
+.filter {
+  position: relative;
+  left: calc(100% - 196px);
+  top: -4px;
+  z-index: 10000;
+  display: flex;
+  align-items: baseline;
+}
+
+.filter-actions {
+  display: flex;
+}
+
+.filter-csv {
+  left: calc(100% - 286.5px) !important;
+}
+
+.filter-view {
+  left: calc(100% - 288.5px) !important;
+}
+
+.filter-view-csv {
+  left: calc(100% - 379px) !important;
+}
+
+.filter-container {
+  left: calc(100% - 236px) !important;
+}
+
+.node-detail-tab-group {
+  margin-top: -62px;
+}

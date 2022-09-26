@@ -1,0 +1,65 @@
+<div class="rule-actions-expand fade-in-right">
+  <div *ngIf="isMasterRole(); else isMemberRole"
+    style="display: flex; justify-content: space-evenly;">
+    <div *ngIf="isMasterCluster(); else isMemberCluster">
+      <em
+        class="eos-icons icon-18 hand "
+        matTooltip="{{ 'multiCluster.tips.policy' | translate }}"
+        (click)="manageFedPolicy()"
+      >gavel</em>
+      <em
+        class="eos-icons icon-18 hand"
+        matTooltip="{{ 'multiCluster.tips.demote' | translate }}"
+        (click)="demote(params.data)"
+      >recycling</em>
+      <em
+        class="eos-icons icon-18 hand"
+        matTooltip="{{ 'multiCluster.tips.token' | translate }}"
+        (click)="generateToken()"
+      >vpn_key</em>
+      <em
+        class="eos-icons icon-18 hand"
+        matTooltip="{{ 'multiCluster.tips.edit' | translate }}"
+        (click)="showEditClusterDialog($event, params.data, false)"
+      >mode_edit</em>
+    </div>
+    <ng-template #isMemberCluster>
+      <em
+        class="eos-icons icon-18 hand"
+        matTooltip="{{ 'multiCluster.tips.syncPolicy' | translate }}"
+        (click)="syncPolicy($event,params.data); $event.stopPropagation();"
+        >sync</em>
+      <em
+        class="eos-icons icon-18 hand"
+        matTooltip="{{ 'multiCluster.tips.remove' | translate }}"
+        (click)="syncPolicy($event,params.data); $event.stopPropagation();"
+      >person_off</em>
+      <em
+        class="eos-icons icon-18 hand"
+        matTooltip="{{ 'multiCluster.tips.manage' | translate }}"
+        (click)="syncPolicy($event,params.data); $event.stopPropagation();"
+      >laptop_windows</em>
+
+    </ng-template>
+
+  </div>
+  <ng-template #isMemberRole>
+    <div *ngIf="!isMasterCluster()">
+    <em
+      class="eos-icons icon-18 hand"
+      matTooltip="{{ 'multiCluster.tips.edit' | translate }}"
+      (click)="showEditClusterDialog($event, params.data, false)"
+    >mode_edit</em>
+    <em
+      class="eos-icons icon-18 hand"
+      matTooltip="{{ 'multiCluster.tips.leave' | translate }}"
+      (click)="leave()"
+    >person_off</em>
+    </div>
+  </ng-template>
+</div>
+
+<div *ngIf="isMasterRole() || !isMasterCluster()" class="rule-actions-collapse">
+  <em class="fa fa-ellipsis-h fa-lg mr-sm text-action hand">
+  </em>
+</div>

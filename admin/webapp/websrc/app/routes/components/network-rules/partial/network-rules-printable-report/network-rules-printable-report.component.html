@@ -1,0 +1,108 @@
+<div>
+  <div class="page-cover">
+    <div class="page-cover-decro"></div>
+    <div class="page-cover-logo"></div>
+    <div class="page-cover-title">Network Rules Summary Report</div>
+  </div>
+  <div class="report-summary">
+    <div class="summary-title">
+      {{ 'policy.report.SUMMARY_HEADER' | translate }}
+    </div>
+    <div class="clearfix">
+      <div class="pull-left margin-left-l" style="width: 50%">
+        <div class="summary-subtitle margin-top-m margin-bottom-m">
+          {{ 'policy.report.BY_TYPE' | translate }}
+        </div>
+        <div class="row statistic-row" *ngFor="let entry of statisticData | keyvalue">
+          <div class="col-sm-9 statistic-cell">
+            {{ entry.key }}
+          </div>
+          <div class="col-sm-3 statistic-cell">
+            {{ entry.value }}
+          </div>
+        </div>
+      </div>
+      <div class="pull-right margin-top-xxxl margin-right-xl">
+        <app-network-rules-report-chart [statisticData]="statisticData"></app-network-rules-report-chart>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix">
+    <table class="print-table">
+      <thead>
+        <tr class="print-header">
+          <th class="print-cell" style="width: 5%">
+            {{'policy.gridHeader.SEQ' | translate }}
+          </th>
+          <th class="print-cell" style="width: 5%">
+            {{ 'policy.gridHeader.ID' | translate }}
+          </th>
+          <th class="print-cell" style="width: 12%">
+            {{ 'policy.gridHeader.COMMENT' | translate }}
+          </th>
+          <th class="print-cell" style="width: 15%">
+            {{ 'policy.gridHeader.FROM' | translate }}
+          </th>
+          <th class="print-cell" style="width: 15%">
+            {{ 'policy.gridHeader.TO' | translate }}
+          </th>
+          <th class="print-cell" style="width: 12%">
+            {{ 'policy.gridHeader.APPLICATIONS' | translate }}
+          </th>
+          <th class="print-cell" style="width: 12%">
+            {{ 'policy.gridHeader.PORT' | translate }}
+          </th>
+          <th class="print-cell" style="width: 6%">
+            {{ 'policy.gridHeader.ACTION' | translate}}
+          </th>
+          <th class="print-cell" style="width: 8%">
+            {{ 'policy.gridHeader.TYPE' | translate}}
+          </th>
+          <th class="print-cell" style="width: 8%">
+            {{ 'policy.gridHeader.UPDATE_AT' | translate }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="print-row" *ngFor="let rule of networkRules; let i = index" [attr.data-index]="i">
+          <ng-container *ngIf="rule.id > -1">
+            <td class="print-cell" style="width: 5%">
+              {{ i + 1 }}
+            </td>
+            <td class="print-cell" style="width: 5%">
+              {{ rule.id }}
+            </td>
+            <td class="print-cell" style="width: 12%">
+              {{ rule.comment }}
+            </td>
+            <td class="print-cell" style="width: 15%">
+              {{ rule.from }}
+            </td>
+            <td class="print-cell" style="width: 15%">
+              {{ rule.to }}
+            </td>
+            <td class="print-cell" style="width: 12%">
+              {{ rule.applications.join(',') }}
+            </td>
+            <td class="print-cell" style="width: 12%">
+              {{ rule.ports }}
+            </td>
+            <td class="print-cell" style="width: 6%">
+              <span class="action-label {{ colourMap[rule.action] }}">
+                {{ 'policy.action.' + rule.action.toUpperCase() | translate }}
+              </span>
+            </td>
+            <td class="print-cell" style="width: 8%">
+              <span *ngIf="colourMap[rule.cfg_type]" class="action-label nv-label {{colourMap[rule.cfg_type]}}">
+                {{ ('policy.head.' + colourMap[rule.cfg_type].replace("-", "_").toUpperCase()) | translate }}
+              </span>
+            </td>
+            <td class="print-cell" style="width: 8%">
+              {{ rule.last_modified_timestamp * 1000 | date: 'MMM dd, y HH:mm:ss'}}
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

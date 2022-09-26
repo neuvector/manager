@@ -1,0 +1,146 @@
+<hr style="margin: 5px auto;"/>
+<div class="row message-box-wrap">
+  <div class="full-width-panel">
+    <div class="full-width-summary">
+      <span class="label" [ngClass]="secEvent.details.message.cssColor">{{"nodes.gridHeader.MESSAGE" | translate}}</span><br/>
+    </div>
+    <div class="full-width-center message-box">
+      <div *ngIf="secEvent.details.message.content" style="border-bottom: #bbb 1px dashed;">
+        <span>{{secEvent.details.message.content}}</span>
+      </div>
+      <div name="what" style="border-bottom: #bbb 1px dashed;">
+        <span *ngIf="secEvent.details.message.procParentName">
+          <span class="text-bold">{{"securityEvent.PROC_P_NAME" | translate}}:</span>&nbsp;
+          <span class="text-muted">
+            {{secEvent.details.message.procParentName}}
+          </span>&nbsp;&nbsp;
+        </span>
+        <span *ngIf="secEvent.details.message.procParentPath">
+          <span class="text-bold">{{"securityEvent.PROC_P_PATH" | translate}}:</span>&nbsp;
+          <span class="text-muted">
+            {{secEvent.details.message.procParentPath}}
+          </span>&nbsp;&nbsp;
+        </span>
+        <span *ngIf="secEvent.details.message.procName">
+          <span class="text-bold">{{"securityEvent.PROC_NAME" | translate}}:</span>&nbsp;
+          <span class="text-muted">
+            {{secEvent.details.message.procName}}
+          </span>&nbsp;&nbsp;
+        </span>
+        <span *ngIf="secEvent.details.message.procPath">
+          <span class="text-bold">{{"securityEvent.PROC_PATH" | translate}}:</span>&nbsp;
+          <span class="text-muted">
+            {{secEvent.details.message.procPath}}
+          </span>&nbsp;&nbsp;
+        </span>
+        <span *ngIf="secEvent.details.message.procCmd">
+          <span *ngIf="secEvent.name.toLowerCase().indexOf('process') >= 0 || secEvent.name.toLowerCase().indexOf('escalation') >= 0 || secEvent.name.toLowerCase().indexOf('detected') >= 0"
+            class="text-bold">
+            {{"securityEvent.PROC_CMD" | translate}}:
+          </span>&nbsp;
+          <span *ngIf="secEvent.name.toLowerCase().indexOf('process') < 0 && secEvent.name.toLowerCase().indexOf('escalation') < 0 && secEvent.name.toLowerCase().indexOf('detected') < 0"
+            class="text-bold">
+            {{"securityEvent.CMD" | translate}}:
+          </span>&nbsp;
+          <span class="text-muted">
+            {{secEvent.details.message.procCmd}}
+          </span>&nbsp;&nbsp;
+        </span>
+        <span *ngIf="secEvent.details.message.procEffectiveUid">
+          <span class="text-bold">{{"securityEvent.PROC_EFF_UID" | translate}}:</span>&nbsp;
+          <span class="text-muted">
+            {{secEvent.details.message.procEffectiveUid}}
+          </span>&nbsp;&nbsp;
+        </span>
+        <span *ngIf="secEvent.details.message.procEffectiveUser">
+          <span class="text-bold">{{"securityEvent.PROC_EFF_USER" | translate}}:</span>&nbsp;
+          <span class="text-muted">
+            {{secEvent.details.message.procEffectiveUser}}
+          </span>&nbsp;&nbsp;
+        </span>
+        <span *ngIf="secEvent.details.message.localIP">
+          <span class="text-bold">{{"securityEvent.LOCAL_IP" | translate}}:</span>&nbsp;
+          <span class="text-muted">
+            {{secEvent.details.message.localIP}}
+          </span>&nbsp;&nbsp;
+        </span>
+        <span *ngIf="secEvent.details.message.remoteIP">
+          <span class="text-bold">{{"securityEvent.REMOTE_IP" | translate}}:</span>&nbsp;
+          <span class="text-muted">
+            {{secEvent.details.message.remoteIP}}
+          </span>&nbsp;&nbsp;
+        </span>
+        <span *ngIf="secEvent.details.message.localPort">
+          <span class="text-bold">{{"securityEvent.LOCAL_PORT" | translate}}:</span>&nbsp;
+          <span class="text-muted">
+            {{secEvent.details.message.localPort}}
+          </span>&nbsp;&nbsp;
+        </span>
+        <span *ngIf="secEvent.details.message.remotePort">
+          <span class="text-bold">{{"securityEvent.REMOTE_PORT" | translate}}:</span>&nbsp;
+          <span class="text-muted">
+            {{secEvent.details.message.remotePort}}
+          </span>&nbsp;&nbsp;
+        </span>
+        <!--<span *ngIf="secEvent.details.message.etherType">
+          <span class="text-bold">{{"securityEvent.ETHER_TYPE" | translate}}:</span>&nbsp;
+          <span class="text-muted">
+            {{secEvent.details.message.etherType}}
+          </span>&nbsp;&nbsp;
+        </span>-->
+        <span *ngIf="secEvent.details.message.ipProto">
+          <span class="text-bold">{{"securityEvent.IP_PROTO" | translate}}:</span>&nbsp;
+          <span class="text-muted">
+            {{secEvent.details.message.ipProto}}
+          </span>&nbsp;&nbsp;
+        </span>
+        <span *ngIf="secEvent.details.message.filePath">
+          <span class="text-bold">{{"securityEvent.FILE_PATH" | translate}}:</span>&nbsp;
+          <span class="text-muted">
+            {{secEvent.details.message.filePath}}
+          </span>&nbsp;&nbsp;
+        </span>
+        <span *ngIf="secEvent.details.message.fileNames">
+          <span class="text-bold">{{"securityEvent.FILE_NAME" | translate}}:</span>&nbsp;
+          <span class="text-muted" *ngIf="secEvent.details.message.fileNames.length > 100">
+            {{secEvent.details.message.fileNames.substring(0, 101)}}...
+            <span class="link" ng-click="showAllFiles(secEvent.details.message.fileNames, $event)">
+              ({{"general.VIEW_ALL" | translate}})
+            </span>
+          </span>&nbsp;&nbsp;
+          <span class="text-muted" *ngIf="secEvent.details.message.fileNames.length <= 100">
+            {{secEvent.details.message.fileNames}}
+          </span>&nbsp;&nbsp;
+        </span>
+        <span id="count" *ngIf="secEvent.details.message.count>1">
+          <span class="text-bold">{{"securityEvent.COUNT" | translate}}:</span>&nbsp;
+          <span class="text-muted">
+            {{secEvent.details.message.count}}
+          </span>&nbsp;&nbsp;
+        </span>
+      </div>
+      <div name="where">
+        <span *ngIf="secEvent.details.clusterName">
+          <span class="text-bold">{{"violation.gridHeader.CLUSTER_NAME" | translate}}:</span>&nbsp;
+          <span class="text-muted">
+            {{secEvent.details.clusterName}}
+          </span>&nbsp;&nbsp;
+        </span>
+        <span *ngIf="secEvent.details.message.group">
+          <span class="text-bold">{{"securityEvent.GROUP" | translate}}:</span>&nbsp;
+
+          <!-- <span class="text-muted link hand" ui-sref="app.group({groupName: secEvent.details.message.group, from: 'process'})">   -->
+          <a data-role="button" class="text-muted link hand" (click)="goToGroupPage(secEvent.details.message.group)">
+            {{secEvent.details.message.group}}
+          </a>&nbsp;&nbsp;
+        </span>
+        <div *ngIf="secEvent.enforcerName && secEvent.hostName">
+          <span class="text-bold">{{"securityEvent.REPORTED_BY" | translate}}:</span>&nbsp;
+          <span class="text-muted">
+            <span class="link" (click)="showEnforcerDetails($event, secEvent.enforcerId, secEvent.enforcerName)">{{secEvent.enforcerName}}</span> on <span class="link" ng-click="showHostDetails($event, secEvent.hostId, secEvent.host_name)">{{secEvent.hostName}}</span>
+          </span>&nbsp;&nbsp;
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

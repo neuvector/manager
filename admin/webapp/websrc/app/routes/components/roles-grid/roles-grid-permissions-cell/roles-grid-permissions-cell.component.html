@@ -1,0 +1,9 @@
+<div class="d-flex align-items-center flex-wrap my-1">
+  <span
+    *ngFor="let permission of params.value"
+    style="line-height: 1"
+    class="type-label badge mb-1"
+    [class]="permission.write ? 'modify-permission' : 'view-permission'">
+    {{ roleText(permission) }}
+  </span>
+</div>

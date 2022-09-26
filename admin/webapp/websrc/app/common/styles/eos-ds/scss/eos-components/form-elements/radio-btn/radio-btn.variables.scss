@@ -1,0 +1,17 @@
+/* Radio button variables
+   ========================================================================== */
+/**
+*
+*  Z-index variables: /assets/stylesheets/eos-base/variables/z-index.scss
+*  Color variables: /assets/stylesheets/eos-base/variables/branding.scss
+*
+*/
+$eos-radio-btn-label-margin: $eos-s;
+$eos-radio-btn-zindex: $eos-zindex-negative;
+$eos-radio-btn-height: 16px;
+$eos-radio-btn-width: 16px;
+$eos-radio-btn-top: .25rem;
+$eos-radio-btn-border: $eos-form-element-color;
+$eos-radio-btn-checked: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiIHZpZXdCb3g9IjAgMCA4IDgiPgogIDxjaXJjbGUgaWQ9IkVsbGlwc2VfMSIgZGF0YS1uYW1lPSJFbGxpcHNlIDEiIGN4PSI0IiBjeT0iNCIgcj0iNCIgZmlsbD0iIzMwYmE3OCIvPgo8L3N2Zz4K');
+$eos-radio-btn-checked-bg-color: $eos-bc-white;
+$eos-radio-btn-disabled: $eos-bc-gray-300;

@@ -1,0 +1,156 @@
+/* Submenu
+   ========================================================================== */
+/* Variables file: assets/stylesheets/eos-components/submenu/submenu.variables.scss */
+.submenu {
+  align-items: center;
+  align-self: baseline;
+  background: $eos-submenu-background;
+  display: flex;
+  height: $eos-submenu-height;
+  position: sticky;
+  top: 0;
+  width: $eos-submenu-width;
+  z-index: $eos-submenu-zindex;
+  @media screen and (max-width: $eos-sd-max) {
+    background-color: $eos-submenu-mobile-background;
+    top: $eos-mobile-menu-height;
+  }
+
+  /* shared link styles */
+  a:not([href]):not([tabindex]), a {
+    color: $eos-submenu-text-color;
+    font-weight: normal;
+
+    &:hover {
+      border-color: $eos-submenu-hover-border;
+      cursor: pointer;
+      text-decoration: none;
+      @media screen and (max-width: $eos-sd-max) {
+        border-color: $eos-submenu-hover-border;
+      }
+    }
+    @media screen and (max-width: $eos-sd-max) {
+      color: $eos-submenu-mobile-text-color;
+    }
+  }
+
+  .user-profile {
+    margin-left: auto;
+    padding: $eos-submenu-user-padding;
+
+    i {
+      color: $eos-submenu-text-color;
+      cursor: pointer;
+      @media screen and (max-width: $eos-sd-max) {
+        color: $eos-submenu-mobile-text-color;
+      }
+    }
+  }
+
+  .dropdown-toggle::after {
+    content: none;
+  }
+
+  /* top level specific link styles */
+  .submenu-item {
+    border-bottom: $eos-submenu-nav-border-width solid transparent;
+    display: inline-block;
+    max-height: $eos-submenu-item-max-height;
+    padding: $eos-submenu-item-padding;
+    transition: all ease-in .1s;
+    white-space: nowrap;
+
+    &.selected {
+      border-color: $eos-submenu-nav-border-color-active;
+    }
+
+    i {
+      margin-right: 0;
+      text-align: center;
+    }
+  }
+
+  nav, .submenu-search-wrap {
+    display: flex;
+  }
+
+  .main-submenu {
+    display: none;
+
+    .list-inline-item {
+      margin: 0;
+      padding: 0;
+    }
+
+    a {
+      .selected {
+        border-color: $eos-submenu-selected-border-color;
+        @media screen and (max-width: $eos-sd-max) {
+          border-color: $eos-submenu-selected-border-color;
+        }
+      }
+    }
+  }
+
+  /* shared search input styles */
+  .submenu-search, .submenu-search-wrap {
+    align-items: center;
+  }
+
+  .submenu-search {
+    display: flex;
+    justify-content: space-around;
+    margin-left: auto;
+
+    .submenu-search-wrap {
+      border-bottom: 1px solid $eos-submenu-search-border;
+      height: $eos-submenu-search-wrap-height;
+    }
+
+    input, a {
+      border: 0;
+    }
+
+    input {
+      outline: 0;
+    }
+
+    a {
+      margin-left: auto;
+      padding: 0;
+    }
+  }
+
+  .visible {
+    display: inline-block;
+  }
+}
+
+/* Smart submenu nav dropdown */
+.dropdown-more {
+  .submenu-item {
+    padding: $eos-submenu-dropdown-more-padding;
+
+    &.selected {
+      border-bottom: 3px solid $eos-submenu-selected-border-color;
+    }
+  }
+
+  .dropdown-menu a {
+    margin-top: $eos-submenu-more-dd-padding;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  // if the user submenu is only visible without search, then pull to right
+  + .user-submenu {
+    margin-left: auto;
+  }
+}
+
+.submenu-scroll {
+  box-shadow: $eos-submenu-box-scroll;
+  transition: box-shadow .3s ease-in-out;
+}

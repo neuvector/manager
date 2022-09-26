@@ -1,0 +1,43 @@
+<div class="my-md-4 mx-3">
+  <h1 class="h4 font-weight-normal">{{ 'setting.SUPPORT' | translate }}</h1>
+  <div class="my-md-2 mx-3">
+    <mat-checkbox
+      class="mx-3"
+      [(ngModel)]="debug_enabled"
+      (change)="submitDebug()"
+      >{{ 'setting.ENABLED_CPATH' | translate }}</mat-checkbox
+    >
+    <app-enforcers-grid
+      [selectable]="true"
+      [refreshable]="false"></app-enforcers-grid>
+    <div class="d-flex justify-content-end align-items-center">
+      <app-loading-button
+        [appearance]="'mat-raised-button'"
+        [color]="'primary'"
+        [loading]="downloadingUsage"
+        [text]="'setting.USAGE_RPT' | translate"
+        [type]="'button'"
+        class="m-2"
+        (btnClick)="usageReport()">
+      </app-loading-button>
+      <app-loading-button
+        *ngIf="!collectingLog"
+        [appearance]="'mat-raised-button'"
+        [color]="'primary'"
+        [text]="'setting.COLLECT' | translate"
+        [type]="'button'"
+        class="m-2"
+        (btnClick)="collectLog()">
+      </app-loading-button>
+      <app-loading-button
+        *ngIf="collectingLog"
+        [appearance]="'mat-raised-button'"
+        [color]="'primary'"
+        [text]="'setting.CANCEL' | translate"
+        [type]="'button'"
+        class="m-2"
+        (btnClick)="cancelCollect()">
+      </app-loading-button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<div class="d-flex justify-content-between align-items-center">
+  <span class="d-block"><span
+    *ngIf="(filtered$ | async)">{{'enum.FOUND' | translate}} {{filteredCount}}&nbsp;/&nbsp;</span>{{rowData.length}} {{'cis.COUNT_POSTFIX' | translate}}</span>
+  <div class="d-flex justify-content-end align-items-center">
+    <button (click)="onToggleChartView()" aria-label="Pie chart view icon button " mat-icon-button>
+      <i class="eos-icons">pie_chart</i>
+    </button>
+    <button (click)="openAdvancedFilter()" class="mx-2 d-flex justify-content-end align-items-center" mat-button><i
+      class="eos-icons">search</i>{{'general.ADV_FILTER' | translate}}
+    </button>
+    <app-quick-filter
+      (filterCountChange)="filterCountChanged($event)"
+      [gridOptions]="gridOptions"
+      [showCount]="false">
+    </app-quick-filter>
+  </div>
+</div>
+
+<ag-grid-angular
+  (window:resize)="onResize()"
+  [gridOptions]="gridOptions"
+  class="ag-theme-alpine"
+  style="width: 100%; height: calc(100% - 70px)">
+</ag-grid-angular>

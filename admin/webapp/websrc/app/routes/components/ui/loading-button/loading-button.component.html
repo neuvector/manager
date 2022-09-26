@@ -1,0 +1,122 @@
+<ng-container [ngSwitch]="appearance">
+  <button
+    (click)="onClick($event)"
+    *ngSwitchCase="'mat-button'"
+    [attr.id]="id"
+    [class]="buttonClasses"
+    [color]="color"
+    [disabled]="disabled"
+    [type]="type"
+    color="undefined"
+    mat-button>
+    <mat-spinner
+      *ngIf="loading"
+      class="btn__spinner"
+      diameter="20">
+    </mat-spinner>
+    <i *ngIf="iconName" [class]="iconClasses">{{ iconName }}</i>
+    {{ text }}
+  </button>
+  <button
+    (click)="onClick($event)"
+    *ngSwitchCase="'mat-raised-button'"
+    [attr.id]="id"
+    [class]="buttonClasses"
+    [color]="color"
+    [disabled]="disabled"
+    [type]="type"
+    mat-raised-button>
+    <mat-spinner
+      *ngIf="loading"
+      class="btn__spinner"
+      diameter="20">
+    </mat-spinner>
+    <i *ngIf="iconName" [class]="iconClasses">{{ iconName }}</i>
+    {{ text }}
+  </button>
+  <button
+    (click)="onClick($event)"
+    *ngSwitchCase="'mat-stroked-button'"
+    [attr.id]="id"
+    [class]="buttonClasses"
+    [color]="color"
+    [disabled]="disabled"
+    [type]="type"
+    mat-stroked-button>
+    <mat-spinner
+      *ngIf="loading"
+      class="btn__spinner"
+      diameter="20">
+    </mat-spinner>
+    <i *ngIf="iconName" [class]="iconClasses">{{ iconName }}</i>
+    {{ text }}
+  </button>
+  <button
+    (click)="onClick($event)"
+    *ngSwitchCase="'mat-flat-button'"
+    [attr.id]="id"
+    [class]="buttonClasses"
+    [color]="color"
+    [disabled]="disabled"
+    [type]="type"
+    mat-flat-button>
+    <mat-spinner
+      *ngIf="loading"
+      class="btn__spinner"
+      diameter="20">
+    </mat-spinner>
+    <i *ngIf="iconName" [class]="iconClasses">{{ iconName }}</i>
+    {{ text }}
+  </button>
+  <button
+    (click)="onClick($event)"
+    *ngSwitchCase="'mat-icon-button'"
+    [attr.aria-label]="ariaLabel"
+    [attr.id]="id"
+    [class]="buttonClasses"
+    [color]="color"
+    [disabled]="disabled"
+    [type]="type"
+    mat-icon-button>
+    <mat-spinner
+      *ngIf="loading"
+      class="btn__spinner"
+      diameter="20">
+    </mat-spinner>
+    <i [class]="iconClasses">{{ iconName }}</i>
+  </button>
+  <button
+    (click)="onClick($event)"
+    *ngSwitchCase="'mat-fab'"
+    [attr.aria-label]="ariaLabel"
+    [attr.id]="id"
+    [class]="buttonClasses"
+    [color]="color"
+    [disabled]="disabled"
+    [type]="type"
+    mat-fab>
+    <mat-spinner
+      *ngIf="loading"
+      class="btn__spinner"
+      diameter="20">
+    </mat-spinner>
+    <i [class]="iconClasses">{{ iconName }}</i>
+  </button>
+  <button
+    (click)="onClick($event)"
+    *ngSwitchCase="'mat-mini-fab'"
+    [attr.aria-label]="ariaLabel"
+    [attr.id]="id"
+    [class]="buttonClasses"
+    [color]="color"
+    [disabled]="disabled"
+    [type]="type"
+    mat-mini-fab>
+    <mat-spinner
+      *ngIf="loading"
+      class="btn__spinner"
+      diameter="20">
+    </mat-spinner>
+    <i [class]="iconClasses">{{ iconName }}</i>
+  </button>
+</ng-container>

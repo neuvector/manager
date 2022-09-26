@@ -1,0 +1,158 @@
+<div class="signin-content">
+  <div class="sign-in-box">
+    <div class="brand-container">
+      <div><img src="assets/img/suse-logo-light.svg" alt="Suse logo" /></div>
+      <div>
+        <img
+          class="margin-bottom-xxxl"
+          src="assets/img/sign-in-lock-1.svg"
+          alt="Sign in lock design" />
+        <div class="info">
+          <h1>NeuVector</h1>
+          <p>Full lifecycle container security</p>
+        </div>
+      </div>
+      <div>
+        <div class="margin-top-l"></div>
+      </div>
+      <div>
+        <div class="margin-top-l"></div>
+      </div>
+      <div>
+        <div class="margin-top-l"></div>
+      </div>
+    </div>
+
+    <div class="form-container">
+      <div id="loadingBar" style="width: 100%; height: 5px;">
+        <mat-progress-bar *ngIf="(inProgress || isFromSSO) && !authMsg" class="sso-auth-progress"mode="indeterminate"></mat-progress-bar>
+      </div>
+      <div class="sign-in-header" *ngIf="!isFromSSO"></div>
+      <div class="sign-in-form">
+        <h1>{{ 'login.SIGN_IN' | translate }}</h1>
+        <form class="margin-top-xl login-form" [formGroup]="loginForm" *ngIf="!isFromSSO">
+          <div class="form-group" style="position: relative">
+            <label for="Email1">{{ 'login.USERNAME' | translate }}</label>
+            <input
+              class="form-control"
+              autocomplete="off"
+              autofocus
+              id="Email1"
+              [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+              formControlName="username"
+              required
+              type="text" />
+            <span
+              class="text-danger"
+              style="position: absolute; left: 0; top: 70px"
+              *ngIf="
+                loginForm.controls['username'].hasError('required') &&
+                loginForm.controls['username'].dirty
+              "
+              >{{ 'login.USER_REQUIRED' | translate }}</span
+            >
+          </div>
+          <div class="form-group" style="position: relative">
+            <label for="password1">{{ 'login.PASSWORD' | translate }}</label>
+            <input
+              id="password1"
+              ng-trim="false"
+              [type]="showPassword ? 'text' : 'password'"
+              [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+              formControlName="password"
+              required
+              class="form-control" />
+            <i
+              class="eos-icons login-icon text-muted"
+              *ngIf="loginForm.controls['password'].value"
+              (click)="showPassword = !showPassword"
+              style="
+                cursor: pointer;
+                pointer-events: all;
+                position: absolute;
+                right: 20px;
+                top: 35px;
+              "
+              >{{ showPassword ? 'visibility_off' : 'visibility' }}</i
+            >
+            <span
+              class="text-danger"
+              style="position: absolute; left: 0; top: 70px"
+              *ngIf="
+                loginForm.controls['password'].hasError('required') &&
+                loginForm.controls['password'].dirty
+              "
+              >{{ 'login.PASSWORD_REQUIRED' | translate }}</span
+            >
+          </div>
+          <button
+            class="btn btn-primary btn-block margin-top-xxl"
+            (click)="submitForm($event, loginForm.value, '')"
+            [disabled]="loginForm.invalid"
+            type="submit">
+            {{ 'login.LOGIN' | translate }}
+          </button>
+          <div class="margin-top-xl" *ngIf="servers && servers.length === 1">
+            <button
+              class="btn btn-primary btn-block"
+              (click)="submitForm($event, loginForm.value, 'okta')"
+              *ngIf="samlEnabled"
+              [disabled]="loginForm.invalid"
+              type="submit">
+              {{ 'login.OKTA_LOGIN' | translate }}
+            </button>
+            <button
+              class="btn btn-primary btn-block"
+              (click)="submitForm($event, loginForm.value, 'oidc')"
+              *ngIf="oidcEnabled"
+              [disabled]="loginForm.invalid"
+              type="submit">
+              {{ 'login.OIDC_LOGIN' | translate }}
+            </button>
+          </div>
+          <div class="margin-top-xl" *ngIf="servers && servers.length === 2">
+            <button
+              class="btn btn-primary btn-block-half"
+              (click)="submitForm($event, loginForm.value, 'okta')"
+              *ngIf="samlEnabled"
+              style="float: left"
+              [disabled]="loginForm.invalid"
+              type="submit">
+              {{ 'login.OKTA_LOGIN' | translate }}
+            </button>
+            <div
+              style="padding: 12px; text-align: center; width: 8%; float: left">
+              {{ 'login.OR' | translate }}
+            </div>
+            <button
+              class="btn btn-primary btn-block-half"
+              (click)="submitForm($event, loginForm.value, 'oidc')"
+              *ngIf="oidcEnabled"
+              style="float: left"
+              [disabled]="loginForm.invalid"
+              type="submit">
+              {{ 'login.OIDC_LOGIN' | translate }}
+            </button>
+          </div>
+        </form>
+      </div>
+      <div style="padding: 0 10px; clear: both; height: 42px" >
+        <div
+          class="text-danger text-center"
+          [ngClass]="{ mt: servers && servers.length === 2 }"
+          *ngIf="authMsg">
+          {{ authMsg }}
+        </div>
+      </div>
+      <div class="sign-in-footer">
+        <div class="text-left margin-bottom-m margin-left-l" >
+          <span>&copy;</span>
+          <span [textContent]="app.year"></span>
+          <span>-</span>
+          <span [textContent]="app.name"></span>&nbsp;|&nbsp;
+          <span [textContent]="app.description"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

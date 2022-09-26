@@ -1,0 +1,17 @@
+<mat-card class="margin-bottom-m">
+  <mat-card-title>{{'dashboard.body.panel_title.CONTAINER_SEC' | translate}}</mat-card-title>
+  <mat-card-content style="display: flex">
+    <app-exposure-chart
+      class="col-sm-4"
+      [ingress]="hierarchicalIngressList"
+      [egress]="hierarchicalEgressList"
+    >
+    </app-exposure-chart>
+    <app-exposure-grid
+      class="col-sm-8"
+      [ingress]="hierarchicalIngressList"
+      [egress]="hierarchicalEgressList"
+    >
+    </app-exposure-grid>
+  </mat-card-content>
+</mat-card>

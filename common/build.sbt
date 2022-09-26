@@ -1,4 +1,4 @@
-test in assembly := {}
+assembly / test := {}
 
 assembly / assemblyMergeStrategy := {
   case PathList(ps @ _*) if ps.last endsWith  "io.netty.versions.properties" => MergeStrategy.first

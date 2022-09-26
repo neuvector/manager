@@ -1,0 +1,13 @@
+<div class="d-flex" [class]="to.wrapperClass">
+  <span
+    *ngIf="!to.hintPosition || to.hintPosition === 'before'"
+    [class]="to.hintClass"
+    >{{ to.hint! | translate }}</span
+  >
+  <div [class]="to.fieldClass">
+    <ng-container #fieldComponent></ng-container>
+  </div>
+  <span *ngIf="to.hintPosition === 'after'" [class]="to.hintClass">{{
+    to.hint! | translate
+  }}</span>
+</div>

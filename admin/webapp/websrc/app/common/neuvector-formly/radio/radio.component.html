@@ -1,0 +1,13 @@
+<mat-radio-group
+  [formControl]="formControl"
+  [formlyAttributes]="field"
+  aria-label="Select an option"
+  class="d-flex">
+  <mat-radio-button
+    *ngFor="let item of field.templateOptions?.items"
+    [formlyAttributes]="field"
+    [value]="item.value"
+    class="mr-3">
+    {{ item.viewValue | translate }}
+  </mat-radio-button>
+</mat-radio-group>

@@ -1,0 +1,48 @@
+<div id="groupInfo" class="infoBox topLeftFloat pt-0 resizable" cdkDrag>
+  <button
+    class="btn btn-xs btn-link pull-right mt-2"
+    (click)="popupState.leave()">
+    <em class="fa fa-times fa-lg text-muted"></em>
+  </button>
+  <div class="clearfix handle" cdkDragHandle id="domainInfoHeader">
+    <div class="auto-hide mt-2" style="display: block; width: 350px">
+      <img
+        src="assets/img/icons/graph/cluster.svg"
+        aria-label="Group icon"
+        style="width: 24px; height: 24px"
+        alt="groupIcon" />
+      {{ group.name }}
+    </div>
+  </div>
+  <hr class="fancy mx-0 my-0" />
+  <mat-tab-group
+    animationDuration="0ms"
+    (selectedTabChange)="activateTab($event)">
+    <mat-tab label="{{ 'group.gridHeader.MEMBERS' | translate }}">
+      <app-members
+        *ngIf="activeTabIndex === 0"
+        [source]="navSource"
+        [members]="group.members"
+        [kind]="group.kind"
+        [resizableHeight]="height">
+      </app-members>
+    </mat-tab>
+
+    <mat-tab label="{{ 'service.POLICY_RULES' | translate }}">
+      <app-network-rules
+        *ngIf="activeTabIndex === 1"
+        [source]="navSource"
+        [groupName]="group.name"
+        [resizableHeight]="height">
+      </app-network-rules>
+    </mat-tab>
+    <mat-tab label="{{ 'group.RESPONSE_RULES' | translate }}">
+      <app-response-rules
+        *ngIf="activeTabIndex === 2"
+        [source]="navSource"
+        [groupName]="group.name"
+        [resizableHeight]="height">
+      </app-response-rules>
+    </mat-tab>
+  </mat-tab-group>
+</div>

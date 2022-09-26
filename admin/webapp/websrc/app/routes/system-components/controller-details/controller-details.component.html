@@ -1,0 +1,155 @@
+<mat-tab-group
+  (selectedTabChange)="activateTab($event)"
+  [(selectedIndex)]="activeTabIndex"
+  #detailsTabGroup>
+  <mat-tab label="{{ 'controllers.detail.TAB_TITLE' | translate }}">
+    <div class="row w-100 mx-0" *ngIf="currentController">
+      <div class="col-md-4 my-md-4 details-item">
+        <mat-icon
+          aria-hidden="false"
+          aria-label="ID icon"
+          class="details-icon"
+          fontSet="fa"
+          fontIcon="fa-credit-card">
+        </mat-icon>
+        <div class="ml-3 overflow-hidden">
+          {{ 'controllers.detail.ID' | translate }}
+          <div class="text-muted text-truncate">
+            {{ currentController.id }}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 my-md-4 details-item">
+        <mat-icon
+          aria-hidden="false"
+          aria-label="Node icon"
+          class="details-icon"
+          fontSet="fa"
+          fontIcon="fa-server">
+        </mat-icon>
+        <div class="ml-3 overflow-hidden">
+          {{ 'controllers.detail.HOST_NAME' | translate }}
+          <div class="text-muted text-truncate">
+            {{ currentController.host_name }}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 my-md-4 details-item">
+        <mat-icon
+          aria-hidden="false"
+          aria-label="Namespace icon"
+          class="details-icon"
+          fontSet="fa"
+          fontIcon="fa-building">
+        </mat-icon>
+        <div class="ml-3 overflow-hidden">
+          {{ 'network.legend.DOMAIN' | translate }}
+          <div class="text-muted text-truncate">
+            {{ currentController.domain }}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 my-md-4 details-item">
+        <mat-icon
+          aria-hidden="false"
+          aria-label="Created icon"
+          class="details-icon"
+          fontSet="fa"
+          fontIcon="fa-calendar">
+        </mat-icon>
+        <div class="ml-3 overflow-hidden">
+          {{ 'controllers.detail.CREATED_AT' | translate }}
+          <div class="text-muted text-truncate">
+            {{ currentController.created_at | date: 'MMM dd, y HH:mm:ss' }}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 my-md-4 details-item">
+        <mat-icon
+          aria-hidden="false"
+          aria-label="Started icon"
+          class="details-icon"
+          fontSet="fa"
+          fontIcon="fa-calendar">
+        </mat-icon>
+        <div class="ml-3 overflow-hidden">
+          {{ 'controllers.detail.STARTED_AT' | translate }}
+          <div class="text-muted text-truncate">
+            {{ currentController.started_at | date: 'MMM dd, y HH:mm:ss' }}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 my-md-4 details-item">
+        <mat-icon
+          aria-hidden="false"
+          aria-label="Joined icon"
+          class="details-icon"
+          fontSet="fa"
+          fontIcon="fa-calendar">
+        </mat-icon>
+        <div class="ml-3 overflow-hidden">
+          {{ 'controllers.detail.JOIN_AT' | translate }}
+          <div class="text-muted text-truncate">
+            {{ currentController.joined_at | date: 'MMM dd, y HH:mm:ss' }}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 my-md-4 details-item">
+        <mat-icon
+          aria-hidden="false"
+          aria-label="Status icon"
+          class="details-icon"
+          fontSet="fa"
+          fontIcon="fa-handshake">
+        </mat-icon>
+        <div class="ml-3 overflow-hidden">
+          {{ 'controllers.detail.ORCH_CONN_STATUS' | translate }}
+          <div class="text-muted text-truncate">
+            {{
+              currentController.orch_conn_status
+                ? currentController.orch_conn_status
+                : 'n/a'
+            }}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 my-md-4 details-item" *ngIf="isDisconnected">
+        <mat-icon
+          aria-hidden="false"
+          aria-label="Disconnected icon"
+          class="details-icon"
+          fontSet="fa"
+          fontIcon="fa-calendar">
+        </mat-icon>
+        <div class="ml-3 overflow-hidden">
+          {{ 'controllers.detail.DISCONNECTED_AT' | translate }}
+          <div class="text-muted text-truncate">
+            {{ currentController.disconnected_at | date: 'MMM dd, y HH:mm:ss' }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <em class="fa fa-chart-line pr-1"></em>
+      {{ 'controllers.stats.TAB_TITLE' | translate }}
+    </ng-template>
+    <ng-template matTabContent>
+      <div class="w-100 my-md-4" *ngIf="!isDisconnected; else noStats">
+        <div class="chart-container">
+          <canvas
+            [data]="cpuChartData.data"
+            [labels]="cpuChartData.data.labels"
+            [options]="cpuChartData.options"
+            [type]="cpuChartData.type"
+            baseChart>
+          </canvas>
+        </div>
+      </div>
+      <ng-template #noStats>
+        {{ 'controllers.message.NO_STATE' | translate }}
+      </ng-template>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>

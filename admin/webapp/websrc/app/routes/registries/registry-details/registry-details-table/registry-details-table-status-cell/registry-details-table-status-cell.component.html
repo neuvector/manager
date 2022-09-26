@@ -1,0 +1,18 @@
+<ng-container [ngSwitch]="status">
+  <span
+    *ngSwitchCase="'finished'"
+    class="badge text-white"
+    style="background-color: #1154a2"
+    >{{ status | titlecase }}</span
+  >
+  <span *ngSwitchCase="'scanning'" class="badge badge-primary">{{
+    status | titlecase
+  }}</span>
+  <span
+    *ngSwitchCase="'scheduled'"
+    class="badge text-white"
+    style="background-color: rgb(0, 0, 0)"
+    >{{ status | titlecase }}</span
+  >
+  <span *ngSwitchDefault>{{ status | titlecase }}</span>
+</ng-container>

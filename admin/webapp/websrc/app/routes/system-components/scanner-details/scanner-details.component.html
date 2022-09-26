@@ -1,0 +1,94 @@
+<div class="row w-100 mx-0" *ngIf="currentScanner">
+  <div class="col-md-4 my-md-4 details-item">
+    <mat-icon
+      aria-hidden="false"
+      aria-label="ID icon"
+      class="details-icon"
+      fontSet="fa"
+      fontIcon="fa-credit-card">
+    </mat-icon>
+    <div class="ml-3 overflow-hidden">
+      {{ 'controllers.detail.ID' | translate }}
+      <div class="text-muted text-truncate">
+        {{ currentScanner.id }}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 my-md-4 details-item">
+    <mat-icon
+      aria-hidden="false"
+      aria-label="CVE DB icon"
+      class="details-icon"
+      fontSet="fa"
+      fontIcon="fa-tag">
+    </mat-icon>
+    <div class="ml-3 overflow-hidden">
+      {{ 'dashboard.heading.CVE_DB_VERSION' | translate }}
+      <div class="text-muted text-truncate">
+        {{ currentScanner.cvedb_version }}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 my-md-4 details-item">
+    <mat-icon
+      aria-hidden="false"
+      aria-label="DB Creation icon"
+      class="details-icon"
+      fontSet="fa"
+      fontIcon="fa-calendar">
+    </mat-icon>
+    <div class="ml-3 overflow-hidden">
+      {{ 'registry.CVE_DB_DATE' | translate }}
+      <div class="text-muted text-truncate">
+        {{ currentScanner.cvedb_create_time }}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 my-md-4 details-item">
+    <mat-icon
+      aria-hidden="false"
+      aria-label="IP icon"
+      class="details-icon"
+      fontSet="fa"
+      fontIcon="fa-server">
+    </mat-icon>
+    <div class="ml-3 overflow-hidden">
+      {{ 'controllers.detail.CLUSTER_IP' | translate }}
+      <div class="text-muted text-truncate">
+        {{ currentScanner.server }}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 my-md-4 details-item">
+    <mat-icon
+      aria-hidden="false"
+      aria-label="Port icon"
+      class="details-icon"
+      fontSet="fa"
+      fontIcon="fa-dot-circle">
+    </mat-icon>
+    <div class="ml-3 overflow-hidden">
+      {{ 'multiCluster.grid.port' | translate }}
+      <div class="text-muted text-truncate">
+        {{ currentScanner.port }}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 my-md-4 details-item">
+    <mat-icon
+      aria-hidden="false"
+      aria-label="Joined icon"
+      class="details-icon"
+      fontSet="fa"
+      fontIcon="fa-calendar">
+    </mat-icon>
+    <div class="ml-3 overflow-hidden">
+      {{ 'enforcers.detail.JOINED_AT' | translate }}
+      <div class="text-muted text-truncate">
+        {{
+          currentScanner.joined_timestamp * 1000 | date: 'MMM dd, y HH:mm:ss'
+        }}
+      </div>
+    </div>
+  </div>
+</div>

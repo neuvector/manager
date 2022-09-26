@@ -1,0 +1,98 @@
+/* Pagination
+   ========================================================================== */
+/* Variables file: assets/stylesheets/eos-components/pagination/pagination.variables.scss*/
+
+.pagination-wrap {
+  align-items: baseline;
+  display: flex;
+}
+
+.pagination {
+  align-items: center;
+  border-radius: 0;
+  display: inline-flex;
+  margin-left: $eos-pagination-left-margin;
+  padding: 0;
+
+  .page-item {
+    background: $eos-pagination-item-color;
+    margin-right: $eos-pagination-item-margin;
+    padding: 0;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &.active, &:hover {
+      background-color: $eos-pagination-item-background;
+      border-radius: $eos-pagination-item-radius;
+      color: $eos-pagination-item-color;
+
+      .page-link {
+        background: transparent;
+        border-color: transparent;
+        color: $eos-pagination-link-color;
+      }
+    }
+
+    &.disabled {
+      background-color: $eos-pagination-item-disabled;
+
+      .page-link {
+        background-color: transparent;
+        color: $eos-pagination-item-disabled-link;
+      }
+    }
+  }
+
+  .page-link {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    color: $eos-pagination-link-color;
+    font-weight: normal;
+    margin: 0;
+    padding: $eos-pagination-link-padding;
+    transition: background-color .25s ease;
+
+    &:hover {
+      border-radius: 0;
+      color: $eos-pagination-link-hover;
+    }
+
+  }
+
+  &-actions {
+    align-items: center;
+    display: inline-flex;
+    margin: $eos-pagination-actions-spacing;
+
+    .goto-field {
+      align-items: center;
+      border-left: 1px solid $eos-pagination-actions-border;
+      border-right: 1px solid $eos-pagination-actions-border;
+      display: flex;
+      padding: $eos-pagination-actions-spacing;
+
+      input {
+        margin-left: $eos-pagination-goto-input-m;
+        margin-right: $eos-pagination-goto-input-m;
+        max-width: $eos-pagination-goto-width;
+        padding: 0;
+      }
+    }
+
+    .dropdown {
+      margin-left: $eos-pagination-actions-dropdown-m;
+    }
+  }
+
+  &-count {
+    border-right: 1px solid $eos-pagination-actions-border;
+    padding-right: $eos-pagination-text-spacing;
+  }
+
+  &-text {
+    padding-left: $eos-pagination-text-spacing;
+  }
+}

@@ -1,0 +1,12 @@
+/* Alerts dark theme
+   ========================================================================== */
+/* Variables file: assets/stylesheets/eos-custom-components/card/dark-theme.variables.scss */
+.dark-theme {
+  eos-alert {
+    color: $eos-body-color;
+  }
+
+  .alert-section a:not([href]):not([tabindex]), .alert-section a {
+    color: $eos-alert-section-link-color-dark-theme;
+  }
+}

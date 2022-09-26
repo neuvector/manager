@@ -1,0 +1,23 @@
+.my-drop-zone {
+  border: dotted 3px lightgray;
+  height: 60px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.file-selection {
+  height: 30px;
+}
+.btn-upload,
+.btn-remove-file {
+  background-color: transparent;
+  color: #141823;
+}
+.file-table {
+  width: 700px;
+}
+.nv-file-over {
+  border: dotted 3px red;
+} /* Default class applied to drop zones on over */
+.another-file-over-class {
+  border: dotted 3px green;
+}

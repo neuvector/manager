@@ -1,0 +1,195 @@
+import { Component, OnInit, Inject } from '@angular/core';
+import { GlobalConstant } from '@common/constants/global.constant';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { DlpSensorsService } from '@services/dlp-sensors.service';
+import { TranslateService } from '@ngx-translate/core';
+import { DlpPattern } from '@common/types';
+import { AuthUtilsService } from '@common/utils/auth.utils';
+import {
+  ColDef,
+  GridApi,
+  GridOptions,
+  GridReadyEvent,
+} from 'ag-grid-community';
+
+@Component({
+  selector: 'app-add-edit-rule-modal',
+  templateUrl: './add-edit-rule-modal.component.html',
+  styleUrls: ['./add-edit-rule-modal.component.scss']
+})
+export class AddEditRuleModalComponent implements OnInit {
+
+  opTypeOptions = GlobalConstant.MODAL_OP;
+  addEditRuleForm: FormGroup;
+  submittingUpdate: boolean = false;
+  operators: Array<any>;
+  contexts: Array<any>;
+  pattern: DlpPattern;
+  patterns: Array<DlpPattern>;
+  isShowingTestPattern: boolean = false;
+  testCase: string;
+  testResult: string;
+  isMatched: boolean;
+  context = { componentParent: this };
+  gridOptions4EditPatterns: GridOptions;
+  patternErrorMsg: string = "";
+
+
+  constructor(
+    private dialogRef: MatDialogRef<AddEditRuleModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private dlpSensorsService: DlpSensorsService,
+    private translate: TranslateService,
+    private authUtilsService: AuthUtilsService
+  ) { }
+
+  ngOnInit(): void {
+    this.operators = [
+      {
+        value: 'regex',
+        viewValue: this.translate.instant('dlp.patternGrid.REGEX')
+      },
+      {
+        value: '!regex',
+        viewValue: this.translate.instant('dlp.patternGrid.!REGEX')
+      }
+    ];
+    this.contexts = ['packet', 'url', 'header', 'body'];
+
+    this.initializePattern();
+
+    if (this.data.opType === GlobalConstant.MODAL_OP.ADD) {
+      this.addEditRuleForm = new FormGroup({
+        sensorName: new FormControl(this.data.sensor.name, Validators.required),
+        comment: new FormControl(this.data.sensor.comment),
+        ruleName: new FormControl('', Validators.required)
+      });
+      this.patterns = [];
+    } else {
+      this.addEditRuleForm = new FormGroup({
+        sensorName: new FormControl(this.data.sensor.name, Validators.required),
+        comment: new FormControl(this.data.sensor.comment),
+        ruleName: new FormControl(this.data.rule.name, Validators.required)
+      });
+      this.patterns = this.data.rule.patterns;
+    }
+    let isWriteDLPSensorAuthorized = this.authUtilsService.getDisplayFlag("write_dlp_rule") && !this.authUtilsService.userPermission.isNamespaceUser;
+    let gridOptions = this.dlpSensorsService.configGrids(isWriteDLPSensorAuthorized);
+    this.gridOptions4EditPatterns = gridOptions.gridOptions4EditPatterns;
+    this.gridOptions4EditPatterns.onSelectionChanged = this.onPatternChanged;
+    setTimeout(() => {
+      this.gridOptions4EditPatterns.api!.setRowData(this.patterns);
+    }, 200);
+  }
+
+  onCancel = () => {
+    this.dialogRef.close(false);
+  }
+
+  initTestArea = (pattern) => {
+    this.testCase = "";
+    this.testRegex(pattern, "");
+  };
+
+  addPattern = () => {
+    if (this.patterns.length >= 16) {
+      this.patternErrorMsg = this.translate.instant("dlp.msg.ADD_PATTERN_NG");
+    } else {
+      let indexOfExistingPattern = this.patterns.findIndex(pattern => {
+        return pattern.value === this.pattern.value &&
+          pattern.op === this.pattern.op
+      });
+      if (this.checkReciprocalPattern(this.patterns, this.pattern)) {
+        this.patternErrorMsg = this.translate.instant("dlp.msg.RECIPROCAL_PATTERN_NG")
+      } else {
+        if (indexOfExistingPattern === -1) {
+          this.patterns.push(this.pattern);
+        } else {
+          this.patterns.splice(
+            indexOfExistingPattern,
+            1,
+            this.pattern
+          );
+        }
+        this.gridOptions4EditPatterns.api!.setRowData(this.patterns);
+        this.patternErrorMsg = "";
+        this.initializePattern();
+      }
+    }
+  };
+
+  updateRule = () => {
+    if (this.data.opType === GlobalConstant.MODAL_OP.ADD) {
+      this.data.sensor.rules.push({
+        name: this.addEditRuleForm.controls.ruleName.value,
+        patterns: this.patterns
+      })
+    } else {
+      this.data.sensor.rules.splice(
+        this.data.index,
+        1,
+        {
+          id: this.data.rule.id,
+          name: this.data.rule.name,
+          patterns: this.patterns
+        }
+      )
+    }
+    let payload = {
+      config: {
+        name: this.data.sensor.name,
+        comment: this.data.sensor.comment,
+        rules: this.data.sensor.rules
+      }
+    }
+
+    this.dlpSensorsService.updateDlpSensorData(payload, GlobalConstant.MODAL_OP.EDIT)
+      .subscribe(
+        response => {
+          setTimeout(() => {
+            this.data.refresh(this.data.index4Sensor);
+          }, 2000);
+          this.dialogRef.close(true);
+        },
+        error => {}
+      );
+  };
+
+  testRegex = (pattern, testCase) => {
+    if (!pattern) return;
+    if (!testCase) {
+      this.testResult = "";
+      this.isMatched = true;
+      return;
+    }
+    this.isMatched = RegExp(`^${pattern}`, "g").test(testCase);
+    if (this.isMatched && testCase.length > 0) {
+      this.testResult = this.translate.instant("dlp.msg.MATCH");
+    }
+    if (!this.isMatched && testCase.length > 0) {
+      this.testResult = this.translate.instant("dlp.msg.MISMATCH");
+    }
+  };
+
+  private initializePattern = () => {
+    this.pattern = {
+      key: 'pattern',
+      op: this.operators[0].value,
+      value: '',
+      context: this.contexts[0]
+    };
+  };
+
+  private onPatternChanged = () => {
+    this.pattern = this.gridOptions4EditPatterns.api!.getSelectedRows()[0];
+  };
+
+  private checkReciprocalPattern = (patternList, currPattern) => {
+    return patternList.findIndex(pattern => {
+      return pattern.value === currPattern.value &&
+             pattern.op !== currPattern.op &&
+             pattern.context === currPattern.context
+    }) > -1
+  };
+}

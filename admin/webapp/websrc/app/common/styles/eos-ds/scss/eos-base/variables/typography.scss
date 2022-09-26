@@ -1,0 +1,15 @@
+/* Typography
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+
+$eos-font-type-base: 'Lato', arial, helvetica, sans-serif;
+$eos-font-type-headlines: 'Poppins', sans-serif;
+$eos-font-type-code: 'Roboto Mono', monospace;
+$eos-font-size-base: 14px;
+$eos-font-weight-normal-base: 400;
+$eos-font-weight-light-base: 300;
+$eos-line-height: 1.5em;
+$eos-text-highlight: $eos-bc-waterhole-blue;

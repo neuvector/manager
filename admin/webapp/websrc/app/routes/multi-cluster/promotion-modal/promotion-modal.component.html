@@ -1,0 +1,119 @@
+<div class="nv-dialog">
+  <div mat-dialog-title class="dialog-header">
+    <div class="pull-left">
+      {{ 'multiCluster.promotion.title' | translate }}
+    </div>
+    <div class="pull-right">
+      <em class="icon-close hand" (click)="onCancel()"></em>
+    </div>
+  </div>
+
+  <div>
+    <div mat-dialog-content class="dialog-content p0 m0" style="height:234px;">
+      <form
+        #clusterForm="ngForm"
+        fxLayout="column"
+        fxLayoutAlign="start"
+        fxFlex="1 0 auto"
+        class="pt-lg"
+      >
+        <div
+          fxLayout="row"
+          fxLayoutAlign="start center"
+          fxFlex="1 0 auto"
+          class="pl-4"
+        >
+          <mat-form-field appearance="outline" fxFlex="100" class="pr-4">
+            <mat-label>{{ "multiCluster.promotion.name" | translate }}</mat-label>
+            <input
+              matInput
+              [(ngModel)]="cluster.name"
+              name="name"
+              required
+            />
+            <mat-error></mat-error>
+          </mat-form-field>
+        </div>
+        <div
+          fxLayout="row"
+          fxLayoutAlign="start center"
+          fxFlex="1 0 auto"
+          class="pl-4"
+        >
+          <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+            <mat-label>{{ "multiCluster.promotion.server" | translate }}</mat-label>
+            <input
+              matInput
+              [(ngModel)]="cluster.host"
+              name="ip"
+              required
+              pattern="^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$"
+            />
+            <mat-error></mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+            <mat-label>{{ "multiCluster.promotion.port" | translate }}</mat-label>
+            <input
+              matInput
+              [(ngModel)]="cluster.port"
+              name="port"
+              required
+              pattern="^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$"
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-10 col-sm-offset-1 mt-sm">
+          <label class="radio-inline c-radio">
+            <input
+              id="https"
+              type="radio"
+              name="proxy"
+              [(ngModel)]="useProxy"
+              value="https"
+            />
+            {{'multiCluster.USE_HTTPS_PROXY' | translate}}
+          </label>
+        </div>
+        <div class="col-sm-10 col-sm-offset-1 mt-sm">
+          <label class="radio-inline c-radio">
+            <input
+              id="none"
+              type="radio"
+              name="proxy"
+              [(ngModel)]="useProxy"
+              value=""
+            />
+            {{'multiCluster.NO_PROXY' | translate}}
+          </label>
+        </div>
+
+        <div
+          style="width: calc(80vw - 48px); max-width: 952px;"
+          class="pl-4 help-block"
+        >
+          {{ "multiCluster.promotion.hint" | translate }}
+        </div>
+      </form>
+    </div>
+    <div
+      mat-dialog-actions
+      class="dialog-actions pull-right"
+      style="margin-right: 24px;"
+    >
+      <a class="modal-cancel-button" (click)="onCancel()">
+        {{ "general.CANCEL" | translate }}
+      </a>
+      <button
+        mat-button
+        class="modal-submit-button"
+        (click)="onConfirm()"
+        type="submit"
+        [disabled]="clusterForm.invalid"
+      >
+        {{ "general.SUBMIT" | translate }}
+      </button>
+    </div>
+  </div>
+</div>
+

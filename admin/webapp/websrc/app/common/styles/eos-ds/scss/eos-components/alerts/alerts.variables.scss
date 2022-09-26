@@ -1,0 +1,76 @@
+/* Alerts variables
+   ========================================================================== */
+/* Colors variables: /assets/stylesheets/eos-base/variables/branding.scss */
+/* Spacing variables: /assets/stylesheets/eos-base/variables/spacings.scss */
+/* Spacing variables: /assets/stylesheets/eos-base/variables/typography.scss */
+/* z-index variables: /assets/stylesheets/eos-base/variables/z-index.scss */
+
+/* Shared */
+$eos-alert-padding: $eos-s;
+$eos-alert-close-margin-left: $eos-s;
+
+/* Global alerts */
+$eos-alert-global-text: $eos-bc-gray-1000;
+$eos-alert-global-link: $eos-bc-gray-1000;
+$eos-alert-global-i-margin-top: $eos-xs - 2;
+$eos-alert-global-success-bg: $eos-bc-green-500;
+$eos-alert-global-info-bg: $eos-bc-cerulean-500;
+$eos-alert-global-warning-bg: $eos-bc-yellow-900;
+$eos-alert-global-danger-bg: $eos-bc-red-500;
+$eos-alert-global-danger-color: $eos-bc-white;
+$eos-alert-global-height: 37px;
+$eos-alert-global-mm-height: 48px; // same as $eos-mm-height from mobile-menu.scss vars
+$eos-alert-global-zindex: $eos-zindex-modal-background;
+
+/* All Alert-danger */
+$eos-alert-danger-padding-right: $eos-m;
+
+/* Section alerts */
+$eos-alert-section-title: $eos-m;
+$eos-alert-section-title-margin-bottom: $eos-s;
+
+// Shared colours
+$eos-alert-close-white: $eos-bc-gray-1000;
+$eos-alert-close-dark: $eos-bc-gray-1000;
+$eos-alert-icon-dark: $eos-bc-gray-1000;
+$eos-alert-icon-white: $eos-bc-white;
+$eos-alert-section-text: $eos-bc-gray-1000;
+$eos-alert-section-link-color: $eos-bc-gray-1000;
+$eos-alert-section-border-left: $eos-xs + 1 solid;
+
+/* Success section alert vars */
+$eos-alert-section-success-color: $eos-bc-gray-1000;
+$eos-alert-section-success-border: $eos-bc-green-500;
+$eos-alert-section-success-bg: $eos-bc-green-100;
+
+/* Info section alert vars */
+$eos-alert-section-info-color: $eos-bc-gray-1000;
+$eos-alert-section-info-border: $eos-bc-cerulean-500;
+$eos-alert-section-info-bg: $eos-bc-cerulean-100;
+
+/* Warning section alert vars */
+$eos-alert-section-warning-color: $eos-bc-gray-1000;
+$eos-alert-section-warning-border: $eos-bc-yellow-500;
+$eos-alert-section-warning-bg: $eos-bc-yellow-100;
+
+/* Danger section alert vars */
+$eos-alert-section-danger-color: $eos-bc-white;
+$eos-alert-section-danger-border: $eos-bc-red-500;
+$eos-alert-section-danger-bg: $eos-bc-red-100;
+
+/* Inline alerts */
+$eos-alert-inline-text: $eos-bc-gray-1000;
+$eos-alert-inline-link-color: $eos-bc-gray-1000;
+
+// Success alert
+$eos-alert-inline-success-bg: $eos-bc-green-100;
+$eos-alert-inline-success-color: $eos-bc-green-500;
+// Info alert
+$eos-alert-inline-info-bg: $eos-bc-cerulean-100;
+$eos-alert-inline-info-color: $eos-bc-cerulean-900;
+// Warning alert
+$eos-alert-inline-warning-bg: $eos-bc-yellow-100;
+$eos-alert-inline-warning-color: $eos-bc-yellow-900;
+// Danger alert
+$eos-alert-inline-danger-bg: $eos-bc-red-100;
+$eos-alert-inline-danger-color: $eos-bc-red-900;

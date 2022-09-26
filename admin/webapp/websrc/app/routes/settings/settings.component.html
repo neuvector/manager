@@ -1,0 +1,73 @@
+<router-outlet>
+  <h1 class="font-weight-light">{{ 'enum.SETTINGS' | translate }}</h1>
+  <div class="row" style="height: calc(100vh - 235px)">
+    <!-- <a [routerLink]="['license']" class="settings__link col-md-12 col-lg-6 col-xl-4">
+      <mat-card class="settings__card">
+        <div class="settings__image--license"></div>
+        <mat-card-title>{{
+          'sidebar.nav.LICENSE' | translate
+          }}</mat-card-title>
+        <mat-card-subtitle>{{
+          'setting.description.LICENSE' | translate
+          }}</mat-card-subtitle>
+      </mat-card>
+    </a> -->
+    <a
+      [routerLink]="['users']"
+      class="settings__link col-md-12 col-lg-6 col-xl-4">
+      <mat-card class="settings__card">
+        <div class="settings__image--users"></div>
+        <mat-card-title>{{ 'sidebar.nav.USERS' | translate }}</mat-card-title>
+        <mat-card-subtitle>{{
+          'setting.description.USERS' | translate
+        }}</mat-card-subtitle>
+      </mat-card>
+    </a>
+    <a
+      [routerLink]="['configuration']"
+      class="settings__link col-md-12 col-lg-6 col-xl-4">
+      <mat-card class="settings__card">
+        <div class="settings__image--config"></div>
+        <mat-card-title>{{
+          'sidebar.nav.CONFIGURATION' | translate
+        }}</mat-card-title>
+        <mat-card-subtitle>{{
+          'setting.description.CONFIGURATION' | translate
+        }}</mat-card-subtitle>
+      </mat-card>
+    </a>
+    <a
+      [routerLink]="['ldap']"
+      class="settings__link col-md-12 col-lg-6 col-xl-4">
+      <mat-card class="settings__card">
+        <div class="settings__image--ldap"></div>
+        <mat-card-title>{{ 'sidebar.nav.LDAP' | translate }}</mat-card-title>
+        <mat-card-subtitle>{{
+          'setting.description.LDAP' | translate
+        }}</mat-card-subtitle>
+      </mat-card>
+    </a>
+    <a
+      [routerLink]="['saml']"
+      class="settings__link col-md-12 col-lg-6 col-xl-4">
+      <mat-card class="settings__card">
+        <div class="settings__image--saml"></div>
+        <mat-card-title>{{ 'sidebar.nav.OKTA' | translate }}</mat-card-title>
+        <mat-card-subtitle>{{
+          'setting.description.SAML' | translate
+        }}</mat-card-subtitle>
+      </mat-card>
+    </a>
+    <a
+      [routerLink]="['openid']"
+      class="settings__link col-md-12 col-lg-6 col-xl-4">
+      <mat-card class="settings__card">
+        <div class="settings__image--openid"></div>
+        <mat-card-title>{{ 'sidebar.nav.OPENID' | translate }}</mat-card-title>
+        <mat-card-subtitle>{{
+          'setting.description.OPENID' | translate
+        }}</mat-card-subtitle>
+      </mat-card>
+    </a>
+  </div>
+</router-outlet>

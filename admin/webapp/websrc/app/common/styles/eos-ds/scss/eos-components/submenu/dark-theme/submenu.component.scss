@@ -1,0 +1,24 @@
+.dark-theme {
+  .submenu {
+    background: $eos-dark-submenu-background;
+
+    .user-profile i {
+      color: $eos-dark-submenu-item-color;
+    }
+  }
+
+
+  .submenu a:not([href]):not([tabindex]), .submenu a {
+    color: $eos-dark-submenu-item-color;
+    text-decoration: none;
+
+    &.selected {
+      border-color: $eos-dark-submenu-item-selected-color;
+    }
+
+    &:hover {
+      border-color: $eos-dark-submenu-item-hover-color;
+    }
+  }
+}
+

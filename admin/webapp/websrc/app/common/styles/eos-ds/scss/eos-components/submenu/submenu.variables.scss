@@ -1,0 +1,31 @@
+/* Submenu variables
+   ========================================================================== */
+/* Colors variables: /assets/stylesheets/eos-base/variables/branding.scss */
+$eos-submenu-text-color: $eos-bc-white;
+$eos-submenu-hover-border: $eos-bc-gray-500;
+$eos-submenu-selected-border-color: $eos-bc-green-500;
+$eos-submenu-search-border: $eos-bc-gray-300;
+$eos-submenu-background: $eos-bc-pine-500;
+$eos-submenu-border: $eos-bc-gray-100;
+$eos-submenu-box-scroll: 1px 2px 4px rgba(0, 0, 0, .1);
+$eos-submenu-user-email-color: $eos-bc-gray-900;
+$eos-submenu-mobile-background: $eos-bc-green-100;
+$eos-submenu-mobile-text-color: $eos-bc-gray-1000;
+
+/* Spacing variables: /assets/stylesheets/eos-base/variables/spacings.scss */
+$eos-submenu-height: $eos-xxl;
+$eos-submenu-item-max-height: 48px;
+$eos-submenu-width: 100%;
+$eos-submenu-toggle-padding: $eos-m;
+$eos-submenu-item-spacing: $eos-s + 4;
+$eos-submenu-nav-border-width: 3px;
+$eos-submenu-nav-border-color-active: $eos-bc-green-500;
+$eos-submenu-search-wrap-height: $eos-xl;
+$eos-submenu-item-padding: $eos-submenu-item-spacing $eos-m;
+$eos-submenu-more-dd-padding: $eos-s;
+$eos-submenu-zindex: $eos-zindex-navbar-fixed;
+$eos-submenu-dropdown-more-padding: $eos-s + 3 $eos-m;
+$eos-submenu-user-padding: $eos-s + 2 $eos-s $eos-s + 2 0;
+
+/* z-index variables: /assets/stylesheets/eos-components/mobile-menu/mobile-menu.variables.scss */
+$eos-mobile-menu-height: $eos-mm-height;

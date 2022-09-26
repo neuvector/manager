@@ -1,0 +1,20 @@
+<mat-card class="margin-bottom-m">
+  <mat-card-title>{{'dashboard.body.panel_title.TOP_SEC_EVENTS' | translate}} - {{'threat.gridHeader.' + direction.toUpperCase() | translate}}</mat-card-title>
+  <mat-card-content>
+    <div
+      class="row margin-horizon-0"
+      *ngIf="dashboardSecurityEventsService.topSecurityEvents"
+    >
+      <app-top-security-events-chart
+        class="col-sm-12"
+        [topSecurityEvents]="dashboardSecurityEventsService.topSecurityEvents"
+        [direction]="direction"
+      ></app-top-security-events-chart>
+      <!-- <app-top-security-events-grid
+        class="col-sm-6"
+        [topSecurityEvents]="dashboardSecurityEventsService.topSecurityEvents"
+        [direction]="direction"
+      ></app-top-security-events-grid> -->
+    </div>
+  </mat-card-content>
+</mat-card>

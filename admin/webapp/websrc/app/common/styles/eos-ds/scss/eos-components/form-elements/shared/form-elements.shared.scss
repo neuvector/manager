@@ -1,0 +1,63 @@
+/* Form elements shared styles
+  ========================================================================== */
+/**
+*  These rules overwrite existing Bootstrap rules
+*
+*  Variables file: assets/stylesheets/eos-components/form-elements/form-elements.variables.scss
+*/
+
+.form-control {
+  background-color: transparent;
+
+  &:focus {
+    background-color: transparent;
+  }
+}
+
+.input-group > .form-control {
+  width: 100%;
+}
+
+label {
+  color: $eos-form-element-label-color;
+  font-size: $eos-form-element-label-font-size;
+  font-weight: $eos-form-element-label-weight;
+
+  .optional-label {
+    color: $eos-form-element-optional-color;
+    margin-left: $eos-form-element-optional-margin-left;
+  }
+}
+
+.disabled {
+  color: $eos-form-element-disabled;
+}
+
+// wrapper for radio buttons & checkboxes
+.form-group:not(:last-child) {
+  margin-bottom: $eos-form-group-margin;
+}
+
+// wrapper for radio buttons & checkboxes
+.form-check:not(:last-child) {
+  margin-bottom: $eos-form-check-margin;
+}
+
+.form-messages {
+  display: flex;
+  font-size: $eos-form-msg-font;
+  justify-content: flex-end;
+  margin-top: $eos-form-msg-margin;
+}
+
+.error-msg {
+  color: $eos-form-element-error;
+  display: block;
+  font-size: $eos-form-element-error-font;
+  margin-top: $eos-form-element-error-margin;
+  width: $eos-form-element-error-width;
+}
+
+.maxlength {
+  color: $eos-form-element-maxlength;
+}

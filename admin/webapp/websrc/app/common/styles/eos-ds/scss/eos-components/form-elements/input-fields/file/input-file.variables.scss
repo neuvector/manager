@@ -1,0 +1,20 @@
+/* File input variables
+   ========================================================================== */
+/**
+*
+*  Spacing variables: /assets/stylesheets/eos-base/variables/spacings.scss
+*  Color variables: /assets/stylesheets/eos-base/variables/branding.scss
+*
+*/
+
+$eos-file-input-padding: $eos-s $eos-xs;
+
+$eos-file-input-wrapper-height: $eos-xxl;
+
+$eos-file-input-width: calc(100% - 50px);
+$eos-file-input-right-pos: -56px;
+$eos-file-input-top-pos: 20px;
+$eos-file-input-font-size: 12px;
+
+$eos-file-input-height: $eos-xxl;
+$eos-file-input-btn-height: 28px;

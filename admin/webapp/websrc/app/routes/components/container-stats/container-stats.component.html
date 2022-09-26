@@ -1,0 +1,29 @@
+<div class="row w-100 my-md-4">
+  <div class="col-md-4 chart-container">
+    <canvas
+      [data]="cpuChartData.data"
+      [labels]="cpuChartData.data.labels"
+      [options]="cpuChartData.options"
+      [type]="cpuChartData.type"
+      baseChart>
+    </canvas>
+  </div>
+  <div class="col-md-4 chart-container">
+    <canvas
+      [data]="byteChartData.data"
+      [labels]="byteChartData.data.labels"
+      [options]="byteChartData.options"
+      [type]="byteChartData.type"
+      baseChart>
+    </canvas>
+  </div>
+  <div class="col-md-4 chart-container">
+    <canvas
+      [data]="sessionChartData.data"
+      [labels]="sessionChartData.data.labels"
+      [options]="sessionChartData.options"
+      [type]="sessionChartData.type"
+      baseChart>
+    </canvas>
+  </div>
+</div>

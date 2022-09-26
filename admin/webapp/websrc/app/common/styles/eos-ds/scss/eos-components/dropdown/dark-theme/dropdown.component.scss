@@ -1,0 +1,48 @@
+/* Dropdown dark theme
+   ========================================================================== */
+/* Variables file: assets/stylesheets/eos-custom-components/dropdown/dark-theme.variables.scss */
+
+.dark-theme {
+  .dropdown-menu.show {
+    background-color: $eos-dark-dropdown-bg-color;
+    border: 0;
+    border-color: $eos-dark-dropdown-border-color;
+
+    .dropdown-header {
+      color: $eos-dark-dropdown-item-color;
+
+      .subtitle {
+        color: $eos-dark-dropdown-subtitle-color;
+      }
+    }
+
+    .dropdown-divider {
+      border-top-color: $eos-dark-dropdown-divider;
+    }
+
+    .dropdown-item {
+      color: $eos-dark-dropdown-item-color;
+      font-weight: $eos-dark-dropdown-item-font-weight;
+
+      .eos-icons-outlined {
+        color: $eos-dark-dropdown-item-color;
+      }
+
+      &:hover, &.selected {
+        background-color: transparent;
+        color: $eos-dark-dropdown-item-color-hover;
+        text-decoration: none;
+
+        .eos-icons-outlined {
+          color: $eos-dark-dropdown-item-color-hover;
+        }
+      }
+    }
+  }
+
+  .show .dropdown-toggle.btn-secondary {
+    background-color: transparent;
+    border-color: $eos-btn-dark-dropdown-color-show;
+    color: $eos-btn-dark-dropdown-color-show;
+  }
+}

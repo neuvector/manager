@@ -199,6 +199,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
             get {
               parameter('start.?, 'limit.?) { (start, limit) =>
                 Utils.respondWithNoCacheControl() {
+                  logger.info("tokenId: {}", tokenId)
                   val cacheKey = if (tokenId.length > 20) tokenId.substring(0, 20) else tokenId
                   try {
                     complete {

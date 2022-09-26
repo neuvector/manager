@@ -1,0 +1,216 @@
+<div class="full-width-panel">
+  <div class="full-width-summary risk-report-summary">
+    <ng-container [ngSwitch]="templateType">
+      <ng-container
+        *ngSwitchCase="'compliance'"
+        [ngTemplateOutlet]="complianceSummary"></ng-container>
+      <ng-container
+        *ngSwitchCase="'scan'"
+        [ngTemplateOutlet]="scanSummary"></ng-container>
+      <ng-container
+        *ngSwitchCase="'admission'"
+        [ngTemplateOutlet]="admissionSummary"></ng-container>
+    </ng-container>
+  </div>
+  <div class="full-width-center" role="cell">
+    <ng-container [ngSwitch]="templateType">
+      <ng-container
+        *ngSwitchCase="'compliance'"
+        [ngTemplateOutlet]="complianceCenter"></ng-container>
+      <ng-container
+        *ngSwitchCase="'scan'"
+        [ngTemplateOutlet]="scanCenter"></ng-container>
+      <ng-container
+        *ngSwitchCase="'admission'"
+        [ngTemplateOutlet]="admissionCenter"></ng-container>
+    </ng-container>
+  </div>
+</div>
+<ng-template #complianceSummary>
+  <div class="row align-items-center">
+    <div class="col-sm-6">
+      <span class="badge" [class]="'badge-' + labelCode">
+        {{ 'audit.gridHeader.ITEMS' | translate }}
+      </span>
+    </div>
+    <div class="col-sm-6">
+      <span class="font-weight-light">
+        {{ 'general.TOTAL' | translate }}:&nbsp;{{ params.data.items.length }}
+      </span>
+    </div>
+  </div>
+  <button
+    (click)="params.exportBenchCSV(params.data)"
+    aria-label="Export compliance CSV"
+    class="mx-auto d-flex align-items-center mat-small-button"
+    mat-button>
+    <i class="eos-icons mr-2">csv_file</i>CSV
+  </button>
+</ng-template>
+<ng-template #scanSummary>
+  <div class="row mb-1 align-items-center">
+    <div class="col-sm-6">
+      <span
+        class="badge badge-danger"
+        matTooltip="{{ 'audit.gridHeader.HIGH_VUL' | translate }}">
+        {{ 'audit.gridHeader.HIGH_VUL_CNT' | translate }}
+      </span>
+    </div>
+    <div class="col-sm-6">
+      <span class="font-weight-light">
+        {{ 'general.TOTAL' | translate }}:&nbsp;{{ params.data.high_vul_cnt }}
+      </span>
+    </div>
+  </div>
+  <div class="row align-items-center">
+    <div class="col-sm-6">
+      <span
+        class="badge badge-warning"
+        matTooltip="{{ 'audit.gridHeader.MEDIUM_VUL' | translate }}">
+        {{ 'audit.gridHeader.MEDIUM_VUL_CNT' | translate }}
+      </span>
+    </div>
+    <div class="col-sm-6">
+      <span class="font-weight-light">
+        {{ 'general.TOTAL' | translate }}:&nbsp;{{ params.data.medium_vul_cnt }}
+      </span>
+    </div>
+  </div>
+  <button
+    [style.visibility]="
+      params.data.medium_vul_cnt > 0 || params.data.high_vul_cnt > 0
+        ? 'visible'
+        : 'hidden'
+    "
+    (click)="params.exportCVECSV(params.data)"
+    aria-label="Export CVE CSV"
+    class="mx-auto d-flex align-items-center mat-small-button"
+    mat-button>
+    <i class="eos-icons mr-2">csv_file</i>CSV
+  </button>
+  <div class="row">
+    <div class="col-sm-12">
+      <strong class="ml-2">
+        {{ 'dashboard.heading.CVE_DB_VERSION' | translate }}:
+      </strong>
+      <span> {{ params.data.cvedb_version }} </span>
+    </div>
+  </div>
+</ng-template>
+<ng-template #admissionSummary>
+  <div class="row mb-1 align-items-center">
+    <div class="col-sm-6">
+      <span
+        class="badge badge-danger"
+        matTooltip="{{ 'audit.gridHeader.HIGH_VUL' | translate }}">
+        {{ 'audit.gridHeader.HIGH_VUL_CNT' | translate }}
+      </span>
+    </div>
+    <div class="col-sm-6">
+      <span class="font-weight-light">
+        {{ 'general.TOTAL' | translate }}:&nbsp;{{ params.data.high_vul_cnt }}
+      </span>
+    </div>
+  </div>
+  <div class="row align-items-center">
+    <div class="col-sm-6">
+      <span
+        class="badge badge-warning"
+        matTooltip="{{ 'audit.gridHeader.MEDIUM_VUL' | translate }}">
+        {{ 'audit.gridHeader.MEDIUM_VUL_CNT' | translate }}
+      </span>
+    </div>
+    <div class="col-sm-6">
+      <span class="font-weight-light">
+        {{ 'general.TOTAL' | translate }}:&nbsp;{{ params.data.medium_vul_cnt }}
+      </span>
+    </div>
+  </div>
+</ng-template>
+<ng-template #complianceCenter>
+  <ng-container *ngFor="let item of params.data.items; let i = index">
+    <ng-container *ngIf="i % 2 === 0">
+      <div class="row">
+        <div class="col-lg-6">{{ params.data.items[i] }}</div>
+        <div class="col-lg-6">
+          {{ params.data.items[i + 1] ? params.data.items[i + 1] : '' }}
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</ng-template>
+<ng-template #scanCenter>
+  <div *ngIf="params.data.image_id" class="mx-1">
+    <strong>{{ 'audit.gridHeader.IMAGE_ID' | translate }}:</strong>
+    <span> {{ params.data.image_id }} </span>
+  </div>
+  <div *ngIf="params.data.base_os" class="mx-1">
+    <strong>{{ 'audit.gridHeader.BASE_OS' | translate }}:</strong>
+    <span> {{ params.data.base_os }} </span>
+  </div>
+  <div
+    *ngIf="params.data.level.toLowerCase() === 'error'"
+    class="mx-1 text-danger">
+    <strong>{{ 'audit.gridHeader.ERR' | translate }}:</strong>
+    <span> {{ params.data.base_os }} </span>
+  </div>
+  <div *ngIf="params.data.high_vul_cnt > 0" class="mx-1">
+    <strong>{{ 'audit.gridHeader.HIGH_VUL' | translate }}:</strong>
+    <span> {{ displayHighVuls }} </span>
+  </div>
+  <div *ngIf="params.data.medium_vul_cnt > 0" class="mx-1">
+    <strong>{{ 'audit.gridHeader.MEDIUM_VUL' | translate }}:</strong>
+    <span> {{ displayMediumVuls }} </span>
+  </div>
+  <div *ngIf="params.data.items && params.data.items.length > 0" class="mx-1">
+    <strong>{{ 'audit.gridHeader.HIGH_PERMISSION_STATE' | translate }}:</strong>
+    <div *ngFor="let item of params.data.items">{{ item }}</div>
+  </div>
+</ng-template>
+<ng-template #admissionCenter>
+  <div *ngFor="let item of getAdmissionItems(params.data.items)" class="mx-1">
+    <strong>{{ item.title | translate }}:</strong>
+    <span> {{ item.value }} </span>
+  </div>
+  <div *ngIf="params.data.repository" class="mx-1">
+    <strong>{{ 'audit.gridHeader.REPO' | translate }}:</strong>
+    <span> {{ params.data.repository }} </span>
+  </div>
+  <div *ngIf="params.data.image_id" class="mx-1">
+    <strong>{{ 'audit.gridHeader.IMAGE_ID' | translate }}:</strong>
+    <span> {{ params.data.image_id }} </span>
+  </div>
+  <div *ngIf="params.data.base_os" class="mx-1">
+    <strong>{{ 'audit.gridHeader.BASE_OS' | translate }}:</strong>
+    <span> {{ params.data.base_os }} </span>
+  </div>
+  <div *ngIf="params.data.tag" class="mx-1">
+    <strong>{{ 'audit.gridHeader.TAG' | translate }}:</strong>
+    <span> {{ params.data.tag }} </span>
+  </div>
+  <div *ngIf="params.data.message" class="mx-1">
+    <strong>{{ 'audit.gridHeader.DESCRIPTION' | translate }}:</strong>
+    <span> {{ params.data.message }} </span>
+  </div>
+  <div *ngIf="params.data.user" class="mx-1">
+    <strong>{{ 'audit.gridHeader.USER' | translate }}:</strong>
+    <span> {{ params.data.user }} </span>
+  </div>
+  <div *ngIf="params.data.response_rule_id" class="mx-1">
+    <strong>{{ 'audit.gridHeader.RESPONSE_RULE_ID' | translate }}:</strong>
+    <span> {{ params.data.response_rule_id }} </span>
+  </div>
+  <ng-container *ngIf="params.data.count && params.data.count > 1">
+    <div class="mx-1">
+      <strong>{{ 'audit.gridHeader.OCCURRENCES' | translate }}:</strong>
+      <span> {{ params.data.count }} </span>
+    </div>
+    <div *ngIf="params.data.aggregation_from" class="mx-1">
+      <strong>{{ 'audit.gridHeader.DURATION' | translate }}:</strong>
+      <span>
+        {{ params.data.aggregation_from * 1000 | date: 'MMM dd, y HH:mm:ss' }} ~
+        {{ params.data.reported_timestamp * 1000 | date: 'MMM dd, y HH:mm:ss' }}
+      </span>
+    </div>
+  </ng-container>
+</ng-template>

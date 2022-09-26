@@ -1,0 +1,33 @@
+<mat-table
+  #editTable
+  [dataSource]="dataSource"
+  [multiTemplateDataRows]="true"
+  class="w-100">
+  <ng-container
+    *ngFor="let currField of visibleFields; let i = index"
+    [matColumnDef]="currField.key">
+    <mat-header-cell
+      *matHeaderCellDef
+      [id]="currField.viewValue"
+      [ngStyle]="{
+        flex: currField.flexWidth ? '0 0 ' + currField.flexWidth : '1'
+      }">
+      {{ currField.viewValue | translate }}
+    </mat-header-cell>
+    <mat-cell
+      *matCellDef="let element"
+      [ngStyle]="{
+        flex: currField.flexWidth ? '0 0 ' + currField.flexWidth : '1'
+      }">
+      <formly-field [field]="element.fieldGroup[i]"></formly-field>
+    </mat-cell>
+  </ng-container>
+  <mat-header-row *matHeaderRowDef="displayColumns"></mat-header-row>
+  <mat-row
+    *matRowDef="let row; columns: displayColumns"
+    [style.max-height]="to.cellHeight"
+    [style.min-height]="to.cellHeight"></mat-row>
+</mat-table>
+<button mat-stroked-button type="button" class="mt-3" (click)="add()">
+  {{ field.templateOptions.addButtonText | translate }}
+</button>

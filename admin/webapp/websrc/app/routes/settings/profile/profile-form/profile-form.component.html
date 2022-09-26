@@ -1,0 +1,110 @@
+<form (ngSubmit)="submitForm()" [formGroup]="profileForm">
+  <mat-card-header>
+    <img
+      [src]="getAvatarSrc()"
+      alt="user.username"
+      class="img-thumbnail profile__avatar"
+      mat-card-avatar />
+  </mat-card-header>
+  <div class="profile__formGroup">
+    <div class="profile__container">
+      <div class="profile__field">
+        <mat-icon
+          aria-hidden="false"
+          aria-label="User icon"
+          class="mr-3 mb-3 profile__icon">
+          person
+        </mat-icon>
+        <mat-form-field class="w-100">
+          <mat-label>{{ 'profile.USER_NAME' | translate }}</mat-label>
+          <input matInput formControlName="username" />
+        </mat-form-field>
+      </div>
+      <div class="profile__field">
+        <mat-icon
+          aria-hidden="false"
+          aria-label="Email icon"
+          class="mr-3 mb-3 profile__icon">
+          email
+        </mat-icon>
+        <mat-form-field class="w-100">
+          <mat-label>{{ 'profile.EMAIL' | translate }}</mat-label>
+          <input matInput formControlName="email" />
+        </mat-form-field>
+      </div>
+      <div class="profile__field">
+        <mat-icon
+          aria-hidden="false"
+          aria-label="Role icon"
+          class="mr-3 mb-3 profile__icon"
+          fontSet="fa"
+          fontIcon="fa-user-secret">
+        </mat-icon>
+        <mat-form-field class="w-100">
+          <mat-label>{{ 'profile.ROLE' | translate }}</mat-label>
+          <input matInput formControlName="role" />
+        </mat-form-field>
+      </div>
+      <div class="profile__field">
+        <mat-icon
+          aria-hidden="false"
+          aria-label="User icon"
+          class="mr-3 mb-3 profile__icon"
+          >hourglass_empty
+        </mat-icon>
+        <mat-form-field class="w-100">
+          <mat-label>{{ 'profile.TIMEOUT' | translate }}</mat-label>
+          <input matInput formControlName="timeout" />
+          <mat-error
+            *ngIf="
+              profileForm.controls.timeout.hasError('min') ||
+              profileForm.controls.timeout.hasError('max')
+            ">
+            {{ 'profile.TIMEOUT_VALIDATION' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="profile__field">
+        <mat-icon
+          aria-hidden="false"
+          aria-label="User icon"
+          class="mr-3 mb-3 profile__icon"
+          >language
+        </mat-icon>
+        <mat-form-field class="w-100">
+          <mat-label>{{ 'profile.LOCALE' | translate }}</mat-label>
+          <mat-select formControlName="locale">
+            <mat-option *ngFor="let lang of getLanguages()" [value]="lang.code">
+              {{ lang.text }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="isLocalUser" [hidden]="!isEdit">
+    <mat-divider></mat-divider>
+    <div class="profile__formGroup">
+      <app-password-panel [passwordForm]="passwordForm"></app-password-panel>
+    </div>
+    <div class="d-flex justify-content-end align-items-center mt-2">
+      <app-loading-button
+        [appearance]="'mat-raised-button'"
+        [color]="'primary'"
+        [buttonClasses]="'d-flex justify-content-center align-items-center'"
+        [disabled]="!formValid() || profileForm.pristine || submittingForm"
+        [id]="'profile-form-submit-button'"
+        [loading]="submittingForm"
+        [text]="'profile.SUBMIT' | translate"
+        [type]="'submit'">
+      </app-loading-button>
+      <button
+        type="button"
+        [disabled]="submittingForm"
+        (click)="toggleEdit()"
+        mat-button>
+        {{ 'profile.CANCEL' | translate }}
+      </button>
+    </div>
+  </div>
+</form>

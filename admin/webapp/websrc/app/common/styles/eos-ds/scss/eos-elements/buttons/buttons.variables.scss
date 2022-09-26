@@ -1,0 +1,57 @@
+/* Buttons variables
+   ========================================================================== */
+/* Colors variables: /assets/stylesheets/eos-base/variables/branding.scss */
+/* Spacing variables: /assets/stylesheets/eos-base/variables/spacing.scss */
+/* Typography variables: /assets/stylesheets/eos-base/variables/typography.scss */
+/* Borders variables: /assets/stylesheets/eos-base/variables/borders.scss */
+
+/* btn */
+$eos-btn-border-radius: $eos-base-border-radius-size;
+$eos-btn-line-height: $eos-line-height;
+$eos-btn-padding: $eos-s $eos-m;
+
+/* Bottom border shared */
+$eos-btn-shared-hover-border: 2px solid transparent;
+$eos-btn-shared-hover-border-position: -2px;
+$eos-btn-shared-hover-height: 1px;
+
+/* Primary button and outline primary button */
+$eos-btn-primary-color: $eos-bc-persimmon-500;
+$eos-btn-primary-text-color: $eos-bc-gray-1000;
+$eos-btn-primary-color-hover: $eos-bc-gray-900;
+$eos-btn-primary-color-focus: $eos-bc-gray-900;
+$eos-btn-primary-color-active: $eos-bc-green-900;
+
+/* secondary button */
+$eos-btn-secondary-color: $eos-bc-pine-500;
+$eos-btn-secondary-color-hover: $eos-bc-pine-500;
+
+$eos-btn-secondary-focus: $eos-bc-green-500;
+$eos-btn-secondary-color-active: $eos-bc-pine-500;
+$eos-btn-secondary-disabled: $eos-bc-gray-500;
+
+/* secondary button inverse */
+$eos-btn-secondary-inverse-color: $eos-bc-white;
+$eos-btn-secondary-inverse-color-hover: $eos-bc-white;
+$eos-btn-secondary-inverse-color-active: $eos-bc-green-500;
+
+/* Danger button */
+$eos-btn-danger-color: $eos-bc-red-500;
+$eos-btn-danger-text-color: $eos-bc-white;
+$eos-btn-danger-color-hover: $eos-bc-red-900;
+$eos-btn-danger-color-active: $eos-bc-red-900;
+
+$eos-btn-all-disabled-opacity: .6;
+
+/* Small button */
+$eos-btn-xs-padding: $eos-xs - 2 $eos-xs;
+
+/* Small button */
+$eos-btn-sm-padding: $eos-xs $eos-s;
+
+/* Large button */
+$eos-btn-lg-padding: $eos-s $eos-m;
+
+
+/* Unstyled button */
+$eos-btn-unstyled-focus: $eos-bc-cerulean-500;

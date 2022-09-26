@@ -1,6 +1,6 @@
 package com.neu.cache
 
-import com.neu.model.{Blacklist, UserBlacklist}
+import com.neu.model.{ Blacklist, UserBlacklist }
 import net.sf.ehcache.CacheManager
 
 object BlacklistCacheManager {

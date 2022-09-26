@@ -1,6 +1,6 @@
 package com.neu.model
 
-import spray.json.{DefaultJsonProtocol, _}
+import spray.json.{ DefaultJsonProtocol, _ }
 
 object NamespaceJsonProtocol extends DefaultJsonProtocol {
   implicit val domainFormat: RootJsonFormat[Namespace] = {
@@ -15,13 +15,18 @@ object NamespaceJsonProtocol extends DefaultJsonProtocol {
     NamespaceConfigData
   )
 
-  implicit val namespaceEntryConfigFormat: RootJsonFormat[NamespaceEntryConfig] = jsonFormat2(NamespaceEntryConfig)
+  implicit val namespaceEntryConfigFormat: RootJsonFormat[NamespaceEntryConfig] = jsonFormat2(
+    NamespaceEntryConfig
+  )
 
-  implicit val namespaceEntryConfigDataFormat: RootJsonFormat[NamespaceEntryConfigData] = jsonFormat1(NamespaceEntryConfigData)
+  implicit val namespaceEntryConfigDataFormat: RootJsonFormat[NamespaceEntryConfigData] =
+    jsonFormat1(NamespaceEntryConfigData)
 
   implicit val domainConfigFormat: RootJsonFormat[DomainConfig] = jsonFormat1(DomainConfig)
 
-  implicit val domainConfigDataFormat: RootJsonFormat[DomainConfigData] = jsonFormat1(DomainConfigData)
+  implicit val domainConfigDataFormat: RootJsonFormat[DomainConfigData] = jsonFormat1(
+    DomainConfigData
+  )
 
   def configWrapToJson(config: NamespaceConfigData): String =
     config.toJson.compactPrint

@@ -1,0 +1,170 @@
+.hidden-footer {
+    .nv-frame .footer-container {
+        display: none;
+    }
+    .nv-frame .section-container {
+        margin-bottom: 0 !important;
+    }
+}
+
+.layout-fs {
+    .nv-frame .section-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: $footer-hg;
+        top: $navbar-hg;
+        height: auto;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        @include media-breakpoint-up(xs) {
+            overflow: hidden;
+        }
+
+        .nv-section {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            > * {
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+
+    &.hidden-footer {
+        .nv-frame .section-container {
+            bottom: 0;
+        }
+    }
+}
+
+// Layout Horizontal Nav
+// -----------------------------------
+.layout-h {
+    .nv-frame {
+        .section-container {
+            max-width: 1140px;
+            margin-left: auto;
+            margin-right: auto;
+            .nv-section .content-heading {
+                display: none;
+                +.breadcrumb { display: none; }
+            }
+        }
+        .section-container {
+        }
+        .offsidebar {
+            margin-top: $navbar-hg;
+        }
+        .footer-container {
+            margin: 0;
+        }
+    }
+    &.layout-fixed .nv-frame {
+        .section-container,
+        .offsidebar {
+            margin-top: $navbar-hg;
+        }
+    }
+}
+
+
+// Aside float
+// -----------------------------------
+$float-space: 15px;
+.left-side-float {
+
+    .nv-frame {
+        box-shadow: 0 0 0 #000;
+        .footer-container {
+            border: 0;
+        }
+        .left-side-container {
+            padding: $float-space 0;
+            background: transparent;
+            .left-side {
+                height: 100%;
+                top: $float-space;
+                bottom: $float-space;
+                left: inherit;
+            }
+            .sidebar {
+                border: 1px solid $gray-light;
+            }
+            .sidebar:after {
+                display: none;
+            }
+        }
+        @include media-breakpoint-up(md) {
+            .section-container {
+                padding-left: $float-space;
+            }
+            .footer-container {
+                left: $float-space;
+            }
+        }
+        .nv-section {
+            border: 0;
+            .content-heading {
+                padding-top: 30px;
+                border: 0;
+                background-color: transparent;
+            }
+            .unwrap {
+                margin: 0 !important;
+            }
+        }
+    }
+
+    &.left-side-toggled .nv-frame {
+        .left-side-container {
+            transition: delay(0.05s);
+            .left-side {
+                margin-left: $float-space;
+            }
+        }
+        .section-container {
+            padding-left: $float-space;
+        }
+        .footer-container {
+            left: $float-space;
+        }
+    }
+    @include media-breakpoint-up(md) {
+        &.left-side-collapsed .topnavbar .navbar-header {
+            width: $left-side-wd-collapsed + ($float-space * 2);
+        }
+        &.left-side-collapsed-text .topnavbar .navbar-header {
+            width: $left-side-wd-collapsed-text + ($float-space * 2);
+        }
+        &.layout-fs {
+            .nv-frame .section-container .nv-section {
+                padding: 0 0 0 20px;
+            }
+        }
+        .nv-frame .left-side-container .left-side {
+            margin-left: $float-space;
+        }
+    }
+    @include media-breakpoint-up(lg) {
+        &.layout-boxed {
+            .nv-frame .left-side-container .left-side {
+                margin-left: 0;
+            }
+            .nv-frame .section-container {
+                padding-left: 0;
+            }
+        }
+    }
+    &.left-side-toggled {
+        &.layout-fs {
+            .nv-frame .section-container .nv-section {
+                padding: 0 0 0 20px;
+            }
+        }
+    }
+}

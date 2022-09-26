@@ -1,0 +1,33 @@
+<div class="rule-actions-expand fade-in-right">
+  <em
+    class="eos-icons hand icon-18"
+    (click)="editResponseRule($event, params.data.id)">
+    edit
+  </em>
+  <em
+    class="eos-icons hand icon-18"
+    (click)="addResponseRule($event, params.data.id)">
+    add
+  </em>
+  <em
+    class="eos-icons hand icon-18"
+    *ngIf="!params.data.disable"
+    (click)="toggleRuleItem($event, params.data)">
+    highlight_off
+  </em>
+  <em
+    class="eos-icons hand icon-18"
+    *ngIf="params.data.disable"
+    (click)="toggleRuleItem($event, params.data)">
+    task_alt
+  </em>
+  <em
+    class="eos-icons hand icon-18"
+    (click)="deleteRuleItem($event, params.data.id)">
+    delete
+  </em>
+</div>
+<div class="rule-actions-collapse">
+  <em class="fa fa-ellipsis-h fa-lg mr-sm text-action hand">
+  </em>
+</div>

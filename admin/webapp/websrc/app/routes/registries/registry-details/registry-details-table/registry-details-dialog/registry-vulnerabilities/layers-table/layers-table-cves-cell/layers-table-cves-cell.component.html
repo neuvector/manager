@@ -1,0 +1,7 @@
+<ng-container *ngIf="medium > 0 && high > 0; else zeroTemplate">
+  <span class="badge badge-danger">{{ high }}</span>
+  <span class="badge badge-warning">{{ medium }}</span>
+</ng-container>
+<ng-template #zeroTemplate>
+  <span class="badge badge-success">0</span>
+</ng-template>

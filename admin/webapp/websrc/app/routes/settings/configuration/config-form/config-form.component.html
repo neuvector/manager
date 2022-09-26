@@ -1,0 +1,17 @@
+<form (ngSubmit)="submitForm()" [formGroup]="configForm">
+  <formly-form
+    [model]="config"
+    [fields]="configFields"
+    [form]="configForm"
+    [options]="configOptions"></formly-form>
+  <div class="d-flex justify-content-end align-items-center mt-2">
+    <app-loading-button
+      [appearance]="'mat-raised-button'"
+      [color]="'primary'"
+      [disabled]="!configForm.valid || !configForm.dirty || submittingForm"
+      [loading]="submittingForm"
+      [text]="'setting.SUBMIT' | translate"
+      [type]="'submit'">
+    </app-loading-button>
+  </div>
+</form>

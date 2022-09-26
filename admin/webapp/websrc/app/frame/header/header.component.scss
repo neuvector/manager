@@ -1,0 +1,39 @@
+.user-info {
+  color: #fff;
+  height: 72px;
+  border-left: 1px solid rgba(241, 241, 248, 0.2);
+}
+
+.cluster-info {
+  color: #fff;
+  height: 72px;
+}
+
+.selected-cluster-text {
+  font-size: 16px;
+  font-family: Serif Monaco, "Lucida Console", monospace;
+  font-weight: bold;
+  color: whitesmoke;
+  margin-left: 1rem;
+}
+
+.skip-to-content {
+  background: white;
+  height: 30px;
+  left: 50%;
+  padding: 8px;
+  position: absolute;
+  transform: translateY(-200%);
+  transition: transform 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.skip-to-content:focus {
+  transform: translateY(0%);
+}
+
+.divider {
+  border-bottom: 0.5px solid rgba(0,0,0,0.4);
+}

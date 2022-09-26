@@ -1,0 +1,143 @@
+<div id="networkGraph"></div>
+
+<div
+  id="legend"
+  class="infoBox rightBottomLegend justify-content-between"
+  *ngIf="settings.showLegend"
+  style="border: none; height: 610px; padding-top: 0"
+  cdkDrag
+  cdkDragHandle>
+  <div
+    class="d-flex align-items-center justify-content-between"
+    id="legendHeader">
+    <div class="text-bold mb0 pl-lg">
+      {{ 'network.legend.TITLE' | translate }}
+    </div>
+    <div>
+      <button
+        mat-icon-button
+        aria-label="Close legend"
+        (click)="settings.showLegend = !settings.showLegend">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </div>
+  <hr class="fancy mx-0 my-0" />
+  <app-legend></app-legend>
+</div>
+
+<div
+  *ngIf="popupState.onQuickSearch()"
+  class="infoBox topLeftBox"
+  style="border: none"
+  cdkDrag>
+  <div
+    class="d-flex align-items-center justify-content-between handle"
+    id="quickSearch"
+    cdkDragHandle>
+    <div class="text-bold mb0 pl-lg">
+      {{ 'network.popup.QUICK_SEARCH_TITLE' | translate }}
+    </div>
+    <div>
+      <button
+        mat-icon-button
+        aria-label="Close quick search"
+        (click)="popupState.leave()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </div>
+  <hr class="fancy mx-0 my-0" />
+
+  <mat-form-field class="searchBox" appearance="standard">
+    <input
+      matInput
+      type="text"
+      aria-label="search node..."
+      [(ngModel)]="endpointOnFocus"
+      (keyup.enter)="doFocus(endpointOnFocus)" />
+    <button
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="doFocus(endpointOnFocus)">
+      <img
+        src="assets/img/icons/graph/focus.svg"
+        style="display: inline-block; width: 24px; height: 24px"
+        alt="focus" />
+    </button>
+  </mat-form-field>
+</div>
+
+<app-active-session
+  *ngIf="popupState.onActiveSession()"
+  [popupState]="popupState"
+  [entriesGridHeight]="activeSessionGridHeight"
+  (onAutoRefresh)="toggleRefresh($event)"
+  [currentName]="currentNodeName"
+  [conversations]="conversations"></app-active-session>
+
+<app-edge-details
+  *ngIf="popupState.onEdge()"
+  [popupState]="popupState"
+  [conversationDetail]="conversationDetail"
+  [entriesGridHeight]="entriesGridHeight">
+</app-edge-details>
+
+<app-sniffer
+  *ngIf="popupState.onSniffer()"
+  [containerName]="containerName"
+  [containerId]="containerId"
+  [popupState]="popupState"
+  [sniffers]="sniffers"
+  [entriesGridHeight]="snifferGridHeight"
+  (onStopRefresh)="stopRefreshSniffer($event)">
+</app-sniffer>
+
+<app-namespace-info
+  *ngIf="popupState.onDomain()"
+  [domainName]="domain.domain"
+  [members]="domain.children"
+  [popupState]="popupState">
+</app-namespace-info>
+
+<app-host-info
+  *ngIf="popupState.onHost()"
+  [hostId]="hostId"
+  [popupState]="popupState">
+</app-host-info>
+
+<app-group-info
+  *ngIf="popupState.onGroupNode()"
+  [group]="group"
+  [popupState]="popupState">
+</app-group-info>
+
+<app-pod-info
+  *ngIf="popupState.onNode()"
+  [pod]="pod"
+  (onPodGroupSelected)="showGroup($event)"
+  [popupState]="popupState">
+</app-pod-info>
+
+<app-blacklist
+  *ngIf="popupState.onBlacklist()"
+  [domains]="domains"
+  [groups]="groups"
+  [nodes]="endpoints"
+  [blacklist]="blacklist"
+  [popupState]="popupState"
+  (onReset)="resetBlacklist()"
+  (onApply)="applyBlacklist($event)" >
+</app-blacklist>
+
+<app-advanced-filter
+  *ngIf="popupState.onAdvFilter()"
+  [domains]="domains"
+  [groups]="groups"
+  [advFilter]="advFilter"
+  [settings]="settings"
+  [popupState]="popupState"
+  (onReset)="resetAdvFilter()"
+  (onApply)="applyAdvFilter($event)" >
+</app-advanced-filter>

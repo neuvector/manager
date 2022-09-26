@@ -1,0 +1,55 @@
+<div class="d-flex align-items-center justify-content-between">
+  <div class="d-flex align-items-center justify-content-start">
+    <span class="mr-2">
+      <span *ngIf="filtered">
+        {{ 'enum.FOUND' | translate }}
+        {{ filteredCount }}&nbsp;/&nbsp;
+      </span>
+      {{ userCount }}
+      {{ 'user.COUNT_POSTFIX' | translate }}
+    </span>
+    <button
+      (click)="addUser()"
+      *appDisplayControl="'write_users'"
+      class="d-flex align-items-center justify-content-start px-2"
+      id="users-add-dialog"
+      mat-stroked-button>
+      <i class="eos-icons mr-2">add_circle</i>{{ 'role.ADD' | translate }}
+    </button>
+    <button
+      (click)="deleteUser()"
+      class="d-flex align-items-center justify-content-start px-2"
+      id="users-remove-dialog"
+      mat-stroked-button
+      *ngIf="removable && isWriteUserAuthorized">
+      <i class="eos-icons mr-2">delete</i>{{ 'role.REMOVE' | translate }}
+    </button>
+  </div>
+  <div class="d-flex align-items-center justify-content-end">
+    <app-loading-button
+      (btnClick)="refresh()"
+      [appearance]="'mat-button'"
+      [buttonClasses]="'d-flex justify-content-center align-items-center'"
+      [disabled]="!!(refreshing$ | async)"
+      [iconClasses]="'eos-icons'"
+      [iconName]="'refresh'"
+      [id]="'users-refresh-button'"
+      [loading]="!!(refreshing$ | async)"
+      [text]="'network.REFRESH' | translate"
+      [type]="'button'"
+      class="mr-3">
+    </app-loading-button>
+    <app-quick-filter
+      [gridOptions]="gridOptions"
+      (filterCountChange)="filterCountChanged($event)"
+      [showCount]="false">
+    </app-quick-filter>
+  </div>
+</div>
+<ag-grid-angular
+  (window:resize)="onResize()"
+  [gridOptions]="gridOptions"
+  class="ag-theme-alpine"
+  style="width: 100%; height: 300px">
+</ag-grid-angular>
+<div class="timeline"></div>

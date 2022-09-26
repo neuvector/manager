@@ -1,0 +1,22 @@
+/* Header styles
+   ========================================================================== */
+/* Variables file: assets/stylesheets/eos-components/menu/header/header.variables.scss */
+.main-menu {
+  header {
+    align-items: center;
+    background: $eos-menu-header-background-color;
+    display: flex;
+    height: $eos-menu-header-height;
+    justify-content: space-between;
+    margin-bottom: $eos-menu-header-margin-bottom;
+    padding-left: $eos-menu-header-padding-left;
+    padding-right: $eos-menu-header-padding-right;
+
+    i {
+      color: $eos-menu-header-text-color;
+      cursor: pointer;
+      margin: 0;
+      width: $eos-menu-header-icon-size;
+    }
+  }
+}

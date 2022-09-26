@@ -1,7 +1,7 @@
 package com.neu.model
 
 import com.neu.core.Md5
-import spray.json.{DefaultJsonProtocol, _}
+import spray.json.{ DefaultJsonProtocol, _ }
 
 /**
  * Json protocol for authentication token
@@ -9,15 +9,15 @@ import spray.json.{DefaultJsonProtocol, _}
  */
 object AuthTokenJsonProtocol extends DefaultJsonProtocol {
   implicit val permissionFormat: RootJsonFormat[Permission] = jsonFormat3(Permission)
-  implicit val keyFormat: RootJsonFormat[Key]             = jsonFormat2(Key)
-  implicit val tokenFormat: RootJsonFormat[Token]         = jsonFormat13(Token)
-  implicit val tokenNewFormat: RootJsonFormat[TokenNew]   = jsonFormat13(TokenNew)
-  implicit val tokenWrapFormat: RootJsonFormat[TokenWrap] = jsonFormat2(TokenWrap)
+  implicit val keyFormat: RootJsonFormat[Key]               = jsonFormat2(Key)
+  implicit val tokenFormat: RootJsonFormat[Token]           = jsonFormat13(Token)
+  implicit val tokenNewFormat: RootJsonFormat[TokenNew]     = jsonFormat13(TokenNew)
+  implicit val tokenWrapFormat: RootJsonFormat[TokenWrap]   = jsonFormat2(TokenWrap)
 
   implicit val passFormat: RootJsonFormat[Password]           = jsonFormat2(Password)
   implicit val authRequestFormat: RootJsonFormat[AuthRequest] = jsonFormat2(AuthRequest)
 
-  implicit val roleFormat: RootJsonFormat[Role] = jsonFormat3(Role)
+  implicit val roleFormat: RootJsonFormat[Role]         = jsonFormat3(Role)
   implicit val roleWrapFormat: RootJsonFormat[RoleWrap] = jsonFormat1(RoleWrap)
 
   implicit val userFormat: RootJsonFormat[User]                 = jsonFormat13(User)
@@ -42,11 +42,11 @@ object AuthTokenJsonProtocol extends DefaultJsonProtocol {
   implicit val licenseKeyFormat: RootJsonFormat[LicenseKey] = jsonFormat1(LicenseKey)
 
   implicit val groupMappedRoleFormat: RootJsonFormat[GroupMappedRole] = jsonFormat3(GroupMappedRole)
-  implicit val ldapServerFormat: RootJsonFormat[LdapServer]     = jsonFormat12(LdapServer)
-  implicit val samlServerFormat: RootJsonFormat[SamlServer]     = jsonFormat7(SamlServer)
-  implicit val ssoServerFormat: RootJsonFormat[SsoServer]       = jsonFormat3(SsoServer)
-  implicit val samlTokenFormat: RootJsonFormat[SamlToken]       = jsonFormat3(SamlToken)
-  implicit val samlResponseFormat: RootJsonFormat[SamlResponse] = jsonFormat3(SamlResponse)
+  implicit val ldapServerFormat: RootJsonFormat[LdapServer]           = jsonFormat12(LdapServer)
+  implicit val samlServerFormat: RootJsonFormat[SamlServer]           = jsonFormat7(SamlServer)
+  implicit val ssoServerFormat: RootJsonFormat[SsoServer]             = jsonFormat3(SsoServer)
+  implicit val samlTokenFormat: RootJsonFormat[SamlToken]             = jsonFormat3(SamlToken)
+  implicit val samlResponseFormat: RootJsonFormat[SamlResponse]       = jsonFormat3(SamlResponse)
 
   implicit val serverOIDCFormat: RootJsonFormat[ServerOIDC] = jsonFormat11(ServerOIDC)
   implicit val openIdServerFormat: RootJsonFormat[OpenIdServer] = jsonFormat8(
@@ -66,10 +66,14 @@ object AuthTokenJsonProtocol extends DefaultJsonProtocol {
   implicit val ldapServerAccountWrapFormat: RootJsonFormat[LdapServerAccountWrap] = jsonFormat1(
     LdapServerAccountWrap
   )
-  implicit val passwordProfileFormat: RootJsonFormat[PasswordProfile] = jsonFormat13(PasswordProfile)
-  implicit val passwordProfileWrapFormat: RootJsonFormat[PasswordProfileWrap] = jsonFormat1(PasswordProfileWrap)
+  implicit val passwordProfileFormat: RootJsonFormat[PasswordProfile] = jsonFormat13(
+    PasswordProfile
+  )
+  implicit val passwordProfileWrapFormat: RootJsonFormat[PasswordProfileWrap] = jsonFormat1(
+    PasswordProfileWrap
+  )
 
-  implicit val userBlockFormat: RootJsonFormat[UserBlock] = jsonFormat3(UserBlock)
+  implicit val userBlockFormat: RootJsonFormat[UserBlock]         = jsonFormat3(UserBlock)
   implicit val userBlockWrapFormat: RootJsonFormat[UserBlockWrap] = jsonFormat1(UserBlockWrap)
 
   def authRequestToJson(authRequest: AuthRequest): String = authRequest.toJson.compactPrint
@@ -91,7 +95,8 @@ object AuthTokenJsonProtocol extends DefaultJsonProtocol {
   def userProfileWrapToJson(userProfileWrap: UserProfileWrap): String =
     userProfileWrap.toJson.compactPrint
 
-  def passwordProfileWrapToJson(passwordProfileWrap: PasswordProfileWrap): String = passwordProfileWrap.toJson.compactPrint
+  def passwordProfileWrapToJson(passwordProfileWrap: PasswordProfileWrap): String =
+    passwordProfileWrap.toJson.compactPrint
 
   def userBlockWrapToJson(userBlockWrap: UserBlockWrap): String = userBlockWrap.toJson.compactPrint
 

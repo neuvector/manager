@@ -1,0 +1,21 @@
+.details-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto;
+}
+
+.details-item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.details-icon {
+  color: white;
+  background-color: #30ba78;
+  border-radius: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

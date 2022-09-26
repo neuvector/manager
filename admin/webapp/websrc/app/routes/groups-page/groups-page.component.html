@@ -1,0 +1,101 @@
+<section class="screen-area" id="groups-section">
+  <div class="d-flex flex-row align-items-center justify-content-between">
+    <div class="d-flex">
+      <h1 class="font-weight-light" id="groups-title">
+        {{ 'sidebar.nav.GROUP' | translate }}
+      </h1>
+      <div
+        class="d-flex flex-column margin-left-m margin-top-s"
+        *ngIf="netServiceStatus !== undefined">
+        <div>
+          <span class="text-muted">
+            {{ 'setting.NET_SERVICE_POLICY_MODE' | translate }}:&nbsp;
+          </span>
+          <span
+            class="text-bold"
+            [ngClass]="{
+              'text-muted': !netServiceStatus,
+              'text-success': netServiceStatus
+            }">
+            {{ netServiceStatus ? 'ON' : 'OFF' }}
+          </span>
+          <em
+            class="fa fa-info-circle text-info"
+            [matTooltip]="
+              (netServiceStatus ? netServicePolicyMode : '') +
+                (netServiceStatus
+                  ? 'setting.description.ENABLED_NET_POLICY_MODE_GROUP'
+                  : 'setting.description.DISABLED_NET_POLICY_MODE') | translate
+            ">
+          </em>
+        </div>
+        <a href="#/settings/configuration"
+          >{{ 'sidebar.nav.SETTING' | translate }}&nbsp;>&nbsp;{{
+            'sidebar.nav.CONFIGURATION' | translate
+          }}</a
+        >
+      </div>
+    </div>
+    <div class="d-flex align-items-center justify-content-end">
+      <button
+        mat-button
+        (click)="openImportGroupsDialog()"
+        *appDisplayControl="'write_group'">
+        <i class="eos-icons icon-18">upload</i>
+        {{ 'group.IMPORT_GROUP_POLICY' | translate }}
+      </button>
+      <button
+        mat-button
+        class="pull-right margin-top-s margin-left-xl"
+        (click)="toggleSystemGroup()">
+        <em class="eos-icons icon-18">{{
+          isShowingSystemGroups ? 'visibility_off' : 'visibility'
+        }}</em>
+        {{
+          (isShowingSystemGroups
+            ? 'group.HIDE_SYS_GROUPS'
+            : 'group.SHOW_SYS_GROUPS'
+          ) | translate
+        }}
+      </button>
+      <app-loading-button
+        (btnClick)="refresh()"
+        [appearance]="'mat-button'"
+        [buttonClasses]="'d-flex justify-content-center align-items-center'"
+        [disabled]="!!(refreshing$ | async)"
+        [iconClasses]="'eos-icons icon-18'"
+        [iconName]="'refresh'"
+        [id]="'groups-refresh-button'"
+        [loading]="!!(refreshing$ | async)"
+        [text]="'network.REFRESH' | translate"
+        [type]="'button'">
+      </app-loading-button>
+    </div>
+  </div>
+  <ng-container>
+    <app-adjustable-div [minHeightOne]="163" [minHeightTwo]="140">
+      <ng-container *appContainerOne="let height">
+        <mat-card [ngStyle]="{ height: height + 'px' }" class="pt-0">
+          <app-groups
+            class="clearfix"
+            [source]="navSource"
+            [height]="height"
+            (refreshing)="refreshing($event)"></app-groups>
+        </mat-card>
+      </ng-container>
+      <ng-container *appContainerTwo="let height">
+        <mat-card
+          [ngStyle]="{ height: height + 'px' }"
+          *ngIf="groupsView && groupsView.selectedGroups.length > 0">
+          <app-group-details
+            class="clearfix"
+            [resizableHeight]="height"
+            [selectedGroupName]="groupsView.selectedGroups[0].name"
+            [members]="groupsView.selectedGroups[0].members"
+            [kind]="groupsView.selectedGroups[0] ? 'c' : 'f'">
+          </app-group-details>
+        </mat-card>
+      </ng-container>
+    </app-adjustable-div>
+  </ng-container>
+</section>

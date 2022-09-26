@@ -1,0 +1,19 @@
+/* Spacing rules
+   ========================================================================== */
+
+/**
+ * The margins/paddings mixins will generate classes following the format:
+ * type-direction-size
+ * for example, you will be able to use in PUG:
+ * .margin-top-xs or .padding-bottom-xl
+ * for more information checkout the file mixins.scss in this same folder.
+ */
+
+@include margins(top);
+@include margins(bottom);
+@include margins(left);
+@include margins(right);
+@include paddings(top);
+@include paddings(bottom);
+@include paddings(left);
+@include paddings(right);

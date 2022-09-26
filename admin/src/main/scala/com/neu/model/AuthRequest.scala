@@ -1,29 +1,29 @@
 package com.neu.model
 
 /**
-  * Created by bxu on 3/24/16.
-  */
+ * Created by bxu on 3/24/16.
+ */
 case class Password(username: String, password: String)
 
-case class AuthRequest (password: Password, client_ip: String)
+case class AuthRequest(password: Password, client_ip: String)
 
-case class Permission (
+case class Permission(
   id: String,
   read: Boolean,
   write: Boolean
 )
 
-case class Role (
+case class Role(
   name: String,
   comment: Option[String],
   permissions: Array[Permission]
 )
 
-case class RoleWrap (
+case class RoleWrap(
   config: Role
 )
 
-case class PasswordProfile (
+case class PasswordProfile(
   name: String,
   min_len: Option[Int],
   min_uppercase_count: Option[Int],
@@ -39,16 +39,16 @@ case class PasswordProfile (
   enable_password_history: Option[Boolean]
 )
 
-case class PasswordProfileWrap (
+case class PasswordProfileWrap(
   config: PasswordProfile
 )
 
-case class UserBlock (
+case class UserBlock(
   fullname: String,
   clear_failed_login: Option[Boolean],
   new_password: Option[String]
 )
 
-case class UserBlockWrap (
+case class UserBlockWrap(
   config: UserBlock
 )

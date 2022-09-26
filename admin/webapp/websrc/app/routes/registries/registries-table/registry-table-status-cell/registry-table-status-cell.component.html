@@ -1,0 +1,12 @@
+<ng-container [ngSwitch]="params.node.data.status">
+  <span
+    *ngSwitchCase="'idle'"
+    class="badge text-white"
+    style="background-color: #49596e">
+    {{ params.node.data.status | titlecase }}
+  </span>
+  <span *ngSwitchCase="'scanning'" class="badge badge-primary text-white">
+    {{ params.node.data.status | titlecase }}
+  </span>
+  <span *ngSwitchDefault>{{ params.node.data.status | titlecase }}</span>
+</ng-container>

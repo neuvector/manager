@@ -1,0 +1,25 @@
+/* Tooltip
+   ========================================================================== */
+// overwrite Boostrap's default tooltip color
+.tooltip {
+  &-inner {
+    background-color: $eos-tooltip-color;
+    border-radius: $eos-tooltip-border-radius;
+  }
+
+  &.bs-tooltip-right .arrow::before {
+    border-right-color: $eos-tooltip-color;
+  }
+
+  &.bs-tooltip-left .arrow::before {
+    border-left-color: $eos-tooltip-color;
+  }
+
+  &.bs-tooltip-bottom .arrow::before {
+    border-bottom-color: $eos-tooltip-color;
+  }
+
+  &.bs-tooltip-top .arrow::before {
+    border-top-color: $eos-tooltip-color;
+  }
+}

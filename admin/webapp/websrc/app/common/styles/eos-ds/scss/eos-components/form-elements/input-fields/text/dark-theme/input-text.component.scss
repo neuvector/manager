@@ -1,0 +1,23 @@
+/* Input fields dark theme
+  ========================================================================== */
+/**
+*  These rules overwrite existing Bootstrap rules
+*
+* Variables file: assets/stylesheets/eos-components/input-fields/text/dark-theme.variables.scss
+*/
+.dark-theme {
+  .form-control {
+    border-color: $eos-dark-text-input-color;
+    color: $eos-dark-text-input-color;
+
+    &:disabled {
+      background: transparent;
+      border-color: $eos-form-element-disabled;
+      color: $eos-form-element-disabled;
+    }
+  }
+
+  .form-control-file:disabled {
+    color: $eos-form-element-disabled;
+  }
+}

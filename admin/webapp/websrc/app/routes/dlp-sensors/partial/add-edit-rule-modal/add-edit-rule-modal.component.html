@@ -1,0 +1,140 @@
+<div class="nv-dialog">
+  <div mat-dialog-title class="dialog-header">
+    <div class="pull-left">
+      {{
+        (data.opType === opTypeOptions.ADD ? 'dlp.ruleModal.ADD_RULE' : 'dlp.ruleModal.EDIT_RULE') | translate
+      }}
+    </div>
+    <div class="pull-right">
+      <em class="icon-close hand" (click)="onCancel()"></em>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <form [formGroup]="addEditRuleForm">
+      <div class="row">
+        <mat-form-field class="col-sm-3" appearance="standard">
+          <mat-label>{{'dlp.sensorModal.SENSOR_NAME' | translate}}</mat-label>
+          <input type="text" matInput formControlName="sensorName" readonly>
+        </mat-form-field>
+        <mat-form-field class="col-sm-9" appearance="standard">
+          <mat-label>{{'dlp.sensorModal.COMMENT' | translate}}</mat-label>
+          <input type="text" matInput formControlName="comment" readonly>
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <mat-form-field class="col-sm-3" appearance="standard">
+          <mat-label>{{'dlp.ruleModal.PATTERN_NAME' | translate}}</mat-label>
+          <input type="text" matInput formControlName="ruleName" [readonly]="data.opType === opTypeOptions.EDIT">
+        </mat-form-field>
+      </div>
+      <hr class="solid margin-top-s margin-bottom-s"/>
+      <div class="row">
+        <mat-form-field appearance="standard" class="col-sm-2">
+          <mat-label>{{'dlp.patternGrid.LOGIC_IS_NOT' | translate}}</mat-label>
+          <mat-select
+            required
+            [(ngModel)]="pattern.op"
+            [ngModelOptions]="{standalone: true}"
+            [(value)]="pattern.op"
+          >
+            <mat-option *ngFor="let operator of operators" [value]="operator.value">
+              {{operator.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col-sm-7" appearance="standard">
+          <mat-label>{{'dlp.ruleModal.PATTERN' | translate}}</mat-label>
+          <input
+            style="position: relative; padding-right: 60px;"
+            matInput
+            required
+            type="text"
+            [(ngModel)]="pattern.value"
+            [ngModelOptions]="{standalone: true}"
+            (keyup)="initTestArea(pattern.value)"
+          >
+          <button
+            aria-hidden="true"
+            class="primary-button hightlighted-button"
+            style="position: absolute; right: 0; top: -5px; line-height: 21px; z-index:10; min-height: 24px; min-width: 60px;"
+            aria-hidden="true"
+            (click)="isShowingTestPattern = true"
+            [disabled]="!pattern.value"
+          >
+            {{ 'dlp.sensorModal.TEST_BTN' |translate}}
+          </button>
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="col-sm-2">
+          <mat-label>{{'dlp.patternGrid.CONTEXT' | translate}}</mat-label>
+          <mat-select
+            matNativeControl
+            required
+            [(ngModel)]="pattern.context"
+            [ngModelOptions]="{standalone: true}"
+            [(value)]="pattern.context"
+          >
+            <mat-option *ngFor="let context of contexts" [value]="context">
+              {{context}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div class="col-sm-1">
+          <button
+            class="primary-button hightlighted-button pull-right"
+            style="margin-top: 20px;" (click)="addPattern()"
+          ><em class="eos-icons icon-18">add</em></button>
+        </div>
+      </div>
+      <div class="row" *ngIf="isShowingTestPattern">
+        <mat-form-field class="col-sm-12" appearance="outline">
+          <mat-label>
+            {{'dlp.ruleModal.TEST' | translate}}
+          </mat-label>
+          <input
+            matInput
+            placeholder="{{'dlp.ruleModal.TEST_INFO' | translate}}"
+            type="text"
+            [(ngModel)]="testCase"
+            [ngModelOptions]="{standalone: true}"
+            (keyup)="testRegex(pattern.value, testCase)"
+            (paste)="testRegex(pattern.value, testCase)"
+          >
+          <mat-hint *ngIf="isMatched" class="text-success">
+            {{testResult}}
+          </mat-hint>
+          <mat-hint *ngIf="!isMatched" class="text-danger">
+            {{testResult}}
+          </mat-hint>
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <ag-grid-angular
+          #dlpPatternEditGrid
+          id="dlp-pattern-edit-grid"
+          style="width: 100%; height: 200px;"
+          class="ag-theme-balham col-sm-12"
+          [gridOptions]="gridOptions4EditPatterns"
+          [context]="context"
+          >
+        </ag-grid-angular>
+        <div *ngIf="patternErrorMsg" class="col-sm-12 text-danger">
+          {{patternErrorMsg}}
+        </div>
+      </div>
+      <div class="clearfix margin-top-s">
+        <app-loading-button
+          [appearance]="'mat-raised-button'"
+          [color]="'primary'"
+          [loading]="submittingUpdate"
+          [text]="(data.opType === opTypeOptions.EDIT ? 'dlp.ruleModal.UPDATE' : 'dlp.ruleModal.ADD') | translate"
+          (click)="updateRule()"
+          class="pull-right"
+        >
+        </app-loading-button>
+        <button class="pull-right margin-right-m" (click)="onCancel()">
+          {{'dlp.ruleModal.CANCEL' | translate}}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,508 @@
+/* ==========================================================================
+   Menu stylesheet
+   ========================================================================== */
+
+/* Variables file: assets/stylesheets/eos-components/menu/menu.variables.scss */
+
+/* Menu & desktop version styles
+   ========================================================================== */
+.main-menu {
+  background-color: $eos-menu-bg;
+  border-right: $eos-menu-border;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  left: 0;
+  max-width: $eos-menu-aside-width;
+  position: fixed;
+  top: 0;
+  width: $eos-menu-aside-width;
+  z-index: $eos-menu-zindex;
+  @media screen and (max-width: $eos-menu-sd-max) {
+    display: none;
+  }
+
+  .menu-togglable {
+    margin-bottom: $eos-menu-ul-margin-bottom;
+    max-height: $eos-menu-navbar-max-height;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: $eos-menu-collapsed-padding;
+
+    &:first-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    li {
+      padding: 0;
+    }
+  }
+
+  .menu-title {
+    border-left: $eos-menu-item-hover-spacing solid transparent;
+    cursor: pointer;
+    display: block;
+    font-weight: $eos-menu-font-weight;
+    margin: $eos-menu-li-no-link-margin;
+    padding: $eos-menu-li-no-link-padding;
+    transition: .1s;
+    user-select: none;
+
+    &:hover, &.selected {
+      border-left: $eos-menu-item-hover-spacing solid $eos-menu-selected-bg;
+      color: $eos-menu-link-color;
+      text-decoration: none;
+    }
+  }
+
+  hr {
+    border-top-color: $eos-menu-hr-color;
+    margin: $eos-menu-hr-margin;
+  }
+
+  h6 {
+    color: $eos-menu-title-color;
+    margin: 0;
+    padding: $eos-menu-li-h6-padding;
+  }
+
+}
+
+.mm-navigation-container {
+  width: 100%;
+
+  /* Fixed size for icons to fix the fliker when are not done loaded. */
+  i {
+    font-size: $eos-menu-i-font-size;
+    height: $eos-menu-i-size;
+    width: $eos-menu-i-size;
+  }
+}
+
+.mm-navigation-close {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  margin-right: $eos-menu-navigation-close-margin-right;
+  padding: $eos-menu-navigation-close-padding;
+}
+
+/* Dropdown menu in main menu
+  ========================================================================== */
+.menu-dropdown {
+  input[type='checkbox'] {
+    opacity: 0;
+    position: absolute;
+  }
+
+  ul {
+    display: none;
+  }
+
+  input[type='checkbox']:checked, &.selected {
+    ~ ul {
+      display: block;
+    }
+
+    ~ .menu-title {
+      background-color: $eos-menu-bg;
+      margin-right: 0;
+
+      .menu-expand {
+        margin-right: $eos-m;
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+}
+
+// top level title
+.menu-title {
+  color: $eos-menu-link-color;
+
+  .menu-expand {
+    // reset margin to align caret to right
+    margin-right: 0;
+  }
+}
+
+/* Uncollapsed sidebar styles for dropdown menu */
+.menu-togglable {
+  .menu-dropdown-list {
+    background: $eos-menu-bg;
+    padding-top: 0;
+
+    li a {
+      padding-left: $eos-menu-sub-padding;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+  }
+}
+
+// collapsed sidebar titles hidden by default
+.menu-collapsed-title, .main-collapsed-single {
+  display: none;
+}
+
+.nav-wrap {
+  max-height: $eos-menu-navbar-max-height;
+}
+
+.svg-icon-menu {
+  height: $eos-menu-svg-icon-size;
+  margin-right: $eos-menu-svg-icon-marign;
+  width: $eos-menu-svg-icon-size;
+}
+
+/* Collapsed menu style.
+  ========================================================================== */
+.collapsed-sidebar {
+  &.main-menu {
+    width: $eos-menu-collapsed-width;
+
+    li a {
+      margin: 0;
+
+      &.selected {
+        border-radius: 0;
+      }
+    }
+
+    .selected {
+      border-radius: 0;
+    }
+
+    /* From here starts the style for items with dropdown when the menu is collapsed
+      ========================================================================== */
+    .menu-item {
+      position: relative;
+
+      &:hover {
+        .main-collapsed-single {
+          display: block;
+        }
+      }
+
+      &.selected {
+        label {
+          border-left: $eos-menu-item-hover-spacing solid $eos-menu-selected-bg;
+        }
+      }
+    }
+
+    // dropdown styles
+    input[type='checkbox'] {
+      &:checked {
+        ~ ul {
+          display: none;
+        }
+
+        ~ .menu-title {
+          background-color: transparent;
+          color: $eos-menu-link-color;
+          margin: 0;
+        }
+
+      }
+    }
+
+    .menu-title {
+      margin: 0;
+    }
+
+    .menu-title-content, .menu-expand {
+      display: none;
+    }
+
+    .menu-togglable {
+      height: 100%;
+      max-height: $eos-menu-navbar-max-height;
+      overflow-x: hidden;
+      overflow-y: auto;
+      width: 100%;
+
+      .menu-item {
+        position: static;
+
+        .menu-element {
+          display: none;
+          position: absolute;
+        }
+
+        .menu-dropdown-list {
+          border: $eos-mm-dropdown-border;
+        }
+
+
+        &:hover > .menu-element {
+          display: flex;
+        }
+      }
+    }
+
+    // list menu inside dropdown
+    .menu-dropdown-list {
+      background: $eos-menu-collapsed-sub-item-bg;
+      display: flex;
+      flex-direction: column;
+      left: $eos-menu-collapsed-sub-position;
+      padding-top: 0;
+      position: absolute;
+      top: 0;
+      width: $eos-menu-collapsed-sub-width;
+
+      li {
+        padding: $eos-menu-collapsed-title-list-padding;
+
+        a {
+          // color: $eos-menu-collapsed-sub-item;
+          margin-left: -5px;
+          padding: 0;
+          text-decoration: none;
+
+          &:hover, &.selected {
+            background: $eos-menu-collapsed-sub-item-bg;
+          }
+
+          &.selected {
+            color: $eos-mm-navigation-background-link-active;
+          }
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+
+    // menu-dropdown
+    .menu-dropdown-list a {
+      &:hover, &.selected, .menu-title {
+        border-left: 5px solid transparent;
+      }
+    }
+
+    .main-collapsed-single {
+      background: $eos-menu-collapsed-sub-item-bg;
+      border: 1px solid $eos-mm-background-navigation;
+      color: $eos-menu-link-color;
+      font-weight: normal;
+      left: $eos-menu-collapsed-sub-position;
+      margin-left: $eos-menu-collapsed-title-margin-left;
+      padding: $eos-menu-collapsed-title-list-padding;
+      position: absolute;
+      top: 0;
+      width: $eos-menu-collapsed-sub-width;
+
+      &.selected {
+        color: $eos-mm-navigation-background-link-active;
+      }
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+
+    // menu titles for collapsed sidebar (dropdown)
+    .menu-collapsed-title {
+      background-color: $eos-mm-background-navigation;
+      color: $eos-menu-link-color;
+      display: block;
+      font-weight: bold;
+      margin-left: $eos-menu-collapsed-title-margin-left;
+      padding: $eos-menu-collapsed-title-padding;
+    }
+  }
+
+  .mm-navigation-close {
+    left: 0;
+    margin-right: 0;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+  }
+
+  .footer-side-menu, .hide-collapsed, span {
+    display: none;
+  }
+
+  // Set content margin same as menu
+  ~ .content {
+    margin-left: $eos-mm-collapsed-content-margin;
+    @media screen and (max-width: $eos-sd-max) {
+      margin-left: 0;
+    }
+  }
+
+  .menu-headers {
+    max-height: $eos-menu-collapsed-max-height;
+    max-width: $eos-menu-collapsed-max-width;
+    visibility: hidden;
+  }
+
+
+  // if a menu item has a dropdown but it's not selected, use dark colour
+  .menu-dropdown:not(.selected) {
+    input[type='checkbox']:checked ~ .menu-title {
+
+      color: $eos-menu-title-color;
+    }
+  }
+
+}
+
+
+
+/* Mobile menu styles
+   ========================================================================== */
+.mobile-menu {
+  display: none;
+  @media screen and (max-width: $eos-sd-max) {
+    // mobile menu doesnt exist by default, so when the screen gets smaller it will appear
+    background-color: $eos-mm-background;
+    display: block;
+    height: $eos-mm-height;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: $eos-mm-zindex;
+  }
+
+  .selected {
+    background-color: $eos-mm-navigation-background-link-active;
+  }
+
+  // This class is added to the body in order to avoid overflow
+  &-open {
+    overflow: hidden;
+  }
+
+  header {
+    align-self: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: $eos-mm-header-padding;
+    position: relative;
+
+    .ds-logo {
+      height: 20px;
+    }
+
+    .burger-menu {
+      position: absolute;
+      right: $eos-mm-burger-menu-right;
+
+      i {
+        color: $eos-mm-burger-icon-color;
+        cursor: pointer;
+      }
+    }
+  }
+
+  nav {
+    background-color: $eos-mm-background-navigation;
+    display: none;
+    min-height: $eos-mm-nav-min-height;
+    position: relative;
+
+    hr {
+      border-top: $eos-mm-hr-border;
+      margin: $eos-menu-hr-margin;
+    }
+
+    .nav-wrap {
+      max-height: $eos-mm-navbar-max-height;
+      overflow-y: scroll;
+      padding-top: $eos-mm-nav-wrap-padding-top;
+    }
+
+    .menu-togglable {
+      margin: 0;
+      padding: 0;
+
+      li {
+        cursor: pointer;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        .menu-title {
+          border-left: $eos-menu-item-hover-spacing solid transparent;
+          color: $eos-mm-navigation-link;
+          cursor: pointer;
+          display: block;
+          font-weight: $eos-menu-font-weight;
+          margin: 0;
+          padding: $eos-mm-nav-li-a-padding;
+          transition: .1s;
+          user-select: none;
+
+          i {
+            font-size: $eos-menu-i-font-size;
+            height: $eos-menu-i-size;
+            text-align: center;
+            width: $eos-menu-i-size;
+          }
+
+          &:hover {
+            border-left: $eos-menu-item-hover-spacing solid $eos-menu-selected-bg;
+            text-decoration: none;
+          }
+
+          &.selected {
+            background-color: $eos-mm-navigation-background-link-active;
+            color: $eos-mm-burger-icon-color;
+
+            > label {
+              color: $eos-mm-burger-icon-color;
+            }
+          }
+        }
+
+        .menu-element li a {
+          padding-left: $eos-menu-sub-padding;
+        }
+
+        &.menu-dropdown {
+          &.selected label {
+            color: $eos-menu-selected-color;
+          }
+
+          input[type='checkbox'] {
+            display: none;
+          }
+
+          .menu-element {
+            ul {
+              display: none;
+            }
+          }
+
+          input[type='checkbox']:checked, &.selected {
+            .menu-element > ul {
+              display: block;
+            }
+
+            ~ label {
+              color: $eos-menu-title-color;
+
+              .menu-expand {
+                margin-right: 0;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

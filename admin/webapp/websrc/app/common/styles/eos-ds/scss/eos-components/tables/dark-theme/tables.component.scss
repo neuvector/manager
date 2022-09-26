@@ -1,0 +1,16 @@
+.dark-theme {
+  .table {
+    color: $tables-dark-theme-color;
+  }
+
+  thead th {
+    color: $tables-dark-theme-color;
+  }
+
+  tr {
+    &:hover {
+      background-color: $tables-dark-theme-background-color;
+      color: $tables-dark-theme-color;
+    }
+  }
+}

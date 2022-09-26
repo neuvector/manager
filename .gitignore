@@ -7,7 +7,6 @@ docker-compose.yml
 .cache
 .history
 .lib/
-dist/*
 target/
 lib_managed/
 src_managed/
@@ -38,9 +37,6 @@ local.properties
 .settings/
 .loadpath
 
-#Visual Studio Code Specific
-.vscode
-
 # External tool builders
 .externalToolBuilders/
 
@@ -48,12 +44,6 @@ local.properties
 *.launch
 
 # Downloaded dependencies
-admin/webapp/root/app_src/node_modules/
-
-admin/webapp/root/app/css/
-admin/webapp/root/app/js/
-admin/webapp/root/index.html
-admin/webapp/root/index-appsafe.html
 
 *.DS_Store
 .DS_Store
@@ -62,15 +52,9 @@ admin/webapp/root/index-appsafe.html
 .sass-cache/*
 
 
-admin/webapp/root/app/metadata/js-version.json
-admin/webapp/root/app/i18n
 .metals
 admin/test/REST_API/output
-admin/webapp/root/app_src/test/ut/coverage
-admin/webapp/root/app_src/bower_components
-admin/webapp/root/app_src/bower_components_bak/
-admin/webapp/root/bower_components
-admin/webapp/root/node_modules
-admin/webapp/root/vendor
-admin/webapp/root/server
+admin/webapp/root
+admin/webapp/.angular
 /.bsp/*
+/admin/.angular/

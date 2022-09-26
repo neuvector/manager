@@ -2,14 +2,14 @@ package com.neu.core
 
 import java.io._
 import java.security.KeyStore
-import java.security.cert.{Certificate, CertificateFactory}
+import java.security.cert.{ Certificate, CertificateFactory }
 import java.util.concurrent.TimeUnit
 
-import akka.actor.{ActorRef, ActorRefFactory, ActorSystem, Props}
+import akka.actor.{ ActorRef, ActorRefFactory, ActorSystem, Props }
 import com.typesafe.config.ConfigFactory._
 import spray.can.server.ServerSettings
-import com.neu.api.{Api, RoutedHttpService}
-import com.neu.core.CommonSettings.{httpPort, newCtrlCert, trustStore}
+import com.neu.api.{ Api, RoutedHttpService }
+import com.neu.core.CommonSettings.{ httpPort, newCtrlCert, trustStore }
 import akka.io.IO
 import akka.util.Timeout
 import spray.can.Http
@@ -18,9 +18,9 @@ import com.typesafe.config.Config
 import com.typesafe.scalalogging.LazyLogging
 
 /**
-  * Core is type containing the ``system: ActorSystem`` member. This enables us to use it in our
-  * apps as well as in our tests.
-  */
+ * Core is type containing the ``system: ActorSystem`` member. This enables us to use it in our
+ * apps as well as in our tests.
+ */
 trait Core {
 
   protected implicit def system: ActorSystem
@@ -28,9 +28,9 @@ trait Core {
 }
 
 /**
-  * This trait implements ``Core`` by starting the required ``ActorSystem`` and registering the
-  * termination handler to stop the system when the JVM exits.
-  */
+ * This trait implements ``Core`` by starting the required ``ActorSystem`` and registering the
+ * termination handler to stop the system when the JVM exits.
+ */
 trait BootedCore
     extends Core
     with Api
@@ -105,22 +105,24 @@ trait BootedCore
     case _ =>
   }
   private val sslSettings = ServerSettings(sslConfig)
-  IO(Http)(system) ! Http.Bind(rootService,
-                               "0.0.0.0",
-                               port = httpPort.toInt,
-                               settings = Some(sslSettings))
+  IO(Http)(system) ! Http.Bind(
+    rootService,
+    "0.0.0.0",
+    port = httpPort.toInt,
+    settings = Some(sslSettings)
+  )
 
   /**
-    * Ensure that the constructed ActorSystem is shut down when the JVM shuts down
-    */
+   * Ensure that the constructed ActorSystem is shut down when the JVM shuts down
+   */
   sys.addShutdownHook(system.shutdown())
 
 }
 
 /**
-  * This trait contains the actors that make up our application; it can be mixed in with
-  * ``BootedCore`` for running code or ``TestKit`` for unit and integration tests.
-  */
+ * This trait contains the actors that make up our application; it can be mixed in with
+ * ``BootedCore`` for running code or ``TestKit`` for unit and integration tests.
+ */
 trait CoreActors {
   this: Core =>
 

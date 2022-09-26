@@ -1,0 +1,295 @@
+/* Cards
+   ========================================================================== */
+/**
+* Use it in HTML as (Card with text & image)
+* <article class='articles-gallery'>
+*   <div class='card-content'>
+*     <header>
+*       <h3> Card title</h3>
+*     </header>
+*     <p>
+*       Card content
+*     </p>
+*     <div class='figure-wrap'>
+*       <figure>
+*         <img src='image url'>
+*       </figure>
+*     </div>
+*     <footer>
+*       Footer content
+*     </footer>
+*   </div>
+* </article>
+*
+* Variables file: assets/stylesheets/eos-custom-components/card/card.variables.scss
+*/
+
+.card {
+  background: $eos-card-bg;
+  border: 0;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  font-size: $eos-card-font-size;
+  justify-content: space-between;
+  outline: none;
+  transition: all 250ms ease-in-out;
+
+  .card-header {
+    h1, h2, h3, h4, h5, h6 {
+      margin-bottom: 0;
+    }
+
+    &:first-child {
+      border-color: $eos-card-bg-header-border-color;
+      border-radius: 0;
+    }
+  }
+
+  .card-footer {
+    border-radius: 0;
+  }
+
+  .card-img-top {
+    border-radius: 0;
+    object-fit: cover;
+  }
+
+  .card-title {
+    @extend .h5;
+  }
+
+  .card-subtitle {
+    @extend .h5;
+    color: $eos-card-subtitle-color;
+  }
+
+  /* stylelint-disable declaration-no-important */
+  &.bg-success {
+    .card-header {
+      background-color: $eos-bc-green-500 !important;
+    }
+  }
+
+  &.bg-danger {
+    .card-header {
+      background-color: $eos-bc-red-500 !important;
+      color: $eos-bc-white;
+    }
+  }
+
+  &.bg-warning {
+    .card-header {
+      background-color: $eos-bc-yellow-500 !important;
+    }
+  }
+
+  &.bg-info {
+    .card-header {
+      background-color: $eos-bc-cerulean-900 !important;
+    }
+  }
+
+  &.bg-success, &.bg-warning, &.bg-info {
+    background-color: transparent !important;
+
+    .card-header {
+      color: $eos-bc-gray-1000;
+    }
+  }
+  /* stylelint-enable declaration-no-important */
+
+  // Rules for horizontal cards.
+  .row {
+    .card-img {
+      object-fit: cover;
+    }
+
+    .card-header:first-child {
+      i {
+        margin: 0;
+        text-align: center;
+      }
+    }
+
+    .card-with-icon {
+      border-bottom: 0;
+      border-bottom-right-radius: 0;
+      border-top-right-radius: 0;
+      border-width: 1px;
+      height: 100%;
+    }
+  }
+
+  &-header, &-with-icon {
+    background-color: $eos-card-bg;
+  }
+
+  &-with-icon {
+    align-items: center;
+    background-color: $eos-card-bg-header;
+    display: flex;
+    justify-content: center;
+    padding: 1.25rem;
+
+    i {
+      margin: 0;
+    }
+  }
+
+  &-body {
+    background: $eos-card-bg;
+
+    .btn {
+      margin: 0 $eos-s $eos-s 0;
+    }
+
+    .card-title, .card-subtitle {
+      display: block;
+    }
+
+    .card-text small {
+      color: $eos-card-subtitle-color;
+    }
+  }
+
+  /* Styles for card wrapped by anchor */
+  &.clickable {
+    text-decoration: none;
+
+    // overwrite Bootstrap inherit property
+    h3 {
+      color: $eos-card-text;
+    }
+  }
+
+  /* Status for disabled card */
+  &.disabled {
+    footer {
+      color: $eos-card-footer-disable-color;
+    }
+  }
+  @media screen and (max-width: $eos-sd-max) {
+    margin: $eos-card-margin 0;
+  }
+}
+
+/* Horizontal card style layout.
+  ========================================================================== */
+.card-horizontal {
+  border-radius: 0;
+  box-shadow: none;
+  color: $eos-card-horizontal-link-color;
+  display: flex;
+  font-size: $eos-card-font-size;
+  height: 100%;
+  position: relative;
+  transition: width .3s ease-in-out;
+
+  &::after, &::before {
+    background: $eos-card-horizontal-default-color;
+    content: '';
+    height: 5px;
+    position: absolute;
+    transition: width .3s ease-in-out;
+  }
+
+  &::before {
+    top: 0;
+    width: 100%;
+  }
+
+  &::after {
+    bottom: 0;
+    width: 0;
+  }
+
+  &:hover {
+    color: $eos-card-horizontal-link-color;
+    text-decoration: none;
+
+    &::before {
+      width: 0;
+    }
+
+    &::after {
+      width: 100%;
+    }
+  }
+
+  &.slick-slide:not(:last-of-type) {
+    margin-right: $eos-card-margin;
+  }
+
+  h3 {
+    margin-top: 0;
+  }
+
+  .card-content {
+    display: flex;
+    justify-content: space-between;
+    padding: $eos-card-content-padding;
+    width: 100%;
+
+    p {
+      margin: 0;
+    }
+
+    div:first-child {
+      display: flex;
+      flex-direction: column;
+      width: 70%;
+    }
+
+    div:last-child {
+      align-self: center;
+      display: flex;
+      justify-content: flex-end;
+      width: 30%;
+
+      img {
+        max-width: $eos-card-horizontal-image-width;
+      }
+
+      /* We'll have to move those to  helper classes once we decide for the structure*/
+      .small-image {
+        max-height: $eos-card-horizontal-small-image-max-height;
+        width: 60%;
+      }
+    }
+
+    div:only-child {
+      display: flex;
+      width: 100%;
+    }
+  }
+
+  footer {
+    display: flex;
+    flex-direction: row-reverse;
+    padding: 0 24px;
+  }
+
+  /* Card icons positions */
+  .card-icon {
+    position: absolute;
+    right: $eos-card-horizontal-icon-position;
+    top: $eos-card-horizontal-icon-position;
+
+    .eos-icons-outlined, .eos-icons {
+      margin-right: 0;
+    }
+  }
+
+  .card-date {
+    color: $eos-card-horizontal-date-color;
+  }
+}
+
+.card-link {
+  color: $eos-card-horizontal-default-color;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

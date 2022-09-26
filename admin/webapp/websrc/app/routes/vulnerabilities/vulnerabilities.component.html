@@ -1,0 +1,61 @@
+<ng-container *appObserve="vulnerabilitiesData$ as vulnerabilitiesData; error:errorTemplate loading:loadingTemplate">
+  <div style="height: calc(100vh - 180px)">
+    <div class="d-flex justify-content-end align-items-center">
+      <app-loading-button
+        (btnClick)="downloadAssetsPDF()"
+        [disabled]="(assetViewPdfProgress$ | async) !== 100"
+        [loading]="(assetViewPdfProgress$ | async) !== 100"
+        [text]="'scan.report.PDF_LINK2' | translate"
+        appearance="mat-button"
+        buttonClasses="mr-1 d-flex justify-content-center align-items-center"
+        iconClasses="eos-icons"
+        iconName="picture_as_pdf">
+        >
+      </app-loading-button>
+      <app-loading-button
+        (btnClick)="downloadVulnerabilityPDF()"
+        [disabled]="(vulnerabilityViewPdfProgress$ | async) !== 100"
+        [loading]="(vulnerabilityViewPdfProgress$ | async) !== 100"
+        [text]="'scan.report.PDF_LINK' | translate"
+        appearance="mat-button"
+        buttonClasses="mr-1 d-flex justify-content-center align-items-center"
+        iconClasses="eos-icons"
+        iconName="picture_as_pdf">
+      </app-loading-button>
+      <button
+        (click)="downloadCsv()"
+        class="mr-1 d-flex justify-content-center align-items-center"
+        mat-button>
+        <i
+          class="eos-icons">csv_file</i>CSV
+      </button>
+      <app-loading-button
+        (btnClick)="refresh()"
+        [appearance]="'mat-button'"
+        [buttonClasses]="'d-flex justify-content-center align-items-center'"
+        [disabled]="false"
+        [iconClasses]="'eos-icons'"
+        [iconName]="'refresh'"
+        [id]="'registries-refresh-button'"
+        [loading]="false"
+        [text]="'network.REFRESH' | translate"
+        [type]="'button'">
+      </app-loading-button>
+    </div>
+    <div style="height: 200px">
+      <app-vulnerability-charts></app-vulnerability-charts>
+    </div>
+    <div style="height: calc(100% - 160px)">
+      <app-vulnerability-items
+        [domains]="vulnerabilitiesData.domain"
+        [vulnerabilities]="vulnerabilitiesData.vulnerabilities.vulnerabilities"
+      ></app-vulnerability-items>
+    </div>
+  </div>
+</ng-container>
+<ng-template #errorTemplate let-error>
+  {{ error | json }}
+</ng-template>
+<ng-template #loadingTemplate>
+  <app-loading-template></app-loading-template>
+</ng-template>

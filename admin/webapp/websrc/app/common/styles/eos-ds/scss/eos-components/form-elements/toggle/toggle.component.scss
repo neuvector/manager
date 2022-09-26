@@ -1,0 +1,79 @@
+/* Toggle component
+   ========================================================================== */
+
+.custom-switch {
+  padding-left: $eos-toggle-switch-padding-left;
+
+  .custom-control-label {
+    margin-bottom: 0;
+    position: relative;
+    vertical-align: top;
+  }
+
+  /*
+  * Starts
+  * style for the toggle when off */
+  .custom-control-label::before {
+    background-color: $eos-toggle-off-color;
+    border: 0;
+    border-radius: $eos-toggle-border-radius;
+    content: '';
+    display: block;
+    height: $eos-toggle-height;
+    left: $eos-toggle-left;
+    pointer-events: all;
+    position: absolute;
+    top: $eos-toggle-top;
+    width: $eos-toggle-width;
+  }
+
+  .custom-control-label::after {
+    background-color: $eos-toggle-circle-bg;
+    border-radius: 50%;
+    color: $eos-toggle-close-color;
+    content: 'close';
+    font-family: 'eos-icons-outlined';
+    font-size: 16px;
+    height: $eos-toggle-circle-height;
+    left: $eos-toggle-circle-left;
+    line-height: 1.2;
+    text-align: center;
+    top: $eos-toggle-circle-top;
+    transition: background-color .15s ease-in-out, -webkit-transform .15s ease-in-out;
+    width: $eos-toggle-circle-width;
+  }
+
+  .custom-control-input:disabled ~ .custom-control-label::after {
+    color: $eos-toggle-icon-disabled;
+  }
+
+  .custom-control-input:disabled ~ .custom-control-label::before, .custom-control-input[disabled] ~ .custom-control-label::before {
+    background-color: $eos-toggle-icon-disabled;
+  }
+
+  /*
+  * Starts
+  * style for the toggle when On */
+  .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: $eos-form-element-approved;
+    color: $eos-toggle-circle-bg;
+  }
+
+  .custom-control-input:checked ~ .custom-control-label::after {
+    background-color: $eos-toggle-circle-bg;
+    color: $eos-toggle-check-color;
+    content: 'check';
+    font-family: 'eos-icons-outlined';
+    font-size: 16px;
+    transform: translateX($eos-toggle-circle-translate);
+    transform: translateX($eos-toggle-circle-translate);
+  }
+
+  .custom-control-input:checked:disabled ~ .custom-control-label::before, .custom-control-input[disabled]:checked ~ .custom-control-label::before {
+    background-color: $eos-toggle-selected-disabled;
+  }
+
+  .custom-control-input:checked:disabled ~ .custom-control-label::after, .custom-control-input[disabled]:checked ~ .custom-control-label::after {
+    color: $eos-toggle-selected-disabled;
+  }
+}

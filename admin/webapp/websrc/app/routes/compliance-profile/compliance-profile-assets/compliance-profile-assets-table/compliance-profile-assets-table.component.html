@@ -1,0 +1,199 @@
+<div class="d-flex flex-column justify-content-between pt-2">
+  <p class="mx-3">{{ 'cis.profile.DESCRIPTION' | translate }}</p>
+  <div class="row mx-3">
+    <div class="col-1 d-flex flex-column justify-content-around">
+      <span class="d-block">Images</span>
+      <span class="d-block">Nodes</span>
+      <span class="d-block">Containers</span>
+    </div>
+    <div class="col-1 d-flex flex-column justify-content-around">
+      <span class="d-block">Templates</span>
+      <span class="d-block">Templates</span>
+      <span class="d-block">Templates</span>
+    </div>
+    <div class="col-3 d-flex flex-column justify-content-around">
+      <ng-container *ngIf="imageTags.length > 0; else allTemplate">
+        <div class="margin-top-s margin-bottom-s">
+          <ng-container *ngFor="let tag of imageTags">
+            <ng-container [ngSwitch]="tag">
+              <span
+                *ngSwitchCase="'GDPR'"
+                class="badge text-white"
+                style="
+                  padding-left: 3px;
+                  background-color: #ff9800;
+                  max-width: 70px;
+                "
+                >⋮⋮&nbsp;&nbsp;GDPR</span
+              >
+              <span
+                *ngSwitchCase="'HIPAA'"
+                class="badge text-white"
+                style="
+                  padding-left: 3px;
+                  background-color: #4e39c1;
+                  max-width: 70px;
+                "
+                >⋮⋮&nbsp;&nbsp;HIPAA</span
+              >
+              <span
+                *ngSwitchCase="'NIST'"
+                class="badge badge-dark"
+                style="padding-left: 3px; max-width: 70px"
+                >⋮⋮&nbsp;&nbsp;NIST</span
+              >
+              <span
+                *ngSwitchCase="'PCI'"
+                class="badge text-white"
+                style="
+                  padding-left: 3px;
+                  background-color: #009688;
+                  max-width: 70px;
+                "
+                >⋮⋮&nbsp;&nbsp;PCI</span
+              >
+            </ng-container>
+          </ng-container>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="nodeTags.length > 0; else allTemplate">
+        <div class="margin-top-s margin-bottom-s">
+          <ng-container *ngFor="let tag of nodeTags">
+            <ng-container [ngSwitch]="tag">
+              <span
+                *ngSwitchCase="'GDPR'"
+                class="badge text-white"
+                style="
+                  padding-left: 3px;
+                  background-color: #ff9800;
+                  max-width: 70px;
+                "
+                >⋮⋮&nbsp;&nbsp;GDPR</span
+              >
+              <span
+                *ngSwitchCase="'HIPAA'"
+                class="badge text-white"
+                style="
+                  padding-left: 3px;
+                  background-color: #4e39c1;
+                  max-width: 70px;
+                "
+                >⋮⋮&nbsp;&nbsp;HIPAA</span
+              >
+              <span
+                *ngSwitchCase="'NIST'"
+                class="badge badge-dark"
+                style="padding-left: 3px; max-width: 70px"
+                >⋮⋮&nbsp;&nbsp;NIST</span
+              >
+              <span
+                *ngSwitchCase="'PCI'"
+                class="badge text-white"
+                style="
+                  padding-left: 3px;
+                  background-color: #009688;
+                  max-width: 70px;
+                "
+                >⋮⋮&nbsp;&nbsp;PCI</span
+              >
+            </ng-container>
+          </ng-container>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="containerTags.length > 0; else allTemplate">
+        <div class="margin-top-s margin-bottom-s">
+          <ng-container *ngFor="let tag of containerTags">
+            <ng-container [ngSwitch]="tag">
+              <span
+                *ngSwitchCase="'GDPR'"
+                class="badge text-white"
+                style="
+                  padding-left: 3px;
+                  background-color: #ff9800;
+                  max-width: 70px;
+                "
+                >⋮⋮&nbsp;&nbsp;GDPR</span
+              >
+              <span
+                *ngSwitchCase="'HIPAA'"
+                class="badge text-white"
+                style="
+                  padding-left: 3px;
+                  background-color: #4e39c1;
+                  max-width: 70px;
+                "
+                >⋮⋮&nbsp;&nbsp;HIPAA</span
+              >
+              <span
+                *ngSwitchCase="'NIST'"
+                class="badge badge-dark"
+                style="padding-left: 3px; max-width: 70px"
+                >⋮⋮&nbsp;&nbsp;NIST</span
+              >
+              <span
+                *ngSwitchCase="'PCI'"
+                class="badge text-white"
+                style="
+                  padding-left: 3px;
+                  background-color: #009688;
+                  max-width: 70px;
+                "
+                >⋮⋮&nbsp;&nbsp;PCI</span
+              >
+            </ng-container>
+          </ng-container>
+        </div>
+      </ng-container>
+      <ng-template #allTemplate>
+        <div class="margin-top-s margin-bottom-s">
+          <span
+            class="badge text-white"
+            style="padding-left: 3px; background-color: #64a150; max-width: 70px"
+            >⋮⋮&nbsp;&nbsp;All</span
+          >
+        </div>
+      </ng-template>
+    </div>
+    <div class="col-1 d-flex flex-column justify-content-around" *appDisplayControl="'write_compliance_profile'">
+      <button
+        (click)="editTemplate('_images')"
+        aria-label="Edit images icon button "
+        class="d-block"
+        mat-icon-button>
+        <i class="eos-icons">edit</i>
+      </button>
+      <button
+        (click)="editTemplate('_nodes')"
+        aria-label="Edit nodes icon button "
+        class="d-block"
+        mat-icon-button>
+        <i class="eos-icons">edit</i>
+      </button>
+      <button
+        (click)="editTemplate('_containers')"
+        [disabled]="namespaceEnabled"
+        aria-label="Edit containers icon button "
+        class="d-block"
+        mat-icon-button>
+        <i class="eos-icons">edit</i>
+      </button>
+    </div>
+  </div>
+  <div class="d-flex flex-row justify-content-between align-items-center">
+    <mat-checkbox
+      (change)="enable()"
+      [(ngModel)]="namespaceEnabled"
+      [disabled]="!isWriteComplianceProfileAuthorized"
+      class="mx-3"
+      >{{ 'cis.profile.ENABLE_DOMAIN_TAGGING' | translate }}</mat-checkbox
+    >
+    <app-quick-filter [gridOptions]="gridOptions" [showCount]="false">
+    </app-quick-filter>
+  </div>
+</div>
+<ag-grid-angular
+  (window:resize)="onResize()"
+  [gridOptions]="gridOptions"
+  class="ag-theme-alpine"
+  style="width: 100%; height: 60%">
+</ag-grid-angular>

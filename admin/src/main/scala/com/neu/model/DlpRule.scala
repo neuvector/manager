@@ -1,13 +1,13 @@
 package com.neu.model
 
-case class Pattern (
+case class Pattern(
   key: String,
   op: String,
   value: String,
   context: Option[String]
 )
 
-case class PreRuleContext (
+case class PreRuleContext(
   name: String,
   context: String
 )

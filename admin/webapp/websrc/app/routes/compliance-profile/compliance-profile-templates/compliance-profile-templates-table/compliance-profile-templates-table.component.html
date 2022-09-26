@@ -1,0 +1,101 @@
+<div
+  class="d-flex flex-column justify-content-between pt-2"
+  style="height: 30%">
+  <div class="d-flex flex-row justify-content-between align-items-center">
+    <div>
+      <mat-checkbox
+        (change)="updateSystem()"
+        [(ngModel)]="hideSystem"
+        *appDisplayControl="'write_compliance_profile'"
+        class="mx-3"
+        >{{ 'cis.profile.HIDE_SYSTEM' | translate }}</mat-checkbox
+      >
+    </div>
+    <div class="d-flex flex-row align-items-center">
+      <span *ngIf="totalChanges > 0" class="d-block"
+        >{{ totalChanges }}&nbsp;{{ 'cis.profile.PENDING' | translate
+        }}{{ 'cis.profile.CHANGES' | translate }}</span
+      >
+      <button
+        (click)="saveChanges()"
+        *ngIf="totalChanges > 0"
+        class="mx-2"
+        mat-stroked-button>
+        {{ 'general.SUBMIT' | translate }}
+      </button>
+      <button (click)="reset()" *appDisplayControl="'write_compliance_profile'" mat-stroked-button>
+        {{ 'cis.profile.RESET' | translate }}
+      </button>
+    </div>
+  </div>
+  <div class="d-flex flex-row align-items-center cis-filter mx-3">
+    <span class="d-block mr-4">{{
+      'cis.profile.COMPLIANCE_TEMPLATE' | translate
+    }}</span>
+    <div class="d-flex flex-row align-items-center mr-2">
+      <mat-checkbox
+        (change)="filterChange('ALL')"
+        [(ngModel)]="all"
+        [disabled]="all || !isWriteComplianceProfileAuthorized"
+        aria-label="All"
+        class="mr-2"></mat-checkbox>
+      <span class="d-block" style="font-size: 28px; font-weight: bold"
+        >ALL</span
+      >
+    </div>
+    <div class="d-flex flex-row align-items-center">
+      <mat-checkbox
+        (change)="filterChange('PCI')"
+        [(ngModel)]="pci"
+        [disabled]="!isWriteComplianceProfileAuthorized"
+        aria-label="PCI"
+        class="mr-2"></mat-checkbox>
+      <img alt="pci" src="assets/img/icons/pci.png" />
+    </div>
+    <div class="d-flex flex-row align-items-center mr-2">
+      <mat-checkbox
+        (change)="filterChange('GDPR')"
+        [(ngModel)]="gdpr"
+        [disabled]="!isWriteComplianceProfileAuthorized"
+        aria-label="GDPR"
+        class="mr-2"></mat-checkbox>
+      <img alt="gdpr" src="assets/img/icons/gdpr.svg" />
+    </div>
+    <div class="d-flex flex-row align-items-center mr-2">
+      <mat-checkbox
+        (change)="filterChange('HIPAA')"
+        [(ngModel)]="hipaa"
+        [disabled]="!isWriteComplianceProfileAuthorized"
+        aria-label="HIPAA"
+        class="mr-2"></mat-checkbox>
+      <img alt="hipaa" src="assets/img/icons/hipaa.png" />
+    </div>
+    <div class="d-flex flex-row align-items-center mr-2">
+      <mat-checkbox
+        (change)="filterChange('NIST')"
+        [(ngModel)]="nist"
+        [disabled]="!isWriteComplianceProfileAuthorized"
+        aria-label="NIST"
+        class="mr-2"></mat-checkbox>
+      <img alt="nist" src="assets/img/icons/nist.png" />
+    </div>
+  </div>
+  <div class="d-flex flex-row justify-content-between align-items-center">
+    <span class="d-block"
+      ><span *ngIf="filtered$ | async"
+        >{{ 'enum.FOUND' | translate }} {{ filteredCount }}&nbsp;/&nbsp;</span
+      >{{ rowData.length }} {{ 'cis.COUNT_POSTFIX' | translate }}</span
+    >
+    <app-quick-filter
+      (filterCountChange)="filterCountChanged($event)"
+      [gridOptions]="gridOptions"
+      [showCount]="false">
+    </app-quick-filter>
+  </div>
+</div>
+<ag-grid-angular
+  (window:resize)="onResize()"
+  [gridOptions]="gridOptions"
+  class="ag-theme-alpine"
+  style="width: 100%; height: 70%">
+</ag-grid-angular>

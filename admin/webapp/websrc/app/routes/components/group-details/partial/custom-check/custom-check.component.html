@@ -1,0 +1,61 @@
+<div class="row">
+  <form
+    [formGroup]="customCheckForm"
+    class="col-sm-6"
+  >
+    <mat-form-field appearance="standard" class="col-12"
+    >
+      <mat-label>{{'group.script.NAME' | translate}}</mat-label>
+      <input
+        matInput
+        [readonly]="!isWriteScriptAuthorized"
+        formControlName="name"
+      />
+      <mat-error *ngIf="customCheckForm.controls.name.hasError('required')">
+        {{'general.REQUIRED' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="col-12"
+    >
+      <mat-label>{{'group.script.SCRIPT' | translate}}</mat-label>
+      <textarea
+        matInput
+        [readonly]="!isWriteScriptAuthorized"
+        formControlName="script"
+        [ngStyle]="{ height: (resizableHeight - 245) + 'px' }"
+      >
+      </textarea>
+    </mat-form-field>
+    <div class="clearfix">
+      <app-loading-button
+        *appDisplayControl="'write_script'"
+        [appearance]="'mat-raised-button'"
+        [color]="'primary'"
+        [loading]="submittingUpdate"
+        [text]="(opType === modalOp.EDIT ? 'group.script.UPDATE' : 'group.script.ADD') | translate"
+        (click)="updateScript()"
+        class="pull-right"
+      >
+      </app-loading-button>
+    </div>
+  </form>
+  <div class="col-sm-6" style="position: relative;">
+    <div
+      role="button"
+      *appDisplayControl="'write_script'"
+      style="position: absolute; z-index: 10; right: 15px;"
+      (click)="switch2Add()">
+      <em class="eos-icons">add</em>
+    </div>
+    <ag-grid-angular
+      #customCheckGrid
+      id="custom-check-grid"
+      style="width: 100%;"
+      [ngStyle]="{ height: (resizableHeight - 85) + 'px' }"
+      class="ag-theme-balham"
+      [gridOptions]="gridOptions4CustomCheck"
+      [context]="context"
+      >
+    </ag-grid-angular>
+  </div>
+</div>

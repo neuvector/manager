@@ -1,0 +1,101 @@
+<div class="nv-dialog">
+  <div mat-dialog-title class="dialog-header">
+    <div class="pull-left">
+      {{
+        (type === 'add' ? 'service.ADD_RULE' : 'service.EDIT_RULE') | translate
+      }}
+    </div>
+    <div class="pull-right">
+      <em class="icon-close hand" (click)="onCancel()"></em>
+    </div>
+  </div>
+  <div mat-dialog-content class="dialog-content p0 m0">
+    <form
+      fxLayout="column"
+      fxLayoutAlign="start"
+      [formGroup]="processProfileRuleForm"
+      fxFlex="1 0 auto"
+      class="pt-lg">
+      <div
+        fxLayout="row"
+        fxLayoutAlign="start center"
+        fxFlex="1 0 auto"
+        class="pl-4">
+        <mat-form-field appearance="fill">
+          <mat-label>{{ 'group.GROUP' | translate }}</mat-label>
+          <mat-select matNativeControl required formControlName="group">
+            <mat-option
+              *ngFor="let groupOption of groupOptions"
+              [value]="groupOption"
+              >{{ groupOption }}</mat-option
+            >
+          </mat-select>
+          <mat-error>Group is required!</mat-error>
+        </mat-form-field>
+      </div>
+      <div
+        fxLayout="row"
+        fxLayoutAlign="start center"
+        fxFlex="1 0 auto"
+        class="pl-4">
+        <mat-form-field appearance="standard" fxFlex="40" class="pr-4">
+          <mat-label>{{ 'service.gridHeader.NAME' | translate }}</mat-label>
+          <input
+            matInput
+            name="name"
+            [readonly]="type === 'edit'"
+            formControlName="name"
+            required />
+          <em matSuffix class="icon-paper-clip input-icon"></em>
+          <mat-error>Rule name is required!</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="standard" fxFlex="60" class="pr-4">
+          <mat-label>{{ 'service.gridHeader.PATH' | translate }}</mat-label>
+          <input matInput name="path" formControlName="path" />
+          <em matSuffix class="icon-paper-clip input-icon"></em>
+        </mat-form-field>
+      </div>
+      <div
+        fxLayout="row"
+        fxLayoutAlign="start center"
+        fxFlex="1 0 auto"
+        class="pl-4">
+        <div fxFlex="30" class="pr-4" style="margin-bottom: 20px">
+          <span class="nv-modal-item-title mr">{{
+            'service.ALLOW_ALERT' | translate
+          }}</span>
+          <mat-slide-toggle
+            id="network-action-toggle"
+            [(ngModel)]="isAllowed"
+            [ngModelOptions]="{ standalone: true }"
+            color="primary">
+            <span
+              [ngClass]="{
+                'text-deny': !isAllowed,
+                'text-success': isAllowed
+              }">
+              {{
+                (isAllowed ? 'policy.action.ALLOW' : 'policy.action.DENY')
+                  | translate
+              }}
+            </span>
+          </mat-slide-toggle>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div
+    mat-dialog-actions
+    class="dialog-actions pull-right"
+    style="margin-right: 24px">
+    <a class="modal-cancel-button" (click)="onCancel()">
+      {{ 'group.editGroup.CANCEL' | translate }}
+    </a>
+    <button
+      mat-button
+      class="modal-submit-button"
+      (click)="addEditProcessProfileRule()">
+      {{ 'policy.portlet.SUBMIT' | translate }}
+    </button>
+  </div>
+</div>

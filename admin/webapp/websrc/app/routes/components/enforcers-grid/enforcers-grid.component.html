@@ -1,0 +1,46 @@
+<div class="d-flex align-items-center justify-content-between">
+  <div class="d-flex align-items-center justify-content-start">
+    <span class="mr-2" *ngIf="!selectable">
+      <span *ngIf="filtered">
+        {{ 'enum.FOUND' | translate }}
+        {{ filteredCount }}&nbsp;/&nbsp;
+      </span>
+      {{ enforcerCount }}
+      {{ 'enforcers.COUNT_POSTFIX' | translate }}
+    </span>
+    <span class="text-muted" *ngIf="selectable">{{
+      'setting.ENFORCERS_HINT'
+        | translate: { maxSlectedEnforcer: MAX_SELECTED_ENFORCER }
+    }}</span>
+  </div>
+  <div class="d-flex align-items-center justify-content-end">
+    <app-quick-filter
+      [gridOptions]="gridOptions"
+      (filterCountChange)="filterCountChanged($event)"
+      [showCount]="false">
+    </app-quick-filter>
+    <app-loading-button
+      *ngIf="refreshable"
+      (btnClick)="refresh()"
+      [appearance]="'mat-button'"
+      [buttonClasses]="'d-flex justify-content-center align-items-center'"
+      [disabled]="!!(refreshing$ | async)"
+      [iconClasses]="'eos-icons'"
+      [iconName]="'refresh'"
+      [id]="'enforcers-refresh-button'"
+      [loading]="!!(refreshing$ | async)"
+      [text]="'network.REFRESH' | translate"
+      [type]="'button'">
+    </app-loading-button>
+  </div>
+</div>
+<ag-grid-angular
+  #agGrid
+  (window:resize)="onResize()"
+  [ngStyle]="{ height: gridHeight + 'px' }"
+  [gridOptions]="gridOptions"
+  [rowData]="enforcersService.enforcers"
+  id="enforcers-grid"
+  style="width: 100%"
+  class="ag-theme-balham">
+</ag-grid-angular>

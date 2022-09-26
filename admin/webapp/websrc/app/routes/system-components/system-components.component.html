@@ -1,0 +1,65 @@
+<mat-card>
+  <mat-tab-group (selectedTabChange)="activateTab($event)">
+    <mat-tab label="{{ 'sidebar.nav.CONTROLLERS' | translate }}">
+      <app-adjustable-div [minHeightOne]="163" [minHeightTwo]="140">
+        <ng-container *appContainerOne="let height">
+          <div [ngStyle]="{ height: height + 'px' }" class="pt-0">
+            <app-controllers-grid
+              [gridHeight]="height - 80"
+              [resize]="resize"
+              [isVisible]="activeTabIndex === 0"></app-controllers-grid>
+          </div>
+        </ng-container>
+        <ng-container *appContainerTwo="let height">
+          <div [ngStyle]="{ height: height + 'px' }" class="pt-0">
+            <app-controller-details></app-controller-details>
+          </div>
+        </ng-container>
+      </app-adjustable-div>
+    </mat-tab>
+    <mat-tab label="{{ 'sidebar.nav.SCANNERS' | translate }}">
+      <app-adjustable-div [minHeightOne]="163" [minHeightTwo]="140">
+        <ng-container *appContainerOne="let height">
+          <div [ngStyle]="{ height: height + 'px' }" class="pt-0">
+            <app-scanners-grid
+              [gridHeight]="height - 80"
+              [resize]="resize"
+              [isVisible]="activeTabIndex === 1"></app-scanners-grid>
+          </div>
+        </ng-container>
+        <ng-container *appContainerTwo="let height">
+          <div [ngStyle]="{ height: height + 'px' }" class="pt-0">
+            <app-scanner-details></app-scanner-details>
+          </div>
+        </ng-container>
+      </app-adjustable-div>
+    </mat-tab>
+    <mat-tab label="{{ 'sidebar.nav.ENFORCERS' | translate }}">
+      <app-adjustable-div [minHeightOne]="163" [minHeightTwo]="140">
+        <ng-container *appContainerOne="let height">
+          <div [ngStyle]="{ height: height + 'px' }" class="pt-0">
+            <app-enforcers-grid
+              [gridHeight]="height - 80"
+              [resize]="resize"
+              [isVisible]="activeTabIndex === 2"></app-enforcers-grid>
+          </div>
+        </ng-container>
+        <ng-container *appContainerTwo="let height">
+          <div [ngStyle]="{ height: height + 'px' }" class="pt-0">
+            <app-enforcer-details></app-enforcer-details>
+          </div>
+        </ng-container>
+      </app-adjustable-div>
+    </mat-tab>
+  </mat-tab-group>
+</mat-card>
+<ng-template #loadingOrErrorTemplate>
+  <ng-container *ngIf="error; else loadingTemplate">
+    <mat-card>
+      {{ error | json }}
+    </mat-card>
+  </ng-container>
+  <ng-template #loadingTemplate>
+    <app-loading-template></app-loading-template>
+  </ng-template>
+</ng-template>

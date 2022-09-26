@@ -23,10 +23,9 @@ object AuthenticationManager extends LazyLogging {
 
   val tokenClusterMap: mutable.Map[String, String] = scala.collection.mutable.Map[String, String]()
 
-  val tokenBaseUrlMap:  mutable.Map[String, String] = scala.collection.mutable.Map[String, String]()
+  val tokenBaseUrlMap: mutable.Map[String, String] = scala.collection.mutable.Map[String, String]()
 
-  val suseTokenMap: mutable.Map[String, String] =
-    scala.collection.mutable.Map[String, String]()
+  val suseTokenMap: mutable.Map[String, String]   = scala.collection.mutable.Map[String, String]()
   def getCluster(tokenId: String): Option[String] = tokenClusterMap.get(tokenId)
   def switchCluster(tokenId: String, clusterId: Option[String]): Unit =
     clusterId.fold(
@@ -34,7 +33,6 @@ object AuthenticationManager extends LazyLogging {
     )(
       id => tokenClusterMap += tokenId -> id
     )
-
 
   def validate(tokenId: String): Option[UserTokenNew] =
     tokenMap.get(tokenId)
@@ -45,24 +43,21 @@ object AuthenticationManager extends LazyLogging {
     suseTokenMap -= tokenId
   }
 
-  def setBaseUrl(tokenId: String, baseUrl: String): Unit = {
+  def setBaseUrl(tokenId: String, baseUrl: String): Unit =
     tokenBaseUrlMap += (tokenId -> baseUrl)
-  }
 
-  def getBaseUrl(tokenId: String): Option[String] = {
+  def getBaseUrl(tokenId: String): Option[String] =
     tokenBaseUrlMap.get(tokenId)
-  }
 
-  def removeBaseUrl(tokenId: String): Unit = {
+  def removeBaseUrl(tokenId: String): Unit =
     tokenBaseUrlMap -= tokenId
-  }
 
   def parseToken: (String) => UserTokenNew = (authToken: String) => {
     val timestamp: Long                             = System.currentTimeMillis
     val datetime: String                            = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(timestamp)
     var converted_role_domains: Map[String, String] = null
     var userToken: UserTokenNew                     = null
-    val authRes = jsonToToken(authToken)
+    val authRes                                     = jsonToToken(authToken)
     token = Some(authRes.token)
 
     val tokenNew = TokenNew(

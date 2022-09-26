@@ -1,0 +1,20 @@
+<mat-card
+  class="remediation-detail-dialog"
+  *ngIf="visible && compliance"
+  cdkDragBoundary=".nv-section"
+  cdkDrag>
+  <mat-card-title class="d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      {{ 'cis.REMEDIATION' | translate }}
+    </div>
+    <div>
+      <button
+        mat-icon-button
+        aria-label="Close vulnerability detail"
+        (click)="hide()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </mat-card-title>
+  <mat-card-content>{{ compliance.remediation }}</mat-card-content>
+</mat-card>

@@ -1,0 +1,58 @@
+/* Button dark theme styling
+   ========================================================================== */
+/* button */
+
+.dark-theme {
+  .btn {
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .btn:not(:disabled) {
+    text-decoration: none;
+  }
+
+  .btn-primary {
+    color: $eos-dark-btn-primary-color;
+  }
+
+  .btn-secondary {
+    border-color: $eos-dark-btn-secondary-color;
+    color: $eos-dark-btn-secondary-color;
+
+    &:hover {
+      border-color: $eos-dark-btn-secondary-color-hover;
+      color: $eos-dark-btn-secondary-color-hover;
+      text-decoration: none;
+
+      &:not(:disabled):not(.disabled):hover::after {
+        background-color: $eos-dark-btn-secondary-color-hover;
+      }
+    }
+
+    &:not(:disabled):not(.disabled):active, &:not(:disabled):not(.disabled):active:focus, &:active, &.active, &:focus, &.focus, &.active.focus, &.active:focus, &:active:focus, &:active.focus {
+      border-color: $eos-dark-btn-secondary-color-active;
+      color: $eos-dark-btn-secondary-color-active;
+    }
+
+    &.disabled, &.disabled:hover, &.disabled:focus {
+      background-color: transparent;
+      border-color: $eos-dark-btn-secondary-color;
+      color: $eos-dark-btn-secondary-color;
+      opacity: $eos-dark-btn-secondary-color;
+    }
+  }
+
+  .btn-outline-primary {
+    color: $eos-dark-btn-secondary-color;
+
+    &.disabled, &.disabled:hover, &.disabled:focus {
+      color: $eos-dark-btn-secondary-color;
+    }
+  }
+
+  .btn-unstyled {
+    color: $eos-dark-btn-secondary-color;
+  }
+}

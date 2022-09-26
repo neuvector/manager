@@ -1,0 +1,32 @@
+export interface Violation {
+  name?: string;
+  level: string;
+  reported_timestamp: number;
+  reported_at: string;
+  cluster_name: string;
+  response_rule_id?: number;
+  host_id: string;
+  host_name: string;
+  enforcer_id: string;
+  enforcer_name: string;
+  id: string;
+  client_id: string;
+  client_name: string;
+  client_domain?: string;
+  client_image?: string;
+  client_service?: string;
+  server_id: string;
+  server_name: string;
+  server_domain?: string;
+  server_image?: string;
+  server_service?: string;
+  server_port: number;
+  ip_proto: number;
+  applications: string[];
+  servers: string[];
+  sessions: number;
+  policy_action: string;
+  policy_id: number;
+  client_ip: string;
+  server_ip: string;
+}

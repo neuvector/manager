@@ -1,0 +1,31 @@
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, OnInit, Inject, Output, EventEmitter } from '@angular/core';
+
+@Component({
+  selector: 'app-confirm-dialog',
+  templateUrl: './confirm-dialog.component.html',
+  styleUrls: ['./confirm-dialog.component.scss'],
+})
+export class ConfirmDialogComponent implements OnInit {
+  loading = false;
+  constructor(
+    public dialogRef: MatDialogRef<ConfirmDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
+
+  ngOnInit(): void {}
+
+  @Output() confirm = new EventEmitter();
+  onConfirm(): void {
+    this.loading = true;
+    if (this.data.isSync) {
+      this.dialogRef.close(true);
+    } else {
+      this.confirm.emit();
+    }
+  }
+
+  onCancel(): void {
+    this.dialogRef.close(false);
+  }
+}

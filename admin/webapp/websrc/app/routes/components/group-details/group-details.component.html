@@ -1,0 +1,108 @@
+<mat-tab-group
+  *ngIf="!isScoreImprovement; else scoreImprovement"
+  animationDuration="0ms"
+  (selectedTabChange)="activateTab($event)">
+  <mat-tab label="{{ 'group.gridHeader.MEMBERS' | translate }}">
+    <app-members
+      *ngIf="activeTabIndex === 0"
+      [source]="navSource"
+      [members]="members"
+      [kind]="kind"
+      [resizableHeight]="resizableHeight">
+    </app-members>
+  </mat-tab>
+  <mat-tab label="{{ 'group.script.TITLE' | translate }}">
+    <app-custom-check
+      *ngIf="activeTabIndex === 1"
+      [source]="navSource"
+      [groupName]="selectedGroupName"
+      [resizableHeight]="resizableHeight">
+    </app-custom-check>
+  </mat-tab>
+  <mat-tab label="{{ 'service.PROCESS_PROFILE' | translate }}">
+    <app-process-profile-rules
+      *ngIf="activeTabIndex === 2"
+      [source]="navSource"
+      [groupName]="selectedGroupName"
+      [resizableHeight]="resizableHeight">
+    </app-process-profile-rules>
+  </mat-tab>
+  <mat-tab label="{{ 'service.FILE_PROFILE' | translate }}">
+    <app-file-access-rules
+      *ngIf="activeTabIndex === 3"
+      [source]="navSource"
+      [groupName]="selectedGroupName"
+      [resizableHeight]="resizableHeight">
+    </app-file-access-rules>
+  </mat-tab>
+  <mat-tab label="{{ 'service.POLICY_RULES' | translate }}">
+    <app-network-rules
+      *ngIf="activeTabIndex === 4"
+      [source]="navSource"
+      [groupName]="selectedGroupName"
+      [resizableHeight]="resizableHeight">
+    </app-network-rules>
+  </mat-tab>
+  <mat-tab label="{{ 'group.RESPONSE_RULES' | translate }}">
+    <app-response-rules
+      *ngIf="activeTabIndex === 5"
+      [source]="navSource"
+      [groupName]="selectedGroupName"
+      [resizableHeight]="resizableHeight">
+    </app-response-rules>
+  </mat-tab>
+  <mat-tab label="{{ 'group.dlp.TITLE' | translate }}">
+    <app-group-dlp
+      *ngIf="activeTabIndex === 6"
+      [source]="navSource"
+      [groupName]="selectedGroupName"
+      [resizableHeight]="resizableHeight">
+    </app-group-dlp>
+  </mat-tab>
+  <mat-tab label="{{ 'group.waf.TITLE' | translate }}">
+    <app-group-waf
+      *ngIf="activeTabIndex === 7"
+      [source]="navSource"
+      [groupName]="selectedGroupName"
+      [resizableHeight]="resizableHeight">
+    </app-group-waf>
+  </mat-tab>
+</mat-tab-group>
+<ng-template #scoreImprovement>
+  <mat-tab-group
+    animationDuration="0ms"
+    (selectedTabChange)="activateTab($event)">
+    <mat-tab label="{{ 'service.PROCESS_PROFILE' | translate }}">
+      <ng-template matTabContent>
+        <app-process-profile-rules
+          [source]="navSource"
+          [groupName]="selectedGroupName"
+          [resizableHeight]="resizableHeight"
+          [isScoreImprovement]="isScoreImprovement">
+        </app-process-profile-rules>
+      </ng-template>
+    </mat-tab>
+    <mat-tab
+      label="{{ 'service.FILE_PROFILE' | translate }}"
+      *ngIf="kind === 'container'">
+      <ng-template matTabContent>
+        <app-file-access-rules
+          [source]="navSource"
+          [groupName]="selectedGroupName"
+          [resizableHeight]="resizableHeight"
+          [isScoreImprovement]="isScoreImprovement">
+        </app-file-access-rules>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="{{ 'service.POLICY_RULES' | translate }}">
+      <ng-template matTabContent>
+        <app-network-rules
+          [source]="navSource"
+          [groupName]="getServiceName(selectedGroupName)"
+          [resizableHeight]="resizableHeight"
+          [isScoreImprovement]="isScoreImprovement">
+        </app-network-rules>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</ng-template>

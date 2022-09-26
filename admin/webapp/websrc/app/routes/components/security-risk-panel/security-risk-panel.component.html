@@ -1,0 +1,38 @@
+<mat-card class="margin-bottom-m">
+  <div class="row margin-horizon-0">
+    <div class="col-xl-2 col-lg-3 col-md-12 margin-bottom-m">
+      <div style="margin: 0 auto; width: 125px; height: 153px">
+        <app-risk-score
+          *ngIf="scoreInfo && summaryInfo"
+          [score]="scoreInfo.score.securityRiskScore"
+          [nodesCnt]="summaryInfo.hosts"
+          [podsCnt]="summaryInfo.running_pods">
+        </app-risk-score>
+      </div>
+    </div>
+    <div
+      *ngIf="scoreInfo && summaryInfo"
+      style="padding-left: 0; padding-right: 0"
+      class="col-xl-7 col-lg-9 col-md-12 row margin-horizon-0 margin-bottom-m">
+      <div class="row margin-horizon-0">
+        <app-risk-factor
+          class="col-sm-4"
+          *ngFor="let riskFactor of riskFactorList"
+          [riskFactor]="riskFactor">
+        </app-risk-factor>
+      </div>
+      <div class="col-sm-12 text-center">
+        <em class="eos-icons icon-18 text-muted margin-right-s"
+          >auto_fix_high</em
+        >
+        <a class="link" (click)="openScoreImprovementConsole()">{{
+          'dashboard.heading.IMPROVE_SCORE' | translate
+        }}</a>
+      </div>
+    </div>
+    <div class="col-xl-3 col-lg-12 col-md-12 margin-bottom-m">
+      <app-risk-instruction *ngIf="scoreInfo" [scoreInfo]="scoreInfo">
+      </app-risk-instruction>
+    </div>
+  </div>
+</mat-card>

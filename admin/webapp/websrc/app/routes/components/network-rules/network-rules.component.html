@@ -1,0 +1,133 @@
+<ng-container *ngIf="!isScoreImprovement; else scoreImprovement">
+  <app-network-rules-printable-report
+    *ngIf="eof && !isNetworkRuleDirty()"
+    class="printable-area"
+    [networkRules]="networkRules"></app-network-rules-printable-report>
+  <div class="screen-area">
+    <div
+      class="clearfix"
+      style="height: 40px"
+      *ngIf="source !== navSource['GROUP']">
+      <div
+        class="pull-right margin-top-s margin-left-xl"
+        *ngIf="(eof || networkRuleErr) && !isNetworkRuleDirty()"
+        (click)="refresh()">
+        <em class="fa fa-refresh text-action hand"></em>
+        <label class="text-gray-label hand">{{
+          'general.REFRESH' | translate
+        }}</label>
+      </div>
+      <button
+        *ngIf="eof && networkRules.length > 0 && !isNetworkRuleDirty()"
+        class="pull-right"
+        mat-button
+        (click)="exportCsv()">
+        <em class="eos-icons icon-18">csv_file</em>
+      </button>
+      <button
+        *ngIf="eof && networkRules.length > 0 && !isNetworkRuleDirty()"
+        class="pull-right"
+        mat-button
+        (click)="print()">
+        <em class="eos-icons icon-18">print</em>
+      </button>
+      <div class="clearfix">
+        <div class="content-title">
+          {{ 'policy.head.TITLE' | translate }}
+        </div>
+      </div>
+    </div>
+    <div
+      [ngClass]="{
+        panel: source === navSource['SELF'],
+        mb0: source === navSource['SELF']
+      }">
+      <div [ngClass]="{ 'panel-body': source === navSource['SELF'] }">
+        <div style="height: 71px" *ngIf="source !== navSource['GROUP']">
+          <div class="clearfix">
+            <button
+              class="pull-left margin-top-l primary-button"
+              *appDisplayControl="'write_network_rule'"
+              (click)="addNetworkRuleToTop()">
+              <em class="eos-icons icon-18">add</em>
+              {{ 'policy.toolBar.INSERT_TO_TOP' | translate }}
+            </button>
+            <button
+              *ngIf="selectedNetworkRules.length > 0 && isWriteRuleAuthorized"
+              class="pull-left margin-top-l margin-left-m primary-button"
+              (click)="removeNetworkRules()">
+              <em class="eos-icons icon-18">delete</em>
+              {{ 'policy.toolBar.REMOVE' | translate }}
+            </button>
+            <button
+              *ngIf="selectedNetworkRules.length > 0 && isWriteRuleAuthorized"
+              class="pull-left margin-top-l margin-left-m primary-button"
+              (click)="openMoveNetworkRulesModal()">
+              <em class="eos-icons icon-18">move</em>
+              {{ 'policy.toolBar.MOVE_TO' | translate }}
+            </button>
+            <button
+              *ngIf="
+                selectedNetworkRules.length > 0 && !containsUnpromotableEndpoint && isWriteRuleAuthorized
+              "
+              class="pull-left margin-top-l margin-left-m primary-button"
+              (click)="promoteRuleOnTop()">
+              <em class="eos-icons icon-18">navigation</em>
+              {{ 'policy.PROMOTE' | translate }}
+            </button>
+            <app-quick-filter
+              *ngIf="filteredCount > 0"
+              class="pull-right"
+              [gridOptions]="gridOptions"
+              [filteredCount]="filteredCount"
+              [count]="networkRules.length">
+            </app-quick-filter>
+            <button
+              *ngIf="isNetworkRuleDirty() && isWriteRuleAuthorized"
+              class="pull-right margin-top-l margin-right-m save-button"
+              (click)="submit()">
+              <em class="eos-icons icon-18">save</em>
+              {{ 'policy.toolBar.SAVE' | translate }}
+            </button>
+            <button
+              *ngIf="isNetworkRuleDirty() && isWriteRuleAuthorized"
+              class="pull-right margin-top-l margin-right-m"
+              (click)="refresh()">
+              <em class="eos-icons icon-18">replay</em>
+              {{ 'policy.toolBar.UNDO' | translate }}
+            </button>
+          </div>
+        </div>
+        <div class="clearfix">
+          <ag-grid-angular
+            #networkRuleGrid
+            id="policy-grid"
+            style="width: 100%"
+            [ngStyle]="{
+              height:
+                (source === navSource['GROUP']
+                  ? resizableHeight - 85
+                  : gridHeight) + 'px'
+            }"
+            class="ag-theme-balham"
+            [gridOptions]="gridOptions"
+            [context]="context">
+          </ag-grid-angular>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<ng-template #scoreImprovement>
+  <div class="mt-2">
+    <ag-grid-angular
+      #networkRuleGrid
+      [ngStyle]="{ height: resizableHeight + 'px' }"
+      [gridOptions]="gridOptions"
+      [context]="context"
+      id="policy-grid"
+      style="width: 100%"
+      class="ag-theme-balham">
+    </ag-grid-angular>
+  </div>
+</ng-template>

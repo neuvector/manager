@@ -1,0 +1,245 @@
+<div
+  cdkDrag
+  cdkDragHandle
+  cdkDragRootElement=".cdk-overlay-pane"
+  class="d-flex align-items-center justify-content-between"
+  style="cursor: move; margin-top: -24px; padding-top: 10px">
+  <h1 mat-dialog-title class="dialog-title">
+    {{ 'general.FILTER_MATCH_ALL' | translate }}
+  </h1>
+  <button
+    aria-label="Close icon button"
+    class="d-flex align-items-center justify-content-center"
+    mat-icon-button>
+    <i (click)="dialogRef.close()" class="eos-icons">close</i>
+  </button>
+</div>
+<hr class="fancy mt-1 mb-4 mx-0" />
+<div mat-dialog-content>
+  <form [formGroup]="form">
+    <section class="row mx-0 align-items-center">
+      <label class="col-3 font-weight-normal mb-0" for="fromDate">
+        {{ 'general.REPORTED_FROM' | translate }}
+      </label>
+      <mat-form-field appearance="standard" class="col pl-0">
+        <input
+          [matDatepicker]="pickerFrom"
+          [matDatepickerFilter]="fromFilter"
+          formControlName="reportedFrom"
+          id="fromDate"
+          matInput />
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle
+          [for]="pickerFrom"
+          matSuffix></mat-datepicker-toggle>
+        <mat-datepicker-toggle
+          (click)="form.get('reportedFrom')?.reset()"
+          matSuffix>
+          <mat-icon matDatepickerToggleIcon>close</mat-icon>
+        </mat-datepicker-toggle>
+        <mat-datepicker #pickerFrom></mat-datepicker>
+      </mat-form-field>
+    </section>
+    <section class="row mx-0 align-items-center">
+      <label class="col-3 font-weight-normal mb-0" for="toDate">
+        {{ 'general.REPORTED_TO' | translate }}
+      </label>
+      <mat-form-field appearance="standard" class="col pl-0">
+        <input
+          [matDatepicker]="pickerTo"
+          [matDatepickerFilter]="toFilter"
+          formControlName="reportedTo"
+          id="toDate"
+          matInput />
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle
+          [for]="pickerTo"
+          matSuffix></mat-datepicker-toggle>
+        <mat-datepicker-toggle
+          (click)="form.get('reportedTo')?.reset()"
+          matSuffix>
+          <mat-icon matDatepickerToggleIcon>close</mat-icon>
+        </mat-datepicker-toggle>
+        <mat-datepicker #pickerTo></mat-datepicker>
+      </mat-form-field>
+    </section>
+    <section class="row mx-0 my-3 align-items-center">
+      <span class="d-block col-3">
+        {{ 'audit.LEVEL' | translate }}
+      </span>
+      <div formArrayName="level" class="mt-2">
+        <ng-container *ngFor="let l of levelFormArray.controls; let i = index">
+          <mat-checkbox class="mr-3" [formControlName]="i">
+            {{ getDisplayName(filterLevel[i]) }}
+          </mat-checkbox>
+        </ng-container>
+      </div>
+    </section>
+    <section class="row mx-0 my-3 align-items-center">
+      <span class="d-block col-3">
+        {{ 'audit.CATEGORY' | translate }}
+      </span>
+      <div formArrayName="category" class="mt-2">
+        <ng-container
+          *ngFor="let c of categoryFormArray.controls; let i = index">
+          <mat-checkbox class="mr-3" [formControlName]="i">
+            {{ getDisplayCategory(filterCategory[i]) }}
+          </mat-checkbox>
+        </ng-container>
+      </div>
+    </section>
+    <mat-divider></mat-divider>
+    <section class="row mx-0 align-items-center">
+      <span class="d-block col-3">{{ 'securityEvent.HOST' | translate }}</span>
+      <mat-form-field appearance="standard" class="col pl-0">
+        <input
+          type="text"
+          aria-label="Host"
+          matInput
+          formControlName="host"
+          id="selectedHost"
+          [matAutocomplete]="hostAuto" />
+        <mat-autocomplete #hostAuto="matAutocomplete">
+          <mat-option *ngFor="let host of filteredHosts | async" [value]="host">
+            {{ host }}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error
+          *ngIf="form.controls.host.hasError('invalidAutocompleteString')">
+          {{
+            'securityEvent.AUTOCOMPLETE_INVALID'
+              | translate: { field: ('securityEvent.HOST' | translate) }
+          }}
+        </mat-error>
+      </mat-form-field>
+    </section>
+    <section class="row mx-0 align-items-center">
+      <span class="d-block col-3">{{
+        'audit.gridHeader.CONTAINER' | translate
+      }}</span>
+      <mat-form-field appearance="standard" class="col pl-0">
+        <input
+          type="text"
+          aria-label="Container"
+          matInput
+          formControlName="container"
+          id="selectedContainer"
+          [matAutocomplete]="containerAuto" />
+        <mat-autocomplete #containerAuto="matAutocomplete">
+          <mat-option
+            *ngFor="let container of filteredContainers | async"
+            [value]="container">
+            {{ container }}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error
+          *ngIf="form.controls.container.hasError('invalidAutocompleteString')">
+          {{
+            'securityEvent.AUTOCOMPLETE_INVALID'
+              | translate: { field: ('event.gridHeader.CONTAINER' | translate) }
+          }}
+        </mat-error>
+      </mat-form-field>
+    </section>
+    <section class="row mx-0 align-items-center">
+      <span class="d-block col-3">{{
+        'audit.gridHeader.IMAGE' | translate
+      }}</span>
+      <mat-form-field appearance="standard" class="col pl-0">
+        <input
+          type="text"
+          aria-label="Image"
+          matInput
+          formControlName="image"
+          [matAutocomplete]="imageAuto" />
+        <mat-autocomplete #imageAuto="matAutocomplete">
+          <mat-option
+            *ngFor="let image of filteredImages | async"
+            [value]="image">
+            {{ image }}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error
+          *ngIf="form.controls.image.hasError('invalidAutocompleteString')">
+          {{
+            'securityEvent.AUTOCOMPLETE_INVALID'
+              | translate: { field: ('event.gridHeader.IMAGE' | translate) }
+          }}
+        </mat-error>
+      </mat-form-field>
+    </section>
+    <section class="row mx-0 align-items-center">
+      <label class="col-3 font-weight-normal mb-0" for="namespaceInput">{{
+        'securityEvent.DOMAIN' | translate
+      }}</label>
+      <mat-form-field appearance="standard" class="col pl-0">
+        <mat-chip-list
+          #chipList
+          aria-label="Namespace selection"
+          formControlName="selectedDomains"
+          id="namespaceInput">
+          <mat-chip
+            (removed)="remove(domainChip)"
+            *ngFor="let domainChip of form.controls.selectedDomains.value">
+            {{ domainChip }}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip>
+          <input
+            #namespaceInput
+            (matChipInputTokenEnd)="add($event)"
+            [formControl]="namespaceCtrl"
+            [matAutocomplete]="auto"
+            [matChipInputFor]="chipList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [placeholder]="'ldap.ADD_DOMAIN' | translate" />
+        </mat-chip-list>
+        <mat-autocomplete
+          #auto="matAutocomplete"
+          (optionSelected)="selected($event)">
+          <mat-option
+            *ngFor="let domain of filteredDomains | async"
+            [value]="domain">
+            {{ domain }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </section>
+    <section class="row mx-0 align-items-center">
+      <span class="d-block col-3">{{
+        'securityEvent.OTHER_KEYWORD' | translate
+      }}</span>
+      <mat-form-field appearance="standard" class="col pl-0">
+        <input
+          id="includedKeyword"
+          aria-label="Included Keyword"
+          formControlName="includedKeyword"
+          matInput />
+      </mat-form-field>
+    </section>
+    <section class="row mx-0 align-items-center">
+      <span class="d-block col-3">{{
+        'securityEvent.EXCLUDED_KEYWORD' | translate
+      }}</span>
+      <mat-form-field appearance="standard" class="col pl-0">
+        <input
+          id="excludedKeyword"
+          aria-label="Excluded Keyword"
+          formControlName="excludedKeyword"
+          matInput />
+      </mat-form-field>
+    </section>
+  </form>
+</div>
+<div class="float-right" mat-dialog-actions>
+  <button (click)="reset()" mat-button>Reset</button>
+  <button
+    [mat-dialog-close]="form.value"
+    [disabled]="!form.valid"
+    cdkFocusInitial
+    color="primary"
+    mat-raised-button>
+    Apply
+  </button>
+</div>

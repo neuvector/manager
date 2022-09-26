@@ -1,0 +1,50 @@
+<div class="container">
+  <div class="row align-items-center">
+    <div class="col-md-5">
+      <div class="mx-auto score-container">
+        <mwl-gauge
+          class="score"
+          [max]="100"
+          [value]="score"
+          [animated]="true"
+          [animationDuration]="1"
+          [color]="getGaugeColor"
+          [showValue]="true"
+          [dialRadius]="40">
+        </mwl-gauge>
+        <div class="score-label" [ngStyle]="{ color: gaugeLabelColor }">
+          {{ gaugeLabel }}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 text-center">
+      <em
+        class="fa fa-long-arrow-alt-right fa-4x text-success adm-sample-arrow"></em>
+    </div>
+    <div class="col-md-5">
+      <div class="mx-auto score-container">
+        <mwl-gauge
+          class="score"
+          [max]="100"
+          [value]="fixedScore"
+          [animated]="true"
+          [animationDuration]="1"
+          [color]="getGaugeColor"
+          [showValue]="true"
+          [dialRadius]="40">
+        </mwl-gauge>
+        <div class="score-label" [ngStyle]="{ color: gaugeLabelColorFixed }">
+          {{ gaugeLabelFixed }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row align-items-center margin-top-xl">
+    <div class="col text-center" [class]="textClass">
+      <h1 class="h2 font-weight-normal mb-4">
+        {{ title }}
+      </h1>
+      <span class="mat-h3">{{ statement }}</span>
+    </div>
+  </div>
+</div>

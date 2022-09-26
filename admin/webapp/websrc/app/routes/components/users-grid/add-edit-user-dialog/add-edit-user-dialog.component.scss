@@ -1,0 +1,26 @@
+.user__container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: auto;
+  grid-gap: 2rem;
+}
+
+.user__field {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.user__icon {
+  color: white;
+  background-color: #30ba78;
+  border-radius: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.user__formGroup {
+  padding-top: 2rem;
+}

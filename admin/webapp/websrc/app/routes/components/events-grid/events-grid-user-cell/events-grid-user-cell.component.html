@@ -1,0 +1,8 @@
+<div *ngIf="params.data.user">
+  <strong>{{ 'event.gridHeader.USER_NAME' | translate }} :</strong>
+  <span> {{ params.data.user }} </span>
+</div>
+<div *ngIf="params.data.user_roles">
+  <strong>{{ 'event.gridHeader.USER_ROLES' | translate }} :</strong>
+  <span> {{ userRoles }} </span>
+</div>

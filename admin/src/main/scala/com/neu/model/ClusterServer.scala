@@ -1,7 +1,7 @@
 package com.neu.model
 
 import com.typesafe.scalalogging.LazyLogging
-import spray.json.{DefaultJsonProtocol, _}
+import spray.json.{ DefaultJsonProtocol, _ }
 
 case class ClusterServer(
   name: String,
@@ -62,7 +62,12 @@ case class FedPromptRequest(
   use_proxy: Option[String]
 )
 
-case class FedConfigData(poll_interval: Int, name: Option[String], use_proxy: Option[String],rest_info: Option[ClusterServerInfo])
+case class FedConfigData(
+  poll_interval: Int,
+  name: Option[String],
+  use_proxy: Option[String],
+  rest_info: Option[ClusterServerInfo]
+)
 
 case class FedJoinRequest(
   name: String,

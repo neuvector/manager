@@ -1,0 +1,22 @@
+<mat-card class="margin-bottom-m">
+  <mat-card-title>{{'dashboard.body.panel_title.' + assetType.substring(0, assetType.length - 1).toUpperCase() + '_MODE' | translate}}</mat-card-title>
+  <mat-card-content>
+    <div
+      class="row margin-horizon-0"
+      style="height: 300px;"
+      *ngIf="dashboardDetailsService.containers && dashboardDetailsService.services"
+    >
+      <app-policy-mode-chart
+        class="col-sm-7"
+        [assetsInfo]="dashboardDetailsService[assetType]"
+        [assetType]="assetType"
+        [scoreInfo]="scoreInfo"
+      ></app-policy-mode-chart>
+      <app-policy-mode-caution
+        class="col-sm-5"
+        [assetType]="assetType"
+      >
+      </app-policy-mode-caution>
+    </div>
+  </mat-card-content>
+</mat-card>

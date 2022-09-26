@@ -1,0 +1,38 @@
+<div class="d-flex flex-row justify-content-end align-items-center">
+  <button
+    (click)="onToggleSafeModules()"
+    class="d-flex align-items-center"
+    mat-button>
+    <i class="eos-icons mr-2">{{
+      safeModuleStatus ? 'visibility_off' : 'visibility'
+    }}</i
+    >{{
+      safeModuleStatus
+        ? ('registry.HIDE_SAFE_MODULES' | translate)
+        : ('registry.SHOW_ALL_MODULES' | translate)
+    }}
+  </button>
+  <button (click)="exportCSV()" class="d-flex align-items-center" mat-button>
+    <i class="eos-icons mr-2">csv_file</i>CSV
+  </button>
+</div>
+<div class="row registry-modules-row mr-0">
+  <div class="col-12">
+    <app-modules-charts [modules]="modules"></app-modules-charts>
+  </div>
+  <div class="col-12 row">
+    <div class="col-12 col-lg-8 mt-2">
+      <app-modules-table
+        (moduleSelected)="moduleSelected($event)"
+        [resize]="resize"
+        [rowData]="modules"
+        [safeModuleStatus]="safeModuleStatus"></app-modules-table>
+    </div>
+    <div class="col-12 col-lg-4 mt-2">
+      <app-vulnerabilities-table
+        [resize]="resize"
+        [rowData]="cves"
+        [vulnerabilities]="vulnerabilities"></app-vulnerabilities-table>
+    </div>
+  </div>
+</div>

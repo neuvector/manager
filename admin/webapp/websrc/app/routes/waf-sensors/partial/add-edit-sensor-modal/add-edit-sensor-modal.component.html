@@ -1,0 +1,43 @@
+<div class="nv-dialog">
+  <div mat-dialog-title class="dialog-header">
+    <div class="pull-left">
+      {{
+        (data.opType === opTypeOptions.ADD ? 'waf.sensorModal.ADD_SENSOR' : 'waf.sensorModal.EDIT_SENSOR') | translate
+      }}
+    </div>
+    <div class="pull-right">
+      <em class="icon-close hand" (click)="onCancel()"></em>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <form [formGroup]="addEditSensorForm">
+      <div class="row">
+        <mat-form-field class="col-sm-3" appearance="standard">
+          <mat-label>{{'waf.sensorModal.SENSOR_NAME' | translate}}</mat-label>
+          <input type="text" matInput formControlName="name" [readonly]="data.opType === opTypeOptions.EDIT">
+          <mat-error *ngIf="addEditSensorForm.controls.name.hasError('required')">
+            {{'waf.msg.SENSOR_NAME_REQUIRED' | translate}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-sm-9" appearance="standard">
+          <mat-label>{{'waf.sensorModal.COMMENT' | translate}}</mat-label>
+          <input type="text" matInput formControlName="comment">
+        </mat-form-field>
+      </div>
+      <div class="clearfix">
+        <app-loading-button
+          [appearance]="'mat-raised-button'"
+          [color]="'primary'"
+          [loading]="submittingUpdate"
+          [text]="(data.opType === opTypeOptions.EDIT ? 'waf.sensorModal.UPDATE' : 'waf.sensorModal.ADD') | translate"
+          (click)="updateSensor()"
+          class="pull-right"
+        >
+        </app-loading-button>
+        <button class="pull-right margin-right-m" (click)="onCancel()">
+          {{'waf.sensorModal.CANCEL' | translate}}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

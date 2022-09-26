@@ -1,0 +1,41 @@
+<div
+  *ngIf="
+    dashboardService.isGoodScore(scoreInfo.score.securityRiskScore);
+    then goodScore;
+    else badScore
+  "></div>
+
+<ng-template #goodScore>
+  <span>
+    {{ 'dashboard.heading.guideline.MAIN_SCORE_GOOD1' | translate }}
+    <span class="text-bold text-success">
+      {{ 'dashboard.heading.guideline.MAIN_SCORE_GOOD2' | translate }}
+    </span>
+    {{ 'dashboard.heading.guideline.MAIN_SCORE_GOOD3' | translate }}
+  </span>
+</ng-template>
+
+<ng-template #badScore>
+  <div>
+    <span>
+      {{ 'dashboard.heading.guideline.MAIN_SCORE_NOT_GOOD1' | translate }}
+      <span class="text-bold text-{{ isPoorScore() ? 'danger' : 'warning' }}">
+        {{
+          (isPoorScore()
+            ? 'dashboard.heading.guideline.MAIN_SCORE_POOR'
+            : 'dashboard.heading.guideline.MAIN_SCORE_FAIR'
+          ) | translate
+        }}
+      </span>
+      {{ 'dashboard.heading.guideline.MAIN_SCORE_NOT_GOOD2' | translate }}
+    </span>
+  </div>
+  <div style="width: 100%" class="text-center policy-top-button margin-top-s">
+    <button
+      type="button"
+      mat-stroked-button
+      (click)="openScoreImprovementConsole()">
+      {{ 'dashboard.heading.IMPROVE_SCORE' | translate }}
+    </button>
+  </div>
+</ng-template>

@@ -1,0 +1,158 @@
+<div>
+  <div
+    class="pull-right mt-sm"
+    style="padding-top: 5px; margin-left: 10px"
+    *ngIf="source === navSource['SELF']"
+    (click)="refresh()">
+    <em class="fa fa-refresh text-action hand" aria-hidden="true"></em>
+    <label class="text-gray-label hand">{{
+      'general.REFRESH' | translate
+    }}</label>
+  </div>
+  <div
+    class="pull-right mt-sm"
+    style="margin-right: 20px"
+    *appDisplayControl="'write_admission'">
+    <div *ngIf="source === navSource['SELF']">
+      <button mat-button [matMenuTriggerFor]="menu">
+        {{ 'admissionControl.MORE' | translate }}
+        <em class="eos-icons">arrow_drop_down</em>
+      </button>
+      <mat-menu #menu="matMenu">
+        <!-- <button mat-menu-item *ngIf="admCtrl.state && isWriteAdmissionRuleAuthorized && canConfig" (click)="showGlobalActions($event)"> -->
+        <button mat-menu-item (click)="showAdvancedSetting()">
+          <em class="eos-icons">config_map</em>
+          {{ 'admissionControl.GLOBAL_OPS' | translate }}
+        </button>
+        <!-- <button mat-menu-item *ngIf="isWriteAdmissionRuleAuthorized" (click)="openExportPopup()"> -->
+        <button mat-menu-item (click)="openExportPopup()">
+          <em class="eos-icons">download</em>
+          {{ 'admissionControl.EXPORT' | translate }}
+        </button>
+        <!-- <button mat-menu-item *ngIf="isWriteAdmissionRuleAuthorized"> -->
+        <button mat-menu-item (click)="openImportPopup()">
+          <em class="eos-icons">upload</em>
+          {{ 'admissionControl.IMPORT' | translate }}
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+  <div *ngIf="source === navSource['SELF']" class="pull-right mt-sm mr">
+    <button
+      class="policy-top-button"
+      *appDisplayControl="'write_admission'"
+      (click)="openConfigAssessmentDialog()"
+      style="">
+      <em class="eos-icons icon-18 margin-right-m">flask</em>
+      <label>{{ 'admissionControl.MATCHING_TEST' | translate }}</label>
+    </button>
+  </div>
+
+  <div class="clearfix">
+    <div class="content-title">
+      {{ 'sidebar.nav.ADMISSION_CONTROL' | translate }}
+    </div>
+  </div>
+
+  <div
+    [ngClass]="{
+      panel: source === navSource['SELF'],
+      mb0: source === navSource['SELF']
+    }">
+    <div
+      class="pull-right mt-sm"
+      style="padding-top: 5px; margin-left: 10px"
+      *ngIf="source === navSource['FED_POLICY']"
+      (click)="refresh()">
+      <em class="fa fa-refresh text-action hand" aria-hidden="true"></em>
+      <label class="text-gray-label hand">{{
+        'general.REFRESH' | translate
+      }}</label>
+    </div>
+    <div [ngClass]="{ 'panel-body': source === navSource['SELF'] }">
+      <div class="clearfix">
+        <app-quick-filter
+          class="pull-left"
+          [gridOptions]="gridOptions"
+          [filteredCount]="filteredCount"
+          [count]="admissionRules.length">
+        </app-quick-filter>
+        <button
+          class="pull-left margin-top-l margin-left-m primary-button"
+          *appDisplayControl="'write_admission'"
+          (click)="openAddEditAdmissionRuleModal()">
+          <em class="eos-icons icon-18">add</em>
+          {{ 'admissionControl.INSERT' | translate }}
+        </button>
+        <div *ngIf="isMaster && selectedAdmissionRules && selectedAdmissionRules.length > 0 && !hasSelectedDefaultRule">
+          <button
+            class="pull-left margin-top-l margin-left-m primary-button"
+            *appDisplayControl="'multi_cluster'"
+            (click)="promoteRule()">
+            <em class="eos-icons icon-18">navigation</em>
+            {{ 'policy.PROMOTE' | translate }}
+          </button>
+        </div>
+        <div class="pull-right margin-top-m" *ngIf="source === navSource['SELF']">
+          <label class="nv-modal-item-title margin-right-m">
+            {{ 'responsePolicy.gridHeader.STATUS' | translate }}
+          </label>
+          <mat-slide-toggle
+            #tooltip="matTooltip"
+            [matTooltip]="stateWarning"
+            [matTooltipDisabled]="canConfig && isK8s && !admissionStateErr"
+            matTooltipClass="tooltip-error"
+            class="padding-top-s"
+            id="status-toggle"
+            *appDisplayControl="'admission'"
+            [disabled]="!canConfig || !isK8s || admissionStateErr || !isWriteAdmissionRuleAuthorized"
+            [(ngModel)]="globalStatus"
+            (change)="toggleStatus()">
+            <span
+              [ngClass]="{
+                'text-muted': !globalStatus,
+                'text-success': globalStatus
+              }">
+              {{
+                (globalStatus
+                  ? 'policy.status.ENABLED'
+                  : 'policy.status.DISABLED'
+                ) | translate
+              }}
+            </span>
+          </mat-slide-toggle>
+        </div>
+        <div
+          class="pull-right margin-top-m margin-right-m"
+          *ngIf="globalStatus && isAdmissionRuleAuthorized && source === navSource['SELF']">
+          <label class="nv-modal-item-title margin-right-m">
+            {{ 'admissionControl.MODE' | translate }}
+          </label>
+          <mat-button-toggle-group
+            name="fontStyle"
+            aria-label="Font Style"
+            [disabled]="!isWriteAdmissionRuleAuthorized"
+            [(ngModel)]="mode"
+            (change)="toggleMode()">
+            <mat-button-toggle value="monitor">{{
+              'enum.MONITOR' | translate
+            }}</mat-button-toggle>
+            <mat-button-toggle value="protect">{{
+              'enum.PROTECT' | translate
+            }}</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+      </div>
+      <ag-grid-angular
+        #agGrid
+        id="admission-rule-grid"
+        style="width: 100%"
+        [ngStyle]="{ height: gridHeight + 'px' }"
+        class="ag-theme-balham"
+        [gridOptions]="gridOptions"
+        [rowData]="admissionRules"
+        [context]="context">
+      </ag-grid-angular>
+    </div>
+  </div>
+</div>

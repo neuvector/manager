@@ -1,0 +1,77 @@
+<div class="d-flex align-items-center justify-content-between" *ngIf="!gridOnly">
+  <div class="d-flex align-items-center justify-content-start">
+    <span class="mr-2">
+      <span *ngIf="filtered">
+        {{ 'enum.FOUND' | translate }}
+        {{ filteredCount }}&nbsp;/&nbsp;
+      </span>
+      {{ nodesCount }}
+      {{ 'nodes.COUNT_POSTFIX' | translate }}
+    </span>
+  </div>
+  <div class="d-flex align-items-center justify-content-end">
+    <ng-container [ngSwitch]="versionInfoService.template">
+      <div class="mr-3" *ngSwitchCase="'compliance'">
+        <span *ngIf="versionInfoService.infoData.docker_cis_version">
+          Docker &nbsp;{{ 'containers.CIS_VERSION' | translate }}:&nbsp;
+          {{ versionInfoService.infoData.docker_cis_version }}&nbsp;&nbsp;
+        </span>
+        <span *ngIf="versionInfoService.infoData.kubernetes_cis_version">
+          {{ cisLabel }}&nbsp;&nbsp;
+        </span>
+        <em
+          *ngIf="versionInfoService.infoData.run_at"
+          class="fa fa-info-circle"
+          matTooltip="{{ 'scan.gridHeader.TIME' | translate }}: {{
+            versionInfoService.infoData.run_at | date: 'MMM dd, y HH:mm:ss'
+          }}">
+        </em>
+      </div>
+      <div class="mr-3" *ngSwitchCase="'vulnerabilities'">
+        <span *ngIf="versionInfoService.infoData.scan_summary.scanner_version">
+          {{ 'audit.gridHeader.CVE_DB_VERSION' | translate }}:&nbsp;
+          {{
+            versionInfoService.infoData.scan_summary.scanner_version
+          }}&nbsp;&nbsp;
+        </span>
+        <em
+          *ngIf="versionInfoService.infoData.scan_summary.cvedb_create_time"
+          class="fa fa-info-circle"
+          matTooltip="{{ 'registry.CVE_DB_DATE' | translate }}: {{
+            versionInfoService.infoData.scan_summary.cvedb_create_time
+              | date: 'MMM dd, y HH:mm:ss'
+          }}">
+        </em>
+      </div>
+      <ng-container *ngSwitchCase="''"></ng-container>
+    </ng-container>
+    <div *ngIf="isScanAuthorized">
+      <ng-container *ngIf="selectedNode$ | async as selectedNode">
+        <button
+          mat-stroked-button
+          aria-label="Scan action"
+          type="button"
+          class="mr-3"
+          (click)="scan.emit(selectedNode)"
+          [disabled]="!selectedNode">
+          {{ 'scan.SCAN' | translate }}
+        </button>
+      </ng-container>
+    </div>
+    <app-quick-filter
+      [gridOptions]="gridOptions"
+      (filterCountChange)="filterCountChanged($event)"
+      [showCount]="false">
+    </app-quick-filter>
+  </div>
+</div>
+<ag-grid-angular
+  #agGrid
+  (window:resize)="onResize()"
+  [ngStyle]="{ height: gridHeight + 'px' }"
+  [gridOptions]="gridOptions"
+  [rowData]="nodesService.nodes"
+  id="nodes-grid"
+  style="width: 100%"
+  class="ag-theme-balham">
+</ag-grid-angular>

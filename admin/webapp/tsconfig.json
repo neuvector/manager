@@ -1,0 +1,58 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./websrc",
+    "outDir": "./dist/out-tsc",
+    "noImplicitAny": false,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2019",
+    "module": "es2020",
+    "skipLibCheck": true,
+    "types": [
+      "jquery",
+      "jasmine"
+    ],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "paths": {
+      "@services/*": [
+        "app/common/services/*"
+      ],
+      "@common/*": [
+        "app/common/*"
+      ],
+      "@core/*": [
+        "app/core/*"
+      ],
+      "@components/*": [
+        "app/routes/components/*"
+      ],
+      "@routes/*": [
+        "app/routes/*"
+      ]
+    },
+    "lib": [
+      "es2019",
+      "dom"
+    ]
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true,
+    "strictPropertyInitialization": false,
+    "allowSyntheticDefaultImports": true
+  }
+}

@@ -1,0 +1,20 @@
+<div class="h-100">
+  <div class="h-50" style="position: relative">
+    <canvas
+      [data]="complianceSeverityDistChartData.data"
+      [labels]="complianceSeverityDistChartData.data.labels"
+      [options]="complianceSeverityDistChartData.options"
+      [type]="complianceSeverityDistChartData.type"
+      baseChart>
+    </canvas>
+  </div>
+  <div class="h-50" style="position: relative">
+    <canvas
+      [data]="complianceTargetDistChartData.data"
+      [labels]="complianceTargetDistChartData.data.labels"
+      [options]="complianceTargetDistChartData.options"
+      [type]="complianceTargetDistChartData.type"
+      baseChart>
+    </canvas>
+  </div>
+</div>

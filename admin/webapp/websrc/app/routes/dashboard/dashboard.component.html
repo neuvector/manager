@@ -1,0 +1,65 @@
+<div class="screen-area">
+  <div class="clearfix">
+    <button class="pull-right" mat-button>
+      <em class="eos-icons icon-18">print</em>
+    </button>
+    <div class="clearfix">
+      {{'dashboard.TITLE' | translate}}
+    </div>
+  </div>
+  <app-security-risk-panel
+    *ngIf="scoreInfo && summaryInfo"
+    [scoreInfo]="scoreInfo"
+    [summaryInfo]="summaryInfo"
+  >
+  </app-security-risk-panel>
+  <app-exposure-panel
+    *ngIf="scoreInfo"
+    [scoreInfo]="scoreInfo"
+  >
+  </app-exposure-panel>
+  <app-security-events-panel>
+  </app-security-events-panel>
+  <div class="row">
+    <app-top-security-events-panel
+      class="col-lg-6"
+      direction="source"
+    >
+    </app-top-security-events-panel>
+    <app-top-security-events-panel
+      class="col-lg-6"
+      direction="destination"
+    >
+    </app-top-security-events-panel>
+  </div>
+  <div class="row">
+    <app-top-vulnerable-assets-panel
+      class="col-lg-6"
+      assetType="containers"
+    >
+    </app-top-vulnerable-assets-panel>
+    <app-top-vulnerable-assets-panel
+      class="col-lg-6"
+      assetType="nodes"
+    >
+    </app-top-vulnerable-assets-panel>
+  </div>
+  <div class="row">
+    <app-policy-mode-panel
+      *ngIf="scoreInfo"
+      class="col-xl-6"
+      assetType="services"
+      [scoreInfo]="scoreInfo"
+    >
+    </app-policy-mode-panel>
+    <app-policy-mode-panel
+      *ngIf="scoreInfo"
+      class="col-xl-6"
+      assetType="containers"
+      [scoreInfo]="scoreInfo"
+    >
+    </app-policy-mode-panel>
+  </div>
+  <app-application-protocols-panel>
+  </app-application-protocols-panel>
+</div>

@@ -1,10 +1,10 @@
-test in assembly := {}
+assembly / test := {}
 
-unmanagedResourceDirectories in Compile += baseDirectory.value / "webapp"
+Compile / unmanagedResourceDirectories += baseDirectory.value / "webapp"
 
-unmanagedResourceDirectories in Compile += baseDirectory.value / "lib"
+Compile / unmanagedResourceDirectories += baseDirectory.value / "lib"
 
-excludeFilter in unmanagedResources := HiddenFileFilter || "node_modules*" || "project*" || "target*" || "bower_components*" || "app_src*"
+unmanagedResources / excludeFilter := HiddenFileFilter || "node_modules*" || "project*" || "target*" || "bower_components*" || "websrc"
 
 Revolver.settings : Seq[sbt.Def.Setting[_]]
 

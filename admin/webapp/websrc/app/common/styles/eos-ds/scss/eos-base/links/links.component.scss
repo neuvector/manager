@@ -1,0 +1,105 @@
+/* Links
+   ========================================================================== */
+/**
+*
+* Links variables: /assets/stylesheets/eos-base/variables/links.scss
+*/
+
+/* Set the link color to our blue and not the bootstrap default */
+/* Remove the default text decoration from link status */
+a, a:active, a:visited, a:focus {
+  text-decoration: none;
+}
+
+a,
+.link-default,
+// Bootstrap 4 overwrite - used only for demo purposes
+a:not([href]):not([tabindex]) {
+  color: $eos-link-default-color;
+  font-weight: bold;
+
+  &:hover {
+    color: $eos-link-default-color;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  * p {
+    font-weight: normal;
+  }
+}
+
+.link-dark,
+// Bootstrap 4 overwrite - used only for demo purposes
+.link-dark:not([href]):not([tabindex]) {
+  color: $eos-link-dark-color;
+  text-decoration: underline;
+
+  &:hover {
+    color: $eos-link-dark-color;
+    text-decoration: none;
+  }
+}
+
+.link-light,
+// Bootstrap 4 overwrite - used only for demo purposes
+.link-light:not([href]):not([tabindex]) {
+  color: $eos-link-light-color;
+  text-decoration: underline;
+
+  &:hover {
+    color: $eos-link-light-color;
+    text-decoration: none;
+  }
+}
+
+.link-dark-theme,
+// Bootstrap 4 overwrite - used only for demo purposes
+.link-dark-theme:not([href]):not([tabindex]) {
+  color: $eos-link-dark-theme-color;
+  text-decoration: underline;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+
+// link buttons
+.btn-link-dark, .btn-link-dark:not([href]):not([tabindex]) {
+  color: $eos-link-dark-color;
+  font-weight: bold;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.btn-link-light, .btn-link-light:not([href]):not([tabindex]) {
+  color: $eos-link-light-color;
+  font-weight: bold;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+/* Title anchors */
+.anchor {
+  position: relative;
+
+  a {
+    color: $eos-link-dark-color;
+    left: $eos-anchor-link-position;
+    opacity: 0;
+    position: absolute;
+  }
+
+  .eos-icons-outlined {
+    vertical-align: middle;
+  }
+
+  &:hover > a, > a:focus {
+    opacity: 1;
+  }
+}

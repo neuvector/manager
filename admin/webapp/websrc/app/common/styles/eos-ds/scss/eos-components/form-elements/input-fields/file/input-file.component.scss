@@ -1,0 +1,80 @@
+/* Input fields
+  ========================================================================== */
+/**
+* These rules overwrite existing Bootstrap rules
+*
+* Variables file: assets/stylesheets/eos-components/input-fields/input-fields.variables.scss
+*/
+
+.form-control-file {
+  border-bottom: 1px solid $eos-form-element-color;
+  padding: $eos-file-input-padding;
+
+  &:disabled {
+    border-bottom: 1px solid $eos-form-element-disabled;
+  }
+
+  &:focus {
+    box-shadow: 0 1px 0 $eos-form-element-focus;
+    outline: none;
+  }
+
+  &.approved {
+    border-bottom: 1px solid $eos-form-element-approved;
+  }
+
+  &.error {
+    border-bottom: 1px solid $eos-form-element-error;
+  }
+}
+
+.custom-file-input {
+  &:focus ~ label {
+    background: transparent;
+    box-shadow: 0 1px 0 $eos-form-element-focus;
+    outline: none;
+  }
+
+  &:disabled ~ label {
+    background-color: transparent;
+    border-bottom: 1px solid $eos-form-element-disabled;
+    color: $eos-form-element-disabled;
+
+    &::after {
+      border-color: $eos-form-element-disabled;
+      color: $eos-form-element-disabled;
+    }
+  }
+
+  &.approved ~ label {
+    border-bottom: 1px solid $eos-form-element-approved;
+  }
+
+  &.error ~ label {
+    border-bottom: 1px solid $eos-form-element-error;
+  }
+}
+
+.custom-file-label {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid $eos-form-element-color;
+  border-radius: 0;
+  color: $eos-form-element-label-color;
+  height: $eos-file-input-height;
+  padding: 0;
+  width: $eos-file-input-width;
+
+  // button style
+  &::after {
+    @extend .btn-secondary;
+    @extend .btn-sm;
+    @extend .btn;
+    border: 1px solid;
+    cursor: pointer;
+    font-size: $eos-file-input-font-size;
+    height: $eos-file-input-btn-height;
+    right: $eos-file-input-right-pos;
+    top: $eos-file-input-top-pos;
+  }
+}

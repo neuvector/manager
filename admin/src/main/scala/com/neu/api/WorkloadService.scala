@@ -75,9 +75,9 @@ class WorkloadService()(implicit executionContext: ExecutionContext)
           path("scanned") {
             parameter('start.?, 'limit.?) { (start, limit) =>
               Utils.respondWithNoCacheControl() {
-                val cacheKey                                         = if (tokenId.length > 20) tokenId.substring(0, 20) else tokenId
+                val cacheKey                                   = if (tokenId.length > 20) tokenId.substring(0, 20) else tokenId
                 var convertedScannedWorkloads: WorkloadsWrapV2 = null
-                var elements: Array[WorkloadV2]               = null
+                var elements: Array[WorkloadV2]                = null
                 complete {
                   try {
                     if (start.isEmpty || start.get.toInt == 0) {

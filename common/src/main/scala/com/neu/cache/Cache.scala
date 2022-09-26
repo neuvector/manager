@@ -1,9 +1,9 @@
 package com.neu.cache
 
 /**
-  * @tparam K type of key
-  * @tparam V type of value
-  */
+ * @tparam K type of key
+ * @tparam V type of value
+ */
 trait Cache[K, V] {
 
   protected val cacheKeyGenerator: CacheKeyGenerator[_] = NoOpCacheKeyGenerator
@@ -31,11 +31,11 @@ trait Cache[K, V] {
   protected def doRemove(cacheKey: Any): Unit
 
   /** Returns value if a corresponding value exists or returns updated value
-    *
-    * @param key a value which is used to generate/find return value by f.
-    * @param f   function to get new value
-    * @return cached value or the result of given f
-    */
+   *
+   * @param key a value which is used to generate/find return value by f.
+   * @param f   function to get new value
+   * @return cached value or the result of given f
+   */
   final def getOrElseInsert(key: K)(f: => V): V =
     get(key) match {
       case Some(value) =>
@@ -68,7 +68,7 @@ private class MapCache[K, V](override val cacheKeyGenerator: CacheKeyGenerator[_
 
 object MapCache {
   def apply[K, V](
-      implicit cacheKeyGenerator: CacheKeyGenerator[_] = NoOpCacheKeyGenerator
+    implicit cacheKeyGenerator: CacheKeyGenerator[_] = NoOpCacheKeyGenerator
   ): Cache[K, V] =
     new MapCache[K, V](cacheKeyGenerator)
 }

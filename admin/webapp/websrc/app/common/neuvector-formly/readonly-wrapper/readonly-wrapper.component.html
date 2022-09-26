@@ -1,0 +1,17 @@
+<div [style.display]="readOnly ? 'none' : ''">
+  <ng-container #fieldComponent></ng-container>
+</div>
+<ng-container *ngIf="readOnly" [ngSwitch]="to.readOnly.type">
+  <ng-container *ngSwitchCase="'text'">
+    <div [innerHtml]="template" style="overflow: hidden"></div>
+  </ng-container>
+  <ng-container *ngSwitchCase="'error'">
+    <span class="text-danger">{{ template | translate }}</span>
+  </ng-container>
+  <ng-container *ngSwitchCase="'icon'">
+    <span [class]="template.badgeClass">
+      <em [class]="template.iconClass"></em>
+      {{ template.text | translate }}
+    </span>
+  </ng-container>
+</ng-container>

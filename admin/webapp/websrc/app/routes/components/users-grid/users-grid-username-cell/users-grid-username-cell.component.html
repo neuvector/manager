@@ -1,0 +1,9 @@
+{{ username }}
+<span
+  *ngIf="params.data.blocked_for_password_expired"
+  class="badge badge-danger">
+  {{ 'user.gridHeader.PWD_EXPIRED' | translate }}
+</span>
+<span *ngIf="params.data.blocked_for_failed_login" class="badge badge-danger">
+  {{ 'user.gridHeader.BLOCKED' | translate }}
+</span>

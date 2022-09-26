@@ -1,0 +1,188 @@
+<div
+  class="d-flex align-items-center justify-content-between"
+  *ngIf="!isScoreImprovement; else scoreImprovementHeader">
+  <div
+    class="d-flex align-items-center justify-content-start"
+    *ngIf="!groupsErr">
+    <span class="text-success font-weight-bold mr-2">
+      <span *ngIf="filtered">
+        {{ 'enum.FOUND' | translate }}
+        {{ filteredCount }}&nbsp;/&nbsp;
+      </span>
+      {{ groupsCount }}
+      {{ 'group.COUNT_POSTFIX' | translate }}
+    </span>
+    <span class="text-info font-weight-bold mr-2" *ngIf="source === navSource['SELF']">
+      {{ 'group.GROUP_LIST' | translate }}:&nbsp;
+      {{ selectedGroups.length }}
+    </span>
+    <button
+      *ngIf="isWriteGroupAuthorized"
+      (click)="openAddGroupModal()"
+      class="d-flex align-items-center justify-content-start px-2 mr-2"
+      id="groups-add-dialog"
+      mat-stroked-button>
+      <em class="eos-icons">add_circle</em>
+      {{ 'role.ADD' | translate }}
+    </button>
+    <button
+      *ngIf="
+        isWriteGroupAuthorized && selectedGroups.length > 0 && hasModeCapGroups
+      "
+      (click)="openSwitchModeModal()"
+      class="d-flex align-items-center justify-content-start px-2 mr-2"
+      id="switch-mode-dialog"
+      mat-stroked-button>
+      <em class="eos-icons">change_circle</em>
+      {{ 'service.SWITCH_MODE' | translate }}
+    </button>
+  </div>
+  <div class="d-flex align-items-center justify-content-end ml-auto">
+    <button
+      mat-button
+      *ngIf="selectedGroups.length > 0"
+      [matMenuTriggerFor]="exportOptions"
+      class="mr-3">
+      <em class="eos-icons icon-18">download</em>
+      {{ 'group.export.TITLE' | translate }}
+    </button>
+    <mat-menu #exportOptions="matMenu">
+      <button mat-menu-item (click)="exportGroups()">
+        <em class="eos-icons icon-18 text-primary margin-right-s">emergency</em>
+        {{ 'enum.DEFAULT' | translate }}
+      </button>
+      <button mat-menu-item (click)="exportGroups('discover')">
+        <em class="eos-icons icon-18 text-discover margin-right-s"
+          >machine_learning</em
+        >
+        {{ 'enum.DISCOVER' | translate }}
+      </button>
+      <button mat-menu-item (click)="exportGroups('monitor')">
+        <em class="eos-icons icon-18 text-monitor margin-right-s"
+          >circle_notifications</em
+        >
+        {{ 'enum.MONITOR' | translate }}
+      </button>
+      <button mat-menu-item (click)="exportGroups('protect')">
+        <em class="eos-icons icon-18 text-protect margin-right-s">shield</em>
+        {{ 'enum.PROTECT' | translate }}
+      </button>
+    </mat-menu>
+    <mat-checkbox
+      *ngIf="
+        isWriteGroupAuthorized &&
+        selectedGroups.length > 0 &&
+        hasScoredCapGroups
+      "
+      [matTooltipDisabled]="!hasNonScorable"
+      [matTooltip]="hasNonScorableMsg"
+      [disabled]="hasNonScorable"
+      [checked]="allScorable"
+      [indeterminate]="someScorable"
+      (change)="toggleScorable($event)"
+      class="mr-3 mt-2">
+      {{ 'group.SWITCH_SCORABLE' | translate }}
+    </mat-checkbox>
+    <app-quick-filter
+      [gridOptions]="gridOptions4Groups"
+      (filterCountChange)="filterCountChanged($event)"
+      [showCount]="false">
+    </app-quick-filter>
+    <app-loading-button
+      *ngIf="source !== navSource['SELF']"
+      (btnClick)="getFedGroups()"
+      [appearance]="'mat-button'"
+      [buttonClasses]="'d-flex justify-content-center align-items-center'"
+      [disabled]="!!isRefreshing"
+      [iconClasses]="'eos-icons icon-18'"
+      [iconName]="'refresh'"
+      [id]="'groups-refresh-button'"
+      [loading]="!!isRefreshing"
+      [text]="'network.REFRESH' | translate"
+      [type]="'button'">
+    </app-loading-button>
+  </div>
+</div>
+<ng-template #scoreImprovementHeader>
+  <div class="d-flex justify-content-between score-improvement-header">
+    <div
+      [style.visibility]="selectedGroups.length > 0 ? 'visible' : 'hidden'"
+      class="d-flex align-items-center">
+      <button
+        mat-button
+        [disabled]="isAllProtectMode"
+        class="d-flex align-items-center font-weight-bold pr-1 mr-2"
+        aria-label="Switch mode"
+        [matMenuTriggerFor]="switchMenu">
+        <span [ngClass]="{ 'mat-small text-success': isAllProtectMode }">
+          {{
+            (isAllProtectMode
+              ? 'dashboard.improveScoreModal.ALL_PROTECT_MODE_DECLARE'
+              : 'service.SWITCH_MODE'
+            ) | translate
+          }}
+        </span>
+        <i class="eos-icons m-auto" *ngIf="!isAllProtectMode"
+          >arrow_drop_down</i
+        >
+      </button>
+      <mat-menu #switchMenu="matMenu">
+        <button
+          mat-menu-item
+          class="d-flex align-items-center"
+          (click)="switchServiceMode('Discover')">
+          <em class="fa fa-binoculars fa-fw text-discover mr-2"></em>
+          {{ 'enum.DISCOVER' | translate }}
+        </button>
+        <button
+          mat-menu-item
+          class="d-flex align-items-center"
+          (click)="switchServiceMode('Monitor')">
+          <em class="fa fa-bell fa-fw text-monitor mr-2"></em>
+          {{ 'enum.MONITOR' | translate }}
+        </button>
+        <button
+          mat-menu-item
+          class="d-flex align-items-center"
+          (click)="switchServiceMode('Protect')">
+          <em class="fa fa-shield-alt fa-fw text-protect mr-2"></em>
+          {{ 'enum.PROTECT' | translate }}
+        </button>
+      </mat-menu>
+      <span class="mat-small font-weight-bold mr-3">{{
+        'group.BASELINE_PROFILE' | translate | uppercase
+      }}</span>
+      <mat-radio-group
+        [(ngModel)]="baselineProfile"
+        (change)="switchBaselineProfile()"
+        aria-label="Baseline profile mode"
+        class="d-flex mt-2">
+        <mat-radio-button value="basic" class="mr-3">
+          <span class="mat-small font-weight-bold">
+            {{ 'enum.BASIC' | translate }}
+          </span>
+        </mat-radio-button>
+        <mat-radio-button value="zero-drift" class="mr-3">
+          <span class="mat-small font-weight-bold">
+            {{ 'enum.ZERODRIFT' | translate }}
+          </span>
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <app-quick-filter
+      [gridOptions]="gridOptions4Groups"
+      (filterCountChange)="filterCountChanged($event)"
+      [showCount]="false">
+    </app-quick-filter>
+  </div>
+</ng-template>
+<ag-grid-angular
+  #groupsGrid
+  (window:resize)="onResize()"
+  [ngStyle]="{ height: height - 90 + 'px' }"
+  [gridOptions]="gridOptions4Groups"
+  [context]="context"
+  id="groups-grid"
+  style="width: 100%"
+  class="ag-theme-balham">
+</ag-grid-angular>

@@ -1,0 +1,23 @@
+.mat-row .mat-cell {
+  cursor: pointer;
+}
+
+.mat-row:hover .mat-cell {
+  background-color: aliceblue;
+}
+
+.active-role {
+  background-color: aliceblue;
+}
+
+.role-map {
+  width: 8rem;
+
+  > span {
+    font-size: 11px;
+  }
+}
+
+.namespace-role {
+  max-width: 10rem;
+}

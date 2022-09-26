@@ -1,0 +1,61 @@
+<div class="d-flex align-items-center justify-content-between">
+  <div class="d-flex align-items-center justify-content-start">
+    <span class="mr-2"
+      >{{ rowData.length }} {{ 'registry.COUNT_POSTFIX' | translate }}</span
+    >
+    <button
+      (click)="openDialog()"
+      *appDisplayControl="'registry_scan'"
+      class="d-flex align-items-center justify-content-start px-2"
+      id="registries-add-dialog"
+      mat-stroked-button>
+      <i class="eos-icons mr-2">add_circle</i>{{ 'role.ADD' | translate }}
+    </button>
+  </div>
+  <mat-form-field appearance="standard">
+    <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
+    <input [formControl]="filter" matInput />
+  </mat-form-field>
+</div>
+<ag-grid-angular
+  (window:resize)="onResize()"
+  [gridOptions]="gridOptions"
+  [ngStyle]="{ height: gridHeight + 'px' }"
+  class="ag-theme-alpine"
+  style="width: 100%">
+</ag-grid-angular>
+<div class="d-flex align-items-center justify-content-end mt-2">
+  <app-loading-button
+    (btnClick)="startScan()"
+    *appDisplayControl="'registry_scan'"
+    [appearance]="'mat-stroked-button'"
+    [buttonClasses]="'mr-2'"
+    [disabled]="
+      (gridApi && !gridApi.getSelectedNodes().length) ||
+      (gridApi &&
+        gridApi.getSelectedNodes().length &&
+        gridApi.getSelectedNodes()[0].data.status === 'scanning') ||
+      !!(startingScan$ | async)
+    "
+    [id]="'registries-start-scan-button'"
+    [loading]="!!(startingScan$ | async)"
+    [text]="'registry.START_SCAN' | translate"
+    [type]="'button'">
+  </app-loading-button>
+  <app-loading-button
+    (btnClick)="stopScan()"
+    *appDisplayControl="'registry_scan'"
+    [appearance]="'mat-stroked-button'"
+    [disabled]="
+      (gridApi && !gridApi.getSelectedNodes().length) ||
+      (gridApi &&
+        gridApi.getSelectedNodes().length &&
+        gridApi.getSelectedNodes()[0].data.status === 'idle') ||
+      !!(stoppingScan$ | async)
+    "
+    [id]="'registries-stop-scan-button'"
+    [loading]="!!(stoppingScan$ | async)"
+    [text]="'registry.STOP_SCAN' | translate"
+    [type]="'button'">
+  </app-loading-button>
+</div>

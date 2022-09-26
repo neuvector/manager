@@ -1,14 +1,14 @@
 package com.neu.model
 
-import spray.json.{DefaultJsonProtocol, _}
+import spray.json.{ DefaultJsonProtocol, _ }
 
 import java.util.UUID
 
 /**
-  * Created by bxu on 3/17/16.
-  *
-  * For Json serialization and de-serialization
-  */
+ * Created by bxu on 3/17/16.
+ *
+ * For Json serialization and de-serialization
+ */
 object JsonProtocol extends DefaultJsonProtocol {
 
   implicit object UuidJsonFormat extends RootJsonFormat[UUID] {
@@ -34,9 +34,9 @@ object JsonProtocol extends DefaultJsonProtocol {
   implicit val nodeFormat: RootJsonFormat[Node]           = jsonFormat19(Node)
 
   implicit val graphEndpointFormat: RootJsonFormat[GraphEndpoint] = jsonFormat2(GraphEndpoint)
-  implicit val graphItemFormat: RootJsonFormat[GraphItem] = jsonFormat1(GraphItem)
-  implicit val blacklist: RootJsonFormat[Blacklist]       = jsonFormat4(Blacklist)
-  implicit val userBlacklist: RootJsonFormat[UserBlacklist] = jsonFormat2(UserBlacklist)
+  implicit val graphItemFormat: RootJsonFormat[GraphItem]         = jsonFormat1(GraphItem)
+  implicit val blacklist: RootJsonFormat[Blacklist]               = jsonFormat3(Blacklist)
+  implicit val userBlacklist: RootJsonFormat[UserBlacklist]       = jsonFormat2(UserBlacklist)
 
   implicit val positionFormat: RootJsonFormat[Position]               = jsonFormat2(Position)
   implicit val userGraphLayoutFormat: RootJsonFormat[UserGraphLayout] = jsonFormat2(UserGraphLayout)

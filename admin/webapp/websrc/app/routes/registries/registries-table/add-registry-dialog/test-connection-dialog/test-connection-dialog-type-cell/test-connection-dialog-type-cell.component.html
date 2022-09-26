@@ -1,0 +1,18 @@
+<ng-container [ngSwitch]="type">
+  <span
+    *ngSwitchCase="'url'"
+    class="badge text-white"
+    style="background-color: rgb(73, 148, 236)">
+    {{ 'registry.test_label.URL' | translate }}
+  </span>
+  <span *ngSwitchCase="'response'" class="badge badge-primary text-white">
+    {{ 'registry.test_label.RESPONSE' | translate }}
+  </span>
+  <span
+    *ngSwitchCase="'images'"
+    class="badge text-white"
+    style="background-color: #9aaabc">
+    {{ 'registry.test_label.IMAGES' | translate }}
+  </span>
+  <i *ngSwitchCase="'stopped'" class="eos-icons text-danger">block</i>
+</ng-container>

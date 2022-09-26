@@ -1,7 +1,7 @@
 package com.neu.model
 
 import com.typesafe.scalalogging.LazyLogging
-import spray.json.{DefaultJsonProtocol, _}
+import spray.json.{ DefaultJsonProtocol, _ }
 
 /**
  * Created by bxu on 5/11/16.
@@ -224,7 +224,8 @@ object ResourceJsonProtocol extends DefaultJsonProtocol with LazyLogging {
       )
       if ("deny".equalsIgnoreCase(conversation.policy_action)) {
         (Some("X") ++ label).reduceOption(_ + " " + _)
-      } else if (conversation.event_type.nonEmpty && (conversation.event_type.get.contains("dlp") || conversation.event_type.get.contains("waf"))) {
+      } else if (conversation.event_type.nonEmpty && (conversation.event_type.get.contains("dlp") || conversation.event_type.get
+                   .contains("waf"))) {
         (Some("$") ++ label).reduceOption(_ + " " + _)
       } else
         label

@@ -1,0 +1,49 @@
+<div>
+  <div class="clearfix"></div>
+  <div class="panel mb0">
+    <div class="panel-body">
+      <mat-tab-group
+        animationDuration="0ms"
+        (selectedTabChange)="activateTab($event)">
+        <mat-tab label="{{ 'sidebar.nav.GROUP' | translate }}">
+          <app-groups
+            *ngIf="activeTabIndex === 0"
+            [source]="navSource"
+            [isScoreImprovement]="false"
+            [height]="height"
+          >
+          </app-groups>
+        </mat-tab>
+        <mat-tab label="{{ 'sidebar.nav.ADMISSION_CONTROL' | translate }}">
+          <app-admission-rules
+            *ngIf="activeTabIndex === 1"
+            [source]="navSource"></app-admission-rules>
+        </mat-tab>
+        <mat-tab label="{{ 'sidebar.nav.POLICY' | translate }}">
+          <app-network-rules
+            *ngIf="activeTabIndex === 2"
+            [source]="navSource">
+          </app-network-rules>
+        </mat-tab>
+        <mat-tab label="{{ 'service.PROCESS_PROFILE' | translate }}">
+          <app-process-profile-rules
+            *ngIf="activeTabIndex === 3"
+            [source]="navSource"></app-process-profile-rules>
+        </mat-tab>
+        <mat-tab label="{{ 'service.FILE_PROFILE' | translate }}">
+          <app-file-access-rules
+            *ngIf="activeTabIndex === 4"
+            [source]="navSource"></app-file-access-rules>
+        </mat-tab>
+        <mat-tab label="{{ 'sidebar.nav.RESPONSE_POLICY' | translate }}">
+          <app-response-rules
+            *ngIf="activeTabIndex === 5"
+            [source]="navSource"></app-response-rules>
+        </mat-tab>
+        <mat-tab label="{{ 'sidebar.nav.CONFIGURATION' | translate }}"
+          >Configurations</mat-tab
+        >
+      </mat-tab-group>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,58 @@
+<app-score-prediction-header
+  [message]="getMessage()"
+  [score]="score"
+  [projectedScore]="projectedScore">
+</app-score-prediction-header>
+<mat-divider class="mt-2"></mat-divider>
+<mat-stepper
+  #stepper
+  [selectedIndex]="selectedIndex"
+  (selectionChange)="selectionChange($event)">
+  <mat-step
+    [stepControl]="stepControls.controls.mode"
+    label="{{ 'dashboard.improveScoreModal.exposure.PROCESS_1' | translate }}">
+    <app-groups
+      [height]="200"
+      [isScoreImprovement]="true"
+      [isExposure]="true"
+      (selectedGroup)="setSelectedGroup($event)"></app-groups>
+    <app-group-details
+      *ngIf="selectedGroup"
+      [resizableHeight]="110"
+      [isScoreImprovement]="true"
+      [selectedGroupName]="selectedGroup.name"
+      [members]="selectedGroup.members"
+      [kind]="selectedGroup.kind">
+    </app-group-details>
+  </mat-step>
+  <mat-step
+    [stepControl]="stepControls.controls.threat"
+    label="{{ 'dashboard.improveScoreModal.exposure.PROCESS_2' | translate }}">
+    <app-exposure-grid
+      [ingress]="displayExposure.threat.ingress"
+      [egress]="displayExposure.threat.egress"
+      [selectedIndex]="selectedIndex4Exposure.threat"
+      [clearSession]="true">
+    </app-exposure-grid>
+  </mat-step>
+  <mat-step
+    [stepControl]="stepControls.controls.violation"
+    label="{{ 'dashboard.improveScoreModal.exposure.PROCESS_3' | translate }}">
+    <app-exposure-grid
+      [ingress]="displayExposure.violation.ingress"
+      [egress]="displayExposure.violation.egress"
+      [selectedIndex]="selectedIndex4Exposure.violation"
+      [clearSession]="true">
+    </app-exposure-grid>
+  </mat-step>
+  <mat-step
+    [stepControl]="stepControls.controls.session"
+    label="{{ 'dashboard.improveScoreModal.exposure.PROCESS_4' | translate }}">
+    <app-exposure-grid
+      [ingress]="displayExposure.normal.ingress"
+      [egress]="displayExposure.normal.egress"
+      [selectedIndex]="selectedIndex4Exposure.normal"
+      [clearSession]="true">
+    </app-exposure-grid>
+  </mat-step>
+</mat-stepper>

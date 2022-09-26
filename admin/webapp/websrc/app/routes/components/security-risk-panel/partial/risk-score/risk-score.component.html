@@ -1,0 +1,26 @@
+<div class="score-container">
+  <mwl-gauge
+    class="score"
+    [max]="100"
+    [value]="score"
+    [animated]="true"
+    [animationDuration]="1"
+    [color]="getGaugeColor"
+    [showValue]="true"
+    [dialRadius]="40"
+  >
+  </mwl-gauge>
+  <div class="score-label" [ngStyle]="{'color': gaugeLabelColor}">
+    {{ gaugeLabel }}
+  </div>
+  <table style="margin: -20px auto 0 auto;">
+    <tr class="mb-sm text-sm text-center summary-title">
+      <td>{{"dashboard.heading.NODES" | translate}}</td>
+      <td>{{"dashboard.heading.PODS" | translate}}</td>
+    </tr>
+    <tr class="mb-sm text-sm text-center summary-value">
+      <td>{{nodesCnt}}</td>
+      <td>{{podsCnt}}</td>
+    </tr>
+  </table>
+</div>

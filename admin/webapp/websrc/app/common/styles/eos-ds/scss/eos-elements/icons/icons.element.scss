@@ -1,0 +1,115 @@
+/* Base classes for icons
+   ========================================================================== */
+/**
+* Dependencies:
+*   - helpers/mixins.scss
+*   - components/icons/icons.variables.scss
+*   - base/variables/spacings.scss
+*/
+.eos-icons-outlined {
+  margin-right: $eos-s;
+  vertical-align: bottom;
+  width: $eos-24;
+}
+
+/* Rules for sizing the icon. */
+.eos-18 {
+  font-size: $eos-18;
+  width: $eos-18;
+}
+
+.eos-24 {
+  font-size: $eos-24;
+  width: $eos-24;
+}
+
+.eos-36 {
+  font-size: $eos-36;
+  width: $eos-36;
+}
+
+.eos-48 {
+  font-size: $eos-48;
+  width: $eos-48;
+}
+
+.icon-reset {
+  margin: 0;
+  text-align: center;
+}
+
+/* Allow image icons, like svg, to use the icon size classes */
+img {
+  &.eos-18 {
+    @include img-eos($eos-18);
+  }
+
+  &.eos-24 {
+    @include img-eos($eos-24);
+  }
+
+  &.eos-36 {
+    @include img-eos($eos-36);
+  }
+
+  &.eos-48 {
+    @include img-eos($eos-48);
+  }
+}
+
+/* Rules for icon colors. */
+.eos-light {
+  color: $eos-light;
+
+  &.eos-inactive {
+    color: $eos-light-inactive;
+  }
+}
+
+.eos-dark {
+  color: $eos-dark;
+
+  &.eos-inactive {
+    color: $eos-dark-inactive;
+  }
+}
+
+/* Logo icons style */
+.logo {
+  margin-right: $eos-logo-icon-margin;
+  padding: $eos-logo-icon-padding;
+
+  &-square {
+    border-radius: 0;
+  }
+
+  &-round {
+    border-radius: $eos-logo-icon-wrapper-round;
+  }
+}
+
+/* Wrapper background */
+.eos-dark-wrapper {
+  background: $eos-dark;
+
+  &.eos-inactive {
+    background: $eos-dark-inactive;
+  }
+}
+
+.eos-light-wrapper {
+  background: $eos-light;
+
+  &.eos-inactive {
+    background: $eos-light-inactive;
+  }
+}
+
+/* Icons - general (not eos-icons classes) */
+.main-menu {
+  .active {
+    .icon-new {
+      color: $eos-icon-new-active-color;
+    }
+  }
+}

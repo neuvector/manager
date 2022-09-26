@@ -1,0 +1,41 @@
+import { HostInterfaces } from "./hostInterfaces";
+import { WorkloadLabels } from "./workloadLabels";
+import { WorkloadDetailAppPorts } from "./workloadDetailAppPorts";
+import { WorkloadPorts } from "./workloadPorts";
+import { ScanBrief } from "./scanBrief";
+
+export interface WorkloadDetail {
+  id: string;
+  name: string;
+  display_name: string;
+  platform_role: string;
+  domain: string;
+  state: string;
+  service: string;
+  service_group: string;
+  share_ns_with?: string;
+  policy_mode?: string;
+  scan_summary?: ScanBrief;
+  host_name: string;
+  host_id: string;
+  enforcer_id: string;
+  image: string;
+  network_mode: string;
+  privileged: boolean;
+  cap_quarantine: boolean;
+  created_at: string;
+  started_at: string;
+  finished_at: string;
+  running: boolean;
+  secured_at: string;
+  exit_code: number;
+  interfaces: HostInterfaces;
+  ports: WorkloadPorts[];
+  labels: WorkloadLabels;
+  applications: string[];
+  memory_limit: number;
+  cpus: string;
+  groups: string[];
+  app_ports: WorkloadDetailAppPorts;
+  children: WorkloadDetail[];
+}

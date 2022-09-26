@@ -1,0 +1,22 @@
+<mat-card class="margin-bottom-m">
+  <mat-card-title>{{'dashboard.body.panel_title.PROTOCOL_APPS_IN_POLICY' | translate}}</mat-card-title>
+  <mat-card-content
+    class="row margin-horizon-0"
+    *ngIf="dashboardDetailsService.applications"
+  >
+    <mat-tab-group>
+      <mat-tab label="{{'dashboard.body.panel_title.POLICY_COUNT' | translate}}">
+        <app-application-conversation-chart
+          [applications]="dashboardDetailsService.applications"
+        >
+        </app-application-conversation-chart>
+      </mat-tab>
+      <mat-tab label="{{'dashboard.body.panel_title.BYTES' | translate}}">
+        <app-application-volume-chart
+          [applications]="dashboardDetailsService.applications"
+        >
+        </app-application-volume-chart>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+</mat-card>

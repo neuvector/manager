@@ -1,0 +1,26 @@
+<div class="d-flex justify-content-between align-items-center flex-wrap">
+  <h1 class="font-weight-light">
+    <a [routerLink]="['../']" class="font-weight-light">
+      {{ 'sidebar.nav.SETTING' | translate }}
+    </a>
+    > {{ 'openId.head.TITLE' | translate }}
+  </h1>
+  <span>{{ 'openId.head.GUIDE' | translate }}</span>
+</div>
+<mat-card>
+  <ng-container *ngIf="openidData$ | async as openidData; else loadingOrError">
+    <app-openid-form [openidData]="openidData"></app-openid-form>
+  </ng-container>
+  <ng-template #loadingOrError>
+    <ng-container *ngIf="openidError; else loading">
+      Error Message Goes Here
+    </ng-container>
+    <ng-template #loading>
+      <div
+        class="license__loader d-flex flex-column align-items-center justify-content-center">
+        <mat-spinner class="mx-auto"></mat-spinner>
+        <span class="ml-2 mt-2">{{ 'enum.LOADING' | translate }}...</span>
+      </div>
+    </ng-template>
+  </ng-template>
+</mat-card>

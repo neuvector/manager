@@ -1,0 +1,37 @@
+/* ==========================================================================
+  Sign in dark theme style
+========================================================================== */
+.dark-theme {
+  // background-color: $eos-dark-background;
+  // color: $eos-dark-text-color;
+
+  > .signin-content {
+    background: $eos-dark-signin-background;
+
+    .sign-in-box {
+      .brand-container {
+        background-color: $eos-dark-signin-brand-container-bg;
+      }
+
+      .form-container {
+        background-color: $eos-dark-signin-form-container-bg;
+
+        .container {
+          background-color: $eos-dark-signin-form-container-bg;
+        }
+
+        .sign-in-footer {
+          background-color: $eos-sign-in-form-container-footer-bg;
+        }
+
+        .sign-in-cookies {
+          background-color: $eos-dark-signin-brand-container-bg;
+          box-shadow: none;
+        }
+      }
+      @media only screen and (max-width: 1120px) {
+        background-color: $eos-dark-signin-brand-container-bg;
+      }
+    }
+  }
+}

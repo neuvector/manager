@@ -1,0 +1,17 @@
+<div cdkDrag cdkDragHandle cdkDragRootElement=".cdk-overlay-pane"
+     class="d-flex align-items-center justify-content-between" style="cursor: move; margin-top: -24px;
+    padding-top: 10px;">
+  <div class="d-flex align-items-center justify-content-center">
+    <i class="eos-icons mr-2">check_box_blank</i><span
+    class="d-block">{{data.workload.display_name}}</span>
+  </div>
+  <button aria-label="Close icon button" class="d-flex align-items-center justify-content-center" mat-icon-button>
+    <i (click)="onNoClick()" class="eos-icons">close</i>
+  </button>
+</div>
+<app-container-brief
+  [apps]="data.apps"
+  [container]="data.workload"
+  [hasApps]="data.hasApps"
+  [hasInterfaces]="data.hasInterfaces">
+</app-container-brief>

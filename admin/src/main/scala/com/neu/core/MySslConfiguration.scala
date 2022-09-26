@@ -1,20 +1,19 @@
 package com.neu.core
 
-import java.io.{BufferedInputStream, File, FileInputStream, FileNotFoundException}
-import java.security.cert.{Certificate, CertificateFactory}
+import java.io.{ BufferedInputStream, File, FileInputStream, FileNotFoundException }
+import java.security.cert.{ Certificate, CertificateFactory }
 import java.security.interfaces.RSAPrivateKey
-import java.security.spec.{RSAPrivateCrtKeySpec, _}
-import java.security.{KeyFactory, KeyStore, PrivateKey, SecureRandom}
+import java.security.spec.{ RSAPrivateCrtKeySpec, _ }
+import java.security.{ KeyFactory, KeyStore, PrivateKey, SecureRandom }
 import java.util.Base64
 
-import com.neu.core.CommonSettings.{newCert, newKey}
+import com.neu.core.CommonSettings.{ newCert, newKey }
 import com.typesafe.scalalogging.LazyLogging
-import javax.net.ssl.{KeyManagerFactory, SSLContext, TrustManagerFactory}
+import javax.net.ssl.{ KeyManagerFactory, SSLContext, TrustManagerFactory }
 import spray.io.ServerSSLEngineProvider
 import sun.security.util.DerInputStream
 
 import scala.collection.JavaConverters._
-
 
 trait MySslConfiguration extends LazyLogging {
 
@@ -22,21 +21,21 @@ trait MySslConfiguration extends LazyLogging {
   // since we want non-default settings in this example we make a custom SSLContext available here
   implicit def sslContext: SSLContext = {
 
-    val password = Array('n', 'e', 'u', 'v', 'e', 'c', 't', 'o', 'r')
+    val password               = Array('n', 'e', 'u', 'v', 'e', 'c', 't', 'o', 'r')
     val cf: CertificateFactory = CertificateFactory.getInstance("X.509")
-    val trustManagerFactory = TrustManagerFactory.getInstance("SunX509")
-    val keyManagerFactory = KeyManagerFactory.getInstance("SunX509")
-    val ks: KeyStore = KeyStore.getInstance("jks")
+    val trustManagerFactory    = TrustManagerFactory.getInstance("SunX509")
+    val keyManagerFactory      = KeyManagerFactory.getInstance("SunX509")
+    val ks: KeyStore           = KeyStore.getInstance("jks")
     val keyFactory: KeyFactory = KeyFactory.getInstance("RSA")
-    val context = SSLContext.getInstance("TLS")
+    val context                = SSLContext.getInstance("TLS")
     logger.info("Import manager's certificate and private key to manager's keystore")
 
-    val fCert: File = new File(newCert)
-    val fKey: File = new File(newKey)
-    var fisCert: FileInputStream = null
-    var fisKey: FileInputStream = null
+    val fCert: File                  = new File(newCert)
+    val fKey: File                   = new File(newKey)
+    var fisCert: FileInputStream     = null
+    var fisKey: FileInputStream      = null
     var bisCert: BufferedInputStream = null
-    var bisKey: BufferedInputStream = null
+    var bisKey: BufferedInputStream  = null
     if (fCert.isFile && fKey.isFile) {
       try {
         fisCert = new FileInputStream(fCert)
@@ -53,36 +52,49 @@ trait MySslConfiguration extends LazyLogging {
           if (privateKeyBytes.map(_.toChar).mkString.contains("BEGIN PRIVATE KEY")) {
             logger.info("PKCS#8 private key is being used")
             val encodedPrivateKey =
-              privateKeyBytes.map(_.toChar)
+              privateKeyBytes
+                .map(_.toChar)
                 .mkString
-                .replaceAll("\\n|\\r\\n", "").
-                replace("-----BEGIN PRIVATE KEY-----", "")
+                .replaceAll("\\n|\\r\\n", "")
+                .replace("-----BEGIN PRIVATE KEY-----", "")
                 .replace("-----END PRIVATE KEY-----", "")
-            privateKey = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(Base64.getDecoder.decode(encodedPrivateKey))).asInstanceOf[RSAPrivateKey]
+            privateKey = keyFactory
+              .generatePrivate(new PKCS8EncodedKeySpec(Base64.getDecoder.decode(encodedPrivateKey)))
+              .asInstanceOf[RSAPrivateKey]
           } else if (privateKeyBytes.map(_.toChar).mkString.contains("BEGIN RSA PRIVATE KEY")) {
             logger.info("PKCS#1 private key is being used")
             val encodedPrivateKey =
-              privateKeyBytes.map(_.toChar)
+              privateKeyBytes
+                .map(_.toChar)
                 .mkString
-                .replaceAll("\\n|\\r\\n", "").
-                replace("-----BEGIN RSA PRIVATE KEY-----", "")
+                .replaceAll("\\n|\\r\\n", "")
+                .replace("-----BEGIN RSA PRIVATE KEY-----", "")
                 .replace("-----END RSA PRIVATE KEY-----", "")
 
             val bytes = Base64.getDecoder.decode(encodedPrivateKey)
 
             val derReader = new DerInputStream(bytes)
-            val seq = derReader.getSequence(0)
+            val seq       = derReader.getSequence(0)
             // skip version seq[0];
-            val modulus = seq(1).getBigInteger
-            val publicExp = seq(2).getBigInteger
+            val modulus    = seq(1).getBigInteger
+            val publicExp  = seq(2).getBigInteger
             val privateExp = seq(3).getBigInteger
-            val prime1 = seq(4).getBigInteger
-            val prime2 = seq(5).getBigInteger
-            val exp1 = seq(6).getBigInteger
-            val exp2 = seq(7).getBigInteger
-            val crtCoef = seq(8).getBigInteger
+            val prime1     = seq(4).getBigInteger
+            val prime2     = seq(5).getBigInteger
+            val exp1       = seq(6).getBigInteger
+            val exp2       = seq(7).getBigInteger
+            val crtCoef    = seq(8).getBigInteger
 
-            val keySpec = new RSAPrivateCrtKeySpec(modulus, publicExp, privateExp, prime1, prime2, exp1, exp2, crtCoef)
+            val keySpec = new RSAPrivateCrtKeySpec(
+              modulus,
+              publicExp,
+              privateExp,
+              prime1,
+              prime2,
+              exp1,
+              exp2,
+              crtCoef
+            )
             val keyFactory = KeyFactory.getInstance("RSA")
             privateKey = keyFactory.generatePrivate(keySpec)
           } else {

@@ -1,0 +1,106 @@
+<button
+  (click)="openDialog()"
+  class="d-block my-2 btn-add-to-top"
+  mat-stroked-button
+  type="button">
+  <i class="eos-icons mr-2">add_circle</i>
+  {{ 'policy.toolBar.INSERT_TO_TOP' | translate }}
+</button>
+<mat-table
+  #table
+  (cdkDropListDropped)="dropTable($event)"
+  [cdkDropListData]="groupMappedRoles"
+  [dataSource]="groupMappedRoles"
+  cdkDropList
+  class="border w-100">
+  <ng-container matColumnDef="position">
+    <mat-header-cell *matHeaderCellDef class="position">
+      <span class="sr-only">Drag and Drop</span>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element" class="position">
+      <mat-icon
+        [cdkDragData]="element"
+        cdkDrag
+        cdkDragHandle
+        cdkDragLockAxis="y"
+        cdkDragRootElement="mat-row"
+        class="cursur-grab"
+        >reorder
+      </mat-icon>
+    </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="group">
+    <mat-header-cell *matHeaderCellDef class="group">{{
+      'ldap.gridHeader.GROUP' | translate
+    }}</mat-header-cell>
+    <mat-cell *matCellDef="let element" class="group">
+      {{ element.group }}
+    </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="globalRole">
+    <mat-header-cell *matHeaderCellDef class="global-role">{{
+      'ldap.gridHeader.GLOBAL_ROLE' | translate
+    }}</mat-header-cell>
+    <mat-cell *matCellDef="let element" class="global-role"
+      ><span class="badge badge-primary text-white">{{
+        element.global_role || 'none'
+      }}</span></mat-cell
+    >
+  </ng-container>
+  <ng-container matColumnDef="namespaceRoles">
+    <mat-header-cell *matHeaderCellDef>{{
+      'ldap.gridHeader.DOMAIN_ROLES' | translate
+    }}</mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <div class="d-block">
+        <div
+          *ngFor="let item of element.role_domains | keyvalue"
+          class="namespace-role">
+          <span class="text-primary">{{ item.key }}</span
+          >&nbsp;{{ 'ldap.ROLE_DOMAIN' | translate }}&nbsp;<span
+            class="text-primary"
+            >{{ item.value }}</span
+          >
+        </div>
+      </div>
+    </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="controls">
+    <mat-header-cell *matHeaderCellDef class="controls"
+      ><span class="sr-only">Controls</span></mat-header-cell
+    >
+    <mat-cell *matCellDef="let element" class="controls">
+      <button
+        (click)="openDialog()"
+        [matTooltip]="'ldap.dialog.title.ADD' | translate"
+        aria-label="Add icon button for editing a group role"
+        mat-icon-button
+        matTooltipPosition="above">
+        <i class="eos-icons">add_circle</i>
+      </button>
+      <button
+        [matTooltip]="'ldap.dialog.title.EDIT' | translate"
+        aria-label="Edit icon button for editing a group role"
+        mat-icon-button
+        matTooltipPosition="above">
+        <i (click)="openDialog(element)" class="eos-icons">edit</i>
+      </button>
+      <button
+        (click)="removeRole(element)"
+        [matTooltip]="'ldap.dialog.title.REMOVE' | translate"
+        aria-label="Delete icon button for removing a group role"
+        mat-icon-button
+        matTooltipPosition="above">
+        <i class="eos-icons">delete</i>
+      </button>
+    </mat-cell>
+  </ng-container>
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row
+    *matRowDef="let row; columns: displayedColumns"
+    class="align-items-start">
+  </mat-row>
+</mat-table>
+<div *ngIf="groupMappedRoles.length === 0" class="text-center my-4">
+  {{ 'general.NO_ROWS' | translate }}
+</div>

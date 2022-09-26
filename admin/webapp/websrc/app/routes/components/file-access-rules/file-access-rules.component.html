@@ -1,0 +1,88 @@
+<ng-container *ngIf="!isScoreImprovement; else scoreImprovement">
+  <div
+    [ngClass]="{ panel: source === navSource['SELF'] }"
+    *ngIf="source === navSource['FED_POLICY'] || groupName">
+    <div [ngClass]="{ 'panel-body': source === navSource['SELF'] }">
+      <div class="clearfix" *ngIf="groupName !== globalConstant4Html.EXTERNAL">
+        <app-quick-filter
+          class="pull-left"
+          [gridOptions]="gridOptions"
+          [filteredCount]="filteredCount"
+          [count]="fileAccessRules.length">
+        </app-quick-filter>
+        <div
+          class="pull-right margin-right-s margin-top-l hand"
+          *ngIf="selectedFileAccessRules && isWriteGroupAuthorized"
+          (click)="removeProfile(selectedFileAccessRules)">
+          <em class="eos-icons">delete</em>
+        </div>
+        <div
+          class="pull-right margin-right-s margin-top-l hand"
+          *ngIf="selectedFileAccessRules && isWriteGroupAuthorized"
+          (click)="editProfile(selectedFileAccessRules)">
+          <em class="eos-icons">edit</em>
+        </div>
+        <div
+          class="pull-right margin-right-s margin-top-l hand"
+          *ngIf="isWriteGroupAuthorized"
+          (click)="addProfile()">
+          <em class="eos-icons">add</em>
+        </div>
+        <div
+          class="pull-right margin-right-s margin-top-l hand"
+          (click)="showPredefinedRules()"
+          *ngIf="source !== navSource['FED_POLICY']">
+          <em class="eos-icons margin-right-s icon-18">info</em>
+          <span class="text-plain">{{
+            'service.PREDEFINED_FILTERS' | translate
+          }}</span>
+        </div>
+        <div
+          *ngIf="source === navSource['FED_POLICY']"
+          class="pull-right margin-right-m margin-top-l">
+          <label class="margin-right-m">{{ 'group.GROUP' | translate }}</label>
+          <mat-select
+            [formControl]="groupSelection"
+            style="width: 200px"
+            name="group-name"
+            (selectionChange)="
+              onGroupChanged(groupSelection.value, gridOptions)
+            ">
+            <mat-option *ngFor="let groupName of groups" [value]="groupName"
+              ><span>{{ groupName }}</span>
+            </mat-option>
+          </mat-select>
+        </div>
+      </div>
+      <div class="mt-sm mb0">
+        <ag-grid-angular
+          #agGrid
+          id="file-access-rules-grid"
+          style="width: 100%"
+          [ngStyle]="{
+            height:
+              (source === navSource['GROUP']
+                ? resizableHeight - 150
+                : gridHeight) + 'px'
+          }"
+          class="ag-theme-balham"
+          [gridOptions]="gridOptions"
+          [rowData]="fileAccessRules">
+        </ag-grid-angular>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<ng-template #scoreImprovement>
+  <div class="mt-2">
+    <ag-grid-angular
+      #agGrid
+      [ngStyle]="{ height: resizableHeight + 'px' }"
+      [gridOptions]="gridOptions"
+      [rowData]="fileAccessRules"
+      id="file-access-rules-grid"
+      style="width: 100%"
+      class="ag-theme-balham">
+    </ag-grid-angular>
+  </div>
+</ng-template>

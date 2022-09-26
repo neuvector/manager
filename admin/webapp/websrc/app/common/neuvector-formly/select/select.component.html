@@ -1,0 +1,15 @@
+<mat-form-field appearance="standard" class="w-100">
+  <mat-label>{{ field.templateOptions?.label || '' | translate }}</mat-label>
+  <mat-select
+    (selectionChange)="change($event)"
+    [attr.disabled]="field.templateOptions?.disabled || false"
+    [formControl]="formControl"
+    [formlyAttributes]="field"
+    [required]="field.templateOptions?.required || false">
+    <mat-option
+      *ngFor="let item of field.templateOptions?.items"
+      [value]="item.value">
+      {{ item.viewValue | translate }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>

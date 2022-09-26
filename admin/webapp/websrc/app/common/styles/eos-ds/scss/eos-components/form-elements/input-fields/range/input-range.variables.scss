@@ -1,0 +1,21 @@
+/* Input-range
+   ========================================================================== */
+/* Colors variables: /assets/stylesheets/eos-base/variables/branding.scss */
+$eos-range-background: $eos-bc-gray-700;
+$eos-range-background-disabled: $eos-bc-gray-100;
+$eos-range-background-filled-slider: $eos-bc-green-500;
+$eos-range-thumb-background: $eos-bc-white;
+$eos-range-thumb-border: 2px solid $eos-range-background;
+$eos-range-color-error: $eos-bc-red-500;
+$eos-range-optional-label-color: $eos-bc-gray-900;
+$eos-range-optional-label-font-size: $eos-m - 2px;
+$eos-range-optional-label-margin-left: $eos-xs;
+/* Spacing variables: /assets/stylesheets/eos-base/variables/spacings.scss */
+$eos-range-width-number: 240;
+$eos-range-width: #{$eos-range-width-number}px;
+$eos-range-shadow-size: -$eos-s;
+$eos-range-thumb-margin-top: -$eos-s;
+$eos-range-thumb-width: $eos-m + 4px;
+$eos-range-thumb-height: $eos-m + 4px;
+$eos-range-thumb-radius: $eos-m + 4px;
+$eos-range-height: $eos-xs;

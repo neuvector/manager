@@ -1,0 +1,38 @@
+@use "@angular/material" as mat;
+
+.settings__card {
+  padding: 10px 20px;
+  height: 100%;
+  text-align: center;
+  @include mat.elevation-transition();
+  @include mat.elevation(4);
+
+  &:hover {
+    @include mat.elevation(9);
+  }
+
+  &:active {
+    @include mat.elevation(2);
+  }
+}
+
+.settings__link {
+  width: 93%;
+  height: 280px;
+  text-decoration: none;
+}
+
+.settings__image {
+  background-repeat: no-repeat !important;
+  background-size: contain;
+  -webkit-background-size: contain;
+  -moz-background-size: contain;
+  -o-background-size: contain;
+  margin: 20px auto !important;
+  width: 72px;
+  height: 72px;
+}
+
+.scrollable {
+  overflow: auto;
+}

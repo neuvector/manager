@@ -1,0 +1,21 @@
+/* Layout variables
+   ========================================================================== */
+/* Spacing variables: /assets/stylesheets/eos-base/variables/spacings.scss */
+/* Colors variables: /assets/stylesheets/eos-base/variables/branding.scss */
+$eos-layout-aside-width: 250px;
+$eos-onmobile-content-margin-top: 48px; // same as $eos-mm-height from mobile-menu.scss vars
+$eos-container-max-width: 1366px - $eos-layout-aside-width;
+
+/* Colors variables: /assets/stylesheets/eos-base/variables/branding.scss */
+$eos-body-bg: $eos-bc-white;
+$eos-body-color: $eos-bc-gray-1000;
+
+/* Spacing variables: /assets/stylesheets/eos-base/variables/spacings.scss */
+$eos-hr-margin: $eos-xxl;
+$eos-hr-color: $eos-bc-gray-50;
+
+/* Footer variables: /assets/stylesheets/eos-components/footer/footer.variables.scss */
+$eos-layout-content-height-padding: calc(100vh - 40px); // 40px is the value of $eos-footer-collapsed-height in the footer component
+
+$eos-layout-eos-alert-main-menu-top: 37px;
+$eos-layout-eos-alert-main-menu-top-mobile: 48px + 37px; // first value same as $eos-mm-height from mobile-menu.

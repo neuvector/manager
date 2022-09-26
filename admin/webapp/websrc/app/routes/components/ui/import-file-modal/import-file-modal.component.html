@@ -1,0 +1,15 @@
+<div class="nv-dialog import-dialog">
+  <div mat-dialog-title class="dialog-header">
+    <div class="pull-left">Import File</div>
+    <div class="pull-right">
+      <em class="eos-icons icon-18 hand" (click)="onCancel()">close</em>
+    </div>
+  </div>
+  <div mat-dialog-content class="dialog-content p0 m0">
+    <app-import-file
+      [importUrl]="data.importUrl"
+      [alias]="'ImportAdmission'"
+    >
+    </app-import-file>
+  </div>
+</div>

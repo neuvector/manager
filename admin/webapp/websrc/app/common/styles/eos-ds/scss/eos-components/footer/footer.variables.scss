@@ -1,0 +1,18 @@
+/* Footer variables
+   ========================================================================== */
+$eos-footer-side-menu-width: 249px;
+$eos-footer-collapsed-height: 40px;
+
+/* Colors variables: /assets/stylesheets/eos-base/variables/branding.scss */
+$eos-footer-collapsed-border-top: 1px solid $eos-bc-gray-50;
+$eos-footer-side-menu-color: $eos-bc-gray-50;
+$eos-footer-border-top-color: $eos-bc-gray-100;
+$eos-footer-side-menu-text-color: $eos-bc-white;
+$eos-footer-content-color: $eos-bc-gray-500;
+$eos-footer-link-color-collapsed: $eos-bc-cerulean-900;
+/* Spacing variables: /assets/stylesheets/eos-base/variables/spacings.scss */
+$eos-footer-side-menu-font-size: $eos-s + 4;
+$eos-footer-padding: $eos-s $eos-l;
+$eos-footer-list-padding: 0 $eos-s 0 0;
+$eos-footer-list-image: $eos-m;
+$eos-footer-margin-collapsed-menu: $eos-xxxl - 4;

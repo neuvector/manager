@@ -1,0 +1,42 @@
+<div>
+  <div
+    [ngClass]="{
+      panel: source === navSource['SELF'],
+      mb0: source === navSource['SELF']
+    }">
+    <div [ngClass]="{ 'panel-body': source === navSource['SELF'] }">
+      <div class="clearfix" *ngIf="source !== navSource['GROUP']">
+        <app-quick-filter
+          class="pull-left"
+          [gridOptions]="gridOptions"
+          [filteredCount]="filteredCount"
+          [count]="responseRulesService.responseRules.length">
+        </app-quick-filter>
+        <div class="pull-left margin-top-m margin-left-l">
+          <ul class="list-inline" *ngIf="!responsePolicyErr">
+            <li
+              class="policy-top-button"
+              (click)="addResponseRule2Top($event)"
+              *ngIf="isWriteResponseRuleAuthorized">
+              <!--Authorization-->
+              <button class="primary-button">
+                <em class="fa fa-share mr-sm"></em>
+                {{ 'policy.toolBar.INSERT_TO_TOP' | translate }}
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <ag-grid-angular
+        #agGrid
+        id="response-rule-grid"
+        style="width: 100%"
+        [ngStyle]="{ height: (source === navSource['GROUP'] ? resizableHeight - 85 : gridHeight) + 'px' }"
+        class="ag-theme-balham"
+        [gridOptions]="gridOptions"
+        [rowData]="responseRulesService.responseRules"
+        [context]="context">
+      </ag-grid-angular>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,91 @@
+<form (ngSubmit)="submitForm()" [formGroup]="samlForm">
+  <div class="d-flex align-items-center my-2 flex-wrap">
+    <i class="eos-icons mr-3">lightbulb</i>
+    <span class="mr-3">{{ 'okta.CALLBACK_URL' | translate }}</span>
+    <span class="text-muted mr-3">{{ samlRedirectURL }}</span>
+    <button
+      [cdkCopyToClipboard]="samlRedirectURL"
+      class="d-flex justify-content-center align-items-center"
+      mat-stroked-button
+      type="button">
+      <i class="eos-icons">content_copy</i>
+      {{ 'license.COPY_CODE' | translate }}
+    </button>
+  </div>
+  <div class="row align-items-center my-0 my-md-4">
+    <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
+      <i class="eos-icons mr-3">organization</i>
+      <mat-form-field appearance="standard" class="w-100">
+        <mat-label>{{ 'okta.IDP_URL' | translate }}</mat-label>
+        <input formControlName="sso_url" matInput />
+        <mat-error *ngIf="samlForm.controls.sso_url.hasError('required')">
+          {{ 'general.REQUIRED' | translate }}
+        </mat-error>
+        <mat-error *ngIf="samlForm.controls.sso_url.hasError('invalidURL')">
+          {{ 'okta.INVALID_URL' | translate }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
+      <i class="eos-icons mr-3">account_box</i>
+      <mat-form-field appearance="standard" class="w-100">
+        <mat-label>{{ 'okta.IDP_ISSUER' | translate }}</mat-label>
+        <input formControlName="issuer" matInput />
+        <mat-error *ngIf="samlForm.controls.issuer.hasError('required')">
+          {{ 'general.REQUIRED' | translate }}
+        </mat-error>
+        <mat-error *ngIf="samlForm.controls.issuer.hasError('invalidURL')">
+          {{ 'okta.INVALID_URL' | translate }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-12 d-flex align-items-center">
+      <i class="eos-icons mr-3">verified</i>
+      <mat-form-field appearance="standard" class="w-100">
+        <mat-label>{{ 'okta.CERTIFICATE' | translate }}</mat-label>
+        <input formControlName="x509_cert" matInput />
+        <mat-error *ngIf="samlForm.controls.x509_cert.hasError('required')">
+          {{ 'general.REQUIRED' | translate }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-12 d-flex align-items-center">
+      <i class="eos-icons mr-3">groups</i>
+      <mat-form-field appearance="standard" class="w-100">
+        <mat-label> {{ 'okta.GROUP_CLAIM' | translate }}</mat-label>
+        <input formControlName="group_claim" matInput />
+      </mat-form-field>
+    </div>
+  </div>
+  <mat-form-field appearance="standard">
+    <mat-label>{{ 'ldap.DEFAULT_ROLE' | translate }}</mat-label>
+    <mat-select formControlName="default_role">
+      <mat-option
+        *ngFor="let role of samlData.server.mappable_roles.group_roles"
+        [value]="role">
+        {{ role ? role : 'none' }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <app-group-domain-role
+    (updateGroupMappedRoles)="updateGroupMappedRoles($event)"
+    [domains]="samlData.domains"
+    [groupMappedRoles]="groupMappedRoles"
+    [mappableRoles]="samlData.server.mappable_roles"></app-group-domain-role>
+  <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
+    <mat-checkbox formControlName="enable">{{
+      'ldap.ENABLE_LDAP' | translate
+      }}</mat-checkbox>
+    <button
+      [disabled]="!samlForm.valid || submittingForm"
+      color="primary"
+      mat-raised-button
+      type="submit">
+      <mat-spinner
+        *ngIf="submittingForm"
+        class="btn__spinner mr-2"
+        diameter="20"></mat-spinner>
+      {{ 'general.SUBMIT' | translate }}
+    </button>
+  </div>
+</form>

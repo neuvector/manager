@@ -1,0 +1,25 @@
+<div mat-dialog-content>
+  <p>{{ data.message }}</p>
+</div>
+<div class="justify-content-end mt-4" mat-dialog-actions>
+  <button
+    (click)="onCancel()"
+    [disabled]="loading"
+    class="mr-2"
+    color="warn"
+    id="cancel-delete"
+    mat-button>
+    {{ 'general.CANCEL' | translate }}
+  </button>
+  <app-loading-button
+    (btnClick)="onConfirm()"
+    [disabled]="loading"
+    [loading]="loading"
+    appearance="mat-raised-button"
+    cdkfocusinitial
+    color="primary"
+    [id]="data.message + '-confirm-button'"
+    text="Ok"
+    type="button">
+  </app-loading-button>
+</div>

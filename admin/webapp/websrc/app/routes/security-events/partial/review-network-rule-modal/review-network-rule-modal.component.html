@@ -1,0 +1,183 @@
+<div class="nv-dialog">
+  <div mat-dialog-title class="dialog-header">
+    <div class="pull-left">
+      {{ 'securityEvent.REVIEW_RULE' | translate }}
+    </div>
+    <div class="pull-right">
+      <em class="icon-close hand" (click)="dialogRef.close()"></em>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <div *ngIf="isReadOnlyRule">
+      <div class="margin-top-m margin-bottom-m">
+        <h5>{{ 'securityEvent.NETWORK_RULE' | translate }}
+          <span class="label {{ruleTypeClass}}" style="display: inline; font-size: 12px;">
+            {{ data.networkRule.id }}
+          </span>
+        </h5>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <mat-form-field appearance="fill">
+            <mat-label>{{ 'policy.editPolicy.FROM' | translate }}</mat-label>
+            <input type="text" matInput readonly [value]="data.networkRule.from">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="fill">
+            <mat-label>{{ 'policy.editPolicy.TO' | translate }}</mat-label>
+            <input type="text" matInput readonly [value]="data.networkRule.to">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-6 mb0">
+          <mat-form-field appearance="fill">
+            <mat-label>{{ 'policy.editPolicy.APP' | translate }}</mat-label>
+            <input type="text" matInput readonly [value]="data.networkRule.applications.join(', ')">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-6 mb0">
+          <mat-form-field appearance="fill">
+            <mat-label>{{ 'policy.editPolicy.PORT' | translate }}</mat-label>
+            <input type="text" matInput readonly [value]="data.networkRule.ports">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-6 mb0" *ngIf="data.networkRule.last_modified_timestamp">
+          <mat-form-field appearance="fill">
+            <mat-label>{{ 'policy.editPolicy.UPDATE_AT' | translate }}</mat-label>
+            <input type="text" matInput readonly [value]="data.networkRule.last_modified_timestamp * 1000 | date:'MMM dd, y HH:mm:ss'">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-6 mb0">
+          <label>{{ 'policy.editPolicy.DENY_ALLOW' | translate }}</label>
+          <div>
+            <mat-slide-toggle
+              [(ngModel)]="data.network.allowed"
+              [ngModelOptions]="{ standalone: true }"
+              disabled
+              color="primary">
+              <span
+                [ngClass]="{
+                  'text-deny': !data.network.allowed,
+                  'text-success': data.network.allowed
+                }">
+                {{
+                  (data.network.allowed ? 'policy.action.ALLOW' : 'policy.action.DENY')
+                    | translate
+                }}
+              </span>
+            </mat-slide-toggle>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!isReadOnlyRule">
+      <div>
+        <div class="mh-lg clearfix" *ngIf="data.networkRule.id">
+          <h5>
+            {{ 'securityEvent.VIOLATED_RULE' | translate }}
+            <span class="label {{ruleTypeClass}} mr-sm" style="display: inline; font-size: 12px;">
+              {{ data.networkRule.id }}
+            </span>
+          </h5>
+          <div class="col-sm-12 pl-sm pr-sm text-muted" style="font-size: 14px;">
+              {{ violatedRuleText }}
+          </div>
+        </div>
+        <div class="mh-lg clearfix" *ngIf="!data.networkRule.id">
+          <h5>
+            {{ 'securityEvent.VIOLATED_RULE' | translate }}
+            <span class="label label-caution mr-sm" style="display: inline; font-size: 12px;">
+              Implicit
+            </span>
+          </h5>
+          <div class="col-sm-12 pl-sm pr-sm text-muted" style="font-size: 14px;">
+            {{ violatedImplicitRuleText }}
+          </div>
+        </div>
+        <hr class="dashed" style="margin-top: 10px; margin-bottom: 10px;"/>
+        <div class="mh-lg clearfix">
+          <h5>
+            {{ 'securityEvent.PROPOSED_RULE' | translate }}
+            <span class="label label-success-tran" style="display: inline; font-size: 12px;">
+              {{ 'policy.head.NEW_RULE' | translate }}
+            </span>
+          </h5>
+        </div>
+        <div class="clearfix">
+          <form [formGroup]="ruleForm" novalidate="">
+            <div class="row">
+              <div class="col-sm-6">
+                <mat-form-field appearance="fill" style="width: 100%">
+                  <mat-label>{{ 'policy.editPolicy.FROM' | translate }}</mat-label>
+                  <input type="text" matInput readonly formControlName="from">
+                </mat-form-field>
+              </div>
+              <div class="col-sm-6">
+                <mat-form-field appearance="fill" style="width: 100%">
+                  <mat-label>{{ 'policy.editPolicy.TO' | translate }}</mat-label>
+                  <input type="text" matInput readonly formControlName="to">
+                </mat-form-field>
+              </div>
+              <div class="col-sm-6 mb0">
+                <mat-form-field appearance="fill" style="width: 100%">
+                  <mat-label>{{ 'policy.editPolicy.APP' | translate }}</mat-label>
+                  <input type="text" matInput readonly
+                    [ngStyle]="{'background-color': data.secEvent.applications === data.networkRule.applications.join(', ') ? 'none' : '#fff7f0'}"
+                    formControlName="applications"
+                  >
+                </mat-form-field>
+              </div>
+              <div class="col-sm-6 mb0">
+                <mat-form-field appearance="fill" style="width: 100%">
+                  <mat-label>{{ 'policy.editPolicy.PORT' | translate }}</mat-label>
+                  <input type="text" matInput readonly
+                    [ngStyle]="{'background-color': comparePortStr(data.secEvent.details.serverPort, data.networkRule.ports) ? 'none' : '#fff7f0'}"
+                    formControlName="ports"
+                  >
+                </mat-form-field>
+              </div>
+              <div class="col-sm-4 mb0">
+                <label>{{ 'policy.editPolicy.DENY_ALLOW' | translate }}</label>
+                <div>
+                  <mat-slide-toggle
+                    [(ngModel)]="newAction"
+                    [ngModelOptions]="{ standalone: true }"
+                    disabled
+                    color="primary">
+                    <span
+                      [ngClass]="{
+                        'text-deny': !newAction,
+                        'text-success': newAction
+                      }">
+                      {{
+                        (newAction ? 'policy.action.ALLOW' : 'policy.action.DENY')
+                          | translate
+                      }}
+                    </span>
+                  </mat-slide-toggle>
+                </div>
+              </div>
+            </div>
+            <div class="clearfix" *ngIf="!isReadOnlyRule && data.isEditable">
+              <div class="proposed-rule-warning pull-left margin-right-m margin-bottom-m" style="width: 100%;">{{'securityEvent.NEW_RULE_WARNING' | translate}}</div>
+              <div class="margin-top-s">
+                <app-loading-button
+                  [appearance]="'mat-raised-button'"
+                  [color]="'primary'"
+                  [loading]="submittingUpdate"
+                  [text]="'policy.portlet.SUBMIT' | translate"
+                  (click)="updateNetworkRule()"
+                  class="pull-right"
+                >
+                </app-loading-button>
+                <button class="pull-right margin-right-m" (click)="dialogRef.close()">
+                  {{'group.editGroup.CANCEL' | translate}}
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

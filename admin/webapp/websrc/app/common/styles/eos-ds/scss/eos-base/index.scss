@@ -1,0 +1,15 @@
+/* Base
+   ========================================================================== */
+/**
+* This folder holds the boilerplate code for the project. Here you'll find all
+* the project's variables, and standard styles for commonly used HTML elements
+*/
+
+@import 'variables/index';
+@import 'helpers/index';
+@import 'titles';
+@import 'paragraphs';
+@import 'lists';
+@import 'links/index';
+@import 'prism-theme';
+@import 'typography';

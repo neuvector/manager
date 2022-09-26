@@ -1,0 +1,56 @@
+<div [class]="!to.isCell ? 'd-flex align-items-center' : ''">
+  <i class="eos-icons mr-3">{{ field.templateOptions?.icon }}</i>
+  <mat-form-field
+    appearance="standard"
+    [class]="to.isCell ? 'pull-left' : 'w-' + (to.inputWidth ?? '100')"
+    [hideRequiredMarker]="to.hideRequiredMarker ?? false">
+    <mat-label>{{ field.templateOptions?.label || '' | translate }}</mat-label>
+    <input
+      *ngIf="field.templateOptions?.type !== 'number'; else numberTmp"
+      [attr.disabled]="field.templateOptions?.disabled || false"
+      [formControl]="formControl"
+      [formlyAttributes]="field"
+      [maskOnBlur]="field.templateOptions?.maskOnBlur"
+      [required]="field.templateOptions?.required || false"
+      [type]="passwordVisible ? 'text' : field.templateOptions?.type || 'text'"
+      appMaskInput
+      matInput />
+    <ng-template #numberTmp>
+      <input
+        [attr.disabled]="field.templateOptions?.disabled || false"
+        [formControl]="formControl"
+        [formlyAttributes]="field"
+        [maskOnBlur]="field.templateOptions?.maskOnBlur"
+        [required]="field.templateOptions?.required || false"
+        type="number"
+        appMaskInput
+        matInput />
+    </ng-template>
+    <mat-hint
+      *ngIf="!field.templateOptions?.noInputHint"
+      [class.text-danger]="field.templateOptions?.hintDanger"
+      >{{ field.templateOptions?.hint || '' | translate }}</mat-hint
+    >
+    <mat-error *ngIf="formControl.invalid">
+      <app-formly-errors [field]="field"></app-formly-errors>
+    </mat-error>
+  </mat-form-field>
+  <button
+    (click)="passwordVisible = !passwordVisible"
+    *ngIf="field.templateOptions?.togglePassword && formControl.value"
+    aria-label="Visibility icon to toggle password visibility"
+    mat-icon-button
+    type="button">
+    <i class="eos-icons">{{
+      passwordVisible ? 'visibility' : 'visibility_off'
+    }}</i>
+  </button>
+  <button
+    [cdkCopyToClipboard]="field.formControl.value"
+    *ngIf="field.templateOptions?.copyClipboard && field.formControl.value"
+    aria-label="Clipboard icon to copy to clipboard"
+    mat-icon-button
+    type="button">
+    <i class="eos-icons">content_copy</i>
+  </button>
+</div>

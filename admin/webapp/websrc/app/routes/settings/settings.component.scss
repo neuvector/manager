@@ -1,0 +1,95 @@
+@use "@angular/material" as mat;
+
+.settings__card {
+  padding: 10px 20px;
+  height: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  @include mat.elevation-transition();
+  @include mat.elevation(4);
+
+  &:hover {
+    @include mat.elevation(9);
+  }
+
+  &:active {
+    @include mat.elevation(2);
+  }
+}
+
+.settings__link {
+  padding: 10px;
+  text-decoration: none;
+}
+
+.settings__image {
+  background-repeat: no-repeat !important;
+  background-size: contain;
+  -webkit-background-size: contain;
+  -moz-background-size: contain;
+  -o-background-size: contain;
+  margin: 15px auto !important;
+  width: 72px;
+  height: 72px;
+}
+
+.settings__image--license {
+  @extend .settings__image;
+  background: url("../../../assets/img/ic-vpn-key-72-px.svg");
+  background: -webkit-image-set(
+      url("../../../assets/img/ic-vpn-key-72-px.png") 1x,
+      url("../../../assets/img/ic-vpn-key-72-px@2x.png") 2x,
+      url("../../../assets/img/ic-vpn-key-72-px_d@3x.png") 3x
+  );
+}
+
+.settings__image--users {
+  @extend .settings__image;
+  background: url("../../../assets/img/ic-group-black-72-px.svg");
+  background: -webkit-image-set(
+      url("../../../assets/img/ic-group-black-72-px.png") 1x,
+      url("../../../assets/img/ic-group-black-72-px@2x.png") 2x,
+      url("../../../assets/img/ic-group-black-72-px@3x.png") 3x
+  );
+}
+
+.settings__image--ldap {
+  @extend .settings__image;
+  background: url("../../../assets/img/ic-verified-user.svg");
+  background: -webkit-image-set(
+      url("../../../assets/img/ic-verified-user.png") 1x,
+      url("../../../assets/img/ic-verified-user@2x.png") 2x
+  );
+}
+
+.settings__image--saml {
+  @extend .settings__image;
+  background: url("../../../assets/img/ic-fingerprint.svg");
+  background: -webkit-image-set(
+      url("../../../assets/img/ic-fingerprint.png") 1x,
+      url("../../../assets/img/ic-fingerprint@2x.png") 2x
+  );
+}
+
+.settings__image--config {
+  @extend .settings__image;
+  background: url("../../../assets/img/ic-settings-input-component-black-72-px.svg") no-repeat;
+  background: -webkit-image-set(
+      url("../../../assets/img/ic-settings-input-component-black-72-px.png") 1x,
+      url("../../../assets/img/ic-settings-input-component-black-72-px@2x.png") 2x,
+      url("../../../assets/img/ic-settings-input-component-black-72-px@3x.png") 3x
+  );
+}
+
+.settings__image--openid {
+  @extend .settings__image;
+  background: url("../../../assets/img/ic-openid.svg");
+  background: -webkit-image-set(
+      url("../../../assets/img/ic-openid.png") 1x,
+      url("../../../assets/img/ic-openid@2x.png") 2x,
+      url("../../../assets/img/ic-openid@3x.png") 3x
+  );
+}

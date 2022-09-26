@@ -1,0 +1,193 @@
+<div class="infoBox advFilter" cdkDrag>
+  <div
+    cdkDragHandle
+    class="d-flex align-items-center justify-content-between handle">
+    <h4 mat-dialog-title>
+      {{ 'general.FILTER_MATCH_ALL' | translate }}
+    </h4>
+    <button
+      aria-label="Close icon button"
+      class="d-flex align-items-center justify-content-center"
+      mat-icon-button>
+      <i (click)="popupState.leave()" class="eos-icons">close</i>
+    </button>
+  </div>
+  <hr class="fancy mt-1 mb-1 mx-0" />
+  <div>
+    <form [formGroup]="advFilterForm">
+      <section class="row mx-0 align-items-center">
+        <label
+          class="col-2 font-weight-normal mb-0 mr-2"
+          for="domainInput"
+          >{{ 'ldap.gridHeader.DOMAINS' | translate }}</label
+        >
+        <mat-form-field appearance="standard" class="col pl-0">
+          <mat-chip-list
+            #domainChips
+            aria-label="Namespace selection"
+            formControlName="domains"
+            id="domainInput">
+            <mat-chip
+              (mouseover)="showButton[i] = true"
+              (mouseleave)="showButton[i] = false"
+              (removed)="remove(domainChip, i)"
+              *ngFor="
+                let domainChip of advFilterForm.controls.domains.value;
+                let i = index
+              ">
+              <img
+                src="assets/img/icons/graph/domain.svg"
+                alt="Icon of domain" />
+              {{ domainChip.name }}
+              <button matChipRemove *ngIf="showButton[i]">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip>
+            <input
+              #domainInput
+              (matChipInputTokenEnd)="add($event)"
+              [formControl]="namespaceCtrl"
+              [matAutocomplete]="auto"
+              [matChipInputFor]="domainChips"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [placeholder]="'ldap.ADD_DOMAIN' | translate" />
+          </mat-chip-list>
+          <mat-autocomplete
+            #auto="matAutocomplete"
+            (optionSelected)="selected($event)">
+            <mat-option
+              *ngFor="let domain of filteredDomains | async"
+              [value]="domain">
+              {{ domain.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </section>
+      <section class="row mx-0 align-items-center">
+        <label class="col-2 font-weight-normal mb-0 mr-2" for="groupInput">{{
+          'dlp.gridHeader.GROUPS' | translate
+        }}</label>
+        <mat-form-field appearance="standard" class="col pl-0">
+          <mat-chip-list
+            #groupChipList
+            aria-label="Group selection"
+            formControlName="selectedGroups"
+            id="groupInput">
+            <mat-chip
+              (mouseover)="showGrpButton[i] = true"
+              (mouseleave)="showGrpButton[i] = false"
+              (removed)="removeGroup(groupChip, i)"
+              *ngFor="
+                let groupChip of advFilterForm.controls.selectedGroups.value;
+                let i = index
+              ">
+              <img
+                src="assets/img/icons/graph/cluster.svg"
+                alt="Icon of group" />
+              {{ groupChip.displayName }}
+              <button matChipRemove *ngIf="showGrpButton[i]">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip>
+            <input
+              #groupInput
+              (matChipInputTokenEnd)="addGroup($event)"
+              [formControl]="groupCtrl"
+              [matAutocomplete]="groupAuto"
+              [matChipInputFor]="groupChipList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [placeholder]="'ldap.ADD_GROUP' | translate" />
+          </mat-chip-list>
+          <mat-autocomplete
+            #groupAuto="matAutocomplete"
+            (optionSelected)="groupSelected($event)">
+            <mat-option
+              *ngFor="let group of filteredGroups | async"
+              [value]="group">
+              {{ group.displayName }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </section>
+      <section class="row mx-0">
+        <span class="d-block col-2">{{
+          'network.protocolFilter.VULNERABILITY' | translate
+        }}</span>
+        <mat-radio-group
+          aria-label="Vulnerability"
+          class="col row"
+          formControlName="vulnerabilityType">
+          <mat-radio-button class="col" value="all">{{
+            'setting.ALL' | translate
+          }}</mat-radio-button>
+          <mat-radio-button class="col" value="vulnerableOnly">{{
+            'network.protocolFilter.VULNERABLE_ONLY' | translate
+          }}</mat-radio-button>
+        </mat-radio-group>
+      </section>
+      <section class="row mx-0">
+        <span class="d-block col-2">{{
+          'network.protocolFilter.RISK' | translate
+        }}</span>
+        <mat-radio-group
+          aria-label="Scored"
+          class="col row"
+          formControlName="riskType">
+          <mat-radio-button class="col" value="all">{{
+            'setting.ALL' | translate
+          }}</mat-radio-button>
+          <mat-radio-button class="col" value="riskOnly">{{
+            'network.protocolFilter.RISKY_ONLY' | translate
+          }}</mat-radio-button>
+        </mat-radio-group>
+      </section>
+      <section class="row mx-0" formGroupName="protocols">
+        <span class="d-block col-2">{{
+          'dashboard.body.panel_title.PROTOCOLS' | translate
+          }}</span>
+        <mat-checkbox class="col" formControlName="tcp">TCP</mat-checkbox>
+        <mat-checkbox class="col" formControlName="udp">UDP</mat-checkbox>
+        <mat-checkbox class="col" formControlName="icmp">ICMP</mat-checkbox>
+      </section>
+      <hr class="fancy my-2 mx-0" />
+      <section class="row mx-0 my-2" formGroupName="settings">
+        <mat-checkbox
+          class="col"
+          formControlName="showSysNode"
+          aria-label="show system nodes">
+          {{ 'network.protocolFilter.SYSTEM_NODE' | translate }}
+        </mat-checkbox>
+        <mat-checkbox
+          class="col"
+          aria-label="show system application"
+          formControlName="showSysApp"
+          >{{ 'network.protocolFilter.SYSTEM' | translate }}</mat-checkbox
+        >
+        <mat-checkbox
+          class="col"
+          aria-label="save results"
+          formControlName="persistent"
+          >{{ 'network.protocolFilter.PERSISTENT' | translate }}</mat-checkbox
+        >
+        <mat-checkbox
+          class="col"
+          aria-label="enable GPU"
+          formControlName="gpuEnabled"
+          >{{ 'network.protocolFilter.GPU_ENABLED' | translate }}</mat-checkbox
+        >
+      </section>
+    </form>
+  </div>
+  <div class="float-right" mat-dialog-actions>
+    <button (click)="reset()" mat-button class="mr-2" aria-label="reset">
+      Reset
+    </button>
+    <button
+      (click)="apply()"
+      color="primary"
+      mat-raised-button
+      aria-label="apply">
+      Apply
+    </button>
+  </div>
+</div>

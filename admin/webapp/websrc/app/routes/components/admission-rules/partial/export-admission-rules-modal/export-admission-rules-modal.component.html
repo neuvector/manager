@@ -1,0 +1,29 @@
+<div class="nv-dialog">
+  <div mat-dialog-title class="dialog-header">
+    <div class="pull-left">
+      {{'admissionControl.EXPORT' | translate}}
+    </div>
+    <div class="pull-right">
+      <em class="icon-close hand" (click)="onCancel()"></em>
+    </div>
+  </div>
+  <form (ngSubmit)="submitExport()" [formGroup]="exportForm">
+    <div>
+      <mat-checkbox class="mx-3" formControlName="isIncludingConfig">
+        {{ 'admissionControl.CONFIG' | translate}}
+      </mat-checkbox>
+    </div>
+    <div>
+      <app-loading-button
+        [appearance]="'mat-raised-button'"
+        [color]="'primary'"
+        [disabled]="!(exportForm.controls.isIncludingConfig.value || data.selectedAdmissionRules)"
+        [loading]="submittingForm"
+        [text]="'admissionControl.DOWNLOAD' | translate"
+        [type]="'submit'"
+        class="pull-right ml-auto"
+      >
+      </app-loading-button>
+    </div>
+  </form>
+</div>

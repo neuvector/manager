@@ -1,0 +1,34 @@
+/* Shared form element variables
+   ========================================================================== */
+/**
+*
+*  Spacing variables: /assets/stylesheets/eos-base/variables/spacings.scss
+*  Color variables: /assets/stylesheets/eos-base/variables/branding.scss
+*
+*/
+
+$eos-form-element-label-font-size: 14px;
+$eos-form-element-label-weight: bold;
+
+$eos-form-element-label-color: $eos-bc-gray-1000;
+$eos-form-element-optional-color: $eos-bc-gray-700;
+$eos-form-element-disabled-bg: $eos-bc-white;
+$eos-form-element-color: $eos-bc-gray-700;
+$eos-form-element-error: $eos-bc-red-500;
+$eos-form-element-disabled: $eos-bc-gray-700;
+$eos-form-element-approved: $eos-bc-green-500;
+$eos-form-element-focus: $eos-bc-cerulean-500;
+$eos-form-element-maxlength: $eos-bc-gray-700;
+$eos-form-element-maxlength-margin-top: $eos-s;
+$eos-form-element-optional-margin-left: $eos-xs;
+$eos-form-element-error-margin: $eos-s;
+$eos-form-check-margin: $eos-s;
+$eos-form-group-margin: $eos-xl;
+
+/* Form messages */
+$eos-form-msg-margin: $eos-s;
+$eos-form-msg-font: 12px;
+$eos-form-msg-color: $eos-bc-gray-900;
+
+$eos-form-element-error-font: $eos-font-size-base;
+$eos-form-element-error-width: 100%;

@@ -1,0 +1,96 @@
+<div id="sniffer" class="infoBox topLeftSession" cdkDrag>
+  <button
+    id="closeSniffer"
+    class="btn btn-xs btn-link pull-right"
+    (click)="stopRefreshSniffer(); popupState.leave()">
+    <em class="fa fa-times fa-lg text-muted ml-1"></em>
+  </button>
+
+  <div class="clearfix handle" cdkDragHandle>
+    <h4 class="text-dark">
+      {{ 'network.nodeDetails.SNIFF' | translate }}
+      <em class="fa fa-long-arrow-right text-info mx-1"></em>{{ containerName }}
+    </h4>
+  </div>
+  <hr class="fancy mx-0 my-0" />
+  <ag-grid-angular
+    id="sniff-grid"
+    style="width: 100%; margin-top: 10px"
+    [ngStyle]="{ height: entriesGridHeight + 'px' }"
+    class="ag-theme-alpine"
+    [rowData]="sniffers"
+    [gridOptions]="gridOptions">
+  </ag-grid-angular>
+
+  <div class="row mx">
+    <div class="col-3">
+      <mat-checkbox
+        aria-label="Toggle schedule"
+        class="md-primary mx-1 mt-3"
+        [checked]="!pcap.options.disabled"
+        (click)="toggleSchedule()">
+        <label
+          [ngClass]="pcap.options.disabled ? 'text-muted' : 'text-primary'"
+          class="mb-0">
+          {{ 'network.SCHEDULE_JOB' | translate }}
+        </label>
+      </mat-checkbox>
+    </div>
+
+    <div class="custom-slider col-8 pl-0">
+      <ngx-slider [value]="pcap.minValue" [options]="pcap.options"></ngx-slider>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-7">
+      <button
+        class="btn btn-xs btn-circle btn-primary pull-left"
+        [disabled]="!isPacketCapAuthorized || disableStart()"
+        (click)="startSniff(containerId)">
+        <em class="fa fa-play"></em>
+      </button>
+      <div *ngIf="onSnifferErr" class="pull-left mt-sm ml">
+        <span class="text-danger">{{ snifferErrMsg }}</span>
+      </div>
+    </div>
+    <div class="col-2">
+      <a
+        type="submit"
+        class="btn btn-primary btn-xs"
+        target="_self"
+        *ngIf="sniffer && downloadId === sniffer.id"
+        download="{{ exportFilename }}"
+        [href]="exportUrl">
+        <span>
+          <em class="fa fa-cloud-download"
+            >&nbsp;{{ 'network.DOWNLOAD' | translate }}</em
+          >
+        </span>
+      </a>
+    </div>
+    <div class="col-3">
+      <div class="pull-right">
+        <button
+          class="btn btn-xs btn-circle btn-primary"
+          [disabled]="
+            !isPacketCapAuthorized || !sniffer || sniffer.status === 'stopped'
+          "
+          (click)="stopSniff(sniffer.id)">
+          <em class="fa fa-stop"></em>
+        </button>
+        <button
+          class="btn btn-xs btn-circle btn-primary"
+          [disabled]="!isPacketCapAuthorized || !sniffer"
+          (click)="downloadPacket(sniffer.id)">
+          <em class="fa fa-file-archive-o"></em>
+        </button>
+        <button
+          class="btn btn-xs btn-circle btn-pink"
+          [disabled]="!isPacketCapAuthorized || !sniffer"
+          (click)="deleteSniff(sniffer.id)">
+          <em class="fa fa-trash"></em>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

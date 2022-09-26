@@ -1,0 +1,46 @@
+<div class="d-flex justify-content-between align-items-center">
+  <h1 class="font-weight-light">
+    <a [routerLink]="['../']" class="font-weight-light">
+      {{ 'sidebar.nav.SETTING' | translate }}
+    </a>
+    >&nbsp;{{ 'license.TITLE' | translate }}
+  </h1>
+  <button
+    (click)="toggleRenewLicenseView()"
+    *ngIf="!renewLicenseView"
+    mat-button>
+    <mat-icon class="mr-1 mb-1">refresh</mat-icon>
+    {{ 'license.RENEW' | translate }}
+  </button>
+  <button
+    (click)="toggleRenewLicenseView()"
+    *ngIf="renewLicenseView"
+    mat-button>
+    <mat-icon class="mb-1">arrow_back</mat-icon>
+    {{ 'registry.BACK' | translate | uppercase }}
+  </button>
+</div>
+<mat-card class="license__card">
+  <ng-container *ngIf="license$ | async as license; else loadingOrError">
+    <ng-container *ngIf="!renewLicenseView; else renewLicenseTemplate">
+      <app-license-info [license]="license"></app-license-info>
+    </ng-container>
+    <ng-template #renewLicenseTemplate>
+      <app-license-renew
+        (cancel)="toggleRenewLicenseView()"></app-license-renew>
+    </ng-template>
+  </ng-container>
+
+  <ng-template #loadingOrError>
+    <ng-container *ngIf="licenseError; else loading">
+      Error Message Goes Here
+    </ng-container>
+    <ng-template #loading>
+      <div
+        class="license__loader d-flex flex-column align-items-center justify-content-center">
+        <mat-spinner class="mx-auto"></mat-spinner>
+        <span class="ml-2 mt-2">{{ 'enum.LOADING' | translate }}...</span>
+      </div>
+    </ng-template>
+  </ng-template>
+</mat-card>

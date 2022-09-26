@@ -1,0 +1,36 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NvCommonModule } from '@common/nvCommon.module';
+import { SecurityRiskPanelComponent } from './security-risk-panel.component';
+import { RiskScoreComponent } from './partial/risk-score/risk-score.component';
+import { RiskFactorComponent } from './partial/risk-factor/risk-factor.component';
+import { RiskInstructionComponent } from './partial/risk-instruction/risk-instruction.component';
+import { GaugeModule } from 'angular-gauge';
+import { RiskFactorInstructionErrorComponent } from './partial/risk-factor-instruction-error/risk-factor-instruction-error.component';
+import { VulnerabilityInstructionComponent } from './partial/vulnerability-instruction/vulnerability-instruction.component';
+import { ScoreInstructionComponent } from './partial/score-instruction/score-instruction.component';
+import { ScoreImprovementModalModule } from '@components/score-improvement-modal/score-improvement-modal.module';
+
+
+
+@NgModule({
+  declarations: [
+    SecurityRiskPanelComponent,
+    RiskScoreComponent,
+    RiskFactorComponent,
+    RiskInstructionComponent,
+    RiskFactorInstructionErrorComponent,
+    VulnerabilityInstructionComponent,
+    ScoreInstructionComponent
+  ],
+  imports: [
+    CommonModule,
+    NvCommonModule,
+    GaugeModule.forRoot(),
+    ScoreImprovementModalModule
+  ],
+  exports: [
+    SecurityRiskPanelComponent
+  ]
+})
+export class SecurityRiskPanelModule { }

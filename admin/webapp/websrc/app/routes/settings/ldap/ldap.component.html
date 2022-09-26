@@ -1,0 +1,25 @@
+<div class="d-flex justify-content-between align-items-center flex-wrap">
+  <h1 class="font-weight-light">
+    <a [routerLink]="['../']" class="font-weight-light">
+      {{ 'sidebar.nav.SETTING' | translate }}
+    </a>
+    > {{ 'ldap.head.TITLE' | translate }}
+  </h1>
+  <span>{{ 'ldap.head.GUIDE' | translate }}</span>
+</div>
+<mat-card>
+  <ng-container
+    *appObserve="
+      ldapData$ as ldapData;
+      loading: loadingTemplate;
+      error: errorTemplate
+    ">
+    <app-ldap-form [ldapData]="ldapData"></app-ldap-form>
+  </ng-container>
+  <ng-template #errorTemplate let-error>
+    {{ error | json }}
+  </ng-template>
+  <ng-template #loadingTemplate>
+    <app-loading-template></app-loading-template>
+  </ng-template>
+</mat-card>

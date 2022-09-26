@@ -1,0 +1,214 @@
+<div class="nv-dialog">
+  <div mat-dialog-title class="dialog-header">
+    <div class="pull-left">
+      {{
+        (type === 'add' ? 'policy.addPolicy.TITLE' : 'policy.editPolicy.TITLE')
+          | translate
+      }}
+    </div>
+    <div class="pull-right">
+      <em class="icon-close hand" (click)="onCancel()"></em>
+    </div>
+  </div>
+  <div mat-dialog-content class="dialog-content p0 m0">
+    <form
+      fxLayout="column"
+      fxLayoutAlign="start"
+      fxFlex="1 0 auto"
+      class="pt-lg">
+      <div
+        fxLayout="row"
+        fxLayoutAlign="start center"
+        fxFlex="1 0 auto"
+        class="pl-4">
+        <mat-form-field
+          appearance="outline"
+          fxFlex="15"
+          class="pr-4"
+          *ngIf="type === 'edit'">
+          <mat-label>{{
+            'responsePolicy.gridHeader.ID' | translate
+          }}</mat-label>
+          <input matInput name="id" [(ngModel)]="responseRule.id" disabled />
+          <em matSuffix class="icon-tag input-icon"></em>
+        </mat-form-field>
+        <mat-form-field appearance="outline" fxFlex="30" class="pr-4">
+          <mat-select
+            name="event"
+            placeholder="{{ 'responsePolicy.gridHeader.TYPE' | translate }}*"
+            [(ngModel)]="responseRule.event"
+            (ngModelChange)="changeEvent(responseRule.event)">
+            <mat-option *ngFor="let event of events" [value]="event"
+              ><span>
+                {{
+                  'responsePolicy.categories.' + event.toUpperCase() | translate
+                }}
+              </span>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" fxFlex="55" class="pr-4">
+          <mat-label>{{
+            'responsePolicy.gridHeader.GROUP' | translate
+          }}</mat-label>
+          <input
+            tabindex="-1"
+            matInput
+            name="group"
+            [(ngModel)]="responseRule.group"
+            [formControl]="formControl4Group"
+            [matAutocomplete]="autoFrom" />
+          <mat-autocomplete #autoFrom="matAutocomplete">
+            <mat-option
+              *ngFor="let option of filteredOptions4Group | async"
+              [value]="option">
+              {{ option }}
+            </mat-option>
+          </mat-autocomplete>
+          <em matSuffix class="icon-grid input-icon"></em>
+        </mat-form-field>
+      </div>
+      <div
+        fxLayout="row"
+        fxLayoutAlign="start center"
+        fxFlex="1 0 auto"
+        class="pl-4 help-block">
+        {{ 'responsePolicy.dialog.content.HINT' | translate
+        }}{{ conditionPatternSample }}
+      </div>
+      <div
+        fxLayout="row"
+        fxLayoutAlign="start center"
+        fxFlex="1 0 auto"
+        class="pl-4">
+        <mat-form-field appearance="outline" fxFlex="100" class="pr-4">
+          <mat-chip-list #chipList aria-label="Criteria selection">
+            <mat-chip
+              *ngFor="let criterion of responseRule.criteria"
+              [selectable]="true"
+              [removable]="true"
+              (removed)="removeCriterionFromChip(criterion)">
+              {{ criterion }}
+              <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
+            </mat-chip>
+            <input
+              tabindex="-1"
+              matInput
+              placeholder="{{
+                'responsePolicy.message.ADD_CRITERIA' | translate
+              }}"
+              #criteriaInput
+              name="criteria"
+              [formControl]="formControl4Criteria"
+              [matAutocomplete]="autoCriteria"
+              [matChipInputFor]="chipList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [matChipInputAddOnBlur]="true"
+              (matChipInputTokenEnd)="addCriterionIntoChip($event)"
+              required />
+          </mat-chip-list>
+          <mat-autocomplete
+            #autoCriteria="matAutocomplete"
+            (optionSelected)="criterionSelectedInChip($event)">
+            <mat-option
+              *ngFor="let criterion of filteredOptions4Criteria | async"
+              [value]="criterion">
+              {{ criterion }}
+            </mat-option>
+          </mat-autocomplete>
+          <em matSuffix class="icon-puzzle input-icon"></em>
+          <mat-error *ngIf="!isValidCriteria">Invalid criterion</mat-error>
+        </mat-form-field>
+      </div>
+      <div
+        fxLayout="row"
+        fxLayoutAlign="start center"
+        fxFlex="1 0 auto"
+        class="pl-4">
+        <div fxFlex="100" class="pr-4">
+          <label class="nv-modal-item-title control-label mr-lg"
+            >{{ 'responsePolicy.gridHeader.ACTION' | translate }}*</label
+          >
+          <mat-checkbox
+            [ngModelOptions]="{ standalone: true }"
+            *ngFor="let action of actions; let i = index"
+            [attr.data-index]="i"
+            [(ngModel)]="responseRule.actions[i]"
+            class="example-ripple-checkbox mr"
+            (change)="onActionsSelected(responseRule.actions)"
+            >{{
+              'responsePolicy.actions.' + action.toUpperCase() | translate
+            }}</mat-checkbox
+          >
+        </div>
+      </div>
+      <div
+        fxLayout="row"
+        fxLayoutAlign="start center"
+        fxFlex="1 0 auto"
+        class="pl-4"
+        *ngIf="isWebhookSelected && webhookOptions.length > 0">
+        <label class="nv-modal-item-title control-label"
+          >{{ 'setting.WEBHOOKS' | translate }}
+        </label>
+        <mat-checkbox
+          *ngFor="let webhook of webhookOptions; let i = index"
+          [attr.data-index]="i"
+          [(ngModel)]="responseRule.webhooks[i]"
+          [ngModelOptions]="{ standalone: true }"
+          >{{ webhook }}
+        </mat-checkbox>
+      </div>
+      <div
+        fxLayout="row"
+        fxLayoutAlign="start center"
+        fxFlex="1 0 auto"
+        class="pl-4">
+        <div fxFlex="100" class="pr-4">
+          <label class="nv-modal-item-title control-label mr-lg"
+            >{{ 'responsePolicy.gridHeader.STATUS' | translate }}*</label
+          >
+          <mat-slide-toggle
+            id="network-status-toggle"
+            name="status"
+            [(ngModel)]="responseRule.enabled">
+            <span
+              [ngClass]="{
+                'text-muted': !responseRule.enabled,
+                'text-success': responseRule.enabled
+              }">
+              {{
+                (responseRule.enabled
+                  ? 'policy.status.ENABLED'
+                  : 'policy.status.DISABLED'
+                ) | translate
+              }}
+            </span>
+          </mat-slide-toggle>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div
+    mat-dialog-actions
+    class="dialog-actions pull-right"
+    style="margin-right: 24px">
+    <a class="modal-cancel-button" (click)="onCancel()">
+      {{ 'policy.addPolicy.CANCEL' | translate }}
+    </a>
+    <button
+      mat-button
+      class="modal-submit-button"
+      [disabled]="
+        !responseRule.actions[0] &&
+        !responseRule.actions[1] &&
+        !responseRule.actions[2]
+      "
+      (click)="submitRule()">
+      {{
+        (type === 'add' ? 'policy.addPolicy.ADD' : 'policy.editPolicy.UPDATE')
+          | translate
+      }}
+    </button>
+  </div>
+</div>

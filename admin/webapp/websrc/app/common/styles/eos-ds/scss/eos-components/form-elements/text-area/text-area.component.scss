@@ -1,0 +1,23 @@
+/* Text area component
+   ========================================================================== */
+.text-area {
+  border: 1px solid $eos-form-element-color;
+  border-radius: $eos-textarea-radius;
+  height: $eos-textarea-height;
+  resize: none;
+
+  &:disabled {
+    background: $eos-form-element-disabled-bg;
+    border-color: $eos-form-element-disabled;
+    color: $eos-form-element-disabled;
+    cursor: not-allowed;
+  }
+
+  &.approved {
+    border: 1px solid $eos-form-element-approved;
+  }
+
+  &.error {
+    border: 1px solid $eos-form-element-error;
+  }
+}

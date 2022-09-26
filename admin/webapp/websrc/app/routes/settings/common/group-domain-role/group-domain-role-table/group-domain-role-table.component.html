@@ -1,0 +1,72 @@
+<ng-container *ngIf="global_role !== 'admin'">
+  <mat-table
+    (matSortChange)="announceSortChange($event)"
+    [dataSource]="dataSource"
+    class="border w-100"
+    matSort>
+    <ng-container matColumnDef="namespaceRoles">
+      <mat-header-cell
+        *matHeaderCellDef
+        class="namespace-role"
+        mat-sort-header="namespaceRole">
+        {{ 'ldap.gridHeader.DOMAIN_ROLES' | translate }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="namespace-role">
+        {{ element.namespaceRole }}
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="namespaces">
+      <mat-header-cell *matHeaderCellDef mat-sort-header="namespaces">
+        {{ 'ldap.gridHeader.DOMAINS' | translate }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+          <span
+            *ngFor="let name of element.namespaces"
+            class="badge badge-primary text-white">
+            {{ name }}
+          </span>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row
+      (click)="clickRow(row.namespaceRole)"
+      *matRowDef="let row; columns: displayedColumns"
+      [class.active-role]="activeRole === row.namespaceRole"></mat-row>
+  </mat-table>
+  <div class="d-flex flex-row justify-content-center align-items-center">
+    <div class="mr-4 role-map">
+      {{ activeRole }} {{ 'ldap.GROUP_ADMIN' | translate }}
+      <span class="d-block">Type and Press Enter</span>
+    </div>
+    <mat-form-field appearance="standard" class="w-100">
+      <mat-label>{{ 'ldap.gridHeader.DOMAINS' | translate }}</mat-label>
+      <mat-chip-list #chipList aria-label="Namespace selection">
+        <mat-chip
+          (removed)="remove(domainChip)"
+          *ngFor="let domainChip of domainChips">
+          {{ domainChip }}
+          <button matChipRemove>
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip>
+        <input
+          #namespaceInput
+          (matChipInputTokenEnd)="add($event)"
+          [formControl]="namespaceCtrl"
+          [matAutocomplete]="auto"
+          [matChipInputFor]="chipList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [placeholder]="'ldap.ADD_DOMAIN' | translate" />
+      </mat-chip-list>
+      <mat-autocomplete
+        #auto="matAutocomplete"
+        (optionSelected)="selected($event)">
+        <mat-option
+          *ngFor="let domain of filteredDomains | async"
+          [value]="domain">
+          {{ domain }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+</ng-container>

@@ -1,13 +1,13 @@
 package com.neu.process
 
 /**
-  * Call operating system's script interpreter to run a script.
-  */
+ * Call operating system's script interpreter to run a script.
+ */
 object Shell {
 
   /**
-    * Run a script using operating system's script interpreter. Currently only support *nix operating systems.
-    */
+   * Run a script using operating system's script interpreter. Currently only support *nix operating systems.
+   */
   def apply(script: String, interpreter: String = "/bin/sh")(implicit env: Env): Proc =
     System.getProperty("os.name").toLowerCase match {
       //noinspection ScalaStyle

@@ -1,0 +1,56 @@
+/* Input fields
+  ========================================================================== */
+/**
+*  These rules overwrite existing Bootstrap rules
+*
+* Variables file: assets/stylesheets/eos-components/input-fields/text/input-text.variables.scss
+*/
+
+.form-control {
+  border: 0;
+  border-bottom: 1px solid $eos-form-element-color;
+  border-radius: 0;
+  color: $eos-text-input-color;
+  padding: $eos-text-input-padding;
+  width: 100%;
+
+  &:focus {
+    color: $eos-text-input-color;
+  }
+
+  &:disabled {
+    background-color: transparent;
+    border-bottom: 1px solid $eos-form-element-disabled;
+    color: $eos-form-element-disabled;
+
+    ~ .input-group-append i {
+      color: $eos-form-element-disabled;
+      pointer-events: none;
+    }
+  }
+
+  &.approved {
+    border-bottom: 1px solid $eos-form-element-approved;
+  }
+
+  &.error {
+    border-bottom: 1px solid $eos-form-element-error;
+  }
+}
+
+/* Inputs with icons */
+
+.input-group-prepend, .input-group-append {
+  cursor: pointer;
+  position: absolute;
+  top: $eos-input-group-top;
+  z-index: 1000;
+}
+
+.input-group-prepend + .form-control {
+  padding-left: $eos-input-group-padding;
+}
+
+.input-group-append {
+  right: $eos-input-group-right;
+}

@@ -1,0 +1,28 @@
+<div class="d-flex justify-content-between align-items-center">
+  <h1 class="font-weight-light">
+    {{ 'profile.TITLE' | translate }}
+  </h1>
+  <button (click)="profileForm.toggleEdit()" mat-button>
+    <mat-icon class="mr-1 mb-1">edit</mat-icon>
+    {{ 'profile.EDIT' | translate }}
+  </button>
+</div>
+<mat-card>
+  <ng-container *ngIf="user$ | async as user; else loadingOrError">
+    <app-profile-form
+      [emailHash]="user.emailHash"
+      [user]="user.token"></app-profile-form>
+  </ng-container>
+
+  <ng-template #loadingOrError>
+    <ng-container *ngIf="profileError; else loading">
+      Error Message Goes Here
+    </ng-container>
+    <ng-template #loading>
+      <div class="d-flex flex-column align-items-center justify-content-center">
+        <mat-spinner class="mx-auto"></mat-spinner>
+        <span class="ml-2 mt-2">{{ 'enum.LOADING' | translate }}...</span>
+      </div>
+    </ng-template>
+  </ng-template>
+</mat-card>

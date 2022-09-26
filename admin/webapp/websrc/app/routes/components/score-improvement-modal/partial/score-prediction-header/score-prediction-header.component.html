@@ -1,0 +1,42 @@
+<div class="d-flex align-items-center justify-content-end score-header">
+  <div class="flex-grow-1 text-muted mat-h4 pl-4">{{ message }}</div>
+  <div class="score-container score-container-flex">
+    <mwl-gauge
+      class="score"
+      [max]="100"
+      [value]="score"
+      [animated]="true"
+      [animationDuration]="1"
+      [color]="getGaugeColor"
+      [showValue]="true"
+      [dialRadius]="40">
+    </mwl-gauge>
+    <div class="score-label" [ngStyle]="{ color: gaugeLabelColor }">
+      {{ gaugeLabel }}
+    </div>
+  </div>
+  <div class="score-container score-container-flex">
+    <div class="d-flex flex-column text-center">
+      <span class="mat-small text-muted">{{
+        'dashboard.improveScoreModal.SCORE_TREND' | translate
+      }}</span>
+      <em
+        class="fa fa-long-arrow-alt-right fa-2x text-success score-improvement-arrow"></em>
+    </div>
+  </div>
+  <div class="score-container score-container-flex mr-3">
+    <mwl-gauge
+      class="score"
+      [max]="100"
+      [value]="projectedScore"
+      [animated]="true"
+      [animationDuration]="1"
+      [color]="getGaugeColor"
+      [showValue]="true"
+      [dialRadius]="40">
+    </mwl-gauge>
+    <div class="score-label" [ngStyle]="{ color: gaugeLabelColorProj }">
+      {{ gaugeLabelProj }}
+    </div>
+  </div>
+</div>

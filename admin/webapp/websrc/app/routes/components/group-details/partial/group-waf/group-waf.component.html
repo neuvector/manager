@@ -1,0 +1,48 @@
+<div>
+  <div class="clearfix">
+    <app-quick-filter
+      class="pull-left"
+      [gridOptions]="gridOptions4GroupWafSensors"
+      [filteredCount]="filteredCount"
+      [count]="groupWafSensors.length">
+    </app-quick-filter>
+    <mat-slide-toggle
+      class="padding-top-s pull-right margin-top-l"
+      id="group-waf-sensor-status-toggle"
+      [disabled]="!isWriteWafAuthorized"
+      [(ngModel)]="enabled"
+      [ngModelOptions]="{standalone: true}"
+    >
+      <span
+        [ngClass]="{
+          'text-muted': !enabled,
+          'text-success': enabled
+        }"
+      >
+        {{
+          (enabled
+            ? "policy.status.ENABLED"
+            : "policy.status.DISABLED") | translate
+        }}
+      </span>
+    </mat-slide-toggle>
+    <div
+      role="button"
+      class="pull-right margin-right-s margin-top-l hand"
+      *appDisplayControl="'write_waf_rule'"
+      (click)="openEditGroupSensorModal()">
+      <em class="eos-icons">edit</em>
+    </div>
+  </div>
+  <div class="clearfix">
+    <ag-grid-angular
+      #groupWafSensorsGrid
+      id="group-waf-sensors-grid"
+      style="width: 100%;"
+      [ngStyle]="{ height: (resizableHeight - 150) + 'px' }"
+      class="ag-theme-balham"
+      [gridOptions]="gridOptions4GroupWafSensors"
+      >
+    </ag-grid-angular>
+  </div>
+</div>

@@ -13,19 +13,18 @@ object SupportLogAuthCacheManager {
   /**
    * Save supportLogAuth for support log
    */
-   def saveSupportLogAuth(token: String, filename: String): Unit = {
-     cache.put(token, filename)
-   }
+  def saveSupportLogAuth(token: String, filename: String): Unit =
+    cache.put(token, filename)
 
   /**
    * Get supportLogAuth for support log
    * @param token
    * @return [[String]]
    */
-   def getSupportLogAuth(token: String): Option[String] = cache.get(token)
+  def getSupportLogAuth(token: String): Option[String] = cache.get(token)
 
-   /**
-    * Remove supportLogAuth for support log
-    */
+  /**
+   * Remove supportLogAuth for support log
+   */
   def removeSupportLogAuth(token: String): Unit = cache.remove(token)
 }

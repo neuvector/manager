@@ -1,0 +1,19 @@
+import { Component, OnInit } from '@angular/core';
+import { FieldWrapper } from '@ngx-formly/core';
+
+@Component({
+  selector: 'app-readonly-wrapper',
+  templateUrl: './readonly-wrapper.component.html',
+  styleUrls: ['./readonly-wrapper.component.scss'],
+})
+export class ReadonlyWrapperComponent extends FieldWrapper {
+  get template() {
+    return this.to.readOnly.template(this.field);
+  }
+
+  get readOnly() {
+    return (
+      this.to.readOnly && (!this.model.isEditable || this.to.readOnly.always)
+    );
+  }
+}

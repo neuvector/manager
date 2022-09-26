@@ -1,0 +1,47 @@
+<section id="risk-reports-section">
+  <div class="d-flex flew-row align-items-center justify-content-between">
+    <h1 class="font-weight-light" id="risk-reports-title">
+      {{ 'sidebar.nav.AUDIT' | translate }}
+    </h1>
+    <div class="d-flex align-items-center justify-content-end">
+      <ng-container *ngIf="!error">
+        <div class="d-flex">
+          <button
+            mat-button
+            aria-label="Export risk reports CSV"
+            type="button"
+            class="d-flex align-items-center"
+            *ngIf="riskReports.length > 0"
+            (click)="riskReportGrid.exportCSV()">
+            <i class="eos-icons mr-2">csv_file</i>CSV
+          </button>
+        </div>
+      </ng-container>
+      <app-loading-button
+        (btnClick)="refresh()"
+        [appearance]="'mat-button'"
+        [buttonClasses]="'d-flex justify-content-center align-items-center'"
+        [disabled]="!!(refreshing$ | async)"
+        [iconClasses]="'eos-icons'"
+        [iconName]="'refresh'"
+        [id]="'risk-reports-refresh-button'"
+        [loading]="!!(refreshing$ | async)"
+        [text]="'network.REFRESH' | translate"
+        [type]="'button'">
+      </app-loading-button>
+    </div>
+  </div>
+  <mat-card *ngIf="loaded; else loadingOrErrorTemplate">
+    <app-risk-report-grid [gridHeight]="480"></app-risk-report-grid>
+  </mat-card>
+  <ng-template #loadingOrErrorTemplate>
+    <ng-container *ngIf="error; else loadingTemplate">
+      <mat-card>
+        {{ error | json }}
+      </mat-card>
+    </ng-container>
+    <ng-template #loadingTemplate>
+      <app-loading-template></app-loading-template>
+    </ng-template>
+  </ng-template>
+</section>

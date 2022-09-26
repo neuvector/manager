@@ -1,0 +1,48 @@
+<div class="nv-dialog">
+  <div mat-dialog-title class="dialog-header">
+    <div class="pull-left">
+      {{'admissionControl.MATCHING_TEST' | translate}}
+    </div>
+    <div class="pull-right">
+      <em class="icon-close hand" (click)="onCancel()"></em>
+    </div>
+  </div>
+  <app-import-test-file
+    [importUrl]="importUrl"
+    [alias]="'matchingTest'"
+    (getImportResult)="getImportResult($event)"
+  >
+  </app-import-test-file>
+  <div *ngIf="configAssessmentResult && configAssessmentResult.results.length > 0">
+    <div><strong>{{ 'admissionControl.matchingTestGrid.TITLE' | translate}}</strong></div>
+    <div
+      (click)="exportCsv()"
+      class="pull-right"
+    >
+      <em
+        class="eos-icons icon-18 hand margin-right-s"
+      >csv_file</em>
+      <span class="text-gray-label link">CSV</span>
+    </div>
+    <div
+      (click)="exportPdf()"
+      class="pull-right"
+    >
+      <em
+        class="eos-icons icon-18 hand margin-right-s"
+      >pdf_file</em>
+      <span class="text-gray-label link">PDF</span>
+    </div>
+    <div class="text-muted margin-top-s"><strong>{{ 'admissionControl.matchingTestGrid.UNAVAILABLE_PROP' | translate}}:&nbsp;</strong>{{configAssessmentResult.props_unavailable.join(", ")}}</div>
+    <ag-grid-angular
+      #agGrid
+      id="configuration-assessment-result-grid"
+      style="width: 100%; height: 300px;"
+      class="ag-theme-balham"
+      [gridOptions]="gridOptions"
+      [rowData]="configAssessmentResult.results"
+      >
+    </ag-grid-angular>
+  </div>
+
+</div>

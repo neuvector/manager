@@ -1,0 +1,171 @@
+<div class="infoBox blacklist" cdkDrag>
+  <div
+    cdkDragHandle
+    class="d-flex align-items-center justify-content-between handle">
+    <h4 mat-dialog-title>
+      {{ 'network.groupFilter.BLACKLIST_TITLE' | translate }}
+    </h4>
+    <button
+      aria-label="Close icon button"
+      class="d-flex align-items-center justify-content-center"
+      mat-icon-button>
+      <i (click)="popupState.leave()" class="eos-icons">close</i>
+    </button>
+  </div>
+  <hr class="fancy mt-1 mb-1 mx-0" />
+  <div>
+    <form [formGroup]="form">
+      <section class="row mx-0 align-items-center">
+        <label
+          class="col-2 font-weight-normal mb-0 mr-2"
+          for="namespaceInput"
+          >{{ 'ldap.gridHeader.DOMAINS' | translate }}</label
+        >
+        <mat-form-field appearance="standard" class="col pl-0">
+          <mat-chip-list
+            #chipList
+            aria-label="Namespace selection"
+            formControlName="selectedDomains"
+            id="namespaceInput">
+            <mat-chip
+              (mouseover)="showButton[i] = true"
+              (mouseleave)="showButton[i] = false"
+              (removed)="remove(domainChip, i)"
+              *ngFor="let domainChip of form.controls.selectedDomains.value; let i = index">
+              <img
+                src="assets/img/icons/graph/domain.svg"
+                alt="Icon of domain" />
+              {{ domainChip.name }}
+              <button matChipRemove *ngIf="showButton[i]">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip>
+            <input
+              #namespaceInput
+              (matChipInputTokenEnd)="add($event)"
+              [formControl]="namespaceCtrl"
+              [matAutocomplete]="auto"
+              [matChipInputFor]="chipList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [placeholder]="'ldap.ADD_DOMAIN' | translate" />
+          </mat-chip-list>
+          <mat-autocomplete
+            #auto="matAutocomplete"
+            (optionSelected)="selected($event)">
+            <mat-option
+              *ngFor="let domain of filteredDomains | async"
+              [value]="domain">
+              {{ domain.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </section>
+      <section class="row mx-0 align-items-center">
+        <label class="col-2 font-weight-normal mb-0 mr-2" for="groupInput">{{
+          'dlp.gridHeader.GROUPS' | translate
+        }}</label>
+        <mat-form-field appearance="standard" class="col pl-0">
+          <mat-chip-list
+            #groupChipList
+            aria-label="Group selection"
+            formControlName="selectedGroups"
+            id="groupInput">
+            <mat-chip
+              (mouseover)="showGrpButton[i] = true"
+              (mouseleave)="showGrpButton[i] = false"
+              (removed)="removeGroup(groupChip, i)"
+              *ngFor="let groupChip of form.controls.selectedGroups.value; let i = index">
+              <img
+                src="assets/img/icons/graph/cluster.svg"
+                alt="Icon of group" />
+              {{ groupChip.displayName }}
+              <button matChipRemove *ngIf="showGrpButton[i]">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip>
+            <input
+              #groupInput
+              (matChipInputTokenEnd)="addGroup($event)"
+              [formControl]="groupCtrl"
+              [matAutocomplete]="groupAuto"
+              [matChipInputFor]="groupChipList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [placeholder]="'ldap.ADD_GROUP' | translate" />
+          </mat-chip-list>
+          <mat-autocomplete
+            #groupAuto="matAutocomplete"
+            (optionSelected)="groupSelected($event)">
+            <mat-option
+              *ngFor="let group of filteredGroups | async"
+              [value]="group">
+              {{ group.displayName }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </section>
+      <section class="row mx-0 align-items-center">
+        <label class="col-2 font-weight-normal mb-0 mr-2" for="nodeInput">{{
+          'network.groupFilter.ENDPOINTS' | translate
+        }}</label>
+        <mat-form-field appearance="standard" class="col pl-0">
+          <mat-chip-list
+            #nodeChipList
+            aria-label="Endpoint selection"
+            formControlName="selectedNodes"
+            id="nodeInput">
+            <mat-chip
+              (mouseover)="showEdpButton[i] = true"
+              (mouseleave)="showEdpButton[i] = false"
+              (removed)="removeNode(nodeChip, i)"
+              *ngFor="let nodeChip of form.controls.selectedNodes.value; let i = index">
+              <img
+                src="assets/img/icons/graph/container.svg"
+                alt="Icon of endpoint" />
+              {{ nodeChip.name }}
+              <button matChipRemove *ngIf="showEdpButton[i]">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip>
+            <input
+              #nodeInput
+              (matChipInputTokenEnd)="addNode($event)"
+              [formControl]="nodeCtrl"
+              [matAutocomplete]="nodeAuto"
+              [matChipInputFor]="nodeChipList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [placeholder]="'network.groupFilter.ADD_ENDPOINT' | translate" />
+          </mat-chip-list>
+          <mat-autocomplete
+            #nodeAuto="matAutocomplete"
+            (optionSelected)="nodeSelected($event)">
+            <mat-option
+              *ngFor="let node of filteredNodes | async"
+              [value]="node">
+              {{ node.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </section>
+      <section class="row mx-0 my-2" >
+        <mat-checkbox
+          class="col"
+          formControlName="hideUnmanaged"
+          aria-label="hide unmanaged endpoint">
+          {{ 'network.groupFilter.HIDE_UNMANAGED_ENDPOINTS' | translate }}
+        </mat-checkbox>
+      </section>
+    </form>
+  </div>
+  <div class="float-right" mat-dialog-actions>
+    <button (click)="reset()" mat-button class="mr-2" aria-label="reset">
+      Reset
+    </button>
+    <button
+      (click)="apply()"
+      color="primary"
+      mat-raised-button
+      aria-label="apply">
+      Apply
+    </button>
+  </div>
+</div>

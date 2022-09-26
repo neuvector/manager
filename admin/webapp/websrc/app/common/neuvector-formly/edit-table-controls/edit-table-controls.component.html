@@ -1,0 +1,10 @@
+<div [hidden]="to.disabled">
+  <ng-container *ngIf="isEditable.value">
+    <button type="button" mat-button (click)="submit()">Submit</button>
+    <button type="button" mat-button (click)="cancel()">Cancel</button>
+  </ng-container>
+  <ng-container *ngIf="!isEditable.value">
+    <button type="button" mat-button (click)="edit()">Edit</button>
+    <button type="button" mat-button (click)="delete()">Delete</button>
+  </ng-container>
+</div>

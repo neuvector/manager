@@ -1,0 +1,35 @@
+<div class="help-block ml-lg mb-3">
+  <span class="text-muted"> {{ 'license.server.PRE_DESC' | translate }}</span>
+  <a [href]="'mailto:' + ('partner.license.server.EMAIL' | translate)">
+    {{ 'partner.license.server.EMAIL' | translate }}</a
+  >.
+</div>
+<form (ngSubmit)="onSubmit()" [formGroup]="renewLicenseForm">
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>{{ 'license.LICENSE_CODE' | translate }}</mat-label>
+    <textarea formControlName="license_key" matInput rows="6"></textarea>
+  </mat-form-field>
+  <span class="d-block text-muted">
+    {{ 'partner.license.server.APPLY_DESC' | translate }}
+  </span>
+  <span *ngIf="errorMessage" class="d-block text-danger">
+    {{ errorMessage }}
+  </span>
+  <div class="d-flex justify-content-end align-items-center mt-2">
+    <button
+      [disabled]="!renewLicenseForm.valid || submittingForm"
+      class="mr-1"
+      color="primary"
+      mat-raised-button
+      type="submit">
+      <mat-spinner
+        *ngIf="submittingForm"
+        class="btn__spinner mr-2"
+        diameter="20"></mat-spinner>
+      {{ 'securityEvent.APPLY' | translate }}
+    </button>
+    <button (click)="onCancel()" mat-button>
+      {{ 'profile.CANCEL' | translate }}
+    </button>
+  </div>
+</form>

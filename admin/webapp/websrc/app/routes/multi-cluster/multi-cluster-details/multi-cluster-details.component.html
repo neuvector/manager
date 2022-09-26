@@ -1,0 +1,168 @@
+<div class="panel mb0">
+  <div class="panel-heading panel-default clearfix">
+    <div class="panel-title">
+      <label class="panel-text-title margin-top-s margin-left-s subtitle">{{selectedCluster?.name }}
+      </label>
+    </div>
+  </div>
+  <div class="panel-body">
+    <div class="containers-detail-sec">
+      <div class="row w-100 mx-0" >
+        <div class="col-md-4 my-md-4 details-item">
+          <mat-icon
+            aria-hidden="false"
+            aria-label="Platform icon"
+            class="details-icon"
+            fontSet="fa"
+            fontIcon="fa-sitemap">
+          </mat-icon>
+          <div class="ml-3 overflow-hidden">
+            <div>{{'nodes.detail.PLATFORM' | translate}}</div>
+            <div class="text-muted text-truncate">
+              {{summary?.platform}}
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4 my-md-4 details-item">
+          <mat-icon
+            aria-hidden="false"
+            aria-label="Namespace icon"
+            class="details-icon"
+            fontSet="fa"
+            fontIcon="fa-building"
+          ></mat-icon>
+          <div class="ml-3 overflow-hidden">
+            <div>{{'multiCluster.summary.DOMAINS' | translate}}</div>
+            <div class="text-muted text-truncate">
+              {{summary?.domains}}
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4 my-md-4 details-item">
+          <mat-icon
+            aria-hidden="false"
+            aria-label="Service icon"
+            class="details-icon"
+            fontSet="fa"
+            fontIcon="fa-cogs"
+          ></mat-icon>
+          <div class="ml-3 overflow-hidden">
+            <div>{{'dashboard.summary.SERVICE' | translate}}</div>
+            <div class="text-muted text-truncate">
+              {{summary?.services}}
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 my-md-4 details-item">
+          <mat-icon
+            aria-hidden="false"
+            aria-label="Host icon"
+            class="details-icon"
+            fontSet="fa"
+            fontIcon="fa-server">
+          </mat-icon>
+          <div class="ml-3 overflow-hidden">
+            <div>{{'dashboard.summary.HOST' | translate}}</div>
+            <div class="text-muted text-truncate">
+              {{summary?.hosts}}
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 my-md-4 details-item">
+          <mat-icon
+            aria-hidden="false"
+            aria-label="Pod icon"
+            class="details-icon"
+            fontSet="fa"
+            fontIcon="fa-vector-square">
+          </mat-icon>
+          <div class="ml-3 overflow-hidden">
+            <div>
+              {{'multiCluster.summary.RUNNING_POD' | translate}}
+            </div>
+            <div class="text-muted text-truncate">
+              {{summary?.running_pods}}
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 my-md-4 details-item">
+          <mat-icon
+            aria-hidden="false"
+            aria-label="Workload icon"
+            class="details-icon"
+            fontSet="fa"
+            fontIcon="fa-cubes">
+          </mat-icon>
+          <div class="ml-3 overflow-hidden">
+            <div>
+              {{'multiCluster.summary.TOTAL_WORKLOAD' | translate}}
+            </div>
+            <div class="text-muted text-truncate">
+              {{summary?.workloads}}
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 my-md-4 details-item">
+          <mat-icon
+            aria-hidden="false"
+            aria-label="Controller icon"
+            class="details-icon"
+            fontSet="fa"
+            fontIcon="fa-cog">
+          </mat-icon>
+          <div class="ml-3 overflow-hidden">
+            <div>{{'dashboard.summary.CONTROLLER' | translate}}</div>
+            <div class="text-muted text-truncate">
+              {{summary?.controllers}}
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 my-md-4 details-item">
+          <mat-icon
+            aria-hidden="false"
+            aria-label="Enforcer icon"
+            class="details-icon"
+            fontSet="fa"
+            fontIcon="fa-user-shield">
+          </mat-icon>
+          <div class="ml-3 overflow-hidden">
+            <div>{{'dashboard.summary.ENFORCER' | translate}}</div>
+            <div class="text-muted text-truncate">
+              {{summary?.enforcers}}
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 my-md-4 details-item">
+          <mat-icon
+            aria-hidden="false"
+            aria-label="Scanner icon"
+            class="details-icon"
+            fontSet="fa"
+            fontIcon="fa-heartbeat">
+          </mat-icon>
+          <div class="ml-3 overflow-hidden">
+            <div>{{'sidebar.nav.SCANNERS' | translate}}</div>
+            <div class="text-muted text-truncate">
+              {{summary?.scanners}}
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 my-md-4 details-item">
+          <mat-icon
+            aria-hidden="false"
+            aria-label="CVEDB_version icon"
+            class="details-icon"
+            fontSet="fa"
+            fontIcon="fa-tag">
+          </mat-icon>
+          <div class="ml-3 overflow-hidden">
+            <div>{{'audit.gridHeader.CVE_DB_VERSION' | translate}}</div>
+            <div class="text-muted text-truncate">
+              {{summary?.cvedb_version}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,54 @@
+<div class="d-flex align-items-center justify-content-between">
+  <h1 mat-dialog-title class="dialog-title">
+    {{ 'dashboard.improveScoreModal.TITLE' | translate }}
+  </h1>
+  <button
+    aria-label="Close score improvement modal button"
+    class="d-flex align-items-center justify-content-center"
+    mat-icon-button>
+    <i (click)="onCancel()" class="eos-icons">close</i>
+  </button>
+</div>
+<div mat-dialog-content class="nv-dialog-content-full" [ngSwitch]="template">
+  <app-score-improvement-general *ngSwitchCase="'general'">
+  </app-score-improvement-general>
+  <app-score-improvement-service-risk-view
+    *ngSwitchCase="'service-risk'"
+    [isGlobalUser]="isGlobalUser">
+  </app-score-improvement-service-risk-view>
+  <app-score-improvement-exposure-view
+    *ngSwitchCase="'exposure'"
+    [isGlobalUser]="isGlobalUser">
+  </app-score-improvement-exposure-view>
+  <app-score-improvement-run-as-privileged-containers-view
+    *ngSwitchCase="'run-as-privileged'"
+    [isGlobalUser]="isGlobalUser">
+  </app-score-improvement-run-as-privileged-containers-view>
+  <app-score-improvement-run-as-root-containers-view
+    *ngSwitchCase="'run-as-root'"
+    [isGlobalUser]="isGlobalUser">
+  </app-score-improvement-run-as-root-containers-view>
+  <app-score-improvement-admission-control-status-view
+    *ngSwitchCase="'admission-control'"
+    [isGlobalUser]="isGlobalUser">
+  </app-score-improvement-admission-control-status-view>
+  <app-score-improvement-completed-view
+    *ngSwitchCase="'completed'"
+    [isGlobalUser]="isGlobalUser"></app-score-improvement-completed-view>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-stroked-button (click)="finish()" *ngIf="template === 'general'">
+    {{ 'dashboard.improveScoreModal.FINISH' | translate }}
+  </button>
+  <ng-container *ngIf="!['general', 'completed'].includes(template)">
+    <button mat-stroked-button (click)="done()">
+      {{ 'dashboard.improveScoreModal.DONE' | translate }}
+    </button>
+    <button
+      mat-stroked-button
+      (click)="next()"
+      *ngIf="template === 'exposure' && exposureView?.selectedIndex !== 3">
+      {{ 'dashboard.improveScoreModal.NEXT' | translate }}
+    </button>
+  </ng-container>
+</div>

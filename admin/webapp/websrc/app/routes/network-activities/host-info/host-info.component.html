@@ -1,0 +1,19 @@
+<div id="hostInfo" class="infoBox topLeftFloat-host pt-1" cdkDrag>
+  <button
+    class="btn btn-xs btn-link pull-right mt-2"
+    (click)="popupState.leave()">
+    <em class="fa fa-times fa-lg text-muted"></em>
+  </button>
+  <div class="clearfix handle" cdkDragHandle id="hostInfoHeader">
+    <div class="auto-hide mt-2" style="display: block; width: 350px">
+      <img
+        src="assets/img/icons/graph/host.svg"
+        aria-label="Host"
+        style="width: 24px; height: 24px"
+        alt="hostIcon" />
+      {{ host.name }}
+    </div>
+  </div>
+  <hr class="fancy mx-0 my-0" />
+  <app-node-brief [host]="host"></app-node-brief>
+</div>

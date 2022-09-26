@@ -1,0 +1,28 @@
+.dark-theme {
+  .pagination {
+    .page-item {
+      background: transparent;
+      
+      .page-link {
+        color: $eos-dt-pagination-page-link-color;
+        text-decoration: none;
+      }
+
+      &.active, &:hover {
+        background-color: $eos-dt-pagination-page-item-active-bg;
+
+        .page-link {
+          color: $eos-dt-pagination-page-item-active-color;
+        }
+      }
+
+      &.disabled {
+        background-color: $eos-dt-pagination-item-disabled-bg;
+
+        .page-link {
+          color: $eos-dt-pagination-page-link-color;
+        }
+      }
+    }
+  }
+}

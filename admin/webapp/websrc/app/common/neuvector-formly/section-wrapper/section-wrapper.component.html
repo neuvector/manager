@@ -1,0 +1,46 @@
+<ng-container *ngIf="to.append">
+  <div class="mx-3">
+    <div class="mx-3 mb-md-2">
+      <ng-container #fieldComponent></ng-container>
+    </div>
+  </div>
+  <mat-divider class="position-relative" *ngIf="to.divider"></mat-divider>
+</ng-container>
+<ng-container *ngIf="to.appendTo">
+  <div class="mx-3 mt-md-4">
+    <div class="d-flex">
+      <h1 class="h4 font-weight-normal" [id]="to.label">
+        {{ to.label! | translate }}
+      </h1>
+      <div *ngIf="to.inline" class="ml-2">
+        <ng-container #fieldComponent></ng-container>
+      </div>
+    </div>
+    <div class="text-muted my-md-2" *ngIf="to.comment">
+      {{ to.comment | translate }}
+    </div>
+    <div class="mx-3 my-md-2" *ngIf="!to.inline">
+      <ng-container #fieldComponent></ng-container>
+    </div>
+  </div>
+  <mat-divider class="position-relative" *ngIf="to.divider"></mat-divider>
+</ng-container>
+<ng-container *ngIf="!to.append && !to.appendTo">
+  <div class="mx-3 my-md-4">
+    <div class="d-flex">
+      <h1 class="h4 font-weight-normal" [id]="to.label">
+        {{ to.label! | translate }}
+      </h1>
+      <div *ngIf="to.inline" class="ml-2">
+        <ng-container #fieldComponent></ng-container>
+      </div>
+    </div>
+    <div class="text-muted my-md-2" *ngIf="to.comment">
+      {{ to.comment | translate }}
+    </div>
+    <div class="mx-3 my-md-2" *ngIf="!to.inline">
+      <ng-container #fieldComponent></ng-container>
+    </div>
+  </div>
+  <mat-divider class="position-relative" *ngIf="to.divider"></mat-divider>
+</ng-container>

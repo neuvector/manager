@@ -1,0 +1,44 @@
+<hr style="margin: 5px auto;"/>
+<div class="row message-box-wrap">
+  <div class="full-width-panel">
+    <div class="full-width-summary">
+      <span class="label" [ngClass]="secEvent.details.message.cssColor">{{"nodes.gridHeader.MESSAGE" | translate}}</span><br/>
+    </div>
+    <div class="full-width-center message-box">
+      <div name="what" style="border-bottom: #bbb 1px dashed;">
+        <span *ngIf="secEvent.applications">
+          <span class="text-bold">{{"threat.gridHeader.APPLICATION" | translate}}:</span>&nbsp;
+          <span class="text-muted">
+            {{secEvent.applications}}
+          </span>&nbsp;&nbsp;
+        </span>
+        <span *ngIf="secEvent.details.message.content">
+          <span class="text-bold">{{"securityEvent.DESC" | translate}}:</span>&nbsp;
+          <span class="text-muted">
+            {{secEvent.details.message.content}}
+          </span>&nbsp;&nbsp;
+        </span>
+        <span *ngIf="secEvent.details.count">
+          <span class="text-bold">{{"threat.gridHeader.COUNT" | translate}}:</span>&nbsp;
+          <span class="text-muted">
+            {{secEvent.details.count}}
+          </span>&nbsp;&nbsp;
+        </span>
+      </div>
+      <div name="where">
+        <span *ngIf="secEvent.details.clusterName">
+          <span class="text-bold">{{"violation.gridHeader.CLUSTER_NAME" | translate}}:</span>&nbsp;
+          <span class="text-muted">
+            {{secEvent.details.clusterName}}
+          </span>&nbsp;&nbsp;
+        </span>
+        <div *ngIf="secEvent.enforcerName && secEvent.hostName">
+          <span class="text-bold">{{"securityEvent.REPORTED_BY" | translate}}:</span>&nbsp;
+          <span class="text-muted">
+          <span class="link" (click)="showEnforcerDetails($event, secEvent.enforcerId, secEvent.enforcerName)">{{secEvent.enforcerName}}</span> on <span class="link" ng-click="showHostDetails($event, secEvent.hostId, secEvent.host_name)">{{secEvent.hostName}}</span>
+        </span>&nbsp;&nbsp;
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

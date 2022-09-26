@@ -1,0 +1,18 @@
+<div>
+  <mat-slide-toggle
+    (change)="toggleAction()"
+  >
+    <span
+      [ngClass]="{
+        'text-danger': !params.data.isAllowed,
+        'text-warning': params.data.isAllowed
+      }"
+    >
+      {{
+        (params.data.isAllowed
+          ? "enum.ALERT"
+          : "admissionControl.DENY") | translate
+      }}
+    </span>
+  </mat-slide-toggle>
+</div>

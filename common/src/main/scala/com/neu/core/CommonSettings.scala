@@ -6,9 +6,9 @@ import com.typesafe.config.{ Config, ConfigFactory }
 import com.typesafe.scalalogging.LazyLogging
 
 /**
-  * Configuration for the system, load from application.conf
-  *
-  */
+ * Configuration for the system, load from application.conf
+ *
+ */
 object CommonSettings extends LazyLogging {
 
   protected val config: Config = ConfigFactory.load.getConfig("common")
@@ -20,11 +20,11 @@ object CommonSettings extends LazyLogging {
 
   val httpPort: String =
     sys.env.getOrElse("MANAGER_SERVER_PORT", config.getString("rest.server.port"))
-  val trustStore: String = config.getString("rest.trust.store")
-  val newCert: String = config.getString("rest.new.cert")
-  val newKey: String = config.getString("rest.new.key")
+  val trustStore: String  = config.getString("rest.trust.store")
+  val newCert: String     = config.getString("rest.new.cert")
+  val newKey: String      = config.getString("rest.new.key")
   val newCtrlCert: String = config.getString("rest.new.ctrl.cert")
-  val newCtrlKey: String = config.getString("rest.new.ctrl.key")
+  val newCtrlKey: String  = config.getString("rest.new.ctrl.key")
 
   val eulaOEMAppSafe: String =
     sys.env.getOrElse("EULA_OEM_APPSAFE", config.getString("product.eula.oem.appsafe"))

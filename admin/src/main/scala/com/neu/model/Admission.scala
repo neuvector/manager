@@ -28,7 +28,7 @@ case class AdmRuleConfig(
   config: AdmRule
 )
 
-case class AdmState (
+case class AdmState(
   enable: Boolean,
   mode: String,
   default_action: String,
@@ -36,7 +36,7 @@ case class AdmState (
   adm_client_mode_options: Map[String, String]
 )
 
-case class AdmConfig (
+case class AdmConfig(
   state: AdmState
 )
 

@@ -1,0 +1,13 @@
+<div (window:resize)="onResize()" [ngStyle]="{ height: gridHeight + 'px' }">
+  <ng-container
+    *ngTemplateOutlet="containerOneTpl; context: containerOneHeightContext">
+  </ng-container>
+  <div class="d-flex justify-content-center align-items-center">
+    <i (mousedown)="startResize()" class="eos-icons" style="cursor: row-resize"
+      >drag_handle</i
+    >
+  </div>
+  <ng-container
+    *ngTemplateOutlet="containerTwoTpl; context: containerTwoHeightContext">
+  </ng-container>
+</div>

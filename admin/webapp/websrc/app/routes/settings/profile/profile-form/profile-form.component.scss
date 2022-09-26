@@ -1,0 +1,44 @@
+@media (min-width: 950px) {
+  .profile__container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.profile__container {
+  display: grid;
+  grid-template-rows: auto;
+  grid-gap: 2rem;
+}
+
+.profile__field {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile__icon {
+  color: white;
+  background-color: #30ba78;
+  border-radius: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile__avatar {
+  margin: auto;
+  width: 80px;
+  height: 80px;
+}
+
+.profile__formGroup {
+  padding: 40px 100px;
+}
+
+.btn__spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

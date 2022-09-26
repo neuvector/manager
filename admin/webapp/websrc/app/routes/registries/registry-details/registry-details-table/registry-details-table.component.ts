@@ -1,0 +1,183 @@
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
+import {
+  ColDef,
+  GridApi,
+  GridOptions,
+  GridReadyEvent,
+  ValueFormatterParams,
+} from 'ag-grid-community';
+import { Image, Summary } from '@common/types';
+import { RegistryDetailsVulnerabilitiesCellComponent } from './registry-details-vulnerabilities-cell/registry-details-vulnerabilities-cell.component';
+import { RegistryDetailsDialogComponent } from './registry-details-dialog/registry-details-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { TranslateService } from '@ngx-translate/core';
+import { DatePipe } from '@angular/common';
+import { RegistryDetailsTableStatusCellComponent } from './registry-details-table-status-cell/registry-details-table-status-cell.component';
+import { FormControl } from '@angular/forms';
+
+@Component({
+  selector: 'app-registry-details-table',
+  templateUrl: './registry-details-table.component.html',
+  styleUrls: ['./registry-details-table.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class RegistryDetailsTableComponent implements OnInit, OnChanges {
+  @Input() gridHeight!: number;
+  @Input() selectedRegistry!: Summary;
+  @Input() rowData!: Image[];
+  @Input() filter!: FormControl;
+  gridOptions!: GridOptions;
+  gridApi!: GridApi;
+  columnDefs: ColDef[] = [
+    {
+      field: 'repository',
+      headerValueGetter: () =>
+        this.translate.instant('registry.gridHeader.REPOSITORY'),
+    },
+    {
+      field: 'image_id',
+      headerValueGetter: () =>
+        this.translate.instant('registry.gridHeader.IMAGE_ID'),
+    },
+    {
+      field: 'base_os',
+      headerValueGetter: () => this.translate.instant('scan.gridHeader.OS'),
+    },
+    {
+      field: 'size',
+      valueFormatter: this.sizeFormatter.bind(this),
+      headerValueGetter: () =>
+        this.translate.instant('registry.gridHeader.SIZE'),
+    },
+    {
+      field: 'vulnerabilities',
+      cellRenderer: 'vulnerabilitiesCellRenderer',
+      comparator: (valueA, valueB, nodeA, nodeB) => {
+        if (
+          nodeA.data.high + nodeA.data.medium ===
+          nodeB.data.high + nodeB.data.medium
+        ) {
+          return 0;
+        }
+        return nodeA.data.high + nodeA.data.medium >
+          nodeB.data.high + nodeB.data.medium
+          ? 1
+          : -1;
+      },
+      headerValueGetter: () =>
+        this.translate.instant('registry.gridHeader.VUL'),
+    },
+    {
+      field: 'status',
+      cellRenderer: 'statusCellRenderer',
+      headerValueGetter: () => this.translate.instant('scan.gridHeader.STATUS'),
+    },
+    {
+      field: 'scanned_at',
+      valueFormatter: this.scannedAtFormatter.bind(this),
+      headerValueGetter: () => this.translate.instant('scan.gridHeader.TIME'),
+    },
+  ];
+
+  constructor(
+    private dialog: MatDialog,
+    private translate: TranslateService,
+    private date: DatePipe
+  ) {}
+
+  ngOnInit(): void {
+    this.gridOptions = {
+      defaultColDef: {
+        sortable: true,
+        resizable: true,
+      },
+      rowData: this.rowData,
+      columnDefs: this.columnDefs,
+      rowSelection: 'single',
+      suppressDragLeaveHidesColumns: true,
+      onGridReady: event => this.onGridReady(event),
+      onRowClicked: event => this.onRowClicked(event),
+      components: {
+        vulnerabilitiesCellRenderer:
+          RegistryDetailsVulnerabilitiesCellComponent,
+        statusCellRenderer: RegistryDetailsTableStatusCellComponent,
+      },
+    };
+    this.filter.valueChanges.subscribe(val => this.gridApi.setQuickFilter(val));
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.gridApi && changes.rowData?.currentValue) {
+      this.gridApi.setRowData(changes.rowData.currentValue);
+    }
+  }
+
+  onRowClicked(params: GridReadyEvent): void {
+    if (params.api.getSelectedNodes()[0].data.status === 'finished') {
+      this.openDialog(
+        this.selectedRegistry,
+        params.api.getSelectedNodes()[0].data
+      );
+    }
+  }
+
+  openDialog(selectedRegistry: Summary, image: Image): void {
+    this.dialog.open(RegistryDetailsDialogComponent, {
+      width: '90%',
+      height: '90%',
+      maxWidth: '1800px',
+      data: {
+        selectedRegistry,
+        image,
+      },
+    });
+  }
+
+  onResize(): void {
+    this.gridApi.sizeColumnsToFit();
+  }
+
+  onGridReady(params: GridReadyEvent): void {
+    this.gridApi = params.api;
+    this.gridApi.sizeColumnsToFit();
+  }
+
+  scannedAtFormatter(params: ValueFormatterParams): string {
+    const date = this.date.transform(
+      params.data.scanned_at,
+      'MMM d, y h:mm:ss'
+    );
+    return date ? date : '';
+  }
+
+  sizeFormatter(params: ValueFormatterParams): string {
+    return this.bytes(params.data.size);
+  }
+
+  bytes(bytes, precision?: number): string {
+    if (bytes === 0) {
+      return '';
+    }
+    if (isNaN(parseFloat(bytes)) || !isFinite(bytes)) {
+      return '-';
+    }
+    if (typeof precision === 'undefined') {
+      precision = 1;
+    }
+    const units = ['', 'KB', 'MB', 'GB', 'TB', 'PB'];
+    const num = Math.floor(Math.log(bytes) / Math.log(1024));
+    const val = (bytes / Math.pow(1024, Math.floor(num))).toFixed(precision);
+    return (
+      (val.match(/\.0*$/) ? val.substr(0, val.indexOf('.')) : val) +
+      ' ' +
+      units[num]
+    );
+  }
+}

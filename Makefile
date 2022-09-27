@@ -28,4 +28,4 @@ jar:
 	@echo "Pulling images ..."
 	docker pull neuvector/build_manager:latest
 	@echo "Making $@ ..."
-	docker run --rm -ia STDOUT --name build -v prebuild_manager:/prebuild/manager -v $(CURDIR):/manager -w /manager --entrypoint ./make_jar.sh neuvector/build:latest
+	docker run --rm -ia STDOUT --name build -v prebuild_manager:/prebuild/manager -v $(CURDIR):/manager -w /manager --entrypoint ./make_jar.sh neuvector/build_manager:latest

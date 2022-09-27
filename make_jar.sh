@@ -15,7 +15,7 @@ if [[ $# > 0 ]]; then
         ;;
     esac
 fi
-npm install 2>&1
+npm install --legacy-peer-deps 2>&1
 if [ $? -eq 0 ]; then
     echo npm package installation SUCCEED
 else

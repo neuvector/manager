@@ -1,6 +1,5 @@
 .PHONY: jar
 
-REPO_REL_URL = 10.1.127.12:5000
 STAGE_DIR = stage
 
 copy_mgr:
@@ -20,18 +19,13 @@ stage_init:
 stage_mgr: stage_init copy_mgr
 
 pull_base:
-	docker pull $(REPO_REL_URL)/neuvector/manager_base:latest
+	docker pull neuvector/manager_base:latest
 
 manager_image: pull_base stage_mgr
 	docker build --build-arg NV_TAG=$(NV_TAG) --no-cache=true -t neuvector/gemini -f manager/Dockerfile.manager .
 
 jar:
 	@echo "Pulling images ..."
-	docker pull $(REPO_REL_URL)/neuvector/store
-	docker pull $(REPO_REL_URL)/neuvector/build_manager:latest
+	docker pull neuvector/build_manager:latest
 	@echo "Making $@ ..."
-	docker volume rm prebuild_manager || true
-	docker run --rm --name store -v prebuild_manager:/prebuild/manager $(REPO_REL_URL)/neuvector/store
-	@echo "Running build ..."
-	docker run --rm -ia STDOUT --name build -v prebuild_manager:/prebuild/manager -v $(CURDIR):/manager -w /manager --entrypoint ./make_jar.sh $(REPO_REL_URL)/neuvector/build:latest
-	docker volume rm prebuild_manager
+	docker run --rm -ia STDOUT --name build -v prebuild_manager:/prebuild/manager -v $(CURDIR):/manager -w /manager --entrypoint ./make_jar.sh neuvector/build:latest

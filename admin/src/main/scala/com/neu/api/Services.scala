@@ -85,12 +85,12 @@ class RoutedHttpService(route: Route) extends Actor with HttpService with ActorL
 
   implicit val handler: ExceptionHandler = ExceptionHandler {
     case NonFatal(ErrorResponseException(statusCode, entity)) =>
-      ctx => ctx.complete((statusCode, entity))
+      ctx => ctx.complete((statusCode, "server internal error"))
 
     case e: ConnectionAttemptFailedException ⇒
       ctx ⇒ {
         log.warning("Controller is not available ..." + e.getMessage)
-        ctx.complete(StatusCodes.InternalServerError, "Controller is not available ...")
+        ctx.complete((StatusCodes.InternalServerError, "Controller is not available ..."))
       }
 
   }

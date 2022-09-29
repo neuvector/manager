@@ -18,6 +18,7 @@ import {
 import * as $ from 'jquery';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { NodesGridStatusCellComponent } from './nodes-grid-status-cell/nodes-grid-status-cell.component';
+import { NodesGridStateCellComponent } from './nodes-grid-state-cell/nodes-grid-state-cell.component';
 
 @Component({
   selector: 'app-nodes-grid',
@@ -75,13 +76,10 @@ export class NodesGridComponent implements OnInit {
       {
         headerName: this.tr.instant('containers.detail.STATE'),
         field: 'state',
-        cellRenderer: params =>
-          `<span><em class="fa fa-circle ${
-            params.value ? 'text-warning' : 'text-success'
-          }"></em> </span>`,
+        cellRenderer: 'stateCellRenderer',
         cellClass: ['d-flex', 'align-items-center', 'justify-content-center'],
-        width: 80,
-        minWidth: 80,
+        width: 90,
+        minWidth: 90,
       },
       {
         headerName: this.tr.instant('nodes.detail.OS'),
@@ -163,6 +161,7 @@ export class NodesGridComponent implements OnInit {
       onRowDataUpdated: this.onRowDataUpdated.bind(this),
       components: {
         statusCellRenderer: NodesGridStatusCellComponent,
+        stateCellRenderer: NodesGridStateCellComponent
       },
     };
     if (this.isMemberData) {

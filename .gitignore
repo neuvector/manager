@@ -58,3 +58,4 @@ admin/webapp/root
 admin/webapp/.angular
 /.bsp/*
 /admin/.angular/
+/admin/webapp/websrc/assets/mockdata

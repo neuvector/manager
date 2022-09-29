@@ -5,12 +5,12 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
 @Component({
-  selector: 'app-containers-grid-state-cell',
-  templateUrl: './containers-grid-state-cell.component.html',
-  styleUrls: ['./containers-grid-state-cell.component.scss'],
+  selector: 'app-nodes-grid-state-cell',
+  templateUrl: './nodes-grid-state-cell.component.html',
+  styleUrls: ['./nodes-grid-state-cell.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContainersGridStateCellComponent
+export class NodesGridStateCellComponent
   implements ICellRendererAngularComp
 {
   params!: ICellRendererParams;
@@ -22,7 +22,7 @@ export class ContainersGridStateCellComponent
 
   agInit(params: ICellRendererParams): void {
     this.params = params;
-    this.state = this.params.data.brief.state || 'unmanaged'
+    this.state = this.params.data.state || 'unmanaged';
     this.displayState = this.utils.getI18Name(this.state);
     this.labelCode = MapConstant.colourMap[this.state] || 'inverse';
   }

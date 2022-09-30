@@ -166,11 +166,15 @@
         {{ interface.key }}
       </div>
       <div class="col-sm-9 offset-sm-1">
-        <div *ngFor="let net of interface.value" class="row text-muted">
-          <div class="col-sm-4">IP: {{ net.ip }}/{{ net.ip_prefix }}</div>
-          <div class="col-sm-8">
-            {{ 'general.GATEWAY' | translate }}:{{ net.gateway }}
-          </div>
+        <div
+          *ngFor="let net of interface.value | slice: 0:MAX_INTERFACE_IP - 1"
+          class="row text-muted">
+          <ng-container *ngIf="validateIP(net)">
+            <div class="col-sm-4">IP: {{ net.ip }}/{{ net.ip_prefix }}</div>
+            <div class="col-sm-8">
+              {{ 'general.GATEWAY' | translate }}:{{ net.gateway }}
+            </div>
+          </ng-container>
         </div>
       </div>
     </div>

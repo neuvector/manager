@@ -552,6 +552,12 @@ export function removeGroupExceptions(groups, policyType) {
   return groups;
 }
 
+export function validateIPAddress(ip: string) {
+  return /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(
+    ip
+  );
+}
+
 export function isVulAccepted(vulnerability: Vulnerability) {
   return !!(
     vulnerability.tags && vulnerability.tags.some(tag => tag === 'accepted')

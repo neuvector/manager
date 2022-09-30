@@ -45,8 +45,10 @@ def request_federation(data):
 @click.option("--port", help="Exposed rest port of this primary cluster")
 @click.option("--use_proxy", default="", type=click.Choice(["https", ""]),
               help="Use configured system https proxy or not when connecting to managed cluster")
+@click.option("--deploy_reg_scan_data", default="disable", type=click.Choice(["enable", "disable"]),
+              help="Deploy federal registry scan data to managed clusters")
 @click.pass_obj
-def request_federation_promote(data, name, server, port, use_proxy):
+def request_federation_promote(data, name, server, port, use_proxy, deploy_reg_scan_data):
     """Promote a cluster to primary cluster in the federation."""
     master_rest_info = {"server": "", "port": 0}
     resp = data.client.show("fed/member", None, None)
@@ -65,6 +67,10 @@ def request_federation_promote(data, name, server, port, use_proxy):
         req["use_proxy"] = resp["use_proxy"]
     if use_proxy != "":
         req["use_proxy"] = use_proxy
+
+    req["deploy_reg_scan_data"] = False
+    if deploy_reg_scan_data == "enable":
+        req["deploy_reg_scan_data"] = True
 
     resp = data.client.request("fed", "promote", None, req)
     # click.echo("Federation promotion response object: {}".format(json.dumps(resp)))
@@ -224,7 +230,7 @@ def show_federation(data):
 
 @show_federation.command("member")
 @click.pass_obj
-def show_federation_config(data):
+def show_federation_member(data):
     """Show multi-clusters members this cluster knows."""
     resp = data.client.show("fed/member", None, None)
     # click.echo("Federation organization object: {}".format(json.dumps(resp)))
@@ -274,6 +280,7 @@ def show_federation_config(data):
         elif resp["fed_role"] == clusterRoleJoint:
             master["status"] = resp["master_cluster"]["status"]
             master["use proxy"] = ""
+            master[proxyRequiredTitle] = ""
             clusters.append(master)
             if len(resp["joint_clusters"]) > 0:
                 joint_cluster = resp["joint_clusters"][0]
@@ -284,6 +291,7 @@ def show_federation_config(data):
                 joint["rest server/port"] = "{}:{}".format(joint_cluster["rest_info"]["server"],
                                                            joint_cluster["rest_info"]["port"])
                 joint["status"] = joint_cluster["status"]
+                joint[proxyRequiredTitle] = ""
                 joint["use proxy"] = False
                 if "use_proxy" in resp:
                     joint["use proxy"] = resp["use_proxy"]
@@ -291,6 +299,30 @@ def show_federation_config(data):
         output.list(columns, clusters)
     # click.echo("")
 
+@show_federation.command("config")
+@click.pass_obj
+def show_federation_config(data):
+    """Show fed configurations on the master cluster."""
+    resp = data.client.show("fed/member", None, None)
+    # click.echo("Federation organization object: {}".format(json.dumps(resp)))
+    click.echo("")
+    if resp is None or (resp["fed_role"] != clusterRoleMaster):
+        click.echo("")
+    else:
+        click.echo("Role of this cluster in the federation: {}".format(resp["fed_role"]))
+        click.echo("")
+        clusters = []
+        cfg = {}
+        cfg["use proxy"] = False
+        if "use_proxy" in resp:
+            cfg["use proxy"] = resp["use_proxy"]
+        cfg["deploy scan result"] = False
+        if "deploy_reg_scan_data" in resp:
+            cfg["deploy scan result"] = resp["deploy_reg_scan_data"]
+
+        columns = ("use proxy", "deploy scan result")
+        output.show(columns, cfg)
+    # click.echo("")
 
 @show_federation.command("remote")
 @click.pass_obj
@@ -313,9 +345,11 @@ def set_federation(data):
 @click.option("--server", help="Exposed rest ip/fqdn of this cluster")
 @click.option("--port", help="Exposed rest port of this cluster")
 @click.option("--use_proxy", default="", type=click.Choice(["https", ""]),
-              help="Use proxy when connecting to remote cluster")
+              help="Use proxy when connecting to primary cluster")
+@click.option("--deploy_reg_scan_data", default="disable", type=click.Choice(["enable", "disable"]),
+              help="Deploy federal registry scan data to managed clusters")
 @click.pass_obj
-def set_federation_config(data, name, server, port, use_proxy):
+def set_federation_config(data, name, server, port, use_proxy, deploy_reg_scan_data):
     """Configure the exposed rest info of this cluster."""
     rest_info = {"server": "", "port": 0}
     resp = data.client.show("fed/member", None, None)
@@ -329,6 +363,9 @@ def set_federation_config(data, name, server, port, use_proxy):
     body["use_proxy"] = use_proxy
     if name != None and name != "":
         body["name"] = name
+    body["deploy_reg_scan_data"] = False
+    if deploy_reg_scan_data == "enable":
+        body["deploy_reg_scan_data"] = True
     ret = data.client.config("fed", "config", body)
 
 

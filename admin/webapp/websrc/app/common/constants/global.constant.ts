@@ -26,6 +26,7 @@ export class GlobalConstant {
   public static RANCHER = 'Kubernetes-Rancher';
   public static OC = 'openshift';
   public static MAX_ENFORCER_LOG = 10;
+  public static MAX_INTERFACE_IP = 3;
   public static NEW_ID_SEED = {
     NETWORK_RULE: 1000000
   };

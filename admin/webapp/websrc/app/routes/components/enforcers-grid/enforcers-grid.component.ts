@@ -25,7 +25,7 @@ import * as moment from 'moment';
 import * as $ from 'jquery';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { EnforcersGridStatusCellComponent } from './enforcers-grid-status-cell/enforcers-grid-status-cell.component';
-import {MultiClusterService} from "@services/multi-cluster.service";
+import { MultiClusterService } from '@services/multi-cluster.service';
 
 @Component({
   selector: 'app-enforcers-grid',
@@ -112,6 +112,8 @@ export class EnforcersGridComponent implements OnInit, OnChanges {
         headerName: this.tr.instant('controllers.detail.DURATION'),
         cellRenderer: params => {
           /** @namespace params.data.joined_at */
+          const diff = moment().diff(params.data.joined_at);
+          if (diff < 0) return 'Invalid date';
           return this.sanitizer.sanitize(
             SecurityContext.HTML,
             moment.duration(moment().diff(params.data.joined_at)).humanize()
@@ -153,13 +155,14 @@ export class EnforcersGridComponent implements OnInit, OnChanges {
     this.getEnforcers();
 
     //refresh the page when it switched to a remote cluster
-    this.switchClusterSubscription = this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
-      this.refresh();
-    });
+    this.switchClusterSubscription =
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
+        this.refresh();
+      });
   }
 
-  ngOnDestroy():void{
-    if(this.switchClusterSubscription){
+  ngOnDestroy(): void {
+    if (this.switchClusterSubscription) {
       this.switchClusterSubscription.unsubscribe();
     }
   }

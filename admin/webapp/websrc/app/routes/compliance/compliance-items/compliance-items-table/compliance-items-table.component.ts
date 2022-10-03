@@ -125,6 +125,7 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
       },
       doesExternalFilterPass: this.doesExternalFilterPass.bind(this),
       isExternalFilterPresent: this.isExternalFilterPresent.bind(this),
+      overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS')
     };
   }
 

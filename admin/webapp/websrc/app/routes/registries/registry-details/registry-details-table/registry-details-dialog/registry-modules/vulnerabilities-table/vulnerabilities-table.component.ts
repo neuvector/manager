@@ -66,6 +66,7 @@ export class VulnerabilitiesTableComponent implements OnInit, OnChanges {
       rowSelection: 'single',
       onGridReady: event => this.onGridReady(event),
       components: { statusCellRenderer: StatusCellComponent },
+      overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS')
     };
   }
 

@@ -146,6 +146,7 @@ export class ComplianceProfileTemplatesTableComponent
       },
       doesExternalFilterPass: this.doesExternalFilterPass.bind(this),
       isExternalFilterPresent: () => true,
+      overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS')
     };
   }
 

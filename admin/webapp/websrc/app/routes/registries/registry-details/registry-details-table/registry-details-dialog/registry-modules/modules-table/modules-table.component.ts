@@ -91,6 +91,7 @@ export class ModulesTableComponent implements OnInit, OnChanges {
       onGridReady: event => this.onGridReady(event),
       onSelectionChanged: event => this.onSelectionChanged(event),
       components: { statusCellRenderer: ModuleVulnerabilitiesCellComponent },
+      overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS')
     };
     this.quickFilterService.textInput$.subscribe((value: string) => {
       this.quickFilterService.onFilterChange(value, this.gridOptions);

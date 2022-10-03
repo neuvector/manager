@@ -41,7 +41,11 @@
   <!-- START Right Navbar-->
   <div class="navbar-nav flex-row">
     <div *ngIf="isOrdinaryRole">
-      <span>{{clusterName}}</span>
+      <button mat-button class="cluster-info">
+        <label
+          class="selected-cluster-text" style="position: relative; margin-bottom: 0"
+        >{{clusterName}}</label>
+      </button>
     </div>
     <div *ngIf="isMasterRole">
       <button mat-button [matMenuTriggerFor]="dropdown_multiCluster"

@@ -1,3 +1,8 @@
 .mat-menu-panel.global-notification-list {
-  max-width: 600px;
+  width: 300px;
+  .mat-menu-item {
+    white-space: normal;
+    line-height: 24px;
+    height: auto;
+  }
 }

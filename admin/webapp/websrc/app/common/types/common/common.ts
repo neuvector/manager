@@ -25,6 +25,7 @@ export interface GlobalNotification {
   link: string;
   labelClass: string;
   accepted: boolean;
+  unClamped: boolean;
 }
 
 export interface ScanConfig {

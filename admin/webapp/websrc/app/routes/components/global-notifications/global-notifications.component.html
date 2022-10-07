@@ -1,7 +1,10 @@
 <button
   mat-icon-button
   [matMenuTriggerFor]="dropdown_globalNotifications"
+  #notificationMenuTrigger="matMenuTrigger"
+  (menuOpened)="menuOpened()"
   [matBadge]="notificationLength"
+  [disabled]="!notificationLength"
   class="nav-white">
   <mat-icon>notifications</mat-icon>
 </button>
@@ -14,13 +17,26 @@
       *ngIf="!notification.accepted"
       class="d-flex align-items-center justify-content-between"
       [class]="'badge-' + notification.labelClass"
+      (click)="$event.stopPropagation()"
       mat-menu-item>
-      <a [href]="notification.link">
+      <a
+        [href]="notification.link"
+        [class]="notification.unClamped ? '' : 'notification-clamped'"
+        [id]="notification.name"
+        (click)="closeMenu()">
         {{ notification.message }}
       </a>
-      <em class="ml-3 eos-icons icon-18" (click)="accept(notification)"
-        >check_circle</em
-      >
+      <div class="ml-3 d-flex flex-column">
+        <em class="eos-icons icon-18" (click)="accept(notification, $event)"
+          >check_circle</em
+        >
+        <em
+          class="eos-icons icon-18"
+          *ngIf="isClamped(notification.name)"
+          (click)="unClamp(notification)"
+          >arrow_drop_down</em
+        >
+      </div>
     </div>
   </ng-container>
 </mat-menu>

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { CommonHttpService } from '@common/api/common-http.service';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { GlobalNotification } from '@common/types';
@@ -11,6 +12,8 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./global-notifications.component.scss'],
 })
 export class GlobalNotificationsComponent implements OnInit {
+  @ViewChild('notificationMenuTrigger')
+  notificationMenuTrigger!: MatMenuTrigger;
   globalNotifications: GlobalNotification[] = [];
   version: any;
   unUpdateDays!: number;
@@ -38,8 +41,26 @@ export class GlobalNotificationsComponent implements OnInit {
     this.initNotifData();
   }
 
-  accept(notification: GlobalNotification) {
+  accept(notification: GlobalNotification, event: MouseEvent) {
     notification.accepted = true;
+    if (this.notificationLength) event.stopPropagation();
+  }
+
+  closeMenu() {
+    this.notificationMenuTrigger.closeMenu();
+  }
+
+  menuOpened() {
+    this.globalNotifications.forEach(n => (n.unClamped = false));
+  }
+
+  isClamped(name: string) {
+    const el = document.getElementById(name);
+    return el ? el.scrollHeight > el.clientHeight : false;
+  }
+
+  unClamp(notification: GlobalNotification) {
+    notification.unClamped = true;
   }
 
   initNotifData(): void {
@@ -62,6 +83,7 @@ export class GlobalNotificationsComponent implements OnInit {
         link: '#/controllers',
         labelClass: 'warning',
         accepted: false,
+        unClamped: false,
       });
     }
     if (this.isVersionMismatch) {
@@ -71,6 +93,7 @@ export class GlobalNotificationsComponent implements OnInit {
         link: '#/controllers',
         labelClass: 'warning',
         accepted: false,
+        unClamped: false,
       });
     }
     if (this.passwordExpiration >= 0 && this.passwordExpiration < 10) {
@@ -82,6 +105,7 @@ export class GlobalNotificationsComponent implements OnInit {
         link: '#/profile',
         labelClass: this.passwordExpiration < 1 ? 'danger' : 'warning',
         accepted: false,
+        unClamped: false,
       });
     }
     if (GlobalVariable.user.token.default_password) {
@@ -95,6 +119,7 @@ export class GlobalNotificationsComponent implements OnInit {
         link: '#/profile',
         labelClass: 'warning',
         accepted: false,
+        unClamped: false,
       });
     }
   }

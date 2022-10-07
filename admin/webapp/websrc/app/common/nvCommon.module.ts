@@ -37,6 +37,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatBadgeModule } from '@angular/material/badge';
 
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { AlertModule } from 'ngx-bootstrap/alert';
@@ -103,7 +104,7 @@ import { SecurityEventsService } from '@services/security-events.service';
 import { TwoWayInfiniteScrollDirective } from './directives/two-way-infinite-scroll.directive';
 
 import { EnforcerBriefModule } from '@components/enforcer-brief/enforcer-brief.module';
-
+import { CommonHttpService } from './api/common-http.service';
 
 // https://angular.io/styleguide#!#04-10
 @NgModule({
@@ -163,6 +164,7 @@ import { EnforcerBriefModule } from '@components/enforcer-brief/enforcer-brief.m
     MatTooltipModule,
     MatNativeDateModule,
     MatStepperModule,
+    MatBadgeModule,
     EnforcerBriefModule,
   ],
   providers: [
@@ -200,6 +202,7 @@ import { EnforcerBriefModule } from '@components/enforcer-brief/enforcer-brief.m
     // Http Services
     AssetsHttpService,
     AuthHttpService,
+    CommonHttpService,
     ConfigHttpService,
     DashboardHttpService,
     EventsHttpService,
@@ -209,10 +212,7 @@ import { EnforcerBriefModule } from '@components/enforcer-brief/enforcer-brief.m
     TimeAgoPipe,
     GraphHttpService,
   ],
-  declarations: [
-    DisplayControlDirective,
-    TwoWayInfiniteScrollDirective,
-  ],
+  declarations: [DisplayControlDirective, TwoWayInfiniteScrollDirective],
   exports: [
     CommonModule,
     FormsModule,
@@ -270,8 +270,9 @@ import { EnforcerBriefModule } from '@components/enforcer-brief/enforcer-brief.m
     MatTooltipModule,
     MatNativeDateModule,
     MatStepperModule,
+    MatBadgeModule,
     DisplayControlDirective,
-    TwoWayInfiniteScrollDirective
+    TwoWayInfiniteScrollDirective,
   ],
 })
 

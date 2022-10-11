@@ -16,40 +16,37 @@
     <div
       *ngIf="!notification.accepted"
       class="d-flex align-items-center justify-content-between pl-0"
-      [class]="'badge-' + notification.labelClass"
       (click)="$event.stopPropagation()"
       mat-menu-item>
       <em
         class="fa fa-circle mx-3"
         [class]="'text-' + notification.labelClass"></em>
       <ng-container *ngIf="isRbacNotif(notification.name); else globalNotif">
-        <p
-          [class]="notification.unClamped ? '' : 'notification-clamped'"
-          [id]="notification.name">
+        <span
+          class="notification-message"
+          [class]="notification.unClamped ? 'unclamped' : 'clamped'"
+          [id]="notification.name"
+          (click)="toggleClamp(notification)">
           <strong>{{ getRbacTitle(notification.name) }}</strong>
+          <br />
           {{ notification.message }}
-        </p>
+        </span>
       </ng-container>
       <ng-template #globalNotif>
-        <a
-          [href]="notification.link"
-          [class]="notification.unClamped ? '' : 'notification-clamped'"
+        <span
+          class="notification-message"
+          [class]="notification.unClamped ? 'unclamped' : 'clamped'"
           [id]="notification.name"
-          (click)="closeMenu()">
+          (click)="toggleClamp(notification)">
           {{ notification.message }}
-        </a>
+          <a [href]="notification.link" (click)="closeMenu()">
+            <em class="eos-icons icon-12">launch</em>
+          </a>
+        </span>
       </ng-template>
-      <div class="ml-3 d-flex flex-column">
-        <em class="eos-icons icon-18" (click)="accept(notification, $event)"
-          >check_circle</em
-        >
-        <em
-          class="eos-icons icon-18"
-          *ngIf="isClamped(notification.name)"
-          (click)="unClamp(notification)"
-          >arrow_drop_down</em
-        >
-      </div>
+      <em class="ml-3 eos-icons icon-18" (click)="accept(notification, $event)"
+        >check_circle</em
+      >
     </div>
   </ng-container>
 </mat-menu>

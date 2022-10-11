@@ -73,8 +73,8 @@ export class GlobalNotificationsComponent implements OnInit {
     return el ? el.scrollHeight > el.clientHeight : false;
   }
 
-  unClamp(notification: GlobalNotification) {
-    notification.unClamped = true;
+  toggleClamp(notification: GlobalNotification) {
+    notification.unClamped = !notification.unClamped;
   }
 
   initNotifData(): void {

@@ -2,9 +2,14 @@
   color: #fff !important;
 }
 
-.notification-clamped {
+.notification-message {
   display: -webkit-box;
-  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  &.clamped {
+    -webkit-line-clamp: 2;
+  }
+  &.unclamped {
+    -webkit-line-clamp: none;
+  }
 }

@@ -15,17 +15,30 @@
   <ng-container *ngFor="let notification of globalNotifications">
     <div
       *ngIf="!notification.accepted"
-      class="d-flex align-items-center justify-content-between"
+      class="d-flex align-items-center justify-content-between pl-0"
       [class]="'badge-' + notification.labelClass"
       (click)="$event.stopPropagation()"
       mat-menu-item>
-      <a
-        [href]="notification.link"
-        [class]="notification.unClamped ? '' : 'notification-clamped'"
-        [id]="notification.name"
-        (click)="closeMenu()">
-        {{ notification.message }}
-      </a>
+      <em
+        class="fa fa-circle mx-3"
+        [class]="'text-' + notification.labelClass"></em>
+      <ng-container *ngIf="isRbacNotif(notification.name); else globalNotif">
+        <p
+          [class]="notification.unClamped ? '' : 'notification-clamped'"
+          [id]="notification.name">
+          <strong>{{ getRbacTitle(notification.name) }}</strong>
+          {{ notification.message }}
+        </p>
+      </ng-container>
+      <ng-template #globalNotif>
+        <a
+          [href]="notification.link"
+          [class]="notification.unClamped ? '' : 'notification-clamped'"
+          [id]="notification.name"
+          (click)="closeMenu()">
+          {{ notification.message }}
+        </a>
+      </ng-template>
       <div class="ml-3 d-flex flex-column">
         <em class="eos-icons icon-18" (click)="accept(notification, $event)"
           >check_circle</em

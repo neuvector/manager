@@ -9,8 +9,8 @@ import {
 import { DashboardSecurityEventsService } from './thread-services/dashboard-security-events.service';
 import { DashboardDetailsService } from './thread-services/dashboard-details.service';
 import { DashboardExposureConversationsService } from './thread-services/dashboard-exposure-conversations.service';
-import {MultiClusterService} from "@services/multi-cluster.service";
-import {Router} from "@angular/router";
+import { MultiClusterService } from '@services/multi-cluster.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -42,19 +42,22 @@ export class DashboardComponent implements OnInit {
     this.dashboardSecurityEventsService.runWorker();
     this.dashboardDetailsService.runWorker();
 
-    this._switchClusterSubscriber = this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
-      const currentUrl = this.router.url;
-      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-        this.router.navigate([currentUrl]);
+    this._switchClusterSubscriber =
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
+        const currentUrl = this.router.url;
+        this.router
+          .navigateByUrl('/', { skipLocationChange: true })
+          .then(() => {
+            this.router.navigate([currentUrl]);
+          });
       });
-    });
   }
 
   ngOnDestroy(): void {
     this.dashboardSecurityEventsService.terminateWorker();
     this.dashboardDetailsService.terminateWorker();
     this.dashboardExposureConversationsService.terminateWorker();
-    if(this._switchClusterSubscriber){
+    if (this._switchClusterSubscriber) {
       this._switchClusterSubscriber.unsubscribe();
     }
   }

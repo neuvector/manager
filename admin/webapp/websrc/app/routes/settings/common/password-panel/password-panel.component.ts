@@ -74,7 +74,11 @@ export class PasswordPanelComponent implements OnInit {
     this.isPasswordValid = Object.values(this.isCharReqValid).every(
       charReq => charReq
     );
-    console.log(password, this.isCharReqValid);
+    if (!this.isPasswordValid) {
+      this.passwordForm.get('newPassword')?.setErrors({
+        charReqInvalid: true,
+      });
+    }
   }
 
   checkCharReq(password: string, profile: PasswordProfile) {

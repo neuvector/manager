@@ -1,5 +1,5 @@
 import { MatDialogRef,  MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { GlobalConstant } from "@common/constants/global.constant";
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AdmissionRulesService } from '@common/services/admission-rules.service';
@@ -8,6 +8,8 @@ import { AdmRuleCriterion, AdmRuleSubCriterion } from '@common/types/admission/a
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { BytesPipe } from "@common/pipes/app.pipes";
 import { TranslateService } from '@ngx-translate/core';
+import { JsonEditorComponent, JsonEditorOptions, JsonEditorTreeNode } from 'ang-jsoneditor';
+import { getValueType4Text, groupBy } from '@common/utils/common.utils';
 
 @Component({
   selector: 'app-add-edit-admission-rule-modal',
@@ -31,12 +33,25 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     op: "",
     value: ""
   };
+  customCriterion: any = {
+    name: "",
+    op: "",
+    value: ""
+  };
   subCriterion: Array<AdmRuleSubCriterion>;
   parseDivideStyle: Function = parseDivideStyle;
   SEPARATOR_KEYS_CODES: number[] = [ENTER, COMMA];
   CRITERIA_PATTERN = GlobalConstant.CRITERIA_PATTERN;
   pspCriteria: string = "";
   hasPSP: boolean = false;
+  isMainView: boolean = true;
+  @ViewChild(JsonEditorComponent, { static: false }) editor: JsonEditorComponent;
+  jsonEditorOptions: JsonEditorOptions;
+  podTemplateData: any;
+  podTemplateTreeData: any;
+  nodeValueType: string = '';
+  customizedOps: Array<string> = [];
+  customizedValues: Array<string> = [];
 
   UNITS = {
     publishDays: ["Day(s)"],
@@ -54,7 +69,9 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     private bytesPipe: BytesPipe,
     private translate: TranslateService,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) {
+    this.jsonEditorOptions = new JsonEditorOptions();
+  }
 
   ngOnInit(): void {
     this.modalOp = GlobalConstant.MODAL_OP;
@@ -63,12 +80,13 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
       category: new FormControl(GlobalConstant.ADMISSION.CATEGORY.KUBE),
       isException: new FormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? false : this.data.rule4Edit.rule_type === "exception"),
       comment: new FormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? "" : this.data.rule4Edit.comment),
-      criteria: new FormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? [] : this.data.rule4Edit.criteria),
+      criteria: new FormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? [] : this.data.rule4Edit.criteria, Validators.required),
       enabled: new FormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? true : !this.data.rule4Edit.disable),
       cfg_type: new FormControl(this.data.cfgType === GlobalConstant.SCOPE.FED ? GlobalConstant.CFG_TYPE.FED : GlobalConstant.CFG_TYPE.CUSTOMER),
       rule_type: new FormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? "deny" : this.data.rule4Edit.rule_type),
       disable: new FormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? false : this.data.rule4Edit.disable)
     });
+    this.getCriteriaOptions();
     if (this.data.opType !== GlobalConstant.MODAL_OP.ADD) {
       let criteria = JSON.parse(JSON.stringify(this.addEditAdmissionRuleForm.controls.criteria.value));
       this.addEditAdmissionRuleForm.controls.criteria.setValue([]);
@@ -76,6 +94,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     }
     this.addEditAdmissionRuleForm.get("criteria")!.valueChanges.subscribe(criteria => {
       this.hasPSP = criteria.some(criterion => {
+        console.log("criterion", criterion)
         if (criterion.value) {
           return criterion.value.name.toLowerCase() === GlobalConstant.PSP;
         } else {
@@ -83,7 +102,6 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
         }
       })
     });
-    this.getCriteriaOptions();
   }
 
   onCancel = () => {
@@ -116,15 +134,76 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
   };
 
   changeCriterionOperator = (selectedCriterionOperator) => {
-    this.hasMultiValue = selectedCriterionOperator.toLowerCase().includes("contain");
+    let isPredefined = this.criteriaOptions[this.mainCriterion.name];
+    this.hasMultiValue = selectedCriterionOperator.toLowerCase().includes("contain") && isPredefined;
   };
+
+  switchCustomizedCriterionView = () => {
+    this.isMainView = false;
+    this.initCustomizedCriterionView();
+    this.mainCriterion.op = '';
+    this.mainCriterion.value = '';
+  };
+
+  onCustomizedViewCancel = () => {
+    this.clearCustomizedCriterion();
+    this.isMainView = true;
+  };
+
+  addCustomizedCriteria = (customCriterion) => {
+    this.addCriterionIntoChip(customCriterion);
+    this.isMainView = true;
+  };
+
+  clickEditor = (event) => {
+    let treepathEl = document.getElementsByClassName('jsoneditor-treepath')[0];
+    this.nodeValueType = '';
+    console.log(Array.from(treepathEl.children).map(child => child.innerHTML).filter(pathNode => pathNode !== '►').join('.'));
+    this.customCriterion.name =
+      Array.from(treepathEl.children)
+      .map(child => child.innerHTML === 'object' ? 'item' : child.innerHTML)
+      .filter(pathNode => pathNode !== '►')
+      .join('.');
+    if (Array.from(event.target.classList).includes('jsoneditor-value')) {
+      this.nodeValueType = getValueType4Text(event.target.innerHTML);
+    } else if (Array.from(event.target.classList).includes('jsoneditor-field')) {
+      this.nodeValueType = 'key';
+    }
+    this.generateOperatorValueList(this.nodeValueType);
+    this.customCriterion.op = '';
+    this.customCriterion.value = '';
+  };
+
+  changeCustomizedCriterionOperator = (operator) => {
+    this.customCriterion.value = '';
+  };
+
+  shareCheckedList = (items: any[]) => {
+    this.mainCriterion.value = items.join(',');
+  }
 
   renderCriteriaTag = (criteria) => {
     if (criteria && Array.isArray(criteria)) {
       criteria.forEach(criterion => {
+        if (criterion.type === 'saBindRiskyRole') {
+          criterion.name = criterion.type;
+        }
         this.addCriterionIntoChip(criterion);
       });
     }
+  };
+
+  isInvalidCriterion = (mainCriterion, subCriterion) => {
+    let isReadonly = this.data.opType !== this.modalOp.VIEW;
+    let isValidInput = false;
+    if (GlobalConstant.CRITERIA_PATTERN.NAME_ONLY.includes(mainCriterion.name)) {
+      isValidInput = true;
+    } else if (GlobalConstant.CRITERIA_PATTERN.RESOURCE.includes(mainCriterion.name)) {
+      isValidInput = mainCriterion.name !== '' && subCriterion.some(item => item.op && item.value);
+    } else {
+      isValidInput = mainCriterion.name !== '' && mainCriterion.op !== '' && mainCriterion.value !== '';
+    }
+    return isReadonly && !isValidInput;
   };
 
   addCriterionIntoChip4HTML = (mainCriterion, subCriterion) => {
@@ -137,11 +216,16 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
   };
 
   addCriterionIntoChip = (criterion) => {
-    let tag = this.admissionRulesService.parseTag(this.CRITERIA_PATTERN, criterion);
+    let isCustomized = !this.criteriaOptions[criterion.name];
+    let tag = this.admissionRulesService.parseTag(this.CRITERIA_PATTERN, criterion, isCustomized);
     this.addEditAdmissionRuleForm.controls.criteria.setValue(
-      this.admissionRulesService.checkAndAppendCriteria(tag.tagName, criterion, this.addEditAdmissionRuleForm.controls.criteria)
+      this.admissionRulesService.checkAndAppendCriteria(tag.tagName, criterion, this.addEditAdmissionRuleForm.controls.criteria, isCustomized)
     );
-    this.clearCriterionDetail();
+    if (isCustomized) {
+      this.clearCustomizedCriterion();
+    } else {
+      this.clearCriterionDetail();
+    }
   };
 
   removeCriterionFromChip = (criterion) => {
@@ -149,6 +233,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
       this.admissionRulesService.removeCriterionFromChip(criterion, this.addEditAdmissionRuleForm.controls.criteria)
     );
     this.clearCriterionDetail();
+    this.removeUnexistingCriterionName(criterion.value.name);
   };
 
   criterionSelectedInChip = (criterion) => {
@@ -157,12 +242,34 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
       this.mainCriterion,
       this.subCriterion
     ] = this.admissionRulesService.criterionSelectedInChip(criterion);
-    this.criterionOperatorList = this.getCriterionOperatorList(this.criteriaOptions, this.mainCriterion.name);
-    this.changeCriterionOperator(this.mainCriterion.op);
-    this.subOptions = this.getSubOptions(this.criteriaOptions, this.mainCriterion.name);
-    if (this.subOptions) {
-      this.initCriteriaSubOptionsView(this.subOptions, this.subCriterion);
+    if (this.criteriaOptions[this.mainCriterion.name]) {
+      this.criterionOperatorList = this.getCriterionOperatorList(this.criteriaOptions, this.mainCriterion.name);
+      if (this.mainCriterion.op) this.changeCriterionOperator(this.mainCriterion.op);
+      this.criterionValueList = this.getCriterionValueList(this.criteriaOptions, this.mainCriterion.name);
+      if (criterion.value.name === 'saBindRiskyRole') {
+        this.criterionValueList = this.data.admissionOptions.predefined_risky_roles.map(role => {
+          return {
+            name: this.translate.instant(`admissionControl.values.${role.toUpperCase()}`),
+            value: role,
+            checked: criterion.value.value.includes(role)
+          }
+        })
+      }
+      this.subOptions = this.getSubOptions(this.criteriaOptions, this.mainCriterion.name);
+      if (this.subOptions) {
+        this.initCriteriaSubOptionsView(this.subOptions, this.subCriterion);
+      }
+    } else {
+      let valueType = getValueType4Text(this.mainCriterion.name);
+      let criterionNameListSet = new Set(this.criterionNameList);
+      criterionNameListSet.add(this.mainCriterion.path);
+      this.criterionNameList = Array.from(criterionNameListSet);
+      this.mainCriterion.name = this.mainCriterion.path;
+      this.criterionOperatorList = [this.mainCriterion.op];
+      this.criterionValueList = [this.mainCriterion.name];
+      this.subOptions = null;
     }
+
   };
 
   updateRule = () => {
@@ -171,14 +278,25 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
       if (criterion.value.sub_criteria && Array.isArray(criterion.value.sub_criteria) && criterion.value.sub_criteria.length === 0) {
         delete criterion.value.sub_criteria;
       }
+      if (!this.criteriaOptions[criterion.value.name]) { //For customized criterion
+        criterion.value.type = GlobalConstant.ADMISSION.CRITERION_TYPE.CUSTOM_PATH;
+        criterion.value.template_kind = this.data.opType === GlobalConstant.MODAL_OP.ADD ? this.podTemplateData.kind : criterion.value.template_kind;
+        criterion.value.path = criterion.value.name;
+        criterion.value.value_type = getValueType4Text(criterion.value.value);
+        criterion.value.name = '';
+      }
+      if (criterion.value.name === 'saBindRiskyRole') { // For Service account bound risky role
+        criterion.value.type = 'saBindRiskyRole',
+        criterion.value.name = '';
+        criterion.value.path = '';
+      }
       return criterion.value;
     });
+
     adminRule.rule_type = adminRule.isException ? "exception" : "deny";
     adminRule.disable = !adminRule.enabled;
 
-    this.addEditAdmissionRuleForm.setValue(adminRule);
-    console.log("this.addEditAdmissionRuleForm.value", this.addEditAdmissionRuleForm.value);
-    this.admissionRulesService.addUpdateAdmissionRules({config: this.addEditAdmissionRuleForm.value}, this.data.opType)
+    this.admissionRulesService.addUpdateAdmissionRules({config: adminRule}, this.data.opType)
       .subscribe(
         response => {
           this.onSubmit();
@@ -192,9 +310,25 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
 
   private getCriteriaOptions =() => {
     this.criteriaOptions = this.addEditAdmissionRuleForm.controls.isException.value ?
-      this.data.admissionOptions.exception_options.k8s_options.rule_options :
-      this.data.admissionOptions.deny_options.k8s_options.rule_options;
-    this.pspCriteria = `${this.translate.instant("admissionControl.PSP_CRITERIA")} ${this.data.admissionOptions.psp_collection.map(pspCriterion => {
+      this.data.admissionOptions.admission_options.exception_options.k8s_options.rule_options :
+      this.data.admissionOptions.admission_options.deny_options.k8s_options.rule_options;
+    let saBoundRiskyRoleOption = {
+      saBindRiskyRole: {
+        name: 'saBindRiskyRole',
+        ops: [
+          "containsTagAny"
+        ],
+        values: this.data.admissionOptions.predefined_risky_roles.map(role => {
+          return {
+            name: this.translate.instant(`admissionControl.values.${role.toUpperCase()}`),
+            value: role,
+            checked: false
+          }
+        })
+      }
+    };
+    this.criteriaOptions = Object.assign(saBoundRiskyRoleOption, this.criteriaOptions)
+    this.pspCriteria = `${this.translate.instant("admissionControl.PSP_CRITERIA")} ${this.data.admissionOptions.admission_options.psp_collection.map(pspCriterion => {
         return this.translate.instant(`admissionControl.names.${parseDivideStyle(pspCriterion.name).toUpperCase()}`);
       }).join(", ")}`;
     this.initCriteriaOptionsView(this.criteriaOptions);
@@ -225,6 +359,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     this.criterionNameList = this.getCriterionNameList(this.criteriaOptions);
     this.criterionOperatorList = this.getCriterionOperatorList(this.criteriaOptions, selectedCriterionName || this.criterionNameList[0]);
     this.criterionValueList = this.getCriterionValueList(this.criteriaOptions, selectedCriterionName || this.criterionNameList[0]);
+    if (this.criterionValueList.length === 0) this.mainCriterion.value = '';
     if (this.criterionOperatorList.length > 0)
       this.changeCriterionOperator(this.criterionOperatorList[0]);
     this.subOptions = this.getSubOptions(this.criteriaOptions, selectedCriterionName || this.criterionNameList[0]);
@@ -246,7 +381,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
   private fillSubCriterion = (subCriterionData: Array<AdmRuleSubCriterion>): void => {
     let dataIndex = 0;
     this.subCriterion = this.subCriterion.map((elem) => {
-      if (elem.name === subCriterionData[dataIndex].name) {
+      if (Array.isArray(subCriterionData) && subCriterionData.length > 0 && subCriterionData[dataIndex] && elem.name === subCriterionData[dataIndex].name) {
         let valueStr = "";
         elem.op = subCriterionData[dataIndex].op;
         if (elem.name.toLowerCase().includes("memory")) {
@@ -277,5 +412,31 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     if (subCriterionData) {
       this.fillSubCriterion(subCriterionData);
     }
+  };
+
+  private clearCustomizedCriterion = () => {
+    this.customCriterion = {
+      name: "",
+      op: "",
+      value: ""
+    };
+  };
+
+  private removeUnexistingCriterionName = (criterionName) => {
+    this.criterionNameList = this.criterionNameList.filter(_criterionName => _criterionName !== criterionName);
+  };
+
+  private initCustomizedCriterionView = () => {
+    this.jsonEditorOptions.mode = 'view';
+    this.jsonEditorOptions.expandAll = true;
+    this.podTemplateData = this.data.admissionOptions.admission_custom_criteria_templates[0];
+    this.podTemplateTreeData = JSON.parse(this.podTemplateData.rawjson);
+  };
+
+  private generateOperatorValueList = (valueType) => {
+    let optionsByValuetype = groupBy(this.data.admissionOptions.admission_custom_criteria_options, 'valuetype');
+    console.log(optionsByValuetype);
+    this.customizedValues = optionsByValuetype[valueType] ? optionsByValuetype[valueType][0].values || [] : [];
+    this.customizedOps = optionsByValuetype[valueType] ? optionsByValuetype[valueType][0].ops || [] : [];
   };
 }

@@ -301,7 +301,10 @@ export class AdmissionRulesService {
 
   criteriaRenderFunc = params => {
     let criteriaArray = params.value.map(criterion => {
-      return this.parseTag(GlobalConstant.CRITERIA_PATTERN, criterion).tagName;
+      if (criterion.type === 'saBindRiskyRole') {
+        criterion.name = criterion.type;
+      }
+      return this.parseTag(GlobalConstant.CRITERIA_PATTERN, criterion, (criterion.type && criterion.type === 'customPath')).tagName;
     });
     return this.sanitizer.sanitize(
       SecurityContext.HTML,
@@ -338,84 +341,33 @@ export class AdmissionRulesService {
     return '';
   };
 
-  parseTag = (CRITERIA_PATTERN: any, criterion: any) => {
+  parseTag = (CRITERIA_PATTERN: any, criterion: any, isCustomized: boolean = false) => {
     let tagName = "";
     let valid = false;
-    if (CRITERIA_PATTERN.NAME_ONLY.includes(criterion.name)) {
-      tagName = this.translate.instant(
-        `admissionControl.names.${parseDivideStyle(criterion.name).toUpperCase()}`
-      );
+    if (isCustomized) {
+      tagName = this.getCustomizedTag(criterion);
       valid = true;
-    } else if (CRITERIA_PATTERN.CVE_COUNT.includes(criterion.name) && criterion.sub_criteria.some(elem => elem.value)) {
-      tagName = this.translate.instant(
-        `admissionControl.display.${parseDivideStyle(
+    } else {
+      if (CRITERIA_PATTERN.NAME_ONLY.includes(criterion.name)) {
+        tagName = this.getNameOnlyTag(criterion.name);
+        valid = true;
+      } else if (CRITERIA_PATTERN.CVE_COUNT.includes(criterion.name) && criterion.sub_criteria && criterion.sub_criteria.some(elem => elem.value)) {
+        tagName = this.getCveCountTagWithSubCriteria(criterion);
+        valid = true;
+      } else if (CRITERIA_PATTERN.CVE_SCORE.includes(criterion.name) && criterion.sub_criteria && criterion.sub_criteria.length > 0) {
+        tagName = this.getCveScoreTagWithSubCriteria(criterion);
+        valid = true;
+      } else if (CRITERIA_PATTERN.RESOURCE.includes(criterion.name)) {
+        tagName = this.getResourceTag(criterion);
+        if (tagName !== this.translate.instant(`admissionControl.display.${parseDivideStyle(
           criterion.name
-        ).toUpperCase()}_WITH_REPORT_DAYS`,
-        {
-          comparison: capitalizeWord(this.translate.instant(`admissionControl.operators.text.${criterion.op}`)),
-          count: criterion.value
+        ).toUpperCase()}`,{details: ""})) {
+          valid = true;
         }
-      ) + " " +
-      this.translate.instant(
-        `admissionControl.display.${parseDivideStyle(
-          criterion.sub_criteria[0].op)}`,
-        {
-          days: criterion.sub_criteria[0].value
-        }
-      );
-      valid = true;
-    } else if (CRITERIA_PATTERN.CVE_SCORE.includes(criterion.name) && criterion.sub_criteria.length > 0) {
-      tagName = this.translate.instant(
-        `admissionControl.display.${parseDivideStyle(criterion.name).toUpperCase()}_WITH_COUNT`,
-        {
-          score: criterion.value,
-          count: criterion.sub_criteria[0].value,
-          countComparison: capitalizeWord(this.translate.instant(`admissionControl.operators.text.${criterion.op}`)),
-          scoreComparison: this.translate.instant(`admissionControl.display.cveScore.${criterion.sub_criteria[0].op}`)
-        }
-      );
-      valid = true;
-    } else if (CRITERIA_PATTERN.RESOURCE.includes(criterion.name)) {
-      tagName = this.translate.instant(
-        `admissionControl.display.${parseDivideStyle(
-          criterion.name
-        ).toUpperCase()}`,
-        {
-          details: criterion.sub_criteria
-          .map((subCriterion) => {
-            if (subCriterion.name.toLowerCase().includes("memory") && !subCriterion.unit) {
-              return `${this.translate.instant(`admissionControl.names.${parseDivideStyle(subCriterion.name).toUpperCase()}_S`)}${subCriterion.op ? subCriterion.op : undefined}${subCriterion.value ? this.bytesPipe.transform(subCriterion.value, 2) : undefined}`
-            }
-            return `${this.translate.instant(`admissionControl.names.${parseDivideStyle(subCriterion.name).toUpperCase()}_S`)}${subCriterion.op ? subCriterion.op : undefined}${subCriterion.value ? subCriterion.value : undefined}${subCriterion.unit ? subCriterion.unit : ""}`
-          })
-          .filter(tag => !tag.includes("undefined"))
-          .join(", ")
-        }
-      ).replace(/\&gt\;/g, ">").replace(/\&lt\;/g, "<");
-      if (tagName !== this.translate.instant(`admissionControl.display.${parseDivideStyle(
-        criterion.name
-      ).toUpperCase()}`,{details: ""})) {
+      } else {
+        tagName = this.getOtherPredefinedTag(criterion);
         valid = true;
       }
-    } else {
-      let displayValue =
-        criterion.value.length > 30
-          ? `${criterion.value.substring(0, 30)}...`
-          : criterion.value;
-      displayValue =
-        criterion.op.toLowerCase().indexOf("contains") >= 0
-          ? `[${displayValue}]`
-          : displayValue;
-      tagName = `${this.translate.instant(
-        `admissionControl.names.${parseDivideStyle(criterion.name).toUpperCase()}`
-      )} ${this.translate.instant(
-        `admissionControl.operators.${
-          GlobalConstant.SINGLE_VALUE_CRITERIA.includes(criterion.name)
-            ? `${criterion.op.toUpperCase()}_SINGLE`
-            : criterion.op.toUpperCase()
-        }`
-      )} ${displayValue}`;
-      valid = true;
     }
     return {
       tagName,
@@ -423,10 +375,13 @@ export class AdmissionRulesService {
     }
   };
 
-  checkAndAppendCriteria = (tagName, criterion: any, currCriteriaControl: AbstractControl) => {
+  checkAndAppendCriteria = (tagName, criterion: any, currCriteriaControl: AbstractControl, isCustomized: boolean) => {
     let isDuplicated = false;
     currCriteriaControl.setValue(currCriteriaControl.value.filter(currCriterion => {
-      if (currCriterion.name === criterion.name) {
+      if (isCustomized) {
+        currCriterion.value.name = currCriterion.value.path;
+      }
+      if (currCriterion.value.name === criterion.name) {
         isDuplicated = true;
       }
       return (
@@ -436,7 +391,7 @@ export class AdmissionRulesService {
     }));
     if (!isDuplicated && criterion.sub_criteria && criterion.sub_criteria.some(elem => elem.value !== "")) {
       if (criterion.name.toLowerCase() === "resourcelimit") {
-        criterion = criterion.sub_criteria.map(elem => {
+        criterion.sub_criteria = criterion.sub_criteria.map(elem => {
           elem.value = this.parseValueByByteUnit(elem.value, elem.unit);
           return elem;
         })
@@ -449,7 +404,8 @@ export class AdmissionRulesService {
         sub_criteria: criterion.sub_criteria && Array.isArray(criterion.sub_criteria) ? criterion.sub_criteria.filter(elem => elem.value) : [],
         name: criterion.name,
         op: GlobalConstant.CRITERIA_PATTERN.NAME_ONLY.includes(criterion.name) ? "=" : criterion.op,
-        value: GlobalConstant.CRITERIA_PATTERN.NAME_ONLY.includes(criterion.name) ? "true" : criterion.value
+        value: GlobalConstant.CRITERIA_PATTERN.NAME_ONLY.includes(criterion.name) ? "true" : criterion.value,
+        path: criterion.path || criterion.name
       }
     })
     return currCriteria;
@@ -472,10 +428,15 @@ export class AdmissionRulesService {
       {
         name: selectedCriterion.value.name,
         op: selectedCriterion.value.op,
-        value: selectedCriterion.value.value
+        value: selectedCriterion.value.value,
+        path: selectedCriterion.value.path || ''
       },
       selectedCriterion.value.sub_criteria
     ]
+  };
+
+  getCriteriaTemplate = () => {
+    return GlobalVariable.http.get('assets/mockdata/pod-template.json').pipe();
   };
 
   getAdmissionData = scope => {
@@ -493,7 +454,7 @@ export class AdmissionRulesService {
           .pipe(pluck('rules'));
     let options = GlobalVariable.http
       .get(PathConstant.ADMCTL_CONDITION_OPTION_URL)
-      .pipe(pluck('admission_options'));
+      .pipe();
     return forkJoin([state, rules, options]).pipe();
   };
 
@@ -820,5 +781,85 @@ export class AdmissionRulesService {
       case "GB": return (numberVal * (1 << 30)).toString();
       default: return value;
     }
+  };
+
+  private getNameOnlyTag = (criterionName: string): string => {
+    return this.translate.instant(
+      `admissionControl.names.${parseDivideStyle(criterionName).toUpperCase()}`
+    );
+  };
+
+  private getCveCountTagWithSubCriteria = (criterion: any): string => {
+    return this.translate.instant(
+      `admissionControl.display.${parseDivideStyle(
+        criterion.name
+      ).toUpperCase()}_WITH_REPORT_DAYS`,
+      {
+        comparison: capitalizeWord(this.translate.instant(`admissionControl.operators.text.${criterion.op}`)),
+        count: criterion.value
+      }
+    ) + " " +
+    this.translate.instant(
+      `admissionControl.display.${parseDivideStyle(
+        criterion.sub_criteria[0].op)}`,
+      {
+        days: criterion.sub_criteria[0].value
+      }
+    );
+  };
+
+  private getCveScoreTagWithSubCriteria = (criterion: any): string => {
+    return this.translate.instant(
+      `admissionControl.display.${parseDivideStyle(criterion.name).toUpperCase()}_WITH_COUNT`,
+      {
+        score: criterion.value,
+        count: criterion.sub_criteria[0].value,
+        countComparison: capitalizeWord(this.translate.instant(`admissionControl.operators.text.${criterion.op}`)),
+        scoreComparison: this.translate.instant(`admissionControl.display.cveScore.${criterion.sub_criteria[0].op}`)
+      }
+    );
+  };
+
+  private getResourceTag = (criterion: any): string => {
+    return this.translate.instant(
+      `admissionControl.display.${parseDivideStyle(
+        criterion.name
+      ).toUpperCase()}`,
+      {
+        details: criterion.sub_criteria
+        .map((subCriterion) => {
+          if (subCriterion.name.toLowerCase().includes("memory") && !subCriterion.unit) {
+            return `${this.translate.instant(`admissionControl.names.${parseDivideStyle(subCriterion.name).toUpperCase()}_S`)}${subCriterion.op ? subCriterion.op : undefined}${subCriterion.value ? this.bytesPipe.transform(subCriterion.value, 2) : undefined}`
+          }
+          return `${this.translate.instant(`admissionControl.names.${parseDivideStyle(subCriterion.name).toUpperCase()}_S`)}${subCriterion.op ? subCriterion.op : undefined}${subCriterion.value ? subCriterion.value : undefined}${subCriterion.unit ? subCriterion.unit : ""}`
+        })
+        .filter(tag => !tag.includes("undefined"))
+        .join(", ")
+      }
+    ).replace(/\&gt\;/g, ">").replace(/\&lt\;/g, "<");
+  };
+
+  private getOtherPredefinedTag = (criterion: any): string => {
+    let displayValue =
+      criterion.value.length > 30
+        ? `${criterion.value.substring(0, 30)}...`
+        : criterion.value;
+    displayValue =
+      criterion.op.toLowerCase().indexOf("contains") >= 0
+        ? `[${displayValue}]`
+        : displayValue;
+    return `${this.translate.instant(
+      `admissionControl.names.${parseDivideStyle(criterion.name).toUpperCase()}`
+    )} ${this.translate.instant(
+      `admissionControl.operators.${
+        GlobalConstant.SINGLE_VALUE_CRITERIA.includes(criterion.name)
+          ? `${criterion.op.toUpperCase()}_SINGLE`
+          : criterion.op.toUpperCase()
+      }`
+    )} ${displayValue}`;
+  };
+
+  private getCustomizedTag = (criterion: any): string => {
+    return `${criterion.path || criterion.name} ${this.translate.instant(`admissionControl.operators.${criterion.op.toUpperCase()}`)} ${criterion.value}`;
   };
 }

@@ -10,7 +10,11 @@ case class AdmRuleCriterion(
   sub_criteria: Option[Array[AdmRuleSubCriterion]],
   name: String,
   op: Option[String],
-  value: Option[String]
+  value: Option[String],
+  path: Option[String],
+  template_kind: Option[String],
+  `type`: Option[String],
+  value_type: Option[String]
 )
 
 case class AdmRule(

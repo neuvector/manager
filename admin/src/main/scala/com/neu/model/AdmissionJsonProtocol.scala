@@ -6,7 +6,7 @@ object AdmissionJsonProtocol extends DefaultJsonProtocol {
   implicit val admissionRuleSubCriterionFormat: RootJsonFormat[AdmRuleSubCriterion] = jsonFormat3(
     AdmRuleSubCriterion
   )
-  implicit val admissionRuleCriterionFormat: RootJsonFormat[AdmRuleCriterion] = jsonFormat4(
+  implicit val admissionRuleCriterionFormat: RootJsonFormat[AdmRuleCriterion] = jsonFormat8(
     AdmRuleCriterion
   )
   implicit val admissionRuleFormat: RootJsonFormat[AdmRule]             = jsonFormat8(AdmRule)

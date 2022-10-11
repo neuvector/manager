@@ -18,6 +18,9 @@ import { ImportTestFileComponent } from "@components/admission-rules/partial/imp
 import { PipeModule } from "@common/pipes/pipe.module";
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { NgJsonEditorModule } from 'ang-jsoneditor';
+import { CriterionDescriptionIconComponent } from './partial/criterion-description-icon/criterion-description-icon.component'
+import { MultiSelectorDropdownModule } from '@routes/components/ui/multi-selector-dropdown/multi-selector-dropdown.module';
 
 
 @NgModule({
@@ -28,7 +31,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     AdvanceSettingModalComponent,
     ExportAdmissionRulesModalComponent,
     ConfigurationAssessmentModalComponent,
-    ImportTestFileComponent
+    ImportTestFileComponent,
+    CriterionDescriptionIconComponent
   ],
   imports: [
     CommonModule,
@@ -40,6 +44,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     PipeModule,
     ClipboardModule,
     MatTooltipModule,
+    NgJsonEditorModule,
+    MultiSelectorDropdownModule,
     AgGridModule.withComponents([
       ActionButtonsComponent
     ])

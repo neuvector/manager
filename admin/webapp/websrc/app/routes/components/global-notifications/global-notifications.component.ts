@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { CommonHttpService } from '@common/api/common-http.service';
 import { GlobalConstant } from '@common/constants/global.constant';
@@ -6,6 +6,7 @@ import { GlobalNotification, RbacStatus } from '@common/types';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { TranslateService } from '@ngx-translate/core';
 import { DashboardService } from '@services/dashboard.service';
+import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 
 @Component({
   selector: 'app-global-notifications',
@@ -35,6 +36,7 @@ export class GlobalNotificationsComponent implements OnInit {
   }
 
   constructor(
+    @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
     private tr: TranslateService,
     private commonHttpService: CommonHttpService,
     private dashboardService: DashboardService
@@ -47,7 +49,14 @@ export class GlobalNotificationsComponent implements OnInit {
   }
 
   accept(notification: GlobalNotification, event: MouseEvent) {
+    const notifs: string[] =
+      this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_NOTIFICATIONS) ||
+      [];
     notification.accepted = true;
+    this.sessionStorage.set(GlobalConstant.SESSION_STORAGE_NOTIFICATIONS, [
+      ...notifs,
+      notification.name,
+    ]);
     if (this.notificationLength) event.stopPropagation();
   }
 
@@ -174,6 +183,16 @@ export class GlobalNotificationsComponent implements OnInit {
           accepted: false,
           unClamped: false,
         });
+      });
+    }
+    const notifs: string[] = this.sessionStorage.get(
+      GlobalConstant.SESSION_STORAGE_NOTIFICATIONS
+    );
+    if (notifs && notifs.length > 0) {
+      this.globalNotifications.forEach(globalNotif => {
+        if (notifs.includes(globalNotif.name)) {
+          globalNotif.accepted = true;
+        }
       });
     }
   }

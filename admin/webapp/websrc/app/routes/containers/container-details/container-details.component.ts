@@ -81,6 +81,11 @@ export class ContainerDetailsComponent implements OnInit {
       ? this.tr.instant('containers.process.SHOW_EXITED')
       : this.tr.instant('containers.process.HIDE_EXITED');
   }
+  get acceptedVulsMsg() {
+    return this.showAcceptedVuls
+      ? this.tr.instant('enum.HIDE_ACCEPTED_VULS')
+      : this.tr.instant('enum.SHOW_ACCEPTED_VULS');
+  }
   get showFilter(): boolean {
     return ['compliance', 'vulnerabilities', 'process'].includes(
       this.activeTab
@@ -88,6 +93,18 @@ export class ContainerDetailsComponent implements OnInit {
   }
   get activeTab(): string {
     return containerDetailsTabs[this.activeTabIndex];
+  }
+  get visibleIcons() {
+    const acceptVul = !!(
+      this.isVulsAuthorized &&
+      this.isWriteVulsAuthorized &&
+      this.selectedVulnerability &&
+      !this.isAccepted(this.selectedVulnerability)
+    );
+    const toggleVul = this.isVulsAuthorized;
+    const csv = !this.vulEmpty;
+    console.log(acceptVul, toggleVul, csv);
+    return +acceptVul + +toggleVul + +csv;
   }
 
   constructor(

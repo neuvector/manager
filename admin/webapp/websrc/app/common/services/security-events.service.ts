@@ -470,6 +470,10 @@ export class SecurityEventsService {
     return GlobalVariable.http.post(PathConstant.POLICY_RULE_URL, networkRule).pipe();
   };
 
+  updateNetworkRuleAction = (id: number, action: string) => {
+    return GlobalVariable.http.patch(PathConstant.POLICY_RULE_URL, { id: id, action: action }).pipe();
+  };
+
   showEnforcerDetails = (ev, enforcerId: string, enforcerName: string) => {
     this.getEnforcer(enforcerId)
       .subscribe(

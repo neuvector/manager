@@ -36,6 +36,7 @@ import { AssetsHttpService } from '@common/api/assets-http.service';
 import { PodDetails } from '@common/types/network-activities/podDetails';
 import { AdvancedFilter } from '@common/types/network-activities/advancedFilter';
 import { NotificationService } from '@services/notification.service';
+import { ConversationPair } from './edge-details/edge-details.component';
 
 @Component({
   selector: 'app-network-activities',
@@ -76,6 +77,7 @@ export class NetworkActivitiesComponent
   blacklist: Blacklist;
 
   selectedEdge;
+  edgeDetails;
 
   tooltipEl;
   container: HTMLElement | null = null;
@@ -734,7 +736,8 @@ export class NetworkActivitiesComponent
       this.settings.showLegend = !this.settings.showLegend;
     };
 
-    const refresh = graph => {
+    const refresh = () => {
+      console.log('refreshing')
       this.refresh();
     };
 
@@ -1212,15 +1215,14 @@ export class NetworkActivitiesComponent
 
     const showEdgeDetail = edgeItem => {
       this.selectedEdge = edgeItem;
-      let edge = edgeItem.getModel();
-      if (edge.kind === 'group' || isGroupEdge(edgeItem)) {
+      this.edgeDetails = edgeItem.getModel();
+      if (this.edgeDetails.kind === 'group' || isGroupEdge(edgeItem)) {
         this.graphService.keepLive();
         return;
       }
 
-      let from = edge.source,
-        to = edge.target;
-      //Todo add it back later
+      let from = this.edgeDetails.source,
+        to = this.edgeDetails.target;
       this.graphService.getConversations(from, to).subscribe(
         response => {
           this.conversationDetail = response['conversation'];
@@ -2488,7 +2490,7 @@ export class NetworkActivitiesComponent
       domainData.edges.forEach(edge => this.graph.addItem('edge', edge, false));
   }
 
-  updateGraph(onRefresh: boolean) {
+  private updateGraph(onRefresh: boolean) {
     const filteredData = this.graphService.applyAdvFilter(
       this.serverData,
       this.advFilter
@@ -2564,7 +2566,7 @@ export class NetworkActivitiesComponent
     };
   }
 
-  handleCollapsedDomains() {
+  private handleCollapsedDomains() {
     const { filteredDomains, firstLevelDomains } = this.updateGraph(false);
     if (this.collapsedDomains.size)
       [...this.collapsedDomains.values()].forEach(domainNode => {
@@ -2579,4 +2581,31 @@ export class NetworkActivitiesComponent
           this.collapseOnNode(domainNode.id, domainNode);
       });
   }
+
+  clearSessions = (conversationPair: ConversationPair) => {
+    this.graphService.clearSessions(conversationPair.from, conversationPair.to)
+      .subscribe(() => {
+        //Remove displayed edge without data reloading
+        this.graph.removeItem(this.selectedEdge, false);
+
+        //Remove original edge in group without data reloading
+        let removedEdgeIndex = this.serverData.edges.findIndex(edge => {
+          return edge.source === conversationPair.from && edge.target === conversationPair.to;
+        });
+        if (removedEdgeIndex > -1) {
+          this.serverData.edges.splice(removedEdgeIndex, 1);
+        }
+
+        this.popupState.leave();
+      }, err => {
+        console.warn(err);
+        this.notificationService.open(
+          this.utils.getAlertifyMsg(
+            err,
+            this.translate.instant('network.popup.SESSION_CLEAR_FAILURE'),
+            false
+          )
+        );
+      });
+  };
 }

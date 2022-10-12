@@ -80,8 +80,10 @@
 <app-edge-details
   *ngIf="popupState.onEdge()"
   [popupState]="popupState"
+  (onClearSession)="clearSessions($event)"
   [conversationDetail]="conversationDetail"
-  [entriesGridHeight]="entriesGridHeight">
+  [entriesGridHeight]="entriesGridHeight"
+  [edgeDetails]="edgeDetails">
 </app-edge-details>
 
 <app-sniffer

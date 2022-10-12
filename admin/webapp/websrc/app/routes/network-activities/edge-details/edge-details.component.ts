@@ -2,9 +2,9 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
-  ElementRef,
+  ElementRef, EventEmitter,
   Input,
-  OnInit,
+  OnInit, Output,
   QueryList,
   ViewChildren,
 } from '@angular/core';
@@ -17,6 +17,17 @@ import { TranslateService } from '@ngx-translate/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { GridApi, GridReadyEvent } from 'ag-grid-community';
 import { BehaviorSubject } from 'rxjs';
+import {AuthUtilsService} from "@common/utils/auth.utils";
+import {SecurityEventsService} from "@services/security-events.service";
+import {NetworkRule} from "@common/types";
+import {MapConstant} from "@common/constants/map.constant";
+import {NotificationService} from "@services/notification.service";
+import {UtilsService} from "@common/utils/app.utils";
+
+export interface ConversationPair {
+  from: string,
+  to: string
+}
 
 @Component({
   selector: 'app-edge-details',
@@ -24,6 +35,18 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./edge-details.component.scss'],
 })
 export class EdgeDetailsComponent implements AfterViewInit, OnInit {
+  get edgeDetails(): any {
+    return this._edgeDetails;
+  }
+
+  @Input()
+  set edgeDetails(value: any) {
+    this._edgeDetails = value;
+  }
+  isWriteNetworkAuthorized: boolean = false;
+  rule: any;
+  onRule: boolean = false;
+
   get entriesGridHeight(): number {
     return this._entriesGridHeight;
   }
@@ -48,6 +71,7 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
   private _entriesGridHeight: number = 0;
 
   _popupState: ActivityState;
+  private _edgeDetails: any;
 
   get popupState() {
     return this._popupState;
@@ -58,7 +82,14 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
     this._popupState = value;
   }
 
+  @Output()
+  onClearSession: EventEmitter<ConversationPair> = new EventEmitter<ConversationPair>();
+
   constructor(
+    private authUtilsService: AuthUtilsService,
+    private securityEventsService: SecurityEventsService,
+    private notificationService: NotificationService,
+    private utils: UtilsService,
     private sanitizer: DomSanitizer,
     private translate: TranslateService,
     private graphService: GraphService,
@@ -91,6 +122,8 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit() {
+    this.isWriteNetworkAuthorized =
+      this.authUtilsService.getDisplayFlag('write_network_rule');
     this.prepareGridData();
     this.gridOptions = this.graphService.prepareTrafficHistoryGrid(
       this._conversationDetail
@@ -101,7 +134,7 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
     };
   }
 
-  private prepareGridData = () => {
+  private prepareGridData() {
     const ELEM_CONV_HISTORY = document.getElementById('conversationHistory');
     this.entriesGridHeight = Math.max(
       this.entriesGridHeight,
@@ -132,7 +165,7 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
         }
       );
     });
-  };
+  }
 
   onGridReady(params: GridReadyEvent): void {
     this.gridApi = params.api;
@@ -143,7 +176,7 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
     this.cd.markForCheck();
   }
 
-  onTrafficChanged = () => {
+  onTrafficChanged() {
     let selectedRows = this.gridApi.getSelectedRows();
     this.traffic = selectedRows[0];
     this.showRuleId = true;
@@ -156,10 +189,116 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
       this.traffic.policy_action === 'violate' ||
       this.traffic.policy_action === 'deny';
     this.graphService.keepLive();
-  };
+  }
 
-  onFilterChanged = value => {
+  onFilterChanged(value) {
     this.graphService.keepLive();
     this.gridApi.setQuickFilter(value);
-  };
+  }
+
+  clearSessions(from, to) {
+    this.onClearSession.emit({ from: from, to: to });
+  }
+
+  overrideRule(traffic, edgeDetails) {
+
+    if (traffic.policy_id !== 0) this.showRule(traffic.policy_id);
+    else this.proposeRule(traffic, edgeDetails);
+  }
+
+  closeRuleDetail() {
+    this.onRule = false;
+    this.graphService.keepLive();
+  }
+
+  updateRule(rule) {
+    if (rule.id === 0) {
+      let action = "deny";
+      if (rule.allowed) action = "allow";
+
+      rule.action = action;
+      this.securityEventsService.updateNetworkRule(rule)
+        .subscribe((response) => {
+          this.onRule = false;
+        },
+        err => {
+          console.warn(err);
+          this.notificationService.open(
+            this.utils.getAlertifyMsg(
+              err,
+              this.translate.instant('network.RULE_DEPLOY_FAILED'),
+              false
+            )
+          );
+        });
+    } else {
+      let action = "deny";
+      if (rule.allowed) action = "allow";
+
+      this.securityEventsService.updateNetworkRuleAction( rule.id, action)
+        .subscribe(() => {
+          this.onRule = false;
+        },
+        err => {
+          console.warn(err);
+          this.notificationService.open(
+            this.utils.getAlertifyMsg(
+              err,
+              this.translate.instant('network.RULE_DEPLOY_FAILED'),
+              false
+            )
+          );
+        });
+    }
+  }
+
+  private showRule(id) {
+    this.securityEventsService.getNetworkRule(id).subscribe(
+      response => {
+        this.rule = response;
+        this.onRule = true;
+        this.rule.allowed = this.rule.action === 'allow';
+      },
+      err => {
+        console.warn(err);
+      }
+    );
+  }
+
+  private proposeRule(traffic, edgeDetails) {
+    const UNMANAGED_NODE = ['workloadIp', 'nodeIp'];
+    const verifyAndParseHostGroup = function (group) {
+      if (group.indexOf(MapConstant.securityEventLocation.HOST) > -1) {
+        return 'nodes';
+      } else {
+        return group;
+      }
+    };
+
+    this.rule = {};
+
+    this.rule.id = 0;
+    if (
+      edgeDetails.fromGroup &&
+      UNMANAGED_NODE.indexOf(edgeDetails.fromGroup) > -1
+    )
+      this.rule.from = edgeDetails.source;
+    else this.rule.from = edgeDetails.fromGroup;
+    if (edgeDetails.toGroup && UNMANAGED_NODE.indexOf(edgeDetails.toGroup) > -1)
+      this.rule.to = edgeDetails.target;
+    else this.rule.to = edgeDetails.toGroup;
+    this.rule.from = verifyAndParseHostGroup(this.rule.from);
+    this.rule.to = verifyAndParseHostGroup(this.rule.to);
+    this.rule.ports = traffic.port;
+    if (traffic.application)
+      this.rule.applications = traffic.application.split(',');
+    else this.rule.applications = ['any'];
+    this.rule.learned = false;
+    this.rule.comment = '';
+    this.onRule = true;
+    this.rule.action = traffic.policy_action;
+    this.rule.allowed = traffic.policy_action === 'allow';
+    this.rule.disable = false;
+    this.graphService.keepLive();
+  }
 }

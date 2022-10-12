@@ -19,6 +19,15 @@ export function isErrorResponse(err: ErrorResponse): err is ErrorResponse {
   return 'code' in err && 'error' in err && 'message' in err;
 }
 
+export interface GlobalNotification {
+  name: string;
+  message: string;
+  link: string;
+  labelClass: string;
+  accepted: boolean;
+  unClamped: boolean;
+}
+
 export interface ScanConfig {
   auto_scan: boolean;
 }

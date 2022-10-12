@@ -1,0 +1,11 @@
+.mat-menu-panel.global-notification-list {
+  width: 300px;
+  max-width: 300px;
+  min-height: auto;
+  .mat-menu-item {
+    white-space: normal;
+    font-size: 12px;
+    line-height: 20px;
+    height: auto;
+  }
+}

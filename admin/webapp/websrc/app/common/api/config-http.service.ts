@@ -54,13 +54,16 @@ export class ConfigHttpService {
   }
 
   postSystemDebug(body: string): Observable<unknown> {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json;charset=UTF-8',
-    });
+    const requestOptions: Object = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json;charset=UTF-8',
+      }),
+      responseType: 'text',
+    };
     return GlobalVariable.http.post<unknown>(
       PathConstant.SYSTEM_DEBUG_URL,
       body,
-      { headers }
+      requestOptions
     );
   }
 

@@ -4,10 +4,11 @@ export class GlobalConstant {
   public static SESSION_STORAGE_TOKEN = 'token';
   public static SESSION_STORAGE_ORIGINAL_URL = 'original_url';
   public static SESSION_STORAGE_THEME = 'theme';
+  public static SESSION_STORAGE_NOTIFICATIONS = 'notifications';
   public static REQ_TOKEN = 'X-Auth-Token';
   // public static REQ_CONTENT_TYPE = "Content-Type";
   // public static REQ_CONTENT_TYPE_VAL = "application/json";
-  public static LOGIN_URL = "auth";
+  public static LOGIN_URL = 'auth';
   public static STATUS_AUTH_TIMEOUT = 408;
   public static STATUS_UNAUTH = 401;
   public static STATUS_SERVER_UNAVAILABLE = 503;
@@ -27,8 +28,9 @@ export class GlobalConstant {
   public static OC = 'openshift';
   public static MAX_ENFORCER_LOG = 10;
   public static MAX_INTERFACE_IP = 3;
+  public static MAX_UNUPDATED_DAYS = 7;
   public static NEW_ID_SEED = {
-    NETWORK_RULE: 1000000
+    NETWORK_RULE: 1000000,
   };
   public static CRUD = {
     C: 'post',
@@ -65,7 +67,7 @@ export class GlobalConstant {
     CUSTOMER: 'customer-rule',
     FED: 'federate-rule',
     READONLY: 'readonly-rule',
-    MOVED: 'moved-rule'
+    MOVED: 'moved-rule',
   };
 
   public static SINGLE_VALUE_CRITERIA = [
@@ -181,41 +183,28 @@ export class GlobalConstant {
 
   public static CRITERIA_PATTERN = {
     NAME_ONLY: [
-      "imageSigned",
-      "runAsRoot",
-      "runAsPrivileged",
-      "allowPrivEscalation",
-      "pspCompliance"
+      'imageSigned',
+      'runAsRoot',
+      'runAsPrivileged',
+      'allowPrivEscalation',
+      'pspCompliance',
     ],
-    CVE_COUNT: [
-      "cveHighCount",
-      "cveHighWithFixCount",
-      "cveMediumCount"
-    ],
-    CVE_SCORE: [
-      "cveScoreCount"
-    ],
-    RESOURCE: [
-      "resourceLimit"
-    ],
-    SINGLE_VALUE_CRITERIA: [
-      "user",
-      "image",
-      "imageRegistry",
-      "namespace"
-    ]
+    CVE_COUNT: ['cveHighCount', 'cveHighWithFixCount', 'cveMediumCount'],
+    CVE_SCORE: ['cveScoreCount'],
+    RESOURCE: ['resourceLimit'],
+    SINGLE_VALUE_CRITERIA: ['user', 'image', 'imageRegistry', 'namespace'],
   };
-  public static PSP = "pspcompliance";
-  public static RESIZE_EVENT = "resize.ag-grid";
+  public static PSP = 'pspcompliance';
+  public static RESIZE_EVENT = 'resize.ag-grid';
 
   public static SCORE_LEVEL = {
     GOOD: 20,
     FAIR: 50,
-    POOR: 100
+    POOR: 100,
   };
   public static SCORE_COLOR = {
-    GOOD: "#00CC00",
-    FAIR: "#FF8000",
-    POOR: "#FF0000"
+    GOOD: '#00CC00',
+    FAIR: '#FF8000',
+    POOR: '#FF0000',
   };
 }

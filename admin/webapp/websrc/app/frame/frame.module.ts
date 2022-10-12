@@ -8,9 +8,10 @@ import { NavsearchComponent } from './header/navsearch/navsearch.component';
 import { FooterComponent } from './footer/footer.component';
 
 import { NvCommonModule } from '../common/nvCommon.module';
+import { GlobalNotificationsModule } from '@components/global-notifications/global-notifications.module';
 
 @NgModule({
-  imports: [NvCommonModule, MatDividerModule],
+  imports: [NvCommonModule, MatDividerModule, GlobalNotificationsModule],
   providers: [],
   declarations: [
     FrameComponent,

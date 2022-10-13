@@ -1,104 +1,151 @@
 <ng-container *ngIf="selectedCompliance$ | async as selectedCompliance">
-  <div class="d-flex align-items-center justify-content-between">
-    <h2 class="m-0">{{'cis.REMEDIATION' | translate}}</h2>
-    <button (click)="legend = !legend" color="primary" mat-flat-button>{{'network.legend.TITLE' | translate}}</button>
+  <div class="h-50">
+    <div class="d-flex align-items-center justify-content-between">
+      <h2 class="m-0">{{ 'cis.REMEDIATION' | translate }}</h2>
+      <button (click)="legend = !legend" color="primary" mat-flat-button>
+        {{ 'network.legend.TITLE' | translate }}
+      </button>
+    </div>
+    <hr class="fancy mt-1 mb-4 mx-0" />
+    <div style="max-height: calc(100% - 74px); overflow: scroll" tabindex="0">
+      <span class="text-secondary">{{ selectedCompliance.description }}</span>
+      <span class="text-muted">{{ selectedCompliance.remediation }}</span>
+    </div>
   </div>
-  <hr class="fancy mt-1 mb-4 mx-0">
-  {{selectedCompliance.description}}
-  <h2 class="m-0" style="padding-top: 50px">{{'cis.report.gridHeader.IMPACT' | translate}}</h2>
-  <hr class="fancy mt-1 mb-4 mx-0">
-  <div style="max-height: calc(100% - 240px); overflow: scroll">
-    <ng-container *ngIf="selectedCompliance.nodes.length > 0">
-      <h3>{{'cis.report.data.NODES' | translate}}</h3>
-      <ng-container *ngFor="let node of selectedCompliance.nodes" class="d-block">
-        <ng-template *ngTemplateOutlet="impactTemplateButton; context: {content: node, type: 'node'}"></ng-template>
+  <div class="h-50">
+    <h2 class="m-0" style="padding-top: 25px">
+      {{ 'cis.report.gridHeader.IMPACT' | translate }}
+    </h2>
+    <hr class="fancy mt-1 mb-4 mx-0" />
+    <div style="max-height: calc(100% - 99px); overflow: scroll">
+      <ng-container *ngIf="selectedCompliance.nodes.length > 0">
+        <h3>{{ 'cis.report.data.NODES' | translate }}</h3>
+        <ng-container
+          *ngFor="let node of selectedCompliance.nodes"
+          class="d-block">
+          <ng-template
+            *ngTemplateOutlet="
+              impactTemplateButton;
+              context: { content: node, type: 'node' }
+            "></ng-template>
+        </ng-container>
       </ng-container>
-    </ng-container>
-    <ng-container *ngIf="selectedCompliance.images.length > 0">
-      <h3>{{'cis.report.data.IMAGES' | translate}}</h3>
-      <ng-container *ngFor="let image of selectedCompliance.images" class="d-block">
-        <ng-template *ngTemplateOutlet="impactTemplateSpan; context: {content: image, type: 'image'}"></ng-template>
+      <ng-container *ngIf="selectedCompliance.images.length > 0">
+        <h3>{{ 'cis.report.data.IMAGES' | translate }}</h3>
+        <ng-container
+          *ngFor="let image of selectedCompliance.images"
+          class="d-block">
+          <ng-template
+            *ngTemplateOutlet="
+              impactTemplateSpan;
+              context: { content: image, type: 'image' }
+            "></ng-template>
+        </ng-container>
       </ng-container>
-    </ng-container>
-    <ng-container *ngIf="selectedCompliance.workloads.length > 0">
-      <h3>{{'cis.report.data.CONTAINERS' | translate}}</h3>
-      <ng-container *ngFor="let workload of selectedCompliance.workloads" class="d-block">
-        <ng-template
-          *ngTemplateOutlet="impactTemplateButton; context: {content: workload, type: 'workload'}"></ng-template>
+      <ng-container *ngIf="selectedCompliance.workloads.length > 0">
+        <h3>{{ 'cis.report.data.CONTAINERS' | translate }}</h3>
+        <ng-container
+          *ngFor="let workload of selectedCompliance.workloads"
+          class="d-block">
+          <ng-template
+            *ngTemplateOutlet="
+              impactTemplateButton;
+              context: { content: workload, type: 'workload' }
+            "></ng-template>
+        </ng-container>
       </ng-container>
-    </ng-container>
-    <ng-container *ngIf="selectedCompliance.platforms.length > 0">
-      <h3>{{'scan.report.data.PLATFORMS' | translate}}</h3>
-      <ng-container *ngFor="let platform of selectedCompliance.platforms" class="d-block">
-        <ng-template
-          *ngTemplateOutlet="impactTemplateSpan; context: {content: platform, type: 'platform'}"></ng-template>
+      <ng-container *ngIf="selectedCompliance.platforms.length > 0">
+        <h3>{{ 'scan.report.data.PLATFORMS' | translate }}</h3>
+        <ng-container
+          *ngFor="let platform of selectedCompliance.platforms"
+          class="d-block">
+          <ng-template
+            *ngTemplateOutlet="
+              impactTemplateSpan;
+              context: { content: platform, type: 'platform' }
+            "></ng-template>
+        </ng-container>
       </ng-container>
-    </ng-container>
+    </div>
   </div>
 </ng-container>
 
 <ng-template #impactTemplateButton let-content="content" let-type="type">
-  <ng-container *ngIf="content.policy_mode else notBeingUsedButton">
+  <ng-container *ngIf="content.policy_mode; else notBeingUsedButton">
     <ng-container [ngSwitch]="content.policy_mode.toLowerCase()">
-      <button (click)="openBrief(type, content)" *ngSwitchCase="'discover'"
-              class="border-0 badge badge-danger ml-0 mr-2 mb-2 d-inline-flex justify-content-center align-items-center"
-      >
+      <button
+        (click)="openBrief(type, content)"
+        *ngSwitchCase="'discover'"
+        class="border-0 badge badge-danger ml-0 mr-2 mb-2 d-inline-flex justify-content-center align-items-center">
         <ng-template
-          *ngTemplateOutlet="iconTemplate; context: {type: type}"></ng-template>
-        {{content.display_name}}</button>
-      <button (click)="openBrief(type, content)" *ngSwitchDefault
-              class="border-0 badge badge-success ml-0 mr-2 mb-2 d-inline-flex justify-content-center align-items-center"
-      >
+          *ngTemplateOutlet="
+            iconTemplate;
+            context: { type: type }
+          "></ng-template>
+        {{ content.display_name }}
+      </button>
+      <button
+        (click)="openBrief(type, content)"
+        *ngSwitchDefault
+        class="border-0 badge badge-success ml-0 mr-2 mb-2 d-inline-flex justify-content-center align-items-center">
         <ng-template
-          *ngTemplateOutlet="iconTemplate; context: {type: type}"></ng-template>
-        {{content.display_name}}</button>
+          *ngTemplateOutlet="
+            iconTemplate;
+            context: { type: type }
+          "></ng-template>
+        {{ content.display_name }}
+      </button>
     </ng-container>
   </ng-container>
   <ng-template #notBeingUsedButton>
-    <button (click)="openBrief(type, content)"
-            class="border-0 badge badge-warning ml-0 mr-2 mb-2 d-inline-flex justify-content-center align-items-center"
-    >
+    <button
+      (click)="openBrief(type, content)"
+      class="border-0 badge badge-warning ml-0 mr-2 mb-2 d-inline-flex justify-content-center align-items-center">
       <ng-template
-        *ngTemplateOutlet="iconTemplate; context: {type: type}"></ng-template>
-      {{content.display_name}}</button>
+        *ngTemplateOutlet="iconTemplate; context: { type: type }"></ng-template>
+      {{ content.display_name }}
+    </button>
   </ng-template>
 </ng-template>
 
 <ng-template #impactTemplateSpan let-content="content" let-type="type">
-  <ng-container *ngIf="content.policy_mode else notBeingUsedSpan">
+  <ng-container *ngIf="content.policy_mode; else notBeingUsedSpan">
     <ng-container [ngSwitch]="content.policy_mode.toLowerCase()">
-      <span *ngSwitchCase="'discover'"
-            class="border-0 badge badge-danger ml-0 mr-2 mb-2 d-inline-flex justify-content-center align-items-center"
-      >
+      <span
+        *ngSwitchCase="'discover'"
+        class="border-0 badge badge-danger ml-0 mr-2 mb-2 d-inline-flex justify-content-center align-items-center">
         <ng-template
-          *ngTemplateOutlet="iconTemplate; context: {type: type}"></ng-template>
-        {{content.display_name}}</span>
-      <span *ngSwitchDefault
-            class="border-0 badge badge-success ml-0 mr-2 mb-2 d-inline-flex justify-content-center align-items-center"
+          *ngTemplateOutlet="
+            iconTemplate;
+            context: { type: type }
+          "></ng-template>
+        {{ content.display_name }}</span
       >
+      <span
+        *ngSwitchDefault
+        class="border-0 badge badge-success ml-0 mr-2 mb-2 d-inline-flex justify-content-center align-items-center">
         <ng-template
-          *ngTemplateOutlet="iconTemplate; context: {type: type}"></ng-template>
-        {{content.display_name}}</span>
+          *ngTemplateOutlet="
+            iconTemplate;
+            context: { type: type }
+          "></ng-template>
+        {{ content.display_name }}</span
+      >
     </ng-container>
   </ng-container>
   <ng-template #notBeingUsedSpan>
-    <span class="border-0 badge badge-warning ml-0 mr-2 mb-2 d-inline-flex justify-content-center align-items-center"
-    >
+    <span
+      class="border-0 badge badge-warning ml-0 mr-2 mb-2 d-inline-flex justify-content-center align-items-center">
       <ng-template
-        *ngTemplateOutlet="iconTemplate; context: {type: type}"></ng-template>
-      {{content.display_name}}</span>
+        *ngTemplateOutlet="iconTemplate; context: { type: type }"></ng-template>
+      {{ content.display_name }}</span
+    >
   </ng-template>
 </ng-template>
 
 <ng-template #iconTemplate let-type="type">
-  <ng-container
-    [ngSwitch]="type"
-  >
-    <i
-      *ngSwitchCase="'image'"
-      class="eos-icons mr-2"
-      style="font-size: 15px"
-    >
+  <ng-container [ngSwitch]="type">
+    <i *ngSwitchCase="'image'" class="eos-icons mr-2" style="font-size: 15px">
       system_image
     </i>
     <i
@@ -107,10 +154,7 @@
       style="font-size: 15px">
       check_box_blank
     </i>
-    <i
-      *ngSwitchCase="'node'"
-      class="eos-icons mr-2"
-      style="font-size: 15px">
+    <i *ngSwitchCase="'node'" class="eos-icons mr-2" style="font-size: 15px">
       storage
     </i>
     <i
@@ -122,23 +166,31 @@
   </ng-container>
 </ng-template>
 
-<div *ngIf="legend" class="p-2 d-flex flex-column mat-elevation-z8"
-     style="position: fixed; bottom: 50px; right: 50px; z-index: 1000; border-radius: 5px; background-color: rgba(255,255,255,0.35)">
-  <span class="m-0 d-inline-flex justify-content-center align-items-center badge text-white"
-        style="background-color: black;"><i
-    class="eos-icons mr-2"
-    style="font-size: 15px">
-      storage
-    </i>{{'scan.IMAGE_NOT_USED' | translate}}</span>
-  <span class="mx-0 my-2 d-inline-flex justify-content-center align-items-center badge badge-danger"><i
-    class="eos-icons mr-2"
-    style="font-size: 15px"
+<div
+  *ngIf="legend"
+  class="p-2 d-flex flex-column mat-elevation-z8"
+  style="
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    z-index: 1000;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.35);
+  ">
+  <span
+    class="m-0 d-inline-flex justify-content-center align-items-center badge text-white"
+    style="background-color: black"
+    ><i class="eos-icons mr-2" style="font-size: 15px"> storage </i
+    >{{ 'scan.IMAGE_NOT_USED' | translate }}</span
   >
-      system_image
-    </i>{{'scan.UNPROTECTED_NODE' | translate}}</span>
-  <span class="m-0 d-inline-flex justify-content-center align-items-center badge badge-primary"><i
-    class="eos-icons mr-2"
-    style="font-size: 15px">
-      check_box_blank
-    </i>{{'scan.PROTECTED_CONTAINER' | translate}}</span>
+  <span
+    class="mx-0 my-2 d-inline-flex justify-content-center align-items-center badge badge-danger"
+    ><i class="eos-icons mr-2" style="font-size: 15px"> system_image </i
+    >{{ 'scan.UNPROTECTED_NODE' | translate }}</span
+  >
+  <span
+    class="m-0 d-inline-flex justify-content-center align-items-center badge badge-primary"
+    ><i class="eos-icons mr-2" style="font-size: 15px"> check_box_blank </i
+    >{{ 'scan.PROTECTED_CONTAINER' | translate }}</span
+  >
 </div>

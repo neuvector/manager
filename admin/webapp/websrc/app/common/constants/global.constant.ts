@@ -100,6 +100,10 @@ export class GlobalConstant {
       TRUE: ['runAsRoot', 'runAsPrivileged'],
       FALSE: ['imageScanned', 'imageSigned'],
     },
+    CRITERION_TYPE: {
+      BIND_RISKY_ROLE: 'saBindRiskyRole',
+      CUSTOM_PATH: 'customPath'
+    }
   };
 
   public static NAV_SOURCE = {

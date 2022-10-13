@@ -118,6 +118,8 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
       op: "",
       value: ""
     };
+    this.criterionValueList = [];
+    this.hasMultiValue = false;
     this.subCriterion = [];
   };
 
@@ -359,6 +361,15 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     this.criterionNameList = this.getCriterionNameList(this.criteriaOptions);
     this.criterionOperatorList = this.getCriterionOperatorList(this.criteriaOptions, selectedCriterionName || this.criterionNameList[0]);
     this.criterionValueList = this.getCriterionValueList(this.criteriaOptions, selectedCriterionName || this.criterionNameList[0]);
+    if (selectedCriterionName === 'saBindRiskyRole') {
+      this.criterionValueList = this.data.admissionOptions.predefined_risky_roles.map(role => {
+        return {
+          name: this.translate.instant(`admissionControl.values.${role.toUpperCase()}`),
+          value: role,
+          checked: false
+        }
+      })
+    }
     if (this.criterionValueList.length === 0) this.mainCriterion.value = '';
     if (this.criterionOperatorList.length > 0)
       this.changeCriterionOperator(this.criterionOperatorList[0]);

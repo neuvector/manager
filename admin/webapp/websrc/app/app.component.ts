@@ -14,6 +14,7 @@ import { AuthService } from '@common/services/auth.service';
 export class AppComponent implements OnInit {
   private win: any;
   isFirstAction: boolean;
+  isSummaryDone: boolean = false;
   initTimer: number;
 
   constructor(
@@ -91,18 +92,21 @@ export class AppComponent implements OnInit {
             GlobalConstant.SESSION_STORAGE_TOKEN,
             GlobalVariable.user
           );
+          if (!GlobalVariable.hasInitializedSummary) {
+            this.authService.getSummary().subscribe((summaryInfo: any) => {
+              GlobalVariable.isOpenShift =
+                summaryInfo.summary.platform === GlobalConstant.OPENSHIFT ||
+                summaryInfo.summary.platform === GlobalConstant.RANCHER;
+              GlobalVariable.summary = summaryInfo.summary;
+              GlobalVariable.hasInitializedSummary = true;
+              this.isSummaryDone = true;
+            });
+          }
         },
         error => {}
       );
-      if (!GlobalVariable.hasInitializedSummary) {
-        this.authService.getSummary().subscribe((summaryInfo: any) => {
-          GlobalVariable.isOpenShift =
-            summaryInfo.summary.platform === GlobalConstant.OPENSHIFT ||
-            summaryInfo.summary.platform === GlobalConstant.RANCHER;
-          GlobalVariable.summary = summaryInfo.summary;
-          GlobalVariable.hasInitializedSummary = true;
-        });
-      }
+    } else {
+      this.isSummaryDone = true;
     }
   }
 

@@ -840,10 +840,11 @@ export class AdmissionRulesService {
   };
 
   private getOtherPredefinedTag = (criterion: any): string => {
-    let displayValue =
-      criterion.value.length > 30
-        ? `${criterion.value.substring(0, 30)}...`
-        : criterion.value;
+    let displayValue = criterion.name === 'saBindRiskyRole' ? this.getDisplayedValueOfSABoundRiskyRole(criterion.value) : criterion.value;
+    displayValue =
+      displayValue.length > 30
+        ? `${displayValue.substring(0, 30)}...`
+        : displayValue;
     displayValue =
       criterion.op.toLowerCase().indexOf("contains") >= 0
         ? `[${displayValue}]`
@@ -857,6 +858,12 @@ export class AdmissionRulesService {
           : criterion.op.toUpperCase()
       }`
     )} ${displayValue}`;
+  };
+
+  private getDisplayedValueOfSABoundRiskyRole = (value) => {
+    return value.split(',').map(item => {
+      return this.translate.instant(`admissionControl.values.${item.toUpperCase()}`);
+    }).join(',');
   };
 
   private getCustomizedTag = (criterion: any): string => {

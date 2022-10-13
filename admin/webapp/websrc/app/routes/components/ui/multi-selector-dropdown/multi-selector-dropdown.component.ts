@@ -1,4 +1,5 @@
 import { Component, OnInit, Input , Output, EventEmitter } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-multi-selector-dropdown',
@@ -11,14 +12,17 @@ export class MultiSelectorDropdownComponent implements OnInit {
   @Output() shareCheckedList = new EventEmitter();
 
   checkedList : any[];
-  currentSelected : {};
+  displaySelection : string[];
   showDropDown: boolean;
 
-  constructor() {
+  constructor(
+    private translate: TranslateService
+  ) {
   }
 
   ngOnInit(): void {
     this.checkedList = this.list.filter(item => item.checked).map(item => item.value);
+    this.displaySelection = this.checkedList.map(item => this.translate.instant(`admissionControl.values.${item.toUpperCase()}`));
     this.showDropDown = false;
   }
 
@@ -30,8 +34,9 @@ export class MultiSelectorDropdownComponent implements OnInit {
       this.checkedList.splice(index,1);
     }
 
+    this.displaySelection = this.checkedList.map(item => this.translate.instant(`admissionControl.values.${item.toUpperCase()}`));
+    console.log(this.checkedList, this.displaySelection);
     this._shareCheckedList();
-
   }
 
   _shareCheckedList = () => {

@@ -1,4 +1,8 @@
-<section id="risk-reports-section">
+<app-risk-reports-printable-report
+  *ngIf="loaded"
+  class="printable-area"
+  [riskReports]="riskReports"></app-risk-reports-printable-report>
+<section id="risk-reports-section" class="screen-area">
   <div class="d-flex flew-row align-items-center justify-content-between">
     <h1 class="font-weight-light" id="risk-reports-title">
       {{ 'sidebar.nav.AUDIT' | translate }}
@@ -7,12 +11,20 @@
       <ng-container *ngIf="!error">
         <div class="d-flex">
           <button
-            mat-button
+            *ngIf="riskReports.length > 0"
+            aria-label="Print risk reports PDF"
+            type="button"
+            (click)="print()"
+            mat-button>
+            <em class="eos-icons icon-18">print</em>
+          </button>
+          <button
+            *ngIf="riskReports.length > 0"
             aria-label="Export risk reports CSV"
             type="button"
             class="d-flex align-items-center"
-            *ngIf="riskReports.length > 0"
-            (click)="riskReportGrid.exportCSV()">
+            (click)="riskReportGrid.exportCSV()"
+            mat-button>
             <i class="eos-icons mr-2">csv_file</i>CSV
           </button>
         </div>

@@ -1,0 +1,133 @@
+<div>
+  <div class="page-cover">
+    <div class="page-cover-decro"></div>
+    <div class="page-cover-logo"></div>
+    <div class="page-cover-title">
+      {{ 'audit.report.reportTitle' | translate }}
+    </div>
+  </div>
+  <div class="report-summary">
+    <div class="summary-title">
+      {{ 'audit.report.summaryHeader' | translate }}
+    </div>
+    <div class="clearfix">
+      <div class="pull-left margin-left-l" style="width: 50%">
+        <div class="summary-subtitle margin-top-m margin-bottom-m">
+          {{ 'audit.report.subHeaderBySevLevel' | translate }}
+        </div>
+        <div
+          class="row statistic-row"
+          *ngFor="let entry of severityDistribution | keyvalue">
+          <div class="col-sm-9 statistic-cell">
+            {{ entry.key }}
+          </div>
+          <div class="col-sm-3 statistic-cell">
+            {{ entry.value }}
+          </div>
+        </div>
+      </div>
+      <div class="pull-right margin-top-xxxl margin-right-xl">
+        <app-risk-reports-report-chart
+          [statisticData]="severityDistribution"
+          [isBarChart]="false"></app-risk-reports-report-chart>
+      </div>
+      <div class="pull-left margin-left-l" style="width: 50%">
+        <div class="summary-subtitle margin-top-m margin-bottom-m">
+          {{ 'audit.report.subHeaderByScanType' | translate }}
+        </div>
+        <div
+          class="row statistic-row"
+          *ngFor="let entry of scanDistribution | keyvalue">
+          <div class="col-sm-9 statistic-cell">
+            {{ entry.key }}
+          </div>
+          <div class="col-sm-3 statistic-cell">
+            {{ entry.value }}
+          </div>
+        </div>
+      </div>
+      <div class="pull-right margin-top-xxxl margin-right-xl">
+        <app-risk-reports-report-chart
+          [statisticData]="scanDistribution"
+          [isBarChart]="true"></app-risk-reports-report-chart>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix">
+    <table class="print-table">
+      <thead>
+        <tr class="print-header">
+          <th class="print-cell" style="width: 5%">
+            {{ 'general.ID' | translate }}
+          </th>
+          <th class="print-cell" style="width: 15%">
+            {{ 'general.NAME' | translate }}
+          </th>
+          <th class="print-cell" style="width: 10%">
+            {{ 'audit.gridHeader.LEVEL' | translate }}
+          </th>
+          <th class="print-cell" style="width: 20%">
+            {{ 'general.LOCATION' | translate }}
+          </th>
+          <th class="print-cell" style="width: 30%">
+            {{ 'audit.gridHeader.DETAIL' | translate }}
+          </th>
+          <th class="print-cell" style="width: 20%">
+            {{ 'general.DATETIME' | translate }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- <tr
+          class="print-row"
+          *ngFor="let rule of networkRules; let i = index"
+          [attr.data-index]="i">
+          <ng-container *ngIf="rule.id > -1">
+            <td class="print-cell" style="width: 5%">
+              {{ i + 1 }}
+            </td>
+            <td class="print-cell" style="width: 5%">
+              {{ rule.id }}
+            </td>
+            <td class="print-cell" style="width: 12%">
+              {{ rule.comment }}
+            </td>
+            <td class="print-cell" style="width: 15%">
+              {{ rule.from }}
+            </td>
+            <td class="print-cell" style="width: 15%">
+              {{ rule.to }}
+            </td>
+            <td class="print-cell" style="width: 12%">
+              {{ rule.applications.join(',') }}
+            </td>
+            <td class="print-cell" style="width: 12%">
+              {{ rule.ports }}
+            </td>
+            <td class="print-cell" style="width: 6%">
+              <span class="action-label {{ colourMap[rule.action] }}">
+                {{ 'policy.action.' + rule.action.toUpperCase() | translate }}
+              </span>
+            </td>
+            <td class="print-cell" style="width: 8%">
+              <span
+                *ngIf="colourMap[rule.cfg_type]"
+                class="action-label nv-label {{ colourMap[rule.cfg_type] }}">
+                {{
+                  'policy.head.' +
+                    colourMap[rule.cfg_type].replace('-', '_').toUpperCase()
+                    | translate
+                }}
+              </span>
+            </td>
+            <td class="print-cell" style="width: 8%">
+              {{
+                rule.last_modified_timestamp * 1000 | date: 'MMM dd, y HH:mm:ss'
+              }}
+            </td>
+          </ng-container>
+        </tr> -->
+      </tbody>
+    </table>
+  </div>
+</div>

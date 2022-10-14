@@ -4,7 +4,7 @@ import { RiskReportGridComponent } from '@components/risk-report-grid/risk-repor
 import { RiskReportsService } from '@services/risk-reports.service';
 import { Subject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
-import {MultiClusterService} from "@services/multi-cluster.service";
+import { MultiClusterService } from '@services/multi-cluster.service';
 
 @Component({
   selector: 'app-risk-reports',
@@ -30,16 +30,21 @@ export class RiskReportsComponent implements OnInit {
   ngOnInit(): void {
     this.getRiskReports();
     //refresh the page when it switched to a remote cluster
-    this._switchClusterSubscription = this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
-      this.refresh();
-    });
+    this._switchClusterSubscription =
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
+        this.refresh();
+      });
   }
 
   ngOnDestroy(): void {
-    if(this._switchClusterSubscription){
+    if (this._switchClusterSubscription) {
       this._switchClusterSubscription.unsubscribe();
     }
   }
+
+  print = () => {
+    window.print();
+  };
 
   refresh(): void {
     this.refreshing$.next(true);

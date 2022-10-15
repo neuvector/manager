@@ -321,6 +321,11 @@ hr.fancy {
     -webkit-print-color-adjust: exact;
   }
 
+  &.pink {
+    background-color: #E91E63;
+    -webkit-print-color-adjust: exact;
+  }
+
   &.allow {
     background-color: $mdc-light-green-500;
     -webkit-print-color-adjust: exact;

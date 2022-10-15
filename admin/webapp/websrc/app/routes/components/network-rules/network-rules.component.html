@@ -1,6 +1,6 @@
 <ng-container *ngIf="!isScoreImprovement; else scoreImprovement">
   <app-network-rules-printable-report
-    *ngIf="eof && !isNetworkRuleDirty()"
+    *ngIf="isPrinting && eof && !isNetworkRuleDirty()"
     class="printable-area"
     [networkRules]="networkRules"></app-network-rules-printable-report>
   <div class="screen-area">
@@ -76,7 +76,7 @@
               {{ 'policy.PROMOTE' | translate }}
             </button>
             <app-quick-filter
-              *ngIf="filteredCount > 0"
+              *ngIf="filteredCount > 1"
               class="pull-right"
               [gridOptions]="gridOptions"
               [filteredCount]="filteredCount"

@@ -1,0 +1,96 @@
+<div class="page-cover">
+  <div class="page-cover-decro"></div>
+  <div class="page-cover-logo"></div>
+  <div class="page-cover-title">Security Events Report</div>
+</div>
+<div class="report-summary">
+  <div class="summary-title">
+    {{ 'policy.report.SUMMARY_HEADER' | translate }}
+  </div>
+  <div class="clearfix">
+    <div class="margin-left-l" style="width: 50%">
+      <div class="summary-subtitle margin-top-m margin-bottom-m">
+        {{ 'policy.report.BY_TYPE' | translate }}
+      </div>
+      <div class="row statistic-row" *ngFor="let entry of severityEntries">
+        <div class="col-sm-9 statistic-cell">
+          {{ entry[0] }}
+        </div>
+        <div class="col-sm-3 statistic-cell">
+          {{ entry[1] }}
+        </div>
+      </div>
+    </div>
+    <div class="margin-top-xxxl margin-right-xl">
+      <app-security-events-printable-report-chart [statisticData]="severityMap"></app-security-events-printable-report-chart>
+    </div>
+  </div>
+</div>
+<div class="clearfix">
+  <table class="print-table">
+    <thead>
+      <tr class="print-header">
+        <th class="print-cell" style="width: 5%">
+          {{'securityEvent.pdf.ID' | translate }}
+        </th>
+        <th class="print-cell" style="width: 18%">
+          {{ 'securityEvent.pdf.TITLE' | translate }}
+        </th>
+        <th class="print-cell" style="width: 7%">
+          {{ 'securityEvent.pdf.SEVERITY' | translate }}
+        </th>
+        <th class="print-cell" style="width: 20%">
+          {{ 'securityEvent.pdf.LOCATION' | translate }}
+        </th>
+        <th class="print-cell" style="width: 37%">
+          {{ 'securityEvent.pdf.DETAILS' | translate }}
+        </th>
+        <th class="print-cell" style="width: 5%">
+          {{ 'securityEvent.pdf.ACTION' | translate }}
+        </th>
+        <th class="print-cell" style="width: 8%">
+          {{ 'securityEvent.pdf.DATETIME' | translate }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="print-row" *ngFor="let securityEvent of securityEvents; let i = index" [attr.data-index]="i">
+        <ng-container>
+          <td class="print-cell" style="width: 5%">
+            {{ securityEvent.ID }}
+          </td>
+          <td class="print-cell" style="width: 18%">
+            {{ securityEvent.Title }}
+          </td>
+          <td class="print-cell" style="width: 7%">
+            <app-security-events-printable-report-severity-col
+              [severity]="securityEvent.Severity"
+            >
+            </app-security-events-printable-report-severity-col>
+          </td>
+          <td class="print-cell" style="width: 20%">
+            <app-security-events-printable-report-location-col
+              [location]="securityEvent.Location"
+            >
+            </app-security-events-printable-report-location-col>
+          </td>
+          <td class="print-cell" style="width: 37%">
+            <app-security-events-printable-report-details-col
+              [details]="securityEvent.Details"
+            >
+            </app-security-events-printable-report-details-col>
+          </td>
+          <td class="print-cell" style="width: 5%">
+            <app-security-events-printable-report-action-col
+              [action]="securityEvent.Action"
+            >
+            </app-security-events-printable-report-action-col>
+          </td>
+          <td class="print-cell" style="width: 8%">
+            {{ securityEvent.Datetime }}
+          </td>
+        </ng-container>
+      </tr>
+    </tbody>
+  </table>
+</div>

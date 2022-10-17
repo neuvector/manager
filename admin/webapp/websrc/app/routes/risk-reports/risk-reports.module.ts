@@ -10,6 +10,8 @@ import { RiskReportsPrintableReportComponent } from './risk-reports-printable-re
 import { NgChartsModule } from 'ng2-charts';
 import { RiskReportsPrintableReportBarChartComponent } from './risk-reports-printable-report/risk-reports-printable-report-bar-chart/risk-reports-printable-report-bar-chart.component';
 import { RiskReportsPrintableReportPieChartComponent } from './risk-reports-printable-report/risk-reports-printable-report-pie-chart/risk-reports-printable-report-pie-chart.component';
+import { RiskReportsPrintableReportLocationColComponent } from './risk-reports-printable-report/risk-reports-printable-report-location-col/risk-reports-printable-report-location-col.component';
+import { RiskReportsPrintableReportDetailColComponent } from './risk-reports-printable-report/risk-reports-printable-report-detail-col/risk-reports-printable-report-detail-col.component';
 
 const routes: Routes = [{ path: '', component: RiskReportsComponent }];
 
@@ -19,6 +21,8 @@ const routes: Routes = [{ path: '', component: RiskReportsComponent }];
     RiskReportsPrintableReportComponent,
     RiskReportsPrintableReportBarChartComponent,
     RiskReportsPrintableReportPieChartComponent,
+    RiskReportsPrintableReportLocationColComponent,
+    RiskReportsPrintableReportDetailColComponent,
   ],
   imports: [
     CommonModule,

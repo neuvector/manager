@@ -16,6 +16,7 @@ export class RiskReportsComponent implements OnInit {
   refreshing$ = new Subject();
   error!: string;
   loaded = false;
+  isPrinting: boolean = false;
   private _switchClusterSubscription;
 
   get riskReports() {
@@ -43,7 +44,13 @@ export class RiskReportsComponent implements OnInit {
   }
 
   print = () => {
-    window.print();
+    this.isPrinting = true;
+    setTimeout(() => {
+      window.print();
+      setTimeout(() => {
+        this.isPrinting = false;
+      }, 1000);
+    }, 1000);
   };
 
   refresh(): void {

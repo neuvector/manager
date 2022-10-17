@@ -8,12 +8,21 @@ import { ChartConfiguration } from 'chart.js';
   styleUrls: ['./risk-reports-printable-report-bar-chart.component.scss'],
 })
 export class RiskReportsPrintableReportBarChartComponent implements OnInit {
-  @Input() statisticData!: Map<string, number>;
+  private _statisticData!: Map<string, number>;
+  @Input() set statisticData(stats: Map<string, number>) {
+    this._statisticData = stats;
+    if (stats) this.genBarChart();
+  }
+  get statisticData() {
+    return this._statisticData;
+  }
   barChartData!: ChartConfiguration<'bar', number[], string[]>;
 
   constructor(private tr: TranslateService) {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  genBarChart() {
     const TYPE_BAR_COLOR = '#ff9800';
     const TYPE_BAR_LABELS = [...this.statisticData.keys()] as any[];
     this.barChartData = {

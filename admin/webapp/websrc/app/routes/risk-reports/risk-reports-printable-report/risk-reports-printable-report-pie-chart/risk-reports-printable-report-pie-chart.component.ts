@@ -8,12 +8,21 @@ import { ChartConfiguration } from 'chart.js';
   styleUrls: ['./risk-reports-printable-report-pie-chart.component.scss'],
 })
 export class RiskReportsPrintableReportPieChartComponent implements OnInit {
-  @Input() statisticData!: Map<string, number>;
+  private _statisticData!: Map<string, number>;
+  @Input() set statisticData(stats: Map<string, number>) {
+    this._statisticData = stats;
+    if (stats) this.genPieChart();
+  }
+  get statisticData() {
+    return this._statisticData;
+  }
   pieChartData!: ChartConfiguration<'pie', number[], string[]>;
 
   constructor(private tr: TranslateService) {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  genPieChart() {
     const TYPE_PIE = [
       [this.tr.instant('enum.INFO'), '#2196f3'],
       [this.tr.instant('enum.WARNING'), '#ff9800'],
@@ -27,6 +36,9 @@ export class RiskReportsPrintableReportPieChartComponent implements OnInit {
     ) as number[];
     this.pieChartData = {
       options: {
+        animation: {
+          duration: 0,
+        },
         maintainAspectRatio: false,
         plugins: {
           title: {

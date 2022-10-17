@@ -1,5 +1,5 @@
 <app-risk-reports-printable-report
-  *ngIf="loaded"
+  *ngIf="isPrinting && loaded"
   class="printable-area"
   [riskReports]="riskReports"></app-risk-reports-printable-report>
 <section id="risk-reports-section" class="screen-area">

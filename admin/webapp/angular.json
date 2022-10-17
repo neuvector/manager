@@ -138,6 +138,7 @@
   },
   "defaultProject": "neuvector",
   "cli": {
+    "analytics": false,
     "defaultCollection": "@angular-eslint/schematics",
     "cache": {
       "path": "../.angular/cache"

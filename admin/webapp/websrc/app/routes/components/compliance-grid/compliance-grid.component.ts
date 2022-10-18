@@ -257,6 +257,7 @@ export class ComplianceGridComponent implements OnInit {
         compliance4Csv.push(node.data);
       });
       compliance4Csv = JSON.parse(JSON.stringify(compliance4Csv));
+      let compliance_ids: string[] = [];
       compliance4Csv = compliance4Csv.flatMap(compliance => {
         let compliances: Check[] = [];
         if (compliance.child_ids && compliance.child_ids.length > 0) {
@@ -264,12 +265,18 @@ export class ComplianceGridComponent implements OnInit {
             const child: ComplianceRow = {
               ...this.gridApi.getRowNode(id)?.data,
             };
-            this.complianceRow2Item(child);
-            compliances.push(child);
+            if (!compliance_ids.includes(child.id)) {
+              compliance_ids.push(child.id);
+              this.complianceRow2Item(child);
+              compliances.push(child);
+            }
           });
         } else {
-          this.complianceRow2Item(compliance);
-          compliances.push(compliance);
+          if (!compliance_ids.includes(compliance.id)) {
+            compliance_ids.push(compliance.id);
+            this.complianceRow2Item(compliance);
+            compliances.push(compliance);
+          }
         }
         return compliances;
       });

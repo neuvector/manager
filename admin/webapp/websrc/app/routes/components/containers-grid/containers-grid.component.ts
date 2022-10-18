@@ -254,6 +254,9 @@ export class ContainersGridComponent implements OnInit {
   }
 
   postSort(nodes: RowNode[]): void {
+    nodes = nodes.sort((a, b) =>
+      !a.data.parent_id ? -1 : !b.data.parent_id ? 1 : 0
+    );
     let lastParentIdx = -1;
     for (let i = 0; i < nodes.length; i++) {
       const pid = nodes[i].data.parent_id;

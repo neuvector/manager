@@ -22,7 +22,7 @@ pull_base:
 	docker pull neuvector/manager_base:latest
 
 manager_image: pull_base stage_mgr
-	docker build --build-arg NV_TAG=$(NV_TAG) --no-cache=true -t neuvector/gemini -f manager/Dockerfile.manager .
+	docker build --build-arg NV_TAG=$(NV_TAG) --no-cache=true -t neuvector/manager -f manager/Dockerfile.manager .
 
 jar:
 	@echo "Pulling images ..."

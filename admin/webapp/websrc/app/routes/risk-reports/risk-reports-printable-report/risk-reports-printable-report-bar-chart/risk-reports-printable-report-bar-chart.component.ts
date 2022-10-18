@@ -27,6 +27,9 @@ export class RiskReportsPrintableReportBarChartComponent implements OnInit {
     const TYPE_BAR_LABELS = [...this.statisticData.keys()] as any[];
     this.barChartData = {
       options: {
+        animation: {
+          duration: 0,
+        },
         indexAxis: 'y',
         maintainAspectRatio: false,
         plugins: {

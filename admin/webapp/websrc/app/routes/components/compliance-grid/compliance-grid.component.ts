@@ -93,7 +93,11 @@ export class ComplianceGridComponent implements OnInit {
       cellRendererParams: {
         kubeType: this.kubernetesCisVersion,
       },
-      cellClass: ['d-flex', 'align-items-center', 'pl-2'],
+      cellClass: ['d-flex', 'align-items-center'],
+      cellClassRules: {
+        'justify-content-center': params =>
+          !params.data.parent_id && !params.data.child_ids,
+      },
       headerValueGetter: () =>
         this.translate.instant('event.gridHeader.CATEGORY'),
     },

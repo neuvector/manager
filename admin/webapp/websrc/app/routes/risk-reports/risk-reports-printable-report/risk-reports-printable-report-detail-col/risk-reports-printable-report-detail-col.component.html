@@ -1,0 +1,83 @@
+<ng-container *ngIf="audit.items && audit.items.length > 0; else scanReport">
+  <ul class="report-list">
+    <ng-container *ngFor="let benchViolation of audit.items; let i = index">
+      <li *ngIf="i < 9" class="p-0">{{ benchViolation }}</li>
+      <li *ngIf="i === 9" class="p-0">
+        ...... ( {{ 'general.TOTAL' | translate }} : {{ audit.items.length }}
+        {{ 'audit.gridHeader.ITEMS' | translate }} )
+      </li>
+    </ng-container>
+  </ul>
+</ng-container>
+<ng-template #scanReport>
+  <ng-container *ngIf="audit.base_os">
+    <span>
+      <strong>{{ 'audit.gridHeader.BASE_OS' | translate }}</strong>
+      : {{ audit.base_os }}
+    </span>
+    <br />
+  </ng-container>
+  <ng-container *ngIf="audit.cvedb_version">
+    <span>
+      <strong>{{ 'audit.gridHeader.CVE_DB_VERSION' | translate }}</strong>
+      : {{ audit.cvedb_version }}
+    </span>
+    <br />
+  </ng-container>
+  <ng-container *ngIf="audit.medium_vul_cnt > 0 || audit.high_vul_cnt > 0">
+    <table class="print-table" style="width: 250px">
+      <thead>
+        <tr class="print-header">
+          <th class="print-cell" style="width: 10%">
+            {{ 'audit.gridHeader.HIGH_VUL' | translate }}
+          </th>
+          <th class="print-cell" style="width: 10%">
+            {{ 'audit.gridHeader.MEDIUM_VUL' | translate }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="print-row">
+          <td class="print-cell" style="width: 10%">
+            <ng-container *ngIf="audit.medium_vul_cnt > 0">
+              <ng-container *ngTemplateOutlet="medVulList"></ng-container>
+            </ng-container>
+          </td>
+          <td class="print-cell" style="width: 10%">
+            <ng-container *ngIf="audit.high_vul_cnt > 0">
+              <ng-container *ngTemplateOutlet="highVulList"></ng-container>
+            </ng-container>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+</ng-template>
+<ng-template #medVulList>
+  <ul class="report-list lh-zero">
+    <ng-container *ngFor="let medVul of audit.medium_vuls; let i = index">
+      <li *ngIf="i < 3">{{ medVul }}</li>
+      <ng-container *ngIf="i === 3">
+        <li>......</li>
+        <li>
+          ( {{ 'general.TOTAL' | translate }} : {{ audit.medium_vul_cnt }}
+          {{ 'audit.gridHeader.ITEMS' | translate }} )
+        </li>
+      </ng-container>
+    </ng-container>
+  </ul>
+</ng-template>
+<ng-template #highVulList>
+  <ul class="report-list lh-zero">
+    <ng-container *ngFor="let highVul of audit.high_vuls; let i = index">
+      <li *ngIf="i < 3">{{ highVul }}</li>
+      <ng-container *ngIf="i === 3">
+        <li>......</li>
+        <li>
+          ( {{ 'general.TOTAL' | translate }} : {{ audit.high_vul_cnt }}
+          {{ 'audit.gridHeader.ITEMS' | translate }} )
+        </li>
+      </ng-container>
+    </ng-container>
+  </ul>
+</ng-template>

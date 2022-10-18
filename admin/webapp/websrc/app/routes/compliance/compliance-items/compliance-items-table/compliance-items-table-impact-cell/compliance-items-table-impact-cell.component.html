@@ -1,8 +1,28 @@
-<span *ngIf="params.node.data.images.length > 0" class="d-flex align-items-center"><i
-  class="eos-icons">system_image</i>&nbsp;{{params.node.data.images.length}}</span>
-<span *ngIf="params.node.data.workloads.length > 0" class="d-flex align-items-center"><i
-  class="eos-icons">check_box_blank</i>&nbsp;{{params.node.data.workloads.length}}</span>
-<span *ngIf="params.node.data.nodes.length > 0" class="d-flex align-items-center"><i
-  class="eos-icons">storage</i>&nbsp;{{params.node.data.nodes.length}}</span>
-<span *ngIf="params.node.data.platforms.length > 0" class="d-flex align-items-center"><i
-  class="eos-icons">apartment</i>&nbsp;{{params.node.data.platforms.length}}</span>
+<div class="d-flex align-items-center justify-content-between">
+  <span
+    *ngIf="params.node.data.images.length > 0"
+    class="d-flex align-items-center">
+    <i class="eos-icons">system_image</i>&nbsp;{{
+      params.node.data.images.length
+    }}
+  </span>
+  <span
+    *ngIf="params.node.data.workloads.length > 0"
+    class="d-flex align-items-center">
+    <i class="eos-icons">check_box_blank</i>&nbsp;{{
+      params.node.data.workloads.length
+    }}
+  </span>
+  <span
+    *ngIf="params.node.data.nodes.length > 0"
+    class="d-flex align-items-center">
+    <i class="eos-icons">storage</i>&nbsp;{{ params.node.data.nodes.length }}
+  </span>
+  <span
+    *ngIf="params.node.data.platforms.length > 0"
+    class="d-flex align-items-center">
+    <i class="eos-icons">apartment</i>&nbsp;{{
+      params.node.data.platforms.length
+    }}
+  </span>
+</div>

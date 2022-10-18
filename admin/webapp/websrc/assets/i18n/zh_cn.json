@@ -2451,6 +2451,8 @@
     "ALLOW": "允许",
     "EXCEPTION": "允许",
     "names": {
+      "ADD_CUSTOMIZED_CRITERION": "添加自定义条件",
+      "SA_BIND_RISKY_ROLE": "服务账户绑定的风险角色",
       "IMAGE": "镜像",
       "NODE": "主机",
       "CONTAINER": "容器",
@@ -2515,10 +2517,17 @@
       ">=": ">=",
       "CONTAINSALL": "包含所有",
       "CONTAINSANY": "包含任意",
+      "CONTAINSANYEXACT": "包含任意 (全匹配)",
+      "CONTAINSANYPARTIAL": "包含任意 (部分)",
+      "CONTAINSANYSTARTSWITH": "包含任意 (起始)",
+      "CONTAINSANYENDSWITH": "包含任意 (结束)",
       "NOTCONTAINSANY": "不包含",
       "CONTAINSOTHERTHAN": "包含于",
       "CONTAINSANY_SINGLE": "是",
       "NOTCONTAINSANY_SINGLE": "不是",
+      "CONTAINSTAGANY": "包含标签 (任意)",
+      "EXIST": "存在",
+      "NOTEXIST": "不存在",
       "text": {
         "<=": "少于",
         ">=": "多于"
@@ -2532,7 +2541,12 @@
       "LOW": "低",
       "NONE": "没有",
       "DAYS": "天",
-      "CORE": "核心"
+      "CORE": "核心",
+      "RISKY_ROLE_VIEW_SECRET": "主题能列出秘文清单",
+      "RISKY_ROLE_ANY_ACTION_WORKLOAD": "主题能在容器资源上做任何动作",
+      "RISKY_ROLE_ANY_ACTION_RBAC": "主题能在RBAC资源上做任何动作",
+      "RISKY_ROLE_CREATE_POD": "主题能创建容器资源",
+      "RISKY_ROLE_EXEC_INTO_CONTAINER": "主题能进入容器执行"
     },
     "display": {
       "<=": "（{{days}}天之内报告的）",

@@ -58,6 +58,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   context = { componentParent: this };
   routeEventSubscription!: Subscription;
   isWriteRuleAuthorized: boolean;
+  isPrinting: boolean = false;
   private w: any;
   private switchClusterSubscription;
 
@@ -377,7 +378,13 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   };
 
   print = () => {
-    window.print();
+    this.isPrinting = true;
+    setTimeout(() => {
+      window.print();
+      setTimeout(() => {
+        this.isPrinting = false;
+      }, 1000);
+    }, 1000);
   };
 
   private createRuleWorker = () => {};
@@ -396,7 +403,6 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   private mergeRulesByWebWorkerClient = (rulesBlock: Array<any>) => {
     let eof = rulesBlock.length < MapConstant.PAGE.NETWORK_RULES;
     this.networkRules = this.networkRules.concat(rulesBlock);
-    this.filteredCount = this.networkRules.length;
     this.renderNetworkRule(this.networkRules, eof);
   };
 
@@ -419,6 +425,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       action: '',
       last_modified_timestamp: '',
     });
+    this.filteredCount = networkRules.length;
     this.gridOptions.api!.setRowData(networkRules);
   };
 

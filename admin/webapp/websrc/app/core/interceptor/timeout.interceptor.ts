@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import {
   HttpHandler,
   HttpInterceptor,
@@ -20,6 +21,7 @@ export class TimeoutInterceptor implements HttpInterceptor {
     private router: Router,
     private location: Location,
     private auth: AuthService,
+    private dialog: MatDialog,
     @Inject(LOCAL_STORAGE) private localStorage: StorageService,
   ) {
     this.location = location;
@@ -44,6 +46,7 @@ export class TimeoutInterceptor implements HttpInterceptor {
               currentPath !== GlobalConstant.PATH_LOGIN)
           ) {
             this.localStorage.set(GlobalConstant.SESSION_STORAGE_ORIGINAL_URL, currentPath);
+            this.dialog.closeAll();
             if (error.error.code === 51) {
               this.auth.logout(false, true);
             } else {

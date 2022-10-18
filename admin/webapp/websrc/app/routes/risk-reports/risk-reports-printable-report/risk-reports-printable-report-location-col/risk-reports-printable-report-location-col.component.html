@@ -1,0 +1,35 @@
+<ng-container *ngIf="audit.workload_name">
+  <span>
+    <strong>{{ 'audit.gridHeader.CONTAINER' | translate }}</strong>
+    : {{ audit.workload_name }}
+  </span>
+  <br />
+</ng-container>
+<ng-container *ngIf="audit.host_name">
+  <span>
+    <strong>{{ 'audit.gridHeader.NODE' | translate }}</strong>
+    : {{ audit.host_name }}
+  </span>
+  <br />
+</ng-container>
+<ng-container *ngIf="audit.registry">
+  <span>
+    <strong>{{ 'audit.gridHeader.REGISTRY' | translate }}</strong>
+    : {{ audit.registry }}
+  </span>
+  <br />
+</ng-container>
+<ng-container *ngIf="audit.repository && audit.tag">
+  <span>
+    <strong>{{ 'audit.gridHeader.IMAGE' | translate }}</strong>
+    : {{ audit.repository }}:{{ audit.tag }}
+  </span>
+  <br />
+</ng-container>
+<ng-container *ngIf="audit.platform">
+  <span>
+    <strong>{{ 'audit.gridHeader.PLATFORM' | translate }}</strong>
+    : {{ formattedPlatform }}
+  </span>
+  <br />
+</ng-container>

@@ -21,6 +21,9 @@ import {
   FilterCategory,
   Other
 } from './partial/advanced-filter-modal/advanced-filter-modal.service';
+import { TranslateService } from '@ngx-translate/core';
+import { arrayToCsv } from '@common/utils/common.utils';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-security-events',
@@ -56,6 +59,9 @@ export class SecurityEventsComponent implements OnInit {
   reviewNetworkRuleModal: MatDialogRef<any>;
   isEditRuleAuthorized: boolean;
   isUpdateRuleAuthorized: boolean;
+  metadata: any;
+  printableData: any[];
+  isPrinting: boolean = false;
 
   constructor(
     public securityEventsService: SecurityEventsService,
@@ -65,6 +71,7 @@ export class SecurityEventsComponent implements OnInit {
     private datePipe: DatePipe,
     public dialog: MatDialog,
     private advancedFilterModalService: AdvancedFilterModalService,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -75,6 +82,140 @@ export class SecurityEventsComponent implements OnInit {
         console.log('this.selectedRow', this.selectedRow);
         this.refresh();
     });
+
+    this.metadata = {
+      title: this.translate.instant(
+        "securityEvent.pdf.REPORT_TITLE"
+      ),
+      header: {
+        id: this.translate.instant("securityEvent.pdf.ID"),
+        title: this.translate.instant("securityEvent.pdf.TITLE"),
+        severity: this.translate.instant(
+          "securityEvent.pdf.SEVERITY"
+        ),
+        location: this.translate.instant(
+          "securityEvent.pdf.LOCATION"
+        ),
+        details: this.translate.instant(
+          "securityEvent.pdf.DETAILS"
+        ),
+        action: this.translate.instant(
+          "securityEvent.pdf.ACTION"
+        ),
+        datetime: this.translate.instant(
+          "securityEvent.pdf.DATETIME"
+        )
+      },
+      items: {
+        source: this.translate.instant("securityEvent.SOURCE"),
+        destination: this.translate.instant(
+          "securityEvent.DESTINATION"
+        ),
+        host: this.translate.instant("securityEvent.HOST"),
+        container: this.translate.instant(
+          "securityEvent.CONTAINER"
+        ),
+        applications: this.translate.instant(
+          "securityEvent.APPLICATIONS"
+        ),
+        count: this.translate.instant("threat.gridHeader.COUNT"),
+        description: this.translate.instant(
+          "securityEvent.DESCRIPTION"
+        ),
+        serverPort: this.translate.instant(
+          "violation.gridHeader.SERVER_PORT"
+        ),
+        protocol: this.translate.instant(
+          "violation.gridHeader.PROTOCOL"
+        ),
+        serverImage: this.translate.instant(
+          "violation.gridHeader.SERVER_IMAGE"
+        ),
+        clusterName: this.translate.instant(
+          "violation.gridHeader.CLUSTER_NAME"
+        ),
+        group: this.translate.instant("securityEvent.GROUP"),
+        procName: this.translate.instant(
+          "securityEvent.PROC_NAME"
+        ),
+        procPath: this.translate.instant(
+          "securityEvent.PROC_PATH"
+        ),
+        procCmd: this.translate.instant("securityEvent.PROC_CMD"),
+        cmd: this.translate.instant("securityEvent.CMD"),
+        procEffectedUid: this.translate.instant(
+          "securityEvent.PROC_EFF_UID"
+        ),
+        procEffectedUser: this.translate.instant(
+          "securityEvent.PROC_EFF_USER"
+        ),
+        localIp: this.translate.instant("securityEvent.LOCAL_IP"),
+        remoteIp: this.translate.instant(
+          "securityEvent.REMOTE_IP"
+        ),
+        localPort: this.translate.instant(
+          "securityEvent.LOCAL_PORT"
+        ),
+        remotePort: this.translate.instant(
+          "securityEvent.REMOTE_PORT"
+        ),
+        ipProto: this.translate.instant("securityEvent.IP_PROTO"),
+        fileNames: this.translate.instant(
+          "securityEvent.FILE_NAME"
+        ),
+        filePath: this.translate.instant(
+          "securityEvent.FILE_PATH"
+        )
+      },
+      others: {
+        tocText: this.translate.instant("general.REPORT_TOC"),
+        headerText: this.translate.instant(
+          "partner.securityEvent.pdf.header"
+        ),
+        footerText: this.translate.instant(
+          "securityEvent.pdf.FOOTER"
+        ),
+        subTitleDetails: this.translate.instant(
+          "securityEvent.pdf.DETAILS"
+        ),
+        reportSummary: this.translate.instant("enum.SUMMARY"),
+        logoName: this.translate.instant(
+          "partner.general.LOGO_NAME"
+        ),
+        byEventType: this.translate.instant(
+          "securityEvent.pdf.TYPEDIST"
+        ),
+        // summaryRange:
+        //   options.filteredCount === 0
+        //     ? ""
+        //     : options.filteredCount === options.rangedCount
+        //     ? this.translate.instant(
+        //         "general.PDF_SUMMARY_RANGE",
+        //         {
+        //           from: options.from,
+        //           to: options.to,
+        //           rangedCount: options.rangedCount
+        //         },
+        //         "",
+        //         "en"
+        //       )
+        //     : this.translate.instant(
+        //         "general.PDF_SUMMARY_RANGE_FILTERED",
+        //         {
+        //           from: options.from,
+        //           to: options.to,
+        //           rangedCount: options.rangedCount,
+        //           filteredCount: options.filteredCount
+        //         },
+        //         "",
+        //         "en"
+        //       ),
+        // detailsLimit:
+        //   options.filteredCount > REPORT_TABLE_ROW_LIMIT
+        //     ? this.translate.instant("general.PDF_TBL_ROW_LIMIT", {max: $scope.REPORT_TABLE_ROW_LIMIT}, "", "en")
+        //     : ""
+      }
+    };
   }
 
   ngAfterViewInit() {
@@ -83,6 +224,7 @@ export class SecurityEventsComponent implements OnInit {
 
   refresh = () => {
     this.securityEventsService.displayedSecurityEvents = [];
+    this.printableData = [];
     this.securityEventsService.cachedSecurityEvents = [];
     this.preprosessSecurityEventsData();
   };
@@ -232,6 +374,7 @@ export class SecurityEventsComponent implements OnInit {
     this.securityEventsService.displayedSecurityEvents = this.securityEventsService.cachedSecurityEvents.filter(event => {
       return this.advancedFilterModalService._includeFilter(event, filterStr);
     });
+    this.printableData = this.getPrintableData(this.securityEventsService.displayedSecurityEvents);
     this.securityEventsService.prepareContext4TwoWayInfinityScroll();
   };
 
@@ -239,6 +382,283 @@ export class SecurityEventsComponent implements OnInit {
     document.getElementById(elemId)!['checked'] = false;
     this.securityEventsService.dateSliderCtx.openedIndex = -1;
     this.securityEventsService.dateSliderCtx.openedPage = -1;
+  };
+
+  exportCSV = () => {
+    let csvData = this.getCsvData(this.securityEventsService.displayedSecurityEvents);
+    let csv = arrayToCsv(JSON.parse(JSON.stringify(csvData)));
+    let blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    saveAs(blob, "Security_events.csv");
+  };
+
+  printReport = () => {
+    this.isPrinting = true;
+    setTimeout(() => {
+      window.print();
+      setTimeout(() => {
+        this.isPrinting = false;
+      }, 1000);
+    }, 1000);
+  };
+
+  private getCsvData = (secEvents) => {
+    return secEvents.map((secEvent, $index) => {
+      return this._organizeSecEventTblRow(secEvent, $index, 'csv');
+    });
+  };
+
+  private getPrintableData = (secEvents) => {
+    return secEvents.map((secEvent, $index) => {
+      return this._organizeSecEventTblRow(secEvent, $index, 'printable');
+    });
+  };
+
+  private _organizeSecEventTblRow = (secEvent: any, index: number, format: string) => {
+    let resPrototype = {
+      ID: "",
+      Title: "",
+      Severity: "",
+      Location: "",
+      Details: "",
+      Action: "",
+      Datetime: ""
+    };
+    const lineBreak = format === 'csv' ? '\n' : '<br/>';
+    resPrototype.ID = (index + 1).toString();
+    resPrototype.Title = `${secEvent.name.replace(/\"/g, "'")}`;
+    resPrototype.Severity = secEvent.details.level
+      ? secEvent.details.level.name
+      : "";
+    resPrototype.Location = `${this._organizeLocation(
+      secEvent
+    ).stack[0].ul.join(lineBreak)}`;
+    resPrototype.Details = `${this._organizeSecEventDetails(secEvent)!
+      .stack.map(function(elem) {
+        return typeof elem === "string" ? elem : elem.ul.join(lineBreak);
+      })
+      .join(lineBreak)
+      .replace(/\"/g, "'")}`;
+    resPrototype.Action = secEvent.details.action
+      ? secEvent.details.action.name
+      : "";
+    resPrototype.Datetime = `${secEvent.reportedAt}`;
+    return resPrototype;
+  };
+
+  private _organizeLocation = (secEvent: any) => {
+    if (secEvent.endpoint.source && secEvent.endpoint.destination) {
+      return {
+        stack: [
+          {
+            ul: [
+              `${this.metadata.items.source}: ${
+                secEvent.endpoint.source.domain
+                  ? `${secEvent.endpoint.source.domain}: `
+                  : ""
+              }${secEvent.endpoint.source.displayName}`,
+              `${this.metadata.items.destination}: ${
+                secEvent.endpoint.destination.domain
+                  ? `${secEvent.endpoint.destination.domain}: `
+                  : ""
+              }${secEvent.endpoint.destination.displayName}`
+            ]
+          }
+        ]
+      };
+    } else if (
+      secEvent.endpoint.source &&
+      !secEvent.details.labels.includes("host")
+    ) {
+      return {
+        stack: [
+          {
+            ul: [
+              `${this.metadata.items.host}: ${secEvent.host_name}`,
+              `${this.metadata.items.container}: ${
+                secEvent.endpoint.source.domain
+                  ? `${secEvent.endpoint.source.domain}: `
+                  : ""
+              }${secEvent.endpoint.source.displayName}`
+            ]
+          }
+        ]
+      };
+    } else if (
+      secEvent.endpoint.destination &&
+      !secEvent.details.labels.includes("host")
+    ) {
+      return {
+        stack: [
+          {
+            ul: [
+              `${this.metadata.items.host}: ${secEvent.host_name}`,
+              `${this.metadata.items.container}: ${
+                secEvent.endpoint.destination.domain
+                  ? `${secEvent.endpoint.destination.domain}: `
+                  : ""
+              }${secEvent.endpoint.destination.displayName}`
+            ]
+          }
+        ]
+      };
+    } else {
+      return {
+        stack: [
+          {
+            ul: [`${this.metadata.items.host}: ${secEvent.host_name}`]
+          }
+        ]
+      };
+    }
+  };
+
+  private _organizeSecEventDetails = (secEvent: any) => {
+    let ul: any[] = [];
+
+    switch (secEvent.type.name) {
+      case "threat":
+        if (secEvent.details.clusterName)
+          ul.push(
+            `${this.metadata.items.clusterName}: ${
+              secEvent.details.clusterName
+            }`
+          );
+        if (secEvent.applications)
+          ul.push(
+            `${this.metadata.items.applications}: ${secEvent.applications}`
+          );
+        if (secEvent.details.count)
+          ul.push(`${this.metadata.items.count}: ${secEvent.details.count}`);
+        if (secEvent.details.message.content)
+          ul.push(
+            `${this.metadata.items.description}: ${
+              secEvent.details.message.content
+            }`
+          );
+        return { stack: [{ ul: ul }] };
+      case "violation":
+        if (secEvent.details.clusterName)
+          ul.push(
+            `${this.metadata.items.clusterName}: ${
+              secEvent.details.clusterName
+            }`
+          );
+        if (secEvent.applications)
+          ul.push(
+            `${this.metadata.items.applications}: ${secEvent.applications}`
+          );
+        if (secEvent.details.serverPort)
+          ul.push(
+            `${
+              secEvent.details.port > 0
+                ? this.metadata.items.serverPort
+                : this.metadata.items.protocol
+            }: ${secEvent.details.serverPort}`
+          );
+        if (secEvent.details.serverImage)
+          ul.push(
+            `${this.metadata.items.serverImage}: ${
+              secEvent.details.serverImage
+            }`
+          );
+        return { stack: [{ ul: ul }] };
+      case "incident":
+        if (secEvent.details.clusterName)
+          ul.push(
+            `${this.metadata.items.clusterName}: ${
+              secEvent.details.clusterName
+            }`
+          );
+        if (secEvent.details.message.group)
+          ul.push(
+            `${this.metadata.items.group}: ${secEvent.details.message.group}`
+          );
+        if (secEvent.details.message.procName)
+          ul.push(
+            `${this.metadata.items.procName}: ${
+              secEvent.details.message.procName
+            }`
+          );
+        if (secEvent.details.message.procPath)
+          ul.push(
+            `${this.metadata.items.procPath}: ${
+              secEvent.details.message.procPath
+            }`
+          );
+        if (secEvent.details.message.procCmd)
+          ul.push(
+            `${this.metadata.items.procCmd}: ${
+              secEvent.details.message.procCmd
+            }`
+          );
+        if (
+          secEvent.details.message.procCmd &&
+          secEvent.name.toLowerCase().indexOf("process") < 0 &&
+          secEvent.name.toLowerCase().indexOf("escalation") < 0 &&
+          secEvent.name.toLowerCase().indexOf("detected") < 0
+        )
+          ul.push(
+            `${this.metadata.items.cmd}: ${secEvent.details.message.procCmd}`
+          );
+        if (secEvent.details.message.procEffectiveUid)
+          ul.push(
+            `${this.metadata.items.procEffectedUid}: ${
+              secEvent.details.message.procEffectiveUid
+            }`
+          );
+        if (secEvent.details.message.procEffectiveUser)
+          ul.push(
+            `${this.metadata.items.procEffectedUser}: ${
+              secEvent.details.message.procEffectiveUser
+            }`
+          );
+        if (secEvent.details.message.localIP)
+          ul.push(
+            `${this.metadata.items.localIp}: ${
+              secEvent.details.message.localIP
+            }`
+          );
+        if (secEvent.details.message.remoteIP)
+          ul.push(
+            `${this.metadata.items.remoteIp}: ${
+              secEvent.details.message.remoteIP
+            }`
+          );
+        if (secEvent.details.message.localPort)
+          ul.push(
+            `${this.metadata.items.localPort}: ${
+              secEvent.details.message.localPort
+            }`
+          );
+        if (secEvent.details.message.localPort)
+          ul.push(
+            `${this.metadata.items.remotePort}: ${
+              secEvent.details.message.localPort
+            }`
+          );
+        if (secEvent.details.message.ipProto)
+          ul.push(
+            `${this.metadata.items.ipProto}: ${
+              secEvent.details.message.ipProto
+            }`
+          );
+        if (secEvent.details.message.filePath)
+          ul.push(
+            `${this.metadata.items.filePath}: ${
+              secEvent.details.message.filePath
+            }`
+          );
+        if (secEvent.details.message.fileNames)
+          ul.push(
+            `${this.metadata.items.fileNames}: ${
+              secEvent.details.message.fileNames
+            }`
+          );
+        return {
+          stack: [secEvent.details.message.content, { ul: ul }]
+        };
+      default: return null;
+    }
   };
 
   private openReviewProcessRuleModal = (secEvent: any) => {
@@ -317,7 +737,8 @@ export class SecurityEventsComponent implements OnInit {
     this.securityEventsService.displayedSecurityEvents =
       this.securityEventsService.displayedSecurityEvents.filter(
         event => this.advancedFilterModalService.filterFn(event)
-      )
+      );
+    this.printableData = this.getPrintableData(this.securityEventsService.displayedSecurityEvents);
     this.securityEventsService.prepareContext4TwoWayInfinityScroll();
   };
 
@@ -469,10 +890,11 @@ export class SecurityEventsComponent implements OnInit {
             this.domainList = this._getDomainList(this.securityEventsService.cachedSecurityEvents);
             this.prepareAutoCompleteData(this.securityEventsService.cachedSecurityEvents);
 
-            if (this.selectedRow !== 'null') {
+            if (this.selectedRow && this.selectedRow !== 'null') {
               this.onQuickFilterChange(this.datePipe.transform(this.selectedRow.reported_at, 'MMM dd, yyyy HH:mm:ss')!);
             } else {
               this.securityEventsService.displayedSecurityEvents = JSON.parse(JSON.stringify(this.securityEventsService.cachedSecurityEvents));
+              this.printableData = this.getPrintableData(this.securityEventsService.displayedSecurityEvents);
             }
             this.securityEventsService.prepareContext4TwoWayInfinityScroll();
           }

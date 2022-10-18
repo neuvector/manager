@@ -1,0 +1,11 @@
+div#report-preload {
+  visibility: hidden;
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  z-index: -1; // hide images
+  content: url('../../../assets/img/background.png')
+    url('../../../assets/img/abstract.png')
+    url('../../../assets/img/logo-with-text.png'); // preload images
+}

@@ -21,6 +21,12 @@ import { ReviewProcessRuleModalComponent } from './partial/review-process-rule-m
 import { ReviewNetworkRuleModalComponent } from './partial/review-network-rule-modal/review-network-rule-modal.component';
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
 import { PodBriefModule } from  '@components/pod-brief/pod-brief.module';
+import { SecurityEventsPrintableReportComponent } from './partial/security-events-printable-report/security-events-printable-report.component';
+import { SecurityEventsPrintableReportLocationColComponent } from './partial/security-events-printable-report-location-col/security-events-printable-report-location-col.component';
+import { SecurityEventsPrintableReportDetailsColComponent } from './partial/security-events-printable-report-details-col/security-events-printable-report-details-col.component';
+import { SecurityEventsPrintableReportActionColComponent } from './partial/security-events-printable-report-action-col/security-events-printable-report-action-col.component';
+import { SecurityEventsPrintableReportSeverityColComponent } from './partial/security-events-printable-report-severity-col/security-events-printable-report-severity-col.component';
+import { SecurityEventsPrintableReportChartComponent } from './partial/security-events-printable-report-chart/security-events-printable-report-chart.component';
 
 const routes: Routes = [
   { path: '', component: SecurityEventsComponent },
@@ -39,6 +45,12 @@ const routes: Routes = [
     PacketModalComponent,
     ReviewProcessRuleModalComponent,
     ReviewNetworkRuleModalComponent,
+    SecurityEventsPrintableReportComponent,
+    SecurityEventsPrintableReportLocationColComponent,
+    SecurityEventsPrintableReportDetailsColComponent,
+    SecurityEventsPrintableReportActionColComponent,
+    SecurityEventsPrintableReportSeverityColComponent,
+    SecurityEventsPrintableReportChartComponent,
   ],
   providers: [
     AdvancedFilterModalService

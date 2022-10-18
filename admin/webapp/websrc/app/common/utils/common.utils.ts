@@ -705,3 +705,10 @@ export function serviceToGroup(service: Service): Group {
     kind: 'container',
   } as any;
 }
+
+export function getValueType4Text(valueText: string): string {
+  const booleanValues = ['true', 'false'];
+  if (booleanValues.includes(valueText)) return 'boolean';
+  if (!isNaN(valueText as any)) return 'number';
+  return 'string';
+}

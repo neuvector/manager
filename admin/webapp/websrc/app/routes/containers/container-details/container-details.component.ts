@@ -243,7 +243,13 @@ export class ContainerDetailsComponent implements OnInit {
         this.notificationService.open(this.tr.instant('cveProfile.msg.ADD_OK'));
         if (!vulnerability.tags) vulnerability.tags = [];
         vulnerability.tags.push('accepted');
-        this.containerVuls = [...this.containerVuls];
+        if (this.showAcceptedVuls) {
+          this.containerVuls = [...this.containerVuls];
+        } else {
+          this.containerVuls = this.containerVuls.filter(
+            v => v !== vulnerability
+          );
+        }
         this.cd.detectChanges();
       },
       error: ({ error }: { error: ErrorResponse }) => {

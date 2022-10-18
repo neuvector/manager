@@ -102,8 +102,8 @@ export class GlobalConstant {
     },
     CRITERION_TYPE: {
       BIND_RISKY_ROLE: 'saBindRiskyRole',
-      CUSTOM_PATH: 'customPath'
-    }
+      CUSTOM_PATH: 'customPath',
+    },
   };
 
   public static NAV_SOURCE = {
@@ -210,5 +210,9 @@ export class GlobalConstant {
     GOOD: '#00CC00',
     FAIR: '#FF8000',
     POOR: '#FF0000',
+  };
+
+  public static REPORT_SIZE = {
+    RISK_REPORT: 1000,
   };
 }

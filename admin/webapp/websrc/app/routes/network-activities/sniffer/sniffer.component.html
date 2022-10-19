@@ -1,17 +1,19 @@
-<div id="sniffer" class="infoBox topLeftSession" cdkDrag>
-  <button
-    id="closeSniffer"
-    class="btn btn-xs btn-link pull-right"
-    (click)="stopRefreshSniffer(); popupState.leave()">
-    <em class="fa fa-times fa-lg text-muted ml-1"></em>
-  </button>
-
-  <div class="clearfix handle" cdkDragHandle>
-    <h4 class="text-dark">
+<div id="sniffer" class="infoBox topLeftSession resizable" cdkDrag>
+  <div
+    cdkDragHandle
+    class="d-flex align-items-center justify-content-between handle">
+    <h4 mat-dialog-title>
       {{ 'network.nodeDetails.SNIFF' | translate }}
-      <em class="fa fa-long-arrow-right text-info mx-1"></em>{{ containerName }}
+      <em class="fas fa-long-arrow-alt-right text-info mx-1"></em>{{ containerName }}
     </h4>
+    <button
+      id="closeSniffer" aria-label="Close icon button"
+      class="d-flex align-items-center justify-content-center"
+      mat-icon-button>
+      <i (click)="popupState.leave()" class="eos-icons ml-1">close</i>
+    </button>
   </div>
+
   <hr class="fancy mx-0 my-0" />
   <ag-grid-angular
     id="sniff-grid"
@@ -22,7 +24,7 @@
     [gridOptions]="gridOptions">
   </ag-grid-angular>
 
-  <div class="row mx">
+  <div class="row mx-0">
     <div class="col-3">
       <mat-checkbox
         aria-label="Toggle schedule"
@@ -41,10 +43,11 @@
       <ngx-slider [value]="pcap.minValue" [options]="pcap.options"></ngx-slider>
     </div>
   </div>
-  <div class="row">
+  <div class="row mx-0">
     <div class="col-7">
       <button
-        class="btn btn-xs btn-circle btn-primary pull-left"
+        mat-mini-fab aria-label="Start sniff" color="primary"
+        class="pull-left"
         [disabled]="!isPacketCapAuthorized || disableStart()"
         (click)="startSniff(containerId)">
         <em class="fa fa-play"></em>
@@ -62,7 +65,7 @@
         download="{{ exportFilename }}"
         [href]="exportUrl">
         <span>
-          <em class="fa fa-cloud-download"
+          <em class="fas fa-cloud-download-alt"
             >&nbsp;{{ 'network.DOWNLOAD' | translate }}</em
           >
         </span>
@@ -71,7 +74,7 @@
     <div class="col-3">
       <div class="pull-right">
         <button
-          class="btn btn-xs btn-circle btn-primary"
+          mat-mini-fab aria-label="Stop sniff" color="primary"
           [disabled]="
             !isPacketCapAuthorized || !sniffer || sniffer.status === 'stopped'
           "
@@ -79,13 +82,13 @@
           <em class="fa fa-stop"></em>
         </button>
         <button
-          class="btn btn-xs btn-circle btn-primary"
+          mat-mini-fab aria-label="Download packet" color="primary"
           [disabled]="!isPacketCapAuthorized || !sniffer"
           (click)="downloadPacket(sniffer.id)">
-          <em class="fa fa-file-archive-o"></em>
+          <em class="far fa-file-archive"></em>
         </button>
         <button
-          class="btn btn-xs btn-circle btn-pink"
+          mat-mini-fab aria-label="Delete packet"  color="warn"
           [disabled]="!isPacketCapAuthorized || !sniffer"
           (click)="deleteSniff(sniffer.id)">
           <em class="fa fa-trash"></em>

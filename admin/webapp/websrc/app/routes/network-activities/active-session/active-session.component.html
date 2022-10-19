@@ -1,11 +1,12 @@
 <div id="activeSessions" class="infoBox topLeftSession resizable" cdkDrag>
-  <button
-    id="closeActiveSessions"
-    class="btn btn-xs btn-link pull-right"
-    (click)="stopRefreshSession(); popupState.leave()">
-    <em class="fa fa-times fa-lg text-muted ml-sm"></em>
-  </button>
-  <div class="pull-right ml-lg">
+  <div
+    cdkDragHandle
+    class="d-flex align-items-center justify-content-between handle">
+    <h4 class="text-dark mt-1">
+      {{ 'dashboard.panelItems.NETWORK_TRAFFIC' | translate }}&nbsp;-&nbsp;{{
+        currentName
+      }}
+    </h4>
     <mat-slide-toggle
       id="autoRefresh"
       name="refreshStatus"
@@ -19,21 +20,34 @@
         {{ 'network.AUTO_REFRESH' | translate }}
       </span>
     </mat-slide-toggle>
+    <button
+      id="closeActiveSessions"
+      aria-label="Close icon button"
+      class="d-flex align-items-center justify-content-center"
+      mat-icon-button>
+      <i (click)="stopRefreshSession(); popupState.leave()" class="eos-icons"
+        >close</i
+      >
+    </button>
   </div>
-  <div *ngIf="conversations && conversations.length > 4">
-    <app-quick-filter
-      [gridOptions]="gridOptions"
-      (filterCountChange)="filterCountChanged($event)"
-      [showCount]="false">
-    </app-quick-filter>
-  </div>
-  <div class="clearfix handle" cdkDragHandle>
-    <h4 class="text-dark mb0">
-      {{ 'dashboard.panelItems.NETWORK_TRAFFIC' | translate }}&nbsp;-&nbsp;{{
-        currentName
-      }}
-    </h4>
-  </div>
+  <!--  <div class="pull-right ml-lg">-->
+  <!--    -->
+  <!--  </div>-->
+  <!--  <div *ngIf="conversations && conversations.length > 4">-->
+  <!--    <app-quick-filter-->
+  <!--      [gridOptions]="gridOptions"-->
+  <!--      (filterCountChange)="filterCountChanged($event)"-->
+  <!--      [showCount]="false">-->
+  <!--    </app-quick-filter>-->
+  <!--  </div>-->
+  <!--  <div class="clearfix handle" cdkDragHandle>-->
+  <!--    <h4 class="text-dark mt-1">-->
+  <!--      {{ 'dashboard.panelItems.NETWORK_TRAFFIC' | translate }}&nbsp;-&nbsp;{{-->
+  <!--        currentName-->
+  <!--      }}-->
+  <!--    </h4>-->
+  <!--  </div>-->
+  <hr class="fancy mx-0 my-0" />
   <div *ngIf="conversations && conversations.length > 0">
     <ag-grid-angular
       id="activeSessionGrid"

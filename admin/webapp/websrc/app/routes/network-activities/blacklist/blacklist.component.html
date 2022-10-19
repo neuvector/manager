@@ -6,7 +6,7 @@
       {{ 'network.groupFilter.BLACKLIST_TITLE' | translate }}
     </h4>
     <button
-      aria-label="Close icon button"
+      id="closeBlackList" aria-label="Close icon button"
       class="d-flex align-items-center justify-content-center"
       mat-icon-button>
       <i (click)="popupState.leave()" class="eos-icons">close</i>
@@ -157,15 +157,15 @@
     </form>
   </div>
   <div class="float-right" mat-dialog-actions>
-    <button (click)="reset()" mat-button class="mr-2" aria-label="reset">
-      Reset
-    </button>
     <button
       (click)="apply()"
       color="primary"
       mat-raised-button
       aria-label="apply">
       Apply
+    </button>
+    <button (click)="reset()" mat-button class="mr-2" aria-label="reset">
+      Reset
     </button>
   </div>
 </div>

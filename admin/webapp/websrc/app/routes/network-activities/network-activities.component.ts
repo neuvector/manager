@@ -273,7 +273,6 @@ export class NetworkActivitiesComponent
             const itemType = item.getType();
             const model: any = item.getModel();
             if (itemType && model) {
-              console.log(model);
               const NO_DETAIL_NODE = [
                 'nvUnmanagedNode',
                 'nvUnmanagedWorkload',
@@ -468,7 +467,6 @@ export class NetworkActivitiesComponent
         }
       },
       handleMenuClick: (target, item) => {
-        console.log(target, item);
         const model = item && item.getModel();
         const liItems = target.id.split('-');
         switch (liItems[0]) {
@@ -732,14 +730,10 @@ export class NetworkActivitiesComponent
       }, 300);
     };
 
-    const showLegend = () => {
-      this.settings.showLegend = !this.settings.showLegend;
-    };
+    const showLegend = () =>
+      (this.settings.showLegend = !this.settings.showLegend);
 
-    const refresh = () => {
-      console.log('refreshing')
-      this.refresh();
-    };
+    const refresh = () => this.refresh();
 
     const codeActionMap = {
       zoomOut: zoomOut,
@@ -957,7 +951,6 @@ export class NetworkActivitiesComponent
 
       const findLinks = (edge, result, linkId, endName) => {
         const endpoint = this.graph.findById(edge[endName]);
-        console.log(endpoint);
         //target is inside combo, just add the link
         if (endpoint && endpoint.isVisible()) {
           this.graph.addItem('edge', edge);
@@ -1013,7 +1006,6 @@ export class NetworkActivitiesComponent
             }
             return result;
           }, []);
-        console.log(nodeEdges);
         this.nodeToClusterEdgesMap.set(nodeId, nodeEdges);
         muteComboEdges(comboId);
         this.lastRevealedNodeIds.push(nodeId);
@@ -1128,7 +1120,6 @@ export class NetworkActivitiesComponent
         node.group.startsWith('mesh')
       ) {
         showPodInfo(node);
-        console.log('group');
       } else if (node.kind === 'domain') {
         showDomainInfo(item);
       } else {
@@ -1232,13 +1223,9 @@ export class NetworkActivitiesComponent
           // this.ruleId = '-';
           // this.entries = this.conversationDetail.entries;
           // this.sessionCount = this.conversationDetail.sessions;
-          if (this.conversationDetail.entries.length < 5) {
-            if (this.conversationDetail.entries.length < 2)
-              this.entriesGridHeight = 40 + 27 * 2;
-            else
-              this.entriesGridHeight =
-                40 + 27 * this.conversationDetail.entries.length;
-          } else this.entriesGridHeight = 40 + 27 * 5;
+          if (this.conversationDetail.entries!.length > 0)
+            this.entriesGridHeight = this.getGridHeight(this.conversationDetail.entries);
+
 
           // this.convHisGridOptions = this.graphService.prepareTrafficHistoryGrid(
           //   this.conversationDetail
@@ -1426,8 +1413,6 @@ export class NetworkActivitiesComponent
             targets.push(edge);
           }
         });
-        console.log(sources);
-        console.log(targets);
         if (sources.length > 0) {
           let newEdge: any = {};
           newEdge.id = item.getModel().id.substring(2) + nodeId;
@@ -1570,7 +1555,6 @@ export class NetworkActivitiesComponent
 
     this.graph.on('node:dblclick', evt => {
       const { item } = evt;
-      console.log(item?.getModel());
       hideCve();
       if (item?.getModel().kind === 'group') this.expandCluster(item);
       else if (item?.getModel().kind === 'domain') expandDomain(item);
@@ -1985,18 +1969,13 @@ export class NetworkActivitiesComponent
       const comboNode = this.graph.findById(`co${clusterNode.id}`);
       // @ts-ignore
       const comboEdges = comboNode.getEdges();
-      console.log('show comboEdges');
-      console.log(comboEdges);
       this.graph.showItem(comboNode);
 
       let hiddenEdges = comboEdges.filter(item => !item.isVisible());
 
-      if (hiddenEdges && hiddenEdges.length > 0) {
-        console.log('from -> to');
-        console.log(hiddenEdges[0].getSource().isVisible());
-        console.log(hiddenEdges[0].getTarget().isVisible());
+      if (hiddenEdges && hiddenEdges.length > 0)
         hiddenEdges.forEach(item => this.toggleLine(item));
-      }
+
       this.graph.paint();
       comboNode.toFront();
       // @ts-ignore
@@ -2147,10 +2126,7 @@ export class NetworkActivitiesComponent
       });
     }
     this.graph.hideItem(clusterNode.id);
-
     this.revealLinks(item);
-
-    console.log(this.getRiskyNodes(clusterNode.id));
 
     this.graph.refreshPositions();
     this.graph.refresh();
@@ -2222,15 +2198,20 @@ export class NetworkActivitiesComponent
     }
   }
 
+  private getGridHeight(items: Array<any>): number {
+    let result: number = 0;
+
+    if (items.length <= 2) result = 30 + 29 * 2;
+    else if (items.length < 5) result = 30 + 29 * items.length;
+    else result = 30 + 29 * 5 + 8;
+
+    return result;
+  }
+
   private getActiveSessions(response) {
     this.conversations = response['sessions'];
     if (this.conversations && this.conversations.length > 0) {
-      if (this.conversations.length <= 2)
-        this.activeSessionGridHeight = 40 + 27 * 2;
-      else if (this.conversations.length < 5)
-        this.activeSessionGridHeight = 40 + 27 * this.conversations.length;
-      else this.activeSessionGridHeight = 40 + 27 * 5;
-
+      this.activeSessionGridHeight = this.getGridHeight(this.conversations);
       this.activeSessionGridOptions =
         this.graphService.prepareActiveSessionGrid();
     }
@@ -2297,7 +2278,7 @@ export class NetworkActivitiesComponent
         response => {
           this.sniffers = response['sniffers'];
           this.sniffer = null;
-          this.snifferGridHeight = 40 + 25 * 5;
+          this.snifferGridHeight = 30 + 29 * 5 + 8;
           this.popupState.transitTo(PopupState.onSniffer);
         },
         err => {
@@ -2583,29 +2564,36 @@ export class NetworkActivitiesComponent
   }
 
   clearSessions = (conversationPair: ConversationPair) => {
-    this.graphService.clearSessions(conversationPair.from, conversationPair.to)
-      .subscribe(() => {
-        //Remove displayed edge without data reloading
-        this.graph.removeItem(this.selectedEdge, false);
+    this.graphService
+      .clearSessions(conversationPair.from, conversationPair.to)
+      .subscribe(
+        () => {
+          //Remove displayed edge without data reloading
+          this.graph.removeItem(this.selectedEdge, false);
 
-        //Remove original edge in group without data reloading
-        let removedEdgeIndex = this.serverData.edges.findIndex(edge => {
-          return edge.source === conversationPair.from && edge.target === conversationPair.to;
-        });
-        if (removedEdgeIndex > -1) {
-          this.serverData.edges.splice(removedEdgeIndex, 1);
+          //Remove original edge in group without data reloading
+          let removedEdgeIndex = this.serverData.edges.findIndex(edge => {
+            return (
+              edge.source === conversationPair.from &&
+              edge.target === conversationPair.to
+            );
+          });
+          if (removedEdgeIndex > -1) {
+            this.serverData.edges.splice(removedEdgeIndex, 1);
+          }
+
+          this.popupState.leave();
+        },
+        err => {
+          console.warn(err);
+          this.notificationService.open(
+            this.utils.getAlertifyMsg(
+              err,
+              this.translate.instant('network.popup.SESSION_CLEAR_FAILURE'),
+              false
+            )
+          );
         }
-
-        this.popupState.leave();
-      }, err => {
-        console.warn(err);
-        this.notificationService.open(
-          this.utils.getAlertifyMsg(
-            err,
-            this.translate.instant('network.popup.SESSION_CLEAR_FAILURE'),
-            false
-          )
-        );
-      });
+      );
   };
 }

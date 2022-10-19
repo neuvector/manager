@@ -1,0 +1,115 @@
+<div>
+  <div class="page-cover">
+    <div class="page-cover-decro"></div>
+    <div class="page-cover-logo"></div>
+    <div class="page-cover-title">
+      {{ 'audit.report.reportTitle' | translate }}
+    </div>
+  </div>
+  <div class="report-summary">
+    <div class="summary-title">
+      {{ 'audit.report.summaryHeader' | translate }}
+      <span class="mat-subheading-1">
+        {{ summaryRangeMsg }}
+      </span>
+    </div>
+    <div class="h-50 clearfix margin-top-xl">
+      <div class="pull-left margin-left-l" style="width: 50%">
+        <div class="summary-subtitle margin-top-m margin-bottom-m">
+          {{ 'audit.report.subHeaderBySevLevel' | translate }}
+        </div>
+        <div
+          class="row statistic-row"
+          *ngFor="let entry of mapEntries(severityDistribution)">
+          <div class="col-sm-9 statistic-cell">
+            {{ entry[0] }}
+          </div>
+          <div class="col-sm-3 statistic-cell">
+            {{ entry[1] }}
+          </div>
+        </div>
+      </div>
+      <div class="pull-right margin-right-xl margin-top-l">
+        <app-risk-reports-printable-report-pie-chart
+          [statisticData]="
+            severityDistribution
+          "></app-risk-reports-printable-report-pie-chart>
+      </div>
+    </div>
+    <div class="h-50 clearfix margin-top-xxxl">
+      <div class="pull-left margin-left-l" style="width: 50%">
+        <div class="summary-subtitle margin-top-m margin-bottom-m">
+          {{ 'audit.report.subHeaderByScanType' | translate }}
+        </div>
+        <div
+          class="row statistic-row"
+          *ngFor="let entry of mapEntries(scanDistribution)">
+          <div class="col-sm-9 statistic-cell">
+            {{ entry[0] }}
+          </div>
+          <div class="col-sm-3 statistic-cell">
+            {{ entry[1] }}
+          </div>
+        </div>
+      </div>
+      <div class="pull-right margin-right-xl margin-top-l">
+        <app-risk-reports-printable-report-bar-chart
+          [statisticData]="
+            scanDistribution
+          "></app-risk-reports-printable-report-bar-chart>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix">
+    <span class="mat-headline text-info">{{
+      'audit.report.details' | translate
+    }}</span>
+    <table class="print-table">
+      <thead>
+        <tr class="print-header">
+          <th class="print-cell" style="width: 5%">
+            {{ 'general.ID' | translate }}
+          </th>
+          <th class="print-cell" style="width: 15%">
+            {{ 'general.NAME' | translate }}
+          </th>
+          <th class="print-cell" style="width: 5%">
+            {{ 'audit.gridHeader.LEVEL' | translate }}
+          </th>
+          <th class="print-cell" style="width: 25%">
+            {{ 'general.LOCATION' | translate }}
+          </th>
+          <th class="print-cell" style="width: 30%">
+            {{ 'audit.gridHeader.DETAIL' | translate }}
+          </th>
+          <th class="print-cell" style="width: 20%">
+            {{ 'general.DATETIME' | translate }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class="print-row"
+          *ngFor="let audit of riskReports; let i = index"
+          [attr.data-index]="i">
+          <td class="print-cell" style="width: 5%">{{ i + 1 }}</td>
+          <td class="print-cell" style="width: 15%">{{ audit.name }}</td>
+          <td class="print-cell" style="width: 5%">
+            <span [class]="textClass(audit.level)">{{ audit.level }}</span>
+          </td>
+          <td class="print-cell" style="width: 25%">
+            <app-risk-reports-printable-report-location-col
+              [audit]="audit"></app-risk-reports-printable-report-location-col>
+          </td>
+          <td class="print-cell" style="width: 30%">
+            <app-risk-reports-printable-report-detail-col
+              [audit]="audit"></app-risk-reports-printable-report-detail-col>
+          </td>
+          <td class="print-cell" style="width: 20%">
+            {{ audit.reported_at | date: 'MMM dd, y HH:mm:ss' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

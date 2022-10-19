@@ -1,0 +1,8 @@
+.report-list {
+  margin-bottom: 0;
+  padding-left: 12px;
+  line-height: 12px;
+  &.lh-zero {
+    line-height: 0 !important;
+  }
+}

@@ -22,9 +22,10 @@ import { RegistriesCommunicationService } from '../regestries-communication.serv
 import { FormControl } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { RegistryTableStatusCellComponent } from './registry-table-status-cell/registry-table-status-cell.component';
-import { ConfirmDeleteDialogComponent } from './confirm-delete-dialog/confirm-delete-dialog.component';
 import { cloneDeep } from 'lodash';
 import { AuthUtilsService } from '@common/utils/auth.utils';
+import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
+import { finalize, switchMap, take, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-registries-table',
@@ -117,7 +118,8 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    let isWriteRegistryAuthorized = this.authUtilsService.getDisplayFlag('registry_scan');
+    let isWriteRegistryAuthorized =
+      this.authUtilsService.getDisplayFlag('registry_scan');
     if (!isWriteRegistryAuthorized) {
       this.columnDefs.pop();
     }
@@ -134,7 +136,7 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
         btnCellRenderer: RegistriesTableButtonsComponent,
         statusCellRenderer: RegistryTableStatusCellComponent,
       },
-      overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS')
+      overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS'),
     };
     this.filter.valueChanges.subscribe(val => this.gridApi.setQuickFilter(val));
   }
@@ -153,14 +155,29 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
   }
 
   deleteRegistry(event): void {
-    this.dialog.open(ConfirmDeleteDialogComponent, {
+    const deleteDialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '80%',
       maxWidth: '600px',
       disableClose: true,
       data: {
-        name: event.data.name,
+        message: this.translate.instant(
+          'registry.REGISTRY_DELETE_CONFIRMATION'
+        ),
       },
     });
+    deleteDialogRef.componentInstance.confirm
+      .pipe(
+        take(1),
+        tap(() => this.registriesCommunicationService.initDelete()),
+        switchMap(() => this.registriesService.deleteRegistry(event.data.name)),
+        finalize(() => {
+          deleteDialogRef.componentInstance.onCancel();
+          deleteDialogRef.componentInstance.loading = false;
+        })
+      )
+      .subscribe(() => {
+        this.registriesCommunicationService.refreshRegistries();
+      });
   }
 
   startScan(): void {

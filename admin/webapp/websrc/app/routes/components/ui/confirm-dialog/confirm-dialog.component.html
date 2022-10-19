@@ -1,16 +1,7 @@
 <div mat-dialog-content>
-  <p>{{ data.message }}</p>
+  <p class="overflow-auto pb-2">{{ data.message }}</p>
 </div>
-<div class="justify-content-end mt-4" mat-dialog-actions>
-  <button
-    (click)="onCancel()"
-    [disabled]="loading"
-    class="mr-2"
-    color="warn"
-    id="cancel-delete"
-    mat-button>
-    {{ 'general.CANCEL' | translate }}
-  </button>
+<div class="mt-4" mat-dialog-actions align="end">
   <app-loading-button
     (btnClick)="onConfirm()"
     [disabled]="loading"
@@ -22,4 +13,13 @@
     text="Ok"
     type="button">
   </app-loading-button>
+  <button
+    (click)="onCancel()"
+    [disabled]="loading"
+    class="mr-2"
+    color="warn"
+    id="cancel-delete"
+    mat-button>
+    {{ 'general.CANCEL' | translate }}
+  </button>
 </div>

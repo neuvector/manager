@@ -1,22 +1,44 @@
-<div id="conversationHistory" class="infoBox topLeftSession" cdkDrag>
-  <button
-    class="btn btn-xs btn-link pull-right ml-1"
-    (click)="popupState.leave()">
-    <em class="fa fa-times fa-lg text-muted"></em>
-  </button>
+<div id="conversationHistory" class="infoBox topLeftSession resizable" cdkDrag>
   <div
-    *ngIf="conversationDetail.entries && conversationDetail.entries.length > 4">
+    cdkDragHandle
+    class="d-flex align-items-center justify-content-between handle">
+    <h4 class="text-muted mt-1">
+      {{ conversationDetail.from.display_name }}
+      <em class="fas fa-long-arrow-alt-right text-info"></em>
+      {{ conversationDetail.to.display_name }}
+    </h4>
+    <button
+      id="closeBlackList"
+      aria-label="Close icon button"
+      class="d-flex align-items-center justify-content-center"
+      mat-icon-button>
+      <i (click)="popupState.leave()" class="eos-icons">close</i>
+    </button>
+  </div>
+
+  <hr class="fancy mx-0 my-0" />
+  <div
+    *ngIf="conversationDetail.entries && conversationDetail.entries.length > 4"
+    class="d-flex flex-row justify-content-between align-items-center">
+    <span
+      *ngIf="
+        conversationDetail.entries && conversationDetail.entries.length > 0
+      "
+      class="mr-2"
+      >{{ 'network.edgeDetails.SESSIONS' | translate }}
+      {{ conversationDetail.sessions }}</span
+    >
+    <mat-label class="text-warning" *ngIf="onViolation"
+      ><em class="fa fa-ban mr-1"></em>
+      {{ 'network.edgeDetails.VIOLATION' | translate }}
+    </mat-label>
+    <mat-label class="text-danger" *ngIf="onThreat"
+      ><em class="fas fa-bug mr-1"></em>
+      {{ 'network.edgeDetails.THREAT' | translate }}
+    </mat-label>
     <app-quick-filter [gridOptions]="gridOptions" [showCount]="false">
     </app-quick-filter>
   </div>
-  <div class="clearfix handle" cdkDragHandle>
-    <h4 class="text-muted mb-0">
-      {{ conversationDetail.from.display_name }}
-      <em class="fa fa-long-arrow-right text-info"></em>
-      {{ conversationDetail.to.display_name }}
-    </h4>
-  </div>
-  <hr class="fancy mx-0 my-0" />
   <ag-grid-angular
     id="conversationHis-grid"
     class="ag-theme-alpine"
@@ -36,55 +58,33 @@
       {{ 'general.NO_CONVERSATIONS' | translate }}
     </div>
   </div>
-  <div class="row my-2">
-    <div class="col-sm-5 mt-2">
-      <span
-        *ngIf="
-          conversationDetail.entries && conversationDetail.entries.length > 0
-        "
-        class="text-muted mr-2"
-        >{{ 'network.edgeDetails.SESSIONS' | translate }}
-        {{ conversationDetail.sessions }}</span
-      >
-      <span class="action-label nv-label warning" *ngIf="onViolation"
-        ><em class="fa fa-ban mr-1"></em>
-        {{ 'network.edgeDetails.VIOLATION' | translate }}
-      </span>
-      <span class="action-label nv-label danger" *ngIf="onThreat"
-        ><em class="fa fa-bug mr-1"></em>
-        {{ 'network.edgeDetails.THREAT' | translate }}
-      </span>
-    </div>
-    <div class="col-sm-7">
-      <div class="pull-right">
-        <button
-          *ngIf="showRuleId && traffic.policy_action !== 'open'"
-          [disabled]="!isWriteNetworkAuthorized"
-          mat-raised-button
-          color="primary"
-          aria-label="review rule"
-          (click)="overrideRule(traffic, edgeDetails)"
-          class="mt-1 mr-1">
-          <em class="far fa-edit mr-1"></em>
-          {{ 'network.edgeDetails.OVERRIDE_RULE' | translate }}
-        </button>
-        <button
-          mat-button
-          color="primary"
-          class="mt-1"
-          aria-label="clear sessions"
-          (click)="
-            clearSessions(conversationDetail.from.id, conversationDetail.to.id)
-          "
-          [disabled]="!isWriteNetworkAuthorized"
-          *ngIf="
-            conversationDetail.entries && conversationDetail.entries.length > 0
-          ">
-          <em class="fa fa-magic mr-1"></em
-          >{{ 'network.edgeDetails.CLEAR' | translate }}
-        </button>
-      </div>
-    </div>
+  <div class="d-flex flex-row justify-content-end mt-1">
+    <button
+      *ngIf="showRuleId && traffic.policy_action !== 'open'"
+      [disabled]="!isWriteNetworkAuthorized"
+      mat-raised-button
+      color="primary"
+      aria-label="review rule"
+      (click)="overrideRule(traffic, edgeDetails)"
+      class="mt-1 mr-1">
+      <em class="far fa-edit mr-1"></em>
+      {{ 'network.edgeDetails.OVERRIDE_RULE' | translate }}
+    </button>
+    <button
+      mat-button
+      color="primary"
+      class="mt-1"
+      aria-label="clear sessions"
+      (click)="
+        clearSessions(conversationDetail.from.id, conversationDetail.to.id)
+      "
+      [disabled]="!isWriteNetworkAuthorized"
+      *ngIf="
+        conversationDetail.entries && conversationDetail.entries.length > 0
+      ">
+      <em class="fa fa-magic mr-1"></em
+      >{{ 'network.edgeDetails.CLEAR' | translate }}
+    </button>
   </div>
 
   <div *ngIf="onRule" class="col-sm-12">

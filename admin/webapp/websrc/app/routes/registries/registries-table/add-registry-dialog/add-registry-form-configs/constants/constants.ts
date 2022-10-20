@@ -208,7 +208,6 @@ export const PasswordField = {
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
     hint: '',
-    required: true,
     togglePassword: true,
     type: 'password',
     icon: 'vpn_key',

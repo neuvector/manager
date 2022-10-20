@@ -14,6 +14,7 @@ import {
   GridApi,
   GridOptions,
   GridReadyEvent,
+  RowDataChangedEvent,
   RowNode,
 } from 'ag-grid-community';
 import { TranslateService } from '@ngx-translate/core';
@@ -117,6 +118,7 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
       suppressDragLeaveHidesColumns: true,
       rowSelection: 'single',
       onGridReady: event => this.onGridReady(event),
+      onRowDataChanged: event => this.onRowDataChanged(event),
       onSelectionChanged: event => this.onSelectionChanged(event),
       components: {
         impactCellRenderer: ComplianceItemsTableImpactCellComponent,
@@ -137,114 +139,8 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
   doesExternalFilterPass(node: RowNode) {
     if (!this.complianceFilterService.isAdvFilterOn()) return true;
     else {
-      let result = true;
-      if (
-        !this.advFilter.category.custom ||
-        !this.advFilter.category.docker ||
-        !this.advFilter.category.kubernetes ||
-        !this.advFilter.category.image
-      ) {
-        if (!this.advFilter.category.docker)
-          result = result && node.data.category !== 'docker';
-        if (!this.advFilter.category.custom)
-          result = result && node.data.category !== 'custom';
-        if (!this.advFilter.category.kubernetes)
-          result = result && node.data.category !== 'kubernetes';
-        if (!this.advFilter.category.image)
-          result = result && node.data.category !== 'image';
-      }
-      if (
-        this.advFilter.tags.gdpr ||
-        this.advFilter.tags.hipaa ||
-        this.advFilter.tags.nist ||
-        this.advFilter.tags.pci
-      ) {
-        if (node.data.tags && node.data.tags.length > 0) {
-          if (this.advFilter.tags.gdpr)
-            result = result && node.data.tags.includes('GDPR');
-          if (this.advFilter.tags.hipaa)
-            result = result && node.data.tags.includes('HIPAA');
-          if (this.advFilter.tags.nist)
-            result = result && node.data.tags.includes('NIST');
-          if (this.advFilter.tags.pci)
-            result = result && node.data.tags.includes('PCI');
-        } else return false;
-      }
-      if (this.advFilter.scoredType !== 'all') {
-        result =
-          result && node.data.scored.toString() === this.advFilter.scoredType;
-      }
-      if (this.advFilter.profileType !== 'all') {
-        result = result && node.data.profile === this.advFilter.profileType;
-      }
-      if (this.advFilter.containerName) {
-        if (node.data.workloads.length) {
-          result = this.checkEntity(
-            this.advFilter.matchTypes['Container'].id,
-            node.data.workloads,
-            this.advFilter.containerName,
-            result
-          );
-        } else return false;
-      }
-      if (this.advFilter.nodeName) {
-        if (node.data.nodes.length) {
-          result = this.checkEntity(
-            this.advFilter.matchTypes['Node'].id,
-            node.data.nodes,
-            this.advFilter.nodeName,
-            result
-          );
-        } else return false;
-      }
-      if (this.advFilter.imageName) {
-        if (node.data.images.length) {
-          result = this.checkEntity(
-            this.advFilter.matchTypes['Image'].id,
-            node.data.images,
-            this.advFilter.imageName,
-            result
-          );
-        } else return false;
-      }
-      if (this.advFilter.selectedDomains.length) {
-        result = this.checkEntity(
-          this.advFilter.matchType4Ns.id,
-          node.data.domains,
-          this.advFilter.selectedDomains.join(','),
-          result
-        );
-      }
-      if (this.advFilter.serviceName) {
-        if (node.data.services.length) {
-          result = this.checkEntity(
-            this.advFilter.matchTypes['Service'].id,
-            node.data.services,
-            this.advFilter.serviceName,
-            result
-          );
-        } else return false;
-      }
-
-      return result;
+      return this.complianceFilterService.filterFn(node.data);
     }
-  }
-
-  checkEntity(matchType, entities, pattern, result) {
-    const patterns = pattern.split(',').map(item => item.trim());
-    const theEntity = entities.find(entity => {
-      if (entity && entity.display_name) {
-        if (matchType === 'equal')
-          return patterns.some(item => item === entity.display_name);
-        else return new RegExp(patterns.join('|')).test(entity.display_name);
-      } else {
-        if (matchType === 'equal')
-          return patterns.some(item => item === entity);
-        else return new RegExp(patterns.join('|')).test(entity);
-      }
-    });
-    result = result && !!theEntity;
-    return result;
   }
 
   filterCountChanged(results: number) {
@@ -274,6 +170,14 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
       node.rowIndex ? 0 : node.setSelected(true)
     );
     this.cd.markForCheck();
+  }
+
+  onRowDataChanged(event: RowDataChangedEvent) {
+    if (this.complianceFilterService.isAdvFilterOn()) {
+      event.api.onFilterChanged();
+      this.filteredCount =
+        event.api.getModel()['rootNode'].childrenAfterFilter.length;
+    }
   }
 
   onResize(): void {

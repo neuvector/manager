@@ -101,8 +101,15 @@ export class ComplianceService {
           platformMap4Pdf: this.platformMap4Pdf,
           imageMap4Pdf: this.imageMap4Pdf,
         };
-        this.complianceFilterService.resetFilter();
-        this.complianceFilterService.filtered = false;
+        if (this.complianceFilterService.isAdvFilterOn()) {
+          this.complianceFilterService.resetFilter(
+            this.complianceFilterService.advFilter
+          );
+          this.complianceFilterService.filtered = true;
+        } else {
+          this.complianceFilterService.resetFilter();
+          this.complianceFilterService.filtered = false;
+        }
         this.complianceFilterService.filteredCis = compliances;
       }),
       finalize(() => {

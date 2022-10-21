@@ -11,7 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MapConstant } from '@common/constants/map.constant';
 import { ErrorResponse, EventItem, User } from '@common/types';
 import { UtilsService } from '@common/utils/app.utils';
-import { getEntityName, stringToColour } from '@common/utils/common.utils';
+import { stringToColour } from '@common/utils/common.utils';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
@@ -64,7 +64,7 @@ export class UsersGridComponent implements OnInit {
   events!: EventItem[];
   removable: boolean = false;
   filtered: boolean = false;
-  isWriteUserAuthorized: boolean;
+  isWriteUserAuthorized!: boolean;
   filteredCount!: number;
   get userCount() {
     return this.rowData.length;
@@ -166,7 +166,8 @@ export class UsersGridComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isWriteUserAuthorized = this.authUtilsService.getDisplayFlag('write_users');
+    this.isWriteUserAuthorized =
+      this.authUtilsService.getDisplayFlag('write_users');
     if (!this.isWriteUserAuthorized) {
       this.columnDefs.pop();
     }

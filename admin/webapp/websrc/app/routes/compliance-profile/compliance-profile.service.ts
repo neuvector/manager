@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { RisksHttpService } from '@common/api/risks-http.service';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { map, repeatWhen } from 'rxjs/operators';
+import { map, repeatWhen, tap } from 'rxjs/operators';
 import { AssetsHttpService } from '@common/api/assets-http.service';
+import { complianceProfileEntries } from '@common/types';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,7 @@ export class ComplianceProfileService {
   private resizeSubject$ = new BehaviorSubject<boolean>(true);
   resize$ = this.resizeSubject$.asObservable();
   private refreshSubject$ = new BehaviorSubject<boolean>(false);
+  lastEntries!: complianceProfileEntries[];
 
   constructor(
     private risksHttpService: RisksHttpService,
@@ -35,6 +37,9 @@ export class ComplianceProfileService {
           profile,
           domains,
         };
+      }),
+      tap(({ profile }) => {
+        this.lastEntries = profile.profiles[0].entries;
       }),
       map(res => {
         res.profile.profiles[0].entries.forEach(p => {

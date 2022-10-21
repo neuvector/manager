@@ -6,6 +6,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [NodeBriefComponent, NodeBriefDialogComponent],
@@ -13,6 +14,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     CommonModule,
     MatDialogModule,
     TranslateModule,
+    RouterModule,
     MatButtonModule,
     DragDropModule,
   ],

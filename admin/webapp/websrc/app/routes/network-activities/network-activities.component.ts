@@ -519,10 +519,10 @@ export class NetworkActivitiesComponent
             switchModeOnMenu('Protect', item, this.graph);
             break;
           case 'quarantine':
-            // quarantine(item, true);
+            this.quarantine(item, true);
             break;
           case 'unQuarantine':
-            // quarantine(item, false);
+            this.quarantine(item, false);
             break;
           default:
             break;
@@ -1224,8 +1224,9 @@ export class NetworkActivitiesComponent
           // this.entries = this.conversationDetail.entries;
           // this.sessionCount = this.conversationDetail.sessions;
           if (this.conversationDetail.entries!.length > 0)
-            this.entriesGridHeight = this.getGridHeight(this.conversationDetail.entries);
-
+            this.entriesGridHeight = this.getGridHeight(
+              this.conversationDetail.entries
+            );
 
           // this.convHisGridOptions = this.graphService.prepareTrafficHistoryGrid(
           //   this.conversationDetail
@@ -2253,6 +2254,64 @@ export class NetworkActivitiesComponent
   }
 
   //endregion
+
+  quarantine(item, toQuarantine: boolean) {
+    const id: string = item.getModel().id;
+
+    this.graphService.quarantine(id, toQuarantine).subscribe(
+      response => {
+        setTimeout(() => {
+          const model = item.getModel();
+          if (toQuarantine) {
+            model.state = 'quarantined';
+            const theNode =
+              this.serverData.nodes[
+                this.graphService.getNodeIdIndexMap().get(model.id)
+              ];
+            if (theNode) theNode.state = model.state;
+            const group = item.get('group');
+            const stroke = group.find(e => e.get('name') === 'stroke-shape');
+            stroke && stroke.show();
+
+            const clusterNode = this.graph.findById(model.clusterId);
+            if (clusterNode) {
+              // @ts-ignore
+              clusterNode.getModel().quarantines += 1;
+            }
+          } else {
+            const group = item.get('group');
+            const stroke = group.find(e => e.get('name') === 'stroke-shape');
+            stroke && stroke.hide();
+
+            model.state = model.group
+              ? item.getModel().group.substring('container'.length)
+              : '';
+            const theNode =
+              this.serverData.nodes[
+                this.graphService.getNodeIdIndexMap().get(model.id)
+              ];
+            if (theNode) theNode.state = model.state;
+
+            const clusterNode = this.graph.findById(model.clusterId);
+            if (clusterNode) {
+              // @ts-ignore
+              clusterNode.getModel().quarantines -= 1;
+            }
+          }
+        }, 0);
+      },
+      err => {
+        console.warn(err);
+        this.notificationService.open(
+          this.utils.getAlertifyMsg(
+            err,
+            this.translate.instant('policy.message.QUARANTINE_FAILED'),
+            false
+          )
+        );
+      }
+    );
+  };
 
   //region Sniffer
   snifferOnErr: boolean = false;

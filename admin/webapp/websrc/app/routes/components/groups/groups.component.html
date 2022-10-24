@@ -47,23 +47,23 @@
       {{ 'group.export.TITLE' | translate }}
     </button>
     <mat-menu #exportOptions="matMenu">
-      <button mat-menu-item (click)="exportGroups()">
+      <button mat-menu-item (click)="exportGroups('N/A')">
         <em class="eos-icons icon-18 text-primary margin-right-s">emergency</em>
         {{ 'enum.DEFAULT' | translate }}
       </button>
-      <button mat-menu-item (click)="exportGroups('discover')">
+      <button mat-menu-item (click)="exportGroups('Discover')">
         <em class="eos-icons icon-18 text-discover margin-right-s"
           >machine_learning</em
         >
         {{ 'enum.DISCOVER' | translate }}
       </button>
-      <button mat-menu-item (click)="exportGroups('monitor')">
+      <button mat-menu-item (click)="exportGroups('Monitor')">
         <em class="eos-icons icon-18 text-monitor margin-right-s"
           >circle_notifications</em
         >
         {{ 'enum.MONITOR' | translate }}
       </button>
-      <button mat-menu-item (click)="exportGroups('protect')">
+      <button mat-menu-item (click)="exportGroups('Protect')">
         <em class="eos-icons icon-18 text-protect margin-right-s">shield</em>
         {{ 'enum.PROTECT' | translate }}
       </button>

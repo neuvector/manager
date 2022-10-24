@@ -42,6 +42,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { AssetsHttpService } from '@common/api/assets-http.service';
 import { RisksHttpService } from '@common/api/risks-http.service';
+import { RisksViewReportModule } from '@components/security-risk-printable-report/risks-view-report/risks-view-report.module';
+import { AssetsViewReportModule } from '@components/security-risk-printable-report/assets-view-report/assets-view-report.module';
+
 
 const routes: Routes = [{ path: '', component: ComplianceComponent }];
 
@@ -85,6 +88,8 @@ const routes: Routes = [{ path: '', component: ComplianceComponent }];
     MatAutocompleteModule,
     MatIconModule,
     ReactiveFormsModule,
+    RisksViewReportModule,
+    AssetsViewReportModule,
   ],
   providers: [
     ComplianceService,

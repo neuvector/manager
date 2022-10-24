@@ -164,7 +164,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     this.customCriterion.name =
       Array.from(treepathEl.children)
       .map(child => child.innerHTML === 'object' ? 'item' : child.innerHTML)
-      .filter(pathNode => pathNode !== '►')
+      .filter(pathNode => pathNode !== '►' && pathNode !== '...')
       .join('.');
     if (Array.from(event.target.classList).includes('jsoneditor-value')) {
       this.nodeValueType = getValueType4Text(event.target.innerHTML);

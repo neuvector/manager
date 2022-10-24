@@ -4,7 +4,7 @@
     <div class="page-cover-logo"></div>
     <div class="page-cover-title">Network Rules Summary Report</div>
   </div>
-  <div class="report-summary">
+  <div class="report-summary pagebreak">
     <div class="summary-title">
       {{ 'policy.report.SUMMARY_HEADER' | translate }}
     </div>
@@ -27,8 +27,11 @@
       </div>
     </div>
   </div>
-  <div class="clearfix">
-    <table class="print-table">
+  <div class="report-summary pagebreak">
+    <div class="summary-title">
+      {{ 'scan.report.others.DETAILS' | translate }}
+    </div>
+    <table class="print-table margin-top-l">
       <thead>
         <tr class="print-header">
           <th class="print-cell" style="width: 5%">
@@ -87,12 +90,12 @@
             <td class="print-cell" style="width: 12%">
               {{ rule.ports }}
             </td>
-            <td class="print-cell" style="width: 6%">
+            <td class="print-cell text-center" style="width: 6%">
               <span class="action-label {{ colourMap[rule.action] }}">
                 {{ 'policy.action.' + rule.action.toUpperCase() | translate }}
               </span>
             </td>
-            <td class="print-cell" style="width: 8%">
+            <td class="print-cell text-center" style="width: 8%">
               <span *ngIf="colourMap[rule.cfg_type]" class="action-label nv-label {{colourMap[rule.cfg_type]}}">
                 {{ ('policy.head.' + colourMap[rule.cfg_type].replace("-", "_").toUpperCase()) | translate }}
               </span>

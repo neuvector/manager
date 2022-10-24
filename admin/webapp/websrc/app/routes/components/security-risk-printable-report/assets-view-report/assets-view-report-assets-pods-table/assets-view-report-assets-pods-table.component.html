@@ -1,0 +1,95 @@
+<div class="report-summary" style="page-break-after: avoid;">
+  <span class="summary-title" style="font-size: 16px;">
+    {{ (reportPage === 'vulnerabilities' ? 'scan' : 'cis') + '.report.others.CONTAINER_INS' | translate: { safeRate4Containers: safeRate4Containers, containerCnt: pods.length } }}
+  </span>
+</div>
+<table class="print-table margin-top-l">
+  <thead>
+    <tr class="print-header">
+      <th class="print-cell" style="width: 15%">
+        {{'cis.report.gridHeader.NAME' | translate }}
+      </th>
+      <th class="print-cell" style="width: 10%">
+        {{ 'audit.gridHeader.DOMAIN' | translate }}
+      </th>
+      <th class="print-cell" style="width: 15%">
+        {{ 'containers.detail.APPLICATIONS' | translate }}
+      </th>
+      <th class="print-cell" style="width: 8%">
+        {{ 'containers.detail.POLICY_MODE' | translate }}
+      </th>
+      <th class="print-cell" style="width: 12%">
+        {{ 'group.GROUP' | translate }}
+      </th>
+      <th *ngIf="reportPage === 'vulnerabilities'" class="print-cell" style="width: 6%">
+        {{ 'scan.report.gridHeader.HI_MED' | translate }}
+      </th>
+      <th *ngIf="reportPage === 'vulnerabilities'" class="print-cell" style="width: 26%">
+        {{ 'group.gridHeader.VULNERABILITIES' | translate }}
+      </th>
+      <th *ngIf="reportPage === 'vulnerabilities'" class="print-cell" style="width: 8%">
+        {{ 'scan.gridHeader.TIME' | translate }}
+      </th>
+      <th *ngIf="reportPage === 'compliance'" class="print-cell" style="width: 10%">
+        {{ 'cis.report.gridHeader.COMPLIANCE_LIST' | translate }}
+      </th>
+      <th *ngIf="reportPage === 'compliance'" class="print-cell" style="width: 30%">
+        {{ 'cis.report.gridHeader.COMPLIANCE_CNT' | translate }}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="print-row" *ngFor="let pod of pods; let i = index" [attr.data-index]="i">
+      <td class="print-cell" style="width: 15%">
+        {{ pod.pod_name }}
+      </td>
+      <td class="print-cell" style="width: 10%">
+        {{ pod.domain }}
+      </td>
+      <td class="print-cell" style="width: 15%">
+        <div class="row">
+          <div *ngFor="let app of pod.applications" class="col-sm-6">
+            {{app}}
+          </div>
+        </div>
+      </td>
+      <td class="print-cell text-center" style="width: 8%">
+        <span class="action-label {{ colourMap[pod.policy_mode] }}">{{ pod.policy_mode }}</span>
+      </td>
+      <td class="print-cell" style="width: 12%">
+        {{ pod.service_group }}
+      </td>
+      <td *ngIf="reportPage === 'vulnerabilities'" class="print-cell" style="width: 6%">
+        <div *ngIf="pod.high + pod.medium > 0">
+          <span class="text-danger">{{ pod.high }}</span>&nbsp;/&nbsp;<span class="text-warning">{{ pod.medium }}</span>
+        </div>
+        <div *ngIf="pod.high + pod.medium === 0">
+          <span class="text-success">0</span>
+        </div>
+      </td>
+      <td *ngIf="reportPage === 'vulnerabilities'" class="print-cell" style="width: 26%">
+        <div *ngIf="pod.high + pod.medium > 0">
+          <span *ngFor="let item of pod.vulnerabilites" class="margin-right-s text-{{ item.style }}">
+            {{item.text.trim()}}
+          </span>
+        </div>
+        <div *ngIf="pod.high + pod.medium === 0">
+          <span class="text-success">{{ "scan.NO_VULNERABILITIES" | translate }}</span>
+        </div>
+      </td>
+      <td *ngIf="reportPage === 'vulnerabilities'" class="print-cell" style="width: 8%">
+        {{ pod.scanned_at }}
+      </td>
+      <td *ngIf="reportPage === 'compliance'" class="print-cell" style="width: 10%">
+        {{ pod.complianceCnt }}
+      </td>
+      <td *ngIf="reportPage === 'compliance'" class="print-cell" style="width: 30%">
+        <div class="row">
+          <div *ngFor="let item of pod.complianceList" class="col-sm-3 text-{{ colourMap[item.style.toUpperCase()] }}">
+            {{item.text.trim()}}
+          </div>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

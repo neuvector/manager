@@ -1,0 +1,103 @@
+<div class="report-summary" style="page-break-after: avoid;">
+  <span class="summary-title" style="font-size: 16px;">
+    {{ (reportPage === 'vulnerabilities' ? 'scan' : 'cis') + '.report.others.HOST_INS' | translate: { safeRate4Hosts: safeRate4Hosts, hostCnt: nodes.length } }}
+  </span>
+</div>
+<table class="print-table margin-top-l">
+  <thead>
+    <tr class="print-header">
+      <th class="print-cell" style="width: 15%">
+        {{'nodes.detail.NAME' | translate }}
+      </th>
+      <th class="print-cell" style="width: 8%">
+        {{ 'nodes.detail.OS' | translate }}
+      </th>
+      <th class="print-cell" style="width: 11%">
+        {{ 'nodes.detail.KERNEL_VERSION' | translate }}
+      </th>
+      <th class="print-cell" style="width: 5%">
+        {{ 'nodes.detail.NUM_OF_CPUS' | translate }}
+      </th>
+      <th class="print-cell" style="width: 8%">
+        {{ 'nodes.detail.MEMORY' | translate }}
+      </th>
+      <th class="print-cell" style="width: 5%">
+        {{ 'nodes.detail.NUM_OF_CONTAINERS' | translate }}
+      </th>
+      <th class="print-cell" style="width: 8%">
+        {{ 'containers.detail.POLICY_MODE' | translate }}
+      </th>
+      <th *ngIf="reportPage === 'vulnerabilities'" class="print-cell" style="width: 6%">
+        {{ 'scan.report.gridHeader.HI_MED' | translate }}
+      </th>
+      <th *ngIf="reportPage === 'vulnerabilities'" class="print-cell" style="width: 26%">
+        {{ 'group.gridHeader.VULNERABILITIES' | translate }}
+      </th>
+      <th *ngIf="reportPage === 'vulnerabilities'" class="print-cell" style="width: 8%">
+        {{ 'scan.gridHeader.TIME' | translate }}
+      </th>
+      <th *ngIf="reportPage === 'compliance'" class="print-cell" style="width: 10%">
+        {{ 'cis.report.gridHeader.COMPLIANCE_LIST' | translate }}
+      </th>
+      <th *ngIf="reportPage === 'compliance'" class="print-cell" style="width: 30%">
+        {{ 'cis.report.gridHeader.COMPLIANCE_CNT' | translate }}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="print-row" *ngFor="let node of nodes; let i = index" [attr.data-index]="i">
+      <td class="print-cell" style="width: 15%">
+        {{ node.name }}
+      </td>
+      <td class="print-cell" style="width: 8%">
+        {{ node.os }}
+      </td>
+      <td class="print-cell" style="width: 11%">
+        {{ node.kernel }}
+      </td>
+      <td class="print-cell" style="width: 5%">
+        {{ node.cpus }}
+      </td>
+      <td class="print-cell" style="width: 5%">
+        {{ node.memory | bytes }}
+      </td>
+      <td class="print-cell" style="width: 8%">
+        {{ node.containers }}
+      </td>
+      <td class="print-cell text-center" style="width: 8%">
+        <span class="action-label {{ colourMap[node.policy_mode] }}">{{ node.policy_mode }}</span>
+      </td>
+      <td *ngIf="reportPage === 'vulnerabilities'" class="print-cell" style="width: 6%">
+        <div *ngIf="node.high + node.medium > 0">
+          <span class="text-danger">{{ node.high }}</span>&nbsp;/&nbsp;<span class="text-warning">{{ node.medium }}</span>
+        </div>
+        <div *ngIf="node.high + node.medium === 0">
+          <span class="text-success">0</span>
+        </div>
+      </td>
+      <td *ngIf="reportPage === 'vulnerabilities'" class="print-cell" style="width: 26%">
+        <div *ngIf="node.high + node.medium > 0">
+          <span *ngFor="let item of node.vulnerabilites" class="margin-right-s text-{{ item.style }}">
+            {{item.text.trim()}}
+          </span>
+        </div>
+        <div *ngIf="node.high + node.medium === 0">
+          <span class="text-success">{{ "scan.NO_VULNERABILITIES" | translate }}</span>
+        </div>
+      </td>
+      <td *ngIf="reportPage === 'vulnerabilities'" class="print-cell" style="width: 8%">
+        {{ node.scanned_at }}
+      </td>
+      <td *ngIf="reportPage === 'compliance'" class="print-cell" style="width: 10%">
+        {{ node.complianceCnt }}
+      </td>
+      <td *ngIf="reportPage === 'compliance'" class="print-cell" style="width: 30%">
+        <div class="row">
+          <div *ngFor="let item of node.complianceList" class="col-sm-3 text-{{ colourMap[item.style.toUpperCase()] }}">
+            {{item.text.trim()}}
+          </div>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

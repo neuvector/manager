@@ -21,11 +21,11 @@ import { RisksHttpService } from '@common/api/risks-http.service';
 @Injectable()
 export class ComplianceService {
   kubeVersion!: string;
-  private workloadMap4Pdf = {};
+  workloadMap4Pdf = {};
   private workloadMap = new Map();
-  private imageMap4Pdf = {};
-  private platformMap4Pdf = {};
-  private hostMap4Pdf = {};
+  imageMap4Pdf = {};
+  platformMap4Pdf = {};
+  hostMap4Pdf = {};
   private refreshSubject$ = new Subject();
   private selectedComplianceSubject$ = new BehaviorSubject<any | undefined>(
     undefined
@@ -105,9 +105,9 @@ export class ComplianceService {
         this.complianceFilterService.filtered = false;
         this.complianceFilterService.filteredCis = compliances;
       }),
-      finalize(() => {
-        this.runWorkers();
-      }),
+      // finalize(() => {
+      //   this.runWorkers();
+      // }),
       repeatWhen(() => this.refreshSubject$)
     );
   }

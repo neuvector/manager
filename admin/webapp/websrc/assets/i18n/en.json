@@ -1082,8 +1082,8 @@
     "report": {
       "TITLE": "Vulnerability reports (Vulnerability View)",
       "TITLE2": "Vulnerability reports (Assets View)",
-      "PDF_LINK": "PDF(Vulnerability View)",
-      "PDF_LINK2": "PDF(Assets VIew)",
+      "PDF_LINK": "Vulnerability View",
+      "PDF_LINK2": "Assets VIew",
       "gridHeader": {
         "NAME": "Name",
         "DESC": "Description",
@@ -1105,6 +1105,7 @@
       },
       "others": {
         "DETAILS": "Details",
+        "DETAIL_SUB": "Please refer appendix for details of CVEs",
         "APPENDIX": "Appendix (Full impact list)",
         "APPENDIX_DESC": "Show full list of images, containers, nodes and platforms",
         "APPENDIX_PACKAGES": "Appendix (Full package list)",
@@ -1115,7 +1116,11 @@
         "TOP_VULNERABLE_IMAGES": "Top Vulnerable Images",
         "TOP_VULNERABLE_HOSTS": "Top Vulnerable Nodes",
         "SEVERITY_DIS": "Vulnerabilities Severity Distribution",
-        "TARGET_DIS": "Vulnerabilities Target Distribution"
+        "TARGET_DIS": "Vulnerabilities Target Distribution",
+        "CONTAINER_INS": "Containers (Vulnerable Workloads (No Vulnerabilities): {{ safeRate4Containers }} ({{ containerCnt }} Workload(s)))",
+        "HOST_INS": "Hosts (Vulnerable Hosts (NoVulnerabilities): {{ safeRate4Hosts }} ({{ hostCnt }} host(s)))",
+        "PLATFORM_INS": "Platforms",
+        "IMAGE_INS": "Images (Vulnerable Images (No Vulnerabilities): {{ safeRate4Images }} ({{ imageCnt }} image(s)))"
       }
     },
     "status": {
@@ -1321,8 +1326,8 @@
     "report": {
       "TITLE": "Compliance Reports (Compliance View)",
       "TITLE2": "Compliance Reports (Assets View)",
-      "PDF_LINK": "PDF(Compliance View)",
-      "PDF_LINK2": "PDF(Assets View)",
+      "PDF_LINK": "Compliance View",
+      "PDF_LINK2": "Assets View",
       "gridHeader": {
         "CATEGORY": "Category",
         "NAME": "Name",
@@ -1343,6 +1348,7 @@
       },
       "others": {
         "DETAILS": "Details",
+        "DETAIL_SUB": "Please refer appendix for details of compliance",
         "APPENDIX": "Appendix (Full impact list)",
         "APPENDIX_DESC": "Show full list of images, containers, nodes and platforms",
         "APPENDIX2": "Appendix (Full compliance list)",
@@ -1350,7 +1356,11 @@
         "TOP_IMPACTFUL_COMP": "Top Impactful Compliance",
         "TOP_COMP_CONTAINER": "Top Impactful Compliance on Containers",
         "TARGET_DIS": "Compliance Target Distribution",
-        "SEVERITY_DIS": "Compliance Severity Distribution"
+        "SEVERITY_DIS": "Compliance Severity Distribution",
+        "CONTAINER_INS": "Containers (Compliant Workloads (No Compliance Violations): {{ safeRate4Containers }} ({{ containerCnt }} Workload(s)))",
+        "HOST_INS": "Hosts (Compliant Hosts (No Compliance Violations): {{ safeRate4Hosts }} ({{ hostCnt }} host(s)))",
+        "PLATFORM_INS": "Platforms",
+        "IMAGE_INS": "Images (Compliant Images (No Compliance Violations): {{ safeRate4Images }} ({{ imageCnt }} image(s)))"
       }
     }
   },

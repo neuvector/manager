@@ -44,7 +44,7 @@ export class ComplianceProfileTemplatesTableComponent
   systemChanges = 0;
   totalChanges = 0;
   regulationChanges = {};
-  isWriteComplianceProfileAuthorized: boolean;
+  isWriteComplianceProfileAuthorized!: boolean;
   all = true;
   pci = false;
   gdpr = false;
@@ -128,7 +128,8 @@ export class ComplianceProfileTemplatesTableComponent
   ) {}
 
   ngOnInit(): void {
-    this.isWriteComplianceProfileAuthorized = this.authUtilsService.getDisplayFlag('write_compliance_profile');
+    this.isWriteComplianceProfileAuthorized =
+      this.authUtilsService.getDisplayFlag('write_compliance_profile');
     if (!this.isWriteComplianceProfileAuthorized) {
       this.columnDefs.pop();
     }
@@ -146,6 +147,7 @@ export class ComplianceProfileTemplatesTableComponent
       },
       doesExternalFilterPass: this.doesExternalFilterPass.bind(this),
       isExternalFilterPresent: () => true,
+      overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS'),
     };
   }
 
@@ -275,6 +277,9 @@ export class ComplianceProfileTemplatesTableComponent
       entries: [] as any,
     };
     if (!bool) {
+      this.complianceProfileService.lastEntries.forEach(entry => {
+        payload.entries.push(entry);
+      });
       Object.keys(this.regulationChanges).forEach(key => {
         payload.entries.push({
           test_number: key,

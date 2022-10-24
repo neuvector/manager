@@ -2,14 +2,14 @@
   <ng-container [ngSwitch]="activeTab">
     <ng-container *ngSwitchCase="'compliance'">
       <div class="filter" [class.filter-csv]="!complianceEmpty">
-        <div class="mr-3 filter-actions">
+        <div class="d-flex">
           <button
-            mat-button
+            *ngIf="!complianceEmpty"
             aria-label="Export compliance CSV"
             type="button"
-            class="d-flex align-items-center"
-            *ngIf="!complianceEmpty"
-            (click)="complianceGrid.exportCSV()">
+            class="mr-3 d-flex align-items-center"
+            (click)="complianceGrid.exportCSV()"
+            mat-button>
             <i class="eos-icons mr-2">csv_file</i>CSV
           </button>
         </div>
@@ -20,59 +20,45 @@
       </div>
     </ng-container>
     <ng-container *ngSwitchCase="'vulnerabilities'">
-      <div
-        class="filter"
-        [class.filter-csv]="!isVulsAuthorized && !vulEmpty"
-        [class.filter-view-csv]="isVulsAuthorized && !vulEmpty"
-        [class.filter-view]="isVulsAuthorized && vulEmpty">
-        <div class="mr-3 filter-actions">
-          <button
-            mat-button
-            aria-label="Export vulnerabilities CSV"
-            type="button"
-            class="d-flex align-items-center"
-            *ngIf="!vulEmpty"
-            (click)="exportCVE()">
-            <i class="eos-icons mr-2">csv_file</i>CSV
-          </button>
+      <div class="filter" [class]="'filter-icon-' + visibleIcons">
+        <div class="d-flex">
           <ng-container *ngIf="isVulsAuthorized">
             <button
-              mat-button
-              class="d-flex align-items-center"
-              aria-label="Vulnerabilities options"
-              [matMenuTriggerFor]="vulMenu">
-              {{ 'network.SETTING' | translate }}
-              <i class="eos-icons m-auto">arrow_drop_down</i>
+              *ngIf="
+                isWriteVulsAuthorized &&
+                selectedVulnerability &&
+                !isAccepted(selectedVulnerability)
+              "
+              attr.aria-label="{{ 'cveProfile.ACCEPT_VUL' | translate }}"
+              matTooltip="{{ 'cveProfile.ACCEPT_VUL' | translate }}"
+              class="mr-3"
+              (click)="onAcceptVulnerability(selectedVulnerability)"
+              mat-icon-button>
+              <mat-icon fontSet="fa" fontIcon="fa-check-square"></mat-icon>
             </button>
-            <mat-menu #vulMenu="matMenu">
-              <button
-                mat-menu-item
-                class="d-flex align-items-center"
-                (click)="toggleAcceptedVuls()">
-                <i class="eos-icons mr-2">
-                  {{ showAcceptedVuls ? 'visibility_off' : 'visibility' }}
-                </i>
-                {{
-                  (showAcceptedVuls
-                    ? 'enum.HIDE_ACCEPTED_VULS'
-                    : 'enum.SHOW_ACCEPTED_VULS'
-                  ) | translate
-                }}
-              </button>
-              <button
-                mat-menu-item
-                *ngIf="
-                  isWriteVulsAuthorized &&
-                  selectedVulnerability &&
-                  !isAccepted(selectedVulnerability)
-                "
-                class="d-flex align-items-center"
-                (click)="onAcceptVulnerability(selectedVulnerability)">
-                <i class="eos-icons mr-2">check_box</i>
-                {{ 'cveProfile.ACCEPT_VUL' | translate }}
-              </button>
-            </mat-menu>
+            <button
+              type="button"
+              [attr.aria-label]="acceptedVulsMsg"
+              [matTooltip]="acceptedVulsMsg"
+              class="mr-3"
+              (click)="toggleAcceptedVuls()"
+              mat-icon-button>
+              <mat-icon
+                fontSet="fa"
+                [fontIcon]="
+                  !showAcceptedVuls ? 'fa-eye' : 'fa-eye-slash'
+                "></mat-icon>
+            </button>
           </ng-container>
+          <button
+            *ngIf="!vulEmpty"
+            aria-label="Export vulnerabilities CSV"
+            type="button"
+            class="mr-3"
+            (click)="exportCVE()"
+            mat-icon-button>
+            <mat-icon class="eos-icons">csv_file</mat-icon>
+          </button>
         </div>
         <mat-form-field appearance="standard">
           <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
@@ -81,13 +67,14 @@
       </div>
     </ng-container>
     <ng-container *ngSwitchCase="'process'">
-      <div class="filter" [class.filter-process]="true">
-        <div class="mr-3 filter-actions">
+      <div class="filter filter-icon-1">
+        <div class="d-flex">
           <button
             mat-icon-button
             [attr.aria-label]="processHistoryMsg"
             [matTooltip]="processHistoryMsg"
             type="button"
+            class="mr-3"
             (click)="toggleProcessHistory()">
             <mat-icon
               fontSet="fa"

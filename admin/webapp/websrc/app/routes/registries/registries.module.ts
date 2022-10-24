@@ -47,7 +47,6 @@ import { RegistryDetailsTableStatusCellComponent } from './registry-details/regi
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RegistryTableStatusCellComponent } from './registries-table/registry-table-status-cell/registry-table-status-cell.component';
-import { ConfirmDeleteDialogComponent } from './registries-table/confirm-delete-dialog/confirm-delete-dialog.component';
 import { TestConnectionDialogDetailsCellComponent } from './registries-table/add-registry-dialog/test-connection-dialog/test-connection-dialog-details-cell/test-connection-dialog-details-cell.component';
 import { TestConnectionDialogTypeCellComponent } from './registries-table/add-registry-dialog/test-connection-dialog/test-connection-dialog-type-cell/test-connection-dialog-type-cell.component';
 
@@ -76,7 +75,6 @@ const routes: Routes = [{ path: '', component: RegistriesComponent }];
     LayersTableCvesCellComponent,
     RegistryDetailsTableStatusCellComponent,
     RegistryTableStatusCellComponent,
-    ConfirmDeleteDialogComponent,
     TestConnectionDialogDetailsCellComponent,
     TestConnectionDialogTypeCellComponent,
   ],
@@ -105,7 +103,7 @@ const routes: Routes = [{ path: '', component: RegistriesComponent }];
     MatTooltipModule,
     QuickFilterModule,
     VulnerabilitiesGridModule,
-    NvCommonModule
+    NvCommonModule,
   ],
   providers: [RegistriesService, RegistriesCommunicationService],
 })

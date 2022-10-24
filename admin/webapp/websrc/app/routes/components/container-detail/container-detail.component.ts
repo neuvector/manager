@@ -1,4 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { GlobalConstant } from '@common/constants/global.constant';
+import { IpAddr } from '@common/types/compliance/ipAddr';
+import { validateIPAddress } from '@common/utils/common.utils';
 import { WorkloadRow } from '@services/containers.service';
 
 @Component({
@@ -11,6 +14,9 @@ export class ContainerDetailComponent implements OnInit {
   get labels() {
     return Object.keys(this.container.rt_attributes.labels || {});
   }
+  get MAX_INTERFACE_IP() {
+    return GlobalConstant.MAX_INTERFACE_IP;
+  }
 
   constructor() {}
 
@@ -18,5 +24,9 @@ export class ContainerDetailComponent implements OnInit {
 
   hasObject(obj: {}): boolean {
     return obj && !!Object.keys(obj).length;
+  }
+
+  validateIP(ip: IpAddr) {
+    return validateIPAddress(ip.ip);
   }
 }

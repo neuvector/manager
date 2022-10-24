@@ -79,6 +79,7 @@ export class TestSettingsDialogComponent implements OnInit, OnDestroy {
         detailsCellRenderer: TestConnectionDialogDetailsCellComponent,
         typeCellRenderer: TestConnectionDialogTypeCellComponent,
       },
+      overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS')
     };
   }
 

@@ -1,0 +1,15 @@
+.nav-white {
+  color: #fff !important;
+}
+
+.notification-message {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  &.clamped {
+    -webkit-line-clamp: 2;
+  }
+  &.unclamped {
+    -webkit-line-clamp: none;
+  }
+}

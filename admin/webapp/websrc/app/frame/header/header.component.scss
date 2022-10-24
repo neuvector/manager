@@ -1,17 +1,18 @@
-.user-info {
-  color: #fff;
+.nav-item {
   height: 72px;
-  border-left: 1px solid rgba(241, 241, 248, 0.2);
 }
 
-.cluster-info {
+.nav-white {
   color: #fff;
-  height: 72px;
+}
+
+.nav-border {
+  border-left: 1px solid rgba(241, 241, 248, 0.2);
 }
 
 .selected-cluster-text {
   font-size: 16px;
-  font-family: Serif Monaco, "Lucida Console", monospace;
+  font-family: Serif Monaco, 'Lucida Console', monospace;
   font-weight: bold;
   color: whitesmoke;
   margin-left: 1rem;
@@ -35,5 +36,5 @@
 }
 
 .divider {
-  border-bottom: 0.5px solid rgba(0,0,0,0.4);
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.4);
 }

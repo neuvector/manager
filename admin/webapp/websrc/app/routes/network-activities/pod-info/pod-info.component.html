@@ -1,27 +1,34 @@
 <div id="podInfo" class="infoBox topLeftFloat pt-0" cdkDrag>
-  <button
-    class="btn btn-xs btn-link pull-right mt-2"
-    (click)="popupState.leave()">
-    <em class="fa fa-times fa-lg text-muted"></em>
-  </button>
-  <div class="clearfix handle" cdkDragHandle id="domainInfoHeader">
-    <div class="auto-hide mt-2" style="display: block; width: 350px">
-      <img
-        src="assets/img/icons/graph/container-d.svg"
-        aria-label="Pod icon"
-        style="width: 24px; height: 24px"
-        alt="Pod Icon" />
-      {{ pod.workload.display_name }}
+  <div
+    cdkDragHandle
+    class="d-flex align-items-center justify-content-between handle my-2">
+    <div class="handle" cdkDragHandle id="domainInfoHeader">
+      <div class="auto-hide my-2" style="display: block; width: 350px">
+        <img
+          src="assets/img/icons/graph/container-d.svg"
+          aria-label="Pod icon"
+          style="width: 24px; height: 24px"
+          alt="Pod Icon" />
+        {{ pod.workload.display_name }}
+      </div>
     </div>
+    <button
+      id="closePodInfo"
+      aria-label="Close icon button"
+      class="d-flex align-items-center justify-content-center"
+      mat-icon-button>
+      <i (click)="popupState.leave()" class="eos-icons">close</i>
+    </button>
   </div>
-  <hr class="fancy mx-0 my-0" />
+
+  <hr class="fancy mx-0 my-1" />
 
   <div>
     <ul class="row">
       <li class="col-sm-12 p-2">
         <div class="mda-list-item-text pb-0 pt-sm">
           <span class="font-weight-bold host-item-key">ID:</span>
-          <span class="ml auto-hide host-item-value">
+          <span class="ml auto-hide host-item-value" style="display: block">
             {{ pod.workload.id }}
           </span>
         </div>
@@ -38,24 +45,28 @@
           <div class="ml pod-item-value">
             <ng-container *ngFor="let child of pod.workload.children">
               <div class="row" *ngIf="child.state !== 'exit'">
-                <div style="margin-top: 2px; width: 620px" class="auto-hide">
-                <span
-                  class="text-muted text-bold pl-lg"
-                  style="display: inline-block">
-                  <em class="fa fa-square-o text-muted mr-2"></em>
-                  {{ child.display_name }}
-                </span>
-                <label
-                  style="display: inline-block"
-                  class="label label-info-tran ml-2 mt-1"
-                  *ngIf="child.service_mesh_sidecar">
-                  Sidecar
-                </label>
-                <em class="fa fa-archive text-info pl-2 mr-1"></em>
-                <span class="text-muted auto-hide" style="margin-top: -2px">
-                  {{ child.image }}
-                </span>
-              </div>
+                <div
+                  style="margin-top: 2px; width: 620px; display: block"
+                  class="auto-hide">
+                  <span
+                    class="text-muted text-bold pl-lg"
+                    style="display: inline-block">
+                    <em class="fa fa-square-o text-muted mr-2"></em>
+                    {{ child.display_name }}
+                  </span>
+                  <label
+                    style="display: inline-block"
+                    class="label label-info-tran ml-2 mt-1"
+                    *ngIf="child.service_mesh_sidecar">
+                    Sidecar
+                  </label>
+                  <em class="fa fa-archive text-info pl-2 mr-1"></em>
+                  <span
+                    class="text-muted auto-hide"
+                    style="margin-top: -2px; display: block">
+                    {{ child.image }}
+                  </span>
+                </div>
               </div>
             </ng-container>
           </div>
@@ -71,14 +82,17 @@
           </div>
           <div class="ml host-item-value">
             <div *ngFor="let image of pod.workload.images">
-              <span class="d-block text-muted auto-hide pod-item-value">
+              <span
+                class="d-block text-muted auto-hide pod-item-value"
+                style="display: block">
                 <mat-icon
                   aria-hidden="false"
                   aria-label="Image icon"
                   class="details-icon text-info"
                   fontSet="fa"
                   fontIcon="fa-archive">
-              </mat-icon>{{ image }}
+                </mat-icon
+                >{{ image }}
               </span>
             </div>
           </div>
@@ -89,7 +103,7 @@
           <span class="font-weight-bold host-item-key">
             {{ 'network.nodeDetails.ENFORCER' | translate }}:
           </span>
-          <span class="ml auto-hide host-item-value">
+          <span class="ml auto-hide host-item-value" style="display: block">
             {{ pod.workload.enforcer_name }}
           </span>
         </div>
@@ -99,7 +113,7 @@
           <span class="font-weight-bold host-item-key">
             {{ 'group.gridHeader.DOMAIN' | translate }}:
           </span>
-          <span class="ml auto-hide host-item-value">
+          <span class="ml auto-hide host-item-value" style="display: block">
             {{ pod.workload.domain }}
           </span>
         </div>
@@ -109,17 +123,19 @@
           <span class="font-weight-bold host-item-key">
             {{ 'network.gridHeader.SERVICE' | translate }}:
           </span>
-          <span class="ml auto-hide host-item-value">
+          <span class="ml auto-hide host-item-value" style="display: block">
             {{ pod.workload.service }}
+            <a
+              mat-icon-button
+              aria-label="External link button"
+              (click)="showPodGroup()"
+              class="external-link text-primary"
+              *ngIf="pod.workload.service_group">
+              <mat-icon style="font-size: 24px; width: 24px; height: 24px"
+                >open_in_new</mat-icon
+              >
+            </a>
           </span>
-          <a
-            mat-icon-button
-            aria-label="External link button"
-            (click)="showPodGroup()"
-            class="external-link text-primary"
-            *ngIf="pod.workload.service_group">
-            <mat-icon style="font-size:24px; width:24px; height: 24px">open_in_new</mat-icon>
-          </a>
         </div>
       </li>
       <li class="col-sm-6 p-2">
@@ -127,7 +143,7 @@
           <span class="font-weight-bold host-item-key">
             {{ 'network.nodeDetails.LOCATION' | translate }}:
           </span>
-          <span class="ml auto-hide host-item-value">
+          <span class="ml auto-hide host-item-value" style="display: block">
             {{ pod.workload.host_name }}
           </span>
         </div>
@@ -153,7 +169,7 @@
           <span class="font-weight-bold host-item-key">
             {{ 'network.nodeDetails.CREATED_AT' | translate }}:
           </span>
-          <span class="ml auto-hide host-item-value">
+          <span class="ml auto-hide host-item-value" style="display: block">
             {{ pod.workload.started_at | date: 'MMM dd, y HH:mm:ss' }}
           </span>
         </div>
@@ -163,8 +179,10 @@
           <span class="font-weight-bold host-item-key"
             >{{ 'network.nodeDetails.SCANNED_AT' | translate }}:</span
           >
-          <span class="ml mr-lg auto-hide host-item-key">
-            {{ pod.workload.scan_summary.scanned_at | date: 'MMM dd, y HH:mm:ss' }}
+          <span class="ml mr-lg auto-hide host-item-key" style="display: block">
+            {{
+              pod.workload.scan_summary.scanned_at | date: 'MMM dd, y HH:mm:ss'
+            }}
           </span>
         </div>
       </li>
@@ -174,7 +192,7 @@
           <span class="font-weight-bold host-item-key">
             {{ 'network.nodeDetails.PRIVILEGED' | translate }}:
           </span>
-          <span class="ml auto-hide host-item-value">
+          <span class="ml auto-hide host-item-value" style="display: block">
             {{ pod.workload.privileged }}
           </span>
         </div>
@@ -184,7 +202,7 @@
           <span class="font-weight-bold host-item-key">
             {{ 'network.nodeDetails.RUN_AS_ROOT' | translate }}:
           </span>
-          <span class="ml auto-hide host-item-value">
+          <span class="ml auto-hide host-item-value" style="display: block">
             {{ pod.workload.run_as_root }}
           </span>
         </div>
@@ -195,9 +213,7 @@
             >{{ 'group.gridHeader.VULNERABILITIES' | translate }}:</span
           >
           <div class="d-inline">
-            <span
-              *ngIf="pod.risk?.high"
-              class="badge badge-danger mr-sm">
+            <span *ngIf="pod.risk?.high" class="badge badge-danger mr-sm">
               {{ pod.risk.high }}</span
             >
             <span *ngIf="pod.risk?.medium" class="badge badge-warning">
@@ -226,7 +242,7 @@
           <span class="font-weight-bold host-item-key">
             {{ 'network.nodeDetails.NETWORK_MODE' | translate }}:
           </span>
-          <span class="ml auto-hide host-item-value">
+          <span class="ml auto-hide host-item-value" style="display: block">
             {{ pod.workload.network_mode }}
           </span>
         </div>

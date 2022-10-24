@@ -1,15 +1,15 @@
-import {Component, OnInit, ViewChild, Injector, Inject} from '@angular/core';
+import { Component, OnInit, ViewChild, Injector, Inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { MultiClusterService } from "@services/multi-cluster.service";
+import { MultiClusterService } from '@services/multi-cluster.service';
 import { Router } from '@angular/router';
 import screenfull from 'screenfull';
 
-import { SwitchersService } from "@core/switchers/switchers.service";
-import { MenuService } from "@core/menu/menu.service";
-import { MapConstant } from "@common/constants/map.constant";
-import { ClusterData, Cluster, SessionStorageCluster } from "@common/types";
-import { SESSION_STORAGE, StorageService } from "ngx-webstorage-service";
-import { GlobalConstant } from "@common/constants/global.constant";
+import { SwitchersService } from '@core/switchers/switchers.service';
+import { MenuService } from '@core/menu/menu.service';
+import { MapConstant } from '@common/constants/map.constant';
+import { ClusterData, Cluster, SessionStorageCluster } from '@common/types';
+import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
+import { GlobalConstant } from '@common/constants/global.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
 
 @Component({
@@ -21,13 +21,13 @@ export class HeaderComponent implements OnInit {
   navCollapsed = true;
   menuItems: Array<any> = [];
   router: Router = <Router>{};
-  clusterName: string="";
+  clusterName: string = '';
   clusters: Cluster[] = [];
   isMasterRole: boolean = false;
   isMemberRole: boolean = false;
   isOrdinaryRole: boolean = false;
-  isOnRemoteCluster: boolean=false;
-  selectedCluster: Cluster|undefined;
+  isOnRemoteCluster: boolean = false;
+  selectedCluster: Cluster | undefined;
   isSUSESSO: boolean;
 
   isNavSearchVisible: boolean = false;
@@ -67,7 +67,6 @@ export class HeaderComponent implements OnInit {
     });
 
     this.initMultiClusters();
-
   }
 
   toggleUserBlock(event) {
@@ -123,105 +122,102 @@ export class HeaderComponent implements OnInit {
   }
 
   goMultiCluster() {
-    this.router.navigate(["multi-cluster"]);
+    this.router.navigate(['multi-cluster']);
   }
 
   goFederatedPolicy() {
     this.router.navigate(['federated-policy']);
   }
 
-  initMultiClusters(){
+  initMultiClusters() {
     this.getClusterName();
     this.getClusters();
-
   }
 
-  getClusterName(){
-    this.multiClusterService.getClusterName().pipe()
+  getClusterName() {
+    this.multiClusterService
+      .getClusterName()
+      .pipe()
       .subscribe({
         next: (data: any) => {
           this.clusterName = data.config.cluster_name;
-        }
+        },
       });
   }
   getClusters() {
-    this.multiClusterService.getClusters().pipe()
-      .subscribe(
-        {
-          next: (data: ClusterData) => {
-            this.clusters = data.clusters || [];
-            this.isMemberRole = data.fed_role === MapConstant.FED_ROLES.MEMBER;
-            this.isMasterRole = data.fed_role === MapConstant.FED_ROLES.MASTER;
-            GlobalVariable.isMaster = this.isMasterRole;
-            GlobalVariable.isMember = this.isMemberRole;
-            this.isOrdinaryRole = data.fed_role === "";
+    this.multiClusterService
+      .getClusters()
+      .pipe()
+      .subscribe({
+        next: (data: ClusterData) => {
+          this.clusters = data.clusters || [];
+          this.isMemberRole = data.fed_role === MapConstant.FED_ROLES.MEMBER;
+          this.isMasterRole = data.fed_role === MapConstant.FED_ROLES.MASTER;
+          GlobalVariable.isMaster = this.isMasterRole;
+          GlobalVariable.isMember = this.isMemberRole;
+          this.isOrdinaryRole = data.fed_role === '';
 
-            //get the status of the chosen cluster
-            const sessionCluster = this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_CLUSTER);
+          //get the status of the chosen cluster
+          const sessionCluster = this.sessionStorage.get(
+            GlobalConstant.SESSION_STORAGE_CLUSTER
+          );
 
-            const cluster = sessionCluster ? JSON.parse(sessionCluster): null;
+          const cluster = sessionCluster ? JSON.parse(sessionCluster) : null;
 
-            if(cluster !== null){
-              this.isOnRemoteCluster = cluster.isOnRemoteCluster;
-              this.selectedCluster = cluster;
-
-            }else{
-              this.selectedCluster = this.clusters.find(cluster => {
-                return cluster.clusterType === MapConstant.FED_ROLES.MASTER;
-              });
-              console.log("selected:",this.selectedCluster);
-            }
-
-
-          },
-          error: (error) => {
-
+          if (cluster !== null) {
+            this.isOnRemoteCluster = cluster.isOnRemoteCluster;
+            this.selectedCluster = cluster;
+          } else {
+            this.selectedCluster = this.clusters.find(cluster => {
+              return cluster.clusterType === MapConstant.FED_ROLES.MASTER;
+            });
+            console.log('selected:', this.selectedCluster);
           }
-        }
-      );
+        },
+        error: error => {},
+      });
   }
 
-  redirectCluster(cluster: Cluster){
+  redirectCluster(cluster: Cluster) {
     let currentID = this.selectedCluster?.id;
     let selectedID = cluster.id;
 
-    if( currentID !== selectedID ){
-      if(this.selectedCluster?.clusterType === MapConstant.FED_ROLES.MASTER){
-        currentID = "";
+    if (currentID !== selectedID) {
+      if (this.selectedCluster?.clusterType === MapConstant.FED_ROLES.MASTER) {
+        currentID = '';
       }
 
       let selectedItem = this.clusters.find(clusterNode => {
         return clusterNode.id === cluster.id;
       });
 
-      if(selectedItem?.clusterType === MapConstant.FED_ROLES.MASTER){
-        selectedID = "";
+      if (selectedItem?.clusterType === MapConstant.FED_ROLES.MASTER) {
+        selectedID = '';
       }
 
-      this.multiClusterService.switchCluster(selectedID, currentID)
-        .subscribe({
-          next: (res) => {
-            this.selectedCluster = selectedItem;
-            this.isOnRemoteCluster = this.selectedCluster?.clusterType !== MapConstant.FED_ROLES.MASTER;
-            this.multiClusterService.dispatchSwitchEvent();
+      this.multiClusterService.switchCluster(selectedID, currentID).subscribe({
+        next: res => {
+          this.selectedCluster = selectedItem;
+          this.isOnRemoteCluster =
+            this.selectedCluster?.clusterType !== MapConstant.FED_ROLES.MASTER;
+          this.multiClusterService.dispatchSwitchEvent();
 
-            //to save and restore the selected cluster in case the page gets refreshed
-            const cluster = {
-              isRemote: this.isOnRemoteCluster,
-              id: this.selectedCluster?.id,
-              name: this.selectedCluster?.name
-            };
-            this.sessionStorage.set(GlobalConstant.SESSION_STORAGE_CLUSTER, JSON.stringify(cluster));
-
-          },
-          error: (error) => {
-          }
-        });
-
-    }else{
-      console.log("same cluster");
+          //to save and restore the selected cluster in case the page gets refreshed
+          const cluster = {
+            isRemote: this.isOnRemoteCluster,
+            id: this.selectedCluster?.id,
+            name: this.selectedCluster?.name,
+          };
+          this.sessionStorage.set(
+            GlobalConstant.SESSION_STORAGE_CLUSTER,
+            JSON.stringify(cluster)
+          );
+        },
+        error: error => {},
+      });
+    } else {
+      console.log('same cluster');
     }
-
   }
 
   logout() {

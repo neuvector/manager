@@ -70,6 +70,7 @@ export class LayersTableComponent implements OnInit, OnChanges {
       onGridReady: event => this.onGridReady(event),
       onSelectionChanged: event => this.onSelectionChanged(event),
       components: { cvesCellRenderer: LayersTableCvesCellComponent },
+      overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS')
     };
   }
 

@@ -1157,6 +1157,12 @@ export class GraphService {
       .subscribe(response => {});
   };
 
+  quarantine = (id: string, toQuarantine: boolean) =>
+    this.http.post(PathConstant.CONTAINER_URL, {
+      id: id,
+      quarantine: toQuarantine
+    }).pipe();
+
   keepLive = () => {
     this.http.patch(PathConstant.KEEP_ALIVE_URL, {}).subscribe(response => {});
   };

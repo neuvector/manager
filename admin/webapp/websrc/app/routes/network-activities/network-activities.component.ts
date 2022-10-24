@@ -19,7 +19,10 @@ import {
   GraphItem,
 } from '@common/types/network-activities/blacklist';
 import { fromEvent, interval, Observable, Subscription } from 'rxjs';
-import { GraphSettings, Settings } from "@common/types/network-activities/settings";
+import {
+  GraphSettings,
+  Settings,
+} from '@common/types/network-activities/settings';
 import {
   ActivityState,
   PopupState,
@@ -33,6 +36,7 @@ import { AssetsHttpService } from '@common/api/assets-http.service';
 import { PodDetails } from '@common/types/network-activities/podDetails';
 import { AdvancedFilter } from '@common/types/network-activities/advancedFilter';
 import { NotificationService } from '@services/notification.service';
+import { ConversationPair } from './edge-details/edge-details.component';
 
 @Component({
   selector: 'app-network-activities',
@@ -73,6 +77,7 @@ export class NetworkActivitiesComponent
   blacklist: Blacklist;
 
   selectedEdge;
+  edgeDetails;
 
   tooltipEl;
   container: HTMLElement | null = null;
@@ -107,6 +112,31 @@ export class NetworkActivitiesComponent
 
   pod: PodDetails = <PodDetails>{};
 
+  CONTAINER_TO_ICON = {
+    discover: 'container-d',
+    monitor: 'container-m',
+    protect: 'container-p',
+  };
+  SERVICE_MESH_TO_ICON = {
+    discover: 'serviceMesh-d',
+    monitor: 'serviceMesh-m',
+    protect: 'serviceMesh-p',
+  };
+  HOST_TO_ICON = {
+    discover: 'host-d',
+    monitor: 'host-m',
+    protect: 'host-p',
+  };
+  RISKY_STATUSES = [
+    'Info',
+    'Low',
+    'Medium',
+    'High',
+    'Critical',
+    'violate',
+    'deny',
+  ];
+
   domains: GraphItem[] = [];
   groups: { name: string; displayName: string }[] = [];
   endpoints: { name: string; id: string }[] = [];
@@ -120,7 +150,7 @@ export class NetworkActivitiesComponent
     private graphService: GraphService,
     private groupsService: GroupsService,
     private sniffService: SniffService,
-    private utils: UtilsService,
+    private utils: UtilsService
   ) {
     this.w = GlobalVariable.window;
     this.popupState = new ActivityState(PopupState.onInit);
@@ -132,7 +162,7 @@ export class NetworkActivitiesComponent
     };
   }
 
-  initSettings = () => {
+  private initSettings() {
     this.settings = {
       showSysNode: this.localStorage.get(this.user + '-showSysNode')
         ? JSON.parse(this.localStorage.get(this.user + '-showSysNode')) || false
@@ -150,9 +180,9 @@ export class NetworkActivitiesComponent
         : false,
       gpuEnabled: this.useGpu() || this.gpuEnabled,
     };
-  };
+  }
 
-  loadAdvFilters = () => {
+  private loadAdvFilters() {
     const saved = this.localStorage.get(this.user + '-advFilter');
     if (saved) {
       this.advFilter = JSON.parse(
@@ -160,9 +190,9 @@ export class NetworkActivitiesComponent
       );
       if (this.advFilter) this.graphService.setAdvFilter(this.advFilter);
     } else this.advFilter = this.graphService.getAdvFilter();
-  };
+  }
 
-  loadBlacklist = () => {
+  private loadBlacklist() {
     const saved = this.localStorage.get(this.user + '-blacklist');
     if (saved) {
       this.blacklist = JSON.parse(
@@ -173,21 +203,21 @@ export class NetworkActivitiesComponent
     if (!this.blacklist) {
       this.blacklist = this.graphService.getBlacklist();
     }
-  };
+  }
 
-  useGpu = () => {
+  private useGpu() {
     let gpuEnabled;
     if (this.localStorage.get('_gpuEnabled')) {
       gpuEnabled = JSON.parse(this.localStorage.get('_gpuEnabled'));
       if (gpuEnabled !== null) return gpuEnabled;
     } else return false;
-  };
+  }
 
-  prepareGraphics = (
+  private prepareGraphics(
     height: number,
     width: number,
     isWriteNetworkAuthorized: boolean
-  ) => {
+  ) {
     //region I18 items
     const DETAILS = this.translate.instant('network.nodeDetails.DETAILS');
     const EXPAND = this.translate.instant('network.popup.EXPAND');
@@ -213,7 +243,7 @@ export class NetworkActivitiesComponent
       'network.nodeDetails.SHOW_OUTGOING'
     );
     const HIDE_EDGE = this.translate.instant('network.nodeDetails.HIDE_EDGE');
-    const SHOW_ALL = this.translate.instant('network.nodeDetails.SHOW_ALL');
+    // const SHOW_ALL = this.translate.instant('network.nodeDetails.SHOW_ALL');
     const FIT_VIEW = this.translate.instant('network.FIT_VIEW');
     const DISCOVER = this.translate.instant('enum.DISCOVER');
     const MONITOR = this.translate.instant('enum.MONITOR');
@@ -243,7 +273,6 @@ export class NetworkActivitiesComponent
             const itemType = item.getType();
             const model: any = item.getModel();
             if (itemType && model) {
-              console.log(model);
               const NO_DETAIL_NODE = [
                 'nvUnmanagedNode',
                 'nvUnmanagedWorkload',
@@ -438,7 +467,6 @@ export class NetworkActivitiesComponent
         }
       },
       handleMenuClick: (target, item) => {
-        console.log(target, item);
         const model = item && item.getModel();
         const liItems = target.id.split('-');
         switch (liItems[0]) {
@@ -491,10 +519,10 @@ export class NetworkActivitiesComponent
             switchModeOnMenu('Protect', item, this.graph);
             break;
           case 'quarantine':
-            // quarantine(item, true);
+            this.quarantine(item, true);
             break;
           case 'unQuarantine':
-            // quarantine(item, false);
+            this.quarantine(item, false);
             break;
           default:
             break;
@@ -576,10 +604,10 @@ export class NetworkActivitiesComponent
             img:
               nodeType === 'container'
                 ? `assets/img/icons/graph/${
-                    CONTAINER_TO_ICON[selectedMode.toLowerCase()]
+                    this.CONTAINER_TO_ICON[selectedMode.toLowerCase()]
                   }.svg`
                 : `assets/img/icons/graph/${
-                    SERVICEMESH_TO_ICON[selectedMode.toLowerCase()]
+                    this.SERVICE_MESH_TO_ICON[selectedMode.toLowerCase()]
                   }.svg`,
           },
           style: {
@@ -702,13 +730,10 @@ export class NetworkActivitiesComponent
       }, 300);
     };
 
-    const showLegend = () => {
-      this.settings.showLegend = !this.settings.showLegend;
-    };
+    const showLegend = () =>
+      (this.settings.showLegend = !this.settings.showLegend);
 
-    const refresh = graph => {
-      // this.refresh();
-    };
+    const refresh = () => this.refresh();
 
     const codeActionMap = {
       zoomOut: zoomOut,
@@ -926,7 +951,6 @@ export class NetworkActivitiesComponent
 
       const findLinks = (edge, result, linkId, endName) => {
         const endpoint = this.graph.findById(edge[endName]);
-        console.log(endpoint);
         //target is inside combo, just add the link
         if (endpoint && endpoint.isVisible()) {
           this.graph.addItem('edge', edge);
@@ -982,7 +1006,6 @@ export class NetworkActivitiesComponent
             }
             return result;
           }, []);
-        console.log(nodeEdges);
         this.nodeToClusterEdgesMap.set(nodeId, nodeEdges);
         muteComboEdges(comboId);
         this.lastRevealedNodeIds.push(nodeId);
@@ -1097,7 +1120,6 @@ export class NetworkActivitiesComponent
         node.group.startsWith('mesh')
       ) {
         showPodInfo(node);
-        console.log('group');
       } else if (node.kind === 'domain') {
         showDomainInfo(item);
       } else {
@@ -1184,15 +1206,14 @@ export class NetworkActivitiesComponent
 
     const showEdgeDetail = edgeItem => {
       this.selectedEdge = edgeItem;
-      let edge = edgeItem.getModel();
-      if (edge.kind === 'group' || isGroupEdge(edgeItem)) {
+      this.edgeDetails = edgeItem.getModel();
+      if (this.edgeDetails.kind === 'group' || isGroupEdge(edgeItem)) {
         this.graphService.keepLive();
         return;
       }
 
-      let from = edge.source,
-        to = edge.target;
-      //Todo add it back later
+      let from = this.edgeDetails.source,
+        to = this.edgeDetails.target;
       this.graphService.getConversations(from, to).subscribe(
         response => {
           this.conversationDetail = response['conversation'];
@@ -1202,13 +1223,10 @@ export class NetworkActivitiesComponent
           // this.ruleId = '-';
           // this.entries = this.conversationDetail.entries;
           // this.sessionCount = this.conversationDetail.sessions;
-          if (this.conversationDetail.entries.length < 5) {
-            if (this.conversationDetail.entries.length < 2)
-              this.entriesGridHeight = 40 + 27 * 2;
-            else
-              this.entriesGridHeight =
-                40 + 27 * this.conversationDetail.entries.length;
-          } else this.entriesGridHeight = 40 + 27 * 5;
+          if (this.conversationDetail.entries!.length > 0)
+            this.entriesGridHeight = this.getGridHeight(
+              this.conversationDetail.entries
+            );
 
           // this.convHisGridOptions = this.graphService.prepareTrafficHistoryGrid(
           //   this.conversationDetail
@@ -1311,27 +1329,6 @@ export class NetworkActivitiesComponent
       this.graphService.keepLive();
     });
 
-    const addMissingEdge = (sourceId, targetId, edge) => {
-      const newEdge = {
-        id: `${sourceId}${targetId}`,
-        source: sourceId,
-        target: targetId,
-        style: edge.getModel().style,
-        // label: edge.label,
-      };
-      if (edge.getModel().style.stroke !== MapConstant.EDGE_STATUS_MAP['OK']) {
-        // @ts-ignore
-        newEdge.stateStyles = {
-          active: {
-            stroke: MapConstant.EDGE_STATUS_MAP[edge.getModel().status],
-            opacity: 1.0,
-          },
-        };
-      }
-      if (!this.graph.findById(`${sourceId}${targetId}`))
-        this.graph.addItem('edge', newEdge);
-    };
-
     const addEdge = (sourceId, targetId, edge) => {
       const newEdge = Object.assign({}, edge);
       newEdge.id = `${sourceId}${targetId}`;
@@ -1354,86 +1351,6 @@ export class NetworkActivitiesComponent
           },
         };
       this.graph.addItem('edge', newEdge);
-    };
-
-    const toggleLine = edge => {
-      if (!edge.getSource().isVisible()) {
-        if (edge.getSource().getType() === 'combo') {
-          addMissingEdge(
-            `${edge.getSource().getModel().id.substring(2)}`,
-            `${edge.getTarget().getModel().id}`,
-            edge
-          );
-        } else {
-          addMissingEdge(
-            `co${edge.getSource().getModel().id}`,
-            `${edge.getTarget().getModel().id}`,
-            edge
-          );
-        }
-      }
-      if (!edge.getTarget().isVisible()) {
-        if (edge.getTarget().getType() === 'combo') {
-          addMissingEdge(
-            `${edge.getSource().getModel().id}`,
-            `${edge.getTarget().getModel().id.substring(2)}`,
-            edge
-          );
-        } else {
-          addMissingEdge(
-            `${edge.getSource().getModel().id}`,
-            `co${edge.getTarget().getModel().id}`,
-            edge
-          );
-        }
-      }
-    };
-
-    const revealLinks = item => {
-      if (this.lastRevealedNodeIds.length === 0) return;
-      const nodeId = this.lastRevealedNodeIds[0];
-      const node = this.graph.findById(nodeId);
-      // @ts-ignore
-      const edges = node && node.getEdges();
-      if (edges && edges.length > 0) {
-        const mergedEdges = edges.filter(
-          edge =>
-            edge.getSource().getModel().id === item.getModel().id ||
-            edge.getTarget().getModel().id === item.getModel().id
-        );
-        if (mergedEdges && mergedEdges.length > 0) {
-          mergedEdges.forEach(edge => {
-            const members = edge.getModel().members;
-            if (members && members.length > 0) {
-              members.forEach(member => {
-                const memberEdge =
-                  this.serverData.edges[
-                    this.graphService.getEdgeIdIndexMap().get(member)
-                  ];
-                const edge = Object.assign({}, memberEdge);
-                this.graphService.formatEdge(edge);
-
-                // @ts-ignore
-                if (edge.style.stroke !== MapConstant.EDGE_STATUS_MAP['OK']) {
-                  // @ts-ignore
-                  edge.stateStyles = {
-                    active: {
-                      stroke: MapConstant.EDGE_STATUS_MAP[edge.status],
-                      opacity: 1.0,
-                    },
-                  };
-                }
-
-                if (edge) {
-                  // @ts-ignore
-                  this.graph.addItem('edge', edge);
-                }
-              });
-            }
-            this.graph.removeItem(edge, false);
-          });
-        }
-      }
     };
 
     const aggregateStatus = links => {
@@ -1497,8 +1414,6 @@ export class NetworkActivitiesComponent
             targets.push(edge);
           }
         });
-        console.log(sources);
-        console.log(targets);
         if (sources.length > 0) {
           let newEdge: any = {};
           newEdge.id = item.getModel().id.substring(2) + nodeId;
@@ -1521,274 +1436,14 @@ export class NetworkActivitiesComponent
     const expand = item => {
       const model = item.getModel();
       if (model.kind === 'domain') expandDomain(item);
-      else if (model.kind === 'group') expandCluster(item);
+      else if (model.kind === 'group') this.expandCluster(item);
       // else if (model.kind === "mesh") expandMesh(item);
-    };
-
-    const doSubLayout = (clusterNode, clusterNodes) => {
-      // noinspection JSPotentiallyInvalidConstructorUsage
-      const subLayout = new G6.Layout.concentric({
-        center: [clusterNode.x, clusterNode.y],
-        preventOverlap: true,
-        nodeSize: 15,
-        minNodeSpacing: 15,
-        maxLevelDiff: 10,
-        sortBy: 'index',
-        tick: () => {
-          this.graph.refreshPositions();
-        },
-      });
-      subLayout.init({
-        nodes: clusterNodes,
-        edges: [],
-      });
-      subLayout.execute();
-
-      //Lock all the combo members inside combo
-      clusterNodes.forEach(item => {
-        const node = this.graph.findById(item.id);
-        // @ts-ignore
-        node.lock();
-      });
     };
 
     const GROUP_TO_ICON = {
       discover: 'cluster-d',
       monitor: 'cluster-m',
       protect: 'cluster-p',
-    };
-
-    const CONTAINER_TO_ICON = {
-      discover: 'container-d',
-      monitor: 'container-m',
-      protect: 'container-p',
-    };
-
-    const SERVICEMESH_TO_ICON = {
-      discover: 'serviceMesh-d',
-      monitor: 'serviceMesh-m',
-      protect: 'serviceMesh-p',
-    };
-
-    const HOST_TO_ICON = {
-      discover: 'host-d',
-      monitor: 'host-m',
-      protect: 'host-p',
-    };
-
-    const RISKY_STATUSES = [
-      'Info',
-      'Low',
-      'Medium',
-      'High',
-      'Critical',
-      'violate',
-      'deny',
-    ];
-
-    const getRiskyNodes = clusterId => {
-      const riskySourceLinks = this.serverData.edges.filter(
-        edge =>
-          edge.fromGroup === clusterId && RISKY_STATUSES.includes(edge.status)
-      );
-      const riskyTargetLinks = this.serverData.edges.filter(
-        edge =>
-          clusterId === edge.toGroup && RISKY_STATUSES.includes(edge.status)
-      );
-      const sources = riskySourceLinks.map(link => link.source);
-      const targets = riskyTargetLinks.map(link => link.target);
-      return [...new Set([...sources, ...targets])];
-    };
-
-    const expandCluster = item => {
-      const clusterNode = item.getModel();
-
-      // const edges = data.edges;
-      let clusterNodes: any[] = [];
-      let clusterEdges: any[] = [];
-
-      let selectedMode = clusterNode.policyMode || 'discover';
-
-      const riskyNodes = getRiskyNodes(clusterNode.id);
-
-      //add the cluster members
-      let cluster = this.graphService.getClusterMap().get(clusterNode.id);
-      if (cluster.comboCreated) {
-        //show combo
-        const comboNode = this.graph.findById(`co${clusterNode.id}`);
-        // @ts-ignore
-        const comboEdges = comboNode.getEdges();
-        console.log('show comboEdges');
-        console.log(comboEdges);
-        this.graph.showItem(comboNode);
-
-        let hiddenEdges = comboEdges.filter(item => !item.isVisible());
-
-        if (hiddenEdges && hiddenEdges.length > 0) {
-          console.log('from -> to');
-          console.log(hiddenEdges[0].getSource().isVisible());
-          console.log(hiddenEdges[0].getTarget().isVisible());
-          hiddenEdges.forEach(item => toggleLine(item));
-        }
-        this.graph.paint();
-        comboNode.toFront();
-        // @ts-ignore
-        const children = comboNode.getNodes();
-        children.forEach(child => child.toFront());
-      } else {
-        const members = cluster.members;
-        if (members && members.length > 0) {
-          clusterNodes = members.map(member => {
-            const memberNode =
-              this.serverData.nodes[
-                this.graphService.getNodeIdIndexMap().get(member)
-              ];
-            // @ts-ignore
-            memberNode.comboId = `co${clusterNode.id}`;
-            const theNode = Object.assign({}, memberNode);
-            // @ts-ignore
-            theNode.cve = this.graphService.getCveLevel(theNode);
-            this.graphService.formatNode(theNode);
-            theNode.label = '';
-            return theNode;
-          });
-        }
-        console.log(clusterNodes);
-
-        // @ts-ignore
-        clusterEdges = this.serverData.edges.filter(
-          edge =>
-            edge.fromGroup === edge.toGroup && edge.fromGroup === clusterNode.id
-        );
-
-        clusterNodes.forEach((item, i) => {
-          item.index = i + 1;
-          item.size = item.service_mesh ? 40 : 20;
-          item.icon.width = item.service_mesh ? 30 : 13;
-          item.icon.height = item.service_mesh ? 30 : 13;
-
-          let nodeType = '';
-          if (item.group && item.group.startsWith('container')) {
-            nodeType = 'container';
-          }
-          if (item.group && item.group.startsWith('mesh')) {
-            nodeType = 'mesh';
-          }
-          if (item.group && item.group.startsWith('host')) {
-            nodeType = 'host';
-          }
-          if (item.kind && item.kind === 'group') {
-            nodeType = 'group';
-          }
-
-          if (nodeType === 'container' || nodeType === 'mesh') {
-            item.icon.img =
-              nodeType === 'container'
-                ? `assets/img/icons/graph/${
-                    CONTAINER_TO_ICON[selectedMode.toLowerCase()]
-                  }.svg`
-                : `assets/img/icons/graph/${
-                    SERVICEMESH_TO_ICON[selectedMode.toLowerCase()]
-                  }.svg`;
-            item.style.stroke = this.graphService.strokeColor[selectedMode];
-            item.style.fill = this.graphService.fillColor[selectedMode];
-          }
-
-          if (nodeType === 'host') {
-            item.icon.img = `assets/img/icons/graph/${
-              HOST_TO_ICON[selectedMode.toLowerCase()]
-            }.svg`;
-            item.style.stroke = this.graphService.strokeColor[selectedMode];
-            item.style.fill = this.graphService.fillColor[selectedMode];
-          }
-
-          if (riskyNodes && riskyNodes.length > 0) {
-            if (riskyNodes.includes(item.id)) {
-              item.style.stroke = '#ff9800';
-              item.style.fill = '#d9b886';
-            }
-          }
-          this.graph.addItem('node', item, false);
-        });
-
-        clusterEdges.forEach(edge => {
-          this.graphService.formatEdge(edge);
-          if (edge.source === edge.target) {
-            edge.type = 'loop';
-            edge.loopCfg = {
-              dist: 20,
-            };
-            const loopNode =
-              this.serverData.nodes[
-                this.graphService.getNodeIdIndexMap().get(edge.source)
-              ];
-            if (loopNode && loopNode.service_mesh) {
-              edge.style.stroke = '#9FB8AD';
-              edge.style.opacity = 0.8;
-            }
-          }
-          edge.style.endArrow = {
-            path: G6.Arrow.triangle(2, 3),
-          };
-          this.graph.addItem('edge', edge, false);
-        });
-
-        doSubLayout(clusterNode, clusterNodes);
-
-        this.graph.createCombo(
-          {
-            id: `co${clusterNode.id}`,
-            oriLabel: clusterNode.label,
-            label: clusterNode.oriLabel,
-            domain: clusterNode.domain,
-            padding: 5,
-          },
-          members
-        );
-        const theCombo = this.graph.findById(`co${clusterNode.id}`);
-        theCombo.toFront();
-        members.forEach(member => {
-          const theMember = this.graph.findById(member);
-          theMember.toFront();
-        });
-
-        let oldEdges = item.getEdges();
-
-        oldEdges.forEach(edge => {
-          if (
-            edge.getSource().getModel().id === clusterNode.id &&
-            edge.getTarget().getModel().id === clusterNode.id
-          )
-            return;
-          if (edge.getSource().getModel().id === clusterNode.id) {
-            if (edge.getTarget().isVisible()) {
-              addMissingEdge(
-                `co${clusterNode.id}`,
-                edge.getTarget().getModel().id,
-                edge
-              );
-            }
-          }
-          if (edge.getTarget().getModel().id === clusterNode.id) {
-            if (edge.getSource().isVisible()) {
-              addMissingEdge(
-                edge.getSource().getModel().id,
-                `co${clusterNode.id}`,
-                edge
-              );
-            }
-          }
-        });
-      }
-      this.graph.hideItem(clusterNode.id);
-
-      revealLinks(item);
-
-      console.log(getRiskyNodes(clusterNode.id));
-
-      this.graph.refreshPositions();
-      this.graph.refresh();
-      this.graph.paint();
     };
 
     const collapseCluster = item => {
@@ -1816,7 +1471,7 @@ export class NetworkActivitiesComponent
 
       let hiddenEdges = clusterEdges.filter(item => !item.isVisible());
       if (hiddenEdges && hiddenEdges.length > 0) {
-        hiddenEdges.forEach(item => toggleLine(item));
+        hiddenEdges.forEach(item => this.toggleLine(item));
       }
 
       mergeRevealedLinks(item);
@@ -1901,9 +1556,8 @@ export class NetworkActivitiesComponent
 
     this.graph.on('node:dblclick', evt => {
       const { item } = evt;
-      console.log(item?.getModel());
       hideCve();
-      if (item?.getModel().kind === 'group') expandCluster(item);
+      if (item?.getModel().kind === 'group') this.expandCluster(item);
       else if (item?.getModel().kind === 'domain') expandDomain(item);
       this.graphService.keepLive();
     });
@@ -1960,9 +1614,9 @@ export class NetworkActivitiesComponent
     });
 
     //endregion
-  };
+  }
 
-  showGroup = (groupName: string) => {
+  showGroup(groupName: string) {
     this.groupsService.getGroupInfo(groupName).subscribe(
       (response: any) => {
         this.group = response;
@@ -1975,7 +1629,7 @@ export class NetworkActivitiesComponent
     setTimeout(() => {
       this.popupState.transitTo(PopupState.onGroupNode);
     }, 300);
-  };
+  }
 
   ngOnInit(): void {
     this.graphService.registerG6Components();
@@ -2018,7 +1672,7 @@ export class NetworkActivitiesComponent
     } else this.loadGraph();
   }
 
-  loadGraph = (onRefresh: boolean = true, callback?: () => void) => {
+  loadGraph(onRefresh: boolean = true, callback?: () => void) {
     const inHiddenDomain = node => {
       if (this.blacklist.domains?.length > 0) {
         return this.blacklist.domains.some(
@@ -2153,9 +1807,334 @@ export class NetworkActivitiesComponent
 
       if (callback) callback();
     });
-  };
+  }
 
-  doFocus = name => {
+  private getRiskyNodes(clusterId) {
+    const riskySourceLinks = this.serverData.edges.filter(
+      edge =>
+        edge.fromGroup === clusterId &&
+        this.RISKY_STATUSES.includes(edge.status)
+    );
+    const riskyTargetLinks = this.serverData.edges.filter(
+      edge =>
+        clusterId === edge.toGroup && this.RISKY_STATUSES.includes(edge.status)
+    );
+    const sources = riskySourceLinks.map(link => link.source);
+    const targets = riskyTargetLinks.map(link => link.target);
+    return [...new Set([...sources, ...targets])];
+  }
+
+  private addMissingEdge(sourceId, targetId, edge) {
+    const newEdge = {
+      id: `${sourceId}${targetId}`,
+      source: sourceId,
+      target: targetId,
+      style: edge.getModel().style,
+      // label: edge.label,
+    };
+    if (edge.getModel().style.stroke !== MapConstant.EDGE_STATUS_MAP['OK']) {
+      // @ts-ignore
+      newEdge.stateStyles = {
+        active: {
+          stroke: MapConstant.EDGE_STATUS_MAP[edge.getModel().status],
+          opacity: 1.0,
+        },
+      };
+    }
+    if (!this.graph.findById(`${sourceId}${targetId}`))
+      this.graph.addItem('edge', newEdge);
+  }
+
+  private toggleLine(edge) {
+    if (!edge.getSource().isVisible()) {
+      if (edge.getSource().getType() === 'combo') {
+        this.addMissingEdge(
+          `${edge.getSource().getModel().id.substring(2)}`,
+          `${edge.getTarget().getModel().id}`,
+          edge
+        );
+      } else {
+        this.addMissingEdge(
+          `co${edge.getSource().getModel().id}`,
+          `${edge.getTarget().getModel().id}`,
+          edge
+        );
+      }
+    }
+    if (!edge.getTarget().isVisible()) {
+      if (edge.getTarget().getType() === 'combo') {
+        this.addMissingEdge(
+          `${edge.getSource().getModel().id}`,
+          `${edge.getTarget().getModel().id.substring(2)}`,
+          edge
+        );
+      } else {
+        this.addMissingEdge(
+          `${edge.getSource().getModel().id}`,
+          `co${edge.getTarget().getModel().id}`,
+          edge
+        );
+      }
+    }
+  }
+
+  private doSubLayout(clusterNode, clusterNodes) {
+    // noinspection JSPotentiallyInvalidConstructorUsage
+    const subLayout = new G6.Layout.concentric({
+      center: [clusterNode.x, clusterNode.y],
+      preventOverlap: true,
+      nodeSize: 15,
+      minNodeSpacing: 15,
+      maxLevelDiff: 10,
+      sortBy: 'index',
+      tick: () => {
+        this.graph.refreshPositions();
+      },
+    });
+    subLayout.init({
+      nodes: clusterNodes,
+      edges: [],
+    });
+    subLayout.execute();
+
+    //Lock all the combo members inside combo
+    clusterNodes.forEach(item => {
+      const node = this.graph.findById(item.id);
+      // @ts-ignore
+      node.lock();
+    });
+  }
+
+  private revealLinks(item) {
+    if (this.lastRevealedNodeIds.length === 0) return;
+    const nodeId = this.lastRevealedNodeIds[0];
+    const node = this.graph.findById(nodeId);
+    // @ts-ignore
+    const edges = node && node.getEdges();
+    if (edges && edges.length > 0) {
+      const mergedEdges = edges.filter(
+        edge =>
+          edge.getSource().getModel().id === item.getModel().id ||
+          edge.getTarget().getModel().id === item.getModel().id
+      );
+      if (mergedEdges && mergedEdges.length > 0) {
+        mergedEdges.forEach(edge => {
+          const members = edge.getModel().members;
+          if (members && members.length > 0) {
+            members.forEach(member => {
+              const memberEdge =
+                this.serverData.edges[
+                  this.graphService.getEdgeIdIndexMap().get(member)
+                ];
+              const edge = Object.assign({}, memberEdge);
+              this.graphService.formatEdge(edge);
+
+              // @ts-ignore
+              if (edge.style.stroke !== MapConstant.EDGE_STATUS_MAP['OK']) {
+                // @ts-ignore
+                edge.stateStyles = {
+                  active: {
+                    stroke: MapConstant.EDGE_STATUS_MAP[edge.status],
+                    opacity: 1.0,
+                  },
+                };
+              }
+
+              if (edge) {
+                // @ts-ignore
+                this.graph.addItem('edge', edge);
+              }
+            });
+          }
+          this.graph.removeItem(edge, false);
+        });
+      }
+    }
+  }
+
+  expandCluster(item) {
+    const clusterNode = item.getModel();
+
+    // const edges = data.edges;
+    let clusterNodes: any[] = [];
+    let clusterEdges: any[] = [];
+
+    let selectedMode = clusterNode.policyMode || 'discover';
+
+    const riskyNodes = this.getRiskyNodes(clusterNode.id);
+
+    //add the cluster members
+    let cluster = this.graphService.getClusterMap().get(clusterNode.id);
+    if (cluster.comboCreated) {
+      //show combo
+      const comboNode = this.graph.findById(`co${clusterNode.id}`);
+      // @ts-ignore
+      const comboEdges = comboNode.getEdges();
+      this.graph.showItem(comboNode);
+
+      let hiddenEdges = comboEdges.filter(item => !item.isVisible());
+
+      if (hiddenEdges && hiddenEdges.length > 0)
+        hiddenEdges.forEach(item => this.toggleLine(item));
+
+      this.graph.paint();
+      comboNode.toFront();
+      // @ts-ignore
+      const children = comboNode.getNodes();
+      children.forEach(child => child.toFront());
+    } else {
+      const members = cluster.members;
+      if (members && members.length > 0) {
+        clusterNodes = members.map(member => {
+          const memberNode =
+            this.serverData.nodes[
+              this.graphService.getNodeIdIndexMap().get(member)
+            ];
+          // @ts-ignore
+          memberNode.comboId = `co${clusterNode.id}`;
+          const theNode = Object.assign({}, memberNode);
+          // @ts-ignore
+          theNode.cve = this.graphService.getCveLevel(theNode);
+          this.graphService.formatNode(theNode);
+          theNode.label = '';
+          return theNode;
+        });
+      }
+
+      // @ts-ignore
+      clusterEdges = this.serverData.edges.filter(
+        edge =>
+          edge.fromGroup === edge.toGroup && edge.fromGroup === clusterNode.id
+      );
+
+      clusterNodes.forEach((item, i) => {
+        item.index = i + 1;
+        item.size = item.service_mesh ? 40 : 20;
+        item.icon.width = item.service_mesh ? 30 : 13;
+        item.icon.height = item.service_mesh ? 30 : 13;
+
+        let nodeType = '';
+        if (item.group && item.group.startsWith('container')) {
+          nodeType = 'container';
+        }
+        if (item.group && item.group.startsWith('mesh')) {
+          nodeType = 'mesh';
+        }
+        if (item.group && item.group.startsWith('host')) {
+          nodeType = 'host';
+        }
+        if (item.kind && item.kind === 'group') {
+          nodeType = 'group';
+        }
+
+        if (nodeType === 'container' || nodeType === 'mesh') {
+          item.icon.img =
+            nodeType === 'container'
+              ? `assets/img/icons/graph/${
+                  this.CONTAINER_TO_ICON[selectedMode.toLowerCase()]
+                }.svg`
+              : `assets/img/icons/graph/${
+                  this.SERVICE_MESH_TO_ICON[selectedMode.toLowerCase()]
+                }.svg`;
+          item.style.stroke = this.graphService.strokeColor[selectedMode];
+          item.style.fill = this.graphService.fillColor[selectedMode];
+        }
+
+        if (nodeType === 'host') {
+          item.icon.img = `assets/img/icons/graph/${
+            this.HOST_TO_ICON[selectedMode.toLowerCase()]
+          }.svg`;
+          item.style.stroke = this.graphService.strokeColor[selectedMode];
+          item.style.fill = this.graphService.fillColor[selectedMode];
+        }
+
+        if (riskyNodes && riskyNodes.length > 0) {
+          if (riskyNodes.includes(item.id)) {
+            item.style.stroke = '#ff9800';
+            item.style.fill = '#d9b886';
+          }
+        }
+        this.graph.addItem('node', item, false);
+      });
+
+      clusterEdges.forEach(edge => {
+        this.graphService.formatEdge(edge);
+        if (edge.source === edge.target) {
+          edge.type = 'loop';
+          edge.loopCfg = {
+            dist: 20,
+          };
+          const loopNode =
+            this.serverData.nodes[
+              this.graphService.getNodeIdIndexMap().get(edge.source)
+            ];
+          if (loopNode && loopNode.service_mesh) {
+            edge.style.stroke = '#9FB8AD';
+            edge.style.opacity = 0.8;
+          }
+        }
+        edge.style.endArrow = {
+          path: G6.Arrow.triangle(2, 3),
+        };
+        this.graph.addItem('edge', edge, false);
+      });
+
+      this.doSubLayout(clusterNode, clusterNodes);
+
+      this.graph.createCombo(
+        {
+          id: `co${clusterNode.id}`,
+          oriLabel: clusterNode.label,
+          label: clusterNode.oriLabel,
+          domain: clusterNode.domain,
+          padding: 5,
+        },
+        members
+      );
+      const theCombo = this.graph.findById(`co${clusterNode.id}`);
+      theCombo.toFront();
+      members.forEach(member => {
+        const theMember = this.graph.findById(member);
+        theMember.toFront();
+      });
+
+      let oldEdges = item.getEdges();
+
+      oldEdges.forEach(edge => {
+        if (
+          edge.getSource().getModel().id === clusterNode.id &&
+          edge.getTarget().getModel().id === clusterNode.id
+        )
+          return;
+        if (edge.getSource().getModel().id === clusterNode.id) {
+          if (edge.getTarget().isVisible()) {
+            this.addMissingEdge(
+              `co${clusterNode.id}`,
+              edge.getTarget().getModel().id,
+              edge
+            );
+          }
+        }
+        if (edge.getTarget().getModel().id === clusterNode.id) {
+          if (edge.getSource().isVisible()) {
+            this.addMissingEdge(
+              edge.getSource().getModel().id,
+              `co${clusterNode.id}`,
+              edge
+            );
+          }
+        }
+      });
+    }
+    this.graph.hideItem(clusterNode.id);
+    this.revealLinks(item);
+
+    this.graph.refreshPositions();
+    this.graph.refresh();
+    this.graph.paint();
+  }
+
+  doFocus(name) {
     const highlightNode = node => {
       this.graph.focusItem(node);
       this.graph.setItemState(node, 'selected', true);
@@ -2186,22 +2165,20 @@ export class NetworkActivitiesComponent
       } else {
         const groupNode = this.graph.findById(maybeNode.clusterId);
         if (groupNode) {
-          //Todo: add back
-          // expandCluster(groupNode);
+          this.expandCluster(groupNode);
           const insider = this.graph.findById(maybeNode.id);
           highlightNode(insider);
         }
       }
     }
-  };
+  }
 
   ngAfterViewInit(): void {}
 
-  ngOnDestroy(): void {
-  }
+  ngOnDestroy(): void {}
 
   //region Active Session
-  showSessions = container => {
+  showSessions(container) {
     this.containerId = container.id;
     this.currentNodeName =
       container.label.length > container.oriLabel.length
@@ -2212,63 +2189,129 @@ export class NetworkActivitiesComponent
 
     this.stopRefreshSession();
     this.refreshSession();
-  };
+  }
 
-  refreshSession = () => {
+  refreshSession() {
     if (this.autoRefresh) {
       this.getLiveSession();
     } else {
       this.getCurrentSession();
     }
-  };
+  }
 
-  private getActiveSessions = response => {
+  private getGridHeight(items: Array<any>): number {
+    let result: number = 0;
+
+    if (items.length <= 2) result = 30 + 29 * 2;
+    else if (items.length < 5) result = 30 + 29 * items.length;
+    else result = 30 + 29 * 5 + 8;
+
+    return result;
+  }
+
+  private getActiveSessions(response) {
     this.conversations = response['sessions'];
     if (this.conversations && this.conversations.length > 0) {
-      if (this.conversations.length <= 2)
-        this.activeSessionGridHeight = 40 + 27 * 2;
-      else if (this.conversations.length < 5)
-        this.activeSessionGridHeight = 40 + 27 * this.conversations.length;
-      else this.activeSessionGridHeight = 40 + 27 * 5;
-
+      this.activeSessionGridHeight = this.getGridHeight(this.conversations);
       this.activeSessionGridOptions =
         this.graphService.prepareActiveSessionGrid();
     }
     this.popupState.transitTo(PopupState.onActiveSession);
-  };
+  }
 
-  private getCurrentSession = () => {
+  private getCurrentSession() {
     this.graphService.getCurrentSession(this.containerId).subscribe(
       response => {
         this.getActiveSessions(response);
       },
       err => console.warn(err)
     );
-  };
+  }
 
   subscription: Subscription | undefined;
   refreshTimer$;
 
-  private getLiveSession = () => {
+  private getLiveSession() {
     this.refreshTimer$ = interval(3000);
-    this.subscription = this.refreshTimer$.subscribe(this.getCurrentSession);
-  };
+    this.subscription = this.refreshTimer$.subscribe(
+      this.getCurrentSession.bind(this)
+    );
+  }
 
-  private stopRefreshSession = () => {
+  private stopRefreshSession() {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
     this.autoRefresh = false;
-  };
+  }
 
-  toggleRefresh = autoUpdate => {
+  toggleRefresh(autoUpdate) {
     if (autoUpdate === this.autoRefresh) return;
     this.autoRefresh = autoUpdate;
 
     if (autoUpdate) this.refreshSession();
     else this.stopRefreshSession();
-  };
+  }
+
   //endregion
+
+  quarantine(item, toQuarantine: boolean) {
+    const id: string = item.getModel().id;
+
+    this.graphService.quarantine(id, toQuarantine).subscribe(
+      response => {
+        setTimeout(() => {
+          const model = item.getModel();
+          if (toQuarantine) {
+            model.state = 'quarantined';
+            const theNode =
+              this.serverData.nodes[
+                this.graphService.getNodeIdIndexMap().get(model.id)
+              ];
+            if (theNode) theNode.state = model.state;
+            const group = item.get('group');
+            const stroke = group.find(e => e.get('name') === 'stroke-shape');
+            stroke && stroke.show();
+
+            const clusterNode = this.graph.findById(model.clusterId);
+            if (clusterNode) {
+              // @ts-ignore
+              clusterNode.getModel().quarantines += 1;
+            }
+          } else {
+            const group = item.get('group');
+            const stroke = group.find(e => e.get('name') === 'stroke-shape');
+            stroke && stroke.hide();
+
+            model.state = model.group
+              ? item.getModel().group.substring('container'.length)
+              : '';
+            const theNode =
+              this.serverData.nodes[
+                this.graphService.getNodeIdIndexMap().get(model.id)
+              ];
+            if (theNode) theNode.state = model.state;
+
+            const clusterNode = this.graph.findById(model.clusterId);
+            if (clusterNode) {
+              // @ts-ignore
+              clusterNode.getModel().quarantines -= 1;
+            }
+          }
+        }, 0);
+      },
+      err => {
+        console.warn(err);
+        this.notificationService.open(
+          this.utils.getAlertifyMsg(
+            err,
+            this.translate.instant('policy.message.QUARANTINE_FAILED'),
+            false
+          )
+        );
+      }
+    );
+  };
 
   //region Sniffer
   snifferOnErr: boolean = false;
@@ -2281,7 +2324,7 @@ export class NetworkActivitiesComponent
     showTicks: true,
   };
 
-  showSniffer = container => {
+  showSniffer(container) {
     if (container && container.cap_sniff) {
       this.containerId = container.id;
       this.containerName =
@@ -2294,7 +2337,7 @@ export class NetworkActivitiesComponent
         response => {
           this.sniffers = response['sniffers'];
           this.sniffer = null;
-          this.snifferGridHeight = 40 + 25 * 5;
+          this.snifferGridHeight = 30 + 29 * 5 + 8;
           this.popupState.transitTo(PopupState.onSniffer);
         },
         err => {
@@ -2302,15 +2345,16 @@ export class NetworkActivitiesComponent
         }
       );
     }
-  };
+  }
 
   snifferSubscription: Subscription | undefined;
   snifferRefreshTimer$;
 
-  stopRefreshSniffer = (stopRefreshSniffer: boolean) =>
-    this.snifferSubscription && this.snifferSubscription.unsubscribe();
+  stopRefreshSniffer(stopRefreshSniffer: boolean) {
+    return this.snifferSubscription && this.snifferSubscription.unsubscribe();
+  }
 
-  refreshSniffer = () => {
+  private refreshSniffer() {
     this.snifferOnErr = false;
     this.sniffService.getSniffers(this.containerId).subscribe(
       response => {
@@ -2322,59 +2366,60 @@ export class NetworkActivitiesComponent
         this.snifferErrMsg = this.utils.getErrorMessage(err);
       }
     );
-  };
+  }
 
-  pullSniffers = () => {
+  private pullSniffers() {
     this.refreshSniffer();
 
     this.snifferRefreshTimer$ = interval(5000);
     this.snifferSubscription = this.snifferRefreshTimer$.subscribe(
       this.pullSniffers
     );
-  };
+  }
+
   //endregion
 
-  saveBlacklist = blacklist => {
+  private saveBlacklist(blacklist) {
     this.blacklist = blacklist;
     this.localStorage.set(`${this.user}-blacklist`, JSON.stringify(blacklist));
     this.graphService.saveBlacklist(this.user, blacklist);
-  };
-
-  saveSettings = () => {
-  if (this.settings.persistent) {
-    this.localStorage.set(
-      `${this.user}-showSysApp`,
-      JSON.stringify(this.settings.showSysApp)
-    );
-
-    this.localStorage.set(
-      `${this.user}-showSysNode`,
-      JSON.stringify(this.settings.showSysNode)
-    );
-
-    this.localStorage.set(
-      `${this.user}-persistent`,
-      JSON.stringify(this.settings.persistent)
-    );
-
-    this.localStorage.set(
-      `${this.user}-advFilter`,
-      JSON.stringify(this.advFilter)
-    );
   }
-};
 
-  clearSettings = () => {
-  this.localStorage.remove(`${this.user}-showSysApp`);
+  saveSettings() {
+    if (this.settings.persistent) {
+      this.localStorage.set(
+        `${this.user}-showSysApp`,
+        JSON.stringify(this.settings.showSysApp)
+      );
 
-  this.localStorage.remove(`${this.user}-showSysNode`);
+      this.localStorage.set(
+        `${this.user}-showSysNode`,
+        JSON.stringify(this.settings.showSysNode)
+      );
 
-  this.localStorage.remove(`${this.user}-persistent`);
+      this.localStorage.set(
+        `${this.user}-persistent`,
+        JSON.stringify(this.settings.persistent)
+      );
 
-  this.localStorage.remove(`${this.user}-advFilter`);
-};
+      this.localStorage.set(
+        `${this.user}-advFilter`,
+        JSON.stringify(this.advFilter)
+      );
+    }
+  }
 
-  applyBlacklist = blacklist => {
+  clearSettings() {
+    this.localStorage.remove(`${this.user}-showSysApp`);
+
+    this.localStorage.remove(`${this.user}-showSysNode`);
+
+    this.localStorage.remove(`${this.user}-persistent`);
+
+    this.localStorage.remove(`${this.user}-advFilter`);
+  }
+
+  applyBlacklist(blacklist) {
     this.graphService.setBlacklist(blacklist);
     this.saveBlacklist(blacklist);
 
@@ -2382,22 +2427,22 @@ export class NetworkActivitiesComponent
       this.popupState.leave();
     }, 100);
     this.refresh();
-  };
+  }
 
-  resetBlacklist = () => {
+  resetBlacklist() {
     this.graphService.initBlacklist();
     this.blacklist = this.graphService.getBlacklist();
     this.graphService.saveBlacklist(this.user, this.blacklist);
     this.refresh();
-  };
+  }
 
-  applyAdvFilter = (graphSettings: GraphSettings) => {
+  applyAdvFilter(graphSettings: GraphSettings) {
     this.advFilter = graphSettings.advFilter;
     this.graphService.setAdvFilter(graphSettings.advFilter);
     const showLegend = this.settings.showLegend;
     this.settings = graphSettings.settings;
     this.settings.showLegend = showLegend;
-    if(this.settings.persistent) this.saveSettings();
+    if (this.settings.persistent) this.saveSettings();
     else this.clearSettings();
     this.popupState.leave();
     if (
@@ -2405,21 +2450,21 @@ export class NetworkActivitiesComponent
       this.settings.gpuEnabled !== this.gpuEnabled
     ) {
       this.localStorage.set(
-        "_gpuEnabled",
+        '_gpuEnabled',
         JSON.stringify(this.settings.gpuEnabled)
       );
       this.gpuEnabled = this.settings.gpuEnabled;
       this.graph.updateLayout({
-        gpuEnabled: this.gpuEnabled
+        gpuEnabled: this.gpuEnabled,
       });
     }
 
     if (this.graphService.advFilterApplied()) {
       this.handleCollapsedDomains();
     } else this.refresh();
-  };
+  }
 
-  resetAdvFilter = () => {
+  resetAdvFilter() {
     this.graphService.initAdvFilter();
     this.advFilter = this.graphService.getAdvFilter();
     this.settings = {
@@ -2429,14 +2474,14 @@ export class NetworkActivitiesComponent
       showLegend: false,
       hiddenDomains: [],
       hiddenGroups: [],
-      persistent: false
+      persistent: false,
     };
     this.clearSettings();
     this.refresh();
     this.popupState.leave();
-  };
+  }
 
-  refresh = () => {
+  refresh() {
     if (this.popupState.onActiveSession()) this.stopRefreshSession();
 
     if (this.popupState.onSniffer()) this.stopRefreshSniffer(true);
@@ -2456,9 +2501,9 @@ export class NetworkActivitiesComponent
       }
     };
     this.loadGraph(false, callback);
-  };
+  }
 
-  collapseOnNode = (domainName, domainNode) => {
+  collapseOnNode(domainName, domainNode) {
     const domainData = this.graphService.collapseDomain(
       this.data,
       domainName,
@@ -2483,9 +2528,9 @@ export class NetworkActivitiesComponent
     this.graph.addItem('node', domainNode, false);
     if (domainData.edges && domainData.edges.length > 0)
       domainData.edges.forEach(edge => this.graph.addItem('edge', edge, false));
-  };
+  }
 
-  updateGraph = (onRefresh: boolean) => {
+  private updateGraph(onRefresh: boolean) {
     const filteredData = this.graphService.applyAdvFilter(
       this.serverData,
       this.advFilter
@@ -2559,9 +2604,9 @@ export class NetworkActivitiesComponent
       filteredDomains: filteredDomains,
       firstLevelDomains: firstLevelDomains,
     };
-  };
+  }
 
-  handleCollapsedDomains = () => {
+  private handleCollapsedDomains() {
     const { filteredDomains, firstLevelDomains } = this.updateGraph(false);
     if (this.collapsedDomains.size)
       [...this.collapsedDomains.values()].forEach(domainNode => {
@@ -2575,5 +2620,39 @@ export class NetworkActivitiesComponent
         if (filteredDomains.has(domainNode.id))
           this.collapseOnNode(domainNode.id, domainNode);
       });
+  }
+
+  clearSessions = (conversationPair: ConversationPair) => {
+    this.graphService
+      .clearSessions(conversationPair.from, conversationPair.to)
+      .subscribe(
+        () => {
+          //Remove displayed edge without data reloading
+          this.graph.removeItem(this.selectedEdge, false);
+
+          //Remove original edge in group without data reloading
+          let removedEdgeIndex = this.serverData.edges.findIndex(edge => {
+            return (
+              edge.source === conversationPair.from &&
+              edge.target === conversationPair.to
+            );
+          });
+          if (removedEdgeIndex > -1) {
+            this.serverData.edges.splice(removedEdgeIndex, 1);
+          }
+
+          this.popupState.leave();
+        },
+        err => {
+          console.warn(err);
+          this.notificationService.open(
+            this.utils.getAlertifyMsg(
+              err,
+              this.translate.instant('network.popup.SESSION_CLEAR_FAILURE'),
+              false
+            )
+          );
+        }
+      );
   };
 }

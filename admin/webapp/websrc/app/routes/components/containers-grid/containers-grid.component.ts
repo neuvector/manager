@@ -119,15 +119,15 @@ export class ContainersGridComponent implements OnInit {
         headerName: this.tr.instant('containers.detail.STATE'),
         field: 'brief.state',
         cellRenderer: 'stateCellRenderer',
-        width: 100,
-        minWidth: 100,
+        width: 110,
+        minWidth: 110,
       },
       {
         headerName: this.tr.instant('scan.gridHeader.STATUS'),
         field: 'security.scan_summary.status',
         cellRenderer: 'statusCellRenderer',
-        width: 100,
-        minWidth: 100,
+        width: 110,
+        minWidth: 110,
         hide: this.isMemberData,
       },
       {
@@ -254,6 +254,9 @@ export class ContainersGridComponent implements OnInit {
   }
 
   postSort(nodes: RowNode[]): void {
+    nodes = nodes.sort((a, b) =>
+      !a.data.parent_id ? -1 : !b.data.parent_id ? 1 : 0
+    );
     let lastParentIdx = -1;
     for (let i = 0; i < nodes.length; i++) {
       const pid = nodes[i].data.parent_id;

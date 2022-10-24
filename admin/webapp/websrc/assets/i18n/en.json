@@ -1,7 +1,7 @@
 {
   "general": {
     "FILTER": "Filter...",
-    "NO_ROWS": "No rows to show",
+    "NO_ROWS": "No row to show",
     "NO_CONVERSATIONS": "No conversations between endpoints",
     "DEPLOY_OK": "Deploy succeeded",
     "FAILED_TO_ADD": "Fail to add",

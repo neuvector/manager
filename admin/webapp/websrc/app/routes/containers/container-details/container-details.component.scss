@@ -1,30 +1,26 @@
 .filter {
   position: relative;
-  left: calc(100% - 196px);
+  left: calc(100% - 180px);
   top: -4px;
   z-index: 10000;
   display: flex;
   align-items: baseline;
 }
 
-.filter-actions {
-  display: flex;
-}
-
 .filter-csv {
   left: calc(100% - 286.5px) !important;
 }
 
-.filter-view {
-  left: calc(100% - 288.5px) !important;
-}
-
-.filter-view-csv {
-  left: calc(100% - 379px) !important;
-}
-
-.filter-process {
+.filter-icon-1 {
   left: calc(100% - 236px) !important;
+}
+
+.filter-icon-2 {
+  left: calc(100% - 292px) !important;
+}
+
+.filter-icon-3 {
+  left: calc(100% - 348px) !important;
 }
 
 .container-detail-tab-group {

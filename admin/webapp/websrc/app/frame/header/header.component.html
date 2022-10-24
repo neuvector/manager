@@ -40,30 +40,50 @@
   <!-- END Left navbar-->
   <!-- START Right Navbar-->
   <div class="navbar-nav flex-row">
+    <app-global-notifications class="mr-3 my-auto"></app-global-notifications>
     <div *ngIf="isOrdinaryRole">
-      <span>{{clusterName}}</span>
+      <button mat-button class="nav-item nav-white nav-border">
+        <label
+          class="selected-cluster-text"
+          style="position: relative; margin-bottom: 0"
+          >{{ clusterName }}</label
+        >
+      </button>
     </div>
     <div *ngIf="isMasterRole">
-      <button mat-button [matMenuTriggerFor]="dropdown_multiCluster"
-              [matMenuTriggerData]="clusters"
-              class="cluster-info">
-        <i class="fa-lg mr-lg text-gray-light" [ngClass]="isOnRemoteCluster? 'fa fa-laptop': 'fa fa-home'"></i>
+      <button
+        mat-button
+        [matMenuTriggerFor]="dropdown_multiCluster"
+        [matMenuTriggerData]="clusters"
+        class="nav-item nav-white nav-border">
+        <i
+          class="fa-lg mr-lg text-gray-light"
+          [ngClass]="isOnRemoteCluster ? 'fa fa-laptop' : 'fa fa-home'"></i>
         <label
-          class="selected-cluster-text hand" style="position: relative; margin-bottom: 0"
-        >{{selectedCluster?.name}}</label>
+          class="selected-cluster-text hand"
+          style="position: relative; margin-bottom: 0"
+          >{{ selectedCluster?.name }}</label
+        >
       </button>
       <mat-menu #dropdown_multiCluster="matMenu">
-          <ng-container *ngFor="let cluster of clusters; last as last">
-            <button  mat-menu-item (click)="redirectCluster(cluster)" >
-              <i class="fa-md mr-md text-gray-light" [ngClass]="cluster.clusterType==='master'? 'fa fa-home': 'fa fa-laptop'"></i>
-              {{cluster?.name}}
-            </button>
-            <mat-divider *ngIf="!last"></mat-divider>
-          </ng-container>
+        <ng-container *ngFor="let cluster of clusters; last as last">
+          <button mat-menu-item (click)="redirectCluster(cluster)">
+            <i
+              class="fa-md mr-md text-gray-light"
+              [ngClass]="
+                cluster.clusterType === 'master' ? 'fa fa-home' : 'fa fa-laptop'
+              "></i>
+            {{ cluster?.name }}
+          </button>
+          <mat-divider *ngIf="!last"></mat-divider>
+        </ng-container>
       </mat-menu>
     </div>
 
-    <button mat-button [matMenuTriggerFor]="menu" class="user-info">
+    <button
+      mat-button
+      [matMenuTriggerFor]="menu"
+      class="nav-item nav-white nav-border">
       User Info
     </button>
     <mat-menu #menu="matMenu">

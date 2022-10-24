@@ -117,6 +117,7 @@ export class ComplianceProfileAssetsTableComponent
         templatesCellRenderer: TemplatesCellComponent,
         actionCellRenderer: ActionCellComponent,
       },
+      overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS')
     };
   }
 

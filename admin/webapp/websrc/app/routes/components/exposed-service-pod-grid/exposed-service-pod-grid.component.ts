@@ -182,7 +182,7 @@ export class ExposedServicePodGridComponent implements OnInit {
     setTimeout(() => {
       this.gridApi.sizeColumnsToFit();
       this.gridApi.getDisplayedRowAtIndex(0)?.setSelected(true);
-    }, 2000);
+    });
   };
 
   onResize = (): void => {

@@ -1,0 +1,9 @@
+ul li::marker {
+  content: '>';
+  color: #0e7e3c;
+  animation: color-change 3s ease-in-out infinite;
+}
+
+li div span {
+  color: #909fa7;
+}

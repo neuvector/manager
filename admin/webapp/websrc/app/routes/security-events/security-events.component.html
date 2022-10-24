@@ -1,7 +1,8 @@
 <app-security-events-printable-report
+  #securityEventsPrintableReport
   *ngIf="isPrinting && printableData.length > 0"
   class="printable-area"
-  [securityEvents]="printableData.slice(0, printableData.length < 1000 ? printableData.length : 1000)">
+  [securityEvents]="printableData.slice(0, printableData.length < rowLimit4Report ? printableData.length : rowLimit4Report)">
 </app-security-events-printable-report>
 <div class="screen-area">
   <div id="sec-event" class="padding-top-0">

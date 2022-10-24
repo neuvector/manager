@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { SecurityEventsService } from '@services/security-events.service';
 import { MapConstant } from '@common/constants/map.constant';
 import { AuthUtilsService } from '@common/utils/auth.utils';
@@ -62,6 +62,9 @@ export class SecurityEventsComponent implements OnInit {
   metadata: any;
   printableData: any[];
   isPrinting: boolean = false;
+  rowLimit4Report: number = MapConstant.REPORT_TABLE_ROW_LIMIT;
+
+  @ViewChild('securityEventsPrintableReport') printableReportView: ElementRef;
 
   constructor(
     public securityEventsService: SecurityEventsService,
@@ -393,12 +396,12 @@ export class SecurityEventsComponent implements OnInit {
 
   printReport = () => {
     this.isPrinting = true;
-    setTimeout(() => {
-      window.print();
-      setTimeout(() => {
+    setInterval(() => {
+      if (this.printableReportView) {
+        window.print();
         this.isPrinting = false;
-      }, 1000);
-    }, 1000);
+      }
+    }, 500);
   };
 
   private getCsvData = (secEvents) => {

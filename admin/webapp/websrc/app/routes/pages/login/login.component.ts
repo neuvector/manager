@@ -70,6 +70,7 @@ export class LoginComponent implements OnInit {
       this.sessionStorage.remove('cluster');
     }
     this.clearToken();
+    console.log("this.currUrl", this.currUrl);
     if (this.currUrl.includes(GlobalConstant.PROXY_VALUE)) {
       this.isFromSSO = true;
       console.log('It is from SSO');

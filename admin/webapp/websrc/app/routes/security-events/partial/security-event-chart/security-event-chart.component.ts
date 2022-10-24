@@ -73,6 +73,7 @@ export class SecurityEventChartComponent implements OnInit {
         ]
       },
       options: {
+        animation: false,
         responsive: true,
         maintainAspectRatio: false,
         scales: {

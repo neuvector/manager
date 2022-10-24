@@ -1,7 +1,25 @@
 <ng-container *appObserve="vulnerabilitiesData$ as vulnerabilitiesData; error:errorTemplate loading:loadingTemplate">
-  <div style="height: calc(100vh - 180px)">
+  <app-risks-view-report
+    #vulnerabilityViewReport
+    *ngIf="vulnerabilitiesList && isPrinting"
+    class="printable-area"
+    [reportPage]="'vulnerabilities'"
+    [data]="vulnerabilitiesList"
+    [charts]="statisticCharts"
+  >
+  </app-risks-view-report>
+  <app-assets-view-report
+    #assetsViewReport
+    *ngIf="vulnerabilitiesList && isPrintingAssets"
+    class="printable-area"
+    [reportPage]="'vulnerabilities'"
+    [masterGrids]="masterGrids"
+    [dictionaryData]="vulnerabilitiesList"
+  >
+  </app-assets-view-report>
+  <div class="screen-area" style="height: calc(100vh - 180px)">
     <div class="d-flex justify-content-end align-items-center">
-      <app-loading-button
+      <!-- <app-loading-button
         (btnClick)="downloadAssetsPDF()"
         [disabled]="(assetViewPdfProgress$ | async) !== 100"
         [loading]="(assetViewPdfProgress$ | async) !== 100"
@@ -21,13 +39,30 @@
         buttonClasses="mr-1 d-flex justify-content-center align-items-center"
         iconClasses="eos-icons"
         iconName="picture_as_pdf">
+      </app-loading-button> -->
+      <app-loading-button
+        (btnClick)="printAssetsPDF()"
+        [text]="'scan.report.PDF_LINK2' | translate"
+        appearance="mat-button"
+        buttonClasses="mr-1 d-flex justify-content-center align-items-center"
+        iconClasses="eos-icons"
+        iconName="print">
+        >
+      </app-loading-button>
+      <app-loading-button
+        (btnClick)="printVulnerabilityPDF()"
+        [text]="'scan.report.PDF_LINK' | translate"
+        appearance="mat-button"
+        buttonClasses="mr-1 d-flex justify-content-center align-items-center"
+        iconClasses="eos-icons"
+        iconName="print">
       </app-loading-button>
       <button
         (click)="downloadCsv()"
         class="mr-1 d-flex justify-content-center align-items-center"
         mat-button>
         <i
-          class="eos-icons">csv_file</i>CSV
+          class="eos-icons">csv_file</i>
       </button>
       <app-loading-button
         (btnClick)="refresh()"

@@ -33,6 +33,10 @@ $nv-mobile-width: 480px;
     position: static;
     height: auto;
   }
+  .pagebreak {
+    clear: both;
+    page-break-after: always;
+  }
 }
 @media screen {
   .printable-area {
@@ -334,6 +338,24 @@ hr.fancy {
     background-color: $mdc-light-green-500;
     -webkit-print-color-adjust: exact;
   }
+
+  &.discover {
+    background-color: #2196f3;
+    -webkit-print-color-adjust: exact;
+    color: #fff;
+  }
+
+  &.monitor {
+    background-color: #4e39c1;
+    -webkit-print-color-adjust: exact;
+    color: #fff;
+  }
+
+  &.protect {
+    background-color: #186d33;
+    -webkit-print-color-adjust: exact;
+    color: #fff;
+  }
 }
 
 .disabled-action {
@@ -568,6 +590,7 @@ hr.fancy {
   display: table;
   width: 980px;
   page-break-after: auto;
+  table-layout: fixed;
 }
 
 .print-header {
@@ -590,6 +613,8 @@ hr.fancy {
   vertical-align: middle;
   padding-left: 5px;
   padding-right: 5px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .print-cell:not(:last-child) {

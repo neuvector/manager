@@ -7,6 +7,12 @@
   <main class="section-container" id="main-content">
     <!-- Page content-->
     <div class="nv-section">
+      <!-- Preload images of report cover page-->
+      <div class="page-cover" style="visibility: hidden; position: absolute; width: 0; height: 0">
+        <div class="page-cover-decro"></div>
+        <div class="page-cover-logo"></div>
+      </div>
+      <!-- Angular view-->
       <router-outlet></router-outlet>
     </div>
   </main>

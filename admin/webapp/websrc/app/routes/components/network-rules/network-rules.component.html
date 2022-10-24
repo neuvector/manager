@@ -1,8 +1,10 @@
 <ng-container *ngIf="!isScoreImprovement; else scoreImprovement">
   <app-network-rules-printable-report
+    #networkRulePrintableReport
     *ngIf="isPrinting && eof && !isNetworkRuleDirty()"
     class="printable-area"
-    [networkRules]="networkRules"></app-network-rules-printable-report>
+    [networkRules]="networkRules">
+  </app-network-rules-printable-report>
   <div class="screen-area">
     <div
       class="clearfix"

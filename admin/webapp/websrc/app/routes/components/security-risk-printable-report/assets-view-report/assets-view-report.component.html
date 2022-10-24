@@ -1,0 +1,34 @@
+<div class="page-cover">
+  <div class="page-cover-decro"></div>
+  <div class="page-cover-logo"></div>
+  <div class="page-cover-title">
+    {{ (reportPage === 'vulnerabilities' ? 'scan' : 'cis') + '.report.TITLE2' | translate }}
+  </div>
+</div>
+<div class="report-summary pagebreak">
+  <div class="summary-title">
+    {{ 'scan.report.others.DETAILS' | translate }}
+    <span style="font-size: 16px;">({{ (reportPage === 'vulnerabilities' ? 'scan' : 'cis') + '.report.others.DETAIL_SUB' | translate }})</span>
+  </div>
+  <app-assets-view-report-assets-tables
+    [masterGrids]="masterGrids"
+    [reportPage]="reportPage"
+  >
+  </app-assets-view-report-assets-tables>
+</div>
+<div class="report-summary pagebreak">
+  <div class="summary-title">
+    {{ (reportPage === 'vulnerabilities' ? 'scan' : 'cis') + '.report.others.APPENDIX2' | translate }}
+  </div>
+  <app-risk-view-report-table
+    [data]="dictionaryData"
+    [reportPage]="reportPage"
+  >
+  </app-risk-view-report-table>
+</div>
+<div class="report-summary pagebreak" *ngIf="reportPage === 'vulnerabilities'">
+  <app-risk-view-report-appendix-packages
+    [data]="dictionaryData"
+  >
+  </app-risk-view-report-appendix-packages>
+</div>

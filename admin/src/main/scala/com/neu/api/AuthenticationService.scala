@@ -99,7 +99,6 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                   )
                   val response = Await.result(result, RestClient.waitingLimit.seconds)
                   logger.info("openId-g: OpenId Login. ")
-                  logger.info("openId-g: response.entity: {}", response.entity.asString)
 
                   response.status match {
                     case StatusCodes.OK =>
@@ -209,10 +208,6 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
               val response = Await.result(result, RestClient.waitingLimit.seconds)
 
               logger.info("saml-p: added temp cookie.")
-              logger.debug(
-                s"saml-p: added temp cookie. response entity is {}",
-                response.entity.asString
-              )
 
               response.status match {
                 case StatusCodes.OK =>

@@ -59,7 +59,7 @@ trait DefaultJsonFormats extends DefaultJsonProtocol with SprayJsonSupport with 
         case Left(a) =>
           val mc = new CollectingMarshallingContext()
           ma(a, mc)
-          ctx.handleError(ErrorResponseException(esa(a), mc.entity))
+          ctx.handleError(ErrorResponseException(esa(a), None))
         case Right(b) =>
           mb(b, ctx)
       }

@@ -1,9 +1,9 @@
 package com.neu.api
 
-import akka.actor.{Actor, ActorContext, ActorLogging}
+import akka.actor.{ Actor, ActorContext, ActorLogging }
 import com.google.common.base.Throwables
 import com.typesafe.scalalogging.LazyLogging
-import spray.can.Http.{Bound, CommandFailed, ConnectionAttemptFailedException}
+import spray.can.Http.{ Bound, CommandFailed, ConnectionAttemptFailedException }
 import spray.http.ContentTypes._
 import spray.http.HttpHeaders._
 import spray.http.StatusCodes._

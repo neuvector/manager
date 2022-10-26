@@ -2510,7 +2510,8 @@
       "CPU_LIMIT_S": "CPU Lmt",
       "CPU_REQUEST_S": "CPU Req",
       "MEMORY_LIMIT_S": "Mem Lmt",
-      "MEMORY_REQUEST_S": "Mem Req"
+      "MEMORY_REQUEST_S": "Mem Req",
+      "HAS_PSS_VIOLATION": "Has PSS Violation"
     },
     "operators": {
       "=": "=",

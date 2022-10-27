@@ -27,6 +27,7 @@ export class NetworkRulesReportChartComponent implements OnInit {
     console.log("this.statisticData.values()", this.statisticData.values())
     this.pieChartData = {
       options: {
+        animation: false,
         maintainAspectRatio: false,
         plugins: {
           title: {

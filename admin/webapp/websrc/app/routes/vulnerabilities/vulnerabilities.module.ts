@@ -45,6 +45,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { RisksViewReportModule } from '@components/security-risk-printable-report/risks-view-report/risks-view-report.module';
+import { AssetsViewReportModule } from '@components/security-risk-printable-report/assets-view-report/assets-view-report.module';
 
 const routes: Routes = [{ path: '', component: VulnerabilitiesComponent }];
 
@@ -61,7 +63,7 @@ const routes: Routes = [{ path: '', component: VulnerabilitiesComponent }];
     VulnerabilityItemsTableImpactCellComponent,
     VulnerabilityItemsTableScoreCellComponent,
     VulnerabilityItemsTableSevertiyCellComponent,
-    VulnerabilityItemsTableNameCellComponent,
+    VulnerabilityItemsTableNameCellComponent
   ],
   providers: [
     VulnerabilitiesService,
@@ -101,6 +103,8 @@ const routes: Routes = [{ path: '', component: VulnerabilitiesComponent }];
     AgGridModule,
     QuickFilterModule,
     MatButtonModule,
+    RisksViewReportModule,
+    AssetsViewReportModule,
   ],
 })
 export class VulnerabilitiesModule {}

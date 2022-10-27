@@ -352,13 +352,10 @@ export class GroupsComponent implements OnInit {
     this.groupsService.exportGroupsConfigData(payload).subscribe(
       response => {
         let fileName = this.utilsService.getExportedFileName(response);
-        let exportedFileName = `${
-          fileName[0]
-        }_${this.utilsService.parseDatetimeStr(new Date())}.${fileName[1]}`;
         let blob = new Blob([response.body || ''], {
           type: 'text/plain;charset=utf-8',
         });
-        saveAs(blob, exportedFileName);
+        saveAs(blob, fileName);
         // Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
         // Alertify.success($translate.instant("group.dlp.msg.EXPORT_OK"));
       },

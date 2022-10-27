@@ -35,11 +35,11 @@ export class VulnerabilitiesService {
     node: 0,
     container: 0,
   };
-  private workloadMap4Pdf = {};
+  workloadMap4Pdf = {};
   private workloadMap = new Map();
-  private imageMap4Pdf = {};
-  private platformMap4Pdf = {};
-  private hostMap4Pdf = {};
+  imageMap4Pdf = {};
+  platformMap4Pdf = {};
+  hostMap4Pdf = {};
   private refreshSubject$ = new Subject();
   private selectedVulnerabilitySubject$ = new BehaviorSubject<any>(undefined);
   selectedVulnerability$ = this.selectedVulnerabilitySubject$.asObservable();
@@ -95,9 +95,9 @@ export class VulnerabilitiesService {
         this.vulnerabilitiesFilterService.filtered = false;
         this.vulnerabilitiesFilterService.filteredCis = vulnerabilities;
       }),
-      finalize(() => {
-        this.runWorkers();
-      }),
+      // finalize(() => {
+      //   this.runWorkers();
+      // }),
       repeatWhen(() => this.refreshSubject$)
     );
   }

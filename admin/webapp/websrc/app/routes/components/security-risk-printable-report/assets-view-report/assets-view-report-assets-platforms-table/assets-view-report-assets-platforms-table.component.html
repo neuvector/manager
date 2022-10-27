@@ -1,0 +1,73 @@
+<div class="report-summary" style="page-break-after: avoid;">
+  <span class="summary-title" style="font-size: 16px;">
+    {{ (reportPage === 'vulnerabilities' ? 'scan' : 'cis') + '.report.others.PLATFORM_INS' | translate }}
+  </span>
+</div>
+<table class="print-table margin-top-l">
+  <thead>
+    <tr class="print-header">
+      <th class="print-cell" style="width: 15%">
+        {{'nodes.detail.NAME' | translate }}
+      </th>
+      <th class="print-cell" style="width: 10%">
+        {{ 'scan.gridHeader.VERSION' | translate }}
+      </th>
+      <th class="print-cell" style="width: 15%">
+        {{ 'audit.gridHeader.BASE_OS' | translate }}
+      </th>
+      <th *ngIf="reportPage === 'vulnerabilities'" class="print-cell" style="width: 10%">
+        {{ 'scan.report.gridHeader.HI_MED' | translate }}
+      </th>
+      <th *ngIf="reportPage === 'vulnerabilities'" class="print-cell" style="width: 50%">
+        {{ 'group.gridHeader.VULNERABILITIES' | translate }}
+      </th>
+      <th *ngIf="reportPage === 'compliance'" class="print-cell" style="width: 10%">
+        {{ 'cis.report.gridHeader.COMPLIANCE_LIST' | translate }}
+      </th>
+      <th *ngIf="reportPage === 'compliance'" class="print-cell" style="width: 60%">
+        {{ 'cis.report.gridHeader.COMPLIANCE_CNT' | translate }}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="print-row" *ngFor="let platform of platforms; let i = index" [attr.data-index]="i">
+      <td class="print-cell" style="width: 15%">
+        {{ platform.platform }}
+      </td>
+      <td class="print-cell" style="width: 10%">
+        {{ platform.kube_version }}
+      </td>
+      <td class="print-cell" style="width: 15%">
+        {{ platform.base_os }}
+      </td>
+      <td *ngIf="reportPage === 'vulnerabilities'" class="print-cell" style="width: 10%">
+        <div *ngIf="platform.high + platform.medium > 0">
+          <span class="text-danger">{{ platform.high }}</span>&nbsp;/&nbsp;<span class="text-warning">{{ platform.medium }}</span>
+        </div>
+        <div *ngIf="platform.high + platform.medium === 0">
+          <span class="text-success">0</span>
+        </div>
+      </td>
+      <td *ngIf="reportPage === 'vulnerabilities'" class="print-cell" style="width: 50%">
+        <div *ngIf="platform.high + platform.medium > 0">
+          <span *ngFor="let item of platform.vulnerabilites" class="margin-right-s text-{{ item.style }}">
+            {{item.text.trim()}}
+          </span>
+        </div>
+        <div *ngIf="platform.high + platform.medium === 0">
+          <span class="text-success">{{ "scan.NO_VULNERABILITIES" | translate }}</span>
+        </div>
+      </td>
+      <td *ngIf="reportPage === 'compliance'" class="print-cell" style="width: 10%">
+        {{ platform.complianceCnt }}
+      </td>
+      <td *ngIf="reportPage === 'compliance'" class="print-cell" style="width: 60%">
+        <div class="row">
+          <div *ngFor="let item of platform.complianceList" class="col-sm-2 text-{{ colourMap[item.style.toUpperCase()] }}">
+            {{item.text.trim()}}
+          </div>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

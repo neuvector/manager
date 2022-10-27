@@ -1,6 +1,7 @@
 package com.neu.api
 
 import akka.actor.{ Actor, ActorContext, ActorLogging }
+import com.google.common.base.Throwables
 import com.typesafe.scalalogging.LazyLogging
 import spray.can.Http.{ Bound, CommandFailed, ConnectionAttemptFailedException }
 import spray.http.ContentTypes._
@@ -66,7 +67,7 @@ trait FailureHandling {
     message: String = "The server is having problems.",
     error: StatusCode = InternalServerError
   )(implicit log: LoggingContext): Unit = {
-    log.error(thrown.getMessage)
+    log.error(Throwables.getStackTraceAsString(thrown))
     ctx.complete((error, message))
   }
 

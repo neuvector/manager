@@ -5,6 +5,8 @@ import {
   OnDestroy,
   OnInit,
   SimpleChanges,
+  ViewChild,
+  ElementRef
 } from '@angular/core';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { NetworkRulesService } from '@common/services/network-rules.service';
@@ -61,6 +63,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   isPrinting: boolean = false;
   private w: any;
   private switchClusterSubscription;
+  @ViewChild('networkRulePrintableReport') printableReportView: ElementRef;
 
   constructor(
     private networkRulesService: NetworkRulesService,
@@ -379,12 +382,12 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
 
   print = () => {
     this.isPrinting = true;
-    setTimeout(() => {
-      window.print();
-      setTimeout(() => {
+    setInterval(() => {
+      if (this.printableReportView) {
+        window.print();
         this.isPrinting = false;
-      }, 1000);
-    }, 1000);
+      }
+    }, 500);
   };
 
   private createRuleWorker = () => {};

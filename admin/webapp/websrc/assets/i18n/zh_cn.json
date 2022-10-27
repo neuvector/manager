@@ -1082,8 +1082,8 @@
     "report": {
       "TITLE": "漏洞报告 (漏洞视角)",
       "TITLE2": "漏洞报告 (资产视角)",
-      "PDF_LINK": "PDF(漏洞视角)",
-      "PDF_LINK2": "PDF(资产视角)",
+      "PDF_LINK": "漏洞视角",
+      "PDF_LINK2": "资产视角",
       "gridHeader": {
         "NAME": "名称",
         "DESC": "描述",
@@ -1105,6 +1105,7 @@
       },
       "others": {
         "DETAILS": "详细",
+        "DETAIL_SUB": "请参考附件的CVE详细内容",
         "APPENDIX": "附录(全部影响清单)",
         "APPENDIX_DESC": "显示全部镜像，容器，主机和平台",
         "APPENDIX_PACKAGES": "附录(全部包清单)",
@@ -1115,7 +1116,11 @@
         "TOP_VULNERABLE_IMAGES": "高危镜像",
         "TOP_VULNERABLE_HOSTS": "高危主机",
         "SEVERITY_DIS": "漏洞严重程度分布",
-        "TARGET_DIS": "漏洞影响目标分布"
+        "TARGET_DIS": "漏洞影响目标分布",
+        "CONTAINER_INS": "容器 (高危容器 (无漏洞): {{ safeRate4Containers }} ({{ containerCnt }} 个容器))",
+        "HOST_INS": "主机 (高危主机 (无漏洞): {{ safeRate4Hosts }} ({{ hostCnt }} 个主机))",
+        "PLATFORM_INS": "平台",
+        "IMAGE_INS": "镜像 (高危镜像 (无漏洞): {{ safeRate4Images }} ({{ imageCnt }} 个镜像))"
       }
     },
     "status": {
@@ -1321,8 +1326,8 @@
     "report": {
       "TITLE": "合规报告 (合规视角)",
       "TITLE2": "合规报告 (资产视角)",
-      "PDF_LINK": "PDF(合规视角)",
-      "PDF_LINK2": "PDF(资产视角)",
+      "PDF_LINK": "合规视角",
+      "PDF_LINK2": "资产视角",
       "gridHeader": {
         "CATEGORY": "分类",
         "NAME": "名称",
@@ -1343,6 +1348,7 @@
       },
       "others": {
         "DETAILS": "详细",
+        "DETAIL_SUB": "请参考附件的合规详细内容",
         "APPENDIX": "附录(全部影响清单)",
         "APPENDIX_DESC": "显示全部镜像，容器，主机和平台",
         "APPENDIX2": "附录(全部合规清单)",
@@ -1350,7 +1356,11 @@
         "TOP_IMPACTFUL_COMP": "高影响合规",
         "TOP_COMP_CONTAINER": "高影响合规的容器",
         "TARGET_DIS": "合规影响目标分布",
-        "SEVERITY_DIS": "合规严重程度分布"
+        "SEVERITY_DIS": "合规严重程度分布",
+        "CONTAINER_INS": "容器 (合规容器 (无合规违反): {{ safeRate4Containers }} ({{ containerCnt }} 个容器))",
+        "HOST_INS": "主机 (合规主机 (无合规违反): {{ safeRate4Hosts }} ({{ hostCnt }} 个主机))",
+        "PLATFORM_INS": "平台",
+        "IMAGE_INS": "镜像 (合规镜像 (无合规违反): {{ safeRate4Images }} ({{ imageCnt }} 个镜像))"
       }
     }
   },

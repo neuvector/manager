@@ -17,6 +17,6 @@ export class ContainerBriefComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    console.log(this.container);
+
   }
 }

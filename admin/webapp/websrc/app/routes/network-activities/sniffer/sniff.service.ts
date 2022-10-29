@@ -105,6 +105,7 @@ export class SniffService {
       .get<HttpResponse<Object>>(PathConstant.SNIFF_PCAP_URL, {
         params: { id: jobId },
         responseType: "arraybuffer" as "json",
+        observe: 'response',
         headers: { "Cache-Control": "no-store" }
       })
       .pipe();

@@ -5,6 +5,7 @@ import { UtilsService } from "@common/utils/app.utils";
 import { MultiClusterService } from "@services/multi-cluster.service";
 import { SettingsService } from "@services/settings.service";
 import swal from "sweetalert";
+import {MapConstant} from "@common/constants/map.constant";
 
 @Component({
   selector: "app-joining-modal",
@@ -33,7 +34,7 @@ export class JoiningModalComponent implements OnInit {
       token: "",
       name: "",
       host: "",
-      port: ""
+      port: MapConstant.FED_PORT.JOINT
     };
     this.useProxy = "";
     this.getClusterName();

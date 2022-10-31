@@ -29,6 +29,12 @@ export class AuthService {
     return GlobalVariable.http.get(PathConstant.EULA_URL).pipe();
   }
 
+  updateEula() {
+    return GlobalVariable.http
+      .post(PathConstant.EULA_URL,{ accepted: true })
+      .pipe();
+  }
+
   getSummary() {
     return GlobalVariable.http.get(PathConstant.DASHBOARD_SUMMARY_URL).pipe();
   }

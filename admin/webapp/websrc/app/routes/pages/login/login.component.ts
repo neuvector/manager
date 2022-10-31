@@ -1,6 +1,7 @@
 import { Component, Inject, Injectable, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TranslatorService } from '@core/translator/translator.service';
+import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '@common/services/auth.service';
 import { CookieService } from 'ngx-cookie-service';
 import { GlobalConstant } from '@common/constants/global.constant';
@@ -28,6 +29,9 @@ export class LoginComponent implements OnInit {
   public samlEnabled: boolean;
   public oidcEnabled: boolean;
   public app: any;
+  public isEulaAccepted: boolean = false;
+  public isEulaValid: boolean = true;
+  public validEula: boolean = false;
   private version: string;
   private gpuEnabled: boolean;
   private originalUrl: string;
@@ -42,6 +46,7 @@ export class LoginComponent implements OnInit {
     private switchersService: SwitchersService,
     private cookieService: CookieService,
     private translatorService: TranslatorService,
+    private translate: TranslateService,
     private fb: FormBuilder,
     private router: Router
   ) {
@@ -70,7 +75,7 @@ export class LoginComponent implements OnInit {
       this.sessionStorage.remove('cluster');
     }
     this.clearToken();
-    console.log("this.currUrl", this.currUrl);
+    console.log("1==this.currUrl", this.currUrl);
     if (this.currUrl.includes(GlobalConstant.PROXY_VALUE)) {
       this.isFromSSO = true;
       console.log('It is from SSO');
@@ -78,6 +83,7 @@ export class LoginComponent implements OnInit {
     }
     this.getAuthServer();
     this.verifyAuth();
+    this.verifyEula();
   }
 
   oktaLogin(value: any, mode) {
@@ -111,44 +117,50 @@ export class LoginComponent implements OnInit {
   }
 
   localLogin(value?: any) {
-    this.authMsg = '';
-    this.inProgress = true;
-    this.authService.login(
-      value?.username || '',
-      value?.password || ''
-    ).subscribe(
-      (userInfo: any) => {
-        GlobalVariable.user = userInfo;
-        GlobalVariable.nvToken = userInfo.token.token;
-        GlobalVariable.isSUSESSO = userInfo.is_suse_authenticated;
-        GlobalVariable.user.global_permissions =
-          userInfo.token.global_permissions;
-        GlobalVariable.user.domain_permissions =
-          userInfo.token.domain_permissions;
-        this.translatorService.useLanguage(GlobalVariable.user.token.locale);
-        this.sessionStorage.set(
-          GlobalConstant.SESSION_STORAGE_TOKEN,
-          GlobalVariable.user
-        );
-        this.verifyEula(true);
-        // if (
-        //   this.sessionStorage.has(GlobalConstant.SESSION_STORAGE_ORIGINAL_URL)
-        // ) {
-        //   this.router.navigate([
-        //     this.sessionStorage.get(
-        //       GlobalConstant.SESSION_STORAGE_ORIGINAL_URL
-        //     ),
-        //   ]);
-        // } else {
-        //   this.router.navigate([GlobalConstant.PATH_DEFAULT]);
-        // }
-        this.inProgress = false;
-      },
-      error => {
-        this.authMsg = error.message;
-        this.inProgress = false;
-      }
-    );
+    if(this.validEula){
+      this.authMsg = '';
+      this.inProgress = true;
+      this.authService.login(
+        value?.username || '',
+        value?.password || ''
+      ).subscribe(
+        (userInfo: any) => {
+          GlobalVariable.user = userInfo;
+          GlobalVariable.nvToken = userInfo.token.token;
+          GlobalVariable.isSUSESSO = userInfo.is_suse_authenticated;
+          GlobalVariable.user.global_permissions =
+            userInfo.token.global_permissions;
+          GlobalVariable.user.domain_permissions =
+            userInfo.token.domain_permissions;
+          this.translatorService.useLanguage(GlobalVariable.user.token.locale);
+          this.sessionStorage.set(
+            GlobalConstant.SESSION_STORAGE_TOKEN,
+            GlobalVariable.user
+          );
+
+          if(this.isEulaAccepted){
+            this.getSummary();
+          } else {
+            this.authService.updateEula().subscribe(
+              value1 => {
+                this.getSummary();
+              }
+              ,error => {
+                this.authMsg = error.message;
+                this.inProgress = false;
+              });
+          }
+
+        },
+        error => {
+          this.authMsg = error.message;
+          this.inProgress = false;
+        }
+      );
+    }else{
+      this.authMsg = this.translate.instant("license.message.ACCEPT_EULA_ERR");
+      this.inProgress = false;
+    }
   }
 
   submitForm($ev, value: any, mode) {
@@ -224,7 +236,6 @@ export class LoginComponent implements OnInit {
             );
           }
           this.cookieService.delete('temp');
-          this.verifyEula(false);
         },
         error => {
           this.inProgress = true;
@@ -235,21 +246,29 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  private verifyEula(isFromLocalAuth: boolean) {
+  public getEulaStatus(isChecked: boolean){
+    this.validEula = this.isEulaAccepted || isChecked;
+   }
+
+  private verifyEula() {
     this.authService.getEula().subscribe(
       (eulaInfo: any) => {
         let eula = eulaInfo.eula;
-        GlobalVariable.isOpenShift = false;
-        this.getSummary(eula, isFromLocalAuth);
+        if(eula && eula.accepted){
+          this.isEulaAccepted = true;
+        }
+
+        this.validEula = this.isEulaAccepted;
+        // GlobalVariable.isOpenShift = false;
       },
       error => {
-        this.inProgress = true;
         this.cookieService.delete('temp');
+        this.isEulaAccepted = false;
       }
     );
   }
 
-  private getSummary(eula: any, isFromLocalAuth: boolean) {
+  private getSummary() {
     this.authService.getSummary().subscribe(
       (summaryInfo: any) => {
         GlobalVariable.isOpenShift =
@@ -257,26 +276,14 @@ export class LoginComponent implements OnInit {
           summaryInfo.summary.platform === GlobalConstant.RANCHER;
         GlobalVariable.summary = summaryInfo.summary;
         GlobalVariable.hasInitializedSummary = true;
-        if (eula === null) {
-          // this.router.navigate(['eula']);
-          // Without accept agreement, navigate to dashboard temporarily
-          this.router.navigate(['dashboard']);
+
+        if (
+          this.originalUrl &&
+          this.originalUrl !== 'login'
+        ) {
+          this.router.navigate([this.originalUrl]);
         } else {
-          if (eula.accepted) {
-            if (
-              this.originalUrl &&
-              this.originalUrl !== 'login' &&
-              isFromLocalAuth
-            ) {
-              this.router.navigate([this.originalUrl]);
-            } else {
-              this.router.navigate(['dashboard']);
-            }
-          } else {
-            // this.router.navigate(['eula']);
-            // Without accept agreement, navigate to dashboard temporarily
-            this.router.navigate(['dashboard']);
-          }
+          this.router.navigate([GlobalConstant.PATH_DEFAULT]);
         }
       },
       error => {

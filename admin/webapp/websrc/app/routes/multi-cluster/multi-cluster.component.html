@@ -20,9 +20,9 @@
           rowHeight="600px"
         >
           <mat-grid-tile>
-            <button (click)="showPromotionDialog()" class="settings__link" mat-button>
-              <mat-card class="settings__card">
-                <div class="settings__image--ldap"></div>
+            <button (click)="showPromotionDialog()" class="cluster_link" mat-button>
+              <mat-card class="cluster_card">
+                <div class="promote_image"></div>
                 <mat-card-title>{{
                   "multiCluster.promotion.title" | translate
                   }}</mat-card-title>
@@ -33,9 +33,9 @@
             </button>
           </mat-grid-tile>
           <mat-grid-tile>
-            <button (click)="showJoiningDialog()" class="settings__link" mat-button>
-              <mat-card class="settings__card">
-                <div class="settings__image--users"></div>
+            <button (click)="showJoiningDialog()" class="cluster_link" mat-button>
+              <mat-card class="cluster_card">
+                <div class="joining_image"></div>
                 <mat-card-title>{{
                   "multiCluster.joining.title" | translate
                   }}</mat-card-title>

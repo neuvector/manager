@@ -227,6 +227,20 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
         }
       }
     } ~
+    path("eula") {
+      get {
+        Utils.respondWithNoCacheControl() {
+          complete {
+            logger.info("Getting EULA")
+            if ("true".equalsIgnoreCase(eulaOEMAppSafe)) {
+              eulaWrapToJson(EulaWrap(Eula(true)))
+            } else {
+              RestClient.httpRequest(s"$baseUri/eula", GET)
+            }
+          }
+        }
+      }
+    } ~
     (post & path(auth)) {
       optionalCookie(suseCookie) {
         case Some(sCookie) => loginWithSUSEToken(sCookie.content)
@@ -569,18 +583,6 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
           }
         } ~
         path("eula") {
-          get {
-            Utils.respondWithNoCacheControl() {
-              complete {
-                logger.info("Getting EULA")
-                if ("true".equalsIgnoreCase(eulaOEMAppSafe)) {
-                  eulaWrapToJson(EulaWrap(Eula(true)))
-                } else {
-                  RestClient.httpRequestWithHeader(s"$baseUri/eula", GET, "", tokenId)
-                }
-              }
-            }
-          } ~
           post {
             entity(as[Eula]) { eula =>
               Utils.respondWithNoCacheControl() {

@@ -561,6 +561,7 @@ hr.fancy {
     color: $neuvector-dark-green-800;
     font-size: 30px;
     font-weight: bolder;
+    margin: 10px 0;
   }
   .summary-subtitle {
     font-size: 20px;
@@ -712,7 +713,7 @@ mwl-gauge.score > .gauge > .value {
   text-align: center;
 }
 
-.summary-title {
+.dashboard-summary-title {
   line-height: 16px;
   & > td {
     float: left;
@@ -728,12 +729,13 @@ mwl-gauge.score > .gauge > .value {
     border-left: $neuvector-grey-900 1px solid;
   }
 }
-.summary-value {
+.dashboard-summary-value {
   line-height: 16px;
   & > td {
     float: left;
     height: 16px;
     background-color: $neuvector-grey-900;
+    -webkit-print-color-adjust: exact;
     color: #fff;
     width: 50px;
     line-height: 16px;
@@ -1060,6 +1062,7 @@ mwl-gauge.score > .gauge > .value {
 
 .label-caution {
   background-color: #ffcb02;
+  -webkit-print-color-adjust: exact;
   color: #545454;
   padding: 5px;
   font-size: 12px;
@@ -1230,4 +1233,40 @@ mwl-gauge.score > .gauge > .value {
 
 .jsoneditor {
   border: thin solid #30ba78;
+}
+
+.safe {
+  text-align: center;
+  padding: 70px 0 40px 0;
+  .safe-signal {
+    display: inline-block;
+    color: $mdc-light-green-500;
+    -webkit-print-color-adjust: exact;
+    font-size: 80px !important;
+  }
+
+  .safe-text {
+    display: inline-block;
+    color: $mdc-light-green-500;
+    -webkit-print-color-adjust: exact;
+    font-size: 20px;
+  }
+}
+
+.unsafe {
+  text-align: center;
+  padding: 70px 0;
+  .unsafe-signal {
+    display: inline-block;
+    color: $mdc-yellow-700;
+    -webkit-print-color-adjust: exact;
+    font-size: 80px !important;
+  }
+
+  .unsafe-text {
+    display: inline-block;
+    color: $mdc-yellow-700;
+    -webkit-print-color-adjust: exact;
+    font-size: 20px;
+  }
 }

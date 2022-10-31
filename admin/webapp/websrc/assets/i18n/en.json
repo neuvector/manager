@@ -382,7 +382,8 @@
         "ALERT": "Alert",
         "THREAT": "Threat",
         "VUL_POD": "Vulnerable Pods",
-        "VUL_NODE": "Vulnerable Nodes"
+        "VUL_NODE": "Vulnerable Nodes",
+        "EXPO_CONV_RPT": "Exposure Conversation Report"
       },
       "comments": {
         "SAFE": "Congrats! All your services are under policy protection perfectly! Please keep it.",
@@ -579,6 +580,9 @@
         "INSTRUCTION_1": "For high risk pods/hosts/platform, please review them in \"Secutiry risks -> Vulnerabilities\"",
         "INSTRUCTION_2": "For major vulnerabilites, please review the following tables (for the top 10 impactful vulnerabilities)"
       }
+    },
+    "report": {
+      "TITLE": "Security Event and Risk Report"
     }
   },
   "network": {
@@ -2511,7 +2515,7 @@
       "CPU_REQUEST_S": "CPU Req",
       "MEMORY_LIMIT_S": "Mem Lmt",
       "MEMORY_REQUEST_S": "Mem Req",
-      "HAS_PSS_VIOLATION": "Has PSS Violation"
+      "HAS_PSS_VIOLATION": "PSA/PSS best practice"
     },
     "operators": {
       "=": "=",

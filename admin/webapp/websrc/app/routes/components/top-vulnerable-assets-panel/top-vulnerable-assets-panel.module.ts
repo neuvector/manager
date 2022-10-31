@@ -4,6 +4,7 @@ import { NvCommonModule } from '@common/nvCommon.module';
 import { TopVulnerableAssetsPanelComponent } from './top-vulnerable-assets-panel.component';
 import { NgChartsModule } from 'ng2-charts';
 import { TopVulnerableAssetsChartComponent } from './partial/top-vulnerable-assets-chart/top-vulnerable-assets-chart.component';
+import { EmptyDataChartReplacementModule } from '@components/ui/empty-data-chart-replacement/empty-data-chart-replacement.module';
 
 
 
@@ -16,10 +17,12 @@ import { TopVulnerableAssetsChartComponent } from './partial/top-vulnerable-asse
   imports: [
     CommonModule,
     NvCommonModule,
-    NgChartsModule
+    NgChartsModule,
+    EmptyDataChartReplacementModule
   ],
   exports: [
-    TopVulnerableAssetsPanelComponent
+    TopVulnerableAssetsPanelComponent,
+    TopVulnerableAssetsChartComponent
   ]
 })
 export class TopVulnerableAssetsPanelModule { }

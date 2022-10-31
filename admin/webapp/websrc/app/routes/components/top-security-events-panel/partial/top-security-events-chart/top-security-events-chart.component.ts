@@ -13,7 +13,9 @@ export class TopSecurityEventsChartComponent implements OnInit {
 
   @Input() topSecurityEvents: any;
   @Input() direction: string;
+  @Input() isReport: boolean = false;
   topSecurityEventsHorizontalBarChartConfig: any; //ChartConfiguration<'bar', number[], string[]>;
+  noChartData: boolean = false;
 
   constructor(
     private translate: TranslateService,
@@ -39,6 +41,7 @@ export class TopSecurityEventsChartComponent implements OnInit {
       topSecurityEventsData[index] = workloadEvents.length;
     });
     console.log("topSecurityEventsLabels", topSecurityEventsLabels, topSecurityEventsData, barChartColors)
+    this.noChartData = topSecurityEventsData.reduce((prev, curr) => prev + curr) === 0
     this.topSecurityEventsHorizontalBarChartConfig = {
       type: 'bar',
       data: {
@@ -57,6 +60,7 @@ export class TopSecurityEventsChartComponent implements OnInit {
         }]
       },
       options: {
+        animation: !this.isReport,
         indexAxis: 'y',
         responsive: true,
         maintainAspectRatio: false

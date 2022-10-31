@@ -11,8 +11,10 @@ export class ExposureChartComponent implements OnInit {
 
   @Input() ingress: Array<HierarchicalExposure>;
   @Input() egress: Array<HierarchicalExposure>;
+  @Input() isReport: boolean = false;
   exposureChartConfig: any;
   chartNumbers: any;
+  noChartData: boolean = false;
 
   constructor(
     private translate: TranslateService
@@ -49,6 +51,7 @@ export class ExposureChartComponent implements OnInit {
     console.log('Object.values(this.chartNumbers.egress)', Array.from(this.chartNumbers.egress.values()))
     this.exposureChartConfig = {
       options: {
+        animation: !this.isReport,
         indexAxis: 'x',
         scales: {
           x: {
@@ -114,6 +117,9 @@ export class ExposureChartComponent implements OnInit {
       },
       type: 'bar'
     };
+    this.noChartData =
+      this.exposureChartConfig.data.datasets[0].data.reduce((prev, curr) => prev + curr) === 0 &&
+      this.exposureChartConfig.data.datasets[1].data.reduce((prev, curr) => prev + curr) === 0;
   };
 
   private accumulateData = (exposedContainers, direction) => {

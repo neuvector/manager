@@ -382,7 +382,8 @@
         "ALERT": "警告",
         "THREAT": "威胁",
         "VUL_POD": "有漏洞的Pod",
-        "VUL_NODE": "有漏洞的主机"
+        "VUL_NODE": "有漏洞的主机",
+        "EXPO_CONV_RPT": "暴露对话报告"
       },
       "comments": {
         "SAFE": "您的服务已经被全部保护! ",
@@ -579,6 +580,9 @@
         "INSTRUCTION_1": "请在“安全风险 - >漏洞”中查看高危的pod / 宿主机 / 系统平台",
         "INSTRUCTION_2": "请查看下表（10类最危险的安全漏洞信息）"
       }
+    },
+    "report": {
+      "TITLE": "安全风险报告"
     }
   },
   "network": {
@@ -2511,7 +2515,7 @@
       "CPU_REQUEST_S": "CPU请求",
       "MEMORY_LIMIT_S": "内存限制",
       "MEMORY_REQUEST_S": "内存请求",
-      "HAS_PSS_VIOLATION": "存在PSS违反"
+      "HAS_PSS_VIOLATION": "PSA/PSS最佳实施"
     },
     "operators": {
       "=": "=",

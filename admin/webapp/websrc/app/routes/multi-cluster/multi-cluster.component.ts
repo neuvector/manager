@@ -39,7 +39,7 @@ export class MultiClusterComponent implements OnInit {
   public summary!: ClusterSummary;
   public clusterData!: ClusterData;
   public useProxy: string = "";
-  public columns!: number;
+  public columns: number = 2;
   private workerCount:number = 0;
   private clusterCount:number = 0;
   private switchClusterSubscription;
@@ -59,7 +59,7 @@ export class MultiClusterComponent implements OnInit {
 
   breakPoints(): void {
     switch (true) {
-      case window.innerWidth <= 640:
+      case window.innerWidth <= 480:
         this.columns = 1;
         break;
       default:

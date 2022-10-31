@@ -1,0 +1,34 @@
+<div class="screen-area">
+  <div
+    cdkDrag
+    cdkDragHandle
+    cdkDragRootElement=".cdk-overlay-pane"
+    class="d-flex align-items-center justify-content-between"
+    style="cursor: move; margin-top: -24px; padding-top: 10px">
+    <div mat-dialog-title class="dialog-title" style="font-size: 16px; margin-top: 10px;">
+      {{"general.DOWNLOAD_PDF" | translate}}
+    </div>
+    <button
+      aria-label="Close icon button"
+      class="d-flex align-items-center justify-content-center"
+      mat-icon-button>
+      <i (click)="dialogRef.close()" class="eos-icons">close</i>
+    </button>
+  </div>
+  <hr class="fancy mt-1 mb-4 mx-0" />
+  <div mat-dialog-content>
+    <app-loading-button
+      (btnClick)="data.printDashboardReport()"
+      appearance="mat-button"
+      [text]="'dashboard.ALL_NAMESPACE' | translate"
+      buttonClasses="mr-1 d-flex justify-content-center align-items-center">
+    </app-loading-button>
+    <app-loading-button
+      (btnClick)="printDashboardReportByDomain(domain)"
+      *ngFor="let domain of data.domainList"
+      [text]="domain"
+      appearance="mat-button"
+      buttonClasses="mr-1 d-flex justify-content-center align-items-center">
+    </app-loading-button>
+  </div>
+</div>

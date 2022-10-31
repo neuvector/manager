@@ -11,7 +11,9 @@ import { threeWayMerge } from '@common/utils/common.utils';
 export class SecurityEventsChartComponent implements OnInit {
 
   @Input() securityEventSummary: any;
+  @Input() isReport: boolean = false;
   securityEventsChartConfig: any;
+  noChartData: boolean = false;
 
   constructor(
     private translate: TranslateService
@@ -52,7 +54,7 @@ export class SecurityEventsChartComponent implements OnInit {
     });
 
     console.log('securityEventsData', criticalDataList, warningDataList);
-
+    this.noChartData = criticalDataList.length === 0 && warningDataList.length === 0;
     this.securityEventsChartConfig = {
       type: 'line',
       data: {
@@ -87,6 +89,7 @@ export class SecurityEventsChartComponent implements OnInit {
         ]
       },
       options: {
+        animation: !this.isReport,
         responsive: true,
         maintainAspectRatio: false,
         plugins: {

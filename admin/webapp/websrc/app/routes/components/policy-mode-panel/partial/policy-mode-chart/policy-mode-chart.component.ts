@@ -12,7 +12,9 @@ export class PolicyModeChartComponent implements OnInit {
   @Input() assetsInfo: Array<any>;
   @Input() assetType: string;
   @Input() scoreInfo: InternalSystemInfo;
+  @Input() is4Report: boolean = false;
   policyModePieChartConfig: any;
+  noChartData: boolean = false;
 
   constructor(
     private translate: TranslateService
@@ -49,9 +51,10 @@ export class PolicyModeChartComponent implements OnInit {
       assetsPolicyModeData = Object.values(containerStateCount);
     }
 
-
+    this.noChartData = assetsPolicyModeData.reduce((prev, curr) => prev + curr) === 0;
     this.policyModePieChartConfig = {
       options: {
+        animation: !this.is4Report,
         maintainAspectRatio: false,
         plugins: {
           title: {

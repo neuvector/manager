@@ -1,10 +1,22 @@
-<div style="height: 250px;">
-  <canvas
-    [data]="topSecurityEventsHorizontalBarChartConfig.data"
-    [labels]="topSecurityEventsHorizontalBarChartConfig.data.labels"
-    [options]="topSecurityEventsHorizontalBarChartConfig.options"
-    [type]="topSecurityEventsHorizontalBarChartConfig.type"
-    baseChart
+<div *ngIf="noChartData; then nodata else chart"></div>
+
+<ng-template #chart>
+  <div style="height: 250px;">
+    <canvas
+      [data]="topSecurityEventsHorizontalBarChartConfig.data"
+      [labels]="topSecurityEventsHorizontalBarChartConfig.data.labels"
+      [options]="topSecurityEventsHorizontalBarChartConfig.options"
+      [type]="topSecurityEventsHorizontalBarChartConfig.type"
+      baseChart
+    >
+    </canvas>
+  </div>
+</ng-template>
+
+<ng-template #nodata>
+  <app-empty-data-chart-replacement
+    type="safe"
+    [message]="'dashboard.body.message.NO_SEC_EVENTS' | translate"
   >
-  </canvas>
-</div>
+  </app-empty-data-chart-replacement>
+</ng-template>

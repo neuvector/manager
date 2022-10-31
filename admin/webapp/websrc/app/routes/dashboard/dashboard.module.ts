@@ -13,12 +13,19 @@ import { ApplicationProtocolsPanelModule } from '@components/application-protoco
 import { DashboardSecurityEventsService } from './thread-services/dashboard-security-events.service';
 import { DashboardDetailsService } from './thread-services/dashboard-details.service';
 import { DashboardExposureConversationsService } from './thread-services/dashboard-exposure-conversations.service';
+import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
+import { DashboardPrintableReportComponent } from './dashboard-printable-report/dashboard-printable-report.component';
+import { ReportByNamespaceModalComponent } from './report-by-namespace-modal/report-by-namespace-modal.component';
+import { ExposedServicePodGridModule } from '@components/exposed-service-pod-grid/exposed-service-pod-grid.module';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 const routes: Routes = [{ path: '', component: DashboardComponent }];
 
 @NgModule({
   declarations: [
-    DashboardComponent
+    DashboardComponent,
+    DashboardPrintableReportComponent,
+    ReportByNamespaceModalComponent
   ],
   providers: [
     DashboardSecurityEventsService,
@@ -35,6 +42,9 @@ const routes: Routes = [{ path: '', component: DashboardComponent }];
     TopVulnerableAssetsPanelModule,
     PolicyModePanelModule,
     ApplicationProtocolsPanelModule,
+    LoadingButtonModule,
+    DragDropModule,
+    ExposedServicePodGridModule,
     RouterModule.forChild(routes),
   ]
 })

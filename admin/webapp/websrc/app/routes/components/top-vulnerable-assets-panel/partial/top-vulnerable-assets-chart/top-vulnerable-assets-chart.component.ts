@@ -12,7 +12,9 @@ export class TopVulnerableAssetsChartComponent implements OnInit {
 
   @Input() highPriorityVulnerabilities: any;
   @Input() assetType: string;
+  @Input() isReport: boolean = false;
   topVulnerableAssetsBarChartConfig: any;
+  noChartData: boolean = false;
 
   constructor(
     private translate: TranslateService,
@@ -43,8 +45,13 @@ export class TopVulnerableAssetsChartComponent implements OnInit {
       }
     });
 
+    this.noChartData =
+      topHighVulnerableAssetsData.reduce((prev, curr) => prev + curr) === 0 &&
+      topMediumVulnerableAssetsData.reduce((prev, curr) => prev + curr) === 0
+
     this.topVulnerableAssetsBarChartConfig = {
       options: {
+        animation: !this.isReport,
         indexAxis: 'y',
         scales: {
           x: {

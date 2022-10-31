@@ -27,10 +27,26 @@ export class DashboardService {
     return score <= GlobalConstant.SCORE_LEVEL.GOOD;
   };
 
-  getScoreData = (isGlobalUser: boolean, podCnt: number, domain: any) => {
+  getScoreData = (
+    isGlobalUser: boolean,
+    podCnt: number,
+    domain: string | null
+  ) => {
     return this.dashboardHttpService
       .getScores(isGlobalUser, podCnt, domain)
       .pipe();
+  };
+
+  getDashboardSecurityEvent = (domain: string) => {
+    return this.dashboardHttpService.getDashboardSecurityEventData(domain).pipe();
+  };
+
+  getDashboardDetails = (domain: string) => {
+    return this.dashboardHttpService.getDashboardDetailsData(domain).pipe();
+  };
+
+  getSummaryInfo = (domain: string) => {
+    return this.dashboardHttpService.getSummaryData(domain).pipe();
   };
 
   getRbacData = () => {
@@ -49,6 +65,26 @@ export class DashboardService {
       null
     );
     return forkJoin([rbacPromise, scorePromise]).pipe();
+  };
+
+  getDomainReportData = (
+    isGlobalUser: boolean,
+    domain: string
+  ) => {
+    const scorePromise = this.getScoreData(
+      isGlobalUser,
+      GlobalVariable.summary.running_pods,
+      domain
+    );
+    const dashboardSecurityEventPromise = this.getDashboardSecurityEvent(domain);
+    const dashboardDetailsPromise = this.getDashboardDetails(domain);
+    const dashboardSummaryPromise = this.getSummaryInfo(domain)
+    return forkJoin([
+      scorePromise,
+      dashboardSecurityEventPromise,
+      dashboardDetailsPromise,
+      dashboardSummaryPromise
+    ]).pipe();
   };
 
   setAutoScan = (isAutoScan: boolean) => {

@@ -7,6 +7,8 @@ import { InternalSystemInfo } from '@common/types';
 export class DashboardExposureConversationsService {
 
   private worker;
+  isLoadingExposureConversation: boolean = false;
+  exposureConversationList: any[];
 
   constructor() {}
 
@@ -26,6 +28,8 @@ export class DashboardExposureConversationsService {
     }
     if (this.worker) {
       console.log('Post message to worker (dashboard-exposure-conversations)');
+      this.isLoadingExposureConversation = true;
+      this.exposureConversationList = [];
       this.worker.postMessage(
         JSON.stringify({
           exposures: {
@@ -41,6 +45,8 @@ export class DashboardExposureConversationsService {
       );
       this.worker.onmessage = (message) => {
         console.log('message =', message);
+        this.isLoadingExposureConversation = false;
+        this.exposureConversationList = message.data;
       };
     }
   }

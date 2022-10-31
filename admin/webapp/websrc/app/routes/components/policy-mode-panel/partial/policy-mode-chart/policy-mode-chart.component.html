@@ -1,9 +1,21 @@
-<div style="height: 250px">
-  <canvas
-    [data]="policyModePieChartConfig.data"
-    [labels]="policyModePieChartConfig.data.labels"
-    [options]="policyModePieChartConfig.options"
-    [type]="policyModePieChartConfig.type"
-    baseChart>
-  </canvas>
-</div>
+<div *ngIf="noChartData; then nodata else chart"></div>
+
+<ng-template #chart>
+  <div style="height: 250px">
+    <canvas
+      [data]="policyModePieChartConfig.data"
+      [labels]="policyModePieChartConfig.data.labels"
+      [options]="policyModePieChartConfig.options"
+      [type]="policyModePieChartConfig.type"
+      baseChart>
+    </canvas>
+  </div>
+</ng-template>
+
+<ng-template #nodata>
+  <app-empty-data-chart-replacement
+    type="warning"
+    [message]="'dashboard.body.message.NO_MANAGED_CONTAINERS' | translate"
+  >
+  </app-empty-data-chart-replacement>
+</ng-template>

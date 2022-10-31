@@ -1,10 +1,22 @@
-<div style="height: 250px;">
-  <canvas
-    [data]="exposureChartConfig.data"
-    [labels]="exposureChartConfig.data.labels"
-    [options]="exposureChartConfig.options"
-    [type]="exposureChartConfig.type"
-    baseChart
+<div *ngIf="noChartData; then nodata else chart"></div>
+
+<ng-template #chart>
+  <div style="height: 250px;">
+    <canvas
+      [data]="exposureChartConfig.data"
+      [labels]="exposureChartConfig.data.labels"
+      [options]="exposureChartConfig.options"
+      [type]="exposureChartConfig.type"
+      baseChart
+    >
+    </canvas>
+  </div>
+</ng-template>
+
+<ng-template #nodata>
+  <app-empty-data-chart-replacement
+    type="safe"
+    [message]="'dashboard.body.message.NO_EXPOSURE' | translate"
   >
-  </canvas>
-</div>
+  </app-empty-data-chart-replacement>
+</ng-template>

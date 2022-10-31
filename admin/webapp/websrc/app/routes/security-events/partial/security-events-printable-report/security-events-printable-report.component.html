@@ -45,10 +45,10 @@
         <th class="print-cell" style="width: 20%">
           {{ 'securityEvent.pdf.LOCATION' | translate }}
         </th>
-        <th class="print-cell" style="width: 37%">
+        <th class="print-cell" style="width: 35%">
           {{ 'securityEvent.pdf.DETAILS' | translate }}
         </th>
-        <th class="print-cell" style="width: 5%">
+        <th class="print-cell" style="width: 7%">
           {{ 'securityEvent.pdf.ACTION' | translate }}
         </th>
         <th class="print-cell" style="width: 8%">
@@ -77,13 +77,13 @@
             >
             </app-security-events-printable-report-location-col>
           </td>
-          <td class="print-cell" style="width: 37%">
+          <td class="print-cell" style="width: 35%">
             <app-security-events-printable-report-details-col
               [details]="securityEvent.Details"
             >
             </app-security-events-printable-report-details-col>
           </td>
-          <td class="print-cell" style="width: 5%">
+          <td class="print-cell" style="width: 7%">
             <app-security-events-printable-report-action-col
               [action]="securityEvent.Action"
             >

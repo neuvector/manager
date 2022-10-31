@@ -248,7 +248,7 @@ export class GroupsService {
       this.$win
     );
 
-    if (isFed) gridOptions4Groups.rowSelection = 'multiple';
+    if (!isFed) gridOptions4Groups.rowSelection = 'multiple';
 
     return gridOptions4Groups;
   };

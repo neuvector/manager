@@ -18,6 +18,7 @@ import { AuthUtilsService } from '@common/utils/auth.utils';
 import { TranslateService } from '@ngx-translate/core';
 import { UtilsService } from '@common/utils/app.utils';
 import { Options } from '@angular-slider/ngx-slider';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-sniffer',
@@ -27,7 +28,7 @@ import { Options } from '@angular-slider/ngx-slider';
 export class SnifferComponent implements AfterViewInit, OnInit {
   isPacketCapAuthorized: boolean = false;
   sniffer: any;
-  exportUrl: string = '';
+  exportUrl: any;
   downloadId: any;
   exportFilename: string = '';
   onSnifferErr: boolean = false;
@@ -70,6 +71,7 @@ export class SnifferComponent implements AfterViewInit, OnInit {
     private translate: TranslateService,
     private authUtilsService: AuthUtilsService,
     private utils: UtilsService,
+    private sanitizer: DomSanitizer,
     public graphService: GraphService,
     public sniffService: SniffService
   ) {
@@ -151,10 +153,8 @@ export class SnifferComponent implements AfterViewInit, OnInit {
     });
 
   startSniff = containerId => {
-    console.log(containerId);
-    console.log(this.containerId);
     this.sniffService.startSniff(containerId).subscribe(
-      response => this.getSniffers(),
+      () => this.getSniffers(),
       err => {
         this.onSnifferErr = true;
         this.snifferErrMsg = this.utils.getErrorMessage(err);
@@ -179,7 +179,7 @@ export class SnifferComponent implements AfterViewInit, OnInit {
 
   stopSniff = jobId =>
     this.sniffService.stopSniff(jobId).subscribe(
-      response => this.getSniffers(),
+      () => this.getSniffers(),
       err => {
         console.warn(err);
         this.onSnifferErr = true;
@@ -189,7 +189,7 @@ export class SnifferComponent implements AfterViewInit, OnInit {
 
   deleteSniff = jobId =>
     this.sniffService.deleteSniff(jobId).subscribe(
-      response => {
+      () => {
         this.getSniffers();
         this.sniffer = null;
       },
@@ -203,10 +203,12 @@ export class SnifferComponent implements AfterViewInit, OnInit {
   downloadPacket = jobId => {
     this.sniffService.downloadPacket(jobId).subscribe(response => {
       let raw = response.headers.get('Content-Type');
-      let nameAndParts = this.sniffService.multiPart_parse(response, raw);
+      let nameAndParts = this.sniffService.multiPart_parse(response.body, raw);
       this.exportFilename = nameAndParts.filename;
-      this.exportUrl = URL.createObjectURL(
-        new Blob([nameAndParts.parts[nameAndParts.filename]])
+      this.exportUrl = this.sanitizer.bypassSecurityTrustUrl(
+        URL.createObjectURL(
+          new Blob([nameAndParts.parts[nameAndParts.filename]])
+        )
       );
       this.downloadId = jobId;
     });

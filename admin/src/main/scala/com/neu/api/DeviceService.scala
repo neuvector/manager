@@ -289,7 +289,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
                       scope.fold {
                         val payload =
                           systemConfigWrapToJson(systemConfigWrap)
-                        logger.info("Updating config: {}", payload)
+                        logger.info("Updating config")
                         RestClient.httpRequestWithHeader(
                           s"${baseClusterUriV2(tokenId)}/system/config",
                           PATCH,
@@ -299,7 +299,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
                       } { scope =>
                         val fedPayload =
                           systemConfigWrapToJson(systemConfigWrap)
-                        logger.info("Updating fed config: {}", fedPayload)
+                        logger.info("Updating fed config")
                         RestClient.httpRequestWithHeader(
                           s"${baseClusterUriV2(tokenId)}/system/config?scope=$scope",
                           PATCH,
@@ -451,7 +451,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
                     complete {
                       try {
                         val baseUrl = baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
-                        logger.info("test baseUrl: {}", baseUrl)
+                        logger.info("testing baseUrl")
                         logger.info("No Transaction ID(Post),{}", asStandalone.getClass.toString)
                         AuthenticationManager.setBaseUrl(tokenId, baseUrl)
                         Thread.sleep(1000)

@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   Component,
+  OnDestroy,
   OnInit,
   QueryList,
   ViewChildren,
@@ -16,7 +17,9 @@ import { BaseChartDirective } from 'ng2-charts';
   templateUrl: './container-stats.component.html',
   styleUrls: ['./container-stats.component.scss'],
 })
-export class ContainerStatsComponent implements OnInit, AfterViewInit {
+export class ContainerStatsComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   @ViewChildren(BaseChartDirective) charts!: QueryList<BaseChartDirective>;
   totalPoints = 30;
   cpuChartData!: ChartConfiguration<'line', number[], string>;
@@ -37,6 +40,11 @@ export class ContainerStatsComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.refreshCharts();
+  }
+
+  ngOnDestroy(): void {
+    if (this.charts)
+      this.charts.forEach(child => child.chart?.destroy());
   }
 
   initData(): void {

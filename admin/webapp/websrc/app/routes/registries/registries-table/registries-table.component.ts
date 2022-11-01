@@ -26,6 +26,8 @@ import { cloneDeep } from 'lodash';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
 import { finalize, switchMap, take, tap } from 'rxjs/operators';
+import { GlobalConstant } from '@common/constants/global.constant';
+import { MapConstant } from '@common/constants/map.constant';
 
 @Component({
   selector: 'app-registries-table',
@@ -75,6 +77,32 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
       headerValueGetter: () => this.translate.instant('scan.gridHeader.STATUS'),
     },
     {
+      field: 'cfg_type',
+      cellRenderer: params => {
+        if (params.value === GlobalConstant.CFG_TYPE.LEARNED) {
+          return `<span class="action-label group-type ${
+            MapConstant.colourMap['LEARNED']
+          }">${this.translate.instant('group.LEARNED')}</span>`;
+        } else if (params.value === GlobalConstant.CFG_TYPE.CUSTOMER) {
+          return `<span class="action-label group-type ${
+            MapConstant.colourMap['CUSTOM']
+          }">${this.translate.instant('group.CUSTOM')}</span>`;
+        } else if (params.value === GlobalConstant.CFG_TYPE.GROUND) {
+          return `<span class="action-label group-type ${
+            MapConstant.colourMap['GROUND']
+          }">${this.translate.instant('group.GROUND')}</span>`;
+        } else if (params.value === GlobalConstant.CFG_TYPE.FED) {
+          return `<span class="action-label group-type ${
+            MapConstant.colourMap['FED']
+          }">${this.translate.instant('group.FED')}</span>`;
+        }
+        return '';
+      },
+      sortable: true,
+      resizable: true,
+      headerValueGetter: () => this.translate.instant('policy.gridHeader.TYPE'),
+    },
+    {
       field: 'scheduled',
       sortable: true,
       resizable: true,
@@ -96,7 +124,7 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
         this.translate.instant('registry.gridHeader.FAILED'),
     },
     {
-      field: 'controls',
+      field: '',
       cellRenderer: 'btnCellRenderer',
       cellRendererParams: {
         edit: event => this.editRegistry(event),
@@ -134,7 +162,7 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
       onSelectionChanged: event => this.onSelectionChanged(event),
       components: {
         btnCellRenderer: RegistriesTableButtonsComponent,
-        statusCellRenderer: RegistryTableStatusCellComponent,
+        statusCellRenderer: RegistryTableStatusCellComponent
       },
       overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS'),
     };

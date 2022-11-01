@@ -31,6 +31,7 @@ export interface RegistryConfig {
   auth_token?: string;
   aws_key?: AWSKey;
   gcr_key?: GCRKey;
+  cfg_type?: string;
 }
 
 export interface RegistryPostBody {

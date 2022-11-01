@@ -41,7 +41,8 @@ case class RegistryConfig(
   gitlab_external_url: Option[String] = None,
   gitlab_private_token: Option[String] = None,
   ibm_cloud_account: Option[String] = None,
-  jfrog_aql: Option[Boolean] = None
+  jfrog_aql: Option[Boolean] = None,
+  cfg_type: Option[String] = None
 )
 
 case class MaskedRegistryConfig(
@@ -78,7 +79,7 @@ object RegistryConfigJsonProtocol extends DefaultJsonProtocol {
   implicit val maskedJfrogXrayFormat: RootJsonFormat[MaskedJfrogXray] = jsonFormat3(MaskedJfrogXray)
   implicit val ScanScheduleFormat: RootJsonFormat[ScanSchedule]       = jsonFormat2(ScanSchedule)
   implicit val GcrKeyFormat: RootJsonFormat[GcrKey]                   = jsonFormat1(GcrKey)
-  implicit val registryConfigFormat: RootJsonFormat[RegistryConfig]   = jsonFormat21(RegistryConfig)
+  implicit val registryConfigFormat: RootJsonFormat[RegistryConfig]   = jsonFormat22(RegistryConfig)
   implicit val maskesRegistryConfigFormat: RootJsonFormat[MaskedRegistryConfig] = jsonFormat18(
     MaskedRegistryConfig
   )

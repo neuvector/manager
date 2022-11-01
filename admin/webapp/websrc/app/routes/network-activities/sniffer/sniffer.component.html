@@ -12,7 +12,8 @@
       aria-label="Close icon button"
       class="d-flex align-items-center justify-content-center"
       mat-icon-button>
-      <i (click)="popupState.leave()" class="eos-icons ml-1">close</i>
+      <i (click)="stopRefresh(); popupState.leave()" class="eos-icons ml-1"
+        >close</i>
     </button>
   </div>
 
@@ -31,10 +32,10 @@
       <mat-checkbox
         aria-label="Toggle schedule"
         class="md-primary mx-1 mt-3"
-        [checked]="!pcap.options.disabled"
-        (click)="toggleSchedule()">
+        [(ngModel)]="disabled"
+        (change)="toggleSchedule($event)">
         <label
-          [ngClass]="pcap.options.disabled ? 'text-muted' : 'text-primary'"
+          [ngClass]="!disabled ? 'text-muted' : 'text-primary'"
           class="mb-0">
           {{ 'network.SCHEDULE_JOB' | translate }}
         </label>

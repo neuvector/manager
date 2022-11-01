@@ -1222,6 +1222,7 @@
     "AWS_REGION": "地区",
     "AUTH_BY_UN": "通过用户名认证",
     "AUTH_BY_TOKEN": "通过令牌认证",
+    "FOR_FED": "在集群全局中使用",
     "JFROG_MODE": "JFrog Docker访问方法",
     "SHOW_LAYERS": "显示镜像层",
     "NO_LAYERS": "无镜像层",

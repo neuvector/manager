@@ -14,25 +14,44 @@ import { OpenShiftRegistryConfig } from './configs/openshift-registry.config';
 
 export const AddRegistryFieldConfig: FormlyFieldConfig[] = [
   {
-    key: 'registry_type',
-    type: FormlyComponents.SELECT,
-    defaultValue: Registries.DOCKER_REGISTRY,
-    templateOptions: {
-      change: field => {
-        field.options?.parentForm?.form.markAsPristine();
-        field.options?.parentForm?.form.markAsUntouched();
-        field.options?.parentForm?.form.updateValueAndValidity();
+    fieldGroupClassName: 'row',
+    fieldGroup: [
+      {
+        className: 'col-12 col-md-9',
+        key: 'registry_type',
+        type: FormlyComponents.SELECT,
+        defaultValue: Registries.DOCKER_REGISTRY,
+        templateOptions: {
+          change: field => {
+            field.options?.parentForm?.form.markAsPristine();
+            field.options?.parentForm?.form.markAsUntouched();
+            field.options?.parentForm?.form.updateValueAndValidity();
+          },
+          label: 'Registry Type',
+          items: Object.keys(Registries)
+            .map(key => {
+              return { value: Registries[key], viewValue: Registries[key] };
+            })
+            .sort((a, b) => (a.value > b.value ? 1 : b.value > a.value ? -1 : 0)),
+        },
+        expressionProperties: {
+          'templateOptions.disabled': 'model.isEdit',
+        },
       },
-      label: 'Registry Type',
-      items: Object.keys(Registries)
-        .map(key => {
-          return { value: Registries[key], viewValue: Registries[key] };
-        })
-        .sort((a, b) => (a.value > b.value ? 1 : b.value > a.value ? -1 : 0)),
-    },
-    expressionProperties: {
-      'templateOptions.disabled': 'model.isEdit',
-    },
+      {
+        className: 'col-12 col-md-3 mt-4',
+        key: 'isFed',
+        defaultValue: false,
+        type: FormlyComponents.TOGGLE,
+        templateOptions: {
+          label: 'registry.FOR_FED',
+        },
+        expressionProperties: {
+          'templateOptions.disabled': 'model.isEdit',
+          'model.name': 'model.isEdit ? model.name : (model.isFed ? \'fed.\' : null)',
+        },
+      }
+    ]
   },
   {
     hideExpression: `model.registry_type !== "${Registries.AMAZON_ECR_REGISTRY}"`,

@@ -1222,6 +1222,7 @@
     "AWS_REGION": "Region",
     "AUTH_BY_UN": "Authenticated by Username",
     "AUTH_BY_TOKEN": "Authenticated by Token",
+    "FOR_FED": "Use in federation",
     "JFROG_MODE": "JFrog Docker Access Method",
     "SHOW_LAYERS": "Show Image Layers",
     "NO_LAYERS": "No layers to show",

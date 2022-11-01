@@ -1,5 +1,6 @@
 import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { GlobalConstant } from '@common/constants/global.constant';
+import { FormlyFieldConfig } from '@ngx-formly/core';
 
 export function urlValidator(
   control: AbstractControl
@@ -26,14 +27,16 @@ export function objNameValidator(
 }
 
 export function fedNameValidator(
-  control: AbstractControl
+  control: AbstractControl,
+  field: FormlyFieldConfig
 ): ValidationErrors | null {
-  const { name, cfg_type } = control.value;
+  let value = control.value;
   const pattern = new RegExp(/^(fed\.)/);
-  if (!name) {
+  console.log("field",field,control)
+  if (!value) {
     return null;
   }
-  return pattern.test(name) && cfg_type !== GlobalConstant.CFG_TYPE.FED
+  return pattern.test(value) //&& cfg_type !== GlobalConstant.CFG_TYPE.FED
     ? { invalidFedName: true }
     : null;
 }

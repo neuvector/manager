@@ -177,7 +177,7 @@ export const NameField = {
   },
   expressionProperties: {
     'templateOptions.disabled': 'model.isEdit',
-  },
+  }
 };
 
 export const RegistryField = {

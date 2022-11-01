@@ -26,6 +26,7 @@ import { RegistriesService } from '@services/registries.service';
 import { finalize, switchMap, take } from 'rxjs/operators';
 import { TestSettingsDialogComponent } from './test-connection-dialog/test-settings-dialog.component';
 import { RegistriesCommunicationService } from '../../regestries-communication.service';
+import { GlobalConstant } from '@common/constants/global.constant';
 
 @Component({
   selector: 'app-add-registry-dialog',
@@ -102,6 +103,7 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
       if (!body.config.auth_with_token) {
         body.config.auth_with_token = false;
       }
+      body.config.cfg_type = this.model.isFed ? GlobalConstant.CFG_TYPE.FED : GlobalConstant.CFG_TYPE.CUSTOMER;
       this.submittingForm = true;
       if (this.model?.isEdit) {
         body.config.password =
@@ -166,6 +168,7 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
       this.model = {
         ...data,
         isEdit: true,
+        isFed: data.cfg_type === GlobalConstant.CFG_TYPE.FED,
         password: this.maskFieldWhenEdit,
         auto_scan,
         periodic_scan,

@@ -355,16 +355,14 @@ export class NetworkRulesService {
           if (!rule.remove) return rule;
         }
       })
-      .filter(x => !!x);
-    // if (networkRulesCopy.some(rule => rule.id === "")) {
-    //   networkRulesCopy.pop();
-    // }
+      .filter(x => !!x && x.id !== -1);
 
     if (onlyRemove && deletedRules.length > 0) {
       payload = { delete: deletedRules };
     } else {
       payload = { rules: networkRulesCopy, delete: deletedRules };
     }
+
     let data = pako.gzip(JSON.stringify(payload));
     data = new Blob([data], { type: 'application/gzip' });
     let config = {

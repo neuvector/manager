@@ -30,6 +30,11 @@ export class DashboardDetailsService {
     }
     if (this.worker) {
       console.log('Post message to worker (dashboard-details)');
+      this.isAutoScanOn = false;
+      this.highPriorityVulnerabilities = null;
+      this.containers = null;
+      this.services = null;
+      this.applications = null;
       this.worker.postMessage(
         JSON.stringify({
           token: GlobalVariable.user?.token.token,

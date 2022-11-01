@@ -88,7 +88,7 @@
           <button
             class="btn btn-primary btn-block margin-top-xxl"
             (click)="submitForm($event, loginForm.value, '')"
-            [disabled]="loginForm.invalid"
+            [disabled]="!validEula || loginForm.invalid"
             type="submit">
             {{ 'login.LOGIN' | translate }}
           </button>
@@ -134,6 +134,10 @@
               {{ 'login.OIDC_LOGIN' | translate }}
             </button>
           </div>
+          <ng-template [ngIf]="!isEulaAccepted">
+            <app-eula (eulaStatus)="getEulaStatus($event)" ></app-eula>
+          </ng-template>
+
         </form>
       </div>
       <div style="padding: 0 10px; clear: both; height: 42px" >

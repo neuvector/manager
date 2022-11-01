@@ -164,14 +164,14 @@ export class AdvancedFilterComponent implements OnInit {
   apply() {
 
     this.advFilter.domains = this.advFilterForm.value.domains;
-    this.advFilter.groups = this.advFilterForm.value.groups;
+    this.advFilter.groups = this.advFilterForm.value.selectedGroups;
     this.advFilter.cve = this.advFilterForm.value.vulnerabilityType;
     this.advFilter.protocol = this.advFilterForm.value.protocols;
     this.advFilter.risk = this.advFilterForm.value.riskType;
-    this.settings.persistent = this.advFilterForm.value.persistent;
-    this.settings.showSysNode = this.advFilterForm.value.showSysNode;
-    this.settings.showSysApp = this.advFilterForm.value.showSysApp;
-    this.settings.gpuEnabled = this.advFilterForm.value.gpuEnabled;
+    this.settings.persistent = this.advFilterForm.value.settings.persistent;
+    this.settings.showSysNode = this.advFilterForm.value.settings.showSysNode;
+    this.settings.showSysApp = this.advFilterForm.value.settings.showSysApp;
+    this.settings.gpuEnabled = this.advFilterForm.value.settings.gpuEnabled;
 
     this.onApply.emit({advFilter: this.advFilter, settings: this.settings});
   }

@@ -1,6 +1,6 @@
 @use "@angular/material" as mat;
 
-.settings__card {
+.cluster_card {
   padding: 10px 20px;
   height: 100%;
   text-align: center;
@@ -16,13 +16,13 @@
   }
 }
 
-.settings__link {
+.cluster_link {
   width: 93%;
   height: 280px;
   text-decoration: none;
 }
 
-.settings__image {
+.cluster_image {
   background-repeat: no-repeat !important;
   background-size: contain;
   -webkit-background-size: contain;
@@ -31,6 +31,25 @@
   margin: 20px auto !important;
   width: 72px;
   height: 72px;
+}
+
+.promote_image {
+  @extend .cluster_image;
+  background: url("../../../assets/img/ic-verified-user.svg");
+  background: -webkit-image-set(
+      url("../../../assets/img/ic-verified-user.png") 1x,
+      url("../../../assets/img/ic-verified-user@2x.png") 2x
+  );
+}
+
+.joining_image {
+  @extend .cluster_image;
+  background: url("/websrc/assets/img/ic-group-black-72-px.svg");
+  background: -webkit-image-set(
+      url("../../../assets/img/ic-group-black-72-px.png") 1x,
+      url("../../../assets/img/ic-group-black-72-px@2x.png") 2x,
+      url("../../../assets/img/ic-group-black-72-px@3x.png") 3x
+  );
 }
 
 .scrollable {

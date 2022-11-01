@@ -227,6 +227,20 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
         }
       }
     } ~
+    path("eula") {
+      get {
+        Utils.respondWithNoCacheControl() {
+          complete {
+            logger.info("Getting EULA")
+            if ("true".equalsIgnoreCase(eulaOEMAppSafe)) {
+              eulaWrapToJson(EulaWrap(Eula(true)))
+            } else {
+              RestClient.httpRequest(s"$baseUri/eula", GET)
+            }
+          }
+        }
+      }
+    } ~
     (post & path(auth)) {
       optionalCookie(suseCookie) {
         case Some(sCookie) => loginWithSUSEToken(sCookie.content)
@@ -358,8 +372,6 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
         pathPrefix("user") {
           get {
             parameter('name.?) { name =>
-              logger.info("name: {}", name)
-              logger.info("tokenId: {}", tokenId)
               Utils.respondWithNoCacheControl() {
                 complete {
                   if (name.nonEmpty) {
@@ -515,7 +527,6 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
             parameter('isOnNV.?) { isOnNV =>
               Utils.respondWithNoCacheControl() {
                 complete {
-                  logger.debug("tokenId: {}", tokenId)
                   try {
                     logger.info("Getting self ..")
                     val result =
@@ -547,7 +558,6 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                         selfWrap.domain_permissions
                       )
                     )
-                    logger.debug("user token: {}", token1)
                     val authToken = AuthenticationManager.parseToken(tokenWrapToJson(token1))
                     authToken
                   } catch {
@@ -573,18 +583,6 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
           }
         } ~
         path("eula") {
-          get {
-            Utils.respondWithNoCacheControl() {
-              complete {
-                logger.info("Getting EULA")
-                if ("true".equalsIgnoreCase(eulaOEMAppSafe)) {
-                  eulaWrapToJson(EulaWrap(Eula(true)))
-                } else {
-                  RestClient.httpRequestWithHeader(s"$baseUri/eula", GET, "", tokenId)
-                }
-              }
-            }
-          } ~
           post {
             entity(as[Eula]) { eula =>
               Utils.respondWithNoCacheControl() {
@@ -808,8 +806,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
       }
     }
 
-  private def loginWithSUSEToken(suseCookieValue: String) = {
-    logger.info("suse cookie value:" + suseCookieValue)
+  private def loginWithSUSEToken(suseCookieValue: String) =
     clientIP { ip =>
       entity(as[Password]) { userPwd =>
         def login: Route = {
@@ -830,9 +827,8 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
             suseCookieValue.nonEmpty
           )
           AuthenticationManager.suseTokenMap += (authToken.token.token -> suseCookieValue)
-          logger.info("login with SUSE cookie: {} ", authToken.is_suse_authenticated)
+          logger.info("login with SUSE cookie")
           logger.info("Client ip {}", ip)
-          logger.info("{} login", authToken.token.username)
           Utils.respondWithNoCacheControl() {
             complete(StatusCodes.OK, authToken)
           }
@@ -893,6 +889,5 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
         }
       }
     }
-  }
 
 }

@@ -58,6 +58,12 @@
                 <span class="text-discover">{{
                   "admissionControl.names.ADD_CUSTOMIZED_CRITERION" | translate
                 }} ...</span>
+                <em
+                  class="fa fa-file-code text-muted margin-left-s"
+                  style="font-size: 10px;"
+                  aria-hidden="true"
+                  matTooltip="{{ 'admissionControl.TIP.scanRequirementHint.YAML' | translate}}">
+                </em>
               </mat-option>
               <mat-option
                 *ngFor="let name of criterionNameList"

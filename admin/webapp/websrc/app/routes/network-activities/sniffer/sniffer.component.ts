@@ -4,6 +4,7 @@ import {
   ElementRef,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -18,22 +19,26 @@ import { AuthUtilsService } from '@common/utils/auth.utils';
 import { TranslateService } from '@ngx-translate/core';
 import { UtilsService } from '@common/utils/app.utils';
 import { Options } from '@angular-slider/ngx-slider';
+import { DomSanitizer } from '@angular/platform-browser';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-sniffer',
   templateUrl: './sniffer.component.html',
   styleUrls: ['./sniffer.component.scss'],
 })
-export class SnifferComponent implements AfterViewInit, OnInit {
+export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
   isPacketCapAuthorized: boolean = false;
   sniffer: any;
-  exportUrl: string = '';
+  exportUrl: any;
   downloadId: any;
   exportFilename: string = '';
   onSnifferErr: boolean = false;
   snifferErrMsg: string = '';
 
-  disabled: boolean = true;
+  private sniffOnId: string = '';
+
+  disabled: boolean = false;
 
   get entriesGridHeight(): number {
     return this._entriesGridHeight;
@@ -64,12 +69,11 @@ export class SnifferComponent implements AfterViewInit, OnInit {
     this._popupState = value;
   }
 
-  @Output() onStopRefresh = new EventEmitter<boolean>();
-
   constructor(
     private translate: TranslateService,
     private authUtilsService: AuthUtilsService,
     private utils: UtilsService,
+    private sanitizer: DomSanitizer,
     public graphService: GraphService,
     public sniffService: SniffService
   ) {
@@ -135,26 +139,51 @@ export class SnifferComponent implements AfterViewInit, OnInit {
     };
   }
 
-  stopRefreshSniffer = () => {
-    this.onStopRefresh.emit(true);
-  };
-
   onSnifferChanged() {
     let selectedRows = this.gridOptions.api.getSelectedRows();
     this.sniffer = selectedRows[0];
-    this.graphService.keepLive();
   }
 
-  getSniffers = () =>
-    this.sniffService.getSniffers(this.containerId).subscribe(response => {
-      this.sniffers = response['sniffers'];
-    });
+  getSniffers = response => {
+    this.sniffers = response['sniffers'];
+    if (this.sniffers?.length > 0) {
+      let runningSniffer = this.sniffers.find(
+        item => item.status === 'running'
+      );
+      if (!!runningSniffer) {
+        this.gridOptions.api.forEachNode(node => {
+          if (node.data.status === 'running') {
+            node.setSelected(true);
+            this.gridOptions.api.ensureNodeVisible(node);
+          }
+        });
+        if (!this.snifferSubscription) {
+          if (!this.sniffOnId) this.sniffOnId = this.containerId;
+          this.pullSniffers();
+        }
+      } else {
+        this.stopRefresh();
+        this.gridOptions.api.forEachNode((node, index) => {
+          if (this.sniffer !== null) {
+            if (node.data.id === this.sniffer.id) {
+              node.setSelected(true);
+              this.gridOptions.api.ensureNodeVisible(node);
+            }
+          } else if (index === 0) {
+            node.setSelected(true);
+            this.gridOptions.api.ensureNodeVisible(node);
+          }
+        });
+        this.sniffer.status = 'stopped';
+      }
+      let selectedRows = this.gridOptions.api.getSelectedRows();
+      this.sniffer = selectedRows[0];
+    }
+  };
 
   startSniff = containerId => {
-    console.log(containerId);
-    console.log(this.containerId);
     this.sniffService.startSniff(containerId).subscribe(
-      response => this.getSniffers(),
+      () => this.pullSniffers(),
       err => {
         this.onSnifferErr = true;
         this.snifferErrMsg = this.utils.getErrorMessage(err);
@@ -162,13 +191,11 @@ export class SnifferComponent implements AfterViewInit, OnInit {
     );
   };
 
-  toggleSchedule = () => {
-    this.disabled = !this.disabled;
+  toggleSchedule = (event) => {
     if (this.disabled) this.pcap.seconds = 0;
     this.pcap.options = Object.assign({}, this.pcap.options, {
-      disabled: this.disabled,
+      disabled: !this.disabled,
     });
-    this.graphService.keepLive();
   };
 
   disableStart = () => {
@@ -179,7 +206,7 @@ export class SnifferComponent implements AfterViewInit, OnInit {
 
   stopSniff = jobId =>
     this.sniffService.stopSniff(jobId).subscribe(
-      response => this.getSniffers(),
+      () => this.refreshSniffer(),
       err => {
         console.warn(err);
         this.onSnifferErr = true;
@@ -189,8 +216,8 @@ export class SnifferComponent implements AfterViewInit, OnInit {
 
   deleteSniff = jobId =>
     this.sniffService.deleteSniff(jobId).subscribe(
-      response => {
-        this.getSniffers();
+      () => {
+        this.refreshSniffer();
         this.sniffer = null;
       },
       err => {
@@ -203,12 +230,49 @@ export class SnifferComponent implements AfterViewInit, OnInit {
   downloadPacket = jobId => {
     this.sniffService.downloadPacket(jobId).subscribe(response => {
       let raw = response.headers.get('Content-Type');
-      let nameAndParts = this.sniffService.multiPart_parse(response, raw);
+      let nameAndParts = this.sniffService.multiPart_parse(response.body, raw);
       this.exportFilename = nameAndParts.filename;
-      this.exportUrl = URL.createObjectURL(
-        new Blob([nameAndParts.parts[nameAndParts.filename]])
+      this.exportUrl = this.sanitizer.bypassSecurityTrustUrl(
+        URL.createObjectURL(
+          new Blob([nameAndParts.parts[nameAndParts.filename]])
+        )
       );
       this.downloadId = jobId;
     });
   };
+
+  snifferSubscription: Subscription | undefined;
+  snifferRefreshTimer$;
+
+  stopRefresh() {
+    return this.snifferSubscription && this.snifferSubscription.unsubscribe();
+  }
+
+  refreshSniffer = () => {
+    this.onSnifferErr = false;
+    this.sniffService.getSniffers(this.containerId).subscribe(
+      response => {
+        //this.sniffers = response['sniffers'];
+        this.getSniffers(response);
+      },
+      err => {
+        console.warn(err);
+        this.onSnifferErr = true;
+        this.snifferErrMsg = this.utils.getErrorMessage(err);
+      }
+    );
+  };
+
+  pullSniffers() {
+    // this.refreshSniffer();
+
+    this.snifferRefreshTimer$ = interval(5000);
+    this.snifferSubscription = this.snifferRefreshTimer$.subscribe(
+      this.refreshSniffer.bind(this)
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.stopRefresh();
+  }
 }

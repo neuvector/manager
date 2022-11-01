@@ -11,7 +11,9 @@ import { Chart, LogarithmicScale } from 'chart.js';
 export class ApplicationVolumeChartComponent implements OnInit {
 
   @Input() applications: any;
+  @Input() isReport: boolean = false;
   applicationVolumeBarChartConfig: any;
+  noChartData: boolean = false;
 
   constructor(
     private translate: TranslateService,
@@ -61,8 +63,10 @@ export class ApplicationVolumeChartComponent implements OnInit {
     let applicationVolumeLabel = applications.map(app => app[0]);
     let applicationVolumeData = applications.map(app => app[1].totalBytes);
 
+    this.noChartData = applicationVolumeData.length === 0;
     this.applicationVolumeBarChartConfig = {
       options: {
+        animation: !this.isReport,
         scales: {
           y: {
             type: 'logarithmic',

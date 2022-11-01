@@ -1,0 +1,220 @@
+<div class="page-cover">
+  <div class="page-cover-decro"></div>
+  <div class="page-cover-logo"></div>
+  <div class="page-cover-title">
+    {{ 'dashboard.report.TITLE' | translate }}
+    <div class="margin-top-m" style="font-size: 30px;">{{domain ? '&nbsp;(&nbsp;' + domain + '&nbsp;)' : ''}}</div>
+  </div>
+</div>
+<!-- <div class="pagebreak" *ngIf="!domain">
+  <div class="report-summary">
+    <div class="summary-title">
+      {{ 'dashboard.heading.SECURITY_RISK_SCORE' | translate }}
+    </div>
+    <app-risk-score
+      [score]="reportInfo.scoreInfo.score.securityRiskScore"
+      [nodesCnt]="reportInfo.summaryInfo.hosts"
+      [podsCnt]="reportInfo.summaryInfo.running_pods"
+    >
+    </app-risk-score>
+  </div>
+</div> -->
+<div class="report-summary pagebreak">
+  <div class="summary-title">
+    {{ 'dashboard.body.panel_title.CONTAINER_SEC' | translate }}
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <app-exposure-chart
+        [ingress]="hierarchicalIngressList"
+        [egress]="hierarchicalEgressList"
+        [isReport]="true"
+      >
+      </app-exposure-chart>
+    </div>
+    <div class="col-sm-8 text-muted">
+      <div style="margin-top: 30px;">
+        <div>{{ 'dashboard.help.exposure.txt1' | translate }}</div>
+        <div>{{ 'dashboard.help.exposure.txt2' | translate }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix" *ngIf="reportInfo.scoreInfo.ingress.length > 0">
+    <div><strong>{{ 'dashboard.body.panel_title.INGRESS' | translate }}</strong></div>
+    <app-exposure-service-pod-report-grid
+      [reportGridData]="reportInfo.scoreInfo.ingress"
+    >
+    </app-exposure-service-pod-report-grid>
+  </div>
+  <div class="clearfix margin-top-l" *ngIf="reportInfo.scoreInfo.egress.length > 0">
+    <div><strong>{{ 'dashboard.body.panel_title.EGRESS' | translate }}</strong></div>
+    <app-exposure-service-pod-report-grid
+      [reportGridData]="reportInfo.scoreInfo.egress"
+    >
+    </app-exposure-service-pod-report-grid>
+  </div>
+</div>
+<div class="report-summary pagebreak">
+  <div class="summary-title">
+    {{ 'dashboard.body.panel_title.CRITICAL_SECURITY_EVENT' | translate }}
+  </div>
+  <div>
+    <app-security-events-chart
+      *ngIf="reportInfo.dashboardSecurityEventInfo.securityEventSummary"
+      [securityEventSummary]="reportInfo.dashboardSecurityEventInfo.securityEventSummary"
+      [isReport]="true"
+    >
+    </app-security-events-chart>
+    <div class="text-muted margin-top-xl">
+      <div>{{ 'dashboard.help.criticalEvent.txt1' | translate }}</div>
+      <div>{{ 'dashboard.help.criticalEvent.txt2' | translate }}</div>
+    </div>
+  </div>
+</div>
+<div class="report-summary pagebreak">
+  <div class="summary-title">
+    {{ 'dashboard.body.panel_title.TOP_SEC_EVENTS' | translate }}
+  </div>
+  <div><strong>{{ 'securityEvent.SOURCE' | translate }}</strong></div>
+  <div class="row">
+    <div class="col-sm-5">
+      <app-top-security-events-chart
+        [topSecurityEvents]="reportInfo.dashboardSecurityEventInfo.topSecurityEvents"
+        [isReport]="true"
+        direction="source"
+      >
+      </app-top-security-events-chart>
+    </div>
+    <div class="col-sm-7 text-muted margin-top-xl" style="line-height: 16px;">
+      <div>{{ 'dashboard.help.top_security_events.txt1' | translate }}</div>
+      <div>{{ 'dashboard.help.top_security_events.txt2' | translate }}</div>
+      <div>{{ 'dashboard.help.top_security_events.txt2_1' | translate }}</div>
+      <div>{{ 'dashboard.help.top_security_events.txt2_2' | translate }}</div>
+      <div>{{ 'dashboard.help.top_security_events.txt2_3' | translate }}</div>
+    </div>
+  </div>
+  <div><strong>{{ 'securityEvent.DESTINATION' | translate }}</strong></div>
+  <div class="row">
+    <div class="col-sm-7 text-muted margin-top-xl" style="line-height: 16px;">
+      <div>{{ 'dashboard.help.top_security_events.txt3' | translate }}</div>
+      <div>{{ 'dashboard.help.top_security_events.txt4' | translate }}</div>
+      <div>{{ 'dashboard.help.top_security_events.txt4_1' | translate }}</div>
+      <div>{{ 'dashboard.help.top_security_events.txt4_2' | translate }}</div>
+      <div>{{ 'dashboard.help.top_security_events.txt4_3' | translate }}</div>
+    </div>
+    <div class="col-sm-5">
+      <app-top-security-events-chart
+        [topSecurityEvents]="reportInfo.dashboardSecurityEventInfo.topSecurityEvents"
+        [isReport]="true"
+        direction="destination"
+      >
+      </app-top-security-events-chart>
+    </div>
+  </div>
+</div>
+<div class="report-summary pagebreak">
+  <div class="summary-title">
+    {{ 'dashboard.body.panel_title.TOP_VULNERABILITY' | translate }}
+  </div>
+  <div><strong>{{ 'dashboard.body.panel_title.BY_PODS' | translate }}</strong></div>
+  <div class="row">
+    <div class="col-sm-6">
+      <app-top-vulnerable-assets-chart
+        [highPriorityVulnerabilities]="reportInfo.dashbaordDetailsInfo.highPriorityVulnerabilities"
+        [isReport]="true"
+        assetType="containers"
+      ></app-top-vulnerable-assets-chart>
+    </div>
+    <div class="col-sm-6 text-muted margin-top-xl">
+      <div>{{ 'dashboard.help.top_incident_pod.txt1' | translate }}</div>
+      <div>{{ 'dashboard.help.top_incident_pod.txt2' | translate }}</div>
+    </div>
+  </div>
+  <div><strong>{{ 'dashboard.body.panel_title.BY_NODES' | translate }}</strong></div>
+  <div class="row">
+    <div class="col-sm-6 text-muted margin-top-xl">
+      <div>{{ 'dashboard.help.top_incident_node.txt1' | translate }}</div>
+      <div>{{ 'dashboard.help.top_incident_node.txt2' | translate }}</div>
+    </div>
+    <div class="col-sm-6">
+      <app-top-vulnerable-assets-chart
+        [highPriorityVulnerabilities]="reportInfo.dashbaordDetailsInfo.highPriorityVulnerabilities"
+        [isReport]="true"
+        assetType="nodes"
+      >
+      </app-top-vulnerable-assets-chart>
+    </div>
+  </div>
+</div>
+<div class="report-summary pagebreak">
+  <div class="summary-title">
+    {{ 'dashboard.body.panel_title.SERVICE_CONTAINER_POLICY_MODE' | translate }}
+  </div>
+  <div class="row">
+    <div class="col-sm-6">
+      <app-policy-mode-chart
+        class="col-sm-7"
+        [assetsInfo]="reportInfo.dashbaordDetailsInfo.services"
+        assetType="services"
+        [scoreInfo]="reportInfo.scoreInfo"
+        [is4Report]="true"
+      ></app-policy-mode-chart>
+      <app-policy-mode-caution
+        class="col-sm-5"
+        assetType="services"
+      >
+      </app-policy-mode-caution>
+    </div>
+    <div class="col-sm-6">
+      <app-policy-mode-chart
+        class="col-sm-7"
+        [assetsInfo]="reportInfo.dashbaordDetailsInfo.containers"
+        assetType="containers"
+        [scoreInfo]="reportInfo.scoreInfo"
+        [is4Report]="true"
+      ></app-policy-mode-chart>
+      <app-policy-mode-caution
+        class="col-sm-5"
+        assetType="containers"
+      >
+      </app-policy-mode-caution>
+    </div>
+  </div>
+  <div class="row text-muted margin-horizon-0">
+    <div>{{ 'dashboard.help.policy_mode_pod.txt1' | translate }}</div>
+    <div>{{ 'dashboard.help.policy_mode_pod.txt2' | translate }}</div>
+  </div>
+</div>
+<div class="report-summary pagebreak">
+  <div class="summary-title">
+    {{ 'dashboard.body.panel_title.PROTOCOL_APPS_IN_POLICY' | translate }}
+  </div>
+  <div><strong>{{ 'dashboard.body.panel_title.POLICY_COUNT' | translate }}</strong></div>
+  <div class="row">
+    <div class="col-sm-6">
+      <app-application-conversation-chart
+        [applications]="reportInfo.dashbaordDetailsInfo.applications"
+        [isReport]="true"
+      >
+      </app-application-conversation-chart>
+    </div>
+    <div class="col-sm-6 text-muted margin-top-xl">
+      <div>{{ 'dashboard.help.application.txt1' | translate }}</div>
+      <div>{{ 'dashboard.help.application.txt2' | translate }}</div>
+    </div>
+  </div>
+  <div><strong>{{ 'dashboard.body.panel_title.BYTES' | translate }}</strong></div>
+  <div class="row">
+    <div class="col-sm-6 text-muted margin-top-xl">
+      <div>{{ 'dashboard.help.application.txt3' | translate }}</div>
+      <div>{{ 'dashboard.help.application.txt4' | translate }}</div>
+    </div>
+    <div class="col-sm-6">
+      <app-application-volume-chart
+        [applications]="reportInfo.dashbaordDetailsInfo.applications"
+        [isReport]="true"
+      >
+      </app-application-volume-chart>
+    </div>
+  </div>
+</div>

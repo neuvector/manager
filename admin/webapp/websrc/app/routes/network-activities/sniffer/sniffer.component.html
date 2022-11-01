@@ -4,13 +4,16 @@
     class="d-flex align-items-center justify-content-between handle">
     <h4 mat-dialog-title>
       {{ 'network.nodeDetails.SNIFF' | translate }}
-      <em class="fas fa-long-arrow-alt-right text-info mx-1"></em>{{ containerName }}
+      <em class="fas fa-long-arrow-alt-right text-info mx-1"></em
+      >{{ containerName }}
     </h4>
     <button
-      id="closeSniffer" aria-label="Close icon button"
+      id="closeSniffer"
+      aria-label="Close icon button"
       class="d-flex align-items-center justify-content-center"
       mat-icon-button>
-      <i (click)="popupState.leave()" class="eos-icons ml-1">close</i>
+      <i (click)="stopRefresh(); popupState.leave()" class="eos-icons ml-1"
+        >close</i>
     </button>
   </div>
 
@@ -29,10 +32,10 @@
       <mat-checkbox
         aria-label="Toggle schedule"
         class="md-primary mx-1 mt-3"
-        [checked]="!pcap.options.disabled"
-        (click)="toggleSchedule()">
+        [(ngModel)]="disabled"
+        (change)="toggleSchedule($event)">
         <label
-          [ngClass]="pcap.options.disabled ? 'text-muted' : 'text-primary'"
+          [ngClass]="!disabled ? 'text-muted' : 'text-primary'"
           class="mb-0">
           {{ 'network.SCHEDULE_JOB' | translate }}
         </label>
@@ -46,7 +49,9 @@
   <div class="row mx-0">
     <div class="col-7">
       <button
-        mat-mini-fab aria-label="Start sniff" color="primary"
+        mat-mini-fab
+        aria-label="Start sniff"
+        color="primary"
         class="pull-left"
         [disabled]="!isPacketCapAuthorized || disableStart()"
         (click)="startSniff(containerId)">
@@ -59,7 +64,7 @@
     <div class="col-2">
       <a
         type="submit"
-        class="btn btn-primary btn-xs"
+        class="btn btn-secondary btn-xs"
         target="_self"
         *ngIf="sniffer && downloadId === sniffer.id"
         download="{{ exportFilename }}"
@@ -74,7 +79,9 @@
     <div class="col-3">
       <div class="pull-right">
         <button
-          mat-mini-fab aria-label="Stop sniff" color="primary"
+          mat-mini-fab
+          aria-label="Stop sniff"
+          color="primary"
           [disabled]="
             !isPacketCapAuthorized || !sniffer || sniffer.status === 'stopped'
           "
@@ -82,13 +89,17 @@
           <em class="fa fa-stop"></em>
         </button>
         <button
-          mat-mini-fab aria-label="Download packet" color="primary"
+          mat-mini-fab
+          aria-label="Download packet"
+          color="primary"
           [disabled]="!isPacketCapAuthorized || !sniffer"
           (click)="downloadPacket(sniffer.id)">
           <em class="far fa-file-archive"></em>
         </button>
         <button
-          mat-mini-fab aria-label="Delete packet"  color="warn"
+          mat-mini-fab
+          aria-label="Delete packet"
+          color="warn"
           [disabled]="!isPacketCapAuthorized || !sniffer"
           (click)="deleteSniff(sniffer.id)">
           <em class="fa fa-trash"></em>

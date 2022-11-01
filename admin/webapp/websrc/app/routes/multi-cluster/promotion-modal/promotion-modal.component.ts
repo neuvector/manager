@@ -5,6 +5,7 @@ import { MatDialogRef } from "@angular/material/dialog";
 import { TranslateService } from "@ngx-translate/core";
 import { MultiClusterService } from "@services/multi-cluster.service";
 import { UtilsService } from "@common/utils/app.utils";
+import { MapConstant } from '@common/constants/map.constant';
 import { SettingsService } from "@services/settings.service";
 import { Router } from "@angular/router";
 import { SESSION_STORAGE, StorageService } from "ngx-webstorage-service";
@@ -41,7 +42,7 @@ export class PromotionModalComponent implements OnInit {
     this.cluster = {
       name: "",
       host: "",
-      port: ""
+      port: MapConstant.FED_PORT.MASTER
     };
     this.useProxy = "";
     this.getClusterName();
@@ -50,11 +51,7 @@ export class PromotionModalComponent implements OnInit {
   getClusterName = () => {
     this.settingsService.getConfig().subscribe(
       data => {
-        console.info("response1 =", data);
-        console.debug(data);
-        console.info("name:",data.cluster_name);
         this.cluster.name = data.cluster_name;
-
       },
       error => {
         console.log(error.message);
@@ -76,7 +73,6 @@ export class PromotionModalComponent implements OnInit {
           this.translate.instant("multiCluster.promotion.success"),
           "success"
         ).then(ev => {
-          console.log(ev);
           setTimeout(() => {
             this.logout();
           }, 1000 );

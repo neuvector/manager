@@ -27,6 +27,8 @@ export class DashboardSecurityEventsService {
     }
     if (this.worker) {
       console.log('Post message to worker (dashboard-security-events)');
+      this.securityEventSummary = null;
+      this.topSecurityEvents = null;
       this.worker.postMessage(
         JSON.stringify({
           token: GlobalVariable.user?.token.token,

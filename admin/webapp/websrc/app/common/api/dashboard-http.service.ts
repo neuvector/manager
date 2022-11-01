@@ -38,4 +38,16 @@ export class DashboardHttpService {
   getSystemRBAC() {
     return GlobalVariable.http.get<RbacStatus>(PathConstant.SYSTEM_RBAC_URL);
   }
+
+  getDashboardSecurityEventData(domain: string) {
+    return GlobalVariable.http.get(PathConstant.DASHBOARD_NOTIFICATIONS_URL, {params: {domain: domain}});
+  }
+
+  getDashboardDetailsData(domain: string) {
+    return GlobalVariable.http.get(PathConstant.DASHBOARD_DETAILS_URL, {params: {domain: domain}});
+  }
+
+  getSummaryData(domain: string) {
+    return GlobalVariable.http.get(PathConstant.DASHBOARD_SUMMARY_URL, {params: {domain: domain}});
+  }
 }

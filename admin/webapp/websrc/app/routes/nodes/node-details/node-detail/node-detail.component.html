@@ -154,12 +154,12 @@
     <div class="h4">
       {{ 'containers.detail.NETWORK_INTERFACES' | translate }}
     </div>
-    <div class="row" *ngFor="let interface of node.interfaces | keyvalue">
+    <div class="row mx-0" *ngFor="let interface of node.interfaces | keyvalue">
       <div class="col-sm-2 text-right">
         {{ interface.key }}
       </div>
       <div class="col-sm-9 offset-sm-1">
-        <div *ngFor="let net of interface.value" class="row text-muted">
+        <div *ngFor="let net of interface.value" class="row mx-0 text-muted">
           <div class="col-sm-4">IP: {{ net.ip }}/{{ net.ip_prefix }}</div>
           <div class="col-sm-8">
             {{ 'general.GATEWAY' | translate }}:{{ net.gateway }}
@@ -175,7 +175,7 @@
     <div class="h4">
       {{ 'containers.detail.LABELS' | translate }}
     </div>
-    <div class="row" *ngFor="let label of labels">
+    <div class="row mx-0" *ngFor="let label of labels">
       <div class="col-sm-4 text-right">{{ label }}</div>
       <div class="col-sm-8 text-muted">
         {{ node.labels[label] || '&nbsp;' }}
@@ -189,7 +189,9 @@
     <div class="h4">
       {{ 'nodes.detail.ANNONTATIONS' | translate }}
     </div>
-    <div class="row" *ngFor="let annotation of node.annotations | keyvalue">
+    <div
+      class="row mx-0"
+      *ngFor="let annotation of node.annotations | keyvalue">
       <div class="col-sm-4 text-right">{{ annotation.key }}</div>
       <div class="col-sm-8 text-muted">
         {{ annotation.value || '&nbsp;' }}

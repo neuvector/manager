@@ -356,9 +356,9 @@ def set_federation(data):
 @click.option("--port", help="Exposed rest port of this cluster")
 @click.option("--use_proxy", default="", type=click.Choice(["https", ""]),
               help="Use proxy when connecting to primary cluster")
-@click.option("--deploy_reg_scan_data", default="disable", type=click.Choice(["enable", "disable"]),
+@click.option("--deploy_reg_scan_data", default="", type=click.Choice(["enable", "disable", ""]),
               help="Deploy federal registry scan data to managed clusters")
-@click.option("--deploy_repo_scan_data", default="disable", type=click.Choice(["enable", "disable"]),
+@click.option("--deploy_repo_scan_data", default="", type=click.Choice(["enable", "disable", ""]),
               help="Deploy repository scan data on primary cluster to managed clusters")
 @click.pass_obj
 def set_federation_config(data, name, server, port, use_proxy, deploy_reg_scan_data, deploy_repo_scan_data):
@@ -375,12 +375,14 @@ def set_federation_config(data, name, server, port, use_proxy, deploy_reg_scan_d
     body["use_proxy"] = use_proxy
     if name != None and name != "":
         body["name"] = name
-    body["deploy_reg_scan_data"] = False
     if deploy_reg_scan_data == "enable":
         body["deploy_reg_scan_data"] = True
-    body["deploy_repo_scan_data"] = False
+    elif deploy_reg_scan_data == "disable":
+        body["deploy_reg_scan_data"] = False
     if deploy_repo_scan_data == "enable":
         body["deploy_repo_scan_data"] = True
+    elif deploy_repo_scan_data == "disable":
+        body["deploy_repo_scan_data"] = False
     ret = data.client.config("fed", "config", body)
 
 

@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
+import { GlobalConstant } from '@common/constants/global.constant';
+import { AuthUtilsService } from '@common/utils/auth.utils';
 
 @Component({
   selector: 'app-registries-table-buttons',
@@ -11,10 +13,22 @@ import { ICellRendererParams } from 'ag-grid-community';
 export class RegistriesTableButtonsComponent
   implements ICellRendererAngularComp
 {
-  private params: any;
+  params: any;
+  CFG_TYPE = GlobalConstant.CFG_TYPE;
+  isWriteRegistryAuthorized: boolean;
+  isFedAdmin: boolean;
+
+  constructor(
+    private authUtilsService: AuthUtilsService
+  ) {
+
+  }
 
   agInit(params: any): void {
     this.params = params;
+    this.isWriteRegistryAuthorized =
+      this.authUtilsService.getDisplayFlag('registry_scan');
+    this.isFedAdmin = this.authUtilsService.getDisplayFlag('multi_cluster_w');
   }
 
   edit(): void {

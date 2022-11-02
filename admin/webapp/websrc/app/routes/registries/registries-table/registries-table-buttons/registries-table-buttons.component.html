@@ -1,6 +1,8 @@
-<button (click)="edit()" aria-label="Edit button" mat-icon-button>
-  <i class="eos-icons">edit</i>
-</button>
-<button (click)="delete()" aria-label="Delete button" mat-icon-button>
-  <i class="eos-icons">delete</i>
-</button>
+<div *ngIf="(params.data.cfg_type === CFG_TYPE.FED && isWriteRegistryAuthorized && isFedAdmin) || (params.data.cfg_type === CFG_TYPE.CUSTOMER && isWriteRegistryAuthorized)">
+  <button (click)="edit()" aria-label="Edit button" mat-icon-button>
+    <i class="eos-icons">edit</i>
+  </button>
+  <button (click)="delete()" aria-label="Delete button" mat-icon-button>
+    <i class="eos-icons">delete</i>
+  </button>
+</div>

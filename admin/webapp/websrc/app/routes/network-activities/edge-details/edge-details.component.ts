@@ -2,9 +2,11 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
-  ElementRef, EventEmitter,
+  ElementRef,
+  EventEmitter,
   Input,
-  OnInit, Output,
+  OnInit,
+  Output,
   QueryList,
   ViewChildren,
 } from '@angular/core';
@@ -17,16 +19,16 @@ import { TranslateService } from '@ngx-translate/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { GridApi, GridReadyEvent } from 'ag-grid-community';
 import { BehaviorSubject } from 'rxjs';
-import {AuthUtilsService} from "@common/utils/auth.utils";
-import {SecurityEventsService} from "@services/security-events.service";
-import {NetworkRule} from "@common/types";
-import {MapConstant} from "@common/constants/map.constant";
-import {NotificationService} from "@services/notification.service";
-import {UtilsService} from "@common/utils/app.utils";
+import { AuthUtilsService } from '@common/utils/auth.utils';
+import { SecurityEventsService } from '@services/security-events.service';
+import { NetworkRule } from '@common/types';
+import { MapConstant } from '@common/constants/map.constant';
+import { NotificationService } from '@services/notification.service';
+import { UtilsService } from '@common/utils/app.utils';
 
 export interface ConversationPair {
-  from: string,
-  to: string
+  from: string;
+  to: string;
 }
 
 @Component({
@@ -201,7 +203,6 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
   }
 
   overrideRule(traffic, edgeDetails) {
-
     if (traffic.policy_id !== 0) this.showRule(traffic.policy_id);
     else this.proposeRule(traffic, edgeDetails);
   }
@@ -213,12 +214,12 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
 
   updateRule(rule) {
     if (rule.id === 0) {
-      let action = "deny";
-      if (rule.allowed) action = "allow";
+      let action = 'deny';
+      if (rule.allowed) action = 'allow';
 
       rule.action = action;
-      this.securityEventsService.updateNetworkRule(rule)
-        .subscribe((response) => {
+      this.securityEventsService.updateNetworkRule(rule).subscribe(
+        response => {
           this.onRule = false;
         },
         err => {
@@ -230,25 +231,37 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
               false
             )
           );
-        });
+        }
+      );
     } else {
-      let action = "deny";
-      if (rule.allowed) action = "allow";
+      let action = 'deny';
+      if (rule.allowed) action = 'allow';
 
-      this.securityEventsService.updateNetworkRuleAction( rule.id, action)
-        .subscribe(() => {
-          this.onRule = false;
-        },
-        err => {
-          console.warn(err);
-          this.notificationService.open(
-            this.utils.getAlertifyMsg(
-              err,
-              this.translate.instant('network.RULE_DEPLOY_FAILED'),
-              false
-            )
-          );
-        });
+      this.securityEventsService
+        .updateNetworkRuleAction(rule.id, action)
+        .subscribe(
+          () => {
+            this.onRule = false;
+          },
+          err => {
+            console.warn(err);
+            this.notificationService.open(
+              this.utils.getAlertifyMsg(
+                err,
+                this.translate.instant('network.RULE_DEPLOY_FAILED'),
+                false
+              )
+            );
+          }
+        );
+    }
+  }
+
+  mouseUp(event) {
+    if (event.target?.id == 'conversationHistory') {
+      this._entriesGridHeight = event.target.clientHeight - 190;
+      this.gridOptions.api.resetRowHeights();
+      this.gridOptions.api.sizeColumnsToFit();
     }
   }
 

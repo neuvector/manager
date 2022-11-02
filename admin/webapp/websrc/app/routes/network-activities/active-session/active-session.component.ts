@@ -136,4 +136,12 @@ export class ActiveSessionComponent implements AfterViewInit, OnInit {
     );
     this.cd.markForCheck();
   }
+
+  mouseUp(event) {
+    if(event.target?.id == "activeSessions") {
+      this._entriesGridHeight = event.target.clientHeight - 90;
+      this.gridApi.resetRowHeights();
+      this.gridApi.sizeColumnsToFit();
+    }
+  }
 }

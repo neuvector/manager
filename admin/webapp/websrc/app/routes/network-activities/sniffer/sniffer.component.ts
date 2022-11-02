@@ -191,7 +191,7 @@ export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
     );
   };
 
-  toggleSchedule = (event) => {
+  toggleSchedule = event => {
     if (this.disabled) this.pcap.seconds = 0;
     this.pcap.options = Object.assign({}, this.pcap.options, {
       disabled: !this.disabled,
@@ -264,12 +264,18 @@ export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
   };
 
   pullSniffers() {
-    // this.refreshSniffer();
-
     this.snifferRefreshTimer$ = interval(5000);
     this.snifferSubscription = this.snifferRefreshTimer$.subscribe(
       this.refreshSniffer.bind(this)
     );
+  }
+
+  mouseUp(event) {
+    if (event.target?.id == 'sniffer') {
+      this._entriesGridHeight = event.target.clientHeight - 170;
+      this.gridOptions.api.resetRowHeights();
+      this.gridOptions.api.sizeColumnsToFit();
+    }
   }
 
   ngOnDestroy(): void {

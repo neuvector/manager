@@ -22,7 +22,7 @@
       <a
         class="nav-link d-none d-md-block d-lg-block d-xl-block"
         trigger-resize=""
-        (click)="toggleCollapsedSideabar()"
+        (click)="toggleCollapsedSidebar()"
         *ngIf="!isCollapsedText()">
         <em class="fas fa-bars"></em>
       </a>
@@ -84,7 +84,7 @@
       mat-button
       [matMenuTriggerFor]="menu"
       class="nav-item nav-white nav-border">
-      User Info
+      <ngx-avatar gravatarId="{{email}}" name="{{username}}"></ngx-avatar>
     </button>
     <mat-menu #menu="matMenu">
       <button mat-menu-item (click)="goProfile()">

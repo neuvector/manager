@@ -95,7 +95,7 @@ export class ComplianceGridComponent implements OnInit {
       },
       cellClass: ['d-flex', 'align-items-center'],
       cellClassRules: {
-        'justify-content-center': params =>
+        'justify-content-start': params =>
           !params.data.parent_id && !params.data.child_ids,
       },
       headerValueGetter: () =>

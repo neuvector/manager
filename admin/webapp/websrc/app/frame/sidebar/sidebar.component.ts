@@ -2,8 +2,8 @@ import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 declare var $: any;
 
-import { MenuService } from '../../core/menu/menu.service';
-import { SwitchersService } from '../../core/switchers/switchers.service';
+import { MenuService } from '@core/menu/menu.service';
+import { SwitchersService } from '@core/switchers/switchers.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -12,7 +12,7 @@ import { SwitchersService } from '../../core/switchers/switchers.service';
 })
 export class SidebarComponent implements OnInit, OnDestroy {
   menuItems: Array<any>;
-  router: Router;
+  router: Router = <Router>{};
   menuClickEvent = 'click.sidebar-toggle';
   $doc: any = null;
 
@@ -27,7 +27,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.router = this.injector.get(Router);
 
-    this.router.events.subscribe(val => {
+    this.router.events.subscribe(() => {
       this.removeFloatingNav();
       window.scrollTo(0, 0);
       this.switchers.setFrameSwitcher('leftSideToggled', false);
@@ -88,7 +88,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
         }).css('height', ul[0].scrollHeight);
         ul.addClass('opening');
         if (dropdownId !== '') {
-          console.log('open sub', $(`#${dropdownId}`));
           $(`#${dropdownId}`)[0].innerText = 'arrow_drop_up';
         }
       }
@@ -132,14 +131,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
       floatingNav.addClass('sidebar-floating');
 
-      var safeOffsetValue = 40 * 5;
-      var navHeight = floatingNav.outerHeight(true) + 2;
-      var safeOffset =
+      const safeOffsetValue = 40 * 5;
+      const navHeight = floatingNav.outerHeight(true) + 2;
+      const safeOffset =
         navHeight < safeOffsetValue ? navHeight : safeOffsetValue;
 
-      var displacement = 25;
+      const displacement = 25;
 
-      var menuTop =
+      const menuTop =
         vwHeight - itemTop > safeOffset
           ? itemTop
           : vwHeight - safeOffset - displacement;

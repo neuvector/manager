@@ -31,6 +31,7 @@ export class HeaderComponent implements OnInit {
 
   email = '';
   username = '';
+  displayRole = '';
 
   isNavSearchVisible: boolean = false;
   @ViewChild('fsbutton', { static: true }) fsbutton;
@@ -59,7 +60,9 @@ export class HeaderComponent implements OnInit {
     this.initMultiClusters();
 
     this.email = this.sessionStorage.get('token')?.emailHash;
-    this.username = this.sessionStorage.get('token')?.token?.fullname;
+    this.username = this.sessionStorage.get('token')?.token?.username;
+    const role = this.sessionStorage.get('token')?.token?.role;
+    this.displayRole = role ? role : "none";
   }
 
   toggleUserBlock(event) {

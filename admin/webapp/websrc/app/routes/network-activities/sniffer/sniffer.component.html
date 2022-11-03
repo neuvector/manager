@@ -48,7 +48,7 @@
     </div>
 
     <div class="custom-slider col-8 pl-0">
-      <ngx-slider [value]="pcap.minValue" [options]="pcap.options"></ngx-slider>
+      <ngx-slider [value]="pcap.minValue" [options]="pcap.options" (userChangeEnd)="onUserChangeEnd($event)"></ngx-slider>
     </div>
   </div>
   <div class="row mx-0">

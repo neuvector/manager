@@ -82,14 +82,12 @@ export class SniffService {
       .get(PathConstant.SNIFF_URL, { params: { id: containerId } })
       .pipe();
 
-  startSniff = (containerId: string) =>
+  startSniff = (containerId: string, snifferParam) =>
     this.http
       .post(PathConstant.SNIFF_URL, {
         workloadId: containerId,
         snifferParamWarp: {
-          sniffer: {
-            file_number: 2
-          }
+            sniffer: snifferParam
         }
       })
       .pipe();

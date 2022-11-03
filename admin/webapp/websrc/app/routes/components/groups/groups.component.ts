@@ -122,6 +122,7 @@ export class GroupsComponent implements OnInit {
         )}: ${nonScorableGroups}`;
         let counts = this.getModeCounts();
         this.baselineProfile = this.getDefaultBaseline(counts.baselineCount);
+        this.groupsService.activeTabIndex = this.groupsService.activeTabIndex || 0;
       }, 0);
     };
     if (this.isScoreImprovement) {

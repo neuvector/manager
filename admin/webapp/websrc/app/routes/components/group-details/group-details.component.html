@@ -1,67 +1,89 @@
 <mat-tab-group
   *ngIf="!isScoreImprovement; else scoreImprovement"
   animationDuration="0ms"
+  [selectedIndex]="groupsService.activeTabIndex"
   (selectedTabChange)="activateTab($event)">
-  <mat-tab label="{{ 'group.gridHeader.MEMBERS' | translate }}">
+  <mat-tab
+    label="{{ 'group.gridHeader.MEMBERS' | translate }}"
+  >
     <app-members
-      *ngIf="activeTabIndex === 0"
+      *ngIf="groupsService.activeTabIndex === 0"
       [source]="navSource"
       [members]="members"
       [kind]="kind"
       [resizableHeight]="resizableHeight">
     </app-members>
   </mat-tab>
-  <mat-tab label="{{ 'group.script.TITLE' | translate }}">
+  <mat-tab
+    label="{{ 'group.script.TITLE' | translate }}"
+    [labelClass]="(kind==='container' || kind==='node') && cfgType !== CFG_TYPE.FED ? '' : 'hide'"
+  >
     <app-custom-check
-      *ngIf="activeTabIndex === 1"
+      *ngIf="groupsService.activeTabIndex === 1 && ((kind==='container' || kind==='node') && cfgType !== CFG_TYPE.FED)"
       [source]="navSource"
       [groupName]="selectedGroupName"
       [resizableHeight]="resizableHeight">
     </app-custom-check>
   </mat-tab>
-  <mat-tab label="{{ 'service.PROCESS_PROFILE' | translate }}">
+  <mat-tab
+    label="{{ 'service.PROCESS_PROFILE' | translate }}"
+    [labelClass]="kind==='container' || kind==='node' ? '' : 'hide'"
+  >
     <app-process-profile-rules
-      *ngIf="activeTabIndex === 2"
+      *ngIf="groupsService.activeTabIndex === 2 && (kind==='container' || kind==='node')"
       [source]="navSource"
       [groupName]="selectedGroupName"
       [resizableHeight]="resizableHeight">
     </app-process-profile-rules>
   </mat-tab>
-  <mat-tab label="{{ 'service.FILE_PROFILE' | translate }}">
+  <mat-tab
+    label="{{ 'service.FILE_PROFILE' | translate }}"
+    [labelClass]="kind==='container' ? '' : 'hide'"
+  >
     <app-file-access-rules
-      *ngIf="activeTabIndex === 3"
+      *ngIf="groupsService.activeTabIndex === 3 && kind==='container'"
       [source]="navSource"
       [groupName]="selectedGroupName"
       [resizableHeight]="resizableHeight">
     </app-file-access-rules>
   </mat-tab>
-  <mat-tab label="{{ 'service.POLICY_RULES' | translate }}">
+  <mat-tab
+    label="{{ 'service.POLICY_RULES' | translate }}"
+  >
     <app-network-rules
-      *ngIf="activeTabIndex === 4"
+      *ngIf="groupsService.activeTabIndex === 4"
       [source]="navSource"
       [groupName]="selectedGroupName"
       [resizableHeight]="resizableHeight">
     </app-network-rules>
   </mat-tab>
-  <mat-tab label="{{ 'group.RESPONSE_RULES' | translate }}">
+  <mat-tab
+    label="{{ 'group.RESPONSE_RULES' | translate }}"
+  >
     <app-response-rules
-      *ngIf="activeTabIndex === 5"
+      *ngIf="groupsService.activeTabIndex === 5"
       [source]="navSource"
       [groupName]="selectedGroupName"
       [resizableHeight]="resizableHeight">
     </app-response-rules>
   </mat-tab>
-  <mat-tab label="{{ 'group.dlp.TITLE' | translate }}">
+  <mat-tab
+    label="{{ 'group.dlp.TITLE' | translate }}"
+    [labelClass]="kind==='container' && cfgType !== CFG_TYPE.FED ? '' : 'hide'"
+  >
     <app-group-dlp
-      *ngIf="activeTabIndex === 6"
+      *ngIf="groupsService.activeTabIndex === 6 && (kind==='container' && cfgType !== CFG_TYPE.FED)"
       [source]="navSource"
       [groupName]="selectedGroupName"
       [resizableHeight]="resizableHeight">
     </app-group-dlp>
   </mat-tab>
-  <mat-tab label="{{ 'group.waf.TITLE' | translate }}">
+  <mat-tab
+    label="{{ 'group.waf.TITLE' | translate }}"
+    [labelClass]="kind==='container' && cfgType !== CFG_TYPE.FED ? '' : 'hide'"
+  >
     <app-group-waf
-      *ngIf="activeTabIndex === 7"
+      *ngIf="groupsService.activeTabIndex === 7 && (kind==='container' && cfgType !== CFG_TYPE.FED)"
       [source]="navSource"
       [groupName]="selectedGroupName"
       [resizableHeight]="resizableHeight">

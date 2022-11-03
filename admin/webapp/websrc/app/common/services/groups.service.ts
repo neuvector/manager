@@ -26,6 +26,7 @@ export class GroupsService {
   public selectedGroup: any;
   public customGroups: any;
   public groups: any;
+  public activeTabIndex: number;
 
   constructor(
     private utils: UtilsService,

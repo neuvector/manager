@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { GroupsService } from '@services/groups.service';
 import { GroupsComponent } from '@components/groups/groups.component';
+// import { GroupDetailsComponent } from '@components/group-details/group-details.component'
 import { ImportFileModalComponent } from '@components/ui/import-file-modal/import-file-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { PathConstant } from '@common/constants/path.constant';
@@ -22,6 +23,7 @@ export class GroupsPageComponent implements OnInit {
   public netServiceStatus: boolean = false;
   public netServicePolicyMode!: string;
   @ViewChild(GroupsComponent) groupsView!: GroupsComponent;
+  // @ViewChild(GroupDetailsComponent) groupDetailsView!: GroupDetailsComponent;
   private _switchClusterSubscription;
 
   constructor(

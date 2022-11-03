@@ -32,6 +32,7 @@ $nv-mobile-width: 480px;
     visibility: visible;
     position: static;
     height: auto;
+    width: 1000px;
   }
   .pagebreak {
     clear: both;
@@ -44,6 +45,7 @@ $nv-mobile-width: 480px;
     position: absolute;
     height: 0;
     overflow: hidden;
+    width: 1000px;
   }
 }
 
@@ -1274,4 +1276,16 @@ mwl-gauge.score > .gauge > .value {
 .badge-pink {
   color: #fff;
   background-color: #E91E63;
+}
+
+.hide {
+  visibility: hidden;
+  width: 0;
+  min-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.show {
+  visibility: block;
 }

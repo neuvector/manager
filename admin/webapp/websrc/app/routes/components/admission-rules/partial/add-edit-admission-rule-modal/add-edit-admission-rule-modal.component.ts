@@ -152,6 +152,20 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     this.isMainView = true;
   };
 
+  isCustomCriterionValid = (customCriterion) => {
+    if (
+      this.customizedValues.length < 1 &&
+      !this.customCriterion.op.toLowerCase().includes('exist'.toLowerCase()) &&
+      this.nodeValueType !== 'key' &&
+      this.nodeValueType
+    )
+    {
+      return !!customCriterion.name && !!customCriterion.op && !!customCriterion.value;
+    } else {
+      return !!customCriterion.name && !!customCriterion.op;
+    }
+  };
+
   addCustomizedCriteria = (customCriterion) => {
     this.addCriterionIntoChip(customCriterion);
     this.isMainView = true;
@@ -314,14 +328,16 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     this.criteriaOptions = this.addEditAdmissionRuleForm.controls.isException.value ?
       this.data.admissionOptions.admission_options.exception_options.k8s_options.rule_options :
       this.data.admissionOptions.admission_options.deny_options.k8s_options.rule_options;
-    this.criteriaOptions.saBindRiskyRole.value =
-      this.data.admissionOptions.predefined_risky_roles.map(role => {
-        return {
-          name: this.translate.instant(`admissionControl.values.${role.toUpperCase()}`),
-          value: role,
-          checked: false
-        }
-      });
+    if (!this.addEditAdmissionRuleForm.controls.isException.value) {
+      this.criteriaOptions.saBindRiskyRole.value =
+        this.data.admissionOptions.predefined_risky_roles.map(role => {
+          return {
+            name: this.translate.instant(`admissionControl.values.${role.toUpperCase()}`),
+            value: role,
+            checked: false
+          }
+        });
+    }
     delete this.criteriaOptions.customPath;
     this.pspCriteria = `${this.translate.instant("admissionControl.PSP_CRITERIA")} ${this.data.admissionOptions.admission_options.psp_collection.map(pspCriterion => {
         return this.translate.instant(`admissionControl.names.${parseDivideStyle(pspCriterion.name).toUpperCase()}`);

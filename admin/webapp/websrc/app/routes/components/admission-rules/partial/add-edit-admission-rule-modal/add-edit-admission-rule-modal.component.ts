@@ -314,14 +314,16 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     this.criteriaOptions = this.addEditAdmissionRuleForm.controls.isException.value ?
       this.data.admissionOptions.admission_options.exception_options.k8s_options.rule_options :
       this.data.admissionOptions.admission_options.deny_options.k8s_options.rule_options;
-    this.criteriaOptions.saBindRiskyRole.value =
-      this.data.admissionOptions.predefined_risky_roles.map(role => {
-        return {
-          name: this.translate.instant(`admissionControl.values.${role.toUpperCase()}`),
-          value: role,
-          checked: false
-        }
-      });
+    if (!this.addEditAdmissionRuleForm.controls.isException.value) {
+      this.criteriaOptions.saBindRiskyRole.value =
+        this.data.admissionOptions.predefined_risky_roles.map(role => {
+          return {
+            name: this.translate.instant(`admissionControl.values.${role.toUpperCase()}`),
+            value: role,
+            checked: false
+          }
+        });
+    }
     delete this.criteriaOptions.customPath;
     this.pspCriteria = `${this.translate.instant("admissionControl.PSP_CRITERIA")} ${this.data.admissionOptions.admission_options.psp_collection.map(pspCriterion => {
         return this.translate.instant(`admissionControl.names.${parseDivideStyle(pspCriterion.name).toUpperCase()}`);

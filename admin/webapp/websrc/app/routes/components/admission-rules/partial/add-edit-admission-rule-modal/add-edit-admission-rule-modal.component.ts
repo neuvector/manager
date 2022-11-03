@@ -152,6 +152,20 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     this.isMainView = true;
   };
 
+  isCustomCriterionValid = (customCriterion) => {
+    if (
+      this.customizedValues.length < 1 &&
+      !this.customCriterion.op.toLowerCase().includes('exist'.toLowerCase()) &&
+      this.nodeValueType !== 'key' &&
+      this.nodeValueType
+    )
+    {
+      return !!customCriterion.name && !!customCriterion.op && !!customCriterion.value;
+    } else {
+      return !!customCriterion.name && !!customCriterion.op;
+    }
+  };
+
   addCustomizedCriteria = (customCriterion) => {
     this.addCriterionIntoChip(customCriterion);
     this.isMainView = true;

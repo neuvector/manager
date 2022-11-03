@@ -353,6 +353,7 @@
       <app-loading-button
         [appearance]="'mat-raised-button'"
         [color]="'primary'"
+        [disabled]="!isCustomCriterionValid(customCriterion)"
         [loading]="submittingUpdate"
         [text]="'policy.addPolicy.ADD' | translate"
         (click)="addCustomizedCriteria(customCriterion)"

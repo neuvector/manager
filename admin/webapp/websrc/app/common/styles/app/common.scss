@@ -1277,3 +1277,15 @@ mwl-gauge.score > .gauge > .value {
   color: #fff;
   background-color: #E91E63;
 }
+
+.hide {
+  visibility: hidden;
+  width: 0;
+  min-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.show {
+  visibility: block;
+}

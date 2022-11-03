@@ -32,6 +32,7 @@ $nv-mobile-width: 480px;
     visibility: visible;
     position: static;
     height: auto;
+    width: 1000px;
   }
   .pagebreak {
     clear: both;
@@ -44,6 +45,7 @@ $nv-mobile-width: 480px;
     position: absolute;
     height: 0;
     overflow: hidden;
+    width: 1000px;
   }
 }
 

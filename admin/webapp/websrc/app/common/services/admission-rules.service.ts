@@ -178,6 +178,7 @@ export class AdmissionRulesService {
       rowClassRules: {
         'disabled-row': params => {
           if (!params.data) return false;
+          console.log("params.data.disable", params.data.disable)
           if (params.data.disable) {
             return true;
           }
@@ -466,7 +467,7 @@ export class AdmissionRulesService {
 
   toggleAdmissionRules = (rule: AdmissionRule) => {
     let payload = rule;
-    return this.addUpdateAdmissionRules(payload);
+    return this.addUpdateAdmissionRules({config: payload});
   };
 
   addUpdateAdmissionRules = (payload: any, event = GlobalConstant.MODAL_OP.EDIT) => {

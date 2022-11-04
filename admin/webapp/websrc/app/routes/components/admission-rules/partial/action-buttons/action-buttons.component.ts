@@ -66,7 +66,8 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
     });
   };
 
-  toggleRuleItem = (event, rule) => {
+  toggleRuleItem = (event, rule, disable) => {
+    rule.disable = disable;
     if (rule.critical) {
       let criteriaValueStr = rule.criteria.map((value: AdmRuleSubCriterion) => value.value).join(",").toLowerCase();
       let namespace = "";

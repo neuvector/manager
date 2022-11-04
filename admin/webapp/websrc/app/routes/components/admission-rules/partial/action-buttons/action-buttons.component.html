@@ -17,14 +17,14 @@
     <em
       class="eos-icons icon-18 hand"
       *ngIf="!params.data['disable']"
-      (click)="toggleRuleItem($event, params.node.data)"
+      (click)="toggleRuleItem($event, params.node.data, true)"
     >
       highlight_off
     </em>
     <em
       class="eos-icons icon-18 hand"
       *ngIf="params.data['disable']"
-      (click)="toggleRuleItem($event, params.node.data)"
+      (click)="toggleRuleItem($event, params.node.data, false)"
     >
       task_alt
     </em>

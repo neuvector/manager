@@ -11,14 +11,14 @@
   <em class="eos-icons icon-18 hand" id="remove-form-action" *ngIf="buttonDisplayMap.undelete"
     (click)="undeleteNetworkRule(params.data.id)" matTooltip="{{'policy.TIP.UNDELETE' | translate}}">recycling
   </em>
-  <em class="eos-icons icon-18 hand" id="promote-from-action" *ngIf="buttonDisplayMap.prmote"
+  <em class="eos-icons icon-18 hand" id="promote-from-action" *ngIf="buttonDisplayMap.promote"
     (click)="promoteNeworkRuleOnEntry(params.data)" matTooltip="{{'policy.PROMOTE' | translate}}">ingress
   </em>
   <em class="eos-icons icon-18 hand" id="remove-form-action" *ngIf="buttonDisplayMap.revert"
-    ng-click="revertNetworkRule(params.data.id)" matTooltip="{{'policy.TIP.REVERT' | translate}}">settings_backup_restore
+    (click)="revertNetworkRule(params.data.id)" matTooltip="{{'policy.TIP.REVERT' | translate}}">settings_backup_restore
   </em>
 </div>
-<div class="rule-actions-collapse">
+<div class="rule-actions-collapse" *ngIf="isOperatableRuleType || isPromotable">
   <em class="fa fa-ellipsis-h fa-lg mr-sm text-action hand">
   </em>
 </div>

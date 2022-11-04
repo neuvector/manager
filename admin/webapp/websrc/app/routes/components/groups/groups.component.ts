@@ -392,6 +392,21 @@ export class GroupsComponent implements OnInit {
     console.log('this.groups', this.groups);
     this.gridOptions4Groups.api!.setRowData(this.groups);
     this.filteredCount = this.groups.length;
+    setTimeout(() => {
+      this.gridOptions4Groups.api!.sizeColumnsToFit();
+      this.gridOptions4Groups.api!.forEachNode((node, index) => {
+        node.setSelected(false);
+        if (this.selectedGroups.length === 1) {
+          if (node.data.name === this.selectedGroups[0].name) {
+            node.setSelected(true);
+            this.gridOptions4Groups.api!.ensureNodeVisible(node);
+          }
+        } else if (index === 0) {
+          node.setSelected(true);
+          this.gridOptions4Groups.api!.ensureNodeVisible(node);
+        }
+      });
+    }, 200);
   };
 
   private handleError = () => {

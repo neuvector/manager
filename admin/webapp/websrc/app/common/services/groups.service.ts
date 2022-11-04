@@ -51,13 +51,13 @@ export class GroupsService {
     };
     const policyModeRendererFunc = params => {
       let mode = '';
-      if (params.value && params.data) {
-        mode = this.utils.getI18Name(params.value);
-        let labelCode = MapConstant.colourMap[params.value];
+      if (params.value && params.value.policy_mode) {
+        mode = this.utils.getI18Name(params.value.policy_mode);
+        let labelCode = MapConstant.colourMap[params.value.policy_mode];
         if (!labelCode) return '';
         else
           return `<span class="type-label policy_mode ${labelCode}">${mode}</span>${
-            params.data.baseline_profile.toLowerCase() === 'zero-drift'
+            params.value.baseline_profile.toLowerCase() === 'zero-drift'
               ? '<em class="eos-icons icon-18">anchor</em>'
               : ''
           }`;
@@ -114,7 +114,12 @@ export class GroupsService {
       },
       {
         headerName: this.translate.instant('group.gridHeader.POLICY_MODE'),
-        field: 'policy_mode',
+        valueGetter: params => {
+          return {
+            policy_mode: params.data.policy_mode,
+            baseline_profile: params.data.baseline_profile
+          }
+        },
         cellRenderer: policyModeRendererFunc,
         hide: isFed,
         width: 120,
@@ -196,7 +201,11 @@ export class GroupsService {
         },
         {
           headerName: this.translate.instant('group.gridHeader.POLICY_MODE'),
-          field: 'policy_mode',
+          valueGetter: params => {
+            return {
+              policy_mode: params.data.policy_mode,
+            }
+          },
           cellRenderer: policyModeRendererFunc,
           width: 130,
           maxWidth: 130,
@@ -716,6 +725,7 @@ export class GroupsService {
       );
     }
 
+    console.log("service payload",{ config: payload })
     let data = pako.gzip(JSON.stringify({ config: payload }));
     data = new Blob([data], { type: 'application/gzip' });
     let config = {

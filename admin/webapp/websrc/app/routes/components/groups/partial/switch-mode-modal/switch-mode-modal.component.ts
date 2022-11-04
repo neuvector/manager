@@ -70,7 +70,7 @@ export class SwitchModeModalComponent implements OnInit {
     ]);
     let baselineCountMap: Map<string, number> = new Map([
       ['basic', 0],
-      ['zerodrift', 0]
+      ['zero-drift', 0]
     ]);
     this.data.selectedGroups.forEach(group => {
       if (group.cap_change_mode) {

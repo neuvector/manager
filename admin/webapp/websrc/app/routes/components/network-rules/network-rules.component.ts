@@ -85,7 +85,12 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
     this.gridHeight = this.w.innerHeight - (this.source === GlobalConstant.NAV_SOURCE.SELF ? 215 : 270);
     this.isWriteNetworkRuleAuthorized =
       this.authUtilsService.getDisplayFlag('write_network_rule') &&
-      (this.source !== GlobalConstant.NAV_SOURCE.GROUP ? this.authUtilsService.getDisplayFlag('multi_cluster') : true);
+      (
+        this.source !== GlobalConstant.NAV_SOURCE.GROUP &&
+        this.source !== GlobalConstant.NAV_SOURCE.SELF ?
+          this.authUtilsService.getDisplayFlag('multi_cluster') :
+          true
+      );
     this.gridOptions = this.networkRulesService.configGrid(
       this.isWriteNetworkRuleAuthorized,
       this.source,

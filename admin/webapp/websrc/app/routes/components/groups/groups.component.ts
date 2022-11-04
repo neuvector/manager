@@ -35,13 +35,13 @@ export class GroupsComponent implements OnInit {
   @Input() isExposure: boolean = false;
   @Input() source!: string;
   @Input() height!: number;
+  @Input() isShowingSystemGroups: boolean = true;
   @Output() selectedGroup = new EventEmitter<Group | null>();
   @Output() refreshing = new EventEmitter<boolean>();
   isRefreshing: boolean;
   groups: Array<Group> = [];
   groupsErr: boolean = false;
   eof: boolean = false;
-  hideSystemGroup: boolean = false;
   isWriteGroupAuthorized: boolean = false;
   isNamespaceUser: boolean = false;
   gridOptions4Groups!: GridOptions;
@@ -384,7 +384,7 @@ export class GroupsComponent implements OnInit {
   private renderGroups = (data, options) => {
     this.eof = data.length < MapConstant.PAGE.GROUPS;
     this.groups = this.groups.concat(data);
-    if (this.hideSystemGroup) {
+    if (!this.isShowingSystemGroups) {
       this.groups = this.groups.filter(function (item) {
         return !item.platform_role;
       });

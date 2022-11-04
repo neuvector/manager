@@ -1289,3 +1289,13 @@ mwl-gauge.score > .gauge > .value {
 .show {
   visibility: block;
 }
+
+.nv-help {
+  color: $neuvector-grey-50 ;
+  opacity: 0.54 ;
+  &:hover {
+    color: $neuvector-mid-green-200 ;
+  }
+  font-size: 24px;
+  padding: 5px 0 0 0;
+}

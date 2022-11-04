@@ -59,8 +59,10 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   containsUnpromotableEndpoint: boolean = false;
   context = { componentParent: this };
   routeEventSubscription!: Subscription;
-  isWriteRuleAuthorized: boolean;
+  isWriteGlobalRulesAuthorized: boolean;
   isPrinting: boolean = false;
+  isIncludingCRD: boolean = false;
+  isIncludingFed: boolean = false;
   private w: any;
   private switchClusterSubscription;
   @ViewChild('networkRulePrintableReport') printableReportView: ElementRef;
@@ -80,12 +82,17 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.isWriteRuleAuthorized = this.authUtilsService.getDisplayFlag('write_network_rule');
+    this.isWriteGlobalRulesAuthorized = this.authUtilsService.getDisplayFlag('write_network_rule');
     this.bindRouteEventListener();
-    this.gridHeight = this.w.innerHeight - (this.source === GlobalConstant.NAV_SOURCE.SELF ? 215 : 270);
+    this.gridHeight = this.w.innerHeight - (this.source === GlobalConstant.NAV_SOURCE.SELF ? 215 : 230);
     this.isWriteNetworkRuleAuthorized =
       this.authUtilsService.getDisplayFlag('write_network_rule') &&
-      (this.source !== GlobalConstant.NAV_SOURCE.GROUP ? this.authUtilsService.getDisplayFlag('multi_cluster') : true);
+      (
+        this.source !== GlobalConstant.NAV_SOURCE.GROUP &&
+        this.source !== GlobalConstant.NAV_SOURCE.SELF ?
+          this.authUtilsService.getDisplayFlag('multi_cluster') :
+          true
+      );
     this.gridOptions = this.networkRulesService.configGrid(
       this.isWriteNetworkRuleAuthorized,
       this.source,
@@ -93,6 +100,12 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
     );
     this.gridOptions.onSelectionChanged = () => {
       this.selectedNetworkRules = this.gridOptions.api!.getSelectedRows();
+      this.isIncludingCRD = this.selectedNetworkRules.some(rule => {
+        return rule.cfg_type === GlobalConstant.CFG_TYPE.GROUND;
+      });
+      this.isIncludingFed = this.selectedNetworkRules.some(rule => {
+        return rule.cfg_type === GlobalConstant.CFG_TYPE.FED && this.source === GlobalConstant.NAV_SOURCE.SELF;
+      });
       this.containsUnpromotableEndpoint = this.selectedNetworkRules.some(
         rule => {
           return (

@@ -2517,7 +2517,8 @@
       "CPU_REQUEST_S": "CPU Req",
       "MEMORY_LIMIT_S": "Mem Lmt",
       "MEMORY_REQUEST_S": "Mem Req",
-      "HAS_PSS_VIOLATION": "PSA/PSS best practice"
+      "HAS_PSS_VIOLATION": "PSA/PSS best practice",
+      "MODULES": "Modules"
     },
     "operators": {
       "=": "=",

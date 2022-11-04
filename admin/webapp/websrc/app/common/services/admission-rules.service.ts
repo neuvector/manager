@@ -147,13 +147,14 @@ export class AdmissionRulesService {
         cellRenderer: params => {
           return this.cfgTypeRenderFunc(params);
         },
-        width: 85,
-        minWidth: 85,
-        maxWidth: 85,
+        width: 100,
+        minWidth: 100,
+        maxWidth: 100,
       },
       {
         cellRenderer: ActionButtonsComponent,
         cellClass: ["grid-right-align"],
+        hide: !isWriteAdmissionRuleAuthorized,
         width: 100,
         maxWidth: 100,
         minWidth: 100
@@ -178,6 +179,7 @@ export class AdmissionRulesService {
       rowClassRules: {
         'disabled-row': params => {
           if (!params.data) return false;
+          console.log("params.data.disable", params.data.disable)
           if (params.data.disable) {
             return true;
           }
@@ -466,7 +468,7 @@ export class AdmissionRulesService {
 
   toggleAdmissionRules = (rule: AdmissionRule) => {
     let payload = rule;
-    return this.addUpdateAdmissionRules(payload);
+    return this.addUpdateAdmissionRules({config: payload});
   };
 
   addUpdateAdmissionRules = (payload: any, event = GlobalConstant.MODAL_OP.EDIT) => {

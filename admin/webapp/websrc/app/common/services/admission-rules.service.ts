@@ -154,7 +154,6 @@ export class AdmissionRulesService {
       {
         cellRenderer: ActionButtonsComponent,
         cellClass: ["grid-right-align"],
-        hide: !isWriteAdmissionRuleAuthorized,
         width: 100,
         maxWidth: 100,
         minWidth: 100

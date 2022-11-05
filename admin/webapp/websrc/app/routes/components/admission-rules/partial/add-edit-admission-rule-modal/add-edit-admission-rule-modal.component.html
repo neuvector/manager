@@ -44,12 +44,14 @@
               <mat-label>{{ "admissionControl.COMMENT" | translate }}</mat-label>
               <input
                 matInput
+                [readonly]="data.opType === modalOp.VIEW"
                 formControlName="comment"
               />
           </mat-form-field>
           <mat-form-field appearance="standard" class="col-12 col-md-4">
             <mat-select
               placeholder="{{ 'admissionControl.NAME' | translate }}*"
+              [disabled]="data.opType === modalOp.VIEW"
               [ngModelOptions]="{standalone: true}"
               [(ngModel)]="mainCriterion.name"
               (selectionChange)="changeCriterionName(mainCriterion.name, true)"
@@ -90,7 +92,7 @@
           >
             <mat-select
               placeholder="{{ 'admissionControl.OP' | translate }}*"
-              [disabled]="criterionOperatorList.length === 1"
+              [disabled]="criterionOperatorList.length === 1 || data.opType === modalOp.VIEW"
               [ngModelOptions]="{standalone: true}"
               [(ngModel)]="mainCriterion.op"
               (selectionChange)="changeCriterionOperator(mainCriterion.op)"
@@ -105,6 +107,7 @@
           >
             <input
               matInput
+              [readonly]="data.opType === modalOp.VIEW"
               [ngModelOptions]="{standalone: true}"
               [(ngModel)]="mainCriterion.value"
             />
@@ -116,6 +119,7 @@
           >
             <textarea
               matInput
+              [readonly]="data.opType === modalOp.VIEW"
               [ngModelOptions]="{standalone: true}"
               [(ngModel)]="mainCriterion.value"
               [placeholder]="'admissionControl.sample.MULTI_VAL' | translate"
@@ -128,7 +132,7 @@
           >
             <mat-select
               placeholder="{{ 'admissionControl.VALUE' | translate }}*"
-              [disabled]="criterionValueList.length === 1"
+              [disabled]="criterionValueList.length === 1 || data.opType === modalOp.VIEW"
               [ngModelOptions]="{standalone: true}"
               [(ngModel)]="mainCriterion.value"
             >
@@ -142,7 +146,7 @@
             (shareCheckedList)="shareCheckedList($event)">
           >
           </app-multi-selector-dropdown>
-          <div class="col-12 col-md-1">
+          <div class="col-12 col-md-1" *ngIf="data.opType !== modalOp.VIEW">
             <button
               class="primary-button hightlighted-button pull-right" [disabled]="isInvalidCriterion(mainCriterion, subCriterion)"
               style="margin-top: 20px;" (click)="addCriterionIntoChip4HTML(mainCriterion, subCriterion)"
@@ -168,6 +172,7 @@
               >
                 <mat-select
                   placeholder="{{ 'admissionControl.OP' | translate }}*"
+                  [disabled]="data.opType === modalOp.VIEW"
                   [ngModelOptions]="{standalone: true}"
                   [(ngModel)]="subCriterion[i]['op']"
                 >
@@ -188,6 +193,7 @@
               >
                 <input
                   matInput
+                  [readonly]="data.opType === modalOp.VIEW"
                   [ngModelOptions]="{standalone: true}"
                   [(ngModel)]="subCriterion[i]['value']"
                 />
@@ -198,6 +204,7 @@
                 class="col-12 col-md-1"
               >
                 <mat-select
+                  [disabled]="data.opType === modalOp.VIEW"
                   [ngModelOptions]="{standalone: true}"
                   [(ngModel)]="subCriterion[i]['unit']"
                 >
@@ -217,13 +224,13 @@
             <mat-chip-list #chipList aria-label="admisson criteria" formControlName="criteria">
               <mat-chip
                 *ngFor="let criterion of addEditAdmissionRuleForm.controls.criteria.value"
-                [selectable]="true"
-                [removable]="true"
+                [selectable]="data.opType !== modalOp.VIEW"
+                [removable]="data.opType !== modalOp.VIEW"
                 (removed)="removeCriterionFromChip(criterion)"
                 (click)="criterionSelectedInChip(criterion)"
               >
                 {{ criterion.name }}
-                <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
+                <mat-icon matChipRemove *ngIf="data.opType !== modalOp.VIEW">cancel</mat-icon>
               </mat-chip>
               <input
                 #criteriaInput
@@ -247,6 +254,7 @@
             <mat-slide-toggle
               class="padding-top-s"
               id="network-status-toggle"
+              [disabled]="data.opType === modalOp.VIEW"
               formControlName="enabled"
             >
               <span

@@ -23,6 +23,7 @@
             <mat-slide-toggle
               id="admission-action-toggle"
               formControlName="isException"
+              [disabled]="data.opType !== modalOp.ADD"
               (change)="toggleType()"
             >
               <span

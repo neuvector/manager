@@ -1,4 +1,8 @@
-<div id="activeSessions" class="infoBox topLeftSession resizable" cdkDrag>
+<div
+  id="activeSessions"
+  class="infoBox topLeftSession resizable"
+  (window:mouseup)="mouseUp($event)"
+  cdkDrag>
   <div
     cdkDragHandle
     class="d-flex align-items-center justify-content-between handle">

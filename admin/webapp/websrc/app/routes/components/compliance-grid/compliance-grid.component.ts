@@ -95,7 +95,7 @@ export class ComplianceGridComponent implements OnInit {
       },
       cellClass: ['d-flex', 'align-items-center'],
       cellClassRules: {
-        'justify-content-center': params =>
+        'justify-content-start': params =>
           !params.data.parent_id && !params.data.child_ids,
       },
       headerValueGetter: () =>
@@ -354,7 +354,6 @@ export class ComplianceGridComponent implements OnInit {
     const title = this.formatTitle();
     compliance4Csv = this.formatCompliance(compliance4Csv);
     const complianceCSV = arrayToCsv(compliance4Csv, title);
-    console.log(complianceCSV);
     const blob = new Blob([complianceCSV], { type: 'text/csv;charset=utf-8' });
     const filename = `compliance-${
       this.path + this.repository

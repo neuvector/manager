@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, Injector, Inject } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { Router } from '@angular/router';
 import screenfull from 'screenfull';
@@ -7,7 +6,7 @@ import screenfull from 'screenfull';
 import { SwitchersService } from '@core/switchers/switchers.service';
 import { MenuService } from '@core/menu/menu.service';
 import { MapConstant } from '@common/constants/map.constant';
-import { ClusterData, Cluster, SessionStorageCluster } from '@common/types';
+import { ClusterData, Cluster } from '@common/types';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
@@ -28,7 +27,11 @@ export class HeaderComponent implements OnInit {
   isOrdinaryRole: boolean = false;
   isOnRemoteCluster: boolean = false;
   selectedCluster: Cluster | undefined;
-  isSUSESSO: boolean;
+  isSUSESSO: boolean = false;
+
+  email = '';
+  username = '';
+  displayRole = '';
 
   isNavSearchVisible: boolean = false;
   @ViewChild('fsbutton', { static: true }) fsbutton;
@@ -47,26 +50,19 @@ export class HeaderComponent implements OnInit {
     this.isSUSESSO = GlobalVariable.isSUSESSO;
     this.isNavSearchVisible = false;
 
-    var ua = window.navigator.userAgent;
-    // if (ua.indexOf("MSIE ") > 0 || !!ua.match(/Trident.*rv\:11\./)) {
-    //     this.fsbutton.nativeElement.style.display = 'none';
-    // }
-    //
-    // // Switch fullscreen icon indicator
-    // const el = this.fsbutton.nativeElement.firstElementChild;
-    // screenfull.on('change', () => {
-    //     if (el)
-    //         el.className = screenfull.isFullscreen ? 'fa fa-compress' : 'fa fa-expand';
-    // });
-
     this.router = this.injector.get(Router);
 
-    this.router.events.subscribe(val => {
+    this.router.events.subscribe(() => {
       window.scrollTo(0, 0);
       this.navCollapsed = true;
     });
 
     this.initMultiClusters();
+
+    this.email = this.sessionStorage.get('token')?.emailHash;
+    this.username = this.sessionStorage.get('token')?.token?.username;
+    const role = this.sessionStorage.get('token')?.token?.role;
+    this.displayRole = role ? role : "none";
   }
 
   toggleUserBlock(event) {
@@ -91,7 +87,7 @@ export class HeaderComponent implements OnInit {
     this.switchers.toggleFrameSwitcher('offsidebarOpen');
   }
 
-  toggleCollapsedSideabar() {
+  toggleCollapsedSidebar() {
     this.switchers.toggleFrameSwitcher('isCollapsed');
   }
 
@@ -174,7 +170,9 @@ export class HeaderComponent implements OnInit {
             console.log('selected:', this.selectedCluster);
           }
         },
-        error: error => {},
+        error: error => {
+          console.error('error:', error);
+        },
       });
   }
 
@@ -196,7 +194,7 @@ export class HeaderComponent implements OnInit {
       }
 
       this.multiClusterService.switchCluster(selectedID, currentID).subscribe({
-        next: res => {
+        next: () => {
           this.selectedCluster = selectedItem;
           this.isOnRemoteCluster =
             this.selectedCluster?.clusterType !== MapConstant.FED_ROLES.MASTER;
@@ -213,10 +211,10 @@ export class HeaderComponent implements OnInit {
             JSON.stringify(cluster)
           );
         },
-        error: error => {},
+        error: error => {
+          console.error(error);
+        },
       });
-    } else {
-      console.log('same cluster');
     }
   }
 

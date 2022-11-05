@@ -2347,36 +2347,6 @@ export class NetworkActivitiesComponent
     }
   }
 
-  snifferSubscription: Subscription | undefined;
-  snifferRefreshTimer$;
-
-  stopRefreshSniffer(stopRefreshSniffer: boolean) {
-    return this.snifferSubscription && this.snifferSubscription.unsubscribe();
-  }
-
-  private refreshSniffer() {
-    this.snifferOnErr = false;
-    this.sniffService.getSniffers(this.containerId).subscribe(
-      response => {
-        this.sniffers = response['sniffers'];
-      },
-      err => {
-        console.warn(err);
-        this.snifferOnErr = true;
-        this.snifferErrMsg = this.utils.getErrorMessage(err);
-      }
-    );
-  }
-
-  private pullSniffers() {
-    this.refreshSniffer();
-
-    this.snifferRefreshTimer$ = interval(5000);
-    this.snifferSubscription = this.snifferRefreshTimer$.subscribe(
-      this.pullSniffers
-    );
-  }
-
   //endregion
 
   private saveBlacklist(blacklist) {
@@ -2483,8 +2453,6 @@ export class NetworkActivitiesComponent
 
   refresh() {
     if (this.popupState.onActiveSession()) this.stopRefreshSession();
-
-    if (this.popupState.onSniffer()) this.stopRefreshSniffer(true);
 
     this.popupState.leave();
 

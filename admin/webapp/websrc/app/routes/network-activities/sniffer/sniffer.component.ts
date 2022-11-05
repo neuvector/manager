@@ -4,6 +4,7 @@ import {
   ElementRef,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -17,15 +18,16 @@ import {
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { TranslateService } from '@ngx-translate/core';
 import { UtilsService } from '@common/utils/app.utils';
-import { Options } from '@angular-slider/ngx-slider';
-import {DomSanitizer} from '@angular/platform-browser';
+import {ChangeContext, Options} from '@angular-slider/ngx-slider';
+import { DomSanitizer } from '@angular/platform-browser';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-sniffer',
   templateUrl: './sniffer.component.html',
   styleUrls: ['./sniffer.component.scss'],
 })
-export class SnifferComponent implements AfterViewInit, OnInit {
+export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
   isPacketCapAuthorized: boolean = false;
   sniffer: any;
   exportUrl: any;
@@ -34,7 +36,9 @@ export class SnifferComponent implements AfterViewInit, OnInit {
   onSnifferErr: boolean = false;
   snifferErrMsg: string = '';
 
-  disabled: boolean = true;
+  private sniffOnId: string = '';
+
+  disabled: boolean = false;
 
   get entriesGridHeight(): number {
     return this._entriesGridHeight;
@@ -64,8 +68,6 @@ export class SnifferComponent implements AfterViewInit, OnInit {
   set popupState(value: ActivityState) {
     this._popupState = value;
   }
-
-  @Output() onStopRefresh = new EventEmitter<boolean>();
 
   constructor(
     private translate: TranslateService,
@@ -137,24 +139,59 @@ export class SnifferComponent implements AfterViewInit, OnInit {
     };
   }
 
-  stopRefreshSniffer = () => {
-    this.onStopRefresh.emit(true);
-  };
+  onUserChangeEnd(changeContext: ChangeContext): void {
+    this.pcap.seconds = changeContext.value;
+  }
 
   onSnifferChanged() {
     let selectedRows = this.gridOptions.api.getSelectedRows();
     this.sniffer = selectedRows[0];
-    this.graphService.keepLive();
   }
 
-  getSniffers = () =>
-    this.sniffService.getSniffers(this.containerId).subscribe(response => {
-      this.sniffers = response['sniffers'];
-    });
+  getSniffers = response => {
+    this.sniffers = response['sniffers'];
+    if (this.sniffers?.length > 0) {
+      let runningSniffer = this.sniffers.find(
+        item => item.status === 'running'
+      );
+      if (!!runningSniffer) {
+        this.gridOptions.api.forEachNode(node => {
+          if (node.data.status === 'running') {
+            node.setSelected(true);
+            this.gridOptions.api.ensureNodeVisible(node);
+          }
+        });
+        if (!this.snifferSubscription) {
+          if (!this.sniffOnId) this.sniffOnId = this.containerId;
+          this.pullSniffers();
+        }
+      } else {
+        this.stopRefresh();
+        this.gridOptions.api.forEachNode((node, index) => {
+          if (this.sniffer !== null) {
+            if (node.data.id === this.sniffer.id) {
+              node.setSelected(true);
+              this.gridOptions.api.ensureNodeVisible(node);
+            }
+          } else if (index === 0) {
+            node.setSelected(true);
+            this.gridOptions.api.ensureNodeVisible(node);
+          }
+        });
+        this.sniffer.status = 'stopped';
+      }
+      let selectedRows = this.gridOptions.api.getSelectedRows();
+      this.sniffer = selectedRows[0];
+    }
+  };
 
   startSniff = containerId => {
-    this.sniffService.startSniff(containerId).subscribe(
-      () => this.getSniffers(),
+    let snifferParam = { duration: 0 };
+    if (!this.pcap.options.disabled && this.pcap.seconds)
+      snifferParam.duration = this.pcap.seconds;
+
+    this.sniffService.startSniff(containerId, snifferParam).subscribe(
+      () => this.pullSniffers(),
       err => {
         this.onSnifferErr = true;
         this.snifferErrMsg = this.utils.getErrorMessage(err);
@@ -162,13 +199,11 @@ export class SnifferComponent implements AfterViewInit, OnInit {
     );
   };
 
-  toggleSchedule = () => {
-    this.disabled = !this.disabled;
-    if (this.disabled) this.pcap.seconds = 0;
+  toggleSchedule = event => {
+    if (!this.disabled) this.pcap.seconds = 0;
     this.pcap.options = Object.assign({}, this.pcap.options, {
-      disabled: this.disabled,
+      disabled: !this.disabled,
     });
-    this.graphService.keepLive();
   };
 
   disableStart = () => {
@@ -179,7 +214,7 @@ export class SnifferComponent implements AfterViewInit, OnInit {
 
   stopSniff = jobId =>
     this.sniffService.stopSniff(jobId).subscribe(
-      () => this.getSniffers(),
+      () => this.refreshSniffer(),
       err => {
         console.warn(err);
         this.onSnifferErr = true;
@@ -190,7 +225,7 @@ export class SnifferComponent implements AfterViewInit, OnInit {
   deleteSniff = jobId =>
     this.sniffService.deleteSniff(jobId).subscribe(
       () => {
-        this.getSniffers();
+        this.refreshSniffer();
         this.sniffer = null;
       },
       err => {
@@ -213,4 +248,45 @@ export class SnifferComponent implements AfterViewInit, OnInit {
       this.downloadId = jobId;
     });
   };
+
+  snifferSubscription: Subscription | undefined;
+  snifferRefreshTimer$;
+
+  stopRefresh() {
+    return this.snifferSubscription && this.snifferSubscription.unsubscribe();
+  }
+
+  refreshSniffer = () => {
+    this.onSnifferErr = false;
+    this.sniffService.getSniffers(this.containerId).subscribe(
+      response => {
+        //this.sniffers = response['sniffers'];
+        this.getSniffers(response);
+      },
+      err => {
+        console.warn(err);
+        this.onSnifferErr = true;
+        this.snifferErrMsg = this.utils.getErrorMessage(err);
+      }
+    );
+  };
+
+  pullSniffers() {
+    this.snifferRefreshTimer$ = interval(5000);
+    this.snifferSubscription = this.snifferRefreshTimer$.subscribe(
+      this.refreshSniffer.bind(this)
+    );
+  }
+
+  mouseUp(event) {
+    if (event.target?.id == 'sniffer') {
+      this._entriesGridHeight = event.target.clientHeight - 170;
+      this.gridOptions.api.resetRowHeights();
+      this.gridOptions.api.sizeColumnsToFit();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.stopRefresh();
+  }
 }

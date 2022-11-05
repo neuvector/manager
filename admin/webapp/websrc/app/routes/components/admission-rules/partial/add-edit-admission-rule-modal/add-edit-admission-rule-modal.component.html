@@ -273,7 +273,9 @@
             class="pull-right"
           >
           </app-loading-button>
-          <button class="pull-right margin-right-m" (click)="onCancel()">
+          <button
+            mat-stroked-button
+            class="pull-right mr-2" (click)="onCancel()">
             {{ "policy.addPolicy.CANCEL" | translate }}
           </button>
         </div>
@@ -360,7 +362,9 @@
         class="pull-right"
       >
       </app-loading-button>
-      <button class="pull-right margin-right-m" (click)="onCustomizedViewCancel()">
+      <button
+        mat-stroked-button
+        class="pull-right mr-2" (click)="onCustomizedViewCancel()">
         {{ "policy.addPolicy.CANCEL" | translate }}
       </button>
     </div>

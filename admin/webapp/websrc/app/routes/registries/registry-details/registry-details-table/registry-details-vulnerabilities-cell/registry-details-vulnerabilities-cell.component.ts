@@ -18,7 +18,7 @@ export class RegistryDetailsVulnerabilitiesCellComponent
   agInit(params: ICellRendererParams): void {
     this.params = params;
     this.high = params.node.data.high;
-    this.medium = params.node.data.high;
+    this.medium = params.node.data.medium;
   }
 
   refresh(params: ICellRendererParams): boolean {

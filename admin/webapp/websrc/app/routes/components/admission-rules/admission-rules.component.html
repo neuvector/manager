@@ -4,7 +4,7 @@
     style="padding-top: 5px; margin-left: 10px"
     *ngIf="source === navSource['SELF']"
     (click)="refresh()">
-    <em class="fa fa-refresh text-action hand" aria-hidden="true"></em>
+    <em class="eos-icons text-action hand" aria-hidden="true">refresh</em>
     <label class="text-gray-label hand">{{
       'general.REFRESH' | translate
     }}</label>
@@ -39,19 +39,22 @@
   </div>
   <div *ngIf="source === navSource['SELF']" class="pull-right mt-sm mr">
     <button
+      mat-raised-button
+      aria-label="Configuration Assessment"
+      color="primary"
       class="policy-top-button"
       *appDisplayControl="'write_admission'"
       (click)="openConfigAssessmentDialog()"
       style="">
       <em class="eos-icons icon-18 margin-right-m">flask</em>
-      <label>{{ 'admissionControl.MATCHING_TEST' | translate }}</label>
+      {{ 'admissionControl.MATCHING_TEST' | translate }}
     </button>
   </div>
 
   <div class="clearfix">
-    <div class="content-title">
+    <h1 class="font-weight-light mb-0" id="admissionControlTitle">
       {{ 'sidebar.nav.ADMISSION_CONTROL' | translate }}
-    </div>
+    </h1>
   </div>
 
   <div
@@ -79,6 +82,7 @@
         </app-quick-filter>
         <button
           class="pull-left margin-top-l margin-left-m primary-button"
+          aria-label="Add"
           *appDisplayControl="'write_admission'"
           (click)="openAddEditAdmissionRuleModal()">
           <em class="eos-icons icon-18">add</em>
@@ -93,7 +97,7 @@
             {{ 'policy.PROMOTE' | translate }}
           </button>
         </div>
-        <div class="pull-right margin-top-m" *ngIf="source === navSource['SELF']">
+        <div class="pull-right margin-top-s" *ngIf="source === navSource['SELF']">
           <label class="nv-modal-item-title margin-right-m">
             {{ 'responsePolicy.gridHeader.STATUS' | translate }}
           </label>

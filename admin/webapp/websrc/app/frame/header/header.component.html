@@ -2,7 +2,10 @@
 <nav class="navbar topnavbar" role="navigation" aria-label="navbar">
   <!-- START navbar header-->
   <div class="navbar-header">
-    <a class="navbar-brand" href="{{'partner.general.DOCUMENT_URL' | translate}}">
+    <a
+      class="navbar-brand"
+      href="{{ 'partner.general.DOCUMENT_URL' | translate }}"
+      target="_blank">
       <div class="brand-logo">
         <img class="img-fluid" src="assets/img/logo.png" alt="App Logo" />
       </div>
@@ -83,9 +86,8 @@
     <div class="docURLBase mr-1">
       <a
         class="far fa-question-circle nv-help"
-        href="{{'partner.general.DOCUMENT_URL' | translate}}"
-        target="_blank"
-      ></a>
+        href="{{ 'partner.general.DOCUMENT_URL' | translate }}"
+        target="_blank"></a>
     </div>
     <button
       mat-button
@@ -93,14 +95,15 @@
       class="nav-item nav-white nav-border">
       <div class="profile-container">
         <div class="avatar">
-          <ngx-avatar gravatarId="{{ email }}" name="{{ username }}"></ngx-avatar>
+          <ngx-avatar
+            gravatarId="{{ email }}"
+            name="{{ username }}"></ngx-avatar>
         </div>
         <div class="info">
           <div>{{ username }}</div>
           <div>{{ displayRole }}</div>
         </div>
       </div>
-
     </button>
     <mat-menu #menu="matMenu">
       <button mat-menu-item (click)="goProfile()">

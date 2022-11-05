@@ -21,6 +21,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgJsonEditorModule } from 'ang-jsoneditor';
 import { CriterionDescriptionIconComponent } from './partial/criterion-description-icon/criterion-description-icon.component'
 import { MultiSelectorDropdownModule } from '@routes/components/ui/multi-selector-dropdown/multi-selector-dropdown.module';
+import { ConfigurationAssessmentResultPrintableReportComponent } from './partial/configuration-assessment-result-printable-report/configuration-assessment-result-printable-report.component';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { MultiSelectorDropdownModule } from '@routes/components/ui/multi-selecto
     ExportAdmissionRulesModalComponent,
     ConfigurationAssessmentModalComponent,
     ImportTestFileComponent,
-    CriterionDescriptionIconComponent
+    CriterionDescriptionIconComponent,
+    ConfigurationAssessmentResultPrintableReportComponent
   ],
   imports: [
     CommonModule,

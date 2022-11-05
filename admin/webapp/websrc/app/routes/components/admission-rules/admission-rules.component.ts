@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PathConstant } from '@common/constants/path.constant';
 import { ImportFileModalComponent } from '@components/ui/import-file-modal/import-file-modal.component';
 import { AddEditAdmissionRuleModalComponent } from "@components/admission-rules/partial/add-edit-admission-rule-modal/add-edit-admission-rule-modal.component";
@@ -63,6 +63,11 @@ export class AdmissionRulesComponent implements OnInit {
   private w: any;
   private isModalOpen: boolean = false;
   private switchClusterSubscription;
+  isPrinting: boolean = false;
+  configAssessmentDialogRef: MatDialogRef<ConfigurationAssessmentModalComponent>;
+  configTestResult: any;
+
+  @ViewChild('testResult') printableReportView: ElementRef;
 
   constructor(
     private dialog: MatDialog,
@@ -168,7 +173,10 @@ export class AdmissionRulesComponent implements OnInit {
   };
 
   openConfigAssessmentDialog = () => {
-    const configAssessmentDialogRef = this.dialog.open(ConfigurationAssessmentModalComponent, {
+    this.configAssessmentDialogRef = this.dialog.open(ConfigurationAssessmentModalComponent, {
+      data: {
+        printConfigurationAssessmentResultFn: this.printConfigurationAssessmentResult
+      },
       width: "1024px",
       disableClose: true
     });
@@ -266,4 +274,16 @@ export class AdmissionRulesComponent implements OnInit {
   };
 
   showGlobalActions = event => {};
+
+  private printConfigurationAssessmentResult = (testResult) => {
+    this.configTestResult = testResult;
+    this.configAssessmentDialogRef.close();
+    this.isPrinting = true;
+    setInterval(() => {
+      if (this.printableReportView) {
+        window.print();
+        this.isPrinting = false;
+      }
+    }, 500);
+  };
 }

@@ -1,4 +1,4 @@
-<div class="nv-dialog">
+<div class="nv-dialog screen-area">
   <div mat-dialog-title class="dialog-header">
     <div class="pull-left">
       {{'admissionControl.MATCHING_TEST' | translate}}
@@ -22,16 +22,14 @@
       <em
         class="eos-icons icon-18 hand margin-right-s"
       >csv_file</em>
-      <span class="text-gray-label link">CSV</span>
     </div>
     <div
       (click)="exportPdf()"
-      class="pull-right"
+      class="pull-right mr-2"
     >
       <em
         class="eos-icons icon-18 hand margin-right-s"
-      >pdf_file</em>
-      <span class="text-gray-label link">PDF</span>
+      >print</em>
     </div>
     <div class="text-muted margin-top-s"><strong>{{ 'admissionControl.matchingTestGrid.UNAVAILABLE_PROP' | translate}}:&nbsp;</strong>{{configAssessmentResult.props_unavailable.join(", ")}}</div>
     <ag-grid-angular

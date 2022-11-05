@@ -194,6 +194,7 @@
   },
   "login": {
     "SIGN_IN": "Sign in",
+    "SIGN_IN_LEGACY": "SIGN IN TO CONTINUE",
     "USERNAME": "Username",
     "PASSWORD": "Password",
     "USER": "Enter username",

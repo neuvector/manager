@@ -260,6 +260,7 @@ export class LoginComponent implements OnInit {
 
         this.validEula = this.isEulaAccepted;
         // GlobalVariable.isOpenShift = false;
+        this.isEulaAccepted = false;
       },
       error => {
         this.cookieService.delete('temp');

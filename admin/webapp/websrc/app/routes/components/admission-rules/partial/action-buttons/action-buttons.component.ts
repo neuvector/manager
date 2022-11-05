@@ -19,6 +19,8 @@ import { switchMap } from 'rxjs/operators';
 export class ActionButtonsComponent implements ICellRendererAngularComp {
 
   params!: ICellRendererParams;
+  isOperatableRuleType: boolean;
+  CFG_TYPE = GlobalConstant.CFG_TYPE;
 
   constructor(
     private dialog: MatDialog,
@@ -28,6 +30,9 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
 
   agInit(params: ICellRendererParams): void {
     this.params = params;
+    this.isOperatableRuleType =
+      this.params.data.cfg_type !== GlobalConstant.CFG_TYPE.GROUND &&
+      !(this.params.context.componentParent.source === GlobalConstant.NAV_SOURCE.SELF && this.params.data.cfg_type === GlobalConstant.CFG_TYPE.FED);
   }
 
   refresh(params: ICellRendererParams): boolean {

@@ -48,18 +48,6 @@ export class AdmissionRulesComponent implements OnInit {
   frameworkComponents;
   context;
   private default_action: string = 'deny';
-  private GLOBAL_ACTION_RULE = {
-    id: -1,
-    comment:
-      this.default_action === 'allow'
-        ? "Allow deployments that don't match any of above rules."
-        : "Deny deployments that don't match any of above rules.",
-    criteria: [],
-    critical: true,
-    category: 'Global action',
-    rule_type: this.default_action,
-    disable: false,
-  };
   private w: any;
   private isModalOpen: boolean = false;
   private switchClusterSubscription;
@@ -124,8 +112,21 @@ export class AdmissionRulesComponent implements OnInit {
           this.admissionOptions = options;
           this.globalStatus = this.admissionStateRec.state?.enable!;
           this.mode = this.admissionStateRec.state?.mode!;
+          this.default_action = this.admissionStateRec.state?.default_action!;
           if (this.source === GlobalConstant.NAV_SOURCE.SELF) {
-            this.admissionRules.push(this.GLOBAL_ACTION_RULE);
+            const GLOBAL_ACTION_RULE = {
+              id: -1,
+              comment:
+                this.default_action === 'allow'
+                  ? "Allow deployments that don't match any of above rules."
+                  : "Deny deployments that don't match any of above rules.",
+              criteria: [],
+              critical: true,
+              category: 'Global action',
+              rule_type: this.default_action,
+              disable: false,
+            };
+            this.admissionRules.push(GLOBAL_ACTION_RULE);
           }
           this.filteredCount = this.admissionRules.length;
 

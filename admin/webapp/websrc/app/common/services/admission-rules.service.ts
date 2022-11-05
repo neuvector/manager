@@ -115,7 +115,7 @@ export class AdmissionRulesService {
         minWidth: 150,
         colSpan: function(params) {
           if (params.data && params.data.id === -1) {
-            return 4;
+            return 2;
           }
           return 1;
         },

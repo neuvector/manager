@@ -4,6 +4,7 @@
       {{
         (type === 'add' ? 'service.ADD_RULE' : 'service.EDIT_RULE') | translate
       }}
+      <span class="eos-icons icon-18" [matTooltip]="'group.file.RULE_SAMPLE' | translate">info</span>
     </div>
     <div class="pull-right">
       <em class="icon-close hand" (click)="onCancel()"></em>

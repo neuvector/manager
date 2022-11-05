@@ -1952,7 +1952,8 @@
       "COUNT_POSTFIX": "process profiles rules found"
     },
     "file": {
-      "COUNT_POSTFIX": "file access rules found"
+      "COUNT_POSTFIX": "file access rules found",
+      "RULE_SAMPLE": "Sample: /dir/xxx, /dir/xxx.*, /dir/*.xxx, /dir/*/abc/* (Not support: [], () and regexp)"
     },
     "dlp": {
       "TITLE": "DLP",

@@ -1949,7 +1949,8 @@
       "OK_MSG": "成功更新组!"
     },
     "profile": {
-      "COUNT_POSTFIX": "个进程规则"
+      "COUNT_POSTFIX": "个进程规则",
+      "RULE_SAMPLE": "例子: /dir/xxx, /dir/xxx.*, /dir/*.xxx, /dir/*/abc/* (不支持: [], () and regexp)"
     },
     "file": {
       "COUNT_POSTFIX": "个文件访问规则"

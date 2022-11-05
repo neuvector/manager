@@ -208,9 +208,12 @@ export class GlobalNotificationsComponent implements OnInit {
   }
 
   getVersion() {
+    GlobalVariable.versionDone = false;
     this.commonHttpService.getVersion().subscribe({
       next: version => {
         this.version = version;
+        GlobalVariable.versionDone = true;
+        GlobalVariable.version = version;
       },
     });
   }

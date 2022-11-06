@@ -12,8 +12,8 @@
               {{authMsg}}
             </div>
           </div>
-          <div class="login-panel" ng-class="{'login-panel-extra': login.servers && login.servers.length === 2}" *ngIf="!isFromSSO">
-            <p class="text-center login-title" translate="{{'login.SIGN_IN_LEGACY'}}"></p>
+          <div class="login-panel" [ngClass]="{'login-panel-extra': servers && servers.length === 2}" *ngIf="!isFromSSO">
+            <p class="text-center login-title mt-0" translate="{{'login.SIGN_IN_LEGACY'}}"></p>
             <form
               class="form-validate mb-lg login-form" [formGroup]="loginForm" novalidate=""
               role="form"
@@ -136,12 +136,12 @@
                 </button>
               </div>
             </form>
-            <div class="text-danger text-center clearfix" ng-class="{'mt': login.servers && login.servers.length === 2}" *ngIf="authMsg" style="padding: 0 10px; clear:both">
+            <div class="text-danger text-center clearfix" [ngClass]="{'mt': servers && servers.length === 2}" *ngIf="authMsg" style="padding: 0 10px; clear:both">
               {{authMsg}}
             </div>
           </div>
         </div>
-        <div class="text-center mt-2" *ngIf="!isEulaAccepted">
+        <div class="text-center mt-2" *ngIf="!isEulaAccepted && !isFromSSO">
           <app-eula (eulaStatus)="getEulaStatus($event)" ></app-eula>
         </div>
       </div>

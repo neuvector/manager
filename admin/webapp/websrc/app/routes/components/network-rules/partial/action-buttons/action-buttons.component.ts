@@ -145,7 +145,20 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
   };
 
   revertNetworkRule = (id) => {
-
+    let indexAtBackup = this.networkRulesService.networkRuleBackup.findIndex(rule => rule.id === id);
+    let indexAtCurr = this.params.context.componentParent.networkRules.findIndex(rule => rule.id === id);
+    this.params.context.componentParent.networkRules[indexAtCurr] =
+      JSON.parse(JSON.stringify(this.networkRulesService.networkRuleBackup[indexAtBackup]));
+    this.params.context.componentParent.gridOptions.api!.setRowData(this.params.context.componentParent.networkRules);
+    this.networkRulesService.isNetworkRuleChanged = false;
+    setTimeout(() => {
+      let row = this.params.context.componentParent.gridOptions.api!.getDisplayedRowAtIndex(indexAtCurr);
+      row.setSelected(true);
+      this.params.context.componentParent.gridOptions.api!.ensureIndexVisible(
+        indexAtCurr,
+        "top"
+      );
+    }, 500);
   };
 
   promoteNeworkRuleOnEntry = (id) => {

@@ -21,6 +21,7 @@ import * as pako from 'pako';
 export class NetworkRulesService {
   w: any;
   isNetworkRuleChanged: boolean = false;
+  networkRuleBackup: Array<any>;
 
   constructor(
     public sanitizer: DomSanitizer,

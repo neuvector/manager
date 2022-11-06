@@ -62,7 +62,7 @@ export class HeaderComponent implements OnInit {
     this.email = this.sessionStorage.get('token')?.emailHash;
     this.username = this.sessionStorage.get('token')?.token?.username;
     const role = this.sessionStorage.get('token')?.token?.role;
-    this.displayRole = role ? role : "none";
+    this.displayRole = role ? role : "Namespace User";
   }
 
   toggleUserBlock(event) {

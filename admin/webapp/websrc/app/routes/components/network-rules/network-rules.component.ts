@@ -343,21 +343,23 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
           if (MapConstant.USER_TIMEOUT.indexOf(error.status) < 0) {
             if (
               error.status === 400 &&
-              error.data &&
-              error.data.code === READONLY_RULE_MODIFIED
+              error.error &&
+              error.error.code === READONLY_RULE_MODIFIED
             ) {
               // Alertify.alert(
               //   `${Utils.getAlertifyMsg(error, $translate.instant("policy.dialog.content.SUBMIT_NG"), true)}
               //   <div>Read-only rule ID is: ${error.data.read_only_rule_ids.join(", ")}</div>
               //   <div>You can click revert button on the rule to rollback your change.</div>`
               // );
-              this.changeState4ReadOnlyRules(error.data.read_only_rule_ids);
+              this.changeState4ReadOnlyRules(error.error.read_only_rule_ids);
             } else {
               // Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
               // Alertify.error(
               //   Utils.getAlertifyMsg(error, $translate.instant("policy.dialog.content.SUBMIT_NG"), false)
               // );
             }
+            dialogRef.componentInstance.onCancel();
+            dialogRef.componentInstance.loading = false;
           }
         }
       );
@@ -414,12 +416,14 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       this.networkRules[index].state =
         GlobalConstant.NETWORK_RULES_STATE.READONLY;
     });
+    console.log("this.networkRules", this.networkRules);
     this.gridOptions.api!.setRowData(this.networkRules);
   };
 
   private mergeRulesByWebWorkerClient = (rulesBlock: Array<any>) => {
     let eof = rulesBlock.length < MapConstant.PAGE.NETWORK_RULES;
     this.networkRules = this.networkRules.concat(rulesBlock);
+    this.networkRulesService.networkRuleBackup = JSON.parse(JSON.stringify(this.networkRules))
     this.renderNetworkRule(this.networkRules, eof);
   };
 

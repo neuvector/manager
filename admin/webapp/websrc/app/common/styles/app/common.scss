@@ -1294,7 +1294,7 @@ mwl-gauge.score > .gauge > .value {
   color: $neuvector-grey-50 ;
   opacity: 0.54 ;
   &:hover {
-    color: $neuvector-mid-green-200 ;
+    color: $neuvector-mid-green-200;
   }
   font-size: 24px;
   padding: 5px 0 0 0;
@@ -1306,4 +1306,11 @@ mwl-gauge.score > .gauge > .value {
 
 .cell-wrap-text {
   white-space: normal !important;
+}
+
+.btn-sec-event {
+  background-color: $neuvector-dark-green-400 !important;
+  color: #fff !important;
+  font-size: 10px !important;
+  line-height: 12px !important;
 }

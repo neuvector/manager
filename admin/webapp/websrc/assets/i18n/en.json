@@ -194,6 +194,7 @@
   },
   "login": {
     "SIGN_IN": "Sign in",
+    "SIGN_IN_LEGACY": "SIGN IN TO CONTINUE",
     "USERNAME": "Username",
     "PASSWORD": "Password",
     "USER": "Enter username",
@@ -1899,6 +1900,7 @@
     "ZERODRIFT_COMMENT": "Enable/disable automated protection that prevents processes and file system drift for selected groups.",
     "ZERO_DRIFT_HINT": "Switching mode to Discover to start learning processes in Basic mode",
     "BASELINE_PROFILE": "Baseline Profile",
+    "MULTI_MODE_SELECTION": "Multiple groups are selected along with different policy mode or baseline profile.",
     "TIP": {
       "EDIT": "Edit Group",
       "DELETE": "Remove Group",
@@ -1952,7 +1954,8 @@
       "COUNT_POSTFIX": "process profiles rules found"
     },
     "file": {
-      "COUNT_POSTFIX": "file access rules found"
+      "COUNT_POSTFIX": "file access rules found",
+      "RULE_SAMPLE": "Sample: /dir/xxx, /dir/xxx.*, /dir/*.xxx, /dir/*/abc/* (Not support: [], () and regexp)"
     },
     "dlp": {
       "TITLE": "DLP",

@@ -2,7 +2,8 @@ $sidebar-bg:                      $left-side-bg;
 
 $sidebar-item-color:              #515253;
 $sidebar-item-color-active:       #30ba78;
-$sidebar-item-bg-active:          darken($sidebar-bg, 1%);
+$sidebar-item-bg-active:          darken($sidebar-bg, 3%);
+$sidebar-subitem-bg-active:       darken($sidebar-bg, 10%);
 
 $sidebar-icon-color:              #141823;
 $sidebar-icon-color-active:       #30ba78;
@@ -140,7 +141,7 @@ $tablet-landscape: 1025px;
             padding: 10px 20px;
             padding-left: 53px;
             font-weight: normal;
-            background-color: transparent !important;
+            background-color: transparent;
             color: $sidebar-item-color;
             &:focus,
             &:hover {
@@ -157,10 +158,8 @@ $tablet-landscape: 1025px;
             >a,
             >.nav-item {
                 color: $sidebar-bullet-color-active;
-                &:after {
-                    border-color: $sidebar-bullet-color-active;
-                    background-color: $sidebar-bullet-color-active;
-                }
+                background-color: $sidebar-subitem-bg-active;
+                border-color: $sidebar-subitem-bg-active;
             }
         } // Nested levels
         .sidebar-nav>li {

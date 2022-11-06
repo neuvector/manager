@@ -15,6 +15,7 @@ import { ProcessProfileRulesService } from '@services/process-profile-rules.serv
 import { AddEditProcessProfileRuleModalComponent } from './partial/add-edit-process-profile-rule-modal/add-edit-process-profile-rule-modal.component';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { AuthUtilsService } from '@common/utils/auth.utils';
+import { ConfirmDialogComponent } from "@components/ui/confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: 'app-process-profile-rules',
@@ -188,41 +189,44 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
   };
 
   removeProfile = data => {
-    // let editDialogRef = this.dialog.open(
-    //   this.translate.instant("service.PROFILE_DELETE_CONFIRMATION")
-    // );
-    // editDialogRef.afterClosed().subscribe(result => {
-    //   if(result) {
-    this.processProfileRulesService
-      .updateProcessProfileRules(GlobalConstant.CRUD.D, data.group, {}, data)
-      .subscribe(
-        response => {
-          setTimeout(() => {
-            this.getProcessProfileRules(this.groupName);
-          }, 1000);
-          // sweetAlert(
-          //   `Removed!`,
-          //   `Your process profile rule has been removed.`,
-          //   "success"
-          // );
-        },
-        err => {
-          if (
-            err.status !== GlobalConstant.STATUS_AUTH_TIMEOUT &&
-            err.status !== GlobalConstant.STATUS_UNAUTH &&
-            err.status !== GlobalConstant.STATUS_SERVER_UNAVAILABLE
-          ) {
-            let message = this.utils.getErrorMessage(err);
-            // sweetAlert(
-            //   "Error!",
-            //   `Something wrong when remove process profile rule! - ${message}`,
-            //   "error"
-            // );
-          }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: "700px",
+      data: {
+        message: this.translate.instant("service.PROFILE_DELETE_CONFIRMATION"),
+        isSync: true
+      },
+      disableClose: true
+    });
+    dialogRef.afterClosed().subscribe(
+      result => {
+        if (result) {
+          this.processProfileRulesService
+            .updateProcessProfileRules(
+              GlobalConstant.CRUD.D,
+              this.source === GlobalConstant.NAV_SOURCE.FED_POLICY ? data.group : this.groupName,
+              {},
+              data,
+              this.source === GlobalConstant.NAV_SOURCE.FED_POLICY ? GlobalConstant.SCOPE.FED : GlobalConstant.SCOPE.LOCAL
+            )
+            .subscribe(
+              response => {
+                setTimeout(() => {
+                  this.getProcessProfileRules(this.groupName);
+                }, 1000);
+              },
+              err => {
+                if (
+                  err.status !== GlobalConstant.STATUS_AUTH_TIMEOUT &&
+                  err.status !== GlobalConstant.STATUS_UNAUTH &&
+                  err.status !== GlobalConstant.STATUS_SERVER_UNAVAILABLE
+                ) {
+                  let message = this.utils.getErrorMessage(err);
+                }
+              }
+            );
         }
-      );
-    //   }
-    // });
+      }
+    );
   };
 
   addProfile = () => {

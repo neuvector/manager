@@ -1,4 +1,11 @@
-<div>
+<app-configuration-assessment-result-printable-report
+  #testResult
+  *ngIf="isPrinting"
+  class="printable-area"
+  [testResult]="configTestResult"
+>
+</app-configuration-assessment-result-printable-report>
+<div class="nv-dialog screen-area">
   <div
     class="pull-right mt-sm"
     style="padding-top: 5px; margin-left: 10px"

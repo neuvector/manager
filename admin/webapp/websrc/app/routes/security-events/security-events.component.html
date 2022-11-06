@@ -350,8 +350,7 @@
                     >
                       <button
                         *ngIf="secEvent.details.message.cap_len"
-                        class="btn btn-primary btn-xs btn-sec-event pull-left"
-                        style="color: #fff;"
+                        class="mat-button btn-sec-event pull-left"
                         (click)="showPacket(secEvent.details.id, $event)"
                       >
                         <em class="icon-envelope-letter mr-sm"></em>
@@ -360,7 +359,7 @@
                     </div>
                     <div class="margin-top-xs col-sm-2 padding-0"
                          *ngIf="secEvent.type.name === 'violation' && isEditRuleAuthorized && secEvent.reviewRulePermission && canShowReviewRule(secEvent)">
-                      <button class="btn btn-primary btn-xs btn-sec-event pull-left" style="color: #fff;" (click)="reviewRule('violation', secEvent)">
+                      <button class="mat-button  btn-sec-event pull-left" style="color: #fff;" (click)="reviewRule('violation', secEvent)">
                         <em class="fa fa-edit fa-lg mr-sm"></em>
                         {{"securityEvent.REVIEW_RULE" | translate}}
                       </button>
@@ -370,7 +369,7 @@
                       *ngIf="secEvent.type.name === 'incident' && secEvent.details.message.group && isEditRuleAuthorized && !isInternalGroup(secEvent.details.message.group) && secEvent.reviewRulePermission"
                     >
                       <button
-                        class="btn btn-primary btn-xs btn-sec-event pull-left"
+                        class="mat-button  btn-sec-event pull-left"
                         style="color: #fff;"
                         *ngIf="secEvent.details.message.messageCategory.toLowerCase().indexOf('process') >= 0"
                         (click)="reviewRule('incident', secEvent)"
@@ -455,7 +454,7 @@
                     >
                       <button
                         *ngIf="secEvent.details.message.cap_len"
-                        class="btn btn-primary btn-xs btn-sec-event pull-left"
+                        class="mat-button  btn-sec-event pull-left"
                         style="color: #fff;"
                         (click)="showPacket(secEvent.details.id, $event)"
                       >
@@ -471,7 +470,7 @@
                           secEvent.reviewRulePermission"
                     >
                       <button
-                        class="btn btn-primary btn-xs btn-sec-event pull-left"
+                        class="mat-button  btn-sec-event pull-left"
                         style="color: #fff;"
                         (click)="reviewRule('violation', secEvent)"
                       >
@@ -488,7 +487,7 @@
                       && secEvent.reviewRulePermission"
                     >
                       <button
-                        class="btn btn-primary btn-xs btn-sec-event pull-left"
+                        class="mat-button  btn-sec-event pull-left"
                         style="color: #fff;"
                         *ngIf="secEvent.details.message.messageCategory.toLowerCase().indexOf('process') >= 0"
                         (click)="reviewRule('incident', secEvent)"

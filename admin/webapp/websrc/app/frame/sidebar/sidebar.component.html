@@ -116,7 +116,10 @@
               <em class="eos-icons icon-18" *ngIf="subitem.icon">{{
                 subitem.icon
               }}</em>
-              <span>{{ (subitem.translate | translate) || subitem.text }}</span>
+              <span
+                [routerLink]="subitem.link"
+                [attr.route]="subitem.link"
+              >{{ (subitem.translate | translate) || subitem.text }}</span>
             </a>
           </li>
 

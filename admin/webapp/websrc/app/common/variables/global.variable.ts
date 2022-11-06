@@ -17,4 +17,5 @@ export class GlobalVariable {
   public static isSUSESSO: boolean;
   public static isMaster: boolean;
   public static isMember: boolean;
+  public static version: string;
 }

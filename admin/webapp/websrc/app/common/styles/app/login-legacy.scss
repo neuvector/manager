@@ -1,0 +1,113 @@
+
+.login {
+  min-height: 100vh;
+  background-image: url("../../../../assets/img/faint-background-v1.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.login-header {
+  height: 10px;
+  width: 100%;
+  background-color: $neuvector-grey-900;
+}
+
+.login-body {
+  height: calc(100vh * 0.5 + 280px);
+  min-height: 650px;
+
+  .login-logo {
+    background: url("../../../../assets/img/logo-with-text.png") no-repeat;
+    background: -webkit-image-set(
+        url("../../../../assets/img/logo-with-text.png") 1x,
+        url("../../../../assets/img/logo-with-text@2x.png") 2x
+      )
+      no-repeat;
+    margin: 0 auto 85px auto;
+    height: 77px;
+    width: 291px;
+  }
+}
+
+.login-footer {
+  height: 80px;
+  width: 100%;
+  background-color: $neuvector-grey-900;
+  padding: 30px 0;
+}
+
+.login-panel-wrap {
+  width: 480px;
+  height: 585px;
+  margin: calc(100vh * 0.5 - 370px) auto auto auto;
+  @media only screen and (max-height: 770px) {
+    margin: 20px auto auto auto;
+  }
+  @media only screen and (max-width: $nv-tablet-width) {
+    width: 100%;
+  }
+  mat-checkbox > label {
+    margin-bottom: 0.2em !important;
+  }
+}
+
+.login-panel {
+  height: 422px;
+  width: 100%;
+  box-shadow: 0 4px 19px 0 rgba(0, 0, 0, 0.5);
+  background-color: #fff;
+  border-radius: 5px;
+  &.login-panel-extra {
+    height: 462px;
+  }
+}
+
+.login-title {
+  padding: 36px 0 0 0;
+  color: #515151;
+  font-size: 20px;
+  font-weight: 300;
+}
+
+.login-form {
+  padding: 0 37px;
+  .login-icon {
+    padding-top: 8px;
+  }
+  .login-error {
+    position: absolute;
+    top: 75px;
+  }
+  > div {
+    margin-top: 25px;
+    > label {
+      color: #515151;
+      font-size: 16px;
+      font-weight: 300;
+      text-align: left;
+    }
+    > input {
+      height: 45px;
+    }
+  }
+  > div > button,
+  > div > div > button {
+    height: 45px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    background-color: $eos-bc-green-900;
+    width: 46%;
+    border-radius: 5px;
+    border: none;
+    &:hover,
+    &:focus {
+      background-color: $eos-bc-green-500;
+    }
+    &:disabled {
+      background-color: $neuvector-grey-200;
+      cursor: not-allowed;
+    }
+  }
+}

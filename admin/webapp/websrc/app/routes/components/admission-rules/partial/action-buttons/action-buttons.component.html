@@ -2,35 +2,35 @@
   <div class="rule-actions-expand fade-in-right">
     <em
       class="eos-icons icon-18 hand"
-      *ngIf="!params.data['critical']"
+      *ngIf="!params.data['critical'] && isOperatableRuleType && isWriteAdmissionRuleAuthorized"
       (click)="editAdmissionRule($event, params.node.data)"
     >
       edit
     </em>
     <em
       class="eos-icons icon-18 hand"
-      *ngIf="params.data['critical']"
+      *ngIf="params.data['critical'] || !isOperatableRuleType || !isWriteAdmissionRuleAuthorized"
       (click)="viewRuleItem($event, params.node.data)"
     >
       text_snippet
     </em>
     <em
       class="eos-icons icon-18 hand"
-      *ngIf="!params.data['disable']"
+      *ngIf="!params.data['disable'] && isOperatableRuleType && isWriteAdmissionRuleAuthorized"
       (click)="toggleRuleItem($event, params.node.data, true)"
     >
       highlight_off
     </em>
     <em
       class="eos-icons icon-18 hand"
-      *ngIf="params.data['disable']"
+      *ngIf="params.data['disable'] && isOperatableRuleType && isWriteAdmissionRuleAuthorized"
       (click)="toggleRuleItem($event, params.node.data, false)"
     >
       task_alt
     </em>
     <em
       class="eos-icons icon-18 hand"
-      *ngIf="!params.data['critical']"
+      *ngIf="!params.data['critical'] && isOperatableRuleType && isWriteAdmissionRuleAuthorized"
       (click)="deleteRuleItem($event, params.node.data)"
     >
       delete

@@ -15,7 +15,7 @@ import {
 } from 'ag-grid-community';
 import { AddRegistryDialogComponent } from './add-registry-dialog/add-registry-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { RegistryConfig, Summary } from '@common/types';
+import { ErrorResponse, RegistryConfig, Summary } from '@common/types';
 import { RegistriesTableButtonsComponent } from './registries-table-buttons/registries-table-buttons.component';
 import { RegistriesService } from '@services/registries.service';
 import { RegistriesCommunicationService } from '../regestries-communication.service';
@@ -28,6 +28,8 @@ import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-di
 import { finalize, switchMap, take, tap } from 'rxjs/operators';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { MapConstant } from '@common/constants/map.constant';
+import { NotificationService } from '@services/notification.service';
+import { UtilsService } from '@common/utils/app.utils';
 
 @Component({
   selector: 'app-registries-table',
@@ -142,7 +144,9 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
     private registriesService: RegistriesService,
     private registriesCommunicationService: RegistriesCommunicationService,
     private cd: ChangeDetectorRef,
-    private authUtilsService: AuthUtilsService
+    private authUtilsService: AuthUtilsService,
+    private notificationService: NotificationService,
+    private utils: UtilsService
   ) {}
 
   ngOnInit(): void {
@@ -162,7 +166,7 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
       onSelectionChanged: event => this.onSelectionChanged(event),
       components: {
         btnCellRenderer: RegistriesTableButtonsComponent,
-        statusCellRenderer: RegistryTableStatusCellComponent
+        statusCellRenderer: RegistryTableStatusCellComponent,
       },
       overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS'),
     };
@@ -204,23 +208,53 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
           deleteDialogRef.componentInstance.loading = false;
         })
       )
-      .subscribe(() => {
-        this.registriesCommunicationService.refreshRegistries();
+      .subscribe({
+        complete: () => {
+          this.registriesCommunicationService.refreshRegistries();
+        },
+        error: ({ error }: { error: ErrorResponse }) => {
+          this.notificationService.open(
+            this.utils.getAlertifyMsg(
+              error,
+              this.translate.instant('registry.REGISTRY_DELETE_FAILED'),
+              false
+            )
+          );
+        },
       });
   }
 
   startScan(): void {
     this.registriesCommunicationService.initStartScan();
     const name = this.gridApi.getSelectedNodes()[0].data.name;
-    this.registriesService
-      .startScanning(name)
-      .subscribe(() => this.registriesCommunicationService.refreshRegistries());
+    this.registriesService.startScanning(name).subscribe({
+      complete: () => this.registriesCommunicationService.refreshRegistries(),
+      error: ({ error }: { error: ErrorResponse }) => {
+        this.notificationService.open(
+          this.utils.getAlertifyMsg(
+            error,
+            this.translate.instant('registry.REGISTRY_SCAN_FAILED'),
+            false
+          )
+        );
+      },
+    });
   }
 
   stopScan(): void {
     this.registriesCommunicationService.initStopScan();
     const name = this.gridApi.getSelectedNodes()[0].data.name;
-    this.registriesService.stopScanning(name).subscribe();
+    this.registriesService.stopScanning(name).subscribe({
+      error: ({ error }: { error: ErrorResponse }) => {
+        this.notificationService.open(
+          this.utils.getAlertifyMsg(
+            error,
+            this.translate.instant('registry.REGISTRY_STOP_SCAN_FAILED'),
+            false
+          )
+        );
+      },
+    });
   }
 
   editRegistry(event): void {

@@ -109,6 +109,10 @@ export class RegistriesCommunicationService {
     this.savingSubject$.next(true);
   }
 
+  cancelSave(): void {
+    this.savingSubject$.next(false);
+  }
+
   initDelete(): void {
     this.deletingSubject$.next(true);
   }

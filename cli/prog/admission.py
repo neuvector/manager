@@ -49,7 +49,9 @@ SingleValueCrt = {"cveHighCount": True,
                   "count": True,
                   "resourceLimit": True,
                   "modules": False,
-                  "hasPssViolation": True
+                  "hasPssViolation": True,
+                  "customPath": False,
+                  "saBindRiskyRole": True,
                   }
 
 NamesDisplay = {"cveHighCount": "High severity CVE count",
@@ -84,7 +86,11 @@ NamesDisplay = {"cveHighCount": "High severity CVE count",
                 "memoryLimit": "memory limit",
                 "modules": "Image Modules/Packages",
                 "hasPssViolation": "Violates Selected K8s Pod Security Standards Policy"
-                }
+}
+
+SaBindRiskyRoleDisplay = {
+    "saBindRiskyRole": "Service Account binds risky role",
+}
 
 NamesDisplay2 = {  # for criteria that has sub-criteria
     "cveHighCount": "More than {v1} high severity CVEs that were reported before {v2} days ago",
@@ -99,6 +105,14 @@ OpsDisplay1 = {CriteriaOpContainsAny: 'is', CriteriaOpNotContainsAny: 'is not',
 OpsDisplay2 = {CriteriaOpContainsAny: 'contains any in', CriteriaOpNotContainsAny: 'not contains any in',
                CriteriaOpContainsAll: 'contains all in', CriteriaOpContainsOtherThan: 'contains value not in'}
 
+
+RiskyRoleDescriptions = {
+    "risky_role_view_secret": "Subject can listing secrets",
+    "risky_role_any_action_workload": "Subject can do any action on workload resources",
+    "risky_role_any_action_rbac" : "Subject can do any action on RBAC resources",
+    "risky_role_create_pod" : "Subject can create workload resource",
+    "risky_role_exec_into_container" : "Subject can exec into container",
+}
 
 def get_admission_rules(data, scope):
     """Get admission control rules."""
@@ -173,10 +187,31 @@ def _get_criterion_op_value(c):
         else:
             opDisplay = OpsDisplay2[c["op"]]
         value = "{{{}}}".format(c["value"])
+    elif c["op"] == "notExist":
+        opDisplay = "doesn't exist"
+        value = ""
+    elif c["op"] == "exist":
+        opDisplay = "exist"
+        value = ""
+    elif c["op"] == "containsTagAny":
+        opDisplay = ""
+        value = "{{{}}}".format(c["value"])
     else:
         opDisplay = c["op"]
         value = c["value"]
     return opDisplay, value
+
+def _format_custompath_criteria(c):
+    opDisplay, value = _get_criterion_op_value(c)
+    if c["value_type"] == "key":
+        msg = "(The value of {} {})".format(c["path"], opDisplay)
+    elif c["value_type"] == "string":
+        msg = "(The value of {} {} {})".format(c["path"], opDisplay, value)
+    elif c["value_type"] == "number":
+        msg = "(The value of {} {} {})".format(c["path"], opDisplay, value)
+    elif c["value_type"] == "boolean":
+        msg = "(The value of {} {} {})".format(c["path"], opDisplay, value)
+    return msg
 
 
 def _list_admission_rule_display_format(rule):
@@ -239,6 +274,10 @@ def _list_admission_rule_display_format(rule):
                         criterion = "(unsupported {})".format(c["name"])
                 elif c["name"] in NamesDisplay:
                     criterion = "({} {} {})".format(NamesDisplay[c["name"]], opDisplay, value)
+                elif c["name"] == "customPath":
+                    criterion = _format_custompath_criteria(c)
+                elif c["name"] == "saBindRiskyRole":
+                    criterion = "({} in {})".format(SaBindRiskyRoleDisplay[c["name"]], value)
                 else:
                     criterion = "(unsupported {})".format(c["name"])
                 if tc == "":
@@ -307,10 +346,17 @@ def _get_criterion_option(option):
     for o in option["ops"]:
         ops.append(o)
     option["ops"] = "{}".format(", ".join(ops))
+
+    if option["name"] == "customPath":
+        option["ops"] = "(Please see following table customPath for details)"
+
     if "values" in option:
         option["values"] = "{}".format(", ".join(option["values"]))
     else:
         option["values"] = ""
+
+    if option["name"] == "saBindRiskyRole":
+        option["values"] = "(Please see following table predefind risky role for details)"
 
 
 def _list_admission_rule_options(data, ruleType, category, ruleOptionsObj):
@@ -356,6 +402,30 @@ def _list_admission_psp_collection(data, criteria):
     columns = ("name", "op", "value")
     output.list(columns, criteria)
 
+def _list_predefined_risky_roles(data, criteria):
+    click.echo(" ")
+    click.echo("Content for predefined risky roles:")
+    mainCrit=[]
+    for role in criteria:
+        if role in RiskyRoleDescriptions:
+            mainCrit.append({"value": role, "description": RiskyRoleDescriptions[role]})
+    columns = ("value","description")
+    output.list(columns, mainCrit)
+
+def _list_custompath_options(data, criteria):
+    click.echo(" ")
+    click.echo("Content for customPath options:")
+    for cr in criteria:
+        if "values" in cr:
+            cr["values"] = "{}".format(", ".join(cr["values"]))
+        else:
+            cr["values"] = ""
+        ops = []
+        for o in cr["ops"]:
+            ops.append(o)
+        cr["ops"] = "{}".format(", ".join(ops))
+    columns = ("valuetype", "ops", "values")
+    output.list(columns, criteria)
 
 @show_admission_rule.command("options")
 @click.pass_obj
@@ -370,9 +440,16 @@ def show_admission_rule_options(data):
             _list_admission_cat_options(data, AdmCtrlAllowRulesType, rest_admission_options["exception_options"])
         if "psp_collection" in rest_admission_options:
             _list_admission_psp_collection(data, rest_admission_options["psp_collection"])
+        if "predefined_risky_roles" in rest_admission_options:
+            _list_predefined_risky_roles(data, rest_admission_options["predefined_risky_roles"])
     else:
         click.echo("")
         click.echo("")
+
+    if "admission_custom_criteria_options" in resp:
+       _list_custompath_options(data, resp["admission_custom_criteria_options"])
+    if "predefined_risky_roles" in resp:
+       _list_predefined_risky_roles(data, resp["predefined_risky_roles"])
 
 
 #
@@ -383,6 +460,28 @@ def create_admission(data):
 
 
 def _parse_adm_criterion(c):
+    d = c.split(":")
+    if len(d) < 3:
+        click.echo("Error: Must provide criterion name, op and value")
+        return
+    elif len(d) > 3:
+        d[2] = ":".join(d[2:])
+    crit = {"name": d[0], "op": d[1], "value": d[2]}
+    return crit
+
+def _parse_adm_custompath_criterion(c):
+    # expected format for custompath
+    #   name:op:value:path:valuetype
+    d = c.split(":")
+    if len(d) < 5:
+        click.echo("Error: Must provide criterion name, op, value, path and value_type")
+        return
+    crit = {"name": d[0], "op": d[1], "value": d[2], "path": d[3], "value_type": d[4], "template_kind": "podTemplate", "type": d[0]}
+    return crit
+
+def _parse_adm_sabindriskyrole_criterion(c):
+    # expected format for sabindriskyrole
+    #   name:op:value
     d = c.split(":")
     if len(d) < 3:
         click.echo("Error: Must provide criterion name, op and value")
@@ -433,6 +532,14 @@ def _parse_adm_criteria(criteria):
                     subCrits.append(subCrit)
                 mainCrit = {"name": "resourceLimit", "sub_criteria": subCrits}
             crits.append(mainCrit)
+        elif crtName == "customPath":
+            mainCrit = _parse_adm_custompath_criterion(c)
+            mainCrit["sub_criteria"] = None
+            crits.append(mainCrit)
+        elif crtName == "saBindRiskyRole":
+            mainCrit = _parse_adm_sabindriskyrole_criterion(c)
+            mainCrit["sub_criteria"] = None
+            crits.append(mainCrit)
         else:
             mainCrit = _parse_adm_criterion(c)
             mainCrit["sub_criteria"] = None
@@ -446,7 +553,7 @@ def _parse_adm_criteria(criteria):
               help="It's a local or federal rule")
 # @click.option("--category", default="Kubernetes", help="rule category. default: Kubernetes")
 @click.option("--criteria", multiple=True,
-              help="Format is name:op:value{/subName:op:value}. name can be image, namespace, user, labels, mountVolumes, cveNames, cveHighCount, cveHighWithFixCount, cveMediumCount, cveScoreCount, imageScanned, imageSigned, runAsRoot, allowPrivEscalation, pspCompliance, userGroups, imageCompliance, envVarSecrets, imageNoOS, sharePidWithHost, shareIpcWithHost, shareNetWithHost, resourceLimit. subName can be publishDays, count, cpuRequest, cpuLimit, memoryRequest, memoryLimit, modules, hasPssViolation. See command: show admission rule options")
+              help="Format is name:op:value{/subName:op:value}. name can be image, namespace, user, labels, mountVolumes, cveNames, cveHighCount, cveHighWithFixCount, cveMediumCount, cveScoreCount, imageScanned, imageSigned, runAsRoot, allowPrivEscalation, pspCompliance, userGroups, imageCompliance, envVarSecrets, imageNoOS, sharePidWithHost, shareIpcWithHost, shareNetWithHost, resourceLimit. subName can be publishDays, count, cpuRequest, cpuLimit, memoryRequest, memoryLimit. Format for criteira named customPath is name:op:path:valuetype:value. Format for criteria named saBindRiskyRole is name:op:value. See command: show admission rule options.")
 @click.option("--disable/--enable", default=False, help="Disable/enable the admission control rule [default: --enable]")
 @click.option("--comment", default="", help="Rule comment")
 @click.pass_obj
@@ -537,7 +644,7 @@ def set_admission_state(data, disable, mode, client_mode):
 @click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=True, help="Obsolete")
 # @click.option("--category", default="Kubernetes", show_default=True, help="Rule category")
 @click.option("--criteria", multiple=True,
-              help="Format is name:op:value{/subName:op:value}. name can be image, namespace, user, labels, mountVolumes, cveNames, cveHighCount, cveHighWithFixCount, cveMediumCount, cveScoreCount, imageScanned, imageSigned, runAsRoot, allowPrivEscalation, pspCompliance, userGroups, imageCompliance, envVarSecrets, imageNoOS, sharePidWithHost, shareIpcWithHost, shareNetWithHost, resourceLimit. subName can be publishDays, count, cpuRequest, cpuLimit, memoryRequest, memoryLimit, modules, hasPssViolation. See command: show admission rule options")
+              help="Format is name:op:value{/subName:op:value}. name can be image, namespace, user, labels, mountVolumes, cveNames, cveHighCount, cveHighWithFixCount, cveMediumCount, cveScoreCount, imageScanned, imageSigned, runAsRoot, allowPrivEscalation, pspCompliance, userGroups, imageCompliance, envVarSecrets, imageNoOS, sharePidWithHost, shareIpcWithHost, shareNetWithHost, resourceLimit. subName can be publishDays, count, cpuRequest, cpuLimit, memoryRequest, memoryLimit. Format for criteira named customPath is name:op:path:valuetype:value. Format for criteria named saBindRiskyRole is name:op:value. See command: show admission rule options")
 @click.option("--enable", "state", flag_value='enable', help="Enable the admission control rule")
 @click.option("--disable", "state", flag_value='disable', help="Enable the admission control rule")
 @click.option("--comment", help="Rule comment")

@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import {
   ErrorResponse,
   GroupMappedRole,
-  SAML,
+  OPENID,
   ServerGetResponse,
   ServerPatchBody,
 } from '@common/types';
@@ -24,7 +24,7 @@ export class OpenidFormComponent implements OnInit {
   submittingForm = false;
   errorMessage = '';
   groupMappedRoles: GroupMappedRole[] = [];
-  serverName = 'openid1';
+  serverName = 'openId1';
   passwordVisible = false;
   openidRedirectURL!: string;
 
@@ -68,12 +68,12 @@ export class OpenidFormComponent implements OnInit {
     if (!this.openidForm.valid) {
       return;
     }
-    const saml: SAML = {
+    const oidc: OPENID = {
       scopes: this.scopes,
       group_mapped_roles: this.groupMappedRoles,
       ...this.openidForm.value,
     };
-    const config: ServerPatchBody = { config: { name: this.serverName, saml } };
+    const config: ServerPatchBody = { config: { name: this.serverName, oidc } };
     this.submittingForm = true;
     this.errorMessage = '';
     this.settingsService

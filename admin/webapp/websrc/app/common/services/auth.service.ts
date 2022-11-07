@@ -77,12 +77,19 @@ export class AuthService {
   }
 
   timeout(currUrl: string) {
+    let temp4TimeoutFlag = null;
+    if (this.sessionStorage.has(GlobalConstant.SESSION_STORAGE_TIMEOUT)) {
+      temp4TimeoutFlag = this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_TIMEOUT)
+    }
     this.clearSessionStorage();
     if (currUrl !== GlobalConstant.PATH_LOGIN) {
       this.sessionStorage.set(
         GlobalConstant.SESSION_STORAGE_ORIGINAL_URL,
         currUrl
       );
+    }
+    if (temp4TimeoutFlag) {
+      this.sessionStorage.set(GlobalConstant.SESSION_STORAGE_TIMEOUT, temp4TimeoutFlag);
     }
     this.router.navigate([GlobalConstant.PATH_LOGIN]);
   }

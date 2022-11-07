@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-panel-instruction-curtain',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./panel-instruction-curtain.component.scss']
 })
 export class PanelInstructionCurtainComponent implements OnInit {
+
+  @Input() instructions: string[];
 
   constructor() { }
 

@@ -126,7 +126,7 @@ export class ExposedServicePodGridComponent implements OnInit {
         cellRenderer: params => {
           if (params.value) {
             return `<span ng-class='{\'policy-remove\': data.remove}'
-                  class='action-label ${
+                  class='action-label px-1 ${
                     MapConstant.colourMap[params.value.toLowerCase()]
                   }'>
                   ${this.sanitizer.sanitize(

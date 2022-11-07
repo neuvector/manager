@@ -65,7 +65,7 @@
         {{ node.containers }}
       </td>
       <td class="print-cell text-center" style="width: 8%">
-        <span class="action-label {{ colourMap[node.policy_mode] }}">{{ node.policy_mode }}</span>
+        <span class="action-label px-1 {{ colourMap[node.policy_mode] }}">{{ node.policy_mode }}</span>
       </td>
       <td *ngIf="reportPage === 'vulnerabilities'" class="print-cell" style="width: 6%">
         <div *ngIf="node.high + node.medium > 0">

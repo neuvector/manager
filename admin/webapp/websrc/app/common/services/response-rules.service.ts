@@ -158,7 +158,7 @@ export class ResponseRulesService {
       let type = params.data.disable
         ? MapConstant.colourMap['disabled-rule']
         : MapConstant.colourMap[params.value.toUpperCase()];
-      return `<div class="action-label nv-label ${type}">${this.sanitizer.sanitize(
+      return `<div class="action-label px-1 ${type}">${this.sanitizer.sanitize(
         SecurityContext.HTML,
         this.translate.instant(`group.${params.value.toUpperCase()}`)
       )}</div>`;

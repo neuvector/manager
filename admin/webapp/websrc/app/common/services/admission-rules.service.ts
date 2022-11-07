@@ -324,7 +324,7 @@ export class AdmissionRulesService {
   typeRenderFunc = params => {
     if (params.value && params.data) {
       let type = params.value === 'exception' ? 'Allow' : params.value;
-      return `<span ng-class="{\'policy-remove\': data.remove}" class="action-label ${
+      return `<span ng-class="{\'policy-remove\': data.remove}" class="action-label px-1 ${
         params.data.disable
           ? MapConstant.colourMap['disabled_background']
           : MapConstant.colourMap[type.toLowerCase()]
@@ -341,7 +341,7 @@ export class AdmissionRulesService {
       let type = params.data.disable
         ? MapConstant.colourMap['disabled-rule']
         : MapConstant.colourMap[params.value.toUpperCase()];
-      return `<div class="action-label nv-label ${type}">
+      return `<div class="action-label px-1 ${type}">
         ${this.sanitizer.sanitize(
           SecurityContext.HTML,
           this.translate.instant(`group.${params.value.toUpperCase()}`)

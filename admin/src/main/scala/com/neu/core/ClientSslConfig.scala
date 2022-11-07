@@ -45,7 +45,7 @@ trait ClientSslConfig extends LazyLogging {
     override def checkServerTrusted(x509Certificates: Array[X509Certificate], s: String): Unit = {}
   }
 
-  // rewrite sendReceiveMethod fron spray.client.pipelining
+  // rewrite sendReceiveMethod from spray.client.pipelining
   def mySendReceive(
     implicit refFactory: ActorRefFactory,
     executionContext: ExecutionContext,
@@ -57,7 +57,7 @@ trait ClientSslConfig extends LazyLogging {
       val uri = request.uri
       val setup =
         HostConnectorSetup(uri.authority.host.toString, uri.effectivePort, uri.scheme == "https")
-      transport ? (request, setup) map {
+      transport ? ((request, setup)) map {
         case x: HttpResponse => x
         case x: HttpResponsePart =>
           sys.error("sendReceive doesn't support chunked responses, try sendTo instead")

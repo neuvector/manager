@@ -80,19 +80,19 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
       field: 'cfg_type',
       cellRenderer: params => {
         if (params.value === GlobalConstant.CFG_TYPE.LEARNED) {
-          return `<span class="action-label group-type ${
+          return `<span class="action-label px-1 group-type ${
             MapConstant.colourMap['LEARNED']
           }">${this.translate.instant('group.LEARNED')}</span>`;
         } else if (params.value === GlobalConstant.CFG_TYPE.CUSTOMER) {
-          return `<span class="action-label group-type ${
+          return `<span class="action-label px-1 group-type ${
             MapConstant.colourMap['CUSTOM']
           }">${this.translate.instant('group.CUSTOM')}</span>`;
         } else if (params.value === GlobalConstant.CFG_TYPE.GROUND) {
-          return `<span class="action-label group-type ${
+          return `<span class="action-label px-1 group-type ${
             MapConstant.colourMap['GROUND']
           }">${this.translate.instant('group.GROUND')}</span>`;
         } else if (params.value === GlobalConstant.CFG_TYPE.FED) {
-          return `<span class="action-label group-type ${
+          return `<span class="action-label px-1 group-type ${
             MapConstant.colourMap['FED']
           }">${this.translate.instant('group.FED')}</span>`;
         }

@@ -46,6 +46,7 @@ export interface WorkloadSecurityV2 {
   scan_summary: ScannedWorkloadSummary;
   service_mesh: boolean;
   service_mesh_sidecar: boolean;
+  quarantine_reason?: string;
 }
 
 export interface ScannedWorkloadSummary extends ScanBrief {

@@ -25,12 +25,17 @@ export interface NodeOptions {
 @Injectable()
 export class ContainersService {
   private _containers: WorkloadV2[] = [];
+  private _quarantinedContainers: WorkloadV2[] = [];
   private _displayContainers: WorkloadRow[] = [];
   get containers() {
     return this._containers;
   }
   get displayContainers() {
     return this._displayContainers;
+  }
+  get quarantinedContainers() {
+    this._quarantinedContainers = this._containers.filter(w => w.brief.state == 'quarantined')
+    return this._quarantinedContainers;
   }
   set displayContainers(display_containers: WorkloadRow[]) {
     this._displayContainers = display_containers;

@@ -5,6 +5,7 @@ import { DashboardExposureConversationsService } from '@routes/dashboard/thread-
 import { arrayToCsv } from '@common/utils/common.utils';
 import { saveAs } from 'file-saver';
 import { UtilsService } from '@common/utils/app.utils';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-exposure-panel',
@@ -15,13 +16,19 @@ export class ExposurePanelComponent implements OnInit {
   @Input() scoreInfo!: InternalSystemInfo;
   hierarchicalIngressList!: Array<HierarchicalExposure>;
   hierarchicalEgressList!: Array<HierarchicalExposure>;
+  instructions: Array<string>;
 
   constructor(
     public dashboardExposureConversationsService: DashboardExposureConversationsService,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
+    this.instructions = [
+      this.translate.instant('dashboard.help.exposure.txt1'),
+      this.translate.instant('dashboard.help.exposure.txt2')
+    ];
     this.hierarchicalIngressList = parseExposureHierarchicalData(
       this.scoreInfo.ingress
     );

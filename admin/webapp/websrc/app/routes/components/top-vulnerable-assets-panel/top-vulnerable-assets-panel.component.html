@@ -1,5 +1,14 @@
 <mat-card class="margin-bottom-m dashboard-card">
-  <mat-card-title >{{'dashboard.body.panel_title.TOP_VULNERABLE_' + assetType.toUpperCase() | translate}}</mat-card-title>
+  <mat-card-title class="d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center justify-content-start">
+      {{ 'dashboard.body.panel_title.TOP_VULNERABLE_' + assetType.toUpperCase() | translate }}
+    </div>
+    <app-panel-instruction-curtain
+      class="d-flex align-items-center justify-content-end"
+      [instructions]="instructions"
+    >
+    </app-panel-instruction-curtain>
+  </mat-card-title>
   <mat-card-content>
     <div
       class="row margin-horizon-0"

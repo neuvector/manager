@@ -1314,3 +1314,10 @@ mwl-gauge.score > .gauge > .value {
   font-size: 10px !important;
   line-height: 12px !important;
 }
+
+.dashboard-panel-instruction-content {
+  width: 500px;
+  padding: 15px;
+  max-width: none !important;
+  background-color: $neuvector-mid-green-50 !important;
+}

@@ -1,18 +1,25 @@
 <mat-card class="margin-bottom-m dashboard-card">
-  <mat-card-title style="display: flex">
-    {{'dashboard.body.panel_title.CONTAINER_SEC' | translate}}
-    <app-loading-button
-      *ngIf="scoreInfo.ingress.length > 0 || scoreInfo.egress.length > 0"
-      style="margin-top: -6px;"
-      (btnClick)="downloadExposureConversationCsv()"
-      [text]="'dashboard.body.panel_title.EXPO_CONV_RPT' | translate"
-      appearance="mat-button"
-      [disabled]="dashboardExposureConversationsService.isLoadingExposureConversation"
-      [loading]="dashboardExposureConversationsService.isLoadingExposureConversation"
-      buttonClasses="d-flex justify-content-center align-items-center"
-      iconClasses="eos-icons"
-      iconName="csv_file">
-    </app-loading-button>
+  <mat-card-title class="d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center justify-content-start">
+      {{ 'dashboard.body.panel_title.CONTAINER_SEC' | translate }}
+      <app-loading-button
+        *ngIf="scoreInfo.ingress.length > 0 || scoreInfo.egress.length > 0"
+        style="margin-top: -6px;"
+        (btnClick)="downloadExposureConversationCsv()"
+        [text]="'dashboard.body.panel_title.EXPO_CONV_RPT' | translate"
+        appearance="mat-button"
+        [disabled]="dashboardExposureConversationsService.isLoadingExposureConversation"
+        [loading]="dashboardExposureConversationsService.isLoadingExposureConversation"
+        buttonClasses="d-flex justify-content-center align-items-center"
+        iconClasses="eos-icons"
+        iconName="csv_file">
+      </app-loading-button>
+    </div>
+    <app-panel-instruction-curtain
+      class="d-flex align-items-center justify-content-end"
+      [instructions]="instructions"
+    >
+    </app-panel-instruction-curtain>
   </mat-card-title>
   <mat-card-content style="display: flex">
     <app-exposure-chart

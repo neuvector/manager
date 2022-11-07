@@ -12,6 +12,7 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { AuthService } from '@common/services/auth.service';
 import {
   LOCAL_STORAGE,
+  SESSION_STORAGE,
   StorageService,
 } from 'ngx-webstorage-service';
 
@@ -23,6 +24,7 @@ export class TimeoutInterceptor implements HttpInterceptor {
     private auth: AuthService,
     private dialog: MatDialog,
     @Inject(LOCAL_STORAGE) private localStorage: StorageService,
+    @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
   ) {
     this.location = location;
   }
@@ -50,6 +52,7 @@ export class TimeoutInterceptor implements HttpInterceptor {
             if (error.error.code === 51) {
               this.auth.logout(false, true);
             } else {
+              this.sessionStorage.set(GlobalConstant.SESSION_STORAGE_TIMEOUT, true);
               this.auth.timeout(currentPath);
             }
           }

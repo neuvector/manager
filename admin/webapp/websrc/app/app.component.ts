@@ -104,6 +104,7 @@ export class AppComponent implements OnInit {
           }
         },
         error => {
+          this.sessionStorage.set(GlobalConstant.SESSION_STORAGE_TIMEOUT, true);
           location.reload();
         }
       );

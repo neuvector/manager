@@ -74,6 +74,13 @@ export class LoginComponent implements OnInit {
     if (this.sessionStorage.has('cluster')) {
       this.sessionStorage.remove('cluster');
     }
+    if (this.sessionStorage.has(GlobalConstant.SESSION_STORAGE_TIMEOUT)) {
+      console.log('SESSION_STORAGE_TIMEOUT', this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_TIMEOUT));
+      if (this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_TIMEOUT)) {
+        this.authMsg = this.translate.instant("login.SESSION_TIMEOUT");
+        this.sessionStorage.remove(GlobalConstant.SESSION_STORAGE_TIMEOUT);
+      }
+    }
     this.clearToken();
     console.log("1==this.currUrl", this.currUrl);
     if (this.currUrl.includes(GlobalConstant.PROXY_VALUE)) {

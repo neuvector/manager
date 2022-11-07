@@ -1,4 +1,8 @@
-<section id="containers-section">
+<app-containers-printable-report
+  *ngIf="isPrinting && loaded"
+  class="printable-area"
+  [containers]="quarantinedContainers"></app-containers-printable-report>
+<section id="containers-section" class="screen-area">
   <div class="d-flex flew-row align-items-center justify-content-between">
     <h1 class="font-weight-light" id="containers-title">
       {{ 'sidebar.nav.CONTAINERS' | translate }}
@@ -16,6 +20,14 @@
             </em>
           </mat-slide-toggle>
         </div>
+        <button
+          *ngIf="quarantinedContainers.length > 0"
+          aria-label="Print quarantined container report PDF"
+          type="button"
+          (click)="print()"
+          mat-button> {{ 'containers.report.title' | translate | uppercase }}
+          <em class="eos-icons icon-18">print</em>
+        </button>
         <button
           mat-button
           [matMenuTriggerFor]="view_menu"

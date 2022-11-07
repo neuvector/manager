@@ -36,10 +36,12 @@ export class ContainersComponent implements OnInit {
   get containersGrid() {
     return this._containersGrid;
   }
+  quarantinedContainers: WorkloadV2[]  = [];
   toggleNodeForm!: FormGroup;
   refreshing$ = new Subject();
   error!: string;
   loaded = false;
+  isPrinting: boolean = false;
   autoScan = new FormControl(false);
   autoScanAuthorized = false;
   isAutoScanAuthorized!: boolean;
@@ -113,6 +115,8 @@ export class ContainersComponent implements OnInit {
       .subscribe({
         next: res => {
           this.containersService.addContainers(res);
+          this.quarantinedContainers = this.containersService.quarantinedContainers;
+          console.log("========quarantine",this.quarantinedContainers);
           this.nodeFilterInit(res);
           this.error = '';
           if (!this.loaded) this.loaded = true;
@@ -213,4 +217,14 @@ export class ContainersComponent implements OnInit {
         this.containers
       );
   }
+
+  print = () => {
+    this.isPrinting = true;
+    setTimeout(() => {
+      window.print();
+      setTimeout(() => {
+        this.isPrinting = false;
+      }, 1000);
+    }, 1000);
+  };
 }

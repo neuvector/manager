@@ -95,7 +95,7 @@ export class LoginComponent implements OnInit {
         this.w.location.href = redirect.redirect_url;
       },
       error => {
-        this.authMsg = error.message;
+        this.authMsg = error.error;
         this.inProgress = false;
       }
     );
@@ -110,7 +110,7 @@ export class LoginComponent implements OnInit {
         this.w.location.href = redirect.redirect_url;
       },
       error => {
-        this.authMsg = error.message;
+        this.authMsg = error.error;
         this.inProgress = false;
       }
     );
@@ -153,7 +153,7 @@ export class LoginComponent implements OnInit {
 
         },
         error => {
-          this.authMsg = error.message;
+          this.authMsg = error.error;
           this.inProgress = false;
         }
       );

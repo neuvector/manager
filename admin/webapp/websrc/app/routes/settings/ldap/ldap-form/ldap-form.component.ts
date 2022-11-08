@@ -11,6 +11,10 @@ import { SettingsService } from '@services/settings.service';
 import { finalize } from 'rxjs/operators';
 import { TestConnectionDialogComponent } from '../test-connection-dialog/test-connection-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { UtilsService } from '@common/utils/app.utils';
+import { NotificationService } from '@services/notification.service';
+import { Observable } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-ldap-form',
@@ -19,8 +23,8 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class LdapFormComponent implements OnInit {
   @Input() ldapData!: { server: ServerGetResponse; domains: string[] };
+  onCreate = true;
   submittingForm = false;
-  errorMessage = '';
   groupMappedRoles: GroupMappedRole[] = [];
   serverName = 'ldap1';
   passwordVisible = false;
@@ -40,7 +44,10 @@ export class LdapFormComponent implements OnInit {
 
   constructor(
     private settingsService: SettingsService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private notificationService: NotificationService,
+    private utils: UtilsService,
+    private tr: TranslateService
   ) {}
 
   submitForm(): void {
@@ -53,23 +60,35 @@ export class LdapFormComponent implements OnInit {
     };
     const config: ServerPatchBody = { config: { name: this.serverName, ldap } };
     this.submittingForm = true;
-    this.errorMessage = '';
-    this.settingsService
-      .patchServer(config)
-      .pipe(
+    let submission: Observable<unknown>;
+    if (!this.onCreate) {
+      submission = this.settingsService.postServer(config).pipe(
+        finalize(() => {
+          this.submittingForm = false;
+          this.onCreate = true;
+        })
+      );
+    } else {
+      submission = this.settingsService.patchServer(config).pipe(
         finalize(() => {
           this.submittingForm = false;
         })
-      )
-      .subscribe({
-        error: ({ error }: { error: ErrorResponse }) => {
-          if (error.error && error.message) {
-            this.errorMessage = `${error.error}: ${error.message}`;
-          } else {
-            this.errorMessage = 'An error occurred. Please try again.';
-          }
-        },
-      });
+      );
+    }
+    submission.subscribe({
+      complete: () => {
+        this.notificationService.open(this.tr.instant('ldap.SERVER_SAVED'));
+      },
+      error: ({ error }: { error: ErrorResponse }) => {
+        this.notificationService.open(
+          this.utils.getAlertifyMsg(
+            error,
+            this.tr.instant('ldap.SERVER_SAVE_FAILED'),
+            false
+          )
+        );
+      },
+    });
   }
 
   ngOnInit(): void {
@@ -86,6 +105,8 @@ export class LdapFormComponent implements OnInit {
           );
         }
       });
+    } else {
+      this.onCreate = false;
     }
   }
 

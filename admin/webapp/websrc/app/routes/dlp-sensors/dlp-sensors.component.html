@@ -1,21 +1,29 @@
 <div class="screen-area">
-  <div class="clearfix" style="height: 40px;">
-    <div class="pull-right margin-top-s margin-left-xl" (click)="refresh()">
-      <em class="eos-icons icon-18">cached</em>
-      <label class="text-gray-label hand">{{'general.REFRESH' | translate}}</label>
-    </div>
-    <div class="pull-right margin-top-s margin-left-xl" (click)="exportDlpSensors()">
-      <em class="eos-icons icon-18">download</em>
-      <label class="text-gray-label hand">{{'admissionControl.EXPORT' | translate | uppercase}}</label>
-    </div>
-    <div class="pull-right margin-top-s margin-left-xl" (click)="openImportDlpSensorsModal()" *appDisplayControl="'write_dlp_rule'">
-      <em class="eos-icons icon-18">upload</em>
-      <label class="text-gray-label hand">{{'admissionControl.IMPORT' | translate | uppercase}}</label>
-    </div>
-    <div class="clearfix">
-      <div class="content-title">
-        {{'sidebar.nav.DLP_SENSORS' | translate}}
-      </div>
+  <div class="d-flex justify-content-between align-items-center">
+    <h1 class="font-weight-light" id="dlpSensors-title">
+      {{'sidebar.nav.DLP_SENSORS' | translate}}
+    </h1>
+    <div class="d-flex align-items-center justify-content-end">
+      <button mat-button aria-label="export WAF SENSORS" (click)="exportDlpSensors()">
+        <em class="eos-icons icon-18">download</em>
+        {{'admissionControl.EXPORT' | translate}}
+      </button>
+      <button mat-button aria-label="import WAF SENSORS" (click)="openImportDlpSensorsModal()" *appDisplayControl="'write_dlp_rule'">
+        <em class="eos-icons icon-18">upload</em>
+        {{'admissionControl.IMPORT' | translate}}
+      </button>
+      <app-loading-button
+        (btnClick)="refresh()"
+        [appearance]="'mat-button'"
+        [buttonClasses]="'d-flex justify-content-center align-items-center'"
+        [disabled]="false"
+        [iconClasses]="'eos-icons'"
+        [iconName]="'refresh'"
+        [id]="'waf-refresh-button'"
+        [loading]="false"
+        [text]="'network.REFRESH' | translate"
+        [type]="'button'">
+      </app-loading-button>
     </div>
   </div>
   <ng-container>

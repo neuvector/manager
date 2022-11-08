@@ -59,13 +59,13 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   containsUnpromotableEndpoint: boolean = false;
   context = { componentParent: this };
   routeEventSubscription!: Subscription;
-  isWriteGlobalRulesAuthorized: boolean;
+  isWriteGlobalRulesAuthorized: boolean = false;
   isPrinting: boolean = false;
   isIncludingCRD: boolean = false;
   isIncludingFed: boolean = false;
   private w: any;
   private switchClusterSubscription;
-  @ViewChild('networkRulePrintableReport') printableReportView: ElementRef;
+  @ViewChild('networkRulePrintableReport') printableReportView!: ElementRef;
 
   constructor(
     private networkRulesService: NetworkRulesService,

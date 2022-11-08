@@ -5,6 +5,9 @@ import { DebugPostBody, ErrorResponse, LDAP } from '@common/types';
 import { finalize } from 'rxjs/operators';
 import { SettingsService } from '@services/settings.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { NotificationService } from '@services/notification.service';
+import { UtilsService } from '@common/utils/app.utils';
+import { TranslateService } from '@ngx-translate/core';
 
 export interface TestConnectionDialogData {
   ldap: LDAP;
@@ -29,7 +32,10 @@ export class TestConnectionDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<LdapFormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: TestConnectionDialogData,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private notificationService: NotificationService,
+    private utils: UtilsService,
+    private tr: TranslateService
   ) {}
 
   submitForm(): void {
@@ -53,12 +59,17 @@ export class TestConnectionDialogComponent {
         })
       )
       .subscribe({
+        complete: () => {
+          this.notificationService.open(this.tr.instant('ldap.test.SUCCEEDED'));
+        },
         error: ({ error }: { error: ErrorResponse }) => {
-          if (error.error && error.message) {
-            this.errorMessage = `${error.error}: ${error.message}`;
-          } else {
-            this.errorMessage = 'An error occurred. Please try again.';
-          }
+          this.notificationService.open(
+            this.utils.getAlertifyMsg(
+              error,
+              this.tr.instant('ldap.test.FAILED'),
+              false
+            )
+          );
         },
       });
   }

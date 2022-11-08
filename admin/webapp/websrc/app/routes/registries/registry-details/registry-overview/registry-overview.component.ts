@@ -59,6 +59,7 @@ export class RegistryOverviewComponent implements OnChanges {
       const topFive = sortedRegistryDetails.slice(0, 5).map(image => {
         return {
           repository: image.repository,
+          tag: image.tag,
           vulnerabilities: { high: image.high, medium: image.medium },
         };
       });
@@ -69,6 +70,7 @@ export class RegistryOverviewComponent implements OnChanges {
         ...topFive.map(i => {
           return {
             repository: i.repository,
+            tag: i.tag,
             vulnerabilities: i.vulnerabilities.high + i.vulnerabilities.medium,
           };
         }),
@@ -96,7 +98,9 @@ export class RegistryOverviewComponent implements OnChanges {
         },
         data: {
           labels: topSix.map(item => {
-            return [item.repository];
+            return [
+              item.tag ? `${item.repository}:${item.tag}` : item.repository,
+            ];
           }),
           datasets: [
             {
@@ -139,7 +143,9 @@ export class RegistryOverviewComponent implements OnChanges {
         },
         data: {
           labels: topFive.map(item => {
-            return [item.repository];
+            return [
+              item.tag ? `${item.repository}:${item.tag}` : item.repository,
+            ];
           }),
           datasets: [
             {

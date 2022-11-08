@@ -254,22 +254,16 @@ export class ContainersGridComponent implements OnInit {
   }
 
   postSort(nodes: RowNode[]): void {
+    // sort parents first
     nodes = nodes.sort((a, b) =>
       !a.data.parent_id ? -1 : !b.data.parent_id ? 1 : 0
     );
-    let lastParentIdx = -1;
     for (let i = 0; i < nodes.length; i++) {
       const pid = nodes[i].data.parent_id;
       if (pid) {
         const pidx = nodes.findIndex(node => node.data.brief.id === pid);
-        if (lastParentIdx !== pidx) {
-          nodes.splice(pidx + 1, 0, nodes.splice(i, 1)[0]);
-          if (pidx > i) {
-            i--;
-          }
-        }
-      } else {
-        lastParentIdx = i;
+        // splice child after parent
+        nodes.splice(pidx + 1, 0, nodes.splice(i, 1)[0]);
       }
     }
   }

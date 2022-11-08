@@ -11,7 +11,6 @@ import {
   AdmissionStateRec,
 } from '@common/types/admission/admission';
 import { AdmissionRulesService } from '@common/services/admission-rules.service';
-import { ActionButtonsComponent } from "./partial/action-buttons/action-buttons.component";
 import { GridOptions } from 'ag-grid-community';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { GlobalConstant } from '@common/constants/global.constant';
@@ -26,25 +25,25 @@ import { UtilsService } from  '@common/utils/app.utils';
   styleUrls: ['./admission-rules.component.scss']
 })
 export class AdmissionRulesComponent implements OnInit {
-  @Input() source: string;
+  @Input() source!: string;
   navSource = GlobalConstant.NAV_SOURCE;
   admissionRules: Array<AdmissionRule> = [];
-  admissionStateRec: AdmissionStateRec;
-  globalStatus: boolean;
-  mode: string;
+  admissionStateRec: AdmissionStateRec = <AdmissionStateRec>{};
+  globalStatus: boolean = false;
+  mode: string = "";
   admissionOptions: any;
-  gridOptions: GridOptions;
-  gridHeight: number;
+  gridOptions: GridOptions = <GridOptions>{};
+  gridHeight: number = 0;
   filteredCount: number = 0;
-  selectedAdmissionRules: Array<AdmissionRule>;
-  isWriteAdmissionRuleAuthorized: boolean;
-  isAdmissionRuleAuthorized: boolean;
-  admissionStateErr: boolean;
-  canConfig: boolean;
-  isK8s: boolean;
-  stateWarning: string;
-  hasSelectedDefaultRule: boolean;
-  isMaster: boolean;
+  selectedAdmissionRules: Array<AdmissionRule> = [];
+  isWriteAdmissionRuleAuthorized: boolean = false;
+  isAdmissionRuleAuthorized: boolean = false;
+  admissionStateErr: boolean = false;
+  canConfig: boolean = false;
+  isK8s: boolean = false;
+  stateWarning: string = "";
+  hasSelectedDefaultRule: boolean = false;
+  isMaster: boolean = false;
   frameworkComponents;
   context;
   private default_action: string = 'deny';
@@ -52,10 +51,10 @@ export class AdmissionRulesComponent implements OnInit {
   private isModalOpen: boolean = false;
   private switchClusterSubscription;
   isPrinting: boolean = false;
-  configAssessmentDialogRef: MatDialogRef<ConfigurationAssessmentModalComponent>;
+  configAssessmentDialogRef!: MatDialogRef<ConfigurationAssessmentModalComponent>;
   configTestResult: any;
 
-  @ViewChild('testResult') printableReportView: ElementRef;
+  @ViewChild('testResult') printableReportView!: ElementRef;
 
   constructor(
     private dialog: MatDialog,

@@ -124,7 +124,7 @@ export interface ServerPatchBody {
     name: string;
     ldap?: LDAP;
     saml?: SAML;
-    openid?: OPENID;
+    oidc?: OPENID;
   };
 }
 

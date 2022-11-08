@@ -71,6 +71,9 @@ export class RegistriesCommunicationService {
           })
         );
       }
+      if (!summarys.length) {
+        this.refreshingDetailsSubject$.next(false);
+      }
     }),
     finalize(() => {
       if (this.refreshingDetailsSubject$.value) {

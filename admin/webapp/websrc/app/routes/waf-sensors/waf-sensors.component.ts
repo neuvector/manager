@@ -2,10 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { WafSensor, WafRule } from '@common/types';
 import {
-  ColDef,
-  GridApi,
-  GridOptions,
-  GridReadyEvent,
+  GridOptions
 } from 'ag-grid-community';
 import { WafSensorsService } from '@services/waf-sensors.service';
 import { MatDialog } from "@angular/material/dialog";
@@ -28,18 +25,18 @@ import {MultiClusterService} from "@services/multi-cluster.service";
 export class WafSensorsComponent implements OnInit {
 
   wafSensors: Array<WafSensor> = [];
-  isWriteWAFSensorAuthorized: boolean;
+  isWriteWAFSensorAuthorized: boolean = false;
   gridOptions: any;
-  gridOptions4Sensors: GridOptions;
-  gridOptions4Rules: GridOptions;
-  gridOptions4Patterns: GridOptions;
-  gridOptions4EditPatterns: GridOptions;
+  gridOptions4Sensors!: GridOptions;
+  gridOptions4Rules!: GridOptions;
+  gridOptions4Patterns!: GridOptions;
+  gridOptions4EditPatterns!: GridOptions;
   filteredCount: number = 0;
-  selectedSensors: Array<WafSensor>;
-  selectedSensor: WafSensor;
-  selectedRule: WafRule;
-  index4Sensor: number;
-  isPredefine: boolean;
+  selectedSensors: Array<WafSensor> = [];
+  selectedSensor: WafSensor = <WafSensor>{};
+  selectedRule: WafRule = <WafRule>{};
+  index4Sensor: number = 0;
+  isPredefine: boolean = false;
   context = { componentParent: this };
   $win: any;
   private _switchClusterSubscription;
@@ -67,9 +64,10 @@ export class WafSensorsComponent implements OnInit {
     this.refresh();
 
     //refresh the page when it switched to a remote cluster
-    this._switchClusterSubscription = this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
-      this.refresh();
-    });
+    this._switchClusterSubscription =
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
+        this.refresh();
+      });
   }
 
   ngOnDestroy(): void {

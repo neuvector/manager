@@ -146,7 +146,7 @@ export class NetworkRulesService {
           params.data.remove &&
           params.data.state !== GlobalConstant.NETWORK_RULES_STATE.READONLY
         ) {
-          return `<div class="type-label removed-rule">${this.translate.instant(
+          return `<div class="type-label px-1 removed-rule">${this.translate.instant(
             'policy.head.REMOVED_RULE'
           )}</div>`;
         } else {
@@ -155,7 +155,7 @@ export class NetworkRulesService {
             : MapConstant.colourMap[
                 params.data.cfg_type ? params.data.cfg_type : 'customer-rule'
               ];
-          return `<div class="type-label ${type}">${this.sanitizer.sanitize(
+          return `<div class="type-label px-1 ${type}">${this.sanitizer.sanitize(
             SecurityContext.HTML,
             this.translate.instant(
               `policy.head.${type.replace('-', '_').toUpperCase()}`
@@ -241,9 +241,9 @@ export class NetworkRulesService {
         headerName: this.translate.instant('policy.gridHeader.TYPE'),
         cellRenderer: typeRenderFunc,
         cellClass: 'grid-center-align',
-        width: 90,
-        minWidth: 90,
-        maxWidth: 90,
+        width: 110,
+        minWidth: 110,
+        maxWidth: 110,
         hide: isScoreImprovement,
       },
       {
@@ -272,8 +272,8 @@ export class NetworkRulesService {
         resizable: true,
         sortable: true,
       },
-      headerHeight: source === GlobalConstant.NAV_SOURCE.GROUP ? 30 : 56,
-      rowHeight: source === GlobalConstant.NAV_SOURCE.GROUP ? 30 : 56,
+      headerHeight:  30,
+      rowHeight: 30,
       animateRows: true,
       suppressDragLeaveHidesColumns: true,
       columnDefs: columnDefs,

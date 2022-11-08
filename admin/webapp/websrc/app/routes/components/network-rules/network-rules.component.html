@@ -14,7 +14,7 @@
         class="pull-right margin-top-s margin-left-xl"
         *ngIf="(eof || networkRuleErr) && !isNetworkRuleDirty()"
         (click)="refresh()">
-        <em class="fa fa-refresh text-action hand"></em>
+        <em class="fas fa-redo text-action mr-1 hand"></em>
         <label class="text-gray-label hand">{{
           'general.REFRESH' | translate
         }}</label>
@@ -136,7 +136,7 @@
       [ngStyle]="{ height: resizableHeight + 'px' }"
       [gridOptions]="gridOptions"
       [context]="context"
-      id="policy-grid"
+      id="score-improvement-policy-grid"
       style="width: 100%"
       class="ag-theme-balham">
     </ag-grid-angular>

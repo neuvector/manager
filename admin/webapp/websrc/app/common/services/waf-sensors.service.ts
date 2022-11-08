@@ -74,15 +74,15 @@ export class WafSensorsService {
           if (params) {
             let cfgType = params.value ? params.value.toUpperCase() : GlobalConstant.CFG_TYPE.CUSTOMER.toUpperCase();
             let type = MapConstant.colourMap[cfgType];
-            return `<div class="type-label ${type}">${this.sanitizer.sanitize(SecurityContext.HTML,
+            return `<div class="type-label px-1 ${type}">${this.sanitizer.sanitize(SecurityContext.HTML,
               this.translate.instant(`group.${cfgType}`)
             )}</div>`;
           }
           return "";
         },
-        width: 100,
-        minWidth: 100,
-        maxWidth: 100
+        width: 110,
+        minWidth: 110,
+        maxWidth: 110
       },
       {
         cellClass: "grid-right-align",

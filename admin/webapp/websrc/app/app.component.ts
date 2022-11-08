@@ -103,7 +103,10 @@ export class AppComponent implements OnInit {
             });
           }
         },
-        error => {}
+        error => {
+          this.sessionStorage.set(GlobalConstant.SESSION_STORAGE_TIMEOUT, true);
+          location.reload();
+        }
       );
     } else {
       this.isSummaryDone = true;

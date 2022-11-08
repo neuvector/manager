@@ -128,12 +128,12 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
             logger.info("openId-pt: authToken is matched and valid.")
             AuthenticationManager.invalidate(samlKey)
             Utils.respondWithNoCacheControl() {
-              complete(StatusCodes.OK, x)
+              complete(x)
             }
           case _ =>
             logger.info("openId-pt: no authToken")
             Utils.respondWithNoCacheControl() {
-              complete(StatusCodes.Unauthorized, authError)
+              complete((StatusCodes.Unauthorized, authError))
             }
         }
       }
@@ -171,12 +171,12 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
             logger.info(s"saml-pt: authToken matched.")
             AuthenticationManager.invalidate(samlKey)
             Utils.respondWithNoCacheControl() {
-              complete(StatusCodes.OK, x)
+              complete(x)
             }
           case None =>
             logger.info("saml-pt: no authToken.")
             Utils.respondWithNoCacheControl() {
-              complete(StatusCodes.Unauthorized, authError)
+              complete((StatusCodes.Unauthorized, authError))
             }
         }
       }
@@ -490,12 +490,12 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                       )
                     )
                     Utils.respondWithNoCacheControl() {
-                      complete(StatusCodes.OK, profile)
+                      complete(profile)
                     }
                   case StatusCodes.RequestTimeout =>
                     logger.warn("Session timed out!")
                     Utils.respondWithNoCacheControl() {
-                      complete(StatusCodes.RequestTimeout, "Timed out")
+                      complete((StatusCodes.RequestTimeout, "Timed out"))
                     }
                   case _ =>
                     logger.warn("Error updating profile!")
@@ -571,7 +571,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
         } ~
         (get & path("version")) {
           Utils.respondWithNoCacheControl() {
-            complete(StatusCodes.OK, managerVersion)
+            complete(managerVersion)
           }
         } ~
         (post & path("token")) {
@@ -830,7 +830,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
           logger.info("login with SUSE cookie")
           logger.info("Client ip {}", ip)
           Utils.respondWithNoCacheControl() {
-            complete(StatusCodes.OK, authToken)
+            complete(authToken)
           }
         }
         {
@@ -860,30 +860,30 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                       }
                     } else {
                       Utils.respondWithNoCacheControl() {
-                        complete(StatusCodes.InternalServerError, "Controller unavailable!")
+                        complete((StatusCodes.InternalServerError, "Controller unavailable!"))
                       }
                     }
                   case e: TimeoutException =>
                     logger.warn(e.getMessage)
                     Utils.respondWithNoCacheControl() {
-                      complete(StatusCodes.NetworkConnectTimeout, "Network connect timeout error")
+                      complete((StatusCodes.NetworkConnectTimeout, "Network connect timeout error"))
                     }
                   case e: ConnectionAttemptFailedException =>
                     logger.warn(e.getMessage)
                     Utils.respondWithNoCacheControl() {
-                      complete(StatusCodes.NetworkConnectTimeout, "Network connect timeout error")
+                      complete((StatusCodes.NetworkConnectTimeout, "Network connect timeout error"))
                     }
                 }
               }
             case e: TimeoutException =>
               logger.warn(e.getMessage)
               Utils.respondWithNoCacheControl() {
-                complete(StatusCodes.NetworkConnectTimeout, "Network connect timeout error")
+                complete((StatusCodes.NetworkConnectTimeout, "Network connect timeout error"))
               }
             case e: ConnectionAttemptFailedException =>
               logger.warn(e.getMessage)
               Utils.respondWithNoCacheControl() {
-                complete(StatusCodes.NetworkConnectTimeout, "Network connect timeout error")
+                complete((StatusCodes.NetworkConnectTimeout, "Network connect timeout error"))
               }
           }
         }

@@ -1,8 +1,7 @@
 <section class="margin-top-l">
-  <mat-checkbox (change)="onCheck($event.checked)" [disabled] = "isEULAPageOpened" ></mat-checkbox>
+  <mat-checkbox (change)="onCheck($event.checked)" [disabled]="isEULAPageOpened" ></mat-checkbox>
   <span class="margin-left-s">
     {{ 'license.ACCEPT_AGREEMENT' | translate }}
     <a (click)="openEULAPage()">{{ 'license.HEAD' | translate }}</a>
   </span>
 </section>
-

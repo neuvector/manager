@@ -63,7 +63,17 @@ export class TopSecurityEventsChartComponent implements OnInit {
         animation: !this.isReport,
         indexAxis: 'y',
         responsive: true,
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            ticks: {
+              callback: (value) => {
+                if (parseFloat(value as string) % 1 === 0) return value;
+                return null;
+              }
+            }
+          },
+        },
       }
     };
 

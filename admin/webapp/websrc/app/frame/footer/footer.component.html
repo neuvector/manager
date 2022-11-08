@@ -1,4 +1,4 @@
-<span
-  >&copy; {{ switchers.getAppSwitcher('year') }} -
-  {{ switchers.getAppSwitcher('name') }}</span
->
+<div>&copy; {{ switchers.getAppSwitcher('year') }} -
+  <a href="{{'partner.general.WEB_URL' | translate}}" target="_blank">{{ switchers.getAppSwitcher('name') }}</a>
+</div>
+<div>{{'general.VERSION' | translate}}&nbsp;-&nbsp;<span class="text-info">{{version}}</span></div>

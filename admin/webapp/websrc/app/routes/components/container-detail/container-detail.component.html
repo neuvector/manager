@@ -160,7 +160,7 @@
       {{ 'containers.detail.NETWORK_INTERFACES' | translate }}
     </div>
     <div
-      class="row"
+      class="row mx-0"
       *ngFor="let interface of container.rt_attributes.interfaces | keyvalue">
       <div class="col-sm-2 text-right">
         {{ interface.key }}
@@ -168,7 +168,7 @@
       <div class="col-sm-9 offset-sm-1">
         <div
           *ngFor="let net of interface.value | slice: 0:MAX_INTERFACE_IP - 1"
-          class="row text-muted">
+          class="row mx-0 text-muted">
           <ng-container *ngIf="validateIP(net)">
             <div class="col-sm-4">IP: {{ net.ip }}/{{ net.ip_prefix }}</div>
             <div class="col-sm-8">
@@ -189,7 +189,7 @@
     <div class="h4">
       {{ 'containers.detail.PORT_MAPPING' | translate }}
     </div>
-    <div class="row" *ngFor="let mapping of container.rt_attributes.ports">
+    <div class="row mx-0" *ngFor="let mapping of container.rt_attributes.ports">
       <div class="col-sm-2 text-right">
         {{ mapping.host_ip }}/{{ mapping.host_port }}
       </div>
@@ -211,7 +211,7 @@
     <div class="h4">
       {{ 'containers.detail.LABELS' | translate }}
     </div>
-    <div class="row" *ngFor="let label of labels">
+    <div class="row mx-0" *ngFor="let label of labels">
       <div class="col-sm-4 text-right">{{ label }}</div>
       <div class="col-sm-8 text-muted">
         {{ container.rt_attributes.labels[label] || '&nbsp;' }}

@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class SwitchersService {
   private user: any;
-  private app: any;
-  private layout: any;
+  private readonly app: any;
+  private readonly layout: any;
 
   constructor() {
     this.app = {

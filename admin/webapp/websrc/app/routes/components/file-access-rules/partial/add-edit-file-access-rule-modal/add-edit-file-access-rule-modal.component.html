@@ -4,23 +4,15 @@
       {{
         (type === 'add' ? 'service.ADD_RULE' : 'service.EDIT_RULE') | translate
       }}
+      <span class="eos-icons icon-18" [matTooltip]="'group.file.RULE_SAMPLE' | translate">info</span>
     </div>
     <div class="pull-right">
       <em class="icon-close hand" (click)="onCancel()"></em>
     </div>
   </div>
   <div mat-dialog-content class="dialog-content p0 m0">
-    <form
-      fxLayout="column"
-      fxLayoutAlign="start"
-      [formGroup]="fileAccessRuleForm"
-      fxFlex="1 0 auto"
-      class="pt-lg">
-      <div
-        fxLayout="row"
-        fxLayoutAlign="start center"
-        fxFlex="1 0 auto"
-        class="pl-4">
+    <form [formGroup]="fileAccessRuleForm">
+      <div class="d-flex justify-content-start align-items-start mt-2">
         <mat-form-field appearance="fill">
           <mat-label>{{ 'group.GROUP' | translate }}</mat-label>
           <mat-select matNativeControl formControlName="group">
@@ -33,64 +25,67 @@
           <mat-error>Group is required!</mat-error>
         </mat-form-field>
       </div>
-      <div
-        fxLayout="row"
-        fxLayoutAlign="start center"
-        fxFlex="1 0 auto"
-        class="pl-4">
-        <mat-form-field appearance="outline" fxFlex="25" class="pr-4">
-          <mat-label>{{ 'service.gridHeader.FILTER' | translate }}</mat-label>
-          <input matInput name="filter" formControlName="filter" [readonly]="type === 'edit'"/>
-          <em matSuffix class="icon-paper-clip input-icon"></em>
-          <mat-error
-            *ngIf="fileAccessRuleForm.get('filter')?.hasError('required')"
-            >Filter is required!</mat-error
-          >
-          <mat-error
-            *ngIf="fileAccessRuleForm.get('filter')?.hasError('pattern')"
-            >Format is not right!</mat-error
-          >
-        </mat-form-field>
-        <div fxFlex="25" class="pr-4" style="margin-top: -10px">
-          <mat-checkbox
-            name="recursive"
-            formControlName="recursive"
-            class="example-ripple-checkbox mr">
-            {{ 'service.gridHeader.RECURSIVE' | translate }}
-          </mat-checkbox>
+      <div class="d-flex justify-content-end align-items-center mt-2">
+        <div class="d-flex mr-2">
+          <mat-form-field appearance="fill">
+            <mat-label>{{ 'service.gridHeader.FILTER' | translate }}</mat-label>
+            <input
+              matInput
+              name="filter"
+              formControlName="filter"
+              [readonly]="type === 'edit'" />
+            <em matSuffix class="icon-paper-clip input-icon"></em>
+            <mat-error
+              *ngIf="fileAccessRuleForm.get('filter')?.hasError('required')"
+              >Filter is required!</mat-error
+            >
+            <mat-error
+              *ngIf="fileAccessRuleForm.get('filter')?.hasError('pattern')"
+              >Format is not right!</mat-error
+            >
+          </mat-form-field>
+          <div style="margin: 25px 5px 0 5px">
+            <mat-checkbox
+              name="recursive"
+              formControlName="recursive"
+              class="example-ripple-checkbox mr">
+              {{ 'service.gridHeader.RECURSIVE' | translate }}
+            </mat-checkbox>
+          </div>
         </div>
-        <div fxFlex="50" class="pr-4" style="margin-top: -5px">
-          <mat-label class="mr">{{
-            'service.ALLOW_ALERT' | translate
-          }}</mat-label>
-          <label class="radio-inline c-radio">
-            <input
-              id="monitor-change"
-              type="radio"
-              name="behavior"
-              formControlName="behavior"
-              value="{{ actionEnum.MONITOR }}" />
-            <span class="fa fa-binoculars text-discover"></span>
-            {{ 'enum.MONITOR_CHANGE' | translate }}
-          </label>
-          <label class="radio-inline c-radio">
-            <input
-              id="block-access"
-              type="radio"
-              name="behavior"
-              formControlName="behavior"
-              value="{{ actionEnum.BLOCK }}" />
-            <span class="fa fa-shield-alt text-protect"></span>
-            {{ 'enum.BLOCK_ACCESS' | translate }}
-          </label>
+
+        <div class="d-flex flex-column mb-2">
+          <div>
+            <mat-label class="mr-1">{{
+              'service.ALLOW_ALERT' | translate
+            }}</mat-label>
+          </div>
+          <div>
+            <label class="radio-inline c-radio mr-2">
+              <input
+                id="monitor-change"
+                type="radio"
+                name="behavior"
+                formControlName="behavior"
+                value="{{ actionEnum.MONITOR }}" />
+              <span class="fa fa-binoculars text-discover ml-1"></span>
+              {{ 'enum.MONITOR_CHANGE' | translate }}
+            </label>
+            <label class="radio-inline c-radio">
+              <input
+                id="block-access"
+                type="radio"
+                name="behavior"
+                formControlName="behavior"
+                value="{{ actionEnum.BLOCK }}" />
+              <span class="fa fa-shield-alt text-protect ml-1"></span>
+              {{ 'enum.BLOCK_ACCESS' | translate }}
+            </label>
+          </div>
         </div>
       </div>
-      <div
-        fxLayout="row"
-        fxLayoutAlign="start center"
-        fxFlex="1 0 auto"
-        class="pl-4">
-        <mat-form-field appearance="outline" fxFlex="100" class="pr-4">
+      <div class="d-flex justify-content-start align-items-start mt-2">
+        <mat-form-field appearance="fill" class="flex-grow-1">
           <mat-chip-list #chipList aria-label="Apps selection">
             <mat-chip
               *ngFor="let app of applicationChipsArray"
@@ -117,17 +112,11 @@
       </div>
     </form>
   </div>
-  <div
-    mat-dialog-actions
-    class="dialog-actions pull-right"
-    style="margin-right: 24px">
-    <a class="modal-cancel-button" (click)="onCancel()">
+  <div mat-dialog-actions class="d-flex justify-content-end align-items-center">
+    <button mat-stroked-button class="modal-cancel-button" (click)="onCancel()">
       {{ 'group.editGroup.CANCEL' | translate }}
-    </a>
-    <button
-      mat-button
-      class="modal-submit-button"
-      (click)="addEditFileAccessRule()">
+    </button>
+    <button mat-raised-button color="primary" (click)="addEditFileAccessRule()">
       {{ 'policy.portlet.SUBMIT' | translate }}
     </button>
   </div>

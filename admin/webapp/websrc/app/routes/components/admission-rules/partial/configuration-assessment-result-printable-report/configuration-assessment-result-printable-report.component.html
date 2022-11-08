@@ -1,0 +1,54 @@
+<div class="page-cover">
+  <div class="page-cover-decro"></div>
+  <div class="page-cover-logo"></div>
+  <div class="page-cover-title">{{ 'admissionControl.matchingTestGrid.REPORT_TITLE' | translate }}</div>
+</div>
+<div class="report-summary pagebreak">
+  <div class="summary-title">
+    {{ 'scan.report.others.DETAILS' | translate }}
+  </div>
+  <div class="summary-subtitle mt-1">
+    {{ testResult.instruction.title }}:&nbsp;
+    <span class="text-info">{{ testResult.instruction.content }}</span>
+  </div>
+  <table class="print-table margin-top-l">
+    <thead>
+      <tr class="print-header">
+        <th class="print-cell" style="width: 5%">
+          {{'admissionControl.matchingTestGrid.INDEX' | translate }}
+        </th>
+        <th class="print-cell" style="width: 10%">
+          {{ 'admissionControl.matchingTestGrid.KIND' | translate }}
+        </th>
+        <th class="print-cell" style="width: 15%">
+          {{ 'admissionControl.matchingTestGrid.NAME' | translate }}
+        </th>
+        <th class="print-cell" style="width: 10%">
+          {{ 'admissionControl.matchingTestGrid.ALLOWED' | translate }}
+        </th>
+        <th class="print-cell" style="width: 60%">
+          {{ 'admissionControl.matchingTestGrid.MSG' | translate }}
+        </th>
+    </thead>
+    <tbody>
+      <tr class="print-row" *ngFor="let item of testResult.data; let i = index" [attr.data-index]="i">
+        <td class="print-cell" style="width: 5%">
+          {{ i + 1 }}
+        </td>
+        <td class="print-cell" style="width: 10%">
+          {{ item.name }}
+        </td>
+        <td class="print-cell" style="width: 15%">
+          {{ item.kind }}
+        </td>
+        <td class="print-cell" style="width: 10%">
+          <em *ngIf="item.allowed" class="fa fa-check text-success" aria-hidden="true"></em>
+          <em *ngIf="!item.allowed" class="fa fa-times text-danger" aria-hidden="true"></em>
+        </td>
+        <td class="print-cell" style="width: 60%">
+          {{ item.message }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

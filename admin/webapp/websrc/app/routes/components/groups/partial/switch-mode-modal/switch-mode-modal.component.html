@@ -27,6 +27,7 @@
         <div class="pull-left text-muted">{{'group.ZERODRIFT_COMMENT' | translate}}</div>
       </div>
       <div class="clearfix">
+        <div *ngIf="!mode ||!baselineProfile" class="text-warning pull-left">{{ 'group.MULTI_MODE_SELECTION' | translate }}</div>
         <app-loading-button
           [appearance]="'mat-raised-button'"
           [color]="'primary'"

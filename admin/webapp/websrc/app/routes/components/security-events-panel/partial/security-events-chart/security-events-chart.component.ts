@@ -92,6 +92,16 @@ export class SecurityEventsChartComponent implements OnInit {
         animation: !this.isReport,
         responsive: true,
         maintainAspectRatio: false,
+        scales: {
+          y: {
+            ticks: {
+              callback: (value) => {
+                if (parseFloat(value as string) % 1 === 0) return value;
+                return null;
+              }
+            }
+          },
+        },
         plugins: {
           legend: {
             position: 'right',

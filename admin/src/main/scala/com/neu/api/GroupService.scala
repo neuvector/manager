@@ -201,7 +201,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
                     }
                   } else {
                     Utils.respondWithNoCacheControl() {
-                      complete(StatusCodes.BadRequest, "Bad criteria")
+                      complete((StatusCodes.BadRequest, "Bad criteria"))
                     }
                   }
                 }
@@ -385,7 +385,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
                     }
                   } else {
                     Utils.respondWithNoCacheControl() {
-                      complete(StatusCodes.BadRequest, "Bad criteria")
+                      complete((StatusCodes.BadRequest, "Bad criteria"))
                     }
                   }
                 }

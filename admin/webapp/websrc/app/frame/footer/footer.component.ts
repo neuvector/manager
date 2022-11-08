@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { SwitchersService } from '../../core/switchers/switchers.service';
+import { GlobalVariable } from '@common/variables/global.variable';
 
 @Component({
   selector: '[app-footer]',
@@ -7,5 +8,12 @@ import { SwitchersService } from '../../core/switchers/switchers.service';
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent {
+  version: string;
   constructor(public switchers: SwitchersService) {}
+  ngOnInit() {
+    setInterval(() => {
+      if (GlobalVariable.versionDone)
+        this.version = GlobalVariable.version || '';
+    }, 500);
+  }
 }

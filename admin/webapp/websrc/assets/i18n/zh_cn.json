@@ -194,6 +194,7 @@
   },
   "login": {
     "SIGN_IN": "登录",
+    "SIGN_IN_LEGACY": "请登录",
     "USERNAME": "用户名",
     "PASSWORD": "密码",
     "USER": "输入用户名",
@@ -1899,6 +1900,7 @@
     "ZERODRIFT_COMMENT": "启用/禁用防止选定组的进程和文件系统漂移的自动保护.",
     "ZERO_DRIFT_HINT": "模式切换到学习模式, 在基本模式下开始学习过程",
     "BASELINE_PROFILE": "基线配置",
+    "MULTI_MODE_SELECTION": "多个拥有不同策略模式或基线配置的组被选择",
     "TIP": {
       "EDIT": "编辑组",
       "DELETE": "删除组",
@@ -1949,7 +1951,8 @@
       "OK_MSG": "成功更新组!"
     },
     "profile": {
-      "COUNT_POSTFIX": "个进程规则"
+      "COUNT_POSTFIX": "个进程规则",
+      "RULE_SAMPLE": "例子: /dir/xxx, /dir/xxx.*, /dir/*.xxx, /dir/*/abc/* (不支持: [], () and regexp)"
     },
     "file": {
       "COUNT_POSTFIX": "个文件访问规则"
@@ -2517,7 +2520,8 @@
       "CPU_REQUEST_S": "CPU请求",
       "MEMORY_LIMIT_S": "内存限制",
       "MEMORY_REQUEST_S": "内存请求",
-      "HAS_PSS_VIOLATION": "PSA/PSS最佳实施"
+      "HAS_PSS_VIOLATION": "PSA/PSS最佳实施",
+      "MODULES": "模块"
     },
     "operators": {
       "=": "=",

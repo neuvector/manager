@@ -18,7 +18,7 @@ import {
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { TranslateService } from '@ngx-translate/core';
 import { UtilsService } from '@common/utils/app.utils';
-import { Options } from '@angular-slider/ngx-slider';
+import {ChangeContext, Options} from '@angular-slider/ngx-slider';
 import { DomSanitizer } from '@angular/platform-browser';
 import { interval, Subscription } from 'rxjs';
 
@@ -139,6 +139,10 @@ export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
     };
   }
 
+  onUserChangeEnd(changeContext: ChangeContext): void {
+    this.pcap.seconds = changeContext.value;
+  }
+
   onSnifferChanged() {
     let selectedRows = this.gridOptions.api.getSelectedRows();
     this.sniffer = selectedRows[0];
@@ -182,7 +186,11 @@ export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
   };
 
   startSniff = containerId => {
-    this.sniffService.startSniff(containerId).subscribe(
+    let snifferParam = { duration: 0 };
+    if (!this.pcap.options.disabled && this.pcap.seconds)
+      snifferParam.duration = this.pcap.seconds;
+
+    this.sniffService.startSniff(containerId, snifferParam).subscribe(
       () => this.pullSniffers(),
       err => {
         this.onSnifferErr = true;
@@ -192,7 +200,7 @@ export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
   };
 
   toggleSchedule = event => {
-    if (this.disabled) this.pcap.seconds = 0;
+    if (!this.disabled) this.pcap.seconds = 0;
     this.pcap.options = Object.assign({}, this.pcap.options, {
       disabled: !this.disabled,
     });

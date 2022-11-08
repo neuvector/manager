@@ -6,6 +6,7 @@ import { NgChartsModule } from 'ng2-charts';
 import { ApplicationConversationChartComponent } from './partial/application-conversation-chart/application-conversation-chart.component';
 import { ApplicationVolumeChartComponent } from './partial/application-volume-chart/application-volume-chart.component';
 import { EmptyDataChartReplacementModule } from '@components/ui/empty-data-chart-replacement/empty-data-chart-replacement.module';
+import { PanelInstructionCurtainModule } from '@components/ui/panel-instruction-curtain/panel-instruction-curtain.module';
 
 
 
@@ -19,7 +20,8 @@ import { EmptyDataChartReplacementModule } from '@components/ui/empty-data-chart
     CommonModule,
     NvCommonModule,
     NgChartsModule,
-    EmptyDataChartReplacementModule
+    EmptyDataChartReplacementModule,
+    PanelInstructionCurtainModule
   ],
   exports: [
     ApplicationProtocolsPanelComponent,

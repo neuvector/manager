@@ -59,8 +59,10 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   containsUnpromotableEndpoint: boolean = false;
   context = { componentParent: this };
   routeEventSubscription!: Subscription;
-  isWriteRuleAuthorized: boolean;
+  isWriteGlobalRulesAuthorized: boolean;
   isPrinting: boolean = false;
+  isIncludingCRD: boolean = false;
+  isIncludingFed: boolean = false;
   private w: any;
   private switchClusterSubscription;
   @ViewChild('networkRulePrintableReport') printableReportView: ElementRef;
@@ -80,12 +82,17 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.isWriteRuleAuthorized = this.authUtilsService.getDisplayFlag('write_network_rule');
+    this.isWriteGlobalRulesAuthorized = this.authUtilsService.getDisplayFlag('write_network_rule');
     this.bindRouteEventListener();
-    this.gridHeight = this.w.innerHeight - (this.source === GlobalConstant.NAV_SOURCE.SELF ? 215 : 270);
+    this.gridHeight = this.w.innerHeight - (this.source === GlobalConstant.NAV_SOURCE.SELF ? 215 : 230);
     this.isWriteNetworkRuleAuthorized =
       this.authUtilsService.getDisplayFlag('write_network_rule') &&
-      (this.source !== GlobalConstant.NAV_SOURCE.GROUP ? this.authUtilsService.getDisplayFlag('multi_cluster') : true);
+      (
+        this.source !== GlobalConstant.NAV_SOURCE.GROUP &&
+        this.source !== GlobalConstant.NAV_SOURCE.SELF ?
+          this.authUtilsService.getDisplayFlag('multi_cluster') :
+          true
+      );
     this.gridOptions = this.networkRulesService.configGrid(
       this.isWriteNetworkRuleAuthorized,
       this.source,
@@ -93,6 +100,12 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
     );
     this.gridOptions.onSelectionChanged = () => {
       this.selectedNetworkRules = this.gridOptions.api!.getSelectedRows();
+      this.isIncludingCRD = this.selectedNetworkRules.some(rule => {
+        return rule.cfg_type === GlobalConstant.CFG_TYPE.GROUND;
+      });
+      this.isIncludingFed = this.selectedNetworkRules.some(rule => {
+        return rule.cfg_type === GlobalConstant.CFG_TYPE.FED && this.source === GlobalConstant.NAV_SOURCE.SELF;
+      });
       this.containsUnpromotableEndpoint = this.selectedNetworkRules.some(
         rule => {
           return (
@@ -330,21 +343,23 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
           if (MapConstant.USER_TIMEOUT.indexOf(error.status) < 0) {
             if (
               error.status === 400 &&
-              error.data &&
-              error.data.code === READONLY_RULE_MODIFIED
+              error.error &&
+              error.error.code === READONLY_RULE_MODIFIED
             ) {
               // Alertify.alert(
               //   `${Utils.getAlertifyMsg(error, $translate.instant("policy.dialog.content.SUBMIT_NG"), true)}
               //   <div>Read-only rule ID is: ${error.data.read_only_rule_ids.join(", ")}</div>
               //   <div>You can click revert button on the rule to rollback your change.</div>`
               // );
-              this.changeState4ReadOnlyRules(error.data.read_only_rule_ids);
+              this.changeState4ReadOnlyRules(error.error.read_only_rule_ids);
             } else {
               // Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
               // Alertify.error(
               //   Utils.getAlertifyMsg(error, $translate.instant("policy.dialog.content.SUBMIT_NG"), false)
               // );
             }
+            dialogRef.componentInstance.onCancel();
+            dialogRef.componentInstance.loading = false;
           }
         }
       );
@@ -401,12 +416,14 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       this.networkRules[index].state =
         GlobalConstant.NETWORK_RULES_STATE.READONLY;
     });
+    console.log("this.networkRules", this.networkRules);
     this.gridOptions.api!.setRowData(this.networkRules);
   };
 
   private mergeRulesByWebWorkerClient = (rulesBlock: Array<any>) => {
     let eof = rulesBlock.length < MapConstant.PAGE.NETWORK_RULES;
     this.networkRules = this.networkRules.concat(rulesBlock);
+    this.networkRulesService.networkRuleBackup = JSON.parse(JSON.stringify(this.networkRules))
     this.renderNetworkRule(this.networkRules, eof);
   };
 

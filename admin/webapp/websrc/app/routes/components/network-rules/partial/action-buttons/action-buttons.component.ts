@@ -20,22 +20,37 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
 
   params!: ICellRendererParams;
   buttonDisplayMap: any;
+  CFG_TYPE = GlobalConstant.CFG_TYPE;
+  isOperatableRuleType: boolean;
+  isPromotable: boolean;
 
   constructor(
     private dialog: MatDialog,
     private translate: TranslateService,
-    private networkRulesService: NetworkRulesService
+    public networkRulesService: NetworkRulesService
   ) { }
 
   agInit(params: ICellRendererParams): void {
     this.params = params;
+    this.isOperatableRuleType =
+      this.params.data.cfg_type !== GlobalConstant.CFG_TYPE.GROUND &&
+      !(this.params.context.componentParent.source === GlobalConstant.NAV_SOURCE.SELF && this.params.data.cfg_type === GlobalConstant.CFG_TYPE.FED);
+    this.isPromotable =
+      this.params.data.cfg_type === GlobalConstant.CFG_TYPE.GROUND &&
+      !(this.params.context.componentParent.source === GlobalConstant.NAV_SOURCE.SELF && this.params.data.cfg_type === GlobalConstant.CFG_TYPE.FED);
     this.buttonDisplayMap = {
-      add: this.params.data.cfg_type !== GlobalConstant.CFG_TYPE.GROUND,
-      edit: !this.params.data.remove && this.params.data.cfg_type !== GlobalConstant.CFG_TYPE.GROUND && !this.params.data.learned,
-      delete: this.params.data.state !== GlobalConstant.NETWORK_RULES_STATE.READONLY && !this.params.data.remove && this.params.data.cfg_type !== GlobalConstant.CFG_TYPE.GROUND,
-      undelete: this.params.data.remove && this.params.data.cfg_type !== GlobalConstant.CFG_TYPE.GROUND,
-      revert: this.params.data.state === GlobalConstant.NETWORK_RULES_STATE.READONLY && this.params.data.cfg_type !== GlobalConstant.CFG_TYPE.GROUND,
-      promote: this.params.context.source === GlobalConstant.NAV_SOURCE.SELF && this.params.data.cfg_type === GlobalConstant.CFG_TYPE.GROUND
+      add: this.isOperatableRuleType,
+      edit: !this.params.data.remove &&
+          !this.params.data.learned &&
+          this.isOperatableRuleType,
+      delete: this.params.data.state !== GlobalConstant.NETWORK_RULES_STATE.READONLY &&
+          !this.params.data.remove &&
+          this.isOperatableRuleType,
+      undelete: this.params.data.remove &&
+          this.isOperatableRuleType,
+      revert: this.params.data.state === GlobalConstant.NETWORK_RULES_STATE.READONLY &&
+          this.isOperatableRuleType,
+      promote: this.isPromotable
     };
   }
 
@@ -130,7 +145,20 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
   };
 
   revertNetworkRule = (id) => {
-
+    let indexAtBackup = this.networkRulesService.networkRuleBackup.findIndex(rule => rule.id === id);
+    let indexAtCurr = this.params.context.componentParent.networkRules.findIndex(rule => rule.id === id);
+    this.params.context.componentParent.networkRules[indexAtCurr] =
+      JSON.parse(JSON.stringify(this.networkRulesService.networkRuleBackup[indexAtBackup]));
+    this.params.context.componentParent.gridOptions.api!.setRowData(this.params.context.componentParent.networkRules);
+    this.networkRulesService.isNetworkRuleChanged = false;
+    setTimeout(() => {
+      let row = this.params.context.componentParent.gridOptions.api!.getDisplayedRowAtIndex(indexAtCurr);
+      row.setSelected(true);
+      this.params.context.componentParent.gridOptions.api!.ensureIndexVisible(
+        indexAtCurr,
+        "top"
+      );
+    }, 500);
   };
 
   promoteNeworkRuleOnEntry = (id) => {

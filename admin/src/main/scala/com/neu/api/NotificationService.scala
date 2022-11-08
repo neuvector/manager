@@ -165,7 +165,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
                         violation.reported_at.isBefore(violationBrief.reported_at.plusHours(2))
                     )
                     Utils.respondWithNoCacheControl() {
-                      complete(StatusCodes.OK, track)
+                      complete(track)
                     }
                   } catch {
                     case NonFatal(e) =>
@@ -259,13 +259,13 @@ class NotificationService()(implicit executionContext: ExecutionContext)
                         paginationCacheManager[List[org.json4s.JsonAST.JValue]]
                           .removePagedData(s"$cacheKey-audit")
                         Utils.respondWithNoCacheControl() {
-                          complete(StatusCodes.Unauthorized, "Authentication failed!")
+                          complete((StatusCodes.Unauthorized, "Authentication failed!"))
                         }
                       } else {
                         Utils.respondWithNoCacheControl() {
                           paginationCacheManager[List[org.json4s.JsonAST.JValue]]
                             .removePagedData(s"$cacheKey-audit")
-                          complete(StatusCodes.InternalServerError, "Controller unavailable!")
+                          complete((StatusCodes.InternalServerError, "Controller unavailable!"))
                         }
                       }
                     case e @ (_: TimeoutException | _: ConnectionAttemptFailedException) =>
@@ -273,7 +273,9 @@ class NotificationService()(implicit executionContext: ExecutionContext)
                       Utils.respondWithNoCacheControl() {
                         paginationCacheManager[List[org.json4s.JsonAST.JValue]]
                           .removePagedData(s"$cacheKey-audit")
-                        complete(StatusCodes.NetworkConnectTimeout, "Network connect timeout error")
+                        complete(
+                          (StatusCodes.NetworkConnectTimeout, "Network connect timeout error")
+                        )
                       }
                   }
                 }
@@ -351,7 +353,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
                         }
                     )
                     Utils.respondWithNoCacheControl() {
-                      complete(StatusCodes.OK, track)
+                      complete(track)
                     }
                   } catch {
                     case NonFatal(e) =>
@@ -539,7 +541,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
                     GraphCacheManager.saveNodeLayout(graphLayout)
                     logger.debug(layoutToJson(graphLayout))
                     Utils.respondWithNoCacheControl() {
-                      complete(StatusCodes.OK, "Layout saved.")
+                      complete("Layout saved.")
                     }
                   }
                 }
@@ -576,7 +578,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
                     logger.info("saving blacklist for user: {}", userBlacklist.user)
                     BlacklistCacheManager.saveBlacklist(userBlacklist)
                     Utils.respondWithNoCacheControl() {
-                      complete(StatusCodes.OK, "Blacklist saved.")
+                      complete("Blacklist saved.")
                     }
                   }
                 }

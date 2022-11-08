@@ -80,7 +80,9 @@
             class="clearfix"
             [source]="navSource"
             [height]="height"
-            (refreshing)="refreshing($event)"></app-groups>
+            [isShowingSystemGroups]="isShowingSystemGroups"
+            (refreshing)="refreshing($event)"
+          ></app-groups>
         </mat-card>
       </ng-container>
       <ng-container *appContainerTwo="let height">
@@ -92,7 +94,9 @@
             [resizableHeight]="height"
             [selectedGroupName]="groupsView.selectedGroups[0].name"
             [members]="groupsView.selectedGroups[0].members"
-            [kind]="groupsView.selectedGroups[0] ? 'c' : 'f'">
+            [cfgType]="groupsView.selectedGroups[0].cfg_type || ''"
+            [kind]="groupsView.selectedGroups[0].kind || ''"
+          >
           </app-group-details>
         </mat-card>
       </ng-container>

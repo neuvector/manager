@@ -21,6 +21,7 @@ import * as pako from 'pako';
 export class NetworkRulesService {
   w: any;
   isNetworkRuleChanged: boolean = false;
+  networkRuleBackup: Array<any> = [];
 
   constructor(
     public sanitizer: DomSanitizer,
@@ -123,7 +124,7 @@ export class NetworkRulesService {
 
     const actionRenderFunc = params => {
       if (params.data && params.data && params.data.id > -1) {
-        return `<span class="action-label ${
+        return `<span class="action-label px-1 ${
           params.data.disable
             ? MapConstant.colourMap['disabled_background']
             : MapConstant.colourMap[params.data.action.toLowerCase()]
@@ -266,7 +267,7 @@ export class NetworkRulesService {
       },
     ];
 
-    const gridOptions = {
+    return {
       defaultColDef: {
         resizable: true,
         sortable: true,
@@ -281,10 +282,7 @@ export class NetworkRulesService {
       rowClassRules: {
         'disabled-row': function (params) {
           if (!params.data) return false;
-          if (params.data.disable) {
-            return true;
-          }
-          return false;
+          return !!params.data.disable;
         },
         'critical-row': function (params) {
           if (!params.data) return;
@@ -294,8 +292,6 @@ export class NetworkRulesService {
       onGridReady: onGridReadyFunc,
       overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS'),
     };
-
-    return gridOptions;
   };
 
   getAutoCompleteData = source => {

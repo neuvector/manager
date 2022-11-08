@@ -9,7 +9,7 @@
     <div
       class="clearfix"
       style="height: 40px"
-      *ngIf="source !== navSource['GROUP']">
+      *ngIf="source !== navSource['GROUP'] && source !== navSource['FED_POLICY']">
       <div
         class="pull-right margin-top-s margin-left-xl"
         *ngIf="(eof || networkRuleErr) && !isNetworkRuleDirty()"
@@ -34,9 +34,9 @@
         <em class="eos-icons icon-18">print</em>
       </button>
       <div class="clearfix">
-        <div class="content-title">
+        <h1 class="font-weight-light" id="events-title">
           {{ 'policy.head.TITLE' | translate }}
-        </div>
+        </h1>
       </div>
     </div>
     <div
@@ -55,14 +55,14 @@
               {{ 'policy.toolBar.INSERT_TO_TOP' | translate }}
             </button>
             <button
-              *ngIf="selectedNetworkRules.length > 0 && isWriteRuleAuthorized"
+              *ngIf="selectedNetworkRules.length > 0 && isWriteGlobalRulesAuthorized && !isIncludingCRD && !isIncludingFed"
               class="pull-left margin-top-l margin-left-m primary-button"
               (click)="removeNetworkRules()">
               <em class="eos-icons icon-18">delete</em>
               {{ 'policy.toolBar.REMOVE' | translate }}
             </button>
             <button
-              *ngIf="selectedNetworkRules.length > 0 && isWriteRuleAuthorized"
+              *ngIf="selectedNetworkRules.length > 0 && isWriteGlobalRulesAuthorized && !isIncludingCRD && !isIncludingFed"
               class="pull-left margin-top-l margin-left-m primary-button"
               (click)="openMoveNetworkRulesModal()">
               <em class="eos-icons icon-18">move</em>
@@ -70,13 +70,22 @@
             </button>
             <button
               *ngIf="
-                selectedNetworkRules.length > 0 && !containsUnpromotableEndpoint && isWriteRuleAuthorized
+                selectedNetworkRules.length > 0 && !containsUnpromotableEndpoint && isWriteGlobalRulesAuthorized && source !== navSource['FED_POLICY'] && !isIncludingFed
               "
               class="pull-left margin-top-l margin-left-m primary-button"
               (click)="promoteRuleOnTop()">
               <em class="eos-icons icon-18">navigation</em>
               {{ 'policy.PROMOTE' | translate }}
             </button>
+            <div
+              class="pull-right margin-top-l"
+              *ngIf="(eof || networkRuleErr) && !isNetworkRuleDirty() && source === navSource['FED_POLICY']"
+              (click)="refresh()">
+              <em class="fa fa-refresh text-action hand"></em>
+              <label class="text-gray-label hand">{{
+                'general.REFRESH' | translate
+              }}</label>
+            </div>
             <app-quick-filter
               *ngIf="filteredCount > 1"
               class="pull-right"
@@ -85,14 +94,14 @@
               [count]="networkRules.length">
             </app-quick-filter>
             <button
-              *ngIf="isNetworkRuleDirty() && isWriteRuleAuthorized"
+              *ngIf="isNetworkRuleDirty() && isWriteGlobalRulesAuthorized"
               class="pull-right margin-top-l margin-right-m save-button"
               (click)="submit()">
               <em class="eos-icons icon-18">save</em>
               {{ 'policy.toolBar.SAVE' | translate }}
             </button>
             <button
-              *ngIf="isNetworkRuleDirty() && isWriteRuleAuthorized"
+              *ngIf="isNetworkRuleDirty() && isWriteGlobalRulesAuthorized"
               class="pull-right margin-top-l margin-right-m"
               (click)="refresh()">
               <em class="eos-icons icon-18">replay</em>

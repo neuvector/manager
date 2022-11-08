@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PathConstant } from '@common/constants/path.constant';
 import { ImportFileModalComponent } from '@components/ui/import-file-modal/import-file-modal.component';
 import { AddEditAdmissionRuleModalComponent } from "@components/admission-rules/partial/add-edit-admission-rule-modal/add-edit-admission-rule-modal.component";
@@ -48,21 +48,14 @@ export class AdmissionRulesComponent implements OnInit {
   frameworkComponents;
   context;
   private default_action: string = 'deny';
-  private GLOBAL_ACTION_RULE = {
-    id: -1,
-    comment:
-      this.default_action === 'allow'
-        ? "Allow deployments that don't match any of above rules."
-        : "Deny deployments that don't match any of above rules.",
-    criteria: [],
-    critical: true,
-    category: 'Global action',
-    rule_type: this.default_action,
-    disable: false,
-  };
   private w: any;
   private isModalOpen: boolean = false;
   private switchClusterSubscription;
+  isPrinting: boolean = false;
+  configAssessmentDialogRef: MatDialogRef<ConfigurationAssessmentModalComponent>;
+  configTestResult: any;
+
+  @ViewChild('testResult') printableReportView: ElementRef;
 
   constructor(
     private dialog: MatDialog,
@@ -119,8 +112,21 @@ export class AdmissionRulesComponent implements OnInit {
           this.admissionOptions = options;
           this.globalStatus = this.admissionStateRec.state?.enable!;
           this.mode = this.admissionStateRec.state?.mode!;
+          this.default_action = this.admissionStateRec.state?.default_action!;
           if (this.source === GlobalConstant.NAV_SOURCE.SELF) {
-            this.admissionRules.push(this.GLOBAL_ACTION_RULE);
+            const GLOBAL_ACTION_RULE = {
+              id: -1,
+              comment:
+                this.default_action === 'allow'
+                  ? "Allow deployments that don't match any of above rules."
+                  : "Deny deployments that don't match any of above rules.",
+              criteria: [],
+              critical: true,
+              category: 'Global action',
+              rule_type: this.default_action,
+              disable: false,
+            };
+            this.admissionRules.push(GLOBAL_ACTION_RULE);
           }
           this.filteredCount = this.admissionRules.length;
 
@@ -168,7 +174,10 @@ export class AdmissionRulesComponent implements OnInit {
   };
 
   openConfigAssessmentDialog = () => {
-    const configAssessmentDialogRef = this.dialog.open(ConfigurationAssessmentModalComponent, {
+    this.configAssessmentDialogRef = this.dialog.open(ConfigurationAssessmentModalComponent, {
+      data: {
+        printConfigurationAssessmentResultFn: this.printConfigurationAssessmentResult
+      },
       width: "1024px",
       disableClose: true
     });
@@ -266,4 +275,16 @@ export class AdmissionRulesComponent implements OnInit {
   };
 
   showGlobalActions = event => {};
+
+  private printConfigurationAssessmentResult = (testResult) => {
+    this.configTestResult = testResult;
+    this.configAssessmentDialogRef.close();
+    this.isPrinting = true;
+    setInterval(() => {
+      if (this.printableReportView) {
+        window.print();
+        this.isPrinting = false;
+      }
+    }, 500);
+  };
 }

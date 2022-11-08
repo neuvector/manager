@@ -26,6 +26,7 @@ export class GroupsService {
   public selectedGroup: any;
   public customGroups: any;
   public groups: any;
+  public activeTabIndex: number = 0;
 
   constructor(
     private utils: UtilsService,
@@ -50,13 +51,13 @@ export class GroupsService {
     };
     const policyModeRendererFunc = params => {
       let mode = '';
-      if (params.value && params.data) {
-        mode = this.utils.getI18Name(params.value);
-        let labelCode = MapConstant.colourMap[params.value];
+      if (params.value && params.value.policy_mode) {
+        mode = this.utils.getI18Name(params.value.policy_mode);
+        let labelCode = MapConstant.colourMap[params.value.policy_mode];
         if (!labelCode) return '';
         else
           return `<span class="type-label policy_mode ${labelCode}">${mode}</span>${
-            params.data.baseline_profile.toLowerCase() === 'zero-drift'
+            params.value.baseline_profile.toLowerCase() === 'zero-drift'
               ? '<em class="eos-icons icon-18">anchor</em>'
               : ''
           }`;
@@ -64,19 +65,19 @@ export class GroupsService {
     };
     const typeRendererFunc = params => {
       if (params.value === GlobalConstant.CFG_TYPE.LEARNED) {
-        return `<span class="action-label group-type ${
+        return `<span class="action-label px-1 group-type ${
           MapConstant.colourMap['LEARNED']
         }">${this.translate.instant('group.LEARNED')}</span>`;
       } else if (params.value === GlobalConstant.CFG_TYPE.CUSTOMER) {
-        return `<span class="action-label group-type ${
+        return `<span class="action-label px-1 group-type ${
           MapConstant.colourMap['CUSTOM']
         }">${this.translate.instant('group.CUSTOM')}</span>`;
       } else if (params.value === GlobalConstant.CFG_TYPE.GROUND) {
-        return `<span class="action-label group-type ${
+        return `<span class="action-label px-1 group-type ${
           MapConstant.colourMap['GROUND']
         }">${this.translate.instant('group.GROUND')}</span>`;
       } else if (params.value === GlobalConstant.CFG_TYPE.FED) {
-        return `<span class="action-label group-type ${
+        return `<span class="action-label px-1 group-type ${
           MapConstant.colourMap['FED']
         }">${this.translate.instant('group.FED')}</span>`;
       }
@@ -113,7 +114,12 @@ export class GroupsService {
       },
       {
         headerName: this.translate.instant('group.gridHeader.POLICY_MODE'),
-        field: 'policy_mode',
+        valueGetter: params => {
+          return {
+            policy_mode: params.data.policy_mode,
+            baseline_profile: params.data.baseline_profile
+          }
+        },
         cellRenderer: policyModeRendererFunc,
         hide: isFed,
         width: 120,
@@ -125,9 +131,9 @@ export class GroupsService {
         field: 'cfg_type',
         cellRenderer: typeRendererFunc,
         hide: isFed,
-        width: 90,
-        maxWidth: 90,
-        minWidth: 90,
+        width: 110,
+        maxWidth: 110,
+        minWidth: 110,
       },
       {
         headerName: this.translate.instant('group.gridHeader.MEMBERS'),
@@ -195,7 +201,11 @@ export class GroupsService {
         },
         {
           headerName: this.translate.instant('group.gridHeader.POLICY_MODE'),
-          field: 'policy_mode',
+          valueGetter: params => {
+            return {
+              policy_mode: params.data.policy_mode,
+            }
+          },
           cellRenderer: policyModeRendererFunc,
           width: 130,
           maxWidth: 130,
@@ -283,19 +293,19 @@ export class GroupsService {
         cellRenderer: params => {
           let displayState = this.getDisplayName(params.value);
           if (params.value === 'disconnected')
-            return `<span class="action-label nv-label warning">${displayState}</span>`;
+            return `<span class="action-label px-1 warning">${displayState}</span>`;
           else if (params.value === 'discover')
-            return `<span class="action-label nv-label info">${displayState}</span>`;
+            return `<span class="action-label px-1 info">${displayState}</span>`;
           else if (params.value === 'protect')
-            return `<span class="action-label nv-label green">${displayState}</span>`;
+            return `<span class="action-label px-1 green">${displayState}</span>`;
           else if (params.value === 'unmanaged')
-            return `<span class="action-label nv-label danger">${displayState}</span>`;
+            return `<span class="action-label px-1 danger">${displayState}</span>`;
           else if (params.value === 'monitor')
-            return `<span class="action-label nv-label primary">${displayState}</span>`;
+            return `<span class="action-label px-1 primary">${displayState}</span>`;
           else if (params.value === 'quarantined')
-            return `<span class="action-label nv-label pink">${displayState}</span>`;
+            return `<span class="action-label px-1 pink">${displayState}</span>`;
           else
-            return `<span class="action-label nv-label inverse">${displayState}</span>`;
+            return `<span class="action-label px-1 inverse">${displayState}</span>`;
         },
         width: 115,
         maxWidth: 115,
@@ -307,9 +317,9 @@ export class GroupsService {
         cellRenderer: params => {
           let display = '';
           if (params.value && params.value.high)
-            display += `<span class="action-label nv-label danger mr-sm">${params.value.high}</span>`;
+            display += `<span class="action-label px-1 danger mr-sm">${params.value.high}</span>`;
           if (params.value && params.value.medium)
-            display += `<span class="action-label nv-label warning">${params.value.medium}</span>`;
+            display += `<span class="action-label px-1 warning">${params.value.medium}</span>`;
           return display;
         },
         width: 120,
@@ -317,11 +327,6 @@ export class GroupsService {
       },
     ];
 
-    // gridOptions4Members = this.utils.createTreeGridOptions(
-    //   columnDefs4Members
-    // );
-
-    // return gridOptions4Members;
   };
 
   prepareGrid4CustomCheck = isGranted => {
@@ -379,9 +384,9 @@ export class GroupsService {
           }
           return '';
         },
-        width: 90,
-        minWidth: 90,
-        maxWidth: 90,
+        width: 110,
+        minWidth: 110,
+        maxWidth: 110,
       },
       {
         headerName: this.translate.instant('group.dlp.gridHeader.ACTION'),
@@ -398,12 +403,12 @@ export class GroupsService {
             if (!labelCode) labelCode = 'info';
             if (params.data) {
               if (params.data.exist) {
-                return `<span class="action-label ${labelCode}">${this.sanitizer.sanitize(
+                return `<span class="action-label px-1 ${labelCode}">${this.sanitizer.sanitize(
                   SecurityContext.HTML,
                   mode
                 )}</span>`;
               } else {
-                return `<span class="action-label disabled-action">${this.sanitizer.sanitize(
+                return `<span class="action-label px-1 disabled-action">${this.sanitizer.sanitize(
                   SecurityContext.HTML,
                   mode
                 )}</span>`;
@@ -516,9 +521,9 @@ export class GroupsService {
           }
           return '';
         },
-        width: 90,
-        minWidth: 90,
-        maxWidth: 90,
+        width: 110,
+        minWidth: 110,
+        maxWidth: 110,
       },
       {
         headerName: this.translate.instant('group.dlp.gridHeader.ACTION'),
@@ -535,12 +540,12 @@ export class GroupsService {
             if (!labelCode) labelCode = 'info';
             if (params.data) {
               if (params.data.exist) {
-                return `<span class="action-label ${labelCode}">${this.sanitizer.sanitize(
+                return `<span class="action-label px-1 ${labelCode}">${this.sanitizer.sanitize(
                   SecurityContext.HTML,
                   mode
                 )}</span>`;
               } else {
-                return `<span class="action-label disabled-action">${this.sanitizer.sanitize(
+                return `<span class="action-label px-1 disabled-action">${this.sanitizer.sanitize(
                   SecurityContext.HTML,
                   mode
                 )}</span>`;
@@ -715,6 +720,7 @@ export class GroupsService {
       );
     }
 
+    console.log("service payload",{ config: payload })
     let data = pako.gzip(JSON.stringify({ config: payload }));
     data = new Blob([data], { type: 'application/gzip' });
     let config = {

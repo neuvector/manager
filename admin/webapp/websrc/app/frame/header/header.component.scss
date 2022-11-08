@@ -38,3 +38,23 @@
 .divider {
   border-bottom: 0.5px solid rgba(0, 0, 0, 0.4);
 }
+
+.profile-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
+  width: 50%;
+}
+.avatar {
+  margin: 10px;
+}
+
+.info{
+  margin: auto 0;
+  font-size: 0.875em;
+  line-height: 2em;
+}
+
+.docURLBase a:hover{
+  text-decoration: none;
+}

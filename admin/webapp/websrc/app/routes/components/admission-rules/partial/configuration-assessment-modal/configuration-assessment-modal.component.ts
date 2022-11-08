@@ -44,7 +44,6 @@ export class ConfigurationAssessmentModalComponent implements OnInit {
 
   getImportResult = (response: AdmissionConfigurationAssessment) => {
     this.configAssessmentResult = response;
-    // this.testReportClient(this.configAssessmentResult);
   };
 
   exportCsv = () => {
@@ -55,54 +54,13 @@ export class ConfigurationAssessmentModalComponent implements OnInit {
     }
   };
 
-  private testReportClient = (testResult) => {
-    let worker: Worker | undefined = undefined;
-    let pdfBlob = null;
-    let progress = 0;
-    // if (worker) {
-    //   worker.terminate();
-    //   console.info("killed an existing running worker...");
-    // }
-    worker = new Worker("./admission-config-assessment-report.worker", {type: "module"});
-    console.log("worker", worker);
-    if (worker) {
-      if (testResult) {
-        let docData = Object.assign(
-          {},
-          {data: testResult},
-          {metadata: this.admissionRulesService.getI18NMessages()},
-          {images: MapConstant.imageMap}
-        );
-        console.log("Post message to worker...", testResult);
-        worker.postMessage(
-          JSON.stringify(this.admissionRulesService.formatContent(docData))
-        );
-      } else {
-        console.warn("no data in admission control matching test.");
-      }
-      worker.onmessage = event => {
-        pdfBlob = event.data.blob;
-        progress = Math.floor(event.data.progress * 100);
-      };
-    } else {
-      progress = 100;
-    }
-  };
-
   exportPdf = () => {
-    let docDefinition: any = {
-      pageSize: 'LETTER',
-      pageOrientation: 'landscape',
-      content: [
-        {
-          text: 'Some data',
-          style: 'header'
-        },
-        {
-          text: 'some data 2', fontSize: 15
-        }
-      ]
-    }
-    pdfMake.createPdf(docDefinition, undefined, undefined, pdfFonts.pdfMake.vfs).open();
+    this.data.printConfigurationAssessmentResultFn({
+      data: this.configAssessmentResult.results,
+      instruction: {
+        title: this.translate.instant("admissionControl.matchingTestGrid.UNAVAILABLE_PROP"),
+        content: this.configAssessmentResult.props_unavailable.join(", ")
+      }
+    });
   };
 }

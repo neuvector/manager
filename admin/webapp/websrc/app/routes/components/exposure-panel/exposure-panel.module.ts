@@ -7,6 +7,7 @@ import { NgChartsModule } from 'ng2-charts';
 import { ExposureGridModule } from '@components/exposure-grid/exposure-grid.module';
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
 import { EmptyDataChartReplacementModule } from '@components/ui/empty-data-chart-replacement/empty-data-chart-replacement.module';
+import { PanelInstructionCurtainModule } from '@components/ui/panel-instruction-curtain/panel-instruction-curtain.module';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { EmptyDataChartReplacementModule } from '@components/ui/empty-data-chart
     NgChartsModule,
     ExposureGridModule,
     LoadingButtonModule,
-    EmptyDataChartReplacementModule
+    EmptyDataChartReplacementModule,
+    PanelInstructionCurtainModule
   ],
   exports: [
     ExposurePanelComponent,

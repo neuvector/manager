@@ -1,162 +1,161 @@
-<div class="signin-content">
-  <div class="sign-in-box">
-    <div class="brand-container">
-      <div><img src="assets/img/suse-logo-light.svg" alt="Suse logo" /></div>
+<div class="login">
+  <div class="login-header"></div>
+  <!-- START panel-->
+  <div class="login-body">
+    <div class="login-panel-wrap">
       <div>
-        <img
-          class="margin-bottom-xxxl"
-          src="assets/img/sign-in-lock-1.svg"
-          alt="Sign in lock design" />
-        <div class="info">
-          <h1>NeuVector</h1>
-          <p>Full lifecycle container security</p>
-        </div>
-      </div>
-      <div>
-        <div class="margin-top-l"></div>
-      </div>
-      <div>
-        <div class="margin-top-l"></div>
-      </div>
-      <div>
-        <div class="margin-top-l"></div>
-      </div>
-    </div>
-
-    <div class="form-container">
-      <div id="loadingBar" style="width: 100%; height: 5px;">
-        <mat-progress-bar *ngIf="(inProgress || isFromSSO) && !authMsg" class="sso-auth-progress"mode="indeterminate"></mat-progress-bar>
-      </div>
-      <div class="sign-in-header" *ngIf="!isFromSSO"></div>
-      <div class="sign-in-form">
-        <h1>{{ 'login.SIGN_IN' | translate }}</h1>
-        <form class="margin-top-xl login-form" [formGroup]="loginForm" *ngIf="!isFromSSO">
-          <div class="form-group" style="position: relative">
-            <label for="Email1">{{ 'login.USERNAME' | translate }}</label>
-            <input
-              class="form-control"
-              autocomplete="off"
-              autofocus
-              id="Email1"
-              [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-              formControlName="username"
-              required
-              type="text" />
-            <span
-              class="text-danger"
-              style="position: absolute; left: 0; top: 70px"
-              *ngIf="
-                loginForm.controls['username'].hasError('required') &&
-                loginForm.controls['username'].dirty
-              "
-              >{{ 'login.USER_REQUIRED' | translate }}</span
-            >
-          </div>
-          <div class="form-group" style="position: relative">
-            <label for="password1">{{ 'login.PASSWORD' | translate }}</label>
-            <input
-              id="password1"
-              ng-trim="false"
-              [type]="showPassword ? 'text' : 'password'"
-              [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-              formControlName="password"
-              required
-              class="form-control" />
-            <i
-              class="eos-icons login-icon text-muted"
-              *ngIf="loginForm.controls['password'].value"
-              (click)="showPassword = !showPassword"
-              style="
-                cursor: pointer;
-                pointer-events: all;
-                position: absolute;
-                right: 20px;
-                top: 35px;
-              "
-              >{{ showPassword ? 'visibility_off' : 'visibility' }}</i
-            >
-            <span
-              class="text-danger"
-              style="position: absolute; left: 0; top: 70px"
-              *ngIf="
-                loginForm.controls['password'].hasError('required') &&
-                loginForm.controls['password'].dirty
-              "
-              >{{ 'login.PASSWORD_REQUIRED' | translate }}</span
-            >
-          </div>
-          <button
-            class="btn btn-primary btn-block margin-top-xxl"
-            (click)="submitForm($event, loginForm.value, '')"
-            [disabled]="!validEula || loginForm.invalid"
-            type="submit">
-            {{ 'login.LOGIN' | translate }}
-          </button>
-          <div class="margin-top-xl" *ngIf="servers && servers.length === 1">
-            <button
-              class="btn btn-primary btn-block"
-              (click)="submitForm($event, loginForm.value, 'okta')"
-              *ngIf="samlEnabled"
-              [disabled]="loginForm.invalid"
-              type="submit">
-              {{ 'login.OKTA_LOGIN' | translate }}
-            </button>
-            <button
-              class="btn btn-primary btn-block"
-              (click)="submitForm($event, loginForm.value, 'oidc')"
-              *ngIf="oidcEnabled"
-              [disabled]="loginForm.invalid"
-              type="submit">
-              {{ 'login.OIDC_LOGIN' | translate }}
-            </button>
-          </div>
-          <div class="margin-top-xl" *ngIf="servers && servers.length === 2">
-            <button
-              class="btn btn-primary btn-block-half"
-              (click)="submitForm($event, loginForm.value, 'okta')"
-              *ngIf="samlEnabled"
-              style="float: left"
-              [disabled]="loginForm.invalid"
-              type="submit">
-              {{ 'login.OKTA_LOGIN' | translate }}
-            </button>
-            <div
-              style="padding: 12px; text-align: center; width: 8%; float: left">
-              {{ 'login.OR' | translate }}
+        <div class="login-logo"></div>
+        <div class="panel-body p0">
+          <div id="loadingBar" style="width: 100%">
+            <mat-progress-bar *ngIf="(inProgress || isFromSSO) && !authMsg" class="sso-auth-progress"mode="indeterminate"></mat-progress-bar>
+            <div class="text-danger text-center clearfix" *ngIf="authMsg && isFromSSO" style="padding: 0 10px; clear:both">
+              {{authMsg}}
             </div>
-            <button
-              class="btn btn-primary btn-block-half"
-              (click)="submitForm($event, loginForm.value, 'oidc')"
-              *ngIf="oidcEnabled"
-              style="float: left"
-              [disabled]="loginForm.invalid"
-              type="submit">
-              {{ 'login.OIDC_LOGIN' | translate }}
-            </button>
           </div>
-          <ng-template [ngIf]="!isEulaAccepted">
-            <app-eula (eulaStatus)="getEulaStatus($event)" ></app-eula>
-          </ng-template>
+          <div class="login-panel" [ngClass]="{'login-panel-extra': servers && servers.length === 2}" *ngIf="!isFromSSO">
+            <p class="text-center login-title mt-0" translate="{{'login.SIGN_IN_LEGACY'}}"></p>
+            <form
+              class="form-validate mb-lg login-form" [formGroup]="loginForm" novalidate=""
+              role="form"
+            >
+              <div class="form-group has-feedback">
+                <label>{{'login.USERNAME' | translate}}</label>
+                <input
+                  autocomplete="off" autofocus class="form-control" id="Email1"
+                  name="account_email" [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+                  formControlName="username" required="" type="text"
+                />
+                <span class="fa fa-user form-control-feedback text-muted login-icon"></span>
+                <!--suppress JSUnresolvedVariable -->
+                <span
+                  class="text-danger login-error"
+                  *ngIf="loginForm.controls['username'].hasError('required') &&
+                  loginForm.controls['username'].dirty"
+                >{{'login.USER_REQUIRED' | translate}}</span>
+              </div>
+              <div class="form-group has-feedback">
+                <label>{{'login.PASSWORD' | translate}}</label>
+                <input
+                  class="form-control" id="password1"
+                  ng-trim="false"
+                  [type]="showPassword ? 'text' : 'password'"
+                  [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+                  name="account_password"
+                  formControlName="password" required
+                />
+                <i
+                  class="eos-icons login-icon text-muted"
+                  *ngIf="loginForm.controls['password'].value"
+                  (click)="showPassword = !showPassword"
+                  style="
+                    cursor: pointer;
+                    pointer-events: all;
+                    position: absolute;
+                    right: 20px;
+                    top: 35px;
+                  "
+                >
+                  {{ showPassword ? 'visibility_off' : 'visibility' }}
+                </i>
+                <!--suppress JSUnresolvedVariable -->
+                <span
+                  class="text-danger login-error"
+                  *ngIf="
+                    loginForm.controls['password'].hasError('required') &&
+                    loginForm.controls['password'].dirty
+                  "
+                >{{'login.PASSWORD_REQUIRED' | translate}}</span>
+              </div>
+              <div class="mt-xl clearfix" *ngIf="servers && servers.length === 1">
+                <!--suppress JSUnresolvedVariable -->
+                <button
+                  (click)="submitForm($event, loginForm.value, '')" [disabled]="!validEula || loginForm.invalid"
+                  style="float: left" type="submit"
+                >
+                  {{'login.LOGIN' | translate}}
+                </button>
+                <div
+                  style="padding: 12px; text-align:center; width: 8%; float: left"
+                  translate="{{'login.OR'}}"
+                ></div>
+                <!--suppress JSUnresolvedVariable -->
+                <button
+                  (click)="submitForm($event, loginForm.value, 'okta')"
+                  *ngIf="!validEula || samlEnabled"
+                  style="float: left"
+                >
+                  {{'login.OKTA_LOGIN' | translate}}
+                </button>
+                <!--suppress JSUnresolvedVariable -->
+                <button
+                  (click)="submitForm($event, loginForm.value, 'oidc')"
+                  *ngIf="!validEula || oidcEnabled"
+                  style="float: left"
+                >
+                  {{'login.OIDC_LOGIN' | translate}}
+                </button>
+              </div>
+              <div class="mt-xl" *ngIf="servers && servers.length===2">
+                <!--suppress JSUnresolvedVariable -->
+                <button
+                  (click)="submitForm($event, loginForm.value, '')" [disabled]="!validEula || loginForm.invalid"
+                  style="width: 100%; margin-bottom: 15px" type="submit"
+                >
+                  {{'login.LOGIN' | translate}}
+                </button>
+                <div class="clearfix">
+                  <!--suppress JSUnresolvedVariable -->
+                  <button
+                    (click)="submitForm($event, loginForm.value, 'okta')"
+                    *ngIf="!validEula || samlEnabled"
+                    style="float: left"
+                  >
+                    {{'login.OKTA_LOGIN' | translate}}
+                  </button>
+                  <div
+                    style="padding: 12px; text-align:center; width: 8%; float: left"
+                    translate="{{'login.OR'}}"
+                  ></div>
+                  <!--suppress JSUnresolvedVariable -->
+                  <button
+                    (click)="submitForm($event, loginForm.value, 'oidc')"
+                    *ngIf="!validEula || oidcEnabled"
+                    style="float: left"
+                  >
+                    {{'login.OIDC_LOGIN' | translate}}
+                  </button>
+                </div>
+              </div>
+              <div class="mt-xl" ng-hide=".servers && servers.length>0">
+                <!--suppress JSUnresolvedVariable -->
+                <button
+                  (click)="submitForm($event, loginForm.value, '')" [disabled]="!validEula || loginForm.invalid"
+                  style="width: 100%" type="submit"
+                >
+                  {{'login.LOGIN' | translate}}
+                </button>
+              </div>
+            </form>
+            <div class="text-danger text-center clearfix" [ngClass]="{'mt': servers && servers.length === 2}" *ngIf="authMsg" style="padding: 0 10px; clear:both">
+              {{authMsg}}
+            </div>
+          </div>
+        </div>
+        <div class="text-center mt-2" *ngIf="!isEulaAccepted && !isFromSSO">
+          <app-eula (eulaStatus)="getEulaStatus($event)" ></app-eula>
+        </div>
+      </div>
+      <!-- END panel-->
 
-        </form>
-      </div>
-      <div style="padding: 0 10px; clear: both; height: 42px" >
-        <div
-          class="text-danger text-center"
-          [ngClass]="{ mt: servers && servers.length === 2 }"
-          *ngIf="authMsg">
-          {{ authMsg }}
-        </div>
-      </div>
-      <div class="sign-in-footer">
-        <div class="text-left margin-bottom-m margin-left-l" >
-          <span>&copy;</span>
-          <span [textContent]="app.year"></span>
-          <span>-</span>
-          <span [textContent]="app.name"></span>&nbsp;|&nbsp;
-          <span [textContent]="app.description"></span>
-        </div>
-      </div>
+    </div>
+  </div>
+  <div class="login-footer">
+    <div class="text-center text-muted">
+      <span>&copy;</span>
+      <span>{{ app.year }}</span>
+      <span>-</span>
+      <span>{{ app.name }}</span>&nbsp;|&nbsp;
+      <span>{{ app.description }}</span>
     </div>
   </div>
 </div>

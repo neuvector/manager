@@ -14,17 +14,17 @@
     "REQUIRED": "This item is required!",
     "REQUIRED_SHORT": "Required",
     "ENABLE": "Enable",
-    "REFRESH": "REFRESH",
+    "REFRESH": "Refresh",
     "NAME": "Name",
-    "NAMESPACES": "NAMESPACES",
-    "CSV_DOWNLOAD": "DOWNLOAD CSV",
-    "PCAP_DOWNLOAD": "DOWNLOAD PCAP",
-    "CVE_CSV_DOWNLOAD": "DOWNLOAD CVE CSV",
-    "BENCH_CSV_DOWNLOAD": "DOWNLOAD COMPLIANCE CSV",
-    "REPORT_DOWNLOAD": "REPORT",
+    "NAMESPACES": "Namespaces",
+    "CSV_DOWNLOAD": "Download CSV",
+    "PCAP_DOWNLOAD": "Download PCAP",
+    "CVE_CSV_DOWNLOAD": "Download CVE CSV",
+    "BENCH_CSV_DOWNLOAD": "Download compliance CSV",
+    "REPORT_DOWNLOAD": "Report",
     "PREPARING_PDF": "Preparing PDF",
-    "EXPAND_GRID": "EXPAND GRID",
-    "COLLAPSE_GRID": "COLLAPSE GRID",
+    "EXPAND_GRID": "Expand grid",
+    "COLLAPSE_GRID": "Collapse grid",
     "VERSION": "Version",
     "LOCATION": "Location",
     "DATETIME": "Datetime",
@@ -157,54 +157,55 @@
     "MY_PROFILE": "My Profile",
     "CLIENT": "client",
     "SERVER": "server",
-    "SUMMARY": "SUMMARY",
-    "DETAIL": "DETAIL",
+    "SUMMARY": "Summary",
+    "DETAIL": "Detail",
     "OUT_OF": "Total: ",
     "FOUND": "Filtered: ",
     "LOADING": "Loading",
     "ANY": "Any",
     "ERROR": "Error",
-    "CAUTION": "CAUTION",
-    "SAFE": "SAFE",
-    "CLUSTER.STATUS.ACTIVE": "ACTIVE",
-    "CLUSTER.STATUS.PINGING": "PINGING",
-    "CLUSTER.STATUS.UNKNOWN_CMD": "UNKNOWN",
-    "CLUSTER.STATUS.NOTIFIED": "NOTIFIED",
-    "CLUSTER.STATUS.REQ_ERROR": "REQUEST ERROR",
-    "CLUSTER.STATUS.MASTER_UPGRADE_REQUIRED": "UPGRADE NEEDED",
-    "CLUSTER.STATUS.JOINT_UPGRADE_REQUIRED": "UPGRADE NEEDED",
-    "CLUSTER.STATUS.CLUSTER_UPGRADE_ONGOING": "UPGRADING",
-    "CLUSTER.STATUS.JOINT_VERSION_TOO_NEW": "UNSUPPORTED NEW VERSION",
-    "CLUSTER.STATUS.CONNECTED": "CONNECTED",
-    "CLUSTER.STATUS.DISCONNECTED": "DISCONNECTED",
-    "CLUSTER.STATUS.JOINED": "JOINED",
-    "CLUSTER.STATUS.OUT_OF_SYNC": "OUT OF SYNC",
-    "CLUSTER.STATUS.SYNCED": "SYNCED",
-    "CLUSTER.STATUS.SYNCING": "SYNCING",
-    "CLUSTER.STATUS.LEFT": "LEFT",
-    "CLUSTER.STATUS.LICENSE_DISALLOW": "IMPROPER LICENSE",
-    "CLUSTER.STATUS.KICKED": "KICKED",
-    "HIDE_ACCEPTED_VULS": "Hide Accepted Vulnerabilities",
-    "SHOW_ACCEPTED_VULS": "Show Accepted Vulnerabilities",
+    "CAUTION": "Caution",
+    "SAFE": "Safe",
+    "CLUSTER.STATUS.ACTIVE": "Active",
+    "CLUSTER.STATUS.PINGING": "Pinging",
+    "CLUSTER.STATUS.UNKNOWN_CMD": "Unknown",
+    "CLUSTER.STATUS.NOTIFIED": "Notified",
+    "CLUSTER.STATUS.REQ_ERROR": "Request error",
+    "CLUSTER.STATUS.MASTER_UPGRADE_REQUIRED": "Upgrade needed",
+    "CLUSTER.STATUS.JOINT_UPGRADE_REQUIRED": "Upgrade needed",
+    "CLUSTER.STATUS.CLUSTER_UPGRADE_ONGOING": "Upgrading",
+    "CLUSTER.STATUS.JOINT_VERSION_TOO_NEW": "Unsupported new version",
+    "CLUSTER.STATUS.CONNECTED": "Connected",
+    "CLUSTER.STATUS.DISCONNECTED": "Disconnected",
+    "CLUSTER.STATUS.JOINED": "Joined",
+    "CLUSTER.STATUS.OUT_OF_SYNC": "Out of sync",
+    "CLUSTER.STATUS.SYNCED": "Synced",
+    "CLUSTER.STATUS.SYNCING": "Syncing",
+    "CLUSTER.STATUS.LEFT": "Left",
+    "CLUSTER.STATUS.LICENSE_DISALLOW": "Improper license",
+    "CLUSTER.STATUS.KICKED": "Kicked",
+    "HIDE_ACCEPTED_VULS": "Hide accepted vulnerabilities",
+    "SHOW_ACCEPTED_VULS": "Show accepted vulnerabilities",
     "FILTER": "Filter"
   },
   "logout": {
-    "SIGN_OUT": "Signed Out Already",
+    "SIGN_OUT": "Signed out already",
     "SIGN_OUT_DESC": "You can close this browser window and go to Rancher."
   },
   "login": {
-    "SIGN_IN": "SIGN IN",
+    "SIGN_IN": "Sign in",
+    "SIGN_IN_LEGACY": "SIGN IN TO CONTINUE",
     "USERNAME": "Username",
     "PASSWORD": "Password",
-    "USER": "Enter Username",
+    "USER": "Enter username",
     "USER_REQUIRED": "Username is required!",
     "PASSWORD_REQUIRED": "Password is required!",
     "LOGIN": "LOGIN",
     "OR": "or",
-    "OKTA_LOGIN": "LOGIN with SAML",
-    "OIDC_LOGIN": "LOGIN with OpenID",
+    "OKTA_LOGIN": "Login with saml",
+    "OIDC_LOGIN": "Login with OpenID",
     "AUTH_ERROR": "Authentication failed!",
-    "SESSION_TIMEOUT": "Session has expired. Please relogin.",
+    "SESSION_TIMEOUT": "Session has expired. Please login.",
     "CHANGE_DEFAULT_PASSWORD": "You should change the default password!",
     "CHANGE_EXPIRING_PASSWORD": "You should change password, as it is expiring within {{expiring_Days}} day(s)!",
     "CHANGE_EXPIRING_PASSWORD_NOW": "You should change password immediately, as it is expiring today!",
@@ -578,8 +579,8 @@
       },
       "vulnerability": {
         "DESCRIPTION": "Review the vulnerabilities analysis results and fix high risk images, pods, hosts, or orchestration platform to remediate high urgency vulnerabilities.",
-        "INSTRUCTION_1": "For high risk pods/hosts/platform, please review them in \"Secutiry risks -> Vulnerabilities\"",
-        "INSTRUCTION_2": "For major vulnerabilites, please review the following tables (for the top 10 impactful vulnerabilities)"
+        "INSTRUCTION_1": "For high risk pods/hosts/platform, please review them in \"Security risks -> Vulnerabilities\"",
+        "INSTRUCTION_2": "For major vulnerabilities, please review the following tables (for the top 10 impactful vulnerabilities)"
       }
     },
     "report": {
@@ -592,14 +593,14 @@
     "NO_ACTIVE_SESSIONS": "No active sessions.",
     "NO_SNIFF_JOBS": "No sniff jobs.",
     "NO_VIOLATIONS": "No violations.",
-    "ACTIONS": "ACTIONS",
-    "SETTING": "VIEW",
+    "ACTIONS": "Actions",
+    "SETTING": "View",
     "FIT_VIEW": "Fit View",
     "HIDE_SYS_NODE": "Hide system containers",
-    "SHOW_SYS_NODE": "SHOW SYSTEM CONTAINERS",
-    "SHOW_SYS_PODS": "SHOW SYSTEM PODS",
-    "SHOW_EXIT_PODS": "SHOW EXIT PODS",
-    "GROUP_VIEW_ON": "GROUP VIEW",
+    "SHOW_SYS_NODE": "Show system containers",
+    "SHOW_SYS_PODS": "Show system pods",
+    "SHOW_EXIT_PODS": "Show exit pods",
+    "GROUP_VIEW_ON": "Group view",
     "GROUP_VIEW_OFF": "Endpoint View",
     "RULE_DEPLOY_OK": "Rule deployed",
     "RULE_DEPLOY_FAILED": "Rule failed to deploy",
@@ -945,8 +946,8 @@
       "TAB_TITLE": "Containers",
       "TYPE": "Type",
       "SYSTEM": "System",
-      "SHOW_SYS_NODE": "SHOW SYSTEM CONTAINER",
-      "HIDE_SYS_NODE": "HIDE SYSTEM CONTAINER"
+      "SHOW_SYS_NODE": "Show system container",
+      "HIDE_SYS_NODE": "Hide system container"
     }
   },
   "containers": {
@@ -990,8 +991,8 @@
       "SECURE_MODE": "Secure mode",
       "APPLICATIONS": "Applications",
       "STATE": "State",
-      "SHOW_SYS_NODE": "SHOW SYSTEM CONTAINER",
-      "HIDE_SYS_NODE": "HIDE SYSTEM CONTAINER",
+      "SHOW_SYS_NODE": "Show system container",
+      "HIDE_SYS_NODE": "Hide system container",
       "SERVICE_GROUP": "Service Group",
       "POLICY_MODE": "Policy Mode"
     },
@@ -1014,8 +1015,8 @@
       "COMMAND": "Command",
       "USER": "User",
       "STATUS": "Status",
-      "SHOW_EXITED": "SHOW PROCESS HISTORY",
-      "HIDE_EXITED": "HIDE PROCESS HISTORY",
+      "SHOW_EXITED": "Show process history",
+      "HIDE_EXITED": "Hide process history",
       "QUERY_ERROR": "Failed to get process"
     },
     "message": {
@@ -1215,7 +1216,7 @@
     "REGISTRY_STOP_SCAN_FAILED": "Failed to stop scan",
     "START_SCAN": "Start Scan",
     "STOP_SCAN": "Stop Scan",
-    "BACK_SUMMARY": "BACK TO SUMMARY",
+    "BACK_SUMMARY": "Back to summary",
     "AWS_ID": "ID",
     "AWS_ACCESS_KEY": "Access Key",
     "AWS_SECRET_KEY": "Secret Access Key",
@@ -1239,9 +1240,9 @@
     "HIDE_SAFE_MODULES": "Hide Safe Modules",
     "TEST_CONN": "Test Connection",
     "START_TEST_HINT": "Please start testing connection",
-    "START_TEST": "START TEST",
-    "STOP_TEST": "STOP TEST",
-    "VIEW_TEST": "VIEW TEST",
+    "START_TEST": "Start test",
+    "STOP_TEST": "Stop test",
+    "VIEW_TEST": "View test",
     "BACK": "Back",
     "COPY_FILTER": "Replace filters",
     "COPIED": "Filters were replaced.",
@@ -1841,11 +1842,11 @@
     "PROCESS_PROFILE": "Process Profile Rules",
     "FILE_PROFILE": "File Access Rules",
     "SWITCH_MODE": "Switch Mode",
-    "REMOVE_GROUP": "REMOVE SERVICE",
+    "REMOVE_GROUP": "Remove service",
     "POLICY_RULES": "Network Rules",
-    "ADD_RULE": "ADD RULE",
-    "DELETE_RULE": "DELETE RULE",
-    "EDIT_RULE": "EDIT RULE",
+    "ADD_RULE": "Add rule",
+    "DELETE_RULE": "Delete rule",
+    "EDIT_RULE": "Edit rule",
     "ALLOW_ALERT": "Action",
     "COUNT_POSTFIX": "services found",
     "HIDE_SYS_SERVICES": "HIDE SYSTEM SERVICES",
@@ -1899,6 +1900,7 @@
     "ZERODRIFT_COMMENT": "Enable/disable automated protection that prevents processes and file system drift for selected groups.",
     "ZERO_DRIFT_HINT": "Switching mode to Discover to start learning processes in Basic mode",
     "BASELINE_PROFILE": "Baseline Profile",
+    "MULTI_MODE_SELECTION": "Multiple groups are selected along with different policy mode or baseline profile.",
     "TIP": {
       "EDIT": "Edit Group",
       "DELETE": "Remove Group",
@@ -1930,21 +1932,21 @@
     "REMOVE_ERR_MSG": "Error happens when removing group",
     "REMOVE_OK_MSG": "Group is removed successfully!",
     "addGroup": {
-      "ADD": "ADD",
-      "TITLE": "ADD GROUP",
+      "ADD": "Add",
+      "TITLE": "Add group",
       "ERR_MSG": "Error happens when adding group.",
       "OK_MSG": "Group is added successfully!"
     },
     "editGroup": {
-      "TITLE": "EDIT GROUP",
+      "TITLE": "Edit group",
       "GROUP_NAME": "Group Name",
       "CONDITION": "Criteria",
       "CONDITION_HINT": "Type and Press Enter",
       "ADD_CRITERIA": "Add Criteria",
       "CRITERIA_RELATIONSHIP": "",
       "MEMBERS": "Members",
-      "UPDATE": "UPDATE",
-      "CANCEL": "CANCEL",
+      "UPDATE": "Update",
+      "CANCEL": "Cancel",
       "ERR_MSG": "Error happens when updating group.",
       "OK_MSG": "Group is updated successfully!"
     },
@@ -1952,7 +1954,8 @@
       "COUNT_POSTFIX": "process profiles rules found"
     },
     "file": {
-      "COUNT_POSTFIX": "file access rules found"
+      "COUNT_POSTFIX": "file access rules found",
+      "RULE_SAMPLE": "Sample: /dir/xxx, /dir/xxx.*, /dir/*.xxx, /dir/*/abc/* (Not support: [], () and regexp)"
     },
     "dlp": {
       "TITLE": "DLP",
@@ -1963,7 +1966,7 @@
         "ACTION": "Action"
       },
       "setting": {
-        "TITLE": "CHOOSE SENSOR",
+        "TITLE": "Choose sensor",
         "ADOPT": "Apply"
       },
       "msg": {
@@ -1987,7 +1990,7 @@
         "ACTION": "Action"
       },
       "setting": {
-        "TITLE": "CHOOSE SENSOR",
+        "TITLE": "Choose sensor",
         "ADOPT": "Apply"
       },
       "msg": {
@@ -2028,8 +2031,8 @@
       "PATTERNS": "Patterns"
     },
     "sensorModal": {
-      "ADD_SENSOR": "ADD SENSOR",
-      "EDIT_SENSOR": "EDIT SENSOR",
+      "ADD_SENSOR": "Add sensor",
+      "EDIT_SENSOR": "Edit sensor",
       "SENSOR_NAME": "Sensor Name",
       "PATTERN_NAME": "Rule Name",
       "COMMENT": "Comment",
@@ -2105,8 +2108,8 @@
       "PATTERNS": "Patterns"
     },
     "sensorModal": {
-      "ADD_SENSOR": "ADD SENSOR",
-      "EDIT_SENSOR": "EDIT SENSOR",
+      "ADD_SENSOR": "Add sensor",
+      "EDIT_SENSOR": "Edit sensor",
       "SENSOR_NAME": "Sensor Name",
       "PATTERN_NAME": "Rule Name",
       "COMMENT": "Comment",
@@ -2211,7 +2214,7 @@
       "MOVED_RULE": "Moved"
     },
     "addPolicy": {
-      "TITLE": "ADD RULE",
+      "TITLE": "Add rule",
       "POLICY_ID": "ID",
       "FROM": "From",
       "TO": "To",
@@ -2225,7 +2228,7 @@
       "DUPLICATED_POLICY": "Rule ID already existed."
     },
     "editPolicy": {
-      "TITLE": "EDIT RULE",
+      "TITLE": "Edit rule",
       "VIEW": "View Rule",
       "POLICY_ID": "ID",
       "FROM": "From",
@@ -2235,7 +2238,7 @@
       "COMMENT": "Comment",
       "STATUS": "Status",
       "DENY_ALLOW": "Action",
-      "UPDATE": "UPDATE",
+      "UPDATE": "Update",
       "CANCEL": "Cancel"
     },
     "message": {
@@ -2370,7 +2373,7 @@
     "INSERT": "Add",
     "MORE": "More Operations",
     "GLOBAL_OPS": "Advanced Setting",
-    "MATCHING_TEST": "Configuation Assessment",
+    "MATCHING_TEST": "Configuration Assessment",
     "IMPORT": "Import",
     "EXPORT": "Export",
     "DOWNLOAD": "Download",
@@ -2380,8 +2383,8 @@
     "NOT_BINDING": "Configuration is disabled, as required bindings does not exist.",
     "EXCLUDE_RULES": "Exclude default rules",
     "DEFAULT_RULES": "Default rules",
-    "SHOW_DENY_RULES": "SHOW DENY RULES",
-    "SHOW_EXCEPTION_RULES": "SHOW EXCEPTION RULES",
+    "SHOW_DENY_RULES": "Show deny rules",
+    "SHOW_EXCEPTION_RULES": "Show exception rules",
     "DENY_RULES": "Deny Rules",
     "EXCEPTION_RULES": "Exception Rules",
     "MODE": "Mode",
@@ -2405,10 +2408,10 @@
       "UPDATE_NG": "Admission rule updating failed",
       "REMOVE_OK": "Admission rule is removed successfully!",
       "REMOVE_NG": "Admission rule removing failed",
-      "EXPORT_OK": "Admission control configuations/rules is exported successfully!",
-      "EXPORT_NG": "Admission control configuations/rules exporting failed",
-      "IMPORT_FINISH": "Admission control configuations/rules is imported successfully!",
-      "IMPORT_FAILED": "Admission control configuations/rules importing failed",
+      "EXPORT_OK": "Admission control configurations/rules is exported successfully!",
+      "EXPORT_NG": "Admission control configurations/rules exporting failed",
+      "IMPORT_FINISH": "Admission control configurations/rules is imported successfully!",
+      "IMPORT_FAILED": "Admission control configurations/rules importing failed",
       "DISABLE_OK": "Admission rule is disabled successfully!",
       "DISABLE_NG": "Admission rule disabling failed",
       "ENABLE_OK": "Admission rule is enabled successfully!",
@@ -2437,14 +2440,14 @@
       "ERR_SRV2WEBHOOK": "Failed to receive a request from Kube-apiserver. Please try different client mode",
       "TEST_K8S_OK": "Kubernetes system connection is normal.",
       "SAVE_CLIENT_MODE": "Submit the chosen mode to Kubernetes configuration in order to test the Kubernetes request connection.",
-      "NOT_NUMBER_ERR": "Not a valid mumber"
+      "NOT_NUMBER_ERR": "Not a valid number"
     },
     "addRule": {
-      "TITLE": "ADD RULE"
+      "TITLE": "Add rule"
     },
     "editRule": {
-      "TITLE": "EDIT RULE",
-      "TITLE2": "VIEW RULE"
+      "TITLE": "Edit rule",
+      "TITLE2": "View rule"
     },
     "TIP": {
       "ALLOW": "Allow by default",
@@ -2517,7 +2520,8 @@
       "CPU_REQUEST_S": "CPU Req",
       "MEMORY_LIMIT_S": "Mem Lmt",
       "MEMORY_REQUEST_S": "Mem Req",
-      "HAS_PSS_VIOLATION": "PSA/PSS best practice"
+      "HAS_PSS_VIOLATION": "PSA/PSS best practice",
+      "MODULES": "Modules"
     },
     "operators": {
       "=": "=",
@@ -2848,7 +2852,7 @@
       "URL_NG": "Invalid URL",
       "NAME_PATTERN_NG": "Start with \"fed.\"",
       "LOCAL_NAME_PATTERN_NG": "Can't start with \"fed.\"",
-      "LEAVE_PAGE": "Do you want to leave the page without saving configration setting?",
+      "LEAVE_PAGE": "Do you want to leave the page without saving configuration setting?",
       "DELETE_CONFIRM": "Do you want to remove webhook - {{name}}",
       "OTHER_TYPE": "Key-Value Pairs"
     },

@@ -49,7 +49,12 @@ export class ResponseRulesComponent implements OnInit {
     console.log('on init: ', this.source);
     this.source = this.source ? this.source : GlobalConstant.NAV_SOURCE.SELF;
     this.isWriteResponseRuleAuthorized = this.authUtilsService.getDisplayFlag("write_response_rule") &&
-      (this.source !== GlobalConstant.NAV_SOURCE.GROUP ? this.authUtilsService.getDisplayFlag("multi_cluster") : true);
+      (
+        this.source !== GlobalConstant.NAV_SOURCE.GROUP &&
+        this.source !== GlobalConstant.NAV_SOURCE.SELF ?
+          this.authUtilsService.getDisplayFlag('multi_cluster') :
+          true
+      );
     this.gridOptions = this.responseRulesService.prepareGrid(this.isWriteResponseRuleAuthorized, this.source);
     this.context = { componentParent: this };
     this.responseRulesService.scope = getScope(this.source);

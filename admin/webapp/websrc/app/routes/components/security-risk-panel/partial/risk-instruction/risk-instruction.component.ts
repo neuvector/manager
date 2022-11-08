@@ -74,7 +74,10 @@ export class RiskInstructionComponent implements OnInit {
   };
 
   switchInstruction = (activeIndex) => {
-    let el = document.getElementsByClassName('carousel-indicators')![0].children[activeIndex] as HTMLButtonElement;
-    el.click();
+    let elemCarousel = document.getElementsByClassName('carousel-indicators');
+    if (elemCarousel.length > 0) {
+      let elCarouselItem = elemCarousel[0].children[activeIndex] as HTMLButtonElement;
+      elCarouselItem.click();
+    }
   };
 }

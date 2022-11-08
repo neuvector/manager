@@ -11,6 +11,10 @@ import { finalize } from 'rxjs/operators';
 import { SettingsService } from '@services/settings.service';
 import { urlValidator } from '@common/validators';
 import { getCallbackUri } from '../../common/helpers';
+import { NotificationService } from '@services/notification.service';
+import { UtilsService } from '@common/utils/app.utils';
+import { TranslateService } from '@ngx-translate/core';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-saml-form',
@@ -19,8 +23,8 @@ import { getCallbackUri } from '../../common/helpers';
 })
 export class SamlFormComponent implements OnInit {
   @Input() samlData!: { server: ServerGetResponse; domains: string[] };
+  onCreate = true;
   submittingForm = false;
-  errorMessage = '';
   groupMappedRoles: GroupMappedRole[] = [];
   serverName = 'saml1';
   passwordVisible = false;
@@ -34,7 +38,12 @@ export class SamlFormComponent implements OnInit {
     enable: new FormControl(false),
   });
 
-  constructor(private settingsService: SettingsService) {}
+  constructor(
+    private settingsService: SettingsService,
+    private notificationService: NotificationService,
+    private utils: UtilsService,
+    private tr: TranslateService
+  ) {}
 
   ngOnInit(): void {
     this.samlRedirectURL = getCallbackUri('token_auth_server');
@@ -51,6 +60,8 @@ export class SamlFormComponent implements OnInit {
           );
         }
       });
+    } else {
+      this.onCreate = false;
     }
   }
 
@@ -68,22 +79,34 @@ export class SamlFormComponent implements OnInit {
     };
     const config: ServerPatchBody = { config: { name: this.serverName, saml } };
     this.submittingForm = true;
-    this.errorMessage = '';
-    this.settingsService
-      .patchServer(config)
-      .pipe(
+    let submission: Observable<unknown>;
+    if (!this.onCreate) {
+      submission = this.settingsService.postServer(config).pipe(
+        finalize(() => {
+          this.submittingForm = false;
+          this.onCreate = true;
+        })
+      );
+    } else {
+      submission = this.settingsService.patchServer(config).pipe(
         finalize(() => {
           this.submittingForm = false;
         })
-      )
-      .subscribe({
-        error: ({ error }: { error: ErrorResponse }) => {
-          if (error.error && error.message) {
-            this.errorMessage = `${error.error}: ${error.message}`;
-          } else {
-            this.errorMessage = 'An error occurred. Please try again.';
-          }
-        },
-      });
+      );
+    }
+    submission.subscribe({
+      complete: () => {
+        this.notificationService.open(this.tr.instant('ldap.SERVER_SAVED'));
+      },
+      error: ({ error }: { error: ErrorResponse }) => {
+        this.notificationService.open(
+          this.utils.getAlertifyMsg(
+            error,
+            this.tr.instant('okta.LOAD_ERR'),
+            false
+          )
+        );
+      },
+    });
   }
 }

@@ -1,4 +1,4 @@
-import { Inject, Injectable, SecurityContext } from '@angular/core';
+import { Injectable, SecurityContext } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { PathConstant } from '@common/constants/path.constant';
 import { MapConstant } from '@common/constants/map.constant';
@@ -92,9 +92,9 @@ export class ResponseRulesService {
           return this.typeRenderFunc(params);
         },
         cellClass: 'grid-center-align',
-        width: 90,
-        minWidth: 90,
-        maxWidth: 90,
+        width: 110,
+        minWidth: 110,
+        maxWidth: 110,
       },
       {
         cellRenderer: ActionButtonsComponent,
@@ -111,10 +111,8 @@ export class ResponseRulesService {
     gridOptions.rowClassRules = {
       'disabled-row': params => {
         if (!params.data) return false;
-        if (params.data.disable) {
-          return true;
-        }
-        return false;
+        return !!params.data.disable;
+
       },
     };
     if (source !== GlobalConstant.NAV_SOURCE.GROUP) gridOptions.rowHeight = 56;
@@ -140,7 +138,7 @@ export class ResponseRulesService {
     let actions = '';
     params.data.actions.forEach(action => {
       actions +=
-        '<div style="display: table; margin: 2px 2px; float: left"><div class="resp-rule-action-label ' +
+        '<div style="display: table; margin: 2px 2px; float: left"><div class="resp-rule-action-label px-1 ' +
         (params.data.disable
           ? MapConstant.colourMap['disabled_color']
           : MapConstant.colourMap[action.toLowerCase()]) +
@@ -158,39 +156,13 @@ export class ResponseRulesService {
       let type = params.data.disable
         ? MapConstant.colourMap['disabled-rule']
         : MapConstant.colourMap[params.value.toUpperCase()];
-      return `<div class="action-label nv-label ${type}">${this.sanitizer.sanitize(
+      return `<div class="action-label px-1 ${type}">${this.sanitizer.sanitize(
         SecurityContext.HTML,
         this.translate.instant(`group.${params.value.toUpperCase()}`)
       )}</div>`;
     }
     return '';
   }
-  //
-  // actionsRenderFunc(params) {
-  //   return (
-  //     '<div class="rule-actions-expand fade-in-right">' +
-  //     '       <em class="fa fa-edit fa-lg mr-sm text-action"' +
-  //     '         ng-click="editPolicy($event, data.id)" uib-tooltip="{{\'policy.TIP.EDIT\' | translate}}">' +
-  //     "       </em>" +
-  //     '       <em class="fa fa-plus-circle fa-lg mr-sm text-action" ' +
-  //     '         ng-click="addPolicy($event, data.id)" uib-tooltip="{{\'policy.TIP.ADD\' | translate}}">' +
-  //     "       </em>" +
-  //     '       <em class="fa fa-times fa-lg mr-sm text-action" ng-if="!data.disable"' +
-  //     '         ng-click="toggleRuleItem($event, data)" uib-tooltip="{{\'policy.TIP.DISABLE\' | translate}}">' +
-  //     "       </em>" +
-  //     '       <em class="fa fa-check fa-lg mr-sm text-action" ng-if="data.disable"' +
-  //     '         ng-click="toggleRuleItem($event, data)" uib-tooltip="{{\'policy.TIP.ENABLE\' | translate}}">' +
-  //     "       </em>" +
-  //     '       <em class="fa fa-trash fa-lg mr-sm text-action" ' +
-  //     '         ng-click="deleteRuleItem($event, data.id)" uib-tooltip="{{\'policy.TIP.DELETE\' | translate}}">' +
-  //     "       </em>" +
-  //     "     </div>" +
-  //     '     <div class="rule-actions-collapse">' +
-  //     '       <em class="fa fa-ellipsis-h fa-lg mr-sm text-action hand">' +
-  //     "       </em>" +
-  //     "     </div>"
-  //   );
-  // }
 
   getResponseRulesData(scope) {
     if (scope === GlobalConstant.SCOPE.FED)
@@ -332,7 +304,7 @@ export class ResponseRulesService {
   }
 
   insertUpdateResponseRuleData(responseRule, actionList, type, webhookOptions) {
-    let payload: any = {};
+    let payload: any;
     if (type === GlobalConstant.MODAL_OP.ADD) {
       payload = {
         insert: {

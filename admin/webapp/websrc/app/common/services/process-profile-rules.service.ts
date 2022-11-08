@@ -59,7 +59,7 @@ export class ProcessProfileRulesService {
             let mode = this.utils.getI18Name(params.value);
             let labelCode = MapConstant.colourMap[params.value];
             if (!labelCode) labelCode = 'info';
-            return `<span class="action-label nv-label ${labelCode}">${mode}</span>`;
+            return `<span class="action-label px-1 ${labelCode}">${mode}</span>`;
           } else return null;
         },
         width: 90,

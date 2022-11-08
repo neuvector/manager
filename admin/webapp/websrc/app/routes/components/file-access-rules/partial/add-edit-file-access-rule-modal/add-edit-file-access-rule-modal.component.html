@@ -34,7 +34,6 @@
               name="filter"
               formControlName="filter"
               [readonly]="type === 'edit'" />
-            <em matSuffix class="icon-paper-clip input-icon"></em>
             <mat-error
               *ngIf="fileAccessRuleForm.get('filter')?.hasError('required')"
               >Filter is required!</mat-error

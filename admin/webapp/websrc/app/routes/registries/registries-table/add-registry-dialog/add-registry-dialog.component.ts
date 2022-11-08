@@ -17,16 +17,19 @@ import { cloneDeep } from 'lodash';
 import { INTERVAL_STEP_VALUES } from './add-registry-form-configs/constants/constants';
 import {
   AWSKey,
+  ErrorResponse,
   GCRKey,
   RegistryConfig,
   RegistryPostBody,
   ScanSchedule,
 } from '@common/types';
 import { RegistriesService } from '@services/registries.service';
-import { finalize, switchMap, take } from 'rxjs/operators';
+import { finalize, take } from 'rxjs/operators';
 import { TestSettingsDialogComponent } from './test-connection-dialog/test-settings-dialog.component';
 import { RegistriesCommunicationService } from '../../regestries-communication.service';
 import { GlobalConstant } from '@common/constants/global.constant';
+import { NotificationService } from '@services/notification.service';
+import { FormlyFieldConfig } from '@ngx-formly/core';
 
 @Component({
   selector: 'app-add-registry-dialog',
@@ -47,9 +50,11 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
   constructor(
     private dialog: MatDialog,
     public dialogRef: MatDialogRef<RegistriesTableComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: RegistryConfig,
+    @Inject(MAT_DIALOG_DATA)
+    public data: { editable: boolean; config: RegistryConfig },
     private registriesService: RegistriesService,
-    private registriesCommunicationService: RegistriesCommunicationService
+    private registriesCommunicationService: RegistriesCommunicationService,
+    private notificationService: NotificationService
   ) {}
 
   submit(): void {
@@ -103,7 +108,9 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
       if (!body.config.auth_with_token) {
         body.config.auth_with_token = false;
       }
-      body.config.cfg_type = this.model.isFed ? GlobalConstant.CFG_TYPE.FED : GlobalConstant.CFG_TYPE.CUSTOMER;
+      body.config.cfg_type = this.model.isFed
+        ? GlobalConstant.CFG_TYPE.FED
+        : GlobalConstant.CFG_TYPE.CUSTOMER;
       this.submittingForm = true;
       if (this.model?.isEdit) {
         body.config.password =
@@ -118,14 +125,21 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
             take(1),
             finalize(() => {
               this.submittingForm = false;
-              this.registriesCommunicationService.refreshRegistries();
-            }),
-            switchMap(() => this.saving$)
+            })
           )
-          .subscribe(saving => {
-            if (!saving) {
-              this.dialogRef.close();
-            }
+          .subscribe({
+            complete: () => {
+              this.registriesCommunicationService.refreshRegistries();
+              this.saving$.subscribe(saving => {
+                if (!saving) {
+                  this.dialogRef.close();
+                }
+              });
+            },
+            error: ({ error }: { error: ErrorResponse }) => {
+              this.registriesCommunicationService.cancelSave();
+              this.notificationService.open(error.message);
+            },
           });
       } else {
         this.registriesService
@@ -133,22 +147,29 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
           .pipe(
             finalize(() => {
               this.submittingForm = false;
-              this.registriesCommunicationService.refreshRegistries();
-            }),
-            switchMap(() => this.saving$)
+            })
           )
-          .subscribe(saving => {
-            if (!saving) {
-              this.dialogRef.close();
-            }
+          .subscribe({
+            complete: () => {
+              this.registriesCommunicationService.refreshRegistries();
+              this.saving$.subscribe(saving => {
+                if (!saving) {
+                  this.dialogRef.close();
+                }
+              });
+            },
+            error: ({ error }: { error: ErrorResponse }) => {
+              this.registriesCommunicationService.cancelSave();
+              this.notificationService.open(error.message);
+            },
           });
       }
     }
   }
 
   ngOnInit(): void {
-    if (this.data) {
-      const { schedule, ...data } = this.data;
+    if (this.data.config) {
+      const { schedule, ...data } = this.data.config;
       const interval =
         Object.keys(INTERVAL_STEP_VALUES).find(
           key => INTERVAL_STEP_VALUES[key].value === schedule.interval
@@ -175,12 +196,28 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
         interval,
       };
     }
+    if (!this.data.editable) {
+      this.disableFields(this.fields);
+    }
+  }
+
+  disableFields(fields: FormlyFieldConfig[]): void {
+    fields.forEach(field => {
+      field.expressionProperties = {
+        'templateOptions.disabled': () => true,
+      };
+      if (field.fieldGroup) {
+        this.disableFields(field.fieldGroup);
+      }
+    });
   }
 
   ngAfterViewChecked(): void {
-    this.canTestConnection = this.canTestConnectionTypes.includes(
-      this.form.controls?.registry_type?.value
-    );
+    this.canTestConnection =
+      this.data.editable &&
+      this.canTestConnectionTypes.includes(
+        this.form.controls?.registry_type?.value
+      );
   }
 
   onNoClick(): void {

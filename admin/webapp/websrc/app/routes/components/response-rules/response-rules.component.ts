@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ResponseRulesService } from '@services/response-rules.service';
 import { TranslateService } from '@ngx-translate/core';
 import { GridOptions } from 'ag-grid-community';
-import { ActionButtonsComponent } from './partial/action-buttons/action-buttons.component';
 import { UtilsService } from '@common/utils/app.utils';
 import { MatDialog } from '@angular/material/dialog';
 import { AddEditResponseRuleModalComponent } from './partial/add-edit-response-rule-modal/add-edit-response-rule-modal.component';
@@ -19,12 +18,12 @@ import {MultiClusterService} from "@services/multi-cluster.service";
   styleUrls: ['./response-rules.component.scss'],
 })
 export class ResponseRulesComponent implements OnInit {
-  @Input() source: string;
-  @Input() groupName: string;
-  @Input() resizableHeight: number;
+  @Input() source: string = "";
+  @Input() groupName: string = "";
+  @Input() resizableHeight: number = 0;
   private isModalOpen: boolean = false;
   public responsePolicyErr: boolean = false;
-  public gridOptions: GridOptions;
+  public gridOptions: GridOptions = <GridOptions>{};
   public gridHeight: number = 0;
   public filteredCount: number = 0;
   public context;
@@ -46,7 +45,6 @@ export class ResponseRulesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('on init: ', this.source);
     this.source = this.source ? this.source : GlobalConstant.NAV_SOURCE.SELF;
     this.isWriteResponseRuleAuthorized = this.authUtilsService.getDisplayFlag("write_response_rule") &&
       (
@@ -58,25 +56,25 @@ export class ResponseRulesComponent implements OnInit {
     this.gridOptions = this.responseRulesService.prepareGrid(this.isWriteResponseRuleAuthorized, this.source);
     this.context = { componentParent: this };
     this.responseRulesService.scope = getScope(this.source);
-    if (this.source === GlobalConstant.NAV_SOURCE.GROUP) {
-      this.getGroupPolicy();
-    } else {
-      this.getResponseRules();
-    }
+    this.refresh();
 
     //refresh the page when it switched to a remote cluster
     this.switchClusterSubscription = this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
-      if (this.source === GlobalConstant.NAV_SOURCE.GROUP) {
-        this.getGroupPolicy();
-      } else {
-        this.getResponseRules();
-      }
+      this.refresh();
     });
   }
 
   ngOnDestroy():void{
     if(this.switchClusterSubscription){
       this.switchClusterSubscription.unsubscribe();
+    }
+  }
+
+  refresh() {
+    if (this.source === GlobalConstant.NAV_SOURCE.GROUP) {
+      this.getGroupPolicy();
+    } else {
+      this.getResponseRules();
     }
   }
 

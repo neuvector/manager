@@ -1,7 +1,7 @@
 <div>
   <div class="rule-actions-expand fade-in-right">
     <em
-      class="eos-icons icon-18 hand"
+      class="eos-icons icon-18 hand text-action"
       *ngIf="!isReadonlyRule && !params.data.reserved && !isAddressGroupAndNamespaceUser && params.context.componentParent.isWriteGroupAuthorized"
       matTooltip="{{'group.TIP.EDIT' | translate}}"
       (click)="editGroup(params.data)"
@@ -9,7 +9,7 @@
       edit
     </em>
     <em
-      class="eos-icons icon-18 hand"
+      class="eos-icons icon-18 hand text-action"
       *ngIf="isReadonlyRule || params.data.reserved || isAddressGroupAndNamespaceUser || !params.context.componentParent.isWriteGroupAuthorized"
       matTooltip="{{'group.TIP.VIEW' | translate}}"
       (click)="viewGroup(params.data)"
@@ -17,7 +17,7 @@
       text_snippet
     </em>
     <em
-      class="eos-icons icon-18 hand"
+      class="eos-icons icon-18 hand text-action"
       *ngIf="isRemovableGroup && !isAddressGroupAndNamespaceUser && params.context.componentParent.isWriteGroupAuthorized"
       matTooltip="{{'group.TIP.DELETE' | translate}}"
       (click)="deleteGroup(params.data)"
@@ -25,7 +25,7 @@
       delete
     </em>
   </div>
-  <div class="rule-actions-collapse">
+  <div class="rule-actions-collapse text-action">
     <em class="fa fa-ellipsis-h fa-lg mr-sm text-action hand">
     </em>
   </div>

@@ -20,3 +20,11 @@
     <i class="eos-icons">delete</i>
   </button>
 </div>
+<button
+  *ngIf="!isWriteRegistryAuthorized"
+  (click)="view()"
+  aria-label="View button"
+  matTooltip="{{ 'registry.TIP.VIEW' | translate }}"
+  mat-icon-button>
+  <mat-icon fontSet="fa" fontIcon="fa-newspaper"></mat-icon>
+</button>

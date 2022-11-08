@@ -131,6 +131,7 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
       cellRendererParams: {
         edit: event => this.editRegistry(event),
         delete: event => this.deleteRegistry(event),
+        view: event => this.viewRegistry(event),
       },
       cellClass: ['d-flex', 'align-items-center'],
     },
@@ -150,11 +151,6 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    let isWriteRegistryAuthorized =
-      this.authUtilsService.getDisplayFlag('registry_scan');
-    if (!isWriteRegistryAuthorized) {
-      this.columnDefs.pop();
-    }
     this.gridOptions = {
       rowData: this.rowData,
       columnDefs: this.columnDefs,
@@ -261,6 +257,13 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
     this.openDialog(cloneDeep(this.gridApi.getRowNode(event.node.id)?.data));
   }
 
+  viewRegistry(event): void {
+    this.openDialog(
+      cloneDeep(this.gridApi.getRowNode(event.node.id)?.data),
+      false
+    );
+  }
+
   onGridReady(params: GridReadyEvent): void {
     this.gridApi = params.api;
     this.gridApi.sizeColumnsToFit();
@@ -274,11 +277,11 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
     this.gridApi.sizeColumnsToFit();
   }
 
-  openDialog(data?: RegistryConfig): void {
+  openDialog(data?: RegistryConfig, editable = true): void {
     const dialog = this.dialog.open(AddRegistryDialogComponent, {
       width: '80%',
       maxWidth: '1100px',
-      data,
+      data: { config: data, editable },
     });
     dialog.afterClosed().subscribe(change => {
       this.cd.markForCheck();

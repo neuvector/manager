@@ -24,6 +24,7 @@
       {{ 'general.CANCEL' | translate }}
     </button>
     <app-loading-button
+      *ngIf="data.editable"
       [disabled]="form.invalid || submittingForm || !!(saving$ | async)"
       [loading]="submittingForm || !!(saving$ | async)"
       [text]="'general.SUBMIT' | translate"

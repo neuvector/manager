@@ -15,14 +15,10 @@ export class RegistriesTableButtonsComponent
 {
   params: any;
   CFG_TYPE = GlobalConstant.CFG_TYPE;
-  isWriteRegistryAuthorized: boolean;
-  isFedAdmin: boolean;
+  isWriteRegistryAuthorized!: boolean;
+  isFedAdmin!: boolean;
 
-  constructor(
-    private authUtilsService: AuthUtilsService
-  ) {
-
-  }
+  constructor(private authUtilsService: AuthUtilsService) {}
 
   agInit(params: any): void {
     this.params = params;
@@ -37,6 +33,10 @@ export class RegistriesTableButtonsComponent
 
   delete(): void {
     this.params.delete(this.params);
+  }
+
+  view(): void {
+    this.params.view(this.params);
   }
 
   refresh(params: ICellRendererParams): boolean {

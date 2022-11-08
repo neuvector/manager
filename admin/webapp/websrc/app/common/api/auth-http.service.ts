@@ -97,6 +97,10 @@ export class AuthHttpService {
     return GlobalVariable.http.patch<unknown>(PathConstant.LDAP_URL, body);
   }
 
+  postServer(body: ServerPatchBody): Observable<unknown> {
+    return GlobalVariable.http.post<unknown>(PathConstant.LDAP_URL, body);
+  }
+
   getPermissionOptions(): Observable<PermissionOptionResponse> {
     return GlobalVariable.http
       .get<PermissionOptionResponse>(PathConstant.PERMISSION_OPTIONS)

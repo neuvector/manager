@@ -13,6 +13,10 @@ import { finalize } from 'rxjs/operators';
 import { urlValidator } from '@common/validators';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { Observable } from 'rxjs';
+import { NotificationService } from '@services/notification.service';
+import { UtilsService } from '@common/utils/app.utils';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-openid-form',
@@ -21,8 +25,8 @@ import { MatChipInputEvent } from '@angular/material/chips';
 })
 export class OpenidFormComponent implements OnInit {
   @Input() openidData!: { server: ServerGetResponse; domains: string[] };
+  onCreate = true;
   submittingForm = false;
-  errorMessage = '';
   groupMappedRoles: GroupMappedRole[] = [];
   serverName = 'openId1';
   passwordVisible = false;
@@ -40,7 +44,12 @@ export class OpenidFormComponent implements OnInit {
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   scopes: string[] = ['openid', 'profile', 'email'];
 
-  constructor(private settingsService: SettingsService) {}
+  constructor(
+    private settingsService: SettingsService,
+    private notificationService: NotificationService,
+    private utils: UtilsService,
+    private tr: TranslateService
+  ) {}
 
   ngOnInit(): void {
     this.openidRedirectURL = getCallbackUri('openId_auth ');
@@ -57,6 +66,8 @@ export class OpenidFormComponent implements OnInit {
           );
         }
       });
+    } else {
+      this.onCreate = false;
     }
   }
 
@@ -75,23 +86,35 @@ export class OpenidFormComponent implements OnInit {
     };
     const config: ServerPatchBody = { config: { name: this.serverName, oidc } };
     this.submittingForm = true;
-    this.errorMessage = '';
-    this.settingsService
-      .patchServer(config)
-      .pipe(
+    let submission: Observable<unknown>;
+    if (!this.onCreate) {
+      submission = this.settingsService.postServer(config).pipe(
+        finalize(() => {
+          this.submittingForm = false;
+          this.onCreate = true;
+        })
+      );
+    } else {
+      submission = this.settingsService.patchServer(config).pipe(
         finalize(() => {
           this.submittingForm = false;
         })
-      )
-      .subscribe({
-        error: ({ error }: { error: ErrorResponse }) => {
-          if (error.error && error.message) {
-            this.errorMessage = `${error.error}: ${error.message}`;
-          } else {
-            this.errorMessage = 'An error occurred. Please try again.';
-          }
-        },
-      });
+      );
+    }
+    submission.subscribe({
+      complete: () => {
+        this.notificationService.open(this.tr.instant('ldap.SERVER_SAVED'));
+      },
+      error: ({ error }: { error: ErrorResponse }) => {
+        this.notificationService.open(
+          this.utils.getAlertifyMsg(
+            error,
+            this.tr.instant('openId.LOAD_ERR'),
+            false
+          )
+        );
+      },
+    });
   }
 
   add(event: MatChipInputEvent): void {

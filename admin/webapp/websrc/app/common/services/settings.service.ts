@@ -75,6 +75,10 @@ export class SettingsService {
     return this.authHttpService.patchServer(body);
   }
 
+  postServer(body: ServerPatchBody) {
+    return this.authHttpService.postServer(body);
+  }
+
   getDomain() {
     return this.assetsHttpService.getDomain();
   }

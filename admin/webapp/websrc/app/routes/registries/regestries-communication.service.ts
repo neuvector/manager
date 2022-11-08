@@ -71,6 +71,9 @@ export class RegistriesCommunicationService {
           })
         );
       }
+      if (!summarys.length) {
+        this.refreshingDetailsSubject$.next(false);
+      }
     }),
     finalize(() => {
       if (this.refreshingDetailsSubject$.value) {
@@ -107,6 +110,10 @@ export class RegistriesCommunicationService {
 
   initSave(): void {
     this.savingSubject$.next(true);
+  }
+
+  cancelSave(): void {
+    this.savingSubject$.next(false);
   }
 
   initDelete(): void {

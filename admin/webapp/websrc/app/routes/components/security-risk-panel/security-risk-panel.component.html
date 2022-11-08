@@ -6,7 +6,9 @@
           *ngIf="scoreInfo && summaryInfo"
           [score]="scoreInfo.score.securityRiskScore"
           [nodesCnt]="summaryInfo.hosts"
-          [podsCnt]="summaryInfo.running_pods">
+          [podsCnt]="summaryInfo.running_pods"
+          (mouseover)="mouseoverOnRiskScore()"
+        >
         </app-risk-score>
       </div>
     </div>
@@ -14,11 +16,13 @@
       *ngIf="scoreInfo && summaryInfo"
       style="padding-left: 0; padding-right: 0"
       class="col-xl-7 col-lg-9 col-md-12 row margin-horizon-0 margin-bottom-m">
-      <div class="row margin-horizon-0">
+      <div class="row margin-horizon-0" style="width: 100%;">
         <app-risk-factor
           class="col-sm-4"
-          *ngFor="let riskFactor of riskFactorList"
-          [riskFactor]="riskFactor">
+          *ngFor="let riskFactor of riskFactorList; let i = index"
+          [riskFactor]="riskFactor"
+          (mouseover)="mouseoverOnRiskFactor(i)"
+        >
         </app-risk-factor>
       </div>
       <div class="col-sm-12 text-center">
@@ -31,7 +35,7 @@
       </div>
     </div>
     <div class="col-xl-3 col-lg-12 col-md-12 margin-bottom-m">
-      <app-risk-instruction *ngIf="scoreInfo" [scoreInfo]="scoreInfo">
+      <app-risk-instruction *ngIf="scoreInfo" [scoreInfo]="scoreInfo" [activeIndex]="activeIndex4RiskInstruction">
       </app-risk-instruction>
     </div>
   </div>

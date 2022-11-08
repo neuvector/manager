@@ -19,6 +19,7 @@ export class SecurityRiskPanelComponent implements OnInit {
   @Input() scoreInfo!: InternalSystemInfo;
   @Input() summaryInfo!: SystemSummaryDetails;
   riskFactorList: Array<RiskFactor> = new Array(3);
+  activeIndex4RiskInstruction: number = 0;
 
   constructor(
     private dashboardService: DashboardService,
@@ -122,5 +123,13 @@ export class SecurityRiskPanelComponent implements OnInit {
     scoreImpovementDialogRef.afterClosed().subscribe(result => {
       this.dashboardService.refresh();
     });
+  };
+
+  mouseoverOnRiskScore = () => {
+    this.activeIndex4RiskInstruction = 0;
+  };
+
+  mouseoverOnRiskFactor = (index: number) => {
+    this.activeIndex4RiskInstruction = index + 1;
   };
 }

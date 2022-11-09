@@ -54,7 +54,7 @@ export class AddEditFileAccessRuleModalComponent implements OnInit {
       ),
       recursive: new FormControl(false),
       behavior: new FormControl(
-        GlobalConstant.FILE_ACCESS_RULE.BEHAVIOR.MONITOR,
+        null,
         [Validators.required]
       ),
       applications: new FormControl([]),
@@ -69,7 +69,7 @@ export class AddEditFileAccessRuleModalComponent implements OnInit {
 
   initializeVM = () => {
     if (this.type === GlobalConstant.MODAL_OP.ADD) {
-      this.fileAccessRuleForm.reset();
+      // this.fileAccessRuleForm.reset();
     } else {
       Object.keys(this.data.selectedRule).forEach((key: string) => {
         if (this.fileAccessRuleForm.controls[key]) {
@@ -144,6 +144,7 @@ export class AddEditFileAccessRuleModalComponent implements OnInit {
 
     fileAccessRuleData.group = this.fileAccessRuleForm.controls.group.value;
     fileAccessRuleData.filter = this.fileAccessRuleForm.controls.filter.value;
+    fileAccessRuleData.recursive = this.fileAccessRuleForm.controls.recursive.value;
     fileAccessRuleData.applications = this.applicationChipsArray;
 
     this.fileAccessRulesService

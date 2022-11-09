@@ -27,6 +27,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
   @Input() source!: string;
   @Input() groupName: string = '';
   @Input() resizableHeight!: number;
+  @Input() cfgType: string;
   public groups: Set<string> = new Set();
   public gridHeight: number = 0;
   public gridOptions!: GridOptions;
@@ -40,6 +41,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
   private isModalOpen: boolean = false;
   private processProfileRuleErr: boolean = false;
   public isWriteGroupAuthorized: boolean = false;
+  public isWriteProcessProfileRuleAuthorized: boolean = false;
   private w: any;
 
   constructor(
@@ -58,6 +60,9 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
     this.isWriteGroupAuthorized =
       this.authUtilsService.getDisplayFlag('write_group') &&
       (this.source !== GlobalConstant.NAV_SOURCE.GROUP ? this.authUtilsService.getDisplayFlag('multi_cluster') : true);
+    this.isWriteProcessProfileRuleAuthorized =
+      (this.source === GlobalConstant.NAV_SOURCE.GROUP && (this.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER || this.cfgType === GlobalConstant.CFG_TYPE.LEARNED)) ||
+      (this.source === GlobalConstant.NAV_SOURCE.FED_POLICY && this.cfgType === GlobalConstant.CFG_TYPE.FED)
     this.gridOptions = this.processProfileRulesService.prepareGrid(
       this.isWriteGroupAuthorized,
       this.source,

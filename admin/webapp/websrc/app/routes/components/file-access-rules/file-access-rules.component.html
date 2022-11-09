@@ -12,19 +12,19 @@
         </app-quick-filter>
         <div
           class="pull-right margin-right-s margin-top-l hand"
-          *ngIf="selectedFileAccessRules && isWriteGroupAuthorized"
+          *ngIf="selectedFileAccessRules && isWriteGroupAuthorized && isWriteFileAccessRuleAuthorized"
           (click)="removeProfile(selectedFileAccessRules)">
           <em class="eos-icons">delete</em>
         </div>
         <div
           class="pull-right margin-right-s margin-top-l hand"
-          *ngIf="selectedFileAccessRules && isWriteGroupAuthorized"
+          *ngIf="selectedFileAccessRules && isWriteGroupAuthorized && isWriteFileAccessRuleAuthorized"
           (click)="editProfile(selectedFileAccessRules)">
           <em class="eos-icons">edit</em>
         </div>
         <div
           class="pull-right margin-right-s margin-top-l hand"
-          *ngIf="isWriteGroupAuthorized"
+          *ngIf="isWriteGroupAuthorized && isWriteFileAccessRuleAuthorized"
           (click)="addProfile()">
           <em class="eos-icons">add</em>
         </div>

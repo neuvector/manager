@@ -28,12 +28,16 @@
         <mat-tab label="{{ 'service.PROCESS_PROFILE' | translate }}">
           <app-process-profile-rules
             *ngIf="activeTabIndex === 3"
-            [source]="navSource"></app-process-profile-rules>
+            [source]="navSource"
+            [cfgType]="CFG_TYPE.FED"
+          ></app-process-profile-rules>
         </mat-tab>
         <mat-tab label="{{ 'service.FILE_PROFILE' | translate }}">
           <app-file-access-rules
             *ngIf="activeTabIndex === 4"
-            [source]="navSource"></app-file-access-rules>
+            [source]="navSource"
+            [cfgType]="CFG_TYPE.FED"
+          ></app-file-access-rules>
         </mat-tab>
         <mat-tab label="{{ 'sidebar.nav.RESPONSE_POLICY' | translate }}">
           <app-response-rules

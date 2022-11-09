@@ -12,19 +12,19 @@
         </app-quick-filter>
         <div
           class="pull-right margin-right-m margin-top-l hand"
-          *ngIf="selectedProcessProfileRules && isWriteGroupAuthorized"
+          *ngIf="selectedProcessProfileRules && isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized"
           (click)="removeProfile(selectedProcessProfileRules)">
           <em class="eos-icons">delete</em>
         </div>
         <div
           class="pull-right margin-right-s margin-top-l hand"
-          *ngIf="selectedProcessProfileRules && isWriteGroupAuthorized"
+          *ngIf="selectedProcessProfileRules && isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized"
           (click)="editProfile(selectedProcessProfileRules)">
           <em class="eos-icons">edit</em>
         </div>
         <div
           class="pull-right margin-right-s margin-top-l hand"
-          *ngIf="isWriteGroupAuthorized"
+          *ngIf="isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized"
           (click)="addProfile()">
           <em class="eos-icons">add</em>
         </div>

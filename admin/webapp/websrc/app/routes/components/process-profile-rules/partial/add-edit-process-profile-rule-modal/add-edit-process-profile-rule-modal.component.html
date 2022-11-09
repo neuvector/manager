@@ -88,12 +88,13 @@
     mat-dialog-actions
     class="dialog-actions pull-right"
     style="margin-right: 24px">
-    <a class="modal-cancel-button" (click)="onCancel()">
+    <a class="modal-cancel-button mr-2" (click)="onCancel()">
       {{ 'group.editGroup.CANCEL' | translate }}
     </a>
     <button
-      mat-button
-      class="modal-submit-button"
+      mat-raised-button
+      color="primary"
+      [disabled]="processProfileRuleForm.invalid"
       (click)="addEditProcessProfileRule()">
       {{ 'policy.portlet.SUBMIT' | translate }}
     </button>

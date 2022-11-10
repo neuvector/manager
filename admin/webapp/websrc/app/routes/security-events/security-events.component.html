@@ -7,16 +7,28 @@
 <div class="screen-area">
   <div id="sec-event" class="padding-top-0">
     <div class="clearfix">
-      <div
+      <!-- <div
         class="pull-right margin-top-xs"
         style="padding-top: 5px; margin-left: 10px; width: 100px; text-align: right;"
         (click)="refresh()"
       >
-        <em class="fa fa-refresh text-action hand"></em>
+        <em class="eos-icons text-action hand " aria-hidden="true">refresh</em>
         <label class="text-gray-label hand"
           >{{'general.REFRESH' | translate}}</label
         >
-      </div>
+      </div> -->
+      <app-loading-button
+        (btnClick)="refresh()"
+        [appearance]="'mat-button'"
+        [buttonClasses]="'pull-right margin-top-xs'"
+        [disabled]="!isDataReady"
+        [iconClasses]="'eos-icons icon-18'"
+        [iconName]="'refresh'"
+        [id]="'groups-refresh-button'"
+        [loading]="!isDataReady"
+        [text]="'network.REFRESH' | translate"
+        [type]="'button'">
+      </app-loading-button>
       <ng-container *ngIf="securityEventsService.displayedSecurityEvents.length > 0">
         <div class="d-flex pull-right">
           <button

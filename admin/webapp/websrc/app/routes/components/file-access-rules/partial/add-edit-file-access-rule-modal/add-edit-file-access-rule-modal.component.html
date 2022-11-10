@@ -15,7 +15,7 @@
       <div class="d-flex justify-content-start align-items-start mt-2">
         <mat-form-field appearance="fill">
           <mat-label>{{ 'group.GROUP' | translate }}</mat-label>
-          <mat-select matNativeControl formControlName="group">
+          <mat-select matNativeControl required formControlName="group">
             <mat-option
               *ngFor="let groupOption of groupOptions"
               [value]="groupOption"
@@ -33,6 +33,7 @@
               matInput
               name="filter"
               formControlName="filter"
+              required
               [readonly]="type === 'edit'" />
             <mat-error
               *ngIf="fileAccessRuleForm.get('filter')?.hasError('required')"
@@ -66,7 +67,8 @@
                 type="radio"
                 name="behavior"
                 formControlName="behavior"
-                value="{{ actionEnum.MONITOR }}" />
+                required
+                [value]="actionEnum.MONITOR" />
               <span class="fa fa-binoculars text-discover ml-1"></span>
               {{ 'enum.MONITOR_CHANGE' | translate }}
             </label>
@@ -76,7 +78,8 @@
                 type="radio"
                 name="behavior"
                 formControlName="behavior"
-                value="{{ actionEnum.BLOCK }}" />
+                required
+                [value]="actionEnum.BLOCK" />
               <span class="fa fa-shield-alt text-protect ml-1"></span>
               {{ 'enum.BLOCK_ACCESS' | translate }}
             </label>
@@ -115,7 +118,7 @@
     <button mat-stroked-button class="modal-cancel-button" (click)="onCancel()">
       {{ 'group.editGroup.CANCEL' | translate }}
     </button>
-    <button mat-raised-button color="primary" (click)="addEditFileAccessRule()">
+    <button mat-raised-button color="primary" (click)="addEditFileAccessRule()" [disabled]="fileAccessRuleForm.invalid">
       {{ 'policy.portlet.SUBMIT' | translate }}
     </button>
   </div>

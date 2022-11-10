@@ -2223,7 +2223,7 @@
       "COMMENT": "Comment",
       "DENY_ALLOW": "Action",
       "APP_TIP": "Type and Press Enter",
-      "ADD": "ADD",
+      "ADD": "Add",
       "CANCEL": "Cancel",
       "DUPLICATED_POLICY": "Rule ID already existed."
     },
@@ -2520,7 +2520,7 @@
       "CPU_REQUEST_S": "CPU Req",
       "MEMORY_LIMIT_S": "Mem Lmt",
       "MEMORY_REQUEST_S": "Mem Req",
-      "HAS_PSS_VIOLATION": "PSA/PSS best practice",
+      "HAS_PSS_VIOLATION": "PSA/PSS Best Practice",
       "MODULES": "Modules"
     },
     "operators": {

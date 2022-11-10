@@ -1,12 +1,11 @@
 <div
   id="conversationHistory"
-  class="infoBox topLeftSession resizable"
-  (window:mouseup)="mouseUp($event)"
+  class="infoBox topLeftSession"
   cdkDrag>
   <div
     cdkDragHandle
     class="d-flex align-items-center justify-content-between handle">
-    <h4 class="text-muted mt-1">
+    <h4 class=" mt-1">
       {{ conversationDetail.from.display_name }}
       <em class="fas fa-long-arrow-alt-right text-info"></em>
       {{ conversationDetail.to.display_name }}
@@ -19,7 +18,6 @@
       <i (click)="popupState.leave()" class="eos-icons">close</i>
     </button>
   </div>
-
   <hr class="fancy mx-0 my-0" />
   <div
     *ngIf="conversationDetail.entries && conversationDetail.entries.length > 4"
@@ -75,7 +73,7 @@
       {{ 'network.edgeDetails.OVERRIDE_RULE' | translate }}
     </button>
     <button
-      mat-button
+      mat-stroked-button
       color="primary"
       class="mt-1"
       aria-label="clear sessions"

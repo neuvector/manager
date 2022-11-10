@@ -1,19 +1,19 @@
 <div *ngIf="params && !params.data.predefine">
   <div class="rule-actions-expand fade-in-right">
     <em
-      class="eos-icons icon-18 hand" matTooltip="{{'waf.TIP.EDIT_SENSOR' | translate}}"
+      class="eos-icons icon-18 hand text-action" matTooltip="{{'waf.TIP.EDIT_SENSOR' | translate}}"
       (click)="editSensor(params.node.data)"
     >
       edit
     </em>
     <em
-      class="eos-icons icon-18 hand" matTooltip="{{'waf.TIP.DELETE_SENSOR' | translate}}"
+      class="eos-icons icon-18 hand text-action" matTooltip="{{'waf.TIP.DELETE_SENSOR' | translate}}"
       (click)="deleteSensor(params.node.data)"
     >
       delete
     </em>
   </div>
-  <div class="rule-actions-collapse">
+  <div class="rule-actions-collapse text-action">
     <em class="fa fa-ellipsis-h fa-lg mr-sm text-action hand">
     </em>
   </div>

@@ -6,7 +6,8 @@
       {{ 'network.groupFilter.BLACKLIST_TITLE' | translate }}
     </h4>
     <button
-      id="closeBlackList" aria-label="Close icon button"
+      id="closeBlackList"
+      aria-label="Close icon button"
       class="d-flex align-items-center justify-content-center"
       mat-icon-button>
       <i (click)="popupState.leave()" class="eos-icons">close</i>
@@ -31,7 +32,10 @@
               (mouseover)="showButton[i] = true"
               (mouseleave)="showButton[i] = false"
               (removed)="remove(domainChip, i)"
-              *ngFor="let domainChip of form.controls.selectedDomains.value; let i = index">
+              *ngFor="
+                let domainChip of form.controls.selectedDomains.value;
+                let i = index
+              ">
               <img
                 src="assets/img/icons/graph/domain.svg"
                 alt="Icon of domain" />
@@ -74,7 +78,10 @@
               (mouseover)="showGrpButton[i] = true"
               (mouseleave)="showGrpButton[i] = false"
               (removed)="removeGroup(groupChip, i)"
-              *ngFor="let groupChip of form.controls.selectedGroups.value; let i = index">
+              *ngFor="
+                let groupChip of form.controls.selectedGroups.value;
+                let i = index
+              ">
               <img
                 src="assets/img/icons/graph/cluster.svg"
                 alt="Icon of group" />
@@ -117,7 +124,10 @@
               (mouseover)="showEdpButton[i] = true"
               (mouseleave)="showEdpButton[i] = false"
               (removed)="removeNode(nodeChip, i)"
-              *ngFor="let nodeChip of form.controls.selectedNodes.value; let i = index">
+              *ngFor="
+                let nodeChip of form.controls.selectedNodes.value;
+                let i = index
+              ">
               <img
                 src="assets/img/icons/graph/container.svg"
                 alt="Icon of endpoint" />
@@ -146,7 +156,7 @@
           </mat-autocomplete>
         </mat-form-field>
       </section>
-      <section class="row mx-0 my-2" >
+      <section class="row mx-0 my-2">
         <mat-checkbox
           class="col"
           formControlName="hideUnmanaged"
@@ -158,14 +168,20 @@
   </div>
   <div class="float-right" mat-dialog-actions>
     <button
+      (click)="reset()"
+      id="resetBlacklist"
+      mat-stroked-button
+      class="mr-2"
+      aria-label="reset">
+      {{ 'enum.RESET' | translate }}
+    </button>
+    <button
       (click)="apply()"
+      id="applyBlacklist"
       color="primary"
       mat-raised-button
       aria-label="apply">
-      Apply
-    </button>
-    <button (click)="reset()" mat-button class="mr-2" aria-label="reset">
-      Reset
+      {{ 'securityEvent.APPLY' | translate }}
     </button>
   </div>
 </div>

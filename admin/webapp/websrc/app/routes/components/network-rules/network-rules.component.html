@@ -14,7 +14,7 @@
         class="pull-right margin-top-s margin-left-xl"
         *ngIf="(eof || networkRuleErr) && !isNetworkRuleDirty()"
         (click)="refresh()">
-        <em class="fas fa-redo text-action mr-1 hand"></em>
+        <em class="eos-icons icon-18 text-action hand " aria-hidden="true">refresh</em>
         <label class="text-gray-label hand">{{
           'general.REFRESH' | translate
         }}</label>

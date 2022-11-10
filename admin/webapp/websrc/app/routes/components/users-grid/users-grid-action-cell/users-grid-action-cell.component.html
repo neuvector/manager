@@ -5,7 +5,7 @@
   "
   matTooltip="{{ 'user.tooltips.RESET_PASSWORD' | translate }}"
   (click)="reset()">
-  <i class="eos-icons">auto_fix_high</i>
+  <i class="eos-icons text-action">auto_fix_high</i>
 </button>
 <button
   mat-icon-button
@@ -14,18 +14,18 @@
   "
   matTooltip="{{ 'user.tooltips.UNLOCK' | translate }}"
   (click)="unlock()">
-  <i class="eos-icons">lock_open</i>
+  <i class="eos-icons text-action">lock_open</i>
 </button>
 <button
   mat-icon-button
   [style.visibility]="params.data.fullname !== 'admin' ? 'visible' : 'hidden'"
   matTooltip="{{ 'user.tooltips.REMOVE' | translate }}"
   (click)="delete()">
-  <i class="eos-icons">delete</i>
+  <i class="eos-icons text-action">delete</i>
 </button>
 <button
   mat-icon-button
   matTooltip="{{ 'user.tooltips.EDIT' | translate }}"
   (click)="edit()">
-  <i class="eos-icons">edit</i>
+  <i class="eos-icons text-action">edit</i>
 </button>

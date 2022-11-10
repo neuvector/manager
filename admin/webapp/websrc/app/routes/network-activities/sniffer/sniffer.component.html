@@ -1,6 +1,6 @@
 <div
   id="sniffer"
-  class="infoBox topLeftSession resizable"
+  class="infoBox topLeftSession mediumBox resizable"
   (window:mouseup)="mouseUp($event)"
   cdkDrag>
   <div
@@ -22,7 +22,7 @@
     </button>
   </div>
 
-  <hr class="fancy mx-0 my-0" />
+  <hr class="fancy" />
   <ag-grid-angular
     id="sniff-grid"
     style="width: 100%; margin-top: 10px"
@@ -38,7 +38,7 @@
         aria-label="Toggle schedule"
         class="md-primary mx-1 mt-3"
         [(ngModel)]="disabled"
-        (change)="toggleSchedule($event)">
+        (change)="toggleSchedule()">
         <label
           [ngClass]="!disabled ? 'text-muted' : 'text-primary'"
           class="mb-0">
@@ -66,10 +66,10 @@
         <span class="text-danger">{{ snifferErrMsg }}</span>
       </div>
     </div>
-    <div class="col-2">
+    <div class="docURLBase col-2">
       <a
         type="submit"
-        class="btn btn-secondary btn-xs"
+        class="mat-stroked-button"
         target="_self"
         *ngIf="sniffer && downloadId === sniffer.id"
         download="{{ exportFilename }}"
@@ -86,7 +86,7 @@
         <button
           mat-mini-fab
           aria-label="Stop sniff"
-          color="primary"
+          color="primary" class="mr-2"
           [disabled]="
             !isPacketCapAuthorized || !sniffer || sniffer.status === 'stopped'
           "
@@ -96,7 +96,7 @@
         <button
           mat-mini-fab
           aria-label="Download packet"
-          color="primary"
+          color="primary" class="mr-2"
           [disabled]="!isPacketCapAuthorized || !sniffer"
           (click)="downloadPacket(sniffer.id)">
           <em class="far fa-file-archive"></em>

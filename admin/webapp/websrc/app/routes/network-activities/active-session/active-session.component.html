@@ -6,16 +6,24 @@
   <div
     cdkDragHandle
     class="d-flex align-items-center justify-content-between handle">
-    <h4 class="text-dark mt-1">
+    <h4 mat-dialog-title>
       {{ 'dashboard.panelItems.NETWORK_TRAFFIC' | translate }}&nbsp;-&nbsp;{{
         currentName
       }}
     </h4>
-    <mat-slide-toggle
-      id="autoRefresh"
-      name="refreshStatus"
-      [(ngModel)]="autoRefresh"
-      (ngModelChange)="onAutoRefreshToggle(autoRefresh)">
+    <div class="d-flex align-items-center justify-content-end">
+      <div *ngIf="conversations && conversations.length > 4" class="mr-4">
+        <app-quick-filter
+          [gridOptions]="gridOptions"
+          (filterCountChange)="filterCountChanged($event)"
+          [showCount]="false">
+        </app-quick-filter>
+      </div>
+      <mat-slide-toggle
+        id="autoRefresh"
+        name="refreshStatus"
+        [(ngModel)]="autoRefresh"
+        (ngModelChange)="onAutoRefreshToggle(autoRefresh)">
       <span
         [ngClass]="{
           'text-muted': !autoRefresh,
@@ -23,35 +31,19 @@
         }">
         {{ 'network.AUTO_REFRESH' | translate }}
       </span>
-    </mat-slide-toggle>
-    <button
-      id="closeActiveSessions"
-      aria-label="Close icon button"
-      class="d-flex align-items-center justify-content-center"
-      mat-icon-button>
-      <i (click)="stopRefreshSession(); popupState.leave()" class="eos-icons"
+      </mat-slide-toggle>
+      <button
+        id="closeActiveSessions"
+        aria-label="Close icon button"
+        class="d-flex align-items-center justify-content-center ml-2"
+        mat-icon-button>
+        <i (click)="stopRefreshSession(); popupState.leave()" class="eos-icons"
         >close</i
-      >
-    </button>
+        >
+      </button>
+    </div>
   </div>
-  <!--  <div class="pull-right ml-lg">-->
-  <!--    -->
-  <!--  </div>-->
-  <!--  <div *ngIf="conversations && conversations.length > 4">-->
-  <!--    <app-quick-filter-->
-  <!--      [gridOptions]="gridOptions"-->
-  <!--      (filterCountChange)="filterCountChanged($event)"-->
-  <!--      [showCount]="false">-->
-  <!--    </app-quick-filter>-->
-  <!--  </div>-->
-  <!--  <div class="clearfix handle" cdkDragHandle>-->
-  <!--    <h4 class="text-dark mt-1">-->
-  <!--      {{ 'dashboard.panelItems.NETWORK_TRAFFIC' | translate }}&nbsp;-&nbsp;{{-->
-  <!--        currentName-->
-  <!--      }}-->
-  <!--    </h4>-->
-  <!--  </div>-->
-  <hr class="fancy mx-0 my-0" />
+  <hr class="fancy" />
   <div *ngIf="conversations && conversations.length > 0">
     <ag-grid-angular
       id="activeSessionGrid"

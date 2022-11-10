@@ -107,7 +107,9 @@ export class AddEditProcessProfileRuleModalComponent implements OnInit {
         this.processProfileRuleForm.controls.group.value,
         newData,
         this.data.oldData || {},
-        GlobalConstant.SCOPE.FED
+        this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY ?
+        GlobalConstant.SCOPE.FED :
+        GlobalConstant.SCOPE.LOCAL
       )
       .subscribe(
         response => {

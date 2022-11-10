@@ -74,16 +74,17 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
   };
 
   toggleRuleItem = (event, rule, disable) => {
-    rule.disable = disable;
-    if (rule.critical) {
-      let criteriaValueStr = rule.criteria.map((value: AdmRuleSubCriterion) => value.value).join(",").toLowerCase();
+    let selectedRule = JSON.parse(JSON.stringify(rule));
+    selectedRule.disable = disable;
+    if (selectedRule.critical) {
+      let criteriaValueStr = selectedRule.criteria.map((value: AdmRuleSubCriterion) => value.value).join(",").toLowerCase();
       let namespace = "";
       if (criteriaValueStr.includes("system") || criteriaValueStr.includes("kube")) {
         namespace = "system";
       } else if (criteriaValueStr.includes("neuvector")) {
         namespace = "NeuVector";
       }
-      let message = rule.disable ?
+      let message = selectedRule.disable ?
       this.translate.instant(
           "admissionControl.msg.ENABLE_CONFIRM_DEFAULT",
           {
@@ -105,7 +106,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
       });
       // listen to confirm subject
       dialogRef.componentInstance.confirm.pipe(switchMap(() => {
-        return this.admissionRulesService.toggleAdmissionRules(rule);
+        return this.admissionRulesService.toggleAdmissionRules(selectedRule);
       })).subscribe(
         (res) => {
           console.log(res)
@@ -117,21 +118,8 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
         },
         error => {}
       );
-      // // listen to response
-      // dialogRef.afterClosed().subscribe(dialogResult => {
-      //   // if user pressed yes dialogResult will be true,
-      //   // if he pressed no - it will be false
-      //   if (dialogResult) {
-      //     this.admissionRulesService.toggleAdmissionRules(rule).subscribe(
-      //       response => {
-      //         this.params.context.componentParent.getAdmissionStateAndRules();
-      //       },
-      //       error => {}
-      //     );
-      //   }
-      // });
     } else {
-      this.admissionRulesService.toggleAdmissionRules(rule).subscribe(
+      this.admissionRulesService.toggleAdmissionRules(selectedRule).subscribe(
         response => {
           this.params.context.componentParent.getAdmissionStateAndRules();
         },

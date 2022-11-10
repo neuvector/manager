@@ -27,6 +27,7 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
   @Input() source!: string;
   @Input() groupName: string = '';
   @Input() resizableHeight!: number;
+  @Input() cfgType!: string;
   private isModalOpen: boolean = false;
   private fileAccessRuleErr: boolean = false;
   public groups: Set<string> = new Set();
@@ -40,6 +41,7 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
   public groupSelection = new FormControl('All', [Validators.required]);
   public filteredCount: number = 0;
   public isWriteGroupAuthorized: boolean = false;
+  public isWriteFileAccessRuleAuthorized: boolean = false;
 
   constructor(
     private fileAccessRulesService: FileAccessRulesService,
@@ -52,11 +54,14 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    console.log('on file access rules init: ', this.source);
+    console.log('on file access rules init: ', this.source, this.cfgType);
     this.source = this.source ? this.source : GlobalConstant.NAV_SOURCE.SELF;
     this.isWriteGroupAuthorized =
       this.authUtilsService.getDisplayFlag('write_group') &&
       (this.source !== GlobalConstant.NAV_SOURCE.GROUP ? this.authUtilsService.getDisplayFlag('multi_cluster') : true);
+    this.isWriteFileAccessRuleAuthorized =
+      (this.source === GlobalConstant.NAV_SOURCE.GROUP && (this.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER || this.cfgType === GlobalConstant.CFG_TYPE.LEARNED)) ||
+      (this.source === GlobalConstant.NAV_SOURCE.FED_POLICY && this.cfgType === GlobalConstant.CFG_TYPE.FED)
     this.gridOptions = this.fileAccessRulesService.prepareGrid(
       this.isWriteGroupAuthorized,
       this.source,

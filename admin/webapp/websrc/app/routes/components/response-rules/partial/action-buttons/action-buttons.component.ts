@@ -80,7 +80,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
         autoCompleteData: autoCompleteData,
         type: type,
       },
-      disableClose: true,
+      disableClose: true, width: "70vw"
     });
     addDialogRef.afterClosed().subscribe(result => {
       setTimeout(() => {

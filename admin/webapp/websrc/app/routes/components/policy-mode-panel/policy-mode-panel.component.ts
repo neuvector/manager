@@ -21,11 +21,9 @@ export class PolicyModePanelComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.instructions = this.assetType === 'services' ? [
+    this.instructions = [
       this.translate.instant('dashboard.help.policy_mode_pod.txt1'),
       this.translate.instant('dashboard.help.policy_mode_pod.txt2')
-    ] : [
-
     ];
   }
 

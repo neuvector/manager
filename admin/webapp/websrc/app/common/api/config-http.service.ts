@@ -5,6 +5,7 @@ import {
   ConfigDebug,
   ConfigPatch,
   ConfigResponse,
+  ConfigV2,
   DebugPostBody,
   IBMSetupGetResponse,
 } from '@common/types';
@@ -17,6 +18,12 @@ export class ConfigHttpService {
   getConfig(): Observable<ConfigResponse> {
     return GlobalVariable.http
       .get<ConfigResponse>(PathConstant.CONFIG_URL)
+      .pipe(pluck('config'));
+  }
+
+  getConfigV2(): Observable<ConfigV2> {
+    return GlobalVariable.http
+      .get<ConfigV2>(PathConstant.CONFIG_V2_URL)
       .pipe(pluck('config'));
   }
 

@@ -43,6 +43,10 @@ export class SettingsService {
     return this.configHttpService.getConfig();
   }
 
+  getConfigV2() {
+    return this.configHttpService.getConfigV2();
+  }
+
   patchConfig(body: ConfigPatch) {
     return this.configHttpService.patchConfig(body);
   }

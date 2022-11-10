@@ -33,7 +33,9 @@
       *ngIf="groupsService.activeTabIndex === 2 && (kind==='container' || kind==='node')"
       [source]="navSource"
       [groupName]="selectedGroupName"
-      [resizableHeight]="resizableHeight">
+      [resizableHeight]="resizableHeight"
+      [cfgType]="cfgType"
+    >
     </app-process-profile-rules>
   </mat-tab>
   <mat-tab
@@ -44,7 +46,9 @@
       *ngIf="groupsService.activeTabIndex === 3 && kind==='container'"
       [source]="navSource"
       [groupName]="selectedGroupName"
-      [resizableHeight]="resizableHeight">
+      [resizableHeight]="resizableHeight"
+      [cfgType]="cfgType"
+    >
     </app-file-access-rules>
   </mat-tab>
   <mat-tab
@@ -100,7 +104,9 @@
           [source]="navSource"
           [groupName]="selectedGroupName"
           [resizableHeight]="resizableHeight"
-          [isScoreImprovement]="isScoreImprovement">
+          [isScoreImprovement]="isScoreImprovement"
+          [cfgType]="cfgType"
+        >
         </app-process-profile-rules>
       </ng-template>
     </mat-tab>
@@ -112,7 +118,9 @@
           [source]="navSource"
           [groupName]="selectedGroupName"
           [resizableHeight]="resizableHeight"
-          [isScoreImprovement]="isScoreImprovement">
+          [isScoreImprovement]="isScoreImprovement"
+          [cfgType]="cfgType"
+        >
         </app-file-access-rules>
       </ng-template>
     </mat-tab>

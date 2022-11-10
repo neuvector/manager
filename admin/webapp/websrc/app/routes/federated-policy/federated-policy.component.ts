@@ -10,6 +10,7 @@ import { GlobalVariable } from '@common/variables/global.variable';
 export class FederatedPolicyComponent implements OnInit {
   public activeTabIndex: number;
   public navSource: string;
+  public CFG_TYPE: any = GlobalConstant.CFG_TYPE;
   public height: number;
   private readonly win: any;
   constructor() {

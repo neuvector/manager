@@ -1,7 +1,7 @@
 import { Injectable, SecurityContext } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
-import { ColDef, GridOptions } from 'ag-grid-community';
+import {ColDef, GetRowIdParams, GridOptions} from 'ag-grid-community';
 import { DomSanitizer } from '@angular/platform-browser';
 import {
   GraphData,
@@ -1259,24 +1259,24 @@ export class GraphService {
         field: 'policy_id',
         cellRenderer: params => {
           if (params.value >= 10000)
-            return `<div class="label ${
+            return `<span class="action-label px-1 ${
               MapConstant.colourMap['LEARNED']
             }">${this.sanitizer.sanitize(
               SecurityContext.HTML,
               params.value
-            )}</div>`;
+            )}</span>`;
           else if (params.value > 0)
-            return `<div class="label ${
+            return `<span class="action-label px-1 ${
               MapConstant.colourMap['CUSTOM']
             }">${this.sanitizer.sanitize(
               SecurityContext.HTML,
               params.value
-            )}</div>`;
+            )}</span>`;
           else return null;
         },
-        width: 70,
-        minWidth: 70,
-        maxWidth: 90,
+        width: 100,
+        minWidth: 100,
+        maxWidth: 100,
       },
       {
         headerName: this.translate.instant('network.gridHeader.ACTION'),
@@ -1299,8 +1299,6 @@ export class GraphService {
         headerName: this.translate.instant('network.gridHeader.AGE'),
         field: 'age',
         valueFormatter: this.ageFormatter,
-        cellClass: 'grid-right-align',
-        cellRenderer: 'agAnimateSlideCellRenderer',
         comparator: this.ageComparator,
         icons: {
           sortAscending: '<em class="fa fa-sort-numeric-asc"></em>',
@@ -1309,67 +1307,9 @@ export class GraphService {
       },
     ];
     gridOptions = this.utils.createGridOptions(activeColumns, this.$win);
-    //Todo: try getRowId instead later
-    gridOptions.getRowNodeId = data => data.id;
-    return gridOptions;
-  };
-
-  prepareSnifferGrid: () => GridOptions = () => {
-    let gridOptions: GridOptions;
-    const sniffColumns = [
-      {
-        headerName: this.translate.instant('network.gridHeader.START_TIME'),
-        field: 'start_time',
-        cellRenderer: params => {
-          return this.sanitizer.sanitize(
-            SecurityContext.HTML,
-            transform(params.value)
-          );
-        },
-        icons: {
-          sortAscending: '<em class="fa fa-sort-numeric-asc"></em>',
-          sortDescending: '<em class="fa fa-sort-numeric-desc"></em>',
-        },
-        minWidth: 160,
-        maxWidth: 170,
-      },
-      {
-        headerName: this.translate.instant('containers.process.STATUS'),
-        field: 'status',
-      },
-      {
-        headerName: this.translate.instant('network.gridHeader.FILE_SIZE'),
-        field: 'size',
-        valueFormatter: this.numberCellFormatter,
-        cellClass: 'grid-right-align',
-        cellRenderer: 'agAnimateShowChangeCellRenderer',
-        icons: {
-          sortAscending: '<em class="fa fa-sort-numeric-asc"></em>',
-          sortDescending: '<em class="fa fa-sort-numeric-desc"></em>',
-        },
-      },
-      {
-        headerName: this.translate.instant('network.gridHeader.STOP_TIME'),
-        field: 'stop_time',
-        cellRenderer: params => {
-          if (params.value > 0)
-            return this.sanitizer.sanitize(
-              SecurityContext.HTML,
-              transform(params.value)
-            );
-          else return '';
-        },
-        icons: {
-          sortAscending: '<em class="fa fa-sort-numeric-asc"></em>',
-          sortDescending: '<em class="fa fa-sort-numeric-desc"></em>',
-        },
-        minWidth: 160,
-        maxWidth: 170,
-      },
-    ];
-    gridOptions = this.utils.createGridOptions(sniffColumns, this.$win);
-    //Todo: try getRowId instead later
-    gridOptions.getRowNodeId = data => data.id;
+    gridOptions.getRowId = (params: GetRowIdParams) => {
+      return params.data.id;
+    };
     return gridOptions;
   };
 
@@ -1505,24 +1445,24 @@ export class GraphService {
           field: 'policy_id',
           cellRenderer: params => {
             if (params.value >= 10000)
-              return `<div class="label ${
+              return `<span class="action-label px-1 ${
                 MapConstant.colourMap['LEARNED']
               }">${this.sanitizer.sanitize(
                 SecurityContext.HTML,
                 params.value
-              )}</div>`;
+              )}</span>`;
             else if (params.value > 0)
-              return `<div class="label ${
+              return `<span class="action-label px-1 ${
                 MapConstant.colourMap['CUSTOM']
               }">${this.sanitizer.sanitize(
                 SecurityContext.HTML,
                 params.value
-              )}</div>`;
+              )}</span>`;
             else return null;
           },
-          width: 70,
-          minWidth: 70,
-          maxWidth: 90,
+          width: 100,
+          minWidth: 100,
+          maxWidth: 100,
         },
         {
           headerName: this.translate.instant('network.gridHeader.ACTION'),

@@ -134,7 +134,7 @@ export class ResponseRulesComponent implements OnInit {
         autoCompleteData: autoCompleteData,
         type: 'add'
       },
-      disableClose: true,
+      disableClose: true, width: "70vw"
     });
     addDialogRef.afterClosed().subscribe(result => {
       setTimeout(() => {

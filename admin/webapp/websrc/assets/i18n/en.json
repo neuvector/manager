@@ -2223,7 +2223,7 @@
       "COMMENT": "Comment",
       "DENY_ALLOW": "Action",
       "APP_TIP": "Type and Press Enter",
-      "ADD": "ADD",
+      "ADD": "Add",
       "CANCEL": "Cancel",
       "DUPLICATED_POLICY": "Rule ID already existed."
     },

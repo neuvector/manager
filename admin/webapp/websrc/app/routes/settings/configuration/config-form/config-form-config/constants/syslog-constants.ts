@@ -23,15 +23,18 @@ export const SyslogCategories = [
 ];
 
 export const SyslogToggleField = {
-  key: 'syslog_status',
+  key: 'syslog.syslog_status',
   type: FormlyComponents.TOGGLE,
   templateOptions: {
     ariaLabelledBy: 'setting.SYSLOG',
   },
+  expressionProperties: {
+    'templateOptions.disabled': '!formState.permissions.isSyslogAuthorized',
+  },
 };
 
 export const SyslogServerField = {
-  key: 'syslog_ip',
+  key: 'syslog.syslog_ip',
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
     label: 'setting.SERVER',
@@ -39,24 +42,26 @@ export const SyslogServerField = {
     required: true,
   },
   expressionProperties: {
-    'templateOptions.disabled': '!model.syslog_status',
+    'templateOptions.disabled':
+      '!model.syslog.syslog_status || !formState.permissions.isSyslogAuthorized',
   },
 };
 
 export const SyslogProtocolField = {
-  key: 'syslog_ip_proto',
+  key: 'syslog.syslog_ip_proto',
   type: FormlyComponents.SELECT,
   templateOptions: {
     label: 'setting.PROTOCOL',
     items: SyslogProtocols,
   },
   expressionProperties: {
-    'templateOptions.disabled': '!model.syslog_status',
+    'templateOptions.disabled':
+      '!model.syslog.syslog_status || !formState.permissions.isSyslogAuthorized',
   },
 };
 
 export const SyslogPortField = {
-  key: 'syslog_port',
+  key: 'syslog.syslog_port',
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
     label: 'setting.PORT',
@@ -67,25 +72,27 @@ export const SyslogPortField = {
     validation: [FormlyValidators.PortRange],
   },
   expressionProperties: {
-    'templateOptions.disabled': '!model.syslog_status',
+    'templateOptions.disabled':
+      '!model.syslog.syslog_status || !formState.permissions.isSyslogAuthorized',
   },
 };
 
 export const SyslogLevelField = {
-  key: 'syslog_level',
+  key: 'syslog.syslog_level',
   type: FormlyComponents.SELECT,
   templateOptions: {
     label: 'setting.LEVEL',
     items: SyslogLevels,
   },
   expressionProperties: {
-    'templateOptions.disabled': '!model.syslog_status',
+    'templateOptions.disabled':
+      '!model.syslog.syslog_status || !formState.permissions.isSyslogAuthorized',
   },
 };
 
 export const SyslogCategoriesField = {
   type: 'multicheckbox',
-  key: 'syslog_categories',
+  key: 'syslog.syslog_categories',
   wrappers: [FormlyComponents.HINT_WRAPPER],
   templateOptions: {
     hint: 'setting.LOG_CATEGORIES',
@@ -94,29 +101,32 @@ export const SyslogCategoriesField = {
     options: SyslogCategories,
   },
   expressionProperties: {
-    'templateOptions.disabled': '!model.syslog_status',
+    'templateOptions.disabled':
+      '!model.syslog.syslog_status || !formState.permissions.isSyslogAuthorized',
   },
 };
 
 export const SyslogInJSONField = {
   type: FormlyComponents.CHECKBOX,
-  key: 'syslog_in_json',
+  key: 'syslog.syslog_in_json',
   templateOptions: {
     label: 'setting.LOG_IN_JSON',
     labelPosition: 'before',
   },
   expressionProperties: {
-    'templateOptions.disabled': '!model.syslog_status',
+    'templateOptions.disabled':
+      '!model.syslog.syslog_status || !formState.permissions.isSyslogAuthorized',
   },
 };
 
 export const SyslogSingleCVEField = {
   type: FormlyComponents.CHECKBOX,
-  key: 'single_cve_per_syslog',
+  key: 'syslog.single_cve_per_syslog',
   templateOptions: {
     label: 'setting.SEND_SYSLOG_PER_CVE',
   },
   expressionProperties: {
-    'templateOptions.disabled': '!model.syslog_status',
+    'templateOptions.disabled':
+      '!model.syslog.syslog_status || !formState.permissions.isSyslogAuthorized',
   },
 };

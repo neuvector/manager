@@ -28,6 +28,11 @@
     [style.max-height]="to.cellHeight"
     [style.min-height]="to.cellHeight"></mat-row>
 </mat-table>
-<button mat-stroked-button type="button" class="mt-3" (click)="add()">
+<button
+  mat-stroked-button
+  type="button"
+  class="mt-3"
+  (click)="add()"
+  [disabled]="field.templateOptions.disabled">
   {{ field.templateOptions.addButtonText | translate }}
 </button>

@@ -40,10 +40,6 @@ export class SettingsService {
   }
 
   getConfig() {
-    return this.configHttpService.getConfig();
-  }
-
-  getConfigV2() {
     return this.configHttpService.getConfigV2();
   }
 

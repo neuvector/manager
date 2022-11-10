@@ -1,12 +1,14 @@
 import { FormControl } from '@angular/forms';
 import { FormlyComponents } from '@common/neuvector-formly/neuvector-formly.module';
-import { FormlyFieldConfig } from '@ngx-formly/core';
+import { ConfigV2Response } from '@common/types';
 
 export const ServiceModeTypes = [
   { value: 'Discover', viewValue: 'topbar.mode.LEARNING' },
   { value: 'Monitor', viewValue: 'topbar.mode.EVALUATION' },
   { value: 'Protect', viewValue: 'topbar.mode.ENFORCE' },
 ];
+
+let a: ConfigV2Response;
 
 export const ScannerAutoscaleStrategy = [
   {
@@ -21,7 +23,7 @@ export const ScannerAutoscaleHideExpr =
   'model.scanner_autoscale.strategy === "n/a"';
 
 export const ServiceModeField = {
-  key: 'new_service_policy_mode',
+  key: 'new_svc.new_service_policy_mode',
   wrappers: [FormlyComponents.HINT_WRAPPER],
   type: FormlyComponents.RADIO,
   templateOptions: {
@@ -56,11 +58,11 @@ export const ProfileBaselineBoolField = {
         ctrl.disable();
       }
       ctrl.setValue(
-        field.model['new_service_profile_baseline'] === 'zero-drift'
+        field.model['new_svc']['new_service_profile_baseline'] === 'zero-drift'
       );
       ctrl.valueChanges.subscribe((x: boolean) => {
         const formCtrl = field.parent.formControl.get(
-          'new_service_profile_baseline'
+          'new_svc.new_service_profile_baseline'
         );
         formCtrl.setValue(x ? 'zero-drift' : 'basic');
         formCtrl.markAsDirty();
@@ -70,11 +72,11 @@ export const ProfileBaselineBoolField = {
 };
 
 export const ProfileBaselineField = {
-  key: 'new_service_profile_baseline',
+  key: 'new_svc.new_service_profile_baseline',
 };
 
 export const AuthByOpenshiftField = {
-  key: 'auth_by_platform',
+  key: 'auth.auth_by_platform',
   type: FormlyComponents.TOGGLE,
   templateOptions: {
     ariaLabelledBy: 'setting.AUTH_BY_OPENSHIFT',
@@ -88,7 +90,7 @@ export const AuthByOpenshiftField = {
 export const AuthByOpenshiftHideExpr = 'formState.isOpenShift';
 
 export const RancherEpField = {
-  key: 'rancher_ep',
+  key: 'auth.rancher_ep',
   template: '',
   expressionProperties: {
     template: (_model, formState, field) => {
@@ -103,7 +105,7 @@ export const RancherEpField = {
 };
 
 export const NetworkServiceStatusField = {
-  key: 'net_service_status',
+  key: 'net_svc.net_service_status',
   type: FormlyComponents.TOGGLE,
   templateOptions: {
     ariaLabelledBy: 'setting.NET_SERVICE_POLICY_MODE',
@@ -115,7 +117,7 @@ export const NetworkServiceStatusField = {
 };
 
 export const NetworkServiceModeField = {
-  key: 'net_service_policy_mode',
+  key: 'net_svc.net_service_policy_mode',
   type: FormlyComponents.RADIO,
   wrappers: [FormlyComponents.HINT_WRAPPER],
   templateOptions: {
@@ -128,7 +130,7 @@ export const NetworkServiceModeField = {
     'templateOptions.disabled':
       '!formState.permissions.isNewServiceModeAuthorized',
     'templateOptions.hint': model =>
-      model.net_service_status
+      model.net_svc.net_service_status
         ? 'setting.description.ENABLED_NET_POLICY_MODE'
         : 'setting.description.DISABLED_NET_POLICY_MODE',
   },
@@ -189,7 +191,7 @@ export const ScannerAutoscaleMinMaxField = {
 };
 
 export const D2MToggleField = {
-  key: 'mode_auto_d2m',
+  key: 'mode_auto.mode_auto_d2m',
   type: FormlyComponents.TOGGLE,
   templateOptions: {
     label: 'setting.D2M',
@@ -202,7 +204,9 @@ export const D2MToggleField = {
   },
   hooks: {
     onInit: field => {
-      const ctrl = field.parent.formControl.get('mode_auto_d2m_duration');
+      const ctrl = field.parent.formControl.get(
+        'mode_auto.mode_auto_d2m_duration'
+      );
       ctrl.valueChanges.subscribe(duration => {
         if (!duration) {
           field.formControl.setValue(false);
@@ -213,7 +217,7 @@ export const D2MToggleField = {
 };
 
 export const D2MDurationField = {
-  key: 'mode_auto_d2m_duration',
+  key: 'mode_auto.mode_auto_d2m_duration',
   type: FormlyComponents.NGX_SLIDER,
   templateOptions: {
     min: 0,
@@ -226,7 +230,7 @@ export const D2MDurationField = {
   },
   hooks: {
     onInit: field => {
-      const ctrl = field.parent.formControl.get('mode_auto_d2m');
+      const ctrl = field.parent.formControl.get('mode_auto.mode_auto_d2m');
       field.templateOptions.disabled = !ctrl.value || ctrl.disabled;
       ctrl.valueChanges.subscribe(isEnabled => {
         if (isEnabled && !field.formControl.value) {
@@ -242,7 +246,7 @@ export const D2MDurationField = {
 };
 
 export const M2PToggleField = {
-  key: 'mode_auto_m2p',
+  key: 'mode_auto.mode_auto_m2p',
   type: FormlyComponents.TOGGLE,
   templateOptions: {
     label: 'setting.M2P',
@@ -255,7 +259,9 @@ export const M2PToggleField = {
   },
   hooks: {
     onInit: field => {
-      const ctrl = field.parent.formControl.get('mode_auto_m2p_duration');
+      const ctrl = field.parent.formControl.get(
+        'mode_auto.mode_auto_m2p_duration'
+      );
       ctrl.valueChanges.subscribe(duration => {
         if (!duration) {
           field.formControl.setValue(false);
@@ -266,7 +272,7 @@ export const M2PToggleField = {
 };
 
 export const M2PDurationField = {
-  key: 'mode_auto_m2p_duration',
+  key: 'mode_auto.mode_auto_m2p_duration',
   type: FormlyComponents.NGX_SLIDER,
   templateOptions: {
     min: 0,
@@ -279,7 +285,7 @@ export const M2PDurationField = {
   },
   hooks: {
     onInit: field => {
-      const ctrl = field.parent.formControl.get('mode_auto_m2p');
+      const ctrl = field.parent.formControl.get('mode_auto.mode_auto_m2p');
       field.templateOptions.disabled = !ctrl.value || ctrl.disabled;
       ctrl.valueChanges.subscribe(isEnabled => {
         if (isEnabled && !field.formControl.value) {
@@ -295,7 +301,7 @@ export const M2PDurationField = {
 };
 
 export const ClusterNameField = {
-  key: 'cluster_name',
+  key: 'misc.cluster_name',
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
     label: 'setting.CLUSTER_NAME',
@@ -318,7 +324,7 @@ export const DurationToggleField = {
   },
   hooks: {
     onInit: field => {
-      const ctrl = field.parent.formControl.get('unused_group_aging');
+      const ctrl = field.parent.formControl.get('misc.unused_group_aging');
       ctrl.valueChanges.subscribe(duration => {
         if (!duration) {
           field.formControl.setValue(false);
@@ -329,7 +335,7 @@ export const DurationToggleField = {
 };
 
 export const DurationSliderField = {
-  key: 'unused_group_aging',
+  key: 'misc.unused_group_aging',
   type: FormlyComponents.NGX_SLIDER,
   templateOptions: {
     min: 0,
@@ -356,7 +362,7 @@ export const DurationSliderField = {
 };
 
 export const XFFToggleField = {
-  key: 'xff_enabled',
+  key: 'misc.xff_enabled',
   type: FormlyComponents.TOGGLE,
   templateOptions: {
     ariaLabelledBy: 'setting.XFF_MATCH',
@@ -379,9 +385,11 @@ export const TelemetryToggleBoolField = {
       if (!field.options.formState.permissions.isSyslogAuthorized) {
         ctrl.disable();
       }
-      ctrl.setValue(!field.model['no_telemetry_report']);
+      ctrl.setValue(!field.model['misc']['no_telemetry_report']);
       ctrl.valueChanges.subscribe((x: boolean) => {
-        const formCtrl = field.parent.formControl.get('no_telemetry_report');
+        const formCtrl = field.parent.formControl.get(
+          'misc.no_telemetry_report'
+        );
         formCtrl.setValue(!x);
         formCtrl.markAsDirty();
       });
@@ -390,5 +398,5 @@ export const TelemetryToggleBoolField = {
 };
 
 export const TelemetryToggleField = {
-  key: 'no_telemetry_report',
+  key: 'misc.no_telemetry_report',
 };

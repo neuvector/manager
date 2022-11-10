@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MapConstant } from '@common/constants/map.constant';
 import { ComponentCanDeactivate } from '@common/guards/pending-changes.guard';
-import { ConfigResponse, Enforcer } from '@common/types';
+import { ConfigV2Response, Enforcer } from '@common/types';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { TranslateService } from '@ngx-translate/core';
@@ -17,15 +17,15 @@ import { ConfigFormComponent } from './config-form/config-form.component';
 })
 export class ConfigurationComponent implements OnInit, ComponentCanDeactivate {
   @ViewChild(ConfigFormComponent) configForm!: ConfigFormComponent;
-  config!: ConfigResponse;
+  config!: ConfigV2Response;
   enforcers!: Enforcer[];
   refreshConfig$ = new Subject();
   isConfigAuthorized!: boolean;
   isImportAuthorized!: boolean;
   get debug_enabled(): boolean {
     return (
-      this.config.controller_debug.length > 0 &&
-      this.config.controller_debug[0] === 'cpath'
+      this.config.misc.controller_debug.length > 0 &&
+      this.config.misc.controller_debug[0] === 'cpath'
     );
   }
 

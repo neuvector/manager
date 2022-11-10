@@ -4,7 +4,7 @@ import {
 } from '@common/neuvector-formly/neuvector-formly.module';
 
 export const HTTPProxyStatusField = {
-  key: 'registry_http_proxy_status',
+  key: 'proxy.registry_http_proxy_status',
   type: FormlyComponents.TOGGLE,
   templateOptions: {
     label: 'setting.REG_HTTP_PROXY',
@@ -18,7 +18,7 @@ export const HTTPProxyStatusField = {
 };
 
 export const HTTPProxyURLField = {
-  key: 'registry_http_proxy.url',
+  key: 'proxy.registry_http_proxy.url',
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
     label: 'setting.URL',
@@ -30,12 +30,12 @@ export const HTTPProxyURLField = {
   },
   expressionProperties: {
     'templateOptions.disabled':
-      '!model.registry_http_proxy_status || !formState.permissions.isRegHttpProxyAuthorized',
+      '!model.proxy.registry_http_proxy_status || !formState.permissions.isRegHttpProxyAuthorized',
   },
 };
 
 export const HTTPProxyUsernameField = {
-  key: 'registry_http_proxy.username',
+  key: 'proxy.registry_http_proxy.username',
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
     label: 'setting.USERNAME',
@@ -43,12 +43,12 @@ export const HTTPProxyUsernameField = {
   },
   expressionProperties: {
     'templateOptions.disabled':
-      '!model.registry_http_proxy_status || !formState.permissions.isRegHttpProxyAuthorized',
+      '!model.proxy.registry_http_proxy_status || !formState.permissions.isRegHttpProxyAuthorized',
   },
 };
 
 export const HTTPProxyPasswordField = {
-  key: 'registry_http_proxy.password',
+  key: 'proxy.registry_http_proxy.password',
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
     label: 'setting.PASSWORD',
@@ -58,12 +58,12 @@ export const HTTPProxyPasswordField = {
   },
   expressionProperties: {
     'templateOptions.disabled':
-      '!model.registry_http_proxy_status || !formState.permissions.isRegHttpProxyAuthorized',
+      '!model.proxy.registry_http_proxy_status || !formState.permissions.isRegHttpProxyAuthorized',
   },
 };
 
 export const HTTPSProxyStatusField = {
-  key: 'registry_https_proxy_status',
+  key: 'proxy.registry_https_proxy_status',
   type: FormlyComponents.TOGGLE,
   templateOptions: {
     label: 'setting.REG_HTTPS_PROXY',
@@ -77,7 +77,7 @@ export const HTTPSProxyStatusField = {
 };
 
 export const HTTPSProxyURLField = {
-  key: 'registry_https_proxy.url',
+  key: 'proxy.registry_https_proxy.url',
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
     label: 'setting.URL',
@@ -89,12 +89,12 @@ export const HTTPSProxyURLField = {
   },
   expressionProperties: {
     'templateOptions.disabled':
-      '!model.registry_https_proxy_status || !formState.permissions.isRegHttpsProxyAuthorized',
+      '!model.proxy.registry_https_proxy_status || !formState.permissions.isRegHttpsProxyAuthorized',
   },
 };
 
 export const HTTPSProxyUsernameField = {
-  key: 'registry_https_proxy.username',
+  key: 'proxy.registry_https_proxy.username',
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
     label: 'setting.USERNAME',
@@ -102,12 +102,12 @@ export const HTTPSProxyUsernameField = {
   },
   expressionProperties: {
     'templateOptions.disabled':
-      '!model.registry_https_proxy_status || !formState.permissions.isRegHttpsProxyAuthorized',
+      '!model.proxy.registry_https_proxy_status || !formState.permissions.isRegHttpsProxyAuthorized',
   },
 };
 
 export const HTTPSProxyPasswordField = {
-  key: 'registry_https_proxy.password',
+  key: 'proxy.registry_https_proxy.password',
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
     label: 'setting.PASSWORD',
@@ -117,6 +117,6 @@ export const HTTPSProxyPasswordField = {
   },
   expressionProperties: {
     'templateOptions.disabled':
-      '!model.registry_https_proxy_status || !formState.permissions.isRegHttpsProxyAuthorized',
+      '!model.proxy.registry_https_proxy_status || !formState.permissions.isRegHttpsProxyAuthorized',
   },
 };

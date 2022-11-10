@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ErrorResponse } from '@common/types';
 import { UtilsService } from '@common/utils/app.utils';
@@ -17,7 +17,7 @@ import { AuthUtilsService } from '@common/utils/auth.utils';
   templateUrl: './export-form.component.html',
   styleUrls: ['./export-form.component.scss'],
 })
-export class ExportFormComponent {
+export class ExportFormComponent implements OnInit {
   submittingForm = false;
   exportForm = new FormGroup({
     export: new FormControl(null, Validators.required),
@@ -42,13 +42,16 @@ export class ExportFormComponent {
     return this.exportForm.get('as_standalone')?.value;
   }
 
-  submitExport(): void {
+  ngOnInit(): void {
     this.isExportAuthorized =
       this.authUtilsService.getDisplayFlag('write_config');
     this.isImportAuthorized =
       GlobalVariable.user.token.role === MapConstant.FED_ROLES.FEDADMIN ||
       (GlobalVariable.user.token.role === MapConstant.FED_ROLES.ADMIN &&
         (GlobalVariable.isStandAlone || GlobalVariable.isMember));
+  }
+
+  submitExport(): void {
     const exportMode = this.exportForm.get('export')?.value;
     this.submittingForm = true;
     this.settingsService

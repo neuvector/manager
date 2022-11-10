@@ -1,19 +1,24 @@
-<div id="hostInfo" class="infoBox topLeftFloat-host pt-1" cdkDrag>
-  <button
-    class="btn btn-xs btn-link pull-right mt-2"
-    (click)="popupState.leave()">
-    <em class="fa fa-times fa-lg text-muted"></em>
-  </button>
-  <div class="clearfix handle" cdkDragHandle id="hostInfoHeader">
-    <div class="auto-hide mt-2" style="display: block; width: 350px">
+<div id="hostInfo" class="infoBox topLeftFloat-host" cdkDrag>
+  <div
+    cdkDragHandle
+    id="hostInfoHeader"
+    class="d-flex align-items-center justify-content-between handle">
+    <h4 mat-dialog-title>
       <img
         src="assets/img/icons/graph/host.svg"
         aria-label="Host"
         style="width: 24px; height: 24px"
         alt="hostIcon" />
       {{ host.name }}
-    </div>
+    </h4>
+    <button
+      id="closeHostInfo"
+      aria-label="Close icon button"
+      class="d-flex align-items-center justify-content-center"
+      mat-icon-button>
+      <i (click)="popupState.leave()" class="eos-icons">close</i>
+    </button>
   </div>
-  <hr class="fancy mx-0 my-0" />
+  <hr class="fancy" />
   <app-node-brief [host]="host"></app-node-brief>
 </div>

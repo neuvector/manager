@@ -281,7 +281,7 @@ export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
 
   mouseUp(event) {
     if (event.target?.id == 'sniffer') {
-      this._entriesGridHeight = event.target.clientHeight - 170;
+      this._entriesGridHeight = event.target.clientHeight - 190;
       this.gridOptions.api.resetRowHeights();
       this.gridOptions.api.sizeColumnsToFit();
     }

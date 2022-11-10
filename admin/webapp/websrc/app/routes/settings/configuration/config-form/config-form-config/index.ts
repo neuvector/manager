@@ -1,6 +1,8 @@
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { FormlyComponents } from '@common/neuvector-formly/neuvector-formly.module';
 import {
+  AuthByOpenshiftField,
+  AuthByOpenshiftHideExpr,
   ClusterNameField,
   D2MDurationField,
   D2MToggleField,
@@ -26,6 +28,7 @@ import {
   NetworkServiceStatusField,
   ProfileBaselineBoolField,
   ProfileBaselineField,
+  RancherEpField,
   ScannerAutoscaleField,
   ScannerAutoscaleHideExpr,
   ScannerAutoscaleMaxField,
@@ -47,6 +50,27 @@ import {
 } from './constants';
 
 export const ConfigFormConfig: FormlyFieldConfig[] = [
+  {
+    wrappers: [FormlyComponents.SECTION_WRAPPER],
+    fieldGroup: [AuthByOpenshiftField],
+    templateOptions: {
+      label: 'setting.AUTH_BY_OPENSHIFT',
+      appendTo: true,
+      inline: true,
+    },
+    hideExpression: AuthByOpenshiftHideExpr,
+  },
+  {
+    wrappers: [FormlyComponents.SECTION_WRAPPER],
+    fieldGroup: [
+      {
+        className: 'mx-3 my-md-4',
+        ...RancherEpField,
+      },
+    ],
+    templateOptions: { append: true, divider: true },
+    hideExpression: AuthByOpenshiftHideExpr,
+  },
   {
     wrappers: [FormlyComponents.SECTION_WRAPPER],
     fieldGroupClassName: 'row',

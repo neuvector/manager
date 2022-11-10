@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { GlobalConstant } from '@common/constants/global.constant';
+import { MapConstant } from '@common/constants/map.constant';
 import {
   ConfigPatch,
   ConfigResponse,
@@ -16,6 +17,8 @@ import {
   IBMSetupGetResponse,
 } from '@common/types';
 import { UtilsService } from '@common/utils/app.utils';
+import { AuthUtilsService } from '@common/utils/auth.utils';
+import { GlobalVariable } from '@common/variables/global.variable';
 import { FormlyFormOptions } from '@ngx-formly/core';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '@services/notification.service';
@@ -37,11 +40,14 @@ export class ConfigFormComponent implements OnInit {
   configFields = cloneDeep(ConfigFormConfig);
   configOptions: FormlyFormOptions = {
     formState: {
+      isOpenShift: GlobalVariable.isOpenShift,
+      permissions: {},
       ibmsa: {
         setup: this.setupIBMSA.bind(this),
         enabled: false,
       },
       tr: {
+        rancher_ep: this.tr.instant('setting.RANCHER_EP'),
         min_max: this.tr.instant('setting.autoscale.MIN_MAX'),
       },
       slider_formatter: this.utils.convertHours.bind(this.utils),
@@ -55,11 +61,32 @@ export class ConfigFormComponent implements OnInit {
     private settingsService: SettingsService,
     private utils: UtilsService,
     private tr: TranslateService,
+    private authUtilsService: AuthUtilsService,
     private notificationService: NotificationService,
     @Inject(DOCUMENT) private document: Document
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const isSettingAuth = this.authUtilsService.getDisplayFlag('write_config');
+    const importAuth =
+      GlobalVariable.user.token.role === MapConstant.FED_ROLES.FEDADMIN ||
+      (GlobalVariable.user.token.role === MapConstant.FED_ROLES.ADMIN &&
+        (GlobalVariable.isStandAlone || GlobalVariable.isMember));
+    this.configOptions.formState.permissions = {
+      isAuthenticateRBACAuthorized: isSettingAuth,
+      isNewServiceModeAuthorized: isSettingAuth,
+      isClusterAuthorized: isSettingAuth,
+      isWebhookAuthorized: isSettingAuth,
+      isSyslogAuthorized: isSettingAuth,
+      isExportAuthorized: isSettingAuth,
+      isImportAuthorized: importAuth,
+      isDebugLogAuthorized: isSettingAuth,
+      isRegHttpProxyAuthorized: isSettingAuth,
+      isRegHttpsProxyAuthorized: isSettingAuth,
+      isConfigAuthorized: isSettingAuth,
+      isIbmSaAuthorized: isSettingAuth,
+    };
+  }
 
   private _config!: ConfigResponse;
 

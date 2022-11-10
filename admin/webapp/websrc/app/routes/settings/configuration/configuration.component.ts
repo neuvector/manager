@@ -1,6 +1,9 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { MapConstant } from '@common/constants/map.constant';
 import { ComponentCanDeactivate } from '@common/guards/pending-changes.guard';
 import { ConfigResponse, Enforcer } from '@common/types';
+import { AuthUtilsService } from '@common/utils/auth.utils';
+import { GlobalVariable } from '@common/variables/global.variable';
 import { TranslateService } from '@ngx-translate/core';
 import { SettingsService } from '@services/settings.service';
 import { Observable, Subject } from 'rxjs';
@@ -17,6 +20,8 @@ export class ConfigurationComponent implements OnInit, ComponentCanDeactivate {
   config!: ConfigResponse;
   enforcers!: Enforcer[];
   refreshConfig$ = new Subject();
+  isConfigAuthorized!: boolean;
+  isImportAuthorized!: boolean;
   get debug_enabled(): boolean {
     return (
       this.config.controller_debug.length > 0 &&
@@ -26,6 +31,7 @@ export class ConfigurationComponent implements OnInit, ComponentCanDeactivate {
 
   constructor(
     private settingsService: SettingsService,
+    private authUtils: AuthUtilsService,
     private tr: TranslateService
   ) {}
 
@@ -37,6 +43,11 @@ export class ConfigurationComponent implements OnInit, ComponentCanDeactivate {
   }
 
   ngOnInit(): void {
+    this.isConfigAuthorized = this.authUtils.getDisplayFlag('write_config');
+    this.isImportAuthorized =
+      GlobalVariable.user.token.role === MapConstant.FED_ROLES.FEDADMIN ||
+      (GlobalVariable.user.token.role === MapConstant.FED_ROLES.ADMIN &&
+        (GlobalVariable.isStandAlone || GlobalVariable.isMember));
     this.settingsService
       .getConfig()
       .pipe(repeatWhen(() => this.refreshConfig$))

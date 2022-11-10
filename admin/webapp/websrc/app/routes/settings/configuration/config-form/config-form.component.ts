@@ -1,5 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import {
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Inject,
@@ -63,29 +64,24 @@ export class ConfigFormComponent implements OnInit {
     private tr: TranslateService,
     private authUtilsService: AuthUtilsService,
     private notificationService: NotificationService,
+    private cd: ChangeDetectorRef,
     @Inject(DOCUMENT) private document: Document
   ) {}
 
   ngOnInit(): void {
     const isSettingAuth = this.authUtilsService.getDisplayFlag('write_config');
-    const importAuth =
-      GlobalVariable.user.token.role === MapConstant.FED_ROLES.FEDADMIN ||
-      (GlobalVariable.user.token.role === MapConstant.FED_ROLES.ADMIN &&
-        (GlobalVariable.isStandAlone || GlobalVariable.isMember));
     this.configOptions.formState.permissions = {
       isAuthenticateRBACAuthorized: isSettingAuth,
       isNewServiceModeAuthorized: isSettingAuth,
       isClusterAuthorized: isSettingAuth,
       isWebhookAuthorized: isSettingAuth,
       isSyslogAuthorized: isSettingAuth,
-      isExportAuthorized: isSettingAuth,
-      isImportAuthorized: importAuth,
-      isDebugLogAuthorized: isSettingAuth,
       isRegHttpProxyAuthorized: isSettingAuth,
       isRegHttpsProxyAuthorized: isSettingAuth,
       isConfigAuthorized: isSettingAuth,
-      isIbmSaAuthorized: isSettingAuth,
+      isIBMSAAuthorized: isSettingAuth,
     };
+    this.cd.detectChanges();
   }
 
   private _config!: ConfigResponse;

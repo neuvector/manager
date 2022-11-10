@@ -11,6 +11,10 @@ export const HTTPProxyStatusField = {
     labelPosition: 'before',
     fixed: 'sm',
   },
+  expressionProperties: {
+    'templateOptions.disabled':
+      '!formState.permissions.isRegHttpProxyAuthorized',
+  },
 };
 
 export const HTTPProxyURLField = {
@@ -25,7 +29,8 @@ export const HTTPProxyURLField = {
     validation: [FormlyValidators.URL],
   },
   expressionProperties: {
-    'templateOptions.disabled': '!model.registry_http_proxy_status',
+    'templateOptions.disabled':
+      '!model.registry_http_proxy_status || !formState.permissions.isRegHttpProxyAuthorized',
   },
 };
 
@@ -37,7 +42,8 @@ export const HTTPProxyUsernameField = {
     maxLength: 1000,
   },
   expressionProperties: {
-    'templateOptions.disabled': '!model.registry_http_proxy_status',
+    'templateOptions.disabled':
+      '!model.registry_http_proxy_status || !formState.permissions.isRegHttpProxyAuthorized',
   },
 };
 
@@ -51,7 +57,8 @@ export const HTTPProxyPasswordField = {
     type: 'password',
   },
   expressionProperties: {
-    'templateOptions.disabled': '!model.registry_http_proxy_status',
+    'templateOptions.disabled':
+      '!model.registry_http_proxy_status || !formState.permissions.isRegHttpProxyAuthorized',
   },
 };
 
@@ -62,6 +69,10 @@ export const HTTPSProxyStatusField = {
     label: 'setting.REG_HTTPS_PROXY',
     labelPosition: 'before',
     fixed: 'sm',
+  },
+  expressionProperties: {
+    'templateOptions.disabled':
+      '!formState.permissions.isRegHttpsProxyAuthorized',
   },
 };
 
@@ -77,7 +88,8 @@ export const HTTPSProxyURLField = {
     validation: [FormlyValidators.URL],
   },
   expressionProperties: {
-    'templateOptions.disabled': '!model.registry_https_proxy_status',
+    'templateOptions.disabled':
+      '!model.registry_https_proxy_status || !formState.permissions.isRegHttpsProxyAuthorized',
   },
 };
 
@@ -89,7 +101,8 @@ export const HTTPSProxyUsernameField = {
     maxLength: 1000,
   },
   expressionProperties: {
-    'templateOptions.disabled': '!model.registry_https_proxy_status',
+    'templateOptions.disabled':
+      '!model.registry_https_proxy_status || !formState.permissions.isRegHttpsProxyAuthorized',
   },
 };
 
@@ -103,6 +116,7 @@ export const HTTPSProxyPasswordField = {
     type: 'password',
   },
   expressionProperties: {
-    'templateOptions.disabled': '!model.registry_https_proxy_status',
+    'templateOptions.disabled':
+      '!model.registry_https_proxy_status || !formState.permissions.isRegHttpsProxyAuthorized',
   },
 };

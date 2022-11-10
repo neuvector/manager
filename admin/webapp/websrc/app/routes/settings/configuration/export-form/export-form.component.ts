@@ -8,6 +8,9 @@ import { finalize } from 'rxjs/operators';
 import { saveAs } from 'file-saver';
 import { PathConstant } from '@common/constants/path.constant';
 import { TranslateService } from '@ngx-translate/core';
+import { GlobalVariable } from '@common/variables/global.variable';
+import { MapConstant } from '@common/constants/map.constant';
+import { AuthUtilsService } from '@common/utils/auth.utils';
 
 @Component({
   selector: 'app-export-form',
@@ -20,11 +23,14 @@ export class ExportFormComponent {
     export: new FormControl(null, Validators.required),
     as_standalone: new FormControl(false),
   });
+  isImportAuthorized!: boolean;
+  isExportAuthorized!: boolean;
 
   constructor(
     private settingsService: SettingsService,
     private tr: TranslateService,
     private utils: UtilsService,
+    private authUtilsService: AuthUtilsService,
     private notificationService: NotificationService
   ) {}
 
@@ -37,6 +43,12 @@ export class ExportFormComponent {
   }
 
   submitExport(): void {
+    this.isExportAuthorized =
+      this.authUtilsService.getDisplayFlag('write_config');
+    this.isImportAuthorized =
+      GlobalVariable.user.token.role === MapConstant.FED_ROLES.FEDADMIN ||
+      (GlobalVariable.user.token.role === MapConstant.FED_ROLES.ADMIN &&
+        (GlobalVariable.isStandAlone || GlobalVariable.isMember));
     const exportMode = this.exportForm.get('export')?.value;
     this.submittingForm = true;
     this.settingsService

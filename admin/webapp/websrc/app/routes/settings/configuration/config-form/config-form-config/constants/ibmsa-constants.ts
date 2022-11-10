@@ -6,6 +6,9 @@ export const IBMSAToggleField = {
   templateOptions: {
     ariaLabelledBy: 'setting.IBM_INTEGRATE',
   },
+  expressionProperties: {
+    'templateOptions.disabled': '!formState.permissions.isIBMSAAuthorized',
+  },
   hooks: {
     onInit: field => {
       const ctrl = field.formControl;
@@ -33,7 +36,8 @@ export const IBMSADashboardURLField = {
     label: 'setting.DASHBOARD_URL',
   },
   expressionProperties: {
-    'templateOptions.disabled': 'model.ibmsa_ep_start === 1',
+    'templateOptions.disabled':
+      'model.ibmsa_ep_start === 1 || !formState.permissions.isIBMSAAuthorized',
   },
 };
 
@@ -46,6 +50,7 @@ export const IBMSASetupField = {
   },
   hideExpression: (model, formState, field) => {
     return (
+      !formState.permissions.isIBMSAAuthorized ||
       !model.ibmsa_ep_enabled ||
       model.ibmsa_ep_start === 1 ||
       field.parent?.formControl?.get('ibmsa_ep_enabled')?.dirty
@@ -65,6 +70,7 @@ export const IBMSASetupURLField = {
   },
   hideExpression: (model, formState, field) => {
     return (
+      !formState.permissions.isIBMSAAuthorized ||
       !model.ibmsa_ep_enabled ||
       model.ibmsa_ep_start === 1 ||
       field.parent?.formControl?.get('ibmsa_ep_enabled')?.dirty

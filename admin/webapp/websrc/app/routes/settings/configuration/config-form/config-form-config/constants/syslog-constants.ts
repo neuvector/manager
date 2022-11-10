@@ -28,6 +28,9 @@ export const SyslogToggleField = {
   templateOptions: {
     ariaLabelledBy: 'setting.SYSLOG',
   },
+  expressionProperties: {
+    'templateOptions.disabled': '!formState.permissions.isSyslogAuthorized',
+  },
 };
 
 export const SyslogServerField = {
@@ -39,7 +42,8 @@ export const SyslogServerField = {
     required: true,
   },
   expressionProperties: {
-    'templateOptions.disabled': '!model.syslog_status',
+    'templateOptions.disabled':
+      '!model.syslog_status || !formState.permissions.isSyslogAuthorized',
   },
 };
 
@@ -51,7 +55,8 @@ export const SyslogProtocolField = {
     items: SyslogProtocols,
   },
   expressionProperties: {
-    'templateOptions.disabled': '!model.syslog_status',
+    'templateOptions.disabled':
+      '!model.syslog_status || !formState.permissions.isSyslogAuthorized',
   },
 };
 
@@ -67,7 +72,8 @@ export const SyslogPortField = {
     validation: [FormlyValidators.PortRange],
   },
   expressionProperties: {
-    'templateOptions.disabled': '!model.syslog_status',
+    'templateOptions.disabled':
+      '!model.syslog_status || !formState.permissions.isSyslogAuthorized',
   },
 };
 
@@ -79,7 +85,8 @@ export const SyslogLevelField = {
     items: SyslogLevels,
   },
   expressionProperties: {
-    'templateOptions.disabled': '!model.syslog_status',
+    'templateOptions.disabled':
+      '!model.syslog_status || !formState.permissions.isSyslogAuthorized',
   },
 };
 
@@ -94,7 +101,8 @@ export const SyslogCategoriesField = {
     options: SyslogCategories,
   },
   expressionProperties: {
-    'templateOptions.disabled': '!model.syslog_status',
+    'templateOptions.disabled':
+      '!model.syslog_status || !formState.permissions.isSyslogAuthorized',
   },
 };
 
@@ -106,7 +114,8 @@ export const SyslogInJSONField = {
     labelPosition: 'before',
   },
   expressionProperties: {
-    'templateOptions.disabled': '!model.syslog_status',
+    'templateOptions.disabled':
+      '!model.syslog_status || !formState.permissions.isSyslogAuthorized',
   },
 };
 
@@ -117,6 +126,7 @@ export const SyslogSingleCVEField = {
     label: 'setting.SEND_SYSLOG_PER_CVE',
   },
   expressionProperties: {
-    'templateOptions.disabled': '!model.syslog_status',
+    'templateOptions.disabled':
+      '!model.syslog_status || !formState.permissions.isSyslogAuthorized',
   },
 };

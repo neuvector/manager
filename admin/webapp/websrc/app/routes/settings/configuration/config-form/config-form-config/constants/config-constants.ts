@@ -1,5 +1,6 @@
 import { FormControl } from '@angular/forms';
 import { FormlyComponents } from '@common/neuvector-formly/neuvector-formly.module';
+import { FormlyFieldConfig } from '@ngx-formly/core';
 
 export const ServiceModeTypes = [
   { value: 'Discover', viewValue: 'topbar.mode.LEARNING' },
@@ -30,6 +31,10 @@ export const ServiceModeField = {
     hintClass: 'ml-4 text-muted',
     fieldClass: 'col-md-4',
   },
+  expressionProperties: {
+    'templateOptions.disabled':
+      '!formState.permissions.isNewServiceModeAuthorized',
+  },
 };
 
 export const ProfileBaselineBoolField = {
@@ -47,6 +52,9 @@ export const ProfileBaselineBoolField = {
   hooks: {
     onInit: field => {
       const ctrl = field.formControl;
+      if (!field.options.formState.permissions.isNewServiceModeAuthorized) {
+        ctrl.disable();
+      }
       ctrl.setValue(
         field.model['new_service_profile_baseline'] === 'zero-drift'
       );
@@ -100,6 +108,10 @@ export const NetworkServiceStatusField = {
   templateOptions: {
     ariaLabelledBy: 'setting.NET_SERVICE_POLICY_MODE',
   },
+  expressionProperties: {
+    'templateOptions.disabled':
+      '!formState.permissions.isNewServiceModeAuthorized',
+  },
 };
 
 export const NetworkServiceModeField = {
@@ -113,6 +125,8 @@ export const NetworkServiceModeField = {
     fieldClass: 'col-md-4',
   },
   expressionProperties: {
+    'templateOptions.disabled':
+      '!formState.permissions.isNewServiceModeAuthorized',
     'templateOptions.hint': model =>
       model.net_service_status
         ? 'setting.description.ENABLED_NET_POLICY_MODE'
@@ -127,6 +141,10 @@ export const ScannerAutoscaleField = {
   templateOptions: {
     items: ScannerAutoscaleStrategy,
     fieldClass: 'col-md-4',
+  },
+  expressionProperties: {
+    'templateOptions.disabled':
+      '!formState.permissions.isNewServiceModeAuthorized',
   },
 };
 
@@ -153,6 +171,9 @@ export const ScannerAutoscaleMinMaxField = {
   hooks: {
     onInit: field => {
       const ctrl = field.formControl;
+      if (!field.options.formState.permissions.isNewServiceModeAuthorized) {
+        field.templateOptions.disabled = true;
+      }
       const formCtrl = field.parent.formControl.get('scanner_autoscale');
       ctrl.setValue([
         formCtrl.get('min_pods').value,
@@ -175,6 +196,9 @@ export const D2MToggleField = {
     labelPosition: 'before',
     fixed: 'md',
     tooltip: 'setting.D2M_HINT',
+  },
+  expressionProperties: {
+    'templateOptions.disabled': '!formState.permissions.isSyslogAuthorized',
   },
   hooks: {
     onInit: field => {
@@ -203,7 +227,7 @@ export const D2MDurationField = {
   hooks: {
     onInit: field => {
       const ctrl = field.parent.formControl.get('mode_auto_d2m');
-      field.templateOptions.disabled = !ctrl.value;
+      field.templateOptions.disabled = !ctrl.value || ctrl.disabled;
       ctrl.valueChanges.subscribe(isEnabled => {
         if (isEnabled && !field.formControl.value) {
           field.formControl.setValue(1);
@@ -225,6 +249,9 @@ export const M2PToggleField = {
     labelPosition: 'before',
     fixed: 'md',
     tooltip: 'setting.M2P_HINT',
+  },
+  expressionProperties: {
+    'templateOptions.disabled': '!formState.permissions.isSyslogAuthorized',
   },
   hooks: {
     onInit: field => {
@@ -253,7 +280,7 @@ export const M2PDurationField = {
   hooks: {
     onInit: field => {
       const ctrl = field.parent.formControl.get('mode_auto_m2p');
-      field.templateOptions.disabled = !ctrl.value;
+      field.templateOptions.disabled = !ctrl.value || ctrl.disabled;
       ctrl.valueChanges.subscribe(isEnabled => {
         if (isEnabled && !field.formControl.value) {
           field.formControl.setValue(1);
@@ -274,6 +301,9 @@ export const ClusterNameField = {
     label: 'setting.CLUSTER_NAME',
     maxLength: 1000,
   },
+  expressionProperties: {
+    'templateOptions.disabled': '!formState.permissions.isClusterAuthorized',
+  },
 };
 
 export const DurationToggleField = {
@@ -282,6 +312,9 @@ export const DurationToggleField = {
   templateOptions: {
     label: 'audit.gridHeader.DURATION',
     labelPosition: 'before',
+  },
+  expressionProperties: {
+    'templateOptions.disabled': '!formState.permissions.isSyslogAuthorized',
   },
   hooks: {
     onInit: field => {
@@ -310,7 +343,8 @@ export const DurationSliderField = {
   hooks: {
     onInit: field => {
       const ctrl = field.parent.formControl.get('duration_toggle');
-      field.templateOptions.disabled = !field.formControl.value;
+      field.templateOptions.disabled =
+        !field.formControl.value || field.formControl.disabled;
       ctrl.valueChanges.subscribe(isEnabled => {
         field.templateOptions.onChangeDisabled(!isEnabled);
       });
@@ -327,6 +361,10 @@ export const XFFToggleField = {
   templateOptions: {
     ariaLabelledBy: 'setting.XFF_MATCH',
   },
+  expressionProperties: {
+    'templateOptions.disabled':
+      '!formState.permissions.isRegHttpProxyAuthorized',
+  },
 };
 
 export const TelemetryToggleBoolField = {
@@ -338,6 +376,9 @@ export const TelemetryToggleBoolField = {
   hooks: {
     onInit: field => {
       const ctrl = field.formControl;
+      if (!field.options.formState.permissions.isSyslogAuthorized) {
+        ctrl.disable();
+      }
       ctrl.setValue(!field.model['no_telemetry_report']);
       ctrl.valueChanges.subscribe((x: boolean) => {
         const formCtrl = field.parent.formControl.get('no_telemetry_report');

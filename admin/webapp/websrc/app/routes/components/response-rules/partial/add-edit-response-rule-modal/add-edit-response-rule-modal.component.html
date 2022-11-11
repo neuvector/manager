@@ -1,8 +1,6 @@
 <div class="nv-dialog ">
-  <div
-    class="d-flex justify-content-between align-items-center"
-    style="background-color: #30ba78">
-    <h4 class="mb-0">
+  <div class="d-flex justify-content-between align-items-center">
+    <h4 mat-dialog-title>
       {{
         (type === 'add' ? 'policy.addPolicy.TITLE' : 'policy.editPolicy.TITLE')
           | translate
@@ -12,9 +10,9 @@
       <i class="eos-icons">close</i>
     </button>
   </div>
-
+  <hr class="fancy" />
   <div mat-dialog-content class="dialog-content p0 m0">
-    <form class="pt-2">
+    <form >
       <div class="d-flex justify-content-between align-items-center mt-2">
         <mat-form-field appearance="fill" class=" mr-4" *ngIf="type === 'edit'">
           <mat-label>{{

@@ -86,13 +86,13 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
       }
       let message = selectedRule.disable ?
       this.translate.instant(
-          "admissionControl.msg.ENABLE_CONFIRM_DEFAULT",
+          "admissionControl.msg.DISABLE_CONFIRM_DEFAULT",
           {
             namespace: namespace
           }
         )
         : this.translate.instant(
-          "admissionControl.msg.DISABLE_CONFIRM_DEFAULT",
+          "admissionControl.msg.ENABLE_CONFIRM_DEFAULT",
           {
             namespace: namespace
           }

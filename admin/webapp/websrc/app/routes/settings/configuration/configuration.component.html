@@ -13,11 +13,11 @@
       (refreshConfig)="refreshConfig()"></app-config-form>
   </mat-card>
   <br />
-  <mat-card>
+  <mat-card *ngIf="isConfigAuthorized || isImportAuthorized">
     <app-export-form></app-export-form>
   </mat-card>
   <br />
-  <mat-card>
+  <mat-card *ngIf="isConfigAuthorized">
     <app-support-form [debug_enabled]="debug_enabled"></app-support-form>
   </mat-card>
 </ng-container>

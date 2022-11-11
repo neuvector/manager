@@ -3,10 +3,9 @@ import { Injectable } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import { GlobalVariable } from "@common/variables/global.variable";
 import { UtilsService } from "@common/utils/app.utils";
-import { GridOptions } from "ag-grid-community";
+import {GetRowIdParams, GridOptions} from "ag-grid-community";
 import * as $ from "jquery";
 import * as moment from "moment";
-import { map, share } from "rxjs/operators";
 import { PathConstant } from "@common/constants/path.constant";
 import { BytesPipe } from "@common/pipes/app.pipes";
 
@@ -49,11 +48,13 @@ export class SniffService {
       {
         headerName: this.translate.instant("network.gridHeader.FILE_SIZE"),
         field: "size",
-        cellRenderer: params => this.bytesPipe.transform(params.value),
+        valueFormatter: params => this.bytesPipe.transform(params.value),
+        cellClass: 'grid-right-align',
+        cellRenderer: 'agAnimateShowChangeCellRenderer',
         icons: {
           sortAscending: '<em class="fa fa-sort-numeric-asc"></em>',
-          sortDescending: '<em class="fa fa-sort-numeric-desc"></em>'
-        }
+          sortDescending: '<em class="fa fa-sort-numeric-desc"></em>',
+        },
       },
       {
         headerName: this.translate.instant("network.gridHeader.STOP_TIME"),
@@ -75,6 +76,9 @@ export class SniffService {
       sniffColumns,
       this.$win
     );
+    this._snifferGridOptions.getRowId = (params: GetRowIdParams) => {
+      return params.data.id;
+    };
   };
 
   getSniffers = (containerId: string) =>

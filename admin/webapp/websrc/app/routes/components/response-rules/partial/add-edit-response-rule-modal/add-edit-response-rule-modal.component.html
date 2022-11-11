@@ -1,38 +1,27 @@
-<div class="nv-dialog">
-  <div mat-dialog-title class="dialog-header">
-    <div class="pull-left">
+<div class="nv-dialog ">
+  <div class="d-flex justify-content-between align-items-center">
+    <h4 mat-dialog-title>
       {{
         (type === 'add' ? 'policy.addPolicy.TITLE' : 'policy.editPolicy.TITLE')
           | translate
       }}
-    </div>
-    <div class="pull-right">
-      <em class="icon-close hand" (click)="onCancel()"></em>
-    </div>
+    </h4>
+    <button (click)="onCancel()" aria-label="Close dialog" mat-icon-button>
+      <i class="eos-icons">close</i>
+    </button>
   </div>
+  <hr class="fancy" />
   <div mat-dialog-content class="dialog-content p0 m0">
-    <form
-      fxLayout="column"
-      fxLayoutAlign="start"
-      fxFlex="1 0 auto"
-      class="pt-lg">
-      <div
-        fxLayout="row"
-        fxLayoutAlign="start center"
-        fxFlex="1 0 auto"
-        class="pl-4">
-        <mat-form-field
-          appearance="outline"
-          fxFlex="15"
-          class="pr-4"
-          *ngIf="type === 'edit'">
+    <form >
+      <div class="d-flex justify-content-between align-items-center mt-2">
+        <mat-form-field appearance="fill" class=" mr-4" *ngIf="type === 'edit'">
           <mat-label>{{
             'responsePolicy.gridHeader.ID' | translate
           }}</mat-label>
           <input matInput name="id" [(ngModel)]="responseRule.id" disabled />
           <em matSuffix class="icon-tag input-icon"></em>
         </mat-form-field>
-        <mat-form-field appearance="outline" fxFlex="30" class="pr-4">
+        <mat-form-field appearance="fill" class="mr-4 flex-grow-1">
           <mat-select
             name="event"
             placeholder="{{ 'responsePolicy.gridHeader.TYPE' | translate }}*"
@@ -47,7 +36,7 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field appearance="outline" fxFlex="55" class="pr-4">
+        <mat-form-field appearance="fill" class="mr-4 flex-grow-1">
           <mat-label>{{
             'responsePolicy.gridHeader.GROUP' | translate
           }}</mat-label>
@@ -68,20 +57,12 @@
           <em matSuffix class="icon-grid input-icon"></em>
         </mat-form-field>
       </div>
-      <div
-        fxLayout="row"
-        fxLayoutAlign="start center"
-        fxFlex="1 0 auto"
-        class="pl-4 help-block">
+      <div class="pl-4 text-muted">
         {{ 'responsePolicy.dialog.content.HINT' | translate
         }}{{ conditionPatternSample }}
       </div>
-      <div
-        fxLayout="row"
-        fxLayoutAlign="start center"
-        fxFlex="1 0 auto"
-        class="pl-4">
-        <mat-form-field appearance="outline" fxFlex="100" class="pr-4">
+      <div class="d-flex justify-content-start align-items-start">
+        <mat-form-field appearance="fill" class="flex-grow-1">
           <mat-chip-list #chipList aria-label="Criteria selection">
             <mat-chip
               *ngFor="let criterion of responseRule.criteria"
@@ -120,13 +101,9 @@
           <mat-error *ngIf="!isValidCriteria">Invalid criterion</mat-error>
         </mat-form-field>
       </div>
-      <div
-        fxLayout="row"
-        fxLayoutAlign="start center"
-        fxFlex="1 0 auto"
-        class="pl-4">
-        <div fxFlex="100" class="pr-4">
-          <label class="nv-modal-item-title control-label mr-lg"
+      <div class="d-flex justify-content-start align-items-start">
+        <div class="flex-grow-1">
+          <label class="nv-modal-item-title control-label mr-4"
             >{{ 'responsePolicy.gridHeader.ACTION' | translate }}*</label
           >
           <mat-checkbox
@@ -134,7 +111,7 @@
             *ngFor="let action of actions; let i = index"
             [attr.data-index]="i"
             [(ngModel)]="responseRule.actions[i]"
-            class="example-ripple-checkbox mr"
+            class="example-ripple-checkbox mr-2"
             (change)="onActionsSelected(responseRule.actions)"
             >{{
               'responsePolicy.actions.' + action.toUpperCase() | translate
@@ -143,29 +120,24 @@
         </div>
       </div>
       <div
-        fxLayout="row"
-        fxLayoutAlign="start center"
-        fxFlex="1 0 auto"
-        class="pl-4"
+        class="d-flex justify-content-start align-items-start"
         *ngIf="isWebhookSelected && webhookOptions.length > 0">
-        <label class="nv-modal-item-title control-label"
-          >{{ 'setting.WEBHOOKS' | translate }}
-        </label>
-        <mat-checkbox
-          *ngFor="let webhook of webhookOptions; let i = index"
-          [attr.data-index]="i"
-          [(ngModel)]="responseRule.webhooks[i]"
-          [ngModelOptions]="{ standalone: true }"
-          >{{ webhook }}
-        </mat-checkbox>
+        <div class="flex-grow-1">
+          <label class="nv-modal-item-title control-label mr-4"
+            >{{ 'setting.WEBHOOKS' | translate }}
+          </label>
+          <mat-checkbox
+            *ngFor="let webhook of webhookOptions; let i = index"
+            [attr.data-index]="i"
+            [(ngModel)]="responseRule.webhooks[i]"
+            [ngModelOptions]="{ standalone: true }"
+            >{{ webhook }}
+          </mat-checkbox>
+        </div>
       </div>
-      <div
-        fxLayout="row"
-        fxLayoutAlign="start center"
-        fxFlex="1 0 auto"
-        class="pl-4">
-        <div fxFlex="100" class="pr-4">
-          <label class="nv-modal-item-title control-label mr-lg"
+      <div class="d-flex justify-content-start align-items-start">
+        <div class="flex-grow-1">
+          <label class="nv-modal-item-title control-label mr-4"
             >{{ 'responsePolicy.gridHeader.STATUS' | translate }}*</label
           >
           <mat-slide-toggle
@@ -189,16 +161,14 @@
       </div>
     </form>
   </div>
-  <div
-    mat-dialog-actions
-    class="dialog-actions pull-right"
-    style="margin-right: 24px">
-    <a class="modal-cancel-button" (click)="onCancel()">
+  <div mat-dialog-actions class="d-flex justify-content-end align-items-center">
+    <button mat-stroked-button aria-label="cancel" (click)="onCancel()">
       {{ 'policy.addPolicy.CANCEL' | translate }}
-    </a>
+    </button>
     <button
-      mat-button
-      class="modal-submit-button"
+      mat-raised-button
+      aria-label="add rule"
+      color="primary"
       [disabled]="
         !responseRule.actions[0] &&
         !responseRule.actions[1] &&

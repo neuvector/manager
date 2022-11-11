@@ -1622,6 +1622,7 @@ export class NetworkActivitiesComponent
         this.group = response;
       },
       error => {
+        //Todo error handling.
         console.warn(error);
       }
     );
@@ -1654,12 +1655,12 @@ export class NetworkActivitiesComponent
       if (
         !this.container ||
         !this.container.scrollWidth ||
-        !this.container.scrollHeight
+        !this.container.clientHeight
       )
         return;
       this.graph.changeSize(
-        this.container.scrollWidth,
-        this.container.scrollHeight
+        this.w.innerWidth - this.SIDE_BAR - this.PADDING,
+        this.w.innerHeight - this.TOP_BAR - this.PADDING
       );
       this.graph.fitView();
     });
@@ -2200,7 +2201,7 @@ export class NetworkActivitiesComponent
   }
 
   private getGridHeight(items: Array<any>): number {
-    let result: number = 0;
+    let result: number;
 
     if (items.length <= 2) result = 30 + 29 * 2;
     else if (items.length < 5) result = 30 + 29 * items.length;
@@ -2232,7 +2233,7 @@ export class NetworkActivitiesComponent
   refreshTimer$;
 
   private getLiveSession() {
-    this.refreshTimer$ = interval(3000);
+    this.refreshTimer$ = interval(15000);
     this.subscription = this.refreshTimer$.subscribe(
       this.getCurrentSession.bind(this)
     );
@@ -2259,7 +2260,7 @@ export class NetworkActivitiesComponent
     const id: string = item.getModel().id;
 
     this.graphService.quarantine(id, toQuarantine).subscribe(
-      response => {
+      () => {
         setTimeout(() => {
           const model = item.getModel();
           if (toQuarantine) {

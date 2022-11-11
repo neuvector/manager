@@ -1,5 +1,9 @@
 import { FormlyFieldConfig } from '@ngx-formly/core';
-import { FilterField, Registries } from './constants/constants';
+import {
+  FedRegistryHideExpr,
+  FilterField,
+  Registries,
+} from './constants/constants';
 import { AmazonEcrRegistryConfig } from './configs/amazon-ecr-registry.config';
 import { AzureRegistryConfig } from './configs/azure-container-registry.config';
 import { DockerRegistryConfig } from './configs/docker-registry.config';
@@ -32,7 +36,9 @@ export const AddRegistryFieldConfig: FormlyFieldConfig[] = [
             .map(key => {
               return { value: Registries[key], viewValue: Registries[key] };
             })
-            .sort((a, b) => (a.value > b.value ? 1 : b.value > a.value ? -1 : 0)),
+            .sort((a, b) =>
+              a.value > b.value ? 1 : b.value > a.value ? -1 : 0
+            ),
         },
         expressionProperties: {
           'templateOptions.disabled': 'model.isEdit',
@@ -46,12 +52,14 @@ export const AddRegistryFieldConfig: FormlyFieldConfig[] = [
         templateOptions: {
           label: 'registry.FOR_FED',
         },
+        hideExpression: FedRegistryHideExpr,
         expressionProperties: {
           'templateOptions.disabled': 'model.isEdit',
-          'model.name': 'model.isEdit ? model.name : (model.isFed ? \'fed.\' : null)',
+          'model.name':
+            "model.isEdit ? model.name : (model.isFed ? 'fed.' : null)",
         },
-      }
-    ]
+      },
+    ],
   },
   {
     hideExpression: `model.registry_type !== "${Registries.AMAZON_ECR_REGISTRY}"`,

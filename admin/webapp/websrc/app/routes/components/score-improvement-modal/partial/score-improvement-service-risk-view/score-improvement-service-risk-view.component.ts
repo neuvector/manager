@@ -39,7 +39,7 @@ export class ScoreImprovementServiceRiskViewComponent implements OnInit {
 
   getServiceMode() {
     this.settingsService.getConfig().subscribe(config => {
-      this.newServiceMode = config.new_service_policy_mode;
+      this.newServiceMode = config.new_svc.new_service_policy_mode;
     });
   }
 

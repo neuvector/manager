@@ -89,9 +89,9 @@ export class ResponseRulesComponent implements OnInit {
           this.filteredCount = this.responseRulesService.responseRules.length;
           this.gridHeight =
             this.source === GlobalConstant.NAV_SOURCE.SELF
-              ? this.w.innerHeight - 180
+              ? this.w.innerHeight - 180 - 70
               : this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-              ? this.w.innerHeight - 228
+              ? this.w.innerHeight - 238
               : 0;
         },
         err => {
@@ -134,7 +134,7 @@ export class ResponseRulesComponent implements OnInit {
         autoCompleteData: autoCompleteData,
         type: 'add'
       },
-      disableClose: true,
+      disableClose: true, width: "70vw"
     });
     addDialogRef.afterClosed().subscribe(result => {
       setTimeout(() => {

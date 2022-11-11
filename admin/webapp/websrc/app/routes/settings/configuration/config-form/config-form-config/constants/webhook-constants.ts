@@ -20,6 +20,9 @@ export const WebhookTableField = {
     cellHeight: '75px',
     addButtonText: 'setting.webhook.NEW',
   },
+  expressionProperties: {
+    'templateOptions.disabled': '!formState.permissions.isWebhookAuthorized',
+  },
   fieldArray: {
     validators: {
       validation: [
@@ -139,8 +142,11 @@ export const WebhookTableField = {
           flexWidth: '20%',
         },
         expressionProperties: {
-          'templateOptions.disabled': model => {
-            return model.cfg_type === GlobalConstant.CFG_TYPE.FED;
+          'templateOptions.disabled': (model, formState, _field) => {
+            return (
+              !formState.permissions.isWebhookAuthorized ||
+              model.cfg_type === GlobalConstant.CFG_TYPE.FED
+            );
           },
         },
       },

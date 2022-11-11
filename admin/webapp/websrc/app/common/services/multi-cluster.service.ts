@@ -120,7 +120,6 @@ export class MultiClusterService {
       },
       use_proxy: useProxy
     };
-    console.log(payload);
     return this.http.post(PathConstant.FED_JOIN_URL, payload).pipe();
   };
 
@@ -144,7 +143,6 @@ export class MultiClusterService {
   };
 
   switchCluster = (selectedID, currentID) => {
-    console.log("service switch:",selectedID,currentID);
     if(selectedID.length > 0 ){
       return this.http.get(PathConstant.FED_REDIRECT_URL, {params: {id: selectedID}}).pipe();
     } else {

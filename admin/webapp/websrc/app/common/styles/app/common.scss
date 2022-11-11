@@ -265,6 +265,7 @@ hr.fancy {
     #59d941,
     #f0f0f0
   );
+  margin: 0 0 20px 0
 }
 
 #multi-clusters-grid .ag-row,
@@ -291,6 +292,22 @@ hr.fancy {
     }
     background-color: $neuvector-light-green-50;
   }
+}
+
+.grid-space-evenly {
+  justify-content: space-evenly;
+}
+
+.grid-center-align {
+  justify-content: center;
+}
+
+.grid-center-header {
+  text-align: center;
+}
+
+.grid-right-align {
+  text-align: right;
 }
 
 .wrap-word-in-cell {
@@ -1037,10 +1054,7 @@ mwl-gauge.score > .gauge > .value {
   padding: 10px;
   animation: 0.4s zoomInUp ease;
   border-radius: 5px;
-  //background-color: rgba(255, 255, 255, 0.37);
   box-shadow: 0 0 10px 0 $neuvector-grey-200;
-  //border: solid 2px $neuvector-light-green-300;
-  //backdrop-filter: blur(15px) saturate(100%);
 }
 
 .g6-component-contextmenu {
@@ -1088,12 +1102,18 @@ mwl-gauge.score > .gauge > .value {
   padding: 10px;
   left: 20px;
   top: 72px;
-  //overflow-y: scroll;
   width: calc(100% - 40px);
   @media screen and (min-width: 1200px) {
-    width: 900px;
+    width: calc(100% - 140px);
   }
   max-height: 650px;
+}
+
+.mediumBox {
+  width: calc(100% - 40px);
+  @media screen and (min-width: 1200px) {
+    width: 800px;
+  }
 }
 
 .resizable {
@@ -1324,4 +1344,8 @@ mwl-gauge.score > .gauge > .value {
   padding: 15px;
   max-width: none !important;
   background-color: $neuvector-mid-green-50 !important;
+}
+
+.docURLBase a:hover{
+  text-decoration: none;
 }

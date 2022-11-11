@@ -280,6 +280,31 @@ class DeviceService()(implicit executionContext: ExecutionContext)
           }
         } ~
         path("config-v2") {
+          get {
+            Utils.respondWithNoCacheControl() {
+              parameter('scope.?) { scope =>
+                complete {
+                  scope.fold {
+                    logger.info("Get config")
+                    RestClient.httpRequestWithHeader(
+                      s"${baseClusterUriV2(tokenId)}/system/config",
+                      GET,
+                      "",
+                      tokenId
+                    )
+                  } { scope =>
+                    logger.info("Get fed config")
+                    RestClient.httpRequestWithHeader(
+                      s"${baseClusterUriV2(tokenId)}/system/config?scope=$scope",
+                      GET,
+                      "",
+                      tokenId
+                    )
+                  }
+                }
+              }
+            }
+          } ~
           patch {
             entity(as[SystemConfigWrap]) { systemConfigWrap =>
               parameter('scope.?) { scope =>

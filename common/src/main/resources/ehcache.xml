@@ -40,5 +40,13 @@
            diskPersistent="true"
            memoryStoreEvictionPolicy="LFU">
     </cache>
+    <cache name="supportLogAuthCache"
+           maxEntriesLocalHeap="10"
+           maxEntriesLocalDisk="100"
+           diskSpoolBufferSizeMB="2"
+           overflowToDisk="true"
+           diskPersistent="true"
+           memoryStoreEvictionPolicy="LFU">
+    </cache>
 
 </ehcache>

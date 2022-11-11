@@ -21,7 +21,6 @@ import { GridApi, GridReadyEvent } from 'ag-grid-community';
 import { BehaviorSubject } from 'rxjs';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { SecurityEventsService } from '@services/security-events.service';
-import { NetworkRule } from '@common/types';
 import { MapConstant } from '@common/constants/map.constant';
 import { NotificationService } from '@services/notification.service';
 import { UtilsService } from '@common/utils/app.utils';
@@ -254,14 +253,6 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
             );
           }
         );
-    }
-  }
-
-  mouseUp(event) {
-    if (event.target?.id == 'conversationHistory') {
-      this._entriesGridHeight = event.target.clientHeight - 190;
-      this.gridOptions.api.resetRowHeights();
-      this.gridOptions.api.sizeColumnsToFit();
     }
   }
 

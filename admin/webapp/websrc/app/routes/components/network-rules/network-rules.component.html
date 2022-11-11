@@ -7,36 +7,41 @@
   </app-network-rules-printable-report>
   <div class="screen-area">
     <div
-      class="clearfix"
-      style="height: 40px"
-      *ngIf="source !== navSource['GROUP'] && source !== navSource['FED_POLICY']">
-      <div
-        class="pull-right margin-top-s margin-left-xl"
-        *ngIf="(eof || networkRuleErr) && !isNetworkRuleDirty()"
-        (click)="refresh()">
-        <em class="eos-icons icon-18 text-action hand " aria-hidden="true">refresh</em>
-        <label class="text-gray-label hand">{{
-          'general.REFRESH' | translate
-        }}</label>
-      </div>
-      <button
-        *ngIf="eof && networkRules.length > 0 && !isNetworkRuleDirty()"
-        class="pull-right"
-        mat-button
-        (click)="exportCsv()">
-        <em class="eos-icons icon-18">csv_file</em>
-      </button>
-      <button
-        *ngIf="eof && networkRules.length > 0 && !isNetworkRuleDirty()"
-        class="pull-right"
-        mat-button
-        (click)="print()">
-        <em class="eos-icons icon-18">print</em>
-      </button>
-      <div class="clearfix">
-        <h1 class="font-weight-light" id="events-title">
-          {{ 'policy.head.TITLE' | translate }}
-        </h1>
+      class="d-flex justify-content-between align-items-center"
+      *ngIf="
+        source !== navSource['GROUP'] && source !== navSource['FED_POLICY']
+      ">
+      <h1 class="font-weight-light" id="networkRulesTitle">
+        {{ 'policy.head.TITLE' | translate }}
+      </h1>
+
+      <div class="d-flex justify-content-end align-items-center">
+        <button
+          *ngIf="eof && networkRules.length > 0 && !isNetworkRuleDirty()"
+          class=""
+          mat-button
+          (click)="print()">
+          <em class="eos-icons icon-18">print</em>
+        </button>
+        <button
+          *ngIf="eof && networkRules.length > 0 && !isNetworkRuleDirty()"
+          class=""
+          mat-button
+          (click)="exportCsv()">
+          <em class="eos-icons icon-18">csv_file</em>
+        </button>
+        <ng-container *ngIf="(eof || networkRuleErr) && !isNetworkRuleDirty()">
+          <app-loading-button
+            (btnClick)="refresh()"
+            [appearance]="'mat-button'"
+            [buttonClasses]="'d-flex justify-content-center align-items-center'"
+            [iconClasses]="'eos-icons icon-18'"
+            [iconName]="'refresh'"
+            [id]="'networkRules-refresh-button'"
+            [text]="'network.REFRESH' | translate"
+            [type]="'button'">
+          </app-loading-button>
+        </ng-container>
       </div>
     </div>
     <div
@@ -46,85 +51,117 @@
       }">
       <div [ngClass]="{ 'panel-body': source === navSource['SELF'] }">
         <div style="height: 71px" *ngIf="source !== navSource['GROUP']">
-          <div class="clearfix">
-            <button
-              class="pull-left margin-top-l primary-button"
-              *appDisplayControl="'write_network_rule'"
-              (click)="addNetworkRuleToTop()">
-              <em class="eos-icons icon-18">add</em>
-              {{ 'policy.toolBar.INSERT_TO_TOP' | translate }}
-            </button>
-            <button
-              *ngIf="selectedNetworkRules.length > 0 && isWriteGlobalRulesAuthorized && !isIncludingCRD && !isIncludingFed"
-              class="pull-left margin-top-l margin-left-m primary-button"
-              (click)="removeNetworkRules()">
-              <em class="eos-icons icon-18">delete</em>
-              {{ 'policy.toolBar.REMOVE' | translate }}
-            </button>
-            <button
-              *ngIf="selectedNetworkRules.length > 0 && isWriteGlobalRulesAuthorized && !isIncludingCRD && !isIncludingFed"
-              class="pull-left margin-top-l margin-left-m primary-button"
-              (click)="openMoveNetworkRulesModal()">
-              <em class="eos-icons icon-18">move</em>
-              {{ 'policy.toolBar.MOVE_TO' | translate }}
-            </button>
-            <button
-              *ngIf="
-                selectedNetworkRules.length > 0 && !containsUnpromotableEndpoint && isWriteGlobalRulesAuthorized && source !== navSource['FED_POLICY'] && !isIncludingFed
-              "
-              class="pull-left margin-top-l margin-left-m primary-button"
-              (click)="promoteRuleOnTop()">
-              <em class="eos-icons icon-18">navigation</em>
-              {{ 'policy.PROMOTE' | translate }}
-            </button>
-            <div
-              class="pull-right margin-top-l"
-              *ngIf="(eof || networkRuleErr) && !isNetworkRuleDirty() && source === navSource['FED_POLICY']"
-              (click)="refresh()">
-              <em class="fa fa-refresh text-action hand"></em>
-              <label class="text-gray-label hand">{{
-                'general.REFRESH' | translate
-              }}</label>
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-start align-items-center">
+              <button
+                class="mr-2"
+                mat-stroked-button
+                *appDisplayControl="'write_network_rule'"
+                (click)="addNetworkRuleToTop()">
+                <em class="eos-icons icon-18">add</em>
+                {{ 'policy.toolBar.INSERT_TO_TOP' | translate }}
+              </button>
+              <button
+                *ngIf="
+                  selectedNetworkRules.length > 0 &&
+                  isWriteGlobalRulesAuthorized &&
+                  !isIncludingCRD &&
+                  !isIncludingFed
+                "
+                class="mr-2"
+                mat-stroked-button
+                (click)="removeNetworkRules()">
+                <em class="eos-icons icon-18">delete</em>
+                {{ 'policy.toolBar.REMOVE' | translate }}
+              </button>
+              <button
+                *ngIf="
+                  selectedNetworkRules.length > 0 &&
+                  isWriteGlobalRulesAuthorized &&
+                  !isIncludingCRD &&
+                  !isIncludingFed
+                "
+                class="mr-2"
+                mat-stroked-button
+                (click)="openMoveNetworkRulesModal()">
+                <em class="eos-icons icon-18">move</em>
+                {{ 'policy.toolBar.MOVE_TO' | translate }}
+              </button>
+              <button
+                *ngIf="
+                  selectedNetworkRules.length > 0 &&
+                  !containsUnpromotableEndpoint &&
+                  isWriteGlobalRulesAuthorized &&
+                  source !== navSource['FED_POLICY'] &&
+                  !isIncludingFed
+                "
+                mat-stroked-button
+                (click)="promoteRuleOnTop()">
+                <em class="eos-icons icon-18">navigation</em>
+                {{ 'policy.PROMOTE' | translate }}
+              </button>
             </div>
-            <app-quick-filter
-              *ngIf="filteredCount > 1"
-              class="pull-right"
-              [gridOptions]="gridOptions"
-              [filteredCount]="filteredCount"
-              [count]="networkRules.length">
-            </app-quick-filter>
-            <button
-              *ngIf="isNetworkRuleDirty() && isWriteGlobalRulesAuthorized"
-              class="pull-right margin-top-l margin-right-m save-button"
-              (click)="submit()">
-              <em class="eos-icons icon-18">save</em>
-              {{ 'policy.toolBar.SAVE' | translate }}
-            </button>
-            <button
-              *ngIf="isNetworkRuleDirty() && isWriteGlobalRulesAuthorized"
-              class="pull-right margin-top-l margin-right-m"
-              (click)="refresh()">
-              <em class="eos-icons icon-18">replay</em>
-              {{ 'policy.toolBar.UNDO' | translate }}
-            </button>
+            <div class="d-flex justify-content-end align-items-center">
+              <button
+                *ngIf="isNetworkRuleDirty() && isWriteGlobalRulesAuthorized"
+                class="mr-2"
+                mat-stroked-button
+                (click)="refresh()">
+                <em class="eos-icons icon-18">replay</em>
+                {{ 'policy.toolBar.UNDO' | translate }}
+              </button>
+              <button
+                *ngIf="isNetworkRuleDirty() && isWriteGlobalRulesAuthorized"
+                class="mr-3"
+                mat-raised-button
+                color="primary"
+                (click)="submit()">
+                <em class="eos-icons icon-18">save</em>
+                {{ 'policy.toolBar.SAVE' | translate }}
+              </button>
+              <app-quick-filter
+                *ngIf="filteredCount > 1"
+                class="pull-right"
+                [gridOptions]="gridOptions"
+                [filteredCount]="filteredCount"
+                [count]="networkRules.length">
+              </app-quick-filter>
+              <ng-container
+                *ngIf="
+                  (eof || networkRuleErr) &&
+                  !isNetworkRuleDirty() &&
+                  source === navSource['FED_POLICY']
+                ">
+                <app-loading-button
+                  (btnClick)="refresh()"
+                  [appearance]="'mat-button'"
+                  [buttonClasses]="
+                    'd-flex justify-content-center align-items-center'
+                  "
+                  [iconClasses]="'eos-icons icon-18'"
+                  [iconName]="'refresh'"
+                  [id]="'networkRules-refresh-button'"
+                  [text]="'network.REFRESH' | translate"
+                  [type]="'button'">
+                </app-loading-button>
+              </ng-container>
+            </div>
           </div>
         </div>
-        <div class="clearfix">
-          <ag-grid-angular
-            #networkRuleGrid
-            id="policy-grid"
-            style="width: 100%"
-            [ngStyle]="{
-              height:
-                (source === navSource['GROUP']
-                  ? resizableHeight - 85
-                  : gridHeight) + 'px'
-            }"
-            class="ag-theme-balham"
-            [gridOptions]="gridOptions"
-            [context]="context">
-          </ag-grid-angular>
-        </div>
+
+        <ag-grid-angular
+          id="policy-grid"
+          style="width: 100%"
+          [ngStyle]="{
+            height:
+              (source === navSource['GROUP']
+                ? resizableHeight - 85
+                : gridHeight) + 'px'
+          }"
+          class="ag-theme-balham"
+          [gridOptions]="gridOptions"
+          [context]="context">
+        </ag-grid-angular>
       </div>
     </div>
   </div>
@@ -132,7 +169,6 @@
 <ng-template #scoreImprovement>
   <div class="mt-2">
     <ag-grid-angular
-      #networkRuleGrid
       [ngStyle]="{ height: resizableHeight + 'px' }"
       [gridOptions]="gridOptions"
       [context]="context"

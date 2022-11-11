@@ -2,11 +2,9 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
-  EventEmitter,
   Input,
   OnDestroy,
   OnInit,
-  Output,
   ViewChild,
 } from '@angular/core';
 import { GraphService } from '../graph.service';
@@ -191,7 +189,10 @@ export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
       snifferParam.duration = this.pcap.seconds;
 
     this.sniffService.startSniff(containerId, snifferParam).subscribe(
-      () => this.pullSniffers(),
+      () => {
+        this.refreshSniffer();
+        this.pullSniffers();
+      },
       err => {
         this.onSnifferErr = true;
         this.snifferErrMsg = this.utils.getErrorMessage(err);
@@ -199,7 +200,7 @@ export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
     );
   };
 
-  toggleSchedule = event => {
+  toggleSchedule = () => {
     if (!this.disabled) this.pcap.seconds = 0;
     this.pcap.options = Object.assign({}, this.pcap.options, {
       disabled: !this.disabled,
@@ -272,7 +273,7 @@ export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
   };
 
   pullSniffers() {
-    this.snifferRefreshTimer$ = interval(5000);
+    this.snifferRefreshTimer$ = interval(15000);
     this.snifferSubscription = this.snifferRefreshTimer$.subscribe(
       this.refreshSniffer.bind(this)
     );
@@ -280,7 +281,7 @@ export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
 
   mouseUp(event) {
     if (event.target?.id == 'sniffer') {
-      this._entriesGridHeight = event.target.clientHeight - 170;
+      this._entriesGridHeight = event.target.clientHeight - 190;
       this.gridOptions.api.resetRowHeights();
       this.gridOptions.api.sizeColumnsToFit();
     }

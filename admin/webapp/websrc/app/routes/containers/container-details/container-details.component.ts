@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   Input,
+  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -43,7 +44,7 @@ export const containerDetailsTabs = {
   templateUrl: './container-details.component.html',
   styleUrls: ['./container-details.component.scss'],
 })
-export class ContainerDetailsComponent implements OnInit {
+export class ContainerDetailsComponent implements OnInit, OnDestroy {
   private _container!: WorkloadRow;
   @Input() gridHeight!: number;
   @Input() set container(value: WorkloadRow) {
@@ -127,6 +128,10 @@ export class ContainerDetailsComponent implements OnInit {
     this.isVulsAuthorized = this.authUtils.getDisplayFlag('vuls_profile');
     this.isWriteVulsAuthorized =
       this.authUtils.getDisplayFlag('write_vuls_profile');
+  }
+
+  ngOnDestroy(): void {
+    this.clearStatsSub();
   }
 
   loadCompliance(container: WorkloadRow) {

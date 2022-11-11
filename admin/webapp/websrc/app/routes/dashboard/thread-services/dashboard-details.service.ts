@@ -6,7 +6,7 @@ import { GlobalConstant } from '@common/constants/global.constant';
 export class DashboardDetailsService {
 
   private worker;
-  isAutoScanOn: boolean;
+  isAutoScanOn: boolean = false;
   highPriorityVulnerabilities: any;
   containers: any;
   services: any;
@@ -15,10 +15,7 @@ export class DashboardDetailsService {
   constructor() {}
 
   runWorker() {
-    if (this.worker) {
-      this.worker.terminate();
-      console.info('killed an existing running worker (dashboard-details)...');
-    }
+    if (this.worker) this.worker.terminate();
     this.createWorker();
   }
 
@@ -29,7 +26,6 @@ export class DashboardDetailsService {
       );
     }
     if (this.worker) {
-      console.log('Post message to worker (dashboard-details)');
       this.isAutoScanOn = false;
       this.highPriorityVulnerabilities = null;
       this.containers = null;
@@ -44,7 +40,6 @@ export class DashboardDetailsService {
         })
       );
       this.worker.onmessage = (message) => {
-        console.log('message =', message);
         this.isAutoScanOn = message.data.autoScanConfig;
         this.highPriorityVulnerabilities = message.data.highPriorityVulnerabilities;
         this.containers = message.data.containers;

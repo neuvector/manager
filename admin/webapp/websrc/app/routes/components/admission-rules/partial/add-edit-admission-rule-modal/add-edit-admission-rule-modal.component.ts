@@ -301,7 +301,6 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
       if (!this.criteriaOptions[criterion.value.name]) { //For customized criterion
         criterion.value.type = GlobalConstant.ADMISSION.CRITERION_TYPE.CUSTOM_PATH;
         criterion.value.template_kind = this.data.opType === GlobalConstant.MODAL_OP.ADD ? this.podTemplateData.kind : criterion.value.template_kind;
-        criterion.value.path = criterion.value.name;
         criterion.value.value_type = getValueType4Text(criterion.value.value);
         criterion.value.name = '';
       }

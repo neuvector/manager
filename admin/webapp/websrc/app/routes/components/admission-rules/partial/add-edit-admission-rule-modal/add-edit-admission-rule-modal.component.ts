@@ -145,6 +145,10 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     this.initCustomizedCriterionView();
     this.mainCriterion.op = '';
     this.mainCriterion.value = '';
+    setTimeout(() => {
+      let jsonEditorNavEl = document.getElementsByClassName('jsoneditor-navigation-bar')[0] as HTMLElement;
+      jsonEditorNavEl.style.height = "0";
+    });
   };
 
   onCustomizedViewCancel = () => {

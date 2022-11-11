@@ -63,7 +63,7 @@ export interface WorkloadRtAttributesV2 {
   network_mode?: string;
   pod_name: string;
   ports?: WorkloadPorts[];
-  priviledged: boolean;
+  privileged: boolean;
   run_as_root: boolean;
   service_account?: string;
 }

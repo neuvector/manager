@@ -1,4 +1,5 @@
-<div class="d-flex flex-row align-items-center justify-content-between">
+<div class="d-flex flex-row align-items-center justify-content-between"
+     *ngIf="source === navSource['SELF']">
   <div class="d-flex">
     <h1 class="font-weight-light" id="response rules title">
       {{ 'responsePolicy.head.TITLE' | translate }}</h1>

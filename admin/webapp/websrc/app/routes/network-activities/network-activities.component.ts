@@ -1622,6 +1622,7 @@ export class NetworkActivitiesComponent
         this.group = response;
       },
       error => {
+        //Todo error handling.
         console.warn(error);
       }
     );

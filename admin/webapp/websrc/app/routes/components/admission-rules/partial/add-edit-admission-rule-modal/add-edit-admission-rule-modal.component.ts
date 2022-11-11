@@ -52,6 +52,8 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
   nodeValueType: string = '';
   customizedOps: Array<string> = [];
   customizedValues: Array<string> = [];
+  jsonEditorPrevBtnEl: HTMLElement;
+  jsonEditorNextBtnEl: HTMLElement;
 
   UNITS = {
     publishDays: ["Day(s)"],
@@ -145,15 +147,26 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     this.initCustomizedCriterionView();
     this.mainCriterion.op = '';
     this.mainCriterion.value = '';
+
     setTimeout(() => {
       let jsonEditorNavEl = document.getElementsByClassName('jsoneditor-navigation-bar')[0] as HTMLElement;
+      let jsonEditorContentInnerEl = document.getElementsByClassName('jsoneditor-tree-inner')[0] as HTMLElement;
+      this.jsonEditorPrevBtnEl = document.getElementsByClassName('jsoneditor-next')[0] as HTMLElement;
+      this.jsonEditorNextBtnEl = document.getElementsByClassName('jsoneditor-previous')[0] as HTMLElement;
+
       jsonEditorNavEl.style.height = "0";
+      jsonEditorContentInnerEl.style.height = "410px";
+      jsonEditorContentInnerEl.style.overflowY = "scroll";
+
+      this.jsonEditorPrevBtnEl.addEventListener('click', this.searchMove);
+      this.jsonEditorNextBtnEl.addEventListener('click', this.searchMove);
     });
   };
 
   onCustomizedViewCancel = () => {
     this.clearCustomizedCriterion();
     this.isMainView = true;
+    this.destoryListeners();
   };
 
   isCustomCriterionValid = (customCriterion) => {
@@ -173,6 +186,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
   addCustomizedCriteria = (customCriterion) => {
     this.addCriterionIntoChip(customCriterion);
     this.isMainView = true;
+    this.destoryListeners();
   };
 
   clickEditor = (event) => {
@@ -461,5 +475,20 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     console.log(optionsByValuetype);
     this.customizedValues = optionsByValuetype[valueType] ? optionsByValuetype[valueType][0].values || [] : [];
     this.customizedOps = optionsByValuetype[valueType] ? optionsByValuetype[valueType][0].ops || [] : [];
+  };
+
+  private searchMove = () => {
+    let prevHighlightedWordElArray = document.querySelectorAll('[tabindex="0"]');
+    prevHighlightedWordElArray.forEach(el => el.removeAttribute('tabindex'));
+    let jsonEditorHighlightedWordEl = document.getElementsByClassName('jsoneditor-highlight-active jsoneditor-highlight')[0] as HTMLElement;
+    jsonEditorHighlightedWordEl.setAttribute('tabindex', '0');
+    setTimeout(() => {
+      jsonEditorHighlightedWordEl.focus();
+    });
+  };
+
+  private destoryListeners = () => {
+    this.jsonEditorPrevBtnEl.removeEventListener('click', this.searchMove);
+    this.jsonEditorNextBtnEl.removeEventListener('click', this.searchMove);
   };
 }

@@ -1,15 +1,24 @@
 <div class="nv-dialog">
-  <div mat-dialog-title class="dialog-header">
-    <div class="pull-left">
+  <div class="d-flex justify-content-between align-items-center">
+    <h4 mat-dialog-title class="mb-2">
       {{
         (type === 'add' ? 'service.ADD_RULE' : 'service.EDIT_RULE') | translate
       }}
-      <span class="eos-icons icon-18" [matTooltip]="'group.file.RULE_SAMPLE' | translate">info</span>
-    </div>
-    <div class="pull-right">
-      <em class="icon-close hand" (click)="onCancel()"></em>
-    </div>
+      <span
+        class="eos-icons icon-18"
+        [matTooltip]="'group.file.RULE_SAMPLE' | translate"
+        >info</span
+      >
+    </h4>
+    <button
+      (click)="onCancel()"
+      class="mb-2"
+      aria-label="Close dialog"
+      mat-icon-button>
+      <i class="eos-icons">close</i>
+    </button>
   </div>
+  <hr class="fancy mb-2" />
   <div mat-dialog-content class="dialog-content p0 m0">
     <form [formGroup]="fileAccessRuleForm">
       <div class="d-flex justify-content-start align-items-start mt-2">
@@ -118,7 +127,11 @@
     <button mat-stroked-button class="modal-cancel-button" (click)="onCancel()">
       {{ 'group.editGroup.CANCEL' | translate }}
     </button>
-    <button mat-raised-button color="primary" (click)="addEditFileAccessRule()" [disabled]="fileAccessRuleForm.invalid">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="addEditFileAccessRule()"
+      [disabled]="fileAccessRuleForm.invalid">
       {{ 'policy.portlet.SUBMIT' | translate }}
     </button>
   </div>

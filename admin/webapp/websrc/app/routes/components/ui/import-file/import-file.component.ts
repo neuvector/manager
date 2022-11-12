@@ -24,10 +24,10 @@ export class ImportFileComponent implements OnInit, OnChanges {
   @Input() importUrl: string = '';
   @Input() isStandAlone?: boolean; //Only for system config file import
   @Input() alias: string = '';
-  uploader: FileUploader;
-  hasBaseDropZoneOver: boolean;
-  hasAnotherDropZoneOver: boolean;
-  response: string;
+  uploader!: FileUploader;
+  hasBaseDropZoneOver: boolean = false;
+  hasAnotherDropZoneOver: boolean = false;
+  response: string = "";
   percentage: number = 0;
   status: string = '';
   nvToken: string = '';

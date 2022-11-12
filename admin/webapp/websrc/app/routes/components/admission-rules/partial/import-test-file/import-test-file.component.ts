@@ -1,17 +1,18 @@
-import { Component, Inject, OnInit, SimpleChanges, Input, Output, EventEmitter } from '@angular/core';
 import {
-  FileSelectDirective,
-  FileDropDirective,
+  Component,
+  Inject,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+} from '@angular/core';
+import {
   FileUploader,
   FileItem,
 } from 'ng2-file-upload';
-import { PathConstant } from '@common/constants/path.constant';
-import { MapConstant } from '@common/constants/map.constant';
 import { GlobalConstant } from '@common/constants/global.constant';
-import { GlobalVariable } from '@common/variables/global.variable';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { TranslateService } from '@ngx-translate/core';
-import { HttpResponse } from '@angular/common/http';
 import { AdmissionConfigurationAssessment } from '@common/types/admission/admission';
 
 @Component({
@@ -24,10 +25,10 @@ export class ImportTestFileComponent implements OnInit {
   @Input() isStandAlone?: boolean; //Only for system config file import
   @Input() alias: string = "";
   @Output() getImportResult = new EventEmitter<AdmissionConfigurationAssessment>();
-  uploader: FileUploader;
-  hasBaseDropZoneOver: boolean;
-  hasAnotherDropZoneOver: boolean;
-  response: string;
+  uploader!: FileUploader;
+  hasBaseDropZoneOver: boolean = false;
+  hasAnotherDropZoneOver: boolean = false;
+  response: string = "";
   percentage: number = 0;
   status: string = "";
   nvToken: string = "";

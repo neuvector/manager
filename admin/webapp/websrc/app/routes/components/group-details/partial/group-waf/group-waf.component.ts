@@ -5,6 +5,7 @@ import { WafSetting } from '@common/types';
 import { MatDialog } from "@angular/material/dialog";
 import { GroupWafConfigModalComponent } from '@components/group-details/partial/group-waf-config-modal/group-waf-config-modal.component';
 import { AuthUtilsService } from '@common/utils/auth.utils';
+import { GlobalConstant } from '@common/constants/global.constant';
 
 @Component({
   selector: 'app-group-waf',
@@ -16,12 +17,14 @@ export class GroupWafComponent implements OnInit {
   @Input() source: string;
   @Input() groupName: string = '';
   @Input() resizableHeight: number;
+  @Input() cfgType: string;
   gridOptions4GroupWafSensors: GridOptions;
   groupWafSensors: Array<WafSetting> = [];
   filteredCount: number = 0;
   selectedSensor: WafSetting;
   enabled: boolean = false;
   isWriteWafAuthorized: boolean;
+  CFG_TYPE = GlobalConstant.CFG_TYPE;
 
   constructor(
     private groupsService: GroupsService,

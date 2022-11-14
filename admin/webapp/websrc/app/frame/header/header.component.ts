@@ -131,14 +131,11 @@ export class HeaderComponent implements OnInit {
   }
 
   getClusterName() {
-    this.multiClusterService
-      .getClusterName()
-      .pipe()
-      .subscribe({
-        next: (data: any) => {
-          this.clusterName = data.config.cluster_name;
-        },
-      });
+    this.multiClusterService.getClusterName().subscribe({
+      next: clusterName => {
+        this.clusterName = clusterName;
+      },
+    });
   }
   getClusters() {
     this.multiClusterService

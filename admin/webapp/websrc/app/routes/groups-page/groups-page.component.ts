@@ -8,7 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PathConstant } from '@common/constants/path.constant';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
-import { MultiClusterService } from "@services/multi-cluster.service";
+import { MultiClusterService } from '@services/multi-cluster.service';
 
 @Component({
   selector: 'app-groups-page',
@@ -37,13 +37,14 @@ export class GroupsPageComponent implements OnInit {
   ngOnInit(): void {
     this.navSource = GlobalConstant.NAV_SOURCE.SELF;
     //refresh the page when it switched to a remote cluster
-    this._switchClusterSubscription = this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
-      this.refresh();
-    });
+    this._switchClusterSubscription =
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
+        this.refresh();
+      });
   }
 
   ngOnDestroy(): void {
-    if(this._switchClusterSubscription){
+    if (this._switchClusterSubscription) {
       this._switchClusterSubscription.unsubscribe();
     }
   }
@@ -90,10 +91,10 @@ export class GroupsPageComponent implements OnInit {
 
   private getConfig = () => {
     this.groupsService.getConfigData().subscribe(
-      (response: any) => {
-        this.netServiceStatus = response.net_service_status;
+      response => {
+        this.netServiceStatus = response.net_svc.net_service_status;
         this.netServicePolicyMode = this.translate.instant(
-          `enum.${response.net_service_policy_mode.toUpperCase()}`
+          `enum.${response.net_svc.net_service_policy_mode.toUpperCase()}`
         );
       },
       error => {}

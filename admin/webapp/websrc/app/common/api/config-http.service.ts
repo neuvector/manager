@@ -16,13 +16,7 @@ import { pluck } from 'rxjs/operators';
 
 @Injectable()
 export class ConfigHttpService {
-  getConfig(): Observable<ConfigResponse> {
-    return GlobalVariable.http
-      .get<ConfigResponse>(PathConstant.CONFIG_URL)
-      .pipe(pluck('config'));
-  }
-
-  getConfigV2(): Observable<ConfigV2Response> {
+  getConfig(): Observable<ConfigV2Response> {
     return GlobalVariable.http
       .get<ConfigV2Response>(PathConstant.CONFIG_V2_URL)
       .pipe(pluck('config'));

@@ -104,7 +104,7 @@ export class MultiClusterService {
       },
       use_proxy: useProxy
     };
-    console.log(payload);
+
     return this.http.post(PathConstant.FED_PROMOTE_URL, payload).pipe();
   };
 

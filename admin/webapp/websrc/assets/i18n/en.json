@@ -2850,6 +2850,7 @@
       "NEW": "New Webhook",
       "NAME_EMPTY": "Name is required",
       "NAME_NG": "Invalid Name",
+      "NAME_DUPLICATED": "Name can't be duplicated.",
       "URL_NG": "Invalid URL",
       "NAME_PATTERN_NG": "Start with \"fed.\"",
       "LOCAL_NAME_PATTERN_NG": "Can't start with \"fed.\"",

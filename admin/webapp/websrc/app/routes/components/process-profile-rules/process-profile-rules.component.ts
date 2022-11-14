@@ -27,7 +27,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
   @Input() source!: string;
   @Input() groupName: string = '';
   @Input() resizableHeight!: number;
-  @Input() cfgType: string;
+  @Input() cfgType: string = '';
   public groups: Set<string> = new Set();
   public gridHeight: number = 0;
   public gridOptions!: GridOptions;
@@ -188,7 +188,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
         disableClose: true,
       }
     );
-    editDialogRef.afterClosed().subscribe(result => {
+    editDialogRef.afterClosed().subscribe(() => {
       this.isModalOpen = false;
     });
   };
@@ -208,13 +208,17 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
           this.processProfileRulesService
             .updateProcessProfileRules(
               GlobalConstant.CRUD.D,
-              this.source === GlobalConstant.NAV_SOURCE.FED_POLICY ? data.group : this.groupName,
+              this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+                ? data.group
+                : this.groupName,
               {},
               data,
-              this.source === GlobalConstant.NAV_SOURCE.FED_POLICY ? GlobalConstant.SCOPE.FED : GlobalConstant.SCOPE.LOCAL
+              this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+                ? GlobalConstant.SCOPE.FED
+                : GlobalConstant.SCOPE.LOCAL
             )
             .subscribe(
-              response => {
+              () => {
                 setTimeout(() => {
                   this.getProcessProfileRules(this.groupName);
                 }, 1000);
@@ -226,6 +230,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
                   err.status !== GlobalConstant.STATUS_SERVER_UNAVAILABLE
                 ) {
                   let message = this.utils.getErrorMessage(err);
+                  //Todo error handling
                 }
               }
             );

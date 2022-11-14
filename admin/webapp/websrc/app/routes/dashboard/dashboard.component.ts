@@ -34,10 +34,10 @@ export class DashboardComponent implements OnInit {
   isPrinting: boolean = false;
   iskube: boolean = false;
   reportDialog!: MatDialogRef<any>;
-  reportDomain: string;
+  reportDomain: string = "";
   reportInfo: any;
   private _switchClusterSubscriber;
-  @ViewChild('dashboardReport') printableReport: ElementRef;
+  @ViewChild('dashboardReport') printableReport!: ElementRef;
 
   constructor(
     private dashboardService: DashboardService,
@@ -60,7 +60,7 @@ export class DashboardComponent implements OnInit {
     this.dashboardDetailsService.runWorker();
 
     this._switchClusterSubscriber =
-      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
         const currentUrl = this.router.url;
         this.router
           .navigateByUrl('/', { skipLocationChange: true })
@@ -99,7 +99,10 @@ export class DashboardComponent implements OnInit {
         );
         this.iskube = this.summaryInfo.platform.toLowerCase().includes(GlobalConstant.KUBE);
       },
-      error => {}
+      error => {
+        //TODO better error handling
+        console.log('error', error);
+      }
     );
   };
 
@@ -114,6 +117,7 @@ export class DashboardComponent implements OnInit {
           this.getDashboardReportListModal(domainList);
         },
         error => {
+          console.warn(error);
           this.getDashboardReportListModal([]);
         }
       )
@@ -130,7 +134,7 @@ export class DashboardComponent implements OnInit {
         topSecurityEvents: this.dashboardSecurityEventsService.topSecurityEvents,
         securityEventSummary: this.dashboardSecurityEventsService.securityEventSummary
       },
-      dashbaordDetailsInfo: {
+      dashboardDetailsInfo: {
         isAutoScanOn: this.dashboardDetailsService.isAutoScanOn,
         highPriorityVulnerabilities: this.dashboardDetailsService.highPriorityVulnerabilities,
         containers: this.dashboardDetailsService.containers,
@@ -138,7 +142,7 @@ export class DashboardComponent implements OnInit {
         applications: this.dashboardDetailsService.applications
       }
     };
-    console.log("this.reportInfo", this.reportInfo);
+
     this.reportDialog.close();
     setTimeout(() => {
       this.reportDomain = domain;

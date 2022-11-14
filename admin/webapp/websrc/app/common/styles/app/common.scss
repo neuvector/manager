@@ -1349,3 +1349,11 @@ mwl-gauge.score > .gauge > .value {
 .docURLBase a:hover{
   text-decoration: none;
 }
+
+.my-drop-zone {
+  border: dotted 3px lightgray;
+  height: 60px;
+  min-width: 220px;
+  text-align: center;
+  margin-bottom: 10px;
+}

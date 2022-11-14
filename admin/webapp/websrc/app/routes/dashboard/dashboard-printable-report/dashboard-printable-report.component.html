@@ -120,7 +120,7 @@
   <div class="row">
     <div class="col-sm-6">
       <app-top-vulnerable-assets-chart
-        [highPriorityVulnerabilities]="reportInfo.dashbaordDetailsInfo.highPriorityVulnerabilities"
+        [highPriorityVulnerabilities]="reportInfo.dashboardDetailsInfo.highPriorityVulnerabilities"
         [isReport]="true"
         assetType="containers"
       ></app-top-vulnerable-assets-chart>
@@ -138,7 +138,7 @@
     </div>
     <div class="col-sm-6">
       <app-top-vulnerable-assets-chart
-        [highPriorityVulnerabilities]="reportInfo.dashbaordDetailsInfo.highPriorityVulnerabilities"
+        [highPriorityVulnerabilities]="reportInfo.dashboardDetailsInfo.highPriorityVulnerabilities"
         [isReport]="true"
         assetType="nodes"
       >
@@ -154,7 +154,7 @@
     <div class="col-sm-6">
       <app-policy-mode-chart
         class="col-sm-7"
-        [assetsInfo]="reportInfo.dashbaordDetailsInfo.services"
+        [assetsInfo]="reportInfo.dashboardDetailsInfo.services"
         assetType="services"
         [scoreInfo]="reportInfo.scoreInfo"
         [is4Report]="true"
@@ -168,7 +168,7 @@
     <div class="col-sm-6">
       <app-policy-mode-chart
         class="col-sm-7"
-        [assetsInfo]="reportInfo.dashbaordDetailsInfo.containers"
+        [assetsInfo]="reportInfo.dashboardDetailsInfo.containers"
         assetType="containers"
         [scoreInfo]="reportInfo.scoreInfo"
         [is4Report]="true"
@@ -193,7 +193,7 @@
   <div class="row">
     <div class="col-sm-6">
       <app-application-conversation-chart
-        [applications]="reportInfo.dashbaordDetailsInfo.applications"
+        [applications]="reportInfo.dashboardDetailsInfo.applications"
         [isReport]="true"
       >
       </app-application-conversation-chart>
@@ -211,7 +211,7 @@
     </div>
     <div class="col-sm-6">
       <app-application-volume-chart
-        [applications]="reportInfo.dashbaordDetailsInfo.applications"
+        [applications]="reportInfo.dashboardDetailsInfo.applications"
         [isReport]="true"
       >
       </app-application-volume-chart>

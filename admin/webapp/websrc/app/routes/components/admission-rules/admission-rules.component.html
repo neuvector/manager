@@ -5,7 +5,9 @@
   [testResult]="configTestResult">
 </app-configuration-assessment-result-printable-report>
 <div class="nv-dialog screen-area">
-  <div class="d-flex justify-content-between align-items-center">
+  <div
+    class="d-flex justify-content-between align-items-center"
+    *ngIf="source === navSource['SELF']">
     <div class="">
       <h1 class="font-weight-light mb-0" id="admissionControlTitle">
         {{ 'sidebar.nav.ADMISSION_CONTROL' | translate }}
@@ -163,15 +165,21 @@
             [filteredCount]="filteredCount"
             [count]="admissionRules.length">
           </app-quick-filter>
-          <div
-            class="d-flex justify-content-center align-items-center"
-            *ngIf="source === navSource['FED_POLICY']"
-            (click)="refresh()">
-            <i class="eos-icons icon-18" aria-hidden="true">refresh</i>
-            <label class="text-gray-label hand">{{
-              'general.REFRESH' | translate
-            }}</label>
-          </div>
+          <ng-container *ngIf="source === navSource['FED_POLICY']">
+            <app-loading-button
+              *ngIf="source !== navSource['SELF']"
+              (btnClick)="refresh()"
+              [appearance]="'mat-button'"
+              [buttonClasses]="
+                'd-flex justify-content-center align-items-center'
+              "
+              [iconClasses]="'eos-icons icon-18'"
+              [iconName]="'refresh'"
+              [id]="'fed-adm-refresh-button'"
+              [text]="'network.REFRESH' | translate"
+              [type]="'button'">
+            </app-loading-button>
+          </ng-container>
         </div>
       </div>
 

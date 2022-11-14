@@ -53,7 +53,7 @@ $scrollbar-wd:                    17px;
     margin-bottom: 0;
     padding-left: 0;
     list-style: none;
-    overflow-y: scroll;
+    overflow-y: auto;
     height: calc(100vh - 160px);
     >.nav-heading:first-child {
         padding-top: 20px;

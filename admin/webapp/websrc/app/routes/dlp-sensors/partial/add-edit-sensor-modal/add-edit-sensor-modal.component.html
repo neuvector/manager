@@ -1,14 +1,19 @@
 <div class="nv-dialog">
-  <div mat-dialog-title class="dialog-header">
-    <div class="pull-left">
+  <div class="d-flex justify-content-between align-items-center">
+    <h4 mat-dialog-title class="mb-2">
       {{
         (data.opType === opTypeOptions.ADD ? 'dlp.sensorModal.ADD_SENSOR' : 'dlp.sensorModal.EDIT_SENSOR') | translate
       }}
-    </div>
-    <div class="pull-right">
-      <em class="icon-close hand" (click)="onCancel()"></em>
-    </div>
+    </h4>
+    <button
+      (click)="onCancel()"
+      class="mb-2"
+      aria-label="Close dialog"
+      mat-icon-button>
+      <i class="eos-icons">close</i>
+    </button>
   </div>
+  <hr class="fancy" />
   <div mat-dialog-content>
     <form [formGroup]="addEditSensorForm">
       <div class="row">
@@ -24,19 +29,23 @@
           <input type="text" matInput formControlName="comment">
         </mat-form-field>
       </div>
-      <div class="clearfix">
+      <div class="d-flex justify-content-end align-items-center">
+        <button
+          mat-stroked-button
+          aria-label="cancel"
+          class="mr-2"
+          (click)="onCancel()">
+          {{'dlp.sensorModal.CANCEL' | translate}}
+        </button>
         <app-loading-button
           [appearance]="'mat-raised-button'"
           [color]="'primary'"
           [loading]="submittingUpdate"
           [text]="(data.opType === opTypeOptions.EDIT ? 'dlp.sensorModal.UPDATE' : 'dlp.sensorModal.ADD') | translate"
           (click)="updateSensor()"
-          class="pull-right"
         >
         </app-loading-button>
-        <button class="pull-right margin-right-m" (click)="onCancel()">
-          {{'dlp.sensorModal.CANCEL' | translate}}
-        </button>
+
       </div>
     </form>
   </div>

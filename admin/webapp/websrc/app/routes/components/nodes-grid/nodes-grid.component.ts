@@ -7,6 +7,7 @@ import { GlobalVariable } from '@common/variables/global.variable';
 import { TranslateService } from '@ngx-translate/core';
 import { NodesService } from '@services/nodes.service';
 import { VersionInfoService } from '@services/version-info.service';
+import { GlobalConstant } from '@common/constants/global.constant';
 import {
   ColDef,
   GridApi,
@@ -32,11 +33,13 @@ export class NodesGridComponent implements OnInit {
   @Input() gridOnly: boolean = false;
   @Input() isMemberData: boolean = false;
   @Input() rowData: Array<Host>;
+  @Input() source: string;
   @Output() scan = new EventEmitter<Host>();
   gridOptions!: GridOptions;
   gridApi!: GridApi;
   filtered: boolean = false;
   filteredCount!: number;
+  navSource = GlobalConstant.NAV_SOURCE;
   selectedNodeSubject$ = new BehaviorSubject<Host | undefined>(undefined);
   selectedNode$: Observable<Host | undefined> =
     this.selectedNodeSubject$.asObservable();

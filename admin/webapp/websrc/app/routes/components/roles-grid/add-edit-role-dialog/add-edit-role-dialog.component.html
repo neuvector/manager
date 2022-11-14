@@ -1,13 +1,17 @@
 <div class="d-flex align-items-center justify-content-between">
-  <h1 mat-dialog-title>
+  <h4 mat-dialog-title class="mb-2">
     {{
       (this.data.isEdit
         ? 'role.roleModal.EDIT_ROLE'
         : 'role.roleModal.ADD_ROLE'
       ) | translate
     }}
-  </h1>
+  </h4>
+  <button (click)="onNoClick()" class="mb-2" aria-label="Close dialog" mat-icon-button>
+    <i class="eos-icons ">close</i>
+  </button>
 </div>
+<hr class="fancy" />
 <form (ngSubmit)="submit()" [formGroup]="form">
   <div class="row">
     <div class="col-md-4">
@@ -81,7 +85,15 @@
       </ng-container>
     </ul>
   </div>
-  <div class="d-flex justify-content-end">
+  <div class="d-flex justify-content-end mt-3">
+    <button
+      (click)="onNoClick()"
+      class="mr-2"
+      [id]="dialogPrefix + '-role-dialog-cancel'"
+      mat-button
+      type="button">
+      {{ 'role.roleModal.CANCEL' | translate }}
+    </button>
     <app-loading-button
       [disabled]="form.invalid || !form.dirty || !!(saving$ | async)"
       [loading]="!!(saving$ | async)"
@@ -92,13 +104,5 @@
       [id]="dialogPrefix + '-role-dialog-submit'"
       type="submit">
     </app-loading-button>
-    <button
-      (click)="onNoClick()"
-      class="mr-2"
-      [id]="dialogPrefix + '-role-dialog-cancel'"
-      mat-button
-      type="button">
-      {{ 'role.roleModal.CANCEL' | translate }}
-    </button>
   </div>
 </form>

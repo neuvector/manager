@@ -87,7 +87,7 @@ export const AuthByOpenshiftField = {
   },
 };
 
-export const AuthByOpenshiftHideExpr = 'formState.isOpenShift';
+export const AuthByOpenshiftHideExpr = '!formState.isOpenShift';
 
 export const RancherEpField = {
   key: 'auth.rancher_ep',

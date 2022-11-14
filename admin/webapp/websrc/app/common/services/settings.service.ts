@@ -40,7 +40,7 @@ export class SettingsService {
   }
 
   getConfig() {
-    return this.configHttpService.getConfigV2();
+    return this.configHttpService.getConfig();
   }
 
   patchConfig(body: ConfigPatch) {

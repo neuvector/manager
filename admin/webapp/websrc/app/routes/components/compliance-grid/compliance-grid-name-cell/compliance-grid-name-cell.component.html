@@ -1,6 +1,6 @@
 <span>
   <em
-    *ngIf="includeRemediation"
+    *ngIf="includeRemediation && params.data.remediation"
     class="fa fa-lightbulb text-success mr-1"
     (click)="openRemediation(params.data)"></em>
   {{ name }}

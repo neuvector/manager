@@ -104,7 +104,7 @@ export class GroupsService {
       {
         headerName: this.translate.instant('policy.addPolicy.COMMENT'),
         field: 'comment',
-        hide: !isFed
+        hide: !isFed,
       },
       {
         headerName: this.translate.instant('group.gridHeader.DOMAIN'),
@@ -117,8 +117,8 @@ export class GroupsService {
         valueGetter: params => {
           return {
             policy_mode: params.data.policy_mode,
-            baseline_profile: params.data.baseline_profile
-          }
+            baseline_profile: params.data.baseline_profile,
+          };
         },
         cellRenderer: policyModeRendererFunc,
         hide: isFed,
@@ -204,7 +204,7 @@ export class GroupsService {
           valueGetter: params => {
             return {
               policy_mode: params.data.policy_mode,
-            }
+            };
           },
           cellRenderer: policyModeRendererFunc,
           width: 130,
@@ -326,7 +326,6 @@ export class GroupsService {
         maxWidth: 130,
       },
     ];
-
   };
 
   prepareGrid4CustomCheck = isGranted => {
@@ -720,7 +719,7 @@ export class GroupsService {
       );
     }
 
-    console.log("service payload",{ config: payload })
+    console.log('service payload', { config: payload });
     let data = pako.gzip(JSON.stringify({ config: payload }));
     data = new Blob([data], { type: 'application/gzip' });
     let config = {

@@ -1,5 +1,6 @@
 <mat-card
   class="remediation-detail-dialog"
+  [class.registry-dialog]="isRegistryDialog"
   *ngIf="visible && compliance"
   cdkDragBoundary=".nv-section"
   cdkDrag>

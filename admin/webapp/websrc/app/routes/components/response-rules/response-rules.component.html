@@ -46,6 +46,17 @@
           [count]="responseRulesService.responseRules.length">
         </app-quick-filter>
       </div>
+      <div
+        *ngIf="source === navSource['GROUP']"
+        class="clearfix"
+      >
+        <app-quick-filter
+          class="pull-right"
+          [gridOptions]="gridOptions"
+          [filteredCount]="filteredCount"
+          [showCount]="false">
+        </app-quick-filter>
+      </div>
       <ag-grid-angular
         id="response-rule-grid"
         style="width: 100%"

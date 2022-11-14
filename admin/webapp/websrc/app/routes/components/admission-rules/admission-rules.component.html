@@ -35,7 +35,7 @@
           </button>
           <mat-menu #menu="matMenu">
             <!-- <button mat-menu-item *ngIf="admCtrl.state && isWriteAdmissionRuleAuthorized && canConfig" (click)="showGlobalActions($event)"> -->
-            <button mat-menu-item (click)="showAdvancedSetting()">
+            <button mat-menu-item (click)="showAdvancedSetting()" *ngIf="globalStatus">
               <em class="eos-icons">config_map</em>
               {{ 'admissionControl.GLOBAL_OPS' | translate }}
             </button>

@@ -1,6 +1,6 @@
 <app-containers-grid
   *ngIf="kind !== 'node'"
-  [gridHeight]="resizableHeight - 80"
+  [gridHeight]="resizableHeight - 150"
   [gridOnly]="true"
   [workloadV2]="false"
   [isMemberData]="true"
@@ -9,7 +9,7 @@
 </app-containers-grid>
 <app-nodes-grid
   *ngIf="kind === 'node'"
-  [gridHeight]="resizableHeight - 80"
+  [gridHeight]="resizableHeight - 150"
   [gridOnly]="true"
   [isMemberData]="true"
   [rowData]="memberGridRowData"

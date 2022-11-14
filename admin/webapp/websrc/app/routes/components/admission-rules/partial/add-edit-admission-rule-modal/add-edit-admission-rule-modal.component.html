@@ -362,7 +362,12 @@
     </div>
   </div>
   <div>
-    <div class="clearfix">
+    <div class="d-flex justify-content-end align-items-center">
+      <button
+        mat-stroked-button
+        class="mr-2" (click)="onCustomizedViewCancel()">
+        {{ "policy.addPolicy.CANCEL" | translate }}
+      </button>
       <app-loading-button
         [appearance]="'mat-raised-button'"
         [color]="'primary'"
@@ -370,14 +375,8 @@
         [loading]="submittingUpdate"
         [text]="'policy.addPolicy.ADD' | translate"
         (click)="addCustomizedCriteria(customCriterion)"
-        class="pull-right"
       >
       </app-loading-button>
-      <button
-        mat-stroked-button
-        class="pull-right mr-2" (click)="onCustomizedViewCancel()">
-        {{ "policy.addPolicy.CANCEL" | translate }}
-      </button>
     </div>
   </div>
 </ng-template>

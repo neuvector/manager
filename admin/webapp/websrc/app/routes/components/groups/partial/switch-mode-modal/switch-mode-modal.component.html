@@ -1,12 +1,13 @@
 <div class="nv-dialog">
-  <div mat-dialog-title class="dialog-header">
-    <div class="pull-left">
+  <div class="d-flex justify-content-between align-items-center">
+    <h4 mat-dialog-title class="mb-2">
       {{ 'service.SWITCH_MODE' | translate }}
-    </div>
-    <div class="pull-right">
-      <em class="icon-close hand" (click)="onCancel()"></em>
-    </div>
+    </h4>
+    <button (click)="onCancel()" class="mb-2" aria-label="Close dialog" mat-icon-button>
+      <i class="eos-icons ">close</i>
+    </button>
   </div>
+  <hr class="fancy mb-3" />
   <div mat-dialog-content>
     <form>
       <div class="clearfix margin-top-m">
@@ -26,20 +27,26 @@
         </mat-radio-group>
         <div class="pull-left text-muted">{{'group.ZERODRIFT_COMMENT' | translate}}</div>
       </div>
-      <div class="clearfix">
-        <div *ngIf="!mode ||!baselineProfile" class="text-warning pull-left">{{ 'group.MULTI_MODE_SELECTION' | translate }}</div>
-        <app-loading-button
-          [appearance]="'mat-raised-button'"
-          [color]="'primary'"
-          [loading]="submittingUpdate"
-          [text]="'setting.SUBMIT' | translate"
-          (click)="switchMode()"
-          class="pull-right"
-        >
-        </app-loading-button>
-        <button class="pull-right margin-right-m" (click)="onCancel()">
-          {{'waf.ruleModal.CANCEL' | translate}}
-        </button>
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-start align-items-center">
+          <div *ngIf="!mode ||!baselineProfile" class="d-flex justify-content-start align-items-center text-warning ">
+            {{ 'group.MULTI_MODE_SELECTION' | translate }}
+          </div>
+        </div>
+        <div class="d-flex justify-content-end align-items-center">
+          <button mat-stroked-button
+                  class="mr-2" (click)="onCancel()">
+            {{'waf.ruleModal.CANCEL' | translate}}
+          </button>
+          <app-loading-button
+            [appearance]="'mat-raised-button'"
+            [color]="'primary'"
+            [loading]="submittingUpdate"
+            [text]="'setting.SUBMIT' | translate"
+            (click)="switchMode()"
+          >
+          </app-loading-button>
+        </div>
       </div>
     </form>
   </div>

@@ -46,6 +46,8 @@
           [repository]="data.image.repository"
           [resize]="resize"
           [rowData]="imageAndLayers.image.report.checks"
+          [includeRemediation]="true"
+          (remediation)="openRemediation($event)"
           [useQuickFilterService]="true"
           tableHeight="calc(100% - 42px)">
         </app-compliance-grid>
@@ -63,6 +65,9 @@
       </mat-tab>
     </mat-tab-group>
   </div>
+  <app-remediation-detail-dialog
+    [compliance]="selectedRemediation"
+    [isRegistryDialog]="true"></app-remediation-detail-dialog>
 </ng-container>
 <ng-template #loadingTemplate>
   <app-loading-template></app-loading-template>

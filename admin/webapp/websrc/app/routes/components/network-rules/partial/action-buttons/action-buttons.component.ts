@@ -97,7 +97,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "700px",
       data: {
-        message: `${this.translate.instant('policy.dialog.REMOVE')} - ${id}`,
+        message: `${this.translate.instant('policy.dialog.REMOVE')} ${id}`,
         isSync: true
       },
       disableClose: true
@@ -115,7 +115,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "700px",
       data: {
-        message: `${this.translate.instant('policy.dialog.UNREMOVE')} - ${id}`,
+        message: `${this.translate.instant('policy.dialog.UNREMOVE')} ${id}`,
         isSync: true
       },
       disableClose: true

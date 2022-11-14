@@ -247,7 +247,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       data: {
         message: `${this.translate.instant(
           'policy.dialog.REMOVE'
-        )} - ${ids.join(', ')}`,
+        )} ${ids.join(', ')}`,
         isSync: true,
       },
       disableClose: true,

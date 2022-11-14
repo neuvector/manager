@@ -2850,6 +2850,7 @@
       "NEW": "新建网络挂接",
       "NAME_EMPTY": "名称不可为空",
       "NAME_NG": "无效名称",
+      "NAME_DUPLICATED": "名称不可重复",
       "URL_NG": "无效URL",
       "NAME_PATTERN_NG": "以\"fed.\"开头",
       "LOCAL_NAME_PATTERN_NG": "不能以\"fed.\"开头",

@@ -20,3 +20,4 @@ export * from './multi-cluster/cluster';
 export * from './multi-cluster/cluster-data';
 export * from './multi-cluster/cluster-summary';
 export * from './multi-cluster/sessionStorageCluster';
+export * from './federated-configuration/FederatedConfiguration';

@@ -25,6 +25,7 @@ export class CustomCheckComponent implements OnInit {
   customCheckScripts: Array<Script> = [];
   selectedScript: Script;
   context = { componentParent: this };
+  filteredCount: number = 0;
 
   constructor(
     private groupsService: GroupsService,
@@ -50,7 +51,8 @@ export class CustomCheckComponent implements OnInit {
     this.groupsService.getCustomCheckData(this.groupName)
       .subscribe(
         (response: any) => {
-          console.log("scripts", response);
+          this.customCheckScripts = response;
+          this.filteredCount = this.customCheckScripts.length;
           this.gridOptions4CustomCheck.api!.setRowData(response);
           this.switch2Add();
         },

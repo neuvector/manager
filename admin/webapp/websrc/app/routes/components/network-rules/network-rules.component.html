@@ -149,13 +149,24 @@
           </div>
         </div>
 
+        <div
+          *ngIf="source === navSource['GROUP']"
+          class="clearfix"
+        >
+          <app-quick-filter
+            class="pull-right"
+            [gridOptions]="gridOptions"
+            [filteredCount]="filteredCount"
+            [showCount]="false">
+          </app-quick-filter>
+        </div>
         <ag-grid-angular
           id="policy-grid"
           style="width: 100%"
           [ngStyle]="{
             height:
               (source === navSource['GROUP']
-                ? resizableHeight - 85
+                ? resizableHeight - 150
                 : gridHeight) + 'px'
           }"
           class="ag-theme-balham"

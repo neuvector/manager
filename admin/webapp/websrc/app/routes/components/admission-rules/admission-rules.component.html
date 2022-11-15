@@ -23,7 +23,7 @@
           *appDisplayControl="'write_admission'"
           (click)="openConfigAssessmentDialog()"
           style="">
-          <em class="eos-icons icon-18 margin-right-m">flask</em>
+          <em class="eos-icons icon-18 mr-1">flask</em>
           {{ 'admissionControl.MATCHING_TEST' | translate }}
         </button>
       </div>
@@ -34,17 +34,21 @@
             <em class="eos-icons">arrow_drop_down</em>
           </button>
           <mat-menu #menu="matMenu">
-            <!-- <button mat-menu-item *ngIf="admCtrl.state && isWriteAdmissionRuleAuthorized && canConfig" (click)="showGlobalActions($event)"> -->
-            <button mat-menu-item (click)="showAdvancedSetting()" *ngIf="globalStatus">
-              <em class="eos-icons">config_map</em>
-              {{ 'admissionControl.GLOBAL_OPS' | translate }}
-            </button>
-            <!-- <button mat-menu-item *ngIf="isWriteAdmissionRuleAuthorized" (click)="openExportPopup()"> -->
-            <button mat-menu-item (click)="openExportPopup()">
-              <em class="eos-icons">download</em>
-              {{ 'admissionControl.EXPORT' | translate }}
-            </button>
-            <!-- <button mat-menu-item *ngIf="isWriteAdmissionRuleAuthorized"> -->
+            <div class="menu-width-medium">
+              <button
+                mat-menu-item
+                (click)="showAdvancedSetting()"
+                *ngIf="globalStatus">
+                <em class="eos-icons">config_map</em>
+                {{ 'admissionControl.GLOBAL_OPS' | translate }}
+              </button>
+            </div>
+            <div class="menu-width-medium">
+              <button mat-menu-item (click)="openExportPopup()">
+                <em class="eos-icons">download</em>
+                {{ 'admissionControl.EXPORT' | translate }}
+              </button>
+            </div>
             <button mat-menu-item (click)="openImportPopup()">
               <em class="eos-icons">upload</em>
               {{ 'admissionControl.IMPORT' | translate }}

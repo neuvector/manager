@@ -70,14 +70,16 @@
       </button>
       <mat-menu #dropdown_multiCluster="matMenu">
         <ng-container *ngFor="let cluster of clusters; last as last">
-          <button mat-menu-item (click)="redirectCluster(cluster)">
-            <i
-              class="fa-md mr-md text-gray-light"
-              [ngClass]="
+          <div class="menu-width">
+            <button mat-menu-item (click)="redirectCluster(cluster)">
+              <i
+                class="fa-md mr-md text-gray-light"
+                [ngClass]="
                 cluster.clusterType === 'master' ? 'fa fa-home' : 'fa fa-laptop'
               "></i>
-            {{ cluster?.name }}
-          </button>
+              {{ cluster?.name }}
+            </button>
+          </div>
           <mat-divider *ngIf="!last"></mat-divider>
         </ng-container>
       </mat-menu>
@@ -106,10 +108,12 @@
       </div>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="goProfile()">
-        <i class="eos-icons icon-18 margin-right-s">badge</i>
-        {{ 'enum.MY_PROFILE' | translate }}
-      </button>
+      <div class="menu-width">
+        <button mat-menu-item (click)="goProfile()">
+          <i class="eos-icons icon-18 margin-right-s">badge</i>
+          {{ 'enum.MY_PROFILE' | translate }}
+        </button>
+      </div>
       <button mat-menu-item (click)="goMultiCluster()">
         <i class="eos-icons icon-18 margin-right-s">organisms</i>
         {{ 'enum.MULTI_CLUSTER' | translate }}

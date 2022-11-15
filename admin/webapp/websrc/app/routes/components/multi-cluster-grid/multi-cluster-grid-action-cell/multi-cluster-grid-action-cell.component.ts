@@ -8,6 +8,12 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { ICellRendererAngularComp } from "ag-grid-angular";
 import { ICellRendererParams } from "ag-grid-community";
 import swal from 'sweetalert';
+import {ConfirmDialogComponent} from "@components/ui/confirm-dialog/confirm-dialog.component";
+import {ShortenFromMiddlePipe} from "@common/pipes/app.pipes";
+import {finalize, switchMap} from 'rxjs/operators';
+import {NotificationService} from "@services/notification.service";
+import {UtilsService} from "@common/utils/app.utils";
+import {PromotionModalComponent} from "@routes/multi-cluster/promotion-modal/promotion-modal.component";
 
 @Component({
   selector: 'app-multi-cluster-grid-action-cell',
@@ -22,6 +28,9 @@ export class MultiClusterGridActionCellComponent implements ICellRendererAngular
 
   constructor(
     public multiClusterService: MultiClusterService,
+    private shortenFromMiddlePipe: ShortenFromMiddlePipe,
+    private notificationService: NotificationService,
+    private utils: UtilsService,
     public dialog: MatDialog,
     private translate: TranslateService,
     private router: Router
@@ -29,10 +38,7 @@ export class MultiClusterGridActionCellComponent implements ICellRendererAngular
 
   agInit (params: ICellRendererParams): void {
     this.params = params;
-    console.log("params:",this.params);
-    this.buttonDisplayMap = {
-
-    };
+    this.buttonDisplayMap = {};
   };
 
   refresh (params: ICellRendererParams): boolean {
@@ -94,7 +100,6 @@ export class MultiClusterGridActionCellComponent implements ICellRendererAngular
 
   generateToken = () => {
     this.multiClusterService.generateToken().subscribe(response => {
-      console.log(response);
       this.openDialog(response["join_token"]);
     });
   };
@@ -140,51 +145,73 @@ export class MultiClusterGridActionCellComponent implements ICellRendererAngular
   };
 
   demote = (data) => {
-    let desc = `1. The Master Cluster will demote to an ordinary cluster.<br>
-    2. Its federal policies will be removed from all member clusters. <br>
-    3. The Federal Administrator will demote to the Administrator. <br>`;
-    swal({
-      title: `Are your sure to demote the Master Cluster " ${
-        this.params.data.name
-      } " ?`,
-      // content: {
-      //   element: "p",
-      //   attributes: {
-      //     innerHTML: `${desc}`
-      //   }
-      // },
-      icon: "warning",
-      buttons: {
-        cancel: {
-          text: "Cancel",
-          value: null,
-          visible: true,
-          closeModal: true
-        },
-        confirm: {
-          text: "Confirm",
-          value: true,
-          visible: true,
-          className: "bg-danger",
-          closeModal: true
+    const dialogRef = this.dialog.open(ConfirmDialogComponent,
+      {
+        maxWidth: "700px",
+        disableClose: true,
+        data: {
+          message: `${
+            this.translate.instant(
+              "multiCluster.prompt.demote",
+              {
+                name: this.shortenFromMiddlePipe.transform(data.name, 20)}
+            )}`
         }
       }
-    }).then(isConfirm => {
-      if (isConfirm) {
-        // swal("Demoted!", "The Master Cluster is demoted.", "success");
-        this.multiClusterService.demoteCluster().subscribe(response => {
-          console.log(response);
-          swal("Demoted!", "The Master Cluster is demoted.", "success");
-        });
+      );
+    dialogRef.componentInstance.confirm.pipe(
+      switchMap(()=>
+        this.multiClusterService.demoteCluster()
+      ),
+      finalize(()=>{
+        dialogRef.componentInstance.onCancel();
+        dialogRef.componentInstance.loading = false;
+      })
+      ).subscribe(
+      () =>{
+        setTimeout(() => {
+          this.router.navigate(['logout']);
+        }, 1000);
+      },
+      error => {
+        this.notificationService.open(
+          this.utils.getAlertifyMsg(
+            error,
+            this.translate.instant("multiCluster.messages.demote_failure"),
+            false)
+        );
       }
-    });
+    );
+    // let desc = `1. The Master Cluster will demote to an ordinary cluster.<br>
+    // 2. Its federal policies will be removed from all member clusters. <br>
+    // 3. The Federal Administrator will demote to the Administrator. <br>`;
   };
 
   openDialog = param => {
     this.dialog.open(TokenModalComponent, { data: { token: param }, width: '50vw' });
   };
 
-  showEditClusterDialog = (event, data, flag) => {
+  showEditClusterDialog (event, data, context, flag): void {
+    console.log("===showEditt context:",context);
+    const dialogRef = this.dialog.open(
+      PromotionModalComponent, {
+        width: '80%',
+        maxWidth: '1100px',
+        disableClose: true,
+        data: {
+          isEdit: true,
+          cluster: {
+            name: data.name,
+            host: data.api_server,
+            port: data.api_port
+          },
+          useProxy: context.componentParent.clusterData.use_proxy,
+          fed_sync_registry_toggle: context.componentParent.clusterData.deploy_reg_scan_data,
+          fed_sync_repo_toggle: context.componentParent.clusterData.deploy_repo_scan_data
+        }
+      }
+
+    );
 
   }
 }

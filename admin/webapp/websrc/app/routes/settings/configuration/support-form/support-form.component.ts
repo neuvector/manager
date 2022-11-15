@@ -101,7 +101,15 @@ export class SupportFormComponent {
         takeUntil(this.stopCollect$),
         finalize(() => (this.collectingLog = false))
       )
-      .subscribe(() => (this.collectingLogReady = true));
+      .subscribe(
+        () => (this.collectingLogReady = true),
+        ({ error }: { error: ErrorResponse }) => {
+          this.notificationService.open(
+            this.tr.instant('setting.COLLOECT_FAILED')
+          );
+          console.warn(error);
+        }
+      );
   }
 
   collectLog(): void {

@@ -93,7 +93,7 @@ export class MultiClusterService {
       .pipe();
   }
 
-  updateCluster = (data: any, isEditable: boolean, useProxy: boolean) => {
+  updateCluster = (data: any, isEditable: boolean, useProxy: string, repo_toggle: boolean, reg_toggle: boolean) => {
     let payload = isEditable
       ? {
           poll_interval: 2,
@@ -103,6 +103,7 @@ export class MultiClusterService {
             port: parseInt(data.api_port),
           },
           use_proxy: useProxy,
+
         }
       : {
           poll_interval: 2,
@@ -111,7 +112,7 @@ export class MultiClusterService {
     return this.http.patch(PathConstant.FED_CFG_URL, payload);
   };
 
-  promoteCluster = (data: any, useProxy) => {
+  promoteCluster = (data: any, useProxy, fed_sync_reg, fed_sync_repo) => {
     let payload = {
       name: data.name,
       master_rest_info: {
@@ -119,6 +120,8 @@ export class MultiClusterService {
         port: parseInt(data.port),
       },
       use_proxy: useProxy,
+      deploy_reg_scan_data: fed_sync_reg,
+      deploy_repo_scan_data: fed_sync_repo
     };
 
     return this.http.post(PathConstant.FED_PROMOTE_URL, payload).pipe();

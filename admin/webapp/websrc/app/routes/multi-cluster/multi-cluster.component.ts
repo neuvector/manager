@@ -149,7 +149,15 @@ export class MultiClusterComponent implements OnInit {
   }
 
   showPromotionDialog(): void {
-    const dialogRef = this.dialog.open(PromotionModalComponent);
+    const dialogRef = this.dialog.open(
+      PromotionModalComponent, {
+        width: '80%',
+        maxWidth: '1100px',
+        disableClose: true,
+        data: {
+          isEdit: false
+        }
+      });
 
     dialogRef.afterClosed().subscribe(result => {
     });

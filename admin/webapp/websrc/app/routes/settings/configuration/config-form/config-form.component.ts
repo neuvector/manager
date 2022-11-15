@@ -40,7 +40,7 @@ export class ConfigFormComponent implements OnInit {
   configFields = cloneDeep(ConfigFormConfig);
   configOptions: FormlyFormOptions = {
     formState: {
-      isOpenShift: GlobalVariable.isOpenShift,
+      isOpenShift: () => GlobalVariable.isOpenShift,
       permissions: {},
       ibmsa: {
         setup: this.setupIBMSA.bind(this),

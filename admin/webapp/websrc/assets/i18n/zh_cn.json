@@ -2520,7 +2520,7 @@
       "CPU_REQUEST_S": "CPU请求",
       "MEMORY_LIMIT_S": "内存限制",
       "MEMORY_REQUEST_S": "内存请求",
-      "HAS_PSS_VIOLATION": "PSA/PSS最佳实施",
+      "PSS_VIOLATION": "PSA/PSS最佳实施",
       "MODULES": "模块"
     },
     "operators": {

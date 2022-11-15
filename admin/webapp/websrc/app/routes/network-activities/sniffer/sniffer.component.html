@@ -27,6 +27,8 @@
     id="sniff-grid"
     style="width: 100%; margin-top: 10px"
     [ngStyle]="{ height: entriesGridHeight + 'px' }"
+    [enableCellTextSelection]="true"
+    [ensureDomOrder]="true"
     class="ag-theme-alpine"
     [rowData]="sniffers"
     [gridOptions]="gridOptions">

@@ -57,7 +57,7 @@
               [(ngModel)]="mainCriterion.name"
               (selectionChange)="changeCriterionName(mainCriterion.name, true)"
             >
-              <mat-option (click)="switchCustomizedCriterionView()">
+              <mat-option *ngIf="!addEditAdmissionRuleForm.controls.isException.value" (click)="switchCustomizedCriterionView()">
                 <span class="text-discover">{{
                   "admissionControl.names.ADD_CUSTOMIZED_CRITERION" | translate
                 }} ...</span>

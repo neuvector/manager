@@ -33,6 +33,8 @@
   #agGrid
   (window:resize)="onResize()"
   [ngStyle]="{ height: gridHeight + 'px' }"
+  [enableCellTextSelection]="true"
+  [ensureDomOrder]="true"
   [gridOptions]="gridOptions"
   [rowData]="scannersService.scanners"
   id="scanners-grid"

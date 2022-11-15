@@ -123,7 +123,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
               this.source === GlobalConstant.NAV_SOURCE.GROUP
                 ? this.w.innerHeight - 572
                 : this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-                ? this.w.innerHeight - 250
+                ? this.w.innerHeight - 300
                 : 0;
             setTimeout(() => {
               if (this.gridOptions.api) {

@@ -245,6 +245,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
       name: mainCriterion.name,
       op: mainCriterion.op,
       value: mainCriterion.value,
+      value_type: mainCriterion.value_type,
       sub_criteria: subCriterion
     });
   };
@@ -253,7 +254,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     let isCustomized = !this.criteriaOptions[criterion.name];
     let tag = this.admissionRulesService.parseTag(this.CRITERIA_PATTERN, criterion, isCustomized);
     this.addEditAdmissionRuleForm.controls.criteria.setValue(
-      this.admissionRulesService.checkAndAppendCriteria(tag.tagName, criterion, this.addEditAdmissionRuleForm.controls.criteria, isCustomized)
+      this.admissionRulesService.checkAndAppendCriteria(tag.tagName, criterion, this.addEditAdmissionRuleForm.controls.criteria, isCustomized, this.nodeValueType)
     );
     if (isCustomized) {
       this.clearCustomizedCriterion();
@@ -315,7 +316,6 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
       if (!this.criteriaOptions[criterion.value.name]) { //For customized criterion
         criterion.value.type = GlobalConstant.ADMISSION.CRITERION_TYPE.CUSTOM_PATH;
         criterion.value.template_kind = this.data.opType === GlobalConstant.MODAL_OP.ADD ? this.podTemplateData.kind : criterion.value.template_kind;
-        criterion.value.value_type = getValueType4Text(criterion.value.value);
         criterion.value.name = '';
       }
       if (criterion.value.name === 'saBindRiskyRole') { // For Service account bound risky role

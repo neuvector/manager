@@ -51,6 +51,7 @@ export class AddEditResponseRuleModalComponent implements OnInit {
   public isWebhookSelected: boolean = false;
   public webhookOptions: Array<string> = [];
   public selectedResponseRule: any;
+  EVENT_WITHOUT_GROUP = MapConstant.EVENT_WITHOUT_GROUP;
   @ViewChild('criteriaInput', { static: false })
   appsInput: ElementRef<HTMLInputElement>;
   @ViewChild('autoCriteria', { static: false })

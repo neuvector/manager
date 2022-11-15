@@ -84,7 +84,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     this.isWriteGlobalRulesAuthorized = this.authUtilsService.getDisplayFlag('write_network_rule');
     this.bindRouteEventListener();
-    this.gridHeight = this.w.innerHeight - (this.source === GlobalConstant.NAV_SOURCE.SELF ? 215 : 230);
+    this.gridHeight = this.w.innerHeight - (this.source === GlobalConstant.NAV_SOURCE.SELF ? 245 : 300);
     this.isWriteNetworkRuleAuthorized =
       this.authUtilsService.getDisplayFlag('write_network_rule') &&
       (

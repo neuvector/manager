@@ -2205,9 +2205,9 @@ export class NetworkActivitiesComponent
   private getGridHeight(items: Array<any>): number {
     let result: number;
 
-    if (items.length <= 2) result = 30 + 29 * 2;
-    else if (items.length < 5) result = 30 + 29 * items.length;
-    else result = 30 + 29 * 5 + 8;
+    if (items.length <= 2) result = 40 + 30 * 2;
+    else if (items.length < 5) result = 40 + 30 * items.length;
+    else result = 40 + 30 * 5 + 8;
 
     return result;
   }
@@ -2235,7 +2235,7 @@ export class NetworkActivitiesComponent
   refreshTimer$;
 
   private getLiveSession() {
-    this.refreshTimer$ = interval(15000);
+    this.refreshTimer$ = interval(5000);
     this.subscription = this.refreshTimer$.subscribe(
       this.getCurrentSession.bind(this)
     );

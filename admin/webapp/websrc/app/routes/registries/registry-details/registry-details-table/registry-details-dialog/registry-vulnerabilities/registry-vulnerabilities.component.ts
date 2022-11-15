@@ -9,7 +9,7 @@ import { Layer, Vulnerability } from '@common/types';
 import { UtilsService } from '@common/utils/app.utils';
 import { cloneDeep } from 'lodash';
 import { saveAs } from 'file-saver';
-import { arrayToCsv } from '@common/utils/common.utils';
+import { arrayToCsv, isVulAccepted } from '@common/utils/common.utils';
 
 @Component({
   selector: 'app-registry-vulnerabilities',
@@ -50,6 +50,10 @@ export class RegistryVulnerabilitiesComponent {
 
   onAcceptVulnerability(): void {
     this.acceptVulnerability.emit(this.selectedVulnerability);
+  }
+
+  isAccepted(vulnerability: Vulnerability): boolean {
+    return isVulAccepted(vulnerability);
   }
 
   exportCVELayers(): void {

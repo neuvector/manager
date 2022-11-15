@@ -103,11 +103,14 @@ export class MultiClusterService {
             port: parseInt(data.api_port),
           },
           use_proxy: useProxy,
-
+          deploy_reg_scan_data: reg_toggle,
+          deploy_repo_scan_data: repo_toggle
         }
       : {
           poll_interval: 2,
           use_proxy: useProxy,
+          deploy_reg_scan_data: reg_toggle,
+          deploy_repo_scan_data: repo_toggle
         };
     return this.http.patch(PathConstant.FED_CFG_URL, payload);
   };

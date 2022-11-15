@@ -79,6 +79,10 @@ export class GroupsPageComponent implements OnInit {
     const importDialogRef = this.dialog.open(ImportFileModalComponent, {
       data: {
         importUrl: PathConstant.IMPORT_GROUP_URL,
+        importMsg: {
+          success: this.translate.instant('group.IMPORT_OK'),
+          error: this.translate.instant('setting.IMPORT_FAILED'),
+        },
       },
       disableClose: true,
     });

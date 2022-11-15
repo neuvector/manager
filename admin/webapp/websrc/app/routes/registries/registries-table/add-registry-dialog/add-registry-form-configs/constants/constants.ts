@@ -168,7 +168,7 @@ export const Registries = {
 };
 
 export const FedRegistryHideExpr =
-  '!formState.isFedAdmin || !formState.isMaster';
+  '(!formState.isFedAdmin && !model.isEdit) || !formState.isMaster';
 
 export const NameField = {
   key: 'name',
@@ -180,6 +180,20 @@ export const NameField = {
   },
   expressionProperties: {
     'templateOptions.disabled': 'model.isEdit',
+  },
+  hooks: {
+    onInit: field => {
+      const isFedCtrl = field.parent.formControl.get('isFed');
+      if (isFedCtrl) {
+        isFedCtrl.valueChanges.subscribe(isFed => {
+          if (isFed) {
+            field.templateOptions.prefix = 'fed.';
+          } else {
+            field.templateOptions.prefix = '';
+          }
+        });
+      }
+    },
   },
 };
 

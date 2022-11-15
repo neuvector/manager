@@ -84,6 +84,9 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
         json_key,
         ...formValue
       } = this.form.value;
+      if (formValue.isFed) {
+        formValue.name = 'fed.' + formValue.name;
+      }
       if (periodic_scan) {
         schedule.schedule = 'periodical';
         schedule.interval = INTERVAL_STEP_VALUES[interval].value;

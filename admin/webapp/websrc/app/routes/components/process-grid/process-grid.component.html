@@ -2,6 +2,8 @@
   (window:resize)="onResize()"
   [gridOptions]="gridOptions"
   [ngStyle]="{ height: tableHeight }"
+  [enableCellTextSelection]="true"
+  [ensureDomOrder]="true"
   class="ag-theme-alpine"
   style="width: 100%">
 </ag-grid-angular>

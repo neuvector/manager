@@ -67,6 +67,8 @@
               : gridHeight) + 'px'
         }"
         class="ag-theme-balham"
+        [enableCellTextSelection]="true"
+        [ensureDomOrder]="true"
         [gridOptions]="gridOptions"
         [rowData]="responseRulesService.responseRules"
         [context]="context">

@@ -171,6 +171,8 @@
                 : gridHeight) + 'px'
           }"
           class="ag-theme-balham"
+          [enableCellTextSelection]="true"
+          [ensureDomOrder]="true"
           [gridOptions]="gridOptions"
           [context]="context">
         </ag-grid-angular>
@@ -184,6 +186,8 @@
       [ngStyle]="{ height: resizableHeight + 'px' }"
       [gridOptions]="gridOptions"
       [context]="context"
+      [enableCellTextSelection]="true"
+      [ensureDomOrder]="true"
       id="score-improvement-policy-grid"
       style="width: 100%"
       class="ag-theme-balham">

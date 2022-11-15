@@ -48,6 +48,8 @@
     <ag-grid-angular
       id="activeSessionGrid"
       (window:resize)="onResize()"
+      [enableCellTextSelection]="true"
+      [ensureDomOrder]="true"
       [rowData]="conversations"
       [gridOptions]="gridOptions"
       class="ag-theme-alpine"

@@ -1,6 +1,8 @@
 .PHONY: jar
 
 STAGE_DIR = stage
+BASE_IMAGE_TAG = latest
+BUILD_IMAGE_TAG = latest
 
 copy_mgr:
 	cp manager/licenses/* ${STAGE_DIR}/licenses/
@@ -19,13 +21,13 @@ stage_init:
 stage_mgr: stage_init copy_mgr
 
 pull_base:
-	docker pull neuvector/manager_base:latest
+	docker pull neuvector/manager_base:${BASE_IMAGE_TAG}
 
 manager_image: pull_base stage_mgr
-	docker build --build-arg NV_TAG=$(NV_TAG) --no-cache=true -t neuvector/manager -f manager/Dockerfile.manager .
+	docker build --build-arg NV_TAG=$(NV_TAG) --build-arg BASE_IMAGE_TAG=${BASE_IMAGE_TAG} --no-cache=true -t neuvector/manager -f manager/Dockerfile.manager .
 
 jar:
 	@echo "Pulling images ..."
-	docker pull neuvector/build_manager:latest
+	docker pull neuvector/build_manager:${BUILD_IMAGE_TAG}
 	@echo "Making $@ ..."
-	docker run --rm -ia STDOUT --name build -v prebuild_manager:/prebuild/manager -v $(CURDIR):/manager -w /manager --entrypoint ./make_jar.sh neuvector/build_manager:latest
+	docker run --rm -ia STDOUT --name build -v prebuild_manager:/prebuild/manager -v $(CURDIR):/manager -w /manager --entrypoint ./make_jar.sh neuvector/build_manager:${BUILD_IMAGE_TAG}

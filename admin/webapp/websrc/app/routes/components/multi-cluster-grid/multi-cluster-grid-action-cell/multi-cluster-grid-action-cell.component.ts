@@ -181,7 +181,7 @@ export class MultiClusterGridActionCellComponent implements ICellRendererAngular
   };
 
   openDialog = param => {
-    this.dialog.open(TokenModalComponent, { data: { token: param } });
+    this.dialog.open(TokenModalComponent, { data: { token: param }, width: '50vw' });
   };
 
   showEditClusterDialog = (event, data, flag) => {

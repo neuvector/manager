@@ -1,46 +1,48 @@
 <div class="nv-dialog">
-  <div mat-dialog-title class="dialog-header">
-    <div class="pull-left">
-      {{ "multiCluster.joining.token" | translate }}
-    </div>
-    <div class="pull-right">
-      <em class="icon-close hand" (click)="onCancel()"></em>
-    </div>
+  <div class="d-flex align-items-center justify-content-between">
+    <h4 mat-dialog-title class="mb-2">
+      {{ 'multiCluster.joining.token' | translate }}
+    </h4>
+    <button
+      (click)="onCancel()"
+      class="mb-2"
+      aria-label="Close dialog"
+      mat-icon-button>
+      <i class="eos-icons">close</i>
+    </button>
   </div>
+  <hr class="fancy" />
 
   <div mat-dialog-content class="dialog-content p0 m0">
-    <div
-      fxLayout="column"
-      fxLayoutAlign="start"
-      fxFlex="1 0 auto"
-      class="pt-lg"
-    >
-      <div
-        fxLayout="row"
-        fxLayoutAlign="start center"
-        fxFlex="1 0 auto"
-        class="pl-4"
-      >
-        <mat-form-field appearance="outline" fxFlex="100" class="pr-4">
-          <label>{{ "multiCluster.joining.token" | translate }}</label>
-          <textarea
-            matInput
-            [value]="data.token"
-            name="name"
-            required
-          ></textarea>
-        </mat-form-field>
+    <div>
+      <div class="pl-4 d-flex justify-content-between align-items-end">
+        <div class="d-flex flex-column flex-grow-1">
+          <mat-form-field appearance="outline" class="pr-4">
+            <textarea
+              matInput
+              [value]="data.token"
+              name="name"
+              id="token"
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="1"
+              cdkAutosizeMaxRows="3"
+              aria-label="token content"
+              required></textarea>
+          </mat-form-field>
+        </div>
+        <button
+          [cdkCopyToClipboard]="data.token"
+          mat-icon-button class="mb-4 mat-raised-button"
+          aria-label="Copy to clipboard">
+          <i class="eos-icons">content_copy</i>
+        </button>
       </div>
     </div>
   </div>
 
-  <div
-    mat-dialog-actions
-    class="dialog-actions pull-right"
-    style="margin-right: 24px;"
-  >
-    <button mat-button class="" (click)="onCancel()">
-      {{ "general.CLOSE" | translate }}
+  <div mat-dialog-actions class="dialog-actions pull-right mr-2">
+    <button mat-stroked-button aria-label="cancel" (click)="onCancel()">
+      {{ 'general.CLOSE' | translate }}
     </button>
   </div>
 </div>

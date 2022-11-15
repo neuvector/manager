@@ -11,6 +11,7 @@ import { LoadingTemplateModule } from '@components/ui/loading-template/loading-t
 import { MultiClusterGridModule } from '@components/multi-cluster-grid/multi-cluster-grid.module';
 import { SettingsService } from "@services/settings.service";
 import { MultiClusterDetailsComponent } from './multi-cluster-details/multi-cluster-details.component';
+import {ClipboardModule} from "@angular/cdk/clipboard";
 
 const routes: Routes = [
   { path: '', component: MultiClusterComponent }
@@ -22,7 +23,7 @@ const routes: Routes = [
     JoiningModalComponent,
     PromotionModalComponent,
     TokenModalComponent,
-    MultiClusterDetailsComponent
+    MultiClusterDetailsComponent,
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -30,10 +31,15 @@ const routes: Routes = [
     NvCommonModule,
     AdjustableDivModule,
     LoadingTemplateModule,
-    MultiClusterGridModule
+    MultiClusterGridModule,
+    ClipboardModule,
   ],
   exports: [MultiClusterComponent],
   providers: [SettingsService],
-  entryComponents: [PromotionModalComponent, JoiningModalComponent, TokenModalComponent]
+  entryComponents: [
+    PromotionModalComponent,
+    JoiningModalComponent,
+    TokenModalComponent,
+  ],
 })
 export class MultiClusterModule {}

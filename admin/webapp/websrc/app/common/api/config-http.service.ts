@@ -24,7 +24,8 @@ export class ConfigHttpService {
 
   getFedConfig(): Observable<any> {
     return GlobalVariable.http
-      .get(PathConstant.CONFIG_URL, {params: { scope: "fed" }}).pipe();
+      .get(PathConstant.CONFIG_URL, { params: { scope: 'fed' } })
+      .pipe();
   }
 
   patchConfig(body: ConfigPatch): Observable<unknown> {
@@ -79,9 +80,13 @@ export class ConfigHttpService {
   }
 
   checkDebug(): Observable<HttpResponse<unknown>> {
+    const requestOptions: Object = {
+      observe: 'response',
+      responseType: 'text',
+    };
     return GlobalVariable.http.get<HttpResponse<unknown>>(
       PathConstant.DEBUG_CHECK_URL,
-      { observe: 'response' }
+      requestOptions
     );
   }
 

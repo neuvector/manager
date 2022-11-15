@@ -14,6 +14,7 @@ import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { UtilsService } from '@common/utils/app.utils';
 import { TranslateService } from '@ngx-translate/core';
 import { HttpResponse } from '@angular/common/http';
+import { NotificationService } from '@services/notification.service';
 
 @Component({
   selector: 'app-import-file',
@@ -27,7 +28,7 @@ export class ImportFileComponent implements OnInit, OnChanges {
   uploader!: FileUploader;
   hasBaseDropZoneOver: boolean = false;
   hasAnotherDropZoneOver: boolean = false;
-  response: string = "";
+  response: string = '';
   percentage: number = 0;
   status: string = '';
   nvToken: string = '';
@@ -35,7 +36,8 @@ export class ImportFileComponent implements OnInit, OnChanges {
   constructor(
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
     private utils: UtilsService,
-    public translate: TranslateService
+    public translate: TranslateService,
+    private notificationService: NotificationService
   ) {
     this.nvToken = this.sessionStorage.get(
       GlobalConstant.SESSION_STORAGE_TOKEN
@@ -131,6 +133,9 @@ export class ImportFileComponent implements OnInit, OnChanges {
     this.status = res.data.status;
 
     if (this.status === 'done') {
+      this.notificationService.open(
+        this.translate.instant('setting.message.UPLOAD_FINISH')
+      );
       // Alertify.set({ delay: 8000 });
       // Alertify.success(
       //   $translate.instant("admissionControl.msg.IMPORT_FINISH")
@@ -145,6 +150,10 @@ export class ImportFileComponent implements OnInit, OnChanges {
       //   $scope.status
       // );
     }
+  };
+
+  status4Tooltip = status => {
+    return status.replace(/&#34;/g, '"');
   };
 
   getImportProgressInfo = params => {
@@ -191,6 +200,7 @@ export class ImportFileComponent implements OnInit, OnChanges {
               this.translate.instant('admissionControl.msg.IMPORT_FAILED'),
               false
             );
+            this.notificationService.open(this.status);
             if (!MapConstant.USER_TIMEOUT.includes(err.status)) {
               // Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
               // Alertify.error(

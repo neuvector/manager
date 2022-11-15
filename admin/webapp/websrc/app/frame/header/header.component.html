@@ -114,7 +114,7 @@
         <i class="eos-icons icon-18 margin-right-s">organisms</i>
         {{ 'enum.MULTI_CLUSTER' | translate }}
       </button>
-      <button mat-menu-item (click)="goFederatedPolicy()">
+      <button mat-menu-item (click)="goFederatedPolicy()" *appDisplayControl="'multi_cluster'">
         <i class="eos-icons icon-18 margin-right-s">policy</i>
         {{ 'enum.FED_POLICY' | translate }}
       </button>

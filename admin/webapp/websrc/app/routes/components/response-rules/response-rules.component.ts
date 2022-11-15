@@ -91,7 +91,7 @@ export class ResponseRulesComponent implements OnInit {
             this.source === GlobalConstant.NAV_SOURCE.SELF
               ? this.w.innerHeight - 180 - 70
               : this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-              ? this.w.innerHeight - 238
+              ? this.w.innerHeight - 298
               : 0;
         },
         err => {

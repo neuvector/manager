@@ -265,7 +265,7 @@ hr.fancy {
     #59d941,
     #f0f0f0
   );
-  margin: 0 0 20px 0
+  margin: 0 0 20px 0;
 }
 
 #multi-clusters-grid .ag-row,
@@ -353,7 +353,7 @@ hr.fancy {
   }
 
   &.pink {
-    background-color: #E91E63;
+    background-color: #e91e63;
     -webkit-print-color-adjust: exact;
   }
 
@@ -1251,7 +1251,6 @@ mwl-gauge.score > .gauge > .value {
   -webkit-backdrop-filter: blur(5px);
 }
 
-
 .jsoneditor-menu {
   background-color: #30ba78;
   border-bottom: 1px solid #30ba78;
@@ -1299,7 +1298,7 @@ mwl-gauge.score > .gauge > .value {
 
 .badge-pink {
   color: #fff;
-  background-color: #E91E63;
+  background-color: #e91e63;
 }
 
 .hide {
@@ -1315,8 +1314,8 @@ mwl-gauge.score > .gauge > .value {
 }
 
 .nv-help {
-  color: $neuvector-grey-50 ;
-  opacity: 0.54 ;
+  color: $neuvector-grey-50;
+  opacity: 0.54;
   &:hover {
     color: $neuvector-mid-green-200;
   }
@@ -1346,11 +1345,14 @@ mwl-gauge.score > .gauge > .value {
   background-color: $neuvector-mid-green-50 !important;
 }
 
-.docURLBase a:hover{
+.docURLBase a:hover {
   text-decoration: none;
 }
 
 .my-drop-zone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: dotted 3px lightgray;
   height: 60px;
   min-width: 220px;

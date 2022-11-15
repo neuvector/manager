@@ -27,7 +27,7 @@ export class RegistryModulesComponent {
   @Input() modules!: Module[];
   @Input() vulnerabilities!: Vulnerability[];
   @Input() resize!: boolean;
-  safeModuleStatus = false;
+  hideSafeModules = true;
   cves = [];
 
   constructor(
@@ -40,7 +40,7 @@ export class RegistryModulesComponent {
   }
 
   onToggleSafeModules(): void {
-    this.safeModuleStatus = !this.safeModuleStatus;
+    this.hideSafeModules = !this.hideSafeModules;
   }
 
   exportCSV(): void {

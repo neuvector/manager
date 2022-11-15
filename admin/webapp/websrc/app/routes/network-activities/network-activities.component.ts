@@ -329,7 +329,9 @@ export class NetworkActivitiesComponent
                 //Todo: add platform check back
                 // && $scope.summary.platform.toLowerCase().indexOf("kubernetes") !== -1,
                 activeSessions:
-                  model.group && model.group.startsWith('container'),
+                  model.group &&
+                  model.group.startsWith('container') &&
+                  model.state !== 'unmanaged',
                 sniff:
                   model.group &&
                   model.cap_sniff &&
@@ -2312,7 +2314,7 @@ export class NetworkActivitiesComponent
         );
       }
     );
-  };
+  }
 
   //region Sniffer
   snifferOnErr: boolean = false;

@@ -21,7 +21,7 @@
           <input matInput name="id" [(ngModel)]="responseRule.id" disabled />
           <em matSuffix class="icon-tag input-icon"></em>
         </mat-form-field>
-        <mat-form-field appearance="fill" class="mr-4 flex-grow-1">
+        <mat-form-field appearance="fill" class="flex-grow-1" [ngClass]="{'mr-4': !EVENT_WITHOUT_GROUP.includes(responseRule.event)}">
           <mat-select
             name="event"
             placeholder="{{ 'responsePolicy.gridHeader.TYPE' | translate }}*"
@@ -36,7 +36,7 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field appearance="fill" class="mr-4 flex-grow-1">
+        <mat-form-field appearance="fill" class="flex-grow-1" *ngIf="!EVENT_WITHOUT_GROUP.includes(responseRule.event)">
           <mat-label>{{
             'responsePolicy.gridHeader.GROUP' | translate
           }}</mat-label>

@@ -406,7 +406,8 @@ export class AdmissionRulesService {
     tagName,
     criterion: any,
     currCriteriaControl: AbstractControl,
-    isCustomized: boolean
+    isCustomized: boolean,
+    nodeValueType: string = ''
   ) => {
     let isDuplicated = false;
     currCriteriaControl.setValue(
@@ -453,6 +454,7 @@ export class AdmissionRulesService {
           ? 'true'
           : criterion.value,
         path: criterion.path || criterion.name,
+        value_type: nodeValueType || criterion.value_type
       },
     });
     return currCriteria;
@@ -477,6 +479,7 @@ export class AdmissionRulesService {
         op: selectedCriterion.value.op,
         value: selectedCriterion.value.value,
         path: selectedCriterion.value.path || '',
+        value_type: selectedCriterion.value.value_type || '',
       },
       selectedCriterion.value.sub_criteria,
     ];

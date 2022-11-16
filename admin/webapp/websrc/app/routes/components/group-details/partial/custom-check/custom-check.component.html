@@ -8,7 +8,7 @@
       <mat-label>{{'group.script.NAME' | translate}}</mat-label>
       <input
         matInput
-        [readonly]="!isWriteScriptAuthorized"
+        [readonly]="!isWriteScriptAuthorized || opType === modalOp.EDIT"
         formControlName="name"
       />
       <mat-error *ngIf="customCheckForm.controls.name.hasError('required')">
@@ -51,7 +51,7 @@
     <div
       role="button"
       *appDisplayControl="'write_script'"
-      style="position: absolute; z-index: 10; right: 15px;"
+      style="position: absolute; z-index: 10; right: 14px; top: 75px;"
       (click)="switch2Add()">
       <em class="eos-icons">add</em>
     </div>

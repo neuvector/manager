@@ -1,7 +1,10 @@
-<div class="d-flex flex-row align-items-center justify-content-between">
+<div
+  class="d-flex flex-row align-items-center justify-content-between"
+  *ngIf="source === navSource['SELF']">
   <div class="d-flex">
     <h1 class="font-weight-light" id="response rules title">
-      {{ 'responsePolicy.head.TITLE' | translate }}</h1>
+      {{ 'responsePolicy.head.TITLE' | translate }}
+    </h1>
   </div>
   <app-loading-button
     (btnClick)="refresh()"
@@ -23,34 +26,49 @@
       mb0: source === navSource['SELF']
     }">
     <div [ngClass]="{ 'panel-body': source === navSource['SELF'] }">
-      <div class="clearfix" *ngIf="source !== navSource['GROUP']">
+      <div
+        class="d-flex justify-content-between align-items-center"
+        *ngIf="source !== navSource['GROUP']">
+        <ng-container *ngIf="!responsePolicyErr">
+          <button
+            mat-stroked-button
+            aria-Label="add rule"
+            (click)="addResponseRule2Top($event)"
+            *ngIf="isWriteResponseRuleAuthorized">
+            <em class="fa fa-share mr-sm"></em>
+            {{ 'policy.toolBar.INSERT_TO_TOP' | translate }}
+          </button>
+        </ng-container>
         <app-quick-filter
           class="pull-left"
           [gridOptions]="gridOptions"
           [filteredCount]="filteredCount"
           [count]="responseRulesService.responseRules.length">
         </app-quick-filter>
-        <div class="pull-left margin-top-m margin-left-l">
-          <ul class="list-inline" *ngIf="!responsePolicyErr">
-            <li
-              class="policy-top-button"
-              (click)="addResponseRule2Top($event)"
-              *ngIf="isWriteResponseRuleAuthorized">
-              <!--Authorization-->
-              <button class="primary-button">
-                <em class="fa fa-share mr-sm"></em>
-                {{ 'policy.toolBar.INSERT_TO_TOP' | translate }}
-              </button>
-            </li>
-          </ul>
-        </div>
+      </div>
+      <div
+        *ngIf="source === navSource['GROUP']"
+        class="clearfix"
+      >
+        <app-quick-filter
+          class="pull-right"
+          [gridOptions]="gridOptions"
+          [filteredCount]="filteredCount"
+          [showCount]="false">
+        </app-quick-filter>
       </div>
       <ag-grid-angular
-        #agGrid
         id="response-rule-grid"
         style="width: 100%"
-        [ngStyle]="{ height: (source === navSource['GROUP'] ? resizableHeight - 85 : gridHeight) + 'px' }"
+        [ngStyle]="{
+          height:
+            (source === navSource['GROUP']
+              ? resizableHeight - 155
+              : gridHeight) + 'px'
+        }"
         class="ag-theme-balham"
+        [enableCellTextSelection]="true"
+        [ensureDomOrder]="true"
         [gridOptions]="gridOptions"
         [rowData]="responseRulesService.responseRules"
         [context]="context">

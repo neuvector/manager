@@ -71,7 +71,7 @@ export class ScoreImprovementRunAsPrivilegedContainersViewComponent
     this.containersService.getContainers().subscribe({
       next: workloads => {
         this.containers = workloads
-          .filter(this.runAsPriviledgedFilter)
+          .filter(this.runAsPrivilegedFilter)
           .filter(w => w.state !== 'exit' && !w.platform_role);
         this.containersService.displayContainers =
           this.containersService.formatScannedWorkloads(this.containers);
@@ -98,7 +98,7 @@ export class ScoreImprovementRunAsPrivilegedContainersViewComponent
       });
   }
 
-  private runAsPriviledgedFilter = (w: Workload) => {
+  private runAsPrivilegedFilter = (w: Workload) => {
     return (
       w.children &&
       w.children.length > 0 &&

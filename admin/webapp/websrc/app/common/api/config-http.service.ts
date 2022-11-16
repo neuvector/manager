@@ -5,6 +5,8 @@ import {
   ConfigDebug,
   ConfigPatch,
   ConfigResponse,
+  ConfigV2,
+  ConfigV2Response,
   DebugPostBody,
   IBMSetupGetResponse,
 } from '@common/types';
@@ -14,10 +16,16 @@ import { pluck } from 'rxjs/operators';
 
 @Injectable()
 export class ConfigHttpService {
-  getConfig(): Observable<ConfigResponse> {
+  getConfig(): Observable<ConfigV2Response> {
     return GlobalVariable.http
-      .get<ConfigResponse>(PathConstant.CONFIG_URL)
+      .get<ConfigV2Response>(PathConstant.CONFIG_V2_URL)
       .pipe(pluck('config'));
+  }
+
+  getFedConfig(): Observable<any> {
+    return GlobalVariable.http
+      .get(PathConstant.CONFIG_URL, { params: { scope: 'fed' } })
+      .pipe();
   }
 
   patchConfig(body: ConfigPatch): Observable<unknown> {
@@ -72,9 +80,13 @@ export class ConfigHttpService {
   }
 
   checkDebug(): Observable<HttpResponse<unknown>> {
+    const requestOptions: Object = {
+      observe: 'response',
+      responseType: 'text',
+    };
     return GlobalVariable.http.get<HttpResponse<unknown>>(
       PathConstant.DEBUG_CHECK_URL,
-      { observe: 'response' }
+      requestOptions
     );
   }
 

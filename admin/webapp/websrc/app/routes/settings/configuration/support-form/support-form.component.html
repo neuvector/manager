@@ -38,6 +38,15 @@
         class="m-2"
         (btnClick)="cancelCollect()">
       </app-loading-button>
+      <app-loading-button
+        *ngIf="collectingLogReady"
+        [appearance]="'mat-raised-button'"
+        [color]="'primary'"
+        [text]="'network.DOWNLOAD' | translate"
+        [type]="'button'"
+        class="m-2"
+        (btnClick)="downloadLog()">
+      </app-loading-button>
     </div>
   </div>
 </div>

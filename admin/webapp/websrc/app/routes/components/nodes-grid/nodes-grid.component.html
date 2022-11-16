@@ -65,10 +65,20 @@
     </app-quick-filter>
   </div>
 </div>
+<div class="clearfix" *ngIf="source === navSource['GROUP']">
+  <app-quick-filter
+    class="pull-right"
+    [gridOptions]="gridOptions"
+    (filterCountChange)="filterCountChanged($event)"
+    [showCount]="false">
+  </app-quick-filter>
+</div>
 <ag-grid-angular
   #agGrid
   (window:resize)="onResize()"
   [ngStyle]="{ height: gridHeight + 'px' }"
+  [enableCellTextSelection]="true"
+  [ensureDomOrder]="true"
   [gridOptions]="gridOptions"
   [rowData]="nodesService.nodes"
   id="nodes-grid"

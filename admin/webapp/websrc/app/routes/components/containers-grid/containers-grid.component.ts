@@ -6,6 +6,7 @@ import { QuickFilterService } from '@components/quick-filter/quick-filter.servic
 import { TranslateService } from '@ngx-translate/core';
 import { ContainersService, WorkloadRow } from '@services/containers.service';
 import { VersionInfoService } from '@services/version-info.service';
+import { GlobalConstant } from '@common/constants/global.constant';
 import {
   ColDef,
   GridApi,
@@ -35,12 +36,14 @@ export class ContainersGridComponent implements OnInit {
   @Input() isScanAuthorized!: boolean;
   @Input() rowData!: Array<WorkloadRow>;
   @Input() isMemberData: boolean = false;
+  @Input() source: string;
   @Output() scan = new EventEmitter<WorkloadRow>();
   gridOptions!: GridOptions;
   gridApi!: GridApi;
   columnDefs!: ColDef[];
   filtered: boolean = false;
   filteredCount!: number;
+  navSource = GlobalConstant.NAV_SOURCE;
   selectedContainerSubject$ = new BehaviorSubject<WorkloadRow | undefined>(
     undefined
   );

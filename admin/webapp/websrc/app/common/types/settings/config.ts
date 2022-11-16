@@ -34,6 +34,22 @@ export interface ConfigV2 {
   misc_cfg: MiscConfig;
 }
 
+export interface ConfigV2Response {
+  new_svc: SvcConfig;
+  syslog: SyslogConfig;
+  auth: AuthConfig;
+  misc: MiscConfig;
+  webhooks: Webhook[];
+  proxy: ProxyConfig;
+  ibmsa: IBMSAConfig;
+  net_svc: NetConfig;
+  mode_auto: AtmoConfig;
+  scanner_autoscale: ScannerAutoscale;
+  duration_toggle?: boolean;
+  ibmsa_setup?: IBMSetupGetResponse;
+  ibmsa_ep_start?: number;
+}
+
 export interface SvcConfig {
   new_service_policy_mode: PolicyMode;
   new_service_profile_baseline: ProfileBaseline;

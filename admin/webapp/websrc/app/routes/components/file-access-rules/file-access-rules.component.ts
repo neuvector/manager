@@ -42,6 +42,7 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
   public filteredCount: number = 0;
   public isWriteGroupAuthorized: boolean = false;
   public isWriteFileAccessRuleAuthorized: boolean = false;
+  CFG_TYPE = GlobalConstant.CFG_TYPE;
 
   constructor(
     private fileAccessRulesService: FileAccessRulesService,
@@ -120,7 +121,7 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
             this.source === GlobalConstant.NAV_SOURCE.GROUP
               ? this.w.innerHeight - 572
               : this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-              ? this.w.innerHeight - 250
+              ? this.w.innerHeight - 300
               : 0;
           setTimeout(() => {
             if (this.gridOptions.api) {

@@ -46,6 +46,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   toggleSubmenuClick(event, dropdownId = '') {
     event.preventDefault();
+    $('.menu-arrow').each((idx, el) => {
+      el.innerText = 'arrow_drop_down';
+    });
 
     if (
       !this.isSidebarCollapsed() &&

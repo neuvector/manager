@@ -167,6 +167,9 @@ export const Registries = {
   SONATYPE_NEXUS: 'Sonatype Nexus',
 };
 
+export const FedRegistryHideExpr =
+  '(!formState.isFedAdmin && !model.isEdit) || !formState.isMaster';
+
 export const NameField = {
   key: 'name',
   type: FormlyComponents.ICON_INPUT,
@@ -177,7 +180,21 @@ export const NameField = {
   },
   expressionProperties: {
     'templateOptions.disabled': 'model.isEdit',
-  }
+  },
+  hooks: {
+    onInit: field => {
+      const isFedCtrl = field.parent.formControl.get('isFed');
+      if (isFedCtrl) {
+        isFedCtrl.valueChanges.subscribe(isFed => {
+          if (isFed) {
+            field.templateOptions.prefix = 'fed.';
+          } else {
+            field.templateOptions.prefix = '';
+          }
+        });
+      }
+    },
+  },
 };
 
 export const RegistryField = {

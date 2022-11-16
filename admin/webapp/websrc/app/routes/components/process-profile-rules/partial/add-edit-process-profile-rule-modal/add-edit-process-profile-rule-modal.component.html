@@ -1,26 +1,21 @@
 <div class="nv-dialog">
-  <div mat-dialog-title class="dialog-header">
-    <div class="pull-left">
+  <div class="d-flex align-items-center justify-content-between">
+    <h4 mat-dialog-title class="mb-1">
       {{
         (type === 'add' ? 'service.ADD_RULE' : 'service.EDIT_RULE') | translate
       }}
-    </div>
-    <div class="pull-right">
-      <em class="icon-close hand" (click)="onCancel()"></em>
-    </div>
+    </h4>
+    <button
+      mat-icon-button
+      aria-label="close"
+      class="d-flex align-items-center justify-content-center mb-1">
+      <i class="eos-icons" (click)="onCancel()">close</i>
+    </button>
   </div>
-  <div mat-dialog-content class="dialog-content p0 m0">
-    <form
-      fxLayout="column"
-      fxLayoutAlign="start"
-      [formGroup]="processProfileRuleForm"
-      fxFlex="1 0 auto"
-      class="pt-lg">
-      <div
-        fxLayout="row"
-        fxLayoutAlign="start center"
-        fxFlex="1 0 auto"
-        class="pl-4">
+  <hr class="fancy" />
+  <div>
+    <form [formGroup]="processProfileRuleForm" class="">
+      <div class="pl-2">
         <mat-form-field appearance="fill">
           <mat-label>{{ 'group.GROUP' | translate }}</mat-label>
           <mat-select matNativeControl required formControlName="group">
@@ -33,12 +28,8 @@
           <mat-error>Group is required!</mat-error>
         </mat-form-field>
       </div>
-      <div
-        fxLayout="row"
-        fxLayoutAlign="start center"
-        fxFlex="1 0 auto"
-        class="pl-4">
-        <mat-form-field appearance="standard" fxFlex="40" class="pr-4">
+      <div class="d-flex justify-content-start align-content-center pl-2">
+        <mat-form-field appearance="standard" class="pr-4">
           <mat-label>{{ 'service.gridHeader.NAME' | translate }}</mat-label>
           <input
             matInput
@@ -46,22 +37,16 @@
             [readonly]="type === 'edit'"
             formControlName="name"
             required />
-          <em matSuffix class="icon-paper-clip input-icon"></em>
           <mat-error>Rule name is required!</mat-error>
         </mat-form-field>
-        <mat-form-field appearance="standard" fxFlex="60" class="pr-4">
+        <mat-form-field appearance="standard">
           <mat-label>{{ 'service.gridHeader.PATH' | translate }}</mat-label>
           <input matInput name="path" formControlName="path" />
-          <em matSuffix class="icon-paper-clip input-icon"></em>
         </mat-form-field>
       </div>
-      <div
-        fxLayout="row"
-        fxLayoutAlign="start center"
-        fxFlex="1 0 auto"
-        class="pl-4">
-        <div fxFlex="30" class="pr-4" style="margin-bottom: 20px">
-          <span class="nv-modal-item-title mr">{{
+      <div class="d-flex justify-content-start align-content-center pl-2 pt-2">
+        <div>
+          <span class="nv-modal-item-title mr-2">{{
             'service.ALLOW_ALERT' | translate
           }}</span>
           <mat-slide-toggle
@@ -86,13 +71,17 @@
   </div>
   <div
     mat-dialog-actions
-    class="dialog-actions pull-right"
-    style="margin-right: 24px">
-    <a class="modal-cancel-button mr-2" (click)="onCancel()">
+    class="d-flex justify-content-end align-content-center">
+    <button
+      mat-stroked-button
+      class="mr-2"
+      aria-label="cancel"
+      (click)="onCancel()">
       {{ 'group.editGroup.CANCEL' | translate }}
-    </a>
+    </button>
     <button
       mat-raised-button
+      aria-label="deploy"
       color="primary"
       [disabled]="processProfileRuleForm.invalid"
       (click)="addEditProcessProfileRule()">

@@ -84,7 +84,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     this.isWriteGlobalRulesAuthorized = this.authUtilsService.getDisplayFlag('write_network_rule');
     this.bindRouteEventListener();
-    this.gridHeight = this.w.innerHeight - (this.source === GlobalConstant.NAV_SOURCE.SELF ? 215 : 230);
+    this.gridHeight = this.w.innerHeight - (this.source === GlobalConstant.NAV_SOURCE.SELF ? 245 : 300);
     this.isWriteNetworkRuleAuthorized =
       this.authUtilsService.getDisplayFlag('write_network_rule') &&
       (
@@ -247,7 +247,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       data: {
         message: `${this.translate.instant(
           'policy.dialog.REMOVE'
-        )} - ${ids.join(', ')}`,
+        )} ${ids.join(', ')}`,
         isSync: true,
       },
       disableClose: true,

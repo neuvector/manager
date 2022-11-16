@@ -4,6 +4,7 @@ import {
   Component,
   Inject,
   OnInit,
+  ViewChild,
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { RegistriesService } from '@services/registries.service';
@@ -11,6 +12,7 @@ import { RegistryDetailsTableComponent } from '../registry-details-table.compone
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { delay, map, mergeMap, take, tap } from 'rxjs/operators';
 import {
+  Check,
   EntryPostBody,
   ErrorResponse,
   Image,
@@ -24,6 +26,7 @@ import { QuickFilterService } from '@components/quick-filter/quick-filter.servic
 import { NotificationService } from '@services/notification.service';
 import { UtilsService } from '@common/utils/app.utils';
 import { TranslateService } from '@ngx-translate/core';
+import { RemediationDetailDialogComponent } from '@components/compliance-grid/remediation-detail-dialog/remediation-detail-dialog.component';
 
 export interface RegistryDetailsDialogData {
   selectedRegistry: Summary;
@@ -45,6 +48,12 @@ export class RegistryDetailsDialogComponent implements OnInit {
   filteredCountText = 0;
   filter = new FormControl('');
   private toggleViewSubject$ = new BehaviorSubject<boolean>(false);
+  @ViewChild(RemediationDetailDialogComponent)
+  remediationDetails!: RemediationDetailDialogComponent;
+  selectedRemediation!: Check;
+  get registryTitle() {
+    return `${this.data.selectedRegistry.registry}${this.data.image.repository}:${this.data.image.tag}`;
+  }
 
   constructor(
     public dialogRef: MatDialogRef<RegistryDetailsTableComponent>,
@@ -154,5 +163,10 @@ export class RegistryDetailsDialogComponent implements OnInit {
 
   onNoClick(): void {
     this.dialogRef.close();
+  }
+
+  openRemediation(data: Check) {
+    this.selectedRemediation = data;
+    this.remediationDetails.show();
   }
 }

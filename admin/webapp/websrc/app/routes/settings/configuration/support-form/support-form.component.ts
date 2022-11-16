@@ -8,8 +8,8 @@ import { EnforcersService } from '@services/enforcers.service';
 import { NotificationService } from '@services/notification.service';
 import { SettingsService } from '@services/settings.service';
 import { saveAs } from 'file-saver';
-import { Subject } from 'rxjs';
-import { delay, finalize, find, repeatWhen, takeUntil } from 'rxjs/operators';
+import { Subject, timer } from 'rxjs';
+import { filter, finalize, switchMap, take, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-support-form',
@@ -93,20 +93,27 @@ export class SupportFormComponent {
   }
 
   handleLog() {
-    this.enforcersService
-      .checkDebug()
+    timer(0, 5000)
       .pipe(
+        switchMap(() => this.enforcersService.checkDebug()),
+        filter(res => res.status === 200),
+        take(1),
         takeUntil(this.stopCollect$),
-        repeatWhen(res => res.pipe(delay(5000))),
-        find(res => res.status === 200),
         finalize(() => (this.collectingLog = false))
       )
-      .subscribe(() => (this.collectingLogReady = true));
+      .subscribe(
+        () => (this.collectingLogReady = true),
+        ({ error }: { error: ErrorResponse }) => {
+          this.notificationService.open(
+            this.tr.instant('setting.COLLOECT_FAILED')
+          );
+          console.warn(error);
+        }
+      );
   }
 
   collectLog(): void {
     this.collectingLog = true;
-    this.collectingLogReady = false;
     let enforcerParam =
       this.enforcersGrid.selectedNodes.length ===
       this.enforcersService.enforcers.length
@@ -119,7 +126,9 @@ export class SupportFormComponent {
         this.handleLog();
       },
       ({ error }: { error: ErrorResponse }) => {
-        this.notificationService.open(this.tr.instant('setting.COLLOECT_FAILED'));
+        this.notificationService.open(
+          this.tr.instant('setting.COLLOECT_FAILED')
+        );
         console.warn(error);
       }
     );

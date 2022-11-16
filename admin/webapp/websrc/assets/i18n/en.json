@@ -2520,7 +2520,7 @@
       "CPU_REQUEST_S": "CPU Req",
       "MEMORY_LIMIT_S": "Mem Lmt",
       "MEMORY_REQUEST_S": "Mem Req",
-      "HAS_PSS_VIOLATION": "PSA/PSS Best Practice",
+      "PSS_VIOLATION": "PSA/PSS Best Practice",
       "MODULES": "Modules"
     },
     "operators": {
@@ -2600,6 +2600,8 @@
     "USE_HTTP_PROXY":"Use http proxy configured in Settings > Configuration page",
     "USE_HTTPS_PROXY": "Use https proxy configured in Settings > Configuration page",
     "NO_PROXY": "Does not use any proxy",
+    "fed_sync_registry": "Sync the fed registry scan data to managed clusters",
+    "fed_sync_repository": "Sync the repository scan data to managed clusters",
     "tips": {
       "policy": "Manage Federated Policy",
       "demote": "Demote",
@@ -2677,7 +2679,7 @@
     },
     "prompt": {
       "remove": "Are you sure you want to remove {{ name }} from this Primary Cluster?",
-      "demote": "Are you sure you want to demote the Primary Cluster {{ name }}?",
+      "demote": "Are you sure you want to demote the cluster ( {{ name }} ) ?",
       "leave": "Are you sure you want to leave this Primary Cluster?"
     },
     "validation": {
@@ -2832,6 +2834,7 @@
     "ENFORCERS_HINT": "Select enforcers to include their support log if necessary. Up to {{maxSlectedEnforcer}} enforcers can be selected.",
     "MAX_SELECTED_ENFORCER_HINT": "Please select no more than {{maxSlectedEnforcer}} enforcers for support log.",
     "AS_STANDALONE": "Import configuration as standalone cluster",
+    "RANCHER_EP": "Rancher Endpoint",
     "autoscale": {
       "TITLE": "Scanner Autoscale",
       "MIN_MAX": "Min/max pods",
@@ -2849,6 +2852,7 @@
       "NEW": "New Webhook",
       "NAME_EMPTY": "Name is required",
       "NAME_NG": "Invalid Name",
+      "NAME_DUPLICATED": "Name can't be duplicated.",
       "URL_NG": "Invalid URL",
       "NAME_PATTERN_NG": "Start with \"fed.\"",
       "LOCAL_NAME_PATTERN_NG": "Can't start with \"fed.\"",

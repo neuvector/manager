@@ -2520,7 +2520,7 @@
       "CPU_REQUEST_S": "CPU请求",
       "MEMORY_LIMIT_S": "内存限制",
       "MEMORY_REQUEST_S": "内存请求",
-      "HAS_PSS_VIOLATION": "PSA/PSS最佳实施",
+      "PSS_VIOLATION": "PSA/PSS最佳实施",
       "MODULES": "模块"
     },
     "operators": {
@@ -2832,6 +2832,7 @@
     "ENFORCERS_HINT": "如果需要可以选择代理以加入它们的支持日志. 最多可以选择{{maxSlectedEnforcer}}个",
     "MAX_SELECTED_ENFORCER_HINT": "请为支持日志选择不超过{{maxSlectedEnforcer}}个代理.",
     "AS_STANDALONE": "作为独立集群导入配置",
+    "RANCHER_EP": "Rancher端点",
     "autoscale": {
       "TITLE": "扫描仪弹性伸缩",
       "MIN_MAX": "最小/最大 pods",
@@ -2849,6 +2850,7 @@
       "NEW": "新建网络挂接",
       "NAME_EMPTY": "名称不可为空",
       "NAME_NG": "无效名称",
+      "NAME_DUPLICATED": "名称不可重复",
       "URL_NG": "无效URL",
       "NAME_PATTERN_NG": "以\"fed.\"开头",
       "LOCAL_NAME_PATTERN_NG": "不能以\"fed.\"开头",

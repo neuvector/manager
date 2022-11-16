@@ -75,7 +75,7 @@ export class AdmissionRulesComponent implements OnInit {
     this.context = { componentParent: this };
     this.gridHeight = this.source === GlobalConstant.NAV_SOURCE.SELF ? this.w.innerHeight - 238
       : this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-      ? this.w.innerHeight - 288
+      ? this.w.innerHeight - 300
       : 0;
     this.refresh();
     //refresh the page when it switched to a remote cluster

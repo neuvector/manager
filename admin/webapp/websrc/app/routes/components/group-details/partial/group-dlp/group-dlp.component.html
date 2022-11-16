@@ -9,7 +9,7 @@
     <mat-slide-toggle
       class="padding-top-s pull-right margin-top-l"
       id="group-dlp-sensor-status-toggle"
-      [disabled]="!isWriteDlpAuthorized"
+      [disabled]="!isWriteDlpAuthorized || cfgType === CFG_TYPE.GROUND"
       [(ngModel)]="enabled"
       [ngModelOptions]="{standalone: true}"
     >
@@ -29,7 +29,7 @@
     <div
       role="button"
       class="pull-right margin-right-s margin-top-l hand"
-      *appDisplayControl="'write_dlp_rule'"
+      *ngIf="cfgType !== CFG_TYPE.GROUND && isWriteDlpAuthorized"
       (click)="openEditGroupSensorModal()">
       <em class="eos-icons">edit</em>
     </div>
@@ -41,6 +41,8 @@
       style="width: 100%;"
       [ngStyle]="{ height: (resizableHeight - 150) + 'px' }"
       class="ag-theme-balham"
+      [enableCellTextSelection]="true"
+      [ensureDomOrder]="true"
       [gridOptions]="gridOptions4GroupDlpSensors"
       >
     </ag-grid-angular>

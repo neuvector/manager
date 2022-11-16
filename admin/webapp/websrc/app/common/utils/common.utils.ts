@@ -588,7 +588,7 @@ export function briefToV2(workload: WorkloadBrief): WorkloadChildV2 {
     platform_role: workload.platform_role || '',
     rt_attributes: {
       pod_name: workload.pod_name || '',
-      priviledged: workload.privileged || false,
+      privileged: workload.privileged || false,
       run_as_root: workload.run_as_root || false,
     },
     security: {
@@ -681,7 +681,7 @@ export function workloadToV2(workload: Workload): WorkloadChildV2 {
       network_mode: workload.network_mode,
       pod_name: workload.pod_name,
       ports: workload.ports,
-      priviledged: workload.privileged,
+      privileged: workload.privileged,
       run_as_root: workload.run_as_root,
     },
     running: workload.running,

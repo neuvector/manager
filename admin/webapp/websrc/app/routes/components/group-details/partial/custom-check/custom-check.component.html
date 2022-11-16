@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row mx-0">
   <form
     [formGroup]="customCheckForm"
     class="col-sm-6"
@@ -8,7 +8,8 @@
       <mat-label>{{'group.script.NAME' | translate}}</mat-label>
       <input
         matInput
-        [readonly]="!isWriteScriptAuthorized"
+        [readonly]="!isWriteScriptAuthorized || opType === modalOp.EDIT"
+        (blur)="blurOnName()"
         formControlName="name"
       />
       <mat-error *ngIf="customCheckForm.controls.name.hasError('required')">
@@ -39,11 +40,19 @@
       </app-loading-button>
     </div>
   </form>
-  <div class="col-sm-6" style="position: relative;">
+  <div class="col-sm-6 px-0" style="position: relative;">
+    <div class="clearfix ">
+      <app-quick-filter
+        class="pull-right"
+        [gridOptions]="gridOptions4CustomCheck"
+        [filteredCount]="filteredCount"
+        [showCount]="false">
+      </app-quick-filter>
+    </div>
     <div
       role="button"
       *appDisplayControl="'write_script'"
-      style="position: absolute; z-index: 10; right: 15px;"
+      style="position: absolute; z-index: 10; right: 14px; top: 75px;"
       (click)="switch2Add()">
       <em class="eos-icons">add</em>
     </div>
@@ -51,8 +60,10 @@
       #customCheckGrid
       id="custom-check-grid"
       style="width: 100%;"
-      [ngStyle]="{ height: (resizableHeight - 85) + 'px' }"
+      [ngStyle]="{ height: (resizableHeight - 150) + 'px' }"
       class="ag-theme-balham"
+      [enableCellTextSelection]="true"
+      [ensureDomOrder]="true"
       [gridOptions]="gridOptions4CustomCheck"
       [context]="context"
       >

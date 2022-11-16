@@ -41,7 +41,7 @@ export class ReportByNamespaceModalComponent implements OnInit {
             topSecurityEvents: dashboardSecurityEvent.criticalSecurityEvents.top_security_events,
             securityEventSummary: dashboardSecurityEvent.criticalSecurityEvents.summary
           },
-          dashbaordDetailsInfo: {
+          dashboardDetailsInfo: {
             isAutoScanOn: dashbaordDetails.autoScanConfig,
             highPriorityVulnerabilities: dashbaordDetails.highPriorityVulnerabilities,
             containers: dashbaordDetails.containers,

@@ -1,11 +1,15 @@
 <div class="d-flex align-items-center justify-content-between">
-  <h1 mat-dialog-title>
+  <h4 mat-dialog-title class="mb-2">
     {{
       (this.data.isEdit ? 'user.editUser.TITLE' : 'user.addUser.TITLE')
         | translate
     }}
-  </h1>
+  </h4>
+  <button (click)="onNoClick()" class="mb-2" aria-label="Close dialog" mat-icon-button>
+    <i class="eos-icons ">close</i>
+  </button>
 </div>
+<hr class="fancy" />
 <form (ngSubmit)="submit()" [formGroup]="form">
   <div class="user__container">
     <div class="user__field">
@@ -97,6 +101,14 @@
     [group_roles]="data.globalRoles"
     [hidden]="!showAdvSetting"></app-group-domain-role-table>
   <div class="d-flex justify-content-end">
+    <button
+      (click)="onNoClick()"
+      class="mr-2"
+      [id]="dialogPrefix + '-user-dialog-cancel'"
+      mat-button
+      type="button">
+      {{ 'user.addUser.CANCEL' | translate }}
+    </button>
     <app-loading-button
       [disabled]="
         form.invalid ||
@@ -113,13 +125,5 @@
       [id]="dialogPrefix + '-user-dialog-submit'"
       type="submit">
     </app-loading-button>
-    <button
-      (click)="onNoClick()"
-      class="mr-2"
-      [id]="dialogPrefix + '-user-dialog-cancel'"
-      mat-button
-      type="button">
-      {{ 'user.addUser.CANCEL' | translate }}
-    </button>
   </div>
 </form>

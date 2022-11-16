@@ -1,5 +1,14 @@
 <div class="d-flex align-items-center justify-content-between">
-  <h1 mat-dialog-title>{{ 'registry.ADD_REPO' | translate }}</h1>
+  <h1 mat-dialog-title>
+    {{
+      (!data.editable
+        ? 'registry.VIEW_REPO'
+        : data.config
+        ? 'registry.EDIT_REPO'
+        : 'registry.ADD_REPO'
+      ) | translate
+    }}
+  </h1>
   <button
     (click)="openTestConnectionDialog()"
     *ngIf="canTestConnection"
@@ -13,7 +22,11 @@
   </button>
 </div>
 <form (ngSubmit)="submit()" [formGroup]="form">
-  <formly-form [fields]="fields" [form]="form" [model]="model"></formly-form>
+  <formly-form
+    [fields]="fields"
+    [form]="form"
+    [options]="options"
+    [model]="model"></formly-form>
   <div class="d-flex justify-content-end">
     <button
       (click)="onNoClick()"

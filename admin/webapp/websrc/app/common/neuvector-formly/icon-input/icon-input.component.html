@@ -5,6 +5,14 @@
     [class]="to.isCell ? 'pull-left' : 'w-' + (to.inputWidth ?? '100')"
     [hideRequiredMarker]="to.hideRequiredMarker ?? false">
     <mat-label>{{ field.templateOptions?.label || '' | translate }}</mat-label>
+    <span
+      matPrefix
+      *ngIf="
+        field.templateOptions?.prefix &&
+        field.templateOptions?.prefix.length > 0
+      "
+      >{{ field.templateOptions?.prefix }}</span
+    >
     <input
       *ngIf="field.templateOptions?.type !== 'number'; else numberTmp"
       [attr.disabled]="field.templateOptions?.disabled || false"

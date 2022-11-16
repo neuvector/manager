@@ -25,6 +25,7 @@ import { ImportFileModule } from '@components/ui/import-file/import-file.module'
 import { SupportFormComponent } from './support-form/support-form.component';
 import { EnforcersGridModule } from '@components/enforcers-grid/enforcers-grid.module';
 import { PendingChangesGuard } from '@common/guards/pending-changes.guard';
+import { NvCommonModule } from '@common/nvCommon.module';
 
 const routes: Routes = [
   {
@@ -44,6 +45,7 @@ const routes: Routes = [
   ],
   imports: [
     CommonModule,
+    NvCommonModule,
     RouterModule.forChild(routes),
     ReactiveFormsModule,
     FormsModule,

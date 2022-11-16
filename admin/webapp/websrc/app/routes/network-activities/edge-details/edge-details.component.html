@@ -46,6 +46,8 @@
     class="ag-theme-alpine"
     style="width: 100%; margin-top: 10px"
     [ngStyle]="{ height: entriesGridHeight + 'px' }"
+    [enableCellTextSelection]="true"
+    [ensureDomOrder]="true"
     [rowData]="conversationDetail.entries"
     [gridOptions]="gridOptions">
   </ag-grid-angular>
@@ -60,7 +62,7 @@
       {{ 'general.NO_CONVERSATIONS' | translate }}
     </div>
   </div>
-  <div class="d-flex flex-row justify-content-end mt-1">
+  <div class="d-flex flex-row justify-content-end my-3">
     <button
       *ngIf="showRuleId && traffic.policy_action !== 'open'"
       [disabled]="!isWriteNetworkAuthorized"
@@ -90,85 +92,79 @@
   </div>
 
   <div *ngIf="onRule" class="col-sm-12">
-    <hr class="fancy my-2" />
     <h4 *ngIf="rule.id !== 0">
       {{ 'policy.RULE_DETAILS' | translate }}
       <em class="far fa-hand-point-right mx-1 text-primary"></em>
-      <small class="text-muted">{{ rule.id }}</small>
+      <small class="text-muted mr-4">{{ rule.id }}</small>
+      <div
+        *ngIf="rule.learned"
+        class="action-label px-1 learn-rule"
+        translate="{{ 'group.LEARNED' }}"></div>
+      <div
+        *ngIf="!rule.learned"
+        class="action-label px-1 customer-rule"
+        translate="{{ 'group.CUSTOM' }}"></div>
     </h4>
     <h4 *ngIf="rule.id === 0">
       {{ 'policy.NEW_RULE' | translate }}
       <em class="far fa-plus-square mx-1 text-primary"></em>
     </h4>
     <div>
-      <form name="ruleForm" novalidate="">
-        <div class="row">
-          <div class="col-sm-6">
-            <label>{{ 'policy.editPolicy.FROM' | translate }}</label>
-            <input
-              matInput
-              value="{{ rule.from }}"
-              disabled
-              aria-label="From" />
+      <form name="ruleForm" >
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="full-width mr-2">
+            <mat-form-field appearance="fill" class="full-width">
+                <mat-label>{{ 'policy.editPolicy.FROM' | translate }}</mat-label>
+                <input
+                  matInput
+                  value="{{ rule.from }}"
+                  disabled
+                  aria-label="From" />
+              </mat-form-field>
           </div>
-          <div class="col-sm-6">
-            <label>{{ 'policy.editPolicy.TO' | translate }}</label>
+          <div class="full-width mr-2">
+            <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{ 'policy.editPolicy.TO' | translate }}</mat-label>
             <input matInput value="{{ rule.to }}" disabled aria-label="To" />
+            </mat-form-field>
+          </div>
+          <div class="full-width ">
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>{{ 'policy.addPolicy.APP' | translate }}</mat-label>
+              <input
+                matInput
+                disabled
+                value="{{ rule.applications.join(', ') }}"
+                aria-label="Applications" />
+            </mat-form-field>
           </div>
         </div>
-        <div class="row mt-2">
-          <div class="col-sm-6 mb-0">
-            <label>{{ 'policy.addPolicy.APP' | translate }}</label>
-            <input
-              matInput
-              disabled
-              value="{{ rule.applications.join(', ') }}"
-              aria-label="Applications" />
-          </div>
-          <div class="col-sm-6 mb-0">
-            <label>{{ 'policy.editPolicy.PORT' | translate }}</label>
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="full-width mr-2">
+            <mat-form-field appearance="fill" class="full-width">
+            <mat-label>{{ 'policy.editPolicy.PORT' | translate }}</mat-label>
             <input
               matInput
               disabled
               value="{{ rule.ports }}"
               aria-label="Port" />
+            </mat-form-field>
           </div>
-        </div>
-        <div class="row mt-2">
-          <div class="col-sm-4 mb-0" *ngIf="rule.created_timestamp">
-            <label>{{ 'controllers.detail.CREATED_AT' | translate }}</label>
-            <input
-              matInput
-              disabled
-              aria-label="Created date"
-              value="{{
+          <div class="full-width mr-2" >
+            <ng-container *ngIf="rule.created_timestamp">
+              <mat-form-field appearance="fill" class="full-width">
+                <mat-label>{{ 'controllers.detail.CREATED_AT' | translate }}</mat-label>
+                <input
+                  matInput
+                  disabled
+                  aria-label="Created date"
+                  value="{{
                 rule.created_timestamp * 1000 | date: 'MMM dd, y HH:mm:ss'
               }}" />
+              </mat-form-field>
+            </ng-container>
           </div>
-          <div class="col-sm-4 mb-0" *ngIf="rule.last_modified_timestamp">
-            <label>{{ 'policy.gridHeader.UPDATE_AT' | translate }}</label>
-            <input
-              matInput
-              disabled
-              aria-label="Modified date"
-              value="{{
-                rule.last_modified_timestamp * 1000 | date: 'MMM dd, y HH:mm:ss'
-              }}" />
-          </div>
-          <div class="col-sm-2 mb-0" style="margin-top: 25px">
-            <div
-              *ngIf="rule.learned"
-              class="action-label px-1 learn-rule"
-              translate="{{ 'group.LEARNED' }}"></div>
-            <div
-              *ngIf="!rule.learned"
-              class="action-label px-1 customer-rule"
-              translate="{{ 'group.CUSTOM' }}"></div>
-          </div>
-          <div class="col-sm-2 mb-0">
-            <label class="text-muted">{{
-              'policy.editPolicy.DENY_ALLOW' | translate
-            }}</label>
+          <div class="full-width">
             <div>
               <mat-slide-toggle
                 class="example-margin"
@@ -176,24 +172,16 @@
                 [checked]="rule.allowed"
                 [disabled]="
                   !isWriteNetworkAuthorized || rule.action === 'open'
-                ">
+                ">{{
+                'policy.editPolicy.DENY_ALLOW' | translate
+                }}
               </mat-slide-toggle>
             </div>
           </div>
         </div>
-        <div class="row mt-2">
+        <div class="row mt-3">
           <div class="col">
             <div class="pull-right">
-              <button
-                mat-raised-button
-                *ngIf="isWriteNetworkAuthorized"
-                class="mt-1 mr-2"
-                color="primary"
-                aria-label="Deploy rule"
-                (click)="updateRule(rule)">
-                <em class="fa fa-save mr-2"></em
-                >{{ 'policy.portlet.SUBMIT' | translate }}
-              </button>
               <button
                 mat-button
                 *ngIf="isWriteNetworkAuthorized"
@@ -203,6 +191,16 @@
                 (click)="closeRuleDetail()">
                 <em class="far fa-window-close mr-1"></em
                 >{{ 'policy.portlet.CLOSE' | translate }}
+              </button>
+              <button
+                mat-raised-button
+                *ngIf="isWriteNetworkAuthorized"
+                class="mt-1 mr-2"
+                color="primary"
+                aria-label="Deploy rule"
+                (click)="updateRule(rule)">
+                <em class="fa fa-save mr-2"></em
+                >{{ 'policy.portlet.SUBMIT' | translate }}
               </button>
             </div>
           </div>

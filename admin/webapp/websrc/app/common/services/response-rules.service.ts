@@ -103,7 +103,7 @@ export class ResponseRulesService {
         width: 123,
         maxWidth: 123,
         minWidth: 123,
-        hide: !isWriteResponseRuleAuthorized
+        hide: !isWriteResponseRuleAuthorized || source === GlobalConstant.NAV_SOURCE.GROUP
       },
     ];
 
@@ -358,7 +358,6 @@ export class ResponseRulesService {
         payload = {
           config: responseRule,
         };
-        payload.config.conditions = this.parseConditions(responseRule.criteria);
       }
       return GlobalVariable.http
         .patch(PathConstant.RESPONSE_POLICY_URL, payload)

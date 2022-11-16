@@ -1,8 +1,6 @@
 <div class="nv-dialog ">
-  <div
-    class="d-flex justify-content-between align-items-center"
-    style="background-color: #30ba78">
-    <h4 class="mb-0">
+  <div class="d-flex justify-content-between align-items-center">
+    <h4 mat-dialog-title>
       {{
         (type === 'add' ? 'policy.addPolicy.TITLE' : 'policy.editPolicy.TITLE')
           | translate
@@ -12,9 +10,9 @@
       <i class="eos-icons">close</i>
     </button>
   </div>
-
+  <hr class="fancy" />
   <div mat-dialog-content class="dialog-content p0 m0">
-    <form class="pt-2">
+    <form >
       <div class="d-flex justify-content-between align-items-center mt-2">
         <mat-form-field appearance="fill" class=" mr-4" *ngIf="type === 'edit'">
           <mat-label>{{
@@ -23,7 +21,7 @@
           <input matInput name="id" [(ngModel)]="responseRule.id" disabled />
           <em matSuffix class="icon-tag input-icon"></em>
         </mat-form-field>
-        <mat-form-field appearance="fill" class="mr-4 flex-grow-1">
+        <mat-form-field appearance="fill" class="flex-grow-1" [ngClass]="{'mr-4': !EVENT_WITHOUT_GROUP.includes(responseRule.event)}">
           <mat-select
             name="event"
             placeholder="{{ 'responsePolicy.gridHeader.TYPE' | translate }}*"
@@ -38,7 +36,7 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field appearance="fill" class="mr-4 flex-grow-1">
+        <mat-form-field appearance="fill" class="flex-grow-1" *ngIf="!EVENT_WITHOUT_GROUP.includes(responseRule.event)">
           <mat-label>{{
             'responsePolicy.gridHeader.GROUP' | translate
           }}</mat-label>
@@ -164,7 +162,7 @@
     </form>
   </div>
   <div mat-dialog-actions class="d-flex justify-content-end align-items-center">
-    <button mat-stroked-button aria-label="cancel" (click)="onCancel()">
+    <button mat-stroked-button aria-label="cancel" class="mr-2" (click)="onCancel()">
       {{ 'policy.addPolicy.CANCEL' | translate }}
     </button>
     <button

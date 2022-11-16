@@ -29,7 +29,9 @@ import { TestSettingsDialogComponent } from './test-connection-dialog/test-setti
 import { RegistriesCommunicationService } from '../../regestries-communication.service';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { NotificationService } from '@services/notification.service';
-import { FormlyFieldConfig } from '@ngx-formly/core';
+import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
+import { GlobalVariable } from '@common/variables/global.variable';
+import { MapConstant } from '@common/constants/map.constant';
 
 @Component({
   selector: 'app-add-registry-dialog',
@@ -42,6 +44,13 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
   form = new FormGroup({});
   model: any = {};
   fields = cloneDeep(AddRegistryFieldConfig);
+  options: FormlyFormOptions = {
+    formState: {
+      isFedAdmin:
+        GlobalVariable.user.token.role === MapConstant.FED_ROLES.FEDADMIN,
+      isMaster: GlobalVariable.isMaster,
+    },
+  };
   submittingForm = false;
   canTestConnectionTypes = ['Docker Registry', 'JFrog Artifactory'];
   canTestConnection!: boolean;
@@ -75,6 +84,9 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
         json_key,
         ...formValue
       } = this.form.value;
+      if (formValue.isFed) {
+        formValue.name = 'fed.' + formValue.name;
+      }
       if (periodic_scan) {
         schedule.schedule = 'periodical';
         schedule.interval = INTERVAL_STEP_VALUES[interval].value;

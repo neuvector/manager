@@ -1,5 +1,9 @@
 <div>
-  <div class="clearfix"></div>
+  <div class="clearfix">
+    <h1 class="font-weight-light" id="nodes-title">
+      {{ 'enum.FED_POLICY' | translate }}
+    </h1>
+  </div>
   <div class="panel mb0">
     <div class="panel-body">
       <mat-tab-group
@@ -44,9 +48,12 @@
             *ngIf="activeTabIndex === 5"
             [source]="navSource"></app-response-rules>
         </mat-tab>
-        <mat-tab label="{{ 'sidebar.nav.CONFIGURATION' | translate }}"
-          >Configurations</mat-tab
-        >
+        <mat-tab label="{{ 'sidebar.nav.CONFIGURATION' | translate }}">
+          <app-federated-policy-configuration
+            *ngIf="activeTabIndex === 6"
+            [source]="navSource"
+          ></app-federated-policy-configuration>
+        </mat-tab>
       </mat-tab-group>
     </div>
   </div>

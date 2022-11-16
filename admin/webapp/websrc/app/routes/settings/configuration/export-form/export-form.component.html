@@ -1,31 +1,33 @@
 <form (ngSubmit)="submitExport()" [formGroup]="exportForm">
-  <div class="ml-3 my-md-4">
-    <h1 class="h4 font-weight-normal">{{ 'setting.EXPORT' | translate }}</h1>
-    <div class="ml-3 my-md-2 d-flex align-items-center">
-      <mat-radio-group
-        class="mx-3"
-        aria-label="Export Type"
-        formControlName="export">
-        <mat-radio-button value="all">{{
-          'setting.ALL' | translate
-        }}</mat-radio-button>
-        <mat-radio-button value="policy">{{
-          'setting.POLICY' | translate
-        }}</mat-radio-button>
-      </mat-radio-group>
-      <app-loading-button
-        [appearance]="'mat-raised-button'"
-        [color]="'primary'"
-        [disabled]="!exportForm.valid || submittingForm"
-        [loading]="submittingForm"
-        [text]="'setting.SUBMIT' | translate"
-        [type]="'submit'"
-        class="ml-auto">
-      </app-loading-button>
+  <ng-container *ngIf="isExportAuthorized">
+    <div class="ml-3 my-md-4">
+      <h1 class="h4 font-weight-normal">{{ 'setting.EXPORT' | translate }}</h1>
+      <div class="ml-3 my-md-2 d-flex align-items-center">
+        <mat-radio-group
+          class="mx-3"
+          aria-label="Export Type"
+          formControlName="export">
+          <mat-radio-button value="all">{{
+            'setting.ALL' | translate
+          }}</mat-radio-button>
+          <mat-radio-button value="policy">{{
+            'setting.POLICY' | translate
+          }}</mat-radio-button>
+        </mat-radio-group>
+        <app-loading-button
+          [appearance]="'mat-raised-button'"
+          [color]="'primary'"
+          [disabled]="!exportForm.valid || submittingForm"
+          [loading]="submittingForm"
+          [text]="'setting.SUBMIT' | translate"
+          [type]="'submit'"
+          class="ml-auto">
+        </app-loading-button>
+      </div>
     </div>
-  </div>
-  <mat-divider class="position-relative"></mat-divider>
-  <div class="my-md-4 mx-3">
+    <mat-divider class="position-relative"></mat-divider>
+  </ng-container>
+  <div class="my-md-4 mx-3" *ngIf="isImportAuthorized">
     <h1 class="h4 font-weight-normal">{{ 'setting.IMPORT' | translate }}</h1>
     <div class="my-md-2 mx-3">
       <mat-checkbox class="mx-3" formControlName="as_standalone">{{

@@ -79,6 +79,7 @@
       *ngIf="groupsService.activeTabIndex === 6 && (kind==='container' && cfgType !== CFG_TYPE.FED)"
       [source]="navSource"
       [groupName]="selectedGroupName"
+      [cfgType]="cfgType"
       [resizableHeight]="resizableHeight">
     </app-group-dlp>
   </mat-tab>
@@ -89,6 +90,7 @@
     <app-group-waf
       *ngIf="groupsService.activeTabIndex === 7 && (kind==='container' && cfgType !== CFG_TYPE.FED)"
       [source]="navSource"
+      [cfgType]="cfgType"
       [groupName]="selectedGroupName"
       [resizableHeight]="resizableHeight">
     </app-group-waf>

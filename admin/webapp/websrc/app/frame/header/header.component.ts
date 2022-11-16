@@ -62,7 +62,7 @@ export class HeaderComponent implements OnInit {
     this.email = this.sessionStorage.get('token')?.emailHash;
     this.username = this.sessionStorage.get('token')?.token?.username;
     const role = this.sessionStorage.get('token')?.token?.role;
-    this.displayRole = role ? role : "Namespace User";
+    this.displayRole = role ? role : 'Namespace User';
   }
 
   toggleUserBlock(event) {
@@ -131,14 +131,11 @@ export class HeaderComponent implements OnInit {
   }
 
   getClusterName() {
-    this.multiClusterService
-      .getClusterName()
-      .pipe()
-      .subscribe({
-        next: (data: any) => {
-          this.clusterName = data.config.cluster_name;
-        },
-      });
+    this.multiClusterService.getClusterName().subscribe({
+      next: clusterName => {
+        this.clusterName = clusterName;
+      },
+    });
   }
   getClusters() {
     this.multiClusterService
@@ -149,9 +146,10 @@ export class HeaderComponent implements OnInit {
           this.clusters = data.clusters || [];
           this.isMemberRole = data.fed_role === MapConstant.FED_ROLES.MEMBER;
           this.isMasterRole = data.fed_role === MapConstant.FED_ROLES.MASTER;
+          this.isOrdinaryRole = data.fed_role === '';
           GlobalVariable.isMaster = this.isMasterRole;
           GlobalVariable.isMember = this.isMemberRole;
-          this.isOrdinaryRole = data.fed_role === '';
+          GlobalVariable.isStandAlone = this.isOrdinaryRole;
 
           //get the status of the chosen cluster
           const sessionCluster = this.sessionStorage.get(

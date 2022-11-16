@@ -106,13 +106,13 @@
       class="details-icon"
       fontSet="fa"
       [fontIcon]="
-        container.rt_attributes.priviledged ? 'fa-user-times' : 'fa-user-check'
+        container.rt_attributes.privileged ? 'fa-user-times' : 'fa-user-check'
       ">
     </mat-icon>
     <div class="ml-3 overflow-hidden">
       {{ 'containers.detail.ROOT_PRIVILEGED' | translate }}
       <div class="text-muted text-truncate">
-        {{ !!container.rt_attributes.priviledged }}
+        {{ container.rt_attributes.privileged }}
       </div>
     </div>
   </div>

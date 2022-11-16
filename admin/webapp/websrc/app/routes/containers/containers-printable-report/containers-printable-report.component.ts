@@ -32,15 +32,23 @@ export class ContainersPrintableReportComponent implements OnInit {
 
   genDistribution() {
     const quarantineReasonsMap = new Map();
-    quarantineReasonsMap.set("user-configured",this._containers.length);
-    quarantineReasonsMap.set("rule-triggered", 0);
+    let userConfig = 0, ruleTriggered = 0;
+    this._containers.forEach( container =>{
+      if(!container.security.quarantine_reason || container.security.quarantine_reason == "user-configured"){
+        userConfig = userConfig + 1;
+      }else {
+        ruleTriggered = ruleTriggered + 1;
+      }
+    });
+
+    quarantineReasonsMap.set("user-configured",userConfig);
+    quarantineReasonsMap.set("rule-triggered", ruleTriggered);
     this.quarantineReasonsDistribution = new Map(
       [...quarantineReasonsMap]
         .filter(a => a[1])
         .sort((a, b) => a[1] - b[1])
         .reverse()
     );
-    console.log(this.quarantineReasonsDistribution);
   }
 
 }

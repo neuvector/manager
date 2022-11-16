@@ -212,7 +212,7 @@ export class LoginComponent implements OnInit {
         if (this.sessionStorage.has(GlobalConstant.SESSION_STORAGE_TIMEOUT)) {
           console.log('SESSION_STORAGE_TIMEOUT', this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_TIMEOUT));
           if (this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_TIMEOUT)) {
-            this.authMsg = this.translate.instant("login.SESSION_TIMEOUT");
+            this.authMsg = 'Session has expired. Please login.';//this.translate.instant("login.SESSION_TIMEOUT");
           }
         }
         this.clearToken();

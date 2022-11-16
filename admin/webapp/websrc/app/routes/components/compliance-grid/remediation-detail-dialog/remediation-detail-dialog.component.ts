@@ -8,6 +8,7 @@ import { Check } from '@common/types';
 })
 export class RemediationDetailDialogComponent implements OnInit {
   @Input() compliance!: Check;
+  @Input() isRegistryDialog: boolean = false;
   visible: boolean = false;
 
   constructor() {}

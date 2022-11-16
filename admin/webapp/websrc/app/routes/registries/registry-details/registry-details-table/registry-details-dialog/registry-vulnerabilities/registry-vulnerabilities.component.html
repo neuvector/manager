@@ -36,13 +36,16 @@
         <i class="eos-icons mr-2">visibility</i
         >{{ 'enum.SHOW_ACCEPTED_VULS' | translate }}
       </button>
-      <button
-        (click)="onAcceptVulnerability()"
-        class="d-flex align-items-center"
-        mat-menu-item>
-        <i class="eos-icons mr-2">check_box</i
-        >{{ 'cveProfile.ACCEPT_VUL' | translate }}
-      </button>
+      <ng-container *appDisplayControl="'write_vuls_profile'">
+        <button
+          *ngIf="selectedVulnerability && !isAccepted(selectedVulnerability)"
+          (click)="onAcceptVulnerability()"
+          class="d-flex align-items-center"
+          mat-menu-item>
+          <i class="eos-icons mr-2">check_box</i
+          >{{ 'cveProfile.ACCEPT_VUL' | translate }}
+        </button>
+      </ng-container>
     </mat-menu>
     <button
       (click)="exportCVELayers()"

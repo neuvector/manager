@@ -5,6 +5,7 @@ import { DlpSetting } from '@common/types';
 import { MatDialog } from "@angular/material/dialog";
 import { GroupDlpConfigModalComponent } from '@components/group-details/partial/group-dlp-config-modal/group-dlp-config-modal.component';
 import { AuthUtilsService } from '@common/utils/auth.utils';
+import { GlobalConstant } from '@common/constants/global.constant';
 
 @Component({
   selector: 'app-group-dlp',
@@ -16,12 +17,14 @@ export class GroupDlpComponent implements OnInit {
   @Input() source: string;
   @Input() groupName: string = '';
   @Input() resizableHeight: number;
+  @Input() cfgType: string;
   gridOptions4GroupDlpSensors: GridOptions;
   groupDlpSensors: Array<DlpSetting> = [];
   filteredCount: number = 0;
   selectedSensor: DlpSetting;
   enabled: boolean = false;
   isWriteDlpAuthorized: boolean;
+  CFG_TYPE = GlobalConstant.CFG_TYPE;
 
   constructor(
     private groupsService: GroupsService,

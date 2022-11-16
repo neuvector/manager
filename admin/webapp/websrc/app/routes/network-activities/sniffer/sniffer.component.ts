@@ -273,7 +273,7 @@ export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
   };
 
   pullSniffers() {
-    this.snifferRefreshTimer$ = interval(15000);
+    this.snifferRefreshTimer$ = interval(5000);
     this.snifferSubscription = this.snifferRefreshTimer$.subscribe(
       this.refreshSniffer.bind(this)
     );

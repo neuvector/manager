@@ -85,7 +85,7 @@
           {{ container.rt_attributes.applications?.join(", ") }}
         </td>
         <td class="print-cell" style="width: 12%">
-          {{ 'containers.report.userConfig' | translate }}
+          {{ container.security.quarantine_reason?(container.security.quarantine_reason!="user-configured"?('containers.report.ruleTriggered'|translate):('containers.report.userConfig'|translate)):('containers.report.userConfig'|translate) }}
         </td>
         <td class="print-cell" style="width: 12%">
           {{ container.security.scan_summary.scanned_at | date: 'MMM dd, y HH:mm:ss' }}

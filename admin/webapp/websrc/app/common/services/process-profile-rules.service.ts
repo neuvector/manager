@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, SecurityContext } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
 import { PathConstant } from '@common/constants/path.constant';
@@ -67,6 +67,25 @@ export class ProcessProfileRulesService {
         minWidth: 90,
       },
       {
+        headerName: this.translate.instant('admissionControl.TYPE'),
+        field: 'cfg_type',
+        cellRenderer: params => {
+          if (params) {
+            let cfgType = params.value
+              ? params.value.toUpperCase()
+              : GlobalConstant.CFG_TYPE.CUSTOMER.toUpperCase();
+            let type = MapConstant.colourMap[cfgType];
+            return `<div class="type-label px-1 ${type}">${this.translate.instant(
+              `group.${cfgType}`
+            )}</div>`;
+          }
+          return '';
+        },
+        width: 110,
+        minWidth: 110,
+        maxWidth: 110,
+      },
+      {
         headerName: this.translate.instant('policy.gridHeader.UPDATE_AT'),
         field: 'last_modified_timestamp',
         cellRenderer: params => {
@@ -90,9 +109,7 @@ export class ProcessProfileRulesService {
       },
     ];
 
-    let gridOptions = this.utils.createGridOptions(columnDefs, this.$win);
-
-    return gridOptions;
+    return this.utils.createGridOptions(columnDefs, this.$win);
   }
 
   private dateComparator(value1, value2, node1, node2) {

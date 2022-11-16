@@ -116,7 +116,6 @@ export class ContainersComponent implements OnInit {
         next: res => {
           this.containersService.addContainers(res);
           this.quarantinedContainers = this.containersService.quarantinedContainers;
-          console.log("========quarantine",this.quarantinedContainers);
           this.nodeFilterInit(res);
           this.error = '';
           if (!this.loaded) this.loaded = true;

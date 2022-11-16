@@ -25,6 +25,8 @@ export class CustomCheckComponent implements OnInit {
   customCheckScripts: Array<Script> = [];
   selectedScript: Script;
   context = { componentParent: this };
+  filteredCount: number = 0;
+  isRefreshingForm: boolean = false;
 
   constructor(
     private groupsService: GroupsService,
@@ -50,9 +52,14 @@ export class CustomCheckComponent implements OnInit {
     this.groupsService.getCustomCheckData(this.groupName)
       .subscribe(
         (response: any) => {
-          console.log("scripts", response);
-          this.gridOptions4CustomCheck.api!.setRowData(response);
-          this.switch2Add();
+          if (response) {
+            this.customCheckScripts = response;
+            this.filteredCount = this.customCheckScripts.length;
+            this.gridOptions4CustomCheck.api!.setRowData(response);
+            this.switch2Add();
+          } else {
+            this.gridOptions4CustomCheck.api!.setRowData([]);
+          }
         },
         error => {
           this.gridOptions4CustomCheck.api!.setRowData([]);
@@ -62,11 +69,16 @@ export class CustomCheckComponent implements OnInit {
 
   switch2Add = () => {
     this.gridOptions4CustomCheck.api!.deselectAll();
-    this.customCheckForm.controls.name.setValue('');
-    this.customCheckForm.controls.script.setValue('');
+    this.customCheckForm.reset();
     setTimeout(() => {
       this.opType = GlobalConstant.MODAL_OP.ADD;
+      this.customCheckForm.controls.name.setErrors(null);
     }, 200);
+  };
+
+  blurOnName = () => {
+    if (!this.customCheckForm.controls.name!.value)
+      this.customCheckForm.controls.name!.setValue('');
   };
 
   updateScript = () => {

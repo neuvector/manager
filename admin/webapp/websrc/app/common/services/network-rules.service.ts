@@ -263,7 +263,7 @@ export class NetworkRulesService {
         width: 90,
         maxWidth: 90,
         minWidth: 90,
-        hide: !isWriteNetworkRuleAuthorized,
+        hide: !isWriteNetworkRuleAuthorized || source === GlobalConstant.NAV_SOURCE.GROUP,
       },
     ];
 

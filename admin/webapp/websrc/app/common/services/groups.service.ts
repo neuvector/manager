@@ -343,9 +343,9 @@ export class GroupsService {
       {
         headerName: '',
         cellRenderer: CustomCheckActionButtonComponent,
-        width: 30,
-        minWidth: 30,
-        maxWidth: 30,
+        width: 45,
+        minWidth: 45,
+        maxWidth: 45,
         hide: !isGranted,
       },
     ];

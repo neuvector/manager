@@ -358,7 +358,6 @@ export class ResponseRulesService {
         payload = {
           config: responseRule,
         };
-        payload.config.conditions = this.parseConditions(responseRule.criteria);
       }
       return GlobalVariable.http
         .patch(PathConstant.RESPONSE_POLICY_URL, payload)

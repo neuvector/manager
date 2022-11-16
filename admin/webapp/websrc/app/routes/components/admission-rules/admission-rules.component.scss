@@ -12,3 +12,11 @@
 .menu-width-medium {
   width: 160px;
 }
+
+.mat-button-toggle-checked {
+  background-color: #30ba78;
+}
+
+::ng-deep .mat-button-toggle-checked button {
+  color: white;
+}

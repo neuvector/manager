@@ -9,6 +9,7 @@
       <input
         matInput
         [readonly]="!isWriteScriptAuthorized || opType === modalOp.EDIT"
+        (blur)="blurOnName()"
         formControlName="name"
       />
       <mat-error *ngIf="customCheckForm.controls.name.hasError('required')">

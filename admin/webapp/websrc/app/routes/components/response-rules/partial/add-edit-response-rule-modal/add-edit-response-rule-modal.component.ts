@@ -119,9 +119,8 @@ export class AddEditResponseRuleModalComponent implements OnInit {
     this.responseRule.enabled = this.selectedResponseRule.disable
       ? !this.selectedResponseRule.disable
       : true;
-    console.log(this.selectedResponseRule.conditions);
     this.responseRule.criteria =
-      this.selectedResponseRule.conditions.split(', ');
+      this.selectedResponseRule.conditions.split(', ').filter(condition => !!condition);
     this.selectedResponseRule.actions.forEach(action => {
       this.responseRule.actions[this.actions.indexOf(action)] = true;
     });

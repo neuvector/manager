@@ -31,7 +31,7 @@
         <div
           class="pull-right margin-right-s margin-top-l hand"
           (click)="showPredefinedRules()"
-          *ngIf="source !== navSource['FED_POLICY']">
+          *ngIf="source !== navSource['FED_POLICY'] && cfgType!==CFG_TYPE.FED && cfgType!==CFG_TYPE.CUSTOMER">
           <em class="eos-icons margin-right-s icon-18">info</em>
           <span class="text-plain">{{
             'service.PREDEFINED_FILTERS' | translate

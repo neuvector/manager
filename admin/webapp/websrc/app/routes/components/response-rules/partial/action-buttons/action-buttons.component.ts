@@ -92,8 +92,13 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
 
   toggleRuleItem = (event, data): void => {
     data.disable = !data.disable;
+    let responseRule = {
+      id: data.id,
+      disable: data.disable,
+      cfg_type: data.cfg_type
+    };
     this.responseRulesService
-      .insertUpdateResponseRuleData(data, [], 'toggle', [])
+      .insertUpdateResponseRuleData(responseRule, [], 'toggle', [])
       .subscribe(
         response => {
           setTimeout(() => {

@@ -240,6 +240,9 @@ export class AdmissionRulesComponent implements OnInit {
       disableClose: true,
     });
     importDialogRef.afterClosed().subscribe(result => {
+      setTimeout(() => {
+        this.refresh();
+      }, 500);
       this.isModalOpen = false;
     });
   };

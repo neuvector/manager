@@ -11,7 +11,6 @@ import { VulnerabilityItemsTableCsvCellComponent } from './vulnerability-items/v
 import { VulnerabilityItemsTableImpactCellComponent } from './vulnerability-items/vulnerability-items-table/vulnerability-items-table-impact-cell/vulnerability-items-table-impact-cell.component';
 import { VulnerabilityItemsTableScoreCellComponent } from './vulnerability-items/vulnerability-items-table/vulnerability-items-table-score-cell/vulnerability-items-table-score-cell.component';
 import { VulnerabilityItemsTableSevertiyCellComponent } from './vulnerability-items/vulnerability-items-table/vulnerability-items-table-severtiy-cell/vulnerability-items-table-severtiy-cell.component';
-import { VulnerabilityItemsTableNameCellComponent } from './vulnerability-items/vulnerability-items-table/vulnerability-items-table-name-cell/vulnerability-items-table-name-cell.component';
 import { RouterModule, Routes } from '@angular/router';
 import { VulnerabilitiesService } from './vulnerabilities.service';
 import { LoadingTemplateModule } from '@components/ui/loading-template/loading-template.module';
@@ -63,7 +62,6 @@ const routes: Routes = [{ path: '', component: VulnerabilitiesComponent }];
     VulnerabilityItemsTableImpactCellComponent,
     VulnerabilityItemsTableScoreCellComponent,
     VulnerabilityItemsTableSevertiyCellComponent,
-    VulnerabilityItemsTableNameCellComponent
   ],
   providers: [
     VulnerabilitiesService,

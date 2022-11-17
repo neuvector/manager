@@ -51,19 +51,21 @@ export class RiskReportGridMessageCellComponent
 
   getAdmissionItems(items: string[]): AdmissionItem[] {
     let admissionItems: AdmissionItem[] = [];
-    items.forEach(item => {
-      let indexOfColon = item.indexOf(':');
-      let title = `audit.gridHeader.${item
-        .substring(0, indexOfColon)
-        .toUpperCase()}`;
-      let value = item.substring(indexOfColon + 1);
-      if (
-        value.trim() &&
-        item.substring(0, indexOfColon).toLowerCase() !== 'image'
-      ) {
-        admissionItems.push({ title, value });
-      }
-    });
+    if (items) {
+      items.forEach(item => {
+        let indexOfColon = item.indexOf(':');
+        let title = `audit.gridHeader.${item
+          .substring(0, indexOfColon)
+          .toUpperCase()}`;
+        let value = item.substring(indexOfColon + 1);
+        if (
+          value.trim() &&
+          item.substring(0, indexOfColon).toLowerCase() !== 'image'
+        ) {
+          admissionItems.push({ title, value });
+        }
+      });
+    }
     return admissionItems;
   }
 }

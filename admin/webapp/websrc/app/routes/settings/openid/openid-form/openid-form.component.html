@@ -13,7 +13,7 @@
     </button>
   </div>
   <div class="row align-items-center my-0 my-md-4">
-    <div class="col-12 d-flex align-items-center my-2">
+    <div class="col-12 col-md-6 d-flex align-items-center my-2">
       <i class="eos-icons mr-3">account_box</i>
       <mat-form-field appearance="standard" class="w-100">
         <mat-label>{{ 'openId.ISSUER' | translate }}</mat-label>
@@ -24,6 +24,33 @@
         <mat-error *ngIf="openidForm.controls.issuer.hasError('invalidURL')">
           {{ 'okta.INVALID_URL' | translate }}
         </mat-error>
+      </mat-form-field>
+    </div>
+    <div
+      class="col-12 col-md-6 d-flex align-items-center my-2"
+      *ngIf="isCreated">
+      <i class="eos-icons mr-3">assignment_ind</i>
+      <mat-form-field appearance="standard" class="w-100">
+        <mat-label>{{ 'openId.AUTHORIZATION_ENDPOINT' | translate }}</mat-label>
+        <input formControlName="authorization_endpoint" matInput />
+      </mat-form-field>
+    </div>
+    <div
+      class="col-12 col-md-6 d-flex align-items-center my-2"
+      *ngIf="isCreated">
+      <i class="eos-icons mr-3">assignment_ind</i>
+      <mat-form-field appearance="standard" class="w-100">
+        <mat-label>{{ 'openId.TOKEN_ENDPOINT' | translate }}</mat-label>
+        <input formControlName="token_endpoint" matInput />
+      </mat-form-field>
+    </div>
+    <div
+      class="col-12 col-md-6 d-flex align-items-center my-2"
+      *ngIf="isCreated">
+      <i class="eos-icons mr-3">assignment_ind</i>
+      <mat-form-field appearance="standard" class="w-100">
+        <mat-label>{{ 'openId.USER_INFO_ENDPOINT' | translate }}</mat-label>
+        <input formControlName="user_info_endpoint" matInput />
       </mat-form-field>
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">

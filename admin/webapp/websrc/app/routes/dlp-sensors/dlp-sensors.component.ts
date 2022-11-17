@@ -8,38 +8,38 @@ import {
   GridReadyEvent,
 } from 'ag-grid-community';
 import { DlpSensorsService } from '@services/dlp-sensors.service';
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog } from '@angular/material/dialog';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { PathConstant } from '@common/constants/path.constant';
 import { MapConstant } from '@common/constants/map.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { AddEditSensorModalComponent } from '@routes/dlp-sensors/partial/add-edit-sensor-modal/add-edit-sensor-modal.component';
 import { AddEditRuleModalComponent } from '@routes/dlp-sensors/partial/add-edit-rule-modal/add-edit-rule-modal.component';
-import { UtilsService } from "@common/utils/app.utils";
+import { UtilsService } from '@common/utils/app.utils';
 import { saveAs } from 'file-saver';
 import { ImportFileModalComponent } from '@components/ui/import-file-modal/import-file-modal.component';
-import {MultiClusterService} from "@services/multi-cluster.service";
+import { MultiClusterService } from '@services/multi-cluster.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dlp-sensors',
   templateUrl: './dlp-sensors.component.html',
-  styleUrls: ['./dlp-sensors.component.scss']
+  styleUrls: ['./dlp-sensors.component.scss'],
 })
 export class DlpSensorsComponent implements OnInit {
-
   dlpSensors: Array<DlpSensor> = [];
-  isWriteDLPSensorAuthorized: boolean;
+  isWriteDLPSensorAuthorized!: boolean;
   gridOptions: any;
-  gridOptions4Sensors: GridOptions;
-  gridOptions4Rules: GridOptions;
-  gridOptions4Patterns: GridOptions;
-  gridOptions4EditPatterns: GridOptions;
+  gridOptions4Sensors!: GridOptions;
+  gridOptions4Rules!: GridOptions;
+  gridOptions4Patterns!: GridOptions;
+  gridOptions4EditPatterns!: GridOptions;
   filteredCount: number = 0;
-  selectedSensors: Array<DlpSensor>;
-  selectedSensor: DlpSensor;
-  selectedRule: DlpRule;
-  index4Sensor: number;
-  isPredefine: boolean;
+  selectedSensors!: Array<DlpSensor>;
+  selectedSensor!: DlpSensor;
+  selectedRule!: DlpRule;
+  index4Sensor!: number;
+  isPredefine!: boolean;
   context = { componentParent: this };
   $win: any;
   private _switchClusterSubscription;
@@ -49,31 +49,38 @@ export class DlpSensorsComponent implements OnInit {
     private dialog: MatDialog,
     private authUtilsService: AuthUtilsService,
     private utilsService: UtilsService,
-    private multiClusterService: MultiClusterService
+    private multiClusterService: MultiClusterService,
+    private tr: TranslateService
   ) {
     this.$win = $(GlobalVariable.window);
   }
 
   ngOnInit(): void {
-    this.isWriteDLPSensorAuthorized = this.authUtilsService.getDisplayFlag("write_dlp_rule") && !this.authUtilsService.userPermission.isNamespaceUser;
-    this.gridOptions = this.dlpSensorsService.configGrids(this.isWriteDLPSensorAuthorized);
+    this.isWriteDLPSensorAuthorized =
+      this.authUtilsService.getDisplayFlag('write_dlp_rule') &&
+      !this.authUtilsService.userPermission.isNamespaceUser;
+    this.gridOptions = this.dlpSensorsService.configGrids(
+      this.isWriteDLPSensorAuthorized
+    );
     this.gridOptions4Sensors = this.gridOptions.gridOptions;
     this.gridOptions4Rules = this.gridOptions.gridOptions4Rules;
     this.gridOptions4Patterns = this.gridOptions.gridOptions4Patterns;
     this.gridOptions4EditPatterns = this.gridOptions.gridOptions4EditPatterns;
-    this.gridOptions4Sensors.onSelectionChanged = this.onSelectionChanged4Sensor;
+    this.gridOptions4Sensors.onSelectionChanged =
+      this.onSelectionChanged4Sensor;
     this.gridOptions4Rules.onSelectionChanged = this.onSelectionChanged4Rule;
 
     this.refresh();
 
     //refresh the page when it switched to a remote cluster
-    this._switchClusterSubscription = this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
-      this.refresh();
-    });
+    this._switchClusterSubscription =
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
+        this.refresh();
+      });
   }
 
-  ngOnDestroy(): void{
-    if(this._switchClusterSubscription){
+  ngOnDestroy(): void {
+    if (this._switchClusterSubscription) {
       this._switchClusterSubscription.unsubscribe();
     }
   }
@@ -84,26 +91,26 @@ export class DlpSensorsComponent implements OnInit {
 
   openAddEditDlpSensorModal = () => {
     const addEditDialogRef = this.dialog.open(AddEditSensorModalComponent, {
-      width: "80%",
+      width: '80%',
       data: {
         opType: GlobalConstant.MODAL_OP.ADD,
-        refresh: this.refresh
+        refresh: this.refresh,
       },
-      disableClose: true
+      disableClose: true,
     });
   };
 
   openAddDlpRuleModal = () => {
     const addEditDialogRef = this.dialog.open(AddEditRuleModalComponent, {
-      width: "80%",
+      width: '80%',
       data: {
         sensor: this.selectedSensor,
         opType: GlobalConstant.MODAL_OP.ADD,
         gridOptions4EditPatterns: this.gridOptions4EditPatterns,
         index4Sensor: this.index4Sensor,
-        refresh: this.refresh
+        refresh: this.refresh,
       },
-      disableClose: true
+      disableClose: true,
     });
   };
 
@@ -111,6 +118,10 @@ export class DlpSensorsComponent implements OnInit {
     const importDialogRef = this.dialog.open(ImportFileModalComponent, {
       data: {
         importUrl: PathConstant.DLP_SENSORS_IMPORT_URL,
+        importMsg: {
+          success: this.tr.instant('waf.msg.IMPORT_FINISH'),
+          error: this.tr.instant('waf.msg.IMPORT_FAILED'),
+        },
       },
       disableClose: true,
     });
@@ -123,49 +134,50 @@ export class DlpSensorsComponent implements OnInit {
 
   exportDlpSensors = () => {
     let payload = {
-      names: this.selectedSensors.map(sensor => sensor.name)
+      names: this.selectedSensors.map(sensor => sensor.name),
     };
-    this.dlpSensorsService.getDlpSensorConfigFileData(payload)
-      .subscribe(
-        response => {
-          let fileName = this.utilsService.getExportedFileName(response);
-          let blob = new Blob([response.body || ""], {
-            type: "text/plain;charset=utf-8"
-          });
-          saveAs(blob, fileName);
-          // Alertify.set({ delay: ALERTIFY_SUCCEED_DELAY });
-          // Alertify.success($translate.instant("dlp.msg.EXPORT_SENSOR_OK"));
-        },
-        error => {
-          if (MapConstant.USER_TIMEOUT.indexOf(error.status) < 0) {
-            // Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
-            // Alertify.error(
-            //   Utils.getAlertifyMsg(error, $translate.instant("dlp.msg.EXPORT_SENSOR_NG"), false)
-            // );
-          }
+    this.dlpSensorsService.getDlpSensorConfigFileData(payload).subscribe(
+      response => {
+        let fileName = this.utilsService.getExportedFileName(response);
+        let blob = new Blob([response.body || ''], {
+          type: 'text/plain;charset=utf-8',
+        });
+        saveAs(blob, fileName);
+        // Alertify.set({ delay: ALERTIFY_SUCCEED_DELAY });
+        // Alertify.success($translate.instant("dlp.msg.EXPORT_SENSOR_OK"));
+      },
+      error => {
+        if (MapConstant.USER_TIMEOUT.indexOf(error.status) < 0) {
+          // Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
+          // Alertify.error(
+          //   Utils.getAlertifyMsg(error, $translate.instant("dlp.msg.EXPORT_SENSOR_NG"), false)
+          // );
         }
-      );
+      }
+    );
   };
 
   private getDlpSensors = (index: number) => {
-    this.dlpSensorsService.getDlpSensorsData()
-      .subscribe(
-        response => {
-          this.dlpSensors = response as Array<DlpSensor>;
-          this.filteredCount = this.dlpSensors.length;
-          setTimeout(() => {
-            let rowNode = this.gridOptions4Sensors.api!.getDisplayedRowAtIndex(index);
-            rowNode!.setSelected(true);
-          }, 200);
-        },
-        error => {}
-      );
+    this.dlpSensorsService.getDlpSensorsData().subscribe(
+      response => {
+        this.dlpSensors = response as Array<DlpSensor>;
+        this.filteredCount = this.dlpSensors.length;
+        setTimeout(() => {
+          let rowNode =
+            this.gridOptions4Sensors.api!.getDisplayedRowAtIndex(index);
+          rowNode!.setSelected(true);
+        }, 200);
+      },
+      error => {}
+    );
   };
 
   private onSelectionChanged4Sensor = () => {
     this.selectedSensors = this.gridOptions4Sensors.api!.getSelectedRows();
     this.selectedSensor = this.selectedSensors[0];
-    this.index4Sensor = this.dlpSensors.findIndex(sensor => sensor.name === this.selectedSensor.name);
+    this.index4Sensor = this.dlpSensors.findIndex(
+      sensor => sensor.name === this.selectedSensor.name
+    );
     this.gridOptions4Rules.api!.setRowData(this.selectedSensor.rules);
     this.gridOptions4Patterns.api!.setRowData([]);
     this.isPredefine = this.selectedSensor.predefine;

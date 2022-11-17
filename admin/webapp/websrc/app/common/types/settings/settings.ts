@@ -98,6 +98,9 @@ export interface OPENID {
   scopes: string[];
   group_mapped_roles: GroupMappedRole[];
   enable: boolean;
+  authorization_endpoint?: string;
+  token_endpoint?: string;
+  user_info_endpoint?: string;
 }
 
 export interface Server {
@@ -105,7 +108,7 @@ export interface Server {
   server_name: string;
   ldap?: LDAP;
   saml?: SAML;
-  openid?: OPENID;
+  oidc?: OPENID;
 }
 
 export interface MappableRoles {

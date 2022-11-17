@@ -48,7 +48,7 @@ export class SamlFormComponent implements OnInit {
   ngOnInit(): void {
     this.samlRedirectURL = getCallbackUri('token_auth_server');
     const saml = this.samlData.server.servers.find(
-      ({ server_type }) => server_type === 'ldap'
+      ({ server_type }) => server_type === 'saml'
     );
     if (saml && saml.saml) {
       this.serverName = saml.server_name;

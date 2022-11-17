@@ -28,6 +28,7 @@ export class ResponseRulesComponent implements OnInit {
   public responsePolicyErr: boolean = false;
   public gridOptions: GridOptions = <GridOptions>{};
   public gridHeight: number = 0;
+  public filtered: boolean = false;
   public filteredCount: number = 0;
   public context;
   public navSource = GlobalConstant.NAV_SOURCE;
@@ -85,6 +86,12 @@ export class ResponseRulesComponent implements OnInit {
     }
   }
 
+  filterCountChanged(results: number) {
+    this.filteredCount = results;
+    this.filtered =
+      this.filteredCount !== this.responseRulesService.responseRules.length;
+  }
+
   getResponseRules = (): void => {
     this.responsePolicyErr = false;
     this.responseRulesService
@@ -94,7 +101,6 @@ export class ResponseRulesComponent implements OnInit {
         (response: any) => {
           this.responseRulesService.responseRules =
             this.responseRulesService.destructConditions(response.rules);
-          this.filteredCount = this.responseRulesService.responseRules.length;
           this.gridHeight =
             this.source === GlobalConstant.NAV_SOURCE.SELF
               ? this.w.innerHeight - 180 - 70

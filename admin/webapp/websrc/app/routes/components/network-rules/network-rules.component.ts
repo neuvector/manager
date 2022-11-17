@@ -58,7 +58,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   gridOptions!: GridOptions;
   gridHeight!: number;
   filtered: boolean = false;
-  filteredCount!: number;
+  filteredCount: number = 0;
   selectedNetworkRules: Array<NetworkRule> = [];
   containsUnpromotableEndpoint: boolean = false;
   context = { componentParent: this };
@@ -70,7 +70,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   private w: any;
   private switchClusterSubscription;
   @ViewChild('networkRulePrintableReport') printableReportView!: ElementRef;
-  ruleCount!: number;
+  ruleCount: number = 0;
 
   constructor(
     private networkRulesService: NetworkRulesService,

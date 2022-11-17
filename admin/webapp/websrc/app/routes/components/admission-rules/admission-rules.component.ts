@@ -34,7 +34,8 @@ export class AdmissionRulesComponent implements OnInit {
   admissionOptions: any;
   gridOptions: GridOptions = <GridOptions>{};
   gridHeight: number = 0;
-  filteredCount: number = 0;
+  filtered: boolean = false;
+  filteredCount!: number;
   selectedAdmissionRules: Array<AdmissionRule> = [];
   isWriteAdmissionRuleAuthorized: boolean = false;
   isAdmissionRuleAuthorized: boolean = false;
@@ -105,6 +106,11 @@ export class AdmissionRulesComponent implements OnInit {
     );
     this.isMaster = GlobalVariable.isMaster;
   };
+
+  filterCountChanged(results: number) {
+    this.filteredCount = results;
+    this.filtered = this.filteredCount !== this.admissionRules.length;
+  }
 
   private getAdmissionStateAndRules = () => {
     this.admissionStateErr = false;

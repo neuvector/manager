@@ -147,7 +147,7 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
     this.filteredCount = results;
     this.complianceFilterService.filtered =
       this.filteredCount !== this.rowData.length;
-    this.runWorkers();
+    // this.runWorkers();
   }
 
   onSelectionChanged(params: GridReadyEvent): void {
@@ -192,7 +192,7 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
     this.gridApi.onFilterChanged();
     this.filteredCount =
       this.gridApi.getModel()['rootNode'].childrenAfterFilter.length;
-    this.runWorkers();
+    // this.runWorkers();
   }
 
   openAdvancedFilter(): void {
@@ -219,7 +219,7 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
         } else if (filter) {
           filter.matchType4Ns = convertMatchType(filter.matchType4Ns);
           filter.matchTypes.Service = convertMatchType(
-            filter.matchTypes.Service
+            filter.matchTypes.Service 
           );
           filter.matchTypes.Container = convertMatchType(
             filter.matchTypes.Container
@@ -233,14 +233,14 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  runWorkers() {
-    const filteredCis: any = [];
-    this.gridApi.forEachNodeAfterFilterAndSort(node => {
-      filteredCis.push(JSON.parse(JSON.stringify(node.data)));
-    });
-    this.complianceFilterService.filteredCis = filteredCis;
-    this.complianceService.runWorkers();
-  }
+  // runWorkers() {
+  //   const filteredCis: any = [];
+  //   this.gridApi.forEachNodeAfterFilterAndSort(node => {
+  //     filteredCis.push(JSON.parse(JSON.stringify(node.data)));
+  //   });
+  //   this.complianceFilterService.filteredCis = filteredCis;
+  //   this.complianceService.runWorkers();
+  // }
 
   isExternalFilterPresent(): boolean {
     return this.complianceFilterService.isAdvFilterOn();

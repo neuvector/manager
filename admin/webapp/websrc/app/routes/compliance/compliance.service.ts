@@ -45,10 +45,10 @@ export class ComplianceService {
     return this.datePipe.transform(date, 'MMM dd, y HH:mm:ss');
   }
 
-  runWorkers() {
-    this.assetsViewPdfService.runWorker();
-    this.complianceViewPdfService.runWorker();
-  }
+  // runWorkers() {
+  //   this.assetsViewPdfService.runWorker();
+  //   this.complianceViewPdfService.runWorker();
+  // }
 
   initCompliance() {
     return combineLatest([

@@ -61,10 +61,10 @@ export class VulnerabilitiesService {
     return this.datePipe.transform(date, 'MMM dd, y HH:mm:ss');
   }
 
-  runWorkers() {
-    this.assetsViewPdfService.runWorker();
-    this.vulnerabilityViewPdfService.runWorker();
-  }
+  // runWorkers() {
+  //   this.assetsViewPdfService.runWorker();
+  //   this.vulnerabilityViewPdfService.runWorker();
+  // }
 
   initVulnerability() {
     return combineLatest([

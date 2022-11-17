@@ -216,4 +216,12 @@ export class GlobalConstant {
   public static REPORT_SIZE = {
     RISK_REPORT: 1000,
   };
+
+  public static NOTIFICATION_TYPE = {
+    DEFAULT: 'default',
+    INFO: 'info',
+    SUCCESS: 'success',
+    WARNING: 'warning',
+    ERROR: 'error'
+  }
 }

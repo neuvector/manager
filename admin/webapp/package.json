@@ -51,6 +51,7 @@
     "ang-jsoneditor": "^1.10.5",
     "angular-gauge": "^4.0.0",
     "angular-imask": "6.0.5",
+    "angular-notifier": "^11.0.0",
     "axe-core": "^4.4.1",
     "bootstrap": "4.6.1",
     "chart.js": "3.9.1",

@@ -147,7 +147,7 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
             },
             error: ({ error }: { error: ErrorResponse }) => {
               this.registriesCommunicationService.cancelSave();
-              this.notificationService.open(error.message);
+              this.notificationService.open(error.message, GlobalConstant.NOTIFICATION_TYPE.ERROR);
             },
           });
       } else {
@@ -169,7 +169,7 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
             },
             error: ({ error }: { error: ErrorResponse }) => {
               this.registriesCommunicationService.cancelSave();
-              this.notificationService.open(error.message);
+              this.notificationService.open(error.message, GlobalConstant.NOTIFICATION_TYPE.ERROR);
             },
           });
       }

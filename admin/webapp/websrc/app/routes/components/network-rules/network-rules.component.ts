@@ -57,7 +57,8 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   networkRuleOptions: any;
   gridOptions!: GridOptions;
   gridHeight!: number;
-  filteredCount: number = 0;
+  filtered: boolean = false;
+  filteredCount!: number;
   selectedNetworkRules: Array<NetworkRule> = [];
   containsUnpromotableEndpoint: boolean = false;
   context = { componentParent: this };
@@ -69,6 +70,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   private w: any;
   private switchClusterSubscription;
   @ViewChild('networkRulePrintableReport') printableReportView!: ElementRef;
+  ruleCount!: number;
 
   constructor(
     private networkRulesService: NetworkRulesService,
@@ -172,6 +174,11 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
     }
   };
 
+  filterCountChanged(results: number) {
+    this.filteredCount = results;
+    this.filtered = this.filteredCount !== this.ruleCount;
+  }
+
   updateGridData = (
     updatedNetworkRules: Array<NetworkRule>,
     targetIndex: number,
@@ -274,6 +281,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(finalize(() => this.refreshing$.next(false)))
       .subscribe({
         next: service => {
+          this.ruleCount = service.policy_rules.length;
           this.gridOptions.api!.setRowData(service.policy_rules);
         },
         error: err => {
@@ -282,6 +290,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
             this.gridOptions.overlayNoRowsTemplate =
               this.utils.getOverlayTemplateMsg(err);
           }
+          this.ruleCount = 0;
           this.gridOptions.api!.setRowData([]);
         },
       });
@@ -293,6 +302,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(finalize(() => this.refreshing$.next(false)))
       .subscribe(
         (response: any) => {
+          this.ruleCount = response.policy_rules.length;
           this.gridOptions.api!.setRowData(response.policy_rules);
         },
         error => {}
@@ -432,6 +442,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
         GlobalConstant.NETWORK_RULES_STATE.READONLY;
     });
     console.log('this.networkRules', this.networkRules);
+    this.ruleCount = this.networkRules.length;
     this.gridOptions.api!.setRowData(this.networkRules);
   };
 
@@ -463,7 +474,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       action: '',
       last_modified_timestamp: '',
     });
-    this.filteredCount = networkRules.length;
+    this.ruleCount = networkRules.length;
     this.gridOptions.api!.setRowData(networkRules);
     if (this.eof) this.refreshing$.next(false);
   };
@@ -475,6 +486,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
     this.networkRules.splice(targetIndex, 0, updatedNetworkRule);
     this.networkRulesService.isNetworkRuleChanged = true;
     setTimeout(() => {
+      this.ruleCount = this.networkRules.length;
       this.gridOptions.api!.setRowData(this.networkRules);
       // this.gridOptions.api!.redrawRows();
       this.gridOptions.api!.ensureIndexVisible(targetIndex, 'top');
@@ -510,6 +522,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       networkRulesTmp.splice(targetIndex + 1, 0, ...selectedNetworkRules);
     }
     this.networkRules = networkRulesTmp;
+    this.ruleCount = this.networkRules.length;
     this.gridOptions.api!.setRowData(this.networkRules);
     // this.gridOptions.api!.redrawRows();
     this.networkRulesService.isNetworkRuleChanged = true;
@@ -524,6 +537,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       }
       return rule;
     });
+    this.ruleCount = this.networkRules.length;
     this.gridOptions.api!.setRowData(this.networkRules);
     // this.gridOptions.api!.redrawRows();
     this.networkRulesService.isNetworkRuleChanged = true;

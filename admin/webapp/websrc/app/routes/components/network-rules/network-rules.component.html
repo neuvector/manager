@@ -55,6 +55,14 @@
         <div style="height: 71px" *ngIf="source !== navSource['GROUP']">
           <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex justify-content-start align-items-center">
+              <span class="mr-2">
+                <span *ngIf="filtered">
+                  {{ 'enum.FOUND' | translate }}
+                  {{ filteredCount }}&nbsp;/&nbsp;
+                </span>
+                {{ ruleCount }}
+                {{ 'policy.COUNT_POSTFIX' | translate }}
+              </span>
               <button
                 class="mr-2"
                 mat-stroked-button
@@ -122,11 +130,10 @@
                 {{ 'policy.toolBar.SAVE' | translate }}
               </button>
               <app-quick-filter
-                *ngIf="filteredCount > 1"
                 class="pull-right"
+                (filterCountChange)="filterCountChanged($event)"
                 [gridOptions]="gridOptions"
-                [filteredCount]="filteredCount"
-                [count]="networkRules.length">
+                [showCount]="false">
               </app-quick-filter>
               <div *ngIf="filteredCount <= 1" style="height: 71px"></div>
               <ng-container

@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, ViewChild } from '@angular/core';
 import { ErrorResponse } from '@common/types';
 import { UtilsService } from '@common/utils/app.utils';
 import { shorten } from '@common/utils/common.utils';
@@ -16,7 +16,7 @@ import { filter, finalize, switchMap, take, takeUntil } from 'rxjs/operators';
   templateUrl: './support-form.component.html',
   styleUrls: ['./support-form.component.scss'],
 })
-export class SupportFormComponent {
+export class SupportFormComponent implements OnDestroy {
   @ViewChild(EnforcersGridComponent) enforcersGrid!: EnforcersGridComponent;
   @Input() debug_enabled!: boolean;
   downloadingUsage = false;
@@ -31,6 +31,12 @@ export class SupportFormComponent {
     private tr: TranslateService,
     private notificationService: NotificationService
   ) {}
+
+  ngOnDestroy(): void {
+    if (this.collectingLog) {
+      this.cancelCollect();
+    }
+  }
 
   submitDebug(): void {
     let body = {

@@ -26,6 +26,7 @@ import * as $ from 'jquery';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { EnforcersGridStatusCellComponent } from './enforcers-grid-status-cell/enforcers-grid-status-cell.component';
 import { MultiClusterService } from '@services/multi-cluster.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-enforcers-grid',
@@ -213,10 +214,12 @@ export class EnforcersGridComponent implements OnInit, OnChanges {
   }
 
   getEnforcers(): void {
-    this.enforcersService.getEnforcers().subscribe(res => {
-      this.enforcersService.enforcers = res;
-      this.filteredCount = this.enforcersService.enforcers.length;
-      this.refreshing$.next(false);
-    });
+    this.enforcersService
+      .getEnforcers()
+      .pipe(finalize(() => this.refreshing$.next(false)))
+      .subscribe(res => {
+        this.enforcersService.enforcers = res;
+        this.filteredCount = this.enforcersService.enforcers.length;
+      });
   }
 }

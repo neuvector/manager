@@ -20,7 +20,8 @@ import {
 } from 'ag-grid-community';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import * as $ from 'jquery';
-import {MultiClusterService} from "@services/multi-cluster.service";
+import { MultiClusterService } from '@services/multi-cluster.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-scanners-grid',
@@ -90,7 +91,7 @@ export class ScannersGridComponent implements OnInit, OnChanges {
     private datePipe: DatePipe,
     private utils: UtilsService,
     private tr: TranslateService,
-    private multiClusterService: MultiClusterService,
+    private multiClusterService: MultiClusterService
   ) {
     this.$win = $(GlobalVariable.window);
   }
@@ -106,13 +107,14 @@ export class ScannersGridComponent implements OnInit, OnChanges {
     this.getScanners();
 
     //refresh the page when it switched to a remote cluster
-    this.switchClusterSubscription = this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
-      this.refresh();
-    });
+    this.switchClusterSubscription =
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
+        this.refresh();
+      });
   }
 
-  ngOnDestroy(): void{
-    if(this.switchClusterSubscription){
+  ngOnDestroy(): void {
+    if (this.switchClusterSubscription) {
       this.switchClusterSubscription.unsubscribe();
     }
   }
@@ -156,10 +158,12 @@ export class ScannersGridComponent implements OnInit, OnChanges {
   }
 
   getScanners(): void {
-    this.scannersService.getScanners().subscribe(res => {
-      this.scannersService.scanners = res;
-      this.filteredCount = this.scannersService.scanners.length;
-      this.refreshing$.next(false);
-    });
+    this.scannersService
+      .getScanners()
+      .pipe(finalize(() => this.refreshing$.next(false)))
+      .subscribe(res => {
+        this.scannersService.scanners = res;
+        this.filteredCount = this.scannersService.scanners.length;
+      });
   }
 }

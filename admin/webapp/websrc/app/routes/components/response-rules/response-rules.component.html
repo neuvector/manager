@@ -8,13 +8,14 @@
   </div>
   <app-loading-button
     (btnClick)="refresh()"
+    [disabled]="!!(refreshing$ | async)"
     [appearance]="'mat-button'"
     [buttonClasses]="'d-flex justify-content-center align-items-center'"
     [disabled]="false"
     [iconClasses]="'eos-icons icon-18'"
     [iconName]="'refresh'"
     [id]="'response-rule-refresh-button'"
-    [loading]="false"
+    [loading]="!!(refreshing$ | async)"
     [text]="'network.REFRESH' | translate"
     [type]="'button'">
   </app-loading-button>
@@ -29,27 +30,34 @@
       <div
         class="d-flex justify-content-between align-items-center"
         *ngIf="source !== navSource['GROUP']">
-        <ng-container *ngIf="!responsePolicyErr">
-          <button
-            mat-stroked-button
-            aria-Label="add rule"
-            (click)="addResponseRule2Top($event)"
-            *ngIf="isWriteResponseRuleAuthorized">
-            <em class="fa fa-share mr-sm"></em>
-            {{ 'policy.toolBar.INSERT_TO_TOP' | translate }}
-          </button>
-        </ng-container>
+        <div class="d-flex justify-content-start align-items-center">
+          <span class="mr-2">
+            <span *ngIf="filtered">
+              {{ 'enum.FOUND' | translate }}
+              {{ filteredCount }}&nbsp;/&nbsp;
+            </span>
+            {{ responseRulesService.responseRules.length }}
+            {{ 'policy.COUNT_POSTFIX' | translate }}
+          </span>
+          <ng-container *ngIf="!responsePolicyErr">
+            <button
+              mat-stroked-button
+              aria-Label="add rule"
+              (click)="addResponseRule2Top($event)"
+              *ngIf="isWriteResponseRuleAuthorized">
+              <em class="fa fa-share mr-sm"></em>
+              {{ 'policy.toolBar.INSERT_TO_TOP' | translate }}
+            </button>
+          </ng-container>
+        </div>
         <app-quick-filter
           class="pull-left"
+          (filterCountChange)="filterCountChanged($event)"
           [gridOptions]="gridOptions"
-          [filteredCount]="filteredCount"
-          [count]="responseRulesService.responseRules.length">
+          [showCount]="false">
         </app-quick-filter>
       </div>
-      <div
-        *ngIf="source === navSource['GROUP']"
-        class="clearfix"
-      >
+      <div *ngIf="source === navSource['GROUP']" class="clearfix">
         <app-quick-filter
           class="pull-right"
           [gridOptions]="gridOptions"

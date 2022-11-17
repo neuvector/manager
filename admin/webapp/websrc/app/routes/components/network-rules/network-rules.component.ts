@@ -6,7 +6,7 @@ import {
   OnInit,
   SimpleChanges,
   ViewChild,
-  ElementRef
+  ElementRef,
 } from '@angular/core';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { NetworkRulesService } from '@common/services/network-rules.service';
@@ -30,7 +30,9 @@ import { saveAs } from 'file-saver';
 import { switchMap, filter } from 'rxjs/operators';
 import { Router, NavigationStart } from '@angular/router';
 import { GroupsService } from '@services/groups.service';
-import { MultiClusterService } from "@services/multi-cluster.service";
+import { MultiClusterService } from '@services/multi-cluster.service';
+import { Subject } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 
 const READONLY_RULE_MODIFIED = 46;
 const UNPROMOTABLE_ENDPOINT_PATTERN = new RegExp(/^Host\:*|^Workload\:*/);
@@ -45,6 +47,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   @Input() source!: string;
   @Input() groupName!: string;
   @Input() resizableHeight!: number;
+  refreshing$ = new Subject();
   navSource = GlobalConstant.NAV_SOURCE;
   eof = false;
   networkRuleErr = false;
@@ -82,17 +85,18 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.isWriteGlobalRulesAuthorized = this.authUtilsService.getDisplayFlag('write_network_rule');
+    this.isWriteGlobalRulesAuthorized =
+      this.authUtilsService.getDisplayFlag('write_network_rule');
     this.bindRouteEventListener();
-    this.gridHeight = this.w.innerHeight - (this.source === GlobalConstant.NAV_SOURCE.SELF ? 245 : 300);
+    this.gridHeight =
+      this.w.innerHeight -
+      (this.source === GlobalConstant.NAV_SOURCE.SELF ? 245 : 300);
     this.isWriteNetworkRuleAuthorized =
       this.authUtilsService.getDisplayFlag('write_network_rule') &&
-      (
-        this.source !== GlobalConstant.NAV_SOURCE.GROUP &&
-        this.source !== GlobalConstant.NAV_SOURCE.SELF ?
-          this.authUtilsService.getDisplayFlag('multi_cluster') :
-          true
-      );
+      (this.source !== GlobalConstant.NAV_SOURCE.GROUP &&
+      this.source !== GlobalConstant.NAV_SOURCE.SELF
+        ? this.authUtilsService.getDisplayFlag('multi_cluster')
+        : true);
     this.gridOptions = this.networkRulesService.configGrid(
       this.isWriteNetworkRuleAuthorized,
       this.source,
@@ -104,7 +108,10 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
         return rule.cfg_type === GlobalConstant.CFG_TYPE.GROUND;
       });
       this.isIncludingFed = this.selectedNetworkRules.some(rule => {
-        return rule.cfg_type === GlobalConstant.CFG_TYPE.FED && this.source === GlobalConstant.NAV_SOURCE.SELF;
+        return (
+          rule.cfg_type === GlobalConstant.CFG_TYPE.FED &&
+          this.source === GlobalConstant.NAV_SOURCE.SELF
+        );
       });
       this.containsUnpromotableEndpoint = this.selectedNetworkRules.some(
         rule => {
@@ -130,9 +137,10 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
     this.refresh();
 
     //refresh the page when it switched to a remote cluster
-    this.switchClusterSubscription = this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
-      this.refresh();
-    });
+    this.switchClusterSubscription =
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
+        this.refresh();
+      });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -149,12 +157,13 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   ngOnDestroy(): void {
     this.unbindRouteEventListener();
 
-    if(this.switchClusterSubscription){
+    if (this.switchClusterSubscription) {
       this.switchClusterSubscription.unsubscribe();
     }
   }
 
   refresh = () => {
+    this.refreshing$.next(true);
     if (this.source === GlobalConstant.NAV_SOURCE.GROUP) {
       if (this.isScoreImprovement) this.getServiceRules();
       else this.getGroupPolicy();
@@ -245,9 +254,9 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '700px',
       data: {
-        message: `${this.translate.instant(
-          'policy.dialog.REMOVE'
-        )} ${ids.join(', ')}`,
+        message: `${this.translate.instant('policy.dialog.REMOVE')} ${ids.join(
+          ', '
+        )}`,
         isSync: true,
       },
       disableClose: true,
@@ -260,28 +269,34 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   };
 
   private getServiceRules = () => {
-    this.groupsService.getService(this.groupName).subscribe({
-      next: service => {
-        this.gridOptions.api!.setRowData(service.policy_rules);
-      },
-      error: err => {
-        console.warn(err);
-        if (err.status !== GlobalConstant.STATUS_NOT_FOUND) {
-          this.gridOptions.overlayNoRowsTemplate =
-            this.utils.getOverlayTemplateMsg(err);
-        }
-        this.gridOptions.api!.setRowData([]);
-      },
-    });
+    this.groupsService
+      .getService(this.groupName)
+      .pipe(finalize(() => this.refreshing$.next(false)))
+      .subscribe({
+        next: service => {
+          this.gridOptions.api!.setRowData(service.policy_rules);
+        },
+        error: err => {
+          console.warn(err);
+          if (err.status !== GlobalConstant.STATUS_NOT_FOUND) {
+            this.gridOptions.overlayNoRowsTemplate =
+              this.utils.getOverlayTemplateMsg(err);
+          }
+          this.gridOptions.api!.setRowData([]);
+        },
+      });
   };
 
   private getGroupPolicy = () => {
-    this.groupsService.getGroupInfo(this.groupName).subscribe(
-      (response: any) => {
-        this.gridOptions.api!.setRowData(response.policy_rules);
-      },
-      error => {}
-    );
+    this.groupsService
+      .getGroupInfo(this.groupName)
+      .pipe(finalize(() => this.refreshing$.next(false)))
+      .subscribe(
+        (response: any) => {
+          this.gridOptions.api!.setRowData(response.policy_rules);
+        },
+        error => {}
+      );
   };
 
   private getNetworkRules = () => {
@@ -416,14 +431,16 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       this.networkRules[index].state =
         GlobalConstant.NETWORK_RULES_STATE.READONLY;
     });
-    console.log("this.networkRules", this.networkRules);
+    console.log('this.networkRules', this.networkRules);
     this.gridOptions.api!.setRowData(this.networkRules);
   };
 
   private mergeRulesByWebWorkerClient = (rulesBlock: Array<any>) => {
     let eof = rulesBlock.length < MapConstant.PAGE.NETWORK_RULES;
     this.networkRules = this.networkRules.concat(rulesBlock);
-    this.networkRulesService.networkRuleBackup = JSON.parse(JSON.stringify(this.networkRules))
+    this.networkRulesService.networkRuleBackup = JSON.parse(
+      JSON.stringify(this.networkRules)
+    );
     this.renderNetworkRule(this.networkRules, eof);
   };
 
@@ -448,6 +465,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
     });
     this.filteredCount = networkRules.length;
     this.gridOptions.api!.setRowData(networkRules);
+    if (this.eof) this.refreshing$.next(false);
   };
 
   private insertRule = (

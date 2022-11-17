@@ -10,7 +10,9 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { getScope } from '@common/utils/common.utils';
 import { GroupsService } from '@services/groups.service';
 import { AuthUtilsService } from '@common/utils/auth.utils';
-import {MultiClusterService} from "@services/multi-cluster.service";
+import { MultiClusterService } from '@services/multi-cluster.service';
+import { Subject } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-response-rules',
@@ -18,9 +20,10 @@ import {MultiClusterService} from "@services/multi-cluster.service";
   styleUrls: ['./response-rules.component.scss'],
 })
 export class ResponseRulesComponent implements OnInit {
-  @Input() source: string = "";
-  @Input() groupName: string = "";
+  @Input() source: string = '';
+  @Input() groupName: string = '';
   @Input() resizableHeight: number = 0;
+  refreshing$ = new Subject();
   private isModalOpen: boolean = false;
   public responsePolicyErr: boolean = false;
   public gridOptions: GridOptions = <GridOptions>{};
@@ -46,31 +49,35 @@ export class ResponseRulesComponent implements OnInit {
 
   ngOnInit(): void {
     this.source = this.source ? this.source : GlobalConstant.NAV_SOURCE.SELF;
-    this.isWriteResponseRuleAuthorized = this.authUtilsService.getDisplayFlag("write_response_rule") &&
-      (
-        this.source !== GlobalConstant.NAV_SOURCE.GROUP &&
-        this.source !== GlobalConstant.NAV_SOURCE.SELF ?
-          this.authUtilsService.getDisplayFlag('multi_cluster') :
-          true
-      );
-    this.gridOptions = this.responseRulesService.prepareGrid(this.isWriteResponseRuleAuthorized, this.source);
+    this.isWriteResponseRuleAuthorized =
+      this.authUtilsService.getDisplayFlag('write_response_rule') &&
+      (this.source !== GlobalConstant.NAV_SOURCE.GROUP &&
+      this.source !== GlobalConstant.NAV_SOURCE.SELF
+        ? this.authUtilsService.getDisplayFlag('multi_cluster')
+        : true);
+    this.gridOptions = this.responseRulesService.prepareGrid(
+      this.isWriteResponseRuleAuthorized,
+      this.source
+    );
     this.context = { componentParent: this };
     this.responseRulesService.scope = getScope(this.source);
     this.refresh();
 
     //refresh the page when it switched to a remote cluster
-    this.switchClusterSubscription = this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
-      this.refresh();
-    });
+    this.switchClusterSubscription =
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
+        this.refresh();
+      });
   }
 
-  ngOnDestroy():void{
-    if(this.switchClusterSubscription){
+  ngOnDestroy(): void {
+    if (this.switchClusterSubscription) {
       this.switchClusterSubscription.unsubscribe();
     }
   }
 
   refresh() {
+    this.refreshing$.next(true);
     if (this.source === GlobalConstant.NAV_SOURCE.GROUP) {
       this.getGroupPolicy();
     } else {
@@ -82,6 +89,7 @@ export class ResponseRulesComponent implements OnInit {
     this.responsePolicyErr = false;
     this.responseRulesService
       .getResponseRulesData(this.responseRulesService.scope)
+      .pipe(finalize(() => this.refreshing$.next(false)))
       .subscribe(
         (response: any) => {
           this.responseRulesService.responseRules =
@@ -116,10 +124,14 @@ export class ResponseRulesComponent implements OnInit {
   };
 
   private getGroupPolicy = () => {
-    this.groupsService.getGroupInfo(this.groupName)
+    this.groupsService
+      .getGroupInfo(this.groupName)
+      .pipe(finalize(() => this.refreshing$.next(false)))
       .subscribe(
         (response: any) => {
-          let convertedRules = this.responseRulesService.destructConditions(response.response_rules);
+          let convertedRules = this.responseRulesService.destructConditions(
+            response.response_rules
+          );
           this.gridOptions.api!.setRowData(convertedRules);
         },
         error => {}
@@ -132,9 +144,10 @@ export class ResponseRulesComponent implements OnInit {
     let addDialogRef = this.dialog.open(AddEditResponseRuleModalComponent, {
       data: {
         autoCompleteData: autoCompleteData,
-        type: 'add'
+        type: 'add',
       },
-      disableClose: true, width: "70vw"
+      disableClose: true,
+      width: '70vw',
     });
     addDialogRef.afterClosed().subscribe(result => {
       setTimeout(() => {

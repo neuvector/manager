@@ -20,6 +20,8 @@ import { saveAs } from 'file-saver';
 import { ImportFileModalComponent } from '@components/ui/import-file-modal/import-file-modal.component';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Subject } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dlp-sensors',
@@ -27,6 +29,7 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./dlp-sensors.component.scss'],
 })
 export class DlpSensorsComponent implements OnInit {
+  refreshing$ = new Subject();
   dlpSensors: Array<DlpSensor> = [];
   isWriteDLPSensorAuthorized!: boolean;
   gridOptions: any;
@@ -86,6 +89,7 @@ export class DlpSensorsComponent implements OnInit {
   }
 
   refresh = (index: number = 0) => {
+    this.refreshing$.next(true);
     this.getDlpSensors(index);
   };
 
@@ -158,18 +162,21 @@ export class DlpSensorsComponent implements OnInit {
   };
 
   private getDlpSensors = (index: number) => {
-    this.dlpSensorsService.getDlpSensorsData().subscribe(
-      response => {
-        this.dlpSensors = response as Array<DlpSensor>;
-        this.filteredCount = this.dlpSensors.length;
-        setTimeout(() => {
-          let rowNode =
-            this.gridOptions4Sensors.api!.getDisplayedRowAtIndex(index);
-          rowNode!.setSelected(true);
-        }, 200);
-      },
-      error => {}
-    );
+    this.dlpSensorsService
+      .getDlpSensorsData()
+      .pipe(finalize(() => this.refreshing$.next(false)))
+      .subscribe(
+        response => {
+          this.dlpSensors = response as Array<DlpSensor>;
+          this.filteredCount = this.dlpSensors.length;
+          setTimeout(() => {
+            let rowNode =
+              this.gridOptions4Sensors.api!.getDisplayedRowAtIndex(index);
+            rowNode!.setSelected(true);
+          }, 200);
+        },
+        error => {}
+      );
   };
 
   private onSelectionChanged4Sensor = () => {

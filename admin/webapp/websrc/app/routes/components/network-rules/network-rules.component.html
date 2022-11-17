@@ -30,14 +30,16 @@
           (click)="exportCsv()">
           <em class="eos-icons icon-18">csv_file</em>
         </button>
-        <ng-container *ngIf="(eof || networkRuleErr) && !isNetworkRuleDirty()">
+        <ng-container *ngIf="!isNetworkRuleDirty()">
           <app-loading-button
             (btnClick)="refresh()"
+            [disabled]="!!(refreshing$ | async)"
             [appearance]="'mat-button'"
             [buttonClasses]="'d-flex justify-content-center align-items-center'"
             [iconClasses]="'eos-icons icon-18'"
             [iconName]="'refresh'"
             [id]="'networkRules-refresh-button'"
+            [loading]="!!(refreshing$ | async)"
             [text]="'network.REFRESH' | translate"
             [type]="'button'">
           </app-loading-button>
@@ -126,7 +128,7 @@
                 [filteredCount]="filteredCount"
                 [count]="networkRules.length">
               </app-quick-filter>
-              <div *ngIf="filteredCount <= 1" style="height: 71px;"></div>
+              <div *ngIf="filteredCount <= 1" style="height: 71px"></div>
               <ng-container
                 *ngIf="
                   (eof || networkRuleErr) &&
@@ -150,10 +152,7 @@
           </div>
         </div>
 
-        <div
-          *ngIf="source === navSource['GROUP']"
-          class="clearfix"
-        >
+        <div *ngIf="source === navSource['GROUP']" class="clearfix">
           <app-quick-filter
             class="pull-right"
             [gridOptions]="gridOptions"

@@ -8,13 +8,14 @@
   </div>
   <app-loading-button
     (btnClick)="refresh()"
+    [disabled]="!!(refreshing$ | async)"
     [appearance]="'mat-button'"
     [buttonClasses]="'d-flex justify-content-center align-items-center'"
     [disabled]="false"
     [iconClasses]="'eos-icons icon-18'"
     [iconName]="'refresh'"
     [id]="'response-rule-refresh-button'"
-    [loading]="false"
+    [loading]="!!(refreshing$ | async)"
     [text]="'network.REFRESH' | translate"
     [type]="'button'">
   </app-loading-button>
@@ -46,10 +47,7 @@
           [count]="responseRulesService.responseRules.length">
         </app-quick-filter>
       </div>
-      <div
-        *ngIf="source === navSource['GROUP']"
-        class="clearfix"
-      >
+      <div *ngIf="source === navSource['GROUP']" class="clearfix">
         <app-quick-filter
           class="pull-right"
           [gridOptions]="gridOptions"

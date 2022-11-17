@@ -66,11 +66,13 @@
       <ng-container *ngIf="source === navSource['SELF']">
         <app-loading-button
           (btnClick)="refresh()"
+          [disabled]="!!(refreshing$ | async)"
           [appearance]="'mat-button'"
           [buttonClasses]="'d-flex justify-content-center align-items-center'"
           [iconClasses]="'eos-icons icon-18'"
           [iconName]="'refresh'"
           [id]="'admission-control-refresh-button'"
+          [loading]="!!(refreshing$ | async)"
           [text]="'network.REFRESH' | translate"
           [type]="'button'">
         </app-loading-button>

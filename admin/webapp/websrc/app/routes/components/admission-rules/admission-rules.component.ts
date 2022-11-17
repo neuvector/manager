@@ -2,10 +2,10 @@ import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PathConstant } from '@common/constants/path.constant';
 import { ImportFileModalComponent } from '@components/ui/import-file-modal/import-file-modal.component';
-import { AddEditAdmissionRuleModalComponent } from "@components/admission-rules/partial/add-edit-admission-rule-modal/add-edit-admission-rule-modal.component";
-import { AdvanceSettingModalComponent } from "@components/admission-rules/partial/advance-setting-modal/advance-setting-modal.component";
-import { ConfigurationAssessmentModalComponent } from "@components/admission-rules/partial/configuration-assessment-modal/configuration-assessment-modal.component";
-import { ExportAdmissionRulesModalComponent } from "@components/admission-rules/partial/export-admission-rules-modal/export-admission-rules-modal.component";
+import { AddEditAdmissionRuleModalComponent } from '@components/admission-rules/partial/add-edit-admission-rule-modal/add-edit-admission-rule-modal.component';
+import { AdvanceSettingModalComponent } from '@components/admission-rules/partial/advance-setting-modal/advance-setting-modal.component';
+import { ConfigurationAssessmentModalComponent } from '@components/admission-rules/partial/configuration-assessment-modal/configuration-assessment-modal.component';
+import { ExportAdmissionRulesModalComponent } from '@components/admission-rules/partial/export-admission-rules-modal/export-admission-rules-modal.component';
 import {
   AdmissionRule,
   AdmissionStateRec,
@@ -16,13 +16,13 @@ import { GlobalVariable } from '@common/variables/global.variable';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { TranslateService } from '@ngx-translate/core';
-import { MultiClusterService } from "@services/multi-cluster.service";
-import { UtilsService } from  '@common/utils/app.utils';
+import { MultiClusterService } from '@services/multi-cluster.service';
+import { UtilsService } from '@common/utils/app.utils';
 
 @Component({
   selector: 'app-admission-rules',
   templateUrl: './admission-rules.component.html',
-  styleUrls: ['./admission-rules.component.scss']
+  styleUrls: ['./admission-rules.component.scss'],
 })
 export class AdmissionRulesComponent implements OnInit {
   @Input() source!: string;
@@ -30,18 +30,19 @@ export class AdmissionRulesComponent implements OnInit {
   admissionRules: Array<AdmissionRule> = [];
   admissionStateRec: AdmissionStateRec = <AdmissionStateRec>{};
   globalStatus: boolean = false;
-  mode: string = "";
+  mode: string = '';
   admissionOptions: any;
   gridOptions: GridOptions = <GridOptions>{};
   gridHeight: number = 0;
-  filteredCount: number = 0;
+  filtered: boolean = false;
+  filteredCount!: number;
   selectedAdmissionRules: Array<AdmissionRule> = [];
   isWriteAdmissionRuleAuthorized: boolean = false;
   isAdmissionRuleAuthorized: boolean = false;
   admissionStateErr: boolean = false;
   canConfig: boolean = false;
   isK8s: boolean = false;
-  stateWarning: string = "";
+  stateWarning: string = '';
   hasSelectedDefaultRule: boolean = false;
   isMaster: boolean = false;
   frameworkComponents;
@@ -68,33 +69,48 @@ export class AdmissionRulesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isWriteAdmissionRuleAuthorized = this.authUtilsService.getDisplayFlag("write_admission");
-    this.isAdmissionRuleAuthorized = this.authUtilsService.getDisplayFlag("admission");
-    this.gridOptions = this.admissionRulesService.configRuleGrid(this.isWriteAdmissionRuleAuthorized);
+    this.isWriteAdmissionRuleAuthorized =
+      this.authUtilsService.getDisplayFlag('write_admission');
+    this.isAdmissionRuleAuthorized =
+      this.authUtilsService.getDisplayFlag('admission');
+    this.gridOptions = this.admissionRulesService.configRuleGrid(
+      this.isWriteAdmissionRuleAuthorized
+    );
     this.gridOptions.onSelectionChanged = this.onAdmissionRulesSelected;
     this.context = { componentParent: this };
-    this.gridHeight = this.source === GlobalConstant.NAV_SOURCE.SELF ? this.w.innerHeight - 238
-      : this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-      ? this.w.innerHeight - 300
-      : 0;
+    this.gridHeight =
+      this.source === GlobalConstant.NAV_SOURCE.SELF
+        ? this.w.innerHeight - 238
+        : this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+        ? this.w.innerHeight - 300
+        : 0;
     this.refresh();
     //refresh the page when it switched to a remote cluster
-    this.switchClusterSubscription = this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
-      this.refresh();
-    });
+    this.switchClusterSubscription =
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
+        this.refresh();
+      });
   }
 
-  ngOnDestroy():void{
-    if(this.switchClusterSubscription){
+  ngOnDestroy(): void {
+    if (this.switchClusterSubscription) {
       this.switchClusterSubscription.unsubscribe();
     }
   }
 
   onAdmissionRulesSelected = () => {
-    this.selectedAdmissionRules = this.gridOptions.api?.getSelectedRows() as Array<AdmissionRule>;
-    this.hasSelectedDefaultRule = this.selectedAdmissionRules.some(rule => rule.critical || rule.cfg_type === GlobalConstant.CFG_TYPE.FED);
+    this.selectedAdmissionRules =
+      this.gridOptions.api?.getSelectedRows() as Array<AdmissionRule>;
+    this.hasSelectedDefaultRule = this.selectedAdmissionRules.some(
+      rule => rule.critical || rule.cfg_type === GlobalConstant.CFG_TYPE.FED
+    );
     this.isMaster = GlobalVariable.isMaster;
   };
+
+  filterCountChanged(results: number) {
+    this.filteredCount = results;
+    this.filtered = this.filteredCount !== this.admissionRules.length;
+  }
 
   private getAdmissionStateAndRules = () => {
     this.admissionStateErr = false;
@@ -105,7 +121,11 @@ export class AdmissionRulesComponent implements OnInit {
           : ''
       )
       .subscribe(
-        ([state, rules, options]: [AdmissionStateRec, Array<AdmissionRule>, any]) => {
+        ([state, rules, options]: [
+          AdmissionStateRec,
+          Array<AdmissionRule>,
+          any
+        ]) => {
           this.admissionStateRec = state;
           this.admissionRules = rules;
           this.admissionOptions = options;
@@ -129,28 +149,36 @@ export class AdmissionRulesComponent implements OnInit {
           }
           this.filteredCount = this.admissionRules.length;
 
-          this.canConfig = state.state!.cfg_type !== GlobalConstant.CFG_TYPE.GROUND;
+          this.canConfig =
+            state.state!.cfg_type !== GlobalConstant.CFG_TYPE.GROUND;
           this.isK8s = state.k8s_env;
           if (!this.canConfig) {
-            this.stateWarning = this.translate.instant("admissionControl.CAN_NOT_CONFIG");
+            this.stateWarning = this.translate.instant(
+              'admissionControl.CAN_NOT_CONFIG'
+            );
           } else if (!this.isK8s) {
-            this.stateWarning = this.translate.instant("admissionControl.NOT_SUPPORT");
+            this.stateWarning = this.translate.instant(
+              'admissionControl.NOT_SUPPORT'
+            );
           }
         },
         error => {
           console.log(error);
           this.admissionStateErr = true;
-          if (
-            error.status === 404
-          ) {
-            this.gridOptions.overlayNoRowsTemplate = this.utils.getOverlayTemplateMsg(error);
+          if (error.status === 404) {
+            this.gridOptions.overlayNoRowsTemplate =
+              this.utils.getOverlayTemplateMsg(error);
             this.gridOptions!.api!.setRowData([]);
-            this.stateWarning = this.translate.instant("admissionControl.NOT_BINDING");
+            this.stateWarning = this.translate.instant(
+              'admissionControl.NOT_BINDING'
+            );
           } else if (error.status === 403) {
-            this.gridOptions.overlayNoRowsTemplate = this.translate.instant("general.NO_ROWS")
+            this.gridOptions.overlayNoRowsTemplate =
+              this.translate.instant('general.NO_ROWS');
             this.gridOptions!.api!.setRowData([]);
           } else {
-            this.gridOptions.overlayNoRowsTemplate = this.utils.getOverlayTemplateMsg(error);
+            this.gridOptions.overlayNoRowsTemplate =
+              this.utils.getOverlayTemplateMsg(error);
             this.gridOptions!.api!.setRowData([]);
           }
         }
@@ -173,23 +201,30 @@ export class AdmissionRulesComponent implements OnInit {
   };
 
   openConfigAssessmentDialog = () => {
-    this.configAssessmentDialogRef = this.dialog.open(ConfigurationAssessmentModalComponent, {
-      data: {
-        printConfigurationAssessmentResultFn: this.printConfigurationAssessmentResult
-      },
-      width: "1024px",
-      disableClose: true
-    });
+    this.configAssessmentDialogRef = this.dialog.open(
+      ConfigurationAssessmentModalComponent,
+      {
+        data: {
+          printConfigurationAssessmentResultFn:
+            this.printConfigurationAssessmentResult,
+        },
+        width: '1024px',
+        disableClose: true,
+      }
+    );
   };
 
   openExportPopup = () => {
-    const exportDialogRef = this.dialog.open(ExportAdmissionRulesModalComponent, {
-      width: "50%",
-      data: {
-        selectedAdmissionRules: this.selectedAdmissionRules
-      },
-      disableClose: true
-    });
+    const exportDialogRef = this.dialog.open(
+      ExportAdmissionRulesModalComponent,
+      {
+        width: '50%',
+        data: {
+          selectedAdmissionRules: this.selectedAdmissionRules,
+        },
+        disableClose: true,
+      }
+    );
   };
 
   openImportPopup = () => {
@@ -197,43 +232,58 @@ export class AdmissionRulesComponent implements OnInit {
     const importDialogRef = this.dialog.open(ImportFileModalComponent, {
       data: {
         importUrl: PathConstant.IMPORT_ADM_CTRL,
+        importMsg: {
+          success: this.translate.instant('admissionControl.msg.IMPORT_FINISH'),
+          error: this.translate.instant('admissionControl.msg.IMPORT_FAILED'),
+        },
       },
       disableClose: true,
     });
     importDialogRef.afterClosed().subscribe(result => {
+      setTimeout(() => {
+        this.refresh();
+      }, 500);
       this.isModalOpen = false;
     });
   };
 
   showAdvancedSetting = () => {
-    const advancedSettingDialogRef = this.dialog.open(AdvanceSettingModalComponent, {
-      width: "60%",
-      data: {
-        state: this.admissionStateRec.state || {},
-        refreshFn: this.refresh
-      },
-      disableClose: true
-    });
+    const advancedSettingDialogRef = this.dialog.open(
+      AdvanceSettingModalComponent,
+      {
+        width: '60%',
+        data: {
+          state: this.admissionStateRec.state || {},
+          refreshFn: this.refresh,
+        },
+        disableClose: true,
+      }
+    );
   };
 
   openAddEditAdmissionRuleModal = () => {
-    const addEditDialogRef = this.dialog.open(AddEditAdmissionRuleModalComponent, {
-      width: "80%",
-      data: {
-        opType: GlobalConstant.MODAL_OP.ADD,
-        admissionOptions: this.admissionOptions,
-        cfgType: this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-          ? GlobalConstant.SCOPE.FED
-          : GlobalConstant.SCOPE.LOCAL,
-        refresh: this.refresh
-      },
-      disableClose: true
-    })
+    const addEditDialogRef = this.dialog.open(
+      AddEditAdmissionRuleModalComponent,
+      {
+        width: '80%',
+        data: {
+          opType: GlobalConstant.MODAL_OP.ADD,
+          admissionOptions: this.admissionOptions,
+          cfgType:
+            this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+              ? GlobalConstant.SCOPE.FED
+              : GlobalConstant.SCOPE.LOCAL,
+          refresh: this.refresh,
+        },
+        disableClose: true,
+      }
+    );
   };
 
   toggleStatus = () => {
     this.admissionStateRec.state!.enable! = this.globalStatus;
-    this.admissionRulesService.updateAdmissionState(this.admissionStateRec)
+    this.admissionRulesService
+      .updateAdmissionState(this.admissionStateRec)
       .subscribe(
         response => {
           this.getAdmissionState();
@@ -244,7 +294,8 @@ export class AdmissionRulesComponent implements OnInit {
 
   toggleMode = () => {
     this.admissionStateRec.state!.mode! = this.mode;
-    this.admissionRulesService.updateAdmissionState(this.admissionStateRec)
+    this.admissionRulesService
+      .updateAdmissionState(this.admissionStateRec)
       .subscribe(
         response => {
           this.getAdmissionState();
@@ -256,26 +307,23 @@ export class AdmissionRulesComponent implements OnInit {
   promoteRule = () => {
     let payload = {
       request: {
-        ids: this.selectedAdmissionRules.map(rule => rule.id)
-      }
-    }
+        ids: this.selectedAdmissionRules.map(rule => rule.id),
+      },
+    };
 
-    this.admissionRulesService.updateRulePromotion(payload)
-      .subscribe({
-        next: res => {
-          setTimeout(() => {
-            this.refresh();
-          }, 1000);
-        },
-        error: error => {
-
-        }
-      });
+    this.admissionRulesService.updateRulePromotion(payload).subscribe({
+      next: res => {
+        setTimeout(() => {
+          this.refresh();
+        }, 1000);
+      },
+      error: error => {},
+    });
   };
 
   showGlobalActions = event => {};
 
-  private printConfigurationAssessmentResult = (testResult) => {
+  private printConfigurationAssessmentResult = testResult => {
     this.configTestResult = testResult;
     this.configAssessmentDialogRef.close();
     this.isPrinting = true;

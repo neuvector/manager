@@ -25,6 +25,10 @@ export class ExportFormComponent implements OnInit {
   });
   isImportAuthorized!: boolean;
   isExportAuthorized!: boolean;
+  importMsg = {
+    success: this.tr.instant('setting.message.UPLOAD_FINISH'),
+    error: this.tr.instant('setting.IMPORT_FAILED'),
+  };
 
   constructor(
     private settingsService: SettingsService,

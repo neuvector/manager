@@ -12,7 +12,11 @@ export class ImportFileModalComponent {
   /* Sample:
     this.dialog.open(ImportFileModalComponent, {
      data: {
-       importUrl: PathConstant.IMPORT_ADM_CTRL
+       importUrl: PathConstant.IMPORT_ADM_CTRL,
+       importMsg: {
+         success: 'Import successful',
+         error: 'Import failed',
+       }
      },
      disableClose: true
    });

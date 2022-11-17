@@ -21,8 +21,7 @@
           color="primary"
           class="policy-top-button"
           *appDisplayControl="'write_admission'"
-          (click)="openConfigAssessmentDialog()"
-          style="">
+          (click)="openConfigAssessmentDialog()">
           <em class="eos-icons icon-18 mr-1">flask</em>
           {{ 'admissionControl.MATCHING_TEST' | translate }}
         </button>
@@ -37,20 +36,27 @@
             <div class="menu-width-medium">
               <button
                 mat-menu-item
+                class="d-flex align-items-center"
                 (click)="showAdvancedSetting()"
                 *ngIf="globalStatus">
-                <em class="eos-icons">config_map</em>
+                <em class="eos-icons mr-2">config_map</em>
                 {{ 'admissionControl.GLOBAL_OPS' | translate }}
               </button>
             </div>
             <div class="menu-width-medium">
-              <button mat-menu-item (click)="openExportPopup()">
-                <em class="eos-icons">download</em>
+              <button
+                mat-menu-item
+                class="d-flex align-items-center"
+                (click)="openExportPopup()">
+                <em class="eos-icons mr-2">download</em>
                 {{ 'admissionControl.EXPORT' | translate }}
               </button>
             </div>
-            <button mat-menu-item (click)="openImportPopup()">
-              <em class="eos-icons">upload</em>
+            <button
+              mat-menu-item
+              class="d-flex align-items-center"
+              (click)="openImportPopup()">
+              <em class="eos-icons mr-2">upload</em>
               {{ 'admissionControl.IMPORT' | translate }}
             </button>
           </mat-menu>
@@ -80,6 +86,14 @@
     <div [ngClass]="{ 'panel-body': source === navSource['SELF'] }">
       <div class="d-flex justify-content-between align-items-center">
         <div class="d-flex justify-content-start align-items-center">
+          <span class="mr-2">
+            <span *ngIf="filtered">
+              {{ 'enum.FOUND' | translate }}
+              {{ filteredCount }}&nbsp;/&nbsp;
+            </span>
+            {{ admissionRules.length }}
+            {{ 'policy.COUNT_POSTFIX' | translate }}
+          </span>
           <button
             mat-stroked-button
             aria-label="Add rule"
@@ -108,13 +122,13 @@
         </div>
         <div class="d-flex justify-content-end align-items-center">
           <div
-            class=""
+            class="d-flex align-items-center"
             *ngIf="
               globalStatus &&
               isAdmissionRuleAuthorized &&
               source === navSource['SELF']
             ">
-            <label class="nv-modal-item-title margin-right-m">
+            <label class="nv-modal-item-title margin-right-m mb-0">
               {{ 'admissionControl.MODE' | translate }}
             </label>
             <mat-button-toggle-group
@@ -131,15 +145,16 @@
               }}</mat-button-toggle>
             </mat-button-toggle-group>
           </div>
-          <div class="ml-2 mr-3" *ngIf="source === navSource['SELF']">
-            <label class="nv-modal-item-title margin-right-s mb-3">
+          <div
+            class="mx-3 d-flex align-items-center"
+            *ngIf="source === navSource['SELF']">
+            <label class="nv-modal-item-title margin-right-s mb-0">
               {{ 'responsePolicy.gridHeader.STATUS' | translate }}
             </label>
             <mat-slide-toggle
               [matTooltip]="stateWarning"
               [matTooltipDisabled]="canConfig && isK8s && !admissionStateErr"
               matTooltipClass="tooltip-error"
-              class="padding-top-s"
               id="status-toggle"
               *appDisplayControl="'admission'"
               [disabled]="
@@ -165,9 +180,9 @@
             </mat-slide-toggle>
           </div>
           <app-quick-filter
+            (filterCountChange)="filterCountChanged($event)"
             [gridOptions]="gridOptions"
-            [filteredCount]="filteredCount"
-            [count]="admissionRules.length">
+            [showCount]="false">
           </app-quick-filter>
           <ng-container *ngIf="source === navSource['FED_POLICY']">
             <app-loading-button

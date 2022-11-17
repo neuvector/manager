@@ -3,6 +3,7 @@ import {
   ErrorResponse,
   GroupMappedRole,
   OPENID,
+  Server,
   ServerGetResponse,
   ServerPatchBody,
 } from '@common/types';
@@ -25,7 +26,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class OpenidFormComponent implements OnInit {
   @Input() openidData!: { server: ServerGetResponse; domains: string[] };
-  onCreate = true;
+  isCreated = true;
   submittingForm = false;
   groupMappedRoles: GroupMappedRole[] = [];
   serverName = 'openId1';
@@ -39,6 +40,9 @@ export class OpenidFormComponent implements OnInit {
     group_claim: new FormControl(),
     default_role: new FormControl(),
     enable: new FormControl(false),
+    authorization_endpoint: new FormControl({ value: null, disabled: true }),
+    token_endpoint: new FormControl({ value: null, disabled: true }),
+    user_info_endpoint: new FormControl({ value: null, disabled: true }),
   });
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
@@ -54,20 +58,23 @@ export class OpenidFormComponent implements OnInit {
   ngOnInit(): void {
     this.openidRedirectURL = getCallbackUri('openId_auth ');
     const openid = this.openidData.server.servers.find(
-      ({ server_type }) => server_type === 'ldap'
+      ({ server_type }) => server_type === 'oidc'
     );
-    if (openid && openid.openid) {
+    if (openid && openid.oidc) {
       this.serverName = openid.server_name;
-      this.groupMappedRoles = openid.openid.group_mapped_roles;
-      Object.keys(openid.openid).forEach((key: string) => {
+      this.groupMappedRoles = openid.oidc.group_mapped_roles;
+      Object.keys(openid.oidc).forEach((key: string) => {
         if (this.openidForm.controls[key]) {
           this.openidForm.controls[key].setValue(
-            openid.openid ? openid.openid[key] : null
+            openid.oidc ? openid.oidc[key] : null
           );
         }
       });
+      const client_secret = this.openidForm.get('client_secret');
+      client_secret?.clearValidators();
+      client_secret?.setValue('********');
     } else {
-      this.onCreate = false;
+      this.isCreated = false;
     }
   }
 
@@ -87,11 +94,11 @@ export class OpenidFormComponent implements OnInit {
     const config: ServerPatchBody = { config: { name: this.serverName, oidc } };
     this.submittingForm = true;
     let submission: Observable<unknown>;
-    if (!this.onCreate) {
+    if (!this.isCreated) {
       submission = this.settingsService.postServer(config).pipe(
         finalize(() => {
           this.submittingForm = false;
-          this.onCreate = true;
+          this.isCreated = true;
         })
       );
     } else {

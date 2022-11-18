@@ -28,8 +28,6 @@
   #agGrid
   (window:resize)="onResize()"
   [ngStyle]="{ height: gridHeight + 'px' }"
-  [enableCellTextSelection]="true"
-  [ensureDomOrder]="true"
   [gridOptions]="gridOptions"
   [rowData]="eventsService.displayEvents"
   id="events-grid"

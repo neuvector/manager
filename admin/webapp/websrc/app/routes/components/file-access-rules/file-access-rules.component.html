@@ -65,8 +65,6 @@
                 ? resizableHeight - 150
                 : gridHeight) + 'px'
           }"
-          [enableCellTextSelection]="true"
-          [ensureDomOrder]="true"
           class="ag-theme-balham"
           [gridOptions]="gridOptions"
           [rowData]="fileAccessRules">
@@ -80,8 +78,6 @@
     <ag-grid-angular
       #agGrid
       [ngStyle]="{ height: resizableHeight + 'px' }"
-      [enableCellTextSelection]="true"
-      [ensureDomOrder]="true"
       [gridOptions]="gridOptions"
       [rowData]="fileAccessRules"
       id="file-access-rules-score-improvement-grid"

@@ -90,8 +90,6 @@
   #agGrid
   (window:resize)="onResize()"
   [ngStyle]="{ height: gridHeight + 'px' }"
-  [enableCellTextSelection]="true"
-  [ensureDomOrder]="true"
   [gridOptions]="gridOptions"
   [rowData]="containersService.displayContainers"
   id="containers-grid"

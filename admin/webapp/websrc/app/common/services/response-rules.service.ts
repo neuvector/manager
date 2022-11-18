@@ -54,13 +54,6 @@ export class ResponseRulesService {
       {
         headerName: this.translate.instant('responsePolicy.gridHeader.GROUP'),
         field: 'group',
-        cellRenderer: params => {
-          if (params.value) {
-            return `<div style="word-wrap: break-word;">${params.value}</div>`;
-          }
-          return '';
-        },
-        cellClass: ['wrap-word-in-cell'],
         width: 200,
       },
       {
@@ -68,13 +61,6 @@ export class ResponseRulesService {
           'responsePolicy.gridHeader.CRITERIA'
         ),
         field: 'conditions',
-        cellRenderer: params => {
-          if (params.value) {
-            return `<div style="word-wrap: break-word;">${params.value}</div>`;
-          }
-          return '';
-        },
-        cellClass: ['wrap-word-in-cell'],
         width: 430,
       },
       {
@@ -115,8 +101,6 @@ export class ResponseRulesService {
 
       },
     };
-    if (source !== GlobalConstant.NAV_SOURCE.GROUP) gridOptions.rowHeight = 56;
-
     return gridOptions;
   }
 

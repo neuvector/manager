@@ -643,6 +643,7 @@
       "ADD_RULE": "添加规则",
       "PROXY": "代理容器",
       "QUARANTINED": "隔离",
+      "QUARANTINED_GROUP": "内含隔离容器",
       "CONV_INTERNAL": "内部对话",
       "CONV": "对话",
       "CONV_DENY": "被阻止的对话",

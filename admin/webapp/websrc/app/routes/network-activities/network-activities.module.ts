@@ -24,6 +24,9 @@ import { NetworkRulesModule } from "@components/network-rules/network-rules.modu
 import { ResponseRulesModule } from '@components/response-rules/response-rules.module';
 import { BlacklistComponent } from './blacklist/blacklist.component';
 import { AdvancedFilterComponent } from './advanced-filter/advanced-filter.component';
+import {
+    VulnerabilitiesGridModule
+} from "@components/vulnerabilities-grid/vulnerabilities-grid.module";
 
 const routes: Routes = [
   { path: '', component: NetworkActivitiesComponent },
@@ -42,7 +45,7 @@ const routes: Routes = [
     HostInfoComponent,
     PodInfoComponent,
     BlacklistComponent,
-    AdvancedFilterComponent
+    AdvancedFilterComponent,
   ],
   imports: [
     CommonModule,
@@ -57,6 +60,7 @@ const routes: Routes = [
     GroupDetailsModule,
     NetworkRulesModule,
     ResponseRulesModule,
+    VulnerabilitiesGridModule,
   ],
   providers: [GraphService, SniffService],
 })

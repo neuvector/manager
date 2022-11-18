@@ -129,7 +129,7 @@
               mat-icon-button
               aria-label="External link button"
               (click)="showPodGroup()"
-              class="external-link text-primary"
+              class="external-link text-info"
               *ngIf="pod.workload.service_group">
               <mat-icon style="font-size: 24px; width: 24px; height: 24px"
                 >open_in_new</mat-icon
@@ -221,8 +221,13 @@
             >
             <a
               *ngIf="pod.risk?.high || pod.risk?.medium"
-              style="display: table-cell; font-size: 11px; line-height: 15px">
-              <em class="fa fa-external-link ml-lg"></em>
+              mat-icon-button
+              aria-label="External link button"
+              (click)="showCve()"
+              class="external-link text-info">
+              <mat-icon style="font-size: 24px; width: 24px; height: 24px"
+                >open_in_new</mat-icon
+              >
             </a>
 
             <span
@@ -276,5 +281,31 @@
         </div>
       </li>
     </ul>
+  </div>
+</div>
+
+<div id="cveInfo" *ngIf="onCveInfo" class="infoBox cveInfo" cdkDrag>
+  <div
+    cdkDragHandle
+    class="d-flex align-items-center justify-content-between handle">
+    <h4 class="handle" id="cveInfoHeader">
+      {{ 'network.protocolFilter.VULNERABILITY' | translate }}
+    </h4>
+    <button
+      id="closeCveInfo"
+      aria-label="Close icon button"
+      class="d-flex align-items-center justify-content-center"
+      mat-icon-button>
+      <i (click)="onCveInfo = !onCveInfo" class="eos-icons">close</i>
+    </button>
+  </div>
+
+  <hr class="fancy" />
+  <div>
+    <app-vulnerabilities-grid
+      [rowData]="vulnerabilities"
+      [useQuickFilterService]="true"
+      [preselect]="false"
+      [tableHeight]="'200px'"></app-vulnerabilities-grid>
   </div>
 </div>

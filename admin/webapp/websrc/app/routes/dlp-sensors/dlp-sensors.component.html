@@ -59,8 +59,8 @@
         </mat-card>
       </ng-container>
       <ng-container *appContainerTwo="let height">
-        <mat-card [ngStyle]="{ height: height + 'px' }">
-          <div *ngIf="selectedSensor">
+        <mat-card [ngStyle]="{ height: height + 'px' }" *ngIf="selectedSensor">
+          <div>
             <label class="panel-text-title mt-sm">
               {{selectedSensor.name | shortenFromMiddle: 30}}
             </label>

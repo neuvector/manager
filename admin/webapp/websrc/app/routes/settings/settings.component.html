@@ -24,10 +24,17 @@
       </mat-card>
     </a>
     <a
-      [routerLink]="['configuration']"
-      class="settings__link col-md-12 col-lg-6 col-xl-4">
-      <mat-card class="settings__card">
-        <div class="settings__image--config"></div>
+      [routerLink]="
+        !isConfigAuth || isNamespaceUser ? ['./'] : ['configuration']
+      "
+      class="settings__link col-md-12 col-lg-6 col-xl-4"
+      [class.disabled]="!isConfigAuth || isNamespaceUser">
+      <mat-card
+        class="settings__card"
+        [class.disabled]="!isConfigAuth || isNamespaceUser">
+        <div
+          class="settings__image--config"
+          [class.disabled]="!isConfigAuth || isNamespaceUser"></div>
         <mat-card-title>{{
           'sidebar.nav.CONFIGURATION' | translate
         }}</mat-card-title>
@@ -37,10 +44,13 @@
       </mat-card>
     </a>
     <a
-      [routerLink]="['ldap']"
-      class="settings__link col-md-12 col-lg-6 col-xl-4">
-      <mat-card class="settings__card">
-        <div class="settings__image--ldap"></div>
+      [routerLink]="!isAuthenticationAuth ? ['./'] : ['ldap']"
+      class="settings__link col-md-12 col-lg-6 col-xl-4"
+      [class.disabled]="!isAuthenticationAuth">
+      <mat-card class="settings__card" [class.disabled]="!isAuthenticationAuth">
+        <div
+          class="settings__image--ldap"
+          [class.disabled]="!isAuthenticationAuth"></div>
         <mat-card-title>{{ 'sidebar.nav.LDAP' | translate }}</mat-card-title>
         <mat-card-subtitle>{{
           'setting.description.LDAP' | translate
@@ -48,10 +58,13 @@
       </mat-card>
     </a>
     <a
-      [routerLink]="['saml']"
-      class="settings__link col-md-12 col-lg-6 col-xl-4">
-      <mat-card class="settings__card">
-        <div class="settings__image--saml"></div>
+      [routerLink]="!isAuthenticationAuth ? ['./'] : ['saml']"
+      class="settings__link col-md-12 col-lg-6 col-xl-4"
+      [class.disabled]="!isAuthenticationAuth">
+      <mat-card class="settings__card" [class.disabled]="!isAuthenticationAuth">
+        <div
+          class="settings__image--saml"
+          [class.disabled]="!isAuthenticationAuth"></div>
         <mat-card-title>{{ 'sidebar.nav.OKTA' | translate }}</mat-card-title>
         <mat-card-subtitle>{{
           'setting.description.SAML' | translate
@@ -59,10 +72,13 @@
       </mat-card>
     </a>
     <a
-      [routerLink]="['openid']"
-      class="settings__link col-md-12 col-lg-6 col-xl-4">
-      <mat-card class="settings__card">
-        <div class="settings__image--openid"></div>
+      [routerLink]="!isAuthenticationAuth ? ['./'] : ['openid']"
+      class="settings__link col-md-12 col-lg-6 col-xl-4"
+      [class.disabled]="!isAuthenticationAuth">
+      <mat-card class="settings__card" [class.disabled]="!isAuthenticationAuth">
+        <div
+          class="settings__image--openid"
+          [class.disabled]="!isAuthenticationAuth"></div>
         <mat-card-title>{{ 'sidebar.nav.OPENID' | translate }}</mat-card-title>
         <mat-card-subtitle>{{
           'setting.description.OPENID' | translate

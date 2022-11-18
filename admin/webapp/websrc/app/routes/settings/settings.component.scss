@@ -1,4 +1,4 @@
-@use "@angular/material" as mat;
+@use '@angular/material' as mat;
 
 .settings__card {
   padding: 10px 20px;
@@ -18,11 +18,20 @@
   &:active {
     @include mat.elevation(2);
   }
+
+  &.disabled {
+    @include mat.elevation(2);
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 }
 
 .settings__link {
   padding: 10px;
   text-decoration: none;
+  &.disabled {
+    pointer-events: none;
+  }
 }
 
 .settings__image {
@@ -38,58 +47,109 @@
 
 .settings__image--license {
   @extend .settings__image;
-  background: url("../../../assets/img/ic-vpn-key-72-px.svg");
+  background: url('../../../assets/img/ic-vpn-key-72-px.svg');
   background: -webkit-image-set(
-      url("../../../assets/img/ic-vpn-key-72-px.png") 1x,
-      url("../../../assets/img/ic-vpn-key-72-px@2x.png") 2x,
-      url("../../../assets/img/ic-vpn-key-72-px_d@3x.png") 3x
+    url('../../../assets/img/ic-vpn-key-72-px.png') 1x,
+    url('../../../assets/img/ic-vpn-key-72-px@2x.png') 2x,
+    url('../../../assets/img/ic-vpn-key-72-px@3x.png') 3x
   );
+  &.disabled {
+    background: url('../../../assets/img/ic-vpn-key-72-px_d.svg');
+    background: -webkit-image-set(
+      url('../../../assets/img/ic-vpn-key-72-px_d.png') 1x,
+      url('../../../assets/img/ic-vpn-key-72-px_d@2x.png') 2x,
+      url('../../../assets/img/ic-vpn-key-72-px_d@3x.png') 3x
+    );
+  }
 }
 
 .settings__image--users {
   @extend .settings__image;
-  background: url("../../../assets/img/ic-group-black-72-px.svg");
+  background: url('../../../assets/img/ic-group-black-72-px.svg');
   background: -webkit-image-set(
-      url("../../../assets/img/ic-group-black-72-px.png") 1x,
-      url("../../../assets/img/ic-group-black-72-px@2x.png") 2x,
-      url("../../../assets/img/ic-group-black-72-px@3x.png") 3x
+    url('../../../assets/img/ic-group-black-72-px.png') 1x,
+    url('../../../assets/img/ic-group-black-72-px@2x.png') 2x,
+    url('../../../assets/img/ic-group-black-72-px@3x.png') 3x
   );
+  &.disabled {
+    background: url('../../../assets/img/ic-group-black-72-px_d.svg');
+    background: -webkit-image-set(
+      url('../../../assets/img/ic-group-black-72-px_d.png') 1x,
+      url('../../../assets/img/ic-group-black-72-px_d@2x.png') 2x,
+      url('../../../assets/img/ic-group-black-72-px_d@3x.png') 3x
+    );
+  }
 }
 
 .settings__image--ldap {
   @extend .settings__image;
-  background: url("../../../assets/img/ic-verified-user.svg");
+  background: url('../../../assets/img/ic-verified-user.svg');
   background: -webkit-image-set(
-      url("../../../assets/img/ic-verified-user.png") 1x,
-      url("../../../assets/img/ic-verified-user@2x.png") 2x
+    url('../../../assets/img/ic-verified-user.png') 1x,
+    url('../../../assets/img/ic-verified-user@2x.png') 2x
   );
+  &.disabled {
+    background: url('../../../assets/img/ic-verified-user_d.svg');
+    background: -webkit-image-set(
+      url('../../../assets/img/ic-verified-user_d.png') 1x,
+      url('../../../assets/img/ic-verified-user_d@2x.png') 2x
+    );
+  }
 }
 
 .settings__image--saml {
   @extend .settings__image;
-  background: url("../../../assets/img/ic-fingerprint.svg");
+  background: url('../../../assets/img/ic-fingerprint.svg');
   background: -webkit-image-set(
-      url("../../../assets/img/ic-fingerprint.png") 1x,
-      url("../../../assets/img/ic-fingerprint@2x.png") 2x
+    url('../../../assets/img/ic-fingerprint.png') 1x,
+    url('../../../assets/img/ic-fingerprint@2x.png') 2x
   );
+  &.disabled {
+    background: url('../../../assets/img/ic-fingerprint_d.svg');
+    background: -webkit-image-set(
+      url('../../../assets/img/ic-fingerprint_d.png') 1x,
+      url('../../../assets/img/ic-fingerprint_d@2x.png') 2x
+    );
+  }
 }
 
 .settings__image--config {
   @extend .settings__image;
-  background: url("../../../assets/img/ic-settings-input-component-black-72-px.svg") no-repeat;
+  background: url('../../../assets/img/ic-settings-input-component-black-72-px.svg')
+    no-repeat;
   background: -webkit-image-set(
-      url("../../../assets/img/ic-settings-input-component-black-72-px.png") 1x,
-      url("../../../assets/img/ic-settings-input-component-black-72-px@2x.png") 2x,
-      url("../../../assets/img/ic-settings-input-component-black-72-px@3x.png") 3x
+    url('../../../assets/img/ic-settings-input-component-black-72-px.png') 1x,
+    url('../../../assets/img/ic-settings-input-component-black-72-px@2x.png') 2x,
+    url('../../../assets/img/ic-settings-input-component-black-72-px@3x.png') 3x
   );
+  &.disabled {
+    background: url('../../../assets/img/ic-settings-input-component-black-72-px_d.svg')
+      no-repeat;
+    background: -webkit-image-set(
+      url('../../../assets/img/ic-settings-input-component-black-72-px_d.png')
+        1x,
+      url('../../../assets/img/ic-settings-input-component-black-72-px_d@2x.png')
+        2x,
+      url('../../../assets/img/ic-settings-input-component-black-72-px_d@3x.png')
+        3x
+    );
+  }
 }
 
 .settings__image--openid {
   @extend .settings__image;
-  background: url("../../../assets/img/ic-openid.svg");
+  background: url('../../../assets/img/ic-openid.svg');
   background: -webkit-image-set(
-      url("../../../assets/img/ic-openid.png") 1x,
-      url("../../../assets/img/ic-openid@2x.png") 2x,
-      url("../../../assets/img/ic-openid@3x.png") 3x
+    url('../../../assets/img/ic-openid.png') 1x,
+    url('../../../assets/img/ic-openid@2x.png') 2x,
+    url('../../../assets/img/ic-openid@3x.png') 3x
   );
+  &.disabled {
+    background: url('../../../assets/img/ic-openid_d.svg');
+    background: -webkit-image-set(
+      url('../../../assets/img/ic-openid_d.png') 1x,
+      url('../../../assets/img/ic-openid_d@2x.png') 2x,
+      url('../../../assets/img/ic-openid_d@3x.png') 3x
+    );
+  }
 }

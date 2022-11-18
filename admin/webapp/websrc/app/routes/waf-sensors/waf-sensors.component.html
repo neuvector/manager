@@ -1,19 +1,23 @@
 <div class="screen-area">
-  <div  class="d-flex justify-content-between align-items-center">
+  <div class="d-flex justify-content-between align-items-center">
     <h1 class="font-weight-light">
-      {{'sidebar.nav.WAF_SENSORS' | translate}}
+      {{ 'sidebar.nav.WAF_SENSORS' | translate }}
     </h1>
     <div class="d-flex align-items-center justify-content-end">
       <button
-        mat-button aria-label="export WAF SENSORS"
+        mat-button
+        aria-label="export WAF SENSORS"
         (click)="exportWafSensors()">
         <em class="eos-icons icon-18 mr-1">download</em>
-        {{'admissionControl.EXPORT' | translate}}
+        {{ 'admissionControl.EXPORT' | translate }}
       </button>
-      <button mat-button aria-label="import WAF SENSORS"
-              (click)="openImportWafSensorsModal()" *appDisplayControl="'write_waf_rule'">
+      <button
+        mat-button
+        aria-label="import WAF SENSORS"
+        (click)="openImportWafSensorsModal()"
+        *appDisplayControl="'write_waf_rule'">
         <em class="eos-icons icon-18 mr-1">upload</em>
-        {{'admissionControl.IMPORT' | translate }}
+        {{ 'admissionControl.IMPORT' | translate }}
       </button>
       <app-loading-button
         (btnClick)="refresh()"
@@ -28,7 +32,6 @@
         [type]="'button'">
       </app-loading-button>
     </div>
-
   </div>
   <ng-container>
     <app-adjustable-div [minHeightOne]="163" [minHeightTwo]="140">
@@ -39,65 +42,64 @@
               class="pull-left"
               [gridOptions]="gridOptions4Sensors"
               [filteredCount]="filteredCount"
-              [count]="wafSensors.length"
-            >
+              [count]="wafSensors.length">
             </app-quick-filter>
-            <button class="pull-left margin-top-l margin-left-m primary-button" (click)="openAddEditWafSensorModal()" *appDisplayControl="'write_waf_rule'">
+            <button
+              class="pull-left margin-top-l margin-left-m primary-button"
+              (click)="openAddEditWafSensorModal()"
+              *appDisplayControl="'write_waf_rule'">
               <em class="eos-icons icon-18">add</em>
-              {{ "admissionControl.INSERT" | translate }}
+              {{ 'admissionControl.INSERT' | translate }}
             </button>
           </div>
           <div class="clearfix">
             <ag-grid-angular
               #wafSensorsGrid
               id="waf-sensors-grid"
-              style="width: 100%;"
-              [ngStyle]="{ height: (height - 90) + 'px' }"
+              style="width: 100%"
+              [ngStyle]="{ height: height - 90 + 'px' }"
               class="ag-theme-balham"
               [gridOptions]="gridOptions4Sensors"
               [rowData]="wafSensors"
-              [context]="context"
-              >
+              [context]="context">
             </ag-grid-angular>
           </div>
         </mat-card>
       </ng-container>
       <ng-container *appContainerTwo="let height">
-        <mat-card [ngStyle]="{ height: height + 'px' }"  *ngIf="selectedSensor">
+        <mat-card [ngStyle]="{ height: height + 'px' }" *ngIf="selectedSensor">
           <div>
             <label class="panel-text-title mt-sm">
-              {{selectedSensor.name | shortenFromMiddle: 30}}
+              {{ selectedSensor.name | shortenFromMiddle: 30 }}
             </label>
           </div>
           <div class="row margin-top-m">
-            <div class="col-sm-3" style="position: relative;">
+            <div class="col-sm-3" style="position: relative">
               <button
                 *ngIf="!isPredefine && isWriteWAFSensorAuthorized"
-                style="position: absolute; z-index: 10; right: 17px; top: 2px;"
+                style="position: absolute; z-index: 10; right: 17px; top: 2px"
                 (click)="openAddWafRuleModal()">
                 <em class="eos-icons icon-18">add</em>
               </button>
               <ag-grid-angular
                 #wafRulesGrid
                 id="waf-rules-grid"
-                style="width: 100%;"
-                [ngStyle]="{ height: (height - 90) + 'px' }"
+                style="width: 100%"
+                [ngStyle]="{ height: height - 90 + 'px' }"
                 class="ag-theme-balham"
                 [gridOptions]="gridOptions4Rules"
-                [context]="context"
-                >
+                [context]="context">
               </ag-grid-angular>
             </div>
             <div class="col-sm-9">
               <ag-grid-angular
                 #wafPatternsGrid
                 id="waf-patterns-grid"
-                style="width: 100%;"
-                [ngStyle]="{ height: (height - 90) + 'px' }"
+                style="width: 100%"
+                [ngStyle]="{ height: height - 90 + 'px' }"
                 class="ag-theme-balham"
                 [gridOptions]="gridOptions4Patterns"
-                [context]="context"
-                >
+                [context]="context">
               </ag-grid-angular>
             </div>
           </div>

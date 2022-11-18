@@ -9,7 +9,7 @@ export class NotificationService {
     private notifier: NotifierService
   ) {}
 
-  open(message: string, type: string = GlobalConstant.NOTIFICATION_TYPE.DEFAULT, id: string = ''): void {
+  open(message: string, type: string = GlobalConstant.NOTIFICATION_TYPE.SUCCESS, id: string = ''): void {
     if (id) {
       this.notifier.notify(type, message, id);
     } else {

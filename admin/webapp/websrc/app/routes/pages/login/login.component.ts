@@ -21,22 +21,22 @@ import {
 })
 export class LoginComponent implements OnInit {
   public loginForm: FormGroup;
-  public inProgress: boolean;
-  public authMsg: string;
-  public servers: Array<any>;
-  public showPassword: boolean;
-  public isFromSSO: boolean;
-  public samlEnabled: boolean;
-  public oidcEnabled: boolean;
+  public inProgress: boolean = false;
+  public authMsg: string = '';
+  public servers: Array<any> = [];
+  public showPassword: boolean = false;
+  public isFromSSO: boolean = false;
+  public samlEnabled: boolean = false;
+  public oidcEnabled: boolean = false;
   public app: any;
   public isEulaAccepted: boolean = false;
   public isEulaValid: boolean = true;
   public validEula: boolean = false;
-  private version: string;
-  private gpuEnabled: boolean;
-  private originalUrl: string;
-  private now: Date;
-  private currUrl: string;
+  private version: string = '';
+  private gpuEnabled: boolean = false;
+  private originalUrl: string = '';
+  private now!: Date;
+  private currUrl: string = '';
   private w: any;
 
   constructor(
@@ -58,14 +58,15 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('Initialize Login......');
     this.inProgress = false;
     this.samlEnabled = false;
     this.oidcEnabled = false;
     this.now = new Date();
     this.app = this.switchersService.getAppSwitcher('');
     this.localStorage.set('login_time', this.now.toString());
-    this.originalUrl = this.localStorage.get(GlobalConstant.SESSION_STORAGE_ORIGINAL_URL);
+    this.originalUrl = this.localStorage.get(
+      GlobalConstant.SESSION_STORAGE_ORIGINAL_URL
+    );
     this.version = this.localStorage.get('version');
     this.gpuEnabled = this.localStorage.get('_gpuEnabled');
     this.currUrl = this.w.location.href;
@@ -74,10 +75,8 @@ export class LoginComponent implements OnInit {
     if (this.sessionStorage.has('cluster')) {
       this.sessionStorage.remove('cluster');
     }
-    console.log("1==this.currUrl", this.currUrl);
     if (this.currUrl.includes(GlobalConstant.PROXY_VALUE)) {
       this.isFromSSO = true;
-      console.log('It is from SSO');
       this.localLogin();
     }
     this.getAuthServer();
@@ -116,48 +115,49 @@ export class LoginComponent implements OnInit {
   }
 
   localLogin(value?: any) {
-    if(this.validEula){
+    if (this.validEula) {
       this.authMsg = '';
       this.inProgress = true;
-      this.authService.login(
-        value?.username || '',
-        value?.password || ''
-      ).subscribe(
-        (userInfo: any) => {
-          GlobalVariable.user = userInfo;
-          GlobalVariable.nvToken = userInfo.token.token;
-          GlobalVariable.isSUSESSO = userInfo.is_suse_authenticated;
-          GlobalVariable.user.global_permissions =
-            userInfo.token.global_permissions;
-          GlobalVariable.user.domain_permissions =
-            userInfo.token.domain_permissions;
-          this.translatorService.useLanguage(GlobalVariable.user.token.locale);
-          this.sessionStorage.set(
-            GlobalConstant.SESSION_STORAGE_TOKEN,
-            GlobalVariable.user
-          );
+      this.authService
+        .login(value?.username || '', value?.password || '')
+        .subscribe(
+          (userInfo: any) => {
+            GlobalVariable.user = userInfo;
+            GlobalVariable.nvToken = userInfo.token.token;
+            GlobalVariable.isSUSESSO = userInfo.is_suse_authenticated;
+            GlobalVariable.user.global_permissions =
+              userInfo.token.global_permissions;
+            GlobalVariable.user.domain_permissions =
+              userInfo.token.domain_permissions;
+            this.translatorService.useLanguage(
+              GlobalVariable.user.token.locale
+            );
+            this.sessionStorage.set(
+              GlobalConstant.SESSION_STORAGE_TOKEN,
+              GlobalVariable.user
+            );
 
-          if(this.isEulaAccepted){
-            this.getSummary();
-          } else {
-            this.authService.updateEula().subscribe(
-              value1 => {
-                this.getSummary();
-              }
-              ,error => {
-                this.authMsg = error.message;
-                this.inProgress = false;
-              });
+            if (this.isEulaAccepted) {
+              this.getSummary();
+            } else {
+              this.authService.updateEula().subscribe(
+                value1 => {
+                  this.getSummary();
+                },
+                error => {
+                  this.authMsg = error.message;
+                  this.inProgress = false;
+                }
+              );
+            }
+          },
+          error => {
+            this.authMsg = error.error;
+            this.inProgress = false;
           }
-
-        },
-        error => {
-          this.authMsg = error.error;
-          this.inProgress = false;
-        }
-      );
-    }else{
-      this.authMsg = this.translate.instant("license.message.ACCEPT_EULA_ERR");
+        );
+    } else {
+      this.authMsg = this.translate.instant('license.message.ACCEPT_EULA_ERR');
       this.inProgress = false;
     }
   }
@@ -210,9 +210,12 @@ export class LoginComponent implements OnInit {
       },
       () => {
         if (this.sessionStorage.has(GlobalConstant.SESSION_STORAGE_TIMEOUT)) {
-          console.log('SESSION_STORAGE_TIMEOUT', this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_TIMEOUT));
+          console.log(
+            'SESSION_STORAGE_TIMEOUT',
+            this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_TIMEOUT)
+          );
           if (this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_TIMEOUT)) {
-            this.authMsg = 'Session has expired. Please login.';//this.translate.instant("login.SESSION_TIMEOUT");
+            this.authMsg = 'Session has expired. Please login.'; //this.translate.instant("login.SESSION_TIMEOUT");
           }
         }
         this.clearToken();
@@ -254,20 +257,19 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  public getEulaStatus(isChecked: boolean){
+  public getEulaStatus(isChecked: boolean) {
     this.validEula = this.isEulaAccepted || isChecked;
-   }
+  }
 
   private verifyEula() {
     this.authService.getEula().subscribe(
       (eulaInfo: any) => {
         let eula = eulaInfo.eula;
-        if(eula && eula.accepted){
+        if (eula && eula.accepted) {
           this.isEulaAccepted = true;
         }
 
         this.validEula = this.isEulaAccepted;
-        // GlobalVariable.isOpenShift = false;
       },
       error => {
         this.cookieService.delete('temp');
@@ -285,10 +287,7 @@ export class LoginComponent implements OnInit {
         GlobalVariable.summary = summaryInfo.summary;
         GlobalVariable.hasInitializedSummary = true;
 
-        if (
-          this.originalUrl &&
-          this.originalUrl !== 'login'
-        ) {
+        if (this.originalUrl && this.originalUrl !== 'login') {
           this.router.navigate([this.originalUrl]);
         } else {
           this.router.navigate([GlobalConstant.PATH_DEFAULT]);

@@ -18,6 +18,8 @@ import { AuthUtilsService } from '@common/utils/auth.utils';
 import { TranslateService } from '@ngx-translate/core';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { UtilsService } from '@common/utils/app.utils';
+import { Subject } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-admission-rules',
@@ -26,6 +28,7 @@ import { UtilsService } from '@common/utils/app.utils';
 })
 export class AdmissionRulesComponent implements OnInit {
   @Input() source!: string;
+  refreshing$ = new Subject();
   navSource = GlobalConstant.NAV_SOURCE;
   admissionRules: Array<AdmissionRule> = [];
   admissionStateRec: AdmissionStateRec = <AdmissionStateRec>{};
@@ -120,6 +123,7 @@ export class AdmissionRulesComponent implements OnInit {
           ? GlobalConstant.SCOPE.FED
           : ''
       )
+      .pipe(finalize(() => this.refreshing$.next(false)))
       .subscribe(
         ([state, rules, options]: [
           AdmissionStateRec,
@@ -197,6 +201,7 @@ export class AdmissionRulesComponent implements OnInit {
   };
 
   refresh = () => {
+    this.refreshing$.next(true);
     this.getAdmissionStateAndRules();
   };
 

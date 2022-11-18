@@ -1,26 +1,34 @@
 <div class="screen-area">
   <div class="d-flex justify-content-between align-items-center">
     <h1 class="font-weight-light" id="dlpSensors-title">
-      {{'sidebar.nav.DLP_SENSORS' | translate}}
+      {{ 'sidebar.nav.DLP_SENSORS' | translate }}
     </h1>
     <div class="d-flex align-items-center justify-content-end">
-      <button mat-button aria-label="export WAF SENSORS" (click)="exportDlpSensors()">
+      <button
+        mat-button
+        aria-label="export WAF SENSORS"
+        (click)="exportDlpSensors()">
         <em class="eos-icons icon-18">download</em>
-        {{'admissionControl.EXPORT' | translate}}
+        {{ 'admissionControl.EXPORT' | translate }}
       </button>
-      <button mat-button aria-label="import WAF SENSORS" (click)="openImportDlpSensorsModal()" *appDisplayControl="'write_dlp_rule'">
+      <button
+        mat-button
+        aria-label="import WAF SENSORS"
+        (click)="openImportDlpSensorsModal()"
+        *appDisplayControl="'write_dlp_rule'">
         <em class="eos-icons icon-18">upload</em>
-        {{'admissionControl.IMPORT' | translate}}
+        {{ 'admissionControl.IMPORT' | translate }}
       </button>
       <app-loading-button
         (btnClick)="refresh()"
+        [disabled]="!!(refreshing$ | async)"
         [appearance]="'mat-button'"
         [buttonClasses]="'d-flex justify-content-center align-items-center'"
         [disabled]="false"
         [iconClasses]="'eos-icons icon-18'"
         [iconName]="'refresh'"
         [id]="'waf-refresh-button'"
-        [loading]="false"
+        [loading]="!!(refreshing$ | async)"
         [text]="'network.REFRESH' | translate"
         [type]="'button'">
       </app-loading-button>
@@ -35,27 +43,28 @@
               class="pull-left"
               [gridOptions]="gridOptions4Sensors"
               [filteredCount]="filteredCount"
-              [count]="dlpSensors.length"
-            >
+              [count]="dlpSensors.length">
             </app-quick-filter>
-            <button class="pull-left margin-top-l margin-left-m primary-button" (click)="openAddEditDlpSensorModal()" *appDisplayControl="'write_dlp_rule'">
+            <button
+              class="pull-left margin-top-l margin-left-m primary-button"
+              (click)="openAddEditDlpSensorModal()"
+              *appDisplayControl="'write_dlp_rule'">
               <em class="eos-icons icon-18">add</em>
-              {{ "admissionControl.INSERT" | translate }}
+              {{ 'admissionControl.INSERT' | translate }}
             </button>
           </div>
           <div class="clearfix">
             <ag-grid-angular
               #dlpSensorsGrid
               id="dlp-sensors-grid"
-              style="width: 100%;"
-              [ngStyle]="{ height: (height - 90) + 'px' }"
+              style="width: 100%"
+              [ngStyle]="{ height: height - 90 + 'px' }"
               class="ag-theme-balham"
               [enableCellTextSelection]="true"
               [ensureDomOrder]="true"
               [gridOptions]="gridOptions4Sensors"
               [rowData]="dlpSensors"
-              [context]="context"
-              >
+              [context]="context">
             </ag-grid-angular>
           </div>
         </mat-card>
@@ -64,42 +73,40 @@
         <mat-card [ngStyle]="{ height: height + 'px' }">
           <div *ngIf="selectedSensor">
             <label class="panel-text-title mt-sm">
-              {{selectedSensor.name | shortenFromMiddle: 30}}
+              {{ selectedSensor.name | shortenFromMiddle: 30 }}
             </label>
           </div>
           <div class="row margin-top-m">
-            <div class="col-sm-3" style="position: relative;">
+            <div class="col-sm-3" style="position: relative">
               <button
                 *ngIf="!isPredefine && isWriteDLPSensorAuthorized"
-                style="position: absolute; z-index: 10; right: 17px; top: 2px;"
+                style="position: absolute; z-index: 10; right: 17px; top: 2px"
                 (click)="openAddDlpRuleModal()">
                 <em class="eos-icons icon-18">add</em>
               </button>
               <ag-grid-angular
                 #dlpRulesGrid
                 id="dlp-rules-grid"
-                style="width: 100%;"
-                [ngStyle]="{ height: (height - 90) + 'px' }"
+                style="width: 100%"
+                [ngStyle]="{ height: height - 90 + 'px' }"
                 class="ag-theme-balham"
                 [enableCellTextSelection]="true"
                 [ensureDomOrder]="true"
                 [gridOptions]="gridOptions4Rules"
-                [context]="context"
-                >
+                [context]="context">
               </ag-grid-angular>
             </div>
             <div class="col-sm-9">
               <ag-grid-angular
                 #dlpPatternsGrid
                 id="dlp-patterns-grid"
-                style="width: 100%;"
-                [ngStyle]="{ height: (height - 90) + 'px' }"
+                style="width: 100%"
+                [ngStyle]="{ height: height - 90 + 'px' }"
                 class="ag-theme-balham"
                 [enableCellTextSelection]="true"
                 [ensureDomOrder]="true"
                 [gridOptions]="gridOptions4Patterns"
-                [context]="context"
-                >
+                [context]="context">
               </ag-grid-angular>
             </div>
           </div>

@@ -241,7 +241,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   };
 
   removeNetworkRules = () => {
-    let ids = this.selectedNetworkRules.map(rule => rule.id);
+    let ids = this.selectedNetworkRules.map(rule => rule.id).filter(id => id !== -1);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '700px',
       data: {
@@ -500,7 +500,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   private maskingDeletedRows = (ids: Array<number>) => {
     let index = 0;
     this.networkRules = this.networkRules.map(rule => {
-      if (rule.id === ids[index]) {
+      if (rule.id === ids[index] && rule.id !== -1) {
         rule.remove = true;
         index++;
       }

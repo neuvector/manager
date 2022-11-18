@@ -10,6 +10,10 @@ import { ShortenFromMiddlePipe } from "@common/pipes/app.pipes";
 import { TranslateService } from '@ngx-translate/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { WafSensorsService } from '@services/waf-sensors.service';
+import { NotificationService } from '@services/notification.service';
+import { MapConstant } from '@common/constants/map.constant';
+import { UtilsService } from '@common/utils/app.utils';
+
 
 @Component({
   selector: 'app-sensor-action-buttons',
@@ -25,7 +29,9 @@ export class SensorActionButtonsComponent implements ICellRendererAngularComp {
     private translate: TranslateService,
     private sanitizer: DomSanitizer,
     private shortenFromMiddlePipe: ShortenFromMiddlePipe,
-    private wafSensorsService: WafSensorsService
+    private wafSensorsService: WafSensorsService,
+    private notificationService: NotificationService,
+    private utils: UtilsService
   ) { }
 
   agInit(params: ICellRendererParams): void {
@@ -64,11 +70,19 @@ export class SensorActionButtonsComponent implements ICellRendererAngularComp {
       (res) => {
         // confirm actions
         this.params.context.componentParent.refresh();
+        this.notificationService.open(this.translate.instant("waf.msg.REMOVE_OK"));
         // close dialog
         dialogRef.componentInstance.onCancel();
         dialogRef.componentInstance.loading = false;
       },
-      error => {}
+      error => {
+        if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
+          this.notificationService.open(
+            this.utils.getAlertifyMsg(error.error, this.translate.instant("waf.msg.REMOVE_NG"), false),
+            GlobalConstant.NOTIFICATION_TYPE.ERROR
+          );
+        }
+      }
     )
   };
 

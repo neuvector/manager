@@ -5,17 +5,19 @@ import {
   GridOptions
 } from 'ag-grid-community';
 import { WafSensorsService } from '@services/waf-sensors.service';
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog } from '@angular/material/dialog';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { PathConstant } from '@common/constants/path.constant';
 import { MapConstant } from '@common/constants/map.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { AddEditSensorModalComponent } from '@routes/waf-sensors/partial/add-edit-sensor-modal/add-edit-sensor-modal.component';
 import { AddEditRuleModalComponent } from '@routes/waf-sensors/partial/add-edit-rule-modal/add-edit-rule-modal.component';
-import { UtilsService } from "@common/utils/app.utils";
+import { UtilsService } from '@common/utils/app.utils';
 import { saveAs } from 'file-saver';
 import { ImportFileModalComponent } from '@components/ui/import-file-modal/import-file-modal.component';
-import {MultiClusterService} from "@services/multi-cluster.service";
+import { MultiClusterService } from '@services/multi-cluster.service';
+import { NotificationService } from '@services/notification.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-waf-sensors',
@@ -46,13 +48,16 @@ export class WafSensorsComponent implements OnInit {
     private dialog: MatDialog,
     private authUtilsService: AuthUtilsService,
     private utilsService: UtilsService,
-    private multiClusterService: MultiClusterService
+    private multiClusterService: MultiClusterService,
+    private notificationService: NotificationService,
+    private translate: TranslateService,
+
   ) {
     this.$win = $(GlobalVariable.window);
   }
 
   ngOnInit(): void {
-    this.isWriteWAFSensorAuthorized = this.authUtilsService.getDisplayFlag("write_waf_rule") && !this.authUtilsService.userPermission.isNamespaceUser;
+    this.isWriteWAFSensorAuthorized = this.authUtilsService.getDisplayFlag('write_waf_rule') && !this.authUtilsService.userPermission.isNamespaceUser;
     this.gridOptions = this.wafSensorsService.configGrids(this.isWriteWAFSensorAuthorized);
     this.gridOptions4Sensors = this.gridOptions.gridOptions;
     this.gridOptions4Rules = this.gridOptions.gridOptions4Rules;
@@ -82,7 +87,7 @@ export class WafSensorsComponent implements OnInit {
 
   openAddEditWafSensorModal = () => {
     const addEditDialogRef = this.dialog.open(AddEditSensorModalComponent, {
-      width: "80%",
+      width: '80%',
       data: {
         opType: GlobalConstant.MODAL_OP.ADD,
         refresh: this.refresh
@@ -93,7 +98,7 @@ export class WafSensorsComponent implements OnInit {
 
   openAddWafRuleModal = () => {
     const addEditDialogRef = this.dialog.open(AddEditRuleModalComponent, {
-      width: "80%",
+      width: '80%',
       data: {
         sensor: this.selectedSensor,
         opType: GlobalConstant.MODAL_OP.ADD,
@@ -127,19 +132,18 @@ export class WafSensorsComponent implements OnInit {
       .subscribe(
         response => {
           let fileName = this.utilsService.getExportedFileName(response);
-          let blob = new Blob([response.body || ""], {
-            type: "text/plain;charset=utf-8"
+          let blob = new Blob([response.body || ''], {
+            type: 'text/plain;charset=utf-8'
           });
           saveAs(blob, fileName);
-          // Alertify.set({ delay: ALERTIFY_SUCCEED_DELAY });
-          // Alertify.success($translate.instant("waf.msg.EXPORT_SENSOR_OK"));
+          this.notificationService.open(this.translate.instant('waf.msg.EXPORT_SENSOR_OK'));
         },
         error => {
-          if (MapConstant.USER_TIMEOUT.indexOf(error.status) < 0) {
-            // Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
-            // Alertify.error(
-            //   Utils.getAlertifyMsg(error, $translate.instant("waf.msg.EXPORT_SENSOR_NG"), false)
-            // );
+          if (MapConstant.USER_TIMEOUT.includes(error.status)) {
+            this.notificationService.open(
+              this.utilsService.getAlertifyMsg(error.error, this.translate.instant('waf.msg.EXPORT_SENSOR_NG'), false),
+              GlobalConstant.NOTIFICATION_TYPE.ERROR
+            );
           }
         }
       );

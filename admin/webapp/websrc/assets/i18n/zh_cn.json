@@ -2162,11 +2162,16 @@
       "REMOVE_NG": "删除检测器时发生错误!",
       "REMOVE_RULE_OK": "成功删除规则!",
       "REMOVE_RULE_NG": "删除规则时发生错误!",
+      "EXPORT_SENSOR_OK": "检测器成功导出!",
+      "EXPORT_SENSOR_NG": "检测器导出时发生错误",
+      "IMPORT_FINISH": "检测器成功导入!",
+      "IMPORT_FAILED": "检测器导入时发生错误",
       "MATCH": "匹配",
       "MISMATCH": "不匹配",
       "ADD_PATTERN_NG": "正则形式的最大数量为16",
       "EXISTING_PATTERN_NG": "此正则形式已存在",
-      "RECIPROCAL_PATTERN_NG": "在同一语境下有与添加的正则形式互逆的表达式"
+      "RECIPROCAL_PATTERN_NG": "在同一语境下有与添加的正则形式互逆的表达式",
+      "SENSOR_NAME_REQUIRED": "需填写检测器名称"
     },
     "TIP": {
       "EDIT_SENSOR": "编辑检测器",

@@ -88,11 +88,11 @@ export class NetworkRulesService {
           params.value[0] === 'any'
             ? this.translate.instant('enum.ANY')
             : params.value;
-        return `<div style="word-wrap: break-word;" ${
+        return `<span ${
           params.data.remove ? `class="policy-remove"` : ''
         }>
           ${this.sanitizer.sanitize(SecurityContext.HTML, app)}
-        </div>`;
+        </span>`;
       }
       return [];
     };
@@ -205,27 +205,23 @@ export class NetworkRulesService {
           }
           return 1;
         },
-        cellClass: ['wrap-word-in-cell'],
         width: 280,
       },
       {
         headerName: this.translate.instant('policy.gridHeader.TO'),
         field: 'to',
         cellRenderer: FromToCellComponent,
-        cellClass: ['wrap-word-in-cell'],
         width: 280,
       },
       {
         headerName: this.translate.instant('policy.gridHeader.APPLICATIONS'),
         field: 'applications',
-        cellClass: ['wrap-word-in-cell'],
         cellRenderer: appRenderFunc,
         width: 200,
       },
       {
         headerName: this.translate.instant('policy.gridHeader.PORT'),
         field: 'ports',
-        cellClass: ['wrap-word-in-cell'],
         cellRenderer: PortsCellComponent,
         width: 200,
       },

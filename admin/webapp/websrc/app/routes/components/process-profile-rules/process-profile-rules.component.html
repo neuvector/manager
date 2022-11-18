@@ -57,8 +57,6 @@
                 : gridHeight) + 'px'
           }"
           class="ag-theme-balham"
-          [enableCellTextSelection]="true"
-          [ensureDomOrder]="true"
           [gridOptions]="gridOptions"
           [rowData]="processProfileRules">
         </ag-grid-angular>
@@ -71,8 +69,6 @@
     <ag-grid-angular
       #agGrid
       [ngStyle]="{ height: resizableHeight + 'px' }"
-      [enableCellTextSelection]="true"
-      [ensureDomOrder]="true"
       [gridOptions]="gridOptions"
       [rowData]="processProfileRules"
       id="process-profile-rules-grid"

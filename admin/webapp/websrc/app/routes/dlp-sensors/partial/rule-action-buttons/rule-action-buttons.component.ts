@@ -93,6 +93,7 @@ export class RuleActionButtonsComponent implements ICellRendererAngularComp {
             GlobalConstant.NOTIFICATION_TYPE.ERROR
           );
         }
+        dialogRef.componentInstance.loading = false;
       }
     )
   };

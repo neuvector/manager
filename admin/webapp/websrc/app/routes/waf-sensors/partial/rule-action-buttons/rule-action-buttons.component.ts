@@ -87,12 +87,13 @@ export class RuleActionButtonsComponent implements ICellRendererAngularComp {
         dialogRef.componentInstance.loading = false;
       },
       error => {
-        if (MapConstant.USER_TIMEOUT.includes(error.status)) {
+        if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
           this.notificationService.open(
             this.utils.getAlertifyMsg(error.error, this.translate.instant("waf.msg.REMOVE_RULE_NG"), false),
             GlobalConstant.NOTIFICATION_TYPE.ERROR
           );
         }
+        dialogRef.componentInstance.loading = false;
       }
     )
   };

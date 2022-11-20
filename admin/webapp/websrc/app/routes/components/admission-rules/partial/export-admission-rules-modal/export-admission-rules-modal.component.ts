@@ -1,11 +1,14 @@
 import { MatDialogRef,  MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { TranslatorService } from '@core/translator/translator.service';
+import { TranslateService } from '@ngx-translate/core';
 import { AdmissionRulesService } from "@common/services/admission-rules.service";
 import { UtilsService } from "@common/utils/app.utils";
 import { finalize } from 'rxjs/operators';
 import { saveAs } from 'file-saver';
+import { NotificationService } from '@services/notification.service';
+import { MapConstant } from '@common/constants/map.constant';
+import { GlobalConstant } from '@common/constants/global.constant';
 
 
 @Component({
@@ -22,7 +25,9 @@ export class ExportAdmissionRulesModalComponent implements OnInit {
     public dialogRef: MatDialogRef<ExportAdmissionRulesModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private admissionRulesService: AdmissionRulesService,
-    private utils: UtilsService
+    private notificationService: NotificationService,
+    private utils: UtilsService,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -51,8 +56,16 @@ export class ExportAdmissionRulesModalComponent implements OnInit {
             type: "text/plain;charset=utf-8"
           });
           saveAs(blob, filename);
+          this.notificationService.open(this.translate.instant("admissionControl.msg.EXPORT_OK"));
         },
-        error => {}
+        error => {
+          if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
+            this.notificationService.open(
+              this.utils.getAlertifyMsg(error.error, this.translate.instant("admissionControl.msg.EXPORT_OK"), false),
+              GlobalConstant.NOTIFICATION_TYPE.ERROR
+            );
+          }
+        }
       );
   };
 

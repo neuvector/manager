@@ -2,10 +2,10 @@ import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PathConstant } from '@common/constants/path.constant';
 import { ImportFileModalComponent } from '@components/ui/import-file-modal/import-file-modal.component';
-import { AddEditAdmissionRuleModalComponent } from "@components/admission-rules/partial/add-edit-admission-rule-modal/add-edit-admission-rule-modal.component";
-import { AdvanceSettingModalComponent } from "@components/admission-rules/partial/advance-setting-modal/advance-setting-modal.component";
-import { ConfigurationAssessmentModalComponent } from "@components/admission-rules/partial/configuration-assessment-modal/configuration-assessment-modal.component";
-import { ExportAdmissionRulesModalComponent } from "@components/admission-rules/partial/export-admission-rules-modal/export-admission-rules-modal.component";
+import { AddEditAdmissionRuleModalComponent } from '@components/admission-rules/partial/add-edit-admission-rule-modal/add-edit-admission-rule-modal.component';
+import { AdvanceSettingModalComponent } from '@components/admission-rules/partial/advance-setting-modal/advance-setting-modal.component';
+import { ConfigurationAssessmentModalComponent } from '@components/admission-rules/partial/configuration-assessment-modal/configuration-assessment-modal.component';
+import { ExportAdmissionRulesModalComponent } from '@components/admission-rules/partial/export-admission-rules-modal/export-admission-rules-modal.component';
 import {
   AdmissionRule,
   AdmissionStateRec,
@@ -16,8 +16,10 @@ import { GlobalVariable } from '@common/variables/global.variable';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { TranslateService } from '@ngx-translate/core';
-import { MultiClusterService } from "@services/multi-cluster.service";
+import { MultiClusterService } from '@services/multi-cluster.service';
 import { UtilsService } from  '@common/utils/app.utils';
+import { NotificationService } from '@services/notification.service';
+import { MapConstant } from '@common/constants/map.constant';
 
 @Component({
   selector: 'app-admission-rules',
@@ -30,7 +32,7 @@ export class AdmissionRulesComponent implements OnInit {
   admissionRules: Array<AdmissionRule> = [];
   admissionStateRec: AdmissionStateRec = <AdmissionStateRec>{};
   globalStatus: boolean = false;
-  mode: string = "";
+  mode: string = '';
   admissionOptions: any;
   gridOptions: GridOptions = <GridOptions>{};
   gridHeight: number = 0;
@@ -41,7 +43,7 @@ export class AdmissionRulesComponent implements OnInit {
   admissionStateErr: boolean = false;
   canConfig: boolean = false;
   isK8s: boolean = false;
-  stateWarning: string = "";
+  stateWarning: string = '';
   hasSelectedDefaultRule: boolean = false;
   isMaster: boolean = false;
   frameworkComponents;
@@ -62,14 +64,15 @@ export class AdmissionRulesComponent implements OnInit {
     private authUtilsService: AuthUtilsService,
     private translate: TranslateService,
     private multiClusterService: MultiClusterService,
+    private notificationService: NotificationService,
     private utils: UtilsService
   ) {
     this.w = GlobalVariable.window;
   }
 
   ngOnInit(): void {
-    this.isWriteAdmissionRuleAuthorized = this.authUtilsService.getDisplayFlag("write_admission");
-    this.isAdmissionRuleAuthorized = this.authUtilsService.getDisplayFlag("admission");
+    this.isWriteAdmissionRuleAuthorized = this.authUtilsService.getDisplayFlag('write_admission');
+    this.isAdmissionRuleAuthorized = this.authUtilsService.getDisplayFlag('admission');
     this.gridOptions = this.admissionRulesService.configRuleGrid(this.isWriteAdmissionRuleAuthorized);
     this.gridOptions.onSelectionChanged = this.onAdmissionRulesSelected;
     this.context = { componentParent: this };
@@ -117,8 +120,8 @@ export class AdmissionRulesComponent implements OnInit {
               id: -1,
               comment:
                 this.default_action === 'allow'
-                  ? "Allow deployments that don't match any of above rules."
-                  : "Deny deployments that don't match any of above rules.",
+                  ? 'Allow deployments that don\'t match any of above rules.'
+                  : 'Deny deployments that don\'t match any of above rules.',
               criteria: [],
               critical: true,
               category: 'Global action',
@@ -132,9 +135,9 @@ export class AdmissionRulesComponent implements OnInit {
           this.canConfig = state.state!.cfg_type !== GlobalConstant.CFG_TYPE.GROUND;
           this.isK8s = state.k8s_env;
           if (!this.canConfig) {
-            this.stateWarning = this.translate.instant("admissionControl.CAN_NOT_CONFIG");
+            this.stateWarning = this.translate.instant('admissionControl.CAN_NOT_CONFIG');
           } else if (!this.isK8s) {
-            this.stateWarning = this.translate.instant("admissionControl.NOT_SUPPORT");
+            this.stateWarning = this.translate.instant('admissionControl.NOT_SUPPORT');
           }
         },
         error => {
@@ -145,9 +148,9 @@ export class AdmissionRulesComponent implements OnInit {
           ) {
             this.gridOptions.overlayNoRowsTemplate = this.utils.getOverlayTemplateMsg(error);
             this.gridOptions!.api!.setRowData([]);
-            this.stateWarning = this.translate.instant("admissionControl.NOT_BINDING");
+            this.stateWarning = this.translate.instant('admissionControl.NOT_BINDING');
           } else if (error.status === 403) {
-            this.gridOptions.overlayNoRowsTemplate = this.translate.instant("general.NO_ROWS")
+            this.gridOptions.overlayNoRowsTemplate = this.translate.instant('general.NO_ROWS')
             this.gridOptions!.api!.setRowData([]);
           } else {
             this.gridOptions.overlayNoRowsTemplate = this.utils.getOverlayTemplateMsg(error);
@@ -177,14 +180,14 @@ export class AdmissionRulesComponent implements OnInit {
       data: {
         printConfigurationAssessmentResultFn: this.printConfigurationAssessmentResult
       },
-      width: "1024px",
+      width: '1024px',
       disableClose: true
     });
   };
 
   openExportPopup = () => {
     const exportDialogRef = this.dialog.open(ExportAdmissionRulesModalComponent, {
-      width: "50%",
+      width: '50%',
       data: {
         selectedAdmissionRules: this.selectedAdmissionRules
       },
@@ -207,7 +210,7 @@ export class AdmissionRulesComponent implements OnInit {
 
   showAdvancedSetting = () => {
     const advancedSettingDialogRef = this.dialog.open(AdvanceSettingModalComponent, {
-      width: "60%",
+      width: '60%',
       data: {
         state: this.admissionStateRec.state || {},
         refreshFn: this.refresh
@@ -218,7 +221,7 @@ export class AdmissionRulesComponent implements OnInit {
 
   openAddEditAdmissionRuleModal = () => {
     const addEditDialogRef = this.dialog.open(AddEditAdmissionRuleModalComponent, {
-      width: "80%",
+      width: '80%',
       data: {
         opType: GlobalConstant.MODAL_OP.ADD,
         admissionOptions: this.admissionOptions,
@@ -236,9 +239,37 @@ export class AdmissionRulesComponent implements OnInit {
     this.admissionRulesService.updateAdmissionState(this.admissionStateRec)
       .subscribe(
         response => {
-          this.getAdmissionState();
+          let msg = this.globalStatus ?
+            this.translate.instant("admissionControl.msg.G_ENABLE_OK") :
+            this.translate.instant("admissionControl.msg.G_DISABLE_OK");
+          this.notificationService.open(msg);
+          setTimeout(() => {
+            this.getAdmissionState();
+          }, 500);
         },
-        error => {}
+        error => {
+          if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
+            let errMsg = '';
+            if (
+              error.status === GlobalConstant.STATUS_INTERNAL_SERVER_ERR &&
+              error.error.code === GlobalConstant.ADMISSION.INTERNAL_ERR_CODE.CONFIG_K8S_FAIL
+            ) {
+              errMsg = this.translate.instant(
+                "admissionControl.msg.CONFIG_K8S_FAIL"
+              );
+            } else {
+              errMsg = error.error;
+            }
+            let errTitle = this.globalStatus ?
+              this.translate.instant("admissionControl.msg.G_ENABLE_NG") :
+              this.translate.instant("admissionControl.msg.G_DISABLE_NG");
+            this.notificationService.open(
+              this.utils.getAlertifyMsg(errMsg, errTitle, false),
+              GlobalConstant.NOTIFICATION_TYPE.ERROR
+            );
+            this.globalStatus = !this.globalStatus;
+          }
+        }
       );
   };
 
@@ -247,9 +278,31 @@ export class AdmissionRulesComponent implements OnInit {
     this.admissionRulesService.updateAdmissionState(this.admissionStateRec)
       .subscribe(
         response => {
-          this.getAdmissionState();
+          this.notificationService.open(this.translate.instant("admissionControl.msg.MODE_SWITCH_OK"));
+          setTimeout(() => {
+            this.getAdmissionState();
+          }, 500);
         },
-        error => {}
+        error => {
+          if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
+            let errMsg = '';
+            if (
+              error.status === GlobalConstant.STATUS_INTERNAL_SERVER_ERR &&
+              error.error.code === GlobalConstant.ADMISSION.INTERNAL_ERR_CODE.CONFIG_K8S_FAIL
+            ) {
+              errMsg = this.translate.instant(
+                "admissionControl.msg.CONFIG_K8S_FAIL"
+              );
+            } else {
+              errMsg = error.error;
+            }
+            this.notificationService.open(
+              this.utils.getAlertifyMsg(errMsg, this.translate.instant("admissionControl.msg.MODE_SWITCH_NG"), false),
+              GlobalConstant.NOTIFICATION_TYPE.ERROR
+            );
+            this.mode = this.mode === 'monitor' ? 'protect' : 'monitor';
+          }
+        }
       );
   };
 
@@ -263,12 +316,18 @@ export class AdmissionRulesComponent implements OnInit {
     this.admissionRulesService.updateRulePromotion(payload)
       .subscribe({
         next: res => {
+          this.notificationService.open(this.translate.instant("policy.message.PROMOTE_OK"));
           setTimeout(() => {
             this.refresh();
           }, 1000);
         },
         error: error => {
-
+          if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
+            this.notificationService.open(
+              this.utils.getAlertifyMsg(error.error, this.translate.instant("policy.message.PROMOTE_NG"), false),
+              GlobalConstant.NOTIFICATION_TYPE.ERROR
+            );
+          }
         }
       });
   };

@@ -14,6 +14,9 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { TranslateService } from '@ngx-translate/core';
 import { AdmissionConfigurationAssessment } from '@common/types/admission/admission';
+import { UtilsService } from "@common/utils/app.utils";
+import { NotificationService } from '@services/notification.service';
+import { MapConstant } from '@common/constants/map.constant';
 
 @Component({
   selector: 'app-import-test-file',
@@ -21,22 +24,25 @@ import { AdmissionConfigurationAssessment } from '@common/types/admission/admiss
   styleUrls: ['./import-test-file.component.scss'],
 })
 export class ImportTestFileComponent implements OnInit {
-  @Input() importUrl: string = "";
+  @Input() importUrl: string = '';
   @Input() isStandAlone?: boolean; //Only for system config file import
-  @Input() alias: string = "";
+  @Input() alias: string = '';
   @Output() getImportResult = new EventEmitter<AdmissionConfigurationAssessment>();
   uploader!: FileUploader;
   hasBaseDropZoneOver: boolean = false;
   hasAnotherDropZoneOver: boolean = false;
-  response: string = "";
+  response: string = '';
   percentage: number = 0;
-  status: string = "";
-  nvToken: string = "";
+  status: string = '';
+  nvToken: string = '';
   result: any;
+  errMsg: string = '';
 
   constructor(
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
-    public translate: TranslateService
+    private translate: TranslateService,
+    private notificationService: NotificationService,
+    private utils: UtilsService,
   ) {
     this.nvToken = this.sessionStorage.get(
       GlobalConstant.SESSION_STORAGE_TOKEN
@@ -64,17 +70,36 @@ export class ImportTestFileComponent implements OnInit {
 
     let self = this;
 
+    this.uploader.response.subscribe(
+      res => {
+        console.log(res)
+      },
+      error => {
+        console.error(error)
+      }
+    );
+
     this.uploader.onSuccessItem = (function (self: any) {
       return function (fileItem, response: string, status, headers) {
-        self.status = "done";
+        self.status = 'done';
         self.percentage = 100;
         self.getImportResult.emit(JSON.parse(response));
       };
     })(self);
 
-    // this.uploader.response.subscribe( res => {
-    //   console.log(res)
-    // } );
+    this.uploader.onErrorItem = (function (self: any) {
+      return function (fileItem, response: string, status, headers) {
+        let errObj = JSON.parse(response);
+        self.errMsg = self.utils.getAlertifyMsg(errObj.message, self.translate.instant('admissionControl.msg.IMPORT_FAILED'), false);
+        self.percentage = 0;
+        if (!MapConstant.USER_TIMEOUT.includes(status)) {
+          self.notificationService.open(
+            self.errMsg,
+            GlobalConstant.NOTIFICATION_TYPE.ERROR
+          );
+        }
+      };
+    })(self);
   }
 
   public fileOverBase = (e: any): void => {

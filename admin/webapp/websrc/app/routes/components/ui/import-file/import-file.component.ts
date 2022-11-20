@@ -14,6 +14,7 @@ import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { UtilsService } from '@common/utils/app.utils';
 import { TranslateService } from '@ngx-translate/core';
 import { HttpResponse } from '@angular/common/http';
+import { NotificationService } from '@services/notification.service';
 
 @Component({
   selector: 'app-import-file',
@@ -31,9 +32,11 @@ export class ImportFileComponent implements OnInit, OnChanges {
   percentage: number = 0;
   status: string = '';
   nvToken: string = '';
+  errMsg: string = '';
 
   constructor(
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
+    private notificationService: NotificationService,
     private utils: UtilsService,
     public translate: TranslateService
   ) {
@@ -90,9 +93,19 @@ export class ImportFileComponent implements OnInit, OnChanges {
       };
     })(self);
 
-    // this.uploader.response.subscribe( res => {
-    //   console.log(res)
-    // } );
+    this.uploader.onErrorItem = (function (self: any) {
+      return function (fileItem, response: string, status, headers) {
+        let errObj = JSON.parse(response);
+        self.errMsg = self.utils.getAlertifyMsg(errObj.message, self.translate.instant('setting.IMPORT_FAILED'), false);
+        self.percentage = 0;
+        if (!MapConstant.USER_TIMEOUT.includes(status)) {
+          self.notificationService.open(
+            self.errMsg,
+            GlobalConstant.NOTIFICATION_TYPE.ERROR
+          );
+        }
+      };
+    })(self);
   }
 
   ngOnChanges(changes: SimpleChanges): void {

@@ -24,7 +24,7 @@ export class HeaderComponent implements OnInit {
   clusters: Cluster[] = [];
   isMasterRole: boolean = false;
   isMemberRole: boolean = false;
-  isOrdinaryRole: boolean = false;
+  isStandaloneRole: boolean = false;
   isOnRemoteCluster: boolean = false;
   selectedCluster: Cluster | undefined;
   isSUSESSO: boolean = false;
@@ -146,10 +146,10 @@ export class HeaderComponent implements OnInit {
           this.clusters = data.clusters || [];
           this.isMemberRole = data.fed_role === MapConstant.FED_ROLES.MEMBER;
           this.isMasterRole = data.fed_role === MapConstant.FED_ROLES.MASTER;
-          this.isOrdinaryRole = data.fed_role === '';
+          this.isStandaloneRole = data.fed_role === '';
           GlobalVariable.isMaster = this.isMasterRole;
           GlobalVariable.isMember = this.isMemberRole;
-          GlobalVariable.isStandAlone = this.isOrdinaryRole;
+          GlobalVariable.isStandAlone = this.isStandaloneRole;
 
           //get the status of the chosen cluster
           const sessionCluster = this.sessionStorage.get(

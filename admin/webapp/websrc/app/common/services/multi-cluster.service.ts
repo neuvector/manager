@@ -45,6 +45,7 @@ export class MultiClusterService {
     this._selectedClusterSubject$.asObservable();
   selectedClusterSummary$: Observable<ClusterSummary | undefined> =
     this._selectedClusterSummarySubject$.asObservable();
+  private refreshSubject = new Subject();
 
   constructor(
     private tr: TranslateService,
@@ -65,6 +66,13 @@ export class MultiClusterService {
 
   setSelectedClusterSummary(summary: ClusterSummary | undefined) {
     this._selectedClusterSummarySubject$.next(summary);
+  }
+
+  syncPolicy(id): Observable<any>{
+    const payload = {
+      ids:[id]
+    };
+    return GlobalVariable.http.post(PathConstant.FED_DEPLOY, payload);
   }
 
   getClusterName(): Observable<string> {
@@ -176,5 +184,13 @@ export class MultiClusterService {
 
   dispatchSwitchEvent() {
     this._clusterSwitchedEvent.next(true);
+  }
+
+  requestRefresh() {
+    this.refreshSubject.next();
+  }
+
+  refresh(): Observable<any> {
+    return this.refreshSubject.asObservable();
   }
 }

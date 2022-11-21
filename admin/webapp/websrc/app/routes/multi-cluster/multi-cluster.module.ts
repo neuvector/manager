@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from "@angular/router";
+import { Routes, RouterModule } from '@angular/router';
 import { NvCommonModule } from '@common/nvCommon.module';
 import { MultiClusterComponent } from './multi-cluster.component';
 import { TranslateModule } from '@ngx-translate/core';
@@ -9,13 +9,12 @@ import { TokenModalComponent } from './token-modal/token-modal.component';
 import { AdjustableDivModule } from '@components/ui/adjustable-div/adjustable-div.module';
 import { LoadingTemplateModule } from '@components/ui/loading-template/loading-template.module';
 import { MultiClusterGridModule } from '@components/multi-cluster-grid/multi-cluster-grid.module';
-import { SettingsService } from "@services/settings.service";
+import { SettingsService } from '@services/settings.service';
 import { MultiClusterDetailsComponent } from './multi-cluster-details/multi-cluster-details.component';
-import {ClipboardModule} from "@angular/cdk/clipboard";
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
 
-const routes: Routes = [
-  { path: '', component: MultiClusterComponent }
-];
+const routes: Routes = [{ path: '', component: MultiClusterComponent }];
 
 @NgModule({
   declarations: [
@@ -30,6 +29,7 @@ const routes: Routes = [
     TranslateModule,
     NvCommonModule,
     AdjustableDivModule,
+    LoadingButtonModule,
     LoadingTemplateModule,
     MultiClusterGridModule,
     ClipboardModule,

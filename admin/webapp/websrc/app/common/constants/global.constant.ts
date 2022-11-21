@@ -127,7 +127,7 @@ export class GlobalConstant {
   };
 
   public static CLUSTER_TYPES = {
-    ORDINARY: '',
+    STANDALONE: '',
     MASTER: 'master',
     MEMBER: 'joint',
   };

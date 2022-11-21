@@ -34,12 +34,12 @@
       <em
         class="eos-icons icon-18 hand"
         matTooltip="{{ 'multiCluster.tips.remove' | translate }}"
-        (click)="syncPolicy($event,params.data); $event.stopPropagation();"
+        (click)="removeMember(params.data); $event.stopPropagation();"
       >person_off</em>
       <em
         class="eos-icons icon-18 hand"
         matTooltip="{{ 'multiCluster.tips.manage' | translate }}"
-        (click)="syncPolicy($event,params.data); $event.stopPropagation();"
+        (click)="manageCluster(); $event.stopPropagation();"
       >laptop_windows</em>
 
     </ng-template>

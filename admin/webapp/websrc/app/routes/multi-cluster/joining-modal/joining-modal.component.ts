@@ -42,8 +42,8 @@ export class JoiningModalComponent implements OnInit {
 
   getClusterName = () => {
     this.settingsService.getConfig().subscribe(
-      response => {
-        this.cluster.name = response["config"]["cluster_name"];
+      data => {
+        this.cluster.name = data.misc.cluster_name;
       },
       error => {
         console.log(error.message);

@@ -252,7 +252,7 @@ export class MapConstant {
     ADMIN: 'admin',
     MASTER: 'master',
     MEMBER: 'joint',
-    ORDINARY: '',
+    STANDALONE: '',
   };
   public static FED_PORT = {
     MASTER: 11443,

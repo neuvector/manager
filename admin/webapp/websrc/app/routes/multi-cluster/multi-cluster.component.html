@@ -5,14 +5,15 @@
         <em class="fa fa-times-circle error-signal" aria-hidden="true"></em>
       </div>
       <div>
-      <span class="error-text">
-        {{'multiCluster.messages.api_failure' | translate }}
-      </span>
+        <span class="error-text">
+          {{ 'multiCluster.messages.api_failure' | translate }}
+        </span>
       </div>
     </div>
 
-    <div *ngIf="isOrdinary">
-      <h1 class="font-weight-light">{{ "enum.MULTI_CLUSTER" | translate }}  </h1>
+    <!--    standalone-->
+    <div *ngIf="isStandalone">
+      <h1 class="font-weight-light">{{ 'enum.MULTI_CLUSTER' | translate }}</h1>
       <mat-card>
         <mat-grid-list
           (window:resize)="onResize()"
@@ -20,60 +21,92 @@
           rowHeight="600px"
         >
           <mat-grid-tile>
-            <button (click)="showPromotionDialog()" class="cluster_link" mat-button>
+            <button
+              (click)="showPromotionDialog()"
+              class="cluster_link"
+              mat-button
+            >
               <mat-card class="cluster_card">
                 <div class="promote_image"></div>
                 <mat-card-title>{{
-                  "multiCluster.promotion.title" | translate
-                  }}</mat-card-title>
+                  'multiCluster.promotion.title' | translate
+                }}</mat-card-title>
                 <mat-card-subtitle>{{
-                  "multiCluster.promotion.description" | translate
-                  }}</mat-card-subtitle>
+                  'multiCluster.promotion.description' | translate
+                }}</mat-card-subtitle>
               </mat-card>
             </button>
           </mat-grid-tile>
           <mat-grid-tile>
-            <button (click)="showJoiningDialog()" class="cluster_link" mat-button>
+            <button
+              (click)="showJoiningDialog()"
+              class="cluster_link"
+              mat-button
+            >
               <mat-card class="cluster_card">
                 <div class="joining_image"></div>
                 <mat-card-title>{{
-                  "multiCluster.joining.title" | translate
-                  }}</mat-card-title>
+                  'multiCluster.joining.title' | translate
+                }}</mat-card-title>
                 <mat-card-subtitle>{{
-                  "multiCluster.joining.description" | translate
-                  }}</mat-card-subtitle>
+                  'multiCluster.joining.description' | translate
+                }}</mat-card-subtitle>
               </mat-card>
-            </button></mat-grid-tile>
+            </button></mat-grid-tile
+          >
         </mat-grid-list>
       </mat-card>
     </div>
 
+    <!--  multiple clusters-->
     <div *ngIf="isFederal">
-      <h1 class="font-weight-light">{{ "multiCluster.title" | translate }}  </h1>
+      <div class="d-flex flew-row align-items-center justify-content-between">
+        <h1 class="font-weight-light" id="multiple-cluster-title">
+          {{ 'multiCluster.title' | translate }}
+        </h1>
+        <app-loading-button
+          (btnClick)="refresh()"
+          [appearance]="'mat-button'"
+          [buttonClasses]="'d-flex justify-content-center align-items-center'"
+          [disabled]="!!(refreshing$ | async)"
+          [iconClasses]="'eos-icons icon-18'"
+          [iconName]="'refresh'"
+          [id]="'nodes-refresh-button'"
+          [loading]="!!(refreshing$ | async)"
+          [text]="'general.REFRESH' | translate"
+          [type]="'button'">
+        </app-loading-button>
+      </div>
+      <!-- primary cluster-->
       <div *ngIf="isMasterRole">
         <app-adjustable-div [minHeightOne]="163" [minHeightTwo]="140">
           <ng-container *appContainerOne="let height">
             <mat-card [ngStyle]="{ height: height + 'px' }" class="pt-0">
               <app-multi-cluster-grid
-                [gridHeight] = "height - 85"
-                [clusterData] = "clusterData"
+                [gridHeight]="height - 85"
+                [clusterData]="clusterData"
               ></app-multi-cluster-grid>
             </mat-card>
           </ng-container>
           <ng-container *appContainerTwo="let height" class="myContainer">
-            <mat-card [ngStyle]="{ height: height + 'px' }" class="pt-0 scrollable">
+            <mat-card
+              [ngStyle]="{ height: height + 'px' }"
+              class="pt-0 scrollable"
+            >
               <mat-card-content>
-                <app-multi-cluster-details [gridHeight]="height -80">
+                <app-multi-cluster-details [gridHeight]="height - 80">
                 </app-multi-cluster-details>
               </mat-card-content>
             </mat-card>
           </ng-container>
         </app-adjustable-div>
       </div>
+
+      <!-- member cluster-->
       <div *ngIf="isMemberRole">
         <mat-card class="pt-0">
           <app-multi-cluster-grid
-            [clusterData] = "clusterData"
+            [clusterData]="clusterData"
           ></app-multi-cluster-grid>
         </mat-card>
       </div>
@@ -90,6 +123,3 @@
     <app-loading-template></app-loading-template>
   </ng-template>
 </ng-template>
-
-
-

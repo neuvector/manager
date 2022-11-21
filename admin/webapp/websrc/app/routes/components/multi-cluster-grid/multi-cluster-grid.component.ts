@@ -268,7 +268,6 @@ export class MultiClusterGridComponent implements OnInit {
 
   onRowSelected(params: RowSelectedEvent) {
     if (params.node.isSelected()) {
-      console.log('selected param:', params);
       this.multiClusterService.setSelectedCluster(params.data);
       this.updateSummaryForRowNode(
         params.node,

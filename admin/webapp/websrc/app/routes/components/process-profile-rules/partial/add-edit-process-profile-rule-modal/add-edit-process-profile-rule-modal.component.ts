@@ -6,6 +6,7 @@ import { ProcessProfileRulesService } from '@services/process-profile-rules.serv
 import { GroupsService } from '@services/groups.service';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { TranslateService } from '@ngx-translate/core';
+import { NotificationService } from '@services/notification.service';
 
 @Component({
   selector: 'app-add-edit-process-profile-rule-modal',
@@ -25,7 +26,8 @@ export class AddEditProcessProfileRuleModalComponent implements OnInit {
     private processProfileRulesService: ProcessProfileRulesService,
     private groupsService: GroupsService,
     private translate: TranslateService,
-    private utils: UtilsService
+    private utils: UtilsService,
+    private notificationService: NotificationService
   ) {
     this.type = this.data.type;
 
@@ -113,31 +115,20 @@ export class AddEditProcessProfileRuleModalComponent implements OnInit {
       )
       .subscribe(
         response => {
+          let msgTitle = this.type === GlobalConstant.MODAL_OP.ADD ?
+            this.translate.instant('group.profile.ADD_OK') :
+            this.translate.instant('group.profile.EDIT_OK');
+          this.notificationService.open(msgTitle);
           setTimeout(() => {
             this.data.getProcessProfileRules(this.data.groupName);
           }, 1000);
           this.onCancel();
-          // swal(
-          //   `${UtilsService.capitalizeWord(typeText[0])}!`,
-          //   `Your process profile rule has been ${typeText[0]}.`,
-          //   "success"
-          // );
         },
-        err => {
-          if (
-            err.status !== GlobalConstant.STATUS_AUTH_TIMEOUT &&
-            err.status !== GlobalConstant.STATUS_UNAUTH &&
-            err.status !== GlobalConstant.STATUS_SERVER_UNAVAILABLE
-          ) {
-            let message = this.utils.getErrorMessage(err);
-            // swal(
-            //   "Error!",
-            //   `Something wrong when ${
-            //     typeText[1]
-            //   } process profile rule! - ${message}`,
-            //   "error"
-            // );
-          }
+        error => {
+          let msgTitle = this.type === GlobalConstant.MODAL_OP.ADD ?
+            this.translate.instant('group.profile.ADD_NG') :
+            this.translate.instant('group.profile.EDIT_NG');
+          this.notificationService.openError(error, msgTitle);
         }
       );
   }

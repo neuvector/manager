@@ -14,6 +14,8 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { FileAccessRulesService } from '@services/file-access-rules.service';
 import { GroupsService } from '@services/groups.service';
 import { cloneDeep } from 'lodash';
+import { NotificationService } from '@services/notification.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-edit-file-access-rule-modal',
@@ -37,7 +39,9 @@ export class AddEditFileAccessRuleModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fileAccessRulesService: FileAccessRulesService,
     private groupsService: GroupsService,
-    private utils: UtilsService
+    private utils: UtilsService,
+    private notificationService: NotificationService,
+    private translate: TranslateService
   ) {
     this.type = this.data.type;
   }
@@ -157,31 +161,20 @@ export class AddEditFileAccessRuleModalComponent implements OnInit {
       )
       .subscribe(
         response => {
+          let msgTitle = this.type === GlobalConstant.MODAL_OP.ADD ?
+            this.translate.instant('group.file.ADD_OK') :
+            this.translate.instant('group.file.EDIT_OK');
+          this.notificationService.open(msgTitle);
           setTimeout(() => {
             this.data.getFileAccessRules(this.data.groupName);
           }, 1000);
           this.onCancel();
-          // sweetAlert(
-          //   `${UtilsService.capitalizeWord(typeText[0])}!`,
-          //   `Your file access rule has been ${typeText[0]}.`,
-          //   "success"
-          // );
         },
-        err => {
-          if (
-            err.status !== GlobalConstant.STATUS_AUTH_TIMEOUT &&
-            err.status !== GlobalConstant.STATUS_UNAUTH &&
-            err.status !== GlobalConstant.STATUS_SERVER_UNAVAILABLE
-          ) {
-            let message = this.utils.getErrorMessage(err);
-            // sweetAlert(
-            //   "Error!",
-            //   `Something wrong when ${
-            //     typeText[1]
-            //   } file access rule! - ${message}`,
-            //   "error"
-            // );
-          }
+        error => {
+          let msgTitle = this.type === GlobalConstant.MODAL_OP.ADD ?
+            this.translate.instant('group.file.ADD_NG') :
+            this.translate.instant('group.file.EDIT_NG');
+          this.notificationService.openError(error, msgTitle);
         }
       );
   };

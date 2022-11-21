@@ -16,6 +16,9 @@ import { AddEditFileAccessRuleModalComponent } from './partial/add-edit-file-acc
 import { PredefinedFileAccessRulesModalComponent } from './partial/predefined-file-access-rules-modal/predefined-file-access-rules-modal.component';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { AuthUtilsService } from '@common/utils/auth.utils';
+import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
+import { switchMap } from 'rxjs/operators';
+import { NotificationService } from '@services/notification.service';
 
 @Component({
   selector: 'app-file-access-rules',
@@ -49,7 +52,8 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
     private authUtilsService: AuthUtilsService,
     private translate: TranslateService,
     private utils: UtilsService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private notificationService: NotificationService
   ) {
     this.w = GlobalVariable.window;
   }
@@ -177,64 +181,37 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
   };
 
   removeProfile = data => {
-    // sweetAlert({
-    //   title: "Removal confirmation",
-    //   text: `Will you remove file access rule? - Name: ${data.filter}`,
-    //   icon: "warning",
-    //   buttons: {
-    //     cancel: {
-    //       text: "Cancel",
-    //       value: null,
-    //       visible: true,
-    //       className: "",
-    //       closeModal: false
-    //     },
-    //     confirm: {
-    //       text: "Remove",
-    //       value: true,
-    //       visible: true,
-    //       className: "bg-danger",
-    //       closeModal: false
-    //     }
-    //   }
-    // }).then(isConfirm => {
-    //   if (isConfirm) {
-    this.fileAccessRulesService
-      .updateFileAccessRuleList(
-        GlobalConstant.CRUD.D,
-        this.selectedFileAccessRules,
-        this.groupName
-      )
-      .subscribe(
-        response => {
-          setTimeout(() => {
-            this.getFileAccessRules(this.groupName);
-          }, 1000);
-          // sweetAlert(
-          //   `Removed!`,
-          //   `Your file access rule has been removed.`,
-          //   "success"
-          // );
-        },
-        err => {
-          if (
-            err.status !== GlobalConstant.STATUS_AUTH_TIMEOUT &&
-            err.status !== GlobalConstant.STATUS_UNAUTH &&
-            err.status !== GlobalConstant.STATUS_SERVER_UNAVAILABLE
-          ) {
-            let message = this.utils.getErrorMessage(err);
-            // sweetAlert(
-            //   "Error!",
-            //   `Something wrong when remove file acess rule! - ${message}`,
-            //   "error"
-            // );
-          }
-        }
-      );
-    //   } else {
-    //     sweetAlert("Cancelled", "Your file access rule is safe", "error");
-    //   }
-    // });
+    let message = `${this.translate.instant('group.file.REMOVE_CONFIRM')} ${data.filter}`;
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: '700px',
+      data: {
+        message: message
+      },
+      disableClose: true
+    });
+    dialogRef.componentInstance.confirm.pipe(switchMap(() => {
+      return this.fileAccessRulesService
+        .updateFileAccessRuleList(
+          GlobalConstant.CRUD.D,
+          this.selectedFileAccessRules,
+          this.groupName
+        );
+    })).subscribe(
+      (res) => {
+        // confirm actions
+        this.notificationService.open(this.translate.instant('group.file.REMOVE_OK'))
+        setTimeout(() => {
+          this.getFileAccessRules(this.groupName);
+        }, 1000);
+        // close dialog
+        dialogRef.componentInstance.onCancel();
+        dialogRef.componentInstance.loading = false;
+      },
+      error => {
+        this.notificationService.openError(error, this.translate.instant('group.file.REMOVE_NG'))
+        dialogRef.componentInstance.loading = false;
+      }
+    );
   };
 
   editProfile = data => {

@@ -5,6 +5,8 @@ import { FormControl, FormGroup, Validators, ValidatorFn, AbstractControl, Valid
 import { GlobalConstant } from '@common/constants/global.constant';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { GroupsService } from '@services/groups.service';
+import { TranslateService } from '@ngx-translate/core';
+import { NotificationService } from '@services/notification.service';
 
 @Component({
   selector: 'app-add-edit-group-modal',
@@ -22,7 +24,9 @@ export class AddEditGroupModalComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<AddEditGroupModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private groupsService: GroupsService
+    private groupsService: GroupsService,
+    private translate: TranslateService,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -85,20 +89,31 @@ export class AddEditGroupModalComponent implements OnInit {
     }
   };
 
-  updateRule = () => {
+  updateGroup = () => {
     console.log(this.addEditGroupForm.value);
     let payload = {
       ...this.addEditGroupForm.value,
       criteria: this.criteria,
       cfg_type: this.data.cfgType
     }
-    this.groupsService.insertUpdateGroupData(payload, this.data.opType,)
+    this.groupsService.insertUpdateGroupData(payload, this.data.opType)
       .subscribe(
         response => {
-          this.data.refresh();
+          let msgTitle = this.data.opType === GlobalConstant.MODAL_OP.ADD ?
+            this.translate.instant('group.addGroup.OK_MSG') :
+            this.translate.instant('group.editGroup.OK_MSG');
+          this.notificationService.open(msgTitle);
+          setTimeout(() => {
+            this.data.refresh();
+          }, 1000);
           this.dialogRef.close(true);
         },
-        error => {}
+        error => {
+          let msgTitle = this.data.opType === GlobalConstant.MODAL_OP.ADD ?
+            this.translate.instant('group.addGroup.ERR_MSG') :
+            this.translate.instant('group.editGroup.ERR_MSG');
+          this.notificationService.openError(error, msgTitle);
+        }
       )
   };
 

@@ -1951,11 +1951,24 @@
       "OK_MSG": "Group is updated successfully!"
     },
     "profile": {
-      "COUNT_POSTFIX": "process profiles rules found"
+      "COUNT_POSTFIX": "process profiles rules found",
+      "REMOVE_OK": "Your process profile rule has been removed.",
+      "REMOVE_NG": "Error happened when removing process profile rule",
+      "ADD_OK": "Your process profile rule has been added.",
+      "ADD_NG": "Error happened when adding process profile rule",
+      "EDIT_OK": "Your process profile rule has been modified.",
+      "EDIT_NG": "Error happened when editing process profile rule"
     },
     "file": {
       "COUNT_POSTFIX": "file access rules found",
-      "RULE_SAMPLE": "Sample: /dir/xxx, /dir/xxx.*, /dir/*.xxx, /dir/*/abc/* (Not support: [], () and regexp)"
+      "RULE_SAMPLE": "Sample: /dir/xxx, /dir/xxx.*, /dir/*.xxx, /dir/*/abc/* (不支持: [], () and regexp)",
+      "REMOVE_CONFIRM": "Will you remove file access rule? - Name:",
+      "REMOVE_OK": "Your file access rule has been removed.",
+      "REMOVE_NG": "Error happened when removing file acess rule",
+      "ADD_OK": "Your file access rule has been added.",
+      "ADD_NG": "Error happened when adding file acess rule",
+      "EDIT_OK": "Your file access rule has been modified.",
+      "EDIT_NG": "Error happened when editing file acess rule"
     },
     "dlp": {
       "TITLE": "DLP",

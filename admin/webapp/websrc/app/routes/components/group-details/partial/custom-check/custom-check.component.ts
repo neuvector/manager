@@ -5,6 +5,8 @@ import { GroupsService } from '@services/groups.service';
 import { GridOptions } from 'ag-grid-community';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { Script } from '@common/types';
+import { NotificationService } from '@services/notification.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-custom-check',
@@ -30,7 +32,9 @@ export class CustomCheckComponent implements OnInit {
 
   constructor(
     private groupsService: GroupsService,
-    private authUtilsService: AuthUtilsService
+    private authUtilsService: AuthUtilsService,
+    private notificationService: NotificationService,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -101,9 +105,12 @@ export class CustomCheckComponent implements OnInit {
     this.groupsService.updateCustomCheckData(payload)
       .subscribe(
         response => {
+          this.notificationService.open(this.translate.instant("group.script.msg.SCRIPT_OK"));
           this.refresh();
         },
-        error => {}
+        error => {
+          this.notificationService.openError(error, this.translate.instant("group.script.msg.SCRIPT_NG"));
+        }
       );
   };
 

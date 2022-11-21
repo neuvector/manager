@@ -73,7 +73,7 @@ export class GroupsComponent implements OnInit {
     private dialog: MatDialog,
     private translate: TranslateService,
     private utilsService: UtilsService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
@@ -187,13 +187,7 @@ export class GroupsComponent implements OnInit {
       },
       error: ({ error }: { error: ErrorResponse }) => {
         this.groupsErr = true;
-        this.notificationService.open(
-          this.utils.getAlertifyMsg(
-            error,
-            this.translate.instant('general.UNFORMATTED_ERR'),
-            false
-          )
-        );
+        this.notificationService.openError(error, this.translate.instant('general.UNFORMATTED_ERR'));
       },
     });
   };
@@ -217,13 +211,7 @@ export class GroupsComponent implements OnInit {
       },
       error: ({ error }: { error: ErrorResponse }) => {
         this.groupsErr = true;
-        this.notificationService.open(
-          this.utils.getAlertifyMsg(
-            error,
-            this.translate.instant('general.UNFORMATTED_ERR'),
-            false
-          )
-        );
+        this.notificationService.openError(error, this.translate.instant('general.UNFORMATTED_ERR'));
       },
     });
   };
@@ -309,9 +297,12 @@ export class GroupsComponent implements OnInit {
 
     this.groupsService.updateScorableData(payload).subscribe(
       response => {
+        this.notificationService.open(this.translate.instant('service.SUBMIT_SCORABLE_OK'));
         this.getGroups();
       },
-      error => {}
+      error => {
+        this.notificationService.openError(error, this.translate.instant('service.SUBMIT_SCORABLE_NG'));
+      }
     );
   };
 
@@ -357,17 +348,10 @@ export class GroupsComponent implements OnInit {
           type: 'text/plain;charset=utf-8',
         });
         saveAs(blob, fileName);
-        // Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
-        // Alertify.success($translate.instant("group.dlp.msg.EXPORT_OK"));
       },
       error => {
         console.warn(error);
-        if (MapConstant.USER_TIMEOUT.indexOf(error.status) < 0) {
-          // Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
-          // Alertify.error(
-          //   Utils.getAlertifyMsg(err, $translate.instant("group.dlp.msg.EXPORT_NG"), false)
-          // );
-        }
+        this.notificationService.openError(error, this.translate.instant('group.dlp.msg.EXPORT_NG'));
       }
     );
   };

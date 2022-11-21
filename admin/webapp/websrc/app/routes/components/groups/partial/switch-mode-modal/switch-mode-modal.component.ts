@@ -4,8 +4,9 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { GroupsService } from '@services/groups.service';
 import { Group } from '@common/types';
-import { ConfirmDialogComponent } from "@components/ui/confirm-dialog/confirm-dialog.component";
+import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
+import { NotificationService } from '@services/notification.service';
 
 @Component({
   selector: 'app-switch-mode-modal',
@@ -24,7 +25,8 @@ export class SwitchModeModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private groupsService: GroupsService,
     private translate: TranslateService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -39,8 +41,8 @@ export class SwitchModeModalComponent implements OnInit {
 
   checkZeroDrift = () => {
     if (this.zeroDriftHint) return;
-    this.zeroDriftHint = "";
-    if ((this.baselineProfile === 'basic' || this.baselineProfile === "no-change") && this.mode !== 'discover') {
+    this.zeroDriftHint = '';
+    if ((this.baselineProfile === 'basic' || this.baselineProfile === 'no-change') && this.mode !== 'discover') {
         this.zeroDriftHint = this.translate.instant('group.ZERO_DRIFT_HINT');
         this.mode = 'discover';
     }
@@ -49,7 +51,7 @@ export class SwitchModeModalComponent implements OnInit {
   switchMode = () => {
     let isSwitchingAll = this.getSwitchableGroups(this.data.selectedGroups).length === this.getSwitchableGroups(this.data.groups).length;
     let nodesGroup = this.data.selectedGroups.filter(
-      group => group.name === "nodes"
+      group => group.name === 'nodes'
     );
     if (nodesGroup.length > 0) {
       if (isSwitchingAll) {
@@ -113,7 +115,7 @@ export class SwitchModeModalComponent implements OnInit {
     if (!this.suppressShowNodesAlerts(mode, nodesGroup)) {
       let message = this.getMessage(mode, baselineProfile, true);
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-        maxWidth: "700px",
+        maxWidth: '700px',
         data: {
           message: message,
           isSync: true
@@ -139,6 +141,7 @@ export class SwitchModeModalComponent implements OnInit {
       this.groupsService.updateModeByService(mode, baselineProfile, switchableGroups)
         .subscribe(
           response => {
+            this.notificationService.open(this.translate.instant('service.SUBMIT_OK'));
             setTimeout(() => {
               this.data.refresh();
             }, 1000);
@@ -146,6 +149,7 @@ export class SwitchModeModalComponent implements OnInit {
             this.submittingUpdate = false;
           },
           error => {
+            this.notificationService.openError(error, this.translate.instant('service.SUBMIT_FAILED'));
             this.submittingUpdate = false;
           }
         );
@@ -155,7 +159,7 @@ export class SwitchModeModalComponent implements OnInit {
     } else {
       let message = this.getMessage(mode, baselineProfile, false);
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-        maxWidth: "700px",
+        maxWidth: '700px',
         data: {
           message: message,
           isSync: true
@@ -177,6 +181,7 @@ export class SwitchModeModalComponent implements OnInit {
     this.groupsService.updateMode4All(mode, baselineProfile)
       .subscribe(
         response => {
+          this.notificationService.open(this.translate.instant('service.SUBMIT_OK'));
           setTimeout(() => {
             this.data.refresh();
           }, 1000);
@@ -184,6 +189,7 @@ export class SwitchModeModalComponent implements OnInit {
           this.submittingUpdate = false;
         },
         error => {
+          this.notificationService.openError(error, this.translate.instant('service.SUBMIT_FAILED'));
           this.submittingUpdate = false;
         }
       );
@@ -200,9 +206,9 @@ export class SwitchModeModalComponent implements OnInit {
     let isSwitchingSameMode = currMode === targetMode;
     let isDowngradingMode = modeGradeMap.get(targetMode) === 0;
     console.log(
-      "isSwitchingSameMode: ",
+      'isSwitchingSameMode: ',
       isSwitchingSameMode,
-      "isDowngradingMode: ",
+      'isDowngradingMode: ',
       isDowngradingMode
     );
     return (
@@ -229,16 +235,16 @@ export class SwitchModeModalComponent implements OnInit {
 
   private getMessage = (mode: string, baselineProfile: string, hasNodeGroups: boolean = false) => {
     let msgArray: Array<string> = [];
-    if (mode !== "") {
+    if (mode !== '') {
       msgArray.push(
-        `${this.translate.instant("group.gridHeader.POLICY_MODE")}: ${this.translate.instant("enum." + mode.toUpperCase())}`
+        `${this.translate.instant('group.gridHeader.POLICY_MODE')}: ${this.translate.instant('enum.' + mode.toUpperCase())}`
       );
     }
-    if (baselineProfile !== "no-change") {
+    if (baselineProfile !== 'no-change') {
       msgArray.push(
-        `${this.translate.instant("group.BASELINE_PROFILE")}: ${this.translate.instant("enum." + baselineProfile.split("-").join("").toUpperCase())}`
+        `${this.translate.instant('group.BASELINE_PROFILE')}: ${this.translate.instant('enum.' + baselineProfile.split('-').join('').toUpperCase())}`
       );
     }
-    return `${hasNodeGroups? this.translate.instant("group.SELECT_ALL_ALERT") : this.translate.instant("topbar.mode.SWITCH_CONFIRM")} (${msgArray.join(", ")})`
+    return `${hasNodeGroups? this.translate.instant('group.SELECT_ALL_ALERT') : this.translate.instant('topbar.mode.SWITCH_CONFIRM')} (${msgArray.join(', ')})`
   };
 }

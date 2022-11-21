@@ -4,12 +4,12 @@
     class="d-flex align-items-center"
     mat-button>
     <i class="eos-icons mr-2">{{
-      safeModuleStatus ? 'visibility_off' : 'visibility'
+      hideSafeModules ? 'visibility' : 'visibility_off'
     }}</i
     >{{
-      safeModuleStatus
-        ? ('registry.HIDE_SAFE_MODULES' | translate)
-        : ('registry.SHOW_ALL_MODULES' | translate)
+      hideSafeModules
+        ? ('registry.SHOW_ALL_MODULES' | translate)
+        : ('registry.HIDE_SAFE_MODULES' | translate)
     }}
   </button>
   <button (click)="exportCSV()" class="d-flex align-items-center" mat-button>
@@ -26,7 +26,7 @@
         (moduleSelected)="moduleSelected($event)"
         [resize]="resize"
         [rowData]="modules"
-        [safeModuleStatus]="safeModuleStatus"></app-modules-table>
+        [hideSafeModules]="hideSafeModules"></app-modules-table>
     </div>
     <div class="col-12 col-lg-4 mt-2">
       <app-vulnerabilities-table

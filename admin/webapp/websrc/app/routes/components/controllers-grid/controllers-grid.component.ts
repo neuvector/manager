@@ -21,7 +21,8 @@ import * as moment from 'moment';
 import * as $ from 'jquery';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { ControllersGridStatusCellComponent } from './controllers-grid-status-cell/controllers-grid-status-cell.component';
-import {MultiClusterService} from "@services/multi-cluster.service";
+import { MultiClusterService } from '@services/multi-cluster.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-controllers-grid',
@@ -119,13 +120,14 @@ export class ControllersGridComponent implements OnInit, OnChanges {
     };
     this.getControllers();
     //refresh the page when it switched to a remote cluster
-    this.switchClusterSubscription = this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
-      this.refresh();
-    });
+    this.switchClusterSubscription =
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
+        this.refresh();
+      });
   }
 
-  ngOnDestroy():void{
-    if(this.switchClusterSubscription){
+  ngOnDestroy(): void {
+    if (this.switchClusterSubscription) {
       this.switchClusterSubscription.unsubscribe();
     }
   }
@@ -169,10 +171,12 @@ export class ControllersGridComponent implements OnInit, OnChanges {
   }
 
   getControllers(): void {
-    this.controllersService.getControllers().subscribe(res => {
-      this.controllersService.controllers = res;
-      this.filteredCount = this.controllersService.controllers.length;
-      this.refreshing$.next(false);
-    });
+    this.controllersService
+      .getControllers()
+      .pipe(finalize(() => this.refreshing$.next(false)))
+      .subscribe(res => {
+        this.controllersService.controllers = res;
+        this.filteredCount = this.controllersService.controllers.length;
+      });
   }
 }

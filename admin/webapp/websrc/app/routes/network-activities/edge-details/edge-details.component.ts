@@ -24,6 +24,7 @@ import { SecurityEventsService } from '@services/security-events.service';
 import { MapConstant } from '@common/constants/map.constant';
 import { NotificationService } from '@services/notification.service';
 import { UtilsService } from '@common/utils/app.utils';
+import { GlobalConstant } from '@common/constants/global.constant';
 
 export interface ConversationPair {
   from: string;
@@ -218,7 +219,7 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
 
       rule.action = action;
       this.securityEventsService.updateNetworkRule(rule).subscribe(
-        response => {
+        () => {
           this.onRule = false;
         },
         err => {
@@ -228,7 +229,8 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
               err,
               this.translate.instant('network.RULE_DEPLOY_FAILED'),
               false
-            )
+            ),
+            GlobalConstant.NOTIFICATION_TYPE.ERROR
           );
         }
       );
@@ -249,7 +251,8 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
                 err,
                 this.translate.instant('network.RULE_DEPLOY_FAILED'),
                 false
-              )
+              ),
+              GlobalConstant.NOTIFICATION_TYPE.ERROR
             );
           }
         );

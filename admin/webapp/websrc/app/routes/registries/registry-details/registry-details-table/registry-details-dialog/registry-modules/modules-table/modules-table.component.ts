@@ -28,7 +28,7 @@ export class ModulesTableComponent implements OnInit, OnChanges {
   @Output() moduleSelected = new EventEmitter();
   @Input() resize?: boolean;
   @Input() rowData;
-  @Input() safeModuleStatus = false;
+  @Input() hideSafeModules = true;
   gridOptions!: GridOptions;
   gridApi!: GridApi;
   columnDefs: ColDef[] = [
@@ -84,14 +84,14 @@ export class ModulesTableComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.gridOptions = {
-      rowData: this.rowData.slice(),
+      rowData: this.filterRows(this.rowData, this.hideSafeModules),
       columnDefs: this.columnDefs,
       rowSelection: 'single',
       suppressDragLeaveHidesColumns: true,
       onGridReady: event => this.onGridReady(event),
       onSelectionChanged: event => this.onSelectionChanged(event),
       components: { statusCellRenderer: ModuleVulnerabilitiesCellComponent },
-      overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS')
+      overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS'),
     };
     this.quickFilterService.textInput$.subscribe((value: string) => {
       this.quickFilterService.onFilterChange(value, this.gridOptions);
@@ -107,17 +107,17 @@ export class ModulesTableComponent implements OnInit, OnChanges {
     if (changes.resize && this.gridApi) {
       this.gridApi.sizeColumnsToFit();
     }
-    if (changes.safeModuleStatus && this.gridApi) {
-      if (changes.safeModuleStatus.currentValue) {
-        this.gridApi.setRowData(
-          this.rowData
-            .slice()
-            .filter(module => module.cves && module.cves.length > 0)
-        );
-      } else {
-        this.gridApi.setRowData(this.rowData.slice());
-      }
+    if (changes.hideSafeModules && this.gridApi) {
+      this.gridApi.setRowData(
+        this.filterRows(this.rowData, changes.hideSafeModules.currentValue)
+      );
     }
+  }
+
+  filterRows(rowData: any, hideSafeModules: boolean) {
+    return hideSafeModules
+      ? rowData.slice().filter(module => module.cves && module.cves.length > 0)
+      : rowData.slice();
   }
 
   onGridReady(params: GridReadyEvent): void {

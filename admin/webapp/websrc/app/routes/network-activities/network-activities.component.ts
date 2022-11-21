@@ -37,6 +37,7 @@ import { PodDetails } from '@common/types/network-activities/podDetails';
 import { AdvancedFilter } from '@common/types/network-activities/advancedFilter';
 import { NotificationService } from '@services/notification.service';
 import { ConversationPair } from './edge-details/edge-details.component';
+import {GlobalConstant} from "@common/constants/global.constant";
 
 @Component({
   selector: 'app-network-activities',
@@ -673,7 +674,7 @@ export class NetworkActivitiesComponent
                 error,
                 this.translate.instant('service.ALL_SUBMIT_FAILED'),
                 false
-              )
+              ), GlobalConstant.NOTIFICATION_TYPE.ERROR
             );
           }
         );
@@ -2310,7 +2311,7 @@ export class NetworkActivitiesComponent
             err,
             this.translate.instant('policy.message.QUARANTINE_FAILED'),
             false
-          )
+          ), GlobalConstant.NOTIFICATION_TYPE.ERROR
         );
       }
     );
@@ -2621,7 +2622,7 @@ export class NetworkActivitiesComponent
               err,
               this.translate.instant('network.popup.SESSION_CLEAR_FAILURE'),
               false
-            )
+            ), GlobalConstant.NOTIFICATION_TYPE.ERROR
           );
         }
       );

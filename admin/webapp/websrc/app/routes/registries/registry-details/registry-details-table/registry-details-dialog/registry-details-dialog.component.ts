@@ -51,6 +51,9 @@ export class RegistryDetailsDialogComponent implements OnInit {
   @ViewChild(RemediationDetailDialogComponent)
   remediationDetails!: RemediationDetailDialogComponent;
   selectedRemediation!: Check;
+  get registryTitle() {
+    return `${this.data.selectedRegistry.registry}${this.data.image.repository}:${this.data.image.tag}`;
+  }
 
   constructor(
     public dialogRef: MatDialogRef<RegistryDetailsTableComponent>,

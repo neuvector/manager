@@ -224,7 +224,9 @@ class ClusterService()(implicit executionContext: ExecutionContext)
             Some(clusters),
             Some(fedMembershipData.use_proxy.fold("") { use_proxy =>
               use_proxy
-            })
+            }),
+            fedMembershipData.deploy_reg_scan_data,
+            fedMembershipData.deploy_repo_scan_data
           )
 
       }

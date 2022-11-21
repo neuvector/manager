@@ -2,7 +2,7 @@
   *ngIf="imageAndLayers$ | async as imageAndLayers; else loadingTemplate">
   <div class="dialog-header d-flex justify-content-between align-items-center">
     <h2 class="mb-0 h4 font-weight-bold">
-      {{ data.selectedRegistry.registry + data.image.repository }}
+      {{ registryTitle }}
     </h2>
     <button
       aria-label="Close dialog button"

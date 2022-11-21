@@ -15,6 +15,7 @@ import { UtilsService } from '@common/utils/app.utils';
 import { TranslateService } from '@ngx-translate/core';
 import { HttpResponse } from '@angular/common/http';
 import { NotificationService } from '@services/notification.service';
+import { ErrorResponse } from '@common/types';
 
 @Component({
   selector: 'app-import-file',
@@ -25,10 +26,11 @@ export class ImportFileComponent implements OnInit, OnChanges {
   @Input() importUrl: string = '';
   @Input() isStandAlone?: boolean; //Only for system config file import
   @Input() alias: string = '';
+  @Input() msg!: { success: string; error: string };
   uploader!: FileUploader;
   hasBaseDropZoneOver: boolean = false;
   hasAnotherDropZoneOver: boolean = false;
-  response: string = "";
+  response: string = '';
   percentage: number = 0;
   status: string = '';
   nvToken: string = '';
@@ -38,7 +40,7 @@ export class ImportFileComponent implements OnInit, OnChanges {
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
     private notificationService: NotificationService,
     private utils: UtilsService,
-    public translate: TranslateService
+    public translate: TranslateService,
   ) {
     this.nvToken = this.sessionStorage.get(
       GlobalConstant.SESSION_STORAGE_TOKEN
@@ -94,10 +96,20 @@ export class ImportFileComponent implements OnInit, OnChanges {
     })(self);
 
     this.uploader.onErrorItem = (function (self: any) {
-      return function (fileItem, response: string, status, headers) {
-        let errObj = JSON.parse(response);
-        self.errMsg = self.utils.getAlertifyMsg(errObj.message, self.translate.instant('setting.IMPORT_FAILED'), false);
+      return function (fileItem, response, status, headers) {
+        let resp;
+        try {
+          resp = JSON.parse(response);
+        } catch (e) {
+          resp = response;
+        }
+        self.status = self.utils.getAlertifyMsg(
+          resp.message ? resp.message : resp,
+          self.msg.error,
+          false
+        );
         self.percentage = 0;
+        self.errMsg = self.utils.getAlertifyMsg(resp.message, self.translate.instant('setting.IMPORT_FAILED'), false);
         if (!MapConstant.USER_TIMEOUT.includes(status)) {
           self.notificationService.open(
             self.errMsg,
@@ -144,6 +156,7 @@ export class ImportFileComponent implements OnInit, OnChanges {
     this.status = res.data.status;
 
     if (this.status === 'done') {
+      if (this.msg.success) this.notificationService.open(this.msg.success);
       // Alertify.set({ delay: 8000 });
       // Alertify.success(
       //   $translate.instant("admissionControl.msg.IMPORT_FINISH")
@@ -158,6 +171,10 @@ export class ImportFileComponent implements OnInit, OnChanges {
       //   $scope.status
       // );
     }
+  };
+
+  status4Tooltip = status => {
+    return status.replace(/&#34;/g, '"');
   };
 
   getImportProgressInfo = params => {
@@ -181,8 +198,8 @@ export class ImportFileComponent implements OnInit, OnChanges {
           headers: headers,
           observe: 'response',
         })
-        .subscribe(
-          (res: HttpResponse<any>) => {
+        .subscribe({
+          next: (res: HttpResponse<any>) => {
             if (res.status === 200) {
               this.finishImport(res.body);
             } else if (res.status === 206) {
@@ -197,21 +214,22 @@ export class ImportFileComponent implements OnInit, OnChanges {
               });
             }
           },
-          err => {
-            console.warn(err);
+          error: ({ error }: { error: ErrorResponse }) => {
+            console.warn(error);
             this.status = this.utils.getAlertifyMsg(
-              err,
-              this.translate.instant('admissionControl.msg.IMPORT_FAILED'),
+              error,
+              this.msg.error,
               false
             );
-            if (!MapConstant.USER_TIMEOUT.includes(err.status)) {
+            if (this.msg.error) this.notificationService.open(this.status);
+            if (!MapConstant.USER_TIMEOUT.includes(error.code)) {
               // Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
               // Alertify.error(
               //   this.status
               // );
             }
-          }
-        );
+          },
+        });
     }
   };
 

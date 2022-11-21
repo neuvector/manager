@@ -30,14 +30,16 @@
           (click)="exportCsv()">
           <em class="eos-icons icon-18">csv_file</em>
         </button>
-        <ng-container *ngIf="(eof || networkRuleErr) && !isNetworkRuleDirty()">
+        <ng-container *ngIf="!isNetworkRuleDirty()">
           <app-loading-button
             (btnClick)="refresh()"
+            [disabled]="!!(refreshing$ | async)"
             [appearance]="'mat-button'"
             [buttonClasses]="'d-flex justify-content-center align-items-center'"
             [iconClasses]="'eos-icons icon-18'"
             [iconName]="'refresh'"
             [id]="'networkRules-refresh-button'"
+            [loading]="!!(refreshing$ | async)"
             [text]="'network.REFRESH' | translate"
             [type]="'button'">
           </app-loading-button>
@@ -53,6 +55,14 @@
         <div style="height: 71px" *ngIf="source !== navSource['GROUP']">
           <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex justify-content-start align-items-center">
+              <span class="mr-2">
+                <span *ngIf="filtered">
+                  {{ 'enum.FOUND' | translate }}
+                  {{ filteredCount }}&nbsp;/&nbsp;
+                </span>
+                {{ ruleCount }}
+                {{ 'policy.COUNT_POSTFIX' | translate }}
+              </span>
               <button
                 class="mr-2"
                 mat-stroked-button
@@ -120,13 +130,12 @@
                 {{ 'policy.toolBar.SAVE' | translate }}
               </button>
               <app-quick-filter
-                *ngIf="filteredCount > 1"
                 class="pull-right"
+                (filterCountChange)="filterCountChanged($event)"
                 [gridOptions]="gridOptions"
-                [filteredCount]="filteredCount"
-                [count]="networkRules.length">
+                [showCount]="false">
               </app-quick-filter>
-              <div *ngIf="filteredCount <= 1" style="height: 71px;"></div>
+              <div *ngIf="filteredCount <= 1" style="height: 71px"></div>
               <ng-container
                 *ngIf="
                   (eof || networkRuleErr) &&
@@ -150,10 +159,7 @@
           </div>
         </div>
 
-        <div
-          *ngIf="source === navSource['GROUP']"
-          class="clearfix"
-        >
+        <div *ngIf="source === navSource['GROUP']" class="clearfix">
           <app-quick-filter
             class="pull-right"
             [gridOptions]="gridOptions"

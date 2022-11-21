@@ -20,7 +20,9 @@
       <em
         class="eos-icons icon-18 hand"
         matTooltip="{{ 'multiCluster.tips.edit' | translate }}"
-        (click)="showEditClusterDialog($event, params.data, false)"
+        (click)="showEditClusterDialog(
+        $event, params.data, params.context, false);
+        $event.stopPropagation();"
       >mode_edit</em>
     </div>
     <ng-template #isMemberCluster>
@@ -48,7 +50,7 @@
     <em
       class="eos-icons icon-18 hand"
       matTooltip="{{ 'multiCluster.tips.edit' | translate }}"
-      (click)="showEditClusterDialog($event, params.data, false)"
+      (click)="showEditClusterDialog($event, params.data, params.context, false)"
     >mode_edit</em>
     <em
       class="eos-icons icon-18 hand"

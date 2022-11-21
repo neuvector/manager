@@ -7,6 +7,16 @@
   max-height: 70vh;
 }
 
+.cveInfo {
+  position: absolute;
+  left: 200px;
+  top: 272px;
+  width: 900px;
+  height: auto;
+  max-height: 70vh;
+  max-width: 80vw;
+}
+
 ul li::marker {
   content: '>';
   color: #0e7e3c;

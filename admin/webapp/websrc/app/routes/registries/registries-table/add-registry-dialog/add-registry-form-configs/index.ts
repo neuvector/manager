@@ -55,8 +55,6 @@ export const AddRegistryFieldConfig: FormlyFieldConfig[] = [
         hideExpression: FedRegistryHideExpr,
         expressionProperties: {
           'templateOptions.disabled': 'model.isEdit',
-          'model.name':
-            "model.isEdit ? model.name : (model.isFed ? 'fed.' : null)",
         },
       },
     ],

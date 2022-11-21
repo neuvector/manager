@@ -26,10 +26,54 @@ def show_system(data):
 @click.pass_obj
 def usage(data):
     """Show system usage."""
-    usage = data.client.show("system", "usage", "usage")
+    respObj = data.client.show("system", None, "usage")
+    usage = respObj["usage"]
+    click.echo("")
 
     columns = ["reported_at", "platform", "hosts", "cores", "cvedb_version", "domains", "running_pods"]
     output.list(columns, usage)
+
+    if "telemetry_status" in respObj:
+        telemetry_status = respObj["telemetry_status"]
+        if telemetry_status["telemetry_url"] == "" and telemetry_status["telemetry_freq"] == 0:
+            click.echo("Do not report anonymous cluster data")
+            click.echo("")
+        else:
+            click.echo("Anonymous telemetry status")
+            column_map = (("current_version", "Current NeuVector Version"),
+                          ("telemetry_url", "Telemetry Server URL"),
+                          ("telemetry_freq", "Telemetry Data Post Frequency"))
+
+            min_upgrade_info = telemetry_status["min_upgrade_version"]
+            column_map += (("min_upgrade_version_info", "Minimum Version Available for Upgrade to"),)
+            telemetry_status["min_upgrade_version_info"] = " "
+            if min_upgrade_info["version"] == "":
+                telemetry_status["min_upgrade_version"] = "N/A"
+                column_map += (("min_upgrade_version", "       Version"),)
+            else:
+                telemetry_status["min_upgrade_version"] = min_upgrade_info["version"]
+                telemetry_status["min_upgrade_release_date"] = min_upgrade_info["release_date"]
+                telemetry_status["min_upgrade_tag"] = min_upgrade_info["tag"]
+                column_map += (("min_upgrade_version", "       Version"),
+                               ("min_upgrade_release_date", "       Release Date"),
+                               ("min_upgrade_tag", "       Tag"),)
+
+            max_upgrade_info = telemetry_status["max_upgrade_version"]
+            column_map += (("max_upgrade_version_info", "Maximum Version Available for Upgrade to"),)
+            telemetry_status["max_upgrade_version_info"] = " "
+            if max_upgrade_info["version"] == "":
+                telemetry_status["max_upgrade_version"] = "N/A"
+                column_map += (("max_upgrade_version", "       Version"),)
+            else:
+                telemetry_status["max_upgrade_version"] = max_upgrade_info["version"]
+                telemetry_status["max_upgrade_release_date"] = max_upgrade_info["release_date"]
+                telemetry_status["max_upgrade_tag"] = max_upgrade_info["tag"]
+                column_map += (("max_upgrade_version", "       Version"),
+                               ("max_upgrade_release_date", "       Release Date"),
+                               ("max_upgrade_tag", "       Tag"),)
+
+            column_map += (("last_telemetry_upload_time", "Last telemetry data upload time"),)
+            output.show_with_map(column_map, telemetry_status)
 
 
 @show_system.command()

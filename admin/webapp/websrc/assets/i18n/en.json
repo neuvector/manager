@@ -194,13 +194,13 @@
   },
   "login": {
     "SIGN_IN": "Sign in",
-    "SIGN_IN_LEGACY": "SIGN IN TO CONTINUE",
+    "SIGN_IN_LEGACY": "Sign in to continue",
     "USERNAME": "Username",
     "PASSWORD": "Password",
     "USER": "Enter username",
     "USER_REQUIRED": "Username is required!",
     "PASSWORD_REQUIRED": "Password is required!",
-    "LOGIN": "LOGIN",
+    "LOGIN": "Login",
     "OR": "or",
     "OKTA_LOGIN": "Login with saml",
     "OIDC_LOGIN": "Login with OpenID",
@@ -643,6 +643,7 @@
       "ADD_RULE": "Add Rule",
       "PROXY": "Proxy Container",
       "QUARANTINED": "Quarantined",
+      "QUARANTINED_GROUP": "Quarantined pods inside",
       "CONV_INTERNAL": "Internal conversation",
       "CONV": "Conversation",
       "CONV_DENY": "Conversation being blocked",
@@ -1089,7 +1090,7 @@
       "TITLE": "Vulnerability reports (Vulnerability View)",
       "TITLE2": "Vulnerability reports (Assets View)",
       "PDF_LINK": "Vulnerability View",
-      "PDF_LINK2": "Assets VIew",
+      "PDF_LINK2": "Assets View",
       "gridHeader": {
         "NAME": "Name",
         "DESC": "Description",
@@ -1276,7 +1277,7 @@
       "SOURCE": "Source",
       "VERSION": "Version",
       "FIXABLE": "Fixable",
-      "UNPATCHED": "Unpatched",
+      "UNPATCHED": "Un-patched",
       "WILL_NOT_FIX": "Will Not Fix",
       "UNAFFECTED": "Unaffected",
       "TOTAL": "Total",
@@ -1290,7 +1291,7 @@
       "GET_CVE_ERR": "Failed to get CVE report",
       "GET_LAYERS_ERR": "Failed to get layers",
       "NO_IMG": "No scanned images found. Please start scan and click refresh to get latest scan status.",
-      "NO_VULS": "No vulnerabilites found",
+      "NO_VULS": "No vulnerabilities found",
       "NO_IMAGE_FINISHED": "No images finished yet"
     }
   },
@@ -1311,7 +1312,7 @@
     "profile": {
       "DESCRIPTION": "Customize which assets have compliance templates reported for them. The default is all templates are applied to all relevant images, nodes, containers and namespaces. If namespace is customized, it will apply to all images, nodes, and containers.",
       "HIDE_SYSTEM": "Hide Compliance Checks for System Containers",
-      "RESET": "RESET TEMPLATE",
+      "RESET": "Reset template",
       "RESET_CONFIRM": "All the regulations will be set to default!",
       "COMPLIANCE_TEMPLATE": "Compliance Filter:",
       "TEMPLATES": "Templates",
@@ -2618,6 +2619,8 @@
     "USE_HTTP_PROXY":"Use http proxy configured in Settings > Configuration page",
     "USE_HTTPS_PROXY": "Use https proxy configured in Settings > Configuration page",
     "NO_PROXY": "Does not use any proxy",
+    "fed_sync_registry": "Sync the fed registry scan data to managed clusters",
+    "fed_sync_repository": "Sync the repository scan data to managed clusters",
     "tips": {
       "policy": "Manage Federated Policy",
       "demote": "Demote",
@@ -2695,7 +2698,7 @@
     },
     "prompt": {
       "remove": "Are you sure you want to remove {{ name }} from this Primary Cluster?",
-      "demote": "Are you sure you want to demote the Primary Cluster {{ name }}?",
+      "demote": "Are you sure you want to demote the cluster ( {{ name }} ) ?",
       "leave": "Are you sure you want to leave this Primary Cluster?"
     },
     "validation": {
@@ -2822,8 +2825,8 @@
     "REG_HTTP_PROXY": "Http Proxy",
     "REG_HTTPS_PROXY": "Https Proxy",
     "XFF_MATCH": "X-Forwarded-For based policy match",
-    "TELEMETRY": "Report anonymous activation data",
-    "TELEMETRY_HINT": "The controller will report activation data anonymously to assist the SUSE Rancher teams with usage information.",
+    "TELEMETRY": "Report anonymous cluster data",
+    "TELEMETRY_HINT": "The controller will report cluster data anonymously to help SUSE NeuVector teams with usage information.",
     "USERNAME": "Username",
     "PASSWORD": "Password",
     "IBM_INTEGRATE": "Integrate with IBM Security Advisor",

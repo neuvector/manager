@@ -1,4 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import {
   ErrorResponse,
   GroupMappedRole,
@@ -24,8 +32,9 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './openid-form.component.html',
   styleUrls: ['./openid-form.component.scss'],
 })
-export class OpenidFormComponent implements OnInit {
+export class OpenidFormComponent implements OnInit, OnChanges {
   @Input() openidData!: { server: ServerGetResponse; domains: string[] };
+  @Output() refresh = new EventEmitter();
   isCreated = true;
   submittingForm = false;
   groupMappedRoles: GroupMappedRole[] = [];
@@ -57,6 +66,16 @@ export class OpenidFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.openidRedirectURL = getCallbackUri('openId_auth ');
+    this.initForm();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.openidData) {
+      this.initForm();
+    }
+  }
+
+  initForm(): void {
     const openid = this.openidData.server.servers.find(
       ({ server_type }) => server_type === 'oidc'
     );
@@ -111,6 +130,7 @@ export class OpenidFormComponent implements OnInit {
     submission.subscribe({
       complete: () => {
         this.notificationService.open(this.tr.instant('ldap.SERVER_SAVED'));
+        this.refresh.emit();
       },
       error: ({ error }: { error: ErrorResponse }) => {
         this.notificationService.open(

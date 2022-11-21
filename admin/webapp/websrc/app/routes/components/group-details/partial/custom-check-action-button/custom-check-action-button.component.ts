@@ -5,6 +5,7 @@ import { ConfirmDialogComponent } from "@components/ui/confirm-dialog/confirm-di
 import { MatDialog } from "@angular/material/dialog";
 import { TranslateService } from "@ngx-translate/core";
 import { GroupsService } from '@services/groups.service';
+import { NotificationService } from '@services/notification.service';
 
 @Component({
   selector: 'app-custom-check-action-button',
@@ -18,7 +19,8 @@ export class CustomCheckActionButtonComponent implements ICellRendererAngularCom
   constructor(
     private dialog: MatDialog,
     private translate: TranslateService,
-    private groupsService: GroupsService
+    private groupsService: GroupsService,
+    private notificationService: NotificationService
   ) { }
 
   agInit(params: ICellRendererParams): void {
@@ -52,9 +54,12 @@ export class CustomCheckActionButtonComponent implements ICellRendererAngularCom
           this.groupsService.updateCustomCheckData(payload)
             .subscribe(
               response => {
+                this.notificationService.open(this.translate.instant("group.script.msg.SCRIPT_OK"));
                 this.params.context.componentParent.refresh();
               },
-              error => {}
+              error => {
+                this.notificationService.openError(error, this.translate.instant("group.script.msg.SCRIPT_NG"));
+              }
             );
         }
       }

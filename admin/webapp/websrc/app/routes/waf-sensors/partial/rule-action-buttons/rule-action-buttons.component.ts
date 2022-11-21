@@ -10,6 +10,9 @@ import { WafSensorsService } from '@services/waf-sensors.service';
 import { TranslateService } from '@ngx-translate/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ShortenFromMiddlePipe } from "@common/pipes/app.pipes";
+import { NotificationService } from '@services/notification.service';
+import { MapConstant } from '@common/constants/map.constant';
+import { UtilsService } from '@common/utils/app.utils';
 
 @Component({
   selector: 'app-rule-action-buttons',
@@ -26,7 +29,9 @@ export class RuleActionButtonsComponent implements ICellRendererAngularComp {
     private sanitizer: DomSanitizer,
     private shortenFromMiddlePipe: ShortenFromMiddlePipe,
     private wafSensorsService: WafSensorsService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private notificationService: NotificationService,
+    private utils: UtilsService
   ) { }
 
   agInit(params: ICellRendererParams): void {
@@ -76,11 +81,20 @@ export class RuleActionButtonsComponent implements ICellRendererAngularComp {
       (res) => {
         // confirm actions
         this.params.context.componentParent.refresh(this.params.context.componentParent.index4Sensor);
+        this.notificationService.open(this.translate.instant("waf.msg.REMOVE_RULE_OK"));
         // close dialog
         dialogRef.componentInstance.onCancel();
         dialogRef.componentInstance.loading = false;
       },
-      error => {}
+      error => {
+        if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
+          this.notificationService.open(
+            this.utils.getAlertifyMsg(error.error, this.translate.instant("waf.msg.REMOVE_RULE_NG"), false),
+            GlobalConstant.NOTIFICATION_TYPE.ERROR
+          );
+        }
+        dialogRef.componentInstance.loading = false;
+      }
     )
   };
 

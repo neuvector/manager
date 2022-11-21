@@ -1,14 +1,15 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ICellRendererAngularComp } from "ag-grid-angular";
+import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
-import { MatDialog } from "@angular/material/dialog";
-import { AdmissionRule, AdmRuleSubCriterion } from "@common/types/admission/admission";
-import { ConfirmDialogComponent } from "@components/ui/confirm-dialog/confirm-dialog.component";
-import { AddEditAdmissionRuleModalComponent } from "@components/admission-rules/partial/add-edit-admission-rule-modal/add-edit-admission-rule-modal.component";
-import { AdmissionRulesService } from "@common/services/admission-rules.service";
-import { GlobalConstant } from "@common/constants/global.constant";
-import { TranslateService } from "@ngx-translate/core";
+import { MatDialog } from '@angular/material/dialog';
+import { AdmissionRule, AdmRuleSubCriterion } from '@common/types/admission/admission';
+import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
+import { AddEditAdmissionRuleModalComponent } from '@components/admission-rules/partial/add-edit-admission-rule-modal/add-edit-admission-rule-modal.component';
+import { AdmissionRulesService } from '@common/services/admission-rules.service';
+import { GlobalConstant } from '@common/constants/global.constant';
+import { TranslateService } from '@ngx-translate/core';
 import { switchMap } from 'rxjs/operators';
+import { NotificationService } from '@services/notification.service';
 
 @Component({
   selector: 'app-action-buttons',
@@ -26,7 +27,8 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
   constructor(
     private dialog: MatDialog,
     private translate: TranslateService,
-    public admissionRulesService: AdmissionRulesService
+    public admissionRulesService: AdmissionRulesService,
+    private notificationService: NotificationService
   ) { }
 
   agInit(params: ICellRendererParams): void {
@@ -43,7 +45,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
 
   editAdmissionRule = (event, rule) => {
     const addEditDialogRef = this.dialog.open(AddEditAdmissionRuleModalComponent, {
-      width: "80%",
+      width: '80%',
       data: {
         opType: GlobalConstant.MODAL_OP.EDIT,
         admissionOptions: this.params.context.componentParent.admissionOptions,
@@ -59,7 +61,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
 
   viewRuleItem = (event, rule) => {
     const addEditDialogRef = this.dialog.open(AddEditAdmissionRuleModalComponent, {
-      width: "80%",
+      width: '80%',
       data: {
         opType: GlobalConstant.MODAL_OP.VIEW,
         admissionOptions: this.params.context.componentParent.admissionOptions,
@@ -77,28 +79,28 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
     let selectedRule = JSON.parse(JSON.stringify(rule));
     selectedRule.disable = disable;
     if (selectedRule.critical) {
-      let criteriaValueStr = selectedRule.criteria.map((value: AdmRuleSubCriterion) => value.value).join(",").toLowerCase();
-      let namespace = "";
-      if (criteriaValueStr.includes("system") || criteriaValueStr.includes("kube")) {
-        namespace = "system";
-      } else if (criteriaValueStr.includes("neuvector")) {
-        namespace = "NeuVector";
+      let criteriaValueStr = selectedRule.criteria.map((value: AdmRuleSubCriterion) => value.value).join(',').toLowerCase();
+      let namespace = '';
+      if (criteriaValueStr.includes('system') || criteriaValueStr.includes('kube')) {
+        namespace = 'system';
+      } else if (criteriaValueStr.includes('neuvector')) {
+        namespace = 'NeuVector';
       }
       let message = selectedRule.disable ?
       this.translate.instant(
-          "admissionControl.msg.DISABLE_CONFIRM_DEFAULT",
+          'admissionControl.msg.DISABLE_CONFIRM_DEFAULT',
           {
             namespace: namespace
           }
         )
         : this.translate.instant(
-          "admissionControl.msg.ENABLE_CONFIRM_DEFAULT",
+          'admissionControl.msg.ENABLE_CONFIRM_DEFAULT',
           {
             namespace: namespace
           }
         );
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-        maxWidth: "700px",
+        maxWidth: '700px',
         data: {
           message: message
         },
@@ -110,29 +112,35 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
       })).subscribe(
         (res) => {
           console.log(res)
+          this.alertOnSuccess(selectedRule.disable, rule.id);
           // confirm actions
           this.params.context.componentParent.getAdmissionStateAndRules();
           // close dialog
           dialogRef.componentInstance.onCancel();
           dialogRef.componentInstance.loading = false;
         },
-        error => {}
+        error => {
+          this.alertOnError(selectedRule.disable, error);
+        }
       );
     } else {
       this.admissionRulesService.toggleAdmissionRules(selectedRule).subscribe(
         response => {
+          this.alertOnSuccess(selectedRule.disable, rule.id);
           this.params.context.componentParent.getAdmissionStateAndRules();
         },
-        error => {}
+        error => {
+          this.alertOnError(selectedRule.disable, error);
+        }
       );
     }
   };
 
   deleteRuleItem = (event, rule) => {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      maxWidth: "700px",
+      maxWidth: '700px',
       data: {
-        message: `${this.translate.instant("policy.dialog.REMOVE")}? - ID: ${rule.id}`
+        message: `${this.translate.instant('policy.dialog.REMOVE')}? - ID: ${rule.id}`
       },
       disableClose: true
     });
@@ -142,11 +150,29 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
       (res) => {
         // confirm actions
         this.params.context.componentParent.getAdmissionStateAndRules();
+        this.notificationService.open(this.translate.instant("admissionControl.msg.REMOVE_OK"));
         // close dialog
         dialogRef.componentInstance.onCancel();
         dialogRef.componentInstance.loading = false;
       },
-      error => {}
+      error => {
+        this.notificationService.openError(error, this.translate.instant("admissionControl.msg.REMOVE_NG"));
+        dialogRef.componentInstance.loading = false;
+      }
     )
+  };
+
+  private alertOnSuccess = (isDisabled, ruleId) => {
+    let msgTitle = isDisabled ?
+      `${this.translate.instant('admissionControl.msg.DISABLE_OK')} - ID: ${ruleId}` :
+      `${this.translate.instant('admissionControl.msg.ENABLE_OK')} - ID: ${ruleId}`;
+    this.notificationService.open(msgTitle);
+  };
+
+  private alertOnError = (isDisabled, error) => {
+    let msgTitle = isDisabled ?
+      this.translate.instant('admissionControl.msg.DISABLE_NG') :
+      this.translate.instant('admissionControl.msg.ENABLE_NG');
+    this.notificationService.openError(error, msgTitle);
   };
 }

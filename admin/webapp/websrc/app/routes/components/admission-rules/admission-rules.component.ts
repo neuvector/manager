@@ -17,7 +17,9 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { TranslateService } from '@ngx-translate/core';
 import { MultiClusterService } from '@services/multi-cluster.service';
-import { UtilsService } from '@common/utils/app.utils';
+import { UtilsService } from  '@common/utils/app.utils';
+import { NotificationService } from '@services/notification.service';
+import { MapConstant } from '@common/constants/map.constant';
 import { Subject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
@@ -66,6 +68,7 @@ export class AdmissionRulesComponent implements OnInit {
     private authUtilsService: AuthUtilsService,
     private translate: TranslateService,
     private multiClusterService: MultiClusterService,
+    private notificationService: NotificationService,
     private utils: UtilsService
   ) {
     this.w = GlobalVariable.window;
@@ -141,8 +144,8 @@ export class AdmissionRulesComponent implements OnInit {
               id: -1,
               comment:
                 this.default_action === 'allow'
-                  ? "Allow deployments that don't match any of above rules."
-                  : "Deny deployments that don't match any of above rules.",
+                  ? 'Allow deployments that don\'t match any of above rules.'
+                  : 'Deny deployments that don\'t match any of above rules.',
               criteria: [],
               critical: true,
               category: 'Global action',
@@ -160,10 +163,12 @@ export class AdmissionRulesComponent implements OnInit {
             this.stateWarning = this.translate.instant(
               'admissionControl.CAN_NOT_CONFIG'
             );
+            this.stateWarning = this.translate.instant('admissionControl.CAN_NOT_CONFIG');
           } else if (!this.isK8s) {
             this.stateWarning = this.translate.instant(
               'admissionControl.NOT_SUPPORT'
             );
+            this.stateWarning = this.translate.instant('admissionControl.NOT_SUPPORT');
           }
         },
         error => {
@@ -291,9 +296,37 @@ export class AdmissionRulesComponent implements OnInit {
       .updateAdmissionState(this.admissionStateRec)
       .subscribe(
         response => {
-          this.getAdmissionState();
+          let msg = this.globalStatus ?
+            this.translate.instant("admissionControl.msg.G_ENABLE_OK") :
+            this.translate.instant("admissionControl.msg.G_DISABLE_OK");
+          this.notificationService.open(msg);
+          setTimeout(() => {
+            this.getAdmissionState();
+          }, 500);
         },
-        error => {}
+        error => {
+          if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
+            let errMsg = '';
+            if (
+              error.status === GlobalConstant.STATUS_INTERNAL_SERVER_ERR &&
+              error.error.code === GlobalConstant.ADMISSION.INTERNAL_ERR_CODE.CONFIG_K8S_FAIL
+            ) {
+              errMsg = this.translate.instant(
+                "admissionControl.msg.CONFIG_K8S_FAIL"
+              );
+            } else {
+              errMsg = error.error;
+            }
+            let errTitle = this.globalStatus ?
+              this.translate.instant("admissionControl.msg.G_ENABLE_NG") :
+              this.translate.instant("admissionControl.msg.G_DISABLE_NG");
+            this.notificationService.open(
+              this.utils.getAlertifyMsg(errMsg, errTitle, false),
+              GlobalConstant.NOTIFICATION_TYPE.ERROR
+            );
+            this.globalStatus = !this.globalStatus;
+          }
+        }
       );
   };
 
@@ -303,9 +336,31 @@ export class AdmissionRulesComponent implements OnInit {
       .updateAdmissionState(this.admissionStateRec)
       .subscribe(
         response => {
-          this.getAdmissionState();
+          this.notificationService.open(this.translate.instant("admissionControl.msg.MODE_SWITCH_OK"));
+          setTimeout(() => {
+            this.getAdmissionState();
+          }, 500);
         },
-        error => {}
+        error => {
+          if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
+            let errMsg = '';
+            if (
+              error.status === GlobalConstant.STATUS_INTERNAL_SERVER_ERR &&
+              error.error.code === GlobalConstant.ADMISSION.INTERNAL_ERR_CODE.CONFIG_K8S_FAIL
+            ) {
+              errMsg = this.translate.instant(
+                "admissionControl.msg.CONFIG_K8S_FAIL"
+              );
+            } else {
+              errMsg = error.error;
+            }
+            this.notificationService.open(
+              this.utils.getAlertifyMsg(errMsg, this.translate.instant("admissionControl.msg.MODE_SWITCH_NG"), false),
+              GlobalConstant.NOTIFICATION_TYPE.ERROR
+            );
+            this.mode = this.mode === 'monitor' ? 'protect' : 'monitor';
+          }
+        }
       );
   };
 
@@ -316,14 +371,23 @@ export class AdmissionRulesComponent implements OnInit {
       },
     };
 
-    this.admissionRulesService.updateRulePromotion(payload).subscribe({
-      next: res => {
-        setTimeout(() => {
-          this.refresh();
-        }, 1000);
-      },
-      error: error => {},
-    });
+    this.admissionRulesService.updateRulePromotion(payload)
+      .subscribe({
+        next: res => {
+          this.notificationService.open(this.translate.instant("policy.message.PROMOTE_OK"));
+          setTimeout(() => {
+            this.refresh();
+          }, 1000);
+        },
+        error: error => {
+          if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
+            this.notificationService.open(
+              this.utils.getAlertifyMsg(error.error, this.translate.instant("policy.message.PROMOTE_NG"), false),
+              GlobalConstant.NOTIFICATION_TYPE.ERROR
+            );
+          }
+        }
+      });
   };
 
   showGlobalActions = event => {};

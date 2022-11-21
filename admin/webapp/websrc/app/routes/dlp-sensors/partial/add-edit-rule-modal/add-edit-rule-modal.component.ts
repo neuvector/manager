@@ -6,6 +6,9 @@ import { DlpSensorsService } from '@services/dlp-sensors.service';
 import { TranslateService } from '@ngx-translate/core';
 import { DlpPattern } from '@common/types';
 import { AuthUtilsService } from '@common/utils/auth.utils';
+import { NotificationService } from '@services/notification.service';
+import { MapConstant } from '@common/constants/map.constant';
+import { UtilsService } from '@common/utils/app.utils';
 import {
   ColDef,
   GridApi,
@@ -41,7 +44,9 @@ export class AddEditRuleModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dlpSensorsService: DlpSensorsService,
     private translate: TranslateService,
-    private authUtilsService: AuthUtilsService
+    private authUtilsService: AuthUtilsService,
+    private notificationService: NotificationService,
+    private utils: UtilsService
   ) { }
 
   ngOnInit(): void {
@@ -147,12 +152,21 @@ export class AddEditRuleModalComponent implements OnInit {
     this.dlpSensorsService.updateDlpSensorData(payload, GlobalConstant.MODAL_OP.EDIT)
       .subscribe(
         response => {
+          this.notificationService.open(this.translate.instant("dlp.msg.UPDATE_RULE_OK"));
           setTimeout(() => {
             this.data.refresh(this.data.index4Sensor);
           }, 2000);
           this.dialogRef.close(true);
         },
-        error => {}
+        error => {
+          if (this.data.opType === GlobalConstant.MODAL_OP.ADD) this.data.sensor.rules.pop();
+          if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
+            this.notificationService.open(
+              this.utils.getAlertifyMsg(error.error, this.translate.instant("dlp.msg.UPDATE_RULE_NG"), false),
+              GlobalConstant.NOTIFICATION_TYPE.ERROR
+            );
+          }
+        }
       );
   };
 

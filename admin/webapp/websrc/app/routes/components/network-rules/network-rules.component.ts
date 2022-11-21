@@ -33,6 +33,7 @@ import { GroupsService } from '@services/groups.service';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { Subject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
+import { NotificationService } from '@services/notification.service';
 
 const READONLY_RULE_MODIFIED = 46;
 const UNPROMOTABLE_ENDPOINT_PATTERN = new RegExp(/^Host\:*|^Workload\:*/);
@@ -67,10 +68,12 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   isPrinting: boolean = false;
   isIncludingCRD: boolean = false;
   isIncludingFed: boolean = false;
+  readonlyNotificationMsgs: any;
+  ruleCount: number = 0;
   private w: any;
   private switchClusterSubscription;
   @ViewChild('networkRulePrintableReport') printableReportView!: ElementRef;
-  ruleCount: number = 0;
+  @ViewChild('readonlyNotification') notificationTemplate;
 
   constructor(
     private networkRulesService: NetworkRulesService,
@@ -81,7 +84,8 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
     private datePipe: DatePipe,
     private utils: UtilsService,
     private multiClusterService: MultiClusterService,
-    public router: Router
+    public router: Router,
+    private notificationService: NotificationService
   ) {
     this.w = GlobalVariable.window;
   }
@@ -248,20 +252,28 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
     };
     this.networkRulesService.promoteNetworkRulesData(payload).subscribe(
       res => {
+        this.notificationService.open(this.translate.instant("policy.message.PROMOTE_OK"));
         setTimeout(() => {
           this.refresh();
         }, 2000);
       },
-      err => {}
+      error => {
+        this.notificationService.openError(error, this.translate.instant("policy.message.PROMOTE_NG"));
+      }
     );
   };
 
   removeNetworkRules = () => {
-    let ids = this.selectedNetworkRules.map(rule => rule.id);
+    let ids = this.selectedNetworkRules.map(rule => rule.id).filter(id => id !== -1);
+    let idsMsg = ids.map(id => {
+      return id >= GlobalConstant.NEW_ID_SEED.NETWORK_RULE
+        ? `New-${id - GlobalConstant.NEW_ID_SEED.NETWORK_RULE + 1}`
+        : id;
+    })
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '700px',
       data: {
-        message: `${this.translate.instant('policy.dialog.REMOVE')} ${ids.join(
+        message: `${this.translate.instant('policy.dialog.REMOVE')} ${idsMsg.join(
           ', '
         )}`,
         isSync: true,
@@ -354,6 +366,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(
         res => {
           console.log(res);
+          this.notificationService.open(this.translate.instant("policy.dialog.content.SUBMIT_OK"));
           // close dialog
           dialogRef.componentInstance.onCancel();
           dialogRef.componentInstance.loading = false;
@@ -365,23 +378,26 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
         },
         error => {
           console.log('error', error);
-          if (MapConstant.USER_TIMEOUT.indexOf(error.status) < 0) {
+          if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
             if (
               error.status === 400 &&
               error.error &&
               error.error.code === READONLY_RULE_MODIFIED
             ) {
-              // Alertify.alert(
-              //   `${Utils.getAlertifyMsg(error, $translate.instant("policy.dialog.content.SUBMIT_NG"), true)}
-              //   <div>Read-only rule ID is: ${error.data.read_only_rule_ids.join(", ")}</div>
-              //   <div>You can click revert button on the rule to rollback your change.</div>`
-              // );
+              this.notificationService.open(
+                `${this.utils.getAlertifyMsg(error, this.translate.instant("policy.dialog.content.SUBMIT_NG"), false)} -
+                Read-only rule ID is: ${error.error.read_only_rule_ids.join(", ")}.\n
+                You can click revert button on the rule to rollback your change.`,
+                GlobalConstant.NOTIFICATION_TYPE.ERROR
+              );
+              // this.readonlyNotificationMsgs =
+              //   `${this.utils.getAlertifyMsg(error, this.translate.instant("policy.dialog.content.SUBMIT_NG"), false)}<br/>
+              //   Read-only rule ID is: ${error.error.read_only_rule_ids.join(", ")}<br/>
+              //   You can click revert button on the rule to rollback your change.`;
+              // this.notificationService.openHtmlError(this.readonlyNotificationMsgs, this.notificationTemplate);
               this.changeState4ReadOnlyRules(error.error.read_only_rule_ids);
             } else {
-              // Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
-              // Alertify.error(
-              //   Utils.getAlertifyMsg(error, $translate.instant("policy.dialog.content.SUBMIT_NG"), false)
-              // );
+              this.notificationService.openError(error, this.translate.instant("policy.dialog.content.SUBMIT_NG"));
             }
             dialogRef.componentInstance.onCancel();
             dialogRef.componentInstance.loading = false;
@@ -531,7 +547,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   private maskingDeletedRows = (ids: Array<number>) => {
     let index = 0;
     this.networkRules = this.networkRules.map(rule => {
-      if (rule.id === ids[index]) {
+      if (rule.id === ids[index] && rule.id !== -1) {
         rule.remove = true;
         index++;
       }

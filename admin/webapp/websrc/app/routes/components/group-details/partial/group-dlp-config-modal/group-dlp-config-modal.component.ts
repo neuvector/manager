@@ -3,6 +3,8 @@ import { MatDialogRef,  MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GridOptions } from 'ag-grid-community';
 import { GroupsService } from '@services/groups.service';
 import { DlpSensor } from '@common/types';
+import { NotificationService } from '@services/notification.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-group-dlp-config-modal',
@@ -21,7 +23,9 @@ export class GroupDlpConfigModalComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<GroupDlpConfigModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private groupsService: GroupsService
+    private groupsService: GroupsService,
+    private notificationService: NotificationService,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -79,12 +83,15 @@ export class GroupDlpConfigModalComponent implements OnInit {
     this.groupsService.updateGroupDlpSensorData(payload)
       .subscribe(
         response => {
+          this.notificationService.open(this.translate.instant("group.dlp.msg.SETTING_OK"));
           setTimeout(() => {
             this.data.refresh();
           }, 1000);
           this.dialogRef.close(true);
         },
-        error => {}
+        error => {
+          this.notificationService.openError(error, this.translate.instant("group.dlp.msg.SETTING_NG"));
+        }
       );
   };
 

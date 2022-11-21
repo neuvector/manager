@@ -46,14 +46,14 @@
             </td>
             <td class="text-center">
               <span *ngIf="item.isSuccess"
-                ><i class="glyphicon glyphicon-ok"></i
+                ><i class="eos-icons icon-18 text-success">download_done</i
               ></span>
               <span *ngIf="item.isCancel"
-                ><i class="glyphicon glyphicon-ban-circle"></i
+                ><i class="eos-icons icon-18 text-info">folder_off</i
               ></span>
-              <span *ngIf="item.isError"
-                ><i class="glyphicon glyphicon-remove"></i
-              ></span>
+              <span *ngIf="item.isError">
+                <i class="eos-icons icon-18 text-danger" matTooltip="{{ errMsg }}">close</i>
+              </span>
             </td>
             <td nowrap>
               <button

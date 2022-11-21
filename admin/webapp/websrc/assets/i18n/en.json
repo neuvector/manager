@@ -1952,11 +1952,24 @@
       "OK_MSG": "Group is updated successfully!"
     },
     "profile": {
-      "COUNT_POSTFIX": "process profiles rules found"
+      "COUNT_POSTFIX": "process profiles rules found",
+      "REMOVE_OK": "Your process profile rule has been removed.",
+      "REMOVE_NG": "Error happened when removing process profile rule",
+      "ADD_OK": "Your process profile rule has been added.",
+      "ADD_NG": "Error happened when adding process profile rule",
+      "EDIT_OK": "Your process profile rule has been modified.",
+      "EDIT_NG": "Error happened when editing process profile rule"
     },
     "file": {
       "COUNT_POSTFIX": "file access rules found",
-      "RULE_SAMPLE": "Sample: /dir/xxx, /dir/xxx.*, /dir/*.xxx, /dir/*/abc/* (Not support: [], () and regexp)"
+      "RULE_SAMPLE": "Sample: /dir/xxx, /dir/xxx.*, /dir/*.xxx, /dir/*/abc/* (不支持: [], () and regexp)",
+      "REMOVE_CONFIRM": "Will you remove file access rule? - Name:",
+      "REMOVE_OK": "Your file access rule has been removed.",
+      "REMOVE_NG": "Error happened when removing file acess rule",
+      "ADD_OK": "Your file access rule has been added.",
+      "ADD_NG": "Error happened when adding file acess rule",
+      "EDIT_OK": "Your file access rule has been modified.",
+      "EDIT_NG": "Error happened when editing file acess rule"
     },
     "dlp": {
       "TITLE": "DLP",
@@ -2072,16 +2085,20 @@
       "INSERT_OK": "Added a sensor successfully!",
       "INSERT_NG": "Error happens when adding sensor!",
       "INSERT_RULE_OK": "Added a rule successfully!",
-      "INSERT_RULE_NG": "Error happens when adding rule!",
+      "INSERT_RULE_NG": "Error happens when adding rule",
       "UPDATE_OK": "Updated the sensor successfully",
-      "UPDATE_NG": "Error happens when updating sensor!",
+      "UPDATE_NG": "Error happens when updating sensor",
       "UPDATE_RULE_OK": "Updated the rule successfully",
-      "UPDATE_RULE_NG": "Error happens when updating rule!",
+      "UPDATE_RULE_NG": "Error happens when updating rule",
       "REMOVE_CFM": "Are you sure you want to delete? - ",
       "REMOVE_OK": "Removed a sensor successfully!",
       "REMOVE_NG": "Error happens when removing sensor!",
       "REMOVE_RULE_OK": "Removed a rule successfully!",
       "REMOVE_RULE_NG": "Error happens when removing rule!",
+      "EXPORT_SENSOR_OK": "Sensors are exported successfully!",
+      "EXPORT_SENSOR_NG": "Error happens when exporting sensors",
+      "IMPORT_FINISH": "Sensors are imported successfully!",
+      "IMPORT_FAILED": "Error happens when importing sensors",
       "MATCH": "Matched",
       "MISMATCH": "Not matched",
       "ADD_PATTERN_NG": "Maximum amount of patterns is 16",
@@ -2167,7 +2184,8 @@
       "MISMATCH": "Not matched",
       "ADD_PATTERN_NG": "Maximum amount of patterns is 16",
       "EXISTING_PATTERN_NG": "This pattern is existing",
-      "RECIPROCAL_PATTERN_NG": "There is reciprocal pattern against added pattern in the same context"
+      "RECIPROCAL_PATTERN_NG": "There is reciprocal pattern against added pattern in the same context",
+      "SENSOR_NAME_REQUIRED": "Sensor name is required!"
     },
     "TIP": {
       "EDIT_SENSOR": "Edit Sensor",

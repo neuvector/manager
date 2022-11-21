@@ -49,7 +49,7 @@
               <div class="mat-small align-self-center">{{ percentage }}%</div>
             </td>
             <td class="text-center">
-              <span *ngIf="status === 'done'">
+              <span *ngIf="status === 'done' || (item.isSuccess && status !== 'preparing' && status !== 'importing')">
                 <i class="fa fa-check text-success"></i>
               </span>
               <span *ngIf="status === 'preparing'">
@@ -61,8 +61,12 @@
               <span *ngIf="item.isCancel">
                 <i class="fa fa-ban"></i>
               </span>
+              <span *ngIf="item.isError && !status">
+                <i class="eos-icons icon-18 text-danger" matTooltip="{{ errMsg }}">close</i>
+              </span>
               <span
                 *ngIf="
+                  !item.isError &&
                   status &&
                   !['', 'preparing', 'importing', 'done'].includes(status)
                 ">

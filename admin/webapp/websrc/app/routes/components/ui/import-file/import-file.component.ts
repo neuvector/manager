@@ -34,12 +34,13 @@ export class ImportFileComponent implements OnInit, OnChanges {
   percentage: number = 0;
   status: string = '';
   nvToken: string = '';
+  errMsg: string = '';
 
   constructor(
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
+    private notificationService: NotificationService,
     private utils: UtilsService,
     public translate: TranslateService,
-    private notificationService: NotificationService
   ) {
     this.nvToken = this.sessionStorage.get(
       GlobalConstant.SESSION_STORAGE_TOKEN
@@ -107,13 +108,16 @@ export class ImportFileComponent implements OnInit, OnChanges {
           self.msg.error,
           false
         );
-        if (self.msg.error) self.notificationService.open(self.status);
+        self.percentage = 0;
+        self.errMsg = self.utils.getAlertifyMsg(resp.message, self.translate.instant('setting.IMPORT_FAILED'), false);
+        if (!MapConstant.USER_TIMEOUT.includes(status)) {
+          self.notificationService.open(
+            self.errMsg,
+            GlobalConstant.NOTIFICATION_TYPE.ERROR
+          );
+        }
       };
     })(self);
-
-    // this.uploader.response.subscribe( res => {
-    //   console.log(res)
-    // } );
   }
 
   ngOnChanges(changes: SimpleChanges): void {

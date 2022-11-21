@@ -1953,10 +1953,23 @@
     },
     "profile": {
       "COUNT_POSTFIX": "个进程规则",
-      "RULE_SAMPLE": "例子: /dir/xxx, /dir/xxx.*, /dir/*.xxx, /dir/*/abc/* (不支持: [], () and regexp)"
+      "REMOVE_OK": "您的进程规则已经被删除.",
+      "REMOVE_NG": "删除进程规则时发生错误",
+      "ADD_OK": "您的进程规则已经被添加.",
+      "ADD_NG": "添加进程规则时发生错误",
+      "EDIT_OK": "您的进程规则已经被修改.",
+      "EDIT_NG": "编辑进程规则时发生错误"
     },
     "file": {
-      "COUNT_POSTFIX": "个文件访问规则"
+      "COUNT_POSTFIX": "个文件访问规则",
+      "RULE_SAMPLE": "例子: /dir/xxx, /dir/xxx.*, /dir/*.xxx, /dir/*/abc/* (不支持: [], () and regexp)",
+      "REMOVE_CONFIRM": "您要删除文件访问规则吗？- 名称:",
+      "REMOVE_OK": "您的文件访问规则已经被删除.",
+      "REMOVE_NG": "删除文件访问规则时发生错误",
+      "ADD_OK": "您的文件访问规则已经被添加.",
+      "ADD_NG": "添加文件访问规则时发生错误",
+      "EDIT_OK": "您的文件访问规则已经被修改.",
+      "EDIT_NG": "编辑文件访问规则时发生错误"
     },
     "dlp": {
       "TITLE": "DLP",
@@ -2163,11 +2176,16 @@
       "REMOVE_NG": "删除检测器时发生错误!",
       "REMOVE_RULE_OK": "成功删除规则!",
       "REMOVE_RULE_NG": "删除规则时发生错误!",
+      "EXPORT_SENSOR_OK": "检测器成功导出!",
+      "EXPORT_SENSOR_NG": "检测器导出时发生错误",
+      "IMPORT_FINISH": "检测器成功导入!",
+      "IMPORT_FAILED": "检测器导入时发生错误",
       "MATCH": "匹配",
       "MISMATCH": "不匹配",
       "ADD_PATTERN_NG": "正则形式的最大数量为16",
       "EXISTING_PATTERN_NG": "此正则形式已存在",
-      "RECIPROCAL_PATTERN_NG": "在同一语境下有与添加的正则形式互逆的表达式"
+      "RECIPROCAL_PATTERN_NG": "在同一语境下有与添加的正则形式互逆的表达式",
+      "SENSOR_NAME_REQUIRED": "需填写检测器名称"
     },
     "TIP": {
       "EDIT_SENSOR": "编辑检测器",

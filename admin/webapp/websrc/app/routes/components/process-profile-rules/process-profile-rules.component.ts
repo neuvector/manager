@@ -16,6 +16,8 @@ import { AddEditProcessProfileRuleModalComponent } from './partial/add-edit-proc
 import { GlobalVariable } from '@common/variables/global.variable';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { ConfirmDialogComponent } from "@components/ui/confirm-dialog/confirm-dialog.component";
+import { switchMap } from 'rxjs/operators';
+import { NotificationService } from '@services/notification.service';
 
 @Component({
   selector: 'app-process-profile-rules',
@@ -49,7 +51,8 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
     private authUtilsService: AuthUtilsService,
     private translate: TranslateService,
     private utils: UtilsService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private notificationService: NotificationService
   ) {
     this.w = GlobalVariable.window;
   }
@@ -194,47 +197,42 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
   };
 
   removeProfile = data => {
+
+    let message = `${this.translate.instant('service.PROFILE_DELETE_CONFIRMATION')} - ${data.name}`;
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      maxWidth: "700px",
+      maxWidth: '700px',
       data: {
-        message: this.translate.instant("service.PROFILE_DELETE_CONFIRMATION"),
-        isSync: true
+        message: message
       },
       disableClose: true
     });
-    dialogRef.afterClosed().subscribe(
-      result => {
-        if (result) {
-          this.processProfileRulesService
-            .updateProcessProfileRules(
-              GlobalConstant.CRUD.D,
-              this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-                ? data.group
-                : this.groupName,
-              {},
-              data,
-              this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-                ? GlobalConstant.SCOPE.FED
-                : GlobalConstant.SCOPE.LOCAL
-            )
-            .subscribe(
-              () => {
-                setTimeout(() => {
-                  this.getProcessProfileRules(this.groupName);
-                }, 1000);
-              },
-              err => {
-                if (
-                  err.status !== GlobalConstant.STATUS_AUTH_TIMEOUT &&
-                  err.status !== GlobalConstant.STATUS_UNAUTH &&
-                  err.status !== GlobalConstant.STATUS_SERVER_UNAVAILABLE
-                ) {
-                  let message = this.utils.getErrorMessage(err);
-                  //Todo error handling
-                }
-              }
-            );
-        }
+    dialogRef.componentInstance.confirm.pipe(switchMap(() => {
+      return this.processProfileRulesService
+        .updateProcessProfileRules(
+          GlobalConstant.CRUD.D,
+          this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+            ? data.group
+            : this.groupName,
+          {},
+          data,
+          this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+            ? GlobalConstant.SCOPE.FED
+            : GlobalConstant.SCOPE.LOCAL
+        );
+    })).subscribe(
+      (res) => {
+        // confirm actions
+        this.notificationService.open(this.translate.instant('group.profile.REMOVE_OK'))
+        setTimeout(() => {
+          this.getProcessProfileRules(this.groupName);
+        }, 1000);
+        // close dialog
+        dialogRef.componentInstance.onCancel();
+        dialogRef.componentInstance.loading = false;
+      },
+      error => {
+        this.notificationService.openError(error, this.translate.instant('group.profile.REMOVE_NG'))
+        dialogRef.componentInstance.loading = false;
       }
     );
   };

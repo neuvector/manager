@@ -62,7 +62,8 @@ export class NetworkRulesService {
               params.data.disable &&
               params.data.cfg_type === GlobalConstant.CFG_TYPE.FED
             ) &&
-            isWriteNetworkRuleAuthorized
+            isWriteNetworkRuleAuthorized &&
+            source !== GlobalConstant.NAV_SOURCE.GROUP
           );
         }
       }
@@ -186,8 +187,8 @@ export class NetworkRulesService {
     const columnDefs = [
       {
         headerName: this.translate.instant('policy.gridHeader.ID'),
-        headerCheckboxSelection: isWriteNetworkRuleAuthorized,
-        headerCheckboxSelectionFilteredOnly: isWriteNetworkRuleAuthorized,
+        headerCheckboxSelection: isWriteNetworkRuleAuthorized && source !== GlobalConstant.NAV_SOURCE.GROUP,
+        headerCheckboxSelectionFilteredOnly: isWriteNetworkRuleAuthorized && source !== GlobalConstant.NAV_SOURCE.GROUP,
         field: 'id',
         checkboxSelection: checkboxSelectionFunc,
         cellRenderer: IdCellComponent,

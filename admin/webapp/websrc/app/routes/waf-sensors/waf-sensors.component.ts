@@ -15,6 +15,7 @@ import { saveAs } from 'file-saver';
 import { ImportFileModalComponent } from '@components/ui/import-file-modal/import-file-modal.component';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { TranslateService } from '@ngx-translate/core';
+import { NotificationService } from '@services/notification.service';
 
 @Component({
   selector: 'app-waf-sensors',
@@ -45,7 +46,8 @@ export class WafSensorsComponent implements OnInit {
     private authUtilsService: AuthUtilsService,
     private utilsService: UtilsService,
     private multiClusterService: MultiClusterService,
-    private tr: TranslateService
+    private notificationService: NotificationService,
+    private translate: TranslateService
   ) {
     this.$win = $(GlobalVariable.window);
   }
@@ -114,8 +116,8 @@ export class WafSensorsComponent implements OnInit {
       data: {
         importUrl: PathConstant.WAF_SENSORS_IMPORT_URL,
         importMsg: {
-          success: this.tr.instant('waf.msg.IMPORT_FINISH'),
-          error: this.tr.instant('waf.msg.IMPORT_FAILED'),
+          success: this.translate.instant('waf.msg.IMPORT_FINISH'),
+          error: this.translate.instant('waf.msg.IMPORT_FAILED'),
         },
       },
       disableClose: true,
@@ -131,25 +133,25 @@ export class WafSensorsComponent implements OnInit {
     let payload = {
       names: this.selectedSensors.map(sensor => sensor.name),
     };
-    this.wafSensorsService.getWafSensorConfigFileData(payload).subscribe(
-      response => {
-        let fileName = this.utilsService.getExportedFileName(response);
-        let blob = new Blob([response.body || ''], {
-          type: 'text/plain;charset=utf-8',
-        });
-        saveAs(blob, fileName);
-        // Alertify.set({ delay: ALERTIFY_SUCCEED_DELAY });
-        // Alertify.success($translate.instant("waf.msg.EXPORT_SENSOR_OK"));
-      },
-      error => {
-        if (MapConstant.USER_TIMEOUT.indexOf(error.status) < 0) {
-          // Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
-          // Alertify.error(
-          //   Utils.getAlertifyMsg(error, $translate.instant("waf.msg.EXPORT_SENSOR_NG"), false)
-          // );
+    this.wafSensorsService.getWafSensorConfigFileData(payload)
+      .subscribe(
+        response => {
+          let fileName = this.utilsService.getExportedFileName(response);
+          let blob = new Blob([response.body || ''], {
+            type: 'text/plain;charset=utf-8'
+          });
+          saveAs(blob, fileName);
+          this.notificationService.open(this.translate.instant('waf.msg.EXPORT_SENSOR_OK'));
+        },
+        error => {
+          if (MapConstant.USER_TIMEOUT.includes(error.status)) {
+            this.notificationService.open(
+              this.utilsService.getAlertifyMsg(error.error, this.translate.instant('waf.msg.EXPORT_SENSOR_NG'), false),
+              GlobalConstant.NOTIFICATION_TYPE.ERROR
+            );
+          }
         }
-      }
-    );
+      );
   };
 
   private getWafSensors = (index: number) => {

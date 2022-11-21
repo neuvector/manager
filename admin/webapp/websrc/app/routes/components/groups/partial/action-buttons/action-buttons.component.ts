@@ -6,11 +6,12 @@ import { Group } from '@common/types';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { MapConstant } from '@common/constants/map.constant'
 import { AddEditGroupModalComponent } from '../add-edit-group-modal/add-edit-group-modal.component';
-import { ConfirmDialogComponent } from "@components/ui/confirm-dialog/confirm-dialog.component";
+import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { switchMap } from 'rxjs/operators';
 import { GroupsService } from '@services/groups.service';
+import { NotificationService } from '@services/notification.service';
 
 @Component({
   selector: 'app-action-buttons',
@@ -29,6 +30,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
     private sanitizer: DomSanitizer,
     private translate: TranslateService,
     private groupsService: GroupsService,
+    private notificationService: NotificationService
   ) { }
 
   agInit(params: ICellRendererParams): void {
@@ -51,7 +53,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
 
   editGroup = (group: Group) => {
     const addEditDialogRef = this.dialog.open(AddEditGroupModalComponent, {
-      width: "80%",
+      width: '80%',
       data: {
         opType: GlobalConstant.MODAL_OP.EDIT,
         source: this.params.context.componentParent.source,
@@ -69,7 +71,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
 
   viewGroup = (group: Group) => {
     const addEditDialogRef = this.dialog.open(AddEditGroupModalComponent, {
-      width: "80%",
+      width: '80%',
       data: {
         opType: GlobalConstant.MODAL_OP.VIEW,
         source: this.params.context.componentParent.source,
@@ -84,12 +86,12 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
   };
 
   deleteGroup = (group: Group) => {
-    let message = `${this.translate.instant("group.REMOVE_CONFIRM")} - ${this.sanitizer.sanitize(SecurityContext.HTML, group.name)}`;
+    let message = `${this.translate.instant('group.REMOVE_CONFIRM')} - ${this.sanitizer.sanitize(SecurityContext.HTML, group.name)}`;
     if (group.policy_rules.length > 0 || group.response_rules.length > 0) {
-      message += `<br/>${this.translate.instant("group.HAS_RULES_WARNING")}`;
+      message += `<br/>${this.translate.instant('group.HAS_RULES_WARNING')}`;
     }
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      maxWidth: "700px",
+      maxWidth: '700px',
       data: {
         message: message
       },
@@ -100,6 +102,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
     })).subscribe(
       (res) => {
         // confirm actions
+        this.notificationService.open(this.translate.instant('group.REMOVE_OK_MSG'))
         this.params.context.componentParent.source === GlobalConstant.NAV_SOURCE.FED_POLICY
           ? this.params.context.componentParent.getFedGroups()
           : this.params.context.componentParent.getGroups();
@@ -107,7 +110,10 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
         dialogRef.componentInstance.onCancel();
         dialogRef.componentInstance.loading = false;
       },
-      error => {}
+      error => {
+        this.notificationService.openError(error, this.translate.instant('group.REMOVE_ERR_MSG'))
+        dialogRef.componentInstance.loading = false;
+      }
     )
   };
 

@@ -190,3 +190,7 @@
     </ag-grid-angular>
   </div>
 </ng-template>
+
+<ng-template #readonlyNotification let-readonlyNotificationMsgs="readonlyNotification">
+  <div [innerHTML]="readonlyNotificationMsgs.message"></div>
+</ng-template>

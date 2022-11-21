@@ -30,4 +30,13 @@ export class NotificationService {
       );
     }
   }
+
+  openHtmlError = (messageHtmlStr, htmlTemplate, id=''): void => {
+    console.log(messageHtmlStr, htmlTemplate)
+    this.notifier.show({
+       message: messageHtmlStr,
+       type: GlobalConstant.NOTIFICATION_TYPE.ERROR,
+       template: htmlTemplate
+    });
+  };
 }

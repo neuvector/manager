@@ -15,6 +15,7 @@ export class GlobalConstant {
   public static STATUS_SERVER_UNAVAILABLE = 503;
   public static STATUS_INTERNAL_SERVER_ERR = 500;
   public static STATUS_NOT_FOUND = 404;
+  public static STATUS_FORBIDDEN = 403;
   public static PATH_LOGIN = 'login';
   public static PATH_DEFAULT = 'dashboard';
   public static AG_GRID_RESIZE = 'resize.#agGrid';
@@ -222,6 +223,6 @@ export class GlobalConstant {
     INFO: 'info',
     SUCCESS: 'success',
     WARNING: 'warning',
-    ERROR: 'error'
-  }
+    ERROR: 'error',
+  };
 }

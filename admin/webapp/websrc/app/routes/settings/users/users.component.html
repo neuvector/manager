@@ -25,7 +25,11 @@
           (refreshData)="refreshRoles()"></app-roles-grid>
       </ng-container>
     </mat-tab>
-    <mat-tab label="{{ 'passwordProfile.PWD_PROFILE' | translate }}">
+    <mat-tab
+      label="{{ 'passwordProfile.PWD_PROFILE' | translate }}"
+      *ngIf="
+        isUpdatePasswordProfileAuthorized || isReadPasswordProfileAuthorized
+      ">
       <ng-container
         *ngIf="pwdProfile$ | async as pwdProfile; else loadingOrErrorTemplate">
         <app-password-profile

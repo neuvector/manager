@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ErrorResponse, PermissionOption, Role } from '@common/types';
-import { getEntityName } from '@common/utils/common.utils';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { TranslateService } from '@ngx-translate/core';
 import {
@@ -17,7 +16,7 @@ import { RolesGridPermissionsCellComponent } from './roles-grid-permissions-cell
 import { RolesGridActionCellComponent } from './roles-grid-action-cell/roles-grid-action-cell.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
-import { finalize, map, pluck, switchMap, take, tap } from 'rxjs/operators';
+import { finalize, map, pluck, switchMap, take } from 'rxjs/operators';
 import { SettingsService } from '@services/settings.service';
 import { NotificationService } from '@services/notification.service';
 import { AddEditRoleDialogComponent } from './add-edit-role-dialog/add-edit-role-dialog.component';
@@ -230,7 +229,7 @@ export class RolesGridComponent implements OnInit {
 
   deleteRole(event: ICellRendererParams) {
     const role = event.data.name;
-    const deleteMessage = this.tr.instant('role.msg.REMOVE_CFM') + role;
+    const deleteMessage = this.tr.instant('role.msg.REMOVE_CFM');
     const deleteDialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '80%',
       maxWidth: '600px',

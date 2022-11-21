@@ -9,7 +9,9 @@
 </div>
 <mat-card>
   <ng-container *ngIf="openidData$ | async as openidData; else loadingOrError">
-    <app-openid-form [openidData]="openidData"></app-openid-form>
+    <app-openid-form
+      [openidData]="openidData"
+      (refresh)="refresh()"></app-openid-form>
   </ng-container>
   <ng-template #loadingOrError>
     <ng-container *ngIf="openidError; else loading">

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { combineLatest, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { combineLatest, Subject, throwError } from 'rxjs';
+import { catchError, map, repeatWhen } from 'rxjs/operators';
 import { SettingsService } from '@services/settings.service';
 
 @Component({
@@ -10,6 +10,7 @@ import { SettingsService } from '@services/settings.service';
 })
 export class OpenidComponent {
   openidError!: string;
+  refreshing$ = new Subject();
   server$ = this.settingsService.getServer();
   domain$ = this.settingsService.getDomain();
   openidData$ = combineLatest([this.server$, this.domain$]).pipe(
@@ -24,8 +25,13 @@ export class OpenidComponent {
     catchError(err => {
       this.openidError = err;
       return throwError(err);
-    })
+    }),
+    repeatWhen(() => this.refreshing$)
   );
 
   constructor(private settingsService: SettingsService) {}
+
+  refresh(): void {
+    this.refreshing$.next(true);
+  }
 }

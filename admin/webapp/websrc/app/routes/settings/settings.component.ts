@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthUtilsService } from '@common/utils/auth.utils';
+import { GlobalVariable } from '@common/variables/global.variable';
 
 @Component({
   selector: 'app-settings',
@@ -7,6 +9,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SettingsComponent implements OnInit {
   columns!: number;
+  isConfigAuth!: boolean;
+  isAuthenticationAuth!: boolean;
+  isNamespaceUser!: boolean;
+
+  constructor(private authUtils: AuthUtilsService) {}
 
   breakPoints(): void {
     switch (true) {
@@ -23,6 +30,10 @@ export class SettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.breakPoints();
+    this.isConfigAuth = this.authUtils.getDisplayFlag('read_config');
+    this.isAuthenticationAuth =
+      this.authUtils.getDisplayFlag('read_auth_server');
+    this.isNamespaceUser = this.authUtils.userPermission.isNamespaceUser;
   }
 
   onResize(): void {

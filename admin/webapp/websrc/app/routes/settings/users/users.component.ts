@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { parseRole } from '@common/utils/common.utils';
+import { GlobalConstant } from '@common/constants/global.constant';
+import { AuthUtilsService } from '@common/utils/auth.utils';
 import { SettingsService } from '@services/settings.service';
-import { combineLatest, Subject } from 'rxjs';
+import { combineLatest, of, Subject } from 'rxjs';
 import {
   catchError,
   map,
@@ -46,15 +47,47 @@ export class UsersComponent implements OnInit {
     repeatWhen(() => this.refreshUserSubject$)
   );
   roleData$ = this.refreshRoleSubject$.pipe(
-    switchMap(() => this.settingsService.getRoles())
+    switchMap(() =>
+      this.settingsService.getRoles().pipe(
+        catchError(err => {
+          if (
+            [
+              GlobalConstant.STATUS_NOT_FOUND,
+              GlobalConstant.STATUS_FORBIDDEN,
+            ].includes(err.status)
+          ) {
+            return of([]);
+          } else {
+            this.error = err;
+            throw err;
+          }
+        })
+      )
+    )
   );
   pwdProfile$ = this.refreshPwdProfileSubject$.pipe(
     switchMap(() => this.settingsService.getPwdProfile())
   );
+  isReadPasswordProfileAuthorized!: boolean;
+  isUpdatePasswordProfileAuthorized!: boolean;
 
-  constructor(private settingsService: SettingsService) {}
+  constructor(
+    private settingsService: SettingsService,
+    private authUtils: AuthUtilsService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.isReadPasswordProfileAuthorized =
+      this.authUtils.getDisplayFlagByMultiPermission(
+        'read_password_profile_1'
+      ) ||
+      this.authUtils.getDisplayFlagByMultiPermission(
+        'read_password_profile_2'
+      ) ||
+      this.authUtils.getDisplayFlagByMultiPermission('read_password_profile_3');
+    this.isUpdatePasswordProfileAuthorized =
+      this.authUtils.getDisplayFlagByMultiPermission('update_password_profile');
+  }
 
   activateTab(event): void {
     this.activeTabIndex = event.index;

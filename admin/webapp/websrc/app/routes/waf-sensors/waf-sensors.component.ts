@@ -31,11 +31,11 @@ export class WafSensorsComponent implements OnInit {
   gridOptions4Patterns!: GridOptions;
   gridOptions4EditPatterns!: GridOptions;
   filteredCount: number = 0;
-  selectedSensors: Array<WafSensor> = [];
-  selectedSensor: WafSensor = <WafSensor>{};
-  selectedRule: WafRule = <WafRule>{};
-  index4Sensor: number = 0;
-  isPredefine: boolean = false;
+  selectedSensors!: Array<WafSensor>;
+  selectedSensor!: WafSensor;
+  selectedRule!: WafRule;
+  index4Sensor!: number;
+  isPredefine!: boolean;
   context = { componentParent: this };
   $win: any;
   private _switchClusterSubscription;
@@ -133,25 +133,30 @@ export class WafSensorsComponent implements OnInit {
     let payload = {
       names: this.selectedSensors.map(sensor => sensor.name),
     };
-    this.wafSensorsService.getWafSensorConfigFileData(payload)
-      .subscribe(
-        response => {
-          let fileName = this.utilsService.getExportedFileName(response);
-          let blob = new Blob([response.body || ''], {
-            type: 'text/plain;charset=utf-8'
-          });
-          saveAs(blob, fileName);
-          this.notificationService.open(this.translate.instant('waf.msg.EXPORT_SENSOR_OK'));
-        },
-        error => {
-          if (MapConstant.USER_TIMEOUT.includes(error.status)) {
-            this.notificationService.open(
-              this.utilsService.getAlertifyMsg(error.error, this.translate.instant('waf.msg.EXPORT_SENSOR_NG'), false),
-              GlobalConstant.NOTIFICATION_TYPE.ERROR
-            );
-          }
+    this.wafSensorsService.getWafSensorConfigFileData(payload).subscribe(
+      response => {
+        let fileName = this.utilsService.getExportedFileName(response);
+        let blob = new Blob([response.body || ''], {
+          type: 'text/plain;charset=utf-8',
+        });
+        saveAs(blob, fileName);
+        this.notificationService.open(
+          this.translate.instant('waf.msg.EXPORT_SENSOR_OK')
+        );
+      },
+      error => {
+        if (MapConstant.USER_TIMEOUT.includes(error.status)) {
+          this.notificationService.open(
+            this.utilsService.getAlertifyMsg(
+              error.error,
+              this.translate.instant('waf.msg.EXPORT_SENSOR_NG'),
+              false
+            ),
+            GlobalConstant.NOTIFICATION_TYPE.ERROR
+          );
         }
-      );
+      }
+    );
   };
 
   private getWafSensors = (index: number) => {

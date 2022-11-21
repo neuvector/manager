@@ -226,6 +226,7 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
     this.registriesService.startScanning(name).subscribe({
       complete: () => this.registriesCommunicationService.refreshRegistries(),
       error: ({ error }: { error: ErrorResponse }) => {
+        this.registriesCommunicationService.cancelStartScan();
         this.notificationService.open(
           this.utils.getAlertifyMsg(
             error,

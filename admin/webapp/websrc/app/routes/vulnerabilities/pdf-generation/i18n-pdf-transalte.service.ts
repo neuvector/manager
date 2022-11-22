@@ -6,7 +6,7 @@ import { GlobalConstant } from '@common/constants/global.constant';
 @Injectable()
 export class i18nPdfTranslateService {
   constructor(private translateService: TranslateService) {
-    this.translateService.use('en');
+
   }
 
   getI18NMessages(options) {

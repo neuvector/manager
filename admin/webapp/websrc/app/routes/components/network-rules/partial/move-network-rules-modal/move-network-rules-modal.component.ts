@@ -23,7 +23,7 @@ export class MoveNetworkRulesModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.idFormCtrl = new FormControl(null, Validators.required);
-    this.movingPosition = UpdateType.MoveUp;
+    this.movingPosition = UpdateType.MoveBefore;
   }
 
   onCancel = () => {
@@ -41,7 +41,7 @@ export class MoveNetworkRulesModalComponent implements OnInit {
       }
       return rule;
     });
-    this.data.updateGridData(this.data.selectedNetworkRules, targetIndex, this.movingPosition);
+    this.data.updateGridData(this.data.selectedNetworkRules, 0, this.movingPosition, this.idFormCtrl.value);
     this.dialogRef.close(true);
   };
 }

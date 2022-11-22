@@ -187,7 +187,8 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   updateGridData = (
     updatedNetworkRules: Array<NetworkRule>,
     targetIndex: number,
-    updateType: UpdateType
+    updateType: UpdateType,
+    targetId: number = 0
   ) => {
     switch (updateType) {
       case UpdateType.AddToTop:
@@ -199,11 +200,11 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       case UpdateType.Edit:
         this.replaceRule(updatedNetworkRules[0], targetIndex);
         break;
-      case UpdateType.MoveUp:
-        this.moveRules(updatedNetworkRules, targetIndex, updateType);
+      case UpdateType.MoveBefore:
+        this.moveRules(updatedNetworkRules, targetId, updateType);
         break;
-      case UpdateType.MoveDown:
-        this.moveRules(updatedNetworkRules, targetIndex, updateType);
+      case UpdateType.MoveAfter:
+        this.moveRules(updatedNetworkRules, targetId, updateType);
         break;
     }
   };
@@ -526,14 +527,15 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
 
   private moveRules = (
     selectedNetworkRules: Array<NetworkRule>,
-    targetIndex: number,
+    targetId: number,
     moveType: UpdateType
   ) => {
     let selectedRuleId = selectedNetworkRules.map(rule => rule.id);
     let networkRulesTmp = this.networkRules.filter(rule => {
       return !selectedRuleId.includes(rule.id);
     });
-    if (moveType === UpdateType.MoveUp) {
+    let targetIndex = networkRulesTmp.findIndex(rule => rule.id === targetId);
+    if (moveType === UpdateType.MoveBefore) {
       networkRulesTmp.splice(targetIndex, 0, ...selectedNetworkRules);
     } else {
       networkRulesTmp.splice(targetIndex + 1, 0, ...selectedNetworkRules);
@@ -543,6 +545,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
     this.gridOptions.api!.setRowData(this.networkRules);
     // this.gridOptions.api!.redrawRows();
     this.networkRulesService.isNetworkRuleChanged = true;
+    this.selectedNetworkRules = [];
   };
 
   private maskingDeletedRows = (ids: Array<number>) => {

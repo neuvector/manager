@@ -692,25 +692,31 @@ export class SecurityEventsComponent implements OnInit {
   };
 
   private openReviewNetworkRuleModal = (secEvent: any) => {
-    this.securityEventsService.getNetworkRule(secEvent.ruleId)
-      .subscribe(
-        (response: any) => {
-          let networkRule = response;
-          networkRule.allowed = networkRule.action === 'allow';
-          this.reviewNetworkRuleModal = this.dialog.open(ReviewNetworkRuleModalComponent, {
-            width: '900px',
-            data: {
-              isEditable: this.isUpdateRuleAuthorized,
-              networkRule: networkRule,
-              secEvent: secEvent
-            },
-            hasBackdrop: false,
-            disableClose: true
-          });
+    const success = (response: any = {}) => {
+      let networkRule = response;
+      networkRule.allowed = networkRule.action ? networkRule.action === 'allow' : true;
+      this.reviewNetworkRuleModal = this.dialog.open(ReviewNetworkRuleModalComponent, {
+        width: '900px',
+        data: {
+          isEditable: this.isUpdateRuleAuthorized,
+          networkRule: networkRule,
+          secEvent: secEvent
         },
-        error => {}
-      );
-
+        hasBackdrop: false,
+        disableClose: true
+      });
+    }
+    if (secEvent.ruleId === 0) {
+      success();
+    } else {
+      this.securityEventsService.getNetworkRule(secEvent.ruleId)
+        .subscribe(
+          (response: any) => {
+            success(response);
+          },
+          error => {}
+        );
+    }
   };
 
   private prepareAutoCompleteData = (cachedSecurityEvents) => {

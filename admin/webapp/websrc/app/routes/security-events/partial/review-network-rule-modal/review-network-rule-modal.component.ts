@@ -38,10 +38,10 @@ export class ReviewNetworkRuleModalComponent implements OnInit {
       this.data.secEvent.reviewRulePermission === "r";
     if (!this.isReadOnlyRule) {
       this.ruleForm = new FormGroup({
-        from: new FormControl(this.data.networkRule.from),
-        to: new FormControl(this.data.networkRule.to),
-        applications: new FormControl(this.data.secEvent.applications),
-        ports: new FormControl(this.data.secEvent.details.serverPort)
+        from: new FormControl(this.data.networkRule.id ? this.data.networkRule.from : this.data.secEvent.source.group4Rule),
+        to: new FormControl(this.data.networkRule.id ? this.data.networkRule.to : this.data.secEvent.destination.group4Rule),
+        applications: new FormControl(this.data.networkRule.id ? this.data.secEvent.applications : []),
+        ports: new FormControl(this.data.networkRule.id ? this.data.secEvent.details.serverPort : '')
       });
     }
     this.prepareReviewRule();

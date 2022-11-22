@@ -27,20 +27,20 @@
     </div>
     <mat-divider class="position-relative"></mat-divider>
   </ng-container>
-  <div class="my-md-4 mx-3" *ngIf="isImportAuthorized">
-    <h1 class="h4 font-weight-normal">{{ 'setting.IMPORT' | translate }}</h1>
-    <div class="my-md-2 mx-3">
-      <mat-checkbox class="mx-3" formControlName="as_standalone">{{
-        'setting.AS_STANDALONE' | translate
-      }}</mat-checkbox>
-      <app-import-file
-        [importUrl]="importUrl"
-        [isStandAlone]="as_standalone"
-        [alias]="'configuration'"
-        [msg]="importMsg"></app-import-file>
-      <span class="mat-small text-muted">{{
-        'setting.IMPORT_NOTICE' | translate
-      }}</span>
-    </div>
-  </div>
 </form>
+<div class="my-md-4 mx-3" *ngIf="isImportAuthorized">
+  <h1 class="h4 font-weight-normal">{{ 'setting.IMPORT' | translate }}</h1>
+  <div class="my-md-2 mx-3">
+    <mat-checkbox class="mx-3" formControlName="as_standalone">{{
+      'setting.AS_STANDALONE' | translate
+    }}</mat-checkbox>
+    <app-import-file
+      [importUrl]="importUrl"
+      [isStandAlone]="as_standalone"
+      [alias]="'configuration'"
+      [msg]="importMsg"></app-import-file>
+    <span class="mat-small text-muted">{{
+      'setting.IMPORT_NOTICE' | translate
+    }}</span>
+  </div>
+</div>

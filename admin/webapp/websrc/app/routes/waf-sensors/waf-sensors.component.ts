@@ -180,16 +180,15 @@ export class WafSensorsComponent implements OnInit {
     this.index4Sensor = this.wafSensors.findIndex(
       sensor => sensor.name === this.selectedSensor.name
     );
-    this.gridOptions4Rules.api!.setRowData(this.selectedSensor.rules);
-    this.gridOptions4Patterns.api!.setRowData([]);
     this.isPredefine = this.selectedSensor.predefine;
-    if (this.selectedSensor.rules.length > 0) {
-      setTimeout(() => {
+    setTimeout(() => {
+      this.gridOptions4Rules.api!.setRowData(this.selectedSensor.rules);
+      if (this.selectedSensor.rules.length > 0) {
         let rowNode = this.gridOptions4Rules.api!.getDisplayedRowAtIndex(0);
         rowNode!.setSelected(true);
         this.gridOptions4Rules.api!.sizeColumnsToFit();
-      }, 200);
-    }
+      }
+    }, 200);
   };
   private onSelectionChanged4Rule = () => {
     this.selectedRule = this.gridOptions4Rules.api!.getSelectedRows()[0];

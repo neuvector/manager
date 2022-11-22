@@ -286,6 +286,7 @@ export class NetworkActivitiesComponent
                   NO_DETAIL_NODE.indexOf(model.cluster) === -1 &&
                   NO_DETAIL_NODE.indexOf(model.domain) === -1 &&
                   !(model.id && model.id === 'nodes') &&
+                  model.state !== 'unmanaged' &&
                   !(model.group && model.group === 'ip_service'),
                 expand: ['group', 'domain'].includes(model.kind),
                 discover:
@@ -2032,16 +2033,18 @@ export class NetworkActivitiesComponent
         }
 
         if (nodeType === 'container' || nodeType === 'mesh') {
-          item.icon.img =
-            nodeType === 'container'
-              ? `assets/img/icons/graph/${
+          if(item.state !== 'unmanaged') {
+            item.icon.img =
+              nodeType === 'container'
+                ? `assets/img/icons/graph/${
                   this.CONTAINER_TO_ICON[selectedMode.toLowerCase()]
                 }.svg`
-              : `assets/img/icons/graph/${
+                : `assets/img/icons/graph/${
                   this.SERVICE_MESH_TO_ICON[selectedMode.toLowerCase()]
                 }.svg`;
-          item.style.stroke = this.graphService.strokeColor[selectedMode];
-          item.style.fill = this.graphService.fillColor[selectedMode];
+            item.style.stroke = this.graphService.strokeColor[selectedMode];
+            item.style.fill = this.graphService.fillColor[selectedMode];
+          }
         }
 
         if (nodeType === 'host') {

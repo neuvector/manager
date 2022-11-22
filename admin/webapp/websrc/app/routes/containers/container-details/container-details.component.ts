@@ -104,7 +104,6 @@ export class ContainerDetailsComponent implements OnInit, OnDestroy {
     );
     const toggleVul = this.isVulsAuthorized;
     const csv = !this.vulEmpty;
-    console.log(acceptVul, toggleVul, csv);
     return +acceptVul + +toggleVul + +csv;
   }
 
@@ -143,7 +142,9 @@ export class ContainerDetailsComponent implements OnInit, OnDestroy {
           this.containerCompliance = compliance;
           this.complianceEmpty = !(compliance.items && compliance.items.length);
         },
-        error: ({ error }: { error: ErrorResponse }) => {},
+        error: ({ error }: { error: ErrorResponse }) => {
+          console.error(error);
+        },
       });
   }
 
@@ -163,7 +164,9 @@ export class ContainerDetailsComponent implements OnInit, OnDestroy {
         this.containerVuls = vuls;
         this.vulEmpty = !(vuls && vuls.length);
       },
-      error: ({ error }: { error: ErrorResponse }) => {},
+      error: ({ error }: { error: ErrorResponse }) => {
+        console.error(error);
+      },
     });
   }
 
@@ -174,7 +177,10 @@ export class ContainerDetailsComponent implements OnInit, OnDestroy {
         next: process => {
           this.containerProcess = process;
         },
-        error: ({ error }: { error: ErrorResponse }) => {},
+        error: ({ error }: { error: ErrorResponse }) => {
+          console.error(error);
+          this.containerProcess = [];
+        },
       });
   }
 

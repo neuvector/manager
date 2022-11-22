@@ -75,7 +75,7 @@ export class PathConstant {
   public static DASHBOARD_SCORES_URL = 'dashboard/scores2'; //dashboard
   public static DASHBOARD_DETAILS_URL = 'dashboard/details'; //dashboard
   public static DASHBOARD_NOTIFICATIONS_URL = 'dashboard/notifications2'; //dashboard
-  public static SECURITY_EVENTS_URL_2 = 'assets/mockdata/security-events.json'//'security-events2'; //events
+  public static SECURITY_EVENTS_URL_2 = 'security-events2'; //events
   public static ADMISSION_URL = 'admission/rules'; //policy
   public static ADMISSION_SINGLE_URL = 'admission/rule'; //policy
   public static ADMCTL_CONDITION_OPTION_URL = 'admission/options'; //policy

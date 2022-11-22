@@ -15,3 +15,13 @@
 .another-file-over-class {
   border: dotted 3px green;
 }
+.hidden-file {
+  visibility: hidden;
+  position: absolute;
+  overflow: hidden;
+  width: 0;
+  height: 0;
+  border: none;
+  margin: 0;
+  padding: 0;
+}

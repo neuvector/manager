@@ -36,7 +36,7 @@ export class ComplianceProfileAssetsTableComponent
   gridOptions!: GridOptions;
   gridApi!: GridApi;
   namespaceEnabled = false;
-  isWriteComplianceProfileAuthorized: boolean;
+  isWriteComplianceProfileAuthorized: boolean = false;
   // name: string;
   // running_pods: number;
   // running_workloads: number;

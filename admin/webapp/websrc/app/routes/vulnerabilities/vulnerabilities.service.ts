@@ -3,7 +3,7 @@ import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { RisksHttpService } from '@common/api/risks-http.service';
 import { AssetsHttpService } from '@common/api/assets-http.service';
-import { finalize, map, repeatWhen, tap } from 'rxjs/operators';
+import { map, repeatWhen, tap } from 'rxjs/operators';
 import {
   HostData,
   HostsData,
@@ -16,7 +16,6 @@ import { sortByDisplayName } from '@common/utils/common.utils';
 import { VulnerabilitiesData } from '@common/types/vulnerabilities/vulnerabilities';
 import { VulnerabilitiesFilterService } from './vulnerabilities.filter.service';
 import { AssetsViewPdfService } from './pdf-generation/assets-view-pdf.service';
-import { VulnerabilityViewPdfService } from './pdf-generation/vulnerability-view-pdf.service';
 
 @Injectable({
   providedIn: 'root',
@@ -50,7 +49,6 @@ export class VulnerabilitiesService {
     private vulnerabilitiesFilterService: VulnerabilitiesFilterService,
     private assetsHttpService: AssetsHttpService,
     private assetsViewPdfService: AssetsViewPdfService,
-    private vulnerabilityViewPdfService: VulnerabilityViewPdfService
   ) {}
 
   selectVulnerability(vulnerability) {
@@ -60,11 +58,6 @@ export class VulnerabilitiesService {
   transformDate(date) {
     return this.datePipe.transform(date, 'MMM dd, y HH:mm:ss');
   }
-
-  // runWorkers() {
-  //   this.assetsViewPdfService.runWorker();
-  //   this.vulnerabilityViewPdfService.runWorker();
-  // }
 
   initVulnerability() {
     return combineLatest([
@@ -95,9 +88,6 @@ export class VulnerabilitiesService {
         this.vulnerabilitiesFilterService.filtered = false;
         this.vulnerabilitiesFilterService.filteredCis = vulnerabilities;
       }),
-      // finalize(() => {
-      //   this.runWorkers();
-      // }),
       repeatWhen(() => this.refreshSubject$)
     );
   }
@@ -189,8 +179,8 @@ export class VulnerabilitiesService {
             if (workload.children) {
               workload.children.forEach(child => {
                 let containerInfo = JSON.parse(JSON.stringify(workload));
-                containerInfo.image_id = child.image_id,
-                containerInfo.image = child.image,
+                containerInfo.image_id = child.image_id;
+                containerInfo.image = child.image;
                 this.workloadMap.set(child.id, containerInfo);
                 this.workloadMap4Pdf[child.id] = {
                   id: child.id,
@@ -228,7 +218,6 @@ export class VulnerabilitiesService {
             }
           }
         });
-        console.log("this.workloadMap", this.workloadMap);
       })
     );
   }
@@ -390,7 +379,6 @@ export class VulnerabilitiesService {
         this.topCve = vulnerabilities
           .sort((a, b) => this.compareImpact(a, b) * -1)
           .slice(0, 5);
-        console.log(this.topImages);
       })
     );
   }

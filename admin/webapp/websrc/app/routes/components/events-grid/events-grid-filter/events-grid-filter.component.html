@@ -274,13 +274,13 @@
   </form>
 </div>
 <div class="float-right" mat-dialog-actions>
-  <button (click)="reset()" mat-button>Reset</button>
+  <button (click)="reset()" mat-button>{{'enum.RESET' | translate}}</button>
   <button
     [mat-dialog-close]="form.value"
     [disabled]="!form.valid"
     cdkFocusInitial
     color="primary"
     mat-raised-button>
-    Apply
+    {{'securityEvent.APPLY' | translate}}
   </button>
 </div>

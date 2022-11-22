@@ -93,7 +93,7 @@ export class AdmissionRulesComponent implements OnInit {
     this.refresh();
     //refresh the page when it switched to a remote cluster
     this.switchClusterSubscription =
-      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
         this.refresh();
       });
   }
@@ -144,8 +144,8 @@ export class AdmissionRulesComponent implements OnInit {
               id: -1,
               comment:
                 this.default_action === 'allow'
-                  ? 'Allow deployments that don\'t match any of above rules.'
-                  : 'Deny deployments that don\'t match any of above rules.',
+                  ? this.translate.instant('admissionControl.msg.ALLOW_NO_MATCH')
+                  : this.translate.instant('admissionControl.msg.DENY_NO_MATCH'),
               criteria: [],
               critical: true,
               category: 'Global action',
@@ -201,7 +201,9 @@ export class AdmissionRulesComponent implements OnInit {
         this.globalStatus = this.admissionStateRec.state?.enable!;
         this.mode = this.admissionStateRec.state?.mode!;
       },
-      error => {}
+      error => {
+        console.log(error);
+      }
     );
   };
 
@@ -225,7 +227,7 @@ export class AdmissionRulesComponent implements OnInit {
   };
 
   openExportPopup = () => {
-    const exportDialogRef = this.dialog.open(
+    this.dialog.open(
       ExportAdmissionRulesModalComponent,
       {
         width: '50%',
@@ -249,7 +251,7 @@ export class AdmissionRulesComponent implements OnInit {
       },
       disableClose: true,
     });
-    importDialogRef.afterClosed().subscribe(result => {
+    importDialogRef.afterClosed().subscribe(() => {
       setTimeout(() => {
         this.refresh();
       }, 500);
@@ -258,7 +260,7 @@ export class AdmissionRulesComponent implements OnInit {
   };
 
   showAdvancedSetting = () => {
-    const advancedSettingDialogRef = this.dialog.open(
+    this.dialog.open(
       AdvanceSettingModalComponent,
       {
         width: '60%',
@@ -272,7 +274,7 @@ export class AdmissionRulesComponent implements OnInit {
   };
 
   openAddEditAdmissionRuleModal = () => {
-    const addEditDialogRef = this.dialog.open(
+    this.dialog.open(
       AddEditAdmissionRuleModalComponent,
       {
         width: '80%',
@@ -295,10 +297,10 @@ export class AdmissionRulesComponent implements OnInit {
     this.admissionRulesService
       .updateAdmissionState(this.admissionStateRec)
       .subscribe(
-        response => {
-          let msg = this.globalStatus ?
-            this.translate.instant("admissionControl.msg.G_ENABLE_OK") :
-            this.translate.instant("admissionControl.msg.G_DISABLE_OK");
+        () => {
+          let msg = this.globalStatus
+            ? this.translate.instant('admissionControl.msg.G_ENABLE_OK')
+            : this.translate.instant('admissionControl.msg.G_DISABLE_OK');
           this.notificationService.open(msg);
           setTimeout(() => {
             this.getAdmissionState();
@@ -306,20 +308,21 @@ export class AdmissionRulesComponent implements OnInit {
         },
         error => {
           if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
-            let errMsg = '';
+            let errMsg: string;
             if (
               error.status === GlobalConstant.STATUS_INTERNAL_SERVER_ERR &&
-              error.error.code === GlobalConstant.ADMISSION.INTERNAL_ERR_CODE.CONFIG_K8S_FAIL
+              error.error.code ===
+                GlobalConstant.ADMISSION.INTERNAL_ERR_CODE.CONFIG_K8S_FAIL
             ) {
               errMsg = this.translate.instant(
-                "admissionControl.msg.CONFIG_K8S_FAIL"
+                'admissionControl.msg.CONFIG_K8S_FAIL'
               );
             } else {
               errMsg = error.error;
             }
-            let errTitle = this.globalStatus ?
-              this.translate.instant("admissionControl.msg.G_ENABLE_NG") :
-              this.translate.instant("admissionControl.msg.G_DISABLE_NG");
+            let errTitle = this.globalStatus
+              ? this.translate.instant('admissionControl.msg.G_ENABLE_NG')
+              : this.translate.instant('admissionControl.msg.G_DISABLE_NG');
             this.notificationService.open(
               this.utils.getAlertifyMsg(errMsg, errTitle, false),
               GlobalConstant.NOTIFICATION_TYPE.ERROR
@@ -335,27 +338,34 @@ export class AdmissionRulesComponent implements OnInit {
     this.admissionRulesService
       .updateAdmissionState(this.admissionStateRec)
       .subscribe(
-        response => {
-          this.notificationService.open(this.translate.instant("admissionControl.msg.MODE_SWITCH_OK"));
+        () => {
+          this.notificationService.open(
+            this.translate.instant('admissionControl.msg.MODE_SWITCH_OK')
+          );
           setTimeout(() => {
             this.getAdmissionState();
           }, 500);
         },
         error => {
           if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
-            let errMsg = '';
+            let errMsg: string;
             if (
               error.status === GlobalConstant.STATUS_INTERNAL_SERVER_ERR &&
-              error.error.code === GlobalConstant.ADMISSION.INTERNAL_ERR_CODE.CONFIG_K8S_FAIL
+              error.error.code ===
+                GlobalConstant.ADMISSION.INTERNAL_ERR_CODE.CONFIG_K8S_FAIL
             ) {
               errMsg = this.translate.instant(
-                "admissionControl.msg.CONFIG_K8S_FAIL"
+                'admissionControl.msg.CONFIG_K8S_FAIL'
               );
             } else {
               errMsg = error.error;
             }
             this.notificationService.open(
-              this.utils.getAlertifyMsg(errMsg, this.translate.instant("admissionControl.msg.MODE_SWITCH_NG"), false),
+              this.utils.getAlertifyMsg(
+                errMsg,
+                this.translate.instant('admissionControl.msg.MODE_SWITCH_NG'),
+                false
+              ),
               GlobalConstant.NOTIFICATION_TYPE.ERROR
             );
             this.mode = this.mode === 'monitor' ? 'protect' : 'monitor';
@@ -371,26 +381,29 @@ export class AdmissionRulesComponent implements OnInit {
       },
     };
 
-    this.admissionRulesService.updateRulePromotion(payload)
-      .subscribe({
-        next: res => {
-          this.notificationService.open(this.translate.instant("policy.message.PROMOTE_OK"));
-          setTimeout(() => {
-            this.refresh();
-          }, 1000);
-        },
-        error: error => {
-          if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
-            this.notificationService.open(
-              this.utils.getAlertifyMsg(error.error, this.translate.instant("policy.message.PROMOTE_NG"), false),
-              GlobalConstant.NOTIFICATION_TYPE.ERROR
-            );
-          }
+    this.admissionRulesService.updateRulePromotion(payload).subscribe({
+      next: () => {
+        this.notificationService.open(
+          this.translate.instant('policy.message.PROMOTE_OK')
+        );
+        setTimeout(() => {
+          this.refresh();
+        }, 1000);
+      },
+      error: error => {
+        if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
+          this.notificationService.open(
+            this.utils.getAlertifyMsg(
+              error.error,
+              this.translate.instant('policy.message.PROMOTE_NG'),
+              false
+            ),
+            GlobalConstant.NOTIFICATION_TYPE.ERROR
+          );
         }
-      });
+      },
+    });
   };
-
-  showGlobalActions = event => {};
 
   private printConfigurationAssessmentResult = testResult => {
     this.configTestResult = testResult;

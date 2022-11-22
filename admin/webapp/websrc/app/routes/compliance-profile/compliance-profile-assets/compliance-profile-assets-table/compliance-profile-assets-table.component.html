@@ -2,14 +2,14 @@
   <p class="mx-3">{{ 'cis.profile.DESCRIPTION' | translate }}</p>
   <div class="row mx-3">
     <div class="col-1 d-flex flex-column justify-content-around">
-      <span class="d-block">Images</span>
-      <span class="d-block">Nodes</span>
-      <span class="d-block">Containers</span>
+      <span class="d-block">{{ 'cis.report.data.IMAGES' | translate }}</span>
+      <span class="d-block">{{ 'cis.report.data.NODES' | translate }}</span>
+      <span class="d-block">{{ 'cis.report.data.CONTAINERS' | translate }}</span>
     </div>
     <div class="col-1 d-flex flex-column justify-content-around">
-      <span class="d-block">Templates</span>
-      <span class="d-block">Templates</span>
-      <span class="d-block">Templates</span>
+      <span class="d-block">{{ 'cis.report.data.TEMPLATES' | translate }}</span>
+      <span class="d-block">{{ 'cis.report.data.TEMPLATES' | translate }}</span>
+      <span class="d-block">{{ 'cis.report.data.TEMPLATES' | translate }}</span>
     </div>
     <div class="col-3 d-flex flex-column justify-content-around">
       <ng-container *ngIf="imageTags.length > 0; else allTemplate">

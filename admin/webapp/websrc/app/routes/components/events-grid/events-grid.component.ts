@@ -286,7 +286,6 @@ export class EventsGridComponent implements OnInit {
       });
 
       this.filterDialog.afterClosed().subscribe(filter => {
-        console.log(filter);
         if (filter && filter.reset) {
           this.eventsGridFilterService.resetFilter();
           this.setAdvancedFilter();

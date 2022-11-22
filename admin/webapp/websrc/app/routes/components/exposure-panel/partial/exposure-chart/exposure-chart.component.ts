@@ -9,8 +9,8 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class ExposureChartComponent implements OnInit {
 
-  @Input() ingress: Array<HierarchicalExposure>;
-  @Input() egress: Array<HierarchicalExposure>;
+  @Input() ingress: Array<HierarchicalExposure> = [];
+  @Input() egress: Array<HierarchicalExposure> = [];
   @Input() isReport: boolean = false;
   exposureChartConfig: any;
   chartNumbers: any;
@@ -47,8 +47,6 @@ export class ExposureChartComponent implements OnInit {
     };
     this.accumulateData(ingressContainers, 'ingress');
     this.accumulateData(egressContainers, 'egress');
-    console.log('Object.values(this.chartNumbers.ingress)', Array.from(this.chartNumbers.ingress.values()))
-    console.log('Object.values(this.chartNumbers.egress)', Array.from(this.chartNumbers.egress.values()))
     this.exposureChartConfig = {
       options: {
         animation: !this.isReport,
@@ -83,7 +81,7 @@ export class ExposureChartComponent implements OnInit {
           },
           title: {
             display: true,
-            text: 'Exposures',
+            text: this.translate.instant('dashboard.body.panel_title.EXPOSURES'),
           },
         },
       },
@@ -97,7 +95,7 @@ export class ExposureChartComponent implements OnInit {
         datasets: [
           {
             data: Array.from(this.chartNumbers.ingress.values()),
-            label: 'Ingress Pods',
+            label: this.translate.instant('dashboard.body.panel_title.INGRESS_CONTAINERS'),
             backgroundColor: 'rgba(255, 13, 129, 0.2)',
             borderColor: '#ff0d81',
             hoverBackgroundColor: 'rgba(255, 13, 129, 0.2)',
@@ -106,7 +104,7 @@ export class ExposureChartComponent implements OnInit {
           },
           {
             data: Array.from(this.chartNumbers.egress.values()),
-            label: 'Egress Pods',
+            label: this.translate.instant('dashboard.body.panel_title.EGRESS_CONTAINERS'),
             backgroundColor: 'rgba(255, 113, 1, 0.2)',
             borderColor: '#ff7101',
             hoverBackgroundColor: 'rgba(255, 113, 1, 0.2)',

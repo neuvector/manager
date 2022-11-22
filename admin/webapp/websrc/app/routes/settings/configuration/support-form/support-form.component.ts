@@ -111,7 +111,7 @@ export class SupportFormComponent implements OnDestroy {
         () => (this.collectingLogReady = true),
         ({ error }: { error: ErrorResponse }) => {
           this.notificationService.open(
-            this.tr.instant('setting.COLLOECT_FAILED')
+            this.tr.instant('setting.COLLECT_FAILED')
           );
           console.warn(error);
         }
@@ -133,7 +133,7 @@ export class SupportFormComponent implements OnDestroy {
       },
       ({ error }: { error: ErrorResponse }) => {
         this.notificationService.open(
-          this.tr.instant('setting.COLLOECT_FAILED')
+          this.tr.instant('setting.COLLECT_FAILED')
         );
         console.warn(error);
       }

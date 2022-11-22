@@ -1,9 +1,7 @@
 <div class="">
   <div class="d-flex justify-content-between align-items-start">
     <div class="d-flex flex-column justify-content-start align-items-start">
-      <label class="h3 font-weight-bold" [for]="'upload-' + importUrl"
-        >Select file</label
-      >
+
       <div
         ng2FileDrop
         [ngClass]="{ 'nv-file-over': hasBaseDropZoneOver }"
@@ -12,15 +10,20 @@
         class="well my-drop-zone">
         {{ 'setting.DROP_ZONE' | translate }}
       </div>
-      <input
-        class="file-selection"
-        type="file"
-        ng2FileSelect
-        [uploader]="uploader"
-        [id]="'upload-' + importUrl" />
+      <span class="hidden-file">
+        <input
+          class="file-selection"
+          type="file" #fileInput
+          ng2FileSelect
+          [uploader]="uploader"
+          [id]="'upload-' + importUrl" />
+      </span>
+      <button mat-stroked-button (click)="fileInput.click()">
+        {{'setting.BROWSE' | translate}}
+      </button>
     </div>
 
-    <div class="d-flex flex-column justify-content-end align-items-center">
+    <div class="d-flex flex-column justify-content-end align-items-center ml-2">
       <table class="table file-table">
         <thead>
           <tr>

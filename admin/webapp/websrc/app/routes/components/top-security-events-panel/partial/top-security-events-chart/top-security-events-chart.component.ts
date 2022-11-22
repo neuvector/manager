@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, SecurityContext } from '@angular/core';
-import { ChartConfiguration } from 'chart.js';
 import { TranslateService } from '@ngx-translate/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CapitalizePipe } from '@common/pipes/app.pipes';
@@ -12,7 +11,7 @@ import { CapitalizePipe } from '@common/pipes/app.pipes';
 export class TopSecurityEventsChartComponent implements OnInit {
 
   @Input() topSecurityEvents: any;
-  @Input() direction: string;
+  @Input() direction!: string;
   @Input() isReport: boolean = false;
   topSecurityEventsHorizontalBarChartConfig: any; //ChartConfiguration<'bar', number[], string[]>;
   noChartData: boolean = false;
@@ -40,7 +39,6 @@ export class TopSecurityEventsChartComponent implements OnInit {
       topSecurityEventsLabels[index] = this.sanitizer.sanitize(SecurityContext.HTML, workloadEvents[0][`${direction}_workload_name`])!;
       topSecurityEventsData[index] = workloadEvents.length;
     });
-    console.log("topSecurityEventsLabels", topSecurityEventsLabels, topSecurityEventsData, barChartColors)
     this.noChartData = topSecurityEventsData.reduce((prev, curr) => prev + curr) === 0
     this.topSecurityEventsHorizontalBarChartConfig = {
       type: 'bar',
@@ -48,7 +46,7 @@ export class TopSecurityEventsChartComponent implements OnInit {
         labels: topSecurityEventsLabels,
         datasets: [{
           axis: 'y',
-          label: `Top Security Events - ${this.capitalizePipe.transform(direction)}`,
+          label: `${this.translate.instant('dashboard.body.panel_title.TOP_SEC_EVENTS')} - ${this.capitalizePipe.transform(direction)}`,
           data: topSecurityEventsData,
           fill: false,
           backgroundColor: barChartColors,

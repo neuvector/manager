@@ -31,7 +31,7 @@ export const AddRegistryFieldConfig: FormlyFieldConfig[] = [
             field.options?.parentForm?.form.markAsUntouched();
             field.options?.parentForm?.form.updateValueAndValidity();
           },
-          label: 'Registry Type',
+          label: 'registry.REGISTRY_TYPE',
           items: Object.keys(Registries)
             .map(key => {
               return { value: Registries[key], viewValue: Registries[key] };

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MapConstant } from '@common/constants/map.constant';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
+import {UtilsService} from "@common/utils/app.utils";
 
 @Component({
   selector: 'app-compliance-grid-status-cell',
@@ -16,10 +17,12 @@ export class ComplianceGridStatusCellComponent
   status!: string;
   labelCode!: string;
 
+  constructor(private utils: UtilsService) {}
+
   agInit(params: ICellRendererParams): void {
     this.params = params;
-    this.status = this.params.data.level;
-    this.labelCode = MapConstant.colourMap[this.status];
+    this.labelCode = MapConstant.colourMap[this.params.data.level];
+    this.status = this.utils.getI18Name(this.params.data.level);
   }
 
   refresh(params: ICellRendererParams): boolean {

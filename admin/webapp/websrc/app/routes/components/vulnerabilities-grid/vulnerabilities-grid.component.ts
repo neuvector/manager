@@ -45,7 +45,7 @@ export class VulnerabilitiesGridComponent implements OnInit, OnChanges {
   columnDefs: ColDef[] = [
     {
       field: 'name',
-      headerValueGetter: () => 'Name',
+      headerValueGetter: () => this.translate.instant('scan.gridHeader.NAME'),
     },
     {
       field: 'severity',

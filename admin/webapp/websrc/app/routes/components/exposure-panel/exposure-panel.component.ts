@@ -16,7 +16,7 @@ export class ExposurePanelComponent implements OnInit {
   @Input() scoreInfo!: InternalSystemInfo;
   hierarchicalIngressList!: Array<HierarchicalExposure>;
   hierarchicalEgressList!: Array<HierarchicalExposure>;
-  instructions: Array<string>;
+  instructions: Array<string> = [];
 
   constructor(
     public dashboardExposureConversationsService: DashboardExposureConversationsService,
@@ -40,7 +40,7 @@ export class ExposurePanelComponent implements OnInit {
   downloadExposureConversationCsv = () => {
     let exposureList: any = [];
     this.dashboardExposureConversationsService.exposureConversationList.forEach(exposure => {
-      let entryList = exposure.entries.map((entry, index) => {
+      exposure.entries.map((entry, index) => {
         let _entry = {};
         if (index === 0) {
           _entry = Object.assign({
@@ -80,7 +80,6 @@ export class ExposurePanelComponent implements OnInit {
         exposureList.push(_entry);
       });
     });
-    console.log("exposureList: ",exposureList);
 
     let csv = arrayToCsv(exposureList);
     let blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });

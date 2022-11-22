@@ -94,6 +94,9 @@
     "INFO": "备注",
     "NOTICE": "关注",
     "WARNING": "告警",
+    "WARN": "告警",
+    "PASS": "通过",
+    "NOTE": "关注",
     "VIOLATE": "警报",
     "ALERT": "警报",
     "DENY": "拒绝",
@@ -374,6 +377,7 @@
         "APPLICATIONS": "应用",
         "INGRESS": "接入",
         "EGRESS": "接出",
+        "EXPOSURES": "暴露的",
         "POLICY_COUNT": "应用会话",
         "BYTES": "应用流量",
         "INGRESS_CONTAINERS": "入口Pod",
@@ -1176,6 +1180,7 @@
     "VIEW_REPO": "浏览镜像库",
     "TEST_REPO": "测试设置",
     "DELETE_REPO": "删除镜像库",
+    "REGISTRY_TYPE": "镜像库类型",
     "FILTER_HINT": "样本: gliderlabs/dockerbox:latest, gliderlabs/*, gliderlabs/*:*, gliderlabs/n*:3*",
     "AMAZON_URL_HINT": "样本: https://<aws_account_id>.dkr.ecr.<region>.amazonaws.com",
     "AZURE_URL_HINT": "样本: https://<companyname>.azurecr.io/",
@@ -2459,7 +2464,9 @@
       "ERR_SRV2WEBHOOK": "Kube-apiserver的请求接收失败. 请尝试别的客户模式.",
       "TEST_K8S_OK": "Kubernetes系统连接正常.",
       "SAVE_CLIENT_MODE": "将选定的模式提交到Kubernetes设置以便进行Kubernetes请求连接的测试.",
-      "NOT_NUMBER_ERR": "不是有效数字"
+      "NOT_NUMBER_ERR": "不是有效数字",
+      "ALLOW_NO_MATCH": "允许不符合上述任何规则的部署.",
+      "DENY_NO_MATCH": "拒绝不符合上述任何规则的部署"
     },
     "addRule": {
       "TITLE": "添加规则"
@@ -2803,7 +2810,7 @@
     "SUBMIT_OK": "系统设置更新成功!",
     "SUBMIT_FAILED": "系统设置更新失败",
     "IMPORT_FAILED": "导入失败 ",
-    "COLLOECT_FAILED": "支持日志收集失败",
+    "COLLECT_FAILED": "支持日志收集失败",
     "NEW_SERVICE_POLICY_MODE": "新增服务的策略模式",
     "NEW_SERVICE": "新增服务",
     "NEW_SERVICE_COMMENT": "新建组的默认策略模式没有被提前监测到.",

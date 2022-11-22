@@ -122,7 +122,7 @@
                 <mat-form-field appearance="fill" style="width: 100%">
                   <mat-label>{{ 'policy.editPolicy.APP' | translate }}</mat-label>
                   <input type="text" matInput readonly
-                    [ngStyle]="{'background-color': data.secEvent.applications === data.networkRule.applications.join(', ') ? 'none' : '#fff7f0'}"
+                    [ngStyle]="{'background-color': data.networkRule.applications && data.secEvent.applications === data.networkRule.applications.join(', ') ? 'none' : '#fff7f0'}"
                     formControlName="applications"
                   >
                 </mat-form-field>
@@ -131,7 +131,7 @@
                 <mat-form-field appearance="fill" style="width: 100%">
                   <mat-label>{{ 'policy.editPolicy.PORT' | translate }}</mat-label>
                   <input type="text" matInput readonly
-                    [ngStyle]="{'background-color': comparePortStr(data.secEvent.details.serverPort, data.networkRule.ports) ? 'none' : '#fff7f0'}"
+                    [ngStyle]="{'background-color': data.networkRule.ports && comparePortStr(data.secEvent.details.serverPort, data.networkRule.ports) ? 'none' : '#fff7f0'}"
                     formControlName="ports"
                   >
                 </mat-form-field>

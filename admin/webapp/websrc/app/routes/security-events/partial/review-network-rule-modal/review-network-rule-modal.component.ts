@@ -32,17 +32,19 @@ export class ReviewNetworkRuleModalComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('this.data.networkRule', this.data.networkRule);
+    console.log('this.data.secEvent', this.data.secEvent);
     this.isReadOnlyRule =
       (this.data.networkRule.cfg_type === this.CFG_TYPE.FED ||
       this.data.networkRule.cfg_type === this.CFG_TYPE.GROUND) ||
       this.data.secEvent.reviewRulePermission === "r";
     if (!this.isReadOnlyRule) {
       this.ruleForm = new FormGroup({
-        from: new FormControl(this.data.networkRule.from),
-        to: new FormControl(this.data.networkRule.to),
+        from: new FormControl(this.data.networkRule.id ? this.data.networkRule.from : this.data.secEvent.endpoint.source.group4Rule),
+        to: new FormControl(this.data.networkRule.id ? this.data.networkRule.to : this.data.secEvent.endpoint.destination.group4Rule),
         applications: new FormControl(this.data.secEvent.applications),
         ports: new FormControl(this.data.secEvent.details.serverPort)
       });
+      console.log("this.ruleForm", this.ruleForm)
     }
     this.prepareReviewRule();
   }

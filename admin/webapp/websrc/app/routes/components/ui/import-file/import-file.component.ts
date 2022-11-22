@@ -10,12 +10,15 @@ import { FileItem, FileUploader } from 'ng2-file-upload';
 import { MapConstant } from '@common/constants/map.constant';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
-import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
+import { PathConstant } from '@common/constants/path.constant';
+import { LOCAL_STORAGE, SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { UtilsService } from '@common/utils/app.utils';
 import { TranslateService } from '@ngx-translate/core';
 import { HttpResponse } from '@angular/common/http';
 import { NotificationService } from '@services/notification.service';
 import { ErrorResponse } from '@common/types';
+import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-import-file',
@@ -38,9 +41,12 @@ export class ImportFileComponent implements OnInit, OnChanges {
 
   constructor(
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
+    @Inject(LOCAL_STORAGE) private localStorage: StorageService,
     private notificationService: NotificationService,
     private utils: UtilsService,
     public translate: TranslateService,
+    private location: Location,
+    private router: Router
   ) {
     this.nvToken = this.sessionStorage.get(
       GlobalConstant.SESSION_STORAGE_TOKEN
@@ -156,20 +162,25 @@ export class ImportFileComponent implements OnInit, OnChanges {
     this.status = res.data.status;
 
     if (this.status === 'done') {
-      if (this.msg.success) this.notificationService.open(this.msg.success);
-      // Alertify.set({ delay: 8000 });
-      // Alertify.success(
-      //   $translate.instant("admissionControl.msg.IMPORT_FINISH")
-      // );
-      setTimeout(() => {
-        //ToDo: If from configuration, logout else close parent modal
-      }, 1000);
+      if (this.importUrl === PathConstant.SYSTEM_CONFIG_URL) {
+        this.notificationService.open(this.translate.instant("setting.message.UPLOAD_FINISH"));
+        setTimeout(() => {
+          this.sessionStorage.set(
+            GlobalConstant.SESSION_STORAGE_ORIGINAL_URL,
+            this.location.path()
+          );
+          this.sessionStorage.remove(GlobalConstant.SESSION_STORAGE_TOKEN);
+          this.sessionStorage.remove(GlobalConstant.SESSION_STORAGE_CLUSTER);
+          this.router.navigate([GlobalConstant.PATH_LOGIN]);
+        }, 8000);
+      } else {
+        this.notificationService.open(this.translate.instant("admissionControl.msg.IMPORT_FINISH"));
+      }
     } else {
-      // this.status = Utils.getAlertifyMsg(this.status, this.translate.instant("admissionControl.msg.IMPORT_FAILED"), false);
-      // Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
-      // Alertify.error(
-      //   $scope.status
-      // );
+      this.notificationService.open(
+        this.utils.getAlertifyMsg(this.status, this.translate.instant("admissionControl.msg.IMPORT_FAILED"), false),
+        GlobalConstant.NOTIFICATION_TYPE.ERROR
+      );
     }
   };
 
@@ -221,12 +232,8 @@ export class ImportFileComponent implements OnInit, OnChanges {
               this.msg.error,
               false
             );
-            if (this.msg.error) this.notificationService.open(this.status);
             if (!MapConstant.USER_TIMEOUT.includes(error.code)) {
-              // Alertify.set({ delay: ALERTIFY_ERROR_DELAY });
-              // Alertify.error(
-              //   this.status
-              // );
+              if (this.msg.error) this.notificationService.open(this.status);
             }
           },
         });

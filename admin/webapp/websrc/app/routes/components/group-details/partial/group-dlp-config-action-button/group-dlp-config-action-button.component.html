@@ -1,6 +1,7 @@
 <div>
   <mat-slide-toggle
-    (change)="toggleAction()"
+    [(ngModel)]="params.data.isAllowed"
+    (toggleChange)="toggleAction()"
   >
     <span
       [ngClass]="{

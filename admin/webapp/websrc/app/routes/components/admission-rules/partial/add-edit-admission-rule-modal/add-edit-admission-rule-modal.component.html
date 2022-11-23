@@ -109,6 +109,7 @@
             <input
               matInput
               [readonly]="data.opType === modalOp.VIEW"
+              [type]="mainCriterion.value_type === 'number' ? 'number' : 'text'"
               [ngModelOptions]="{standalone: true}"
               [(ngModel)]="mainCriterion.value"
             />

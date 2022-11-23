@@ -2,6 +2,7 @@ import { Component, OnInit, Input, SecurityContext } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CapitalizePipe } from '@common/pipes/app.pipes';
+import { ChartConfiguration } from 'chart.js';
 
 @Component({
   selector: 'app-top-security-events-chart',
@@ -13,7 +14,7 @@ export class TopSecurityEventsChartComponent implements OnInit {
   @Input() topSecurityEvents: any;
   @Input() direction!: string;
   @Input() isReport: boolean = false;
-  topSecurityEventsHorizontalBarChartConfig: any; //ChartConfiguration<'bar', number[], string[]>;
+  topSecurityEventsHorizontalBarChartConfig: ChartConfiguration<'bar', number[], string>;
   noChartData: boolean = false;
 
   constructor(
@@ -45,10 +46,8 @@ export class TopSecurityEventsChartComponent implements OnInit {
       data: {
         labels: topSecurityEventsLabels,
         datasets: [{
-          axis: 'y',
           label: `${this.translate.instant('dashboard.body.panel_title.TOP_SEC_EVENTS')} - ${this.capitalizePipe.transform(direction)}`,
           data: topSecurityEventsData,
-          fill: false,
           backgroundColor: barChartColors,
           borderColor: barChartBorderColors,
           hoverBackgroundColor: barChartColors,
@@ -58,7 +57,7 @@ export class TopSecurityEventsChartComponent implements OnInit {
         }]
       },
       options: {
-        animation: !this.isReport,
+        animation: false,
         indexAxis: 'y',
         responsive: true,
         maintainAspectRatio: false,
@@ -71,6 +70,15 @@ export class TopSecurityEventsChartComponent implements OnInit {
               }
             }
           },
+          y: {
+            ticks: {
+              crossAlign: "far",
+              callback: function(value, index, values): string {
+                let label = this.getLabelForValue(value as number);
+                return label.length > 22 ? `${label.substring(0, 22)}...` : label;
+              },
+            }
+          }
         },
       }
     };

@@ -107,6 +107,7 @@
     <div class="d-flex align-items-center justify-content-end" style="position: absolute; right: 10px; top: -10px;">
       <button
         (click)="openAdvancedFilterDialog()"
+        *ngIf="securityEventsService.cachedSecurityEvents.length > 0"
         class="mx-2 d-flex justify-content-end align-items-center"
         mat-button>
         <i class="eos-icons">search</i>{{ 'general.ADV_FILTER' | translate }}
@@ -255,13 +256,13 @@
                       </span>
                       <span *ngIf="secEvent.endpoint.source.id!=='external'">
                         <span *ngIf="secEvent.endpoint.source.domain">
-                          <em class="fa text-primary fa-building-o"></em>
+                          <em class="eos-icons icon-18 text-primary">domain</em>
                           <span>
                             {{secEvent.endpoint.source.domain}}
                           </span>
                         </span>
                         <span *ngIf="secEvent.endpoint.source.service">
-                          <em class="fa text-primary fa-th-large"></em>
+                          <em class="eos-icons icon-18 text-primary">system_group</em>
                           <span>
                             {{secEvent.endpoint.source.service}}
                           </span>
@@ -333,19 +334,18 @@
                         </span>
                         <span *ngIf="secEvent.endpoint.destination.id!=='external'">
                           <span *ngIf="secEvent.endpoint.destination.domain">
-                            <em class="fa text-primary fa-building-o"></em>
+                            <em class="eos-icons icon-18 text-primary">domain</em>
                             <span>{{secEvent.endpoint.destination.domain}}</span>
                           </span>
                           <span *ngIf="secEvent.endpoint.destination.service">
-                            <em class="fa text-primary fa-th-large"></em>
+                            <em class="eos-icons icon-18 text-primary">system_group</em>
                             <span>
                               {{secEvent.endpoint.destination.service}}
                             </span>
                           </span>
                           <em
-                            class="fa text-primary"
-                            [ngClass]="secEvent.endpoint.destination.icon"
-                          ></em>
+                            class="eos-icons icon-18 text-primary"
+                          >{{secEvent.endpoint.destination.icon}}</em>
                           <span class="link" *ngIf="secEvent.endpoint.destination.hasDetail && secEvent.endpoint.destination.isHyperlinkEnabled"
                                 (click)="showContainerDetails($event, secEvent.endpoint.destination, secEvent.host_name)">
                             {{secEvent.endpoint.destination.displayName}}
@@ -435,14 +435,14 @@
                         >
                         <span>
                           <span>
-                            <em class="fa text-primary fa-building-o"></em>
+                            <em class="eos-icons icon-18 text-primary">domain</em>
                             <span>
                               {{secEvent.container.domain}}
                             </span>
                           </span>
                           <span *ngIf="secEvent.container.id !== ''">
                             <span *ngIf="secEvent.container.service">
-                              <em class="fa text-primary fa-th-large"></em>
+                              <em class="eos-icons icon-18 text-primary">system_group</em>
                               <span>
                                 {{secEvent.container.service}}
                               </span>

@@ -7,6 +7,7 @@
       <button
         mat-button
         aria-label="export WAF SENSORS"
+        *appDisplayControl="'review_rule'"
         (click)="exportWafSensors()">
         <em class="eos-icons icon-18 mr-1">download</em>
         {{ 'admissionControl.EXPORT' | translate }}

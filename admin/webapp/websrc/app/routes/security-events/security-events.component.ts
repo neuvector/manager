@@ -356,20 +356,25 @@ export class SecurityEventsComponent implements OnInit {
         position: { right: '25px', top: '80px' },
       });
 
-      this.filterDialog.afterClosed().subscribe(filter => {
-        console.log(filter);
-        if (filter && filter.reset) {
-          this.advancedFilterModalService.resetFilter();
-          this.setAdvancedFilter();
-        } else if (filter) {
-          filter.severity = this.getSeverities(filter.severity);
-          filter.location = this.getLocations(filter.location);
-          filter.category = this.getCategories(filter.category);
-          filter.other = this.getOther(filter.other);
-          this.setAdvancedFilter(filter);
+      this.filterDialog.afterClosed().subscribe(
+        filter => {
+          console.log(filter);
+          if (filter && filter.reset) {
+            this.advancedFilterModalService.resetFilter();
+            this.setAdvancedFilter();
+          } else if (filter) {
+            filter.severity = this.getSeverities(filter.severity);
+            filter.location = this.getLocations(filter.location);
+            filter.category = this.getCategories(filter.category);
+            filter.other = this.getOther(filter.other);
+            this.setAdvancedFilter(filter);
+          }
+        },
+        error => {},
+        () => {
+          this.filterOpen = false;
         }
-        this.filterOpen = false;
-      });
+      );
     }
   };
 

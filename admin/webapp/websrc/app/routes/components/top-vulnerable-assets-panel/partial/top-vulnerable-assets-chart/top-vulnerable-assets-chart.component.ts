@@ -2,6 +2,7 @@ import { Component, OnInit, Input, SecurityContext } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { CapitalizePipe } from '@common/pipes/app.pipes';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ChartConfiguration } from 'chart.js';
 
 @Component({
   selector: 'app-top-vulnerable-assets-chart',
@@ -13,7 +14,7 @@ export class TopVulnerableAssetsChartComponent implements OnInit {
   @Input() highPriorityVulnerabilities: any;
   @Input() assetType: string;
   @Input() isReport: boolean = false;
-  topVulnerableAssetsBarChartConfig: any;
+  topVulnerableAssetsBarChartConfig: ChartConfiguration<'bar', number[], string>;
   noChartData: boolean = false;
 
   constructor(
@@ -51,7 +52,7 @@ export class TopVulnerableAssetsChartComponent implements OnInit {
 
     this.topVulnerableAssetsBarChartConfig = {
       options: {
-        animation: !this.isReport,
+        animation: false,
         indexAxis: 'y',
         scales: {
           x: {
@@ -64,6 +65,15 @@ export class TopVulnerableAssetsChartComponent implements OnInit {
             },
             beginAtZero: true,
           },
+          y: {
+            ticks: {
+              crossAlign: "far",
+              callback: function(value, index, values): string {
+                let label = this.getLabelForValue(value as number);
+                return label.length > 22 ? `${label.substring(0, 22)}...` : label;
+              },
+            }
+          }
         },
         maintainAspectRatio: false,
         plugins: {

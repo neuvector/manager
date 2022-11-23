@@ -136,6 +136,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
   changeCriterionName = (selectedCriterionName, needClear = false) => {
     this.initCriteriaOptionsView(this.criteriaOptions, selectedCriterionName);
     this.mainCriterion.op = this.criterionOperatorList[0];
+    this.mainCriterion.value_type = '';
     // if (needClear) this.clearCriterionDetail(selectedCriterionName);
   };
 

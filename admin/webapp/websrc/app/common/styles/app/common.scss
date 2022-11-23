@@ -1172,6 +1172,10 @@ mwl-gauge.score > .gauge > .value {
   overflow: hidden;
 }
 
+.label-danger {
+  background-color: $mdc-red-400;
+}
+
 .label-warning {
   background-color: $mdc-orange-700;
 }
@@ -1182,6 +1186,10 @@ mwl-gauge.score > .gauge > .value {
 
 .label-muted {
   background-color: $neuvector-grey-700;
+}
+
+.label-pink {
+  background-color: #E91E63;
 }
 
 .label-success-tran {

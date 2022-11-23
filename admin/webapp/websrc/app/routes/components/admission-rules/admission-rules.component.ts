@@ -21,7 +21,8 @@ import { UtilsService } from  '@common/utils/app.utils';
 import { NotificationService } from '@services/notification.service';
 import { MapConstant } from '@common/constants/map.constant';
 import { Subject } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { finalize, switchMap } from 'rxjs/operators';
+import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-admission-rules',
@@ -334,44 +335,74 @@ export class AdmissionRulesComponent implements OnInit {
   };
 
   toggleMode = () => {
-    this.admissionStateRec.state!.mode! = this.mode;
-    this.admissionRulesService
-      .updateAdmissionState(this.admissionStateRec)
-      .subscribe(
-        () => {
-          this.notificationService.open(
-            this.translate.instant('admissionControl.msg.MODE_SWITCH_OK')
+    const doSuccess = () => {
+      this.notificationService.open(
+        this.translate.instant('admissionControl.msg.MODE_SWITCH_OK')
+      );
+      setTimeout(() => {
+        this.getAdmissionState();
+      }, 500);
+    };
+
+    const doError = (error) => {
+      if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
+        let errMsg: string;
+        if (
+          error.status === GlobalConstant.STATUS_INTERNAL_SERVER_ERR &&
+          error.error.code ===
+            GlobalConstant.ADMISSION.INTERNAL_ERR_CODE.CONFIG_K8S_FAIL
+        ) {
+          errMsg = this.translate.instant(
+            'admissionControl.msg.CONFIG_K8S_FAIL'
           );
-          setTimeout(() => {
-            this.getAdmissionState();
-          }, 500);
+        } else {
+          errMsg = error.error;
+        }
+        this.notificationService.open(
+          this.utils.getAlertifyMsg(
+            errMsg,
+            this.translate.instant('admissionControl.msg.MODE_SWITCH_NG'),
+            false
+          ),
+          GlobalConstant.NOTIFICATION_TYPE.ERROR
+        );
+        this.mode = this.mode === 'monitor' ? 'protect' : 'monitor';
+      }
+    };
+
+    this.admissionStateRec.state!.mode! = this.mode;
+
+    if (this.mode === 'protect') {
+      let message = this.translate.instant('admissionControl.msg.PROTECT_CONFIRM');
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        maxWidth: '700px',
+        data: {
+          message: message
+        },
+        disableClose: true
+      });
+      dialogRef.componentInstance.confirm.pipe(switchMap(() => {
+        return this.admissionRulesService.updateAdmissionState(this.admissionStateRec);
+      })).subscribe(
+        (res) => {
+          // confirm actions
+          doSuccess();
+          // close dialog
+          dialogRef.componentInstance.onCancel();
+          dialogRef.componentInstance.loading = false;
         },
         error => {
-          if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
-            let errMsg: string;
-            if (
-              error.status === GlobalConstant.STATUS_INTERNAL_SERVER_ERR &&
-              error.error.code ===
-                GlobalConstant.ADMISSION.INTERNAL_ERR_CODE.CONFIG_K8S_FAIL
-            ) {
-              errMsg = this.translate.instant(
-                'admissionControl.msg.CONFIG_K8S_FAIL'
-              );
-            } else {
-              errMsg = error.error;
-            }
-            this.notificationService.open(
-              this.utils.getAlertifyMsg(
-                errMsg,
-                this.translate.instant('admissionControl.msg.MODE_SWITCH_NG'),
-                false
-              ),
-              GlobalConstant.NOTIFICATION_TYPE.ERROR
-            );
-            this.mode = this.mode === 'monitor' ? 'protect' : 'monitor';
-          }
+          doError(error);
+          dialogRef.componentInstance.loading = false;
         }
       );
+    } else {
+      this.admissionRulesService.updateAdmissionState(this.admissionStateRec)
+        .subscribe(
+          res => doSuccess(),
+          error => doError(error)
+        );
+    }
   };
 
   promoteRule = () => {

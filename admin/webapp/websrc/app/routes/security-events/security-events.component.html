@@ -107,6 +107,7 @@
     <div class="d-flex align-items-center justify-content-end" style="position: absolute; right: 10px; top: -10px;">
       <button
         (click)="openAdvancedFilterDialog()"
+        *ngIf="securityEventsService.cachedSecurityEvents.length > 0"
         class="mx-2 d-flex justify-content-end align-items-center"
         mat-button>
         <i class="eos-icons">search</i>{{ 'general.ADV_FILTER' | translate }}

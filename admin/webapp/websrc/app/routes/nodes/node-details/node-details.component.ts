@@ -2,10 +2,8 @@ import { DatePipe } from '@angular/common';
 import {
   ChangeDetectorRef,
   Component,
-  EventEmitter,
   Input,
   OnInit,
-  Output,
   ViewChild,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
@@ -20,20 +18,18 @@ import {
 } from '@common/types';
 import { UtilsService } from '@common/utils/app.utils';
 import { AuthUtilsService } from '@common/utils/auth.utils';
-import { arrayToCsv, isVulAccepted } from '@common/utils/common.utils';
+import { isVulAccepted } from '@common/utils/common.utils';
 import { ComplianceGridComponent } from '@components/compliance-grid/compliance-grid.component';
 import { RemediationDetailDialogComponent } from '@components/compliance-grid/remediation-detail-dialog/remediation-detail-dialog.component';
 import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
 import { VulnerabilitiesGridComponent } from '@components/vulnerabilities-grid/vulnerabilities-grid.component';
 import { VulnerabilityDetailDialogComponent } from '@components/vulnerabilities-grid/vulnerability-detail-dialog/vulnerability-detail-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
-import { VulnerabilitiesService } from '@routes/vulnerabilities/vulnerabilities.service';
 import { ContainersService } from '@services/containers.service';
 import { NodesService } from '@services/nodes.service';
 import { NotificationService } from '@services/notification.service';
 import { ScanService } from '@services/scan.service';
 import { VersionInfoService } from '@services/version-info.service';
-import { saveAs } from 'file-saver';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 

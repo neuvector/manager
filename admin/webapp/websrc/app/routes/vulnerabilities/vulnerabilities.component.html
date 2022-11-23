@@ -1,12 +1,16 @@
-<ng-container *appObserve="vulnerabilitiesData$ as vulnerabilitiesData; error:errorTemplate loading:loadingTemplate">
+<ng-container
+  *appObserve="
+    vulnerabilitiesData$ as vulnerabilitiesData;
+    error: errorTemplate;
+    loading: loadingTemplate
+  ">
   <app-risks-view-report
     #vulnerabilityViewReport
     *ngIf="vulnerabilitiesList && isPrinting"
     class="printable-area"
     [reportPage]="'vulnerabilities'"
     [data]="vulnerabilitiesList"
-    [charts]="statisticCharts"
-  >
+    [charts]="statisticCharts">
   </app-risks-view-report>
   <app-assets-view-report
     #assetsViewReport
@@ -14,8 +18,7 @@
     class="printable-area"
     [reportPage]="'vulnerabilities'"
     [masterGrids]="masterGrids"
-    [dictionaryData]="vulnerabilitiesList"
-  >
+    [dictionaryData]="vulnerabilitiesList">
   </app-assets-view-report>
   <div class="screen-area" style="height: calc(100vh - 180px)">
     <div class="d-flex justify-content-end align-items-center">
@@ -47,7 +50,6 @@
         buttonClasses="mr-1 d-flex justify-content-center align-items-center"
         iconClasses="eos-icons"
         iconName="print">
-        >
       </app-loading-button>
       <app-loading-button
         (btnClick)="printVulnerabilityPDF()"
@@ -61,8 +63,7 @@
         (click)="downloadCsv()"
         class="mr-1 d-flex justify-content-center align-items-center"
         mat-button>
-        <i
-          class="eos-icons">csv_file</i>
+        <i class="eos-icons">csv_file</i>
       </button>
       <app-loading-button
         (btnClick)="refresh()"
@@ -83,8 +84,9 @@
     <div style="height: calc(100% - 160px)">
       <app-vulnerability-items
         [domains]="vulnerabilitiesData.domain"
-        [vulnerabilities]="vulnerabilitiesData.vulnerabilities.vulnerabilities"
-      ></app-vulnerability-items>
+        [vulnerabilities]="
+          vulnerabilitiesData.vulnerabilities.vulnerabilities
+        "></app-vulnerability-items>
     </div>
   </div>
 </ng-container>

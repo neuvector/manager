@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of, Subject } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { RisksHttpService } from '@common/api/risks-http.service';
 import { AssetsHttpService } from '@common/api/assets-http.service';
-import { map, repeatWhen, tap } from 'rxjs/operators';
+import { catchError, map, repeatWhen, tap } from 'rxjs/operators';
 import {
+  Compliance,
   HostData,
   HostsData,
   VulnerabilityProfile,
+  VulnerabilityAssetRaw,
   Workload,
   WorkloadsData,
 } from '@common/types';
@@ -16,6 +18,9 @@ import { sortByDisplayName } from '@common/utils/common.utils';
 import { VulnerabilitiesData } from '@common/types/vulnerabilities/vulnerabilities';
 import { VulnerabilitiesFilterService } from './vulnerabilities.filter.service';
 import { AssetsViewPdfService } from './pdf-generation/assets-view-pdf.service';
+import { NotificationService } from '@services/notification.service';
+import { TranslateService } from '@ngx-translate/core';
+import { MapConstant } from '@common/constants/map.constant';
 
 @Injectable({
   providedIn: 'root',
@@ -23,9 +28,9 @@ import { AssetsViewPdfService } from './pdf-generation/assets-view-pdf.service';
 export class VulnerabilitiesService {
   imageMap = new Map();
   hostMap = new Map();
-  topNodes;
-  topImages;
-  topCve;
+  topNodes: [any, any][] = [];
+  topImages: [any, any][] = [];
+  topCve: Compliance[] | VulnerabilityAssetRaw[] = [];
   countDistribution = {
     high: 0,
     medium: 0,
@@ -49,6 +54,8 @@ export class VulnerabilitiesService {
     private vulnerabilitiesFilterService: VulnerabilitiesFilterService,
     private assetsHttpService: AssetsHttpService,
     private assetsViewPdfService: AssetsViewPdfService,
+    private notificationService: NotificationService,
+    private translate: TranslateService
   ) {}
 
   selectVulnerability(vulnerability) {
@@ -144,6 +151,17 @@ export class VulnerabilitiesService {
         return data.domains
           .map(domain => domain.name)
           .filter(domain => domain.charAt(0) !== '_');
+      }),
+      catchError(err => {
+        if (
+          [MapConstant.NOT_FOUND, MapConstant.ACC_FORBIDDEN].includes(
+            err.status
+          )
+        ) {
+          return of([]);
+        } else {
+          throw err;
+        }
       })
     );
   }
@@ -218,6 +236,17 @@ export class VulnerabilitiesService {
             }
           }
         });
+      }),
+      catchError(err => {
+        if (
+          [MapConstant.NOT_FOUND, MapConstant.ACC_FORBIDDEN].includes(
+            err.status
+          )
+        ) {
+          return of({ workloads: [] });
+        } else {
+          throw err;
+        }
       })
     );
   }
@@ -246,6 +275,17 @@ export class VulnerabilitiesService {
             complianceList: [],
           };
         });
+      }),
+      catchError(err => {
+        if (
+          [MapConstant.NOT_FOUND, MapConstant.ACC_FORBIDDEN].includes(
+            err.status
+          )
+        ) {
+          return of({ hosts: [] });
+        } else {
+          throw err;
+        }
       })
     );
   }
@@ -266,6 +306,17 @@ export class VulnerabilitiesService {
             complianceList: [],
           };
         });
+      }),
+      catchError(err => {
+        if (
+          [MapConstant.NOT_FOUND, MapConstant.ACC_FORBIDDEN].includes(
+            err.status
+          )
+        ) {
+          return of({ platforms: [] });
+        } else {
+          throw err;
+        }
       })
     );
   }
@@ -379,6 +430,23 @@ export class VulnerabilitiesService {
         this.topCve = vulnerabilities
           .sort((a, b) => this.compareImpact(a, b) * -1)
           .slice(0, 5);
+      }),
+      catchError(err => {
+        if (
+          [MapConstant.NOT_FOUND, MapConstant.ACC_FORBIDDEN].includes(
+            err.status
+          )
+        ) {
+          return of({
+            vulnerabilities: [],
+            nodes: {},
+            platforms: {},
+            images: {},
+            workloads: {},
+          });
+        } else {
+          throw err;
+        }
       })
     );
   }

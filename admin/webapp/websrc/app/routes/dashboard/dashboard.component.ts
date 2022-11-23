@@ -20,6 +20,7 @@ import { MultiClusterService } from '@services/multi-cluster.service';
 import { Router } from '@angular/router';
 import { AssetsHttpService } from '@common/api/assets-http.service';
 import { ReportByNamespaceModalComponent } from './report-by-namespace-modal/report-by-namespace-modal.component';
+import { AuthService } from '@common/services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -47,6 +48,7 @@ export class DashboardComponent implements OnInit {
     private multiClusterService: MultiClusterService,
     private router: Router,
     private assetsHttpService: AssetsHttpService,
+    private authService: AuthService,
     private dialog: MatDialog
   ) {}
 
@@ -62,6 +64,16 @@ export class DashboardComponent implements OnInit {
     this._switchClusterSubscriber =
       this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
         const currentUrl = this.router.url;
+        this.authService.getSummary().subscribe(
+          (summaryInfo: any) => {
+            GlobalVariable.isOpenShift =
+              summaryInfo.summary.platform === GlobalConstant.OPENSHIFT ||
+              summaryInfo.summary.platform === GlobalConstant.RANCHER;
+            GlobalVariable.summary = summaryInfo.summary;
+            GlobalVariable.hasInitializedSummary = true;
+          },
+          error => {}
+        );
         this.router
           .navigateByUrl('/', { skipLocationChange: true })
           .then(() => {

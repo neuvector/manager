@@ -707,18 +707,18 @@ export class SecurityEventsService {
       }
       endpointOut.id = id;
       if (name.indexOf(MapConstant.securityEventLocation.HOST) === 0) {
-        endpointOut.icon = 'fa-server';
+        endpointOut.icon = 'cluster';
         endpointOut.hasDetail = true;
       }
       else if (name.indexOf(MapConstant.securityEventLocation.WORKLOAD) === 0) {
-        endpointOut.icon = 'fa-square';
+        endpointOut.icon = 'workload';
       }
       else if (name.indexOf(MapConstant.securityEventLocation.EXTERNAL) === 0)
-        endpointOut.icon = 'fa-cloud';
+        endpointOut.icon = 'cloud';
       else if (name.indexOf(MapConstant.securityEventLocation.IP_GROUP) === 0)
-        endpointOut.icon = 'fa-th-large';
+        endpointOut.icon = 'system_group';
       else {
-        endpointOut.icon = 'fa-square-o';
+        endpointOut.icon = 'workload';
         endpointOut.hasDetail = true;
       }
       endpointOut.displayName = displayName;

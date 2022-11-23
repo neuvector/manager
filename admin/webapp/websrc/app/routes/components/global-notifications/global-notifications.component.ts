@@ -21,12 +21,12 @@ export class GlobalNotificationsComponent implements OnInit {
   rbacData!: RbacStatus;
   unUpdateDays!: number;
   get isVersionMismatch() {
-    return (
-      (GlobalVariable.summary.component_versions.length > 1 &&
-        GlobalVariable.summary.component_versions[0] ===
-          GlobalVariable.summary.component_versions[1]) ||
-      this.version !== GlobalVariable.summary.component_versions[0]
-    );
+    return GlobalVariable.summary.component_versions
+      ? (GlobalVariable.summary.component_versions.length > 1 &&
+          GlobalVariable.summary.component_versions[0] ===
+            GlobalVariable.summary.component_versions[1]) ||
+          this.version !== GlobalVariable.summary.component_versions[0]
+      : false;
   }
   get passwordExpiration() {
     return GlobalVariable.user.token.password_days_until_expire;

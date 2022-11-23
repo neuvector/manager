@@ -37,24 +37,25 @@
     <app-adjustable-div [minHeightOne]="163" [minHeightTwo]="140">
       <ng-container *appContainerOne="let height">
         <mat-card [ngStyle]="{ height: height + 'px' }" class="pt-0">
-          <div class="clearfix">
+          <div class="d-flex justify-content-between align-items-center">
+            <button
+              mat-stroked-button
+              aria-label="add sensor"
+              class=""
+              (click)="openAddEditWafSensorModal()"
+              *appDisplayControl="'write_waf_rule'">
+              <em class="eos-icons icon-18">add_circle</em>
+              {{ 'admissionControl.INSERT' | translate }}
+            </button>
             <app-quick-filter
-              class="pull-left"
+              class=""
               [gridOptions]="gridOptions4Sensors"
               [filteredCount]="filteredCount"
               [count]="wafSensors.length">
             </app-quick-filter>
-            <button
-              class="pull-left margin-top-l margin-left-m primary-button"
-              (click)="openAddEditWafSensorModal()"
-              *appDisplayControl="'write_waf_rule'">
-              <em class="eos-icons icon-18">add</em>
-              {{ 'admissionControl.INSERT' | translate }}
-            </button>
           </div>
           <div class="clearfix">
             <ag-grid-angular
-              #wafSensorsGrid
               id="waf-sensors-grid"
               style="width: 100%"
               [ngStyle]="{ height: height - 90 + 'px' }"
@@ -77,12 +78,11 @@
             <div class="col-sm-3" style="position: relative">
               <button
                 *ngIf="!isPredefine && isWriteWAFSensorAuthorized"
-                style="position: absolute; z-index: 10; right: 17px; top: 2px"
+                style="position: absolute; z-index: 10; right: 17px; top: 4px"
                 (click)="openAddWafRuleModal()">
-                <em class="eos-icons icon-18">add</em>
+                <em class="eos-icons icon-18 d-flex justify-content-center align-items-center">add</em>
               </button>
               <ag-grid-angular
-                #wafRulesGrid
                 id="waf-rules-grid"
                 style="width: 100%"
                 [ngStyle]="{ height: height - 90 + 'px' }"
@@ -93,7 +93,6 @@
             </div>
             <div class="col-sm-9">
               <ag-grid-angular
-                #wafPatternsGrid
                 id="waf-patterns-grid"
                 style="width: 100%"
                 [ngStyle]="{ height: height - 90 + 'px' }"

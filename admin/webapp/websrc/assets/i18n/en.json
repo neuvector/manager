@@ -120,7 +120,7 @@
     "CONTAINER.SECURED": "Container secured",
     "CONTAINER.UNSECURED": "Container unsecured",
     "CONTAINER.QUARANTINED": "Container quarantined",
-    "CONTAINER.UNQUARANTINED": "Container unquarantined",
+    "CONTAINER.UNQUARANTINED": "Container un-quarantined",
     "ENFORCER.START": "Enforcer started",
     "ENFORCER.JOIN": "Enforcer joined",
     "ENFORCER.LEAVE": "Enforcer left",
@@ -405,11 +405,11 @@
         "OTHERS": "Others"
       },
       "policy_evaluation": {
-        "EXCELLENT": "EXCELLENT",
-        "VERYGOOD": "VERY GOOD",
-        "GOOD": "GOOD",
-        "FAIR": "FAIR",
-        "POOR": "POOR"
+        "EXCELLENT": "Excellent",
+        "VERYGOOD": "Very good",
+        "GOOD": "Good",
+        "FAIR": "Fair",
+        "POOR": "Poor"
       },
       "button": {
         "VIEW_ALL_THREATS": "View All Threats",
@@ -665,7 +665,7 @@
       "SNIFF": "Packet Capture",
       "START_SNIFF": "Start Capture",
       "QUARANTINE": "Quarantine",
-      "UN_QUARANTINE": "Unquarantine",
+      "UN_QUARANTINE": "Un-quarantine",
       "LOCATION": "Node",
       "SECURED_AT": "Secured at",
       "CREATED_AT": "Created at",
@@ -1329,7 +1329,7 @@
       "REGULATIONS": "Regulations",
       "DEPLOY_OK": "Templated saved.",
       "DEPLOY_FAILED": "Failed to save template: ",
-      "DISABLE_CHECK": "DISABLE CHECK",
+      "DISABLE_CHECK": "Disable check",
       "APPLY_TEMPLATES": "Apply Templates",
       "CURR_TEMPLATES": "Current Templates",
       "APPLY_REG": "Apply Regulations",
@@ -1690,7 +1690,7 @@
       "TITLE": "Reset Password",
       "RESET": "Reset",
       "RESET_OK": "Password is reset successfully!",
-      "RESET_NG": "Error happens when reseting password."
+      "RESET_NG": "Error happens when resetting password."
     },
     "addUser": {
       "TITLE": "Add User",
@@ -1855,9 +1855,9 @@
     "EDIT_RULE": "Edit rule",
     "ALLOW_ALERT": "Action",
     "COUNT_POSTFIX": "services found",
-    "HIDE_SYS_SERVICES": "HIDE SYSTEM SERVICES",
-    "SHOW_SYS_SERVICES": "SHOW SYSTEM SERVICES",
-    "PREDEFINED_FILTERS": "SHOW PREDEFINED FILTERS",
+    "HIDE_SYS_SERVICES": "Hide system services",
+    "SHOW_SYS_SERVICES": "Show system services",
+    "PREDEFINED_FILTERS": "Show predefined filters",
     "PREDEFINED_FILTERS_TITLE": "Predefined filters",
     "gridHeader": {
       "USER": "User",
@@ -2211,7 +2211,7 @@
     "POLICY_DEPLOY_CONFIRM": "Please confirm that you want to deploy this updated policy.",
     "RULE_DEPLOY_CONFIRM": "Please confirm that you want to deploy this rule.",
     "QUARANTINE_CONFIRM": "Please confirm that you want to quarantine this container.",
-    "UNQUARANTINE_CONFIRM": "Please confirm that you want to unquarantine this container.",
+    "UNQUARANTINE_CONFIRM": "Please confirm that you want to un-quarantine this container.",
     "DEFAULT_RULE": "Deny network connections that don't match any of above allowed rules for any applications/ports.",
     "COUNT_POSTFIX": "rules found",
     "ALL_PORTS": "All Ports",
@@ -2385,12 +2385,12 @@
         "DISABLE_NG": "Response rule disabling failed",
         "ENABLE_OK": "Response rule is enabled successfully!",
         "ENABLE_NG": "Response rule enabling faile",
-        "UNQUARANTINE_OK": "Response rule is unquarantined successfully!",
-        "UNQUARANTINE_NG": "Response rule unquarantining failed",
+        "UNQUARANTINE_OK": "Response rule is un-quarantined successfully!",
+        "UNQUARANTINE_NG": "Response rule un-quarantining failed",
         "HINT": "Sample: ",
         "REMOVE_CONFIRM": "Will you remove Response Rule? - ID: "
       },
-      "UNQUARANTINE_CHECK": "Unquarantine all containers which were quarantined by this rule"
+      "UNQUARANTINE_CHECK": "Un-quarantine all containers which were quarantined by this rule"
     }
   },
   "admissionControl": {
@@ -2485,7 +2485,7 @@
       }
     },
     "ID": "ID",
-    "COMMENT": "comment",
+    "COMMENT": "Comment",
     "DISABLED": "Disabled",
     "NAME": "Criterion",
     "OP": "Operator",
@@ -2714,7 +2714,7 @@
   },
   "license": {
     "TITLE": "License",
-    "HEAD": "END USER LICENSE AGREEMENT",
+    "HEAD": "End user license agreement",
     "ACCEPT_AGREEMENT": "I have read and agree to the ",
     "METERED": "Metered License",
     "METERED_TRIAL": "Metered Trial License",
@@ -2800,12 +2800,12 @@
     "PROGRESS": "Progress",
     "STATUS": "Status",
     "ACTIONS": "Actions",
-    "UPLOAD": "UPLOAD",
-    "CANCEL": "CANCEL",
-    "REMOVE": "REMOVE",
-    "SUBMIT": "SUBMIT",
-    "COLLECT": "COLLECT LOG",
-    "USAGE_RPT": "USAGE REPORT",
+    "UPLOAD": "Upload",
+    "CANCEL": "Cancel",
+    "REMOVE": "Remove",
+    "SUBMIT": "Submit",
+    "COLLECT": "Collect log",
+    "USAGE_RPT": "Usage report",
     "SUPPORT_IN_PROGRESS": "Collecting logs for Manager, Controller and Enforcer...",
     "SUPPORT_INFO": "Please send to support@neuvector.com",
     "EXPORT_FAILED": "Failed to export file",
@@ -2837,7 +2837,7 @@
     "USERNAME": "Username",
     "PASSWORD": "Password",
     "IBM_INTEGRATE": "Integrate with IBM Security Advisor",
-    "GENERATE_URL": "GENERATE URL",
+    "GENERATE_URL": "Generate url",
     "URL_EXPIRE": "URL is valid until {{time}}",
     "IBM_SA_ERR": "Error happened when getting URL",
     "DASHBOARD_URL": "Dashboard URL",

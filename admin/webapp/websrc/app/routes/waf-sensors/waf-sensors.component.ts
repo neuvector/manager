@@ -14,6 +14,8 @@ import { UtilsService } from '@common/utils/app.utils';
 import { saveAs } from 'file-saver';
 import { ImportFileModalComponent } from '@components/ui/import-file-modal/import-file-modal.component';
 import { MultiClusterService } from '@services/multi-cluster.service';
+import { finalize } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '@services/notification.service';
 
@@ -24,6 +26,7 @@ import { NotificationService } from '@services/notification.service';
 })
 export class WafSensorsComponent implements OnInit {
   wafSensors: Array<WafSensor> = [];
+  refreshing$ = new Subject();
   isWriteWAFSensorAuthorized: boolean = false;
   gridOptions: any;
   gridOptions4Sensors!: GridOptions;
@@ -160,18 +163,21 @@ export class WafSensorsComponent implements OnInit {
   };
 
   private getWafSensors = (index: number) => {
-    this.wafSensorsService.getWafSensorsData().subscribe(
-      response => {
-        this.wafSensors = response as Array<WafSensor>;
-        this.filteredCount = this.wafSensors.length;
-        setTimeout(() => {
-          let rowNode =
-            this.gridOptions4Sensors.api!.getDisplayedRowAtIndex(index);
-          rowNode!.setSelected(true);
-        }, 200);
-      },
-      error => {}
-    );
+    this.wafSensorsService
+      .getWafSensorsData()
+      .pipe(finalize(() => this.refreshing$.next(false)))
+      .subscribe(
+        response => {
+          this.wafSensors = response as Array<WafSensor>;
+          this.filteredCount = this.wafSensors.length;
+          setTimeout(() => {
+            let rowNode =
+              this.gridOptions4Sensors.api!.getDisplayedRowAtIndex(index);
+            rowNode!.setSelected(true);
+          }, 200);
+        },
+        error => {}
+      );
   };
 
   private onSelectionChanged4Sensor = () => {
@@ -183,6 +189,7 @@ export class WafSensorsComponent implements OnInit {
     this.isPredefine = this.selectedSensor.predefine;
     setTimeout(() => {
       this.gridOptions4Rules.api!.setRowData(this.selectedSensor.rules);
+      this.gridOptions4Patterns.api!.setRowData([]);
       if (this.selectedSensor.rules.length > 0) {
         let rowNode = this.gridOptions4Rules.api!.getDisplayedRowAtIndex(0);
         rowNode!.setSelected(true);

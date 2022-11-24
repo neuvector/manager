@@ -15,6 +15,9 @@
         [filteredCount]="filteredCount"
         [count]="wafSensorOption.length">
       </app-quick-filter>
+      <div class="pull-left mt-4 text-warning" *ngIf="data.warning">
+        {{data.warning}}
+      </div>
     </div>
     <div class="clearfix">
       <ag-grid-angular

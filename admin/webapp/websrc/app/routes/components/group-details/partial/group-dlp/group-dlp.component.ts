@@ -6,6 +6,8 @@ import { MatDialog } from "@angular/material/dialog";
 import { GroupDlpConfigModalComponent } from '@components/group-details/partial/group-dlp-config-modal/group-dlp-config-modal.component';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { GlobalConstant } from '@common/constants/global.constant';
+import { NotificationService } from '@services/notification.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-group-dlp',
@@ -29,7 +31,9 @@ export class GroupDlpComponent implements OnInit {
   constructor(
     private groupsService: GroupsService,
     private dialog: MatDialog,
-    private authUtilsService: AuthUtilsService
+    private authUtilsService: AuthUtilsService,
+    private notificationService: NotificationService,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -45,6 +49,23 @@ export class GroupDlpComponent implements OnInit {
     this.groupsService.getGroupDlpSensorData(this.groupName)
       .subscribe(
         (response: any) => {
+          if (response.sensors.length === 0) {
+            if (response.status) {
+              this.gridOptions4GroupDlpSensors.overlayNoRowsTemplate =
+                `<div class="server-error">
+                  <div>
+                    <em class="eos-icons text-warning" aria-hidden="true">gpp_maybe</em>
+                  </div>
+                  <div>
+                    <div>${this.translate.instant("group.dlp.msg.ADD_DLP_WARNING")}</div>
+                  </div>
+                </div>`
+            } else {
+              this.gridOptions4GroupDlpSensors.overlayNoRowsTemplate = `<span class="overlay">${this.translate.instant(
+                "general.NO_ROWS"
+              )}</span>`
+            }
+          }
           this.groupDlpSensors = response.sensors;
           this.gridOptions4GroupDlpSensors.api!.setRowData(this.groupDlpSensors);
           this.enabled = response.status;
@@ -54,17 +75,51 @@ export class GroupDlpComponent implements OnInit {
       );
   };
 
-  openEditGroupSensorModal = () => {
+  openEditGroupSensorModal = (warning = '') => {
     const addEditDialogRef = this.dialog.open(GroupDlpConfigModalComponent, {
       width: "80%",
       data: {
         configuredSensors: this.groupDlpSensors,
         groupName: this.groupName,
         status: this.enabled,
+        warning: warning,
         refresh: this.refresh
       },
       disableClose: true
     });
+  };
+
+  toggleDLPConfigEnablement = (enabled) => {
+    let payload = {
+      config: {
+        name: this.groupName,
+        status: !enabled
+      }
+    };
+    this.groupsService.updateGroupDlpSensorData(payload)
+      .subscribe(
+        (response: any) => {
+          if (!enabled && this.groupDlpSensors.length === 0) {
+            this.openEditGroupSensorModal(this.translate.instant("group.dlp.msg.ADD_DLP_WARNING"));
+          }
+          setTimeout(() => {
+            this.refresh();
+          }, 1000);
+          this.notificationService.open(
+            enabled ?
+              this.translate.instant('group.dlp.msg.DISABLED_OK') :
+              this.translate.instant('group.dlp.msg.ENABLED_OK')
+          );
+        },
+        error => {
+          this.notificationService.openError(
+            error,
+            enabled ?
+              this.translate.instant('group.dlp.msg.DISABLED_NG') :
+              this.translate.instant('group.dlp.msg.ENABLED_NG')
+          );
+        }
+      );
   };
 
 }

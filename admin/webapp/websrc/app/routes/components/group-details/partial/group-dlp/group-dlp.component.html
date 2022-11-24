@@ -12,6 +12,7 @@
       [disabled]="!isWriteDlpAuthorized || cfgType === CFG_TYPE.GROUND"
       [(ngModel)]="enabled"
       [ngModelOptions]="{standalone: true}"
+      (toggleChange)="toggleDLPConfigEnablement(enabled)"
     >
       <span
         [ngClass]="{

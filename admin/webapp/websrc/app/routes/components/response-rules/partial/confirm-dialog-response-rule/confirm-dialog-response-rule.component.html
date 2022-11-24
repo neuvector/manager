@@ -1,0 +1,30 @@
+<div mat-dialog-content>
+  <p class="overflow-auto pb-2">{{ data.message }}</p>
+  <div *ngIf="data.isQuarantined">
+    <mat-checkbox class="example-margin" [(ngModel)]="isUnquarantined">
+      {{ 'responsePolicy.dialog.UNQUARANTINE_CHECK' | translate }}
+    </mat-checkbox>
+  </div>
+</div>
+<div class="mt-4" mat-dialog-actions align="end">
+  <button
+    (click)="onCancel()"
+    [disabled]="loading"
+    class="mr-2"
+    color="warn"
+    id="cancel-delete"
+    mat-button>
+    {{ 'general.CANCEL' | translate }}
+  </button>
+  <app-loading-button
+    (btnClick)="onConfirm()"
+    [disabled]="loading"
+    [loading]="loading"
+    appearance="mat-raised-button"
+    cdkfocusinitial
+    color="primary"
+    [id]="data.message + '-confirm-button'"
+    text="Ok"
+    type="button">
+  </app-loading-button>
+</div>

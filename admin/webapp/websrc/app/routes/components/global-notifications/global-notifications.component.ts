@@ -34,6 +34,9 @@ export class GlobalNotificationsComponent implements OnInit {
   get notificationLength() {
     return this.globalNotifications.filter(n => !n.accepted).length;
   }
+  get currentUser(): string {
+    return GlobalVariable.user.token.username || '';
+  }
 
   constructor(
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
@@ -49,14 +52,20 @@ export class GlobalNotificationsComponent implements OnInit {
   }
 
   accept(notification: GlobalNotification, event: MouseEvent) {
-    const notifs: string[] =
-      this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_NOTIFICATIONS) ||
-      [];
+    let globalNotifs = {};
+    let currentNotifs = this.sessionStorage.get(
+      GlobalConstant.SESSION_STORAGE_NOTIFICATIONS
+    )?.[this.currentUser];
+    if (currentNotifs) {
+      globalNotifs[this.currentUser] = [...currentNotifs, notification.name];
+    } else {
+      globalNotifs[this.currentUser] = [notification.name];
+    }
     notification.accepted = true;
-    this.sessionStorage.set(GlobalConstant.SESSION_STORAGE_NOTIFICATIONS, [
-      ...notifs,
-      notification.name,
-    ]);
+    this.sessionStorage.set(
+      GlobalConstant.SESSION_STORAGE_NOTIFICATIONS,
+      globalNotifs
+    );
     if (this.notificationLength) event.stopPropagation();
   }
 
@@ -185,15 +194,18 @@ export class GlobalNotificationsComponent implements OnInit {
         });
       });
     }
-    const notifs: string[] = this.sessionStorage.get(
-      GlobalConstant.SESSION_STORAGE_NOTIFICATIONS
-    );
+    const notifs: string[] =
+      this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_NOTIFICATIONS)?.[
+        this.currentUser
+      ] || [];
     if (notifs && notifs.length > 0) {
       this.globalNotifications.forEach(globalNotif => {
         if (notifs.includes(globalNotif.name)) {
           globalNotif.accepted = true;
         }
       });
+    } else {
+      this.sessionStorage.remove(GlobalConstant.SESSION_STORAGE_NOTIFICATIONS);
     }
   }
 

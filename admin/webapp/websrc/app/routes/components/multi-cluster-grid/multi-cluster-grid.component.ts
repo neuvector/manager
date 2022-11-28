@@ -424,7 +424,7 @@ export class MultiClusterGridComponent implements OnInit {
       }
 
       rowNode.data.hosts = summaryDetail.hosts;
-      rowNode.data.running_pods = summaryDetail.running_pods;
+      rowNode.data.running_pods = summaryDetail.running_pods.toString();
       rowNode.data.cvedb_version = summaryDetail.cvedb_version;
     } else {
       rowNode.data.hosts = this.translate.instant(

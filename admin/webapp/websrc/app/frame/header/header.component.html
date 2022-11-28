@@ -97,6 +97,24 @@
         </ng-container>
       </mat-menu>
     </div>
+    <div *ngIf="isMemberRole">
+      <button mat-button class="nav-item nav-white nav-border">
+        <i class="fa fa-home fa-lg mr-lg text-gray-light brightness-70"></i>
+        <label
+          class="selected-cluster-text mr-lg brightness-70"
+          [matTooltip]  = "primaryMasterName"
+          [matTooltipDisabled]="primaryMasterName.length < 20"
+        >{{primaryMasterName | shortenFromMiddle: 20}} &nbsp;&nbsp;&nbsp;/&nbsp;</label>
+        <i class="fa fa-laptop fa-lg mr-lg text-gray-light"></i>
+        <label
+          class="selected-cluster-text mr-lg"
+          style="position: relative;"
+          [matTooltip]  = "managedClusterName"
+          [matTooltipDisabled]="managedClusterName.length < 20"
+        >{{managedClusterName | shortenFromMiddle: 20}}
+        </label>
+      </button>
+    </div>
 
     <div class="docURLBase mr-1">
       <a

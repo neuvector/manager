@@ -1,6 +1,6 @@
 <div class="rule-actions-expand fade-in-right">
-  <div *ngIf="isMasterRole(); else isMemberRole"
-    style="display: flex; justify-content: space-evenly;">
+  <div *ngIf="isMasterRole(); else isMemberRole" class="grid-space-evenly"
+    style="display: flex;">
     <div *ngIf="isMasterCluster(); else isMemberCluster">
       <em
         class="eos-icons icon-18 hand "
@@ -34,12 +34,12 @@
       <em
         class="eos-icons icon-18 hand"
         matTooltip="{{ 'multiCluster.tips.remove' | translate }}"
-        (click)="removeMember(params.data); $event.stopPropagation();"
+        (click)="removeMember(params.data)"
       >person_off</em>
       <em
         class="eos-icons icon-18 hand"
         matTooltip="{{ 'multiCluster.tips.manage' | translate }}"
-        (click)="manageCluster(); $event.stopPropagation();"
+        (click)="manageCluster(params.data)"
       >laptop_windows</em>
 
     </ng-template>

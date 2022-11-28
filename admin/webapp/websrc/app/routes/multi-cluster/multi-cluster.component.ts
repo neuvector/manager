@@ -124,11 +124,9 @@ export class MultiClusterComponent implements OnInit {
       this.multiClusterService
         .getRemoteSummary(id)
         .subscribe((summary: any) => {
-          console.log('summary:', summary);
         });
     } else {
       this.multiClusterService.getLocalSummary().subscribe((summary: any) => {
-        console.log('summary:', summary);
       });
     }
   }

@@ -18,32 +18,30 @@ import { sortByDisplayName } from '@common/utils/common.utils';
 import { VulnerabilitiesData } from '@common/types/vulnerabilities/vulnerabilities';
 import { VulnerabilitiesFilterService } from './vulnerabilities.filter.service';
 import { AssetsViewPdfService } from './pdf-generation/assets-view-pdf.service';
-import { NotificationService } from '@services/notification.service';
-import { TranslateService } from '@ngx-translate/core';
 import { MapConstant } from '@common/constants/map.constant';
 
 @Injectable({
   providedIn: 'root',
 })
 export class VulnerabilitiesService {
-  imageMap = new Map();
-  hostMap = new Map();
-  topNodes: [any, any][] = [];
-  topImages: [any, any][] = [];
-  topCve: Compliance[] | VulnerabilityAssetRaw[] = [];
-  countDistribution = {
-    high: 0,
-    medium: 0,
-    platform: 0,
-    image: 0,
-    node: 0,
-    container: 0,
+  imageMap!: Map<string, { high: number; medium: number }>;
+  hostMap!: Map<string, { high: number; medium: number }>;
+  topNodes!: [string, { high: number; medium: number }][];
+  topImages!: [string, { high: number; medium: number }][];
+  topCve!: Compliance[] | VulnerabilityAssetRaw[];
+  countDistribution!: {
+    high: number;
+    medium: number;
+    platform: number;
+    image: number;
+    node: number;
+    container: number;
   };
-  workloadMap4Pdf = {};
-  private workloadMap = new Map();
-  imageMap4Pdf = {};
-  platformMap4Pdf = {};
-  hostMap4Pdf = {};
+  workloadMap4Pdf!: {};
+  private workloadMap!: Map<string, any>;
+  imageMap4Pdf!: {};
+  platformMap4Pdf!: {};
+  hostMap4Pdf!: {};
   private refreshSubject$ = new Subject();
   private selectedVulnerabilitySubject$ = new BehaviorSubject<any>(undefined);
   selectedVulnerability$ = this.selectedVulnerabilitySubject$.asObservable();
@@ -53,9 +51,7 @@ export class VulnerabilitiesService {
     private risksHttpService: RisksHttpService,
     private vulnerabilitiesFilterService: VulnerabilitiesFilterService,
     private assetsHttpService: AssetsHttpService,
-    private assetsViewPdfService: AssetsViewPdfService,
-    private notificationService: NotificationService,
-    private translate: TranslateService
+    private assetsViewPdfService: AssetsViewPdfService
   ) {}
 
   selectVulnerability(vulnerability) {
@@ -66,7 +62,30 @@ export class VulnerabilitiesService {
     return this.datePipe.transform(date, 'MMM dd, y HH:mm:ss');
   }
 
+  initVulnerabilityDetails() {
+    this.selectedVulnerabilitySubject$.next(undefined);
+    this.imageMap = new Map();
+    this.hostMap = new Map();
+    this.topCve = [];
+    this.topNodes = [];
+    this.topImages = [];
+    this.countDistribution = {
+      high: 0,
+      medium: 0,
+      platform: 0,
+      image: 0,
+      node: 0,
+      container: 0,
+    };
+    this.workloadMap4Pdf = {};
+    this.workloadMap = new Map();
+    this.imageMap4Pdf = {};
+    this.platformMap4Pdf = {};
+    this.hostMap4Pdf = {};
+  }
+
   initVulnerability() {
+    this.initVulnerabilityDetails();
     return combineLatest([
       this.getDomain(),
       this.getContainer(),

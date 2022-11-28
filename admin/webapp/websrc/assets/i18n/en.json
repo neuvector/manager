@@ -648,6 +648,7 @@
       "PROXY": "Proxy Container",
       "QUARANTINED": "Quarantined",
       "QUARANTINED_GROUP": "Quarantined pods inside",
+      "RISKY_POD": "Risky container",
       "CONV_INTERNAL": "Internal conversation",
       "CONV": "Conversation",
       "CONV_DENY": "Conversation being blocked",

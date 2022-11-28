@@ -356,7 +356,7 @@ export class GraphService {
     hostDiscover: 'host-d',
     hostMonitor: 'host-m',
     hostProtect: 'host-p',
-    workload_ip: 'workload-ip',
+    workload_ip: 'container-x',
     meshProxy: 'meshProxy',
     external: 'cloud',
   };

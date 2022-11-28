@@ -15,7 +15,7 @@ import { ProcessProfileRulesService } from '@services/process-profile-rules.serv
 import { AddEditProcessProfileRuleModalComponent } from './partial/add-edit-process-profile-rule-modal/add-edit-process-profile-rule-modal.component';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { AuthUtilsService } from '@common/utils/auth.utils';
-import { ConfirmDialogComponent } from "@components/ui/confirm-dialog/confirm-dialog.component";
+import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
 import { switchMap } from 'rxjs/operators';
 import { NotificationService } from '@services/notification.service';
 
@@ -62,10 +62,15 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
     this.source = this.source ? this.source : GlobalConstant.NAV_SOURCE.SELF;
     this.isWriteGroupAuthorized =
       this.authUtilsService.getDisplayFlag('write_group') &&
-      (this.source !== GlobalConstant.NAV_SOURCE.GROUP ? this.authUtilsService.getDisplayFlag('multi_cluster') : true);
+      (this.source !== GlobalConstant.NAV_SOURCE.GROUP
+        ? this.authUtilsService.getDisplayFlag('multi_cluster')
+        : true);
     this.isWriteProcessProfileRuleAuthorized =
-      (this.source === GlobalConstant.NAV_SOURCE.GROUP && (this.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER || this.cfgType === GlobalConstant.CFG_TYPE.LEARNED)) ||
-      (this.source === GlobalConstant.NAV_SOURCE.FED_POLICY && this.cfgType === GlobalConstant.CFG_TYPE.FED)
+      (this.source === GlobalConstant.NAV_SOURCE.GROUP &&
+        (this.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER ||
+          this.cfgType === GlobalConstant.CFG_TYPE.LEARNED)) ||
+      (this.source === GlobalConstant.NAV_SOURCE.FED_POLICY &&
+        this.cfgType === GlobalConstant.CFG_TYPE.FED);
     this.gridOptions = this.processProfileRulesService.prepareGrid(
       this.isWriteGroupAuthorized,
       this.source,
@@ -188,7 +193,6 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
           source: this.source,
           getProcessProfileRules: this.getProcessProfileRules,
         },
-        disableClose: true,
       }
     );
     editDialogRef.afterClosed().subscribe(() => {
@@ -197,44 +201,53 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
   };
 
   removeProfile = data => {
-
-    let message = `${this.translate.instant('service.PROFILE_DELETE_CONFIRMATION')} - ${data.name}`;
+    let message = `${this.translate.instant(
+      'service.PROFILE_DELETE_CONFIRMATION'
+    )} - ${data.name}`;
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '700px',
       data: {
-        message: message
+        message: message,
       },
-      disableClose: true
+      disableClose: true,
     });
-    dialogRef.componentInstance.confirm.pipe(switchMap(() => {
-      return this.processProfileRulesService
-        .updateProcessProfileRules(
-          GlobalConstant.CRUD.D,
-          this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-            ? data.group
-            : this.groupName,
-          {},
-          data,
-          this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-            ? GlobalConstant.SCOPE.FED
-            : GlobalConstant.SCOPE.LOCAL
-        );
-    })).subscribe(
-      (res) => {
-        // confirm actions
-        this.notificationService.open(this.translate.instant('group.profile.REMOVE_OK'))
-        setTimeout(() => {
-          this.getProcessProfileRules(this.groupName);
-        }, 1000);
-        // close dialog
-        dialogRef.componentInstance.onCancel();
-        dialogRef.componentInstance.loading = false;
-      },
-      error => {
-        this.notificationService.openError(error, this.translate.instant('group.profile.REMOVE_NG'))
-        dialogRef.componentInstance.loading = false;
-      }
-    );
+    dialogRef.componentInstance.confirm
+      .pipe(
+        switchMap(() => {
+          return this.processProfileRulesService.updateProcessProfileRules(
+            GlobalConstant.CRUD.D,
+            this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+              ? data.group
+              : this.groupName,
+            {},
+            data,
+            this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+              ? GlobalConstant.SCOPE.FED
+              : GlobalConstant.SCOPE.LOCAL
+          );
+        })
+      )
+      .subscribe(
+        res => {
+          // confirm actions
+          this.notificationService.open(
+            this.translate.instant('group.profile.REMOVE_OK')
+          );
+          setTimeout(() => {
+            this.getProcessProfileRules(this.groupName);
+          }, 1000);
+          // close dialog
+          dialogRef.componentInstance.onCancel();
+          dialogRef.componentInstance.loading = false;
+        },
+        error => {
+          this.notificationService.openError(
+            error,
+            this.translate.instant('group.profile.REMOVE_NG')
+          );
+          dialogRef.componentInstance.loading = false;
+        }
+      );
   };
 
   addProfile = () => {
@@ -248,7 +261,6 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
           source: this.source,
           getProcessProfileRules: this.getProcessProfileRules,
         },
-        disableClose: true,
       }
     );
     addDialogRef.afterClosed().subscribe(result => {

@@ -229,7 +229,6 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
               : GlobalConstant.SCOPE.LOCAL,
           updateGridData: this.updateGridData,
         },
-        disableClose: true,
       }
     );
   };
@@ -242,7 +241,6 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
         networkRules: this.networkRules,
         updateGridData: this.updateGridData,
       },
-      disableClose: true,
     });
   };
 
@@ -254,33 +252,39 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
     };
     this.networkRulesService.promoteNetworkRulesData(payload).subscribe(
       res => {
-        this.notificationService.open(this.translate.instant("policy.message.PROMOTE_OK"));
+        this.notificationService.open(
+          this.translate.instant('policy.message.PROMOTE_OK')
+        );
         setTimeout(() => {
           this.refresh();
         }, 2000);
       },
       error => {
-        this.notificationService.openError(error, this.translate.instant("policy.message.PROMOTE_NG"));
+        this.notificationService.openError(
+          error,
+          this.translate.instant('policy.message.PROMOTE_NG')
+        );
       }
     );
   };
 
   removeNetworkRules = () => {
-    let ids = this.selectedNetworkRules.map(rule => rule.id).filter(id => id !== -1);
+    let ids = this.selectedNetworkRules
+      .map(rule => rule.id)
+      .filter(id => id !== -1);
     let idsMsg = ids.map(id => {
       return id >= GlobalConstant.NEW_ID_SEED.NETWORK_RULE
         ? `New-${id - GlobalConstant.NEW_ID_SEED.NETWORK_RULE + 1}`
         : id;
-    })
+    });
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '700px',
       data: {
-        message: `${this.translate.instant('policy.dialog.REMOVE')} ${idsMsg.join(
-          ', '
-        )}`,
+        message: `${this.translate.instant(
+          'policy.dialog.REMOVE'
+        )} ${idsMsg.join(', ')}`,
         isSync: true,
       },
-      disableClose: true,
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -353,7 +357,6 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       data: {
         message: this.translate.instant('policy.POLICY_DEPLOY_CONFIRM'),
       },
-      disableClose: true,
     });
     // listen to confirm subject
     dialogRef.componentInstance.confirm
@@ -368,7 +371,9 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(
         res => {
           console.log(res);
-          this.notificationService.open(this.translate.instant("policy.dialog.content.SUBMIT_OK"));
+          this.notificationService.open(
+            this.translate.instant('policy.dialog.content.SUBMIT_OK')
+          );
           // close dialog
           dialogRef.componentInstance.onCancel();
           dialogRef.componentInstance.loading = false;
@@ -387,8 +392,14 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
               error.error.code === READONLY_RULE_MODIFIED
             ) {
               this.notificationService.open(
-                `${this.utils.getAlertifyMsg(error, this.translate.instant("policy.dialog.content.SUBMIT_NG"), false)} -
-                Read-only rule ID is: ${error.error.read_only_rule_ids.join(", ")}.\n
+                `${this.utils.getAlertifyMsg(
+                  error,
+                  this.translate.instant('policy.dialog.content.SUBMIT_NG'),
+                  false
+                )} -
+                Read-only rule ID is: ${error.error.read_only_rule_ids.join(
+                  ', '
+                )}.\n
                 You can click revert button on the rule to rollback your change.`,
                 GlobalConstant.NOTIFICATION_TYPE.ERROR
               );
@@ -399,7 +410,10 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
               // this.notificationService.openHtmlError(this.readonlyNotificationMsgs, this.notificationTemplate);
               this.changeState4ReadOnlyRules(error.error.read_only_rule_ids);
             } else {
-              this.notificationService.openError(error, this.translate.instant("policy.dialog.content.SUBMIT_NG"));
+              this.notificationService.openError(
+                error,
+                this.translate.instant('policy.dialog.content.SUBMIT_NG')
+              );
             }
             dialogRef.componentInstance.onCancel();
             dialogRef.componentInstance.loading = false;

@@ -150,7 +150,7 @@ export class RolesGridComponent implements OnInit {
     const addDialogRef = this.dialog.open(AddEditRoleDialogComponent, {
       width: '80%',
       maxWidth: '1100px',
-      disableClose: true,
+
       data: {
         isEdit: false,
         permissionOptions: this.globalOptions,
@@ -189,7 +189,7 @@ export class RolesGridComponent implements OnInit {
     const editDialogRef = this.dialog.open(AddEditRoleDialogComponent, {
       width: '80%',
       maxWidth: '1100px',
-      disableClose: true,
+
       data: {
         isEdit: true,
         permissionOptions: this.globalOptions,
@@ -233,7 +233,7 @@ export class RolesGridComponent implements OnInit {
     const deleteDialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '80%',
       maxWidth: '600px',
-      disableClose: true,
+
       data: {
         message: deleteMessage,
       },

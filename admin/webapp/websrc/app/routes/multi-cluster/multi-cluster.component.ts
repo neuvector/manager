@@ -16,7 +16,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { MapConstant } from '@common/constants/map.constant';
 import { finalize } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import {Subject} from "rxjs";
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-multi-cluster',
@@ -64,7 +64,7 @@ export class MultiClusterComponent implements OnInit {
     this.$win = $(this.w);
     this.multiClusterService.refresh().subscribe(value => {
       this.refresh();
-    })
+    });
   }
 
   breakPoints(): void {
@@ -79,11 +79,10 @@ export class MultiClusterComponent implements OnInit {
 
   ngOnInit(): void {
     this.pageInit();
-    this.switchClusterSubscription = this.multiClusterService.onClusterSwitchedEvent$.subscribe(
-      data => {
+    this.switchClusterSubscription =
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
         this.router.navigate(['dashboard']);
-      }
-    );
+      });
   }
 
   ngOnDestroy(): void {
@@ -163,7 +162,7 @@ export class MultiClusterComponent implements OnInit {
     const dialogRef = this.dialog.open(PromotionModalComponent, {
       width: '80%',
       maxWidth: '1100px',
-      disableClose: true,
+
       data: {
         isEdit: false,
       },
@@ -176,7 +175,6 @@ export class MultiClusterComponent implements OnInit {
     const dialogRef = this.dialog.open(JoiningModalComponent, {
       width: '80%',
       maxWidth: '1100px',
-      disableClose: true,
     });
     dialogRef.afterClosed().subscribe(result => {});
   }

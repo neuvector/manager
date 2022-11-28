@@ -96,7 +96,6 @@ export class WafSensorsComponent implements OnInit {
         opType: GlobalConstant.MODAL_OP.ADD,
         refresh: this.refresh,
       },
-      disableClose: true,
     });
   };
 
@@ -110,7 +109,6 @@ export class WafSensorsComponent implements OnInit {
         index4Sensor: this.index4Sensor,
         refresh: this.refresh,
       },
-      disableClose: true,
     });
   };
 
@@ -123,7 +121,6 @@ export class WafSensorsComponent implements OnInit {
           error: this.translate.instant('waf.msg.IMPORT_FAILED'),
         },
       },
-      disableClose: true,
     });
     importDialogRef.afterClosed().subscribe(result => {
       setTimeout(() => {

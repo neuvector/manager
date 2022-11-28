@@ -124,18 +124,22 @@
     </div>
     <button
       mat-button
+      #avatarMenuTrigger="matMenuTrigger"
       [matMenuTriggerFor]="menu"
       class="nav-item nav-white nav-border">
-      <div class="profile-container">
+      <div class="d-flex justify-content-between align-items-center">
         <div class="avatar">
           <ngx-avatar
             gravatarId="{{ email }}"
             name="{{ username }}"></ngx-avatar>
         </div>
-        <div class="info">
+        <div class="info mr-1">
           <div>{{ username }}</div>
           <div>{{ displayRole }}</div>
         </div>
+        <mat-icon>
+          {{ avatarMenuTrigger.menuOpen ? 'expand_less' : 'expand_more' }}
+        </mat-icon>
       </div>
     </button>
     <mat-menu #menu="matMenu">

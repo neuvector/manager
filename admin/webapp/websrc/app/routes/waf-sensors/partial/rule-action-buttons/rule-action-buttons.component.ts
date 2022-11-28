@@ -51,7 +51,6 @@ export class RuleActionButtonsComponent implements ICellRendererAngularComp {
           this.params.context.componentParent.gridOptions4EditPatterns,
         refresh: this.params.context.componentParent.refresh,
       },
-      disableClose: true,
     });
   };
 
@@ -61,7 +60,6 @@ export class RuleActionButtonsComponent implements ICellRendererAngularComp {
       data: {
         message: this.translate.instant('waf.msg.REMOVE_CFM'),
       },
-      disableClose: true,
     });
     dialogRef.componentInstance.confirm
       .pipe(

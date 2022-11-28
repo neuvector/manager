@@ -2,7 +2,7 @@
   <mat-table
     (matSortChange)="announceSortChange($event)"
     [dataSource]="dataSource"
-    class="border w-100"
+    class="border w-100 role-table"
     matSort>
     <ng-container matColumnDef="namespaceRoles">
       <mat-header-cell
@@ -20,14 +20,15 @@
         {{ 'ldap.gridHeader.DOMAINS' | translate }}
       </mat-header-cell>
       <mat-cell *matCellDef="let element">
-          <span
-            *ngFor="let name of element.namespaces"
-            class="badge badge-primary text-white">
-            {{ name }}
-          </span>
+        <span
+          *ngFor="let name of element.namespaces"
+          class="badge badge-primary text-white">
+          {{ name }}
+        </span>
       </mat-cell>
     </ng-container>
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-header-row
+      *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
     <mat-row
       (click)="clickRow(row.namespaceRole)"
       *matRowDef="let row; columns: displayedColumns"
@@ -36,7 +37,7 @@
   <div class="d-flex flex-row justify-content-center align-items-center">
     <div class="mr-4 role-map">
       {{ activeRole }} {{ 'ldap.GROUP_ADMIN' | translate }}
-      <span class="d-block">{{ "general.TYPE_PRESS_TXT" | translate }}</span>
+      <span class="d-block">{{ 'general.TYPE_PRESS_TXT' | translate }}</span>
     </div>
     <mat-form-field appearance="standard" class="w-100">
       <mat-label>{{ 'ldap.gridHeader.DOMAINS' | translate }}</mat-label>

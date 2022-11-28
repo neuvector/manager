@@ -17,7 +17,7 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { TranslateService } from '@ngx-translate/core';
 import { MultiClusterService } from '@services/multi-cluster.service';
-import { UtilsService } from  '@common/utils/app.utils';
+import { UtilsService } from '@common/utils/app.utils';
 import { NotificationService } from '@services/notification.service';
 import { MapConstant } from '@common/constants/map.constant';
 import { Subject } from 'rxjs';
@@ -145,8 +145,12 @@ export class AdmissionRulesComponent implements OnInit {
               id: -1,
               comment:
                 this.default_action === 'allow'
-                  ? this.translate.instant('admissionControl.msg.ALLOW_NO_MATCH')
-                  : this.translate.instant('admissionControl.msg.DENY_NO_MATCH'),
+                  ? this.translate.instant(
+                      'admissionControl.msg.ALLOW_NO_MATCH'
+                    )
+                  : this.translate.instant(
+                      'admissionControl.msg.DENY_NO_MATCH'
+                    ),
               criteria: [],
               critical: true,
               category: 'Global action',
@@ -164,12 +168,16 @@ export class AdmissionRulesComponent implements OnInit {
             this.stateWarning = this.translate.instant(
               'admissionControl.CAN_NOT_CONFIG'
             );
-            this.stateWarning = this.translate.instant('admissionControl.CAN_NOT_CONFIG');
+            this.stateWarning = this.translate.instant(
+              'admissionControl.CAN_NOT_CONFIG'
+            );
           } else if (!this.isK8s) {
             this.stateWarning = this.translate.instant(
               'admissionControl.NOT_SUPPORT'
             );
-            this.stateWarning = this.translate.instant('admissionControl.NOT_SUPPORT');
+            this.stateWarning = this.translate.instant(
+              'admissionControl.NOT_SUPPORT'
+            );
           }
         },
         error => {
@@ -222,22 +230,17 @@ export class AdmissionRulesComponent implements OnInit {
             this.printConfigurationAssessmentResult,
         },
         width: '1024px',
-        disableClose: true,
       }
     );
   };
 
   openExportPopup = () => {
-    this.dialog.open(
-      ExportAdmissionRulesModalComponent,
-      {
-        width: '50%',
-        data: {
-          selectedAdmissionRules: this.selectedAdmissionRules,
-        },
-        disableClose: true,
-      }
-    );
+    this.dialog.open(ExportAdmissionRulesModalComponent, {
+      width: '50%',
+      data: {
+        selectedAdmissionRules: this.selectedAdmissionRules,
+      },
+    });
   };
 
   openImportPopup = () => {
@@ -250,7 +253,6 @@ export class AdmissionRulesComponent implements OnInit {
           error: this.translate.instant('admissionControl.msg.IMPORT_FAILED'),
         },
       },
-      disableClose: true,
     });
     importDialogRef.afterClosed().subscribe(() => {
       setTimeout(() => {
@@ -261,36 +263,28 @@ export class AdmissionRulesComponent implements OnInit {
   };
 
   showAdvancedSetting = () => {
-    this.dialog.open(
-      AdvanceSettingModalComponent,
-      {
-        width: '60%',
-        data: {
-          state: this.admissionStateRec.state || {},
-          refreshFn: this.refresh,
-        },
-        disableClose: true,
-      }
-    );
+    this.dialog.open(AdvanceSettingModalComponent, {
+      width: '60%',
+      data: {
+        state: this.admissionStateRec.state || {},
+        refreshFn: this.refresh,
+      },
+    });
   };
 
   openAddEditAdmissionRuleModal = () => {
-    this.dialog.open(
-      AddEditAdmissionRuleModalComponent,
-      {
-        width: '80%',
-        data: {
-          opType: GlobalConstant.MODAL_OP.ADD,
-          admissionOptions: this.admissionOptions,
-          cfgType:
-            this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-              ? GlobalConstant.SCOPE.FED
-              : GlobalConstant.SCOPE.LOCAL,
-          refresh: this.refresh,
-        },
-        disableClose: true,
-      }
-    );
+    this.dialog.open(AddEditAdmissionRuleModalComponent, {
+      width: '80%',
+      data: {
+        opType: GlobalConstant.MODAL_OP.ADD,
+        admissionOptions: this.admissionOptions,
+        cfgType:
+          this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+            ? GlobalConstant.SCOPE.FED
+            : GlobalConstant.SCOPE.LOCAL,
+        refresh: this.refresh,
+      },
+    });
   };
 
   toggleStatus = () => {
@@ -344,7 +338,7 @@ export class AdmissionRulesComponent implements OnInit {
       }, 500);
     };
 
-    const doError = (error) => {
+    const doError = error => {
       if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
         let errMsg: string;
         if (
@@ -373,31 +367,40 @@ export class AdmissionRulesComponent implements OnInit {
     this.admissionStateRec.state!.mode! = this.mode;
 
     if (this.mode === 'protect') {
-      let message = this.translate.instant('admissionControl.msg.PROTECT_CONFIRM');
+      let message = this.translate.instant(
+        'admissionControl.msg.PROTECT_CONFIRM'
+      );
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         maxWidth: '700px',
         data: {
-          message: message
+          message: message,
         },
-        disableClose: true
+        disableClose: true,
       });
-      dialogRef.componentInstance.confirm.pipe(switchMap(() => {
-        return this.admissionRulesService.updateAdmissionState(this.admissionStateRec);
-      })).subscribe(
-        (res) => {
-          // confirm actions
-          doSuccess();
-          // close dialog
-          dialogRef.componentInstance.onCancel();
-          dialogRef.componentInstance.loading = false;
-        },
-        error => {
-          doError(error);
-          dialogRef.componentInstance.loading = false;
-        }
-      );
+      dialogRef.componentInstance.confirm
+        .pipe(
+          switchMap(() => {
+            return this.admissionRulesService.updateAdmissionState(
+              this.admissionStateRec
+            );
+          })
+        )
+        .subscribe(
+          res => {
+            // confirm actions
+            doSuccess();
+            // close dialog
+            dialogRef.componentInstance.onCancel();
+            dialogRef.componentInstance.loading = false;
+          },
+          error => {
+            doError(error);
+            dialogRef.componentInstance.loading = false;
+          }
+        );
     } else {
-      this.admissionRulesService.updateAdmissionState(this.admissionStateRec)
+      this.admissionRulesService
+        .updateAdmissionState(this.admissionStateRec)
         .subscribe(
           res => doSuccess(),
           error => doError(error)

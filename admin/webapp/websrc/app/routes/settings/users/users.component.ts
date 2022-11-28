@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GlobalConstant } from '@common/constants/global.constant';
+import { MapConstant } from '@common/constants/map.constant';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { SettingsService } from '@services/settings.service';
 import { combineLatest, of, Subject } from 'rxjs';
@@ -51,10 +52,9 @@ export class UsersComponent implements OnInit {
       this.settingsService.getRoles().pipe(
         catchError(err => {
           if (
-            [
-              GlobalConstant.STATUS_NOT_FOUND,
-              GlobalConstant.STATUS_FORBIDDEN,
-            ].includes(err.status)
+            [MapConstant.NOT_FOUND, MapConstant.ACC_FORBIDDEN].includes(
+              err.status
+            )
           ) {
             return of([]);
           } else {

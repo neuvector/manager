@@ -187,7 +187,7 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
     const deleteDialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '80%',
       maxWidth: '600px',
-      disableClose: true,
+
       data: {
         message: this.translate.instant(
           'registry.REGISTRY_DELETE_CONFIRMATION'
@@ -226,6 +226,7 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
     this.registriesService.startScanning(name).subscribe({
       complete: () => this.registriesCommunicationService.refreshRegistries(),
       error: ({ error }: { error: ErrorResponse }) => {
+        this.registriesCommunicationService.cancelStartScan();
         this.notificationService.open(
           this.utils.getAlertifyMsg(
             error,

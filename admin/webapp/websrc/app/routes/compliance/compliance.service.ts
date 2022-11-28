@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
-import { finalize, map, repeatWhen, tap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, of, Subject } from 'rxjs';
+import { catchError, finalize, map, repeatWhen, tap } from 'rxjs/operators';
 import {
   Compliance,
   ComplianceData,
@@ -17,15 +17,16 @@ import { ComplianceViewPdfService } from './pdf-generation/compliance-view-pdf.s
 import { sortByDisplayName } from '@common/utils/common.utils';
 import { AssetsHttpService } from '@common/api/assets-http.service';
 import { RisksHttpService } from '@common/api/risks-http.service';
+import { MapConstant } from '@common/constants/map.constant';
 
 @Injectable()
 export class ComplianceService {
   kubeVersion!: string;
-  workloadMap4Pdf = {};
-  private workloadMap = new Map();
-  imageMap4Pdf = {};
-  platformMap4Pdf = {};
-  hostMap4Pdf = {};
+  workloadMap4Pdf!: {};
+  private workloadMap!: Map<string, any>;
+  imageMap4Pdf!: {};
+  platformMap4Pdf!: {};
+  hostMap4Pdf!: {};
   private refreshSubject$ = new Subject();
   private selectedComplianceSubject$ = new BehaviorSubject<any | undefined>(
     undefined
@@ -50,7 +51,17 @@ export class ComplianceService {
   //   this.complianceViewPdfService.runWorker();
   // }
 
+  initComplianceDetails() {
+    this.selectedComplianceSubject$.next(undefined);
+    this.workloadMap4Pdf = {};
+    this.workloadMap = new Map();
+    this.imageMap4Pdf = {};
+    this.platformMap4Pdf = {};
+    this.hostMap4Pdf = {};
+  }
+
   initCompliance() {
+    this.initComplianceDetails();
     return combineLatest([
       this.getDomain(),
       this.getContainer(),
@@ -159,6 +170,17 @@ export class ComplianceService {
         return data.domains
           .map(domain => domain.name)
           .filter(domain => domain.charAt(0) !== '_');
+      }),
+      catchError(err => {
+        if (
+          [MapConstant.NOT_FOUND, MapConstant.ACC_FORBIDDEN].includes(
+            err.status
+          )
+        ) {
+          return of([]);
+        } else {
+          throw err;
+        }
       })
     );
   }
@@ -229,6 +251,17 @@ export class ComplianceService {
             }
           }
         });
+      }),
+      catchError(err => {
+        if (
+          [MapConstant.NOT_FOUND, MapConstant.ACC_FORBIDDEN].includes(
+            err.status
+          )
+        ) {
+          return of({ workloads: [] });
+        } else {
+          throw err;
+        }
       })
     );
   }
@@ -257,6 +290,17 @@ export class ComplianceService {
             complianceList: [],
           };
         });
+      }),
+      catchError(err => {
+        if (
+          [MapConstant.NOT_FOUND, MapConstant.ACC_FORBIDDEN].includes(
+            err.status
+          )
+        ) {
+          return of({ hosts: [] });
+        } else {
+          throw err;
+        }
       })
     );
   }
@@ -277,6 +321,17 @@ export class ComplianceService {
             complianceList: [],
           };
         });
+      }),
+      catchError(err => {
+        if (
+          [MapConstant.NOT_FOUND, MapConstant.ACC_FORBIDDEN].includes(
+            err.status
+          )
+        ) {
+          return of({ platforms: [] });
+        } else {
+          throw err;
+        }
       })
     );
   }
@@ -321,6 +376,23 @@ export class ComplianceService {
           compliance.platforms.sort(sortByDisplayName);
         });
         return complianceData;
+      }),
+      catchError(err => {
+        if (
+          [MapConstant.NOT_FOUND, MapConstant.ACC_FORBIDDEN].includes(
+            err.status
+          )
+        ) {
+          return of({
+            compliances: [],
+            nodes: {},
+            platforms: {},
+            images: {},
+            workloads: {},
+          } as any);
+        } else {
+          throw err;
+        }
       })
     );
   }

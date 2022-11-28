@@ -24,7 +24,7 @@ export class ControllerDetailsComponent implements OnInit, OnDestroy {
   cpuChartData!: ChartConfiguration<'line', number[], string>;
   cpuData!: ComponentChartData;
   get isDisconnected() {
-    return this.currentController.connection_state === 'disconnected';
+    return this.currentController?.connection_state === 'disconnected';
   }
   get statsSub() {
     return this.componentsCommunicationService.systemComponentStats.controller;

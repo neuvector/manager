@@ -1,20 +1,23 @@
-<mat-card style="height: calc(100vh - 110px);">
-  <div *appObserve="complianceProfileData$ as complianceProfileData; error:errorTemplate loading:loadingTemplate"
-       class="h-100">
+<mat-card style="height: calc(100vh - 110px)">
+  <div *ngIf="loaded; else loadingTemplate" class="h-100">
     <mat-tab-group (selectedTabChange)="resize()" class="h-100">
       <mat-tab [label]="'cis.profile.TEMPLATES' | translate" class="h-100">
         <app-compliance-profile-templates
-          [hideSystemInit]="complianceProfileData.profile.profiles[0].disable_system"
-          [templates]="complianceProfileData.template.list.compliance"></app-compliance-profile-templates>
+          [hideSystemInit]="
+            complianceProfileData.profile.profiles[0]?.disable_system || false
+          "
+          [templates]="
+            complianceProfileData.template.list.compliance
+          "></app-compliance-profile-templates>
       </mat-tab>
       <mat-tab [label]="'sidebar.nav.RESOURCE' | translate">
-        <app-compliance-profile-assets [domains]="complianceProfileData.domains"></app-compliance-profile-assets>
+        <app-compliance-profile-assets
+          [domains]="
+            complianceProfileData.domains
+          "></app-compliance-profile-assets>
       </mat-tab>
     </mat-tab-group>
   </div>
-  <ng-template #errorTemplate let-error>
-    {{ error | json }}
-  </ng-template>
   <ng-template #loadingTemplate>
     <app-loading-template></app-loading-template>
   </ng-template>

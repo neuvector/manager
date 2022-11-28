@@ -83,7 +83,6 @@ export class ServiceModeService {
           message: this.tr.instant('service.BASELINE_PROFILE_WARNING'),
           isSync: true,
         },
-        disableClose: true,
       });
       dialogRef.afterClosed().subscribe((result: boolean) => {
         if (result) {
@@ -109,7 +108,6 @@ export class ServiceModeService {
           message: message,
           isSync: true,
         },
-        disableClose: true,
       });
       dialogRef.afterClosed().subscribe((result: boolean) => {
         if (result) {
@@ -151,7 +149,6 @@ export class ServiceModeService {
           message: message,
           isSync: true,
         },
-        disableClose: true,
       });
       dialogRef.afterClosed().subscribe((result: boolean) => {
         if (result) {
@@ -220,7 +217,6 @@ export class ServiceModeService {
           message: message,
           isSync: true,
         },
-        disableClose: true,
       });
       dialogRef.afterClosed().subscribe((result: boolean) => {
         if (result) {

@@ -46,7 +46,6 @@ export class SensorActionButtonsComponent implements ICellRendererAngularComp {
         index: this.params.rowIndex,
         refresh: this.params.context.componentParent.refresh,
       },
-      disableClose: true,
     });
   };
 
@@ -56,7 +55,6 @@ export class SensorActionButtonsComponent implements ICellRendererAngularComp {
       data: {
         message: this.translate.instant('dlp.msg.REMOVE_CFM'),
       },
-      disableClose: true,
     });
     dialogRef.componentInstance.confirm
       .pipe(

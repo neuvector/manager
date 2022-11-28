@@ -84,7 +84,6 @@ export class GroupsPageComponent implements OnInit {
           error: this.translate.instant('setting.IMPORT_FAILED'),
         },
       },
-      disableClose: true,
     });
     importDialogRef.afterClosed().subscribe(result => {
       setTimeout(() => {

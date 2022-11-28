@@ -158,14 +158,14 @@
       <button
         (click)="editTemplate('_images')"
         aria-label="Edit images icon button "
-        class="d-block"
+        class="d-block" matTooltip="{{ 'cis.tooltips.EDIT_TEMPLATE' | translate }}"
         mat-icon-button>
         <i class="eos-icons text-action">edit</i>
       </button>
       <button
         (click)="editTemplate('_nodes')"
         aria-label="Edit nodes icon button "
-        class="d-block"
+        class="d-block" matTooltip="{{ 'cis.tooltips.EDIT_TEMPLATE' | translate }}"
         mat-icon-button>
         <i class="eos-icons text-action">edit</i>
       </button>
@@ -173,7 +173,7 @@
         (click)="editTemplate('_containers')"
         [disabled]="namespaceEnabled"
         aria-label="Edit containers icon button "
-        class="d-block"
+        class="d-block" matTooltip="{{ 'cis.tooltips.EDIT_TEMPLATE' | translate }}"
         mat-icon-button>
         <i class="eos-icons text-action">edit</i>
       </button>

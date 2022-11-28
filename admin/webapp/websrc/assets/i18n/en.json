@@ -1375,6 +1375,10 @@
         "PLATFORM_INS": "Platforms",
         "IMAGE_INS": "Images (Compliant Images (No Compliance Violations): {{ safeRate4Images }} ({{ imageCnt }} image(s)))"
       }
+    },
+    "tooltips": {
+      "EDIT_REGULATION": "Edit Regulation",
+      "EDIT_TEMPLATE": "Edit Template"
     }
   },
   "securityEvent": {

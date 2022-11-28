@@ -6,6 +6,9 @@ import { MatDialog } from "@angular/material/dialog";
 import { GroupWafConfigModalComponent } from '@components/group-details/partial/group-waf-config-modal/group-waf-config-modal.component';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { GlobalConstant } from '@common/constants/global.constant';
+import { NotificationService } from '@services/notification.service';
+import { TranslateService } from '@ngx-translate/core';
+
 
 @Component({
   selector: 'app-group-waf',
@@ -29,7 +32,9 @@ export class GroupWafComponent implements OnInit {
   constructor(
     private groupsService: GroupsService,
     private dialog: MatDialog,
-    private authUtilsService: AuthUtilsService
+    private authUtilsService: AuthUtilsService,
+    private notificationService: NotificationService,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -45,6 +50,23 @@ export class GroupWafComponent implements OnInit {
     this.groupsService.getGroupWafSensorData(this.groupName)
       .subscribe(
         (response: any) => {
+          if (response.sensors.length === 0) {
+            if (response.status) {
+              this.gridOptions4GroupWafSensors.overlayNoRowsTemplate =
+                `<div class="server-error">
+                  <div>
+                    <em class="eos-icons text-warning" aria-hidden="true">gpp_maybe</em>
+                  </div>
+                  <div>
+                    <div>${this.translate.instant("group.waf.msg.ADD_WAF_WARNING")}</div>
+                  </div>
+                </div>`
+            } else {
+              this.gridOptions4GroupWafSensors.overlayNoRowsTemplate = `<span class="overlay">${this.translate.instant(
+                "general.NO_ROWS"
+              )}</span>`
+            }
+          }
           this.groupWafSensors = response.sensors;
           this.gridOptions4GroupWafSensors.api!.setRowData(this.groupWafSensors);
           this.enabled = response.status;
@@ -54,17 +76,51 @@ export class GroupWafComponent implements OnInit {
       );
   };
 
-  openEditGroupSensorModal = () => {
+  openEditGroupSensorModal = (warning = '') => {
     const addEditDialogRef = this.dialog.open(GroupWafConfigModalComponent, {
       width: "80%",
       data: {
         configuredSensors: this.groupWafSensors,
         groupName: this.groupName,
         status: this.enabled,
+        warning: warning,
         refresh: this.refresh
       },
       disableClose: true
     });
+  };
+
+  toggleWAFConfigEnablement = (enabled) => {
+    let payload = {
+      config: {
+        name: this.groupName,
+        status: !enabled
+      }
+    };
+    this.groupsService.updateGroupWafSensorData(payload)
+      .subscribe(
+        (response: any) => {
+          if (!enabled && this.groupWafSensors.length === 0) {
+            this.openEditGroupSensorModal(this.translate.instant("group.waf.msg.ADD_WAF_WARNING"));
+          }
+          setTimeout(() => {
+            this.refresh();
+          }, 1000);
+          this.notificationService.open(
+            enabled ?
+              this.translate.instant('group.waf.msg.DISABLED_OK') :
+              this.translate.instant('group.waf.msg.ENABLED_OK')
+          );
+        },
+        error => {
+          this.notificationService.openError(
+            error,
+            enabled ?
+              this.translate.instant('group.waf.msg.DISABLED_NG') :
+              this.translate.instant('group.waf.msg.ENABLED_NG')
+          );
+        }
+      );
   };
 
 }

@@ -21,6 +21,7 @@ import { MapConstant } from '@common/constants/map.constant';
 import { UtilsService } from '@common/utils/app.utils';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { TranslateService } from '@ngx-translate/core';
+import { NotificationService } from '@services/notification.service';
 
 export interface AutoCompleteOption {
   name: string;
@@ -62,7 +63,8 @@ export class AddEditResponseRuleModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private responseRulesService: ResponseRulesService,
     private utils: UtilsService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -94,7 +96,7 @@ export class AddEditResponseRuleModalComponent implements OnInit {
           : '',
       criteria: [],
       actions: [false, false, false],
-      enabled: false,
+      enabled: true,
     };
   };
 
@@ -310,25 +312,19 @@ export class AddEditResponseRuleModalComponent implements OnInit {
       .subscribe(
         response => {
           this.onCancel();
-          // sweetAlert(
-          //   `${UtilsService.capitalizeWord(typeText[0])}!`,
-          //   `Your group has been ${typeText[0]}.`,
-          //   "success"
-          // );
+          this.notificationService.open(
+            this.type === GlobalConstant.MODAL_OP.ADD ?
+              this.translate.instant('responsePolicy.dialog.content.INSERT_OK') :
+              this.translate.instant('responsePolicy.dialog.content.UPDATE_OK')
+          );
         },
-        err => {
-          if (
-            err.status !== GlobalConstant.STATUS_AUTH_TIMEOUT &&
-            err.status !== GlobalConstant.STATUS_UNAUTH &&
-            err.status !== GlobalConstant.STATUS_SERVER_UNAVAILABLE
-          ) {
-            let message = this.utils.getErrorMessage(err);
-            // sweetAlert(
-            //   "Error!",
-            //   `Something wrong when process group ${typeText[1]}! - ${message}`,
-            //   "error"
-            // );
-          }
+        error => {
+          this.notificationService.openError(
+            error,
+            this.type === GlobalConstant.MODAL_OP.ADD ?
+              this.translate.instant('responsePolicy.dialog.content.INSERT_NG') :
+              this.translate.instant('responsePolicy.dialog.content.UPDATE_NG')
+          );
         }
       );
   };

@@ -6,6 +6,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { ResponseRulesService } from '@services/response-rules.service';
 import { AddEditResponseRuleModalComponent } from '../add-edit-response-rule-modal/add-edit-response-rule-modal.component';
 import { UtilsService } from '@common/utils/app.utils';
+import { NotificationService } from '@services/notification.service';
+import { ConfirmDialogResponseRuleComponent } from '@components/response-rules/partial/confirm-dialog-response-rule/confirm-dialog-response-rule.component';
+import { switchMap } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
+
 
 @Component({
   selector: 'app-action-buttons',
@@ -19,7 +24,8 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
     private translate: TranslateService,
     private responseRulesService: ResponseRulesService,
     public dialog: MatDialog,
-    private utils: UtilsService
+    private utils: UtilsService,
+    private notificationService: NotificationService
   ) {}
 
   agInit(params: any): void {
@@ -105,31 +111,16 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
             this.params.context.componentParent.getResponseRules();
           }, 1000);
           if (data.disable) {
-            // sweetAlert(
-            //   "Disabled!",
-            //   "Your response rule has been disabled.",
-            //   "success"
-            // );
+            this.notificationService.open(this.translate.instant('responsePolicy.dialog.content.DISABLE_OK'));
           } else {
-            // sweetAlert(
-            //   "Enabled!",
-            //   "Your response rule has been enabled.",
-            //   "success"
-            // );
+            this.notificationService.open(this.translate.instant('responsePolicy.dialog.content.ENABLE_OK'));
           }
         },
-        err => {
-          if (
-            err.status !== GlobalConstant.STATUS_AUTH_TIMEOUT &&
-            err.status !== GlobalConstant.STATUS_UNAUTH &&
-            err.status !== GlobalConstant.STATUS_SERVER_UNAVAILABLE
-          ) {
-            let message = this.utils.getErrorMessage(err);
-            // sweetAlert(
-            //   "Error!",
-            //   `Something wrong when toggle response rule status! - ${message}`,
-            //   "error"
-            // );
+        error => {
+          if (data.disable) {
+            this.notificationService.openError(error, this.translate.instant('responsePolicy.dialog.content.DISABLE_NG'));
+          } else {
+            this.notificationService.openError(error, this.translate.instant('responsePolicy.dialog.content.ENABLE_NG'));
           }
         }
       );
@@ -149,123 +140,44 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
       this.responseRulesService.responseRules[
         this.responseRulesService.index4Delete
       ].actions.includes('quarantine');
-    // // sweetAlert({
-    // //   title: "HTML <small>Title</small>!",
-    // //   text: "A custom <span style='color:#F8BB86'>html<span> message.",
-    // //   html: true
-    // // });
-    // sweetAlert({
-    //   title: "Removal confirmation",
-    //   text: `${this.translate.instant(
-    //     "responsePolicy.dialog.content.REMOVE_CONFIRM"
-    //   )}? ID: ${id}`,
-    //   html: true,
-    //   icon: "warning",
-    //   buttons: {
-    //     cancel: {
-    //       text: "Cancel",
-    //       value: null,
-    //       visible: true,
-    //       className: "",
-    //       closeModal: false
-    //     },
-    //     confirm: {
-    //       text: "Remove",
-    //       value: true,
-    //       visible: true,
-    //       className: "bg-danger",
-    //       closeModal: false
-    //     }
-    //   }
-    // }).then(isConfirm => {
-    //   if (isConfirm) {
-    this.responseRulesService.removeResponseRuleData(id).subscribe(
-      response => {
-        setTimeout(() => {
-          this.params.context.componentParent.getResponseRules();
-        }, 1000);
-        // sweetAlert(
-        //   "Deleted!",
-        //   "Your response rule has been removed.",
-        //   "success"
-        // );
-      },
-      err => {
-        if (
-          err.status !== GlobalConstant.STATUS_AUTH_TIMEOUT &&
-          err.status !== GlobalConstant.STATUS_UNAUTH &&
-          err.status !== GlobalConstant.STATUS_SERVER_UNAVAILABLE
-        ) {
-          let message = this.utils.getErrorMessage(err);
-          // sweetAlert(
-          //   "Error!",
-          //   `Something wrong when process response rule removal! - ${message}`,
-          //   "error"
-          // );
-        }
-      }
-    );
-    //   } else {
-    //     sweetAlert("Cancelled", "Your response rule is safe", "error");
-    //   }
-    // });
-  };
 
-  unquarantine = (event, id) => {
-    // sweetAlert({
-    //   title: "Unquarantine and Removal confirmation",
-    //   text: `${this.translate.instant(
-    //     "responsePolicy.dialog.UNQUARANTINE_CHECK"
-    //   )} and remove the rule? - ID: ${id}`,
-    //   html: true,
-    //   icon: "warning",
-    //   buttons: {
-    //     cancel: {
-    //       text: "Cancel",
-    //       value: null,
-    //       visible: true,
-    //       className: "",
-    //       closeModal: false
-    //     },
-    //     confirm: {
-    //       text: "Unquarantine and Remove",
-    //       value: true,
-    //       visible: true,
-    //       className: "bg-danger",
-    //       closeModal: false
-    //     }
-    //   }
-    // }).then(isConfirm => {
-    //   if (isConfirm) {
-    this.responseRulesService.unquarantine(id).subscribe(
-      response => {
+    console.log("isQuarantined", isQuarantined)
+    let message = `${this.translate.instant("responsePolicy.dialog.content.REMOVE_CONFIRM")} ${id}`;
+    const dialogRef = this.dialog.open(ConfirmDialogResponseRuleComponent, {
+      maxWidth: '700px',
+      data: {
+        message: message,
+        isQuarantined: isQuarantined
+      },
+      disableClose: true
+    });
+    dialogRef.componentInstance.confirm.pipe(switchMap(() => {
+      if (dialogRef.componentInstance.isUnquarantined) {
+        return this.responseRulesService.unquarantine(id);
+      } else {
+        return this.responseRulesService.removeResponseRuleData(id);
+      }
+    })).subscribe(
+      (res) => {
+        // confirm actions
+        if (dialogRef.componentInstance.isUnquarantined) {
+          this.notificationService.open(this.translate.instant('responsePolicy.dialog.content.UNQUARANTINE_OK'));
+        }
+        this.notificationService.open(this.translate.instant('responsePolicy.dialog.content.REMOVE_OK'));
         setTimeout(() => {
           this.params.context.componentParent.getResponseRules();
         }, 1000);
-        // sweetAlert(
-        //   "Unquarantined and Deleted!",
-        //   "Your response rule has been removed and all the containers under this rule are unquarantined.",
-        //   "success"
-        // );
+        // close dialog
+        dialogRef.componentInstance.onCancel();
+        dialogRef.componentInstance.loading = false;
       },
-      err => {
-        if (
-          err.status !== GlobalConstant.STATUS_AUTH_TIMEOUT &&
-          err.status !== GlobalConstant.STATUS_UNAUTH &&
-          err.status !== GlobalConstant.STATUS_SERVER_UNAVAILABLE
-        ) {
-          let message = this.utils.getErrorMessage(err);
-          // sweetAlert(
-          //   "Error!",
-          //   `Something wrong when remove response rule and unquarantine containers! - ${message}`,
-          //   "error"
-          // );
+      error => {
+        if (dialogRef.componentInstance.isUnquarantined) {
+          this.notificationService.openError(error, this.translate.instant('responsePolicy.dialog.content.UNQUARANTINE_NG'));
         }
+        this.notificationService.openError(error, this.translate.instant('responsePolicy.dialog.content.REMOVE_NG'));
+        dialogRef.componentInstance.loading = false;
       }
     );
-    //   } else {
-    //     sweetAlert("Cancelled", "Your response rule is safe", "error");
-    //   }
-    // });
   };
 }

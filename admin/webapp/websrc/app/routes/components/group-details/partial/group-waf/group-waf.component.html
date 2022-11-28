@@ -12,6 +12,7 @@
       [disabled]="!isWriteWafAuthorized || cfgType === CFG_TYPE.GROUND"
       [(ngModel)]="enabled"
       [ngModelOptions]="{standalone: true}"
+      (toggleChange)="toggleWAFConfigEnablement(enabled)"
     >
       <span
         [ngClass]="{

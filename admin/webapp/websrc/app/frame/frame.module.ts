@@ -13,6 +13,7 @@ import { GlobalNotificationsModule } from '@components/global-notifications/glob
 import { HttpClientModule } from '@angular/common/http';
 import { AvatarModule } from 'ngx-avatar';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
+import { PipeModule } from "@common/pipes/pipe.module";
 
 const customNotifierOptions: NotifierOptions = {
   position: {
@@ -57,14 +58,15 @@ const customNotifierOptions: NotifierOptions = {
 
 
 @NgModule({
-  imports: [
-    NvCommonModule,
-    MatDividerModule,
-    GlobalNotificationsModule,
-    HttpClientModule,
-    AvatarModule,
-    NotifierModule.withConfig(customNotifierOptions),
-  ],
+    imports: [
+        NvCommonModule,
+        MatDividerModule,
+        GlobalNotificationsModule,
+        HttpClientModule,
+        AvatarModule,
+        NotifierModule.withConfig(customNotifierOptions),
+        PipeModule,
+    ],
   providers: [],
   declarations: [
     FrameComponent,

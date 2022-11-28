@@ -123,6 +123,24 @@ export class MultiClusterService {
     return this.http.patch(PathConstant.FED_CFG_URL, payload);
   };
 
+  updateMemberCluster = (data: any, isEditable: boolean, useProxy: string) => {
+    let payload = isEditable
+      ? {
+        poll_interval: 2,
+        name: data.name,
+        rest_info: {
+          server: data.api_server,
+          port: parseInt(data.api_port),
+        },
+        use_proxy: useProxy
+      }
+      : {
+        poll_interval: 2,
+        use_proxy: useProxy
+      };
+    return this.http.patch(PathConstant.FED_CFG_URL, payload);
+  };
+
   promoteCluster = (data: any, useProxy, fed_sync_reg, fed_sync_repo) => {
     let payload = {
       name: data.name,

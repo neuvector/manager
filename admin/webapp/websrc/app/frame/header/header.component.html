@@ -56,6 +56,7 @@
     <div *ngIf="isMasterRole">
       <button
         mat-button
+        #menuTrigger="matMenuTrigger"
         [matMenuTriggerFor]="dropdown_multiCluster"
         [matMenuTriggerData]="clusters"
         class="nav-item nav-white nav-border">
@@ -63,20 +64,32 @@
           class="fa-lg mr-lg text-gray-light"
           [ngClass]="isOnRemoteCluster ? 'fa fa-laptop' : 'fa fa-home'"></i>
         <label
-          class="selected-cluster-text hand"
+          class="selected-cluster-text hand mr-2"
           style="position: relative; margin-bottom: 0"
           >{{ selectedCluster?.name }}</label
         >
+        <mat-icon>
+          {{ menuTrigger.menuOpen ? 'expand_less' : 'expand_more' }}
+        </mat-icon>
       </button>
       <mat-menu #dropdown_multiCluster="matMenu">
         <ng-container *ngFor="let cluster of clusters; last as last">
-          <div class="menu-width">
-            <button mat-menu-item (click)="redirectCluster(cluster)">
+          <div class="cluster-menu-width">
+            <button
+              mat-menu-item
+              (click)="redirectCluster(cluster)"
+              [disabled]="
+                cluster.status === 'disconnected' ||
+                cluster.status === 'left' ||
+                cluster.status === 'joint_upgrade_required'
+              ">
               <i
                 class="fa-md mr-md text-gray-light"
                 [ngClass]="
-                cluster.clusterType === 'master' ? 'fa fa-home' : 'fa fa-laptop'
-              "></i>
+                  cluster.clusterType === 'master'
+                    ? 'fa fa-home'
+                    : 'fa fa-laptop'
+                "></i>
               {{ cluster?.name }}
             </button>
           </div>
@@ -118,7 +131,10 @@
         <i class="eos-icons icon-18 margin-right-s">organisms</i>
         {{ 'enum.MULTI_CLUSTER' | translate }}
       </button>
-      <button mat-menu-item (click)="goFederatedPolicy()" *appDisplayControl="'multi_cluster'">
+      <button
+        mat-menu-item
+        (click)="goFederatedPolicy()"
+        *appDisplayControl="'multi_cluster'">
         <i class="eos-icons icon-18 margin-right-s">policy</i>
         {{ 'enum.FED_POLICY' | translate }}
       </button>

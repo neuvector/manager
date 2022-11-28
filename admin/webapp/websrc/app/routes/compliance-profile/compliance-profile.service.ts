@@ -1,9 +1,15 @@
 import { Injectable } from '@angular/core';
 import { RisksHttpService } from '@common/api/risks-http.service';
-import { BehaviorSubject, combineLatest } from 'rxjs';
-import { map, repeatWhen, tap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import { catchError, map, repeatWhen, tap } from 'rxjs/operators';
 import { AssetsHttpService } from '@common/api/assets-http.service';
-import { complianceProfileEntries } from '@common/types';
+import {
+  ComplianceProfileData,
+  complianceProfileEntries,
+  ComplianceProfileTemplateData,
+  DomainGetResponse,
+} from '@common/types';
+import { MapConstant } from '@common/constants/map.constant';
 
 @Injectable()
 export class ComplianceProfileService {
@@ -37,10 +43,10 @@ export class ComplianceProfileService {
         };
       }),
       tap(({ profile }) => {
-        this.lastEntries = profile.profiles[0].entries;
+        this.lastEntries = profile.profiles[0]?.entries || [];
       }),
       map(res => {
-        res.profile.profiles[0].entries.forEach(p => {
+        res.profile.profiles[0]?.entries.forEach(p => {
           res.template.list.compliance.forEach(e => {
             if (e.test_number === p.test_number) {
               e.tags = p.tags;
@@ -65,28 +71,65 @@ export class ComplianceProfileService {
     return this.assetsHttpService.patchDomain(payload);
   }
 
-  private getTemplate() {
-    return this.risksHttpService.getComplianceProfileTemplate();
+  private getTemplate(): Observable<ComplianceProfileTemplateData> {
+    return this.risksHttpService.getComplianceProfileTemplate().pipe(
+      catchError(err => {
+        if (
+          [MapConstant.NOT_FOUND, MapConstant.ACC_FORBIDDEN].includes(
+            err.status
+          )
+        ) {
+          return of({ list: { compliance: [] } });
+        } else {
+          throw err;
+        }
+      })
+    );
   }
 
-  private getProfile() {
-    return this.risksHttpService.getComplianceProfile();
+  private getProfile(): Observable<ComplianceProfileData> {
+    return this.risksHttpService.getComplianceProfile().pipe(
+      catchError(err => {
+        if (
+          [MapConstant.NOT_FOUND, MapConstant.ACC_FORBIDDEN].includes(
+            err.status
+          )
+        ) {
+          return of({ profiles: [] });
+        } else {
+          throw err;
+        }
+      })
+    );
   }
 
-  private getDomain() {
+  private getDomain(): Observable<DomainGetResponse> {
     return this.assetsHttpService.getDomain().pipe(
       map(res => {
-        res['imageTags'] = res.domains.find(
-          item => item.name === '_images'
-        )!.tags;
-        res['containerTags'] = res.domains.find(
-          item => item.name === '_containers'
-        )!.tags;
-        res['nodeTags'] = res.domains.find(
-          item => item.name === '_nodes'
-        )!.tags;
+        res['imageTags'] =
+          res.domains.find(item => item.name === '_images')?.tags || [];
+        res['containerTags'] =
+          res.domains.find(item => item.name === '_containers')?.tags || [];
+        res['nodeTags'] =
+          res.domains.find(item => item.name === '_nodes')?.tags || [];
         res.domains = res.domains.filter(d => d.name.charAt(0) !== '_');
         return res;
+      }),
+      catchError(err => {
+        if (
+          [MapConstant.NOT_FOUND, MapConstant.ACC_FORBIDDEN].includes(
+            err.status
+          )
+        ) {
+          return of({
+            domains: [],
+            imageTags: [],
+            containerTags: [],
+            nodeTags: [],
+          } as any);
+        } else {
+          throw err;
+        }
       })
     );
   }

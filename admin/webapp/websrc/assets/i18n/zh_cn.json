@@ -1375,6 +1375,10 @@
         "PLATFORM_INS": "平台",
         "IMAGE_INS": "镜像 (合规镜像 (无合规违反): {{ safeRate4Images }} ({{ imageCnt }} 个镜像))"
       }
+    },
+    "tooltips": {
+      "EDIT_REGULATION": "编辑规定",
+      "EDIT_TEMPLATE": "编辑模版"
     }
   },
   "securityEvent": {

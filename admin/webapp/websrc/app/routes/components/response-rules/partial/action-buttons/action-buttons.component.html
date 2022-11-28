@@ -1,28 +1,28 @@
 <div class="rule-actions-expand fade-in-right">
   <em
-    class="eos-icons icon-18 hand text-action"
+    class="eos-icons icon-18 hand text-action" matTooltip="{{ 'policy.TIP.EDIT' | translate }}"
     (click)="editResponseRule($event, params.data.id)">
     edit
   </em>
   <em
-    class="eos-icons icon-18 hand text-action"
+    class="eos-icons icon-18 hand text-action" matTooltip="{{ 'policy.TIP.ADD' | translate }}"
     (click)="addResponseRule($event, params.data.id)">
     add
   </em>
   <em
-    class="eos-icons icon-18 hand text-action"
+    class="eos-icons icon-18 hand text-action" matTooltip="{{ 'policy.TIP.DISABLE' | translate }}"
     *ngIf="!params.data.disable"
     (click)="toggleRuleItem($event, params.data)">
     highlight_off
   </em>
   <em
-    class="eos-icons icon-18 hand text-action"
+    class="eos-icons icon-18 hand text-action" matTooltip="{{ 'policy.TIP.ENABLE' | translate }}"
     *ngIf="params.data.disable"
     (click)="toggleRuleItem($event, params.data)">
     task_alt
   </em>
   <em
-    class="eos-icons icon-18 hand text-action"
+    class="eos-icons icon-18 hand text-action" matTooltip="{{ 'policy.TIP.DELETE' | translate }}"
     (click)="deleteRuleItem($event, params.data.id)">
     delete
   </em>

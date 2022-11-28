@@ -2,9 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class SessionService {
   constructor(
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService

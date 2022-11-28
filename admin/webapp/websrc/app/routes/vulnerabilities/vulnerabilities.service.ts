@@ -20,9 +20,7 @@ import { VulnerabilitiesFilterService } from './vulnerabilities.filter.service';
 import { AssetsViewPdfService } from './pdf-generation/assets-view-pdf.service';
 import { MapConstant } from '@common/constants/map.constant';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class VulnerabilitiesService {
   imageMap!: Map<string, { high: number; medium: number }>;
   hostMap!: Map<string, { high: number; medium: number }>;

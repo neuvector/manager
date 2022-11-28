@@ -5,9 +5,7 @@ import { map, repeatWhen, tap } from 'rxjs/operators';
 import { AssetsHttpService } from '@common/api/assets-http.service';
 import { complianceProfileEntries } from '@common/types';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class ComplianceProfileService {
   private resizeSubject$ = new BehaviorSubject<boolean>(true);
   resize$ = this.resizeSubject$.asObservable();

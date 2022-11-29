@@ -81,6 +81,11 @@ export class AuthUtilsService {
   }
 
   private getCacheUserPermission() {
+    console.log(
+      this.tokenBakeup,
+      GlobalVariable.user.token.token,
+      GlobalVariable.namespaces4NamespaceUser
+    );
     if (
       !this.userPermission.ownedPermissions ||
       this.tokenBakeup !== GlobalVariable.user.token.token

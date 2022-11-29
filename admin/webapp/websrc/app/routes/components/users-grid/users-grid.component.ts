@@ -45,11 +45,13 @@ import { GlobalConstant } from '@common/constants/global.constant';
 })
 export class UsersGridComponent implements OnInit {
   private readonly $win;
-  domains!: string[];
+  domains: string[] = [];
   _rowData!: User[];
   @Input() set userData(value: { users: User[]; domains: string[] }) {
     this._rowData = value.users;
-    this.domains = value.domains;
+    if (value.domains.length) {
+      this.domains = value.domains;
+    }
     if (this.gridApi) {
       this.gridApi.setRowData(this.rowData);
       this.gridApi.sizeColumnsToFit();
@@ -57,6 +59,7 @@ export class UsersGridComponent implements OnInit {
     this.refreshing$.next(false);
   }
   @Input() globalRoles!: string[];
+  @Input() domainRoles!: string[];
   get rowData() {
     return this._rowData;
   }
@@ -203,6 +206,12 @@ export class UsersGridComponent implements OnInit {
         actionCellRenderer: UsersGridActionCellComponent,
       },
     };
+    if (
+      !this.domains.length &&
+      'authorization_w' in GlobalVariable.namespaces4NamespaceUser
+    ) {
+      this.domains = GlobalVariable.namespaces4NamespaceUser['authorization_w'];
+    }
   }
 
   onResize(): void {
@@ -235,10 +244,10 @@ export class UsersGridComponent implements OnInit {
     const addDialogRef = this.dialog.open(AddEditUserDialogComponent, {
       width: '80%',
       maxWidth: '1100px',
-
       data: {
         isEdit: false,
         globalRoles: this.globalRoles,
+        domainRoles: this.domainRoles,
         domains: this.domains,
       },
     });
@@ -287,11 +296,11 @@ export class UsersGridComponent implements OnInit {
     const editDialogRef = this.dialog.open(AddEditUserDialogComponent, {
       width: '80%',
       maxWidth: '1100px',
-
       data: {
         isEdit: true,
         user: event.data,
         globalRoles: this.globalRoles,
+        domainRoles: this.domainRoles,
         domains: this.domains,
       },
     });
@@ -334,7 +343,6 @@ export class UsersGridComponent implements OnInit {
     const deleteDialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '80%',
       maxWidth: '600px',
-
       data: {
         message: deleteMessage,
       },
@@ -371,12 +379,12 @@ export class UsersGridComponent implements OnInit {
       width: '80%',
       maxWidth: '1100px',
       data: {
-        isEdit: true,
         isReadOnly: true,
+        isEdit: true,
         user: event.data,
         globalRoles: this.globalRoles,
+        domainRoles: this.domainRoles,
         domains: this.domains,
-        isSync: true,
       },
     });
   }

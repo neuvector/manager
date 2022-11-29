@@ -1999,9 +1999,9 @@
         "DISABLED_OK": "DLP setting for this group is disabled",
         "DISABLED_NG": "Error happens when disabling DLP setting",
         "SETTING_OK": "Group's DLP setting is successful!",
-        "SETTING_NG": "Error happens when processing group's DLP setting!",
+        "SETTING_NG": "Error happens when processing group's DLP setting",
         "EXPORT_OK": "Group's configuration file is exported successfully!",
-        "EXPORT_NG": "Error happens when exporting group configuration file!",
+        "EXPORT_NG": "Error happens when exporting group configuration file",
         "ADD_DLP_WARNING": "Do you want to add DLP sensors on the group?"
       }
     },
@@ -2023,7 +2023,7 @@
         "DISABLED_OK": "WAF setting for this group is disabled",
         "DISABLED_NG": "Error happens when disabling WAF setting",
         "SETTING_OK": "Group's WAF setting is successful!",
-        "SETTING_NG": "Error happens when processing group's WAF setting!",
+        "SETTING_NG": "Error happens when processing group's WAF setting",
         "ADD_WAF_WARNING": "Do you want to add WAF sensors on the group?"
       }
     },
@@ -2304,7 +2304,8 @@
       "MOVE": "Move Rules",
       "DISABLE": "Disable Rule",
       "ENABLE": "Enable Rule",
-      "REVERT": "Revert Rule"
+      "REVERT": "Revert Rule",
+      "VIEW": "View Rule"
     },
     "gridHeader": {
       "SEQ": "Seq.",

@@ -21,6 +21,7 @@ import { Router } from '@angular/router';
 import { AssetsHttpService } from '@common/api/assets-http.service';
 import { ReportByNamespaceModalComponent } from './report-by-namespace-modal/report-by-namespace-modal.component';
 import { AuthService } from '@common/services/auth.service';
+import { isAuthorized } from '@common/utils/common.utils';
 
 @Component({
   selector: 'app-dashboard',
@@ -37,6 +38,7 @@ export class DashboardComponent implements OnInit {
   reportDialog!: MatDialogRef<any>;
   reportDomain: string = "";
   reportInfo: any;
+  isShowingScore: boolean = false;
   private _switchClusterSubscriber;
   @ViewChild('dashboardReport') printableReport!: ElementRef;
 
@@ -53,6 +55,16 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const resource = {
+      seeScore: {
+        global: 1,
+        namespace: 1,
+      },
+    };
+    this.isShowingScore = isAuthorized(
+      GlobalVariable.user.roles,
+      resource.seeScore
+    );
     this.isGlobalUser = GlobalVariable.user?.global_permissions.length > 0;
     this.getBasicInfo();
     this.dashboardService.refreshEvent$.subscribe(refresh => {

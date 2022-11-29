@@ -38,6 +38,7 @@ import { AdvancedFilter } from '@common/types/network-activities/advancedFilter'
 import { NotificationService } from '@services/notification.service';
 import { ConversationPair } from './edge-details/edge-details.component';
 import {GlobalConstant} from "@common/constants/global.constant";
+import { MultiClusterService } from '@services/multi-cluster.service';
 
 @Component({
   selector: 'app-network-activities',
@@ -47,6 +48,7 @@ import {GlobalConstant} from "@common/constants/global.constant";
 export class NetworkActivitiesComponent
   implements AfterViewInit, OnInit, OnDestroy
 {
+  private _switchClusterSubscription;
   private data: GraphDataSet = { nodes: [], edges: [] };
   serverData: GraphDataSet = { nodes: [], edges: [] };
   domainGridOptions: GridOptions = <GridOptions>{};
@@ -151,6 +153,7 @@ export class NetworkActivitiesComponent
     private graphService: GraphService,
     private groupsService: GroupsService,
     private sniffService: SniffService,
+    private multiClusterService: MultiClusterService,
     private utils: UtilsService
   ) {
     this.w = GlobalVariable.window;
@@ -1675,6 +1678,11 @@ export class NetworkActivitiesComponent
       };
       this.loadGraph(true, callback);
     } else this.loadGraph();
+
+    this._switchClusterSubscription =
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
+        this.refresh();
+      });
   }
 
   loadGraph(onRefresh: boolean = true, callback?: () => void) {
@@ -2182,7 +2190,11 @@ export class NetworkActivitiesComponent
 
   ngAfterViewInit(): void {}
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    if (this._switchClusterSubscription) {
+      this._switchClusterSubscription.unsubscribe();
+    }
+  }
 
   //region Active Session
   showSessions(container) {

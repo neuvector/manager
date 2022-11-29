@@ -20,7 +20,7 @@
     </h1>
   </div>
   <app-security-risk-panel
-    *ngIf="scoreInfo && summaryInfo && isGlobalUser"
+    *ngIf="scoreInfo && summaryInfo && isShowingScore"
     [scoreInfo]="scoreInfo"
     [summaryInfo]="summaryInfo"
   >

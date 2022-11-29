@@ -30,7 +30,7 @@
   <ng-container *ngFor="let tag of applied">
     <ng-container [ngSwitch]="tag">
       <span *ngSwitchCase="'GDPR'" class="mr-1 d-inline-flex align-items-center badge text-white ml-0"
-            style="padding-left: 3px; background-color: #ff9800;">⋮⋮&nbsp;&nbsp;GDPR]<i
+            style="padding-left: 3px; background-color: #ff9800;">⋮⋮&nbsp;&nbsp;GDPR<i
         (click)="remove('GDPR')" class="ml-1 eos-icons" role="button">close</i></span>
       <span *ngSwitchCase="'HIPAA'" class="mr-1 d-inline-flex align-items-center badge text-white ml-0"
             style="padding-left: 3px; background-color: #4e39c1;">⋮⋮&nbsp;&nbsp;HIPAA<i

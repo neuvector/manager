@@ -18,7 +18,7 @@ import org.json4s._
 import org.json4s.native.JsonMethods._
 import spray.can.Http.ConnectionAttemptFailedException
 import spray.http.HttpMethods._
-import spray.http.StatusCodes
+import spray.http.{ HttpEntity, StatusCodes }
 import spray.routing.Route
 
 import java.io.{ PrintWriter, StringWriter }
@@ -541,7 +541,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
                     GraphCacheManager.saveNodeLayout(graphLayout)
                     logger.debug(layoutToJson(graphLayout))
                     Utils.respondWithNoCacheControl() {
-                      complete("Layout saved.")
+                      complete(HttpEntity.Empty)
                     }
                   }
                 }
@@ -578,7 +578,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
                     logger.info("saving blacklist for user: {}", userBlacklist.user)
                     BlacklistCacheManager.saveBlacklist(userBlacklist)
                     Utils.respondWithNoCacheControl() {
-                      complete("Blacklist saved.")
+                      complete(HttpEntity.Empty)
                     }
                   }
                 }

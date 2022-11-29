@@ -37,12 +37,6 @@ export class ComplianceProfileAssetsTableComponent
   gridApi!: GridApi;
   namespaceEnabled = false;
   isWriteComplianceProfileAuthorized: boolean = false;
-  // name: string;
-  // running_pods: number;
-  // running_workloads: number;
-  // services: number;
-  // tags: string[];
-  // workloads: number;
 
   columnDefs: ColDef[] = [
     {
@@ -54,7 +48,7 @@ export class ComplianceProfileAssetsTableComponent
     },
     {
       field: 'tags',
-      width: 180,
+      width: 120,
       sortable: true,
       resizable: true,
       cellRenderer: 'templatesCellRenderer',
@@ -62,27 +56,27 @@ export class ComplianceProfileAssetsTableComponent
     },
     {
       field: 'workloads',
-      width: 70,
+      width: 120,
       sortable: true,
       resizable: true,
       headerValueGetter: () =>
-        this.translate.instant('cis.report.gridHeader.CATEGORY'),
+        this.translate.instant('multiCluster.summary.TOTAL_WORKLOAD'),
     },
     {
       field: 'running_pods',
-      width: 50,
+      width: 120,
       sortable: true,
       resizable: true,
       headerValueGetter: () =>
-        this.translate.instant('cis.report.gridHeader.SCORED'),
+        this.translate.instant('multiCluster.summary.RUNNING_POD'),
     },
     {
-      field: 'running_workloads',
+      field: 'services',
       width: 70,
       sortable: true,
       resizable: true,
       headerValueGetter: () =>
-        this.translate.instant('cis.report.gridHeader.PROFILE'),
+        this.translate.instant('dashboard.summary.SERVICE'),
     },
     {
       field: 'action',

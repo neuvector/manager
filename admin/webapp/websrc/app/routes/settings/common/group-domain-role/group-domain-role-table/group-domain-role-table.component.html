@@ -1,4 +1,4 @@
-<ng-container *ngIf="global_role !== 'admin'">
+<ng-container *ngIf="!['admin', 'fedAdmin'].includes(global_role)">
   <mat-table
     (matSortChange)="announceSortChange($event)"
     [dataSource]="dataSource"

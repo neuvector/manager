@@ -105,11 +105,11 @@
     }}
   </button>
   <app-group-domain-role-table
-    [activeRole]="data.globalRoles[0]"
+    [activeRole]="domainTableSource.data[0].namespaceRole"
     [dataSource]="domainTableSource"
     [domains]="data.domains"
     [global_role]="selectedRole"
-    [group_roles]="data.globalRoles"
+    [group_roles]="data.domainRoles"
     [hidden]="!showAdvSetting"
     [isReadOnly]="data.isReadOnly || false"></app-group-domain-role-table>
   <div class="d-flex justify-content-end" *ngIf="!data.isReadOnly">

@@ -205,7 +205,7 @@
     "PASSWORD_REQUIRED": "Password is required!",
     "LOGIN": "Login",
     "OR": "or",
-    "OKTA_LOGIN": "Login with saml",
+    "OKTA_LOGIN": "Login with SAML",
     "OIDC_LOGIN": "Login with OpenID",
     "AUTH_ERROR": "Authentication failed!",
     "SESSION_TIMEOUT": "Session has expired. Please login.",

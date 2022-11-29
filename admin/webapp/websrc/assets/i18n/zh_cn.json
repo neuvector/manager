@@ -2304,7 +2304,8 @@
       "MOVE": "移动规则",
       "DISABLE": "禁用规则",
       "ENABLE": "启用规则",
-      "REVERT": "复原规则"
+      "REVERT": "复原规则",
+      "VIEW": "浏览规则"
     },
     "gridHeader": {
       "SEQ": "顺序",

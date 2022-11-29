@@ -470,9 +470,9 @@ export class GroupsService {
           }
           return '';
         },
-        width: 90,
-        minWidth: 90,
-        maxWidth: 90,
+        width: 110,
+        minWidth: 110,
+        maxWidth: 110,
       },
       {
         headerName: this.translate.instant('group.dlp.gridHeader.ACTION'),
@@ -607,9 +607,9 @@ export class GroupsService {
           }
           return '';
         },
-        width: 90,
-        minWidth: 90,
-        maxWidth: 90,
+        width: 110,
+        minWidth: 110,
+        maxWidth: 110,
       },
       {
         headerName: this.translate.instant('group.dlp.gridHeader.ACTION'),

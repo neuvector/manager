@@ -2303,7 +2303,8 @@
       "MOVE": "Move Rules",
       "DISABLE": "Disable Rule",
       "ENABLE": "Enable Rule",
-      "REVERT": "Revert Rule"
+      "REVERT": "Revert Rule",
+      "VIEW": "View Rule"
     },
     "gridHeader": {
       "SEQ": "Seq.",

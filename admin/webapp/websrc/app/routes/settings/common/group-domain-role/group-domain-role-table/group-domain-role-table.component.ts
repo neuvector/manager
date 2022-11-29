@@ -32,6 +32,7 @@ export class GroupDomainRoleTableComponent
   @Input() domains!: string[];
   @Input() global_role!: string;
   @Input() group_roles!: string[];
+  @Input() isReadOnly: boolean = false;
   displayedColumns = ['namespaceRoles', 'namespaces'];
   separatorKeysCodes: number[] = [ENTER, COMMA];
   namespaceCtrl = new FormControl();

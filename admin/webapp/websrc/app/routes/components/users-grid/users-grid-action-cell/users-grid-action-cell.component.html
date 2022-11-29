@@ -1,31 +1,42 @@
-<button
-  mat-icon-button
-  [style.visibility]="
-    params.data.blocked_for_password_expire ? 'visible' : 'hidden'
-  "
-  matTooltip="{{ 'user.tooltips.RESET_PASSWORD' | translate }}"
-  (click)="reset()">
-  <i class="eos-icons text-action">auto_fix_high</i>
-</button>
-<button
-  mat-icon-button
-  [style.visibility]="
-    params.data.blocked_for_failed_login ? 'visible' : 'hidden'
-  "
-  matTooltip="{{ 'user.tooltips.UNLOCK' | translate }}"
-  (click)="unlock()">
-  <i class="eos-icons text-action">lock_open</i>
-</button>
-<button
-  mat-icon-button
-  [style.visibility]="params.data.fullname !== 'admin' ? 'visible' : 'hidden'"
-  matTooltip="{{ 'user.tooltips.REMOVE' | translate }}"
-  (click)="delete()">
-  <i class="eos-icons text-action">delete</i>
-</button>
-<button
-  mat-icon-button
-  matTooltip="{{ 'user.tooltips.EDIT' | translate }}"
-  (click)="edit()">
-  <i class="eos-icons text-action">edit</i>
-</button>
+<ng-container
+  *ngIf="params.isWriteUserAuthorized && !params.isRemote; else viewTemplate">
+  <button
+    mat-icon-button
+    [style.visibility]="
+      params.data.blocked_for_password_expire ? 'visible' : 'hidden'
+    "
+    matTooltip="{{ 'user.tooltips.RESET_PASSWORD' | translate }}"
+    (click)="reset()">
+    <i class="eos-icons text-action">auto_fix_high</i>
+  </button>
+  <button
+    mat-icon-button
+    [style.visibility]="
+      params.data.blocked_for_failed_login ? 'visible' : 'hidden'
+    "
+    matTooltip="{{ 'user.tooltips.UNLOCK' | translate }}"
+    (click)="unlock()">
+    <i class="eos-icons text-action">lock_open</i>
+  </button>
+  <button
+    mat-icon-button
+    [style.visibility]="params.data.fullname !== 'admin' ? 'visible' : 'hidden'"
+    matTooltip="{{ 'user.tooltips.REMOVE' | translate }}"
+    (click)="delete()">
+    <i class="eos-icons text-action">delete</i>
+  </button>
+  <button
+    mat-icon-button
+    matTooltip="{{ 'user.tooltips.EDIT' | translate }}"
+    (click)="edit()">
+    <i class="eos-icons text-action">edit</i>
+  </button>
+</ng-container>
+<ng-template #viewTemplate>
+  <button
+    mat-icon-button
+    matTooltip="{{ 'user.tooltips.VIEW' | translate }}"
+    (click)="view()">
+    <i class="eos-icons text-action">feed</i>
+  </button>
+</ng-template>

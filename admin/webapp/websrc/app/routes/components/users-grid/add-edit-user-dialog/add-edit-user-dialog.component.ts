@@ -28,6 +28,7 @@ export interface AddEditUserDialog {
   globalRoles: string[];
   domains: string[];
   user?: User;
+  isReadOnly?: boolean;
 }
 
 @Component({
@@ -133,6 +134,9 @@ export class AddEditUserDialogComponent implements OnInit {
             .includes(true)
         ) {
           this.toggleAdvSetting = true;
+        }
+        if (this.data.isReadOnly) {
+          this.form.disable();
         }
       }
     }

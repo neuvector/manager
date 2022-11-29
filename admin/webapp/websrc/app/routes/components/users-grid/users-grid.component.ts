@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  Inject,
   Input,
   OnInit,
   Output,
@@ -33,6 +34,8 @@ import { AddEditUserDialogComponent } from './add-edit-user-dialog/add-edit-user
 import { UsersGridActionCellComponent } from './users-grid-action-cell/users-grid-action-cell.component';
 import { UsersGridUsernameCellComponent } from './users-grid-username-cell/users-grid-username-cell.component';
 import { AuthUtilsService } from '@common/utils/auth.utils';
+import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
+import { GlobalConstant } from '@common/constants/global.constant';
 
 @Component({
   selector: 'app-users-grid',
@@ -141,10 +144,13 @@ export class UsersGridComponent implements OnInit {
       headerName: this.tr.instant('user.gridHeader.ACTION'),
       cellRenderer: 'actionCellRenderer',
       cellRendererParams: {
+        isWriteUserAuthorized: undefined,
+        isRemote: undefined,
         edit: event => this.editUser(event),
         delete: event => this.deleteUser(event),
         reset: event => this.resetUser(event),
         unlock: event => this.unlockUser(event),
+        view: event => this.viewUser(event),
       },
       cellClass: ['d-flex', 'align-items-center'],
       sortable: false,
@@ -160,7 +166,8 @@ export class UsersGridComponent implements OnInit {
     private notificationService: NotificationService,
     private tr: TranslateService,
     private cd: ChangeDetectorRef,
-    private authUtilsService: AuthUtilsService
+    private authUtilsService: AuthUtilsService,
+    @Inject(SESSION_STORAGE) private sessionStorage: StorageService
   ) {
     this.$win = $(GlobalVariable.window);
   }
@@ -168,9 +175,13 @@ export class UsersGridComponent implements OnInit {
   ngOnInit(): void {
     this.isWriteUserAuthorized =
       this.authUtilsService.getDisplayFlag('write_users');
-    if (!this.isWriteUserAuthorized) {
-      this.columnDefs.pop();
-    }
+    let actionCellParams =
+      this.columnDefs[this.columnDefs.length - 1].cellRendererParams;
+    actionCellParams.isWriteUserAuthorized = this.isWriteUserAuthorized;
+    actionCellParams.isRemote =
+      JSON.parse(
+        this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_CLUSTER) || '{}'
+      )?.isRemote || false;
     this.gridOptions = this.utils.createGridOptions(this.columnDefs, this.$win);
     this.gridOptions = {
       ...this.gridOptions,
@@ -181,7 +192,9 @@ export class UsersGridComponent implements OnInit {
       rowMultiSelectWithClick: true,
       suppressRowClickSelection: true,
       isRowSelectable: node =>
-        node.data ? node.data.fullname !== 'admin' : false,
+        node.data
+          ? node.data.fullname !== 'admin' && this.isWriteUserAuthorized
+          : false,
       onSelectionChanged: () => this.onSelectionChanged(),
       onCellClicked: e => this.getEventsByUser(e.node.data.fullname),
       onGridReady: event => this.onGridReady(event),
@@ -351,6 +364,21 @@ export class UsersGridComponent implements OnInit {
           );
         },
       });
+  }
+
+  viewUser(event) {
+    const editDialogRef = this.dialog.open(AddEditUserDialogComponent, {
+      width: '80%',
+      maxWidth: '1100px',
+      data: {
+        isEdit: true,
+        isReadOnly: true,
+        user: event.data,
+        globalRoles: this.globalRoles,
+        domains: this.domains,
+        isSync: true,
+      },
+    });
   }
 
   unlockUser(event) {}

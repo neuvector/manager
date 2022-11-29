@@ -86,6 +86,7 @@ export class SensorActionButtonsComponent implements ICellRendererAngularComp {
               GlobalConstant.NOTIFICATION_TYPE.ERROR
             );
           }
+          dialogRef.componentInstance.loading = false;
         }
       );
   };

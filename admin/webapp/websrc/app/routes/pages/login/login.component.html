@@ -126,7 +126,7 @@
                   </button>
                 </div>
               </div>
-              <div class="mt-xl" ng-hide=".servers && servers.length>0">
+              <div class="mt-xl" *ngIf="!servers || servers.length === 0">
                 <!--suppress JSUnresolvedVariable -->
                 <button
                   (click)="submitForm($event, loginForm.value, '')" [disabled]="!validEula || loginForm.invalid"

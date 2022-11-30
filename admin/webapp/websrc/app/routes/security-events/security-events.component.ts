@@ -229,6 +229,7 @@ export class SecurityEventsComponent implements OnInit {
   }
 
   refresh = () => {
+    this.isDataReady = false;
     this.securityEventsService.displayedSecurityEvents = [];
     this.printableData = [];
     this.securityEventsService.cachedSecurityEvents = [];

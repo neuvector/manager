@@ -1911,6 +1911,7 @@
     "ZERODRIFT_COMMENT": "Enable/disable automated protection that prevents processes and file system drift for selected groups.",
     "ZERO_DRIFT_HINT": "Switching mode to Discover to start learning processes in Basic mode",
     "BASELINE_PROFILE": "Baseline Profile",
+    "ZERO_DRIFT": "Zero Drift",
     "MULTI_MODE_SELECTION": "Multiple groups are selected along with different policy mode or baseline profile.",
     "TIP": {
       "EDIT": "Edit Group",

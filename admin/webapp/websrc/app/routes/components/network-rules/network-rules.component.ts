@@ -428,24 +428,26 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   exportCsv = () => {
     let reportData: Array<any> = [];
     this.gridOptions.api!.forEachNodeAfterFilterAndSort((node, index) => {
-      reportData.push({
-        sequence: index + 1,
-        id: node.data.id,
-        comment: node.data.comment,
-        from: node.data.from,
-        to: node.data.to,
-        applications: node.data.applications,
-        ports: node.data.ports,
-        action: node.data.action,
-        type: MapConstant.DISPLAY_CFG_TYPE_MAP[
-          node.data.cfg_type.toLowerCase()
-        ],
-        status: node.data.disable ? 'disabled' : 'enabled',
-        updated_at: this.datePipe.transform(
-          node.data.last_modified_timestamp * 1000,
-          'MMM dd, y HH:mm:ss'
-        ),
-      });
+      if (node.data.id > 0) {
+        reportData.push({
+          sequence: index + 1,
+          id: node.data.id,
+          comment: node.data.comment,
+          from: node.data.from,
+          to: node.data.to,
+          applications: node.data.applications,
+          ports: node.data.ports,
+          action: node.data.action,
+          type: MapConstant.DISPLAY_CFG_TYPE_MAP[
+            node.data.cfg_type.toLowerCase()
+          ],
+          status: node.data.disable ? 'disabled' : 'enabled',
+          updated_at: this.datePipe.transform(
+            node.data.last_modified_timestamp * 1000,
+            'MMM dd, y HH:mm:ss'
+          ),
+        });
+      }
     });
 
     let csv = arrayToCsv(reportData);

@@ -104,6 +104,20 @@
     </div>
   </div>
   <mat-card style="position: relative;">
+    <div
+      *ngIf="isDataReady && securityEventsService.cachedSecurityEvents.length === 0"
+      class="safe sec-event-safe"
+    >
+      <div>
+        <em class="eos-icons safe-signal" aria-hidden="true">check</em>
+      </div>
+      <div class="safe-text">
+        {{'securityEvent.NO_SEC_EVENT' | translate}}
+      </div>
+    </div>
+    <div *ngIf="!isDataReady">
+      <app-loading-template></app-loading-template>
+    </div>
     <div class="d-flex align-items-center justify-content-end" style="position: absolute; right: 10px; top: -10px;">
       <button
         (click)="openAdvancedFilterDialog()"

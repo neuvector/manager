@@ -70,14 +70,28 @@ export class ProcessProfileRulesService {
         headerName: this.translate.instant('admissionControl.TYPE'),
         field: 'cfg_type',
         cellRenderer: params => {
-          if (params) {
-            let cfgType = params.value
-              ? params.value.toUpperCase()
-              : GlobalConstant.CFG_TYPE.CUSTOMER.toUpperCase();
-            let type = MapConstant.colourMap[cfgType];
-            return `<div class="type-label px-1 ${type}">${this.translate.instant(
-              `group.${cfgType}`
-            )}</div>`;
+          // if (params) {
+          //   let cfgType = params.value
+          //     ? params.value.toUpperCase()
+          //     : GlobalConstant.CFG_TYPE.CUSTOMER.toUpperCase();
+          //   let type = MapConstant.colourMap[cfgType];
+          //   return `<div class="type-label px-1 ${type}">${this.translate.instant(
+          //     `group.${cfgType}`
+          //   )}</div>`;
+          // }
+          // return '';
+
+          if (params && params.value) {
+            let typeClass =
+              params.value === GlobalConstant.CFG_TYPE.GROUND || params.value === GlobalConstant.CFG_TYPE.FED
+                ? MapConstant.colourMap[params.value.toUpperCase()]
+                : "local-rule";
+
+            let typeName =
+              params.value === GlobalConstant.CFG_TYPE.GROUND || params.value === GlobalConstant.CFG_TYPE.FED
+                ? this.translate.instant(`group.${params.value.toUpperCase()}`)
+                : this.translate.instant("group.LOCAL");
+            return `<div class="action-label nv-label ${typeClass}">${typeName}</div>`;
           }
           return '';
         },

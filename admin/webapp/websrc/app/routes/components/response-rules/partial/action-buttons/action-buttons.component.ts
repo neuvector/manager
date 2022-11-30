@@ -19,6 +19,9 @@ import { forkJoin } from 'rxjs';
 export class ActionButtonsComponent implements ICellRendererAngularComp {
   public params;
   private isModalOpen: boolean = false;
+  isWriteResponseRuleAuthorized: boolean = false;
+  isOperatableRuleType: boolean = false;
+
   constructor(
     private translate: TranslateService,
     private responseRulesService: ResponseRulesService,
@@ -31,6 +34,10 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
     if (params.node && params.node.data) {
       this.params = params;
     }
+    this.isWriteResponseRuleAuthorized = this.params.context.componentParent.isWriteResponseRuleAuthorized;
+    this.isOperatableRuleType =
+      this.params.data.cfg_type !== GlobalConstant.CFG_TYPE.GROUND &&
+      !(this.params.context.componentParent.source === GlobalConstant.NAV_SOURCE.SELF && this.params.data.cfg_type === GlobalConstant.CFG_TYPE.FED);
   }
 
   refresh(params: any): boolean {

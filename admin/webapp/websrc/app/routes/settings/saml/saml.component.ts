@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { combineLatest, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { SettingsService } from '@services/settings.service';
@@ -9,7 +9,7 @@ import { MultiClusterService } from '@services/multi-cluster.service';
   templateUrl: './saml.component.html',
   styleUrls: ['./saml.component.scss'],
 })
-export class SamlComponent {
+export class SamlComponent implements OnInit, OnDestroy{
   private _switchClusterSubscription;
   samlError!: string;
   server$ = this.settingsService.getServer();
@@ -30,6 +30,11 @@ export class SamlComponent {
       });
   }
 
+  ngOnDestroy(): void {
+    if (this._switchClusterSubscription) {
+      this._switchClusterSubscription.unsubscribe();
+    }
+  }
   private loadData() {
     return combineLatest([this.server$, this.domain$]).pipe(
       map(([server, domain]) => {

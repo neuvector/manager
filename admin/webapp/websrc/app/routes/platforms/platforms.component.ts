@@ -1,5 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MapConstant } from '@common/constants/map.constant';
 import { ErrorResponse, Platform, ScanConfig } from '@common/types';
@@ -19,7 +25,7 @@ import {MultiClusterService} from "@services/multi-cluster.service";
   templateUrl: './platforms.component.html',
   styleUrls: ['./platforms.component.scss'],
 })
-export class PlatformsComponent implements OnInit {
+export class PlatformsComponent implements OnInit, OnDestroy {
   _platformsGrid!: PlatformsGridComponent;
   @ViewChild(PlatformsGridComponent) set platformsGrid(
     grid: PlatformsGridComponent

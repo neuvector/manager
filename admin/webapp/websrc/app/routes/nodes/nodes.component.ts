@@ -75,9 +75,10 @@ export class NodesComponent implements OnInit {
     }
 
     //refresh the page when it switched to a remote cluster
-    this._switchClusterSubscription = this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
-      this.refresh();
-    });
+    this._switchClusterSubscription =
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
+        this.refresh();
+      });
 
   }
 

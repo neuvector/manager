@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { MapConstant } from '@common/constants/map.constant';
 import { ComponentCanDeactivate } from '@common/guards/pending-changes.guard';
 import { ConfigV2Response, Enforcer } from '@common/types';
@@ -16,7 +16,7 @@ import { MultiClusterService } from '@services/multi-cluster.service';
   templateUrl: './configuration.component.html',
   styleUrls: ['./configuration.component.scss'],
 })
-export class ConfigurationComponent implements OnInit, ComponentCanDeactivate {
+export class ConfigurationComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
   private _switchClusterSubscription;
   @ViewChild(ConfigFormComponent) configForm!: ConfigFormComponent;
   config!: ConfigV2Response;
@@ -59,7 +59,7 @@ export class ConfigurationComponent implements OnInit, ComponentCanDeactivate {
       });
     this._switchClusterSubscription =
       this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
-        this.refreshConfig();
+        this.refreshConfig$.next(true);
       });
   }
 
@@ -67,5 +67,11 @@ export class ConfigurationComponent implements OnInit, ComponentCanDeactivate {
     setTimeout(() => {
       this.refreshConfig$.next(true);
     }, 500);
+  }
+
+  ngOnDestroy(): void {
+    if(this._switchClusterSubscription){
+      this._switchClusterSubscription.unsubscribe();
+    }
   }
 }

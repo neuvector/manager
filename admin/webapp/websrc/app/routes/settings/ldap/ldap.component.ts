@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { SettingsService } from '@services/settings.service';
-import { combineLatest} from 'rxjs';
+import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MultiClusterService } from '@services/multi-cluster.service';
 
@@ -9,7 +9,7 @@ import { MultiClusterService } from '@services/multi-cluster.service';
   templateUrl: './ldap.component.html',
   styleUrls: ['./ldap.component.scss'],
 })
-export class LdapComponent {
+export class LdapComponent implements OnInit, OnDestroy {
   private _switchClusterSubscription;
   server$ = this.settingsService.getServer();
   domain$ = this.settingsService.getDomain();
@@ -31,7 +31,7 @@ export class LdapComponent {
 
   ngOnInit(): void {
     this._switchClusterSubscription =
-      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
         this.server$ = this.settingsService.getServer();
         this.domain$ = this.settingsService.getDomain();
         this.ldapData$ = combineLatest([this.server$, this.domain$]).pipe(
@@ -45,5 +45,11 @@ export class LdapComponent {
           })
         );
       });
+  }
+
+  ngOnDestroy(): void {
+    if (this._switchClusterSubscription) {
+      this._switchClusterSubscription.unsubscribe();
+    }
   }
 }

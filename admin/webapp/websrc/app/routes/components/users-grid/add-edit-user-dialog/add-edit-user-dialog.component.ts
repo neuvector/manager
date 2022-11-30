@@ -59,8 +59,8 @@ export class AddEditUserDialogComponent implements OnInit {
     return GlobalVariable.hasInitializedSummary
       ? GlobalVariable.summary.platform
           .toLowerCase()
-          .indexOf(GlobalConstant.KUBE) !== -1
-      : true; // TODO: init summary or save/load from session storage
+          .includes(GlobalConstant.KUBE)
+      : false;
   }
   get passwordForm(): FormGroup {
     return <FormGroup>this.form.get('passwordForm');
@@ -84,6 +84,10 @@ export class AddEditUserDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    if (!this.isKube) {
+      let indexOfNone = this.data.globalRoles.findIndex(role => role === '');
+      this.data.globalRoles.splice(indexOfNone, 1);
+    }
     this.domainTableSource = new MatTableDataSource(
       this.data.user
         ? this.getNamespaceRoleGridData(

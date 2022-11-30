@@ -9,7 +9,7 @@ import { ContainersGridComponent } from '@components/containers-grid/containers-
 import { TranslateService } from '@ngx-translate/core';
 import { ContainersService, WorkloadRow } from '@services/containers.service';
 import { NotificationService } from '@services/notification.service';
-import { MultiClusterService } from "@services/multi-cluster.service";
+import { MultiClusterService } from '@services/multi-cluster.service';
 import { ScanService } from '@services/scan.service';
 import { interval, Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
@@ -36,7 +36,7 @@ export class ContainersComponent implements OnInit {
   get containersGrid() {
     return this._containersGrid;
   }
-  quarantinedContainers: WorkloadV2[]  = [];
+  quarantinedContainers: WorkloadV2[] = [];
   toggleNodeForm!: FormGroup;
   refreshing$ = new Subject();
   error!: string;
@@ -76,13 +76,14 @@ export class ContainersComponent implements OnInit {
     this.getContainers();
     if (this.isAutoScanAuthorized) this.getScanConfig();
     //refresh the page when it switched to a remote cluster
-    this.switchClusterSubscription = this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
-      this.refresh();
-    });
+    this.switchClusterSubscription =
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
+        this.refresh();
+      });
   }
 
-  ngOnDestroy(): void{
-    if(this.switchClusterSubscription){
+  ngOnDestroy(): void {
+    if (this.switchClusterSubscription) {
       this.switchClusterSubscription.unsubscribe();
     }
   }
@@ -115,17 +116,13 @@ export class ContainersComponent implements OnInit {
       .subscribe({
         next: res => {
           this.containersService.addContainers(res);
-          this.quarantinedContainers = this.containersService.quarantinedContainers;
+          this.quarantinedContainers =
+            this.containersService.quarantinedContainers;
           this.nodeFilterInit(res);
           this.error = '';
           if (!this.loaded) this.loaded = true;
         },
-        error: ({ error }: { error: ErrorResponse }) => {
-          this.error = error.message;
-          if (this.containersGrid) {
-            this.containersGrid.setError(this.error);
-          }
-        },
+        error: ({ error }: { error: ErrorResponse }) => {},
       });
   }
 

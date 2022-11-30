@@ -40,6 +40,10 @@ export class RegistryDetailsTableComponent implements OnInit, OnChanges {
       field: 'repository',
       headerValueGetter: () =>
         this.translate.instant('registry.gridHeader.REPOSITORY'),
+      valueGetter: params =>
+        params.data.tag
+          ? `${params.data.repository}:${params.data.tag}`
+          : params.data.repository,
     },
     {
       field: 'image_id',
@@ -109,7 +113,7 @@ export class RegistryDetailsTableComponent implements OnInit, OnChanges {
           RegistryDetailsVulnerabilitiesCellComponent,
         statusCellRenderer: RegistryDetailsTableStatusCellComponent,
       },
-      overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS')
+      overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS'),
     };
     this.filter.valueChanges.subscribe(val => this.gridApi.setQuickFilter(val));
   }

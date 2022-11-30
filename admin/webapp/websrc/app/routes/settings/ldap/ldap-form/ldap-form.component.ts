@@ -1,4 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   ErrorResponse,
@@ -21,9 +29,10 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './ldap-form.component.html',
   styleUrls: ['./ldap-form.component.scss'],
 })
-export class LdapFormComponent implements OnInit {
+export class LdapFormComponent implements OnInit, OnChanges {
   @Input() ldapData!: { server: ServerGetResponse; domains: string[] };
-  onCreate = true;
+  @Output() refresh = new EventEmitter();
+  isCreated = true;
   submittingForm = false;
   groupMappedRoles: GroupMappedRole[] = [];
   serverName = 'ldap1';
@@ -50,48 +59,17 @@ export class LdapFormComponent implements OnInit {
     private tr: TranslateService
   ) {}
 
-  submitForm(): void {
-    if (!this.ldapForm.valid) {
-      return;
-    }
-    const ldap: LDAP = {
-      group_mapped_roles: this.groupMappedRoles,
-      ...this.ldapForm.value,
-    };
-    const config: ServerPatchBody = { config: { name: this.serverName, ldap } };
-    this.submittingForm = true;
-    let submission: Observable<unknown>;
-    if (!this.onCreate) {
-      submission = this.settingsService.postServer(config).pipe(
-        finalize(() => {
-          this.submittingForm = false;
-          this.onCreate = true;
-        })
-      );
-    } else {
-      submission = this.settingsService.patchServer(config).pipe(
-        finalize(() => {
-          this.submittingForm = false;
-        })
-      );
-    }
-    submission.subscribe({
-      complete: () => {
-        this.notificationService.open(this.tr.instant('ldap.SERVER_SAVED'));
-      },
-      error: ({ error }: { error: ErrorResponse }) => {
-        this.notificationService.open(
-          this.utils.getAlertifyMsg(
-            error,
-            this.tr.instant('ldap.SERVER_SAVE_FAILED'),
-            false
-          )
-        );
-      },
-    });
+  ngOnInit(): void {
+    this.initForm();
   }
 
-  ngOnInit(): void {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.ldapData) {
+      this.initForm();
+    }
+  }
+
+  initForm(): void {
     const ldap = this.ldapData.server.servers.find(
       ({ server_type }) => server_type === 'ldap'
     );
@@ -105,9 +83,55 @@ export class LdapFormComponent implements OnInit {
           );
         }
       });
+      this.ldapForm.get('bind_password')?.markAsPristine();
     } else {
-      this.onCreate = false;
+      this.isCreated = false;
     }
+  }
+
+  submitForm(): void {
+    if (!this.ldapForm.valid) {
+      return;
+    }
+    const ldap: LDAP = {
+      group_mapped_roles: this.groupMappedRoles,
+      ...this.ldapForm.value,
+    };
+    if (!this.ldapForm.get('bind_password')?.dirty) {
+      ldap.bind_password = null as any;
+    }
+    const config: ServerPatchBody = { config: { name: this.serverName, ldap } };
+    this.submittingForm = true;
+    let submission: Observable<unknown>;
+    if (!this.isCreated) {
+      submission = this.settingsService.postServer(config).pipe(
+        finalize(() => {
+          this.submittingForm = false;
+          this.isCreated = true;
+        })
+      );
+    } else {
+      submission = this.settingsService.patchServer(config).pipe(
+        finalize(() => {
+          this.submittingForm = false;
+        })
+      );
+    }
+    submission.subscribe({
+      complete: () => {
+        this.notificationService.open(this.tr.instant('ldap.SERVER_SAVED'));
+        this.refresh.emit();
+      },
+      error: ({ error }: { error: ErrorResponse }) => {
+        this.notificationService.open(
+          this.utils.getAlertifyMsg(
+            error,
+            this.tr.instant('ldap.SERVER_SAVE_FAILED'),
+            false
+          )
+        );
+      },
+    });
   }
 
   openDialog(): void {

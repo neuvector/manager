@@ -18,7 +18,7 @@ import { PlatformsService } from '@services/platforms.service';
 import { ScanService } from '@services/scan.service';
 import { interval, Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
-import {MultiClusterService} from "@services/multi-cluster.service";
+import { MultiClusterService } from '@services/multi-cluster.service';
 
 @Component({
   selector: 'app-platforms',
@@ -77,13 +77,14 @@ export class PlatformsComponent implements OnInit, OnDestroy {
     }
 
     //refresh the page when it switched to a remote cluster
-    this._switchClusterSubscription = this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
-      this.refresh();
-    });
+    this._switchClusterSubscription =
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
+        this.refresh();
+      });
   }
 
   ngOnDestroy(): void {
-    if(this._switchClusterSubscription){
+    if (this._switchClusterSubscription) {
       this._switchClusterSubscription.unsubscribe();
     }
   }
@@ -112,12 +113,7 @@ export class PlatformsComponent implements OnInit, OnDestroy {
           this.error = '';
           if (!this.loaded) this.loaded = true;
         },
-        error: ({ error }: { error: ErrorResponse }) => {
-          this.error = error.message;
-          if (this.platformsGrid) {
-            this.platformsGrid.setError(this.error);
-          }
-        },
+        error: ({ error }: { error: ErrorResponse }) => {},
       });
   }
 

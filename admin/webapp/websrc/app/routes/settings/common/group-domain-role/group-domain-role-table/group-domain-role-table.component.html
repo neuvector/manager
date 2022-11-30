@@ -1,4 +1,4 @@
-<ng-container *ngIf="global_role !== 'admin'">
+<ng-container *ngIf="!['admin', 'fedAdmin'].includes(global_role)">
   <mat-table
     (matSortChange)="announceSortChange($event)"
     [dataSource]="dataSource"
@@ -34,7 +34,9 @@
       *matRowDef="let row; columns: displayedColumns"
       [class.active-role]="activeRole === row.namespaceRole"></mat-row>
   </mat-table>
-  <div class="d-flex flex-row justify-content-center align-items-center">
+  <div
+    class="d-flex flex-row justify-content-center align-items-center"
+    *ngIf="!isReadOnly">
     <div class="mr-4 role-map">
       {{ activeRole }} {{ 'ldap.GROUP_ADMIN' | translate }}
       <span class="d-block">{{ 'general.TYPE_PRESS_TXT' | translate }}</span>

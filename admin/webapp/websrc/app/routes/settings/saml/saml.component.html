@@ -9,7 +9,7 @@
 </div>
 <mat-card>
   <ng-container *ngIf="samlData$ | async as samlData; else loadingOrError">
-    <app-saml-form [samlData]="samlData"></app-saml-form>
+    <app-saml-form [samlData]="samlData" (refresh)="refresh()"></app-saml-form>
   </ng-container>
   <ng-template #loadingOrError>
     <ng-container *ngIf="samlError; else loading">

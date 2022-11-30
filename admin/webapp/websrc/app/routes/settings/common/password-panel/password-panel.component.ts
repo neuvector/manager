@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { PasswordProfile } from '@common/types';
+import { PublicPasswordProfile } from '@common/types';
 import { TranslateService } from '@ngx-translate/core';
 import { SettingsService } from '@services/settings.service';
 
@@ -11,7 +11,7 @@ import { SettingsService } from '@services/settings.service';
 })
 export class PasswordPanelComponent implements OnInit {
   @Input() passwordForm!: FormGroup;
-  pwdProfile!: PasswordProfile;
+  pwdProfile!: PublicPasswordProfile;
   isCharReqValid!: {
     isReachingMinLen: boolean;
     isReachingMinUpper: boolean;
@@ -36,7 +36,7 @@ export class PasswordPanelComponent implements OnInit {
 
   ngOnInit(): void {
     const passwordField = this.passwordForm.get('newPassword');
-    this.settingsService.getPwdProfile().subscribe(res => {
+    this.settingsService.getPublicPwdProfile().subscribe(res => {
       this.pwdProfile = res;
       this.checkPassword(passwordField?.value || '');
       this.getReqTxt(this.pwdProfile);
@@ -46,7 +46,7 @@ export class PasswordPanelComponent implements OnInit {
     });
   }
 
-  getReqTxt(profile: PasswordProfile) {
+  getReqTxt(profile: PublicPasswordProfile) {
     this.reqText = {
       min_len: this.tr.instant('user.passwordRequirement.MIN_LENGTH', {
         minLength: profile.min_len,
@@ -81,7 +81,7 @@ export class PasswordPanelComponent implements OnInit {
     }
   }
 
-  checkCharReq(password: string, profile: PasswordProfile) {
+  checkCharReq(password: string, profile: PublicPasswordProfile) {
     const PATTERNS = {
       UPPER: new RegExp(/[A-Z]/),
       LOWER: new RegExp(/[a-z]/),

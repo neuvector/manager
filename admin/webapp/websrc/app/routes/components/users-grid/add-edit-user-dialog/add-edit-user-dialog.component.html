@@ -1,12 +1,20 @@
 <div class="d-flex align-items-center justify-content-between">
   <h4 mat-dialog-title class="mb-2">
     {{
-      (this.data.isEdit ? 'user.editUser.TITLE' : 'user.addUser.TITLE')
-        | translate
+      (data.isReadOnly
+        ? 'user.tooltips.VIEW'
+        : data.isEdit
+        ? 'user.editUser.TITLE'
+        : 'user.addUser.TITLE'
+      ) | translate
     }}
   </h4>
-  <button (click)="onNoClick()" class="mb-2" aria-label="Close dialog" mat-icon-button>
-    <i class="eos-icons ">close</i>
+  <button
+    (click)="onNoClick()"
+    class="mb-2"
+    aria-label="Close dialog"
+    mat-icon-button>
+    <i class="eos-icons">close</i>
   </button>
 </div>
 <hr class="fancy" />
@@ -86,7 +94,10 @@
     mat-stroked-button
     type="button"
     *ngIf="
-      isKube && !['admin', 'fedAdmin', ''].includes(form.controls.role.value)
+      isKube &&
+      !['admin', 'fedAdmin', ''].includes(form.controls.role.value) &&
+      data.user &&
+      ['', 'openshift'].includes(data.user.server)
     ">
     {{
       (toggleAdvSetting ? 'user.HIDE_ADV_SETTING' : 'user.SHOW_ADV_SETTING')
@@ -94,13 +105,14 @@
     }}
   </button>
   <app-group-domain-role-table
-    [activeRole]="data.globalRoles[0]"
+    [activeRole]="domainTableSource.data[0].namespaceRole"
     [dataSource]="domainTableSource"
     [domains]="data.domains"
     [global_role]="selectedRole"
-    [group_roles]="data.globalRoles"
-    [hidden]="!showAdvSetting"></app-group-domain-role-table>
-  <div class="d-flex justify-content-end">
+    [group_roles]="data.domainRoles"
+    [hidden]="!showAdvSetting"
+    [isReadOnly]="data.isReadOnly || false"></app-group-domain-role-table>
+  <div class="d-flex justify-content-end" *ngIf="!data.isReadOnly">
     <button
       (click)="onNoClick()"
       class="mr-2"

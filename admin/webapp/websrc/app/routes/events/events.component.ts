@@ -4,7 +4,7 @@ import { EventsGridComponent } from '@components/events-grid/events-grid.compone
 import { EventsService } from '@services/events.service';
 import { Subject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
-import {MultiClusterService} from "@services/multi-cluster.service";
+import { MultiClusterService } from '@services/multi-cluster.service';
 
 @Component({
   selector: 'app-events',
@@ -24,18 +24,20 @@ export class EventsComponent implements OnInit {
 
   constructor(
     private eventsService: EventsService,
-    private multiClusterService: MultiClusterService) {}
+    private multiClusterService: MultiClusterService
+  ) {}
 
   ngOnInit(): void {
     this.getEvents();
     //refresh the page when it switched to a remote cluster
-    this._switchClusterSubscription = this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
-      this.refresh();
-    });
+    this._switchClusterSubscription =
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
+        this.refresh();
+      });
   }
 
-  ngOnDestroy(): void{
-    if(this._switchClusterSubscription){
+  ngOnDestroy(): void {
+    if (this._switchClusterSubscription) {
       this._switchClusterSubscription.unsubscribe();
     }
   }
@@ -64,12 +66,7 @@ export class EventsComponent implements OnInit {
           this.error = '';
           if (!this.loaded) this.loaded = true;
         },
-        error: ({ error }: { error: ErrorResponse }) => {
-          this.error = error.message;
-          if (this.eventsGrid) {
-            this.eventsGrid.setError(this.error);
-          }
-        },
+        error: ({ error }: { error: ErrorResponse }) => {},
       });
   }
 }

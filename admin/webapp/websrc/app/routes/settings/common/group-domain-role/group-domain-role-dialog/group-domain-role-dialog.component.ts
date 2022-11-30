@@ -18,6 +18,7 @@ export interface GroupDomainRoleDialogData {
   global_role: string;
   group: string;
   group_roles: string[];
+  group_domain_roles: string[];
   dataSource: _MatTableDataSource<any>;
   domains: string[];
 }

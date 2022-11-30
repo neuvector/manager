@@ -52,7 +52,7 @@ export class GroupDomainRoleComponent {
     let dataSource: MatTableDataSource<any>;
     if (groupMappedRole) {
       dataSource = new MatTableDataSource(
-        this.mappableRoles.group_roles
+        this.mappableRoles.group_domain_roles
           .filter(role => role)
           .map(role => {
             return {
@@ -68,6 +68,7 @@ export class GroupDomainRoleComponent {
         global_role: groupMappedRole.global_role,
         group: groupMappedRole.group,
         group_roles: [...this.mappableRoles.group_roles],
+        group_domain_roles: [...this.mappableRoles.group_domain_roles],
         dataSource,
         domains: [...this.domains],
       };
@@ -76,7 +77,7 @@ export class GroupDomainRoleComponent {
         namespaceRole: string;
         namespaces: string[];
       }>(
-        this.mappableRoles.group_roles
+        this.mappableRoles.group_domain_roles
           .filter(role => role)
           .map(role => {
             return { namespaceRole: role, namespaces: [] };
@@ -87,6 +88,7 @@ export class GroupDomainRoleComponent {
         global_role: '',
         group: '',
         group_roles: [...this.mappableRoles.group_roles],
+        group_domain_roles: [...this.mappableRoles.group_domain_roles],
         dataSource,
         domains: [...this.domains],
       };

@@ -17,14 +17,14 @@
 
       <div class="d-flex justify-content-end align-items-center">
         <button
-          *ngIf="eof && networkRules.length > 0 && !isNetworkRuleDirty()"
+          *ngIf="eof && networkRules.length > 1 && !isNetworkRuleDirty()"
           class=""
           mat-button
           (click)="print()">
           <em class="eos-icons icon-18">print</em>
         </button>
         <button
-          *ngIf="eof && networkRules.length > 0 && !isNetworkRuleDirty()"
+          *ngIf="eof && networkRules.length > 1 && !isNetworkRuleDirty()"
           class=""
           mat-button
           (click)="exportCsv()">

@@ -2,6 +2,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnInit,
   Output,
   SimpleChanges,
@@ -28,7 +29,7 @@ import { Observable } from 'rxjs';
   templateUrl: './saml-form.component.html',
   styleUrls: ['./saml-form.component.scss'],
 })
-export class SamlFormComponent implements OnInit {
+export class SamlFormComponent implements OnInit, OnChanges {
   @Input() samlData!: { server: ServerGetResponse; domains: string[] };
   @Output() refresh = new EventEmitter();
   onCreate = true;

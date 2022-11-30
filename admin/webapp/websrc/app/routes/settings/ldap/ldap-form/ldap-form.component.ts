@@ -1,4 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   ErrorResponse,
@@ -21,8 +29,9 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './ldap-form.component.html',
   styleUrls: ['./ldap-form.component.scss'],
 })
-export class LdapFormComponent implements OnInit {
+export class LdapFormComponent implements OnInit, OnChanges {
   @Input() ldapData!: { server: ServerGetResponse; domains: string[] };
+  @Output() refresh = new EventEmitter();
   onCreate = true;
   submittingForm = false;
   groupMappedRoles: GroupMappedRole[] = [];
@@ -49,6 +58,35 @@ export class LdapFormComponent implements OnInit {
     private utils: UtilsService,
     private tr: TranslateService
   ) {}
+
+  ngOnInit(): void {
+    this.initForm();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.ldapData) {
+      this.initForm();
+    }
+  }
+
+  initForm(): void {
+    const ldap = this.ldapData.server.servers.find(
+      ({ server_type }) => server_type === 'ldap'
+    );
+    if (ldap && ldap.ldap) {
+      this.serverName = ldap.server_name;
+      this.groupMappedRoles = ldap.ldap.group_mapped_roles;
+      Object.keys(ldap.ldap).forEach((key: string) => {
+        if (this.ldapForm.controls[key]) {
+          this.ldapForm.controls[key].setValue(
+            ldap.ldap ? ldap.ldap[key] : null
+          );
+        }
+      });
+    } else {
+      this.onCreate = false;
+    }
+  }
 
   submitForm(): void {
     if (!this.ldapForm.valid) {
@@ -78,6 +116,7 @@ export class LdapFormComponent implements OnInit {
     submission.subscribe({
       complete: () => {
         this.notificationService.open(this.tr.instant('ldap.SERVER_SAVED'));
+        this.refresh.emit();
       },
       error: ({ error }: { error: ErrorResponse }) => {
         this.notificationService.open(
@@ -89,25 +128,6 @@ export class LdapFormComponent implements OnInit {
         );
       },
     });
-  }
-
-  ngOnInit(): void {
-    const ldap = this.ldapData.server.servers.find(
-      ({ server_type }) => server_type === 'ldap'
-    );
-    if (ldap && ldap.ldap) {
-      this.serverName = ldap.server_name;
-      this.groupMappedRoles = ldap.ldap.group_mapped_roles;
-      Object.keys(ldap.ldap).forEach((key: string) => {
-        if (this.ldapForm.controls[key]) {
-          this.ldapForm.controls[key].setValue(
-            ldap.ldap ? ldap.ldap[key] : null
-          );
-        }
-      });
-    } else {
-      this.onCreate = false;
-    }
   }
 
   openDialog(): void {

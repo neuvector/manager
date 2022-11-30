@@ -2504,7 +2504,7 @@
     "EXCEPTION": "Allow",
     "names": {
       "ADD_CUSTOMIZED_CRITERION": "Add customized criterion",
-      "SA_BIND_RISKY_ROLE": "Service Account Bound Risky Role",
+      "SA_BIND_RISKY_ROLE": "Service Account Bound High Risky Role",
       "IMAGE": "Image",
       "NODE": "Node",
       "CONTAINER": "Container",
@@ -2578,10 +2578,10 @@
       "NOTCONTAINSANY": "does NOT contain ANY of",
       "CONTAINSOTHERTHAN": "contains OTHER than",
       "CONTAINSANY_SINGLE": "is one of",
+      "CONTAINSTAGANY_SINGLE": "is one of",
       "NOTCONTAINSANY_SINGLE": "is NOT one of",
-      "CONTAINSTAGANY": "Contains tag (Any)",
-      "EXIST": "is existing",
-      "NOTEXIST": "is NOT existing",
+      "EXIST": "exists",
+      "NOTEXIST": "NOT exists",
       "text": {
         "<=": "less than",
         ">=": "more than"
@@ -2596,11 +2596,11 @@
       "NONE": "none",
       "DAYS": "days",
       "CORE": "Core(s)",
-      "RISKY_ROLE_VIEW_SECRET": "Subject can listing secrets",
-      "RISKY_ROLE_ANY_ACTION_WORKLOAD": "Subject can do any action on workload resources",
-      "RISKY_ROLE_ANY_ACTION_RBAC": "Subject can do any action on RBAC resources",
-      "RISKY_ROLE_CREATE_POD": "Subject can create workload resource",
-      "RISKY_ROLE_EXEC_INTO_CONTAINER": "Subject can execute into container"
+      "RISKY_ROLE_VIEW_SECRET": "Service Account can listing secrets",
+      "RISKY_ROLE_ANY_ACTION_WORKLOAD": "Service Account can do any action on workload resources",
+      "RISKY_ROLE_ANY_ACTION_RBAC": "Service Account can do any action on RBAC resources",
+      "RISKY_ROLE_CREATE_POD": "Service Account can create workload resource",
+      "RISKY_ROLE_EXEC_INTO_CONTAINER": "Service Account can execute into container"
     },
     "display": {
       "<=": "within {{days}} day(s)",

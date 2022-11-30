@@ -115,14 +115,14 @@ export class UtilsService {
         '<div><em class="fa fa-times-circle error-signal" aria-hidden="true"></em></div>' +
         '<div><span class="error-text">' +
         errBrief +
-        ': ' +
+        '  ' +
         message.charAt(0).toUpperCase() +
         message.slice(1) +
         '</span></div></div>'
       );
     } else {
       return (
-        errBrief + ': ' + message.charAt(0).toUpperCase() + message.slice(1)
+        errBrief + '  ' + message.charAt(0).toUpperCase() + message.slice(1)
       );
     }
   }

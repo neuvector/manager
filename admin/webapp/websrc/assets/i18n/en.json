@@ -433,8 +433,8 @@
         "NO_EXPOSURE": "No exposure",
         "AUTO_SCAN_ENABLE_OK": "Auto scan is enabled successfully!",
         "AUTO_SCAN_DISABLE_OK": "Auto scan is disabled successfully!",
-        "AUTO_SCAN_ENABLE_NG": "Auto scan enabling failed.",
-        "AUTO_SCAN_DISABLE_NG": "Auto scan disabling failed.",
+        "AUTO_SCAN_ENABLE_NG": "Auto scan enabling failed",
+        "AUTO_SCAN_DISABLE_NG": "Auto scan disabling failed",
         "DISABLE_AUTOSCAN_CONFIRM": "If auto scan is disabled, future vulnerability will not be found immediately.",
         "RBAC_ERR_TITLE": "RBAC Role Error",
         "CLUSTERROLE_ERRORS": "Cluster Role",
@@ -1047,12 +1047,12 @@
     "ACCEPT_VUL": "Accept Vulnerability",
     "msg": {
       "REMOVE_CFM": "Are you sure you want to remove?",
-      "REMOVE_OK": "Vulnerability profile entry is removed successfully",
-      "REMOVE_NG": "Error happens when removing vulnerability profile entry",
-      "ADD_OK": "Vulnerability profile entry is added successfully",
-      "ADD_NG": "Error happens when adding vulnerability profile entry",
-      "UPDATE_OK": "Vulnerability profile entry is updated successfully",
-      "UPDATE_NG": "Error happens when updating vulnerability profile entry"
+      "REMOVE_OK": "Vulnerability profile entry is removed successfully!",
+      "REMOVE_NG": "Error happens when removing vulnerability profile entry!",
+      "ADD_OK": "Vulnerability profile entry is added successfully!",
+      "ADD_NG": "Error happens when adding vulnerability profile entry!",
+      "UPDATE_OK": "Vulnerability profile entry is updated successfully!",
+      "UPDATE_NG": "Error happens when updating vulnerability profile entry!"
     },
     "gridHeader": {
       "VULNERABILITY": "Vulnerability Name",
@@ -1695,7 +1695,7 @@
       "TITLE": "Reset Password",
       "RESET": "Reset",
       "RESET_OK": "Password is reset successfully!",
-      "RESET_NG": "Error happens when resetting password."
+      "RESET_NG": "Error happens when resetting password!"
     },
     "addUser": {
       "TITLE": "Add User",
@@ -1707,7 +1707,7 @@
       "ROLE_PLACEHOLDER": "Global Role",
       "ADD": "Add",
       "CANCEL": "Cancel",
-      "SUBMIT_NG": "Failed to add user",
+      "SUBMIT_NG": "Failed to add user!",
       "ADD_NS": "Add Namespace",
       "ADMIN_HINT": "Add namespaces for which this user has admin privileges",
       "READER_HINT": "Add namespaces for which this user has read-only privileges",
@@ -1716,8 +1716,8 @@
     "editUser": {
       "TITLE": "Edit User",
       "EDIT": "Update",
-      "SUBMIT_OK": "Updating user is successful",
-      "SUBMIT_NG": "Failed to update user"
+      "SUBMIT_OK": "Updating user is successful!",
+      "SUBMIT_NG": "Failed to update user!"
     },
     "deleteUser": {
       "title": "Remove",
@@ -1763,7 +1763,7 @@
     "msg": {
       "INSERT_OK": "Added a role successfully!",
       "INSERT_NG": "Error happens when adding role!",
-      "UPDATE_OK": "Updated the role successfully",
+      "UPDATE_OK": "Updated the role successfully!",
       "UPDATE_NG": "Error happens when updating role!",
       "REMOVE_CFM": "Are you sure you want to remove?",
       "REMOVE_OK": "Removed a role successfully!",
@@ -1832,10 +1832,10 @@
     "msg": {
       "GET_PROFILE_ERR": "Error happens when getting password profiles",
       "NUM_ERR": "Minimum total length is less than summary of 4 types of character's minimum length.",
-      "UPDATE_PROFILE_OK": "Password profile is updated successfully.",
-      "UPDATE_PROFILE_NG": "Error happens when updating password profile.",
-      "UNLOCK_USER_OK": "User is unlocked successfully.",
-      "UNLOCK_USER_NG": "Error happens when unlocking user."
+      "UPDATE_PROFILE_OK": "Password profile is updated successfully!",
+      "UPDATE_PROFILE_NG": "Error happens when updating password profile!",
+      "UNLOCK_USER_OK": "User is unlocked successfully!",
+      "UNLOCK_USER_NG": "Error happens when unlocking user!"
     }
   },
   "service": {
@@ -1965,22 +1965,22 @@
     "profile": {
       "COUNT_POSTFIX": "process profiles rules found",
       "REMOVE_OK": "Your process profile rule has been removed.",
-      "REMOVE_NG": "Error happened when removing process profile rule",
+      "REMOVE_NG": "Error happened when removing process profile rule!",
       "ADD_OK": "Your process profile rule has been added.",
-      "ADD_NG": "Error happened when adding process profile rule",
+      "ADD_NG": "Error happened when adding process profile rule!",
       "EDIT_OK": "Your process profile rule has been modified.",
-      "EDIT_NG": "Error happened when editing process profile rule"
+      "EDIT_NG": "Error happened when editing process profile rule!"
     },
     "file": {
       "COUNT_POSTFIX": "file access rules found",
       "RULE_SAMPLE": "Sample: /dir/xxx, /dir/xxx.*, /dir/*.xxx, /dir/*/abc/* (不支持: [], () and regexp)",
       "REMOVE_CONFIRM": "Will you remove file access rule? - Name:",
       "REMOVE_OK": "Your file access rule has been removed.",
-      "REMOVE_NG": "Error happened when removing file acess rule",
+      "REMOVE_NG": "Error happened when removing file acess rule!",
       "ADD_OK": "Your file access rule has been added.",
-      "ADD_NG": "Error happened when adding file acess rule",
+      "ADD_NG": "Error happened when adding file acess rule!",
       "EDIT_OK": "Your file access rule has been modified.",
-      "EDIT_NG": "Error happened when editing file acess rule"
+      "EDIT_NG": "Error happened when editing file acess rule!"
     },
     "dlp": {
       "TITLE": "DLP",
@@ -1995,14 +1995,14 @@
         "ADOPT": "Apply"
       },
       "msg": {
-        "ENABLED_OK": "DLP setting for this group is enabled",
-        "ENABLED_NG": "Error happens when enabling DLP setting",
-        "DISABLED_OK": "DLP setting for this group is disabled",
-        "DISABLED_NG": "Error happens when disabling DLP setting",
+        "ENABLED_OK": "DLP setting for this group is enabled.",
+        "ENABLED_NG": "Error happens when enabling DLP setting!",
+        "DISABLED_OK": "DLP setting for this group is disabled.",
+        "DISABLED_NG": "Error happens when disabling DLP setting!",
         "SETTING_OK": "Group's DLP setting is successful!",
-        "SETTING_NG": "Error happens when processing group's DLP setting",
+        "SETTING_NG": "Error happens when processing group's DLP setting!",
         "EXPORT_OK": "Group's configuration file is exported successfully!",
-        "EXPORT_NG": "Error happens when exporting group configuration file",
+        "EXPORT_NG": "Error happens when exporting group configuration file!",
         "ADD_DLP_WARNING": "Do you want to add DLP sensors on the group?"
       }
     },
@@ -2019,12 +2019,12 @@
         "ADOPT": "Apply"
       },
       "msg": {
-        "ENABLED_OK": "WAF setting for this group is enabled",
-        "ENABLED_NG": "Error happens when enabling WAF setting",
-        "DISABLED_OK": "WAF setting for this group is disabled",
-        "DISABLED_NG": "Error happens when disabling WAF setting",
+        "ENABLED_OK": "WAF setting for this group is enabled.",
+        "ENABLED_NG": "Error happens when enabling WAF setting!",
+        "DISABLED_OK": "WAF setting for this group is disabled.",
+        "DISABLED_NG": "Error happens when disabling WAF setting!",
         "SETTING_OK": "Group's WAF setting is successful!",
-        "SETTING_NG": "Error happens when processing group's WAF setting",
+        "SETTING_NG": "Error happens when processing group's WAF setting!",
         "ADD_WAF_WARNING": "Do you want to add WAF sensors on the group?"
       }
     },
@@ -2096,25 +2096,25 @@
       "INSERT_OK": "Added a sensor successfully!",
       "INSERT_NG": "Error happens when adding sensor!",
       "INSERT_RULE_OK": "Added a rule successfully!",
-      "INSERT_RULE_NG": "Error happens when adding rule",
-      "UPDATE_OK": "Updated the sensor successfully",
-      "UPDATE_NG": "Error happens when updating sensor",
-      "UPDATE_RULE_OK": "Updated the rule successfully",
-      "UPDATE_RULE_NG": "Error happens when updating rule",
+      "INSERT_RULE_NG": "Error happens when adding rule!",
+      "UPDATE_OK": "Updated the sensor successfully!",
+      "UPDATE_NG": "Error happens when updating sensor!",
+      "UPDATE_RULE_OK": "Updated the rule successfully!",
+      "UPDATE_RULE_NG": "Error happens when updating rule!",
       "REMOVE_CFM": "Are you sure you want to delete?",
       "REMOVE_OK": "Removed a sensor successfully!",
       "REMOVE_NG": "Error happens when removing sensor!",
       "REMOVE_RULE_OK": "Removed a rule successfully!",
       "REMOVE_RULE_NG": "Error happens when removing rule!",
       "EXPORT_SENSOR_OK": "Sensors are exported successfully!",
-      "EXPORT_SENSOR_NG": "Error happens when exporting sensors",
+      "EXPORT_SENSOR_NG": "Error happens when exporting sensors!",
       "IMPORT_FINISH": "Sensors are imported successfully!",
-      "IMPORT_FAILED": "Error happens when importing sensors",
+      "IMPORT_FAILED": "Error happens when importing sensors!",
       "MATCH": "Matched",
       "MISMATCH": "Not matched",
       "ADD_PATTERN_NG": "Maximum amount of patterns is 16",
-      "EXISTING_PATTERN_NG": "This pattern is existing",
-      "RECIPROCAL_PATTERN_NG": "There is reciprocal pattern against added pattern in the same context",
+      "EXISTING_PATTERN_NG": "This pattern is existing!",
+      "RECIPROCAL_PATTERN_NG": "There is reciprocal pattern against added pattern in the same context.",
       "SENSOR_NAME_REQUIRED": "Sensor name is required!"
     },
     "TIP": {
@@ -2178,9 +2178,9 @@
       "INSERT_NG": "Error happens when adding sensor!",
       "INSERT_RULE_OK": "Added a rule successfully!",
       "INSERT_RULE_NG": "Error happens when adding rule!",
-      "UPDATE_OK": "Updated the sensor successfully",
+      "UPDATE_OK": "Updated the sensor successfully!",
       "UPDATE_NG": "Error happens when updating sensor!",
-      "UPDATE_RULE_OK": "Updated the rule successfully",
+      "UPDATE_RULE_OK": "Updated the rule successfully!",
       "UPDATE_RULE_NG": "Error happens when updating rule!",
       "REMOVE_CFM": "Are you sure you want to delete?",
       "REMOVE_OK": "Removed a sensor successfully!",
@@ -2188,14 +2188,14 @@
       "REMOVE_RULE_OK": "Removed a rule successfully!",
       "REMOVE_RULE_NG": "Error happens when removing rule!",
       "EXPORT_SENSOR_OK": "Sensors are exported successfully!",
-      "EXPORT_SENSOR_NG": "Error happens when exporting sensors",
+      "EXPORT_SENSOR_NG": "Error happens when exporting sensors!",
       "IMPORT_FINISH": "Sensors are imported successfully!",
       "IMPORT_FAILED": "Error happens when importing sensors",
       "MATCH": "Matched",
       "MISMATCH": "Not matched",
       "ADD_PATTERN_NG": "Maximum amount of patterns is 16",
-      "EXISTING_PATTERN_NG": "This pattern is existing",
-      "RECIPROCAL_PATTERN_NG": "There is reciprocal pattern against added pattern in the same context",
+      "EXISTING_PATTERN_NG": "This pattern is existing.",
+      "RECIPROCAL_PATTERN_NG": "There is reciprocal pattern against added pattern in the same context.",
       "SENSOR_NAME_REQUIRED": "Sensor name is required!"
     },
     "TIP": {
@@ -2278,7 +2278,7 @@
       "PORT_SAMPLE": "Sample: 80, tcp/8080, udp/6142-6150, tcp/any, udp/any, icmp, any",
       "QUARANTINE_FAILED": "Quarantine failed",
       "PROMOTE_OK": "The rules are promoted successfully!",
-      "PROMOTE_NG": "Error happened when Promoting rules"
+      "PROMOTE_NG": "Error happened when Promoting rules!"
     },
     "portlet": {
       "ADD": "Add on Top",
@@ -2289,7 +2289,7 @@
     "dialog": {
       "content": {
         "SUBMIT_OK": "Policy deployed successfully!",
-        "SUBMIT_NG": "Policy deploy failed"
+        "SUBMIT_NG": "Policy deploy failed!"
       },
       "reminder": {
         "MESSAGE": "Do you want to leave the page without saving?"
@@ -2383,17 +2383,17 @@
     "dialog": {
       "content": {
         "INSERT_OK": "Response rule is added successfully!",
-        "INSERT_NG": "Response rule adding failed",
+        "INSERT_NG": "Response rule adding failed!",
         "UPDATE_OK": "Response rule is updated successfully!",
-        "UPDATE_NG": "Response rule updating failed",
+        "UPDATE_NG": "Response rule updating failed!",
         "REMOVE_OK": "Response rule is removed successfully!",
-        "REMOVE_NG": "Response rule removing failed",
+        "REMOVE_NG": "Response rule removing failed!",
         "DISABLE_OK": "Response rule is disabled successfully!",
-        "DISABLE_NG": "Response rule disabling failed",
+        "DISABLE_NG": "Response rule disabling failed!",
         "ENABLE_OK": "Response rule is enabled successfully!",
-        "ENABLE_NG": "Response rule enabling faile",
+        "ENABLE_NG": "Response rule enabling failed!",
         "UNQUARANTINE_OK": "Response rule is un-quarantined successfully!",
-        "UNQUARANTINE_NG": "Response rule un-quarantining failed",
+        "UNQUARANTINE_NG": "Response rule un-quarantining failed!",
         "HINT": "Sample: ",
         "REMOVE_CONFIRM": "Will you remove Response Rule? - ID: "
       },
@@ -2434,29 +2434,29 @@
     },
     "msg": {
       "INSERT_OK": "Admission rule is added successfully!",
-      "INSERT_NG": "Admission rule adding failed",
+      "INSERT_NG": "Admission rule adding failed!",
       "UPDATE_OK": "Admission rule is updated successfully!",
-      "UPDATE_NG": "Admission rule updating failed",
+      "UPDATE_NG": "Admission rule updating failed!",
       "REMOVE_OK": "Admission rule is removed successfully!",
-      "REMOVE_NG": "Admission rule removing failed",
+      "REMOVE_NG": "Admission rule removing failed!",
       "EXPORT_OK": "Admission control configurations/rules is exported successfully!",
-      "EXPORT_NG": "Admission control configurations/rules exporting failed",
+      "EXPORT_NG": "Admission control configurations/rules exporting failed!",
       "IMPORT_FINISH": "Admission control configurations/rules is imported successfully!",
-      "IMPORT_FAILED": "Admission control configurations/rules importing failed",
+      "IMPORT_FAILED": "Admission control configurations/rules importing failed!",
       "DISABLE_OK": "Admission rule is disabled successfully!",
-      "DISABLE_NG": "Admission rule disabling failed",
+      "DISABLE_NG": "Admission rule disabling failed!",
       "ENABLE_OK": "Admission rule is enabled successfully!",
-      "ENABLE_NG": "Admission rule enabling failed",
+      "ENABLE_NG": "Admission rule enabling failed!",
       "G_DISABLE_OK": "All admission rules are disabled successfully!",
-      "G_DISABLE_NG": "All admission rules disabling failed.",
+      "G_DISABLE_NG": "All admission rules disabling failed!",
       "G_ENABLE_OK": "All admission rules are enabled successfully!",
-      "G_ENABLE_NG": "All admission rules enabling failed.",
+      "G_ENABLE_NG": "All admission rules enabling failed!",
       "MODE_SWITCH_OK": "All admission rules' mode are switched successfully!",
-      "MODE_SWITCH_NG": "All admission rules' mode switching failed.",
+      "MODE_SWITCH_NG": "All admission rules' mode switching failed!",
       "CLIENT_MODE_SWITCH_OK": "Client mode is switched successfully!",
-      "CLIENT_MODE_SWITCH_NG": "Client mode switching failed.",
+      "CLIENT_MODE_SWITCH_NG": "Client mode switching failed!",
       "ACTION_SWITCH_OK": "Global action is switched successfully!",
-      "ACTION_SWITCH_NG": "Global action switching failed.",
+      "ACTION_SWITCH_NG": "Global action switching failed!",
       "REMOVE_CONFIRM": "Will you remove Admission Rule? - ID: ",
       "DISABLE_CONFIRM": "Disable default whitelist rule? - ID: ",
       "ENABLE_CONFIRM": "Enable default whitelist rule? - ID: ",
@@ -2859,10 +2859,10 @@
     "MINUTES": " minutes",
     "SECONDS": " seconds",
     "ENABLED_CPATH": "Enable controller control path debug",
-    "ENABLED_CPATH_OK": "Controller control path debug is enabled successfully.",
-    "DISABLED_CPATH_OK": "Controller control path debug is disabled successfully.",
-    "ENABLED_CPATH_NG": "Error happens when enabling controller control path debug.",
-    "DISABLED_CPATH_NG": "Error happens when disabling controller control path debug.",
+    "ENABLED_CPATH_OK": "Controller control path debug is enabled successfully!",
+    "DISABLED_CPATH_OK": "Controller control path debug is disabled successfully!",
+    "ENABLED_CPATH_NG": "Error happens when enabling controller control path debug!",
+    "DISABLED_CPATH_NG": "Error happens when disabling controller control path debug!",
     "ENFORCERS": "Enforcers",
     "ENFORCERS_HINT": "Select enforcers to include their support log if necessary. Up to {{maxSlectedEnforcer}} enforcers can be selected.",
     "MAX_SELECTED_ENFORCER_HINT": "Please select no more than {{maxSlectedEnforcer}} enforcers for support log.",

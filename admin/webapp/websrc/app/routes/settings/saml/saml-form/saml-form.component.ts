@@ -79,7 +79,9 @@ export class SamlFormComponent implements OnInit, OnChanges {
           );
         }
       });
-      this.samlForm.get('x509_cert')?.clearValidators();
+      let x509_cert = this.samlForm.get('x509_cert');
+      x509_cert?.clearValidators();
+      x509_cert?.markAsPristine();
     } else {
       this.isCreated = false;
     }

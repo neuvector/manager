@@ -83,6 +83,7 @@ export class LdapFormComponent implements OnInit, OnChanges {
           );
         }
       });
+      this.ldapForm.get('bind_password')?.markAsPristine();
     } else {
       this.isCreated = false;
     }

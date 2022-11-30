@@ -41,7 +41,6 @@ export class OpenidFormComponent implements OnInit, OnChanges {
   serverName = 'openId1';
   passwordVisible = false;
   openidRedirectURL!: string;
-
   openidForm = new FormGroup({
     issuer: new FormControl(null, [Validators.required, urlValidator()]),
     client_id: new FormControl(null, Validators.required),
@@ -89,9 +88,9 @@ export class OpenidFormComponent implements OnInit, OnChanges {
           );
         }
       });
-      const client_secret = this.openidForm.get('client_secret');
+      let client_secret = this.openidForm.get('client_secret');
       client_secret?.clearValidators();
-      client_secret?.setValue('********');
+      client_secret?.markAsPristine();
     } else {
       this.isCreated = false;
     }

@@ -1911,6 +1911,7 @@
     "ZERODRIFT_COMMENT": "启用/禁用防止选定组的进程和文件系统漂移的自动保护.",
     "ZERO_DRIFT_HINT": "模式切换到学习模式, 在基本模式下开始学习过程",
     "BASELINE_PROFILE": "基线配置",
+    "ZERO_DRIFT": "零漂移",
     "MULTI_MODE_SELECTION": "多个拥有不同策略模式或基线配置的组被选择",
     "TIP": {
       "EDIT": "编辑组",

@@ -20,7 +20,7 @@ export class GroupsPageComponent implements OnInit {
   public refresh!: Function;
   refreshing$ = new Subject();
   public isShowingSystemGroups: boolean = true;
-  public netServiceStatus: boolean = false;
+  public netServiceStatus: boolean;
   public netServicePolicyMode!: string;
   @ViewChild(GroupsComponent) groupsView!: GroupsComponent;
   // @ViewChild(GroupDetailsComponent) groupDetailsView!: GroupDetailsComponent;
@@ -36,6 +36,7 @@ export class GroupsPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.navSource = GlobalConstant.NAV_SOURCE.SELF;
+    this.getConfig();
     //refresh the page when it switched to a remote cluster
     this._switchClusterSubscription =
       this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {

@@ -1,14 +1,7 @@
 export function getCallbackUri(server: string): string {
   const protocol = location.protocol;
-  const port = location.port;
   const host = location.host;
-  if (
-    (protocol.toLowerCase() === 'https' && port === '443') ||
-    (protocol.toLowerCase() === 'http' && port === '80')
-  ) {
-    return `${protocol}://${host}/${server}`;
-  }
-  return `${protocol}://${host}:${port}/${server}`;
+  return `${protocol}//${host}/${server}`;
 }
 
 export function getAvatar(

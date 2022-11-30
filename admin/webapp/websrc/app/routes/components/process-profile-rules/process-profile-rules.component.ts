@@ -30,6 +30,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
   @Input() groupName: string = '';
   @Input() resizableHeight!: number;
   @Input() cfgType: string = '';
+  @Input() baselineProfile: string = '';
   public groups: Set<string> = new Set();
   public gridHeight: number = 0;
   public gridOptions!: GridOptions;

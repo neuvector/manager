@@ -27,6 +27,7 @@ import { SecurityEventsPrintableReportDetailsColComponent } from './partial/secu
 import { SecurityEventsPrintableReportActionColComponent } from './partial/security-events-printable-report-action-col/security-events-printable-report-action-col.component';
 import { SecurityEventsPrintableReportSeverityColComponent } from './partial/security-events-printable-report-severity-col/security-events-printable-report-severity-col.component';
 import { SecurityEventsPrintableReportChartComponent } from './partial/security-events-printable-report-chart/security-events-printable-report-chart.component';
+import { LoadingTemplateModule } from '@components/ui/loading-template/loading-template.module';
 
 const routes: Routes = [
   { path: '', component: SecurityEventsComponent },
@@ -66,7 +67,8 @@ const routes: Routes = [
     NodeBriefModule,
     LoadingButtonModule,
     PodBriefModule,
-    EnforcerBriefModule
+    EnforcerBriefModule,
+    LoadingTemplateModule
   ]
 })
 export class SecurityEventsModule { }

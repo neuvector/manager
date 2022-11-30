@@ -20,6 +20,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
 import { LoadingTemplateModule } from '@components/ui/loading-template/loading-template.module';
 import { ObserveModule } from '@common/directives/observe/observe.module';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatChipsModule } from '@angular/material/chips';
 
 const routes: Routes = [
   { path: '', component: LdapComponent },
@@ -42,9 +44,11 @@ const routes: Routes = [
     MatCardModule,
     MatSelectModule,
     MatProgressSpinnerModule,
+    MatProgressBarModule,
     MatInputModule,
     MatCheckboxModule,
     MatIconModule,
+    MatChipsModule,
     MatButtonModule,
     MatRadioModule,
     LoadingButtonModule,

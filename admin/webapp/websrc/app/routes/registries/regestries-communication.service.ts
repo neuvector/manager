@@ -108,6 +108,10 @@ export class RegistriesCommunicationService {
     this.startingScanSubject$.next(true);
   }
 
+  cancelStartScan(): void {
+    this.startingScanSubject$.next(false);
+  }
+
   initSave(): void {
     this.savingSubject$.next(true);
   }

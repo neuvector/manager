@@ -22,7 +22,8 @@ import { PromotionModalComponent } from '@routes/multi-cluster/promotion-modal/p
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MultiClusterGridActionCellComponent
-  implements ICellRendererAngularComp {
+  implements ICellRendererAngularComp
+{
   public params!: ICellRendererParams;
   buttonDisplayMap: any;
 
@@ -60,9 +61,7 @@ export class MultiClusterGridActionCellComponent
   remove = () => {
     let desc = '';
     swal({
-      title: `Are you sure to remove the member cluster "${
-        this.params.data.name
-      }" ? `,
+      title: `Are you sure to remove the member cluster "${this.params.data.name}" ? `,
       text: desc,
       icon: 'warning',
       buttons: {
@@ -104,66 +103,105 @@ export class MultiClusterGridActionCellComponent
   };
 
   syncPolicy = (event, data) => {
-    console.log("sync policy:",data);
     this.multiClusterService.syncPolicy(data.id).subscribe(
       () => {
-        this.notificationService.open(this.translate.instant("multiCluster.messages.deploy_ok"));
+        this.notificationService.open(
+          this.translate.instant('multiCluster.messages.deploy_ok')
+        );
       },
       error => {
-        this.notificationService.open(this.translate.instant("multiCluster.messages.deploy_failure"), GlobalConstant.NOTIFICATION_TYPE.ERROR);
-      }
-    );
-
-  };
-
-  removeMember(clusterId: number):void {
-
-  }
-
-  manageCluster():void {
-
-  }
-
-  leave = () => {
-    let desc = 'All federal policies will be removed.';
-    swal({
-      title: `Are you sure to leave the Federal ? `,
-      text: desc,
-      icon: 'warning',
-      buttons: {
-        cancel: {
-          text: 'Cancel',
-          value: null,
-          visible: true,
-          closeModal: true,
-        },
-        confirm: {
-          text: 'Confirm',
-          value: true,
-          visible: true,
-          className: 'bg-danger',
-          closeModal: true,
-        },
-      },
-    }).then(isConfirm => {
-      if (isConfirm) {
-        let force = true;
-        this.multiClusterService.leaveFromMaster(force).subscribe(response => {
-          console.log(response);
-        });
-        swal(
-          'Succeed',
-          'The Cluster successfully left the federal.',
-          'success'
+        this.notificationService.openError(
+          error,
+          this.translate.instant('multiCluster.messages.deploy_failure')
         );
       }
-    });
+    );
   };
+
+  removeMember(rowData): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: '700px',
+      disableClose: true,
+      data: {
+        message: `${this.translate.instant('multiCluster.prompt.remove', {
+          name: this.shortenFromMiddlePipe.transform(rowData.name, 20),
+        })}`,
+      },
+    });
+
+    dialogRef.componentInstance.confirm
+      .pipe(
+        switchMap(() => this.multiClusterService.removeMember(rowData.id)),
+        finalize(() => {
+          dialogRef.componentInstance.onCancel();
+          dialogRef.componentInstance.loading = false;
+        })
+      )
+      .subscribe(
+        () => {
+          this.notificationService.open(
+            this.translate.instant('multiCluster.messages.remove_ok')
+          );
+          setTimeout(() => {
+            this.multiClusterService.requestRefresh();
+          }, 2000);
+        },
+        error => {
+          this.notificationService.openError(
+            error,
+            this.translate.instant('multiCluster.messages.remove_failure')
+          );
+        }
+      );
+  }
+
+  manageCluster(rowData): void {
+    this.multiClusterService.switchCluster(rowData.id, '').subscribe(
+      value => {},
+      error => {}
+    );
+  }
+
+  leave() {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: '700px',
+      disableClose: true,
+      data: {
+        message: `${this.translate.instant('multiCluster.prompt.leave')}`,
+      },
+    });
+    dialogRef.componentInstance.confirm
+      .pipe(
+        switchMap(() => this.multiClusterService.leaveFromMaster(true)),
+        finalize(() => {
+          // dialogRef.componentInstance.onCancel();
+          // dialogRef.componentInstance.loading = false;
+        })
+      )
+      .subscribe(
+        () => {
+          this.notificationService.open(
+            this.translate.instant('multiCluster.messages.leave_ok')
+          );
+          dialogRef.componentInstance.loading = false;
+          dialogRef.componentInstance.onCancel();
+          setTimeout(() => {
+            this.multiClusterService.requestRefresh();
+          }, 2000);
+        },
+        error => {
+          this.notificationService.open(
+            this.translate.instant('multiCluster.messages.leave_failure'),
+            GlobalConstant.NOTIFICATION_TYPE.ERROR
+          );
+        }
+      );
+  }
 
   demote = data => {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '700px',
-      disableClose: true,
+
       data: {
         message: `${this.translate.instant('multiCluster.prompt.demote', {
           name: this.shortenFromMiddlePipe.transform(data.name, 20),
@@ -180,18 +218,17 @@ export class MultiClusterGridActionCellComponent
       )
       .subscribe(
         () => {
-          this.notificationService.open(this.translate.instant('multiCluster.messages.demote_ok'));
+          this.notificationService.open(
+            this.translate.instant('multiCluster.messages.demote_ok')
+          );
           setTimeout(() => {
             this.router.navigate(['logout']);
           }, 3000);
         },
         error => {
-          this.notificationService.open(
-            this.utils.getAlertifyMsg(
-              error,
-              this.translate.instant('multiCluster.messages.demote_failure'),
-              false
-            )
+          this.notificationService.openError(
+            error,
+            this.translate.instant('multiCluster.messages.demote_failure')
           );
         }
       );
@@ -211,7 +248,7 @@ export class MultiClusterGridActionCellComponent
     const dialogRef = this.dialog.open(PromotionModalComponent, {
       width: '80%',
       maxWidth: '1100px',
-      disableClose: true,
+
       data: {
         isEdit: true,
         cluster: {

@@ -1,10 +1,15 @@
 import { Inject, Injectable, SecurityContext } from '@angular/core';
 import { PathConstant } from '../constants/path.constant';
 import { Router } from '@angular/router';
-import { SESSION_STORAGE, LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
+import {
+  SESSION_STORAGE,
+  LOCAL_STORAGE,
+  StorageService,
+} from 'ngx-webstorage-service';
 import { GlobalConstant } from '../constants/global.constant';
 import { GlobalVariable } from '../variables/global.variable';
 import { DomSanitizer } from '@angular/platform-browser';
+import { SessionService } from './session.service';
 
 @Injectable()
 export class AuthService {
@@ -12,6 +17,7 @@ export class AuthService {
     private router: Router,
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
     @Inject(LOCAL_STORAGE) private localStorage: StorageService,
+    private sessionService: SessionService,
     private sanitizer: DomSanitizer
   ) {}
 
@@ -31,7 +37,7 @@ export class AuthService {
 
   updateEula() {
     return GlobalVariable.http
-      .post(PathConstant.EULA_URL,{ accepted: true })
+      .post(PathConstant.EULA_URL, { accepted: true })
       .pipe();
   }
 
@@ -59,18 +65,22 @@ export class AuthService {
 
   login(username: string, password: string) {
     return GlobalVariable.http
-      .post(PathConstant.LOGIN_URL, { username: username, password: this.sanitizer.sanitize(SecurityContext.HTML, password) })
+      .post(PathConstant.LOGIN_URL, {
+        username: username,
+        password: this.sanitizer.sanitize(SecurityContext.HTML, password),
+      })
       .pipe();
   }
 
   refreshToken() {
     return GlobalVariable.http
-      .get(PathConstant.SELF_URL, { params: { isOnNV: "true" } })
+      .get(PathConstant.SELF_URL, { params: { isOnNV: 'true' } })
       .pipe();
   }
 
   logout(isNVTimeout: boolean, isSSOTimeout: boolean) {
-    if (GlobalVariable.isSUSESSO && !isNVTimeout && !isSSOTimeout) this.router.navigate(['login']);
+    if (GlobalVariable.isSUSESSO && !isNVTimeout && !isSSOTimeout)
+      this.router.navigate(['login']);
     else {
       this.doLogout(isNVTimeout);
     }
@@ -79,7 +89,9 @@ export class AuthService {
   timeout(currUrl: string) {
     let temp4TimeoutFlag = null;
     if (this.sessionStorage.has(GlobalConstant.SESSION_STORAGE_TIMEOUT)) {
-      temp4TimeoutFlag = this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_TIMEOUT)
+      temp4TimeoutFlag = this.sessionStorage.get(
+        GlobalConstant.SESSION_STORAGE_TIMEOUT
+      );
     }
     this.clearSessionStorage();
     if (currUrl !== GlobalConstant.PATH_LOGIN) {
@@ -89,7 +101,10 @@ export class AuthService {
       );
     }
     if (temp4TimeoutFlag) {
-      this.sessionStorage.set(GlobalConstant.SESSION_STORAGE_TIMEOUT, temp4TimeoutFlag);
+      this.sessionStorage.set(
+        GlobalConstant.SESSION_STORAGE_TIMEOUT,
+        temp4TimeoutFlag
+      );
     }
     this.router.navigate([GlobalConstant.PATH_LOGIN]);
   }
@@ -101,7 +116,7 @@ export class AuthService {
         ? this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_THEME)
         : 'A'
       : 'A';
-    this.sessionStorage.clear();
+    this.sessionService.clearSession();
     this.sessionStorage.set(GlobalConstant.SESSION_STORAGE_THEME, theme);
   }
 
@@ -110,31 +125,30 @@ export class AuthService {
   }
 
   private doLogout = (isNVTimeout: boolean) => {
-    GlobalVariable.http.delete(PathConstant.LOGIN_URL)
-      .subscribe(
-        (response: any) => {
-          setTimeout(() => {
-            let version = this.localStorage.get("version");
-            let gpuEnabled = this.localStorage.get("_gpuEnabled");
-            if (!isNVTimeout && !GlobalVariable.isSUSESSO) {
-              this.localStorage.clear();
-              this.sessionStorage.clear();
-              GlobalVariable.user = null;
-              GlobalVariable.sidebarDone = false;
-              GlobalVariable.versionDone = false;
-              GlobalVariable.isFooterReady = false;
-              this.localStorage.set("version", version);
-              this.localStorage.set("_gpuEnabled", gpuEnabled);
-              this.router.navigate([GlobalConstant.PATH_LOGIN]);
-            } else {
-              this.rejectBack();
-            }
-          }, 1000);
-        },
-        error => {
-          this.rejectBack();
-        }
-      );
+    GlobalVariable.http.delete(PathConstant.LOGIN_URL).subscribe(
+      (response: any) => {
+        setTimeout(() => {
+          let version = this.localStorage.get('version');
+          let gpuEnabled = this.localStorage.get('_gpuEnabled');
+          if (!isNVTimeout && !GlobalVariable.isSUSESSO) {
+            this.localStorage.clear();
+            this.sessionService.clearSession();
+            GlobalVariable.user = null;
+            GlobalVariable.sidebarDone = false;
+            GlobalVariable.versionDone = false;
+            GlobalVariable.isFooterReady = false;
+            this.localStorage.set('version', version);
+            this.localStorage.set('_gpuEnabled', gpuEnabled);
+            this.router.navigate([GlobalConstant.PATH_LOGIN]);
+          } else {
+            this.rejectBack();
+          }
+        }, 1000);
+      },
+      error => {
+        this.rejectBack();
+      }
+    );
   };
 
   private rejectBack = () => {

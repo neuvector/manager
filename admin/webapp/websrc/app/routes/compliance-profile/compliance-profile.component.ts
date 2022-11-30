@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import {
+  ComplianceProfileData,
+  ComplianceProfileTemplateData,
+  DomainGetResponse,
+} from '@common/types';
 import { ComplianceProfileService } from '@routes/compliance-profile/compliance-profile.service';
 
 @Component({
@@ -7,12 +12,23 @@ import { ComplianceProfileService } from '@routes/compliance-profile/compliance-
   styleUrls: ['./compliance-profile.component.scss'],
 })
 export class ComplianceProfileComponent implements OnInit {
-  complianceProfileData$ =
-    this.complianceProfileService.initComplianceProfile();
+  complianceProfileData!: {
+    template: ComplianceProfileTemplateData;
+    profile: ComplianceProfileData;
+    domains: DomainGetResponse;
+  };
+  loaded = false;
 
   constructor(private complianceProfileService: ComplianceProfileService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.complianceProfileService
+      .initComplianceProfile()
+      .subscribe(profileData => {
+        this.complianceProfileData = profileData;
+        this.loaded = true;
+      });
+  }
 
   resize() {
     this.complianceProfileService.resize();

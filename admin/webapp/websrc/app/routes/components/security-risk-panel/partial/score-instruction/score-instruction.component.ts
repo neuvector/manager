@@ -33,7 +33,7 @@ export class ScoreInstructionComponent implements OnInit {
         data: {
           scoreInfo: this.scoreInfo,
         },
-        disableClose: true,
+
         panelClass: 'mat-dialog-container-full',
         width: '80vw',
         height: '685px',

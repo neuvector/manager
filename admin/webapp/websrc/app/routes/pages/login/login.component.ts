@@ -13,6 +13,7 @@ import {
   SESSION_STORAGE,
   StorageService,
 } from 'ngx-webstorage-service';
+import { SessionService } from '@services/session.service';
 
 @Component({
   selector: 'app-login',
@@ -42,6 +43,7 @@ export class LoginComponent implements OnInit {
   constructor(
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
     @Inject(LOCAL_STORAGE) private localStorage: StorageService,
+    private sessionService: SessionService,
     private authService: AuthService,
     private switchersService: SwitchersService,
     private cookieService: CookieService,
@@ -185,7 +187,7 @@ export class LoginComponent implements OnInit {
 
   private clearToken() {
     this.localStorage.clear();
-    this.sessionStorage.clear();
+    this.sessionService.clearSession();
     GlobalVariable.user = null;
     GlobalVariable.sidebarDone = false;
     GlobalVariable.versionDone = false;

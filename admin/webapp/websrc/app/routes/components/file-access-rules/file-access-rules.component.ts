@@ -63,10 +63,15 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
     this.source = this.source ? this.source : GlobalConstant.NAV_SOURCE.SELF;
     this.isWriteGroupAuthorized =
       this.authUtilsService.getDisplayFlag('write_group') &&
-      (this.source !== GlobalConstant.NAV_SOURCE.GROUP ? this.authUtilsService.getDisplayFlag('multi_cluster') : true);
+      (this.source !== GlobalConstant.NAV_SOURCE.GROUP
+        ? this.authUtilsService.getDisplayFlag('multi_cluster')
+        : true);
     this.isWriteFileAccessRuleAuthorized =
-      (this.source === GlobalConstant.NAV_SOURCE.GROUP && (this.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER || this.cfgType === GlobalConstant.CFG_TYPE.LEARNED)) ||
-      (this.source === GlobalConstant.NAV_SOURCE.FED_POLICY && this.cfgType === GlobalConstant.CFG_TYPE.FED)
+      (this.source === GlobalConstant.NAV_SOURCE.GROUP &&
+        (this.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER ||
+          this.cfgType === GlobalConstant.CFG_TYPE.LEARNED)) ||
+      (this.source === GlobalConstant.NAV_SOURCE.FED_POLICY &&
+        this.cfgType === GlobalConstant.CFG_TYPE.FED);
     this.gridOptions = this.fileAccessRulesService.prepareGrid(
       this.isWriteGroupAuthorized,
       this.source,
@@ -172,7 +177,6 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
           source: this.source,
         },
         width: '70%',
-        disableClose: true,
       }
     );
     predefinedRuleDialogRef.afterClosed().subscribe(result => {
@@ -181,37 +185,47 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
   };
 
   removeProfile = data => {
-    let message = `${this.translate.instant('group.file.REMOVE_CONFIRM')} ${data.filter}`;
+    let message = `${this.translate.instant('group.file.REMOVE_CONFIRM')} ${
+      data.filter
+    }`;
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '700px',
       data: {
-        message: message
+        message: message,
       },
-      disableClose: true
+      disableClose: true,
     });
-    dialogRef.componentInstance.confirm.pipe(switchMap(() => {
-      return this.fileAccessRulesService
-        .updateFileAccessRuleList(
-          GlobalConstant.CRUD.D,
-          this.selectedFileAccessRules,
-          this.groupName
-        );
-    })).subscribe(
-      (res) => {
-        // confirm actions
-        this.notificationService.open(this.translate.instant('group.file.REMOVE_OK'))
-        setTimeout(() => {
-          this.getFileAccessRules(this.groupName);
-        }, 1000);
-        // close dialog
-        dialogRef.componentInstance.onCancel();
-        dialogRef.componentInstance.loading = false;
-      },
-      error => {
-        this.notificationService.openError(error, this.translate.instant('group.file.REMOVE_NG'))
-        dialogRef.componentInstance.loading = false;
-      }
-    );
+    dialogRef.componentInstance.confirm
+      .pipe(
+        switchMap(() => {
+          return this.fileAccessRulesService.updateFileAccessRuleList(
+            GlobalConstant.CRUD.D,
+            this.selectedFileAccessRules,
+            this.groupName
+          );
+        })
+      )
+      .subscribe(
+        res => {
+          // confirm actions
+          this.notificationService.open(
+            this.translate.instant('group.file.REMOVE_OK')
+          );
+          setTimeout(() => {
+            this.getFileAccessRules(this.groupName);
+          }, 1000);
+          // close dialog
+          dialogRef.componentInstance.onCancel();
+          dialogRef.componentInstance.loading = false;
+        },
+        error => {
+          this.notificationService.openError(
+            error,
+            this.translate.instant('group.file.REMOVE_NG')
+          );
+          dialogRef.componentInstance.loading = false;
+        }
+      );
   };
 
   editProfile = data => {
@@ -224,7 +238,6 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
         source: this.source,
         getFileAccessRules: this.getFileAccessRules,
       },
-      disableClose: true,
     });
     editDialogRef.afterClosed().subscribe(result => {
       this.isModalOpen = false;
@@ -240,7 +253,6 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
         source: this.source,
         getFileAccessRules: this.getFileAccessRules,
       },
-      disableClose: true,
     });
     addDialogRef.afterClosed().subscribe(result => {
       this.isModalOpen = false;

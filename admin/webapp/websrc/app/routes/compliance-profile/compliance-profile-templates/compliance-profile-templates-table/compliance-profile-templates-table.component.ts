@@ -261,7 +261,6 @@ export class ComplianceProfileTemplatesTableComponent
         message: this.translate.instant('cis.profile.RESET_CONFIRM'),
         isSync: true,
       },
-      disableClose: true,
     });
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {

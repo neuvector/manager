@@ -150,7 +150,10 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
             },
             error: ({ error }: { error: ErrorResponse }) => {
               this.registriesCommunicationService.cancelSave();
-              this.notificationService.open(error.message, GlobalConstant.NOTIFICATION_TYPE.ERROR);
+              this.notificationService.open(
+                error.message,
+                GlobalConstant.NOTIFICATION_TYPE.ERROR
+              );
             },
           });
       } else {
@@ -172,7 +175,10 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
             },
             error: ({ error }: { error: ErrorResponse }) => {
               this.registriesCommunicationService.cancelSave();
-              this.notificationService.open(error.message, GlobalConstant.NOTIFICATION_TYPE.ERROR);
+              this.notificationService.open(
+                error.message,
+                GlobalConstant.NOTIFICATION_TYPE.ERROR
+              );
             },
           });
       }
@@ -241,7 +247,6 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
       width: '80%',
       maxWidth: '1100px',
       data: this.model,
-      disableClose: true,
     });
 
     dialog.afterClosed().subscribe((filters: string[]) => {

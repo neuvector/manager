@@ -38,7 +38,7 @@ export class GroupsComponent implements OnInit {
   @Input() isShowingSystemGroups: boolean = true;
   @Output() selectedGroup = new EventEmitter<Group | null>();
   @Output() refreshing = new EventEmitter<boolean>();
-  isRefreshing: boolean;
+  isRefreshing: boolean = false;
   groups: Array<Group> = [];
   groupsErr: boolean = false;
   eof: boolean = false;
@@ -73,18 +73,20 @@ export class GroupsComponent implements OnInit {
     private dialog: MatDialog,
     private translate: TranslateService,
     private utilsService: UtilsService,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.isWriteGroupAuthorized = this.source === this.navSource.FED_POLICY ?
-      this.authUtilsService.getDisplayFlag('write_group') && this.authUtilsService.getDisplayFlag('multi_cluster_w') :
-      this.authUtilsService.getDisplayFlag('write_group');
+    this.isWriteGroupAuthorized =
+      this.source === this.navSource.FED_POLICY
+        ? this.authUtilsService.getDisplayFlag('write_group') &&
+          this.authUtilsService.getDisplayFlag('multi_cluster_w')
+        : this.authUtilsService.getDisplayFlag('write_group');
     this.isNamespaceUser = this.authUtilsService.userPermission.isNamespaceUser;
     this.route.paramMap.pipe().subscribe(rep => {
-        this.preselectedGroupName = String(rep.get('groupName'));
-        this.navFrom = String(rep.get('from'));
-        console.log('this.preselectedGroupName', this.preselectedGroupName);
+      this.preselectedGroupName = String(rep.get('groupName'));
+      this.navFrom = String(rep.get('from'));
+      console.log('this.preselectedGroupName', this.preselectedGroupName);
     });
     this.gridOptions4Groups = this.groupsService.prepareGrid4Groups(
       this.isScoreImprovement,
@@ -122,7 +124,8 @@ export class GroupsComponent implements OnInit {
         )}: ${nonScorableGroups}`;
         let counts = this.getModeCounts();
         this.baselineProfile = this.getDefaultBaseline(counts.baselineCount);
-        this.groupsService.activeTabIndex = this.groupsService.activeTabIndex || 0;
+        this.groupsService.activeTabIndex =
+          this.groupsService.activeTabIndex || 0;
       }, 0);
     };
     if (this.isScoreImprovement) {
@@ -187,7 +190,10 @@ export class GroupsComponent implements OnInit {
       },
       error: ({ error }: { error: ErrorResponse }) => {
         this.groupsErr = true;
-        this.notificationService.openError(error, this.translate.instant('general.UNFORMATTED_ERR'));
+        this.notificationService.openError(
+          error,
+          this.translate.instant('general.UNFORMATTED_ERR')
+        );
       },
     });
   };
@@ -211,7 +217,10 @@ export class GroupsComponent implements OnInit {
       },
       error: ({ error }: { error: ErrorResponse }) => {
         this.groupsErr = true;
-        this.notificationService.openError(error, this.translate.instant('general.UNFORMATTED_ERR'));
+        this.notificationService.openError(
+          error,
+          this.translate.instant('general.UNFORMATTED_ERR')
+        );
       },
     });
   };
@@ -239,16 +248,15 @@ export class GroupsComponent implements OnInit {
   getFedGroups = () => {
     this.isRefreshing = true;
     this.groups = [];
-    this.groupsService.getFedGroupsData()
-      .subscribe({
-        next: groups => {
-          this.renderGroups(groups, true);
-        },
-        error: ({ error }: { error: ErrorResponse }) => {},
-        complete: () => {
-          this.isRefreshing = false;
-        }
-      });
+    this.groupsService.getFedGroupsData().subscribe({
+      next: groups => {
+        this.renderGroups(groups, true);
+      },
+      error: ({ error }: { error: ErrorResponse }) => {},
+      complete: () => {
+        this.isRefreshing = false;
+      },
+    });
   };
 
   setDefaultSelection = () => {
@@ -276,7 +284,6 @@ export class GroupsComponent implements OnInit {
             ? this.getFedGroups
             : this.getGroups,
       },
-      disableClose: true,
     });
   };
 
@@ -297,11 +304,16 @@ export class GroupsComponent implements OnInit {
 
     this.groupsService.updateScorableData(payload).subscribe(
       response => {
-        this.notificationService.open(this.translate.instant('service.SUBMIT_SCORABLE_OK'));
+        this.notificationService.open(
+          this.translate.instant('service.SUBMIT_SCORABLE_OK')
+        );
         this.getGroups();
       },
       error => {
-        this.notificationService.openError(error, this.translate.instant('service.SUBMIT_SCORABLE_NG'));
+        this.notificationService.openError(
+          error,
+          this.translate.instant('service.SUBMIT_SCORABLE_NG')
+        );
       }
     );
   };
@@ -314,7 +326,6 @@ export class GroupsComponent implements OnInit {
         groups: this.groups,
         refresh: this.getGroups,
       },
-      disableClose: true,
     });
   };
 
@@ -351,7 +362,10 @@ export class GroupsComponent implements OnInit {
       },
       error => {
         console.warn(error);
-        this.notificationService.openError(error, this.translate.instant('group.dlp.msg.EXPORT_NG'));
+        this.notificationService.openError(
+          error,
+          this.translate.instant('group.dlp.msg.EXPORT_NG')
+        );
       }
     );
   };

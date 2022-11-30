@@ -4,8 +4,9 @@ import { TranslateService } from "@ngx-translate/core";
 import { UtilsService } from "@common/utils/app.utils";
 import { MultiClusterService } from "@services/multi-cluster.service";
 import { SettingsService } from "@services/settings.service";
-import swal from "sweetalert";
-import {MapConstant} from "@common/constants/map.constant";
+import { MapConstant } from "@common/constants/map.constant";
+import { NotificationService } from "@services/notification.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-joining-modal",
@@ -21,7 +22,9 @@ export class JoiningModalComponent implements OnInit {
     private settingsService: SettingsService,
     private translate: TranslateService,
     private utils: UtilsService,
-    public dialogRef: MatDialogRef<JoiningModalComponent>
+    public dialogRef: MatDialogRef<JoiningModalComponent>,
+    private notificationService: NotificationService,
+    private router: Router
     // @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {
     dialogRef.disableClose = true;
@@ -70,21 +73,17 @@ export class JoiningModalComponent implements OnInit {
   onConfirm = () => {
     this.clustersService.joinCluster(this.cluster, this.useProxy).subscribe(
       response => {
-        swal(
-          "Success",
-          this.translate.instant("multiCluster.joining.success"),
-          "success"
-        ).then(ev => {
-          this.dialogRef.close();
-        });
+        this.notificationService.open(
+          this.translate.instant('multiCluster.joining.success'));
+        setTimeout(() => {
+          this.router.navigate(
+            ['logout']);
+        } ,3000);
+        this.dialogRef.close();
       },
       err => {
         let message = this.utils.getErrorMessage(err);
-        swal(
-          this.translate.instant("multiCluster.joining.failure"),
-          message,
-          "error"
-        );
+        this.notificationService.openError(message,this.translate.instant("multiCluster.joining.failure"));
       }
     );
   };

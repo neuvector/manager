@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { GlobalConstant } from '@common/constants/global.constant';
+import { MapConstant } from '@common/constants/map.constant';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { SettingsService } from '@services/settings.service';
 import { combineLatest, of, Subject } from 'rxjs';
@@ -11,6 +11,7 @@ import {
   switchMap,
   tap,
 } from 'rxjs/operators';
+import { MultiClusterService } from '@services/multi-cluster.service';
 
 @Component({
   selector: 'app-users',
@@ -18,6 +19,7 @@ import {
   styleUrls: ['./users.component.scss'],
 })
 export class UsersComponent implements OnInit {
+  private _switchClusterSubscription;
   private refreshUserSubject$ = new Subject();
   private refreshRoleSubject$ = new Subject();
   private refreshPwdProfileSubject$ = new Subject();
@@ -51,10 +53,9 @@ export class UsersComponent implements OnInit {
       this.settingsService.getRoles().pipe(
         catchError(err => {
           if (
-            [
-              GlobalConstant.STATUS_NOT_FOUND,
-              GlobalConstant.STATUS_FORBIDDEN,
-            ].includes(err.status)
+            [MapConstant.NOT_FOUND, MapConstant.ACC_FORBIDDEN].includes(
+              err.status
+            )
           ) {
             return of([]);
           } else {
@@ -73,6 +74,7 @@ export class UsersComponent implements OnInit {
 
   constructor(
     private settingsService: SettingsService,
+    private multiClusterService: MultiClusterService,
     private authUtils: AuthUtilsService
   ) {}
 
@@ -87,10 +89,18 @@ export class UsersComponent implements OnInit {
       this.authUtils.getDisplayFlagByMultiPermission('read_password_profile_3');
     this.isUpdatePasswordProfileAuthorized =
       this.authUtils.getDisplayFlagByMultiPermission('update_password_profile');
+    this._switchClusterSubscription =
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
+        this.onSwitchTab();
+      });
   }
 
   activateTab(event): void {
     this.activeTabIndex = event.index;
+    this.onSwitchTab();
+  }
+
+  private onSwitchTab() {
     switch (this.activeTabIndex) {
       case 0:
         this.refreshUserSubject$.next(true);

@@ -87,7 +87,6 @@ export class AdmissionRulesService {
 
   configRuleGrid = isWriteAdmissionRuleAuthorized => {
     let gridOptions: GridOptions;
-    let gridOptions4MatchingTest: GridOptions;
     const $win = $(GlobalVariable.window);
     const columnDefs = [
       {
@@ -186,7 +185,7 @@ export class AdmissionRulesService {
       onGridReady: function (params) {
         setTimeout(() => {
           params.api.sizeColumnsToFit();
-        }, 100);
+        }, 500);
         $win.on(GlobalConstant.AG_GRID_RESIZE, () => {
           setTimeout(() => {
             params.api.sizeColumnsToFit();
@@ -324,7 +323,7 @@ export class AdmissionRulesService {
   typeRenderFunc = params => {
     if (params.value && params.data) {
       let type = params.value === 'exception' ? 'Allow' : params.value;
-      return `<span ng-class="{\'policy-remove\': data.remove}" class="action-label px-1 ${
+      return `<span [class]="{\'policy-remove\': data.remove}" class="action-label px-1 ${
         params.data.disable
           ? MapConstant.colourMap['disabled_background']
           : MapConstant.colourMap[type.toLowerCase()]
@@ -355,7 +354,7 @@ export class AdmissionRulesService {
     criterion: any,
     isCustomized: boolean = false
   ) => {
-    let tagName = '';
+    let tagName: string;
     let valid = false;
     if (isCustomized) {
       tagName = this.getCustomizedTag(criterion);

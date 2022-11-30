@@ -9,6 +9,7 @@ import { SettingsService } from '@services/settings.service';
 import { Observable, Subject } from 'rxjs';
 import { repeatWhen } from 'rxjs/operators';
 import { ConfigFormComponent } from './config-form/config-form.component';
+import { MultiClusterService } from '@services/multi-cluster.service';
 
 @Component({
   selector: 'app-configuration',
@@ -16,6 +17,7 @@ import { ConfigFormComponent } from './config-form/config-form.component';
   styleUrls: ['./configuration.component.scss'],
 })
 export class ConfigurationComponent implements OnInit, ComponentCanDeactivate {
+  private _switchClusterSubscription;
   @ViewChild(ConfigFormComponent) configForm!: ConfigFormComponent;
   config!: ConfigV2Response;
   enforcers!: Enforcer[];
@@ -30,6 +32,7 @@ export class ConfigurationComponent implements OnInit, ComponentCanDeactivate {
   }
 
   constructor(
+    private multiClusterService: MultiClusterService,
     private settingsService: SettingsService,
     private authUtils: AuthUtilsService,
     private tr: TranslateService
@@ -53,6 +56,10 @@ export class ConfigurationComponent implements OnInit, ComponentCanDeactivate {
       .pipe(repeatWhen(() => this.refreshConfig$))
       .subscribe({
         next: value => (this.config = value),
+      });
+    this._switchClusterSubscription =
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
+        this.refreshConfig();
       });
   }
 

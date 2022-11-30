@@ -1,10 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { SecurityEventsService } from '@services/security-events.service';
 import { MapConstant } from '@common/constants/map.constant';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
 import { FormControl } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -24,19 +22,19 @@ import {
 import { TranslateService } from '@ngx-translate/core';
 import { arrayToCsv } from '@common/utils/common.utils';
 import { saveAs } from 'file-saver';
+import { MultiClusterService } from '@services/multi-cluster.service';
 
 @Component({
   selector: 'app-security-events',
   templateUrl: './security-events.component.html',
   styleUrls: ['./security-events.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SecurityEventsComponent implements OnInit {
-
+  private _switchClusterSubscription;
   threatList: any;
   violationList: any;
   incidentList: any;
-  domainList: Array<any> = new Array();
+  domainList: Array<any> = [];
   isDataReady: boolean = false;
   secEventsErr: boolean = false;
   selectedRow: any;
@@ -52,21 +50,22 @@ export class SecurityEventsComponent implements OnInit {
     destination: string[]
   };
   displayedSecurityEventsJsonBeforeApplyAdvFilter: string = '[]';
-  packetModal: MatDialogRef<any>;
-  hostModal: MatDialogRef<any>;
-  podModal: MatDialogRef<any>;
-  reviewProcessRuleModal: MatDialogRef<any>;
-  reviewNetworkRuleModal: MatDialogRef<any>;
-  isEditRuleAuthorized: boolean;
-  isUpdateRuleAuthorized: boolean;
+  packetModal!: MatDialogRef<any>;
+  hostModal!: MatDialogRef<any>;
+  podModal!: MatDialogRef<any>;
+  reviewProcessRuleModal!: MatDialogRef<any>;
+  reviewNetworkRuleModal!: MatDialogRef<any>;
+  isEditRuleAuthorized: boolean = false;
+  isUpdateRuleAuthorized: boolean = false;
   metadata: any;
-  printableData: any[];
+  printableData: any[] = [];
   isPrinting: boolean = false;
   rowLimit4Report: number = MapConstant.REPORT_TABLE_ROW_LIMIT;
 
-  @ViewChild('securityEventsPrintableReport') printableReportView: ElementRef;
+  @ViewChild('securityEventsPrintableReport') printableReportView!: ElementRef;
 
   constructor(
+    private multiClusterService: MultiClusterService,
     public securityEventsService: SecurityEventsService,
     private authUtilsService: AuthUtilsService,
     private cd: ChangeDetectorRef,
@@ -82,7 +81,6 @@ export class SecurityEventsComponent implements OnInit {
     this.isUpdateRuleAuthorized = this.authUtilsService.getDisplayFlag("update_rule");
     this.route.paramMap.pipe().subscribe(rep => {
         this.selectedRow = String(rep.get('selectedRow'));
-        console.log('this.selectedRow', this.selectedRow);
         this.refresh();
     });
 
@@ -219,6 +217,11 @@ export class SecurityEventsComponent implements OnInit {
         //     : ""
       }
     };
+
+    this._switchClusterSubscription =
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
+        this.refresh();
+      });
   }
 
   ngAfterViewInit() {
@@ -230,21 +233,22 @@ export class SecurityEventsComponent implements OnInit {
     this.securityEventsService.displayedSecurityEvents = [];
     this.printableData = [];
     this.securityEventsService.cachedSecurityEvents = [];
-    this.preprosessSecurityEventsData();
+    this.preprocessSecurityEventsData();
   };
 
-  preprosessSecurityEventsData = () => {
+  preprocessSecurityEventsData = () => {
     this.securityEventsService.getSecurityEvents()
       .subscribe(
         (response: any) => {
           this.combineSecurityEvents(response);
         },
-        error => {}
+        error => {
+          console.error(error);
+        }
       );
   };
 
   getOpenedRec = (evt, index, page) => {
-    // console.log('Before: ', $scope.openedIndex, $scope.openedPage)
     if (evt.target.checked) {
       this.securityEventsService.dateSliderCtx.openedIndex = index;
       this.securityEventsService.dateSliderCtx.openedPage = page;
@@ -252,7 +256,6 @@ export class SecurityEventsComponent implements OnInit {
       this.securityEventsService.dateSliderCtx.openedIndex = -1;
       this.securityEventsService.dateSliderCtx.openedPage = -1;
     }
-    // console.log('After: ', $scope.openedIndex, $scope.openedPage)
   };
 
   isTooltipDisabled = e => {

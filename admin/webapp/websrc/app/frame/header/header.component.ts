@@ -28,6 +28,8 @@ export class HeaderComponent implements OnInit {
   isOnRemoteCluster: boolean = false;
   selectedCluster: Cluster | undefined;
   isSUSESSO: boolean = false;
+  primaryMasterName: string = "";
+  managedClusterName: string = "";
 
   email = '';
   username = '';
@@ -144,6 +146,8 @@ export class HeaderComponent implements OnInit {
       .subscribe({
         next: (data: ClusterData) => {
           this.clusters = data.clusters || [];
+
+          //init the cluster role
           this.isMemberRole = data.fed_role === MapConstant.FED_ROLES.MEMBER;
           this.isMasterRole = data.fed_role === MapConstant.FED_ROLES.MASTER;
           this.isStandaloneRole = data.fed_role === '';
@@ -151,22 +155,35 @@ export class HeaderComponent implements OnInit {
           GlobalVariable.isMember = this.isMemberRole;
           GlobalVariable.isStandAlone = this.isStandaloneRole;
 
-          //get the status of the chosen cluster
-          const sessionCluster = this.sessionStorage.get(
-            GlobalConstant.SESSION_STORAGE_CLUSTER
-          );
+          if(GlobalVariable.isMaster){
+            //get the status of the chosen cluster
+            const sessionCluster = this.sessionStorage.get(
+              GlobalConstant.SESSION_STORAGE_CLUSTER
+            );
 
-          const cluster = sessionCluster ? JSON.parse(sessionCluster) : null;
+            const cluster = sessionCluster ? JSON.parse(sessionCluster) : null;
 
-          if (cluster !== null) {
-            this.isOnRemoteCluster = cluster.isOnRemoteCluster;
-            this.selectedCluster = cluster;
-          } else {
-            this.selectedCluster = this.clusters.find(cluster => {
-              return cluster.clusterType === MapConstant.FED_ROLES.MASTER;
-            });
-            console.log('selected:', this.selectedCluster);
+            if (cluster !== null) {
+              this.isOnRemoteCluster = cluster.isOnRemoteCluster;
+              this.selectedCluster = cluster;
+            } else {
+              this.selectedCluster = this.clusters.find(cluster => {
+                return cluster.clusterType === MapConstant.FED_ROLES.MASTER;
+              });
+            }
           }
+
+          if(GlobalVariable.isMember){
+            this.clusters.forEach(cluster =>{
+              if(cluster.clusterType === MapConstant.FED_ROLES.MASTER){
+                this.primaryMasterName = cluster.name;
+              }else{
+                this.managedClusterName = cluster.name;
+              }
+            });
+
+          }
+
         },
         error: error => {
           console.error('error:', error);

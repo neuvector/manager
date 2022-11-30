@@ -222,7 +222,7 @@ export class UsersGridComponent implements OnInit {
     const addDialogRef = this.dialog.open(AddEditUserDialogComponent, {
       width: '80%',
       maxWidth: '1100px',
-      disableClose: true,
+
       data: {
         isEdit: false,
         globalRoles: this.globalRoles,
@@ -274,7 +274,7 @@ export class UsersGridComponent implements OnInit {
     const editDialogRef = this.dialog.open(AddEditUserDialogComponent, {
       width: '80%',
       maxWidth: '1100px',
-      disableClose: true,
+
       data: {
         isEdit: true,
         user: event.data,
@@ -321,7 +321,7 @@ export class UsersGridComponent implements OnInit {
     const deleteDialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '80%',
       maxWidth: '600px',
-      disableClose: true,
+
       data: {
         message: deleteMessage,
       },

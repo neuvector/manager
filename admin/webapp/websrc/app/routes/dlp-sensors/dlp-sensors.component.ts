@@ -44,6 +44,7 @@ export class DlpSensorsComponent implements OnInit {
   selectedRule!: DlpRule;
   index4Sensor!: number;
   isPredefine!: boolean;
+  filtered: boolean = false;
   context = { componentParent: this };
   $win: any;
   private _switchClusterSubscription;
@@ -55,7 +56,7 @@ export class DlpSensorsComponent implements OnInit {
     private utilsService: UtilsService,
     private multiClusterService: MultiClusterService,
     private notificationService: NotificationService,
-    private translate: TranslateService,
+    private translate: TranslateService
   ) {
     this.$win = $(GlobalVariable.window);
   }
@@ -102,7 +103,6 @@ export class DlpSensorsComponent implements OnInit {
         opType: GlobalConstant.MODAL_OP.ADD,
         refresh: this.refresh,
       },
-      disableClose: true,
     });
   };
 
@@ -116,7 +116,6 @@ export class DlpSensorsComponent implements OnInit {
         index4Sensor: this.index4Sensor,
         refresh: this.refresh,
       },
-      disableClose: true,
     });
   };
 
@@ -129,7 +128,6 @@ export class DlpSensorsComponent implements OnInit {
           error: this.translate.instant('waf.msg.IMPORT_FAILED'),
         },
       },
-      disableClose: true,
     });
     importDialogRef.afterClosed().subscribe(result => {
       setTimeout(() => {
@@ -142,26 +140,42 @@ export class DlpSensorsComponent implements OnInit {
     let payload = {
       names: this.selectedSensors.map(sensor => sensor.name),
     };
-    this.dlpSensorsService.getDlpSensorConfigFileData(payload)
-      .subscribe(
-        response => {
-          let fileName = this.utilsService.getExportedFileName(response);
-          let blob = new Blob([response.body || ''], {
-            type: 'text/plain;charset=utf-8'
-          });
-          saveAs(blob, fileName);
-          this.notificationService.open(this.translate.instant('dlp.msg.EXPORT_SENSOR_OK'));
-        },
-        error => {
-          if (MapConstant.USER_TIMEOUT.includes(error.status)) {
-            this.notificationService.open(
-              this.utilsService.getAlertifyMsg(error.error, this.translate.instant('dlp.msg.EXPORT_SENSOR_NG'), false),
-              GlobalConstant.NOTIFICATION_TYPE.ERROR
-            );
-          }
+    this.dlpSensorsService.getDlpSensorConfigFileData(payload).subscribe(
+      response => {
+        let fileName = this.utilsService.getExportedFileName(response);
+        let blob = new Blob([response.body || ''], {
+          type: 'text/plain;charset=utf-8',
+        });
+        saveAs(blob, fileName);
+        this.notificationService.open(
+          this.translate.instant('dlp.msg.EXPORT_SENSOR_OK')
+        );
+      },
+      error => {
+        if (MapConstant.USER_TIMEOUT.includes(error.status)) {
+          this.notificationService.open(
+            this.utilsService.getAlertifyMsg(
+              error.error,
+              this.translate.instant('dlp.msg.EXPORT_SENSOR_NG'),
+              false
+            ),
+            GlobalConstant.NOTIFICATION_TYPE.ERROR
+          );
         }
-      );
+      }
+    );
   };
+
+  get dlpSensorsCount() {
+    if(this.dlpSensors?.length)
+      return this.dlpSensors.length;
+    else return 0;
+  }
+
+  filterCountChanged(results: number) {
+    this.filteredCount = results;
+    this.filtered = this.filteredCount !== this.dlpSensorsCount;
+  }
 
   private getDlpSensors = (index: number) => {
     this.dlpSensorsService

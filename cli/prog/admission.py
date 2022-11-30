@@ -89,7 +89,7 @@ NamesDisplay = {"cveHighCount": "High severity CVE count",
                 }
 
 SaBindRiskyRoleDisplay = {
-    "saBindRiskyRole": "Service Account binds risky role",
+    "saBindRiskyRole": "Service Account binds high risk role",
 }
 
 NamesDisplay2 = {  # for criteria that has sub-criteria
@@ -107,11 +107,11 @@ OpsDisplay2 = {CriteriaOpContainsAny: 'contains any in', CriteriaOpNotContainsAn
 
 
 RiskyRoleDescriptions = {
-    "risky_role_view_secret": "Subject can listing secrets",
-    "risky_role_any_action_workload": "Subject can do any action on workload resources",
-    "risky_role_any_action_rbac" : "Subject can do any action on RBAC resources",
-    "risky_role_create_pod" : "Subject can create workload resource",
-    "risky_role_exec_into_container" : "Subject can exec into container",
+    "risky_role_view_secret": "Service Account can listing secrets",
+    "risky_role_any_action_workload": "Service Account can do any action on workload resources",
+    "risky_role_any_action_rbac" : "Service Account can do any action on RBAC resources",
+    "risky_role_create_pod" : "Service Account can create workload resource",
+    "risky_role_exec_into_container" : "Service Account can exec into container",
 }
 
 def get_admission_rules(data, scope):
@@ -356,7 +356,7 @@ def _get_criterion_option(option):
         option["values"] = ""
 
     if option["name"] == "saBindRiskyRole":
-        option["values"] = "(Please see following table predefind risky role for details)"
+        option["values"] = "(Please see following table predefind high risk role for details)"
 
 
 def _list_admission_rule_options(data, ruleType, category, ruleOptionsObj):
@@ -404,7 +404,7 @@ def _list_admission_psp_collection(data, criteria):
 
 def _list_predefined_risky_roles(data, criteria):
     click.echo(" ")
-    click.echo("Content for predefined risky roles:")
+    click.echo("Content for predefined high risk roles:")
     mainCrit=[]
     for role in criteria:
         if role in RiskyRoleDescriptions:

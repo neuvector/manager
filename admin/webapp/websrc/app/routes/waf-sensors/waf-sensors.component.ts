@@ -39,9 +39,16 @@ export class WafSensorsComponent implements OnInit {
   selectedRule!: WafRule;
   index4Sensor!: number;
   isPredefine!: boolean;
+  filtered: boolean = false;
   context = { componentParent: this };
   $win: any;
   private _switchClusterSubscription;
+
+  get wafSensorsCount() {
+    if(this.wafSensors?.length)
+      return this.wafSensors.length;
+    else return 0;
+  }
 
   constructor(
     private wafSensorsService: WafSensorsService,
@@ -96,7 +103,6 @@ export class WafSensorsComponent implements OnInit {
         opType: GlobalConstant.MODAL_OP.ADD,
         refresh: this.refresh,
       },
-      disableClose: true,
     });
   };
 
@@ -110,7 +116,6 @@ export class WafSensorsComponent implements OnInit {
         index4Sensor: this.index4Sensor,
         refresh: this.refresh,
       },
-      disableClose: true,
     });
   };
 
@@ -123,7 +128,6 @@ export class WafSensorsComponent implements OnInit {
           error: this.translate.instant('waf.msg.IMPORT_FAILED'),
         },
       },
-      disableClose: true,
     });
     importDialogRef.afterClosed().subscribe(result => {
       setTimeout(() => {
@@ -161,6 +165,11 @@ export class WafSensorsComponent implements OnInit {
       }
     );
   };
+
+  filterCountChanged(results: number) {
+    this.filteredCount = results;
+    this.filtered = this.filteredCount !== this.wafSensorsCount;
+  }
 
   private getWafSensors = (index: number) => {
     this.wafSensorsService

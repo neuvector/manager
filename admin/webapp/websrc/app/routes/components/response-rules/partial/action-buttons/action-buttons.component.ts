@@ -11,7 +11,6 @@ import { ConfirmDialogResponseRuleComponent } from '@components/response-rules/p
 import { switchMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 
-
 @Component({
   selector: 'app-action-buttons',
   templateUrl: './action-buttons.component.html',
@@ -39,12 +38,12 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
     this.isOperatableRuleType =
       this.params.data.cfg_type !== GlobalConstant.CFG_TYPE.GROUND &&
       !(this.params.context.componentParent.source === GlobalConstant.NAV_SOURCE.SELF && this.params.data.cfg_type === GlobalConstant.CFG_TYPE.FED);
-  };
+  }
 
   refresh(params: any): boolean {
     this.params = params;
     return true;
-  };
+  }
 
   editResponseRule = (event, id): void => {
     this.responseRulesService.index4Edit = this.responseRulesService.getIndex(
@@ -93,7 +92,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
         autoCompleteData: autoCompleteData,
         type: type,
       },
-      disableClose: true, width: "70vw"
+      width: '70vw',
     });
     addDialogRef.afterClosed().subscribe(result => {
       setTimeout(() => {
@@ -108,7 +107,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
     let responseRule = {
       id: data.id,
       disable: data.disable,
-      cfg_type: data.cfg_type
+      cfg_type: data.cfg_type,
     };
     this.responseRulesService
       .insertUpdateResponseRuleData(responseRule, [], 'toggle', [])
@@ -118,16 +117,26 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
             this.params.context.componentParent.getResponseRules();
           }, 1000);
           if (data.disable) {
-            this.notificationService.open(this.translate.instant('responsePolicy.dialog.content.DISABLE_OK'));
+            this.notificationService.open(
+              this.translate.instant('responsePolicy.dialog.content.DISABLE_OK')
+            );
           } else {
-            this.notificationService.open(this.translate.instant('responsePolicy.dialog.content.ENABLE_OK'));
+            this.notificationService.open(
+              this.translate.instant('responsePolicy.dialog.content.ENABLE_OK')
+            );
           }
         },
         error => {
           if (data.disable) {
-            this.notificationService.openError(error, this.translate.instant('responsePolicy.dialog.content.DISABLE_NG'));
+            this.notificationService.openError(
+              error,
+              this.translate.instant('responsePolicy.dialog.content.DISABLE_NG')
+            );
           } else {
-            this.notificationService.openError(error, this.translate.instant('responsePolicy.dialog.content.ENABLE_NG'));
+            this.notificationService.openError(
+              error,
+              this.translate.instant('responsePolicy.dialog.content.ENABLE_NG')
+            );
           }
         }
       );
@@ -148,43 +157,63 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
         this.responseRulesService.index4Delete
       ].actions.includes('quarantine');
 
-    console.log("isQuarantined", isQuarantined)
-    let message = `${this.translate.instant("responsePolicy.dialog.content.REMOVE_CONFIRM")} ${id}`;
+    console.log('isQuarantined', isQuarantined);
+    let message = `${this.translate.instant(
+      'responsePolicy.dialog.content.REMOVE_CONFIRM'
+    )} ${id}`;
     const dialogRef = this.dialog.open(ConfirmDialogResponseRuleComponent, {
       maxWidth: '700px',
       data: {
         message: message,
-        isQuarantined: isQuarantined
+        isQuarantined: isQuarantined,
       },
-      disableClose: true
+      disableClose: true,
     });
-    dialogRef.componentInstance.confirm.pipe(switchMap(() => {
-      if (dialogRef.componentInstance.isUnquarantined) {
-        return this.responseRulesService.unquarantine(id);
-      } else {
-        return this.responseRulesService.removeResponseRuleData(id);
-      }
-    })).subscribe(
-      (res) => {
-        // confirm actions
-        if (dialogRef.componentInstance.isUnquarantined) {
-          this.notificationService.open(this.translate.instant('responsePolicy.dialog.content.UNQUARANTINE_OK'));
+    dialogRef.componentInstance.confirm
+      .pipe(
+        switchMap(() => {
+          if (dialogRef.componentInstance.isUnquarantined) {
+            return this.responseRulesService.unquarantine(id);
+          } else {
+            return this.responseRulesService.removeResponseRuleData(id);
+          }
+        })
+      )
+      .subscribe(
+        res => {
+          // confirm actions
+          if (dialogRef.componentInstance.isUnquarantined) {
+            this.notificationService.open(
+              this.translate.instant(
+                'responsePolicy.dialog.content.UNQUARANTINE_OK'
+              )
+            );
+          }
+          this.notificationService.open(
+            this.translate.instant('responsePolicy.dialog.content.REMOVE_OK')
+          );
+          setTimeout(() => {
+            this.params.context.componentParent.getResponseRules();
+          }, 1000);
+          // close dialog
+          dialogRef.componentInstance.onCancel();
+          dialogRef.componentInstance.loading = false;
+        },
+        error => {
+          if (dialogRef.componentInstance.isUnquarantined) {
+            this.notificationService.openError(
+              error,
+              this.translate.instant(
+                'responsePolicy.dialog.content.UNQUARANTINE_NG'
+              )
+            );
+          }
+          this.notificationService.openError(
+            error,
+            this.translate.instant('responsePolicy.dialog.content.REMOVE_NG')
+          );
+          dialogRef.componentInstance.loading = false;
         }
-        this.notificationService.open(this.translate.instant('responsePolicy.dialog.content.REMOVE_OK'));
-        setTimeout(() => {
-          this.params.context.componentParent.getResponseRules();
-        }, 1000);
-        // close dialog
-        dialogRef.componentInstance.onCancel();
-        dialogRef.componentInstance.loading = false;
-      },
-      error => {
-        if (dialogRef.componentInstance.isUnquarantined) {
-          this.notificationService.openError(error, this.translate.instant('responsePolicy.dialog.content.UNQUARANTINE_NG'));
-        }
-        this.notificationService.openError(error, this.translate.instant('responsePolicy.dialog.content.REMOVE_NG'));
-        dialogRef.componentInstance.loading = false;
-      }
-    );
+      );
   };
 }

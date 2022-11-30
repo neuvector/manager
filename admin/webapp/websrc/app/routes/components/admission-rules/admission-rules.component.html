@@ -88,22 +88,18 @@
     <div [ngClass]="{ 'panel-body': source === navSource['SELF'] }">
       <div class="d-flex justify-content-between align-items-center">
         <div class="d-flex justify-content-start align-items-center">
-          <span class="mr-2">
+          <span class="font-weight-bold text-info">
             <span *ngIf="filtered">
               {{ 'enum.FOUND' | translate }}
-              {{ filteredCount }}&nbsp;/&nbsp;
+              {{ filteredCount }}&nbsp;/
+            </span>
+            <span *ngIf="!filtered">
+              {{ 'enum.OUT_OF' | translate }}&nbsp;
             </span>
             {{ admissionRules.length }}
-            {{ 'policy.COUNT_POSTFIX' | translate }}
           </span>
-          <button
-            mat-stroked-button
-            aria-label="Add rule"
-            *appDisplayControl="'write_admission'"
-            (click)="openAddEditAdmissionRuleModal()">
-            <em class="eos-icons icon-18">add_circle</em>
-            {{ 'admissionControl.INSERT' | translate }}
-          </button>
+        </div>
+        <div class="d-flex justify-content-end align-items-center">
           <div
             *ngIf="
               isMaster &&
@@ -111,7 +107,7 @@
               selectedAdmissionRules.length > 0 &&
               !hasSelectedDefaultRule
             "
-            class="ml-2">
+            class="mr-2">
             <button
               mat-stroked-button
               aria-label="prompt rule"
@@ -121,8 +117,15 @@
               {{ 'policy.PROMOTE' | translate }}
             </button>
           </div>
-        </div>
-        <div class="d-flex justify-content-end align-items-center">
+          <button
+            mat-stroked-button
+            aria-label="Add rule"
+            class="mr-3"
+            *appDisplayControl="'write_admission'"
+            (click)="openAddEditAdmissionRuleModal()">
+            <em class="eos-icons icon-18">add_circle</em>
+            {{ 'admissionControl.INSERT' | translate }}
+          </button>
           <div
             class="d-flex align-items-center"
             *ngIf="

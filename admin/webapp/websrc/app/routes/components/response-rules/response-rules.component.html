@@ -31,31 +31,35 @@
         class="d-flex justify-content-between align-items-center"
         *ngIf="source !== navSource['GROUP']">
         <div class="d-flex justify-content-start align-items-center">
-          <span class="mr-2">
+          <span class="font-weight-bold text-info">
             <span *ngIf="filtered">
               {{ 'enum.FOUND' | translate }}
-              {{ filteredCount }}&nbsp;/&nbsp;
+              {{ filteredCount }}&nbsp;/
+            </span>
+            <span *ngIf="!filtered" >
+              {{ 'enum.OUT_OF' | translate }}&nbsp;
             </span>
             {{ responseRulesService.responseRules.length }}
-            {{ 'policy.COUNT_POSTFIX' | translate }}
           </span>
+        </div>
+        <div class="d-flex justify-content-end align-items-center">
           <ng-container *ngIf="!responsePolicyErr">
             <button
               mat-stroked-button
               aria-Label="add rule"
+              class="mr-4"
               (click)="addResponseRule2Top($event)"
               *ngIf="isWriteResponseRuleAuthorized">
               <em class="eos-icons icon-18">add_circle</em>
               {{ 'policy.toolBar.INSERT_TO_TOP' | translate }}
             </button>
           </ng-container>
+          <app-quick-filter
+            (filterCountChange)="filterCountChanged($event)"
+            [gridOptions]="gridOptions"
+            [showCount]="false">
+          </app-quick-filter>
         </div>
-        <app-quick-filter
-          class="pull-left"
-          (filterCountChange)="filterCountChanged($event)"
-          [gridOptions]="gridOptions"
-          [showCount]="false">
-        </app-quick-filter>
       </div>
       <div *ngIf="source === navSource['GROUP']" class="clearfix">
         <app-quick-filter

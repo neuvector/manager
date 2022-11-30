@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthUtilsService } from '@common/utils/auth.utils';
-import { GlobalVariable } from '@common/variables/global.variable';
 
 @Component({
   selector: 'app-settings',

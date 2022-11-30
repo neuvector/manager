@@ -39,9 +39,16 @@ export class WafSensorsComponent implements OnInit {
   selectedRule!: WafRule;
   index4Sensor!: number;
   isPredefine!: boolean;
+  filtered: boolean = false;
   context = { componentParent: this };
   $win: any;
   private _switchClusterSubscription;
+
+  get wafSensorsCount() {
+    if(this.wafSensors?.length)
+      return this.wafSensors.length;
+    else return 0;
+  }
 
   constructor(
     private wafSensorsService: WafSensorsService,
@@ -158,6 +165,11 @@ export class WafSensorsComponent implements OnInit {
       }
     );
   };
+
+  filterCountChanged(results: number) {
+    this.filteredCount = results;
+    this.filtered = this.filteredCount !== this.wafSensorsCount;
+  }
 
   private getWafSensors = (index: number) => {
     this.wafSensorsService

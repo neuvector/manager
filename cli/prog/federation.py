@@ -45,10 +45,8 @@ def request_federation(data):
 @click.option("--port", help="Exposed rest port of this primary cluster")
 @click.option("--use_proxy", default="", type=click.Choice(["https", ""]),
               help="Use configured system https proxy or not when connecting to managed cluster")
-@click.option("--deploy_repo_scan_data", default="disable", type=click.Choice(["enable", "disable"]),
-              help="Deploy repository scan data on primary cluster to managed clusters")
 @click.pass_obj
-def request_federation_promote(data, name, server, port, use_proxy, deploy_repo_scan_data):
+def request_federation_promote(data, name, server, port, use_proxy):
     """Promote a cluster to primary cluster in the federation."""
     master_rest_info = {"server": "", "port": 0}
     resp = data.client.show("fed/member", None, None)
@@ -67,10 +65,6 @@ def request_federation_promote(data, name, server, port, use_proxy, deploy_repo_
         req["use_proxy"] = resp["use_proxy"]
     if use_proxy != "":
         req["use_proxy"] = use_proxy
-
-    req["deploy_repo_scan_data"] = False
-    if deploy_repo_scan_data == "enable":
-        req["deploy_repo_scan_data"] = True
 
     resp = data.client.request("fed", "promote", None, req)
     # click.echo("Federation promotion response object: {}".format(json.dumps(resp)))

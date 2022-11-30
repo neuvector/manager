@@ -4,12 +4,16 @@
     *ngIf="source === navSource['FED_POLICY'] || groupName">
     <div [ngClass]="{ 'panel-body': source === navSource['SELF'] }">
       <div class="clearfix" *ngIf="groupName !== globalConstant4Html.EXTERNAL">
-        <app-quick-filter
-          class="pull-left"
-          [gridOptions]="gridOptions"
-          [filteredCount]="filteredCount"
-          [count]="processProfileRules.length">
-        </app-quick-filter>
+        <div class="pull-left mt-4">
+          <span
+            *ngIf="baselineProfile === 'zero-drift'"
+          >
+            <em class="eos-icons icon-18 mr-2">anchor</em>
+            <label class="text-gray-label">
+              {{'group.ZERO_DRIFT' | translate}}
+            </label>
+          </span>
+        </div>
         <div
           class="pull-right margin-right-m margin-top-l hand"
           *ngIf="selectedProcessProfileRules && isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized"
@@ -44,6 +48,13 @@
             </mat-option>
           </mat-select>
         </div>
+        <app-quick-filter
+          class="pull-right"
+          [gridOptions]="gridOptions"
+          [filteredCount]="filteredCount"
+          [showCount]="false"
+          [count]="processProfileRules.length">
+        </app-quick-filter>
       </div>
       <div class="mt-sm mb0">
         <ag-grid-angular

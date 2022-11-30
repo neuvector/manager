@@ -96,6 +96,9 @@ export class LdapFormComponent implements OnInit, OnChanges {
       group_mapped_roles: this.groupMappedRoles,
       ...this.ldapForm.value,
     };
+    if (!this.ldapForm.get('bind_password')?.dirty) {
+      ldap.bind_password = null as any;
+    }
     const config: ServerPatchBody = { config: { name: this.serverName, ldap } };
     this.submittingForm = true;
     let submission: Observable<unknown>;

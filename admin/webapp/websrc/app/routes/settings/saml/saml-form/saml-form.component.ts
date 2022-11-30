@@ -97,6 +97,9 @@ export class SamlFormComponent implements OnInit, OnChanges {
       group_mapped_roles: this.groupMappedRoles,
       ...this.samlForm.value,
     };
+    if (!this.samlForm.get('x509_cert')?.dirty) {
+      saml.x509_cert = null as any;
+    }
     const config: ServerPatchBody = { config: { name: this.serverName, saml } };
     this.submittingForm = true;
     let submission: Observable<unknown>;

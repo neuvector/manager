@@ -110,6 +110,9 @@ export class OpenidFormComponent implements OnInit, OnChanges {
       group_mapped_roles: this.groupMappedRoles,
       ...this.openidForm.value,
     };
+    if (!this.openidForm.get('client_secret')?.dirty) {
+      oidc.client_secret = null as any;
+    }
     const config: ServerPatchBody = { config: { name: this.serverName, oidc } };
     this.submittingForm = true;
     let submission: Observable<unknown>;

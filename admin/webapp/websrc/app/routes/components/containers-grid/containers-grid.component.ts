@@ -36,7 +36,7 @@ export class ContainersGridComponent implements OnInit {
   @Input() isScanAuthorized!: boolean;
   @Input() rowData!: Array<WorkloadRow>;
   @Input() isMemberData: boolean = false;
-  @Input() source: string;
+  @Input() source!: string;
   @Output() scan = new EventEmitter<WorkloadRow>();
   gridOptions!: GridOptions;
   gridApi!: GridApi;
@@ -282,13 +282,6 @@ export class ContainersGridComponent implements OnInit {
   filterCountChanged(results: number) {
     this.filteredCount = results;
     this.filtered = this.filteredCount !== this.containersCount;
-  }
-
-  setError(error: string) {
-    if (this.gridOptions) {
-      this.gridOptions.overlayNoRowsTemplate =
-        this.utils.getOverlayTemplateMsg(error);
-    }
   }
 
   quickFilterParents(node: RowNode) {

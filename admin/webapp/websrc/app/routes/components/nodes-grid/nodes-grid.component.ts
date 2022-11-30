@@ -1,7 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MapConstant } from '@common/constants/map.constant';
-import { Host, WorkloadCompliance } from '@common/types';
+import { Host } from '@common/types';
 import { UtilsService } from '@common/utils/app.utils';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { TranslateService } from '@ngx-translate/core';
@@ -32,8 +31,8 @@ export class NodesGridComponent implements OnInit {
   @Input() isScanAuthorized!: boolean;
   @Input() gridOnly: boolean = false;
   @Input() isMemberData: boolean = false;
-  @Input() rowData: Array<Host>;
-  @Input() source: string;
+  @Input() rowData!: Array<Host>;
+  @Input() source!: string;
   @Output() scan = new EventEmitter<Host>();
   gridOptions!: GridOptions;
   gridApi!: GridApi;
@@ -49,7 +48,7 @@ export class NodesGridComponent implements OnInit {
   get cisLabel() {
     return this.utils.getCisLabel(this.versionInfoService.infoData);
   }
-  columnDefs: ColDef[];
+  columnDefs!: ColDef[];
 
   constructor(
     public nodesService: NodesService,
@@ -74,7 +73,7 @@ export class NodesGridComponent implements OnInit {
         field: 'id',
         width: 80,
         minWidth: 80,
-        hide: !this.isMemberData
+        hide: !this.isMemberData,
       },
       {
         headerName: this.tr.instant('containers.detail.STATE'),
@@ -87,12 +86,12 @@ export class NodesGridComponent implements OnInit {
       {
         headerName: this.tr.instant('nodes.detail.OS'),
         field: 'os',
-        hide: this.isMemberData
+        hide: this.isMemberData,
       },
       {
         headerName: this.tr.instant('nodes.detail.PLATFORM'),
         field: 'platform',
-        hide: this.isMemberData
+        hide: this.isMemberData,
       },
       {
         headerName: this.tr.instant('nodes.detail.NUM_OF_CONTAINERS'),
@@ -101,7 +100,7 @@ export class NodesGridComponent implements OnInit {
           sortAscending: '<em class="fa fa-sort-amount-down"></em>',
           sortDescending: '<em class="fa fa-sort-amount-up"></em>',
         },
-        hide: this.isMemberData
+        hide: this.isMemberData,
       },
       {
         headerName: this.tr.instant('scan.gridHeader.STATUS'),
@@ -109,7 +108,7 @@ export class NodesGridComponent implements OnInit {
         cellRenderer: 'statusCellRenderer',
         width: 100,
         minWidth: 100,
-        hide: this.isMemberData
+        hide: this.isMemberData,
       },
       {
         headerName: this.tr.instant('scan.gridHeader.HIGH'),
@@ -152,7 +151,7 @@ export class NodesGridComponent implements OnInit {
         },
         width: 160,
         minWidth: 160,
-        hide: this.isMemberData
+        hide: this.isMemberData,
       },
     ];
     this.gridOptions = this.utils.createGridOptions(this.columnDefs, this.$win);
@@ -164,7 +163,7 @@ export class NodesGridComponent implements OnInit {
       onRowDataUpdated: this.onRowDataUpdated.bind(this),
       components: {
         statusCellRenderer: NodesGridStatusCellComponent,
-        stateCellRenderer: NodesGridStateCellComponent
+        stateCellRenderer: NodesGridStateCellComponent,
       },
     };
     if (this.isMemberData) {
@@ -200,12 +199,5 @@ export class NodesGridComponent implements OnInit {
 
   onResize(): void {
     this.gridApi.sizeColumnsToFit();
-  }
-
-  setError(error: string) {
-    if (this.gridOptions) {
-      this.gridOptions.overlayNoRowsTemplate =
-        this.utils.getOverlayTemplateMsg(error);
-    }
   }
 }

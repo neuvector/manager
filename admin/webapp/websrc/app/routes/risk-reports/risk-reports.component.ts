@@ -78,12 +78,7 @@ export class RiskReportsComponent implements OnInit {
           this.error = '';
           if (!this.loaded) this.loaded = true;
         },
-        error: ({ error }: { error: ErrorResponse }) => {
-          this.error = error.message;
-          if (this.riskReportGrid) {
-            this.riskReportGrid.setError(this.error);
-          }
-        },
+        error: ({ error }: { error: ErrorResponse }) => {},
       });
   }
 }

@@ -321,13 +321,6 @@ export class EventsGridComponent implements OnInit {
     return !node.data.parent_id;
   }
 
-  setError(error: string) {
-    if (this.gridOptions) {
-      this.gridOptions.overlayNoRowsTemplate =
-        this.utils.getOverlayTemplateMsg(error);
-    }
-  }
-
   private getLevels(levels: boolean[]) {
     let _levels = [] as any;
     levels.forEach((l, idx) => {

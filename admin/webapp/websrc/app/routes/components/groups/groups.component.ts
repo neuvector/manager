@@ -312,7 +312,7 @@ export class GroupsComponent implements OnInit {
       error => {
         this.notificationService.openError(
           error,
-          this.translate.instant('service.SUBMIT_SCORABLE_NG')
+          this.translate.instant('service.SUBMIT_SCORABLE_FAILED')
         );
       }
     );

@@ -4,6 +4,7 @@ import {
   LicenseGetResponse,
   PasswordProfile,
   PermissionOptionResponse,
+  PublicPasswordProfile,
   RenewLicensePostBody,
   Role,
   Self,
@@ -109,8 +110,24 @@ export class AuthHttpService {
 
   getPwdProfile(): Observable<PasswordProfile> {
     return GlobalVariable.http
-      .get<{ pwd_profiles: PasswordProfile[] }>(PathConstant.PASSWORD_PROFILE)
-      .pipe(map(pwdProfileResponse => pwdProfileResponse.pwd_profiles[0]));
+      .get<{ pwd_profiles: PasswordProfile[]; active_profile_name: string }>(
+        PathConstant.PASSWORD_PROFILE
+      )
+      .pipe(
+        map(pwdProfileResponse => {
+          const active_profile_name =
+            pwdProfileResponse.active_profile_name || 'default';
+          return pwdProfileResponse.pwd_profiles.filter(
+            pwd_profile => pwd_profile.name === active_profile_name
+          )[0];
+        })
+      );
+  }
+
+  getPublicPwdProfile(): Observable<PublicPasswordProfile> {
+    return GlobalVariable.http
+      .get<PublicPasswordProfile>(PathConstant.PUBLIC_PASSWORD_PROFILE)
+      .pipe(pluck('pwd_profile'));
   }
 
   patchPwdProfile(profile: PasswordProfile): Observable<unknown> {

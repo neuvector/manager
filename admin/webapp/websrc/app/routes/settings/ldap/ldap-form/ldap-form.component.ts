@@ -32,7 +32,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class LdapFormComponent implements OnInit, OnChanges {
   @Input() ldapData!: { server: ServerGetResponse; domains: string[] };
   @Output() refresh = new EventEmitter();
-  onCreate = true;
+  isCreated = true;
   submittingForm = false;
   groupMappedRoles: GroupMappedRole[] = [];
   serverName = 'ldap1';
@@ -84,7 +84,7 @@ export class LdapFormComponent implements OnInit, OnChanges {
         }
       });
     } else {
-      this.onCreate = false;
+      this.isCreated = false;
     }
   }
 
@@ -102,11 +102,11 @@ export class LdapFormComponent implements OnInit, OnChanges {
     const config: ServerPatchBody = { config: { name: this.serverName, ldap } };
     this.submittingForm = true;
     let submission: Observable<unknown>;
-    if (!this.onCreate) {
+    if (!this.isCreated) {
       submission = this.settingsService.postServer(config).pipe(
         finalize(() => {
           this.submittingForm = false;
-          this.onCreate = true;
+          this.isCreated = true;
         })
       );
     } else {

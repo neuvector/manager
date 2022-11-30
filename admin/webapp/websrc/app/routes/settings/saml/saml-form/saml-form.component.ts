@@ -32,7 +32,7 @@ import { Observable } from 'rxjs';
 export class SamlFormComponent implements OnInit, OnChanges {
   @Input() samlData!: { server: ServerGetResponse; domains: string[] };
   @Output() refresh = new EventEmitter();
-  onCreate = true;
+  isCreated = true;
   submittingForm = false;
   groupMappedRoles: GroupMappedRole[] = [];
   serverName = 'saml1';
@@ -81,7 +81,7 @@ export class SamlFormComponent implements OnInit, OnChanges {
       });
       this.samlForm.get('x509_cert')?.clearValidators();
     } else {
-      this.onCreate = false;
+      this.isCreated = false;
     }
   }
 
@@ -103,11 +103,11 @@ export class SamlFormComponent implements OnInit, OnChanges {
     const config: ServerPatchBody = { config: { name: this.serverName, saml } };
     this.submittingForm = true;
     let submission: Observable<unknown>;
-    if (!this.onCreate) {
+    if (!this.isCreated) {
       submission = this.settingsService.postServer(config).pipe(
         finalize(() => {
           this.submittingForm = false;
-          this.onCreate = true;
+          this.isCreated = true;
         })
       );
     } else {

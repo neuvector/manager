@@ -244,10 +244,10 @@
                               {{secEvent.endpoint.source.displayName}}
                             </span>
                             (
-                              <span *ngIf="secEvent.endpoint.destination.countryCode!=='-'"
-                                matTooltip="{{secEvent.endpoint.destination.countryName}}"
+                              <span *ngIf="secEvent.endpoint.source.countryCode !== '-'"
+                                matTooltip="{{secEvent.endpoint.source.countryName}}"
                                 style="font-size: 14px;"
-                              >{{ secEvent.endpoint.destination.countryFlagUnicode }}&nbsp;
+                              >{{ secEvent.endpoint.source.countryFlagUnicode }}&nbsp;
                               </span>
                               <span>{{secEvent.endpoint.source.ip}}</span>
                             )
@@ -323,7 +323,7 @@
                               {{secEvent.endpoint.destination.displayName}}
                             </span>
                             (
-                              <span *ngIf="secEvent.endpoint.destination.countryCode!=='-'"
+                              <span *ngIf="secEvent.endpoint.destination.countryCode !== '-'"
                                 matTooltip="{{secEvent.endpoint.destination.countryName}}"
                                 style="font-size: 14px;"
                               >{{ secEvent.endpoint.destination.countryFlagUnicode }}&nbsp;

@@ -137,20 +137,21 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
             appList,
           };
         },
-        error => {}
+        error => {
+          console.error(error);
+        }
       );
     }
     this.refresh();
 
     //refresh the page when it switched to a remote cluster
     this.switchClusterSubscription =
-      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
         this.refresh();
       });
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(changes);
     if (
       changes.groupName &&
       changes.groupName.previousValue &&
@@ -214,7 +215,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   };
 
   addNetworkRuleToTop = () => {
-    const addEditDialogRef = this.dialog.open(
+    this.dialog.open(
       AddEditNetworkRuleModalComponent,
       {
         width: '80%',
@@ -234,7 +235,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   };
 
   openMoveNetworkRulesModal = () => {
-    const addEditDialogRef = this.dialog.open(MoveNetworkRulesModalComponent, {
+    this.dialog.open(MoveNetworkRulesModalComponent, {
       width: '450px',
       data: {
         selectedNetworkRules: this.selectedNetworkRules,
@@ -251,7 +252,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       },
     };
     this.networkRulesService.promoteNetworkRulesData(payload).subscribe(
-      res => {
+      () => {
         this.notificationService.open(
           this.translate.instant('policy.message.PROMOTE_OK')
         );
@@ -323,7 +324,9 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
           this.ruleCount = response.policy_rules.length;
           this.gridOptions.api!.setRowData(response.policy_rules);
         },
-        error => {}
+        error => {
+          console.error(error);
+        }
       );
   };
 
@@ -583,14 +586,13 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       this.routeEventSubscription = this.router.events
         .pipe(
           filter((event): event is NavigationStart => {
-            console.log('event', event);
             return (
               event instanceof NavigationStart &&
               `#${currentRoute.snapshot.url}` === location.hash
             );
           })
         )
-        .subscribe(event => {
+        .subscribe(() => {
           if (
             this.isNetworkRuleDirty() &&
             !confirm(this.translate.instant('policy.dialog.reminder.MESSAGE'))

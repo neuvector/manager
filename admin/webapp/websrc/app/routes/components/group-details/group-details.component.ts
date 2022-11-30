@@ -17,7 +17,7 @@ export class GroupDetailsComponent implements OnInit {
   @Input() members: any;
   @Input() kind!: string;
   @Input() isScoreImprovement: boolean = false;
-  @Input() cfgType: string;
+  @Input() cfgType: string = '';
   public navSource!: string;
   CFG_TYPE = GlobalConstant.CFG_TYPE;
 

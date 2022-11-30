@@ -17,14 +17,14 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./quick-filter.component.scss'],
 })
 export class QuickFilterComponent implements OnInit, OnChanges {
-  @Input() gridOptions: GridOptions;
-  @Input() count: number;
-  @Input() filteredCount: number;
+  @Input() gridOptions!: GridOptions;
+  @Input() count: number = 0;
+  @Input() filteredCount: number = 0;
   @Input() showCount: boolean = true;
   @Input() condition: any = false;
   @Output() filterCountChange = new EventEmitter<number>();
-  public totalCountText: string;
-  public filteredCountText: string;
+  public totalCountText: string = '';
+  public filteredCountText: string = '';
   public filter = new FormControl('');
 
   constructor(private translate: TranslateService) {}

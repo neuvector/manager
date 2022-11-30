@@ -39,7 +39,7 @@ export class NetworkRulesService {
     const onGridReadyFunc = params => {
       setTimeout(function () {
         params.api.sizeColumnsToFit();
-      }, 100);
+      }, 500);
       $(this.w).on(GlobalConstant.RESIZE_EVENT, function () {
         setTimeout(function () {
           params.api.sizeColumnsToFit();

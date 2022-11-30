@@ -38,7 +38,7 @@ export class GroupsComponent implements OnInit {
   @Input() isShowingSystemGroups: boolean = true;
   @Output() selectedGroup = new EventEmitter<Group | null>();
   @Output() refreshing = new EventEmitter<boolean>();
-  isRefreshing: boolean;
+  isRefreshing: boolean = false;
   groups: Array<Group> = [];
   groupsErr: boolean = false;
   eof: boolean = false;

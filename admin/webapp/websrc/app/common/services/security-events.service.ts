@@ -661,7 +661,7 @@ export class SecurityEventsService {
           if (ip) {
             endpointOut.countryCode = ipMap[ip].country_code.toLowerCase();
             endpointOut.countryName = ipMap[ip].country_name;
-            endpointOut.countryFlagUnicode = getUnicodeFlagIcon(ipMap[ip].country_code);
+            endpointOut.countryFlagUnicode = getUnicodeFlagIcon(ipMap[ip].country_code === '-' ? '--' : ipMap[ip].country_code);
             endpointOut.ip = ip;
             displayName = getDisplayName(name);
           }
@@ -680,7 +680,7 @@ export class SecurityEventsService {
           if (ip) {
             endpointOut.countryCode = ipMap[ip].country_code.toLowerCase();
             endpointOut.countryName = ipMap[ip].country_name;
-            endpointOut.countryFlagUnicode = getUnicodeFlagIcon(ipMap[ip].country_code);
+            endpointOut.countryFlagUnicode = getUnicodeFlagIcon(ipMap[ip].country_code === '-' ? '--' : ipMap[ip].country_code);
             endpointOut.ip = ip;
             displayName = getDisplayName(name);
           }

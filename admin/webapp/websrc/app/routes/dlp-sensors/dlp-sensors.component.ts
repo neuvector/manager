@@ -44,6 +44,7 @@ export class DlpSensorsComponent implements OnInit {
   selectedRule!: DlpRule;
   index4Sensor!: number;
   isPredefine!: boolean;
+  filtered: boolean = false;
   context = { componentParent: this };
   $win: any;
   private _switchClusterSubscription;
@@ -164,6 +165,17 @@ export class DlpSensorsComponent implements OnInit {
       }
     );
   };
+
+  get dlpSensorsCount() {
+    if(this.dlpSensors?.length)
+      return this.dlpSensors.length;
+    else return 0;
+  }
+
+  filterCountChanged(results: number) {
+    this.filteredCount = results;
+    this.filtered = this.filteredCount !== this.dlpSensorsCount;
+  }
 
   private getDlpSensors = (index: number) => {
     this.dlpSensorsService

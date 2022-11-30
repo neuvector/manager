@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { combineLatest, Subject, throwError } from 'rxjs';
 import { catchError, map, repeatWhen } from 'rxjs/operators';
 import { SettingsService } from '@services/settings.service';
+import { MultiClusterService } from '@services/multi-cluster.service';
 
 @Component({
   selector: 'app-openid',
@@ -9,6 +10,7 @@ import { SettingsService } from '@services/settings.service';
   styleUrls: ['./openid.component.scss'],
 })
 export class OpenidComponent {
+  private _switchClusterSubscription;
   openidError!: string;
   refreshing$ = new Subject();
   server$ = this.settingsService.getServer();
@@ -29,7 +31,17 @@ export class OpenidComponent {
     repeatWhen(() => this.refreshing$)
   );
 
-  constructor(private settingsService: SettingsService) {}
+  constructor(
+    private multiClusterService: MultiClusterService,
+    private settingsService: SettingsService
+  ) {}
+
+  ngOnInit(): void {
+    this._switchClusterSubscription =
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
+        this.refresh();
+      });
+  }
 
   refresh(): void {
     this.refreshing$.next(true);

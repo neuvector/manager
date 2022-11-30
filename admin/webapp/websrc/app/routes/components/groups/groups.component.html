@@ -4,27 +4,22 @@
   <div
     class="d-flex align-items-center justify-content-start"
     *ngIf="!groupsErr">
-    <span class="text-success font-weight-bold mr-2">
+    <span class="text-info font-weight-bold mr-2">
       <span *ngIf="filtered">
         {{ 'enum.FOUND' | translate }}
-        {{ filteredCount }}&nbsp;/&nbsp;
+        {{ filteredCount }}&nbsp;/
       </span>
+      <span *ngIf="!filtered"> {{ 'enum.OUT_OF' | translate }}&nbsp; </span>
       {{ groupsCount }}
-      {{ 'group.COUNT_POSTFIX' | translate }}
     </span>
-    <span class="text-info font-weight-bold mr-2" *ngIf="source === navSource['SELF']">
+    <span
+      class="text-success font-weight-bold mr-2"
+      *ngIf="source === navSource['SELF']">
       {{ 'group.GROUP_LIST' | translate }}:&nbsp;
       {{ selectedGroups.length }}
     </span>
-    <button
-      *ngIf="isWriteGroupAuthorized"
-      (click)="openAddGroupModal()"
-      class="d-flex align-items-center justify-content-start px-2 mr-2"
-      id="groups-add-dialog"
-      mat-stroked-button>
-      <em class="eos-icons">add_circle</em>
-      {{ 'role.ADD' | translate }}
-    </button>
+  </div>
+  <div class="d-flex align-items-center justify-content-end ml-auto">
     <button
       *ngIf="
         isWriteGroupAuthorized && selectedGroups.length > 0 && hasModeCapGroups
@@ -36,8 +31,15 @@
       <em class="eos-icons">change_circle</em>
       {{ 'service.SWITCH_MODE' | translate }}
     </button>
-  </div>
-  <div class="d-flex align-items-center justify-content-end ml-auto">
+    <button
+      *ngIf="isWriteGroupAuthorized"
+      (click)="openAddGroupModal()"
+      class="d-flex align-items-center justify-content-start px-2 mr-2"
+      id="groups-add-dialog"
+      mat-stroked-button>
+      <em class="eos-icons">add_circle</em>
+      {{ 'role.ADD' | translate }}
+    </button>
     <button
       mat-button
       *ngIf="selectedGroups.length > 0"

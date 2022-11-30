@@ -1,4 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import {
   ErrorResponse,
   GroupMappedRole,
@@ -23,6 +30,7 @@ import { Observable } from 'rxjs';
 })
 export class SamlFormComponent implements OnInit {
   @Input() samlData!: { server: ServerGetResponse; domains: string[] };
+  @Output() refresh = new EventEmitter();
   onCreate = true;
   submittingForm = false;
   groupMappedRoles: GroupMappedRole[] = [];
@@ -47,6 +55,16 @@ export class SamlFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.samlRedirectURL = getCallbackUri('token_auth_server');
+    this.initForm();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.samlData) {
+      this.initForm();
+    }
+  }
+
+  initForm(): void {
     const saml = this.samlData.server.servers.find(
       ({ server_type }) => server_type === 'saml'
     );
@@ -60,6 +78,7 @@ export class SamlFormComponent implements OnInit {
           );
         }
       });
+      this.samlForm.get('x509_cert')?.clearValidators();
     } else {
       this.onCreate = false;
     }
@@ -97,6 +116,7 @@ export class SamlFormComponent implements OnInit {
     submission.subscribe({
       complete: () => {
         this.notificationService.open(this.tr.instant('ldap.SERVER_SAVED'));
+        this.refresh.emit();
       },
       error: ({ error }: { error: ErrorResponse }) => {
         this.notificationService.open(

@@ -43,7 +43,10 @@
       <i class="eos-icons mr-3">verified</i>
       <mat-form-field appearance="standard" class="w-100">
         <mat-label>{{ 'okta.CERTIFICATE' | translate }}</mat-label>
-        <input formControlName="x509_cert" matInput />
+        <textarea
+          cdkTextareaAutosize
+          formControlName="x509_cert"
+          matInput></textarea>
         <mat-error *ngIf="samlForm.controls.x509_cert.hasError('required')">
           {{ 'general.REQUIRED' | translate }}
         </mat-error>
@@ -75,7 +78,7 @@
   <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
     <mat-checkbox formControlName="enable">{{
       'ldap.ENABLE_LDAP' | translate
-      }}</mat-checkbox>
+    }}</mat-checkbox>
     <button
       [disabled]="!samlForm.valid || submittingForm"
       color="primary"

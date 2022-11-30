@@ -212,7 +212,9 @@ export class EventsGridComponent implements OnInit {
   exportCSV(): void {
     let events4Csv = [] as any;
     this.gridApi.forEachNodeAfterFilterAndSort(node => {
-      events4Csv.push(node.data);
+      if (!node.data.parent_id) {
+        events4Csv.push(node.data);
+      }
     });
     this.eventsGridCsvService.exportCSV(events4Csv);
   }

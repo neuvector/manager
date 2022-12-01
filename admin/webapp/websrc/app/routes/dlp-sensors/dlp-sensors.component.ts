@@ -188,7 +188,7 @@ export class DlpSensorsComponent implements OnInit {
           setTimeout(() => {
             let rowNode =
               this.gridOptions4Sensors.api!.getDisplayedRowAtIndex(index);
-            rowNode!.setSelected(true);
+            rowNode?.setSelected(true);
           }, 200);
         },
         error => {}

@@ -765,7 +765,7 @@
       "COLLAPSE_GROUP": "Collapse Group",
       "COLLAPSE_ALL_GROUPS": "Collapse All Groups",
       "SESSION_CLEAR_FAILURE": "Session clear failed",
-      "QUICK_SEARCH_TITLE": "Find container/pod/service by name"
+      "QUICK_SEARCH_TITLE": "Find node by name"
     }
   },
   "topbar": {

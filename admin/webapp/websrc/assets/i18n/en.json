@@ -2504,7 +2504,7 @@
     "EXCEPTION": "Allow",
     "names": {
       "ADD_CUSTOMIZED_CRITERION": "Add customized criterion",
-      "SA_BIND_RISKY_ROLE": "Service Account Bound High Risky Role",
+      "SA_BIND_RISKY_ROLE": "Service Account Bound High Risk Role",
       "IMAGE": "Image",
       "NODE": "Node",
       "CONTAINER": "Container",

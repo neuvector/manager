@@ -45,7 +45,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
     return true;
   }
 
-  editResponseRule = (event, id): void => {
+  editResponseRule = (event, id, isReadonly = false): void => {
     this.responseRulesService.index4Edit = this.responseRulesService.getIndex(
       this.responseRulesService.responseRules,
       id
@@ -57,10 +57,10 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
     rowNode.setSelected(true);
     this.responseRulesService.getAutoCompleteData().subscribe(
       response => {
-        this.openAddResponseRuleModal(response, GlobalConstant.MODAL_OP.EDIT);
+        this.openAddResponseRuleModal(response, GlobalConstant.MODAL_OP.EDIT, isReadonly);
       },
       err => {
-        this.openAddResponseRuleModal([], GlobalConstant.MODAL_OP.EDIT);
+        this.openAddResponseRuleModal([], GlobalConstant.MODAL_OP.EDIT, isReadonly);
       }
     );
   };
@@ -85,12 +85,14 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
 
   private openAddResponseRuleModal = (
     autoCompleteData: Object[] = [],
-    type
+    type,
+    isReadonly = false
   ): void => {
     let addDialogRef = this.dialog.open(AddEditResponseRuleModalComponent, {
       data: {
         autoCompleteData: autoCompleteData,
         type: type,
+        isReadonly: isReadonly
       },
       width: '70vw',
     });

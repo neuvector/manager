@@ -89,7 +89,7 @@ export class ResponseRulesService {
         width: 123,
         maxWidth: 123,
         minWidth: 123,
-        hide: !isWriteResponseRuleAuthorized || source === GlobalConstant.NAV_SOURCE.GROUP
+        hide: source === GlobalConstant.NAV_SOURCE.GROUP
       },
     ];
 

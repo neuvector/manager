@@ -2,7 +2,7 @@
   <div class="d-flex justify-content-between align-items-center">
     <h4 mat-dialog-title>
       {{
-        (type === 'add' ? 'policy.addPolicy.TITLE' : 'policy.editPolicy.TITLE')
+        (type === 'add' ? 'policy.addPolicy.TITLE' : (data.isReadonly ? 'policy.editPolicy.VIEW' : 'policy.editPolicy.TITLE'))
           | translate
       }}
     </h4>
@@ -25,6 +25,7 @@
           <mat-select
             name="event"
             placeholder="{{ 'responsePolicy.gridHeader.TYPE' | translate }}*"
+            [disabled]="data.isReadonly"
             [(ngModel)]="responseRule.event"
             (ngModelChange)="changeEvent(responseRule.event)">
             <mat-option *ngFor="let event of events" [value]="event"
@@ -44,6 +45,7 @@
             tabindex="-1"
             matInput
             name="group"
+            [readonly]="data.isReadonly"
             [(ngModel)]="responseRule.group"
             [formControl]="formControl4Group"
             [matAutocomplete]="autoFrom" />
@@ -59,7 +61,7 @@
       </div>
       <div class="d-flex justify-content-start align-items-start">
         <mat-form-field appearance="fill" class="flex-grow-1">
-          <mat-chip-list #chipList aria-label="Criteria selection">
+          <mat-chip-list #chipList aria-label="Criteria selection" [disabled]="data.isReadonly">
             <mat-chip
               *ngFor="let criterion of responseRule.criteria"
               [selectable]="true"
@@ -108,6 +110,7 @@
             [ngModelOptions]="{ standalone: true }"
             *ngFor="let action of actions; let i = index"
             [attr.data-index]="i"
+            [disabled]="data.isReadonly"
             [(ngModel)]="responseRule.actions[i]"
             class="mr-2"
             (change)="onActionsSelected(responseRule.actions)"
@@ -128,6 +131,7 @@
             *ngFor="let webhook of webhookOptions; let i = index"
             class="mr-2"
             [attr.data-index]="i"
+            [disabled]="data.isReadonly"
             [(ngModel)]="responseRule.webhooks[i]"
             [ngModelOptions]="{ standalone: true }"
             >{{ webhook }}
@@ -142,6 +146,7 @@
           <mat-slide-toggle
             id="network-status-toggle"
             name="status"
+            [disabled]="data.isReadonly"
             [(ngModel)]="responseRule.enabled">
             <span
               [ngClass]="{
@@ -160,7 +165,7 @@
       </div>
     </form>
   </div>
-  <div mat-dialog-actions class="d-flex justify-content-end align-items-center">
+  <div mat-dialog-actions class="d-flex justify-content-end align-items-center" *ngIf="!data.isReadonly">
     <button mat-stroked-button aria-label="cancel" class="mr-2" (click)="onCancel()">
       {{ 'policy.addPolicy.CANCEL' | translate }}
     </button>

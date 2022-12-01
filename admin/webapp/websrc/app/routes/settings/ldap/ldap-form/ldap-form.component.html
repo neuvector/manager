@@ -6,10 +6,10 @@
     <div>
       <span class="d-block mb-2">{{ 'ldap.DIRECTORY_TYPE' | translate }}</span>
       <mat-radio-group aria-label="Directory Type" formControlName="directory">
-        <mat-radio-button value="OpenLDAP">{{
+        <mat-radio-button value="OpenLDAP" [disabled]="isWriteLdapAuthorized">{{
           'setting.directory_type.OPEN_LDAP' | translate
         }}</mat-radio-button>
-        <mat-radio-button value="MicrosoftAD">{{
+        <mat-radio-button value="MicrosoftAD" [disabled]="isWriteLdapAuthorized">{{
           'setting.directory_type.MS_AD' | translate
         }}</mat-radio-button>
       </mat-radio-group>
@@ -20,7 +20,10 @@
       <i class="eos-icons mr-3">cluster</i>
       <mat-form-field appearance="standard" class="w-100">
         <mat-label>{{ 'ldap.HOST' | translate }}</mat-label>
-        <input formControlName="hostname" matInput />
+        <input
+          formControlName="hostname"
+          [disabled]="isWriteLdapAuthorized"
+          matInput />
         <mat-error *ngIf="ldapForm.controls.hostname.hasError('required')">
           {{ 'ldap.HOST_REQUIRED' | translate }}
         </mat-error>
@@ -32,12 +35,16 @@
       </mat-icon>
       <mat-form-field appearance="standard" class="w-100">
         <mat-label>{{ 'ldap.PORT' | translate }}</mat-label>
-        <input formControlName="port" matInput type="number" />
+        <input
+          formControlName="port"
+          [disabled]="isWriteLdapAuthorized"
+          matInput
+          type="number" />
       </mat-form-field>
     </div>
     <div
       class="col-12 col-md-2 d-flex align-items-center my-2 my-md-0 pt-3 pt-md-0">
-      <mat-checkbox formControlName="ssl"
+      <mat-checkbox formControlName="ssl" [disabled]="isWriteLdapAuthorized"
         >{{ 'ldap.SSL' | translate }}L</mat-checkbox
       >
     </div>
@@ -49,7 +56,10 @@
       </mat-icon>
       <mat-form-field appearance="standard" class="w-100">
         <mat-label>{{ 'ldap.USERNAME' | translate }}</mat-label>
-        <input formControlName="bind_dn" matInput />
+        <input
+          formControlName="bind_dn"
+          [disabled]="isWriteLdapAuthorized"
+          matInput />
       </mat-form-field>
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
@@ -61,6 +71,7 @@
         <input
           [type]="passwordVisible ? 'text' : 'password'"
           formControlName="bind_password"
+          [disabled]="isWriteLdapAuthorized"
           matInput />
       </mat-form-field>
       <button
@@ -79,7 +90,10 @@
     <i class="eos-icons mr-3">organization</i>
     <mat-form-field appearance="standard" class="w-100">
       <mat-label>{{ 'ldap.BASE_DN' | translate }}</mat-label>
-      <input formControlName="base_dn" matInput />
+      <input
+        formControlName="base_dn"
+        [disabled]="isWriteLdapAuthorized"
+        matInput />
       <mat-hint>{{ 'ldap.BASE_DN_HINT' | translate }}</mat-hint>
       <mat-error *ngIf="ldapForm.controls.base_dn.hasError('required')">
         {{ 'ldap.BASE_DN_MESSAGE' | translate }}
@@ -92,7 +106,11 @@
     </mat-icon>
     <mat-form-field appearance="standard" class="w-100">
       <mat-label>{{ 'ldap.USERNAME_ATTR' | translate }}</mat-label>
-      <input formControlName="username_attr" matInput />
+      <input
+        formControlName="username_attr"
+        placeholder="{{ 'ldap.USERNAME_ATTR_PLACEHOLDER' | translate }}"
+        [disabled]="isWriteLdapAuthorized"
+        matInput />
       <mat-hint>{{ 'ldap.USERNAME_ATTR_HINT' | translate }}</mat-hint>
     </mat-form-field>
   </div>
@@ -100,7 +118,11 @@
     <i class="eos-icons mr-3">recent_actors</i>
     <mat-form-field appearance="standard" class="w-100">
       <mat-label>{{ 'group.GROUP_MEMBER' | translate }}</mat-label>
-      <input formControlName="group_member_attr" matInput />
+      <input
+        formControlName="group_member_attr"
+        [disabled]="isWriteLdapAuthorized"
+        placeholder="{{ 'ldap.GROUP_MEMBER_ATTR_PLACEHOLDER' | translate }}"
+        matInput />
       <mat-hint>{{ 'ldap.GROUP_MEMBER_ATTR_HINT' | translate }}</mat-hint>
     </mat-form-field>
   </div>

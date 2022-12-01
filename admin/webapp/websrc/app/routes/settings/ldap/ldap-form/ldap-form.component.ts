@@ -23,6 +23,7 @@ import { UtilsService } from '@common/utils/app.utils';
 import { NotificationService } from '@services/notification.service';
 import { Observable } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
+import {AuthUtilsService} from "@common/utils/auth.utils";
 
 @Component({
   selector: 'app-ldap-form',
@@ -32,6 +33,8 @@ import { TranslateService } from '@ngx-translate/core';
 export class LdapFormComponent implements OnInit, OnChanges {
   @Input() ldapData!: { server: ServerGetResponse; domains: string[] };
   @Output() refresh = new EventEmitter();
+
+  isWriteLdapAuthorized: boolean = false;
   isCreated = true;
   submittingForm = false;
   groupMappedRoles: GroupMappedRole[] = [];
@@ -52,6 +55,7 @@ export class LdapFormComponent implements OnInit, OnChanges {
   });
 
   constructor(
+    private authUtilsService: AuthUtilsService,
     private settingsService: SettingsService,
     private dialog: MatDialog,
     private notificationService: NotificationService,
@@ -60,6 +64,7 @@ export class LdapFormComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
+    this.isWriteLdapAuthorized  = this.authUtilsService.getDisplayFlag('write_auth_server');
     this.initForm();
   }
 

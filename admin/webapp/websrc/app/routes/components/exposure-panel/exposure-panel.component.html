@@ -3,7 +3,7 @@
     <div class="d-flex align-items-center justify-content-start">
       {{ 'dashboard.body.panel_title.CONTAINER_SEC' | translate }}
       <app-loading-button
-        *ngIf="(scoreInfo.ingress.length > 0 || scoreInfo.egress.length > 0) && isExposureConvReportOK"
+        *ngIf="(scoreInfo.ingress.length > 0 || scoreInfo.egress.length > 0) && (Array.isArray(dashboardExposureConversationsService.exposureConversationList) && dashboardExposureConversationsService.exposureConversationList.length > 0)"
         style="margin-top: -6px;"
         (btnClick)="downloadExposureConversationCsv()"
         [text]="'dashboard.body.panel_title.EXPO_CONV_RPT' | translate"

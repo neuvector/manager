@@ -89,7 +89,7 @@ export class ResponseRulesService {
         width: 123,
         maxWidth: 123,
         minWidth: 123,
-        hide: !isWriteResponseRuleAuthorized || source === GlobalConstant.NAV_SOURCE.GROUP
+        hide: source === GlobalConstant.NAV_SOURCE.GROUP
       },
     ];
 
@@ -297,7 +297,7 @@ export class ResponseRulesService {
             {
               event: responseRule.event,
               // comment: Option[String],
-              group: responseRule.group.name || '',
+              group: responseRule.group || '',
               conditions: this.parseConditions(responseRule.criteria),
               actions: this.filterSelectedOptions(
                 responseRule.actions,
@@ -324,7 +324,7 @@ export class ResponseRulesService {
             id: responseRule.id,
             event: responseRule.event,
             // comment: Option[String],
-            group: responseRule.group.name || '',
+            group: responseRule.group || '',
             conditions: this.parseConditions(responseRule.criteria),
             actions: this.filterSelectedOptions(
               responseRule.actions,

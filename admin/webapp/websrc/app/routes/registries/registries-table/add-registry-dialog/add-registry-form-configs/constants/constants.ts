@@ -201,6 +201,7 @@ export const RegistryField = {
   key: 'registry',
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
+    alwaysHint: true,
     hint: '',
     icon: 'workspaces',
     label: 'registry.gridHeader.REGISTRY',
@@ -224,6 +225,7 @@ export const PasswordField = {
   key: 'password',
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
+    alwaysHint: true,
     hint: '',
     togglePassword: true,
     type: 'password',
@@ -238,6 +240,7 @@ export const FilterField = {
   type: FormlyComponents.CHIP_INPUT,
   templateOptions: {
     hint: 'registry.FILTER_HINT',
+    alwaysHint: true,
     required: true,
     label: 'registry.gridHeader.FILTER',
     placeholder: 'general.FILTER',
@@ -375,6 +378,7 @@ export const IBMCloudAccountField = {
   key: 'ibm_cloud_account',
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
+    alwaysHint: true,
     icon: 'network',
     label: 'registry.IBM.ACCOUNT',
     required: true,

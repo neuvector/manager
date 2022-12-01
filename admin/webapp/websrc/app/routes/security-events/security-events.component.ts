@@ -39,6 +39,7 @@ export class SecurityEventsComponent implements OnInit {
   secEventsErr: boolean = false;
   selectedRow: any;
   filter = new FormControl('');
+  advFilterConf: any = null;
   filterOpen: boolean = false;
 
   filterDialog!: MatDialogRef<any>;
@@ -362,6 +363,7 @@ export class SecurityEventsComponent implements OnInit {
 
       this.filterDialog.afterClosed().subscribe(
         filter => {
+          this.advFilterConf = filter;
           console.log(filter);
           if (filter && filter.reset) {
             this.advancedFilterModalService.resetFilter();
@@ -915,6 +917,9 @@ export class SecurityEventsComponent implements OnInit {
               this.printableData = this.getPrintableData(this.securityEventsService.displayedSecurityEvents);
             }
             this.securityEventsService.prepareContext4TwoWayInfinityScroll();
+          }
+          if (this.advFilterConf) {
+            this.setAdvancedFilter(this.advFilterConf);
           }
           this.isDataReady = true;
         },

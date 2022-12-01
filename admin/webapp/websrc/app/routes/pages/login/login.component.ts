@@ -95,7 +95,7 @@ export class LoginComponent implements OnInit {
         this.w.location.href = redirect.redirect_url;
       },
       error => {
-        this.authMsg = error.error;
+        this.authMsg = error.status === 0 ? error.message : error.error;
         this.inProgress = false;
       }
     );
@@ -110,7 +110,7 @@ export class LoginComponent implements OnInit {
         this.w.location.href = redirect.redirect_url;
       },
       error => {
-        this.authMsg = error.error;
+        this.authMsg = error.status === 0 ? error.message : error.error;
         this.inProgress = false;
       }
     );
@@ -154,7 +154,7 @@ export class LoginComponent implements OnInit {
             }
           },
           error => {
-            this.authMsg = error.error;
+            this.authMsg = error.status === 0 ? error.message : error.error;
             this.inProgress = false;
           }
         );
@@ -208,7 +208,7 @@ export class LoginComponent implements OnInit {
         }
       },
       error => {
-        this.authMsg = error.error;
+        this.authMsg = error.status === 0 ? error.message : error.error;
       },
       () => {
         if (this.sessionStorage.has(GlobalConstant.SESSION_STORAGE_TIMEOUT)) {
@@ -252,7 +252,7 @@ export class LoginComponent implements OnInit {
         },
         error => {
           this.inProgress = true;
-          this.authMsg = error.error;
+          this.authMsg = error.status === 0 ? error.message : error.error;
           this.cookieService.delete('temp');
         }
       );

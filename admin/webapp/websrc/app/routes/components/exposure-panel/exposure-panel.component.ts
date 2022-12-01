@@ -17,6 +17,7 @@ export class ExposurePanelComponent implements OnInit {
   hierarchicalIngressList!: Array<HierarchicalExposure>;
   hierarchicalEgressList!: Array<HierarchicalExposure>;
   instructions: Array<string> = [];
+  isExposureConvReportOK: boolean;
 
   constructor(
     public dashboardExposureConversationsService: DashboardExposureConversationsService,
@@ -35,6 +36,7 @@ export class ExposurePanelComponent implements OnInit {
     this.hierarchicalEgressList = parseExposureHierarchicalData(
       this.scoreInfo.egress
     );
+    this.isExposureConvReportOK = Array.isArray(this.dashboardExposureConversationsService.exposureConversationList);
   }
 
   downloadExposureConversationCsv = () => {

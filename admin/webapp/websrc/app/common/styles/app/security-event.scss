@@ -2,9 +2,9 @@
   overflow: scroll;
 
   &.normal {
-    height: calc(100vh - 293px);
+    height: calc(100vh - 305px);
     @media screen and (max-width: 768px) {
-      height: calc(100vh - 414px);
+      height: calc(100vh - 350px);
     }
   }
 
@@ -318,7 +318,7 @@
 .sec-event-top-mask {
   position: absolute;
   left: 0;
-  top: 102px;
+  top: 112px;
   width: 100%;
   min-height: 25px;
   z-index: 102;
@@ -331,7 +331,7 @@
 .sec-event-bottom-mask {
   position: absolute;
   left: 0;
-  bottom: 16px;
+  bottom: 12px;
   width: 100%;
   min-height: 25px;
   z-index: 102;

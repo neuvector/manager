@@ -140,7 +140,7 @@
     <div style="position: absolute; left: 20px; top: 10px;" *ngIf="securityEventsService.displayedSecurityEvents.length < securityEventsService.cachedSecurityEvents.length">
       {{ 'enum.FOUND' | translate }} {{securityEventsService.displayedSecurityEvents.length}} / {{ 'enum.OUT_OF' | translate }} {{securityEventsService.cachedSecurityEvents.length}}
     </div>
-    <div style="height: 95px;" class="margin-top-m" style="position: relative;">
+    <div style="height: 95px;" class="margin-top-l" style="position: relative;">
       <app-security-event-chart
         *ngIf="securityEventsService.cachedSecurityEvents.length > 0"
         [secEventList]="securityEventsService.cachedSecurityEvents"

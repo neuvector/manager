@@ -8,10 +8,10 @@ import { GlobalVariable } from '@common/variables/global.variable';
   styleUrls: ['./federated-policy.component.scss'],
 })
 export class FederatedPolicyComponent implements OnInit {
-  public activeTabIndex: number;
-  public navSource: string;
+  public activeTabIndex: number = 0;
+  public navSource: string = '';
   public CFG_TYPE: any = GlobalConstant.CFG_TYPE;
-  public height: number;
+  public height: number = 0;
   private readonly win: any;
   constructor() {
     this.win = GlobalVariable.window;

@@ -1,13 +1,23 @@
 <div class="d-flex align-items-center justify-content-between">
   <div class="d-flex align-items-center justify-content-start">
-    <span class="mr-2">
+    <span class="font-weight-bold text-info">
       <span *ngIf="filtered">
         {{ 'enum.FOUND' | translate }}
-        {{ filteredCount }}&nbsp;/&nbsp;
+        {{ filteredCount }}&nbsp;/
       </span>
+      <span *ngIf="!filtered"> {{ 'enum.OUT_OF' | translate }}&nbsp; </span>
       {{ userCount }}
-      {{ 'user.COUNT_POSTFIX' | translate }}
     </span>
+  </div>
+  <div class="d-flex align-items-center justify-content-end">
+    <button
+      (click)="deleteUser()"
+      class="d-flex align-items-center justify-content-start pr-2"
+      id="users-remove-dialog"
+      mat-stroked-button
+      *ngIf="removable && isWriteUserAuthorized">
+      <i class="eos-icons mr-2">delete</i>{{ 'role.REMOVE' | translate }}
+    </button>
     <button
       (click)="addUser()"
       *appDisplayControl="'write_users'"
@@ -16,16 +26,7 @@
       mat-stroked-button>
       <i class="eos-icons mr-2">add_circle</i>{{ 'role.ADD' | translate }}
     </button>
-    <button
-      (click)="deleteUser()"
-      class="d-flex align-items-center justify-content-start px-2"
-      id="users-remove-dialog"
-      mat-stroked-button
-      *ngIf="removable && isWriteUserAuthorized">
-      <i class="eos-icons mr-2">delete</i>{{ 'role.REMOVE' | translate }}
-    </button>
-  </div>
-  <div class="d-flex align-items-center justify-content-end">
+
     <app-loading-button
       (btnClick)="refresh()"
       [appearance]="'mat-button'"

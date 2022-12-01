@@ -176,7 +176,8 @@ export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
             this.gridOptions.api.ensureNodeVisible(node);
           }
         });
-        this.sniffer.status = 'stopped';
+        if (this.sniffer !== null)
+          this.sniffer.status = 'stopped';
       }
       let selectedRows = this.gridOptions.api.getSelectedRows();
       this.sniffer = selectedRows[0];

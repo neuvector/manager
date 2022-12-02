@@ -106,7 +106,7 @@ export class MultiClusterGridActionCellComponent
     this.multiClusterService.syncPolicy(data.id).subscribe(
       () => {
         this.notificationService.open(
-          this.translate.instant('multiCluster.messages.deploy_ok')
+          this.translate.instant('multiCluster.messages.deploy_ok', {name: data.name})
         );
       },
       error => {

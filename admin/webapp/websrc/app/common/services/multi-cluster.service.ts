@@ -180,7 +180,7 @@ export class MultiClusterService {
   };
 
   removeMember = id => {
-    return this.http.delete(`${PathConstant.FED_REMOVE_URL}/${id}`).pipe();
+    return this.http.delete(PathConstant.FED_REMOVE_URL, { params: { id: id } }).pipe();
   };
 
   leaveFromMaster = force => {

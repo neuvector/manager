@@ -54,17 +54,6 @@
       <div
         *ngIf="isMaster"
         class="d-flex justify-content-start align-items-center">
-        <div class="mr-4">
-          <label class="nv-modal-item-title mr-2">
-            {{ 'multiCluster.fed_sync_registry' | translate }}
-          </label>
-          <mat-slide-toggle
-            id="fed_sync_registry_toggle"
-            [(ngModel)]="fed_sync_registry_toggle"
-            [ngModelOptions]="{ standalone: true }"></mat-slide-toggle>
-
-          <mat-error></mat-error>
-        </div>
         <div>
           <label class="nv-modal-item-title mr-2">
             {{ 'multiCluster.fed_sync_repository' | translate }}

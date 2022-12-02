@@ -21,7 +21,6 @@ export interface EditClusterDialog {
     port: ''
   } ;
   useProxy: string;
-  fed_sync_registry_toggle :boolean;
   fed_sync_repo_toggle :boolean;
 }
 
@@ -33,7 +32,6 @@ export interface EditClusterDialog {
 export class PromotionModalComponent implements OnInit {
   public cluster: any;
   public useProxy: string = '';
-  public fed_sync_registry_toggle: boolean = false;
   public fed_sync_repo_toggle: boolean = false;
   public isMaster: boolean = false;
 
@@ -60,7 +58,6 @@ export class PromotionModalComponent implements OnInit {
       port: MapConstant.FED_PORT.MASTER,
     };
     this.useProxy = '';
-    this.fed_sync_registry_toggle = false;
     this.fed_sync_repo_toggle = false;
     this.isMaster = GlobalVariable.isMaster;
     this.getClusterName();
@@ -68,7 +65,6 @@ export class PromotionModalComponent implements OnInit {
     if(this.data.isEdit){
       this.cluster = this.data.cluster;
       this.useProxy = this.data.useProxy;
-      this.fed_sync_registry_toggle = this.data.fed_sync_registry_toggle;
       this.fed_sync_repo_toggle = this.data.fed_sync_repo_toggle;
     }
   }
@@ -95,7 +91,7 @@ export class PromotionModalComponent implements OnInit {
       payload.api_server = this.cluster.host;
       payload.api_port = this.cluster.port;
       if(GlobalVariable.isMaster){
-        this.clustersService.updateCluster(payload, true, this.useProxy, this.fed_sync_repo_toggle, this.fed_sync_registry_toggle).subscribe(
+        this.clustersService.updateCluster(payload, true, this.useProxy, this.fed_sync_repo_toggle).subscribe(
           response => {
             this.notificationService.open(this.translate.instant('multiCluster.messages.update_ok'));
             this.dialogRef.close();
@@ -124,7 +120,7 @@ export class PromotionModalComponent implements OnInit {
     }else{
       this.clustersService.promoteCluster(
         this.cluster, this.useProxy,
-        this.fed_sync_registry_toggle, this.fed_sync_repo_toggle).subscribe(
+        this.fed_sync_repo_toggle).subscribe(
         response => {
           this.notificationService.open(this.translate.instant('multiCluster.promotion.success'));
           setTimeout(() => {

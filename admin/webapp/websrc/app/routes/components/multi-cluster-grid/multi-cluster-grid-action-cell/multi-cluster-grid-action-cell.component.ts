@@ -257,8 +257,6 @@ export class MultiClusterGridActionCellComponent
           port: data.api_port,
         },
         useProxy: context.componentParent.clusterData.use_proxy,
-        fed_sync_registry_toggle:
-          context.componentParent.clusterData.deploy_reg_scan_data,
         fed_sync_repo_toggle:
           context.componentParent.clusterData.deploy_repo_scan_data,
       },

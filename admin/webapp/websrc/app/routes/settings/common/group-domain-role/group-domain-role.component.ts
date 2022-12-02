@@ -57,7 +57,7 @@ export class GroupDomainRoleComponent {
           .map(role => {
             return {
               namespaceRole: role,
-              namespaces: groupMappedRole.role_domains[role]
+              namespaces: groupMappedRole.role_domains
                 ? [...groupMappedRole.role_domains[role]]
                 : [],
             };

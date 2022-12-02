@@ -398,6 +398,11 @@ export class AdmissionRulesComponent implements OnInit {
             dialogRef.componentInstance.loading = false;
           }
         );
+      dialogRef.afterClosed().subscribe(() => {
+        setTimeout(() => {
+          this.refresh();
+        }, 500);
+      });
     } else {
       this.admissionRulesService
         .updateAdmissionState(this.admissionStateRec)

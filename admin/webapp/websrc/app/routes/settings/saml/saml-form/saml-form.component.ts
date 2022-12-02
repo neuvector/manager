@@ -23,6 +23,7 @@ import { NotificationService } from '@services/notification.service';
 import { UtilsService } from '@common/utils/app.utils';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
+import { AuthUtilsService } from '@common/utils/auth.utils';
 
 @Component({
   selector: 'app-saml-form',
@@ -46,16 +47,23 @@ export class SamlFormComponent implements OnInit, OnChanges {
     default_role: new FormControl(),
     enable: new FormControl(false),
   });
+  isWriteSamlAuthorized!: boolean;
 
   constructor(
     private settingsService: SettingsService,
     private notificationService: NotificationService,
+    private authUtilsService: AuthUtilsService,
     private utils: UtilsService,
     private tr: TranslateService
   ) {}
 
   ngOnInit(): void {
     this.samlRedirectURL = getCallbackUri('token_auth_server');
+    this.isWriteSamlAuthorized =
+      this.authUtilsService.getDisplayFlag('write_auth_server');
+    if (!this.isWriteSamlAuthorized) {
+      this.samlForm.disable();
+    }
     this.initForm();
   }
 

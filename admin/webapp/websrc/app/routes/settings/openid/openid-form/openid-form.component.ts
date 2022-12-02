@@ -26,6 +26,7 @@ import { Observable } from 'rxjs';
 import { NotificationService } from '@services/notification.service';
 import { UtilsService } from '@common/utils/app.utils';
 import { TranslateService } from '@ngx-translate/core';
+import { AuthUtilsService } from '@common/utils/auth.utils';
 
 @Component({
   selector: 'app-openid-form',
@@ -52,6 +53,7 @@ export class OpenidFormComponent implements OnInit, OnChanges {
     token_endpoint: new FormControl({ value: null, disabled: true }),
     user_info_endpoint: new FormControl({ value: null, disabled: true }),
   });
+  isWriteOidcAuthorized!: boolean;
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   scopes: string[] = ['openid', 'profile', 'email'];
@@ -59,12 +61,18 @@ export class OpenidFormComponent implements OnInit, OnChanges {
   constructor(
     private settingsService: SettingsService,
     private notificationService: NotificationService,
+    private authUtilsService: AuthUtilsService,
     private utils: UtilsService,
     private tr: TranslateService
   ) {}
 
   ngOnInit(): void {
     this.openidRedirectURL = getCallbackUri('openId_auth ');
+    this.isWriteOidcAuthorized =
+      this.authUtilsService.getDisplayFlag('write_auth_server');
+    if (!this.isWriteOidcAuthorized) {
+      this.openidForm.disable();
+    }
     this.initForm();
   }
 

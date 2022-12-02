@@ -90,7 +90,10 @@
     <div class="col-12 d-flex align-items-center my-2">
       <mat-form-field appearance="standard" class="w-100">
         <mat-label>{{ 'openId.SCOPES' | translate }}</mat-label>
-        <mat-chip-list #chipList aria-label="Scopes">
+        <mat-chip-list
+          #chipList
+          [disabled]="!isWriteOidcAuthorized"
+          aria-label="Scopes">
           <mat-chip (removed)="remove(scope)" *ngFor="let scope of scopes">
             {{ scope }}
             <button matChipRemove>
@@ -128,12 +131,14 @@
     (updateGroupMappedRoles)="updateGroupMappedRoles($event)"
     [domains]="openidData.domains"
     [groupMappedRoles]="groupMappedRoles"
-    [mappableRoles]="openidData.server.mappable_roles"></app-group-domain-role>
+    [mappableRoles]="openidData.server.mappable_roles"
+    [isReadOnly]="!isWriteOidcAuthorized"></app-group-domain-role>
   <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
     <mat-checkbox formControlName="enable">{{
       'ldap.ENABLE_LDAP' | translate
     }}</mat-checkbox>
     <button
+      *ngIf="isWriteOidcAuthorized"
       [disabled]="!openidForm.valid || submittingForm"
       color="primary"
       mat-raised-button

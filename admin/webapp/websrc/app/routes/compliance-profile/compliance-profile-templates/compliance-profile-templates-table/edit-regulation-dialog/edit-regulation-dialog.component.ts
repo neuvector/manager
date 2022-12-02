@@ -17,7 +17,7 @@ export class EditRegulationDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.applied = this.data.tags;
+    this.applied = this.data.tags || [];
     this.filterApplied();
   }
 

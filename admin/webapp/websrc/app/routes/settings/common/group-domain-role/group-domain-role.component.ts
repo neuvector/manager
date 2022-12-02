@@ -26,6 +26,7 @@ export class GroupDomainRoleComponent {
   @Input() mappableRoles!: MappableRoles;
   @Input() groupMappedRoles!: GroupMappedRole[];
   @Input() domains!: string[];
+  @Input() isReadOnly!: boolean;
 
   @ViewChild('table') table!: MatTable<GroupMappedRole>;
   displayedColumns: string[] = [
@@ -51,13 +52,14 @@ export class GroupDomainRoleComponent {
     let data: GroupDomainRoleDialogData;
     let dataSource: MatTableDataSource<any>;
     if (groupMappedRole) {
+      groupMappedRole.role_domains = groupMappedRole.role_domains || {};
       dataSource = new MatTableDataSource(
         this.mappableRoles.group_domain_roles
           .filter(role => role)
           .map(role => {
             return {
               namespaceRole: role,
-              namespaces: groupMappedRole.role_domains
+              namespaces: groupMappedRole.role_domains[role]
                 ? [...groupMappedRole.role_domains[role]]
                 : [],
             };

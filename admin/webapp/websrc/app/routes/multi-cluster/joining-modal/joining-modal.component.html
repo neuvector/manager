@@ -6,9 +6,8 @@
     (click)="onCancel()"
     class="mb-2"
     aria-label="Close dialog"
-    mat-icon-button
-  >
-    <i class="eos-icons ">close</i>
+    mat-icon-button>
+    <i class="eos-icons">close</i>
   </button>
 </div>
 <hr class="fancy" />
@@ -16,34 +15,32 @@
 <div>
   <div mat-dialog-content class="dialog-content p0 m0">
     <form #clusterForm="ngForm" class="pt-lg">
-      <div class="pl-4">
-        <mat-form-field appearance="outline" class="pr-4">
+      <div class="d-flex flex-column flex-grow-1">
+        <mat-form-field appearance="standard" class="flex-grow-1">
           <mat-label>{{ 'multiCluster.joining.name' | translate }}</mat-label>
           <input matInput [(ngModel)]="cluster.name" name="name" required />
         </mat-form-field>
       </div>
-      <div class="pl-4">
-        <mat-form-field appearance="outline" class="pr-4">
+      <div class="d-flex justify-content-start align-items-center">
+        <mat-form-field appearance="standard" class="flex-grow-1 mr-4">
           <mat-label>{{ 'multiCluster.joining.server' | translate }}</mat-label>
           <input
             matInput
             [(ngModel)]="cluster.host"
             name="cluster-host"
-            required
-          />
+            required />
         </mat-form-field>
-        <mat-form-field appearance="outline" class="pr-4">
+        <mat-form-field appearance="standard" class="flex-grow-1">
           <mat-label>{{ 'multiCluster.joining.port' | translate }}</mat-label>
           <input
             matInput
             [(ngModel)]="cluster.port"
             name="cluster-port"
-            required
-          />
+            required />
         </mat-form-field>
       </div>
-      <div class="pl-4">
-        <mat-form-field appearance="outline" class="pr-4">
+      <div class="d-flex flex-column flex-grow-1">
+        <mat-form-field appearance="standard" class="flex-grow-1">
           <mat-label>{{ 'multiCluster.joining.token' | translate }}</mat-label>
           <textarea
             matInput
@@ -51,13 +48,12 @@
             name="token"
             required
             (blur)="parseToken()"
-            (paste)="parseToken()"
-          ></textarea>
+            (paste)="parseToken()"></textarea>
           <mat-error></mat-error>
         </mat-form-field>
       </div>
-      <div class="pl-4">
-        <mat-form-field appearance="outline" class="pr-4">
+      <div class="d-flex justify-content-start align-items-center">
+        <mat-form-field appearance="standard" class="flex-grow-1 mr-4">
           <mat-label>{{
             'multiCluster.promotion.server' | translate
           }}</mat-label>
@@ -65,67 +61,59 @@
             matInput
             [(ngModel)]="cluster.master_host"
             name="master-host"
-            required
-          />
+            required />
         </mat-form-field>
-        <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+        <mat-form-field appearance="standard" class="flex-grow-1">
           <mat-label>{{ 'multiCluster.promotion.port' | translate }}</mat-label>
           <input
             matInput
             [(ngModel)]="cluster.master_port"
             name="master-port"
-            required
-          />
+            required />
         </mat-form-field>
       </div>
 
-      <div class="col-sm-10 col-sm-offset-1 mt-sm">
+      <div class="d-flex justify-content-start align-items-center">
         <label class="radio-inline c-radio">
           <input
             id="https"
             type="radio"
             name="proxy"
             [(ngModel)]="useProxy"
-            value="https"
-          />
+            value="https" />
           {{ 'multiCluster.USE_HTTPS_PROXY' | translate }}
         </label>
       </div>
-      <div class="col-sm-10 col-sm-offset-1 mt-sm">
+      <div class="d-flex justify-content-start align-items-center">
         <label class="radio-inline c-radio">
           <input
             id="none"
             type="radio"
             name="proxy"
             [(ngModel)]="useProxy"
-            value=""
-          />
+            value="" />
           {{ 'multiCluster.NO_PROXY' | translate }}
         </label>
       </div>
-
-      <div
-        style="width: calc(80vw - 48px); max-width: 952px;"
-        class="pl-4 help-block"
-      >
+      <mat-hint>
         {{ 'multiCluster.joining.hint' | translate }}
-      </div>
+      </mat-hint>
     </form>
   </div>
-  <div
-    mat-dialog-actions
-    class="dialog-actions pull-right"
-    style="margin-right: 24px;"
-  >
-    <a class="modal-cancel-button" (click)="onCancel()">
-      {{ 'general.CANCEL' | translate }}
-    </a>
+  <div mat-dialog-actions class="d-flex justify-content-end align-items-center">
     <button
-      mat-button
-      class="modal-submit-button"
+      mat-stroked-button
+      aria-label="Cancel button"
+      class="mr-2"
+      (click)="onCancel()">
+      {{ 'general.CANCEL' | translate }}
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      aria-label="submit"
       (click)="onConfirm()"
-      [disabled]="clusterForm.invalid"
-    >
+      [disabled]="clusterForm.invalid">
       {{ 'general.SUBMIT' | translate }}
     </button>
   </div>

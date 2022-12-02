@@ -51,6 +51,7 @@ export class GroupDomainRoleComponent {
     let data: GroupDomainRoleDialogData;
     let dataSource: MatTableDataSource<any>;
     if (groupMappedRole) {
+      groupMappedRole.role_domains = groupMappedRole.role_domains || {};
       dataSource = new MatTableDataSource(
         this.mappableRoles.group_domain_roles
           .filter(role => role)

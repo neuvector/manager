@@ -101,7 +101,7 @@ export const RancherEpField = {
               </div>`;
     },
   },
-  hideExpression: '!model.rancher_ep',
+  hideExpression: '!model.auth.rancher_ep',
 };
 
 export const NetworkServiceStatusField = {

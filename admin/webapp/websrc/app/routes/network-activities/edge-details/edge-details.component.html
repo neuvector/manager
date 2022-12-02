@@ -62,7 +62,7 @@
   </div>
   <div class="d-flex flex-row justify-content-end my-3">
     <button
-      *ngIf="showRuleId && traffic.policy_action !== 'open'"
+      *ngIf="showRuleId && traffic && traffic.policy_action !== 'open'"
       [disabled]="!isWriteNetworkAuthorized"
       mat-raised-button
       color="primary"

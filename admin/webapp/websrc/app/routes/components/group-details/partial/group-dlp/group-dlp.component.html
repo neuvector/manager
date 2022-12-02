@@ -1,13 +1,14 @@
 <div>
-  <div class="clearfix">
-    <app-quick-filter
-      class="pull-left"
-      [gridOptions]="gridOptions4GroupDlpSensors"
-      [filteredCount]="filteredCount"
-      [count]="groupDlpSensors.length">
-    </app-quick-filter>
+  <div class="d-flex align-items-center justify-content-end">
+    <div
+      role="button"
+      class="hand mr-3 margin-top-s"
+      *ngIf="cfgType !== CFG_TYPE.GROUND && isWriteDlpAuthorized"
+      (click)="openEditGroupSensorModal()">
+      <em class="eos-icons">edit</em>
+    </div>
     <mat-slide-toggle
-      class="padding-top-s pull-right margin-top-l"
+      class="mr-2 margin-top-s"
       id="group-dlp-sensor-status-toggle"
       [disabled]="!isWriteDlpAuthorized || cfgType === CFG_TYPE.GROUND"
       [(ngModel)]="enabled"
@@ -27,17 +28,15 @@
         }}
       </span>
     </mat-slide-toggle>
-    <div
-      role="button"
-      class="pull-right margin-right-s margin-top-l hand"
-      *ngIf="cfgType !== CFG_TYPE.GROUND && isWriteDlpAuthorized"
-      (click)="openEditGroupSensorModal()">
-      <em class="eos-icons">edit</em>
-    </div>
+    <app-quick-filter
+      class="pull-left"
+      [gridOptions]="gridOptions4GroupDlpSensors"
+      [showCount]="false"
+    >
+    </app-quick-filter>
   </div>
   <div class="clearfix">
     <ag-grid-angular
-      #groupDlpSensorsGrid
       id="group-dlp-sensors-grid"
       style="width: 100%;"
       [ngStyle]="{ height: (resizableHeight - 150) + 'px' }"

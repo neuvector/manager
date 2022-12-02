@@ -9,7 +9,6 @@ import { ComplianceViewPdfService } from './pdf-generation/compliance-view-pdf.s
 import { ComplianceCsvService } from './csv-generation/compliance-csv.service';
 import { i18nPdfTranslateService } from './pdf-generation/i18n-pdf-translate.service';
 import { ComplianceFilterService } from './compliance.filter.service';
-import { MapConstant } from '@common/constants/map.constant';
 
 @Component({
   selector: 'app-compliance',
@@ -21,7 +20,7 @@ export class ComplianceComponent {
   complianceViewPdfProgress$ = this.complianceViewPdfService.progress$;
   complianceData$ = this.complianceService.initCompliance();
   masterData: any;
-  masterGrids: any[][];
+  masterGrids: any[][] = [];
   isFiltered: boolean = false;
   advFilter: any;
   isPrinting: boolean = false;
@@ -31,8 +30,8 @@ export class ComplianceComponent {
     node: null,
     image: null
   };
-  @ViewChild('complianceViewReport') printableReportView: ElementRef;
-  @ViewChild('assetsViewReport') printableReportViewAssets: ElementRef;
+  @ViewChild('complianceViewReport') printableReportView!: ElementRef;
+  @ViewChild('assetsViewReport') printableReportViewAssets!: ElementRef;
 
   constructor(
     private complianceService: ComplianceService,
@@ -340,7 +339,6 @@ export class ComplianceComponent {
     grids[2] = Object.values(masterData.platformMap4Pdf);
     grids[3] = Object.values(masterData.imageMap4Pdf);
 
-    console.log("grids: ", grids);
     return grids;
   };
 }

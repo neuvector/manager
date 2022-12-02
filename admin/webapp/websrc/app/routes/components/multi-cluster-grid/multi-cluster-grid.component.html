@@ -1,4 +1,15 @@
 <div class="d-flex align-items-center justify-content-between">
+  <div>
+    <span class="font-weight-bold text-info">
+      <span *ngIf="filtered">
+        {{ 'enum.FOUND' | translate }}
+        {{ filteredCount }}&nbsp;/
+      </span>
+      <span *ngIf="!filtered"> {{ 'enum.OUT_OF' | translate }}&nbsp; </span>
+      {{ clusterCount }}
+    </span>
+  </div>
+
   <app-quick-filter
     [gridOptions]="gridOptions"
     (filterCountChange)="filterCountChanged($event)"
@@ -7,7 +18,6 @@
   </app-quick-filter>
 </div>
 <ag-grid-angular
-  #agGrid
   id="multi-clusters-grid"
   class="ag-theme-balham"
   style="width: 100%"

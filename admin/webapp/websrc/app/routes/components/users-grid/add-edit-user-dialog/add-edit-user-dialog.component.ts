@@ -26,8 +26,10 @@ import { UsersGridComponent } from '../users-grid.component';
 export interface AddEditUserDialog {
   isEdit: boolean;
   globalRoles: string[];
+  domainRoles: string[];
   domains: string[];
   user?: User;
+  isReadOnly?: boolean;
 }
 
 @Component({
@@ -57,8 +59,8 @@ export class AddEditUserDialogComponent implements OnInit {
     return GlobalVariable.hasInitializedSummary
       ? GlobalVariable.summary.platform
           .toLowerCase()
-          .indexOf(GlobalConstant.KUBE) !== -1
-      : true; // TODO: init summary or save/load from session storage
+          .includes(GlobalConstant.KUBE)
+      : false;
   }
   get passwordForm(): FormGroup {
     return <FormGroup>this.form.get('passwordForm');
@@ -82,17 +84,18 @@ export class AddEditUserDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    if (!this.isKube) {
+      let indexOfNone = this.data.globalRoles.findIndex(role => role === '');
+      this.data.globalRoles.splice(indexOfNone, 1);
+    }
     this.domainTableSource = new MatTableDataSource(
-      this.data.globalRoles
-        .filter(role => role)
-        .map(role => {
-          return {
-            namespaceRole: role,
-            namespaces: this.data.user?.role_domains[role]
-              ? [...this.data.user?.role_domains[role]]
-              : [],
-          };
-        })
+      this.data.user
+        ? this.getNamespaceRoleGridData(
+            this.data.domainRoles,
+            this.data.user.role,
+            this.data.user.role_domains
+          )
+        : this.getNamespaceRoleGridData(this.data.domainRoles)
     );
     this.form = this.fb.group({
       username: ['', Validators.required],
@@ -134,7 +137,50 @@ export class AddEditUserDialogComponent implements OnInit {
         ) {
           this.toggleAdvSetting = true;
         }
+        if (this.data.isReadOnly) {
+          this.form.disable();
+        }
       }
+    }
+  }
+
+  getNamespaceRoleGridData(
+    domainRoleOptions: string[],
+    globalRole?: string,
+    domainRoles?: Object
+  ): {
+    namespaceRole: string;
+    namespaces: any[];
+  }[] {
+    if (domainRoles) {
+      let roleMap = Object.entries(domainRoles).map(([key, value]) => {
+        return {
+          namespaceRole: key,
+          namespaces: value,
+        };
+      });
+      return domainRoleOptions
+        .map(domainRoleOption => {
+          let roleIndex = roleMap.findIndex(
+            role => role.namespaceRole === domainRoleOption
+          );
+          if (roleIndex > -1) {
+            return roleMap[roleIndex];
+          } else {
+            return {
+              namespaceRole: domainRoleOption,
+              namespaces: [],
+            };
+          }
+        })
+        .filter(role => role.namespaceRole !== globalRole);
+    } else {
+      return domainRoleOptions
+        .map(domainRoleOption => ({
+          namespaceRole: domainRoleOption,
+          namespaces: [],
+        }))
+        .filter(role => role.namespaceRole !== globalRole);
     }
   }
 

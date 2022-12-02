@@ -73,11 +73,7 @@ export class ScoreImprovementRunAsRootContainersViewComponent
         this.containersService.displayContainers =
           this.containersService.formatScannedWorkloads(this.containers);
       },
-      error: ({ error }: { error: ErrorResponse }) => {
-        if (this.containersGrid) {
-          this.containersGrid.setError(error.message);
-        }
-      },
+      error: ({ error }: { error: ErrorResponse }) => {},
     });
   }
 

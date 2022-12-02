@@ -32,6 +32,7 @@ export class GroupDomainRoleTableComponent
   @Input() domains!: string[];
   @Input() global_role!: string;
   @Input() group_roles!: string[];
+  @Input() isReadOnly: boolean = false;
   displayedColumns = ['namespaceRoles', 'namespaces'];
   separatorKeysCodes: number[] = [ENTER, COMMA];
   namespaceCtrl = new FormControl();
@@ -85,29 +86,25 @@ export class GroupDomainRoleTableComponent
     if (this.domainChips.includes(event.option.viewValue)) {
       return;
     }
-    this.domainChips.push(event.option.viewValue);
-    this.namespaceCtrl.setValue(null);
-    const row = this.findRowFromRole(this.activeRole);
-    if (row) {
-      const rowIndex = this.dataSource.data.indexOf(row);
-      if (
-        !this.dataSource.data[rowIndex].namespaces.includes(event.option.value)
-      ) {
-        this.dataSource.data[rowIndex].namespaces.push(event.option.viewValue);
-      }
-    }
-    this.dirty = true;
+    this.add({ value: event.option.value } as any);
   }
 
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
-    if (this.domains.includes(value) && !this.domainChips.includes(value)) {
+    if (value && !this.domainChips.includes(value)) {
       this.domainChips.push(value);
     }
     if (event.chipInput) {
       event.chipInput.clear();
     }
     this.namespaceCtrl.setValue(null);
+    const row = this.findRowFromRole(this.activeRole);
+    if (row) {
+      const rowIndex = this.dataSource.data.indexOf(row);
+      if (!this.dataSource.data[rowIndex].namespaces.includes(event.value)) {
+        this.dataSource.data[rowIndex].namespaces.push(event.value);
+      }
+    }
     this.dirty = true;
   }
 

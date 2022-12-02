@@ -1,4 +1,4 @@
-<ng-container *ngIf="global_role !== 'admin'">
+<ng-container *ngIf="!['admin', 'fedAdmin'].includes(global_role)">
   <mat-table
     (matSortChange)="announceSortChange($event)"
     [dataSource]="dataSource"
@@ -34,12 +34,20 @@
       *matRowDef="let row; columns: displayedColumns"
       [class.active-role]="activeRole === row.namespaceRole"></mat-row>
   </mat-table>
-  <div class="d-flex flex-row justify-content-center align-items-center">
-    <div class="mr-4 role-map">
+  <div
+    class="d-flex flex-row justify-content-center align-items-center"
+    *ngIf="!isReadOnly">
+    <div class="mr-4 role-map text-bold d-flex flex-row align-items-center">
+      <mat-icon
+        aria-hidden="false"
+        aria-label="Name icon"
+        class="d-flex user__icon mr-2"
+        fontSet="far"
+        fontIcon="fa-id-card">
+      </mat-icon>
       {{ activeRole }} {{ 'ldap.GROUP_ADMIN' | translate }}
-      <span class="d-block">{{ 'general.TYPE_PRESS_TXT' | translate }}</span>
     </div>
-    <mat-form-field appearance="standard" class="w-100">
+    <mat-form-field appearance="standard" class="flex-grow-1">
       <mat-label>{{ 'ldap.gridHeader.DOMAINS' | translate }}</mat-label>
       <mat-chip-list #chipList aria-label="Namespace selection">
         <mat-chip

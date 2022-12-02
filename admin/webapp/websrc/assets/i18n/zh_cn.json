@@ -433,8 +433,8 @@
         "NO_EXPOSURE": "无暴露的链接",
         "AUTO_SCAN_ENABLE_OK": "自动扫描启用成功!",
         "AUTO_SCAN_DISABLE_OK": "自动扫描禁用成功!",
-        "AUTO_SCAN_ENABLE_NG": "自动扫描启用失败.",
-        "AUTO_SCAN_DISABLE_NG": "自动扫描禁用失败.",
+        "AUTO_SCAN_ENABLE_NG": "自动扫描启用失败!",
+        "AUTO_SCAN_DISABLE_NG": "自动扫描禁用失败!",
         "DISABLE_AUTOSCAN_CONFIRM": "如果自动扫描被禁用, 今后的漏洞不会被及时发现.",
         "RBAC_ERR_TITLE": "RBAC角色错误",
         "CLUSTERROLE_ERRORS": "集群角色",
@@ -765,7 +765,7 @@
       "COLLAPSE_GROUP": "合并组",
       "COLLAPSE_ALL_GROUPS": "合并所有组",
       "SESSION_CLEAR_FAILURE": "会话清除失败",
-      "QUICK_SEARCH_TITLE": "指定名字查找容器/pod/服务"
+      "QUICK_SEARCH_TITLE": "指定名字查找节点"
     }
   },
   "topbar": {
@@ -1047,12 +1047,12 @@
     "ACCEPT_VUL": "接受漏洞",
     "msg": {
       "REMOVE_CFM": "您确定要删除?",
-      "REMOVE_OK": "漏洞配置资料条目删除成功",
-      "REMOVE_NG": "漏洞配置资料条目删除时发生错误",
-      "ADD_OK": "漏洞配置资料条目添加成功",
-      "ADD_NG": "漏洞配置资料条目添加时发生错误",
-      "UPDATE_OK": "漏洞配置资料条目更新成功",
-      "UPDATE_NG": "漏洞配置资料条目更新时发生错误"
+      "REMOVE_OK": "漏洞配置资料条目删除成功!",
+      "REMOVE_NG": "漏洞配置资料条目删除时发生错误!",
+      "ADD_OK": "漏洞配置资料条目添加成功!",
+      "ADD_NG": "漏洞配置资料条目添加时发生错误!",
+      "UPDATE_OK": "漏洞配置资料条目更新成功!",
+      "UPDATE_NG": "漏洞配置资料条目更新时发生错误!"
     },
     "gridHeader": {
       "VULNERABILITY": "漏洞名称",
@@ -1695,7 +1695,7 @@
       "TITLE": "重置密码",
       "RESET": "重置",
       "RESET_OK": "密码成功重置!",
-      "RESET_NG": "密码重置发生错误."
+      "RESET_NG": "密码重置发生错误!"
     },
     "addUser": {
       "TITLE": "创建用户",
@@ -1707,7 +1707,7 @@
       "ROLE_PLACEHOLDER": "全局角色",
       "ADD": "添加",
       "CANCEL": "取消",
-      "SUBMIT_NG": "添加用户失败",
+      "SUBMIT_NG": "添加用户失败!",
       "ADD_NS": "添加命名空间",
       "ADMIN_HINT": "为有管理员权限的用户添加命名空间",
       "READER_HINT": "为有只读权限的用户添加命名空间",
@@ -1716,8 +1716,8 @@
     "editUser": {
       "TITLE": "编辑用户",
       "EDIT": "更新",
-      "SUBMIT_OK": "成功更新用户",
-      "SUBMIT_NG": "更新用户失败"
+      "SUBMIT_OK": "成功更新用户!",
+      "SUBMIT_NG": "更新用户失败!"
     },
     "deleteUser": {
       "title": "删除",
@@ -1763,7 +1763,7 @@
     "msg": {
       "INSERT_OK": "成功添加角色!",
       "INSERT_NG": "添加角色时发生错误!",
-      "UPDATE_OK": "成功更新角色",
+      "UPDATE_OK": "成功更新角色!",
       "UPDATE_NG": "更新角色时发生错误!",
       "REMOVE_CFM": "要删除该角色吗?",
       "REMOVE_OK": "成功删除角色!",
@@ -1832,10 +1832,10 @@
     "msg": {
       "GET_PROFILE_ERR": "获取密码策略资料时发生错误.",
       "NUM_ERR": "最小字符总长度小于4种字符最小长度要求之和.",
-      "UPDATE_PROFILE_OK": "密码策略资料成功更新.",
-      "UPDATE_PROFILE_NG": "更新密码策略资料时发生错误.",
-      "UNLOCK_USER_OK": "成功解锁用户.",
-      "UNLOCK_USER_NG": "解锁用户时发生错误."
+      "UPDATE_PROFILE_OK": "密码策略资料成功更新!",
+      "UPDATE_PROFILE_NG": "更新密码策略资料时发生错误!",
+      "UNLOCK_USER_OK": "成功解锁用户!",
+      "UNLOCK_USER_NG": "解锁用户时发生错误!"
     }
   },
   "service": {
@@ -1965,22 +1965,22 @@
     "profile": {
       "COUNT_POSTFIX": "个进程规则",
       "REMOVE_OK": "您的进程规则已经被删除.",
-      "REMOVE_NG": "删除进程规则时发生错误",
+      "REMOVE_NG": "删除进程规则时发生错误!",
       "ADD_OK": "您的进程规则已经被添加.",
-      "ADD_NG": "添加进程规则时发生错误",
+      "ADD_NG": "添加进程规则时发生错误!",
       "EDIT_OK": "您的进程规则已经被修改.",
-      "EDIT_NG": "编辑进程规则时发生错误"
+      "EDIT_NG": "编辑进程规则时发生错误!"
     },
     "file": {
       "COUNT_POSTFIX": "个文件访问规则",
       "RULE_SAMPLE": "例子: /dir/xxx, /dir/xxx.*, /dir/*.xxx, /dir/*/abc/* (不支持: [], () and regexp)",
       "REMOVE_CONFIRM": "您要删除文件访问规则吗？- 名称:",
       "REMOVE_OK": "您的文件访问规则已经被删除.",
-      "REMOVE_NG": "删除文件访问规则时发生错误",
+      "REMOVE_NG": "删除文件访问规则时发生错误!",
       "ADD_OK": "您的文件访问规则已经被添加.",
-      "ADD_NG": "添加文件访问规则时发生错误",
+      "ADD_NG": "添加文件访问规则时发生错误!",
       "EDIT_OK": "您的文件访问规则已经被修改.",
-      "EDIT_NG": "编辑文件访问规则时发生错误"
+      "EDIT_NG": "编辑文件访问规则时发生错误!"
     },
     "dlp": {
       "TITLE": "DLP",
@@ -1995,10 +1995,10 @@
         "ADOPT": "应用"
       },
       "msg": {
-        "ENABLED_OK": "该组的DLP设置成功启用",
-        "ENABLED_NG": "启用改组的DLP设置时发生错误",
-        "DISABLED_OK": "该组的DLP设置成功禁用",
-        "DISABLED_NG": "禁用改组的DLP设置时发生错误",
+        "ENABLED_OK": "该组的DLP设置成功启用.",
+        "ENABLED_NG": "启用改组的DLP设置时发生错误!",
+        "DISABLED_OK": "该组的DLP设置成功禁用.",
+        "DISABLED_NG": "禁用改组的DLP设置时发生错误!",
         "SETTING_OK": "该组的DLP设置成功!",
         "SETTING_NG": "该组DLP设置时发生错误!",
         "EXPORT_OK": "该组的配置文件已成功导出!",
@@ -2019,10 +2019,10 @@
         "ADOPT": "应用"
       },
       "msg": {
-        "ENABLED_OK": "该组的WAF设置成功启用",
-        "ENABLED_NG": "启用改组的WAF设置时发生错误",
-        "DISABLED_OK": "该组的WAF设置成功禁用",
-        "DISABLED_NG": "禁用改组的WAF设置时发生错误",
+        "ENABLED_OK": "该组的WAF设置成功启用.",
+        "ENABLED_NG": "启用改组的WAF设置时发生错误!",
+        "DISABLED_OK": "该组的WAF设置成功禁用.",
+        "DISABLED_NG": "禁用改组的WAF设置时发生错误!",
         "SETTING_OK": "该组的WAF设置成功!",
         "SETTING_NG": "该组WAF设置时发生错误!",
         "ADD_WAF_WARNING": "您是否需要在该组添加WAF检测器?"
@@ -2097,9 +2097,9 @@
       "INSERT_NG": "添加检测器时发生错误!",
       "INSERT_RULE_OK": "成功添加规则!",
       "INSERT_RULE_NG": "添加规则时发生错误!",
-      "UPDATE_OK": "成功更新检测器",
+      "UPDATE_OK": "成功更新检测器!",
       "UPDATE_NG": "更新规则时发生错误!",
-      "UPDATE_RULE_OK": "成功更新规则",
+      "UPDATE_RULE_OK": "成功更新规则!",
       "UPDATE_RULE_NG": "更新检测器时发生错误!",
       "REMOVE_CFM": "要删除该检测器吗?",
       "REMOVE_OK": "成功删除检测器!",
@@ -2107,9 +2107,9 @@
       "REMOVE_RULE_OK": "成功删除规则!",
       "REMOVE_RULE_NG": "删除规则时发生错误!",
       "EXPORT_SENSOR_OK": "检测器成功导出!",
-      "EXPORT_SENSOR_NG": "检测器导出时发生错误",
+      "EXPORT_SENSOR_NG": "检测器导出时发生错误!",
       "IMPORT_FINISH": "检测器成功导入!",
-      "IMPORT_FAILED": "检测器导入时发生错误",
+      "IMPORT_FAILED": "检测器导入时发生错误!",
       "MATCH": "匹配",
       "MISMATCH": "不匹配",
       "ADD_PATTERN_NG": "正则形式的最大数量为16",
@@ -2188,9 +2188,9 @@
       "REMOVE_RULE_OK": "成功删除规则!",
       "REMOVE_RULE_NG": "删除规则时发生错误!",
       "EXPORT_SENSOR_OK": "检测器成功导出!",
-      "EXPORT_SENSOR_NG": "检测器导出时发生错误",
+      "EXPORT_SENSOR_NG": "检测器导出时发生错误!",
       "IMPORT_FINISH": "检测器成功导入!",
-      "IMPORT_FAILED": "检测器导入时发生错误",
+      "IMPORT_FAILED": "检测器导入时发生错误!",
       "MATCH": "匹配",
       "MISMATCH": "不匹配",
       "ADD_PATTERN_NG": "正则形式的最大数量为16",
@@ -2278,7 +2278,7 @@
       "PORT_SAMPLE": "例如: 80, tcp/8080, udp/6142-6150, tcp/any, udp/any, icmp, any",
       "QUARANTINE_FAILED": "隔离失败",
       "PROMOTE_OK": "规则升级成功!",
-      "PROMOTE_NG": "规则升级时发生错误"
+      "PROMOTE_NG": "规则升级时发生错误!"
     },
     "portlet": {
       "ADD": "添加规则",
@@ -2289,7 +2289,7 @@
     "dialog": {
       "content": {
         "SUBMIT_OK": "策略保存成功!",
-        "SUBMIT_NG": "策略保存失败"
+        "SUBMIT_NG": "策略保存失败!"
       },
       "reminder": {
         "MESSAGE": "您要离开本页面且不保存修改吗?"
@@ -2383,17 +2383,17 @@
     "dialog": {
       "content": {
         "INSERT_OK": "应对规则成功添加!",
-        "INSERT_NG": "应对规则添加失败",
+        "INSERT_NG": "应对规则添加失败!",
         "UPDATE_OK": "应对规则成功更新!",
-        "UPDATE_NG": "应对规则更新失败",
+        "UPDATE_NG": "应对规则更新失败!",
         "REMOVE_OK": "应对规则成功删除!",
-        "REMOVE_NG": "应对规则删除失败",
+        "REMOVE_NG": "应对规则删除失败!",
         "DISABLE_OK": "应对规则成功禁用!",
-        "DISABLE_NG": "应对规则禁用失败",
+        "DISABLE_NG": "应对规则禁用失败!",
         "ENABLE_OK": "应对规则成功启用!",
-        "ENABLE_NG": "应对规则启用失败",
+        "ENABLE_NG": "应对规则启用失败!",
         "UNQUARANTINE_OK": "应对规则成功取消隔离!",
-        "UNQUARANTINE_NG": "应对规则取消隔离失败",
+        "UNQUARANTINE_NG": "应对规则取消隔离失败!",
         "HINT": "例如: ",
         "REMOVE_CONFIRM": "你要删除这条应对规则吗？ - ID: "
       },
@@ -2434,29 +2434,29 @@
     },
     "msg": {
       "INSERT_OK": "规则添加成功!",
-      "INSERT_NG": "规则添加失败",
+      "INSERT_NG": "规则添加失败!",
       "UPDATE_OK": "规则更新成功!",
-      "UPDATE_NG": "规则更新失败",
+      "UPDATE_NG": "规则更新失败!",
       "REMOVE_OK": "规则删除成功!",
       "REMOVE_NG": "规则删除失败",
       "EXPORT_OK": "准入控制配置/规则导出成功!",
-      "EXPORT_NG": "准入控制配置/规则导出失败",
+      "EXPORT_NG": "准入控制配置/规则导出失败!",
       "IMPORT_FINISH": "准入控制配置/规则导入成功!",
-      "IMPORT_FAILED": "准入控制配置/规则导入失败",
+      "IMPORT_FAILED": "准入控制配置/规则导入失败!",
       "DISABLE_OK": "规则禁用成功!",
-      "DISABLE_NG": "规则禁用失败",
+      "DISABLE_NG": "规则禁用失败!",
       "ENABLE_OK": "规则启用成功!",
-      "ENABLE_NG": "规则启用失败",
+      "ENABLE_NG": "规则启用失败!",
       "G_DISABLE_OK": "规则禁用成功!",
-      "G_DISABLE_NG": "规则禁用失败.",
+      "G_DISABLE_NG": "规则禁用失败!",
       "G_ENABLE_OK": "规则启用成功!",
-      "G_ENABLE_NG": "规则启用失败.",
+      "G_ENABLE_NG": "规则启用失败!",
       "MODE_SWITCH_OK": "规则模式转换成功!",
-      "MODE_SWITCH_NG": "规则模式转换失败.",
+      "MODE_SWITCH_NG": "规则模式转换失败!",
       "CLIENT_MODE_SWITCH_OK": "客户端模式转换成功!",
-      "CLIENT_MODE_SWITCH_NG": "客户端模式转换失败.",
+      "CLIENT_MODE_SWITCH_NG": "客户端模式转换失败!",
       "ACTION_SWITCH_OK": "全局操作转化成功!",
-      "ACTION_SWITCH_NG": "全局操作转化失败.",
+      "ACTION_SWITCH_NG": "全局操作转化失败!",
       "REMOVE_CONFIRM": "删除这条规则吗? - ID: ",
       "DISABLE_CONFIRM": "禁用这条默认许可规则吗？- ID: ",
       "ENABLE_CONFIRM": "启用这条默认许可规则吗？ - ID: ",
@@ -2504,7 +2504,7 @@
     "EXCEPTION": "允许",
     "names": {
       "ADD_CUSTOMIZED_CRITERION": "添加自定义条件",
-      "SA_BIND_RISKY_ROLE": "服务账户绑定的风险角色",
+      "SA_BIND_RISKY_ROLE": "服务账户绑定的高风险角色",
       "IMAGE": "镜像",
       "NODE": "主机",
       "CONTAINER": "容器",
@@ -2578,8 +2578,8 @@
       "NOTCONTAINSANY": "不包含",
       "CONTAINSOTHERTHAN": "包含于",
       "CONTAINSANY_SINGLE": "是",
+      "CONTAINSTAGANY_SINGLE": "是",
       "NOTCONTAINSANY_SINGLE": "不是",
-      "CONTAINSTAGANY": "包含标签 (任意)",
       "EXIST": "存在",
       "NOTEXIST": "不存在",
       "text": {
@@ -2596,11 +2596,11 @@
       "NONE": "没有",
       "DAYS": "天",
       "CORE": "核心",
-      "RISKY_ROLE_VIEW_SECRET": "主题能列出秘文清单",
-      "RISKY_ROLE_ANY_ACTION_WORKLOAD": "主题能在容器资源上做任何动作",
-      "RISKY_ROLE_ANY_ACTION_RBAC": "主题能在RBAC资源上做任何动作",
-      "RISKY_ROLE_CREATE_POD": "主题能创建容器资源",
-      "RISKY_ROLE_EXEC_INTO_CONTAINER": "主题能进入容器执行"
+      "RISKY_ROLE_VIEW_SECRET": "服务账户能列出秘文清单",
+      "RISKY_ROLE_ANY_ACTION_WORKLOAD": "服务账户能在容器资源上做任何动作",
+      "RISKY_ROLE_ANY_ACTION_RBAC": "服务账户能在RBAC资源上做任何动作",
+      "RISKY_ROLE_CREATE_POD": "服务账户能创建容器资源",
+      "RISKY_ROLE_EXEC_INTO_CONTAINER": "服务账户能进入容器执行"
     },
     "display": {
       "<=": "（{{days}}天之内报告的）",
@@ -2857,10 +2857,10 @@
     "MINUTES": "分",
     "SECONDS": "秒",
     "ENABLED_CPATH": "启动控制器控制路径调试",
-    "ENABLED_CPATH_OK": "控制器控制路径调试启用成功.",
-    "DISABLED_CPATH_OK": "控制器控制路径调试停用成功.",
-    "ENABLED_CPATH_NG": "控制器控制路径调试启用时发生错误.",
-    "DISABLED_CPATH_NG": "控制器控制路径调试停用时发生错误.",
+    "ENABLED_CPATH_OK": "控制器控制路径调试启用成功!",
+    "DISABLED_CPATH_OK": "控制器控制路径调试停用成功!",
+    "ENABLED_CPATH_NG": "控制器控制路径调试启用时发生错误!",
+    "DISABLED_CPATH_NG": "控制器控制路径调试停用时发生错误!",
     "ENFORCERS": "代理",
     "ENFORCERS_HINT": "如果需要可以选择代理以加入它们的支持日志. 最多可以选择{{maxSlectedEnforcer}}个",
     "MAX_SELECTED_ENFORCER_HINT": "请为支持日志选择不超过{{maxSlectedEnforcer}}个代理.",

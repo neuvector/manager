@@ -17,6 +17,7 @@ export class ExposurePanelComponent implements OnInit {
   hierarchicalIngressList!: Array<HierarchicalExposure>;
   hierarchicalEgressList!: Array<HierarchicalExposure>;
   instructions: Array<string> = [];
+  Array = Array;
 
   constructor(
     public dashboardExposureConversationsService: DashboardExposureConversationsService,

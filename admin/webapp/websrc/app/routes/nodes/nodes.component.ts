@@ -17,7 +17,7 @@ import { NotificationService } from '@services/notification.service';
 import { ScanService } from '@services/scan.service';
 import { interval, Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
-import {MultiClusterService} from "@services/multi-cluster.service";
+import { MultiClusterService } from '@services/multi-cluster.service';
 
 @Component({
   selector: 'app-nodes',
@@ -64,8 +64,7 @@ export class NodesComponent implements OnInit {
     private tr: TranslateService,
     private cd: ChangeDetectorRef,
     private multiClusterService: MultiClusterService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.isAutoScanAuthorized = this.authUtils.getDisplayFlag('runtime_scan');
@@ -75,14 +74,14 @@ export class NodesComponent implements OnInit {
     }
 
     //refresh the page when it switched to a remote cluster
-    this._switchClusterSubscription = this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
-      this.refresh();
-    });
-
+    this._switchClusterSubscription =
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
+        this.refresh();
+      });
   }
 
   ngOnDestroy(): void {
-    if(this._switchClusterSubscription){
+    if (this._switchClusterSubscription) {
       this._switchClusterSubscription.unsubscribe();
     }
   }
@@ -111,12 +110,7 @@ export class NodesComponent implements OnInit {
           this.error = '';
           if (!this.loaded) this.loaded = true;
         },
-        error: ({ error }: { error: ErrorResponse }) => {
-          this.error = error.message;
-          if (this.nodesGrid) {
-            this.nodesGrid.setError(this.error);
-          }
-        },
+        error: ({ error }: { error: ErrorResponse }) => {},
       });
   }
 

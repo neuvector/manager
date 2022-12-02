@@ -1,12 +1,12 @@
 <div class="d-flex align-items-center justify-content-between">
   <div class="d-flex align-items-center justify-content-start">
-    <span class="mr-2" *ngIf="!selectable">
+    <span class="font-weight-bold text-info" *ngIf="!selectable">
       <span *ngIf="filtered">
         {{ 'enum.FOUND' | translate }}
-        {{ filteredCount }}&nbsp;/&nbsp;
+        {{ filteredCount }}&nbsp;/
       </span>
+      <span *ngIf="!filtered"> {{ 'enum.OUT_OF' | translate }}&nbsp; </span>
       {{ enforcerCount }}
-      {{ 'enforcers.COUNT_POSTFIX' | translate }}
     </span>
     <span class="text-muted" *ngIf="selectable">{{
       'setting.ENFORCERS_HINT'

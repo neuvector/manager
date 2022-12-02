@@ -77,6 +77,7 @@ export class GlobalConstant {
     'image',
     'imageregistry',
     'namespace',
+    'saBindRiskyRole'
   ];
 
   public static ADMISSION = {
@@ -94,7 +95,7 @@ export class GlobalConstant {
       DENY: 'deny',
       FED_DENY: 'federal-policy',
     },
-    SINGLE_VALUE_CRITERIA: ['user', 'image', 'imageregistry', 'namespace'],
+    SINGLE_VALUE_CRITERIA: ['user', 'image', 'imageregistry', 'namespace', 'saBindRiskyRole'],
     CATEGORY: {
       KUBE: 'Kubernetes',
     },
@@ -198,7 +199,7 @@ export class GlobalConstant {
     CVE_COUNT: ['cveHighCount', 'cveHighWithFixCount', 'cveMediumCount'],
     CVE_SCORE: ['cveScoreCount'],
     RESOURCE: ['resourceLimit'],
-    SINGLE_VALUE_CRITERIA: ['user', 'image', 'imageRegistry', 'namespace'],
+    SINGLE_VALUE_CRITERIA: ['user', 'image', 'imageRegistry', 'namespace', 'saBindRiskyRole'],
   };
   public static PSP = 'pspcompliance';
   public static RESIZE_EVENT = 'resize.ag-grid';

@@ -185,19 +185,22 @@ export interface Role {
   reserved?: boolean;
 }
 
-export interface PasswordProfile {
+export interface PasswordProfile extends PublicPasswordProfile {
   block_after_failed_login_count: number;
   block_minutes: number;
   comment: string;
   enable_block_after_failed_login: boolean;
   enable_password_expiration: boolean;
   enable_password_history: boolean;
+  name: string;
+  password_expire_after_days: number;
+  password_keep_history_count: number;
+}
+
+export interface PublicPasswordProfile {
   min_digit_count: number;
   min_len: number;
   min_lowercase_count: number;
   min_special_count: number;
   min_uppercase_count: number;
-  name: string;
-  password_expire_after_days: number;
-  password_keep_history_count: number;
 }

@@ -26,9 +26,15 @@ export class UsersComponent implements OnInit {
   activeTabIndex: number = 0;
   error: unknown;
   globalRoles!: string[];
+  domainRoles!: string[];
   users$ = this.settingsService.getUsers().pipe(
     tap(user => {
-      this.globalRoles = user.global_roles;
+      this.domainRoles = user.domain_roles;
+      if (!this.authUtils.userPermission.isNamespaceUser) {
+        this.globalRoles = user.global_roles;
+      } else {
+        this.globalRoles = [''];
+      }
     }),
     pluck('users')
   );
@@ -39,7 +45,7 @@ export class UsersComponent implements OnInit {
         users,
         domains: domain.domains
           .map(d => d.name)
-          .filter(name => name.charAt(0) !== '_'),
+          .filter(name => !['_images', '_nodes', '_containers'].includes(name)),
       };
     }),
     catchError(err => {

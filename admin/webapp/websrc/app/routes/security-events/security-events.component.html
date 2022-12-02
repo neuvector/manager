@@ -2,21 +2,18 @@
   #securityEventsPrintableReport
   *ngIf="isPrinting && printableData.length > 0"
   class="printable-area"
-  [securityEvents]="printableData.slice(0, printableData.length < rowLimit4Report ? printableData.length : rowLimit4Report)">
+  [securityEvents]="
+    printableData.slice(
+      0,
+      printableData.length < rowLimit4Report
+        ? printableData.length
+        : rowLimit4Report
+    )
+  ">
 </app-security-events-printable-report>
 <div class="screen-area">
   <div id="sec-event" class="padding-top-0">
     <div class="clearfix">
-      <!-- <div
-        class="pull-right margin-top-xs"
-        style="padding-top: 5px; margin-left: 10px; width: 100px; text-align: right;"
-        (click)="refresh()"
-      >
-        <em class="eos-icons text-action hand " aria-hidden="true">refresh</em>
-        <label class="text-gray-label hand"
-          >{{'general.REFRESH' | translate}}</label
-        >
-      </div> -->
       <app-loading-button
         (btnClick)="refresh()"
         [appearance]="'mat-button'"
@@ -29,7 +26,8 @@
         [text]="'network.REFRESH' | translate"
         [type]="'button'">
       </app-loading-button>
-      <ng-container *ngIf="securityEventsService.displayedSecurityEvents.length > 0">
+      <ng-container
+        *ngIf="securityEventsService.displayedSecurityEvents.length > 0">
         <div class="d-flex pull-right">
           <button
             mat-button
@@ -46,79 +44,36 @@
             type="button"
             class="d-flex align-items-center"
             aria-label="Export secutiry events reports Printer"
-            (click)="printReport()"
-          >
+            (click)="printReport()">
             <em class="eos-icons mr-2">print</em>
           </button>
         </div>
       </ng-container>
 
-      <!-- <div
-        class="margin-top-xs pull-right text-muted ml"
-        style="padding-top: 5px; margin-left: 10px; text-align: right; position: relative;"
-        ng-if="!isPdfPreparing && rangedSecEvents.length>0 && !secEventsErr"
-      >
-        <span ng-if="progress<100">
-          <em class="fa fa-file-pdf-o disabled" style="margin-left:10px;"></em>
-          <span class="text-disabled-label disabled">PDF</span>
-          <div class="loader5" style="position: absolute; top: 10px; left: 30px;"></div>
-          <div style="position: absolute; top: 6px; left: 22px; font-size: 12px; color: #11330f">{{progress}}%</div>
-        </span>
-        <span ng-if="progress===100" ng-click="downloadPdf()">
-          <em
-            class="fa fa-file-pdf-o pdf-color hand"
-            style="margin-left:10px;"
-          ></em>
-          <span class="text-gray-label link">PDF</span>
-        </span>
-        <span ng-click="downloadCsv()">
-          <em
-            class="fa fa-file-excel-o xls-color hand"
-            style="margin-left:10px;"
-          ></em>
-          <span class="text-gray-label link">CSV</span>
-        </span>
-      </div> -->
-      <!-- <div
-        class="margin-top-xs pull-right ml"
-        style="color: rgba(144, 159, 167, .4); position: relative; padding-top: 5px; margin-left: 10px; text-align: right;"
-        ng-if="isPdfPreparing && rangedSecEvents.length>0 && !secEventsErr"
-      >
-        <em class="fa fa-file-pdf-o disabled" style="margin-left:10px;"> </em>
-        <span class="text-disabled-label disabled">PDF</span>
-        <span ng-click="downloadCsv()">
-          <em
-            class="fa fa-file-excel-o xls-color hand"
-            style="margin-left:10px;"
-          ></em>
-          <span class="text-gray-label link">CSV</span>
-        </span>
-        <div
-          class="loader5"
-          style="position: absolute; top: 12px; left: 25px;"
-        ></div>
-      </div> -->
       <h1 class="font-weight-light" id="security-events-title">
-        {{'sidebar.nav.SECURITY_EVENT' | translate}}
+        {{ 'sidebar.nav.SECURITY_EVENT' | translate }}
       </h1>
     </div>
   </div>
-  <mat-card style="position: relative;">
+  <mat-card style="position: relative">
     <div
-      *ngIf="isDataReady && securityEventsService.cachedSecurityEvents.length === 0"
-      class="safe sec-event-safe"
-    >
+      *ngIf="
+        isDataReady && securityEventsService.cachedSecurityEvents.length === 0
+      "
+      class="safe sec-event-safe">
       <div>
         <em class="eos-icons safe-signal" aria-hidden="true">check</em>
       </div>
       <div class="safe-text">
-        {{'securityEvent.NO_SEC_EVENT' | translate}}
+        {{ 'securityEvent.NO_SEC_EVENT' | translate }}
       </div>
     </div>
     <div *ngIf="!isDataReady">
       <app-loading-template></app-loading-template>
     </div>
-    <div class="d-flex align-items-center justify-content-end" style="position: absolute; right: 10px; top: -10px;">
+    <div
+      class="d-flex align-items-center justify-content-end"
+      style="position: absolute; right: 10px; top: -10px">
       <button
         (click)="openAdvancedFilterDialog()"
         *ngIf="securityEventsService.cachedSecurityEvents.length > 0"
@@ -126,7 +81,9 @@
         mat-button>
         <i class="eos-icons">search</i>{{ 'general.ADV_FILTER' | translate }}
       </button>
-      <mat-form-field appearance="standard" class="example-full-width pull-right">
+      <mat-form-field
+        appearance="standard"
+        class="example-full-width pull-right">
         <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
         <input
           (keyup)="onQuickFilterChange(filter.value)"
@@ -134,304 +91,423 @@
           matInput />
       </mat-form-field>
     </div>
-    <div style="position: absolute; left: 20px; top: 10px;" *ngIf="securityEventsService.displayedSecurityEvents.length === securityEventsService.cachedSecurityEvents.length">
-      {{ 'enum.OUT_OF' | translate }} {{securityEventsService.cachedSecurityEvents.length}}
+    <div
+      style="position: absolute; left: 20px; top: 10px"
+      class="font-weight-bold text-info"
+      *ngIf="
+        securityEventsService.displayedSecurityEvents.length ===
+        securityEventsService.cachedSecurityEvents.length
+      ">
+      {{ 'enum.OUT_OF' | translate }}
+      {{ securityEventsService.cachedSecurityEvents.length }}
     </div>
-    <div style="position: absolute; left: 20px; top: 10px;" *ngIf="securityEventsService.displayedSecurityEvents.length < securityEventsService.cachedSecurityEvents.length">
-      {{ 'enum.FOUND' | translate }} {{securityEventsService.displayedSecurityEvents.length}} / {{ 'enum.OUT_OF' | translate }} {{securityEventsService.cachedSecurityEvents.length}}
+    <div
+      style="position: absolute; left: 20px; top: 10px"
+      class="font-weight-bold text-info"class="font-weight-bold text-info"
+      *ngIf="
+        securityEventsService.displayedSecurityEvents.length <
+        securityEventsService.cachedSecurityEvents.length
+      ">
+      {{ 'enum.FOUND' | translate }}
+      {{ securityEventsService.displayedSecurityEvents.length }} /
+      {{ securityEventsService.cachedSecurityEvents.length }}
     </div>
-    <div style="height: 95px;" class="margin-top-m" style="position: relative;">
+    <div style="height: 95px" class="margin-top-m" style="position: relative">
       <app-security-event-chart
         *ngIf="securityEventsService.cachedSecurityEvents.length > 0"
-        [secEventList]="securityEventsService.cachedSecurityEvents"
-      >
+        [secEventList]="securityEventsService.cachedSecurityEvents">
       </app-security-event-chart>
       <div
         style="padding-left: 25px; position: absolute; top: 25px; width: 100%"
-        *ngIf="securityEventsService.cachedSecurityEvents.length > 0"
-      >
-        <app-date-slider>
-        </app-date-slider>
+        *ngIf="securityEventsService.cachedSecurityEvents.length > 0">
+        <app-date-slider> </app-date-slider>
       </div>
     </div>
     <div
       *ngIf="securityEventsService.cachedSecurityEvents.length > 0"
-      class="sec-event-top-mask"
-    ></div>
+      class="sec-event-top-mask"></div>
     <div
       *ngIf="securityEventsService.cachedSecurityEvents.length > 0"
-      class="sec-event-bottom-mask"
-    ></div>
+      class="sec-event-bottom-mask"></div>
     <div
       id="sec-event-list"
-      *ngIf="isDataReady && !secEventsErr && securityEventsService.cachedSecurityEvents.length > 0"
-      class="timeline-nv normal" style="margin-top: 12px;"
+      *ngIf="
+        isDataReady &&
+        !secEventsErr &&
+        securityEventsService.cachedSecurityEvents.length > 0
+      "
+      class="timeline-nv normal"
+      style="margin-top: 12px"
       [ctx]="securityEventsService.dateSliderCtx"
-      appTwoWayInfiniteScroll
-    >
+      appTwoWayInfiniteScroll>
       <!-- <div class="overlay loading-grid">
         {{'enum.LOADING' | translate}}......
       </div> -->
       <ul id="timeline">
         <li
           class="sec-event-row"
-          id="sec-wrap-{{$index}}"
-          *ngFor="let secEvent of securityEventsService.displayedSecurityEvents | slice: securityEventsService.dateSliderCtx.begin : (securityEventsService.dateSliderCtx.begin + securityEventsService.dateSliderCtx.limit); index as $index"
-        >
+          id="sec-wrap-{{ $index }}"
+          *ngFor="
+            let secEvent of securityEventsService.displayedSecurityEvents
+              | slice
+                : securityEventsService.dateSliderCtx.begin
+                : securityEventsService.dateSliderCtx.begin +
+                    securityEventsService.dateSliderCtx.limit;
+            index as $index
+          ">
           <input
             class="radio"
-            id="sec-{{$index}}"
+            id="sec-{{ $index }}"
             name="secEvt"
             type="radio"
-            (click)="getOpenedRec($event, $index, securityEventsService.dateSliderCtx.page)"
-          />
+            (click)="
+              getOpenedRec(
+                $event,
+                $index,
+                securityEventsService.dateSliderCtx.page
+              )
+            " />
           <div class="relative">
-            <label for="sec-{{$index}}">
+            <label for="sec-{{ $index }}">
               <div class="heading">
                 <div class="row margin-right-0">
                   <div class="col-sm-7 padding-left-0">
                     <div
                       class="sec-event-name padding-left-0 auto-hide"
-                      matTooltip="{{secEvent.name}}"
+                      matTooltip="{{ secEvent.name }}"
                       [matTooltipDisabled]="isTooltipDisabled(ttSecEventName)"
-                      #ttSecEventName
-                    >
+                      #ttSecEventName>
                       <span
                         class="pull-left margin-top-xs"
                         aria-hidden="true"
-                        [ngClass]="secEvent.type.cssColor"
-                      ></span>
-                      <strong>{{secEvent.name}}</strong>
+                        [ngClass]="secEvent.type.cssColor"></span>
+                      <strong>{{ secEvent.name }}</strong>
                     </div>
                   </div>
                   <div class="col-sm-3 padding-left-0 label-wrap">
                     <span
                       class="severity-label margin-right-0"
                       [ngClass]="secEvent.details.level.cssColor"
-                      >{{"enum." + secEvent.details.level.name.toUpperCase() |
-                      translate}}
+                      >{{
+                        'enum.' + secEvent.details.level.name.toUpperCase()
+                          | translate
+                      }}
                     </span>
                     <span
                       class="severity-label label-primary"
                       *ngFor="let label of secEvent.details.labels"
-                      >{{"securityEvent.label." + label.toUpperCase() |
-                      translate}}
+                      >{{
+                        'securityEvent.label.' + label.toUpperCase() | translate
+                      }}
                     </span>
                     <span
                       class="severity-label label-muted"
                       *ngIf="secEvent.details.labels.length === 0"
-                      >{{"securityEvent.label.OTHER" | translate}}
+                      >{{ 'securityEvent.label.OTHER' | translate }}
                     </span>
                     <div class="sec-event-right-mask"></div>
                   </div>
                   <div
                     class="col-sm-2 sec-event-time text-muted padding-left-0 auto-hide"
-                    matTooltip="{{secEvent.reportedAt}}"
-                    [matTooltipDisabled]="isTooltipDisabled(ttSecEventReportedAt)"
-                    #ttSecEventReportedAt
-                  >
-                    <span>{{secEvent.reportedAt}}</span>
+                    matTooltip="{{ secEvent.reportedAt }}"
+                    [matTooltipDisabled]="
+                      isTooltipDisabled(ttSecEventReportedAt)
+                    "
+                    #ttSecEventReportedAt>
+                    <span>{{ secEvent.reportedAt }}</span>
                   </div>
                 </div>
                 <div
-                  *ngIf="secEvent.endpoint.source.id && secEvent.endpoint.destination.id"
-                >
+                  *ngIf="
+                    secEvent.endpoint.source.id &&
+                    secEvent.endpoint.destination.id
+                  ">
                   <div class="row margin-right-0">
                     <div
                       class="col-sm-10 padding-left-0 auto-hide"
-                      matTooltip="{{secEvent.endpoint.source.displayName}}"
-                      [matTooltipDisabled]="isTooltipDisabled(ttSecEventSourceName)"
-                      #ttSecEventSourceName
-                    >
-                      <strong>{{"securityEvent.SOURCE" | translate}}:</strong>
+                      matTooltip="{{ secEvent.endpoint.source.displayName }}"
+                      [matTooltipDisabled]="
+                        isTooltipDisabled(ttSecEventSourceName)
+                      "
+                      #ttSecEventSourceName>
+                      <strong>{{ 'securityEvent.SOURCE' | translate }}:</strong>
                       <span>
-                        <span *ngIf="secEvent.endpoint.source.id==='external'">
+                        <span
+                          *ngIf="secEvent.endpoint.source.id === 'external'">
                           <a
-                            href="{{secEvent.endpoint.source.externalURL}}"
-                            target="_blank"
-                          >
+                            href="{{ secEvent.endpoint.source.externalURL }}"
+                            target="_blank">
                             <em
                               class="fa text-primary"
-                              [ngClass]="secEvent.endpoint.source.icon"
-                            ></em>
+                              [ngClass]="secEvent.endpoint.source.icon"></em>
                             <span>
-                              {{secEvent.endpoint.source.displayName}}
+                              {{ secEvent.endpoint.source.displayName }}
                             </span>
                             (
-                              <span *ngIf="secEvent.endpoint.source.countryCode !== '-'"
-                                matTooltip="{{secEvent.endpoint.source.countryName}}"
-                                style="font-size: 14px;"
-                              >{{ secEvent.endpoint.source.countryFlagUnicode }}&nbsp;
-                              </span>
-                              <span>{{secEvent.endpoint.source.ip}}</span>
+                            <span
+                              *ngIf="
+                                secEvent.endpoint.source.countryCode !== '-'
+                              "
+                              matTooltip="{{
+                                secEvent.endpoint.source.countryName
+                              }}"
+                              style="font-size: 14px"
+                              >{{
+                                secEvent.endpoint.source.countryFlagUnicode
+                              }}&nbsp;
+                            </span>
+                            <span>{{ secEvent.endpoint.source.ip }}</span>
                             )
                           </a>
                         </span>
                       </span>
-                      <span *ngIf="secEvent.endpoint.source.id!=='external'">
+                      <span *ngIf="secEvent.endpoint.source.id !== 'external'">
                         <span *ngIf="secEvent.endpoint.source.domain">
                           <em class="eos-icons icon-18 text-primary">domain</em>
                           <span>
-                            {{secEvent.endpoint.source.domain}}
+                            {{ secEvent.endpoint.source.domain }}
                           </span>
                         </span>
                         <span *ngIf="secEvent.endpoint.source.service">
-                          <em class="eos-icons icon-18 text-primary">system_group</em>
+                          <em class="eos-icons icon-18 text-primary"
+                            >system_group</em
+                          >
                           <span>
-                            {{secEvent.endpoint.source.service}}
+                            {{ secEvent.endpoint.source.service }}
                           </span>
                         </span>
                         <em
                           class="fa text-primary"
-                          [ngClass]="secEvent.endpoint.source.icon"
-                        ></em>
-                        <span class="link" *ngIf="secEvent.endpoint.source.hasDetail && secEvent.endpoint.source.isHyperlinkEnabled"
-                              (click)="showContainerDetails($event, secEvent.endpoint.source, secEvent.host_name)">
-                          {{secEvent.endpoint.source.displayName}}
+                          [ngClass]="secEvent.endpoint.source.icon"></em>
+                        <span
+                          class="link"
+                          *ngIf="
+                            secEvent.endpoint.source.hasDetail &&
+                            secEvent.endpoint.source.isHyperlinkEnabled
+                          "
+                          (click)="
+                            showContainerDetails(
+                              $event,
+                              secEvent.endpoint.source,
+                              secEvent.host_name
+                            )
+                          ">
+                          {{ secEvent.endpoint.source.displayName }}
                         </span>
-                        <span *ngIf="!secEvent.endpoint.source.hasDetail || !secEvent.endpoint.source.isHyperlinkEnabled">
-                          {{secEvent.endpoint.source.displayName}}
+                        <span
+                          *ngIf="
+                            !secEvent.endpoint.source.hasDetail ||
+                            !secEvent.endpoint.source.isHyperlinkEnabled
+                          ">
+                          {{ secEvent.endpoint.source.displayName }}
                         </span>
                       </span>
                     </div>
                     <div
                       *ngIf="secEvent.details.action"
                       class="col-sm-2 padding-left-0 auto-hide"
-                      matTooltip="{{secEvent.details.action.name}}"
+                      matTooltip="{{ secEvent.details.action.name }}"
                       [matTooltipDisabled]="isTooltipDisabled(ttSecEventAction)"
-                      #ttSecEventAction
-                    >
+                      #ttSecEventAction>
                       <strong
-                        >{{"threat.gridHeader.ACTION" | translate}}:</strong
+                        >{{ 'threat.gridHeader.ACTION' | translate }}:</strong
                       >&nbsp;&nbsp;
                       <span
                         class="type-label sec-event-action-label px-1"
                         [ngClass]="secEvent.details.action.cssColor"
-                        >{{secEvent.details.action.name}}</span
+                        >{{ secEvent.details.action.name }}</span
                       >
                     </div>
                   </div>
                   <div class="row margin-right-0">
                     <div
                       class="col-sm-10 padding-left-0 auto-hide"
-                      matTooltip="{{secEvent.endpoint.destination.displayName}}"
-                      [matTooltipDisabled]="isTooltipDisabled(ttSecEventDestinationName)"
-                      #ttSecEventDestinationName
-                    >
+                      matTooltip="{{
+                        secEvent.endpoint.destination.displayName
+                      }}"
+                      [matTooltipDisabled]="
+                        isTooltipDisabled(ttSecEventDestinationName)
+                      "
+                      #ttSecEventDestinationName>
                       <strong
-                        >{{"securityEvent.DESTINATION" | translate}}:</strong
+                        >{{ 'securityEvent.DESTINATION' | translate }}:</strong
                       >
                       <span>
                         <span
-                          *ngIf="secEvent.endpoint.destination.id==='external'"
-                        >
+                          *ngIf="
+                            secEvent.endpoint.destination.id === 'external'
+                          ">
                           <a
-                            href="{{secEvent.endpoint.destination.externalURL}}"
-                            target="_blank"
-                          >
+                            href="{{
+                              secEvent.endpoint.destination.externalURL
+                            }}"
+                            target="_blank">
                             <em
                               class="fa text-primary"
-                              [ngClass]="secEvent.endpoint.destination.icon"
-                            ></em>
+                              [ngClass]="
+                                secEvent.endpoint.destination.icon
+                              "></em>
                             <span>
-                              {{secEvent.endpoint.destination.displayName}}
+                              {{ secEvent.endpoint.destination.displayName }}
                             </span>
                             (
-                              <span *ngIf="secEvent.endpoint.destination.countryCode !== '-'"
-                                matTooltip="{{secEvent.endpoint.destination.countryName}}"
-                                style="font-size: 14px;"
-                              >{{ secEvent.endpoint.destination.countryFlagUnicode }}&nbsp;
-                              </span>
-                              <span>{{secEvent.endpoint.destination.ip}}</span>
+                            <span
+                              *ngIf="
+                                secEvent.endpoint.destination.countryCode !==
+                                '-'
+                              "
+                              matTooltip="{{
+                                secEvent.endpoint.destination.countryName
+                              }}"
+                              style="font-size: 14px"
+                              >{{
+                                secEvent.endpoint.destination
+                                  .countryFlagUnicode
+                              }}&nbsp;
+                            </span>
+                            <span>{{ secEvent.endpoint.destination.ip }}</span>
                             )
                           </a>
                         </span>
-                        <span *ngIf="secEvent.endpoint.destination.id!=='external'">
+                        <span
+                          *ngIf="
+                            secEvent.endpoint.destination.id !== 'external'
+                          ">
                           <span *ngIf="secEvent.endpoint.destination.domain">
-                            <em class="eos-icons icon-18 text-primary">domain</em>
-                            <span>{{secEvent.endpoint.destination.domain}}</span>
+                            <em class="eos-icons icon-18 text-primary"
+                              >domain</em
+                            >
+                            <span>{{
+                              secEvent.endpoint.destination.domain
+                            }}</span>
                           </span>
                           <span *ngIf="secEvent.endpoint.destination.service">
-                            <em class="eos-icons icon-18 text-primary">system_group</em>
+                            <em class="eos-icons icon-18 text-primary"
+                              >system_group</em
+                            >
                             <span>
-                              {{secEvent.endpoint.destination.service}}
+                              {{ secEvent.endpoint.destination.service }}
                             </span>
                           </span>
-                          <em
-                            class="eos-icons icon-18 text-primary"
-                          >{{secEvent.endpoint.destination.icon}}</em>
-                          <span class="link" *ngIf="secEvent.endpoint.destination.hasDetail && secEvent.endpoint.destination.isHyperlinkEnabled"
-                                (click)="showContainerDetails($event, secEvent.endpoint.destination, secEvent.host_name)">
-                            {{secEvent.endpoint.destination.displayName}}
+                          <em class="eos-icons icon-18 text-primary">{{
+                            secEvent.endpoint.destination.icon
+                          }}</em>
+                          <span
+                            class="link"
+                            *ngIf="
+                              secEvent.endpoint.destination.hasDetail &&
+                              secEvent.endpoint.destination.isHyperlinkEnabled
+                            "
+                            (click)="
+                              showContainerDetails(
+                                $event,
+                                secEvent.endpoint.destination,
+                                secEvent.host_name
+                              )
+                            ">
+                            {{ secEvent.endpoint.destination.displayName }}
                           </span>
-                          <span *ngIf="!secEvent.endpoint.destination.hasDetail || !secEvent.endpoint.destination.isHyperlinkEnabled">
-                            {{secEvent.endpoint.destination.displayName}}
+                          <span
+                            *ngIf="
+                              !secEvent.endpoint.destination.hasDetail ||
+                              !secEvent.endpoint.destination.isHyperlinkEnabled
+                            ">
+                            {{ secEvent.endpoint.destination.displayName }}
                           </span>
                         </span>
                       </span>
                     </div>
                     <div
                       class="margin-top-xs col-sm-2 padding-0"
-                      *ngIf="secEvent.type.name === 'threat'"
-                    >
+                      *ngIf="secEvent.type.name === 'threat'">
                       <button
                         *ngIf="secEvent.details.message.cap_len"
                         class="mat-button btn-sec-event pull-left"
-                        (click)="showPacket(secEvent.details.id, $event)"
-                      >
+                        (click)="showPacket(secEvent.details.id, $event)">
                         <em class="icon-envelope-letter mr-sm"></em>
-                        {{"threat.VIEW_PACKET" | translate}}
-                      </button>
-                    </div>
-                    <div class="margin-top-xs col-sm-2 padding-0"
-                         *ngIf="secEvent.type.name === 'violation' && isEditRuleAuthorized && secEvent.reviewRulePermission && canShowReviewRule(secEvent)">
-                      <button class="mat-button  btn-sec-event pull-left" style="color: #fff;" (click)="reviewRule('violation', secEvent)">
-                        <em class="fa fa-edit fa-lg mr-sm"></em>
-                        {{"securityEvent.REVIEW_RULE" | translate}}
+                        {{ 'threat.VIEW_PACKET' | translate }}
                       </button>
                     </div>
                     <div
                       class="margin-top-xs col-sm-2 padding-0"
-                      *ngIf="secEvent.type.name === 'incident' && secEvent.details.message.group && isEditRuleAuthorized && !isInternalGroup(secEvent.details.message.group) && secEvent.reviewRulePermission"
-                    >
+                      *ngIf="
+                        secEvent.type.name === 'violation' &&
+                        isEditRuleAuthorized &&
+                        secEvent.reviewRulePermission &&
+                        canShowReviewRule(secEvent)
+                      ">
                       <button
-                        class="mat-button  btn-sec-event pull-left"
-                        style="color: #fff;"
-                        *ngIf="secEvent.details.message.messageCategory.toLowerCase().indexOf('process') >= 0"
-                        (click)="reviewRule('incident', secEvent)"
-                      >
+                        class="mat-button btn-sec-event pull-left"
+                        style="color: #fff"
+                        (click)="reviewRule('violation', secEvent)">
                         <em class="fa fa-edit fa-lg mr-sm"></em>
-                        {{"securityEvent.REVIEW_RULE" | translate}}
+                        {{ 'securityEvent.REVIEW_RULE' | translate }}
+                      </button>
+                    </div>
+                    <div
+                      class="margin-top-xs col-sm-2 padding-0"
+                      *ngIf="
+                        secEvent.type.name === 'incident' &&
+                        secEvent.details.message.group &&
+                        isEditRuleAuthorized &&
+                        !isInternalGroup(secEvent.details.message.group) &&
+                        secEvent.reviewRulePermission
+                      ">
+                      <button
+                        class="mat-button btn-sec-event pull-left"
+                        style="color: #fff"
+                        *ngIf="
+                          secEvent.details.message.messageCategory
+                            .toLowerCase()
+                            .indexOf('process') >= 0
+                        "
+                        (click)="reviewRule('incident', secEvent)">
+                        <em class="fa fa-edit fa-lg mr-sm"></em>
+                        {{ 'securityEvent.REVIEW_RULE' | translate }}
                       </button>
                     </div>
                   </div>
                 </div>
                 <div
-                  *ngIf="!(secEvent.endpoint.source.id && secEvent.endpoint.destination.id)"
-                >
+                  *ngIf="
+                    !(
+                      secEvent.endpoint.source.id &&
+                      secEvent.endpoint.destination.id
+                    )
+                  ">
                   <div class="row margin-right-0">
                     <div
                       class="col-sm-2 padding-left-0 auto-hide"
-                      matTooltip="{{secEvent.host_name}}"
-                      [matTooltipDisabled]="isTooltipDisabled(ttSecEventHostName)"
-                      #ttSecEventHostName
-                    >
-                      <strong>{{"securityEvent.HOST" | translate}}:</strong>
-                      <span class="link" (click)="showHostDetails($event, secEvent.hostId, secEvent.host_name)">{{secEvent.host_name}}</span>
+                      matTooltip="{{ secEvent.host_name }}"
+                      [matTooltipDisabled]="
+                        isTooltipDisabled(ttSecEventHostName)
+                      "
+                      #ttSecEventHostName>
+                      <strong>{{ 'securityEvent.HOST' | translate }}:</strong>
+                      <span
+                        class="link"
+                        (click)="
+                          showHostDetails(
+                            $event,
+                            secEvent.hostId,
+                            secEvent.host_name
+                          )
+                        "
+                        >{{ secEvent.host_name }}</span
+                      >
                     </div>
                     <div
                       *ngIf="secEvent.details.action"
                       class="col-sm-offset-8 col-sm-2 padding-left-0 sec-ellipsis-item"
                       matTooltipPosition="above"
-                      matTooltip="{{secEvent.details.action.name}}"
-                    >
+                      matTooltip="{{ secEvent.details.action.name }}">
                       <strong
-                        >{{"threat.gridHeader.ACTION" | translate}}:</strong
+                        >{{ 'threat.gridHeader.ACTION' | translate }}:</strong
                       >&nbsp;&nbsp;
                       <span
                         class="type-label sec-event-action-label px-1"
                         [ngClass]="secEvent.details.action.cssColor"
-                        >{{secEvent.details.action.name}}</span
+                        >{{ secEvent.details.action.name }}</span
                       >
                     </div>
                   </div>
@@ -440,35 +516,48 @@
                       <div
                         *ngIf="secEvent.container.domain !== ''"
                         class="auto-hide"
-                        matTooltip="{{secEvent.container.name}}"
-                        [matTooltipDisabled]="isTooltipDisabled(ttSecEventContainerName)"
-                        #ttSecEventContainerName
-                      >
+                        matTooltip="{{ secEvent.container.name }}"
+                        [matTooltipDisabled]="
+                          isTooltipDisabled(ttSecEventContainerName)
+                        "
+                        #ttSecEventContainerName>
                         <strong
-                          >{{"securityEvent.CONTAINER" | translate}}:</strong
+                          >{{ 'securityEvent.CONTAINER' | translate }}:</strong
                         >
                         <span>
                           <span>
-                            <em class="eos-icons icon-18 text-primary">domain</em>
+                            <em class="eos-icons icon-18 text-primary"
+                              >domain</em
+                            >
                             <span>
-                              {{secEvent.container.domain}}
+                              {{ secEvent.container.domain }}
                             </span>
                           </span>
                           <span *ngIf="secEvent.container.id !== ''">
                             <span *ngIf="secEvent.container.service">
-                              <em class="eos-icons icon-18 text-primary">system_group</em>
+                              <em class="eos-icons icon-18 text-primary"
+                                >system_group</em
+                              >
                               <span>
-                                {{secEvent.container.service}}
+                                {{ secEvent.container.service }}
                               </span>
                             </span>
                             <em class="fa text-primary fa-square-o"></em>
-                            <span class="link" *ngIf="secEvent.container.isHyperlinkEnabled"
-                              (click)="showContainerDetails($event, secEvent.container, secEvent.host_name)"
-                            >
-                              {{secEvent.container.name}}
+                            <span
+                              class="link"
+                              *ngIf="secEvent.container.isHyperlinkEnabled"
+                              (click)="
+                                showContainerDetails(
+                                  $event,
+                                  secEvent.container,
+                                  secEvent.host_name
+                                )
+                              ">
+                              {{ secEvent.container.name }}
                             </span>
-                            <span *ngIf="!secEvent.container.isHyperlinkEnabled">
-                              {{secEvent.container.name}}
+                            <span
+                              *ngIf="!secEvent.container.isHyperlinkEnabled">
+                              {{ secEvent.container.name }}
                             </span>
                           </span>
                         </span>
@@ -476,81 +565,82 @@
                     </div>
                     <div
                       class="margin-top-xs col-sm-2 padding-0"
-                      *ngIf="secEvent.type.name === 'threat'"
-                    >
+                      *ngIf="secEvent.type.name === 'threat'">
                       <button
                         *ngIf="secEvent.details.message.cap_len"
-                        class="mat-button  btn-sec-event pull-left"
-                        style="color: #fff;"
-                        (click)="showPacket(secEvent.details.id, $event)"
-                      >
+                        class="mat-button btn-sec-event pull-left"
+                        style="color: #fff"
+                        (click)="showPacket(secEvent.details.id, $event)">
                         <em class="icon-envelope-letter mr-sm"></em>
-                        {{"threat.VIEW_PACKET" | translate}}
+                        {{ 'threat.VIEW_PACKET' | translate }}
                       </button>
                     </div>
                     <div
                       class="margin-top-xs col-sm-2 padding-0"
-                      *ngIf="secEvent.type.name === 'violation' && isEditRuleAuthorized &&
-                          (secEvent.endpoint.source.service || secEvent.endpoint.source.id === 'external') &&
-                          (secEvent.endpoint.destination.service || secEvent.endpoint.destination.id === 'external') &&
-                          secEvent.reviewRulePermission"
-                    >
+                      *ngIf="
+                        secEvent.type.name === 'violation' &&
+                        isEditRuleAuthorized &&
+                        (secEvent.endpoint.source.service ||
+                          secEvent.endpoint.source.id === 'external') &&
+                        (secEvent.endpoint.destination.service ||
+                          secEvent.endpoint.destination.id === 'external') &&
+                        secEvent.reviewRulePermission
+                      ">
                       <button
-                        class="mat-button  btn-sec-event pull-left"
-                        style="color: #fff;"
-                        (click)="reviewRule('violation', secEvent)"
-                      >
+                        class="mat-button btn-sec-event pull-left"
+                        style="color: #fff"
+                        (click)="reviewRule('violation', secEvent)">
                         <em class="fa fa-edit fa-lg mr-sm"></em>
-                        {{"securityEvent.REVIEW_RULE" | translate}}
+                        {{ 'securityEvent.REVIEW_RULE' | translate }}
                       </button>
                     </div>
                     <div
                       class="margin-top-xs col-sm-2 padding-0"
-                      *ngIf="secEvent.type.name === 'incident' &&
-                      secEvent.details.message.group &&
-                      isEditRuleAuthorized &&
-                      !isInternalGroup(secEvent.details.message.group)
-                      && secEvent.reviewRulePermission"
-                    >
+                      *ngIf="
+                        secEvent.type.name === 'incident' &&
+                        secEvent.details.message.group &&
+                        isEditRuleAuthorized &&
+                        !isInternalGroup(secEvent.details.message.group) &&
+                        secEvent.reviewRulePermission
+                      ">
                       <button
-                        class="mat-button  btn-sec-event pull-left"
-                        style="color: #fff;"
-                        *ngIf="secEvent.details.message.messageCategory.toLowerCase().indexOf('process') >= 0"
-                        (click)="reviewRule('incident', secEvent)"
-                      >
+                        class="mat-button btn-sec-event pull-left"
+                        style="color: #fff"
+                        *ngIf="
+                          secEvent.details.message.messageCategory
+                            .toLowerCase()
+                            .indexOf('process') >= 0
+                        "
+                        (click)="reviewRule('incident', secEvent)">
                         <em class="fa fa-edit fa-lg mr-sm"></em>
-                        {{"securityEvent.REVIEW_RULE" | translate}}
+                        {{ 'securityEvent.REVIEW_RULE' | translate }}
                       </button>
                     </div>
                   </div>
                 </div>
               </div>
             </label>
-            <span class="date">{{secEvent.relativeDate}}</span>
+            <span class="date">{{ secEvent.relativeDate }}</span>
             <span class="circle"></span>
           </div>
           <div class="sec-event-content">
             <button
               id="detail-close"
               class="btn-link pull-right sec-fixed-close"
-              (click)="closeDetails('sec-' + $index)"
-            >
+              (click)="closeDetails('sec-' + $index)">
               <em class="fa fa-times text-primary"></em>
             </button>
             <app-threat-details
-              *ngIf="secEvent.type.name.toLowerCase()==='threat'"
-              [secEvent]="secEvent"
-            >
+              *ngIf="secEvent.type.name.toLowerCase() === 'threat'"
+              [secEvent]="secEvent">
             </app-threat-details>
             <app-violation-details
-              *ngIf="secEvent.type.name.toLowerCase()==='violation'"
-              [secEvent]="secEvent"
-            >
+              *ngIf="secEvent.type.name.toLowerCase() === 'violation'"
+              [secEvent]="secEvent">
             </app-violation-details>
             <app-incident-details
-              *ngIf="secEvent.type.name.toLowerCase()==='incident'"
-              [secEvent]="secEvent"
-            >
+              *ngIf="secEvent.type.name.toLowerCase() === 'incident'"
+              [secEvent]="secEvent">
             </app-incident-details>
           </div>
         </li>

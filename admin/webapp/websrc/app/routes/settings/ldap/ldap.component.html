@@ -14,7 +14,7 @@
       loading: loadingTemplate;
       error: errorTemplate
     ">
-    <app-ldap-form [ldapData]="ldapData"></app-ldap-form>
+    <app-ldap-form [ldapData]="ldapData" (refresh)="refresh()"></app-ldap-form>
   </ng-container>
   <ng-template #errorTemplate let-error>
     {{ error | json }}

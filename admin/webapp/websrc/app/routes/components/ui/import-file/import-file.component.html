@@ -52,7 +52,7 @@
               <div class="mat-small align-self-center">{{ percentage }}%</div>
             </td>
             <td class="text-center">
-              <span *ngIf="status === 'done' || (item.isSuccess && status !== 'preparing' && status !== 'importing')">
+              <span *ngIf="item.isError && (status === 'done' || (item.isSuccess && status !== 'preparing' && status !== 'importing'))">
                 <i class="fa fa-check text-success"></i>
               </span>
               <span *ngIf="status === 'preparing'">

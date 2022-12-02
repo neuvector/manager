@@ -42,7 +42,7 @@
     </button>
     <button
       mat-button
-      *ngIf="selectedGroups.length > 0"
+      *ngIf="selectedGroups.length > 0 && source === navSource['SELF']"
       [matMenuTriggerFor]="exportOptions"
       class="mr-3">
       <em class="eos-icons icon-18">download</em>

@@ -74,6 +74,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
         this.cfgType === GlobalConstant.CFG_TYPE.FED);
     this.gridOptions = this.processProfileRulesService.prepareGrid(
       this.isWriteGroupAuthorized,
+      this.isWriteProcessProfileRuleAuthorized,
       this.source,
       this.isScoreImprovement
     );
@@ -136,25 +137,6 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
                 : 0;
             setTimeout(() => {
               if (this.gridOptions.api) {
-                this.gridOptions.api.forEachNode((node, index) => {
-                  if (this.selectedProcessProfileRules) {
-                    if (
-                      node.data.name ===
-                        this.selectedProcessProfileRules.name &&
-                      node.data.path === this.selectedProcessProfileRules.path
-                    ) {
-                      node.setSelected(true);
-                      if (this.gridOptions.api) {
-                        this.gridOptions.api.ensureNodeVisible(node);
-                      }
-                    }
-                  } else if (index === 0) {
-                    node.setSelected(true);
-                    if (this.gridOptions.api) {
-                      this.gridOptions.api.ensureNodeVisible(node);
-                    }
-                  }
-                });
                 this.gridOptions.api.sizeColumnsToFit();
               }
             });
@@ -176,7 +158,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
       let selectedRows = this.gridOptions.api.getSelectedRows();
       if (selectedRows.length > 0) {
         setTimeout(() => {
-          this.selectedProcessProfileRules = selectedRows[0];
+          this.selectedProcessProfileRules = selectedRows;
         });
       }
     }
@@ -204,7 +186,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
   removeProfile = data => {
     let message = `${this.translate.instant(
       'service.PROFILE_DELETE_CONFIRMATION'
-    )} - ${data.name}`;
+    )} - ${data.map(item => item.name).join(',')}`;
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '700px',
       data: {

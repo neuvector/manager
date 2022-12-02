@@ -4,6 +4,13 @@
     *ngIf="source === navSource['FED_POLICY'] || groupName">
     <div [ngClass]="{ 'panel-body': source === navSource['SELF'] }">
       <div class="clearfix" *ngIf="groupName !== globalConstant4Html.EXTERNAL">
+        <app-quick-filter
+          class="pull-right"
+          [gridOptions]="gridOptions"
+          [filteredCount]="filteredCount"
+          [showCount]="false"
+          [count]="fileAccessRules.length">
+        </app-quick-filter>
         <div
           class="pull-right margin-right-s margin-top-l hand"
           *ngIf="selectedFileAccessRules && isWriteGroupAuthorized && isWriteFileAccessRuleAuthorized"
@@ -47,13 +54,7 @@
             </mat-option>
           </mat-select>
         </div>
-        <app-quick-filter
-          class="pull-right"
-          [gridOptions]="gridOptions"
-          [filteredCount]="filteredCount"
-          [showCount]="false"
-          [count]="fileAccessRules.length">
-        </app-quick-filter>
+
       </div>
       <div class="mt-sm mb0">
         <ag-grid-angular

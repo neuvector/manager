@@ -14,6 +14,13 @@
             </label>
           </span>
         </div>
+        <app-quick-filter
+          class="pull-right"
+          [gridOptions]="gridOptions"
+          [filteredCount]="filteredCount"
+          [showCount]="false"
+          [count]="processProfileRules.length">
+        </app-quick-filter>
         <div
           class="pull-right margin-right-m margin-top-l hand"
           *ngIf="selectedProcessProfileRules && isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized"
@@ -48,17 +55,10 @@
             </mat-option>
           </mat-select>
         </div>
-        <app-quick-filter
-          class="pull-right"
-          [gridOptions]="gridOptions"
-          [filteredCount]="filteredCount"
-          [showCount]="false"
-          [count]="processProfileRules.length">
-        </app-quick-filter>
+
       </div>
       <div class="mt-sm mb0">
         <ag-grid-angular
-          #agGrid
           id="process-profile-rules-grid"
           style="width: 100%"
           [ngStyle]="{
@@ -78,11 +78,10 @@
 <ng-template #scoreImprovement>
   <div class="mt-2">
     <ag-grid-angular
-      #agGrid
       [ngStyle]="{ height: resizableHeight + 'px' }"
       [gridOptions]="gridOptions"
       [rowData]="processProfileRules"
-      id="process-profile-rules-grid"
+      id="score-process-profile-rules-grid"
       style="width: 100%"
       class="ag-theme-balham">
     </ag-grid-angular>

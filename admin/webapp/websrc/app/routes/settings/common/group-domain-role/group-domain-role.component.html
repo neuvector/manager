@@ -1,5 +1,6 @@
 <button
   (click)="openDialog()"
+  [disabled]="isReadOnly"
   class="d-block my-2 btn-add-to-top"
   mat-stroked-button
   type="button">
@@ -72,6 +73,7 @@
     <mat-cell *matCellDef="let element" class="controls">
       <button
         (click)="openDialog()"
+        [disabled]="isReadOnly"
         [matTooltip]="'ldap.dialog.title.ADD' | translate"
         aria-label="Add icon button for editing a group role"
         mat-icon-button
@@ -80,15 +82,18 @@
         <i class="eos-icons">add_circle</i>
       </button>
       <button
+        (click)="openDialog(element)"
+        [disabled]="isReadOnly"
         [matTooltip]="'ldap.dialog.title.EDIT' | translate"
         aria-label="Edit icon button for editing a group role"
         mat-icon-button
         type="button"
         matTooltipPosition="above">
-        <i (click)="openDialog(element)" class="eos-icons">edit</i>
+        <i class="eos-icons">edit</i>
       </button>
       <button
         (click)="removeRole(element)"
+        [disabled]="isReadOnly"
         [matTooltip]="'ldap.dialog.title.REMOVE' | translate"
         aria-label="Delete icon button for removing a group role"
         mat-icon-button

@@ -23,7 +23,7 @@ import { UtilsService } from '@common/utils/app.utils';
 import { NotificationService } from '@services/notification.service';
 import { Observable } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
-import {AuthUtilsService} from "@common/utils/auth.utils";
+import { AuthUtilsService } from '@common/utils/auth.utils';
 
 @Component({
   selector: 'app-ldap-form',
@@ -64,7 +64,11 @@ export class LdapFormComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    this.isWriteLdapAuthorized  = this.authUtilsService.getDisplayFlag('write_auth_server');
+    this.isWriteLdapAuthorized =
+      this.authUtilsService.getDisplayFlag('write_auth_server');
+    if (!this.isWriteLdapAuthorized) {
+      this.ldapForm.disable();
+    }
     this.initForm();
   }
 

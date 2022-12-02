@@ -26,6 +26,7 @@ export class GroupDomainRoleComponent {
   @Input() mappableRoles!: MappableRoles;
   @Input() groupMappedRoles!: GroupMappedRole[];
   @Input() domains!: string[];
+  @Input() isReadOnly!: boolean;
 
   @ViewChild('table') table!: MatTable<GroupMappedRole>;
   displayedColumns: string[] = [

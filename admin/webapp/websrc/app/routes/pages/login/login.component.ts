@@ -289,7 +289,7 @@ export class LoginComponent implements OnInit {
         GlobalVariable.summary = summaryInfo.summary;
         GlobalVariable.hasInitializedSummary = true;
 
-        if (this.originalUrl && this.originalUrl !== 'login') {
+        if (this.originalUrl && this.originalUrl.includes('login')) {
           this.router.navigate([this.originalUrl]);
         } else {
           this.router.navigate([GlobalConstant.PATH_DEFAULT]);

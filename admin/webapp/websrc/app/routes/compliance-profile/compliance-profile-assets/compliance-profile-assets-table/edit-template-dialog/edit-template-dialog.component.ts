@@ -25,7 +25,7 @@ export class EditTemplateDialogComponent implements OnInit {
       this.name = this.name.substring(1);
       this.name = this.name.charAt(0).toUpperCase() + this.name.slice(1);
     }
-    this.applied = this.data.tags;
+    this.applied = this.data.tags || [];
     this.filterApplied();
   }
 

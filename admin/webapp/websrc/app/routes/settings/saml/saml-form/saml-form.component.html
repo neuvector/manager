@@ -74,12 +74,14 @@
     (updateGroupMappedRoles)="updateGroupMappedRoles($event)"
     [domains]="samlData.domains"
     [groupMappedRoles]="groupMappedRoles"
-    [mappableRoles]="samlData.server.mappable_roles"></app-group-domain-role>
+    [mappableRoles]="samlData.server.mappable_roles"
+    [isReadOnly]="!isWriteSamlAuthorized"></app-group-domain-role>
   <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
     <mat-checkbox formControlName="enable">{{
       'ldap.ENABLE_LDAP' | translate
     }}</mat-checkbox>
     <button
+      *ngIf="isWriteSamlAuthorized"
       [disabled]="!samlForm.valid || submittingForm"
       color="primary"
       mat-raised-button

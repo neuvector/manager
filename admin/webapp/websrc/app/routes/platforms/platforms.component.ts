@@ -1,5 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MapConstant } from '@common/constants/map.constant';
 import { ErrorResponse, Platform, ScanConfig } from '@common/types';
@@ -12,14 +18,14 @@ import { PlatformsService } from '@services/platforms.service';
 import { ScanService } from '@services/scan.service';
 import { interval, Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
-import {MultiClusterService} from "@services/multi-cluster.service";
+import { MultiClusterService } from '@services/multi-cluster.service';
 
 @Component({
   selector: 'app-platforms',
   templateUrl: './platforms.component.html',
   styleUrls: ['./platforms.component.scss'],
 })
-export class PlatformsComponent implements OnInit {
+export class PlatformsComponent implements OnInit, OnDestroy {
   _platformsGrid!: PlatformsGridComponent;
   @ViewChild(PlatformsGridComponent) set platformsGrid(
     grid: PlatformsGridComponent
@@ -71,13 +77,14 @@ export class PlatformsComponent implements OnInit {
     }
 
     //refresh the page when it switched to a remote cluster
-    this._switchClusterSubscription = this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
-      this.refresh();
-    });
+    this._switchClusterSubscription =
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
+        this.refresh();
+      });
   }
 
   ngOnDestroy(): void {
-    if(this._switchClusterSubscription){
+    if (this._switchClusterSubscription) {
       this._switchClusterSubscription.unsubscribe();
     }
   }
@@ -106,12 +113,7 @@ export class PlatformsComponent implements OnInit {
           this.error = '';
           if (!this.loaded) this.loaded = true;
         },
-        error: ({ error }: { error: ErrorResponse }) => {
-          this.error = error.message;
-          if (this.platformsGrid) {
-            this.platformsGrid.setError(this.error);
-          }
-        },
+        error: ({ error }: { error: ErrorResponse }) => {},
       });
   }
 

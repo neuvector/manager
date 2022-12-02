@@ -29,10 +29,43 @@
         </button>
       </div>
     </div>
-    <span class="d-flex align-items-center mt-2"
-      ><i class="eos-icons">assignment</i
-      >{{ 'ldap.test.NOTE' | translate }}</span
-    >
+    <mat-progress-bar
+      *ngIf="submittingForm && !testFinished"
+      mode="indeterminate"></mat-progress-bar>
+    <ng-container *ngIf="!submittingForm && !testFinished">
+      <span class="d-flex align-items-center my-2">
+        <i class="eos-icons text-info mr-2">assignment</i>
+        {{ 'ldap.test.NOTE' | translate }}
+      </span>
+    </ng-container>
+    <ng-container *ngIf="submittingForm">
+      <span class="d-flex align-items-center my-2">
+        <i class="eos-icons text-info mr-2">info</i>
+        {{ 'ldap.test.INFO' | translate }}
+      </span>
+    </ng-container>
+    <ng-container *ngIf="testFinished && !errorMessage">
+      <span class="d-flex align-items-center my-2">
+        <i class="eos-icons text-success mr-2">check</i>
+        {{
+          (connectedGroups.length
+            ? 'ldap.test.SUCCEEDED_GROUP'
+            : 'ldap.test.SUCCEEDED'
+          ) | translate
+        }}
+      </span>
+      <mat-chip-list>
+        <mat-chip *ngFor="let group of connectedGroups">
+          {{ group }}
+        </mat-chip>
+      </mat-chip-list>
+    </ng-container>
+    <ng-container *ngIf="testFinished && errorMessage">
+      <span class="d-flex align-items-center my-2">
+        <i class="eos-icons text-danger mr-2">close</i>
+        {{ errorMessage }}
+      </span>
+    </ng-container>
   </div>
   <div class="align-items-center justify-content-end" mat-dialog-actions>
     <button (click)="onNoClick()" mat-stroked-button type="button">

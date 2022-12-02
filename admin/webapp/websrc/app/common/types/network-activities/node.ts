@@ -23,6 +23,7 @@ export interface Node {
   clusterId: string;
   clusterName: string;
   scanBrief?: ScanBrief;
+  cve?: any;
   platform_role: string;
   state: string;
   domain: string;

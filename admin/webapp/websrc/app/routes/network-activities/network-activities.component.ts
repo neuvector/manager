@@ -1791,6 +1791,9 @@ export class NetworkActivitiesComponent
       this.serverData = JSON.parse(
         JSON.stringify({ nodes: response.nodes, edges: response.edges })
       );
+      this.serverData.nodes.forEach(node => {
+        node.cve = this.graphService.getCveLevel(node);
+      });
       console.profileEnd();
       console.profile('processing nodes');
       this.data.nodes = this.graphService.processNodes(

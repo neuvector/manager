@@ -70,7 +70,7 @@ export class EnforcerDetailsComponent implements OnInit, OnDestroy {
 
   getStats(): void {
     this.clearStatsSub();
-    if (!this.isDisconnected) {
+    if (this.currentEnforcer && !this.isDisconnected) {
       this.statsSub = this.componentsCommunicationService
         .startEnforcerStats(this.currentEnforcer)
         .subscribe({

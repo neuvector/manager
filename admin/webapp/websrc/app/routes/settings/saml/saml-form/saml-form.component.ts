@@ -1,4 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import {
   ErrorResponse,
   GroupMappedRole,
@@ -21,9 +29,10 @@ import { Observable } from 'rxjs';
   templateUrl: './saml-form.component.html',
   styleUrls: ['./saml-form.component.scss'],
 })
-export class SamlFormComponent implements OnInit {
+export class SamlFormComponent implements OnInit, OnChanges {
   @Input() samlData!: { server: ServerGetResponse; domains: string[] };
-  onCreate = true;
+  @Output() refresh = new EventEmitter();
+  isCreated = true;
   submittingForm = false;
   groupMappedRoles: GroupMappedRole[] = [];
   serverName = 'saml1';
@@ -47,6 +56,16 @@ export class SamlFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.samlRedirectURL = getCallbackUri('token_auth_server');
+    this.initForm();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.samlData) {
+      this.initForm();
+    }
+  }
+
+  initForm(): void {
     const saml = this.samlData.server.servers.find(
       ({ server_type }) => server_type === 'saml'
     );
@@ -60,8 +79,11 @@ export class SamlFormComponent implements OnInit {
           );
         }
       });
+      let x509_cert = this.samlForm.get('x509_cert');
+      x509_cert?.clearValidators();
+      x509_cert?.markAsPristine();
     } else {
-      this.onCreate = false;
+      this.isCreated = false;
     }
   }
 
@@ -77,14 +99,17 @@ export class SamlFormComponent implements OnInit {
       group_mapped_roles: this.groupMappedRoles,
       ...this.samlForm.value,
     };
+    if (!this.samlForm.get('x509_cert')?.dirty) {
+      saml.x509_cert = null as any;
+    }
     const config: ServerPatchBody = { config: { name: this.serverName, saml } };
     this.submittingForm = true;
     let submission: Observable<unknown>;
-    if (!this.onCreate) {
+    if (!this.isCreated) {
       submission = this.settingsService.postServer(config).pipe(
         finalize(() => {
           this.submittingForm = false;
-          this.onCreate = true;
+          this.isCreated = true;
         })
       );
     } else {
@@ -97,6 +122,7 @@ export class SamlFormComponent implements OnInit {
     submission.subscribe({
       complete: () => {
         this.notificationService.open(this.tr.instant('ldap.SERVER_SAVED'));
+        this.refresh.emit();
       },
       error: ({ error }: { error: ErrorResponse }) => {
         this.notificationService.open(

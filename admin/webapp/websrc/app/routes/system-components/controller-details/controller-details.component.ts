@@ -204,7 +204,7 @@ export class ControllerDetailsComponent implements OnInit, OnDestroy {
 
   getStats(): void {
     this.clearStatsSub();
-    if (!this.isDisconnected) {
+    if (this.currentController && !this.isDisconnected) {
       this.statsSub = this.componentsCommunicationService
         .startControllerStats(this.currentController)
         // .pipe(takeUntil(this.destroy$))

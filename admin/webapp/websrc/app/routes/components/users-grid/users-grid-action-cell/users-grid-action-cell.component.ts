@@ -34,4 +34,8 @@ export class UsersGridActionCellComponent implements ICellRendererAngularComp {
   reset(): void {
     this.params.reset(this.params);
   }
+
+  view(): void {
+    this.params.view(this.params);
+  }
 }

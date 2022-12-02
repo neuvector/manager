@@ -23,6 +23,8 @@ export class TestConnectionDialogComponent {
   passwordVisible = false;
   submittingForm = false;
   errorMessage!: string;
+  testFinished: boolean = false;
+  connectedGroups: string[] = [];
 
   testForm = new FormGroup({
     username: new FormControl(null, Validators.required),
@@ -49,26 +51,31 @@ export class TestConnectionDialogComponent {
         test_ldap: this.testForm.value,
       },
     };
+
+    body.test.ldap.bind_password = body.test.ldap.bind_password
+      ? body.test.ldap.bind_password
+      : (null as any);
+    this.testFinished = false;
     this.submittingForm = true;
     this.errorMessage = '';
     this.settingsService
       .postDebug(body)
       .pipe(
         finalize(() => {
+          this.testFinished = true;
           this.submittingForm = false;
         })
       )
       .subscribe({
-        complete: () => {
+        next: (result: any) => {
           this.notificationService.open(this.tr.instant('ldap.test.SUCCEEDED'));
+          this.connectedGroups = result.groups;
         },
         error: ({ error }: { error: ErrorResponse }) => {
-          this.notificationService.open(
-            this.utils.getAlertifyMsg(
-              error,
-              this.tr.instant('ldap.test.FAILED'),
-              false
-            )
+          this.errorMessage = this.utils.getAlertifyMsg(
+            error,
+            this.tr.instant('ldap.test.FAILED'),
+            false
           );
         },
       });

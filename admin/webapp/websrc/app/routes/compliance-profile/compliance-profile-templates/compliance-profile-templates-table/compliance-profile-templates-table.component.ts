@@ -56,8 +56,7 @@ export class ComplianceProfileTemplatesTableComponent
       width: 70,
       sortable: true,
       resizable: true,
-      headerValueGetter: () =>
-        this.translate.instant('cis.report.gridHeader.NAME'),
+      headerName: "CIS ID",
     },
     {
       field: 'tags',

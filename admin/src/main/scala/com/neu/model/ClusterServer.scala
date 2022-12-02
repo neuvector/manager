@@ -18,7 +18,6 @@ case class FedMemberData(
   local_rest_info: Option[ClusterServerInfo] = None,
   clusters: Option[Seq[ClusterServer]] = None,
   use_proxy: Option[String] = None,
-  deploy_reg_scan_data: Option[Boolean] = Some(false),
   deploy_repo_scan_data: Option[Boolean] = Some(false)
 )
 
@@ -56,7 +55,6 @@ case class FedMembershipData(
   master_cluster: Option[FedMasterCluster] = None,
   joint_clusters: Option[Seq[FedJointCluster]] = None,
   use_proxy: Option[String] = None,
-  deploy_reg_scan_data: Option[Boolean],
   deploy_repo_scan_data: Option[Boolean]
 )
 
@@ -64,7 +62,6 @@ case class FedPromptRequest(
   name: String,
   master_rest_info: Option[ClusterServerInfo],
   use_proxy: Option[String],
-  deploy_reg_scan_data: Option[Boolean],
   deploy_repo_scan_data: Option[Boolean]
 )
 
@@ -73,7 +70,6 @@ case class FedConfigData(
   name: Option[String],
   use_proxy: Option[String],
   rest_info: Option[ClusterServerInfo],
-  deploy_reg_scan_data: Option[Boolean],
   deploy_repo_scan_data: Option[Boolean]
 )
 
@@ -99,12 +95,12 @@ object ClusterJsonProtocol extends DefaultJsonProtocol with LazyLogging {
   implicit val clusterServerInfo: RootJsonFormat[ClusterServerInfo]  = jsonFormat2(ClusterServerInfo)
   implicit val fedMasterClusterFmt: RootJsonFormat[FedMasterCluster] = jsonFormat7(FedMasterCluster)
   implicit val fedJointClusterFmt: RootJsonFormat[FedJointCluster]   = jsonFormat9(FedJointCluster)
-  implicit val fedMemberDataFmt: RootJsonFormat[FedMemberData]       = jsonFormat6(FedMemberData)
-  implicit val fedMembershipDataFmt: RootJsonFormat[FedMembershipData] = jsonFormat7(
+  implicit val fedMemberDataFmt: RootJsonFormat[FedMemberData]       = jsonFormat5(FedMemberData)
+  implicit val fedMembershipDataFmt: RootJsonFormat[FedMembershipData] = jsonFormat6(
     FedMembershipData
   )
-  implicit val fedPromptRequestFmt: RootJsonFormat[FedPromptRequest] = jsonFormat5(FedPromptRequest)
-  implicit val fedConfigDataFmt: RootJsonFormat[FedConfigData]       = jsonFormat6(FedConfigData)
+  implicit val fedPromptRequestFmt: RootJsonFormat[FedPromptRequest] = jsonFormat4(FedPromptRequest)
+  implicit val fedConfigDataFmt: RootJsonFormat[FedConfigData]       = jsonFormat5(FedConfigData)
   implicit val fedJoinRequestFmt: RootJsonFormat[FedJoinRequest]     = jsonFormat6(FedJoinRequest)
   implicit val fedLeaveRequestFmt: RootJsonFormat[FedLeaveRequest]   = jsonFormat1(FedLeaveRequest)
   implicit val deployFedRulesReqFmt: RootJsonFormat[DeployFedRulesReq] = jsonFormat1(

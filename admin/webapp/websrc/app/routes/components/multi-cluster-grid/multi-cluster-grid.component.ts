@@ -5,7 +5,7 @@ import {
   OnInit,
   SecurityContext,
 } from '@angular/core';
-import { ClusterData, Cluster } from '@common/types';
+import { Cluster, ClusterData } from '@common/types';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { TranslateService } from '@ngx-translate/core';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -18,13 +18,11 @@ import {
   RowNode,
   RowSelectedEvent,
 } from 'ag-grid-community';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { MapConstant } from '@common/constants/map.constant';
 import { UtilsService } from '@common/utils/app.utils';
-import { SelectionChangedEvent } from 'ag-grid-community/dist/lib/events';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { MultiClusterGridActionCellComponent } from '@components/multi-cluster-grid/multi-cluster-grid-action-cell/multi-cluster-grid-action-cell.component';
-import { PathConstant } from '@common/constants/path.constant';
 import { finalize } from 'rxjs/operators';
 
 @Component({
@@ -156,6 +154,9 @@ export class MultiClusterGridComponent implements OnInit {
   filteredCount: number = 0;
   context;
 
+  get clusterCount() {
+    return this.clusterData.clusters!.length;
+  }
   constructor(
     public multiClusterService: MultiClusterService,
     private translate: TranslateService,
@@ -223,7 +224,6 @@ export class MultiClusterGridComponent implements OnInit {
         this.multiClusterService
           .getMultiClusterSummary(params)
           .subscribe(res => {
-            console.log('summary of master node:', res);
             this.updateClusterGridRRow4Success(
               index,
               rowNode,
@@ -314,7 +314,7 @@ export class MultiClusterGridComponent implements OnInit {
 
   filterCountChanged(results: number) {
     this.filteredCount = results;
-    // this.filtered = this.filteredCount !== this.clustersCount;
+    this.filtered = this.filteredCount !== this.clusterCount;
   }
 
   onGridReady(params: GridReadyEvent): void {

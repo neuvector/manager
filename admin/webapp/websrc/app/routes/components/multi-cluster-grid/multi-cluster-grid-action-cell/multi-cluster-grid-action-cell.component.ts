@@ -106,7 +106,7 @@ export class MultiClusterGridActionCellComponent
     this.multiClusterService.syncPolicy(data.id).subscribe(
       () => {
         this.notificationService.open(
-          this.translate.instant('multiCluster.messages.deploy_ok')
+          this.translate.instant('multiCluster.messages.deploy_ok', {name: data.name})
         );
       },
       error => {
@@ -257,8 +257,6 @@ export class MultiClusterGridActionCellComponent
           port: data.api_port,
         },
         useProxy: context.componentParent.clusterData.use_proxy,
-        fed_sync_registry_toggle:
-          context.componentParent.clusterData.deploy_reg_scan_data,
         fed_sync_repo_toggle:
           context.componentParent.clusterData.deploy_repo_scan_data,
       },

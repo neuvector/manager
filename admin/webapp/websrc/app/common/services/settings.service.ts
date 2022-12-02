@@ -132,6 +132,10 @@ export class SettingsService {
     return this.authHttpService.getPwdProfile();
   }
 
+  getPublicPwdProfile() {
+    return this.authHttpService.getPublicPwdProfile();
+  }
+
   patchPwdProfile(profile: PasswordProfile) {
     return this.authHttpService.patchPwdProfile(profile);
   }

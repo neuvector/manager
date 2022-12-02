@@ -315,13 +315,6 @@ export class RiskReportGridComponent implements OnInit {
     return !audit.parent_id || audit.visible;
   }
 
-  setError(error: string) {
-    if (this.gridOptions) {
-      this.gridOptions.overlayNoRowsTemplate =
-        this.utils.getOverlayTemplateMsg(error);
-    }
-  }
-
   private getLevels(levels: boolean[]) {
     let _levels = [] as any;
     levels.forEach((l, idx) => {

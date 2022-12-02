@@ -159,11 +159,4 @@ export class PlatformsGridComponent implements OnInit {
   onResize(): void {
     this.gridApi.sizeColumnsToFit();
   }
-
-  setError(error: string) {
-    if (this.gridOptions) {
-      this.gridOptions.overlayNoRowsTemplate =
-        this.utils.getOverlayTemplateMsg(error);
-    }
-  }
 }

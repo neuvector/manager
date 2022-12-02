@@ -1367,3 +1367,13 @@ mwl-gauge.score > .gauge > .value {
   text-align: center;
   margin-bottom: 10px;
 }
+
+.user__icon {
+  color: white;
+  background-color: #30ba78;
+  border-radius: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

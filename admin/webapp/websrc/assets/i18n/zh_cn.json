@@ -765,7 +765,7 @@
       "COLLAPSE_GROUP": "合并组",
       "COLLAPSE_ALL_GROUPS": "合并所有组",
       "SESSION_CLEAR_FAILURE": "会话清除失败",
-      "QUICK_SEARCH_TITLE": "指定名字查找容器/pod/服务"
+      "QUICK_SEARCH_TITLE": "指定名字查找节点"
     }
   },
   "topbar": {

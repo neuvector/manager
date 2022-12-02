@@ -74,6 +74,7 @@ export class LdapFormComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.ldapData) {
+      this.ldapForm.reset();
       this.initForm();
     }
   }

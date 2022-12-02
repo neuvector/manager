@@ -78,6 +78,7 @@ export class OpenidFormComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.openidData) {
+      this.openidForm.reset();
       this.initForm();
     }
   }

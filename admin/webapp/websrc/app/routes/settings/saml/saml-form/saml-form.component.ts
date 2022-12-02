@@ -69,6 +69,7 @@ export class SamlFormComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.samlData) {
+      this.samlForm.reset();
       this.initForm();
     }
   }

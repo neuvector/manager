@@ -167,7 +167,7 @@ export class DashboardComponent implements OnInit {
       }
     };
 
-    this.reportDialog.close();
+    this.reportDialog?.close();
     setTimeout(() => {
       this.reportDomain = domain;
       this.isPrinting = true;

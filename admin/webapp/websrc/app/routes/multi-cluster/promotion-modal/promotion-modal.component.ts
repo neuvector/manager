@@ -124,7 +124,7 @@ export class PromotionModalComponent implements OnInit {
         response => {
           this.notificationService.open(this.translate.instant('multiCluster.promotion.success'));
           setTimeout(() => {
-            this.router.navigate(['logout']);
+            this.router.navigate(['login']);
           }, 5000);
           this.dialogRef.close();
         },

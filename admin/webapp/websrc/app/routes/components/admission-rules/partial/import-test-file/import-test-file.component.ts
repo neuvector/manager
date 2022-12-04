@@ -102,6 +102,10 @@ export class ImportTestFileComponent implements OnInit {
     })(self);
   }
 
+  browseFile = () => {
+    this.uploader?.clearQueue();
+  };
+
   public fileOverBase = (e: any): void => {
     this.hasBaseDropZoneOver = e;
   };

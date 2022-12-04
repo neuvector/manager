@@ -18,7 +18,7 @@
           [uploader]="uploader"
           [id]="'upload-' + importUrl" />
       </span>
-      <button mat-stroked-button (click)="fileInput.click()">
+      <button mat-stroked-button (click)="fileInput.click(); browseFile()">
         {{'setting.BROWSE' | translate}}
       </button>
     </div>

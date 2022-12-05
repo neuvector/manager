@@ -47,13 +47,13 @@ export class PolicyHttpService {
     });
   }
 
-  getPolicyRule(id: string): Observable<NetworkRule> {
+  getPolicyRule(id: number): Observable<NetworkRule> {
     return GlobalVariable.http.get<NetworkRule>(PathConstant.POLICY_RULE_URL, {
       params: { id },
     });
   }
 
-  getResponseRule(id: string): Observable<ResponseRule> {
+  getResponseRule(id: number): Observable<ResponseRule> {
     return GlobalVariable.http.get<ResponseRule>(
       PathConstant.RESPONSE_RULE_URL,
       {

@@ -16,7 +16,7 @@
         ng2FileSelect
         [uploader]="uploader" />
       </span>
-      <button mat-stroked-button (click)="testFileInput.click()">
+      <button mat-stroked-button (click)="testFileInput.click(); browseFile();">
         {{'setting.BROWSE' | translate}}
       </button>
     </div>

@@ -191,10 +191,13 @@ export class MultiClusterGridActionCellComponent
             this.translate.instant('multiCluster.messages.demote_ok')
           );
           setTimeout(() => {
-            this.router.navigate(['logout']);
+            dialogRef.componentInstance.loading = false;
+            dialogRef.close();
+            this.router.navigate(['login']);
           }, 3000);
         },
         error => {
+          dialogRef.componentInstance.loading = false;
           this.notificationService.openError(
             error,
             this.translate.instant('multiCluster.messages.demote_failure')

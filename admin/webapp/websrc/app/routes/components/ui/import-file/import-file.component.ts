@@ -135,6 +135,10 @@ export class ImportFileComponent implements OnInit, OnChanges {
     }
   }
 
+  browseFile = () => {
+    this.uploader?.clearQueue();
+  };
+
   addOrReplaceHeaders = (headerName, headerValue) => {
     if (
       typeof this.uploader.options !== 'undefined' &&

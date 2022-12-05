@@ -254,14 +254,20 @@ export class LoginComponent implements OnInit {
             GlobalConstant.SESSION_STORAGE_TOKEN,
             GlobalVariable.user
           );
-          if (this.sessionStorage.has(GlobalConstant.SESSION_STORAGE_TOKEN)) {
-            GlobalVariable.headers.set(
-              'Token',
-              this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_TOKEN)
-                .token.token
+          this.cookieService.delete('temp');
+          if (this.isEulaAccepted) {
+            this.getSummary();
+          } else {
+            this.authService.updateEula().subscribe(
+              value1 => {
+                this.getSummary();
+              },
+              error => {
+                this.authMsg = error.message;
+                this.inProgress = false;
+              }
             );
           }
-          this.cookieService.delete('temp');
         },
         error => {
           this.inProgress = true;

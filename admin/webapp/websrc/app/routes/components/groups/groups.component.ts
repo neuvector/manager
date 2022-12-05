@@ -24,6 +24,7 @@ import { switchMap } from 'rxjs/operators';
 import { NotificationService } from '@services/notification.service';
 import { ServiceModeService } from '@services/service-mode.service';
 import { serviceToGroup } from '@common/utils/common.utils';
+import { RuleDetailModalService } from '@components/groups/partial/rule-detail-modal/rule-detail-modal.service';
 
 @Component({
   selector: 'app-groups',
@@ -73,7 +74,8 @@ export class GroupsComponent implements OnInit {
     private dialog: MatDialog,
     private translate: TranslateService,
     private utilsService: UtilsService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private ruleDetailModalService: RuleDetailModalService
   ) {}
 
   ngOnInit(): void {
@@ -152,6 +154,11 @@ export class GroupsComponent implements OnInit {
         this.getGroups();
       }
     }
+  }
+
+  ngOnDestroy(): void {
+    this.ruleDetailModalService.ruleDialog.close(false);
+    this.ruleDetailModalService.isDialogOpen = false;
   }
 
   getScoreImprovementGroups = () => {

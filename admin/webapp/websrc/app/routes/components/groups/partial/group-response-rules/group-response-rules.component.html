@@ -1,0 +1,8 @@
+<span
+  *ngFor="let ruleId of params.data.response_rules"
+  class="type-label customer-rule mr-1"
+  style="min-width: 0; padding-left: 3px; padding-right: 3px;"
+  (mouseenter)="openResponseRuleDetailModal(ruleId)"
+>
+  {{ ruleId }}
+</span>

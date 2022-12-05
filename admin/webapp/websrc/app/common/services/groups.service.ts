@@ -232,6 +232,7 @@ export class GroupsService {
           valueGetter: params => {
             return {
               policy_mode: params.data.policy_mode,
+              baseline_profile: params.data.baseline_profile,
             };
           },
           cellRenderer: policyModeRendererFunc,

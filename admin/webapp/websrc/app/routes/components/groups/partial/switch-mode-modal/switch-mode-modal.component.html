@@ -3,48 +3,74 @@
     <h4 mat-dialog-title class="mb-2">
       {{ 'service.SWITCH_MODE' | translate }}
     </h4>
-    <button (click)="onCancel()" class="mb-2" aria-label="Close dialog" mat-icon-button>
-      <i class="eos-icons ">close</i>
+    <button
+      (click)="onCancel()"
+      class="mb-2"
+      aria-label="Close dialog"
+      mat-icon-button>
+      <i class="eos-icons">close</i>
     </button>
   </div>
   <hr class="fancy mb-3" />
   <div mat-dialog-content>
     <form>
       <div class="clearfix margin-top-m">
-        <mat-radio-group class="pull-left margin-right-m" aria-label="Select a mode" [(ngModel)]="mode" [ngModelOptions]="{standalone: true}">
-          <mat-radio-button value="discover" class="margin-right-s">{{'topbar.mode.LEARNING' | translate}}</mat-radio-button>
-          <mat-radio-button value="monitor" class="margin-right-s">{{'topbar.mode.EVALUATION' | translate}}</mat-radio-button>
-          <mat-radio-button value="protect" class="margin-right-s">{{'topbar.mode.ENFORCE' | translate}}</mat-radio-button>
+        <mat-radio-group
+          class="pull-left margin-right-m"
+          aria-label="Select a mode"
+          [(ngModel)]="mode"
+          [ngModelOptions]="{ standalone: true }">
+          <mat-radio-button value="discover" class="margin-right-s">{{
+            'topbar.mode.LEARNING' | translate
+          }}</mat-radio-button>
+          <mat-radio-button value="monitor" class="margin-right-s">{{
+            'topbar.mode.EVALUATION' | translate
+          }}</mat-radio-button>
+          <mat-radio-button value="protect" class="margin-right-s">{{
+            'topbar.mode.ENFORCE' | translate
+          }}</mat-radio-button>
         </mat-radio-group>
         <div class="text-warning text-sm pull-left">
-          {{zeroDriftHint}}
+          {{ zeroDriftHint }}
         </div>
       </div>
       <div class="clearfix margin-top-m">
-        <mat-radio-group aria-label="Select a baseline profile" class="pull-left margin-right-m" [(ngModel)]="baselineProfile" [ngModelOptions]="{standalone: true}" (change)="checkZeroDrift()">
-          <mat-radio-button value="basic" class="margin-right-s">{{'enum.BASIC' | translate}}</mat-radio-button>
-          <mat-radio-button value="zero-drift" class="margin-right-s">{{'enum.ZERODRIFT' | translate}}</mat-radio-button>
+        <mat-radio-group
+          aria-label="Select a baseline profile"
+          class="pull-left margin-right-m"
+          [(ngModel)]="baselineProfile"
+          [ngModelOptions]="{ standalone: true }"
+          (change)="checkZeroDrift()">
+          <mat-radio-button value="basic" class="margin-right-s">{{
+            'enum.BASIC' | translate
+          }}</mat-radio-button>
+          <mat-radio-button value="zero-drift" class="margin-right-s">{{
+            'enum.ZERODRIFT' | translate
+          }}</mat-radio-button>
         </mat-radio-group>
-        <div class="pull-left text-muted">{{'group.ZERODRIFT_COMMENT' | translate}}</div>
+        <div class="pull-left text-muted">
+          {{ 'group.ZERODRIFT_COMMENT' | translate }}
+        </div>
       </div>
       <div class="d-flex justify-content-between align-items-center">
         <div class="d-flex justify-content-start align-items-center">
-          <div *ngIf="!mode || baselineProfile === 'no-change'" class="d-flex justify-content-start align-items-center text-warning ">
+          <div
+            *ngIf="!mode || baselineProfile === 'no-change'"
+            class="d-flex justify-content-start align-items-center text-warning">
             {{ 'group.MULTI_MODE_SELECTION' | translate }}
           </div>
         </div>
         <div class="d-flex justify-content-end align-items-center">
-          <button mat-stroked-button
-                  class="mr-2" (click)="onCancel()">
-            {{'waf.ruleModal.CANCEL' | translate}}
+          <button mat-stroked-button class="mr-2" (click)="onCancel()">
+            {{ 'waf.ruleModal.CANCEL' | translate }}
           </button>
           <app-loading-button
             [appearance]="'mat-raised-button'"
             [color]="'primary'"
             [loading]="submittingUpdate"
+            [disabled]="submittingUpdate"
             [text]="'setting.SUBMIT' | translate"
-            (click)="switchMode()"
-          >
+            (click)="switchMode()">
           </app-loading-button>
         </div>
       </div>

@@ -77,14 +77,13 @@ export class JoiningModalComponent implements OnInit {
           this.translate.instant('multiCluster.joining.success')
         );
         setTimeout(() => {
-          this.router.navigate(['logout']);
-        }, 3000);
+          this.clustersService.dispatchRefreshEvent();
+        }, 1000);
         this.dialogRef.close();
       },
       err => {
-        let message = this.utils.getErrorMessage(err);
         this.notificationService.openError(
-          message,
+          err,
           this.translate.instant('multiCluster.joining.failure')
         );
       }

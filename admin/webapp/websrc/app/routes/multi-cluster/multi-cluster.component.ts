@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { UtilsService } from '@common/utils/app.utils';
@@ -17,6 +17,7 @@ import { MapConstant } from '@common/constants/map.constant';
 import { finalize } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
+import {MultiClusterGridComponent} from "@components/multi-cluster-grid/multi-cluster-grid.component";
 
 @Component({
   selector: 'app-multi-cluster',
@@ -49,9 +50,17 @@ export class MultiClusterComponent implements OnInit {
   private workerCount: number = 0;
   private clusterCount: number = 0;
   private switchClusterSubscription;
+  private refreshClusterSubscription;
   refreshing$ = new Subject();
-
   readonly CONST = GlobalConstant;
+  private _clusterGrid!: MultiClusterGridComponent;
+
+  @ViewChild(MultiClusterGridComponent) set multiClusterGrid(
+    grid: MultiClusterGridComponent
+  ){
+    this._clusterGrid = grid;
+  }
+
 
   constructor(
     public dialog: MatDialog,
@@ -62,9 +71,6 @@ export class MultiClusterComponent implements OnInit {
   ) {
     this.w = GlobalVariable.window;
     this.$win = $(this.w);
-    this.multiClusterService.refresh().subscribe(value => {
-      this.refresh();
-    });
   }
 
   breakPoints(): void {
@@ -83,11 +89,17 @@ export class MultiClusterComponent implements OnInit {
       this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
         this.router.navigate(['dashboard']);
       });
+    this.refreshClusterSubscription = this.multiClusterService.onRefreshClustersEvent$.subscribe( data => {
+      this.pageInit();
+    });
   }
 
   ngOnDestroy(): void {
     if (this.switchClusterSubscription) {
       this.switchClusterSubscription.unsubscribe();
+    }
+    if (this.refreshClusterSubscription) {
+      this.refreshClusterSubscription.unsubscribe();
     }
   }
 
@@ -97,6 +109,11 @@ export class MultiClusterComponent implements OnInit {
     this.isStandalone = fedData.fed_role.length === 0;
     this.isFederal = fedData.fed_role.length > 0;
     this.clusterData = fedData;
+    if(this._clusterGrid && this._clusterGrid.gridApi){
+      this._clusterGrid.gridApi.setRowData(this.clusterData.clusters!);
+      this._clusterGrid.gridApi.getDisplayedRowAtIndex(0)?.setSelected(true);
+      this._clusterGrid.updateSummaryForRows();
+    }
 
     this.clusterCount = this.clusterData.clusters
       ? this.clusterData.clusters.length
@@ -108,8 +125,6 @@ export class MultiClusterComponent implements OnInit {
       this.getSummaries(this.clusterData);
     }
 
-    //todo: to broadcast reloadClusters to the dropdown menu
-    //todo: to get summary info
   }
 
   getSummaries(clusters: ClusterData) {
@@ -141,6 +156,7 @@ export class MultiClusterComponent implements OnInit {
       .pipe(
         finalize(() => {
           this.loaded = true;
+          this.refreshing$.next(false);
         })
       )
       .subscribe({
@@ -150,6 +166,7 @@ export class MultiClusterComponent implements OnInit {
           } else {
             this.clusterError = true;
           }
+          if(!this.loaded) this.loaded = true;
         },
         error: error => {
           this.error = error.message;
@@ -180,6 +197,7 @@ export class MultiClusterComponent implements OnInit {
   }
 
   refresh(): void {
-    this.pageInit();
+    this.refreshing$.next(true);
+    this.multiClusterService.dispatchRefreshEvent();
   }
 }

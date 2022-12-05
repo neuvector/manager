@@ -71,7 +71,7 @@
           [disabled]="!!(refreshing$ | async)"
           [iconClasses]="'eos-icons icon-18'"
           [iconName]="'refresh'"
-          [id]="'nodes-refresh-button'"
+          [id]="'multiCluster-refresh-button'"
           [loading]="!!(refreshing$ | async)"
           [text]="'general.REFRESH' | translate"
           [type]="'button'">
@@ -115,9 +115,17 @@
 </ng-container>
 <ng-template #loadingOrErrorTemplate>
   <ng-container *ngIf="error; else loadingTemplate">
-    <mat-card>
-      {{ error | json }}
-    </mat-card>
+    <div
+      class="server-error-sm details"
+      style="height: 145px; padding-top: 30px;"
+    >
+      <div>
+        <em class="fa fa-times-circle error-signal" aria-hidden="true"></em>
+      <span class="error-text padding-left-m">
+        {{'multiCluster.messages.api_failure' | translate }}
+      </span>
+      </div>
+    </div>
   </ng-container>
   <ng-template #loadingTemplate>
     <app-loading-template></app-loading-template>

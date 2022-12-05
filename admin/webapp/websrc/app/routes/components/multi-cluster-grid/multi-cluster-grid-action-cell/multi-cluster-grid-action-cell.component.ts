@@ -102,7 +102,7 @@ export class MultiClusterGridActionCellComponent
     });
   };
 
-  syncPolicy = (event, data) => {
+  syncPolicy = (data) => {
     this.multiClusterService.syncPolicy(data.id).subscribe(
       () => {
         this.notificationService.open(
@@ -131,20 +131,18 @@ export class MultiClusterGridActionCellComponent
 
     dialogRef.componentInstance.confirm
       .pipe(
-        switchMap(() => this.multiClusterService.removeMember(rowData.id)),
-        finalize(() => {
-          dialogRef.componentInstance.onCancel();
-          dialogRef.componentInstance.loading = false;
-        })
+        switchMap(() => this.multiClusterService.removeMember(rowData.id))
       )
       .subscribe(
         () => {
           this.notificationService.open(
             this.translate.instant('multiCluster.messages.remove_ok')
           );
+          dialogRef.componentInstance.onCancel();
+          dialogRef.componentInstance.loading = false;
           setTimeout(() => {
-            this.multiClusterService.requestRefresh();
-          }, 2000);
+            this.multiClusterService.dispatchRefreshEvent();
+          }, 1500);
         },
         error => {
           this.notificationService.openError(
@@ -172,11 +170,7 @@ export class MultiClusterGridActionCellComponent
     });
     dialogRef.componentInstance.confirm
       .pipe(
-        switchMap(() => this.multiClusterService.leaveFromMaster(true)),
-        finalize(() => {
-          // dialogRef.componentInstance.onCancel();
-          // dialogRef.componentInstance.loading = false;
-        })
+        switchMap(() => this.multiClusterService.leaveFromMaster(true))
       )
       .subscribe(
         () => {
@@ -186,8 +180,8 @@ export class MultiClusterGridActionCellComponent
           dialogRef.componentInstance.loading = false;
           dialogRef.componentInstance.onCancel();
           setTimeout(() => {
-            this.multiClusterService.requestRefresh();
-          }, 2000);
+            this.multiClusterService.dispatchRefreshEvent();
+          }, 1500);
         },
         error => {
           this.notificationService.open(
@@ -201,7 +195,6 @@ export class MultiClusterGridActionCellComponent
   demote = data => {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '700px',
-
       data: {
         message: `${this.translate.instant('multiCluster.prompt.demote', {
           name: this.shortenFromMiddlePipe.transform(data.name, 20),

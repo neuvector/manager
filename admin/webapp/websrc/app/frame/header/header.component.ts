@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Injector, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, Injector, Inject, OnDestroy } from '@angular/core';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { Router } from '@angular/router';
 import screenfull from 'screenfull';
@@ -16,7 +16,7 @@ import { GlobalVariable } from '@common/variables/global.variable';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   navCollapsed = true;
   menuItems: Array<any> = [];
   router: Router = <Router>{};
@@ -36,6 +36,8 @@ export class HeaderComponent implements OnInit {
   displayRole = '';
 
   isNavSearchVisible: boolean = false;
+  private _multiClusterSubScription;
+
   @ViewChild('fsbutton', { static: true }) fsbutton;
 
   constructor(
@@ -65,6 +67,15 @@ export class HeaderComponent implements OnInit {
     this.username = this.sessionStorage.get('token')?.token?.username;
     const role = this.sessionStorage.get('token')?.token?.role;
     this.displayRole = role ? role : 'Namespace User';
+
+    this._multiClusterSubScription = this.multiClusterService.onRefreshClustersEvent$.subscribe(data => {
+      this.initMultiClusters();
+    });
+
+  }
+
+  ngOnDestroy() {
+    this._multiClusterSubScription.unsubscribe();
   }
 
   toggleUserBlock(event) {

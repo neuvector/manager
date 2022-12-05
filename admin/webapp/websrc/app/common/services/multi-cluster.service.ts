@@ -33,7 +33,9 @@ export interface Cluster2Join {
 export class MultiClusterService {
   public clusters: Cluster[] = [];
   private _clusterSwitchedEvent = new Subject();
+  private _clusterRefreshEvent = new Subject();
   public onClusterSwitchedEvent$ = this._clusterSwitchedEvent.asObservable();
+  public onRefreshClustersEvent$ = this._clusterRefreshEvent.asObservable();
   private readonly $win;
   private _selectedClusterSubject$ = new BehaviorSubject<Cluster | undefined>(
     undefined
@@ -202,11 +204,8 @@ export class MultiClusterService {
     this._clusterSwitchedEvent.next(true);
   }
 
-  requestRefresh() {
-    this.refreshSubject.next();
+  dispatchRefreshEvent() {
+    this._clusterRefreshEvent.next(true);
   }
 
-  refresh(): Observable<any> {
-    return this.refreshSubject.asObservable();
-  }
 }

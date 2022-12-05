@@ -168,6 +168,10 @@ export class MultiClusterGridComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.initGrid();
+  }
+
+  initGrid(){
     // login as a master
     this.isMasterRole =
       this.clusterData.fed_role === MapConstant.FED_ROLES.MASTER;
@@ -194,11 +198,12 @@ export class MultiClusterGridComponent implements OnInit {
     this.context = { componentParent: this };
 
     this.gridOptions = this.utils.createGridOptions(this.columnDefs, this.$win);
+
     this.gridOptions = {
       ...this.gridOptions,
-      rowData: this.clusterData.clusters,
       suppressDragLeaveHidesColumns: true,
       rowSelection: 'single',
+      rowData: this.clusterData.clusters,
       onGridReady: event => this.onGridReady(event),
       onRowSelected: event => this.onRowSelected(event),
     };

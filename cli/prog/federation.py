@@ -9,6 +9,7 @@ from prog import client
 from prog import output
 import json
 
+
 clusterRoleNone = ""
 clusterRoleMaster = "master"
 clusterRoleJoint = "joint"

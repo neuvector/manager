@@ -9,9 +9,14 @@ import { AddEditGroupModalComponent } from './partial/add-edit-group-modal/add-e
 import { ConfirmDialogModule } from '@components/ui/confirm-dialog/confirm-dialog.module';
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
 import { ScorableHeaderComponent } from './partial/scorable-header/scorable-header.component';
+import { GroupResponseRulesComponent } from '@components/groups/partial/group-response-rules/group-response-rules.component';
+import { GroupNetworkRulesComponent } from '@components/groups/partial/group-network-rules/group-network-rules.component';
 import { SwitchModeModalComponent } from './partial/switch-mode-modal/switch-mode-modal.component';
 import { PipeModule } from '@common/pipes/pipe.module';
 import { ServiceModeService } from '@services/service-mode.service';
+import { RuleDetailModalComponent } from './partial/rule-detail-modal/rule-detail-modal.component';
+import { RuleDetailModalService } from '@components/groups/partial/rule-detail-modal/rule-detail-modal.service';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -20,6 +25,9 @@ import { ServiceModeService } from '@services/service-mode.service';
     AddEditGroupModalComponent,
     ScorableHeaderComponent,
     SwitchModeModalComponent,
+    GroupResponseRulesComponent,
+    GroupNetworkRulesComponent,
+    RuleDetailModalComponent
   ],
   imports: [
     CommonModule,
@@ -28,9 +36,15 @@ import { ServiceModeService } from '@services/service-mode.service';
     ConfirmDialogModule,
     LoadingButtonModule,
     PipeModule,
-    AgGridModule.withComponents([ActionButtonsComponent]),
+    DragDropModule,
+    AgGridModule.withComponents([
+      ActionButtonsComponent
+    ]),
   ],
-  providers: [ServiceModeService],
+  providers: [
+    ServiceModeService,
+    RuleDetailModalService
+  ],
   exports: [GroupsComponent],
 })
 export class GroupsModule {}

@@ -13,10 +13,12 @@ export class EulaComponent implements OnInit {
 
   constructor(private dialog: MatDialog) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   openEULAPage() {
     this.dialog.open(AgreementComponent, {
+      data: { isFromSSO: false},
       width: '80vw',
       height: '685px',
     });

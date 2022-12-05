@@ -3,12 +3,23 @@
     <h2 style="color: #5eb77f">
       End User License Agreement for NeuVector Products
     </h2>
-    <button
-      aria-label="Close score improvement modal button"
-      class="d-flex align-items-center justify-content-center"
-      mat-icon-button>
-      <i (click)="onClose()" class="eos-icons">close</i>
-    </button>
+    <div *ngIf="isFromSSO; else localLogin">
+      <button
+        (click)="onClose()"
+        class="d-flex justify-content-center align-items-center"
+        mat-stroked-button
+        type="button">
+        {{ 'license.ACCEPTED' | translate }}
+      </button>
+    </div>
+    <ng-template #localLogin>
+      <button
+        aria-label="Close score improvement modal button"
+        class="d-flex align-items-center justify-content-center"
+        mat-icon-button>
+          <i (click)="onClose()" class="eos-icons">close</i>
+      </button>
+    </ng-template>
   </div>
   <h4>
     PLEASE READ THIS AGREEMENT CAREFULLY. BY INSTALLING, DOWNLOADING OR OTHERWISE USING THE SOFTWARE (INCLUDING ITS COMPONENTS), YOU AGREE TO THE TERMS OF THIS AGREEMENT. IF YOU DO NOT AGREE WITH THESE TERMS, YOU ARE NOT PERMITTED TO DOWNLOAD, INSTALL OR USE THE SOFTWARE. AN INDIVIDUAL ACTING ON BEHALF OF AN ENTITY REPRESENTS THAT HE OR SHE HAS THE AUTHORITY TO ENTER INTO THIS AGREEMENT ON BEHALF OF THAT ENTITY.

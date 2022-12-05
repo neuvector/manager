@@ -48,6 +48,7 @@
       </ng-container>
     </mat-menu>
     <button
+      *ngIf="layers.length > 1"
       (click)="exportCVELayers()"
       class="mx-1 d-flex align-items-center"
       mat-button>

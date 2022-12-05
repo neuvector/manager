@@ -1,10 +1,11 @@
 <form (ngSubmit)="submitForm()" [formGroup]="profileForm">
   <mat-card-header>
-    <img
-      [src]="getAvatarSrc()"
-      alt="user.username"
-      class="img-thumbnail profile__avatar"
-      mat-card-avatar />
+    <ngx-avatar
+      [gravatarId]="emailHash"
+      [name]="user.username"
+      size="80"
+      class="userIcon profile__avatar"
+      mat-card-avatar></ngx-avatar>
   </mat-card-header>
   <div class="profile__formGroup">
     <div class="profile__container">

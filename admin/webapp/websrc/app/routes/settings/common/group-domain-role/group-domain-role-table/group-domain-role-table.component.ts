@@ -99,7 +99,7 @@ export class GroupDomainRoleTableComponent
     }
     this.namespaceCtrl.setValue(null);
     const row = this.findRowFromRole(this.activeRole);
-    if (row) {
+    if (row && value) {
       const rowIndex = this.dataSource.data.indexOf(row);
       if (!this.dataSource.data[rowIndex].namespaces.includes(event.value)) {
         this.dataSource.data[rowIndex].namespaces.push(event.value);

@@ -67,9 +67,9 @@ export class TestConnectionDialogComponent {
         })
       )
       .subscribe({
-        next: (result: any) => {
+        next: (response: any) => {
           this.notificationService.open(this.tr.instant('ldap.test.SUCCEEDED'));
-          this.connectedGroups = result.groups;
+          this.connectedGroups = response.result.groups;
         },
         error: ({ error }: { error: ErrorResponse }) => {
           this.errorMessage = this.utils.getAlertifyMsg(

@@ -28,7 +28,7 @@
     <mwl-gauge
       class="score"
       [max]="100"
-      [value]="projectedScore"
+      [value]="projectedScore || 0"
       [animated]="true"
       [animationDuration]="1"
       [color]="getGaugeColor"

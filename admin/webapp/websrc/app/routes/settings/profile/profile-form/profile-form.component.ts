@@ -6,8 +6,6 @@ import { TranslatorService } from '@core/translator/translator.service';
 import { NotificationService } from '@services/notification.service';
 import { SettingsService } from '@services/settings.service';
 import { finalize } from 'rxjs/operators';
-import { getAvatar } from '../../common/helpers';
-import { stringToColour } from '@common/utils/common.utils';
 import { Router } from '@angular/router';
 
 @Component({
@@ -52,14 +50,6 @@ export class ProfileFormComponent implements OnInit {
 
   getLanguages(): { code: string; text: string }[] {
     return this.tr.getAvailableLanguages();
-  }
-
-  getAvatarSrc(): string {
-    return getAvatar(
-      this.emailHash,
-      this.user.username,
-      stringToColour(this.user.username)
-    );
   }
 
   refreshForm(): void {

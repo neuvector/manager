@@ -1,4 +1,10 @@
-import {Component, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  Component,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MapConstant } from '@common/constants/map.constant';
 import { ComponentCanDeactivate } from '@common/guards/pending-changes.guard';
 import { ConfigV2Response, Enforcer } from '@common/types';
@@ -10,13 +16,16 @@ import { Observable, Subject } from 'rxjs';
 import { repeatWhen } from 'rxjs/operators';
 import { ConfigFormComponent } from './config-form/config-form.component';
 import { MultiClusterService } from '@services/multi-cluster.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-configuration',
   templateUrl: './configuration.component.html',
   styleUrls: ['./configuration.component.scss'],
 })
-export class ConfigurationComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
+export class ConfigurationComponent
+  implements OnInit, OnDestroy, ComponentCanDeactivate
+{
   private _switchClusterSubscription;
   @ViewChild(ConfigFormComponent) configForm!: ConfigFormComponent;
   config!: ConfigV2Response;
@@ -35,6 +44,7 @@ export class ConfigurationComponent implements OnInit, OnDestroy, ComponentCanDe
     private multiClusterService: MultiClusterService,
     private settingsService: SettingsService,
     private authUtils: AuthUtilsService,
+    private router: Router,
     private tr: TranslateService
   ) {}
 
@@ -59,7 +69,12 @@ export class ConfigurationComponent implements OnInit, OnDestroy, ComponentCanDe
       });
     this._switchClusterSubscription =
       this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
-        this.refreshConfig$.next(true);
+        const currentUrl = this.router.url;
+        this.router
+          .navigateByUrl('/', { skipLocationChange: true })
+          .then(() => {
+            this.router.navigate([currentUrl]);
+          });
       });
   }
 
@@ -70,7 +85,7 @@ export class ConfigurationComponent implements OnInit, OnDestroy, ComponentCanDe
   }
 
   ngOnDestroy(): void {
-    if(this._switchClusterSubscription){
+    if (this._switchClusterSubscription) {
       this._switchClusterSubscription.unsubscribe();
     }
   }

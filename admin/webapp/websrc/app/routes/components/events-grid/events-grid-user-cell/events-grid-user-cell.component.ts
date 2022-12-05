@@ -9,15 +9,17 @@ import { ICellRendererParams } from 'ag-grid-community';
 })
 export class EventsGridUserCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
-  hashTable4UserDomainRole: { [key: string]: string[] } = {};
-  get userRoles() {
-    return this.renderUserRoles(this.params.data.user_roles).join(', ');
-  }
+  hashTable4UserDomainRole!: { [key: string]: string[] };
+  userRoles!: string;
 
   constructor() {}
 
   agInit(params: ICellRendererParams): void {
     this.params = params;
+    this.hashTable4UserDomainRole = {};
+    this.userRoles = this.renderUserRoles(this.params.data.user_roles).join(
+      ', '
+    );
   }
 
   refresh(params: ICellRendererParams): boolean {

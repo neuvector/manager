@@ -1166,6 +1166,11 @@ mwl-gauge.score > .gauge > .value {
   background: orange;
 }
 
+ngx-avatar.userIcon img.avatar-content {
+  @extend .img-thumbnail;
+  vertical-align: initial;
+}
+
 .auto-hide {
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1189,7 +1194,7 @@ mwl-gauge.score > .gauge > .value {
 }
 
 .label-pink {
-  background-color: #E91E63;
+  background-color: #e91e63;
 }
 
 .label-success-tran {

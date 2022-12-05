@@ -48,13 +48,22 @@
       </ng-container>
     </mat-menu>
     <button
+      *ngIf="hasLayers"
       (click)="exportCVELayers()"
       class="mx-1 d-flex align-items-center"
       mat-button>
       <i class="eos-icons mr-2">csv_file</i
       >{{ 'registry.CVE_REPORT_BY_LAYER' | translate }}
     </button>
-    <button (click)="exportCVE()" class="d-flex align-items-center" mat-button>
+    <button
+      *ngIf="
+        selectedLayer &&
+        selectedLayer.vulnerabilities &&
+        selectedLayer.vulnerabilities.length > 0
+      "
+      (click)="exportCVE()"
+      class="d-flex align-items-center"
+      mat-button>
       <i class="eos-icons mr-2">csv_file</i
       >{{ 'registry.CVE_REPORT' | translate }}
     </button>

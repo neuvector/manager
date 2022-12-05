@@ -81,10 +81,11 @@
               [disabled]="
                 cluster.status === 'disconnected' ||
                 cluster.status === 'left' ||
-                cluster.status === 'joint_upgrade_required'
+                cluster.status === 'joint_upgrade_required' ||
+                cluster.status === 'kicked'
               ">
               <i
-                class="fa-md mr-md text-gray-light"
+                class="fa-md mr-md"
                 [ngClass]="
                   cluster.clusterType === 'master'
                     ? 'fa fa-home'
@@ -149,7 +150,7 @@
           {{ 'enum.MY_PROFILE' | translate }}
         </button>
       </div>
-      <button mat-menu-item (click)="goMultiCluster()">
+      <button *ngIf="!isOnRemoteCluster" mat-menu-item (click)="goMultiCluster()">
         <i class="eos-icons icon-18 margin-right-s">organisms</i>
         {{ 'enum.MULTI_CLUSTER' | translate }}
       </button>

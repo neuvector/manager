@@ -10,6 +10,8 @@ import { ClusterData, Cluster } from '@common/types';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
+import {NotificationService} from "@services/notification.service";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-header',
@@ -42,7 +44,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(
     public menu: MenuService,
+    public notificationService: NotificationService,
     public multiClusterService: MultiClusterService,
+    public translateService: TranslateService,
     public switchers: SwitchersService,
     public injector: Injector,
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService
@@ -148,6 +152,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
       next: clusterName => {
         this.clusterName = clusterName;
       },
+      error: err => {
+        this.notificationService.openError(err, this.translateService.instant('multiCluster.messages.get_name_failure'));
+      }
     });
   }
   getClusters() {

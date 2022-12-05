@@ -34,6 +34,7 @@ export class PromotionModalComponent implements OnInit {
   public useProxy: string = '';
   public fed_sync_repo_toggle: boolean = false;
   public isMaster: boolean = false;
+  public readOnly: boolean = false;
 
   constructor(
     private clustersService: MultiClusterService,
@@ -66,6 +67,7 @@ export class PromotionModalComponent implements OnInit {
       this.cluster = this.data.cluster;
       this.useProxy = this.data.useProxy;
       this.fed_sync_repo_toggle = this.data.fed_sync_repo_toggle;
+      this.readOnly = true;
     }
   }
 

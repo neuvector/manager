@@ -7,13 +7,13 @@ import { MultiClusterService } from '@services/multi-cluster.service';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
-import swal from 'sweetalert';
 import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
 import { ShortenFromMiddlePipe } from '@common/pipes/app.pipes';
 import { finalize, switchMap } from 'rxjs/operators';
 import { NotificationService } from '@services/notification.service';
 import { UtilsService } from '@common/utils/app.utils';
 import { PromotionModalComponent } from '@routes/multi-cluster/promotion-modal/promotion-modal.component';
+import {MapConstant} from "@common/constants/map.constant";
 
 @Component({
   selector: 'app-multi-cluster-grid-action-cell',
@@ -26,6 +26,11 @@ export class MultiClusterGridActionCellComponent
 {
   public params!: ICellRendererParams;
   buttonDisplayMap: any;
+  left_status: string = MapConstant.FED_STATUS.LEFT;
+  disconnect_status: string = MapConstant.FED_STATUS.DISCONNECTED;
+  upgrade_status: string = MapConstant.FED_STATUS.UPGADE_REQUIRED;
+  kicked_status: string = MapConstant.FED_STATUS.KICKED;
+
 
   constructor(
     public multiClusterService: MultiClusterService,
@@ -56,39 +61,6 @@ export class MultiClusterGridActionCellComponent
 
   manageFedPolicy = () => {
     this.router.navigate(['federated-policy']);
-  };
-
-  remove = () => {
-    let desc = '';
-    swal({
-      title: `Are you sure to remove the member cluster "${this.params.data.name}" ? `,
-      text: desc,
-      icon: 'warning',
-      buttons: {
-        cancel: {
-          text: 'Cancel',
-          value: null,
-          visible: true,
-          closeModal: true,
-        },
-        confirm: {
-          text: 'Confirm',
-          value: true,
-          visible: true,
-          className: 'bg-danger',
-          closeModal: true,
-        },
-      },
-    }).then(isConfirm => {
-      if (isConfirm) {
-        this.multiClusterService
-          .removeMember(this.params.data.id)
-          .subscribe(response => {
-            console.log(response);
-            swal('Removed', 'The Member Cluster is removed.', 'success');
-          });
-      }
-    });
   };
 
   switchCluster = () => {
@@ -131,7 +103,11 @@ export class MultiClusterGridActionCellComponent
 
     dialogRef.componentInstance.confirm
       .pipe(
-        switchMap(() => this.multiClusterService.removeMember(rowData.id))
+        switchMap(() => this.multiClusterService.removeMember(rowData.id)),
+        finalize(() => {
+          dialogRef.componentInstance.onCancel();
+          dialogRef.componentInstance.loading = false;
+        })
       )
       .subscribe(
         () => {

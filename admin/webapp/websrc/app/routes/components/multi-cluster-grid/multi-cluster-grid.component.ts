@@ -218,7 +218,7 @@ export class MultiClusterGridComponent implements OnInit {
     if (
       cluster.status === MapConstant.FED_STATUS.DISCONNECTED ||
       cluster.status === MapConstant.FED_STATUS.LEFT ||
-      cluster.status === MapConstant.FED_STATUS.IMPROPERLICENSE
+      cluster.status === MapConstant.FED_STATUS.KICKED
     ) {
       this.updateClusterSummary4Error(rowNode);
     } else {

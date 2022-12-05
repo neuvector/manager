@@ -1,12 +1,9 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { VulnerabilitiesService } from './vulnerabilities.service';
-import { AssetsViewPdfService } from './pdf-generation/assets-view-pdf.service';
-import { VulnerabilityViewPdfService } from './pdf-generation/vulnerability-view-pdf.service';
 import { VulnerabilitiesCsvService } from './csv-generation/vulnerabilities-csv.service';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { VulnerabilitiesFilterService } from './vulnerabilities.filter.service';
 import { MapConstant } from '@common/constants/map.constant';
-import { i18nPdfTranslateService } from './pdf-generation/i18n-pdf-transalte.service';
 
 @Component({
   selector: 'app-vulnerabilities',
@@ -14,8 +11,6 @@ import { i18nPdfTranslateService } from './pdf-generation/i18n-pdf-transalte.ser
   styleUrls: ['./vulnerabilities.component.scss'],
 })
 export class VulnerabilitiesComponent {
-  assetViewPdfProgress$ = this.assetsViewPdfService.progress$;
-  vulnerabilityViewPdfProgress$ = this.vulnerabilityViewPdfService.progress$;
   vulnerabilitiesData$ = this.vulnerabilitiesService.initVulnerability();
   private _switchClusterSubscription;
   vulnerabilitiesList: any[] = [];
@@ -34,11 +29,8 @@ export class VulnerabilitiesComponent {
 
   constructor(
     private vulnerabilitiesService: VulnerabilitiesService,
-    private assetsViewPdfService: AssetsViewPdfService,
-    private vulnerabilityViewPdfService: VulnerabilityViewPdfService,
     private vulnerabilitiesCsvService: VulnerabilitiesCsvService,
     private multiClusterService: MultiClusterService,
-    private i18nPdfTranslateService: i18nPdfTranslateService,
     private vulnerabilitiesFilterService: VulnerabilitiesFilterService
   ) {
     //refresh the page when it switched to a remote cluster
@@ -58,17 +50,10 @@ export class VulnerabilitiesComponent {
     this.vulnerabilitiesService.refresh();
   }
 
-  downloadVulnerabilityPDF() {
-    this.vulnerabilityViewPdfService.downloadPdf();
-  }
-
   downloadCsv() {
     this.vulnerabilitiesCsvService.downloadCsv();
   }
 
-  downloadAssetsPDF() {
-    this.assetsViewPdfService.downloadPdf();
-  }
 
   printVulnerabilityPDF() {
     this.vulnerabilitiesList =

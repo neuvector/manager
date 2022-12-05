@@ -135,6 +135,10 @@ export class ImportFileComponent implements OnInit, OnChanges {
     }
   }
 
+  browseFile = () => {
+    this.uploader?.clearQueue();
+  };
+
   addOrReplaceHeaders = (headerName, headerValue) => {
     if (
       typeof this.uploader.options !== 'undefined' &&
@@ -174,12 +178,12 @@ export class ImportFileComponent implements OnInit, OnChanges {
           this.router.navigate([GlobalConstant.PATH_LOGIN]);
         }, 8000);
       } else {
-        this.notificationService.open(this.translate.instant("admissionControl.msg.IMPORT_FINISH"));
+        this.notificationService.open(this.msg.success);
       }
     } else {
-      this.notificationService.open(
-        this.utils.getAlertifyMsg(this.status, this.translate.instant("admissionControl.msg.IMPORT_FAILED"), false),
-        GlobalConstant.NOTIFICATION_TYPE.ERROR
+      this.notificationService.openError(
+        this.msg.error,
+        this.status
       );
     }
   };
@@ -225,15 +229,10 @@ export class ImportFileComponent implements OnInit, OnChanges {
               });
             }
           },
-          error: ({ error }: { error: ErrorResponse }) => {
+          error: ({ status, error }: {status: number, error: ErrorResponse }) => {
             console.warn(error);
-            this.status = this.utils.getAlertifyMsg(
-              error,
-              this.msg.error,
-              false
-            );
-            if (!MapConstant.USER_TIMEOUT.includes(error.code)) {
-              if (this.msg.error) this.notificationService.open(this.status);
+            if (!MapConstant.USER_TIMEOUT.includes(status)) {
+              if (this.msg.error) this.notificationService.openError(error, this.msg.error);
             }
           },
         });

@@ -128,7 +128,7 @@ export class GroupDomainRoleTableComponent
   updateTable(): void {
     if (this.global_role === 'admin') {
       this.dataSource.data = this.dataSource.data.filter(
-        ({ namespaceRole }) => namespaceRole === 'admin'
+        ({ namespaceRole }) => namespaceRole !== 'admin'
       );
       this.dataSource.data[0].namespaces = [];
       this.domainChips = [];

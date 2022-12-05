@@ -19,6 +19,8 @@ import * as pako from 'pako';
 import { PolicyHttpService } from '@common/api/policy-http.service';
 import { ConfigHttpService } from '@common/api/config-http.service';
 import { DatePipe } from '@angular/common';
+import { GroupNetworkRulesComponent } from '@components/groups/partial/group-network-rules/group-network-rules.component';
+import { GroupResponseRulesComponent } from '@components/groups/partial/group-response-rules/group-response-rules.component'
 
 @Injectable()
 export class GroupsService {
@@ -144,7 +146,7 @@ export class GroupsService {
         width: 80,
       },
       {
-        headerName: this.translate.instant('group.gridHeader.USED_BY_RULES'),
+        headerName: this.translate.instant('group.gridHeader.NETWORK_RULES'),
         field: 'policy_rules.length',
         icons: {
           sortAscending: '<em class="fa fa-sort-numeric-asc"></em>',
@@ -153,10 +155,11 @@ export class GroupsService {
         maxWidth: 140,
         minWidth: 50,
         width: 50,
+        hide: isFed
       },
       {
         headerName: this.translate.instant(
-          'group.gridHeader.USED_BY_RESPONSE_RULES'
+          'group.gridHeader.RESPONSE_RULES'
         ),
         field: 'response_rules.length',
         icons: {
@@ -166,6 +169,33 @@ export class GroupsService {
         maxWidth: 140,
         minWidth: 50,
         width: 50,
+        hide: isFed
+      },
+      {
+        headerName: this.translate.instant('group.gridHeader.USED_BY_RULES'),
+        field: 'policy_rules',
+        cellRenderer: GroupNetworkRulesComponent,
+        icons: {
+          sortAscending: '<em class="fa fa-sort-numeric-asc"></em>',
+          sortDescending: '<em class="fa fa-sort-numeric-desc"></em>',
+        },
+        minWidth: 150,
+        width: 150,
+        hide: !isFed
+      },
+      {
+        headerName: this.translate.instant(
+          'group.gridHeader.USED_BY_RESPONSE_RULES'
+        ),
+        field: 'response_rules',
+        cellRenderer: GroupResponseRulesComponent,
+        icons: {
+          sortAscending: '<em class="fa fa-sort-numeric-asc"></em>',
+          sortDescending: '<em class="fa fa-sort-numeric-desc"></em>',
+        },
+        minWidth: 150,
+        width: 150,
+        hide: !isFed
       },
       {
         headerComponentFramework: ScorableHeaderComponent,
@@ -666,11 +696,11 @@ export class GroupsService {
     return this.policyHttpService.deleteGroup(name);
   };
 
-  getNetworkRuleById = (id: string) => {
+  getNetworkRuleById = (id: number) => {
     return this.policyHttpService.getPolicyRule(id);
   };
 
-  getResponseRuleById = (id: string) => {
+  getResponseRuleById = (id: number) => {
     return this.policyHttpService.getResponseRule(id);
   };
 

@@ -41,6 +41,12 @@
     >
     <mat-error *ngIf="formControl.invalid">
       <app-formly-errors [field]="field"></app-formly-errors>
+      <mat-hint
+        *ngIf="field.templateOptions?.hint && field.templateOptions?.alwaysHint"
+        class="float-right"
+        align="end">
+        {{ field.templateOptions?.hint | translate }}
+      </mat-hint>
     </mat-error>
   </mat-form-field>
   <button

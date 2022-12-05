@@ -24,28 +24,39 @@ export class ProcessProfileRulesService {
 
   prepareGrid(
     isWriteGroupAuthorized: boolean,
+    isWriteProcessProfileRuleAuthorized: boolean,
     source: string,
     isScoreImprovement: boolean = false
   ) {
     let columnDefs = [
       {
         headerName: this.translate.instant('group.GROUP'),
-        // headerCheckboxSelection: function(params) {
-        //     console.log("Header: ", $scope.selectedGroup, params);
-        //     return $scope.isWriteRuleAuthorized && $scope.selectedGroup;
-        // },
-        // headerCheckboxSelectionFilteredOnly: true,
-        // checkboxSelection: function(params) {
-        //     console.log("Rows: ", $scope.selectedGroup);
-        //     return $scope.isWriteRuleAuthorized && $scope.selectedGroup;
-        // },
         field: 'group',
         filter: 'agTextColumnFilter',
         hide: source === GlobalConstant.NAV_SOURCE.GROUP,
       },
       {
         headerName: this.translate.instant('service.gridHeader.NAME'),
+        headerCheckboxSelection: params => {
+          return isWriteGroupAuthorized &&
+            isWriteProcessProfileRuleAuthorized;
+        },
+        headerCheckboxSelectionFilteredOnly: true,
+        checkboxSelection: params => {
+          return isWriteGroupAuthorized &&
+            isWriteProcessProfileRuleAuthorized;
+        },
         field: 'name',
+        hide: !(source === GlobalConstant.NAV_SOURCE.GROUP &&
+          isWriteGroupAuthorized &&
+          isWriteProcessProfileRuleAuthorized)
+      },
+      {
+        headerName: this.translate.instant('service.gridHeader.NAME'),
+        field: 'name',
+        hide: source === GlobalConstant.NAV_SOURCE.GROUP &&
+          isWriteGroupAuthorized &&
+          isWriteProcessProfileRuleAuthorized
       },
       {
         headerName: this.translate.instant('service.gridHeader.PATH'),
@@ -70,17 +81,6 @@ export class ProcessProfileRulesService {
         headerName: this.translate.instant('admissionControl.TYPE'),
         field: 'cfg_type',
         cellRenderer: params => {
-          // if (params) {
-          //   let cfgType = params.value
-          //     ? params.value.toUpperCase()
-          //     : GlobalConstant.CFG_TYPE.CUSTOMER.toUpperCase();
-          //   let type = MapConstant.colourMap[cfgType];
-          //   return `<div class="type-label px-1 ${type}">${this.translate.instant(
-          //     `group.${cfgType}`
-          //   )}</div>`;
-          // }
-          // return '';
-
           if (params && params.value) {
             let typeClass =
               params.value === GlobalConstant.CFG_TYPE.GROUND || params.value === GlobalConstant.CFG_TYPE.FED
@@ -123,7 +123,10 @@ export class ProcessProfileRulesService {
       },
     ];
 
-    return this.utils.createGridOptions(columnDefs, this.$win);
+    let gridOptions = this.utils.createGridOptions(columnDefs, this.$win);
+    gridOptions.rowSelection = 'multiple';
+
+    return gridOptions;
   }
 
   private dateComparator(value1, value2, node1, node2) {
@@ -177,7 +180,7 @@ export class ProcessProfileRulesService {
         payload = {
           process_profile_config: {
             group: groupName,
-            process_delete_list: [oldData],
+            process_delete_list: oldData,
           },
         };
     }

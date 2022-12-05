@@ -14,6 +14,8 @@ import {
   StorageService,
 } from 'ngx-webstorage-service';
 import { SessionService } from '@services/session.service';
+import {MatDialog} from "@angular/material/dialog";
+import {AgreementComponent} from "@routes/pages/login/eula/agreement/agreement.component";
 
 @Component({
   selector: 'app-login',
@@ -50,7 +52,8 @@ export class LoginComponent implements OnInit {
     private translatorService: TranslatorService,
     private translate: TranslateService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {
     this.loginForm = fb.group({
       username: [null, Validators.required],
@@ -79,11 +82,21 @@ export class LoginComponent implements OnInit {
     }
     if (this.currUrl.includes(GlobalConstant.PROXY_VALUE)) {
       this.isFromSSO = true;
-      this.localLogin();
+      const dialog = this.dialog.open(AgreementComponent, {
+        data: { isFromSSO: true},
+        width: '85vw',
+        height: '90vh',
+      });
+      dialog.afterClosed().subscribe(dialogData =>{
+        this.getEulaStatus(true);
+        this.localLogin();
+      });
     }
     this.getAuthServer();
     this.verifyAuth();
-    this.verifyEula();
+    if(!this.isFromSSO){
+      this.verifyEula();
+    }
   }
 
   oktaLogin(value: any, mode) {
@@ -241,14 +254,20 @@ export class LoginComponent implements OnInit {
             GlobalConstant.SESSION_STORAGE_TOKEN,
             GlobalVariable.user
           );
-          if (this.sessionStorage.has(GlobalConstant.SESSION_STORAGE_TOKEN)) {
-            GlobalVariable.headers.set(
-              'Token',
-              this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_TOKEN)
-                .token.token
+          this.cookieService.delete('temp');
+          if (this.isEulaAccepted) {
+            this.getSummary();
+          } else {
+            this.authService.updateEula().subscribe(
+              value1 => {
+                this.getSummary();
+              },
+              error => {
+                this.authMsg = error.message;
+                this.inProgress = false;
+              }
             );
           }
-          this.cookieService.delete('temp');
         },
         error => {
           this.inProgress = true;
@@ -289,7 +308,7 @@ export class LoginComponent implements OnInit {
         GlobalVariable.summary = summaryInfo.summary;
         GlobalVariable.hasInitializedSummary = true;
 
-        if (this.originalUrl && this.originalUrl !== 'login') {
+        if (this.originalUrl && this.originalUrl.includes('login')) {
           this.router.navigate([this.originalUrl]);
         } else {
           this.router.navigate([GlobalConstant.PATH_DEFAULT]);

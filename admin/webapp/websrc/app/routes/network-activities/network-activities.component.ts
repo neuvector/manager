@@ -37,7 +37,7 @@ import { PodDetails } from '@common/types/network-activities/podDetails';
 import { AdvancedFilter } from '@common/types/network-activities/advancedFilter';
 import { NotificationService } from '@services/notification.service';
 import { ConversationPair } from './edge-details/edge-details.component';
-import {GlobalConstant} from "@common/constants/global.constant";
+import { GlobalConstant } from '@common/constants/global.constant';
 import { MultiClusterService } from '@services/multi-cluster.service';
 
 @Component({
@@ -678,7 +678,8 @@ export class NetworkActivitiesComponent
                 error,
                 this.translate.instant('service.ALL_SUBMIT_FAILED'),
                 false
-              ), GlobalConstant.NOTIFICATION_TYPE.ERROR
+              ),
+              GlobalConstant.NOTIFICATION_TYPE.ERROR
             );
           }
         );
@@ -2044,24 +2045,27 @@ export class NetworkActivitiesComponent
         }
 
         if (nodeType === 'container' || nodeType === 'mesh') {
-          if(item.state !== 'unmanaged') {
+          if (item.state !== 'unmanaged') {
             item.icon.img =
               nodeType === 'container'
                 ? `assets/img/icons/graph/${
-                  this.CONTAINER_TO_ICON[selectedMode.toLowerCase()]
-                }.svg`
+                    this.CONTAINER_TO_ICON[selectedMode.toLowerCase()]
+                  }.svg`
                 : `assets/img/icons/graph/${
-                  this.SERVICE_MESH_TO_ICON[selectedMode.toLowerCase()]
-                }.svg`;
+                    this.SERVICE_MESH_TO_ICON[selectedMode.toLowerCase()]
+                  }.svg`;
             item.style.stroke = this.graphService.strokeColor[selectedMode];
             item.style.fill = this.graphService.fillColor[selectedMode];
           }
         }
 
         if (nodeType === 'host') {
-          item.icon.img = `assets/img/icons/graph/${
-            this.HOST_TO_ICON[selectedMode.toLowerCase()]
-          }.svg`;
+          if (item.state === 'unmanaged')
+            item.icon.img = `assets/img/icons/graph/host.svg`;
+          else
+            item.icon.img = `assets/img/icons/graph/${
+              this.HOST_TO_ICON[selectedMode.toLowerCase()]
+            }.svg`;
           item.style.stroke = this.graphService.strokeColor[selectedMode];
           item.style.fill = this.graphService.fillColor[selectedMode];
         }
@@ -2329,7 +2333,8 @@ export class NetworkActivitiesComponent
             err,
             this.translate.instant('policy.message.QUARANTINE_FAILED'),
             false
-          ), GlobalConstant.NOTIFICATION_TYPE.ERROR
+          ),
+          GlobalConstant.NOTIFICATION_TYPE.ERROR
         );
       }
     );
@@ -2640,7 +2645,8 @@ export class NetworkActivitiesComponent
               err,
               this.translate.instant('network.popup.SESSION_CLEAR_FAILURE'),
               false
-            ), GlobalConstant.NOTIFICATION_TYPE.ERROR
+            ),
+            GlobalConstant.NOTIFICATION_TYPE.ERROR
           );
         }
       );

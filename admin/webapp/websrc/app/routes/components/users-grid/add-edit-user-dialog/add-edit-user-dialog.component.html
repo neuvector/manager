@@ -96,8 +96,7 @@
     *ngIf="
       isKube &&
       !['admin', 'fedAdmin', ''].includes(form.controls.role.value) &&
-      data.user &&
-      ['', 'openshift'].includes(data.user.server)
+      (!data.user || ['', 'openshift'].includes(data.user.server))
     ">
     {{
       (toggleAdvSetting ? 'user.HIDE_ADV_SETTING' : 'user.SHOW_ADV_SETTING')

@@ -29,8 +29,8 @@
         </div>
         <div
           class="pull-right margin-right-s margin-top-l hand"
-          *ngIf="selectedProcessProfileRules && isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized"
-          (click)="editProfile(selectedProcessProfileRules)">
+          *ngIf="selectedProcessProfileRules && selectedProcessProfileRules.length === 1 && isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized"
+          (click)="editProfile(selectedProcessProfileRules[0])">
           <em class="eos-icons">edit</em>
         </div>
         <div

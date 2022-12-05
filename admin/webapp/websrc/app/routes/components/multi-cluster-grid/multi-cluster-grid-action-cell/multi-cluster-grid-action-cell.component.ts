@@ -7,13 +7,13 @@ import { MultiClusterService } from '@services/multi-cluster.service';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
-import swal from 'sweetalert';
 import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
 import { ShortenFromMiddlePipe } from '@common/pipes/app.pipes';
 import { finalize, switchMap } from 'rxjs/operators';
 import { NotificationService } from '@services/notification.service';
 import { UtilsService } from '@common/utils/app.utils';
 import { PromotionModalComponent } from '@routes/multi-cluster/promotion-modal/promotion-modal.component';
+import {MapConstant} from "@common/constants/map.constant";
 
 @Component({
   selector: 'app-multi-cluster-grid-action-cell',
@@ -26,6 +26,11 @@ export class MultiClusterGridActionCellComponent
 {
   public params!: ICellRendererParams;
   buttonDisplayMap: any;
+  left_status: string = MapConstant.FED_STATUS.LEFT;
+  disconnect_status: string = MapConstant.FED_STATUS.DISCONNECTED;
+  upgrade_status: string = MapConstant.FED_STATUS.UPGADE_REQUIRED;
+  kicked_status: string = MapConstant.FED_STATUS.KICKED;
+
 
   constructor(
     public multiClusterService: MultiClusterService,
@@ -58,39 +63,6 @@ export class MultiClusterGridActionCellComponent
     this.router.navigate(['federated-policy']);
   };
 
-  remove = () => {
-    let desc = '';
-    swal({
-      title: `Are you sure to remove the member cluster "${this.params.data.name}" ? `,
-      text: desc,
-      icon: 'warning',
-      buttons: {
-        cancel: {
-          text: 'Cancel',
-          value: null,
-          visible: true,
-          closeModal: true,
-        },
-        confirm: {
-          text: 'Confirm',
-          value: true,
-          visible: true,
-          className: 'bg-danger',
-          closeModal: true,
-        },
-      },
-    }).then(isConfirm => {
-      if (isConfirm) {
-        this.multiClusterService
-          .removeMember(this.params.data.id)
-          .subscribe(response => {
-            console.log(response);
-            swal('Removed', 'The Member Cluster is removed.', 'success');
-          });
-      }
-    });
-  };
-
   switchCluster = () => {
     console.log(this.params.data.id);
     this.multiClusterService.switchCluster(this.params.data.id, '');
@@ -102,7 +74,7 @@ export class MultiClusterGridActionCellComponent
     });
   };
 
-  syncPolicy = (event, data) => {
+  syncPolicy = (data) => {
     this.multiClusterService.syncPolicy(data.id).subscribe(
       () => {
         this.notificationService.open(
@@ -142,9 +114,11 @@ export class MultiClusterGridActionCellComponent
           this.notificationService.open(
             this.translate.instant('multiCluster.messages.remove_ok')
           );
+          dialogRef.componentInstance.onCancel();
+          dialogRef.componentInstance.loading = false;
           setTimeout(() => {
-            this.multiClusterService.requestRefresh();
-          }, 2000);
+            this.multiClusterService.dispatchRefreshEvent();
+          }, 1500);
         },
         error => {
           this.notificationService.openError(
@@ -172,11 +146,7 @@ export class MultiClusterGridActionCellComponent
     });
     dialogRef.componentInstance.confirm
       .pipe(
-        switchMap(() => this.multiClusterService.leaveFromMaster(true)),
-        finalize(() => {
-          // dialogRef.componentInstance.onCancel();
-          // dialogRef.componentInstance.loading = false;
-        })
+        switchMap(() => this.multiClusterService.leaveFromMaster(true))
       )
       .subscribe(
         () => {
@@ -186,8 +156,8 @@ export class MultiClusterGridActionCellComponent
           dialogRef.componentInstance.loading = false;
           dialogRef.componentInstance.onCancel();
           setTimeout(() => {
-            this.multiClusterService.requestRefresh();
-          }, 2000);
+            this.multiClusterService.dispatchRefreshEvent();
+          }, 1500);
         },
         error => {
           this.notificationService.open(
@@ -201,7 +171,6 @@ export class MultiClusterGridActionCellComponent
   demote = data => {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '700px',
-
       data: {
         message: `${this.translate.instant('multiCluster.prompt.demote', {
           name: this.shortenFromMiddlePipe.transform(data.name, 20),
@@ -222,10 +191,13 @@ export class MultiClusterGridActionCellComponent
             this.translate.instant('multiCluster.messages.demote_ok')
           );
           setTimeout(() => {
-            this.router.navigate(['logout']);
+            dialogRef.componentInstance.loading = false;
+            dialogRef.close();
+            this.router.navigate(['login']);
           }, 3000);
         },
         error => {
+          dialogRef.componentInstance.loading = false;
           this.notificationService.openError(
             error,
             this.translate.instant('multiCluster.messages.demote_failure')

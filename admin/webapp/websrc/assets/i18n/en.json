@@ -1913,6 +1913,7 @@
     "BASELINE_PROFILE": "Baseline Profile",
     "ZERO_DRIFT": "Zero Drift",
     "MULTI_MODE_SELECTION": "Multiple groups are selected along with different policy mode or baseline profile.",
+    "GET_RULE_ERR": "Error happened when getting rule",
     "TIP": {
       "EDIT": "Edit Group",
       "DELETE": "Remove Group",
@@ -2708,12 +2709,13 @@
       "deploy_ok": "The sync notification has sent to the cluster {{ name }}",
       "deploy_failure": "Failed to send the sync notification",
       "api_failure": "Multiple Cluster Service is not available",
+      "get_name_failure": "Failed to access the cluster name",
       "SCORE_UNAVAILIBlE": "Unavailable"
     },
     "prompt": {
       "remove": "Are you sure you want to remove {{ name }} from this Primary Cluster?",
       "demote": "Are you sure you want to demote the cluster ( {{ name }} ) ?",
-      "leave": "Are you sure you want to leave this Primary Cluster?"
+      "leave": "Are you sure you want to leave from the cluster ?"
     },
     "validation": {
       "token": "Invalid token format."

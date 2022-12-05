@@ -144,9 +144,7 @@ object ResourceJsonProtocol extends DefaultJsonProtocol with LazyLogging {
   implicit val threatBriefDTOFormat: RootJsonFormat[ThreatBriefDTO]   = jsonFormat4(ThreatBriefDTO)
   implicit val threatBriefWrapFormat: RootJsonFormat[ThreatBriefWrap] = jsonFormat1(ThreatBriefWrap)
 
-  val nginxTunnelSecured = "secured"
-  val nginxTunnelPartial = "partial"
-  val address            = "address"
+  private val address = "address"
 
   def jsonToContainerWrap(container: String): ContainerWrap =
     container.parseJson.convertTo[ContainerWrap]
@@ -301,12 +299,13 @@ object ResourceJsonProtocol extends DefaultJsonProtocol with LazyLogging {
       }
     } else {
       endpoint.kind match {
-        case "node_ip" => {
+        case "node_ip" =>
           if (endpoint.service_group.isDefined &&
-              endpoint.service_group.get.equalsIgnoreCase("nodes"))
-            s"host${endpoint.policy_mode.getOrElse("")}"
-          else endpoint.kind
-        }
+              endpoint.service_group.get.equalsIgnoreCase("nodes")) {
+            if (endpoint.state.equalsIgnoreCase("unmanaged"))
+              "hostUnmanaged"
+            else s"host${endpoint.policy_mode.getOrElse("")}"
+          } else endpoint.kind
         case _ => endpoint.kind
       }
     }
@@ -362,7 +361,7 @@ object ResourceJsonProtocol extends DefaultJsonProtocol with LazyLogging {
 
   val emptyThreatBriefDTO: ThreatBriefDTO = ThreatBriefDTO(" ", "", 0, "")
 
-  def getCompactName: (String, String) => String = (display_name: String, name: String) => {
+  private def getCompactName: (String, String) => String = (display_name: String, name: String) => {
     display_name match {
       case x if x.isEmpty => name
       case _              => display_name

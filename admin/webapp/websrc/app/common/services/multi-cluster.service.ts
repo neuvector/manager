@@ -13,6 +13,8 @@ import { UtilsService } from '@common/utils/app.utils';
 import { MultiClusterSummary } from '@common/types/scala_for_reference_only/MultiClusterSummary';
 import { ConfigHttpService } from '@common/api/config-http.service';
 import { map } from 'rxjs/operators';
+import { CommonHttpService } from '@common/api/common-http.service';
+import { GlobalConstant } from '@common/constants/global.constant';
 
 export interface Cluster2Promote {
   name: string;
@@ -33,7 +35,9 @@ export interface Cluster2Join {
 export class MultiClusterService {
   public clusters: Cluster[] = [];
   private _clusterSwitchedEvent = new Subject();
+  private _clusterRefreshEvent = new Subject();
   public onClusterSwitchedEvent$ = this._clusterSwitchedEvent.asObservable();
+  public onRefreshClustersEvent$ = this._clusterRefreshEvent.asObservable();
   private readonly $win;
   private _selectedClusterSubject$ = new BehaviorSubject<Cluster | undefined>(
     undefined
@@ -51,6 +55,7 @@ export class MultiClusterService {
     private tr: TranslateService,
     private utils: UtilsService,
     private http: HttpClient,
+    private commonHttpService: CommonHttpService,
     private router: Router,
     private location: Location,
     private configHttpService: ConfigHttpService,
@@ -68,9 +73,9 @@ export class MultiClusterService {
     this._selectedClusterSummarySubject$.next(summary);
   }
 
-  syncPolicy(id): Observable<any>{
+  syncPolicy(id): Observable<any> {
     const payload = {
-      ids:[id]
+      ids: [id],
     };
     return GlobalVariable.http.post(PathConstant.FED_DEPLOY, payload);
   }
@@ -101,7 +106,25 @@ export class MultiClusterService {
       .pipe();
   }
 
-  updateCluster = (data: any, isEditable: boolean, useProxy: string, repo_toggle: boolean) => {
+  refreshSummary() {
+    this.commonHttpService.getSummary().subscribe(
+      (summaryInfo: any) => {
+        GlobalVariable.isOpenShift =
+          summaryInfo.summary.platform === GlobalConstant.OPENSHIFT ||
+          summaryInfo.summary.platform === GlobalConstant.RANCHER;
+        GlobalVariable.summary = summaryInfo.summary;
+        GlobalVariable.hasInitializedSummary = true;
+      },
+      error => {}
+    );
+  }
+
+  updateCluster = (
+    data: any,
+    isEditable: boolean,
+    useProxy: string,
+    repo_toggle: boolean
+  ) => {
     let payload = isEditable
       ? {
           poll_interval: 2,
@@ -112,12 +135,12 @@ export class MultiClusterService {
           },
           use_proxy: useProxy,
 
-          deploy_repo_scan_data: repo_toggle
+          deploy_repo_scan_data: repo_toggle,
         }
       : {
           poll_interval: 2,
           use_proxy: useProxy,
-          deploy_repo_scan_data: repo_toggle
+          deploy_repo_scan_data: repo_toggle,
         };
     return this.http.patch(PathConstant.FED_CFG_URL, payload);
   };
@@ -125,18 +148,18 @@ export class MultiClusterService {
   updateMemberCluster = (data: any, isEditable: boolean, useProxy: string) => {
     let payload = isEditable
       ? {
-        poll_interval: 2,
-        name: data.name,
-        rest_info: {
-          server: data.api_server,
-          port: parseInt(data.api_port),
-        },
-        use_proxy: useProxy
-      }
+          poll_interval: 2,
+          name: data.name,
+          rest_info: {
+            server: data.api_server,
+            port: parseInt(data.api_port),
+          },
+          use_proxy: useProxy,
+        }
       : {
-        poll_interval: 2,
-        use_proxy: useProxy
-      };
+          poll_interval: 2,
+          use_proxy: useProxy,
+        };
     return this.http.patch(PathConstant.FED_CFG_URL, payload);
   };
 
@@ -148,7 +171,7 @@ export class MultiClusterService {
         port: parseInt(data.port),
       },
       use_proxy: useProxy,
-      deploy_repo_scan_data: fed_sync_repo
+      deploy_repo_scan_data: fed_sync_repo,
     };
 
     return this.http.post(PathConstant.FED_PROMOTE_URL, payload).pipe();
@@ -178,7 +201,9 @@ export class MultiClusterService {
   };
 
   removeMember = id => {
-    return this.http.delete(PathConstant.FED_REMOVE_URL, { params: { id: id } }).pipe();
+    return this.http
+      .delete(PathConstant.FED_REMOVE_URL, { params: { id: id } })
+      .pipe();
   };
 
   leaveFromMaster = force => {
@@ -202,11 +227,8 @@ export class MultiClusterService {
     this._clusterSwitchedEvent.next(true);
   }
 
-  requestRefresh() {
-    this.refreshSubject.next();
+  dispatchRefreshEvent() {
+    this._clusterRefreshEvent.next(true);
   }
 
-  refresh(): Observable<any> {
-    return this.refreshSubject.asObservable();
-  }
 }

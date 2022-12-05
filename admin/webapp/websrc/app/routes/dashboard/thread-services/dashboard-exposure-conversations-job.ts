@@ -2,7 +2,8 @@ import { PathConstant } from '@common/constants/path.constant';
 
 export const dashboardExposureConversationsJob = () => {
   self.onmessage = (event) => {
-    let baseUrl = event.srcElement.origin;
+    // @ts-ignore
+    let baseUrl = event.target!.origin;
     let inputObj = JSON.parse(event.data);
     if (inputObj.isSUSESSO) {
       baseUrl = `${inputObj.currUrl.split(inputObj.neuvectorProxy)[0]}${inputObj.neuvectorProxy}`;

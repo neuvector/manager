@@ -1,16 +1,14 @@
 import { PathConstant } from '@common/constants/path.constant';
 
 export const dashboardDetailsJob = () => {
-  self.onmessage = (event) => {
-    let baseUrl = event.srcElement.origin;
+  self.onmessage = (event: MessageEvent) => {
+    // @ts-ignore
+    let baseUrl = event.target!.origin;
     let inputObj = JSON.parse(event.data);
-    console.log("inputObj.isSUSESSO: ", inputObj.isSUSESSO);
     if (inputObj.isSUSESSO) {
       baseUrl = `${inputObj.currUrl.split(inputObj.neuvectorProxy)[0]}${inputObj.neuvectorProxy}`;
-      console.log("Rewritten base url:", baseUrl);
     }
     let apiUrl = `${baseUrl}/${PathConstant.DASHBOARD_DETAILS_URL}`;
-    console.log("Notification API Url:", apiUrl);
     let domain = inputObj.domain;
     let query = domain ? `?domain=${encodeURIComponent(domain)}` : "";
     let xhttp = new XMLHttpRequest();

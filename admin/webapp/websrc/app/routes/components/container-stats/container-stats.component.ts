@@ -43,8 +43,7 @@ export class ContainerStatsComponent
   }
 
   ngOnDestroy(): void {
-    if (this.charts)
-      this.charts.forEach(child => child.chart?.destroy());
+    if (this.charts) this.charts.forEach(child => child.chart?.destroy());
   }
 
   initData(): void {
@@ -105,9 +104,15 @@ export class ContainerStatsComponent
         if (value < 1000) {
           return Math.abs(value) + 'MB';
         } else if (value < 1000 * 1000 && value >= 1000) {
-          return Math.abs(Math.round(value / 1000)) + 'GB';
+          const gb = Math.abs(Math.round((value / 1000) * 10) / 10);
+          return gb < 10 && gb % 1 !== 0
+            ? gb.toFixed(1) + 'GB'
+            : Math.round(gb) + 'GB';
         } else if (value < 1000 * 1000 * 1000 && value >= 1000 * 1000) {
-          return Math.abs(Math.round(value / 1000 / 1000)) + 'TB';
+          const tb = Math.abs(Math.round((value / 1000 / 1000) * 10) / 10);
+          return tb < 10 && tb % 1 !== 0
+            ? tb.toFixed(1) + 'TB'
+            : Math.round(tb) + 'TB';
         }
       }
       return '';

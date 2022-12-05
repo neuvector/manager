@@ -14,6 +14,8 @@ import {
   StorageService,
 } from 'ngx-webstorage-service';
 import { SessionService } from '@services/session.service';
+import {MatDialog} from "@angular/material/dialog";
+import {AgreementComponent} from "@routes/pages/login/eula/agreement/agreement.component";
 
 @Component({
   selector: 'app-login',
@@ -50,7 +52,8 @@ export class LoginComponent implements OnInit {
     private translatorService: TranslatorService,
     private translate: TranslateService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {
     this.loginForm = fb.group({
       username: [null, Validators.required],
@@ -79,11 +82,21 @@ export class LoginComponent implements OnInit {
     }
     if (this.currUrl.includes(GlobalConstant.PROXY_VALUE)) {
       this.isFromSSO = true;
-      this.localLogin();
+      const dialog = this.dialog.open(AgreementComponent, {
+        data: { isFromSSO: true},
+        width: '85vw',
+        height: '90vh',
+      });
+      dialog.afterClosed().subscribe(dialogData =>{
+        this.getEulaStatus(true);
+        this.localLogin();
+      });
     }
     this.getAuthServer();
     this.verifyAuth();
-    this.verifyEula();
+    if(!this.isFromSSO){
+      this.verifyEula();
+    }
   }
 
   oktaLogin(value: any, mode) {

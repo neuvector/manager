@@ -1,7 +1,7 @@
 import { Injectable, SecurityContext } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
-import {ColDef, GetRowIdParams, GridOptions} from 'ag-grid-community';
+import { ColDef, GetRowIdParams, GridOptions } from 'ag-grid-community';
 import { DomSanitizer } from '@angular/platform-browser';
 import {
   GraphData,
@@ -30,7 +30,6 @@ import {
   PolicyMode,
   Protocol,
 } from '@common/types/network-activities/advancedFilter';
-import { transform } from 'lodash';
 import { Blacklist } from '@common/types/network-activities/blacklist';
 
 @Injectable()
@@ -356,6 +355,7 @@ export class GraphService {
     hostDiscover: 'host-d',
     hostMonitor: 'host-m',
     hostProtect: 'host-p',
+    hostUnmanaged: 'host',
     workload_ip: 'container-x',
     meshProxy: 'meshProxy',
     external: 'cloud',
@@ -790,8 +790,8 @@ export class GraphService {
   };
 
   processNodes = (nodes, serverData, onRefresh, settings) => {
-    let domains: any[] = [];
-    let groups: any[] = [];
+    let domains: any[];
+    let groups: any[];
     const domainMap: Map<string, any> = new Map();
     const clusterMap = new Map();
     if (onRefresh) this._nodeIdIndexMap.clear();
@@ -1154,17 +1154,19 @@ export class GraphService {
         user: user,
         blacklist: blacklist,
       })
-      .subscribe(response => {});
+      .subscribe(() => {});
   };
 
   quarantine = (id: string, toQuarantine: boolean) =>
-    this.http.post(PathConstant.CONTAINER_URL, {
-      id: id,
-      quarantine: toQuarantine
-    }).pipe();
+    this.http
+      .post(PathConstant.CONTAINER_URL, {
+        id: id,
+        quarantine: toQuarantine,
+      })
+      .pipe();
 
   keepLive = () => {
-    this.http.patch(PathConstant.KEEP_ALIVE_URL, {}).subscribe(response => {});
+    this.http.patch(PathConstant.KEEP_ALIVE_URL, {}).subscribe(() => {});
   };
 
   private numberCellFormatter = params => {

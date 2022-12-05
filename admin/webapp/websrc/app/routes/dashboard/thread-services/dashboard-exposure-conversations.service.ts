@@ -8,14 +8,13 @@ export class DashboardExposureConversationsService {
 
   private worker;
   isLoadingExposureConversation: boolean = false;
-  exposureConversationList: any[];
+  exposureConversationList: any[] = [];
 
   constructor() {}
 
   runWorker(isGlobalUser: boolean, scoreInfo: InternalSystemInfo) {
     if (this.worker) {
       this.worker.terminate();
-      console.info('killed an existing running worker (dashboard-exposure-conversations)...');
     }
     this.createWorker(isGlobalUser, scoreInfo);
   }
@@ -27,7 +26,6 @@ export class DashboardExposureConversationsService {
       );
     }
     if (this.worker) {
-      console.log('Post message to worker (dashboard-exposure-conversations)');
       this.isLoadingExposureConversation = true;
       this.exposureConversationList = [];
       this.worker.postMessage(
@@ -44,7 +42,6 @@ export class DashboardExposureConversationsService {
         })
       );
       this.worker.onmessage = (message) => {
-        console.log('message =', message);
         this.isLoadingExposureConversation = false;
         this.exposureConversationList = message.data;
       };

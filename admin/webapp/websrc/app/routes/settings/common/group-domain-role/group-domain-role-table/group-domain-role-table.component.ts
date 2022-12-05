@@ -99,7 +99,7 @@ export class GroupDomainRoleTableComponent
     }
     this.namespaceCtrl.setValue(null);
     const row = this.findRowFromRole(this.activeRole);
-    if (row) {
+    if (row && value) {
       const rowIndex = this.dataSource.data.indexOf(row);
       if (!this.dataSource.data[rowIndex].namespaces.includes(event.value)) {
         this.dataSource.data[rowIndex].namespaces.push(event.value);
@@ -128,7 +128,7 @@ export class GroupDomainRoleTableComponent
   updateTable(): void {
     if (this.global_role === 'admin') {
       this.dataSource.data = this.dataSource.data.filter(
-        ({ namespaceRole }) => namespaceRole === 'admin'
+        ({ namespaceRole }) => namespaceRole !== 'admin'
       );
       this.dataSource.data[0].namespaces = [];
       this.domainChips = [];

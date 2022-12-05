@@ -4,10 +4,7 @@ import {
   ElementRef
 } from '@angular/core';
 import { ComplianceService } from './compliance.service';
-import { AssetsViewPdfService } from './pdf-generation/assets-view-pdf.service';
-import { ComplianceViewPdfService } from './pdf-generation/compliance-view-pdf.service';
 import { ComplianceCsvService } from './csv-generation/compliance-csv.service';
-import { i18nPdfTranslateService } from './pdf-generation/i18n-pdf-translate.service';
 import { ComplianceFilterService } from './compliance.filter.service';
 
 @Component({
@@ -16,8 +13,6 @@ import { ComplianceFilterService } from './compliance.filter.service';
   styleUrls: ['./compliance.component.scss'],
 })
 export class ComplianceComponent {
-  assetViewPdfProgress$ = this.assetsViewPdfService.progress$;
-  complianceViewPdfProgress$ = this.complianceViewPdfService.progress$;
   complianceData$ = this.complianceService.initCompliance();
   masterData: any;
   masterGrids: any[][] = [];
@@ -35,10 +30,7 @@ export class ComplianceComponent {
 
   constructor(
     private complianceService: ComplianceService,
-    private assetsViewPdfService: AssetsViewPdfService,
-    private complianceViewPdfService: ComplianceViewPdfService,
     private complianceCsvService: ComplianceCsvService,
-    private i18nPdfTranslateService: i18nPdfTranslateService,
     private complianceFilterService: ComplianceFilterService
   ) {}
 
@@ -46,16 +38,8 @@ export class ComplianceComponent {
     this.complianceService.refresh();
   }
 
-  downloadCompliancePDF() {
-    this.complianceViewPdfService.downloadPdf();
-  }
-
   downloadCsv() {
     this.complianceCsvService.downloadCsv();
-  }
-
-  downloadAssetsPDF() {
-    this.assetsViewPdfService.downloadPdf();
   }
 
   printCompliancePDF() {

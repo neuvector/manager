@@ -13,7 +13,6 @@ import { PlatformsData } from '@common/types/compliance/platformsData';
 import { DatePipe } from '@angular/common';
 import { ComplianceFilterService } from './compliance.filter.service';
 import { AssetsViewPdfService } from './pdf-generation/assets-view-pdf.service';
-import { ComplianceViewPdfService } from './pdf-generation/compliance-view-pdf.service';
 import { sortByDisplayName } from '@common/utils/common.utils';
 import { AssetsHttpService } from '@common/api/assets-http.service';
 import { RisksHttpService } from '@common/api/risks-http.service';
@@ -39,7 +38,6 @@ export class ComplianceService {
     private assetsHttpService: AssetsHttpService,
     private complianceFilterService: ComplianceFilterService,
     private assetsViewPdfService: AssetsViewPdfService,
-    private complianceViewPdfService: ComplianceViewPdfService
   ) {}
 
   transformDate(date) {

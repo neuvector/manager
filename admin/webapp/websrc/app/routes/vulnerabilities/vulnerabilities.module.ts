@@ -26,9 +26,7 @@ import { QuickFilterModule } from '@components/quick-filter/quick-filter.module'
 import { MatMenuModule } from '@angular/material/menu';
 import { NgChartsModule } from 'ng2-charts';
 import { VulnerabilitiesFilterService } from './vulnerabilities.filter.service';
-import { i18nPdfTranslateService } from './pdf-generation/i18n-pdf-transalte.service';
 import { AssetsViewPdfService } from './pdf-generation/assets-view-pdf.service';
-import { VulnerabilityViewPdfService } from './pdf-generation/vulnerability-view-pdf.service';
 import { VulnerabilitiesCsvService } from './csv-generation/vulnerabilities-csv.service';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -67,11 +65,9 @@ const routes: Routes = [{ path: '', component: VulnerabilitiesComponent }];
     VulnerabilitiesService,
     AssetsHttpService,
     AssetsViewPdfService,
-    VulnerabilityViewPdfService,
     VulnerabilitiesCsvService,
     RisksHttpService,
     VulnerabilitiesFilterService,
-    i18nPdfTranslateService,
   ],
   imports: [
     RouterModule.forChild(routes),

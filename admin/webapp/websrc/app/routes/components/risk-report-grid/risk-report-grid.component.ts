@@ -199,7 +199,9 @@ export class RiskReportGridComponent implements OnInit {
   exportCSV(): void {
     let reports4Csv = [] as any;
     this.gridApi.forEachNodeAfterFilterAndSort(node => {
-      reports4Csv.push(node.data);
+      if (!node.data.parent_id) {
+        reports4Csv.push(node.data);
+      }
     });
     this.riskReportGridCsvService.exportCSV(reports4Csv);
   }

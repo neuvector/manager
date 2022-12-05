@@ -1,6 +1,6 @@
 <form (ngSubmit)="submitForm()" [formGroup]="samlForm">
   <div class="d-flex align-items-center my-2 flex-wrap">
-    <i class="eos-icons mr-3">lightbulb</i>
+    <i class="eos-icons mr-3 text-primary">lightbulb</i>
     <span class="mr-3">{{ 'okta.CALLBACK_URL' | translate }}</span>
     <span class="text-muted mr-3">{{ samlRedirectURL }}</span>
     <button
@@ -14,7 +14,7 @@
   </div>
   <div class="row align-items-center my-0 my-md-4">
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
-      <i class="eos-icons mr-3">organization</i>
+      <i class="eos-icons mr-3 text-primary">organization</i>
       <mat-form-field appearance="standard" class="w-100">
         <mat-label>{{ 'okta.IDP_URL' | translate }}</mat-label>
         <input formControlName="sso_url" matInput />
@@ -27,7 +27,7 @@
       </mat-form-field>
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
-      <i class="eos-icons mr-3">account_box</i>
+      <i class="eos-icons mr-3 text-primary">account_box</i>
       <mat-form-field appearance="standard" class="w-100">
         <mat-label>{{ 'okta.IDP_ISSUER' | translate }}</mat-label>
         <input formControlName="issuer" matInput />
@@ -40,7 +40,7 @@
       </mat-form-field>
     </div>
     <div class="col-12 d-flex align-items-center">
-      <i class="eos-icons mr-3">verified</i>
+      <i class="eos-icons mr-3 text-primary">verified</i>
       <mat-form-field appearance="standard" class="w-100">
         <mat-label>{{ 'okta.CERTIFICATE' | translate }}</mat-label>
         <textarea
@@ -53,7 +53,7 @@
       </mat-form-field>
     </div>
     <div class="col-12 d-flex align-items-center">
-      <i class="eos-icons mr-3">groups</i>
+      <i class="eos-icons mr-3 text-primary">groups</i>
       <mat-form-field appearance="standard" class="w-100">
         <mat-label> {{ 'okta.GROUP_CLAIM' | translate }}</mat-label>
         <input formControlName="group_claim" matInput />
@@ -74,12 +74,14 @@
     (updateGroupMappedRoles)="updateGroupMappedRoles($event)"
     [domains]="samlData.domains"
     [groupMappedRoles]="groupMappedRoles"
-    [mappableRoles]="samlData.server.mappable_roles"></app-group-domain-role>
+    [mappableRoles]="samlData.server.mappable_roles"
+    [isReadOnly]="!isWriteSamlAuthorized"></app-group-domain-role>
   <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
     <mat-checkbox formControlName="enable">{{
       'ldap.ENABLE_LDAP' | translate
     }}</mat-checkbox>
     <button
+      *ngIf="isWriteSamlAuthorized"
       [disabled]="!samlForm.valid || submittingForm"
       color="primary"
       mat-raised-button

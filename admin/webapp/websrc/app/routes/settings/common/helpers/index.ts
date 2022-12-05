@@ -4,22 +4,6 @@ export function getCallbackUri(server: string): string {
   return `${protocol}//${host}/${server}`;
 }
 
-export function getAvatar(
-  emailHash: string,
-  username: string,
-  color: string
-): string {
-  return (
-    'https://secure.gravatar.com/avatar/' +
-    emailHash +
-    '?s=80&d=https%3A%2F%2Fui-avatars.com%2Fapi%2F/' +
-    username +
-    '/80/' +
-    color +
-    '/fff'
-  );
-}
-
 export function getConvertHours(HOURS: string, DAYS: string) {
   return (value: number) => {
     if (!value) return '';

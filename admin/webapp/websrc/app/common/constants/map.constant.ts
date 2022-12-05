@@ -261,7 +261,7 @@ export class MapConstant {
   public static FED_STATUS = {
     ACTIVE: 'active',
     LEFT: 'left',
-    IMPROPERLICENSE: 'license_disallow',
+    KICKED: 'kicked',
     DISCONNECTED: 'disconnected',
     UPGADE_REQUIRED: 'joint_upgrade_required',
     SYNCED: 'synced',

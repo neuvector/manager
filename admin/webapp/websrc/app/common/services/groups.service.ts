@@ -20,7 +20,7 @@ import { PolicyHttpService } from '@common/api/policy-http.service';
 import { ConfigHttpService } from '@common/api/config-http.service';
 import { DatePipe } from '@angular/common';
 import { GroupNetworkRulesComponent } from '@components/groups/partial/group-network-rules/group-network-rules.component';
-import { GroupResponseRulesComponent } from '@components/groups/partial/group-response-rules/group-response-rules.component'
+import { GroupResponseRulesComponent } from '@components/groups/partial/group-response-rules/group-response-rules.component';
 
 @Injectable()
 export class GroupsService {
@@ -59,7 +59,7 @@ export class GroupsService {
         if (!labelCode) return '';
         else
           return `<span class="type-label policy_mode ${labelCode}">${mode}</span>${
-            params.value.baseline_profile.toLowerCase() === 'zero-drift'
+            params.value.baseline_profile?.toLowerCase() === 'zero-drift'
               ? '<em class="eos-icons icon-18">anchor</em>'
               : ''
           }`;
@@ -155,12 +155,10 @@ export class GroupsService {
         maxWidth: 140,
         minWidth: 50,
         width: 50,
-        hide: isFed
+        hide: isFed,
       },
       {
-        headerName: this.translate.instant(
-          'group.gridHeader.RESPONSE_RULES'
-        ),
+        headerName: this.translate.instant('group.gridHeader.RESPONSE_RULES'),
         field: 'response_rules.length',
         icons: {
           sortAscending: '<em class="fa fa-sort-numeric-asc"></em>',
@@ -169,7 +167,7 @@ export class GroupsService {
         maxWidth: 140,
         minWidth: 50,
         width: 50,
-        hide: isFed
+        hide: isFed,
       },
       {
         headerName: this.translate.instant('group.gridHeader.USED_BY_RULES'),
@@ -181,7 +179,7 @@ export class GroupsService {
         },
         minWidth: 150,
         width: 150,
-        hide: !isFed
+        hide: !isFed,
       },
       {
         headerName: this.translate.instant(
@@ -195,7 +193,7 @@ export class GroupsService {
         },
         minWidth: 150,
         width: 150,
-        hide: !isFed
+        hide: !isFed,
       },
       {
         headerComponentFramework: ScorableHeaderComponent,
@@ -234,6 +232,7 @@ export class GroupsService {
           valueGetter: params => {
             return {
               policy_mode: params.data.policy_mode,
+              baseline_profile: params.data.baseline_profile,
             };
           },
           cellRenderer: policyModeRendererFunc,

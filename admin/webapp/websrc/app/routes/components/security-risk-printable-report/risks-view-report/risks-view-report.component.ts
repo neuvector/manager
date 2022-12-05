@@ -7,7 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class RisksViewReportComponent implements OnInit {
 
-  @Input() reportPage: string;
+  @Input() reportPage: string = '';
   @Input() data: any;
   @Input() charts: any;
 

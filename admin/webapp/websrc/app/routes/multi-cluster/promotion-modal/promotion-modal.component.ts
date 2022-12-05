@@ -34,6 +34,7 @@ export class PromotionModalComponent implements OnInit {
   public useProxy: string = '';
   public fed_sync_repo_toggle: boolean = false;
   public isMaster: boolean = false;
+  public readOnly: boolean = false;
 
   constructor(
     private clustersService: MultiClusterService,
@@ -66,6 +67,7 @@ export class PromotionModalComponent implements OnInit {
       this.cluster = this.data.cluster;
       this.useProxy = this.data.useProxy;
       this.fed_sync_repo_toggle = this.data.fed_sync_repo_toggle;
+      this.readOnly = true;
     }
   }
 
@@ -95,7 +97,7 @@ export class PromotionModalComponent implements OnInit {
           response => {
             this.notificationService.open(this.translate.instant('multiCluster.messages.update_ok'));
             this.dialogRef.close();
-            this.clustersService.requestRefresh();
+            this.clustersService.dispatchRefreshEvent();
           },
           error => {
             this.notificationService.openError(error,
@@ -107,7 +109,7 @@ export class PromotionModalComponent implements OnInit {
           response => {
             this.notificationService.open(this.translate.instant('multiCluster.messages.update_ok'));
             this.dialogRef.close();
-            this.clustersService.requestRefresh();
+            this.clustersService.dispatchRefreshEvent();
           },
           error => {
             this.notificationService.openError(error,
@@ -115,8 +117,6 @@ export class PromotionModalComponent implements OnInit {
           }
         );
       }
-
-
     }else{
       this.clustersService.promoteCluster(
         this.cluster, this.useProxy,
@@ -129,8 +129,7 @@ export class PromotionModalComponent implements OnInit {
           this.dialogRef.close();
         },
         err => {
-          let message = this.utils.getErrorMessage(err);
-          this.notificationService.openError( message,
+          this.notificationService.openError( err,
             this.translate.instant('multiCluster.promotion.failure'));
         }
       );

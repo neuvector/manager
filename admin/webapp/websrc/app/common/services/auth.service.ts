@@ -10,10 +10,12 @@ import { GlobalConstant } from '../constants/global.constant';
 import { GlobalVariable } from '../variables/global.variable';
 import { DomSanitizer } from '@angular/platform-browser';
 import { SessionService } from './session.service';
+import { CommonHttpService } from '@common/api/common-http.service';
 
 @Injectable()
 export class AuthService {
   constructor(
+    private commonHttpService: CommonHttpService,
     private router: Router,
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
     @Inject(LOCAL_STORAGE) private localStorage: StorageService,
@@ -42,7 +44,7 @@ export class AuthService {
   }
 
   getSummary() {
-    return GlobalVariable.http.get(PathConstant.DASHBOARD_SUMMARY_URL).pipe();
+    return this.commonHttpService.getSummary();
   }
 
   samlLogin(username: string, password: string) {

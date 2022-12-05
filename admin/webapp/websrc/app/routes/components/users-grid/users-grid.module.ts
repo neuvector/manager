@@ -10,6 +10,8 @@ import { LoadingButtonModule } from '@components/ui/loading-button/loading-butto
 import { AddEditUserDialogComponent } from './add-edit-user-dialog/add-edit-user-dialog.component';
 import { PasswordPanelModule } from 'app/routes/settings/common/password-panel/password-panel.module';
 import { GroupDomainRoleModule } from 'app/routes/settings/common/group-domain-role/group-domain-role.module';
+import { UsersGridUserCellComponent } from './users-grid-user-cell/users-grid-user-cell.component';
+import { AvatarModule } from 'ngx-avatar';
 
 @NgModule({
   declarations: [
@@ -17,11 +19,13 @@ import { GroupDomainRoleModule } from 'app/routes/settings/common/group-domain-r
     UsersGridUsernameCellComponent,
     UsersGridActionCellComponent,
     AddEditUserDialogComponent,
+    UsersGridUserCellComponent,
   ],
   imports: [
     CommonModule,
     QuickFilterModule,
     NvCommonModule,
+    AvatarModule,
     LoadingButtonModule,
     PasswordPanelModule,
     GroupDomainRoleModule,

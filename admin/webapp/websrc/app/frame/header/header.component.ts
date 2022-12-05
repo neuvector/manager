@@ -30,8 +30,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isOnRemoteCluster: boolean = false;
   selectedCluster: Cluster | undefined;
   isSUSESSO: boolean = false;
-  primaryMasterName: string = "";
-  managedClusterName: string = "";
+  primaryMasterName: string = '';
+  managedClusterName: string = '';
 
   email = '';
   username = '';
@@ -173,7 +173,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           GlobalVariable.isMember = this.isMemberRole;
           GlobalVariable.isStandAlone = this.isStandaloneRole;
 
-          if(GlobalVariable.isMaster){
+          if (GlobalVariable.isMaster) {
             //get the status of the chosen cluster
             const sessionCluster = this.sessionStorage.get(
               GlobalConstant.SESSION_STORAGE_CLUSTER
@@ -191,17 +191,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
             }
           }
 
-          if(GlobalVariable.isMember){
-            this.clusters.forEach(cluster =>{
-              if(cluster.clusterType === MapConstant.FED_ROLES.MASTER){
+          if (GlobalVariable.isMember) {
+            this.clusters.forEach(cluster => {
+              if (cluster.clusterType === MapConstant.FED_ROLES.MASTER) {
                 this.primaryMasterName = cluster.name;
-              }else{
+              } else {
                 this.managedClusterName = cluster.name;
               }
             });
-
           }
-
         },
         error: error => {
           console.error('error:', error);
@@ -231,8 +229,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.selectedCluster = selectedItem;
           this.isOnRemoteCluster =
             this.selectedCluster?.clusterType !== MapConstant.FED_ROLES.MASTER;
+          this.multiClusterService.refreshSummary();
           this.multiClusterService.dispatchSwitchEvent();
-
           //to save and restore the selected cluster in case the page gets refreshed
           const cluster = {
             isRemote: this.isOnRemoteCluster,

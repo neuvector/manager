@@ -12,7 +12,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MapConstant } from '@common/constants/map.constant';
 import { ErrorResponse, EventItem, User } from '@common/types';
 import { UtilsService } from '@common/utils/app.utils';
-import { stringToColour } from '@common/utils/common.utils';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
@@ -26,7 +25,6 @@ import {
   GridReadyEvent,
   ICellRendererParams,
 } from 'ag-grid-community';
-import { getAvatar } from 'app/routes/settings/common/helpers';
 import * as $ from 'jquery';
 import { from, Subject } from 'rxjs';
 import { concatMap, finalize, map, switchMap, take } from 'rxjs/operators';
@@ -36,6 +34,7 @@ import { UsersGridUsernameCellComponent } from './users-grid-username-cell/users
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { GlobalConstant } from '@common/constants/global.constant';
+import { UsersGridUserCellComponent } from './users-grid-user-cell/users-grid-user-cell.component';
 
 @Component({
   selector: 'app-users-grid',
@@ -81,15 +80,7 @@ export class UsersGridComponent implements OnInit {
       headerCheckboxSelection: true,
       resizable: true,
       checkboxSelection: true,
-      cellRenderer: params => {
-        return `<img src="${getAvatar(
-          params.data.emailHash,
-          params.data.username,
-          stringToColour(params.data.username)
-        )}" class="img-thumbnail rounded-circle" alt="${
-          params.data.username
-        } avatar" style="width: 35px;"/>`;
-      },
+      cellRenderer: 'userCellRenderer',
       sortable: false,
       cellClass: ['d-flex', 'align-items-center'],
       width: 85,
@@ -202,6 +193,7 @@ export class UsersGridComponent implements OnInit {
       onCellClicked: e => this.getEventsByUser(e.node.data.fullname),
       onGridReady: event => this.onGridReady(event),
       components: {
+        userCellRenderer: UsersGridUserCellComponent,
         usernameCellRenderer: UsersGridUsernameCellComponent,
         actionCellRenderer: UsersGridActionCellComponent,
       },

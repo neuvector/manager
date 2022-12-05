@@ -157,7 +157,9 @@ export class GroupsComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.ruleDetailModalService.ruleDialog.close(false);
+    if (this.ruleDetailModalService.ruleDialog) {
+      this.ruleDetailModalService.ruleDialog.close(false);
+    }
     this.ruleDetailModalService.isDialogOpen = false;
   }
 

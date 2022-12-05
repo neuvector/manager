@@ -25,7 +25,17 @@ export class RegistryVulnerabilitiesComponent {
   @Input() cveDBVersion!: string;
   @Input() scannerVersion!: string;
   @Input() scannerDate!: string;
-  @Input() layers!: Layer[];
+  private _layers!: Layer[];
+  @Input() set layers(layers: Layer[]) {
+    this._layers = layers;
+    this.hasLayers =
+      this._layers.length > 1 &&
+      this._layers.some(l => l.vulnerabilities.length > 0);
+  }
+  get layers() {
+    return this._layers;
+  }
+  hasLayers!: boolean;
   @Input() refreshing!: boolean;
   @Input() resize!: boolean;
   @Output() showAcceptedVulnerability = new EventEmitter<boolean>();

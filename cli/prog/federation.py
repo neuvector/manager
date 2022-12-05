@@ -9,6 +9,7 @@ from prog import client
 from prog import output
 import json
 
+
 clusterRoleNone = ""
 clusterRoleMaster = "master"
 clusterRoleJoint = "joint"
@@ -45,12 +46,8 @@ def request_federation(data):
 @click.option("--port", help="Exposed rest port of this primary cluster")
 @click.option("--use_proxy", default="", type=click.Choice(["https", ""]),
               help="Use configured system https proxy or not when connecting to managed cluster")
-@click.option("--deploy_reg_scan_data", default="disable", type=click.Choice(["enable", "disable"]),
-              help="Deploy federal registry scan data to managed clusters")
-@click.option("--deploy_repo_scan_data", default="disable", type=click.Choice(["enable", "disable"]),
-              help="Deploy repository scan data on primary cluster to managed clusters")
 @click.pass_obj
-def request_federation_promote(data, name, server, port, use_proxy, deploy_reg_scan_data, deploy_repo_scan_data):
+def request_federation_promote(data, name, server, port, use_proxy):
     """Promote a cluster to primary cluster in the federation."""
     master_rest_info = {"server": "", "port": 0}
     resp = data.client.show("fed/member", None, None)
@@ -69,13 +66,6 @@ def request_federation_promote(data, name, server, port, use_proxy, deploy_reg_s
         req["use_proxy"] = resp["use_proxy"]
     if use_proxy != "":
         req["use_proxy"] = use_proxy
-
-    req["deploy_reg_scan_data"] = False
-    if deploy_reg_scan_data == "enable":
-        req["deploy_reg_scan_data"] = True
-    req["deploy_repo_scan_data"] = False
-    if deploy_repo_scan_data == "enable":
-        req["deploy_repo_scan_data"] = True
 
     resp = data.client.request("fed", "promote", None, req)
     # click.echo("Federation promotion response object: {}".format(json.dumps(resp)))
@@ -318,19 +308,15 @@ def show_federation_config(data):
         click.echo("")
         clusters = []
         cfg = {}
-        deploy_reg_scan_data_title = "deploy federal registry scan data"
         deploy_repo_scan_data_title = "deploy repository scan data"
         cfg["use proxy"] = False
         if "use_proxy" in resp:
             cfg["use proxy"] = resp["use_proxy"]
-        cfg[deploy_reg_scan_data_title] = False
-        if "deploy_reg_scan_data" in resp:
-            cfg[deploy_reg_scan_data_title] = resp["deploy_reg_scan_data"]
         cfg[deploy_repo_scan_data_title] = False
         if "deploy_repo_scan_data" in resp:
             cfg[deploy_repo_scan_data_title] = resp["deploy_repo_scan_data"]
 
-        columns = ("use proxy", deploy_reg_scan_data_title, deploy_repo_scan_data_title)
+        columns = ("use proxy", deploy_repo_scan_data_title)
         output.show(columns, cfg)
     # click.echo("")
 
@@ -356,12 +342,10 @@ def set_federation(data):
 @click.option("--port", help="Exposed rest port of this cluster")
 @click.option("--use_proxy", default="", type=click.Choice(["https", ""]),
               help="Use proxy when connecting to primary cluster")
-@click.option("--deploy_reg_scan_data", default="", type=click.Choice(["enable", "disable", ""]),
-              help="Deploy federal registry scan data to managed clusters")
 @click.option("--deploy_repo_scan_data", default="", type=click.Choice(["enable", "disable", ""]),
               help="Deploy repository scan data on primary cluster to managed clusters")
 @click.pass_obj
-def set_federation_config(data, name, server, port, use_proxy, deploy_reg_scan_data, deploy_repo_scan_data):
+def set_federation_config(data, name, server, port, use_proxy, deploy_repo_scan_data):
     """Configure the exposed rest info of this cluster."""
     rest_info = {"server": "", "port": 0}
     resp = data.client.show("fed/member", None, None)
@@ -375,10 +359,6 @@ def set_federation_config(data, name, server, port, use_proxy, deploy_reg_scan_d
     body["use_proxy"] = use_proxy
     if name != None and name != "":
         body["name"] = name
-    if deploy_reg_scan_data == "enable":
-        body["deploy_reg_scan_data"] = True
-    elif deploy_reg_scan_data == "disable":
-        body["deploy_reg_scan_data"] = False
     if deploy_repo_scan_data == "enable":
         body["deploy_repo_scan_data"] = True
     elif deploy_repo_scan_data == "disable":

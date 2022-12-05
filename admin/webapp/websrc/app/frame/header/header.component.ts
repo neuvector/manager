@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Injector, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, Injector, Inject, OnDestroy } from '@angular/core';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { Router } from '@angular/router';
 import screenfull from 'screenfull';
@@ -10,13 +10,15 @@ import { ClusterData, Cluster } from '@common/types';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
+import {NotificationService} from "@services/notification.service";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   navCollapsed = true;
   menuItems: Array<any> = [];
   router: Router = <Router>{};
@@ -36,11 +38,15 @@ export class HeaderComponent implements OnInit {
   displayRole = '';
 
   isNavSearchVisible: boolean = false;
+  private _multiClusterSubScription;
+
   @ViewChild('fsbutton', { static: true }) fsbutton;
 
   constructor(
     public menu: MenuService,
+    public notificationService: NotificationService,
     public multiClusterService: MultiClusterService,
+    public translateService: TranslateService,
     public switchers: SwitchersService,
     public injector: Injector,
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService
@@ -65,6 +71,15 @@ export class HeaderComponent implements OnInit {
     this.username = this.sessionStorage.get('token')?.token?.username;
     const role = this.sessionStorage.get('token')?.token?.role;
     this.displayRole = role ? role : 'Namespace User';
+
+    this._multiClusterSubScription = this.multiClusterService.onRefreshClustersEvent$.subscribe(data => {
+      this.initMultiClusters();
+    });
+
+  }
+
+  ngOnDestroy() {
+    this._multiClusterSubScription.unsubscribe();
   }
 
   toggleUserBlock(event) {
@@ -137,6 +152,9 @@ export class HeaderComponent implements OnInit {
       next: clusterName => {
         this.clusterName = clusterName;
       },
+      error: err => {
+        this.notificationService.openError(err, this.translateService.instant('multiCluster.messages.get_name_failure'));
+      }
     });
   }
   getClusters() {

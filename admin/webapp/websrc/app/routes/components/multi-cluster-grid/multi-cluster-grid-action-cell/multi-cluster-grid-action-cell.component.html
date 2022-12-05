@@ -26,21 +26,45 @@
       >mode_edit</em>
     </div>
     <ng-template #isMemberCluster>
-      <em
-        class="eos-icons icon-18 hand"
-        matTooltip="{{ 'multiCluster.tips.syncPolicy' | translate }}"
-        (click)="syncPolicy($event,params.data); $event.stopPropagation();"
+      <div *ngIf="
+      params.data &&
+      ( params.data.status === left_status ||
+                params.data.status === disconnect_status ||
+                params.data.status === upgrade_status ||
+                params.data.status === kicked_status);
+           else valid_status" >
+        <em
+          class="eos-icons icon-18 hand disabled-color"
+          matTooltip="{{ 'multiCluster.tips.syncPolicy' | translate }}"
         >sync</em>
-      <em
-        class="eos-icons icon-18 hand"
-        matTooltip="{{ 'multiCluster.tips.remove' | translate }}"
-        (click)="removeMember(params.data)"
-      >person_off</em>
-      <em
-        class="eos-icons icon-18 hand"
-        matTooltip="{{ 'multiCluster.tips.manage' | translate }}"
-        (click)="manageCluster(params.data)"
-      >laptop_windows</em>
+        <em
+          class="eos-icons icon-18 hand"
+          matTooltip="{{ 'multiCluster.tips.remove' | translate }}"
+          (click)="removeMember(params.data)"
+        >person_off</em>
+        <em
+          class="eos-icons icon-18 hand disabled-color"
+          matTooltip="{{ 'multiCluster.tips.manage' | translate }}"
+        >laptop_windows</em>
+      </div>
+      <ng-template #valid_status>
+        <em
+          class="eos-icons icon-18 hand"
+          matTooltip="{{ 'multiCluster.tips.syncPolicy' | translate }}"
+          (click)="syncPolicy(params.data)"
+        >sync</em>
+        <em
+          class="eos-icons icon-18 hand"
+          matTooltip="{{ 'multiCluster.tips.remove' | translate }}"
+          (click)="removeMember(params.data)"
+        >person_off</em>
+        <em
+          class="eos-icons icon-18 hand"
+          matTooltip="{{ 'multiCluster.tips.manage' | translate }}"
+          (click)="manageCluster(params.data)"
+        >laptop_windows</em>
+      </ng-template>
+
 
     </ng-template>
 

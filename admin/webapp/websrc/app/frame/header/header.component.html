@@ -81,10 +81,11 @@
               [disabled]="
                 cluster.status === 'disconnected' ||
                 cluster.status === 'left' ||
-                cluster.status === 'joint_upgrade_required'
+                cluster.status === 'joint_upgrade_required' ||
+                cluster.status === 'kicked'
               ">
               <i
-                class="fa-md mr-md text-gray-light"
+                class="fa-md mr-md"
                 [ngClass]="
                   cluster.clusterType === 'master'
                     ? 'fa fa-home'
@@ -101,13 +102,13 @@
       <button mat-button class="nav-item nav-white nav-border ">
         <i class="fa fa-home fa-lg mr-lg text-gray-light brightness-70"></i>
         <label
-          class="selected-cluster-text mr-lg brightness-70"
+          class="selected-cluster-text mr-lg mb-0 brightness-70"
           [matTooltip]  = "primaryMasterName"
           [matTooltipDisabled]="primaryMasterName.length < 20"
-        >{{primaryMasterName | shortenFromMiddle: 20}} &nbsp;&nbsp;&nbsp;/&nbsp;</label>
+        >{{primaryMasterName | shortenFromMiddle: 20}} &nbsp;&nbsp;/&nbsp;&nbsp;</label>
         <i class="fa fa-laptop fa-lg mr-lg text-gray-light"></i>
         <label
-          class="selected-cluster-text mr-lg"
+          class="selected-cluster-text mr-lg mb-0"
           style="position: relative;"
           [matTooltip]  = "managedClusterName"
           [matTooltipDisabled]="managedClusterName.length < 20"
@@ -149,7 +150,7 @@
           {{ 'enum.MY_PROFILE' | translate }}
         </button>
       </div>
-      <button mat-menu-item (click)="goMultiCluster()">
+      <button *ngIf="!isOnRemoteCluster" mat-menu-item (click)="goMultiCluster()">
         <i class="eos-icons icon-18 margin-right-s">organisms</i>
         {{ 'enum.MULTI_CLUSTER' | translate }}
       </button>

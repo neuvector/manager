@@ -8,7 +8,6 @@ import { AgreementComponent } from '@routes/pages/login/eula/agreement/agreement
   styleUrls: ['./eula.component.scss'],
 })
 export class EulaComponent implements OnInit {
-  isEULAPageOpened = true;
 
   @Output() eulaStatus = new EventEmitter<boolean>();
 
@@ -17,7 +16,6 @@ export class EulaComponent implements OnInit {
   ngOnInit(): void {}
 
   openEULAPage() {
-    this.isEULAPageOpened = false;
     this.dialog.open(AgreementComponent, {
       width: '80vw',
       height: '685px',

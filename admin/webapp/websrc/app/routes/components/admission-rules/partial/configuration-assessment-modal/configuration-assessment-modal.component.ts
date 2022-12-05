@@ -1,7 +1,6 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Component, Inject, OnInit } from "@angular/core";
 import { PathConstant } from "@common/constants/path.constant";
-import { MapConstant } from "@common/constants/map.constant";
 import { AdmissionRulesService } from "@common/services/admission-rules.service";
 import { GridOptions } from "ag-grid-community";
 import { AdmissionConfigurationAssessment } from "@common/types/admission/admission";
@@ -9,9 +8,6 @@ import { TranslateService } from "@ngx-translate/core";
 import { UtilsService } from "@common/utils/app.utils";
 import { arrayToCsv } from "@common/utils/common.utils";
 import { saveAs } from "file-saver";
-
-import * as pdfMake from 'pdfmake/build/pdfmake';
-import * as pdfFonts from 'pdfmake/build/vfs_fonts.js';
 
 @Component({
   selector: 'app-configuration-assessment-modal',

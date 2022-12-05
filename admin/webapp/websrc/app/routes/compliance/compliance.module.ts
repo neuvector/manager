@@ -19,9 +19,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
 import { NgChartsModule } from 'ng2-charts';
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
-import { ComplianceViewPdfService } from './pdf-generation/compliance-view-pdf.service';
 import { AssetsViewPdfService } from './pdf-generation/assets-view-pdf.service';
-import { i18nPdfTranslateService } from './pdf-generation/i18n-pdf-translate.service';
 import { ComplianceFilterService } from './compliance.filter.service';
 import { ComplianceCsvService } from './csv-generation/compliance-csv.service';
 import { ComplianceItemsChartsComponent } from './compliance-items/compliance-items-charts/compliance-items-charts.component';
@@ -93,9 +91,7 @@ const routes: Routes = [{ path: '', component: ComplianceComponent }];
   ],
   providers: [
     ComplianceService,
-    ComplianceViewPdfService,
     AssetsViewPdfService,
-    i18nPdfTranslateService,
     ComplianceFilterService,
     ComplianceCsvService,
     AssetsHttpService,

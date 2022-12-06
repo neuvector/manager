@@ -1177,6 +1177,7 @@
     "COUNT_POSTFIX": "registries found",
     "ADD_REPO": "Add registry",
     "ADD_FILTER": "Add Filter",
+    "EDIT_FILTER": "Edit Filter",
     "EDIT_REPO": "Edit registry",
     "VIEW_REPO": "View registry",
     "TEST_REPO": "Test Setting",

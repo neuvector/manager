@@ -1177,6 +1177,7 @@
     "COUNT_POSTFIX": " 个镜像库",
     "ADD_REPO": "创建镜像库",
     "ADD_FILTER": "添加过滤器",
+    "EDIT_FILTER": "编辑过滤器",
     "EDIT_REPO": "编辑镜像库",
     "VIEW_REPO": "浏览镜像库",
     "TEST_REPO": "测试设置",

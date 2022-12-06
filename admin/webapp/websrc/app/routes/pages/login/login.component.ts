@@ -1,4 +1,4 @@
-import { Component, Inject, Injectable, OnInit } from '@angular/core';
+import { Component, Inject, Injectable, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TranslatorService } from '@core/translator/translator.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -16,13 +16,14 @@ import {
 import { SessionService } from '@services/session.service';
 import {MatDialog} from "@angular/material/dialog";
 import {AgreementComponent} from "@routes/pages/login/eula/agreement/agreement.component";
+import {NotificationService} from "@services/notification.service";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   public loginForm: FormGroup;
   public inProgress: boolean = false;
   public authMsg: string = '';
@@ -41,6 +42,7 @@ export class LoginComponent implements OnInit {
   private now!: Date;
   private currUrl: string = '';
   private w: any;
+  private _dialogSubscription;
 
   constructor(
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
@@ -51,6 +53,7 @@ export class LoginComponent implements OnInit {
     private cookieService: CookieService,
     private translatorService: TranslatorService,
     private translate: TranslateService,
+    private notificationService: NotificationService,
     private fb: FormBuilder,
     private router: Router,
     private dialog: MatDialog
@@ -82,20 +85,41 @@ export class LoginComponent implements OnInit {
     }
     if (this.currUrl.includes(GlobalConstant.PROXY_VALUE)) {
       this.isFromSSO = true;
-      const dialog = this.dialog.open(AgreementComponent, {
-        data: { isFromSSO: true},
-        width: '85vw',
-        height: '90vh',
-      });
-      dialog.afterClosed().subscribe(dialogData =>{
-        this.getEulaStatus(true);
-        this.localLogin();
-      });
-    }
-    this.getAuthServer();
-    this.verifyAuth();
-    if(!this.isFromSSO){
+      this.authService.getEula().subscribe(
+        (eulaInfo: any) => {
+          let eula = eulaInfo.eula;
+          if (eula && eula.accepted) {
+            this.isEulaAccepted = true;
+            this.validEula = true;
+            this.localLogin();
+          }else{
+            const dialog = this.dialog.open(AgreementComponent, {
+              data: { isFromSSO: true},
+              width: '85vw',
+              height: '90vh',
+            });
+            this._dialogSubscription = dialog.afterClosed().subscribe(dialogData =>{
+              this.validEula = true;
+              this.localLogin();
+            });
+          }
+        },
+        error => {
+          this.cookieService.delete('temp');
+          this.isEulaAccepted = false;
+          this.notificationService.openError(error, this.translate.instant("license.message.GET_EULA_ERR"));
+        }
+      );
+    }else{
+      this.getAuthServer();
+      this.verifyAuth();
       this.verifyEula();
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this._dialogSubscription) {
+      this._dialogSubscription.unsubscribe();
     }
   }
 
@@ -207,6 +231,7 @@ export class LoginComponent implements OnInit {
     GlobalVariable.isFooterReady = false;
   }
 
+  //get saml and openID status
   private getAuthServer() {
     this.authService.getTokenAuthServer().subscribe(
       (serverData: any) => {
@@ -238,6 +263,7 @@ export class LoginComponent implements OnInit {
     );
   }
 
+  //for saml and openID redirection
   private verifyAuth() {
     let hasAuthCookies = this.cookieService.check('temp');
     if (hasAuthCookies) {
@@ -289,12 +315,12 @@ export class LoginComponent implements OnInit {
         if (eula && eula.accepted) {
           this.isEulaAccepted = true;
         }
-
         this.validEula = this.isEulaAccepted;
       },
       error => {
         this.cookieService.delete('temp');
         this.isEulaAccepted = false;
+        this.notificationService.openError(error, this.translate.instant("license.message.GET_EULA_ERR"));
       }
     );
   }

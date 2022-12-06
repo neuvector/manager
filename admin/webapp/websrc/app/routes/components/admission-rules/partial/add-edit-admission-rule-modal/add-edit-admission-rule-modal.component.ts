@@ -44,7 +44,10 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
   SEPARATOR_KEYS_CODES: number[] = [ENTER, COMMA];
   CRITERIA_PATTERN = GlobalConstant.CRITERIA_PATTERN;
   pspCriteria: string = "";
+  pssCollections: any;
   hasPSP: boolean = false;
+  isPSSBaseline: boolean = false;
+  isPSSRestricted: boolean = false;
   isMainView: boolean = true;
   @ViewChild(JsonEditorComponent, { static: false }) editor: JsonEditorComponent;
   jsonEditorOptions: JsonEditorOptions;
@@ -98,13 +101,26 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     }
     this.addEditAdmissionRuleForm.get("criteria")!.valueChanges.subscribe(criteria => {
       this.hasPSP = criteria.some(criterion => {
-        console.log("criterion", criterion)
         if (criterion.value) {
           return criterion.value.name.toLowerCase() === GlobalConstant.PSP;
         } else {
           return false;
         }
-      })
+      });
+      this.isPSSBaseline = criteria.some(criterion => {
+        if (criterion.value) {
+          return criterion.value.name.toLowerCase() === GlobalConstant.PSS && criterion.value.value === 'baseline';
+        } else {
+          return false;
+        }
+      });
+      this.isPSSRestricted = criteria.some(criterion => {
+        if (criterion.value) {
+          return criterion.value.name.toLowerCase() === GlobalConstant.PSS && criterion.value.value === 'restricted';
+        } else {
+          return false;
+        }
+      });
     });
   }
 
@@ -271,7 +287,9 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
       this.admissionRulesService.removeCriterionFromChip(criterion, this.addEditAdmissionRuleForm.controls.criteria)
     );
     this.clearCriterionDetail();
-    this.removeUnexistingCriterionName(criterion.value.name);
+    if (!this.getCriterionNameList(this.criteriaOptions).includes(criterion.value.name)) {
+      this.removeUnexistingCriterionName(criterion.value.name);
+    }
   };
 
   criterionSelectedInChip = (criterion) => {
@@ -371,6 +389,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     this.pspCriteria = `${this.translate.instant("admissionControl.PSP_CRITERIA")} ${this.data.admissionOptions.admission_options.psp_collection.map(pspCriterion => {
         return this.translate.instant(`admissionControl.names.${parseDivideStyle(pspCriterion.name).toUpperCase()}`);
       }).join(", ")}`;
+    this.pssCollections = this.data.admissionOptions.admission_options.pss_collections;
     this.initCriteriaOptionsView(this.criteriaOptions);
     this.clearCriterionDetail();
   };

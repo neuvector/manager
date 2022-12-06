@@ -78,7 +78,7 @@ export class PathConstant {
   public static SECURITY_EVENTS_URL_2 = 'security-events2'; //events
   public static ADMISSION_URL = 'admission/rules'; //policy
   public static ADMISSION_SINGLE_URL = 'admission/rule'; //policy
-  public static ADMCTL_CONDITION_OPTION_URL = 'admission/options'; //policy
+  public static ADMCTL_CONDITION_OPTION_URL = 'assets/mockdata/options.json'//'admission/options'; //policy
   public static ADMCTL_STATE_URL = 'admission/state'; //policy
   public static ADM_CTRL_K8S_TEST = 'admission/test'; //policy
   public static LAYER_URL = 'scan/registry/layer'; //assets

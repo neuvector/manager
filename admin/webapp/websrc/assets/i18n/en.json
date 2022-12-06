@@ -2429,6 +2429,10 @@
     "RULE_TYPE": "Action",
     "PSP_INSTRUCTION": "Suggest to add more criteria, such as namespace, to limit the rule's scope.",
     "PSP_CRITERIA": "PSP Best Practice includes:",
+    "BL_POLICY": "PSS Baseline Policy List",
+    "RS_POLICY": "PSS Restricted Policy List",
+    "PSS_POLICY_DETAIL_LINK": "For Details",
+    "PSS_RESTRICT_HINT": "if the deployment doesn't meet \"restricted\" level, the action (block) will be taken.",
     "sample": {
       "MULTI_VAL": "Format sample: element1, element2, element3",
       "IMG_REG_HINT": "Image registry should be \"localhost\" or with \".\" in name"
@@ -2554,7 +2558,7 @@
       "CPU_REQUEST_S": "CPU Req",
       "MEMORY_LIMIT_S": "Mem Lmt",
       "MEMORY_REQUEST_S": "Mem Req",
-      "PSS_VIOLATION": "PSA/PSS Best Practice",
+      "PSS_VIOLATION": "Violate PSA policy",
       "MODULES": "Modules"
     },
     "operators": {

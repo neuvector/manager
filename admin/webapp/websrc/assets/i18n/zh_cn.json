@@ -2429,6 +2429,10 @@
     "RULE_TYPE": "操作",
     "PSP_INSTRUCTION": "建议添加更多条件限制规则的范围, 例如: 命名空间",
     "PSP_CRITERIA": "PSP最佳实施包括:",
+    "BL_POLICY": "PSS基线策略清单",
+    "RS_POLICY": "PSS限制策略清单",
+    "PSS_POLICY_DETAIL_LINK": "详细内容",
+    "PSS_RESTRICT_HINT": "如果部署不能满足\"严格限制\"的水平, 阻止措施将要被实施.",
     "sample": {
       "MULTI_VAL": "格式样例: element1, element2, element3",
       "IMG_REG_HINT": "镜像库名应该是 \"localhost\" 或含有 \".\" 的名称"
@@ -2554,7 +2558,7 @@
       "CPU_REQUEST_S": "CPU请求",
       "MEMORY_LIMIT_S": "内存限制",
       "MEMORY_REQUEST_S": "内存请求",
-      "PSS_VIOLATION": "PSA/PSS最佳实施",
+      "PSS_VIOLATION": "违反PSA策略",
       "MODULES": "模块"
     },
     "operators": {

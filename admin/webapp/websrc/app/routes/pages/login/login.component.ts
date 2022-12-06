@@ -1,4 +1,10 @@
-import { Component, Inject, Injectable, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  Inject,
+  Injectable,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TranslatorService } from '@core/translator/translator.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -14,9 +20,9 @@ import {
   StorageService,
 } from 'ngx-webstorage-service';
 import { SessionService } from '@services/session.service';
-import {MatDialog} from "@angular/material/dialog";
-import {AgreementComponent} from "@routes/pages/login/eula/agreement/agreement.component";
-import {NotificationService} from "@services/notification.service";
+import { MatDialog } from '@angular/material/dialog';
+import { AgreementComponent } from '@routes/pages/login/eula/agreement/agreement.component';
+import { NotificationService } from '@services/notification.service';
 
 @Component({
   selector: 'app-login',
@@ -92,25 +98,30 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.isEulaAccepted = true;
             this.validEula = true;
             this.localLogin();
-          }else{
+          } else {
             const dialog = this.dialog.open(AgreementComponent, {
-              data: { isFromSSO: true},
+              data: { isFromSSO: true },
               width: '85vw',
               height: '90vh',
             });
-            this._dialogSubscription = dialog.afterClosed().subscribe(dialogData =>{
-              this.validEula = true;
-              this.localLogin();
-            });
+            this._dialogSubscription = dialog
+              .afterClosed()
+              .subscribe(dialogData => {
+                this.validEula = true;
+                this.localLogin();
+              });
           }
         },
         error => {
           this.cookieService.delete('temp');
           this.isEulaAccepted = false;
-          this.notificationService.openError(error, this.translate.instant("license.message.GET_EULA_ERR"));
+          this.notificationService.openError(
+            error,
+            this.translate.instant('license.message.GET_EULA_ERR')
+          );
         }
       );
-    }else{
+    } else {
       this.getAuthServer();
       this.verifyAuth();
       this.verifyEula();
@@ -207,7 +218,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.oidcLogin(value, mode);
         break;
       case 'okta':
-        this.oidcLogin(value, mode);
+        this.oktaLogin(value, mode);
         break;
       default:
         this.localLogin(value);
@@ -320,7 +331,10 @@ export class LoginComponent implements OnInit, OnDestroy {
       error => {
         this.cookieService.delete('temp');
         this.isEulaAccepted = false;
-        this.notificationService.openError(error, this.translate.instant("license.message.GET_EULA_ERR"));
+        this.notificationService.openError(
+          error,
+          this.translate.instant('license.message.GET_EULA_ERR')
+        );
       }
     );
   }

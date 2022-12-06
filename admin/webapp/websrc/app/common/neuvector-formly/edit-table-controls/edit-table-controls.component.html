@@ -1,10 +1,10 @@
 <div [hidden]="to.disabled">
   <ng-container *ngIf="isEditable.value">
-    <button type="button" mat-button (click)="submit()">Submit</button>
-    <button type="button" mat-button (click)="cancel()">Cancel</button>
+    <button type="button" mat-button (click)="submit()">{{ 'cveProfile.ADD' | translate }}</button>
+    <button type="button" mat-button (click)="cancel()">{{ 'cveProfile.CANCEL' | translate }}</button>
   </ng-container>
   <ng-container *ngIf="!isEditable.value">
-    <button type="button" mat-button (click)="edit()">Edit</button>
-    <button type="button" mat-button (click)="delete()">Delete</button>
+    <button type="button" mat-button (click)="edit()">{{ 'cveProfile.EDIT' | translate }}</button>
+    <button type="button" mat-button (click)="delete()">{{ 'cveProfile.REMOVE' | translate }}</button>
   </ng-container>
 </div>

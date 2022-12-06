@@ -1,38 +1,34 @@
-import { Component, OnInit } from '@angular/core';
-import { ICellRendererAngularComp } from "ag-grid-angular";
+import { Component } from '@angular/core';
+import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 import { TranslateService } from '@ngx-translate/core';
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog } from '@angular/material/dialog';
 import { PortsFullListModalComponent } from '@components/network-rules/partial/ports-full-list-modal/ports-full-list-modal.component';
 
 @Component({
   selector: 'app-ports-cell',
   templateUrl: './ports-cell.component.html',
-  styleUrls: ['./ports-cell.component.scss']
+  styleUrls: ['./ports-cell.component.scss'],
 })
 export class PortsCellComponent implements ICellRendererAngularComp {
-
   params!: ICellRendererParams;
-  ports: string;
+  ports!: string;
   portCount: number = 0;
 
-  constructor(
-    private dialog: MatDialog,
-    private translate: TranslateService
-  ) { }
+  constructor(private dialog: MatDialog, private translate: TranslateService) {}
 
   agInit(params: ICellRendererParams): void {
     this.params = params;
     this.ports =
-      this.params.value === "any"
-        ? this.translate.instant("enum.ANY")
+      this.params.value === 'any'
+        ? this.translate.instant('enum.ANY')
         : this.params.value;
-    this.portCount = this.params.value.split(",").length;
+    this.portCount = this.params.value.split(',').length;
     if (this.portCount > 2) {
       this.ports = this.params.value
-        .split(",")
+        .split(',')
         .slice(0, 2)
-        .join(",")
+        .join(',')
         .toString();
     }
   }
@@ -42,14 +38,15 @@ export class PortsCellComponent implements ICellRendererAngularComp {
   }
 
   showAllPorts = (ruleId: number, ports: string) => {
-    const portsFullListDialogRef = this.dialog.open(PortsFullListModalComponent, {
-      width: "600px",
-      data: {
-        ruleId: ruleId,
-        ports: ports.split(",")
-      },
-      disableClose: false
-    });
+    const portsFullListDialogRef = this.dialog.open(
+      PortsFullListModalComponent,
+      {
+        width: '600px',
+        data: {
+          ruleId: ruleId,
+          ports: ports.split(','),
+        },
+      }
+    );
   };
-
 }

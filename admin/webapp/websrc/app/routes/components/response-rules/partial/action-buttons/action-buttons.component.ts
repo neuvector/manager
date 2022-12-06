@@ -34,10 +34,15 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
     if (params.node && params.node.data) {
       this.params = params;
     }
-    this.isWriteResponseRuleAuthorized = this.params.context.componentParent.isWriteResponseRuleAuthorized;
+    this.isWriteResponseRuleAuthorized =
+      this.params.context.componentParent.isWriteResponseRuleAuthorized;
     this.isOperatableRuleType =
       this.params.data.cfg_type !== GlobalConstant.CFG_TYPE.GROUND &&
-      !(this.params.context.componentParent.source === GlobalConstant.NAV_SOURCE.SELF && this.params.data.cfg_type === GlobalConstant.CFG_TYPE.FED);
+      !(
+        this.params.context.componentParent.source ===
+          GlobalConstant.NAV_SOURCE.SELF &&
+        this.params.data.cfg_type === GlobalConstant.CFG_TYPE.FED
+      );
   }
 
   refresh(params: any): boolean {
@@ -57,10 +62,18 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
     rowNode.setSelected(true);
     this.responseRulesService.getAutoCompleteData().subscribe(
       response => {
-        this.openAddResponseRuleModal(response, GlobalConstant.MODAL_OP.EDIT, isReadonly);
+        this.openAddResponseRuleModal(
+          response,
+          GlobalConstant.MODAL_OP.EDIT,
+          isReadonly
+        );
       },
       err => {
-        this.openAddResponseRuleModal([], GlobalConstant.MODAL_OP.EDIT, isReadonly);
+        this.openAddResponseRuleModal(
+          [],
+          GlobalConstant.MODAL_OP.EDIT,
+          isReadonly
+        );
       }
     );
   };
@@ -92,7 +105,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
       data: {
         autoCompleteData: autoCompleteData,
         type: type,
-        isReadonly: isReadonly
+        isReadonly: isReadonly,
       },
       width: '70vw',
     });
@@ -169,7 +182,6 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
         message: message,
         isQuarantined: isQuarantined,
       },
-      disableClose: true,
     });
     dialogRef.componentInstance.confirm
       .pipe(

@@ -18,7 +18,7 @@ export class ImportFileModalComponent {
          error: 'Import failed',
        }
      },
-     disableClose: true
+     
    });
   */
   constructor(

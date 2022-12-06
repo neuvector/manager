@@ -27,7 +27,7 @@ object SystemConfigJsonProtocol extends DefaultJsonProtocol {
   implicit val serviceConfigParamFormat: RootJsonFormat[ServiceConfigParam] = jsonFormat4(
     ServiceConfigParam
   )
-  implicit val systemRequestContentFormat: RootJsonFormat[SystemRequestContent] = jsonFormat1(
+  implicit val systemRequestContentFormat: RootJsonFormat[SystemRequestContent] = jsonFormat2(
     SystemRequestContent
   )
   implicit val systemRequestFormat: RootJsonFormat[SystemRequest] = jsonFormat1(SystemRequest)

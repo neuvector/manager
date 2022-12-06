@@ -133,7 +133,10 @@ case class SystemConfig4DashboardWrap(
   error: Option[Error]
 )
 
-case class SystemRequestContent(policy_mode: Option[String])
+case class SystemRequestContent(
+  policy_mode: Option[String],
+  baseline_profile: Option[String]
+)
 
 case class ServiceConfigParam(
   policy_mode: Option[String],

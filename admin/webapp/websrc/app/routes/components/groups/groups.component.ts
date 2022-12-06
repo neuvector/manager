@@ -157,10 +157,10 @@ export class GroupsComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    if (this.ruleDetailModalService.ruleDialog) {
-      this.ruleDetailModalService.ruleDialog.close(false);
+    if (this.source === this.navSource.FED_POLICY) {
+      this.ruleDetailModalService.ruleDialog?.close(false);
+      this.ruleDetailModalService.isDialogOpen = false;
     }
-    this.ruleDetailModalService.isDialogOpen = false;
   }
 
   getScoreImprovementGroups = () => {

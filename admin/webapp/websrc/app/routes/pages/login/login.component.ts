@@ -334,7 +334,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         GlobalVariable.summary = summaryInfo.summary;
         GlobalVariable.hasInitializedSummary = true;
 
-        if (this.originalUrl && this.originalUrl.includes('login')) {
+        if (this.originalUrl && !this.originalUrl.includes('login')) {
           this.router.navigate([this.originalUrl]);
         } else {
           this.router.navigate([GlobalConstant.PATH_DEFAULT]);

@@ -2769,7 +2769,7 @@
     "RENEW": "RENEW LICENSE",
     "LOAD_ERR": "Failed to load license",
     "message": {
-      "GET_LICENSE_ERR": "Error happened when getting license information",
+      "GET_EULA_ERR": "Error happened when getting EULA information",
       "GENERATE_CODE_ERR": "Error happened when generating code",
       "ACCEPT_EULA_ERR": "It is required to read and agree to the End User License Agreement before login"
     }

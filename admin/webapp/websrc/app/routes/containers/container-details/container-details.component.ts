@@ -8,6 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MatTooltip } from '@angular/material/tooltip';
 import {
   ErrorResponse,
   ProcessInfo,
@@ -74,7 +75,9 @@ export class ContainerDetailsComponent implements OnInit, OnDestroy {
   activeTabIndex: number = 0;
   filter = new FormControl('');
   showProcessHistory: boolean = false;
+  @ViewChild('processHistoryTooltip') processHistoryTooltip!: MatTooltip;
   showAcceptedVuls: boolean = false;
+  @ViewChild('acceptedTooltip') acceptedTooltip!: MatTooltip;
   isVulsAuthorized!: boolean;
   isWriteVulsAuthorized!: boolean;
   get processHistoryMsg() {
@@ -218,11 +221,13 @@ export class ContainerDetailsComponent implements OnInit, OnDestroy {
 
   toggleAcceptedVuls(): void {
     this.showAcceptedVuls = !this.showAcceptedVuls;
+    this.acceptedTooltip.show();
     this.loadVuls(this.container);
   }
 
   toggleProcessHistory(): void {
     this.showProcessHistory = !this.showProcessHistory;
+    this.processHistoryTooltip.show();
     this.loadProcess(this.container);
   }
 

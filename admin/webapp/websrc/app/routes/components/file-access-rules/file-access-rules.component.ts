@@ -193,7 +193,6 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
       data: {
         message: message,
       },
-      disableClose: true,
     });
     dialogRef.componentInstance.confirm
       .pipe(

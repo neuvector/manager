@@ -13,7 +13,7 @@ import { finalize, switchMap } from 'rxjs/operators';
 import { NotificationService } from '@services/notification.service';
 import { UtilsService } from '@common/utils/app.utils';
 import { PromotionModalComponent } from '@routes/multi-cluster/promotion-modal/promotion-modal.component';
-import {MapConstant} from "@common/constants/map.constant";
+import { MapConstant } from '@common/constants/map.constant';
 
 @Component({
   selector: 'app-multi-cluster-grid-action-cell',
@@ -30,7 +30,6 @@ export class MultiClusterGridActionCellComponent
   disconnect_status: string = MapConstant.FED_STATUS.DISCONNECTED;
   upgrade_status: string = MapConstant.FED_STATUS.UPGADE_REQUIRED;
   kicked_status: string = MapConstant.FED_STATUS.KICKED;
-
 
   constructor(
     public multiClusterService: MultiClusterService,
@@ -74,11 +73,13 @@ export class MultiClusterGridActionCellComponent
     });
   };
 
-  syncPolicy = (data) => {
+  syncPolicy = data => {
     this.multiClusterService.syncPolicy(data.id).subscribe(
       () => {
         this.notificationService.open(
-          this.translate.instant('multiCluster.messages.deploy_ok', {name: data.name})
+          this.translate.instant('multiCluster.messages.deploy_ok', {
+            name: data.name,
+          })
         );
       },
       error => {
@@ -93,7 +94,7 @@ export class MultiClusterGridActionCellComponent
   removeMember(rowData): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '700px',
-      disableClose: true,
+
       data: {
         message: `${this.translate.instant('multiCluster.prompt.remove', {
           name: this.shortenFromMiddlePipe.transform(rowData.name, 20),
@@ -139,15 +140,13 @@ export class MultiClusterGridActionCellComponent
   leave() {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '700px',
-      disableClose: true,
+
       data: {
         message: `${this.translate.instant('multiCluster.prompt.leave')}`,
       },
     });
     dialogRef.componentInstance.confirm
-      .pipe(
-        switchMap(() => this.multiClusterService.leaveFromMaster(true))
-      )
+      .pipe(switchMap(() => this.multiClusterService.leaveFromMaster(true)))
       .subscribe(
         () => {
           this.notificationService.open(

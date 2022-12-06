@@ -37,6 +37,7 @@
               <mat-icon fontSet="fa" fontIcon="fa-check-square"></mat-icon>
             </button>
             <button
+              #acceptedTooltip="matTooltip"
               type="button"
               [attr.aria-label]="acceptedVulsMsg"
               [matTooltip]="acceptedVulsMsg"
@@ -70,6 +71,7 @@
       <div class="filter filter-icon-1">
         <div class="d-flex">
           <button
+            #processHistoryTooltip="matTooltip"
             mat-icon-button
             [attr.aria-label]="processHistoryMsg"
             [matTooltip]="processHistoryMsg"

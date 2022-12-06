@@ -58,6 +58,7 @@
       </mat-card>
     </a>
     <a
+      *ngIf="!isWorker"
       [routerLink]="!isAuthenticationAuth ? ['./'] : ['saml']"
       class="settings__link col-md-12 col-lg-6 col-xl-4"
       [class.disabled]="!isAuthenticationAuth">
@@ -72,6 +73,7 @@
       </mat-card>
     </a>
     <a
+      *ngIf="!isWorker"
       [routerLink]="!isAuthenticationAuth ? ['./'] : ['openid']"
       class="settings__link col-md-12 col-lg-6 col-xl-4"
       [class.disabled]="!isAuthenticationAuth">

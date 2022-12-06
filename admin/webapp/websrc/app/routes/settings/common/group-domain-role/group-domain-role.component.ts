@@ -51,7 +51,11 @@ export class GroupDomainRoleComponent {
   openDialog(groupMappedRole?: GroupMappedRole): void {
     let data: GroupDomainRoleDialogData;
     let dataSource: MatTableDataSource<any>;
+    let role_idx = -1;
     if (groupMappedRole) {
+      role_idx = this.groupMappedRoles.findIndex(
+        role => role.group === groupMappedRole.group
+      );
       groupMappedRole.role_domains = groupMappedRole.role_domains || {};
       dataSource = new MatTableDataSource(
         this.mappableRoles.group_domain_roles
@@ -115,9 +119,9 @@ export class GroupDomainRoleComponent {
           group: result.group,
           role_domains: roleDomains,
         };
-        if (groupMappedRole) {
-          this.groupMappedRoles = this.groupMappedRoles.map(role =>
-            role.group === newRole.group ? newRole : role
+        if (groupMappedRole && role_idx !== -1) {
+          this.groupMappedRoles = this.groupMappedRoles.map((role, idx) =>
+            idx === role_idx ? newRole : role
           );
         } else {
           this.groupMappedRoles = [newRole, ...this.groupMappedRoles];

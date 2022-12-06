@@ -1,12 +1,13 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   Inject,
   OnDestroy,
   OnInit,
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { RegistryConfig } from '@common/types';
+import { ErrorResponse, RegistryConfig } from '@common/types';
 import { AddRegistryDialogComponent } from '../add-registry-dialog.component';
 import { FormGroup } from '@angular/forms';
 import { cloneDeep } from 'lodash';
@@ -66,7 +67,8 @@ export class TestSettingsDialogComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: RegistryConfig,
     private registriesService: RegistriesService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -79,7 +81,7 @@ export class TestSettingsDialogComponent implements OnInit, OnDestroy {
         detailsCellRenderer: TestConnectionDialogDetailsCellComponent,
         typeCellRenderer: TestConnectionDialogTypeCellComponent,
       },
-      overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS')
+      overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS'),
     };
   }
 
@@ -144,7 +146,12 @@ export class TestSettingsDialogComponent implements OnInit, OnDestroy {
             )
         )
       )
-      .subscribe((r: any) => this.gridApi.setRowData(r.body.steps));
+      .subscribe({
+        next: (r: any) => this.gridApi.setRowData(r.body.steps),
+        error: ({ error }: { error: ErrorResponse }) => {
+          this.stopTest(error.message);
+        },
+      });
   }
 
   test(isScanning: boolean): void {
@@ -158,17 +165,21 @@ export class TestSettingsDialogComponent implements OnInit, OnDestroy {
     }
   }
 
-  stopTest(): void {
+  stopTest(error?: string): void {
     clearTimeout(this.timeoutId);
     this.destroy$.next(true);
+    this.registriesService
+      .deleteTestSettings(this.data.name, this.transactionID)
+      .subscribe(() => {});
     const row = {
       step_type: 'stopped',
-      step_content: 'Test was stopped.',
+      step_content: error ? error : 'Test was stopped.',
     };
     const rows = this.getAllRows();
     rows.push(row);
     this.gridApi.setRowData(rows);
     this.testingSwitch = false;
+    this.cd.markForCheck();
   }
 
   onNoClick(): void {

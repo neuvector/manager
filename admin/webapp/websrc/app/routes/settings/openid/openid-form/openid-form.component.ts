@@ -99,6 +99,7 @@ export class OpenidFormComponent implements OnInit, OnChanges {
       });
       let client_secret = this.openidForm.get('client_secret');
       client_secret?.clearValidators();
+      client_secret?.updateValueAndValidity();
       client_secret?.markAsPristine();
     } else {
       this.isCreated = false;

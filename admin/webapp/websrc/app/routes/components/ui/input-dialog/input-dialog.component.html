@@ -1,0 +1,27 @@
+<h1 mat-dialog-title *ngIf="data.title">{{ data.title }}</h1>
+<div mat-dialog-content>
+  <p class="overflow-auto pb-2" *ngIf="data.hint">{{ data.hint }}</p>
+  <mat-form-field>
+    <mat-label *ngIf="data.label">{{ data.label }}</mat-label>
+    <input matInput [(ngModel)]="data.input" />
+  </mat-form-field>
+</div>
+<div class="mt-4" mat-dialog-actions align="end">
+  <button
+    (click)="onCancel()"
+    [disabled]="loading"
+    class="mr-2"
+    color="warn"
+    id="cancel-delete"
+    mat-button>
+    {{ 'general.CANCEL' | translate }}
+  </button>
+  <button
+    (click)="onConfirm()"
+    color="primary"
+    id="input-confirm"
+    type="button"
+    mat-raised-button>
+    Ok
+  </button>
+</div>

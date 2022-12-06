@@ -1,7 +1,7 @@
 <div *ngIf="noChartData; then nodata else chart"></div>
 
 <ng-template #chart>
-  <div style="height: 250px;">
+  <div style="height: 220px;">
     <canvas
       [data]="applicationVolumeBarChartConfig.data"
       [labels]="applicationVolumeBarChartConfig.data.labels"

@@ -246,6 +246,28 @@
           <div class="margin-left-m margin-right-m">
             <div class="text-muted" *ngIf="hasPSP">{{pspCriteria}}</div>
             <div class="text-warning" *ngIf="hasPSP">{{'admissionControl.PSP_INSTRUCTION'| translate}}</div>
+            <div class="text-muted">
+              <div *ngIf="isPSSBaseline || isPSSRestricted">
+                <span class="text-bold">{{ (isPSSBaseline ? 'admissionControl.BL_POLICY' : 'admissionControl.RS_POLICY') | translate }}:</span>
+                <span class="text-info">
+                  ({{ 'admissionControl.PSS_POLICY_DETAIL_LINK' | translate }}:
+                    <a
+                      target="_blank"
+                      class="eos-icons icon-18"
+                      href="https://kubernetes.io/docs/concepts/security/pod-security-standards/"
+                    >link
+                    </a>
+                  )
+                </span>
+              </div>
+              <div *ngIf="isPSSBaseline" class="row mx-0">
+                <div *ngFor="let item of pssCollections.baseline" class="col-sm-6">- {{ item }}</div>
+              </div>
+              <div *ngIf="isPSSRestricted">
+                <div *ngFor="let item of pssCollections.restricted">- {{ item }}</div>
+              </div>
+            </div>
+            <div class="text-warning" *ngIf="isPSSRestricted">{{ 'admissionControl.PSS_RESTRICT_HINT' | translate }}</div>
           </div>
         </div>
         <div class="row">

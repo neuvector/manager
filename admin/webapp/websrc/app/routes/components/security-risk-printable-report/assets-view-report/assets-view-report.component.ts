@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { MapConstant } from '@common/constants/map.constant';
 
 @Component({
   selector: 'app-assets-view-report',
@@ -9,7 +10,9 @@ export class AssetsViewReportComponent implements OnInit {
 
   @Input() reportPage: string;
   @Input() masterGrids: any[][];
-  @Input() dictionaryData: any;
+  @Input() dictionaryData: any[];
+  @Input() isMeetingReportLimit: boolean;
+  SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW = MapConstant.SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW;
 
   constructor() { }
 

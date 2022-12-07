@@ -17,6 +17,9 @@ import { sortByDisplayName } from '@common/utils/common.utils';
 import { AssetsHttpService } from '@common/api/assets-http.service';
 import { RisksHttpService } from '@common/api/risks-http.service';
 import { MapConstant } from '@common/constants/map.constant';
+import {
+  GridApi,
+} from 'ag-grid-community';
 
 @Injectable()
 export class ComplianceService {
@@ -26,6 +29,7 @@ export class ComplianceService {
   imageMap4Pdf!: {};
   platformMap4Pdf!: {};
   hostMap4Pdf!: {};
+  gridApi!: GridApi;
   private refreshSubject$ = new Subject();
   private selectedComplianceSubject$ = new BehaviorSubject<any | undefined>(
     undefined

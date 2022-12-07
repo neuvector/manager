@@ -5,6 +5,7 @@
     class="printable-area"
     [reportPage]="'compliance'"
     [data]="complianceList"
+    [isMeetingReportLimit]="isMeetingReportLimit"
     [charts]="statisticCharts"
   >
   </app-risks-view-report>
@@ -14,56 +15,41 @@
     class="printable-area"
     [reportPage]="'compliance'"
     [masterGrids]="masterGrids"
+    [isMeetingReportLimit]="isMeetingReportLimit"
     [dictionaryData]="complianceList"
   >
   </app-assets-view-report>
   <div class="screen-area" style="height: calc(100vh - 180px)">
     <div class="d-flex justify-content-end align-items-center">
-      <!-- <app-loading-button
-        (btnClick)="downloadAssetsPDF()"
-        [disabled]="(assetViewPdfProgress$ | async) !== 100"
-        [loading]="(assetViewPdfProgress$ | async) !== 100"
-        appearance="mat-button"
-        buttonClasses="mr-1 d-flex justify-content-center align-items-center"
-        iconClasses="eos-icons"
-        iconName="picture_as_pdf"
-        text="PDF(Assets View)"
+      <div
+        class="d-flex justify-content-end align-items-center"
+        *ngIf="!complianceFilterService.filtered && complianceData.compliance.compliances.length > 0 || complianceFilterService.filtered && complianceFilterService.filteredCount > 0"
       >
-      </app-loading-button>
-      <app-loading-button
-        (btnClick)="downloadCompliancePDF()"
-        [disabled]="(complianceViewPdfProgress$ | async) !== 100"
-        [loading]="(complianceViewPdfProgress$ | async) !== 100"
-        appearance="mat-button"
-        buttonClasses="mr-1 d-flex justify-content-center align-items-center"
-        iconClasses="eos-icons"
-        iconName="picture_as_pdf"
-        text="PDF(Compliance View)">
-      </app-loading-button> -->
-      <app-loading-button
-        (btnClick)="printAssetsPDF()"
-        [text]="'cis.report.PDF_LINK2' | translate"
-        appearance="mat-button"
-        buttonClasses="mr-1 d-flex justify-content-center align-items-center"
-        iconClasses="eos-icons"
-        iconName="print">
-        >
-      </app-loading-button>
-      <app-loading-button
-        (btnClick)="printCompliancePDF()"
-        [text]="'cis.report.PDF_LINK' | translate"
-        appearance="mat-button"
-        buttonClasses="mr-1 d-flex justify-content-center align-items-center"
-        iconClasses="eos-icons"
-        iconName="print">
-      </app-loading-button>
-      <button
-        (click)="downloadCsv()"
-        class="mr-1 d-flex justify-content-center align-items-center"
-        mat-button>
-        <i
-          class="eos-icons">csv_file</i>
-      </button>
+        <app-loading-button
+          (btnClick)="printAssetsPDF()"
+          [text]="'cis.report.PDF_LINK2' | translate"
+          appearance="mat-button"
+          buttonClasses="mr-1 d-flex justify-content-center align-items-center"
+          iconClasses="eos-icons"
+          iconName="print">
+          >
+        </app-loading-button>
+        <app-loading-button
+          (btnClick)="printCompliancePDF()"
+          [text]="'cis.report.PDF_LINK' | translate"
+          appearance="mat-button"
+          buttonClasses="mr-1 d-flex justify-content-center align-items-center"
+          iconClasses="eos-icons"
+          iconName="print">
+        </app-loading-button>
+        <button
+          (click)="downloadCsv()"
+          class="mr-1 d-flex justify-content-center align-items-center"
+          mat-button>
+          <i
+            class="eos-icons">csv_file</i>
+        </button>
+      </div>
       <app-loading-button
         (btnClick)="refresh()"
         [appearance]="'mat-button'"

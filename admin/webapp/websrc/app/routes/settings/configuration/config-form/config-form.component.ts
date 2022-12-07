@@ -131,7 +131,7 @@ export class ConfigFormComponent implements OnInit {
             error,
             this.tr.instant('setting.SUBMIT_FAILED'),
             false
-          )
+          ), GlobalConstant.NOTIFICATION_TYPE.ERROR
         );
         this.submittingForm = false;
       },

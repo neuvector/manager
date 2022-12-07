@@ -162,7 +162,7 @@ export const ScannerAutoscaleMinMaxField = {
   formControl: new FormControl([]),
   type: FormlyComponents.NGX_SLIDER,
   templateOptions: {
-    min: 0,
+    min: 1,
     max: 128,
     step: 1,
     showTicks: true,

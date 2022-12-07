@@ -98,6 +98,17 @@ export class UtilsService {
     }
   }
 
+  private removeEndingChar(message: string): string {
+    const ends = ['!', '.', '。'];
+    let messageEndWith = (err, ends) => {
+      return ends.some(element => {
+        return err.endsWith(element);
+      });
+    };
+    if (messageEndWith(message, ends)) message = message.replace(/.$/, '');
+    return message;
+  }
+
   getAlertifyMsg(error, errBrief, isHtml) {
     let message = '';
     if (typeof error === 'string') {
@@ -109,20 +120,21 @@ export class UtilsService {
     } else {
       message = this.translate.instant('general.UNFORMATTED_ERR');
     }
+    errBrief = this.removeEndingChar(errBrief);
     if (isHtml) {
       return (
         '<div class="server-error" style="padding: 0">' +
         '<div><em class="fa fa-times-circle error-signal" aria-hidden="true"></em></div>' +
         '<div><span class="error-text">' +
         errBrief +
-        '  ' +
+        ': ' +
         message.charAt(0).toUpperCase() +
         message.slice(1) +
         '</span></div></div>'
       );
     } else {
       return (
-        errBrief + '  ' + message.charAt(0).toUpperCase() + message.slice(1)
+        errBrief + ': ' + message.charAt(0).toUpperCase() + message.slice(1)
       );
     }
   }
@@ -148,10 +160,7 @@ export class UtilsService {
       base.length > 8 ? parseInt(base.substring(10, 12)) : 0,
       base.length > 8 ? parseInt(base.substring(12, 14)) : 0,
     ]).add(interval, intervalUnit);
-    return this.datePipe.transform(
-      resDateObj.toDate(),
-      pattern
-    );
+    return this.datePipe.transform(resDateObj.toDate(), pattern);
   }
 
   parseDatetimeStr(datetimeObj, pattern?) {
@@ -405,14 +414,13 @@ export class UtilsService {
   }
 
   parseControllerStats(statsData: SystemStatsData): ChartDataUpdate {
-    const cpu = {
+    return {
       data1: (statsData.stats.span_1.cpu * 100).toFixed(2),
       postfix1: '%',
       data2: (statsData.stats.span_1.memory / 1000 / 1000).toFixed(2),
       postfix2: 'MB',
       read_at: statsData.read_at,
     };
-    return cpu;
   }
 
   exportCVE(name: string, vuls: Vulnerability[]) {

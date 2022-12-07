@@ -104,6 +104,7 @@ export class ImportTestFileComponent implements OnInit {
 
   browseFile = () => {
     this.uploader?.clearQueue();
+    this.percentage = 0;
   };
 
   public fileOverBase = (e: any): void => {

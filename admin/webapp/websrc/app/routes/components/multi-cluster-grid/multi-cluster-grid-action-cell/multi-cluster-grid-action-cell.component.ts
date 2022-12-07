@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import {Component, ChangeDetectionStrategy, Inject} from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -14,6 +14,7 @@ import { NotificationService } from '@services/notification.service';
 import { UtilsService } from '@common/utils/app.utils';
 import { PromotionModalComponent } from '@routes/multi-cluster/promotion-modal/promotion-modal.component';
 import { MapConstant } from '@common/constants/map.constant';
+import {SESSION_STORAGE, StorageService} from "ngx-webstorage-service";
 
 @Component({
   selector: 'app-multi-cluster-grid-action-cell',
@@ -35,10 +36,12 @@ export class MultiClusterGridActionCellComponent
     public multiClusterService: MultiClusterService,
     private shortenFromMiddlePipe: ShortenFromMiddlePipe,
     private notificationService: NotificationService,
+    public translateService: TranslateService,
     private utils: UtilsService,
     public dialog: MatDialog,
     private translate: TranslateService,
-    private router: Router
+    private router: Router,
+    @Inject(SESSION_STORAGE) private sessionStorage: StorageService
   ) {}
 
   agInit(params: ICellRendererParams): void {
@@ -130,10 +133,26 @@ export class MultiClusterGridActionCellComponent
       );
   }
 
+  //switch to a member cluster
   manageCluster(rowData): void {
     this.multiClusterService.switchCluster(rowData.id, '').subscribe(
-      value => {},
-      error => {}
+      value => {
+        const cluster = {
+          isRemote: true,
+          id: rowData.id,
+          name: rowData.name
+        };
+        this.sessionStorage.set(
+          GlobalConstant.SESSION_STORAGE_CLUSTER,
+          JSON.stringify(cluster)
+        );
+        this.multiClusterService.refreshSummary();
+        this.multiClusterService.dispatchSwitchEvent();
+        this.multiClusterService.dispatchRefreshEvent();
+      },
+      error => {
+        this.notificationService.openError(error, this.translateService.instant('multiCluster.messages.redirect_failure', {name: rowData.name}));
+      }
     );
   }
 

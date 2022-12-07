@@ -201,17 +201,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
           GlobalVariable.isMember = this.isMemberRole;
           GlobalVariable.isStandAlone = this.isStandaloneRole;
 
+          //get the status of the chosen cluster
+          const sessionCluster = this.sessionStorage.get(
+            GlobalConstant.SESSION_STORAGE_CLUSTER
+          );
+          const clusterInSession = sessionCluster ? JSON.parse(sessionCluster) : null;
+          this.isOnRemoteCluster = clusterInSession.isRemote;
+          
           if (GlobalVariable.isMaster) {
-            //get the status of the chosen cluster
-            const sessionCluster = this.sessionStorage.get(
-              GlobalConstant.SESSION_STORAGE_CLUSTER
-            );
-
-            const cluster = sessionCluster ? JSON.parse(sessionCluster) : null;
-
-            if (cluster !== null) {
-              this.isOnRemoteCluster = cluster.isOnRemoteCluster;
-              this.selectedCluster = cluster;
+            if (clusterInSession !== null) {
+              this.selectedCluster = clusterInSession;
             } else {
               this.selectedCluster = this.clusters.find(cluster => {
                 return cluster.clusterType === MapConstant.FED_ROLES.MASTER;
@@ -230,7 +229,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           }
         },
         error: error => {
-          console.error('error:', error);
+          this.notificationService.openError(error, this.translateService.instant('multiCluster.messages.query_failure'));
         },
       });
   }
@@ -271,7 +270,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           );
         },
         error: error => {
-          console.error(error);
+          this.notificationService.openError(error, this.translateService.instant('multiCluster.messages.redirect_failure', {name: cluster.name}))
         },
       });
     }

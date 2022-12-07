@@ -82,6 +82,25 @@
         </mat-form-field>
       </div>
     </div>
+    <div *ngIf="isRancherSSO" class="d-flex justify-content-end align-items-center mt-2">
+      <app-loading-button
+        [appearance]="'mat-raised-button'"
+        [color]="'primary'"
+        [buttonClasses]="'d-flex justify-content-center align-items-center'"
+        [disabled]="!formValid() || profileForm.pristine || submittingForm"
+        [id]="'profile-form-submit-button'"
+        [loading]="submittingForm"
+        [text]="'profile.SUBMIT' | translate"
+        [type]="'submit'">
+      </app-loading-button>
+      <button
+        type="button"
+        [disabled]="submittingForm"
+        (click)="toggleEdit()"
+        mat-button>
+        {{ 'profile.CANCEL' | translate }}
+      </button>
+    </div>
   </div>
   <div *ngIf="isLocalUser" [hidden]="!isEdit">
     <mat-divider></mat-divider>

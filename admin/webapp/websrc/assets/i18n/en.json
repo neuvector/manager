@@ -1091,6 +1091,9 @@
     "INVALID_DATE": "Please input valid date.",
     "INVALID_DATE_RANGE": "Please input valid date range.",
     "CONDITION_HINT": "Sample: on Service use redis-pod.demo,nv.nvlab:node to matchredis-pod.demo or nv.nvlab:node service, same for the other criteria.",
+    "APPENDIX_LIMIT_HINT": "Report does not print appendix as the number of rows is over 200",
+    "MAX_REPORT_ROW_HINT": "Report prints the first 1000 records",
+    "MAX_REPORT_ROW_HINT_2": "according to publish datetime",
     "report": {
       "TITLE": "Vulnerability reports (Vulnerability View)",
       "TITLE2": "Vulnerability reports (Assets View)",

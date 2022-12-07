@@ -19,6 +19,9 @@ import { VulnerabilitiesData } from '@common/types/vulnerabilities/vulnerabiliti
 import { VulnerabilitiesFilterService } from './vulnerabilities.filter.service';
 import { AssetsViewPdfService } from './pdf-generation/assets-view-pdf.service';
 import { MapConstant } from '@common/constants/map.constant';
+import {
+  GridApi,
+} from 'ag-grid-community';
 
 @Injectable()
 export class VulnerabilitiesService {
@@ -27,6 +30,7 @@ export class VulnerabilitiesService {
   topNodes!: [string, { high: number; medium: number }][];
   topImages!: [string, { high: number; medium: number }][];
   topCve!: Compliance[] | VulnerabilityAssetRaw[];
+  gridApi!: GridApi;
   countDistribution!: {
     high: number;
     medium: number;

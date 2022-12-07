@@ -246,6 +246,8 @@ export class MapConstant {
   public static ALERTIFY_SUCCEED_DELAY = 4000;
   public static ALERTIFY_ERROR_DELAY = 10000;
   public static REPORT_TABLE_ROW_LIMIT = 60000;
+  public static SEC_RISK_REPORT_MAX_ROW = 1000;
+  public static SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW = 200;
 
   public static FED_ROLES = {
     FEDADMIN: 'fedAdmin',

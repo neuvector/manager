@@ -18,6 +18,7 @@ export class VulnerabilitiesComponent {
   masterGrids: any[][] = [];
   isFiltered: boolean = false;
   advFilter: any;
+  isMeetingReportLimit: boolean = false;
   isPrinting: boolean = false;
   isPrintingAssets: boolean = false;
   statisticCharts: any = {
@@ -31,7 +32,7 @@ export class VulnerabilitiesComponent {
     private vulnerabilitiesService: VulnerabilitiesService,
     private vulnerabilitiesCsvService: VulnerabilitiesCsvService,
     private multiClusterService: MultiClusterService,
-    private vulnerabilitiesFilterService: VulnerabilitiesFilterService
+    public vulnerabilitiesFilterService: VulnerabilitiesFilterService
   ) {
     //refresh the page when it switched to a remote cluster
     this._switchClusterSubscription =
@@ -56,11 +57,7 @@ export class VulnerabilitiesComponent {
 
 
   printVulnerabilityPDF() {
-    this.vulnerabilitiesList =
-      this.vulnerabilitiesFilterService.filteredCis.length >=
-      MapConstant.REPORT_TABLE_ROW_LIMIT
-        ? this.vulnerabilitiesList.slice(0, this.vulnerabilitiesList.length)
-        : this.vulnerabilitiesFilterService.filteredCis;
+    this.vulnerabilitiesList = this.getFilteredVulnerabilities();
     this.statisticCharts = {
       node: (
         document.getElementById('vulnNodesBarPDF') as HTMLCanvasElement
@@ -85,11 +82,7 @@ export class VulnerabilitiesComponent {
       platformMap4Pdf: this.vulnerabilitiesService.platformMap4Pdf,
       imageMap4Pdf: this.vulnerabilitiesService.imageMap4Pdf,
     };
-    this.vulnerabilitiesList =
-      this.vulnerabilitiesFilterService.filteredCis.length >=
-      MapConstant.REPORT_TABLE_ROW_LIMIT
-        ? this.vulnerabilitiesList.slice(0, this.vulnerabilitiesList.length)
-        : this.vulnerabilitiesFilterService.filteredCis;
+    this.vulnerabilitiesList = this.getFilteredVulnerabilities();
     this.isFiltered = this.vulnerabilitiesFilterService.filtered;
     this.advFilter = this.vulnerabilitiesFilterService.advFilter;
 
@@ -109,6 +102,17 @@ export class VulnerabilitiesComponent {
     }, 500);
   }
 
+  private getFilteredVulnerabilities = () => {
+    let vulnerabilitiesList: any[] = [];
+    this.vulnerabilitiesService.gridApi.forEachNodeAfterFilter(rowNode => {
+      vulnerabilitiesList.push(rowNode.data);
+    });
+    this.isMeetingReportLimit = vulnerabilitiesList.length > MapConstant.SEC_RISK_REPORT_MAX_ROW;
+    return this.isMeetingReportLimit
+        ? vulnerabilitiesList.sort((a, b) => b.published_timestamp - a.published_timestamp).slice(0, MapConstant.SEC_RISK_REPORT_MAX_ROW)
+        : vulnerabilitiesList;
+  };
+
   private prepareDetails = (masterData, vuls, isFiltered, advFilter) => {
     if (isFiltered) {
       return this.prepareData4Filtered(masterData, vuls, advFilter);
@@ -122,40 +126,61 @@ export class VulnerabilitiesComponent {
     let workloadMap4FilteredPdf = {};
     let hostMap4FilteredPdf = {};
     let imageMap4FilteredPdf = {};
+    let vulWorkloadInit = {
+      pod_name: '',
+      domain: '',
+      applications: [],
+      policy_mode: '',
+      service_group: '',
+      scanned_at: '',
+      high: 0,
+      medium: 0,
+      evaluation: 0,
+      vulnerabilites: [],
+    };
+    let vulHostInit = {
+      name: '',
+      os: '',
+      kernel: '',
+      cpus: 0,
+      memory: 0,
+      containers: 0,
+      policy_mode: '',
+      scanned_at: '',
+      high: 0,
+      medium: 0,
+      evaluation: 0,
+      vulnerabilites: [],
+    };
+    let vulImageInit = {
+      image_name: '',
+      high: 0,
+      medium: 0,
+      vulnerabilites: [],
+    };
     vuls.forEach(vul => {
-      if (
-        vul.workloads &&
-        Array.isArray(vul.workloads) &&
-        vul.workloads.length > 0 &&
-        (advFilter.containerName ||
-          advFilter.serviceName ||
-          advFilter.selectedDomains.length > 0)
-      ) {
-        let vulWorkloadInit = {
-          pod_name: '',
-          domain: '',
-          applications: [],
-          policy_mode: '',
-          service_group: '',
-          scanned_at: '',
-          high: 0,
-          medium: 0,
-          evaluation: 0,
-          vulnerabilites: [],
-        };
-        let patterns = advFilter.containerName
-          .split(',')
-          .map(item => item.trim())
-          .filter(item => item.length > 0);
-        let servicePatterns = advFilter.serviceName
-          .split(',')
-          .map(item => item.trim())
-          .filter(item => item.length > 0);
-        let domainPatterns = advFilter.selectedDomains
-          .map(item => item.name.trim())
-          .filter(item => item.length > 0);
-        console.log('domainPatterns: ', servicePatterns);
-        vul.workloads.forEach(workload => {
+      vul.workloads.forEach(workload => {
+        if (
+          vul.workloads &&
+          Array.isArray(vul.workloads) &&
+          vul.workloads.length > 0 &&
+          (advFilter.containerName ||
+            advFilter.serviceName ||
+            advFilter.selectedDomains.length > 0)
+        ) {
+          let patterns = advFilter.containerName
+            .split(',')
+            .map(item => item.trim())
+            .filter(item => item.length > 0);
+          let servicePatterns = advFilter.serviceName
+            .split(',')
+            .map(item => item.trim())
+            .filter(item => item.length > 0);
+          let domainPatterns = advFilter.selectedDomains
+            .map(item => item.name.trim())
+            .filter(item => item.length > 0);
+          console.log('domainPatterns: ', servicePatterns);
+
           if (masterData.workloadMap4Pdf[workload.id])
             console.log(
               'workloads: ',
@@ -190,7 +215,7 @@ export class VulnerabilitiesComponent {
                 masterData.workloadMap4Pdf[workload.id].service_group
               )
             );
-            let vulWorkload = workloadMap4FilteredPdf[workload.id];
+            let vulWorkload = masterData.workloadMap4Pdf[workload.id];
             if (vulWorkload) {
               vulWorkload.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
               vulWorkload.medium +=
@@ -224,30 +249,36 @@ export class VulnerabilitiesComponent {
             }
             workloadMap4FilteredPdf[workload.id] = vulWorkload;
           }
-        });
-      }
-      if (
-        vul.nodes &&
-        Array.isArray(vul.nodes) &&
-        vul.nodes.length > 0 &&
-        advFilter.nodeName
-      ) {
-        let vulHostInit = {
-          name: '',
-          os: '',
-          kernel: '',
-          cpus: 0,
-          memory: 0,
-          containers: 0,
-          policy_mode: '',
-          scanned_at: '',
-          high: 0,
-          medium: 0,
-          evaluation: 0,
-          vulnerabilites: [],
-        };
-        let patterns = advFilter.nodeName.split(',').map(item => item.trim());
-        vul.nodes.forEach(host => {
+        } else {
+          let vulWorkload = JSON.parse(JSON.stringify(vulWorkloadInit));
+          let workloadInfo = masterData.workloadMap4Pdf[workload.id];
+          vulWorkload.pod_name = workload.display_name || '';
+          vulWorkload.domain = workloadInfo.domain || '';
+          vulWorkload.applications = workloadInfo.applications || '';
+          vulWorkload.policy_mode = workload.policy_mode || '';
+          vulWorkload.service_group = workloadInfo.service_group || '';
+          vulWorkload.scanned_at = workloadInfo.scanned_at || '';
+          vulWorkload.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
+          vulWorkload.medium +=
+            vul.severity.toLowerCase() === 'high' ? 0 : 1;
+          vulWorkload.evaluation =
+            vulWorkload.high > 0 || vulWorkload.medium > 0 ? 1 : 0;
+          vulWorkload.vulnerabilites.push({
+            text: vul.name || '',
+            style:
+              vul.severity.toLowerCase() === 'high' ? 'danger' : 'warning',
+          });
+          workloadMap4FilteredPdf[workload.id] = vulWorkload;
+        }
+      });
+      vul.nodes.forEach(host => {
+        if (
+          vul.nodes &&
+          Array.isArray(vul.nodes) &&
+          vul.nodes.length > 0 &&
+          advFilter.nodeName
+        ) {
+          let patterns = advFilter.nodeName.split(',').map(item => item.trim());
           if (new RegExp(patterns.join('|')).test(host.display_name)) {
             let vulHost = hostMap4FilteredPdf[host.id];
             if (vulHost) {
@@ -283,22 +314,37 @@ export class VulnerabilitiesComponent {
             }
             hostMap4FilteredPdf[host.id] = vulHost;
           }
-        });
-      }
-      if (
-        vul.images &&
-        Array.isArray(vul.images) &&
-        vul.images.length > 0 &&
-        advFilter.imageName
-      ) {
-        let vulImageInit = {
-          image_name: '',
-          high: 0,
-          medium: 0,
-          vulnerabilites: [],
-        };
-        let patterns = advFilter.imageName.split(',').map(item => item.trim());
-        vul.images.forEach(image => {
+        } else {
+          let vulHost = JSON.parse(JSON.stringify(vulHostInit));
+          let hostInfo = masterData.hostMap4Pdf[host.id];
+          vulHost.name = host.display_name || '';
+          vulHost.os = hostInfo.os || '';
+          vulHost.kernel = hostInfo.kernel || '';
+          vulHost.cpus = hostInfo.cpus || '';
+          vulHost.memory = hostInfo.memory || '';
+          vulHost.containers = hostInfo.containers || '';
+          vulHost.policy_mode = host.policy_mode || '';
+          vulHost.scanned_at = hostInfo.scanned_at || '';
+          vulHost.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
+          vulHost.medium += vul.severity.toLowerCase() === 'high' ? 0 : 1;
+          vulHost.evaluation =
+            vulHost.high > 0 || vulHost.medium > 0 ? 1 : 0;
+          vulHost.vulnerabilites.push({
+            text: vul.name || '',
+            style:
+              vul.severity.toLowerCase() === 'high' ? 'danger' : 'warning',
+          });
+          hostMap4FilteredPdf[host.id] = vulHost;
+        }
+      });
+      vul.images.forEach(image => {
+        if (
+          vul.images &&
+          Array.isArray(vul.images) &&
+          vul.images.length > 0 &&
+          advFilter.imageName
+        ) {
+          let patterns = advFilter.imageName.split(',').map(item => item.trim());
           if (new RegExp(patterns.join('|')).test(image.display_name)) {
             let vulImage = imageMap4FilteredPdf[image.id];
             if (vulImage) {
@@ -326,12 +372,26 @@ export class VulnerabilitiesComponent {
             }
             imageMap4FilteredPdf[image.id] = vulImage;
           }
-        });
-      }
+        } else {
+          let vulImage = JSON.parse(JSON.stringify(vulImageInit));
+          vulImage.image_name = image.display_name || '';
+          vulImage.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
+          vulImage.medium += vul.severity.toLowerCase() === 'high' ? 0 : 1;
+          vulImage.evaluation =
+            vulImage.high > 0 || vulImage.medium > 0 ? 1 : 0;
+          vulImage.vulnerabilites.push({
+            text: vul.name || '',
+            style:
+              vul.severity.toLowerCase() === 'high' ? 'danger' : 'warning',
+          });
+          imageMap4FilteredPdf[image.id] = vulImage;
+        }
+      });
     });
     grids[0] = Object.values(workloadMap4FilteredPdf);
     grids[1] = Object.values(hostMap4FilteredPdf);
     grids[3] = Object.values(imageMap4FilteredPdf);
+    console.log('grids1: ', JSON.parse(JSON.stringify(grids)));
     return grids;
   };
 

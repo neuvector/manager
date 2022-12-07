@@ -21,6 +21,11 @@
 <div class="report-summary pagebreak">
   <div class="summary-title">
     {{ 'scan.report.others.DETAILS' | translate }}
+    <div *ngIf="isMeetingReportLimit" class="text-warning" style="font-size: 16px;">
+      {{ 'scan.MAX_REPORT_ROW_HINT' | translate }}&nbsp;
+      <span *ngIf="reportPage === 'vulnerabilities'">{{ 'scan.MAX_REPORT_ROW_HINT_2' | translate }}</span>
+    </div>
+    <div *ngIf="data.length > SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW" class="text-warning" style="font-size: 16px;">{{ 'scan.APPENDIX_LIMIT_HINT' | translate }}</div>
   </div>
   <app-risk-view-report-table
     [data]="data"
@@ -28,7 +33,7 @@
   >
   </app-risk-view-report-table>
 </div>
-<div class="report-summary pagebreak">
+<div class="report-summary pagebreak" *ngIf="data.length <= SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW">
   <div class="summary-title">
     {{ 'scan.report.others.APPENDIX' | translate }}
     <span class="summary-subtitle margin-left-m">
@@ -65,7 +70,7 @@
     </div>
   </div>
 </div>
-<div class="report-summary pagebreak" *ngIf="reportPage === 'vulnerabilities'">
+<div class="report-summary pagebreak" *ngIf="reportPage === 'vulnerabilities' && data.length <= SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW">
   <app-risk-view-report-appendix-packages
     [data]="data"
   >

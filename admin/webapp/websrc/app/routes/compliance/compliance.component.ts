@@ -6,6 +6,7 @@ import {
 import { ComplianceService } from './compliance.service';
 import { ComplianceCsvService } from './csv-generation/compliance-csv.service';
 import { ComplianceFilterService } from './compliance.filter.service';
+import { MapConstant } from '@common/constants/map.constant';
 
 @Component({
   selector: 'app-compliance',
@@ -18,6 +19,7 @@ export class ComplianceComponent {
   masterGrids: any[][] = [];
   isFiltered: boolean = false;
   advFilter: any;
+  isMeetingReportLimit: boolean = false;
   isPrinting: boolean = false;
   isPrintingAssets: boolean = false;
   complianceList: any[] = [];
@@ -31,11 +33,12 @@ export class ComplianceComponent {
   constructor(
     private complianceService: ComplianceService,
     private complianceCsvService: ComplianceCsvService,
-    private complianceFilterService: ComplianceFilterService
+    public complianceFilterService: ComplianceFilterService
   ) {}
 
   refresh() {
     this.complianceService.refresh();
+    this.complianceList = this.getFilteredCis();
   }
 
   downloadCsv() {
@@ -43,16 +46,7 @@ export class ComplianceComponent {
   }
 
   printCompliancePDF() {
-    // this.vulnerabilitiesList =
-    //   this.vulnerabilitiesFilterService.filteredCis.length >= MapConstant.REPORT_TABLE_ROW_LIMIT ?
-    //   this.vulnerabilitiesList.slice(0, this.vulnerabilitiesList.length) :
-    //   this.vulnerabilitiesFilterService.filteredCis;
-    this.complianceList = this.complianceFilterService.filteredCis.map(compliance => {
-      compliance.workloads = compliance.workloads.filter(workload =>
-        this.complianceFilterService.namespaceFilter(workload)
-      );
-      return compliance;
-    });
+    this.complianceList = this.getFilteredCis();
     this.statisticCharts = {
       node: (document.getElementById("complinceNodesBarPDF") as HTMLCanvasElement)
         .toDataURL(),
@@ -75,12 +69,7 @@ export class ComplianceComponent {
       platformMap4Pdf: this.complianceService.platformMap4Pdf,
       imageMap4Pdf: this.complianceService.imageMap4Pdf
     };
-    this.complianceList = this.complianceFilterService.filteredCis.map(compliance => {
-      compliance.workloads = compliance.workloads.filter(workload =>
-        this.complianceFilterService.namespaceFilter(workload)
-      );
-      return compliance;
-    });
+    this.complianceList = this.getFilteredCis();
     this.isFiltered = this.complianceFilterService.filtered;
     this.advFilter = this.complianceFilterService.advFilter;
 
@@ -99,6 +88,17 @@ export class ComplianceComponent {
       }
     }, 500);
   }
+
+  private getFilteredCis = () => {
+    let complianceList: any[] = [];
+    this.complianceService.gridApi!.forEachNodeAfterFilter(rowNode => {
+      complianceList.push(rowNode.data);
+    });
+    this.isMeetingReportLimit = complianceList.length > MapConstant.SEC_RISK_REPORT_MAX_ROW;
+    return this.isMeetingReportLimit
+        ? complianceList.slice(0, MapConstant.SEC_RISK_REPORT_MAX_ROW)
+        : complianceList;
+  };
 
   private prepareDetails = (
     masterData,
@@ -122,28 +122,45 @@ export class ComplianceComponent {
     let workloadMap4FilteredPdf = {};
     let hostMap4FilteredPdf = {};
     let imageMap4FilteredPdf = {};
+    let compWorkloadInit = {
+      pod_name: "",
+      domain: "",
+      applications: [],
+      policy_mode: "",
+      service_group: "",
+      complianceCnt: 0,
+      evaluation: 0,
+      complianceList: []
+    };
+    let compHostInit = {
+      name: "",
+      os: "",
+      kernel: "",
+      cpus: 0,
+      memory: 0,
+      containers: 0,
+      policy_mode: "",
+      complianceCnt: 0,
+      evaluation: 0,
+      complianceList: []
+    };
+    let compImageInit = {
+      image_name: "",
+      complianceCnt: 0,
+      evaluation: 0,
+      complianceList: []
+    };
     complianceList.forEach(compliance => {
-      if (
-        compliance.workloads &&
-        Array.isArray(compliance.workloads) &&
-        compliance.workloads.length > 0 &&
-        (advFilter.containerName || advFilter.serviceName || advFilter.selectedDomains.length > 0)
-      ) {
-        let compWorkloadInit = {
-          pod_name: "",
-          domain: "",
-          applications: [],
-          policy_mode: "",
-          service_group: "",
-          complianceCnt: 0,
-          evaluation: 0,
-          complianceList: []
-        };
-        let patterns = advFilter.containerName.split(",").map(item => item.trim()).filter(item => item.length > 0);
-        let servicePatterns = advFilter.serviceName.split(",").map(item => item.trim()).filter(item => item.length > 0);
-        let domainPatterns = advFilter.selectedDomains.map(item => item.name.trim()).filter(item => item.length > 0);
-
-        compliance.workloads.forEach(workload => {
+      compliance.workloads.forEach(workload => {
+        if (
+          compliance.workloads &&
+          Array.isArray(compliance.workloads) &&
+          compliance.workloads.length > 0 &&
+          (advFilter.containerName || advFilter.serviceName || advFilter.selectedDomains.length > 0)
+        ) {
+          let patterns = advFilter.containerName.split(",").map(item => item.trim()).filter(item => item.length > 0);
+          let servicePatterns = advFilter.serviceName.split(",").map(item => item.trim()).filter(item => item.length > 0);
+          let domainPatterns = advFilter.selectedDomains.map(item => item.name.trim()).filter(item => item.length > 0);
           if (
             (
               patterns.length > 0 &&
@@ -179,23 +196,25 @@ export class ComplianceComponent {
             }
             workloadMap4FilteredPdf[workload.id] = compWorkload;
           }
-        });
-      }
-      if (compliance.nodes && Array.isArray(compliance.nodes) && compliance.nodes.length > 0 && advFilter.nodeName) {
-        let compHostInit = {
-          name: "",
-          os: "",
-          kernel: "",
-          cpus: 0,
-          memory: 0,
-          containers: 0,
-          policy_mode: "",
-          complianceCnt: 0,
-          evaluation: 0,
-          complianceList: []
-        };
-        let patterns = advFilter.nodeName.split(",").map(item => item.trim());
-        compliance.nodes.forEach(host => {
+        } else {
+          let compWorkload = JSON.parse(JSON.stringify(compWorkloadInit));
+          let workloadInfo = masterData.workloadMap4Pdf[workload.id];
+          compWorkload.pod_name = workload.display_name || "";
+          compWorkload.domain = workloadInfo.domain || "";
+          compWorkload.applications = workloadInfo.applications || "";
+          compWorkload.policy_mode = workload.policy_mode || "";
+          compWorkload.service_group = workloadInfo.service_group || "";
+          compWorkload.complianceCnt++;
+          compWorkload.evaluation = compWorkload.complianceCnt > 0 ? 1 : 0;
+          compWorkload.complianceList.push({text: compliance.name.padEnd(12), style: compliance.level.toLowerCase()});
+          workloadMap4FilteredPdf[workload.id] = compWorkload;
+        }
+      });
+      compliance.nodes.forEach(host => {
+        if (compliance.nodes && Array.isArray(compliance.nodes) && compliance.nodes.length > 0 && advFilter.nodeName) {
+
+          let patterns = advFilter.nodeName.split(",").map(item => item.trim());
+
           if (new RegExp(patterns.join("|")).test(host.display_name)) {
             let compHost = hostMap4FilteredPdf[host.id];
             if (compHost) {
@@ -218,17 +237,27 @@ export class ComplianceComponent {
             }
             hostMap4FilteredPdf[host.id] = compHost;
           }
-        });
-      }
-      if (compliance.images && Array.isArray(compliance.images) && compliance.images.length > 0 && advFilter.imageName) {
-        let compImageInit = {
-          image_name: "",
-          complianceCnt: 0,
-          evaluation: 0,
-          complianceList: []
-        };
+        } else {
+          let compHost = JSON.parse(JSON.stringify(compHostInit));
+          let hostInfo = masterData.hostMap4Pdf[host.id];
+          compHost.name = host.display_name || "";
+          compHost.os = hostInfo.os || "";
+          compHost.kernel = hostInfo.kernel || "";
+          compHost.cpus = hostInfo.cpus || "";
+          compHost.memory = hostInfo.memory || "";
+          compHost.containers = hostInfo.containers || "";
+          compHost.policy_mode = host.policy_mode || "";
+          compHost.complianceCnt++;
+          compHost.evaluation = compHost.complianceCnt > 0 ? 1 : 0;
+          compHost.complianceList.push({text: compliance.name.padEnd(12), style: compliance.level.toLowerCase()});
+          hostMap4FilteredPdf[host.id] = compHost;
+        }
+      });
+      compliance.images.forEach(image => {
+        if (compliance.images && Array.isArray(compliance.images) && compliance.images.length > 0 && advFilter.imageName) {
+
         let patterns = advFilter.imageName.split(",").map(item => item.trim());
-        compliance.images.forEach(image => {
+
           if (new RegExp(patterns.join("|")).test(image.display_name)) {
             let compImage = imageMap4FilteredPdf[image.id];
             if (compImage) {
@@ -244,8 +273,15 @@ export class ComplianceComponent {
             }
             imageMap4FilteredPdf[image.id] = compImage;
           }
-        });
-      }
+        } else {
+          let compImage = JSON.parse(JSON.stringify(compImageInit));
+          compImage.image_name = image.display_name || "";
+          compImage.complianceCnt++;
+          compImage.evaluation = compImage.complianceCnt > 0 ? 1 : 0;
+          compImage.complianceList.push({text: compliance.name.padEnd(12), style: compliance.level.toLowerCase()});
+          imageMap4FilteredPdf[image.id] = compImage;
+        }
+      });
     });
     grids[0] = Object.values(workloadMap4FilteredPdf);
     grids[1] = Object.values(hostMap4FilteredPdf);

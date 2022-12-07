@@ -145,6 +145,7 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
 
   filterCountChanged(results: number) {
     this.filteredCount = results;
+    this.complianceFilterService.filteredCount = results;
     this.complianceFilterService.filtered =
       this.filteredCount !== this.rowData.length;
     // this.runWorkers();
@@ -165,6 +166,7 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
 
   onGridReady(params: GridReadyEvent): void {
     this.gridApi = params.api;
+    this.complianceService.gridApi = this.gridApi;
     this.gridApi.sizeColumnsToFit();
     this.gridApi.forEachNode(node =>
       node.rowIndex ? 0 : node.setSelected(true)
@@ -192,6 +194,7 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
     this.gridApi.onFilterChanged();
     this.filteredCount =
       this.gridApi.getModel()['rootNode'].childrenAfterFilter.length;
+    this.complianceFilterService.filteredCount = this.filteredCount;
     // this.runWorkers();
   }
 
@@ -219,7 +222,7 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
         } else if (filter) {
           filter.matchType4Ns = convertMatchType(filter.matchType4Ns);
           filter.matchTypes.Service = convertMatchType(
-            filter.matchTypes.Service 
+            filter.matchTypes.Service
           );
           filter.matchTypes.Container = convertMatchType(
             filter.matchTypes.Container

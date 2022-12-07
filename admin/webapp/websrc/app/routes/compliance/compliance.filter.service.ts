@@ -14,6 +14,7 @@ export class ComplianceFilterService {
   ];
   private filteredSubject$ = new BehaviorSubject(false);
   filtered$ = this.filteredSubject$.asObservable();
+  filteredCount: number = 0;
 
   constructor(private translate: TranslateService) {}
 

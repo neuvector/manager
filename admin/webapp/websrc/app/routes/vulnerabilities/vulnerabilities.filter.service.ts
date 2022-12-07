@@ -18,6 +18,7 @@ export class VulnerabilitiesFilterService {
   ];
   private filteredSubject$ = new BehaviorSubject(false);
   filtered$ = this.filteredSubject$.asObservable();
+  filteredCount: number = 0;
   selectedScore = 'V3';
 
   constructor(private translate: TranslateService) {}

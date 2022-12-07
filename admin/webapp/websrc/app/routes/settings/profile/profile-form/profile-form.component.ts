@@ -41,6 +41,10 @@ export class ProfileFormComponent implements OnInit {
     return this.user.server === '';
   }
 
+  get isRancherSSO(): boolean {
+    return this.user.server === 'Rancher';
+  }
+
   constructor(
     private settingsService: SettingsService,
     private tr: TranslatorService,

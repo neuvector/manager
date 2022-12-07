@@ -2642,8 +2642,7 @@
     "USE_HTTP_PROXY":"Use http proxy configured in Settings > Configuration page",
     "USE_HTTPS_PROXY": "Use https proxy configured in Settings > Configuration page",
     "NO_PROXY": "Does not use any proxy",
-    "fed_sync_registry": "Sync the fed registry scan data to managed clusters",
-    "fed_sync_repository": "Sync the repository scan data to managed clusters",
+    "fed_sync_repository": "Sync CI/CD image scan results from stand alone scanners to remote clusters",
     "tips": {
       "policy": "Manage Federated Policy",
       "demote": "Demote",

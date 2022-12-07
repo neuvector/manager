@@ -2642,6 +2642,7 @@
     "USE_HTTP_PROXY":"使用配置在\"设置>配置\"页面的http代理",
     "USE_HTTPS_PROXY": "使用配置在\"设置>配置\"页面的https代理",
     "NO_PROXY": "不使用任何代理",
+    "fed_sync_repository": "将独立扫描仪的CI/CD镜像扫描结果同步到远程集群",
     "tips": {
       "policy": "管理集群策略",
       "demote": "降级",

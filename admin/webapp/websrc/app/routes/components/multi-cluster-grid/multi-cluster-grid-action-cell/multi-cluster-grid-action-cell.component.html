@@ -32,7 +32,7 @@
                 params.data.status === disconnect_status ||
                 params.data.status === upgrade_status ||
                 params.data.status === kicked_status);
-           else valid_status" >
+           else valid_status" class="grid-space-evenly" style="display: flex;">
         <em
           class="eos-icons icon-18 hand disabled-color"
           matTooltip="{{ 'multiCluster.tips.syncPolicy' | translate }}"
@@ -70,7 +70,7 @@
 
   </div>
   <ng-template #isMemberRole>
-    <div *ngIf="!isMasterCluster()">
+    <div *ngIf="!isMasterCluster()" class="grid-space-evenly" style="display: flex;">
     <em
       class="eos-icons icon-18 hand"
       matTooltip="{{ 'multiCluster.tips.edit' | translate }}"

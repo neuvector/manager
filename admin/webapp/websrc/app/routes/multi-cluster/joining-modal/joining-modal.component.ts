@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 export class JoiningModalComponent implements OnInit {
   public cluster: any;
   public useProxy: String = '';
+  public invalidToken: boolean = false;
 
   constructor(
     private clustersService: MultiClusterService,
@@ -49,7 +50,7 @@ export class JoiningModalComponent implements OnInit {
         this.cluster.name = data.misc.cluster_name;
       },
       error => {
-        console.log(error.message);
+        this.notificationService.openError(error, this.translate.instant("multiCluster.messages.get_name_failure"));
       }
     );
   };
@@ -61,11 +62,16 @@ export class JoiningModalComponent implements OnInit {
   parseToken = () => {
     if (!(this.cluster.master_host || this.cluster.master_port)) {
       try {
-        let decodedStr = JSON.parse(atob(this.cluster.token.trim()));
-        this.cluster.master_host = decodedStr['s'];
-        this.cluster.master_port = decodedStr['p'];
-      } catch (e) {
-        console.warn('token format is invalid.', e);
+        this.invalidToken = false;
+        if(this.cluster.token.length % 4 != 0 ){
+          this.invalidToken = true;
+        }else{
+          let decodedStr = JSON.parse(atob(this.cluster.token));
+          this.cluster.master_host = decodedStr['s'];
+          this.cluster.master_port = decodedStr['p'];
+        }
+      } catch (error) {
+        this.invalidToken = true;
       }
     }
   };

@@ -68,8 +68,8 @@ export class MultiClusterGridActionCellComponent
   };
 
   generateToken = () => {
-    this.multiClusterService.generateToken().subscribe(response => {
-      this.openDialog(response['join_token']);
+    this.multiClusterService.generateToken().subscribe(data => {
+      this.openDialog(data['join_token']);
     });
   };
 

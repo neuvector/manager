@@ -183,7 +183,7 @@ export class LoginComponent implements OnInit {
         this.oidcLogin(value, mode);
         break;
       case 'okta':
-        this.oidcLogin(value, mode);
+        this.oktaLogin(value, mode);
         break;
       default:
         this.localLogin(value);

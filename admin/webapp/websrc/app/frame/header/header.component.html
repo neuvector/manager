@@ -44,7 +44,7 @@
   <!-- START Right Navbar-->
   <div class="navbar-nav flex-row">
     <app-global-notifications class="mr-3 my-auto"></app-global-notifications>
-    <div *ngIf="isStandaloneRole">
+    <div *ngIf="!(isMasterRole && isAllowedToRedirectMultiCluster || isMemberRole)">
       <button mat-button class="nav-item nav-white nav-border">
         <label
           class="selected-cluster-text"
@@ -53,7 +53,7 @@
         >
       </button>
     </div>
-    <div *ngIf="isMasterRole">
+    <div *ngIf="isMasterRole && isAllowedToRedirectMultiCluster">
       <button
         mat-button
         #menuTrigger="matMenuTrigger"
@@ -150,7 +150,7 @@
           {{ 'enum.MY_PROFILE' | translate }}
         </button>
       </div>
-      <button *ngIf="!isOnRemoteCluster" mat-menu-item (click)="goMultiCluster()">
+      <button *ngIf="!isOnRemoteCluster && isAllowedToOperateMultiCluster" mat-menu-item (click)="goMultiCluster()" >
         <i class="eos-icons icon-18 margin-right-s">organisms</i>
         {{ 'enum.MULTI_CLUSTER' | translate }}
       </button>

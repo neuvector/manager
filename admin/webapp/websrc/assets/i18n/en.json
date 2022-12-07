@@ -2723,7 +2723,7 @@
       "leave": "Are you sure you want to leave from the cluster ?"
     },
     "validation": {
-      "token": "Invalid token format."
+      "token": "Invalid token format"
     }
   },
   "license": {

@@ -49,8 +49,8 @@
             required
             (blur)="parseToken()"
             (paste)="parseToken()"></textarea>
-          <mat-error></mat-error>
         </mat-form-field>
+        <div class="invalid" *ngIf="invalidToken"> {{ 'multiCluster.validation.token' | translate }} </div>
       </div>
       <div class="d-flex justify-content-start align-items-center">
         <mat-form-field appearance="standard" class="flex-grow-1 mr-4">

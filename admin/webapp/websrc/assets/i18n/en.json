@@ -1332,7 +1332,7 @@
       "PENDING": "Pending ",
       "CHANGES": " change(s)",
       "REGULATIONS": "Regulations",
-      "DEPLOY_OK": "Templated saved.",
+      "DEPLOY_OK": "Template saved.",
       "DEPLOY_FAILED": "Failed to save template: ",
       "DISABLE_CHECK": "Disable check",
       "APPLY_TEMPLATES": "Apply Templates",

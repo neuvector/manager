@@ -181,7 +181,7 @@ export class MultiClusterService {
     let payload = {
       name: data.name,
       server: data.master_host,
-      port: data.master_port,
+      port: parseInt(data.master_port),
       join_token: data.token,
       joint_rest_info: {
         server: data.host,

@@ -24,6 +24,7 @@ import { UtilsService } from '@common/utils/app.utils';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { MultiClusterGridActionCellComponent } from '@components/multi-cluster-grid/multi-cluster-grid-action-cell/multi-cluster-grid-action-cell.component';
 import { finalize } from 'rxjs/operators';
+import {isAuthorized} from "@common/utils/common.utils";
 
 @Component({
   selector: 'app-multi-cluster-grid',
@@ -187,9 +188,15 @@ export class MultiClusterGridComponent implements OnInit {
       this.columnDefs = this.columnDefs.concat(this.statusColumn);
     }
 
-    this.isActionAuthorized =
-      GlobalVariable.user.roles.global === '2' ||
-      GlobalVariable.user.roles.global === '4';
+    const resource = {
+      manageAuth: {
+        global: 4
+      },
+    }
+    this.isActionAuthorized = isAuthorized(
+      GlobalVariable.user.roles,
+      resource.manageAuth
+    )
 
     if (this.isActionAuthorized) {
       this.columnDefs.push(this.actionColumn);

@@ -1,8 +1,8 @@
 <div
   class="d-flex flex-row justify-content-end align-items-center"
   *ngIf="!isContainer">
-  <button class="d-flex align-items-center" mat-button>
-    <i (click)="exportCSV()" class="eos-icons mr-2">csv_file</i>CSV
+  <button ariaLabel="csv report" mat-button>
+    <i (click)="exportCSV()" class="eos-icons icon-18">csv_file</i>
   </button>
 </div>
 <ag-grid-angular

@@ -7,10 +7,9 @@
             mat-button
             aria-label="Export compliance CSV"
             type="button"
-            class="d-flex align-items-center"
             *ngIf="!complianceEmpty"
             (click)="complianceGrid.exportCSV()">
-            <i class="eos-icons mr-2">csv_file</i>CSV
+            <i class="eos-icons icon-18">csv_file</i>
           </button>
         </div>
         <mat-form-field appearance="standard">
@@ -30,10 +29,9 @@
             mat-button
             aria-label="Export vulnerabilities CSV"
             type="button"
-            class="d-flex align-items-center"
             *ngIf="!vulEmpty"
             (click)="exportCVE()">
-            <i class="eos-icons mr-2">csv_file</i>CSV
+            <i class="eos-icons icon-18">csv_file</i>
           </button>
           <ng-container *ngIf="isVulsAuthorized">
             <button

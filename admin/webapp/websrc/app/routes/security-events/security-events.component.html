@@ -33,19 +33,17 @@
             mat-button
             aria-label="Export secutiry events reports CSV"
             type="button"
-            class="d-flex align-items-center"
             (click)="exportCSV()">
-            <i class="eos-icons mr-2">csv_file</i>
+            <i class="eos-icons icon-18">csv_file</i>
           </button>
         </div>
         <div class="d-flex pull-right">
           <button
             mat-button
             type="button"
-            class="d-flex align-items-center"
             aria-label="Export secutiry events reports Printer"
             (click)="printReport()">
-            <em class="eos-icons mr-2">print</em>
+            <em class="eos-icons icon-18">print</em>
           </button>
         </div>
       </ng-container>
@@ -97,14 +95,16 @@
       class="font-weight-bold text-info"
       *ngIf="
         securityEventsService.displayedSecurityEvents.length ===
-        securityEventsService.cachedSecurityEvents.length && securityEventsService.displayedSecurityEvents.length > 0
+          securityEventsService.cachedSecurityEvents.length &&
+        securityEventsService.displayedSecurityEvents.length > 0
       ">
       {{ 'enum.OUT_OF' | translate }}
       {{ securityEventsService.cachedSecurityEvents.length }}
     </div>
     <div
       style="position: absolute; left: 20px; top: 10px"
-      class="font-weight-bold text-info"class="font-weight-bold text-info"
+      class="font-weight-bold text-info"
+      class="font-weight-bold text-info"
       *ngIf="
         securityEventsService.displayedSecurityEvents.length <
         securityEventsService.cachedSecurityEvents.length

@@ -12,6 +12,7 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
 import {NotificationService} from "@services/notification.service";
 import {TranslateService} from "@ngx-translate/core";
+import {isAuthorized} from "@common/utils/common.utils";
 
 @Component({
   selector: 'app-header',
@@ -32,6 +33,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isSUSESSO: boolean = false;
   primaryMasterName: string = '';
   managedClusterName: string = '';
+  isAllowedToOperateMultiCluster: boolean = false;
+  isAllowedToRedirectMultiCluster: boolean = false;
 
   email = '';
   username = '';
@@ -64,6 +67,31 @@ export class HeaderComponent implements OnInit, OnDestroy {
       window.scrollTo(0, 0);
       this.navCollapsed = true;
     });
+
+    const resource = {
+      multiClusterOp: {
+        global: 2
+      },
+      redirectAuth: {
+        global: 3
+      },
+      manageAuth: {
+        global: 2
+      },
+      policyAuth: {
+        global: 3
+      }
+    };
+
+    this.isAllowedToOperateMultiCluster = isAuthorized(
+      GlobalVariable.user.roles,
+      resource.multiClusterOp
+    );
+
+    this.isAllowedToRedirectMultiCluster = isAuthorized(
+      GlobalVariable.user.roles,
+      resource.redirectAuth
+    );
 
     this.initMultiClusters();
 

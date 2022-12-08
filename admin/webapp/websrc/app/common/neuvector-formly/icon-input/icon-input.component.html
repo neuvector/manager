@@ -3,7 +3,8 @@
   <mat-form-field
     appearance="standard"
     [class]="to.isCell ? 'pull-left' : 'w-' + (to.inputWidth ?? '100')"
-    [hideRequiredMarker]="to.hideRequiredMarker ?? false">
+    [hideRequiredMarker]="to.hideRequiredMarker ?? false"
+    [floatLabel]="to.floatLabel ? 'always' : 'auto'">
     <mat-label>{{ field.templateOptions?.label || '' | translate }}</mat-label>
     <span
       matPrefix
@@ -20,6 +21,7 @@
       [formlyAttributes]="field"
       [maskOnBlur]="field.templateOptions?.maskOnBlur"
       [required]="field.templateOptions?.required || false"
+      [placeholder]="field.templateOptions?.placeholder || ''"
       [type]="passwordVisible ? 'text' : field.templateOptions?.type || 'text'"
       appMaskInput
       matInput />

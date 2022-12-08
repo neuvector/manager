@@ -40,6 +40,10 @@ export class ConfigFormComponent implements OnInit {
   configFields = cloneDeep(ConfigFormConfig);
   configOptions: FormlyFormOptions = {
     formState: {
+      isCreated: {
+        httpProxy: false,
+        httpsProxy: false,
+      },
       isOpenShift: () => GlobalVariable.isOpenShift,
       permissions: {},
       ibmsa: {
@@ -91,6 +95,12 @@ export class ConfigFormComponent implements OnInit {
 
   @Input() set config(val) {
     this._config = val;
+    if (this._config.proxy.registry_http_proxy.url) {
+      this.configOptions.formState.isCreated.httpProxy = true;
+    }
+    if (this._config.proxy.registry_https_proxy.url) {
+      this.configOptions.formState.isCreated.httpsProxy = true;
+    }
     if (this._config.misc.unused_group_aging) {
       this._config.duration_toggle = true;
     }
@@ -131,7 +141,8 @@ export class ConfigFormComponent implements OnInit {
             error,
             this.tr.instant('setting.SUBMIT_FAILED'),
             false
-          ), GlobalConstant.NOTIFICATION_TYPE.ERROR
+          ),
+          GlobalConstant.NOTIFICATION_TYPE.ERROR
         );
         this.submittingForm = false;
       },

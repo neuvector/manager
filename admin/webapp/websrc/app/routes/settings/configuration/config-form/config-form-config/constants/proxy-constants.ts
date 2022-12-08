@@ -2,6 +2,7 @@ import {
   FormlyComponents,
   FormlyValidators,
 } from '@common/neuvector-formly/neuvector-formly.module';
+import { FormlyFieldConfig } from '@ngx-formly/core';
 
 export const HTTPProxyStatusField = {
   key: 'proxy.registry_http_proxy_status',
@@ -57,6 +58,10 @@ export const HTTPProxyPasswordField = {
     type: 'password',
   },
   expressionProperties: {
+    'templateOptions.floatLabel': 'formState.isCreated.httpProxy',
+    'templateOptions.placeholder': (_model, formState, _field) => {
+      return formState.isCreated.httpProxy ? '******' : '';
+    },
     'templateOptions.disabled':
       '!model.proxy.registry_http_proxy_status || !formState.permissions.isRegHttpProxyAuthorized',
   },
@@ -116,6 +121,10 @@ export const HTTPSProxyPasswordField = {
     type: 'password',
   },
   expressionProperties: {
+    'templateOptions.floatLabel': 'formState.isCreated.httpsProxy',
+    'templateOptions.placeholder': (_model, formState, _field) => {
+      return formState.isCreated.httpsProxy ? '******' : '';
+    },
     'templateOptions.disabled':
       '!model.proxy.registry_https_proxy_status || !formState.permissions.isRegHttpsProxyAuthorized',
   },

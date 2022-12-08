@@ -43,5 +43,5 @@ fi
 # npm run unittest
 popd
 env JAVA_OPTS="-Xms2g -Xmx3g" sbt admin/assembly
-zip -d admin/target/scala-2.11/admin-assembly-1.0.jar rest-management-private-classpath\*
+zip -d admin/target/scala-2.11/admin-assembly-1.0.jar websrc\* node_modules\* rest-management-private-classpath\*
 rm -rf admin/webapp/root/.sass-cache

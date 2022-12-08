@@ -148,7 +148,7 @@ export class MultiClusterGridActionCellComponent
         );
         this.multiClusterService.refreshSummary();
         this.multiClusterService.dispatchSwitchEvent();
-        this.multiClusterService.dispatchRefreshEvent();
+        this.multiClusterService.dispatchManageMemberEvent();
       },
       error => {
         this.notificationService.openError(error, this.translateService.instant('multiCluster.messages.redirect_failure', {name: rowData.name}));

@@ -104,6 +104,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.initMultiClusters();
     });
 
+    this._multiClusterSubScription = this.multiClusterService.onManageMemberClusterEvent$.subscribe(data => {
+      this.initMultiClusters();
+    })
+
   }
 
   ngOnDestroy() {
@@ -206,8 +210,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
             GlobalConstant.SESSION_STORAGE_CLUSTER
           );
           const clusterInSession = sessionCluster ? JSON.parse(sessionCluster) : null;
-          this.isOnRemoteCluster = clusterInSession.isRemote;
-          
+          if(clusterInSession){
+            this.isOnRemoteCluster = clusterInSession.isRemote;
+          }
+
           if (GlobalVariable.isMaster) {
             if (clusterInSession !== null) {
               this.selectedCluster = clusterInSession;

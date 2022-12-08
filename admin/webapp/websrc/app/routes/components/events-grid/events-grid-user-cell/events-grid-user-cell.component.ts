@@ -17,9 +17,9 @@ export class EventsGridUserCellComponent implements ICellRendererAngularComp {
   agInit(params: ICellRendererParams): void {
     this.params = params;
     this.hashTable4UserDomainRole = {};
-    this.userRoles = this.renderUserRoles(this.params.data.user_roles).join(
-      ', '
-    );
+    this.userRoles = this.renderUserRoles(
+      this.params.data.user_roles || {}
+    ).join(', ');
   }
 
   refresh(params: ICellRendererParams): boolean {

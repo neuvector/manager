@@ -1092,7 +1092,7 @@
     "INVALID_DATE_RANGE": "请输入有效的日期范围",
     "CONDITION_HINT": "样本: 对于Namespace用redis-pod.demo,nv.nvlab:node去匹配matchredis-pod.demo或nv.nvlab:node服务, 其余同理",
     "APPENDIX_LIMIT_HINT": "由于记录超过200条，报告不打印附件内容",
-    "MAX_REPORT_ROW_HINT": "报告打印前1000条记录",
+    "MAX_REPORT_ROW_HINT": "报告打印前500条记录",
     "MAX_REPORT_ROW_HINT_2": "(按照发布日期时间排序)",
     "report": {
       "TITLE": "漏洞报告 (漏洞视角)",

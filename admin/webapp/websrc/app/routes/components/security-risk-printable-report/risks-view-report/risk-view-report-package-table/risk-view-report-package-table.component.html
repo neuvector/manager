@@ -1,0 +1,29 @@
+<table class="print-table" style="width: 100%" >
+  <thead>
+    <tr class="print-header">
+      <th class="print-cell" style="width: 50%">
+        {{'scan.report.data.IMPACTED' | translate }}
+      </th>
+      <th class="print-cell" style="width: 50%">
+        {{ 'scan.report.data.FIXED' | translate }}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr
+      class="print-row"
+      *ngFor="let impact of packageVersions | slice: 0 : (packageVersions.length > SEC_RISK_REPORT_MAX_DISPLAY_VERSION ? SEC_RISK_REPORT_MAX_DISPLAY_VERSION : packageVersions.length); let i = index"
+      [attr.data-index]="i"
+    >
+      <td class="print-cell" style="width: 50%">
+        {{ impact.package_version }}
+      </td>
+      <td class="print-cell" style="width: 50%">
+        {{ impact.fixed_version || 'N/A'}}
+      </td>
+    </tr>
+    <tr colspan="2" *ngIf="packageVersions.length > SEC_RISK_REPORT_MAX_DISPLAY_VERSION">
+      ...({{ packageVersions.length }} versions)
+    </tr>
+  </tbody>
+</table>

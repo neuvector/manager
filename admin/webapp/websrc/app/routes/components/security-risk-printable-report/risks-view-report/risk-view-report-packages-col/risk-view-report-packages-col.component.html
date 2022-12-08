@@ -1,32 +1,10 @@
 <div [ngClass]="{'row': isInAppendix}">
   <div [ngClass]="{'col-sm-4 padding-vertical-0': isInAppendix}" *ngFor="let package of displayedPackages | slice: 0 : (isInAppendix ? displayedPackages.length : 3)">
     <div>{{ package[0] }}</div>
-    <table class="print-table" style="width: 100%" >
-      <thead>
-        <tr class="print-header">
-          <th class="print-cell" style="width: 50%">
-            {{'scan.report.data.IMPACTED' | translate }}
-          </th>
-          <th class="print-cell" style="width: 50%">
-            {{ 'scan.report.data.FIXED' | translate }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          class="print-row"
-          *ngFor="let impact of package[1]; let i = index"
-          [attr.data-index]="i"
-        >
-          <td class="print-cell" style="width: 50%">
-            {{ impact.package_version }}
-          </td>
-          <td class="print-cell" style="width: 50%">
-            {{ impact.fixed_version || 'N/A'}}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <app-risk-view-report-package-table
+      [packageVersions]="package[1]"
+    >
+    </app-risk-view-report-package-table>
   </div>
 </div>
 <div *ngIf="displayedPackages.length > 3 && !isInAppendix">...({{ displayedPackages.length }} packages)</div>

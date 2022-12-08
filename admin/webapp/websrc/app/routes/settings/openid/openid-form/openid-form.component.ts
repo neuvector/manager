@@ -47,7 +47,7 @@ export class OpenidFormComponent implements OnInit, OnChanges {
     client_id: new FormControl(null, Validators.required),
     client_secret: new FormControl(null, Validators.required),
     group_claim: new FormControl(),
-    default_role: new FormControl(),
+    default_role: new FormControl(''),
     enable: new FormControl(false),
     authorization_endpoint: new FormControl({ value: null, disabled: true }),
     token_endpoint: new FormControl({ value: null, disabled: true }),

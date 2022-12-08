@@ -13,7 +13,7 @@ export class SettingsComponent implements OnInit {
   isAuthenticationAuth!: boolean;
   isNamespaceUser!: boolean;
   get isWorker() {
-    return GlobalVariable.isMember;
+    return GlobalVariable.isRemote;
   }
 
   constructor(private authUtils: AuthUtilsService) {}

@@ -212,6 +212,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           const clusterInSession = sessionCluster ? JSON.parse(sessionCluster) : null;
           if(clusterInSession){
             this.isOnRemoteCluster = clusterInSession.isRemote;
+            GlobalVariable.isRemote = clusterInSession.isRemote;
           }
 
           if (GlobalVariable.isMaster) {
@@ -265,6 +266,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.multiClusterService.refreshSummary();
           this.multiClusterService.dispatchSwitchEvent();
           //to save and restore the selected cluster in case the page gets refreshed
+          GlobalVariable.isRemote = this.isOnRemoteCluster;
           const cluster = {
             isRemote: this.isOnRemoteCluster,
             id: this.selectedCluster?.id,

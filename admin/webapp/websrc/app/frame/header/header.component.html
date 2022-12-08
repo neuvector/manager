@@ -44,7 +44,11 @@
   <!-- START Right Navbar-->
   <div class="navbar-nav flex-row">
     <app-global-notifications class="mr-3 my-auto"></app-global-notifications>
-    <div *ngIf="!(isMasterRole && isAllowedToRedirectMultiCluster || isMemberRole)">
+    <div
+      *ngIf="
+        !clusterNameError &&
+        !((isMasterRole && isAllowedToRedirectMultiCluster) || isMemberRole)
+      ">
       <button mat-button class="nav-item nav-white nav-border">
         <label
           class="selected-cluster-text"
@@ -53,70 +57,75 @@
         >
       </button>
     </div>
-    <div *ngIf="isMasterRole && isAllowedToRedirectMultiCluster">
-      <button
-        mat-button
-        #menuTrigger="matMenuTrigger"
-        [matMenuTriggerFor]="dropdown_multiCluster"
-        [matMenuTriggerData]="clusters"
-        class="nav-item nav-white nav-border">
-        <i
-          class="fa-lg mr-lg text-gray-light"
-          [ngClass]="isOnRemoteCluster ? 'fa fa-laptop' : 'fa fa-home'"></i>
-        <label
-          class="selected-cluster-text hand mr-2"
-          style="position: relative; margin-bottom: 0"
-          >{{ selectedCluster?.name }}</label
-        >
-        <mat-icon>
-          {{ menuTrigger.menuOpen ? 'expand_less' : 'expand_more' }}
-        </mat-icon>
-      </button>
-      <mat-menu #dropdown_multiCluster="matMenu">
-        <ng-container *ngFor="let cluster of clusters; last as last">
-          <div class="cluster-menu-width">
-            <button
-              mat-menu-item
-              (click)="redirectCluster(cluster)"
-              [disabled]="
-                cluster.status === 'disconnected' ||
-                cluster.status === 'left' ||
-                cluster.status === 'joint_upgrade_required' ||
-                cluster.status === 'kicked'
-              ">
-              <i
-                class="fa-md mr-md"
-                [ngClass]="
-                  cluster.clusterType === 'master'
-                    ? 'fa fa-home'
-                    : 'fa fa-laptop'
-                "></i>
-              {{ cluster?.name }}
-            </button>
-          </div>
-          <mat-divider *ngIf="!last"></mat-divider>
-        </ng-container>
-      </mat-menu>
-    </div>
-    <div *ngIf="isMemberRole">
-      <button mat-button class="nav-item nav-white nav-border ">
-        <i class="fa fa-home fa-lg mr-lg text-gray-light brightness-70"></i>
-        <label
-          class="selected-cluster-text mr-lg mb-0 brightness-70"
-          [matTooltip]  = "primaryMasterName"
-          [matTooltipDisabled]="primaryMasterName.length < 20"
-        >{{primaryMasterName | shortenFromMiddle: 20}} &nbsp;&nbsp;/&nbsp;&nbsp;</label>
-        <i class="fa fa-laptop fa-lg mr-lg text-gray-light"></i>
-        <label
-          class="selected-cluster-text mr-lg mb-0"
-          style="position: relative;"
-          [matTooltip]  = "managedClusterName"
-          [matTooltipDisabled]="managedClusterName.length < 20"
-        >{{managedClusterName | shortenFromMiddle: 20}}
-        </label>
-      </button>
-    </div>
-
+    <ng-container *ngIf="!clustersError">
+      <div *ngIf="isMasterRole && isAllowedToRedirectMultiCluster">
+        <button
+          mat-button
+          #menuTrigger="matMenuTrigger"
+          [matMenuTriggerFor]="dropdown_multiCluster"
+          [matMenuTriggerData]="clusters"
+          class="nav-item nav-white nav-border">
+          <i
+            class="fa-lg mr-lg text-gray-light"
+            [ngClass]="isOnRemoteCluster ? 'fa fa-laptop' : 'fa fa-home'"></i>
+          <label
+            class="selected-cluster-text hand mr-2"
+            style="position: relative; margin-bottom: 0"
+            >{{ selectedCluster?.name }}</label
+          >
+          <mat-icon>
+            {{ menuTrigger.menuOpen ? 'expand_less' : 'expand_more' }}
+          </mat-icon>
+        </button>
+        <mat-menu #dropdown_multiCluster="matMenu">
+          <ng-container *ngFor="let cluster of clusters; last as last">
+            <div class="cluster-menu-width">
+              <button
+                mat-menu-item
+                (click)="redirectCluster(cluster)"
+                [disabled]="
+                  cluster.status === 'disconnected' ||
+                  cluster.status === 'left' ||
+                  cluster.status === 'joint_upgrade_required' ||
+                  cluster.status === 'kicked'
+                ">
+                <i
+                  class="fa-md mr-md"
+                  [ngClass]="
+                    cluster.clusterType === 'master'
+                      ? 'fa fa-home'
+                      : 'fa fa-laptop'
+                  "></i>
+                {{ cluster?.name }}
+              </button>
+            </div>
+            <mat-divider *ngIf="!last"></mat-divider>
+          </ng-container>
+        </mat-menu>
+      </div>
+      <div *ngIf="isMemberRole">
+        <button mat-button class="nav-item nav-white nav-border">
+          <i class="fa fa-home fa-lg mr-lg text-gray-light brightness-70"></i>
+          <label
+            class="selected-cluster-text mr-lg mb-0 brightness-70"
+            [matTooltip]="primaryMasterName"
+            [matTooltipDisabled]="primaryMasterName.length < 20"
+            >{{
+              primaryMasterName | shortenFromMiddle: 20
+            }}
+            &nbsp;&nbsp;/&nbsp;&nbsp;</label
+          >
+          <i class="fa fa-laptop fa-lg mr-lg text-gray-light"></i>
+          <label
+            class="selected-cluster-text mr-lg mb-0"
+            style="position: relative"
+            [matTooltip]="managedClusterName"
+            [matTooltipDisabled]="managedClusterName.length < 20"
+            >{{ managedClusterName | shortenFromMiddle: 20 }}
+          </label>
+        </button>
+      </div>
+    </ng-container>
     <div class="docURLBase mr-1">
       <a
         class="far fa-question-circle nv-help"
@@ -150,7 +159,10 @@
           {{ 'enum.MY_PROFILE' | translate }}
         </button>
       </div>
-      <button *ngIf="!isOnRemoteCluster && isAllowedToOperateMultiCluster" mat-menu-item (click)="goMultiCluster()" >
+      <button
+        *ngIf="!isOnRemoteCluster && isAllowedToOperateMultiCluster"
+        mat-menu-item
+        (click)="goMultiCluster()">
         <i class="eos-icons icon-18 margin-right-s">organisms</i>
         {{ 'enum.MULTI_CLUSTER' | translate }}
       </button>

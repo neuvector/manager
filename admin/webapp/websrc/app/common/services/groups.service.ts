@@ -153,8 +153,8 @@ export class GroupsService {
           sortDescending: '<em class="fa fa-sort-numeric-desc"></em>',
         },
         maxWidth: 140,
-        minWidth: 50,
-        width: 50,
+        minWidth: 70,
+        width: 70,
         hide: isFed,
       },
       {
@@ -165,8 +165,8 @@ export class GroupsService {
           sortDescending: '<em class="fa fa-sort-numeric-desc"></em>',
         },
         maxWidth: 140,
-        minWidth: 50,
-        width: 50,
+        minWidth: 80,
+        width: 80,
         hide: isFed,
       },
       {

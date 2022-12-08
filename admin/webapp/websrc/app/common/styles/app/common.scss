@@ -1384,3 +1384,24 @@ ngx-avatar.userIcon img.avatar-content {
 }
 
 .server-error-sm { padding:20px 0 }
+
+.sample-table-header {
+  border-bottom: 1px solid #fff;
+}
+
+.sample-table-border {
+  padding: 1px 3px;
+  &.column-1 {
+    width: 25%;
+  }
+  &.column-2 {
+    width: 20%;
+  }
+  &.column-3 {
+    width: 55%;
+  }
+}
+
+.mat-menu-panel {
+  max-width: none !important;
+}

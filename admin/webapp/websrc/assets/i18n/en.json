@@ -2562,7 +2562,7 @@
       "CPU_REQUEST_S": "CPU Req",
       "MEMORY_LIMIT_S": "Mem Lmt",
       "MEMORY_REQUEST_S": "Mem Req",
-      "PSS_VIOLATION": "Violates PSA policy",
+      "VIOLATE_PSS_POLICY": "Violates PSA policy",
       "MODULES": "Modules"
     },
     "operators": {

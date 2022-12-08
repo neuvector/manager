@@ -152,7 +152,7 @@
           </div>
           <div
             class="mx-3 d-flex align-items-center"
-            *ngIf="source === navSource['SELF']">
+            *ngIf="source === navSource['SELF'] && isAdmissionRuleAuthorized">
             <label class="nv-modal-item-title margin-right-s mb-0">
               {{ 'responsePolicy.gridHeader.STATUS' | translate }}
             </label>
@@ -161,7 +161,6 @@
               [matTooltipDisabled]="canConfig && isK8s && !admissionStateErr"
               matTooltipClass="tooltip-error"
               id="status-toggle"
-              *appDisplayControl="'admission'"
               [disabled]="
                 !canConfig ||
                 !isK8s ||

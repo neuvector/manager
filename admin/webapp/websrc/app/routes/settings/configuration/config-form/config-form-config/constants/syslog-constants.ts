@@ -19,7 +19,7 @@ export const SyslogLevels = [
 export const SyslogCategories = [
   { value: 'event', label: 'Event' },
   { value: 'security-event', label: 'Security Event' },
-  { value: 'audit', label: 'Risk Reports' },
+  { value: 'audit', label: 'Risk Report' },
 ];
 
 export const SyslogToggleField = {

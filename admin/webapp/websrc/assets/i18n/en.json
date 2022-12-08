@@ -1630,7 +1630,7 @@
   "profile": {
     "TITLE": "Profile",
     "DESCRIPTION": "Please update your profile",
-    "EDIT": "EDIT PROFILE",
+    "EDIT": "Edit Profile",
     "USER_NAME": "User Name",
     "EMAIL": "eMail",
     "ROLE": "Global Role",

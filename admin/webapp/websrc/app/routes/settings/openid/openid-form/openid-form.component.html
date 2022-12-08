@@ -65,7 +65,10 @@
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
       <i class="eos-icons mr-3 text-primary">vpn_key</i>
-      <mat-form-field appearance="standard" class="w-100">
+      <mat-form-field
+        appearance="standard"
+        class="w-100"
+        [floatLabel]="isCreated ? 'always' : 'auto'">
         <mat-label>{{ 'openId.CLIENT_SECRET' | translate }}</mat-label>
         <input
           [type]="passwordVisible ? 'text' : 'password'"

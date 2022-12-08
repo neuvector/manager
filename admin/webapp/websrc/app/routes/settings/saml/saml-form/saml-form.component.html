@@ -41,13 +41,15 @@
     </div>
     <div class="col-12 d-flex align-items-center">
       <i class="eos-icons mr-3 text-primary">verified</i>
-      <mat-form-field appearance="standard" class="w-100">
+      <mat-form-field
+        appearance="standard"
+        class="w-100"
+        [floatLabel]="isCreated ? 'always' : 'auto'">
         <mat-label>{{ 'okta.CERTIFICATE' | translate }}</mat-label>
         <textarea
           cdkTextareaAutosize
           formControlName="x509_cert"
           placeholder="{{ isCreated ? '********************' : '' }}"
-          [required]="!isCreated"
           matInput></textarea>
         <mat-error *ngIf="samlForm.controls.x509_cert.hasError('required')">
           {{ 'general.REQUIRED' | translate }}

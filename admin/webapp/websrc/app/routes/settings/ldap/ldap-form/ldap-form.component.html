@@ -68,7 +68,10 @@
         class="mr-3 text-primary"
         >vpn_key
       </mat-icon>
-      <mat-form-field appearance="standard" class="w-100">
+      <mat-form-field
+        appearance="standard"
+        class="w-100"
+        [floatLabel]="isCreated ? 'always' : 'auto'">
         <mat-label>{{ 'ldap.PASSWORD' | translate }}</mat-label>
         <input
           [type]="passwordVisible ? 'text' : 'password'"

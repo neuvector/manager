@@ -262,9 +262,11 @@ export class MultiClusterGridComponent implements OnInit {
   }
   updateSummaryForRows() {
     this.clusterData.clusters!.forEach((cluster, index) => {
-      const rowNode = this.gridOptions.api!.getDisplayedRowAtIndex(index);
-      if (rowNode) {
-        this.updateSummaryForRowNode(rowNode, cluster, index, false);
+      if(this.gridOptions && this.gridOptions.api){
+        const rowNode = this.gridOptions.api!.getDisplayedRowAtIndex(index);
+        if (rowNode) {
+          this.updateSummaryForRowNode(rowNode, cluster, index, false);
+        }
       }
     });
   }
@@ -457,7 +459,10 @@ export class MultiClusterGridComponent implements OnInit {
       );
     }
 
-    this.gridOptions.api!.redrawRows({ rowNodes: [rowNode] });
+    if(this.gridOptions && this.gridOptions.api){
+      this.gridOptions.api!.redrawRows({ rowNodes: [rowNode] });
+    }
+
   }
 
   updateClusterSummary4Error(rowNode: RowNode) {

@@ -47,7 +47,7 @@
             [(ngModel)]="cluster.token"
             name="token"
             required
-            (blur)="parseToken()"
+            (keyup)="parseToken()"
             (paste)="parseToken()"></textarea>
         </mat-form-field>
         <div class="invalid" *ngIf="invalidToken"> {{ 'multiCluster.validation.token' | translate }} </div>

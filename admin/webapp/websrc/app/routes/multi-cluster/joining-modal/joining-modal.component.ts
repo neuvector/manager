@@ -60,19 +60,19 @@ export class JoiningModalComponent implements OnInit {
   };
 
   parseToken = () => {
-    if (!(this.cluster.master_host || this.cluster.master_port)) {
-      try {
-        if(this.cluster.token.length % 4 != 0 ){
-          this.invalidToken = true;
-        }else{
+    try {
+      if(this.cluster.token){
+        if(this.cluster.token.length % 4 == 0 ){
           let decodedStr = JSON.parse(atob(this.cluster.token));
           this.cluster.master_host = decodedStr['s'];
           this.cluster.master_port = decodedStr['p'];
           this.invalidToken = false;
+        }else{
+          this.invalidToken = true;
         }
-      } catch (error) {
-        this.invalidToken = true;
       }
+    } catch (error) {
+      this.invalidToken = true;
     }
   };
 

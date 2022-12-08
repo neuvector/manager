@@ -70,6 +70,7 @@
         <input
           [type]="passwordVisible ? 'text' : 'password'"
           formControlName="client_secret"
+          placeholder="{{isCreated ? '******' : ''}}"
           matInput />
         <mat-error
           *ngIf="openidForm.controls.client_secret.hasError('required')">

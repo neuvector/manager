@@ -46,6 +46,8 @@
         <textarea
           cdkTextareaAutosize
           formControlName="x509_cert"
+          placeholder="{{isCreated?'********************':''}}"
+          [required]="!isCreated"
           matInput></textarea>
         <mat-error *ngIf="samlForm.controls.x509_cert.hasError('required')">
           {{ 'general.REQUIRED' | translate }}

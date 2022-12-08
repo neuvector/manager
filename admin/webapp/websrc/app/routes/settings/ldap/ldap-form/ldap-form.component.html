@@ -73,6 +73,7 @@
         <input
           [type]="passwordVisible ? 'text' : 'password'"
           formControlName="bind_password"
+          placeholder="{{isCreated ? '******' : ''}}"
           matInput />
       </mat-form-field>
       <button

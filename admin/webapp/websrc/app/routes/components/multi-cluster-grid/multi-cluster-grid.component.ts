@@ -188,15 +188,9 @@ export class MultiClusterGridComponent implements OnInit {
       this.columnDefs = this.columnDefs.concat(this.statusColumn);
     }
 
-    const resource = {
-      manageAuth: {
-        global: 4
-      },
-    }
-    this.isActionAuthorized = isAuthorized(
-      GlobalVariable.user.roles,
-      resource.manageAuth
-    )
+    this.isActionAuthorized =
+      GlobalVariable.user.roles.global === '2' ||
+      GlobalVariable.user.roles.global === '4';
 
     if (this.isActionAuthorized) {
       this.columnDefs.push(this.actionColumn);

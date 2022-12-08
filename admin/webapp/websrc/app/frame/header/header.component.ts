@@ -17,9 +17,10 @@ import { ClusterData, Cluster } from '@common/types';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
-import { NotificationService } from '@services/notification.service';
-import { TranslateService } from '@ngx-translate/core';
-import { isAuthorized } from '@common/utils/common.utils';
+import {NotificationService} from "@services/notification.service";
+import {TranslateService} from "@ngx-translate/core";
+import {isAuthorized} from "@common/utils/common.utils";
+import {AuthUtilsService} from "@common/utils/auth.utils";
 
 @Component({
   selector: 'app-header',
@@ -60,6 +61,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     public multiClusterService: MultiClusterService,
     public translateService: TranslateService,
     public switchers: SwitchersService,
+    public authUtilsService: AuthUtilsService,
     public injector: Injector,
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService
   ) {
@@ -215,6 +217,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
           GlobalVariable.isMember = this.isMemberRole;
           GlobalVariable.isStandAlone = this.isStandaloneRole;
 
+          const resource = {
+            multiClusterOp: {
+              global: 2
+            },
+            manageAuth: {
+              global: 3
+            }
+          };
+
+          this.isAllowedToRedirectMultiCluster  = this.authUtilsService.getDisplayFlag('multi_cluster') || isAuthorized(GlobalVariable.user.roles, resource.multiClusterOp) && data.fed_role !== MapConstant.FED_ROLES.MASTER;
+
           //get the status of the chosen cluster
           const sessionCluster = this.sessionStorage.get(
             GlobalConstant.SESSION_STORAGE_CLUSTER
@@ -228,6 +241,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           }
 
           if (GlobalVariable.isMaster) {
+            this.isAllowedToOperateMultiCluster = isAuthorized(GlobalVariable.user.roles, resource.manageAuth);
             if (clusterInSession !== null) {
               this.selectedCluster = clusterInSession;
             } else {

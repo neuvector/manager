@@ -1,4 +1,11 @@
-import { Component, OnInit, ViewChild, Injector, Inject, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  Injector,
+  Inject,
+  OnDestroy,
+} from '@angular/core';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { Router } from '@angular/router';
 import screenfull from 'screenfull';
@@ -10,9 +17,9 @@ import { ClusterData, Cluster } from '@common/types';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
-import {NotificationService} from "@services/notification.service";
-import {TranslateService} from "@ngx-translate/core";
-import {isAuthorized} from "@common/utils/common.utils";
+import { NotificationService } from '@services/notification.service';
+import { TranslateService } from '@ngx-translate/core';
+import { isAuthorized } from '@common/utils/common.utils';
 
 @Component({
   selector: 'app-header',
@@ -24,7 +31,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   menuItems: Array<any> = [];
   router: Router = <Router>{};
   clusterName: string = '';
+  clusterNameError: boolean = false;
   clusters: Cluster[] = [];
+  clustersError: boolean = false;
   isMasterRole: boolean = false;
   isMemberRole: boolean = false;
   isStandaloneRole: boolean = false;
@@ -70,17 +79,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     const resource = {
       multiClusterOp: {
-        global: 2
+        global: 2,
       },
       redirectAuth: {
-        global: 3
+        global: 3,
       },
       manageAuth: {
-        global: 2
+        global: 2,
       },
       policyAuth: {
-        global: 3
-      }
+        global: 3,
+      },
     };
 
     this.isAllowedToOperateMultiCluster = isAuthorized(
@@ -100,14 +109,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const role = this.sessionStorage.get('token')?.token?.role;
     this.displayRole = role ? role : 'Namespace User';
 
-    this._multiClusterSubScription = this.multiClusterService.onRefreshClustersEvent$.subscribe(data => {
-      this.initMultiClusters();
-    });
+    this._multiClusterSubScription =
+      this.multiClusterService.onRefreshClustersEvent$.subscribe(data => {
+        this.initMultiClusters();
+      });
 
-    this._multiClusterSubScription = this.multiClusterService.onManageMemberClusterEvent$.subscribe(data => {
-      this.initMultiClusters();
-    })
-
+    this._multiClusterSubScription =
+      this.multiClusterService.onManageMemberClusterEvent$.subscribe(data => {
+        this.initMultiClusters();
+      });
   }
 
   ngOnDestroy() {
@@ -185,8 +195,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.clusterName = clusterName;
       },
       error: err => {
-        this.notificationService.openError(err, this.translateService.instant('multiCluster.messages.get_name_failure'));
-      }
+        this.clusterNameError = true;
+      },
     });
   }
   getClusters() {
@@ -209,8 +219,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
           const sessionCluster = this.sessionStorage.get(
             GlobalConstant.SESSION_STORAGE_CLUSTER
           );
-          const clusterInSession = sessionCluster ? JSON.parse(sessionCluster) : null;
-          if(clusterInSession){
+          const clusterInSession = sessionCluster
+            ? JSON.parse(sessionCluster)
+            : null;
+          if (clusterInSession) {
             this.isOnRemoteCluster = clusterInSession.isRemote;
             GlobalVariable.isRemote = clusterInSession.isRemote;
           }
@@ -236,7 +248,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           }
         },
         error: error => {
-          this.notificationService.openError(error, this.translateService.instant('multiCluster.messages.query_failure'));
+          this.clustersError = true;
         },
       });
   }
@@ -278,7 +290,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
           );
         },
         error: error => {
-          this.notificationService.openError(error, this.translateService.instant('multiCluster.messages.redirect_failure', {name: cluster.name}))
+          this.notificationService.openError(
+            error,
+            this.translateService.instant(
+              'multiCluster.messages.redirect_failure',
+              { name: cluster.name }
+            )
+          );
         },
       });
     }

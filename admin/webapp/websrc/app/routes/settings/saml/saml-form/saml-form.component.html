@@ -46,7 +46,7 @@
         <textarea
           cdkTextareaAutosize
           formControlName="x509_cert"
-          placeholder="{{isCreated?'********************':''}}"
+          placeholder="{{ isCreated ? '********************' : '' }}"
           [required]="!isCreated"
           matInput></textarea>
         <mat-error *ngIf="samlForm.controls.x509_cert.hasError('required')">
@@ -66,7 +66,7 @@
     <mat-label>{{ 'ldap.DEFAULT_ROLE' | translate }}</mat-label>
     <mat-select formControlName="default_role">
       <mat-option
-        *ngFor="let role of samlData.server.mappable_roles.group_roles"
+        *ngFor="let role of samlData.server.mappable_roles.default_roles"
         [value]="role">
         {{ role ? role : 'none' }}
       </mat-option>

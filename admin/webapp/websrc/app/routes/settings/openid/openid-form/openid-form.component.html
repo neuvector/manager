@@ -70,7 +70,7 @@
         <input
           [type]="passwordVisible ? 'text' : 'password'"
           formControlName="client_secret"
-          placeholder="{{isCreated ? '******' : ''}}"
+          placeholder="{{ isCreated ? '******' : '' }}"
           matInput />
         <mat-error
           *ngIf="openidForm.controls.client_secret.hasError('required')">
@@ -122,7 +122,7 @@
     <mat-label>{{ 'ldap.DEFAULT_ROLE' | translate }}</mat-label>
     <mat-select formControlName="default_role">
       <mat-option
-        *ngFor="let role of openidData.server.mappable_roles.group_roles"
+        *ngFor="let role of openidData.server.mappable_roles.default_roles"
         [value]="role">
         {{ role ? role : 'none' }}
       </mat-option>

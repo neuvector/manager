@@ -3,10 +3,11 @@
     {{ 'dashboard.improveScoreModal.TITLE' | translate }}
   </h1>
   <button
+    (click)="onCancel()"
     aria-label="Close score improvement modal button"
     class="d-flex align-items-center justify-content-center"
     mat-icon-button>
-    <i (click)="onCancel()" class="eos-icons">close</i>
+    <i class="eos-icons">close</i>
   </button>
 </div>
 <div mat-dialog-content class="nv-dialog-content-full" [ngSwitch]="template">

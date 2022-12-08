@@ -44,7 +44,7 @@ export class SamlFormComponent implements OnInit, OnChanges {
     issuer: new FormControl(null, [Validators.required, urlValidator()]),
     x509_cert: new FormControl(null, [Validators.required]),
     group_claim: new FormControl(),
-    default_role: new FormControl(),
+    default_role: new FormControl(''),
     enable: new FormControl(false),
   });
   isWriteSamlAuthorized!: boolean;

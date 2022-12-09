@@ -36,6 +36,7 @@ export class PromotionModalComponent implements OnInit {
   public fed_sync_repo_toggle: boolean = false;
   public isMaster: boolean = false;
   public readOnly: boolean = false;
+  public isProcessing: boolean = false;
 
   constructor(
     private clustersService: MultiClusterService,
@@ -121,6 +122,7 @@ export class PromotionModalComponent implements OnInit {
         );
       }
     }else{
+      this.isProcessing = true;
       this.clustersService.promoteCluster(
         this.cluster, this.useProxy,
         this.fed_sync_repo_toggle).subscribe(
@@ -131,10 +133,12 @@ export class PromotionModalComponent implements OnInit {
             this.sessionStorage.clear();
             this.sessionService.clearSession();
             this.router.navigate(['login']);
-          }, 5000);
+          }, 3500);
+          this.isProcessing = false;
           this.dialogRef.close();
         },
         err => {
+          this.isProcessing = false;
           this.notificationService.openError( err,
             this.translate.instant('multiCluster.promotion.failure'));
         }

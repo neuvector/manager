@@ -17,6 +17,7 @@ export class JoiningModalComponent implements OnInit {
   public cluster: any;
   public useProxy: String = '';
   public invalidToken: boolean = false;
+  public isProcessing: boolean = false;
 
   constructor(
     private clustersService: MultiClusterService,
@@ -77,6 +78,7 @@ export class JoiningModalComponent implements OnInit {
   };
 
   onConfirm = () => {
+    this.isProcessing = true;
     this.clustersService.joinCluster(this.cluster, this.useProxy).subscribe(
       response => {
         this.notificationService.open(
@@ -85,9 +87,11 @@ export class JoiningModalComponent implements OnInit {
         setTimeout(() => {
           this.clustersService.dispatchRefreshEvent();
         }, 1000);
+        this.isProcessing = false;
         this.dialogRef.close();
       },
       err => {
+        this.isProcessing  = false;
         this.notificationService.openError(
           err,
           this.translate.instant('multiCluster.joining.failure')

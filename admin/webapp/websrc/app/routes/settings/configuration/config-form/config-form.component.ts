@@ -150,7 +150,7 @@ export class ConfigFormComponent implements OnInit {
   }
 
   formatConfigPatch(base_config: ConfigV2Response): ConfigPatch {
-    const patch: ConfigPatch = {
+    return {
       atmo_config: {
         mode_auto_d2m: base_config.mode_auto.mode_auto_d2m,
         mode_auto_d2m_duration:
@@ -186,10 +186,18 @@ export class ConfigFormComponent implements OnInit {
           rancher_ep: base_config.auth.rancher_ep,
         },
         proxy_cfg: {
-          registry_http_proxy: base_config.proxy.registry_http_proxy,
+          registry_http_proxy: base_config.proxy.registry_http_proxy.password
+            ? base_config.proxy.registry_http_proxy
+            : Object.assign({}, base_config.proxy.registry_http_proxy, {
+                password: null,
+              }),
           registry_http_proxy_status:
             base_config.proxy.registry_http_proxy_status,
-          registry_https_proxy: base_config.proxy.registry_https_proxy,
+          registry_https_proxy: base_config.proxy.registry_https_proxy.password
+            ? base_config.proxy.registry_http_proxy
+            : Object.assign({}, base_config.proxy.registry_https_proxy, {
+                password: null,
+              }),
           registry_https_proxy_status:
             base_config.proxy.registry_https_proxy_status,
         },
@@ -219,7 +227,6 @@ export class ConfigFormComponent implements OnInit {
         },
       },
     };
-    return patch;
   }
 
   setupIBMSA(): void {

@@ -202,7 +202,7 @@ export class GlobalConstant {
     SINGLE_VALUE_CRITERIA: ['user', 'image', 'imageRegistry', 'namespace', 'saBindRiskyRole'],
   };
   public static PSP = 'pspcompliance';
-  public static PSS = 'pssviolation';
+  public static PSS = 'violatepsspolicy';
   public static RESIZE_EVENT = 'resize.ag-grid';
 
   public static SCORE_LEVEL = {

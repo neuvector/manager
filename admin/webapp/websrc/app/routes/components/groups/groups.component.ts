@@ -100,6 +100,7 @@ export class GroupsComponent implements OnInit {
       setTimeout(() => {
         this.selectedGroups = this.gridOptions4Groups.api!.getSelectedRows();
         this.gridOptions4Groups.api!.redrawRows();
+        this.highlightDisplayedGroup();
         this.selectedGroup.emit(
           this.selectedGroups.length > 0 ? this.selectedGroups[0] : null
         );
@@ -414,6 +415,21 @@ export class GroupsComponent implements OnInit {
         }
       });
     }, 200);
+  };
+
+  private highlightDisplayedGroup = () => {
+    let index = this.groups.findIndex(group => group.name === this.selectedGroups[0].name);
+    let rowNode = this.gridOptions4Groups.api!.getDisplayedRowAtIndex(index);
+    let groupGridEl = document.querySelector('#groups-grid .ag-center-cols-container');
+    if (groupGridEl) {
+      Array.from(groupGridEl!.children).forEach((el, index) => {
+        if (index === rowNode!.rowIndex) {
+          el.classList.add('ag-row-highlight');
+        } else {
+          el.classList.remove('ag-row-highlight');
+        }
+      });
+    }
   };
 
   private handleError = () => {

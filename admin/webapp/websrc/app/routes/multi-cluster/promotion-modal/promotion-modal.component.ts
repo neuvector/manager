@@ -133,7 +133,7 @@ export class PromotionModalComponent implements OnInit {
             this.sessionStorage.clear();
             this.sessionService.clearSession();
             this.router.navigate(['login']);
-          }, 3500);
+          }, 1000);
           this.isProcessing = false;
           this.dialogRef.close();
         },

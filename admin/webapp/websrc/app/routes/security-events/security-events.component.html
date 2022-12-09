@@ -238,9 +238,9 @@
                           <a
                             href="{{ secEvent.endpoint.source.externalURL }}"
                             target="_blank">
-                            <em
-                              class="fa text-primary"
-                              [ngClass]="secEvent.endpoint.source.icon"></em>
+                            <em class="eos-icons icon-18 text-primary">{{
+                              secEvent.endpoint.source.icon
+                            }}</em>
                             <span>
                               {{ secEvent.endpoint.source.displayName }}
                             </span>
@@ -277,9 +277,9 @@
                             {{ secEvent.endpoint.source.service }}
                           </span>
                         </span>
-                        <em
-                          class="fa text-primary"
-                          [ngClass]="secEvent.endpoint.source.icon"></em>
+                        <em class="eos-icons icon-18 text-primary">{{
+                          secEvent.endpoint.source.icon
+                        }}</em>
                         <span
                           class="link"
                           *ngIf="
@@ -343,11 +343,9 @@
                               secEvent.endpoint.destination.externalURL
                             }}"
                             target="_blank">
-                            <em
-                              class="fa text-primary"
-                              [ngClass]="
-                                secEvent.endpoint.destination.icon
-                              "></em>
+                            <em class="eos-icons icon-18 text-primary">{{
+                              secEvent.endpoint.destination.icon
+                            }}</em>
                             <span>
                               {{ secEvent.endpoint.destination.displayName }}
                             </span>

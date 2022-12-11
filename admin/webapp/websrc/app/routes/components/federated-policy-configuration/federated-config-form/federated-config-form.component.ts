@@ -6,6 +6,7 @@ import { cloneDeep } from 'lodash';
 import { UtilsService } from "@common/utils/app.utils";
 import { TranslateService } from "@ngx-translate/core";
 import { NotificationService } from "@services/notification.service";
+import { GlobalConstant } from '@common/constants/global.constant';
 
 import { FederatedConfigFormConfig } from "@components/federated-policy-configuration/federated-config-form/types";
 import { ComponentCanDeactivate } from "@common/guards/pending-changes.guard";
@@ -83,7 +84,8 @@ export class FederatedConfigFormComponent implements OnInit,ComponentCanDeactiva
         this.utils.getAlertifyMsg(
           this.translate.instant('setting.webhook.NAME_DUPLICATED'),
           this.translate.instant('setting.webhook.NAME_NG'),
-          false)
+          false),
+        GlobalConstant.NOTIFICATION_TYPE.ERROR
       );
       return;
     }
@@ -128,7 +130,8 @@ export class FederatedConfigFormComponent implements OnInit,ComponentCanDeactiva
               this.utils.getAlertifyMsg(
                 err,
                 this.translate.instant('setting.SUBMIT_FAILED'),
-                false)
+                false),
+              GlobalConstant.NOTIFICATION_TYPE.ERROR
             );
           }
         }
@@ -144,7 +147,8 @@ export class FederatedConfigFormComponent implements OnInit,ComponentCanDeactiva
             this.utils.getAlertifyMsg(
               err,
               this.translate.instant('setting.SUBMIT_FAILED'),
-              false)
+              false),
+            GlobalConstant.NOTIFICATION_TYPE.ERROR
           );
         }
       });

@@ -126,6 +126,9 @@ export const FailedLoginAttemptsField = {
     min: 0,
     required: true,
   },
+  expressionProperties: {
+    'templateOptions.disabled': '!model.enable_block_after_failed_login',
+  },
 };
 
 export const FailedLoginAccessField = {

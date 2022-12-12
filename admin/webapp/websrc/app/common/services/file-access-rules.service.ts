@@ -107,9 +107,34 @@ export class FileAccessRulesService {
       width: 220,
       minWidth: 200,
     };
+
+    const typeColumn = {
+      headerName: this.translate.instant("policy.gridHeader.TYPE"),
+      field: "cfg_type",
+      cellRenderer: params => {
+        if (params && params.value) {
+          let typeClass =
+            params.value === GlobalConstant.CFG_TYPE.GROUND || params.value === GlobalConstant.CFG_TYPE.FED
+              ? MapConstant.colourMap[params.value.toUpperCase()]
+              : "local-rule";
+
+          let typeName =
+            params.value === GlobalConstant.CFG_TYPE.GROUND || params.value === GlobalConstant.CFG_TYPE.FED
+              ? this.translate.instant(`group.${params.value.toUpperCase()}`)
+              : this.translate.instant("group.LOCAL");
+          return `<div class="action-label nv-label ${typeClass}">${typeName}</div>`;
+        }
+        return '';
+      },
+      cellClass: "grid-center-align",
+      width: 90,
+      minWidth: 90,
+      maxWidth: 90
+    };
+
     const fileColumnDefs = isScoreImprovement
       ? [...filterColumn, timeColumn, actionColumn]
-      : [...filterPrefix, applicationColumn, actionColumn, timeColumn];
+      : [...filterPrefix, applicationColumn, actionColumn, typeColumn, timeColumn];
     const predefinedFilterColumns = [...filterPrefix, actionColumn];
 
     return {

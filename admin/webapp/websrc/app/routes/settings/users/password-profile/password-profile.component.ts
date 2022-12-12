@@ -5,6 +5,7 @@ import { UtilsService } from '@common/utils/app.utils';
 import { FormlyFormOptions } from '@ngx-formly/core';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '@services/notification.service';
+import { GlobalConstant } from '@common/constants/global.constant';
 import { SettingsService } from '@services/settings.service';
 import { cloneDeep } from 'lodash';
 import { finalize } from 'rxjs/operators';
@@ -72,7 +73,8 @@ export class PasswordProfileComponent {
             error,
             this.tr.instant('passwordProfile.msg.UPDATE_PROFILE_NG'),
             false
-          )
+          ),
+          GlobalConstant.NOTIFICATION_TYPE.ERROR
         );
         this.submittingForm = false;
       },

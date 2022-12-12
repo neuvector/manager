@@ -180,6 +180,9 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (this.gridApi && changes.rowData) {
       this.gridApi.setRowData(changes.rowData.currentValue);
+      if (!this.gridApi.getSelectedNodes().length) {
+        this.gridApi.getDisplayedRowAtIndex(0)?.setSelected(true);
+      }
     }
   }
 
@@ -285,6 +288,11 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
       data: { config: data, editable },
     });
     dialog.afterClosed().subscribe(change => {
+      if (change) {
+        this.registriesCommunicationService.setSelectedRegistry(
+          this.gridApi.getSelectedNodes()[0].data
+        );
+      }
       this.cd.markForCheck();
     });
   }

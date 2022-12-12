@@ -186,12 +186,6 @@ export class ComplianceChartsComponent implements OnChanges {
           tooltip: {
             mode: 'point',
           },
-          title: {
-            display: true,
-            text: this.translate.instant(
-              'cis.report.others.TOP_COMP_CONTAINER'
-            ),
-          },
           legend: {
             display: true,
             labels: {

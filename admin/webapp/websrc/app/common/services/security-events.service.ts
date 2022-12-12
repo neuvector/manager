@@ -665,7 +665,7 @@ export class SecurityEventsService {
             endpointOut.ip = ip;
             displayName = getDisplayName(name);
           }
-          endpointOut.externalURL = `GlobalVariable.https://www.whois.com/whois/${ip}`;
+          endpointOut.externalURL = `https://www.whois.com/whois/${ip}`;
         }
       } else {
         displayName = getDisplayName(name);
@@ -684,7 +684,7 @@ export class SecurityEventsService {
             endpointOut.ip = ip;
             displayName = getDisplayName(name);
           }
-          endpointOut.externalURL = `GlobalVariable.https://www.whois.com/whois/${ip}`;
+          endpointOut.externalURL = `https://www.whois.com/whois/${ip}`;
         } else {
           displayName = getDisplayName(name);
           if (port === server_conn_port && port) {

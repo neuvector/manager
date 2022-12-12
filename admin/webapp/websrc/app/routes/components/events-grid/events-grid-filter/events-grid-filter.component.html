@@ -70,7 +70,7 @@
       <div formArrayName="level" class="mt-2">
         <ng-container *ngFor="let l of levelFormArray.controls; let i = index">
           <mat-checkbox class="mr-3" [formControlName]="i">
-            {{ filterLevel[i] }}
+            {{ getDisplayName(filterLevel[i]) }}
           </mat-checkbox>
         </ng-container>
       </div>

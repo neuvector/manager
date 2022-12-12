@@ -189,7 +189,8 @@
     "CLUSTER.STATUS.KICKED": "Kicked",
     "HIDE_ACCEPTED_VULS": "Hide accepted vulnerabilities",
     "SHOW_ACCEPTED_VULS": "Show accepted vulnerabilities",
-    "FILTER": "Filter"
+    "FILTER": "Filter",
+    "MATCH": "Match"
   },
   "logout": {
     "SIGN_OUT": "Signed out already",
@@ -1088,6 +1089,9 @@
     "UNPROTECTED_NODE": "UnProtected Node",
     "PROTECTED_CONTAINER": "Protected container",
     "PUBLISHED": "Published",
+    "PUBLISHED_TYPE": "Published Type",
+    "WITH_FIX": "With Fix",
+    "WITHOUT_FIX": "Without Fix",
     "INVALID_DATE": "Please input valid date.",
     "INVALID_DATE_RANGE": "Please input valid date range.",
     "CONDITION_HINT": "Sample: on Service use redis-pod.demo,nv.nvlab:node to matchredis-pod.demo or nv.nvlab:node service, same for the other criteria.",

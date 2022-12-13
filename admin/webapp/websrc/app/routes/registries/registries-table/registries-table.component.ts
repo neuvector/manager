@@ -23,13 +23,12 @@ import { FormControl } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { RegistryTableStatusCellComponent } from './registry-table-status-cell/registry-table-status-cell.component';
 import { cloneDeep } from 'lodash';
-import { AuthUtilsService } from '@common/utils/auth.utils';
 import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
 import { finalize, switchMap, take, tap } from 'rxjs/operators';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { MapConstant } from '@common/constants/map.constant';
 import { NotificationService } from '@services/notification.service';
-import { UtilsService } from '@common/utils/app.utils';
+import { GlobalVariable } from '@common/variables/global.variable';
 
 @Component({
   selector: 'app-registries-table',
@@ -138,6 +137,15 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
   ];
   startingScan$ = this.registriesCommunicationService.startingScan$;
   stoppingScan$ = this.registriesCommunicationService.stoppingScan$;
+  get isFedRegistry() {
+    return (
+      this.gridApi?.getSelectedNodes()?.[0].data?.cfg_type ===
+      GlobalConstant.CFG_TYPE.FED
+    );
+  }
+  get isFedAdmin() {
+    return GlobalVariable.user.token.role === MapConstant.FED_ROLES.FEDADMIN;
+  }
 
   constructor(
     private dialog: MatDialog,
@@ -145,9 +153,7 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
     private registriesService: RegistriesService,
     private registriesCommunicationService: RegistriesCommunicationService,
     private cd: ChangeDetectorRef,
-    private authUtilsService: AuthUtilsService,
-    private notificationService: NotificationService,
-    private utils: UtilsService
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -212,12 +218,9 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
           this.registriesCommunicationService.refreshRegistries();
         },
         error: ({ error }: { error: ErrorResponse }) => {
-          this.notificationService.open(
-            this.utils.getAlertifyMsg(
-              error,
-              this.translate.instant('registry.REGISTRY_DELETE_FAILED'),
-              false
-            )
+          this.notificationService.openError(
+            error,
+            this.translate.instant('registry.REGISTRY_DELETE_FAILED')
           );
         },
       });
@@ -230,12 +233,9 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
       complete: () => this.registriesCommunicationService.refreshRegistries(),
       error: ({ error }: { error: ErrorResponse }) => {
         this.registriesCommunicationService.cancelStartScan();
-        this.notificationService.open(
-          this.utils.getAlertifyMsg(
-            error,
-            this.translate.instant('registry.REGISTRY_SCAN_FAILED'),
-            false
-          )
+        this.notificationService.openError(
+          error,
+          this.translate.instant('registry.REGISTRY_SCAN_FAILED')
         );
       },
     });
@@ -246,12 +246,9 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
     const name = this.gridApi.getSelectedNodes()[0].data.name;
     this.registriesService.stopScanning(name).subscribe({
       error: ({ error }: { error: ErrorResponse }) => {
-        this.notificationService.open(
-          this.utils.getAlertifyMsg(
-            error,
-            this.translate.instant('registry.REGISTRY_STOP_SCAN_FAILED'),
-            false
-          )
+        this.notificationService.openError(
+          error,
+          this.translate.instant('registry.REGISTRY_STOP_SCAN_FAILED')
         );
       },
     });

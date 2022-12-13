@@ -105,6 +105,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
       data: {
         autoCompleteData: autoCompleteData,
         type: type,
+        source: this.params.context.componentParent.source,
         isReadonly: isReadonly,
       },
       width: '70vw',

@@ -150,6 +150,7 @@ export class ResponseRulesComponent implements OnInit {
     let addDialogRef = this.dialog.open(AddEditResponseRuleModalComponent, {
       data: {
         autoCompleteData: autoCompleteData,
+        source: this.source,
         type: 'add',
       },
 

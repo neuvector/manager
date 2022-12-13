@@ -15,6 +15,7 @@ import {
   _MatTableDataSource,
 } from '@angular/material/table';
 import { GlobalConstant } from '@common/constants/global.constant';
+import { MapConstant } from '@common/constants/map.constant';
 import { User } from '@common/types';
 import { passwordValidator } from '@common/validators';
 import { GlobalVariable } from '@common/variables/global.variable';
@@ -47,7 +48,9 @@ export class AddEditUserDialogComponent implements OnInit {
     const role = this.form.controls.role.value;
     return (
       (this.toggleAdvSetting || role === '') &&
-      !['admin', 'fedAdmin'].includes(role)
+      ![MapConstant.FED_ROLES.FEDADMIN, MapConstant.FED_ROLES.ADMIN].includes(
+        role
+      )
     );
   }
   @ViewChild(GroupDomainRoleTableComponent)

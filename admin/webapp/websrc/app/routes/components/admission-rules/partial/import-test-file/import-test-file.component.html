@@ -10,14 +10,18 @@
         {{ 'setting.DROP_ZONE' | translate }}
       </div>
       <span class="hidden-file">
-      <input
-        class="file-selection"
-        type="file" #testFileInput
-        ng2FileSelect
-        [uploader]="uploader" />
+        <input
+          class="file-selection"
+          type="file"
+          #testFileInput
+          ng2FileSelect
+          [uploader]="uploader" />
       </span>
-      <button mat-stroked-button (click)="testFileInput.click(); browseFile();">
-        {{'setting.BROWSE' | translate}}
+      <button
+        mat-stroked-button
+        type="button"
+        (click)="testFileInput.click(); browseFile()">
+        {{ 'setting.BROWSE' | translate }}
       </button>
     </div>
 
@@ -25,7 +29,7 @@
       <table class="table file-table">
         <thead>
           <tr>
-            <th style="width:50%">{{ 'setting.FILE_NAME' | translate }}</th>
+            <th style="width: 50%">{{ 'setting.FILE_NAME' | translate }}</th>
             <th>{{ 'setting.FILE_SIZE' | translate }}</th>
             <th>{{ 'setting.PROGRESS' | translate }}</th>
             <th>{{ 'setting.STATUS' | translate }}</th>
@@ -50,13 +54,19 @@
             </td>
             <td class="text-center">
               <span *ngIf="item.isSuccess"
-                ><i class="eos-icons icon-18 text-success">download_done</i
-              ></span>
+                ><i class="eos-icons icon-18 text-success"
+                  >download_done</i
+                ></span
+              >
               <span *ngIf="item.isCancel"
-                ><i class="eos-icons icon-18 text-info">folder_off</i
-              ></span>
+                ><i class="eos-icons icon-18 text-info">folder_off</i></span
+              >
               <span *ngIf="item.isError">
-                <i class="eos-icons icon-18 text-danger" matTooltip="{{ errMsg }}">close</i>
+                <i
+                  class="eos-icons icon-18 text-danger"
+                  matTooltip="{{ errMsg }}"
+                  >close</i
+                >
               </span>
             </td>
             <td nowrap>

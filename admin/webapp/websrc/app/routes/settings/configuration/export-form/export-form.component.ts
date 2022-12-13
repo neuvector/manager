@@ -23,12 +23,18 @@ export class ExportFormComponent implements OnInit {
     export: new FormControl(null, Validators.required),
     as_standalone: new FormControl(false),
   });
-  isImportAuthorized!: boolean;
   isExportAuthorized!: boolean;
   importMsg = {
     success: this.tr.instant('setting.message.UPLOAD_FINISH'),
     error: this.tr.instant('setting.IMPORT_FAILED'),
   };
+  get isImportAuthorized() {
+    return (
+      GlobalVariable.user.token.role === MapConstant.FED_ROLES.FEDADMIN ||
+      (GlobalVariable.user.token.role === MapConstant.FED_ROLES.ADMIN &&
+        (GlobalVariable.isStandAlone || GlobalVariable.isMember))
+    );
+  }
 
   constructor(
     private settingsService: SettingsService,
@@ -49,10 +55,6 @@ export class ExportFormComponent implements OnInit {
   ngOnInit(): void {
     this.isExportAuthorized =
       this.authUtilsService.getDisplayFlag('write_config');
-    this.isImportAuthorized =
-      GlobalVariable.user.token.role === MapConstant.FED_ROLES.FEDADMIN ||
-      (GlobalVariable.user.token.role === MapConstant.FED_ROLES.ADMIN &&
-        (GlobalVariable.isStandAlone || GlobalVariable.isMember));
   }
 
   submitExport(): void {

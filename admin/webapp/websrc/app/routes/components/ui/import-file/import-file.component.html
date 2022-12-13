@@ -1,7 +1,6 @@
 <div class="">
   <div class="d-flex justify-content-between align-items-start">
     <div class="d-flex flex-column justify-content-start align-items-start">
-
       <div
         ng2FileDrop
         [ngClass]="{ 'nv-file-over': hasBaseDropZoneOver }"
@@ -13,13 +12,17 @@
       <span class="hidden-file">
         <input
           class="file-selection"
-          type="file" #fileInput
+          type="file"
+          #fileInput
           ng2FileSelect
           [uploader]="uploader"
           [id]="'upload-' + importUrl" />
       </span>
-      <button mat-stroked-button (click)="fileInput.click(); browseFile()">
-        {{'setting.BROWSE' | translate}}
+      <button
+        mat-stroked-button
+        type="button"
+        (click)="fileInput.click(); browseFile()">
+        {{ 'setting.BROWSE' | translate }}
       </button>
     </div>
 
@@ -52,7 +55,15 @@
               <div class="mat-small align-self-center">{{ percentage }}%</div>
             </td>
             <td class="text-center">
-              <span *ngIf="!item.isError && (status === 'done' || (item.isSuccess && status !== 'preparing' && status !== 'importing' && status !== 'error'))">
+              <span
+                *ngIf="
+                  !item.isError &&
+                  (status === 'done' ||
+                    (item.isSuccess &&
+                      status !== 'preparing' &&
+                      status !== 'importing' &&
+                      status !== 'error'))
+                ">
                 <i class="fa fa-check text-success"></i>
               </span>
               <span *ngIf="status === 'preparing'">
@@ -65,7 +76,11 @@
                 <i class="fa fa-ban"></i>
               </span>
               <span *ngIf="item.isError && status === 'error'">
-                <i class="eos-icons icon-18 text-danger" matTooltip="{{ errMsg }}">close</i>
+                <i
+                  class="eos-icons icon-18 text-danger"
+                  matTooltip="{{ errMsg }}"
+                  >close</i
+                >
               </span>
               <span
                 *ngIf="

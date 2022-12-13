@@ -18,5 +18,6 @@ export class GlobalVariable {
   public static isMaster: boolean;
   public static isMember: boolean;
   public static isStandAlone: boolean;
+  public static isRemote: boolean = false;
   public static version: string;
 }

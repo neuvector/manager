@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthUtilsService } from '@common/utils/auth.utils';
+import { GlobalVariable } from '@common/variables/global.variable';
 
 @Component({
   selector: 'app-settings',
@@ -11,6 +12,9 @@ export class SettingsComponent implements OnInit {
   isConfigAuth!: boolean;
   isAuthenticationAuth!: boolean;
   isNamespaceUser!: boolean;
+  get isWorker() {
+    return GlobalVariable.isRemote;
+  }
 
   constructor(private authUtils: AuthUtilsService) {}
 

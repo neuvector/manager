@@ -68,11 +68,15 @@
         class="mr-3 text-primary"
         >vpn_key
       </mat-icon>
-      <mat-form-field appearance="standard" class="w-100">
+      <mat-form-field
+        appearance="standard"
+        class="w-100"
+        [floatLabel]="isCreated ? 'always' : 'auto'">
         <mat-label>{{ 'ldap.PASSWORD' | translate }}</mat-label>
         <input
           [type]="passwordVisible ? 'text' : 'password'"
           formControlName="bind_password"
+          placeholder="{{ isCreated ? '******' : '' }}"
           matInput />
       </mat-form-field>
       <button
@@ -138,7 +142,7 @@
     <mat-label>{{ 'ldap.DEFAULT_ROLE' | translate }}</mat-label>
     <mat-select formControlName="default_role">
       <mat-option
-        *ngFor="let role of ldapData.server.mappable_roles.group_roles"
+        *ngFor="let role of ldapData.server.mappable_roles.default_roles"
         [value]="role">
         {{ role ? role : 'none' }}
       </mat-option>

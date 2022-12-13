@@ -112,7 +112,9 @@ export class MultiClusterComponent implements OnInit {
     if(this._clusterGrid && this._clusterGrid.gridApi){
       this._clusterGrid.gridApi.setRowData(this.clusterData.clusters!);
       this._clusterGrid.gridApi.getDisplayedRowAtIndex(0)?.setSelected(true);
-      this._clusterGrid.updateSummaryForRows();
+      setTimeout(()=>{
+        this._clusterGrid.updateSummaryForRows();
+      },500);
     }
 
     this.clusterCount = this.clusterData.clusters

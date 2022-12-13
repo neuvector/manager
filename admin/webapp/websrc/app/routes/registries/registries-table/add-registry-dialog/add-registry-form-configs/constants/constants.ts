@@ -243,6 +243,7 @@ export const FilterField = {
     alwaysHint: true,
     required: true,
     label: 'registry.gridHeader.FILTER',
+    editTitle: 'registry.EDIT_FILTER',
     placeholder: 'general.FILTER',
   },
 };

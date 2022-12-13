@@ -36,6 +36,8 @@ export class MultiClusterService {
   public clusters: Cluster[] = [];
   private _clusterSwitchedEvent = new Subject();
   private _clusterRefreshEvent = new Subject();
+  private _manageClusterEvent = new Subject();
+  public onManageMemberClusterEvent$  = this._manageClusterEvent.asObservable();
   public onClusterSwitchedEvent$ = this._clusterSwitchedEvent.asObservable();
   public onRefreshClustersEvent$ = this._clusterRefreshEvent.asObservable();
   private readonly $win;
@@ -49,7 +51,6 @@ export class MultiClusterService {
     this._selectedClusterSubject$.asObservable();
   selectedClusterSummary$: Observable<ClusterSummary | undefined> =
     this._selectedClusterSummarySubject$.asObservable();
-  private refreshSubject = new Subject();
 
   constructor(
     private tr: TranslateService,
@@ -181,7 +182,7 @@ export class MultiClusterService {
     let payload = {
       name: data.name,
       server: data.master_host,
-      port: data.master_port,
+      port: parseInt(data.master_port),
       join_token: data.token,
       joint_rest_info: {
         server: data.host,
@@ -229,6 +230,10 @@ export class MultiClusterService {
 
   dispatchRefreshEvent() {
     this._clusterRefreshEvent.next(true);
+  }
+
+  dispatchManageMemberEvent() {
+    this._manageClusterEvent.next(true);
   }
 
 }

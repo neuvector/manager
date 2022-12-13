@@ -25,7 +25,8 @@
           aria-label="Print quarantined container report PDF"
           type="button"
           (click)="print()"
-          mat-button> {{ 'containers.report.title' | translate }}
+          mat-button>
+          {{ 'containers.report.title' | translate }}
           <em class="eos-icons icon-18">print</em>
         </button>
         <button
@@ -87,7 +88,10 @@
         </mat-card>
       </ng-container>
       <ng-container *appContainerTwo="let height">
-        <mat-card [ngStyle]="{ height: height + 'px' }" class="pt-0">
+        <mat-card
+          *ngIf="selectedContainer"
+          [ngStyle]="{ height: height + 'px' }"
+          class="pt-0">
           <app-container-details
             [gridHeight]="height - 80"
             [container]="selectedContainer">

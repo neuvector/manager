@@ -117,7 +117,7 @@ export interface ScannerAutoscale {
 export interface Proxy {
   url: string;
   username: string;
-  password: string;
+  password: string | null;
 }
 
 export interface Webhook {

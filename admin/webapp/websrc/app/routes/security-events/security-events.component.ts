@@ -1,4 +1,10 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { SecurityEventsService } from '@services/security-events.service';
 import { MapConstant } from '@common/constants/map.constant';
 import { AuthUtilsService } from '@common/utils/auth.utils';
@@ -17,7 +23,7 @@ import {
   FilterSeverity,
   FilterLocation,
   FilterCategory,
-  Other
+  Other,
 } from './partial/advanced-filter-modal/advanced-filter-modal.service';
 import { TranslateService } from '@ngx-translate/core';
 import { arrayToCsv } from '@common/utils/common.utils';
@@ -48,7 +54,7 @@ export class SecurityEventsComponent implements OnInit {
     domain: string[];
     host: string[];
     source: string[];
-    destination: string[]
+    destination: string[];
   };
   displayedSecurityEventsJsonBeforeApplyAdvFilter: string = '[]';
   packetModal!: MatDialogRef<any>;
@@ -75,118 +81,68 @@ export class SecurityEventsComponent implements OnInit {
     public dialog: MatDialog,
     private advancedFilterModalService: AdvancedFilterModalService,
     private translate: TranslateService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-    this.isEditRuleAuthorized = this.authUtilsService.getDisplayFlag("review_rule");
-    this.isUpdateRuleAuthorized = this.authUtilsService.getDisplayFlag("update_rule");
+    this.isEditRuleAuthorized =
+      this.authUtilsService.getDisplayFlag('review_rule');
+    this.isUpdateRuleAuthorized =
+      this.authUtilsService.getDisplayFlag('update_rule');
     this.route.paramMap.pipe().subscribe(rep => {
-        this.selectedRow = String(rep.get('selectedRow'));
-        this.refresh();
+      this.selectedRow = String(rep.get('selectedRow'));
+      this.refresh();
     });
 
     this.metadata = {
-      title: this.translate.instant(
-        "securityEvent.pdf.REPORT_TITLE"
-      ),
+      title: this.translate.instant('securityEvent.pdf.REPORT_TITLE'),
       header: {
-        id: this.translate.instant("securityEvent.pdf.ID"),
-        title: this.translate.instant("securityEvent.pdf.TITLE"),
-        severity: this.translate.instant(
-          "securityEvent.pdf.SEVERITY"
-        ),
-        location: this.translate.instant(
-          "securityEvent.pdf.LOCATION"
-        ),
-        details: this.translate.instant(
-          "securityEvent.pdf.DETAILS"
-        ),
-        action: this.translate.instant(
-          "securityEvent.pdf.ACTION"
-        ),
-        datetime: this.translate.instant(
-          "securityEvent.pdf.DATETIME"
-        )
+        id: this.translate.instant('securityEvent.pdf.ID'),
+        title: this.translate.instant('securityEvent.pdf.TITLE'),
+        severity: this.translate.instant('securityEvent.pdf.SEVERITY'),
+        location: this.translate.instant('securityEvent.pdf.LOCATION'),
+        details: this.translate.instant('securityEvent.pdf.DETAILS'),
+        action: this.translate.instant('securityEvent.pdf.ACTION'),
+        datetime: this.translate.instant('securityEvent.pdf.DATETIME'),
       },
       items: {
-        source: this.translate.instant("securityEvent.SOURCE"),
-        destination: this.translate.instant(
-          "securityEvent.DESTINATION"
-        ),
-        host: this.translate.instant("securityEvent.HOST"),
-        container: this.translate.instant(
-          "securityEvent.CONTAINER"
-        ),
-        applications: this.translate.instant(
-          "securityEvent.APPLICATIONS"
-        ),
-        count: this.translate.instant("threat.gridHeader.COUNT"),
-        description: this.translate.instant(
-          "securityEvent.DESCRIPTION"
-        ),
-        serverPort: this.translate.instant(
-          "violation.gridHeader.SERVER_PORT"
-        ),
-        protocol: this.translate.instant(
-          "violation.gridHeader.PROTOCOL"
-        ),
+        source: this.translate.instant('securityEvent.SOURCE'),
+        destination: this.translate.instant('securityEvent.DESTINATION'),
+        host: this.translate.instant('securityEvent.HOST'),
+        container: this.translate.instant('securityEvent.CONTAINER'),
+        applications: this.translate.instant('securityEvent.APPLICATIONS'),
+        count: this.translate.instant('threat.gridHeader.COUNT'),
+        description: this.translate.instant('securityEvent.DESCRIPTION'),
+        serverPort: this.translate.instant('violation.gridHeader.SERVER_PORT'),
+        protocol: this.translate.instant('violation.gridHeader.PROTOCOL'),
         serverImage: this.translate.instant(
-          "violation.gridHeader.SERVER_IMAGE"
+          'violation.gridHeader.SERVER_IMAGE'
         ),
         clusterName: this.translate.instant(
-          "violation.gridHeader.CLUSTER_NAME"
+          'violation.gridHeader.CLUSTER_NAME'
         ),
-        group: this.translate.instant("securityEvent.GROUP"),
-        procName: this.translate.instant(
-          "securityEvent.PROC_NAME"
-        ),
-        procPath: this.translate.instant(
-          "securityEvent.PROC_PATH"
-        ),
-        procCmd: this.translate.instant("securityEvent.PROC_CMD"),
-        cmd: this.translate.instant("securityEvent.CMD"),
-        procEffectedUid: this.translate.instant(
-          "securityEvent.PROC_EFF_UID"
-        ),
-        procEffectedUser: this.translate.instant(
-          "securityEvent.PROC_EFF_USER"
-        ),
-        localIp: this.translate.instant("securityEvent.LOCAL_IP"),
-        remoteIp: this.translate.instant(
-          "securityEvent.REMOTE_IP"
-        ),
-        localPort: this.translate.instant(
-          "securityEvent.LOCAL_PORT"
-        ),
-        remotePort: this.translate.instant(
-          "securityEvent.REMOTE_PORT"
-        ),
-        ipProto: this.translate.instant("securityEvent.IP_PROTO"),
-        fileNames: this.translate.instant(
-          "securityEvent.FILE_NAME"
-        ),
-        filePath: this.translate.instant(
-          "securityEvent.FILE_PATH"
-        )
+        group: this.translate.instant('securityEvent.GROUP'),
+        procName: this.translate.instant('securityEvent.PROC_NAME'),
+        procPath: this.translate.instant('securityEvent.PROC_PATH'),
+        procCmd: this.translate.instant('securityEvent.PROC_CMD'),
+        cmd: this.translate.instant('securityEvent.CMD'),
+        procEffectedUid: this.translate.instant('securityEvent.PROC_EFF_UID'),
+        procEffectedUser: this.translate.instant('securityEvent.PROC_EFF_USER'),
+        localIp: this.translate.instant('securityEvent.LOCAL_IP'),
+        remoteIp: this.translate.instant('securityEvent.REMOTE_IP'),
+        localPort: this.translate.instant('securityEvent.LOCAL_PORT'),
+        remotePort: this.translate.instant('securityEvent.REMOTE_PORT'),
+        ipProto: this.translate.instant('securityEvent.IP_PROTO'),
+        fileNames: this.translate.instant('securityEvent.FILE_NAME'),
+        filePath: this.translate.instant('securityEvent.FILE_PATH'),
       },
       others: {
-        tocText: this.translate.instant("general.REPORT_TOC"),
-        headerText: this.translate.instant(
-          "partner.securityEvent.pdf.header"
-        ),
-        footerText: this.translate.instant(
-          "securityEvent.pdf.FOOTER"
-        ),
-        subTitleDetails: this.translate.instant(
-          "securityEvent.pdf.DETAILS"
-        ),
-        reportSummary: this.translate.instant("enum.SUMMARY"),
-        logoName: this.translate.instant(
-          "partner.general.LOGO_NAME"
-        ),
-        byEventType: this.translate.instant(
-          "securityEvent.pdf.TYPEDIST"
-        ),
+        tocText: this.translate.instant('general.REPORT_TOC'),
+        headerText: this.translate.instant('partner.securityEvent.pdf.header'),
+        footerText: this.translate.instant('securityEvent.pdf.FOOTER'),
+        subTitleDetails: this.translate.instant('securityEvent.pdf.DETAILS'),
+        reportSummary: this.translate.instant('enum.SUMMARY'),
+        logoName: this.translate.instant('partner.general.LOGO_NAME'),
+        byEventType: this.translate.instant('securityEvent.pdf.TYPEDIST'),
         // summaryRange:
         //   options.filteredCount === 0
         //     ? ""
@@ -216,7 +172,7 @@ export class SecurityEventsComponent implements OnInit {
         //   options.filteredCount > REPORT_TABLE_ROW_LIMIT
         //     ? this.translate.instant("general.PDF_TBL_ROW_LIMIT", {max: $scope.REPORT_TABLE_ROW_LIMIT}, "", "en")
         //     : ""
-      }
+      },
     };
 
     this._switchClusterSubscription =
@@ -238,15 +194,14 @@ export class SecurityEventsComponent implements OnInit {
   };
 
   preprocessSecurityEventsData = () => {
-    this.securityEventsService.getSecurityEvents()
-      .subscribe(
-        (response: any) => {
-          this.combineSecurityEvents(response);
-        },
-        error => {
-          console.error(error);
-        }
-      );
+    this.securityEventsService.getSecurityEvents().subscribe(
+      (response: any) => {
+        this.combineSecurityEvents(response);
+      },
+      error => {
+        console.error(error);
+      }
+    );
   };
 
   getOpenedRec = (evt, index, page) => {
@@ -263,79 +218,73 @@ export class SecurityEventsComponent implements OnInit {
     return e.scrollWidth <= e.clientWidth;
   };
 
-  canShowReviewRule = (secEvent) => {
+  canShowReviewRule = secEvent => {
     let srcGroup = secEvent.endpoint.source.group4Rule;
     let destGroup = secEvent.endpoint.destination.group4Rule;
     return srcGroup.length > 0 && destGroup.length > 0;
   };
 
-
-
   showContainerDetails = (ev, endpoint, hostName: string): void => {
-    if (endpoint.displayName && endpoint.displayName.startsWith(MapConstant.securityEventLocation.HOST)) {
-      this.showHostDetails(
-        ev,
-        endpoint.id.substring(5),
-        hostName
-      );
+    if (
+      endpoint.displayName &&
+      endpoint.displayName.startsWith(MapConstant.securityEventLocation.HOST)
+    ) {
+      this.showHostDetails(ev, endpoint.id.substring(5), hostName);
       return;
     }
     ev.stopPropagation();
 
-    this.securityEventsService.getContainer(endpoint.id)
-      .subscribe(
-        (response: any) => {
-          this.podModal = this.dialog.open(PodBriefDialogComponent, {
-            width: '900px',
-            position: { left: '25px', top: '130px' },
-            hasBackdrop: false,
-            data: {
-              pod: response
-            }
-          });
-        },
-        error => {}
-      );
+    this.securityEventsService.getContainer(endpoint.id).subscribe(
+      (response: any) => {
+        this.podModal = this.dialog.open(PodBriefDialogComponent, {
+          width: '900px',
+          position: { left: '25px', top: '130px' },
+          hasBackdrop: false,
+          data: {
+            pod: response,
+          },
+        });
+      },
+      error => {}
+    );
   };
 
   showHostDetails = (ev, hostId: string, hostName: string): void => {
     ev.stopPropagation();
-    this.securityEventsService.getHost(hostId)
-      .subscribe(
-        (response: any) => {
-          this.hostModal = this.dialog.open(NodeBriefDialogComponent, {
-            width: '675px',
-            position: { left: '25px', top: '130px' },
-            hasBackdrop: false,
-            data: response,
-          });
-        },
-        error => {}
-      );
+    this.securityEventsService.getHost(hostId).subscribe(
+      (response: any) => {
+        this.hostModal = this.dialog.open(NodeBriefDialogComponent, {
+          width: '675px',
+          position: { left: '25px', top: '130px' },
+          hasBackdrop: false,
+          data: response,
+        });
+      },
+      error => {}
+    );
   };
 
-  isInternalGroup = function(group: string): boolean {
+  isInternalGroup = function (group: string): boolean {
     return MapConstant.INTERNAL_GROUPS.includes(group);
   };
 
   showPacket = (id: string, ev): void => {
     console.log('Threat ID', id);
-    this.securityEventsService.getPacketData(id)
-      .subscribe(
-        (response: any) => {
-          this.packetModal = this.dialog.open(PacketModalComponent, {
-            width: '675px',
-            data: {
-              packet: response.packet
-            },
-          });
-        },
-        error => {}
-      );
+    this.securityEventsService.getPacketData(id).subscribe(
+      (response: any) => {
+        this.packetModal = this.dialog.open(PacketModalComponent, {
+          width: '675px',
+          data: {
+            packet: response.packet,
+          },
+        });
+      },
+      error => {}
+    );
   };
 
   reviewRule = (eventType: string, secEvent: any): void => {
-    switch(eventType) {
+    switch (eventType) {
       case 'incident':
         this.openReviewProcessRuleModal(secEvent);
         break;
@@ -355,7 +304,7 @@ export class SecurityEventsComponent implements OnInit {
           domains: this.autoComplete.domain,
           hosts: this.autoComplete.host,
           sources: this.autoComplete.source,
-          destinations: this.autoComplete.destination
+          destinations: this.autoComplete.destination,
         },
         hasBackdrop: false,
         position: { right: '25px', top: '80px' },
@@ -385,24 +334,29 @@ export class SecurityEventsComponent implements OnInit {
   };
 
   onQuickFilterChange = (filterStr: string) => {
-    this.securityEventsService.displayedSecurityEvents = this.securityEventsService.cachedSecurityEvents.filter(event => {
-      return this.advancedFilterModalService._includeFilter(event, filterStr);
-    });
-    this.printableData = this.getPrintableData(this.securityEventsService.displayedSecurityEvents);
+    this.securityEventsService.displayedSecurityEvents =
+      this.securityEventsService.cachedSecurityEvents.filter(event => {
+        return this.advancedFilterModalService._includeFilter(event, filterStr);
+      });
+    this.printableData = this.getPrintableData(
+      this.securityEventsService.displayedSecurityEvents
+    );
     this.securityEventsService.prepareContext4TwoWayInfinityScroll();
   };
 
-  closeDetails = (elemId) => {
+  closeDetails = elemId => {
     document.getElementById(elemId)!['checked'] = false;
     this.securityEventsService.dateSliderCtx.openedIndex = -1;
     this.securityEventsService.dateSliderCtx.openedPage = -1;
   };
 
   exportCSV = () => {
-    let csvData = this.getCsvData(this.securityEventsService.displayedSecurityEvents);
+    let csvData = this.getCsvData(
+      this.securityEventsService.displayedSecurityEvents
+    );
     let csv = arrayToCsv(JSON.parse(JSON.stringify(csvData)));
-    let blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
-    saveAs(blob, "Security_events.csv");
+    let blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    saveAs(blob, 'Security_events.csv');
   };
 
   printReport = () => {
@@ -415,46 +369,50 @@ export class SecurityEventsComponent implements OnInit {
     }, 500);
   };
 
-  private getCsvData = (secEvents) => {
+  private getCsvData = secEvents => {
     return secEvents.map((secEvent, $index) => {
       return this._organizeSecEventTblRow(secEvent, $index, 'csv');
     });
   };
 
-  private getPrintableData = (secEvents) => {
+  private getPrintableData = secEvents => {
     return secEvents.map((secEvent, $index) => {
       return this._organizeSecEventTblRow(secEvent, $index, 'printable');
     });
   };
 
-  private _organizeSecEventTblRow = (secEvent: any, index: number, format: string) => {
+  private _organizeSecEventTblRow = (
+    secEvent: any,
+    index: number,
+    format: string
+  ) => {
     let resPrototype = {
-      ID: "",
-      Title: "",
-      Severity: "",
-      Location: "",
-      Details: "",
-      Action: "",
-      Datetime: ""
+      ID: '',
+      Title: '',
+      Severity: '',
+      Location: '',
+      Details: '',
+      Action: '',
+      Datetime: '',
     };
     const lineBreak = format === 'csv' ? '\n' : '<br/>';
     resPrototype.ID = (index + 1).toString();
     resPrototype.Title = `${secEvent.name.replace(/\"/g, "'")}`;
     resPrototype.Severity = secEvent.details.level
       ? secEvent.details.level.name
-      : "";
+      : '';
     resPrototype.Location = `${this._organizeLocation(
       secEvent
     ).stack[0].ul.join(lineBreak)}`;
     resPrototype.Details = `${this._organizeSecEventDetails(secEvent)!
-      .stack.map(function(elem) {
-        return typeof elem === "string" ? elem : elem.ul.join(lineBreak);
+      .stack.map(function (elem) {
+        return typeof elem === 'string' ? elem : elem.ul.join(lineBreak);
       })
       .join(lineBreak)
       .replace(/\"/g, "'")}`;
     resPrototype.Action = secEvent.details.action
       ? secEvent.details.action.name
-      : "";
+      : '';
     resPrototype.Datetime = `${secEvent.reportedAt}`;
     return resPrototype;
   };
@@ -468,20 +426,20 @@ export class SecurityEventsComponent implements OnInit {
               `${this.metadata.items.source}: ${
                 secEvent.endpoint.source.domain
                   ? `${secEvent.endpoint.source.domain}: `
-                  : ""
+                  : ''
               }${secEvent.endpoint.source.displayName}`,
               `${this.metadata.items.destination}: ${
                 secEvent.endpoint.destination.domain
                   ? `${secEvent.endpoint.destination.domain}: `
-                  : ""
-              }${secEvent.endpoint.destination.displayName}`
-            ]
-          }
-        ]
+                  : ''
+              }${secEvent.endpoint.destination.displayName}`,
+            ],
+          },
+        ],
       };
     } else if (
       secEvent.endpoint.source &&
-      !secEvent.details.labels.includes("host")
+      !secEvent.details.labels.includes('host')
     ) {
       return {
         stack: [
@@ -491,15 +449,15 @@ export class SecurityEventsComponent implements OnInit {
               `${this.metadata.items.container}: ${
                 secEvent.endpoint.source.domain
                   ? `${secEvent.endpoint.source.domain}: `
-                  : ""
-              }${secEvent.endpoint.source.displayName}`
-            ]
-          }
-        ]
+                  : ''
+              }${secEvent.endpoint.source.displayName}`,
+            ],
+          },
+        ],
       };
     } else if (
       secEvent.endpoint.destination &&
-      !secEvent.details.labels.includes("host")
+      !secEvent.details.labels.includes('host')
     ) {
       return {
         stack: [
@@ -509,19 +467,19 @@ export class SecurityEventsComponent implements OnInit {
               `${this.metadata.items.container}: ${
                 secEvent.endpoint.destination.domain
                   ? `${secEvent.endpoint.destination.domain}: `
-                  : ""
-              }${secEvent.endpoint.destination.displayName}`
-            ]
-          }
-        ]
+                  : ''
+              }${secEvent.endpoint.destination.displayName}`,
+            ],
+          },
+        ],
       };
     } else {
       return {
         stack: [
           {
-            ul: [`${this.metadata.items.host}: ${secEvent.host_name}`]
-          }
-        ]
+            ul: [`${this.metadata.items.host}: ${secEvent.host_name}`],
+          },
+        ],
       };
     }
   };
@@ -530,12 +488,10 @@ export class SecurityEventsComponent implements OnInit {
     let ul: any[] = [];
 
     switch (secEvent.type.name) {
-      case "threat":
+      case 'threat':
         if (secEvent.details.clusterName)
           ul.push(
-            `${this.metadata.items.clusterName}: ${
-              secEvent.details.clusterName
-            }`
+            `${this.metadata.items.clusterName}: ${secEvent.details.clusterName}`
           );
         if (secEvent.applications)
           ul.push(
@@ -545,17 +501,13 @@ export class SecurityEventsComponent implements OnInit {
           ul.push(`${this.metadata.items.count}: ${secEvent.details.count}`);
         if (secEvent.details.message.content)
           ul.push(
-            `${this.metadata.items.description}: ${
-              secEvent.details.message.content
-            }`
+            `${this.metadata.items.description}: ${secEvent.details.message.content}`
           );
         return { stack: [{ ul: ul }] };
-      case "violation":
+      case 'violation':
         if (secEvent.details.clusterName)
           ul.push(
-            `${this.metadata.items.clusterName}: ${
-              secEvent.details.clusterName
-            }`
+            `${this.metadata.items.clusterName}: ${secEvent.details.clusterName}`
           );
         if (secEvent.applications)
           ul.push(
@@ -571,17 +523,13 @@ export class SecurityEventsComponent implements OnInit {
           );
         if (secEvent.details.serverImage)
           ul.push(
-            `${this.metadata.items.serverImage}: ${
-              secEvent.details.serverImage
-            }`
+            `${this.metadata.items.serverImage}: ${secEvent.details.serverImage}`
           );
         return { stack: [{ ul: ul }] };
-      case "incident":
+      case 'incident':
         if (secEvent.details.clusterName)
           ul.push(
-            `${this.metadata.items.clusterName}: ${
-              secEvent.details.clusterName
-            }`
+            `${this.metadata.items.clusterName}: ${secEvent.details.clusterName}`
           );
         if (secEvent.details.message.group)
           ul.push(
@@ -589,114 +537,92 @@ export class SecurityEventsComponent implements OnInit {
           );
         if (secEvent.details.message.procName)
           ul.push(
-            `${this.metadata.items.procName}: ${
-              secEvent.details.message.procName
-            }`
+            `${this.metadata.items.procName}: ${secEvent.details.message.procName}`
           );
         if (secEvent.details.message.procPath)
           ul.push(
-            `${this.metadata.items.procPath}: ${
-              secEvent.details.message.procPath
-            }`
+            `${this.metadata.items.procPath}: ${secEvent.details.message.procPath}`
           );
         if (secEvent.details.message.procCmd)
           ul.push(
-            `${this.metadata.items.procCmd}: ${
-              secEvent.details.message.procCmd
-            }`
+            `${this.metadata.items.procCmd}: ${secEvent.details.message.procCmd}`
           );
         if (
           secEvent.details.message.procCmd &&
-          secEvent.name.toLowerCase().indexOf("process") < 0 &&
-          secEvent.name.toLowerCase().indexOf("escalation") < 0 &&
-          secEvent.name.toLowerCase().indexOf("detected") < 0
+          secEvent.name.toLowerCase().indexOf('process') < 0 &&
+          secEvent.name.toLowerCase().indexOf('escalation') < 0 &&
+          secEvent.name.toLowerCase().indexOf('detected') < 0
         )
           ul.push(
             `${this.metadata.items.cmd}: ${secEvent.details.message.procCmd}`
           );
         if (secEvent.details.message.procEffectiveUid)
           ul.push(
-            `${this.metadata.items.procEffectedUid}: ${
-              secEvent.details.message.procEffectiveUid
-            }`
+            `${this.metadata.items.procEffectedUid}: ${secEvent.details.message.procEffectiveUid}`
           );
         if (secEvent.details.message.procEffectiveUser)
           ul.push(
-            `${this.metadata.items.procEffectedUser}: ${
-              secEvent.details.message.procEffectiveUser
-            }`
+            `${this.metadata.items.procEffectedUser}: ${secEvent.details.message.procEffectiveUser}`
           );
         if (secEvent.details.message.localIP)
           ul.push(
-            `${this.metadata.items.localIp}: ${
-              secEvent.details.message.localIP
-            }`
+            `${this.metadata.items.localIp}: ${secEvent.details.message.localIP}`
           );
         if (secEvent.details.message.remoteIP)
           ul.push(
-            `${this.metadata.items.remoteIp}: ${
-              secEvent.details.message.remoteIP
-            }`
+            `${this.metadata.items.remoteIp}: ${secEvent.details.message.remoteIP}`
           );
         if (secEvent.details.message.localPort)
           ul.push(
-            `${this.metadata.items.localPort}: ${
-              secEvent.details.message.localPort
-            }`
+            `${this.metadata.items.localPort}: ${secEvent.details.message.localPort}`
           );
         if (secEvent.details.message.localPort)
           ul.push(
-            `${this.metadata.items.remotePort}: ${
-              secEvent.details.message.localPort
-            }`
+            `${this.metadata.items.remotePort}: ${secEvent.details.message.localPort}`
           );
         if (secEvent.details.message.ipProto)
           ul.push(
-            `${this.metadata.items.ipProto}: ${
-              secEvent.details.message.ipProto
-            }`
+            `${this.metadata.items.ipProto}: ${secEvent.details.message.ipProto}`
           );
         if (secEvent.details.message.filePath)
           ul.push(
-            `${this.metadata.items.filePath}: ${
-              secEvent.details.message.filePath
-            }`
+            `${this.metadata.items.filePath}: ${secEvent.details.message.filePath}`
           );
         if (secEvent.details.message.fileNames)
           ul.push(
-            `${this.metadata.items.fileNames}: ${
-              secEvent.details.message.fileNames
-            }`
+            `${this.metadata.items.fileNames}: ${secEvent.details.message.fileNames}`
           );
         return {
-          stack: [secEvent.details.message.content, { ul: ul }]
+          stack: [secEvent.details.message.content, { ul: ul }],
         };
-      default: return null;
+      default:
+        return null;
     }
   };
 
   private openReviewProcessRuleModal = (secEvent: any) => {
-    this.securityEventsService.getProcessRule(secEvent.details.message.group)
+    this.securityEventsService
+      .getProcessRule(secEvent.details.message.group)
       .subscribe(
         (response: any) => {
-          let processRule = response.process_list.filter(
-            rule => {
-              return (
-                rule.name === secEvent.details.message.procName &&
-                rule.path === secEvent.details.message.procPath
-              );
+          let processRule = response.process_list.filter(rule => {
+            return (
+              rule.name === secEvent.details.message.procName &&
+              rule.path === secEvent.details.message.procPath
+            );
+          });
+          this.reviewProcessRuleModal = this.dialog.open(
+            ReviewProcessRuleModalComponent,
+            {
+              width: '900px',
+              data: {
+                isEditable: this.isUpdateRuleAuthorized,
+                secEvent: secEvent,
+                processRule: processRule,
+              },
+              hasBackdrop: false,
             }
           );
-          this.reviewProcessRuleModal = this.dialog.open(ReviewProcessRuleModalComponent, {
-            width: '900px',
-            data: {
-              isEditable: this.isUpdateRuleAuthorized,
-              secEvent: secEvent,
-              processRule: processRule
-            },
-            hasBackdrop: false,
-            disableClose: true
-          });
         },
         error => {}
       );
@@ -705,60 +631,78 @@ export class SecurityEventsComponent implements OnInit {
   private openReviewNetworkRuleModal = (secEvent: any) => {
     const success = (response: any = {}) => {
       let networkRule = response;
-      networkRule.allowed = networkRule.action ? networkRule.action === 'allow' : true;
-      this.reviewNetworkRuleModal = this.dialog.open(ReviewNetworkRuleModalComponent, {
-        width: '900px',
-        data: {
-          isEditable: this.isUpdateRuleAuthorized,
-          networkRule: networkRule,
-          secEvent: secEvent
-        },
-        hasBackdrop: false,
-        disableClose: true
-      });
-    }
+      networkRule.allowed = networkRule.action
+        ? networkRule.action === 'allow'
+        : true;
+      this.reviewNetworkRuleModal = this.dialog.open(
+        ReviewNetworkRuleModalComponent,
+        {
+          width: '900px',
+          data: {
+            isEditable: this.isUpdateRuleAuthorized,
+            networkRule: networkRule,
+            secEvent: secEvent,
+          },
+          hasBackdrop: false,
+        }
+      );
+    };
     if (secEvent.ruleId === 0) {
       success();
     } else {
-      this.securityEventsService.getNetworkRule(secEvent.ruleId)
-        .subscribe(
-          (response: any) => {
-            success(response);
-          },
-          error => {}
-        );
+      this.securityEventsService.getNetworkRule(secEvent.ruleId).subscribe(
+        (response: any) => {
+          success(response);
+        },
+        error => {}
+      );
     }
   };
 
-  private prepareAutoCompleteData = (cachedSecurityEvents) => {
+  private prepareAutoCompleteData = cachedSecurityEvents => {
     this.autoComplete = {
       domain: this.domainList,
       host: this.getAutoCompleteData(e => e.hostName, cachedSecurityEvents),
-      source: this.getAutoCompleteData(e => e.endpoint.source.displayName, cachedSecurityEvents),
-      destination: this.getAutoCompleteData(e => e.endpoint.destination.displayName, cachedSecurityEvents),
+      source: this.getAutoCompleteData(
+        e => e.endpoint.source.displayName,
+        cachedSecurityEvents
+      ),
+      destination: this.getAutoCompleteData(
+        e => e.endpoint.destination.displayName,
+        cachedSecurityEvents
+      ),
     };
-  }
+  };
 
-  private getAutoCompleteData = (cb: (e: any) => any, secEvents: Array<any>): string[] => {
+  private getAutoCompleteData = (
+    cb: (e: any) => any,
+    secEvents: Array<any>
+  ): string[] => {
     return Array.from(new Set(secEvents.map(e => cb(e))))
       .filter(s => !!s)
       .sort();
-  }
+  };
 
   private setAdvancedFilter = (filter?: any) => {
     if (filter) {
       this.advancedFilterModalService.advFilter = filter;
     }
     if (this.displayedSecurityEventsJsonBeforeApplyAdvFilter !== '[]') {
-      this.securityEventsService.displayedSecurityEvents = JSON.parse(this.displayedSecurityEventsJsonBeforeApplyAdvFilter);
+      this.securityEventsService.displayedSecurityEvents = JSON.parse(
+        this.displayedSecurityEventsJsonBeforeApplyAdvFilter
+      );
     }
     this.advFilter = this.advancedFilterModalService.advFilter;
-    this.displayedSecurityEventsJsonBeforeApplyAdvFilter = JSON.stringify(this.securityEventsService.displayedSecurityEvents);
+    this.displayedSecurityEventsJsonBeforeApplyAdvFilter = JSON.stringify(
+      this.securityEventsService.displayedSecurityEvents
+    );
     this.securityEventsService.displayedSecurityEvents =
-      this.securityEventsService.displayedSecurityEvents.filter(
-        event => this.advancedFilterModalService.filterFn(event)
+      this.securityEventsService.displayedSecurityEvents.filter(event =>
+        this.advancedFilterModalService.filterFn(event)
       );
-    this.printableData = this.getPrintableData(this.securityEventsService.displayedSecurityEvents);
+    this.printableData = this.getPrintableData(
+      this.securityEventsService.displayedSecurityEvents
+    );
     this.securityEventsService.prepareContext4TwoWayInfinityScroll();
   };
 
@@ -768,7 +712,7 @@ export class SecurityEventsComponent implements OnInit {
       if (severity) _severities.push(Object.values(FilterSeverity)[idx]);
     });
     return _severities;
-  }
+  };
 
   private getLocations = (locations: boolean[]) => {
     let _locations = [] as any;
@@ -776,7 +720,7 @@ export class SecurityEventsComponent implements OnInit {
       if (location) _locations.push(Object.values(FilterLocation)[idx]);
     });
     return _locations;
-  }
+  };
 
   private getCategories = (categories: boolean[]) => {
     let _categories = [] as any;
@@ -784,7 +728,7 @@ export class SecurityEventsComponent implements OnInit {
       if (category) _categories.push(Object.values(FilterCategory)[idx]);
     });
     return _categories;
-  }
+  };
 
   private getOther = (other: boolean[]) => {
     let _other = [] as any;
@@ -792,9 +736,9 @@ export class SecurityEventsComponent implements OnInit {
       if (otherElem) _other.push(Object.values(Other)[idx]);
     });
     return _other;
-  }
+  };
 
-  private combineSecurityEvents = (securityEventsData) => {
+  private combineSecurityEvents = securityEventsData => {
     let startTime = new Date().getTime();
     this.threatList = JSON.parse(securityEventsData[0]);
     this.violationList = JSON.parse(securityEventsData[1]);
@@ -805,19 +749,21 @@ export class SecurityEventsComponent implements OnInit {
     console.log('Security Events (raw): ', [
       this.threatList,
       this.violationList,
-      this.incidentList
+      this.incidentList,
     ]);
 
     let ipList = this.threatList.threats
       .flatMap((threat: any) => {
         let ips: Array<string> = [];
         if (
-          threat.client_workload_id === MapConstant.securityEventLocation.EXTERNAL
+          threat.client_workload_id ===
+          MapConstant.securityEventLocation.EXTERNAL
         ) {
           ips.push(threat.client_ip);
         }
         if (
-          threat.server_workload_id === MapConstant.securityEventLocation.EXTERNAL
+          threat.server_workload_id ===
+          MapConstant.securityEventLocation.EXTERNAL
         ) {
           ips.push(threat.server_ip);
         }
@@ -826,10 +772,14 @@ export class SecurityEventsComponent implements OnInit {
       .concat(
         this.violationList.violations.flatMap((violation: any) => {
           let ips: Array<string> = [];
-          if (violation.client_id === MapConstant.securityEventLocation.EXTERNAL) {
+          if (
+            violation.client_id === MapConstant.securityEventLocation.EXTERNAL
+          ) {
             ips.push(violation.client_ip);
           }
-          if (violation.server_id === MapConstant.securityEventLocation.EXTERNAL) {
+          if (
+            violation.server_id === MapConstant.securityEventLocation.EXTERNAL
+          ) {
             ips.push(violation.server_ip);
           }
           return ips;
@@ -838,12 +788,14 @@ export class SecurityEventsComponent implements OnInit {
       .concat(
         this.incidentList.incidents.flatMap((incident: any) => {
           let ips: Array<string> = [];
-          if (incident.workload_id === MapConstant.securityEventLocation.EXTERNAL) {
+          if (
+            incident.workload_id === MapConstant.securityEventLocation.EXTERNAL
+          ) {
             ips.push(incident.client_ip);
           }
           if (
             incident.remote_workload_id ===
-            MapConstant. securityEventLocation.EXTERNAL
+            MapConstant.securityEventLocation.EXTERNAL
           ) {
             ips.push(incident.server_ip);
           }
@@ -855,79 +807,105 @@ export class SecurityEventsComponent implements OnInit {
     let getIpListTime = new Date().getTime();
     console.log('Profile - Get ip list: ', getIpListTime - parseDataTime);
 
-    this.securityEventsService.getIpGeoInfo(ipList)
-      .subscribe(
-        (response: any) => {
+    this.securityEventsService.getIpGeoInfo(ipList).subscribe(
+      (response: any) => {
+        let getIpGeoInfoTime = new Date().getTime();
+        console.log(
+          'Profile - Get ip geo info: ',
+          getIpGeoInfoTime - getIpListTime
+        );
 
-          let getIpGeoInfoTime = new Date().getTime();
-          console.log('Profile - Get ip geo info: ', getIpGeoInfoTime - getIpListTime);
-
-          let ipMap = response.ip_map;
-          this.threatList = this.threatList.threats.map((threat: any) => {
-            return this.securityEventsService.editDisplayedThreat(threat, ipMap);
-          });
-          this.violationList = this.violationList.violations.map((violation: any) => {
+        let ipMap = response.ip_map;
+        this.threatList = this.threatList.threats.map((threat: any) => {
+          return this.securityEventsService.editDisplayedThreat(threat, ipMap);
+        });
+        this.violationList = this.violationList.violations.map(
+          (violation: any) => {
             return this.securityEventsService.editDisplayedViolation(
               violation,
               ipMap
             );
-          });
-          this.incidentList = this.incidentList.incidents.map((incident: any) => {
-            return this.securityEventsService.editDisplayedIncident(
-              incident,
-              ipMap
-            );
-          });
+          }
+        );
+        this.incidentList = this.incidentList.incidents.map((incident: any) => {
+          return this.securityEventsService.editDisplayedIncident(
+            incident,
+            ipMap
+          );
+        });
 
-          let editSecEventTime = new Date().getTime();
-          console.log('Profile - Edit sec event time: ', editSecEventTime - getIpGeoInfoTime);
+        let editSecEventTime = new Date().getTime();
+        console.log(
+          'Profile - Edit sec event time: ',
+          editSecEventTime - getIpGeoInfoTime
+        );
 
-          this.securityEventsService.cachedSecurityEvents = this.securityEventsService.cachedSecurityEvents
+        this.securityEventsService.cachedSecurityEvents =
+          this.securityEventsService.cachedSecurityEvents
             .concat(this.threatList)
             .concat(this.violationList)
             .concat(this.incidentList);
 
-          let mergeSecEventTime = new Date().getTime();
-          console.log('Profile - Merge sec event time: ', mergeSecEventTime - editSecEventTime);
+        let mergeSecEventTime = new Date().getTime();
+        console.log(
+          'Profile - Merge sec event time: ',
+          mergeSecEventTime - editSecEventTime
+        );
 
-          if (this.securityEventsService.cachedSecurityEvents.length > 0) {
-            let sortingStartTime = new Date().getTime();
-            this.securityEventsService.cachedSecurityEvents = this.securityEventsService.cachedSecurityEvents.sort(
-              (a, b) => {
-                return b.reportedTimestamp - a.reportedTimestamp;
-              }
+        if (this.securityEventsService.cachedSecurityEvents.length > 0) {
+          let sortingStartTime = new Date().getTime();
+          this.securityEventsService.cachedSecurityEvents =
+            this.securityEventsService.cachedSecurityEvents.sort((a, b) => {
+              return b.reportedTimestamp - a.reportedTimestamp;
+            });
+
+          let sortSecEventTime = new Date().getTime();
+          console.log(
+            'Profile - Sort sec event time: ',
+            sortSecEventTime - mergeSecEventTime
+          );
+
+          console.log(
+            'Security Events (After edited): ',
+            JSON.parse(
+              JSON.stringify(this.securityEventsService.cachedSecurityEvents)
+            )
+          );
+
+          this.domainList = this._getDomainList(
+            this.securityEventsService.cachedSecurityEvents
+          );
+          this.prepareAutoCompleteData(
+            this.securityEventsService.cachedSecurityEvents
+          );
+
+          if (this.selectedRow && this.selectedRow !== 'null') {
+            this.onQuickFilterChange(
+              this.datePipe.transform(
+                this.selectedRow.reported_at,
+                'MMM dd, yyyy HH:mm:ss'
+              )!
             );
-
-            let sortSecEventTime = new Date().getTime();
-            console.log('Profile - Sort sec event time: ', sortSecEventTime - mergeSecEventTime);
-
-            console.log(
-              'Security Events (After edited): ',
-              JSON.parse(JSON.stringify(this.securityEventsService.cachedSecurityEvents))
+          } else {
+            this.securityEventsService.displayedSecurityEvents = JSON.parse(
+              JSON.stringify(this.securityEventsService.cachedSecurityEvents)
             );
-
-
-            this.domainList = this._getDomainList(this.securityEventsService.cachedSecurityEvents);
-            this.prepareAutoCompleteData(this.securityEventsService.cachedSecurityEvents);
-
-            if (this.selectedRow && this.selectedRow !== 'null') {
-              this.onQuickFilterChange(this.datePipe.transform(this.selectedRow.reported_at, 'MMM dd, yyyy HH:mm:ss')!);
-            } else {
-              this.securityEventsService.displayedSecurityEvents = JSON.parse(JSON.stringify(this.securityEventsService.cachedSecurityEvents));
-              this.printableData = this.getPrintableData(this.securityEventsService.displayedSecurityEvents);
-            }
-            this.securityEventsService.prepareContext4TwoWayInfinityScroll();
+            this.printableData = this.getPrintableData(
+              this.securityEventsService.displayedSecurityEvents
+            );
           }
-          if (this.advFilterConf) {
-            this.setAdvancedFilter(this.advFilterConf);
-          }
-          this.isDataReady = true;
-        },
-        error => {}
-      );
+          this.securityEventsService.prepareContext4TwoWayInfinityScroll();
+        }
+        if (this.advFilterConf) {
+          this.setAdvancedFilter(this.advFilterConf);
+        }
+        this.isDataReady = true;
+      },
+      error => {}
+    );
   };
 
-  private _getDomainList = (allSecurityEvents) => {
+  private _getDomainList = allSecurityEvents => {
     let domainSet = new Set();
     allSecurityEvents.forEach(event => {
       if (event.endpoint.source && event.endpoint.source.domain) {
@@ -939,5 +917,5 @@ export class SecurityEventsComponent implements OnInit {
     });
     console.log('Domain set: ', domainSet);
     return Array.from(domainSet);
-  }
+  };
 }

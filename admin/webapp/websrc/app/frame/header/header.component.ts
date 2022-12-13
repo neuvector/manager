@@ -1,4 +1,11 @@
-import { Component, OnInit, ViewChild, Injector, Inject, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  Injector,
+  Inject,
+  OnDestroy,
+} from '@angular/core';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { Router } from '@angular/router';
 import screenfull from 'screenfull';
@@ -12,6 +19,8 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
 import {NotificationService} from "@services/notification.service";
 import {TranslateService} from "@ngx-translate/core";
+import {isAuthorized} from "@common/utils/common.utils";
+import {AuthUtilsService} from "@common/utils/auth.utils";
 
 @Component({
   selector: 'app-header',
@@ -23,7 +32,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   menuItems: Array<any> = [];
   router: Router = <Router>{};
   clusterName: string = '';
+  clusterNameError: boolean = false;
   clusters: Cluster[] = [];
+  clustersError: boolean = false;
   isMasterRole: boolean = false;
   isMemberRole: boolean = false;
   isStandaloneRole: boolean = false;
@@ -32,6 +43,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isSUSESSO: boolean = false;
   primaryMasterName: string = '';
   managedClusterName: string = '';
+  isAllowedToOperateMultiCluster: boolean = false;
+  isAllowedToRedirectMultiCluster: boolean = false;
 
   email = '';
   username = '';
@@ -48,6 +61,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     public multiClusterService: MultiClusterService,
     public translateService: TranslateService,
     public switchers: SwitchersService,
+    public authUtilsService: AuthUtilsService,
     public injector: Injector,
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService
   ) {
@@ -65,6 +79,31 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.navCollapsed = true;
     });
 
+    const resource = {
+      multiClusterOp: {
+        global: 2,
+      },
+      redirectAuth: {
+        global: 3,
+      },
+      manageAuth: {
+        global: 2,
+      },
+      policyAuth: {
+        global: 3,
+      },
+    };
+
+    this.isAllowedToOperateMultiCluster = isAuthorized(
+      GlobalVariable.user.roles,
+      resource.multiClusterOp
+    );
+
+    this.isAllowedToRedirectMultiCluster = isAuthorized(
+      GlobalVariable.user.roles,
+      resource.redirectAuth
+    );
+
     this.initMultiClusters();
 
     this.email = this.sessionStorage.get('token')?.emailHash;
@@ -72,10 +111,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const role = this.sessionStorage.get('token')?.token?.role;
     this.displayRole = role ? role : 'Namespace User';
 
-    this._multiClusterSubScription = this.multiClusterService.onRefreshClustersEvent$.subscribe(data => {
-      this.initMultiClusters();
-    });
+    this._multiClusterSubScription =
+      this.multiClusterService.onRefreshClustersEvent$.subscribe(data => {
+        this.initMultiClusters();
+      });
 
+    this._multiClusterSubScription =
+      this.multiClusterService.onManageMemberClusterEvent$.subscribe(data => {
+        this.initMultiClusters();
+      });
   }
 
   ngOnDestroy() {
@@ -153,8 +197,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.clusterName = clusterName;
       },
       error: err => {
-        this.notificationService.openError(err, this.translateService.instant('multiCluster.messages.get_name_failure'));
-      }
+        this.clusterNameError = true;
+      },
     });
   }
   getClusters() {
@@ -173,17 +217,33 @@ export class HeaderComponent implements OnInit, OnDestroy {
           GlobalVariable.isMember = this.isMemberRole;
           GlobalVariable.isStandAlone = this.isStandaloneRole;
 
+          const resource = {
+            multiClusterOp: {
+              global: 2
+            },
+            manageAuth: {
+              global: 3
+            }
+          };
+
+          this.isAllowedToRedirectMultiCluster  = this.authUtilsService.getDisplayFlag('multi_cluster') || isAuthorized(GlobalVariable.user.roles, resource.multiClusterOp) && data.fed_role !== MapConstant.FED_ROLES.MASTER;
+
+          //get the status of the chosen cluster
+          const sessionCluster = this.sessionStorage.get(
+            GlobalConstant.SESSION_STORAGE_CLUSTER
+          );
+          const clusterInSession = sessionCluster
+            ? JSON.parse(sessionCluster)
+            : null;
+          if (clusterInSession) {
+            this.isOnRemoteCluster = clusterInSession.isRemote;
+            GlobalVariable.isRemote = clusterInSession.isRemote;
+          }
+
           if (GlobalVariable.isMaster) {
-            //get the status of the chosen cluster
-            const sessionCluster = this.sessionStorage.get(
-              GlobalConstant.SESSION_STORAGE_CLUSTER
-            );
-
-            const cluster = sessionCluster ? JSON.parse(sessionCluster) : null;
-
-            if (cluster !== null) {
-              this.isOnRemoteCluster = cluster.isOnRemoteCluster;
-              this.selectedCluster = cluster;
+            this.isAllowedToOperateMultiCluster = isAuthorized(GlobalVariable.user.roles, resource.manageAuth);
+            if (clusterInSession !== null) {
+              this.selectedCluster = clusterInSession;
             } else {
               this.selectedCluster = this.clusters.find(cluster => {
                 return cluster.clusterType === MapConstant.FED_ROLES.MASTER;
@@ -202,7 +262,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           }
         },
         error: error => {
-          console.error('error:', error);
+          this.clustersError = true;
         },
       });
   }
@@ -232,6 +292,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.multiClusterService.refreshSummary();
           this.multiClusterService.dispatchSwitchEvent();
           //to save and restore the selected cluster in case the page gets refreshed
+          GlobalVariable.isRemote = this.isOnRemoteCluster;
           const cluster = {
             isRemote: this.isOnRemoteCluster,
             id: this.selectedCluster?.id,
@@ -243,7 +304,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
           );
         },
         error: error => {
-          console.error(error);
+          this.notificationService.openError(
+            error,
+            this.translateService.instant(
+              'multiCluster.messages.redirect_failure',
+              { name: cluster.name }
+            )
+          );
         },
       });
     }

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import {Component, ChangeDetectionStrategy, Inject} from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,7 +13,8 @@ import { finalize, switchMap } from 'rxjs/operators';
 import { NotificationService } from '@services/notification.service';
 import { UtilsService } from '@common/utils/app.utils';
 import { PromotionModalComponent } from '@routes/multi-cluster/promotion-modal/promotion-modal.component';
-import {MapConstant} from "@common/constants/map.constant";
+import { MapConstant } from '@common/constants/map.constant';
+import {SESSION_STORAGE, StorageService} from "ngx-webstorage-service";
 
 @Component({
   selector: 'app-multi-cluster-grid-action-cell',
@@ -31,15 +32,16 @@ export class MultiClusterGridActionCellComponent
   upgrade_status: string = MapConstant.FED_STATUS.UPGADE_REQUIRED;
   kicked_status: string = MapConstant.FED_STATUS.KICKED;
 
-
   constructor(
     public multiClusterService: MultiClusterService,
     private shortenFromMiddlePipe: ShortenFromMiddlePipe,
     private notificationService: NotificationService,
+    public translateService: TranslateService,
     private utils: UtilsService,
     public dialog: MatDialog,
     private translate: TranslateService,
-    private router: Router
+    private router: Router,
+    @Inject(SESSION_STORAGE) private sessionStorage: StorageService
   ) {}
 
   agInit(params: ICellRendererParams): void {
@@ -69,16 +71,18 @@ export class MultiClusterGridActionCellComponent
   };
 
   generateToken = () => {
-    this.multiClusterService.generateToken().subscribe(response => {
-      this.openDialog(response['join_token']);
+    this.multiClusterService.generateToken().subscribe(data => {
+      this.openDialog(data['join_token']);
     });
   };
 
-  syncPolicy = (data) => {
+  syncPolicy = data => {
     this.multiClusterService.syncPolicy(data.id).subscribe(
       () => {
         this.notificationService.open(
-          this.translate.instant('multiCluster.messages.deploy_ok', {name: data.name})
+          this.translate.instant('multiCluster.messages.deploy_ok', {
+            name: data.name,
+          })
         );
       },
       error => {
@@ -93,7 +97,7 @@ export class MultiClusterGridActionCellComponent
   removeMember(rowData): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '700px',
-      disableClose: true,
+
       data: {
         message: `${this.translate.instant('multiCluster.prompt.remove', {
           name: this.shortenFromMiddlePipe.transform(rowData.name, 20),
@@ -129,25 +133,39 @@ export class MultiClusterGridActionCellComponent
       );
   }
 
+  //switch to a member cluster
   manageCluster(rowData): void {
     this.multiClusterService.switchCluster(rowData.id, '').subscribe(
-      value => {},
-      error => {}
+      value => {
+        const cluster = {
+          isRemote: true,
+          id: rowData.id,
+          name: rowData.name
+        };
+        this.sessionStorage.set(
+          GlobalConstant.SESSION_STORAGE_CLUSTER,
+          JSON.stringify(cluster)
+        );
+        this.multiClusterService.refreshSummary();
+        this.multiClusterService.dispatchSwitchEvent();
+        this.multiClusterService.dispatchManageMemberEvent();
+      },
+      error => {
+        this.notificationService.openError(error, this.translateService.instant('multiCluster.messages.redirect_failure', {name: rowData.name}));
+      }
     );
   }
 
   leave() {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '700px',
-      disableClose: true,
+
       data: {
         message: `${this.translate.instant('multiCluster.prompt.leave')}`,
       },
     });
     dialogRef.componentInstance.confirm
-      .pipe(
-        switchMap(() => this.multiClusterService.leaveFromMaster(true))
-      )
+      .pipe(switchMap(() => this.multiClusterService.leaveFromMaster(true)))
       .subscribe(
         () => {
           this.notificationService.open(

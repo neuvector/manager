@@ -24,7 +24,7 @@
       <div formArrayName="severity" class="mt-2 col-9 row">
         <ng-container *ngFor="let severity of severityFormArray.controls; let i = index">
           <mat-checkbox class="mr-3" [formControlName]="i"  class="col-sm-3">
-            {{ filterSeverity[i] }}
+            {{ getDisplayName(filterSeverity[i]) }}
           </mat-checkbox>
         </ng-container>
       </div>
@@ -48,7 +48,7 @@
       <div formArrayName="category" class="mt-2 col-9 row">
         <ng-container *ngFor="let category of categoryFormArray.controls; let i = index">
           <mat-checkbox class="mr-3" [formControlName]="i" class="col-sm-3">
-            {{ filterCategory[i] }}
+            {{ filterCategory[i] | translate }}
           </mat-checkbox>
         </ng-container>
       </div>
@@ -59,7 +59,7 @@
       <div formArrayName="other" class="mt-2 col-9 row">
         <ng-container *ngFor="let other of otherFormArray.controls; let i = index">
           <mat-checkbox class="mr-3" [formControlName]="i" class="col-sm-3">
-            {{ filterOther[i] }}
+            {{ filterOther[i] | translate }}
           </mat-checkbox>
         </ng-container>
       </div>

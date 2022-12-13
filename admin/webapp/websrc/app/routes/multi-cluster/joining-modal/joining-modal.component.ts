@@ -16,6 +16,8 @@ import { Router } from '@angular/router';
 export class JoiningModalComponent implements OnInit {
   public cluster: any;
   public useProxy: String = '';
+  public invalidToken: boolean = false;
+  public isProcessing: boolean = false;
 
   constructor(
     private clustersService: MultiClusterService,
@@ -49,7 +51,7 @@ export class JoiningModalComponent implements OnInit {
         this.cluster.name = data.misc.cluster_name;
       },
       error => {
-        console.log(error.message);
+        this.notificationService.openError(error, this.translate.instant("multiCluster.messages.get_name_failure"));
       }
     );
   };
@@ -59,18 +61,24 @@ export class JoiningModalComponent implements OnInit {
   };
 
   parseToken = () => {
-    if (!(this.cluster.master_host || this.cluster.master_port)) {
-      try {
-        let decodedStr = JSON.parse(atob(this.cluster.token.trim()));
-        this.cluster.master_host = decodedStr['s'];
-        this.cluster.master_port = decodedStr['p'];
-      } catch (e) {
-        console.warn('token format is invalid.', e);
+    try {
+      if(this.cluster.token){
+        if(this.cluster.token.length % 4 == 0 ){
+          let decodedStr = JSON.parse(atob(this.cluster.token));
+          this.cluster.master_host = decodedStr['s'];
+          this.cluster.master_port = decodedStr['p'];
+          this.invalidToken = false;
+        }else{
+          this.invalidToken = true;
+        }
       }
+    } catch (error) {
+      this.invalidToken = true;
     }
   };
 
   onConfirm = () => {
+    this.isProcessing = true;
     this.clustersService.joinCluster(this.cluster, this.useProxy).subscribe(
       response => {
         this.notificationService.open(
@@ -79,9 +87,11 @@ export class JoiningModalComponent implements OnInit {
         setTimeout(() => {
           this.clustersService.dispatchRefreshEvent();
         }, 1000);
+        this.isProcessing = false;
         this.dialogRef.close();
       },
       err => {
+        this.isProcessing  = false;
         this.notificationService.openError(
           err,
           this.translate.instant('multiCluster.joining.failure')

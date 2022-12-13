@@ -4,7 +4,7 @@ import { ICellRendererParams } from 'ag-grid-community';
 import { MatDialog } from '@angular/material/dialog';
 import { Group } from '@common/types';
 import { GlobalConstant } from '@common/constants/global.constant';
-import { MapConstant } from '@common/constants/map.constant'
+import { MapConstant } from '@common/constants/map.constant';
 import { AddEditGroupModalComponent } from '../add-edit-group-modal/add-edit-group-modal.component';
 import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -16,10 +16,9 @@ import { NotificationService } from '@services/notification.service';
 @Component({
   selector: 'app-action-buttons',
   templateUrl: './action-buttons.component.html',
-  styleUrls: ['./action-buttons.component.scss']
+  styleUrls: ['./action-buttons.component.scss'],
 })
 export class ActionButtonsComponent implements ICellRendererAngularComp {
-
   params!: ICellRendererParams;
   isReadonlyRule: boolean;
   isAddressGroupAndNamespaceUser: boolean;
@@ -31,19 +30,20 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
     private translate: TranslateService,
     private groupsService: GroupsService,
     private notificationService: NotificationService
-  ) { }
+  ) {}
 
   agInit(params: ICellRendererParams): void {
     this.params = params;
     this.isReadonlyRule =
       params.data.cfg_type === GlobalConstant.CFG_TYPE.GROUND ||
-      (
-        this.params.context.componentParent.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-          ? false
-          : params.data.cfg_type === GlobalConstant.CFG_TYPE.FED
-      ) ||
+      (this.params.context.componentParent.source ===
+      GlobalConstant.NAV_SOURCE.FED_POLICY
+        ? false
+        : params.data.cfg_type === GlobalConstant.CFG_TYPE.FED) ||
       params.data.cfg_type === GlobalConstant.CFG_TYPE.LEARNED;
-    this.isAddressGroupAndNamespaceUser = this.params.context.componentParent.isNamespaceUser && params.data.kind.toLowerCase() === MapConstant.GROUP_KIND.ADDRESS;
+    this.isAddressGroupAndNamespaceUser =
+      this.params.context.componentParent.isNamespaceUser &&
+      params.data.kind.toLowerCase() === MapConstant.GROUP_KIND.ADDRESS;
     this.isRemovableGroup = this.verifyRemovable(params.data);
   }
 
@@ -57,15 +57,18 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
       data: {
         opType: GlobalConstant.MODAL_OP.EDIT,
         source: this.params.context.componentParent.source,
-        cfgType: this.params.context.componentParent.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-          ? GlobalConstant.CFG_TYPE.FED
-          : GlobalConstant.CFG_TYPE.CUSTOMER,
+        cfgType:
+          this.params.context.componentParent.source ===
+          GlobalConstant.NAV_SOURCE.FED_POLICY
+            ? GlobalConstant.CFG_TYPE.FED
+            : GlobalConstant.CFG_TYPE.CUSTOMER,
         selectedGroup: this.params.data,
-        refresh: this.params.context.componentParent.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-          ? this.params.context.componentParent.getFedGroups
-          : this.params.context.componentParent.getGroups
+        refresh:
+          this.params.context.componentParent.source ===
+          GlobalConstant.NAV_SOURCE.FED_POLICY
+            ? this.params.context.componentParent.getFedGroups
+            : this.params.context.componentParent.getGroups,
       },
-      disableClose: true
     });
   };
 
@@ -75,62 +78,72 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
       data: {
         opType: GlobalConstant.MODAL_OP.VIEW,
         source: this.params.context.componentParent.source,
-        cfgType: this.params.context.componentParent.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-          ? GlobalConstant.SCOPE.FED
-          : GlobalConstant.SCOPE.LOCAL,
+        cfgType:
+          this.params.context.componentParent.source ===
+          GlobalConstant.NAV_SOURCE.FED_POLICY
+            ? GlobalConstant.SCOPE.FED
+            : GlobalConstant.SCOPE.LOCAL,
         selectedGroup: this.params.data,
-        refresh: this.params.context.componentParent.getGroups
+        refresh: this.params.context.componentParent.getGroups,
       },
-      disableClose: true
     });
   };
 
   deleteGroup = (group: Group) => {
-    let message = `${this.translate.instant('group.REMOVE_CONFIRM')} - ${this.sanitizer.sanitize(SecurityContext.HTML, group.name)}`;
+    let message = `${this.translate.instant(
+      'group.REMOVE_CONFIRM'
+    )} - ${this.sanitizer.sanitize(SecurityContext.HTML, group.name)}`;
     if (group.policy_rules.length > 0 || group.response_rules.length > 0) {
       message += `<br/>${this.translate.instant('group.HAS_RULES_WARNING')}`;
     }
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '700px',
       data: {
-        message: message
+        message: message,
       },
-      disableClose: true
     });
-    dialogRef.componentInstance.confirm.pipe(switchMap(() => {
-      return this.groupsService.removeGroupData(group.name);
-    })).subscribe(
-      (res) => {
-        // confirm actions
-        this.notificationService.open(this.translate.instant('group.REMOVE_OK_MSG'))
-        this.params.context.componentParent.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-          ? this.params.context.componentParent.getFedGroups()
-          : this.params.context.componentParent.getGroups();
-        // close dialog
-        dialogRef.componentInstance.onCancel();
-        dialogRef.componentInstance.loading = false;
-      },
-      error => {
-        this.notificationService.openError(error, this.translate.instant('group.REMOVE_ERR_MSG'))
-        dialogRef.componentInstance.loading = false;
-      }
-    )
+    dialogRef.componentInstance.confirm
+      .pipe(
+        switchMap(() => {
+          return this.groupsService.removeGroupData(group.name);
+        })
+      )
+      .subscribe(
+        res => {
+          // confirm actions
+          this.notificationService.open(
+            this.translate.instant('group.REMOVE_OK_MSG')
+          );
+          this.params.context.componentParent.source ===
+          GlobalConstant.NAV_SOURCE.FED_POLICY
+            ? this.params.context.componentParent.getFedGroups()
+            : this.params.context.componentParent.getGroups();
+          // close dialog
+          dialogRef.componentInstance.onCancel();
+          dialogRef.componentInstance.loading = false;
+        },
+        error => {
+          this.notificationService.openError(
+            error,
+            this.translate.instant('group.REMOVE_ERR_MSG')
+          );
+          dialogRef.componentInstance.loading = false;
+        }
+      );
   };
 
-  private verifyRemovable = (group) => {
+  private verifyRemovable = group => {
     return (
-        group.cfg_type !== GlobalConstant.CFG_TYPE.GROUND &&
-        (
-          this.params.context.componentParent.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-            ? true
-            : group.cfg_type !== GlobalConstant.CFG_TYPE.FED
-        ) &&
-        (
-          group.cfg_type !== GlobalConstant.CFG_TYPE.LEARNED ||
-          (group.cfg_type === GlobalConstant.CFG_TYPE.LEARNED && group.members.length === 0)
-        ) &&
-        !group.reserved &&
-        group.kind !== MapConstant.GROUP_KIND.IP_SERVICE
+      group.cfg_type !== GlobalConstant.CFG_TYPE.GROUND &&
+      (this.params.context.componentParent.source ===
+      GlobalConstant.NAV_SOURCE.FED_POLICY
+        ? true
+        : group.cfg_type !== GlobalConstant.CFG_TYPE.FED) &&
+      (group.cfg_type !== GlobalConstant.CFG_TYPE.LEARNED ||
+        (group.cfg_type === GlobalConstant.CFG_TYPE.LEARNED &&
+          group.members.length === 0)) &&
+      !group.reserved &&
+      group.kind !== MapConstant.GROUP_KIND.IP_SERVICE
     );
   };
 }

@@ -40,6 +40,10 @@ export class ConfigFormComponent implements OnInit {
   configFields = cloneDeep(ConfigFormConfig);
   configOptions: FormlyFormOptions = {
     formState: {
+      isCreated: {
+        httpProxy: false,
+        httpsProxy: false,
+      },
       isOpenShift: () => GlobalVariable.isOpenShift,
       permissions: {},
       ibmsa: {
@@ -91,6 +95,12 @@ export class ConfigFormComponent implements OnInit {
 
   @Input() set config(val) {
     this._config = val;
+    if (this._config.proxy.registry_http_proxy.url) {
+      this.configOptions.formState.isCreated.httpProxy = true;
+    }
+    if (this._config.proxy.registry_https_proxy.url) {
+      this.configOptions.formState.isCreated.httpsProxy = true;
+    }
     if (this._config.misc.unused_group_aging) {
       this._config.duration_toggle = true;
     }
@@ -131,7 +141,8 @@ export class ConfigFormComponent implements OnInit {
             error,
             this.tr.instant('setting.SUBMIT_FAILED'),
             false
-          )
+          ),
+          GlobalConstant.NOTIFICATION_TYPE.ERROR
         );
         this.submittingForm = false;
       },
@@ -139,7 +150,7 @@ export class ConfigFormComponent implements OnInit {
   }
 
   formatConfigPatch(base_config: ConfigV2Response): ConfigPatch {
-    const patch: ConfigPatch = {
+    return {
       atmo_config: {
         mode_auto_d2m: base_config.mode_auto.mode_auto_d2m,
         mode_auto_d2m_duration:
@@ -175,10 +186,18 @@ export class ConfigFormComponent implements OnInit {
           rancher_ep: base_config.auth.rancher_ep,
         },
         proxy_cfg: {
-          registry_http_proxy: base_config.proxy.registry_http_proxy,
+          registry_http_proxy: base_config.proxy.registry_http_proxy.password
+            ? base_config.proxy.registry_http_proxy
+            : Object.assign({}, base_config.proxy.registry_http_proxy, {
+                password: null,
+              }),
           registry_http_proxy_status:
             base_config.proxy.registry_http_proxy_status,
-          registry_https_proxy: base_config.proxy.registry_https_proxy,
+          registry_https_proxy: base_config.proxy.registry_https_proxy.password
+            ? base_config.proxy.registry_http_proxy
+            : Object.assign({}, base_config.proxy.registry_https_proxy, {
+                password: null,
+              }),
           registry_https_proxy_status:
             base_config.proxy.registry_https_proxy_status,
         },
@@ -208,7 +227,6 @@ export class ConfigFormComponent implements OnInit {
         },
       },
     };
-    return patch;
   }
 
   setupIBMSA(): void {

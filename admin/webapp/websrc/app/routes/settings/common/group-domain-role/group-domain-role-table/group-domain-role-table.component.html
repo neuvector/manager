@@ -65,7 +65,9 @@
           [matAutocomplete]="auto"
           [matChipInputFor]="chipList"
           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-          [placeholder]="'ldap.ADD_DOMAIN' | translate" />
+          placeholder="{{ 'ldap.ADD_DOMAIN' | translate }}&nbsp;{{
+            'general.TYPE_PRESS_TXT' | translate
+          }}" />
       </mat-chip-list>
       <mat-autocomplete
         #auto="matAutocomplete"

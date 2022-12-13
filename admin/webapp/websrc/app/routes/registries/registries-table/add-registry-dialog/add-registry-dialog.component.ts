@@ -144,7 +144,7 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
               this.registriesCommunicationService.refreshRegistries();
               this.saving$.subscribe(saving => {
                 if (!saving) {
-                  this.dialogRef.close();
+                  this.dialogRef.close(true);
                 }
               });
             },
@@ -169,7 +169,7 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
               this.registriesCommunicationService.refreshRegistries();
               this.saving$.subscribe(saving => {
                 if (!saving) {
-                  this.dialogRef.close();
+                  this.dialogRef.close(true);
                 }
               });
             },
@@ -239,7 +239,7 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
   }
 
   onNoClick(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 
   openTestConnectionDialog(): void {

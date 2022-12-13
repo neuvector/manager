@@ -49,7 +49,7 @@ SingleValueCrt = {"cveHighCount": True,
                   "count": True,
                   "resourceLimit": True,
                   "modules": False,
-                  "pssViolation": True,
+                  "violatePssPolicy": True,
                   "customPath": False,
                   "saBindRiskyRole": True,
                   }
@@ -85,7 +85,7 @@ NamesDisplay = {"cveHighCount": "High severity CVE count",
                 "memoryRequest": "memory request",
                 "memoryLimit": "memory limit",
                 "modules": "Image Modules/Packages",
-                "pssViolation": "Violates Selected K8s Pod Security Standards Policy"
+                "violatePssPolicy": "Violates Selected K8s Pod Security Standards Policy"
                 }
 
 SaBindRiskyRoleDisplay = {
@@ -402,6 +402,16 @@ def _list_admission_psp_collection(data, criteria):
     columns = ("name", "op", "value")
     output.list(columns, criteria)
 
+def _list_admission_pss_collections(data, pss_collections):
+    click.echo(" ")
+    click.echo("Controls checked for PSA/PSS best practice violation:")
+    controls = []
+    for policy in pss_collections:
+        row = {"policy":policy, "controls":'\n'.join(pss_collections[policy])}
+        controls.append(row)
+    columns = ("policy", "controls")
+    output.list(columns, controls)
+
 def _list_predefined_risky_roles(data, criteria):
     click.echo(" ")
     click.echo("Content for predefined high risk roles:")
@@ -424,7 +434,8 @@ def _list_custompath_options(data, criteria):
         for o in cr["ops"]:
             ops.append(o)
         cr["ops"] = "{}".format(", ".join(ops))
-    columns = ("valuetype", "ops", "values")
+        cr["value type"] = cr["valuetype"]
+    columns = ("value type", "ops", "values")
     output.list(columns, criteria)
 
 @show_admission_rule.command("options")
@@ -440,6 +451,8 @@ def show_admission_rule_options(data):
             _list_admission_cat_options(data, AdmCtrlAllowRulesType, rest_admission_options["exception_options"])
         if "psp_collection" in rest_admission_options:
             _list_admission_psp_collection(data, rest_admission_options["psp_collection"])
+        if "pss_collections" in rest_admission_options:
+            _list_admission_pss_collections(data, rest_admission_options["pss_collections"])
         if "predefined_risky_roles" in rest_admission_options:
             _list_predefined_risky_roles(data, rest_admission_options["predefined_risky_roles"])
     else:
@@ -553,7 +566,7 @@ def _parse_adm_criteria(criteria):
               help="It's a local or federal rule")
 # @click.option("--category", default="Kubernetes", help="rule category. default: Kubernetes")
 @click.option("--criteria", multiple=True,
-              help="Format is name:op:value{/subName:op:value}. name can be image, namespace, user, labels, mountVolumes, cveNames, cveHighCount, cveHighWithFixCount, cveMediumCount, cveScoreCount, imageScanned, imageSigned, runAsRoot, allowPrivEscalation, pspCompliance, userGroups, imageCompliance, envVarSecrets, imageNoOS, sharePidWithHost, shareIpcWithHost, shareNetWithHost, resourceLimit. subName can be publishDays, count, cpuRequest, cpuLimit, memoryRequest, memoryLimit, modules, pssViolation. Format for criteira named customPath is name:op:path:valuetype:value. Format for criteria named saBindRiskyRole is name:op:value. See command: show admission rule options")
+              help="Format is name:op:value{/subName:op:value}. name can be allowPrivEscalation, count, cpuLimit, cpuRequest, cveHighCount, cveHighWithFixCount, cveMediumCount, cveNames, cveScoreCount, envVarSecrets, image, imageCompliance, imageNoOS, imageScanned, imageSigned, labels, memoryLimit, memoryRequest, modules, mountVolumes, namespace, pspCompliance, resourceLimit. subName can be publishDays, runAsRoot, shareIpcWithHost, shareNetWithHost, sharePidWithHost, user, userGroups, violatePssPolicy. Format for criteira named customPath is name:op:path:valuetype:value. Format for criteria named saBindRiskyRole is name:op:value. See command: show admission rule options")
 @click.option("--disable/--enable", default=False, help="Disable/enable the admission control rule [default: --enable]")
 @click.option("--comment", default="", help="Rule comment")
 @click.pass_obj
@@ -644,7 +657,7 @@ def set_admission_state(data, disable, mode, client_mode):
 @click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=True, help="Obsolete")
 # @click.option("--category", default="Kubernetes", show_default=True, help="Rule category")
 @click.option("--criteria", multiple=True,
-              help="Format is name:op:value{/subName:op:value}. name can be image, namespace, user, labels, mountVolumes, cveNames, cveHighCount, cveHighWithFixCount, cveMediumCount, cveScoreCount, imageScanned, imageSigned, runAsRoot, allowPrivEscalation, pspCompliance, userGroups, imageCompliance, envVarSecrets, imageNoOS, sharePidWithHost, shareIpcWithHost, shareNetWithHost, resourceLimit. subName can be publishDays, count, cpuRequest, cpuLimit, memoryRequest, memoryLimit, modules, pssViolation. Format for criteira named customPath is name:op:path:valuetype:value. Format for criteria named saBindRiskyRole is name:op:value. See command: show admission rule options")
+              help="Format is name:op:value{/subName:op:value}. name can be allowPrivEscalation, count, cpuLimit, cpuRequest, cveHighCount, cveHighWithFixCount, cveMediumCount, cveNames, cveScoreCount, envVarSecrets, image, imageCompliance, imageNoOS, imageScanned, imageSigned, labels, memoryLimit, memoryRequest, modules, mountVolumes, namespace, pspCompliance, resourceLimit. subName can be publishDays, runAsRoot, shareIpcWithHost, shareNetWithHost, sharePidWithHost, user, userGroups, violatePssPolicy. Format for criteira named customPath is name:op:path:valuetype:value. Format for criteria named saBindRiskyRole is name:op:value. See command: show admission rule options")
 @click.option("--enable", "state", flag_value='enable', help="Enable the admission control rule")
 @click.option("--disable", "state", flag_value='disable', help="Enable the admission control rule")
 @click.option("--comment", help="Rule comment")

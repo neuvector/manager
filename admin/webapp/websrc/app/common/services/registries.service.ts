@@ -41,6 +41,19 @@ export class RegistriesService {
     });
   }
 
+  deleteTestSettings(name: string, transactionId?: string) {
+    let headers: HttpHeaders | undefined;
+    if (transactionId) {
+      headers = new HttpHeaders({
+        'X-Transaction-Id': transactionId,
+      });
+    }
+    return GlobalVariable.http.delete(PathConstant.REGISTRY_TEST, {
+      headers,
+      params: { name },
+    });
+  }
+
   deleteRegistry(name: string): Observable<unknown> {
     return GlobalVariable.http.delete<unknown>(PathConstant.REGISTRY_SCAN_URL, {
       params: {

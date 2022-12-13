@@ -8,10 +8,11 @@ import { UtilsService } from '@common/utils/app.utils';
 import { MapConstant } from '@common/constants/map.constant';
 import { SettingsService } from '@services/settings.service';
 import { Router } from '@angular/router';
-import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
+import { LOCAL_STORAGE, SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { NotificationService } from '@services/notification.service';
 import { GlobalVariable } from "@common/variables/global.variable";
+import { SessionService } from "@services/session.service";
 
 export interface EditClusterDialog {
   isEdit: boolean;
@@ -35,11 +36,13 @@ export class PromotionModalComponent implements OnInit {
   public fed_sync_repo_toggle: boolean = false;
   public isMaster: boolean = false;
   public readOnly: boolean = false;
+  public isProcessing: boolean = false;
 
   constructor(
     private clustersService: MultiClusterService,
     private settingsService: SettingsService,
     private notificationService: NotificationService,
+    private sessionService: SessionService,
     private translate: TranslateService,
     private utils: UtilsService,
     private http: HttpClient,
@@ -47,7 +50,8 @@ export class PromotionModalComponent implements OnInit {
     private location: Location,
     public dialogRef: MatDialogRef<PromotionModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: EditClusterDialog,
-    @Inject(SESSION_STORAGE) private sessionStorage: StorageService // @Inject(MAT_DIALOG_DATA) public
+    @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
+    @Inject(LOCAL_STORAGE) private localStorage: StorageService
   ) {
     this.location = location;
   }
@@ -118,17 +122,23 @@ export class PromotionModalComponent implements OnInit {
         );
       }
     }else{
+      this.isProcessing = true;
       this.clustersService.promoteCluster(
         this.cluster, this.useProxy,
         this.fed_sync_repo_toggle).subscribe(
         response => {
           this.notificationService.open(this.translate.instant('multiCluster.promotion.success'));
           setTimeout(() => {
+            this.localStorage.clear();
+            this.sessionStorage.clear();
+            this.sessionService.clearSession();
             this.router.navigate(['login']);
-          }, 5000);
+          }, 1000);
+          this.isProcessing = false;
           this.dialogRef.close();
         },
         err => {
+          this.isProcessing = false;
           this.notificationService.openError( err,
             this.translate.instant('multiCluster.promotion.failure'));
         }

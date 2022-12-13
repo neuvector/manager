@@ -50,7 +50,7 @@ export class LdapFormComponent implements OnInit, OnChanges {
     base_dn: new FormControl(null, Validators.required),
     username_attr: new FormControl(),
     group_member_attr: new FormControl(),
-    default_role: new FormControl(),
+    default_role: new FormControl(''),
     enable: new FormControl(false),
   });
 

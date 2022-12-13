@@ -189,7 +189,8 @@
     "CLUSTER.STATUS.KICKED": "Kicked",
     "HIDE_ACCEPTED_VULS": "Hide accepted vulnerabilities",
     "SHOW_ACCEPTED_VULS": "Show accepted vulnerabilities",
-    "FILTER": "Filter"
+    "FILTER": "Filter",
+    "MATCH": "Match"
   },
   "logout": {
     "SIGN_OUT": "Signed out already",
@@ -1088,6 +1089,9 @@
     "UNPROTECTED_NODE": "UnProtected Node",
     "PROTECTED_CONTAINER": "Protected container",
     "PUBLISHED": "Published",
+    "PUBLISHED_TYPE": "Published Type",
+    "WITH_FIX": "With Fix",
+    "WITHOUT_FIX": "Without Fix",
     "INVALID_DATE": "Please input valid date.",
     "INVALID_DATE_RANGE": "Please input valid date range.",
     "CONDITION_HINT": "Sample: on Service use redis-pod.demo,nv.nvlab:node to matchredis-pod.demo or nv.nvlab:node service, same for the other criteria.",
@@ -1180,6 +1184,7 @@
     "COUNT_POSTFIX": "registries found",
     "ADD_REPO": "Add registry",
     "ADD_FILTER": "Add Filter",
+    "EDIT_FILTER": "Edit Filter",
     "EDIT_REPO": "Edit registry",
     "VIEW_REPO": "View registry",
     "TEST_REPO": "Test Setting",
@@ -1331,7 +1336,7 @@
       "PENDING": "Pending ",
       "CHANGES": " change(s)",
       "REGULATIONS": "Regulations",
-      "DEPLOY_OK": "Templated saved.",
+      "DEPLOY_OK": "Template saved.",
       "DEPLOY_FAILED": "Failed to save template: ",
       "DISABLE_CHECK": "Disable check",
       "APPLY_TEMPLATES": "Apply Templates",
@@ -1629,7 +1634,7 @@
   "profile": {
     "TITLE": "Profile",
     "DESCRIPTION": "Please update your profile",
-    "EDIT": "EDIT PROFILE",
+    "EDIT": "Edit Profile",
     "USER_NAME": "User Name",
     "EMAIL": "eMail",
     "ROLE": "Global Role",
@@ -2641,8 +2646,7 @@
     "USE_HTTP_PROXY":"Use http proxy configured in Settings > Configuration page",
     "USE_HTTPS_PROXY": "Use https proxy configured in Settings > Configuration page",
     "NO_PROXY": "Does not use any proxy",
-    "fed_sync_registry": "Sync the fed registry scan data to managed clusters",
-    "fed_sync_repository": "Sync the repository scan data to managed clusters",
+    "fed_sync_repository": "Sync CI/CD image scan results to managed clusters",
     "tips": {
       "policy": "Manage Federated Policy",
       "demote": "Demote",
@@ -2725,7 +2729,7 @@
       "leave": "Are you sure you want to leave from the cluster ?"
     },
     "validation": {
-      "token": "Invalid token format."
+      "token": "Invalid token format"
     }
   },
   "license": {
@@ -2776,7 +2780,7 @@
     "RENEW": "RENEW LICENSE",
     "LOAD_ERR": "Failed to load license",
     "message": {
-      "GET_LICENSE_ERR": "Error happened when getting license information",
+      "GET_EULA_ERR": "Error happened when getting EULA information",
       "GENERATE_CODE_ERR": "Error happened when generating code",
       "ACCEPT_EULA_ERR": "It is required to read and agree to the End User License Agreement before login"
     }

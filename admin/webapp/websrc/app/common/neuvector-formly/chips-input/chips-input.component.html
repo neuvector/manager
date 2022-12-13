@@ -4,7 +4,10 @@
     #chipList
     [formControl]="formControl"
     aria-label="Filter selection">
-    <mat-chip (removed)="remove(chip)" *ngFor="let chip of formControl.value">
+    <mat-chip
+      (click)="edit(chip)"
+      (removed)="remove(chip)"
+      *ngFor="let chip of formControl.value">
       {{ chip }}
       <button matChipRemove>
         <mat-icon>cancel</mat-icon>

@@ -41,6 +41,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { NgxSliderComponent } from './ngx-slider/ngx-slider.component';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { InputDialogModule } from '@components/ui/input-dialog/input-dialog.module';
 
 export enum FormlyValidators {
   REQUIRED = 'required',
@@ -106,6 +107,7 @@ export enum FormlyComponents {
     MatTooltipModule,
     ClipboardModule,
     NgxSliderModule,
+    InputDialogModule,
     FormlyModule.forRoot({
       wrappers: [
         {

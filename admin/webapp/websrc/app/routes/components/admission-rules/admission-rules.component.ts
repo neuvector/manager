@@ -375,7 +375,6 @@ export class AdmissionRulesComponent implements OnInit {
         data: {
           message: message,
         },
-        disableClose: true,
       });
       dialogRef.componentInstance.confirm
         .pipe(

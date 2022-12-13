@@ -14,6 +14,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { FilterSeverity, FilterLocation, FilterCategory, Other } from './advanced-filter-modal.service';
 import { autocompleteValidator } from '@common/validators';
+import {UtilsService} from "@common/utils/app.utils";
 
 @Component({
   selector: 'app-advanced-filter-modal',
@@ -57,6 +58,7 @@ export class AdvancedFilterModalComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AdvancedFilterModalComponent>,
+    private utils: UtilsService,
     @Inject(MAT_DIALOG_DATA) public data
   ) {
     this.filteredDomains = this.namespaceCtrl.valueChanges.pipe(
@@ -92,6 +94,10 @@ export class AdvancedFilterModalComponent implements OnInit {
       other => new FormControl(otherList.includes(other))
     );
     return new FormArray(arr);
+  }
+
+  getDisplayName(name: string){
+    return this.utils.getI18Name(name);
   }
 
 

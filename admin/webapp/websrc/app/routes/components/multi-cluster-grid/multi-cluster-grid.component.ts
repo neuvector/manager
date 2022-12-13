@@ -24,6 +24,7 @@ import { UtilsService } from '@common/utils/app.utils';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { MultiClusterGridActionCellComponent } from '@components/multi-cluster-grid/multi-cluster-grid-action-cell/multi-cluster-grid-action-cell.component';
 import { finalize } from 'rxjs/operators';
+import {isAuthorized} from "@common/utils/common.utils";
 
 @Component({
   selector: 'app-multi-cluster-grid',
@@ -255,9 +256,11 @@ export class MultiClusterGridComponent implements OnInit {
   }
   updateSummaryForRows() {
     this.clusterData.clusters!.forEach((cluster, index) => {
-      const rowNode = this.gridOptions.api!.getDisplayedRowAtIndex(index);
-      if (rowNode) {
-        this.updateSummaryForRowNode(rowNode, cluster, index, false);
+      if(this.gridOptions && this.gridOptions.api){
+        const rowNode = this.gridOptions.api!.getDisplayedRowAtIndex(index);
+        if (rowNode) {
+          this.updateSummaryForRowNode(rowNode, cluster, index, false);
+        }
       }
     });
   }
@@ -450,7 +453,10 @@ export class MultiClusterGridComponent implements OnInit {
       );
     }
 
-    this.gridOptions.api!.redrawRows({ rowNodes: [rowNode] });
+    if(this.gridOptions && this.gridOptions.api){
+      this.gridOptions.api!.redrawRows({ rowNodes: [rowNode] });
+    }
+
   }
 
   updateClusterSummary4Error(rowNode: RowNode) {

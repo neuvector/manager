@@ -189,7 +189,8 @@
     "CLUSTER.STATUS.KICKED": "已被移除",
     "HIDE_ACCEPTED_VULS": "隐藏接受的漏洞",
     "SHOW_ACCEPTED_VULS": "显示接受的漏洞",
-    "FILTER": "过滤器"
+    "FILTER": "过滤器",
+    "MATCH": "匹配"
   },
   "logout": {
     "SIGN_OUT": "已经登出了",
@@ -1088,6 +1089,9 @@
     "UNPROTECTED_NODE": "未保护的主机",
     "PROTECTED_CONTAINER": "被保护的容器",
     "PUBLISHED": "发布时间",
+    "PUBLISHED_TYPE": "发布类型",
+    "WITH_FIX": "修复",
+    "WITHOUT_FIX": "未修复",
     "INVALID_DATE": "请输入有效的日期",
     "INVALID_DATE_RANGE": "请输入有效的日期范围",
     "CONDITION_HINT": "样本: 对于Namespace用redis-pod.demo,nv.nvlab:node去匹配matchredis-pod.demo或nv.nvlab:node服务, 其余同理",
@@ -1180,6 +1184,7 @@
     "COUNT_POSTFIX": " 个镜像库",
     "ADD_REPO": "创建镜像库",
     "ADD_FILTER": "添加过滤器",
+    "EDIT_FILTER": "编辑过滤器",
     "EDIT_REPO": "编辑镜像库",
     "VIEW_REPO": "浏览镜像库",
     "TEST_REPO": "测试设置",
@@ -2222,7 +2227,7 @@
     "RULE_DEPLOY_CONFIRM": "请确认部署修改的规则.",
     "QUARANTINE_CONFIRM": "请确认隔离该容器.",
     "UNQUARANTINE_CONFIRM": "请确认解除该容器隔离.",
-    "DEFAULT_RULE": "Deny network connections that don't match any of above allowed rules for any applications/ports.",
+    "DEFAULT_RULE": "拒绝与任何应用程序/端口的上述任何允许规则不匹配的网络连接。",
     "COUNT_POSTFIX": "个规则",
     "ALL_PORTS": "全部端口",
     "PROMOTE": "升级",
@@ -2641,6 +2646,7 @@
     "USE_HTTP_PROXY":"使用配置在\"设置>配置\"页面的http代理",
     "USE_HTTPS_PROXY": "使用配置在\"设置>配置\"页面的https代理",
     "NO_PROXY": "不使用任何代理",
+    "fed_sync_repository": "将CI/CD镜像扫描结果同步到托管集群",
     "tips": {
       "policy": "管理集群策略",
       "demote": "降级",

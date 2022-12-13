@@ -16,16 +16,16 @@ export const FilterLocation = {
 };
 
 export const FilterCategory = {
-  network: 'Network',
-  package: 'Package',
-  file: 'File',
-  tunnel: 'Tunnel',
-  process: 'Process',
-  priviledge: 'Priviledge',
+  network: 'securityEvent.label.NETWORK',
+  package: 'securityEvent.label.PACKAGE',
+  file: 'securityEvent.label.FILE',
+  tunnel: 'securityEvent.label.TUNNEL',
+  process: 'securityEvent.label.PROCESS',
+  priviledge: 'securityEvent.label.PRIVILEGE',
 };
 
 export const Other = {
-  other: 'Other'
+  other: 'securityEvent.label.OTHER'
 };
 
 @Injectable()

@@ -43,11 +43,13 @@
         </mat-card>
       </ng-container>
       <ng-container *appContainerTwo="let height">
-        <mat-card [ngStyle]="{ height: height + 'px' }" class="pt-0">
+        <mat-card
+          *ngIf="selectedPlatform"
+          [ngStyle]="{ height: height + 'px' }"
+          class="pt-0">
           <app-platform-details
             [gridHeight]="height - 80"
-            [platform]="selectedPlatform"
-            *ngIf="selectedPlatform">
+            [platform]="selectedPlatform">
           </app-platform-details>
         </mat-card>
       </ng-container>

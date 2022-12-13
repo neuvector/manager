@@ -57,6 +57,7 @@ export class AddEditResponseRuleModalComponent implements OnInit {
   appsInput: ElementRef<HTMLInputElement>;
   @ViewChild('autoCriteria', { static: false })
   matAutocomplete: MatAutocomplete;
+  shouldHideWebhookList: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddEditResponseRuleModalComponent>,
@@ -128,7 +129,16 @@ export class AddEditResponseRuleModalComponent implements OnInit {
     });
     this.isWebhookSelected =
       this.selectedResponseRule.actions.includes('webhook');
-    console.log(this.responseRule, this.selectedResponseRule);
+    this.shouldHideWebhookList =
+      (
+        this.type === GlobalConstant.MODAL_OP.EDIT &&
+        (
+          this.selectedResponseRule.cfg_type === GlobalConstant.CFG_TYPE.FED ||
+          this.selectedResponseRule.cfg_type === GlobalConstant.CFG_TYPE.GROUND
+        ) &&
+        this.data.isReadonly
+      ) &&
+      this.data.source !== GlobalConstant.NAV_SOURCE.FED_POLICY;
   };
 
   prepareActions = event => {

@@ -109,11 +109,7 @@ export class ImportFileComponent implements OnInit, OnChanges {
         } catch (e) {
           resp = response;
         }
-        self.status = self.utils.getAlertifyMsg(
-          resp.message ? resp.message : resp,
-          self.msg.error,
-          false
-        );
+        self.status = 'error';
         self.percentage = 0;
         self.errMsg = self.utils.getAlertifyMsg(resp.message, self.translate.instant('setting.IMPORT_FAILED'), false);
         if (!MapConstant.USER_TIMEOUT.includes(status)) {
@@ -232,6 +228,7 @@ export class ImportFileComponent implements OnInit, OnChanges {
           },
           error: ({ status, error }: {status: number, error: ErrorResponse }) => {
             console.warn(error);
+            this.status = 'error';
             if (!MapConstant.USER_TIMEOUT.includes(status)) {
               if (this.msg.error) this.notificationService.openError(error, this.msg.error);
             }

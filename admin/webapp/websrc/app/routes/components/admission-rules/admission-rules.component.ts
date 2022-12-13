@@ -50,7 +50,7 @@ export class AdmissionRulesComponent implements OnInit {
   isK8s: boolean = false;
   stateWarning: string = '';
   hasSelectedDefaultRule: boolean = false;
-  isMaster: boolean = false;
+  isRemote: boolean = false;
   frameworkComponents;
   context;
   private default_action: string = 'deny';
@@ -111,7 +111,7 @@ export class AdmissionRulesComponent implements OnInit {
     this.hasSelectedDefaultRule = this.selectedAdmissionRules.some(
       rule => rule.critical || rule.cfg_type === GlobalConstant.CFG_TYPE.FED
     );
-    this.isMaster = GlobalVariable.isMaster;
+    this.isRemote = GlobalVariable.isRemote;
   };
 
   filterCountChanged(results: number) {
@@ -217,6 +217,8 @@ export class AdmissionRulesComponent implements OnInit {
   };
 
   refresh = () => {
+    this.selectedAdmissionRules = [];
+    this.isRemote = false;
     this.refreshing$.next(true);
     this.getAdmissionStateAndRules();
   };

@@ -212,6 +212,7 @@
     "AUTH_ERROR": "身分验证错误!",
     "SESSION_TIMEOUT": "会话超时，请重新登录",
     "CHANGE_DEFAULT_PASSWORD": "请修改缺省密码!",
+    "CHANGE_DEFAULT_PASSWORD_RANCHER": "NeuVector的默认Admin的密码应该被修改!",
     "CHANGE_EXPIRING_PASSWORD": "您需要更新密码,因为密码将于{{expiring_Days}}天内过期!",
     "CHANGE_EXPIRING_PASSWORD_NOW": "您需要立即更新密码, 因为密码今天即将过期!",
     "UNSUPPORTED_ROLE": "该用户仅用于CI集成。",

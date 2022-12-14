@@ -84,15 +84,15 @@
       <button [matMenuTriggerFor]="menu" class="col-2 d-flex" mat-button>{{viewText}}&nbsp;<i class="eos-icons">arrow_drop_down</i>
       </button>
       <mat-menu #menu="matMenu">
-        <button (click)="changeView(0)" mat-menu-item><span>Service</span></button>
-        <button (click)="changeView(1)" mat-menu-item><span>Image</span></button>
-        <button (click)="changeView(2)" mat-menu-item><span>Node</span></button>
-        <button (click)="changeView(3)" mat-menu-item><span>Container</span></button>
+        <button (click)="changeView(0)" mat-menu-item><span>{{'admissionControl.names.SERVICE' | translate}}</span></button>
+        <button (click)="changeView(1)" mat-menu-item><span>{{'admissionControl.names.IMAGE' | translate}}</span></button>
+        <button (click)="changeView(2)" mat-menu-item><span>{{'admissionControl.names.NODE' | translate}}</span></button>
+        <button (click)="changeView(3)" mat-menu-item><span>{{'admissionControl.names.CONTAINER' | translate}}</span></button>
       </mat-menu>
       <ng-container [ngSwitch]="view">
         <div class="row col align-items-center">
           <ng-container *ngSwitchCase="FilterView.SERVICE">
-            <label class="sr-only" for="serviceName">Service</label>
+            <label class="sr-only" for="serviceName">{{'admissionControl.names.SERVICE' | translate}}</label>
             <label class="sr-only" for="serviceMatch">Match</label>
             <mat-form-field appearance="standard" class="col-2 pr-0 match" formGroupName="matchTypes">
               <mat-select formControlName="Service" id="serviceMatch">
@@ -106,7 +106,7 @@
             </mat-form-field>
           </ng-container>
           <ng-container *ngSwitchCase="FilterView.IMAGE">
-            <label class="sr-only" for="imageName">Image</label>
+            <label class="sr-only" for="imageName">{{'admissionControl.names.IMAGE' | translate}}</label>
             <label class="sr-only" for="imageMatch">Match</label>
             <mat-form-field appearance="standard" class="col-2 pr-0 match" formGroupName="matchTypes">
               <mat-select formControlName="Image" id="imageMatch">
@@ -120,7 +120,7 @@
             </mat-form-field>
           </ng-container>
           <ng-container *ngSwitchCase="FilterView.NODE">
-            <label class="sr-only" for="nodeName">Node</label>
+            <label class="sr-only" for="nodeName">{{'admissionControl.names.NODE' | translate}}</label>
             <label class="sr-only" for="nodeMatch">Match</label>
             <mat-form-field appearance="standard" class="col-2 pr-0 match" formGroupName="matchTypes">
               <mat-select formControlName="Node" id="nodeMatch">
@@ -134,7 +134,7 @@
             </mat-form-field>
           </ng-container>
           <ng-container *ngSwitchCase="FilterView.CONTAINER">
-            <label class="sr-only" for="containerName">Container</label>
+            <label class="sr-only" for="containerName">{{'admissionControl.names.CONTAINER' | translate}}</label>
             <label class="sr-only" for="containerMatch">Match</label>
             <mat-form-field appearance="standard" class="col-2 pr-0 match" formGroupName="matchTypes">
               <mat-select formControlName="Container" id="containerMatch">
@@ -176,6 +176,6 @@
 </div>
 <p>{{'scan.CONDITION_HINT' | translate}}</p>
 <div class="float-right" mat-dialog-actions>
-  <button (click)="reset()" mat-button>Reset</button>
-  <button [mat-dialog-close]="form.value" cdkFocusInitial color="primary" mat-raised-button>Apply</button>
+  <button (click)="reset()" mat-button>{{ 'enum.RESET' | translate}}</button>
+  <button [mat-dialog-close]="form.value" cdkFocusInitial color="primary" mat-raised-button>{{ 'enum.APPLY' | translate}}</button>
 </div>

@@ -105,6 +105,7 @@
     "OPEN": "Open",
     "BLOCK": "Block",
     "RESET": "Reset",
+    "APPLY": "Apply",
     "EVENT": "Event",
     "SECURITY_EVENT": "Security Event",
     "VIOLATION": "Violation",

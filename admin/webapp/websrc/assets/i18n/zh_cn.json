@@ -105,6 +105,7 @@
     "OPEN": "开放",
     "BLOCK": "阻止",
     "RESET": "重置",
+    "APPLY": "应用",
     "EVENT": "事件",
     "SECURITY_EVENT": "安全事件",
     "VIOLATION": "违规",

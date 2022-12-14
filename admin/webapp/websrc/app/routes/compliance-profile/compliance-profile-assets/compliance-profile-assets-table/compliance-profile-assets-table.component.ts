@@ -3,7 +3,9 @@ import {
   ChangeDetectorRef,
   Component,
   Input,
+  OnChanges,
   OnInit,
+  SimpleChanges,
 } from '@angular/core';
 import { Domain } from '@common/types';
 import {
@@ -27,7 +29,7 @@ import { AuthUtilsService } from '@common/utils/auth.utils';
   styleUrls: ['./compliance-profile-assets-table.component.scss'],
 })
 export class ComplianceProfileAssetsTableComponent
-  implements OnInit, AfterViewInit
+  implements OnInit, OnChanges, AfterViewInit
 {
   @Input() rowData!: Domain[];
   @Input() imageTags!: string[];
@@ -100,7 +102,8 @@ export class ComplianceProfileAssetsTableComponent
   ) {}
 
   ngOnInit(): void {
-    this.isWriteComplianceProfileAuthorized = this.authUtilsService.getDisplayFlag('write_compliance_profile');
+    this.isWriteComplianceProfileAuthorized =
+      this.authUtilsService.getDisplayFlag('write_compliance_profile');
     this.gridOptions = {
       rowData: this.rowData,
       columnDefs: this.columnDefs,
@@ -111,8 +114,14 @@ export class ComplianceProfileAssetsTableComponent
         templatesCellRenderer: TemplatesCellComponent,
         actionCellRenderer: ActionCellComponent,
       },
-      overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS')
+      overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS'),
     };
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.gridApi && changes.rowData) {
+      this.gridApi.setRowData(changes.rowData.currentValue);
+    }
   }
 
   editTemplateFromGrid(event): void {

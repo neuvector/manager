@@ -236,7 +236,11 @@
                 {{ 'securityEvent.NEW_RULE_WARNING' | translate }}
               </div>
               <div class="d-flex justify-content-end align-items-center">
-                <button mat-stroked-button class="mr-2" (click)="dialogRef.close()">
+                <button
+                  mat-stroked-button
+                  class="mr-2"
+                  aria-label="Cancel"
+                  (click)="dialogRef.close()">
                   {{ 'group.editGroup.CANCEL' | translate }}
                 </button>
                 <app-loading-button
@@ -244,8 +248,7 @@
                   [color]="'primary'"
                   [loading]="submittingUpdate"
                   [text]="'policy.portlet.SUBMIT' | translate"
-                  (click)="updateNetworkRule()"
-                  class="">
+                  (click)="updateNetworkRule()">
                 </app-loading-button>
               </div>
             </div>

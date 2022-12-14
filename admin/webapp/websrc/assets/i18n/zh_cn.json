@@ -2722,6 +2722,7 @@
       "deploy_ok": "同步通知已发送到集群{{ name }}",
       "deploy_failure": "同步通知无法发送",
       "api_failure": "集群服务不可用",
+      "get_name_failure": "访问集群名称失败",
       "SCORE_UNAVAILIBlE": "不可用"
     },
     "prompt": {
@@ -2878,8 +2879,8 @@
     "ENABLED_CPATH_NG": "控制器控制路径调试启用时发生错误!",
     "DISABLED_CPATH_NG": "控制器控制路径调试停用时发生错误!",
     "ENFORCERS": "代理",
-    "ENFORCERS_HINT": "如果需要可以选择代理以加入它们的支持包. 最多可以选择{{maxSlectedEnforcer}}个",
-    "MAX_SELECTED_ENFORCER_HINT": "请为支持包选择不超过{{maxSlectedEnforcer}}个代理.",
+    "ENFORCERS_HINT": "如果需要可以选择代理以加入它们的支持信息. 最多可以选择{{maxSlectedEnforcer}}个",
+    "MAX_SELECTED_ENFORCER_HINT": "请为支持信息选择不超过{{maxSlectedEnforcer}}个代理.",
     "AS_STANDALONE": "作为独立集群导入配置",
     "RANCHER_EP": "Rancher端点",
     "autoscale": {

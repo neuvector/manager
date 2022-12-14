@@ -3,6 +3,7 @@ import { combineLatest, Subject, throwError } from 'rxjs';
 import { catchError, map, repeatWhen } from 'rxjs/operators';
 import { SettingsService } from '@services/settings.service';
 import { MultiClusterService } from '@services/multi-cluster.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-saml',
@@ -33,14 +34,16 @@ export class SamlComponent implements OnInit, OnDestroy {
 
   constructor(
     private multiClusterService: MultiClusterService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this._switchClusterSubscription =
-      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
-        this.refresh();
-      });
+    this._switchClusterSubscription = this.multiClusterService.onClusterSwitchedEvent$.subscribe(
+      data => {
+        this.router.navigate(['settings']);
+      }
+    );
   }
 
   ngOnDestroy(): void {

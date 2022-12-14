@@ -238,6 +238,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
           if (clusterInSession) {
             this.isOnRemoteCluster = clusterInSession.isRemote;
             GlobalVariable.isRemote = clusterInSession.isRemote;
+          }else{
+            GlobalVariable.isRemote = false;
           }
 
           if (GlobalVariable.isMaster) {

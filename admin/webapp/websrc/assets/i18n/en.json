@@ -1602,7 +1602,7 @@
       "NODE": "Node",
       "CONTAINER": "Container",
       "CONTROLLER_ID": "Controller ID",
-      "ENFORCER_ID": "Enforcer ID",
+      "ENFORCER_ID": "Enforcer",
       "LOCATION": "Location",
       "USER_NAME": "User Name",
       "USER_ADDR": "User Address",

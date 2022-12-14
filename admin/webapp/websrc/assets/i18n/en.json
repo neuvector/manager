@@ -2879,8 +2879,8 @@
     "ENABLED_CPATH_NG": "Error happens when enabling controller control path debug!",
     "DISABLED_CPATH_NG": "Error happens when disabling controller control path debug!",
     "ENFORCERS": "Enforcers",
-    "ENFORCERS_HINT": "Select enforcers to include their support bundle if necessary. Up to {{maxSlectedEnforcer}} enforcers can be selected.",
-    "MAX_SELECTED_ENFORCER_HINT": "Please select no more than {{maxSlectedEnforcer}} enforcers for support bundle.",
+    "ENFORCERS_HINT": "Select enforcers to include their support information if necessary. Up to {{maxSlectedEnforcer}} enforcers can be selected.",
+    "MAX_SELECTED_ENFORCER_HINT": "Please select no more than {{maxSlectedEnforcer}} enforcers for support information.",
     "AS_STANDALONE": "Import configuration as standalone cluster",
     "RANCHER_EP": "Rancher Endpoint",
     "autoscale": {

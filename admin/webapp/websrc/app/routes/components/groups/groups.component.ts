@@ -418,6 +418,7 @@ export class GroupsComponent implements OnInit {
   };
 
   private highlightDisplayedGroup = () => {
+    if (!this.selectedGroups || this.selectedGroups.length === 0) return;
     let index = this.groups.findIndex(group => group.name === this.selectedGroups[0].name);
     let rowNode = this.gridOptions4Groups.api!.getDisplayedRowAtIndex(index);
     let groupGridEl = document.querySelector('#groups-grid .ag-center-cols-container');

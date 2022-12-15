@@ -18,6 +18,7 @@ export class CustomCheckComponent implements OnInit {
   @Input() source: string;
   @Input() groupName: string = '';
   @Input() resizableHeight: number;
+  @Input() cfgType: string;
   opType: string = GlobalConstant.MODAL_OP.ADD;
   submittingUpdate: boolean = false;
   modalOp = GlobalConstant.MODAL_OP;
@@ -29,6 +30,7 @@ export class CustomCheckComponent implements OnInit {
   context = { componentParent: this };
   filteredCount: number = 0;
   isRefreshingForm: boolean = false;
+  CFG_TYPE = GlobalConstant.CFG_TYPE;
 
   constructor(
     private groupsService: GroupsService,
@@ -40,7 +42,7 @@ export class CustomCheckComponent implements OnInit {
   ngOnInit(): void {
     this.isWriteScriptAuthorized = this.authUtilsService.getDisplayFlag("write_script");
     this.initializeVM();
-    this.gridOptions4CustomCheck = this.groupsService.prepareGrid4CustomCheck(this.isWriteScriptAuthorized);
+    this.gridOptions4CustomCheck = this.groupsService.prepareGrid4CustomCheck(this.isWriteScriptAuthorized, this.cfgType);
     this.gridOptions4CustomCheck.onSelectionChanged = () => {
       this.selectedScript = this.gridOptions4CustomCheck.api!.getSelectedRows()[0];
       this.opType = GlobalConstant.MODAL_OP.EDIT;

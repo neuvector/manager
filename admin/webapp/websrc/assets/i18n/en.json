@@ -190,6 +190,8 @@
     "CLUSTER.STATUS.KICKED": "Kicked",
     "HIDE_ACCEPTED_VULS": "Hide accepted vulnerabilities",
     "SHOW_ACCEPTED_VULS": "Show accepted vulnerabilities",
+    "HIDE_DETAILS": "Hide Details",
+    "SHOW_DETAILS": "Show Details",
     "FILTER": "Filter",
     "MATCH": "Match"
   },
@@ -1908,7 +1910,7 @@
     "HIDE_SYS_GROUPS": "Hide System Groups",
     "SHOW_SYS_GROUPS": "Show System Groups",
     "SELECT_ALL_ALERT": "The selection contains 'nodes' group. Please confirm if you want to switch this group to ",
-    "SWITCH_MODE_DISABLED": "Policy mode cannot be switched for one or more currently selected groups.",
+    "SWITCH_MODE_DISABLED": "Policy mode in following {{noModeGroupCount}} group(s) cannot be switched.",
     "SCORED_DISABLED": "Cannot turn on/off scorable attribute for one or more currently selected groups.",
     "MODE_NODES": " mode or unselect it.",
     "SWITCH_SCORABLE": "Scorable",

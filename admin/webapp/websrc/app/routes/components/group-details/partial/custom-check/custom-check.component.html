@@ -8,7 +8,7 @@
       <mat-label>{{'group.script.NAME' | translate}}</mat-label>
       <input
         matInput
-        [readonly]="!isWriteScriptAuthorized || opType === modalOp.EDIT"
+        [readonly]="cfgType === CFG_TYPE.GROUND || !isWriteScriptAuthorized || opType === modalOp.EDIT"
         (blur)="blurOnName()"
         formControlName="name"
       />
@@ -21,7 +21,7 @@
       <mat-label>{{'group.script.SCRIPT' | translate}}</mat-label>
       <textarea
         matInput
-        [readonly]="!isWriteScriptAuthorized"
+        [readonly]="cfgType === CFG_TYPE.GROUND || !isWriteScriptAuthorized"
         formControlName="script"
         [ngStyle]="{ height: (resizableHeight - 245) + 'px' }"
       >
@@ -29,7 +29,7 @@
     </mat-form-field>
     <div class="clearfix">
       <app-loading-button
-        *appDisplayControl="'write_script'"
+        *ngIf="cfgType !== CFG_TYPE.GROUND && isWriteScriptAuthorized"
         [appearance]="'mat-raised-button'"
         [color]="'primary'"
         [loading]="submittingUpdate"
@@ -51,7 +51,7 @@
     </div>
     <div
       role="button"
-      *appDisplayControl="'write_script'"
+      *ngIf="cfgType !== CFG_TYPE.GROUND && isWriteScriptAuthorized"
       style="position: absolute; z-index: 10; right: 14px; top: 75px;"
       (click)="switch2Add()">
       <em class="eos-icons">add</em>

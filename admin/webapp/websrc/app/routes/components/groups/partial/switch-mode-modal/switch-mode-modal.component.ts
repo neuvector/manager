@@ -22,6 +22,9 @@ export class SwitchModeModalComponent implements OnInit {
   mode: string;
   baselineProfile: string;
   zeroDriftHint: string;
+  noModeGroupList: Array<Group> = [];
+  isExpandingGroupList: boolean = false;
+  noModeGroupMsg: string = '';
 
   constructor(
     public dialogRef: MatDialogRef<SwitchModeModalComponent>,
@@ -36,6 +39,9 @@ export class SwitchModeModalComponent implements OnInit {
     let counts = this.getModeCounts();
     this.mode = this.getDefaultMode(counts.modeCount);
     this.baselineProfile = this.getDefaultBaseline(counts.baselineCount);
+    this.noModeGroupList = this.data.selectedGroups.filter(group => !group.cap_change_mode);
+    this.noModeGroupMsg = this.noModeGroupList.length > 0 ?
+        this.translate.instant("group.SWITCH_MODE_DISABLED", {noModeGroupCount: this.noModeGroupList.length}): '';
   }
 
   onCancel = () => {

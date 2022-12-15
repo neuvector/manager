@@ -357,7 +357,7 @@ export class GroupsService {
     ];
   };
 
-  prepareGrid4CustomCheck = isGranted => {
+  prepareGrid4CustomCheck = (isGranted, cfgType) => {
     const scriptColumnDefs = [
       {
         headerName: this.translate.instant('group.script.NAME'),
@@ -375,7 +375,7 @@ export class GroupsService {
         width: 45,
         minWidth: 45,
         maxWidth: 45,
-        hide: !isGranted,
+        hide: !isGranted || cfgType === GlobalConstant.CFG_TYPE.GROUND,
       },
     ];
     return this.utils.createGridOptions(scriptColumnDefs, this.$win);

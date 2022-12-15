@@ -22,6 +22,7 @@
       *ngIf="groupsService.activeTabIndex === 1 && ((kind==='container' || kind==='node') && cfgType !== CFG_TYPE.FED)"
       [source]="navSource"
       [groupName]="selectedGroupName"
+      [cfgType]="cfgType"
       [resizableHeight]="resizableHeight">
     </app-custom-check>
   </mat-tab>

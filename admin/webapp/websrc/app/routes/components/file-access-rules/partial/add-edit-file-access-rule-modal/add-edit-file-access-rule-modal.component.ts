@@ -58,7 +58,7 @@ export class AddEditFileAccessRuleModalComponent implements OnInit {
       ),
       recursive: new FormControl(false),
       behavior: new FormControl(
-        null,
+        this.actionEnum.MONITOR,
         [Validators.required]
       ),
       applications: new FormControl([]),

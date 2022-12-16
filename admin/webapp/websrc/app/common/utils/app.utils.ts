@@ -425,6 +425,7 @@ export class UtilsService {
 
   exportCVE(name: string, vuls: Vulnerability[]) {
     vuls = vuls.map(vulnerability => {
+      vulnerability.in_base_image = vulnerability.in_base_image || false;
       vulnerability.description = `${vulnerability.description.replace(
         /\"/g,
         "'"

@@ -3,7 +3,7 @@
   class="type-label mr-1"
   style="min-width: 0; padding-left: 3px; padding-right: 3px;"
   [ngClass]="{'fed-rule': ruleId >= 100000, 'learn-rule': ruleId >= 10000, 'customer-rule': ruleId < 10000}"
-  (mouseenter)="openNetworkRuleDetailModal(ruleId)"
+  (click)="openNetworkRuleDetailModal(ruleId)"
 >
   {{ ruleId }}
 </span>

@@ -115,7 +115,7 @@ export interface Vulnerability {
   description: string;
   feed_rating: string;
   fixed_version: string;
-  in_base_image: boolean;
+  in_base_image: boolean | undefined;
   last_modified_timestamp: number;
   link: string;
   name: string;

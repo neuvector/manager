@@ -2,9 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   ComplianceProfileData,
   ComplianceProfileTemplateData,
-  DomainGetResponse,
 } from '@common/types';
-import { ComplianceProfileService } from '@routes/compliance-profile/compliance-profile.service';
+import {
+  ComplianceProfileService,
+  DomainResponse,
+} from '@routes/compliance-profile/compliance-profile.service';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { Subscription } from 'rxjs';
 
@@ -18,7 +20,7 @@ export class ComplianceProfileComponent implements OnInit, OnDestroy {
   complianceProfileData!: {
     template: ComplianceProfileTemplateData;
     profile: ComplianceProfileData;
-    domains: DomainGetResponse;
+    domains: DomainResponse;
   };
   loaded = false;
 

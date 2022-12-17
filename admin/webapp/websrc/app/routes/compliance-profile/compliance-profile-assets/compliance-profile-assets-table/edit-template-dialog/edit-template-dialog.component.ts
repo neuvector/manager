@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ComplianceProfileService } from '@routes/compliance-profile/compliance-profile.service';
+import { iconMap } from '../compliance-profile-assets-table.component';
 
 @Component({
   selector: 'app-edit-template-dialog',
@@ -27,6 +28,13 @@ export class EditTemplateDialogComponent implements OnInit {
     }
     this.applied = this.data.tags || [];
     this.filterApplied();
+  }
+
+  getAssetIcon(name: string) {
+    if (name in iconMap) {
+      return iconMap[name];
+    }
+    return 'fa fa-building';
   }
 
   filterApplied() {

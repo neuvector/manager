@@ -40,6 +40,7 @@ export class QuickFilterComponent implements OnInit, OnChanges {
 
   onFilterChange(filterStr: string) {
     if (this.gridOptions && this.gridOptions.api) {
+      this.count = this.gridOptions.api.getDisplayedRowCount();
       this.gridOptions.api.setQuickFilter(filterStr);
       const childrenAfterFilter: RowNode[] =
         this.gridOptions.api.getModel()['rootNode'].childrenAfterFilter;

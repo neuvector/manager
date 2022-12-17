@@ -1,39 +1,42 @@
 <div>
-  <div class="clearfix">
-    <app-quick-filter
-      class="pull-left"
-      [gridOptions]="gridOptions4GroupWafSensors"
-      [filteredCount]="filteredCount"
-      [count]="groupWafSensors.length">
-    </app-quick-filter>
-    <mat-slide-toggle
-      class="padding-top-s pull-right margin-top-l"
-      id="group-waf-sensor-status-toggle"
-      [disabled]="!isWriteWafAuthorized || cfgType === CFG_TYPE.GROUND"
-      [(ngModel)]="enabled"
-      [ngModelOptions]="{standalone: true}"
-      (toggleChange)="toggleWAFConfigEnablement(enabled)"
-    >
-      <span
-        [ngClass]="{
-          'text-muted': !enabled,
-          'text-success': enabled
-        }"
-      >
-        {{
-          (enabled
-            ? "policy.status.ENABLED"
-            : "policy.status.DISABLED") | translate
-        }}
-      </span>
-    </mat-slide-toggle>
+  <div class="d-flex align-items-center justify-content-end">
     <div
       role="button"
-      class="pull-right margin-right-s margin-top-l hand"
+      class="hand mr-3 margin-top-s"
       *ngIf="cfgType !== CFG_TYPE.GROUND && isWriteWafAuthorized"
       (click)="openEditGroupSensorModal()">
       <em class="eos-icons">edit</em>
     </div>
+    <section class="status-section">
+      <label class="status-margin text-label">{{ 'setting.STATUS' | translate }}:</label>
+      <mat-slide-toggle
+        class="mr-2 margin-top-s"
+        id="group-waf-sensor-status-toggle"
+        [disabled]="!isWriteWafAuthorized || cfgType === CFG_TYPE.GROUND"
+        [(ngModel)]="enabled"
+        [ngModelOptions]="{standalone: true}"
+        (toggleChange)="toggleWAFConfigEnablement(enabled)"
+      >
+        <span
+          [ngClass]="{
+            'text-muted': !enabled,
+            'text-success': enabled
+          }"
+        >
+          {{
+            (enabled
+              ? "policy.status.ENABLED"
+              : "policy.status.DISABLED") | translate
+          }}
+        </span>
+      </mat-slide-toggle>
+    </section>
+    <app-quick-filter
+      class="pull-left"
+      [gridOptions]="gridOptions4GroupWafSensors"
+      [showCount]="false"
+    >
+    </app-quick-filter>
   </div>
   <div class="clearfix">
     <ag-grid-angular

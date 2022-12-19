@@ -35,26 +35,20 @@ export class GroupNetworkRulesComponent implements ICellRendererAngularComp {
   }
 
   openNetworkRuleDetailModal = (ruleId: number) => {
-    if (!this.ruleDetailModalService.isDialogOpen) {
-      this.ruleDetailModalService.isDialogOpen = true;
-      this.groupsService.getNetworkRuleById(ruleId)
-        .subscribe(
-          (response: any) => {
-            this.ruleDetailModalService.ruleDialog = this.dialog.open(RuleDetailModalComponent, {
-              width: '70vw',
-              hasBackdrop: false,
-              data: {
-                rule: response.rule,
-                ruleType: 'network'
-              }
-            });
-          },
-          error => {
-            this.notificationService.openError(error, this.translate.instant('group.GET_RULE_ERR'));
-            this.ruleDetailModalService.isDialogOpen = false;
-          }
-        );
-    }
+    this.groupsService.getNetworkRuleById(ruleId)
+      .subscribe(
+        (response: any) => {
+          this.ruleDetailModalService.ruleDialog = this.dialog.open(RuleDetailModalComponent, {
+            width: '70vw',
+            data: {
+              rule: response.rule,
+              ruleType: 'network'
+            }
+          });
+        },
+        error => {
+          this.notificationService.openError(error, this.translate.instant('group.GET_RULE_ERR'));
+        }
+      );
   };
-
 }

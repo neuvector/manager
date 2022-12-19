@@ -382,12 +382,14 @@ hr.fancy {
 }
 
 .disabled-action {
-  background-color: $neuvector-grey-200;
+  background-color: $neuvector-grey-400;
+  -webkit-print-color-adjust: exact;
 }
 
 .disabled-action-2 {
-  color: $neuvector-grey-400;
-  border: 1px solid $neuvector-grey-200;
+  color: $neuvector-grey-500 !important;
+  border: 1px solid $neuvector-grey-400;
+  -webkit-print-color-adjust: exact;
 }
 
 .resp-rule-action-label {
@@ -480,8 +482,8 @@ hr.fancy {
 }
 
 .disabled-rule {
-  border: 1px solid $neuvector-grey-200;
-  background-color: $neuvector-grey-50;
+  border: 1px solid $neuvector-grey-400;
+  background-color: $neuvector-grey-100;
   color: #becfd5;
 }
 
@@ -652,7 +654,7 @@ hr.solid {
 }
 
 .disabled-row {
-  color: $neuvector-grey-400 !important;
+  color: $neuvector-grey-500 !important;
 }
 
 .critical-row {

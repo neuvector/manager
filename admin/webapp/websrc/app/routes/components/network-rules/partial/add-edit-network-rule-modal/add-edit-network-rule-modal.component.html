@@ -115,44 +115,49 @@
             formControlName="ports"
             placeholder="{{ 'policy.message.PORT_SAMPLE' | translate }}" />
         </mat-form-field>
-        <div class="col-2 col-md-3 margin-top-l">
-          <label class="nv-modal-item-title margin-right-m">
-            {{ 'policy.editPolicy.DENY_ALLOW' | translate }}
-          </label>
-          <mat-slide-toggle
-            id="network-action-toggle"
-            [(ngModel)]="isAllow"
-            [ngModelOptions]="{ standalone: true }"
-            (change)="toggleType()">
-            <span
-              [ngClass]="{
-                'text-deny': !isAllow,
-                'text-success': isAllow
-              }">
-              {{
-                (isAllow ? 'policy.action.ALLOW' : 'policy.action.DENY')
-                  | translate
-              }}
-            </span>
-          </mat-slide-toggle>
+        <div class="col-2 col-md-3 mt-1">
+          <section class="status-section">
+            <label class="status-margin text-label">{{ 'policy.editPolicy.DENY_ALLOW' | translate }}</label>
+            <mat-slide-toggle
+              id="network-action-toggle"
+              [(ngModel)]="isAllow"
+              [ngModelOptions]="{ standalone: true }"
+              (change)="toggleType()">
+              <span
+                [ngClass]="{
+                  'text-deny': !isAllow,
+                  'text-success': isAllow
+                }">
+                {{
+                  (isAllow ? 'policy.action.ALLOW' : 'policy.action.DENY')
+                    | translate
+                }}
+              </span>
+            </mat-slide-toggle>
+          </section>
         </div>
         <div
-          class="col-2 col-md-3 margin-top-l"
+          class="col-2 col-md-3 mt-1"
           *ngIf="data.opType !== modalOp.ADD">
-          <label class="nv-modal-item-title margin-right-m">
-            {{ 'policy.editPolicy.STATUS' | translate }}
-          </label>
-          <mat-slide-toggle
-            id="network-status-toggle"
-            [(ngModel)]="enable"
-            [ngModelOptions]="{ standalone: true }">
-            <span>
-              {{
-                (enable ? 'policy.status.ENABLED' : 'policy.status.DISABLED')
-                  | translate
-              }}
-            </span>
-          </mat-slide-toggle>
+          <section class="status-section">
+            <label class="status-margin text-label">{{ 'setting.STATUS' | translate }}</label>
+            <mat-slide-toggle
+              id="network-status-toggle"
+              [(ngModel)]="enable"
+              [ngModelOptions]="{ standalone: true }">
+              <span
+                [ngClass]="{
+                  'text-muted': !enable,
+                  'text-success': enable
+                }"
+              >
+                {{
+                  (enable ? 'policy.status.ENABLED' : 'policy.status.DISABLED')
+                    | translate
+                }}
+              </span>
+            </mat-slide-toggle>
+          </section>
         </div>
       </div>
       <div class="d-flex justify-content-end align-items-center">

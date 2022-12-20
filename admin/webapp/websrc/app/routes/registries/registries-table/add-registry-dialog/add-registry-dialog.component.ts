@@ -60,7 +60,7 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
     private dialog: MatDialog,
     public dialogRef: MatDialogRef<RegistriesTableComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public data: { editable: boolean; config: RegistryConfig },
+    public data: { isEdit: boolean, editable: boolean; config: RegistryConfig },
     private registriesService: RegistriesService,
     private registriesCommunicationService: RegistriesCommunicationService,
     private notificationService: NotificationService
@@ -206,12 +206,18 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
       }
       this.model = {
         ...data,
-        isEdit: true,
+        isEdit: this.data.isEdit,
+        isRemote: GlobalVariable.isRemote,
         isFed: data.cfg_type === GlobalConstant.CFG_TYPE.FED,
         password: this.maskFieldWhenEdit,
         auto_scan,
         periodic_scan,
         interval,
+      };
+    } else {
+      this.model = {
+        isEdit: this.data.isEdit,
+        isRemote: GlobalVariable.isRemote
       };
     }
     if (!this.data.editable) {

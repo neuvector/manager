@@ -30,6 +30,7 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { MapConstant } from '@common/constants/map.constant';
 import { NotificationService } from '@services/notification.service';
 import { UtilsService } from '@common/utils/app.utils';
+import { GlobalVariable } from '@common/variables/global.variable';
 
 @Component({
   selector: 'app-registries-table',
@@ -258,11 +259,15 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
   }
 
   editRegistry(event): void {
-    this.openDialog(cloneDeep(this.gridApi.getRowNode(event.node.id)?.data));
+    this.openDialog(
+      true,
+      cloneDeep(this.gridApi.getRowNode(event.node.id)?.data)
+    );
   }
 
   viewRegistry(event): void {
     this.openDialog(
+      true,
       cloneDeep(this.gridApi.getRowNode(event.node.id)?.data),
       false
     );
@@ -281,11 +286,11 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
     this.gridApi.sizeColumnsToFit();
   }
 
-  openDialog(data?: RegistryConfig, editable = true): void {
+  openDialog(isEdit = false, data?: RegistryConfig, editable = true): void {
     const dialog = this.dialog.open(AddRegistryDialogComponent, {
       width: '80%',
       maxWidth: '1100px',
-      data: { config: data, editable },
+      data: { config: data, isEdit: isEdit, editable: editable },
     });
     dialog.afterClosed().subscribe(change => {
       if (change) {

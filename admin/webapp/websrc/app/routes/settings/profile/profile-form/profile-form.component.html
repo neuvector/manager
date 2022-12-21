@@ -18,7 +18,10 @@
         </mat-icon>
         <mat-form-field class="w-100">
           <mat-label>{{ 'profile.USER_NAME' | translate }}</mat-label>
-          <input matInput formControlName="username" />
+          <input
+            matInput
+            formControlName="username"
+          />
         </mat-form-field>
       </div>
       <div class="profile__field">
@@ -30,7 +33,11 @@
         </mat-icon>
         <mat-form-field class="w-100">
           <mat-label>{{ 'profile.EMAIL' | translate }}</mat-label>
-          <input matInput formControlName="email" />
+          <input
+            matInput
+            formControlName="email"
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+          />
         </mat-form-field>
       </div>
       <div class="profile__field">
@@ -55,7 +62,11 @@
         </mat-icon>
         <mat-form-field class="w-100">
           <mat-label>{{ 'profile.TIMEOUT' | translate }}</mat-label>
-          <input matInput formControlName="timeout" />
+          <input
+            matInput
+            formControlName="timeout"
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+          />
           <mat-error
             *ngIf="
               profileForm.controls.timeout.hasError('min') ||

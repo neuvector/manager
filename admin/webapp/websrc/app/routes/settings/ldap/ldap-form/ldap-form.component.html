@@ -23,7 +23,11 @@
       <i class="eos-icons mr-3 text-primary">cluster</i>
       <mat-form-field appearance="standard" class="w-100">
         <mat-label>{{ 'ldap.HOST' | translate }}</mat-label>
-        <input formControlName="hostname" matInput />
+        <input
+          formControlName="hostname"
+          matInput
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+        />
         <mat-error *ngIf="ldapForm.controls.hostname.hasError('required')">
           {{ 'ldap.HOST_REQUIRED' | translate }}
         </mat-error>
@@ -38,7 +42,7 @@
       </mat-icon>
       <mat-form-field appearance="standard" class="w-100">
         <mat-label>{{ 'ldap.PORT' | translate }}</mat-label>
-        <input formControlName="port" matInput type="number" />
+        <input formControlName="port" matInput type="number" min="0"/>
       </mat-form-field>
     </div>
     <div
@@ -58,7 +62,11 @@
       </mat-icon>
       <mat-form-field appearance="standard" class="w-100">
         <mat-label>{{ 'ldap.USERNAME' | translate }}</mat-label>
-        <input formControlName="bind_dn" matInput />
+        <input
+          formControlName="bind_dn"
+          matInput
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+        />
       </mat-form-field>
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
@@ -77,6 +85,7 @@
           [type]="passwordVisible ? 'text' : 'password'"
           formControlName="bind_password"
           placeholder="{{ isCreated ? '******' : '' }}"
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
           matInput />
       </mat-form-field>
       <button
@@ -95,7 +104,11 @@
     <i class="eos-icons mr-3 text-primary">organization</i>
     <mat-form-field appearance="standard" class="w-100">
       <mat-label>{{ 'ldap.BASE_DN' | translate }}</mat-label>
-      <input formControlName="base_dn" matInput />
+      <input
+        formControlName="base_dn"
+        matInput
+        [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+      />
       <mat-hint>{{ 'ldap.BASE_DN_HINT' | translate }}</mat-hint>
       <mat-error *ngIf="ldapForm.controls.base_dn.hasError('required')">
         {{ 'ldap.BASE_DN_MESSAGE' | translate }}
@@ -114,6 +127,7 @@
       <input
         formControlName="username_attr"
         placeholder="{{ 'ldap.USERNAME_ATTR_PLACEHOLDER' | translate }}"
+        [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
         matInput />
       <mat-hint>{{ 'ldap.USERNAME_ATTR_HINT' | translate }}</mat-hint>
     </mat-form-field>
@@ -125,6 +139,7 @@
       <input
         formControlName="group_member_attr"
         placeholder="{{ 'ldap.GROUP_MEMBER_ATTR_PLACEHOLDER' | translate }}"
+        [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
         matInput />
       <mat-hint>{{ 'ldap.GROUP_MEMBER_ATTR_HINT' | translate }}</mat-hint>
     </mat-form-field>

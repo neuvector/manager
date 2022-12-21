@@ -39,6 +39,7 @@ export const WebhookTableField = {
           label: 'setting.webhook.NAME',
           isCell: true,
           required: true,
+          maxLength: 1000,
           readOnly: {
             type: 'text',
             template: field => `${field.model[field.key] || ''}`,
@@ -57,6 +58,7 @@ export const WebhookTableField = {
           label: 'setting.webhook.URL',
           isCell: true,
           required: true,
+          maxLength: 1000,
           readOnly: {
             type: 'text',
             template: field => `${field.model[field.key] || ''}`,

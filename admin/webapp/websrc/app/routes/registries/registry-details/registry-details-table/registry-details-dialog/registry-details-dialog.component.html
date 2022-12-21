@@ -15,7 +15,7 @@
     <div class="filter">
       <mat-form-field appearance="standard">
         <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
-        <input [formControl]="filter" matInput />
+        <input [formControl]="filter" matInput [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"/>
       </mat-form-field>
     </div>
     <mat-tab-group

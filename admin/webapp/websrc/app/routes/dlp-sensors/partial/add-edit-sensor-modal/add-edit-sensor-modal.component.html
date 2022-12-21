@@ -19,14 +19,25 @@
       <div class="row">
         <mat-form-field class="col-sm-3" appearance="standard">
           <mat-label>{{'dlp.sensorModal.SENSOR_NAME' | translate}}</mat-label>
-          <input type="text" matInput formControlName="name" [readonly]="data.opType === opTypeOptions.EDIT">
+          <input
+            type="text"
+            matInput
+            formControlName="name"
+            [attr.maxlength]="255"
+            [readonly]="data.opType === opTypeOptions.EDIT"
+          >
           <mat-error *ngIf="addEditSensorForm.controls.name.hasError('required')">
             {{'dlp.msg.SENSOR_NAME_REQUIRED' | translate}}
           </mat-error>
         </mat-form-field>
         <mat-form-field class="col-sm-9" appearance="standard">
           <mat-label>{{'dlp.sensorModal.COMMENT' | translate}}</mat-label>
-          <input type="text" matInput formControlName="comment">
+          <input
+            type="text"
+            matInput
+            formControlName="comment"
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+          >
         </mat-form-field>
       </div>
       <div class="d-flex justify-content-end align-items-center">

@@ -46,6 +46,7 @@
               <input
                 matInput
                 [readonly]="data.opType === modalOp.VIEW"
+                [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
                 formControlName="comment"
               />
           </mat-form-field>
@@ -112,6 +113,7 @@
               [type]="mainCriterion.value_type === 'number' ? 'number' : 'text'"
               [ngModelOptions]="{standalone: true}"
               [(ngModel)]="mainCriterion.value"
+              [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
             />
           </mat-form-field>
           <mat-form-field
@@ -198,6 +200,7 @@
                   [readonly]="data.opType === modalOp.VIEW"
                   [ngModelOptions]="{standalone: true}"
                   [(ngModel)]="subCriterion[i]['value']"
+                  [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
                 />
               </mat-form-field>
               <mat-form-field
@@ -340,6 +343,7 @@
           placeholder="{{ 'admissionControl.NAME' | translate }}*"
           [ngModelOptions]="{standalone: true}"
           [(ngModel)]="customCriterion.name"
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
         />
       </mat-form-field>
       <mat-form-field
@@ -367,6 +371,7 @@
           type="{{ nodeValueType === 'number' ? 'number' : 'text'}}"
           [ngModelOptions]="{standalone: true}"
           [(ngModel)]="customCriterion.value"
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
         />
       </mat-form-field>
       <mat-form-field

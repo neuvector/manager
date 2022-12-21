@@ -48,6 +48,7 @@
             [readonly]="data.isReadonly"
             [(ngModel)]="responseRule.group"
             [formControl]="formControl4Group"
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
             [matAutocomplete]="autoFrom" />
           <mat-autocomplete #autoFrom="matAutocomplete">
             <mat-option
@@ -79,6 +80,7 @@
               #criteriaInput
               name="criteria"
               [formControl]="formControl4Criteria"
+              [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
               [matAutocomplete]="autoCriteria"
               [matChipInputFor]="chipList"
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"

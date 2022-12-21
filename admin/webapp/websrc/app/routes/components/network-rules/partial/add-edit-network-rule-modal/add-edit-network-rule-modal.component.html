@@ -25,7 +25,11 @@
           class="col-2 col-md-2"
           *ngIf="data.opType !== modalOp.ADD">
           <mat-label>{{ 'policy.editPolicy.POLICY_ID' | translate }}</mat-label>
-          <input matInput formControlName="id" [readonly]="'true'" />
+          <input
+            matInput
+            formControlName="id"
+            [readonly]="'true'"
+          />
         </mat-form-field>
         <mat-form-field
           appearance="standard"
@@ -34,7 +38,11 @@
             'col-10 col-md-10': data.opType !== modalOp.ADD
           }">
           <mat-label>{{ 'policy.addPolicy.COMMENT' | translate }}</mat-label>
-          <input matInput formControlName="comment" />
+          <input
+            matInput
+            formControlName="comment"
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+          />
         </mat-form-field>
       </div>
       <div class="row">
@@ -45,6 +53,7 @@
             aria-label="From"
             matInput
             formControlName="from"
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
             [matAutocomplete]="autoForm" />
           <mat-autocomplete autoActiveFirstOption #autoForm="matAutocomplete">
             <mat-option
@@ -61,6 +70,7 @@
             aria-label="To"
             matInput
             formControlName="to"
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
             [matAutocomplete]="autoTo" />
           <mat-autocomplete autoActiveFirstOption #autoTo="matAutocomplete">
             <mat-option
@@ -87,6 +97,7 @@
               placeholder="{{ 'policy.message.ADD_APP' | translate }}"
               #applicationsInput
               formControlName="applicationsCtrl"
+              [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
               [matAutocomplete]="autoApp"
               [matChipInputFor]="chipList"
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes" />
@@ -113,6 +124,7 @@
           <input
             matInput
             formControlName="ports"
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
             placeholder="{{ 'policy.message.PORT_SAMPLE' | translate }}" />
         </mat-form-field>
         <div class="col-2 col-md-3 mt-1">

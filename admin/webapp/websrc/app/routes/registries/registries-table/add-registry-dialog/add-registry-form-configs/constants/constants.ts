@@ -176,6 +176,7 @@ export const NameField = {
   templateOptions: {
     icon: 'sell',
     label: 'general.NAME',
+    maxLength: 1000,
     required: true,
   },
   expressionProperties: {
@@ -205,6 +206,7 @@ export const RegistryField = {
     hint: '',
     icon: 'workspaces',
     label: 'registry.gridHeader.REGISTRY',
+    maxLength: 1000,
     required: true,
   },
   validators: {
@@ -218,6 +220,7 @@ export const UsernameField = {
   templateOptions: {
     icon: 'person',
     label: 'registry.gridHeader.USERNAME',
+    maxLength: 1000,
   },
 };
 
@@ -231,6 +234,7 @@ export const PasswordField = {
     type: 'password',
     icon: 'vpn_key',
     label: 'login.PASSWORD',
+    maxLength: 1000,
   },
 };
 
@@ -308,6 +312,7 @@ export const IdField = {
   templateOptions: {
     icon: 'featured_video',
     label: 'registry.AWS_ID',
+    maxLength: 1000,
     required: true,
   },
 };
@@ -319,6 +324,7 @@ export const AccessKeyField = {
     maskOnBlur: true,
     icon: 'vpn_key',
     label: 'registry.AWS_ACCESS_KEY',
+    maxLength: 1000,
   },
 };
 
@@ -328,6 +334,7 @@ export const RegionField = {
   templateOptions: {
     icon: 'network',
     label: 'registry.AWS_REGION',
+    maxLength: 1000,
     required: true,
   },
 };
@@ -339,6 +346,7 @@ export const SecretAccessKeyField = {
     maskOnBlur: true,
     icon: 'vpn_key',
     label: 'registry.AWS_SECRET_KEY',
+    maxLength: 1000,
   },
 };
 
@@ -349,6 +357,7 @@ export const PrivateTokenField = {
     maskOnBlur: true,
     icon: 'vpn_key',
     label: 'registry.GITLAB_PRIVATE_TOKEN',
+    maxLength: 1000,
   },
 };
 
@@ -359,6 +368,7 @@ export const ExternalUrlField = {
     hint: '',
     icon: 'network',
     label: 'registry.GITLAB_EXTERNAL_URL',
+    maxLength: 1000,
     required: true,
   },
   validators: {
@@ -382,6 +392,7 @@ export const IBMCloudAccountField = {
     alwaysHint: true,
     icon: 'network',
     label: 'registry.IBM.ACCOUNT',
+    maxLength: 1000,
     required: true,
     hint: 'registry.IBM.GET_ACCOUNT_HINT',
   },
@@ -420,5 +431,6 @@ export const TokenAuthenticationField = {
   templateOptions: {
     icon: 'vpn_key',
     label: 'ldap.TOKEN',
+    maxLength: 1000,
   },
 };

@@ -25,7 +25,13 @@
       <div class="row">
         <mat-form-field class="col-sm-3" appearance="standard">
           <mat-label>{{'waf.ruleModal.PATTERN_NAME' | translate}}</mat-label>
-          <input type="text" matInput formControlName="ruleName" [readonly]="data.opType === opTypeOptions.EDIT">
+          <input
+            type="text"
+            matInput
+            formControlName="ruleName"
+            [readonly]="data.opType === opTypeOptions.EDIT"
+            [attr.maxlength]="255"
+          >
         </mat-form-field>
       </div>
       <hr class="solid margin-top-s margin-bottom-s"/>
@@ -53,6 +59,7 @@
             [(ngModel)]="pattern.value"
             [ngModelOptions]="{standalone: true}"
             (keyup)="initTestArea(pattern.value)"
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
           >
           <button
             aria-hidden="true"

@@ -7,7 +7,7 @@
         <div class="login-logo"></div>
         <div class="panel-body p0">
           <div id="loadingBar" style="width: 100%">
-            <mat-progress-bar *ngIf="(inProgress || isFromSSO) && !authMsg" class="sso-auth-progress"mode="indeterminate"></mat-progress-bar>
+            <mat-progress-bar *ngIf="(inProgress || isFromSSO) && !authMsg" class="sso-auth-progress" mode="indeterminate"></mat-progress-bar>
             <div class="text-danger text-center clearfix" *ngIf="authMsg && isFromSSO" style="padding: 0 10px; clear:both">
               {{authMsg}}
             </div>

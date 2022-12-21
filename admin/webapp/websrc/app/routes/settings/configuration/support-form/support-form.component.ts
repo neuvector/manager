@@ -153,5 +153,6 @@ export class SupportFormComponent implements OnDestroy {
 
   cancelCollect(): void {
     this.stopCollect$.next(true);
+    this.collectingLog = false;
   }
 }

@@ -61,7 +61,9 @@
           class="mr-3"
           (click)="scan.emit(selectedContainer)"
           [disabled]="
-            !selectedContainer || selectedContainer.brief.state === 'exit'
+            !isScannerInstalled ||
+            !selectedContainer ||
+            selectedContainer.brief.state === 'exit'
           ">
           {{ 'scan.SCAN' | translate }}
         </button>

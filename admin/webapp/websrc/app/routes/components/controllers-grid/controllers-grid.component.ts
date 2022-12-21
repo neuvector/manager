@@ -145,6 +145,7 @@ export class ControllersGridComponent implements OnInit, OnChanges {
 
   refresh(): void {
     this.refreshing$.next(true);
+    this.selectedControllerSubject$.next(undefined);
     this.getControllers();
   }
 

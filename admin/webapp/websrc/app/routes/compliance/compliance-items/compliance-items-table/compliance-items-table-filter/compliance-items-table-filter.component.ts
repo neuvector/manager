@@ -14,6 +14,7 @@ import { Observable } from 'rxjs';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { map } from 'rxjs/operators';
+import { TranslateService } from "@ngx-translate/core";
 
 enum FilterView {
   SERVICE = 0,
@@ -34,14 +35,15 @@ export class ComplianceItemsTableFilterComponent implements OnInit {
   form!: FormGroup;
   matchTypes = this.complianceFilterService.matchTypes;
   view = FilterView.SERVICE;
-  viewText = 'Service';
+  viewText = this.translate.instant("admissionControl.names.SERVICE");
   FilterView = FilterView;
   @ViewChild('namespaceInput') namespaceInput!: ElementRef<HTMLInputElement>;
 
   constructor(
     public dialogRef: MatDialogRef<ComplianceItemsTableComponent>,
     @Inject(MAT_DIALOG_DATA) public data,
-    private complianceFilterService: ComplianceFilterService
+    private complianceFilterService: ComplianceFilterService,
+    private translate: TranslateService
   ) {
     this.filteredDomains = this.namespaceCtrl.valueChanges.pipe(
       map((domain: string) => {
@@ -82,19 +84,19 @@ export class ComplianceItemsTableFilterComponent implements OnInit {
   changeView(num: FilterView) {
     switch (num) {
       case FilterView.SERVICE: {
-        this.viewText = 'Service';
+        this.viewText = this.translate.instant("admissionControl.names.SERVICE");
         break;
       }
       case FilterView.IMAGE: {
-        this.viewText = 'Image';
+        this.viewText = this.translate.instant("admissionControl.names.IMAGE");
         break;
       }
       case FilterView.NODE: {
-        this.viewText = 'Node';
+        this.viewText = this.translate.instant("admissionControl.names.NODE");
         break;
       }
       case FilterView.CONTAINER: {
-        this.viewText = 'Container';
+        this.viewText = this.translate.instant("admissionControl.names.CONTAINER");
         break;
       }
     }

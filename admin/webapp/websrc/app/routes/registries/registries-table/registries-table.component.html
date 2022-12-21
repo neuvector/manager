@@ -1,7 +1,7 @@
 <div class="d-flex align-items-center justify-content-between">
   <div class="d-flex align-items-center justify-content-start">
     <span class="font-weight-bold text-info"
-      >{{ rowData.length }} {{ 'registry.COUNT_POSTFIX' | translate }}</span
+      >{{ 'enum.OUT_OF' | translate }}&nbsp; {{ rowData.length }}</span
     >
   </div>
   <div class="d-flex align-items-center justify-content-end">
@@ -37,6 +37,7 @@
       (gridApi &&
         gridApi.getSelectedNodes().length &&
         gridApi.getSelectedNodes()[0].data.status === 'scanning') ||
+      (isFedRegistry && !isFedAdmin) ||
       !!(startingScan$ | async)
     "
     [id]="'registries-start-scan-button'"
@@ -53,6 +54,7 @@
       (gridApi &&
         gridApi.getSelectedNodes().length &&
         gridApi.getSelectedNodes()[0].data.status === 'idle') ||
+      (isFedRegistry && !isFedAdmin) ||
       !!(stoppingScan$ | async)
     "
     [id]="'registries-stop-scan-button'"

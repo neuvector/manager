@@ -3,7 +3,9 @@ import {
   ChangeDetectorRef,
   Component,
   Input,
+  OnChanges,
   OnInit,
+  SimpleChanges,
 } from '@angular/core';
 import { ComplianceProfileTemplateEntry, ErrorResponse } from '@common/types';
 import {
@@ -33,7 +35,7 @@ import { AuthUtilsService } from '@common/utils/auth.utils';
   styleUrls: ['./compliance-profile-templates-table.component.scss'],
 })
 export class ComplianceProfileTemplatesTableComponent
-  implements OnInit, AfterViewInit
+  implements OnInit, OnChanges, AfterViewInit
 {
   @Input() rowData!: ComplianceProfileTemplateEntry[];
   @Input() hideSystemInit!: boolean;
@@ -56,7 +58,7 @@ export class ComplianceProfileTemplatesTableComponent
       width: 70,
       sortable: true,
       resizable: true,
-      headerName: "CIS ID",
+      headerName: 'CIS ID',
     },
     {
       field: 'tags',
@@ -157,6 +159,12 @@ export class ComplianceProfileTemplatesTableComponent
         this.cd.markForCheck();
       }
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.gridApi && changes.rowData) {
+      this.gridApi.setRowData(changes.rowData.currentValue);
+    }
   }
 
   editRegulation(event): void {
@@ -268,6 +276,12 @@ export class ComplianceProfileTemplatesTableComponent
     });
   }
 
+  resetPending() {
+    this.totalChanges = 0;
+    this.systemChanges = 0;
+    this.regulationChanges = {};
+  }
+
   saveChanges(bool?: boolean) {
     let payload = {
       name: 'default',
@@ -288,6 +302,7 @@ export class ComplianceProfileTemplatesTableComponent
     this.complianceProfileService.saveRegulations(payload).subscribe({
       complete: () => {
         this.complianceProfileService.refresh();
+        this.resetPending();
         this.notificationService.open(
           this.translate.instant('cis.profile.DEPLOY_OK')
         );

@@ -132,11 +132,13 @@ export class ComplianceProfileAssetsTableComponent
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.gridApi && changes.rowData) {
-      this.gridApi.setRowData(changes.rowData.currentValue);
-    }
-    if (changes.namespaceEnabled) {
-      this.toggleNamespaceActions();
+    if (this.gridApi) {
+      if (changes.rowData) {
+        this.gridApi.setRowData(changes.rowData.currentValue);
+      }
+      if (changes.namespaceEnabled && this.gridOptions) {
+        this.toggleNamespaceActions();
+      }
     }
   }
 

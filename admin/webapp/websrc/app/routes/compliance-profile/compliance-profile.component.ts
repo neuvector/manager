@@ -3,6 +3,7 @@ import {
   ComplianceProfileData,
   ComplianceProfileTemplateData,
 } from '@common/types';
+import { AuthUtilsService } from '@common/utils/auth.utils';
 import {
   ComplianceProfileService,
   DomainResponse,
@@ -23,10 +24,14 @@ export class ComplianceProfileComponent implements OnInit, OnDestroy {
     domains: DomainResponse;
   };
   loaded = false;
+  get isNamespaceUser() {
+    return this.authUtilsService.userPermission.isNamespaceUser;
+  }
 
   constructor(
     private complianceProfileService: ComplianceProfileService,
-    private multiClusterService: MultiClusterService
+    private multiClusterService: MultiClusterService,
+    private authUtilsService: AuthUtilsService
   ) {}
 
   ngOnInit(): void {

@@ -151,12 +151,21 @@ export class NetworkRulesService {
             'policy.head.REMOVED_RULE'
           )}</div>`;
         } else {
+          let typeClass = params.data.disable
+            ? MapConstant.colourMap['disabled-rule']
+            : (
+              params.data.state
+              ? MapConstant.colourMap[params.data.state]
+              : MapConstant.colourMap[
+                  params.data.cfg_type ? params.data.cfg_type : 'customer-rule'
+              ]
+            );
           let type = params.data.state
             ? MapConstant.colourMap[params.data.state]
             : MapConstant.colourMap[
                 params.data.cfg_type ? params.data.cfg_type : 'customer-rule'
-              ];
-          return `<div class="type-label px-1 ${type}">${this.sanitizer.sanitize(
+            ]
+          return `<div class="type-label px-1 ${typeClass}">${this.sanitizer.sanitize(
             SecurityContext.HTML,
             this.translate.instant(
               `policy.head.${type.replace('-', '_').toUpperCase()}`

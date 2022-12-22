@@ -23,7 +23,14 @@
       <div class="d-flex flex-column flex-grow-1">
         <mat-form-field appearance="standard" class="flex-grow-1">
           <mat-label>{{ 'multiCluster.promotion.name' | translate }}</mat-label>
-          <input matInput [(ngModel)]="cluster.name" name="name" [disabled]="readOnly" required />
+          <input
+            matInput
+            [(ngModel)]="cluster.name"
+            name="name"
+            [disabled]="readOnly"
+            required
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+          />
           <mat-error></mat-error>
         </mat-form-field>
       </div>
@@ -38,6 +45,7 @@
             name="ip"
             required
             pattern="^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$"
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
             [disabled]="readOnly" />
           <mat-error></mat-error>
         </mat-form-field>
@@ -49,6 +57,7 @@
             name="port"
             required
             pattern="^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$"
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
             [disabled]="readOnly" />
         </mat-form-field>
       </div>

@@ -34,6 +34,7 @@ export const IBMSADashboardURLField = {
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
     label: 'setting.DASHBOARD_URL',
+    maxLength: 1000
   },
   expressionProperties: {
     'templateOptions.disabled':

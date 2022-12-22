@@ -8,7 +8,13 @@
   <div class="d-flex flex-column" style="max-width: 50%">
     <mat-form-field appearance="standard">
       <mat-label>{{ 'ldap.gridHeader.GROUP' | translate }}</mat-label>
-      <input #groupInput="ngModel" [(ngModel)]="data.group" matInput required />
+      <input
+        #groupInput="ngModel"
+        [(ngModel)]="data.group"
+        matInput
+        required
+        [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+      />
     </mat-form-field>
     <mat-form-field appearance="standard">
       <mat-label>{{ 'ldap.gridHeader.GLOBAL_ROLE' | translate }}</mat-label>

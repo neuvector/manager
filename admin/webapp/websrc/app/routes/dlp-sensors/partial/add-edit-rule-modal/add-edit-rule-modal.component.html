@@ -36,6 +36,7 @@
             type="text"
             matInput
             formControlName="ruleName"
+            [attr.maxlength]="255"
             [readonly]="data.opType === opTypeOptions.EDIT" />
         </mat-form-field>
       </div>
@@ -64,6 +65,7 @@
             matInput
             required
             type="text"
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
             [(ngModel)]="pattern.value"
             [ngModelOptions]="{ standalone: true }"
             (keyup)="initTestArea(pattern.value)" />

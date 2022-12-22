@@ -17,7 +17,11 @@
     <div class="col-md-4">
       <mat-form-field class="w-100">
         <mat-label>{{ 'role.roleModal.ROLE_NAME' | translate }}</mat-label>
-        <input matInput formControlName="name" />
+        <input
+          matInput
+          formControlName="name"
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+        />
         <mat-error *ngIf="form.controls.name.hasError('required')">
           {{ 'general.REQUIRED' | translate }}
         </mat-error>
@@ -26,7 +30,11 @@
     <div class="col-md-8">
       <mat-form-field class="w-100">
         <mat-label>{{ 'role.roleModal.COMMENT' | translate }}</mat-label>
-        <input matInput formControlName="comment" />
+        <input
+          matInput
+          formControlName="comment"
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+        />
       </mat-form-field>
     </div>
   </div>

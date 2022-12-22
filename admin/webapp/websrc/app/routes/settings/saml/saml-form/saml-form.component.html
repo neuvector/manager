@@ -17,7 +17,11 @@
       <i class="eos-icons mr-3 text-primary">organization</i>
       <mat-form-field appearance="standard" class="w-100">
         <mat-label>{{ 'okta.IDP_URL' | translate }}</mat-label>
-        <input formControlName="sso_url" matInput />
+        <input
+          formControlName="sso_url"
+          matInput
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+        />
         <mat-error *ngIf="samlForm.controls.sso_url.hasError('required')">
           {{ 'general.REQUIRED' | translate }}
         </mat-error>
@@ -30,7 +34,11 @@
       <i class="eos-icons mr-3 text-primary">account_box</i>
       <mat-form-field appearance="standard" class="w-100">
         <mat-label>{{ 'okta.IDP_ISSUER' | translate }}</mat-label>
-        <input formControlName="issuer" matInput />
+        <input
+          formControlName="issuer"
+          matInput
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+        />
         <mat-error *ngIf="samlForm.controls.issuer.hasError('required')">
           {{ 'general.REQUIRED' | translate }}
         </mat-error>
@@ -60,7 +68,11 @@
       <i class="eos-icons mr-3 text-primary">groups</i>
       <mat-form-field appearance="standard" class="w-100">
         <mat-label> {{ 'okta.GROUP_CLAIM' | translate }}</mat-label>
-        <input formControlName="group_claim" matInput />
+        <input
+          formControlName="group_claim"
+          matInput
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+        />
       </mat-form-field>
     </div>
   </div>

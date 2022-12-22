@@ -487,6 +487,13 @@ hr.fancy {
   color: #becfd5;
 }
 
+.disabled-rule-print {
+  border: 1px solid $neuvector-grey-600;
+  background-color: $neuvector-grey-100;
+  -webkit-print-color-adjust: exact;
+  color: $neuvector-grey-600;
+}
+
 .removed-rule {
   background-color: #fff;
   text-decoration: line-through double red;
@@ -655,6 +662,10 @@ hr.solid {
 
 .disabled-row {
   color: $neuvector-grey-500 !important;
+}
+
+.disabled-row-print {
+  color: $neuvector-grey-300 !important;
 }
 
 .critical-row {

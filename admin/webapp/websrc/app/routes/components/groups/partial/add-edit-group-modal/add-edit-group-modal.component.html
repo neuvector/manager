@@ -17,7 +17,13 @@
       <div class="row">
         <mat-form-field class="col-sm-3" appearance="standard">
           <mat-label>{{'group.editGroup.GROUP_NAME' | translate}}</mat-label>
-          <input type="text" matInput formControlName="name" [readonly]="data.opType !== modalOp.ADD">
+          <input
+            type="text"
+            matInput
+            formControlName="name"
+            [readonly]="data.opType !== modalOp.ADD"
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+          >
           <mat-error *ngIf="addEditGroupForm.controls.name.hasError('required')">
             {{'general.REQUIRED' | translate}}
           </mat-error>
@@ -27,7 +33,13 @@
         </mat-form-field>
         <mat-form-field class="col-sm-9" appearance="standard">
           <mat-label>{{'policy.addPolicy.COMMENT' | translate}}</mat-label>
-          <input type="text" matInput formControlName="comment" [readonly]="data.opType === modalOp.VIEW">
+          <input
+            type="text"
+            matInput
+            formControlName="comment"
+            [readonly]="data.opType === modalOp.VIEW"
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+          >
         </mat-form-field>
       </div>
       <div class="row">
@@ -46,6 +58,7 @@
               placeholder="{{(data.opType !== modalOp.VIEW ? 'group.editGroup.ADD_CRITERIA' : '') | translate}}"
               #criteriaInput
               [readonly]="data.opType === modalOp.VIEW"
+              [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
               [matChipInputFor]="chipList"
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               matChipInputAddOnBlur="true"

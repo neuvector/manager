@@ -76,12 +76,18 @@
             name="name"
             [readonly]="type === 'edit'"
             formControlName="name"
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
             required />
           <mat-error>Rule name is required!</mat-error>
         </mat-form-field>
         <mat-form-field appearance="standard">
           <mat-label>{{ 'service.gridHeader.PATH' | translate }}</mat-label>
-          <input matInput name="path" formControlName="path" />
+          <input
+            matInput
+            name="path"
+            formControlName="path"
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+          />
         </mat-form-field>
       </div>
       <div class="d-flex justify-content-start align-content-center pl-2 pt-2">

@@ -54,7 +54,7 @@ export const AddRegistryFieldConfig: FormlyFieldConfig[] = [
         },
         hideExpression: FedRegistryHideExpr,
         expressionProperties: {
-          'templateOptions.disabled': 'model.isEdit',
+          'templateOptions.disabled': 'model.isEdit || model.isRemote'
         },
       },
     ],

@@ -5,7 +5,12 @@
       <div class="col-6 d-flex align-items-center">
         <mat-form-field appearance="standard" class="w-inherit">
           <mat-label>{{ 'ldap.USERNAME' | translate }}</mat-label>
-          <input formControlName="username" matInput required />
+          <input
+            formControlName="username"
+            matInput
+            required
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+          />
         </mat-form-field>
       </div>
       <div class="col-6 d-flex align-items-center">
@@ -15,6 +20,7 @@
             [type]="passwordVisible ? 'text' : 'password'"
             formControlName="password"
             matInput
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
             required />
         </mat-form-field>
         <button

@@ -65,6 +65,7 @@
               name="filter"
               formControlName="filter"
               required
+              [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
               [readonly]="type === 'edit'" />
             <mat-error
               *ngIf="fileAccessRuleForm.get('filter')?.hasError('required')"
@@ -134,6 +135,7 @@
               #AppsInput
               name="apps"
               formControlName="applications"
+              [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
               [matChipInputFor]="chipList"
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               [matChipInputAddOnBlur]="true"

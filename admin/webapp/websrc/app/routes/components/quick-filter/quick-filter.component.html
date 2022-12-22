@@ -4,7 +4,8 @@
     <input
       (keyup)="onFilterChange(filter.value)"
       [formControl]="filter"
-      matInput />
+      matInput
+      [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
   </mat-form-field>
   <div *ngIf="showCount" class="pull-left margin-top-l margin-left-m quick-filter__item_count">
     <div *ngIf="filteredCountText">{{ filteredCountText }}</div>

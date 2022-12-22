@@ -18,7 +18,13 @@
       <div class="d-flex flex-column flex-grow-1">
         <mat-form-field appearance="standard" class="flex-grow-1">
           <mat-label>{{ 'multiCluster.joining.name' | translate }}</mat-label>
-          <input matInput [(ngModel)]="cluster.name" name="name" required />
+          <input
+            matInput
+            [(ngModel)]="cluster.name"
+            name="name"
+            required
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+          />
         </mat-form-field>
       </div>
       <div class="d-flex justify-content-start align-items-center">
@@ -28,6 +34,7 @@
             matInput
             [(ngModel)]="cluster.host"
             name="cluster-host"
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
             required />
         </mat-form-field>
         <mat-form-field appearance="standard" class="flex-grow-1">
@@ -36,6 +43,7 @@
             matInput
             [(ngModel)]="cluster.port"
             name="cluster-port"
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
             required />
         </mat-form-field>
       </div>
@@ -61,6 +69,7 @@
             matInput
             [(ngModel)]="cluster.master_host"
             name="master-host"
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
             required />
         </mat-form-field>
         <mat-form-field appearance="standard" class="flex-grow-1">
@@ -69,6 +78,7 @@
             matInput
             [(ngModel)]="cluster.master_port"
             name="master-port"
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
             required />
         </mat-form-field>
       </div>

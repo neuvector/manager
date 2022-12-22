@@ -36,26 +36,21 @@ export class GroupResponseRulesComponent implements ICellRendererAngularComp {
   }
 
   openResponseRuleDetailModal = (ruleId: number) => {
-    if (!this.ruleDetailModalService.isDialogOpen) {
-      this.ruleDetailModalService.isDialogOpen = true;
-      this.groupsService.getResponseRuleById(ruleId)
-        .subscribe(
-          (response: any) => {
-            this.ruleDetailModalService.ruleDialog = this.dialog.open(RuleDetailModalComponent, {
-              width: '70vw',
-              hasBackdrop: false,
-              data: {
-                rule: response.rule,
-                ruleType: 'response'
-              }
-            });
-          },
-          error => {
-            this.notificationService.openError(error, this.translate.instant('group.GET_RULE_ERR'));
-            this.ruleDetailModalService.isDialogOpen = false;
-          }
-        );
-    }
-
+    this.groupsService.getResponseRuleById(ruleId)
+      .subscribe(
+        (response: any) => {
+          this.ruleDetailModalService.ruleDialog = this.dialog.open(RuleDetailModalComponent, {
+            width: '70vw',
+            hasBackdrop: false,
+            data: {
+              rule: response.rule,
+              ruleType: 'response'
+            }
+          });
+        },
+        error => {
+          this.notificationService.openError(error, this.translate.instant('group.GET_RULE_ERR'));
+        }
+      );
   };
 }

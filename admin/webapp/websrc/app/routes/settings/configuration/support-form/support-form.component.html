@@ -11,6 +11,11 @@
       [selectable]="true"
       [refreshable]="false"></app-enforcers-grid>
     <div class="d-flex justify-content-end align-items-center">
+      <mat-progress-bar
+        *ngIf="collectingLog"
+        class="sso-auth-progress"
+        mode="indeterminate">
+      </mat-progress-bar>
       <app-loading-button
         [appearance]="'mat-raised-button'"
         [color]="'primary'"

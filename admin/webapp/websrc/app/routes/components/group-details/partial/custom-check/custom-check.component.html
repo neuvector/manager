@@ -10,6 +10,7 @@
         matInput
         [readonly]="cfgType === CFG_TYPE.GROUND || !isWriteScriptAuthorized || opType === modalOp.EDIT"
         (blur)="blurOnName()"
+        [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
         formControlName="name"
       />
       <mat-error *ngIf="customCheckForm.controls.name.hasError('required')">

@@ -17,7 +17,11 @@
       <i class="eos-icons mr-3 text-primary">account_box</i>
       <mat-form-field appearance="standard" class="w-100">
         <mat-label>{{ 'openId.ISSUER' | translate }}</mat-label>
-        <input formControlName="issuer" matInput />
+        <input
+          formControlName="issuer"
+          matInput
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+        />
         <mat-error *ngIf="openidForm.controls.issuer.hasError('required')">
           {{ 'general.REQUIRED' | translate }}
         </mat-error>
@@ -32,7 +36,11 @@
       <i class="eos-icons mr-3 text-primary">assignment_ind</i>
       <mat-form-field appearance="standard" class="w-100">
         <mat-label>{{ 'openId.AUTHORIZATION_ENDPOINT' | translate }}</mat-label>
-        <input formControlName="authorization_endpoint" matInput />
+        <input
+          formControlName="authorization_endpoint"
+          matInput
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+        />
       </mat-form-field>
     </div>
     <div
@@ -41,7 +49,11 @@
       <i class="eos-icons mr-3 text-primary">assignment_ind</i>
       <mat-form-field appearance="standard" class="w-100">
         <mat-label>{{ 'openId.TOKEN_ENDPOINT' | translate }}</mat-label>
-        <input formControlName="token_endpoint" matInput />
+        <input
+          formControlName="token_endpoint"
+          matInput
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+        />
       </mat-form-field>
     </div>
     <div
@@ -50,14 +62,22 @@
       <i class="eos-icons mr-3 text-primary">assignment_ind</i>
       <mat-form-field appearance="standard" class="w-100">
         <mat-label>{{ 'openId.USER_INFO_ENDPOINT' | translate }}</mat-label>
-        <input formControlName="user_info_endpoint" matInput />
+        <input
+          formControlName="user_info_endpoint"
+          matInput
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+        />
       </mat-form-field>
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
       <i class="eos-icons mr-3 text-primary">person</i>
       <mat-form-field appearance="standard" class="w-100">
         <mat-label>{{ 'openId.CLIENT_ID' | translate }}</mat-label>
-        <input formControlName="client_id" matInput />
+        <input
+          formControlName="client_id"
+          matInput
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+        />
         <mat-error *ngIf="openidForm.controls.client_id.hasError('required')">
           {{ 'general.REQUIRED' | translate }}
         </mat-error>
@@ -74,6 +94,7 @@
           [type]="passwordVisible ? 'text' : 'password'"
           formControlName="client_secret"
           placeholder="{{ isCreated ? '******' : '' }}"
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
           matInput />
         <mat-error
           *ngIf="openidForm.controls.client_secret.hasError('required')">
@@ -109,6 +130,7 @@
             [matChipInputAddOnBlur]="addOnBlur"
             [matChipInputFor]="chipList"
             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
             [placeholder]="'cveProfile.TAGS_INPUT_TIP' | translate" />
         </mat-chip-list>
       </mat-form-field>
@@ -117,7 +139,11 @@
       <i class="eos-icons mr-3 text-primary">groups</i>
       <mat-form-field appearance="standard" class="w-100">
         <mat-label> {{ 'okta.GROUP_CLAIM' | translate }}</mat-label>
-        <input formControlName="group_claim" matInput />
+        <input
+          formControlName="group_claim"
+          matInput
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+        />
       </mat-form-field>
     </div>
   </div>

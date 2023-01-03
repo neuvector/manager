@@ -19,6 +19,7 @@ import { ScanService } from '@services/scan.service';
 import { interval, Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { MultiClusterService } from '@services/multi-cluster.service';
+import { GlobalVariable } from '@common/variables/global.variable';
 
 @Component({
   selector: 'app-platforms',
@@ -39,6 +40,9 @@ export class PlatformsComponent implements OnInit, OnDestroy {
   }
   get platformsGrid() {
     return this._platformsGrid;
+  }
+  get isScannerInstalled() {
+    return GlobalVariable.summary.scanners !== 0;
   }
   refreshing$ = new Subject();
   error!: string;

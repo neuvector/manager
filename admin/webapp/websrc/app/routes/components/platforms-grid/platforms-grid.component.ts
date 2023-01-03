@@ -4,6 +4,7 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { MapConstant } from '@common/constants/map.constant';
 import { Platform } from '@common/types';
 import { UtilsService } from '@common/utils/app.utils';
+import { GlobalVariable } from '@common/variables/global.variable';
 import { TranslateService } from '@ngx-translate/core';
 import { PlatformsService } from '@services/platforms.service';
 import {
@@ -38,6 +39,9 @@ export class PlatformsGridComponent implements OnInit {
     this.selectedPlatformSubject$.asObservable();
   get platformsCount() {
     return this.platformsService.platforms.length;
+  }
+  get isScannerInstalled() {
+    return GlobalVariable.summary.scanners !== 0;
   }
   columnDefs: ColDef[] = [
     {

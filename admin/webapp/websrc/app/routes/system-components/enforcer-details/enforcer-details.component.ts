@@ -18,7 +18,7 @@ export class EnforcerDetailsComponent implements OnInit, OnDestroy {
   @ViewChild('detailsTabGroup', { static: false })
   detailsTabGroup!: MatTabGroup;
   activeTabIndex: number = 0;
-  currentEnforcer!: Enforcer;
+  currentEnforcer!: Enforcer | undefined;
   get isDisconnected() {
     return this.currentEnforcer?.connection_state === 'disconnected';
   }
@@ -40,18 +40,17 @@ export class EnforcerDetailsComponent implements OnInit, OnDestroy {
     this.initTabs();
     this.componentsCommunicationService.selectedEnforcer$.subscribe(
       enforcer => {
-        if (enforcer) {
-          this.currentEnforcer = enforcer;
-          if (this.containerStats) {
-            this.containerStats.clearCharts();
-          }
-          if (
-            this.activeTabIndex === 1 &&
-            this.containerStats.charts.length > 0 &&
-            this.containerStats.charts.toArray().every(c => c.chart)
-          ) {
-            this.getStats();
-          }
+        this.currentEnforcer = enforcer;
+        if (!this.currentEnforcer) return;
+        if (this.containerStats) {
+          this.containerStats.clearCharts();
+        }
+        if (
+          this.activeTabIndex === 1 &&
+          this.containerStats.charts.length > 0 &&
+          this.containerStats.charts.toArray().every(c => c.chart)
+        ) {
+          this.getStats();
         }
       }
     );

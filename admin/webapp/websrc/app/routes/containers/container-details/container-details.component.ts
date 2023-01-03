@@ -147,6 +147,8 @@ export class ContainerDetailsComponent implements OnInit, OnDestroy {
         },
         error: ({ error }: { error: ErrorResponse }) => {
           console.error(error);
+          this.containerCompliance = { items: [] } as any;
+          this.complianceEmpty = true;
         },
       });
   }
@@ -169,6 +171,8 @@ export class ContainerDetailsComponent implements OnInit, OnDestroy {
       },
       error: ({ error }: { error: ErrorResponse }) => {
         console.error(error);
+        this.containerVuls = [];
+        this.vulEmpty = true;
       },
     });
   }

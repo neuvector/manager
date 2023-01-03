@@ -9,7 +9,7 @@ import { SystemComponentsCommunicationService } from '../system-components-commu
   styleUrls: ['./scanner-details.component.scss'],
 })
 export class ScannerDetailsComponent implements OnInit {
-  currentScanner!: Scanner;
+  currentScanner!: Scanner | undefined;
   activeScannerSub!: Subscription;
 
   constructor(
@@ -18,9 +18,7 @@ export class ScannerDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.componentsCommunicationService.selectedScanner$.subscribe(scanner => {
-      if (scanner) {
-        this.currentScanner = scanner;
-      }
+      this.currentScanner = scanner;
     });
   }
 }

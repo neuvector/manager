@@ -1,10 +1,27 @@
 <div class="d-flex flex-column justify-content-between pt-2">
   <p class="mx-3">{{ 'cis.profile.DESCRIPTION' | translate }}</p>
   <div class="row mx-3">
-    <div class="col-1 d-flex flex-column justify-content-around">
-      <span class="d-block">{{ 'cis.report.data.IMAGES' | translate }}</span>
-      <span class="d-block">{{ 'cis.report.data.NODES' | translate }}</span>
-      <span class="d-block">{{ 'cis.report.data.CONTAINERS' | translate }}</span>
+    <div class="mx-3 d-flex flex-column justify-content-around">
+      <div class="d-flex align-items-center">
+        <i class="fa fa-archive mr-2 text-info"></i>
+        <span class="text-action font-weight-bold">
+          {{ 'cis.report.data.IMAGES' | translate }}
+        </span>
+      </div>
+      <div class="d-flex align-items-center">
+        <i class="fa fa-server mr-2 text-info"></i>
+        <span class="text-action font-weight-bold">
+          {{ 'cis.report.data.NODES' | translate }}
+        </span>
+      </div>
+      <div class="d-flex align-items-center">
+        <i
+          class="far fa-square mr-2 text-info"
+          [class]="namespaceEnabled ? 'text-muted' : 'text-info'"></i>
+        <span class="text-action font-weight-bold">
+          {{ 'cis.report.data.CONTAINERS' | translate }}
+        </span>
+      </div>
     </div>
     <div class="col-1 d-flex flex-column justify-content-around">
       <span class="d-block">{{ 'cis.profile.TEMPLATES' | translate }}</span>
@@ -148,34 +165,44 @@
         <div class="margin-top-s margin-bottom-s">
           <span
             class="badge text-white"
-            style="padding-left: 3px; background-color: #64a150; max-width: 70px"
+            style="
+              padding-left: 3px;
+              background-color: #64a150;
+              max-width: 70px;
+            "
             >⋮⋮&nbsp;&nbsp;All</span
           >
         </div>
       </ng-template>
     </div>
-    <div class="col-1 d-flex flex-column justify-content-around" *appDisplayControl="'write_compliance_profile'">
+    <div
+      class="col-1 d-flex flex-column justify-content-around"
+      *appDisplayControl="'write_compliance_profile'">
       <button
         (click)="editTemplate('_images')"
         aria-label="Edit images icon button "
-        class="d-block" matTooltip="{{ 'cis.tooltips.EDIT_TEMPLATE' | translate }}"
+        class="d-block"
+        matTooltip="{{ 'cis.tooltips.EDIT_TEMPLATE' | translate }}"
         mat-icon-button>
-        <i class="eos-icons text-action">edit</i>
+        <mat-icon class="eos-icons text-action">edit</mat-icon>
       </button>
       <button
         (click)="editTemplate('_nodes')"
         aria-label="Edit nodes icon button "
-        class="d-block" matTooltip="{{ 'cis.tooltips.EDIT_TEMPLATE' | translate }}"
+        class="d-block"
+        matTooltip="{{ 'cis.tooltips.EDIT_TEMPLATE' | translate }}"
         mat-icon-button>
-        <i class="eos-icons text-action">edit</i>
+        <mat-icon class="eos-icons text-action">edit</mat-icon>
       </button>
       <button
-        (click)="editTemplate('_containers')"
+        [style.visibility]="!namespaceEnabled ? 'visible' : 'hidden'"
         [disabled]="namespaceEnabled"
+        (click)="editTemplate('_containers')"
         aria-label="Edit containers icon button "
-        class="d-block" matTooltip="{{ 'cis.tooltips.EDIT_TEMPLATE' | translate }}"
+        class="d-block"
+        matTooltip="{{ 'cis.tooltips.EDIT_TEMPLATE' | translate }}"
         mat-icon-button>
-        <i class="eos-icons text-action">edit</i>
+        <mat-icon class="eos-icons text-action">edit</mat-icon>
       </button>
     </div>
   </div>

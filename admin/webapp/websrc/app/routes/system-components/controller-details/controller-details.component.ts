@@ -19,7 +19,7 @@ export class ControllerDetailsComponent implements OnInit, OnDestroy {
   @ViewChild('detailsTabGroup', { static: false })
   detailsTabGroup!: MatTabGroup;
   activeTabIndex: number = 0;
-  currentController!: Controller;
+  currentController!: Controller | undefined;
   totalPoints = 30;
   cpuChartData!: ChartConfiguration<'line', number[], string>;
   cpuData!: ComponentChartData;
@@ -46,12 +46,11 @@ export class ControllerDetailsComponent implements OnInit, OnDestroy {
     this.cpuChartData = this.getCPUConfig();
     this.componentsCommunicationService.selectedController$.subscribe(
       controller => {
-        if (controller) {
-          this.currentController = controller;
-          this.clearCharts();
-          if (this.activeTabIndex === 1 && this.chart.chart) {
-            this.getStats();
-          }
+        this.currentController = controller;
+        if (!this.currentController) return;
+        this.clearCharts();
+        if (this.activeTabIndex === 1 && this.chart.chart) {
+          this.getStats();
         }
       }
     );

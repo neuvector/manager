@@ -54,6 +54,9 @@ export class ContainersGridComponent implements OnInit {
       this.containersService.displayContainers
     ).length;
   }
+  get isScannerInstalled() {
+    return GlobalVariable.summary.scanners !== 0;
+  }
   get cisLabel() {
     return this.utils.getCisLabel(this.versionInfoService.infoData);
   }

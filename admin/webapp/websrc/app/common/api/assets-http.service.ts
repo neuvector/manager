@@ -183,6 +183,10 @@ export class AssetsHttpService {
     );
   }
 
+  postDomain(payload) {
+    return GlobalVariable.http.post<unknown>(PathConstant.DOMAIN_URL, payload);
+  }
+
   getControllers(): Observable<Controller[]> {
     return GlobalVariable.http
       .get<Controller[]>(PathConstant.CONTROLLER_URL)

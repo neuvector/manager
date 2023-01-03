@@ -11,6 +11,7 @@
       <ng-container *ngIf="!error">
         <div class="mr-3" *ngIf="autoScanAuthorized && containers.length > 0">
           <mat-slide-toggle
+            [disabled]="!isScannerInstalled"
             [formControl]="autoScan"
             (change)="configAutoScan(auto_scan)">
             {{ 'scan.AUTO' | translate }}

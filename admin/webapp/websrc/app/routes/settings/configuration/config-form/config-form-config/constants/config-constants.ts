@@ -349,8 +349,7 @@ export const DurationSliderField = {
   hooks: {
     onInit: field => {
       const ctrl = field.parent.formControl.get('duration_toggle');
-      field.templateOptions.disabled =
-        !field.formControl.value || field.formControl.disabled;
+      field.templateOptions.disabled = !ctrl.value || ctrl.disabled;
       ctrl.valueChanges.subscribe(isEnabled => {
         field.templateOptions.onChangeDisabled(!isEnabled);
       });

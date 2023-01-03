@@ -11,6 +11,12 @@ import {
 } from '@common/types';
 import { MapConstant } from '@common/constants/map.constant';
 
+export interface DomainResponse extends DomainGetResponse {
+  imageTags: string[];
+  containerTags: string[];
+  nodeTags: string[];
+}
+
 @Injectable()
 export class ComplianceProfileService {
   private resizeSubject$ = new BehaviorSubject<boolean>(true);
@@ -71,6 +77,10 @@ export class ComplianceProfileService {
     return this.assetsHttpService.patchDomain(payload);
   }
 
+  toggleDomainTagging(payload) {
+    return this.assetsHttpService.postDomain(payload);
+  }
+
   private getTemplate(): Observable<ComplianceProfileTemplateData> {
     return this.risksHttpService.getComplianceProfileTemplate().pipe(
       catchError(err => {
@@ -103,9 +113,10 @@ export class ComplianceProfileService {
     );
   }
 
-  private getDomain(): Observable<DomainGetResponse> {
+  private getDomain(): Observable<DomainResponse> {
     return this.assetsHttpService.getDomain().pipe(
-      map(res => {
+      map(domainRes => {
+        let res: DomainResponse = domainRes as any;
         res['imageTags'] =
           res.domains.find(item => item.name === '_images')?.tags || [];
         res['containerTags'] =
@@ -126,6 +137,7 @@ export class ComplianceProfileService {
             imageTags: [],
             containerTags: [],
             nodeTags: [],
+            tag_per_domain: false,
           } as any);
         } else {
           throw err;

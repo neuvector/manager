@@ -2,9 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   ComplianceProfileData,
   ComplianceProfileTemplateData,
-  DomainGetResponse,
 } from '@common/types';
-import { ComplianceProfileService } from '@routes/compliance-profile/compliance-profile.service';
+import { AuthUtilsService } from '@common/utils/auth.utils';
+import {
+  ComplianceProfileService,
+  DomainResponse,
+} from '@routes/compliance-profile/compliance-profile.service';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { Subscription } from 'rxjs';
 
@@ -18,13 +21,17 @@ export class ComplianceProfileComponent implements OnInit, OnDestroy {
   complianceProfileData!: {
     template: ComplianceProfileTemplateData;
     profile: ComplianceProfileData;
-    domains: DomainGetResponse;
+    domains: DomainResponse;
   };
   loaded = false;
+  get isNamespaceUser() {
+    return this.authUtilsService.userPermission.isNamespaceUser;
+  }
 
   constructor(
     private complianceProfileService: ComplianceProfileService,
-    private multiClusterService: MultiClusterService
+    private multiClusterService: MultiClusterService,
+    private authUtilsService: AuthUtilsService
   ) {}
 
   ngOnInit(): void {

@@ -33,6 +33,7 @@
     [appearance]="'mat-stroked-button'"
     [buttonClasses]="'mr-2'"
     [disabled]="
+      !isScannerInstalled ||
       (gridApi && !gridApi.getSelectedNodes().length) ||
       (gridApi &&
         gridApi.getSelectedNodes().length &&
@@ -50,6 +51,7 @@
     *appDisplayControl="'registry_scan'"
     [appearance]="'mat-stroked-button'"
     [disabled]="
+      !isScannerInstalled ||
       (gridApi && !gridApi.getSelectedNodes().length) ||
       (gridApi &&
         gridApi.getSelectedNodes().length &&

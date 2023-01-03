@@ -10,7 +10,9 @@
             complianceProfileData.template.list.compliance
           "></app-compliance-profile-templates>
       </mat-tab>
-      <mat-tab [label]="'sidebar.nav.RESOURCE' | translate">
+      <mat-tab
+        [label]="'sidebar.nav.RESOURCE' | translate"
+        *ngIf="!isNamespaceUser">
         <app-compliance-profile-assets
           [domains]="
             complianceProfileData.domains

@@ -23,6 +23,12 @@ import { ComplianceProfileService } from '@routes/compliance-profile/compliance-
 import { EditTemplateDialogComponent } from '@routes/compliance-profile/compliance-profile-assets/compliance-profile-assets-table/edit-template-dialog/edit-template-dialog.component';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 
+export const iconMap = {
+  _images: 'fa fa-archive',
+  _nodes: 'fa fa-server',
+  _containers: 'far fa-square',
+};
+
 @Component({
   selector: 'app-compliance-profile-assets-table',
   templateUrl: './compliance-profile-assets-table.component.html',
@@ -35,63 +41,12 @@ export class ComplianceProfileAssetsTableComponent
   @Input() imageTags!: string[];
   @Input() nodeTags!: string[];
   @Input() containerTags!: string[];
+  @Input() namespaceEnabled: boolean = false;
   gridOptions!: GridOptions;
   gridApi!: GridApi;
-  namespaceEnabled = false;
   isWriteComplianceProfileAuthorized: boolean = false;
 
-  columnDefs: ColDef[] = [
-    {
-      field: 'name',
-      sortable: true,
-      resizable: true,
-      headerValueGetter: () =>
-        this.translate.instant('cis.report.gridHeader.NAME'),
-    },
-    {
-      field: 'tags',
-      width: 120,
-      sortable: true,
-      resizable: true,
-      cellRenderer: 'templatesCellRenderer',
-      headerValueGetter: () => this.translate.instant('cis.profile.TEMPLATES'),
-    },
-    {
-      field: 'workloads',
-      width: 120,
-      sortable: true,
-      resizable: true,
-      headerValueGetter: () =>
-        this.translate.instant('multiCluster.summary.TOTAL_WORKLOAD'),
-    },
-    {
-      field: 'running_pods',
-      width: 120,
-      sortable: true,
-      resizable: true,
-      headerValueGetter: () =>
-        this.translate.instant('multiCluster.summary.RUNNING_POD'),
-    },
-    {
-      field: 'services',
-      width: 70,
-      sortable: true,
-      resizable: true,
-      headerValueGetter: () =>
-        this.translate.instant('dashboard.summary.SERVICE'),
-    },
-    {
-      field: 'action',
-      resizable: true,
-      width: 50,
-      cellRenderer: 'actionCellRenderer',
-      hide: true,
-      cellRendererParams: {
-        edit: event => this.editTemplateFromGrid(event),
-      },
-      headerValueGetter: () => this.translate.instant('setting.ACTIONS'),
-    },
-  ];
+  columnDefs!: ColDef[];
 
   constructor(
     private translate: TranslateService,
@@ -101,9 +56,67 @@ export class ComplianceProfileAssetsTableComponent
     private authUtilsService: AuthUtilsService
   ) {}
 
+  setGrid() {
+    this.columnDefs = [
+      {
+        field: 'name',
+        sortable: true,
+        resizable: true,
+        headerValueGetter: () =>
+          this.translate.instant('cis.report.gridHeader.NAME'),
+      },
+      {
+        field: 'tags',
+        width: 120,
+        sortable: true,
+        resizable: true,
+        cellRenderer: 'templatesCellRenderer',
+        headerValueGetter: () =>
+          this.translate.instant('cis.profile.TEMPLATES'),
+      },
+      {
+        field: 'workloads',
+        width: 120,
+        sortable: true,
+        resizable: true,
+        headerValueGetter: () =>
+          this.translate.instant('multiCluster.summary.TOTAL_WORKLOAD'),
+      },
+      {
+        field: 'running_pods',
+        width: 120,
+        sortable: true,
+        resizable: true,
+        headerValueGetter: () =>
+          this.translate.instant('multiCluster.summary.RUNNING_POD'),
+      },
+      {
+        field: 'services',
+        width: 70,
+        sortable: true,
+        resizable: true,
+        headerValueGetter: () =>
+          this.translate.instant('dashboard.summary.SERVICE'),
+      },
+      {
+        field: 'action',
+        resizable: true,
+        width: 50,
+        cellRenderer: 'actionCellRenderer',
+        hide:
+          !this.namespaceEnabled || !this.isWriteComplianceProfileAuthorized,
+        cellRendererParams: {
+          edit: event => this.editTemplateFromGrid(event),
+        },
+        headerValueGetter: () => this.translate.instant('setting.ACTIONS'),
+      },
+    ];
+  }
+
   ngOnInit(): void {
     this.isWriteComplianceProfileAuthorized =
       this.authUtilsService.getDisplayFlag('write_compliance_profile');
+    this.setGrid();
     this.gridOptions = {
       rowData: this.rowData,
       columnDefs: this.columnDefs,
@@ -119,8 +132,13 @@ export class ComplianceProfileAssetsTableComponent
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.gridApi && changes.rowData) {
-      this.gridApi.setRowData(changes.rowData.currentValue);
+    if (this.gridApi) {
+      if (changes.rowData) {
+        this.gridApi.setRowData(changes.rowData.currentValue);
+      }
+      if (changes.namespaceEnabled && this.gridOptions) {
+        this.toggleNamespaceActions();
+      }
     }
   }
 
@@ -192,14 +210,23 @@ export class ComplianceProfileAssetsTableComponent
     this.cd.markForCheck();
   }
 
-  enable() {
-    if (this.namespaceEnabled) {
+  toggleNamespaceActions() {
+    if (this.namespaceEnabled && this.isWriteComplianceProfileAuthorized) {
       this.gridOptions.columnApi?.setColumnVisible('action', true);
     } else {
       this.gridOptions.columnApi?.setColumnVisible('action', false);
     }
     this.gridApi.sizeColumnsToFit();
     this.cd.markForCheck();
+  }
+
+  enable() {
+    this.toggleNamespaceActions();
+    this.complianceProfileService
+      .toggleDomainTagging({
+        tag_per_domain: this.namespaceEnabled,
+      })
+      .subscribe(() => {});
   }
 
   onResize(): void {

@@ -1,46 +1,115 @@
 <div class="d-flex flex-row align-items-center justify-content-between">
-  <h1
-    class="h4">Customize regulation for&nbsp;{{data.test_number}}</h1>
+  <h1 class="h4">Customize regulation for&nbsp;{{ data.test_number }}</h1>
   <button (click)="onNoClick()" aria-label="Close dialog" mat-icon-button>
     <i class="eos-icons">close</i>
   </button>
 </div>
-<div style="height: 70px;">
-  <span class="d-block mb-2">{{'cis.profile.APPLY_REG' | translate }}</span>
+<div style="height: 70px">
+  <span class="d-block mb-2 text-success font-weight-bold">{{
+    'cis.profile.APPLY_REG' | translate
+  }}</span>
   <ng-container *ngFor="let tag of available">
     <ng-container [ngSwitch]="tag">
-      <span *ngSwitchCase="'GDPR'" class="mr-1 d-inline-flex align-items-center badge text-white ml-0"
-            style="padding-left: 3px; background-color: #ff9800;">⋮⋮&nbsp;&nbsp;GDPR<i
-        (click)="add('GDPR')" class="ml-1 eos-icons" role="button">add</i></span>
-      <span *ngSwitchCase="'HIPAA'" class="mr-1 d-inline-flex align-items-center badge text-white ml-0"
-            style="padding-left: 3px; background-color: #4e39c1;">⋮⋮&nbsp;&nbsp;HIPAA<i
-        (click)="add('HIPAA')" class="ml-1 eos-icons" role="button">add</i></span>
-      <span *ngSwitchCase="'NIST'" class="mr-1 d-inline-flex align-items-center badge badge-dark ml-0"
-            style="padding-left: 3px;">⋮⋮&nbsp;&nbsp;NIST<i
-        (click)="add('NIST')" class="ml-1 eos-icons" role="button">add</i></span>
-      <span *ngSwitchCase="'PCI'" class="mr-1 d-inline-flex align-items-center badge text-white ml-0"
-            style="padding-left: 3px; background-color: #009688;">⋮⋮&nbsp;&nbsp;PCI<i
-        (click)="add('PCI')" class="ml-1 eos-icons" role="button">add</i></span>
+      <span
+        *ngSwitchCase="'GDPR'"
+        class="mr-1 d-inline-flex align-items-center badge text-white ml-0"
+        style="padding-left: 3px; background-color: #ff9800"
+        >⋮⋮&nbsp;&nbsp;GDPR<i
+          (click)="add('GDPR')"
+          class="ml-1 eos-icons"
+          role="button"
+          >add</i
+        ></span
+      >
+      <span
+        *ngSwitchCase="'HIPAA'"
+        class="mr-1 d-inline-flex align-items-center badge text-white ml-0"
+        style="padding-left: 3px; background-color: #4e39c1"
+        >⋮⋮&nbsp;&nbsp;HIPAA<i
+          (click)="add('HIPAA')"
+          class="ml-1 eos-icons"
+          role="button"
+          >add</i
+        ></span
+      >
+      <span
+        *ngSwitchCase="'NIST'"
+        class="mr-1 d-inline-flex align-items-center badge badge-dark ml-0"
+        style="padding-left: 3px"
+        >⋮⋮&nbsp;&nbsp;NIST<i
+          (click)="add('NIST')"
+          class="ml-1 eos-icons"
+          role="button"
+          >add</i
+        ></span
+      >
+      <span
+        *ngSwitchCase="'PCI'"
+        class="mr-1 d-inline-flex align-items-center badge text-white ml-0"
+        style="padding-left: 3px; background-color: #009688"
+        >⋮⋮&nbsp;&nbsp;PCI<i
+          (click)="add('PCI')"
+          class="ml-1 eos-icons"
+          role="button"
+          >add</i
+        ></span
+      >
     </ng-container>
   </ng-container>
 </div>
-<div style="height: 70px;">
-  <span class="d-block mb-2">{{'cis.profile.CURR_REG' | translate }}</span>
-  <span *ngIf="applied.length === 0" class="text-muted mt-2">{{'cis.profile.ADD_TEMPLATE' | translate }}</span>
+<div style="height: 70px">
+  <span class="d-block mb-2 text-success font-weight-bold">{{
+    'cis.profile.CURR_REG' | translate
+  }}</span>
+  <span *ngIf="applied.length === 0" class="text-muted mt-2">{{
+    'cis.profile.ADD_TEMPLATE' | translate
+  }}</span>
   <ng-container *ngFor="let tag of applied">
     <ng-container [ngSwitch]="tag">
-      <span *ngSwitchCase="'GDPR'" class="mr-1 d-inline-flex align-items-center badge text-white ml-0"
-            style="padding-left: 3px; background-color: #ff9800;">⋮⋮&nbsp;&nbsp;GDPR<i
-        (click)="remove('GDPR')" class="ml-1 eos-icons" role="button">close</i></span>
-      <span *ngSwitchCase="'HIPAA'" class="mr-1 d-inline-flex align-items-center badge text-white ml-0"
-            style="padding-left: 3px; background-color: #4e39c1;">⋮⋮&nbsp;&nbsp;HIPAA<i
-        (click)="remove('HIPAA')" class="ml-1 eos-icons" role="button">close</i></span>
-      <span *ngSwitchCase="'NIST'" class="mr-1 d-inline-flex align-items-center badge badge-dark ml-0"
-            style="padding-left: 3px;">⋮⋮&nbsp;&nbsp;NIST<i
-        (click)="remove('NIST')" class="ml-1 eos-icons" role="button">close</i></span>
-      <span *ngSwitchCase="'PCI'" class="mr-1 d-inline-flex align-items-center badge text-white ml-0"
-            style="padding-left: 3px; background-color: #009688;">⋮⋮&nbsp;&nbsp;PCI<i
-        (click)="remove('PCI')" class="ml-1 eos-icons" role="button">close</i></span>
+      <span
+        *ngSwitchCase="'GDPR'"
+        class="mr-1 d-inline-flex align-items-center badge text-white ml-0"
+        style="padding-left: 3px; background-color: #ff9800"
+        >⋮⋮&nbsp;&nbsp;GDPR<i
+          (click)="remove('GDPR')"
+          class="ml-1 eos-icons"
+          role="button"
+          >close</i
+        ></span
+      >
+      <span
+        *ngSwitchCase="'HIPAA'"
+        class="mr-1 d-inline-flex align-items-center badge text-white ml-0"
+        style="padding-left: 3px; background-color: #4e39c1"
+        >⋮⋮&nbsp;&nbsp;HIPAA<i
+          (click)="remove('HIPAA')"
+          class="ml-1 eos-icons"
+          role="button"
+          >close</i
+        ></span
+      >
+      <span
+        *ngSwitchCase="'NIST'"
+        class="mr-1 d-inline-flex align-items-center badge badge-dark ml-0"
+        style="padding-left: 3px"
+        >⋮⋮&nbsp;&nbsp;NIST<i
+          (click)="remove('NIST')"
+          class="ml-1 eos-icons"
+          role="button"
+          >close</i
+        ></span
+      >
+      <span
+        *ngSwitchCase="'PCI'"
+        class="mr-1 d-inline-flex align-items-center badge text-white ml-0"
+        style="padding-left: 3px; background-color: #009688"
+        >⋮⋮&nbsp;&nbsp;PCI<i
+          (click)="remove('PCI')"
+          class="ml-1 eos-icons"
+          role="button"
+          >close</i
+        ></span
+      >
     </ng-container>
   </ng-container>
 </div>

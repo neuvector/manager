@@ -80,12 +80,13 @@ export class ComplianceProfileTemplatesTableComponent
     },
     {
       field: 'scored',
-      width: 50,
+      width: 70,
       sortable: true,
       resizable: true,
       valueFormatter: params => (params?.node?.data.scored ? 'Y' : 'N'),
       headerValueGetter: () =>
-        this.translate.instant('cis.report.gridHeader.SCORED'),
+        this.translate.instant('cis.report.gridHeader.SCORED') + '\u00A0\u24D8',
+      headerTooltip: this.translate.instant('cis.SCORED'),
     },
     {
       field: 'profile',
@@ -93,7 +94,9 @@ export class ComplianceProfileTemplatesTableComponent
       sortable: true,
       resizable: true,
       headerValueGetter: () =>
-        this.translate.instant('cis.report.gridHeader.PROFILE'),
+        this.translate.instant('cis.report.gridHeader.PROFILE') +
+        '\u00A0\u24D8',
+      headerTooltip: this.translate.instant('cis.LEVEL1'),
     },
     {
       field: 'description',
@@ -137,6 +140,7 @@ export class ComplianceProfileTemplatesTableComponent
     this.hideSystem = this.hideSystemInit;
     this.gridOptions = {
       rowData: this.rowData,
+      tooltipShowDelay: 0,
       columnDefs: this.columnDefs,
       suppressDragLeaveHidesColumns: true,
       rowSelection: 'single',

@@ -132,6 +132,7 @@ export class ScannersGridComponent implements OnInit, OnChanges {
 
   refresh(): void {
     this.refreshing$.next(true);
+    this.selectedScannerSubject$.next(undefined);
     this.getScanners();
   }
 

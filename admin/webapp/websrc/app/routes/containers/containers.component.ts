@@ -13,6 +13,7 @@ import { MultiClusterService } from '@services/multi-cluster.service';
 import { ScanService } from '@services/scan.service';
 import { interval, Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
+import { GlobalVariable } from '@common/variables/global.variable';
 
 @Component({
   selector: 'app-containers',
@@ -54,6 +55,9 @@ export class ContainersComponent implements OnInit {
   }
   get containers() {
     return this.containersService.containers;
+  }
+  get isScannerInstalled() {
+    return GlobalVariable.summary.scanners !== 0;
   }
 
   constructor(

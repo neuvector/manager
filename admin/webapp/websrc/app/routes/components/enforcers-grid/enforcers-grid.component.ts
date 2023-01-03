@@ -181,6 +181,7 @@ export class EnforcersGridComponent implements OnInit, OnChanges {
 
   refresh(): void {
     this.refreshing$.next(true);
+    this.selectedEnforcerSubject$.next(undefined);
     this.getEnforcers();
   }
 

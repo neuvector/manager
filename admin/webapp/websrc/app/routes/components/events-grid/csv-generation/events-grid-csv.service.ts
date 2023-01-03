@@ -23,7 +23,6 @@ export class EventsGridCsvService {
     events4Csv = events4Csv.map(event => {
       this.eventRow2Item(event);
       if (!event.enforcer_limit) event.enforcer_limit = 0;
-      if (!event.license_expire) event.license_expire = '';
       if (event.user_roles) {
         event.user_roles = JSON.stringify(event.user_roles).replace(/\"/g, "'");
       }

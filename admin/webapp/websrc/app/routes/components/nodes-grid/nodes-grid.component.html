@@ -55,7 +55,7 @@
           type="button"
           class="mr-3"
           (click)="scan.emit(selectedNode)"
-          [disabled]="!selectedNode">
+          [disabled]="!isScannerInstalled || !selectedNode">
           {{ 'scan.SCAN' | translate }}
         </button>
       </ng-container>

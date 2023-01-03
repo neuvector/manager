@@ -4,8 +4,8 @@ export type VersionInfoType = 'compliance' | 'vulnerabilities' | '';
 
 @Injectable()
 export class VersionInfoService {
-  private _infoData: any;
-  template!: VersionInfoType;
+  private _infoData: any = null;
+  template: VersionInfoType = '';
   get infoData() {
     return this._infoData;
   }

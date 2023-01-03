@@ -30,9 +30,9 @@
 /* Colors variables: /assets/stylesheets/eos-base/variables/branding.scss */
 /* Typography
    ========================================================================== */
-@import url("https://fonts.googleapis.com/css?family=Lato:400,700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap");
+
+
+
 /* Paragraph variables
    ========================================================================== */
 /* Variables: /assets/stylesheets/eos-base/variables/typography.scss */
@@ -100,12 +100,12 @@
  * .margin-top-xs or .padding-bottom-xl
  * for more information checkout the file mixins.scss in this same folder.
  */
-@import url("https://fonts.googleapis.com/css?family=Lato:400,700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap");
-@import url("https://fonts.googleapis.com/css?family=Lato:400,700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap");
+
+
+
+
+
+
 .margin-top-m {
   margin-top: 16px; }
 

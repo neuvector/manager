@@ -1453,7 +1453,7 @@
     "AUTOCOMPLETE_INVALID": "{{field}}未被识别。单击其中一个自动完成选项。",
     "label": {
       "NETWORK": "网络",
-      "PRIVILEGE": "权限",
+      "PRIVILEDGE": "权限",
       "FILE": "文件",
       "TUNNEL": "隧道",
       "PROCESS": "进程",

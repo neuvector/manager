@@ -185,6 +185,10 @@ export class SecurityEventsComponent implements OnInit {
     this.cd.detectChanges();
   }
 
+  ngOnDestroy() {
+    this.advancedFilterModalService.resetFilter();
+  }
+
   refresh = () => {
     this.isDataReady = false;
     this.securityEventsService.displayedSecurityEvents = [];

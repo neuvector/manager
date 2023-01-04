@@ -145,12 +145,9 @@ export class OpenidFormComponent implements OnInit, OnChanges {
         this.refresh.emit();
       },
       error: ({ error }: { error: ErrorResponse }) => {
-        this.notificationService.open(
-          this.utils.getAlertifyMsg(
-            error,
-            this.tr.instant('openId.LOAD_ERR'),
-            false
-          )
+        this.notificationService.openError(
+          error,
+          this.tr.instant('openId.LOAD_ERR')
         );
       },
     });

@@ -53,12 +53,9 @@ export class ScoreImprovementServiceRiskViewComponent implements OnInit {
           this.notificationService.open(this.tr.instant('setting.SUBMIT_OK'));
         },
         error: ({ error }: { error: ErrorResponse }) => {
-          this.notificationService.open(
-            this.utils.getAlertifyMsg(
-              error,
-              this.tr.instant('setting.SUBMIT_FAILED'),
-              false
-            )
+          this.notificationService.openError(
+            error,
+            this.tr.instant('setting.SUBMIT_FAILED')
           );
         },
       });

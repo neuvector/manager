@@ -133,12 +133,9 @@ export class LdapFormComponent implements OnInit, OnChanges {
         this.refresh.emit();
       },
       error: ({ error }: { error: ErrorResponse }) => {
-        this.notificationService.open(
-          this.utils.getAlertifyMsg(
-            error,
-            this.tr.instant('ldap.SERVER_SAVE_FAILED'),
-            false
-          )
+        this.notificationService.openError(
+          error,
+          this.tr.instant('ldap.SERVER_SAVE_FAILED')
         );
       },
     });

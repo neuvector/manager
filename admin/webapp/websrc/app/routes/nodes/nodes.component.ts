@@ -128,12 +128,9 @@ export class NodesComponent implements OnInit {
         if (error.status === MapConstant.ACC_FORBIDDEN) {
           this.autoScanAuthorized = false;
         }
-        this.notificationService.open(
-          this.utils.getAlertifyMsg(
-            error.error,
-            this.tr.instant('scan.message.CONFIG_ERR'),
-            false
-          )
+        this.notificationService.openError(
+          error.error,
+          this.tr.instant('scan.message.CONFIG_ERR')
         );
       },
     });
@@ -176,12 +173,9 @@ export class NodesComponent implements OnInit {
           });
       },
       error: ({ error }: { error: ErrorResponse }) => {
-        this.notificationService.open(
-          this.utils.getAlertifyMsg(
-            error,
-            this.tr.instant('scan.FAILED_SCAN'),
-            false
-          )
+        this.notificationService.openError(
+          error,
+          this.tr.instant('scan.FAILED_SCAN')
         );
       },
     });

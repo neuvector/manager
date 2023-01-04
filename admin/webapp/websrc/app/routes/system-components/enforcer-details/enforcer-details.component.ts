@@ -77,12 +77,9 @@ export class EnforcerDetailsComponent implements OnInit, OnDestroy {
             this.containerStats.updateCharts(cpu, byte, session);
           },
           error: ({ error }: { error: ErrorResponse }) => {
-            this.notificationService.open(
-              this.utils.getAlertifyMsg(
-                error,
-                this.tr.instant('general.UNFORMATTED_ERR'),
-                false
-              )
+            this.notificationService.openError(
+              error,
+              this.tr.instant('general.UNFORMATTED_ERR')
             );
           },
         });

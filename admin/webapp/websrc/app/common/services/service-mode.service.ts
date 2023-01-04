@@ -129,12 +129,9 @@ export class ServiceModeService {
         });
       },
       error: ({ error }: { error: ErrorResponse }) => {
-        this.notificationService.open(
-          this.utils.getAlertifyMsg(
-            error,
-            this.tr.instant('service.ALL_SUBMIT_FAILED'),
-            false
-          )
+        this.notificationService.openError(
+          error,
+          this.tr.instant('service.ALL_SUBMIT_FAILED')
         );
       },
     });
@@ -172,12 +169,9 @@ export class ServiceModeService {
           });
         },
         error: ({ error }: { error: ErrorResponse }) => {
-          this.notificationService.open(
-            this.utils.getAlertifyMsg(
-              error,
-              this.tr.instant('service.BASELINE_PROFILE_SUBMIT_FAILED'),
-              false
-            )
+          this.notificationService.openError(
+            error,
+            this.tr.instant('service.BASELINE_PROFILE_SUBMIT_FAILED')
           );
         },
       });
@@ -197,12 +191,9 @@ export class ServiceModeService {
           });
         },
         error: ({ error }: { error: ErrorResponse }) => {
-          this.notificationService.open(
-            this.utils.getAlertifyMsg(
-              error,
-              this.tr.instant('service.ALL_SUBMIT_FAILED'),
-              false
-            )
+          this.notificationService.openError(
+            error,
+            this.tr.instant('service.ALL_SUBMIT_FAILED')
           );
         },
       });

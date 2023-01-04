@@ -11,6 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { MapConstant } from '@common/constants/map.constant';
 import { AuthUtilsService } from '@common/utils/auth.utils';
+import { GlobalConstant } from '@common/constants/global.constant';
 
 @Component({
   selector: 'app-export-form',
@@ -80,7 +81,8 @@ export class ExportFormComponent implements OnInit {
         },
         ({ error }: { error: ErrorResponse }) => {
           this.notificationService.open(
-            this.tr.instant('setting.EXPORT_FAILED')
+            this.tr.instant('setting.EXPORT_FAILED'),
+            GlobalConstant.NOTIFICATION_TYPE.ERROR
           );
           console.warn(error);
         }

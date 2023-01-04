@@ -131,12 +131,9 @@ export class PlatformsComponent implements OnInit, OnDestroy {
         if (error.status === MapConstant.ACC_FORBIDDEN) {
           this.autoScanAuthorized = false;
         }
-        this.notificationService.open(
-          this.utils.getAlertifyMsg(
-            error.error,
-            this.tr.instant('scan.message.CONFIG_ERR'),
-            false
-          )
+        this.notificationService.openError(
+          error.error,
+          this.tr.instant('scan.message.CONFIG_ERR')
         );
       },
     });
@@ -184,12 +181,9 @@ export class PlatformsComponent implements OnInit, OnDestroy {
           });
       },
       error: ({ error }: { error: ErrorResponse }) => {
-        this.notificationService.open(
-          this.utils.getAlertifyMsg(
-            error,
-            this.tr.instant('scan.FAILED_SCAN'),
-            false
-          )
+        this.notificationService.openError(
+          error,
+          this.tr.instant('scan.FAILED_SCAN')
         );
       },
     });

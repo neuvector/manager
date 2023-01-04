@@ -16,12 +16,12 @@ export const FilterLocation = {
 };
 
 export const FilterCategory = {
-  network: 'securityEvent.label.NETWORK',
-  package: 'securityEvent.label.PACKAGE',
-  file: 'securityEvent.label.FILE',
-  tunnel: 'securityEvent.label.TUNNEL',
-  process: 'securityEvent.label.PROCESS',
-  priviledge: 'securityEvent.label.PRIVILEGE',
+  network: 'network',
+  package: 'package',
+  file: 'file',
+  tunnel: 'tunnel',
+  process: 'process',
+  priviledge: 'priviledge',
 };
 
 export const Other = {
@@ -33,7 +33,9 @@ export class AdvancedFilterModalService {
   private filteredSubject$ = new BehaviorSubject(false);
   filtered$ = this.filteredSubject$.asObservable();
 
-  constructor(private datePipe: DatePipe) {}
+  constructor(
+    private datePipe: DatePipe
+  ) {}
 
   private _filtered = false;
 
@@ -132,7 +134,7 @@ export class AdvancedFilterModalService {
     let res = false;
     for (let selectedCategory of selectedCategories) {
       if (selectedCategory) {
-        if (category.includes(selectedCategory.toLowerCase())) {
+        if (category.includes(selectedCategory)) {
           res = true;
           break;
         }

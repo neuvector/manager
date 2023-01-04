@@ -93,7 +93,7 @@
         </mat-form-field>
       </div>
     </div>
-    <div *ngIf="isRancherSSO" class="d-flex justify-content-end align-items-center mt-2">
+    <div *ngIf="!isLocalUser" class="d-flex justify-content-end align-items-center mt-2">
       <app-loading-button
         [appearance]="'mat-raised-button'"
         [color]="'primary'"

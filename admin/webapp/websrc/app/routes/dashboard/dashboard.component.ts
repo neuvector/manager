@@ -73,19 +73,13 @@ export class DashboardComponent implements OnInit {
     this.dashboardSecurityEventsService.runWorker();
     this.dashboardDetailsService.runWorker();
 
+    if (!GlobalVariable.hasInitializedSummary) {
+      this.getSummary();
+    }
+
     this._switchClusterSubscriber =
       this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
         const currentUrl = this.router.url;
-        this.authService.getSummary().subscribe(
-          (summaryInfo: any) => {
-            GlobalVariable.isOpenShift =
-              summaryInfo.summary.platform === GlobalConstant.OPENSHIFT ||
-              summaryInfo.summary.platform === GlobalConstant.RANCHER;
-            GlobalVariable.summary = summaryInfo.summary;
-            GlobalVariable.hasInitializedSummary = true;
-          },
-          error => {}
-        );
         this.router
           .navigateByUrl('/', { skipLocationChange: true })
           .then(() => {
@@ -101,6 +95,7 @@ export class DashboardComponent implements OnInit {
     if (this._switchClusterSubscriber) {
       this._switchClusterSubscriber.unsubscribe();
     }
+    GlobalVariable.hasInitializedSummary = false;
   }
 
   getBasicInfo = () => {
@@ -192,5 +187,18 @@ export class DashboardComponent implements OnInit {
       hasBackdrop: false,
       position: { right: '25px', top: '80px' },
     });
+  };
+
+  private getSummary = () => {
+    this.authService.getSummary().subscribe(
+      (summaryInfo: any) => {
+        GlobalVariable.isOpenShift =
+          summaryInfo.summary.platform === GlobalConstant.OPENSHIFT ||
+          summaryInfo.summary.platform === GlobalConstant.RANCHER;
+        GlobalVariable.summary = summaryInfo.summary;
+        GlobalVariable.hasInitializedSummary = true;
+      },
+      error => {}
+    );
   };
 }

@@ -1453,7 +1453,7 @@
     "AUTOCOMPLETE_INVALID": "{{field}} not recognized. Click one of the autocomplete options.",
     "label": {
       "NETWORK": "Network",
-      "PRIVILEGE": "Privilege",
+      "PRIVILEDGE": "Privilege",
       "FILE": "File",
       "TUNNEL": "Tunnel",
       "PROCESS": "Process",

@@ -36,7 +36,7 @@
       <div formArrayName="location" class="mt-2 col-9 row">
         <ng-container *ngFor="let location of locationFormArray.controls; let i = index">
           <mat-checkbox class="mr-3" [formControlName]="i" class="col-sm-3">
-            {{ filterLocation[i] }}
+            {{ 'securityEvent.label.' + filterLocation[i].toUpperCase() | translate }}
           </mat-checkbox>
         </ng-container>
       </div>
@@ -48,7 +48,7 @@
       <div formArrayName="category" class="mt-2 col-9 row">
         <ng-container *ngFor="let category of categoryFormArray.controls; let i = index">
           <mat-checkbox class="mr-3" [formControlName]="i" class="col-sm-3">
-            {{ filterCategory[i] | translate }}
+            {{ 'securityEvent.label.' + filterCategory[i].toUpperCase() | translate }}
           </mat-checkbox>
         </ng-container>
       </div>

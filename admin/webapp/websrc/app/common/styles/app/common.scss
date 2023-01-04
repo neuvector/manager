@@ -665,7 +665,9 @@ hr.solid {
 }
 
 .disabled-row-print {
-  color: $neuvector-grey-300 !important;
+  color: $neuvector-grey-500 !important;
+  background-color: $neuvector-grey-50 !important;
+  -webkit-print-color-adjust: exact;
 }
 
 .critical-row {

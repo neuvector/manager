@@ -90,7 +90,7 @@
             <td class="print-cell" style="width: 12%" [ngClass]="{'disabled-row-print': rule.disable}">
               {{ rule.ports }}
             </td>
-            <td class="print-cell text-center" style="width: 6%">
+            <td class="print-cell text-center" style="width: 6%" [ngClass]="{'disabled-row-print': rule.disable}">
               <span class="action-label px-1 {{ colourMap[rule.action] }}" *ngIf="!rule.disable">
                 {{ 'policy.action.' + rule.action.toUpperCase() | translate }}
               </span>
@@ -98,7 +98,7 @@
                 {{ 'policy.action.' + rule.action.toUpperCase() | translate }}
               </span>
             </td>
-            <td class="print-cell text-center" style="width: 8%">
+            <td class="print-cell text-center" style="width: 8%" [ngClass]="{'disabled-row-print': rule.disable}">
               <span *ngIf="colourMap[rule.cfg_type] && !rule.disable" class="action-label px-1 {{colourMap[rule.cfg_type]}}">
                 {{ ('policy.head.' + colourMap[rule.cfg_type].replace("-", "_").toUpperCase()) | translate }}
               </span>

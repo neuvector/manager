@@ -383,6 +383,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
           // confirm actions
           setTimeout(() => {
             this.gridOptions.api!.deselectAll();
+            this.networkRulesService.squence = GlobalConstant.NEW_ID_SEED.NETWORK_RULE;
             this.getNetworkRules();
           }, 2000);
         },

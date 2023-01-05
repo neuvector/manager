@@ -383,6 +383,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
           // confirm actions
           setTimeout(() => {
             this.gridOptions.api!.deselectAll();
+            this.networkRulesService.squence = GlobalConstant.NEW_ID_SEED.NETWORK_RULE;
             this.getNetworkRules();
           }, 2000);
         },
@@ -536,8 +537,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   ) => {
     this.networkRules.splice(targetIndex, 1, updatedNetworkRule);
     let row = this.gridOptions.api!.getDisplayedRowAtIndex(targetIndex)!;
-    row.setData(updatedNetworkRule);
-    this.gridOptions.api!.redrawRows({ rowNodes: [row] });
+    this.gridOptions.api!.setRowData(this.networkRules);
     this.networkRulesService.isNetworkRuleChanged = true;
     setTimeout(() => {
       this.gridOptions.api!.ensureIndexVisible(targetIndex, 'top');

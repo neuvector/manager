@@ -8,6 +8,7 @@ import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { UpdateType } from '@common/types/network-rules/enum';
+import { NetworkRulesService } from '@services/network-rules.service';
 
 @Component({
   selector: 'app-add-edit-network-rule-modal',
@@ -26,10 +27,10 @@ export class AddEditNetworkRuleModalComponent implements OnInit {
   isAllow: boolean = false;
   enable: boolean = true;
   submittingUpdate: boolean = false;
-  squence: number = GlobalConstant.NEW_ID_SEED.NETWORK_RULE;
   @ViewChild('applicationsInput') applicationsInput: ElementRef<HTMLInputElement>;
 
   constructor(
+    private networkRulesService: NetworkRulesService,
     public dialogRef: MatDialogRef<AddEditNetworkRuleModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -133,11 +134,13 @@ export class AddEditNetworkRuleModalComponent implements OnInit {
     return {
       ...this.addEditNetworkRuleForm.value,
       applications: this.applications,
-      action: this.isAllow ? GlobalConstant.PROCESS_PROFILE_RULE.ACTION.ALLOW : GlobalConstant.PROCESS_PROFILE_RULE.ACTION.DENY,
+      action: this.isAllow ?
+        GlobalConstant.PROCESS_PROFILE_RULE.ACTION.ALLOW :
+        GlobalConstant.PROCESS_PROFILE_RULE.ACTION.DENY,
       state: GlobalConstant.NETWORK_RULES_STATE.NEW,
       disable: false,
       learned: false,
-      id: this.squence++
+      id: this.networkRulesService.squence++
     };
   };
 
@@ -145,8 +148,12 @@ export class AddEditNetworkRuleModalComponent implements OnInit {
     return {
       ...this.addEditNetworkRuleForm.value,
       applications: this.applications,
-      action: this.isAllow ? GlobalConstant.PROCESS_PROFILE_RULE.ACTION.ALLOW : GlobalConstant.PROCESS_PROFILE_RULE.ACTION.DENY,
-      state: GlobalConstant.NETWORK_RULES_STATE.MODIFIED,
+      action: this.isAllow ?
+        GlobalConstant.PROCESS_PROFILE_RULE.ACTION.ALLOW :
+        GlobalConstant.PROCESS_PROFILE_RULE.ACTION.DENY,
+      state: this.addEditNetworkRuleForm.value.id >= GlobalConstant.NEW_ID_SEED.NETWORK_RULE ?
+        GlobalConstant.NETWORK_RULES_STATE.NEW :
+        GlobalConstant.NETWORK_RULES_STATE.MODIFIED,
       disable: !this.enable,
       learned: false,
     }

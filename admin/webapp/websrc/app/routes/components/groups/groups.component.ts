@@ -424,7 +424,7 @@ export class GroupsComponent implements OnInit {
     let groupGridEl = document.querySelector('#groups-grid .ag-center-cols-container');
     if (groupGridEl) {
       Array.from(groupGridEl!.children).forEach((el, index) => {
-        if (index === rowNode!.rowIndex) {
+        if (index === rowNode?.rowIndex) {
           el.classList.add('ag-row-highlight');
         } else {
           el.classList.remove('ag-row-highlight');

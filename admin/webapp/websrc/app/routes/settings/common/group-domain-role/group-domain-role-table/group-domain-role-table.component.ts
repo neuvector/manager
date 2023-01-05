@@ -10,7 +10,10 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Observable } from 'rxjs';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import {
+  MatAutocompleteActivatedEvent,
+  MatAutocompleteSelectedEvent,
+} from '@angular/material/autocomplete';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { FormControl } from '@angular/forms';
 import { MatSort, Sort } from '@angular/material/sort';
@@ -38,6 +41,7 @@ export class GroupDomainRoleTableComponent
   namespaceCtrl = new FormControl();
   filteredDomains!: Observable<string[]>;
   domainChips: string[] = [];
+  autocompleteTagsOptionActivated = false;
   dirty: boolean = false;
 
   @ViewChild('namespaceInput') namespaceInput!: ElementRef<HTMLInputElement>;
@@ -81,31 +85,37 @@ export class GroupDomainRoleTableComponent
     this.setChips();
   }
 
+  optionActivated(event: MatAutocompleteActivatedEvent): void {
+    if (event.option) {
+      this.autocompleteTagsOptionActivated = true;
+    }
+  }
+
   selected(event: MatAutocompleteSelectedEvent): void {
     this.namespaceInput.nativeElement.value = '';
     if (this.domainChips.includes(event.option.viewValue)) {
       return;
     }
-    this.add({ value: event.option.value } as any);
+    this.domainChips.push(event.option.value);
+    this.autocompleteTagsOptionActivated = false;
+    this.namespaceCtrl.setValue(null);
+    this.addToTable(event.option.value);
   }
 
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
-    if (value && !this.domainChips.includes(value)) {
+    if (
+      !this.autocompleteTagsOptionActivated &&
+      value &&
+      !this.domainChips.includes(value)
+    ) {
       this.domainChips.push(value);
     }
     if (event.chipInput) {
       event.chipInput.clear();
     }
     this.namespaceCtrl.setValue(null);
-    const row = this.findRowFromRole(this.activeRole);
-    if (row && value) {
-      const rowIndex = this.dataSource.data.indexOf(row);
-      if (!this.dataSource.data[rowIndex].namespaces.includes(event.value)) {
-        this.dataSource.data[rowIndex].namespaces.push(event.value);
-      }
-    }
-    this.dirty = true;
+    this.addToTable(value);
   }
 
   remove(domain: string): void {
@@ -120,6 +130,17 @@ export class GroupDomainRoleTableComponent
         this.dataSource.data[rowIdx].namespaces.indexOf(domain);
       if (namespaceIdx >= 0) {
         this.dataSource.data[rowIdx].namespaces.splice(namespaceIdx, 1);
+      }
+    }
+    this.dirty = true;
+  }
+
+  addToTable(value: any): void {
+    const row = this.findRowFromRole(this.activeRole);
+    if (row && value) {
+      const rowIndex = this.dataSource.data.indexOf(row);
+      if (!this.dataSource.data[rowIndex].namespaces.includes(value)) {
+        this.dataSource.data[rowIndex].namespaces.push(value);
       }
     }
     this.dirty = true;

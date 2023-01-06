@@ -7,7 +7,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
@@ -40,13 +40,13 @@ export class BlacklistComponent implements OnInit {
   }
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   private _popupState: ActivityState;
-  namespaceCtrl = new FormControl();
+  namespaceCtrl = new UntypedFormControl();
   filteredDomains!: Observable<GraphItem[]>;
-  groupCtrl = new FormControl();
+  groupCtrl = new UntypedFormControl();
   filteredGroups!: Observable<GroupItem[]>;
-  nodeCtrl = new FormControl();
+  nodeCtrl = new UntypedFormControl();
   filteredNodes!: Observable<GraphEndpoint[]>;
-  form!: FormGroup;
+  form!: UntypedFormGroup;
   @ViewChild('namespaceInput') namespaceInput!: ElementRef<HTMLInputElement>;
   @ViewChild('groupInput') groupInput!: ElementRef<HTMLInputElement>;
   @ViewChild('nodeInput') nodeInput!: ElementRef<HTMLInputElement>;
@@ -123,11 +123,11 @@ export class BlacklistComponent implements OnInit {
 
   ngOnInit(): void {
     const list = this.blacklist;
-    this.form = new FormGroup({
-      selectedDomains: new FormControl(list.domains),
-      selectedGroups: new FormControl(list.groups),
-      selectedNodes: new FormControl(list.endpoints),
-      hideUnmanaged: new FormControl(list.hideUnmanaged),
+    this.form = new UntypedFormGroup({
+      selectedDomains: new UntypedFormControl(list.domains),
+      selectedGroups: new UntypedFormControl(list.groups),
+      selectedNodes: new UntypedFormControl(list.endpoints),
+      hideUnmanaged: new UntypedFormControl(list.hideUnmanaged),
     });
   }
 

@@ -6,7 +6,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import {
   ErrorResponse,
   Platform,
@@ -49,7 +49,7 @@ export class PlatformDetailsComponent implements OnInit {
   selectedVulnerability!: Vulnerability;
   platformVuls!: Vulnerability[];
   vulEmpty: boolean = true;
-  filter = new FormControl('');
+  filter = new UntypedFormControl('');
   showAcceptedVuls: boolean = false;
   isVulsAuthorized!: boolean;
   isWriteVulsAuthorized!: boolean;

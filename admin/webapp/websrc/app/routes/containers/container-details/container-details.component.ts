@@ -7,7 +7,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatTooltip } from '@angular/material/tooltip';
 import {
   ErrorResponse,
@@ -73,7 +73,7 @@ export class ContainerDetailsComponent implements OnInit, OnDestroy {
   complianceEmpty: boolean = true;
   vulEmpty: boolean = true;
   activeTabIndex: number = 0;
-  filter = new FormControl('');
+  filter = new UntypedFormControl('');
   showProcessHistory: boolean = false;
   @ViewChild('processHistoryTooltip') processHistoryTooltip!: MatTooltip;
   showAcceptedVuls: boolean = false;

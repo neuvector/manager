@@ -9,7 +9,7 @@ import {
 } from "@angular/core";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { ActivityState, PopupState } from "@common/types/network-activities/activityState";
-import { FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { Observable } from "rxjs";
 import {
   GraphItem,
@@ -29,12 +29,12 @@ import { GraphSettings, Settings } from "@common/types/network-activities/settin
 export class AdvancedFilterComponent implements OnInit {
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   private _popupState: ActivityState;
-  namespaceCtrl = new FormControl();
+  namespaceCtrl = new UntypedFormControl();
   filteredDomains!: Observable<GraphItem[]>;
-  groupCtrl = new FormControl();
+  groupCtrl = new UntypedFormControl();
   filteredGroups!: Observable<GroupItem[]>;
 
-  advFilterForm!: FormGroup;
+  advFilterForm!: UntypedFormGroup;
   @ViewChild('domainInput') domainInput!: ElementRef<HTMLInputElement>;
   @ViewChild('groupInput') groupInput!: ElementRef<HTMLInputElement>;
 
@@ -113,21 +113,21 @@ export class AdvancedFilterComponent implements OnInit {
   ngOnInit(): void {
     const filter = this.advFilter;
     const settings = this.settings;
-    this.advFilterForm = new FormGroup({
-      domains: new FormControl(filter.domains),
-      selectedGroups: new FormControl(filter.groups),
-      vulnerabilityType: new FormControl(filter.cve),
-      protocols: new FormGroup({
-        tcp: new FormControl(filter.protocol.tcp),
-        udp: new FormControl(filter.protocol.udp),
-        icmp: new FormControl(filter.protocol.icmp),
+    this.advFilterForm = new UntypedFormGroup({
+      domains: new UntypedFormControl(filter.domains),
+      selectedGroups: new UntypedFormControl(filter.groups),
+      vulnerabilityType: new UntypedFormControl(filter.cve),
+      protocols: new UntypedFormGroup({
+        tcp: new UntypedFormControl(filter.protocol.tcp),
+        udp: new UntypedFormControl(filter.protocol.udp),
+        icmp: new UntypedFormControl(filter.protocol.icmp),
       }),
-      riskType: new FormControl(filter.risk),
-      settings: new FormGroup({
-        showSysNode: new FormControl(settings.showSysNode),
-        showSysApp: new FormControl(settings.showSysApp),
-        persistent: new FormControl(settings.persistent),
-        gpuEnabled: new FormControl(settings.gpuEnabled),
+      riskType: new UntypedFormControl(filter.risk),
+      settings: new UntypedFormGroup({
+        showSysNode: new UntypedFormControl(settings.showSysNode),
+        showSysApp: new UntypedFormControl(settings.showSysApp),
+        persistent: new UntypedFormControl(settings.persistent),
+        gpuEnabled: new UntypedFormControl(settings.gpuEnabled),
       }),
       }
     );

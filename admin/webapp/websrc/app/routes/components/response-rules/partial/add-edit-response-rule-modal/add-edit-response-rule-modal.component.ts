@@ -5,7 +5,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -34,8 +34,8 @@ export interface AutoCompleteOption {
 })
 export class AddEditResponseRuleModalComponent implements OnInit {
   private selectedRule: any;
-  public formControl4Group = new FormControl();
-  public formControl4Criteria = new FormControl();
+  public formControl4Group = new UntypedFormControl();
+  public formControl4Criteria = new UntypedFormControl();
   public groupOptions: Array<string>;
   private criteriaOptions: [];
   public filteredOptions4Group: Observable<Array<string>>;

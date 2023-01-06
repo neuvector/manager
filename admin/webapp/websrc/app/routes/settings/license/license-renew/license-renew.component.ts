@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { SettingsService } from '@services/settings.service';
 import { finalize } from 'rxjs/operators';
 import { ErrorResponse } from '@common/types';
@@ -13,8 +13,8 @@ export class LicenseRenewComponent {
   @Output() cancel = new EventEmitter();
   submittingForm = false;
   errorMessage!: string;
-  renewLicenseForm = new FormGroup({
-    license_key: new FormControl('', Validators.required),
+  renewLicenseForm = new UntypedFormGroup({
+    license_key: new UntypedFormControl('', Validators.required),
   });
 
   constructor(private settingService: SettingsService) {}

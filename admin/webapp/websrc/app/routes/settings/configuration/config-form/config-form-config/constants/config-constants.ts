@@ -1,4 +1,4 @@
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { FormlyComponents } from '@common/neuvector-formly/neuvector-formly.module';
 import { ConfigV2Response } from '@common/types';
 
@@ -40,7 +40,7 @@ export const ServiceModeField = {
 };
 
 export const ProfileBaselineBoolField = {
-  formControl: new FormControl(),
+  formControl: new UntypedFormControl(),
   wrappers: [FormlyComponents.HINT_WRAPPER],
   type: FormlyComponents.TOGGLE,
   templateOptions: {
@@ -159,7 +159,7 @@ export const ScannerAutoscaleMaxField = {
 };
 
 export const ScannerAutoscaleMinMaxField = {
-  formControl: new FormControl([]),
+  formControl: new UntypedFormControl([]),
   type: FormlyComponents.NGX_SLIDER,
   templateOptions: {
     min: 1,
@@ -373,7 +373,7 @@ export const XFFToggleField = {
 };
 
 export const TelemetryToggleBoolField = {
-  formControl: new FormControl(),
+  formControl: new UntypedFormControl(),
   type: FormlyComponents.TOGGLE,
   templateOptions: {
     ariaLabelledBy: 'setting.TELEMETRY',

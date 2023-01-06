@@ -5,7 +5,7 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { GridOptions } from 'ag-grid-community';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { TranslateService } from '@ngx-translate/core';
@@ -41,7 +41,7 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
   public navSource = GlobalConstant.NAV_SOURCE;
   private w: any;
   public globalConstant4Html = GlobalConstant;
-  public groupSelection = new FormControl('All', [Validators.required]);
+  public groupSelection = new UntypedFormControl('All', [Validators.required]);
   public filteredCount: number = 0;
   public isWriteGroupAuthorized: boolean = false;
   public isWriteFileAccessRuleAuthorized: boolean = false;

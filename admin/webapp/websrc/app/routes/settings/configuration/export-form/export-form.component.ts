@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ErrorResponse } from '@common/types';
 import { UtilsService } from '@common/utils/app.utils';
 import { NotificationService } from '@services/notification.service';
@@ -19,9 +19,9 @@ import { AuthUtilsService } from '@common/utils/auth.utils';
 })
 export class ExportFormComponent implements OnInit {
   submittingForm = false;
-  exportForm = new FormGroup({
-    export: new FormControl(null, Validators.required),
-    as_standalone: new FormControl(false),
+  exportForm = new UntypedFormGroup({
+    export: new UntypedFormControl(null, Validators.required),
+    as_standalone: new UntypedFormControl(false),
   });
   isExportAuthorized!: boolean;
   importMsg = {

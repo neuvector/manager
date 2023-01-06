@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { PublicPasswordProfile } from '@common/types';
 import { TranslateService } from '@ngx-translate/core';
 import { SettingsService } from '@services/settings.service';
@@ -10,7 +10,7 @@ import { SettingsService } from '@services/settings.service';
   styleUrls: ['./password-panel.component.scss'],
 })
 export class PasswordPanelComponent implements OnInit {
-  @Input() passwordForm!: FormGroup;
+  @Input() passwordForm!: UntypedFormGroup;
   pwdProfile!: PublicPasswordProfile;
   isCharReqValid!: {
     isReachingMinLen: boolean;

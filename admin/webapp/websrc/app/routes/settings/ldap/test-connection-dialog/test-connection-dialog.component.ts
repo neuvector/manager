@@ -4,7 +4,7 @@ import { LdapFormComponent } from '../ldap-form/ldap-form.component';
 import { DebugPostBody, ErrorResponse, LDAP } from '@common/types';
 import { finalize } from 'rxjs/operators';
 import { SettingsService } from '@services/settings.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { NotificationService } from '@services/notification.service';
 import { UtilsService } from '@common/utils/app.utils';
 import { TranslateService } from '@ngx-translate/core';
@@ -26,9 +26,9 @@ export class TestConnectionDialogComponent {
   testFinished: boolean = false;
   connectedGroups: string[] = [];
 
-  testForm = new FormGroup({
-    username: new FormControl(null, Validators.required),
-    password: new FormControl(null, Validators.required),
+  testForm = new UntypedFormGroup({
+    username: new UntypedFormControl(null, Validators.required),
+    password: new UntypedFormControl(null, Validators.required),
   });
 
   constructor(

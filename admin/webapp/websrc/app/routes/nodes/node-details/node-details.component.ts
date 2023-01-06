@@ -6,7 +6,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import {
   Check,
   ErrorResponse,
@@ -71,7 +71,7 @@ export class NodeDetailsComponent implements OnInit {
   selectedRemediation!: Check;
   complianceEmpty: boolean = true;
   vulEmpty: boolean = true;
-  filter = new FormControl('');
+  filter = new UntypedFormControl('');
   showAcceptedVuls: boolean = false;
   showSysContainers: boolean = false;
   isVulsAuthorized!: boolean;

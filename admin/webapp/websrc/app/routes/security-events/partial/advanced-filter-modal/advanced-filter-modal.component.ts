@@ -6,7 +6,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { map } from 'rxjs/operators';
@@ -24,33 +24,33 @@ import {UtilsService} from "@common/utils/app.utils";
 export class AdvancedFilterModalComponent implements OnInit {
 
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  namespaceCtrl = new FormControl();
+  namespaceCtrl = new UntypedFormControl();
   filteredSources!: Observable<string[]>;
   filteredDestinations!: Observable<string[]>;
   filteredHosts!: Observable<string[]>;
   filteredDomains!: Observable<string[]>;
-  form!: FormGroup;
+  form!: UntypedFormGroup;
   @ViewChild('namespaceInput') namespaceInput!: ElementRef<HTMLInputElement>;
   get filterSeverity() {
     return Object.values(FilterSeverity);
   }
   get severityFormArray() {
-    return this.form.controls.severity as FormArray;
+    return this.form.controls.severity as UntypedFormArray;
   }
   get filterLocation() {
     return Object.values(FilterLocation);
   }
   get locationFormArray() {
-    return this.form.controls.location as FormArray;
+    return this.form.controls.location as UntypedFormArray;
   }
   get filterCategory() {
     return Object.values(FilterCategory);
   }
   get categoryFormArray() {
-    return this.form.controls.category as FormArray;
+    return this.form.controls.category as UntypedFormArray;
   }
   get otherFormArray() {
-    return this.form.controls.other as FormArray;
+    return this.form.controls.other as UntypedFormArray;
   }
   get filterOther() {
     return Object.values(Other);
@@ -70,30 +70,30 @@ export class AdvancedFilterModalComponent implements OnInit {
 
   getSeverityForm(severityList: string[]) {
     const arr = Object.values(FilterSeverity).map(
-      severity => new FormControl(severityList.includes(severity))
+      severity => new UntypedFormControl(severityList.includes(severity))
     );
-    return new FormArray(arr);
+    return new UntypedFormArray(arr);
   }
 
   getLocationForm(locationList: string[]) {
     const arr = Object.values(FilterLocation).map(
-      location => new FormControl(locationList.includes(location))
+      location => new UntypedFormControl(locationList.includes(location))
     );
-    return new FormArray(arr);
+    return new UntypedFormArray(arr);
   }
 
   getCategoryForm(categoryList: string[]) {
     const arr = Object.values(FilterCategory).map(
-      category => new FormControl(categoryList.includes(category))
+      category => new UntypedFormControl(categoryList.includes(category))
     );
-    return new FormArray(arr);
+    return new UntypedFormArray(arr);
   }
 
   getOtherForm(otherList: string[]) {
     const arr = Object.values(Other).map(
-      other => new FormControl(otherList.includes(other))
+      other => new UntypedFormControl(otherList.includes(other))
     );
-    return new FormArray(arr);
+    return new UntypedFormArray(arr);
   }
 
   getDisplayName(name: string){
@@ -103,28 +103,28 @@ export class AdvancedFilterModalComponent implements OnInit {
 
   ngOnInit() {
     const filter = this.data.filter;
-    this.form = new FormGroup({
-      reportedFrom: new FormControl(filter.reportedFrom),
-      reportedTo: new FormControl(filter.reportedTo),
+    this.form = new UntypedFormGroup({
+      reportedFrom: new UntypedFormControl(filter.reportedFrom),
+      reportedTo: new UntypedFormControl(filter.reportedTo),
       severity: this.getSeverityForm(filter.severity),
       location: this.getLocationForm(filter.location),
       category: this.getCategoryForm(filter.category),
       other: this.getOtherForm(filter.other),
-      source: new FormControl(
+      source: new UntypedFormControl(
         filter.source,
         autocompleteValidator(this.data.sources)
       ),
-      destination: new FormControl(
+      destination: new UntypedFormControl(
         filter.destination,
         autocompleteValidator(this.data.destinations)
       ),
-      host: new FormControl(
+      host: new UntypedFormControl(
         filter.host,
         autocompleteValidator(this.data.hosts)
       ),
-      selectedDomains: new FormControl(filter.selectedDomains),
-      includedKeyword: new FormControl(filter.includedKeyword),
-      excludedKeyword: new FormControl(filter.excludedKeyword),
+      selectedDomains: new UntypedFormControl(filter.selectedDomains),
+      includedKeyword: new UntypedFormControl(filter.includedKeyword),
+      excludedKeyword: new UntypedFormControl(filter.excludedKeyword),
     });
     this.initAutocomplete();
   }

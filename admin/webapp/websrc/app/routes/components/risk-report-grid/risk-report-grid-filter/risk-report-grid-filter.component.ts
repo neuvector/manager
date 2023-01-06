@@ -6,7 +6,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { DateFilterFn } from '@angular/material/datepicker';
@@ -29,12 +29,12 @@ import {
 })
 export class RiskReportGridFilterComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  namespaceCtrl = new FormControl();
+  namespaceCtrl = new UntypedFormControl();
   filteredHosts!: Observable<string[]>;
   filteredContainers!: Observable<string[]>;
   filteredImages!: Observable<string[]>;
   filteredDomains!: Observable<string[]>;
-  form!: FormGroup;
+  form!: UntypedFormGroup;
   @ViewChild('namespaceInput') namespaceInput!: ElementRef<HTMLInputElement>;
   get filterLevel() {
     return Object.values(FilterLevel);
@@ -43,10 +43,10 @@ export class RiskReportGridFilterComponent implements OnInit {
     return Object.values(FilterCategory);
   }
   get levelFormArray() {
-    return this.form.controls.level as FormArray;
+    return this.form.controls.level as UntypedFormArray;
   }
   get categoryFormArray() {
-    return this.form.controls.category as FormArray;
+    return this.form.controls.category as UntypedFormArray;
   }
   fromFilter: DateFilterFn<Date | null> = this._fromFilter.bind(this);
   toFilter: DateFilterFn<Date | null> = this._toFilter.bind(this);
@@ -75,44 +75,44 @@ export class RiskReportGridFilterComponent implements OnInit {
 
   getLevelsForm(levels: string[]) {
     const arr = Object.values(FilterLevel).map(
-      l => new FormControl(levels.includes(l))
+      l => new UntypedFormControl(levels.includes(l))
     );
-    return new FormArray(arr);
+    return new UntypedFormArray(arr);
   }
 
   getCategoryForm(categories: string[]) {
     const arr = Object.values(FilterCategory).map(
-      c => new FormControl(categories.includes(c))
+      c => new UntypedFormControl(categories.includes(c))
     );
-    return new FormArray(arr);
+    return new UntypedFormArray(arr);
   }
 
   ngOnInit() {
     const filter = this.data.filter;
-    this.form = new FormGroup({
-      reportedFrom: new FormControl(
+    this.form = new UntypedFormGroup({
+      reportedFrom: new UntypedFormControl(
         filter.reportedFrom ? new Date(filter.reportedFrom) : null
       ),
-      reportedTo: new FormControl(
+      reportedTo: new UntypedFormControl(
         filter.reportedTo ? new Date(filter.reportedTo) : null
       ),
       level: this.getLevelsForm(filter.level),
       category: this.getCategoryForm(filter.category),
-      host: new FormControl(
+      host: new UntypedFormControl(
         filter.host,
         autocompleteValidator(this.data.hosts)
       ),
-      container: new FormControl(
+      container: new UntypedFormControl(
         filter.container,
         autocompleteValidator(this.data.containers)
       ),
-      image: new FormControl(
+      image: new UntypedFormControl(
         filter.image,
         autocompleteValidator(this.data.images)
       ),
-      selectedDomains: new FormControl(filter.selectedDomains),
-      includedKeyword: new FormControl(filter.includedKeyword),
-      excludedKeyword: new FormControl(filter.excludedKeyword),
+      selectedDomains: new UntypedFormControl(filter.selectedDomains),
+      includedKeyword: new UntypedFormControl(filter.includedKeyword),
+      excludedKeyword: new UntypedFormControl(filter.excludedKeyword),
     });
     this.initAutocomplete();
   }

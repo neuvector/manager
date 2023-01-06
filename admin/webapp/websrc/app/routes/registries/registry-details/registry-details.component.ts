@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { RegistriesCommunicationService } from '../regestries-communication.service';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { catchError } from 'rxjs/operators';
 
 @Component({
@@ -12,7 +12,7 @@ import { catchError } from 'rxjs/operators';
 export class RegistryDetailsComponent {
   error: unknown;
   @Input() gridHeight!: number;
-  filter = new FormControl('');
+  filter = new UntypedFormControl('');
   registryDetails$ = this.registriesCommunicationService.registryDetails$.pipe(
     catchError(err => {
       this.error = err;

@@ -6,7 +6,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { map } from 'rxjs/operators';
@@ -25,20 +25,20 @@ import { UtilsService } from '@common/utils/app.utils';
 })
 export class EventsGridFilterComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  namespaceCtrl = new FormControl();
+  namespaceCtrl = new UntypedFormControl();
   filteredNames!: Observable<string[]>;
   filteredUserNames!: Observable<string[]>;
   filteredHosts!: Observable<string[]>;
   filteredContainers!: Observable<string[]>;
   filteredImages!: Observable<string[]>;
   filteredDomains!: Observable<string[]>;
-  form!: FormGroup;
+  form!: UntypedFormGroup;
   @ViewChild('namespaceInput') namespaceInput!: ElementRef<HTMLInputElement>;
   get filterLevel() {
     return Object.values(FilterLevel);
   }
   get levelFormArray() {
-    return this.form.controls.level as FormArray;
+    return this.form.controls.level as UntypedFormArray;
   }
   fromFilter: DateFilterFn<Date | null> = this._fromFilter.bind(this);
   toFilter: DateFilterFn<Date | null> = this._toFilter.bind(this);
@@ -58,9 +58,9 @@ export class EventsGridFilterComponent implements OnInit {
 
   getLevelsForm(levels: string[]) {
     const arr = Object.values(FilterLevel).map(
-      l => new FormControl(levels.includes(l))
+      l => new UntypedFormControl(levels.includes(l))
     );
-    return new FormArray(arr);
+    return new UntypedFormArray(arr);
   }
 
   getDisplayName(name: string) {
@@ -69,37 +69,37 @@ export class EventsGridFilterComponent implements OnInit {
 
   ngOnInit() {
     const filter = this.data.filter;
-    this.form = new FormGroup({
-      reportedFrom: new FormControl(
+    this.form = new UntypedFormGroup({
+      reportedFrom: new UntypedFormControl(
         filter.reportedFrom ? new Date(filter.reportedFrom) : null
       ),
-      reportedTo: new FormControl(
+      reportedTo: new UntypedFormControl(
         filter.reportedTo ? new Date(filter.reportedTo) : null
       ),
       level: this.getLevelsForm(filter.level),
-      name: new FormControl(
+      name: new UntypedFormControl(
         filter.name,
         autocompleteValidator(this.data.names)
       ),
-      userName: new FormControl(
+      userName: new UntypedFormControl(
         filter.userName,
         autocompleteValidator(this.data.userNames)
       ),
-      host: new FormControl(
+      host: new UntypedFormControl(
         filter.host,
         autocompleteValidator(this.data.hosts)
       ),
-      container: new FormControl(
+      container: new UntypedFormControl(
         filter.container,
         autocompleteValidator(this.data.containers)
       ),
-      image: new FormControl(
+      image: new UntypedFormControl(
         filter.image,
         autocompleteValidator(this.data.images)
       ),
-      selectedDomains: new FormControl(filter.selectedDomains),
-      includedKeyword: new FormControl(filter.includedKeyword),
-      excludedKeyword: new FormControl(filter.excludedKeyword),
+      selectedDomains: new UntypedFormControl(filter.selectedDomains),
+      includedKeyword: new UntypedFormControl(filter.includedKeyword),
+      excludedKeyword: new UntypedFormControl(filter.excludedKeyword),
     });
     this.initAutocomplete();
   }

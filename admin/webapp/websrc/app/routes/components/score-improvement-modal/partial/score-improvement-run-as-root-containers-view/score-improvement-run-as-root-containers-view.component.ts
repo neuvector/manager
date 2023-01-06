@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { ErrorResponse, Workload } from '@common/types';
 import { arrayToCsv } from '@common/utils/common.utils';
 import { ContainersGridComponent } from '@components/containers-grid/containers-grid.component';
@@ -36,7 +36,7 @@ export class ScoreImprovementRunAsRootContainersViewComponent
     return this.scoreImprovementModalService.score;
   }
   projectedScore!: number;
-  filter = new FormControl('');
+  filter = new UntypedFormControl('');
   containers!: Workload[];
   selectedContainer!: WorkloadRow;
 

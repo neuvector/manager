@@ -1,6 +1,6 @@
 import { MatDialogRef,  MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, OnInit, Inject, Input } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { AdmissionRulesService } from  "@common/services/admission-rules.service";
 import { cloneDeep } from 'lodash';
 import { finalize } from 'rxjs/operators';
@@ -15,7 +15,7 @@ import { UtilsService } from "@common/utils/app.utils";
 })
 export class AdvanceSettingModalComponent implements OnInit {
 
-  clientModeFormGroup: FormGroup;
+  clientModeFormGroup: UntypedFormGroup;
   submittingForm: boolean;
   submittingTest: boolean;
   isTestCompleted: boolean;
@@ -31,8 +31,8 @@ export class AdvanceSettingModalComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.clientModeFormGroup = new FormGroup({
-      clientModeFormControl: new FormControl(this.data.state.adm_client_mode)
+    this.clientModeFormGroup = new UntypedFormGroup({
+      clientModeFormControl: new UntypedFormControl(this.data.state.adm_client_mode)
     });
     this.submittingForm = false;
     this.submittingTest = false;

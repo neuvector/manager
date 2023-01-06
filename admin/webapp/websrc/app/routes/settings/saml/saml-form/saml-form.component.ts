@@ -14,7 +14,7 @@ import {
   ServerGetResponse,
   ServerPatchBody,
 } from '@common/types';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { SettingsService } from '@services/settings.service';
 import { urlValidator } from '@common/validators';
@@ -39,13 +39,13 @@ export class SamlFormComponent implements OnInit, OnChanges {
   serverName = 'saml1';
   passwordVisible = false;
   samlRedirectURL!: string;
-  samlForm = new FormGroup({
-    sso_url: new FormControl(null, [Validators.required, urlValidator()]),
-    issuer: new FormControl(null, [Validators.required, urlValidator()]),
-    x509_cert: new FormControl(null, [Validators.required]),
-    group_claim: new FormControl(),
-    default_role: new FormControl(''),
-    enable: new FormControl(false),
+  samlForm = new UntypedFormGroup({
+    sso_url: new UntypedFormControl(null, [Validators.required, urlValidator()]),
+    issuer: new UntypedFormControl(null, [Validators.required, urlValidator()]),
+    x509_cert: new UntypedFormControl(null, [Validators.required]),
+    group_claim: new UntypedFormControl(),
+    default_role: new UntypedFormControl(''),
+    enable: new UntypedFormControl(false),
   });
   isWriteSamlAuthorized!: boolean;
 

@@ -8,7 +8,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { GlobalConstant } from '@common/constants/global.constant';
 import {
   ConfigPatch,
@@ -36,7 +36,7 @@ export class ConfigFormComponent implements OnInit {
   @Output() refreshConfig = new EventEmitter();
   ibmSetup!: IBMSetupGetResponse;
   submittingForm = false;
-  configForm = new FormGroup({});
+  configForm = new UntypedFormGroup({});
   configFields = cloneDeep(ConfigFormConfig);
   configOptions: FormlyFormOptions = {
     formState: {

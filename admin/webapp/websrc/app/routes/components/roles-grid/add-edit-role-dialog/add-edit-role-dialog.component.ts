@@ -10,9 +10,9 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -34,9 +34,9 @@ export interface AddEditRoleDialog {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddEditRoleDialogComponent implements OnInit {
-  form!: FormGroup;
+  form!: UntypedFormGroup;
   saving$ = new Subject();
-  permissionCtrl = new FormControl();
+  permissionCtrl = new UntypedFormControl();
   permissionChips: { name: string; value: Permission }[] = [];
   get permissionOptions() {
     return this.permissionService.permissionOptions;
@@ -48,7 +48,7 @@ export class AddEditRoleDialogComponent implements OnInit {
   @ViewChild('permissionInput') permissionInput!: ElementRef<HTMLInputElement>;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public dialogRef: MatDialogRef<RolesGridComponent>,
     @Inject(MAT_DIALOG_DATA) public data: AddEditRoleDialog,
     private permissionService: PermissionService
@@ -71,7 +71,7 @@ export class AddEditRoleDialogComponent implements OnInit {
   }
 
   getPermissionForm(id: string) {
-    return this.form.get(['permissions', id]) as FormGroup;
+    return this.form.get(['permissions', id]) as UntypedFormGroup;
   }
 
   getRole(): Role {

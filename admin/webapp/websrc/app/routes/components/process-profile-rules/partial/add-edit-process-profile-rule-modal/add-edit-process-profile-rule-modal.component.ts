@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { UtilsService } from '@common/utils/app.utils';
 import { ProcessProfileRulesService } from '@services/process-profile-rules.service';
 import { GroupsService } from '@services/groups.service';
@@ -18,7 +18,7 @@ export class AddEditProcessProfileRuleModalComponent implements OnInit {
   public readonly type: string = '';
   public groupOptions: Array<string>;
   public isAllowed: Boolean = true;
-  public processProfileRuleForm: FormGroup;
+  public processProfileRuleForm: UntypedFormGroup;
 
   constructor(
     public dialogRef: MatDialogRef<AddEditProcessProfileRuleModalComponent>,
@@ -34,13 +34,13 @@ export class AddEditProcessProfileRuleModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.processProfileRuleForm = new FormGroup({
-      group: new FormControl(
+    this.processProfileRuleForm = new UntypedFormGroup({
+      group: new UntypedFormControl(
         { value: '', disabled: this.type === GlobalConstant.MODAL_OP.EDIT || this.data.source === GlobalConstant.NAV_SOURCE.GROUP },
         [Validators.required]
       ),
-      name: new FormControl('', Validators.required),
-      path: new FormControl(''),
+      name: new UntypedFormControl('', Validators.required),
+      path: new UntypedFormControl(''),
     });
     this.initializeVM();
     this.getGroupOptions();

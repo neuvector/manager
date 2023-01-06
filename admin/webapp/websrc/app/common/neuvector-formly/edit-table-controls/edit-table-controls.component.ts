@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, FormGroup } from '@angular/forms';
 import { FieldType, FieldTypeConfig } from '@ngx-formly/core';
 
 @Component({
@@ -12,8 +12,8 @@ export class EditTableControlsComponent
   implements OnInit
 {
   cache: any;
-  get isEditable(): FormControl {
-    return <FormControl>this.form.get('isEditable');
+  get isEditable(): UntypedFormControl {
+    return <UntypedFormControl>this.form.get('isEditable');
   }
 
   ngOnInit(): void {

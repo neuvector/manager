@@ -8,21 +8,17 @@ import { AddEditFileAccessRuleModalComponent } from './partial/add-edit-file-acc
 import { PredefinedFileAccessRulesModalComponent } from './partial/predefined-file-access-rules-modal/predefined-file-access-rules-modal.component';
 
 @NgModule({
-  declarations: [
-    FileAccessRulesComponent,
-    AddEditFileAccessRuleModalComponent,
-    PredefinedFileAccessRulesModalComponent,
-  ],
-  imports: [
-    CommonModule,
-    NvCommonModule,
-    QuickFilterModule,
-    AgGridModule.withComponents([]),
-  ],
-  entryComponents: [
-    AddEditFileAccessRuleModalComponent,
-    PredefinedFileAccessRulesModalComponent,
-  ],
-  exports: [FileAccessRulesComponent],
+    declarations: [
+        FileAccessRulesComponent,
+        AddEditFileAccessRuleModalComponent,
+        PredefinedFileAccessRulesModalComponent,
+    ],
+    imports: [
+        CommonModule,
+        NvCommonModule,
+        QuickFilterModule,
+        AgGridModule.withComponents([]),
+    ],
+    exports: [FileAccessRulesComponent]
 })
 export class FileAccessRulesModule {}

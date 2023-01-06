@@ -15,7 +15,7 @@ import {
   ServerGetResponse,
   ServerPatchBody,
 } from '@common/types';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { SettingsService } from '@services/settings.service';
 import { getCallbackUri } from '../../common/helpers';
 import { finalize } from 'rxjs/operators';
@@ -42,16 +42,16 @@ export class OpenidFormComponent implements OnInit, OnChanges {
   serverName = 'openId1';
   passwordVisible = false;
   openidRedirectURL!: string;
-  openidForm = new FormGroup({
-    issuer: new FormControl(null, [Validators.required, urlValidator()]),
-    client_id: new FormControl(null, Validators.required),
-    client_secret: new FormControl(null, Validators.required),
-    group_claim: new FormControl(),
-    default_role: new FormControl(''),
-    enable: new FormControl(false),
-    authorization_endpoint: new FormControl({ value: null, disabled: true }),
-    token_endpoint: new FormControl({ value: null, disabled: true }),
-    user_info_endpoint: new FormControl({ value: null, disabled: true }),
+  openidForm = new UntypedFormGroup({
+    issuer: new UntypedFormControl(null, [Validators.required, urlValidator()]),
+    client_id: new UntypedFormControl(null, Validators.required),
+    client_secret: new UntypedFormControl(null, Validators.required),
+    group_claim: new UntypedFormControl(),
+    default_role: new UntypedFormControl(''),
+    enable: new UntypedFormControl(false),
+    authorization_endpoint: new UntypedFormControl({ value: null, disabled: true }),
+    token_endpoint: new UntypedFormControl({ value: null, disabled: true }),
+    user_info_endpoint: new UntypedFormControl({ value: null, disabled: true }),
   });
   isWriteOidcAuthorized!: boolean;
   addOnBlur = true;

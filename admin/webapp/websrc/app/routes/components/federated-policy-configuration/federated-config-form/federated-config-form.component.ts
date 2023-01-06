@@ -1,6 +1,6 @@
 import {Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import { OtherWebhookType } from './types/constants';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Webhook, FederatedConfiguration } from '@common/types';
 import { cloneDeep } from 'lodash';
 import { UtilsService } from "@common/utils/app.utils";
@@ -21,7 +21,7 @@ import { FederatedConfigurationService } from "@services/federated-configuration
 export class FederatedConfigFormComponent implements OnInit,ComponentCanDeactivate {
 
   @Output() refreshConfig = new EventEmitter();
-  fedConfigForm = new FormGroup({});
+  fedConfigForm = new UntypedFormGroup({});
   fedConfigFields = cloneDeep(FederatedConfigFormConfig);
 
   private _config!: FederatedConfiguration;

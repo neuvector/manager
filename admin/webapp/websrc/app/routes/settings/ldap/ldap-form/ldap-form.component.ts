@@ -7,7 +7,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import {
   ErrorResponse,
   GroupMappedRole,
@@ -40,18 +40,18 @@ export class LdapFormComponent implements OnInit, OnChanges {
   groupMappedRoles: GroupMappedRole[] = [];
   serverName = 'ldap1';
   passwordVisible = false;
-  ldapForm = new FormGroup({
-    directory: new FormControl(),
-    hostname: new FormControl(null, Validators.required),
-    port: new FormControl(),
-    ssl: new FormControl(),
-    bind_dn: new FormControl(),
-    bind_password: new FormControl(),
-    base_dn: new FormControl(null, Validators.required),
-    username_attr: new FormControl(),
-    group_member_attr: new FormControl(),
-    default_role: new FormControl(''),
-    enable: new FormControl(false),
+  ldapForm = new UntypedFormGroup({
+    directory: new UntypedFormControl(),
+    hostname: new UntypedFormControl(null, Validators.required),
+    port: new UntypedFormControl(),
+    ssl: new UntypedFormControl(),
+    bind_dn: new UntypedFormControl(),
+    bind_password: new UntypedFormControl(),
+    base_dn: new UntypedFormControl(null, Validators.required),
+    username_attr: new UntypedFormControl(),
+    group_member_attr: new UntypedFormControl(),
+    default_role: new UntypedFormControl(''),
+    enable: new UntypedFormControl(false),
   });
 
   constructor(

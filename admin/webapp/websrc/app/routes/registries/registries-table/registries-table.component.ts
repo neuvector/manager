@@ -19,7 +19,7 @@ import { ErrorResponse, RegistryConfig, Summary } from '@common/types';
 import { RegistriesTableButtonsComponent } from './registries-table-buttons/registries-table-buttons.component';
 import { RegistriesService } from '@services/registries.service';
 import { RegistriesCommunicationService } from '../regestries-communication.service';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { RegistryTableStatusCellComponent } from './registry-table-status-cell/registry-table-status-cell.component';
 import { cloneDeep } from 'lodash';
@@ -39,7 +39,7 @@ import { GlobalVariable } from '@common/variables/global.variable';
 export class RegistriesTableComponent implements OnInit, OnChanges {
   @Input() rowData!: Summary[];
   @Input() gridHeight!: number;
-  filter = new FormControl('');
+  filter = new UntypedFormControl('');
   gridOptions!: GridOptions;
   gridApi!: GridApi;
   columnDefs: ColDef[] = [

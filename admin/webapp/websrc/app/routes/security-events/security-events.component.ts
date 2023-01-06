@@ -10,7 +10,7 @@ import { MapConstant } from '@common/constants/map.constant';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AdvancedFilterModalComponent } from './partial/advanced-filter-modal/advanced-filter-modal.component';
 import { PacketModalComponent } from './partial/packet-modal/packet-modal.component';
@@ -44,7 +44,7 @@ export class SecurityEventsComponent implements OnInit {
   isDataReady: boolean = false;
   secEventsErr: boolean = false;
   selectedRow: any;
-  filter = new FormControl('');
+  filter = new UntypedFormControl('');
   advFilterConf: any = null;
   filterOpen: boolean = false;
 

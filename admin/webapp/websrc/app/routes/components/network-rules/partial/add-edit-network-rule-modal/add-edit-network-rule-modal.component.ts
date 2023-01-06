@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject, ElementRef, ViewChild } from '@angular/core';
 import { MatDialogRef,  MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GlobalConstant } from "@common/constants/global.constant";
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
@@ -18,7 +18,7 @@ import { NetworkRulesService } from '@services/network-rules.service';
 export class AddEditNetworkRuleModalComponent implements OnInit {
 
   modalOp: any;
-  addEditNetworkRuleForm: FormGroup;
+  addEditNetworkRuleForm: UntypedFormGroup;
   separatorKeysCodes: number[] = [ENTER, COMMA];
   filteredApps: Observable<Array<string>>;
   filteredFromEndpoints: Observable<Array<string>>;
@@ -35,24 +35,24 @@ export class AddEditNetworkRuleModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     if (this.data.selectedNetworkRule) {
-      this.addEditNetworkRuleForm = new FormGroup({
-        id: new FormControl(this.data.selectedNetworkRule.id),
-        comment: new FormControl(this.data.selectedNetworkRule.comment),
-        from: new FormControl(this.data.selectedNetworkRule.from, Validators.required),
-        to: new FormControl(this.data.selectedNetworkRule.to, Validators.required),
-        applicationsCtrl: new FormControl(),
-        ports: new FormControl(this.data.selectedNetworkRule.ports)
+      this.addEditNetworkRuleForm = new UntypedFormGroup({
+        id: new UntypedFormControl(this.data.selectedNetworkRule.id),
+        comment: new UntypedFormControl(this.data.selectedNetworkRule.comment),
+        from: new UntypedFormControl(this.data.selectedNetworkRule.from, Validators.required),
+        to: new UntypedFormControl(this.data.selectedNetworkRule.to, Validators.required),
+        applicationsCtrl: new UntypedFormControl(),
+        ports: new UntypedFormControl(this.data.selectedNetworkRule.ports)
       });
       this.applications = this.data.selectedNetworkRule.applications;
       this.isAllow = this.data.selectedNetworkRule.action === GlobalConstant.PROCESS_PROFILE_RULE.ACTION.ALLOW;
       this.enable = !this.data.selectedNetworkRule.disable;
     } else {
-      this.addEditNetworkRuleForm = new FormGroup({
-        comment: new FormControl(''),
-        from: new FormControl('', Validators.required),
-        to: new FormControl('', Validators.required),
-        applicationsCtrl: new FormControl(),
-        ports: new FormControl("")
+      this.addEditNetworkRuleForm = new UntypedFormGroup({
+        comment: new UntypedFormControl(''),
+        from: new UntypedFormControl('', Validators.required),
+        to: new UntypedFormControl('', Validators.required),
+        applicationsCtrl: new UntypedFormControl(),
+        ports: new UntypedFormControl("")
       });
     }
     this.filteredApps = this.addEditNetworkRuleForm.get('applicationsCtrl')!.valueChanges.pipe(

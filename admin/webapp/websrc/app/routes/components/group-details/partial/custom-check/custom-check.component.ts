@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { GlobalConstant } from '@common/constants/global.constant';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { GroupsService } from '@services/groups.service';
 import { GridOptions } from 'ag-grid-community';
 import { AuthUtilsService } from '@common/utils/auth.utils';
@@ -22,7 +22,7 @@ export class CustomCheckComponent implements OnInit {
   opType: string = GlobalConstant.MODAL_OP.ADD;
   submittingUpdate: boolean = false;
   modalOp = GlobalConstant.MODAL_OP;
-  customCheckForm: FormGroup;
+  customCheckForm: UntypedFormGroup;
   gridOptions4CustomCheck: GridOptions;
   isWriteScriptAuthorized: boolean = false;
   customCheckScripts: Array<Script> = [];
@@ -117,9 +117,9 @@ export class CustomCheckComponent implements OnInit {
   };
 
   private initializeVM = () => {
-    this.customCheckForm = new FormGroup({
-      name: new FormControl('', this.isWriteScriptAuthorized ? Validators.required : null),
-      script: new FormControl('')
+    this.customCheckForm = new UntypedFormGroup({
+      name: new UntypedFormControl('', this.isWriteScriptAuthorized ? Validators.required : null),
+      script: new UntypedFormControl('')
     });
   };
 }

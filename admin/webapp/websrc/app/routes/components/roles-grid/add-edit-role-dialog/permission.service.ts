@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { Permission, PermissionOption, Role } from '@common/types';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -33,7 +33,7 @@ export class PermissionService {
     events: this.defaultPermission(),
   };
 
-  constructor(private fb: FormBuilder, private tr: TranslateService) {}
+  constructor(private fb: UntypedFormBuilder, private tr: TranslateService) {}
 
   loadPermissions(permissionOptions) {
     permissionOptions.forEach(permissionOption => {

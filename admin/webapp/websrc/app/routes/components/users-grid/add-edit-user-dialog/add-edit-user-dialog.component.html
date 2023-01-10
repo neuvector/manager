@@ -32,8 +32,7 @@
         <input
           matInput
           formControlName="username"
-          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-        />
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
         <mat-error *ngIf="form.controls.username.hasError('required')">
           {{ 'general.REQUIRED' | translate }}
         </mat-error>
@@ -52,8 +51,7 @@
           matInput
           type="email"
           formControlName="email"
-          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-        />
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
         <mat-error *ngIf="form.controls.email.hasError('email')">
           {{ 'license.register.EMAIL_REQUIRED' | translate }}
         </mat-error>
@@ -103,9 +101,7 @@
     mat-stroked-button
     type="button"
     *ngIf="
-      isKube &&
-      !['admin', 'fedAdmin', ''].includes(form.controls.role.value) &&
-      (!data.user || ['', 'openshift'].includes(data.user.server))
+      isKube && !['admin', 'fedAdmin', ''].includes(form.controls.role.value)
     ">
     {{
       (toggleAdvSetting ? 'user.HIDE_ADV_SETTING' : 'user.SHOW_ADV_SETTING')

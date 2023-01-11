@@ -9,7 +9,6 @@ import {
 import { FormControl } from '@angular/forms';
 import { MapConstant } from '@common/constants/map.constant';
 import { ErrorResponse, Platform, ScanConfig } from '@common/types';
-import { UtilsService } from '@common/utils/app.utils';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { PlatformsGridComponent } from '@components/platforms-grid/platforms-grid.component';
 import { TranslateService } from '@ngx-translate/core';
@@ -20,6 +19,7 @@ import { interval, Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { GlobalVariable } from '@common/variables/global.variable';
+import { SummaryService } from '@services/summary.service';
 
 @Component({
   selector: 'app-platforms',
@@ -67,7 +67,7 @@ export class PlatformsComponent implements OnInit, OnDestroy {
     private scanService: ScanService,
     private authUtils: AuthUtilsService,
     private notificationService: NotificationService,
-    private utils: UtilsService,
+    private summaryService: SummaryService,
     private tr: TranslateService,
     private cd: ChangeDetectorRef,
     private multiClusterService: MultiClusterService
@@ -95,6 +95,7 @@ export class PlatformsComponent implements OnInit, OnDestroy {
 
   refresh(cb?: (platforms: Platform[]) => void): void {
     this.refreshing$.next(true);
+    this.summaryService.refreshSummary();
     this.getPlatforms(cb);
   }
 

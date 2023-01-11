@@ -3,7 +3,6 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MapConstant } from '@common/constants/map.constant';
 import { ErrorResponse, ScanConfig, WorkloadV2 } from '@common/types';
-import { UtilsService } from '@common/utils/app.utils';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { ContainersGridComponent } from '@components/containers-grid/containers-grid.component';
 import { TranslateService } from '@ngx-translate/core';
@@ -14,6 +13,7 @@ import { ScanService } from '@services/scan.service';
 import { interval, Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { GlobalVariable } from '@common/variables/global.variable';
+import { SummaryService } from '@services/summary.service';
 
 @Component({
   selector: 'app-containers',
@@ -65,7 +65,7 @@ export class ContainersComponent implements OnInit {
     private scanService: ScanService,
     private notificationService: NotificationService,
     private authUtils: AuthUtilsService,
-    private utils: UtilsService,
+    private summaryService: SummaryService,
     private tr: TranslateService,
     private multiClusterService: MultiClusterService,
     private cd: ChangeDetectorRef
@@ -95,6 +95,7 @@ export class ContainersComponent implements OnInit {
     cb?: (containers: WorkloadV2[], displayContainers: WorkloadRow[]) => void
   ): void {
     this.refreshing$.next(true);
+    this.summaryService.refreshSummary();
     this.getContainers(cb);
   }
 

@@ -21,8 +21,8 @@
           for="domainInput"
           >{{ 'ldap.gridHeader.DOMAINS' | translate }}</label
         >
-        <mat-form-field appearance="standard" class="col pl-0">
-          <mat-chip-list
+        <mat-form-field appearance="fill" class="col pl-0">
+          <mat-chip-grid
             #domainChips
             aria-label="Namespace selection"
             formControlName="domains"
@@ -51,7 +51,7 @@
               [matChipInputFor]="domainChips"
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               [placeholder]="'ldap.ADD_DOMAIN' | translate" />
-          </mat-chip-list>
+          </mat-chip-grid>
           <mat-autocomplete
             #auto="matAutocomplete"
             (optionSelected)="selected($event)">
@@ -67,9 +67,9 @@
         <label class="col-2 font-weight-normal mb-0 mr-2" for="groupInput">{{
           'dlp.gridHeader.GROUPS' | translate
         }}</label>
-        <mat-form-field appearance="standard" class="col pl-0">
-          <mat-chip-list
-            #groupChipList
+        <mat-form-field appearance="fill" class="col pl-0">
+          <mat-chip-grid
+            #groupChipGrid
             aria-label="Group selection"
             formControlName="selectedGroups"
             id="groupInput">
@@ -94,10 +94,10 @@
               (matChipInputTokenEnd)="addGroup($event)"
               [formControl]="groupCtrl"
               [matAutocomplete]="groupAuto"
-              [matChipInputFor]="groupChipList"
+              [matChipInputFor]="groupChipGrid"
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               [placeholder]="'ldap.ADD_GROUP' | translate" />
-          </mat-chip-list>
+          </mat-chip-grid>
           <mat-autocomplete
             #groupAuto="matAutocomplete"
             (optionSelected)="groupSelected($event)">

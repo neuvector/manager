@@ -41,7 +41,7 @@
               </span>
             </mat-slide-toggle>
           </div>
-          <mat-form-field appearance="standard" class="col-12 col-md-9">
+          <mat-form-field appearance="fill" class="col-12 col-md-9">
               <mat-label>{{ "admissionControl.COMMENT" | translate }}</mat-label>
               <input
                 matInput
@@ -50,7 +50,7 @@
                 formControlName="comment"
               />
           </mat-form-field>
-          <mat-form-field appearance="standard" class="col-12 col-md-4">
+          <mat-form-field appearance="fill" class="col-12 col-md-4">
             <mat-select
               placeholder="{{ 'admissionControl.NAME' | translate }}*"
               [disabled]="data.opType === modalOp.VIEW"
@@ -89,7 +89,7 @@
           </mat-form-field>
           <mat-form-field
             *ngIf="!(CRITERIA_PATTERN.NAME_ONLY.concat(CRITERIA_PATTERN.RESOURCE)).includes(mainCriterion.name)"
-            appearance="standard"
+            appearance="fill"
             class="col-12 col-md-3"
           >
             <mat-select
@@ -104,7 +104,7 @@
           </mat-form-field>
           <mat-form-field
             *ngIf="!(CRITERIA_PATTERN.NAME_ONLY.concat(CRITERIA_PATTERN.RESOURCE)).includes(mainCriterion.name) && !hasMultiValue && criterionValueList.length <= 1 && !mainCriterion.op.toLowerCase().includes('exist'.toLowerCase()) && mainCriterion.name !== 'saBindRiskyRole'"
-            appearance="standard"
+            appearance="fill"
             class="col-12 col-md-4"
           >
             <input
@@ -131,7 +131,7 @@
           </mat-form-field>
           <mat-form-field
             *ngIf="!(CRITERIA_PATTERN.NAME_ONLY.concat(CRITERIA_PATTERN.RESOURCE)).includes(mainCriterion.name) && criterionValueList.length > 1 && !mainCriterion.op.toLowerCase().includes('exist'.toLowerCase()) && mainCriterion.name !== 'saBindRiskyRole'"
-            appearance="standard"
+            appearance="fill"
             class="col-12 col-md-4"
           >
             <mat-select
@@ -171,7 +171,7 @@
               </div>
               <mat-form-field
                 *ngIf="!(CRITERIA_PATTERN.NAME_ONLY.concat(CRITERIA_PATTERN.RESOURCE)).includes(subOption.name) && subOption.ops.length > 1"
-                appearance="standard"
+                appearance="fill"
                 class="col-12 col-md-3"
               >
                 <mat-select
@@ -192,7 +192,7 @@
                 {{'admissionControl.operators.text.' + subOption.ops[0].toUpperCase() | translate}}
               </div>
               <mat-form-field
-                appearance="standard"
+                appearance="fill"
                 class="col-12 col-md-3"
               >
                 <input
@@ -205,7 +205,7 @@
               </mat-form-field>
               <mat-form-field
                 *ngIf="UNITS[subOption.name] && UNITS[subOption.name].length > 1"
-                appearance="standard"
+                appearance="fill"
                 class="col-12 col-md-1"
               >
                 <mat-select
@@ -226,10 +226,10 @@
         </div>
         <div class="row">
           <mat-form-field appearance="outline" class="col-12 col-md-12">
-            <mat-chip-list #chipList aria-label="admisson criteria" formControlName="criteria">
+            <mat-chip-grid #chipGrid aria-label="admisson criteria" formControlName="criteria">
               <mat-chip
                 *ngFor="let criterion of addEditAdmissionRuleForm.controls.criteria.value"
-                [selectable]="data.opType !== modalOp.VIEW"
+                [disabled]="data.opType === modalOp.VIEW"
                 [removable]="data.opType !== modalOp.VIEW"
                 (removed)="removeCriterionFromChip(criterion)"
                 (click)="criterionSelectedInChip(criterion)"
@@ -241,10 +241,10 @@
                 #criteriaInput
                 matInput
                 placeholder="{{ 'admissionControl.CRITERIA' | translate }}"
-                [matChipInputFor]="chipList"
+                [matChipInputFor]="chipGrid"
                 [matChipInputSeparatorKeyCodes]="SEPARATOR_KEYS_CODES"
               />
-            </mat-chip-list>
+            </mat-chip-grid>
           </mat-form-field>
           <div class="margin-left-m margin-right-m">
             <div class="text-muted" *ngIf="hasPSP">{{pspCriteria}}</div>
@@ -334,7 +334,7 @@
     <div class="col-md-6">
       <mat-form-field
         *ngIf="customCriterion.name"
-        appearance="standard"
+        appearance="fill"
         style="width: 100%;"
       >
         <input
@@ -348,7 +348,7 @@
       </mat-form-field>
       <mat-form-field
         *ngIf="nodeValueType"
-        appearance="standard"
+        appearance="fill"
         style="width: 100%;"
       >
         <mat-select
@@ -363,7 +363,7 @@
       </mat-form-field>
       <mat-form-field
         *ngIf="customizedValues.length < 1 && !customCriterion.op.toLowerCase().includes('exist'.toLowerCase()) && nodeValueType !== 'key' && nodeValueType"
-        appearance="standard"
+        appearance="fill"
         style="width: 100%;"
       >
         <input
@@ -376,7 +376,7 @@
       </mat-form-field>
       <mat-form-field
         *ngIf="customizedValues.length > 1 && !customCriterion.op.toLowerCase().includes('exist'.toLowerCase()) && nodeValueType !== 'key' && nodeValueType"
-        appearance="standard"
+        appearance="fill"
         style="width: 100%;"
       >
         <mat-select

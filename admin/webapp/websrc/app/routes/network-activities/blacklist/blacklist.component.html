@@ -22,9 +22,9 @@
           for="namespaceInput"
           >{{ 'ldap.gridHeader.DOMAINS' | translate }}</label
         >
-        <mat-form-field appearance="standard" class="col pl-0">
-          <mat-chip-list
-            #chipList
+        <mat-form-field appearance="fill" class="col pl-0">
+          <mat-chip-grid
+            #chipGrid
             aria-label="Namespace selection"
             formControlName="selectedDomains"
             id="namespaceInput">
@@ -49,10 +49,10 @@
               (matChipInputTokenEnd)="add($event)"
               [formControl]="namespaceCtrl"
               [matAutocomplete]="auto"
-              [matChipInputFor]="chipList"
+              [matChipInputFor]="chipGrid"
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               [placeholder]="'ldap.ADD_DOMAIN' | translate" />
-          </mat-chip-list>
+          </mat-chip-grid>
           <mat-autocomplete
             #auto="matAutocomplete"
             (optionSelected)="selected($event)">
@@ -68,9 +68,9 @@
         <label class="col-2 font-weight-normal mb-0 mr-2" for="groupInput">{{
           'dlp.gridHeader.GROUPS' | translate
         }}</label>
-        <mat-form-field appearance="standard" class="col pl-0">
-          <mat-chip-list
-            #groupChipList
+        <mat-form-field appearance="fill" class="col pl-0">
+          <mat-chip-grid
+            #groupChipGrid
             aria-label="Group selection"
             formControlName="selectedGroups"
             id="groupInput">
@@ -95,10 +95,10 @@
               (matChipInputTokenEnd)="addGroup($event)"
               [formControl]="groupCtrl"
               [matAutocomplete]="groupAuto"
-              [matChipInputFor]="groupChipList"
+              [matChipInputFor]="groupChipGrid"
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               [placeholder]="'ldap.ADD_GROUP' | translate" />
-          </mat-chip-list>
+          </mat-chip-grid>
           <mat-autocomplete
             #groupAuto="matAutocomplete"
             (optionSelected)="groupSelected($event)">
@@ -114,9 +114,9 @@
         <label class="col-2 font-weight-normal mb-0 mr-2" for="nodeInput">{{
           'network.groupFilter.ENDPOINTS' | translate
         }}</label>
-        <mat-form-field appearance="standard" class="col pl-0">
-          <mat-chip-list
-            #nodeChipList
+        <mat-form-field appearance="fill" class="col pl-0">
+          <mat-chip-grid
+            #nodeChipGrid
             aria-label="Endpoint selection"
             formControlName="selectedNodes"
             id="nodeInput">
@@ -141,10 +141,10 @@
               (matChipInputTokenEnd)="addNode($event)"
               [formControl]="nodeCtrl"
               [matAutocomplete]="nodeAuto"
-              [matChipInputFor]="nodeChipList"
+              [matChipInputFor]="nodeChipGrid"
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               [placeholder]="'network.groupFilter.ADD_ENDPOINT' | translate" />
-          </mat-chip-list>
+          </mat-chip-grid>
           <mat-autocomplete
             #nodeAuto="matAutocomplete"
             (optionSelected)="nodeSelected($event)">

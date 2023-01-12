@@ -1,7 +1,7 @@
 <div [class]="!to.isCell ? 'd-flex align-items-center' : ''">
   <i class="eos-icons mr-3">{{ field.templateOptions?.icon }}</i>
   <mat-form-field
-    appearance="standard"
+    appearance="fill"
     [class]="to.isCell ? 'pull-left' : 'w-' + (to.inputWidth ?? '100')"
     [hideRequiredMarker]="to.hideRequiredMarker ?? false"
     [floatLabel]="to.floatLabel ? 'always' : 'auto'">

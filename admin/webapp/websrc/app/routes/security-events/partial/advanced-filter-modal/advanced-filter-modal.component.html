@@ -67,7 +67,7 @@
     <mat-divider></mat-divider>
     <section class="row mx-0 align-items-center">
       <span class="d-block col-3">{{ 'securityEvent.HOST' | translate }}</span>
-      <mat-form-field appearance="standard" class="col pl-0">
+      <mat-form-field appearance="fill" class="col pl-0">
         <input
           type="text"
           aria-label="Host"
@@ -91,7 +91,7 @@
     </section>
     <section class="row mx-0 align-items-center">
       <span class="d-block col-3">{{'securityEvent.SOURCE' | translate}}</span>
-      <mat-form-field appearance="standard" class="col pl-0">
+      <mat-form-field appearance="fill" class="col pl-0">
         <input
           type="text"
           aria-label="Source"
@@ -115,7 +115,7 @@
     </section>
     <section class="row mx-0 align-items-center">
       <span class="d-block col-3">{{ 'securityEvent.DESTINATION' | translate }}</span>
-      <mat-form-field appearance="standard" class="col pl-0">
+      <mat-form-field appearance="fill" class="col pl-0">
         <input
           type="text"
           aria-label="Destination"
@@ -141,9 +141,9 @@
       <label class="col-3 font-weight-normal mb-0" for="namespaceInput">{{
         'securityEvent.DOMAIN' | translate
       }}</label>
-      <mat-form-field appearance="standard" class="col pl-0">
-        <mat-chip-list
-          #chipList
+      <mat-form-field appearance="fill" class="col pl-0">
+        <mat-chip-grid
+          #chipGrid
           aria-label="Namespace selection"
           formControlName="selectedDomains"
           id="namespaceInput">
@@ -160,10 +160,10 @@
             (matChipInputTokenEnd)="add($event)"
             [formControl]="namespaceCtrl"
             [matAutocomplete]="auto"
-            [matChipInputFor]="chipList"
+            [matChipInputFor]="chipGrid"
             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
             [placeholder]="'ldap.ADD_DOMAIN' | translate" />
-        </mat-chip-list>
+        </mat-chip-grid>
         <mat-autocomplete
           #auto="matAutocomplete"
           (optionSelected)="selected($event)">
@@ -179,7 +179,7 @@
       <span class="d-block col-3">{{
         'securityEvent.OTHER_KEYWORD' | translate
       }}</span>
-      <mat-form-field appearance="standard" class="col pl-0">
+      <mat-form-field appearance="fill" class="col pl-0">
         <input
           formControlName="includedKeyword"
           id="includedKeyword"
@@ -190,7 +190,7 @@
       <span class="d-block col-3">{{
         'securityEvent.EXCLUDED_KEYWORD' | translate
       }}</span>
-      <mat-form-field appearance="standard" class="col pl-0">
+      <mat-form-field appearance="fill" class="col pl-0">
         <input
           formControlName="excludedKeyword"
           id="excludedKeyword"

@@ -3,7 +3,7 @@
   <div mat-dialog-content>
     <div class="row">
       <div class="col-6 d-flex align-items-center">
-        <mat-form-field appearance="standard" class="w-inherit">
+        <mat-form-field appearance="fill" class="w-inherit">
           <mat-label>{{ 'ldap.USERNAME' | translate }}</mat-label>
           <input
             formControlName="username"
@@ -14,7 +14,7 @@
         </mat-form-field>
       </div>
       <div class="col-6 d-flex align-items-center">
-        <mat-form-field appearance="standard" class="w-inherit">
+        <mat-form-field appearance="fill" class="w-inherit">
           <mat-label>{{ 'ldap.PASSWORD' | translate }}</mat-label>
           <input
             [type]="passwordVisible ? 'text' : 'password'"
@@ -60,11 +60,11 @@
           ) | translate
         }}
       </span>
-      <mat-chip-list>
+      <mat-chip-grid>
         <mat-chip *ngFor="let group of connectedGroups">
           {{ group }}
         </mat-chip>
-      </mat-chip-list>
+      </mat-chip-grid>
     </ng-container>
     <ng-container *ngIf="testFinished && errorMessage">
       <span class="d-flex align-items-center my-2">

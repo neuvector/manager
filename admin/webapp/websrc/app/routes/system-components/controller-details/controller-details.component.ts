@@ -219,12 +219,9 @@ export class ControllerDetailsComponent implements OnInit, OnDestroy {
             this.refreshChart();
           },
           error: ({ error }: { error: ErrorResponse }) => {
-            this.notificationService.open(
-              this.utils.getAlertifyMsg(
-                error,
-                this.tr.instant('general.UNFORMATTED_ERR'),
-                false
-              )
+            this.notificationService.openError(
+              error,
+              this.tr.instant('general.UNFORMATTED_ERR')
             );
           },
         });

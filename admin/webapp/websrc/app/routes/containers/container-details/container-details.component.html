@@ -1,15 +1,15 @@
 <ng-container *ngIf="container">
   <ng-container [ngSwitch]="activeTab">
     <ng-container *ngSwitchCase="'compliance'">
-      <div class="filter" [class.filter-csv]="!complianceEmpty">
+      <div class="filter" [class.filter-icon-1]="!complianceEmpty">
         <div class="d-flex">
           <button
             *ngIf="!complianceEmpty"
             aria-label="Export compliance CSV"
             type="button"
-            class="mr-3 d-flex align-items-center"
+            class="mr-3"
             (click)="complianceGrid.exportCSV()"
-            mat-button>
+            mat-icon-button>
             <i class="eos-icons icon-18">csv_file</i>
           </button>
         </div>
@@ -58,7 +58,7 @@
             class="mr-3"
             (click)="exportCVE()"
             mat-icon-button>
-            <mat-icon class="eos-icons icon-18">csv_file</mat-icon>
+            <i class="eos-icons icon-18">csv_file</i>
           </button>
         </div>
         <mat-form-field appearance="standard">

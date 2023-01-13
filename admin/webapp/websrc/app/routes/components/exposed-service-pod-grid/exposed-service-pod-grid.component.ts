@@ -249,12 +249,9 @@ export class ExposedServicePodGridComponent implements OnInit {
           );
         },
         error: ({ error }: { error: ErrorResponse }) => {
-          this.notificationService.open(
-            this.utils.getAlertifyMsg(
-              error,
-              this.translate.instant('network.popup.SESSION_CLEAR_FAILURE'),
-              false
-            )
+          this.notificationService.openError(
+            error,
+            this.translate.instant('network.popup.SESSION_CLEAR_FAILURE')
           );
         },
       });

@@ -1,4 +1,5 @@
 import { Component, Input, OnDestroy, ViewChild } from '@angular/core';
+import { GlobalConstant } from '@common/constants/global.constant';
 import { ErrorResponse } from '@common/types';
 import { UtilsService } from '@common/utils/app.utils';
 import { shorten } from '@common/utils/common.utils';
@@ -57,11 +58,13 @@ export class SupportFormComponent implements OnDestroy {
       error: ({ error }: { error: ErrorResponse }) => {
         if (this.debug_enabled) {
           this.notificationService.open(
-            this.tr.instant('setting.ENABLED_CPATH_NG')
+            this.tr.instant('setting.ENABLED_CPATH_NG'),
+            GlobalConstant.NOTIFICATION_TYPE.ERROR
           );
         } else {
           this.notificationService.open(
-            this.tr.instant('setting.DISABLED_CPATH_NG')
+            this.tr.instant('setting.DISABLED_CPATH_NG'),
+            GlobalConstant.NOTIFICATION_TYPE.ERROR
           );
         }
         console.log(error);
@@ -91,7 +94,8 @@ export class SupportFormComponent implements OnDestroy {
         },
         ({ error }: { error: ErrorResponse }) => {
           this.notificationService.open(
-            this.tr.instant('setting.EXPORT_FAILED')
+            this.tr.instant('setting.EXPORT_FAILED'),
+            GlobalConstant.NOTIFICATION_TYPE.ERROR
           );
           console.warn(error);
         }
@@ -111,7 +115,8 @@ export class SupportFormComponent implements OnDestroy {
         () => (this.collectingLogReady = true),
         ({ error }: { error: ErrorResponse }) => {
           this.notificationService.open(
-            this.tr.instant('setting.COLLECT_FAILED')
+            this.tr.instant('setting.COLLECT_FAILED'),
+            GlobalConstant.NOTIFICATION_TYPE.ERROR
           );
           console.warn(error);
         }
@@ -133,7 +138,8 @@ export class SupportFormComponent implements OnDestroy {
       },
       ({ error }: { error: ErrorResponse }) => {
         this.notificationService.open(
-          this.tr.instant('setting.COLLECT_FAILED')
+          this.tr.instant('setting.COLLECT_FAILED'),
+          GlobalConstant.NOTIFICATION_TYPE.ERROR
         );
         console.warn(error);
       }

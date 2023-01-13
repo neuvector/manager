@@ -16,6 +16,9 @@ export const MinLengthField = {
     min: 0,
     required: true,
   },
+  expressionProperties: {
+    'templateOptions.disabled': '!formState.isUpdatePwdProfileAuthorized',
+  },
 };
 
 export const MinUppercaseField = {
@@ -32,6 +35,9 @@ export const MinUppercaseField = {
     type: 'number',
     min: 0,
     required: true,
+  },
+  expressionProperties: {
+    'templateOptions.disabled': '!formState.isUpdatePwdProfileAuthorized',
   },
 };
 
@@ -50,6 +56,9 @@ export const MinLowercaseField = {
     min: 0,
     required: true,
   },
+  expressionProperties: {
+    'templateOptions.disabled': '!formState.isUpdatePwdProfileAuthorized',
+  },
 };
 
 export const MinNumericField = {
@@ -67,6 +76,9 @@ export const MinNumericField = {
     min: 0,
     required: true,
   },
+  expressionProperties: {
+    'templateOptions.disabled': '!formState.isUpdatePwdProfileAuthorized',
+  },
 };
 
 export const MinSpecialField = {
@@ -83,6 +95,9 @@ export const MinSpecialField = {
     type: 'number',
     min: 0,
     required: true,
+  },
+  expressionProperties: {
+    'templateOptions.disabled': '!formState.isUpdatePwdProfileAuthorized',
   },
 };
 
@@ -109,6 +124,9 @@ export const FailedLoginToggleField = {
   templateOptions: {
     ariaLabelledBy: 'passwordProfile.loginFailureAllowance.TITLE',
   },
+  expressionProperties: {
+    'templateOptions.disabled': '!formState.isUpdatePwdProfileAuthorized',
+  },
 };
 
 export const FailedLoginAttemptsField = {
@@ -127,7 +145,8 @@ export const FailedLoginAttemptsField = {
     required: true,
   },
   expressionProperties: {
-    'templateOptions.disabled': '!model.enable_block_after_failed_login',
+    'templateOptions.disabled':
+      '!formState.isUpdatePwdProfileAuthorized || !model.enable_block_after_failed_login',
   },
 };
 
@@ -147,7 +166,8 @@ export const FailedLoginAccessField = {
     required: true,
   },
   expressionProperties: {
-    'templateOptions.disabled': '!model.enable_block_after_failed_login',
+    'templateOptions.disabled':
+      '!formState.isUpdatePwdProfileAuthorized || !model.enable_block_after_failed_login',
   },
 };
 
@@ -156,6 +176,9 @@ export const ExpiredPasswordToggleField = {
   type: FormlyComponents.TOGGLE,
   templateOptions: {
     ariaLabelledBy: 'passwordProfile.passwordExpiring.TITLE',
+  },
+  expressionProperties: {
+    'templateOptions.disabled': '!formState.isUpdatePwdProfileAuthorized',
   },
 };
 
@@ -175,7 +198,8 @@ export const ExpiredPasswordAgeField = {
     required: true,
   },
   expressionProperties: {
-    'templateOptions.disabled': '!model.enable_password_expiration',
+    'templateOptions.disabled':
+      '!formState.isUpdatePwdProfileAuthorized || !model.enable_password_expiration',
   },
 };
 
@@ -184,6 +208,9 @@ export const PasswordHistoryToggleField = {
   type: FormlyComponents.TOGGLE,
   templateOptions: {
     ariaLabelledBy: 'passwordProfile.passwordHistory.TITLE',
+  },
+  expressionProperties: {
+    'templateOptions.disabled': '!formState.isUpdatePwdProfileAuthorized',
   },
 };
 
@@ -203,6 +230,7 @@ export const PasswordHistoryKeptField = {
     required: true,
   },
   expressionProperties: {
-    'templateOptions.disabled': '!model.enable_password_history',
+    'templateOptions.disabled':
+      '!formState.isUpdatePwdProfileAuthorized || !model.enable_password_history',
   },
 };

@@ -106,6 +106,7 @@ import { TwoWayInfiniteScrollDirective } from './directives/two-way-infinite-scr
 
 import { EnforcerBriefModule } from '@components/enforcer-brief/enforcer-brief.module';
 import { CommonHttpService } from './api/common-http.service';
+import { SummaryService } from '@services/summary.service';
 
 // https://angular.io/styleguide#!#04-10
 @NgModule({
@@ -201,6 +202,7 @@ import { CommonHttpService } from './api/common-http.service';
     EventsService,
     RiskReportsService,
     DashboardService,
+    SummaryService,
     // Http Services
     AssetsHttpService,
     AuthHttpService,

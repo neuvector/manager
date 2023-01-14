@@ -25,10 +25,10 @@ class RiskService()(implicit executionContext: ExecutionContext)
     extends Directives
     with DefaultJsonFormats
     with LazyLogging {
-  val scanUrl                 = "scan/asset"
-  val complianceUrl           = "compliance/asset"
-  val complianceProfileUrl    = "compliance/profile"
-  val vulnerabilityProfileUrl = "vulnerability/profile"
+  private val scanUrl                 = "scan/asset"
+  private val complianceUrl           = "compliance/asset"
+  private val complianceProfileUrl    = "compliance/profile"
+  private val vulnerabilityProfileUrl = "vulnerability/profile"
 
   val riskRoute: Route =
     headerValueByName("Token") { tokenId =>

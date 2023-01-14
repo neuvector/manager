@@ -33,12 +33,12 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
     with ResponseTransformation
     with LazyLogging {
 
-  val auth       = "auth"
-  val saml       = "token_auth_server"
-  val openId     = "openId_auth"
-  val rootPath   = "/"
-  val samlKey    = "samlSso"
-  val suseCookie = "R_SESS"
+  val auth               = "auth"
+  val saml               = "token_auth_server"
+  val openId             = "openId_auth"
+  private val rootPath   = "/"
+  private val samlKey    = "samlSso"
+  private val suseCookie = "R_SESS"
 
   val authRoute: Route =
     (get & path(openId)) {

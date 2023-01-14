@@ -29,18 +29,18 @@ class PolicyService()(implicit executionContext: ExecutionContext)
     with DefaultJsonFormats
     with LazyLogging {
 
-  final val policyPath                 = "policy/rule"
-  final val responseRulePath           = "response/rule"
-  final val scanConfigPath             = "scan/config"
-  final val scanRegistryPath           = "scan/registry"
-  final val admissionControlPath       = "admission/rules"
-  final val admissionControlSinglePath = "admission/rule"
-  final val admissionControlOption     = "admission/options"
-  final val admissionControlState      = "admission/state"
-  final val admissionExport            = "file/admission"
-  final val admissionImport            = "file/admission/config"
-  final val admissionControlTest       = "debug/admission/test"
-  final val fedDeploy                  = "fed/deploy"
+  private final val policyPath                 = "policy/rule"
+  private final val responseRulePath           = "response/rule"
+  private final val scanConfigPath             = "scan/config"
+  private final val scanRegistryPath           = "scan/registry"
+  private final val admissionControlPath       = "admission/rules"
+  private final val admissionControlSinglePath = "admission/rule"
+  private final val admissionControlOption     = "admission/options"
+  private final val admissionControlState      = "admission/state"
+  private final val admissionExport            = "file/admission"
+  private final val admissionImport            = "file/admission/config"
+  private final val admissionControlTest       = "debug/admission/test"
+  private final val fedDeploy                  = "fed/deploy"
 
   final val serverErrorStatus = "Status: 503"
 

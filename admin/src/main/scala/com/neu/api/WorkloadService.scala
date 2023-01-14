@@ -20,7 +20,7 @@ class WorkloadService()(implicit executionContext: ExecutionContext)
     extends Directives
     with DefaultJsonFormats
     with LazyLogging {
-  val monitorConfig = """{"config": {"monitor": """
+  private val monitorConfig = """{"config": {"monitor": """
 
   val workloadRoute: Route =
     headerValueByName("Token") { tokenId =>

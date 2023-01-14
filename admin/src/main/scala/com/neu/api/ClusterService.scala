@@ -198,7 +198,7 @@ class ClusterService()(implicit executionContext: ExecutionContext)
       }
     }
 
-  lazy val toClusters: FedMembershipData => FedMemberData =
+  private lazy val toClusters: FedMembershipData => FedMemberData =
     (fedMembershipData: FedMembershipData) => {
       fedMembershipData.fed_role match {
         case "" =>
@@ -231,19 +231,20 @@ class ClusterService()(implicit executionContext: ExecutionContext)
       }
     }
 
-  val masterToClusterServer: FedMasterCluster => ClusterServer = (master: FedMasterCluster) => {
-    ClusterServer(
-      master.name,
-      master.id,
-      master.rest_info.server,
-      Some(master.rest_info.port),
-      master.status,
-      master.user,
-      "master"
-    )
-  }
+  private val masterToClusterServer: FedMasterCluster => ClusterServer =
+    (master: FedMasterCluster) => {
+      ClusterServer(
+        master.name,
+        master.id,
+        master.rest_info.server,
+        Some(master.rest_info.port),
+        master.status,
+        master.user,
+        "master"
+      )
+    }
 
-  val jointToClusterServer: FedJointCluster => ClusterServer = (joint: FedJointCluster) => {
+  private val jointToClusterServer: FedJointCluster => ClusterServer = (joint: FedJointCluster) => {
     ClusterServer(
       joint.name,
       joint.id,

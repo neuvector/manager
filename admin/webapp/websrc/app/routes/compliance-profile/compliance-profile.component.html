@@ -4,7 +4,7 @@
       <mat-tab [label]="'cis.profile.TEMPLATES' | translate" class="h-100">
         <app-compliance-profile-templates
           [hideSystemInit]="
-            complianceProfileData.profile.profiles[0]?.disable_system || false
+            complianceProfileData.profile.profiles[0].disable_system || false
           "
           [templates]="
             complianceProfileData.template.list.compliance

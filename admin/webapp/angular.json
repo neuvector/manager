@@ -28,7 +28,22 @@
             "inlineStyleLanguage": "scss",
             "allowedCommonJsDependencies": [
               "lodash",
-              "chart.js"
+              "chart.js",
+              "inversify-inject-decorators",
+              "regl",
+              "@babel/runtime/regenerator",
+              "@webgpu/types/dist/constants",
+              "inversify",
+              "@antv/matrix-util/lib/ext",
+              "@antv/algorithm/lib/asyncIndex",
+              "color",
+              "insert-css",
+              "ag-grid-community",
+              "jsoneditor",
+              "jquery",
+              "file-saver",
+              "moment",
+              "screenfull"
             ],
             "assets": [
               "websrc/favicon.ico",

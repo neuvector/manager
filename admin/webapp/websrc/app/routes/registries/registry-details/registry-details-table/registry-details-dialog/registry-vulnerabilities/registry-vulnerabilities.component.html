@@ -94,22 +94,22 @@
     <app-vulnerabilities-grid
       (vulnerabilitySelected)="vulnerabilitySelected($event)"
       [resize]="resize"
-      [rowData]="selectedLayer?.vulnerabilities"
+      [rowData]="selectedLayer.vulnerabilities"
       [useQuickFilterService]="true"
       tableHeight="100%"></app-vulnerabilities-grid>
   </div>
   <div class="col-4 mt-2 vulnerability-description-container p-0">
     <div class="vulnerability-description">
       <div class="vulnerability-description-header">
-        {{ selectedVulnerability?.name }}
+        {{ selectedVulnerability.name }}
         <a
           *ngIf="selectedVulnerability?.link"
-          [href]="selectedVulnerability?.link"
+          [href]="selectedVulnerability.link"
           ><i class="ml-2 eos-icons">launch</i></a
         >
       </div>
       <div class="vulnerability-description-body">
-        {{ selectedVulnerability?.description }}
+        {{ selectedVulnerability.description }}
       </div>
     </div>
   </div>

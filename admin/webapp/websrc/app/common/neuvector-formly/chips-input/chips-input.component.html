@@ -1,5 +1,5 @@
 <mat-form-field appearance="fill" class="w-100">
-  <mat-label>{{ field.templateOptions?.label || '' | translate }}</mat-label>
+  <mat-label>{{ field.templateOptions.label || '' | translate }}</mat-label>
   <mat-chip-grid
     #chipGrid
     [formControl]="formControl"
@@ -19,8 +19,8 @@
       [matChipInputAddOnBlur]="addOnBlur"
       [matChipInputFor]="chipGrid"
       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-      [placeholder]="field.templateOptions?.placeholder || '' | translate"
-      [required]="field.templateOptions?.required" />
+      [placeholder]="field.templateOptions.placeholder || '' | translate"
+      [required]="field.templateOptions.required" />
   </mat-chip-grid>
   <mat-error *ngIf="formControl.invalid">
     <app-formly-errors [field]="field"></app-formly-errors>
@@ -28,8 +28,8 @@
       *ngIf="field.templateOptions?.hint && field.templateOptions?.alwaysHint"
       class="float-right"
       align="end">
-      {{ field.templateOptions?.hint | translate }}
+      {{ field.templateOptions.hint | translate }}
     </mat-hint>
   </mat-error>
-  <mat-hint>{{ field.templateOptions?.hint || '' | translate }}</mat-hint>
+  <mat-hint>{{ field.templateOptions.hint || '' | translate }}</mat-hint>
 </mat-form-field>

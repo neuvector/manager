@@ -49,7 +49,7 @@ export class SecurityEventsComponent implements OnInit {
   filterOpen: boolean = false;
 
   filterDialog!: MatDialogRef<any>;
-  advFilter: any = this.advancedFilterModalService.advFilter;
+  advFilter: any;
   autoComplete!: {
     domain: string[];
     host: string[];
@@ -81,7 +81,9 @@ export class SecurityEventsComponent implements OnInit {
     public dialog: MatDialog,
     private advancedFilterModalService: AdvancedFilterModalService,
     private translate: TranslateService
-  ) {}
+  ) {
+    this.advFilter = this.advancedFilterModalService.advFilter;
+  }
 
   ngOnInit(): void {
     this.isEditRuleAuthorized =

@@ -5,6 +5,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NodeBriefDialogComponent } from '@components/node-brief/node-brief-dialog/node-brief-dialog.component';
 import { ContainerBriefDialogComponent } from '@components/container-brief/container-brief-dialog/container-brief-dialog.component';
 import { take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-compliance-item-details',
@@ -12,7 +13,7 @@ import { take } from 'rxjs/operators';
   styleUrls: ['./compliance-item-details.component.scss'],
 })
 export class ComplianceItemDetailsComponent implements OnDestroy {
-  selectedCompliance$ = this.complianceService.selectedCompliance$;
+  selectedCompliance$: Observable<any>;
   legend = false;
   currentDialog!: MatDialogRef<any>;
   openDialog = false;
@@ -20,7 +21,9 @@ export class ComplianceItemDetailsComponent implements OnDestroy {
   constructor(
     private complianceService: ComplianceService,
     private dialog: MatDialog
-  ) {}
+  ) {
+    this.selectedCompliance$ = this.complianceService.selectedCompliance$;
+  }
 
   openNodeBrief(host: Host) {
     this.openDialog = true;

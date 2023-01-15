@@ -39,92 +39,14 @@ export class RiskReportGridComponent implements OnInit {
   gridOptions!: GridOptions;
   gridApi!: GridApi;
   filteredCount = 0;
-  filtered$ = this.riskReportGridFilterService.filtered$;
-  advFilter: any = this.riskReportGridFilterService.advFilter;
+  filtered$: any;
+  advFilter: any;
   filterDialog!: MatDialogRef<any>;
   filterOpen = false;
   get reportsCount() {
     return this.riskReportsService.riskReports.length;
   }
-  columnDefs: ColDef[] = [
-    {
-      headerName: this.tr.instant('threat.gridHeader.NAME'),
-      field: 'name',
-      cellRenderer: 'nameCellRenderer',
-      width: 230,
-    },
-    {
-      headerName: this.tr.instant('audit.gridHeader.LEVEL'),
-      field: 'level',
-      cellRenderer: 'levelCellRenderer',
-      width: 95,
-      minWidth: 95,
-    },
-    {
-      headerName: this.tr.instant('general.LOCATION'),
-      cellRenderer: 'locationCellRenderer',
-      width: 660,
-    },
-    {
-      headerName: this.tr.instant('threat.gridHeader.TIME'),
-      field: 'reported_at',
-      cellRenderer: params =>
-        this.datePipe.transform(params.value, 'MMM dd, y HH:mm:ss'),
-      comparator: (value1, value2, node1, node2) =>
-        Date.parse(node1.data.reported_at) - Date.parse(node2.data.reported_at),
-      icons: {
-        sortAscending: '<em class="fa fa-sort-numeric-down"/>',
-        sortDescending: '<em class="fa fa-sort-numeric-up"/>',
-      },
-      minWidth: 160,
-      maxWidth: 170,
-    },
-    {
-      headerName: 'Workload Domain',
-      field: 'workload_domain',
-      hide: true,
-    },
-    {
-      headerName: 'Workload Name',
-      field: 'workload_name',
-      hide: true,
-    },
-    {
-      headerName: 'Host Name',
-      field: 'host_name',
-      hide: true,
-    },
-    {
-      headerName: 'Registry',
-      field: 'registry',
-      hide: true,
-    },
-    {
-      headerName: 'Workload Image',
-      field: 'workload_image',
-      hide: true,
-    },
-    {
-      headerName: 'Repository',
-      field: 'repository',
-      hide: true,
-    },
-    {
-      headerName: 'Tag',
-      field: 'tag',
-      hide: true,
-    },
-    {
-      headerName: 'Platform',
-      field: 'platform',
-      hide: true,
-    },
-    {
-      headerName: 'Platform Version',
-      field: 'platform_version',
-      hide: true,
-    },
-  ];
+  columnDefs: ColDef[];
   autoComplete!: {
     domain: string[];
     host: string[];
@@ -142,6 +64,87 @@ export class RiskReportGridComponent implements OnInit {
     private tr: TranslateService
   ) {
     this.$win = $(GlobalVariable.window);
+    this.filtered$ = this.riskReportGridFilterService.filtered$;
+    this.advFilter = this.riskReportGridFilterService.advFilter;
+    this.columnDefs = [
+      {
+        headerName: this.tr.instant('threat.gridHeader.NAME'),
+        field: 'name',
+        cellRenderer: 'nameCellRenderer',
+        width: 230,
+      },
+      {
+        headerName: this.tr.instant('audit.gridHeader.LEVEL'),
+        field: 'level',
+        cellRenderer: 'levelCellRenderer',
+        width: 95,
+        minWidth: 95,
+      },
+      {
+        headerName: this.tr.instant('general.LOCATION'),
+        cellRenderer: 'locationCellRenderer',
+        width: 660,
+      },
+      {
+        headerName: this.tr.instant('threat.gridHeader.TIME'),
+        field: 'reported_at',
+        cellRenderer: params =>
+          this.datePipe.transform(params.value, 'MMM dd, y HH:mm:ss'),
+        comparator: (value1, value2, node1, node2) =>
+          Date.parse(node1.data.reported_at) - Date.parse(node2.data.reported_at),
+        icons: {
+          sortAscending: '<em class="fa fa-sort-numeric-down"/>',
+          sortDescending: '<em class="fa fa-sort-numeric-up"/>',
+        },
+        minWidth: 160,
+        maxWidth: 170,
+      },
+      {
+        headerName: 'Workload Domain',
+        field: 'workload_domain',
+        hide: true,
+      },
+      {
+        headerName: 'Workload Name',
+        field: 'workload_name',
+        hide: true,
+      },
+      {
+        headerName: 'Host Name',
+        field: 'host_name',
+        hide: true,
+      },
+      {
+        headerName: 'Registry',
+        field: 'registry',
+        hide: true,
+      },
+      {
+        headerName: 'Workload Image',
+        field: 'workload_image',
+        hide: true,
+      },
+      {
+        headerName: 'Repository',
+        field: 'repository',
+        hide: true,
+      },
+      {
+        headerName: 'Tag',
+        field: 'tag',
+        hide: true,
+      },
+      {
+        headerName: 'Platform',
+        field: 'platform',
+        hide: true,
+      },
+      {
+        headerName: 'Platform Version',
+        field: 'platform_version',
+        hide: true,
+      },
+    ];
   }
 
   ngOnInit(): void {

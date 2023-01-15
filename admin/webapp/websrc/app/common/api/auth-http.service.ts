@@ -23,7 +23,7 @@ export class AuthHttpService {
   getLicense(): Observable<LicenseGetResponse> {
     return GlobalVariable.http
       .get<LicenseGetResponse>(PathConstant.LICENSE_URL)
-      .pipe(pluck('license'));
+      .pipe(pluck('license')) as Observable<LicenseGetResponse>;
   }
 
   postLicense(body: RenewLicensePostBody): Observable<unknown> {
@@ -34,7 +34,7 @@ export class AuthHttpService {
   }
 
   getUsers(): Observable<UserGetResponse> {
-    return GlobalVariable.http.get<UserGetResponse>(PathConstant.USERS_URL);
+    return GlobalVariable.http.get<UserGetResponse>(PathConstant.USERS_URL) as Observable<UserGetResponse>;
   }
 
   addUser(
@@ -59,7 +59,7 @@ export class AuthHttpService {
   getRoles(): Observable<Role[]> {
     return GlobalVariable.http
       .get<Role[]>(PathConstant.ROLES)
-      .pipe(pluck('roles'));
+      .pipe(pluck('roles')) as Observable<Role[]>;
   }
 
   addRole(role: Role): Observable<unknown> {
@@ -83,7 +83,7 @@ export class AuthHttpService {
   getSelf(): Observable<SelfGetResponse> {
     return GlobalVariable.http.get<SelfGetResponse>(PathConstant.SELF_URL, {
       params: { isOnNV: 'true' },
-    });
+    }) as Observable<SelfGetResponse>;
   }
 
   patchSelf(user: Self): Observable<unknown> {
@@ -91,7 +91,7 @@ export class AuthHttpService {
   }
 
   getServer(): Observable<ServerGetResponse> {
-    return GlobalVariable.http.get<ServerGetResponse>(PathConstant.LDAP_URL);
+    return GlobalVariable.http.get<ServerGetResponse>(PathConstant.LDAP_URL) as Observable<ServerGetResponse>;
   }
 
   patchServer(body: ServerPatchBody): Observable<unknown> {
@@ -105,7 +105,7 @@ export class AuthHttpService {
   getPermissionOptions(): Observable<PermissionOptionResponse> {
     return GlobalVariable.http
       .get<PermissionOptionResponse>(PathConstant.PERMISSION_OPTIONS)
-      .pipe(pluck('options'));
+      .pipe(pluck('options')) as Observable<PermissionOptionResponse>;
   }
 
   getPwdProfile(): Observable<PasswordProfile> {
@@ -121,13 +121,13 @@ export class AuthHttpService {
             pwd_profile => pwd_profile.name === active_profile_name
           )[0];
         })
-      );
+      ) as Observable<PasswordProfile>;
   }
 
   getPublicPwdProfile(): Observable<PublicPasswordProfile> {
     return GlobalVariable.http
       .get<PublicPasswordProfile>(PathConstant.PUBLIC_PASSWORD_PROFILE)
-      .pipe(pluck('pwd_profile'));
+      .pipe(pluck('pwd_profile')) as Observable<PublicPasswordProfile>;
   }
 
   patchPwdProfile(profile: PasswordProfile): Observable<unknown> {

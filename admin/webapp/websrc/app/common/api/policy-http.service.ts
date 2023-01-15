@@ -8,15 +8,15 @@ import { pluck } from 'rxjs/operators';
 @Injectable()
 export class PolicyHttpService {
   getFedGroups(): Observable<Group[]>{
-    return GlobalVariable.http.get<Group[]>(PathConstant.GROUP_URL, {params: {scope: 'fed'}});
+    return GlobalVariable.http.get<Group[]>(PathConstant.GROUP_URL, {params: {scope: 'fed'}}) as Observable<Group[]>;
   }
 
   getGroups(params?: any): Observable<Group[]> {
     if (params)
       return GlobalVariable.http.get<Group[]>(PathConstant.GROUP_URL, {
         params,
-      });
-    return GlobalVariable.http.get<Group[]>(PathConstant.GROUP_URL);
+      }) as Observable<Group[]>;
+    return GlobalVariable.http.get<Group[]>(PathConstant.GROUP_URL) as Observable<Group[]>;
   }
 
   getGroupList(scope: string) {
@@ -30,7 +30,7 @@ export class PolicyHttpService {
       .get<Group>(PathConstant.GROUP_URL, {
         params: { name },
       })
-      .pipe(pluck('group'));
+      .pipe(pluck('group')) as Observable<Group>;
   }
 
   postGroup(payload) {
@@ -50,7 +50,7 @@ export class PolicyHttpService {
   getPolicyRule(id: number): Observable<NetworkRule> {
     return GlobalVariable.http.get<NetworkRule>(PathConstant.POLICY_RULE_URL, {
       params: { id },
-    });
+    }) as Observable<NetworkRule>;
   }
 
   getResponseRule(id: number): Observable<ResponseRule> {
@@ -59,7 +59,7 @@ export class PolicyHttpService {
       {
         params: { id },
       }
-    );
+    ) as Observable<ResponseRule> ;
   }
 
   getServices(params?: any): Observable<Service[]> {
@@ -68,17 +68,17 @@ export class PolicyHttpService {
         .get<Service[]>(PathConstant.SERVICE_URL, {
           params,
         })
-        .pipe(pluck('services'));
+        .pipe(pluck('services')) as Observable<Service[]>;
     }
     return GlobalVariable.http
       .get<Service[]>(PathConstant.SERVICE_URL)
-      .pipe(pluck('services'));
+      .pipe(pluck('services')) as Observable<Service[]>;
   }
 
   getService(name: string): Observable<Service> {
     return GlobalVariable.http
       .get<Service>(PathConstant.SERVICE_URL, { params: { name } })
-      .pipe(pluck('service'));
+      .pipe(pluck('service')) as Observable<Service>;
   }
 
   patchService(payload, config?) {

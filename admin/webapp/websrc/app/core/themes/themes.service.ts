@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-const themeA = require('../../common/styles/themes/theme-a.scss');
-const themeB = require('../../common/styles/themes/theme-b.scss');
+// const themeA = require('../../common/styles/themes/theme-a.scss');
+// const themeB = require('../../common/styles/themes/theme-b.scss');
 
 @Injectable()
 export class ThemesService {
@@ -22,14 +22,14 @@ export class ThemesService {
   }
 
   setTheme(name) {
-    switch (name) {
-      case 'A':
-        this.injectStylesheet(themeA);
-        break;
-      case 'B':
-        this.injectStylesheet(themeB);
-        break;
-    }
+    // switch (name) {
+    //   case 'A':
+    //     this.injectStylesheet(themeA);
+    //     break;
+    //   case 'B':
+    //     this.injectStylesheet(themeB);
+    //     break;
+    // }
   }
 
   injectStylesheet(css) {

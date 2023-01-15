@@ -2,11 +2,11 @@
   <span
     *ngIf="tooltip"
     class="badge"
-    [class]="'badge-' + labelCode"
+    [ngClass]="'badge-' + labelCode"
     [matTooltip]="result">
     {{ displayStatus }}
   </span>
-  <span *ngIf="!tooltip" class="badge" [class]="'badge-' + labelCode">
+  <span *ngIf="!tooltip" class="badge" [ngClass]="'badge-' + labelCode">
     {{ displayStatus }}
   </span>
 </ng-container>

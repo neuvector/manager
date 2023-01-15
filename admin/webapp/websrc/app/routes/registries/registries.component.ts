@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import { RegistriesCommunicationService } from './regestries-communication.service';
 import { catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { RepoGetResponse, Summary, RegistryGetResponse } from '@common/types';
 import { MultiClusterService } from "@services/multi-cluster.service";
 
 @Component({
@@ -10,19 +12,21 @@ import { MultiClusterService } from "@services/multi-cluster.service";
 })
 export class RegistriesComponent implements OnInit{
   error: unknown;
-  registries$ = this.registriesCommunicationService.registries$.pipe(
-    catchError(err => {
-      this.error = err;
-      throw err;
-    })
-  );
-  refreshingDetails$ = this.registriesCommunicationService.refreshingDetails$;
+  registries$: Observable<RegistryGetResponse>;
+  refreshingDetails$: Observable<any>;
   private switchClusterSubscription;
 
   constructor(
     private registriesCommunicationService: RegistriesCommunicationService,
     private multiClusterService: MultiClusterService
   ) {
+    this.registries$ = this.registriesCommunicationService.registries$.pipe(
+      catchError(err => {
+        this.error = err;
+        throw err;
+      })
+    );
+    this.refreshingDetails$ = this.registriesCommunicationService.refreshingDetails$;
   }
 
   ngOnInit(): void {

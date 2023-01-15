@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { throwError } from 'rxjs';
+import { throwError, Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ProfileFormComponent } from './profile-form/profile-form.component';
 import { SettingsService } from '@services/settings.service';
@@ -13,17 +13,19 @@ import { MultiClusterService } from '@services/multi-cluster.service';
 export class ProfileComponent {
   @ViewChild(ProfileFormComponent) profileForm!: ProfileFormComponent;
   profileError: unknown;
-  user$ = this.settingsService.getSelf().pipe(
-    catchError(err => {
-      this.profileError = err;
-      return throwError(err);
-    })
-  );
+  user$: Observable<any>
 
   constructor(
     private multiClusterService: MultiClusterService,
     private settingsService: SettingsService
-  ) {}
+  ) {
+    this.user$ = this.settingsService.getSelf().pipe(
+      catchError(err => {
+        this.profileError = err;
+        return throwError(err);
+      })
+    );
+  }
 
   ngOnInit(): void {}
 }

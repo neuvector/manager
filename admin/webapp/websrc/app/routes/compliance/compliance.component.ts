@@ -9,7 +9,7 @@ import { ComplianceService } from './compliance.service';
 import { ComplianceCsvService } from './csv-generation/compliance-csv.service';
 import { ComplianceFilterService } from './compliance.filter.service';
 import { MapConstant } from '@common/constants/map.constant';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { MultiClusterService } from '@services/multi-cluster.service';
 
 @Component({
@@ -19,7 +19,7 @@ import { MultiClusterService } from '@services/multi-cluster.service';
 })
 export class ComplianceComponent implements OnInit, OnDestroy {
   private _switchClusterSubscription!: Subscription;
-  complianceData$ = this.complianceService.initCompliance();
+  complianceData$: Observable<any>;
   masterData: any;
   masterGrids: any[][] = [];
   isFiltered: boolean = false;
@@ -40,7 +40,9 @@ export class ComplianceComponent implements OnInit, OnDestroy {
     private complianceCsvService: ComplianceCsvService,
     public complianceFilterService: ComplianceFilterService,
     private multiClusterService: MultiClusterService
-  ) {}
+  ) {
+    this.complianceData$ = this.complianceService.initCompliance();
+  }
 
   ngOnInit(): void {
     this._switchClusterSubscription =

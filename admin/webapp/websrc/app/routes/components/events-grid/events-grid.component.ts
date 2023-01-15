@@ -41,104 +41,14 @@ export class EventsGridComponent implements OnInit {
   gridOptions!: GridOptions;
   gridApi!: GridApi;
   filteredCount = 0;
-  filtered$ = this.eventsGridFilterService.filtered$;
-  advFilter: any = this.eventsGridFilterService.advFilter;
+  filtered$: any;
+  advFilter: any;
   filterDialog!: MatDialogRef<any>;
   filterOpen = false;
   get eventsCount() {
     return this.eventsService.events.length;
   }
-  columnDefs: ColDef[] = [
-    {
-      headerName: this.tr.instant('event.gridHeader.NAME'),
-      field: 'name',
-      cellRenderer: 'nameCellRenderer',
-      width: 170,
-    },
-    {
-      headerName: this.tr.instant('event.gridHeader.LEVEL'),
-      field: 'level',
-      cellRenderer: 'levelCellRenderer',
-      width: 90,
-      minWidth: 90,
-    },
-    {
-      headerName: this.tr.instant('event.gridHeader.USER'),
-      field: 'user',
-      cellRenderer: 'userCellRenderer',
-      width: 200,
-    },
-    {
-      headerName: this.tr.instant('event.gridHeader.LOCATION'),
-      field: 'workload_name',
-      cellRenderer: 'locationCellRenderer',
-      width: 250,
-    },
-    {
-      headerName: this.tr.instant('event.gridHeader.TIME'),
-      field: 'reported_at',
-      cellRenderer: params =>
-        this.datePipe.transform(params.value, 'MMM dd, y HH:mm:ss'),
-      comparator: (value1, value2, node1, node2) =>
-        node1.data.reported_timestamp - node2.data.reported_timestamp,
-      icons: {
-        sortAscending: '<em class="fa fa-sort-numeric-down"/>',
-        sortDescending: '<em class="fa fa-sort-numeric-up"/>',
-      },
-      minWidth: 160,
-      maxWidth: 170,
-    },
-    {
-      headerName: 'Host Name',
-      field: 'host_name',
-      hide: true,
-    },
-    {
-      headerName: 'Workload Name',
-      field: 'workload_name',
-      hide: true,
-    },
-    {
-      headerName: 'Workload Domain',
-      field: 'workload_domain',
-      hide: true,
-    },
-    {
-      headerName: 'Workload Image',
-      field: 'workload_image',
-      hide: true,
-    },
-    {
-      headerName: 'User',
-      field: 'user',
-      hide: true,
-    },
-    {
-      headerName: 'User Roles',
-      field: 'user_roles',
-      hide: true,
-    },
-    {
-      headerName: 'User Addr',
-      field: 'user_addr',
-      hide: true,
-    },
-    {
-      headerName: 'Rest Method',
-      field: 'rest_method',
-      hide: true,
-    },
-    {
-      headerName: 'Rest Request',
-      field: 'rest_request',
-      hide: true,
-    },
-    {
-      headerName: 'Rest Body',
-      field: 'rest_body',
-      hide: true,
-    },
-  ];
+  columnDefs: ColDef[];
   autoComplete!: {
     name: string[];
     userName: string[];
@@ -158,6 +68,99 @@ export class EventsGridComponent implements OnInit {
     private tr: TranslateService
   ) {
     this.$win = $(GlobalVariable.window);
+    this.filtered$ = this.eventsGridFilterService.filtered$;
+    this.advFilter = this.eventsGridFilterService.advFilter;
+    this.columnDefs = [
+      {
+        headerName: this.tr.instant('event.gridHeader.NAME'),
+        field: 'name',
+        cellRenderer: 'nameCellRenderer',
+        width: 170,
+      },
+      {
+        headerName: this.tr.instant('event.gridHeader.LEVEL'),
+        field: 'level',
+        cellRenderer: 'levelCellRenderer',
+        width: 90,
+        minWidth: 90,
+      },
+      {
+        headerName: this.tr.instant('event.gridHeader.USER'),
+        field: 'user',
+        cellRenderer: 'userCellRenderer',
+        width: 200,
+      },
+      {
+        headerName: this.tr.instant('event.gridHeader.LOCATION'),
+        field: 'workload_name',
+        cellRenderer: 'locationCellRenderer',
+        width: 250,
+      },
+      {
+        headerName: this.tr.instant('event.gridHeader.TIME'),
+        field: 'reported_at',
+        cellRenderer: params =>
+          this.datePipe.transform(params.value, 'MMM dd, y HH:mm:ss'),
+        comparator: (value1, value2, node1, node2) =>
+          node1.data.reported_timestamp - node2.data.reported_timestamp,
+        icons: {
+          sortAscending: '<em class="fa fa-sort-numeric-down"/>',
+          sortDescending: '<em class="fa fa-sort-numeric-up"/>',
+        },
+        minWidth: 160,
+        maxWidth: 170,
+      },
+      {
+        headerName: 'Host Name',
+        field: 'host_name',
+        hide: true,
+      },
+      {
+        headerName: 'Workload Name',
+        field: 'workload_name',
+        hide: true,
+      },
+      {
+        headerName: 'Workload Domain',
+        field: 'workload_domain',
+        hide: true,
+      },
+      {
+        headerName: 'Workload Image',
+        field: 'workload_image',
+        hide: true,
+      },
+      {
+        headerName: 'User',
+        field: 'user',
+        hide: true,
+      },
+      {
+        headerName: 'User Roles',
+        field: 'user_roles',
+        hide: true,
+      },
+      {
+        headerName: 'User Addr',
+        field: 'user_addr',
+        hide: true,
+      },
+      {
+        headerName: 'Rest Method',
+        field: 'rest_method',
+        hide: true,
+      },
+      {
+        headerName: 'Rest Request',
+        field: 'rest_request',
+        hide: true,
+      },
+      {
+        headerName: 'Rest Body',
+        field: 'rest_body',
+        hide: true,
+      },
+    ];
   }
 
   ngOnInit(): void {

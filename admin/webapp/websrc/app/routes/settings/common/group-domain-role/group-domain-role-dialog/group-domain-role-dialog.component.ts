@@ -29,7 +29,7 @@ export interface GroupDomainRoleDialogData {
   styleUrls: ['./group-domain-role-dialog.component.scss'],
 })
 export class GroupDomainRoleDialogComponent {
-  activeRole = this.data.dataSource.data[0].namespaceRole;
+  activeRole: any;
   separatorKeysCodes: number[] = [ENTER, COMMA];
   namespaceCtrl = new UntypedFormControl();
   filteredDomains!: Observable<string[]>;
@@ -42,7 +42,9 @@ export class GroupDomainRoleDialogComponent {
     public dialogRef: MatDialogRef<GroupDomainRoleComponent>,
     @Inject(MAT_DIALOG_DATA) public data: GroupDomainRoleDialogData,
     private cd: ChangeDetectorRef
-  ) {}
+  ) {
+    this.activeRole = this.data.dataSource.data[0].namespaceRole;
+  }
 
   updateTable() {
     this.cd.detectChanges();

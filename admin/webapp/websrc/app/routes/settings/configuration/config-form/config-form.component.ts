@@ -38,25 +38,7 @@ export class ConfigFormComponent implements OnInit {
   submittingForm = false;
   configForm = new UntypedFormGroup({});
   configFields = cloneDeep(ConfigFormConfig);
-  configOptions: FormlyFormOptions = {
-    formState: {
-      isCreated: {
-        httpProxy: false,
-        httpsProxy: false,
-      },
-      isOpenShift: () => GlobalVariable.isOpenShift,
-      permissions: {},
-      ibmsa: {
-        setup: this.setupIBMSA.bind(this),
-        enabled: false,
-      },
-      tr: {
-        rancher_ep: this.tr.instant('setting.RANCHER_EP'),
-        min_max: this.tr.instant('setting.autoscale.MIN_MAX'),
-      },
-      slider_formatter: this.utils.convertHours.bind(this.utils),
-    },
-  };
+  configOptions: FormlyFormOptions;
   get dashboardUrl(): string {
     return `${this.document.location.origin}/`;
   }
@@ -69,7 +51,27 @@ export class ConfigFormComponent implements OnInit {
     private notificationService: NotificationService,
     private cd: ChangeDetectorRef,
     @Inject(DOCUMENT) private document: Document
-  ) {}
+  ) {
+    this.configOptions = {
+      formState: {
+        isCreated: {
+          httpProxy: false,
+          httpsProxy: false,
+        },
+        isOpenShift: () => GlobalVariable.isOpenShift,
+        permissions: {},
+        ibmsa: {
+          setup: this.setupIBMSA.bind(this),
+          enabled: false,
+        },
+        tr: {
+          rancher_ep: this.tr.instant('setting.RANCHER_EP'),
+          min_max: this.tr.instant('setting.autoscale.MIN_MAX'),
+        },
+        slider_formatter: this.utils.convertHours.bind(this.utils),
+      },
+    };
+  }
 
   ngOnInit(): void {
     const isSettingAuth = this.authUtilsService.getDisplayFlag('write_config');

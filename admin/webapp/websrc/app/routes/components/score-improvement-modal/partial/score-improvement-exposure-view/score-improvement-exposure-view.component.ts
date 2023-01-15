@@ -26,12 +26,7 @@ export class ScoreImprovementExposureViewComponent implements OnInit {
   }
   projectedScore!: number;
   selectedIndex: number = 0;
-  stepControls = this.fb.group({
-    mode: null,
-    threat: null,
-    violation: null,
-    session: null,
-  });
+  stepControls: any;
   selectedGroup!: Group | null;
   selectedIndex4Exposure = {
     threat: 0,
@@ -62,7 +57,14 @@ export class ScoreImprovementExposureViewComponent implements OnInit {
     private scoreImprovementModalService: ScoreImprovementModalService,
     private fb: UntypedFormBuilder,
     private tr: TranslateService
-  ) {}
+  ) {
+    this.stepControls = this.fb.group({
+      mode: null,
+      threat: null,
+      violation: null,
+      session: null,
+    });
+  }
 
   ngOnInit(): void {
     this.getPredictionScores();

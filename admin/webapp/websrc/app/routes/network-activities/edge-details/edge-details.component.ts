@@ -181,6 +181,7 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
   onTrafficChanged() {
     let selectedRows = this.gridApi.getSelectedRows();
     this.traffic = selectedRows[0];
+    if (!this.traffic || this.traffic.length === 0) return;
     this.showRuleId = true;
     this.ruleId = this.traffic.policy_id;
 

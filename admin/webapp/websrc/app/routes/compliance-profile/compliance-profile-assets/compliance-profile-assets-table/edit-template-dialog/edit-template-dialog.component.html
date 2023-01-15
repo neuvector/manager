@@ -1,7 +1,7 @@
 <div class="d-flex flex-row align-items-center justify-content-between">
   <h1 class="h4">
     {{ 'cis.profile.CUSTOMIZE_TEMPLATE' | translate }}&nbsp;
-    <i class="mr-1 text-info" [class]="getAssetIcon(name)"></i>{{ name }}
+    <i class="mr-1 text-info" [ngClass]="getAssetIcon(name)"></i>{{ name }}
   </h1>
   <button (click)="onNoClick()" aria-label="Close dialog" mat-icon-button>
     <i class="eos-icons">close</i>

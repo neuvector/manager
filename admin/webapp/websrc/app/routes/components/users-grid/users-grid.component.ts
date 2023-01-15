@@ -74,83 +74,7 @@ export class UsersGridComponent implements OnInit {
   get userCount() {
     return this.rowData.length;
   }
-  columnDefs: ColDef[] = [
-    {
-      headerName: this.tr.instant('user.gridHeader.USER'),
-      headerCheckboxSelection: true,
-      resizable: true,
-      checkboxSelection: true,
-      cellRenderer: 'userCellRenderer',
-      sortable: false,
-      cellClass: ['d-flex', 'align-items-center'],
-      width: 85,
-      minWidth: 78,
-      maxWidth: 120,
-    },
-    {
-      headerName: this.tr.instant('user.gridHeader.USER_NAME'),
-      field: 'username',
-      editable: false,
-      cellRenderer: 'usernameCellRenderer',
-      width: 130,
-    },
-    {
-      headerName: this.tr.instant('user.gridHeader.ROLE'),
-      field: 'role',
-      width: 100,
-    },
-    {
-      headerName: this.tr.instant('user.gridHeader.IDENTITY_PROVIDER'),
-      field: 'server',
-      cellRenderer: params => {
-        const server = params.data.server;
-        let result = '';
-        if (server) {
-          if (server.toLowerCase().includes(MapConstant.SERVER_TYPE.LDAP)) {
-            result = MapConstant.AUTH_PROVIDER.LDAP;
-          }
-          if (server.toLowerCase().includes(MapConstant.SERVER_TYPE.OPENID)) {
-            result = MapConstant.AUTH_PROVIDER.OPENID;
-          }
-          if (server.toLowerCase().includes(MapConstant.SERVER_TYPE.SAML)) {
-            result = MapConstant.AUTH_PROVIDER.SAML;
-          }
-          if (
-            server.toLowerCase().includes(MapConstant.SERVER_TYPE.OPENSHIFT)
-          ) {
-            result = MapConstant.AUTH_PROVIDER.OPENSHIFT;
-          }
-          if (server.toLowerCase().includes(MapConstant.SERVER_TYPE.RANCHER)) {
-            result = MapConstant.AUTH_PROVIDER.RANCHER;
-          }
-        } else {
-          result = this.tr.instant('partner.general.PROVIDER');
-        }
-        return result;
-      },
-      width: 100,
-    },
-    {
-      headerName: this.tr.instant('user.gridHeader.EMAIL'),
-      field: 'email',
-    },
-    {
-      headerName: this.tr.instant('user.gridHeader.ACTION'),
-      cellRenderer: 'actionCellRenderer',
-      cellRendererParams: {
-        isWriteUserAuthorized: undefined,
-        isRemote: undefined,
-        edit: event => this.editUser(event),
-        delete: event => this.deleteUser(event),
-        reset: event => this.resetUser(event),
-        unlock: event => this.unlockUser(event),
-        view: event => this.viewUser(event),
-      },
-      cellClass: ['d-flex', 'align-items-center'],
-      sortable: false,
-      width: 120,
-    },
-  ];
+  columnDefs: ColDef[];
 
   constructor(
     private dialog: MatDialog,
@@ -164,6 +88,83 @@ export class UsersGridComponent implements OnInit {
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService
   ) {
     this.$win = $(GlobalVariable.window);
+    this.columnDefs = [
+      {
+        headerName: this.tr.instant('user.gridHeader.USER'),
+        headerCheckboxSelection: true,
+        resizable: true,
+        checkboxSelection: true,
+        cellRenderer: 'userCellRenderer',
+        sortable: false,
+        cellClass: ['d-flex', 'align-items-center'],
+        width: 85,
+        minWidth: 78,
+        maxWidth: 120,
+      },
+      {
+        headerName: this.tr.instant('user.gridHeader.USER_NAME'),
+        field: 'username',
+        editable: false,
+        cellRenderer: 'usernameCellRenderer',
+        width: 130,
+      },
+      {
+        headerName: this.tr.instant('user.gridHeader.ROLE'),
+        field: 'role',
+        width: 100,
+      },
+      {
+        headerName: this.tr.instant('user.gridHeader.IDENTITY_PROVIDER'),
+        field: 'server',
+        cellRenderer: params => {
+          const server = params.data.server;
+          let result = '';
+          if (server) {
+            if (server.toLowerCase().includes(MapConstant.SERVER_TYPE.LDAP)) {
+              result = MapConstant.AUTH_PROVIDER.LDAP;
+            }
+            if (server.toLowerCase().includes(MapConstant.SERVER_TYPE.OPENID)) {
+              result = MapConstant.AUTH_PROVIDER.OPENID;
+            }
+            if (server.toLowerCase().includes(MapConstant.SERVER_TYPE.SAML)) {
+              result = MapConstant.AUTH_PROVIDER.SAML;
+            }
+            if (
+              server.toLowerCase().includes(MapConstant.SERVER_TYPE.OPENSHIFT)
+            ) {
+              result = MapConstant.AUTH_PROVIDER.OPENSHIFT;
+            }
+            if (server.toLowerCase().includes(MapConstant.SERVER_TYPE.RANCHER)) {
+              result = MapConstant.AUTH_PROVIDER.RANCHER;
+            }
+          } else {
+            result = this.tr.instant('partner.general.PROVIDER');
+          }
+          return result;
+        },
+        width: 100,
+      },
+      {
+        headerName: this.tr.instant('user.gridHeader.EMAIL'),
+        field: 'email',
+      },
+      {
+        headerName: this.tr.instant('user.gridHeader.ACTION'),
+        cellRenderer: 'actionCellRenderer',
+        cellRendererParams: {
+          isWriteUserAuthorized: undefined,
+          isRemote: undefined,
+          edit: event => this.editUser(event),
+          delete: event => this.deleteUser(event),
+          reset: event => this.resetUser(event),
+          unlock: event => this.unlockUser(event),
+          view: event => this.viewUser(event),
+        },
+        cellClass: ['d-flex', 'align-items-center'],
+        sortable: false,
+        width: 120,
+      },
+    ];
   }
 
   ngOnInit(): void {

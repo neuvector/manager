@@ -33,9 +33,9 @@ export class ComplianceItemsTableFilterComponent implements OnInit {
   namespaceCtrl = new UntypedFormControl();
   filteredDomains!: Observable<string[]>;
   form!: UntypedFormGroup;
-  matchTypes = this.complianceFilterService.matchTypes;
+  matchTypes: Array<any>;
   view = FilterView.SERVICE;
-  viewText = this.translate.instant("admissionControl.names.SERVICE");
+  viewText: string;
   FilterView = FilterView;
   @ViewChild('namespaceInput') namespaceInput!: ElementRef<HTMLInputElement>;
 
@@ -50,6 +50,8 @@ export class ComplianceItemsTableFilterComponent implements OnInit {
         return domain ? this._filter(domain) : [];
       })
     );
+    this.matchTypes = this.complianceFilterService.matchTypes;
+    this.viewText = this.translate.instant("admissionControl.names.SERVICE");
   }
 
   clear(num: FilterView) {

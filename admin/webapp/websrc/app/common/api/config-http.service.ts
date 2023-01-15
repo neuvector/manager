@@ -19,7 +19,7 @@ export class ConfigHttpService {
   getConfig(): Observable<ConfigV2Response> {
     return GlobalVariable.http
       .get<ConfigV2Response>(PathConstant.CONFIG_V2_URL)
-      .pipe(pluck('config'));
+      .pipe(pluck('config')) as Observable<ConfigV2Response>;
   }
 
   getFedConfig(): Observable<any> {
@@ -39,7 +39,7 @@ export class ConfigHttpService {
   getIBMSetup(): Observable<IBMSetupGetResponse> {
     return GlobalVariable.http.get<IBMSetupGetResponse>(
       PathConstant.IBM_SETUP_URL
-    );
+    ) as Observable<IBMSetupGetResponse>;
   }
 
   getSystemConfig(exportMode): Observable<ArrayBuffer> {

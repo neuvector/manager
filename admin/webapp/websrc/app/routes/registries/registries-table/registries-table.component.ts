@@ -25,6 +25,7 @@ import { RegistryTableStatusCellComponent } from './registry-table-status-cell/r
 import { cloneDeep } from 'lodash';
 import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
 import { finalize, switchMap, take, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { MapConstant } from '@common/constants/map.constant';
 import { NotificationService } from '@services/notification.service';
@@ -135,8 +136,8 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
       cellClass: ['d-flex', 'align-items-center'],
     },
   ];
-  startingScan$ = this.registriesCommunicationService.startingScan$;
-  stoppingScan$ = this.registriesCommunicationService.stoppingScan$;
+  startingScan$: Observable<any>;
+  stoppingScan$: Observable<any>;
   get isFedRegistry() {
     return (
       this.gridApi?.getSelectedNodes()?.[0].data?.cfg_type ===
@@ -157,7 +158,10 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
     private registriesCommunicationService: RegistriesCommunicationService,
     private cd: ChangeDetectorRef,
     private notificationService: NotificationService
-  ) {}
+  ) {
+    this.startingScan$ = this.registriesCommunicationService.startingScan$;
+    this.stoppingScan$ = this.registriesCommunicationService.stoppingScan$;
+  }
 
   ngOnInit(): void {
     this.gridOptions = {

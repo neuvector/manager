@@ -41,115 +41,12 @@ export class MultiClusterGridComponent implements OnInit {
   refreshing$ = new Subject();
   gridOptions!: GridOptions;
   gridApi!: GridApi;
-  columnDefs: ColDef[] = [
-    {
-      headerName: this.translate.instant('multiCluster.grid.name'),
-      field: 'name',
-      icons: {
-        sortAscending: '<em class="fa fa-sort-alpha-asc"></em>',
-        sortDescending: '<em class="fa fa-sort-alpha-desc"></em>',
-      },
-      width: 110,
-    },
-    {
-      headerName: this.translate.instant('multiCluster.grid.type'),
-      field: 'clusterType',
-      cellRenderer: params => {
-        return this.typeRenderFunction(params);
-      },
-      icons: {
-        sortAscending: '<em class="fa fa-sort-alpha-asc"></em>',
-        sortDescending: '<em class="fa fa-sort-alpha-desc"></em>',
-      },
-      width: 70,
-      minWidth: 60,
-    },
-    {
-      headerName: this.translate.instant('multiCluster.grid.server'),
-      field: 'api_server',
-      width: 100,
-    },
-    {
-      headerName: this.translate.instant('multiCluster.grid.port'),
-      field: 'api_port',
-      width: 80,
-    },
-  ];
-  majorSummaryColumn = [
-    {
-      headerName: this.translate.instant('dashboard.summary.HOST'),
-      field: 'hosts',
-      cellRenderer: params => {
-        return this.hostRenderFunction(params);
-      },
-      width: 60,
-    },
-    {
-      headerName: this.translate.instant('multiCluster.summary.RUNNING_POD'),
-      field: 'running_pods',
-      cellRenderer: params => {
-        return this.podRenderFunction(params);
-      },
-      width: 90,
-    },
-    {
-      headerName: this.translate.instant('audit.gridHeader.CVE_DB_VERSION'),
-      field: 'cvedb_version',
-      cellRenderer: params => {
-        return this.versionRenderFunction(params);
-      },
-      width: 90,
-    },
-    {
-      headerName: this.translate.instant('multiCluster.grid.score'),
-      field: 'score',
-      cellRenderer: params => {
-        return this.scoreRenderFunction(params);
-      },
-      icons: {
-        sortAscending: '<em class="fa fa-sort-alpha-asc"></em>',
-        sortDescending: '<em class="fa fa-sort-alpha-desc"></em>',
-      },
-      width: 100,
-    },
-    {
-      headerName: this.translate.instant('multiCluster.grid.status'),
-      field: 'status',
-      cellRenderer: params => {
-        return this.statusRenderFunction(params);
-      },
-      icons: {
-        sortAscending: '<em class="fa fa-sort-alpha-asc"></em>',
-        sortDescending: '<em class="fa fa-sort-alpha-desc"></em>',
-      },
-      width: 90,
-    },
-  ];
+  columnDefs: ColDef[];
+  majorSummaryColumn: ColDef[];
 
-  statusColumn = [
-    {
-      headerName: this.translate.instant('multiCluster.grid.status'),
-      field: 'status',
-      cellRenderer: params => {
-        return this.statusRenderFunction(params);
-      },
-      icons: {
-        sortAscending: '<em class="fa fa-sort-alpha-asc"></em>',
-        sortDescending: '<em class="fa fa-sort-alpha-desc"></em>',
-      },
-      width: 70,
-      minWidth: 60,
-    },
-  ];
+  statusColumn: ColDef[];
 
-  actionColumn = {
-    headerName: this.translate.instant('multiCluster.grid.action'),
-    cellRenderer: MultiClusterGridActionCellComponent,
-    cellClass: ['grid-right-align'],
-    width: 120,
-    maxWidth: 120,
-    minWidth: 120,
-  };
+  actionColumn: ColDef;
 
   filtered: boolean = false;
   filteredCount: number = 0;
@@ -166,6 +63,115 @@ export class MultiClusterGridComponent implements OnInit {
     private cd: ChangeDetectorRef
   ) {
     this.$win = $(GlobalVariable.window);
+    this.columnDefs = [
+      {
+        headerName: this.translate.instant('multiCluster.grid.name'),
+        field: 'name',
+        icons: {
+          sortAscending: '<em class="fa fa-sort-alpha-asc"></em>',
+          sortDescending: '<em class="fa fa-sort-alpha-desc"></em>',
+        },
+        width: 110,
+      },
+      {
+        headerName: this.translate.instant('multiCluster.grid.type'),
+        field: 'clusterType',
+        cellRenderer: params => {
+          return this.typeRenderFunction(params);
+        },
+        icons: {
+          sortAscending: '<em class="fa fa-sort-alpha-asc"></em>',
+          sortDescending: '<em class="fa fa-sort-alpha-desc"></em>',
+        },
+        width: 70,
+        minWidth: 60,
+      },
+      {
+        headerName: this.translate.instant('multiCluster.grid.server'),
+        field: 'api_server',
+        width: 100,
+      },
+      {
+        headerName: this.translate.instant('multiCluster.grid.port'),
+        field: 'api_port',
+        width: 80,
+      },
+    ];
+    this.majorSummaryColumn = [
+      {
+        headerName: this.translate.instant('dashboard.summary.HOST'),
+        field: 'hosts',
+        cellRenderer: params => {
+          return this.hostRenderFunction(params);
+        },
+        width: 60,
+      },
+      {
+        headerName: this.translate.instant('multiCluster.summary.RUNNING_POD'),
+        field: 'running_pods',
+        cellRenderer: params => {
+          return this.podRenderFunction(params);
+        },
+        width: 90,
+      },
+      {
+        headerName: this.translate.instant('audit.gridHeader.CVE_DB_VERSION'),
+        field: 'cvedb_version',
+        cellRenderer: params => {
+          return this.versionRenderFunction(params);
+        },
+        width: 90,
+      },
+      {
+        headerName: this.translate.instant('multiCluster.grid.score'),
+        field: 'score',
+        cellRenderer: params => {
+          return this.scoreRenderFunction(params);
+        },
+        icons: {
+          sortAscending: '<em class="fa fa-sort-alpha-asc"></em>',
+          sortDescending: '<em class="fa fa-sort-alpha-desc"></em>',
+        },
+        width: 100,
+      },
+      {
+        headerName: this.translate.instant('multiCluster.grid.status'),
+        field: 'status',
+        cellRenderer: params => {
+          return this.statusRenderFunction(params);
+        },
+        icons: {
+          sortAscending: '<em class="fa fa-sort-alpha-asc"></em>',
+          sortDescending: '<em class="fa fa-sort-alpha-desc"></em>',
+        },
+        width: 90,
+      },
+    ];
+
+    this.statusColumn = [
+      {
+        headerName: this.translate.instant('multiCluster.grid.status'),
+        field: 'status',
+        cellRenderer: params => {
+          return this.statusRenderFunction(params);
+        },
+        icons: {
+          sortAscending: '<em class="fa fa-sort-alpha-asc"></em>',
+          sortDescending: '<em class="fa fa-sort-alpha-desc"></em>',
+        },
+        width: 70,
+        minWidth: 60,
+      },
+    ];
+
+    this.actionColumn = {
+      headerName: this.translate.instant('multiCluster.grid.action'),
+      cellRenderer: MultiClusterGridActionCellComponent,
+      cellClass: ['grid-right-align'],
+      width: 120,
+      maxWidth: 120,
+      minWidth: 120,
+    };
   }
 
   ngOnInit(): void {

@@ -20,7 +20,7 @@
       </div>
     </ng-container>
     <ng-container *ngSwitchCase="'vulnerabilities'">
-      <div class="filter" [class]="'filter-icon-' + visibleIcons">
+      <div class="filter" [ngClass]="'filter-icon-' + visibleIcons">
         <div class="d-flex">
           <ng-container *ngIf="isVulsAuthorized">
             <button

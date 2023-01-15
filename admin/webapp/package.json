@@ -50,7 +50,7 @@
     "ang-jsoneditor": "^1.10.5",
     "angular-gauge": "^4.0.0",
     "angular-imask": "6.0.5",
-    "angular-notifier": "^11.0.0",
+    "angular-notifier": "^12.0.0",
     "axe-core": "^4.4.1",
     "bootstrap": "4.6.1",
     "chart.js": "3.9.1",
@@ -87,8 +87,8 @@
     "prettier": "^2.6.2",
     "prettier-eslint": "^13.0.0",
     "roboto-fontface": "0.10.0",
-    "rxjs": "6.6.0",
-    "rxjs-compat": "6.1.0",
+    "rxjs": "7.8.0",
+    "rxjs-compat": "6.6.7",
     "save-dev": "0.0.1-security",
     "screenfull": "3.3.3",
     "simple-line-icons": "2.4.1",
@@ -103,7 +103,7 @@
     "zone.js": "0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "15.0.5",
+    "@angular-devkit/build-angular": "15.1.0",
     "@angular-eslint/builder": "15.1.0",
     "@angular-eslint/eslint-plugin": "15.1.0",
     "@angular-eslint/eslint-plugin-template": "15.1.0",

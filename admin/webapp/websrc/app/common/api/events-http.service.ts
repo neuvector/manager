@@ -10,7 +10,7 @@ export class EventsHttpService {
   getEvents(): Observable<EventItem[]> {
     return GlobalVariable.http
       .get<EventItem[]>(PathConstant.EVENT_URL)
-      .pipe(pluck('events'));
+      .pipe(pluck('events')) as Observable<EventItem[]>;
   }
 
   getEventsByLimit(start: number, limit: number): Observable<EventItem[]> {
@@ -21,12 +21,12 @@ export class EventsHttpService {
           limit,
         },
       })
-      .pipe(pluck('events'));
+      .pipe(pluck('events')) as Observable<EventItem[]>;
   }
 
   getRiskReports(): Observable<Audit[]> {
     return GlobalVariable.http
       .get<Audit[]>(PathConstant.AUDIT_URL)
-      .pipe(pluck('audits'));
+      .pipe(pluck('audits')) as Observable<Audit[]>;
   }
 }

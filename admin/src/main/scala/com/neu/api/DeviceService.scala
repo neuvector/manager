@@ -26,8 +26,8 @@ class DeviceService()(implicit executionContext: ExecutionContext)
     with DefaultJsonFormats
     with LazyLogging {
 
-  var logFile                          = "/tmp/debug.gz"
-  final val benchHostPath              = "bench/host"
+  private var logFile                  = "/tmp/debug.gz"
+  private final val benchHostPath      = "bench/host"
   final val timeOutStatus              = "Status: 408"
   final val authenticationFailedStatus = "Status: 401"
   final val serverErrorStatus          = "Status: 503"

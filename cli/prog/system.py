@@ -432,6 +432,14 @@ def request_system_policy_mode(data, mode):
     data.client.request("system", "request", None, {"request": {"policy_mode": mode.title()}})
 
 
+@request_system.command('baseline_profile')
+@click.argument('mode', type=click.Choice(['basic', 'zero-drift']))
+@click.pass_obj
+def request_system_baseline_profile(data, mode):
+    """Set baseline profile"""
+    data.client.request("system", "request", None, {"request": {"baseline_profile": mode.title()}})
+
+
 @request_system.command('unquarantine')
 @click.option('--group', '-g')
 @click.option('--rule', '-r', type=int)

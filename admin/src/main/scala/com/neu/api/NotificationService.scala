@@ -35,13 +35,9 @@ class NotificationService()(implicit executionContext: ExecutionContext)
     with DefaultJsonFormats
     with LazyLogging {
 
-  val topLimit       = 5
-  val externalId     = "external"
-  val hostPrefix     = "Host:"
-  val workloadPrefix = "Workload:"
-  val ipGroupPrefix  = "IP-Group:"
-  val top            = "top"
-  val client         = "client"
+  val topLimit = 5
+  val top      = "top"
+  val client   = "client"
 
   val eventRoute: Route =
     headerValueByName("Token") { tokenId =>

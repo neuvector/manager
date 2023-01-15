@@ -1,10 +1,17 @@
-import { Component, HostBinding, OnInit, Inject, HostListener } from '@angular/core';
+import {
+  Component,
+  HostBinding,
+  OnInit,
+  Inject,
+  HostListener,
+} from '@angular/core';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { TranslatorService } from '@core/translator/translator.service';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { SwitchersService } from '@core/switchers/switchers.service';
 import { AuthService } from '@common/services/auth.service';
+import { SummaryService } from '@services/summary.service';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +28,7 @@ export class AppComponent implements OnInit {
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
     public switchers: SwitchersService,
     private translatorService: TranslatorService,
+    private summaryService: SummaryService,
     private authService: AuthService
   ) {
     this.win = GlobalVariable.window;
@@ -93,12 +101,7 @@ export class AppComponent implements OnInit {
             GlobalVariable.user
           );
           if (!GlobalVariable.hasInitializedSummary) {
-            this.authService.getSummary().subscribe((summaryInfo: any) => {
-              GlobalVariable.isOpenShift =
-                summaryInfo.summary.platform === GlobalConstant.OPENSHIFT ||
-                summaryInfo.summary.platform === GlobalConstant.RANCHER;
-              GlobalVariable.summary = summaryInfo.summary;
-              GlobalVariable.hasInitializedSummary = true;
+            this.summaryService.getSummary().subscribe(summaryInfo => {
               this.isSummaryDone = true;
             });
           }
@@ -132,11 +135,11 @@ export class AppComponent implements OnInit {
           if (timeout) clearTimeout(timeout);
           timeout = setTimeout(() => {
             fn(...args);
-          },GlobalVariable.user.token.timeout * 1000 + 10000);
+          }, GlobalVariable.user.token.timeout * 1000 + 10000);
         }
         timerId = null;
       }, delay);
-    }
+    };
   };
 
   private heartbeat = () => {
@@ -145,13 +148,15 @@ export class AppComponent implements OnInit {
       if (currTimer - this.initTimer > 29000 || this.isFirstAction) {
         this.isFirstAction = false;
         this.initTimer = currTimer;
-        this.authService.heartbeat()
-          .subscribe(
-            response => {console.log("heartbeat...OK");},
-            error => {console.log("heartbeat...NG");}
-          );
+        this.authService.heartbeat().subscribe(
+          response => {
+            console.log('heartbeat...OK');
+          },
+          error => {
+            console.log('heartbeat...NG');
+          }
+        );
       }
     }
-  }
-
+  };
 }

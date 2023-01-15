@@ -314,12 +314,9 @@ export class ComplianceProfileTemplatesTableComponent
         );
       },
       error: ({ error }: { error: ErrorResponse }) => {
-        this.notificationService.open(
-          this.utils.getAlertifyMsg(
-            error,
-            this.translate.instant('cis.profile.DEPLOY_FAILED'),
-            false
-          )
+        this.notificationService.openError(
+          error,
+          this.translate.instant('cis.profile.DEPLOY_FAILED')
         );
       },
     });

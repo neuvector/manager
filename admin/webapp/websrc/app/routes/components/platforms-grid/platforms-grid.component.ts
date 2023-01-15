@@ -44,8 +44,6 @@ export class PlatformsGridComponent implements OnInit {
     return GlobalVariable.summary.scanners !== 0;
   }
   columnDefs: ColDef[];
-
-
   constructor(
     public platformsService: PlatformsService,
     private utils: UtilsService,
@@ -61,15 +59,23 @@ export class PlatformsGridComponent implements OnInit {
         headerName: this.tr.instant('scan.gridHeader.VERSION'),
         cellRenderer: params => {
           const platform = params.data.platform.toLowerCase();
-          if (platform.includes(GlobalConstant.KUBE))
-            return params.data.kube_version;
-          if (platform.includes(GlobalConstant.OC))
-            return params.data.openshift_version;
+          if (platform.includes(GlobalConstant.KUBE)) {
+            if (platform.includes(GlobalConstant.OC)) {
+              return params.data.openshift_version;
+            } else {
+              return params.data.kube_version;
+            }
+          }
         },
         getQuickFilterText: params => {
           const platform = params.data.platform.toLowerCase();
-          if (platform.includes(GlobalConstant.KUBE)) return 'kube_version';
-          if (platform.includes(GlobalConstant.OC)) return 'openshift_version';
+          if (platform.includes(GlobalConstant.KUBE)) {
+            if (platform.includes(GlobalConstant.OC)) {
+              return 'openshift_version';
+            } else {
+              return 'kube_version';
+            }
+          }
           return '';
         },
       },

@@ -23,6 +23,7 @@ import { SessionService } from '@services/session.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AgreementComponent } from '@routes/pages/login/eula/agreement/agreement.component';
 import { NotificationService } from '@services/notification.service';
+import { SummaryService } from '@services/summary.service';
 
 @Component({
   selector: 'app-login',
@@ -60,6 +61,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private translatorService: TranslatorService,
     private translate: TranslateService,
     private notificationService: NotificationService,
+    private summaryService: SummaryService,
     private fb: UntypedFormBuilder,
     private router: Router,
     private dialog: MatDialog
@@ -340,24 +342,18 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   private getSummary() {
-    this.authService.getSummary().subscribe(
-      (summaryInfo: any) => {
-        GlobalVariable.isOpenShift =
-          summaryInfo.summary.platform === GlobalConstant.OPENSHIFT ||
-          summaryInfo.summary.platform === GlobalConstant.RANCHER;
-        GlobalVariable.summary = summaryInfo.summary;
-        GlobalVariable.hasInitializedSummary = true;
-
+    this.summaryService.getSummary().subscribe({
+      next: summaryInfo => {
         if (this.originalUrl && !this.originalUrl.includes('login')) {
           this.router.navigate([this.originalUrl]);
         } else {
           this.router.navigate([GlobalConstant.PATH_DEFAULT]);
         }
       },
-      error => {
+      error: error => {
         this.inProgress = true;
         this.cookieService.delete('temp');
-      }
-    );
+      },
+    });
   }
 }

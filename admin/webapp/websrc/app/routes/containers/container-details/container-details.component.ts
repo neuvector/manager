@@ -208,12 +208,9 @@ export class ContainerDetailsComponent implements OnInit, OnDestroy {
             this.containerStats.updateCharts(cpu, byte, session);
         },
         error: ({ error }: { error: ErrorResponse }) => {
-          this.notificationService.open(
-            this.utils.getAlertifyMsg(
-              error,
-              this.tr.instant('general.UNFORMATTED_ERR'),
-              false
-            )
+          this.notificationService.openError(
+            error,
+            this.tr.instant('general.UNFORMATTED_ERR')
           );
         },
       });
@@ -273,12 +270,9 @@ export class ContainerDetailsComponent implements OnInit, OnDestroy {
         this.cd.detectChanges();
       },
       error: ({ error }: { error: ErrorResponse }) => {
-        this.notificationService.open(
-          this.utils.getAlertifyMsg(
-            error,
-            this.tr.instant('cveProfile.msg.ADD_NG'),
-            false
-          )
+        this.notificationService.openError(
+          error,
+          this.tr.instant('cveProfile.msg.ADD_NG')
         );
       },
     });

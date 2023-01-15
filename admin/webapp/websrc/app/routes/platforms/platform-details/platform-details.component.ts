@@ -135,12 +135,9 @@ export class PlatformDetailsComponent implements OnInit {
         this.cd.detectChanges();
       },
       error: ({ error }: { error: ErrorResponse }) => {
-        this.notificationService.open(
-          this.utils.getAlertifyMsg(
-            error,
-            this.tr.instant('cveProfile.msg.ADD_NG'),
-            false
-          )
+        this.notificationService.openError(
+          error,
+          this.tr.instant('cveProfile.msg.ADD_NG')
         );
       },
     });

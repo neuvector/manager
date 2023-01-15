@@ -2,13 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { MapConstant } from '@common/constants/map.constant';
-import {
-  ErrorResponse,
-  Host,
-  ScanConfig,
-  WorkloadCompliance,
-} from '@common/types';
-import { UtilsService } from '@common/utils/app.utils';
+import { ErrorResponse, Host, ScanConfig } from '@common/types';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { NodesGridComponent } from '@components/nodes-grid/nodes-grid.component';
 import { TranslateService } from '@ngx-translate/core';
@@ -19,6 +13,7 @@ import { interval, Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { GlobalVariable } from '@common/variables/global.variable';
+import { SummaryService } from '@services/summary.service';
 
 @Component({
   selector: 'app-nodes',
@@ -64,7 +59,7 @@ export class NodesComponent implements OnInit {
     private scanService: ScanService,
     private notificationService: NotificationService,
     private authUtils: AuthUtilsService,
-    private utils: UtilsService,
+    private summaryService: SummaryService,
     private tr: TranslateService,
     private cd: ChangeDetectorRef,
     private multiClusterService: MultiClusterService
@@ -92,6 +87,7 @@ export class NodesComponent implements OnInit {
 
   refresh(cb?: (nodes: Host[]) => void): void {
     this.refreshing$.next(true);
+    this.summaryService.refreshSummary();
     this.getNodes(cb);
   }
 
@@ -128,12 +124,9 @@ export class NodesComponent implements OnInit {
         if (error.status === MapConstant.ACC_FORBIDDEN) {
           this.autoScanAuthorized = false;
         }
-        this.notificationService.open(
-          this.utils.getAlertifyMsg(
-            error.error,
-            this.tr.instant('scan.message.CONFIG_ERR'),
-            false
-          )
+        this.notificationService.openError(
+          error.error,
+          this.tr.instant('scan.message.CONFIG_ERR')
         );
       },
     });
@@ -176,12 +169,9 @@ export class NodesComponent implements OnInit {
           });
       },
       error: ({ error }: { error: ErrorResponse }) => {
-        this.notificationService.open(
-          this.utils.getAlertifyMsg(
-            error,
-            this.tr.instant('scan.FAILED_SCAN'),
-            false
-          )
+        this.notificationService.openError(
+          error,
+          this.tr.instant('scan.FAILED_SCAN')
         );
       },
     });

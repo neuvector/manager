@@ -585,7 +585,7 @@ export class NetworkActivitiesComponent
         groupName = model.id;
         nodeType = 'group';
       }
-      return { model, nodeType, groupName };
+      return { nodeType, groupName };
     };
 
     const updatePolicyModeOnNode = (selectedMode, item, nodeType, graph) => {
@@ -660,7 +660,7 @@ export class NetworkActivitiesComponent
     };
 
     const switchModeOnMenu = (policyMode, item, graph) => {
-      let { model, nodeType, groupName } = getNodeTypeToSwitch(item);
+      let { nodeType, groupName } = getNodeTypeToSwitch(item);
 
       if (groupName)
         this.graphService.switchServiceMode(policyMode, groupName).subscribe(
@@ -1605,8 +1605,6 @@ export class NetworkActivitiesComponent
 
     this.graph.on('canvas:click', () => {
       hideCve();
-      //Todo better state handling
-      // clearPopup();
     });
 
     this.graph.on('canvas:dblclick', () => {
@@ -1618,7 +1616,6 @@ export class NetworkActivitiesComponent
         this.graph.refreshPositions();
         this.graph.fitView();
       }, 500);
-      console.profileEnd();
     });
 
     //endregion
@@ -1786,7 +1783,6 @@ export class NetworkActivitiesComponent
         JSON.stringify(this.blacklist)
       );
 
-      console.profile('copying data');
       this.data.nodes = filterHiddenNodes(response.nodes);
       this.data.edges = filterHiddenEdges(response.edges);
       this.serverData = JSON.parse(
@@ -1795,23 +1791,19 @@ export class NetworkActivitiesComponent
       this.serverData.nodes.forEach(node => {
         node.cve = this.graphService.getCveLevel(node);
       });
-      console.profileEnd();
-      console.profile('processing nodes');
+
       this.data.nodes = this.graphService.processNodes(
         this.data.nodes,
         this.data,
         true,
         this.settings
       );
-      console.profileEnd();
-      console.profile('processing edges');
       this.data.edges = this.graphService.processEdges(
         this.serverData,
         response.edges,
         true,
         this.settings
       );
-      console.profileEnd();
 
       if (onRefresh) {
         // @ts-ignore

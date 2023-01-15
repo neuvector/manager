@@ -15,6 +15,7 @@ import { ConfigHttpService } from '@common/api/config-http.service';
 import { map } from 'rxjs/operators';
 import { CommonHttpService } from '@common/api/common-http.service';
 import { GlobalConstant } from '@common/constants/global.constant';
+import { SummaryService } from './summary.service';
 
 export interface Cluster2Promote {
   name: string;
@@ -37,7 +38,7 @@ export class MultiClusterService {
   private _clusterSwitchedEvent = new Subject();
   private _clusterRefreshEvent = new Subject();
   private _manageClusterEvent = new Subject();
-  public onManageMemberClusterEvent$  = this._manageClusterEvent.asObservable();
+  public onManageMemberClusterEvent$ = this._manageClusterEvent.asObservable();
   public onClusterSwitchedEvent$ = this._clusterSwitchedEvent.asObservable();
   public onRefreshClustersEvent$ = this._clusterRefreshEvent.asObservable();
   private readonly $win;
@@ -60,6 +61,7 @@ export class MultiClusterService {
     private router: Router,
     private location: Location,
     private configHttpService: ConfigHttpService,
+    private summaryService: SummaryService,
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService
   ) {
     this.location = location;
@@ -108,16 +110,7 @@ export class MultiClusterService {
   }
 
   refreshSummary() {
-    this.commonHttpService.getSummary().subscribe(
-      (summaryInfo: any) => {
-        GlobalVariable.isOpenShift =
-          summaryInfo.summary.platform === GlobalConstant.OPENSHIFT ||
-          summaryInfo.summary.platform === GlobalConstant.RANCHER;
-        GlobalVariable.summary = summaryInfo.summary;
-        GlobalVariable.hasInitializedSummary = true;
-      },
-      error => {}
-    );
+    this.summaryService.refreshSummary();
   }
 
   updateCluster = (
@@ -235,5 +228,4 @@ export class MultiClusterService {
   dispatchManageMemberEvent() {
     this._manageClusterEvent.next(true);
   }
-
 }

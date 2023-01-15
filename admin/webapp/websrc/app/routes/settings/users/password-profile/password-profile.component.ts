@@ -8,19 +8,21 @@ import { NotificationService } from '@services/notification.service';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { SettingsService } from '@services/settings.service';
 import { cloneDeep } from 'lodash';
-import { finalize } from 'rxjs/operators';
 import { PwdProfileFormConfig } from './password-profile-config';
+import { AuthUtilsService } from '@common/utils/auth.utils';
 
 @Component({
   selector: 'app-password-profile',
   templateUrl: './password-profile.component.html',
   styleUrls: ['./password-profile.component.scss'],
 })
-export class PasswordProfileComponent {
+export class PasswordProfileComponent implements OnInit {
   submittingForm = false;
   profileForm = new UntypedFormGroup({});
   profileFields = cloneDeep(PwdProfileFormConfig);
-  profileOptions: FormlyFormOptions = {};
+  profileOptions: FormlyFormOptions = {
+    formState: {},
+  };
   private _pwdProfile!: PasswordProfile;
   get passwordProfile(): PasswordProfile {
     return this._pwdProfile;
@@ -50,9 +52,15 @@ export class PasswordProfileComponent {
   constructor(
     private tr: TranslateService,
     private utils: UtilsService,
+    private authUtils: AuthUtilsService,
     private settingsService: SettingsService,
     private notificationService: NotificationService
   ) {}
+
+  ngOnInit(): void {
+    this.profileOptions.formState.isUpdatePwdProfileAuthorized =
+      this.authUtils.getDisplayFlagByMultiPermission('update_password_profile');
+  }
 
   submitForm(): void {
     if (!this.profileForm.valid) {

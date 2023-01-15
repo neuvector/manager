@@ -257,12 +257,9 @@ export class UsersGridComponent implements OnInit {
             this.refresh();
           },
           error: ({ error }: { error: ErrorResponse }) => {
-            this.notificationService.open(
-              this.utils.getAlertifyMsg(
-                error,
-                this.tr.instant('user.ADD_USER_ERR'),
-                false
-              )
+            this.notificationService.openError(
+              error,
+              this.tr.instant('user.ADD_USER_ERR')
             );
             addDialogRef.componentInstance.saving$.next(false);
           },
@@ -307,12 +304,9 @@ export class UsersGridComponent implements OnInit {
           this.refresh();
         },
         error: ({ error }: { error: ErrorResponse }) => {
-          this.notificationService.open(
-            this.utils.getAlertifyMsg(
-              error,
-              this.tr.instant('user.editUser.SUBMIT_NG'),
-              false
-            )
+          this.notificationService.openError(
+            error,
+            this.tr.instant('user.editUser.SUBMIT_NG')
           );
           editDialogRef.componentInstance.saving$.next(false);
         },
@@ -356,12 +350,9 @@ export class UsersGridComponent implements OnInit {
           this.notificationService.open(this.tr.instant('user.REMOVE_USER_OK'));
         },
         error: ({ error }: { error: ErrorResponse }) => {
-          this.notificationService.open(
-            this.utils.getAlertifyMsg(
-              error,
-              this.tr.instant('user.REMOVE_USER_ERR'),
-              false
-            )
+          this.notificationService.openError(
+            error,
+            this.tr.instant('user.REMOVE_USER_ERR')
           );
         },
       });
@@ -395,12 +386,9 @@ export class UsersGridComponent implements OnInit {
           this.events = events.slice(0, 4);
         },
         error: error => {
-          this.notificationService.open(
-            this.utils.getAlertifyMsg(
-              error,
-              this.tr.instant('user.USER_EVENT_ERR'),
-              false
-            )
+          this.notificationService.openError(
+            error,
+            this.tr.instant('user.USER_EVENT_ERR')
           );
         },
       });

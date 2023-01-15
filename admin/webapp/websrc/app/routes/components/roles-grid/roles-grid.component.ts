@@ -174,12 +174,9 @@ export class RolesGridComponent implements OnInit {
           this.rowData = [...this.rowData, role];
         },
         error: ({ error }: { error: ErrorResponse }) => {
-          this.notificationService.open(
-            this.utils.getAlertifyMsg(
-              error,
-              this.tr.instant('role.msg.INSERT_NG'),
-              false
-            )
+          this.notificationService.openError(
+            error,
+            this.tr.instant('role.msg.INSERT_NG')
           );
         },
       });
@@ -217,12 +214,9 @@ export class RolesGridComponent implements OnInit {
           ];
         },
         error: ({ error }: { error: ErrorResponse }) => {
-          this.notificationService.open(
-            this.utils.getAlertifyMsg(
-              error,
-              this.tr.instant('role.msg.UPDATE_NG'),
-              false
-            )
+          this.notificationService.openError(
+            error,
+            this.tr.instant('role.msg.UPDATE_NG')
           );
         },
       });
@@ -254,12 +248,9 @@ export class RolesGridComponent implements OnInit {
           this.rowData = this.rowData.filter(r => r.name !== role);
         },
         error: ({ error }: { error: ErrorResponse }) => {
-          this.notificationService.open(
-            this.utils.getAlertifyMsg(
-              error,
-              this.tr.instant('role.msg.REMOVE_NG'),
-              false
-            )
+          this.notificationService.openError(
+            error,
+            this.tr.instant('role.msg.REMOVE_NG')
           );
         },
       });

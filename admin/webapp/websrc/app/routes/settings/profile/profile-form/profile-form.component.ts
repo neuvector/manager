@@ -7,6 +7,7 @@ import { NotificationService } from '@services/notification.service';
 import { SettingsService } from '@services/settings.service';
 import { finalize } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { GlobalConstant } from '@common/constants/global.constant';
 
 @Component({
   selector: 'app-profile-form',
@@ -147,7 +148,8 @@ export class ProfileFormComponent implements OnInit {
           }
           console.log(this.errorMessage);
           this.notificationService.open(
-            this.tr.translate.instant('profile.SUBMIT_FAILED')
+            this.tr.translate.instant('profile.SUBMIT_FAILED'),
+            GlobalConstant.NOTIFICATION_TYPE.ERROR
           );
         },
       });

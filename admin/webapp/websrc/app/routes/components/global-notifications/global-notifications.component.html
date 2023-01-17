@@ -20,11 +20,11 @@
       mat-menu-item>
       <em
         class="fa fa-circle mx-3"
-        [class]="'text-' + notification.labelClass"></em>
+        [ngClass]="'text-' + notification.labelClass"></em>
       <ng-container *ngIf="isRbacNotif(notification.name); else globalNotif">
         <span
           class="notification-message"
-          [class]="notification.unClamped ? 'unclamped' : 'clamped'"
+          [ngClass]="notification.unClamped ? 'unclamped' : 'clamped'"
           [id]="notification.name"
           (click)="toggleClamp(notification)">
           <strong>{{ getRbacTitle(notification.name) }}</strong>
@@ -35,7 +35,7 @@
       <ng-template #globalNotif>
         <span
           class="notification-message"
-          [class]="notification.unClamped ? 'unclamped' : 'clamped'"
+          [ngClass]="notification.unClamped ? 'unclamped' : 'clamped'"
           [id]="notification.name"
           (click)="toggleClamp(notification)">
           {{ notification.message }}

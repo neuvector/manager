@@ -85,68 +85,7 @@ export class ComplianceGridComponent implements OnInit {
   }
   gridOptions!: GridOptions;
   gridApi!: GridApi;
-  columnDefs: ColDef[] = [
-    {
-      field: 'category',
-      width: 5,
-      cellRenderer: 'categoryCellRenderer',
-      cellRendererParams: {
-        kubeType: this.kubernetesCisVersion,
-      },
-      cellClass: ['d-flex', 'align-items-center'],
-      cellClassRules: {
-        'justify-content-start': params =>
-          !params.data.parent_id && !params.data.child_ids,
-      },
-      headerValueGetter: () =>
-        this.translate.instant('event.gridHeader.CATEGORY'),
-    },
-    {
-      field: 'test_number',
-      width: 5,
-      cellRenderer: 'nameCellRenderer',
-      cellRendererParams: {
-        includeRemediation: () => this.includeRemediation,
-        openRemediation: (data: Check) => this.remediation.emit(data),
-      },
-      headerValueGetter: () =>
-        this.translate.instant('registry.gridHeader.NAME'),
-    },
-    {
-      field: 'level',
-      width: 5,
-      cellRenderer: 'statusCellRenderer',
-      cellClass: ['d-flex', 'align-items-center'],
-      headerValueGetter: () =>
-        this.translate.instant('registry.gridHeader.STATUS'),
-    },
-    {
-      field: 'scored',
-      width: 5,
-      valueFormatter: this.scoreFormatter,
-      headerValueGetter: () =>
-        this.translate.instant('cis.report.gridHeader.SCORED') + '\u00A0\u24D8',
-      headerTooltip: this.translate.instant('cis.SCORED'),
-    },
-    {
-      field: 'profile',
-      width: 5,
-      headerValueGetter: () =>
-        this.translate.instant('profile.TITLE') + '\u00A0\u24D8',
-      headerTooltip: this.translate.instant('cis.LEVEL1'),
-    },
-    {
-      field: 'description',
-      wrapText: true,
-      autoHeight: true,
-      cellClassRules: {
-        'text-muted': params =>
-          params.data.child_ids && params.data.child_ids.length > 0,
-      },
-      headerValueGetter: () =>
-        this.translate.instant('cis.report.gridHeader.DESC'),
-    },
-  ];
+  columnDefs: ColDef[];
 
   constructor(
     private quickFilterService: QuickFilterService,
@@ -155,6 +94,68 @@ export class ComplianceGridComponent implements OnInit {
     private datePipe: DatePipe
   ) {
     this.$win = $(GlobalVariable.window);
+    this.columnDefs = [
+      {
+        field: 'category',
+        width: 5,
+        cellRenderer: 'categoryCellRenderer',
+        cellRendererParams: {
+          kubeType: this.kubernetesCisVersion,
+        },
+        cellClass: ['d-flex', 'align-items-center'],
+        cellClassRules: {
+          'justify-content-start': params =>
+            !params.data.parent_id && !params.data.child_ids,
+        },
+        headerValueGetter: () =>
+          this.translate.instant('event.gridHeader.CATEGORY'),
+      },
+      {
+        field: 'test_number',
+        width: 5,
+        cellRenderer: 'nameCellRenderer',
+        cellRendererParams: {
+          includeRemediation: () => this.includeRemediation,
+          openRemediation: (data: Check) => this.remediation.emit(data),
+        },
+        headerValueGetter: () =>
+          this.translate.instant('registry.gridHeader.NAME'),
+      },
+      {
+        field: 'level',
+        width: 5,
+        cellRenderer: 'statusCellRenderer',
+        cellClass: ['d-flex', 'align-items-center'],
+        headerValueGetter: () =>
+          this.translate.instant('registry.gridHeader.STATUS'),
+      },
+      {
+        field: 'scored',
+        width: 5,
+        valueFormatter: this.scoreFormatter,
+        headerValueGetter: () =>
+          this.translate.instant('cis.report.gridHeader.SCORED') + '\u00A0\u24D8',
+        headerTooltip: this.translate.instant('cis.SCORED'),
+      },
+      {
+        field: 'profile',
+        width: 5,
+        headerValueGetter: () =>
+          this.translate.instant('profile.TITLE') + '\u00A0\u24D8',
+        headerTooltip: this.translate.instant('cis.LEVEL1'),
+      },
+      {
+        field: 'description',
+        wrapText: true,
+        autoHeight: true,
+        cellClassRules: {
+          'text-muted': params =>
+            params.data.child_ids && params.data.child_ids.length > 0,
+        },
+        headerValueGetter: () =>
+          this.translate.instant('cis.report.gridHeader.DESC'),
+      },
+    ];
   }
 
   ngOnInit(): void {

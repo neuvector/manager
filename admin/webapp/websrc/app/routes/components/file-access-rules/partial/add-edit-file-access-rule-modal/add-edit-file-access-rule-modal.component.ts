@@ -9,7 +9,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { UtilsService } from '@common/utils/app.utils';
 import { GlobalConstant } from '@common/constants/global.constant';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { FileAccessRulesService } from '@services/file-access-rules.service';
 import { GroupsService } from '@services/groups.service';
@@ -27,9 +27,9 @@ export class AddEditFileAccessRuleModalComponent implements OnInit {
   public readonly type: string = '';
   public groupOptions: Array<string>;
   public actionEnum = GlobalConstant.FILE_ACCESS_RULE.BEHAVIOR;
-  public formControl4Apps = new FormControl();
+  public formControl4Apps = new UntypedFormControl();
   public separatorKeysCodes: number[] = [ENTER, COMMA];
-  public fileAccessRuleForm: FormGroup;
+  public fileAccessRuleForm: UntypedFormGroup;
   public applicationChipsArray: Array<string> = [];
 
   @ViewChild('appsInput', { static: false })
@@ -47,21 +47,21 @@ export class AddEditFileAccessRuleModalComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.fileAccessRuleForm = new FormGroup({
-      group: new FormControl(
+    this.fileAccessRuleForm = new UntypedFormGroup({
+      group: new UntypedFormControl(
         { value: '', disabled: this.type === GlobalConstant.MODAL_OP.EDIT || this.data.source === GlobalConstant.NAV_SOURCE.GROUP },
         [Validators.required]
       ),
-      filter: new FormControl(
+      filter: new UntypedFormControl(
         { value: '', disabled: this.type === GlobalConstant.MODAL_OP.EDIT },
         [Validators.required, Validators.pattern('^/.*')]
       ),
-      recursive: new FormControl(false),
-      behavior: new FormControl(
+      recursive: new UntypedFormControl(false),
+      behavior: new UntypedFormControl(
         this.actionEnum.MONITOR,
         [Validators.required]
       ),
-      applications: new FormControl([]),
+      applications: new UntypedFormControl([]),
     });
     this.initializeVM();
     this.getGroupOptions();

@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef,  MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { FormControl, FormGroup, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { GroupsService } from '@services/groups.service';
@@ -17,7 +17,7 @@ export class AddEditGroupModalComponent implements OnInit {
 
   modalOp: any;
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  addEditGroupForm: FormGroup;
+  addEditGroupForm: UntypedFormGroup;
   criteria: Array<any> = [];
   submittingUpdate: boolean = false;
 
@@ -32,8 +32,8 @@ export class AddEditGroupModalComponent implements OnInit {
   ngOnInit(): void {
     this.modalOp = GlobalConstant.MODAL_OP;
     if (this.data.opType === GlobalConstant.MODAL_OP.ADD) {
-      this.addEditGroupForm = new FormGroup({
-        name: new FormControl(
+      this.addEditGroupForm = new UntypedFormGroup({
+        name: new UntypedFormControl(
           this.data.cfgType === GlobalConstant.CFG_TYPE.FED
             ? 'fed.'
             : '',
@@ -44,14 +44,14 @@ export class AddEditGroupModalComponent implements OnInit {
               ]
             : Validators.required
         ),
-        comment: new FormControl(''),
-        criteriaCtrl: new FormControl()
+        comment: new UntypedFormControl(''),
+        criteriaCtrl: new UntypedFormControl()
       });
     } else {
-      this.addEditGroupForm = new FormGroup({
-        name: new FormControl(this.data.selectedGroup.name, Validators.required),
-        comment: new FormControl(this.data.selectedGroup.comment),
-        criteriaCtrl: new FormControl()
+      this.addEditGroupForm = new UntypedFormGroup({
+        name: new UntypedFormControl(this.data.selectedGroup.name, Validators.required),
+        comment: new UntypedFormControl(this.data.selectedGroup.comment),
+        criteriaCtrl: new UntypedFormControl()
       });
       this.criteria = this.data.selectedGroup.criteria;
       if (this.data.opType === GlobalConstant.MODAL_OP.VIEW) {

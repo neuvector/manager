@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { GridOptions, RowNode } from 'ag-grid-community';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-quick-filter',
@@ -25,7 +25,7 @@ export class QuickFilterComponent implements OnInit, OnChanges {
   @Output() filterCountChange = new EventEmitter<number>();
   public totalCountText: string = '';
   public filteredCountText: string = '';
-  public filter = new FormControl('');
+  public filter = new UntypedFormControl('');
 
   constructor(private translate: TranslateService) {}
 

@@ -1,7 +1,7 @@
 import { MatDialogRef,  MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { GlobalConstant } from "@common/constants/global.constant";
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { AdmissionRulesService } from '@common/services/admission-rules.service';
 import { parseDivideStyle } from '@common/utils/common.utils';
 import { AdmRuleCriterion, AdmRuleSubCriterion } from '@common/types/admission/admission';
@@ -20,7 +20,7 @@ import { NotificationService } from '@services/notification.service';
 export class AddEditAdmissionRuleModalComponent implements OnInit {
 
   modalOp: any;
-  addEditAdmissionRuleForm: FormGroup;
+  addEditAdmissionRuleForm: UntypedFormGroup;
   criteriaOptions: any;
   criterionNameList: Array<any> = [];
   criterionOperatorList: Array<any> = [];
@@ -82,16 +82,16 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.modalOp = GlobalConstant.MODAL_OP;
-    this.addEditAdmissionRuleForm = new FormGroup({
-      id: new FormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? 0 : this.data.rule4Edit.id),
-      category: new FormControl(GlobalConstant.ADMISSION.CATEGORY.KUBE),
-      isException: new FormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? false : this.data.rule4Edit.rule_type === "exception"),
-      comment: new FormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? "" : this.data.rule4Edit.comment),
-      criteria: new FormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? [] : this.data.rule4Edit.criteria, Validators.required),
-      enabled: new FormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? true : !this.data.rule4Edit.disable),
-      cfg_type: new FormControl(this.data.cfgType === GlobalConstant.SCOPE.FED ? GlobalConstant.CFG_TYPE.FED : GlobalConstant.CFG_TYPE.CUSTOMER),
-      rule_type: new FormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? "deny" : this.data.rule4Edit.rule_type),
-      disable: new FormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? false : this.data.rule4Edit.disable)
+    this.addEditAdmissionRuleForm = new UntypedFormGroup({
+      id: new UntypedFormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? 0 : this.data.rule4Edit.id),
+      category: new UntypedFormControl(GlobalConstant.ADMISSION.CATEGORY.KUBE),
+      isException: new UntypedFormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? false : this.data.rule4Edit.rule_type === "exception"),
+      comment: new UntypedFormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? "" : this.data.rule4Edit.comment),
+      criteria: new UntypedFormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? [] : this.data.rule4Edit.criteria, Validators.required),
+      enabled: new UntypedFormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? true : !this.data.rule4Edit.disable),
+      cfg_type: new UntypedFormControl(this.data.cfgType === GlobalConstant.SCOPE.FED ? GlobalConstant.CFG_TYPE.FED : GlobalConstant.CFG_TYPE.CUSTOMER),
+      rule_type: new UntypedFormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? "deny" : this.data.rule4Edit.rule_type),
+      disable: new UntypedFormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? false : this.data.rule4Edit.disable)
     });
     this.getCriteriaOptions();
     if (this.data.opType !== GlobalConstant.MODAL_OP.ADD) {

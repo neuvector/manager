@@ -16,8 +16,9 @@
       id="closePodInfo"
       aria-label="Close icon button"
       class="d-flex align-items-center justify-content-center"
+      (click)="popupState.leave()"
       mat-icon-button>
-      <i (click)="popupState.leave()" class="eos-icons">close</i>
+      <i class="eos-icons">close</i>
     </button>
   </div>
 
@@ -153,7 +154,7 @@
           <span class="font-weight-bold host-item-key">
             {{ 'network.nodeDetails.STATE' | translate }}:
           </span>
-          <span class="badge" [class]="'badge-' + labelCode">
+          <span class="badge" [ngClass]="'badge-' + labelCode">
             {{ displayState }}
           </span>
           <span
@@ -295,8 +296,9 @@
       id="closeCveInfo"
       aria-label="Close icon button"
       class="d-flex align-items-center justify-content-center"
+      (click)="onCveInfo = !onCveInfo"
       mat-icon-button>
-      <i (click)="onCveInfo = !onCveInfo" class="eos-icons">close</i>
+      <i class="eos-icons">close</i>
     </button>
   </div>
 

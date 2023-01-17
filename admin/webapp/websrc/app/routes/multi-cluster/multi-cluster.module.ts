@@ -17,29 +17,24 @@ import { LoadingButtonModule } from '@components/ui/loading-button/loading-butto
 const routes: Routes = [{ path: '', component: MultiClusterComponent }];
 
 @NgModule({
-  declarations: [
-    MultiClusterComponent,
-    JoiningModalComponent,
-    PromotionModalComponent,
-    TokenModalComponent,
-    MultiClusterDetailsComponent,
-  ],
-  imports: [
-    RouterModule.forChild(routes),
-    TranslateModule,
-    NvCommonModule,
-    AdjustableDivModule,
-    LoadingButtonModule,
-    LoadingTemplateModule,
-    MultiClusterGridModule,
-    ClipboardModule,
-  ],
-  exports: [MultiClusterComponent],
-  providers: [SettingsService],
-  entryComponents: [
-    PromotionModalComponent,
-    JoiningModalComponent,
-    TokenModalComponent,
-  ],
+    declarations: [
+        MultiClusterComponent,
+        JoiningModalComponent,
+        PromotionModalComponent,
+        TokenModalComponent,
+        MultiClusterDetailsComponent,
+    ],
+    imports: [
+        RouterModule.forChild(routes),
+        TranslateModule,
+        NvCommonModule,
+        AdjustableDivModule,
+        LoadingButtonModule,
+        LoadingTemplateModule,
+        MultiClusterGridModule,
+        ClipboardModule,
+    ],
+    exports: [MultiClusterComponent],
+    providers: [SettingsService]
 })
 export class MultiClusterModule {}

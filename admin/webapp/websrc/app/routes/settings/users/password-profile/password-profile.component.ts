@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { ErrorResponse, PasswordProfile } from '@common/types';
 import { UtilsService } from '@common/utils/app.utils';
 import { FormlyFormOptions } from '@ngx-formly/core';
@@ -18,7 +18,7 @@ import { AuthUtilsService } from '@common/utils/auth.utils';
 })
 export class PasswordProfileComponent implements OnInit {
   submittingForm = false;
-  profileForm = new FormGroup({});
+  profileForm = new UntypedFormGroup({});
   profileFields = cloneDeep(PwdProfileFormConfig);
   profileOptions: FormlyFormOptions = {
     formState: {},

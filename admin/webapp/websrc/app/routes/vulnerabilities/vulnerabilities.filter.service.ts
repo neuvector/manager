@@ -4,24 +4,12 @@ import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class VulnerabilitiesFilterService {
-  readonly matchTypes = [
-    { id: 'equal', name: '=' },
-    {
-      id: 'contains',
-      name: this.translate.instant('admissionControl.operators.CONTAINS'),
-    },
-  ];
-
-  readonly dateTypes = [
-    { id: 'before', name: this.translate.instant('general.BEFORE') },
-    { id: 'after', name: this.translate.instant('general.AFTER') },
-  ];
+  matchTypes: Array<any>;
+  dateTypes: Array<any>;
   private filteredSubject$ = new BehaviorSubject(false);
   filtered$ = this.filteredSubject$.asObservable();
   filteredCount: number = 0;
   selectedScore = 'V3';
-
-  constructor(private translate: TranslateService) {}
 
   private _filtered = false;
 
@@ -50,7 +38,7 @@ export class VulnerabilitiesFilterService {
     this._workloadMap = val;
   }
 
-  private _advFilter = this.initAdvFilter();
+  private _advFilter: any;
 
   get advFilter() {
     return JSON.parse(JSON.stringify(this._advFilter));
@@ -59,6 +47,22 @@ export class VulnerabilitiesFilterService {
   set advFilter(val) {
     this._advFilter = val;
     this.filteredSubject$.next(this.isAdvFilterOn() || this._filtered);
+  }
+
+  constructor(private translate: TranslateService) {
+    this.matchTypes = [
+      { id: 'equal', name: '=' },
+      {
+        id: 'contains',
+        name: this.translate.instant('admissionControl.operators.CONTAINS'),
+      },
+    ];
+
+    this.dateTypes = [
+      { id: 'before', name: this.translate.instant('general.BEFORE') },
+      { id: 'after', name: this.translate.instant('general.AFTER') },
+    ];
+    this._advFilter = this.initAdvFilter();
   }
 
   resetFilter() {

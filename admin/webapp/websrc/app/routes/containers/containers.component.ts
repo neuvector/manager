@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MapConstant } from '@common/constants/map.constant';
 import { ErrorResponse, ScanConfig, WorkloadV2 } from '@common/types';
 import { AuthUtilsService } from '@common/utils/auth.utils';
@@ -38,12 +38,12 @@ export class ContainersComponent implements OnInit {
     return this._containersGrid;
   }
   quarantinedContainers: WorkloadV2[] = [];
-  toggleNodeForm!: FormGroup;
+  toggleNodeForm!: UntypedFormGroup;
   refreshing$ = new Subject();
   error!: string;
   loaded = false;
   isPrinting: boolean = false;
-  autoScan = new FormControl(false);
+  autoScan = new UntypedFormControl(false);
   autoScanAuthorized = false;
   isAutoScanAuthorized!: boolean;
   stopFullScan$ = new Subject();
@@ -73,9 +73,9 @@ export class ContainersComponent implements OnInit {
 
   ngOnInit(): void {
     this.isAutoScanAuthorized = this.authUtils.getDisplayFlag('runtime_scan');
-    this.toggleNodeForm = new FormGroup({
-      systemNode: new FormControl(true),
-      exitNode: new FormControl(false),
+    this.toggleNodeForm = new UntypedFormGroup({
+      systemNode: new UntypedFormControl(true),
+      exitNode: new UntypedFormControl(false),
     });
     this.getContainers();
     if (this.isAutoScanAuthorized) this.getScanConfig();

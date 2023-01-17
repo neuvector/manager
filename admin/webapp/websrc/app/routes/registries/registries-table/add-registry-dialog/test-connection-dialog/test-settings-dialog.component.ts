@@ -9,7 +9,7 @@ import {
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ErrorResponse, RegistryConfig } from '@common/types';
 import { AddRegistryDialogComponent } from '../add-registry-dialog.component';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { cloneDeep } from 'lodash';
 import { TestRegistryFieldConfig } from '../add-registry-form-configs';
 import {
@@ -34,7 +34,7 @@ import { TestConnectionDialogTypeCellComponent } from './test-connection-dialog-
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TestSettingsDialogComponent implements OnInit, OnDestroy {
-  form = new FormGroup({});
+  form = new UntypedFormGroup({});
   destroy$ = new Subject();
   model: any = {};
   fields = cloneDeep(TestRegistryFieldConfig);

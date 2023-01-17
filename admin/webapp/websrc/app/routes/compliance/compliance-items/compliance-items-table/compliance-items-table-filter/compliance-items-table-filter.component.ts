@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { ComplianceItemsTableComponent } from '../compliance-items-table.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { ComplianceFilterService } from '../../../compliance.filter.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Observable } from 'rxjs';
@@ -30,12 +30,12 @@ enum FilterView {
 })
 export class ComplianceItemsTableFilterComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  namespaceCtrl = new FormControl();
+  namespaceCtrl = new UntypedFormControl();
   filteredDomains!: Observable<string[]>;
-  form!: FormGroup;
-  matchTypes = this.complianceFilterService.matchTypes;
+  form!: UntypedFormGroup;
+  matchTypes: Array<any>;
   view = FilterView.SERVICE;
-  viewText = this.translate.instant("admissionControl.names.SERVICE");
+  viewText: string;
   FilterView = FilterView;
   @ViewChild('namespaceInput') namespaceInput!: ElementRef<HTMLInputElement>;
 
@@ -50,6 +50,8 @@ export class ComplianceItemsTableFilterComponent implements OnInit {
         return domain ? this._filter(domain) : [];
       })
     );
+    this.matchTypes = this.complianceFilterService.matchTypes;
+    this.viewText = this.translate.instant("admissionControl.names.SERVICE");
   }
 
   clear(num: FilterView) {
@@ -105,32 +107,32 @@ export class ComplianceItemsTableFilterComponent implements OnInit {
 
   ngOnInit() {
     const filter = this.data.filter;
-    this.form = new FormGroup({
-      category: new FormGroup({
-        docker: new FormControl(filter.category.docker),
-        kubernetes: new FormControl(filter.category.kubernetes),
-        custom: new FormControl(filter.category.custom),
-        image: new FormControl(filter.category.image),
+    this.form = new UntypedFormGroup({
+      category: new UntypedFormGroup({
+        docker: new UntypedFormControl(filter.category.docker),
+        kubernetes: new UntypedFormControl(filter.category.kubernetes),
+        custom: new UntypedFormControl(filter.category.custom),
+        image: new UntypedFormControl(filter.category.image),
       }),
-      tags: new FormGroup({
-        gdpr: new FormControl(filter.tags.gdpr),
-        hipaa: new FormControl(filter.tags.hipaa),
-        nist: new FormControl(filter.tags.nist),
-        pci: new FormControl(filter.tags.pci),
+      tags: new UntypedFormGroup({
+        gdpr: new UntypedFormControl(filter.tags.gdpr),
+        hipaa: new UntypedFormControl(filter.tags.hipaa),
+        nist: new UntypedFormControl(filter.tags.nist),
+        pci: new UntypedFormControl(filter.tags.pci),
       }),
-      scoredType: new FormControl(filter.scoredType),
-      profileType: new FormControl(filter.profileType),
-      selectedDomains: new FormControl(filter.selectedDomains),
-      serviceName: new FormControl(filter.serviceName),
-      imageName: new FormControl(filter.imageName),
-      nodeName: new FormControl(filter.nodeName),
-      containerName: new FormControl(filter.containerName),
-      matchType4Ns: new FormControl(filter.matchType4Ns.id),
-      matchTypes: new FormGroup({
-        Service: new FormControl(filter.matchTypes.Service.id),
-        Image: new FormControl(filter.matchTypes.Image.id),
-        Node: new FormControl(filter.matchTypes.Node.id),
-        Container: new FormControl(filter.matchTypes.Container.id),
+      scoredType: new UntypedFormControl(filter.scoredType),
+      profileType: new UntypedFormControl(filter.profileType),
+      selectedDomains: new UntypedFormControl(filter.selectedDomains),
+      serviceName: new UntypedFormControl(filter.serviceName),
+      imageName: new UntypedFormControl(filter.imageName),
+      nodeName: new UntypedFormControl(filter.nodeName),
+      containerName: new UntypedFormControl(filter.containerName),
+      matchType4Ns: new UntypedFormControl(filter.matchType4Ns.id),
+      matchTypes: new UntypedFormGroup({
+        Service: new UntypedFormControl(filter.matchTypes.Service.id),
+        Image: new UntypedFormControl(filter.matchTypes.Image.id),
+        Node: new UntypedFormControl(filter.matchTypes.Node.id),
+        Container: new UntypedFormControl(filter.matchTypes.Container.id),
       }),
     });
   }

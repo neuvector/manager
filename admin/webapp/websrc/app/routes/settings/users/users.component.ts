@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MapConstant } from '@common/constants/map.constant';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { SettingsService } from '@services/settings.service';
-import { combineLatest, of, Subject } from 'rxjs';
+import { combineLatest, of, Subject, Observable } from 'rxjs';
 import {
   catchError,
   map,
@@ -11,7 +11,16 @@ import {
   switchMap,
   tap,
 } from 'rxjs/operators';
+import {
+  DomainGetResponse,
+  User
+} from '@common/types';
 import { MultiClusterService } from '@services/multi-cluster.service';
+
+interface UserInfo {
+  users: User[];
+  domains: string[];
+}
 
 @Component({
   selector: 'app-users',
@@ -27,33 +36,9 @@ export class UsersComponent implements OnInit {
   error: unknown;
   globalRoles!: string[];
   domainRoles!: string[];
-  users$ = this.settingsService.getUsers().pipe(
-    tap(user => {
-      this.domainRoles = user.domain_roles;
-      if (!this.authUtils.userPermission.isNamespaceUser) {
-        this.globalRoles = user.global_roles;
-      } else {
-        this.globalRoles = [''];
-      }
-    }),
-    pluck('users')
-  );
-  domain$ = this.settingsService.getDomain();
-  userData$ = combineLatest([this.users$, this.domain$]).pipe(
-    map(([users, domain]) => {
-      return {
-        users,
-        domains: domain.domains
-          .map(d => d.name)
-          .filter(name => !['_images', '_nodes', '_containers'].includes(name)),
-      };
-    }),
-    catchError(err => {
-      this.error = err;
-      throw err;
-    }),
-    repeatWhen(() => this.refreshUserSubject$)
-  );
+  users$: Observable<Array<any>>;
+  domain$: Observable<DomainGetResponse>;
+  userData$: Observable<UserInfo>;
   roleData$ = this.refreshRoleSubject$.pipe(
     switchMap(() =>
       this.settingsService.getRoles().pipe(
@@ -82,7 +67,35 @@ export class UsersComponent implements OnInit {
     private settingsService: SettingsService,
     private multiClusterService: MultiClusterService,
     private authUtils: AuthUtilsService
-  ) {}
+  ) {
+    this.users$ = this.settingsService.getUsers().pipe(
+      tap(user => {
+        this.domainRoles = user.domain_roles;
+        if (!this.authUtils.userPermission.isNamespaceUser) {
+          this.globalRoles = user.global_roles;
+        } else {
+          this.globalRoles = [''];
+        }
+      }),
+      pluck('users')
+    );
+    this.domain$ = this.settingsService.getDomain();
+    this.userData$ = combineLatest([this.users$, this.domain$]).pipe(
+      map(([users, domain]) => {
+        return {
+          users,
+          domains: domain.domains
+            .map(d => d.name)
+            .filter(name => !['_images', '_nodes', '_containers'].includes(name)),
+        };
+      }),
+      catchError(err => {
+        this.error = err;
+        throw err;
+      }),
+      repeatWhen(() => this.refreshUserSubject$)
+    );
+  }
 
   ngOnInit(): void {
     this.isReadPasswordProfileAuthorized =

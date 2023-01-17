@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { DlpSensorsService } from '@services/dlp-sensors.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '@services/notification.service';
@@ -16,7 +16,7 @@ import { UtilsService } from '@common/utils/app.utils';
 export class AddEditSensorModalComponent implements OnInit {
 
   opTypeOptions = GlobalConstant.MODAL_OP;
-  addEditSensorForm: FormGroup;
+  addEditSensorForm: UntypedFormGroup;
   submittingUpdate: boolean = false;
 
   constructor(
@@ -29,9 +29,9 @@ export class AddEditSensorModalComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.addEditSensorForm = new FormGroup({
-      name: new FormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? "" : this.data.sensor.name, Validators.required),
-      comment: new FormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? "" : this.data.sensor.comment)
+    this.addEditSensorForm = new UntypedFormGroup({
+      name: new UntypedFormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? "" : this.data.sensor.name, Validators.required),
+      comment: new UntypedFormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? "" : this.data.sensor.comment)
     });
   }
 

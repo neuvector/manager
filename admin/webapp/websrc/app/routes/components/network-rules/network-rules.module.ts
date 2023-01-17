@@ -19,35 +19,33 @@ import { NetworkRulesReportChartComponent } from './partial/network-rules-report
 import { ConfirmDialogModule } from "@components/ui/confirm-dialog/confirm-dialog.module";
 
 @NgModule({
-  declarations: [
-    NetworkRulesComponent,
-    ActionButtonsComponent,
-    AddEditNetworkRuleModalComponent,
-    MoveNetworkRulesModalComponent,
-    FromToCellComponent,
-    IdCellComponent,
-    PortsCellComponent,
-    PortsFullListModalComponent,
-    NetworkRulesPrintableReportComponent,
-    NetworkRulesReportChartComponent
-  ],
-  imports: [
-    CommonModule,
-    NvCommonModule,
-    NgChartsModule,
-    QuickFilterModule,
-    LoadingButtonModule,
-    PipeModule,
-    ConfirmDialogModule,
-    AgGridModule.withComponents([
-      ActionButtonsComponent,
-      IdCellComponent,
-      FromToCellComponent,
-      PortsCellComponent
-    ]),
-  ],
-  entryComponents: [
-  ],
-  exports: [NetworkRulesComponent],
+    declarations: [
+        NetworkRulesComponent,
+        ActionButtonsComponent,
+        AddEditNetworkRuleModalComponent,
+        MoveNetworkRulesModalComponent,
+        FromToCellComponent,
+        IdCellComponent,
+        PortsCellComponent,
+        PortsFullListModalComponent,
+        NetworkRulesPrintableReportComponent,
+        NetworkRulesReportChartComponent
+    ],
+    imports: [
+        CommonModule,
+        NvCommonModule,
+        NgChartsModule,
+        QuickFilterModule,
+        LoadingButtonModule,
+        PipeModule,
+        ConfirmDialogModule,
+        AgGridModule.withComponents([
+            ActionButtonsComponent,
+            IdCellComponent,
+            FromToCellComponent,
+            PortsCellComponent
+        ]),
+    ],
+    exports: [NetworkRulesComponent]
 })
 export class NetworkRulesModule { }

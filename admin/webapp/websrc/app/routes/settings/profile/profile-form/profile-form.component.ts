@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ErrorResponse, Self } from '@common/types';
 import { passwordValidator } from '@common/validators';
 import { TranslatorService } from '@core/translator/translator.service';
@@ -18,25 +18,25 @@ export class ProfileFormComponent implements OnInit {
   @Input() user!: Self;
   @Input() emailHash!: string;
   isEdit: boolean = false;
-  profileForm = new FormGroup({
-    username: new FormControl(),
-    email: new FormControl(null, [Validators.email]),
-    role: new FormControl(),
-    timeout: new FormControl(null, [Validators.min(30), Validators.max(3600)]),
-    locale: new FormControl(),
-    passwordForm: new FormGroup(
+  profileForm = new UntypedFormGroup({
+    username: new UntypedFormControl(),
+    email: new UntypedFormControl(null, [Validators.email]),
+    role: new UntypedFormControl(),
+    timeout: new UntypedFormControl(null, [Validators.min(30), Validators.max(3600)]),
+    locale: new UntypedFormControl(),
+    passwordForm: new UntypedFormGroup(
       {
-        currentPassword: new FormControl(null, [Validators.required]),
-        newPassword: new FormControl(null, [Validators.required]),
-        confirmPassword: new FormControl(null, [Validators.required]),
+        currentPassword: new UntypedFormControl(null, [Validators.required]),
+        newPassword: new UntypedFormControl(null, [Validators.required]),
+        confirmPassword: new UntypedFormControl(null, [Validators.required]),
       },
       { validators: passwordValidator() }
     ),
   });
   errorMessage = '';
   submittingForm: boolean = false;
-  get passwordForm(): FormGroup {
-    return <FormGroup>this.profileForm.get('passwordForm');
+  get passwordForm(): UntypedFormGroup {
+    return <UntypedFormGroup>this.profileForm.get('passwordForm');
   }
   get isLocalUser(): boolean {
     return this.user.server === '';

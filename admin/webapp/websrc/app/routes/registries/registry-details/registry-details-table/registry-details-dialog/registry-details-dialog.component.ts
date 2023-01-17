@@ -21,7 +21,7 @@ import {
   Summary,
   Vulnerability,
 } from '@common/types';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
 import { NotificationService } from '@services/notification.service';
 import { UtilsService } from '@common/utils/app.utils';
@@ -46,7 +46,7 @@ export class RegistryDetailsDialogComponent implements OnInit {
   imageAndLayers$!: Observable<any>;
   totalCountText = 5;
   filteredCountText = 0;
-  filter = new FormControl('');
+  filter = new UntypedFormControl('');
   private toggleViewSubject$ = new BehaviorSubject<boolean>(false);
   @ViewChild(RemediationDetailDialogComponent)
   remediationDetails!: RemediationDetailDialogComponent;

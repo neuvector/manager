@@ -20,7 +20,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { DatePipe } from '@angular/common';
 import { RegistryDetailsTableStatusCellComponent } from './registry-details-table-status-cell/registry-details-table-status-cell.component';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-registry-details-table',
@@ -32,7 +32,7 @@ export class RegistryDetailsTableComponent implements OnInit, OnChanges {
   @Input() gridHeight!: number;
   @Input() selectedRegistry!: Summary;
   @Input() rowData!: Image[];
-  @Input() filter!: FormControl;
+  @Input() filter!: UntypedFormControl;
   gridOptions!: GridOptions;
   gridApi!: GridApi;
   columnDefs: ColDef[] = [

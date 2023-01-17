@@ -15,7 +15,7 @@ import {
   MatAutocompleteSelectedEvent,
 } from '@angular/material/autocomplete';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatSort, Sort } from '@angular/material/sort';
 import { _MatTableDataSource } from '@angular/material/table';
 import { MatChipInputEvent } from '@angular/material/chips';
@@ -38,7 +38,7 @@ export class GroupDomainRoleTableComponent
   @Input() isReadOnly: boolean = false;
   displayedColumns = ['namespaceRoles', 'namespaces'];
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  namespaceCtrl = new FormControl();
+  namespaceCtrl = new UntypedFormControl();
   filteredDomains!: Observable<string[]>;
   domainChips: string[] = [];
   autocompleteTagsOptionActivated = false;

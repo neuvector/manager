@@ -497,10 +497,10 @@ export class AdmissionRulesService {
           .get<Array<AdmissionRule>>(PathConstant.ADMISSION_URL, {
             params: { scope: scope },
           })
-          .pipe(pluck('rules'))
+          .pipe(pluck('rules')) as Observable<Array<AdmissionRule>>
       : GlobalVariable.http
           .get<Array<AdmissionRule>>(PathConstant.ADMISSION_URL)
-          .pipe(pluck('rules'));
+          .pipe(pluck('rules')) as Observable<Array<AdmissionRule>>;
     let options = GlobalVariable.http
       .get(PathConstant.ADMCTL_CONDITION_OPTION_URL)
       .pipe();

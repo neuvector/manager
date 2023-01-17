@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SecurityEventsService } from  '@common/services/security-events.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { MapConstant } from '@common/constants/map.constant';
 import { TranslateService } from '@ngx-translate/core';
@@ -20,7 +20,7 @@ export class ReviewNetworkRuleModalComponent implements OnInit {
   violatedImplicitRuleText: string;
   ruleTypeClass: string;
   CFG_TYPE = GlobalConstant.CFG_TYPE;
-  ruleForm: FormGroup;
+  ruleForm: UntypedFormGroup;
   newAction: boolean = true;
 
   constructor(
@@ -38,11 +38,11 @@ export class ReviewNetworkRuleModalComponent implements OnInit {
       this.data.networkRule.cfg_type === this.CFG_TYPE.GROUND) ||
       this.data.secEvent.reviewRulePermission === "r";
     if (!this.isReadOnlyRule) {
-      this.ruleForm = new FormGroup({
-        from: new FormControl(this.data.networkRule.id ? this.data.networkRule.from : this.data.secEvent.endpoint.source.group4Rule),
-        to: new FormControl(this.data.networkRule.id ? this.data.networkRule.to : this.data.secEvent.endpoint.destination.group4Rule),
-        applications: new FormControl(this.data.secEvent.applications),
-        ports: new FormControl(this.data.secEvent.details.serverPort)
+      this.ruleForm = new UntypedFormGroup({
+        from: new UntypedFormControl(this.data.networkRule.id ? this.data.networkRule.from : this.data.secEvent.endpoint.source.group4Rule),
+        to: new UntypedFormControl(this.data.networkRule.id ? this.data.networkRule.to : this.data.secEvent.endpoint.destination.group4Rule),
+        applications: new UntypedFormControl(this.data.secEvent.applications),
+        ports: new UntypedFormControl(this.data.secEvent.details.serverPort)
       });
       console.log("this.ruleForm", this.ruleForm)
     }

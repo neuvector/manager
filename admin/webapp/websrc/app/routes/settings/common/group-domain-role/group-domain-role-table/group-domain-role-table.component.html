@@ -47,9 +47,9 @@
       </mat-icon>
       {{ activeRole }} {{ 'ldap.GROUP_ADMIN' | translate }}
     </div>
-    <mat-form-field appearance="standard" class="flex-grow-1">
+    <mat-form-field appearance="fill" class="flex-grow-1">
       <mat-label>{{ 'ldap.gridHeader.DOMAINS' | translate }}</mat-label>
-      <mat-chip-list #chipList aria-label="Namespace selection">
+      <mat-chip-grid #chipGrid aria-label="Namespace selection">
         <mat-chip
           (removed)="remove(domainChip)"
           *ngFor="let domainChip of domainChips">
@@ -63,13 +63,13 @@
           (matChipInputTokenEnd)="add($event)"
           [formControl]="namespaceCtrl"
           [matAutocomplete]="auto"
-          [matChipInputFor]="chipList"
+          [matChipInputFor]="chipGrid"
           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
           [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
           placeholder="{{ 'ldap.ADD_DOMAIN' | translate }}&nbsp;{{
             'general.TYPE_PRESS_TXT' | translate
           }}" />
-      </mat-chip-list>
+      </mat-chip-grid>
       <mat-autocomplete
         #auto="matAutocomplete"
         (optionSelected)="selected($event)">

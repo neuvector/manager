@@ -7,13 +7,14 @@
     <button
       aria-label="Close dialog button"
       id="registry-details-dialog-close-button"
+      (click)="onNoClick()"
       mat-icon-button>
-      <i (click)="onNoClick()" class="eos-icons">close</i>
+      <i class="eos-icons">close</i>
     </button>
   </div>
   <div style="min-height: 700px; height: calc(100% - 70px)">
     <div class="filter">
-      <mat-form-field appearance="standard">
+      <mat-form-field appearance="fill">
         <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
         <input [formControl]="filter" matInput [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"/>
       </mat-form-field>
@@ -49,7 +50,7 @@
           [includeRemediation]="true"
           (remediation)="openRemediation($event)"
           [useQuickFilterService]="true"
-          tableHeight="calc(100% - 42px)">
+          [tableHeight]="'calc(100% - 42px)'">
         </app-compliance-grid>
       </mat-tab>
       <mat-tab label="Modules">

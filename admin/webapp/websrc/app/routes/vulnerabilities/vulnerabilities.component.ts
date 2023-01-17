@@ -4,6 +4,7 @@ import { VulnerabilitiesCsvService } from './csv-generation/vulnerabilities-csv.
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { VulnerabilitiesFilterService } from './vulnerabilities.filter.service';
 import { MapConstant } from '@common/constants/map.constant';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-vulnerabilities',
@@ -11,7 +12,7 @@ import { MapConstant } from '@common/constants/map.constant';
   styleUrls: ['./vulnerabilities.component.scss'],
 })
 export class VulnerabilitiesComponent {
-  vulnerabilitiesData$ = this.vulnerabilitiesService.initVulnerability();
+  vulnerabilitiesData$: Observable<any>;
   private _switchClusterSubscription;
   vulnerabilitiesList: any[] = [];
   masterData: any;
@@ -39,6 +40,7 @@ export class VulnerabilitiesComponent {
       this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
         this.refresh();
       });
+    this.vulnerabilitiesData$ = this.vulnerabilitiesService.initVulnerability();
   }
 
   ngOnDestroy(): void {

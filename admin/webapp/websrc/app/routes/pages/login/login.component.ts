@@ -5,7 +5,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { TranslatorService } from '@core/translator/translator.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '@common/services/auth.service';
@@ -31,7 +31,7 @@ import { SummaryService } from '@services/summary.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  public loginForm: FormGroup;
+  public loginForm: UntypedFormGroup;
   public inProgress: boolean = false;
   public authMsg: string = '';
   public servers: Array<any> = [];
@@ -62,7 +62,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private notificationService: NotificationService,
     private summaryService: SummaryService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private router: Router,
     private dialog: MatDialog
   ) {

@@ -8,7 +8,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
   MatTableDataSource,
@@ -40,7 +40,7 @@ export interface AddEditUserDialog {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddEditUserDialogComponent implements OnInit {
-  form!: FormGroup;
+  form!: UntypedFormGroup;
   saving$ = new Subject();
   toggleAdvSetting = false;
   domainTableSource!: _MatTableDataSource<any>;
@@ -65,8 +65,8 @@ export class AddEditUserDialogComponent implements OnInit {
           .includes(GlobalConstant.KUBE)
       : false;
   }
-  get passwordForm(): FormGroup {
-    return <FormGroup>this.form.get('passwordForm');
+  get passwordForm(): UntypedFormGroup {
+    return <UntypedFormGroup>this.form.get('passwordForm');
   }
   get selectedRole(): string {
     return this.form.get('role')?.value;
@@ -79,7 +79,7 @@ export class AddEditUserDialogComponent implements OnInit {
   }
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public dialogRef: MatDialogRef<UsersGridComponent>,
     @Inject(MAT_DIALOG_DATA) public data: AddEditUserDialog,
     private tr: TranslatorService,

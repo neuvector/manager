@@ -19,12 +19,13 @@ import { ErrorResponse, RegistryConfig, Summary } from '@common/types';
 import { RegistriesTableButtonsComponent } from './registries-table-buttons/registries-table-buttons.component';
 import { RegistriesService } from '@services/registries.service';
 import { RegistriesCommunicationService } from '../regestries-communication.service';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { RegistryTableStatusCellComponent } from './registry-table-status-cell/registry-table-status-cell.component';
 import { cloneDeep } from 'lodash';
 import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
 import { finalize, switchMap, take, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { MapConstant } from '@common/constants/map.constant';
 import { NotificationService } from '@services/notification.service';
@@ -39,7 +40,7 @@ import { GlobalVariable } from '@common/variables/global.variable';
 export class RegistriesTableComponent implements OnInit, OnChanges {
   @Input() rowData!: Summary[];
   @Input() gridHeight!: number;
-  filter = new FormControl('');
+  filter = new UntypedFormControl('');
   gridOptions!: GridOptions;
   gridApi!: GridApi;
   columnDefs: ColDef[] = [
@@ -135,8 +136,8 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
       cellClass: ['d-flex', 'align-items-center'],
     },
   ];
-  startingScan$ = this.registriesCommunicationService.startingScan$;
-  stoppingScan$ = this.registriesCommunicationService.stoppingScan$;
+  startingScan$: Observable<any>;
+  stoppingScan$: Observable<any>;
   get isFedRegistry() {
     return (
       this.gridApi?.getSelectedNodes()?.[0].data?.cfg_type ===
@@ -157,7 +158,10 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
     private registriesCommunicationService: RegistriesCommunicationService,
     private cd: ChangeDetectorRef,
     private notificationService: NotificationService
-  ) {}
+  ) {
+    this.startingScan$ = this.registriesCommunicationService.startingScan$;
+    this.stoppingScan$ = this.registriesCommunicationService.stoppingScan$;
+  }
 
   ngOnInit(): void {
     this.gridOptions = {

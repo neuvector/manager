@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { WafSensorsService } from '@services/waf-sensors.service';
 import { TranslateService } from '@ngx-translate/core';
 import { WafPattern } from '@common/types';
@@ -24,7 +24,7 @@ import {
 export class AddEditRuleModalComponent implements OnInit {
 
   opTypeOptions = GlobalConstant.MODAL_OP;
-  addEditRuleForm: FormGroup;
+  addEditRuleForm: UntypedFormGroup;
   submittingUpdate: boolean = false;
   operators: Array<any>;
   contexts: Array<any>;
@@ -66,17 +66,17 @@ export class AddEditRuleModalComponent implements OnInit {
     this.initializePattern();
 
     if (this.data.opType === GlobalConstant.MODAL_OP.ADD) {
-      this.addEditRuleForm = new FormGroup({
-        sensorName: new FormControl(this.data.sensor.name, Validators.required),
-        comment: new FormControl(this.data.sensor.comment),
-        ruleName: new FormControl('', Validators.required)
+      this.addEditRuleForm = new UntypedFormGroup({
+        sensorName: new UntypedFormControl(this.data.sensor.name, Validators.required),
+        comment: new UntypedFormControl(this.data.sensor.comment),
+        ruleName: new UntypedFormControl('', Validators.required)
       });
       this.patterns = [];
     } else {
-      this.addEditRuleForm = new FormGroup({
-        sensorName: new FormControl(this.data.sensor.name, Validators.required),
-        comment: new FormControl(this.data.sensor.comment),
-        ruleName: new FormControl(this.data.rule.name, Validators.required)
+      this.addEditRuleForm = new UntypedFormGroup({
+        sensorName: new UntypedFormControl(this.data.sensor.name, Validators.required),
+        comment: new UntypedFormControl(this.data.sensor.comment),
+        ruleName: new UntypedFormControl(this.data.rule.name, Validators.required)
       });
       this.patterns = this.data.rule.patterns;
     }

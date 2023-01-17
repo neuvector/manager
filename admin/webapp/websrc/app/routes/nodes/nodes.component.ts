@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MapConstant } from '@common/constants/map.constant';
 import { ErrorResponse, Host, ScanConfig } from '@common/types';
 import { AuthUtilsService } from '@common/utils/auth.utils';
@@ -39,7 +39,7 @@ export class NodesComponent implements OnInit {
   refreshing$ = new Subject();
   error!: string;
   loaded = false;
-  autoScan = new FormControl(false);
+  autoScan = new UntypedFormControl(false);
   autoScanAuthorized = false;
   isAutoScanAuthorized!: boolean;
   stopFullScan$ = new Subject();

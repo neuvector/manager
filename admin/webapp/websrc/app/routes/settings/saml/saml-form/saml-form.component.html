@@ -15,7 +15,7 @@
   <div class="row align-items-center my-0 my-md-4">
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
       <i class="eos-icons mr-3 text-primary">organization</i>
-      <mat-form-field appearance="standard" class="w-100">
+      <mat-form-field appearance="fill" class="w-100">
         <mat-label>{{ 'okta.IDP_URL' | translate }}</mat-label>
         <input
           formControlName="sso_url"
@@ -32,7 +32,7 @@
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
       <i class="eos-icons mr-3 text-primary">account_box</i>
-      <mat-form-field appearance="standard" class="w-100">
+      <mat-form-field appearance="fill" class="w-100">
         <mat-label>{{ 'okta.IDP_ISSUER' | translate }}</mat-label>
         <input
           formControlName="issuer"
@@ -50,7 +50,7 @@
     <div class="col-12 d-flex align-items-center">
       <i class="eos-icons mr-3 text-primary">verified</i>
       <mat-form-field
-        appearance="standard"
+        appearance="fill"
         class="w-100"
         [floatLabel]="isCreated ? 'always' : 'auto'">
         <mat-label>{{ 'okta.CERTIFICATE' | translate }}</mat-label>
@@ -66,7 +66,7 @@
     </div>
     <div class="col-12 d-flex align-items-center">
       <i class="eos-icons mr-3 text-primary">groups</i>
-      <mat-form-field appearance="standard" class="w-100">
+      <mat-form-field appearance="fill" class="w-100">
         <mat-label> {{ 'okta.GROUP_CLAIM' | translate }}</mat-label>
         <input
           formControlName="group_claim"
@@ -76,7 +76,7 @@
       </mat-form-field>
     </div>
   </div>
-  <mat-form-field appearance="standard">
+  <mat-form-field appearance="fill">
     <mat-label>{{ 'ldap.DEFAULT_ROLE' | translate }}</mat-label>
     <mat-select formControlName="default_role">
       <mat-option

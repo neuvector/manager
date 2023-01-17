@@ -11,23 +11,22 @@ import {LoadingButtonModule} from "@components/ui/loading-button/loading-button.
 import { ConfirmDialogResponseRuleComponent } from './partial/confirm-dialog-response-rule/confirm-dialog-response-rule.component';
 
 @NgModule({
-  declarations: [
-    ResponseRulesComponent,
-    ActionButtonsComponent,
-    AddEditResponseRuleModalComponent,
-    ConfirmDialogResponseRuleComponent,
-  ],
-  imports: [
-    CommonModule,
-    NvCommonModule,
-    QuickFilterModule,
-    AgGridModule.withComponents([
-      ActionButtonsComponent,
-      AddEditResponseRuleModalComponent,
-    ]),
-    LoadingButtonModule,
-  ],
-  entryComponents: [AddEditResponseRuleModalComponent],
-  exports: [ResponseRulesComponent],
+    declarations: [
+        ResponseRulesComponent,
+        ActionButtonsComponent,
+        AddEditResponseRuleModalComponent,
+        ConfirmDialogResponseRuleComponent,
+    ],
+    imports: [
+        CommonModule,
+        NvCommonModule,
+        QuickFilterModule,
+        AgGridModule.withComponents([
+            ActionButtonsComponent,
+            AddEditResponseRuleModalComponent,
+        ]),
+        LoadingButtonModule,
+    ],
+    exports: [ResponseRulesComponent]
 })
 export class ResponseRulesModule {}

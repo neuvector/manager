@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
-import { RepoGetResponse, Summary } from '@common/types';
+import { RepoGetResponse, Summary, RegistryGetResponse } from '@common/types';
 import {
   filter,
   finalize,
@@ -59,36 +59,38 @@ export class RegistriesCommunicationService {
   private deletingSubject$ = new BehaviorSubject<boolean>(false);
   deleting$ = this.deletingSubject$.asObservable();
   private savingSubject$ = new BehaviorSubject<boolean>(false);
-  registries$ = this.registriesService.getRegistries().pipe(
-    tap(({ summarys }) => {
-      if (this.selectedRegistrySubject$.value) {
-        this.scan(
-          summarys.some(summary => {
-            return (
-              summary.status === 'scanning' &&
-              this.selectedRegistrySubject$.value!.name === summary.name
-            );
-          })
-        );
-      }
-      if (!summarys.length) {
-        this.refreshingDetailsSubject$.next(false);
-      }
-    }),
-    finalize(() => {
-      if (this.refreshingDetailsSubject$.value) {
-        this.refreshDetails();
-      }
-      this.savingSubject$.next(false);
-      this.stoppingScanSubject$.next(false);
-      this.deletingSubject$.next(false);
-      this.startingScanSubject$.next(false);
-    }),
-    repeatWhen(() => this.refreshRegistriesSubject$)
-  );
+  registries$: Observable<RegistryGetResponse>
   saving$ = this.savingSubject$.asObservable();
 
-  constructor(private registriesService: RegistriesService) {}
+  constructor(private registriesService: RegistriesService) {
+    this.registries$ = this.registriesService.getRegistries().pipe(
+      tap(({ summarys }) => {
+        if (this.selectedRegistrySubject$.value) {
+          this.scan(
+            summarys.some(summary => {
+              return (
+                summary.status === 'scanning' &&
+                this.selectedRegistrySubject$.value!.name === summary.name
+              );
+            })
+          );
+        }
+        if (!summarys.length) {
+          this.refreshingDetailsSubject$.next(false);
+        }
+      }),
+      finalize(() => {
+        if (this.refreshingDetailsSubject$.value) {
+          this.refreshDetails();
+        }
+        this.savingSubject$.next(false);
+        this.stoppingScanSubject$.next(false);
+        this.deletingSubject$.next(false);
+        this.startingScanSubject$.next(false);
+      }),
+      repeatWhen(() => this.refreshRegistriesSubject$)
+    );
+  }
 
   refreshRegistries(): void {
     this.timeoutId = setTimeout(() => {

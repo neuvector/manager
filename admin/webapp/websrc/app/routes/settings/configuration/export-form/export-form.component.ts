@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ErrorResponse } from '@common/types';
 import { UtilsService } from '@common/utils/app.utils';
 import { NotificationService } from '@services/notification.service';
@@ -20,15 +20,12 @@ import { GlobalConstant } from '@common/constants/global.constant';
 })
 export class ExportFormComponent implements OnInit {
   submittingForm = false;
-  exportForm = new FormGroup({
-    export: new FormControl(null, Validators.required),
-    as_standalone: new FormControl(false),
+  exportForm = new UntypedFormGroup({
+    export: new UntypedFormControl(null, Validators.required),
+    as_standalone: new UntypedFormControl(false),
   });
   isExportAuthorized!: boolean;
-  importMsg = {
-    success: this.tr.instant('setting.message.UPLOAD_FINISH'),
-    error: this.tr.instant('setting.IMPORT_FAILED'),
-  };
+  importMsg: any;
   get isImportAuthorized() {
     return (
       GlobalVariable.user.token.role === MapConstant.FED_ROLES.FEDADMIN ||
@@ -43,7 +40,12 @@ export class ExportFormComponent implements OnInit {
     private utils: UtilsService,
     private authUtilsService: AuthUtilsService,
     private notificationService: NotificationService
-  ) {}
+  ) {
+    this.importMsg = {
+      success: this.tr.instant('setting.message.UPLOAD_FINISH'),
+      error: this.tr.instant('setting.IMPORT_FAILED'),
+    };
+  }
 
   get importUrl(): string {
     return PathConstant.SYSTEM_CONFIG_URL;

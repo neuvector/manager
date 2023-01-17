@@ -1,6 +1,6 @@
 import { MatDialogRef,  MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { AdmissionRulesService } from "@common/services/admission-rules.service";
 import { UtilsService } from "@common/utils/app.utils";
@@ -19,7 +19,7 @@ import { GlobalConstant } from '@common/constants/global.constant';
 export class ExportAdmissionRulesModalComponent implements OnInit {
 
   submittingForm = false;
-  exportForm: FormGroup;
+  exportForm: UntypedFormGroup;
 
   constructor(
     public dialogRef: MatDialogRef<ExportAdmissionRulesModalComponent>,
@@ -31,8 +31,8 @@ export class ExportAdmissionRulesModalComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.exportForm = new FormGroup({
-      isIncludingConfig: new FormControl(false)
+    this.exportForm = new UntypedFormGroup({
+      isIncludingConfig: new UntypedFormControl(false)
     });
   }
 

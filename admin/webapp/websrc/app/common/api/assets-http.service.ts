@@ -43,7 +43,7 @@ export class AssetsHttpService {
   getContainers(): Observable<Workload[]> {
     return GlobalVariable.http
       .get<Workload[]>(PathConstant.CONTAINER_URL)
-      .pipe(pluck('workloads'));
+      .pipe(pluck('workloads')) as Observable<Workload[]>;
   }
 
   getScannedContainers(start: number, limit: number): Observable<WorkloadV2[]> {
@@ -52,7 +52,7 @@ export class AssetsHttpService {
       {
         params: { start, limit },
       }
-    );
+    ) as Observable<WorkloadV2[]>;
   }
 
   getContainerStats(id: string): Observable<SystemStatsData> {
@@ -61,7 +61,7 @@ export class AssetsHttpService {
       {
         params: { id },
       }
-    );
+    ) as Observable<SystemStatsData>;
   }
 
   getWorkloadReport(
@@ -75,7 +75,7 @@ export class AssetsHttpService {
       .get<Vulnerability[]>(PathConstant.SCAN_URL, {
         params,
       })
-      .pipe(pluck('report', 'vulnerabilities'));
+      .pipe(pluck('report', 'vulnerabilities')) as Observable<Vulnerability[]>;
   }
 
   getHostReport(
@@ -87,7 +87,7 @@ export class AssetsHttpService {
     ) as any;
     return GlobalVariable.http
       .get<Vulnerability[]>(PathConstant.SCAN_HOST_URL, { params })
-      .pipe(pluck('report', 'vulnerabilities'));
+      .pipe(pluck('report', 'vulnerabilities')) as Observable<Vulnerability[]>;
   }
 
   getPlatformReport(
@@ -99,13 +99,13 @@ export class AssetsHttpService {
     ) as any;
     return GlobalVariable.http
       .get<Vulnerability[]>(PathConstant.SCAN_PLATFORM_URL, { params })
-      .pipe(pluck('report', 'vulnerabilities'));
+      .pipe(pluck('report', 'vulnerabilities')) as Observable<Vulnerability[]>;
   }
 
   getNodeWorkloads(id: string): Observable<Workload[]> {
     return GlobalVariable.http
       .get<Workload[]>(PathConstant.NODE_WORKLOADS_URL, { params: { id } })
-      .pipe(pluck('workloads'));
+      .pipe(pluck('workloads')) as Observable<Workload[]>;
   }
 
   getProcess(id: string): Observable<ProcessInfo[]> {
@@ -113,7 +113,7 @@ export class AssetsHttpService {
       .get<ProcessInfo>(PathConstant.CONTAINER_PROCESS_URL, {
         params: { id },
       })
-      .pipe(pluck('processes'));
+      .pipe(pluck('processes')) as Observable<ProcessInfo[]>;
   }
 
   getProcessHistory(id: string): Observable<ProcessInfo[]> {
@@ -121,13 +121,13 @@ export class AssetsHttpService {
       .get(PathConstant.CONTAINER_PROCESS_HISTORY_URL, {
         params: { id },
       })
-      .pipe(pluck('processes'));
+      .pipe(pluck('processes')) as Observable<ProcessInfo[]>;
   }
 
   getScanConfig(): Observable<ScanConfig> {
     return GlobalVariable.http
       .get<ScanConfig>(PathConstant.SCAN_CONFIG_URL)
-      .pipe(pluck('config'));
+      .pipe(pluck('config')) as Observable<ScanConfig>;
   }
 
   postScanConfig(config: ScanConfig): Observable<unknown> {
@@ -190,31 +190,31 @@ export class AssetsHttpService {
   getControllers(): Observable<Controller[]> {
     return GlobalVariable.http
       .get<Controller[]>(PathConstant.CONTROLLER_URL)
-      .pipe(pluck('controllers'));
+      .pipe(pluck('controllers')) as Observable<Controller[]>;
   }
 
   getControllerStats(id: string): Observable<SystemStatsData> {
     return GlobalVariable.http.get<SystemStatsData>(
       PathConstant.CONTROLLER_URL,
       { params: { id } }
-    );
+    ) as Observable<SystemStatsData>;
   }
 
   getEnforcers(): Observable<Enforcer[]> {
     return GlobalVariable.http
       .get<Enforcer[]>(PathConstant.ENFORCER_URL)
-      .pipe(pluck('enforcers'));
+      .pipe(pluck('enforcers')) as Observable<Enforcer[]>;
   }
 
   getEnforcerStats(id: string): Observable<SystemStatsData> {
     return GlobalVariable.http.get<SystemStatsData>(PathConstant.ENFORCER_URL, {
       params: { id },
-    });
+    }) as Observable<SystemStatsData>;
   }
 
   getScanners(): Observable<Scanner[]> {
     return GlobalVariable.http
       .get<Scanner[]>(PathConstant.SCANNER_URL)
-      .pipe(pluck('scanners'));
+      .pipe(pluck('scanners')) as Observable<Scanner[]>;
   }
 }

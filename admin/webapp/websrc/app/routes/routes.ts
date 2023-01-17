@@ -3,14 +3,16 @@ import { FrameComponent } from '../frame/frame.component';
 import { LoginComponent } from './pages/login/login.component';
 import { LogoutComponent } from './pages/logout/logout.component';
 
+type PathMatch = 'full'| 'prefix' | undefined;
+
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' as PathMatch },
   {
     path: '',
     component: FrameComponent,
     children: [
-      { path: '', redirectTo: 'login', pathMatch: 'full' },
-      { path: 'logout', redirectTo: 'logout', pathMatch: 'full' },
+      { path: '', redirectTo: 'login', pathMatch: 'full' as PathMatch },
+      { path: 'logout', redirectTo: 'logout', pathMatch: 'full' as PathMatch },
       {
         path: 'profile',
         loadChildren: () =>

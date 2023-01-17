@@ -37,71 +37,15 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
   @Input() gridHeight!: number;
   @Input() domains!: string[];
   @Output() toggleChartView = new EventEmitter();
-  matchTypes = this.complianceFilterService.matchTypes;
   filteredCount = 0;
-  filtered$ = this.complianceFilterService.filtered$;
-  advFilter: any = this.complianceFilterService.advFilter;
+  matchTypes: Array<any>;
+  filtered$: any;
+  advFilter: any;
   filterDialog!: MatDialogRef<any>;
   filterOpen = false;
   gridOptions!: GridOptions;
   gridApi!: GridApi;
-  columnDefs: ColDef[] = [
-    {
-      field: 'category',
-      sortable: true,
-      resizable: true,
-      cellRenderer: 'categoryCellRenderer',
-      cellRendererParams: {
-        kubeType: this.complianceService.kubeVersion,
-      },
-      cellClass: ['d-flex', 'align-items-center'],
-      headerValueGetter: () =>
-        this.translate.instant('cis.report.gridHeader.CATEGORY'),
-    },
-    {
-      field: 'name',
-      sortable: true,
-      resizable: true,
-      headerValueGetter: () =>
-        this.translate.instant('cis.report.gridHeader.NAME'),
-    },
-    {
-      field: 'level',
-      sortable: true,
-      resizable: true,
-      cellRenderer: 'statusCellRenderer',
-      headerValueGetter: () =>
-        this.translate.instant('responsePolicy.gridHeader.STATUS'),
-    },
-    {
-      field: 'scored',
-      sortable: true,
-      resizable: true,
-      valueFormatter: params => (params?.node?.data.scored ? 'Y' : 'N'),
-      headerValueGetter: () =>
-        this.translate.instant('cis.report.gridHeader.SCORED'),
-    },
-    {
-      field: 'profile',
-      sortable: true,
-      resizable: true,
-      headerValueGetter: () =>
-        this.translate.instant('cis.report.gridHeader.PROFILE'),
-    },
-    {
-      sortable: true,
-      resizable: true,
-      comparator: this.impactComparator,
-      cellRenderer: 'impactCellRenderer',
-      headerValueGetter: () =>
-        this.translate.instant('cis.report.gridHeader.IMPACT'),
-    },
-    {
-      resizable: true,
-      cellRenderer: 'csvCellRenderer',
-      headerValueGetter: () => 'CSV',
-    },
-  ];
+  columnDefs: ColDef[];
 
   constructor(
     private translate: TranslateService,
@@ -109,7 +53,68 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
     private cd: ChangeDetectorRef,
     private complianceFilterService: ComplianceFilterService,
     public dialog: MatDialog
-  ) {}
+  ) {
+    this.columnDefs = [
+      {
+        field: 'category',
+        sortable: true,
+        resizable: true,
+        cellRenderer: 'categoryCellRenderer',
+        cellRendererParams: {
+          kubeType: this.complianceService.kubeVersion,
+        },
+        cellClass: ['d-flex', 'align-items-center'],
+        headerValueGetter: () =>
+          this.translate.instant('cis.report.gridHeader.CATEGORY'),
+      },
+      {
+        field: 'name',
+        sortable: true,
+        resizable: true,
+        headerValueGetter: () =>
+          this.translate.instant('cis.report.gridHeader.NAME'),
+      },
+      {
+        field: 'level',
+        sortable: true,
+        resizable: true,
+        cellRenderer: 'statusCellRenderer',
+        headerValueGetter: () =>
+          this.translate.instant('responsePolicy.gridHeader.STATUS'),
+      },
+      {
+        field: 'scored',
+        sortable: true,
+        resizable: true,
+        valueFormatter: params => (params?.node?.data.scored ? 'Y' : 'N'),
+        headerValueGetter: () =>
+          this.translate.instant('cis.report.gridHeader.SCORED'),
+      },
+      {
+        field: 'profile',
+        sortable: true,
+        resizable: true,
+        headerValueGetter: () =>
+          this.translate.instant('cis.report.gridHeader.PROFILE'),
+      },
+      {
+        sortable: true,
+        resizable: true,
+        comparator: this.impactComparator,
+        cellRenderer: 'impactCellRenderer',
+        headerValueGetter: () =>
+          this.translate.instant('cis.report.gridHeader.IMPACT'),
+      },
+      {
+        resizable: true,
+        cellRenderer: 'csvCellRenderer',
+        headerValueGetter: () => 'CSV',
+      },
+    ];
+    this.matchTypes = this.complianceFilterService.matchTypes;
+    this.filtered$ = this.complianceFilterService.filtered$;
+    this.advFilter = this.complianceFilterService.advFilter;
+  }
 
   ngOnInit(): void {
     this.gridOptions = {

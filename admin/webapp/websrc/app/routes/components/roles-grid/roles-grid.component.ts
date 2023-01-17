@@ -51,45 +51,7 @@ export class RolesGridComponent implements OnInit {
   get roleCount() {
     return this.rowData.length;
   }
-  columnDefs: ColDef[] = [
-    {
-      headerName: this.tr.instant('role.gridHeader.ROLE_NAME'),
-      field: 'name',
-      cellRenderer: params => {
-        if (params) {
-          return params.value === '' ? 'none' : params.value;
-        }
-      },
-      width: 80,
-      minWidth: 80,
-    },
-    {
-      headerName: this.tr.instant('role.gridHeader.COMMENT'),
-      field: 'comment',
-      width: 120,
-      minWidth: 120,
-    },
-    {
-      headerName: this.tr.instant('role.gridHeader.PERMISSIONS'),
-      field: 'permissions',
-      cellRenderer: 'permissionsCellRenderer',
-      autoHeight: true,
-      width: 350,
-      minWidth: 350,
-    },
-    {
-      sortable: false,
-      cellRenderer: 'actionCellRenderer',
-      cellRendererParams: {
-        edit: event => this.editRole(event),
-        delete: event => this.deleteRole(event),
-      },
-      cellClass: ['d-flex', 'align-items-center'],
-      width: 120,
-      minWidth: 120,
-      maxWidth: 120,
-    },
-  ];
+  columnDefs: ColDef[];
 
   constructor(
     private dialog: MatDialog,
@@ -100,6 +62,45 @@ export class RolesGridComponent implements OnInit {
     private authUtilsService: AuthUtilsService
   ) {
     this.$win = $(GlobalVariable.window);
+    this.columnDefs = [
+      {
+        headerName: this.tr.instant('role.gridHeader.ROLE_NAME'),
+        field: 'name',
+        cellRenderer: params => {
+          if (params) {
+            return params.value === '' ? 'none' : params.value;
+          }
+        },
+        width: 80,
+        minWidth: 80,
+      },
+      {
+        headerName: this.tr.instant('role.gridHeader.COMMENT'),
+        field: 'comment',
+        width: 120,
+        minWidth: 120,
+      },
+      {
+        headerName: this.tr.instant('role.gridHeader.PERMISSIONS'),
+        field: 'permissions',
+        cellRenderer: 'permissionsCellRenderer',
+        autoHeight: true,
+        width: 350,
+        minWidth: 350,
+      },
+      {
+        sortable: false,
+        cellRenderer: 'actionCellRenderer',
+        cellRendererParams: {
+          edit: event => this.editRole(event),
+          delete: event => this.deleteRole(event),
+        },
+        cellClass: ['d-flex', 'align-items-center'],
+        width: 120,
+        minWidth: 120,
+        maxWidth: 120,
+      },
+    ];
   }
 
   ngOnInit(): void {

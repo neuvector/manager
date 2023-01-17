@@ -6,7 +6,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MapConstant } from '@common/constants/map.constant';
 import { ErrorResponse, Platform, ScanConfig } from '@common/types';
 import { AuthUtilsService } from '@common/utils/auth.utils';
@@ -47,7 +47,7 @@ export class PlatformsComponent implements OnInit, OnDestroy {
   refreshing$ = new Subject();
   error!: string;
   loaded = false;
-  autoScan = new FormControl(false);
+  autoScan = new UntypedFormControl(false);
   autoScanAuthorized = false;
   isAutoScanAuthorized!: boolean;
   stopFullScan$ = new Subject();

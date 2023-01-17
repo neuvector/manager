@@ -1,6 +1,6 @@
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import { Group, HierarchicalExposure } from '@common/types';
 import { TranslateService } from '@ngx-translate/core';
@@ -26,12 +26,7 @@ export class ScoreImprovementExposureViewComponent implements OnInit {
   }
   projectedScore!: number;
   selectedIndex: number = 0;
-  stepControls = this.fb.group({
-    mode: null,
-    threat: null,
-    violation: null,
-    session: null,
-  });
+  stepControls: any;
   selectedGroup!: Group | null;
   selectedIndex4Exposure = {
     threat: 0,
@@ -60,9 +55,16 @@ export class ScoreImprovementExposureViewComponent implements OnInit {
 
   constructor(
     private scoreImprovementModalService: ScoreImprovementModalService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private tr: TranslateService
-  ) {}
+  ) {
+    this.stepControls = this.fb.group({
+      mode: null,
+      threat: null,
+      violation: null,
+      session: null,
+    });
+  }
 
   ngOnInit(): void {
     this.getPredictionScores();

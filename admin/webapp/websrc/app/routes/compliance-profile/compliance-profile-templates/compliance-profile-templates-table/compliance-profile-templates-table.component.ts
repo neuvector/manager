@@ -52,72 +52,7 @@ export class ComplianceProfileTemplatesTableComponent
   gdpr = false;
   nist = false;
   hipaa = false;
-  columnDefs: ColDef[] = [
-    {
-      field: 'test_number',
-      width: 70,
-      sortable: true,
-      resizable: true,
-      headerName: 'CIS ID',
-    },
-    {
-      field: 'tags',
-      width: 180,
-      sortable: true,
-      resizable: true,
-      cellRenderer: 'regulationsCellRenderer',
-      headerValueGetter: () =>
-        this.translate.instant('cis.profile.REGULATIONS'),
-    },
-    {
-      field: 'category',
-      width: 70,
-      sortable: true,
-      resizable: true,
-      cellRenderer: 'categoryCellRenderer',
-      headerValueGetter: () =>
-        this.translate.instant('cis.report.gridHeader.CATEGORY'),
-    },
-    {
-      field: 'scored',
-      width: 70,
-      sortable: true,
-      resizable: true,
-      valueFormatter: params => (params?.node?.data.scored ? 'Y' : 'N'),
-      headerValueGetter: () =>
-        this.translate.instant('cis.report.gridHeader.SCORED') + '\u00A0\u24D8',
-      headerTooltip: this.translate.instant('cis.SCORED'),
-    },
-    {
-      field: 'profile',
-      width: 70,
-      sortable: true,
-      resizable: true,
-      headerValueGetter: () =>
-        this.translate.instant('cis.report.gridHeader.PROFILE') +
-        '\u00A0\u24D8',
-      headerTooltip: this.translate.instant('cis.LEVEL1'),
-    },
-    {
-      field: 'description',
-      sortable: true,
-      resizable: true,
-      wrapText: true,
-      autoHeight: true,
-      cellStyle: { 'line-height': '25px' },
-      headerValueGetter: () =>
-        this.translate.instant('cis.report.gridHeader.DESC'),
-    },
-    {
-      resizable: true,
-      width: 50,
-      cellRenderer: 'actionCellRenderer',
-      cellRendererParams: {
-        edit: event => this.editRegulation(event),
-      },
-      headerValueGetter: () => this.translate.instant('setting.ACTIONS'),
-    },
-  ];
+  columnDefs: ColDef[];
   private filteredSubject$ = new BehaviorSubject(false);
   filtered$ = this.filteredSubject$.asObservable();
 
@@ -129,7 +64,74 @@ export class ComplianceProfileTemplatesTableComponent
     private dialog: MatDialog,
     private complianceProfileService: ComplianceProfileService,
     private authUtilsService: AuthUtilsService
-  ) {}
+  ) {
+    this.columnDefs = [
+      {
+        field: 'test_number',
+        width: 70,
+        sortable: true,
+        resizable: true,
+        headerName: 'CIS ID',
+      },
+      {
+        field: 'tags',
+        width: 180,
+        sortable: true,
+        resizable: true,
+        cellRenderer: 'regulationsCellRenderer',
+        headerValueGetter: () =>
+          this.translate.instant('cis.profile.REGULATIONS'),
+      },
+      {
+        field: 'category',
+        width: 70,
+        sortable: true,
+        resizable: true,
+        cellRenderer: 'categoryCellRenderer',
+        headerValueGetter: () =>
+          this.translate.instant('cis.report.gridHeader.CATEGORY'),
+      },
+      {
+        field: 'scored',
+        width: 70,
+        sortable: true,
+        resizable: true,
+        valueFormatter: params => (params?.node?.data.scored ? 'Y' : 'N'),
+        headerValueGetter: () =>
+          this.translate.instant('cis.report.gridHeader.SCORED') + '\u00A0\u24D8',
+        headerTooltip: this.translate.instant('cis.SCORED'),
+      },
+      {
+        field: 'profile',
+        width: 70,
+        sortable: true,
+        resizable: true,
+        headerValueGetter: () =>
+          this.translate.instant('cis.report.gridHeader.PROFILE') +
+          '\u00A0\u24D8',
+        headerTooltip: this.translate.instant('cis.LEVEL1'),
+      },
+      {
+        field: 'description',
+        sortable: true,
+        resizable: true,
+        wrapText: true,
+        autoHeight: true,
+        cellStyle: { 'line-height': '25px' },
+        headerValueGetter: () =>
+          this.translate.instant('cis.report.gridHeader.DESC'),
+      },
+      {
+        resizable: true,
+        width: 50,
+        cellRenderer: 'actionCellRenderer',
+        cellRendererParams: {
+          edit: event => this.editRegulation(event),
+        },
+        headerValueGetter: () => this.translate.instant('setting.ACTIONS'),
+      },
+    ];
+  }
 
   ngOnInit(): void {
     this.isWriteComplianceProfileAuthorized =

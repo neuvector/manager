@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { isEmptyObj } from '@common/utils/common.utils';
 import { SecurityEventsService } from  '@common/services/security-events.service';
@@ -15,7 +15,7 @@ export class ReviewProcessRuleModalComponent implements OnInit {
 
   isReviewRule: boolean;
   isReadOnlyRule: boolean;
-  processRuleFromGroup: FormGroup;
+  processRuleFromGroup: UntypedFormGroup;
   newAction: boolean;
   CFG_TYPE = GlobalConstant.CFG_TYPE;
   submittingUpdate: boolean = false;
@@ -36,10 +36,10 @@ export class ReviewProcessRuleModalComponent implements OnInit {
       (this.data.processRule[0].cfg_type === this.CFG_TYPE.FED ||
       this.data.processRule[0].cfg_type === this.CFG_TYPE.GROUND) ||
       this.data.secEvent.reviewRulePermission === "r";
-    this.processRuleFromGroup = new FormGroup({
-      group: new FormControl(this.data.secEvent.details.message.group),
-      procName: new FormControl(this.data.secEvent.details.message.procName),
-      procPath: new FormControl(this.data.secEvent.details.message.procPath)
+    this.processRuleFromGroup = new UntypedFormGroup({
+      group: new UntypedFormControl(this.data.secEvent.details.message.group),
+      procName: new UntypedFormControl(this.data.secEvent.details.message.procName),
+      procPath: new UntypedFormControl(this.data.secEvent.details.message.procPath)
     });
     this.newAction = true;
   }

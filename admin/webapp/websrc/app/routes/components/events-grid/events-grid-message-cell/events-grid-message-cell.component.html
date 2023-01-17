@@ -1,9 +1,9 @@
 <div class="full-width-panel">
   <div class="full-width-flag">
-    <em class="fa fa-3x text-success" [class]="iconCode"></em>
+    <em class="fa fa-3x text-success" [ngClass]="iconCode"></em>
   </div>
   <div class="full-width-summary">
-    <span class="badge" [class]="'badge-' + labelCode">
+    <span class="badge" [ngClass]="'badge-' + labelCode">
       {{ 'nodes.gridHeader.MESSAGE' | translate }}
     </span>
   </div>

@@ -1,9 +1,9 @@
-<mat-form-field appearance="standard" class="w-100">
-  <mat-label>{{ field.templateOptions?.label || '' | translate }}</mat-label>
+<mat-form-field appearance="fill" class="w-100">
+  <mat-label>{{ field.templateOptions.label || '' | translate }}</mat-label>
   <textarea
     [formControl]="formControl"
     [formlyAttributes]="field"
-    [required]="field.templateOptions?.required || false"
+    [required]="field.templateOptions.required || false"
     matInput></textarea>
   <mat-error *ngIf="formControl.invalid">
     <app-formly-errors [field]="field"></app-formly-errors>

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { PermissionOption } from '@common/types';
 
@@ -9,7 +9,7 @@ import { PermissionOption } from '@common/types';
   styleUrls: ['./permission-checkbox.component.scss'],
 })
 export class PermissionCheckboxComponent implements OnInit {
-  @Input() permissionForm!: FormGroup;
+  @Input() permissionForm!: UntypedFormGroup;
   @Input() permissionOption!: PermissionOption;
   @Output() updatePermission = new EventEmitter();
   get read() {

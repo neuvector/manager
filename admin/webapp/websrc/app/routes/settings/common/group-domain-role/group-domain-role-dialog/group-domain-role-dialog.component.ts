@@ -6,7 +6,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { GroupDomainRoleComponent } from '../group-domain-role.component';
@@ -29,9 +29,9 @@ export interface GroupDomainRoleDialogData {
   styleUrls: ['./group-domain-role-dialog.component.scss'],
 })
 export class GroupDomainRoleDialogComponent {
-  activeRole = this.data.dataSource.data[0].namespaceRole;
+  activeRole: any;
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  namespaceCtrl = new FormControl();
+  namespaceCtrl = new UntypedFormControl();
   filteredDomains!: Observable<string[]>;
   domainChips: string[] = [];
 
@@ -42,7 +42,9 @@ export class GroupDomainRoleDialogComponent {
     public dialogRef: MatDialogRef<GroupDomainRoleComponent>,
     @Inject(MAT_DIALOG_DATA) public data: GroupDomainRoleDialogData,
     private cd: ChangeDetectorRef
-  ) {}
+  ) {
+    this.activeRole = this.data.dataSource.data[0].namespaceRole;
+  }
 
   updateTable() {
     this.cd.detectChanges();

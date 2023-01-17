@@ -15,7 +15,7 @@
       [formGroup]="addEditGroupForm"
     >
       <div class="row">
-        <mat-form-field class="col-sm-3" appearance="standard">
+        <mat-form-field class="col-sm-3" appearance="fill">
           <mat-label>{{'group.editGroup.GROUP_NAME' | translate}}</mat-label>
           <input
             type="text"
@@ -31,7 +31,7 @@
             {{'group.NAME_VALID' | translate}} "fed."
           </mat-error>
         </mat-form-field>
-        <mat-form-field class="col-sm-9" appearance="standard">
+        <mat-form-field class="col-sm-9" appearance="fill">
           <mat-label>{{'policy.addPolicy.COMMENT' | translate}}</mat-label>
           <input
             type="text"
@@ -43,9 +43,9 @@
         </mat-form-field>
       </div>
       <div class="row">
-        <mat-form-field class="col-12 col-md-12" appearance="standard">
+        <mat-form-field class="col-12 col-md-12" appearance="fill">
           <mat-label>{{'responsePolicy.gridHeader.CRITERIA' | translate}}</mat-label>
-          <mat-chip-list #chipList aria-label="Criteria" formControlName="criteriaCtrl">
+          <mat-chip-grid #chipGrid aria-label="Criteria" formControlName="criteriaCtrl">
             <mat-chip
               *ngFor="let criterion of criteria"
               (removed)="removeCriterion(criterion)">
@@ -59,12 +59,12 @@
               #criteriaInput
               [readonly]="data.opType === modalOp.VIEW"
               [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-              [matChipInputFor]="chipList"
+              [matChipInputFor]="chipGrid"
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               matChipInputAddOnBlur="true"
               (matChipInputTokenEnd)="addCriterion($event)"
             >
-          </mat-chip-list>
+          </mat-chip-grid>
         </mat-form-field>
         <ng-container *ngIf="data.opType !== modalOp.VIEW">
           <mat-hint align="start" class="px-3">

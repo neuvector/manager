@@ -6,7 +6,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { GridOptions } from 'ag-grid-community';
@@ -38,7 +38,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
   public selectedProcessProfileRules;
   public navSource = GlobalConstant.NAV_SOURCE;
   public groupNames!: string[];
-  public groupSelection = new FormControl('All', [Validators.required]);
+  public groupSelection = new UntypedFormControl('All', [Validators.required]);
   public filteredCount: number = 0;
   public globalConstant4Html = GlobalConstant;
   private isModalOpen: boolean = false;

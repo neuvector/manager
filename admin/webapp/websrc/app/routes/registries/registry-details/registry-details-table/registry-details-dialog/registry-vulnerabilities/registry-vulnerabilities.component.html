@@ -36,7 +36,7 @@
         <i class="eos-icons mr-2">visibility</i
         >{{ 'enum.SHOW_ACCEPTED_VULS' | translate }}
       </button>
-      <ng-container *appDisplayControl="'write_vuls_profile'">
+      <div *appDisplayControl="'write_vuls_profile'">
         <button
           *ngIf="selectedVulnerability && !isAccepted(selectedVulnerability)"
           (click)="onAcceptVulnerability()"
@@ -45,7 +45,7 @@
           <i class="eos-icons mr-2">check_box</i
           >{{ 'cveProfile.ACCEPT_VUL' | translate }}
         </button>
-      </ng-container>
+      </div>
     </mat-menu>
     <button
       *ngIf="hasLayers"
@@ -94,22 +94,22 @@
     <app-vulnerabilities-grid
       (vulnerabilitySelected)="vulnerabilitySelected($event)"
       [resize]="resize"
-      [rowData]="selectedLayer?.vulnerabilities"
+      [rowData]="selectedLayer ? selectedLayer.vulnerabilities : []"
       [useQuickFilterService]="true"
       tableHeight="100%"></app-vulnerabilities-grid>
   </div>
   <div class="col-4 mt-2 vulnerability-description-container p-0">
     <div class="vulnerability-description">
       <div class="vulnerability-description-header">
-        {{ selectedVulnerability?.name }}
+        {{ selectedVulnerability ? selectedVulnerability.name : '' }}
         <a
           *ngIf="selectedVulnerability?.link"
-          [href]="selectedVulnerability?.link"
+          [href]="selectedVulnerability.link"
           ><i class="ml-2 eos-icons">launch</i></a
         >
       </div>
       <div class="vulnerability-description-body">
-        {{ selectedVulnerability?.description }}
+        {{ selectedVulnerability ? selectedVulnerability.description : ''}}
       </div>
     </div>
   </div>

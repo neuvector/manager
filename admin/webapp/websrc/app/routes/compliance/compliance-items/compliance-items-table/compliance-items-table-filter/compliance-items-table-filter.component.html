@@ -2,8 +2,8 @@
      class="d-flex align-items-center justify-content-between" style="cursor: move; margin-top: -24px;
     padding-top: 10px;">
   <h1 mat-dialog-title>{{'general.FILTER_MATCH_ALL' | translate}}</h1>
-  <button aria-label="Close icon button" class="d-flex align-items-center justify-content-center" mat-icon-button>
-    <i (click)="dialogRef.close()" class="eos-icons">close</i>
+  <button aria-label="Close icon button" class="d-flex align-items-center justify-content-center" (click)="dialogRef.close()" mat-icon-button>
+    <i class="eos-icons">close</i>
   </button>
 </div>
 <hr class="fancy mt-1 mb-4 mx-0">

@@ -7,8 +7,9 @@
     <button
       aria-label="Close dialog button"
       id="registry-details-dialog-close-button"
+      (click)="onNoClick()"
       mat-icon-button>
-      <i (click)="onNoClick()" class="eos-icons">close</i>
+      <i class="eos-icons">close</i>
     </button>
   </div>
   <div style="min-height: 700px; height: calc(100% - 70px)">

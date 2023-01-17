@@ -25,10 +25,7 @@ export class ExportFormComponent implements OnInit {
     as_standalone: new UntypedFormControl(false),
   });
   isExportAuthorized!: boolean;
-  importMsg = {
-    success: this.tr.instant('setting.message.UPLOAD_FINISH'),
-    error: this.tr.instant('setting.IMPORT_FAILED'),
-  };
+  importMsg: any;
   get isImportAuthorized() {
     return (
       GlobalVariable.user.token.role === MapConstant.FED_ROLES.FEDADMIN ||
@@ -43,7 +40,12 @@ export class ExportFormComponent implements OnInit {
     private utils: UtilsService,
     private authUtilsService: AuthUtilsService,
     private notificationService: NotificationService
-  ) {}
+  ) {
+    this.importMsg = {
+      success: this.tr.instant('setting.message.UPLOAD_FINISH'),
+      error: this.tr.instant('setting.IMPORT_FAILED'),
+    };
+  }
 
   get importUrl(): string {
     return PathConstant.SYSTEM_CONFIG_URL;

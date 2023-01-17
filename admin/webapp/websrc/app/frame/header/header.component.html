@@ -65,17 +65,19 @@
           [matMenuTriggerFor]="dropdown_multiCluster"
           [matMenuTriggerData]="clusters"
           class="nav-item nav-white nav-border">
-          <i
-            class="fa-lg mr-lg text-gray-light"
-            [ngClass]="isOnRemoteCluster ? 'fa fa-laptop' : 'fa fa-home'"></i>
-          <label
-            class="selected-cluster-text hand mr-2"
-            style="position: relative; margin-bottom: 0"
-            >{{ selectedCluster?.name }}</label
-          >
-          <mat-icon>
-            {{ menuTrigger.menuOpen ? 'expand_less' : 'expand_more' }}
-          </mat-icon>
+          <div class="d-flex justify-content-between align-items-center">
+            <i
+              class="fa-lg mr-lg text-gray-light"
+              [ngClass]="isOnRemoteCluster ? 'fa fa-laptop' : 'fa fa-home'"></i>
+            <label
+              class="selected-cluster-text hand mr-2"
+              style="position: relative; margin-bottom: 0"
+              >{{ selectedCluster?.name }}</label
+            >
+            <mat-icon style="color: #fff">
+              {{ menuTrigger.menuOpen ? 'expand_less' : 'expand_more' }}
+            </mat-icon>
+          </div>
         </button>
         <mat-menu #dropdown_multiCluster="matMenu">
           <ng-container *ngFor="let cluster of clusters; last as last">
@@ -143,11 +145,11 @@
             gravatarId="{{ email }}"
             name="{{ username }}"></ngx-avatar>
         </div>
-        <div class="info mr-1">
+        <div class="info mr-1" style="color: #fff">
           <div>{{ username }}</div>
           <div>{{ displayRole }}</div>
         </div>
-        <mat-icon>
+        <mat-icon style="color: #fff">
           {{ avatarMenuTrigger.menuOpen ? 'expand_less' : 'expand_more' }}
         </mat-icon>
       </div>

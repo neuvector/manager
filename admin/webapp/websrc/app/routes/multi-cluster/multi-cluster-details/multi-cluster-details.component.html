@@ -1,4 +1,4 @@
-<div class="panel mb0">
+<div class="panel mb0" *ngIf="selectedCluster">
   <div class="panel-heading panel-default clearfix">
     <div class="panel-title">
       <label class="panel-text-title margin-top-s margin-left-s subtitle">{{selectedCluster.name }}
@@ -6,7 +6,7 @@
     </div>
   </div>
   <div class="panel-body">
-    <div class="containers-detail-sec">
+    <div class="containers-detail-sec" *ngIf="summary">
       <div class="row w-100 mx-0" >
         <div class="col-md-4 my-md-4 details-item">
           <mat-icon

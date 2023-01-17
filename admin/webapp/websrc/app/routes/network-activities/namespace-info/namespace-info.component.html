@@ -15,8 +15,9 @@
       id="closeGroupInfo"
       aria-label="Close icon button"
       class="d-flex align-items-center justify-content-center"
+      (click)="popupState.leave()"
       mat-icon-button>
-      <i (click)="popupState.leave()" class="eos-icons">close</i>
+      <i class="eos-icons">close</i>
     </button>
     </div>
   <hr class="fancy" />

@@ -16,8 +16,9 @@
       id="closePodInfo"
       aria-label="Close icon button"
       class="d-flex align-items-center justify-content-center"
+      (click)="popupState.leave()"
       mat-icon-button>
-      <i (click)="popupState.leave()" class="eos-icons">close</i>
+      <i class="eos-icons">close</i>
     </button>
   </div>
 
@@ -295,8 +296,9 @@
       id="closeCveInfo"
       aria-label="Close icon button"
       class="d-flex align-items-center justify-content-center"
+      (click)="onCveInfo = !onCveInfo"
       mat-icon-button>
-      <i (click)="onCveInfo = !onCveInfo" class="eos-icons">close</i>
+      <i class="eos-icons">close</i>
     </button>
   </div>
 

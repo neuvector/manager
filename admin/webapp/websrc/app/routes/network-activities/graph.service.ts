@@ -1474,12 +1474,13 @@ export class GraphService {
               let mode = this.utils.getI18Name(params.value);
               let labelCode = MapConstant.colourMap[params.value];
               if (!labelCode) labelCode = 'info';
-              return `<span class="label label-${labelCode}">${this.sanitizer.sanitize(
+              return `<span class="action-label px-1 ${labelCode}">${this.sanitizer.sanitize(
                 SecurityContext.HTML,
                 mode
               )}</span>`;
             } else return null;
           },
+          minWidth: 100,
           width: 100,
           maxWidth: 110,
         },
@@ -1492,7 +1493,7 @@ export class GraphService {
             sortDescending: '<em class="fa fa-sort-numeric-desc"></em>',
           },
           minWidth: 160,
-          maxWidth: 170,
+          maxWidth: 200,
         },
       ];
 

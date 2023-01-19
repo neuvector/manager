@@ -167,12 +167,16 @@
               <mat-slide-toggle
                 class="example-margin"
                 color="primary"
-                [checked]="rule.allowed"
+                name="toggleAction"
+                [(ngModel)]="rule.allowed"
                 [disabled]="
                   !isWriteNetworkAuthorized || rule.action === 'open'
-                ">{{
-                'policy.editPolicy.DENY_ALLOW' | translate
-                }}
+                ">
+                <span
+                  [ngClass]="{ 'text-danger': !rule.allowed, 'text-success': rule.allowed }"
+                >
+                  {{(rule.allowed ? "enum.ALLOW" : "enum.DENY") | translate}}
+                </span>
               </mat-slide-toggle>
             </div>
           </div>

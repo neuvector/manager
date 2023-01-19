@@ -400,6 +400,7 @@ export class GroupsComponent implements OnInit {
     console.log('this.groups', this.groups);
     this.gridOptions4Groups.api!.setRowData(this.groups);
     this.filteredCount = this.groups.length;
+    if (this.eof) this.refreshing.emit(false);
     setTimeout(() => {
       this.gridOptions4Groups.api!.sizeColumnsToFit();
       this.gridOptions4Groups.api!.forEachNode((node, index) => {

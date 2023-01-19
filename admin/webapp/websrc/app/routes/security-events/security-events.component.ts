@@ -688,7 +688,7 @@ export class SecurityEventsComponent implements OnInit {
   };
 
   private setAdvancedFilter = (filter?: any) => {
-    if (filter) {
+    if (filter && !filter.reset) {
       this.advancedFilterModalService.advFilter = filter;
     }
     if (this.displayedSecurityEventsJsonBeforeApplyAdvFilter !== '[]') {

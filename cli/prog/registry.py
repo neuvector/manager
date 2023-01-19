@@ -569,3 +569,17 @@ def registry_stop(data):
 
     url = "scan/registry/%s" % data.id_or_name
     data.client.delete(url, "scan")
+
+@request_registry.command("promote")
+@click.pass_obj
+def registry_start(data):
+    """Request to promote a local registry to federated registry."""
+
+    data.client.request("scan/registry", data.id_or_name, "promote", None)
+
+@request_registry.command("demote")
+@click.pass_obj
+def registry_start(data):
+    """Request to promote a federated registry to local registry."""
+
+    data.client.request("scan/registry", data.id_or_name, "demote", None)

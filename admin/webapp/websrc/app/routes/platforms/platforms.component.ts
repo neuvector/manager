@@ -41,9 +41,6 @@ export class PlatformsComponent implements OnInit, OnDestroy {
   get platformsGrid() {
     return this._platformsGrid;
   }
-  get isScannerInstalled() {
-    return GlobalVariable.summary.scanners !== 0;
-  }
   refreshing$ = new Subject();
   error!: string;
   loaded = false;

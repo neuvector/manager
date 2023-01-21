@@ -18,7 +18,7 @@
           type="button"
           class="mr-3"
           (click)="scan.emit(selectedPlatform)"
-          [disabled]="!isScannerInstalled || !selectedPlatform">
+          [disabled]="!selectedPlatform">
           {{ 'scan.SCAN' | translate }}
         </button>
       </ng-container>

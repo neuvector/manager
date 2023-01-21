@@ -146,9 +146,6 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
   get isFedAdmin() {
     return GlobalVariable.user.token.role === MapConstant.FED_ROLES.FEDADMIN;
   }
-  get isScannerInstalled() {
-    return GlobalVariable.summary.scanners !== 0;
-  }
 
   constructor(
     private dialog: MatDialog,

@@ -61,7 +61,6 @@
           class="mr-3"
           (click)="scan.emit(selectedContainer)"
           [disabled]="
-            !isScannerInstalled ||
             !selectedContainer ||
             selectedContainer.brief.state === 'exit'
           ">

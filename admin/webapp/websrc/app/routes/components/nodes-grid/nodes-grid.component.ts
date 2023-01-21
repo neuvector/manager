@@ -45,9 +45,6 @@ export class NodesGridComponent implements OnInit {
   get nodesCount() {
     return this.nodesService.nodes.length;
   }
-  get isScannerInstalled() {
-    return GlobalVariable.summary.scanners !== 0;
-  }
   get cisLabel() {
     return this.utils.getCisLabel(this.versionInfoService.infoData);
   }

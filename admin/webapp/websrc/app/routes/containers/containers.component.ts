@@ -56,9 +56,6 @@ export class ContainersComponent implements OnInit {
   get containers() {
     return this.containersService.containers;
   }
-  get isScannerInstalled() {
-    return GlobalVariable.summary.scanners !== 0;
-  }
 
   constructor(
     private containersService: ContainersService,

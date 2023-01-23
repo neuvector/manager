@@ -33,9 +33,6 @@ export class NodesComponent implements OnInit {
   get nodesGrid() {
     return this._nodesGrid;
   }
-  get isScannerInstalled() {
-    return GlobalVariable.summary.scanners !== 0;
-  }
   refreshing$ = new Subject();
   error!: string;
   loaded = false;

@@ -223,6 +223,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
             },
             manageAuth: {
               global: 3
+            },
+            multiClusterView: {
+              global: 1
             }
           };
 
@@ -254,6 +257,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           }
 
           if (GlobalVariable.isMember) {
+            this.isAllowedToOperateMultiCluster = isAuthorized(GlobalVariable.user.roles, resource.multiClusterView);
             this.clusters.forEach(cluster => {
               if (cluster.clusterType === MapConstant.FED_ROLES.MASTER) {
                 this.primaryMasterName = cluster.name;

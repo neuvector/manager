@@ -81,7 +81,8 @@
                 <!--suppress JSUnresolvedVariable -->
                 <button
                   (click)="submitForm($event, loginForm.value, 'okta')"
-                  *ngIf="!validEula || samlEnabled"
+                  *ngIf="samlEnabled"
+                  [disabled]="!validEula"
                   style="float: left"
                 >
                   {{'login.OKTA_LOGIN' | translate}}
@@ -89,7 +90,8 @@
                 <!--suppress JSUnresolvedVariable -->
                 <button
                   (click)="submitForm($event, loginForm.value, 'oidc')"
-                  *ngIf="!validEula || oidcEnabled"
+                  *ngIf="oidcEnabled"
+                  [disabled]="!validEula"
                   style="float: left"
                 >
                   {{'login.OIDC_LOGIN' | translate}}
@@ -107,7 +109,8 @@
                   <!--suppress JSUnresolvedVariable -->
                   <button
                     (click)="submitForm($event, loginForm.value, 'okta')"
-                    *ngIf="!validEula || samlEnabled"
+                    *ngIf="samlEnabled"
+                    [disabled]="!validEula"
                     style="float: left"
                   >
                     {{'login.OKTA_LOGIN' | translate}}
@@ -119,7 +122,8 @@
                   <!--suppress JSUnresolvedVariable -->
                   <button
                     (click)="submitForm($event, loginForm.value, 'oidc')"
-                    *ngIf="!validEula || oidcEnabled"
+                    *ngIf="oidcEnabled"
+                    [disabled]="!validEula"
                     style="float: left"
                   >
                     {{'login.OIDC_LOGIN' | translate}}

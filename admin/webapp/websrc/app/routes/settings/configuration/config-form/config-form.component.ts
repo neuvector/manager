@@ -76,7 +76,7 @@ export class ConfigFormComponent implements OnInit {
     this.configOptions.formState.permissions = {
       isAuthenticateRBACAuthorized: isSettingAuth,
       isNewServiceModeAuthorized: isSettingAuth,
-      isClusterAuthorized: isSettingAuth,
+      isClusterAuthorized: isSettingAuth && GlobalVariable.isStandAlone,
       isWebhookAuthorized: isSettingAuth,
       isSyslogAuthorized: isSettingAuth,
       isRegHttpProxyAuthorized: isSettingAuth,

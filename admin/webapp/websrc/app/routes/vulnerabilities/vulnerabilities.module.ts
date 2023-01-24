@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { VulnerabilitiesComponent } from './vulnerabilities.component';
 import { VulnerabilityChartsComponent } from './vulnerability-charts/vulnerability-charts.component';
 import { VulnerabilityItemsComponent } from './vulnerability-items/vulnerability-items.component';
@@ -16,34 +15,19 @@ import { VulnerabilitiesService } from './vulnerabilities.service';
 import { LoadingTemplateModule } from '@components/ui/loading-template/loading-template.module';
 import { ObserveModule } from '@common/directives/observe/observe.module';
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
-import { TranslateModule } from '@ngx-translate/core';
-import { MatButtonModule } from '@angular/material/button';
 import { AssetsHttpService } from '@common/api/assets-http.service';
 import { RisksHttpService } from '@common/api/risks-http.service';
-import { MatCardModule } from '@angular/material/card';
 import { AgGridModule } from 'ag-grid-angular';
 import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
-import { MatMenuModule } from '@angular/material/menu';
 import { NgChartsModule } from 'ng2-charts';
 import { VulnerabilitiesFilterService } from './vulnerabilities.filter.service';
 import { AssetsViewPdfService } from './pdf-generation/assets-view-pdf.service';
 import { VulnerabilitiesCsvService } from './csv-generation/vulnerabilities-csv.service';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { ReactiveFormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatOptionModule } from '@angular/material/core';
-import { MatIconModule } from '@angular/material/icon';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatSelectModule } from '@angular/material/select';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
-import { MatInputModule } from '@angular/material/input';
-import { MatDatepickerModule } from '@angular/material/datepicker';
 import { RisksViewReportModule } from '@components/security-risk-printable-report/risks-view-report/risks-view-report.module';
 import { AssetsViewReportModule } from '@components/security-risk-printable-report/assets-view-report/assets-view-report.module';
+import { NvCommonModule } from '@common/nvCommon.module';
 
 const routes: Routes = [{ path: '', component: VulnerabilitiesComponent }];
 
@@ -71,32 +55,15 @@ const routes: Routes = [{ path: '', component: VulnerabilitiesComponent }];
   ],
   imports: [
     RouterModule.forChild(routes),
-    CommonModule,
-    MatMenuModule,
+    NvCommonModule,
     NgChartsModule,
     LoadingTemplateModule,
     ObserveModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatCheckboxModule,
-    ReactiveFormsModule,
     DragDropModule,
-    MatRadioModule,
-    MatOptionModule,
     LoadingButtonModule,
-    TranslateModule,
-    MatCardModule,
-    MatIconModule,
-    MatChipsModule,
-    MatAutocompleteModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatDatepickerModule,
-    MatSelectModule,
     NgxSliderModule,
     AgGridModule,
     QuickFilterModule,
-    MatButtonModule,
     RisksViewReportModule,
     AssetsViewReportModule,
   ],

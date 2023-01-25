@@ -1335,6 +1335,26 @@ ngx-avatar.userIcon img.avatar-content {
   }
 }
 
+.hint-info {
+  text-align: center;
+  padding: 70px 0 40px 0;
+  .hint-info-signal {
+    display: inline-block;
+    color: $mdc-blue-500;
+    -webkit-print-color-adjust: exact;
+    font-size: 25px !important;
+  }
+
+  .hint-info-text {
+    display: inline-block;
+    color: $mdc-black-dark;
+    -webkit-print-color-adjust: exact;
+    font-size: 20px;
+  }
+}
+
+
+
 .badge-pink {
   color: #fff;
   background-color: #e91e63;

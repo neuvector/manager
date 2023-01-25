@@ -38,6 +38,9 @@ export class NodesComponent implements OnInit {
   get nodesGrid() {
     return this._nodesGrid;
   }
+  get isRemote() {
+    return GlobalVariable.isRemote;
+  }
   refreshing$ = new Subject();
   error!: string;
   loaded = false;

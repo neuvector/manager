@@ -3,6 +3,7 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { AuthUtilsService } from '@common/utils/auth.utils';
+import { GlobalVariable } from '@common/variables/global.variable';
 
 @Component({
   selector: 'app-registries-table-buttons',
@@ -17,6 +18,7 @@ export class RegistriesTableButtonsComponent
   CFG_TYPE = GlobalConstant.CFG_TYPE;
   isWriteRegistryAuthorized!: boolean;
   isFedAdmin!: boolean;
+  isRemote: boolean = false;
 
   constructor(private authUtilsService: AuthUtilsService) {}
 
@@ -25,6 +27,7 @@ export class RegistriesTableButtonsComponent
     this.isWriteRegistryAuthorized =
       this.authUtilsService.getDisplayFlag('registry_scan');
     this.isFedAdmin = this.authUtilsService.getDisplayFlag('multi_cluster_w');
+    this.isRemote = GlobalVariable.isRemote;
   }
 
   edit(): void {

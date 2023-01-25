@@ -40,6 +40,9 @@ export class PlatformsGridComponent implements OnInit {
   get platformsCount() {
     return this.platformsService.platforms.length;
   }
+  get isRemote() {
+    return GlobalVariable.isRemote;
+  }
   columnDefs: ColDef[] = [
     {
       headerName: this.tr.instant('scan.gridHeader.NAME'),

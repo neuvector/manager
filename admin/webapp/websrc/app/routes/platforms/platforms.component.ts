@@ -41,6 +41,9 @@ export class PlatformsComponent implements OnInit, OnDestroy {
   get platformsGrid() {
     return this._platformsGrid;
   }
+  get isRemote() {
+    return GlobalVariable.isRemote;
+  }
   refreshing$ = new Subject();
   error!: string;
   loaded = false;

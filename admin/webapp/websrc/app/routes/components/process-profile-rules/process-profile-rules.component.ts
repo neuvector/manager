@@ -69,7 +69,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    console.log('on process profile rules init: ', this.source);
+    console.log('on process profile rules init: ', this.source, this.baselineProfile);
     this.source = this.source ? this.source : GlobalConstant.NAV_SOURCE.SELF;
     this.isWriteGroupAuthorized =
       this.authUtilsService.getDisplayFlag('write_group') &&

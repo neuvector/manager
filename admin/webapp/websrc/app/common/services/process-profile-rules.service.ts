@@ -53,7 +53,7 @@ export class ProcessProfileRulesService {
           isWriteProcessProfileRuleAuthorized)
       },
       {
-        headerName: this.translate.instant('service.gridHeader.NAME'),
+        headerComponentFramework: ProcessProfileRuleNameHeaderComponent,
         field: 'name',
         hide: source === GlobalConstant.NAV_SOURCE.GROUP &&
           isWriteGroupAuthorized &&

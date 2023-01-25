@@ -53,6 +53,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
   private processProfileRuleErr: boolean = false;
   public isWriteGroupAuthorized: boolean = false;
   public isWriteProcessProfileRuleAuthorized: boolean = false;
+  context = { componentParent: this };
   private w: any;
 
   constructor(
@@ -85,7 +86,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
       this.isWriteGroupAuthorized,
       this.isWriteProcessProfileRuleAuthorized,
       this.source,
-      this.isScoreImprovement
+      this.isScoreImprovement,
     );
     this.gridOptions.onSelectionChanged = () => {
       this.onSelectionChanged4Profile();

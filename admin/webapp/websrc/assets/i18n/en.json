@@ -1926,6 +1926,7 @@
     "ZERO_DRIFT": "Zero Drift",
     "MULTI_MODE_SELECTION": "Multiple groups are selected along with different policy mode or baseline profile.",
     "GET_RULE_ERR": "Error happened when getting rule",
+    "CONFIG": "Configure",
     "TIP": {
       "EDIT": "Edit Group",
       "DELETE": "Remove Group",

@@ -7,6 +7,7 @@ import { AuthUtilsService } from '@common/utils/auth.utils';
 import { Script } from '@common/types';
 import { NotificationService } from '@services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
+import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
 
 @Component({
   selector: 'app-custom-check',
@@ -19,6 +20,7 @@ export class CustomCheckComponent implements OnInit {
   @Input() groupName: string = '';
   @Input() resizableHeight: number;
   @Input() cfgType: string;
+  @Input() useQuickFilterService: boolean = false;
   opType: string = GlobalConstant.MODAL_OP.ADD;
   submittingUpdate: boolean = false;
   modalOp = GlobalConstant.MODAL_OP;
@@ -36,10 +38,16 @@ export class CustomCheckComponent implements OnInit {
     private groupsService: GroupsService,
     private authUtilsService: AuthUtilsService,
     private notificationService: NotificationService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private quickFilterService: QuickFilterService,
   ) { }
 
   ngOnInit(): void {
+    if (this.useQuickFilterService) {
+      this.quickFilterService.textInput$.subscribe((value: string) => {
+        this.quickFilterService.onFilterChange(value, this.gridOptions4CustomCheck);
+      });
+    }
     this.isWriteScriptAuthorized = this.authUtilsService.getDisplayFlag("write_script");
     this.initializeVM();
     this.gridOptions4CustomCheck = this.groupsService.prepareGrid4CustomCheck(this.isWriteScriptAuthorized, this.cfgType);

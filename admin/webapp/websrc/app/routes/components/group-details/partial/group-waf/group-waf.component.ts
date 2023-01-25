@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { GridOptions } from 'ag-grid-community';
 import { GroupsService } from '@services/groups.service';
 import { WafSetting } from '@common/types';
@@ -8,6 +8,7 @@ import { AuthUtilsService } from '@common/utils/auth.utils';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { NotificationService } from '@services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
+import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
 
 @Component({
   selector: 'app-group-waf',
@@ -19,6 +20,10 @@ export class GroupWafComponent implements OnInit {
   @Input() groupName: string = '';
   @Input() resizableHeight: number;
   @Input() cfgType: string;
+  @Input() useQuickFilterService: boolean = false;
+  @Output() getEditGroupSensorModal = new EventEmitter();
+  @Output() getToggleWAFConfigEnablement = new EventEmitter();
+  @Output() getStatus = new EventEmitter();
   gridOptions4GroupWafSensors: GridOptions;
   groupWafSensors: Array<WafSetting> = [];
   filteredCount: number = 0;
@@ -32,6 +37,7 @@ export class GroupWafComponent implements OnInit {
     private dialog: MatDialog,
     private authUtilsService: AuthUtilsService,
     private notificationService: NotificationService,
+    private quickFilterService: QuickFilterService,
     private translate: TranslateService
   ) {}
 
@@ -44,7 +50,19 @@ export class GroupWafComponent implements OnInit {
       this.selectedSensor =
         this.gridOptions4GroupWafSensors.api!.getSelectedRows()[0];
     };
+    if (this.useQuickFilterService) {
+      this.quickFilterService.textInput$.subscribe((value: string) => {
+        this.quickFilterService.onFilterChange(value, this.gridOptions4GroupWafSensors);
+      });
+    }
+    this.getEditGroupSensorModal.emit(this.openEditGroupSensorModal);
+    this.getToggleWAFConfigEnablement.emit(this.toggleWAFConfigEnablement);
     this.refresh();
+  }
+
+  ngOnChanges(): void {
+    this.getEditGroupSensorModal.emit(this.openEditGroupSensorModal);
+    this.getToggleWAFConfigEnablement.emit(this.toggleWAFConfigEnablement);
   }
 
   refresh = () => {
@@ -71,6 +89,7 @@ export class GroupWafComponent implements OnInit {
         this.groupWafSensors = response.sensors;
         this.gridOptions4GroupWafSensors.api!.setRowData(this.groupWafSensors);
         this.enabled = response.status;
+        this.getStatus.emit(this.enabled);
         this.filteredCount = this.groupWafSensors.length;
       },
       error => {}

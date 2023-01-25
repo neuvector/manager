@@ -5,12 +5,28 @@ import {
 } from '@angular/core';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { GroupsService } from '@common/services/groups.service';
+import { FormControl } from '@angular/forms';
+import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
+import { tap } from 'rxjs/operators';
+import { AuthUtilsService } from '@common/utils/auth.utils';
+
+export const groupDetailsTabs = {
+  0: 'member',
+  1: 'custom check',
+  2: 'process profile rules',
+  3: 'file access rules',
+  4: 'network rules',
+  5: 'response rules',
+  6: 'DLP',
+  7: 'WAF',
+};
 
 @Component({
   selector: 'app-group-details',
   templateUrl: './group-details.component.html',
   styleUrls: ['./group-details.component.scss'],
 })
+
 export class GroupDetailsComponent implements OnInit {
   @Input() resizableHeight!: number;
   @Input() selectedGroupName!: string;
@@ -19,15 +35,50 @@ export class GroupDetailsComponent implements OnInit {
   @Input() isScoreImprovement: boolean = false;
   @Input() cfgType: string = '';
   @Input() baselineProfile: string = '';
-  public navSource!: string;
+  editGroupSensorModal: any;
+  toggleWAFConfigEnablement: any;
+  toggleDLPConfigEnablement: any;
+  enabled: boolean;
+  selectedFileAccessRules: any;
+  selectedProcessProfileRules: any;
+  removeProfile: any;
+  editProfile: any;
+  addProfile: any;
+  showPredefinedRules: any;
+  isWriteWafAuthorized: boolean;
+  isWriteDlpAuthorized: boolean;
+  isWriteGroupAuthorized: boolean;
+  isWriteFileAccessRuleAuthorized: boolean;
+  isWriteProcessProfileRuleAuthorized: boolean;
   CFG_TYPE = GlobalConstant.CFG_TYPE;
+  get activeTab(): string {
+    return groupDetailsTabs[this.groupsService.activeTabIndex];
+  }
+  public navSource!: string;
+  filter = new FormControl('');
 
   constructor(
-    public groupsService: GroupsService
+    public groupsService: GroupsService,
+    private quickFilterService: QuickFilterService,
+    private authUtilsService: AuthUtilsService
   ) {}
 
   ngOnInit(): void {
+    this.isWriteWafAuthorized =
+      this.authUtilsService.getDisplayFlag('write_waf_rule');
+    this.isWriteDlpAuthorized =
+      this.authUtilsService.getDisplayFlag('write_dlp_rule');
+    this.isWriteGroupAuthorized =
+      this.authUtilsService.getDisplayFlag('write_group') &&
+      this.authUtilsService.getDisplayFlag('multi_cluster');
+    this.isWriteFileAccessRuleAuthorized =
+      this.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER ||
+      this.cfgType === GlobalConstant.CFG_TYPE.LEARNED;
+    this.isWriteProcessProfileRuleAuthorized = this.isWriteFileAccessRuleAuthorized;
     this.navSource = GlobalConstant.NAV_SOURCE.GROUP;
+    this.filter.valueChanges
+      .pipe(tap((value: string) => this.quickFilterService.setTextInput(value)))
+      .subscribe();
   }
 
   ngAfterViewInit() {
@@ -43,6 +94,46 @@ export class GroupDetailsComponent implements OnInit {
     ];
     if (!TAB_VISIBLE_MATRIX[this.groupsService.activeTabIndex]) this.groupsService.activeTabIndex = 0;
   }
+
+  getEditGroupSensorModal = editGroupSensorModal => {
+    this.editGroupSensorModal = editGroupSensorModal;
+  };
+
+  getToggleWAFConfigEnablement = toggleWAFConfigEnablement => {
+    this.toggleWAFConfigEnablement = toggleWAFConfigEnablement;
+  };
+
+  getToggleDLPConfigEnablement = toggleDLPConfigEnablement => {
+    this.toggleDLPConfigEnablement = toggleDLPConfigEnablement;
+  };
+
+  getStatus = enabled => {
+    this.enabled = enabled;
+  };
+
+  getSelectedFileAccessRules = selectedFileAccessRules => {
+    this.selectedFileAccessRules = selectedFileAccessRules;
+  };
+
+  getSelectedProcessProfileRules = selectedProcessProfileRules => {
+    this.selectedProcessProfileRules = selectedProcessProfileRules;
+  };
+
+  getRemoveProfile = removeProfile => {
+    this.removeProfile = removeProfile;
+  };
+
+  getEditProfile = editProfile => {
+    this.editProfile = editProfile;
+  };
+
+  getAddProfile = addProfile => {
+    this.addProfile = addProfile;
+  };
+
+  getShowPredefinedRules = showPredefinedRules => {
+    this.showPredefinedRules = showPredefinedRules;
+  };
 
   activateTab = event => {
     this.groupsService.activeTabIndex = event.index;

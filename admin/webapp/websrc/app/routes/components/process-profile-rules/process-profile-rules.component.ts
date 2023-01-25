@@ -1,9 +1,11 @@
 import {
   Component,
   Input,
+  Output,
   OnChanges,
   OnInit,
   SimpleChanges,
+  EventEmitter
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { FormControl, Validators } from '@angular/forms';
@@ -18,6 +20,7 @@ import { AuthUtilsService } from '@common/utils/auth.utils';
 import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
 import { switchMap } from 'rxjs/operators';
 import { NotificationService } from '@services/notification.service';
+import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
 
 @Component({
   selector: 'app-process-profile-rules',
@@ -31,6 +34,11 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
   @Input() resizableHeight!: number;
   @Input() cfgType: string = '';
   @Input() baselineProfile: string = '';
+  @Input() useQuickFilterService: boolean = false;
+  @Output() getSelectedProcessProfileRules = new EventEmitter();
+  @Output() getRemoveProfile = new EventEmitter();
+  @Output() getEditProfile = new EventEmitter();
+  @Output() getAddProfile = new EventEmitter();
   public groups: Set<string> = new Set();
   public gridHeight: number = 0;
   public gridOptions!: GridOptions;
@@ -53,6 +61,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
     private translate: TranslateService,
     private utils: UtilsService,
     private dialog: MatDialog,
+    private quickFilterService: QuickFilterService,
     private notificationService: NotificationService
   ) {
     this.w = GlobalVariable.window;
@@ -83,6 +92,12 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
     };
     this.getProcessProfileRules(this.groupName);
     this.groups.add('All');
+    if (this.useQuickFilterService) {
+      this.quickFilterService.textInput$.subscribe((value: string) => {
+        this.quickFilterService.onFilterChange(value, this.gridOptions);
+      });
+    }
+    this.emitObjects();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -94,6 +109,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
     ) {
       this.getProcessProfileRules(this.groupName);
     }
+    this.emitObjects();
   }
 
   getProcessProfileRules = groupName => {
@@ -159,6 +175,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
       if (selectedRows.length > 0) {
         setTimeout(() => {
           this.selectedProcessProfileRules = selectedRows;
+          this.getSelectedProcessProfileRules.emit(this.selectedProcessProfileRules);
         });
       }
     }
@@ -264,5 +281,11 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
           gridOptions.api.getModel()['rootNode'].childrenAfterFilter.length;
       }
     }
+  };
+
+  private emitObjects = () => {
+    this.getRemoveProfile.emit(this.removeProfile);
+    this.getEditProfile.emit(this.editProfile);
+    this.getAddProfile.emit(this.addProfile);
   };
 }

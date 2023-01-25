@@ -42,18 +42,10 @@
     </div>
   </form>
   <div class="col-sm-6 px-0" style="position: relative;">
-    <div class="clearfix ">
-      <app-quick-filter
-        class="pull-right"
-        [gridOptions]="gridOptions4CustomCheck"
-        [filteredCount]="filteredCount"
-        [showCount]="false">
-      </app-quick-filter>
-    </div>
     <div
       role="button"
       *ngIf="cfgType !== CFG_TYPE.GROUND && isWriteScriptAuthorized"
-      style="position: absolute; z-index: 10; right: 14px; top: 75px;"
+      style="position: absolute; z-index: 10; right: 14px; top: 5px;"
       (click)="switch2Add()">
       <em class="eos-icons">add</em>
     </div>
@@ -61,7 +53,7 @@
       #customCheckGrid
       id="custom-check-grid"
       style="width: 100%;"
-      [ngStyle]="{ height: (resizableHeight - 150) + 'px' }"
+      [ngStyle]="{ height: (resizableHeight - 90) + 'px' }"
       class="ag-theme-balham"
       [gridOptions]="gridOptions4CustomCheck"
       [context]="context"

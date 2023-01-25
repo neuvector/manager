@@ -34,6 +34,7 @@ import { MultiClusterService } from '@services/multi-cluster.service';
 import { Subject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { NotificationService } from '@services/notification.service';
+import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
 
 const READONLY_RULE_MODIFIED = 46;
 const UNPROMOTABLE_ENDPOINT_PATTERN = new RegExp(/^Host\:*|^Workload\:*/);
@@ -48,6 +49,8 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   @Input() source!: string;
   @Input() groupName!: string;
   @Input() resizableHeight!: number;
+  @Input() useQuickFilterService: boolean = false;
+
   refreshing$ = new Subject();
   navSource = GlobalConstant.NAV_SOURCE;
   eof = false;
@@ -85,6 +88,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
     private utils: UtilsService,
     private multiClusterService: MultiClusterService,
     public router: Router,
+    private quickFilterService: QuickFilterService,
     private notificationService: NotificationService
   ) {
     this.w = GlobalVariable.window;
@@ -128,6 +132,11 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
         }
       );
     };
+    if (this.useQuickFilterService) {
+      this.quickFilterService.textInput$.subscribe((value: string) => {
+        this.quickFilterService.onFilterChange(value, this.gridOptions);
+      });
+    }
     if (!this.isScoreImprovement) {
       this.networkRulesService.getAutoCompleteData(this.source).subscribe(
         ([groupList, hostList, appList]) => {

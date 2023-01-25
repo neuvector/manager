@@ -13,6 +13,7 @@ export class MembersComponent implements OnInit {
   @Input() resizableHeight: number;
   @Input() members: any;
   @Input() kind: string;
+  @Input() useQuickFilterService: boolean;
   memberGridRowData: any;
 
   constructor(

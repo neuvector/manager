@@ -1,8 +1,11 @@
 <div>
-  <div class="d-flex align-items-center justify-content-end">
+  <div
+    class="d-flex align-items-center justify-content-end"
+    *ngIf="!useQuickFilterService"
+  >
     <div
       role="button"
-      class="hand mr-3 margin-top-s"
+      class="hand mr-3"
       *ngIf="cfgType !== CFG_TYPE.GROUND && isWriteWafAuthorized"
       (click)="openEditGroupSensorModal()">
       <em class="eos-icons">edit</em>
@@ -10,7 +13,7 @@
     <section class="status-section">
       <label class="status-margin text-label">{{ 'setting.STATUS' | translate }}:</label>
       <mat-slide-toggle
-        class="mr-2 margin-top-s"
+        class="mr-2"
         id="group-waf-sensor-status-toggle"
         [disabled]="!isWriteWafAuthorized || cfgType === CFG_TYPE.GROUND"
         [(ngModel)]="enabled"
@@ -43,7 +46,7 @@
       #groupWafSensorsGrid
       id="group-waf-sensors-grid"
       style="width: 100%;"
-      [ngStyle]="{ height: (resizableHeight - 150) + 'px' }"
+      [ngStyle]="{ height: (resizableHeight - 90) + 'px' }"
       class="ag-theme-balham"
       [gridOptions]="gridOptions4GroupWafSensors"
       >

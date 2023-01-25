@@ -77,16 +77,6 @@
     </app-quick-filter>
   </div>
 </div>
-<div class="clearfix" *ngIf="source === navSource['GROUP']">
-  <app-quick-filter
-    *ngIf="!useQuickFilterService"
-    class="pull-right"
-    [gridOptions]="gridOptions"
-    (filterCountChange)="filterCountChanged($event)"
-    [showCount]="false"
-    [condition]="quickFilterParents">
-  </app-quick-filter>
-</div>
 <ag-grid-angular
   #agGrid
   (window:resize)="onResize()"

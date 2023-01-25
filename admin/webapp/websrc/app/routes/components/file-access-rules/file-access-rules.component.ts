@@ -1,9 +1,11 @@
 import {
   Component,
   Input,
+  Output,
   OnChanges,
   OnInit,
   SimpleChanges,
+  EventEmitter
 } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { GridOptions } from 'ag-grid-community';
@@ -19,6 +21,7 @@ import { AuthUtilsService } from '@common/utils/auth.utils';
 import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
 import { switchMap } from 'rxjs/operators';
 import { NotificationService } from '@services/notification.service';
+import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
 
 @Component({
   selector: 'app-file-access-rules',
@@ -31,6 +34,12 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
   @Input() groupName: string = '';
   @Input() resizableHeight!: number;
   @Input() cfgType!: string;
+  @Input() useQuickFilterService: boolean = false;
+  @Output() getSelectedFileAccessRules = new EventEmitter();
+  @Output() getRemoveProfile = new EventEmitter();
+  @Output() getEditProfile = new EventEmitter();
+  @Output() getAddProfile = new EventEmitter();
+  @Output() getShowPredefinedRules = new EventEmitter();
   private isModalOpen: boolean = false;
   private fileAccessRuleErr: boolean = false;
   public groups: Set<string> = new Set();
@@ -53,6 +62,7 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
     private translate: TranslateService,
     private utils: UtilsService,
     private dialog: MatDialog,
+    private quickFilterService: QuickFilterService,
     private notificationService: NotificationService
   ) {
     this.w = GlobalVariable.window;
@@ -82,6 +92,12 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
     };
     this.getFileAccessRules(this.groupName);
     this.groups.add('All');
+    if (this.useQuickFilterService) {
+      this.quickFilterService.textInput$.subscribe((value: string) => {
+        this.quickFilterService.onFilterChange(value, this.gridOptions);
+      });
+    }
+    this.emitObjects();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -93,6 +109,7 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
     ) {
       this.getFileAccessRules(this.groupName);
     }
+    this.emitObjects();
   }
 
   getFileAccessRules = groupName => {
@@ -280,8 +297,16 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
       if (selectedRows.length > 0) {
         setTimeout(() => {
           this.selectedFileAccessRules = selectedRows[0];
+          this.getSelectedFileAccessRules.emit(this.selectedFileAccessRules);
         });
       }
     }
+  };
+
+  private emitObjects = () => {
+    this.getRemoveProfile.emit(this.removeProfile);
+    this.getEditProfile.emit(this.editProfile);
+    this.getAddProfile.emit(this.addProfile);
+    this.getShowPredefinedRules.emit(this.showPredefinedRules);
   };
 }

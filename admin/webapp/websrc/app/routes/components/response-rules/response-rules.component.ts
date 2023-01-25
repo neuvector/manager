@@ -13,6 +13,7 @@ import { AuthUtilsService } from '@common/utils/auth.utils';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { Subject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
+import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
 
 @Component({
   selector: 'app-response-rules',
@@ -23,6 +24,7 @@ export class ResponseRulesComponent implements OnInit {
   @Input() source: string = '';
   @Input() groupName: string = '';
   @Input() resizableHeight: number = 0;
+  @Input() useQuickFilterService: boolean = false;
   refreshing$ = new Subject();
   private isModalOpen: boolean = false;
   public responsePolicyErr: boolean = false;
@@ -43,6 +45,7 @@ export class ResponseRulesComponent implements OnInit {
     private translate: TranslateService,
     private utils: UtilsService,
     private multiClusterService: MultiClusterService,
+    private quickFilterService: QuickFilterService,
     public dialog: MatDialog
   ) {
     this.w = GlobalVariable.window;
@@ -60,6 +63,11 @@ export class ResponseRulesComponent implements OnInit {
       this.isWriteResponseRuleAuthorized,
       this.source
     );
+    if (this.useQuickFilterService) {
+      this.quickFilterService.textInput$.subscribe((value: string) => {
+        this.quickFilterService.onFilterChange(value, this.gridOptions);
+      });
+    }
     this.context = { componentParent: this };
     this.responseRulesService.scope = getScope(this.source);
     this.refresh();

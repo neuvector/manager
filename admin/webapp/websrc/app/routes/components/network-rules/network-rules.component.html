@@ -167,6 +167,7 @@
 
         <div *ngIf="source === navSource['GROUP']" class="clearfix">
           <app-quick-filter
+            *ngIf="!useQuickFilterService"
             class="pull-right"
             [gridOptions]="gridOptions"
             [filteredCount]="filteredCount"
@@ -179,7 +180,7 @@
           [ngStyle]="{
             height:
               (source === navSource['GROUP']
-                ? resizableHeight - 150
+                ? resizableHeight - 90
                 : gridHeight) + 'px'
           }"
           class="ag-theme-balham"

@@ -3,8 +3,8 @@
     [ngClass]="{ panel: source === navSource['SELF'] }"
     *ngIf="source === navSource['FED_POLICY'] || groupName">
     <div [ngClass]="{ 'panel-body': source === navSource['SELF'] }">
-      <div class="clearfix" *ngIf="groupName !== globalConstant4Html.EXTERNAL">
-        <div class="pull-left mt-4">
+      <div class="clearfix" *ngIf="groupName !== globalConstant4Html.EXTERNAL && !useQuickFilterService">
+        <div class="pull-left">
           <span
             *ngIf="baselineProfile === 'zero-drift'"
           >
@@ -15,6 +15,7 @@
           </span>
         </div>
         <app-quick-filter
+          *ngIf="!useQuickFilterService"
           class="pull-right"
           [gridOptions]="gridOptions"
           [filteredCount]="filteredCount"
@@ -22,19 +23,22 @@
           [count]="processProfileRules.length">
         </app-quick-filter>
         <div
-          class="pull-right margin-right-m margin-top-l hand"
+          class="pull-right margin-right-m hand"
+          [ngClass]="{'margin-top-l': !useQuickFilterService}"
           *ngIf="selectedProcessProfileRules && isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized"
           (click)="removeProfile(selectedProcessProfileRules)">
           <em class="eos-icons">delete</em>
         </div>
         <div
-          class="pull-right margin-right-s margin-top-l hand"
+          class="pull-right margin-right-s hand"
+          [ngClass]="{'margin-top-l': !useQuickFilterService}"
           *ngIf="selectedProcessProfileRules && selectedProcessProfileRules.length === 1 && isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized"
           (click)="editProfile(selectedProcessProfileRules[0])">
           <em class="eos-icons">edit</em>
         </div>
         <div
-          class="pull-right margin-right-s margin-top-l hand"
+          class="pull-right margin-right-s hand"
+          [ngClass]="{'margin-top-l': !useQuickFilterService}"
           *ngIf="isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized"
           (click)="addProfile()">
           <em class="eos-icons">add</em>
@@ -64,12 +68,13 @@
           [ngStyle]="{
             height:
               (source === navSource['GROUP']
-                ? resizableHeight - 150
+                ? resizableHeight - 90
                 : gridHeight) + 'px'
           }"
           class="ag-theme-balham"
           [gridOptions]="gridOptions"
-          [rowData]="processProfileRules">
+          [rowData]="processProfileRules"
+          [context]="context">
         </ag-grid-angular>
       </div>
     </div>

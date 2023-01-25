@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { GridOptions } from 'ag-grid-community';
 import { GroupsService } from '@services/groups.service';
 import { DlpSetting } from '@common/types';
@@ -8,6 +8,7 @@ import { AuthUtilsService } from '@common/utils/auth.utils';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { NotificationService } from '@services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
+import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
 
 @Component({
   selector: 'app-group-dlp',
@@ -19,6 +20,10 @@ export class GroupDlpComponent implements OnInit {
   @Input() groupName: string = '';
   @Input() resizableHeight: number;
   @Input() cfgType: string;
+  @Input() useQuickFilterService: boolean = false;
+  @Output() getEditGroupSensorModal = new EventEmitter();
+  @Output() getToggleDLPConfigEnablement = new EventEmitter();
+  @Output() getStatus = new EventEmitter();
   gridOptions4GroupDlpSensors: GridOptions;
   groupDlpSensors: Array<DlpSetting> = [];
   filteredCount: number = 0;
@@ -32,6 +37,7 @@ export class GroupDlpComponent implements OnInit {
     private dialog: MatDialog,
     private authUtilsService: AuthUtilsService,
     private notificationService: NotificationService,
+    private quickFilterService: QuickFilterService,
     private translate: TranslateService
   ) {}
 
@@ -44,7 +50,19 @@ export class GroupDlpComponent implements OnInit {
       this.selectedSensor =
         this.gridOptions4GroupDlpSensors.api!.getSelectedRows()[0];
     };
+    if (this.useQuickFilterService) {
+      this.quickFilterService.textInput$.subscribe((value: string) => {
+        this.quickFilterService.onFilterChange(value, this.gridOptions4GroupDlpSensors);
+      });
+    }
+    this.getEditGroupSensorModal.emit(this.openEditGroupSensorModal);
+    this.getToggleDLPConfigEnablement.emit(this.toggleDLPConfigEnablement);
     this.refresh();
+  }
+
+  ngOnChanges(): void {
+    this.getEditGroupSensorModal.emit(this.openEditGroupSensorModal);
+    this.getToggleDLPConfigEnablement.emit(this.toggleDLPConfigEnablement);
   }
 
   refresh = () => {
@@ -71,6 +89,7 @@ export class GroupDlpComponent implements OnInit {
         this.groupDlpSensors = response.sensors;
         this.gridOptions4GroupDlpSensors.api!.setRowData(this.groupDlpSensors);
         this.enabled = response.status;
+        this.getStatus.emit(this.enabled);
         this.filteredCount = this.groupDlpSensors.length;
       },
       error => {}

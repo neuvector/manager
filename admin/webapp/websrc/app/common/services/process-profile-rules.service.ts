@@ -8,6 +8,7 @@ import { MapConstant } from '@common/constants/map.constant';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { DatePipe } from '@angular/common';
 import { GlobalVariable } from '@common/variables/global.variable';
+import { ProcessProfileRuleNameHeaderComponent } from '@components/process-profile-rules/partial/process-profile-rule-name-header/process-profile-rule-name-header.component';
 
 @Injectable()
 export class ProcessProfileRulesService {
@@ -26,7 +27,7 @@ export class ProcessProfileRulesService {
     isWriteGroupAuthorized: boolean,
     isWriteProcessProfileRuleAuthorized: boolean,
     source: string,
-    isScoreImprovement: boolean = false
+    isScoreImprovement: boolean = false,
   ) {
     let columnDefs = [
       {
@@ -36,7 +37,7 @@ export class ProcessProfileRulesService {
         hide: source === GlobalConstant.NAV_SOURCE.GROUP,
       },
       {
-        headerName: this.translate.instant('service.gridHeader.NAME'),
+        headerComponentFramework: ProcessProfileRuleNameHeaderComponent,
         headerCheckboxSelection: params => {
           return isWriteGroupAuthorized &&
             isWriteProcessProfileRuleAuthorized;
@@ -52,7 +53,7 @@ export class ProcessProfileRulesService {
           isWriteProcessProfileRuleAuthorized)
       },
       {
-        headerName: this.translate.instant('service.gridHeader.NAME'),
+        headerComponentFramework: ProcessProfileRuleNameHeaderComponent,
         field: 'name',
         hide: source === GlobalConstant.NAV_SOURCE.GROUP &&
           isWriteGroupAuthorized &&

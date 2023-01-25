@@ -1436,3 +1436,11 @@ ngx-avatar.userIcon img.avatar-content {
 .mat-menu-panel {
   max-width: none !important;
 }
+
+#group-details .mat-tab-header {
+  width: calc(100% - 300px);
+}
+
+#group-details .mat-tab-body {
+  padding-top: 10px;
+}

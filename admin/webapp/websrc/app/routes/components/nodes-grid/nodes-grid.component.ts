@@ -19,6 +19,7 @@ import * as $ from 'jquery';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { NodesGridStatusCellComponent } from './nodes-grid-status-cell/nodes-grid-status-cell.component';
 import { NodesGridStateCellComponent } from './nodes-grid-state-cell/nodes-grid-state-cell.component';
+import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
 
 @Component({
   selector: 'app-nodes-grid',
@@ -34,6 +35,7 @@ export class NodesGridComponent implements OnInit {
   @Input() rowData!: Array<Host>;
   @Input() source!: string;
   @Output() scan = new EventEmitter<Host>();
+  @Input() useQuickFilterService: boolean = false;
   gridOptions!: GridOptions;
   gridApi!: GridApi;
   filtered: boolean = false;
@@ -53,6 +55,7 @@ export class NodesGridComponent implements OnInit {
   constructor(
     public nodesService: NodesService,
     public versionInfoService: VersionInfoService,
+    public quickFilterService: QuickFilterService,
     private utils: UtilsService,
     private datePipe: DatePipe,
     private tr: TranslateService
@@ -61,6 +64,11 @@ export class NodesGridComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.useQuickFilterService) {
+      this.quickFilterService.textInput$.subscribe((value: string) => {
+        this.quickFilterService.onFilterChange(value, this.gridOptions);
+      });
+    }
     this.columnDefs = [
       {
         headerName: this.tr.instant('nodes.detail.NAME'),

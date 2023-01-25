@@ -410,9 +410,6 @@ export class GroupsComponent implements OnInit {
             node.setSelected(true);
             this.gridOptions4Groups.api!.ensureNodeVisible(node);
           }
-        } else if (index === 0) {
-          node.setSelected(true);
-          this.gridOptions4Groups.api!.ensureNodeVisible(node);
         }
       });
     }, 200);

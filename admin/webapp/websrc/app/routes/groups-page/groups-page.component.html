@@ -100,6 +100,18 @@
           >
           </app-group-details>
         </mat-card>
+        <mat-card
+          [ngStyle]="{ height: height + 'px' }"
+          *ngIf="groupsView && groupsView.selectedGroups.length === 0">
+          <mat-card-content>
+            <div class="hint-info">
+              <em class="eos-icons hint-info-signal mr-2" aria-hidden="true">info</em>
+              <div class="hint-info-text">
+                {{ 'group.SELECT_GROUP_HINT' | translate }}
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
       </ng-container>
     </app-adjustable-div>
   </ng-container>

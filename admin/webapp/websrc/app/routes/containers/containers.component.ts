@@ -37,6 +37,9 @@ export class ContainersComponent implements OnInit {
   get containersGrid() {
     return this._containersGrid;
   }
+  get isRemote() {
+    return GlobalVariable.isRemote;
+  }
   quarantinedContainers: WorkloadV2[] = [];
   toggleNodeForm!: FormGroup;
   refreshing$ = new Subject();

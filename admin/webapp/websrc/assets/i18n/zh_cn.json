@@ -1927,6 +1927,7 @@
     "MULTI_MODE_SELECTION": "多个拥有不同策略模式或基线配置的组被选择",
     "GET_RULE_ERR": "获取规则时发生错误",
     "CONFIG": "配置",
+    "SELECT_GROUP_HINT": "选择一个组以浏览详细内容",
     "TIP": {
       "EDIT": "编辑组",
       "DELETE": "删除组",

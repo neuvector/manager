@@ -1927,6 +1927,7 @@
     "MULTI_MODE_SELECTION": "Multiple groups are selected along with different policy mode or baseline profile.",
     "GET_RULE_ERR": "Error happened when getting rule",
     "CONFIG": "Configure",
+    "SELECT_GROUP_HINT": "Select a group to view details",
     "TIP": {
       "EDIT": "Edit Group",
       "DELETE": "Remove Group",

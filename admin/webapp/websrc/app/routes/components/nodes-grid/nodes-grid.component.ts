@@ -50,6 +50,9 @@ export class NodesGridComponent implements OnInit {
   get cisLabel() {
     return this.utils.getCisLabel(this.versionInfoService.infoData);
   }
+  get isRemote() {
+    return GlobalVariable.isRemote;
+  }
   columnDefs!: ColDef[];
 
   constructor(

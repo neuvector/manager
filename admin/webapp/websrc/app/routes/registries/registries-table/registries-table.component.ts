@@ -29,6 +29,7 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { MapConstant } from '@common/constants/map.constant';
 import { NotificationService } from '@services/notification.service';
 import { GlobalVariable } from '@common/variables/global.variable';
+import { AuthUtilsService } from '@common/utils/auth.utils';
 
 @Component({
   selector: 'app-registries-table',
@@ -137,6 +138,7 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
   ];
   startingScan$ = this.registriesCommunicationService.startingScan$;
   stoppingScan$ = this.registriesCommunicationService.stoppingScan$;
+  isRegistryScanAuthorized: boolean = false;
   get isFedRegistry() {
     return (
       this.gridApi?.getSelectedNodes()?.[0].data?.cfg_type ===
@@ -147,16 +149,22 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
     return GlobalVariable.user.token.role === MapConstant.FED_ROLES.FEDADMIN;
   }
 
+  get isRemote() {
+    return GlobalVariable.isRemote;
+  }
+
   constructor(
     private dialog: MatDialog,
     private translate: TranslateService,
     private registriesService: RegistriesService,
     private registriesCommunicationService: RegistriesCommunicationService,
     private cd: ChangeDetectorRef,
+    private authUtilsService: AuthUtilsService,
     private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
+    this.isRegistryScanAuthorized = this.authUtilsService.getDisplayFlag('registry_scan');
     this.gridOptions = {
       rowData: this.rowData,
       columnDefs: this.columnDefs,

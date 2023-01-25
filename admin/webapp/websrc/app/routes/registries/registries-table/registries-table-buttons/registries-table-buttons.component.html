@@ -1,9 +1,10 @@
 <div
   *ngIf="
-    (params.data.cfg_type === CFG_TYPE.FED &&
+    ((params.data.cfg_type === CFG_TYPE.FED &&
       isWriteRegistryAuthorized &&
       isFedAdmin) ||
-    (params.data.cfg_type === CFG_TYPE.CUSTOMER && isWriteRegistryAuthorized)
+    (params.data.cfg_type === CFG_TYPE.CUSTOMER && isWriteRegistryAuthorized)) &&
+    !isRemote
   ">
   <button
     (click)="edit()"

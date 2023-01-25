@@ -57,6 +57,9 @@ export class ContainersGridComponent implements OnInit {
   get cisLabel() {
     return this.utils.getCisLabel(this.versionInfoService.infoData);
   }
+  get isRemote() {
+    return GlobalVariable.isRemote;
+  }
 
   constructor(
     public containersService: ContainersService,

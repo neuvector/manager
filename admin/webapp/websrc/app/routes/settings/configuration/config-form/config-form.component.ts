@@ -207,6 +207,7 @@ export class ConfigFormComponent implements OnInit {
             if (webhook.type === OtherWebhookType) {
               webhook.type = '';
             }
+            webhook.url = webhook.url.trim();
             return webhook;
           }),
         ibmsa_cfg: {

@@ -31,13 +31,12 @@
     (btnClick)="startScan()"
     [appearance]="'mat-stroked-button'"
     [buttonClasses]="'mr-2'"
-    *ngIf="isRegistryScanAuthorized && !(isFedRegistry && isRemote)"
+    *ngIf="isRegistryScanAuthorized && !(isFedRegistry && (isRemote || !isFedAdmin))"
     [disabled]="
       (gridApi && !gridApi.getSelectedNodes().length) ||
       (gridApi &&
         gridApi.getSelectedNodes().length &&
         gridApi.getSelectedNodes()[0].data.status === 'scanning') ||
-      (isFedRegistry && !isFedAdmin) ||
       !!(startingScan$ | async)
     "
     [id]="'registries-start-scan-button'"
@@ -48,13 +47,12 @@
   <app-loading-button
     (btnClick)="stopScan()"
     [appearance]="'mat-stroked-button'"
-    *ngIf="isRegistryScanAuthorized && !(isFedRegistry && isRemote)"
+    *ngIf="isRegistryScanAuthorized && !(isFedRegistry && (isRemote || !isFedAdmin))"
     [disabled]="
       (gridApi && !gridApi.getSelectedNodes().length) ||
       (gridApi &&
         gridApi.getSelectedNodes().length &&
         gridApi.getSelectedNodes()[0].data.status === 'idle') ||
-      (isFedRegistry && !isFedAdmin) ||
       !!(stoppingScan$ | async)
     "
     [id]="'registries-stop-scan-button'"

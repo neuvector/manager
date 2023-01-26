@@ -7,7 +7,7 @@
   <div class="d-flex align-items-center justify-content-end">
     <button
       (click)="openDialog()"
-      *ngIf="isRegistryScanAuthorized && !isRemote"
+      *ngIf="isRegistryScanAuthorized"
       class="d-flex align-items-center justify-content-start mr-3"
       id="registries-add-dialog"
       mat-stroked-button>
@@ -31,7 +31,7 @@
     (btnClick)="startScan()"
     [appearance]="'mat-stroked-button'"
     [buttonClasses]="'mr-2'"
-    *ngIf="isRegistryScanAuthorized && !isRemote"
+    *ngIf="isRegistryScanAuthorized && !(isFedRegistry && isRemote)"
     [disabled]="
       (gridApi && !gridApi.getSelectedNodes().length) ||
       (gridApi &&
@@ -48,7 +48,7 @@
   <app-loading-button
     (btnClick)="stopScan()"
     [appearance]="'mat-stroked-button'"
-    *ngIf="isRegistryScanAuthorized && !isRemote"
+    *ngIf="isRegistryScanAuthorized && !(isFedRegistry && isRemote)"
     [disabled]="
       (gridApi && !gridApi.getSelectedNodes().length) ||
       (gridApi &&

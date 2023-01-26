@@ -50,7 +50,6 @@
     <div *ngIf="isScanAuthorized">
       <ng-container *ngIf="selectedNode$ | async as selectedNode">
         <button
-          *ngIf="!isRemote"
           mat-stroked-button
           aria-label="Scan action"
           type="button"

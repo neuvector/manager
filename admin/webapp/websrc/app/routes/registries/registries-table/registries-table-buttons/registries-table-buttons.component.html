@@ -1,10 +1,10 @@
 <div
   *ngIf="
-    ((params.data.cfg_type === CFG_TYPE.FED &&
+    (params.data.cfg_type === CFG_TYPE.FED &&
       isWriteRegistryAuthorized &&
-      isFedAdmin) ||
-    (params.data.cfg_type === CFG_TYPE.CUSTOMER && isWriteRegistryAuthorized)) &&
-    !isRemote
+      isFedAdmin &&
+      !isRemote) ||
+    (params.data.cfg_type === CFG_TYPE.CUSTOMER && isWriteRegistryAuthorized)
   ">
   <button
     (click)="edit()"
@@ -22,7 +22,7 @@
   </button>
 </div>
 <button
-  *ngIf="!isWriteRegistryAuthorized"
+  *ngIf="!isWriteRegistryAuthorized || (params.data.cfg_type === CFG_TYPE.FED && isRemote)"
   (click)="view()"
   aria-label="View button"
   matTooltip="{{ 'registry.TIP.VIEW' | translate }}"

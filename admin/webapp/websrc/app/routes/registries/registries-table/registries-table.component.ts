@@ -193,6 +193,7 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.gridApi && changes.rowData) {
+      this.gridApi.setRowData([]);
       this.gridApi.setRowData(changes.rowData.currentValue);
       if (!this.gridApi.getSelectedNodes().length) {
         this.gridApi.getDisplayedRowAtIndex(0)?.setSelected(true);

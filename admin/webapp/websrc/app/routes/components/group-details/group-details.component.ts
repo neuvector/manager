@@ -69,8 +69,7 @@ export class GroupDetailsComponent implements OnInit {
     this.isWriteDlpAuthorized =
       this.authUtilsService.getDisplayFlag('write_dlp_rule');
     this.isWriteGroupAuthorized =
-      this.authUtilsService.getDisplayFlag('write_group') &&
-      this.authUtilsService.getDisplayFlag('multi_cluster');
+      this.authUtilsService.getDisplayFlag('write_group');
     this.isWriteFileAccessRuleAuthorized =
       this.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER ||
       this.cfgType === GlobalConstant.CFG_TYPE.LEARNED;

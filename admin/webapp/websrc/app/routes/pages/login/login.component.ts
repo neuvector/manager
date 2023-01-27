@@ -1,10 +1,4 @@
-import {
-  Component,
-  Inject,
-  Injectable,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TranslatorService } from '@core/translator/translator.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -24,6 +18,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { AgreementComponent } from '@routes/pages/login/eula/agreement/agreement.component';
 import { NotificationService } from '@services/notification.service';
 import { SummaryService } from '@services/summary.service';
+import { SystemSummary } from '@common/types';
+import { PathConstant } from '@common/constants/path.constant';
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -106,12 +103,10 @@ export class LoginComponent implements OnInit, OnDestroy {
               width: '85vw',
               height: '90vh',
             });
-            this._dialogSubscription = dialog
-              .afterClosed()
-              .subscribe(dialogData => {
-                this.validEula = true;
-                this.localLogin();
-              });
+            this._dialogSubscription = dialog.afterClosed().subscribe(() => {
+              this.validEula = true;
+              this.localLogin();
+            });
           }
         },
         error => {
@@ -136,7 +131,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
-  oktaLogin(value: any, mode) {
+  oktaLogin(value: any) {
     this.clearToken();
     this.inProgress = true;
     this.authService.samlLogin(value.username, value.password).subscribe(
@@ -151,7 +146,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     );
   }
 
-  oidcLogin(value: any, mode) {
+  oidcLogin(value: any) {
     this.clearToken();
     this.inProgress = true;
     this.authService.openIdLogin(value.username, value.password).subscribe(
@@ -190,11 +185,11 @@ export class LoginComponent implements OnInit, OnDestroy {
             );
 
             if (this.isEulaAccepted) {
-              this.getSummary();
+              this.getSummary(userInfo);
             } else {
               this.authService.updateEula().subscribe(
-                value1 => {
-                  this.getSummary();
+                () => {
+                  this.getSummary(userInfo);
                 },
                 error => {
                   this.authMsg = error.message;
@@ -217,22 +212,15 @@ export class LoginComponent implements OnInit, OnDestroy {
   submitForm($ev, value: any, mode) {
     switch (mode) {
       case 'oidc':
-        this.oidcLogin(value, mode);
+        this.oidcLogin(value);
         break;
       case 'okta':
-        this.oktaLogin(value, mode);
+        this.oktaLogin(value);
         break;
       default:
         this.localLogin(value);
     }
 
-    // for (let c in this.loginForm.controls) {
-    //     this.loginForm.controls[c].markAsTouched();
-    // }
-    // if (this.loginForm.valid) {
-    //     console.log('Valid!');
-    //     console.log(value);
-    // }
   }
 
   private clearToken() {
@@ -283,23 +271,14 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.authService.updateTokenAuthServer().subscribe(
         (userInfo: any) => {
           this.inProgress = true;
-          GlobalVariable.user = userInfo;
-          GlobalVariable.user.global_permissions =
-            userInfo.token.global_permissions;
-          GlobalVariable.user.domain_permissions =
-            userInfo.token.domain_permissions;
-          this.translatorService.useLanguage(GlobalVariable.user.token.locale);
-          this.sessionStorage.set(
-            GlobalConstant.SESSION_STORAGE_TOKEN,
-            GlobalVariable.user
-          );
+          this.setUserInfo(userInfo);
           this.cookieService.delete('temp');
           if (this.isEulaAccepted) {
-            this.getSummary();
+            this.getSummary(userInfo);
           } else {
             this.authService.updateEula().subscribe(
-              value1 => {
-                this.getSummary();
+              () => {
+                this.getSummary(userInfo);
               },
               error => {
                 this.authMsg = error.message;
@@ -341,19 +320,46 @@ export class LoginComponent implements OnInit, OnDestroy {
     );
   }
 
-  private getSummary() {
-    this.summaryService.getSummary().subscribe({
+  private getSum(authToken) {
+    const headers = new HttpHeaders()
+      .set(GlobalConstant.SESSION_STORAGE_TOKEN, authToken)
+      .set('Cache-Control', 'no-cache')
+      .set('Pragma', 'no-cache');
+    return GlobalVariable.http
+      .get<SystemSummary>(PathConstant.DASHBOARD_SUMMARY_URL, {
+        headers: headers,
+      })
+      .pipe();
+  }
+
+  private getSummary(userInfo) {
+    this.getSum(userInfo.token.token).subscribe({
       next: summaryInfo => {
+        GlobalVariable.isOpenShift =
+          summaryInfo.summary.platform === GlobalConstant.OPENSHIFT ||
+          summaryInfo.summary.platform === GlobalConstant.RANCHER;
+        GlobalVariable.summary = summaryInfo.summary;
+
+        GlobalVariable.hasInitializedSummary = true;
+        this.setUserInfo(userInfo);
         if (this.originalUrl && !this.originalUrl.includes('login')) {
           this.router.navigate([this.originalUrl]);
         } else {
           this.router.navigate([GlobalConstant.PATH_DEFAULT]);
         }
       },
-      error: error => {
+      error: () => {
         this.inProgress = true;
         this.cookieService.delete('temp');
       },
     });
+  }
+
+  private setUserInfo(userInfo) {
+    GlobalVariable.user = userInfo;
+    GlobalVariable.user.global_permissions = userInfo.token.global_permissions;
+    GlobalVariable.user.domain_permissions = userInfo.token.domain_permissions;
+    this.translatorService.useLanguage(GlobalVariable.user.token.locale);
+    this.sessionStorage.set(GlobalConstant.SESSION_STORAGE_TOKEN, userInfo);
   }
 }

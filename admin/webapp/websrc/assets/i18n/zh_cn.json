@@ -108,6 +108,7 @@
     "APPLY": "应用",
     "EVENT": "事件",
     "SECURITY_EVENT": "安全事件",
+    "RISK_REPORT": "风险报告",
     "VIOLATION": "违规",
     "THREAT": "威胁",
     "AUDIT": "风险报告",
@@ -1071,6 +1072,11 @@
       "IMAGES": "镜像",
       "DOMAINS": "命名空间",
       "COMMENT": "注释"
+    },
+    "hint": {
+      "NAME": "样本: CVE-2021-4534, CVE-2021-* or *.",
+      "IMAGE": "样本: nginx:1.23, *node*:latest",
+      "NAMESPACE": "样本: default, *kafka*"
     }
   },
   "scan": {

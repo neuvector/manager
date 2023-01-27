@@ -108,6 +108,7 @@
     "APPLY": "Apply",
     "EVENT": "Event",
     "SECURITY_EVENT": "Security Event",
+    "RISK_REPORT": "Risk Report",
     "VIOLATION": "Violation",
     "THREAT": "Threat",
     "INCIDENT": "Incident",
@@ -1071,6 +1072,11 @@
       "IMAGES": "Images",
       "DOMAINS": "Namespaces",
       "COMMENT": "Comment"
+    },
+    "hint": {
+      "NAME": "Sample: CVE-2021-4534, CVE-2021-* or *.",
+      "IMAGE": "Sample: nginx:1.23, *node*:latest",
+      "NAMESPACE": "Sample: default, *kafka*"
     }
   },
   "scan": {

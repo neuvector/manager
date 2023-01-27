@@ -11,6 +11,9 @@
   {{ 'setting.webhook.NAME_NG' | translate }}
 </ng-container>
 <ng-container *ngIf="field.formControl.hasError(formlyValidators.FedName)">
+  {{ 'setting.webhook.NAME_PATTERN_NG' | translate }}
+</ng-container>
+<ng-container *ngIf="field.formControl.hasError(formlyValidators.WebhookUserName)">
   {{ 'setting.webhook.LOCAL_NAME_PATTERN_NG' | translate }}
 </ng-container>
 <ng-container *ngIf="field.formControl.hasError(formlyValidators.PortRange)">

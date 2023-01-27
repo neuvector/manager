@@ -9,7 +9,9 @@ import {
   objNameValidator,
   portRangeValidator,
   urlValidator,
+  webhookUsernameValidator,
 } from '@common/neuvector-formly/formlyValidators';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ToggleComponent } from './toggle/toggle.component';
@@ -48,6 +50,7 @@ export enum FormlyValidators {
   URL = 'invalidURL',
   ObjName = 'invalidObjName',
   FedName = 'invalidFedName',
+  WebhookUserName = 'invalidWebhookUserName',
   PortRange = 'invalidPortRange',
 }
 
@@ -127,6 +130,10 @@ export enum FormlyComponents {
         { name: FormlyValidators.URL, validation: urlValidator },
         { name: FormlyValidators.ObjName, validation: objNameValidator },
         { name: FormlyValidators.FedName, validation: fedNameValidator },
+        {
+          name: FormlyValidators.WebhookUserName,
+          validation: webhookUsernameValidator,
+        },
         { name: FormlyValidators.PortRange, validation: portRangeValidator },
       ],
       types: [

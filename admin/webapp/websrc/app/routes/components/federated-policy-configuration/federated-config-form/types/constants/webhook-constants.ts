@@ -21,11 +21,6 @@ export const WebhookTableField = {
     addButtonText: 'setting.webhook.NEW',
   },
   fieldArray: {
-    validators: {
-      validation: [
-        { name: FormlyValidators.FedName, options: { errorPath: 'name' } },
-      ],
-    },
     fieldGroup: [
       {
         key: 'name',
@@ -44,7 +39,7 @@ export const WebhookTableField = {
           },
         },
         validators: {
-          validation: [FormlyValidators.ObjName],
+          validation: [FormlyValidators.ObjName, FormlyValidators.FedName]
         },
       },
       {

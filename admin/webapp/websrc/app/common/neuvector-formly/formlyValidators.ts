@@ -1,4 +1,4 @@
-import { AbstractControl, ValidationErrors } from '@angular/forms';
+import {AbstractControl, FormGroup, ValidationErrors} from '@angular/forms';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 
@@ -26,17 +26,30 @@ export function objNameValidator(
   return pattern.test(value) ? null : { invalidObjName: true };
 }
 
-export function fedNameValidator(
-  control: AbstractControl,
-  field: FormlyFieldConfig
+export function webhookUsernameValidator(
+  control: AbstractControl
 ): ValidationErrors | null {
-  let value = control.value;
+  const value = control.value;
   const pattern = new RegExp(/^(fed\.)/);
-  console.log("field",field,control)
   if (!value) {
     return null;
   }
-  return pattern.test(value) //&& cfg_type !== GlobalConstant.CFG_TYPE.FED
+
+  return pattern.test(value)
+    ? { invalidWebhookUserName: true }
+    : null;
+}
+
+export function fedNameValidator(
+  control: AbstractControl
+): ValidationErrors | null {
+  let value = control.value;
+  const pattern = new RegExp(/^(fed\.)/);
+  if (!value) {
+    return null;
+  }
+
+  return !pattern.test(value)
     ? { invalidFedName: true }
     : null;
 }

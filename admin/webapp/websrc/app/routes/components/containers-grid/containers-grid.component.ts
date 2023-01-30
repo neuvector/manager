@@ -38,7 +38,6 @@ export class ContainersGridComponent implements OnInit {
   @Input() isMemberData: boolean = false;
   @Input() source!: string;
   @Output() scan = new EventEmitter<WorkloadRow>();
-  workloadMap = new Map();
   gridOptions!: GridOptions;
   gridApi!: GridApi;
   columnDefs!: ColDef[];
@@ -243,9 +242,6 @@ export class ContainersGridComponent implements OnInit {
     if (this.isMemberData) {
       this.containersService.displayContainers = this.rowData;
     }
-    this.containersService.displayContainers.forEach(container => {
-      this.workloadMap.set(container.brief.id, container);
-    });
   }
 
   onGridReady(params: GridReadyEvent): void {

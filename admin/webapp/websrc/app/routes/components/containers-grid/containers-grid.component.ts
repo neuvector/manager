@@ -38,6 +38,7 @@ export class ContainersGridComponent implements OnInit {
   @Input() isMemberData: boolean = false;
   @Input() source!: string;
   @Output() scan = new EventEmitter<WorkloadRow>();
+  workloadMap = new Map();
   gridOptions!: GridOptions;
   gridApi!: GridApi;
   columnDefs!: ColDef[];
@@ -97,8 +98,18 @@ export class ContainersGridComponent implements OnInit {
         hide: true,
       },
       {
-        headerName: 'Child Names',
-        field: 'child_names',
+        headerName: 'Child IDs',
+        field: 'child_ids',
+        hide: true,
+      },
+      {
+        headerName: 'Child Data',
+        field: 'child_data',
+        hide: true,
+      },
+      {
+        headerName: 'Parent Data',
+        field: 'parent_data',
         hide: true,
       },
       {
@@ -232,6 +243,9 @@ export class ContainersGridComponent implements OnInit {
     if (this.isMemberData) {
       this.containersService.displayContainers = this.rowData;
     }
+    this.containersService.displayContainers.forEach(container => {
+      this.workloadMap.set(container.brief.id, container);
+    });
   }
 
   onGridReady(params: GridReadyEvent): void {

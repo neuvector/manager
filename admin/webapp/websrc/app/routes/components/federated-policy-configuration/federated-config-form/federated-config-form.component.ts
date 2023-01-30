@@ -1,4 +1,4 @@
-import {Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, HostListener, Input, OnInit, Output} from '@angular/core';
 import { OtherWebhookType } from './types/constants';
 import { FormGroup } from '@angular/forms';
 import { Webhook, FederatedConfiguration } from '@common/types';
@@ -160,8 +160,8 @@ export class FederatedConfigFormComponent implements OnInit,ComponentCanDeactiva
         this.notificationService.open(
           this.translate.instant('setting.SUBMIT_OK')
         );
+        this.refreshConfig.emit();
       }
-      this.refreshConfig.emit();
     },2000);
 
     this.submittingForm = false;

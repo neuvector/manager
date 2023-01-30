@@ -19,9 +19,7 @@ import { VulnerabilitiesData } from '@common/types/vulnerabilities/vulnerabiliti
 import { VulnerabilitiesFilterService } from './vulnerabilities.filter.service';
 import { AssetsViewPdfService } from './pdf-generation/assets-view-pdf.service';
 import { MapConstant } from '@common/constants/map.constant';
-import {
-  GridApi,
-} from 'ag-grid-community';
+import { GridApi } from 'ag-grid-community';
 
 @Injectable()
 export class VulnerabilitiesService {
@@ -39,6 +37,8 @@ export class VulnerabilitiesService {
     node: number;
     container: number;
   };
+  private countDistributionSubject$ = new Subject();
+  countDistribution$ = this.countDistributionSubject$.asObservable();
   workloadMap4Pdf!: {};
   private workloadMap!: Map<string, any>;
   imageMap4Pdf!: {};
@@ -84,6 +84,27 @@ export class VulnerabilitiesService {
     this.imageMap4Pdf = {};
     this.platformMap4Pdf = {};
     this.hostMap4Pdf = {};
+  }
+
+  updateCountDistribution(filteredCis) {
+    let countDistribution = {
+      high: 0,
+      medium: 0,
+      platform: 0,
+      image: 0,
+      node: 0,
+      container: 0,
+    };
+    filteredCis.forEach(cve => {
+      if (cve.severity === 'High') countDistribution.high += 1;
+      if (cve.severity === 'Medium') countDistribution.medium += 1;
+      if (cve.platforms.length) countDistribution.platform += 1;
+      if (cve.images.length) countDistribution.image += 1;
+      if (cve.nodes.length) countDistribution.node += 1;
+      if (cve.workloads.length) countDistribution.container += 1;
+    });
+    this.countDistribution = countDistribution;
+    this.countDistributionSubject$.next();
   }
 
   initVulnerability() {

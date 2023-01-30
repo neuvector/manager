@@ -1,4 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { ChartConfiguration } from 'chart.js';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -7,7 +13,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './compliance-items-charts.component.html',
   styleUrls: ['./compliance-items-charts.component.scss'],
 })
-export class ComplianceItemsChartsComponent implements OnInit {
+export class ComplianceItemsChartsComponent implements OnInit, OnChanges {
   @Input() complianceDist!: any;
   complianceSeverityDistChartData!: ChartConfiguration<
     'doughnut',
@@ -21,6 +27,39 @@ export class ComplianceItemsChartsComponent implements OnInit {
   >;
 
   constructor(private translateService: TranslateService) {}
+
+  updateData(): void {
+    this.complianceTargetDistChartData.data = {
+      ...this.complianceTargetDistChartData.data,
+      datasets: [
+        {
+          ...this.complianceTargetDistChartData.data.datasets[0],
+          data: [
+            this.complianceDist.error,
+            this.complianceDist.high,
+            this.complianceDist.warning,
+            this.complianceDist.note,
+            this.complianceDist.info,
+            this.complianceDist.pass,
+          ],
+        },
+      ],
+    };
+    this.complianceSeverityDistChartData.data = {
+      ...this.complianceSeverityDistChartData.data,
+      datasets: [
+        {
+          ...this.complianceSeverityDistChartData.data.datasets[0],
+          data: [
+            this.complianceDist.platform,
+            this.complianceDist.image,
+            this.complianceDist.node,
+            this.complianceDist.container,
+          ],
+        },
+      ],
+    };
+  }
 
   ngOnInit(): void {
     this.complianceTargetDistChartData = {
@@ -133,5 +172,11 @@ export class ComplianceItemsChartsComponent implements OnInit {
       },
       type: 'doughnut',
     };
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.complianceDist && !changes.complianceDist.isFirstChange()) {
+      this.updateData();
+    }
   }
 }

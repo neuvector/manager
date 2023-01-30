@@ -215,6 +215,19 @@ export class FileAccessRulesService {
         };
         break;
     }
-    return this.http.patch(PathConstant.FILE_PROFILE_URL, payload).pipe();
+    return scope === GlobalConstant.SCOPE.FED ?
+      this.http.patch(
+        PathConstant.FILE_PROFILE_URL,
+        payload,
+        {
+          params: {
+            scope: GlobalConstant.SCOPE.FED,
+          }
+        },
+      ).pipe() :
+      this.http.patch(
+        PathConstant.FILE_PROFILE_URL,
+        payload
+      ).pipe();
   }
 }

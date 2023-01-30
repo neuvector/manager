@@ -1989,7 +1989,7 @@
     "file": {
       "COUNT_POSTFIX": "file access rules found",
       "RULE_SAMPLE": "Sample: /dir/xxx, /dir/xxx.*, /dir/*.xxx, /dir/*/abc/* (不支持: [], () and regexp)",
-      "REMOVE_CONFIRM": "Will you remove file access rule? - Name:",
+      "REMOVE_CONFIRM": "Will you remove file access rule? - Filter:",
       "REMOVE_OK": "Your file access rule has been removed.",
       "REMOVE_NG": "Error happened when removing file acess rule!",
       "ADD_OK": "Your file access rule has been added.",

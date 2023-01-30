@@ -103,7 +103,7 @@ export class AddEditFileAccessRuleModalComponent implements OnInit {
       response => {
         this.groupOptions = response['groups']
           .map(group => group.name)
-          .filter(group => group !== GlobalConstant.EXTERNAL);
+          .filter(group => group !== GlobalConstant.EXTERNAL && group !== 'fed.nodes');
       },
       err => {
         console.warn(err);

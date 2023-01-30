@@ -1989,7 +1989,7 @@
     "file": {
       "COUNT_POSTFIX": "个文件访问规则",
       "RULE_SAMPLE": "例子: /dir/xxx, /dir/xxx.*, /dir/*.xxx, /dir/*/abc/* (不支持: [], () and regexp)",
-      "REMOVE_CONFIRM": "您要删除文件访问规则吗？- 名称:",
+      "REMOVE_CONFIRM": "您要删除文件访问规则吗？- 过滤器:",
       "REMOVE_OK": "您的文件访问规则已经被删除.",
       "REMOVE_NG": "删除文件访问规则时发生错误!",
       "ADD_OK": "您的文件访问规则已经被添加.",

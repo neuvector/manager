@@ -12,8 +12,9 @@ import { concatMap, delay, map, repeatWhen, takeWhile } from 'rxjs/operators';
 
 export type WorkloadRow = WorkloadChildV2 & {
   parent_id?: string;
+  parent_data?: string;
   child_ids?: string[];
-  child_names?: string[];
+  child_data?: string;
   visible: boolean;
 };
 
@@ -34,7 +35,9 @@ export class ContainersService {
     return this._displayContainers;
   }
   get quarantinedContainers() {
-    this._quarantinedContainers = this._containers.filter(w => w.brief.state == 'quarantined')
+    this._quarantinedContainers = this._containers.filter(
+      w => w.brief.state == 'quarantined'
+    );
     return this._quarantinedContainers;
   }
   set displayContainers(display_containers: WorkloadRow[]) {
@@ -121,12 +124,14 @@ export class ContainersService {
   formatScannedContainers(containers: WorkloadV2[]): WorkloadRow[] {
     let res: WorkloadRow[] = [];
     containers.forEach(workload => {
-      const parent_id = workload.brief.id;
-      const child_ids = workload.children.map(c => c.brief.id);
-      const child_names = workload.children.map(c => c.brief.display_name);
-      res.push({ ...workload, child_ids, child_names, visible: true });
-      workload.children.forEach(workloadChild => {
-        res.push({ ...workloadChild, parent_id, visible: true });
+      let { children, ...parent } = workload;
+      const parent_id = parent.brief.id;
+      const parent_data = JSON.stringify(parent);
+      const child_ids = children.map(c => c.brief.id);
+      const child_data = JSON.stringify(children);
+      res.push({ ...parent, child_ids, child_data, visible: true });
+      children.forEach(workloadChild => {
+        res.push({ ...workloadChild, parent_id, parent_data, visible: true });
       });
     });
     this.checkDuplicates(res);
@@ -136,19 +141,22 @@ export class ContainersService {
   formatScannedWorkloads(workloads: Workload[]): WorkloadRow[] {
     let res: WorkloadRow[] = [];
     workloads.forEach(workload => {
-      const parent_id = workload.id;
-      const child_ids = workload.children.map(c => c.id);
-      const child_names = workload.children.map(c => c.display_name);
+      let { children, ...parent } = workload;
+      const parent_id = parent.id;
+      const parent_data = JSON.stringify(parent);
+      const child_ids = children.map(c => c.id);
+      const child_data = JSON.stringify(children);
       res.push({
         ...workloadToV2(workload),
         child_ids,
-        child_names,
+        child_data,
         visible: true,
       });
-      workload.children.forEach(workloadChild => {
+      children.forEach(workloadChild => {
         res.push({
           ...briefToV2(workloadChild),
           parent_id,
+          parent_data,
           visible: true,
         });
       });

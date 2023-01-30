@@ -1353,8 +1353,6 @@ ngx-avatar.userIcon img.avatar-content {
   }
 }
 
-
-
 .badge-pink {
   color: #fff;
   background-color: #e91e63;
@@ -1362,7 +1360,7 @@ ngx-avatar.userIcon img.avatar-content {
 
 .badge-danger-tran {
   color: #fff;
-  background-color: #D9534f;
+  background-color: #d9534f;
 }
 
 .hide {
@@ -1434,7 +1432,9 @@ ngx-avatar.userIcon img.avatar-content {
   align-items: center;
 }
 
-.server-error-sm { padding:20px 0 }
+.server-error-sm {
+  padding: 20px 0;
+}
 
 .sample-table-header {
   border-bottom: 1px solid #fff;
@@ -1455,6 +1455,29 @@ ngx-avatar.userIcon img.avatar-content {
 
 .mat-menu-panel {
   max-width: none !important;
+}
+
+#container-details {
+  &.filter-icon-0 {
+    .mat-tab-header {
+      width: calc(100% - 200px);
+    }
+  }
+  &.filter-icon-1 {
+    .mat-tab-header {
+      width: calc(100% - 250px);
+    }
+  }
+  &.filter-icon-2 {
+    .mat-tab-header {
+      width: calc(100% - 300px);
+    }
+  }
+  &.filter-icon-3 {
+    .mat-tab-header {
+      width: calc(100% - 350px);
+    }
+  }
 }
 
 #group-details .mat-tab-header {

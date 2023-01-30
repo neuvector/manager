@@ -102,6 +102,18 @@
   </ng-container>
 
   <mat-tab-group
+    id="container-details"
+    [class]="
+      activeTab === 'vulnerabilities'
+        ? 'filter-icon-' + visibleIcons
+        : activeTab === 'compliance'
+        ? !complianceEmpty
+          ? 'filter-icon-1'
+          : 'filter-icon-0'
+        : activeTab === 'process'
+        ? 'filter-icon-1'
+        : ''
+    "
     class="h-100 container-detail-tab-group"
     mat-align-tabs="start"
     (selectedTabChange)="activateTab($event)">

@@ -187,7 +187,7 @@ export class ComplianceComponent implements OnInit, OnDestroy {
             .map(item => item.trim())
             .filter(item => item.length > 0);
           let domainPatterns = advFilter.selectedDomains
-            .map(item => item.name.trim())
+            .map(item => item.trim())
             .filter(item => item.length > 0);
           if (
             ((patterns.length > 0 &&

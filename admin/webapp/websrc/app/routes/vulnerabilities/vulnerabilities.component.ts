@@ -55,7 +55,6 @@ export class VulnerabilitiesComponent {
     this.vulnerabilitiesCsvService.downloadCsv();
   }
 
-
   printVulnerabilityPDF() {
     this.vulnerabilitiesList = this.getFilteredVulnerabilities();
     this.statisticCharts = {
@@ -107,10 +106,13 @@ export class VulnerabilitiesComponent {
     this.vulnerabilitiesService.gridApi.forEachNodeAfterFilter(rowNode => {
       vulnerabilitiesList.push(rowNode.data);
     });
-    this.isMeetingReportLimit = vulnerabilitiesList.length > MapConstant.SEC_RISK_REPORT_MAX_ROW;
+    this.isMeetingReportLimit =
+      vulnerabilitiesList.length > MapConstant.SEC_RISK_REPORT_MAX_ROW;
     return this.isMeetingReportLimit
-        ? vulnerabilitiesList.sort((a, b) => b.published_timestamp - a.published_timestamp).slice(0, MapConstant.SEC_RISK_REPORT_MAX_ROW)
-        : vulnerabilitiesList;
+      ? vulnerabilitiesList
+          .sort((a, b) => b.published_timestamp - a.published_timestamp)
+          .slice(0, MapConstant.SEC_RISK_REPORT_MAX_ROW)
+      : vulnerabilitiesList;
   };
 
   private prepareDetails = (masterData, vuls, isFiltered, advFilter) => {
@@ -177,7 +179,7 @@ export class VulnerabilitiesComponent {
             .map(item => item.trim())
             .filter(item => item.length > 0);
           let domainPatterns = advFilter.selectedDomains
-            .map(item => item.name.trim())
+            .map(item => item.trim())
             .filter(item => item.length > 0);
           console.log('domainPatterns: ', servicePatterns);
 
@@ -259,14 +261,12 @@ export class VulnerabilitiesComponent {
           vulWorkload.service_group = workloadInfo.service_group || '';
           vulWorkload.scanned_at = workloadInfo.scanned_at || '';
           vulWorkload.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
-          vulWorkload.medium +=
-            vul.severity.toLowerCase() === 'high' ? 0 : 1;
+          vulWorkload.medium += vul.severity.toLowerCase() === 'high' ? 0 : 1;
           vulWorkload.evaluation =
             vulWorkload.high > 0 || vulWorkload.medium > 0 ? 1 : 0;
           vulWorkload.vulnerabilites.push({
             text: vul.name || '',
-            style:
-              vul.severity.toLowerCase() === 'high' ? 'danger' : 'warning',
+            style: vul.severity.toLowerCase() === 'high' ? 'danger' : 'warning',
           });
           workloadMap4FilteredPdf[workload.id] = vulWorkload;
         }
@@ -327,12 +327,10 @@ export class VulnerabilitiesComponent {
           vulHost.scanned_at = hostInfo.scanned_at || '';
           vulHost.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
           vulHost.medium += vul.severity.toLowerCase() === 'high' ? 0 : 1;
-          vulHost.evaluation =
-            vulHost.high > 0 || vulHost.medium > 0 ? 1 : 0;
+          vulHost.evaluation = vulHost.high > 0 || vulHost.medium > 0 ? 1 : 0;
           vulHost.vulnerabilites.push({
             text: vul.name || '',
-            style:
-              vul.severity.toLowerCase() === 'high' ? 'danger' : 'warning',
+            style: vul.severity.toLowerCase() === 'high' ? 'danger' : 'warning',
           });
           hostMap4FilteredPdf[host.id] = vulHost;
         }
@@ -344,7 +342,9 @@ export class VulnerabilitiesComponent {
           vul.images.length > 0 &&
           advFilter.imageName
         ) {
-          let patterns = advFilter.imageName.split(',').map(item => item.trim());
+          let patterns = advFilter.imageName
+            .split(',')
+            .map(item => item.trim());
           if (new RegExp(patterns.join('|')).test(image.display_name)) {
             let vulImage = imageMap4FilteredPdf[image.id];
             if (vulImage) {
@@ -381,8 +381,7 @@ export class VulnerabilitiesComponent {
             vulImage.high > 0 || vulImage.medium > 0 ? 1 : 0;
           vulImage.vulnerabilites.push({
             text: vul.name || '',
-            style:
-              vul.severity.toLowerCase() === 'high' ? 'danger' : 'warning',
+            style: vul.severity.toLowerCase() === 'high' ? 'danger' : 'warning',
           });
           imageMap4FilteredPdf[image.id] = vulImage;
         }

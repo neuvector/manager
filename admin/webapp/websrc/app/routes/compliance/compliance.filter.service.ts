@@ -41,6 +41,10 @@ export class ComplianceFilterService {
 
   private _workloadMap;
 
+  get workloadMap() {
+    return this._workloadMap;
+  }
+
   set workloadMap(val) {
     this._workloadMap = val;
   }
@@ -193,7 +197,7 @@ export class ComplianceFilterService {
   namespaceFilter(workload) {
     const advFilter = this._advFilter;
     if (advFilter.selectedDomains.length) {
-      const container = this._workloadMap.get(workload.id);
+      const container = this.workloadMap.get(workload.id);
       const nsNames = advFilter.selectedDomains.map(
         (selectedDomain: any) => selectedDomain.name
       );
@@ -208,7 +212,7 @@ export class ComplianceFilterService {
   serviceFilter(workload) {
     const advFilter = this._advFilter;
     if (advFilter.serviceName) {
-      const container = this._workloadMap.get(workload.id);
+      const container = this.workloadMap.get(workload.id);
       if (container && container.service_group) {
         if (advFilter.matchTypes.Service.id === 'contains')
           return new RegExp(advFilter.serviceName).test(
@@ -223,7 +227,7 @@ export class ComplianceFilterService {
   workloadFilter(workload) {
     const advFilter = this._advFilter;
     if (advFilter.containerName) {
-      const container = this._workloadMap.get(workload.id);
+      const container = this.workloadMap.get(workload.id);
       if (container && container.display_name) {
         if (advFilter.matchTypes.Container.id === 'contains')
           return new RegExp(advFilter.containerName).test(

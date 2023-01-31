@@ -15,5 +15,6 @@ mat-tab-group.component-tabs .mat-tab-body-content {
   app-scanner-details > div {
     height: 100%;
     overflow: auto !important;
+    align-content: flex-start;
   }
 }

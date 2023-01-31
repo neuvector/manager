@@ -494,4 +494,58 @@ export class UtilsService {
       gaugeLabelColor,
     };
   }
+
+  humanizeDuration(duration: moment.Duration): string {
+    let units: string[] = [];
+    if (!duration || duration.toISOString() === 'P0D') return '';
+    if (duration.years() >= 1) {
+      const years = Math.floor(duration.years());
+      units.push(
+        years > 1
+          ? this.translate.instant('time.YEARS', { time: years })
+          : this.translate.instant('time.YEAR')
+      );
+    }
+    if (duration.months() >= 1) {
+      const months = Math.floor(duration.months());
+      units.push(
+        months > 1
+          ? this.translate.instant('time.MONTHS', { time: months })
+          : this.translate.instant('time.MONTH')
+      );
+    }
+    if (duration.days() >= 1) {
+      const days = Math.floor(duration.days());
+      units.push(
+        days > 1
+          ? this.translate.instant('time.DAYS', { time: days })
+          : this.translate.instant('time.DAY')
+      );
+    }
+    if (duration.hours() >= 1) {
+      const hours = Math.floor(duration.hours());
+      units.push(
+        hours > 1
+          ? this.translate.instant('time.HOURS', { time: hours })
+          : this.translate.instant('time.HOUR')
+      );
+    }
+    if (duration.minutes() >= 1) {
+      const minutes = Math.floor(duration.minutes());
+      units.push(
+        minutes > 1
+          ? this.translate.instant('time.MINUTES', { time: minutes })
+          : this.translate.instant('time.MINUTE')
+      );
+    }
+    if (duration.seconds() >= 1) {
+      const seconds = Math.floor(duration.seconds());
+      units.push(
+        seconds > 1
+          ? this.translate.instant('time.SECONDS', { time: seconds })
+          : this.translate.instant('time.SECOND')
+      );
+    }
+    return units.slice(0, 2).join(', ');
+  }
 }

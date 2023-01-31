@@ -6,12 +6,78 @@
       }}
     </h4>
     <div class="d-flex align-items-center justify-content-center mb-1">
-      <button mat-button [matMenuTriggerFor]="aboveMenu" class="rule-sample-btn text-muted">
-        <em class="eos-icons icon-18">info</em>
-        Sample
+      <button
+        mat-icon-button
+        aria-label="close"
+      >
+        <i class="eos-icons" (click)="onCancel()">close</i>
       </button>
-      <mat-menu id="rule-sample" #aboveMenu="matMenu" yPosition="above">
-        <div class="p-4">
+    </div>
+  </div>
+  <hr class="fancy" />
+  <div>
+    <form [formGroup]="processProfileRuleForm" class="">
+      <div class="d-flex justify-content-start align-content-center pl-2">
+        <mat-form-field appearance="fill" class="flex-grow-1">
+          <mat-label>{{ 'group.GROUP' | translate }}</mat-label>
+          <mat-select matNativeControl required formControlName="group">
+            <mat-option
+              *ngFor="let groupOption of groupOptions"
+              [value]="groupOption"
+              >{{ groupOption }}</mat-option
+            >
+          </mat-select>
+          <mat-error>Group is required!</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="d-flex justify-content-start align-content-center pl-2">
+        <mat-form-field appearance="standard" class="pr-4 flex-grow-1">
+          <mat-label>{{ 'service.gridHeader.NAME' | translate }}</mat-label>
+          <input
+            matInput
+            name="name"
+            [readonly]="type === 'edit'"
+            formControlName="name"
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+            required />
+          <mat-error>Rule name is required!</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="flex-grow-1">
+          <mat-label>{{ 'service.gridHeader.PATH' | translate }}</mat-label>
+          <input
+            matInput
+            name="path"
+            formControlName="path"
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+          />
+        </mat-form-field>
+        <div class="mt-4">
+          <span class="nv-modal-item-title mr-2">{{
+            'service.ALLOW_ALERT' | translate
+          }}</span>
+          <mat-slide-toggle
+            id="network-action-toggle"
+            [(ngModel)]="isAllowed"
+            [ngModelOptions]="{ standalone: true }"
+            color="primary">
+            <span
+              [ngClass]="{
+                'text-deny': !isAllowed,
+                'text-success': isAllowed
+              }">
+              {{
+                (isAllowed ? 'policy.action.ALLOW' : 'policy.action.DENY')
+                  | translate
+              }}
+            </span>
+          </mat-slide-toggle>
+        </div>
+      </div>
+      <div>
+        <div class="text-info">
+          <em class="eos-icons icon-18 mr-2">info</em>{{ 'general.SAMPLE'| translate }}
+        </div>
+        <div class="p-2 text-muted">
           <table>
             <tr class="sample-table-header">
               <th class="sample-table-border column-1">{{'service.gridHeader.NAME' | translate }}</th>
@@ -42,75 +108,6 @@
           <div class="text-bold">
             A single wildcard must be at the end
           </div>
-        </div>
-      </mat-menu>
-      <button
-        mat-icon-button
-        aria-label="close"
-      >
-        <i class="eos-icons" (click)="onCancel()">close</i>
-      </button>
-    </div>
-  </div>
-  <hr class="fancy" />
-  <div>
-    <form [formGroup]="processProfileRuleForm" class="">
-      <div class="pl-2">
-        <mat-form-field appearance="fill">
-          <mat-label>{{ 'group.GROUP' | translate }}</mat-label>
-          <mat-select matNativeControl required formControlName="group">
-            <mat-option
-              *ngFor="let groupOption of groupOptions"
-              [value]="groupOption"
-              >{{ groupOption }}</mat-option
-            >
-          </mat-select>
-          <mat-error>Group is required!</mat-error>
-        </mat-form-field>
-      </div>
-      <div class="d-flex justify-content-start align-content-center pl-2">
-        <mat-form-field appearance="standard" class="pr-4">
-          <mat-label>{{ 'service.gridHeader.NAME' | translate }}</mat-label>
-          <input
-            matInput
-            name="name"
-            [readonly]="type === 'edit'"
-            formControlName="name"
-            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-            required />
-          <mat-error>Rule name is required!</mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="standard">
-          <mat-label>{{ 'service.gridHeader.PATH' | translate }}</mat-label>
-          <input
-            matInput
-            name="path"
-            formControlName="path"
-            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-          />
-        </mat-form-field>
-      </div>
-      <div class="d-flex justify-content-start align-content-center pl-2 pt-2">
-        <div>
-          <span class="nv-modal-item-title mr-2">{{
-            'service.ALLOW_ALERT' | translate
-          }}</span>
-          <mat-slide-toggle
-            id="network-action-toggle"
-            [(ngModel)]="isAllowed"
-            [ngModelOptions]="{ standalone: true }"
-            color="primary">
-            <span
-              [ngClass]="{
-                'text-deny': !isAllowed,
-                'text-success': isAllowed
-              }">
-              {{
-                (isAllowed ? 'policy.action.ALLOW' : 'policy.action.DENY')
-                  | translate
-              }}
-            </span>
-          </mat-slide-toggle>
         </div>
       </div>
     </form>

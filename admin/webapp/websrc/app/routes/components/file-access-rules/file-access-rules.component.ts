@@ -254,6 +254,7 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
         source: this.source,
         getFileAccessRules: this.getFileAccessRules,
       },
+      width: '70%'
     });
     editDialogRef.afterClosed().subscribe(result => {
       this.isModalOpen = false;
@@ -269,6 +270,7 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
         source: this.source,
         getFileAccessRules: this.getFileAccessRules,
       },
+      width: '70%'
     });
     addDialogRef.afterClosed().subscribe(result => {
       this.isModalOpen = false;

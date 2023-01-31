@@ -512,15 +512,17 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
     if (networkRules.some(row => row.id === -1)) {
       networkRules.pop();
     }
-    networkRules.push({
-      id: -1,
-      from: this.translate.instant('policy.DEFAULT_RULE'),
-      to: '',
-      application: [],
-      ports: '',
-      action: '',
-      last_modified_timestamp: '',
-    });
+    if (this.eof) {
+      networkRules.push({
+        id: -1,
+        from: this.translate.instant('policy.DEFAULT_RULE'),
+        to: '',
+        application: [],
+        ports: '',
+        action: '',
+        last_modified_timestamp: '',
+      });
+    }
     this.ruleCount = networkRules.length;
     this.gridOptions.api!.setRowData(networkRules);
     if (this.eof) this.refreshing$.next(false);

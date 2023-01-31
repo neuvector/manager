@@ -117,7 +117,9 @@ export class EnforcersGridComponent implements OnInit, OnChanges {
           if (diff < 0) return 'Invalid date';
           return this.sanitizer.sanitize(
             SecurityContext.HTML,
-            moment.duration(moment().diff(params.data.joined_at)).humanize()
+            this.utils.humanizeDuration(
+              moment.duration(moment().diff(params.data.joined_at))
+            )
           );
         },
         comparator: (value1, value2, node1, node2) =>

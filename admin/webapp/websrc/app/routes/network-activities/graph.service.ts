@@ -1177,7 +1177,7 @@ export class GraphService {
   };
 
   private ageFormatter = params =>
-    moment.duration(params.value, 'seconds').humanize();
+    this.utils.humanizeDuration(moment.duration(params.value, 'seconds'));
 
   private ageComparator = (value1, value2, node1, node2) =>
     node1.data.age - node2.data.age;

@@ -1,5 +1,7 @@
 <mat-card>
-  <mat-tab-group (selectedTabChange)="activateTab($event)">
+  <mat-tab-group
+    (selectedTabChange)="activateTab($event)"
+    class="component-tabs">
     <mat-tab label="{{ 'sidebar.nav.CONTROLLERS' | translate }}">
       <app-adjustable-div [minHeightOne]="163" [minHeightTwo]="140">
         <ng-container *appContainerOne="let height">

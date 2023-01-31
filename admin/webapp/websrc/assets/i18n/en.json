@@ -3099,6 +3099,20 @@
   "HOURS_INTERVAL": "Every {{time}} hours",
   "ONE_DAY_INTERVAL": "Every day",
   "DAYS_INTERVAL": "Every {{time}} days",
+  "time": {
+    "YEARS": "{{time}} years",
+    "YEAR": "1 year",
+    "MONTHS": "{{time}} months",
+    "MONTH": "1 month",
+    "DAYS": "{{time}} days",
+    "DAY": "1 day",
+    "HOURS": "{{time}} hours",
+    "HOUR": "1 hour",
+    "MINUTES": "{{time}} minutes",
+    "MINUTE": "1 minute",
+    "SECONDS": "{{time}} seconds",
+    "SECOND": "1 second"
+  },
   "partner": {
     "general": {
       "WEB_URL": "http://www.neuvector.com",

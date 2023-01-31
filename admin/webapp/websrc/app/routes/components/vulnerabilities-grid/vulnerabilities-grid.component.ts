@@ -158,7 +158,7 @@ export class VulnerabilitiesGridComponent implements OnInit, OnChanges {
   scoreFormatter(params: ValueFormatterParams): string {
     const v2 = params.data.score;
     const v3 = params.data.score_v3;
-    return v2 === 0 ? '0' : `${v2}/${v3}`;
+    return `${v2}/${v3}`;
   }
 
   dateFormatter(params: ValueFormatterParams): string {

@@ -19,6 +19,7 @@ export class AddEditProcessProfileRuleModalComponent implements OnInit {
   public groupOptions: Array<string>;
   public isAllowed: Boolean = true;
   public processProfileRuleForm: FormGroup;
+  public oldData: any = {};
 
   constructor(
     public dialogRef: MatDialogRef<AddEditProcessProfileRuleModalComponent>,
@@ -71,15 +72,18 @@ export class AddEditProcessProfileRuleModalComponent implements OnInit {
     if (this.type === GlobalConstant.MODAL_OP.ADD) {
       this.processProfileRuleForm.reset();
     } else {
-      Object.keys(this.data.oldData).forEach((key: string) => {
+      this.oldData = this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY ?
+        this.data.oldData :
+        this.data.oldData[0];
+      Object.keys(this.oldData).forEach((key: string) => {
         if (this.processProfileRuleForm.controls[key]) {
           this.processProfileRuleForm.controls[key].setValue(
-            this.data.oldData ? this.data.oldData[key] : null
+            this.oldData ? this.oldData[key] : null
           );
         }
       });
       this.isAllowed =
-        this.data.oldData.action ===
+        this.oldData.action ===
         GlobalConstant.PROCESS_PROFILE_RULE.ACTION.ALLOW;
     }
     if (!this.processProfileRuleForm.controls.group.value) {
@@ -108,7 +112,7 @@ export class AddEditProcessProfileRuleModalComponent implements OnInit {
           : GlobalConstant.CRUD.U,
         this.processProfileRuleForm.controls.group.value,
         newData,
-        this.data.oldData || {},
+        this.oldData,
         this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY ?
         GlobalConstant.SCOPE.FED :
         GlobalConstant.SCOPE.LOCAL

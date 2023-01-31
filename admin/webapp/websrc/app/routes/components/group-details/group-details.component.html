@@ -35,7 +35,7 @@
           <button
             mat-button
             *ngIf="selectedProcessProfileRules && isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized"
-            (click)="removeProfile(selectedFileAccessRules)">
+            (click)="removeProfile(selectedProcessProfileRules)">
             <em class="eos-icons">delete</em>
             {{ 'service.DELETE_RULE' | translate }}
           </button>
@@ -43,8 +43,8 @@
         <div>
           <button
             mat-button
-            *ngIf="selectedProcessProfileRules && isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized"
-            (click)="editProfile(selectedFileAccessRules)">
+            *ngIf="selectedProcessProfileRules && selectedProcessProfileRules.length === 1 && isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized"
+            (click)="editProfile(selectedProcessProfileRules)">
             <em class="eos-icons">edit</em>
             {{ 'service.EDIT_RULE' | translate }}
           </button>

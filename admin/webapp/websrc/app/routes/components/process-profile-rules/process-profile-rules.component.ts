@@ -183,6 +183,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
   };
 
   editProfile = data => {
+    console.log(data)
     this.isModalOpen = true;
     let editDialogRef = this.dialog.open(
       AddEditProcessProfileRuleModalComponent,
@@ -217,7 +218,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
           return this.processProfileRulesService.updateProcessProfileRules(
             GlobalConstant.CRUD.D,
             this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-              ? data.group
+              ? data[0].group
               : this.groupName,
             {},
             data,

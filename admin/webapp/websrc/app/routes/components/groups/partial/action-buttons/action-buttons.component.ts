@@ -93,13 +93,15 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
     let message = `${this.translate.instant(
       'group.REMOVE_CONFIRM'
     )} - ${this.sanitizer.sanitize(SecurityContext.HTML, group.name)}`;
+    let supplemental = '';
     if (group.policy_rules.length > 0 || group.response_rules.length > 0) {
-      message += `<br/>${this.translate.instant('group.HAS_RULES_WARNING')}`;
+      supplemental = this.translate.instant('group.HAS_RULES_WARNING');
     }
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '700px',
       data: {
         message: message,
+        supplemental: supplemental
       },
     });
     dialogRef.componentInstance.confirm
@@ -114,10 +116,12 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
           this.notificationService.open(
             this.translate.instant('group.REMOVE_OK_MSG')
           );
-          this.params.context.componentParent.source ===
-          GlobalConstant.NAV_SOURCE.FED_POLICY
-            ? this.params.context.componentParent.getFedGroups()
-            : this.params.context.componentParent.getGroups();
+          setTimeout(() => {
+            this.params.context.componentParent.source ===
+            GlobalConstant.NAV_SOURCE.FED_POLICY
+              ? this.params.context.componentParent.getFedGroups()
+              : this.params.context.componentParent.getGroups();
+          }, 2000);
           // close dialog
           dialogRef.componentInstance.onCancel();
           dialogRef.componentInstance.loading = false;

@@ -116,10 +116,12 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
           this.notificationService.open(
             this.translate.instant('group.REMOVE_OK_MSG')
           );
-          this.params.context.componentParent.source ===
-          GlobalConstant.NAV_SOURCE.FED_POLICY
-            ? this.params.context.componentParent.getFedGroups()
-            : this.params.context.componentParent.getGroups();
+          setTimeout(() => {
+            this.params.context.componentParent.source ===
+            GlobalConstant.NAV_SOURCE.FED_POLICY
+              ? this.params.context.componentParent.getFedGroups()
+              : this.params.context.componentParent.getGroups();
+          }, 2000);
           // close dialog
           dialogRef.componentInstance.onCancel();
           dialogRef.componentInstance.loading = false;

@@ -195,6 +195,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
           source: this.source,
           getProcessProfileRules: this.getProcessProfileRules,
         },
+        width: "70%"
       }
     );
     editDialogRef.afterClosed().subscribe(() => {
@@ -262,6 +263,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
           source: this.source,
           getProcessProfileRules: this.getProcessProfileRules,
         },
+        width: "70%"
       }
     );
     addDialogRef.afterClosed().subscribe(result => {

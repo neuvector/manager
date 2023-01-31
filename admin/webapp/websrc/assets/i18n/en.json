@@ -58,7 +58,8 @@
     "DOWNLOAD_PDF": "Download by Namespace",
     "NEED_RESCAN": "You need to rescan for getting details",
     "VIEW_MORE": "View More",
-    "VIEW_LESS": "View Less"
+    "VIEW_LESS": "View Less",
+    "SAMPLE": "Sample"
   },
   "enum": {
     "FEDADMIN": "Federated Administrator",

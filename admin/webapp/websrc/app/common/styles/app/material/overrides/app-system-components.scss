@@ -1,0 +1,19 @@
+mat-tab-group.component-tabs .mat-tab-body-content {
+  overflow: hidden !important;
+  app-controller-details mat-tab-group {
+    height: 100%;
+    .mat-tab-body-content {
+      overflow: auto !important;
+    }
+  }
+  app-enforcer-details mat-tab-group {
+    height: 100%;
+    .mat-tab-body-content {
+      overflow: auto !important;
+    }
+  }
+  app-scanner-details > div {
+    height: 100%;
+    overflow: auto !important;
+  }
+}

@@ -172,10 +172,6 @@ export class UsersGridComponent implements OnInit {
     let actionCellParams =
       this.columnDefs[this.columnDefs.length - 1].cellRendererParams;
     actionCellParams.isWriteUserAuthorized = this.isWriteUserAuthorized;
-    actionCellParams.isRemote =
-      JSON.parse(
-        this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_CLUSTER) || '{}'
-      )?.isRemote || false;
     this.gridOptions = this.utils.createGridOptions(this.columnDefs, this.$win);
     this.gridOptions = {
       ...this.gridOptions,

@@ -24,9 +24,7 @@ export class ComplianceProfileComponent implements OnInit, OnDestroy {
     domains: DomainResponse;
   };
   loaded = false;
-  get isNamespaceUser() {
-    return this.authUtilsService.userPermission.isNamespaceUser;
-  }
+  isNamespaceUser!: boolean;
 
   constructor(
     private complianceProfileService: ComplianceProfileService,
@@ -40,6 +38,8 @@ export class ComplianceProfileComponent implements OnInit, OnDestroy {
       .subscribe(profileData => {
         this.complianceProfileData = profileData;
         this.loaded = true;
+        this.isNamespaceUser =
+          this.authUtilsService.userPermission.isNamespaceUser;
       });
     this._switchClusterSubscription =
       this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {

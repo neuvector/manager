@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable()
 export class VulnerabilitiesFilterService {
@@ -45,6 +45,10 @@ export class VulnerabilitiesFilterService {
   }
 
   private _workloadMap;
+
+  get workloadMap() {
+    return this._workloadMap;
+  }
 
   set workloadMap(val) {
     this._workloadMap = val;

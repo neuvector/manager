@@ -97,8 +97,18 @@ export class ContainersGridComponent implements OnInit {
         hide: true,
       },
       {
-        headerName: 'Child Names',
-        field: 'child_names',
+        headerName: 'Child IDs',
+        field: 'child_ids',
+        hide: true,
+      },
+      {
+        headerName: 'Child Data',
+        field: 'child_data',
+        hide: true,
+      },
+      {
+        headerName: 'Parent Data',
+        field: 'parent_data',
         hide: true,
       },
       {

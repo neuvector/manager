@@ -1,13 +1,17 @@
 <mat-card class="h-100 pt-0">
   <div class="row h-100">
     <div class="col-7 h-100">
-      <app-compliance-items-table (toggleChartView)="toggleChartView($event)"
-                                  [domains]="domains" [rowData]="compliances"></app-compliance-items-table>
+      <app-compliance-items-table
+        (toggleChartView)="toggleChartView($event)"
+        (updateCountDistribution)="updateCountDistribution($event)"
+        [domains]="domains"
+        [rowData]="compliances"></app-compliance-items-table>
     </div>
 
     <ng-container *ngIf="pieChartView; else detailsViewTemplate">
       <div class="col-5 h-100" style="padding-top: 5px">
-        <app-compliance-items-charts [complianceDist]="complianceDist"></app-compliance-items-charts>
+        <app-compliance-items-charts
+          [complianceDist]="complianceDist"></app-compliance-items-charts>
       </div>
     </ng-container>
     <ng-template #detailsViewTemplate>

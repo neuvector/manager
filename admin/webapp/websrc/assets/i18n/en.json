@@ -109,6 +109,7 @@
     "APPLY": "Apply",
     "EVENT": "Event",
     "SECURITY_EVENT": "Security Event",
+    "RISK_REPORT": "Risk Report",
     "VIOLATION": "Violation",
     "THREAT": "Threat",
     "INCIDENT": "Incident",
@@ -1072,6 +1073,11 @@
       "IMAGES": "Images",
       "DOMAINS": "Namespaces",
       "COMMENT": "Comment"
+    },
+    "hint": {
+      "NAME": "Sample: CVE-2021-4534, CVE-2021-* or *.",
+      "IMAGE": "Sample: nginx:1.23, *node*:latest",
+      "NAMESPACE": "Sample: default, *kafka*"
     }
   },
   "scan": {
@@ -3093,6 +3099,20 @@
   "HOURS_INTERVAL": "Every {{time}} hours",
   "ONE_DAY_INTERVAL": "Every day",
   "DAYS_INTERVAL": "Every {{time}} days",
+  "time": {
+    "YEARS": "{{time}} years",
+    "YEAR": "1 year",
+    "MONTHS": "{{time}} months",
+    "MONTH": "1 month",
+    "DAYS": "{{time}} days",
+    "DAY": "1 day",
+    "HOURS": "{{time}} hours",
+    "HOUR": "1 hour",
+    "MINUTES": "{{time}} minutes",
+    "MINUTE": "1 minute",
+    "SECONDS": "{{time}} seconds",
+    "SECOND": "1 second"
+  },
   "partner": {
     "general": {
       "WEB_URL": "http://www.neuvector.com",

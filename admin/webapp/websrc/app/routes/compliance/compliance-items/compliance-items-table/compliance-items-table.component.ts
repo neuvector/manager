@@ -37,6 +37,7 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
   @Input() gridHeight!: number;
   @Input() domains!: string[];
   @Output() toggleChartView = new EventEmitter();
+  @Output() updateCountDistribution = new EventEmitter();
   matchTypes = this.complianceFilterService.matchTypes;
   filteredCount = 0;
   filtered$ = this.complianceFilterService.filtered$;
@@ -148,7 +149,7 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
     this.complianceFilterService.filteredCount = results;
     this.complianceFilterService.filtered =
       this.filteredCount !== this.rowData.length;
-    // this.runWorkers();
+    this.updateFiltered();
   }
 
   onSelectionChanged(params: GridReadyEvent): void {
@@ -195,7 +196,7 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
     this.filteredCount =
       this.gridApi.getModel()['rootNode'].childrenAfterFilter.length;
     this.complianceFilterService.filteredCount = this.filteredCount;
-    // this.runWorkers();
+    this.updateFiltered();
   }
 
   openAdvancedFilter(): void {
@@ -236,14 +237,14 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  // runWorkers() {
-  //   const filteredCis: any = [];
-  //   this.gridApi.forEachNodeAfterFilterAndSort(node => {
-  //     filteredCis.push(JSON.parse(JSON.stringify(node.data)));
-  //   });
-  //   this.complianceFilterService.filteredCis = filteredCis;
-  //   this.complianceService.runWorkers();
-  // }
+  updateFiltered() {
+    const filteredCis: any = [];
+    this.gridApi.forEachNodeAfterFilterAndSort(node => {
+      filteredCis.push(JSON.parse(JSON.stringify(node.data)));
+    });
+    this.complianceFilterService.filteredCis = filteredCis;
+    this.updateCountDistribution.emit(this.complianceFilterService.filteredCis);
+  }
 
   isExternalFilterPresent(): boolean {
     return this.complianceFilterService.isAdvFilterOn();

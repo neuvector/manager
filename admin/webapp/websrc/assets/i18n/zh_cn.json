@@ -109,6 +109,7 @@
     "APPLY": "应用",
     "EVENT": "事件",
     "SECURITY_EVENT": "安全事件",
+    "RISK_REPORT": "风险报告",
     "VIOLATION": "违规",
     "THREAT": "威胁",
     "AUDIT": "风险报告",
@@ -1072,6 +1073,11 @@
       "IMAGES": "镜像",
       "DOMAINS": "命名空间",
       "COMMENT": "注释"
+    },
+    "hint": {
+      "NAME": "样本: CVE-2021-4534, CVE-2021-* or *.",
+      "IMAGE": "样本: nginx:1.23, *node*:latest",
+      "NAMESPACE": "样本: default, *kafka*"
     }
   },
   "scan": {
@@ -3093,6 +3099,20 @@
   "HOURS_INTERVAL": "每 {{time}} 小时",
   "ONE_DAY_INTERVAL": "每天",
   "DAYS_INTERVAL": "每 {{time}} 天",
+  "time": {
+    "YEARS": "{{time}}年",
+    "YEAR": "1年",
+    "MONTHS": "{{time}}个月",
+    "MONTH": "1个月",
+    "DAYS": "{{time}}天",
+    "DAY": "1天",
+    "HOURS": "{{time}}小时",
+    "HOUR": "1小时",
+    "MINUTES": "{{time}}分钟",
+    "MINUTE": "1分钟",
+    "SECONDS": "{{time}}秒",
+    "SECOND": "1秒"
+  },
   "partner": {
     "general": {
       "WEB_URL": "http://www.neuvector.com",

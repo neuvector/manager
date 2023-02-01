@@ -46,9 +46,10 @@
     <app-loading-button
       [appearance]="'mat-raised-button'"
       [color]="'primary'"
+      [disabled]="selectedDlpSensors.length === 0"
       [loading]="submittingUpdate"
       [text]="'group.dlp.setting.ADOPT' | translate"
-      (click)="adoptSensors()"
+      (btnClick)="adoptSensors()"
       class="pull-right"
     >
     </app-loading-button>

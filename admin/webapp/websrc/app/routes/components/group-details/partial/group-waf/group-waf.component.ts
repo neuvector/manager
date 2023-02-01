@@ -97,16 +97,18 @@ export class GroupWafComponent implements OnInit {
   };
 
   openEditGroupSensorModal = (warning = '') => {
-    const addEditDialogRef = this.dialog.open(GroupWafConfigModalComponent, {
-      width: '80%',
-      data: {
-        configuredSensors: this.groupWafSensors,
-        groupName: this.groupName,
-        status: this.enabled,
-        warning: warning,
-        refresh: this.refresh,
-      },
-    });
+    setTimeout(() => {
+      const addEditDialogRef = this.dialog.open(GroupWafConfigModalComponent, {
+        width: '80%',
+        data: {
+          configuredSensors: this.groupWafSensors,
+          groupName: this.groupName,
+          status: this.enabled,
+          warning: warning,
+          refresh: this.refresh,
+        },
+      });
+    }, 200);
   };
 
   toggleWAFConfigEnablement = enabled => {

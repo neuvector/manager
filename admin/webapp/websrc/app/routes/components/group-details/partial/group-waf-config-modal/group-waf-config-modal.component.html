@@ -46,7 +46,6 @@
     <app-loading-button
       [appearance]="'mat-raised-button'"
       [color]="'primary'"
-      [disabled]="selectedWafSensors.length === 0"
       [loading]="submittingUpdate"
       [text]="'group.waf.setting.ADOPT' | translate"
       (btnClick)="adoptSensors()"

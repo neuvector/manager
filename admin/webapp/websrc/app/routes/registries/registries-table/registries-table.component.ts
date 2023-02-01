@@ -140,10 +140,14 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
   stoppingScan$ = this.registriesCommunicationService.stoppingScan$;
   isRegistryScanAuthorized: boolean = false;
   get isFedRegistry() {
-    return (
-      this.gridApi?.getSelectedNodes()?.[0].data?.cfg_type ===
-      GlobalConstant.CFG_TYPE.FED
-    );
+    let selectedRows = this.gridApi?.getSelectedNodes();
+    if (Array.isArray(selectedRows) && selectedRows.length > 0) {
+      return (
+        selectedRows[0].data.cfg_type ===
+        GlobalConstant.CFG_TYPE.FED
+      );
+    }
+    return false;
   }
   get isFedAdmin() {
     return GlobalVariable.user.token.role === MapConstant.FED_ROLES.FEDADMIN;

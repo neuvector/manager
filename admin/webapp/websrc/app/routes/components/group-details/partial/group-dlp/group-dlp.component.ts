@@ -97,16 +97,18 @@ export class GroupDlpComponent implements OnInit {
   };
 
   openEditGroupSensorModal = (warning = '') => {
-    const addEditDialogRef = this.dialog.open(GroupDlpConfigModalComponent, {
-      width: '80%',
-      data: {
-        configuredSensors: this.groupDlpSensors,
-        groupName: this.groupName,
-        status: this.enabled,
-        warning: warning,
-        refresh: this.refresh,
-      },
-    });
+    setTimeout(() => {
+      const addEditDialogRef = this.dialog.open(GroupDlpConfigModalComponent, {
+        width: '80%',
+        data: {
+          configuredSensors: this.groupDlpSensors,
+          groupName: this.groupName,
+          status: this.enabled,
+          warning: warning,
+          refresh: this.refresh,
+        },
+      });
+    }, 200);
   };
 
   toggleDLPConfigEnablement = enabled => {

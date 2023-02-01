@@ -15,6 +15,7 @@ export class GroupDlpConfigModalComponent implements OnInit {
 
   gridOptions4DlpSensorOption: GridOptions;
   filteredCount: number = 0;
+  filtered: boolean = false;
   dlpSensorOption: Array<DlpSensor> = [];
   selectedDlpSensors: Array<DlpSensor> = [];
   submittingUpdate: boolean = false;
@@ -94,5 +95,11 @@ export class GroupDlpConfigModalComponent implements OnInit {
         }
       );
   };
+
+  filterCountChanged = (results: number) => {
+    this.filteredCount = results;
+    this.filtered =
+      this.filteredCount !== this.dlpSensorOption.length;
+  }
 
 }

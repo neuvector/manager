@@ -1,44 +1,56 @@
 <div class="nv-dialog">
-  <div mat-dialog-title class="dialog-header">
-    <div class="pull-left">
-      <span>{{'group.waf.setting.TITLE' | translate}}</span>
-    </div>
-    <div class="pull-right">
-      <em class="icon-close hand" (click)="onCancel()"></em>
+  <div class="d-flex align-items-center justify-content-between">
+    <h4 mat-dialog-title class="mb-1">
+      {{'group.waf.setting.TITLE' | translate}}
+    </h4>
+    <div class="d-flex align-items-center justify-content-center mb-1">
+      <button
+        mat-icon-button
+        aria-label="close"
+      >
+        <i class="eos-icons" (click)="onCancel()">close</i>
+      </button>
     </div>
   </div>
-  <div mat-dialog-content>
-    <div class="clearfix">
-      <app-quick-filter
-        class="pull-left"
-        [gridOptions]="gridOptions4WafSensorOption"
-        [filteredCount]="filteredCount"
-        [count]="wafSensorOption.length">
-      </app-quick-filter>
-      <div class="pull-left mt-4 text-warning" *ngIf="data.warning">
-        {{data.warning}}
+  <hr class="fancy mb-0" />
+  <div class="clearfix">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="font-weight-bold text-info">
+        <span *ngIf="filtered">
+          {{ 'enum.FOUND' | translate }}
+          {{ filteredCount }}&nbsp;/
+        </span>
+        <span *ngIf="!filtered" >
+          {{ 'enum.OUT_OF' | translate }}&nbsp;
+        </span>
+        {{ wafSensorOption.length }}
       </div>
-    </div>
-    <div class="clearfix">
-      <ag-grid-angular
-        #groupWafSensorOptionGrid
-        id="group-waf-sensor-option-grid"
-        style="width: 100%; height: 400px;"
-        class="ag-theme-balham"
+      <app-quick-filter
+        (filterCountChange)="filterCountChanged($event)"
         [gridOptions]="gridOptions4WafSensorOption"
-        >
-      </ag-grid-angular>
+        [showCount]="false">
+      </app-quick-filter>
     </div>
-    <div class="clearfix mt-2">
-      <app-loading-button
-        [appearance]="'mat-raised-button'"
-        [color]="'primary'"
-        [loading]="submittingUpdate"
-        [text]="'group.waf.setting.ADOPT' | translate"
-        (click)="adoptSensors()"
-        class="pull-right"
+    <ag-grid-angular
+      #groupWafSensorOptionGrid
+      id="group-waf-sensor-option-grid"
+      style="width: 100%; height: 400px;"
+      class="ag-theme-balham"
+      [gridOptions]="gridOptions4WafSensorOption"
       >
-      </app-loading-button>
-    </div>
+    </ag-grid-angular>
+  </div>
+  <div
+    mat-dialog-actions
+    class="d-flex justify-content-end align-content-center">
+    <app-loading-button
+      [appearance]="'mat-raised-button'"
+      [color]="'primary'"
+      [loading]="submittingUpdate"
+      [text]="'group.waf.setting.ADOPT' | translate"
+      (click)="adoptSensors()"
+      class="pull-right"
+    >
+    </app-loading-button>
   </div>
 </div>

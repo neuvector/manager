@@ -15,6 +15,7 @@ export class GroupWafConfigModalComponent implements OnInit {
 
   gridOptions4WafSensorOption: GridOptions;
   filteredCount: number = 0;
+  filtered: boolean = false;
   wafSensorOption: Array<WafSensor> = [];
   selectedWafSensors: Array<WafSensor> = [];
   submittingUpdate: boolean = false;
@@ -95,4 +96,9 @@ export class GroupWafConfigModalComponent implements OnInit {
       );
   };
 
+  filterCountChanged = (results: number) => {
+    this.filteredCount = results;
+    this.filtered =
+      this.filteredCount !== this.wafSensorOption.length;
+  }
 }

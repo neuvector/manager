@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { GlobalVariable } from '@common/variables/global.variable';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
@@ -10,6 +11,9 @@ import { ICellRendererParams } from 'ag-grid-community';
 })
 export class UsersGridActionCellComponent implements ICellRendererAngularComp {
   params: any;
+  get isRemote() {
+    return GlobalVariable.isRemote;
+  }
 
   agInit(params: ICellRendererParams): void {
     this.params = params;

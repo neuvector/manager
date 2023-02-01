@@ -9,17 +9,17 @@ export const SyslogProtocols = [
 ];
 
 export const SyslogLevels = [
-  { value: 'Critical', viewValue: 'Critical' },
-  { value: 'Error', viewValue: 'Error' },
-  { value: 'Warning', viewValue: 'Warning' },
-  { value: 'Notice', viewValue: 'Notice' },
-  { value: 'Info', viewValue: 'Info' },
+  { value: 'Critical', viewValue: 'enum.CRITICAL' },
+  { value: 'Error', viewValue: 'enum.ERROR' },
+  { value: 'Warning', viewValue: 'enum.WARNING' },
+  { value: 'Notice', viewValue: 'enum.NOTICE' },
+  { value: 'Info', viewValue: 'enum.INFO' },
 ];
 
 export const SyslogCategories = [
-  { value: 'event', label: 'Event' },
-  { value: 'security-event', label: 'Security Event' },
-  { value: 'audit', label: 'Risk Report' },
+  { value: 'event', label: 'enum.EVENT' },
+  { value: 'security-event', label: 'enum.SECURITY_EVENT' },
+  { value: 'audit', label: 'enum.RISK_REPORT' },
 ];
 
 export const SyslogToggleField = {
@@ -91,7 +91,7 @@ export const SyslogLevelField = {
 };
 
 export const SyslogCategoriesField = {
-  type: 'multicheckbox',
+  type: FormlyComponents.MULTI_CHECKBOX,
   key: 'syslog.syslog_categories',
   wrappers: [FormlyComponents.HINT_WRAPPER],
   templateOptions: {

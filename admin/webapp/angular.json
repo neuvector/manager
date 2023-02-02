@@ -18,7 +18,7 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
             "outputPath": "root",
             "index": "websrc/index.html",
@@ -45,7 +45,11 @@
               "websrc/app/core/jquery/jquerySupport.js",
               "websrc/app/core/systemPrepare/systemPrepare.js"
             ],
-            "webWorkerTsConfig": "tsconfig.worker.json"
+            "webWorkerTsConfig": "tsconfig.worker.json",
+            "customWebpackConfig": {
+              "path": "websrc/nv-webpack.config.js",
+              "replaceDuplicatePlugins": true
+            }
           },
           "configurations": {
             "production": {
@@ -67,6 +71,7 @@
                   "with": "websrc/environments/environment.prod.ts"
                 }
               ],
+              "vendorChunk": true,
               "outputHashing": "all"
             },
             "development": {

@@ -141,7 +141,8 @@ object Utils extends LazyLogging with Directives {
         respondWithHeaders(
           RawHeader("Content-Security-Policy", s"frame-ancestors $acceptFrameAncestors"),
           RawHeader("X-Frame-Options", "DENY"),
-          RawHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload")
+          RawHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload"),
+          RawHeader("Content-Encoding", "gzip")
         )
       } else {
         respondWithHeaders(
@@ -155,7 +156,8 @@ object Utils extends LazyLogging with Directives {
       if (isStaticResource) {
         respondWithHeaders(
           RawHeader("Content-Security-Policy", s"frame-ancestors $acceptFrameAncestors"),
-          RawHeader("X-Frame-Options", "DENY")
+          RawHeader("X-Frame-Options", "DENY"),
+          RawHeader("Content-Encoding", "gzip")
         )
       } else {
         respondWithHeaders(

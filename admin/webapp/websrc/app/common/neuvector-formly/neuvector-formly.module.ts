@@ -44,6 +44,8 @@ import { NgxSliderComponent } from './ngx-slider/ngx-slider.component';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { InputDialogModule } from '@components/ui/input-dialog/input-dialog.module';
+import { MulticheckboxComponent } from './multicheckbox/multicheckbox.component';
+import { FormlySelectModule } from '@ngx-formly/core/select';
 
 export enum FormlyValidators {
   REQUIRED = 'required',
@@ -56,6 +58,7 @@ export enum FormlyValidators {
 
 export enum FormlyComponents {
   CHECKBOX = 'checkbox',
+  MULTI_CHECKBOX = 'multicheckbox',
   BUTTON = 'button',
   ICON_INPUT = 'icon_input',
   TOGGLE = 'toggle',
@@ -91,8 +94,10 @@ export enum FormlyComponents {
     CheckboxComponent,
     ButtonComponent,
     NgxSliderComponent,
+    MulticheckboxComponent,
   ],
   imports: [
+    FormlySelectModule,
     CommonModule,
     ReactiveFormsModule,
     MatChipsModule,
@@ -140,6 +145,11 @@ export enum FormlyComponents {
         {
           name: FormlyComponents.CHECKBOX,
           component: CheckboxComponent,
+          wrappers: [],
+        },
+        {
+          name: FormlyComponents.MULTI_CHECKBOX,
+          component: MulticheckboxComponent,
           wrappers: [],
         },
         { name: FormlyComponents.BUTTON, component: ButtonComponent },

@@ -84,7 +84,7 @@
           [color]="'primary'"
           [loading]="submittingUpdate"
           [text]="(data.opType === modalOp.EDIT ? 'group.editGroup.UPDATE' : 'group.addGroup.ADD') | translate"
-          (click)="updateGroup()"
+          (btnClick)="updateGroup()"
         >
         </app-loading-button>
       </div>

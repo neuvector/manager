@@ -306,7 +306,7 @@
             [color]="'primary'"
             [loading]="submittingUpdate"
             [text]="(data.opType === modalOp.EDIT ? 'policy.editPolicy.UPDATE' : 'policy.addPolicy.ADD') | translate"
-            (click)="updateRule()"
+            (btnClick)="updateRule()"
             class="pull-right"
           >
           </app-loading-button>
@@ -402,7 +402,7 @@
         [disabled]="!isCustomCriterionValid(customCriterion)"
         [loading]="submittingUpdate"
         [text]="'policy.addPolicy.ADD' | translate"
-        (click)="addCustomizedCriteria(customCriterion)"
+        (btnClick)="addCustomizedCriteria(customCriterion)"
       >
       </app-loading-button>
     </div>

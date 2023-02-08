@@ -18,7 +18,9 @@ export class GroupWafConfigModalComponent implements OnInit {
   filtered: boolean = false;
   wafSensorOption: Array<WafSensor> = [];
   selectedWafSensors: Array<WafSensor> = [];
+  selectedWafSensorNodes: Array<any> = [];
   submittingUpdate: boolean = false;
+  context = {componentParent: this};
 
 
   constructor(
@@ -33,6 +35,7 @@ export class GroupWafConfigModalComponent implements OnInit {
     this.gridOptions4WafSensorOption = this.groupsService.prepareGrid4WafSensorOption();
     this.gridOptions4WafSensorOption.onSelectionChanged = () => {
       this.selectedWafSensors = this.gridOptions4WafSensorOption.api!.getSelectedRows();
+      this.selectedWafSensorNodes = this.gridOptions4WafSensorOption.api!.getSelectedNodes();
     };
     this.refresh();
   }

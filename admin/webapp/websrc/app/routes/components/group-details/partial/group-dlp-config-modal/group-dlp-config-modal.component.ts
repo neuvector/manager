@@ -18,7 +18,9 @@ export class GroupDlpConfigModalComponent implements OnInit {
   filtered: boolean = false;
   dlpSensorOption: Array<DlpSensor> = [];
   selectedDlpSensors: Array<DlpSensor> = [];
+  selectedDLPSensorNodes: Array<any> = [];
   submittingUpdate: boolean = false;
+  context = { componentParent: this };
 
 
   constructor(
@@ -33,6 +35,7 @@ export class GroupDlpConfigModalComponent implements OnInit {
     this.gridOptions4DlpSensorOption = this.groupsService.prepareGrid4DlpSensorOption();
     this.gridOptions4DlpSensorOption.onSelectionChanged = () => {
       this.selectedDlpSensors = this.gridOptions4DlpSensorOption.api!.getSelectedRows();
+      this.selectedDLPSensorNodes = this.gridOptions4DlpSensorOption.api!.getSelectedNodes();
     };
     this.refresh();
   }

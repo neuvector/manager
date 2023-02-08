@@ -156,6 +156,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
               if (this.gridOptions.api) {
                 this.gridOptions.api.sizeColumnsToFit();
               }
+              this.getSelectedProcessProfileRules.emit(this.selectedProcessProfileRules);
             });
           },
           err => {

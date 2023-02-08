@@ -150,6 +150,7 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
               ? this.w.innerHeight - 300
               : 0;
           setTimeout(() => {
+            this.getSelectedFileAccessRules.emit(this.selectedFileAccessRules);
             if (this.gridOptions.api) {
               // this.gridOptions.api.setRowData($scope.profile);
               this.gridOptions.api.forEachNode((node, index) => {
@@ -161,11 +162,13 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
                     node.setSelected(true);
                     if (this.gridOptions.api)
                       this.gridOptions.api.ensureNodeVisible(node);
+                    this.getSelectedFileAccessRules.emit(this.selectedFileAccessRules);
                   }
                 } else if (index === 0) {
                   node.setSelected(true);
                   if (this.gridOptions.api)
                     this.gridOptions.api.ensureNodeVisible(node);
+                  this.getSelectedFileAccessRules.emit(this.selectedFileAccessRules);
                 }
               });
               this.gridOptions.api.sizeColumnsToFit();

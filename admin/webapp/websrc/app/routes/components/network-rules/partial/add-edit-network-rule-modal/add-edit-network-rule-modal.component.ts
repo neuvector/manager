@@ -43,7 +43,7 @@ export class AddEditNetworkRuleModalComponent implements OnInit {
         applicationsCtrl: new FormControl(),
         ports: new FormControl(this.data.selectedNetworkRule.ports)
       });
-      this.applications = this.data.selectedNetworkRule.applications;
+      this.applications = JSON.parse(JSON.stringify(this.data.selectedNetworkRule.applications));
       this.isAllow = this.data.selectedNetworkRule.action === GlobalConstant.PROCESS_PROFILE_RULE.ACTION.ALLOW;
       this.enable = !this.data.selectedNetworkRule.disable;
     } else {

@@ -53,7 +53,7 @@ export class AddEditGroupModalComponent implements OnInit {
         comment: new FormControl(this.data.selectedGroup.comment),
         criteriaCtrl: new FormControl()
       });
-      this.criteria = this.data.selectedGroup.criteria;
+      this.criteria = JSON.parse(JSON.stringify(this.data.selectedGroup.criteria));
       if (this.data.opType === GlobalConstant.MODAL_OP.VIEW) {
         this.addEditGroupForm.controls.criteriaCtrl.disable();
       } else {

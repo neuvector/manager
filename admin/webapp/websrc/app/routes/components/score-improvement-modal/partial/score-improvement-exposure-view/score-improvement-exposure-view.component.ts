@@ -75,18 +75,18 @@ export class ScoreImprovementExposureViewComponent implements OnInit {
 
   getPredictionScores() {
     const metrics = this.scoreImprovementModalService.newMetrics();
-    metrics.protect_ext_eps +=
-      metrics.discover_ext_eps + metrics.monitor_ext_eps;
-    metrics.monitor_ext_eps = 0;
-    metrics.discover_ext_eps = 0;
-    metrics.threat_ext_eps = 0;
-    metrics.violate_ext_eps = 0;
-    metrics.discover_groups_zero_drift = 0;
+    metrics.workloads.protect_ext_eps +=
+      metrics.workloads.discover_ext_eps + metrics.workloads.monitor_ext_eps;
+    metrics.workloads.monitor_ext_eps = 0;
+    metrics.workloads.discover_ext_eps = 0;
+    metrics.workloads.threat_ext_eps = 0;
+    metrics.workloads.violate_ext_eps = 0;
+    metrics.groups.discover_groups_zero_drift = 0;
     this.scoreImprovementModalService
       .calculateScoreData(
         metrics,
         this.isGlobalUser,
-        this.scoreImprovementModalService.scoreInfo.header_data.running_pods
+        this.scoreImprovementModalService.scoreInfo.header_data.workloads.running_pods
       )
       .subscribe(scores => {
         this.projectedScore = scores.securityRiskScore;
@@ -156,7 +156,10 @@ export class ScoreImprovementExposureViewComponent implements OnInit {
   }
 
   setSelectedGroup(service: Group | null) {
-    this.selectedGroup = service;
+    this.selectedGroup = null;
+    setTimeout(() => {
+      this.selectedGroup = service;
+    });
   }
 
   selectionChange(event: StepperSelectionEvent) {

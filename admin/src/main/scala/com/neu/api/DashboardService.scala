@@ -117,28 +117,15 @@ class DashboardService()(implicit executionContext: ExecutionContext)
                                              internalSystemDataToJson(
                                                InternalSystemData(
                                                  Metrics(
-                                                   0,
-                                                   0,
-                                                   0,
-                                                   0,
-                                                   0,
-                                                   0,
-                                                   0,
-                                                   0,
-                                                   0,
-                                                   0,
-                                                   0,
-                                                   0,
-                                                   0,
+                                                   "",
+                                                   "",
                                                    "",
                                                    "",
                                                    0,
                                                    0,
-                                                   0,
-                                                   0,
-                                                   0,
-                                                   0,
-                                                   0
+                                                   RiskScoreMetricsWL(0, 0, 0, 0, 0, 0, 0, 0),
+                                                   RiskScoreMetricsGroup(0, 0, 0, 0, 0, 0, 0),
+                                                   RiskScoreMetricsCVE(0, 0, 0, 0, 0)
                                                  ),
                                                  Array(),
                                                  Array(),
@@ -1858,7 +1845,7 @@ class DashboardService()(implicit executionContext: ExecutionContext)
     hasError: Boolean,
     isGlobalUser: Boolean
   ) => {
-    val totalRunningPods = totalRunningPodsOption.fold(metrics.running_pods) {
+    val totalRunningPods = totalRunningPodsOption.fold(metrics.workloads.running_pods) {
       totalRunningPodsOption =>
         totalRunningPodsOption
     }
@@ -1866,12 +1853,12 @@ class DashboardService()(implicit executionContext: ExecutionContext)
       metrics.new_service_policy_mode.toLowerCase == "discover"
     )
 
-    val serviceModeScoreBy100 = metrics.groups match {
+    val serviceModeScoreBy100 = metrics.groups.groups match {
       case 0 => 0
       case _ =>
         math
           .ceil(
-            ((metrics.discover_groups - metrics.discover_groups_zero_drift) + metrics.discover_groups_zero_drift * 0.5) / metrics.groups.toDouble * 100
+            ((metrics.groups.discover_groups - metrics.groups.discover_groups_zero_drift) + metrics.groups.discover_groups_zero_drift * 0.5) / metrics.groups.groups.toDouble * 100
           )
           .toInt
     }
@@ -1883,10 +1870,10 @@ class DashboardService()(implicit executionContext: ExecutionContext)
       case _ =>
         val exposureDensity = getExposureDensity(totalRunningPods)
         logger.info("Exposure density: {}", exposureDensity)
-        var modeScore = (metrics.protect_ext_eps + metrics.monitor_ext_eps) * exposureDensity * RATIO_PROTECT_MONITOR_EXPOSURE +
-          metrics.discover_ext_eps * exposureDensity * RATIO_DISCOVER_EXPOSURE
-        var violationScore = metrics.violate_ext_eps * exposureDensity * RATIO_VIOLATED_EXPOSURE
-        var threatScore    = metrics.threat_ext_eps * exposureDensity * RATIO_THREATENED_EXPOSURE
+        var modeScore = (metrics.workloads.protect_ext_eps + metrics.workloads.monitor_ext_eps) * exposureDensity * RATIO_PROTECT_MONITOR_EXPOSURE +
+          metrics.workloads.discover_ext_eps * exposureDensity * RATIO_DISCOVER_EXPOSURE
+        var violationScore = metrics.workloads.violate_ext_eps * exposureDensity * RATIO_VIOLATED_EXPOSURE
+        var threatScore    = metrics.workloads.threat_ext_eps * exposureDensity * RATIO_THREATENED_EXPOSURE
         modeScore = if (modeScore > MAX_MODE_EXPOSURE) MAX_MODE_EXPOSURE else modeScore
         violationScore =
           if (violationScore > MAX_VIOLATE_EXPOSURE) MAX_VIOLATE_EXPOSURE else violationScore
@@ -1900,9 +1887,9 @@ class DashboardService()(implicit executionContext: ExecutionContext)
       )
       .toInt
 
-    val privilegedContainerScore = getPrivilegedContainerScore(metrics.privileged_wls > 0)
+    val privilegedContainerScore = getPrivilegedContainerScore(metrics.workloads.privileged_wls > 0)
 
-    val runAsRootScore = getRunAsRootScore(metrics.root_wls > 0)
+    val runAsRootScore = getRunAsRootScore(metrics.workloads.root_wls > 0)
 
     val admissionRuleScore = getAdmissionRuleScore(metrics.deny_adm_ctrl_rules > 0)
 
@@ -1911,18 +1898,18 @@ class DashboardService()(implicit executionContext: ExecutionContext)
     totalRunningPods match {
       case 0 => 0
       case _ =>
-        podScore = metrics.discover_cves / totalRunningPods * RATIO_DISCOVER_VUL +
-          metrics.discover_cves / totalRunningPods * RATIO_MONITOR_VUL +
-          metrics.protect_cves / totalRunningPods * RATIO_PROTECT_VUL
+        podScore = metrics.cves.discover_cves / totalRunningPods * RATIO_DISCOVER_VUL +
+          metrics.cves.discover_cves / totalRunningPods * RATIO_MONITOR_VUL +
+          metrics.cves.protect_cves / totalRunningPods * RATIO_PROTECT_VUL
         podScore = if (podScore > MAX_POD_VUL_SCORE) MAX_POD_VUL_SCORE else podScore
     }
     metrics.hosts match {
       case 0 => 0
       case _ =>
-        hostScore = metrics.host_cves / metrics.hosts * RATIO_HOST_VUL
+        hostScore = metrics.cves.host_cves / metrics.hosts * RATIO_HOST_VUL
         hostScore = if (hostScore > MAX_HOST_VUL_SCORE) MAX_HOST_VUL_SCORE else hostScore
     }
-    val platformScore      = if (metrics.platform_cves > 0) MAX_PLATFORM_VUL_SCORE else 0
+    val platformScore      = if (metrics.cves.platform_cves > 0) MAX_PLATFORM_VUL_SCORE else 0
     val vulnerabilityScore = math.ceil(podScore + hostScore + platformScore).toInt
 
     val vulnerabilityScoreBy100 = math

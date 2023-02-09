@@ -21,29 +21,45 @@ export interface Score {
   hasError: boolean;
 }
 
-export interface Metrics {
-  deny_adm_ctrl_rules: number;
-  discover_cves: number;
-  discover_ext_eps: number;
-  discover_groups: number;
-  discover_groups_zero_drift: number;
-  monitor_groups: number;
-  protect_groups: number;
+interface RiskScoreMetricsWL {
   running_pods: number;
-  groups: number;
-  host_cves: number;
-  hosts: number;
-  monitor_cves: number;
-  monitor_ext_eps: number;
-  new_service_policy_mode: string;
-  platform: string;
-  platform_cves: number;
   privileged_wls: number;
-  protect_cves: number;
-  protect_ext_eps: number;
   root_wls: number;
+  discover_ext_eps: number;
+  monitor_ext_eps: number;
+  protect_ext_eps: number;
   threat_ext_eps: number;
   violate_ext_eps: number;
+}
+
+interface RiskScoreMetricsGroup {
+  groups: number;
+  discover_groups: number;
+  monitor_groups: number;
+  protect_groups: number;
+  discover_groups_zero_drift: number;
+  monitor_groups_zero_drift: number;
+  protect_groups_zero_drift: number;
+}
+
+interface RiskScoreMetricsCVE {
+  discover_cves: number;
+  monitor_cves: number;
+  protect_cves: number;
+  platform_cves: number;
+  host_cves: number;
+}
+
+export interface Metrics {
+  platform: string;
+  kube_version: string;
+  openshift_version: string;
+  new_service_policy_mode: string;
+  deny_adm_ctrl_rules: number;
+  hosts: number;
+  workloads: RiskScoreMetricsWL;
+  groups: RiskScoreMetricsGroup;
+  cves: RiskScoreMetricsCVE;
 }
 
 export interface Exposure {

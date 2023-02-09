@@ -64,19 +64,19 @@ export class ScoreImprovementServiceRiskViewComponent implements OnInit {
   getPredictionScores() {
     const metrics = this.scoreImprovementModalService.newMetrics();
     metrics.new_service_policy_mode = 'Protect';
-    metrics.protect_groups += metrics.discover_groups + metrics.monitor_groups;
-    metrics.monitor_groups = 0;
-    metrics.discover_groups = 0;
-    metrics.protect_ext_eps +=
-      metrics.discover_ext_eps + metrics.monitor_ext_eps;
-    metrics.monitor_ext_eps = 0;
-    metrics.discover_ext_eps = 0;
-    metrics.discover_groups_zero_drift = 0;
+    metrics.groups.protect_groups += metrics.groups.discover_groups + metrics.groups.monitor_groups;
+    metrics.groups.monitor_groups = 0;
+    metrics.groups.discover_groups = 0;
+    metrics.workloads.protect_ext_eps +=
+      metrics.workloads.discover_ext_eps + metrics.workloads.monitor_ext_eps;
+    metrics.workloads.monitor_ext_eps = 0;
+    metrics.workloads.discover_ext_eps = 0;
+    metrics.groups.discover_groups_zero_drift = 0;
     this.scoreImprovementModalService
       .calculateScoreData(
         metrics,
         this.isGlobalUser,
-        this.scoreImprovementModalService.scoreInfo.header_data.running_pods
+        this.scoreImprovementModalService.scoreInfo.header_data.workloads.running_pods
       )
       .subscribe(scores => {
         this.projectedScore = scores.securityRiskScore;
@@ -84,6 +84,9 @@ export class ScoreImprovementServiceRiskViewComponent implements OnInit {
   }
 
   setSelectedGroup(group: Group | Service | null) {
-    this.selectedGroup = group as Group;
+    this.selectedGroup = null;
+    setTimeout(() => {
+      this.selectedGroup = group as Group;
+    });
   }
 }

@@ -79,12 +79,12 @@ export class ScoreImprovementRunAsRootContainersViewComponent
 
   getPredictionScores() {
     const metrics = this.scoreImprovementModalService.newMetrics();
-    metrics.root_wls = 0;
+    metrics.workloads.root_wls = 0;
     this.scoreImprovementModalService
       .calculateScoreData(
         metrics,
         this.isGlobalUser,
-        this.scoreImprovementModalService.scoreInfo.header_data.running_pods
+        this.scoreImprovementModalService.scoreInfo.header_data.workloads.running_pods
       )
       .subscribe(scores => {
         this.projectedScore = scores.securityRiskScore;

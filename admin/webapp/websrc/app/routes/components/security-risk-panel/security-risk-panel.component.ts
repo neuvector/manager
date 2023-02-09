@@ -41,16 +41,18 @@ export class SecurityRiskPanelComponent implements OnInit {
       factors: [
         {
           title: this.translate.instant('dashboard.body.panel_title.DISCOVER'),
-          amount: scoreInfo.header_data.discover_groups.toString(),
-          comment: scoreInfo.header_data.discover_groups_zero_drift.toString(),
+          amount: scoreInfo.header_data.groups.discover_groups.toString(),
+          comment: scoreInfo.header_data.groups.discover_groups_zero_drift.toString(),
         },
         {
           title: this.translate.instant('dashboard.body.panel_title.MONITOR'),
-          amount: scoreInfo.header_data.monitor_groups.toString(),
+          amount: scoreInfo.header_data.groups.monitor_groups.toString(),
+          comment: scoreInfo.header_data.groups.monitor_groups_zero_drift.toString(),
         },
         {
           title: this.translate.instant('dashboard.body.panel_title.PROTECT'),
-          amount: scoreInfo.header_data.protect_groups.toString(),
+          amount: scoreInfo.header_data.groups.protect_groups.toString(),
+          comment: scoreInfo.header_data.groups.protect_groups_zero_drift.toString(),
         },
       ],
       subScore: { height: `${95 - scoreInfo.score.serviceModeScoreBy100}%` },
@@ -62,15 +64,15 @@ export class SecurityRiskPanelComponent implements OnInit {
       factors: [
         {
           title: this.translate.instant('dashboard.body.panel_title.DISCOVER'),
-          amount: scoreInfo.header_data.discover_ext_eps.toString(),
+          amount: scoreInfo.header_data.workloads.discover_ext_eps.toString(),
         },
         {
           title: this.translate.instant('dashboard.heading.THREATS'),
-          amount: scoreInfo.header_data.threat_ext_eps.toString(),
+          amount: scoreInfo.header_data.workloads.threat_ext_eps.toString(),
         },
         {
           title: this.translate.instant('dashboard.heading.VIOLATIONS'),
-          amount: scoreInfo.header_data.violate_ext_eps.toString(),
+          amount: scoreInfo.header_data.workloads.violate_ext_eps.toString(),
         },
       ],
       subScore: { height: `${95 - scoreInfo.score.exposureScoreBy100}%` },
@@ -82,15 +84,15 @@ export class SecurityRiskPanelComponent implements OnInit {
       factors: [
         {
           title: this.translate.instant('dashboard.body.panel_title.DISCOVER'),
-          amount: scoreInfo.header_data.discover_cves.toString(),
+          amount: scoreInfo.header_data.cves.discover_cves.toString(),
         },
         {
           title: this.translate.instant('dashboard.body.panel_title.MONITOR'),
-          amount: scoreInfo.header_data.monitor_cves.toString(),
+          amount: scoreInfo.header_data.cves.monitor_cves.toString(),
         },
         {
           title: this.translate.instant('dashboard.body.panel_title.PROTECT'),
-          amount: scoreInfo.header_data.protect_cves.toString(),
+          amount: scoreInfo.header_data.cves.protect_cves.toString(),
         },
       ],
       factorComment: [

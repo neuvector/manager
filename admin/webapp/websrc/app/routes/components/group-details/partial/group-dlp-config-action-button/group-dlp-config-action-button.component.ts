@@ -24,6 +24,10 @@ export class GroupDlpConfigActionButtonComponent implements ICellRendererAngular
 
   toggleAction=() => {
     this.params.data.isAllowed = !this.params.data.isAllowed;
+    let selectedNodes = this.params.context.componentParent.selectedDLPSensorNodes;
+    selectedNodes.forEach(node => {
+      node.setSelected(true);
+    })
   };
 
 }

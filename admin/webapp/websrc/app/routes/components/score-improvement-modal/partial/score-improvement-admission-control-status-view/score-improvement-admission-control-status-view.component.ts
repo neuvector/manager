@@ -33,7 +33,7 @@ export class ScoreImprovementAdmissionControlStatusViewComponent
       .calculateScoreData(
         metrics,
         this.isGlobalUser,
-        this.scoreImprovementModalService.scoreInfo.header_data.running_pods
+        this.scoreImprovementModalService.scoreInfo.header_data.workloads.running_pods
       )
       .subscribe(scores => {
         this.projectedScore = scores.securityRiskScore;

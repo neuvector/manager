@@ -12,9 +12,9 @@
         <td>{{factor.title}}</td>
         <td style="text-align: left;">
           {{factor.amount}}
-          <span class="margin-left-s" *ngIf="factor.comment">
-            (<em class="eos-icons icon-18">anchor</em>{{factor.comment}})
-          </span>
+        </td>
+        <td style="text-align: left;" *ngIf="factor.comment">
+          (<em class="eos-icons icon-18">anchor</em>{{factor.comment}})
         </td>
       </tr>
     </table>

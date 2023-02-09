@@ -683,29 +683,45 @@ case class DashboardDTO(
   scoreOutput: ScoreOutput
 )
 
-case class Metrics(
-  deny_adm_ctrl_rules: Int,
-  discover_cves: Int,
+case class RiskScoreMetricsWL(
+  running_pods: Int,
+  privileged_wls: Int,
+  root_wls: Int,
   discover_ext_eps: Int,
+  monitor_ext_eps: Int,
+  protect_ext_eps: Int,
+  threat_ext_eps: Int,
+  violate_ext_eps: Int
+)
+
+case class RiskScoreMetricsGroup(
+  groups: Int,
   discover_groups: Int,
   monitor_groups: Int,
   protect_groups: Int,
   discover_groups_zero_drift: Int,
-  running_pods: Int,
-  groups: Int,
-  host_cves: Int,
-  hosts: Int,
+  monitor_groups_zero_drift: Int,
+  protect_groups_zero_drift: Int
+)
+
+case class RiskScoreMetricsCVE(
+  discover_cves: Int,
   monitor_cves: Int,
-  monitor_ext_eps: Int,
-  new_service_policy_mode: String,
-  platform: String,
-  platform_cves: Int,
-  privileged_wls: Int,
   protect_cves: Int,
-  protect_ext_eps: Int,
-  root_wls: Int,
-  threat_ext_eps: Int,
-  violate_ext_eps: Int
+  platform_cves: Int,
+  host_cves: Int
+)
+
+case class Metrics(
+  platform: String,
+  kube_version: String,
+  openshift_version: String,
+  new_service_policy_mode: String,
+  deny_adm_ctrl_rules: Int,
+  hosts: Int,
+  workloads: RiskScoreMetricsWL,
+  groups: RiskScoreMetricsGroup,
+  cves: RiskScoreMetricsCVE
 )
 
 case class Exposure(
@@ -943,7 +959,16 @@ object DashboardJsonProtocol extends DefaultJsonProtocol with LazyLogging {
   )
   implicit val dashboardDTOFormat: RootJsonFormat[DashboardDTO] = jsonFormat12(DashboardDTO)
 
-  implicit val metricsFormat: RootJsonFormat[Metrics]           = jsonFormat22(Metrics)
+  implicit val riskScoreMetricsWLFormat: RootJsonFormat[RiskScoreMetricsWL] = jsonFormat8(
+    RiskScoreMetricsWL
+  )
+  implicit val riskScoreMetricsGroupFormat: RootJsonFormat[RiskScoreMetricsGroup] = jsonFormat7(
+    RiskScoreMetricsGroup
+  )
+  implicit val riskScoreMetricsCVEFormat: RootJsonFormat[RiskScoreMetricsCVE] = jsonFormat5(
+    RiskScoreMetricsCVE
+  )
+  implicit val metricsFormat: RootJsonFormat[Metrics]           = jsonFormat9(Metrics)
   implicit val exposureFormat: RootJsonFormat[Exposure]         = jsonFormat11(Exposure)
   implicit val scoreOutput2Format: RootJsonFormat[ScoreOutput2] = jsonFormat4(ScoreOutput2)
   implicit val internalSystemDataFormat: RootJsonFormat[InternalSystemData] = jsonFormat4(

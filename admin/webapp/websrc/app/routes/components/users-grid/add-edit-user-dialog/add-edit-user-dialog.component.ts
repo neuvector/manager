@@ -96,7 +96,7 @@ export class AddEditUserDialogComponent implements OnInit {
         ? this.getNamespaceRoleGridData(
             this.data.domainRoles,
             this.data.user.role,
-            this.data.user.role_domains
+            JSON.parse(JSON.stringify(this.data.user.role_domains))
           )
         : this.getNamespaceRoleGridData(this.data.domainRoles)
     );

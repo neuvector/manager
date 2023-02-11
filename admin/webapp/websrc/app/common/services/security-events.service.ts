@@ -3,7 +3,7 @@ import { GlobalVariable } from '@common/variables/global.variable';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { PathConstant } from '@common/constants/path.constant';
 import { MapConstant } from '@common/constants/map.constant';
-import { getDisplayName } from '@common/utils/common.utils';
+import { getDisplayName, isIpV4, isIpV6 } from '@common/utils/common.utils';
 import { UtilsService } from '@common/utils/app.utils';
 import { TranslateService } from '@ngx-translate/core';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -604,17 +604,22 @@ export class SecurityEventsService {
       if (service) {
         return service === MapConstant.securityEventLocation.EXTERNAL
           ? service //external
-          : (endpointName.indexOf(MapConstant.securityEventLocation.IP_GROUP) === 0 ?
+          : (endpointName.startsWith(MapConstant.securityEventLocation.IP_GROUP) ?
             `nv.ip.${service}`.replace(/\/|\?|\%|\&|\s/g, ':') /* Add 'nv.ip.' for IP service */:
             `nv.${service}`.replace(/\/|\?|\%|\&|\s/g, ':')); /* Add 'nv.' for learnt service */
             // replace(/\/|\?|\%|\&|\s/g, ':') is for resolving irregular symbol in service name
       } else {
         if (
-          endpointName.indexOf(MapConstant.securityEventLocation.HOST) === 0//Host format is like Host:<host_name or IP>:host ID
+          endpointName.startsWith(MapConstant.securityEventLocation.HOST)//Host format is like Host:<host_name or IP>:host ID
         ) {
-          return 'nodes';
+          let hostName = endpointName.substring(5);
+          if (isIpV4(hostName) || isIpV6(hostName)) {
+            return endpointName;
+          } else {
+            return 'nodes';
+          }
         } else if (
-          endpointName.indexOf(MapConstant.securityEventLocation.WORKLOAD) === 0 // IP workload format is Workload:<workload IP>
+          endpointName.startsWith(MapConstant.securityEventLocation.WORKLOAD) // IP workload format is Workload:<workload IP>
         ) {
           let endpointNameParts = endpointName.split(':');
           return `${endpointNameParts[0].trim()}:${endpointNameParts[1].trim()}`;

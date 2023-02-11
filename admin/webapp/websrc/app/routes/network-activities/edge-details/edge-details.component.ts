@@ -274,13 +274,6 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
 
   private proposeRule(traffic, edgeDetails) {
     const UNMANAGED_NODE = ['workloadIp', 'nodeIp'];
-    const verifyAndParseHostGroup = function (group) {
-      if (group.indexOf(MapConstant.securityEventLocation.HOST) > -1) {
-        return 'nodes';
-      } else {
-        return group;
-      }
-    };
 
     this.rule = {};
 
@@ -294,8 +287,6 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
     if (edgeDetails.toGroup && UNMANAGED_NODE.indexOf(edgeDetails.toGroup) > -1)
       this.rule.to = edgeDetails.target;
     else this.rule.to = edgeDetails.toGroup;
-    this.rule.from = verifyAndParseHostGroup(this.rule.from);
-    this.rule.to = verifyAndParseHostGroup(this.rule.to);
     this.rule.ports = traffic.port;
     if (traffic.application)
       this.rule.applications = traffic.application.split(',');

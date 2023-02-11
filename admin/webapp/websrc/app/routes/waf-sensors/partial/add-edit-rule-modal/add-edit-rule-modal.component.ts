@@ -78,7 +78,7 @@ export class AddEditRuleModalComponent implements OnInit {
         comment: new FormControl(this.data.sensor.comment),
         ruleName: new FormControl(this.data.rule.name, Validators.required)
       });
-      this.patterns = this.data.rule.patterns;
+      this.patterns = JSON.parse(JSON.stringify(this.data.rule.patterns));
     }
     let isWriteWAFSensorAuthorized = this.authUtilsService.getDisplayFlag("write_waf_rule") && !this.authUtilsService.userPermission.isNamespaceUser;
     let gridOptions = this.wafSensorsService.configGrids(isWriteWAFSensorAuthorized);

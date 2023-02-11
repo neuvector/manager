@@ -177,7 +177,6 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
       setTimeout(() => {
         this.selectedProcessProfileRules = selectedRows;
         this.getSelectedProcessProfileRules.emit(this.selectedProcessProfileRules);
-        console.log(this.selectedProcessProfileRules.length);
       });
     }
   };

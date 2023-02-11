@@ -34,7 +34,7 @@
         <div>
           <button
             mat-button
-            *ngIf="selectedProcessProfileRules && isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized"
+            *ngIf="selectedProcessProfileRules && selectedProcessProfileRules.length >= 1 && isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized"
             (click)="removeProfile(selectedProcessProfileRules)">
             <em class="eos-icons">delete</em>
             {{ 'service.DELETE_RULE' | translate }}

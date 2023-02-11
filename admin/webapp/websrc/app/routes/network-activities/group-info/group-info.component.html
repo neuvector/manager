@@ -38,6 +38,7 @@
     <mat-tab label="{{ 'service.POLICY_RULES' | translate }}">
       <app-network-rules
         *ngIf="activeTabIndex === 1"
+        [useQuickFilterService]="true"
         [source]="navSource"
         [groupName]="group.name"
         [resizableHeight]="height">
@@ -46,6 +47,7 @@
     <mat-tab label="{{ 'group.RESPONSE_RULES' | translate }}">
       <app-response-rules
         *ngIf="activeTabIndex === 2"
+        [useQuickFilterService]="true"
         [source]="navSource"
         [groupName]="group.name"
         [resizableHeight]="height">

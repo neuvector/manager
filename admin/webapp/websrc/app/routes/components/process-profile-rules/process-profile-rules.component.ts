@@ -174,12 +174,11 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
   onSelectionChanged4Profile = () => {
     if (this.gridOptions && this.gridOptions.api) {
       let selectedRows = this.gridOptions.api.getSelectedRows();
-      if (selectedRows.length > 0) {
-        setTimeout(() => {
-          this.selectedProcessProfileRules = selectedRows;
-          this.getSelectedProcessProfileRules.emit(this.selectedProcessProfileRules);
-        });
-      }
+      setTimeout(() => {
+        this.selectedProcessProfileRules = selectedRows;
+        this.getSelectedProcessProfileRules.emit(this.selectedProcessProfileRules);
+        console.log(this.selectedProcessProfileRules.length);
+      });
     }
   };
 

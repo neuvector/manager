@@ -20,7 +20,7 @@ stage_init:
 stage_mgr: stage_init copy_mgr
 
 pull_base:
-	docker pull $(REPO_REL_URL)/neuvector/manager_base:latest
+	docker pull $(REPO_REL_URL)/neuvector/manager_base:jdk11
 
 manager_image: pull_base stage_mgr
 	docker build --build-arg NV_TAG=$(NV_TAG) --no-cache=true -t neuvector/manager -f manager/Dockerfile.manager .

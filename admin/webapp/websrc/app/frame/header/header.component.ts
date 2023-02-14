@@ -17,10 +17,10 @@ import { ClusterData, Cluster } from '@common/types';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
-import {NotificationService} from "@services/notification.service";
-import {TranslateService} from "@ngx-translate/core";
-import {isAuthorized} from "@common/utils/common.utils";
-import {AuthUtilsService} from "@common/utils/auth.utils";
+import { NotificationService } from '@services/notification.service';
+import { TranslateService } from '@ngx-translate/core';
+import { isAuthorized } from '@common/utils/common.utils';
+import { AuthUtilsService } from '@common/utils/auth.utils';
 
 @Component({
   selector: 'app-header',
@@ -45,6 +45,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   managedClusterName: string = '';
   isAllowedToOperateMultiCluster: boolean = false;
   isAllowedToRedirectMultiCluster: boolean = false;
+  get gravatarEnabled() {
+    return GlobalVariable.gravatar;
+  }
 
   email = '';
   username = '';
@@ -219,17 +222,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
           const resource = {
             multiClusterOp: {
-              global: 2
+              global: 2,
             },
             manageAuth: {
-              global: 3
+              global: 3,
             },
             multiClusterView: {
-              global: 1
-            }
+              global: 1,
+            },
           };
 
-          this.isAllowedToRedirectMultiCluster  = this.authUtilsService.getDisplayFlag('multi_cluster') || isAuthorized(GlobalVariable.user.roles, resource.multiClusterOp) && data.fed_role !== MapConstant.FED_ROLES.MASTER;
+          this.isAllowedToRedirectMultiCluster =
+            this.authUtilsService.getDisplayFlag('multi_cluster') ||
+            (isAuthorized(GlobalVariable.user.roles, resource.multiClusterOp) &&
+              data.fed_role !== MapConstant.FED_ROLES.MASTER);
 
           //get the status of the chosen cluster
           const sessionCluster = this.sessionStorage.get(
@@ -241,12 +247,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
           if (clusterInSession) {
             this.isOnRemoteCluster = clusterInSession.isRemote;
             GlobalVariable.isRemote = clusterInSession.isRemote;
-          }else{
+          } else {
             GlobalVariable.isRemote = false;
           }
 
           if (GlobalVariable.isMaster) {
-            this.isAllowedToOperateMultiCluster = isAuthorized(GlobalVariable.user.roles, resource.manageAuth);
+            this.isAllowedToOperateMultiCluster = isAuthorized(
+              GlobalVariable.user.roles,
+              resource.manageAuth
+            );
             if (clusterInSession !== null) {
               this.selectedCluster = clusterInSession;
             } else {
@@ -257,7 +266,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
           }
 
           if (GlobalVariable.isMember) {
-            this.isAllowedToOperateMultiCluster = isAuthorized(GlobalVariable.user.roles, resource.multiClusterView);
+            this.isAllowedToOperateMultiCluster = isAuthorized(
+              GlobalVariable.user.roles,
+              resource.multiClusterView
+            );
             this.clusters.forEach(cluster => {
               if (cluster.clusterType === MapConstant.FED_ROLES.MASTER) {
                 this.primaryMasterName = cluster.name;

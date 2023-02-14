@@ -21,6 +21,8 @@ import { SummaryService } from '@services/summary.service';
 import { SystemSummary } from '@common/types';
 import { PathConstant } from '@common/constants/path.constant';
 import { HttpHeaders } from '@angular/common/http';
+import { CommonHttpService } from '@common/api/common-http.service';
+import { toBoolean } from '@common/utils/common.utils';
 
 @Component({
   selector: 'app-login',
@@ -58,6 +60,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private translatorService: TranslatorService,
     private translate: TranslateService,
     private notificationService: NotificationService,
+    private commonHttpService: CommonHttpService,
     private summaryService: SummaryService,
     private fb: FormBuilder,
     private router: Router,
@@ -220,7 +223,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       default:
         this.localLogin(value);
     }
-
   }
 
   private clearToken() {
@@ -342,6 +344,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         GlobalVariable.hasInitializedSummary = true;
         this.setUserInfo(userInfo);
+        this.commonHttpService.getGravatar().subscribe(val => {
+          GlobalVariable.gravatar = val;
+        });
         if (this.originalUrl && !this.originalUrl.includes('login')) {
           this.router.navigate([this.originalUrl]);
         } else {

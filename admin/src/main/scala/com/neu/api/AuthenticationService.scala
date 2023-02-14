@@ -574,6 +574,11 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
             complete(managerVersion)
           }
         } ~
+        (get & path("gravatar")) {
+          Utils.respondWithNoCacheControl() {
+            complete(gravatarEnabled)
+          }
+        } ~
         (post & path("token")) {
           Utils.respondWithNoCacheControl() {
             complete {

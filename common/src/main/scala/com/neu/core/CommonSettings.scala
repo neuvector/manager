@@ -13,6 +13,7 @@ object CommonSettings extends LazyLogging {
 
   protected val config: Config = ConfigFactory.load.getConfig("common")
 
+  val gravatarEnabled: String = sys.env.getOrElse("GRAVATAR_ENABLED", "false")
   val ctrlHost: String =
     sys.env.getOrElse("CTRL_SERVER_IP", config.getString("rest.ctrl.server.ip"))
   val ctrlPort: String =

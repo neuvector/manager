@@ -12,6 +12,8 @@ import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { SwitchersService } from '@core/switchers/switchers.service';
 import { AuthService } from '@common/services/auth.service';
 import { SummaryService } from '@services/summary.service';
+import { CommonHttpService } from '@common/api/common-http.service';
+import { toBoolean } from '@common/utils/common.utils';
 
 @Component({
   selector: 'app-root',
@@ -29,7 +31,8 @@ export class AppComponent implements OnInit {
     public switchers: SwitchersService,
     private translatorService: TranslatorService,
     private summaryService: SummaryService,
-    private authService: AuthService
+    private authService: AuthService,
+    private commonHttpService: CommonHttpService
   ) {
     this.win = GlobalVariable.window;
     this.initTimer = new Date().getTime();
@@ -100,6 +103,9 @@ export class AppComponent implements OnInit {
             GlobalConstant.SESSION_STORAGE_TOKEN,
             GlobalVariable.user
           );
+          this.commonHttpService.getGravatar().subscribe(val => {
+            GlobalVariable.gravatar = val;
+          });
           if (!GlobalVariable.hasInitializedSummary) {
             this.summaryService.getSummary().subscribe(summaryInfo => {
               this.isSummaryDone = true;

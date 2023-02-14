@@ -118,6 +118,7 @@ export class PathConstant {
   public static IMPORT_GROUP_URL = 'group/import'; //policy
   public static ADMISSION_TEST_URL = 'admission/matching-test'; //policy
   public static MGR_VERSION = 'version'; //common
+  public static GRAVATAR = 'gravatar'; //common
   public static EXPORT_ADM_CTRL = 'admission/export'; //policy
   public static IMPORT_ADM_CTRL = 'admission/import'; //policy
   public static PROMOTE_NETWORK_RULE = 'policy/promote'; //policy
@@ -128,5 +129,5 @@ export class PathConstant {
   public static SERVICE_ALL = 'service/all'; //policy
   public static DEBUG_URL = 'debug'; //config
   public static THREAT_URL = 'threat';
-  public static HEART_BEAT_URL = "heartbeat";
+  public static HEART_BEAT_URL = 'heartbeat';
 }

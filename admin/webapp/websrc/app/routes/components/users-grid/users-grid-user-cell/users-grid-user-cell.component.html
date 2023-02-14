@@ -1,5 +1,10 @@
-<ngx-avatar
-  class="userIcon"
-  [gravatarId]="emailHash"
-  [name]="username"
-  size="35"></ngx-avatar>
+<ng-container *ngIf="gravatarEnabled; else altAvatar">
+  <ngx-avatar
+    class="userIcon"
+    [gravatarId]="emailHash"
+    [name]="username"
+    size="35"></ngx-avatar>
+</ng-container>
+<ng-template #altAvatar>
+  <ngx-avatar class="userIcon" [name]="username" size="35"></ngx-avatar>
+</ng-template>

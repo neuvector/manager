@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { GlobalVariable } from '@common/variables/global.variable';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
@@ -12,6 +13,9 @@ export class UsersGridUserCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
   username!: string;
   emailHash!: string;
+  get gravatarEnabled() {
+    return GlobalVariable.gravatar;
+  }
 
   agInit(params: ICellRendererParams): void {
     this.params = params;

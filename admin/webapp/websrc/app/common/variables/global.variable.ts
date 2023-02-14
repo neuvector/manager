@@ -20,4 +20,5 @@ export class GlobalVariable {
   public static isStandAlone: boolean;
   public static isRemote: boolean = false;
   public static version: string;
+  public static gravatar: boolean = false;
 }

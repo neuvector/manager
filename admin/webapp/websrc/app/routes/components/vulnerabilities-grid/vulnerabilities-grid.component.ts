@@ -53,12 +53,18 @@ export class VulnerabilitiesGridComponent implements OnInit, OnChanges {
       cellClass: ['d-flex', 'align-items-center'],
       headerValueGetter: () =>
         this.translate.instant('scan.gridHeader.SEVERITY'),
-      width: 100,
+      width: 130,
     },
     {
       field: 'score',
       valueFormatter: this.scoreFormatter,
       headerValueGetter: () => this.translate.instant('scan.gridHeader.SCORE'),
+      width: 160,
+    },
+    {
+      field: 'feed_rating',
+      headerValueGetter: () =>
+        this.translate.instant('scan.gridHeader.FEED_RATING'),
       width: 150,
     },
     {

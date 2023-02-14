@@ -1178,6 +1178,7 @@
       "SCORE": "分数(V2/V3)",
       "SCORE_V2": "分数(V2)",
       "SCORE_V3": "分数(V3)",
+      "FEED_RATING": "馈送评级",
       "PACKAGE_NAME": "软件包",
       "PACKAGE_VERSION": "版本",
       "VICTIM": "影响",

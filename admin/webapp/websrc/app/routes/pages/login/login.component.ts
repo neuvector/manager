@@ -22,7 +22,6 @@ import { SystemSummary } from '@common/types';
 import { PathConstant } from '@common/constants/path.constant';
 import { HttpHeaders } from '@angular/common/http';
 import { CommonHttpService } from '@common/api/common-http.service';
-import { toBoolean } from '@common/utils/common.utils';
 
 @Component({
   selector: 'app-login',
@@ -344,9 +343,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         GlobalVariable.hasInitializedSummary = true;
         this.setUserInfo(userInfo);
-        this.commonHttpService.getGravatar().subscribe(val => {
-          GlobalVariable.gravatar = val;
-        });
         if (this.originalUrl && !this.originalUrl.includes('login')) {
           this.router.navigate([this.originalUrl]);
         } else {

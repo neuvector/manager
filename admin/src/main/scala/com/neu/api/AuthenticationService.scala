@@ -227,6 +227,13 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
         }
       }
     } ~
+    path("gravatar") {
+      get {
+        Utils.respondWithNoCacheControl() {
+          complete(gravatarEnabled)
+        }
+      }
+    } ~
     path("eula") {
       get {
         Utils.respondWithNoCacheControl() {
@@ -572,11 +579,6 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
         (get & path("version")) {
           Utils.respondWithNoCacheControl() {
             complete(managerVersion)
-          }
-        } ~
-        (get & path("gravatar")) {
-          Utils.respondWithNoCacheControl() {
-            complete(gravatarEnabled)
           }
         } ~
         (post & path("token")) {

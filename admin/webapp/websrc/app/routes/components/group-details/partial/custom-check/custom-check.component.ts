@@ -8,6 +8,7 @@ import { Script } from '@common/types';
 import { NotificationService } from '@services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
+import { updateGridData } from '@common/utils/common.utils';
 
 @Component({
   selector: 'app-custom-check',
@@ -116,7 +117,14 @@ export class CustomCheckComponent implements OnInit {
       .subscribe(
         response => {
           this.notificationService.open(this.translate.instant("group.script.msg.SCRIPT_OK"));
-          this.refresh();
+          updateGridData(
+            this.customCheckScripts,
+            payload.config[this.opType === GlobalConstant.MODAL_OP.ADD ? 'add' : 'update']!.scripts,
+            this.gridOptions4CustomCheck.api!,
+            'name',
+            this.opType === GlobalConstant.MODAL_OP.ADD ? 'add' : 'edit'
+          );
+          this.initializeVM();
         },
         error => {
           this.notificationService.openError(error, this.translate.instant("group.script.msg.SCRIPT_NG"));
@@ -124,10 +132,14 @@ export class CustomCheckComponent implements OnInit {
       );
   };
 
-  private initializeVM = () => {
+  initializeVM = () => {
+    this.isRefreshingForm = true;
     this.customCheckForm = new FormGroup({
       name: new FormControl('', this.isWriteScriptAuthorized ? Validators.required : null),
       script: new FormControl('')
+    });
+    setTimeout(() => {
+      this.isRefreshingForm = false;
     });
   };
 }

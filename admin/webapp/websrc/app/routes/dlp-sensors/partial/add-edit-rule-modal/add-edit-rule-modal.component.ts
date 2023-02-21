@@ -153,9 +153,12 @@ export class AddEditRuleModalComponent implements OnInit {
       .subscribe(
         response => {
           this.notificationService.open(this.translate.instant("dlp.msg.UPDATE_RULE_OK"));
+          this.data.gridApi.setRowData(payload.config.rules);
           setTimeout(() => {
-            this.data.refresh(this.data.index4Sensor);
-          }, 2000);
+            let rowNode =
+              this.data.gridApi.getDisplayedRowAtIndex(this.data.index);
+            rowNode?.setSelected(true);
+          }, 200);
           this.dialogRef.close(true);
         },
         error => {

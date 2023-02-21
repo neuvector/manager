@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { GroupsService } from '@services/groups.service';
 import { NotificationService } from '@services/notification.service';
+import { updateGridData } from '@common/utils/common.utils';
 
 @Component({
   selector: 'app-custom-check-action-button',
@@ -58,6 +59,14 @@ export class CustomCheckActionButtonComponent
               this.translate.instant('group.script.msg.SCRIPT_OK')
             );
             this.params.context.componentParent.refresh();
+            updateGridData(
+              this.params.context.componentParent.customCheckScripts,
+              [data],
+              this.params.context.componentParent.gridOptions4CustomCheck.api!,
+              'name',
+              'delete'
+            );
+            this.params.context.componentParent.initializeVM();
           },
           error => {
             this.notificationService.openError(

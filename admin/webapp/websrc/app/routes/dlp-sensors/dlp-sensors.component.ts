@@ -101,7 +101,8 @@ export class DlpSensorsComponent implements OnInit {
       width: '80%',
       data: {
         opType: GlobalConstant.MODAL_OP.ADD,
-        refresh: this.refresh,
+        dlpSensors: this.dlpSensors,
+        gridApi: this.gridOptions4Sensors.api!
       },
     });
   };
@@ -114,7 +115,7 @@ export class DlpSensorsComponent implements OnInit {
         opType: GlobalConstant.MODAL_OP.ADD,
         gridOptions4EditPatterns: this.gridOptions4EditPatterns,
         index4Sensor: this.index4Sensor,
-        refresh: this.refresh,
+        gridApi: this.gridOptions4Rules.api!
       },
     });
   };

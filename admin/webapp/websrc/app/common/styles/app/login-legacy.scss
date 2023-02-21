@@ -24,7 +24,7 @@
         url("../../../../assets/img/logo-with-text@2x.png") 2x
       )
       no-repeat;
-    margin: 0 auto 85px auto;
+    margin: 0 auto 50px auto;
     height: 77px;
     width: 291px;
   }
@@ -53,13 +53,13 @@
 }
 
 .login-panel {
-  height: 422px;
+  height: 452px;
   width: 100%;
   box-shadow: 0 4px 19px 0 rgba(0, 0, 0, 0.5);
   background-color: #fff;
   border-radius: 5px;
   &.login-panel-extra {
-    height: 462px;
+    height: 495px;
   }
 }
 

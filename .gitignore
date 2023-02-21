@@ -51,6 +51,10 @@ local.properties
 .sass-cache
 .sass-cache/*
 
+.vscode/
+admin/webapp/.bsp/
+admin/webapp/websrc/.bsp/
+token.json
 
 .metals
 admin/test/REST_API/output

@@ -10,6 +10,7 @@ import { NotificationService } from '@services/notification.service';
 import { ConfirmDialogResponseRuleComponent } from '@components/response-rules/partial/confirm-dialog-response-rule/confirm-dialog-response-rule.component';
 import { switchMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
+import { updateGridData } from '@common/utils/common.utils';
 
 @Component({
   selector: 'app-action-buttons',
@@ -107,6 +108,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
         type: type,
         source: this.params.context.componentParent.source,
         isReadonly: isReadonly,
+        gridApi: this.params.context.componentParent.gridOptions.api!
       },
       width: '70vw',
     });
@@ -129,9 +131,13 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
       .insertUpdateResponseRuleData(responseRule, [], 'toggle', [])
       .subscribe(
         response => {
-          setTimeout(() => {
-            this.params.context.componentParent.getResponseRules();
-          }, 1000);
+          updateGridData(
+            this.responseRulesService.responseRules,
+            [data],
+            this.params.context.componentParent.gridOptions.api!,
+            'id',
+            'edit'
+          );
           if (data.disable) {
             this.notificationService.open(
               this.translate.instant('responsePolicy.dialog.content.DISABLE_OK')
@@ -207,9 +213,13 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
           this.notificationService.open(
             this.translate.instant('responsePolicy.dialog.content.REMOVE_OK')
           );
-          setTimeout(() => {
-            this.params.context.componentParent.getResponseRules();
-          }, 1000);
+          updateGridData(
+            this.responseRulesService.responseRules,
+            [{id: id}],
+            this.params.context.componentParent.gridOptions.api!,
+            'id',
+            'delete'
+          );
           // close dialog
           dialogRef.componentInstance.onCancel();
           dialogRef.componentInstance.loading = false;

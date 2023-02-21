@@ -22,6 +22,7 @@ import { UtilsService } from '@common/utils/app.utils';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '@services/notification.service';
+import { updateGridData, getCfgType } from '@common/utils/common.utils';
 
 export interface AutoCompleteOption {
   name: string;
@@ -327,6 +328,37 @@ export class AddEditResponseRuleModalComponent implements OnInit {
               this.translate.instant('responsePolicy.dialog.content.INSERT_OK') :
               this.translate.instant('responsePolicy.dialog.content.UPDATE_OK')
           );
+          if (this.type === GlobalConstant.MODAL_OP.ADD) {
+            setTimeout(() => {
+              this.data.refresh();
+            }, 1000);
+          } else {
+            updateGridData(
+              this.responseRulesService.responseRules,
+              [{
+                id: this.responseRule.id,
+                event: this.responseRule.event,
+                // comment: Option[String],
+                group: this.responseRule.group || '',
+                conditions: this.responseRulesService.parseConditions(this.responseRule.criteria),
+                actions: this.responseRulesService.filterSelectedOptions(
+                  this.responseRule.actions,
+                  this.actions
+                ),
+                disable: !this.responseRule.enabled,
+                cfg_type: this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY ?
+                  GlobalConstant.CFG_TYPE.FED :
+                  GlobalConstant.CFG_TYPE.CUSTOMER,
+                webhooks: this.responseRulesService.filterSelectedOptions(
+                  this.responseRule.webhooks,
+                  this.webhookOptions
+                ),
+              }],
+              this.data.gridApi,
+              'id',
+              'edit'
+            );
+          }
         },
         error => {
           this.notificationService.openError(

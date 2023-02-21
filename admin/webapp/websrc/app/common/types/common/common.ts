@@ -9,6 +9,8 @@ export type ScannerAutoscaleStrategy =
   | 'n/a'
   | '';
 
+export type DataOps = 'add' | 'edit' | 'delete';
+
 export interface ErrorResponse {
   code: number;
   error: string;

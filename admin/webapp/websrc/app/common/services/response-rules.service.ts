@@ -61,7 +61,7 @@ export class ResponseRulesService {
           'responsePolicy.gridHeader.CRITERIA'
         ),
         field: 'conditions',
-        width: 430,
+        width: 400,
       },
       {
         headerName: this.translate.instant('responsePolicy.gridHeader.ACTION'),
@@ -69,7 +69,7 @@ export class ResponseRulesService {
         cellRenderer: params => {
           return this.actionRenderFunc(params);
         },
-        width: 220,
+        width: 250,
       },
       {
         headerName: this.translate.instant('policy.gridHeader.TYPE'),
@@ -349,7 +349,7 @@ export class ResponseRulesService {
     }
   }
 
-  private parseConditions(criteria) {
+  parseConditions(criteria) {
     return Array.isArray(criteria)
       ? criteria.map(criterion => {
           let criterionArr = criterion.split(':');
@@ -361,7 +361,7 @@ export class ResponseRulesService {
       : [];
   }
 
-  private filterSelectedOptions(optionsBoolean, optionList) {
+  filterSelectedOptions(optionsBoolean, optionList) {
     let selecetedOptions: Array<any> = [];
     optionList.forEach((action, index) => {
       if (optionsBoolean[index]) {

@@ -7,6 +7,7 @@ import { GroupsService } from '@services/groups.service';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '@services/notification.service';
+import { updateGridData } from '@common/utils/common.utils';
 
 @Component({
   selector: 'app-add-edit-process-profile-rule-modal',
@@ -97,10 +98,13 @@ export class AddEditProcessProfileRuleModalComponent implements OnInit {
         ? ['added', 'add']
         : ['updated', 'update'];
     let newData = {
+      cfg_type: this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY ?
+        GlobalConstant.CFG_TYPE.FED : GlobalConstant.CFG_TYPE.LEARNED,
       action: this.isAllowed
         ? GlobalConstant.PROCESS_PROFILE_RULE.ACTION.ALLOW
         : GlobalConstant.PROCESS_PROFILE_RULE.ACTION.DENY,
       ...this.processProfileRuleForm.value,
+      last_modified_timestamp: new Date().getTime() / 1000
     };
 
     newData.group = this.processProfileRuleForm.controls.group.value;
@@ -122,10 +126,13 @@ export class AddEditProcessProfileRuleModalComponent implements OnInit {
           let msgTitle = this.type === GlobalConstant.MODAL_OP.ADD ?
             this.translate.instant('group.profile.ADD_OK') :
             this.translate.instant('group.profile.EDIT_OK');
-          this.notificationService.open(msgTitle);
-          setTimeout(() => {
-            this.data.getProcessProfileRules(this.data.groupName);
-          }, 1000);
+            updateGridData(
+              this.data.processProfileRules,
+              [newData],
+              this.data.gridApi,
+              'name',
+              this.data.type
+            );
           this.onCancel();
         },
         error => {

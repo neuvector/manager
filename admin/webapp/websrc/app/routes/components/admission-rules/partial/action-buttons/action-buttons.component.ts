@@ -13,6 +13,7 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { TranslateService } from '@ngx-translate/core';
 import { switchMap } from 'rxjs/operators';
 import { NotificationService } from '@services/notification.service';
+import { updateGridData } from '@common/utils/common.utils';
 
 @Component({
   selector: 'app-action-buttons',
@@ -65,7 +66,8 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
               ? GlobalConstant.SCOPE.FED
               : GlobalConstant.SCOPE.LOCAL,
           rule4Edit: rule,
-          refresh: this.params.context.componentParent.refresh,
+          admissionRules: this.params.context.componentParent.admissionRules,
+          gridApi: this.params.context.componentParent.gridOptions.api!
         },
       }
     );
@@ -142,7 +144,13 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
             console.log(res);
             this.alertOnSuccess(selectedRule.disable, rule.id);
             // confirm actions
-            this.params.context.componentParent.getAdmissionStateAndRules();
+            updateGridData(
+              this.params.context.componentParent.admissionRules,
+              [selectedRule],
+              this.params.context.componentParent.gridOptions.api!,
+              'id',
+              'edit'
+            );
             // close dialog
             dialogRef.componentInstance.onCancel();
             dialogRef.componentInstance.loading = false;
@@ -155,7 +163,13 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
       this.admissionRulesService.toggleAdmissionRules(selectedRule).subscribe(
         response => {
           this.alertOnSuccess(selectedRule.disable, rule.id);
-          this.params.context.componentParent.getAdmissionStateAndRules();
+          updateGridData(
+            this.params.context.componentParent.admissionRules,
+            [selectedRule],
+            this.params.context.componentParent.gridOptions.api!,
+            'id',
+            'edit'
+          );
         },
         error => {
           this.alertOnError(selectedRule.disable, error);
@@ -185,7 +199,13 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
       .subscribe(
         res => {
           // confirm actions
-          this.params.context.componentParent.getAdmissionStateAndRules();
+          updateGridData(
+            this.params.context.componentParent.admissionRules,
+            [rule],
+            this.params.context.componentParent.gridOptions.api!,
+            'id',
+            'delete'
+          );
           this.notificationService.open(
             this.translate.instant('admissionControl.msg.REMOVE_OK')
           );

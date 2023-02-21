@@ -21,6 +21,7 @@ import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-di
 import { switchMap } from 'rxjs/operators';
 import { NotificationService } from '@services/notification.service';
 import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
+import { updateGridData } from '@common/utils/common.utils';
 
 @Component({
   selector: 'app-process-profile-rules',
@@ -193,12 +194,15 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
           oldData: data,
           source: this.source,
           getProcessProfileRules: this.getProcessProfileRules,
+          gridApi: this.gridOptions.api!,
+          processProfileRules: this.processProfileRules
         },
         width: "70%"
       }
     );
     editDialogRef.afterClosed().subscribe(() => {
       this.isModalOpen = false;
+      this.selectedProcessProfileRules = null;
     });
   };
 
@@ -234,9 +238,14 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
           this.notificationService.open(
             this.translate.instant('group.profile.REMOVE_OK')
           );
-          setTimeout(() => {
-            this.getProcessProfileRules(this.groupName);
-          }, 1000);
+          updateGridData(
+            this.processProfileRules,
+            data,
+            this.gridOptions.api!,
+            'name',
+            'delete'
+          );
+          this.selectedProcessProfileRules = null;
           // close dialog
           dialogRef.componentInstance.onCancel();
           dialogRef.componentInstance.loading = false;
@@ -261,12 +270,15 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
           groupName: this.groupName,
           source: this.source,
           getProcessProfileRules: this.getProcessProfileRules,
+          gridApi: this.gridOptions.api!,
+          processProfileRules: this.processProfileRules
         },
         width: "70%"
       }
     );
     addDialogRef.afterClosed().subscribe(result => {
       this.isModalOpen = false;
+      this.selectedProcessProfileRules = null;
     });
   };
 

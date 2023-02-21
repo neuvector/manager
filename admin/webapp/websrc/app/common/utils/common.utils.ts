@@ -11,8 +11,13 @@ import {
   Vulnerability,
   Workload,
   WorkloadChildV2,
+  DataOps,
 } from '@common/types';
 import { WorkloadBrief } from '@common/types/compliance/workloadBrief';
+import {
+  GridApi,
+  GridOptions,
+} from 'ag-grid-community';
 
 let _keyStr: string =
   'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
@@ -721,4 +726,34 @@ export function isIpV4(str: string): boolean {
 export function isIpV6(str: string): boolean {
   let pattern = new RegExp(/^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:))$/);
   return pattern.test(str);
+}
+
+export function updateGridData(
+  dataset: Array<any>,
+  targetDataArray: Array<any>,
+  gridApi: GridApi,
+  keyName: string,
+  op: DataOps
+): void {
+  let index = -1;
+  targetDataArray.forEach(targetData => {
+    index = dataset.findIndex(dataElem => dataElem[keyName] === targetData[keyName]);
+    if (index > -1) {
+      if (op === 'edit') {
+        dataset.splice(index, 1, targetData);
+      } else if (op === 'delete') {
+        dataset.splice(index, 1);
+      }
+    } else {
+      dataset.splice(dataset.length, 1, targetData);
+    }
+  });
+  gridApi.setRowData(dataset);
+  if (op === 'edit') {
+    setTimeout(() => {
+      let rowNode =
+        gridApi.getDisplayedRowAtIndex(index);
+      rowNode?.setSelected(true);
+    }, 200);
+  }
 }

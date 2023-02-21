@@ -160,13 +160,12 @@ export class ResponseRulesComponent implements OnInit {
         autoCompleteData: autoCompleteData,
         source: this.source,
         type: 'add',
+        refresh: this.getResponseRules
       },
-
       width: '70vw',
     });
     addDialogRef.afterClosed().subscribe(result => {
       setTimeout(() => {
-        this.getResponseRules();
         this.isModalOpen = false;
       }, 1000);
     });

@@ -35,6 +35,7 @@ import { AuthUtilsService } from '@common/utils/auth.utils';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { UsersGridUserCellComponent } from './users-grid-user-cell/users-grid-user-cell.component';
+import { updateGridData } from '@common/utils/common.utils';
 
 @Component({
   selector: 'app-users-grid',
@@ -249,7 +250,13 @@ export class UsersGridComponent implements OnInit {
           complete: () => {
             this.notificationService.open(this.tr.instant('user.ADD_USER_OK'));
             addDialogRef.componentInstance.onNoClick();
-            this.refresh();
+            updateGridData(
+              this.rowData,
+              [user],
+              this.gridOptions.api!,
+              'username',
+              'add'
+            );
           },
           error: ({ error }: { error: ErrorResponse }) => {
             this.notificationService.openError(
@@ -296,7 +303,13 @@ export class UsersGridComponent implements OnInit {
             this.tr.instant('user.editUser.SUBMIT_OK')
           );
           editDialogRef.componentInstance.onNoClick();
-          this.refresh();
+          updateGridData(
+            this.rowData,
+            [userForm],
+            this.gridOptions.api!,
+            'username',
+            'edit'
+          );
         },
         error: ({ error }: { error: ErrorResponse }) => {
           this.notificationService.openError(
@@ -335,7 +348,13 @@ export class UsersGridComponent implements OnInit {
         switchMap(() => from(users)),
         concatMap(userId => this.settingsService.deleteUser(userId)),
         finalize(() => {
-          this.refresh();
+          updateGridData(
+            this.rowData,
+            users.map(user => {return {username: user};}),
+            this.gridOptions.api!,
+            'username',
+            'delete'
+          );
           deleteDialogRef.componentInstance.onCancel();
           deleteDialogRef.componentInstance.loading = false;
         })

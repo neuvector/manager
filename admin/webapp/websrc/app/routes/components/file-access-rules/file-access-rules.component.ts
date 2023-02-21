@@ -22,6 +22,7 @@ import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-di
 import { switchMap } from 'rxjs/operators';
 import { NotificationService } from '@services/notification.service';
 import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
+import { updateGridData } from '@common/utils/common.utils';
 
 @Component({
   selector: 'app-file-access-rules',
@@ -230,9 +231,13 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
           this.notificationService.open(
             this.translate.instant('group.file.REMOVE_OK')
           );
-          setTimeout(() => {
-            this.getFileAccessRules(this.groupName);
-          }, 1000);
+          updateGridData(
+            this.fileAccessRules,
+            [data],
+            this.gridOptions.api!,
+            'filter',
+            'delete'
+          );
           // close dialog
           dialogRef.componentInstance.onCancel();
           dialogRef.componentInstance.loading = false;
@@ -256,6 +261,8 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
         selectedRule: data,
         source: this.source,
         getFileAccessRules: this.getFileAccessRules,
+        gridApi: this.gridOptions.api!,
+        fileAccessRules: this.fileAccessRules
       },
       width: '70%'
     });
@@ -272,6 +279,8 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
         groupName: this.groupName,
         source: this.source,
         getFileAccessRules: this.getFileAccessRules,
+        gridApi: this.gridOptions.api!,
+        fileAccessRules: this.fileAccessRules
       },
       width: '70%'
     });

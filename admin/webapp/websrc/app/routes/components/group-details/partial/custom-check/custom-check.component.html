@@ -1,6 +1,7 @@
 <div class="row mx-0">
   <form
     [formGroup]="customCheckForm"
+    *ngIf="!isRefreshingForm"
     class="col-sm-6"
   >
     <mat-form-field appearance="standard" class="col-12"

@@ -16,6 +16,7 @@ import { GroupsService } from '@services/groups.service';
 import { cloneDeep } from 'lodash';
 import { NotificationService } from '@services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
+import { updateGridData } from '@common/utils/common.utils';
 
 @Component({
   selector: 'app-add-edit-file-access-rule-modal',
@@ -142,8 +143,11 @@ export class AddEditFileAccessRuleModalComponent implements OnInit {
         ? ['added', 'add']
         : ['updated', 'update'];
     let fileAccessRuleData = {
+      cfg_type: this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY ?
+        GlobalConstant.CFG_TYPE.FED : GlobalConstant.CFG_TYPE.LEARNED,
       applications: this.applicationChipsArray,
       ...this.fileAccessRuleForm.value,
+      last_modified_timestamp: new Date().getTime() / 1000
     };
 
     fileAccessRuleData.group = this.fileAccessRuleForm.controls.group.value;
@@ -165,9 +169,13 @@ export class AddEditFileAccessRuleModalComponent implements OnInit {
             this.translate.instant('group.file.ADD_OK') :
             this.translate.instant('group.file.EDIT_OK');
           this.notificationService.open(msgTitle);
-          setTimeout(() => {
-            this.data.getFileAccessRules(this.data.groupName);
-          }, 1000);
+          updateGridData(
+            this.data.fileAccessRules,
+            [fileAccessRuleData],
+            this.data.gridApi,
+            'filter',
+            this.data.type
+          );
           this.onCancel();
         },
         error => {

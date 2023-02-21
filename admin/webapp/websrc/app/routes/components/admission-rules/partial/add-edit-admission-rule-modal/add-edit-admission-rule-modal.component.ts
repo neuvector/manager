@@ -9,7 +9,7 @@ import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { BytesPipe } from "@common/pipes/app.pipes";
 import { TranslateService } from '@ngx-translate/core';
 import { JsonEditorComponent, JsonEditorOptions, JsonEditorTreeNode } from 'ang-jsoneditor';
-import { getValueType4Text, groupBy } from '@common/utils/common.utils';
+import { getValueType4Text, groupBy, updateGridData } from '@common/utils/common.utils';
 import { NotificationService } from '@services/notification.service';
 
 @Component({
@@ -358,9 +358,19 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
             `${this.translate.instant("admissionControl.msg.UPDATE_OK")} - ID: ${adminRule.id}`;
           this.notificationService.open(msgTitle);
           this.onSubmit();
-          setTimeout(() => {
-            this.data.refresh();
-          }, 1000);
+          if (this.data.opType === GlobalConstant.MODAL_OP.ADD) {
+            setTimeout(() => {
+              this.data.refresh();
+            }, 1000);
+          } else {
+            updateGridData(
+              this.data.admissionRules,
+              [adminRule],
+              this.data.gridApi,
+              'id',
+              'edit'
+            );
+          }
         },
         error => {
           let msgTitle = this.data.opType === GlobalConstant.MODAL_OP.ADD ?

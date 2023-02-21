@@ -11,6 +11,7 @@ import { DlpSensorsService } from '@services/dlp-sensors.service';
 import { NotificationService } from '@services/notification.service';
 import { MapConstant } from '@common/constants/map.constant';
 import { UtilsService } from '@common/utils/app.utils';
+import { updateGridData } from '@common/utils/common.utils';
 
 @Component({
   selector: 'app-sensor-action-buttons',
@@ -44,7 +45,8 @@ export class SensorActionButtonsComponent implements ICellRendererAngularComp {
         sensor: sensor,
         opType: GlobalConstant.MODAL_OP.EDIT,
         index: this.params.rowIndex,
-        refresh: this.params.context.componentParent.refresh,
+        dlpSensors: this.params.context.componentParent.dlpSensors,
+        gridApi: this.params.context.componentParent.gridOptions4Sensors.api!
       },
     });
   };
@@ -65,7 +67,13 @@ export class SensorActionButtonsComponent implements ICellRendererAngularComp {
       .subscribe(
         res => {
           // confirm actions
-          this.params.context.componentParent.refresh();
+          updateGridData(
+            this.params.context.componentParent.dlpSensors,
+            [sensor],
+            this.params.context.componentParent.gridOptions4Sensors.api!,
+            'name',
+            'delete'
+          );
           this.notificationService.open(
             this.translate.instant('dlp.msg.REMOVE_OK')
           );

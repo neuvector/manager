@@ -7,6 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '@services/notification.service';
 import { MapConstant } from '@common/constants/map.constant';
 import { UtilsService } from '@common/utils/app.utils';
+import { updateGridData } from '@common/utils/common.utils';
 
 
 @Component({
@@ -53,9 +54,23 @@ export class AddEditSensorModalComponent implements OnInit {
             this.translate.instant("waf.msg.UPDATE_OK")
           );
           this.dialogRef.close(true);
-          setTimeout(() => {
-            this.data.refresh(this.data.index);
-          }, 2000);
+          updateGridData(
+            this.data.wafSensors,
+            [this.data.opType === GlobalConstant.MODAL_OP.ADD ?
+              {
+                cfg_type: GlobalConstant.CFG_TYPE.CUSTOMER,
+                comment: this.addEditSensorForm.value.comment,
+                groups: [],
+                name: this.addEditSensorForm.value.name,
+                predefine: false,
+                rules: []
+              } :
+              this.addEditSensorForm.value
+            ],
+            this.data.gridApi,
+            'name',
+            this.data.opType === GlobalConstant.MODAL_OP.ADD ? 'add' : 'edit'
+          );
         },
         error => {
           if (!MapConstant.USER_TIMEOUT.includes(error.status)) {

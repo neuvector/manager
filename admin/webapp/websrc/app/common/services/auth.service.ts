@@ -11,6 +11,7 @@ import { GlobalVariable } from '../variables/global.variable';
 import { DomSanitizer } from '@angular/platform-browser';
 import { SessionService } from './session.service';
 import { CommonHttpService } from '@common/api/common-http.service';
+import { decode } from 'html-entities';
 
 @Injectable()
 export class AuthService {
@@ -69,7 +70,7 @@ export class AuthService {
     return GlobalVariable.http
       .post(PathConstant.LOGIN_URL, {
         username: username,
-        password: this.sanitizer.sanitize(SecurityContext.HTML, password),
+        password: decode(this.sanitizer.sanitize(SecurityContext.HTML, password)!),
       })
       .pipe();
   }

@@ -126,13 +126,16 @@ export class AddEditProcessProfileRuleModalComponent implements OnInit {
           let msgTitle = this.type === GlobalConstant.MODAL_OP.ADD ?
             this.translate.instant('group.profile.ADD_OK') :
             this.translate.instant('group.profile.EDIT_OK');
-            updateGridData(
-              this.data.processProfileRules,
-              [newData],
-              this.data.gridApi,
-              'name',
-              this.data.type
-            );
+          this.notificationService.open(msgTitle);
+          updateGridData(
+            this.data.processProfileRules,
+            [newData],
+            this.data.gridApi,
+            ['name', 'path'],
+            this.data.type,
+            [this.oldData],
+            true
+          );
           this.onCancel();
         },
         error => {

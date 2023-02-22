@@ -1,5 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MapConstant } from '@common/constants/map.constant';
 import { ErrorResponse, ScanConfig, WorkloadV2 } from '@common/types';
@@ -20,7 +26,7 @@ import { SummaryService } from '@services/summary.service';
   templateUrl: './containers.component.html',
   styleUrls: ['./containers.component.scss'],
 })
-export class ContainersComponent implements OnInit {
+export class ContainersComponent implements OnInit, OnDestroy {
   _containersGrid!: ContainersGridComponent;
   private switchClusterSubscription;
 
@@ -87,6 +93,8 @@ export class ContainersComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
+    this.stopContainerScan$.next(true);
+    this.stopFullScan$.next(true);
     if (this.switchClusterSubscription) {
       this.switchClusterSubscription.unsubscribe();
     }

@@ -87,6 +87,9 @@ export class RegistriesCommunicationService {
     repeatWhen(() => this.refreshRegistriesSubject$)
   );
   saving$ = this.savingSubject$.asObservable();
+  get selectedRegistry() {
+    return this.selectedRegistrySubject$.value;
+  }
 
   constructor(private registriesService: RegistriesService) {}
 

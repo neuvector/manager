@@ -26,8 +26,7 @@
         <input
           formControlName="hostname"
           matInput
-          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-        />
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
         <mat-error *ngIf="ldapForm.controls.hostname.hasError('required')">
           {{ 'ldap.HOST_REQUIRED' | translate }}
         </mat-error>
@@ -42,14 +41,14 @@
       </mat-icon>
       <mat-form-field appearance="standard" class="w-100">
         <mat-label>{{ 'ldap.PORT' | translate }}</mat-label>
-        <input formControlName="port" matInput type="number" min="0"/>
+        <input formControlName="port" matInput type="number" min="0" />
       </mat-form-field>
     </div>
     <div
       class="col-12 col-md-2 d-flex align-items-center my-2 my-md-0 pt-3 pt-md-0">
-      <mat-checkbox formControlName="ssl"
-        >{{ 'ldap.SSL' | translate }}L</mat-checkbox
-      >
+      <mat-checkbox formControlName="ssl">{{
+        'ldap.SSL' | translate
+      }}</mat-checkbox>
     </div>
   </div>
   <div class="row align-items-center my-0 my-md-4">
@@ -65,8 +64,7 @@
         <input
           formControlName="bind_dn"
           matInput
-          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-        />
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
       </mat-form-field>
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
@@ -107,8 +105,7 @@
       <input
         formControlName="base_dn"
         matInput
-        [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-      />
+        [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
       <mat-hint>{{ 'ldap.BASE_DN_HINT' | translate }}</mat-hint>
       <mat-error *ngIf="ldapForm.controls.base_dn.hasError('required')">
         {{ 'ldap.BASE_DN_MESSAGE' | translate }}

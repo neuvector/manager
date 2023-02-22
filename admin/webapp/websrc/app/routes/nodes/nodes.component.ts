@@ -80,6 +80,8 @@ export class NodesComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
+    this.stopNodeScan$.next(true);
+    this.stopFullScan$.next(true);
     if (this._switchClusterSubscription) {
       this._switchClusterSubscription.unsubscribe();
     }

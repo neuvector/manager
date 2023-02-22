@@ -51,7 +51,7 @@ export class PlatformsComponent implements OnInit, OnDestroy {
   autoScanAuthorized = false;
   isAutoScanAuthorized!: boolean;
   stopFullScan$ = new Subject();
-  stopNodeScan$ = new Subject();
+  stopPlatformScan$ = new Subject();
   selectedPlatform!: Platform;
   private _switchClusterSubscription;
 
@@ -88,6 +88,8 @@ export class PlatformsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.stopPlatformScan$.next(true);
+    this.stopFullScan$.next(true);
     if (this._switchClusterSubscription) {
       this._switchClusterSubscription.unsubscribe();
     }
@@ -166,7 +168,7 @@ export class PlatformsComponent implements OnInit, OnDestroy {
           .getRowNode(selectedPlatform.platform)
           ?.setData(selectedPlatform);
         interval(5000)
-          .pipe(takeUntil(this.stopNodeScan$))
+          .pipe(takeUntil(this.stopPlatformScan$))
           .subscribe(() => {
             this.refresh(platforms => {
               const platform = platforms.find(
@@ -176,7 +178,7 @@ export class PlatformsComponent implements OnInit, OnDestroy {
                 !platform ||
                 this.scanService.isPlatformScanFinished(platform)
               ) {
-                this.stopNodeScan$.next(true);
+                this.stopPlatformScan$.next(true);
               }
             });
           });

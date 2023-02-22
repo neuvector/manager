@@ -242,7 +242,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
             this.processProfileRules,
             data,
             this.gridOptions.api!,
-            'name',
+            ['name', 'path'],
             'delete'
           );
           this.selectedProcessProfileRules = null;

@@ -732,22 +732,44 @@ export function updateGridData(
   dataset: Array<any>,
   targetDataArray: Array<any>,
   gridApi: GridApi,
-  keyName: string,
-  op: DataOps
+  keyNames: string | string[],
+  op: DataOps,
+  originalDataArray: Array<any> | null = null,
+  canOverrideKey: boolean = false
 ): void {
   let index = -1;
-  targetDataArray.forEach(targetData => {
-    index = dataset.findIndex(dataElem => dataElem[keyName] === targetData[keyName]);
-    if (index > -1) {
-      if (op === 'edit') {
-        dataset.splice(index, 1, targetData);
-      } else if (op === 'delete') {
+  const getIndex = function(dataset, queryData, keyNames) {
+    return dataset.findIndex(dataElem => {
+      if (Array.isArray(keyNames)) {
+        return keyNames.map(keyName => {
+          return dataElem[keyName] === queryData[keyName]
+        }).reduce((curr, next) => {
+          return curr && next;
+        });
+      } else {
+        return dataElem[keyNames] === queryData[keyNames]
+      }
+    });
+  };
+  let queryDataArray = canOverrideKey ? originalDataArray : targetDataArray;
+  if (op === 'delete') {
+    queryDataArray!.forEach(queryData => {
+      let index = getIndex(dataset, queryData, keyNames);
+      if (index > -1) {
         dataset.splice(index, 1);
       }
+    });
+  } else {
+    let index = getIndex(dataset, queryDataArray![0], keyNames);
+    if (index > -1) {
+      if (op === 'edit') {
+        dataset.splice(index, 1, targetDataArray[0]);
+      }
     } else {
-      dataset.splice(dataset.length, 1, targetData);
+      dataset.splice(dataset.length, 1, targetDataArray[0]);
     }
-  });
+  }
+
   gridApi.setRowData(dataset);
   if (op === 'edit') {
     setTimeout(() => {

@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TranslatorService } from '@core/translator/translator.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -38,9 +38,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   public samlEnabled: boolean = false;
   public oidcEnabled: boolean = false;
   public app: any;
-  public isEulaAccepted: boolean = false;
+  public isEulaAccepted: boolean = true;
   public isEulaValid: boolean = true;
-  public validEula: boolean = false;
+  public validEula: boolean = true;
   private version: string = '';
   private gpuEnabled: boolean = false;
   private originalUrl: string = '';
@@ -100,6 +100,8 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.validEula = true;
             this.localLogin();
           } else {
+            this.isEulaAccepted = false;
+            this.validEula = false;
             const dialog = this.dialog.open(AgreementComponent, {
               data: { isFromSSO: true },
               width: '85vw',
@@ -307,12 +309,15 @@ export class LoginComponent implements OnInit, OnDestroy {
         let eula = eulaInfo.eula;
         if (eula && eula.accepted) {
           this.isEulaAccepted = true;
+        }else{
+          this.isEulaAccepted = false;
         }
         this.validEula = this.isEulaAccepted;
       },
       error => {
         this.cookieService.delete('temp');
         this.isEulaAccepted = false;
+        this.validEula = this.isEulaAccepted;
         this.notificationService.openError(
           error,
           this.translate.instant('license.message.GET_EULA_ERR')

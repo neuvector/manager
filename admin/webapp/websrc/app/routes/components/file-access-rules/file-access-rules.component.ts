@@ -241,6 +241,8 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
           // close dialog
           dialogRef.componentInstance.onCancel();
           dialogRef.componentInstance.loading = false;
+          this.selectedFileAccessRules = null;
+          this.getSelectedFileAccessRules.emit(this.selectedFileAccessRules);
         },
         error => {
           this.notificationService.openError(
@@ -268,6 +270,7 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
     });
     editDialogRef.afterClosed().subscribe(result => {
       this.isModalOpen = false;
+      this.getSelectedFileAccessRules.emit(this.selectedFileAccessRules);
     });
   };
 
@@ -286,6 +289,7 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
     });
     addDialogRef.afterClosed().subscribe(result => {
       this.isModalOpen = false;
+      this.getSelectedFileAccessRules.emit(this.selectedFileAccessRules);
     });
   };
 

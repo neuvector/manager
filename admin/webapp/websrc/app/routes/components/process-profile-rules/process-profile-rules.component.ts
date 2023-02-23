@@ -203,6 +203,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
     editDialogRef.afterClosed().subscribe(() => {
       this.isModalOpen = false;
       this.selectedProcessProfileRules = null;
+      this.getSelectedProcessProfileRules.emit(this.selectedProcessProfileRules);
     });
   };
 
@@ -246,6 +247,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
             'delete'
           );
           this.selectedProcessProfileRules = null;
+          this.getSelectedProcessProfileRules.emit(this.selectedProcessProfileRules);
           // close dialog
           dialogRef.componentInstance.onCancel();
           dialogRef.componentInstance.loading = false;
@@ -279,6 +281,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
     addDialogRef.afterClosed().subscribe(result => {
       this.isModalOpen = false;
       this.selectedProcessProfileRules = null;
+      this.getSelectedProcessProfileRules.emit(this.selectedProcessProfileRules);
     });
   };
 

@@ -1955,6 +1955,7 @@
       "NETWORK_RULES": "网络规则",
       "RESPONSE_RULES": "响应规则"
     },
+    "EDIT_CRITERIA": "编辑准则",
     "DELETE_ITEM_TITLE": "删除组",
     "DELETE_UNIT": "删除",
     "HAS_RULES_WARNING": "使用该组的网络规则或/与响应规则将被一起删除.",

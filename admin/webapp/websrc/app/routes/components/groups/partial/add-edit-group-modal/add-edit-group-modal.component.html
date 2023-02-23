@@ -1,61 +1,84 @@
 <div class="nv-dialog">
   <div class="d-flex justify-content-between align-items-center">
     <h4 mat-dialog-title class="mb-2">
-      <span *ngIf="data.opType === modalOp.ADD">{{'group.addGroup.TITLE' | translate}}</span>
-      <span *ngIf="data.opType === modalOp.EDIT">{{'group.editGroup.TITLE' | translate}}</span>
-      <span *ngIf="data.opType === modalOp.VIEW">{{'group.VIEW_GROUP' | translate}}</span>
+      <span *ngIf="data.opType === modalOp.ADD">{{
+        'group.addGroup.TITLE' | translate
+      }}</span>
+      <span *ngIf="data.opType === modalOp.EDIT">{{
+        'group.editGroup.TITLE' | translate
+      }}</span>
+      <span *ngIf="data.opType === modalOp.VIEW">{{
+        'group.VIEW_GROUP' | translate
+      }}</span>
     </h4>
-    <button (click)="onCancel()" class="mb-2" aria-label="Close dialog" mat-icon-button>
+    <button
+      (click)="onCancel()"
+      class="mb-2"
+      aria-label="Close dialog"
+      mat-icon-button
+    >
       <i class="eos-icons ">close</i>
     </button>
   </div>
   <hr class="fancy mb-2" />
   <div mat-dialog-content>
-    <form
-      [formGroup]="addEditGroupForm"
-    >
+    <form [formGroup]="addEditGroupForm">
       <div class="row">
         <mat-form-field class="col-sm-3" appearance="standard">
-          <mat-label>{{'group.editGroup.GROUP_NAME' | translate}}</mat-label>
+          <mat-label>{{ 'group.editGroup.GROUP_NAME' | translate }}</mat-label>
           <input
             type="text"
             matInput
             formControlName="name"
             [readonly]="data.opType !== modalOp.ADD"
             [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+          />
+          <mat-error
+            *ngIf="addEditGroupForm.controls.name.hasError('required')"
           >
-          <mat-error *ngIf="addEditGroupForm.controls.name.hasError('required')">
-            {{'general.REQUIRED' | translate}}
+            {{ 'general.REQUIRED' | translate }}
           </mat-error>
           <mat-error *ngIf="addEditGroupForm.controls.name.hasError('fedName')">
-            {{'group.NAME_VALID' | translate}} "fed."
+            {{ 'group.NAME_VALID' | translate }} "fed."
           </mat-error>
         </mat-form-field>
         <mat-form-field class="col-sm-9" appearance="standard">
-          <mat-label>{{'policy.addPolicy.COMMENT' | translate}}</mat-label>
+          <mat-label>{{ 'policy.addPolicy.COMMENT' | translate }}</mat-label>
           <input
             type="text"
             matInput
             formControlName="comment"
             [readonly]="data.opType === modalOp.VIEW"
             [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-          >
+          />
         </mat-form-field>
       </div>
       <div class="row">
         <mat-form-field class="col-12 col-md-12" appearance="standard">
-          <mat-label>{{'responsePolicy.gridHeader.CRITERIA' | translate}}</mat-label>
-          <mat-chip-list #chipList aria-label="Criteria" formControlName="criteriaCtrl">
+          <mat-label>{{
+            'responsePolicy.gridHeader.CRITERIA' | translate
+          }}</mat-label>
+          <mat-chip-list
+            #chipList
+            aria-label="Criteria"
+            formControlName="criteriaCtrl"
+          >
             <mat-chip
               *ngFor="let criterion of criteria"
-              (removed)="removeCriterion(criterion)">
-              {{criterion.name}}
+              (removed)="removeCriterion(criterion)"
+              (click)="editCriterion(criterion)"
+            >
+              {{ criterion.name }}
               <button matChipRemove>
                 <mat-icon class="eos-icons icon-18">cancel</mat-icon>
               </button>
             </mat-chip>
             <input
-              placeholder="{{(data.opType !== modalOp.VIEW ? 'group.editGroup.ADD_CRITERIA' : '') | translate}}"
+              placeholder="{{
+                (data.opType !== modalOp.VIEW
+                  ? 'group.editGroup.ADD_CRITERIA'
+                  : '') | translate
+              }}"
               #criteriaInput
               [readonly]="data.opType === modalOp.VIEW"
               [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
@@ -63,27 +86,31 @@
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               matChipInputAddOnBlur="true"
               (matChipInputTokenEnd)="addCriterion($event)"
-            >
+            />
           </mat-chip-list>
         </mat-form-field>
         <ng-container *ngIf="data.opType !== modalOp.VIEW">
           <mat-hint align="start" class="px-3">
-            {{'partner.group.CRITERIA_HINT' | translate}}
+            {{ 'partner.group.CRITERIA_HINT' | translate }}
           </mat-hint>
         </ng-container>
       </div>
-      <div class="d-flex justify-content-end align-items-center"
-           *ngIf="data.opType !== modalOp.VIEW">
-        <button mat-stroked-button
-                class="mr-2"
-                (click)="onCancel()">
-          {{'group.editGroup.CANCEL' | translate}}
+      <div
+        class="d-flex justify-content-end align-items-center"
+        *ngIf="data.opType !== modalOp.VIEW"
+      >
+        <button mat-stroked-button class="mr-2" (click)="onCancel()">
+          {{ 'group.editGroup.CANCEL' | translate }}
         </button>
         <app-loading-button
           [appearance]="'mat-raised-button'"
           [color]="'primary'"
           [loading]="submittingUpdate"
-          [text]="(data.opType === modalOp.EDIT ? 'group.editGroup.UPDATE' : 'group.addGroup.ADD') | translate"
+          [text]="
+            (data.opType === modalOp.EDIT
+              ? 'group.editGroup.UPDATE'
+              : 'group.addGroup.ADD') | translate
+          "
           (btnClick)="updateGroup()"
         >
         </app-loading-button>

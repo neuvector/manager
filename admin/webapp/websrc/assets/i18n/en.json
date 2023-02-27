@@ -2851,7 +2851,7 @@
     "NEW_SERVICE_POLICY_MODE": "Default mode for new services",
     "NEW_SERVICE": "New Services Mode",
     "NEW_SERVICE_COMMENT": "The default policy mode for new groups that have not been previously detected.",
-    "NET_SERVICE_POLICY_MODE": "Network Security Service Policy Mode",
+    "NET_SERVICE_POLICY_MODE": "Network Security Policy Mode",
     "MODE_AUTO_SWITCH": "Service Group Mode Automation",
     "MODE_AUTO_SWITCH_HINT": "Promote groups' policy mode automatically. This does not affect CRD created groups.",
     "D2M": "Discover to Monitor",

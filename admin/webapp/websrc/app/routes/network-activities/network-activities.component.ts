@@ -1144,7 +1144,7 @@ export class NetworkActivitiesComponent
       const node = item.getModel();
       if (node.kind === 'group') {
         this.graph.hideItem(item);
-        this.blacklist?.groups.push({ name: node.id });
+        this.blacklist?.groups.push({ name: node.id, displayName: getServiceName(node.id)});
       } else if (node.kind === 'domain') {
         this.graph.hideItem(item);
         this.blacklist?.domains.push({ name: node.id });

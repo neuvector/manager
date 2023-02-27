@@ -2851,7 +2851,7 @@
     "NEW_SERVICE_POLICY_MODE": "新增服务的策略模式",
     "NEW_SERVICE": "新增服务",
     "NEW_SERVICE_COMMENT": "新建组的默认策略模式没有被提前监测到.",
-    "NET_SERVICE_POLICY_MODE": "网络安全服务策略模式",
+    "NET_SERVICE_POLICY_MODE": "网络安全策略模式",
     "MODE_AUTO_SWITCH": "服务组模式自动化",
     "MODE_AUTO_SWITCH_HINT": "自动升级组的策略模式. 这不会影响CRD创建的组.",
     "D2M": "学习模式到监视模式",

@@ -436,7 +436,7 @@ export class SecurityEventsComponent implements OnInit {
                 secEvent.endpoint.destination.domain
                   ? `${secEvent.endpoint.destination.domain}: `
                   : ''
-              }${secEvent.endpoint.destination.displayName}`,
+              }${secEvent.endpoint.destination.displayName} (${secEvent.endpoint.destination.ip})`,
             ],
           },
         ],

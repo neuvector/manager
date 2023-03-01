@@ -7,6 +7,8 @@ import { GlobalVariable } from '@common/variables/global.variable';
 import { TranslateService } from '@ngx-translate/core';
 import { DashboardService } from '@services/dashboard.service';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
+import { CspLicenseConfigModalComponent } from '@components/global-notifications/csp-license-config-modal/csp-license-config-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-global-notifications',
@@ -20,6 +22,7 @@ export class GlobalNotificationsComponent implements OnInit {
   version: any;
   rbacData!: RbacStatus;
   unUpdateDays!: number;
+  user = GlobalVariable.user;
   get isVersionMismatch() {
     return GlobalVariable.summary.component_versions
       ? (GlobalVariable.summary.component_versions.length > 1 &&
@@ -40,6 +43,7 @@ export class GlobalNotificationsComponent implements OnInit {
 
   constructor(
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
+    private dialog: MatDialog,
     private tr: TranslateService,
     private commonHttpService: CommonHttpService,
     private dashboardService: DashboardService
@@ -194,6 +198,15 @@ export class GlobalNotificationsComponent implements OnInit {
         });
       });
     }
+    //Mock up of csp user notifications
+    this.globalNotifications.push({
+      name: 'CSP user notifications:' + 'NueVector server does not have the required amount of licenses',
+      message: 'NueVector server has the required amount of licenses',
+      link: '',
+      labelClass: 'danger',
+      accepted: false,
+      unClamped: false,
+    });
     const notifs: string[] =
       this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_NOTIFICATIONS)?.[
         this.currentUser
@@ -246,9 +259,25 @@ export class GlobalNotificationsComponent implements OnInit {
     );
   }
 
+  isCspNotif(name: string) {
+    return name.startsWith('CSP user notifications');
+  }
+
   getRbacTitle(name: string) {
     return this.tr.instant(
       'dashboard.body.message.' + name.split(':')[0].toUpperCase()
+    );
+  }
+
+  openCspLicenseConfigDialog() {
+    this.dialog.open(
+      CspLicenseConfigModalComponent,
+      {
+        width: '50%',
+        data: {
+
+        },
+      }
     );
   }
 }

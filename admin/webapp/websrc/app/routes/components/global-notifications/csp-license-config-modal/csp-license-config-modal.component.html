@@ -1,0 +1,52 @@
+<div class="nv-dialog">
+  <div class="d-flex justify-content-between align-items-center">
+    <h4 mat-dialog-title class="mb-2">
+      License
+    </h4>
+    <button
+      (click)="dialogRef.close()"
+      class="mb-2"
+      aria-label="Close dialog"
+      mat-icon-button>
+      <i class="eos-icons">close</i>
+    </button>
+  </div>
+  <hr class="fancy mb-3" />
+  <div mat-dialog-content>
+    <div class="license__field">
+      <i class="eos-icons eos-icons--dark-circle-bg mr-3">cloud_computing</i>
+      <mat-form-field appearance="standard" class="w-100">
+        <mat-label>Cloud Service Name</mat-label>
+        <input [value]="'AWS'" disabled matInput />
+      </mat-form-field>
+    </div>
+    <div class="license__field">
+      <i class="eos-icons eos-icons--dark-circle-bg mr-3">account_box</i>
+      <mat-form-field appearance="standard" class="w-100">
+        <mat-label>Account No.</mat-label>
+        <input [value]="'123451234567'" disabled matInput />
+      </mat-form-field>
+    </div>
+    <div class="license__field">
+      <i class="eos-icons eos-icons--dark-circle-bg mr-3">computer</i>
+      <mat-form-field appearance="standard" class="w-100">
+        <mat-label>Platform</mat-label>
+        <input [value]="'x86_64'" disabled matInput />
+      </mat-form-field>
+    </div>
+    <div class="d-flex justify-content-center">
+      <app-loading-button
+        (btnClick)="downloadSupportConfigFile()"
+        [disabled]="!!(downloading$ | async)"
+        [appearance]="'mat-button'"
+        [buttonClasses]="'d-flex justify-content-center align-items-center'"
+        [iconClasses]="'eos-icons icon-18'"
+        [iconName]="'download'"
+        [id]="'download-csp-support-config-file-button'"
+        [loading]="!!(downloading$ | async)"
+        [text]="'Download Support Configuration File'"
+        [type]="'button'">
+      </app-loading-button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+.license__field {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 32px;
+}
+
+.license__field:last-child {
+  padding-bottom: 0;
+}

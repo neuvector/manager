@@ -15,13 +15,13 @@
   <ng-container *ngFor="let notification of globalNotifications">
     <div
       *ngIf="!notification.accepted"
-      class="d-flex align-items-center justify-content-between pl-0"
+      class="d-flex align-items-center pl-0"
       (click)="$event.stopPropagation()"
       mat-menu-item>
       <em
         class="fa fa-circle mx-3"
         [class]="'text-' + notification.labelClass"></em>
-      <ng-container *ngIf="isRbacNotif(notification.name); else globalNotif">
+      <ng-container *ngIf="isRbacNotif(notification.name); else cspNotif">
         <span
           class="notification-message"
           [class]="notification.unClamped ? 'unclamped' : 'clamped'"
@@ -32,6 +32,23 @@
           {{ notification.message }}
         </span>
       </ng-container>
+      <ng-template #cspNotif>
+        <ng-container *ngIf="isCspNotif(notification.name); else globalNotif">
+          <span
+            class="notification-message"
+            [class]="notification.unClamped ? 'unclamped' : 'clamped'"
+            [id]="notification.name"
+            (click)="toggleClamp(notification)">
+            {{ notification.message }}
+          </span>
+          <button
+            *ngIf="user.roles.global === '2' || user.roles.global === '4'"
+            mat-button
+            (click)="openCspLicenseConfigDialog()">
+            <em class="eos-icons icon-18 text-info">settings</em>
+          </button>
+        </ng-container>
+      </ng-template>
       <ng-template #globalNotif>
         <span
           class="notification-message"
@@ -44,9 +61,10 @@
           </a>
         </span>
       </ng-template>
-      <em class="ml-3 eos-icons icon-18" (click)="accept(notification, $event)"
-        >check_circle</em
+      <div class="ml-auto ml-3 eos-icons icon-18" (click)="accept(notification, $event)"
+        >check_circle</div
       >
     </div>
+
   </ng-container>
 </mat-menu>

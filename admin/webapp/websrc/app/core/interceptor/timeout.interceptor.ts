@@ -44,7 +44,7 @@ export class TimeoutInterceptor implements HttpInterceptor {
           if (
             status === GlobalConstant.STATUS_AUTH_TIMEOUT ||
             status === GlobalConstant.STATUS_UNAUTH ||
-            ( status / 100 === 5 &&
+            ( status === GlobalConstant.STATUS_SERVER_UNAVAILABLE &&
               currentPath !== GlobalConstant.PATH_LOGIN )
           ) {
             this.localStorage.set(GlobalConstant.SESSION_STORAGE_ORIGINAL_URL, currentPath);

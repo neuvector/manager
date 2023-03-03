@@ -1,7 +1,6 @@
-
 .login {
   min-height: 100vh;
-  background-image: url("../../../../assets/img/faint-background-v1.jpeg");
+  background-image: url('../../../../assets/img/faint-background-v1.jpeg');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -18,15 +17,18 @@
   min-height: 650px;
 
   .login-logo {
-    background: url("../../../../assets/img/logo-with-text.png") no-repeat;
+    background: url('../../../../assets/img/logo-with-text.png') no-repeat;
     background: -webkit-image-set(
-        url("../../../../assets/img/logo-with-text.png") 1x,
-        url("../../../../assets/img/logo-with-text@2x.png") 2x
+        url('../../../../assets/img/logo-with-text.png') 1x,
+        url('../../../../assets/img/logo-with-text@2x.png') 2x
       )
       no-repeat;
     margin: 0 auto 85px auto;
     height: 77px;
     width: 291px;
+    &.openID-saml-eula {
+      margin-bottom: 50px;
+    }
   }
 }
 
@@ -53,13 +55,19 @@
 }
 
 .login-panel {
-  height: 422px;
+  height: 400px;
   width: 100%;
   box-shadow: 0 4px 19px 0 rgba(0, 0, 0, 0.5);
   background-color: #fff;
   border-radius: 5px;
-  &.login-panel-extra {
+  &.login-panel-eula {
+    height: 432px;
+  }
+  &.login-panel-openid-saml {
     height: 462px;
+  }
+  &.login-panel-openid-saml-eula {
+    height: 495px;
   }
 }
 

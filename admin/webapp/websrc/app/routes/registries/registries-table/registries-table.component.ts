@@ -142,10 +142,7 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
   get isFedRegistry() {
     let selectedRows = this.gridApi?.getSelectedNodes();
     if (Array.isArray(selectedRows) && selectedRows.length > 0) {
-      return (
-        selectedRows[0].data.cfg_type ===
-        GlobalConstant.CFG_TYPE.FED
-      );
+      return selectedRows[0].data.cfg_type === GlobalConstant.CFG_TYPE.FED;
     }
     return false;
   }
@@ -168,7 +165,8 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    this.isRegistryScanAuthorized = this.authUtilsService.getDisplayFlag('registry_scan');
+    this.isRegistryScanAuthorized =
+      this.authUtilsService.getDisplayFlag('registry_scan');
     this.gridOptions = {
       rowData: this.rowData,
       columnDefs: this.columnDefs,
@@ -199,9 +197,12 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
     if (this.gridApi && changes.rowData) {
       this.gridApi.setRowData([]);
       this.gridApi.setRowData(changes.rowData.currentValue);
-      if (!this.gridApi.getSelectedNodes().length) {
-        this.gridApi.getDisplayedRowAtIndex(0)?.setSelected(true);
-      }
+      const selected = this.registriesCommunicationService.selectedRegistry,
+        node = selected
+          ? this.gridApi.getRowNode(selected.name)
+          : this.gridApi.getDisplayedRowAtIndex(0);
+      node?.setSelected(true);
+      this.gridApi.ensureNodeVisible(node, 'middle');
     }
   }
 

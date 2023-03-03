@@ -4,44 +4,85 @@
   <div class="login-body">
     <div class="login-panel-wrap">
       <div>
-        <div class="login-logo"></div>
+        <div
+          class="login-logo"
+          [ngClass]="{
+            'openID-saml-eula':
+              !isEulaAccepted && servers && servers.length === 2
+          }"
+        ></div>
         <div class="panel-body p0">
           <div id="loadingBar" style="width: 100%">
-            <mat-progress-bar *ngIf="(inProgress || isFromSSO) && !authMsg" class="sso-auth-progress" mode="indeterminate"></mat-progress-bar>
-            <div class="text-danger text-center clearfix" *ngIf="authMsg && isFromSSO" style="padding: 0 10px; clear:both">
-              {{authMsg}}
+            <mat-progress-bar
+              *ngIf="(inProgress || isFromSSO) && !authMsg"
+              class="sso-auth-progress"
+              mode="indeterminate"
+            ></mat-progress-bar>
+            <div
+              class="text-danger text-center clearfix"
+              *ngIf="authMsg && isFromSSO"
+              style="padding: 0 10px; clear:both"
+            >
+              {{ authMsg }}
             </div>
           </div>
-          <div class="login-panel" [ngClass]="{'login-panel-extra': servers && servers.length === 2}" *ngIf="!isFromSSO">
-            <p class="text-center login-title mt-0" translate="{{'login.SIGN_IN_LEGACY'}}"></p>
+          <div
+            class="login-panel"
+            [ngClass]="{
+              'login-panel-eula': !isEulaAccepted,
+              'login-panel-openid-saml': servers && servers.length === 2,
+              'login-panel-openid-saml-eula':
+                !isEulaAccepted && servers && servers.length === 2
+            }"
+            *ngIf="!isFromSSO"
+          >
+            <p
+              class="text-center login-title mt-0"
+              translate="{{ 'login.SIGN_IN_LEGACY' }}"
+            ></p>
             <form
-              class="form-validate mb-lg login-form" [formGroup]="loginForm" novalidate=""
+              class="form-validate mb-lg login-form"
+              [formGroup]="loginForm"
+              novalidate=""
               role="form"
             >
               <div class="form-group has-feedback">
-                <label>{{'login.USERNAME' | translate}}</label>
+                <label>{{ 'login.USERNAME' | translate }}</label>
                 <input
-                  autocomplete="off" autofocus class="form-control" id="Email1"
-                  name="account_email" [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-                  formControlName="username" required="" type="text"
+                  autocomplete="off"
+                  autofocus
+                  class="form-control"
+                  id="Email1"
+                  name="account_email"
+                  [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+                  formControlName="username"
+                  required=""
+                  type="text"
                 />
-                <span class="fa fa-user form-control-feedback text-muted login-icon"></span>
+                <span
+                  class="fa fa-user form-control-feedback text-muted login-icon"
+                ></span>
                 <!--suppress JSUnresolvedVariable -->
                 <span
                   class="text-danger login-error"
-                  *ngIf="loginForm.controls['username'].hasError('required') &&
-                  loginForm.controls['username'].dirty"
-                >{{'login.USER_REQUIRED' | translate}}</span>
+                  *ngIf="
+                    loginForm.controls['username'].hasError('required') &&
+                    loginForm.controls['username'].dirty
+                  "
+                  >{{ 'login.USER_REQUIRED' | translate }}</span
+                >
               </div>
               <div class="form-group has-feedback">
-                <label>{{'login.PASSWORD' | translate}}</label>
+                <label>{{ 'login.PASSWORD' | translate }}</label>
                 <input
-                  class="form-control" id="password1"
+                  class="form-control"
+                  id="password1"
                   ng-trim="false"
                   [type]="showPassword ? 'text' : 'password'"
                   [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
                   name="account_password"
-                  formControlName="password" required
+                  formControlName="password"
+                  required
                 />
                 <i
                   class="eos-icons login-icon text-muted"
@@ -64,19 +105,25 @@
                     loginForm.controls['password'].hasError('required') &&
                     loginForm.controls['password'].dirty
                   "
-                >{{'login.PASSWORD_REQUIRED' | translate}}</span>
+                  >{{ 'login.PASSWORD_REQUIRED' | translate }}</span
+                >
               </div>
-              <div class="mt-xl clearfix" *ngIf="servers && servers.length === 1">
+              <div
+                class="mt-xl clearfix"
+                *ngIf="servers && servers.length === 1"
+              >
                 <!--suppress JSUnresolvedVariable -->
                 <button
-                  (click)="submitForm($event, loginForm.value, '')" [disabled]="!validEula || loginForm.invalid"
-                  style="float: left" type="submit"
+                  (click)="submitForm($event, loginForm.value, '')"
+                  [disabled]="!validEula || loginForm.invalid"
+                  style="float: left"
+                  type="submit"
                 >
-                  {{'login.LOGIN' | translate}}
+                  {{ 'login.LOGIN' | translate }}
                 </button>
                 <div
                   style="padding: 12px; text-align:center; width: 8%; float: left"
-                  translate="{{'login.OR'}}"
+                  translate="{{ 'login.OR' }}"
                 ></div>
                 <!--suppress JSUnresolvedVariable -->
                 <button
@@ -85,7 +132,7 @@
                   [disabled]="!validEula"
                   style="float: left"
                 >
-                  {{'login.OKTA_LOGIN' | translate}}
+                  {{ 'login.OKTA_LOGIN' | translate }}
                 </button>
                 <!--suppress JSUnresolvedVariable -->
                 <button
@@ -94,16 +141,18 @@
                   [disabled]="!validEula"
                   style="float: left"
                 >
-                  {{'login.OIDC_LOGIN' | translate}}
+                  {{ 'login.OIDC_LOGIN' | translate }}
                 </button>
               </div>
-              <div class="mt-xl" *ngIf="servers && servers.length===2">
+              <div class="mt-xl" *ngIf="servers && servers.length === 2">
                 <!--suppress JSUnresolvedVariable -->
                 <button
-                  (click)="submitForm($event, loginForm.value, '')" [disabled]="!validEula || loginForm.invalid"
-                  style="width: 100%; margin-bottom: 15px" type="submit"
+                  (click)="submitForm($event, loginForm.value, '')"
+                  [disabled]="!validEula || loginForm.invalid"
+                  style="width: 100%; margin-bottom: 15px"
+                  type="submit"
                 >
-                  {{'login.LOGIN' | translate}}
+                  {{ 'login.LOGIN' | translate }}
                 </button>
                 <div class="clearfix">
                   <!--suppress JSUnresolvedVariable -->
@@ -113,11 +162,11 @@
                     [disabled]="!validEula"
                     style="float: left"
                   >
-                    {{'login.OKTA_LOGIN' | translate}}
+                    {{ 'login.OKTA_LOGIN' | translate }}
                   </button>
                   <div
                     style="padding: 12px; text-align:center; width: 8%; float: left"
-                    translate="{{'login.OR'}}"
+                    translate="{{ 'login.OR' }}"
                   ></div>
                   <!--suppress JSUnresolvedVariable -->
                   <button
@@ -126,31 +175,37 @@
                     [disabled]="!validEula"
                     style="float: left"
                   >
-                    {{'login.OIDC_LOGIN' | translate}}
+                    {{ 'login.OIDC_LOGIN' | translate }}
                   </button>
                 </div>
               </div>
               <div class="mt-xl" *ngIf="!servers || servers.length === 0">
                 <!--suppress JSUnresolvedVariable -->
                 <button
-                  (click)="submitForm($event, loginForm.value, '')" [disabled]="!validEula || loginForm.invalid"
-                  style="width: 100%" type="submit"
+                  (click)="submitForm($event, loginForm.value, '')"
+                  [disabled]="!validEula || loginForm.invalid"
+                  style="width: 100%"
+                  type="submit"
                 >
-                  {{'login.LOGIN' | translate}}
+                  {{ 'login.LOGIN' | translate }}
                 </button>
               </div>
             </form>
-            <div class="text-danger text-center clearfix" [ngClass]="{'mt-3': servers && servers.length === 2}" *ngIf="authMsg" style="padding: 0 10px; clear:both">
-              {{authMsg}}
+            <div
+              class="text-danger text-center clearfix"
+              [ngClass]="{ 'mt-3': servers && servers.length === 2 }"
+              *ngIf="authMsg"
+              style="padding: 0 10px; clear:both"
+            >
+              {{ authMsg }}
+            </div>
+            <div class="text-center mt-2" *ngIf="!isEulaAccepted">
+              <app-eula (eulaStatus)="getEulaStatus($event)"></app-eula>
             </div>
           </div>
         </div>
-        <div class="text-center mt-2" *ngIf="!isEulaAccepted && !isFromSSO">
-          <app-eula (eulaStatus)="getEulaStatus($event)" ></app-eula>
-        </div>
       </div>
       <!-- END panel-->
-
     </div>
   </div>
   <div class="login-footer">
@@ -158,7 +213,8 @@
       <span>&copy;</span>
       <span>{{ app.year }}</span>
       <span>-</span>
-      <span>{{ app.name }}</span>&nbsp;|&nbsp;
+      <span>{{ app.name }}</span
+      >&nbsp;|&nbsp;
       <span>{{ app.description }}</span>
     </div>
   </div>

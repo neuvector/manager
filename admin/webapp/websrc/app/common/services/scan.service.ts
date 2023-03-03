@@ -5,21 +5,16 @@ import {
   Host,
   Platform,
   ScanConfig,
-  Vulnerability,
   VulnerabilityProfile,
   WorkloadV2,
 } from '@common/types';
-import { UtilsService } from '@common/utils/app.utils';
-import { arrayToCsv } from '@common/utils/common.utils';
-import { saveAs } from 'file-saver';
 import { WorkloadRow } from './containers.service';
 
 @Injectable()
 export class ScanService {
   constructor(
     private assetsHttpService: AssetsHttpService,
-    private risksHttpService: RisksHttpService,
-    private utils: UtilsService
+    private risksHttpService: RisksHttpService
   ) {}
 
   getScanConfig() {

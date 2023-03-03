@@ -12,6 +12,7 @@ import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { SwitchersService } from '@core/switchers/switchers.service';
 import { AuthService } from '@common/services/auth.service';
 import { SummaryService } from '@services/summary.service';
+import { CommonHttpService } from '@common/api/common-http.service';
 
 @Component({
   selector: 'app-root',
@@ -29,7 +30,8 @@ export class AppComponent implements OnInit {
     public switchers: SwitchersService,
     private translatorService: TranslatorService,
     private summaryService: SummaryService,
-    private authService: AuthService
+    private authService: AuthService,
+    private commonHttpService: CommonHttpService
   ) {
     this.win = GlobalVariable.window;
     this.initTimer = new Date().getTime();
@@ -84,6 +86,9 @@ export class AppComponent implements OnInit {
         ['', '#'].indexOf(target.getAttribute('href') || '') > -1
       )
         e.preventDefault();
+    });
+    this.commonHttpService.getGravatar().subscribe(val => {
+      GlobalVariable.gravatar = val;
     });
     if (this.win.location.hash !== '#/login' && this.win.location.hash !== '') {
       this.authService.refreshToken().subscribe(

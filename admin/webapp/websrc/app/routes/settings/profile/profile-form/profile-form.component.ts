@@ -8,6 +8,7 @@ import { SettingsService } from '@services/settings.service';
 import { finalize } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { GlobalConstant } from '@common/constants/global.constant';
+import { GlobalVariable } from '@common/variables/global.variable';
 
 @Component({
   selector: 'app-profile-form',
@@ -41,9 +42,11 @@ export class ProfileFormComponent implements OnInit {
   get isLocalUser(): boolean {
     return this.user.server === '';
   }
-
   get isRancherSSO(): boolean {
     return this.user.server === 'Rancher';
+  }
+  get gravatarEnabled() {
+    return GlobalVariable.gravatar;
   }
 
   constructor(

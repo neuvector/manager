@@ -1,11 +1,20 @@
 <form (ngSubmit)="submitForm()" [formGroup]="profileForm">
   <mat-card-header>
-    <ngx-avatar
-      [gravatarId]="emailHash"
-      [name]="user.username"
-      size="80"
-      class="userIcon profile__avatar"
-      mat-card-avatar></ngx-avatar>
+    <ng-container *ngIf="gravatarEnabled; else altAvatar">
+      <ngx-avatar
+        [gravatarId]="emailHash"
+        [name]="user.username"
+        size="80"
+        class="userIcon profile__avatar"
+        mat-card-avatar></ngx-avatar>
+    </ng-container>
+    <ng-template #altAvatar>
+      <ngx-avatar
+        [name]="user.username"
+        size="80"
+        class="userIcon profile__avatar"
+        mat-card-avatar></ngx-avatar>
+    </ng-template>
   </mat-card-header>
   <div class="profile__formGroup">
     <div class="profile__container">
@@ -18,10 +27,7 @@
         </mat-icon>
         <mat-form-field class="w-100">
           <mat-label>{{ 'profile.USER_NAME' | translate }}</mat-label>
-          <input
-            matInput
-            formControlName="username"
-          />
+          <input matInput formControlName="username" />
         </mat-form-field>
       </div>
       <div class="profile__field">
@@ -36,8 +42,7 @@
           <input
             matInput
             formControlName="email"
-            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-          />
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
         </mat-form-field>
       </div>
       <div class="profile__field">
@@ -65,8 +70,7 @@
           <input
             matInput
             formControlName="timeout"
-            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-          />
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
           <mat-error
             *ngIf="
               profileForm.controls.timeout.hasError('min') ||
@@ -93,7 +97,9 @@
         </mat-form-field>
       </div>
     </div>
-    <div *ngIf="!isLocalUser" class="d-flex justify-content-end align-items-center mt-2">
+    <div
+      *ngIf="!isLocalUser"
+      class="d-flex justify-content-end align-items-center mt-2">
       <app-loading-button
         [appearance]="'mat-raised-button'"
         [color]="'primary'"

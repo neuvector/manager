@@ -1178,6 +1178,7 @@
       "SCORE": "Score(V2/V3)",
       "SCORE_V2": "Score(V2)",
       "SCORE_V3": "Score(V3)",
+      "FEED_RATING": "Feed Rating",
       "PACKAGE_NAME": "Package",
       "PACKAGE_VERSION": "Version",
       "VICTIM": "Impact",
@@ -1550,7 +1551,7 @@
       "DOMAIN": "Namespace",
       "CONTAINER": "Container",
       "NODE": "Node",
-      "PROJECT":"Project",
+      "PROJECT": "Project",
       "REGION": "Region",
       "FUNCTION": "Function",
       "HIGH_PERMISSION_STATE": "High Level Permission Statements",
@@ -1944,7 +1945,7 @@
       "NAME": "Name",
       "CRITERIA": "Criteria",
       "POLICY_MODE": "Policy Mode",
-			"PROFILE_MODE": "Profile Mode",
+      "PROFILE_MODE": "Profile Mode",
       "TYPE": "Type",
       "USED_BY_RULES": "Covered by Network Rules",
       "USED_BY_RESPONSE_RULES": "Covered by Response Rules",
@@ -1954,6 +1955,7 @@
       "NETWORK_RULES": "Network Rules",
       "RESPONSE_RULES": "Response Rules"
     },
+    "EDIT_CRITERIA": "Edit Criteria",
     "DELETE_ITEM_TITLE": "REMOVE GROUP",
     "DELETE_UNIT": "item(s)",
     "HAS_RULES_WARNING": "Network rules or/and Response rules that use the group will be deleted too.",
@@ -2656,7 +2658,7 @@
     "title": "Federation Management",
     "joint": "Managed",
     "master": "Primary",
-    "USE_HTTP_PROXY":"Use http proxy configured in Settings > Configuration page",
+    "USE_HTTP_PROXY": "Use http proxy configured in Settings > Configuration page",
     "USE_HTTPS_PROXY": "Use https proxy configured in Settings > Configuration page",
     "NO_PROXY": "Does not use any proxy",
     "fed_sync_repository": "Sync CI/CD image scan results to managed clusters",
@@ -2747,7 +2749,7 @@
   },
   "license": {
     "TITLE": "License",
-    "HEAD": "End user license agreement",
+    "HEAD": "End User License Agreement",
     "ACCEPT_AGREEMENT": "I have read and agree to the ",
     "METERED": "Metered License",
     "METERED_TRIAL": "Metered Trial License",
@@ -2849,7 +2851,7 @@
     "NEW_SERVICE_POLICY_MODE": "Default mode for new services",
     "NEW_SERVICE": "New Services Mode",
     "NEW_SERVICE_COMMENT": "The default policy mode for new groups that have not been previously detected.",
-    "NET_SERVICE_POLICY_MODE": "Network Service Policy Mode",
+    "NET_SERVICE_POLICY_MODE": "Network Security Policy Mode",
     "MODE_AUTO_SWITCH": "Service Group Mode Automation",
     "MODE_AUTO_SWITCH_HINT": "Promote groups' policy mode automatically. This does not affect CRD created groups.",
     "D2M": "Discover to Monitor",
@@ -2941,9 +2943,9 @@
       "SAML": "Configure single sign on using SAML.",
       "LICENSE": "View billing and manage licenses.",
       "OPENID": "Configure single sign on using OpenID Connect.",
-      "ENABLED_NET_POLICY_MODE": "The selected policy mode will apply globally to the network rules for all groups, and each Group’s individual policy mode will only apply to process and file rules.",
-      "ENABLED_NET_POLICY_MODE_GROUP": " mode will apply globally to the network rules for all groups, and each Group’s individual policy mode will only apply to process and file rules.",
-      "DISABLED_NET_POLICY_MODE": "Set the network policy mode at the global level"
+      "ENABLED_NET_POLICY_MODE": "The Network Security Policy Mode can be set globally, independent of the default group policy mode.",
+      "ENABLED_NET_POLICY_MODE_GROUP": "The Network Security Policy will be set globally to a single mode {{name}} and will enforce Network policies independently from the current Group process mode.",
+      "DISABLED_NET_POLICY_MODE": "The Network Security Policy will use the Group Policy Mode for process, network, and file access."
     }
   },
   "ldap": {
@@ -2981,8 +2983,8 @@
       }
     },
     "ADD_DOMAIN": "Add Namespaces ...",
-		"ROLE_DOMAIN": "role in namespace",
-		"ROLE_DOMAIN_INSTRUCTION": "Select access role in the table, then edit namespace list under the table",
+    "ROLE_DOMAIN": "role in namespace",
+    "ROLE_DOMAIN_INSTRUCTION": "Select access role in the table, then edit namespace list under the table",
     "DM_ROLE_HINT": "Add namespaces for which this user has {{role}} privileges",
     "SINGLE_DOMAIN_HINT": "Edit namespace here",
     "HOST": "Host Name",
@@ -3140,40 +3142,40 @@
     "group": {
       "CRITERIA_HINT": "Sample: container=myServer, namespace!=default, node=ubuntu*, image=*nginx*, address=216.58.194.0/24, address=0.0.0.0/0, address=0.0.0.0-255.255.255.255, address=*.neuvector.com, container~k8s_zoo[12] or key=value for label (\"=\" exactly match, \"!\" not, \"? and *\" wildcards, \"~\" regex)"
     },
-		"admissionControl": {
-			"msg": {
+    "admissionControl": {
+      "msg": {
         "CLUSTER_ROLE_NOT_CONFIG": "The neuvector-binding-admission clusterrole/clusterrolebinding required for Neuvector Admission Control is not configured correctly.",
         "WEBHOOK_NOT_CONFIG": "The neuvector-svc-admission-webhook service required for Neuvector Admission Control is not configured correctly.",
         "NO_UPD_PROMISSION": "NeuVector default service account doesn't have UPDATE permission for service resource."
-			}
-		},
-		"license": {
+      }
+    },
+    "license": {
       "HEAD": "END USER LICENSE AGREEMENT",
       "SUB_HEAD": "for NeuVector open source products",
       "server": {
         "APPLY_DESC": "Enter code received from NeuVector support",
         "EMAIL": "support@neuvector.com"
       }
-		},
-		"setting": {
+    },
+    "setting": {
       "SUPPORT_INFO": "Please send to support@neuvector.com",
       "IBM_SETUP_URL": "NeuVector setup URL"
-		},
-		"ldap": {
+    },
+    "ldap": {
       "ADMIN_HINT": "Add LDAP/AD groups which map to NeuVector admin",
       "READER_HINT": "Add LDAP/AD groups which map to NeuVector reader",
       "CI_HINT": "Add LDAP/AD groups which map to NeuVector CI Integration",
       "BASE_DN_HINT": "Root node in LDAP/AD from which to search users and groups. e.g. dc=neuvector, dc=com"
-		},
+    },
     "okta": {
       "ADMIN_HINT": "Add SAML groups which map to NeuVector admin",
       "READER_HINT": "Add SAML groups which map to NeuVector reader",
       "CI_HINT": "Add SAML groups which map to NeuVector CI Integration"
     },
-		"openId": {
+    "openId": {
       "ADMIN_HINT": "Add OpenID Connect groups which map to NeuVector admin",
       "READER_HINT": "Add OpenID Connect groups which map to NeuVector reader",
       "CI_HINT": "Add OpenID Connect groups which map to NeuVector CI Integration"
-		}
+    }
   }
 }

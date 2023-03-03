@@ -1178,6 +1178,7 @@
       "SCORE": "分数(V2/V3)",
       "SCORE_V2": "分数(V2)",
       "SCORE_V3": "分数(V3)",
+      "FEED_RATING": "馈送评级",
       "PACKAGE_NAME": "软件包",
       "PACKAGE_VERSION": "版本",
       "VICTIM": "影响",
@@ -1954,6 +1955,7 @@
       "NETWORK_RULES": "网络规则",
       "RESPONSE_RULES": "响应规则"
     },
+    "EDIT_CRITERIA": "编辑准则",
     "DELETE_ITEM_TITLE": "删除组",
     "DELETE_UNIT": "删除",
     "HAS_RULES_WARNING": "使用该组的网络规则或/与响应规则将被一起删除.",
@@ -2849,7 +2851,7 @@
     "NEW_SERVICE_POLICY_MODE": "新增服务的策略模式",
     "NEW_SERVICE": "新增服务",
     "NEW_SERVICE_COMMENT": "新建组的默认策略模式没有被提前监测到.",
-    "NET_SERVICE_POLICY_MODE": "网络服务策略模式",
+    "NET_SERVICE_POLICY_MODE": "网络安全策略模式",
     "MODE_AUTO_SWITCH": "服务组模式自动化",
     "MODE_AUTO_SWITCH_HINT": "自动升级组的策略模式. 这不会影响CRD创建的组.",
     "D2M": "学习模式到监视模式",
@@ -2941,9 +2943,9 @@
       "SAML": "用SAML配置单一登录.",
       "LICENSE": "浏览账单以及管理许可证.",
       "OPENID": "用OpenID Connect配置单一登录.",
-      "ENABLED_NET_POLICY_MODE": "选定的策略模式将全局地应用于所有组的网络规则上, 每个组各自的策略模式将只应用于进程和文件规则上.",
-      "ENABLED_NET_POLICY_MODE_GROUP": "模式将全局地应用于所有组的网络规则上, 每个组各自的策略模式将只应用于进程和文件规则上.",
-      "DISABLED_NET_POLICY_MODE": "在全局级别设置网络策略模式"
+      "ENABLED_NET_POLICY_MODE": "网络安全策略模式可以全局设置，独立于默认的组策略模式.",
+      "ENABLED_NET_POLICY_MODE_GROUP": "网络安全策略将全局设置为单一模式{{name}}，并将独立于当前组进程模式执行网络策略。",
+      "DISABLED_NET_POLICY_MODE": "网络安全策略将使用组策略模式进行进程、网络和文件访问."
     }
   },
   "ldap": {

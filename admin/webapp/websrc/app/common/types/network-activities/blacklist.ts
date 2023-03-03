@@ -14,7 +14,7 @@ export interface GroupItem {
 
 export interface Blacklist {
   domains: GraphItem[];
-  groups: GraphItem[];
+  groups: GroupItem[];
   endpoints: GraphEndpoint[];
   hideUnmanaged: boolean;
 }

@@ -227,6 +227,13 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
         }
       }
     } ~
+    path("gravatar") {
+      get {
+        Utils.respondWithNoCacheControl() {
+          complete(gravatarEnabled)
+        }
+      }
+    } ~
     path("eula") {
       get {
         Utils.respondWithNoCacheControl() {

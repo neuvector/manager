@@ -978,9 +978,6 @@ export class GraphService {
         };
     });
 
-    console.log(clusterMap);
-    console.log(domainMap);
-
     return clusterNodes;
   };
 
@@ -1010,6 +1007,12 @@ export class GraphService {
     }
     return { edgeId, edgeSource, edgeTarget };
   };
+
+  private aggregateEdgeLabel(label: string, newLabel: string): string {
+    if(!newLabel || label.length >= 15) return label;
+    let joined = Array.from(new Set([label, newLabel].join(',').split(','))).join(',');
+    return this.formatText(joined, 15);
+  }
 
   createClusterEdge = (serverData, edge, clusterEdgeMap, onRefresh) => {
     let theEdge;
@@ -1061,6 +1064,8 @@ export class GraphService {
     }
   };
 
+
+
   aggregateLinks = (clusterEdge, edge) => {
     clusterEdge.weight += 1;
     clusterEdge.bytes += edge.bytes;
@@ -1076,7 +1081,7 @@ export class GraphService {
       MapConstant.EDGE_STATUS_LEVEL_MAP[clusterEdge.status]
         ? MapConstant.EDGE_STATUS_MAP[edge.status]
         : MapConstant.EDGE_STATUS_MAP[clusterEdge.status];
-    clusterEdge.oriLabel = '';
+    clusterEdge.oriLabel = this.aggregateEdgeLabel(clusterEdge.oriLabel, edge.oriLabel);
 
     if (clusterEdge.style.stroke !== MapConstant.EDGE_STATUS_MAP['OK'])
       clusterEdge.stateStyles = {

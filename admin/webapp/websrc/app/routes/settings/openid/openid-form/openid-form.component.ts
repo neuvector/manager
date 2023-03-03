@@ -67,7 +67,7 @@ export class OpenidFormComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    this.openidRedirectURL = getCallbackUri('openId_auth ');
+    this.openidRedirectURL = getCallbackUri('openId_auth');
     this.isWriteOidcAuthorized =
       this.authUtilsService.getDisplayFlag('write_auth_server');
     if (!this.isWriteOidcAuthorized) {

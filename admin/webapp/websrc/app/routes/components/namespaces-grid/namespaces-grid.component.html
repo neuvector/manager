@@ -1,0 +1,24 @@
+<div class="d-flex align-items-center justify-content-between">
+  <span class="font-weight-bold text-info">
+    <span *ngIf="filtered">
+      {{ 'enum.FOUND' | translate }}
+      {{ filteredCount }}&nbsp;/
+    </span>
+    <span *ngIf="!filtered"> {{ 'enum.OUT_OF' | translate }}&nbsp; </span>
+    {{ domainsCount }}
+  </span>
+  <app-quick-filter
+    [gridOptions]="gridOptions"
+    (filterCountChange)="filterCountChanged($event)"
+    [showCount]="false">
+  </app-quick-filter>
+</div>
+<ag-grid-angular
+  (window:resize)="onResize()"
+  [ngStyle]="{ height: gridHeight + 'px' }"
+  [gridOptions]="gridOptions"
+  [rowData]="namespacesService.namespaces"
+  id="namespace-grid"
+  style="width: 100%"
+  class="ag-theme-balham">
+</ag-grid-angular>

@@ -823,6 +823,7 @@
       "SERVICES": "服务",
       "RESOURCE": "资产",
       "NODES": "主机",
+      "NAMESPACES": "命名空间",
       "CONTAINERS": "容器",
       "CONTROLLERS": "控制器",
       "ENFORCERS": "代理端",
@@ -929,6 +930,18 @@
     },
     "message": {
       "NO_STATE": "未连接的代理端没有统计信息"
+    }
+  },
+  "namespaces": {
+    "gridHeader": {
+      "NAME": "主机",
+      "TOTAL_WORKLOAD": "总容器数",
+      "RUNNING_PODS": "正在运行的POD数",
+      "SERVICES": "服务"
+    },
+    "detail": {
+      "RUNNING_WORKLOADS": "正在运行的容器数",
+      "LABELS": "详细信息"
     }
   },
   "nodes": {

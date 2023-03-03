@@ -9,6 +9,7 @@ import { Location } from '@angular/common';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { GlobalConstant } from '@common/constants/global.constant';
+import { PathConstant } from '@common/constants/path.constant';
 import { AuthService } from '@common/services/auth.service';
 import {
   LOCAL_STORAGE,
@@ -45,7 +46,9 @@ export class TimeoutInterceptor implements HttpInterceptor {
             status === GlobalConstant.STATUS_AUTH_TIMEOUT ||
             status === GlobalConstant.STATUS_UNAUTH ||
             ( status === GlobalConstant.STATUS_SERVER_UNAVAILABLE &&
-              currentPath !== GlobalConstant.PATH_LOGIN )
+              currentPath !== GlobalConstant.PATH_LOGIN ) ||
+            req.url === PathConstant.TOKEN_AUTH ||
+            req.url === PathConstant.SELF_URL
           ) {
             this.localStorage.set(GlobalConstant.SESSION_STORAGE_ORIGINAL_URL, currentPath);
             this.dialog.closeAll();

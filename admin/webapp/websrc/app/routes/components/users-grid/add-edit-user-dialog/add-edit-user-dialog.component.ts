@@ -59,7 +59,7 @@ export class AddEditUserDialogComponent implements OnInit {
     return this.domainTable ? this.domainTable.dirty : false;
   }
   get isKube() {
-    return GlobalVariable.hasInitializedSummary
+    return GlobalVariable.summary
       ? GlobalVariable.summary.platform
           .toLowerCase()
           .includes(GlobalConstant.KUBE)

@@ -96,6 +96,7 @@ export class ComplianceService {
           if (compliance.nodes.length) complianceDist.node += 1;
           if (compliance.workloads.length) complianceDist.container += 1;
         });
+        compliance = this.mapWorkloadService(compliance, this.workloadMap);
         return {
           domain,
           container,
@@ -130,6 +131,20 @@ export class ComplianceService {
       // }),
       repeatWhen(() => this.refreshSubject$)
     );
+  }
+
+  private mapWorkloadService(compliance, workloadMap) {
+    let compliances = compliance.compliances.map(item => {
+      let services: Set<any> = new Set();
+      item.workloads.forEach(workload => {
+        let workloadDetails = workloadMap.get(workload.id);
+        services.add(workloadDetails.service);
+      });
+      item.services = Array.from(services);
+      return item;
+    });
+    compliance.compliances = compliances;
+    return compliance;
   }
 
   refresh() {

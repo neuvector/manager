@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { RegistriesCommunicationService } from './regestries-communication.service';
 import { catchError } from 'rxjs/operators';
 import { MultiClusterService } from '@services/multi-cluster.service';
-import { SummaryService } from '@services/summary.service';
 
 @Component({
   selector: 'app-registries',
@@ -22,8 +21,7 @@ export class RegistriesComponent implements OnInit {
 
   constructor(
     private registriesCommunicationService: RegistriesCommunicationService,
-    private multiClusterService: MultiClusterService,
-    private summaryService: SummaryService
+    private multiClusterService: MultiClusterService
   ) {}
 
   ngOnInit(): void {
@@ -41,7 +39,6 @@ export class RegistriesComponent implements OnInit {
   }
 
   refresh(): void {
-    this.summaryService.refreshSummary();
     this.registriesCommunicationService.initRefreshingRegistries();
     this.registriesCommunicationService.refreshRegistries();
   }

@@ -823,6 +823,7 @@
       "SERVICES": "Services",
       "RESOURCE": "Assets",
       "NODES": "Nodes",
+      "NAMESPACES": "Namespaces",
       "CONTAINERS": "Containers",
       "CONTROLLERS": "Controllers",
       "ENFORCERS": "Enforcers",
@@ -929,6 +930,18 @@
     },
     "message": {
       "NO_STATE": "No stats for disconnected enforcer"
+    }
+  },
+  "namespaces": {
+    "gridHeader": {
+      "NAME": "Name",
+      "TOTAL_WORKLOAD": "Total Workloads",
+      "RUNNING_PODS": "Running Pods",
+      "SERVICES": "Services"
+    },
+    "detail": {
+      "RUNNING_WORKLOADS": "Running Workloads",
+      "LABELS": "Labels"
     }
   },
   "nodes": {

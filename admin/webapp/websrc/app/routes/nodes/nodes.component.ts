@@ -13,7 +13,6 @@ import { interval, Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { GlobalVariable } from '@common/variables/global.variable';
-import { SummaryService } from '@services/summary.service';
 
 @Component({
   selector: 'app-nodes',
@@ -59,7 +58,6 @@ export class NodesComponent implements OnInit {
     private scanService: ScanService,
     private notificationService: NotificationService,
     private authUtils: AuthUtilsService,
-    private summaryService: SummaryService,
     private tr: TranslateService,
     private cd: ChangeDetectorRef,
     private multiClusterService: MultiClusterService
@@ -89,7 +87,6 @@ export class NodesComponent implements OnInit {
 
   refresh(cb?: (nodes: Host[]) => void): void {
     this.refreshing$.next(true);
-    this.summaryService.refreshSummary();
     this.getNodes(cb);
   }
 

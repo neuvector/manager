@@ -21,6 +21,7 @@ import { TranslateService } from '@ngx-translate/core';
 import * as $ from 'jquery';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { UtilsService } from '@common/utils/app.utils';
+import { VulnerabilitiesGridFeedRatingCellComponent } from './vulnerabilities-grid-feed-rating-cell/vulnerabilities-grid-feed-rating-cell.component';
 
 @Component({
   selector: 'app-vulnerabilities-grid',
@@ -63,6 +64,8 @@ export class VulnerabilitiesGridComponent implements OnInit, OnChanges {
     },
     {
       field: 'feed_rating',
+      cellRenderer: 'feedRatingCellRenderer',
+      cellClass: ['d-flex', 'align-items-center'],
       headerValueGetter: () =>
         this.translate.instant('scan.gridHeader.FEED_RATING'),
       width: 150,
@@ -109,6 +112,7 @@ export class VulnerabilitiesGridComponent implements OnInit, OnChanges {
       onSelectionChanged: event => this.onSelectionChanged(event),
       components: {
         severityCellRenderer: VulnerabilitiesGridSeverityCellComponent,
+        feedRatingCellRenderer: VulnerabilitiesGridFeedRatingCellComponent,
       },
     };
     if (this.useQuickFilterService) {

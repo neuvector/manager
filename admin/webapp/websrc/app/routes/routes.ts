@@ -50,6 +50,13 @@ export const routes: Routes = [
           import('./platforms/platforms.module').then(m => m.PlatformsModule),
       },
       {
+        path: 'domains',
+        loadChildren: () =>
+          import('./namespaces/namespaces.module').then(
+            m => m.NamespacesModule
+          ),
+      },
+      {
         path: 'hosts',
         loadChildren: () =>
           import('./nodes/nodes.module').then(m => m.NodesModule),
@@ -153,7 +160,9 @@ export const routes: Routes = [
       {
         path: 'security-event',
         loadChildren: () =>
-          import('./security-events/security-events.module').then(m => m.SecurityEventsModule),
+          import('./security-events/security-events.module').then(
+            m => m.SecurityEventsModule
+          ),
       },
       {
         path: 'audit',

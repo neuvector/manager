@@ -21,6 +21,11 @@ const ASSETS = {
       link: '/platforms',
     },
     {
+      text: 'Namespaces',
+      translate: 'sidebar.nav.NAMESPACES',
+      link: '/domains',
+    },
+    {
       text: 'Nodes',
       translate: 'sidebar.nav.NODES',
       link: '/hosts',

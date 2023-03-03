@@ -160,6 +160,11 @@ export interface Domain {
   services: number;
   tags: string[];
   workloads: number;
+  labels: DomainLabels;
+}
+
+export interface DomainLabels {
+  [key: string]: string;
 }
 
 export interface DomainGetResponse {

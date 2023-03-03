@@ -1,0 +1,48 @@
+<section id="namespaces-section">
+  <div class="d-flex flew-row align-items-center justify-content-between">
+    <h1 class="font-weight-light" id="namespaces-title">
+      {{ 'sidebar.nav.NAMESPACES' | translate }}
+    </h1>
+    <app-loading-button
+      (btnClick)="refresh()"
+      [appearance]="'mat-button'"
+      [buttonClasses]="'d-flex justify-content-center align-items-center'"
+      [disabled]="!!(refreshing$ | async)"
+      [iconClasses]="'eos-icons icon-18'"
+      [iconName]="'refresh'"
+      [id]="'namespaces-refresh-button'"
+      [loading]="!!(refreshing$ | async)"
+      [text]="'network.REFRESH' | translate"
+      [type]="'button'">
+    </app-loading-button>
+  </div>
+  <ng-container *ngIf="loaded; else loadingOrErrorTemplate">
+    <app-adjustable-div [minHeightOne]="163" [minHeightTwo]="140">
+      <ng-container *appContainerOne="let height">
+        <mat-card [ngStyle]="{ height: height + 'px' }" class="pt-0">
+          <app-namespaces-grid [gridHeight]="height - 85">
+          </app-namespaces-grid>
+        </mat-card>
+      </ng-container>
+      <ng-container *appContainerTwo="let height">
+        <mat-card
+          *ngIf="selectedNamespace"
+          [ngStyle]="{ height: height + 'px' }"
+          class="pt-0">
+          <app-namespace-details [namespace]="selectedNamespace">
+          </app-namespace-details>
+        </mat-card>
+      </ng-container>
+    </app-adjustable-div>
+  </ng-container>
+  <ng-template #loadingOrErrorTemplate>
+    <ng-container *ngIf="error; else loadingTemplate">
+      <mat-card>
+        {{ error | json }}
+      </mat-card>
+    </ng-container>
+    <ng-template #loadingTemplate>
+      <app-loading-template></app-loading-template>
+    </ng-template>
+  </ng-template>
+</section>

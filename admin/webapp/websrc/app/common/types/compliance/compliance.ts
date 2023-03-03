@@ -50,6 +50,7 @@ export interface IdName {
   display_name: string;
   policy_mode: string;
   domains: string[];
+  service?: string;
 }
 
 export interface ComplianceData {

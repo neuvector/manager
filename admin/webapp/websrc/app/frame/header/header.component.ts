@@ -45,6 +45,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   managedClusterName: string = '';
   isAllowedToOperateMultiCluster: boolean = false;
   isAllowedToRedirectMultiCluster: boolean = false;
+  isFedQueryAllowed: boolean = false;
   get gravatarEnabled() {
     return GlobalVariable.gravatar;
   }
@@ -55,6 +56,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   isNavSearchVisible: boolean = false;
   private _multiClusterSubScription;
+  public isAuthReadConfig: boolean = false;
 
   @ViewChild('fsbutton', { static: true }) fsbutton;
 
@@ -95,6 +97,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
       policyAuth: {
         global: 3,
       },
+      fedQueryAllowed: {
+        global: 1
+      }
     };
 
     this.isAllowedToOperateMultiCluster = isAuthorized(
@@ -106,6 +111,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
       GlobalVariable.user.roles,
       resource.redirectAuth
     );
+
+    this.isAuthReadConfig = this.authUtilsService.getDisplayFlag('read_config');
+    this.isFedQueryAllowed = isAuthorized(GlobalVariable.user.roles, resource.fedQueryAllowed);
 
     this.initMultiClusters();
 
@@ -190,8 +198,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   initMultiClusters() {
-    this.getClusterName();
-    this.getClusters();
+    if(this.isAuthReadConfig){
+      this.getClusterName();
+    }
+
+    if(this.isFedQueryAllowed){
+      this.getClusters();
+    }
   }
 
   getClusterName() {
@@ -200,6 +213,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.clusterName = clusterName;
       },
       error: err => {
+        this.clusterName = "";
         this.clusterNameError = true;
       },
     });

@@ -15,9 +15,9 @@ export class GlobalVariable {
   public static http: HttpClient;
   public static nvToken: string;
   public static isSUSESSO: boolean;
-  public static isMaster: boolean;
-  public static isMember: boolean;
-  public static isStandAlone: boolean;
+  public static isMaster: boolean = false;
+  public static isMember: boolean = false;
+  public static isStandAlone: boolean = false;
   public static isRemote: boolean = false;
   public static version: string;
   public static gravatar: boolean = false;

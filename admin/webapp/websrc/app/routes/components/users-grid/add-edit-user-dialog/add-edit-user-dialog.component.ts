@@ -89,7 +89,7 @@ export class AddEditUserDialogComponent implements OnInit {
   ngOnInit(): void {
     if (!this.isKube) {
       let indexOfNone = this.data.globalRoles.findIndex(role => role === '');
-      this.data.globalRoles.splice(indexOfNone, 1);
+      if (indexOfNone > -1) this.data.globalRoles.splice(indexOfNone, 1);
     }
     this.domainTableSource = new MatTableDataSource(
       this.data.user

@@ -7,6 +7,7 @@ case class SamlServer(
   sso_url: String,
   issuer: String,
   x509_cert: Option[String],
+  x509_cert_extras: Option[Array[String]],
   group_claim: Option[String] = Some(""),
   enable: Option[Boolean],
   default_role: Option[String],

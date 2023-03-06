@@ -48,6 +48,10 @@ export class FederatedConfigFormComponent
   @Input() set config(val) {
     this._modelData = cloneDeep(val);
     this._config = val;
+    this._config.webhooks.forEach(e => {
+      e.isEditable = e.isEditable ? e.isEditable : false;
+      e.type = e.type || OtherWebhookType;
+    });
     this.submittingForm = false;
   }
 

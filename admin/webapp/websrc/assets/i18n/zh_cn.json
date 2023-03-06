@@ -3048,6 +3048,8 @@
     "IDP_URL": "身份提供者单点登录网址",
     "IDP_ISSUER": "身份提供者",
     "CERTIFICATE": "X.509证书",
+    "ADD_EXTRA_CERT": "添加额外的X.509证书",
+    "EXTRA_CERT": "额外的X.509证书",
     "INVALID_URL": "请输入有效的网址.",
     "GROUP_CLAIM": "组别声明",
     "ADMIN_HINT": "添加SAML组到管理员",

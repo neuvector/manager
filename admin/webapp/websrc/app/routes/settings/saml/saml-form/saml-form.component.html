@@ -20,8 +20,7 @@
         <input
           formControlName="sso_url"
           matInput
-          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-        />
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
         <mat-error *ngIf="samlForm.controls.sso_url.hasError('required')">
           {{ 'general.REQUIRED' | translate }}
         </mat-error>
@@ -37,8 +36,7 @@
         <input
           formControlName="issuer"
           matInput
-          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-        />
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
         <mat-error *ngIf="samlForm.controls.issuer.hasError('required')">
           {{ 'general.REQUIRED' | translate }}
         </mat-error>
@@ -64,6 +62,35 @@
         </mat-error>
       </mat-form-field>
     </div>
+    <ng-container formArrayName="x509_cert_extras">
+      <div
+        *ngFor="let _ of x509_extras.controls; let i = index"
+        class="col-12 d-flex align-items-center">
+        <i class="eos-icons mr-3 text-primary invisible">verified</i>
+        <mat-form-field appearance="standard" class="w-100">
+          <mat-label>{{ 'okta.EXTRA_CERT' | translate }}</mat-label>
+          <textarea
+            cdkTextareaAutosize
+            [formControlName]="i"
+            matInput></textarea>
+        </mat-form-field>
+        <button
+          (click)="removeExtraCert(i)"
+          aria-label="Remove extra X509_cert"
+          type="button"
+          mat-icon-button>
+          <mat-icon>delete_forever</mat-icon>
+        </button>
+      </div>
+    </ng-container>
+    <div
+      class="col-12 d-flex align-items-center"
+      *ngIf="samlForm.get('x509_cert')?.value && x509_extras.length < 3">
+      <button (click)="addExtraCert()" type="button" mat-stroked-button>
+        <i class="eos-icons mr-2 icon-16">add_circle</i>
+        {{ 'okta.ADD_EXTRA_CERT' | translate }}
+      </button>
+    </div>
     <div class="col-12 d-flex align-items-center">
       <i class="eos-icons mr-3 text-primary">groups</i>
       <mat-form-field appearance="standard" class="w-100">
@@ -71,8 +98,7 @@
         <input
           formControlName="group_claim"
           matInput
-          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-        />
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
       </mat-form-field>
     </div>
   </div>

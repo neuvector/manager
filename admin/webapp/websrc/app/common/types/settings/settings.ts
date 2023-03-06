@@ -83,6 +83,7 @@ export interface SAML {
   sso_url: string;
   issuer: string;
   x509_cert: string;
+  x509_cert_extras: string[];
   group_claim: string;
   default_role: string;
   group_mapped_roles: GroupMappedRole[];

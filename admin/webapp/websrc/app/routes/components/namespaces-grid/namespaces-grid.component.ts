@@ -51,7 +51,7 @@ export class NamespacesGridComponent implements OnInit {
     {
       field: 'running_pods',
       headerValueGetter: () =>
-        this.tr.instant('namespaces.gridHeader.TOTAL_WORKLOAD'),
+        this.tr.instant('namespaces.gridHeader.RUNNING_PODS'),
       icons: {
         sortAscending: '<em class="fa fa-sort-amount-down"></em>',
         sortDescending: '<em class="fa fa-sort-amount-up"></em>',

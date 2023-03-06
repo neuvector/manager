@@ -20,13 +20,16 @@ export const WebhookTableField = {
     cellHeight: '75px',
     addButtonText: 'setting.webhook.NEW',
   },
+  expressionProperties: {
+    'templateOptions.disabled': '!formState.permissions.isWebhookAuthorized',
+  },
   fieldArray: {
     fieldGroup: [
       {
         key: 'name',
         wrappers: [FormlyComponents.READONLY_WRAPPER],
         type: FormlyComponents.ICON_INPUT,
-        defaultValue: "fed.",
+        defaultValue: 'fed.',
         templateOptions: {
           viewValue: 'setting.webhook.NAME',
           label: 'setting.webhook.NAME',
@@ -134,8 +137,11 @@ export const WebhookTableField = {
           flexWidth: '20%',
         },
         expressionProperties: {
-          'templateOptions.disabled': model => {
-            return model.cfg_type !== GlobalConstant.CFG_TYPE.FED;
+          'templateOptions.disabled': (model, formState) => {
+            return (
+              !formState.permissions.isWebhookAuthorized ||
+              model.cfg_type !== GlobalConstant.CFG_TYPE.FED
+            );
           },
         },
       },

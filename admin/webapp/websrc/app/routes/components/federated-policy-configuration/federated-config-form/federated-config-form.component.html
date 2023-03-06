@@ -2,15 +2,23 @@
   <formly-form
     [model]="config"
     [fields]="fedConfigFields"
-    [form]="fedConfigForm"></formly-form>
+    [form]="fedConfigForm"
+    [options]="fedConfigOptions"
+  ></formly-form>
   <div class="d-flex justify-content-end align-items-center mt-2">
     <app-loading-button
       [appearance]="'mat-raised-button'"
       [color]="'primary'"
-      [disabled]="!fedConfigForm.valid || !fedConfigForm.dirty || submittingForm"
+      [disabled]="
+        !fedConfigForm.valid ||
+        !fedConfigForm.dirty ||
+        submittingForm ||
+        !isFedOpAllowed
+      "
       [loading]="submittingForm"
       [text]="'setting.SUBMIT' | translate"
-      [type]="'submit'">
+      [type]="'submit'"
+    >
     </app-loading-button>
   </div>
 </form>

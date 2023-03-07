@@ -41,7 +41,7 @@
     >
     </app-quick-filter>
   </div>
-  <div class="clearfix">
+  <div class="clearfix" style="position: relative;">
     <ag-grid-angular
       #groupWafSensorsGrid
       id="group-waf-sensors-grid"
@@ -51,5 +51,10 @@
       [gridOptions]="gridOptions4GroupWafSensors"
       >
     </ag-grid-angular>
+    <div
+      *ngIf="!enabled"
+      style="position: absolute; top: 0; width: 100%; background-color: rgba(0, 0, 0, 0.2); z-index: 50;"
+      [ngStyle]="{ height: (resizableHeight - 90) + 'px' }">
+    </div>
   </div>
 </div>

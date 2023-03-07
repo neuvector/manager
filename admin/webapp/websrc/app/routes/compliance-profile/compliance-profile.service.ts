@@ -10,6 +10,7 @@ import {
   DomainGetResponse,
 } from '@common/types';
 import { MapConstant } from '@common/constants/map.constant';
+import { AuthUtilsService } from '@common/utils/auth.utils';
 
 export interface DomainResponse extends DomainGetResponse {
   imageTags: string[];
@@ -26,7 +27,8 @@ export class ComplianceProfileService {
 
   constructor(
     private risksHttpService: RisksHttpService,
-    private assetsHttpService: AssetsHttpService
+    private assetsHttpService: AssetsHttpService,
+    private authUtils: AuthUtilsService
   ) {}
 
   refresh() {
@@ -82,19 +84,23 @@ export class ComplianceProfileService {
   }
 
   private getTemplate(): Observable<ComplianceProfileTemplateData> {
-    return this.risksHttpService.getComplianceProfileTemplate().pipe(
-      catchError(err => {
-        if (
-          [MapConstant.NOT_FOUND, MapConstant.ACC_FORBIDDEN].includes(
-            err.status
-          )
-        ) {
-          return of({ list: { compliance: [] } });
-        } else {
-          throw err;
-        }
-      })
-    );
+    if (!this.authUtils.getDisplayFlag('read_compliance_profile')) {
+      return of({ list: { compliance: [] } });
+    } else {
+      return this.risksHttpService.getComplianceProfileTemplate().pipe(
+        catchError(err => {
+          if (
+            [MapConstant.NOT_FOUND, MapConstant.ACC_FORBIDDEN].includes(
+              err.status
+            )
+          ) {
+            return of({ list: { compliance: [] } });
+          } else {
+            throw err;
+          }
+        })
+      );
+    }
   }
 
   private getProfile(): Observable<ComplianceProfileData> {

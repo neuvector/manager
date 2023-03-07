@@ -936,11 +936,11 @@
     "gridHeader": {
       "NAME": "Name",
       "TOTAL_WORKLOAD": "Total Workloads",
+      "RUNNING_WORKLOADS": "Running Workloads",
       "RUNNING_PODS": "Running Pods",
       "SERVICES": "Services"
     },
     "detail": {
-      "RUNNING_WORKLOADS": "Running Workloads",
       "LABELS": "Labels"
     }
   },

@@ -936,11 +936,11 @@
     "gridHeader": {
       "NAME": "主机",
       "TOTAL_WORKLOAD": "总容器数",
+      "RUNNING_WORKLOADS": "正在运行的容器数",
       "RUNNING_PODS": "正在运行的POD数",
       "SERVICES": "服务"
     },
     "detail": {
-      "RUNNING_WORKLOADS": "正在运行的容器数",
       "LABELS": "详细信息"
     }
   },

@@ -1,9 +1,30 @@
 <div class="nv-dialog">
-  <div class="d-flex align-items-center justify-content-between">
+  <div class="d-flex align-items-center">
     <h4 mat-dialog-title class="mb-1">
       {{'group.waf.setting.TITLE' | translate}}
     </h4>
-    <div class="d-flex align-items-center justify-content-center mb-1">
+    <section class="ml-4 status-section">
+      <mat-slide-toggle
+        class="mr-2"
+        id="group-waf-sensor-status-toggle"
+        [(ngModel)]="data.status"
+        [ngModelOptions]="{standalone: true}"
+      >
+        <span
+          [ngClass]="{
+            'text-muted': !data.status,
+            'text-success': data.status
+          }"
+        >
+          {{
+            (data.status
+              ? "policy.status.ENABLED"
+              : "policy.status.DISABLED") | translate
+          }}
+        </span>
+      </mat-slide-toggle>
+    </section>
+    <div class="ml-auto align-items-center mb-1">
       <button
         mat-icon-button
         aria-label="close"

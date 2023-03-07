@@ -4,6 +4,8 @@ declare var $: any;
 
 import { MenuService } from '@core/menu/menu.service';
 import { SwitchersService } from '@core/switchers/switchers.service';
+import {GlobalVariable} from "@common/variables/global.variable";
+import {GlobalConstant} from "@common/constants/global.constant";
 
 @Component({
   selector: 'app-sidebar',
@@ -26,6 +28,17 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.router = this.injector.get(Router);
+    if (
+      !GlobalVariable.summary.platform
+        .toLowerCase()
+        .includes(GlobalConstant.KUBE)
+    ) {
+      this.menuItems = this.removeSubMenu(
+        this.menuItems,
+        'assets',
+        'namespaces'
+      );
+    }
 
     this.router.events.subscribe(() => {
       this.removeFloatingNav();
@@ -194,4 +207,20 @@ export class SidebarComponent implements OnInit, OnDestroy {
   isEnabledHover() {
     return this.switchers.getFrameSwitcher('leftSideHover');
   }
+
+  private removeSubMenu = function(menu: Array<any>, menuItemName: string, submenuItemName: string): Array<any> {
+    let _menu = JSON.parse(JSON.stringify(menu));
+    let menuItemIndex = _menu.findIndex(item => item.text.toLowerCase() === menuItemName.toLowerCase());
+    let submenu = _menu[menuItemIndex].submenu;
+    if (submenu) {
+      let submenuItemIndex = submenu.findIndex(
+        item => item.text.toLowerCase() === submenuItemName.toLowerCase()
+      );
+      if (submenuItemIndex > -1) {
+        submenu.splice(submenuItemIndex, 1);
+      }
+      return _menu;
+    }
+    return menu;
+  };
 }

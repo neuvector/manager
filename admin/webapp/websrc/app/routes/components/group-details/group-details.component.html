@@ -169,29 +169,6 @@
           <em class="eos-icons">edit</em>
           {{ 'group.CONFIG' | translate }}
         </button>
-        <section>
-          <mat-slide-toggle
-            id="group-waf-sensor-status-toggle"
-            class="px-3"
-            [disabled]="!isWriteDlpAuthorized || cfgType === CFG_TYPE.GROUND"
-            [(ngModel)]="enabled"
-            [ngModelOptions]="{standalone: true}"
-            (toggleChange)="toggleDLPConfigEnablement(enabled)"
-          >
-            <span
-              [ngClass]="{
-                'text-muted': !enabled,
-                'text-success': enabled
-              }"
-            >
-              {{
-                (enabled
-                  ? "policy.status.ENABLED"
-                  : "policy.status.DISABLED") | translate
-              }}
-            </span>
-          </mat-slide-toggle>
-        </section>
       </mat-menu>
       <div class="filter">
         <mat-form-field appearance="standard">
@@ -224,29 +201,6 @@
           <em class="eos-icons">edit</em>
           {{ 'group.CONFIG' | translate }}
         </button>
-        <section>
-          <mat-slide-toggle
-            id="group-waf-sensor-status-toggle"
-            class="px-3"
-            [disabled]="!isWriteWafAuthorized || cfgType === CFG_TYPE.GROUND"
-            [(ngModel)]="enabled"
-            [ngModelOptions]="{standalone: true}"
-            (toggleChange)="toggleWAFConfigEnablement(enabled)"
-          >
-            <span
-              [ngClass]="{
-                'text-muted': !enabled,
-                'text-success': enabled
-              }"
-            >
-              {{
-                (enabled
-                  ? "policy.status.ENABLED"
-                  : "policy.status.DISABLED") | translate
-              }}
-            </span>
-          </mat-slide-toggle>
-        </section>
       </mat-menu>
       <div class="filter">
         <mat-form-field appearance="standard">

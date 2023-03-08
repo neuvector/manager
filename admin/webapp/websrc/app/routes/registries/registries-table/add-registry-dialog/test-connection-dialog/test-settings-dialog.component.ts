@@ -102,19 +102,24 @@ export class TestSettingsDialogComponent implements OnInit, OnDestroy {
   }
 
   testConnection(): void {
+    const config: RegistryConfig = {
+      name: this.data.name,
+      registry_type: this.data.registry_type,
+      filters: this.form.controls.filters.value,
+      username: this.data.username,
+      password: this.data.password,
+      auth_token: this.data.auth_token,
+      auth_with_token: this.data.auth_with_token,
+      scan_layers: this.data.scan_layers,
+      schedule: this.data.schedule,
+      registry: this.data.registry,
+      rescan_after_db_update: this.data.rescan_after_db_update,
+    };
     this.gridApi.setRowData([]);
     this.testingSwitch = true;
     this.registriesService
       .testSettings({
-        config: {
-          name: this.data.name,
-          registry_type: this.data.registry_type,
-          filters: this.form.controls.filters.value,
-          username: this.data.username,
-          auth_token: this.data.auth_token,
-          auth_with_token: this.data.auth_with_token,
-          registry: this.data.registry,
-        },
+        config,
       })
       .pipe(
         takeUntil(this.destroy$),
@@ -125,15 +130,7 @@ export class TestSettingsDialogComponent implements OnInit, OnDestroy {
           this.registriesService
             .testSettings(
               {
-                config: {
-                  name: this.data.name,
-                  registry_type: this.data.registry_type,
-                  filters: this.form.controls.filters.value,
-                  username: this.data.username,
-                  auth_token: this.data.auth_token,
-                  auth_with_token: this.data.auth_with_token,
-                  registry: this.data.registry,
-                },
+                config,
               },
               this.transactionID
             )

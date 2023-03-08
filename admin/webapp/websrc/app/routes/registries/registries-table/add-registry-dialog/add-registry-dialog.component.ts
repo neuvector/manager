@@ -60,7 +60,7 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
     private dialog: MatDialog,
     public dialogRef: MatDialogRef<RegistriesTableComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public data: { isEdit: boolean, editable: boolean; config: RegistryConfig },
+    public data: { isEdit: boolean; editable: boolean; config: RegistryConfig },
     private registriesService: RegistriesService,
     private registriesCommunicationService: RegistriesCommunicationService,
     private notificationService: NotificationService
@@ -217,7 +217,7 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
     } else {
       this.model = {
         isEdit: this.data.isEdit,
-        isRemote: GlobalVariable.isRemote
+        isRemote: GlobalVariable.isRemote,
       };
     }
     if (!this.data.editable) {
@@ -252,7 +252,14 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
     const dialog = this.dialog.open(TestSettingsDialogComponent, {
       width: '80%',
       maxWidth: '1100px',
-      data: this.model,
+      data: {
+        ...this.model,
+        schedule: this.getSchedule(this.model),
+        password:
+          this.model.password !== this.maskFieldWhenEdit
+            ? this.model.password
+            : undefined,
+      },
     });
 
     dialog.afterClosed().subscribe((filters: string[]) => {
@@ -260,5 +267,18 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
         this.form.controls.filters.setValue(filters);
       }
     });
+  }
+
+  private getSchedule(model: any): ScanSchedule {
+    const schedule: ScanSchedule = { schedule: 'manual', interval: 0 };
+    if (model.periodic_scan) {
+      schedule.schedule = 'periodical';
+      schedule.interval = INTERVAL_STEP_VALUES[model.interval].value;
+    }
+    if (model.auto_scan) {
+      schedule.schedule = 'auto';
+      schedule.interval = 300;
+    }
+    return schedule;
   }
 }

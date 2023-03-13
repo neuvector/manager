@@ -149,7 +149,9 @@ export class SupportFormComponent implements OnDestroy {
   downloadLog(): void {
     if (!this.collectingLogReady) return;
     this.enforcersService.getDebug().subscribe(res => {
-      let filename = `nvsupport_${this.utils.parseDatetimeStr(new Date())}.gz`;
+      let filename = `nvsupport_${this.utils.parseDatetimeStr(
+        new Date()
+      )}.json.gz`;
       let exportUrl = new Blob([res], {
         type: 'application/x-gzip',
       });

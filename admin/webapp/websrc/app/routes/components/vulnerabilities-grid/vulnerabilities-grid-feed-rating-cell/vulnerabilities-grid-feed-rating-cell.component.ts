@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MapConstant } from '@common/constants/map.constant';
-import { UtilsService } from '@common/utils/app.utils';
+import { capitalizeWord } from '@common/utils/common.utils';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
@@ -17,11 +17,13 @@ export class VulnerabilitiesGridFeedRatingCellComponent
   feed_rating!: string;
   labelCode!: string;
 
-  constructor(private utils: UtilsService) {}
+  constructor() {}
 
   agInit(params: ICellRendererParams): void {
     this.params = params;
-    this.feed_rating = this.params.data.feed_rating;
+    this.feed_rating = capitalizeWord(
+      this.params.data.feed_rating.toLowerCase()
+    );
     this.labelCode = MapConstant.colourMap[this.feed_rating];
   }
 

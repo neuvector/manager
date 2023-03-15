@@ -1,8 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
-import { EventItem } from '@common/types';
 import { BehaviorSubject } from 'rxjs';
-import { capitalizeWord } from '@common/utils/common.utils';
 
 export const FilterSeverity = {
   critical: 'Critical',
@@ -25,7 +23,7 @@ export const FilterCategory = {
 };
 
 export const Other = {
-  other: 'securityEvent.label.OTHER'
+  other: 'securityEvent.label.OTHER',
 };
 
 @Injectable()
@@ -33,9 +31,7 @@ export class AdvancedFilterModalService {
   private filteredSubject$ = new BehaviorSubject(false);
   filtered$ = this.filteredSubject$.asObservable();
 
-  constructor(
-    private datePipe: DatePipe
-  ) {}
+  constructor(private datePipe: DatePipe) {}
 
   private _filtered = false;
 
@@ -70,8 +66,14 @@ export class AdvancedFilterModalService {
       this._locationFilter(event.details.labels, this.advFilter.location) &&
       this._categoryFilter(event.details.labels, this.advFilter.category) &&
       this._otherFilter(event.details.labels, this.advFilter.other) &&
-      this._sourceFilter(event.endpoint.source.displayName, this.advFilter.source) &&
-      this._destinationFilter(event.endpoint.destination.displayName, this.advFilter.destination) &&
+      this._sourceFilter(
+        event.endpoint.source.displayName,
+        this.advFilter.source
+      ) &&
+      this._destinationFilter(
+        event.endpoint.destination.displayName,
+        this.advFilter.destination
+      ) &&
       this._nodeFilter(event.host_name, this.advFilter.host) &&
       this._domainFilter(
         event.endpoint.source.domain,
@@ -114,7 +116,9 @@ export class AdvancedFilterModalService {
   }
 
   _severityFilter(severity: string, selectedSeverities: string[]) {
-    return selectedSeverities.length > 0 ? selectedSeverities.includes(severity) : true;
+    return selectedSeverities.length > 0
+      ? selectedSeverities.includes(severity)
+      : true;
   }
 
   _locationFilter(location: string[], selectedLocations: string[]) {
@@ -159,8 +163,15 @@ export class AdvancedFilterModalService {
     return selectedHost ? host === selectedHost : true;
   }
 
-  _domainFilter(sourceDomain: string, destinationDomain: string, selectedDomains: string[]) {
-    return selectedDomains.length > 0 ? selectedDomains.includes(sourceDomain) || selectedDomains.includes(destinationDomain) : true;
+  _domainFilter(
+    sourceDomain: string,
+    destinationDomain: string,
+    selectedDomains: string[]
+  ) {
+    return selectedDomains.length > 0
+      ? selectedDomains.includes(sourceDomain) ||
+          selectedDomains.includes(destinationDomain)
+      : true;
   }
 
   _includeFilter(event: any, keyword: string) {

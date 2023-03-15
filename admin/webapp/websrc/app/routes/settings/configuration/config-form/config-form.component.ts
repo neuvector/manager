@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { GlobalConstant } from '@common/constants/global.constant';
+import { MapConstant } from '@common/constants/map.constant';
 import {
   ConfigPatch,
   ConfigV2Response,
@@ -45,6 +46,10 @@ export class ConfigFormComponent implements OnInit {
         httpsProxy: false,
       },
       isOpenShift: () => GlobalVariable.isOpenShift,
+      isRancherSSO: () =>
+        GlobalVariable.user.server === MapConstant.AUTH_PROVIDER.RANCHER,
+      isOpenShiftSSO: () =>
+        GlobalVariable.user.server === MapConstant.AUTH_PROVIDER.OPENSHIFT,
       permissions: {},
       ibmsa: {
         setup: this.setupIBMSA.bind(this),

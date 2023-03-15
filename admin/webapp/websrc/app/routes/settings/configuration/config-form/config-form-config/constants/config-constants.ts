@@ -1,14 +1,11 @@
 import { FormControl } from '@angular/forms';
 import { FormlyComponents } from '@common/neuvector-formly/neuvector-formly.module';
-import { ConfigV2Response } from '@common/types';
 
 export const ServiceModeTypes = [
   { value: 'Discover', viewValue: 'topbar.mode.LEARNING' },
   { value: 'Monitor', viewValue: 'topbar.mode.EVALUATION' },
   { value: 'Protect', viewValue: 'topbar.mode.ENFORCE' },
 ];
-
-let a: ConfigV2Response;
 
 export const ScannerAutoscaleStrategy = [
   {
@@ -83,7 +80,7 @@ export const AuthByOpenshiftField = {
   },
   expressionProperties: {
     'templateOptions.disabled':
-      '!formState.permissions.isAuthenticateRBACAuthorized',
+      '!formState.permissions.isAuthenticateRBACAuthorized || formState.isRancherSSO() || formState.isOpenShiftSSO()',
   },
 };
 

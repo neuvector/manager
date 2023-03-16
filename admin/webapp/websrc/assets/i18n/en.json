@@ -2963,8 +2963,8 @@
   },
   "ldap": {
     "head": {
-      "TITLE": "LDAP/AD Setting",
-      "GUIDE": "The setting below configure an LDAP directory or Microsoft active directory which will be used to authenticate user."
+      "TITLE": "LDAP/AD Settings",
+      "GUIDE": "The settings below configure an LDAP directory or Microsoft active directory which will be used to authenticate user."
     },
     "test": {
       "TITLE": "Check LDAP/AD connection",
@@ -3042,8 +3042,8 @@
   },
   "okta": {
     "head": {
-      "TITLE": "SAML Setting",
-      "GUIDE": "The setting below configure single sign on using SAML."
+      "TITLE": "SAML Settings",
+      "GUIDE": "The settings below configure single sign on using SAML."
     },
     "IDP_URL": "Identity Provider Single Sign-On URL",
     "IDP_ISSUER": "Identity Provider Issuer",
@@ -3063,8 +3063,8 @@
   },
   "openId": {
     "head": {
-      "TITLE": "OpenID Connect Setting",
-      "GUIDE": "The setting below configure single sign on using OpenID Connect."
+      "TITLE": "OpenID Connect Settings",
+      "GUIDE": "The settings below configure single sign on using OpenID Connect."
     },
     "ISSUER": "Identity Provider Issuer",
     "AUTHORIZATION_ENDPOINT": "Authorization Endpoint",

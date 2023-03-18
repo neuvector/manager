@@ -14,7 +14,7 @@ import {
   ServerGetResponse,
   ServerPatchBody,
 } from '@common/types';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { SettingsService } from '@services/settings.service';
 import { urlValidator } from '@common/validators';
@@ -43,15 +43,11 @@ export class SamlFormComponent implements OnInit, OnChanges {
     sso_url: new FormControl(null, [Validators.required, urlValidator()]),
     issuer: new FormControl(null, [Validators.required, urlValidator()]),
     x509_cert: new FormControl(null, [Validators.required]),
-    x509_cert_extras: new FormArray([], [Validators.maxLength(3)]),
     group_claim: new FormControl(),
     default_role: new FormControl(''),
     enable: new FormControl(false),
   });
   isWriteSamlAuthorized!: boolean;
-  get x509_extras() {
-    return this.samlForm.get('x509_cert_extras') as FormArray;
-  }
 
   constructor(
     private settingsService: SettingsService,
@@ -96,7 +92,6 @@ export class SamlFormComponent implements OnInit, OnChanges {
       x509_cert?.clearValidators();
       x509_cert?.updateValueAndValidity();
       x509_cert?.markAsPristine();
-      this.x509_extras.clear();
     } else {
       this.isCreated = false;
     }
@@ -116,12 +111,6 @@ export class SamlFormComponent implements OnInit, OnChanges {
     };
     if (!this.samlForm.get('x509_cert')?.dirty) {
       saml.x509_cert = null as any;
-    }
-    if (saml.x509_cert_extras) {
-      saml.x509_cert_extras = saml.x509_cert_extras.filter(cert => cert);
-      if (!saml.x509_cert_extras.length) {
-        saml.x509_cert_extras = null as any;
-      }
     }
     const config: ServerPatchBody = { config: { name: this.serverName, saml } };
     this.submittingForm = true;
@@ -152,13 +141,5 @@ export class SamlFormComponent implements OnInit, OnChanges {
         );
       },
     });
-  }
-
-  addExtraCert() {
-    this.x509_extras.push(new FormControl(''));
-  }
-
-  removeExtraCert(index: number) {
-    this.x509_extras.removeAt(index);
   }
 }

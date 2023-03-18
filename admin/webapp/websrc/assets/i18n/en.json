@@ -3048,8 +3048,6 @@
     "IDP_URL": "Identity Provider Single Sign-On URL",
     "IDP_ISSUER": "Identity Provider Issuer",
     "CERTIFICATE": "X.509 Certificate",
-    "ADD_EXTRA_CERT": "Add extra X.509 Certificate",
-    "EXTRA_CERT": "Extra X.509 Certificate",
     "INVALID_URL": "Please input valid url.",
     "GROUP_CLAIM": "Group Claim",
     "ADMIN_HINT": "Add SAML groups which map to NeuVector admin",

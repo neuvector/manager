@@ -22,12 +22,6 @@ export class ConfigHttpService {
       .pipe(pluck('config'));
   }
 
-  getFedConfig(): Observable<any> {
-    return GlobalVariable.http
-      .get(PathConstant.CONFIG_URL, { params: { scope: 'fed' } })
-      .pipe();
-  }
-
   patchConfig(body: ConfigPatch): Observable<unknown> {
     return GlobalVariable.http.patch<unknown>(PathConstant.CONFIG_V2_URL, body);
   }

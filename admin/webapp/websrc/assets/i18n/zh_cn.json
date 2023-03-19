@@ -59,7 +59,11 @@
     "NEED_RESCAN": "您需要重新扫描取得详细内容",
     "VIEW_MORE": "全部浏览",
     "VIEW_LESS": "简略浏览",
-    "SAMPLE": "范例"
+    "SAMPLE": "范例",
+    "ADD": "添加",
+    "UPDATE": "更新",
+    "EDIT": "编辑",
+    "DELETE": "删除"
   },
   "enum": {
     "FEDADMIN": "集群全局管理员",
@@ -2932,7 +2936,13 @@
       "LOCAL_NAME_PATTERN_NG": "不能以\"fed.\"开头",
       "LEAVE_PAGE": "确定要离开此页面，不保存配置设定吗?",
       "DELETE_CONFIRM": "确定删除网络挂接 - {{name}}",
-      "OTHER_TYPE": "键-值配对"
+      "DELETE_SUCCEED": "删除成功",
+      "DELETE_FAILED": "删除失败",
+      "OTHER_TYPE": "键-值配对",
+      "ADD_TITLE": "添加 webhook",
+      "EDIT_TITLE": "编辑 webhook",
+      "SUBMIT_OK": "webhook 更新成功",
+      "SUBMIT_FAILED": "webhook 更新失败"
     },
     "directory_type": {
       "OPEN_LDAP": "OpenLDAP",

@@ -59,7 +59,11 @@
     "NEED_RESCAN": "You need to rescan for getting details",
     "VIEW_MORE": "View More",
     "VIEW_LESS": "View Less",
-    "SAMPLE": "Sample"
+    "SAMPLE": "Sample",
+    "ADD": "Add",
+    "UPDATE": "Update",
+    "EDIT": "Edit",
+    "DELETE": "Delete"
   },
   "enum": {
     "FEDADMIN": "Federated Administrator",
@@ -2932,7 +2936,13 @@
       "LOCAL_NAME_PATTERN_NG": "Can't start with \"fed.\"",
       "LEAVE_PAGE": "Do you want to leave the page without saving configuration setting?",
       "DELETE_CONFIRM": "Do you want to remove webhook - {{name}}",
-      "OTHER_TYPE": "Key-Value Pairs"
+      "DELETE_SUCCEED": "The webhook has been removed successfully.",
+      "DELETE_FAILED": "Failed to remove the webhook",
+      "OTHER_TYPE": "Key-Value Pairs",
+      "ADD_TITLE": "Add webhook",
+      "EDIT_TITLE": "Edit webhook",
+      "SUBMIT_OK": "Webhook updated",
+      "SUBMIT_FAILED": "Failed to update the webhook"
     },
     "directory_type": {
       "OPEN_LDAP": "OpenLDAP",

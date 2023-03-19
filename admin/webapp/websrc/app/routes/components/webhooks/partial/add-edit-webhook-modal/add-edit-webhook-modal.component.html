@@ -1,0 +1,112 @@
+<div class="nv-dialog">
+  <div class="d-flex justify-content-between align-items-center">
+    <h4 mat-dialog-title class="mb-2">
+      <span *ngIf="data.opType === modalOp.ADD">{{
+        'setting.webhook.ADD_TITLE' | translate
+      }}</span>
+      <span *ngIf="data.opType === modalOp.EDIT">{{
+        'setting.webhook.EDIT_TITLE' | translate
+      }}</span>
+    </h4>
+    <button
+      (click)="onCancel(false)"
+      class="mb-2"
+      aria-label="Close dialog"
+      mat-icon-button
+    >
+      <i class="eos-icons ">close</i>
+    </button>
+  </div>
+  <hr class="fancy mb-2" />
+  <div mat-dialog-content>
+    <form [formGroup]="form">
+      <div class="row">
+        <mat-form-field class="col-sm-4" appearance="standard">
+          <mat-label>{{ 'setting.webhook.NAME' | translate }}</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="name"
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+          />
+          <mat-error *ngIf="form.controls.name.hasError('required')">
+            {{ 'general.REQUIRED' | translate }}
+          </mat-error>
+          <mat-error *ngIf="form.controls.name.hasError('fedName')">
+            {{ 'setting.webhook.NAME_PATTERN_NG' | translate }}
+          </mat-error>
+          <mat-error *ngIf="form.controls.name.hasError('invalidObjName')">
+            {{ 'setting.webhook.NAME_NG' | translate }}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-sm-8" appearance="standard">
+          <mat-label>{{ 'setting.webhook.URL' | translate }}</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="url"
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+          />
+          <mat-error *ngIf="form.controls.url.hasError('required')">
+            {{ 'general.REQUIRED' | translate }}
+          </mat-error>
+          <mat-error *ngIf="form.controls.url.hasError('invalidURL')">
+            {{ 'setting.webhook.URL_NG' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <div class="col-4 col-md-4 margin-top-l">
+          <label class="nv-modal-item-title margin-right-m">{{
+            'setting.webhook.STATUS' | translate
+          }}</label>
+          <mat-slide-toggle
+            class="padding-top-s"
+            id="webhook-enable-toggle"
+            formControlName="enable"
+          >
+            <span
+              [ngClass]="{
+                'text-muted': !form.controls.enable.value,
+                'text-success': form.controls.enable.value
+              }"
+            >
+              {{
+                (form.controls.enable.value
+                  ? 'setting.ENABLED'
+                  : 'setting.DISABLED') | translate
+              }}
+            </span>
+          </mat-slide-toggle>
+        </div>
+
+        <mat-form-field class="col-8 col-md-8" appearance="standard">
+          <mat-label>{{ 'setting.webhook.WH_TYPE' | translate }}</mat-label>
+          <mat-select aria-label="webhook_type" formControlName="type">
+            <mat-option *ngFor="let type of types" [value]="type.value">
+              {{ type.viewValue }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="d-flex justify-content-end align-items-center">
+        <button mat-stroked-button class="mr-2" (click)="onCancel(false)">
+          {{ 'setting.CANCEL' | translate }}
+        </button>
+        <app-loading-button
+          [appearance]="'mat-raised-button'"
+          [color]="'primary'"
+          [loading]="processing"
+          [disabled]="processing || form.invalid || form.pristine"
+          [text]="
+            (data.opType === modalOp.EDIT ? 'general.UPDATE' : 'general.ADD')
+              | translate
+          "
+          (btnClick)="updateWebhook()"
+        >
+        </app-loading-button>
+      </div>
+    </form>
+  </div>
+</div>

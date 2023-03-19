@@ -49,10 +49,10 @@
             [source]="navSource"></app-response-rules>
         </mat-tab>
         <mat-tab label="{{ 'sidebar.nav.CONFIGURATION' | translate }}">
-          <app-federated-policy-configuration
+          <app-webhooks
             *ngIf="activeTabIndex === 6"
             [source]="navSource"
-          ></app-federated-policy-configuration>
+          ></app-webhooks>
         </mat-tab>
       </mat-tab-group>
     </div>

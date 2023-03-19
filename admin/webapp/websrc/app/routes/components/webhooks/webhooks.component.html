@@ -1,0 +1,49 @@
+<ng-container *ngIf="webhooks; else loadingTemplate">
+  <div class="d-flex justify-content-between align-items-center my-3 ml-3">
+    <div class="d-flex justify-content-start align-items-center">
+      <h1 class="h4 font-weight-normal me-auto p2" id="webhook.label">
+        {{ 'setting.WEBHOOKS' | translate }}
+      </h1>
+    </div>
+    <div class="d-flex justify-content-end align-items-center">
+      <button
+        mat-stroked-button
+        aria-label="Add Webhook"
+        class="mr-3"
+        *appDisplayControl="'multi_cluster_w'"
+        (click)="addWebhook()"
+      >
+        <em class="eos-icons icon-18">add_circle</em>
+        {{ 'admissionControl.INSERT' | translate }}
+      </button>
+      <app-loading-button
+        (btnClick)="refresh()"
+        [disabled]="isLoading"
+        [appearance]="'mat-button'"
+        [iconClasses]="'eos-icons icon-18'"
+        [iconName]="'refresh'"
+        [id]="'webhook-refresh-button'"
+        [loading]="isLoading"
+        [text]="'network.REFRESH' | translate"
+        [type]="'button'"
+      >
+      </app-loading-button>
+    </div>
+  </div>
+
+  <ag-grid-angular
+    #agGrid
+    id="webhook-grid"
+    style="width:100%"
+    [ngStyle]="{ height: agGridHeight + 'px' }"
+    class="ag-theme-balham"
+    [gridOptions]="agGridOptions"
+    [rowData]="webhooks"
+    [context]="context"
+  >
+  </ag-grid-angular>
+</ng-container>
+
+<ng-template #loadingTemplate>
+  <app-loading-template></app-loading-template>
+</ng-template>

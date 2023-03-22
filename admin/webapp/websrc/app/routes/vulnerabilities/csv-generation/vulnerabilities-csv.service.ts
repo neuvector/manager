@@ -69,7 +69,11 @@ export class VulnerabilitiesCsvService {
 
         cve.domains = Array.from(
           filteredWorkload.reduce(
-            (acc, curr) => acc.add(curr.domain),
+            (acc, curr) =>
+              curr.domains.reduce(
+                (domainAcc, domain) => domainAcc.add(domain),
+                acc
+              ),
             new Set()
           )
         ).join(' ');
@@ -212,7 +216,12 @@ export class VulnerabilitiesCsvService {
           score_v3: i === 0 ? entryData.score_v3 : '',
           vectors: i === 0 ? entryData.vectors : '',
           vectors_v3: i === 0 ? entryData.vectors_v3 : '',
-          platforms: i === 0 ? entryData.platforms.map(platform => platform.display_name).join(' ') : '',
+          platforms:
+            i === 0
+              ? entryData.platforms
+                  .map(platform => platform.display_name)
+                  .join(' ')
+              : '',
           nodes: i === 0 ? entryData.nodes : '',
           domains:
             entryData.domains.length > MapConstant.EXCEL_CELL_LIMIT * (i + 1)

@@ -108,6 +108,7 @@ export class TestSettingsDialogComponent implements OnInit, OnDestroy {
       filters: this.form.controls.filters.value,
       username: this.data.username,
       password: this.data.password,
+      jfrog_mode: this.data.jfrog_mode,
       auth_token: this.data.auth_token,
       auth_with_token: this.data.auth_with_token,
       scan_layers: this.data.scan_layers,

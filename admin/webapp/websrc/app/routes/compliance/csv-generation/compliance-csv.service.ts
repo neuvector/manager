@@ -59,7 +59,11 @@ export class ComplianceCsvService {
 
         compliance.domains = Array.from(
           filteredWorkload.reduce(
-            (acc, curr) => acc.add(curr.domain),
+            (acc, curr) =>
+              curr.domains.reduce(
+                (domainAcc, domain) => domainAcc.add(domain),
+                acc
+              ),
             new Set()
           )
         ).join(' ');

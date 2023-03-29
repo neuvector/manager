@@ -96,6 +96,7 @@ export class AddEditResponseRuleModalComponent implements OnInit {
         GlobalConstant.NAV_SOURCE.FED_POLICY && GlobalVariable.selectedFedGroup
           ? { name: GlobalVariable.selectedFedGroup }
           : '',
+      comment: '',
       criteria: [],
       actions: [false, false, false],
       enabled: true,
@@ -120,6 +121,7 @@ export class AddEditResponseRuleModalComponent implements OnInit {
     this.responseRule.id = this.selectedResponseRule.id;
     this.responseRule.event = this.selectedResponseRule.event;
     this.responseRule.group = this.selectedResponseRule.group;
+    this.responseRule.comment = this.selectedResponseRule.comment;
     this.responseRule.enabled = this.selectedResponseRule.disable
       ? !this.selectedResponseRule.disable
       : true;

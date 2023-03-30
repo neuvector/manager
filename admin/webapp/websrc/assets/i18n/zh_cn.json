@@ -2456,6 +2456,7 @@
     "DENY_RULES": "拒绝规则",
     "EXCEPTION_RULES": "例外规则",
     "MODE": "模式",
+    "NO_MODE": "使用全局模式",
     "CLIENT_MODE": "客户端模式",
     "SERVICE": "服务",
     "URL": "URL",

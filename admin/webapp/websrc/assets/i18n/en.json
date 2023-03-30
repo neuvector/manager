@@ -2456,6 +2456,7 @@
     "DENY_RULES": "Deny Rules",
     "EXCEPTION_RULES": "Exception Rules",
     "MODE": "Mode",
+    "NO_MODE": "Use Global Mode",
     "CLIENT_MODE": "Client Mode",
     "SERVICE": "Service",
     "URL": "URL",

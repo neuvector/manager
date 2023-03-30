@@ -207,12 +207,12 @@
       </div>
 
       <ag-grid-angular
+        *ngIf="isGridOptionsReady"
         id="admission-rule-grid"
         style="width: 100%"
         [ngStyle]="{ height: gridHeight + 'px' }"
         class="ag-theme-balham"
         [gridOptions]="gridOptions"
-        [rowData]="admissionRules"
         [context]="context">
       </ag-grid-angular>
     </div>

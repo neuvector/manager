@@ -21,7 +21,6 @@ import { GridApi, GridReadyEvent } from 'ag-grid-community';
 import { BehaviorSubject } from 'rxjs';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { SecurityEventsService } from '@services/security-events.service';
-import { MapConstant } from '@common/constants/map.constant';
 import { NotificationService } from '@services/notification.service';
 import { UtilsService } from '@common/utils/app.utils';
 import { GlobalConstant } from '@common/constants/global.constant';

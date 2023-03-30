@@ -182,7 +182,9 @@ export class ContainersService {
       );
     } else {
       return this.formatScannedContainers(
-        containers.filter(w => w.brief.state !== 'exit' && !w.platform_role)
+        containers
+          .filter(w => w.brief.state !== 'exit')
+          .filter(w => !w.platform_role)
       );
     }
   }

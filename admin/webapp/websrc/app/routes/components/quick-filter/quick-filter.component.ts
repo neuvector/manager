@@ -56,7 +56,10 @@ export class QuickFilterComponent implements OnInit, OnChanges {
   displayCount() {
     let outOf = this.translate.instant('enum.OUT_OF');
     let found = this.translate.instant('enum.FOUND');
-    if (this.filteredCount !== this.count) {
+    if (
+      (this.filter.value && !this.filteredCount) ||
+      this.filteredCount !== this.count
+    ) {
       this.filterCountChange.emit(this.filteredCount);
       this.filteredCountText = `${found} ${this.filteredCount}`;
     } else {

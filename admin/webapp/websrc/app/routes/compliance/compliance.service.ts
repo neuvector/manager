@@ -13,13 +13,11 @@ import { PlatformsData } from '@common/types/compliance/platformsData';
 import { DatePipe } from '@angular/common';
 import { ComplianceFilterService } from './compliance.filter.service';
 import { AssetsViewPdfService } from './pdf-generation/assets-view-pdf.service';
-import { sortByDisplayName } from '@common/utils/common.utils';
+import { setRisks, sortByDisplayName } from '@common/utils/common.utils';
 import { AssetsHttpService } from '@common/api/assets-http.service';
 import { RisksHttpService } from '@common/api/risks-http.service';
 import { MapConstant } from '@common/constants/map.constant';
-import {
-  GridApi,
-} from 'ag-grid-community';
+import { GridApi } from 'ag-grid-community';
 
 @Injectable()
 export class ComplianceService {
@@ -41,7 +39,7 @@ export class ComplianceService {
     private risksHttpService: RisksHttpService,
     private assetsHttpService: AssetsHttpService,
     private complianceFilterService: ComplianceFilterService,
-    private assetsViewPdfService: AssetsViewPdfService,
+    private assetsViewPdfService: AssetsViewPdfService
   ) {}
 
   transformDate(date) {
@@ -109,6 +107,7 @@ export class ComplianceService {
       tap(({ compliance: { compliances, kubernetes_cis_version } }) => {
         this.kubeVersion = kubernetes_cis_version;
         this.complianceFilterService.workloadMap = this.workloadMap;
+        setRisks(compliances, this.workloadMap);
         this.assetsViewPdfService.masterData = {
           workloadMap4Pdf: this.workloadMap4Pdf,
           hostMap4Pdf: this.hostMap4Pdf,

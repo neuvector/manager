@@ -14,7 +14,7 @@ import {
   WorkloadsData,
 } from '@common/types';
 import { PlatformsData } from '@common/types/compliance/platformsData';
-import { sortByDisplayName } from '@common/utils/common.utils';
+import { setRisks, sortByDisplayName } from '@common/utils/common.utils';
 import { VulnerabilitiesData } from '@common/types/vulnerabilities/vulnerabilities';
 import { VulnerabilitiesFilterService } from './vulnerabilities.filter.service';
 import { AssetsViewPdfService } from './pdf-generation/assets-view-pdf.service';
@@ -127,6 +127,7 @@ export class VulnerabilitiesService {
       }),
       tap(({ vulnerabilities: { vulnerabilities } }) => {
         this.vulnerabilitiesFilterService.workloadMap = this.workloadMap;
+        setRisks(vulnerabilities, this.workloadMap);
         this.assetsViewPdfService.masterData = {
           workloadMap4Pdf: this.workloadMap4Pdf,
           hostMap4Pdf: this.hostMap4Pdf,

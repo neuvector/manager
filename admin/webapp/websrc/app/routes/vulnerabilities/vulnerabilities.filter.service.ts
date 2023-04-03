@@ -90,13 +90,15 @@ export class VulnerabilitiesFilterService {
   namespaceFilter(workload) {
     if (this.advFilter.selectedDomains.length) {
       const container = this.workloadMap.get(workload.id);
-      const nsNames = this.advFilter.selectedDomains.map(
-        selectedDomain => selectedDomain.name
-      );
       if (container && container.domain) {
         if (this.advFilter.matchType4Ns.id === 'contains')
-          return new RegExp(nsNames.join('|')).test(container.domain);
-        else return nsNames.some(item => container.domain === item);
+          return new RegExp(this.advFilter.selectedDomains.join('|')).test(
+            container.domain
+          );
+        else
+          return this.advFilter.selectedDomains.some(
+            item => container.domain === item
+          );
       } else return false;
     } else return true;
   }

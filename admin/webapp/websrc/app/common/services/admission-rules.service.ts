@@ -342,7 +342,7 @@ export class AdmissionRulesService {
         let labelCode = MapConstant.colourMap[params.value ? params.value : params.globalMode];
         if (!labelCode) return '';
         else
-          return `<span class="type-label policy_mode ${labelCode}">${mode}</span>`;
+          return `<span class="type-label policy_mode ${params.data.disable ? MapConstant.colourMap['disabled_background'] : labelCode}">${mode}</span>`;
       }
     }
     return '';

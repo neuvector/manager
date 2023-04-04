@@ -237,6 +237,8 @@ def showLocalSystemConfig(data, scope):
         column_map += (("net_service_status", "Enable Network Service Policy Mode"),)
     if "net_service_policy_mode" in conf:
         column_map += (("net_service_policy_mode", "Network Service Policy Mode"),)
+    if "disable_net_policy" in conf:
+        column_map += (("disable_net_policy", "Disable Network Policy"),)
     if "mode_auto_d2m" in conf:
         column_map += (("mode_auto_d2m", "Auto Mode Upgrader: Discover -> Monitor"),
                    ("mode_auto_d2m_duration", "       Duration"),)
@@ -826,6 +828,21 @@ def set_system_net_service_status(data, status):
 def set_system_net_service_policy_mode(data, mode):
     """Set system global network service policy mode."""
     data.client.config_system_net(net_service_policy_mode=mode.title())
+
+@set_system.group('disable_net_policy')
+@click.pass_obj
+def set_system_disable_net_policy(data):
+    """Disable network policy"""
+
+@set_system_disable_net_policy.command("status")
+@click.argument('status', type=click.Choice(['true', 'false']))
+@click.pass_obj
+def set_system_disable_net_policy_status(data, status):
+    """Enable/disable network policy"""
+    if status == 'true':
+        data.client.config_system_net(disable_net_policy=True)
+    else:
+        data.client.config_system_net(disable_net_policy=False)
 
 @set_system.group("registry")
 @click.pass_obj

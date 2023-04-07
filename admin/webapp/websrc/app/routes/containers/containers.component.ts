@@ -6,7 +6,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { MapConstant } from '@common/constants/map.constant';
 import { ErrorResponse, ScanConfig, WorkloadV2 } from '@common/types';
 import { AuthUtilsService } from '@common/utils/auth.utils';
@@ -46,7 +46,7 @@ export class ContainersComponent implements OnInit, OnDestroy {
     return GlobalVariable.isRemote;
   }
   quarantinedContainers: WorkloadV2[] = [];
-  toggleNodeForm!: FormGroup;
+  showSystem = new FormControl(true);
   refreshing$ = new Subject();
   error!: string;
   loaded = false;
@@ -77,10 +77,6 @@ export class ContainersComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isAutoScanAuthorized = this.authUtils.getDisplayFlag('runtime_scan');
-    this.toggleNodeForm = new FormGroup({
-      systemNode: new FormControl(true),
-      exitNode: new FormControl(false),
-    });
     this.getContainers();
     if (this.isAutoScanAuthorized) this.getScanConfig();
     //refresh the page when it switched to a remote cluster
@@ -206,16 +202,13 @@ export class ContainersComponent implements OnInit, OnDestroy {
 
   nodeFilterInit(containers: WorkloadV2[]): void {
     this.containersService.addDisplayContainers(
-      this.containersService.filterNode(this.toggleNodeForm.value, containers)
+      this.containersService.filterNode(this.showSystem.value, containers)
     );
   }
 
   nodeFilterChange(): void {
     this.containersService.displayContainers =
-      this.containersService.filterNode(
-        this.toggleNodeForm.value,
-        this.containers
-      );
+      this.containersService.filterNode(this.showSystem.value, this.containers);
   }
 
   print = () => {

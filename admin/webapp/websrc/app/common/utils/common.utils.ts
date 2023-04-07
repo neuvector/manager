@@ -12,12 +12,10 @@ import {
   Workload,
   WorkloadChildV2,
   DataOps,
+  WorkloadV2,
 } from '@common/types';
 import { WorkloadBrief } from '@common/types/compliance/workloadBrief';
-import {
-  GridApi,
-  GridOptions,
-} from 'ag-grid-community';
+import { GridApi, GridOptions } from 'ag-grid-community';
 
 let _keyStr: string =
   'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
@@ -744,6 +742,26 @@ export function isIpV6(str: string): boolean {
   return pattern.test(str);
 }
 
+export function filterExitWorkloads(workloads: Workload[]) {
+  return workloads
+    .filter(w => w.state !== 'exit')
+    .map(workload => {
+      workload.children = workload.children.filter(w => w.state !== 'exit');
+      return workload;
+    });
+}
+
+export function filterExitWorkloadsV2(workloads: WorkloadV2[]) {
+  return workloads
+    .filter(w => w.brief.state !== 'exit')
+    .map(workload => {
+      workload.children = workload.children.filter(
+        w => w.brief.state !== 'exit'
+      );
+      return workload;
+    });
+}
+
 export function updateGridData(
   dataset: Array<any>,
   targetDataArray: Array<any>,
@@ -754,16 +772,18 @@ export function updateGridData(
   canOverrideKey: boolean = false
 ): void {
   let index = -1;
-  const getIndex = function(dataset, queryData, keyNames) {
+  const getIndex = function (dataset, queryData, keyNames) {
     return dataset.findIndex(dataElem => {
       if (Array.isArray(keyNames)) {
-        return keyNames.map(keyName => {
-          return dataElem[keyName] === queryData[keyName]
-        }).reduce((curr, next) => {
-          return curr && next;
-        });
+        return keyNames
+          .map(keyName => {
+            return dataElem[keyName] === queryData[keyName];
+          })
+          .reduce((curr, next) => {
+            return curr && next;
+          });
       } else {
-        return dataElem[keyNames] === queryData[keyNames]
+        return dataElem[keyNames] === queryData[keyNames];
       }
     });
   };
@@ -789,8 +809,7 @@ export function updateGridData(
   gridApi.setRowData(dataset);
   if (op === 'edit') {
     setTimeout(() => {
-      let rowNode =
-        gridApi.getDisplayedRowAtIndex(index);
+      let rowNode = gridApi.getDisplayedRowAtIndex(index);
       rowNode?.setSelected(true);
     }, 200);
   }

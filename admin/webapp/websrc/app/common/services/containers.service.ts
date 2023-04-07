@@ -6,7 +6,12 @@ import { MapConstant } from '@common/constants/map.constant';
 import { Workload, WorkloadChildV2, WorkloadV2 } from '@common/types';
 import { WorkloadBrief } from '@common/types/compliance/workloadBrief';
 import { UtilsService } from '@common/utils/app.utils';
-import { briefToV2, workloadToV2 } from '@common/utils/common.utils';
+import {
+  briefToV2,
+  filterExitWorkloads,
+  filterExitWorkloadsV2,
+  workloadToV2,
+} from '@common/utils/common.utils';
 import { Observable, range } from 'rxjs';
 import { concatMap, delay, map, repeatWhen, takeWhile } from 'rxjs/operators';
 
@@ -169,32 +174,18 @@ export class ContainersService {
     return workloads.filter(w => !w.parent_id);
   }
 
-  filterNode(nodeOptions: NodeOptions, containers: WorkloadV2[]) {
-    if (nodeOptions.systemNode && nodeOptions.exitNode) {
-      return this.formatScannedContainers(containers);
-    } else if (nodeOptions.systemNode) {
-      return this.formatScannedContainers(
-        containers.filter(w => w.brief.state !== 'exit')
-      );
-    } else if (nodeOptions.exitNode) {
-      return this.formatScannedContainers(
-        containers.filter(w => !w.platform_role)
-      );
-    } else {
-      return this.formatScannedContainers(
-        containers
-          .filter(w => w.brief.state !== 'exit')
-          .filter(w => !w.platform_role)
-      );
-    }
+  filterNode(showSystem: boolean, containers: WorkloadV2[]) {
+    const filtered = showSystem
+      ? containers
+      : containers.filter(w => !w.platform_role);
+    return this.formatScannedContainers(filterExitWorkloadsV2(filtered));
   }
 
-  filterWorkload(showSysContainers: boolean, workloads: Workload[]) {
-    if (!showSysContainers)
-      return this.formatScannedWorkloads(
-        workloads.filter(w => w.state !== 'exit' && !w.platform_role)
-      );
-    return this.formatScannedWorkloads(workloads);
+  filterWorkload(showSystem: boolean, workloads: Workload[]) {
+    const filtered = showSystem
+      ? workloads
+      : workloads.filter(w => !w.platform_role);
+    return this.formatScannedWorkloads(filterExitWorkloads(filtered));
   }
 
   makeWorkloadCSVData(containers: Workload[]) {

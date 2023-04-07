@@ -167,17 +167,19 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
       );
     });
   }
-
   onGridReady(params: GridReadyEvent): void {
     this.gridApi = params.api;
-    this.gridApi.sizeColumnsToFit();
-    this.gridApi.forEachNode(node =>
-      node.rowIndex ? 0 : node.setSelected(true)
-    );
-    this.cd.markForCheck();
+    setTimeout(() => {
+      this.gridApi.forEachNode(node =>
+        node.rowIndex ? 0 : node.setSelected(true)
+      );
+      this.gridApi.sizeColumnsToFit();
+      this.cd.markForCheck();
+    }, 500);
   }
 
   onTrafficChanged() {
+
     let selectedRows = this.gridApi.getSelectedRows();
     this.traffic = selectedRows[0];
     this.showRuleId = true;

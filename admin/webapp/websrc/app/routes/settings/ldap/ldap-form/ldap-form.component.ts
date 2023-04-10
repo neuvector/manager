@@ -118,19 +118,20 @@ export class LdapFormComponent implements OnInit, OnChanges {
         finalize(() => {
           this.submittingForm = false;
           this.isCreated = true;
+          this.refresh.emit();
         })
       );
     } else {
       submission = this.settingsService.patchServer(config).pipe(
         finalize(() => {
           this.submittingForm = false;
+          this.ldapForm.reset(this.ldapForm.getRawValue());
         })
       );
     }
     submission.subscribe({
       complete: () => {
         this.notificationService.open(this.tr.instant('ldap.SERVER_SAVED'));
-        this.refresh.emit();
       },
       error: ({ error }: { error: ErrorResponse }) => {
         this.notificationService.openError(

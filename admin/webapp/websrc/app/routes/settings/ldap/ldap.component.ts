@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SettingsService } from '@services/settings.service';
-import { combineLatest, Subject } from 'rxjs';
-import { map, repeatWhen } from 'rxjs/operators';
+import { combineLatest, Subject, throwError } from 'rxjs';
 import { MultiClusterService } from '@services/multi-cluster.service';
+import { ServerGetResponse } from '@common/types';
+import { catchError, map } from 'rxjs/operators';
+import { pollUntilResult } from '@common/utils/rxjs.utils';
 
 @Component({
   selector: 'app-ldap',
@@ -11,20 +13,9 @@ import { MultiClusterService } from '@services/multi-cluster.service';
 })
 export class LdapComponent implements OnInit, OnDestroy {
   private _switchClusterSubscription;
+  ldapError!: string;
   refreshing$ = new Subject();
-  server$ = this.settingsService.getServer();
-  domain$ = this.settingsService.getDomain();
-  ldapData$ = combineLatest([this.server$, this.domain$]).pipe(
-    map(([server, domain]) => {
-      return {
-        server,
-        domains: domain.domains
-          .map(d => d.name)
-          .filter(name => name.charAt(0) !== '_'),
-      };
-    }),
-    repeatWhen(() => this.refreshing$)
-  );
+  ldapData!: { domains: string[]; server: ServerGetResponse };
 
   constructor(
     private multiClusterService: MultiClusterService,
@@ -36,6 +27,25 @@ export class LdapComponent implements OnInit, OnDestroy {
       this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
         this.refresh();
       });
+    combineLatest([
+      this.settingsService.getServer(),
+      this.settingsService.getDomain(),
+    ])
+      .pipe(
+        map(([server, domain]) => {
+          return {
+            server,
+            domains: domain.domains
+              .map(d => d.name)
+              .filter(name => name.charAt(0) !== '_'),
+          };
+        }),
+        catchError(err => {
+          this.ldapError = err;
+          return throwError(err);
+        })
+      )
+      .subscribe(ldapData => (this.ldapData = ldapData));
   }
 
   ngOnDestroy(): void {
@@ -45,6 +55,21 @@ export class LdapComponent implements OnInit, OnDestroy {
   }
 
   refresh(): void {
-    this.refreshing$.next(true);
+    pollUntilResult(
+      () => this.settingsService.getServer(),
+      server =>
+        !!server.servers.find(({ server_type }) => server_type === 'ldap'),
+      5000,
+      30000
+    )
+      .pipe(
+        catchError(err => {
+          this.ldapError = err;
+          return throwError(err);
+        })
+      )
+      .subscribe(server => {
+        this.ldapData = { ...this.ldapData, server };
+      });
   }
 }

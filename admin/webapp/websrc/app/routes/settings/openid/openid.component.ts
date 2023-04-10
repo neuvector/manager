@@ -1,9 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { combineLatest, Subject, throwError } from 'rxjs';
-import { catchError, map, repeatWhen } from 'rxjs/operators';
+import { combineLatest, Subject, throwError, timer } from 'rxjs';
+import {
+  catchError,
+  filter,
+  map,
+  switchMap,
+  take,
+  timeout,
+} from 'rxjs/operators';
 import { SettingsService } from '@services/settings.service';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { Router } from '@angular/router';
+import { ServerGetResponse } from '@common/types';
 
 @Component({
   selector: 'app-openid',
@@ -14,23 +22,7 @@ export class OpenidComponent implements OnInit, OnDestroy {
   private _switchClusterSubscription;
   openidError!: string;
   refreshing$ = new Subject();
-  server$ = this.settingsService.getServer();
-  domain$ = this.settingsService.getDomain();
-  openidData$ = combineLatest([this.server$, this.domain$]).pipe(
-    map(([server, domain]) => {
-      return {
-        server,
-        domains: domain.domains
-          .map(d => d.name)
-          .filter(name => name.charAt(0) !== '_'),
-      };
-    }),
-    catchError(err => {
-      this.openidError = err;
-      return throwError(err);
-    }),
-    repeatWhen(() => this.refreshing$)
-  );
+  openidData!: { domains: string[]; server: ServerGetResponse };
 
   constructor(
     private multiClusterService: MultiClusterService,
@@ -39,11 +31,29 @@ export class OpenidComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._switchClusterSubscription = this.multiClusterService.onClusterSwitchedEvent$.subscribe(
-      () => {
+    this._switchClusterSubscription =
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
         this.router.navigate(['settings']);
-      }
-    );
+      });
+    combineLatest([
+      this.settingsService.getServer(),
+      this.settingsService.getDomain(),
+    ])
+      .pipe(
+        map(([server, domain]) => {
+          return {
+            server,
+            domains: domain.domains
+              .map(d => d.name)
+              .filter(name => name.charAt(0) !== '_'),
+          };
+        }),
+        catchError(err => {
+          this.openidError = err;
+          return throwError(err);
+        })
+      )
+      .subscribe(openidData => (this.openidData = openidData));
   }
 
   ngOnDestroy(): void {
@@ -52,6 +62,22 @@ export class OpenidComponent implements OnInit, OnDestroy {
     }
   }
   refresh(): void {
-    this.refreshing$.next(true);
+    timer(0, 5000)
+      .pipe(
+        switchMap(() => this.settingsService.getServer()),
+        filter(
+          server =>
+            !!server.servers.find(({ server_type }) => server_type === 'oidc')
+        ),
+        take(1),
+        timeout(30000),
+        catchError(err => {
+          this.openidError = err;
+          return throwError(err);
+        })
+      )
+      .subscribe(server => {
+        this.openidData = { ...this.openidData, server };
+      });
   }
 }

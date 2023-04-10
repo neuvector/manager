@@ -1,5 +1,5 @@
-import { defer, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { defer, Observable, timer } from 'rxjs';
+import { filter, switchMap, take, tap, timeout } from 'rxjs/operators';
 
 export function tapOnce<T>(fn: (value) => void) {
   return (source: Observable<any>) =>
@@ -14,4 +14,18 @@ export function tapOnce<T>(fn: (value) => void) {
         })
       );
     });
+}
+
+export function pollUntilResult<T>(
+  pollFn: () => Observable<T>,
+  pred: (val: T) => boolean,
+  period: number,
+  to: number
+): Observable<T> {
+  return timer(0, period).pipe(
+    switchMap(() => pollFn()),
+    filter(pred),
+    take(1),
+    timeout(to)
+  );
 }

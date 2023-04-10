@@ -1,17 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { combineLatest, Subject, throwError, timer } from 'rxjs';
-import {
-  catchError,
-  filter,
-  map,
-  switchMap,
-  take,
-  timeout,
-} from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { SettingsService } from '@services/settings.service';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { Router } from '@angular/router';
 import { ServerGetResponse } from '@common/types';
+import { pollUntilResult } from '@common/utils/rxjs.utils';
 
 @Component({
   selector: 'app-openid',
@@ -62,15 +56,14 @@ export class OpenidComponent implements OnInit, OnDestroy {
     }
   }
   refresh(): void {
-    timer(0, 5000)
+    pollUntilResult(
+      () => this.settingsService.getServer(),
+      server =>
+        !!server.servers.find(({ server_type }) => server_type === 'oidc'),
+      5000,
+      30000
+    )
       .pipe(
-        switchMap(() => this.settingsService.getServer()),
-        filter(
-          server =>
-            !!server.servers.find(({ server_type }) => server_type === 'oidc')
-        ),
-        take(1),
-        timeout(30000),
         catchError(err => {
           this.openidError = err;
           return throwError(err);

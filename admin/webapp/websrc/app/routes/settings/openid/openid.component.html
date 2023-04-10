@@ -8,7 +8,7 @@
   <span>{{ 'openId.head.GUIDE' | translate }}</span>
 </div>
 <mat-card>
-  <ng-container *ngIf="openidData$ | async as openidData; else loadingOrError">
+  <ng-container *ngIf="openidData; else loadingOrError">
     <app-openid-form
       [openidData]="openidData"
       (refresh)="refresh()"></app-openid-form>

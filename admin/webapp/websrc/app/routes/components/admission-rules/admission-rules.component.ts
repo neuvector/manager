@@ -60,6 +60,7 @@ export class AdmissionRulesComponent implements OnInit {
   isPrinting: boolean = false;
   configAssessmentDialogRef!: MatDialogRef<ConfigurationAssessmentModalComponent>;
   configTestResult: any;
+  isGridOptionsReady: boolean = false;
 
   @ViewChild('testResult') printableReportView!: ElementRef;
 
@@ -80,10 +81,6 @@ export class AdmissionRulesComponent implements OnInit {
       this.authUtilsService.getDisplayFlag('write_admission');
     this.isAdmissionRuleAuthorized =
       this.authUtilsService.getDisplayFlag('admission');
-    this.gridOptions = this.admissionRulesService.configRuleGrid(
-      this.isWriteAdmissionRuleAuthorized
-    );
-    this.gridOptions.onSelectionChanged = this.onAdmissionRulesSelected;
     this.context = { componentParent: this };
     this.gridHeight =
       this.source === GlobalConstant.NAV_SOURCE.SELF
@@ -121,6 +118,7 @@ export class AdmissionRulesComponent implements OnInit {
 
   private getAdmissionStateAndRules = () => {
     this.admissionStateErr = false;
+    this.isGridOptionsReady = false;
     this.admissionRulesService
       .getAdmissionData(
         this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
@@ -139,6 +137,12 @@ export class AdmissionRulesComponent implements OnInit {
           this.admissionOptions = options;
           this.globalStatus = this.admissionStateRec.state?.enable!;
           this.mode = this.admissionStateRec.state?.mode!;
+          this.admissionRulesService.globalMode = this.mode;
+          this.gridOptions = this.admissionRulesService.configRuleGrid(
+            this.isWriteAdmissionRuleAuthorized
+          );
+          this.gridOptions.onSelectionChanged = this.onAdmissionRulesSelected;
+          this.isGridOptionsReady = true;
           this.default_action = this.admissionStateRec.state?.default_action!;
           if (this.source === GlobalConstant.NAV_SOURCE.SELF) {
             const GLOBAL_ACTION_RULE = {
@@ -179,6 +183,9 @@ export class AdmissionRulesComponent implements OnInit {
               'admissionControl.NOT_SUPPORT'
             );
           }
+          setTimeout(() => {
+            this.gridOptions.api!.setRowData(this.admissionRules);
+          }, 200);
         },
         error => {
           console.log(error);
@@ -336,7 +343,7 @@ export class AdmissionRulesComponent implements OnInit {
         this.translate.instant('admissionControl.msg.MODE_SWITCH_OK')
       );
       setTimeout(() => {
-        this.getAdmissionState();
+        this.getAdmissionStateAndRules();
       }, 500);
     };
 
@@ -399,11 +406,6 @@ export class AdmissionRulesComponent implements OnInit {
             dialogRef.componentInstance.loading = false;
           }
         );
-      dialogRef.afterClosed().subscribe(() => {
-        setTimeout(() => {
-          this.refresh();
-        }, 500);
-      });
     } else {
       this.admissionRulesService
         .updateAdmissionState(this.admissionStateRec)

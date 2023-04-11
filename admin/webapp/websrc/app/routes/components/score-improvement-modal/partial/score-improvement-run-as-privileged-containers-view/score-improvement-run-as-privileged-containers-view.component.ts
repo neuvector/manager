@@ -81,7 +81,7 @@ export class ScoreImprovementRunAsPrivilegedContainersViewComponent
   }
 
   getPredictionScores() {
-    const metrics = this.scoreImprovementModalService.newMetrics();
+    const metrics = JSON.parse(JSON.stringify(this.scoreImprovementModalService.newMetrics()))
     metrics.workloads.privileged_wls = 0;
     this.scoreImprovementModalService
       .calculateScoreData(

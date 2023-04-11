@@ -274,6 +274,24 @@
           </div>
         </div>
         <div class="row">
+          <div class="col-12 col-md-6 mt-2" *ngIf="!addEditAdmissionRuleForm.controls.isException.value">
+            <label class="pull-left margin-right-m">{{ 'admissionControl.MODE' | translate }}</label>
+            <mat-radio-group
+              class="pull-left margin-right-m"
+              aria-label="Select a mode"
+              formControlName="rule_mode"
+            >
+              <mat-radio-button value="" class="margin-right-s">{{
+                'admissionControl.NO_MODE' | translate
+              }}</mat-radio-button>
+              <mat-radio-button value="monitor" class="margin-right-s">{{
+                'topbar.mode.EVALUATION' | translate
+              }}</mat-radio-button>
+              <mat-radio-button value="protect" class="margin-right-s">{{
+                'topbar.mode.ENFORCE' | translate
+              }}</mat-radio-button>
+            </mat-radio-group>
+          </div>
           <div class="col-12 col-md-3">
             <label class="nv-modal-item-title margin-right-m">{{
               "responsePolicy.gridHeader.STATUS" | translate

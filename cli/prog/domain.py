@@ -5,6 +5,7 @@ from prog.cli import set
 from prog.cli import unset
 from prog import client
 from prog import output
+from prog import utils
 
 
 def _list_domain_display_format(d):

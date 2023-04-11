@@ -18,6 +18,7 @@ export class GlobalConstant {
   public static STATUS_FORBIDDEN = 403;
   public static PATH_LOGIN = 'login';
   public static PATH_DEFAULT = 'dashboard';
+  public static PATH_MULTICLUSTER = 'multi-cluster';
   public static AG_GRID_RESIZE = 'resize.#agGrid';
   public static NETWORK_RULES_NEW_ID_SEED = 1000000;
   public static NETWORK_RULES_PORTS_DISPLAY_LEN = 40;
@@ -31,6 +32,7 @@ export class GlobalConstant {
   public static MAX_ENFORCER_LOG = 10;
   public static MAX_INTERFACE_IP = 3;
   public static MAX_UNUPDATED_DAYS = 7;
+  public static MULTICLUSTER_CONCURRENT_LIMIT = 8;
   public static NEW_ID_SEED = {
     NETWORK_RULE: 1000000,
   };
@@ -77,7 +79,7 @@ export class GlobalConstant {
     'image',
     'imageregistry',
     'namespace',
-    'saBindRiskyRole'
+    'saBindRiskyRole',
   ];
 
   public static ADMISSION = {
@@ -95,7 +97,13 @@ export class GlobalConstant {
       DENY: 'deny',
       FED_DENY: 'federal-policy',
     },
-    SINGLE_VALUE_CRITERIA: ['user', 'image', 'imageregistry', 'namespace', 'saBindRiskyRole'],
+    SINGLE_VALUE_CRITERIA: [
+      'user',
+      'image',
+      'imageregistry',
+      'namespace',
+      'saBindRiskyRole',
+    ],
     CATEGORY: {
       KUBE: 'Kubernetes',
     },
@@ -199,7 +207,13 @@ export class GlobalConstant {
     CVE_COUNT: ['cveHighCount', 'cveHighWithFixCount', 'cveMediumCount'],
     CVE_SCORE: ['cveScoreCount'],
     RESOURCE: ['resourceLimit'],
-    SINGLE_VALUE_CRITERIA: ['user', 'image', 'imageRegistry', 'namespace', 'saBindRiskyRole'],
+    SINGLE_VALUE_CRITERIA: [
+      'user',
+      'image',
+      'imageRegistry',
+      'namespace',
+      'saBindRiskyRole',
+    ],
   };
   public static PSP = 'pspcompliance';
   public static PSS = 'violatepsspolicy';

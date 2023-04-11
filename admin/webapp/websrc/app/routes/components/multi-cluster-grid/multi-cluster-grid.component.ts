@@ -2,6 +2,7 @@ import {
   ChangeDetectorRef,
   Component,
   Input,
+  OnDestroy,
   OnInit,
   SecurityContext,
 } from '@angular/core';
@@ -23,16 +24,27 @@ import { MapConstant } from '@common/constants/map.constant';
 import { UtilsService } from '@common/utils/app.utils';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { MultiClusterGridActionCellComponent } from '@components/multi-cluster-grid/multi-cluster-grid-action-cell/multi-cluster-grid-action-cell.component';
-import { finalize } from 'rxjs/operators';
-import {isAuthorized} from "@common/utils/common.utils";
+import { finalize, takeWhile } from 'rxjs/operators';
+import { interval } from 'rxjs';
+import { GlobalConstant } from '@common/constants/global.constant';
+
+type Task = {
+  index: number;
+  rowNode: RowNode;
+  cluster: Cluster;
+  flag: boolean;
+};
 
 @Component({
   selector: 'app-multi-cluster-grid',
   templateUrl: './multi-cluster-grid.component.html',
   styleUrls: ['./multi-cluster-grid.component.scss'],
 })
-export class MultiClusterGridComponent implements OnInit {
+export class MultiClusterGridComponent implements OnInit, OnDestroy {
   private readonly $win;
+  private _activeTaskNum: number = 0;
+  private _taskQueue: Task[] = [];
+  private _getSummarySubscription;
   @Input() clusterData!: ClusterData;
   @Input() gridHeight: number = 200;
   isMasterRole;
@@ -172,7 +184,13 @@ export class MultiClusterGridComponent implements OnInit {
     this.initGrid();
   }
 
-  initGrid(){
+  ngOnDestroy() {
+    if (this._getSummarySubscription) {
+      this._getSummarySubscription.unsubscribe();
+    }
+  }
+
+  initGrid() {
     // login as a master
     this.isMasterRole =
       this.clusterData.fed_role === MapConstant.FED_ROLES.MASTER;
@@ -221,48 +239,84 @@ export class MultiClusterGridComponent implements OnInit {
       cluster.status === MapConstant.FED_STATUS.LEFT ||
       cluster.status === MapConstant.FED_STATUS.KICKED
     ) {
-      this.updateClusterSummary4Error(rowNode);
-    } else {
-      if (cluster.clusterType === MapConstant.FED_ROLES.MASTER) {
-        const params = { isGlobalUser: true };
-
-        //get summary
-        this.multiClusterService
-          .getMultiClusterSummary(params)
-          .subscribe(res => {
-            this.updateClusterGridRRow4Success(
-              index,
-              rowNode,
-              res,
-              isRowSelected
-            );
-          });
-      } else {
-        const params = { isGlobalUser: true, clusterId: cluster.id };
-
-        //get summary
-        this.multiClusterService
-          .getMultiClusterSummary(params)
-          .subscribe(res => {
-            this.updateClusterGridRRow4Success(
-              index,
-              rowNode,
-              res,
-              isRowSelected
-            );
-          });
+      this.updateClusterSummary4Error(rowNode, '');
+      if (!isRowSelected) {
+        this._activeTaskNum--;
       }
+    } else {
+      const params =
+        cluster.clusterType === MapConstant.FED_ROLES.MASTER
+          ? { isGlobalUser: true }
+          : { isGlobalUser: true, clusterId: cluster.id };
+      //get summary
+      this.multiClusterService.getMultiClusterSummary(params).subscribe(
+        res => {
+          this.updateClusterGridRRow4Success(
+            index,
+            rowNode,
+            res,
+            isRowSelected
+          );
+          if (!isRowSelected) {
+            this._activeTaskNum--;
+          }
+        },
+        error => {
+          console.log('=======summary=error========', error);
+          this.updateClusterSummary4Error(
+            rowNode,
+            this.translate.instant('multiCluster.messages.SCORE_UNAVAILIBlE')
+          );
+          if (!isRowSelected) {
+            this._activeTaskNum--;
+          }
+        }
+      );
     }
   }
+
   updateSummaryForRows() {
     this.clusterData.clusters!.forEach((cluster, index) => {
-      if(this.gridOptions && this.gridOptions.api){
+      if (this.gridOptions && this.gridOptions.api) {
         const rowNode = this.gridOptions.api!.getDisplayedRowAtIndex(index);
         if (rowNode) {
-          this.updateSummaryForRowNode(rowNode, cluster, index, false);
+          const task: Task = {
+            index: index,
+            rowNode: rowNode,
+            cluster: cluster,
+            flag: false,
+          };
+          this._taskQueue.push(task);
         }
       }
     });
+
+    const limit = GlobalConstant.MULTICLUSTER_CONCURRENT_LIMIT;
+    this._getSummarySubscription = interval(500)
+      .pipe(
+        takeWhile(() => {
+          return this._taskQueue.length > 0;
+        })
+      )
+      .subscribe(() => {
+        while (this._activeTaskNum < limit && this._taskQueue.length > 0) {
+          const task = this._taskQueue.shift();
+          if (task) {
+            this._activeTaskNum++;
+            console.log(
+              '_activeTask, queue:',
+              this._activeTaskNum,
+              this._taskQueue.length
+            );
+            this.updateSummaryForRowNode(
+              task.rowNode,
+              task.cluster,
+              task.index,
+              task.flag
+            );
+          }
+        }
+      });
   }
 
   getClusters(): void {
@@ -347,7 +401,7 @@ export class MultiClusterGridComponent implements OnInit {
         params.value ===
         this.translate.instant('multiCluster.messages.SCORE_UNAVAILIBlE')
       ) {
-        return `<span class="label label-idle">${params.value}</span>`;
+        return `<span class="label label-warning">${params.value}</span>`;
       } else {
         return params.value;
       }
@@ -358,13 +412,12 @@ export class MultiClusterGridComponent implements OnInit {
     if (params && params.value) {
       let score = params.value.valueOf();
       if (isNaN(score)) {
-        return `<span class="label label-idle">${params.value}</span>`;
+        return `<span class="label label-warning">${params.value}</span>`;
       } else {
         let scoreColor = 'success';
         let scoreText = this.translate.instant(
           'dashboard.heading.guideline.MAIN_SCORE_GOOD2'
         );
-        console.log('score: ', score);
         if (score > 20 && score <= 50) {
           scoreColor = 'warning';
           scoreText = this.translate.instant(
@@ -380,7 +433,11 @@ export class MultiClusterGridComponent implements OnInit {
         return `<span style="display: inline-block; width: 45px;" class="ml-sm label label-${scoreColor} badge badge-${scoreColor}">${scoreText}</span><span class="text-${scoreColor} text-bold padding-left-s">${score}</span>`;
       }
     } else {
-      return "<span><em class='fa fa-spin fa-spinner text-primary' aria-hidden='true'></em></span>";
+      if (typeof params.value === 'undefined') {
+        return "<span><em class='fa fa-spin fa-spinner text-primary' aria-hidden='true'></em></span>";
+      } else {
+        return '<span></span>';
+      }
     }
   }
 
@@ -399,7 +456,7 @@ export class MultiClusterGridComponent implements OnInit {
         params.value ===
         this.translate.instant('multiCluster.messages.SCORE_UNAVAILIBlE')
       ) {
-        return `<span class="label label-idle">${params.value}</span>`;
+        return `<span class="label label-warning">${params.value}</span>`;
       } else {
         return params.value;
       }
@@ -412,7 +469,7 @@ export class MultiClusterGridComponent implements OnInit {
         params.value ===
         this.translate.instant('multiCluster.messages.SCORE_UNAVAILIBlE')
       ) {
-        return `<span class="label label-idle">${params.value}</span>`;
+        return `<span class="label label-warning">${params.value}</span>`;
       } else {
         return params.value;
       }
@@ -453,25 +510,17 @@ export class MultiClusterGridComponent implements OnInit {
       );
     }
 
-    if(this.gridOptions && this.gridOptions.api){
+    if (this.gridOptions && this.gridOptions.api) {
       this.gridOptions.api!.redrawRows({ rowNodes: [rowNode] });
     }
-
   }
 
-  updateClusterSummary4Error(rowNode: RowNode) {
-    rowNode.data.hosts = this.translate.instant(
-      'multiCluster.messages.SCORE_UNAVAILIBlE'
-    );
-    rowNode.data.running_pods = this.translate.instant(
-      'multiCluster.messages.SCORE_UNAVAILIBlE'
-    );
-    rowNode.data.cvedb_version = this.translate.instant(
-      'multiCluster.messages.SCORE_UNAVAILIBlE'
-    );
-    rowNode.data.score = this.translate.instant(
-      'multiCluster.messages.SCORE_UNAVAILIBlE'
-    );
+  updateClusterSummary4Error(rowNode: RowNode, message: string) {
+    rowNode.data.hosts = message;
+    rowNode.data.running_pods = message;
+    rowNode.data.cvedb_version = message;
+    rowNode.data.score = message;
+
     this.gridOptions.api!.redrawRows({ rowNodes: [rowNode] });
   }
 }

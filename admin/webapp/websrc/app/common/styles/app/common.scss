@@ -259,11 +259,11 @@ hr.fancy {
   border: 0;
   height: 1px;
   background-image: linear-gradient(
-    to right,
-    #f0f0f0,
-    #00b9ff,
-    #59d941,
-    #f0f0f0
+      to right,
+      #f0f0f0,
+      #00b9ff,
+      #59d941,
+      #f0f0f0
   );
   margin: 0 0 20px 0;
 }
@@ -1061,9 +1061,9 @@ mwl-gauge.score > .gauge > .value {
 
 .infoBox {
   @include backdrop-blur-mixin(
-    1,
-    rgba(255, 255, 255, 0.5),
-    rgba(255, 255, 255, 0.97)
+      1,
+      rgba(255, 255, 255, 0.5),
+      rgba(255, 255, 255, 0.97)
   );
   position: absolute;
   padding: 10px;
@@ -1219,6 +1219,16 @@ ngx-avatar.userIcon img.avatar-content {
 
 .label-warning {
   background-color: $mdc-orange-700;
+}
+#multi-clusters-grid .label-warning {
+  color: #fff;
+  background-color: $mdc-orange-700;
+  border-radius: 4px;
+  font-size: 0.8em;
+  line-height: 1.5;
+  font-weight: 700;
+  margin-left: 8px;
+  padding: 5px 8px;
 }
 
 .label-primary {

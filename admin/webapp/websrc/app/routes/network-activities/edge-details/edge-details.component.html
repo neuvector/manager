@@ -20,24 +20,9 @@
   </div>
   <hr class="fancy mx-0 my-0" />
   <div
-    *ngIf="conversationDetail.entries && conversationDetail.entries.length > 4"
-    class="d-flex flex-row justify-content-between align-items-center">
-    <span
-      *ngIf="
-        conversationDetail.entries && conversationDetail.entries.length > 0
-      "
-      class="mr-2"
-      >{{ 'network.edgeDetails.SESSIONS' | translate }}
-      {{ conversationDetail.sessions }}</span
-    >
-    <mat-label class="text-warning" *ngIf="onViolation"
-      ><em class="fa fa-ban mr-1"></em>
-      {{ 'network.edgeDetails.VIOLATION' | translate }}
-    </mat-label>
-    <mat-label class="text-danger" *ngIf="onThreat"
-      ><em class="fas fa-bug mr-1"></em>
-      {{ 'network.edgeDetails.THREAT' | translate }}
-    </mat-label>
+    *ngIf="conversationDetail.entries && conversationDetail.entries.length > 8"
+    class="d-flex flex-row justify-content-end align-items-center">
+
     <app-quick-filter [gridOptions]="gridOptions" [showCount]="false">
     </app-quick-filter>
   </div>
@@ -60,33 +45,57 @@
       {{ 'general.NO_CONVERSATIONS' | translate }}
     </div>
   </div>
-  <div class="d-flex flex-row justify-content-end my-3">
-    <button
-      *ngIf="showRuleId && traffic && traffic.policy_action !== 'open'"
-      [disabled]="!isWriteNetworkAuthorized"
-      mat-raised-button
-      color="primary"
-      aria-label="review rule"
-      (click)="overrideRule(traffic, edgeDetails)"
-      class="mt-1 mr-1">
-      <em class="far fa-edit mr-1"></em>
-      {{ 'network.edgeDetails.OVERRIDE_RULE' | translate }}
-    </button>
-    <button
-      mat-stroked-button
-      color="primary"
-      class="mt-1"
-      aria-label="clear sessions"
-      (click)="
+  <div class="d-flex flex-row justify-content-between my-3">
+    <div class="d-flex flex-row justify-content-start align-items-center"
+         *ngIf="showRuleId"
+    >
+      <span
+        *ngIf=" sessionCount &&
+        conversationDetail.entries && conversationDetail.entries.length > 0
+      "
+        class="text-muted mr-2"
+      >{{ 'network.edgeDetails.SESSIONS' | translate }}
+        {{ sessionCount }}</span
+      >
+      <span class="action-label warning px-1" *ngIf="onViolation"
+      ><em class="fa fa-ban mr-1"></em>
+        {{ 'network.edgeDetails.VIOLATION' | translate }}
+    </span>
+      <span class="action-label danger px-1" *ngIf="onThreat"
+      ><em class="fas fa-bug mr-1"></em>
+        {{ 'network.edgeDetails.THREAT' | translate }}
+    </span>
+    </div>
+
+    <div class="d-flex flex-row justify-content-end align-items-center">
+      <button
+        *ngIf="showRuleId && traffic && traffic.policy_action !== 'open'"
+        [disabled]="!isWriteNetworkAuthorized"
+        mat-raised-button
+        color="primary"
+        aria-label="review rule"
+        (click)="overrideRule(traffic, edgeDetails)"
+        class="mt-1 mr-1">
+        <em class="far fa-edit mr-1"></em>
+        {{ 'network.edgeDetails.OVERRIDE_RULE' | translate }}
+      </button>
+      <button
+        mat-stroked-button
+        color="primary"
+        class="mt-1"
+        aria-label="clear sessions"
+        (click)="
         clearSessions(conversationDetail.from.id, conversationDetail.to.id)
       "
-      [disabled]="!isWriteNetworkAuthorized"
-      *ngIf="
+        [disabled]="!isWriteNetworkAuthorized"
+        *ngIf="
         conversationDetail.entries && conversationDetail.entries.length > 0
       ">
-      <em class="fa fa-magic mr-1"></em
-      >{{ 'network.edgeDetails.CLEAR' | translate }}
-    </button>
+        <em class="fa fa-magic mr-1"></em
+        >{{ 'network.edgeDetails.CLEAR' | translate }}
+      </button>
+    </div>
+
   </div>
 
   <div *ngIf="onRule" class="col-sm-12">
@@ -108,22 +117,22 @@
       <em class="far fa-plus-square mx-1 text-primary"></em>
     </h4>
     <div>
-      <form name="ruleForm" >
+      <form name="ruleForm">
         <div class="d-flex justify-content-between align-items-center">
           <div class="full-width mr-2">
             <mat-form-field appearance="fill" class="full-width">
-                <mat-label>{{ 'policy.editPolicy.FROM' | translate }}</mat-label>
-                <input
-                  matInput
-                  value="{{ rule.from }}"
-                  disabled
-                  aria-label="From" />
-              </mat-form-field>
+              <mat-label>{{ 'policy.editPolicy.FROM' | translate }}</mat-label>
+              <input
+                matInput
+                value="{{ rule.from }}"
+                disabled
+                aria-label="From" />
+            </mat-form-field>
           </div>
           <div class="full-width mr-2">
             <mat-form-field appearance="fill" class="full-width">
-            <mat-label>{{ 'policy.editPolicy.TO' | translate }}</mat-label>
-            <input matInput value="{{ rule.to }}" disabled aria-label="To" />
+              <mat-label>{{ 'policy.editPolicy.TO' | translate }}</mat-label>
+              <input matInput value="{{ rule.to }}" disabled aria-label="To" />
             </mat-form-field>
           </div>
           <div class="full-width ">
@@ -140,15 +149,15 @@
         <div class="d-flex justify-content-between align-items-center">
           <div class="full-width mr-2">
             <mat-form-field appearance="fill" class="full-width">
-            <mat-label>{{ 'policy.editPolicy.PORT' | translate }}</mat-label>
-            <input
-              matInput
-              disabled
-              value="{{ rule.ports }}"
-              aria-label="Port" />
+              <mat-label>{{ 'policy.editPolicy.PORT' | translate }}</mat-label>
+              <input
+                matInput
+                disabled
+                value="{{ rule.ports }}"
+                aria-label="Port" />
             </mat-form-field>
           </div>
-          <div class="full-width mr-2" >
+          <div class="full-width mr-2">
             <ng-container *ngIf="rule.created_timestamp">
               <mat-form-field appearance="fill" class="full-width">
                 <mat-label>{{ 'controllers.detail.CREATED_AT' | translate }}</mat-label>

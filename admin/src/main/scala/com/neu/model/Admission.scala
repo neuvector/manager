@@ -25,7 +25,8 @@ case class AdmRule(
   disable: Option[Boolean],
   critical: Option[Boolean] = None,
   cfg_type: Option[String] = Some("user_created"),
-  rule_type: Option[String]
+  rule_type: Option[String],
+  rule_mode: Option[String] = Some("")
 )
 
 case class AdmRuleConfig(

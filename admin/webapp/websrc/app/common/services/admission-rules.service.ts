@@ -26,6 +26,7 @@ export class AdmissionRulesService {
   public admissionRules: Array<any> = <any>[];
   public id: number = 0;
   public admissionRule4Edit: any;
+  public globalMode: string = '';
   public PSP_CRITERIA = [
     {
       name: {
@@ -126,6 +127,19 @@ export class AdmissionRulesService {
           return this.criteriaRenderFunc(params);
         },
         width: 550,
+      },
+      {
+        headerName: this.translate.instant('admissionControl.MODE'),
+        field: 'rule_mode',
+        cellRenderer: params => {
+          return this.modeRenderFunc(params);
+        },
+        cellRendererParams: {
+          globalMode: this.globalMode
+        },
+        width: 100,
+        minWidth: 100,
+        maxWidth: 100,
       },
       {
         headerName: this.translate.instant('admissionControl.RULE_TYPE'),
@@ -318,6 +332,20 @@ export class AdmissionRulesService {
       SecurityContext.HTML,
       criteriaArray.join(', ')
     );
+  };
+
+  modeRenderFunc = params => {
+    let mode = '';
+    if (params.data) {
+      if (params.data.rule_type === GlobalConstant.ADMISSION.RULE_TYPE.DENY) {
+        mode = this.utils.getI18Name(params.value ? params.value : params.globalMode);
+        let labelCode = MapConstant.colourMap[params.value ? params.value : params.globalMode];
+        if (!labelCode) return '';
+        else
+          return `<span class="type-label policy_mode ${params.data.disable ? MapConstant.colourMap['disabled_background'] : labelCode}">${mode}</span>`;
+      }
+    }
+    return '';
   };
 
   typeRenderFunc = params => {

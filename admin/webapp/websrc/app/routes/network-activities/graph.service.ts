@@ -1175,6 +1175,7 @@ export class GraphService {
   };
 
   private numberCellFormatter = params => {
+    if(!params.value) return '';
     return this.sanitizer.sanitize(
       SecurityContext.HTML,
       this.bytesPipe.transform(params.value)
@@ -1435,12 +1436,7 @@ export class GraphService {
         {
           headerName: this.translate.instant('network.gridHeader.BYTES'),
           field: 'bytes',
-          cellRenderer: params => {
-            return this.sanitizer.sanitize(
-              SecurityContext.HTML,
-              this.bytesPipe.transform(params.value)
-            );
-          },
+          cellRenderer: this.numberCellFormatter,
           comparator: this.bytesComparator,
           icons: {
             sortAscending: '<em class="fa fa-sort-numeric-asc"></em>',

@@ -1,4 +1,4 @@
-<ng-container [ngSwitch]="activeTab">
+<ng-container [ngSwitch]="activeTab" *ngIf="!isScoreImprovement">
   <ng-container *ngSwitchCase="'member'">
     <div class="filter" style="position: absolute; right: 20px; top: 5px;">
       <mat-form-field appearance="standard">

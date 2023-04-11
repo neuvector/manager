@@ -861,6 +861,7 @@ export class NetworkActivitiesComponent
         maxIteration: 1000,
       },
       animate: true,
+      enabledStack: true,
       defaultCombo: {
         type: 'circle',
         labelCfg: {
@@ -1021,7 +1022,7 @@ export class NetworkActivitiesComponent
         nodeLinks.forEach(linkId => {
           let link = this.graph.findById(linkId);
           if (link) {
-            this.graph.removeItem(link, false);
+            this.graph.removeItem(link);
           }
         });
         unmMuteComboEdges(comboId);
@@ -1236,42 +1237,7 @@ export class NetworkActivitiesComponent
               this.conversationDetail.entries
             );
 
-          // this.convHisGridOptions = this.graphService.prepareTrafficHistoryGrid(
-          //   this.conversationDetail
-          // );
 
-          // setTimeout(() => {
-          //   this.entriesGridHeight = Math.max(
-          //     this.entriesGridHeight,
-          //     ELEM_CONV_HISTORY!.clientHeight - 130
-          //   );
-          //   // this.convHisGridOptions.api.resetRowHeights();
-          //   let ipList: any[] = this.conversationDetail.entries.flatMap(
-          //     entry => {
-          //       let ips: any[] = [];
-          //       if (entry.client_ip) {
-          //         ips.push(entry.client_ip);
-          //       }
-          //       if (entry.server_ip) {
-          //         ips.push(entry.server_ip);
-          //       }
-          //       return ips;
-          //     }
-          //   );
-          //   this.graphService.getIpMap(ipList).subscribe(response => {
-          //     let ipMap = response['ip_map'];
-          //     this.conversationDetail.entries =
-          //       this.conversationDetail.entries.map(entry => {
-          //         if (entry.client_ip) {
-          //           entry.client_ip_location = ipMap[entry.client_ip];
-          //         }
-          //         if (entry.server_ip) {
-          //           entry.server_ip_location = ipMap[entry.server_ip];
-          //         }
-          //         return entry;
-          //       });
-          //   });
-          // }, 100);
           this.popupState.transitTo(PopupState.onEdge);
         },
         err => {
@@ -1390,7 +1356,7 @@ export class NetworkActivitiesComponent
       newEdge.oriLabel = Array.from(newEdge.status).join(', ');
       this.graph.addItem('edge', newEdge);
       links.forEach(edge => {
-        this.graph.removeItem(edge, false);
+        this.graph.removeItem(edge);
       });
     };
 
@@ -1484,7 +1450,7 @@ export class NetworkActivitiesComponent
 
       mergeRevealedLinks(item);
 
-      this.graph.removeItem(item, false);
+      this.graph.removeItem(item);
       this.graph.paint();
     };
 
@@ -1513,7 +1479,7 @@ export class NetworkActivitiesComponent
       this.data.nodes.forEach(node => {
         if (node.domain === domainModel.domain) {
           const item = this.graph.findById(node.id);
-          item && this.graph.showItem(item, false);
+          item && this.graph.showItem(item);
         }
       });
       if (this.collapsedDomains.has(domainModel.domain))
@@ -1522,7 +1488,7 @@ export class NetworkActivitiesComponent
 
     const getMeshLinks = (meshNode, sidecar, inCombo = false) => {
       const selfLink = this.graph.findById(`${meshNode.id}${meshNode.id}`);
-      this.graph.hideItem(selfLink, false);
+      this.graph.hideItem(selfLink);
 
       const links = this.serverData.edges.filter(
         edge => edge.source === sidecar.id || edge.target === sidecar.id
@@ -1955,7 +1921,7 @@ export class NetworkActivitiesComponent
               }
             });
           }
-          this.graph.removeItem(edge, false);
+          this.graph.removeItem(edge);
         });
       }
     }
@@ -2068,7 +2034,7 @@ export class NetworkActivitiesComponent
             item.style.fill = '#d9b886';
           }
         }
-        this.graph.addItem('node', item, false);
+        this.graph.addItem('node', item);
       });
 
       clusterEdges.forEach(edge => {
@@ -2090,7 +2056,7 @@ export class NetworkActivitiesComponent
         edge.style.endArrow = {
           path: G6.Arrow.triangle(2, 3),
         };
-        this.graph.addItem('edge', edge, false);
+        this.graph.addItem('edge', edge);
       });
 
       this.doSubLayout(clusterNode, clusterNodes);
@@ -2503,18 +2469,18 @@ export class NetworkActivitiesComponent
         let model = item.getModel();
         if (model) childrenInfo.push(model);
         if (item) {
-          if (item.isVisible()) this.graph.hideItem(item, false);
+          if (item.isVisible()) this.graph.hideItem(item);
           else {
             const combo = this.graph.findById(`co${node.id}`);
-            combo && this.graph.removeItem(combo, false);
+            combo && this.graph.removeItem(combo);
           }
         }
       });
       Object.assign(domainNode, { children: childrenInfo });
     }
-    this.graph.addItem('node', domainNode, false);
+    this.graph.addItem('node', domainNode);
     if (domainData.edges && domainData.edges.length > 0)
-      domainData.edges.forEach(edge => this.graph.addItem('edge', edge, false));
+      domainData.edges.forEach(edge => this.graph.addItem('edge', edge));
   }
 
   private updateGraph(onRefresh: boolean) {
@@ -2615,7 +2581,7 @@ export class NetworkActivitiesComponent
       .subscribe(
         () => {
           //Remove displayed edge without data reloading
-          this.graph.removeItem(this.selectedEdge, false);
+          this.graph.removeItem(this.selectedEdge);
 
           //Remove original edge in group without data reloading
           let removedEdgeIndex = this.serverData.edges.findIndex(edge => {

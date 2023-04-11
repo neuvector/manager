@@ -21,7 +21,6 @@ import { GridApi, GridReadyEvent } from 'ag-grid-community';
 import { BehaviorSubject } from 'rxjs';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { SecurityEventsService } from '@services/security-events.service';
-import { MapConstant } from '@common/constants/map.constant';
 import { NotificationService } from '@services/notification.service';
 import { UtilsService } from '@common/utils/app.utils';
 import { GlobalConstant } from '@common/constants/global.constant';
@@ -168,17 +167,19 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
       );
     });
   }
-
   onGridReady(params: GridReadyEvent): void {
     this.gridApi = params.api;
-    this.gridApi.sizeColumnsToFit();
-    this.gridApi.forEachNode(node =>
-      node.rowIndex ? 0 : node.setSelected(true)
-    );
-    this.cd.markForCheck();
+    setTimeout(() => {
+      this.gridApi.forEachNode(node =>
+        node.rowIndex ? 0 : node.setSelected(true)
+      );
+      this.gridApi.sizeColumnsToFit();
+      this.cd.markForCheck();
+    }, 500);
   }
 
   onTrafficChanged() {
+
     let selectedRows = this.gridApi.getSelectedRows();
     this.traffic = selectedRows[0];
     this.showRuleId = true;

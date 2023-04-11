@@ -8,7 +8,7 @@
   <span>{{ 'openId.head.GUIDE' | translate }}</span>
 </div>
 <mat-card>
-  <ng-container *ngIf="openidData$ | async as openidData; else loadingOrError">
+  <ng-container *ngIf="openidData; else loadingOrError">
     <app-openid-form
       [openidData]="openidData"
       (refresh)="refresh()"></app-openid-form>
@@ -18,11 +18,7 @@
       Error Message Goes Here
     </ng-container>
     <ng-template #loading>
-      <div
-        class="license__loader d-flex flex-column align-items-center justify-content-center">
-        <mat-spinner class="mx-auto"></mat-spinner>
-        <span class="ml-2 mt-2">{{ 'enum.LOADING' | translate }}...</span>
-      </div>
+      <app-loading-template></app-loading-template>
     </ng-template>
   </ng-template>
 </mat-card>

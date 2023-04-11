@@ -16,6 +16,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
+import { LoadingTemplateModule } from '@components/ui/loading-template/loading-template.module';
 
 const routes: Routes = [
   { path: '', component: OpenidComponent },
@@ -39,6 +40,7 @@ const routes: Routes = [
     MatChipsModule,
     MatIconModule,
     GroupDomainRoleModule,
+    LoadingTemplateModule,
   ],
   providers: [SettingsService],
 })

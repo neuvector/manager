@@ -25,6 +25,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '@services/notification.service';
 import { SettingsService } from '@services/settings.service';
 import { cloneDeep } from 'lodash';
+import { finalize } from 'rxjs/operators';
 import { ConfigFormConfig } from './config-form-config';
 import { OtherWebhookType } from './config-form-config/constants';
 
@@ -34,7 +35,6 @@ import { OtherWebhookType } from './config-form-config/constants';
   styleUrls: ['./config-form.component.scss'],
 })
 export class ConfigFormComponent implements OnInit {
-  @Output() refreshConfig = new EventEmitter();
   ibmSetup!: IBMSetupGetResponse;
   submittingForm = false;
   configForm = new FormGroup({});
@@ -116,15 +116,6 @@ export class ConfigFormComponent implements OnInit {
       e.type = e.type || OtherWebhookType;
     });
     this._config.ibmsa.ibmsa_ep_dashboard_url ||= this.dashboardUrl;
-    if (this.configOptions.resetModel) {
-      this.configOptions.resetModel(this._config);
-      setTimeout(() => {
-        if (this.configOptions.resetModel) {
-          this.configOptions.resetModel(this._config);
-        }
-      });
-    }
-    this.submittingForm = false;
   }
 
   submitForm(): void {
@@ -135,23 +126,26 @@ export class ConfigFormComponent implements OnInit {
       this.configForm.getRawValue()
     );
     this.submittingForm = true;
-    this.settingsService.patchConfig(configPatch).subscribe({
-      complete: () => {
-        this.notificationService.open(this.tr.instant('setting.SUBMIT_OK'));
-        this.refreshConfig.emit();
-      },
-      error: ({ error }: { error: ErrorResponse }) => {
-        this.notificationService.open(
-          this.utils.getAlertifyMsg(
-            error,
-            this.tr.instant('setting.SUBMIT_FAILED'),
-            false
-          ),
-          GlobalConstant.NOTIFICATION_TYPE.ERROR
-        );
-        this.submittingForm = false;
-      },
-    });
+    this.settingsService
+      .patchConfig(configPatch)
+      .pipe(finalize(() => (this.submittingForm = false)))
+      .subscribe({
+        complete: () => {
+          this.notificationService.open(this.tr.instant('setting.SUBMIT_OK'));
+          this.configOptions.resetModel?.(this._config);
+          setTimeout(() => this.configOptions.resetModel?.(this._config));
+        },
+        error: ({ error }: { error: ErrorResponse }) => {
+          this.notificationService.open(
+            this.utils.getAlertifyMsg(
+              error,
+              this.tr.instant('setting.SUBMIT_FAILED'),
+              false
+            ),
+            GlobalConstant.NOTIFICATION_TYPE.ERROR
+          );
+        },
+      });
   }
 
   formatConfigPatch(base_config: ConfigV2Response): ConfigPatch {

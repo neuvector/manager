@@ -62,15 +62,11 @@ export class ScoreImprovementServiceRiskViewComponent implements OnInit {
   }
 
   getPredictionScores() {
-    const metrics = this.scoreImprovementModalService.newMetrics();
+    const metrics = JSON.parse(JSON.stringify(this.scoreImprovementModalService.newMetrics()))
     metrics.new_service_policy_mode = 'Protect';
     metrics.groups.protect_groups += metrics.groups.discover_groups + metrics.groups.monitor_groups;
     metrics.groups.monitor_groups = 0;
     metrics.groups.discover_groups = 0;
-    metrics.workloads.protect_ext_eps +=
-      metrics.workloads.discover_ext_eps + metrics.workloads.monitor_ext_eps;
-    metrics.workloads.monitor_ext_eps = 0;
-    metrics.workloads.discover_ext_eps = 0;
     metrics.groups.discover_groups_zero_drift = 0;
     this.scoreImprovementModalService
       .calculateScoreData(

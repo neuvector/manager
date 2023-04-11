@@ -78,7 +78,7 @@ export class ScoreImprovementRunAsRootContainersViewComponent
   }
 
   getPredictionScores() {
-    const metrics = this.scoreImprovementModalService.newMetrics();
+    const metrics = JSON.parse(JSON.stringify(this.scoreImprovementModalService.newMetrics()))
     metrics.workloads.root_wls = 0;
     this.scoreImprovementModalService
       .calculateScoreData(

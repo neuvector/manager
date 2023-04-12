@@ -122,6 +122,19 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
     this._entriesGridHeight = value;
   }
 
+  ngOnChanges() {
+    this.prepareGridData();
+    setTimeout(() => {
+      let nodes = this.gridApi.getRenderedNodes();
+      if (nodes.length) {
+        nodes[0].setSelected(true); //selects the first row in the rendered view
+      }
+    }, 500);
+    this.sessionCount = '';
+    this.onThreat = false;
+    this.onViolation = false;
+  }
+
   ngOnInit() {
     this.isWriteNetworkAuthorized =
       this.authUtilsService.getDisplayFlag('write_network_rule');
@@ -133,14 +146,17 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
     this.gridOptions.onSelectionChanged = () => {
       this.onTrafficChanged();
     };
+    this.sessionCount = '';
+    this.onThreat = false;
+    this.onViolation = false;
   }
 
   private prepareGridData() {
     const ELEM_CONV_HISTORY = document.getElementById('conversationHistory');
-    this.entriesGridHeight = Math.max(
-      this.entriesGridHeight,
-      ELEM_CONV_HISTORY!.clientHeight - 130
-    );
+    // this.entriesGridHeight = Math.max(
+    //   this.entriesGridHeight,
+    //   ELEM_CONV_HISTORY!.clientHeight - 130
+    // );
     // this.convHisGridOptions.api.resetRowHeights();
     let ipList: any[] = this._conversationDetail.entries.flatMap(entry => {
       let ips: any[] = [];

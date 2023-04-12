@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { RisksHttpService } from '@common/api/risks-http.service';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
-import { catchError, map, repeatWhen, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { AssetsHttpService } from '@common/api/assets-http.service';
 import {
   ComplianceProfileData,
@@ -62,8 +62,7 @@ export class ComplianceProfileService {
           });
         });
         return res;
-      }),
-      repeatWhen(() => this.refreshSubject$)
+      })
     );
   }
 

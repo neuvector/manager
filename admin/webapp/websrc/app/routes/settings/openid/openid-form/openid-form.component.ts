@@ -11,7 +11,6 @@ import {
   ErrorResponse,
   GroupMappedRole,
   OPENID,
-  Server,
   ServerGetResponse,
   ServerPatchBody,
 } from '@common/types';
@@ -24,7 +23,6 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable } from 'rxjs';
 import { NotificationService } from '@services/notification.service';
-import { UtilsService } from '@common/utils/app.utils';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 
@@ -62,7 +60,6 @@ export class OpenidFormComponent implements OnInit, OnChanges {
     private settingsService: SettingsService,
     private notificationService: NotificationService,
     private authUtilsService: AuthUtilsService,
-    private utils: UtilsService,
     private tr: TranslateService
   ) {}
 
@@ -130,19 +127,20 @@ export class OpenidFormComponent implements OnInit, OnChanges {
         finalize(() => {
           this.submittingForm = false;
           this.isCreated = true;
+          this.refresh.emit();
         })
       );
     } else {
       submission = this.settingsService.patchServer(config).pipe(
         finalize(() => {
           this.submittingForm = false;
+          this.openidForm.reset(this.openidForm.getRawValue());
         })
       );
     }
     submission.subscribe({
       complete: () => {
         this.notificationService.open(this.tr.instant('ldap.SERVER_SAVED'));
-        this.refresh.emit();
       },
       error: ({ error }: { error: ErrorResponse }) => {
         this.notificationService.openError(

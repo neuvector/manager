@@ -276,7 +276,7 @@ export class ContainersGridComponent implements OnInit {
         : event.api.getDisplayedRowAtIndex(0);
     node?.setSelected(true);
     this.gridApi.ensureNodeVisible(node, 'middle');
-    this.quickFilter.onFilterChange(this.quickFilter.filter.value);
+    this.quickFilter?.onFilterChange(this.quickFilter.filter.value);
   }
 
   postSort(nodes: RowNode[]): void {

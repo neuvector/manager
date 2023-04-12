@@ -30,7 +30,6 @@ export class ConfigurationComponent
   @ViewChild(ConfigFormComponent) configForm!: ConfigFormComponent;
   config!: ConfigV2Response;
   enforcers!: Enforcer[];
-  refreshConfig$ = new Subject();
   isConfigAuthorized!: boolean;
   isImportAuthorized!: boolean;
   get debug_enabled(): boolean {
@@ -61,12 +60,9 @@ export class ConfigurationComponent
       GlobalVariable.user.token.role === MapConstant.FED_ROLES.FEDADMIN ||
       (GlobalVariable.user.token.role === MapConstant.FED_ROLES.ADMIN &&
         (GlobalVariable.isStandAlone || GlobalVariable.isMember));
-    this.settingsService
-      .getConfig()
-      .pipe(repeatWhen(() => this.refreshConfig$))
-      .subscribe({
-        next: value => (this.config = value),
-      });
+    this.settingsService.getConfig().subscribe({
+      next: value => (this.config = value),
+    });
     this._switchClusterSubscription =
       this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
         const currentUrl = this.router.url;
@@ -76,12 +72,6 @@ export class ConfigurationComponent
             this.router.navigate([currentUrl]);
           });
       });
-  }
-
-  refreshConfig(): void {
-    setTimeout(() => {
-      this.refreshConfig$.next(true);
-    }, 500);
   }
 
   ngOnDestroy(): void {

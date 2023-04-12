@@ -38,28 +38,16 @@
           {{ 'network.SETTING' | translate }}
         </button>
         <mat-menu #view_menu="matMenu">
-          <form [formGroup]="toggleNodeForm">
-            <div
-              mat-menu-item
-              class="mat-menu-checkbox"
-              (click)="$event.stopPropagation()">
-              <mat-checkbox
-                formControlName="systemNode"
-                (change)="nodeFilterChange()">
-                {{ 'network.SHOW_SYS_PODS' | translate }}
-              </mat-checkbox>
-            </div>
-            <div
-              mat-menu-item
-              class="mat-menu-checkbox"
-              (click)="$event.stopPropagation()">
-              <mat-checkbox
-                formControlName="exitNode"
-                (change)="nodeFilterChange()">
-                {{ 'network.SHOW_EXIT_PODS' | translate }}
-              </mat-checkbox>
-            </div>
-          </form>
+          <div
+            mat-menu-item
+            class="mat-menu-checkbox"
+            (click)="$event.stopPropagation()">
+            <mat-checkbox
+              [formControl]="showSystem"
+              (change)="nodeFilterChange()">
+              {{ 'network.SHOW_SYS_PODS' | translate }}
+            </mat-checkbox>
+          </div>
         </mat-menu>
       </ng-container>
       <app-loading-button

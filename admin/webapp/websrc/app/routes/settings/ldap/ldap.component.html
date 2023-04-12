@@ -8,18 +8,15 @@
   <span>{{ 'ldap.head.GUIDE' | translate }}</span>
 </div>
 <mat-card>
-  <ng-container
-    *appObserve="
-      ldapData$ as ldapData;
-      loading: loadingTemplate;
-      error: errorTemplate
-    ">
+  <ng-container *ngIf="ldapData; else loadingOrError">
     <app-ldap-form [ldapData]="ldapData" (refresh)="refresh()"></app-ldap-form>
   </ng-container>
-  <ng-template #errorTemplate let-error>
-    {{ error | json }}
-  </ng-template>
-  <ng-template #loadingTemplate>
-    <app-loading-template></app-loading-template>
+  <ng-template #loadingOrError>
+    <ng-container *ngIf="ldapError; else loading">
+      Error Message Goes Here
+    </ng-container>
+    <ng-template #loading>
+      <app-loading-template></app-loading-template>
+    </ng-template>
   </ng-template>
 </mat-card>

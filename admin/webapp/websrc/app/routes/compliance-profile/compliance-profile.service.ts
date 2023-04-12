@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { RisksHttpService } from '@common/api/risks-http.service';
-import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of, Subject } from 'rxjs';
 import { catchError, map, repeatWhen, tap } from 'rxjs/operators';
 import { AssetsHttpService } from '@common/api/assets-http.service';
 import {
@@ -22,7 +22,7 @@ export interface DomainResponse extends DomainGetResponse {
 export class ComplianceProfileService {
   private resizeSubject$ = new BehaviorSubject<boolean>(true);
   resize$ = this.resizeSubject$.asObservable();
-  private refreshSubject$ = new BehaviorSubject<boolean>(false);
+  private refreshSubject$ = new Subject();
   lastEntries!: complianceProfileEntries[];
 
   constructor(
@@ -33,7 +33,7 @@ export class ComplianceProfileService {
 
   refresh() {
     setTimeout(() => {
-      this.refreshSubject$.next(false);
+      this.refreshSubject$.next();
     }, 500);
   }
 

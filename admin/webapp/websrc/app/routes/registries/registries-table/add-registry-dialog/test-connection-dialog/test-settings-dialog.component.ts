@@ -29,10 +29,10 @@ import {
 } from 'rxjs/operators';
 import { EMPTY, Subject, Subscription } from 'rxjs';
 import { saveAs } from 'file-saver';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { TestConnectionDialogDetailsCellComponent } from './test-connection-dialog-details-cell/test-connection-dialog-details-cell.component';
 import { TestConnectionDialogTypeCellComponent } from './test-connection-dialog-type-cell/test-connection-dialog-type-cell.component';
+import { FormlyFormOptions } from '@ngx-formly/core';
 
 @Component({
   selector: 'app-test-settings-dialog',
@@ -44,7 +44,13 @@ export class TestSettingsDialogComponent implements OnInit, OnDestroy {
   form = new FormGroup({});
   destroy$ = new Subject();
   model: any = {};
+  gridData: { step_type: string; step_content: string }[] = [];
   fields = cloneDeep(TestRegistryFieldConfig);
+  options: FormlyFormOptions = {
+    formState: {
+      filtersChanged: false,
+    },
+  };
   transactionID!: string;
   refreshSubject$ = new Subject();
   testingSwitch = false;
@@ -52,7 +58,6 @@ export class TestSettingsDialogComponent implements OnInit, OnDestroy {
   savedFilters = [];
   gridOptions!: GridOptions;
   gridApi!: GridApi;
-  timeoutId;
   columnDefs: ColDef[] = [
     {
       field: 'step_type',
@@ -73,7 +78,6 @@ export class TestSettingsDialogComponent implements OnInit, OnDestroy {
     public dialogRef: MatDialogRef<AddRegistryDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: RegistryConfig,
     private registriesService: RegistriesService,
-    private snackBar: MatSnackBar,
     private translate: TranslateService,
     private cd: ChangeDetectorRef
   ) {}
@@ -97,17 +101,6 @@ export class TestSettingsDialogComponent implements OnInit, OnDestroy {
     this.gridApi.sizeColumnsToFit();
   }
 
-  saveFilters(): void {
-    this.savedFilters = this.form.controls.filters.value;
-    this.snackBar.open(
-      this.translate.instant('registry.COPIED'),
-      this.translate.instant('general.CLOSE'),
-      {
-        duration: 3000,
-      }
-    );
-  }
-
   testConnection(): void {
     const config: RegistryConfig = {
       name: this.data.name,
@@ -123,7 +116,8 @@ export class TestSettingsDialogComponent implements OnInit, OnDestroy {
       registry: this.data.registry,
       rescan_after_db_update: this.data.rescan_after_db_update,
     };
-    this.gridApi.setRowData([]);
+    this.gridData = [];
+    this.gridApi.setRowData(this.gridData);
     this.testingSwitch = true;
     this.registriesService
       .testSettings({
@@ -160,7 +154,10 @@ export class TestSettingsDialogComponent implements OnInit, OnDestroy {
         )
       )
       .subscribe({
-        next: (r: any) => this.gridApi.setRowData(r.body.steps),
+        next: (r: any) => {
+          this.gridData = r.body.steps;
+          this.gridApi.setRowData(this.gridData);
+        },
         error: ({ error }: { error: ErrorResponse }) => {
           this.stopTest(error.message);
         },
@@ -168,7 +165,6 @@ export class TestSettingsDialogComponent implements OnInit, OnDestroy {
   }
 
   stopTest(error?: string): void {
-    clearTimeout(this.timeoutId);
     this.destroy$.next(true);
     this.registriesService
       .deleteTestSettings(this.data.name, this.transactionID)
@@ -177,19 +173,18 @@ export class TestSettingsDialogComponent implements OnInit, OnDestroy {
       step_type: 'stopped',
       step_content: error ? error : 'Test was stopped.',
     };
-    const rows = this.getAllRows();
-    rows.push(row);
-    this.gridApi.setRowData(rows);
+    this.gridData = [...this.gridData, row];
+    this.gridApi.setRowData(this.gridData);
     this.testingSwitch = false;
     this.cd.markForCheck();
   }
 
-  onNoClick(): void {
-    this.dialogRef.close(this.savedFilters);
+  onNoClick(saveFilters: boolean = false): void {
+    this.dialogRef.close(saveFilters ? this.form.controls.filters.value : []);
   }
 
   downloadTxt(): void {
-    const blob = new Blob([JSON.stringify(this.getAllRows(), null, '\t')], {
+    const blob = new Blob([JSON.stringify(this.gridData, null, '\t')], {
       type: 'text/plain;charset=utf-8',
     });
     saveAs(blob, 'Registry connection test report.txt');
@@ -198,11 +193,5 @@ export class TestSettingsDialogComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
-  }
-
-  private getAllRows(): any[] {
-    const rowData: any[] = [];
-    this.gridApi.forEachNode((node: any) => rowData.push(node.data));
-    return rowData;
   }
 }

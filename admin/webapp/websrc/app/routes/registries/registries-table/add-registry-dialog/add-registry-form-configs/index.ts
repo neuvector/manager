@@ -3,6 +3,7 @@ import {
   FedRegistryHideExpr,
   FilterField,
   Registries,
+  TestSettingsFilterField,
 } from './constants/constants';
 import { AmazonEcrRegistryConfig } from './configs/amazon-ecr-registry.config';
 import { AzureRegistryConfig } from './configs/azure-container-registry.config';
@@ -54,7 +55,7 @@ export const AddRegistryFieldConfig: FormlyFieldConfig[] = [
         },
         hideExpression: FedRegistryHideExpr,
         expressionProperties: {
-          'templateOptions.disabled': 'model.isEdit || model.isRemote'
+          'templateOptions.disabled': 'model.isEdit || model.isRemote',
         },
       },
     ],
@@ -107,7 +108,7 @@ export const TestRegistryFieldConfig: FormlyFieldConfig[] = [
     fieldGroup: [
       {
         className: 'col-12',
-        ...FilterField,
+        ...TestSettingsFilterField,
       },
     ],
   },

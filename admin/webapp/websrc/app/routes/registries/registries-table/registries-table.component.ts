@@ -172,8 +172,7 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
       columnDefs: this.columnDefs,
       suppressDragLeaveHidesColumns: true,
       rowSelection: 'single',
-      getRowNodeId: data => data.name,
-      deltaRowDataMode: true,
+      getRowId: params => params.data.name,
       onGridReady: event => this.onGridReady(event),
       onSelectionChanged: event => this.onSelectionChanged(event),
       components: {

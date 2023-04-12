@@ -218,7 +218,7 @@ def _list_admission_rule_display_format(rule):
     # attribs = ["category", "comment", "disable"]
     rule["type"] = client.CfgTypeDisplay[rule["cfg_type"]]
     rule["action"] = AdmCtrlRuleTypeDisplay[rule["rule_type"]]
-    attribs = ["comment", "disable"]
+    attribs = ["comment", "disable", "rule_mode"]
     for attrib in attribs:
         if attrib not in rule:
             rule[attrib] = ""
@@ -316,7 +316,7 @@ def show_admission_rule(ctx, data, id, scope):
     rules.append(rule)
     click.echo(" ")
     # columns = ("id", "category", "criteria", "disable", "comment", "type")
-    columns = ("id", "criteria", "disable", "comment", "action", "type")
+    columns = ("id", "criteria", "disable", "rule_mode", "comment", "action", "type")
     output.list(columns, rules)
 
 
@@ -337,7 +337,7 @@ def show_admission_rules(ctx, data, scope):
 
     if len(rules) > 0:
         # columns = ("id", "category", "criteria", "disable", "comment", "type")
-        columns = ("id", "criteria", "disable", "comment", "action", "type")
+        columns = ("id", "criteria", "disable", "rule_mode", "comment", "action", "type")
         output.list(columns, rules)
 
 
@@ -568,9 +568,10 @@ def _parse_adm_criteria(criteria):
 @click.option("--criteria", multiple=True,
               help="Format is name:op:value{/subName:op:value}. name can be allowPrivEscalation, count, cpuLimit, cpuRequest, cveHighCount, cveHighWithFixCount, cveMediumCount, cveNames, cveScoreCount, envVarSecrets, image, imageCompliance, imageNoOS, imageScanned, imageSigned, labels, memoryLimit, memoryRequest, modules, mountVolumes, namespace, pspCompliance, resourceLimit. subName can be publishDays, runAsRoot, shareIpcWithHost, shareNetWithHost, sharePidWithHost, user, userGroups, violatePssPolicy. Format for criteira named customPath is name:op:path:valuetype:value. Format for criteria named saBindRiskyRole is name:op:value. See command: show admission rule options")
 @click.option("--disable/--enable", default=False, help="Disable/enable the admission control rule [default: --enable]")
+@click.option("--mode", default="", type=click.Choice(['','monitor', 'protect']), help="Rule mode, only for deny rules")
 @click.option("--comment", default="", help="Rule comment")
 @click.pass_obj
-def create_admission_rule(data, type, scope, criteria, disable, comment):
+def create_admission_rule(data, type, scope, criteria, disable, mode, comment):
     """Create an admission control rule.\n
        Notice: \n
        For criteria/comment options, you need to use double quote character around the option value, like --criteria \"cveHighCount:>=:2/publishDays:>=:30\" or --criteria \"cveScoreCount:>=:7/count:>=:5\" """
@@ -595,6 +596,7 @@ def create_admission_rule(data, type, scope, criteria, disable, comment):
         rule["cfg_type"] = client.UserCreatedCfg
     rule["rule_type"] = type
     rule["id"] = 0
+    rule["rule_mode"] = mode
     body = dict()
     body["config"] = rule
     # click.echo("Admission control rule object: {}".format(json.dumps(body)))
@@ -660,9 +662,10 @@ def set_admission_state(data, disable, mode, client_mode):
               help="Format is name:op:value{/subName:op:value}. name can be allowPrivEscalation, count, cpuLimit, cpuRequest, cveHighCount, cveHighWithFixCount, cveMediumCount, cveNames, cveScoreCount, envVarSecrets, image, imageCompliance, imageNoOS, imageScanned, imageSigned, labels, memoryLimit, memoryRequest, modules, mountVolumes, namespace, pspCompliance, resourceLimit. subName can be publishDays, runAsRoot, shareIpcWithHost, shareNetWithHost, sharePidWithHost, user, userGroups, violatePssPolicy. Format for criteira named customPath is name:op:path:valuetype:value. Format for criteria named saBindRiskyRole is name:op:value. See command: show admission rule options")
 @click.option("--enable", "state", flag_value='enable', help="Enable the admission control rule")
 @click.option("--disable", "state", flag_value='disable', help="Enable the admission control rule")
+@click.option("--mode", required=False, type=click.Choice(['', 'monitor', 'protect']), help="Rule mode, only for deny rules")
 @click.option("--comment", help="Rule comment")
 @click.pass_obj
-def set_admission_rule(data, id, scope, criteria, state, comment):
+def set_admission_rule(data, id, scope, criteria, state, mode, comment):
     category = None  # Do not allow category yet
     disable = False
     """Configure admission control deny rule.\n
@@ -673,7 +676,7 @@ def set_admission_rule(data, id, scope, criteria, state, comment):
 
     rule = None
     scope = "local"
-    if id > 100000:
+    if id > 100000 and id < 110000:
         scope = "fed"
     rules = get_admission_rules(data, scope)
     for rule_ in rules:
@@ -711,6 +714,9 @@ def set_admission_rule(data, id, scope, criteria, state, comment):
             click.echo("")
             return
         rule["category"] = category
+        modify = True
+    if mode is not None:
+        rule["rule_mode"] = mode
         modify = True
 
     if modify:

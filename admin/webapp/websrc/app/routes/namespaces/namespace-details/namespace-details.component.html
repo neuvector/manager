@@ -1,93 +1,15 @@
-<div class="h-100 overflow-auto">
-  <div class="row w-100 mx-0" *ngIf="namespace">
-    <div class="col-md-4 my-md-4 details-item">
-      <mat-icon
-        aria-hidden="false"
-        aria-label="ID icon"
-        class="details-icon"
-        fontSet="fa"
-        fontIcon="fa-credit-card">
-      </mat-icon>
-      <div class="ml-3 overflow-hidden">
-        {{ 'namespaces.gridHeader.NAME' | translate }}
-        <div class="text-muted text-truncate">
-          {{ namespace.name }}
-        </div>
-      </div>
+<div
+  class="h-100 overflow-auto"
+  *ngIf="namespace.labels && hasObject(namespace.labels)">
+  <div class="my-sm-4">
+    <div class="h4">
+      {{ 'namespaces.detail.LABELS' | translate }}
     </div>
-    <div class="col-md-4 my-md-4 details-item">
-      <mat-icon
-        aria-hidden="false"
-        aria-label="Workloads icon"
-        class="details-icon"
-        fontSet="fa"
-        fontIcon="fa-file-code">
-      </mat-icon>
-      <div class="ml-3 overflow-hidden">
-        {{ 'namespaces.gridHeader.TOTAL_WORKLOAD' | translate }}
-        <div class="text-muted text-truncate">
-          {{ namespace.workloads }}
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4 my-md-4 details-item">
-      <mat-icon
-        aria-hidden="false"
-        aria-label="Running workloads icon"
-        class="details-icon"
-        fontSet="fa"
-        fontIcon="fa-file-code">
-      </mat-icon>
-      <div class="ml-3 overflow-hidden">
-        {{ 'namespaces.detail.RUNNING_WORKLOADS' | translate }}
-        <div class="text-muted text-truncate">
-          {{ namespace.running_workloads }}
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4 my-md-4 details-item">
-      <mat-icon
-        aria-hidden="false"
-        aria-label="Running pods icon"
-        class="details-icon"
-        fontSet="fa"
-        fontIcon="fa-server">
-      </mat-icon>
-      <div class="ml-3 overflow-hidden">
-        {{ 'namespaces.gridHeader.RUNNING_PODS' | translate }}
-        <div class="text-muted text-truncate">
-          {{ namespace.running_pods }}
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4 my-md-4 details-item">
-      <mat-icon
-        aria-hidden="false"
-        aria-label="Service icon"
-        class="details-icon"
-        fontSet="fa"
-        fontIcon="fa-cogs">
-      </mat-icon>
-      <div class="ml-3 overflow-hidden">
-        {{ 'namespaces.gridHeader.SERVICES' | translate }}
-        <div class="text-muted text-truncate">
-          {{ namespace.services }}
-        </div>
+    <div class="row mx-0" *ngFor="let label of labels">
+      <div class="col-sm-4 text-right">{{ label }}</div>
+      <div class="col-sm-8 text-muted">
+        {{ namespace.labels[label] || '&nbsp;' }}
       </div>
     </div>
   </div>
-  <ng-container *ngIf="namespace.labels && hasObject(namespace.labels)">
-    <mat-divider class="position-relative"></mat-divider>
-    <div class="my-sm-4">
-      <div class="h4">
-        {{ 'namespaces.detail.LABELS' | translate }}
-      </div>
-      <div class="row mx-0" *ngFor="let label of labels">
-        <div class="col-sm-4 text-right">{{ label }}</div>
-        <div class="col-sm-8 text-muted">
-          {{ namespace.labels[label] || '&nbsp;' }}
-        </div>
-      </div>
-    </div>
-  </ng-container>
 </div>

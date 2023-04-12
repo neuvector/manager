@@ -25,6 +25,7 @@ export interface RegistryConfig {
   auth_with_token: boolean;
   password?: string;
   username?: string;
+  jfrog_mode?: string;
   gitlab_external_url?: string;
   gitlab_private_token?: string;
   ibm_cloud_account?: string;

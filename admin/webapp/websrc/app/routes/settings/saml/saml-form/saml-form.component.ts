@@ -10,17 +10,16 @@ import {
 import {
   ErrorResponse,
   GroupMappedRole,
-  SAML,
+  SAMLPatch,
   ServerGetResponse,
   ServerPatchBody,
 } from '@common/types';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { SettingsService } from '@services/settings.service';
 import { urlValidator } from '@common/validators';
 import { getCallbackUri } from '../../common/helpers';
 import { NotificationService } from '@services/notification.service';
-import { UtilsService } from '@common/utils/app.utils';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { AuthUtilsService } from '@common/utils/auth.utils';
@@ -42,18 +41,20 @@ export class SamlFormComponent implements OnInit, OnChanges {
   samlForm = new FormGroup({
     sso_url: new FormControl(null, [Validators.required, urlValidator()]),
     issuer: new FormControl(null, [Validators.required, urlValidator()]),
-    x509_cert: new FormControl(null, [Validators.required]),
+    x509_certs: new FormArray([], [Validators.maxLength(4)]),
     group_claim: new FormControl(),
     default_role: new FormControl(''),
     enable: new FormControl(false),
   });
   isWriteSamlAuthorized!: boolean;
+  get x509_certs() {
+    return this.samlForm.get('x509_certs') as FormArray;
+  }
 
   constructor(
     private settingsService: SettingsService,
     private notificationService: NotificationService,
     private authUtilsService: AuthUtilsService,
-    private utils: UtilsService,
     private tr: TranslateService
   ) {}
 
@@ -75,25 +76,33 @@ export class SamlFormComponent implements OnInit, OnChanges {
   }
 
   initForm(): void {
+    this.x509_certs.clear();
     const saml = this.samlData.server.servers.find(
       ({ server_type }) => server_type === 'saml'
     );
     if (saml && saml.saml) {
       this.serverName = saml.server_name;
       this.groupMappedRoles = saml.saml.group_mapped_roles;
+      saml.saml.x509_certs.forEach((x509_cert, idx) => {
+        this.x509_certs.push(
+          new FormControl(
+            x509_cert.x509_cert,
+            idx === 0 ? [Validators.required] : null
+          )
+        );
+      });
       Object.keys(saml.saml).forEach((key: string) => {
-        if (this.samlForm.controls[key]) {
+        if (this.samlForm.controls[key] && key !== 'x509_certs') {
           this.samlForm.controls[key].setValue(
             saml.saml ? saml.saml[key] : null
           );
         }
       });
-      let x509_cert = this.samlForm.get('x509_cert');
-      x509_cert?.clearValidators();
-      x509_cert?.updateValueAndValidity();
-      x509_cert?.markAsPristine();
     } else {
       this.isCreated = false;
+    }
+    if (!this.x509_certs.length) {
+      this.x509_certs.push(new FormControl('', [Validators.required]));
     }
   }
 
@@ -105,13 +114,13 @@ export class SamlFormComponent implements OnInit, OnChanges {
     if (!this.samlForm.valid) {
       return;
     }
-    const saml: SAML = {
+    const { x509_certs, ...samlForm } = this.samlForm.value;
+    const saml: SAMLPatch = {
       group_mapped_roles: this.groupMappedRoles,
-      ...this.samlForm.value,
+      x509_cert: x509_certs[0],
+      x509_cert_extra: x509_certs.slice(1).filter(cert => cert),
+      ...samlForm,
     };
-    if (!this.samlForm.get('x509_cert')?.dirty) {
-      saml.x509_cert = null as any;
-    }
     const config: ServerPatchBody = { config: { name: this.serverName, saml } };
     this.submittingForm = true;
     let submission: Observable<unknown>;
@@ -120,19 +129,20 @@ export class SamlFormComponent implements OnInit, OnChanges {
         finalize(() => {
           this.submittingForm = false;
           this.isCreated = true;
+          this.refresh.emit();
         })
       );
     } else {
       submission = this.settingsService.patchServer(config).pipe(
         finalize(() => {
           this.submittingForm = false;
+          this.samlForm.reset(this.samlForm.getRawValue());
         })
       );
     }
     submission.subscribe({
       complete: () => {
         this.notificationService.open(this.tr.instant('ldap.SERVER_SAVED'));
-        this.refresh.emit();
       },
       error: ({ error }: { error: ErrorResponse }) => {
         this.notificationService.openError(
@@ -141,5 +151,13 @@ export class SamlFormComponent implements OnInit, OnChanges {
         );
       },
     });
+  }
+
+  addExtraCert() {
+    this.x509_certs.push(new FormControl(''));
+  }
+
+  removeExtraCert(index: number) {
+    this.x509_certs.removeAt(index);
   }
 }

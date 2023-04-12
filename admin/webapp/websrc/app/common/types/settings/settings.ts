@@ -79,6 +79,14 @@ export interface LDAP {
   username_attr: string;
 }
 
+export interface SAMLGetResponse extends SAML {
+  x509_certs: X509Cert[];
+}
+
+export interface SAMLPatch extends SAML {
+  x509_cert_extra: string[];
+}
+
 export interface SAML {
   sso_url: string;
   issuer: string;
@@ -87,6 +95,13 @@ export interface SAML {
   default_role: string;
   group_mapped_roles: GroupMappedRole[];
   enable: boolean;
+}
+
+export interface X509Cert {
+  x509_cert: string;
+  issuer_cn: string;
+  subject_cn: string;
+  subject_notafter: number;
 }
 
 export interface OPENID {
@@ -107,7 +122,7 @@ export interface Server {
   server_type: string;
   server_name: string;
   ldap?: LDAP;
-  saml?: SAML;
+  saml?: SAMLGetResponse;
   oidc?: OPENID;
 }
 
@@ -126,7 +141,7 @@ export interface ServerPatchBody {
   config: {
     name: string;
     ldap?: LDAP;
-    saml?: SAML;
+    saml?: SAMLPatch;
     oidc?: OPENID;
   };
 }

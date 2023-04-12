@@ -27,7 +27,7 @@ export class ScoreImprovementAdmissionControlStatusViewComponent
   }
 
   getPredictionScores() {
-    const metrics = this.scoreImprovementModalService.newMetrics();
+    const metrics = JSON.parse(JSON.stringify(this.scoreImprovementModalService.newMetrics()))
     metrics.deny_adm_ctrl_rules = 1;
     this.scoreImprovementModalService
       .calculateScoreData(

@@ -1,5 +1,12 @@
 import { DatePipe } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { UtilsService } from '@common/utils/app.utils';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
@@ -21,6 +28,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { ContainersGridNameCellComponent } from './containers-grid-name-cell/containers-grid-name-cell.component';
 import { ContainersGridStateCellComponent } from './containers-grid-state-cell/containers-grid-state-cell.component';
 import { ContainersGridStatusCellComponent } from './containers-grid-status-cell/containers-grid-status-cell.component';
+import { QuickFilterComponent } from '@components/quick-filter/quick-filter.component';
 
 @Component({
   selector: 'app-containers-grid',
@@ -38,6 +46,7 @@ export class ContainersGridComponent implements OnInit {
   @Input() isMemberData: boolean = false;
   @Input() source!: string;
   @Output() scan = new EventEmitter<WorkloadRow>();
+  @ViewChild(QuickFilterComponent) quickFilter!: QuickFilterComponent;
   gridOptions!: GridOptions;
   gridApi!: GridApi;
   columnDefs!: ColDef[];
@@ -267,6 +276,7 @@ export class ContainersGridComponent implements OnInit {
         : event.api.getDisplayedRowAtIndex(0);
     node?.setSelected(true);
     this.gridApi.ensureNodeVisible(node, 'middle');
+    this.quickFilter?.onFilterChange(this.quickFilter.filter.value);
   }
 
   postSort(nodes: RowNode[]): void {

@@ -936,11 +936,11 @@
     "gridHeader": {
       "NAME": "主机",
       "TOTAL_WORKLOAD": "总容器数",
+      "RUNNING_WORKLOADS": "正在运行的容器数",
       "RUNNING_PODS": "正在运行的POD数",
       "SERVICES": "服务"
     },
     "detail": {
-      "RUNNING_WORKLOADS": "正在运行的容器数",
       "LABELS": "详细信息"
     }
   },
@@ -2456,6 +2456,7 @@
     "DENY_RULES": "拒绝规则",
     "EXCEPTION_RULES": "例外规则",
     "MODE": "模式",
+    "NO_MODE": "使用全局模式",
     "CLIENT_MODE": "客户端模式",
     "SERVICE": "服务",
     "URL": "URL",
@@ -3048,6 +3049,8 @@
     "IDP_URL": "身份提供者单点登录网址",
     "IDP_ISSUER": "身份提供者",
     "CERTIFICATE": "X.509证书",
+    "ADD_EXTRA_CERT": "添加额外的X.509证书",
+    "EXTRA_CERT": "额外的X.509证书",
     "INVALID_URL": "请输入有效的网址.",
     "GROUP_CLAIM": "组别声明",
     "ADMIN_HINT": "添加SAML组到管理员",

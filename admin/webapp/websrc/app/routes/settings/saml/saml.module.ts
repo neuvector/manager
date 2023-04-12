@@ -14,6 +14,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { SettingsService } from '@services/settings.service';
+import { MatIconModule } from '@angular/material/icon';
+import { LoadingTemplateModule } from '@components/ui/loading-template/loading-template.module';
 
 const routes: Routes = [
   { path: '', component: SamlComponent },
@@ -31,10 +33,12 @@ const routes: Routes = [
     MatInputModule,
     MatCheckboxModule,
     MatButtonModule,
+    MatIconModule,
     MatCardModule,
     MatSelectModule,
     ClipboardModule,
     GroupDomainRoleModule,
+    LoadingTemplateModule,
   ],
   providers: [SettingsService],
 })

@@ -19,8 +19,15 @@ import {
   GridReadyEvent,
 } from 'ag-grid-community';
 import { RegistriesService } from '@services/registries.service';
-import { mergeMap, repeatWhen, takeUntil, tap } from 'rxjs/operators';
-import { Subject, Subscription } from 'rxjs';
+import {
+  delay,
+  expand,
+  finalize,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
+import { EMPTY, Subject, Subscription } from 'rxjs';
 import { saveAs } from 'file-saver';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
@@ -102,47 +109,53 @@ export class TestSettingsDialogComponent implements OnInit, OnDestroy {
   }
 
   testConnection(): void {
+    const config: RegistryConfig = {
+      name: this.data.name,
+      registry_type: this.data.registry_type,
+      filters: this.form.controls.filters.value,
+      username: this.data.username,
+      password: this.data.password,
+      jfrog_mode: this.data.jfrog_mode,
+      auth_token: this.data.auth_token,
+      auth_with_token: this.data.auth_with_token,
+      scan_layers: this.data.scan_layers,
+      schedule: this.data.schedule,
+      registry: this.data.registry,
+      rescan_after_db_update: this.data.rescan_after_db_update,
+    };
     this.gridApi.setRowData([]);
     this.testingSwitch = true;
     this.registriesService
       .testSettings({
-        config: {
-          name: this.data.name,
-          registry_type: this.data.registry_type,
-          filters: this.form.controls.filters.value,
-          username: this.data.username,
-          auth_token: this.data.auth_token,
-          auth_with_token: this.data.auth_with_token,
-          registry: this.data.registry,
-        },
+        config,
       })
       .pipe(
         takeUntil(this.destroy$),
         tap((r: any) => {
           this.transactionID = r.headers.get('X-Transaction-Id');
         }),
-        mergeMap(() =>
+        switchMap(() =>
           this.registriesService
             .testSettings(
               {
-                config: {
-                  name: this.data.name,
-                  registry_type: this.data.registry_type,
-                  filters: this.form.controls.filters.value,
-                  username: this.data.username,
-                  auth_token: this.data.auth_token,
-                  auth_with_token: this.data.auth_with_token,
-                  registry: this.data.registry,
-                },
+                config,
               },
               this.transactionID
             )
             .pipe(
-              takeUntil(this.destroy$),
-              tap((r: any) => {
-                this.test(r.status === 206);
-              }),
-              repeatWhen(() => this.refreshSubject$)
+              expand((r: any) =>
+                r.status === 206
+                  ? this.registriesService
+                      .testSettings(
+                        {
+                          config,
+                        },
+                        this.transactionID
+                      )
+                      .pipe(delay(1000))
+                  : EMPTY.pipe(finalize(() => (this.testingSwitch = false)))
+              ),
+              takeUntil(this.destroy$)
             )
         )
       )
@@ -152,17 +165,6 @@ export class TestSettingsDialogComponent implements OnInit, OnDestroy {
           this.stopTest(error.message);
         },
       });
-  }
-
-  test(isScanning: boolean): void {
-    if (isScanning) {
-      this.testingSwitch = true;
-      this.timeoutId = setTimeout(() => {
-        this.refreshSubject$.next(true);
-      }, 500);
-    } else {
-      this.testingSwitch = false;
-    }
   }
 
   stopTest(error?: string): void {

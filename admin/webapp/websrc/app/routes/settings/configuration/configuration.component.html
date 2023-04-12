@@ -8,9 +8,7 @@
 </div>
 <ng-container *ngIf="config; else loadingTemplate">
   <mat-card>
-    <app-config-form
-      [config]="config"
-      (refreshConfig)="refreshConfig()"></app-config-form>
+    <app-config-form [config]="config"></app-config-form>
   </mat-card>
   <br />
   <mat-card *ngIf="isConfigAuthorized || isImportAuthorized">

@@ -52,6 +52,11 @@ export class ResponseRulesService {
         maxWidth: 120,
       },
       {
+        headerName: this.translate.instant('admissionControl.COMMENT'),
+        field: 'comment',
+        width: 200,
+      },
+      {
         headerName: this.translate.instant('responsePolicy.gridHeader.GROUP'),
         field: 'group',
         width: 200,
@@ -296,7 +301,7 @@ export class ResponseRulesService {
           rules: [
             {
               event: responseRule.event,
-              // comment: Option[String],
+              comment: responseRule.comment,
               group: responseRule.group || '',
               conditions: this.parseConditions(responseRule.criteria),
               actions: this.filterSelectedOptions(
@@ -323,7 +328,7 @@ export class ResponseRulesService {
           config: {
             id: responseRule.id,
             event: responseRule.event,
-            // comment: Option[String],
+            comment: responseRule.comment,
             group: responseRule.group || '',
             conditions: this.parseConditions(responseRule.criteria),
             actions: this.filterSelectedOptions(

@@ -32,6 +32,7 @@ export class MapConstant {
     write_response_rule: ['rt_policy_w'],
     write_dlp_rule: ['rt_policy_w'],
     write_waf_rule: ['rt_policy_w'],
+    read_compliance_profile: ['compliance_r', 'compliance_w'],
     write_compliance_profile: ['compliance_w'],
     review_rule: ['rt_policy_w', 'rt_policy_r'],
     update_rule: ['rt_policy_w'],
@@ -140,15 +141,15 @@ export class MapConstant {
     FED: 'fed-rule',
     USER_CREATED: 'customer-rule',
     FEDERAL: 'fed-rule',
-    SYSTEM_DEFINED: "predefined",
-    'learned': 'learn-rule',
-    'user_created': 'customer-rule',
+    SYSTEM_DEFINED: 'predefined',
+    learned: 'learn-rule',
+    user_created: 'customer-rule',
     'new-rule': 'new-rule',
     'modified-rule': 'modified-rule',
     'disabled-rule': 'disabled-rule',
-    'ground': 'ground-rule',
+    ground: 'ground-rule',
     'removed-rule': 'removed-rule',
-    'federal': 'fed-rule',
+    federal: 'fed-rule',
     'readonly-rule': 'readonly-rule',
     'moved-rule': 'moved-rule',
     modify: 'modify-permission',
@@ -246,7 +247,7 @@ export class MapConstant {
   public static ALERTIFY_SUCCEED_DELAY = 4000;
   public static ALERTIFY_ERROR_DELAY = 10000;
   public static REPORT_TABLE_ROW_LIMIT = 60000;
-  public static SEC_RISK_REPORT_MAX_ROW =500;
+  public static SEC_RISK_REPORT_MAX_ROW = 500;
   public static SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW = 200;
   public static SEC_RISK_REPORT_MAX_DISPLAY_VERSION = 3;
 

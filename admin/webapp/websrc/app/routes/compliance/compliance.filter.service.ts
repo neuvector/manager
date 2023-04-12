@@ -198,13 +198,15 @@ export class ComplianceFilterService {
     const advFilter = this._advFilter;
     if (advFilter.selectedDomains.length) {
       const container = this.workloadMap.get(workload.id);
-      const nsNames = advFilter.selectedDomains.map(
-        (selectedDomain: any) => selectedDomain.name
-      );
       if (container && container.domain) {
         if (advFilter.matchType4Ns.id === 'contains')
-          return new RegExp(nsNames.join('|')).test(container.domain);
-        else return nsNames.some(item => container.domain === item);
+          return new RegExp(advFilter.selectedDomains.join('|')).test(
+            container.domain
+          );
+        else
+          return advFilter.selectedDomains.some(
+            item => container.domain === item
+          );
       } else return false;
     } else return true;
   }

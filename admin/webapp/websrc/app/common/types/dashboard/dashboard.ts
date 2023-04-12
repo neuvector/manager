@@ -1,9 +1,10 @@
 import { RiskType } from './enum';
 
 export interface RbacStatus {
-  clusterrole_errors: Array<string>;
-  clusterrolebinding_errors: Array<string>;
-  rolebinding_errors: Array<string>;
+  clusterrole_errors: string[];
+  clusterrolebinding_errors: string[];
+  rolebinding_errors: string[];
+  role_errors: string[];
 }
 
 export interface Score {
@@ -71,16 +72,16 @@ export interface Exposure {
   severity: string;
   policy_mode: string;
   policy_action: string;
-  protocols?: Array<string>;
-  applications?: Array<string>;
-  ports?: Array<number>;
+  protocols?: string[];
+  applications?: string[];
+  ports?: number[];
 }
 
 export interface InternalSystemInfo {
   header_data: Metrics;
   score: Score;
-  egress: Array<Exposure>;
-  ingress: Array<Exposure>;
+  egress: Exposure[];
+  ingress: Exposure[];
 }
 
 export interface Factor {
@@ -91,8 +92,8 @@ export interface Factor {
 
 export interface RiskFactor {
   factorTitle: string;
-  factors: Array<Factor>;
-  factorComment?: Array<string>;
+  factors: Factor[];
+  factorComment?: string[];
   subScore: any;
   isFactorError: boolean;
   factorErrorMessage?: string;
@@ -110,11 +111,11 @@ export interface ExposedContainer {
   display_name: string;
   name: string;
   pod_name: string;
-  applications: Array<string>;
+  applications: string[];
   policy_action: string;
   policy_mode: string;
-  ports: Array<string>;
-  protocols: Array<string>;
+  ports: string[];
+  protocols: string[];
   service: string;
   severity: string;
 }
@@ -131,7 +132,7 @@ export interface HierarchicalExposure {
   policy_action: string;
   event_type: string;
   protocols: string;
-  applications: Array<string>;
-  ports: Array<number>;
-  children: Array<ExposedContainer>;
+  applications: string[];
+  ports: number[];
+  children: ExposedContainer[];
 }

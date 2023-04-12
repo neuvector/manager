@@ -20,8 +20,7 @@
         <input
           formControlName="sso_url"
           matInput
-          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-        />
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
         <mat-error *ngIf="samlForm.controls.sso_url.hasError('required')">
           {{ 'general.REQUIRED' | translate }}
         </mat-error>
@@ -37,8 +36,7 @@
         <input
           formControlName="issuer"
           matInput
-          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-        />
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
         <mat-error *ngIf="samlForm.controls.issuer.hasError('required')">
           {{ 'general.REQUIRED' | translate }}
         </mat-error>
@@ -47,22 +45,49 @@
         </mat-error>
       </mat-form-field>
     </div>
-    <div class="col-12 d-flex align-items-center">
-      <i class="eos-icons mr-3 text-primary">verified</i>
-      <mat-form-field
-        appearance="standard"
-        class="w-100"
-        [floatLabel]="isCreated ? 'always' : 'auto'">
-        <mat-label>{{ 'okta.CERTIFICATE' | translate }}</mat-label>
-        <textarea
-          cdkTextareaAutosize
-          formControlName="x509_cert"
-          placeholder="{{ isCreated ? '********************' : '' }}"
-          matInput></textarea>
-        <mat-error *ngIf="samlForm.controls.x509_cert.hasError('required')">
-          {{ 'general.REQUIRED' | translate }}
-        </mat-error>
-      </mat-form-field>
+    <ng-container formArrayName="x509_certs">
+      <div
+        *ngFor="let _ of x509_certs.controls; let i = index"
+        class="col-12 d-flex align-items-center">
+        <ng-container *ngIf="i === 0; else extraCertTemplate">
+          <i class="eos-icons mr-3 text-primary">verified</i>
+          <mat-form-field appearance="standard" class="w-100">
+            <mat-label>{{ 'okta.CERTIFICATE' | translate }}</mat-label>
+            <textarea
+              cdkTextareaAutosize
+              [formControlName]="i"
+              matInput></textarea>
+            <mat-error *ngIf="x509_certs.controls[0].hasError('required')">
+              {{ 'general.REQUIRED' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </ng-container>
+        <ng-template #extraCertTemplate>
+          <i class="eos-icons mr-3 text-primary invisible">verified</i>
+          <mat-form-field appearance="standard" class="w-100">
+            <mat-label>{{ 'okta.EXTRA_CERT' | translate }}</mat-label>
+            <textarea
+              cdkTextareaAutosize
+              [formControlName]="i"
+              matInput></textarea>
+          </mat-form-field>
+          <button
+            (click)="removeExtraCert(i)"
+            aria-label="Remove extra X509_cert"
+            type="button"
+            mat-icon-button>
+            <mat-icon>delete_forever</mat-icon>
+          </button>
+        </ng-template>
+      </div>
+    </ng-container>
+    <div
+      class="col-12 d-flex align-items-center"
+      *ngIf="x509_certs.length <= 3">
+      <button (click)="addExtraCert()" type="button" mat-stroked-button>
+        <i class="eos-icons mr-2 icon-16">add_circle</i>
+        {{ 'okta.ADD_EXTRA_CERT' | translate }}
+      </button>
     </div>
     <div class="col-12 d-flex align-items-center">
       <i class="eos-icons mr-3 text-primary">groups</i>
@@ -71,8 +96,7 @@
         <input
           formControlName="group_claim"
           matInput
-          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-        />
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
       </mat-form-field>
     </div>
   </div>

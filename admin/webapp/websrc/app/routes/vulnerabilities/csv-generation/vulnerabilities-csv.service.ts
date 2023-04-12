@@ -156,14 +156,14 @@ export class VulnerabilitiesCsvService {
       let rows: any = [];
       for (let i = 0; i < maxRow4Entry; i++) {
         rows.push({
-          description: i === 0 ? entryData.description : '',
-          link: i === 0 ? entryData.link : '',
           name: i === 0 ? entryData.name : '',
+          link: i === 0 ? entryData.link : '',
           severity: i === 0 ? entryData.severity : '',
           score: i === 0 ? entryData.score : '',
           score_v3: i === 0 ? entryData.score_v3 : '',
           vectors: i === 0 ? entryData.vectors : '',
           vectors_v3: i === 0 ? entryData.vectors_v3 : '',
+          description: i === 0 ? entryData.description : '',
           platforms: i > platformList.length - 1 ? '' : platformList[i],
           nodes: i > (nodeList?.length || 0) - 1 ? '' : nodeList[i],
           domains: i > (domainList?.length || 0) - 1 ? '' : domainList[i],
@@ -204,15 +204,20 @@ export class VulnerabilitiesCsvService {
       let rows: any = [];
       for (let i = 0; i < maxRow4Entry; i++) {
         rows.push({
-          description: i === 0 ? entryData.description : '',
-          link: i === 0 ? entryData.link : '',
           name: i === 0 ? entryData.name : '',
+          link: i === 0 ? entryData.link : '',
           severity: i === 0 ? entryData.severity : '',
           score: i === 0 ? entryData.score : '',
           score_v3: i === 0 ? entryData.score_v3 : '',
           vectors: i === 0 ? entryData.vectors : '',
           vectors_v3: i === 0 ? entryData.vectors_v3 : '',
-          platforms: i === 0 ? entryData.platforms.map(platform => platform.display_name).join(' ') : '',
+          description: i === 0 ? entryData.description : '',
+          platforms:
+            i === 0
+              ? entryData.platforms
+                  .map(platform => platform.display_name)
+                  .join(' ')
+              : '',
           nodes: i === 0 ? entryData.nodes : '',
           domains:
             entryData.domains.length > MapConstant.EXCEL_CELL_LIMIT * (i + 1)

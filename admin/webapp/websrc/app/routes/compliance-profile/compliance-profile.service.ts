@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { RisksHttpService } from '@common/api/risks-http.service';
-import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of, Subject } from 'rxjs';
 import { catchError, map, repeatWhen, tap } from 'rxjs/operators';
 import { AssetsHttpService } from '@common/api/assets-http.service';
 import {
@@ -10,6 +10,7 @@ import {
   DomainGetResponse,
 } from '@common/types';
 import { MapConstant } from '@common/constants/map.constant';
+import { AuthUtilsService } from '@common/utils/auth.utils';
 
 export interface DomainResponse extends DomainGetResponse {
   imageTags: string[];
@@ -21,17 +22,18 @@ export interface DomainResponse extends DomainGetResponse {
 export class ComplianceProfileService {
   private resizeSubject$ = new BehaviorSubject<boolean>(true);
   resize$ = this.resizeSubject$.asObservable();
-  private refreshSubject$ = new BehaviorSubject<boolean>(false);
+  private refreshSubject$ = new Subject();
   lastEntries!: complianceProfileEntries[];
 
   constructor(
     private risksHttpService: RisksHttpService,
-    private assetsHttpService: AssetsHttpService
+    private assetsHttpService: AssetsHttpService,
+    private authUtils: AuthUtilsService
   ) {}
 
   refresh() {
     setTimeout(() => {
-      this.refreshSubject$.next(false);
+      this.refreshSubject$.next();
     }, 500);
   }
 
@@ -82,19 +84,23 @@ export class ComplianceProfileService {
   }
 
   private getTemplate(): Observable<ComplianceProfileTemplateData> {
-    return this.risksHttpService.getComplianceProfileTemplate().pipe(
-      catchError(err => {
-        if (
-          [MapConstant.NOT_FOUND, MapConstant.ACC_FORBIDDEN].includes(
-            err.status
-          )
-        ) {
-          return of({ list: { compliance: [] } });
-        } else {
-          throw err;
-        }
-      })
-    );
+    if (!this.authUtils.getDisplayFlag('read_compliance_profile')) {
+      return of({ list: { compliance: [] } });
+    } else {
+      return this.risksHttpService.getComplianceProfileTemplate().pipe(
+        catchError(err => {
+          if (
+            [MapConstant.NOT_FOUND, MapConstant.ACC_FORBIDDEN].includes(
+              err.status
+            )
+          ) {
+            return of({ list: { compliance: [] } });
+          } else {
+            throw err;
+          }
+        })
+      );
+    }
   }
 
   private getProfile(): Observable<ComplianceProfileData> {

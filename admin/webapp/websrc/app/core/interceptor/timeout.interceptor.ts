@@ -25,7 +25,7 @@ export class TimeoutInterceptor implements HttpInterceptor {
     private auth: AuthService,
     private dialog: MatDialog,
     @Inject(LOCAL_STORAGE) private localStorage: StorageService,
-    @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
+    @Inject(SESSION_STORAGE) private sessionStorage: StorageService
   ) {
     this.location = location;
   }
@@ -39,23 +39,30 @@ export class TimeoutInterceptor implements HttpInterceptor {
           // console.log('normal:', event);
         },
         error => {
-          console.error(error);
+          console.error(error, this.location.path());
           let status: number = error.status;
           let currentPath: string = this.location.path();
           if (
             status === GlobalConstant.STATUS_AUTH_TIMEOUT ||
             status === GlobalConstant.STATUS_UNAUTH ||
-            ( status === GlobalConstant.STATUS_SERVER_UNAVAILABLE &&
-              currentPath !== GlobalConstant.PATH_LOGIN ) ||
+            (status === GlobalConstant.STATUS_SERVER_UNAVAILABLE &&
+              currentPath !== GlobalConstant.PATH_LOGIN &&
+              currentPath !== GlobalConstant.PATH_MULTICLUSTER) ||
             req.url === PathConstant.TOKEN_AUTH ||
             req.url === PathConstant.SELF_URL
           ) {
-            this.localStorage.set(GlobalConstant.SESSION_STORAGE_ORIGINAL_URL, currentPath);
+            this.localStorage.set(
+              GlobalConstant.SESSION_STORAGE_ORIGINAL_URL,
+              currentPath
+            );
             this.dialog.closeAll();
             if (error.error.code === 51) {
               this.auth.logout(false, true);
             } else {
-              this.sessionStorage.set(GlobalConstant.SESSION_STORAGE_TIMEOUT, true);
+              this.sessionStorage.set(
+                GlobalConstant.SESSION_STORAGE_TIMEOUT,
+                true
+              );
               this.auth.timeout(currentPath);
             }
           }

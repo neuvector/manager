@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { UtilsService } from '@common/utils/app.utils';
@@ -6,18 +6,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { PromotionModalComponent } from './promotion-modal/promotion-modal.component';
 import { JoiningModalComponent } from './joining-modal/joining-modal.component';
 import { GlobalVariable } from '@common/variables/global.variable';
-import {
-  Cluster,
-  ClusterData,
-  ClusterSummary,
-  ErrorResponse,
-} from '@common/types';
+import { ClusterData, ClusterSummary } from '@common/types';
 import { TranslateService } from '@ngx-translate/core';
 import { MapConstant } from '@common/constants/map.constant';
 import { finalize } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import {MultiClusterGridComponent} from "@components/multi-cluster-grid/multi-cluster-grid.component";
+import { MultiClusterGridComponent } from '@components/multi-cluster-grid/multi-cluster-grid.component';
 
 @Component({
   selector: 'app-multi-cluster',
@@ -47,8 +42,6 @@ export class MultiClusterComponent implements OnInit {
   public clusterData!: ClusterData;
   public useProxy: string = '';
   public columns: number = 2;
-  private workerCount: number = 0;
-  private clusterCount: number = 0;
   private switchClusterSubscription;
   private refreshClusterSubscription;
   refreshing$ = new Subject();
@@ -57,10 +50,9 @@ export class MultiClusterComponent implements OnInit {
 
   @ViewChild(MultiClusterGridComponent) set multiClusterGrid(
     grid: MultiClusterGridComponent
-  ){
+  ) {
     this._clusterGrid = grid;
   }
-
 
   constructor(
     public dialog: MatDialog,
@@ -89,9 +81,10 @@ export class MultiClusterComponent implements OnInit {
       this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
         this.router.navigate(['dashboard']);
       });
-    this.refreshClusterSubscription = this.multiClusterService.onRefreshClustersEvent$.subscribe( data => {
-      this.pageInit();
-    });
+    this.refreshClusterSubscription =
+      this.multiClusterService.onRefreshClustersEvent$.subscribe(data => {
+        this.pageInit();
+      });
   }
 
   ngOnDestroy(): void {
@@ -109,41 +102,12 @@ export class MultiClusterComponent implements OnInit {
     this.isStandalone = fedData.fed_role.length === 0;
     this.isFederal = fedData.fed_role.length > 0;
     this.clusterData = fedData;
-    if(this._clusterGrid && this._clusterGrid.gridApi){
+    if (this._clusterGrid && this._clusterGrid.gridApi) {
       this._clusterGrid.gridApi.setRowData(this.clusterData.clusters!);
       this._clusterGrid.gridApi.getDisplayedRowAtIndex(0)?.setSelected(true);
-      setTimeout(()=>{
+      setTimeout(() => {
         this._clusterGrid.updateSummaryForRows();
-      },500);
-    }
-
-    this.clusterCount = this.clusterData.clusters
-      ? this.clusterData.clusters.length
-      : 0;
-    //get the web worker number (up to 10)
-    this.workerCount = this.clusterCount < 10 ? this.clusterCount : 10;
-
-    if (this.clusterCount > 0) {
-      this.getSummaries(this.clusterData);
-    }
-
-  }
-
-  getSummaries(clusters: ClusterData) {
-    for (let index in clusters.clusters) {
-      this.getSummary();
-    }
-  }
-
-  getSummary(id?: String) {
-    if (id) {
-      this.multiClusterService
-        .getRemoteSummary(id)
-        .subscribe((summary: any) => {
-        });
-    } else {
-      this.multiClusterService.getLocalSummary().subscribe((summary: any) => {
-      });
+      }, 500);
     }
   }
 
@@ -168,7 +132,7 @@ export class MultiClusterComponent implements OnInit {
           } else {
             this.clusterError = true;
           }
-          if(!this.loaded) this.loaded = true;
+          if (!this.loaded) this.loaded = true;
         },
         error: error => {
           this.error = error.message;

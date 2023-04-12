@@ -1220,6 +1220,16 @@ ngx-avatar.userIcon img.avatar-content {
 .label-warning {
   background-color: $mdc-orange-700;
 }
+#multi-clusters-grid .label-warning {
+  color: #fff;
+  background-color: $mdc-orange-700;
+  border-radius: 4px;
+  font-size: 0.8em;
+  line-height: 1.5;
+  font-weight: 700;
+  margin-left: 8px;
+  padding: 5px 8px;
+}
 
 .label-primary {
   background-color: $neuvector-mid-green-700;

@@ -1284,6 +1284,7 @@
     "STOP_TEST": "Stop test",
     "VIEW_TEST": "View test",
     "BACK": "Back",
+    "BACK_COPY_FILTER": "Back and accept new filters",
     "COPY_FILTER": "Replace filters",
     "COPIED": "Filters were replaced.",
     "TEST_FILTER": "Tested filters",

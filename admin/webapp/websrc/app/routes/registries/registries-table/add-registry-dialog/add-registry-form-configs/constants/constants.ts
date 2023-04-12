@@ -2,6 +2,7 @@ import {
   FormlyComponents,
   FormlyValidators,
 } from '@common/neuvector-formly/neuvector-formly.module';
+import { FormlyFieldConfig } from '@ngx-formly/core';
 
 const min = 60;
 const hour = min * 60;
@@ -249,6 +250,27 @@ export const FilterField = {
     label: 'registry.gridHeader.FILTER',
     editTitle: 'registry.EDIT_FILTER',
     placeholder: 'general.FILTER',
+  },
+};
+
+export const TestSettingsFilterField = {
+  key: 'filters',
+  defaultValue: [],
+  type: FormlyComponents.CHIP_INPUT,
+  templateOptions: {
+    hint: 'registry.FILTER_HINT',
+    alwaysHint: true,
+    required: true,
+    label: 'registry.gridHeader.FILTER',
+    editTitle: 'registry.EDIT_FILTER',
+    placeholder: 'general.FILTER',
+  },
+  hooks: {
+    onInit: field => {
+      field.formControl.valueChanges.subscribe(
+        _ => (field.options.formState.filtersChanged = true)
+      );
+    },
   },
 };
 

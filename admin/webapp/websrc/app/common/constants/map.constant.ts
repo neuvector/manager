@@ -32,7 +32,7 @@ export class MapConstant {
     write_response_rule: ['rt_policy_w'],
     write_dlp_rule: ['rt_policy_w'],
     write_waf_rule: ['rt_policy_w'],
-    read_compliance_profile: ['compliance_r'],
+    read_compliance_profile: ['compliance_r', 'compliance_w'],
     write_compliance_profile: ['compliance_w'],
     review_rule: ['rt_policy_w', 'rt_policy_r'],
     update_rule: ['rt_policy_w'],

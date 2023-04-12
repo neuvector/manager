@@ -19,8 +19,15 @@ import {
   GridReadyEvent,
 } from 'ag-grid-community';
 import { RegistriesService } from '@services/registries.service';
-import { mergeMap, repeatWhen, takeUntil, tap } from 'rxjs/operators';
-import { Subject, Subscription } from 'rxjs';
+import {
+  delay,
+  expand,
+  finalize,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
+import { EMPTY, Subject, Subscription } from 'rxjs';
 import { saveAs } from 'file-saver';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
@@ -127,7 +134,7 @@ export class TestSettingsDialogComponent implements OnInit, OnDestroy {
         tap((r: any) => {
           this.transactionID = r.headers.get('X-Transaction-Id');
         }),
-        mergeMap(() =>
+        switchMap(() =>
           this.registriesService
             .testSettings(
               {
@@ -136,11 +143,19 @@ export class TestSettingsDialogComponent implements OnInit, OnDestroy {
               this.transactionID
             )
             .pipe(
-              takeUntil(this.destroy$),
-              tap((r: any) => {
-                this.test(r.status === 206);
-              }),
-              repeatWhen(() => this.refreshSubject$)
+              expand((r: any) =>
+                r.status === 206
+                  ? this.registriesService
+                      .testSettings(
+                        {
+                          config,
+                        },
+                        this.transactionID
+                      )
+                      .pipe(delay(1000))
+                  : EMPTY.pipe(finalize(() => (this.testingSwitch = false)))
+              ),
+              takeUntil(this.destroy$)
             )
         )
       )
@@ -150,17 +165,6 @@ export class TestSettingsDialogComponent implements OnInit, OnDestroy {
           this.stopTest(error.message);
         },
       });
-  }
-
-  test(isScanning: boolean): void {
-    if (isScanning) {
-      this.testingSwitch = true;
-      this.timeoutId = setTimeout(() => {
-        this.refreshSubject$.next(true);
-      }, 500);
-    } else {
-      this.testingSwitch = false;
-    }
   }
 
   stopTest(error?: string): void {

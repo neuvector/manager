@@ -1,16 +1,11 @@
-<div class="d-flex align-items-center justify-content-between">
+<div class="d-flex align-items-center justify-content-start">
   <h1 mat-dialog-title>{{ 'registry.TEST_REPO' | translate }}</h1>
-  <button
-    (click)="saveFilters()"
-    class="mr-1"
-    color="primary"
-    id="test-connection-copy-filters-button"
-    mat-raised-button
-    type="button">
-    {{ 'registry.COPY_FILTER' | translate }}
-  </button>
 </div>
-<formly-form [fields]="fields" [form]="form" [model]="model"></formly-form>
+<formly-form
+  [fields]="fields"
+  [form]="form"
+  [model]="model"
+  [options]="options"></formly-form>
 <div class="mt-4" style="height: 4px">
   <mat-progress-bar
     *ngIf="testingSwitch"
@@ -24,11 +19,12 @@
 <div class="d-flex justify-content-between align-items-center">
   <button
     (click)="downloadTxt()"
+    [disabled]="testingSwitch || !gridData.length"
     class="d-flex justify-content-center align-items-center"
     mat-button>
-    <i class="eos-icons" id="test-connection-download-text-button"
-      >description</i
-    >
+    <i class="eos-icons" id="test-connection-download-text-button">
+      description
+    </i>
     TXT
   </button>
   <div class="d-flex">
@@ -39,6 +35,15 @@
       mat-stroked-button
       type="button">
       {{ 'registry.BACK' | translate }}
+    </button>
+    <button
+      *ngIf="options.formState.filtersChanged"
+      (click)="onNoClick(true)"
+      class="mr-2"
+      id="test-connection-copy-filters-button"
+      mat-stroked-button
+      type="button">
+      {{ 'registry.BACK_COPY_FILTER' | translate }}
     </button>
     <button
       (click)="testConnection()"

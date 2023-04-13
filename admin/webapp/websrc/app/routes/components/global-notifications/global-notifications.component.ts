@@ -7,6 +7,7 @@ import { GlobalVariable } from '@common/variables/global.variable';
 import { TranslateService } from '@ngx-translate/core';
 import { DashboardService } from '@services/dashboard.service';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-global-notifications',
@@ -233,13 +234,23 @@ export class GlobalNotificationsComponent implements OnInit {
 
   getVersion() {
     GlobalVariable.versionDone = false;
-    this.commonHttpService.getVersion().subscribe({
-      next: version => {
-        this.version = version;
-        GlobalVariable.versionDone = true;
-        GlobalVariable.version = version;
-      },
-    });
+    this.commonHttpService
+      .getVersion()
+      .pipe(
+        map(version => {
+          if (version && version[0] === 'v') {
+            return version.substring(1);
+          }
+          return version;
+        })
+      )
+      .subscribe({
+        next: version => {
+          this.version = version;
+          GlobalVariable.versionDone = true;
+          GlobalVariable.version = version;
+        },
+      });
   }
 
   getRBAC() {

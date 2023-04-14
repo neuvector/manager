@@ -228,7 +228,8 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
       )
       .subscribe({
         complete: () => {
-          this.registriesCommunicationService.refreshRegistries();
+          this.registriesCommunicationService.setSelectedRegistry(undefined);
+          this.registriesCommunicationService.refreshRegistries(1000);
         },
         error: ({ error }: { error: ErrorResponse }) => {
           this.notificationService.openError(
@@ -243,7 +244,8 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
     this.registriesCommunicationService.initStartScan();
     const name = this.gridApi.getSelectedNodes()[0].data.name;
     this.registriesService.startScanning(name).subscribe({
-      complete: () => this.registriesCommunicationService.refreshRegistries(),
+      complete: () =>
+        this.registriesCommunicationService.refreshRegistries(1000),
       error: ({ error }: { error: ErrorResponse }) => {
         this.registriesCommunicationService.cancelStartScan();
         this.notificationService.openError(

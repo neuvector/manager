@@ -136,14 +136,13 @@ export class GlobalNotificationsComponent implements OnInit {
         unClamped: false,
       });
     }
-    if (GlobalVariable.user.token.default_password) {
+    if (
+      GlobalVariable.user.token.default_password &&
+      GlobalVariable.user.token.server.toLowerCase() !== 'rancher'
+    ) {
       this.globalNotifications.push({
         name: 'isDefaultPassword',
-        message: this.tr.instant(
-          GlobalVariable.user.token.server.toLowerCase() === 'rancher'
-            ? 'login.CHANGE_DEFAULT_PASSWORD_RANCHER'
-            : 'login.CHANGE_DEFAULT_PASSWORD'
-        ),
+        message: this.tr.instant('login.CHANGE_DEFAULT_PASSWORD'),
         link: '#/profile',
         labelClass: 'warning',
         accepted: false,

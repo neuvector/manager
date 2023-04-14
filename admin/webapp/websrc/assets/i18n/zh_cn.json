@@ -1284,6 +1284,7 @@
     "STOP_TEST": "停止测试",
     "VIEW_TEST": "浏览测试",
     "BACK": "返回",
+    "BACK_COPY_FILTER": "返回并接受新过滤器",
     "COPY_FILTER": "替换过滤器",
     "COPIED": "过滤器已替换",
     "TEST_FILTER": "测试的过滤器",

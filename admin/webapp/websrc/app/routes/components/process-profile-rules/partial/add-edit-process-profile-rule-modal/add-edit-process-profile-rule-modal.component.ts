@@ -98,8 +98,12 @@ export class AddEditProcessProfileRuleModalComponent implements OnInit {
         ? ['added', 'add']
         : ['updated', 'update'];
     let newData = {
-      cfg_type: this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY ?
-        GlobalConstant.CFG_TYPE.FED : GlobalConstant.CFG_TYPE.LEARNED,
+      cfg_type:
+        this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+          ? GlobalConstant.CFG_TYPE.FED
+          : this.type === GlobalConstant.MODAL_OP.ADD
+          ? GlobalConstant.CFG_TYPE.CUSTOMER
+          : GlobalConstant.CFG_TYPE.LEARNED,
       action: this.isAllowed
         ? GlobalConstant.PROCESS_PROFILE_RULE.ACTION.ALLOW
         : GlobalConstant.PROCESS_PROFILE_RULE.ACTION.DENY,

@@ -9,12 +9,14 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { DatePipe } from '@angular/common';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { ProcessProfileRuleNameHeaderComponent } from '@components/process-profile-rules/partial/process-profile-rule-name-header/process-profile-rule-name-header.component';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Injectable()
 export class ProcessProfileRulesService {
   private readonly $win;
 
   constructor(
+    public sanitizer: DomSanitizer,
     private utils: UtilsService,
     private http: HttpClient,
     private translate: TranslateService,
@@ -86,12 +88,17 @@ export class ProcessProfileRulesService {
             let typeClass =
               params.value === GlobalConstant.CFG_TYPE.GROUND || params.value === GlobalConstant.CFG_TYPE.FED
                 ? MapConstant.colourMap[params.value.toUpperCase()]
-                : "local-rule";
+                : MapConstant.colourMap[params.value];
 
             let typeName =
               params.value === GlobalConstant.CFG_TYPE.GROUND || params.value === GlobalConstant.CFG_TYPE.FED
                 ? this.translate.instant(`group.${params.value.toUpperCase()}`)
-                : this.translate.instant("group.LOCAL");
+                : this.sanitizer.sanitize(
+                    SecurityContext.HTML,
+                    this.translate.instant(
+                      `group.${params.value.replace('-', '_').toUpperCase()}`
+                    )
+                  );
             return `<div class="action-label nv-label ${typeClass}">${typeName}</div>`;
           }
           return '';

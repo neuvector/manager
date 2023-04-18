@@ -1,7 +1,14 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { RegistriesCommunicationService } from '../regestries-communication.service';
+import {
+  RegistriesCommunicationService,
+  RegistryDetails,
+} from '../regestries-communication.service';
 import { FormControl } from '@angular/forms';
 import { catchError } from 'rxjs/operators';
+import { arrayToCsv } from '@common/utils/common.utils';
+import { saveAs } from 'file-saver';
+import { UtilsService } from '@common/utils/app.utils';
+import { Image } from '@common/types';
 
 @Component({
   selector: 'app-registry-details',
@@ -21,6 +28,30 @@ export class RegistryDetailsComponent {
   );
 
   constructor(
-    private registriesCommunicationService: RegistriesCommunicationService
+    private registriesCommunicationService: RegistriesCommunicationService,
+    private utils: UtilsService
   ) {}
+
+  exportCSV(registryDetails: RegistryDetails): void {
+    let images4Csv = registryDetails.repositories.images.map(image => ({
+      repository: image.tag
+        ? `${image.repository}:${image.tag}`
+        : image.repository,
+      image_id: image.image_id,
+      base_os: image.base_os,
+      size: image.size,
+      high: image.high,
+      medium: image.medium,
+      status: image.status,
+      scanned_at: image.scanned_at,
+    }));
+    const imagesCSV = arrayToCsv(images4Csv);
+    const blob = new Blob([imagesCSV], { type: 'text/csv;charset=utf-8' });
+    saveAs(
+      blob,
+      `registry-vulnerabilities-${
+        registryDetails.selectedRegistry.name
+      }_${this.utils.parseDatetimeStr(new Date())}.csv`
+    );
+  }
 }

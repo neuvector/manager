@@ -102,7 +102,6 @@
   </ng-container>
 
   <mat-tab-group
-    id="container-details"
     [class]="
       activeTab === 'vulnerabilities'
         ? 'filter-icon-' + visibleIcons
@@ -114,7 +113,7 @@
         ? 'filter-icon-1'
         : ''
     "
-    class="h-100 container-detail-tab-group"
+    class="h-100 detail-tabs"
     mat-align-tabs="start"
     (selectedTabChange)="activateTab($event)">
     <mat-tab>

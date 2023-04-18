@@ -4,22 +4,55 @@
     else loadingOrErrorTemplate
   ">
   <div
-    class="detail-header d-flex justify-content-between align-items-center px-1">
+    class="detail-header d-flex justify-content-start align-items-center px-1">
     <div class="h4 mb-0">
       {{ registryDetails.selectedRegistry.name }} ({{
         registryDetails.selectedRegistry.registry
       }})
     </div>
-    <div class="align-self-baseline">
-      <mat-form-field
-        *ngIf="maTabGroup.selectedIndex === 0"
-        appearance="standard">
-        <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
-        <input [formControl]="filter" matInput />
-      </mat-form-field>
-    </div>
   </div>
-  <mat-tab-group #maTabGroup class="detail-tabs">
+
+  <ng-container [ngSwitch]="maTabGroup.selectedIndex">
+    <ng-container *ngSwitchCase="0">
+      <div
+        class="filter"
+        [class.filter-icon-1]="registryDetails.repositories.images.length">
+        <div class="d-flex" *ngIf="registryDetails.repositories.images.length">
+          <button
+            aria-label="Export registry vulnerabilities CSV"
+            type="button"
+            class="mr-3"
+            (click)="exportCSV(registryDetails)"
+            mat-icon-button>
+            <i class="eos-icons icon-18">csv_file</i>
+          </button>
+        </div>
+        <mat-form-field appearance="standard">
+          <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
+          <input [formControl]="filter" matInput />
+        </mat-form-field>
+      </div>
+    </ng-container>
+    <ng-container *ngSwitchDefault>
+      <div class="filter" [style.visibility]="'hidden'">
+        <mat-form-field appearance="standard">
+          <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
+          <input matInput disabled />
+        </mat-form-field>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <mat-tab-group
+    #maTabGroup
+    class="h-100 detail-tabs"
+    [class]="
+      maTabGroup.selectedIndex === 0
+        ? registryDetails.repositories.images.length
+          ? 'filter-icon-1'
+          : 'filter-icon-0'
+        : ''
+    ">
     <mat-tab [label]="'registry.DETAILS' | translate">
       <div class="mt-2">
         <app-registry-details-table

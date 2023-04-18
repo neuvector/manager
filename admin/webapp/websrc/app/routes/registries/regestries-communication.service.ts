@@ -12,7 +12,7 @@ import {
 } from 'rxjs/operators';
 import { RegistriesService } from '@services/registries.service';
 
-interface RegistryDetails {
+export interface RegistryDetails {
   selectedRegistry: Summary;
   repositories: RepoGetResponse;
 }

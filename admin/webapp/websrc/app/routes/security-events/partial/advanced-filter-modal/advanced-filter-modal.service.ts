@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 export const FilterSeverity = {
+  error: 'Error',
   critical: 'Critical',
   warning: 'Warning',
   info: 'Info',

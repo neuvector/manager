@@ -239,6 +239,8 @@ def showLocalSystemConfig(data, scope):
         column_map += (("net_service_policy_mode", "Network Service Policy Mode"),)
     if "disable_net_policy" in conf:
         column_map += (("disable_net_policy", "Disable Network Policy"),)
+    if "detect_unmanaged_wl" in conf:
+        column_map += (("detect_unmanaged_wl", "Detect unmanaged container"),)
     if "mode_auto_d2m" in conf:
         column_map += (("mode_auto_d2m", "Auto Mode Upgrader: Discover -> Monitor"),
                    ("mode_auto_d2m_duration", "       Duration"),)
@@ -843,6 +845,21 @@ def set_system_disable_net_policy_status(data, status):
         data.client.config_system_net(disable_net_policy=True)
     else:
         data.client.config_system_net(disable_net_policy=False)
+
+@set_system.group('detect_unmanaged_wl')
+@click.pass_obj
+def set_system_detect_unmanaged_wl(data):
+    """Detect unmanaged container"""
+
+@set_system_detect_unmanaged_wl.command("status")
+@click.argument('status', type=click.Choice(['true', 'false']))
+@click.pass_obj
+def set_system_detect_unmanaged_wl_status(data, status):
+    """Enable/disable detect unmanaged container"""
+    if status == 'true':
+        data.client.config_system_net(detect_unmanaged_wl=True)
+    else:
+        data.client.config_system_net(detect_unmanaged_wl=False)
 
 @set_system.group("registry")
 @click.pass_obj

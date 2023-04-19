@@ -42,7 +42,7 @@ export class PasswordPanelComponent implements OnInit {
       this.getReqTxt(this.pwdProfile);
     });
     passwordField?.valueChanges.subscribe(password => {
-      if (password) this.checkPassword(password);
+      this.checkPassword(password);
     });
   }
 

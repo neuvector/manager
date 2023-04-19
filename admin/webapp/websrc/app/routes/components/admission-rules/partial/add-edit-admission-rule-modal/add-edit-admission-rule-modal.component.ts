@@ -350,6 +350,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
 
     adminRule.rule_type = adminRule.isException ? "exception" : "deny";
     adminRule.disable = !adminRule.enabled;
+    if (adminRule.isException) delete adminRule.rule_mode;
 
     this.admissionRulesService.addUpdateAdmissionRules({config: adminRule}, this.data.opType)
       .subscribe(

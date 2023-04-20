@@ -3,7 +3,7 @@
     <a [routerLink]="['../']" class="font-weight-light">
       {{ 'sidebar.nav.SETTING' | translate }}
     </a>
-    >&nbsp;{{ 'sidebar.nav.USERS' | translate }}
+    >&nbsp;{{ 'user.TITLE' | translate }}
   </h1>
 </div>
 <mat-card>
@@ -16,6 +16,14 @@
           [globalRoles]="globalRoles"
           [domainRoles]="domainRoles"
           (refreshData)="refreshUsers()"></app-users-grid>
+      </ng-container>
+    </mat-tab>
+    <mat-tab label="{{ 'apikey.APIKEYS' | translate }}">
+      <ng-container
+        *ngIf="apikeyData$ | async as apikeyData; else loadingOrErrorTemplate">
+        <app-apikeys-grid
+          [apikeyData]="apikeyData"
+          (refreshData)="refreshApikeys()"></app-apikeys-grid>
       </ng-container>
     </mat-tab>
     <mat-tab label="{{ 'role.ROLES' | translate }}">

@@ -1,0 +1,10 @@
+<ng-container *ngIf="params.value; else expiredTemplate">
+  <span class="ag-badge ag-badge-60 badge rounded-pill badge-success">
+    {{ 'apikey.state.ACTIVE' | translate }}
+  </span>
+</ng-container>
+<ng-template #expiredTemplate>
+  <span class="ag-badge ag-badge-60 badge rounded-pill badge-warning">
+    {{ 'apikey.state.EXPIRED' | translate }}
+  </span>
+</ng-template>

@@ -383,7 +383,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                 Utils.respondWithNoCacheControl() {
                   complete {
                     if (name.isEmpty) {
-                      logger.info("Getting all apikey")
+                      logger.info("Getting all apikeys")
                       RestClient.httpRequestWithHeader(
                         s"${baseClusterUri(tokenId)}/api_key",
                         GET,
@@ -416,6 +416,17 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                       tokenId
                     )
                   }
+                }
+              } ~
+              Utils.respondWithNoCacheControl() {
+                complete {
+                  logger.info("Create apikey")
+                  RestClient.httpRequestWithHeader(
+                    s"${baseClusterUri(tokenId)}/api_key",
+                    POST,
+                    "",
+                    tokenId
+                  )
                 }
               }
             } ~

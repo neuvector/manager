@@ -1770,6 +1770,53 @@
       "ALL_SET": "您的密码设置完毕!"
     }
   },
+  "apikey": {
+    "APIKEYS": "API Keys",
+    "ADD": "Create API Key",
+    "REMOVE": "Delete API Key",
+    "gridHeader": {
+      "STATE": "State",
+      "NAME": "Access Key",
+      "DESCRIPTION": "Description",
+      "ROLE": "Global Role",
+      "EXPIRES": "Expires",
+      "AGE": "Age"
+    },
+    "state": {
+      "ACTIVE": "Active",
+      "EXPIRED": "Expired"
+    },
+    "expires": {
+      "NEVER": "Never",
+      "ONEDAY": "A day from now",
+      "ONEMONTH": "A month from now",
+      "ONEYEAR": "A year from now",
+      "HOURS": "Custom",
+      "time": {
+        "YEARS": "Years",
+        "MONTHS": "Months",
+        "DAYS": "Days",
+        "HOURS": "Hours"
+      }
+    },
+    "msg": {
+      "ADD_OK": "Adding API Key is successful.",
+      "ADD_NG": "Failed to add API Key",
+      "REMOVE_CFM": "Are you sure you want to remove API Key {{name}}?",
+      "REMOVE_OK": "Removing API Key is successful",
+      "REMOVE_ERR": "Failed to remove API Key"
+    },
+    "addApikey": {
+      "TITLE": "Add API Key",
+      "NAME_ERROR": "Access Key can contain up to 32 alphanumeric characters, including '_' and '-'.",
+      "SECRET": "Secret Key",
+      "TOKEN": "Bearer Token",
+      "COPY": "Copy",
+      "EXPIRE": "Automatically expire",
+      "ADD": "Add",
+      "CANCEL": "Cancel"
+    }
+  },
   "role": {
     "ROLES": "角色",
     "COUNT_POSTFIX": "个角色",
@@ -3145,7 +3192,11 @@
     "MINUTES": "{{time}}分钟",
     "MINUTE": "1分钟",
     "SECONDS": "{{time}}秒",
-    "SECOND": "1秒"
+    "SECOND": "1秒",
+    "relative": {
+      "FUTURE": "{{time}} from now",
+      "PAST": "{{time}} ago"
+    }
   },
   "partner": {
     "general": {

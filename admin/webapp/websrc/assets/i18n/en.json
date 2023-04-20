@@ -853,7 +853,7 @@
       "NETWORK_TRAFFIC": "Network Traffic",
       "SETTING": "Settings",
       "PROFILE": "Profile",
-      "USERS": "Users & Roles",
+      "USERS": "Users, API Keys & Roles",
       "CONSOLE": "Console",
       "LICENSE": "License",
       "LDAP": "LDAP/AD Settings",
@@ -1681,7 +1681,7 @@
     "TIMEOUT_VALIDATION": "Please use integer from 30 to 3600."
   },
   "user": {
-    "TITLE": "Users & Roles",
+    "TITLE": "Users, API Keys & Roles",
     "DESCRIPTION": "User and role management",
     "USERS": "Users",
     "PASSWORD_REQUIRED": "Password is required!",
@@ -1768,6 +1768,53 @@
       "MIN_SP_CHAR": "{{minSpChar}} special character(s). e.g. !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~",
       "PASSWORD_SECURE": "Please enter it again in Confirm Password field.",
       "ALL_SET": "Your password is all set!"
+    }
+  },
+  "apikey": {
+    "APIKEYS": "API Keys",
+    "ADD": "Create API Key",
+    "REMOVE": "Delete API Key",
+    "gridHeader": {
+      "STATE": "State",
+      "NAME": "Access Key",
+      "DESCRIPTION": "Description",
+      "ROLE": "Global Role",
+      "EXPIRES": "Expires",
+      "AGE": "Age"
+    },
+    "state": {
+      "ACTIVE": "Active",
+      "EXPIRED": "Expired"
+    },
+    "expires": {
+      "NEVER": "Never",
+      "ONEDAY": "A day from now",
+      "ONEMONTH": "A month from now",
+      "ONEYEAR": "A year from now",
+      "HOURS": "Custom",
+      "time": {
+        "YEARS": "Years",
+        "MONTHS": "Months",
+        "DAYS": "Days",
+        "HOURS": "Hours"
+      }
+    },
+    "msg": {
+      "ADD_OK": "Adding API Key is successful.",
+      "ADD_NG": "Failed to add API Key",
+      "REMOVE_CFM": "Are you sure you want to remove API Key {{name}}?",
+      "REMOVE_OK": "Removing API Key is successful",
+      "REMOVE_ERR": "Failed to remove API Key"
+    },
+    "addApikey": {
+      "TITLE": "Add API Key",
+      "NAME_ERROR": "Access Key can contain up to 32 alphanumeric characters, including '_' and '-'.",
+      "SECRET": "Secret Key",
+      "TOKEN": "Bearer Token",
+      "COPY": "Copy",
+      "EXPIRE": "Automatically expire",
+      "ADD": "Add",
+      "CANCEL": "Cancel"
     }
   },
   "role": {
@@ -3145,7 +3192,11 @@
     "MINUTES": "{{time}} minutes",
     "MINUTE": "1 minute",
     "SECONDS": "{{time}} seconds",
-    "SECOND": "1 second"
+    "SECOND": "1 second",
+    "relative": {
+      "FUTURE": "{{time}} from now",
+      "PAST": "{{time}} ago"
+    }
   },
   "partner": {
     "general": {

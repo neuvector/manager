@@ -97,7 +97,7 @@ export class AuthHttpService {
 
   postEmptyApikey(): Observable<ApikeyInit> {
     return GlobalVariable.http
-      .post<ApikeyInit>(PathConstant.APIKEY_URL, {})
+      .post<ApikeyInit>(PathConstant.APIKEY_URL, null)
       .pipe(pluck('apikey'));
   }
 

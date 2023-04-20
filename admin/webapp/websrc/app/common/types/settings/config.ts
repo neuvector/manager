@@ -106,6 +106,7 @@ export interface AtmoConfig {
 export interface NetConfig {
   net_service_policy_mode: PolicyMode;
   net_service_status: boolean;
+  disable_net_policy: boolean;
 }
 
 export interface ScannerAutoscale {

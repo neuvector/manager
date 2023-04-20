@@ -42,7 +42,8 @@ case class SystemConfig(
 
 case class SystemNetConfig(
   net_service_status: Option[Boolean],
-  net_service_policy_mode: Option[String]
+  net_service_policy_mode: Option[String],
+  disable_net_policy: Option[Boolean]
 )
 
 case class SystemAtmoConfig(

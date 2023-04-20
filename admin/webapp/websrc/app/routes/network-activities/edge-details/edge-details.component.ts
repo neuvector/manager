@@ -131,6 +131,7 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
       }
     }, 500);
     this.sessionCount = '';
+    this.onRule = false;
     this.onThreat = false;
     this.onViolation = false;
   }

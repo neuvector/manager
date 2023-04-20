@@ -97,6 +97,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
   toggleRuleItem = (event, rule, disable) => {
     let selectedRule = JSON.parse(JSON.stringify(rule));
     selectedRule.disable = disable;
+    if (selectedRule.rule_type === 'exception') delete selectedRule.rule_mode;
     if (selectedRule.critical) {
       let criteriaValueStr = selectedRule.criteria
         .map((value: AdmRuleSubCriterion) => value.value)

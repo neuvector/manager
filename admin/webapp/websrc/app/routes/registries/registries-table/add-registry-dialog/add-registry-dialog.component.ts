@@ -141,7 +141,7 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
           )
           .subscribe({
             complete: () => {
-              this.registriesCommunicationService.refreshRegistries();
+              this.registriesCommunicationService.refreshRegistries(1000);
               this.saving$.subscribe(saving => {
                 if (!saving) {
                   this.dialogRef.close(true);
@@ -166,7 +166,7 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
           )
           .subscribe({
             complete: () => {
-              this.registriesCommunicationService.refreshRegistries();
+              this.registriesCommunicationService.refreshRegistries(1000);
               this.saving$.subscribe(saving => {
                 if (!saving) {
                   this.dialogRef.close(true);

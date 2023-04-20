@@ -2,6 +2,19 @@
   height: 50px;
 }
 
+.filter {
+  position: relative;
+  left: calc(100% - 180px);
+  top: -4px;
+  z-index: 10000;
+  display: flex;
+  align-items: baseline;
+}
+
+.filter-icon-1 {
+  left: calc(100% - 236px) !important;
+}
+
 .detail-tabs {
-  height: calc(100% - 50px);
+  margin-top: -62px;
 }

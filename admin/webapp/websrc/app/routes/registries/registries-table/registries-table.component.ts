@@ -19,7 +19,6 @@ import { ErrorResponse, RegistryConfig, Summary } from '@common/types';
 import { RegistriesTableButtonsComponent } from './registries-table-buttons/registries-table-buttons.component';
 import { RegistriesService } from '@services/registries.service';
 import { RegistriesCommunicationService } from '../regestries-communication.service';
-import { FormControl } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { RegistryTableStatusCellComponent } from './registry-table-status-cell/registry-table-status-cell.component';
 import { cloneDeep } from 'lodash';
@@ -40,7 +39,8 @@ import { AuthUtilsService } from '@common/utils/auth.utils';
 export class RegistriesTableComponent implements OnInit, OnChanges {
   @Input() rowData!: Summary[];
   @Input() gridHeight!: number;
-  filter = new FormControl('');
+  filtered: boolean = false;
+  filteredCount!: number;
   gridOptions!: GridOptions;
   gridApi!: GridApi;
   columnDefs: ColDef[] = [
@@ -181,7 +181,6 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
       },
       overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS'),
     };
-    this.filter.valueChanges.subscribe(val => this.gridApi.setQuickFilter(val));
   }
 
   onSelectionChanged(params: GridReadyEvent): void {
@@ -203,6 +202,11 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
       node?.setSelected(true);
       this.gridApi.ensureNodeVisible(node, 'middle');
     }
+  }
+
+  filterCountChanged(results: number) {
+    this.filteredCount = results;
+    this.filtered = this.filteredCount !== this.rowData.length;
   }
 
   deleteRegistry(event): void {
@@ -228,7 +232,8 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
       )
       .subscribe({
         complete: () => {
-          this.registriesCommunicationService.refreshRegistries();
+          this.registriesCommunicationService.setSelectedRegistry(undefined);
+          this.registriesCommunicationService.refreshRegistries(1000);
         },
         error: ({ error }: { error: ErrorResponse }) => {
           this.notificationService.openError(
@@ -243,7 +248,8 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
     this.registriesCommunicationService.initStartScan();
     const name = this.gridApi.getSelectedNodes()[0].data.name;
     this.registriesService.startScanning(name).subscribe({
-      complete: () => this.registriesCommunicationService.refreshRegistries(),
+      complete: () =>
+        this.registriesCommunicationService.refreshRegistries(1000),
       error: ({ error }: { error: ErrorResponse }) => {
         this.registriesCommunicationService.cancelStartScan();
         this.notificationService.openError(

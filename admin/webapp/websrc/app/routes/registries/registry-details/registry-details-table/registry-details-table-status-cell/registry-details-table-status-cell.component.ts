@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { MapConstant } from '@common/constants/map.constant';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
@@ -13,10 +14,12 @@ export class RegistryDetailsTableStatusCellComponent
 {
   params!: ICellRendererParams;
   status!: string;
+  labelCode!: string;
 
   agInit(params: ICellRendererParams): void {
     this.params = params;
     this.status = params.node.data.status;
+    this.labelCode = MapConstant.colourMap[this.status];
   }
 
   refresh(params: ICellRendererParams): boolean {

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
 import { RepoGetResponse, Summary } from '@common/types';
 import {
+  distinctUntilChanged,
   filter,
   finalize,
   map,
@@ -11,14 +12,13 @@ import {
 } from 'rxjs/operators';
 import { RegistriesService } from '@services/registries.service';
 
-interface RegistryDetails {
+export interface RegistryDetails {
   selectedRegistry: Summary;
   repositories: RepoGetResponse;
 }
 
 @Injectable()
 export class RegistriesCommunicationService {
-  private timeoutId;
   private refreshRegistriesSubject$ = new Subject();
   private refreshDetailsSubject$ = new Subject();
   private selectedRegistrySubject$ = new BehaviorSubject<Summary | undefined>(
@@ -31,25 +31,18 @@ export class RegistriesCommunicationService {
   registryDetails$ = this.selectedRegistry$
     .pipe(
       filter(summary => summary !== undefined),
+      distinctUntilChanged(),
       switchMap(summary =>
-        combineLatest([
-          this.selectedRegistry$,
-          this.registriesService.getRepo(summary!.name).pipe(
-            finalize(() => {
-              if (this.refreshingDetailsSubject$.value) {
-                this.refreshingDetailsSubject$.next(false);
-              }
-            }),
-            repeatWhen(() => this.refreshDetailsSubject$)
-          ),
-        ])
-      ),
-      map(([selectedRegistry, repositories]) => {
-        return {
-          selectedRegistry,
-          repositories,
-        };
-      })
+        this.registriesService.getRepo(summary!.name).pipe(
+          map(repositories => ({ selectedRegistry: summary, repositories })),
+          finalize(() => {
+            if (this.refreshingDetailsSubject$.value) {
+              this.refreshingDetailsSubject$.next(false);
+            }
+          }),
+          repeatWhen(() => this.refreshDetailsSubject$)
+        )
+      )
     )
     .pipe() as Observable<RegistryDetails>;
   private startingScanSubject$ = new BehaviorSubject<boolean>(false);
@@ -61,16 +54,7 @@ export class RegistriesCommunicationService {
   private savingSubject$ = new BehaviorSubject<boolean>(false);
   registries$ = this.registriesService.getRegistries().pipe(
     tap(({ summarys }) => {
-      if (this.selectedRegistrySubject$.value) {
-        this.scan(
-          summarys.some(summary => {
-            return (
-              summary.status === 'scanning' &&
-              this.selectedRegistrySubject$.value!.name === summary.name
-            );
-          })
-        );
-      }
+      this.scan(summarys.some(summary => summary.status === 'scanning'));
       if (!summarys.length) {
         this.refreshingDetailsSubject$.next(false);
       }
@@ -93,10 +77,12 @@ export class RegistriesCommunicationService {
 
   constructor(private registriesService: RegistriesService) {}
 
-  refreshRegistries(): void {
-    this.timeoutId = setTimeout(() => {
+  refreshRegistries(delay?: number): void {
+    if (delay) {
+      setTimeout(() => this.refreshRegistriesSubject$.next(true), delay);
+    } else {
       this.refreshRegistriesSubject$.next(true);
-    }, 1000);
+    }
   }
 
   refreshDetails(): void {
@@ -131,12 +117,8 @@ export class RegistriesCommunicationService {
     this.stoppingScanSubject$.next(true);
   }
 
-  setSelectedRegistry(registry: Summary): void {
-    clearTimeout(this.timeoutId);
+  setSelectedRegistry(registry: Summary | undefined): void {
     this.selectedRegistrySubject$.next(registry);
-    if (registry.status === 'scanning') {
-      this.refreshRegistries();
-    }
   }
 
   private scan(isScanning: boolean): void {
@@ -144,7 +126,7 @@ export class RegistriesCommunicationService {
       setTimeout(() => {
         this.initRefreshingRegistries();
         this.refreshRegistries();
-      }, 4500);
+      }, 5000);
     }
   }
 }

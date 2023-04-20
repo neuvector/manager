@@ -1,8 +1,13 @@
 <div class="d-flex align-items-center justify-content-between">
   <div class="d-flex align-items-center justify-content-start">
-    <span class="font-weight-bold text-info"
-      >{{ 'enum.OUT_OF' | translate }}&nbsp; {{ rowData.length }}</span
-    >
+    <span class="font-weight-bold text-info">
+      <span *ngIf="filtered">
+        {{ 'enum.FOUND' | translate }}
+        {{ filteredCount }}&nbsp;/
+      </span>
+      <span *ngIf="!filtered"> {{ 'enum.OUT_OF' | translate }}&nbsp; </span>
+      {{ rowData.length }}
+    </span>
   </div>
   <div class="d-flex align-items-center justify-content-end">
     <button
@@ -13,10 +18,11 @@
       mat-stroked-button>
       <i class="eos-icons mr-2">add_circle</i>{{ 'role.ADD' | translate }}
     </button>
-    <mat-form-field appearance="standard">
-      <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
-      <input [formControl]="filter" matInput [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"/>
-    </mat-form-field>
+    <app-quick-filter
+      [gridOptions]="gridOptions"
+      (filterCountChange)="filterCountChanged($event)"
+      [showCount]="false">
+    </app-quick-filter>
   </div>
 </div>
 <ag-grid-angular
@@ -31,7 +37,9 @@
     (btnClick)="startScan()"
     [appearance]="'mat-stroked-button'"
     [buttonClasses]="'mr-2'"
-    *ngIf="isRegistryScanAuthorized && !(isFedRegistry && (isRemote || !isFedAdmin))"
+    *ngIf="
+      isRegistryScanAuthorized && !(isFedRegistry && (isRemote || !isFedAdmin))
+    "
     [disabled]="
       (gridApi && !gridApi.getSelectedNodes().length) ||
       (gridApi &&
@@ -47,7 +55,9 @@
   <app-loading-button
     (btnClick)="stopScan()"
     [appearance]="'mat-stroked-button'"
-    *ngIf="isRegistryScanAuthorized && !(isFedRegistry && (isRemote || !isFedAdmin))"
+    *ngIf="
+      isRegistryScanAuthorized && !(isFedRegistry && (isRemote || !isFedAdmin))
+    "
     [disabled]="
       (gridApi && !gridApi.getSelectedNodes().length) ||
       (gridApi &&

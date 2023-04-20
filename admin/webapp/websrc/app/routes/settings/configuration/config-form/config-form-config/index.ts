@@ -47,6 +47,8 @@ import {
   TelemetryToggleField,
   WebhookTableField,
   XFFToggleField,
+  DisableNetworkPolicyToggleBoolField,
+  DisableNetworkPolicyToggleField,
 } from './constants';
 
 export const ConfigFormConfig: FormlyFieldConfig[] = [
@@ -105,6 +107,16 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
       },
     ],
     templateOptions: { append: true, divider: true },
+  },
+  {
+    wrappers: [FormlyComponents.SECTION_WRAPPER],
+    fieldGroup: [DisableNetworkPolicyToggleBoolField, DisableNetworkPolicyToggleField],
+    templateOptions: {
+      label: 'setting.DISABLE_NET_POLICY',
+      comment: 'setting.DISABLE_NET_POLICY_HINT',
+      inline: true,
+      divider: true,
+    },
   },
   {
     wrappers: [FormlyComponents.SECTION_WRAPPER],

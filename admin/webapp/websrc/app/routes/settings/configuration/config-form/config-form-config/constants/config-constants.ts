@@ -396,3 +396,28 @@ export const TelemetryToggleBoolField = {
 export const TelemetryToggleField = {
   key: 'misc.no_telemetry_report',
 };
+
+export const DisableNetworkPolicyToggleBoolField = {
+  formControl: new FormControl(),
+  type: FormlyComponents.TOGGLE,
+  templateOptions: {
+    ariaLabelledBy: 'setting.DISABLE_NET_POLICY',
+  },
+  hooks: {
+    onInit: field => {
+      const ctrl = field.formControl;
+      ctrl.setValue(!field.model['net_svc']['disable_net_policy']);
+      ctrl.valueChanges.subscribe((x: boolean) => {
+        const formCtrl = field.parent.formControl.get(
+          'net_svc.disable_net_policy'
+        );
+        formCtrl.setValue(!x);
+        formCtrl.markAsDirty();
+      });
+    },
+  },
+};
+
+export const DisableNetworkPolicyToggleField = {
+  key: 'net_svc.disable_net_policy',
+};

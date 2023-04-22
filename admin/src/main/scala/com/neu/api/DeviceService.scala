@@ -705,6 +705,21 @@ class DeviceService()(implicit executionContext: ExecutionContext)
               }
             }
           }
+        } ~
+        path("csp-support") {
+          post {
+            Utils.respondWithNoCacheControl() {
+              complete {
+                logger.info("Downloading CSP support file: {}")
+                RestClient.httpRequestWithHeader(
+                  s"${baseClusterUri(tokenId)}/csp/file/support",
+                  POST,
+                  "",
+                  tokenId
+                )
+              }
+            }
+          }
         }
       }
     }

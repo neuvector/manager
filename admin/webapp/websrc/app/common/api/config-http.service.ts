@@ -95,4 +95,16 @@ export class ConfigHttpService {
       responseType: 'arraybuffer' as any,
     });
   }
+
+  getCspSupport() {
+    const options = {
+      responseType: 'arraybuffer' as any,
+      cache: false,
+      headers: { 'Cache-Control': 'no-store' },
+    };
+    return GlobalVariable.http.post<ArrayBuffer>(
+      PathConstant.CSP_SUPPORT_URL,
+      null
+    );
+  }
 }

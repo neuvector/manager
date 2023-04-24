@@ -70,7 +70,7 @@ export class AuthService {
     return GlobalVariable.http
       .post(PathConstant.LOGIN_URL, {
         username: username,
-        password: decode(this.sanitizer.sanitize(SecurityContext.HTML, password)!),
+        password: password,
       })
       .pipe();
   }

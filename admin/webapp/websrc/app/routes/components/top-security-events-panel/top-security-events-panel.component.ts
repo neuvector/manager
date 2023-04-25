@@ -23,14 +23,14 @@ export class TopSecurityEventsPanelComponent implements OnInit {
       this.translate.instant('dashboard.help.top_security_events.txt1'),
       this.translate.instant('dashboard.help.top_security_events.txt2'),
       this.translate.instant('dashboard.help.top_security_events.txt2_1'),
-      this.translate.instant('dashboard.help.top_security_events.txt2_1'),
-      this.translate.instant('dashboard.help.top_security_events.txt2_1')
+      this.translate.instant('dashboard.help.top_security_events.txt2_2'),
+      this.translate.instant('dashboard.help.top_security_events.txt2_3')
     ] : [
       this.translate.instant('dashboard.help.top_security_events.txt3'),
       this.translate.instant('dashboard.help.top_security_events.txt4'),
       this.translate.instant('dashboard.help.top_security_events.txt4_1'),
-      this.translate.instant('dashboard.help.top_security_events.txt4_1'),
-      this.translate.instant('dashboard.help.top_security_events.txt4_1')
+      this.translate.instant('dashboard.help.top_security_events.txt4_2'),
+      this.translate.instant('dashboard.help.top_security_events.txt4_3')
     ];
   }
 

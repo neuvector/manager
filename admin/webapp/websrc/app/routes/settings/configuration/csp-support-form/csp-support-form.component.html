@@ -1,0 +1,21 @@
+<form (ngSubmit)="submitExport()" [formGroup]="cspExportForm">
+  <div class="ml-3 my-md-4">
+    <h1 class="h4 font-weight-normal">
+      {{ 'setting.AWS_BILLING' | translate }}
+    </h1>
+    <div class="ml-3 my-md-2 d-flex align-items-center">
+      <label class="mx-3">
+        {{'setting.DOWNLOAD_SUPPORT_FILE' | translate}}
+      </label>
+      <app-loading-button
+        [appearance]="'mat-raised-button'"
+        [color]="'primary'"
+        [disabled]="submittingForm"
+        [loading]="submittingForm"
+        [text]="'setting.SUBMIT' | translate"
+        [type]="'submit'"
+        class="ml-auto">
+      </app-loading-button>
+    </div>
+  </div>
+</form>

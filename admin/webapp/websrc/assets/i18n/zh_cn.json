@@ -2834,6 +2834,8 @@
     "SEND_SYSLOG_PER_CVE": "发送每个CVE的单独系统日志事件",
     "EXPORT": "输出",
     "IMPORT": "输入",
+    "AWS_BILLING": "AWS账单",
+    "DOWNLOAD_SUPPORT_FILE": "下载支持文件",
     "IMPORT_NOTICE": "输入策略将覆盖组和规则, 输入全体将覆盖策略所有用户和密码以及系统日志等设置.",
     "UPLOAD_QUEUE": "上传队列",
     "QUEUE_DESC": "无可选文件, 请添加上传文件",

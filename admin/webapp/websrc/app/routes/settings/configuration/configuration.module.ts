@@ -26,6 +26,7 @@ import { SupportFormComponent } from './support-form/support-form.component';
 import { EnforcersGridModule } from '@components/enforcers-grid/enforcers-grid.module';
 import { PendingChangesGuard } from '@common/guards/pending-changes.guard';
 import { NvCommonModule } from '@common/nvCommon.module';
+import { CspSupportFormComponent } from './csp-support-form/csp-support-form.component';
 
 const routes: Routes = [
   {
@@ -42,6 +43,7 @@ const routes: Routes = [
     ConfigFormComponent,
     ExportFormComponent,
     SupportFormComponent,
+    CspSupportFormComponent,
   ],
   imports: [
     CommonModule,

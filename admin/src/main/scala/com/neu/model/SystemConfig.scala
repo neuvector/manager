@@ -103,7 +103,8 @@ case class SystemConfigMiscCfgV2(
   controller_debug: Option[Array[String]] = None,
   monitor_service_mesh: Option[Boolean] = None,
   xff_enabled: Option[Boolean] = None,
-  no_telemetry_report: Option[Boolean] = None
+  no_telemetry_report: Option[Boolean] = None,
+  csp_type: Option[String] = None
 )
 
 case class SystemConfigV2(

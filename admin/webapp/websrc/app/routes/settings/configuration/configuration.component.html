@@ -18,6 +18,10 @@
   <mat-card *ngIf="isConfigAuthorized">
     <app-support-form [debug_enabled]="debug_enabled"></app-support-form>
   </mat-card>
+  <br />
+  <mat-card *ngIf="isConfigAuthorized && config.misc.csp_type && config.misc.csp_type.length > 0">
+    <app-csp-support-form></app-csp-support-form>
+  </mat-card>
 </ng-container>
 <ng-template #errorTemplate let-error>
   {{ error | json }}

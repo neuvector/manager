@@ -2925,6 +2925,7 @@
       "TYPE": "Type",
       "STATUS": "Status",
       "NEW": "New Webhook",
+      "ADD": "Add Webhook",
       "NAME_EMPTY": "Name is required",
       "NAME_NG": "Invalid Name",
       "NAME_DUPLICATED": "Name can't be duplicated.",

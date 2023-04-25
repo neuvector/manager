@@ -2925,6 +2925,7 @@
       "TYPE": "类型",
       "STATUS": "状态",
       "NEW": "新建网络挂接",
+      "ADD": "添加网络挂接",
       "NAME_EMPTY": "名称不可为空",
       "NAME_NG": "无效名称",
       "NAME_DUPLICATED": "名称不可重复",

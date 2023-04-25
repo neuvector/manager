@@ -101,10 +101,12 @@ export class ConfigHttpService {
       responseType: 'arraybuffer' as any,
       cache: false,
       headers: { 'Cache-Control': 'no-store' },
+      observe: 'response' as any
     };
-    return GlobalVariable.http.post<ArrayBuffer>(
+    return GlobalVariable.http.post(
       PathConstant.CSP_SUPPORT_URL,
-      null
+      null,
+      options
     );
   }
 }

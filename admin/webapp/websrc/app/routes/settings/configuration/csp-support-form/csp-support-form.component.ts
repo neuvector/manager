@@ -41,11 +41,11 @@ export class CspSupportFormComponent implements OnInit {
         })
       )
       .subscribe(
-        data => {
-          let exportUrl = new Blob([data], {
+        response => {
+          let exportUrl = new Blob([response['body'] || ""], {
             type: 'application/zip',
           });
-          let fileName = `NV_AWS_Billing_Support_${this.utils.parseDatetimeStr(new Date())}.gz`;
+          let fileName = `${this.utils.getExportedFileName(response)}.gz`;
           saveAs(exportUrl, fileName);
         },
         ({ error }: { error: ErrorResponse }) => {

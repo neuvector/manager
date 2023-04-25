@@ -2886,7 +2886,7 @@
     "XFF_MATCH": "基于X-Forwarded-For的策略匹配",
     "TELEMETRY": "报告匿名集群数据",
     "TELEMETRY_HINT": "控制器将匿名报告集群数据，以帮助 SUSE NeuVector 团队了解使用信息。",
-    "DISABLE_NET_POLICY": "激活网络策略",
+    "DISABLE_NET_POLICY": "网络策略实施",
     "DISABLE_NET_POLICY_HINT": "若只使用WAF/DLP做网络保护，请禁用强制的网络策略。当它被禁用时网络规则不能被学习。",
     "USERNAME": "用户名",
     "PASSWORD": "密码",

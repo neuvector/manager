@@ -2886,7 +2886,7 @@
     "XFF_MATCH": "X-Forwarded-For based policy match",
     "TELEMETRY": "Report anonymous cluster data",
     "TELEMETRY_HINT": "The controller will report cluster data anonymously to help SUSE NeuVector teams with usage information.",
-    "DISABLE_NET_POLICY": "Network Policy Enablement",
+    "DISABLE_NET_POLICY": "Network Policy Enforcement",
     "DISABLE_NET_POLICY_HINT": "To only use WAF/DLP for network protection please disable network policy enforcement. When it is disabled no network rule can be learned.",
     "USERNAME": "Username",
     "PASSWORD": "Password",

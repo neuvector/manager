@@ -42,7 +42,7 @@ export const WebhookTableField = {
           },
         },
         validators: {
-          validation: [FormlyValidators.ObjName, FormlyValidators.FedName]
+          validation: [FormlyValidators.ObjName, FormlyValidators.FedName],
         },
       },
       {
@@ -100,7 +100,7 @@ export const WebhookTableField = {
           flexWidth: '10%',
           align: 'center',
           ariaLabelledBy: 'setting.webhook.STATUS',
-        }
+        },
       },
       {
         key: 'cfg_type',
@@ -131,7 +131,7 @@ export const WebhookTableField = {
       },
       {
         key: 'isEditable',
-        type: FormlyComponents.EDIT_TABLE_CONTROLS,
+        type: FormlyComponents.EDIT_WEBHOOK_TABLE_CONTROLS,
         defaultValue: true,
         templateOptions: {
           flexWidth: '20%',

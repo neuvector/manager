@@ -1,24 +1,8 @@
-<form (ngSubmit)="submitForm()" [formGroup]="fedConfigForm">
+<form [formGroup]="fedConfigForm">
   <formly-form
     [model]="config"
     [fields]="fedConfigFields"
     [form]="fedConfigForm"
     [options]="fedConfigOptions"
   ></formly-form>
-  <div class="d-flex justify-content-end align-items-center mt-2">
-    <app-loading-button
-      [appearance]="'mat-raised-button'"
-      [color]="'primary'"
-      [disabled]="
-        !fedConfigForm.valid ||
-        !fedConfigForm.dirty ||
-        submittingForm ||
-        !isFedOpAllowed
-      "
-      [loading]="submittingForm"
-      [text]="'setting.SUBMIT' | translate"
-      [type]="'submit'"
-    >
-    </app-loading-button>
-  </div>
 </form>

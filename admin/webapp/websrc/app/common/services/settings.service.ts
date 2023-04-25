@@ -139,4 +139,8 @@ export class SettingsService {
   patchPwdProfile(profile: PasswordProfile) {
     return this.authHttpService.patchPwdProfile(profile);
   }
+
+  getCspSupport() {
+    return this.configHttpService.getCspSupport();
+  }
 }

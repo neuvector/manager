@@ -130,4 +130,5 @@ export class PathConstant {
   public static DEBUG_URL = 'debug'; //config
   public static THREAT_URL = 'threat';
   public static HEART_BEAT_URL = 'heartbeat';
+  public static CSP_SUPPORT_URL = 'csp-support';
 }

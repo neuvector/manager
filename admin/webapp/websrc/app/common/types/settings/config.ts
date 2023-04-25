@@ -90,6 +90,7 @@ export interface MiscConfig extends ConfigDebug {
   monitor_service_mesh: boolean;
   xff_enabled: boolean;
   no_telemetry_report: boolean;
+  csp_type?: string;
 }
 
 export interface ConfigDebug {

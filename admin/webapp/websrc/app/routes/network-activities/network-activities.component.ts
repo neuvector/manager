@@ -1646,94 +1646,97 @@ export class NetworkActivitiesComponent
       });
   }
 
+  private inHiddenDomain ( node)  {
+  if (this.blacklist.domains?.length > 0) {
+    return this.blacklist.domains.some(
+      domain => domain.name === node.domain
+    );
+  } else return false;
+  }
+
+  private inHiddenGroup ( node ) {
+  if (this.blacklist.groups?.length > 0) {
+    return this.blacklist.groups.some(
+      group => group.name === node.clusterId
+    );
+  } else return false;
+}
+
+  private isHiddenEndpoint(node)  {
+  if (this.blacklist.endpoints?.length > 0) {
+    return this.blacklist.endpoints.some(
+      endpoint =>
+        endpoint.name === node.label || endpoint.name === node.oriLabel
+    );
+  } else return false;
+}
+
+  private readonly unmanagedEndpoints = ['node_ip', 'workload_ip'];
+
+  private filterHiddenNodes (nodes)  {
+  return nodes.filter(
+    node =>
+      !this.inHiddenDomain(node) &&
+      !this.inHiddenGroup(node) &&
+      !this.isHiddenEndpoint(node) &&
+      !(
+        this.blacklist?.hideUnmanaged &&
+        this.unmanagedEndpoints.includes(node.group)
+      )
+  );
+}
+
+  private edgeWithHiddenDomain ( edge) {
+  if (this.blacklist === undefined) return false;
+  if (this.blacklist.domains?.length > 0) {
+    return this.blacklist.domains.some(
+      domain =>
+        domain.name === edge.fromDomain || domain.name === edge.toDomain
+    );
+  } else return false;
+}
+
+  private edgeWithHiddenGroup (edge)  {
+  if (this.blacklist === undefined) return false;
+  if (this.blacklist.groups?.length > 0) {
+    return this.blacklist.groups.some(
+      group => group.name === edge.fromGroup || group.name === edge.toGroup
+    );
+  } else return false;
+}
+
+  private edgeWithHiddenEndpoint  (edge) {
+  if (this.blacklist === undefined) return false;
+  if (this.blacklist.endpoints?.length > 0) {
+    return this.blacklist.endpoints.some(
+      endpoint => endpoint.id === edge.source || endpoint.id === edge.target
+    );
+  } else return false;
+}
+
+  private readonly unmanagedDomains = ['nvUnmanagedWorkload', 'nvUnmanagedNode'];
+  private edgeWithUnmanagedEndpoint (edge) {
+  if (this.blacklist === undefined) return false;
+  if (this.blacklist.hideUnmanaged) {
+    return (
+      this.unmanagedDomains.includes(edge.fromDomain) ||
+      this.unmanagedDomains.includes(edge.toDomain)
+    );
+  } else return false;
+}
+  private filterHiddenEdges (edges) {
+  return edges.filter(
+    edge =>
+      !this.edgeWithHiddenDomain(edge) &&
+      !this.edgeWithHiddenGroup(edge) &&
+      !this.edgeWithHiddenEndpoint(edge) &&
+      !this.edgeWithUnmanagedEndpoint(edge)
+  );
+}
+
+
   loadGraph(onRefresh: boolean = true, callback?: () => void) {
-    const inHiddenDomain = node => {
-      if (this.blacklist.domains?.length > 0) {
-        return this.blacklist.domains.some(
-          domain => domain.name === node.domain
-        );
-      } else return false;
-    };
 
-    const inHiddenGroup = node => {
-      if (this.blacklist.groups?.length > 0) {
-        return this.blacklist.groups.some(
-          group => group.name === node.clusterId
-        );
-      } else return false;
-    };
-
-    const isHiddenEndpoint = node => {
-      if (this.blacklist.endpoints?.length > 0) {
-        return this.blacklist.endpoints.some(
-          endpoint =>
-            endpoint.name === node.label || endpoint.name === node.oriLabel
-        );
-      } else return false;
-    };
-
-    const unmanagedEndpoints = ['node_ip', 'workload_ip'];
-
-    const filterHiddenNodes = nodes => {
-      return nodes.filter(
-        node =>
-          !inHiddenDomain(node) &&
-          !inHiddenGroup(node) &&
-          !isHiddenEndpoint(node) &&
-          !(
-            this.blacklist?.hideUnmanaged &&
-            unmanagedEndpoints.includes(node.group)
-          )
-      );
-    };
-
-    const edgeWithHiddenDomain = edge => {
-      if (this.blacklist === undefined) return false;
-      if (this.blacklist.domains?.length > 0) {
-        return this.blacklist.domains.some(
-          domain =>
-            domain.name === edge.fromDomain || domain.name === edge.toDomain
-        );
-      } else return false;
-    };
-
-    const edgeWithHiddenGroup = edge => {
-      if (this.blacklist === undefined) return false;
-      if (this.blacklist.groups?.length > 0) {
-        return this.blacklist.groups.some(
-          group => group.name === edge.fromGroup || group.name === edge.toGroup
-        );
-      } else return false;
-    };
-
-    const edgeWithHiddenEndpoint = edge => {
-      if (this.blacklist === undefined) return false;
-      if (this.blacklist.endpoints?.length > 0) {
-        return this.blacklist.endpoints.some(
-          endpoint => endpoint.id === edge.source || endpoint.id === edge.target
-        );
-      } else return false;
-    };
-
-    const unmanagedDomains = ['nvUnmanagedWorkload', 'nvUnmanagedNode'];
-    const edgeWithUnmanagedEndpoint = edge => {
-      if (this.blacklist === undefined) return false;
-      if (this.blacklist.hideUnmanaged) {
-        return (
-          unmanagedDomains.includes(edge.fromDomain) ||
-          unmanagedDomains.includes(edge.toDomain)
-        );
-      } else return false;
-    };
-    const filterHiddenEdges = edges => {
-      return edges.filter(
-        edge =>
-          !edgeWithHiddenDomain(edge) &&
-          !edgeWithHiddenGroup(edge) &&
-          !edgeWithHiddenEndpoint(edge) &&
-          !edgeWithUnmanagedEndpoint(edge)
-      );
-    };
 
     this.graphService.getNetworkData(this.user).subscribe(response => {
       if (!this.blacklist) {
@@ -1746,8 +1749,8 @@ export class NetworkActivitiesComponent
         JSON.stringify(this.blacklist)
       );
 
-      this.data.nodes = filterHiddenNodes(response.nodes);
-      this.data.edges = filterHiddenEdges(response.edges);
+      this.data.nodes = this.filterHiddenNodes(response.nodes);
+      this.data.edges = this.filterHiddenEdges(response.edges);
       this.serverData = JSON.parse(
         JSON.stringify({ nodes: response.nodes, edges: response.edges })
       );
@@ -1959,9 +1962,7 @@ export class NetworkActivitiesComponent
       if (members && members.length > 0) {
         clusterNodes = members.map(member => {
           const memberNode =
-            this.serverData.nodes[
-              this.graphService.getNodeIdIndexMap().get(member)
-            ];
+            this.serverData.nodes.find(node => node.id === member);
           // @ts-ignore
           memberNode.comboId = `co${clusterNode.id}`;
           const theNode = Object.assign({}, memberNode);
@@ -1980,6 +1981,11 @@ export class NetworkActivitiesComponent
       );
 
       clusterNodes.forEach((item, i) => {
+        let oldNode = this.graph.findById(item.id);
+        if(oldNode){
+          this.graph.removeItem(oldNode);
+        }
+
         item.index = i + 1;
         item.size = item.service_mesh ? 40 : 20;
         item.icon.width = item.service_mesh ? 30 : 13;
@@ -2053,7 +2059,8 @@ export class NetworkActivitiesComponent
         edge.style.endArrow = {
           path: G6.Arrow.triangle(2, 3),
         };
-        this.graph.addItem('edge', edge);
+        if(this.graph.findById(edge.source) && this.graph.findById(edge.target))
+          this.graph.addItem('edge', edge);
       });
 
       this.doSubLayout(clusterNode, clusterNodes);

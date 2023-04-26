@@ -45,7 +45,7 @@ export class CspSupportFormComponent implements OnInit {
           let exportUrl = new Blob([response['body'] || ""], {
             type: 'application/zip',
           });
-          let fileName = `${this.utils.getExportedFileName(response)}.gz`;
+          let fileName = `${this.utils.getExportedFileName(response)}`;
           saveAs(exportUrl, fileName);
         },
         ({ error }: { error: ErrorResponse }) => {

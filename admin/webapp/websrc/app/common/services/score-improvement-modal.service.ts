@@ -42,10 +42,9 @@ export class ScoreImprovementModalService {
     return Object.assign({}, this.scoreInfo.header_data);
   }
 
-  getScores(isGlobalUser: boolean, totalRunningPods: number, domain: any) {
+  getScores(isGlobalUser: boolean, domain: any) {
     return this.dashboardHttpService.getScores(
       isGlobalUser,
-      totalRunningPods,
       domain
     );
   }

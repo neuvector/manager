@@ -29,11 +29,10 @@ export class DashboardService {
 
   getScoreData = (
     isGlobalUser: boolean,
-    podCnt: number,
     domain: string | null
   ) => {
     return this.dashboardHttpService
-      .getScores(isGlobalUser, podCnt, domain)
+      .getScores(isGlobalUser, domain)
       .pipe();
   };
 
@@ -61,7 +60,6 @@ export class DashboardService {
     const rbacPromise = this.getRbacData();
     const scorePromise = this.getScoreData(
       isGlobalUser,
-      GlobalVariable.summary.running_pods,
       null
     );
     return forkJoin([rbacPromise, scorePromise]).pipe();
@@ -73,7 +71,6 @@ export class DashboardService {
   ) => {
     const scorePromise = this.getScoreData(
       isGlobalUser,
-      GlobalVariable.summary.running_pods,
       domain
     );
     const dashboardSecurityEventPromise = this.getDashboardSecurityEvent(domain);

@@ -187,44 +187,42 @@ class DashboardService()(implicit executionContext: ExecutionContext)
         } ~
         path("scores2") {
           get {
-            parameters('isGlobalUser, 'domain.?, 'clusterId.?) {
-              (isGlobalUser, domain, clusterId) =>
-                Utils.respondWithNoCacheControl() {
-                  complete {
-                    try {
-                      val url = domain.fold(s"${baseClusterUri(tokenId)}/internal/system") {
-                        domain =>
-                          if (domain == "") s"${baseClusterUri(tokenId)}/internal/system"
-                          else s"${baseClusterUri(tokenId)}/internal/system?f_domain=${domain}"
-                      }
-                      logger.info("Url: {}", url)
-                      val internalSystemDataRes = RestClient.requestWithHeaderDecode(
-                        url,
-                        GET,
-                        "",
-                        tokenId
-                      )
-                      val internalSystemData = jsonToInternalSystemData(
-                        Await.result(internalSystemDataRes, RestClient.waitingLimit.seconds)
-                      )
-                      logger.info("internalSystemData: {}", internalSystemData)
-                      ScoreOutput2(
-                        getScore2(internalSystemData.metrics, None, false, isGlobalUser == "true"),
-                        internalSystemData.metrics,
-                        internalSystemData.ingress,
-                        internalSystemData.egress
-                      )
-                    } catch {
-                      case NonFatal(e) =>
-                        RestClient.handleError(
-                          timeOutStatus,
-                          authenticationFailedStatus,
-                          serverErrorStatus,
-                          e
-                        )
+            parameters('isGlobalUser, 'domain.?) { (isGlobalUser, domain) =>
+              Utils.respondWithNoCacheControl() {
+                complete {
+                  try {
+                    val url = domain.fold(s"${baseClusterUri(tokenId)}/internal/system") { domain =>
+                      if (domain == "") s"${baseClusterUri(tokenId)}/internal/system"
+                      else s"${baseClusterUri(tokenId)}/internal/system?f_domain=${domain}"
                     }
+                    logger.info("Url: {}", url)
+                    val internalSystemDataRes = RestClient.requestWithHeaderDecode(
+                      url,
+                      GET,
+                      "",
+                      tokenId
+                    )
+                    val internalSystemData = jsonToInternalSystemData(
+                      Await.result(internalSystemDataRes, RestClient.waitingLimit.seconds)
+                    )
+                    logger.info("internalSystemData: {}", internalSystemData)
+                    ScoreOutput2(
+                      getScore2(internalSystemData.metrics, None, false, isGlobalUser == "true"),
+                      internalSystemData.metrics,
+                      internalSystemData.ingress,
+                      internalSystemData.egress
+                    )
+                  } catch {
+                    case NonFatal(e) =>
+                      RestClient.handleError(
+                        timeOutStatus,
+                        authenticationFailedStatus,
+                        serverErrorStatus,
+                        e
+                      )
                   }
                 }
+              }
             }
           } ~
           patch {

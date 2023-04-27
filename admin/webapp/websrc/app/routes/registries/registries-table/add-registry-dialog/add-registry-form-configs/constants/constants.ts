@@ -235,7 +235,6 @@ export const PasswordField = {
     type: 'password',
     icon: 'vpn_key',
     label: 'login.PASSWORD',
-    maxLength: 1000,
   },
 };
 
@@ -346,7 +345,6 @@ export const AccessKeyField = {
     maskOnBlur: true,
     icon: 'vpn_key',
     label: 'registry.AWS_ACCESS_KEY',
-    maxLength: 1000,
   },
 };
 
@@ -368,7 +366,6 @@ export const SecretAccessKeyField = {
     maskOnBlur: true,
     icon: 'vpn_key',
     label: 'registry.AWS_SECRET_KEY',
-    maxLength: 1000,
   },
 };
 
@@ -379,7 +376,6 @@ export const PrivateTokenField = {
     maskOnBlur: true,
     icon: 'vpn_key',
     label: 'registry.GITLAB_PRIVATE_TOKEN',
-    maxLength: 1000,
   },
 };
 
@@ -453,6 +449,5 @@ export const TokenAuthenticationField = {
   templateOptions: {
     icon: 'vpn_key',
     label: 'ldap.TOKEN',
-    maxLength: 1000,
   },
 };

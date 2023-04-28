@@ -685,14 +685,14 @@ export class NetworkActivitiesComponent
         );
     };
 
-    const quickSearch = graph => {
+    const quickSearch = () => {
       this.popupState.leave();
       setTimeout(() => {
         this.popupState.transitTo(PopupState.onQuickSearch);
       }, 300);
     };
 
-    const showFilter = graph => {
+    const showFilter = () => {
       this.popupState.leave();
       this.domains = this.graphService
         .getDomains()
@@ -713,7 +713,7 @@ export class NetworkActivitiesComponent
       return nvName;
     };
 
-    const showBlacklist = graph => {
+    const showBlacklist = () => {
       this.popupState.leave();
       this.domains = this.graphService
         .getDomains()
@@ -1590,7 +1590,7 @@ export class NetworkActivitiesComponent
         this.group = response;
       },
       error => {
-        //Todo error handling.
+        this.popupState.leave();
         console.warn(error);
       }
     );
@@ -1641,7 +1641,7 @@ export class NetworkActivitiesComponent
     } else this.loadGraph();
 
     this._switchClusterSubscription =
-      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
         this.refresh();
       });
   }

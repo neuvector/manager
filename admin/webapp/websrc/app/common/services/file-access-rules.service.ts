@@ -86,8 +86,8 @@ export class FileAccessRulesService {
         return '';
       },
       icons: {
-        sortAscending: '<em class="fa fa-sort-numeric-asc"/>',
-        sortDescending: '<em class="fa fa-sort-numeric-desc"/>',
+        sortAscending: '<em class="fas fa-sort-numeric-up"/>',
+        sortDescending: '<em class="fas fa-sort-numeric-down"/>',
       },
       comparator: (value1, value2, node1, node2) => {
         this.dateComparator(value1, value2, node1, node2);

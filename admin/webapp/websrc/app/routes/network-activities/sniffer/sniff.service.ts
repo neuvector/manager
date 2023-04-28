@@ -35,8 +35,8 @@ export class SniffService {
         cellRenderer: params =>
           moment(params.value * 1000).format("MM/DD/Y HH:mm:ss"),
         icons: {
-          sortAscending: '<em class="fa fa-sort-numeric-asc"></em>',
-          sortDescending: '<em class="fa fa-sort-numeric-desc"></em>'
+          sortAscending: '<em class="fas fa-sort-numeric-up"></em>',
+          sortDescending: '<em class="fas fa-sort-numeric-down"></em>'
         },
         minWidth: 160,
         maxWidth: 170
@@ -52,8 +52,8 @@ export class SniffService {
         cellClass: 'grid-right-align',
         cellRenderer: 'agAnimateShowChangeCellRenderer',
         icons: {
-          sortAscending: '<em class="fa fa-sort-numeric-asc"></em>',
-          sortDescending: '<em class="fa fa-sort-numeric-desc"></em>',
+          sortAscending: '<em class="fas fa-sort-numeric-up"></em>',
+          sortDescending: '<em class="fas fa-sort-numeric-down"></em>',
         },
       },
       {
@@ -65,8 +65,8 @@ export class SniffService {
           else return "";
         },
         icons: {
-          sortAscending: '<em class="fa fa-sort-numeric-asc"></em>',
-          sortDescending: '<em class="fa fa-sort-numeric-desc"></em>'
+          sortAscending: '<em class="fas fa-sort-numeric-up"></em>',
+          sortDescending: '<em class="fas fa-sort-numeric-down"></em>'
         },
         minWidth: 160,
         maxWidth: 170

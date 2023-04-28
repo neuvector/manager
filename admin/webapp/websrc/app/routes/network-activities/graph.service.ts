@@ -1244,8 +1244,8 @@ export class GraphService {
         cellClass: 'grid-right-align',
         cellRenderer: 'agAnimateShowChangeCellRenderer',
         icons: {
-          sortAscending: '<em class="fa fa-sort-numeric-asc"></em>',
-          sortDescending: '<em class="fa fa-sort-numeric-desc"></em>',
+          sortAscending: '<em class="fas fa-sort-numeric-up"></em>',
+          sortDescending: '<em class="fas fa-sort-numeric-down"></em>',
         },
         width: 200,
       },
@@ -1256,8 +1256,8 @@ export class GraphService {
         cellClass: 'grid-right-align',
         cellRenderer: 'agAnimateShowChangeCellRenderer',
         icons: {
-          sortAscending: '<em class="fa fa-sort-numeric-asc"></em>',
-          sortDescending: '<em class="fa fa-sort-numeric-desc"></em>',
+          sortAscending: '<em class="fas fa-sort-numeric-up"></em>',
+          sortDescending: '<em class="fas fa-sort-numeric-down"></em>',
         },
         width: 200,
       },
@@ -1308,8 +1308,8 @@ export class GraphService {
         valueFormatter: this.ageFormatter,
         comparator: this.ageComparator,
         icons: {
-          sortAscending: '<em class="fa fa-sort-numeric-asc"></em>',
-          sortDescending: '<em class="fa fa-sort-numeric-desc"></em>',
+          sortAscending: '<em class="fas fa-sort-numeric-up"></em>',
+          sortDescending: '<em class="fas fa-sort-numeric-down"></em>',
         },
       },
     ];
@@ -1327,29 +1327,32 @@ export class GraphService {
         {
           headerName: ' ',
           cellRenderer: function (params) {
-            const proxy = `<div class="label label-info"> Proxy </div>`;
+            const proxy = `<div class="action-label text-info"> Proxy </div>`;
 
             if (params.data.severity) {
               if (params.data.to_sidecar)
-                return `<span><em class="fa fa-bug text-danger mr-sm"></em> ${params.data.threat_name}${proxy}</span>`;
+                return `<span><em class="fas fa-bug text-danger mr-1"></em> ${params.data.threat_name}${proxy}</span>`;
               else
-                return `<span><em class="fa fa-bug text-danger"></em> ${params.data.threat_name}</span>`;
+                return `<span><em class="fas fa-bug text-danger"></em> ${params.data.threat_name}</span>`;
             } else if (
               params.data.policy_action === 'violate' ||
               params.data.policy_action === 'deny'
             ) {
               if (params.data.to_sidecar)
-                return `<span><em class="fa fa-ban text-warning mr-sm"></em>${proxy}</span>`;
+                return `<span><em class="fas fa-ban text-warning mr-1"></em>${proxy}</span>`;
               else
-                return `<span><em class="fa fa-ban text-warning"></em></span>`;
+                return `<span><em class="fas fa-ban text-warning"></em></span>`;
             } else {
               if (params.data.to_sidecar)
-                return `<span><em class="fa fa-check text-green mr-sm"></em>${proxy}</span>`;
+                return `<span><em class="fas fa-check text-success mr-1"></em>${proxy}</span>`;
               else
-                return `<span><em class="fa fa-check text-green"></em></span>`;
+                return `<span><em class="fas fa-check text-success"></em></span>`;
             }
           },
           sortable: false,
+          width: 110,
+          minWidth: 110,
+          maxWidth: 120,
         },
         {
           headerName: this.translate.instant('network.gridHeader.APP'),
@@ -1443,8 +1446,8 @@ export class GraphService {
           },
           comparator: this.bytesComparator,
           icons: {
-            sortAscending: '<em class="fa fa-sort-numeric-asc"></em>',
-            sortDescending: '<em class="fa fa-sort-numeric-desc"></em>',
+            sortAscending: '<em class="fas fa-sort-numeric-up"></em>',
+            sortDescending: '<em class="fas fa-sort-numeric-down"></em>',
           },
         },
         {
@@ -1494,8 +1497,8 @@ export class GraphService {
           field: 'last_seen_at',
           comparator: this.dateComparator,
           icons: {
-            sortAscending: '<em class="fa fa-sort-numeric-asc"></em>',
-            sortDescending: '<em class="fa fa-sort-numeric-desc"></em>',
+            sortAscending: '<em class="fas fa-sort-numeric-up"></em>',
+            sortDescending: '<em class="fas fa-sort-numeric-down"></em>',
           },
           minWidth: 160,
           maxWidth: 200,

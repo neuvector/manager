@@ -149,8 +149,8 @@ export class GroupsService {
         headerName: this.translate.instant('group.gridHeader.NETWORK_RULES'),
         field: 'policy_rules.length',
         icons: {
-          sortAscending: '<em class="fa fa-sort-numeric-asc"></em>',
-          sortDescending: '<em class="fa fa-sort-numeric-desc"></em>',
+          sortAscending: '<em class="fas fa-sort-numeric-up"></em>',
+          sortDescending: '<em class="fas fa-sort-numeric-down"></em>',
         },
         maxWidth: 140,
         minWidth: 70,
@@ -161,8 +161,8 @@ export class GroupsService {
         headerName: this.translate.instant('group.gridHeader.RESPONSE_RULES'),
         field: 'response_rules.length',
         icons: {
-          sortAscending: '<em class="fa fa-sort-numeric-asc"></em>',
-          sortDescending: '<em class="fa fa-sort-numeric-desc"></em>',
+          sortAscending: '<em class="fas fa-sort-numeric-up"></em>',
+          sortDescending: '<em class="fas fa-sort-numeric-down"></em>',
         },
         maxWidth: 140,
         minWidth: 80,
@@ -174,8 +174,8 @@ export class GroupsService {
         field: 'policy_rules',
         cellRenderer: GroupNetworkRulesComponent,
         icons: {
-          sortAscending: '<em class="fa fa-sort-numeric-asc"></em>',
-          sortDescending: '<em class="fa fa-sort-numeric-desc"></em>',
+          sortAscending: '<em class="fas fa-sort-numeric-up"></em>',
+          sortDescending: '<em class="fas fa-sort-numeric-down"></em>',
         },
         minWidth: 150,
         width: 150,
@@ -188,8 +188,8 @@ export class GroupsService {
         field: 'response_rules',
         cellRenderer: GroupResponseRulesComponent,
         icons: {
-          sortAscending: '<em class="fa fa-sort-numeric-asc"></em>',
-          sortDescending: '<em class="fa fa-sort-numeric-desc"></em>',
+          sortAscending: '<em class="fas fa-sort-numeric-up"></em>',
+          sortDescending: '<em class="fas fa-sort-numeric-down"></em>',
         },
         minWidth: 150,
         width: 150,

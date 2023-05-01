@@ -94,7 +94,6 @@
           [type]="passwordVisible ? 'text' : 'password'"
           formControlName="client_secret"
           placeholder="{{ isCreated ? '******' : '' }}"
-          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
           matInput />
         <mat-error
           *ngIf="openidForm.controls.client_secret.hasError('required')">

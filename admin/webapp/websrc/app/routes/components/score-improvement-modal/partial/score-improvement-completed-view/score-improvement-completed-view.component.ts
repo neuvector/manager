@@ -42,7 +42,7 @@ export class ScoreImprovementCompletedViewComponent implements OnInit {
       console.warn('Summary uninitialized');
     }
     this.scoreImprovementModalService
-      .getScores(this.isGlobalUser, GlobalVariable.summary.running_pods, null)
+      .getScores(this.isGlobalUser, null)
       .subscribe(scoreInfo => {
         this.fixedScore = scoreInfo.score.securityRiskScore;
         const metrics = this.getGaugeMetrics(this.fixedScore);

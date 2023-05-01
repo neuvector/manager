@@ -259,8 +259,8 @@ export class NetworkRulesService {
         cellRenderer: lastModifiedTimestampRenderFunc,
         comparator: dateComparator,
         icons: {
-          sortAscending: '<em class="fa fa-sort-numeric-asc"/>',
-          sortDescending: '<em class="fa fa-sort-numeric-desc"/>',
+          sortAscending: '<em class="fas fa-sort-numeric-up"/>',
+          sortDescending: '<em class="fas fa-sort-numeric-down"/>',
         },
         width: 200,
       },

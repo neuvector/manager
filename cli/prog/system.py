@@ -185,9 +185,15 @@ def showLocalSystemConfig(data, scope):
         conf["syslog_addr"] = "%s:%d" % (conf["syslog_ip"], conf["syslog_port"])
     else:
         conf["syslog_addr"] = ""
+    conf["syslog_protocol"] = ""
     if conf["syslog_ip_proto"] == 6:
         conf["syslog_protocol"] = "TCP"
-    else:
+    elif conf["syslog_ip_proto"] == 66:
+        conf["syslog_protocol"] = "TCP/TLS"
+        cert = conf["syslog_server_cert"]
+        if cert[len(cert)-1] == '\n':
+            conf["syslog_server_cert"] = cert[0:len(cert)-1]
+    elif conf["syslog_ip_proto"] == 17:
         conf["syslog_protocol"] = "UDP"
 
     conf["ibmsa_ep"] = ""
@@ -201,12 +207,21 @@ def showLocalSystemConfig(data, scope):
                    ("ibmsa_ep_dashboard_url", "       NeuVector Dashboard URL"),
                    ("ibmsa_ep_connected_at", "       Connection creation time"),)
 
-    column_map += (("syslog_addr", "Syslog Address"),
+    if conf["syslog_ip_proto"] == 66:
+        column_map += (("syslog_addr", "Syslog Address"),
+                       ("syslog_protocol", "       Protocol"),
+                       ("syslog_server_cert", "       Server Certificate"),
+                       ("syslog_level", "       Level"),
+                       ("syslog_in_json", "       In-JSON"),
+                       ("syslog_status", "       Status"),
+                       ("syslog_categories", "       Categories"),)
+    else:
+        column_map += (("syslog_addr", "Syslog Address"),
                    ("syslog_protocol", "       Protocol"),
                    ("syslog_level", "       Level"),
                    ("syslog_in_json", "       In-JSON"),
                    ("syslog_status", "       Status"),
-                   ("syslog_categories", "       categories"),)
+                   ("syslog_categories", "       Categories"),)
     if "single_cve_per_syslog" in conf:
         column_map += (("single_cve_per_syslog", "Single CVE per syslog"),)
     if "auth_order" in conf:
@@ -651,14 +666,25 @@ def set_system_syslog_server(data, address):
 
 
 @set_system_syslog.command("protocol")
-@click.argument('protocol', type=click.Choice(['UDP', 'TCP']))
+@click.argument('protocol', type=click.Choice(['UDP', 'TCP', 'TCPTLS']))
+@click.option("--cert_file_path", default="", help="file path of syslog server certificate for TCP/TLS protocol")
 @click.pass_obj
-def set_system_syslog_protocol(data, protocol):
-    """Set syslog level"""
+def set_system_syslog_protocol(data, protocol, cert_file_path):
+    """Set syslog protocol"""
     if protocol == 'TCP':
-        data.client.config_system(syslog_ip_proto=6)
+        data.client.config_system(syslog_ip_proto=6, syslog_server_cert="")
+    elif protocol == 'TCPTLS':
+        cert = ""
+        if cert_file_path is not None and cert_file_path != "":
+            f = open(cert_file_path)
+            cert = f.read()
+            f.close()
+        if cert == "":
+            click.echo("Error: Syslog server certificate file path not specified")
+        else:
+            data.client.config_system(syslog_ip_proto=66, syslog_server_cert=cert)
     else:
-        data.client.config_system(syslog_ip_proto=17)
+        data.client.config_system(syslog_ip_proto=17, syslog_server_cert="")
 
 
 @set_system_syslog.command("level")
@@ -988,7 +1014,7 @@ def unset_system_syslog_server(data):
 @click.pass_obj
 def unset_system_syslog_protocol(data):
     """Unset syslog protocol."""
-    data.client.config_system(syslog_ip_proto=0)
+    data.client.config_system(syslog_ip_proto=0, syslog_server_cert="")
 
 
 @unset_system_syslog.command("level")

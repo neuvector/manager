@@ -40,7 +40,9 @@ export class VulnerabilitiesGridComponent implements OnInit, OnChanges {
   gridApi!: GridApi;
   rowClassRules: RowClassRules = {
     'accepted-vulnerability': params => {
-      return params.data?.tags?.some(tag => tag === 'accepted');
+      return (
+        params.data?.tags && params.data?.tags.some(tag => tag === 'accepted')
+      );
     },
   };
   columnDefs: ColDef[] = [

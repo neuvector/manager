@@ -446,7 +446,9 @@
         "RBAC_ERR_TITLE": "RBAC Role Error",
         "CLUSTERROLE_ERRORS": "Cluster Role",
         "CLUSTERROLEBINDING_ERRORS": "Cluster Role Binding",
-        "ROLEBINDING_ERRORS": "Role Binding"
+        "ROLEBINDING_ERRORS": "Role Binding",
+        "ROLE_ERRORS": "Role",
+        "NEUVECTOR_CRD_ERROR": "Neuvector CRD"
       }
     },
     "help": {

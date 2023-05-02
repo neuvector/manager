@@ -1,6 +1,7 @@
 import { RiskType } from './enum';
 
 export interface RbacStatus {
+  neuvector_crd_errors: string[];
   clusterrole_errors: string[];
   clusterrolebinding_errors: string[];
   rolebinding_errors: string[];

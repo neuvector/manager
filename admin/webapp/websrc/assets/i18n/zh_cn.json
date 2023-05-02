@@ -446,7 +446,9 @@
         "RBAC_ERR_TITLE": "RBAC角色错误",
         "CLUSTERROLE_ERRORS": "集群角色",
         "CLUSTERROLEBINDING_ERRORS": "集群角色绑定",
-        "ROLEBINDING_ERRORS": "角色绑定"
+        "ROLEBINDING_ERRORS": "角色绑定",
+        "ROLE_ERRORS": "Role",
+        "NEUVECTOR_CRD_ERROR": "Neuvector CRD"
       }
     },
     "help": {

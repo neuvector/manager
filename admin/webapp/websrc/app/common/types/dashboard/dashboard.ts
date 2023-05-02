@@ -1,9 +1,11 @@
 import { RiskType } from './enum';
 
 export interface RbacStatus {
-  clusterrole_errors: Array<string>;
-  clusterrolebinding_errors: Array<string>;
-  rolebinding_errors: Array<string>;
+  neuvector_crd_errors: string[];
+  clusterrole_errors: string[];
+  clusterrolebinding_errors: string[];
+  rolebinding_errors: string[];
+  role_errors: string[];
 }
 
 export interface Score {

@@ -448,7 +448,7 @@
         "CLUSTERROLEBINDING_ERRORS": "Cluster Role Binding",
         "ROLEBINDING_ERRORS": "Role Binding",
         "ROLE_ERRORS": "Role",
-        "NEUVECTOR_CRD_ERROR": "Neuvector CRD"
+        "NEUVECTOR_CRD_ERRORS": "Neuvector CRD"
       }
     },
     "help": {

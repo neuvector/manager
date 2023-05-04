@@ -448,7 +448,7 @@
         "CLUSTERROLEBINDING_ERRORS": "集群角色绑定",
         "ROLEBINDING_ERRORS": "角色绑定",
         "ROLE_ERRORS": "Role",
-        "NEUVECTOR_CRD_ERROR": "Neuvector CRD"
+        "NEUVECTOR_CRD_ERRORS": "Neuvector CRD"
       }
     },
     "help": {

@@ -853,7 +853,7 @@ export class NetworkActivitiesComponent
 
       layout: {
         type: 'fruchterman',
-        workerEnabled: true,
+        workerEnabled: false,
         gpuEnabled: this.useGpu(),
         gravity: 6,
         clusterGravity: 4,

@@ -11,8 +11,8 @@ import {
   IBMSetupGetResponse,
 } from '@common/types';
 import { GlobalVariable } from '@common/variables/global.variable';
-import { Observable } from 'rxjs';
-import { pluck } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { pluck, catchError } from 'rxjs/operators';
 
 @Injectable()
 export class ConfigHttpService {
@@ -107,6 +107,13 @@ export class ConfigHttpService {
       PathConstant.CSP_SUPPORT_URL,
       null,
       options
+    ).pipe(
+      catchError(error => {
+        const textDecoder = new TextDecoder();
+        error.error = JSON.parse(textDecoder.decode(error.error));
+        return throwError(error);
+      })
+
     );
   }
 }

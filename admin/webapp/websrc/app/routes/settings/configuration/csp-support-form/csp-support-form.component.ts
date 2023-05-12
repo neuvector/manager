@@ -17,6 +17,7 @@ import { ErrorResponse } from '@common/types';
 export class CspSupportFormComponent implements OnInit {
 
   submittingForm = false;
+  errorMsg: string = '';
   cspExportForm = new FormGroup({
     export: new FormControl(null, Validators.required)
   });
@@ -33,6 +34,7 @@ export class CspSupportFormComponent implements OnInit {
 
   submitExport = () => {
     this.submittingForm = true;
+    this.errorMsg = '';
     this.settingsService
       .getCspSupport()
       .pipe(
@@ -47,13 +49,13 @@ export class CspSupportFormComponent implements OnInit {
           });
           let fileName = `${this.utils.getExportedFileName(response)}`;
           saveAs(exportUrl, fileName);
-        },
-        ({ error }: { error: ErrorResponse }) => {
           this.notificationService.open(
-            this.tr.instant('setting.EXPORT_FAILED'),
-            GlobalConstant.NOTIFICATION_TYPE.ERROR
+            this.tr.instant('setting.EXPORT_OK')
           );
+        },
+        error => {
           console.warn(error);
+          this.errorMsg = typeof error.error === 'string' ? error.error : error.error.message;
         }
       );
   }

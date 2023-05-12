@@ -110,7 +110,8 @@ export class ConfigHttpService {
     ).pipe(
       catchError(error => {
         const textDecoder = new TextDecoder();
-        error.error = JSON.parse(textDecoder.decode(error.error));
+        let errorRes = textDecoder.decode(error.error);
+        error.error = typeof errorRes === 'string' ? errorRes : JSON.parse(errorRes);
         return throwError(error);
       })
 

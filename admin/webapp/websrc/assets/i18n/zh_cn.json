@@ -2865,6 +2865,7 @@
     "USAGE_RPT": "用途报告",
     "SUPPORT_IN_PROGRESS": "正收集系统各组件日志...",
     "SUPPORT_INFO": "请发送support@neuvector.com",
+    "EXPORT_OK": "文件导出成功",
     "EXPORT_FAILED": "文件导出失败",
     "SUBMIT_OK": "系统设置更新成功!",
     "SUBMIT_FAILED": "系统设置更新失败",

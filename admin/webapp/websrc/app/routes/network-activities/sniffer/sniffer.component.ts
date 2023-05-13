@@ -33,6 +33,7 @@ export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
   exportFilename: string = '';
   onSnifferErr: boolean = false;
   snifferErrMsg: string = '';
+  errorMsg: string = '';
 
   private sniffOnId: string = '';
 
@@ -238,17 +239,24 @@ export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
     );
 
   downloadPacket = jobId => {
-    this.sniffService.downloadPacket(jobId).subscribe(response => {
-      let raw = response.headers.get('Content-Type');
-      let nameAndParts = this.sniffService.multiPart_parse(response.body, raw);
-      this.exportFilename = nameAndParts.filename;
-      this.exportUrl = this.sanitizer.bypassSecurityTrustUrl(
-        URL.createObjectURL(
-          new Blob([nameAndParts.parts[nameAndParts.filename]])
-        )
-      );
-      this.downloadId = jobId;
-    });
+    this.errorMsg = '';
+    this.sniffService.downloadPacket(jobId).subscribe(
+      response => {
+        let raw = response.headers.get('Content-Type');
+        let nameAndParts = this.sniffService.multiPart_parse(response.body, raw);
+        this.exportFilename = nameAndParts.filename;
+        this.exportUrl = this.sanitizer.bypassSecurityTrustUrl(
+          URL.createObjectURL(
+            new Blob([nameAndParts.parts[nameAndParts.filename]])
+          )
+        );
+        this.downloadId = jobId;
+      },
+      error => {
+        console.warn(error);
+        this.errorMsg = typeof error.error === 'string' ? error.error : error.error.message;
+      }
+    );
   };
 
   snifferSubscription: Subscription | undefined;

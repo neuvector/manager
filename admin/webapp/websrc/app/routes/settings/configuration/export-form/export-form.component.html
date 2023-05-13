@@ -24,6 +24,7 @@
           class="ml-auto">
         </app-loading-button>
       </div>
+      <div *ngIf="errorMsg" class="ml-4 text-danger">{{ errorMsg }}</div>
     </div>
     <mat-divider class="position-relative"></mat-divider>
   </ng-container>

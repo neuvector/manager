@@ -52,6 +52,13 @@ export class ConfigHttpService {
     return GlobalVariable.http.get<ArrayBuffer>(
       PathConstant.SYSTEM_CONFIG_URL,
       options
+    ).pipe(
+      catchError(error => {
+        const textDecoder = new TextDecoder();
+        let errorRes = textDecoder.decode(error.error);
+        error.error = typeof errorRes === 'string' ? errorRes : JSON.parse(errorRes);
+        return throwError(error);
+      })
     );
   }
 
@@ -93,7 +100,14 @@ export class ConfigHttpService {
   getDebug(): Observable<ArrayBuffer> {
     return GlobalVariable.http.get<ArrayBuffer>(PathConstant.SYSTEM_DEBUG_URL, {
       responseType: 'arraybuffer' as any,
-    });
+    }).pipe(
+      catchError(error => {
+        const textDecoder = new TextDecoder();
+        let errorRes = textDecoder.decode(error.error);
+        error.error = typeof errorRes === 'string' ? errorRes : JSON.parse(errorRes);
+        return throwError(error);
+      })
+    );
   }
 
   getCspSupport() {

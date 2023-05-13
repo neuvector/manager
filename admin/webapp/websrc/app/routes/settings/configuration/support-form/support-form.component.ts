@@ -24,6 +24,7 @@ export class SupportFormComponent implements OnDestroy {
   collectingLog = false;
   collectingLogReady = false;
   stopCollect$ = new Subject<boolean>();
+  errorMsg: string = '';
 
   constructor(
     private settingsService: SettingsService,
@@ -147,16 +148,26 @@ export class SupportFormComponent implements OnDestroy {
   }
 
   downloadLog(): void {
+    this.errorMsg = '';
     if (!this.collectingLogReady) return;
-    this.enforcersService.getDebug().subscribe(res => {
-      let filename = `nvsupport_${this.utils.parseDatetimeStr(
-        new Date()
-      )}.json.gz`;
-      let exportUrl = new Blob([res], {
-        type: 'application/x-gzip',
-      });
-      saveAs(exportUrl, filename);
-    });
+    this.enforcersService.getDebug().subscribe(
+      res => {
+        let filename = `nvsupport_${this.utils.parseDatetimeStr(
+          new Date()
+        )}.json.gz`;
+        let exportUrl = new Blob([res], {
+          type: 'application/x-gzip',
+        });
+        saveAs(exportUrl, filename);
+        this.notificationService.open(
+          this.tr.instant('setting.EXPORT_OK')
+        );
+      },
+      error => {
+        console.warn(error);
+        this.errorMsg = typeof error.error === 'string' ? error.error : error.error.message;
+      }
+    );
   }
 
   cancelCollect(): void {

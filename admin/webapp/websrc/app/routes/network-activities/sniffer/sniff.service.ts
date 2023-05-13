@@ -8,6 +8,8 @@ import * as $ from "jquery";
 import * as moment from "moment";
 import { PathConstant } from "@common/constants/path.constant";
 import { BytesPipe } from "@common/pipes/app.pipes";
+import { throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class SniffService {
@@ -110,7 +112,14 @@ export class SniffService {
         observe: 'response',
         headers: { "Cache-Control": "no-store" }
       })
-      .pipe();
+      .pipe(
+        catchError(error => {
+          const textDecoder = new TextDecoder();
+          let errorRes = textDecoder.decode(error.error);
+          error.error = typeof errorRes === 'string' ? errorRes : JSON.parse(errorRes);
+          return throwError(error);
+        })
+      );
 
   multiPart_parse(body, contentType) {
     let m = contentType.match(/boundary=(?:"([^"]+)"|([^;]+))/i);

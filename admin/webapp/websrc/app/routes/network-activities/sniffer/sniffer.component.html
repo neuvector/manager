@@ -62,8 +62,11 @@
         (click)="startSniff(containerId)">
         <em class="fa fa-play"></em>
       </button>
-      <div *ngIf="onSnifferErr" class="pull-left mt-sm ml">
+      <div *ngIf="onSnifferErr" class="pull-left mt-2 ml-4">
         <span class="text-danger">{{ snifferErrMsg }}</span>
+      </div>
+      <div *ngIf="errorMsg" class="pull-left mt-2 ml-4">
+        <span class="text-danger">{{ errorMsg }}</span>
       </div>
     </div>
     <div class="docURLBase col-2">

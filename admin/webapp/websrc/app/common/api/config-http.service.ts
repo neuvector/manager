@@ -56,7 +56,7 @@ export class ConfigHttpService {
       catchError(error => {
         const textDecoder = new TextDecoder();
         let errorRes = textDecoder.decode(error.error);
-        error.error = typeof errorRes === 'string' ? errorRes : JSON.parse(errorRes);
+        error.error = error.headers.get('Content-type') === 'application/json' ? JSON.parse(errorRes).message : errorRes;
         return throwError(error);
       })
     );
@@ -104,7 +104,7 @@ export class ConfigHttpService {
       catchError(error => {
         const textDecoder = new TextDecoder();
         let errorRes = textDecoder.decode(error.error);
-        error.error = typeof errorRes === 'string' ? errorRes : JSON.parse(errorRes);
+        error.error = error.headers.get('Content-type') === 'application/json' ? JSON.parse(errorRes).message : errorRes;
         return throwError(error);
       })
     );
@@ -125,7 +125,7 @@ export class ConfigHttpService {
       catchError(error => {
         const textDecoder = new TextDecoder();
         let errorRes = textDecoder.decode(error.error);
-        error.error = typeof errorRes === 'string' ? errorRes : JSON.parse(errorRes);
+        error.error = error.headers.get('Content-type') === 'application/json' ? JSON.parse(errorRes).message : errorRes;
         return throwError(error);
       })
 

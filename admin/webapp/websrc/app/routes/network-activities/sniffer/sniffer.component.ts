@@ -254,7 +254,7 @@ export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
       },
       error => {
         console.warn(error);
-        this.errorMsg = typeof error.error === 'string' ? error.error : error.error.message;
+        this.errorMsg = error.error;
       }
     );
   };

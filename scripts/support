@@ -23,6 +23,7 @@ support_global = [
     "/v1/fed/member",
     "/v1/user_role",
     "/v1/user",
+    "/v1/api_key",
     "/v1/password_profile",
     "/v1/server",
     "/v1/server/_platform_/user",

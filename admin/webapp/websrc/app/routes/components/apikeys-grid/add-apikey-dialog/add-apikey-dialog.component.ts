@@ -11,10 +11,18 @@ import { UtilsService } from '@common/utils/app.utils';
 import { MapConstant } from '@common/constants/map.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { GlobalConstant } from '@common/constants/global.constant';
-import { Apikey, ApikeyExpiration, ApikeyInit } from '@common/types';
+import {
+  Apikey,
+  ApikeyExpiration,
+  ApikeyInit,
+  ErrorResponse,
+} from '@common/types';
+import { SettingsService } from '@services/settings.service';
+import { finalize } from 'rxjs/operators';
+import { NotificationService } from '@services/notification.service';
+import { TranslateService } from '@ngx-translate/core';
 
 interface AddApikeyDialog {
-  apikeyInit: ApikeyInit;
   globalRoles: string[];
   domainRoles: string[];
   domains: string[];
@@ -42,6 +50,7 @@ export class AddApikeyDialogComponent implements OnInit {
   ];
   form!: FormGroup;
   saving$ = new Subject();
+  apikeyInit!: ApikeyInit;
   toggleAdvSetting = false;
   get showAdvSetting() {
     const role = this.form.controls.role.value;
@@ -68,14 +77,15 @@ export class AddApikeyDialogComponent implements OnInit {
     return this.form.get('expiration_type')?.value;
   }
   get bearerToken(): string {
-    return `${this.form.get('apikey_name')?.value}:${
-      this.form.get('apikey_secret')?.value
-    }`;
+    return `${this.apikeyInit.apikey_name}:${this.apikeyInit.apikey_secret}`;
   }
 
   constructor(
     public dialogRef: MatDialogRef<ApikeysGridComponent>,
     @Inject(MAT_DIALOG_DATA) public data: AddApikeyDialog,
+    private settingsService: SettingsService,
+    private notificationService: NotificationService,
+    private tr: TranslateService,
     private utils: UtilsService
   ) {}
 
@@ -92,23 +102,19 @@ export class AddApikeyDialogComponent implements OnInit {
     );
     this.activeRole = this.domainTableSource.data[0].namespaceRole;
     this.form = new FormGroup({
-      apikey_name: new FormControl(this.data.apikeyInit.apikey_name, [
+      apikey_name: new FormControl('', [
         Validators.required,
         Validators.pattern(/^[\w-]{1,32}$/),
       ]),
-      apikey_secret: new FormControl(
-        { value: this.data.apikeyInit.apikey_secret, disabled: true },
-        Validators.required
-      ),
       description: new FormControl(''),
       role: new FormControl(this.data.globalRoles[0]),
-      expiration_type: new FormControl('never'),
+      expiration_type: new FormControl('oneday'),
       expiration_hours: new FormControl(0),
     });
   }
 
-  onNoClick(): void {
-    this.dialogRef.close();
+  onNoClick(saved: boolean = false): void {
+    this.dialogRef.close(saved);
   }
 
   @Output() confirm = new EventEmitter<Apikey>();
@@ -130,7 +136,21 @@ export class AddApikeyDialogComponent implements OnInit {
         this.customExpUnit
       );
     }
-    this.confirm.emit(patch);
+    this.settingsService
+      .addApikey(patch)
+      .pipe(finalize(() => this.saving$.next(false)))
+      .subscribe({
+        next: apikeyInit => {
+          this.apikeyInit = apikeyInit;
+        },
+        error: ({ error }: { error: ErrorResponse }) => {
+          this.onNoClick();
+          this.notificationService.openError(
+            error,
+            this.tr.instant('apikey.msg.ADD_NG')
+          );
+        },
+      });
   }
 
   private getHours(amount: number, unit: string): number {

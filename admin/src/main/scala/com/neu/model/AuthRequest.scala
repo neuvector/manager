@@ -11,7 +11,6 @@ case class Apikey(
   expiration_type: String,
   expiration_hours: Int,
   apikey_name: String,
-  apikey_secret: String,
   description: String,
   role: String,
   role_domains: Option[Map[String, Array[String]]]

@@ -117,10 +117,6 @@ export class SettingsService {
     return this.authHttpService.getApikey(id);
   }
 
-  createApikey() {
-    return this.authHttpService.postEmptyApikey();
-  }
-
   addApikey(apikey: Apikey) {
     return this.authHttpService.postApikey(apikey);
   }

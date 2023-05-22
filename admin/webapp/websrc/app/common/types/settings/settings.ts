@@ -216,7 +216,6 @@ export interface Apikey {
   expiration_type: ApikeyExpiration;
   expiration_hours: number;
   apikey_name: string;
-  apikey_secret: string;
   description: string;
   role: string;
   role_domains: {
@@ -227,7 +226,10 @@ export interface Apikey {
   created_by_entity?: number;
 }
 
-export type ApikeyInit = Pick<Apikey, 'apikey_name' | 'apikey_secret'>;
+export interface ApikeyInit {
+  apikey_name: string;
+  apikey_secret: string;
+}
 
 export interface ApikeyGetResponse {
   apikeys: Apikey[];

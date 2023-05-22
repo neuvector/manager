@@ -14,6 +14,9 @@
     grid-column-start: 1;
     grid-column-end: 3;
   }
+  &.no-gap {
+    margin-top: -1rem;
+  }
 }
 
 .apikey__radio-group {

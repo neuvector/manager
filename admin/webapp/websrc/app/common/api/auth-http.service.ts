@@ -95,16 +95,12 @@ export class AuthHttpService {
       .pipe(pluck('apikey'));
   }
 
-  postEmptyApikey(): Observable<ApikeyInit> {
+  postApikey(apikey: Apikey): Observable<ApikeyInit> {
     return GlobalVariable.http
-      .post<ApikeyInit>(PathConstant.APIKEY_URL, null)
+      .post<ApikeyInit>(PathConstant.APIKEY_URL, {
+        apikey,
+      })
       .pipe(pluck('apikey'));
-  }
-
-  postApikey(apikey: Apikey): Observable<unknown> {
-    return GlobalVariable.http.post<unknown>(PathConstant.APIKEY_URL, {
-      apikey,
-    });
   }
 
   deleteApikey(name: string): Observable<unknown> {

@@ -148,39 +148,21 @@ export class ApikeysGridComponent implements OnInit {
     this.gridApi.sizeColumnsToFit();
   }
 
-  createApikey(): void {
-    this.settingsService.createApikey().subscribe(apikeyInit => {
-      const addDialogRef = this.dialog.open(AddApikeyDialogComponent, {
-        width: '80%',
-        maxWidth: '1100px',
-        data: {
-          apikeyInit: apikeyInit,
-          globalRoles: this.globalRoles,
-          domainRoles: this.domainRoles,
-          domains: this.domains,
-        },
-      });
-      addDialogRef.componentInstance.confirm
-        .pipe(
-          take(1),
-          switchMap((apikey: Apikey) => this.settingsService.addApikey(apikey)),
-          finalize(() => {
-            addDialogRef.componentInstance.saving$.next(false);
-            addDialogRef.componentInstance.onNoClick();
-          })
-        )
-        .subscribe({
-          complete: () => {
-            this.notificationService.open(this.tr.instant('apikey.msg.ADD_OK'));
-            setTimeout(() => this.refreshData.emit(), 1000);
-          },
-          error: ({ error }: { error: ErrorResponse }) => {
-            this.notificationService.openError(
-              error,
-              this.tr.instant('apikey.msg.ADD_NG')
-            );
-          },
-        });
+  addApikey(): void {
+    const addDialogRef = this.dialog.open(AddApikeyDialogComponent, {
+      width: '80%',
+      maxWidth: '1100px',
+      data: {
+        globalRoles: this.globalRoles,
+        domainRoles: this.domainRoles,
+        domains: this.domains,
+      },
+    });
+    addDialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+        this.notificationService.open(this.tr.instant('apikey.msg.ADD_OK'));
+        setTimeout(() => this.refreshData.emit(), 1000);
+      }
     });
   }
 

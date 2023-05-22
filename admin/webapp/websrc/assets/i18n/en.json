@@ -1776,7 +1776,7 @@
     "REMOVE": "Delete API Key",
     "gridHeader": {
       "STATE": "State",
-      "NAME": "Access Key",
+      "NAME": "API Key Name",
       "DESCRIPTION": "Description",
       "ROLE": "Global Role",
       "EXPIRES": "Expires",
@@ -1792,6 +1792,7 @@
       "ONEMONTH": "A month from now",
       "ONEYEAR": "A year from now",
       "HOURS": "Custom",
+      "WARNING": "NeuVector strongly recommends that you set an expiration date for your token to help keep your information secure.",
       "time": {
         "YEARS": "Years",
         "MONTHS": "Months",
@@ -1800,6 +1801,9 @@
       }
     },
     "msg": {
+      "CREATED": "A new API Key has been created",
+      "AUTH_INSTRUCTION": "API Key Name and Secret Key can be sent as ...",
+      "SAVE_WARNING": "Save the info above! This is the only time you'll be able to see it. If you lose it, you'll need to create a new API Key.",
       "ADD_OK": "Adding API Key is successful.",
       "ADD_NG": "Failed to add API Key",
       "REMOVE_CFM": "Are you sure you want to remove API Key {{name}}?",
@@ -1814,7 +1818,8 @@
       "COPY": "Copy",
       "EXPIRE": "Automatically expire",
       "ADD": "Add",
-      "CANCEL": "Cancel"
+      "CANCEL": "Cancel",
+      "DONE": "Done"
     }
   },
   "role": {

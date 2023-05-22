@@ -66,7 +66,7 @@ object AuthTokenJsonProtocol extends DefaultJsonProtocol {
   implicit val ldapServerAccountWrapFormat: RootJsonFormat[LdapServerAccountWrap] = jsonFormat1(
     LdapServerAccountWrap
   )
-  implicit val passwordProfileFormat: RootJsonFormat[PasswordProfile] = jsonFormat13(
+  implicit val passwordProfileFormat: RootJsonFormat[PasswordProfile] = jsonFormat14(
     PasswordProfile
   )
   implicit val passwordProfileWrapFormat: RootJsonFormat[PasswordProfileWrap] = jsonFormat1(

@@ -1,6 +1,7 @@
 import { FormlyComponents } from '@common/neuvector-formly/neuvector-formly.module';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import {
+  DefaultSessionTimeoutField,
   ExpiredPasswordAgeField,
   ExpiredPasswordToggleField,
   FailedLoginAccessField,
@@ -127,6 +128,17 @@ export const PwdProfileFormConfig: FormlyFieldConfig[] = [
         ...PasswordHistoryKeptField,
       },
     ],
-    templateOptions: { append: true },
+    templateOptions: { append: true, divider: true },
+  },
+  {
+    wrappers: [FormlyComponents.SECTION_WRAPPER],
+    fieldGroupClassName: 'row',
+    fieldGroup: [
+      {
+        className: 'col-md-6',
+        ...DefaultSessionTimeoutField,
+      },
+    ],
+    templateOptions: { label: 'passwordProfile.globalPolicy.TITLE' },
   },
 ];

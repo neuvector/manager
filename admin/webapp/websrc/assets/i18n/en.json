@@ -1838,7 +1838,7 @@
     }
   },
   "passwordProfile": {
-    "PWD_PROFILE": "Password Profile",
+    "PWD_PROFILE": "Authentication and Security Policies",
     "INSTRUCTION": "Password policy only applies to local user accounts.",
     "passwordFormat": {
       "TITLE": "Password Format Requirement",
@@ -1864,6 +1864,10 @@
     "passwordHistory": {
       "TITLE": "Keep Password History to Prevent Reusing",
       "NUM_PASSWORD_HISTORY": "Number of Kept Password History"
+    },
+    "globalPolicy": {
+      "TITLE": "Global Security Policy",
+      "SESSION_TIMEOUT": "Default Session Timeout"
     },
     "msg": {
       "GET_PROFILE_ERR": "Error happens when getting password profiles",

@@ -23,6 +23,7 @@ support_global = [
     "/v1/fed/member",
     "/v1/user_role",
     "/v1/user",
+    "/v1/api_key",
     "/v1/password_profile",
     "/v1/server",
     "/v1/server/_platform_/user",
@@ -50,6 +51,7 @@ support_global = [
     "/v1/policy/rule",
     "/v1/response/rule",
     "/v1/conversation",
+    "/v1/vulnerability/profile",
 
     "/v1/log/activity",
     "/v1/log/event",

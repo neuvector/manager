@@ -1865,6 +1865,10 @@
       "TITLE": "保留密码历史以避免复用",
       "NUM_PASSWORD_HISTORY": "保留密码历史数量"
     },
+    "globalPolicy": {
+      "TITLE": "Global Security Policy",
+      "SESSION_TIMEOUT": "Default Session Timeout"
+    },
     "msg": {
       "GET_PROFILE_ERR": "获取密码策略资料时发生错误.",
       "NUM_ERR": "最小字符总长度小于4种字符最小长度要求之和.",

@@ -36,7 +36,8 @@ case class PasswordProfile(
   block_minutes: Option[Int],
   enable_block_after_failed_login: Option[Boolean],
   enable_password_expiration: Option[Boolean],
-  enable_password_history: Option[Boolean]
+  enable_password_history: Option[Boolean],
+  session_timeout: Option[Int]
 )
 
 case class PasswordProfileWrap(

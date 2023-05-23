@@ -215,6 +215,7 @@ export interface PasswordProfile extends PublicPasswordProfile {
   name: string;
   password_expire_after_days: number;
   password_keep_history_count: number;
+  session_timeout: number;
 }
 
 export interface PublicPasswordProfile {

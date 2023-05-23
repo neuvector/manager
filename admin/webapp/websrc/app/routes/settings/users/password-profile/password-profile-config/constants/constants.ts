@@ -234,3 +234,23 @@ export const PasswordHistoryKeptField = {
       '!formState.isUpdatePwdProfileAuthorized || !model.enable_password_history',
   },
 };
+
+export const DefaultSessionTimeoutField = {
+  key: 'session_timeout',
+  wrappers: [FormlyComponents.HINT_WRAPPER],
+  type: FormlyComponents.ICON_INPUT,
+  templateOptions: {
+    hint: 'passwordProfile.globalPolicy.SESSION_TIMEOUT',
+    hintClass: 'font-weight-bold text-muted col-md-6',
+    wrapperClass: 'align-items-center',
+    noInputHint: true,
+    hideRequiredMarker: true,
+    inputWidth: 50,
+    type: 'number',
+    min: 0,
+    required: true,
+  },
+  expressionProperties: {
+    'templateOptions.disabled': '!formState.isUpdatePwdProfileAuthorized',
+  },
+};

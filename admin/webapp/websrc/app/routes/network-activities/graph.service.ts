@@ -1353,7 +1353,6 @@ export class GraphService {
           sortable: false,
           width: 110,
           minWidth: 110,
-          maxWidth: 120,
         },
         {
           headerName: this.translate.instant('network.gridHeader.APP'),

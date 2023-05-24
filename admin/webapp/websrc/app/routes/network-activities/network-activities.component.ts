@@ -39,6 +39,8 @@ import { NotificationService } from '@services/notification.service';
 import { ConversationPair } from './edge-details/edge-details.component';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { MultiClusterService } from '@services/multi-cluster.service';
+import { ConfirmDialogComponent } from "@components/ui/confirm-dialog/confirm-dialog.component";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
   selector: 'app-network-activities',
@@ -56,6 +58,7 @@ export class NetworkActivitiesComponent
   private w: any;
   resizeObservable$: Observable<Event> = <Observable<Event>>{};
   resizeSubscription$: Subscription = <Subscription>{};
+
 
   private readonly TOP_BAR = 65;
   private readonly SIDE_BAR = 220;
@@ -154,6 +157,7 @@ export class NetworkActivitiesComponent
     private groupsService: GroupsService,
     private sniffService: SniffService,
     private multiClusterService: MultiClusterService,
+    private dialog: MatDialog,
     private utils: UtilsService
   ) {
     this.w = GlobalVariable.window;
@@ -2246,60 +2250,76 @@ export class NetworkActivitiesComponent
   quarantine(item, toQuarantine: boolean) {
     const id: string = item.getModel().id;
 
-    this.graphService.quarantine(id, toQuarantine).subscribe(
-      () => {
-        setTimeout(() => {
-          const model = item.getModel();
-          if (toQuarantine) {
-            model.state = 'quarantined';
-            const theNode =
-              this.serverData.nodes[
-                this.graphService.getNodeIdIndexMap().get(model.id)
-              ];
-            if (theNode) theNode.state = model.state;
-            const group = item.get('group');
-            const stroke = group.find(e => e.get('name') === 'stroke-shape');
-            stroke && stroke.show();
+    const message = toQuarantine
+      ? this.translate.instant("policy.QUARANTINE_CONFIRM")
+      : this.translate.instant("policy.UNQUARANTINE_CONFIRM");
 
-            const clusterNode = this.graph.findById(model.clusterId);
-            if (clusterNode) {
-              // @ts-ignore
-              clusterNode.getModel().quarantines += 1;
-            }
-          } else {
-            const group = item.get('group');
-            const stroke = group.find(e => e.get('name') === 'stroke-shape');
-            stroke && stroke.hide();
-
-            model.state = model.group
-              ? item.getModel().group.substring('container'.length)
-              : '';
-            const theNode =
-              this.serverData.nodes[
-                this.graphService.getNodeIdIndexMap().get(model.id)
-              ];
-            if (theNode) theNode.state = model.state;
-
-            const clusterNode = this.graph.findById(model.clusterId);
-            if (clusterNode) {
-              // @ts-ignore
-              clusterNode.getModel().quarantines -= 1;
-            }
-          }
-        }, 0);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: '700px',
+      data: {
+        message: message,
+        isSync: true,
       },
-      err => {
-        console.warn(err);
-        this.notificationService.open(
-          this.utils.getAlertifyMsg(
-            err,
-            this.translate.instant('policy.message.QUARANTINE_FAILED'),
-            false
-          ),
-          GlobalConstant.NOTIFICATION_TYPE.ERROR
+    });
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+        this.graphService.quarantine(id, toQuarantine).subscribe(
+          () => {
+            setTimeout(() => {
+              const model = item.getModel();
+              if (toQuarantine) {
+                model.state = 'quarantined';
+                const theNode =
+                  this.serverData.nodes[
+                    this.graphService.getNodeIdIndexMap().get(model.id)
+                    ];
+                if (theNode) theNode.state = model.state;
+                const group = item.get('group');
+                const stroke = group.find(e => e.get('name') === 'stroke-shape');
+                stroke && stroke.show();
+
+                const clusterNode = this.graph.findById(model.clusterId);
+                if (clusterNode) {
+                  // @ts-ignore
+                  clusterNode.getModel().quarantines += 1;
+                }
+              } else {
+                const group = item.get('group');
+                const stroke = group.find(e => e.get('name') === 'stroke-shape');
+                stroke && stroke.hide();
+
+                model.state = model.group
+                  ? item.getModel().group.substring('container'.length)
+                  : '';
+                const theNode =
+                  this.serverData.nodes[
+                    this.graphService.getNodeIdIndexMap().get(model.id)
+                    ];
+                if (theNode) theNode.state = model.state;
+
+                const clusterNode = this.graph.findById(model.clusterId);
+                if (clusterNode) {
+                  // @ts-ignore
+                  clusterNode.getModel().quarantines -= 1;
+                }
+              }
+            }, 0);
+          },
+          err => {
+            console.warn(err);
+            this.notificationService.open(
+              this.utils.getAlertifyMsg(
+                err,
+                this.translate.instant('policy.message.QUARANTINE_FAILED'),
+                false
+              ),
+              GlobalConstant.NOTIFICATION_TYPE.ERROR
+            );
+          }
         );
       }
-    );
+    });
+
   }
 
   //region Sniffer

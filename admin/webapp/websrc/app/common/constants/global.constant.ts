@@ -242,4 +242,6 @@ export class GlobalConstant {
     WARNING: 'warning',
     ERROR: 'error',
   };
+
+  public static EXCLUDED_DOMAINS = ['_images', '_nodes', '_containers'];
 }

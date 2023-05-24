@@ -20,6 +20,9 @@ object AuthTokenJsonProtocol extends DefaultJsonProtocol {
   implicit val roleFormat: RootJsonFormat[Role]         = jsonFormat3(Role)
   implicit val roleWrapFormat: RootJsonFormat[RoleWrap] = jsonFormat1(RoleWrap)
 
+  implicit val apikeyFormat: RootJsonFormat[Apikey]         = jsonFormat6(Apikey)
+  implicit val apikeyWrapFormat: RootJsonFormat[ApikeyWrap] = jsonFormat1(ApikeyWrap)
+
   implicit val userFormat: RootJsonFormat[User]                 = jsonFormat13(User)
   implicit val usersFormat: RootJsonFormat[Users]               = jsonFormat3(Users)
   implicit val userImageFormat: RootJsonFormat[UserImage]       = jsonFormat13(UserImage)
@@ -133,4 +136,6 @@ object AuthTokenJsonProtocol extends DefaultJsonProtocol {
   def redirectUrlToJson(redirectURL: RedirectURL): String = redirectURL.toJson.compactPrint
 
   def roleWrapToJson(roleWrap: RoleWrap): String = roleWrap.toJson.compactPrint
+
+  def apikeyWrapToJson(apikeyWrap: ApikeyWrap): String = apikeyWrap.toJson.compactPrint
 }

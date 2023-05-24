@@ -7,6 +7,19 @@ case class Password(username: String, password: String)
 
 case class AuthRequest(password: Password, client_ip: String)
 
+case class Apikey(
+  expiration_type: String,
+  expiration_hours: Int,
+  apikey_name: String,
+  description: String,
+  role: String,
+  role_domains: Option[Map[String, Array[String]]]
+)
+
+case class ApikeyWrap(
+  apikey: Option[Apikey]
+)
+
 case class Permission(
   id: String,
   read: Boolean,

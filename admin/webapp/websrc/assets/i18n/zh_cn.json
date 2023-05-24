@@ -1770,6 +1770,58 @@
       "ALL_SET": "您的密码设置完毕!"
     }
   },
+  "apikey": {
+    "APIKEYS": "API密钥",
+    "ADD": "添加API密钥",
+    "REMOVE": "删除API密钥",
+    "gridHeader": {
+      "STATE": "状态",
+      "NAME": "API密钥名",
+      "DESCRIPTION": "描述",
+      "ROLE": "全局角色",
+      "EXPIRES": "到期",
+      "AGE": "时间跨度"
+    },
+    "state": {
+      "ACTIVE": "正常",
+      "EXPIRED": "过期"
+    },
+    "expires": {
+      "NEVER": "绝不",
+      "ONEDAY": "一天后",
+      "ONEMONTH": "一月后",
+      "ONEYEAR": "一年后",
+      "HOURS": "自定",
+      "WARNING": "NeuVector 强烈建议您为您的令牌设置到期日期，以帮助保护您的信息安全。",
+      "time": {
+        "YEARS": "年",
+        "MONTHS": "月",
+        "DAYS": "日",
+        "HOURS": "时"
+      }
+    },
+    "msg": {
+      "CREATED": "已创建新的 API 密钥",
+      "AUTH_INSTRUCTION": "API Key Name 和 Secret Key 可以组合起来用作 HTTP 授权标头",
+      "SAVE_WARNING": "请保存上面的信息！ 这是您唯一能看到它的时候。 如果您丢失了它，您将需要创建一个新的 API 密钥。",
+      "ADD_OK": "添加 API Key 成功。",
+      "ADD_NG": "添加 API Key 失败。",
+      "REMOVE_CFM": "您确定要删除 API 密钥{{name}}吗?",
+      "REMOVE_OK": "移除API Key成功",
+      "REMOVE_ERR": "移除API Key失败"
+    },
+    "addApikey": {
+      "TITLE": "添加API密钥",
+      "NAME_ERROR": "Access Key 最多可包含 32 个字母数字字符，包括'_'和'-'。",
+      "SECRET": "密钥",
+      "TOKEN": "X-Auth-Apikey令牌",
+      "COPY": "复制",
+      "EXPIRE": "自动过期",
+      "ADD": "添加",
+      "CANCEL": "取消",
+      "DONE": "完成"
+    }
+  },
   "role": {
     "ROLES": "角色",
     "COUNT_POSTFIX": "个角色",
@@ -1838,7 +1890,7 @@
     }
   },
   "passwordProfile": {
-    "PWD_PROFILE": "密码策略资料",
+    "PWD_PROFILE": "身份验证和安全策略",
     "INSTRUCTION": "密码策略资料仅适用于本地用户账户.",
     "passwordFormat": {
       "TITLE": "密码格式要求",
@@ -1866,8 +1918,8 @@
       "NUM_PASSWORD_HISTORY": "保留密码历史数量"
     },
     "globalPolicy": {
-      "TITLE": "Global Security Policy",
-      "SESSION_TIMEOUT": "Default Session Timeout"
+      "TITLE": "全局安全策略",
+      "SESSION_TIMEOUT": "缺省会话超时(秒)"
     },
     "msg": {
       "GET_PROFILE_ERR": "获取密码策略资料时发生错误.",
@@ -3145,7 +3197,11 @@
     "MINUTES": "{{time}}分钟",
     "MINUTE": "1分钟",
     "SECONDS": "{{time}}秒",
-    "SECOND": "1秒"
+    "SECOND": "1秒",
+    "relative": {
+      "FUTURE": "{{time}}现在起",
+      "PAST": "{{time}}以前"
+    }
   },
   "partner": {
     "general": {

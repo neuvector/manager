@@ -12,6 +12,7 @@ import {
   tap,
 } from 'rxjs/operators';
 import { MultiClusterService } from '@services/multi-cluster.service';
+import { GlobalConstant } from '@common/constants/global.constant';
 
 @Component({
   selector: 'app-users',
@@ -22,6 +23,7 @@ export class UsersComponent implements OnInit {
   private _switchClusterSubscription;
   private refreshUserSubject$ = new Subject();
   private refreshRoleSubject$ = new Subject();
+  private refreshApikeySubject$ = new Subject();
   private refreshPwdProfileSubject$ = new Subject();
   activeTabIndex: number = 0;
   error: unknown;
@@ -38,14 +40,20 @@ export class UsersComponent implements OnInit {
     }),
     pluck('users')
   );
-  domain$ = this.settingsService.getDomain();
+  domain$ = this.settingsService
+    .getDomain()
+    .pipe(
+      map(domain =>
+        domain.domains
+          .map(d => d.name)
+          .filter(name => !GlobalConstant.EXCLUDED_DOMAINS.includes(name))
+      )
+    );
   userData$ = combineLatest([this.users$, this.domain$]).pipe(
-    map(([users, domain]) => {
+    map(([users, domains]) => {
       return {
         users,
-        domains: domain.domains
-          .map(d => d.name)
-          .filter(name => !['_images', '_nodes', '_containers'].includes(name)),
+        domains,
       };
     }),
     catchError(err => {
@@ -53,6 +61,18 @@ export class UsersComponent implements OnInit {
       throw err;
     }),
     repeatWhen(() => this.refreshUserSubject$)
+  );
+  apikeyData$ = this.refreshApikeySubject$.pipe(
+    switchMap(() =>
+      combineLatest([this.settingsService.getApikeys(), this.domain$]).pipe(
+        map(([apikeyData, domains]) => {
+          return {
+            apikeyData,
+            domains,
+          };
+        })
+      )
+    )
   );
   roleData$ = this.refreshRoleSubject$.pipe(
     switchMap(() =>
@@ -112,9 +132,12 @@ export class UsersComponent implements OnInit {
         this.refreshUserSubject$.next(true);
         break;
       case 1:
-        this.refreshRoleSubject$.next(true);
+        this.refreshApikeySubject$.next(true);
         break;
       case 2:
+        this.refreshRoleSubject$.next(true);
+        break;
+      case 3:
         this.refreshPwdProfileSubject$.next(true);
     }
   }
@@ -125,5 +148,9 @@ export class UsersComponent implements OnInit {
 
   refreshRoles(): void {
     this.refreshRoleSubject$.next(true);
+  }
+
+  refreshApikeys(): void {
+    this.refreshApikeySubject$.next(true);
   }
 }

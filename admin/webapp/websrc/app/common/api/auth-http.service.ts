@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { PathConstant } from '@common/constants/path.constant';
 import {
+  Apikey,
+  ApikeyGetResponse,
+  ApikeyInit,
   LicenseGetResponse,
   PasswordProfile,
   PermissionOptionResponse,
@@ -76,6 +79,32 @@ export class AuthHttpService {
 
   deleteRole(name: string): Observable<unknown> {
     return GlobalVariable.http.delete<unknown>(PathConstant.ROLES, {
+      params: { name },
+    });
+  }
+
+  getApikeys(): Observable<ApikeyGetResponse> {
+    return GlobalVariable.http.get<ApikeyGetResponse>(PathConstant.APIKEY_URL);
+  }
+
+  getApikey(name: string): Observable<Apikey> {
+    return GlobalVariable.http
+      .get<Apikey>(PathConstant.APIKEY_URL, {
+        params: { name },
+      })
+      .pipe(pluck('apikey'));
+  }
+
+  postApikey(apikey: Apikey): Observable<ApikeyInit> {
+    return GlobalVariable.http
+      .post<ApikeyInit>(PathConstant.APIKEY_URL, {
+        apikey,
+      })
+      .pipe(pluck('apikey'));
+  }
+
+  deleteApikey(name: string): Observable<unknown> {
+    return GlobalVariable.http.delete<unknown>(PathConstant.APIKEY_URL, {
       params: { name },
     });
   }

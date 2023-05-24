@@ -253,6 +253,7 @@ export class MapConstant {
 
   public static FED_ROLES = {
     FEDADMIN: 'fedAdmin',
+    FEDREADER: 'fedReader',
     ADMIN: 'admin',
     MASTER: 'master',
     MEMBER: 'joint',

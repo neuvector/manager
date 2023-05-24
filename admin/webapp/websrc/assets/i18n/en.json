@@ -1802,7 +1802,7 @@
     },
     "msg": {
       "CREATED": "A new API Key has been created",
-      "AUTH_INSTRUCTION": "API Key Name and Secret Key can be sent as ...",
+      "AUTH_INSTRUCTION": "API Key Name and Secret Key can be combined to use as HTTP Authorization header:",
       "SAVE_WARNING": "Save the info above! This is the only time you'll be able to see it. If you lose it, you'll need to create a new API Key.",
       "ADD_OK": "Adding API Key is successful.",
       "ADD_NG": "Failed to add API Key",
@@ -1814,7 +1814,7 @@
       "TITLE": "Add API Key",
       "NAME_ERROR": "Access Key can contain up to 32 alphanumeric characters, including '_' and '-'.",
       "SECRET": "Secret Key",
-      "TOKEN": "Bearer Token",
+      "TOKEN": "X-Auth-Apikey Token",
       "COPY": "Copy",
       "EXPIRE": "Automatically expire",
       "ADD": "Add",

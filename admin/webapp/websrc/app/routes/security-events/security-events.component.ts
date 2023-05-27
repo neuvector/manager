@@ -321,12 +321,20 @@ export class SecurityEventsComponent implements OnInit {
           if (filter && filter.reset) {
             this.advancedFilterModalService.resetFilter();
             this.setAdvancedFilter();
+            this.advFilterConf = null;
+            if (this.displayedSecurityEventsJsonBeforeApplyAdvFilter !== '[]') {
+              this.securityEventsService.displayedSecurityEvents = JSON.parse(
+                this.displayedSecurityEventsJsonBeforeApplyAdvFilter
+              );
+            }
+            this.onQuickFilterChange(this.filter.value);
           } else if (filter) {
             filter.severity = this.getSeverities(filter.severity);
             filter.location = this.getLocations(filter.location);
             filter.category = this.getCategories(filter.category);
             filter.other = this.getOther(filter.other);
             this.setAdvancedFilter(filter);
+            this.onQuickFilterChange(this.filter.value);
           }
         },
         error => {},
@@ -339,7 +347,7 @@ export class SecurityEventsComponent implements OnInit {
 
   onQuickFilterChange = (filterStr: string) => {
     this.securityEventsService.displayedSecurityEvents =
-      this.securityEventsService.cachedSecurityEvents.filter(event => {
+      (this.advFilterConf ? this.securityEventsService.displayedSecurityEvents : this.securityEventsService.cachedSecurityEvents).filter(event => {
         return this.advancedFilterModalService._includeFilter(event, filterStr);
       });
     this.printableData = this.getPrintableData(
@@ -898,11 +906,14 @@ export class SecurityEventsComponent implements OnInit {
               this.securityEventsService.displayedSecurityEvents
             );
           }
-          this.securityEventsService.prepareContext4TwoWayInfinityScroll();
         }
-        if (this.advFilterConf) {
-          this.setAdvancedFilter(this.advFilterConf);
-        }
+        this.securityEventsService.displayedSecurityEvents =
+          this.securityEventsService.displayedSecurityEvents.filter(event => {
+            return this.advancedFilterModalService._includeFilter(event, this.filter.value);
+          });
+        console.log("this.advFilterConf", this.advFilterConf);
+        this.setAdvancedFilter(this.advFilterConf);
+        this.onQuickFilterChange(this.filter.value);
         this.isDataReady = true;
       },
       error => {}

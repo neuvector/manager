@@ -12,13 +12,14 @@ import { ErrorResponse } from '@common/types';
 @Component({
   selector: 'app-csp-support-form',
   templateUrl: './csp-support-form.component.html',
-  styleUrls: ['./csp-support-form.component.scss'],
+  styleUrls: ['./csp-support-form.component.scss']
 })
 export class CspSupportFormComponent implements OnInit {
+
   submittingForm = false;
   errorMsg: string = '';
   cspExportForm = new FormGroup({
-    export: new FormControl(null, Validators.required),
+    export: new FormControl(null, Validators.required)
   });
 
   constructor(
@@ -26,9 +27,10 @@ export class CspSupportFormComponent implements OnInit {
     private tr: TranslateService,
     private utils: UtilsService,
     private notificationService: NotificationService
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   submitExport = () => {
     this.submittingForm = true;
@@ -42,17 +44,20 @@ export class CspSupportFormComponent implements OnInit {
       )
       .subscribe(
         response => {
-          let exportUrl = new Blob([response['body'] || ''], {
+          let exportUrl = new Blob([response['body'] || ""], {
             type: 'application/zip',
           });
           let fileName = `${this.utils.getExportedFileName(response)}`;
           saveAs(exportUrl, fileName);
-          this.notificationService.open(this.tr.instant('setting.EXPORT_OK'));
+          this.notificationService.open(
+            this.tr.instant('setting.EXPORT_OK')
+          );
         },
-        ({ error }: { error: ErrorResponse }) => {
+        error => {
           console.warn(error);
-          this.errorMsg = error.message;
+          this.errorMsg = error.error;
         }
       );
-  };
+  }
+
 }

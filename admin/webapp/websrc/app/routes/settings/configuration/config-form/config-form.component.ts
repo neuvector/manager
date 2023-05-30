@@ -47,9 +47,10 @@ export class ConfigFormComponent implements OnInit {
       },
       isOpenShift: () => GlobalVariable.isOpenShift,
       isRancherSSO: () =>
-        GlobalVariable.user.server === MapConstant.AUTH_PROVIDER.RANCHER,
+        GlobalVariable.user.token.server === MapConstant.AUTH_PROVIDER.RANCHER,
       isOpenShiftSSO: () =>
-        GlobalVariable.user.server === MapConstant.AUTH_PROVIDER.OPENSHIFT,
+        GlobalVariable.user.token.server ===
+        MapConstant.AUTH_PROVIDER.OPENSHIFT,
       permissions: {},
       ibmsa: {
         setup: this.setupIBMSA.bind(this),

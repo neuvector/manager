@@ -11,10 +11,12 @@ export class TranslatorService {
   ];
 
   constructor(public translate: TranslateService) {
-    if (!translate.getDefaultLang())
-      translate.setDefaultLang(this.defaultLanguage);
+    this.setDefaultLang();
+  }
 
-    this.useLanguage();
+  private setDefaultLang() {
+    this.translate.addLangs(this.availablelangs.map(lang => lang.code));
+    this.translate.setDefaultLang(this.defaultLanguage);
   }
 
   useLanguage(lang: string = '') {

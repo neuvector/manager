@@ -70,7 +70,8 @@ case class SystemConfigSyslogCfgV2(
   syslog_status: Option[Boolean] = None,
   syslog_categories: Option[Array[String]] = None,
   syslog_in_json: Option[Boolean] = None,
-  single_cve_per_syslog: Boolean
+  single_cve_per_syslog: Boolean,
+  syslog_server_cert: Option[String] = None
 )
 
 case class SystemConfigAuthCfgV2(

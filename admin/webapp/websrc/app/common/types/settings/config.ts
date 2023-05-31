@@ -64,6 +64,7 @@ export interface SyslogConfig {
   syslog_categories: string[];
   syslog_in_json: boolean;
   single_cve_per_syslog: boolean;
+  syslog_server_cert: string;
 }
 
 export interface AuthConfig {

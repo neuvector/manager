@@ -39,7 +39,7 @@ object SystemConfigJsonProtocol extends DefaultJsonProtocol {
   implicit val systemConfigSvcCfgV2Format: RootJsonFormat[SystemConfigSvcCfgV2] = jsonFormat2(
     SystemConfigSvcCfgV2
   )
-  implicit val systemConfigSyslogCfgV2Format: RootJsonFormat[SystemConfigSyslogCfgV2] = jsonFormat8(
+  implicit val systemConfigSyslogCfgV2Format: RootJsonFormat[SystemConfigSyslogCfgV2] = jsonFormat9(
     SystemConfigSyslogCfgV2
   )
   implicit val systemConfigAuthCfgV2Format: RootJsonFormat[SystemConfigAuthCfgV2] = jsonFormat3(

@@ -205,6 +205,38 @@ export interface Role {
   reserved?: boolean;
 }
 
+export type ApikeyExpiration =
+  | 'never'
+  | 'oneday'
+  | 'onemonth'
+  | 'oneyear'
+  | 'hours';
+
+export interface Apikey {
+  expiration_type: ApikeyExpiration;
+  expiration_hours: number;
+  apikey_name: string;
+  description: string;
+  role: string;
+  role_domains: {
+    [key: string]: string[];
+  };
+  expiration_timestamp?: number;
+  created_timestamp?: number;
+  created_by_entity?: number;
+}
+
+export interface ApikeyInit {
+  apikey_name: string;
+  apikey_secret: string;
+}
+
+export interface ApikeyGetResponse {
+  apikeys: Apikey[];
+  global_roles: string[];
+  domain_roles: string[];
+}
+
 export interface PasswordProfile extends PublicPasswordProfile {
   block_after_failed_login_count: number;
   block_minutes: number;
@@ -215,6 +247,7 @@ export interface PasswordProfile extends PublicPasswordProfile {
   name: string;
   password_expire_after_days: number;
   password_keep_history_count: number;
+  session_timeout: number;
 }
 
 export interface PublicPasswordProfile {

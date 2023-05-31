@@ -8,6 +8,8 @@ import * as $ from "jquery";
 import * as moment from "moment";
 import { PathConstant } from "@common/constants/path.constant";
 import { BytesPipe } from "@common/pipes/app.pipes";
+import { throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class SniffService {
@@ -35,8 +37,8 @@ export class SniffService {
         cellRenderer: params =>
           moment(params.value * 1000).format("MM/DD/Y HH:mm:ss"),
         icons: {
-          sortAscending: '<em class="fa fa-sort-numeric-asc"></em>',
-          sortDescending: '<em class="fa fa-sort-numeric-desc"></em>'
+          sortAscending: '<em class="fas fa-sort-numeric-up"></em>',
+          sortDescending: '<em class="fas fa-sort-numeric-down"></em>'
         },
         minWidth: 160,
         maxWidth: 170
@@ -52,8 +54,8 @@ export class SniffService {
         cellClass: 'grid-right-align',
         cellRenderer: 'agAnimateShowChangeCellRenderer',
         icons: {
-          sortAscending: '<em class="fa fa-sort-numeric-asc"></em>',
-          sortDescending: '<em class="fa fa-sort-numeric-desc"></em>',
+          sortAscending: '<em class="fas fa-sort-numeric-up"></em>',
+          sortDescending: '<em class="fas fa-sort-numeric-down"></em>',
         },
       },
       {
@@ -65,8 +67,8 @@ export class SniffService {
           else return "";
         },
         icons: {
-          sortAscending: '<em class="fa fa-sort-numeric-asc"></em>',
-          sortDescending: '<em class="fa fa-sort-numeric-desc"></em>'
+          sortAscending: '<em class="fas fa-sort-numeric-up"></em>',
+          sortDescending: '<em class="fas fa-sort-numeric-down"></em>'
         },
         minWidth: 160,
         maxWidth: 170
@@ -110,7 +112,14 @@ export class SniffService {
         observe: 'response',
         headers: { "Cache-Control": "no-store" }
       })
-      .pipe();
+      .pipe(
+        catchError(error => {
+          const textDecoder = new TextDecoder();
+          let errorRes = textDecoder.decode(error.error);
+          error.error = error.headers.get('Content-type') === 'application/json' ? JSON.parse(errorRes).message : errorRes;
+          return throwError(error);
+        })
+      );
 
   multiPart_parse(body, contentType) {
     let m = contentType.match(/boundary=(?:"([^"]+)"|([^;]+))/i);

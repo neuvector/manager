@@ -495,7 +495,15 @@ export class UtilsService {
     };
   }
 
-  humanizeDuration(duration: moment.Duration): string {
+  getRelativeDuration(ts: moment.Moment) {
+    let diff = ts.diff(moment());
+    let huamnized = this.humanizeDuration(moment.duration(Math.abs(diff)), 1);
+    return diff > 0
+      ? this.translate.instant('time.relative.FUTURE', { time: huamnized })
+      : this.translate.instant('time.relative.PAST', { time: huamnized });
+  }
+
+  humanizeDuration(duration: moment.Duration, precision: number = 2): string {
     let units: string[] = [];
     if (!duration || duration.toISOString() === 'P0D') return '';
     if (duration.years() >= 1) {
@@ -546,6 +554,6 @@ export class UtilsService {
           : this.translate.instant('time.SECOND')
       );
     }
-    return units.slice(0, 2).join(', ');
+    return units.slice(0, precision).join(', ');
   }
 }

@@ -1,0 +1,8 @@
+<ng-container [ngSwitch]="expiration_type">
+  <ng-container *ngSwitchCase="'never'">
+    {{ 'apikey.expires.NEVER' | translate }}
+  </ng-container>
+  <ng-container *ngSwitchDefault>
+    {{ expiration_duration }}
+  </ng-container>
+</ng-container>

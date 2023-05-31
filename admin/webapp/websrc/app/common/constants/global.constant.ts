@@ -33,6 +33,7 @@ export class GlobalConstant {
   public static MAX_INTERFACE_IP = 3;
   public static MAX_UNUPDATED_DAYS = 7;
   public static MULTICLUSTER_CONCURRENT_LIMIT = 8;
+  public static OtherWebhookType = 'OTHER';
   public static NEW_ID_SEED = {
     NETWORK_RULE: 1000000,
   };
@@ -79,7 +80,7 @@ export class GlobalConstant {
     'image',
     'imageregistry',
     'namespace',
-    'saBindRiskyRole'
+    'saBindRiskyRole',
   ];
 
   public static ADMISSION = {
@@ -102,7 +103,7 @@ export class GlobalConstant {
       'image',
       'imageregistry',
       'namespace',
-      'saBindRiskyRole'
+      'saBindRiskyRole',
     ],
     CATEGORY: {
       KUBE: 'Kubernetes',
@@ -212,7 +213,7 @@ export class GlobalConstant {
       'image',
       'imageRegistry',
       'namespace',
-      'saBindRiskyRole'
+      'saBindRiskyRole',
     ],
   };
   public static PSP = 'pspcompliance';
@@ -241,4 +242,6 @@ export class GlobalConstant {
     WARNING: 'warning',
     ERROR: 'error',
   };
+
+  public static EXCLUDED_DOMAINS = ['_images', '_nodes', '_containers'];
 }

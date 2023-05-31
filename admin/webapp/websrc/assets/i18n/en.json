@@ -446,7 +446,9 @@
         "RBAC_ERR_TITLE": "RBAC Role Error",
         "CLUSTERROLE_ERRORS": "Cluster Role",
         "CLUSTERROLEBINDING_ERRORS": "Cluster Role Binding",
-        "ROLEBINDING_ERRORS": "Role Binding"
+        "ROLEBINDING_ERRORS": "Role Binding",
+        "ROLE_ERRORS": "Role",
+        "NEUVECTOR_CRD_ERRORS": "Neuvector CRD"
       }
     },
     "help": {
@@ -852,7 +854,7 @@
       "NETWORK_TRAFFIC": "Network Traffic",
       "SETTING": "Settings",
       "PROFILE": "Profile",
-      "USERS": "Users & Roles",
+      "USERS": "Users, API Keys & Roles",
       "CONSOLE": "Console",
       "LICENSE": "License",
       "LDAP": "LDAP/AD Settings",
@@ -1680,7 +1682,7 @@
     "TIMEOUT_VALIDATION": "Please use integer from 30 to 3600."
   },
   "user": {
-    "TITLE": "Users & Roles",
+    "TITLE": "Users, API Keys & Roles",
     "DESCRIPTION": "User and role management",
     "USERS": "Users",
     "PASSWORD_REQUIRED": "Password is required!",
@@ -1769,6 +1771,58 @@
       "ALL_SET": "Your password is all set!"
     }
   },
+  "apikey": {
+    "APIKEYS": "API Keys",
+    "ADD": "Create API Key",
+    "REMOVE": "Delete API Key",
+    "gridHeader": {
+      "STATE": "State",
+      "NAME": "API Key Name",
+      "DESCRIPTION": "Description",
+      "ROLE": "Global Role",
+      "EXPIRES": "Expires",
+      "AGE": "Age"
+    },
+    "state": {
+      "ACTIVE": "Active",
+      "EXPIRED": "Expired"
+    },
+    "expires": {
+      "NEVER": "Never",
+      "ONEDAY": "A day from now",
+      "ONEMONTH": "A month from now",
+      "ONEYEAR": "A year from now",
+      "HOURS": "Custom",
+      "WARNING": "NeuVector strongly recommends that you set an expiration date for your token to help keep your information secure.",
+      "time": {
+        "YEARS": "Years",
+        "MONTHS": "Months",
+        "DAYS": "Days",
+        "HOURS": "Hours"
+      }
+    },
+    "msg": {
+      "CREATED": "A new API Key has been created",
+      "AUTH_INSTRUCTION": "API Key Name and Secret Key can be combined to use as HTTP Authorization header:",
+      "SAVE_WARNING": "Save the info above! This is the only time you'll be able to see it. If you lose it, you'll need to create a new API Key.",
+      "ADD_OK": "Adding API Key is successful.",
+      "ADD_NG": "Failed to add API Key",
+      "REMOVE_CFM": "Are you sure you want to remove API Key {{name}}?",
+      "REMOVE_OK": "Removing API Key is successful",
+      "REMOVE_ERR": "Failed to remove API Key"
+    },
+    "addApikey": {
+      "TITLE": "Add API Key",
+      "NAME_ERROR": "Access Key can contain up to 32 alphanumeric characters, including '_' and '-'.",
+      "SECRET": "Secret Key",
+      "TOKEN": "X-Auth-Apikey Token",
+      "COPY": "Copy",
+      "EXPIRE": "Automatically expire",
+      "ADD": "Add",
+      "CANCEL": "Cancel",
+      "DONE": "Done"
+    }
+  },
   "role": {
     "ROLES": "Roles",
     "COUNT_POSTFIX": "roles found",
@@ -1837,7 +1891,7 @@
     }
   },
   "passwordProfile": {
-    "PWD_PROFILE": "Password Profile",
+    "PWD_PROFILE": "Authentication and Security Policies",
     "INSTRUCTION": "Password policy only applies to local user accounts.",
     "passwordFormat": {
       "TITLE": "Password Format Requirement",
@@ -1863,6 +1917,10 @@
     "passwordHistory": {
       "TITLE": "Keep Password History to Prevent Reusing",
       "NUM_PASSWORD_HISTORY": "Number of Kept Password History"
+    },
+    "globalPolicy": {
+      "TITLE": "Global Security Policy",
+      "SESSION_TIMEOUT": "Default Session Timeout"
     },
     "msg": {
       "GET_PROFILE_ERR": "Error happens when getting password profiles",
@@ -2834,8 +2892,14 @@
     "LOG_IN_JSON": "In JSON:",
     "LOG_CATEGORIES": "Categories:",
     "SEND_SYSLOG_PER_CVE": "Send individual syslog events per CVE",
+    "SERVER_CERTIFICATE": "Server Certificate",
     "EXPORT": "Export",
     "IMPORT": "Import",
+    "AWS_BILLING": "AWS Marketplace Support",
+    "AWS_BILLING_HINT_1": "If you have subscribed to NeuVector by SUSE support through the AWS Marketplace (i.e. integrated billing through your AWS account), please download this special support file. You will need to upload it to your SUSE SCC account at ",
+    "AWS_SUPPORT_LINK": "https://scc.suse.com/cloudsupport",
+    "AWS_BILLING_HINT_2": " in order to create a support case.",
+    "DOWNLOAD_SUPPORT_FILE": "Download Support File",
     "IMPORT_NOTICE": "Importing policy will overwrite groups and rules, importing all will overwrite policy and all users and passwords and settings such as SYSLOG and other configurations.",
     "UPLOAD_QUEUE": "Upload Queue",
     "QUEUE_DESC": "No file selected. Please add a file.",
@@ -2860,6 +2924,7 @@
     "USAGE_RPT": "Usage report",
     "SUPPORT_IN_PROGRESS": "Collecting logs for Manager, Controller and Enforcer...",
     "SUPPORT_INFO": "Please send to support@neuvector.com",
+    "EXPORT_OK": "Exporting file is successful",
     "EXPORT_FAILED": "Failed to export file",
     "SUBMIT_OK": "System config updated.",
     "SUBMIT_FAILED": "Failed to update system config",
@@ -2930,6 +2995,7 @@
       "TYPE": "Type",
       "STATUS": "Status",
       "NEW": "New Webhook",
+      "ADD": "Add Webhook",
       "NAME_EMPTY": "Name is required",
       "NAME_NG": "Invalid Name",
       "NAME_DUPLICATED": "Name can't be duplicated.",
@@ -3175,7 +3241,11 @@
     "MINUTES": "{{time}} minutes",
     "MINUTE": "1 minute",
     "SECONDS": "{{time}} seconds",
-    "SECOND": "1 second"
+    "SECOND": "1 second",
+    "relative": {
+      "FUTURE": "{{time}} from now",
+      "PAST": "{{time}} ago"
+    }
   },
   "partner": {
     "general": {

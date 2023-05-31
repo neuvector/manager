@@ -6,6 +6,7 @@ import {
 export const SyslogProtocols = [
   { value: 6, viewValue: 'TCP' },
   { value: 17, viewValue: 'UDP' },
+  { value: 66, viewValue: 'TCP + TLS' }
 ];
 
 export const SyslogLevels = [
@@ -87,6 +88,18 @@ export const SyslogLevelField = {
   expressionProperties: {
     'templateOptions.disabled':
       '!model.syslog.syslog_status || !formState.permissions.isSyslogAuthorized',
+  },
+};
+
+export const SyslogTLSCertificate = {
+  key:'syslog.syslog_server_cert',
+  type: FormlyComponents.TEXT_AREA,
+  templateOptions: {
+    label: 'setting.SERVER_CERTIFICATE',
+    required: true,
+  },
+  expressionProperties: {
+    'templateOptions.disabled': '!model.syslog.syslog_status || !formState.permissions.isSyslogAuthorized || !( model.syslog.syslog_ip_proto == 66 )',
   },
 };
 

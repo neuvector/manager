@@ -12,8 +12,8 @@ export class ReadonlyWrapperComponent extends FieldWrapper {
   }
 
   get readOnly() {
-    return (
-      this.to.readOnly && (!this.model.isEditable || this.to.readOnly.always)
-    );
+    return this.model
+      ? this.to.readOnly && (!this.model.isEditable || this.to.readOnly.always)
+      : this.to.readOnly && this.to.readOnly.always;
   }
 }

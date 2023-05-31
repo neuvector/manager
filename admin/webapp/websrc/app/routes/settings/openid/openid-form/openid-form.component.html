@@ -20,8 +20,7 @@
         <input
           formControlName="issuer"
           matInput
-          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-        />
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
         <mat-error *ngIf="openidForm.controls.issuer.hasError('required')">
           {{ 'general.REQUIRED' | translate }}
         </mat-error>
@@ -39,8 +38,7 @@
         <input
           formControlName="authorization_endpoint"
           matInput
-          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-        />
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
       </mat-form-field>
     </div>
     <div
@@ -52,8 +50,7 @@
         <input
           formControlName="token_endpoint"
           matInput
-          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-        />
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
       </mat-form-field>
     </div>
     <div
@@ -65,8 +62,7 @@
         <input
           formControlName="user_info_endpoint"
           matInput
-          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-        />
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
       </mat-form-field>
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
@@ -76,8 +72,7 @@
         <input
           formControlName="client_id"
           matInput
-          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-        />
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
         <mat-error *ngIf="openidForm.controls.client_id.hasError('required')">
           {{ 'general.REQUIRED' | translate }}
         </mat-error>
@@ -94,7 +89,6 @@
           [type]="passwordVisible ? 'text' : 'password'"
           formControlName="client_secret"
           placeholder="{{ isCreated ? '******' : '' }}"
-          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
           matInput />
         <mat-error
           *ngIf="openidForm.controls.client_secret.hasError('required')">
@@ -121,7 +115,7 @@
           aria-label="Scopes">
           <mat-chip (removed)="remove(scope)" *ngFor="let scope of scopes">
             {{ scope }}
-            <button matChipRemove>
+            <button matChipRemove *ngIf="removable(scope)">
               <mat-icon>cancel</mat-icon>
             </button>
           </mat-chip>
@@ -142,8 +136,7 @@
         <input
           formControlName="group_claim"
           matInput
-          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-        />
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
       </mat-form-field>
     </div>
   </div>

@@ -39,6 +39,8 @@ import { NotificationService } from '@services/notification.service';
 import { ConversationPair } from './edge-details/edge-details.component';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { MultiClusterService } from '@services/multi-cluster.service';
+import { ConfirmDialogComponent } from "@components/ui/confirm-dialog/confirm-dialog.component";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
   selector: 'app-network-activities',
@@ -56,6 +58,7 @@ export class NetworkActivitiesComponent
   private w: any;
   resizeObservable$: Observable<Event> = <Observable<Event>>{};
   resizeSubscription$: Subscription = <Subscription>{};
+
 
   private readonly TOP_BAR = 65;
   private readonly SIDE_BAR = 220;
@@ -154,6 +157,7 @@ export class NetworkActivitiesComponent
     private groupsService: GroupsService,
     private sniffService: SniffService,
     private multiClusterService: MultiClusterService,
+    private dialog: MatDialog,
     private utils: UtilsService
   ) {
     this.w = GlobalVariable.window;
@@ -685,14 +689,14 @@ export class NetworkActivitiesComponent
         );
     };
 
-    const quickSearch = graph => {
+    const quickSearch = () => {
       this.popupState.leave();
       setTimeout(() => {
         this.popupState.transitTo(PopupState.onQuickSearch);
       }, 300);
     };
 
-    const showFilter = graph => {
+    const showFilter = () => {
       this.popupState.leave();
       this.domains = this.graphService
         .getDomains()
@@ -713,7 +717,7 @@ export class NetworkActivitiesComponent
       return nvName;
     };
 
-    const showBlacklist = graph => {
+    const showBlacklist = () => {
       this.popupState.leave();
       this.domains = this.graphService
         .getDomains()
@@ -853,7 +857,7 @@ export class NetworkActivitiesComponent
 
       layout: {
         type: 'fruchterman',
-        workerEnabled: true,
+        workerEnabled: false,
         gpuEnabled: this.useGpu(),
         gravity: 6,
         clusterGravity: 4,
@@ -1590,7 +1594,7 @@ export class NetworkActivitiesComponent
         this.group = response;
       },
       error => {
-        //Todo error handling.
+        this.popupState.leave();
         console.warn(error);
       }
     );
@@ -1641,99 +1645,102 @@ export class NetworkActivitiesComponent
     } else this.loadGraph();
 
     this._switchClusterSubscription =
-      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
         this.refresh();
       });
   }
 
+  private inHiddenDomain ( node)  {
+  if (this.blacklist.domains?.length > 0) {
+    return this.blacklist.domains.some(
+      domain => domain.name === node.domain
+    );
+  } else return false;
+  }
+
+  private inHiddenGroup ( node ) {
+  if (this.blacklist.groups?.length > 0) {
+    return this.blacklist.groups.some(
+      group => group.name === node.clusterId
+    );
+  } else return false;
+}
+
+  private isHiddenEndpoint(node)  {
+  if (this.blacklist.endpoints?.length > 0) {
+    return this.blacklist.endpoints.some(
+      endpoint =>
+        endpoint.name === node.label || endpoint.name === node.oriLabel
+    );
+  } else return false;
+}
+
+  private readonly unmanagedEndpoints = ['node_ip', 'workload_ip'];
+
+  private filterHiddenNodes (nodes)  {
+  return nodes.filter(
+    node =>
+      !this.inHiddenDomain(node) &&
+      !this.inHiddenGroup(node) &&
+      !this.isHiddenEndpoint(node) &&
+      !(
+        this.blacklist?.hideUnmanaged &&
+        this.unmanagedEndpoints.includes(node.group)
+      )
+  );
+}
+
+  private edgeWithHiddenDomain ( edge) {
+  if (this.blacklist === undefined) return false;
+  if (this.blacklist.domains?.length > 0) {
+    return this.blacklist.domains.some(
+      domain =>
+        domain.name === edge.fromDomain || domain.name === edge.toDomain
+    );
+  } else return false;
+}
+
+  private edgeWithHiddenGroup (edge)  {
+  if (this.blacklist === undefined) return false;
+  if (this.blacklist.groups?.length > 0) {
+    return this.blacklist.groups.some(
+      group => group.name === edge.fromGroup || group.name === edge.toGroup
+    );
+  } else return false;
+}
+
+  private edgeWithHiddenEndpoint  (edge) {
+  if (this.blacklist === undefined) return false;
+  if (this.blacklist.endpoints?.length > 0) {
+    return this.blacklist.endpoints.some(
+      endpoint => endpoint.id === edge.source || endpoint.id === edge.target
+    );
+  } else return false;
+}
+
+  private readonly unmanagedDomains = ['nvUnmanagedWorkload', 'nvUnmanagedNode'];
+  private edgeWithUnmanagedEndpoint (edge) {
+  if (this.blacklist === undefined) return false;
+  if (this.blacklist.hideUnmanaged) {
+    return (
+      this.unmanagedDomains.includes(edge.fromDomain) ||
+      this.unmanagedDomains.includes(edge.toDomain)
+    );
+  } else return false;
+}
+  private filterHiddenEdges (edges) {
+  return edges.filter(
+    edge =>
+      !this.edgeWithHiddenDomain(edge) &&
+      !this.edgeWithHiddenGroup(edge) &&
+      !this.edgeWithHiddenEndpoint(edge) &&
+      !this.edgeWithUnmanagedEndpoint(edge)
+  );
+}
+
+
   loadGraph(onRefresh: boolean = true, callback?: () => void) {
-    const inHiddenDomain = node => {
-      if (this.blacklist.domains?.length > 0) {
-        return this.blacklist.domains.some(
-          domain => domain.name === node.domain
-        );
-      } else return false;
-    };
 
-    const inHiddenGroup = node => {
-      if (this.blacklist.groups?.length > 0) {
-        return this.blacklist.groups.some(
-          group => group.name === node.clusterId
-        );
-      } else return false;
-    };
-
-    const isHiddenEndpoint = node => {
-      if (this.blacklist.endpoints?.length > 0) {
-        return this.blacklist.endpoints.some(
-          endpoint =>
-            endpoint.name === node.label || endpoint.name === node.oriLabel
-        );
-      } else return false;
-    };
-
-    const unmanagedEndpoints = ['node_ip', 'workload_ip'];
-
-    const filterHiddenNodes = nodes => {
-      return nodes.filter(
-        node =>
-          !inHiddenDomain(node) &&
-          !inHiddenGroup(node) &&
-          !isHiddenEndpoint(node) &&
-          !(
-            this.blacklist?.hideUnmanaged &&
-            unmanagedEndpoints.includes(node.group)
-          )
-      );
-    };
-
-    const edgeWithHiddenDomain = edge => {
-      if (this.blacklist === undefined) return false;
-      if (this.blacklist.domains?.length > 0) {
-        return this.blacklist.domains.some(
-          domain =>
-            domain.name === edge.fromDomain || domain.name === edge.toDomain
-        );
-      } else return false;
-    };
-
-    const edgeWithHiddenGroup = edge => {
-      if (this.blacklist === undefined) return false;
-      if (this.blacklist.groups?.length > 0) {
-        return this.blacklist.groups.some(
-          group => group.name === edge.fromGroup || group.name === edge.toGroup
-        );
-      } else return false;
-    };
-
-    const edgeWithHiddenEndpoint = edge => {
-      if (this.blacklist === undefined) return false;
-      if (this.blacklist.endpoints?.length > 0) {
-        return this.blacklist.endpoints.some(
-          endpoint => endpoint.id === edge.source || endpoint.id === edge.target
-        );
-      } else return false;
-    };
-
-    const unmanagedDomains = ['nvUnmanagedWorkload', 'nvUnmanagedNode'];
-    const edgeWithUnmanagedEndpoint = edge => {
-      if (this.blacklist === undefined) return false;
-      if (this.blacklist.hideUnmanaged) {
-        return (
-          unmanagedDomains.includes(edge.fromDomain) ||
-          unmanagedDomains.includes(edge.toDomain)
-        );
-      } else return false;
-    };
-    const filterHiddenEdges = edges => {
-      return edges.filter(
-        edge =>
-          !edgeWithHiddenDomain(edge) &&
-          !edgeWithHiddenGroup(edge) &&
-          !edgeWithHiddenEndpoint(edge) &&
-          !edgeWithUnmanagedEndpoint(edge)
-      );
-    };
 
     this.graphService.getNetworkData(this.user).subscribe(response => {
       if (!this.blacklist) {
@@ -1746,8 +1753,8 @@ export class NetworkActivitiesComponent
         JSON.stringify(this.blacklist)
       );
 
-      this.data.nodes = filterHiddenNodes(response.nodes);
-      this.data.edges = filterHiddenEdges(response.edges);
+      this.data.nodes = this.filterHiddenNodes(response.nodes);
+      this.data.edges = this.filterHiddenEdges(response.edges);
       this.serverData = JSON.parse(
         JSON.stringify({ nodes: response.nodes, edges: response.edges })
       );
@@ -1959,9 +1966,7 @@ export class NetworkActivitiesComponent
       if (members && members.length > 0) {
         clusterNodes = members.map(member => {
           const memberNode =
-            this.serverData.nodes[
-              this.graphService.getNodeIdIndexMap().get(member)
-            ];
+            this.serverData.nodes.find(node => node.id === member);
           // @ts-ignore
           memberNode.comboId = `co${clusterNode.id}`;
           const theNode = Object.assign({}, memberNode);
@@ -1980,6 +1985,11 @@ export class NetworkActivitiesComponent
       );
 
       clusterNodes.forEach((item, i) => {
+        let oldNode = this.graph.findById(item.id);
+        if(oldNode){
+          this.graph.removeItem(oldNode);
+        }
+
         item.index = i + 1;
         item.size = item.service_mesh ? 40 : 20;
         item.icon.width = item.service_mesh ? 30 : 13;
@@ -2053,7 +2063,8 @@ export class NetworkActivitiesComponent
         edge.style.endArrow = {
           path: G6.Arrow.triangle(2, 3),
         };
-        this.graph.addItem('edge', edge);
+        if(this.graph.findById(edge.source) && this.graph.findById(edge.target))
+          this.graph.addItem('edge', edge);
       });
 
       this.doSubLayout(clusterNode, clusterNodes);
@@ -2239,60 +2250,76 @@ export class NetworkActivitiesComponent
   quarantine(item, toQuarantine: boolean) {
     const id: string = item.getModel().id;
 
-    this.graphService.quarantine(id, toQuarantine).subscribe(
-      () => {
-        setTimeout(() => {
-          const model = item.getModel();
-          if (toQuarantine) {
-            model.state = 'quarantined';
-            const theNode =
-              this.serverData.nodes[
-                this.graphService.getNodeIdIndexMap().get(model.id)
-              ];
-            if (theNode) theNode.state = model.state;
-            const group = item.get('group');
-            const stroke = group.find(e => e.get('name') === 'stroke-shape');
-            stroke && stroke.show();
+    const message = toQuarantine
+      ? this.translate.instant("policy.QUARANTINE_CONFIRM")
+      : this.translate.instant("policy.UNQUARANTINE_CONFIRM");
 
-            const clusterNode = this.graph.findById(model.clusterId);
-            if (clusterNode) {
-              // @ts-ignore
-              clusterNode.getModel().quarantines += 1;
-            }
-          } else {
-            const group = item.get('group');
-            const stroke = group.find(e => e.get('name') === 'stroke-shape');
-            stroke && stroke.hide();
-
-            model.state = model.group
-              ? item.getModel().group.substring('container'.length)
-              : '';
-            const theNode =
-              this.serverData.nodes[
-                this.graphService.getNodeIdIndexMap().get(model.id)
-              ];
-            if (theNode) theNode.state = model.state;
-
-            const clusterNode = this.graph.findById(model.clusterId);
-            if (clusterNode) {
-              // @ts-ignore
-              clusterNode.getModel().quarantines -= 1;
-            }
-          }
-        }, 0);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: '700px',
+      data: {
+        message: message,
+        isSync: true,
       },
-      err => {
-        console.warn(err);
-        this.notificationService.open(
-          this.utils.getAlertifyMsg(
-            err,
-            this.translate.instant('policy.message.QUARANTINE_FAILED'),
-            false
-          ),
-          GlobalConstant.NOTIFICATION_TYPE.ERROR
+    });
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+        this.graphService.quarantine(id, toQuarantine).subscribe(
+          () => {
+            setTimeout(() => {
+              const model = item.getModel();
+              if (toQuarantine) {
+                model.state = 'quarantined';
+                const theNode =
+                  this.serverData.nodes[
+                    this.graphService.getNodeIdIndexMap().get(model.id)
+                    ];
+                if (theNode) theNode.state = model.state;
+                const group = item.get('group');
+                const stroke = group.find(e => e.get('name') === 'stroke-shape');
+                stroke && stroke.show();
+
+                const clusterNode = this.graph.findById(model.clusterId);
+                if (clusterNode) {
+                  // @ts-ignore
+                  clusterNode.getModel().quarantines += 1;
+                }
+              } else {
+                const group = item.get('group');
+                const stroke = group.find(e => e.get('name') === 'stroke-shape');
+                stroke && stroke.hide();
+
+                model.state = model.group
+                  ? item.getModel().group.substring('container'.length)
+                  : '';
+                const theNode =
+                  this.serverData.nodes[
+                    this.graphService.getNodeIdIndexMap().get(model.id)
+                    ];
+                if (theNode) theNode.state = model.state;
+
+                const clusterNode = this.graph.findById(model.clusterId);
+                if (clusterNode) {
+                  // @ts-ignore
+                  clusterNode.getModel().quarantines -= 1;
+                }
+              }
+            }, 0);
+          },
+          err => {
+            console.warn(err);
+            this.notificationService.open(
+              this.utils.getAlertifyMsg(
+                err,
+                this.translate.instant('policy.message.QUARANTINE_FAILED'),
+                false
+              ),
+              GlobalConstant.NOTIFICATION_TYPE.ERROR
+            );
+          }
         );
       }
-    );
+    });
+
   }
 
   //region Sniffer

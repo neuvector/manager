@@ -5,7 +5,6 @@ import {
   FormlyValidators,
 } from '@common/neuvector-formly/neuvector-formly.module';
 
-export const OtherWebhookType = 'OTHER';
 export const WebhookTypes = [
   { value: 'Slack', viewValue: 'Slack', iconClass: 'fab fa-slack' },
   { value: 'Teams', viewValue: 'MS Teams' },
@@ -18,7 +17,7 @@ export const WebhookTableField = {
   type: FormlyComponents.EDIT_TABLE,
   templateOptions: {
     cellHeight: '75px',
-    addButtonText: 'setting.webhook.NEW',
+    addButtonText: 'setting.webhook.ADD',
   },
   expressionProperties: {
     'templateOptions.disabled': '!formState.permissions.isWebhookAuthorized',
@@ -42,7 +41,7 @@ export const WebhookTableField = {
           },
         },
         validators: {
-          validation: [FormlyValidators.ObjName, FormlyValidators.FedName]
+          validation: [FormlyValidators.ObjName, FormlyValidators.FedName],
         },
       },
       {
@@ -100,7 +99,7 @@ export const WebhookTableField = {
           flexWidth: '10%',
           align: 'center',
           ariaLabelledBy: 'setting.webhook.STATUS',
-        }
+        },
       },
       {
         key: 'cfg_type',
@@ -131,7 +130,7 @@ export const WebhookTableField = {
       },
       {
         key: 'isEditable',
-        type: FormlyComponents.EDIT_TABLE_CONTROLS,
+        type: FormlyComponents.EDIT_WEBHOOK_TABLE_CONTROLS,
         defaultValue: true,
         templateOptions: {
           flexWidth: '20%',

@@ -1,0 +1,45 @@
+.apikey__container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: auto;
+  grid-gap: 1rem;
+}
+
+.apikey__field {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: hidden;
+  &.full {
+    grid-column-start: 1;
+    grid-column-end: 3;
+  }
+  &.no-gap {
+    margin-top: -1rem;
+  }
+}
+
+.apikey__radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+  align-items: flex-start;
+}
+
+.apikey__icon {
+  color: white;
+  background-color: #30ba78;
+  border-radius: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.w-10 {
+  width: 10% !important;
+}
+
+.w-15 {
+  width: 15% !important; 
+}

@@ -11,8 +11,8 @@ import {
   IBMSetupGetResponse,
 } from '@common/types';
 import { GlobalVariable } from '@common/variables/global.variable';
-import { Observable } from 'rxjs';
-import { pluck } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { pluck, catchError } from 'rxjs/operators';
 
 @Injectable()
 export class ConfigHttpService {
@@ -52,6 +52,13 @@ export class ConfigHttpService {
     return GlobalVariable.http.get<ArrayBuffer>(
       PathConstant.SYSTEM_CONFIG_URL,
       options
+    ).pipe(
+      catchError(error => {
+        const textDecoder = new TextDecoder();
+        let errorRes = textDecoder.decode(error.error);
+        error.error = error.headers.get('Content-type') === 'application/json' ? JSON.parse(errorRes).message : errorRes;
+        return throwError(error);
+      })
     );
   }
 
@@ -93,6 +100,35 @@ export class ConfigHttpService {
   getDebug(): Observable<ArrayBuffer> {
     return GlobalVariable.http.get<ArrayBuffer>(PathConstant.SYSTEM_DEBUG_URL, {
       responseType: 'arraybuffer' as any,
-    });
+    }).pipe(
+      catchError(error => {
+        const textDecoder = new TextDecoder();
+        let errorRes = textDecoder.decode(error.error);
+        error.error = error.headers.get('Content-type') === 'application/json' ? JSON.parse(errorRes).message : errorRes;
+        return throwError(error);
+      })
+    );
+  }
+
+  getCspSupport() {
+    const options = {
+      responseType: 'arraybuffer' as any,
+      cache: false,
+      headers: { 'Cache-Control': 'no-store' },
+      observe: 'response' as any
+    };
+    return GlobalVariable.http.post(
+      PathConstant.CSP_SUPPORT_URL,
+      null,
+      options
+    ).pipe(
+      catchError(error => {
+        const textDecoder = new TextDecoder();
+        let errorRes = textDecoder.decode(error.error);
+        error.error = error.headers.get('Content-type') === 'application/json' ? JSON.parse(errorRes).message : errorRes;
+        return throwError(error);
+      })
+
+    );
   }
 }

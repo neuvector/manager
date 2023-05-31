@@ -64,6 +64,7 @@ export interface SyslogConfig {
   syslog_categories: string[];
   syslog_in_json: boolean;
   single_cve_per_syslog: boolean;
+  syslog_server_cert: string;
 }
 
 export interface AuthConfig {
@@ -90,6 +91,7 @@ export interface MiscConfig extends ConfigDebug {
   monitor_service_mesh: boolean;
   xff_enabled: boolean;
   no_telemetry_report: boolean;
+  csp_type?: string;
 }
 
 export interface ConfigDebug {

@@ -87,6 +87,7 @@ export class OpenidFormComponent implements OnInit, OnChanges {
     if (openid && openid.oidc) {
       this.serverName = openid.server_name;
       this.groupMappedRoles = openid.oidc.group_mapped_roles;
+      this.scopes = openid.oidc.scopes;
       Object.keys(openid.oidc).forEach((key: string) => {
         if (this.openidForm.controls[key]) {
           this.openidForm.controls[key].setValue(
@@ -169,5 +170,9 @@ export class OpenidFormComponent implements OnInit, OnChanges {
     if (index >= 0) {
       this.scopes.splice(index, 1);
     }
+  }
+
+  removable(scope: string): boolean {
+    return scope !== 'openid';
   }
 }

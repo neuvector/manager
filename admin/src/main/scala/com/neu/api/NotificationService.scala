@@ -693,7 +693,10 @@ class NotificationService()(implicit executionContext: ExecutionContext)
   private val getDataSet = (graphData: GraphData) => {
     val nodes = graphData.endpoints
       .filter(
-        x => !"exit".equals(x.state) && x.share_ns_with.isEmpty && x.id.nonEmpty
+        x =>
+          !"exit".equals(x.state) && x.share_ns_with.isEmpty && x.id.nonEmpty
+          && !(x.domain.isEmpty && !x.service_group
+            .exists(_.trim.nonEmpty) && x.kind == "container")
       )
       .map(endpointToNode)
 

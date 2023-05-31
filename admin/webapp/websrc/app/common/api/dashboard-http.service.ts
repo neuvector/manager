@@ -20,7 +20,6 @@ export class DashboardHttpService {
 
   getScores(
     isGlobalUser: boolean,
-    totalRunningPods: number,
     domain: any
   ): Observable<InternalSystemInfo> {
     return GlobalVariable.http.get<InternalSystemInfo>(
@@ -28,7 +27,6 @@ export class DashboardHttpService {
       {
         params: {
           isGlobalUser,
-          totalRunningPods,
           domain,
         },
       }

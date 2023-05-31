@@ -11,6 +11,7 @@ export interface SystemConfig {
   syslog_status: boolean;
   syslog_categories: string[];
   syslog_in_json: boolean;
+  syslog_server_cert?: string;
   auth_order: string[];
   auth_by_platform: boolean;
   configured_internal_subnets?: string[];

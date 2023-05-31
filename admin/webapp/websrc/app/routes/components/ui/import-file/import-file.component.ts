@@ -186,7 +186,7 @@ export class ImportFileComponent implements OnInit, OnChanges {
   };
 
   status4Tooltip = status => {
-    return status.replace(/&#34;/g, '"');
+    return this.errMsg || status.replace(/&#34;/g, '"');
   };
 
   getImportProgressInfo = params => {
@@ -231,6 +231,7 @@ export class ImportFileComponent implements OnInit, OnChanges {
             this.status = 'error';
             if (!MapConstant.USER_TIMEOUT.includes(status)) {
               if (this.msg.error) this.notificationService.openError(error, this.msg.error);
+              this.errMsg = error.message || error.error;
             }
           },
         });

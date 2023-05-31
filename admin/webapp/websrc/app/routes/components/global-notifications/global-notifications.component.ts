@@ -206,6 +206,21 @@ export class GlobalNotificationsComponent implements OnInit {
         });
       });
     }
+    if (
+      this.rbacData.neuvector_crd_errors &&
+      this.rbacData.neuvector_crd_errors.length > 0
+    ) {
+      this.rbacData.neuvector_crd_errors.forEach(err => {
+        this.globalNotifications.push({
+          name: 'neuvector_crd_errors:' + err,
+          message: err,
+          link: '',
+          labelClass: 'danger',
+          accepted: false,
+          unClamped: false,
+        });
+      });
+    }
     const notifs: string[] =
       this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_NOTIFICATIONS)?.[
         this.currentUser
@@ -265,7 +280,8 @@ export class GlobalNotificationsComponent implements OnInit {
       name.startsWith('clusterrole_errors:') ||
       name.startsWith('clusterrolebinding_errors:') ||
       name.startsWith('rolebinding_errors:') ||
-      name.startsWith('role_errors:')
+      name.startsWith('role_errors:') ||
+      name.startsWith('neuvector_crd_errors:')
     );
   }
 

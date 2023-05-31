@@ -70,7 +70,7 @@ export class PasswordPanelComponent implements OnInit {
   }
 
   checkPassword(password: string): void {
-    this.isCharReqValid = this.checkCharReq(password, this.pwdProfile);
+    this.isCharReqValid = this.checkCharReq(password || '', this.pwdProfile);
     this.isPasswordValid = Object.values(this.isCharReqValid).every(
       charReq => charReq
     );

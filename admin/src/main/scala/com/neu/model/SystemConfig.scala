@@ -70,7 +70,8 @@ case class SystemConfigSyslogCfgV2(
   syslog_status: Option[Boolean] = None,
   syslog_categories: Option[Array[String]] = None,
   syslog_in_json: Option[Boolean] = None,
-  single_cve_per_syslog: Boolean
+  single_cve_per_syslog: Boolean,
+  syslog_server_cert: Option[String] = None
 )
 
 case class SystemConfigAuthCfgV2(
@@ -103,7 +104,8 @@ case class SystemConfigMiscCfgV2(
   controller_debug: Option[Array[String]] = None,
   monitor_service_mesh: Option[Boolean] = None,
   xff_enabled: Option[Boolean] = None,
-  no_telemetry_report: Option[Boolean] = None
+  no_telemetry_report: Option[Boolean] = None,
+  csp_type: Option[String] = None
 )
 
 case class SystemConfigV2(

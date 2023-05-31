@@ -376,6 +376,77 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
             }
           }
         } ~
+        pathPrefix("api_key") {
+          pathEnd {
+            get {
+              parameter('name.?) { name =>
+                Utils.respondWithNoCacheControl() {
+                  complete {
+                    if (name.isEmpty) {
+                      logger.info("Getting all apikeys")
+                      RestClient.httpRequestWithHeader(
+                        s"${baseClusterUri(tokenId)}/api_key",
+                        GET,
+                        "",
+                        tokenId
+                      )
+                    } else {
+                      logger.info("Getting apikey: {}", name.get)
+                      RestClient.httpRequestWithHeader(
+                        s"${baseClusterUri(tokenId)}/api_key/${UrlEscapers.urlFragmentEscaper().escape(name.get)}",
+                        GET,
+                        "",
+                        tokenId
+                      )
+                    }
+                  }
+                }
+              }
+            } ~
+            post {
+              entity(as[ApikeyWrap]) { apikeyWrap =>
+                Utils.respondWithNoCacheControl() {
+                  complete {
+                    val payload = apikeyWrapToJson(apikeyWrap)
+                    logger.info("Add apikey: {}", payload)
+                    RestClient.httpRequestWithHeader(
+                      s"${baseClusterUri(tokenId)}/api_key",
+                      POST,
+                      payload,
+                      tokenId
+                    )
+                  }
+                }
+              } ~
+              Utils.respondWithNoCacheControl() {
+                complete {
+                  logger.info("Create apikey")
+                  RestClient.httpRequestWithHeader(
+                    s"${baseClusterUri(tokenId)}/api_key",
+                    POST,
+                    "",
+                    tokenId
+                  )
+                }
+              }
+            } ~
+            delete {
+              parameter('name) { name =>
+                Utils.respondWithNoCacheControl() {
+                  complete {
+                    logger.info("Deleting apikey: {}", name)
+                    RestClient.httpRequestWithHeader(
+                      s"${baseClusterUri(tokenId)}/api_key/${UrlEscapers.urlFragmentEscaper().escape(name)}",
+                      DELETE,
+                      "",
+                      tokenId
+                    )
+                  }
+                }
+              }
+            }
+          }
+        } ~
         pathPrefix("user") {
           get {
             parameter('name.?) { name =>

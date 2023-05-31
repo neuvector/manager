@@ -13,6 +13,7 @@ import {
   Role,
   PasswordProfile,
   PolicyMode,
+  Apikey,
 } from '@common/types';
 
 @Injectable()
@@ -108,6 +109,22 @@ export class SettingsService {
     return this.authHttpService.patchUser(user);
   }
 
+  getApikeys() {
+    return this.authHttpService.getApikeys();
+  }
+
+  getApikey(id: string) {
+    return this.authHttpService.getApikey(id);
+  }
+
+  addApikey(apikey: Apikey) {
+    return this.authHttpService.postApikey(apikey);
+  }
+
+  deleteApikey(id: string) {
+    return this.authHttpService.deleteApikey(id);
+  }
+
   getPermissionOptions() {
     return this.authHttpService.getPermissionOptions();
   }
@@ -138,5 +155,9 @@ export class SettingsService {
 
   patchPwdProfile(profile: PasswordProfile) {
     return this.authHttpService.patchPwdProfile(profile);
+  }
+
+  getCspSupport() {
+    return this.configHttpService.getCspSupport();
   }
 }

@@ -107,6 +107,7 @@ export class PathConstant {
   public static IBM_SETUP_URL = 'ibmsa_setup'; //config
   public static PERMISSION_OPTIONS = 'role2/permission-options'; //auth
   public static ROLES = 'role2'; //auth
+  public static APIKEY_URL = 'api_key'; //auth
   public static SINGLE_ENFORCER = 'single-enforcer'; //assets
   public static USAGE_REPORT_URL = 'usage'; //config
   public static MULTI_CLUSTER_SUMMARY = 'multi-cluster-summary'; //multi-cluster
@@ -134,4 +135,5 @@ export class PathConstant {
   public static VERIFIER_URL = 'verifier';
   public static SIGNATURE_IMPORT_URL = 'signature/import';
   public static SIGNATURE_EXPORT_URL = 'signature/export';
+  public static CSP_SUPPORT_URL = 'csp-support';
 }

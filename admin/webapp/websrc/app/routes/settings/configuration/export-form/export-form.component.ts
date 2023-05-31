@@ -20,6 +20,7 @@ import { GlobalConstant } from '@common/constants/global.constant';
 })
 export class ExportFormComponent implements OnInit {
   submittingForm = false;
+  errorMsg: string = '';
   exportForm = new FormGroup({
     export: new FormControl(null, Validators.required),
     as_standalone: new FormControl(false),
@@ -61,6 +62,7 @@ export class ExportFormComponent implements OnInit {
   submitExport(): void {
     const exportMode = this.exportForm.get('export')?.value;
     this.submittingForm = true;
+    this.errorMsg = '';
     this.settingsService
       .getSystemConfig(exportMode)
       .pipe(
@@ -78,13 +80,13 @@ export class ExportFormComponent implements OnInit {
               ? `NV${this.utils.parseDatetimeStr(new Date())}.conf.gz`
               : `NV${this.utils.parseDatetimeStr(new Date())}_policy.conf.gz`;
           saveAs(exportUrl, fileName);
-        },
-        ({ error }: { error: ErrorResponse }) => {
           this.notificationService.open(
-            this.tr.instant('setting.EXPORT_FAILED'),
-            GlobalConstant.NOTIFICATION_TYPE.ERROR
+            this.tr.instant('setting.EXPORT_OK')
           );
+        },
+        error => {
           console.warn(error);
+          this.errorMsg = error.error;
         }
       );
   }

@@ -46,6 +46,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { InputDialogModule } from '@components/ui/input-dialog/input-dialog.module';
 import { MulticheckboxComponent } from './multicheckbox/multicheckbox.component';
 import { FormlySelectModule } from '@ngx-formly/core/select';
+import { EditWebhookTableControlsComponent } from './edit-webhook-table-controls/edit-webhook-table-controls.component';
 
 export enum FormlyValidators {
   REQUIRED = 'required',
@@ -70,6 +71,7 @@ export enum FormlyComponents {
   RADIO = 'custom_radio',
   EDIT_TABLE = 'edit_table',
   EDIT_TABLE_CONTROLS = 'edit_table_controls',
+  EDIT_WEBHOOK_TABLE_CONTROLS = 'edit_webhook_table_controls',
   READONLY_WRAPPER = 'readonly',
   SECTION_WRAPPER = 'section',
   HINT_WRAPPER = 'hint_wrapper',
@@ -95,6 +97,7 @@ export enum FormlyComponents {
     ButtonComponent,
     NgxSliderComponent,
     MulticheckboxComponent,
+    EditWebhookTableControlsComponent,
   ],
   imports: [
     FormlySelectModule,
@@ -165,6 +168,10 @@ export enum FormlyComponents {
         {
           name: FormlyComponents.EDIT_TABLE_CONTROLS,
           component: EditTableControlsComponent,
+        },
+        {
+          name: FormlyComponents.EDIT_WEBHOOK_TABLE_CONTROLS,
+          component: EditWebhookTableControlsComponent,
         },
       ],
     }),

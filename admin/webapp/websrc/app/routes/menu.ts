@@ -41,6 +41,11 @@ const ASSETS = {
       link: '/regScan',
     },
     {
+      text: 'Sigstore Verifiers',
+      translate: 'sidebar.nav.SIGSTORE_VERIFIERS',
+      link: '/signature-verifiers',
+    },
+    {
       text: 'System Components',
       translate: 'sidebar.nav.SYSTEM_COMPONENTS',
       link: '/controllers',

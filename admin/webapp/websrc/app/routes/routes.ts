@@ -176,6 +176,11 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./settings/settings.module').then(m => m.SettingsModule),
       },
+      {
+        path: 'signature-verifiers',
+        loadChildren: () =>
+          import('./signature-verifiers/signature-verifiers.module').then(m => m.SignatureVerifiersModule),
+      },
     ],
   },
 

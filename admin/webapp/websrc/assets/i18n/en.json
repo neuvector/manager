@@ -834,6 +834,7 @@
       "SECURITY": "Policy",
       "GROUP": "Groups",
       "POLICY": "Network Rules",
+      "SIGSTORE_VERIFIERS": "Sigstore Verifiers",
       "RESPONSE_POLICY": "Response Rules",
       "DLP_SENSORS": "DLP Sensors",
       "WAF_SENSORS": "WAF Sensors",
@@ -2655,7 +2656,8 @@
       "MEMORY_LIMIT_S": "Mem Lmt",
       "MEMORY_REQUEST_S": "Mem Req",
       "VIOLATE_PSS_POLICY": "Violates PSA policy",
-      "MODULES": "Modules"
+      "MODULES": "Modules",
+      "IMAGE_VERIFIERS": "Image Sigstore Verifiers"
     },
     "operators": {
       "=": "=",
@@ -3150,6 +3152,47 @@
     "CALLBACK_URL": "OpenID Connect Redirect URI: ",
     "message": {
       "GET_SAML_ERR": "Error happened when getting OpenID Connect configuration"
+    }
+  },
+  "signatures": {
+    "gridHeader": {
+      "NAME": "Name",
+      "COMMENT": "Comment",
+      "REKOR_PUBLIC_KEY": "Rekor Public Key",
+      "ROOT_CERT": "Root Certificate",
+      "SCT_PUBLIC_KEY": "SCT Public Key",
+      "SCT_PUBLIC_KEY_HINT": "SCT: Signed certificate timestamp",
+      "TYPE": "Type",
+      "IGNORE_TLOG": "Ignore Tlog",
+      "IGNORE_SCT": "Ignore Secret",
+      "PUBLIC_KEY": "Public Key",
+      "CERT_ISSUER": "Certificate Issuer",
+      "CERT_SUBJECT": "Certificate Subject"
+    },
+    "signatureModal": {
+      "ADD": "Add Signature",
+      "EDIT": "Edit Signature",
+      "DELETE": "Remove Signature",
+      "VERIFIER": "Verifier",
+      "ADD_VERIFIER": "Add Verifier",
+      "EDIT_VERIFIER": "Edit Verifier",
+      "DELETE_VERIFIER": "Remove Verifier"
+    },
+    "msg": {
+      "ADD_VERIFIER_NG": "Maximum amount of verifiers is 16",
+      "INSERT_SIGSTORE_OK": "Added a sigstore successfully!",
+      "INSERT_SIGSTORE_NG": "Error happens when adding sigstore!",
+      "INSERT_VERIFIER_OK": "Added a verifier successfully!",
+      "INSERT_VERIFIER_NG": "Error happens when adding verifier!",
+      "UPDATE_SIGSTORE_OK": "Updated the sigstore successfully!",
+      "UPDATE_SIGSTORE_NG": "Error happens when updating sigstore!",
+      "UPDATE_VERIFIER_OK": "Updated the verifier successfully!",
+      "UPDATE_VERIFIER_NG": "Error happens when updating verifier!",
+      "REMOVE_CFM": "Are you sure you want to delete?",
+      "REMOVE_SIGSTORE_OK": "Removed a sigstore successfully!",
+      "REMOVE_SIGSTORE_NG": "Error happens when removing sigstore!",
+      "REMOVE_VERIFIER_OK": "Removed a verifier successfully!",
+      "REMOVE_VERIFIER_NG": "Error happens when removing verifier!"
     }
   },
   "just_now": "just now",

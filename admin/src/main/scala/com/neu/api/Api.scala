@@ -24,6 +24,7 @@ trait Api extends HttpService with CoreActors with Core {
     new GroupService().groupRoute ~
     new DashboardService().dashboardRoute ~
     new ClusterService().clusterRoute ~
-    new RiskService().riskRoute
+    new RiskService().riskRoute ~
+    new SigstoreService().sigstoreRoute
   }
 }

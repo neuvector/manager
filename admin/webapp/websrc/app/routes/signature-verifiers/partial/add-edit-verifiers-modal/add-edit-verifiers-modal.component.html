@@ -1,0 +1,107 @@
+<div class="nv-dialog">
+  <div class="d-flex justify-content-between align-items-center">
+    <h4 mat-dialog-title class="mb-2">
+      {{
+        (data.opType === opTypeOptions.ADD
+          ? 'signatures.signatureModal.ADD_VERIFIER'
+          : 'signatures.signatureModal.EDIT_VERIFIER'
+        ) | translate
+      }}
+    </h4>
+    <button
+      (click)="onCancel()"
+      class="mb-2"
+      aria-label="Close dialog"
+      mat-icon-button>
+      <i class="eos-icons">close</i>
+    </button>
+  </div>
+  <hr class="fancy" />
+  <div mat-dialog-content>
+    <form [formGroup]="addEditVerifierForm">
+      <div class="d-flex justify-content-start align-items-center mt-2">
+        <mat-form-field appearance="standard">
+          <mat-label>{{ 'signatures.gridHeader.NAME' | translate }}</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="name" />
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="ml-4">
+          <mat-label>{{'signatures.gridHeader.TYPE' | translate}}</mat-label>
+          <mat-select
+            required
+            [(ngModel)]="vType"
+            [ngModelOptions]="{standalone: true}"
+          >
+            <mat-option *ngFor="let type of types" [value]="type">
+              {{type}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <!-- <mat-checkbox
+          class="mt-3 ml-4"
+          formControlName="ignore_tlog"
+        >
+          {{ 'signatures.gridHeader.IGNORE_TLOG' | translate}}
+        </mat-checkbox>
+        <mat-checkbox
+          class="mt-3 ml-4"
+          formControlName="ignore_sct"
+        >
+          {{ 'signatures.gridHeader.IGNORE_SCT' | translate}}
+        </mat-checkbox> -->
+      </div>
+      <div class="d-flex justify-content-start align-items-center" *ngIf="vType === VERIFIER_TYPE.KEYPAIR">
+        <mat-form-field appearance="standard" class="w-100">
+          <mat-label>{{ 'signatures.gridHeader.PUBLIC_KEY' | translate }}</mat-label>
+          <textarea
+            cdkTextareaAutosize
+            style="min-height: 30px;"
+            formControlName="public_key"
+            matInput>
+          </textarea>
+        </mat-form-field>
+      </div>
+      <div class="d-flex justify-content-start align-items-center" *ngIf="vType === VERIFIER_TYPE.KEYLESS">
+        <mat-form-field class="mr-4" appearance="standard">
+          <mat-label>{{ 'signatures.gridHeader.CERT_ISSUER' | translate }}</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="cert_issuer" />
+        </mat-form-field>
+        <mat-form-field appearance="standard" class="flex-grow-1">
+          <mat-label>{{ 'signatures.gridHeader.CERT_SUBJECT' | translate }}</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="cert_subject" />
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+  <div mat-dialog-actions class="d-flex justify-content-end mt-2">
+    <div>
+      <button
+        mat-stroked-button
+        aria-label="cancel"
+        class="mr-2"
+        (click)="onCancel()">
+        {{ 'waf.sensorModal.CANCEL' | translate }}
+      </button>
+      <app-loading-button
+        [appearance]="'mat-raised-button'"
+        [color]="'primary'"
+        [loading]="submittingUpdate"
+        [text]="
+          (data.opType === opTypeOptions.EDIT
+            ? 'waf.sensorModal.UPDATE'
+            : 'waf.sensorModal.ADD'
+          ) | translate
+        "
+        (btnClick)="updateVerifier()">
+      </app-loading-button>
+    </div>
+  <div>
+</div>

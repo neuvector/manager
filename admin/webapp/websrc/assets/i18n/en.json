@@ -2890,6 +2890,7 @@
     "LOG_IN_JSON": "In JSON:",
     "LOG_CATEGORIES": "Categories:",
     "SEND_SYSLOG_PER_CVE": "Send individual syslog events per CVE",
+    "SERVER_CERTIFICATE": "Server Certificate",
     "EXPORT": "Export",
     "IMPORT": "Import",
     "AWS_BILLING": "AWS Marketplace Support",

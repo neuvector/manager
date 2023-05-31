@@ -48,7 +48,7 @@ import {
   WebhookTableField,
   XFFToggleField,
   DisableNetworkPolicyToggleBoolField,
-  DisableNetworkPolicyToggleField,
+  DisableNetworkPolicyToggleField, SyslogTLSCertificate,
 } from './constants';
 
 export const ConfigFormConfig: FormlyFieldConfig[] = [
@@ -304,6 +304,11 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
       {
         className: 'col-12 col-md-1',
         ...SyslogLevelField,
+      },
+      {
+        hideExpression: `model.syslog.syslog_ip_proto != 66`,
+        className: 'col-12 col-md-5 my-1 ml-3',
+        ...SyslogTLSCertificate,
       },
       {
         className: 'col-12 col-md-8 my-3',

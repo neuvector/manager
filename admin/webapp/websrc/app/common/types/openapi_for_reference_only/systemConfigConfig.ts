@@ -12,6 +12,7 @@ export interface SystemConfigConfig {
   syslog_categories?: string[];
   syslog_in_json?: boolean;
   single_cve_per_syslog: boolean;
+  syslog_server_cert?: string;
   auth_order?: string[];
   auth_by_platform?: boolean;
   webhooks?: Webhook[];

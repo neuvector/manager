@@ -790,27 +790,27 @@ export function updateGridData(
   let queryDataArray = canOverrideKey ? originalDataArray : targetDataArray;
   if (op === 'delete') {
     queryDataArray!.forEach(queryData => {
-      let index = getIndex(dataset, queryData, keyNames);
+      index = getIndex(dataset, queryData, keyNames);
       if (index > -1) {
         dataset.splice(index, 1);
       }
     });
   } else {
-    let index = getIndex(dataset, queryDataArray![0], keyNames);
+    index = getIndex(dataset, queryDataArray![0], keyNames);
     if (index > -1) {
       if (op === 'edit') {
         dataset.splice(index, 1, targetDataArray[0]);
       }
     } else {
-      dataset.splice(dataset.length, 1, targetDataArray[0]);
+      index = dataset.length;
+      dataset.splice(index, 1, targetDataArray[0]);
     }
   }
 
   gridApi.setRowData(dataset);
-  if (op === 'edit') {
-    setTimeout(() => {
-      let rowNode = gridApi.getDisplayedRowAtIndex(index);
-      rowNode?.setSelected(true);
-    }, 200);
-  }
+  setTimeout(() => {
+    if (op === 'delete') index = 0;
+    let rowNode = gridApi.getDisplayedRowAtIndex(index);
+    rowNode?.setSelected(true);
+  }, 200);
 }

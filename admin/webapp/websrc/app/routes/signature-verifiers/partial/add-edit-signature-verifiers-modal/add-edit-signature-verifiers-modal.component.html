@@ -1,0 +1,98 @@
+<div class="nv-dialog">
+  <div class="d-flex justify-content-between align-items-center">
+    <h4 mat-dialog-title class="mb-2">
+      {{
+        (data.opType === opTypeOptions.ADD
+          ? 'signatures.signatureModal.ADD'
+          : 'signatures.signatureModal.EDIT'
+        ) | translate
+      }}
+    </h4>
+    <button
+      (click)="onCancel()"
+      class="mb-2"
+      aria-label="Close dialog"
+      mat-icon-button>
+      <i class="eos-icons">close</i>
+    </button>
+  </div>
+  <hr class="fancy" />
+  <div mat-dialog-content>
+    <form [formGroup]="addEditSignatureForm">
+      <div class="d-flex justify-content-start align-items-center">
+        <mat-form-field appearance="standard" class="mr-4">
+          <mat-label>{{ 'signatures.gridHeader.NAME' | translate }}</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="name"
+            [readonly]="data.opType === opTypeOptions.EDIT" />
+          <mat-error
+            *ngIf="addEditSignatureForm.controls.name.hasError('required')">
+            {{ 'general.REQUIRED' | translate }}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="flex-grow-1" appearance="standard">
+          <mat-label>{{ 'signatures.gridHeader.COMMENT' | translate }}</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="comment"/>
+        </mat-form-field>
+      </div>
+      <div class="row mx-0">
+        <mat-form-field appearance="standard" class="w-100">
+          <mat-label>{{ 'signatures.gridHeader.REKOR_PUBLIC_KEY' | translate }}</mat-label>
+          <textarea
+            cdkTextareaAutosize
+            style="min-height: 30px;"
+            formControlName="rekor_public_key"
+            matInput></textarea>
+        </mat-form-field>
+      </div>
+      <div class="row mx-0">
+        <mat-form-field appearance="standard" class="w-100">
+          <mat-label>{{ 'signatures.gridHeader.ROOT_CERT' | translate }}</mat-label>
+          <textarea
+            cdkTextareaAutosize
+            style="min-height: 30px;"
+            formControlName="root_cert"
+            matInput></textarea>
+        </mat-form-field>
+      </div>
+      <div class="row mx-0">
+        <mat-form-field appearance="standard" class="w-100">
+          <mat-label>{{ 'signatures.gridHeader.SCT_PUBLIC_KEY' | translate }}&nbsp;&nbsp;({{ 'signatures.gridHeader.SCT_PUBLIC_KEY_HINT' | translate }})</mat-label>
+          <textarea
+            cdkTextareaAutosize
+            style="min-height: 30px;"
+            formControlName="sct_public_key"
+            matInput></textarea>
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+  <div mat-dialog-actions class="d-flex justify-content-end mt-2">
+    <div>
+      <button
+        mat-stroked-button
+        aria-label="cancel"
+        class="mr-2"
+        (click)="onCancel()">
+        {{ 'waf.sensorModal.CANCEL' | translate }}
+      </button>
+      <app-loading-button
+        [appearance]="'mat-raised-button'"
+        [color]="'primary'"
+        [loading]="submittingUpdate"
+        [text]="
+          (data.opType === opTypeOptions.EDIT
+            ? 'waf.sensorModal.UPDATE'
+            : 'waf.sensorModal.ADD'
+          ) | translate
+        "
+        (btnClick)="updateSigstore()">
+      </app-loading-button>
+    </div>
+  <div>
+</div>

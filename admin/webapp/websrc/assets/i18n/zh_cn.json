@@ -832,6 +832,7 @@
       "SECURITY": "策略",
       "GROUP": "组",
       "POLICY": "网络规则",
+      "SIGSTORE_VERIFIERS": "Sigstore校验器",
       "RESPONSE_POLICY": "应对规则",
       "DLP_SENSORS": "DLP 检测器",
       "WAF_SENSORS": "WAF 检测器",
@@ -2597,7 +2598,8 @@
       "MEMORY_LIMIT_S": "内存限制",
       "MEMORY_REQUEST_S": "内存请求",
       "VIOLATE_PSS_POLICY": "违反PSA策略",
-      "MODULES": "模块"
+      "MODULES": "模块",
+      "IMAGE_VERIFIERS": "镜像Sigstore检测器"
     },
     "operators": {
       "=": "=",
@@ -3084,6 +3086,47 @@
     "CALLBACK_URL": "OpenID Connect重定向网址: ",
     "message": {
       "GET_SAML_ERR": "获取OpenID Connect配置时发生错误"
+    }
+  },
+  "signatures": {
+    "gridHeader": {
+      "NAME": "名称",
+      "COMMENT": "说明",
+      "REKOR_PUBLIC_KEY": "Rekor公钥",
+      "ROOT_CERT": "根证书",
+      "SCT_PUBLIC_KEY": "SCT公钥",
+      "SCT_PUBLIC_KEY_HINT": "SCT: Signed certificate timestamp",
+      "TYPE": "类型",
+      "IGNORE_TLOG": "忽略Tlog",
+      "IGNORE_SCT": "忽略密钥",
+      "PUBLIC_KEY": "公钥",
+      "CERT_ISSUER": "证书发行者",
+      "CERT_SUBJECT": "证书主题"
+    },
+    "signatureModal": {
+      "ADD": "添加签名",
+      "EDIT": "编辑签名",
+      "DELETE": "删除签名",
+      "VERIFIER": "校验器",
+      "ADD_VERIFIER": "添加校验器",
+      "EDIT_VERIFIER": "编辑校验器",
+      "DELETE_VERIFIER": "删除校验器"
+    },
+    "msg": {
+      "ADD_VERIFIER_NG": "校验器的最大数量为16",
+      "INSERT_SIGSTORE_OK": "sigstore添加成功!",
+      "INSERT_SIGSTORE_NG": "sigstore添加时发生错误!",
+      "INSERT_VERIFIER_OK": "检测器添加成功!",
+      "INSERT_VERIFIER_NG": "添加检测器时发生错误!",
+      "UPDATE_SIGSTORE_OK": "sigstore更新成功!",
+      "UPDATE_SIGSTORE_NG": "sigstore更新时发生错误!",
+      "UPDATE_VERIFIER_OK": "检测器添加成功!",
+      "UPDATE_VERIFIER_NG": "添加检测器时发生错误!",
+      "REMOVE_CFM": "确定要删除吗?",
+      "REMOVE_SIGSTORE_OK": "sigstore删除成功!",
+      "REMOVE_SIGSTORE_NG": "删除sigstore时发生错误!",
+      "REMOVE_VERIFIER_OK": "检测器删除成功!",
+      "REMOVE_VERIFIER_NG": "检测器删除时发生错误!"
     }
   },
   "just_now": "刚才",

@@ -26,6 +26,7 @@ export class MapConstant {
     roles: ['authorization_w'],
     admission: ['admctrl_w', 'admctrl_r'],
     write_admission: ['admctrl_w'],
+    write_sigstore: ['reg_scan_w'],
     write_group: ['rt_policy_w'],
     write_script: ['compliance_w'],
     write_network_rule: ['rt_policy_w'],
@@ -323,6 +324,11 @@ export class MapConstant {
     WORKLOAD: 'Workload',
     EXTERNAL: 'external',
     IP_GROUP: 'nv.ip.',
+  };
+
+  public static VERIFIER_TYPE = {
+    KEYPAIR: 'keypair',
+    KEYLESS: 'keyless'
   };
 
   public static singularMap = {

@@ -76,6 +76,7 @@ import { NetworkRulesService } from '@services/network-rules.service';
 import { DlpSensorsService } from '@services/dlp-sensors.service';
 import { WafSensorsService } from '@services/waf-sensors.service';
 import { DashboardService } from '@services/dashboard.service';
+import { SignaturesService } from '@services/signatures.service';
 
 import { DisplayControlDirective } from '@common/directives/displayControl.directive';
 
@@ -217,6 +218,7 @@ import { NamespacesService } from '@services/namespaces.service';
     SecurityEventsService,
     TimeAgoPipe,
     GraphHttpService,
+    SignaturesService,
   ],
   declarations: [DisplayControlDirective, TwoWayInfiniteScrollDirective],
   exports: [

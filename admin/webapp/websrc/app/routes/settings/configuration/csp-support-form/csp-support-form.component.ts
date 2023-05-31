@@ -18,6 +18,7 @@ export class CspSupportFormComponent implements OnInit {
 
   submittingForm = false;
   errorMsg: string = '';
+  cspAdapterErrorMsgList: Array<string> = [];
   cspExportForm = new FormGroup({
     export: new FormControl(null, Validators.required)
   });
@@ -48,6 +49,8 @@ export class CspSupportFormComponent implements OnInit {
             type: 'application/zip',
           });
           let fileName = `${this.utils.getExportedFileName(response)}`;
+          let cspAdapterErrorsBase64 = response['headers'].get('X-Nv-Csp-Adapter-Errors');
+          this.cspAdapterErrorMsgList = cspAdapterErrorsBase64 ? atob(cspAdapterErrorsBase64).replace(/\n/g, '|').split('|') : [];
           saveAs(exportUrl, fileName);
           this.notificationService.open(
             this.tr.instant('setting.EXPORT_OK')

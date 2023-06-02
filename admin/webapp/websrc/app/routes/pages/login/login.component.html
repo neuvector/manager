@@ -4,13 +4,18 @@
   <div class="login-body">
     <div class="login-panel-wrap">
       <div>
-        <div
-          class="login-logo"
-          [ngClass]="{
-            'openID-saml-eula':
-              !isEulaAccepted && servers && servers.length === 2
-          }"
-        ></div>
+        <ng-container *ngIf="customLoginLogo; else nvLogo">
+          <div class="custom-login-logo" [innerHTML]="customLoginLogo"></div>
+        </ng-container>
+        <ng-template #nvLogo>
+          <div
+            class="login-logo"
+            [ngClass]="{
+              'openID-saml-eula':
+                (!isEulaAccepted || hasCustomPrompt || hasCustomPolicy) && servers && servers.length === 2
+            }"
+          ></div>
+        </ng-template>
         <div class="panel-body p0">
           <div id="loadingBar" style="width: 100%">
             <mat-progress-bar
@@ -29,10 +34,10 @@
           <div
             class="login-panel"
             [ngClass]="{
-              'login-panel-eula': !isEulaAccepted,
+              'login-panel-eula': !isEulaAccepted || hasCustomPrompt || hasCustomPolicy,
               'login-panel-openid-saml': servers && servers.length === 2,
               'login-panel-openid-saml-eula':
-                !isEulaAccepted && servers && servers.length === 2
+                (!isEulaAccepted || hasCustomPrompt || hasCustomPolicy) && servers && servers.length === 2
             }"
             *ngIf="!isFromSSO"
           >
@@ -56,7 +61,7 @@
                   name="account_email"
                   [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
                   formControlName="username"
-                  required=""
+                  required
                   type="text"
                 />
                 <span
@@ -114,7 +119,7 @@
                 <!--suppress JSUnresolvedVariable -->
                 <button
                   (click)="submitForm($event, loginForm.value, '')"
-                  [disabled]="!validEula || loginForm.invalid"
+                  [disabled]="!validEula || loginForm.invalid || !agreeCustomTerms"
                   style="float: left"
                   type="submit"
                 >
@@ -128,7 +133,7 @@
                 <button
                   (click)="submitForm($event, loginForm.value, 'okta')"
                   *ngIf="samlEnabled"
-                  [disabled]="!validEula"
+                  [disabled]="!validEula || !agreeCustomTerms"
                   style="float: left"
                 >
                   {{ 'login.OKTA_LOGIN' | translate }}
@@ -137,7 +142,7 @@
                 <button
                   (click)="submitForm($event, loginForm.value, 'oidc')"
                   *ngIf="oidcEnabled"
-                  [disabled]="!validEula"
+                  [disabled]="!validEula || !agreeCustomTerms"
                   style="float: left"
                 >
                   {{ 'login.OIDC_LOGIN' | translate }}
@@ -147,7 +152,7 @@
                 <!--suppress JSUnresolvedVariable -->
                 <button
                   (click)="submitForm($event, loginForm.value, '')"
-                  [disabled]="!validEula || loginForm.invalid"
+                  [disabled]="!validEula || loginForm.invalid || !agreeCustomTerms"
                   style="width: 100%; margin-bottom: 15px"
                   type="submit"
                 >
@@ -158,7 +163,7 @@
                   <button
                     (click)="submitForm($event, loginForm.value, 'okta')"
                     *ngIf="samlEnabled"
-                    [disabled]="!validEula"
+                    [disabled]="!validEula || !agreeCustomTerms"
                     style="float: left"
                   >
                     {{ 'login.OKTA_LOGIN' | translate }}
@@ -171,7 +176,7 @@
                   <button
                     (click)="submitForm($event, loginForm.value, 'oidc')"
                     *ngIf="oidcEnabled"
-                    [disabled]="!validEula"
+                    [disabled]="!validEula || !agreeCustomTerms"
                     style="float: left"
                   >
                     {{ 'login.OIDC_LOGIN' | translate }}
@@ -182,7 +187,7 @@
                 <!--suppress JSUnresolvedVariable -->
                 <button
                   (click)="submitForm($event, loginForm.value, '')"
-                  [disabled]="!validEula || loginForm.invalid"
+                  [disabled]="!validEula || loginForm.invalid || !agreeCustomTerms"
                   style="width: 100%"
                   type="submit"
                 >
@@ -198,7 +203,7 @@
             >
               {{ authMsg }}
             </div>
-            <div class="text-center mt-2" *ngIf="!isEulaAccepted">
+            <div *ngIf="!isEulaAccepted || hasCustomPrompt  || hasCustomPolicy">
               <app-eula (eulaStatus)="getEulaStatus($event)"></app-eula>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TranslatorService } from '@core/translator/translator.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -22,6 +22,8 @@ import { SystemSummary } from '@common/types';
 import { PathConstant } from '@common/constants/path.constant';
 import { HttpHeaders } from '@angular/common/http';
 import { CommonHttpService } from '@common/api/common-http.service';
+import { isValidBased64 } from '@common/utils/common.utils';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-login',
@@ -41,6 +43,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   public isEulaAccepted: boolean = true;
   public isEulaValid: boolean = true;
   public validEula: boolean = true;
+  public agreeCustomTerms: boolean = true;
   private version: string = '';
   private gpuEnabled: boolean = false;
   private originalUrl: string = '';
@@ -48,6 +51,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   private currUrl: string = '';
   private w: any;
   private _dialogSubscription;
+  public customLoginLogo: SafeHtml = '';
+  public hasCustomPrompt: boolean = false;
+  public hasCustomPolicy: boolean = false;
 
   constructor(
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
@@ -63,13 +69,46 @@ export class LoginComponent implements OnInit, OnDestroy {
     private summaryService: SummaryService,
     private fb: FormBuilder,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private sanitizer: DomSanitizer
   ) {
     this.loginForm = fb.group({
       username: [null, Validators.required],
       password: [null, Validators.required],
     });
     this.w = GlobalVariable.window;
+    this.commonHttpService.getCustomLoginLogo().subscribe(value => {
+      if (value) {
+        const decodedHTML  = isValidBased64(value)? atob(value): value;
+        this.customLoginLogo =  this.sanitizer.bypassSecurityTrustHtml(decodedHTML);
+      }
+    });
+
+    this.commonHttpService.getCustomEULAPrompt().subscribe(value => {
+      if (value) {
+        const decodedHTML  = isValidBased64(value)? atob(value): value;
+        GlobalVariable.customEULAPrompt = decodedHTML;
+        this.hasCustomPrompt = true;
+        this.agreeCustomTerms = false;
+      }
+    });
+
+    this.commonHttpService.getCustomEULAPolicy().subscribe(value => {
+      if (value) {
+        const decodedHTML  = isValidBased64(value)? atob(value): value;
+        GlobalVariable.customEULAPolicy = decodedHTML;
+        this.hasCustomPolicy = true;
+        this.agreeCustomTerms = false;
+      }
+    });
+
+    this.commonHttpService.getCustomPageHeader().subscribe(value => {
+      if (value) {
+        const decodedHTML  = isValidBased64(value)? atob(value): value;
+        GlobalVariable.customPageHeader = decodedHTML;
+      }
+    });
+
   }
 
   ngOnInit() {
@@ -300,7 +339,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   public getEulaStatus(isChecked: boolean) {
-    this.validEula = this.isEulaAccepted || isChecked;
+    if(GlobalVariable.customEULAPrompt || GlobalVariable.customEULAPolicy){
+      this.agreeCustomTerms = isChecked;
+    } else {
+      this.validEula = this.isEulaAccepted || isChecked;
+    }
   }
 
   private verifyEula() {
@@ -309,7 +352,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         let eula = eulaInfo.eula;
         if (eula && eula.accepted) {
           this.isEulaAccepted = true;
-        }else{
+        } else {
           this.isEulaAccepted = false;
         }
         this.validEula = this.isEulaAccepted;

@@ -41,6 +41,14 @@
     </li>
   </ul>
   <!-- END Left navbar-->
+  <!-- START Custom page header in the middle-->
+  <ng-container *ngIf="customPageHeader">
+    <div class="navbar-nav mr-auto flex-row">
+      <label class="selected-cluster-text">
+        <div [innerHTML]="customPageHeader"></div></label>
+    </div>
+  </ng-container>
+  <!-- END Custom header in the middle-->
   <!-- START Right Navbar-->
   <div class="navbar-nav flex-row">
     <app-global-notifications class="mr-3 my-auto"></app-global-notifications>

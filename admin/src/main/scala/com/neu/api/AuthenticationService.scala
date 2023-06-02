@@ -248,6 +248,34 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
         }
       }
     } ~
+    path("custom-login-logo") {
+      get {
+        Utils.respondWithNoCacheControl() {
+          complete(customLoginLogo)
+        }
+      }
+    } ~
+    path("custom-eula-prompt") {
+      get {
+        Utils.respondWithNoCacheControl() {
+          complete(customEulaPrompt)
+        }
+      }
+    } ~
+    path("custom-eula-policy") {
+      get {
+        Utils.respondWithNoCacheControl() {
+          complete(customEulaPolicy)
+        }
+      }
+    } ~
+    path("custom-page-header") {
+      get {
+        Utils.respondWithNoCacheControl() {
+          complete(customPageHeader)
+        }
+      }
+    } ~
     (post & path(auth)) {
       optionalCookie(suseCookie) {
         case Some(sCookie) => loginWithSUSEToken(sCookie.content)

@@ -814,3 +814,15 @@ export function updateGridData(
     rowNode?.setSelected(true);
   }, 200);
 }
+
+export function isValidBased64(str) {
+  // Remove any whitespace characters from the string
+  str = str.replace(/\s/g, '');
+
+  // Check if the string is a valid base64 encoded string
+  try {
+    return btoa(atob(str)) === str;
+  } catch (e) {
+    return false;
+  }
+}

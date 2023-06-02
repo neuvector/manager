@@ -207,8 +207,11 @@
         </button>
       </mat-form-field>
     </div>
-    <div class="apikey__field full no-gap">
+    <div class="apikey__field full no-gap flex-col">
       {{ 'apikey.msg.AUTH_INSTRUCTION' | translate }}
+      <code class="mt-1">{{
+        'apikey.msg.AUTH_CODE' | translate: { apikey: bearerToken }
+      }}</code>
     </div>
     <div class="apikey__field full">
       <mat-icon

@@ -33,7 +33,6 @@ import { UsersGridActionCellComponent } from './users-grid-action-cell/users-gri
 import { UsersGridUsernameCellComponent } from './users-grid-username-cell/users-grid-username-cell.component';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
-import { GlobalConstant } from '@common/constants/global.constant';
 import { UsersGridUserCellComponent } from './users-grid-user-cell/users-grid-user-cell.component';
 import { updateGridData } from '@common/utils/common.utils';
 
@@ -350,7 +349,9 @@ export class UsersGridComponent implements OnInit {
         finalize(() => {
           updateGridData(
             this.rowData,
-            users.map(user => {return {username: user};}),
+            users.map(user => {
+              return { username: user };
+            }),
             this.gridOptions.api!,
             'username',
             'delete'
@@ -387,9 +388,92 @@ export class UsersGridComponent implements OnInit {
     });
   }
 
-  unlockUser(event) {}
+  unlockUser(event: ICellRendererParams) {
+    const user = event.data.fullname;
+    const unlockDialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '80%',
+      maxWidth: '600px',
+      data: {
+        message: this.tr.instant(
+          'passwordProfile.loginFailureAllowance.UNLOCK_WARNING'
+        ),
+      },
+    });
+    unlockDialogRef.componentInstance.confirm
+      .pipe(
+        take(1),
+        switchMap(() => this.settingsService.unlockUser(user)),
+        finalize(() => {
+          updateGridData(
+            this.rowData,
+            [{ username: user, blocked_for_failed_login: false }],
+            this.gridOptions.api!,
+            'username',
+            'edit'
+          );
+          unlockDialogRef.componentInstance.onCancel();
+          unlockDialogRef.componentInstance.loading = false;
+        })
+      )
+      .subscribe({
+        complete: () => {
+          this.notificationService.open(
+            this.tr.instant('passwordProfile.msg.UNLOCK_USER_OK')
+          );
+        },
+        error: ({ error }: { error: ErrorResponse }) => {
+          this.notificationService.openError(
+            error,
+            this.tr.instant('passwordProfile.msg.UNLOCK_USER_NG')
+          );
+        },
+      });
+  }
 
-  resetUser(event) {}
+  resetUser(event: ICellRendererParams) {
+    const resetDialogRef = this.dialog.open(AddEditUserDialogComponent, {
+      width: '80%',
+      maxWidth: '1100px',
+      data: {
+        isReset: true,
+        user: event.data,
+      },
+    });
+    resetDialogRef.componentInstance.confirm.subscribe(userForm => {
+      this.settingsService
+        .resetUser({
+          username: userForm.username,
+          password: userForm.passwordForm.newPassword,
+        })
+        .subscribe({
+          complete: () => {
+            this.notificationService.open(
+              this.tr.instant('user.resetPassword.RESET_OK')
+            );
+            resetDialogRef.componentInstance.onNoClick();
+            updateGridData(
+              this.rowData,
+              [
+                {
+                  username: userForm.username,
+                  blocked_for_password_expired: false,
+                },
+              ],
+              this.gridOptions.api!,
+              'username',
+              'edit'
+            );
+          },
+          error: ({ error }: { error: ErrorResponse }) => {
+            this.notificationService.openError(
+              error,
+              this.tr.instant('user.resetPassword.RESET_NG')
+            );
+            resetDialogRef.componentInstance.saving$.next(false);
+          },
+        });
+    });
+  }
 
   getEventsByUser(username) {
     this.eventsService

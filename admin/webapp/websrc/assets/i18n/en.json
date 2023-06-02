@@ -3163,6 +3163,7 @@
       "SCT_PUBLIC_KEY": "SCT Public Key",
       "SCT_PUBLIC_KEY_HINT": "SCT: Signed certificate timestamp",
       "TYPE": "Type",
+      "V_TYPE": "Verifier Type",
       "IGNORE_TLOG": "Ignore Tlog",
       "IGNORE_SCT": "Ignore Secret",
       "PUBLIC_KEY": "Public Key",

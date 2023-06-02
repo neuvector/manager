@@ -96,11 +96,11 @@ export class SignaturesService {
         minWidth: 200
       },
       {
-        headerName: this.translate.instant("admissionControl.TYPE"),
+        headerName: this.translate.instant("signatures.gridHeader.V_TYPE"),
         field: "verifier_type",
-        width: 80,
-        minWidth: 80,
-        maxWidth: 80
+        width: 100,
+        minWidth: 100,
+        maxWidth: 200
       },
       // {
       //   headerName: this.translate.instant("signatures.gridHeader.IGNORE_TLOG"),

@@ -3163,6 +3163,7 @@
       "SCT_PUBLIC_KEY": "SCT公钥",
       "SCT_PUBLIC_KEY_HINT": "SCT: Signed certificate timestamp",
       "TYPE": "类型",
+      "V_TYPE": "检测器类型",
       "IGNORE_TLOG": "忽略Tlog",
       "IGNORE_SCT": "忽略密钥",
       "PUBLIC_KEY": "公钥",

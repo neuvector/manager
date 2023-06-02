@@ -3155,6 +3155,8 @@
     }
   },
   "signatures": {
+    "PRIVATE": "私有",
+    "PUBLIC": "共有",
     "gridHeader": {
       "NAME": "名称",
       "COMMENT": "说明",
@@ -3162,6 +3164,7 @@
       "ROOT_CERT": "根证书",
       "SCT_PUBLIC_KEY": "SCT公钥",
       "SCT_PUBLIC_KEY_HINT": "SCT: Signed certificate timestamp",
+      "ATTRIBUTE": "属性",
       "TYPE": "类型",
       "V_TYPE": "检测器类型",
       "IGNORE_TLOG": "忽略Tlog",

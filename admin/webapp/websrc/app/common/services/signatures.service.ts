@@ -55,6 +55,18 @@ export class SignaturesService {
         minWidth: 400
       },
       {
+        headerName: this.translate.instant("signatures.gridHeader.ATTRIBUTE"),
+        field: "is_private",
+        valueFormatter: params => {
+          return params.value ?
+            this.translate.instant("signatures.PRIVATE") :
+            this.translate.instant("signatures.PUBLIC")
+        },
+        width: 80,
+        minWidth: 80,
+        maxWidth: 80
+      },
+      {
         headerName: this.translate.instant("admissionControl.TYPE"),
         field: "cfg_type",
         cellRenderer: (params) => {

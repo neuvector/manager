@@ -1,5 +1,11 @@
 import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
   MatTableDataSource,
@@ -43,7 +49,6 @@ export class AddApikeyDialogComponent implements OnInit {
   ];
   customExpUnit = this.utils.CALENDAR.HOURS;
   customExpUnits: string[] = [
-    this.utils.CALENDAR.YEARS,
     this.utils.CALENDAR.MONTHS,
     this.utils.CALENDAR.DAYS,
     this.utils.CALENDAR.HOURS,
@@ -109,8 +114,23 @@ export class AddApikeyDialogComponent implements OnInit {
       description: new FormControl(''),
       role: new FormControl(this.data.globalRoles[0]),
       expiration_type: new FormControl('oneday'),
-      expiration_hours: new FormControl(0),
+      expiration_hours: new FormControl({ value: 0, disabled: true }, [
+        Validators.pattern(/^[0-9]*$/),
+        this.expirationValidator.bind(this),
+      ]),
     });
+  }
+
+  changeExpiration(selectedExpiration: ApikeyExpiration) {
+    if (selectedExpiration === 'hours') {
+      this.form.controls['expiration_hours'].enable();
+    } else {
+      this.form.controls['expiration_hours'].disable();
+    }
+  }
+
+  changeExpUnit() {
+    this.form.controls['expiration_hours'].updateValueAndValidity();
   }
 
   onNoClick(saved: boolean = false): void {
@@ -135,6 +155,8 @@ export class AddApikeyDialogComponent implements OnInit {
         +patch.expiration_hours,
         this.customExpUnit
       );
+    } else {
+      patch.expiration_hours = 0;
     }
     this.settingsService
       .addApikey(patch)
@@ -156,9 +178,6 @@ export class AddApikeyDialogComponent implements OnInit {
   private getHours(amount: number, unit: string): number {
     let ret = amount;
     switch (unit) {
-      case this.utils.CALENDAR.YEARS:
-        ret *= 8760;
-        break;
       case this.utils.CALENDAR.MONTHS:
         ret *= 730;
         break;
@@ -169,5 +188,33 @@ export class AddApikeyDialogComponent implements OnInit {
         break;
     }
     return ret;
+  }
+
+  private expirationValidator(
+    control: AbstractControl
+  ): ValidationErrors | null {
+    if (this.selectedExpiration !== 'hours') {
+      return null;
+    }
+    const expHours = control.value;
+    let error;
+    switch (this.customExpUnit) {
+      case this.utils.CALENDAR.MONTHS:
+        if (expHours > 12) {
+          error = { invalidHours: true };
+        }
+        break;
+      case this.utils.CALENDAR.DAYS:
+        if (expHours > 365) {
+          error = { invalidHours: true };
+        }
+        break;
+      case this.utils.CALENDAR.HOURS:
+        if (expHours > 8760) {
+          error = { invalidHours: true };
+        }
+        break;
+    }
+    return error || null;
   }
 }

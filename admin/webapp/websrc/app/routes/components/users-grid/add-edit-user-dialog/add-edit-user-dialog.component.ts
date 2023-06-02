@@ -31,6 +31,7 @@ export interface AddEditUserDialog {
   domains: string[];
   user?: User;
   isReadOnly?: boolean;
+  isReset?: boolean;
 }
 
 @Component({
@@ -75,7 +76,13 @@ export class AddEditUserDialogComponent implements OnInit {
     return this.tr.getAvailableLanguages();
   }
   get dialogPrefix() {
-    return this.data.isEdit ? 'edit' : 'add';
+    return this.data.isEdit
+      ? 'edit'
+      : this.data.isReset
+      ? 'reset'
+      : this.data.isReadOnly
+      ? 'view'
+      : 'add';
   }
 
   constructor(
@@ -87,61 +94,77 @@ export class AddEditUserDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (!this.isKube) {
-      let indexOfNone = this.data.globalRoles.findIndex(role => role === '');
-      if (indexOfNone > -1) this.data.globalRoles.splice(indexOfNone, 1);
-    }
-    this.domainTableSource = new MatTableDataSource(
-      this.data.user
-        ? this.getNamespaceRoleGridData(
-            this.data.domainRoles,
-            this.data.user.role,
-            JSON.parse(JSON.stringify(this.data.user.role_domains))
-          )
-        : this.getNamespaceRoleGridData(this.data.domainRoles)
-    );
-    this.form = this.fb.group({
-      username: ['', Validators.required],
-      email: ['', Validators.email],
-      role: [this.data.globalRoles[0]],
-    });
-    if (!this.data.isEdit) {
-      this.form.addControl('locale', this.fb.control(this.languages[0].code));
-      this.form.addControl('password', this.fb.control(''));
-      this.form.addControl(
-        'passwordForm',
-        this.fb.group(
+    if (this.data.isReset) {
+      this.form = this.fb.group({
+        username: [
+          { value: this.data.user?.username, disabled: true },
+          Validators.required,
+        ],
+        passwordForm: this.fb.group(
           {
             newPassword: ['', Validators.required],
             confirmPassword: ['', Validators.required],
           },
           { validators: passwordValidator() }
-        )
-      );
+        ),
+      });
     } else {
-      this.form.controls.username.disable();
-      if (this.data.user) {
-        this.form.patchValue({
-          username: this.data.user.username,
-          email: this.data.user.email,
-          role: this.data.user.role,
-        });
-        if (this.data.user.fullname === 'admin') {
-          this.form.controls.role.disable();
-        }
-        if (
-          !this.data.user.role ||
-          this.domainTableSource.data
-            .map(r => {
-              const namespaces: string[] = r.namespaces;
-              return !!(Array.isArray(namespaces) && namespaces.length);
-            })
-            .includes(true)
-        ) {
-          this.toggleAdvSetting = true;
-        }
-        if (this.data.isReadOnly) {
-          this.form.disable();
+      if (!this.isKube) {
+        let indexOfNone = this.data.globalRoles.findIndex(role => role === '');
+        if (indexOfNone > -1) this.data.globalRoles.splice(indexOfNone, 1);
+      }
+      this.domainTableSource = new MatTableDataSource(
+        this.data.user
+          ? this.getNamespaceRoleGridData(
+              this.data.domainRoles,
+              this.data.user.role,
+              JSON.parse(JSON.stringify(this.data.user.role_domains))
+            )
+          : this.getNamespaceRoleGridData(this.data.domainRoles)
+      );
+      this.form = this.fb.group({
+        username: ['', Validators.required],
+        email: ['', Validators.email],
+        role: [this.data.globalRoles[0]],
+      });
+      if (!this.data.isEdit) {
+        this.form.addControl('locale', this.fb.control(this.languages[0].code));
+        this.form.addControl('password', this.fb.control(''));
+        this.form.addControl(
+          'passwordForm',
+          this.fb.group(
+            {
+              newPassword: ['', Validators.required],
+              confirmPassword: ['', Validators.required],
+            },
+            { validators: passwordValidator() }
+          )
+        );
+      } else {
+        this.form.controls.username.disable();
+        if (this.data.user) {
+          this.form.patchValue({
+            username: this.data.user.username,
+            email: this.data.user.email,
+            role: this.data.user.role,
+          });
+          if (this.data.user.fullname === 'admin') {
+            this.form.controls.role.disable();
+          }
+          if (
+            !this.data.user.role ||
+            this.domainTableSource.data
+              .map(r => {
+                const namespaces: string[] = r.namespaces;
+                return !!(Array.isArray(namespaces) && namespaces.length);
+              })
+              .includes(true)
+          ) {
+            this.toggleAdvSetting = true;
+          }
+          if (this.data.isReadOnly) {
+            this.form.disable();
+          }
         }
       }
     }
@@ -213,5 +236,10 @@ export class AddEditUserDialogComponent implements OnInit {
     } else {
       this.confirm.emit({ ...this.form.value, role_domains });
     }
+  }
+
+  submitReset(): void {
+    this.saving$.next(true);
+    this.confirm.emit({ ...this.form.getRawValue() });
   }
 }

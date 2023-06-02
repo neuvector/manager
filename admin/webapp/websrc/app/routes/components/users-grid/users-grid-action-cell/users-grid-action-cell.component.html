@@ -3,7 +3,7 @@
   <button
     mat-icon-button
     [style.visibility]="
-      params.data.blocked_for_password_expire ? 'visible' : 'hidden'
+      params.data.blocked_for_password_expired ? 'visible' : 'hidden'
     "
     matTooltip="{{ 'user.tooltips.RESET_PASSWORD' | translate }}"
     (click)="reset()">

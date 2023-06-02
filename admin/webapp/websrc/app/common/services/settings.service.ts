@@ -109,6 +109,17 @@ export class SettingsService {
     return this.authHttpService.patchUser(user);
   }
 
+  unlockUser(id: string) {
+    return this.authHttpService.unblockUser(id);
+  }
+
+  resetUser(user: { username: string; password: string }) {
+    return this.authHttpService.resetUser({
+      fullname: user.username,
+      new_password: user.password,
+    });
+  }
+
   getApikeys() {
     return this.authHttpService.getApikeys();
   }

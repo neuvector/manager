@@ -53,6 +53,25 @@ export class AuthHttpService {
     return GlobalVariable.http.patch<unknown>(PathConstant.USERS_URL, user);
   }
 
+  unblockUser(userId: string): Observable<unknown> {
+    const config = {
+      fullname: userId,
+      clear_failed_login: true,
+    };
+    return GlobalVariable.http.post<unknown>(PathConstant.USER_BLOCK_URL, {
+      config,
+    });
+  }
+
+  resetUser(config: {
+    fullname: string;
+    new_password: string;
+  }): Observable<unknown> {
+    return GlobalVariable.http.post<unknown>(PathConstant.USER_BLOCK_URL, {
+      config,
+    });
+  }
+
   deleteUser(userId: string): Observable<unknown> {
     return GlobalVariable.http.delete<unknown>(PathConstant.USERS_URL, {
       params: { userId },

@@ -21,4 +21,8 @@ export class GlobalVariable {
   public static isRemote: boolean = false;
   public static version: string;
   public static gravatar: boolean = false;
+  public static customPageHeader: string;
+  public static customEULAPrompt: string;
+  public static customEULAPolicy: string;
+  public static customLoginLogo: string;
 }

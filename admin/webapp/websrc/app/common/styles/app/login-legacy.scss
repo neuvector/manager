@@ -16,6 +16,15 @@
   height: calc(100vh * 0.5 + 280px);
   min-height: 650px;
 
+  .custom-login-logo {
+    margin: 0 auto 80px auto;
+    height: 80px;
+    width: 300px;
+    &.openID-saml-eula {
+      margin-bottom: 50px;
+    }
+  };
+
   .login-logo {
     background: url('../../../../assets/img/logo-with-text.png') no-repeat;
     background: -webkit-image-set(

@@ -1,10 +1,10 @@
 import {
   Component,
+  Inject,
+  Injector,
+  OnDestroy,
   OnInit,
   ViewChild,
-  Injector,
-  Inject,
-  OnDestroy,
 } from '@angular/core';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { Router } from '@angular/router';
@@ -13,7 +13,7 @@ import screenfull from 'screenfull';
 import { SwitchersService } from '@core/switchers/switchers.service';
 import { MenuService } from '@core/menu/menu.service';
 import { MapConstant } from '@common/constants/map.constant';
-import { ClusterData, Cluster } from '@common/types';
+import { Cluster, ClusterData } from '@common/types';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
@@ -21,6 +21,7 @@ import { NotificationService } from '@services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { isAuthorized } from '@common/utils/common.utils';
 import { AuthUtilsService } from '@common/utils/auth.utils';
+import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 
 @Component({
   selector: 'app-header',
@@ -57,6 +58,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isNavSearchVisible: boolean = false;
   private _multiClusterSubScription;
   public isAuthReadConfig: boolean = false;
+  public customPageHeader: SafeHtml = '';
 
   @ViewChild('fsbutton', { static: true }) fsbutton;
 
@@ -68,6 +70,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     public switchers: SwitchersService,
     public authUtilsService: AuthUtilsService,
     public injector: Injector,
+    private sanitizer: DomSanitizer,
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService
   ) {
     this.menuItems = menu.getMenu().slice(0, 4);
@@ -76,7 +79,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.isSUSESSO = GlobalVariable.isSUSESSO;
     this.isNavSearchVisible = false;
-
+    if(GlobalVariable.customPageHeader) {
+      this.customPageHeader = this.sanitizer.bypassSecurityTrustHtml(GlobalVariable.customPageHeader);
+    }
     this.router = this.injector.get(Router);
 
     this.router.events.subscribe(() => {
@@ -98,8 +103,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
         global: 3,
       },
       fedQueryAllowed: {
-        global: 1
-      }
+        global: 1,
+      },
     };
 
     this.isAllowedToOperateMultiCluster = isAuthorized(
@@ -113,7 +118,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     );
 
     this.isAuthReadConfig = this.authUtilsService.getDisplayFlag('read_config');
-    this.isFedQueryAllowed = isAuthorized(GlobalVariable.user.roles, resource.fedQueryAllowed);
+    this.isFedQueryAllowed = isAuthorized(
+      GlobalVariable.user.roles,
+      resource.fedQueryAllowed
+    );
 
     this.initMultiClusters();
 
@@ -198,11 +206,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   initMultiClusters() {
-    if(this.isAuthReadConfig){
+    if (this.isAuthReadConfig) {
       this.getClusterName();
     }
 
-    if(this.isFedQueryAllowed){
+    if (this.isFedQueryAllowed) {
       this.getClusters();
     }
   }
@@ -213,7 +221,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.clusterName = clusterName;
       },
       error: err => {
-        this.clusterName = "";
+        this.clusterName = '';
         this.clusterNameError = true;
       },
     });

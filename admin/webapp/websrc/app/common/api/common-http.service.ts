@@ -27,4 +27,28 @@ export class CommonHttpService {
       })
       .pipe(map(val => toBoolean(val)));
   }
+
+  getCustomLoginLogo(): Observable<string> {
+    return GlobalVariable.http.get(PathConstant.CUSTOM_LOGIN_LOGO, {
+      responseType: 'text',
+    });
+  }
+
+  getCustomPageHeader(): Observable<string> {
+    return GlobalVariable.http.get(PathConstant.CUSTOM_PAGE_HEADER, {
+      responseType: 'text',
+    });
+  }
+
+  getCustomEULAPrompt(): Observable<string> {
+    return GlobalVariable.http.get(PathConstant.CUSTOM_EULA_PROMPT, {
+      responseType: 'text',
+    });
+  }
+
+  getCustomEULAPolicy(): Observable<string> {
+    return GlobalVariable.http.get(PathConstant.CUSTOM_EULA_POLICY, {
+      responseType: 'text',
+    });
+  }
 }

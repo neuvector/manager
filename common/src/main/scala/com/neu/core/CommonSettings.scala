@@ -61,4 +61,9 @@ object CommonSettings extends LazyLogging {
 
   val managerVersion: String = config.getString("product.manager.version")
 
+  val customLoginLogo: String  = sys.env.getOrElse("CUSTOM_LOGIN_LOGO", "")
+  val customEulaPrompt: String = sys.env.getOrElse("CUSTOM_EULA_PROMPT", "")
+  val customEulaPolicy: String = sys.env.getOrElse("CUSTOM_EULA_POLICY", "")
+  val customPageHeader: String = sys.env.getOrElse("CUSTOM_PAGE_HEADER", "")
+
 }

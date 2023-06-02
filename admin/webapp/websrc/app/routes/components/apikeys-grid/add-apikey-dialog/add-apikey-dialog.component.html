@@ -56,7 +56,9 @@
         </mat-icon>
         <mat-form-field class="w-25">
           <mat-label>{{ 'apikey.addApikey.EXPIRE' | translate }}</mat-label>
-          <mat-select formControlName="expiration_type">
+          <mat-select
+            formControlName="expiration_type"
+            (selectionChange)="changeExpiration(selectedExpiration)">
             <mat-option
               *ngFor="let expOption of expirationOptions"
               [value]="expOption">
@@ -71,7 +73,8 @@
           <mat-form-field class="w-15 ml-2">
             <mat-select
               [(ngModel)]="customExpUnit"
-              [ngModelOptions]="{ standalone: true }">
+              [ngModelOptions]="{ standalone: true }"
+              (selectionChange)="changeExpUnit()">
               <mat-option
                 *ngFor="let expUnit of customExpUnits"
                 [value]="expUnit">

@@ -1803,7 +1803,8 @@
     },
     "msg": {
       "CREATED": "已创建新的 API 密钥",
-      "AUTH_INSTRUCTION": "API Key Name 和 Secret Key 可以组合起来用作 HTTP 授权标头",
+      "AUTH_INSTRUCTION": "直接针对 API 使用此令牌:",
+      "AUTH_CODE": "> curl -k -H \"Content-Type: application/json\" -H \"X-Auth-Apikey: {{apikey}}\" https://...",
       "SAVE_WARNING": "请保存上面的信息！ 这是您唯一能看到它的时候。 如果您丢失了它，您将需要创建一个新的 API 密钥。",
       "ADD_OK": "添加 API Key 成功。",
       "ADD_NG": "添加 API Key 失败。",
@@ -1815,7 +1816,7 @@
       "TITLE": "添加API密钥",
       "NAME_ERROR": "Access Key 最多可包含 32 个字母数字字符，包括'_'和'-'。",
       "SECRET": "密钥",
-      "TOKEN": "X-Auth-Apikey令牌",
+      "TOKEN": "X-Auth-Apikey",
       "COPY": "复制",
       "EXPIRE": "自动过期",
       "ADD": "添加",

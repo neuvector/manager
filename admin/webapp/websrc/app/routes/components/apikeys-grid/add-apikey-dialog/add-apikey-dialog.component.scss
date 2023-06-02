@@ -17,6 +17,10 @@
   &.no-gap {
     margin-top: -1rem;
   }
+  &.flex-col {
+    flex-direction: column;
+    align-items: baseline;
+  }
 }
 
 .apikey__radio-group {

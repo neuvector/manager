@@ -478,8 +478,11 @@ def detail(data, apikey_name):
     dt = datetime.datetime.utcfromtimestamp(user["created_timestamp"])
     user["creation_time"] = dt.strftime('%Y-%m-%d %H:%M:%S')
 
-    dt = datetime.datetime.utcfromtimestamp(user["expiration_timestamp"])
-    user["expiration_time"] = dt.strftime('%Y-%m-%d %H:%M:%S')
+    if user["expiration_type"] == "never":
+        user["expiration_time"] = "(never)"
+    else:
+        dt = datetime.datetime.utcfromtimestamp(user["expiration_timestamp"])
+        user["expiration_time"] = dt.strftime('%Y-%m-%d %H:%M:%S')
 
     columns = ("apikey_name", "description", "creation_time", "expiration_time", "expiration_type", "expiration_hours", "role", utils.RoleDomains)
     output.show(columns, user)

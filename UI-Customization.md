@@ -30,6 +30,6 @@ To customize the content of the page header, follow these guidelines:
 - Base64 encode the HTML or text.
 - Save the base64 encoded string in the environment variable `CUSTOM_PAGE_HEADER`.
 
-Remember to replace the environment variable placeholders (`CUSTOM_LOGIN_LOGO`, `CUSTOM_EULA_PROMPT`, `CUSTOM_EULA_POLICY`, `CUSTOM_PAGE_HEADER`) with the actual environment variable names used in your system.
+The environment variables (`CUSTOM_LOGIN_LOGO`, `CUSTOM_PAGE_HEADER`, `CUSTOM_EULA_PROMPT`, `CUSTOM_EULA_POLICY`) are defined in the [helm chart](https://github.com/neuvector/neuvector-helm/blob/master/charts/core/templates/manager-deployment.yaml).
 
-Feel free to adjust the formatting or add any additional instructions as needed for your specific application.
+

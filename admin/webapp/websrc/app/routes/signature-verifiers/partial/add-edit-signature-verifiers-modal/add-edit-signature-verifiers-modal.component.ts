@@ -58,7 +58,7 @@ export class AddEditSignatureVerifiersModalComponent implements OnInit {
         rekor_public_key: new FormControl(this.data.signature.rekor_public_key),
         root_cert: new FormControl(this.data.signature.root_cert),
         sct_public_key: new FormControl(this.data.signature.sct_public_key),
-        is_private: new FormControl(this.data.signatureis_private),
+        is_private: new FormControl(this.data.signature.is_private),
         cfg_type: new FormControl(this.data.cfg_type),
       });
     }
@@ -69,6 +69,11 @@ export class AddEditSignatureVerifiersModalComponent implements OnInit {
   };
 
   updateSigstore = () => {
+    if (this.addEditSignatureForm.controls.is_private.value) {
+      this.addEditSignatureForm.controls.rekor_public_key.setValue('');
+      this.addEditSignatureForm.controls.root_cert.setValue('');
+      this.addEditSignatureForm.controls.sct_public_key.setValue('');
+    }
     this.signaturesService.updateSigstoreData(
       this.addEditSignatureForm.value,
       this.data.opType
@@ -86,6 +91,7 @@ export class AddEditSignatureVerifiersModalComponent implements OnInit {
             {
               name: this.addEditSignatureForm.value.name,
               comment: this.addEditSignatureForm.value.comment,
+              is_private: this.addEditSignatureForm.value.is_private,
               rekor_public_key: this.addEditSignatureForm.value.rekor_public_key,
               root_cert: this.addEditSignatureForm.value.root_cert,
               sct_public_key: this.addEditSignatureForm.value.sct_public_key,

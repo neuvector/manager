@@ -27,8 +27,15 @@
             matInput
             formControlName="name" />
         </mat-form-field>
+        <mat-form-field appearance="standard" class="ml-4 flex-grow-1">
+          <mat-label>{{ 'signatures.gridHeader.COMMENT' | translate }}</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="comment" />
+        </mat-form-field>
         <mat-form-field appearance="standard" class="ml-4">
-          <mat-label>{{'signatures.gridHeader.TYPE' | translate}}</mat-label>
+          <mat-label>{{'signatures.gridHeader.V_TYPE' | translate}}</mat-label>
           <mat-select
             required
             [(ngModel)]="vType"

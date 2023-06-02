@@ -3155,6 +3155,8 @@
     }
   },
   "signatures": {
+    "PRIVATE": "Private",
+    "PUBLIC": "Public",
     "gridHeader": {
       "NAME": "Name",
       "COMMENT": "Comment",
@@ -3162,7 +3164,9 @@
       "ROOT_CERT": "Root Certificate",
       "SCT_PUBLIC_KEY": "SCT Public Key",
       "SCT_PUBLIC_KEY_HINT": "SCT: Signed certificate timestamp",
+      "ATTRIBUTE": "Attribute",
       "TYPE": "Type",
+      "V_TYPE": "Verifier Type",
       "IGNORE_TLOG": "Ignore Tlog",
       "IGNORE_SCT": "Ignore Secret",
       "PUBLIC_KEY": "Public Key",

@@ -69,7 +69,7 @@ export class AddEditSignatureVerifiersModalComponent implements OnInit {
   };
 
   updateSigstore = () => {
-    if (this.addEditSignatureForm.controls.is_private.value) {
+    if (!this.addEditSignatureForm.controls.is_private.value) {
       this.addEditSignatureForm.controls.rekor_public_key.setValue('');
       this.addEditSignatureForm.controls.root_cert.setValue('');
       this.addEditSignatureForm.controls.sct_public_key.setValue('');

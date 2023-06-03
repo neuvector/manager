@@ -31,13 +31,13 @@ export class SignaturesService {
       {
         headerName: this.translate.instant("signatures.gridHeader.NAME"),
         field: "name",
-        headerCheckboxSelection: isWriteSignaturesAuthorized,
-        headerCheckboxSelectionFilteredOnly: isWriteSignaturesAuthorized,
-        checkboxSelection: (params) => {
-          if (params.data)
-            return isWriteSignaturesAuthorized;
-          return false;
-        },
+        // headerCheckboxSelection: isWriteSignaturesAuthorized,
+        // headerCheckboxSelectionFilteredOnly: isWriteSignaturesAuthorized,
+        // checkboxSelection: (params) => {
+        //   if (params.data)
+        //     return isWriteSignaturesAuthorized;
+        //   return false;
+        // },
         cellRenderer: (params) => {
           if (params.value)
             return `<span class="${!isWriteSignaturesAuthorized ? 'left-margin-32' : ''}">

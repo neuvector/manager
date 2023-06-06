@@ -114,11 +114,25 @@ export class ContainersGridComponent implements OnInit {
         headerName: 'Child Data',
         field: 'child_data',
         hide: true,
+        getQuickFilterText: params => {
+          const { parent_data, child_data, ...data } = params.data;
+          if (!parent_data && !child_data) {
+            return '';
+          }
+          return child_data || JSON.stringify(data);
+        },
       },
       {
         headerName: 'Parent Data',
         field: 'parent_data',
         hide: true,
+        getQuickFilterText: params => {
+          const { parent_data, child_data, ...data } = params.data;
+          if (!parent_data && !child_data) {
+            return '';
+          }
+          return parent_data || JSON.stringify(data);
+        },
       },
       {
         headerName: this.tr.instant('group.gridHeader.DOMAIN'),

@@ -199,7 +199,6 @@ export class GlobalConstant {
 
   public static CRITERIA_PATTERN = {
     NAME_ONLY: [
-      'imageSigned',
       'runAsRoot',
       'runAsPrivileged',
       'allowPrivEscalation',

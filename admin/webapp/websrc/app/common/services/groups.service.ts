@@ -118,11 +118,15 @@ export class GroupsService {
         headerName: this.translate.instant('group.gridHeader.POLICY_MODE'),
         valueGetter: params => {
           return {
-            policy_mode: params.data.policy_mode,
-            baseline_profile: params.data.baseline_profile,
+            policy_mode: params.data.policy_mode || '',
+            baseline_profile: params.data.baseline_profile || '',
           };
         },
         cellRenderer: policyModeRendererFunc,
+        comparator: (value1, value2, node1, node2) => {
+          return `${value1.policy_mode.toLowerCase()}-${value1.baseline_profile.toLowerCase()}`
+                  .localeCompare(`${value2.policy_mode.toLowerCase()}-${value1.baseline_profile.toLowerCase()}`);
+        },
         hide: isFed,
         width: 120,
         maxWidth: 120,

@@ -25,6 +25,7 @@
           <input
             type="text"
             matInput
+            [readonly]="data.opType === opTypeOptions.EDIT"
             formControlName="name" />
         </mat-form-field>
         <mat-form-field appearance="standard" class="ml-4 flex-grow-1">
@@ -101,6 +102,7 @@
         [appearance]="'mat-raised-button'"
         [color]="'primary'"
         [loading]="submittingUpdate"
+        [disabled]="addEditVerifierForm.invalid"
         [text]="
           (data.opType === opTypeOptions.EDIT
             ? 'waf.sensorModal.UPDATE'

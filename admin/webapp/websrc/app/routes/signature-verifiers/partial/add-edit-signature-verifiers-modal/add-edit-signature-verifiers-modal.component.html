@@ -45,6 +45,7 @@
         <mat-radio-group
           class="pull-left margin-right-m"
           aria-label="Select attribute"
+          [disabled]="data.opType === opTypeOptions.EDIT"
           formControlName="is_private"
         >
           <mat-radio-button [value]="true" class="margin-right-s">{{
@@ -73,6 +74,10 @@
             style="min-height: 30px;"
             formControlName="root_cert"
             matInput></textarea>
+          <mat-error
+            *ngIf="addEditSignatureForm.controls.root_cert.hasError('required')">
+            {{ 'general.REQUIRED' | translate }}
+          </mat-error>
         </mat-form-field>
       </div>
       <div class="row mx-0" *ngIf="addEditSignatureForm.controls.is_private.value">
@@ -100,6 +105,7 @@
         [appearance]="'mat-raised-button'"
         [color]="'primary'"
         [loading]="submittingUpdate"
+        [disabled]="addEditSignatureForm.invalid"
         [text]="
           (data.opType === opTypeOptions.EDIT
             ? 'waf.sensorModal.UPDATE'

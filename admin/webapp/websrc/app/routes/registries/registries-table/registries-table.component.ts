@@ -308,7 +308,7 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
       data: { config: data, isEdit: isEdit, editable: editable },
     });
     dialog.afterClosed().subscribe(change => {
-      if (change) {
+      if (change && isEdit) {
         this.registriesCommunicationService.setSelectedRegistry(
           this.gridApi.getSelectedNodes()[0].data
         );

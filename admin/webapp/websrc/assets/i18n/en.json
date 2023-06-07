@@ -2685,6 +2685,8 @@
       "NOTCONTAINSANY_SINGLE": "is NOT one of",
       "EXIST": "exists",
       "NOTEXIST": "NOT exists",
+      "REGEXCONTAINSANY_SINGLE": "matches any regex in",
+      "!REGEXCONTAINSANY_SINGLE": "matches NONE regex in",
       "text": {
         "<=": "less than",
         ">=": "more than"

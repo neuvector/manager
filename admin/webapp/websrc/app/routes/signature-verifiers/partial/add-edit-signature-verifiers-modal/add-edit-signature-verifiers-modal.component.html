@@ -46,6 +46,7 @@
           class="pull-left margin-right-m"
           aria-label="Select attribute"
           [disabled]="data.opType === opTypeOptions.EDIT"
+          (change)="changeAttribute()"
           formControlName="is_private"
         >
           <mat-radio-button [value]="true" class="margin-right-s">{{

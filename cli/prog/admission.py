@@ -10,8 +10,11 @@ from prog import output
 
 CriteriaOpNotEqual = "!="
 CriteriaOpNotRegex = "!regex"
+CriteriaOpRegexNotContainsAny = "!regexContainsAny"
 CriteriaOpContainsAll = "containsAll"
 CriteriaOpContainsAny = "containsAny"
+CriteriaOpRegexContainsAny = "regexContainsAny"
+
 CriteriaOpContainsOtherThan = "containsOtherThan"
 CriteriaOpNotContainsAny = "notContainsAny"
 
@@ -37,7 +40,7 @@ SingleValueCrt = {"cveHighCount": True,
                   "runAsRoot": True,
                   "allowPrivEscalation": True,
                   "pspCompliance": True,
-                  "user": True,
+                  "user": False,
                   "userGroups": False,
                   "publishDays": True,
                   "imageCompliance": True,
@@ -103,10 +106,13 @@ NamesDisplay2 = {  # for criteria that has sub-criteria
 }
 
 OpsDisplay1 = {CriteriaOpContainsAny: 'is', CriteriaOpNotContainsAny: 'is not',
-               CriteriaOpContainsAll: CriteriaOpContainsAll, CriteriaOpContainsOtherThan: CriteriaOpContainsOtherThan}
+               CriteriaOpContainsAll: CriteriaOpContainsAll, CriteriaOpContainsOtherThan: CriteriaOpContainsOtherThan,
+               CriteriaOpRegexContainsAny: 'matches any regex in', CriteriaOpRegexNotContainsAny: 'matches none regex in'}
 OpsDisplay2 = {CriteriaOpContainsAny: 'contains any in', CriteriaOpNotContainsAny: 'not contains any in',
-               CriteriaOpContainsAll: 'contains all in', CriteriaOpContainsOtherThan: 'contains value not in'}
-
+               CriteriaOpContainsAll: 'contains all in', CriteriaOpContainsOtherThan: 'contains value not in',
+               CriteriaOpRegexContainsAny: 'matches any regex in', CriteriaOpRegexNotContainsAny: 'matches none regex in'}
+userOpsDisplay = {CriteriaOpContainsAny: 'is one of', CriteriaOpNotContainsAny: 'is not one of',
+                  CriteriaOpRegexContainsAny: 'matches any regex in', CriteriaOpRegexNotContainsAny: 'matches none regex in'}
 
 RiskyRoleDescriptions = {
     "risky_role_view_secret": "Service Account can listing secrets",
@@ -183,11 +189,14 @@ def show_admission_stats(data):
 
 def _get_criterion_op_value(c):
     opDisplay = c["op"]
-    if c["op"] == CriteriaOpContainsAll or c["op"] == CriteriaOpContainsAny or c["op"] == CriteriaOpNotContainsAny or c["op"] == CriteriaOpContainsOtherThan:
-        if SingleValueCrt[c["name"]] is True:
-            opDisplay = OpsDisplay1[c["op"]]
+    if c["op"] == CriteriaOpContainsAll or c["op"] == CriteriaOpContainsAny or c["op"] == CriteriaOpNotContainsAny or c["op"] == CriteriaOpRegexContainsAny or c["op"] == CriteriaOpRegexNotContainsAny or c["op"] == CriteriaOpContainsOtherThan:
+        if c["name"] == "user":
+            opDisplay = userOpsDisplay[c["op"]]
         else:
-            opDisplay = OpsDisplay2[c["op"]]
+            if SingleValueCrt[c["name"]] is True:
+                opDisplay = OpsDisplay1[c["op"]]
+            else:
+                opDisplay = OpsDisplay2[c["op"]]
         value = "{{{}}}".format(c["value"])
     elif c["op"] == "notExist":
         opDisplay = "doesn't exist"
@@ -237,7 +246,7 @@ def _list_admission_rule_display_format(rule):
                 continue
             positive = False
             for c in types[t]:
-                if c["op"] != CriteriaOpNotEqual and c["op"] != CriteriaOpNotRegex and c["op"] != CriteriaOpNotContainsAny:  
+                if c["op"] != CriteriaOpNotEqual and c["op"] != CriteriaOpNotRegex and c["op"] != CriteriaOpNotContainsAny and c["op"] != CriteriaOpRegexNotContainsAny:  
                     positive = True
                     break
             tc = ""
@@ -610,7 +619,8 @@ def create_admission_rule(data, type, scope, criteria, disable, mode, comment):
         rule["cfg_type"] = client.UserCreatedCfg
     rule["rule_type"] = type
     rule["id"] = 0
-    rule["rule_mode"] = mode
+    if type == 'deny':
+        rule["rule_mode"] = mode
     body = dict()
     body["config"] = rule
     # click.echo("Admission control rule object: {}".format(json.dumps(body)))
@@ -730,8 +740,13 @@ def set_admission_rule(data, id, scope, criteria, state, mode, comment):
         rule["category"] = category
         modify = True
     if mode is not None:
-        rule["rule_mode"] = mode
-        modify = True
+        if "rule_type" in rule and rule["rule_type"] == 'deny':
+            rule["rule_mode"] = mode
+            modify = True
+        else:
+            click.echo("Abort because --mode cannot be set for allow rules.")
+            click.echo("")
+            return
 
     if modify:
         body = dict()

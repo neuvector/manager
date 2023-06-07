@@ -2686,6 +2686,8 @@
       "NOTCONTAINSANY_SINGLE": "is NOT one of",
       "EXIST": "exists",
       "NOTEXIST": "NOT exists",
+      "REGEXCONTAINSANY_SINGLE": "matches any regex in",
+      "!REGEXCONTAINSANY_SINGLE": "matches NONE regex in",
       "text": {
         "<=": "less than",
         ">=": "more than"
@@ -3160,6 +3162,8 @@
     "PUBLIC": "Public",
     "gridHeader": {
       "NAME": "Name",
+      "SIG_NAME": "Sigstore Trust of Root Name",
+      "VERIFIER_NAME": "Verifier Name",
       "COMMENT": "Comment",
       "REKOR_PUBLIC_KEY": "Rekor Public Key",
       "ROOT_CERT": "Root Certificate",

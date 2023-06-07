@@ -7,7 +7,8 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./multi-selector-dropdown.component.scss']
 })
 export class MultiSelectorDropdownComponent implements OnInit {
-  @Input() list:any[];
+  @Input() list: any[];
+  @Input() isUsingI18n: Boolean = false;
 
   @Output() shareCheckedList = new EventEmitter();
 
@@ -22,7 +23,7 @@ export class MultiSelectorDropdownComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkedList = this.list.filter(item => item.checked).map(item => item.value);
-    this.displaySelection = this.checkedList.map(item => this.translate.instant(`admissionControl.values.${item.toUpperCase()}`));
+    this.displaySelection = this.checkedList.map(item => this.isUsingI18n ? this.translate.instant(`admissionControl.values.${item.toUpperCase()}`) : item);
     this.showDropDown = false;
   }
 
@@ -34,7 +35,7 @@ export class MultiSelectorDropdownComponent implements OnInit {
       this.checkedList.splice(index,1);
     }
 
-    this.displaySelection = this.checkedList.map(item => this.translate.instant(`admissionControl.values.${item.toUpperCase()}`));
+    this.displaySelection = this.checkedList.map(item => this.isUsingI18n ? this.translate.instant(`admissionControl.values.${item.toUpperCase()}`) : item);
     console.log(this.checkedList, this.displaySelection);
     this._shareCheckedList();
   }

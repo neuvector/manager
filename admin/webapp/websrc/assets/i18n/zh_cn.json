@@ -2686,6 +2686,8 @@
       "NOTCONTAINSANY_SINGLE": "不是",
       "EXIST": "存在",
       "NOTEXIST": "不存在",
+      "REGEXCONTAINSANY_SINGLE": "匹配任意",
+      "!REGEXCONTAINSANY_SINGLE": "不匹配任何",
       "text": {
         "<=": "少于",
         ">=": "多于"
@@ -3160,6 +3162,8 @@
     "PUBLIC": "共有",
     "gridHeader": {
       "NAME": "名称",
+      "SIG_NAME": "签名信任根名称",
+      "VERIFIER_NAME": "校验器名称",
       "COMMENT": "说明",
       "REKOR_PUBLIC_KEY": "Rekor公钥",
       "ROOT_CERT": "根证书",

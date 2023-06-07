@@ -3161,6 +3161,8 @@
     "PUBLIC": "Public",
     "gridHeader": {
       "NAME": "Name",
+      "SIG_NAME": "Sigstore Trust of Root Name",
+      "VERIFIER_NAME": "Verifier Name",
       "COMMENT": "Comment",
       "REKOR_PUBLIC_KEY": "Rekor Public Key",
       "ROOT_CERT": "Root Certificate",

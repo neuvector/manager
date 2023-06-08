@@ -123,10 +123,11 @@
           >
             <textarea
               matInput
+              style="min-height: 60px;"
               [readonly]="data.opType === modalOp.VIEW"
               [ngModelOptions]="{standalone: true}"
               [(ngModel)]="mainCriterion.value"
-              [placeholder]="'admissionControl.sample.MULTI_VAL' | translate"
+              [placeholder]="(mainCriterion.name === 'imageVerifiers' ? 'admissionControl.sample.MULTI_VAL_SIG_VRF' : 'admissionControl.sample.MULTI_VAL') | translate"
             ></textarea>
           </mat-form-field>
           <mat-form-field

@@ -2688,6 +2688,8 @@
       "NOTEXIST": "NOT exists",
       "REGEXCONTAINSANY_SINGLE": "matches any regex in",
       "!REGEXCONTAINSANY_SINGLE": "matches NONE regex in",
+      "REGEXCONTAINSANY": "matches any regex in",
+      "!REGEXCONTAINSANY": "matches NONE regex in",
       "text": {
         "<=": "less than",
         ">=": "more than"
@@ -3179,9 +3181,9 @@
       "CERT_SUBJECT": "Certificate Subject"
     },
     "signatureModal": {
-      "ADD": "Add Signature Root of Trust",
-      "EDIT": "Edit Signature Root of Trust",
-      "DELETE": "Remove Signature Root of Trust",
+      "ADD": "Add Sigstore Root of Trust",
+      "EDIT": "Edit Sigstore Root of Trust",
+      "DELETE": "Remove Sigstore Root of Trust",
       "VERIFIER": "Verifier",
       "ADD_VERIFIER": "Add Verifier",
       "EDIT_VERIFIER": "Edit Verifier",

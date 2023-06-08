@@ -2533,6 +2533,7 @@
     "PSS_RESTRICT_HINT": "如果部署不能满足\"严格限制\"的水平, 阻止措施将要被实施.",
     "sample": {
       "MULTI_VAL": "格式样例: element1, element2, element3",
+      "MULTI_VAL_SIG_VRF": "格式样例: 签名信任根名/检测器名1, 签名信任根名/检测器名2",
       "IMG_REG_HINT": "镜像库名应该是 \"localhost\" 或含有 \".\" 的名称"
     },
     "msg": {

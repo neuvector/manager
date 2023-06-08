@@ -103,7 +103,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field
-            *ngIf="!(CRITERIA_PATTERN.NAME_ONLY.concat(CRITERIA_PATTERN.RESOURCE).concat(CRITERIA_PATTERN.CHECKABLE_VALUE_CRITERIA)).includes(mainCriterion.name) && !hasMultiValue && criterionValueList.length <= 1 && !mainCriterion.op.toLowerCase().includes('exist'.toLowerCase())"
+            *ngIf="!(CRITERIA_PATTERN.NAME_ONLY.concat(CRITERIA_PATTERN.RESOURCE)).includes(mainCriterion.name) && !hasMultiValue && criterionValueList.length <= 1 && !mainCriterion.op.toLowerCase().includes('exist'.toLowerCase()) && mainCriterion.name !== 'saBindRiskyRole'"
             appearance="standard"
             class="col-12 col-md-4"
           >
@@ -117,20 +117,21 @@
             />
           </mat-form-field>
           <mat-form-field
-            *ngIf="!(CRITERIA_PATTERN.NAME_ONLY.concat(CRITERIA_PATTERN.RESOURCE).concat(CRITERIA_PATTERN.CHECKABLE_VALUE_CRITERIA)).includes(mainCriterion.name) && hasMultiValue && criterionValueList.length <= 1 && !mainCriterion.op.toLowerCase().includes('exist'.toLowerCase())"
+            *ngIf="!(CRITERIA_PATTERN.NAME_ONLY.concat(CRITERIA_PATTERN.RESOURCE)).includes(mainCriterion.name) && hasMultiValue && criterionValueList.length <= 1 && !mainCriterion.op.toLowerCase().includes('exist'.toLowerCase()) && mainCriterion.name !== 'saBindRiskyRole'"
             appearance="outline"
             class="col-12 col-md-4"
           >
             <textarea
               matInput
+              style="min-height: 60px;"
               [readonly]="data.opType === modalOp.VIEW"
               [ngModelOptions]="{standalone: true}"
               [(ngModel)]="mainCriterion.value"
-              [placeholder]="'admissionControl.sample.MULTI_VAL' | translate"
+              [placeholder]="(mainCriterion.name === 'imageVerifiers' ? 'admissionControl.sample.MULTI_VAL_SIG_VRF' : 'admissionControl.sample.MULTI_VAL') | translate"
             ></textarea>
           </mat-form-field>
           <mat-form-field
-            *ngIf="!(CRITERIA_PATTERN.NAME_ONLY.concat(CRITERIA_PATTERN.RESOURCE).concat(CRITERIA_PATTERN.CHECKABLE_VALUE_CRITERIA)).includes(mainCriterion.name) && criterionValueList.length > 1 && !mainCriterion.op.toLowerCase().includes('exist'.toLowerCase())"
+            *ngIf="!(CRITERIA_PATTERN.NAME_ONLY.concat(CRITERIA_PATTERN.RESOURCE)).includes(mainCriterion.name) && criterionValueList.length > 1 && !mainCriterion.op.toLowerCase().includes('exist'.toLowerCase()) && mainCriterion.name !== 'saBindRiskyRole'"
             appearance="standard"
             class="col-12 col-md-4"
           >
@@ -144,17 +145,9 @@
             </mat-select>
           </mat-form-field>
           <app-multi-selector-dropdown
-            *ngIf="mainCriterion.name === 'imageVerifiers'"
-            class="margin-top-m"
-            [list]="criterionValueList4Verifiers"
-            (shareCheckedList)="shareCheckedList($event)">
-          >
-          </app-multi-selector-dropdown>
-          <app-multi-selector-dropdown
             *ngIf="mainCriterion.name === 'saBindRiskyRole'"
             class="margin-top-m"
             [list]="criterionValueList"
-            [isUsingI18n]="true"
             (shareCheckedList)="shareCheckedList($event)">
           >
           </app-multi-selector-dropdown>

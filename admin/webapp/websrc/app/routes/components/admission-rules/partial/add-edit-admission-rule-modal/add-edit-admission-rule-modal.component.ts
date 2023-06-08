@@ -25,7 +25,6 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
   criterionNameList: Array<any> = [];
   criterionOperatorList: Array<any> = [];
   criterionValueList: Array<string> = [];
-  criterionValueList4Verifiers: Array<string> = [];
   subOptions: any;
   subCriterionNameList: Array<any> = [];
   subCriterionOperatorList: Array<any> = [];
@@ -313,15 +312,6 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
           }
         })
       }
-      if (criterion.value.name === 'imageVerifiers') {
-        this.criterionValueList4Verifiers = this.data.admissionOptions.admission_options.sigstore_verifiers.map(verifier => {
-          return {
-            name: verifier,
-            value: verifier,
-            checked: criterion.value.value.includes(verifier)
-          }
-        })
-      }
       this.subOptions = this.getSubOptions(this.criteriaOptions, this.mainCriterion.name);
       if (this.subOptions) {
         this.initCriteriaSubOptionsView(this.subOptions, this.subCriterion);
@@ -445,15 +435,6 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
         return {
           name: this.translate.instant(`admissionControl.values.${role.toUpperCase()}`),
           value: role,
-          checked: false
-        }
-      })
-    }
-    if (selectedCriterionName === 'imageVerifiers') {
-      this.criterionValueList4Verifiers = this.data.admissionOptions.admission_options.sigstore_verifiers.map(verifier => {
-        return {
-          name: verifier,
-          value: verifier,
           checked: false
         }
       })

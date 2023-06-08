@@ -212,11 +212,8 @@ export class GlobalConstant {
       'image',
       'imageRegistry',
       'namespace',
-    ],
-    CHECKABLE_VALUE_CRITERIA: [
       'saBindRiskyRole',
-      'imageVerifiers'
-    ]
+    ],
   };
   public static PSP = 'pspcompliance';
   public static PSS = 'violatepsspolicy';

@@ -2688,6 +2688,8 @@
       "NOTEXIST": "NOT exists",
       "REGEXCONTAINSANY_SINGLE": "matches any regex in",
       "!REGEXCONTAINSANY_SINGLE": "matches NONE regex in",
+      "REGEXCONTAINSANY": "matches any regex in",
+      "!REGEXCONTAINSANY": "matches NONE regex in",
       "text": {
         "<=": "less than",
         ">=": "more than"

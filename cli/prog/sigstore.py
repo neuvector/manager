@@ -250,7 +250,7 @@ def set_sigstore_rootoftrust(data, root_name, rekor_public_key, root_cert, sct_p
 @set_sigstore.group("verifier", invoke_without_command=True)
 @click.option("--root_name", required=True, help="Root of trust name")
 @click.option("--name", required=True, help="Verifier name")
-@click.option("--verifier_type", default=None, type=click.Choice(['keyless', 'keypair', None]), help="Verifier type")
+@click.option("--verifier_type", default=None, type=click.Choice(['keyless', 'keypair']), help="Verifier type")
 @click.option("--public_key", is_flag=True, default=False, help="Set this flag for Public Key. Only for 'keypair' verifier type")
 @click.option("--cert_issuer", default=None, help="Certificate issuer")
 @click.option("--cert_subject", default=None, help="Certificate subject")

@@ -12,7 +12,6 @@
 }
 
 .vulnerability-description-container {
-  overflow-y: scroll;
   height: 50%;
 
   .vulnerability-description {
@@ -41,4 +40,12 @@
 
 .vulnerability-description-body {
   padding: 10px;
+  height: calc(100% - 47px);
+  overflow-y: scroll;
+}
+
+.vulnerability-verifiers-body {
+  padding: 10px;
+  height: calc(100% - 47px);
+  overflow: scroll;
 }

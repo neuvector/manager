@@ -1240,6 +1240,8 @@
     "COMPLIANCE_REPORT": "Compliance Report",
     "CVE_DB_DATE": "DB Creation Time",
     "SINGLE_FILTER_HINT": "Edit filter here",
+    "SIG_VERIFIERS": "Sigstore Verifiers",
+    "SIG_VERIFIERS_HINT": "The image was scanned with listed sigstore verifiers",
     "TIP": {
       "EDIT": "Edit Registry",
       "DELETE": "Remove Registry",

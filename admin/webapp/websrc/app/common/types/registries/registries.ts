@@ -135,6 +135,7 @@ export interface Layer {
   cmds: string;
   digest: string;
   size: number;
+  verifiers: string[];
   vulnerabilities: Vulnerability[];
 }
 
@@ -189,6 +190,7 @@ export interface ImageGetResponse {
   report: {
     checks: Check[];
     cmds: string[];
+    verifiers: string[];
     envs: string[];
     labels: {
       [key: string]: string[];

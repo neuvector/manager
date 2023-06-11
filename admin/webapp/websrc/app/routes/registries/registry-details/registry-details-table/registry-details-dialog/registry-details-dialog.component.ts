@@ -85,6 +85,7 @@ export class RegistryDetailsDialogComponent implements OnInit {
         layer.report.layers.unshift({
           cmds: image.report.cmds.join(','),
           digest: this.data.image.digest,
+          verifiers: image.report.verifiers || [],
           size: 0,
           vulnerabilities: image.report.vulnerabilities,
         });

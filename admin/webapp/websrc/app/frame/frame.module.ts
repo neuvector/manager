@@ -14,6 +14,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { AvatarModule } from 'ngx-avatar';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
 import { PipeModule } from "@common/pipes/pipe.module";
+import { CustomFooterComponent } from './custom-footer/custom-footer.component';
+import { CustomHeaderComponent } from "./custom-header/custom-header.component";
 
 const customNotifierOptions: NotifierOptions = {
   position: {
@@ -68,19 +70,23 @@ const customNotifierOptions: NotifierOptions = {
         PipeModule,
     ],
   providers: [],
-  declarations: [
-    FrameComponent,
-    SidebarComponent,
-    HeaderComponent,
-    NavsearchComponent,
-    FooterComponent,
-  ],
+    declarations: [
+        FrameComponent,
+        SidebarComponent,
+        HeaderComponent,
+        NavsearchComponent,
+        FooterComponent,
+        CustomFooterComponent,
+        CustomHeaderComponent,
+    ],
   exports: [
     FrameComponent,
     SidebarComponent,
     HeaderComponent,
     NavsearchComponent,
     FooterComponent,
+    CustomFooterComponent,
+    CustomHeaderComponent,
   ],
 })
 export class FrameModule {}

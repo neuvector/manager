@@ -1,35 +1,43 @@
-## 1. Customizing the Login Page Logo
+# Customizing the UI Component
 
-To customize the login page logo, follow these steps:
-1. Create a 300x80 pixels SVG file.
-2. Base64 encode the SVG file.
-3. Save the base64 encoded string in the environment variable `CUSTOM_LOGIN_LOGO`.
+This guide will help you customize the UI component with the following options:
 
-## 2. Customizing the Prompt Message of Policy and Terms
+## 1. Customize the Login Logo
 
-To customize the prompt message of Policy and Terms, follow these guidelines:
-- Provide a plain HTML or text with no more than two lines.
-- Each line should not exceed 50 characters.
-- Use anchor tags to indicate clickable portions, for example:
-  `I have read and consent to terms in <a>IS user agreement</a>`.
-- Base64 encode the HTML or text.
-- Save the base64 encoded string in the environment variable `CUSTOM_EULA_PROMPT`.
+To customize the login logo, follow these steps:
+- Create a 300x80 pixels SVG file.
+- Base64 encode the SVG file.
+- Save the encoded file to the environment variable `CUSTOM_LOGIN_LOGO`.
 
-## 3. Customizing the Content of Policy and Terms
+## 2. Customize the Policy
 
-To customize the content of Policy and Terms, follow these steps:
-1. Provide a plain HTML or text.
-2. Base64 encode the HTML or text.
-3. Save the base64 encoded string in the environment variable `CUSTOM_EULA_POLICY`.
+To customize the policy, follow these steps:
+- The policy content can be plain HTML or text.
+- Base64 encode the policy content.
+- Save the encoded content to the environment variable `CUSTOM_EULA_POLICY`.
 
-## 4. Customizing the Content of the Page Header
+## 3. Customize the Page Banner
 
-To customize the content of the page header, follow these guidelines:
-- Provide a plain HTML or text with no more than two lines.
-- Each line can have a maximum of 100 characters.
-- Base64 encode the HTML or text.
-- Save the base64 encoded string in the environment variable `CUSTOM_PAGE_HEADER`.
+To customize the page banner, follow these steps:
 
-The environment variables (`CUSTOM_LOGIN_LOGO`, `CUSTOM_PAGE_HEADER`, `CUSTOM_EULA_PROMPT`, `CUSTOM_EULA_POLICY`) are defined in the [helm chart](https://github.com/neuvector/neuvector-helm/blob/master/charts/core/templates/manager-deployment.yaml).
+### Header Customization
+
+- Customize the header's content and color.
+- The color of the header banner is required.
+- The color value can be a color keyword (e.g., yellow) or a Hex value (e.g., #ffff00).
+- The content is optional and can be one line of plain HTML or text with a maximum of 120 characters.
+- Base64 encode the header content.
+- Save the encoded content to the environment variables `CUSTOM_PAGE_HEADER_COLOR` and `CUSTOM_PAGE_HEADER_CONTENT`.
+
+### Footer Customization
+
+- Customize the footer's content and color.
+- The color of the footer banner will be the same as the header banner if the color is not customized.
+- The content is optional and can be one line of plain HTML or text with a maximum of 120 characters.
+- Base64 encode the footer content.
+- Save the encoded content to the environment variables `CUSTOM_PAGE_FOOTER_COLOR` and `CUSTOM_PAGE_FOOTER_CONTENT`.
+
+
+The environment variables (`CUSTOM_LOGIN_LOGO`, `CUSTOM_EULA_POLICY`, `CUSTOM_PAGE_HEADER_COLOR`, `CUSTOM_PAGE_HEADER_CONTENT`, `CUSTOM_PAGE_FOOTER_COLOR`, `CUSTOM_PAGE_FOOTER_CONTENT`) are defined in the [helm chart](https://github.com/neuvector/neuvector-helm/blob/master/charts/core/templates/manager-deployment.yaml).
 
 

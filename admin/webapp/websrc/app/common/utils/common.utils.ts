@@ -816,13 +816,47 @@ export function updateGridData(
 }
 
 export function isValidBased64(str) {
-  // Remove any whitespace characters from the string
-  str = str.replace(/\s/g, '');
+  if(str){
+    // Remove any whitespace characters from the string
+    str = str.replace(/\s/g, '');
 
-  // Check if the string is a valid base64 encoded string
-  try {
-    return btoa(atob(str)) === str;
-  } catch (e) {
+    // Check if the string is a valid base64 encoded string
+    try {
+      return btoa(atob(str)) === str;
+    } catch (e) {
+      return false;
+    }
+  }else{
     return false;
   }
+}
+
+export function getContrastRatio(background, foreground) {
+  const getLuminance = (color) => {
+    const rgb = color.slice(1);
+    const r = parseInt(rgb.substr(0, 2), 16) / 255;
+    const g = parseInt(rgb.substr(2, 2), 16) / 255;
+    const b = parseInt(rgb.substr(4, 2), 16) / 255;
+
+    const sRGB = [r, g, b].map((channel) => {
+      if (channel <= 0.03928) {
+        return channel / 12.92;
+      }
+      return Math.pow((channel + 0.055) / 1.055, 2.4);
+    });
+
+    return 0.2126 * sRGB[0] + 0.7152 * sRGB[1] + 0.0722 * sRGB[2];
+  };
+
+  const backgroundLuminance = getLuminance(background);
+  const foregroundLuminance = getLuminance(foreground);
+
+  const contrastRatio = (Math.max(backgroundLuminance, foregroundLuminance) + 0.05) /
+    (Math.min(backgroundLuminance, foregroundLuminance) + 0.05);
+
+  return contrastRatio;
+}
+
+export function isGoodContrastRatio(contrastRatio){
+  return contrastRatio >= 4.5;
 }

@@ -207,6 +207,7 @@ export interface Role {
 
 export type ApikeyExpiration =
   | 'never'
+  | 'onehour'
   | 'oneday'
   | 'onemonth'
   | 'oneyear'

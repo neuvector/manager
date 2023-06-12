@@ -42,6 +42,7 @@ interface AddApikeyDialog {
 export class AddApikeyDialogComponent implements OnInit {
   expirationOptions: ApikeyExpiration[] = [
     'never',
+    'onehour',
     'oneday',
     'onemonth',
     'oneyear',
@@ -113,7 +114,7 @@ export class AddApikeyDialogComponent implements OnInit {
       ]),
       description: new FormControl(''),
       role: new FormControl(this.data.globalRoles[0]),
-      expiration_type: new FormControl('oneday'),
+      expiration_type: new FormControl('onehour'),
       expiration_hours: new FormControl({ value: 0, disabled: true }, [
         Validators.pattern(/^[0-9]*$/),
         this.expirationValidator.bind(this),

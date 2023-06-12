@@ -1791,6 +1791,7 @@
     },
     "expires": {
       "NEVER": "Never",
+      "ONEHOUR": "One hour from now",
       "ONEDAY": "A day from now",
       "ONEMONTH": "A month from now",
       "ONEYEAR": "A year from now",

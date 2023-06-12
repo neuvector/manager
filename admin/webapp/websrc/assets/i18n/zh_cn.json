@@ -1791,6 +1791,7 @@
     },
     "expires": {
       "NEVER": "绝不",
+      "ONEHOUR": "一小时后",
       "ONEDAY": "一天后",
       "ONEMONTH": "一月后",
       "ONEYEAR": "一年后",

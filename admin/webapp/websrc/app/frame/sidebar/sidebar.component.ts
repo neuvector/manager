@@ -17,6 +17,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
   router: Router = <Router>{};
   menuClickEvent = 'click.sidebar-toggle';
   $doc: any = null;
+  customHeaderStyle;
+  customFooterStyle;
+  customSideBarStyle;
 
   constructor(
     public menu: MenuService,
@@ -51,6 +54,18 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.switchers.setFrameSwitcher('leftSideToggled', false);
       }
     });
+
+    if(GlobalVariable.customPageHeaderColor){
+      this.customHeaderStyle = {
+        'margin-top': '28px'
+      };
+      this.customSideBarStyle = {
+        'height': 'calc(100vh - 184px)'
+      };
+      this.customFooterStyle = {
+        'bottom': '28px'
+      }
+    }
   }
 
   ngOnDestroy() {

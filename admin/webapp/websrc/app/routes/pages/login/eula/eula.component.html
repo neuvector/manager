@@ -2,18 +2,8 @@
   <div class="checkbox-wrapper">
     <mat-checkbox (change)="onCheck($event.checked)"></mat-checkbox>
     <span class="display-text">
-      <ng-container *ngIf="this.eulaPrompt; else nvEULA">
-        <ng-container *ngIf="this.eulaPromptLink; else fullTextToLink">
-          <div style="display:inline" [innerHTML]="eulaPrompt"></div><a (click)="openEULAPage()"><div style="display:inline" [innerHTML]="eulaPromptLink"></div></a>
-        </ng-container>
-        <ng-template #fullTextToLink>
-          <a (click)="openEULAPage()"><div style="display:inline" [innerHTML]="eulaPrompt"></div></a>
-        </ng-template>
-      </ng-container>
-      <ng-template #nvEULA>
         {{ 'license.ACCEPT_AGREEMENT' | translate }}
         <a (click)="openEULAPage()">{{ 'license.HEAD' | translate }}</a>
-      </ng-template>
     </span>
   </div>
 </section>

@@ -2,7 +2,6 @@ package com.neu.core
 
 import akka.japi.Util.immutableSeq
 import com.typesafe.config.{ Config, ConfigFactory }
-
 import com.typesafe.scalalogging.LazyLogging
 
 /**
@@ -61,9 +60,10 @@ object CommonSettings extends LazyLogging {
 
   val managerVersion: String = config.getString("product.manager.version")
 
-  val customLoginLogo: String  = sys.env.getOrElse("CUSTOM_LOGIN_LOGO", "")
-  val customEulaPrompt: String = sys.env.getOrElse("CUSTOM_EULA_PROMPT", "")
-  val customEulaPolicy: String = sys.env.getOrElse("CUSTOM_EULA_POLICY", "")
-  val customPageHeader: String = sys.env.getOrElse("CUSTOM_PAGE_HEADER", "")
-
+  val customLoginLogo: String         = sys.env.getOrElse("CUSTOM_LOGIN_LOGO", "")
+  val customPolicy: String            = sys.env.getOrElse("CUSTOM_EULA_POLICY", "")
+  val customPageHeaderContent: String = sys.env.getOrElse("CUSTOM_PAGE_HEADER_CONTENT", "")
+  val customPageHeaderColor: String   = sys.env.getOrElse("CUSTOM_PAGE_HEADER_COLOR", "")
+  val customPageFooterContent: String = sys.env.getOrElse("CUSTOM_PAGE_FOOTER_CONTENT", "")
+  val customPageFooterColor: String   = sys.env.getOrElse("CUSTOM_PAGE_FOOTER_COLOR", "")
 }

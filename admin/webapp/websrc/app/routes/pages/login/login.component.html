@@ -1,5 +1,12 @@
 <div class="login">
-  <div class="login-header"></div>
+  <ng-container *ngIf="hasCustomHeader; else nvHeader">
+    <div class="customHeader">
+      <app-custom-header></app-custom-header>
+    </div>
+  </ng-container>
+  <ng-template #nvHeader>
+    <div class="login-header"></div>
+  </ng-template>
   <!-- START panel-->
   <div class="login-body">
     <div class="login-panel-wrap">
@@ -12,7 +19,7 @@
             class="login-logo"
             [ngClass]="{
               'openID-saml-eula':
-                (!isEulaAccepted || hasCustomPrompt || hasCustomPolicy) && servers && servers.length === 2
+                !isEulaAccepted && servers && servers.length === 2
             }"
           ></div>
         </ng-template>
@@ -34,10 +41,10 @@
           <div
             class="login-panel"
             [ngClass]="{
-              'login-panel-eula': !isEulaAccepted || hasCustomPrompt || hasCustomPolicy,
+              'login-panel-eula': !isEulaAccepted,
               'login-panel-openid-saml': servers && servers.length === 2,
               'login-panel-openid-saml-eula':
-                (!isEulaAccepted || hasCustomPrompt || hasCustomPolicy) && servers && servers.length === 2
+                !isEulaAccepted && servers && servers.length === 2
             }"
             *ngIf="!isFromSSO"
           >
@@ -119,7 +126,7 @@
                 <!--suppress JSUnresolvedVariable -->
                 <button
                   (click)="submitForm($event, loginForm.value, '')"
-                  [disabled]="!validEula || loginForm.invalid || !agreeCustomTerms"
+                  [disabled]="!validEula || loginForm.invalid"
                   style="float: left"
                   type="submit"
                 >
@@ -133,7 +140,7 @@
                 <button
                   (click)="submitForm($event, loginForm.value, 'okta')"
                   *ngIf="samlEnabled"
-                  [disabled]="!validEula || !agreeCustomTerms"
+                  [disabled]="!validEula"
                   style="float: left"
                 >
                   {{ 'login.OKTA_LOGIN' | translate }}
@@ -142,7 +149,7 @@
                 <button
                   (click)="submitForm($event, loginForm.value, 'oidc')"
                   *ngIf="oidcEnabled"
-                  [disabled]="!validEula || !agreeCustomTerms"
+                  [disabled]="!validEula"
                   style="float: left"
                 >
                   {{ 'login.OIDC_LOGIN' | translate }}
@@ -152,7 +159,7 @@
                 <!--suppress JSUnresolvedVariable -->
                 <button
                   (click)="submitForm($event, loginForm.value, '')"
-                  [disabled]="!validEula || loginForm.invalid || !agreeCustomTerms"
+                  [disabled]="!validEula || loginForm.invalid"
                   style="width: 100%; margin-bottom: 15px"
                   type="submit"
                 >
@@ -163,7 +170,7 @@
                   <button
                     (click)="submitForm($event, loginForm.value, 'okta')"
                     *ngIf="samlEnabled"
-                    [disabled]="!validEula || !agreeCustomTerms"
+                    [disabled]="!validEula"
                     style="float: left"
                   >
                     {{ 'login.OKTA_LOGIN' | translate }}
@@ -176,7 +183,7 @@
                   <button
                     (click)="submitForm($event, loginForm.value, 'oidc')"
                     *ngIf="oidcEnabled"
-                    [disabled]="!validEula || !agreeCustomTerms"
+                    [disabled]="!validEula"
                     style="float: left"
                   >
                     {{ 'login.OIDC_LOGIN' | translate }}
@@ -187,7 +194,7 @@
                 <!--suppress JSUnresolvedVariable -->
                 <button
                   (click)="submitForm($event, loginForm.value, '')"
-                  [disabled]="!validEula || loginForm.invalid || !agreeCustomTerms"
+                  [disabled]="!validEula || loginForm.invalid"
                   style="width: 100%"
                   type="submit"
                 >
@@ -203,7 +210,7 @@
             >
               {{ authMsg }}
             </div>
-            <div *ngIf="!isEulaAccepted || hasCustomPrompt  || hasCustomPolicy">
+            <div *ngIf="!isEulaAccepted">
               <app-eula (eulaStatus)="getEulaStatus($event)"></app-eula>
             </div>
           </div>
@@ -223,3 +230,4 @@
     </div>
   </div>
 </div>
+<app-custom-footer></app-custom-footer>

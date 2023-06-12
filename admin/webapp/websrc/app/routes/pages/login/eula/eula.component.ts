@@ -1,8 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AgreementComponent } from '@routes/pages/login/eula/agreement/agreement.component';
-import { GlobalVariable } from '@common/variables/global.variable';
-import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 
 @Component({
   selector: 'app-eula',
@@ -10,37 +8,18 @@ import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
   styleUrls: ['./eula.component.scss'],
 })
 export class EulaComponent implements OnInit {
-  public eulaPrompt: SafeHtml = '';
-  public eulaPromptText: SafeHtml = '';
-  public eulaPromptLink: SafeHtml = '';
-
   @Output() eulaStatus = new EventEmitter<boolean>();
 
-  constructor(private dialog: MatDialog,
-              private sanitizer: DomSanitizer) {}
+  constructor(private dialog: MatDialog) {}
 
-  ngOnInit(): void {
-    this.eulaPrompt = GlobalVariable.customEULAPrompt;
-
-    if (GlobalVariable.customEULAPrompt) {
-      const regex = /<a>(.*?)<\/a>/;
-      const match = GlobalVariable.customEULAPrompt.match(regex);
-      const anchorText = match ? match[1] : '';
-      const promptText = GlobalVariable.customEULAPrompt.replace(regex, '');
-      if(promptText){
-        this.eulaPrompt = this.sanitizer.bypassSecurityTrustHtml(promptText);
-      }
-      if(anchorText){
-        this.eulaPromptLink = this.sanitizer.bypassSecurityTrustHtml(anchorText);
-      }
-    }
-  }
+  ngOnInit(): void {}
 
   openEULAPage() {
     this.dialog.open(AgreementComponent, {
-      data: { isFromSSO: false },
+      disableClose: true,
+      data: { showAcceptButton: false, showCustomPolicy: false },
       width: '80vw',
-      height: '685px',
+      height: '90vh',
     });
   }
 

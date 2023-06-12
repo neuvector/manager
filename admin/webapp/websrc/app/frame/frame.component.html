@@ -4,7 +4,7 @@
   <!-- sidebar-->
   <app-sidebar class="left-side-container"></app-sidebar>
   <!-- Main section-->
-  <main class="section-container" id="main-content">
+  <main class="section-container" id="main-content" [ngStyle]="customStyle">
     <!-- Page content-->
     <div class="nv-section">
       <!-- Preload images of report cover page-->
@@ -20,3 +20,5 @@
   <!-- Page footer-->
   <!-- <footer class="footer-container" app-footer></footer> -->
 </div>
+<app-custom-footer></app-custom-footer>
+

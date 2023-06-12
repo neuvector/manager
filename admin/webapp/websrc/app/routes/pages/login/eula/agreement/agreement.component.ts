@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { GlobalVariable } from '@common/variables/global.variable';
-import { SafeHtml } from "@angular/platform-browser";
+import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 
 @Component({
   selector: 'app-agreement',
@@ -9,18 +9,23 @@ import { SafeHtml } from "@angular/platform-browser";
   styleUrls: ['./agreement.component.scss'],
 })
 export class AgreementComponent implements OnInit {
-  isFromSSO: boolean = false;
+  showAcceptButton: boolean = false;
 
-  eulaPolicy: SafeHtml = '';
+  showCustomPolicy: boolean = false;
+  customPolicy: SafeHtml = "";
 
   constructor(
+    private sanitizer: DomSanitizer,
     private dialogRef: MatDialogRef<AgreementComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
   ngOnInit(): void {
-    this.isFromSSO = this.data.isFromSSO;
-    this.eulaPolicy = GlobalVariable.customEULAPolicy;
+    this.showAcceptButton = this.data.showAcceptButton;
+    this.showCustomPolicy = this.data.showCustomPolicy;
+    if(this.showCustomPolicy && GlobalVariable.customPolicy){
+      this.customPolicy = this.sanitizer.bypassSecurityTrustHtml(GlobalVariable.customPolicy);
+    }
   }
 
   onClose() {

@@ -258,3 +258,49 @@ export interface PublicPasswordProfile {
   min_special_count: number;
   min_uppercase_count: number;
 }
+
+export interface UsageReport {
+  telemetry_status: TelemetryStatus;
+  usage: Usage[];
+}
+
+export interface Usage {
+  adm_ctrl_rules: number;
+  clusters: number;
+  controllers: number;
+  cores: number;
+  crd_rules: number;
+  cvedb_version: string;
+  domains: number;
+  enforcers: number;
+  groups: number;
+  hosts: number;
+  installation_id: string;
+  monitor_groups: number;
+  platform: string;
+  policy_rules: number;
+  protect_groups: number;
+  registries: number;
+  reported_at: string;
+  reported_timestamp: number;
+  response_rules: number;
+  running_pods: number;
+  scanners: number;
+  signature: string;
+  sl_projs: number;
+}
+
+export interface TelemetryStatus {
+  current_version: string;
+  last_telemetry_upload_time: string;
+  max_upgrade_version: UpgradeVersion;
+  min_upgrade_version: UpgradeVersion;
+  telemetry_freq: number;
+  telemetry_url: string;
+}
+
+export interface UpgradeVersion {
+  release_date: string;
+  tag: string;
+  version: string;
+}

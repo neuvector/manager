@@ -221,7 +221,8 @@
     "CHANGE_EXPIRING_PASSWORD_NOW": "You should change password immediately, as it is expiring today!",
     "UNSUPPORTED_ROLE": "This user account is only for CI integration.",
     "VERSION_MISMATCHED": "Manager, Controller, Enforcer are running different versions.",
-    "CVE_DB_OLD": "CVE Database has not been updated for {{day}} days"
+    "CVE_DB_OLD": "CVE Database has not been updated for {{day}} days",
+    "UPGRADE_AVAILABLE": "NeuVector is running {{currentVersion}} and can be upgraded to {{newVersion}}"
   },
   "dashboard": {
     "WELCOME": "Welcome to {{appName}}",

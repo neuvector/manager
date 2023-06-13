@@ -39,7 +39,10 @@
           [id]="notification.name"
           (click)="toggleClamp(notification)">
           {{ notification.message }}
-          <a [href]="notification.link" (click)="closeMenu()">
+          <a
+            *ngIf="notification.link"
+            [href]="notification.link"
+            (click)="closeMenu()">
             <em class="eos-icons icon-12">launch</em>
           </a>
         </span>

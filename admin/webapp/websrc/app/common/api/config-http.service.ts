@@ -2,13 +2,11 @@ import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { PathConstant } from '@common/constants/path.constant';
 import {
-  ConfigDebug,
   ConfigPatch,
-  ConfigResponse,
-  ConfigV2,
   ConfigV2Response,
   DebugPostBody,
   IBMSetupGetResponse,
+  UsageReport,
 } from '@common/types';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { Observable, throwError } from 'rxjs';
@@ -49,23 +47,23 @@ export class ConfigHttpService {
       cache: false,
       headers: { 'Cache-Control': 'no-store' },
     };
-    return GlobalVariable.http.get<ArrayBuffer>(
-      PathConstant.SYSTEM_CONFIG_URL,
-      options
-    ).pipe(
-      catchError(error => {
-        const textDecoder = new TextDecoder();
-        let errorRes = textDecoder.decode(error.error);
-        error.error = error.headers.get('Content-type') === 'application/json' ? JSON.parse(errorRes).message : errorRes;
-        return throwError(error);
-      })
-    );
+    return GlobalVariable.http
+      .get<ArrayBuffer>(PathConstant.SYSTEM_CONFIG_URL, options)
+      .pipe(
+        catchError(error => {
+          const textDecoder = new TextDecoder();
+          let errorRes = textDecoder.decode(error.error);
+          error.error =
+            error.headers.get('Content-type') === 'application/json'
+              ? JSON.parse(errorRes).message
+              : errorRes;
+          return throwError(error);
+        })
+      );
   }
 
-  getUsageReport(): Observable<unknown> {
-    return GlobalVariable.http
-      .get<unknown>(PathConstant.USAGE_REPORT_URL)
-      .pipe(pluck('usage'));
+  getUsageReport(): Observable<UsageReport> {
+    return GlobalVariable.http.get<UsageReport>(PathConstant.USAGE_REPORT_URL);
   }
 
   postSystemDebug(body: string): Observable<unknown> {
@@ -98,16 +96,21 @@ export class ConfigHttpService {
   }
 
   getDebug(): Observable<ArrayBuffer> {
-    return GlobalVariable.http.get<ArrayBuffer>(PathConstant.SYSTEM_DEBUG_URL, {
-      responseType: 'arraybuffer' as any,
-    }).pipe(
-      catchError(error => {
-        const textDecoder = new TextDecoder();
-        let errorRes = textDecoder.decode(error.error);
-        error.error = error.headers.get('Content-type') === 'application/json' ? JSON.parse(errorRes).message : errorRes;
-        return throwError(error);
+    return GlobalVariable.http
+      .get<ArrayBuffer>(PathConstant.SYSTEM_DEBUG_URL, {
+        responseType: 'arraybuffer' as any,
       })
-    );
+      .pipe(
+        catchError(error => {
+          const textDecoder = new TextDecoder();
+          let errorRes = textDecoder.decode(error.error);
+          error.error =
+            error.headers.get('Content-type') === 'application/json'
+              ? JSON.parse(errorRes).message
+              : errorRes;
+          return throwError(error);
+        })
+      );
   }
 
   getCspSupport() {
@@ -115,20 +118,20 @@ export class ConfigHttpService {
       responseType: 'arraybuffer' as any,
       cache: false,
       headers: { 'Cache-Control': 'no-store' },
-      observe: 'response' as any
+      observe: 'response' as any,
     };
-    return GlobalVariable.http.post(
-      PathConstant.CSP_SUPPORT_URL,
-      null,
-      options
-    ).pipe(
-      catchError(error => {
-        const textDecoder = new TextDecoder();
-        let errorRes = textDecoder.decode(error.error);
-        error.error = error.headers.get('Content-type') === 'application/json' ? JSON.parse(errorRes).message : errorRes;
-        return throwError(error);
-      })
-
-    );
+    return GlobalVariable.http
+      .post(PathConstant.CSP_SUPPORT_URL, null, options)
+      .pipe(
+        catchError(error => {
+          const textDecoder = new TextDecoder();
+          let errorRes = textDecoder.decode(error.error);
+          error.error =
+            error.headers.get('Content-type') === 'application/json'
+              ? JSON.parse(errorRes).message
+              : errorRes;
+          return throwError(error);
+        })
+      );
   }
 }

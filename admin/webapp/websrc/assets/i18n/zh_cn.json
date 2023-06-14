@@ -221,7 +221,8 @@
     "CHANGE_EXPIRING_PASSWORD_NOW": "您需要立即更新密码, 因为密码今天即将过期!",
     "UNSUPPORTED_ROLE": "该用户仅用于CI集成。",
     "VERSION_MISMATCHED": "管理界面, 控制器和代理之间有运行版本差异",
-    "CVE_DB_OLD": "CVE数据库有{{day}}天没有更新"
+    "CVE_DB_OLD": "CVE数据库有{{day}}天没有更新",
+    "UPGRADE_AVAILABLE": "NeuVector 正在运行{{currentVersion}}可以升级到{{newVersion}}"
   },
   "dashboard": {
     "WELCOME": "欢迎使用 {{appName}}",

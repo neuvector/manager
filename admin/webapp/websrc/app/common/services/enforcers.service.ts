@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { Enforcer } from '@common/types';
 import { AssetsHttpService } from '@common/api/assets-http.service';
 import { ConfigHttpService } from '@common/api/config-http.service';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class EnforcersService {
@@ -22,7 +23,9 @@ export class EnforcersService {
   }
 
   getUsageReport() {
-    return this.configHttpService.getUsageReport();
+    return this.configHttpService
+      .getUsageReport()
+      .pipe(map(usageReport => usageReport.usage));
   }
 
   postSystemDebug(body: string) {

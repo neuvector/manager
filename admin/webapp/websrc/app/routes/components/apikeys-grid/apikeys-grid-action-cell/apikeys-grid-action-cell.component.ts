@@ -21,6 +21,10 @@ export class ApikeysGridActionCellComponent
     return false;
   }
 
+  view(): void {
+    this.params.view(this.params);
+  }
+
   delete(): void {
     this.params.delete(this.params);
   }

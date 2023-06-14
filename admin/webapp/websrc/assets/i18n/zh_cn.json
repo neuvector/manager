@@ -1777,6 +1777,7 @@
   "apikey": {
     "APIKEYS": "API密钥",
     "ADD": "添加API密钥",
+    "VIEW": "浏览API密钥",
     "REMOVE": "删除API密钥",
     "gridHeader": {
       "STATE": "状态",

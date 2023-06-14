@@ -816,7 +816,7 @@ export function updateGridData(
 }
 
 export function isValidBased64(str) {
-  if(str){
+  if (str) {
     // Remove any whitespace characters from the string
     str = str.replace(/\s/g, '');
 
@@ -826,19 +826,19 @@ export function isValidBased64(str) {
     } catch (e) {
       return false;
     }
-  }else{
+  } else {
     return false;
   }
 }
 
 export function getContrastRatio(background, foreground) {
-  const getLuminance = (color) => {
+  const getLuminance = color => {
     const rgb = color.slice(1);
     const r = parseInt(rgb.substr(0, 2), 16) / 255;
     const g = parseInt(rgb.substr(2, 2), 16) / 255;
     const b = parseInt(rgb.substr(4, 2), 16) / 255;
 
-    const sRGB = [r, g, b].map((channel) => {
+    const sRGB = [r, g, b].map(channel => {
       if (channel <= 0.03928) {
         return channel / 12.92;
       }
@@ -851,12 +851,53 @@ export function getContrastRatio(background, foreground) {
   const backgroundLuminance = getLuminance(background);
   const foregroundLuminance = getLuminance(foreground);
 
-  const contrastRatio = (Math.max(backgroundLuminance, foregroundLuminance) + 0.05) /
+  const contrastRatio =
+    (Math.max(backgroundLuminance, foregroundLuminance) + 0.05) /
     (Math.min(backgroundLuminance, foregroundLuminance) + 0.05);
 
   return contrastRatio;
 }
 
-export function isGoodContrastRatio(contrastRatio){
+export function isGoodContrastRatio(contrastRatio) {
   return contrastRatio >= 4.5;
+}
+
+export function getNamespaceRoleGridData(
+  domainRoleOptions: string[],
+  globalRole?: string,
+  domainRoles?: Object
+): {
+  namespaceRole: string;
+  namespaces: any[];
+}[] {
+  if (domainRoles) {
+    let roleMap = Object.entries(domainRoles).map(([key, value]) => {
+      return {
+        namespaceRole: key,
+        namespaces: value,
+      };
+    });
+    return domainRoleOptions
+      .map(domainRoleOption => {
+        let roleIndex = roleMap.findIndex(
+          role => role.namespaceRole === domainRoleOption
+        );
+        if (roleIndex > -1) {
+          return roleMap[roleIndex];
+        } else {
+          return {
+            namespaceRole: domainRoleOption,
+            namespaces: [],
+          };
+        }
+      })
+      .filter(role => role.namespaceRole !== globalRole);
+  } else {
+    return domainRoleOptions
+      .map(domainRoleOption => ({
+        namespaceRole: domainRoleOption,
+        namespaces: [],
+      }))
+      .filter(role => role.namespaceRole !== globalRole);
+  }
 }

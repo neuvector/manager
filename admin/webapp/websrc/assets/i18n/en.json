@@ -1777,6 +1777,7 @@
   "apikey": {
     "APIKEYS": "API Keys",
     "ADD": "Create API Key",
+    "VIEW": "View API Key",
     "REMOVE": "Delete API Key",
     "gridHeader": {
       "STATE": "State",

@@ -3,7 +3,11 @@
     [model]="config"
     [fields]="configFields"
     [form]="configForm"
-    [options]="configOptions"></formly-form>
+    [options]="configOptions"
+  ></formly-form>
+  <ng-container *ngIf="serverErrorMessage"
+    ><div class="error-message" [innerHTML]="serverErrorMessage"></div
+  ></ng-container>
   <div class="d-flex justify-content-end align-items-center mt-2">
     <app-loading-button
       *appDisplayControl="'write_config'"
@@ -12,7 +16,8 @@
       [disabled]="!configForm.valid || !configForm.dirty || submittingForm"
       [loading]="submittingForm"
       [text]="'setting.SUBMIT' | translate"
-      [type]="'submit'">
+      [type]="'submit'"
+    >
     </app-loading-button>
   </div>
 </form>

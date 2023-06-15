@@ -103,7 +103,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field
-            *ngIf="!(CRITERIA_PATTERN.NAME_ONLY.concat(CRITERIA_PATTERN.RESOURCE)).includes(mainCriterion.name) && !hasMultiValue && criterionValueList.length <= 1 && !mainCriterion.op.toLowerCase().includes('exist'.toLowerCase()) && mainCriterion.name !== 'saBindRiskyRole'"
+            *ngIf="!(CRITERIA_PATTERN.NAME_ONLY.concat(CRITERIA_PATTERN.RESOURCE)).includes(mainCriterion.name) && !hasMultiValue && criterionValueList.length <= 1 && !mainCriterion.op.toLowerCase().includes('exist'.toLowerCase()) && mainCriterion.name !== 'saBindRiskyRole' && mainCriterion.name !== 'imageVerifiers'"
             appearance="standard"
             class="col-12 col-md-4"
           >
@@ -117,7 +117,7 @@
             />
           </mat-form-field>
           <mat-form-field
-            *ngIf="!(CRITERIA_PATTERN.NAME_ONLY.concat(CRITERIA_PATTERN.RESOURCE)).includes(mainCriterion.name) && hasMultiValue && criterionValueList.length <= 1 && !mainCriterion.op.toLowerCase().includes('exist'.toLowerCase()) && mainCriterion.name !== 'saBindRiskyRole'"
+            *ngIf="!(CRITERIA_PATTERN.NAME_ONLY.concat(CRITERIA_PATTERN.RESOURCE)).includes(mainCriterion.name) && hasMultiValue && criterionValueList.length <= 1 && !mainCriterion.op.toLowerCase().includes('exist'.toLowerCase()) && mainCriterion.name !== 'saBindRiskyRole' && mainCriterion.name !== 'imageVerifiers'"
             appearance="outline"
             class="col-12 col-md-4"
           >
@@ -131,7 +131,7 @@
             ></textarea>
           </mat-form-field>
           <mat-form-field
-            *ngIf="!(CRITERIA_PATTERN.NAME_ONLY.concat(CRITERIA_PATTERN.RESOURCE)).includes(mainCriterion.name) && criterionValueList.length > 1 && !mainCriterion.op.toLowerCase().includes('exist'.toLowerCase()) && mainCriterion.name !== 'saBindRiskyRole'"
+            *ngIf="!(CRITERIA_PATTERN.NAME_ONLY.concat(CRITERIA_PATTERN.RESOURCE)).includes(mainCriterion.name) && criterionValueList.length > 1 && !mainCriterion.op.toLowerCase().includes('exist'.toLowerCase()) && mainCriterion.name !== 'saBindRiskyRole' && mainCriterion.name !== 'imageVerifiers'"
             appearance="standard"
             class="col-12 col-md-4"
           >
@@ -143,6 +143,37 @@
             >
               <mat-option *ngFor="let value of criterionValueList" [value]="value">{{value}}</mat-option>
             </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col-12 col-md-4" appearance="standard" *ngIf="mainCriterion.name === 'imageVerifiers'">
+            <mat-chip-list #valueChipList aria-label="criteria value">
+              <mat-chip
+                *ngFor="let chip of valuechips"
+                (removed)="removeValueChip(chip)">
+                {{ chip }}
+                <button matChipRemove>
+                  <mat-icon class="eos-icons icon-18">cancel</mat-icon>
+                </button>
+              </mat-chip>
+              <input
+                placeholder="{{ 'admissionControl.VALUE' | translate }}*"
+                #valueChipsInput
+                [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="valuechipsModel"
+                [matAutocomplete]="autoValueChip"
+                [matChipInputFor]="valueChipList"
+                [matChipInputSeparatorKeyCodes]="SEPARATOR_KEYS_CODES" />
+            </mat-chip-list>
+            <mat-autocomplete
+              #autoValueChip="matAutocomplete"
+              (optionSelected)="onValueAutocompleteSelected($event)"
+              (opened)="onAutoCompleteListOpened()"
+            >
+              <mat-option
+                *ngFor="let verifier of sigVerifierOptions"
+                [value]="verifier">
+                {{ verifier }}
+              </mat-option>
+            </mat-autocomplete>
           </mat-form-field>
           <app-multi-selector-dropdown
             *ngIf="mainCriterion.name === 'saBindRiskyRole'"

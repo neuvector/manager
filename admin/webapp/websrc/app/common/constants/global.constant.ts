@@ -33,6 +33,7 @@ export class GlobalConstant {
   public static MAX_INTERFACE_IP = 3;
   public static MAX_UNUPDATED_DAYS = 7;
   public static MULTICLUSTER_CONCURRENT_LIMIT = 8;
+  public static MAX_ERROR_MESSAGE_LENGTH = 120;
   public static OtherWebhookType = 'OTHER';
   public static NEW_ID_SEED = {
     NETWORK_RULE: 1000000,

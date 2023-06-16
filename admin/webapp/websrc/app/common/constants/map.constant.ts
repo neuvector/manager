@@ -119,6 +119,7 @@ export class MapConstant {
     Medium: 'warning',
     High: 'danger',
     HIGH: 'danger',
+    Important: 'danger',
     disconnected: 'warning',
     discover: 'discover',
     protect: 'protect',
@@ -329,7 +330,7 @@ export class MapConstant {
 
   public static VERIFIER_TYPE = {
     KEYPAIR: 'keypair',
-    KEYLESS: 'keyless'
+    KEYLESS: 'keyless',
   };
 
   public static singularMap = {

@@ -189,6 +189,17 @@ def report(data, name, image, show_accepted):
         else:
             click.echo("No SetUid/SetGid Report")
 
+    if report["verifiers"] != None:
+        if len(report["verifiers"]) > 0:
+            click.echo("Sigstore Verifiers:")
+            verifiers = []
+            for v in report["verifiers"]:
+                rv = v.split("/", -1)
+                if len(rv) == 2:
+                    obj = {"root_of_trust": rv[0], "verifier": rv[1]}
+                    verifiers.append(obj)
+            columns = ("root_of_trust", "verifier")
+            output.list(columns, verifiers)
 
 @show_registry.command()
 @click.argument("name")

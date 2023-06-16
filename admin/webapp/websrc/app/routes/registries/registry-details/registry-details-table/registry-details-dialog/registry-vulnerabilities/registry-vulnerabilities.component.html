@@ -100,8 +100,8 @@
           >info</i
         >
       </div>
-      <div class="vulnerability-verifiers-body" *ngFor="let verifier of selectedLayer?.verifiers">
-        <div class="type-label info"><i class="eos-icons icon-12 mr-2">verified</i>{{ verifier }}</div>
+      <div class="vulnerability-verifiers-body">
+        <div *ngFor="let verifier of selectedLayer?.verifiers" class="type-label info"><i class="eos-icons icon-12 mr-2">verified</i>{{ verifier }}</div>
       </div>
     </div>
   </div>

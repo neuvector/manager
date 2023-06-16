@@ -107,10 +107,11 @@ export class ApikeysGridComponent implements OnInit {
       sortable: false,
       cellRenderer: 'actionCellRenderer',
       cellRendererParams: {
+        view: event => this.viewApikey(event),
         delete: event => this.deleteApikey(event),
       },
       cellClass: ['d-flex', 'align-items-center', 'justify-content-end'],
-      width: 80,
+      width: 120,
     },
   ];
 
@@ -163,6 +164,20 @@ export class ApikeysGridComponent implements OnInit {
         this.notificationService.open(this.tr.instant('apikey.msg.ADD_OK'));
         setTimeout(() => this.refreshData.emit(), 1000);
       }
+    });
+  }
+
+  viewApikey(event: ICellRendererParams): void {
+    const viewDialogRef = this.dialog.open(AddApikeyDialogComponent, {
+      width: '80%',
+      maxWidth: '1100px',
+      data: {
+        globalRoles: this.globalRoles,
+        domainRoles: this.domainRoles,
+        domains: this.domains,
+        isReadOnly: true,
+        apikey: event.data,
+      },
     });
   }
 

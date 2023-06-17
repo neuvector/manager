@@ -46,6 +46,12 @@
 
 .vulnerability-verifiers-body {
   padding: 10px;
-  height: calc(100% - 47px);
+  height: calc(100% - 97px);
   overflow: scroll;
+}
+
+.vulnerability-verifiers-footer {
+  padding: 5px 10px;
+  height: 50px;
+  font-size: 11px;
 }

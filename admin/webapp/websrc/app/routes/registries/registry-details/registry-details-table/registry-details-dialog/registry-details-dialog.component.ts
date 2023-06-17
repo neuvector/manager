@@ -27,6 +27,7 @@ import { NotificationService } from '@services/notification.service';
 import { UtilsService } from '@common/utils/app.utils';
 import { TranslateService } from '@ngx-translate/core';
 import { RemediationDetailDialogComponent } from '@components/compliance-grid/remediation-detail-dialog/remediation-detail-dialog.component';
+import * as moment from 'moment';
 
 export interface RegistryDetailsDialogData {
   selectedRegistry: Summary;
@@ -85,7 +86,8 @@ export class RegistryDetailsDialogComponent implements OnInit {
         layer.report.layers.unshift({
           cmds: image.report.cmds.join(','),
           digest: this.data.image.digest,
-          verifiers: image.report.verifiers || [],
+          verifiers: image.report.signature_data ? image.report.signature_data.verifiers || [] : [],
+          verificationTimestamp: image.report.signature_data ? moment(image.report.signature_data.verification_timestamp).format('MM/DD/YYYY hh:mm:ss') : '',
           size: 0,
           vulnerabilities: image.report.vulnerabilities,
         });

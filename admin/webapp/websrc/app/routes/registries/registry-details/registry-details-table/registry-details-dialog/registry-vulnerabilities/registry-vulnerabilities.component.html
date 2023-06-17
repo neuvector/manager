@@ -101,7 +101,15 @@
         >
       </div>
       <div class="vulnerability-verifiers-body">
-        <div *ngFor="let verifier of selectedLayer?.verifiers" class="type-label info"><i class="eos-icons icon-12 mr-2">verified</i>{{ verifier }}</div>
+        <div *ngFor="let verifier of selectedLayer?.verifiers" class="px-2 type-label info"><i class="eos-icons icon-12 mr-2">verified</i>{{ verifier }}</div>
+      </div>
+      <div class="vulnerability-verifiers-footer">
+        <div>
+          {{ 'registry.SIG_VERIFICATION_TIMESTAMP' | translate }}
+        </div>
+        <div>
+          {{ selectedLayer?.verificationTimestamp }}
+        </div>
       </div>
     </div>
   </div>

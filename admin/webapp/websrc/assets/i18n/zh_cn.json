@@ -1243,6 +1243,7 @@
     "SINGLE_FILTER_HINT": "在这里编辑过滤器",
     "SIG_VERIFIERS": "签名信任根检测器",
     "SIG_VERIFIERS_HINT": "镜像和签名信任根检测器一起被扫描",
+    "SIG_VERIFICATION_TIMESTAMP": "核查于",
     "TIP": {
       "EDIT": "编辑镜像库",
       "DELETE": "删除镜像库",

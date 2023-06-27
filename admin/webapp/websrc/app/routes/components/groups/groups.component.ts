@@ -321,7 +321,7 @@ export class GroupsComponent implements OnInit {
       },
       error => {
         this.notificationService.openError(
-          error,
+          error.error,
           this.translate.instant('service.SUBMIT_SCORABLE_FAILED')
         );
       }
@@ -373,7 +373,7 @@ export class GroupsComponent implements OnInit {
       error => {
         console.warn(error);
         this.notificationService.openError(
-          error,
+          error.error,
           this.translate.instant('group.dlp.msg.EXPORT_NG')
         );
       }

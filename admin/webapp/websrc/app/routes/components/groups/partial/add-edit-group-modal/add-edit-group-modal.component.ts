@@ -143,7 +143,7 @@ export class AddEditGroupModalComponent implements OnInit {
             this.data.opType === GlobalConstant.MODAL_OP.ADD
               ? this.translate.instant('group.addGroup.ERR_MSG')
               : this.translate.instant('group.editGroup.ERR_MSG');
-          this.notificationService.openError(error, msgTitle);
+          this.notificationService.openError(error.error, msgTitle);
         }
       );
   };

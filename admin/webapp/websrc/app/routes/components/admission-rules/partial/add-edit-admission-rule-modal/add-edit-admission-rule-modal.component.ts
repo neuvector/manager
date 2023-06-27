@@ -378,7 +378,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
           let msgTitle = this.data.opType === GlobalConstant.MODAL_OP.ADD ?
             this.translate.instant("admissionControl.msg.INSERT_NG") :
             this.translate.instant("admissionControl.msg.UPDATE_NG");
-          this.notificationService.openError(error, msgTitle);
+          this.notificationService.openError(error.error, msgTitle);
         }
       )
   };

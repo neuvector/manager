@@ -146,7 +146,7 @@ export class AddEditProcessProfileRuleModalComponent implements OnInit {
           let msgTitle = this.type === GlobalConstant.MODAL_OP.ADD ?
             this.translate.instant('group.profile.ADD_NG') :
             this.translate.instant('group.profile.EDIT_NG');
-          this.notificationService.openError(error, msgTitle);
+          this.notificationService.openError(error.error, msgTitle);
         }
       );
   }

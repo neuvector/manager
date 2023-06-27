@@ -94,7 +94,7 @@ export class GroupWafConfigModalComponent implements OnInit {
           this.dialogRef.close(true);
         },
         error => {
-          this.notificationService.openError(error, this.translate.instant("group.waf.msg.SETTING_NG"));
+          this.notificationService.openError(error.error, this.translate.instant("group.waf.msg.SETTING_NG"));
         }
       );
   };

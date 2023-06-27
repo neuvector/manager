@@ -271,7 +271,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       },
       error => {
         this.notificationService.openError(
-          error,
+          error.error,
           this.translate.instant('policy.message.PROMOTE_NG')
         );
       }
@@ -424,7 +424,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
               this.changeState4ReadOnlyRules(error.error.read_only_rule_ids);
             } else {
               this.notificationService.openError(
-                error,
+                error.error,
                 this.translate.instant('policy.dialog.content.SUBMIT_NG')
               );
             }

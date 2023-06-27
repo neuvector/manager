@@ -364,7 +364,7 @@ export class AddEditResponseRuleModalComponent implements OnInit {
         },
         error => {
           this.notificationService.openError(
-            error,
+            error.error,
             this.type === GlobalConstant.MODAL_OP.ADD ?
               this.translate.instant('responsePolicy.dialog.content.INSERT_NG') :
               this.translate.instant('responsePolicy.dialog.content.UPDATE_NG')

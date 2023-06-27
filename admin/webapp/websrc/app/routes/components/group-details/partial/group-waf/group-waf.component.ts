@@ -136,7 +136,7 @@ export class GroupWafComponent implements OnInit {
       },
       error => {
         this.notificationService.openError(
-          error,
+          error.error,
           enabled
             ? this.translate.instant('group.waf.msg.DISABLED_NG')
             : this.translate.instant('group.waf.msg.ENABLED_NG')

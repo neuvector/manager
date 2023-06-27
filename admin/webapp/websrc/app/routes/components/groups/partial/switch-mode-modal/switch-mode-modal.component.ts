@@ -191,7 +191,7 @@ export class SwitchModeModalComponent implements OnInit {
           },
           error => {
             this.notificationService.openError(
-              error,
+              error.error,
               this.translate.instant('service.SUBMIT_FAILED')
             );
             this.submittingUpdate = false;
@@ -232,7 +232,7 @@ export class SwitchModeModalComponent implements OnInit {
       },
       error => {
         this.notificationService.openError(
-          error,
+          error.error,
           this.translate.instant('service.SUBMIT_FAILED')
         );
         this.submittingUpdate = false;

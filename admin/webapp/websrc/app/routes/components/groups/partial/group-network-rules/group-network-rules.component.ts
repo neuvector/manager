@@ -47,7 +47,7 @@ export class GroupNetworkRulesComponent implements ICellRendererAngularComp {
           });
         },
         error => {
-          this.notificationService.openError(error, this.translate.instant('group.GET_RULE_ERR'));
+          this.notificationService.openError(error.error, this.translate.instant('group.GET_RULE_ERR'));
         }
       );
   };

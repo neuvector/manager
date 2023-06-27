@@ -127,7 +127,7 @@ export class CustomCheckComponent implements OnInit {
           this.initializeVM();
         },
         error => {
-          this.notificationService.openError(error, this.translate.instant("group.script.msg.SCRIPT_NG"));
+          this.notificationService.openError(error.error, this.translate.instant("group.script.msg.SCRIPT_NG"));
         }
       );
   };

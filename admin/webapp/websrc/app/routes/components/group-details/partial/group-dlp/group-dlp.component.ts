@@ -136,7 +136,7 @@ export class GroupDlpComponent implements OnInit {
       },
       error => {
         this.notificationService.openError(
-          error,
+          error.error,
           enabled
             ? this.translate.instant('group.dlp.msg.DISABLED_NG')
             : this.translate.instant('group.dlp.msg.ENABLED_NG')

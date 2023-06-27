@@ -246,7 +246,7 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
         },
         error => {
           this.notificationService.openError(
-            error,
+            error.error,
             this.translate.instant('group.file.REMOVE_NG')
           );
           dialogRef.componentInstance.loading = false;

@@ -119,6 +119,7 @@ export class MapConstant {
     Medium: 'warning',
     High: 'danger',
     HIGH: 'danger',
+    Moderate: 'warning',
     Important: 'danger',
     disconnected: 'warning',
     discover: 'discover',

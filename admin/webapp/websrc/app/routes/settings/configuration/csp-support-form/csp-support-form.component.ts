@@ -21,6 +21,7 @@ export class CspSupportFormComponent implements OnInit {
   errorMsg: string = '';
   cspAdapterErrorMsgObj: any;
   cspErrors: string[] = [];
+  nvError: string = '';
   billingDataExpireTime: string = '';
   cspExportForm = new FormGroup({
     export: new FormControl(null, Validators.required)
@@ -55,9 +56,13 @@ export class CspSupportFormComponent implements OnInit {
           let cspAdapterErrorsBase64 = response['headers'].get('X-Nv-Csp-Adapter-Errors');
           this.cspAdapterErrorMsgObj = cspAdapterErrorsBase64 ? JSON.parse(atob(cspAdapterErrorsBase64)) : null;
           if (this.cspAdapterErrorMsgObj) {
-            this.cspErrors = this.cspAdapterErrorMsgObj.csp_errors.map(cspError => cspError.split('\n'));
+            if (this.cspAdapterErrorMsgObj.csp_errors) {
+              this.cspErrors = this.cspAdapterErrorMsgObj.csp_errors.map(cspError => cspError.split('\n'));
+            }
+            if (this.cspAdapterErrorMsgObj.nv_error) {
+              this.nvError = this.cspAdapterErrorMsgObj.nv_error;
+            }
             if (this.cspAdapterErrorMsgObj.billing_data_expire_time) {
-              console.log(this.cspAdapterErrorMsgObj.billing_data_expire_time);
               this.billingDataExpireTime = moment(this.cspAdapterErrorMsgObj.billing_data_expire_time * 1000).format('MM/DD/YYYY hh:mm:ss');
             }
           }

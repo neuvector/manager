@@ -51,7 +51,7 @@ export class JoiningModalComponent implements OnInit {
         this.cluster.name = data.misc.cluster_name;
       },
       error => {
-        this.notificationService.openError(error, this.translate.instant("multiCluster.messages.get_name_failure"));
+        this.notificationService.openError(error.error, this.translate.instant("multiCluster.messages.get_name_failure"));
       }
     );
   };
@@ -93,7 +93,7 @@ export class JoiningModalComponent implements OnInit {
       err => {
         this.isProcessing  = false;
         this.notificationService.openError(
-          err,
+          err.error,
           this.translate.instant('multiCluster.joining.failure')
         );
       }

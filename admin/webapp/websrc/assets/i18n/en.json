@@ -221,7 +221,8 @@
     "CHANGE_EXPIRING_PASSWORD_NOW": "You should change password immediately, as it is expiring today!",
     "UNSUPPORTED_ROLE": "This user account is only for CI integration.",
     "VERSION_MISMATCHED": "Manager, Controller, Enforcer are running different versions.",
-    "CVE_DB_OLD": "CVE Database has not been updated for {{day}} days"
+    "CVE_DB_OLD": "CVE Database has not been updated for {{day}} days",
+    "UPGRADE_AVAILABLE": "NeuVector is running {{currentVersion}} and can be upgraded to {{newVersion}}"
   },
   "dashboard": {
     "WELCOME": "Welcome to {{appName}}",
@@ -1235,13 +1236,14 @@
     "INTERVAL": "Interval",
     "GITLAB_EXTERNAL_URL": "External URL",
     "GITLAB_PRIVATE_TOKEN": "Private Token",
-    "CVE_REPORT": "CVE Report",
-    "CVE_REPORT_BY_LAYER": "CVE Report by Layer",
+    "CVE_REPORT": "Scan Report",
+    "CVE_REPORT_BY_LAYER": "Scan Report by Layer",
     "COMPLIANCE_REPORT": "Compliance Report",
     "CVE_DB_DATE": "DB Creation Time",
     "SINGLE_FILTER_HINT": "Edit filter here",
     "SIG_VERIFIERS": "Sigstore Verifiers",
     "SIG_VERIFIERS_HINT": "The image was scanned with listed sigstore verifiers",
+    "SIG_VERIFICATION_TIMESTAMP": "Verified at",
     "TIP": {
       "EDIT": "Edit Registry",
       "DELETE": "Remove Registry",
@@ -1776,6 +1778,7 @@
   "apikey": {
     "APIKEYS": "API Keys",
     "ADD": "Create API Key",
+    "VIEW": "View API Key",
     "REMOVE": "Delete API Key",
     "gridHeader": {
       "STATE": "State",
@@ -2909,6 +2912,10 @@
     "AWS_SUPPORT_LINK": "https://scc.suse.com/cloudsupport",
     "AWS_BILLING_HINT_2": " in order to create a support case.",
     "DOWNLOAD_SUPPORT_FILE": "Download Support File",
+    "CSP_ERR_TITLE": "CSP Adapter Error",
+    "NV_ERR_TITLE": "NeuVector Error",
+    "EXPIRE_TITLE": "Expiration Warning",
+    "EXPIRE_STATE": "Billing data expired time: ",
     "IMPORT_NOTICE": "Importing policy will overwrite groups and rules, importing all will overwrite policy and all users and passwords and settings such as SYSLOG and other configurations.",
     "UPLOAD_QUEUE": "Upload Queue",
     "QUEUE_DESC": "No file selected. Please add a file.",

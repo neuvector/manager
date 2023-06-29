@@ -87,7 +87,7 @@ export class MultiClusterGridActionCellComponent
       },
       error => {
         this.notificationService.openError(
-          error,
+          error.error,
           this.translate.instant('multiCluster.messages.deploy_failure')
         );
       }
@@ -126,7 +126,7 @@ export class MultiClusterGridActionCellComponent
         },
         error => {
           this.notificationService.openError(
-            error,
+            error.error,
             this.translate.instant('multiCluster.messages.remove_failure')
           );
         }
@@ -151,7 +151,7 @@ export class MultiClusterGridActionCellComponent
         this.multiClusterService.dispatchManageMemberEvent();
       },
       error => {
-        this.notificationService.openError(error, this.translateService.instant('multiCluster.messages.redirect_failure', {name: rowData.name}));
+        this.notificationService.openError(error.error, this.translateService.instant('multiCluster.messages.redirect_failure', {name: rowData.name}));
       }
     );
   }
@@ -217,7 +217,7 @@ export class MultiClusterGridActionCellComponent
         error => {
           dialogRef.componentInstance.loading = false;
           this.notificationService.openError(
-            error,
+            error.error,
             this.translate.instant('multiCluster.messages.demote_failure')
           );
         }

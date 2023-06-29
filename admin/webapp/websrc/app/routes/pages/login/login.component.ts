@@ -146,7 +146,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.cookieService.delete('temp');
           this.isEulaAccepted = false;
           this.notificationService.openError(
-            error,
+            error.error,
             this.translate.instant('license.message.GET_EULA_ERR')
           );
         }
@@ -351,7 +351,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.isEulaAccepted = false;
         this.validEula = this.isEulaAccepted;
         this.notificationService.openError(
-          error,
+          error.error,
           this.translate.instant('license.message.GET_EULA_ERR')
         );
       }

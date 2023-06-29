@@ -485,7 +485,7 @@ export class UsersGridComponent implements OnInit {
         },
         error: error => {
           this.notificationService.openError(
-            error,
+            error.error,
             this.tr.instant('user.USER_EVENT_ERR')
           );
         },

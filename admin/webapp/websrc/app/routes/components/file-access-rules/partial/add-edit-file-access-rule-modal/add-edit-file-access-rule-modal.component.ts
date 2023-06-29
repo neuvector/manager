@@ -182,7 +182,7 @@ export class AddEditFileAccessRuleModalComponent implements OnInit {
           let msgTitle = this.type === GlobalConstant.MODAL_OP.ADD ?
             this.translate.instant('group.file.ADD_NG') :
             this.translate.instant('group.file.EDIT_NG');
-          this.notificationService.openError(error, msgTitle);
+          this.notificationService.openError(error.error, msgTitle);
         }
       );
   };

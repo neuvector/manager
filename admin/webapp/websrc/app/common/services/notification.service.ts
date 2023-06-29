@@ -25,14 +25,13 @@ export class NotificationService {
   openError = (error, errorTitle: string, id: string = ''): void => {
     if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
       this.open(
-        this.utils.getAlertifyMsg(error.message || error.error, errorTitle, false),
+        this.utils.getAlertifyMsg(error, errorTitle, false),
         GlobalConstant.NOTIFICATION_TYPE.ERROR
       );
     }
   }
 
   openHtmlError = (messageHtmlStr, htmlTemplate, id=''): void => {
-    console.log(messageHtmlStr, htmlTemplate)
     this.notifier.show({
        message: messageHtmlStr,
        type: GlobalConstant.NOTIFICATION_TYPE.ERROR,

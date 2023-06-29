@@ -27,11 +27,14 @@ import { SettingsService } from '@services/settings.service';
 import { finalize } from 'rxjs/operators';
 import { NotificationService } from '@services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
+import { getNamespaceRoleGridData } from '@common/utils/common.utils';
 
 interface AddApikeyDialog {
   globalRoles: string[];
   domainRoles: string[];
   domains: string[];
+  isReadOnly?: boolean;
+  apikey?: Apikey;
 }
 
 @Component({
@@ -101,10 +104,13 @@ export class AddApikeyDialogComponent implements OnInit {
       if (indexOfNone > -1) this.data.globalRoles.splice(indexOfNone, 1);
     }
     this.domainTableSource = new MatTableDataSource(
-      this.data.domainRoles.map(domainRoleOption => ({
-        namespaceRole: domainRoleOption,
-        namespaces: [],
-      }))
+      this.data.apikey
+        ? getNamespaceRoleGridData(
+            this.data.domainRoles,
+            this.data.apikey.role,
+            JSON.parse(JSON.stringify(this.data.apikey.role_domains))
+          )
+        : getNamespaceRoleGridData(this.data.domainRoles)
     );
     this.activeRole = this.domainTableSource.data[0].namespaceRole;
     this.form = new FormGroup({
@@ -120,6 +126,10 @@ export class AddApikeyDialogComponent implements OnInit {
         this.expirationValidator.bind(this),
       ]),
     });
+    if (this.data.isReadOnly && this.data.apikey) {
+      this.form.patchValue(this.data.apikey);
+      this.form.disable();
+    }
   }
 
   changeExpiration(selectedExpiration: ApikeyExpiration) {

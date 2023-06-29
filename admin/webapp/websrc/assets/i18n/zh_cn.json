@@ -221,7 +221,8 @@
     "CHANGE_EXPIRING_PASSWORD_NOW": "您需要立即更新密码, 因为密码今天即将过期!",
     "UNSUPPORTED_ROLE": "该用户仅用于CI集成。",
     "VERSION_MISMATCHED": "管理界面, 控制器和代理之间有运行版本差异",
-    "CVE_DB_OLD": "CVE数据库有{{day}}天没有更新"
+    "CVE_DB_OLD": "CVE数据库有{{day}}天没有更新",
+    "UPGRADE_AVAILABLE": "NeuVector 正在运行{{currentVersion}}可以升级到{{newVersion}}"
   },
   "dashboard": {
     "WELCOME": "欢迎使用 {{appName}}",
@@ -1235,13 +1236,14 @@
     "INTERVAL": "间隔",
     "GITLAB_EXTERNAL_URL": "外部网址",
     "GITLAB_PRIVATE_TOKEN": "私有令牌",
-    "CVE_REPORT": "CVE报告",
-    "CVE_REPORT_BY_LAYER": "分层CVE报告",
+    "CVE_REPORT": "扫描报告",
+    "CVE_REPORT_BY_LAYER": "分层扫描报告",
     "COMPLIANCE_REPORT": "合规报告",
     "CVE_DB_DATE": "DB创建时间",
     "SINGLE_FILTER_HINT": "在这里编辑过滤器",
     "SIG_VERIFIERS": "签名信任根检测器",
     "SIG_VERIFIERS_HINT": "镜像和签名信任根检测器一起被扫描",
+    "SIG_VERIFICATION_TIMESTAMP": "核查于",
     "TIP": {
       "EDIT": "编辑镜像库",
       "DELETE": "删除镜像库",
@@ -1776,6 +1778,7 @@
   "apikey": {
     "APIKEYS": "API密钥",
     "ADD": "添加API密钥",
+    "VIEW": "浏览API密钥",
     "REMOVE": "删除API密钥",
     "gridHeader": {
       "STATE": "状态",
@@ -2909,6 +2912,10 @@
     "AWS_SUPPORT_LINK": "https://scc.suse.com/cloudsupport",
     "AWS_BILLING_HINT_2": "来创建支持案件.",
     "DOWNLOAD_SUPPORT_FILE": "下载支持文件",
+    "CSP_ERR_TITLE": "CSP适配器错误",
+    "NV_ERR_TITLE": "NeuVector错误",
+    "EXPIRE_TITLE": "过期警告",
+    "EXPIRE_STATE": "账单数据过期时间:",
     "IMPORT_NOTICE": "输入策略将覆盖组和规则, 输入全体将覆盖策略所有用户和密码以及系统日志等设置.",
     "UPLOAD_QUEUE": "上传队列",
     "QUEUE_DESC": "无可选文件, 请添加上传文件",

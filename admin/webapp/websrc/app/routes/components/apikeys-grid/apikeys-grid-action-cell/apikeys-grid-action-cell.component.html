@@ -1,5 +1,11 @@
 <button
   mat-icon-button
+  matTooltip="{{ 'apikey.VIEW' | translate }}"
+  (click)="view()">
+  <i class="eos-icons text-action">feed</i>
+</button>
+<button
+  mat-icon-button
   matTooltip="{{ 'apikey.REMOVE' | translate }}"
   (click)="delete()">
   <i class="eos-icons text-action">delete</i>

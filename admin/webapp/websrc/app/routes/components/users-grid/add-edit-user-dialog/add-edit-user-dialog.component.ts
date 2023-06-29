@@ -23,6 +23,7 @@ import { TranslatorService } from '@core/translator/translator.service';
 import { GroupDomainRoleTableComponent } from 'app/routes/settings/common/group-domain-role/group-domain-role-table/group-domain-role-table.component';
 import { Subject } from 'rxjs';
 import { UsersGridComponent } from '../users-grid.component';
+import { getNamespaceRoleGridData } from '@common/utils/common.utils';
 
 export interface AddEditUserDialog {
   isEdit: boolean;
@@ -115,12 +116,12 @@ export class AddEditUserDialogComponent implements OnInit {
       }
       this.domainTableSource = new MatTableDataSource(
         this.data.user
-          ? this.getNamespaceRoleGridData(
+          ? getNamespaceRoleGridData(
               this.data.domainRoles,
               this.data.user.role,
               JSON.parse(JSON.stringify(this.data.user.role_domains))
             )
-          : this.getNamespaceRoleGridData(this.data.domainRoles)
+          : getNamespaceRoleGridData(this.data.domainRoles)
       );
       this.form = this.fb.group({
         username: ['', Validators.required],
@@ -167,46 +168,6 @@ export class AddEditUserDialogComponent implements OnInit {
           }
         }
       }
-    }
-  }
-
-  getNamespaceRoleGridData(
-    domainRoleOptions: string[],
-    globalRole?: string,
-    domainRoles?: Object
-  ): {
-    namespaceRole: string;
-    namespaces: any[];
-  }[] {
-    if (domainRoles) {
-      let roleMap = Object.entries(domainRoles).map(([key, value]) => {
-        return {
-          namespaceRole: key,
-          namespaces: value,
-        };
-      });
-      return domainRoleOptions
-        .map(domainRoleOption => {
-          let roleIndex = roleMap.findIndex(
-            role => role.namespaceRole === domainRoleOption
-          );
-          if (roleIndex > -1) {
-            return roleMap[roleIndex];
-          } else {
-            return {
-              namespaceRole: domainRoleOption,
-              namespaces: [],
-            };
-          }
-        })
-        .filter(role => role.namespaceRole !== globalRole);
-    } else {
-      return domainRoleOptions
-        .map(domainRoleOption => ({
-          namespaceRole: domainRoleOption,
-          namespaces: [],
-        }))
-        .filter(role => role.namespaceRole !== globalRole);
     }
   }
 

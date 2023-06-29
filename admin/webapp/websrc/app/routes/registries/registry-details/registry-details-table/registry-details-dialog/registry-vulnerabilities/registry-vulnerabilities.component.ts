@@ -99,12 +99,12 @@ export class RegistryVulnerabilitiesComponent {
       this.selectedLayer.vulnerabilities &&
       this.selectedLayer.vulnerabilities.length > 0
     ) {
-      const title = `${this.path + this.repository} | Image Id: ${
+      const title = `${this.path + this.repository} | Image ID: ${
         this.imageId
       } |  ${this.cveDBVersion} | ${this.scannerDate.replace(
         /\,/g,
         ' '
-      )} | OS: ${this.baseOS}`;
+      )} | OS: ${this.baseOS}${this.selectedLayer?.verifiers && this.selectedLayer?.verifiers.length > 0 ? `\nSigstore Verifiers: ${this.selectedLayer?.verifiers.join(' | ')}` : ''}`;
       let cves4Csv: any = cloneDeep(this.selectedLayer.vulnerabilities);
       cves4Csv = cves4Csv.map(cve => {
         cve.description = `${cve.description.replace(/\"/g, "'")}`;
@@ -113,7 +113,23 @@ export class RegistryVulnerabilitiesComponent {
           cve.last_modified_timestamp * 1000
         );
         cve.published_timestamp = new Date(cve.published_timestamp * 1000);
-        return cve;
+        return {
+          name: cve.name,
+          description: cve.description,
+          link: cve.link,
+          score: cve.score,
+          score_v3: cve.score_v3,
+          severity: cve.severity,
+          vectors: cve.vectors,
+          vectors_v3: cve.vectors_v3,
+          feed_rating: cve.feed_rating,
+          package_name: cve.package_name,
+          package_version: cve.package_version,
+          fixed_version: cve.fixed_version,
+          tags: cve.tags,
+          published_timestamp: cve.published_timestamp,
+          last_modified_timestamp: cve.last_modified_timestamp
+        }
       });
       const csv = arrayToCsv(cves4Csv, title);
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });

@@ -104,7 +104,7 @@ export class PromotionModalComponent implements OnInit {
             this.clustersService.dispatchRefreshEvent();
           },
           error => {
-            this.notificationService.openError(error,
+            this.notificationService.openError(error.error,
               this.translate.instant('multiCluster.messages.update_failure'));
           }
         );
@@ -116,7 +116,7 @@ export class PromotionModalComponent implements OnInit {
             this.clustersService.dispatchRefreshEvent();
           },
           error => {
-            this.notificationService.openError(error,
+            this.notificationService.openError(error.error,
               this.translate.instant('multiCluster.messages.update_failure'));
           }
         );
@@ -139,7 +139,7 @@ export class PromotionModalComponent implements OnInit {
         },
         err => {
           this.isProcessing = false;
-          this.notificationService.openError( err,
+          this.notificationService.openError( err.error,
             this.translate.instant('multiCluster.promotion.failure'));
         }
       );

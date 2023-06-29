@@ -188,7 +188,26 @@ def report(data, name, image, show_accepted):
             output.list(columns, report["setid_perms"])
         else:
             click.echo("No SetUid/SetGid Report")
+            click.echo("")
 
+    signedByVerifiers = 0
+    if "signature_data" in report and report["signature_data"] != None:
+        signature_data = report["signature_data"]
+        if "verifiers" in signature_data and signature_data["verifiers"] != None:
+            if len(signature_data["verifiers"]) > 0:
+                click.echo("Sigstore Verifiers:")
+                verifiers = []
+                for v in signature_data["verifiers"]:
+                    rv = v.split("/", -1)
+                    if len(rv) == 2:
+                        obj = {"root_of_trust": rv[0], "verifier": rv[1]}
+                        verifiers.append(obj)
+                        signedByVerifiers += 1
+                columns = ("root_of_trust", "verifier")
+                output.list(columns, verifiers)
+    if signedByVerifiers == 0:
+        click.echo("The image is not signed by any configured verifier")
+        click.echo("")
 
 @show_registry.command()
 @click.argument("name")

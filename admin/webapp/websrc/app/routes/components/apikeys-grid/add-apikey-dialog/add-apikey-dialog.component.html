@@ -1,6 +1,8 @@
 <div class="d-flex align-items-center justify-content-between">
   <h4 mat-dialog-title class="mb-2">
-    {{ 'apikey.addApikey.TITLE' | translate }}
+    {{
+      (data.isReadOnly ? 'apikey.VIEW' : 'apikey.addApikey.TITLE') | translate
+    }}
   </h4>
   <button
     (click)="onNoClick()"
@@ -129,8 +131,9 @@
       [domains]="data.domains"
       [global_role]="selectedRole"
       [group_roles]="data.domainRoles"
-      [hidden]="!showAdvSetting"></app-group-domain-role-table>
-    <div class="d-flex justify-content-end">
+      [hidden]="!showAdvSetting"
+      [isReadOnly]="data.isReadOnly || false"></app-group-domain-role-table>
+    <div class="d-flex justify-content-end" *ngIf="!data.isReadOnly">
       <button
         (click)="onNoClick()"
         class="mr-2"

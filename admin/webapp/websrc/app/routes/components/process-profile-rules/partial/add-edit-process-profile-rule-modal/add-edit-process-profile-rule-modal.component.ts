@@ -77,8 +77,8 @@ export class AddEditProcessProfileRuleModalComponent implements OnInit {
         this.data.oldData :
         this.data.oldData[0];
       Object.keys(this.oldData).forEach((key: string) => {
-        if (this.processProfileRuleForm.controls[key]) {
-          this.processProfileRuleForm.controls[key].setValue(
+        if (this.processProfileRuleForm.get(key)) {
+          this.processProfileRuleForm.get(key)!.setValue(
             this.oldData ? this.oldData[key] : null
           );
         }
@@ -87,8 +87,8 @@ export class AddEditProcessProfileRuleModalComponent implements OnInit {
         this.oldData.action ===
         GlobalConstant.PROCESS_PROFILE_RULE.ACTION.ALLOW;
     }
-    if (!this.processProfileRuleForm.controls.group.value) {
-      this.processProfileRuleForm.controls.group.setValue(this.data.groupName || "");
+    if (!this.processProfileRuleForm.get('group')!.value) {
+      this.processProfileRuleForm.get('group')!.setValue(this.data.groupName || "");
     }
   }
 
@@ -98,12 +98,6 @@ export class AddEditProcessProfileRuleModalComponent implements OnInit {
         ? ['added', 'add']
         : ['updated', 'update'];
     let newData = {
-      cfg_type:
-        this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-          ? GlobalConstant.CFG_TYPE.FED
-          : this.type === GlobalConstant.MODAL_OP.ADD
-          ? GlobalConstant.CFG_TYPE.CUSTOMER
-          : GlobalConstant.CFG_TYPE.LEARNED,
       action: this.isAllowed
         ? GlobalConstant.PROCESS_PROFILE_RULE.ACTION.ALLOW
         : GlobalConstant.PROCESS_PROFILE_RULE.ACTION.DENY,
@@ -111,14 +105,19 @@ export class AddEditProcessProfileRuleModalComponent implements OnInit {
       last_modified_timestamp: new Date().getTime() / 1000
     };
 
-    newData.group = this.processProfileRuleForm.controls.group.value;
+    newData.cfg_type =
+      this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+        ? GlobalConstant.CFG_TYPE.FED
+        : GlobalConstant.CFG_TYPE.CUSTOMER;
+
+    newData.group = this.processProfileRuleForm.get('group')!.value;
 
     this.processProfileRulesService
       .updateProcessProfileRules(
         this.type === GlobalConstant.MODAL_OP.ADD
           ? GlobalConstant.CRUD.C
           : GlobalConstant.CRUD.U,
-        this.processProfileRuleForm.controls.group.value,
+        this.processProfileRuleForm.get('group')!.value,
         newData,
         this.oldData,
         this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY ?

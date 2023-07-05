@@ -29,7 +29,10 @@ export class GlobalNotificationsComponent implements OnInit {
       ? (GlobalVariable.summary.component_versions.length > 1 &&
           GlobalVariable.summary.component_versions[0] ===
             GlobalVariable.summary.component_versions[1]) ||
-          this.version !== GlobalVariable.summary.component_versions[0]
+          this.version !==
+            (GlobalVariable.summary.component_versions[0].startsWith('v')
+              ? GlobalVariable.summary.component_versions[0].substring(1)
+              : GlobalVariable.summary.component_versions[0])
       : false;
   }
   get passwordExpiration() {

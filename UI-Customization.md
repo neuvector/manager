@@ -38,7 +38,7 @@ To customize the page banner, follow these steps:
 - Save the encoded content to the environment variables `CUSTOM_PAGE_FOOTER_COLOR` and `CUSTOM_PAGE_FOOTER_CONTENT`.
 
 
-The environment variables (`CUSTOM_LOGIN_LOGO`, `CUSTOM_EULA_POLICY`, `CUSTOM_PAGE_HEADER_COLOR`, `CUSTOM_PAGE_HEADER_CONTENT`, `CUSTOM_PAGE_FOOTER_COLOR`, `CUSTOM_PAGE_FOOTER_CONTENT`) are defined in the [helm chart](https://github.com/neuvector/neuvector-helm/blob/master/charts/core/templates/manager-deployment.yaml).
+The environment variables (`CUSTOM_LOGIN_LOGO`, `CUSTOM_EULA_POLICY`, `CUSTOM_PAGE_HEADER_COLOR`, `CUSTOM_PAGE_HEADER_CONTENT`, `CUSTOM_PAGE_FOOTER_COLOR`, `CUSTOM_PAGE_FOOTER_CONTENT`) can be defined in the `values.yaml` file in the [helm chart](https://github.com/neuvector/neuvector-helm/blob/master/charts/core/values.yaml). The corresponding section in the `values.yaml` file where these variables can be defined is "manager.env.envs".
 
 ## 4. Example to customize the UI pages using helm chart
 

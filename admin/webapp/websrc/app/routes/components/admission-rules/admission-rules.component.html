@@ -117,21 +117,24 @@
               {{ 'policy.PROMOTE' | translate }}
             </button>
           </div>
-          <button
-            mat-stroked-button
-            aria-label="Add rule"
-            class="mr-3"
-            *appDisplayControl="'write_admission'"
-            (click)="openAddEditAdmissionRuleModal()">
-            <em class="eos-icons icon-18">add_circle</em>
-            {{ 'admissionControl.INSERT' | translate }}
-          </button>
+          <div class="d-flex align-items-center" *ngIf="!admissionStateErr">
+            <button
+              mat-stroked-button
+              aria-label="Add rule"
+              class="mr-3"
+              *appDisplayControl="'write_admission'"
+              (click)="openAddEditAdmissionRuleModal()">
+              <em class="eos-icons icon-18">add_circle</em>
+              {{ 'admissionControl.INSERT' | translate }}
+            </button>
+          </div>
           <div
             class="d-flex align-items-center"
             *ngIf="
               globalStatus &&
               isAdmissionRuleAuthorized &&
-              source === navSource['SELF']
+              source === navSource['SELF'] &&
+              !admissionStateErr
             ">
             <label class="nv-modal-item-title margin-right-m mb-0">
               {{ 'admissionControl.MODE' | translate }}
@@ -152,7 +155,7 @@
           </div>
           <div
             class="mx-3 d-flex align-items-center"
-            *ngIf="source === navSource['SELF'] && isAdmissionRuleAuthorized">
+            *ngIf="source === navSource['SELF'] && isAdmissionRuleAuthorized && !admissionStateErr">
             <label class="nv-modal-item-title margin-right-s mb-0">
               {{ 'responsePolicy.gridHeader.STATUS' | translate }}
             </label>

@@ -189,23 +189,26 @@ export class AdmissionRulesComponent implements OnInit {
         },
         error => {
           console.log(error);
+          this.isGridOptionsReady = true;
           this.admissionStateErr = true;
-          if (error.status === 404) {
-            this.gridOptions.overlayNoRowsTemplate =
-              this.utils.getOverlayTemplateMsg(error);
-            this.gridOptions!.api!.setRowData([]);
-            this.stateWarning = this.translate.instant(
-              'admissionControl.NOT_BINDING'
-            );
-          } else if (error.status === 403) {
-            this.gridOptions.overlayNoRowsTemplate =
-              this.translate.instant('general.NO_ROWS');
-            this.gridOptions!.api!.setRowData([]);
-          } else {
-            this.gridOptions.overlayNoRowsTemplate =
-              this.utils.getOverlayTemplateMsg(error);
-            this.gridOptions!.api!.setRowData([]);
-          }
+          setTimeout(() => {
+            if (error.status === 404) {
+              this.gridOptions.overlayNoRowsTemplate =
+                this.utils.getOverlayTemplateMsg(error);
+              this.gridOptions!.api!.setRowData([]);
+              this.stateWarning = this.translate.instant(
+                'admissionControl.NOT_BINDING'
+              );
+            } else if (error.status === 403) {
+              this.gridOptions.overlayNoRowsTemplate =
+                this.translate.instant('general.NO_ROWS');
+              this.gridOptions!.api!.setRowData([]);
+            } else {
+              this.gridOptions.overlayNoRowsTemplate =
+                this.utils.getOverlayTemplateMsg(error);
+              this.gridOptions!.api!.setRowData([]);
+            }
+          }, 200);
         }
       );
   };
@@ -219,6 +222,11 @@ export class AdmissionRulesComponent implements OnInit {
       },
       error => {
         console.log(error);
+        const errTitle = this.translate.instant('admissionControl.msg.GET_ADM_STATE_NG');
+        this.notificationService.open(
+          this.utils.getAlertifyMsg(error.error, errTitle, false),
+          GlobalConstant.NOTIFICATION_TYPE.ERROR
+        );
       }
     );
   };

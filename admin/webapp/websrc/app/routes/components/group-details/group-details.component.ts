@@ -73,7 +73,7 @@ export class GroupDetailsComponent implements OnInit {
     this.isWriteFileAccessRuleAuthorized =
       this.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER ||
       this.cfgType === GlobalConstant.CFG_TYPE.LEARNED;
-    this.isWriteProcessProfileRuleAuthorized = this.isWriteFileAccessRuleAuthorized;
+    this.isWriteProcessProfileRuleAuthorized = this.isWriteFileAccessRuleAuthorized || this.cfgType === GlobalConstant.CFG_TYPE.GROUND;
     this.navSource = GlobalConstant.NAV_SOURCE.GROUP;
     this.filter.valueChanges
       .pipe(tap((value: string) => this.quickFilterService.setTextInput(value)))
@@ -93,6 +93,11 @@ export class GroupDetailsComponent implements OnInit {
     ];
     if (!TAB_VISIBLE_MATRIX[this.groupsService.activeTabIndex]) this.groupsService.activeTabIndex = 0;
   }
+
+  isIncludingGroundRule = () => {
+    let index = this.selectedProcessProfileRules.findIndex(rule => rule.cfg_type === GlobalConstant.CFG_TYPE.GROUND);
+    return index > -1;
+  };
 
   getEditGroupSensorModal = editGroupSensorModal => {
     this.editGroupSensorModal = editGroupSensorModal;

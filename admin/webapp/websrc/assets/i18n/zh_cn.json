@@ -2583,7 +2583,8 @@
       "SAVE_CLIENT_MODE": "将选定的模式提交到Kubernetes设置以便进行Kubernetes请求连接的测试.",
       "NOT_NUMBER_ERR": "不是有效数字",
       "ALLOW_NO_MATCH": "允许不符合上述任何规则的部署.",
-      "DENY_NO_MATCH": "拒绝不符合上述任何规则的部署"
+      "DENY_NO_MATCH": "拒绝不符合上述任何规则的部署",
+      "GET_ADM_STATE_NG": "获取准入控制状态时发生错误"
     },
     "addRule": {
       "TITLE": "添加规则"

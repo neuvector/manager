@@ -47,7 +47,8 @@ export class ProcessProfileRulesService {
         headerCheckboxSelectionFilteredOnly: true,
         checkboxSelection: params => {
           return isWriteGroupAuthorized &&
-            isWriteProcessProfileRuleAuthorized;
+            isWriteProcessProfileRuleAuthorized &&
+            [GlobalConstant.CFG_TYPE.CUSTOMER, GlobalConstant.CFG_TYPE.LEARNED].includes(params.data.cfg_type);
         },
         field: 'name',
         hide: !(source === GlobalConstant.NAV_SOURCE.GROUP &&

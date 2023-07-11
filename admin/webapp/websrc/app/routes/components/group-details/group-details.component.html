@@ -21,7 +21,7 @@
       class="d-flex align-items-center justify-content-end"
     >
       <button
-        *ngIf="isWriteGroupAuthorized && cfgType!==CFG_TYPE.FED && cfgType!==CFG_TYPE.GROUND"
+        *ngIf="isWriteGroupAuthorized && cfgType!==CFG_TYPE.FED"
         mat-button
         class="mr-2 mt-1"
         [matMenuTriggerFor]="menu"
@@ -34,7 +34,7 @@
         <div>
           <button
             mat-button
-            *ngIf="selectedProcessProfileRules && selectedProcessProfileRules.length >= 1 && isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized"
+            *ngIf="selectedProcessProfileRules && selectedProcessProfileRules.length >= 1 && isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized && !isIncludingGroundRule()"
             (click)="removeProfile(selectedProcessProfileRules)">
             <em class="eos-icons">delete</em>
             {{ 'service.DELETE_RULE' | translate }}
@@ -43,7 +43,7 @@
         <div>
           <button
             mat-button
-            *ngIf="selectedProcessProfileRules && selectedProcessProfileRules.length === 1 && isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized"
+            *ngIf="selectedProcessProfileRules && selectedProcessProfileRules.length === 1 && isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized && !isIncludingGroundRule()"
             (click)="editProfile(selectedProcessProfileRules)">
             <em class="eos-icons">edit</em>
             {{ 'service.EDIT_RULE' | translate }}

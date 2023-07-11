@@ -2583,7 +2583,8 @@
       "SAVE_CLIENT_MODE": "Submit the chosen mode to Kubernetes configuration in order to test the Kubernetes request connection.",
       "NOT_NUMBER_ERR": "Not a valid number",
       "ALLOW_NO_MATCH": "Allow deployments that don't match any of above rules.",
-      "DENY_NO_MATCH": "Deny deployments that don't match any of above rules."
+      "DENY_NO_MATCH": "Deny deployments that don't match any of above rules.",
+      "GET_ADM_STATE_NG": "Error happened when getting admission control state"
     },
     "addRule": {
       "TITLE": "Add rule"

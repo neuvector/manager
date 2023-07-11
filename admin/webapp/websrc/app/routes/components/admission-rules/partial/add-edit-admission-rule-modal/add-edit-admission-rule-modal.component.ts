@@ -138,6 +138,10 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     this.dialogRef.close(true);
   }
 
+  isTooltipDisabled = e => {
+    return e._element.nativeElement.children[0].scrollWidth <= e._element.nativeElement.children[0].clientWidth;
+  };
+
   clearCriterionDetail = (selectedCriterionName?: string | undefined) => {
     this.mainCriterion = {
       name: selectedCriterionName || "",

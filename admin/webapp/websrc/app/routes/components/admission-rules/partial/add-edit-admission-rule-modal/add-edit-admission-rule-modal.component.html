@@ -149,7 +149,7 @@
               <mat-chip
                 *ngFor="let chip of valuechips"
                 (removed)="removeValueChip(chip)">
-                {{ chip }}
+                <span class="auto-hide" style="max-width: 150px;" [matTooltip]="chip">{{ chip }}</span>
                 <button matChipRemove>
                   <mat-icon class="eos-icons icon-18">cancel</mat-icon>
                 </button>
@@ -170,7 +170,11 @@
             >
               <mat-option
                 *ngFor="let verifier of sigVerifierOptions"
-                [value]="verifier">
+                [value]="verifier"
+                [matTooltip]="verifier"
+                [matTooltipDisabled]="isTooltipDisabled(ttVerifier)"
+                matTooltipPosition="right"
+                #ttVerifier>
                 {{ verifier }}
               </mat-option>
             </mat-autocomplete>

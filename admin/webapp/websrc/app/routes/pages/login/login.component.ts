@@ -79,6 +79,21 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.inProgress = false;
+    this.samlEnabled = false;
+    this.oidcEnabled = false;
+    this.now = new Date();
+    this.app = this.switchersService.getAppSwitcher('');
+    this.localStorage.set('login_time', this.now.toString());
+    this.originalUrl = this.localStorage.get(
+      GlobalConstant.SESSION_STORAGE_ORIGINAL_URL
+    );
+    this.version = this.localStorage.get('version');
+    this.gpuEnabled = this.localStorage.get('_gpuEnabled');
+    this.currUrl = this.w.location.href;
+    GlobalVariable.hasInitializedSummary = false;
+    GlobalVariable.clusterName = '';
+
     if (this.currUrl.includes(GlobalConstant.PROXY_VALUE)) {
       this.isFromSSO = true;
     }
@@ -101,20 +116,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.retrieveCustomizedUIContent();
     }
 
-    this.inProgress = false;
-    this.samlEnabled = false;
-    this.oidcEnabled = false;
-    this.now = new Date();
-    this.app = this.switchersService.getAppSwitcher('');
-    this.localStorage.set('login_time', this.now.toString());
-    this.originalUrl = this.localStorage.get(
-      GlobalConstant.SESSION_STORAGE_ORIGINAL_URL
-    );
-    this.version = this.localStorage.get('version');
-    this.gpuEnabled = this.localStorage.get('_gpuEnabled');
-    this.currUrl = this.w.location.href;
-    GlobalVariable.hasInitializedSummary = false;
-    GlobalVariable.clusterName = '';
     if (this.sessionStorage.has('cluster')) {
       this.sessionStorage.remove('cluster');
     }

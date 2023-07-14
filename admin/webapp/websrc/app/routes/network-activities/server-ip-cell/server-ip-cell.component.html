@@ -1,0 +1,17 @@
+<div *ngIf="params.context.componentParent._conversationDetail.to.id === 'external'; else internalEndpoint">
+  <a [attr.href]="'https://www.whois.com/whois/' + params.data.server_ip" target="_blank">
+    <span
+      *ngIf="params.data.server_ip_location.country_code !== '-'"
+      [matTooltip]="params.data.server_ip_location.country_name"
+      matTooltipPosition="above"
+      style="font-size: 14px"
+    >
+      {{ countryFlagIcon }} &nbsp;
+    </span>
+    <span>{{ params.data.server_ip }}</span>
+  </a>
+</div>
+
+<ng-template #internalEndpoint>
+  <span>{{ params.data.server_ip }}</span>
+</ng-template>

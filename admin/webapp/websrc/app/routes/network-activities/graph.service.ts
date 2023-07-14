@@ -31,6 +31,8 @@ import {
   Protocol,
 } from '@common/types/network-activities/advancedFilter';
 import { Blacklist } from '@common/types/network-activities/blacklist';
+import { ClientIpCellComponent } from './client-ip-cell/client-ip-cell.component';
+import { ServerIpCellComponent } from './server-ip-cell/server-ip-cell.component';
 
 @Injectable()
 export class GraphService {
@@ -1361,58 +1363,13 @@ export class GraphService {
         {
           headerName: this.translate.instant('network.gridHeader.CLIENT_IP'),
           field: 'client_ip',
-          cellRenderer: function (params) {
-            // @ts-ignore
-            if (conversationDetail.from.id === 'external') {
-              return (
-                '<a href="https://www.whois.com/whois/' +
-                sanitizer.sanitize(
-                  SecurityContext.HTML,
-                  params.data.client_ip
-                ) +
-                '" target="_blank">' +
-                '<countryflag ng-if="data.client_ip_location.country_code!==\'-\'" ' +
-                'country="{{data.client_ip_location.country_code.toLowerCase()}}" ' +
-                'uib-tooltip="{{data.client_ip_location.country_name}}" ' +
-                'tooltip-enable="{{data.client_ip_location.country_code !== \'-\'}}" >' +
-                '</countryflag>' +
-                '&nbsp;&nbsp;' +
-                sanitizer.sanitize(
-                  SecurityContext.HTML,
-                  params.data.client_ip
-                ) +
-                '</a>'
-              );
-            } else return '<span>' + params.data.client_ip + '</span>';
-          },
+          cellRenderer: ClientIpCellComponent,
           width: 250,
         },
         {
           headerName: this.translate.instant('network.gridHeader.SERVER_IP'),
           field: 'server_ip',
-          cellRenderer: function (params) {
-            if (conversationDetail.to.id === 'external') {
-              return (
-                '<a href="https://www.whois.com/whois/' +
-                sanitizer.sanitize(
-                  SecurityContext.HTML,
-                  params.data.server_ip
-                ) +
-                '" target="_blank">' +
-                '<countryflag ng-if="data.server_ip_location.country_code!==\'-\'" ' +
-                'country="{{data.server_ip_location.country_code.toLowerCase()}}" ' +
-                'uib-tooltip="{{data.server_ip_location.country_name}}" ' +
-                'tooltip-enable="{{data.server_ip_location.country_code !== \'-\'}}" >' +
-                '</countryflag>' +
-                '&nbsp;&nbsp;' +
-                sanitizer.sanitize(
-                  SecurityContext.HTML,
-                  params.data.server_ip
-                ) +
-                '</a>'
-              );
-            } else return '<span>' + params.data.server_ip + '</span>';
-          },
+          cellRenderer: ServerIpCellComponent,
           width: 250,
         },
         {

@@ -27,6 +27,8 @@ import { AdvancedFilterComponent } from './advanced-filter/advanced-filter.compo
 import {
     VulnerabilitiesGridModule
 } from "@components/vulnerabilities-grid/vulnerabilities-grid.module";
+import { ClientIpCellComponent } from './client-ip-cell/client-ip-cell.component';
+import { ServerIpCellComponent } from './server-ip-cell/server-ip-cell.component';
 
 const routes: Routes = [
   { path: '', component: NetworkActivitiesComponent },
@@ -46,6 +48,8 @@ const routes: Routes = [
     PodInfoComponent,
     BlacklistComponent,
     AdvancedFilterComponent,
+    ClientIpCellComponent,
+    ServerIpCellComponent,
   ],
   imports: [
     CommonModule,

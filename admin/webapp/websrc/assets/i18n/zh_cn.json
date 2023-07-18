@@ -2915,6 +2915,7 @@
     "LOG_IN_JSON": "用Json:",
     "LOG_CATEGORIES": "类别:",
     "SEND_SYSLOG_PER_CVE": "发送每个CVE的单独系统日志事件",
+    "SEND_SYSLOG_PER_LAYER": "每层发送系统日志事件CVE",
     "SERVER_CERTIFICATE": "服务器证书",
     "EXPORT": "输出",
     "IMPORT": "输入",

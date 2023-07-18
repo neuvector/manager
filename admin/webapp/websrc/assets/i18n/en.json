@@ -2915,6 +2915,7 @@
     "LOG_IN_JSON": "In JSON:",
     "LOG_CATEGORIES": "Categories:",
     "SEND_SYSLOG_PER_CVE": "Send individual syslog events per CVE",
+    "SEND_SYSLOG_PER_LAYER": "Send syslog events CVE per layer",
     "SERVER_CERTIFICATE": "Server Certificate",
     "EXPORT": "Export",
     "IMPORT": "Import",

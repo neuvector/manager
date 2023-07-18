@@ -6,7 +6,7 @@ import {
 export const SyslogProtocols = [
   { value: 6, viewValue: 'TCP' },
   { value: 17, viewValue: 'UDP' },
-  { value: 66, viewValue: 'TCP + TLS' }
+  { value: 66, viewValue: 'TCP + TLS' },
 ];
 
 export const SyslogLevels = [
@@ -92,14 +92,15 @@ export const SyslogLevelField = {
 };
 
 export const SyslogTLSCertificate = {
-  key:'syslog.syslog_server_cert',
+  key: 'syslog.syslog_server_cert',
   type: FormlyComponents.TEXT_AREA,
   templateOptions: {
     label: 'setting.SERVER_CERTIFICATE',
     required: true,
   },
   expressionProperties: {
-    'templateOptions.disabled': '!model.syslog.syslog_status || !formState.permissions.isSyslogAuthorized || !( model.syslog.syslog_ip_proto == 66 )',
+    'templateOptions.disabled':
+      '!model.syslog.syslog_status || !formState.permissions.isSyslogAuthorized || !( model.syslog.syslog_ip_proto == 66 )',
   },
 };
 
@@ -137,6 +138,18 @@ export const SyslogSingleCVEField = {
   key: 'syslog.single_cve_per_syslog',
   templateOptions: {
     label: 'setting.SEND_SYSLOG_PER_CVE',
+  },
+  expressionProperties: {
+    'templateOptions.disabled':
+      '!model.syslog.syslog_status || !formState.permissions.isSyslogAuthorized',
+  },
+};
+
+export const SyslogCVELayersField = {
+  type: FormlyComponents.CHECKBOX,
+  key: 'syslog.syslog_cve_in_layers',
+  templateOptions: {
+    label: 'setting.SEND_SYSLOG_PER_LAYER',
   },
   expressionProperties: {
     'templateOptions.disabled':

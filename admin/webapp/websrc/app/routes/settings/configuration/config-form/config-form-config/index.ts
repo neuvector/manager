@@ -48,7 +48,9 @@ import {
   WebhookTableField,
   XFFToggleField,
   DisableNetworkPolicyToggleBoolField,
-  DisableNetworkPolicyToggleField, SyslogTLSCertificate,
+  DisableNetworkPolicyToggleField,
+  SyslogTLSCertificate,
+  SyslogCVELayersField,
 } from './constants';
 
 export const ConfigFormConfig: FormlyFieldConfig[] = [
@@ -110,7 +112,10 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
   },
   {
     wrappers: [FormlyComponents.SECTION_WRAPPER],
-    fieldGroup: [DisableNetworkPolicyToggleBoolField, DisableNetworkPolicyToggleField],
+    fieldGroup: [
+      DisableNetworkPolicyToggleBoolField,
+      DisableNetworkPolicyToggleField,
+    ],
     templateOptions: {
       label: 'setting.DISABLE_NET_POLICY',
       comment: 'setting.DISABLE_NET_POLICY_HINT',
@@ -321,6 +326,10 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
       {
         className: 'col-12 col-md-4',
         ...SyslogSingleCVEField,
+      },
+      {
+        className: 'col-12 col-md-4',
+        ...SyslogCVELayersField,
       },
     ],
     templateOptions: { append: true, divider: true },

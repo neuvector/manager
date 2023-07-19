@@ -1069,6 +1069,12 @@
     "DOMAINS_PLACEHOLDER": "添加命名空间",
     "ACCEPT": "接受",
     "ACCEPT_VUL": "接受漏洞",
+    "PROFILE_FILTER_TYPE": "漏洞配置资料种类",
+    "REPORTED_TIME": "报告时间",
+    "WITH_FIX": "已修复",
+    "NAME": "名称",
+    "REPORTED_WITHIN": "报告于",
+    "DAYS": "天以内",
     "msg": {
       "REMOVE_CFM": "您确定要删除?",
       "REMOVE_OK": "漏洞配置资料条目删除成功!",

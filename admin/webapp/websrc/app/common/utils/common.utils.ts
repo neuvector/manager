@@ -164,13 +164,13 @@ export function decodeArrayBuffer(input) {
   return ab;
 }
 
-export function numericTextInputOnly(evt) {
+export function numericTextInputOnly(evt, withDec: boolean = true) {
   let event = evt || window.event;
   // event.persist();
   let key = event.keyCode || event.which;
   let isRemoving = key === 8;
   key = String.fromCharCode(key);
-  let regex = /[0-9]|\./;
+  let regex = withDec ? /[0-9]|\./ : /[0-9]/;
   if (!regex.test(key) && !isRemoving) {
     event.returnValue = false;
     if (event.preventDefault) event.preventDefault();

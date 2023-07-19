@@ -1069,6 +1069,12 @@
     "DOMAINS_PLACEHOLDER": "Add Namespaces",
     "ACCEPT": "Accept",
     "ACCEPT_VUL": "Accept Vulnerability",
+    "PROFILE_FILTER_TYPE": "Profile Filter Type",
+    "REPORTED_TIME": "Reported Time",
+    "WITH_FIX": "With Fix",
+    "NAME": "Name",
+    "REPORTED_WITHIN": "Reported Within",
+    "DAYS": "Day(s)",
     "msg": {
       "REMOVE_CFM": "Are you sure you want to remove?",
       "REMOVE_OK": "Vulnerability profile entry is removed successfully!",

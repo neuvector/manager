@@ -2637,6 +2637,7 @@
       "SERVICE": "Service",
       "ADDRESS": "Address",
       "LABELS": "Labels",
+      "ANNOTATIONS": "Annotations",
       "USER": "User",
       "POD_LABELS": "Pod labels",
       "DOMAIN": "Domain",

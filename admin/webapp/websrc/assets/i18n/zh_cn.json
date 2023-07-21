@@ -2637,6 +2637,7 @@
       "SERVICE": "服务",
       "ADDRESS": "地址",
       "LABELS": "标签",
+      "ANNOTATIONS": "注解",
       "USER": "用户",
       "POD_LABELS": "Pod 标签",
       "DOMAIN": "域名",

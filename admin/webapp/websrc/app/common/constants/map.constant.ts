@@ -195,6 +195,7 @@ export class MapConstant {
     mc_connected: 'success',
     mc_disconnected: 'danger',
     mc_joined: 'joined',
+    mc_pending: 'warning',
     mc_out_of_sync: 'danger-tran',
     mc_synced: 'success',
     mc_syncing: 'idle',
@@ -275,6 +276,7 @@ export class MapConstant {
     SYNCED: 'synced',
     OUT_OF_SYNC: 'out_of_sync',
     JOIN: 'join',
+    PENDING: 'pending', // meaning the remote cluster's joining request has been handled successfully but the joining process is not complete yet
   };
 
   public static SERVER_TYPE = {

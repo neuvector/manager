@@ -231,7 +231,8 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
     if (
       cluster.status === MapConstant.FED_STATUS.DISCONNECTED ||
       cluster.status === MapConstant.FED_STATUS.LEFT ||
-      cluster.status === MapConstant.FED_STATUS.KICKED
+      cluster.status === MapConstant.FED_STATUS.KICKED ||
+      cluster.status === MapConstant.FED_STATUS.PENDING
     ) {
       this.updateRow4Error(rowNode, '');
       this._activeTaskNum--;
@@ -320,7 +321,8 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
     if (
       cluster.status === MapConstant.FED_STATUS.DISCONNECTED ||
       cluster.status === MapConstant.FED_STATUS.LEFT ||
-      cluster.status === MapConstant.FED_STATUS.KICKED
+      cluster.status === MapConstant.FED_STATUS.KICKED ||
+      cluster.status === MapConstant.FED_STATUS.PENDING
     ) {
       this.updateRow4Error(rowNode, '');
     } else {

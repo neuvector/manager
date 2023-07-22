@@ -173,6 +173,7 @@
     "CAUTION": "Caution",
     "SAFE": "Safe",
     "CLUSTER.STATUS.ACTIVE": "Active",
+    "CLUSTER.STATUS.PENDING": "Pending",
     "CLUSTER.STATUS.PINGING": "Pinging",
     "CLUSTER.STATUS.UNKNOWN_CMD": "Unknown",
     "CLUSTER.STATUS.NOTIFIED": "Notified",

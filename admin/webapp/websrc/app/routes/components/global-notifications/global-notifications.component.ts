@@ -27,7 +27,7 @@ export class GlobalNotificationsComponent implements OnInit {
   get isVersionMismatch() {
     return GlobalVariable.summary.component_versions
       ? (GlobalVariable.summary.component_versions.length > 1 &&
-          GlobalVariable.summary.component_versions[0] ===
+          GlobalVariable.summary.component_versions[0] !==
             GlobalVariable.summary.component_versions[1]) ||
           this.version !==
             (GlobalVariable.summary.component_versions[0].startsWith('v')

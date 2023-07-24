@@ -2008,6 +2008,7 @@
     "RESERVED_PREFIX": "系统保留的前缀: nv., external, Host:, Workload:",
     "NAME_INVALID": "组名前缀不可以是: ",
     "NAME_VALID": "组名前缀必须是: ",
+    "K8S_NAME_WARNING": "当导出组时，yaml文件里metadata.name的值默认为小写字母.",
     "COUNT_POSTFIX": "个组",
     "NO_MEMBERS": "无组成员",
     "HIDE_SYS_GROUPS": "隐藏系统组",

@@ -180,6 +180,18 @@ export function numericTextInputOnly(evt, withDec: boolean = true) {
   }
 }
 
+export function validTypingOnly(evt, pattern) {
+  let event = evt || window.event;
+  // event.persist();
+  if (!pattern.test(event.key)) {
+    event.returnValue = false;
+    if (event.preventDefault) event.preventDefault();
+    return false;
+  } else {
+    return true;
+  }
+}
+
 export function threeWayMerge(arr1, arr2, arr3, comparer, target) {
   let params = [arr1, arr2, arr3];
   params.sort(function (a, b) {

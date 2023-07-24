@@ -30,6 +30,8 @@
             type="text"
             matInput
             formControlName="name"
+            (keyup)="checkGroupName()"
+            (keydown)="suppressInvalidTyping($event)"
             [readonly]="data.opType !== modalOp.ADD"
             [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
           />
@@ -92,6 +94,11 @@
         <ng-container *ngIf="data.opType !== modalOp.VIEW">
           <mat-hint align="start" class="px-3">
             {{ 'partner.group.CRITERIA_HINT' | translate }}
+          </mat-hint>
+        </ng-container>
+        <ng-container *ngIf="isShowingWarning && data.opType !== modalOp.VIEW" class="apikey__field full">
+          <mat-hint class="type-label px-1 ml-3 mt-2 view-permission">
+            {{ 'group.K8S_NAME_WARNING' | translate }}
           </mat-hint>
         </ng-container>
       </div>

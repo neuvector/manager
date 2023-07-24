@@ -2008,6 +2008,7 @@
     "RESERVED_PREFIX": "System reserved prefix: ",
     "NAME_INVALID": "Group name can't start with: ",
     "NAME_VALID": "Group name must start with: ",
+    "K8S_NAME_WARNING": "When a group is exported, the value of metadata.name in the yaml file is the lowercase by default.",
     "COUNT_POSTFIX": "groups found",
     "NO_MEMBERS": "No group members",
     "HIDE_SYS_GROUPS": "Hide System Groups",

@@ -80,6 +80,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
     this.isWriteProcessProfileRuleAuthorized =
       (this.source === GlobalConstant.NAV_SOURCE.GROUP &&
         (this.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER ||
+          this.cfgType === GlobalConstant.CFG_TYPE.GROUND ||
           this.cfgType === GlobalConstant.CFG_TYPE.LEARNED)) ||
       (this.source === GlobalConstant.NAV_SOURCE.FED_POLICY &&
         this.cfgType === GlobalConstant.CFG_TYPE.FED);
@@ -254,7 +255,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
         },
         error => {
           this.notificationService.openError(
-            error,
+            error.error,
             this.translate.instant('group.profile.REMOVE_NG')
           );
           dialogRef.componentInstance.loading = false;

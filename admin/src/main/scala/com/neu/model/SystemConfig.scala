@@ -71,6 +71,7 @@ case class SystemConfigSyslogCfgV2(
   syslog_categories: Option[Array[String]] = None,
   syslog_in_json: Option[Boolean] = None,
   single_cve_per_syslog: Boolean,
+  syslog_cve_in_layers: Option[Boolean] = None,
   syslog_server_cert: Option[String] = None
 )
 

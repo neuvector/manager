@@ -19,6 +19,7 @@ import { GroupsService } from '@services/groups.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '@services/notification.service';
 import { InputDialogComponent } from '@components/ui/input-dialog/input-dialog.component';
+import { validTypingOnly } from '@common/utils/common.utils';
 
 @Component({
   selector: 'app-add-edit-group-modal',
@@ -31,6 +32,8 @@ export class AddEditGroupModalComponent implements OnInit {
   addEditGroupForm: FormGroup;
   criteria: Array<any> = [];
   submittingUpdate: boolean = false;
+  groupNameRegex = new RegExp(/^[a-z0-9.-]*$/);
+  isShowingWarning: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddEditGroupModalComponent>,
@@ -63,6 +66,7 @@ export class AddEditGroupModalComponent implements OnInit {
         comment: new FormControl(this.data.selectedGroup.comment),
         criteriaCtrl: new FormControl(),
       });
+      this.isShowingWarning = !this.groupNameRegex.test(this.addEditGroupForm.get('name')!.value);
       this.criteria = JSON.parse(
         JSON.stringify(this.data.selectedGroup.criteria)
       );
@@ -80,6 +84,14 @@ export class AddEditGroupModalComponent implements OnInit {
       return isValid ? null : { fedName: { value: control.value } };
     };
   }
+
+  checkGroupName = () => {
+    this.isShowingWarning = !this.groupNameRegex.test(this.addEditGroupForm.get('name')!.value);
+  };
+
+  suppressInvalidTyping = (event) => {
+    return validTypingOnly(event, /[a-z]|[A-Z]|[0-9]|\.|\-/);
+  };
 
   onCancel = () => {
     this.dialogRef.close(false);
@@ -143,7 +155,7 @@ export class AddEditGroupModalComponent implements OnInit {
             this.data.opType === GlobalConstant.MODAL_OP.ADD
               ? this.translate.instant('group.addGroup.ERR_MSG')
               : this.translate.instant('group.editGroup.ERR_MSG');
-          this.notificationService.openError(error, msgTitle);
+          this.notificationService.openError(error.error, msgTitle);
         }
       );
   };

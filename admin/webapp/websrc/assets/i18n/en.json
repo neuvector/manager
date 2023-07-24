@@ -173,6 +173,7 @@
     "CAUTION": "Caution",
     "SAFE": "Safe",
     "CLUSTER.STATUS.ACTIVE": "Active",
+    "CLUSTER.STATUS.PENDING": "Pending",
     "CLUSTER.STATUS.PINGING": "Pinging",
     "CLUSTER.STATUS.UNKNOWN_CMD": "Unknown",
     "CLUSTER.STATUS.NOTIFIED": "Notified",
@@ -221,7 +222,8 @@
     "CHANGE_EXPIRING_PASSWORD_NOW": "You should change password immediately, as it is expiring today!",
     "UNSUPPORTED_ROLE": "This user account is only for CI integration.",
     "VERSION_MISMATCHED": "Manager, Controller, Enforcer are running different versions.",
-    "CVE_DB_OLD": "CVE Database has not been updated for {{day}} days"
+    "CVE_DB_OLD": "CVE Database has not been updated for {{day}} days",
+    "UPGRADE_AVAILABLE": "NeuVector is running {{currentVersion}} and can be upgraded to {{newVersion}}"
   },
   "dashboard": {
     "WELCOME": "Welcome to {{appName}}",
@@ -1068,6 +1070,10 @@
     "DOMAINS_PLACEHOLDER": "Add Namespaces",
     "ACCEPT": "Accept",
     "ACCEPT_VUL": "Accept Vulnerability",
+    "NAME": "Vulnerability Name",
+    "REPORTED_WITHIN": "Vulnerability Reported Within",
+    "REPORTED_WITHIN_WITH_FIX": "Vulnerability with Fix Reported within",
+    "DAYS": "Day(s)",
     "msg": {
       "REMOVE_CFM": "Are you sure you want to remove?",
       "REMOVE_OK": "Vulnerability profile entry is removed successfully!",
@@ -1235,11 +1241,14 @@
     "INTERVAL": "Interval",
     "GITLAB_EXTERNAL_URL": "External URL",
     "GITLAB_PRIVATE_TOKEN": "Private Token",
-    "CVE_REPORT": "CVE Report",
-    "CVE_REPORT_BY_LAYER": "CVE Report by Layer",
+    "CVE_REPORT": "Scan Report",
+    "CVE_REPORT_BY_LAYER": "Scan Report by Layer",
     "COMPLIANCE_REPORT": "Compliance Report",
     "CVE_DB_DATE": "DB Creation Time",
     "SINGLE_FILTER_HINT": "Edit filter here",
+    "SIG_VERIFIERS": "Sigstore Verifiers",
+    "SIG_VERIFIERS_HINT": "The image was scanned with listed sigstore verifiers",
+    "SIG_VERIFICATION_TIMESTAMP": "Verified at",
     "TIP": {
       "EDIT": "Edit Registry",
       "DELETE": "Remove Registry",
@@ -1472,6 +1481,16 @@
     "HOST_PROCESS_VIOLATION": "Process profile rule violation by command \"{{proc_name}}\" on host \"{{host_name}}\" was detected",
     "CONTAINER_FILEACCESS_VIOLATION": "The file \"{{file_path}}\" in container \"{{container}}\" was accessed by command \"{{proc_name}}\"",
     "HOST_FILEACCESS_VIOLATION": "The file \"{{file_path}}\" on host \"{{host_name}}\" was accessed by command \"{{proc_name}}\"",
+    "HOST_PRIVILEGE_ESCALATION_NO_PROC_CMD": "The privilege by some commands on host \"{{host_name}}\" was escalated",
+    "CONTAINER_PRIVILEGE_ESCALATION_NO_PROC_CMD": "The privilege by some commands in container \"{{container}}\" was escalated",
+    "HOST_SUSPICIOUS_PROCESS_NO_PROC_NAME": "Suspicious process on host \"{{host_name}}\" was found",
+    "CONTAINER_SUSPICIOUS_PROCESS_NO_PROC_NAME": "Suspicious process in container \"{{container}}\" was found",
+    "HOST_TUNNEL_DETECTED_NO_PROC_NAME": "Tunnel by some commands on host \"{{host_name}}\" was detected",
+    "CONTAINER_TUNNEL_DETECTED_NO_PROC_NAME": "Tunnel by some command in container \"{{container}}\" was detected",
+    "PROCESS_PROFILE_VIOLATION_NO_PROC_NAME": "Process profile rule violation by some commands on container \"{{container}}\" was detected",
+    "HOST_PROCESS_VIOLATION_NO_PROC_NAME": "Process profile rule violation by some commands on host \"{{host_name}}\" was detected",
+    "CONTAINER_FILEACCESS_VIOLATION_NO_PROC_NAME": "The file \"{{file_path}}\" in container \"{{container}}\" was created/removed",
+    "HOST_FILEACCESS_VIOLATION_NO_PROC_NAME": "The file \"{{file_path}}\" on host \"{{host_name}}\" was was created/removed",
     "HOST_ERR": "Error happened when getting host details",
     "CONTAINER_ERR": "Error happened when getting container details",
     "ENFORCER_ERR": "Error happened when getting enforcer details",
@@ -1774,6 +1793,7 @@
   "apikey": {
     "APIKEYS": "API Keys",
     "ADD": "Create API Key",
+    "VIEW": "View API Key",
     "REMOVE": "Delete API Key",
     "gridHeader": {
       "STATE": "State",
@@ -1789,6 +1809,7 @@
     },
     "expires": {
       "NEVER": "Never",
+      "ONEHOUR": "One hour from now",
       "ONEDAY": "A day from now",
       "ONEMONTH": "A month from now",
       "ONEYEAR": "A year from now",
@@ -1987,6 +2008,7 @@
     "RESERVED_PREFIX": "System reserved prefix: ",
     "NAME_INVALID": "Group name can't start with: ",
     "NAME_VALID": "Group name must start with: ",
+    "K8S_NAME_WARNING": "When a group is exported, the value of metadata.name in the yaml file is the lowercase by default.",
     "COUNT_POSTFIX": "groups found",
     "NO_MEMBERS": "No group members",
     "HIDE_SYS_GROUPS": "Hide System Groups",
@@ -2533,6 +2555,7 @@
     "PSS_RESTRICT_HINT": "if the deployment doesn't meet \"restricted\" level, the action (block) will be taken.",
     "sample": {
       "MULTI_VAL": "Format sample: element1, element2, element3",
+      "MULTI_VAL_SIG_VRF": "Format sample: sigstore_root_of_trust_name/verifier_name1, sigstore_root_of_trust_name/verifier_name2",
       "IMG_REG_HINT": "Image registry should be \"localhost\" or with \".\" in name"
     },
     "msg": {
@@ -2576,7 +2599,8 @@
       "SAVE_CLIENT_MODE": "Submit the chosen mode to Kubernetes configuration in order to test the Kubernetes request connection.",
       "NOT_NUMBER_ERR": "Not a valid number",
       "ALLOW_NO_MATCH": "Allow deployments that don't match any of above rules.",
-      "DENY_NO_MATCH": "Deny deployments that don't match any of above rules."
+      "DENY_NO_MATCH": "Deny deployments that don't match any of above rules.",
+      "GET_ADM_STATE_NG": "Error happened when getting admission control state"
     },
     "addRule": {
       "TITLE": "Add rule"
@@ -2686,6 +2710,10 @@
       "NOTCONTAINSANY_SINGLE": "is NOT one of",
       "EXIST": "exists",
       "NOTEXIST": "NOT exists",
+      "REGEXCONTAINSANY_SINGLE": "matches any regex in",
+      "!REGEXCONTAINSANY_SINGLE": "matches NONE regex in",
+      "REGEXCONTAINSANY": "matches any regex in",
+      "!REGEXCONTAINSANY": "matches NONE regex in",
       "text": {
         "<=": "less than",
         ">=": "more than"
@@ -2859,7 +2887,7 @@
     },
     "LICENSE_CODE": "License Code",
     "LICENSE_AGREEMENT": "License Agreement",
-    "ACCEPTED": "I accept",
+    "ACCEPTED": "Accept",
     "NOT_ACCEPTED": "I do not accept",
     "ACTIVATE": "ACTIVATE",
     "REQUEST": "REQUEST CODE",
@@ -2893,6 +2921,7 @@
     "LOG_IN_JSON": "In JSON:",
     "LOG_CATEGORIES": "Categories:",
     "SEND_SYSLOG_PER_CVE": "Send individual syslog events per CVE",
+    "SEND_SYSLOG_PER_LAYER": "Send syslog events CVE per layer",
     "SERVER_CERTIFICATE": "Server Certificate",
     "EXPORT": "Export",
     "IMPORT": "Import",
@@ -2901,6 +2930,10 @@
     "AWS_SUPPORT_LINK": "https://scc.suse.com/cloudsupport",
     "AWS_BILLING_HINT_2": " in order to create a support case.",
     "DOWNLOAD_SUPPORT_FILE": "Download Support File",
+    "CSP_ERR_TITLE": "CSP Adapter Error",
+    "NV_ERR_TITLE": "NeuVector Error",
+    "EXPIRE_TITLE": "Expiration Warning",
+    "EXPIRE_STATE": "Billing data expired time: ",
     "IMPORT_NOTICE": "Importing policy will overwrite groups and rules, importing all will overwrite policy and all users and passwords and settings such as SYSLOG and other configurations.",
     "UPLOAD_QUEUE": "Upload Queue",
     "QUEUE_DESC": "No file selected. Please add a file.",
@@ -3160,6 +3193,8 @@
     "PUBLIC": "Public",
     "gridHeader": {
       "NAME": "Name",
+      "SIG_NAME": "Sigstore Root of Trust Name",
+      "VERIFIER_NAME": "Verifier Name",
       "COMMENT": "Comment",
       "REKOR_PUBLIC_KEY": "Rekor Public Key",
       "ROOT_CERT": "Root Certificate",
@@ -3175,9 +3210,9 @@
       "CERT_SUBJECT": "Certificate Subject"
     },
     "signatureModal": {
-      "ADD": "Add Signature Root of Trust",
-      "EDIT": "Edit Signature Root of Trust",
-      "DELETE": "Remove Signature Root of Trust",
+      "ADD": "Add Sigstore Root of Trust",
+      "EDIT": "Edit Sigstore Root of Trust",
+      "DELETE": "Remove Sigstore Root of Trust",
       "VERIFIER": "Verifier",
       "ADD_VERIFIER": "Add Verifier",
       "EDIT_VERIFIER": "Edit Verifier",

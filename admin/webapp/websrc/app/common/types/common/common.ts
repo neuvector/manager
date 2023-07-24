@@ -77,3 +77,12 @@ export interface SystemSummaryDetails {
 export interface SystemSummary {
   summary: SystemSummaryDetails;
 }
+
+export interface Rebrand {
+  customLoginLogo: string;
+  customPolicy: string;
+  customPageHeaderContent: string;
+  customPageHeaderColor: string;
+  customPageFooterContent: string;
+  customPageFooterColor: string;
+}

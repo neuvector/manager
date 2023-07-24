@@ -347,34 +347,47 @@ export class SecurityEventsService {
       reportedOn: ''
     };
 
-    displayedIncident.name = this.translate.instant(
-      `securityEvent.${incident.name.replace(/\./g, '_').toUpperCase()}`,
-      {
-        host_name: incident.host_name || '',
-        container: container.id
-          ? `${container.domain ? `${container.domain}:` : ''}${
-              container.service ? `${container.service}:` : ''
-            }${container.name}`
-          : '',
-        file_path: incident.file_path || '',
-        proc_name: incident.proc_name || '',
-        proc_cmd: incident.proc_cmd || ''
+    const getIncidentName = (incident, container) => {
+      const constName = incident.name.replace(/\./g, '_').toUpperCase();
+        let translateConst = `securityEvent.${constName}`;
+      const PROC_NAME_RELATED_INCIDENTS = [
+        'HOST_SUSPICIOUS_PROCESS',
+        'CONTAINER_SUSPICIOUS_PROCESS',
+        'HOST_TUNNEL_DETECTED',
+        'CONTAINER_TUNNEL_DETECTED',
+        'PROCESS_PROFILE_VIOLATION',
+        'HOST_PROCESS_VIOLATION',
+        'CONTAINER_FILEACCESS_VIOLATION',
+        'HOST_FILEACCESS_VIOLATION'
+      ];
+      const PROC_CMD_RELATED_INCIDENTS = [
+        'HOST_PRIVILEGE_ESCALATION',
+        'CONTAINER_PRIVILEGE_ESCALATION'
+      ];
+      if (!incident.proc_name && PROC_NAME_RELATED_INCIDENTS.includes(constName)) {
+        translateConst = `securityEvent.${constName}_NO_PROC_NAME`;
       }
-    );
-    displayedIncident.name4Pdf = this.translate.instant(
-      `securityEvent.${incident.name.replace(/\./g, '_').toUpperCase()}`,
-      {
-        host_name: incident.host_name || '',
-        container: container.id
-          ? `${container.domain ? `${container.domain}:` : ''}${
-              container.service ? `${container.service}:` : ''
-            }${container.name}`
-          : '',
-        file_path: incident.file_path || '',
-        proc_name: incident.proc_name || '',
-        proc_cmd: incident.proc_cmd || ''
+      if (!incident.proc_cmd && PROC_CMD_RELATED_INCIDENTS.includes(constName)) {
+        translateConst = `securityEvent.${constName}_NO_PROC_CMD`;
       }
-    );
+      return this.translate.instant(
+        translateConst,
+        {
+          host_name: incident.host_name || '',
+          container: container.id
+            ? `${container.domain ? `${container.domain}:` : ''}${
+                container.service ? `${container.service}:` : ''
+              }${container.name}`
+            : '',
+          file_path: incident.file_path || '',
+          proc_name: incident.proc_name || '',
+          proc_cmd: incident.proc_cmd || ''
+        }
+      );
+    };
+
+    displayedIncident.name = getIncidentName(incident, container);
+    displayedIncident.name4Pdf = displayedIncident.name;
     displayedIncident.reviewRulePermission = this.getReviewRulePermission(source!.domain_name, destination!.domain_name);
     displayedIncident.type.name = this.EVENT_TYPE.INCIDENT;
     displayedIncident.type.cssColor =

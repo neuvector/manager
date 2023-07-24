@@ -164,14 +164,26 @@ export function decodeArrayBuffer(input) {
   return ab;
 }
 
-export function numericTextInputOnly(evt) {
+export function numericTextInputOnly(evt, withDec: boolean = true) {
   let event = evt || window.event;
   // event.persist();
   let key = event.keyCode || event.which;
   let isRemoving = key === 8;
   key = String.fromCharCode(key);
-  let regex = /[0-9]|\./;
+  let regex = withDec ? /[0-9]|\./ : /[0-9]/;
   if (!regex.test(key) && !isRemoving) {
+    event.returnValue = false;
+    if (event.preventDefault) event.preventDefault();
+    return false;
+  } else {
+    return true;
+  }
+}
+
+export function validTypingOnly(evt, pattern) {
+  let event = evt || window.event;
+  // event.persist();
+  if (!pattern.test(event.key)) {
     event.returnValue = false;
     if (event.preventDefault) event.preventDefault();
     return false;
@@ -816,13 +828,88 @@ export function updateGridData(
 }
 
 export function isValidBased64(str) {
-  // Remove any whitespace characters from the string
-  str = str.replace(/\s/g, '');
+  if (str) {
+    // Remove any whitespace characters from the string
+    str = str.replace(/\s/g, '');
 
-  // Check if the string is a valid base64 encoded string
-  try {
-    return btoa(atob(str)) === str;
-  } catch (e) {
+    // Check if the string is a valid base64 encoded string
+    try {
+      return btoa(atob(str)) === str;
+    } catch (e) {
+      return false;
+    }
+  } else {
     return false;
+  }
+}
+
+export function getContrastRatio(background, foreground) {
+  const getLuminance = color => {
+    const rgb = color.slice(1);
+    const r = parseInt(rgb.substr(0, 2), 16) / 255;
+    const g = parseInt(rgb.substr(2, 2), 16) / 255;
+    const b = parseInt(rgb.substr(4, 2), 16) / 255;
+
+    const sRGB = [r, g, b].map(channel => {
+      if (channel <= 0.03928) {
+        return channel / 12.92;
+      }
+      return Math.pow((channel + 0.055) / 1.055, 2.4);
+    });
+
+    return 0.2126 * sRGB[0] + 0.7152 * sRGB[1] + 0.0722 * sRGB[2];
+  };
+
+  const backgroundLuminance = getLuminance(background);
+  const foregroundLuminance = getLuminance(foreground);
+
+  const contrastRatio =
+    (Math.max(backgroundLuminance, foregroundLuminance) + 0.05) /
+    (Math.min(backgroundLuminance, foregroundLuminance) + 0.05);
+
+  return contrastRatio;
+}
+
+export function isGoodContrastRatio(contrastRatio) {
+  return contrastRatio >= 4.5;
+}
+
+export function getNamespaceRoleGridData(
+  domainRoleOptions: string[],
+  globalRole?: string,
+  domainRoles?: Object
+): {
+  namespaceRole: string;
+  namespaces: any[];
+}[] {
+  if (domainRoles) {
+    let roleMap = Object.entries(domainRoles).map(([key, value]) => {
+      return {
+        namespaceRole: key,
+        namespaces: value,
+      };
+    });
+    return domainRoleOptions
+      .map(domainRoleOption => {
+        let roleIndex = roleMap.findIndex(
+          role => role.namespaceRole === domainRoleOption
+        );
+        if (roleIndex > -1) {
+          return roleMap[roleIndex];
+        } else {
+          return {
+            namespaceRole: domainRoleOption,
+            namespaces: [],
+          };
+        }
+      })
+      .filter(role => role.namespaceRole !== globalRole);
+  } else {
+    return domainRoleOptions
+      .map(domainRoleOption => ({
+        namespaceRole: domainRoleOption,
+        namespaces: [],
+      }))
+      .filter(role => role.namespaceRole !== globalRole);
   }
 }

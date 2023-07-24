@@ -78,6 +78,7 @@ export class SignatureActionButtonsComponent implements ICellRendererAngularComp
           );
           if (this.params.context.componentParent.signatures.length === 0)
             this.params.context.componentParent.gridOptions4Verifiers.api!.setRowData([]);
+            this.params.context.componentParent.selectedSignature = null;
           this.notificationService.open(
             this.translate.instant('signatures.msg.REMOVE_SIGSTORE_OK')
           );

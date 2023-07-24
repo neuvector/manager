@@ -1,13 +1,15 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { CommonHttpService } from '@common/api/common-http.service';
+import { ConfigHttpService } from '@common/api/config-http.service';
 import { GlobalConstant } from '@common/constants/global.constant';
-import { GlobalNotification, RbacStatus } from '@common/types';
+import { GlobalNotification, RbacStatus, TelemetryStatus } from '@common/types';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { TranslateService } from '@ngx-translate/core';
 import { DashboardService } from '@services/dashboard.service';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
-import { map } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-global-notifications',
@@ -20,13 +22,17 @@ export class GlobalNotificationsComponent implements OnInit {
   globalNotifications: GlobalNotification[] = [];
   version: any;
   rbacData!: RbacStatus;
+  telemetryStatus!: TelemetryStatus | null;
   unUpdateDays!: number;
   get isVersionMismatch() {
     return GlobalVariable.summary.component_versions
       ? (GlobalVariable.summary.component_versions.length > 1 &&
-          GlobalVariable.summary.component_versions[0] ===
+          GlobalVariable.summary.component_versions[0] !==
             GlobalVariable.summary.component_versions[1]) ||
-          this.version !== GlobalVariable.summary.component_versions[0]
+          this.version !==
+            (GlobalVariable.summary.component_versions[0].startsWith('v')
+              ? GlobalVariable.summary.component_versions[0].substring(1)
+              : GlobalVariable.summary.component_versions[0])
       : false;
   }
   get passwordExpiration() {
@@ -43,12 +49,14 @@ export class GlobalNotificationsComponent implements OnInit {
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
     private tr: TranslateService,
     private commonHttpService: CommonHttpService,
+    private configHttpService: ConfigHttpService,
     private dashboardService: DashboardService
   ) {}
 
   ngOnInit(): void {
     this.getVersion();
     this.getRBAC();
+    this.getTelemetry();
     this.initNotifData();
   }
 
@@ -91,6 +99,7 @@ export class GlobalNotificationsComponent implements OnInit {
     if (
       this.version &&
       this.rbacData &&
+      this.telemetryStatus !== undefined &&
       GlobalVariable.hasInitializedSummary &&
       GlobalVariable.user
     ) {
@@ -102,6 +111,23 @@ export class GlobalNotificationsComponent implements OnInit {
   }
 
   generateNotifications(): void {
+    if (
+      this.telemetryStatus?.max_upgrade_version.tag &&
+      this.telemetryStatus.current_version !==
+        this.telemetryStatus.max_upgrade_version.tag
+    ) {
+      this.globalNotifications.push({
+        name: 'newVersionAvailable',
+        message: this.tr.instant('login.UPGRADE_AVAILABLE', {
+          currentVersion: this.telemetryStatus.current_version,
+          newVersion: this.telemetryStatus.max_upgrade_version.tag,
+        }),
+        link: '',
+        labelClass: 'warning',
+        accepted: false,
+        unClamped: false,
+      });
+    }
     if (this.unUpdateDays > GlobalConstant.MAX_UNUPDATED_DAYS) {
       this.globalNotifications.push({
         name: 'isScannerOld',
@@ -263,6 +289,27 @@ export class GlobalNotificationsComponent implements OnInit {
           this.version = version;
           GlobalVariable.versionDone = true;
           GlobalVariable.version = version;
+        },
+      });
+  }
+
+  getTelemetry() {
+    this.configHttpService
+      .getConfig()
+      .pipe(
+        switchMap(config =>
+          !config.misc.no_telemetry_report
+            ? this.configHttpService.getUsageReport().pipe(
+                map(usageReport => usageReport.telemetry_status),
+                catchError(() => of(null))
+              )
+            : of(null)
+        ),
+        catchError(() => of(null))
+      )
+      .subscribe({
+        next: telemetryStatus => {
+          this.telemetryStatus = telemetryStatus;
         },
       });
   }

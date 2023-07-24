@@ -216,7 +216,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
         },
         error => {
           this.notificationService.openError(
-            error,
+            error.error,
             this.translate.instant('admissionControl.msg.REMOVE_NG')
           );
           dialogRef.componentInstance.loading = false;
@@ -239,6 +239,6 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
     let msgTitle = isDisabled
       ? this.translate.instant('admissionControl.msg.DISABLE_NG')
       : this.translate.instant('admissionControl.msg.ENABLE_NG');
-    this.notificationService.openError(error, msgTitle);
+    this.notificationService.openError(error.error, msgTitle);
   };
 }

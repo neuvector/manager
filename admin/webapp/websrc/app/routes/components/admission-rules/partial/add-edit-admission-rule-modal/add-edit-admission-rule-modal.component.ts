@@ -1,5 +1,5 @@
 import { MatDialogRef,  MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Component, OnInit, Inject, ViewChild } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
 import { GlobalConstant } from "@common/constants/global.constant";
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AdmissionRulesService } from '@common/services/admission-rules.service';
@@ -11,6 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { JsonEditorComponent, JsonEditorOptions, JsonEditorTreeNode } from 'ang-jsoneditor';
 import { getValueType4Text, groupBy, updateGridData } from '@common/utils/common.utils';
 import { NotificationService } from '@services/notification.service';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-add-edit-admission-rule-modal',
@@ -58,6 +59,10 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
   customizedValues: Array<string> = [];
   jsonEditorPrevBtnEl: HTMLElement;
   jsonEditorNextBtnEl: HTMLElement;
+  sigVerifierOptions: string[] =[];
+  valuechips: string[] = [];
+  valuechipsModel: any;
+  @ViewChild('valueChipsInput') valueChipsInput: ElementRef<HTMLInputElement>;
 
   UNITS = {
     publishDays: ["Day(s)"],
@@ -133,6 +138,10 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     this.dialogRef.close(true);
   }
 
+  isTooltipDisabled = e => {
+    return e._element.nativeElement.children[0].scrollWidth <= e._element.nativeElement.children[0].clientWidth;
+  };
+
   clearCriterionDetail = (selectedCriterionName?: string | undefined) => {
     this.mainCriterion = {
       name: selectedCriterionName || "",
@@ -160,6 +169,23 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
   changeCriterionOperator = (selectedCriterionOperator) => {
     let isPredefined = this.criteriaOptions[this.mainCriterion.name];
     this.hasMultiValue = selectedCriterionOperator.toLowerCase().includes("contain") && isPredefined;
+  };
+
+  onAutoCompleteListOpened = () => {
+    this.sigVerifierOptions = this.data.admissionOptions.admission_options.sigstore_verifiers.filter(option => !this.valuechips.includes(option));
+  };
+
+  onValueAutocompleteSelected = (event: MatAutocompleteSelectedEvent) => {
+    this.valuechips.push(event.option.viewValue);
+    this.mainCriterion.value = this.valuechips.join(',');
+    this.valueChipsInput.nativeElement.value = '';
+  };
+
+  removeValueChip = (valueChip: string) => {
+    const index = this.valuechips.indexOf(valueChip);
+    if (index >= 0) {
+      this.valuechips.splice(index, 1);
+    }
   };
 
   switchCustomizedCriterionView = () => {
@@ -312,6 +338,10 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
           }
         })
       }
+      if (this.mainCriterion.name === 'imageVerifiers') {
+        this.valuechips = this.mainCriterion.value.split(',');
+        this.sigVerifierOptions = this.data.admissionOptions.admission_options.sigstore_verifiers;
+      }
       this.subOptions = this.getSubOptions(this.criteriaOptions, this.mainCriterion.name);
       if (this.subOptions) {
         this.initCriteriaSubOptionsView(this.subOptions, this.subCriterion);
@@ -378,7 +408,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
           let msgTitle = this.data.opType === GlobalConstant.MODAL_OP.ADD ?
             this.translate.instant("admissionControl.msg.INSERT_NG") :
             this.translate.instant("admissionControl.msg.UPDATE_NG");
-          this.notificationService.openError(error, msgTitle);
+          this.notificationService.openError(error.error, msgTitle);
         }
       )
   };
@@ -397,6 +427,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
           }
         });
     }
+    this.sigVerifierOptions = this.data.admissionOptions.admission_options.sigstore_verifiers;
     delete this.criteriaOptions.customPath;
     this.pspCriteria = `${this.translate.instant("admissionControl.PSP_CRITERIA")} ${this.data.admissionOptions.admission_options.psp_collection.map(pspCriterion => {
         return this.translate.instant(`admissionControl.names.${parseDivideStyle(pspCriterion.name).toUpperCase()}`);

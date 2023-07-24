@@ -151,12 +151,12 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
         error => {
           if (data.disable) {
             this.notificationService.openError(
-              error,
+              error.error,
               this.translate.instant('responsePolicy.dialog.content.DISABLE_NG')
             );
           } else {
             this.notificationService.openError(
-              error,
+              error.error,
               this.translate.instant('responsePolicy.dialog.content.ENABLE_NG')
             );
           }
@@ -227,14 +227,14 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
         error => {
           if (dialogRef.componentInstance.isUnquarantined) {
             this.notificationService.openError(
-              error,
+              error.error,
               this.translate.instant(
                 'responsePolicy.dialog.content.UNQUARANTINE_NG'
               )
             );
           }
           this.notificationService.openError(
-            error,
+            error.error,
             this.translate.instant('responsePolicy.dialog.content.REMOVE_NG')
           );
           dialogRef.componentInstance.loading = false;

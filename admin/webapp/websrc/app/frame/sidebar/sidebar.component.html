@@ -1,11 +1,13 @@
-<!-- START Sidebar (left)-->
+!-- START Sidebar (left)-->
 <div class="left-side">
   <nav
     class="sidebar"
+    [ngStyle]="customHeaderStyle"
     aria-label="sidebar"
     [class.show-scrollbar]="switchers.getFrameSwitcher('leftSideScrollbar')">
     <!-- START sidebar nav-->
-    <ul class="sidebar-nav">
+    <ul class="sidebar-nav"
+        [ngStyle]="customSideBarStyle">
       <!-- END user info-->
 
       <li
@@ -129,7 +131,7 @@
     </ul>
     <!-- END sidebar nav-->
     <!-- Page footer-->
-    <footer class="footer-container" app-footer></footer>
+    <footer class="footer-container" [ngStyle]="customFooterStyle" app-footer></footer>
     <!-- END sidebar nav-->
   </nav>
 </div>

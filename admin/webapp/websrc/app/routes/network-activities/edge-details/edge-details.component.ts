@@ -67,6 +67,7 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
   sessionCount: string = '';
   onThreat: boolean = false;
   onViolation: boolean = false;
+  context = { componentParent: this };
 
   entries;
   private _entriesGridHeight: number = 0;
@@ -182,6 +183,7 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
           return entry;
         }
       );
+      this.gridApi.setRowData(this._conversationDetail.entries);
     });
   }
   onGridReady(params: GridReadyEvent): void {

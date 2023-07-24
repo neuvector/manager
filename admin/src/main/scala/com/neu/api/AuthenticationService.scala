@@ -7,6 +7,7 @@ import com.neu.client.RestClient._
 import com.neu.core.CommonSettings._
 import com.neu.core.{ AuthenticationManager, Md5 }
 import com.neu.model.AuthTokenJsonProtocol.{ jsonToUserWrap, tokenWrapToJson, _ }
+import com.neu.model.RebrandJsonProtocol._
 import com.neu.model._
 import com.typesafe.scalalogging.LazyLogging
 import spray.can.Http._
@@ -248,31 +249,19 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
         }
       }
     } ~
-    path("custom-login-logo") {
+    path("rebrand") {
       get {
         Utils.respondWithNoCacheControl() {
-          complete(customLoginLogo)
-        }
-      }
-    } ~
-    path("custom-eula-prompt") {
-      get {
-        Utils.respondWithNoCacheControl() {
-          complete(customEulaPrompt)
-        }
-      }
-    } ~
-    path("custom-eula-policy") {
-      get {
-        Utils.respondWithNoCacheControl() {
-          complete(customEulaPolicy)
-        }
-      }
-    } ~
-    path("custom-page-header") {
-      get {
-        Utils.respondWithNoCacheControl() {
-          complete(customPageHeader)
+          complete(
+            Rebrand(
+              customLoginLogo,
+              customPolicy,
+              customPageHeaderContent,
+              customPageHeaderColor,
+              customPageFooterContent,
+              customPageFooterColor
+            )
+          )
         }
       }
     } ~

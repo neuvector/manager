@@ -8,20 +8,21 @@ import {
 } from 'ngx-webstorage-service';
 import { GlobalConstant } from '../constants/global.constant';
 import { GlobalVariable } from '../variables/global.variable';
-import { DomSanitizer } from '@angular/platform-browser';
 import { SessionService } from './session.service';
 import { CommonHttpService } from '@common/api/common-http.service';
-import { decode } from 'html-entities';
+import { Subject } from "rxjs";
 
 @Injectable()
 export class AuthService {
+  private _environmentVariablesRetrieved = new Subject();
+  public onEnvironmentVariablesRetrieved$ = this._environmentVariablesRetrieved.asObservable();
+
   constructor(
     private commonHttpService: CommonHttpService,
     private router: Router,
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
     @Inject(LOCAL_STORAGE) private localStorage: StorageService,
     private sessionService: SessionService,
-    private sanitizer: DomSanitizer
   ) {}
 
   getTokenAuthServer() {
@@ -125,6 +126,10 @@ export class AuthService {
 
   heartbeat() {
     return GlobalVariable.http.patch(PathConstant.HEART_BEAT_URL, '').pipe();
+  }
+
+  notifyEnvironmentVariablesRetrieved():void{
+    this._environmentVariablesRetrieved.next(true);
   }
 
   private doLogout = (isNVTimeout: boolean) => {

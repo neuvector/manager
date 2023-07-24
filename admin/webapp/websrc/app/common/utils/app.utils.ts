@@ -114,7 +114,7 @@ export class UtilsService {
     if (typeof error === 'string') {
       message = error;
     } else if (isErrorResponse(error)) {
-      message = error.message;
+      message = error.message || error.error;
     } else if ('headers' in error) {
       message = this.getErrorMessage(error);
     } else {

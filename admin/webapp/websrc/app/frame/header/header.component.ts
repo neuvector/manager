@@ -19,9 +19,11 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { NotificationService } from '@services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
-import { isAuthorized } from '@common/utils/common.utils';
+import { isAuthorized, isValidBased64 } from '@common/utils/common.utils';
 import { AuthUtilsService } from '@common/utils/auth.utils';
-import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
+import { DomSanitizer } from "@angular/platform-browser";
+import { CommonHttpService } from "@common/api/common-http.service";
+import { AuthService } from "@services/auth.service";
 
 @Component({
   selector: 'app-header',
@@ -57,8 +59,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   isNavSearchVisible: boolean = false;
   private _multiClusterSubScription;
+  private _getRebrandCustomValuesSubscription;
   public isAuthReadConfig: boolean = false;
-  public customPageHeader: SafeHtml = '';
 
   @ViewChild('fsbutton', { static: true }) fsbutton;
 
@@ -71,17 +73,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
     public authUtilsService: AuthUtilsService,
     public injector: Injector,
     private sanitizer: DomSanitizer,
+    private authService: AuthService,
+    private commonHttpService: CommonHttpService,
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService
   ) {
     this.menuItems = menu.getMenu().slice(0, 4);
   }
 
   ngOnInit() {
+    if(!GlobalVariable.customPageHeaderColor && !GlobalVariable.customPageHeaderContent){
+      this.retrieveCustomizedUIContent();
+    }
+
     this.isSUSESSO = GlobalVariable.isSUSESSO;
     this.isNavSearchVisible = false;
-    if(GlobalVariable.customPageHeader) {
-      this.customPageHeader = this.sanitizer.bypassSecurityTrustHtml(GlobalVariable.customPageHeader);
-    }
     this.router = this.injector.get(Router);
 
     this.router.events.subscribe(() => {
@@ -143,6 +148,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this._multiClusterSubScription.unsubscribe();
+    if(this._getRebrandCustomValuesSubscription){
+      this._getRebrandCustomValuesSubscription.unsubscribe();
+    }
   }
 
   toggleUserBlock(event) {
@@ -354,6 +362,58 @@ export class HeaderComponent implements OnInit, OnDestroy {
         },
       });
     }
+  }
+
+  retrieveCustomizedUIContent(){
+    this._getRebrandCustomValuesSubscription = this.commonHttpService.getRebrandCustomValues().subscribe((value) => {
+      if (value.customLoginLogo) {
+        GlobalVariable.customLoginLogo = isValidBased64(value.customLoginLogo)
+          ? atob(value.customLoginLogo)
+          : value.customLoginLogo;
+      }
+
+      if (value.customPolicy) {
+        GlobalVariable.customPolicy = isValidBased64(value.customPolicy)
+          ? atob(value.customPolicy)
+          : value.customPolicy;
+      }
+
+      if (value.customPageHeaderContent) {
+        GlobalVariable.customPageHeaderContent = isValidBased64(
+          value.customPageHeaderContent
+        )
+          ? atob(value.customPageHeaderContent)
+          : value.customPageHeaderContent;
+      }
+
+      if (value.customPageHeaderColor) {
+        GlobalVariable.customPageHeaderColor = isValidBased64(
+          value.customPageHeaderColor
+        )
+          ? atob(value.customPageHeaderColor)
+          : value.customPageHeaderColor;
+      }
+
+      if (value.customPageFooterContent) {
+        GlobalVariable.customPageFooterContent = isValidBased64(
+          value.customPageFooterContent
+        )
+          ? atob(value.customPageFooterContent)
+          : value.customPageFooterContent;
+      }
+
+      if ( value.customPageFooterColor ) {
+        GlobalVariable.customPageFooterColor = isValidBased64(
+          value.customPageFooterColor
+        )
+          ? atob(value.customPageFooterColor)
+          : value.customPageFooterColor;
+      } else if (GlobalVariable.customPageHeaderColor) {
+        GlobalVariable.customPageFooterColor = GlobalVariable.customPageHeaderColor
+      }
+
+      this.authService.notifyEnvironmentVariablesRetrieved();
+    });
   }
 
   logout() {

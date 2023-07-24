@@ -128,7 +128,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
         },
         error => {
           this.notificationService.openError(
-            error,
+            error.error,
             this.translate.instant('group.REMOVE_ERR_MSG')
           );
           dialogRef.componentInstance.loading = false;

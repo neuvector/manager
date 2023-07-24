@@ -29,7 +29,7 @@ export class SignaturesService {
 
     const columnDefs4Signature = [
       {
-        headerName: this.translate.instant("signatures.gridHeader.NAME"),
+        headerName: this.translate.instant("signatures.gridHeader.SIG_NAME"),
         field: "name",
         // headerCheckboxSelection: isWriteSignaturesAuthorized,
         // headerCheckboxSelectionFilteredOnly: isWriteSignaturesAuthorized,
@@ -45,8 +45,8 @@ export class SignaturesService {
                     </span>`;
           return false;
         },
-        width: 100,
-        minWidth: 100
+        width: 180,
+        minWidth: 180
       },
       {
         headerName: this.translate.instant("signatures.gridHeader.COMMENT"),
@@ -96,10 +96,10 @@ export class SignaturesService {
 
     const columnDefs4Verifier = [
       {
-        headerName: this.translate.instant("signatures.gridHeader.NAME"),
+        headerName: this.translate.instant("signatures.gridHeader.VERIFIER_NAME"),
         field: "name",
-        width: 100,
-        minWidth: 100
+        width: 150,
+        minWidth: 150
       },
       {
         headerName: this.translate.instant("signatures.gridHeader.COMMENT"),

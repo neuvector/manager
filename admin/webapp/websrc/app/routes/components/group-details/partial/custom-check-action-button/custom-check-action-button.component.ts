@@ -70,7 +70,7 @@ export class CustomCheckActionButtonComponent
           },
           error => {
             this.notificationService.openError(
-              error,
+              error.error,
               this.translate.instant('group.script.msg.SCRIPT_NG')
             );
           }

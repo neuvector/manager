@@ -43,7 +43,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   public isEulaAccepted: boolean = true;
   public isEulaValid: boolean = true;
   public validEula: boolean = true;
-  public agreeCustomTerms: boolean = true;
   private version: string = '';
   private gpuEnabled: boolean = false;
   private originalUrl: string = '';
@@ -51,9 +50,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   private currUrl: string = '';
   private w: any;
   private _dialogSubscription;
+  private _getRebrandCustomValuesSubscription;
   public customLoginLogo: SafeHtml = '';
-  public hasCustomPrompt: boolean = false;
-  public hasCustomPolicy: boolean = false;
+  public hasCustomHeader: boolean = false;
 
   constructor(
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
@@ -77,38 +76,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       password: [null, Validators.required],
     });
     this.w = GlobalVariable.window;
-    this.commonHttpService.getCustomLoginLogo().subscribe(value => {
-      if (value) {
-        const decodedHTML  = isValidBased64(value)? atob(value): value;
-        this.customLoginLogo =  this.sanitizer.bypassSecurityTrustHtml(decodedHTML);
-      }
-    });
-
-    this.commonHttpService.getCustomEULAPrompt().subscribe(value => {
-      if (value) {
-        const decodedHTML  = isValidBased64(value)? atob(value): value;
-        GlobalVariable.customEULAPrompt = decodedHTML;
-        this.hasCustomPrompt = true;
-        this.agreeCustomTerms = false;
-      }
-    });
-
-    this.commonHttpService.getCustomEULAPolicy().subscribe(value => {
-      if (value) {
-        const decodedHTML  = isValidBased64(value)? atob(value): value;
-        GlobalVariable.customEULAPolicy = decodedHTML;
-        this.hasCustomPolicy = true;
-        this.agreeCustomTerms = false;
-      }
-    });
-
-    this.commonHttpService.getCustomPageHeader().subscribe(value => {
-      if (value) {
-        const decodedHTML  = isValidBased64(value)? atob(value): value;
-        GlobalVariable.customPageHeader = decodedHTML;
-      }
-    });
-
   }
 
   ngOnInit() {
@@ -126,11 +93,34 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.currUrl = this.w.location.href;
     GlobalVariable.hasInitializedSummary = false;
     GlobalVariable.clusterName = '';
+
+    if (this.currUrl.includes(GlobalConstant.PROXY_VALUE)) {
+      this.isFromSSO = true;
+    }
+
+    if (GlobalVariable.customLoginLogo) {
+      this.customLoginLogo = this.sanitizer.bypassSecurityTrustHtml(
+        GlobalVariable.customLoginLogo
+      );
+    }
+
+    if (!this.isFromSSO && GlobalVariable.customPolicy) {
+      this.openEULAPage();
+    }
+
+    if ( GlobalVariable.customPageHeaderColor ) {
+      this.hasCustomHeader = true;
+    }
+
+    if (!GlobalVariable.customLoginLogo && !GlobalVariable.customPolicy && !GlobalVariable.customPageHeaderColor) {
+      this.retrieveCustomizedUIContent();
+    }
+
     if (this.sessionStorage.has('cluster')) {
       this.sessionStorage.remove('cluster');
     }
-    if (this.currUrl.includes(GlobalConstant.PROXY_VALUE)) {
-      this.isFromSSO = true;
+
+    if (this.isFromSSO) {
       this.authService.getEula().subscribe(
         (eulaInfo: any) => {
           let eula = eulaInfo.eula;
@@ -142,7 +132,8 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.isEulaAccepted = false;
             this.validEula = false;
             const dialog = this.dialog.open(AgreementComponent, {
-              data: { isFromSSO: true },
+              disableClose: true,
+              data: { showAcceptButton: true, showCustomPolicy: false },
               width: '85vw',
               height: '90vh',
             });
@@ -156,7 +147,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.cookieService.delete('temp');
           this.isEulaAccepted = false;
           this.notificationService.openError(
-            error,
+            error.error,
             this.translate.instant('license.message.GET_EULA_ERR')
           );
         }
@@ -171,6 +162,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this._dialogSubscription) {
       this._dialogSubscription.unsubscribe();
+    }
+    if(this._getRebrandCustomValuesSubscription){
+      this._getRebrandCustomValuesSubscription.unsubscribe();
     }
   }
 
@@ -209,7 +203,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.authMsg = '';
       this.inProgress = true;
       this.authService
-        .login(value?.username || '', value?.password || '')
+        .login(value ? value.username : '', value ? value.password : '')
         .subscribe(
           (userInfo: any) => {
             GlobalVariable.user = userInfo;
@@ -339,11 +333,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   public getEulaStatus(isChecked: boolean) {
-    if(GlobalVariable.customEULAPrompt || GlobalVariable.customEULAPolicy){
-      this.agreeCustomTerms = isChecked;
-    } else {
-      this.validEula = this.isEulaAccepted || isChecked;
-    }
+    this.validEula = this.isEulaAccepted || isChecked;
   }
 
   private verifyEula() {
@@ -362,7 +352,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.isEulaAccepted = false;
         this.validEula = this.isEulaAccepted;
         this.notificationService.openError(
-          error,
+          error.error,
           this.translate.instant('license.message.GET_EULA_ERR')
         );
       }
@@ -410,5 +400,81 @@ export class LoginComponent implements OnInit, OnDestroy {
     GlobalVariable.user.domain_permissions = userInfo.token.domain_permissions;
     this.translatorService.useLanguage(GlobalVariable.user.token.locale);
     this.sessionStorage.set(GlobalConstant.SESSION_STORAGE_TOKEN, userInfo);
+  }
+
+  // Retrieve customized UI content from environment variables (API endpoint is "/rebrand")
+  // These variables allow customization of the login page logo, content of Policy (banner) and content of the page header
+  private retrieveCustomizedUIContent() {
+    this._getRebrandCustomValuesSubscription = this.commonHttpService.getRebrandCustomValues().subscribe(value => {
+
+      if (value.customLoginLogo) {
+        GlobalVariable.customLoginLogo = isValidBased64(value.customLoginLogo)
+          ? atob(value.customLoginLogo)
+          : value.customLoginLogo;
+        this.customLoginLogo = this.sanitizer.bypassSecurityTrustHtml(
+          GlobalVariable.customLoginLogo
+        );
+      }
+
+      if (value.customPolicy) {
+        GlobalVariable.customPolicy = isValidBased64(value.customPolicy)
+          ? atob(value.customPolicy)
+          : value.customPolicy;
+
+        if (!this.isFromSSO) {
+          this.openEULAPage();
+        }
+      }
+
+      if (value.customPageHeaderContent) {
+        GlobalVariable.customPageHeaderContent = isValidBased64(
+          value.customPageHeaderContent
+        )
+          ? atob(value.customPageHeaderContent)
+          : value.customPageHeaderContent;
+      }
+
+      if (value.customPageHeaderColor) {
+        GlobalVariable.customPageHeaderColor = isValidBased64(
+          value.customPageHeaderColor
+        )
+          ? atob(value.customPageHeaderColor)
+          : value.customPageHeaderColor;
+      }
+
+      if (value.customPageFooterContent) {
+        GlobalVariable.customPageFooterContent = isValidBased64(
+          value.customPageFooterContent
+        )
+          ? atob(value.customPageFooterContent)
+          : value.customPageFooterContent;
+      }
+
+      if ( value.customPageFooterColor ) {
+        GlobalVariable.customPageFooterColor = isValidBased64(
+          value.customPageFooterColor
+        )
+          ? atob(value.customPageFooterColor)
+          : value.customPageFooterColor;
+      } else if (GlobalVariable.customPageHeaderColor) {
+        GlobalVariable.customPageFooterColor = GlobalVariable.customPageHeaderColor
+      }
+
+      this.authService.notifyEnvironmentVariablesRetrieved();
+      this.hasCustomHeader = true;
+    });
+  }
+
+  private openEULAPage() {
+    const dialogRef = this.dialog.open(AgreementComponent, {
+      autoFocus: false,
+      disableClose: true,
+      data: {
+        showAcceptButton: true,
+        showCustomPolicy: GlobalVariable.customPolicy ? true : false,
+      },
+      width: '80vw',
+      height: '90vh',
+    });
   }
 }

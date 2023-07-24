@@ -7,7 +7,7 @@
   </h1>
 </div>
 <mat-card>
-  <mat-tab-group (selectedTabChange)="activateTab($event)">
+  <mat-tab-group (selectedTabChange)="activateTab($event)" dynamicHeight>
     <mat-tab label="{{ 'user.USERS' | translate }}">
       <ng-container
         *ngIf="userData$ | async as userData; else loadingOrErrorTemplate">

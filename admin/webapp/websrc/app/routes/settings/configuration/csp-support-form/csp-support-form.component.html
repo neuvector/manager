@@ -8,11 +8,28 @@
       <a href="{{ 'setting.AWS_SUPPORT_LINK' | translate }}" target="_blank">{{ 'setting.AWS_SUPPORT_LINK' | translate }}</a>
       {{ 'setting.AWS_BILLING_HINT_2' | translate }}
     </div>
+    <div class="mx-3 mt-3 mat-small">
+      <div *ngIf="cspErrors.length > 0">
+        <div class="text-danger text-bold">{{ 'setting.CSP_ERR_TITLE' | translate }}</div>
+        <ul>
+          <li *ngFor="let cspError of cspErrors let i = index" class="text-danger py-0">
+            <div *ngFor="let cspErrorLine of cspError">
+              {{ cspErrorLine }}
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div *ngIf="nvError.length > 0">
+        <div class="text-danger text-bold">{{ 'setting.NV_ERR_TITLE' | translate }}</div>
+        <div class="text-danger py-0">{{ nvError }}</div>
+      </div>
+      <div *ngIf="billingDataExpireTime" class="text-warning">
+        <div class="text-bold">{{ 'setting.EXPIRE_TITLE' | translate }}</div>
+        <div>{{ 'setting.EXPIRE_STATE' | translate }} {{ billingDataExpireTime }}</div>
+      </div>
+    </div>
     <div class="ml-3 mr-4 my-md-2 d-flex align-items-center">
       <div *ngIf="errorMsg" class="text-danger">{{errorMsg}}</div>
-      <div>
-        <div *ngFor="let cspAdapterErrorMsg of cspAdapterErrorMsgList" class="text-danger">{{ cspAdapterErrorMsg }}</div>
-      </div>
       <app-loading-button
         [appearance]="'mat-raised-button'"
         [color]="'primary'"

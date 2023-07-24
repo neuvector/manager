@@ -10,7 +10,7 @@
         ': ' +
         (scannerDate | date: 'medium')
       "
-      class="eos-icons eos-18"
+      class="eos-icons icon-18"
       >info</i
     >
   </div>
@@ -52,7 +52,7 @@
       (click)="exportCVELayers()"
       class="mx-1 d-flex align-items-center"
       mat-button>
-      <i class="eos-icons icon-18">csv_file</i
+      <i class="eos-icons icon-18 mr-1">csv_file</i
       >{{ 'registry.CVE_REPORT_BY_LAYER' | translate }}
     </button>
     <button
@@ -64,7 +64,7 @@
       (click)="exportCVE()"
       class="d-flex align-items-center"
       mat-button>
-      <i class="eos-icons icon-18">csv_file</i
+      <i class="eos-icons icon-18 mr-1">csv_file</i
       >{{ 'registry.CVE_REPORT' | translate }}
     </button>
   </div>
@@ -79,7 +79,7 @@
       [resize]="resize"
       [rowData]="layers"></app-layers-table>
   </div>
-  <div class="col-8 terminal p-0">
+  <div class="terminal" [ngClass]="{'p0 col-8': !selectedLayer?.verifiers || selectedLayer?.verifiers!.length === 0, 'col-6': selectedLayer?.verifiers && selectedLayer?.verifiers!.length > 0}">
     <div class="cmds">
       <ng-container *ngIf="selectedLayer?.cmds">
         <span
@@ -88,6 +88,31 @@
           >{{ cmd }}</span
         >
       </ng-container>
+    </div>
+  </div>
+  <div class="col-2 vulnerability-description-container pr-0" *ngIf="selectedLayer?.verifiers && selectedLayer?.verifiers!.length > 0">
+    <div class="vulnerability-description">
+      <div class="vulnerability-description-header">
+        {{ 'registry.SIG_VERIFIERS' | translate}}
+        <i
+          [matTooltip]="'registry.SIG_VERIFIERS_HINT' | translate"
+          class="eos-icons icon-18 ml-2"
+          >info</i
+        >
+      </div>
+      <div class="vulnerability-verifiers-body">
+        <div *ngFor="let verifier of selectedLayer?.verifiers" class="px-2 type-label info mt-1 auto-hide" style="display: block; text-align: left;" matTooltip="{{ verifier }}">
+          <i class="eos-icons icon-12 mr-2">verified</i>{{ verifier }}
+        </div>
+      </div>
+      <div class="vulnerability-verifiers-footer">
+        <div>
+          {{ 'registry.SIG_VERIFICATION_TIMESTAMP' | translate }}
+        </div>
+        <div>
+          {{ selectedLayer?.verificationTimestamp }}
+        </div>
+      </div>
     </div>
   </div>
   <div class="col-8 mt-2">

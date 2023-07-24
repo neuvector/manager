@@ -95,6 +95,7 @@
                 mat-stroked-button
                 aria-label="add signature"
                 class="mr-4"
+                [disabled]="!selectedSignature"
                 (click)="openAddEditVerifierModal()"
                 *appDisplayControl="'write_sigstore'">
                 <em class="eos-icons icon-18">add_circle</em>

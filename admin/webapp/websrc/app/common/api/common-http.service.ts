@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { PathConstant } from '@common/constants/path.constant';
-import { SystemSummary } from '@common/types';
+import { Rebrand, SystemSummary } from '@common/types';
 import { toBoolean } from '@common/utils/common.utils';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { Observable } from 'rxjs';
@@ -28,27 +28,7 @@ export class CommonHttpService {
       .pipe(map(val => toBoolean(val)));
   }
 
-  getCustomLoginLogo(): Observable<string> {
-    return GlobalVariable.http.get(PathConstant.CUSTOM_LOGIN_LOGO, {
-      responseType: 'text',
-    });
-  }
-
-  getCustomPageHeader(): Observable<string> {
-    return GlobalVariable.http.get(PathConstant.CUSTOM_PAGE_HEADER, {
-      responseType: 'text',
-    });
-  }
-
-  getCustomEULAPrompt(): Observable<string> {
-    return GlobalVariable.http.get(PathConstant.CUSTOM_EULA_PROMPT, {
-      responseType: 'text',
-    });
-  }
-
-  getCustomEULAPolicy(): Observable<string> {
-    return GlobalVariable.http.get(PathConstant.CUSTOM_EULA_POLICY, {
-      responseType: 'text',
-    });
+  getRebrandCustomValues() {
+    return GlobalVariable.http.get<Rebrand>(PathConstant.REBRAND);
   }
 }

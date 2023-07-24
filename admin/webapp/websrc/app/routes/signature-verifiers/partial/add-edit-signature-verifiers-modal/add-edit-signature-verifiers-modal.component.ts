@@ -56,7 +56,7 @@ export class AddEditSignatureVerifiersModalComponent implements OnInit {
         name: new FormControl(this.data.signature.name, Validators.required),
         comment: new FormControl(this.data.signature.comment),
         rekor_public_key: new FormControl(this.data.signature.rekor_public_key),
-        root_cert: new FormControl(this.data.signature.root_cert, Validators.required),
+        root_cert: new FormControl(this.data.signature.root_cert, this.data.signature.is_private ? Validators.required : null),
         sct_public_key: new FormControl(this.data.signature.sct_public_key),
         is_private: new FormControl(this.data.signature.is_private),
         cfg_type: new FormControl(this.data.cfg_type),
@@ -66,6 +66,23 @@ export class AddEditSignatureVerifiersModalComponent implements OnInit {
 
   onCancel = () => {
     this.dialogRef.close(false);
+  };
+
+  changeAttribute = () => {
+    let isPrivate = this.addEditSignatureForm.get('is_private')!.value;
+    let name = this.addEditSignatureForm.get('name')!.value;
+    let comment = this.addEditSignatureForm.get('comment')!.value;
+    let cfgType = this.addEditSignatureForm.get('cfg_type')!.value;
+    if (isPrivate) {
+      this.addEditSignatureForm.get('root_cert')!.setValidators([Validators.required]);
+    } else {
+      this.addEditSignatureForm.get('root_cert')!.clearValidators();
+    }
+    this.addEditSignatureForm.reset();
+    this.addEditSignatureForm.get('is_private')!.setValue(isPrivate);
+    this.addEditSignatureForm.get('name')!.setValue(name);
+    this.addEditSignatureForm.get('comment')!.setValue(comment);
+    this.addEditSignatureForm.get('cfg_type')!.setValue(cfgType);
   };
 
   updateSigstore = () => {

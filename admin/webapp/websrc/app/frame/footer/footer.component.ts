@@ -8,7 +8,7 @@ import { GlobalVariable } from '@common/variables/global.variable';
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent {
-  version: string;
+  version: string = "";
   constructor(public switchers: SwitchersService) {}
   ngOnInit() {
     setInterval(() => {

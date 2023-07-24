@@ -28,6 +28,7 @@ import { cloneDeep } from 'lodash';
 import { finalize } from 'rxjs/operators';
 import { ConfigFormConfig } from './config-form-config';
 import { OtherWebhookType } from './config-form-config/constants';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-config-form',
@@ -63,6 +64,7 @@ export class ConfigFormComponent implements OnInit {
       slider_formatter: this.utils.convertHours.bind(this.utils),
     },
   };
+  serverErrorMessage: SafeHtml = '';
   get dashboardUrl(): string {
     return `${this.document.location.origin}/`;
   }
@@ -71,6 +73,7 @@ export class ConfigFormComponent implements OnInit {
     private settingsService: SettingsService,
     private utils: UtilsService,
     private tr: TranslateService,
+    private domSanitizer: DomSanitizer,
     private authUtilsService: AuthUtilsService,
     private notificationService: NotificationService,
     private cd: ChangeDetectorRef,
@@ -90,6 +93,7 @@ export class ConfigFormComponent implements OnInit {
       isConfigAuthorized: isSettingAuth,
       isIBMSAAuthorized: isSettingAuth,
     };
+    this.serverErrorMessage = '';
     this.cd.detectChanges();
   }
 
@@ -120,6 +124,7 @@ export class ConfigFormComponent implements OnInit {
   }
 
   submitForm(): void {
+    this.serverErrorMessage = '';
     if (!this.configForm.valid) {
       return;
     }
@@ -137,12 +142,23 @@ export class ConfigFormComponent implements OnInit {
           setTimeout(() => this.configOptions.resetModel?.(this._config));
         },
         error: ({ error }: { error: ErrorResponse }) => {
+          if (
+            error.message &&
+            error.message.length > GlobalConstant.MAX_ERROR_MESSAGE_LENGTH
+          ) {
+            this.serverErrorMessage = this.domSanitizer.bypassSecurityTrustHtml(
+              error.message
+            );
+          }
+
           this.notificationService.open(
-            this.utils.getAlertifyMsg(
-              error,
-              this.tr.instant('setting.SUBMIT_FAILED'),
-              false
-            ),
+            this.serverErrorMessage
+              ? this.tr.instant('setting.SUBMIT_FAILED')
+              : this.utils.getAlertifyMsg(
+                  error,
+                  this.tr.instant('setting.SUBMIT_FAILED'),
+                  false
+                ),
             GlobalConstant.NOTIFICATION_TYPE.ERROR
           );
         },
@@ -179,7 +195,8 @@ export class ConfigFormComponent implements OnInit {
           syslog_categories: base_config.syslog.syslog_categories,
           syslog_in_json: base_config.syslog.syslog_in_json,
           single_cve_per_syslog: base_config.syslog.single_cve_per_syslog,
-          syslog_server_cert: base_config.syslog.syslog_server_cert
+          syslog_cve_in_layers: base_config.syslog.syslog_cve_in_layers,
+          syslog_server_cert: base_config.syslog.syslog_server_cert,
         },
         auth_cfg: {
           // NOTE: auth_cfg = {} - formly is missing auth_cfg fields

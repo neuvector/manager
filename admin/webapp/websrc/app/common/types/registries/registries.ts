@@ -135,6 +135,8 @@ export interface Layer {
   cmds: string;
   digest: string;
   size: number;
+  verifiers: string[];
+  verificationTimestamp: string;
   vulnerabilities: Vulnerability[];
 }
 
@@ -189,6 +191,7 @@ export interface ImageGetResponse {
   report: {
     checks: Check[];
     cmds: string[];
+    signature_data?: SignatureData;
     envs: string[];
     labels: {
       [key: string]: string[];
@@ -213,4 +216,9 @@ export interface EntryPostBody {
     ];
     name: string;
   };
+}
+
+export interface SignatureData {
+  verification_timestamp: string;
+  verifiers: string[];
 }

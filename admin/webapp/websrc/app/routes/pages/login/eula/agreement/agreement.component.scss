@@ -1,0 +1,11 @@
+.accept-button {
+  font-weight: 600;
+  color: #fff;
+  background-color: #0e7e3c;
+  border-radius: 5px;
+  border: none;
+  &:hover,
+  &:focus {
+    background-color: #30ba78;
+  }
+}

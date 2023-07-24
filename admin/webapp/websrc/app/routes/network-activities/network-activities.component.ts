@@ -339,7 +339,8 @@ export class NetworkActivitiesComponent
                 // && $scope.summary.platform.toLowerCase().indexOf("kubernetes") !== -1,
                 activeSessions:
                   model.group &&
-                  model.group.startsWith('container') &&
+                  (model.group.startsWith('container') ||
+                    model.group.startsWith('mesh')) &&
                   model.state !== 'unmanaged',
                 sniff:
                   model.group &&

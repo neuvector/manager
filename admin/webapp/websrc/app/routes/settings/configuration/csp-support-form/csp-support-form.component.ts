@@ -19,7 +19,7 @@ export class CspSupportFormComponent implements OnInit {
 
   submittingForm = false;
   errorMsg: string = '';
-  cspAdapterErrorMsgObj: any;
+  cspAdapterErrorMsgObj: any = null;
   cspErrors: string[] = [];
   nvError: string = '';
   billingDataExpireTime: string = '';
@@ -40,6 +40,10 @@ export class CspSupportFormComponent implements OnInit {
   submitExport = () => {
     this.submittingForm = true;
     this.errorMsg = '';
+    this.cspErrors = [];
+    this.nvError = '';
+    this.billingDataExpireTime = ''
+    let cspAdapterErrorsBase64 = null;
     this.settingsService
       .getCspSupport()
       .pipe(
@@ -53,7 +57,7 @@ export class CspSupportFormComponent implements OnInit {
             type: 'application/zip',
           });
           let fileName = `${this.utils.getExportedFileName(response)}`;
-          let cspAdapterErrorsBase64 = response['headers'].get('X-Nv-Csp-Adapter-Errors');
+          cspAdapterErrorsBase64 = response['headers'].get('X-Nv-Csp-Adapter-Errors');
           this.cspAdapterErrorMsgObj = cspAdapterErrorsBase64 ? JSON.parse(atob(cspAdapterErrorsBase64)) : null;
           if (this.cspAdapterErrorMsgObj) {
             if (this.cspAdapterErrorMsgObj.csp_errors) {

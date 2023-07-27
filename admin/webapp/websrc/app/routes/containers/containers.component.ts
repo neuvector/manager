@@ -141,11 +141,12 @@ export class ContainersComponent implements OnInit, OnDestroy {
       error: (error: HttpErrorResponse) => {
         if (error.status === MapConstant.ACC_FORBIDDEN) {
           this.autoScanAuthorized = false;
+        } else {
+          this.notificationService.openError(
+            error.error,
+            this.tr.instant('scan.message.CONFIG_ERR')
+          );
         }
-        this.notificationService.openError(
-          error.error,
-          this.tr.instant('scan.message.CONFIG_ERR')
-        );
       },
     });
   }

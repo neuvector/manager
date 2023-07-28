@@ -1477,6 +1477,10 @@ ngx-avatar.userIcon img.avatar-content {
   max-width: none !important;
 }
 
+.mat-card-title {
+  font-family: "Poppins", sans-serif;
+}
+
 .detail-tabs {
   &.filter-icon-0 {
     .mat-tab-header {

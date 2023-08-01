@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { GlobalVariable } from '@common/variables/global.variable';
 import {
   ComplianceData,
+  ComplianceNISTConfig,
+  ComplianceNISTMap,
   ComplianceProfileData,
   ComplianceProfileTemplateData,
   VulnerabilityProfile,
@@ -18,6 +20,17 @@ export class RisksHttpService {
   getCompliance(): Observable<ComplianceData> {
     return GlobalVariable.http.get<ComplianceData>(
       PathConstant.RISK_COMPLIANCE_URL
+    );
+  }
+
+  postComplianceNIST(
+    config: ComplianceNISTConfig
+  ): Observable<ComplianceNISTMap> {
+    return GlobalVariable.http.post<ComplianceNISTMap>(
+      PathConstant.RISK_COMPLIANCE_NIST_URL,
+      {
+        config,
+      }
     );
   }
 

@@ -8,6 +8,7 @@ import { RiskViewReportImpactColComponent } from './risk-view-report-impact-col/
 import { RiskViewReportTableComponent } from './risk-view-report-table/risk-view-report-table.component';
 import { RiskViewReportAppendixPackagesComponent } from './risk-view-report-appendix-packages/risk-view-report-appendix-packages.component';
 import { RiskViewReportPackageTableComponent } from './risk-view-report-package-table/risk-view-report-package-table.component';
+import { RiskViewReportControlColComponent } from './risk-view-report-control-col/risk-view-report-control-col.component';
 
 
 
@@ -19,7 +20,8 @@ import { RiskViewReportPackageTableComponent } from './risk-view-report-package-
     RiskViewReportImpactColComponent,
     RiskViewReportTableComponent,
     RiskViewReportAppendixPackagesComponent,
-    RiskViewReportPackageTableComponent
+    RiskViewReportPackageTableComponent,
+    RiskViewReportControlColComponent
   ],
   imports: [
     CommonModule,

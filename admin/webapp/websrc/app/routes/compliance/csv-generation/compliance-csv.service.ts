@@ -4,13 +4,15 @@ import { MapConstant } from '@common/constants/map.constant';
 import { UtilsService } from '@common/utils/app.utils';
 import { arrayToCsv } from '@common/utils/common.utils';
 import { ComplianceFilterService } from '../compliance.filter.service';
-import { Compliance } from '@common/types';
+import { Compliance, ComplianceNIST } from '@common/types';
+import { ComplianceService } from '../compliance.service';
 
 @Injectable()
 export class ComplianceCsvService {
   constructor(
     private utilsService: UtilsService,
-    private complianceFilterService: ComplianceFilterService
+    private complianceFilterService: ComplianceFilterService,
+    private complianceService: ComplianceService
   ) {}
 
   downloadCsv(compEntry?: Compliance) {
@@ -86,7 +88,10 @@ export class ComplianceCsvService {
       return compliance;
     };
 
-    const listAssets = function (entryData: Compliance) {
+    const listAssets = (entryData: Compliance) => {
+      let complianceNIST = this.complianceService.complianceNISTMap[
+        entryData.name
+      ] as ComplianceNIST;
       let imageList = entryData.images.map(image => image.display_name);
       let workloadList = entryData.workloads.map(
         workload => workload.display_name
@@ -112,6 +117,9 @@ export class ComplianceCsvService {
           message: i === 0 ? entryData.message : '',
           profile: i === 0 ? entryData.profile : '',
           remediation: i === 0 ? entryData.remediation : '',
+          cis_subcontrol: i === 0 ? complianceNIST?.subcontrol : '',
+          nist_control_id: i === 0 ? complianceNIST?.control_id : '',
+          nist_title: i === 0 ? complianceNIST?.title : '',
           scored: i === 0 ? entryData.scored : '',
           tags: i === 0 ? entryData.tags : '',
           type: i === 0 ? entryData.type : '',
@@ -124,7 +132,10 @@ export class ComplianceCsvService {
       return rows;
     };
 
-    const resolveExcelCellLimit = function (entryData) {
+    const resolveExcelCellLimit = entryData => {
+      let complianceNIST = this.complianceService.complianceNISTMap[
+        entryData.name
+      ] as ComplianceNIST;
       let maxLen = Math.max(
         entryData.images.length,
         entryData.workloads.length,
@@ -143,6 +154,9 @@ export class ComplianceCsvService {
           message: i === 0 ? entryData.message : '',
           profile: i === 0 ? entryData.profile : '',
           remediation: i === 0 ? entryData.remediation : '',
+          cis_subcontrol: i === 0 ? complianceNIST?.subcontrol : '',
+          nist_control_id: i === 0 ? complianceNIST?.control_id : '',
+          nist_title: i === 0 ? complianceNIST?.title : '',
           scored: i === 0 ? entryData.scored : '',
           tags: i === 0 ? entryData.tags : '',
           type: i === 0 ? entryData.type : '',

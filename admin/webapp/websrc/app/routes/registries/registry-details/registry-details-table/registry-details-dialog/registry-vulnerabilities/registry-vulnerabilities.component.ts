@@ -10,6 +10,7 @@ import { UtilsService } from '@common/utils/app.utils';
 import { cloneDeep } from 'lodash';
 import { saveAs } from 'file-saver';
 import { arrayToCsv, isVulAccepted } from '@common/utils/common.utils';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-registry-vulnerabilities',
@@ -71,10 +72,10 @@ export class RegistryVulnerabilitiesComponent {
     if (cveByLayer.length > 0) {
       const title = `${this.path + this.repository} | Image Id: ${
         this.imageId
-      } |  ${this.cveDBVersion} | ${this.scannerDate.replace(
+      } |  CVE DB Version: ${this.cveDBVersion}(${moment(this.scannerDate.replace(
         /\,/g,
         ' '
-      )} | OS: ${this.baseOS}`;
+      )).format('MM/DD/YYYY hh:mm:ss')}) | OS: ${this.baseOS}`;
       let cveByLayer4Csv = cloneDeep(cveByLayer);
       cveByLayer4Csv = cveByLayer4Csv.map(cve => {
         cve.description = `${cve.description.replace(/\"/g, "'")}`;
@@ -101,10 +102,11 @@ export class RegistryVulnerabilitiesComponent {
     ) {
       const title = `${this.path + this.repository} | Image ID: ${
         this.imageId
-      } |  ${this.cveDBVersion} | ${this.scannerDate.replace(
+      } |  CVE DB Version: ${this.cveDBVersion}(${moment(this.scannerDate.replace(
         /\,/g,
         ' '
-      )} | OS: ${this.baseOS}${this.selectedLayer?.verifiers && this.selectedLayer?.verifiers.length > 0 ? `\nSigstore Verifiers: ${this.selectedLayer?.verifiers.join(' | ')}` : ''}`;
+      )).format('MM/DD/YYYY hh:mm:ss')}) | OS: ${this.baseOS}${this.selectedLayer?.verifiers && this.selectedLayer?.verifiers.length > 0 ?
+        `\nSigstore Verifiers: ${this.selectedLayer?.verifiers.join(' | ')} (Verified at: ${this.selectedLayer?.verificationTimestamp})` : ''}`;
       let cves4Csv: any = cloneDeep(this.selectedLayer.vulnerabilities);
       cves4Csv = cves4Csv.map(cve => {
         cve.description = `${cve.description.replace(/\"/g, "'")}`;

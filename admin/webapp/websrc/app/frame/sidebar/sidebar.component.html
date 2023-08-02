@@ -6,7 +6,7 @@
     aria-label="sidebar"
     [class.show-scrollbar]="switchers.getFrameSwitcher('leftSideScrollbar')">
     <!-- START sidebar nav-->
-    <ul class="sidebar-nav"
+    <ul class="sidebar-nav" style="height: 750px;"
         [ngStyle]="customSideBarStyle">
       <!-- END user info-->
 
@@ -131,7 +131,7 @@
     </ul>
     <!-- END sidebar nav-->
     <!-- Page footer-->
-    <footer class="footer-container" [ngStyle]="customFooterStyle" app-footer></footer>
+    <footer class="footer-container" style="height: 100px; text-align: center;" [ngStyle]="customFooterStyle" app-footer></footer>
     <!-- END sidebar nav-->
   </nav>
 </div>

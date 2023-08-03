@@ -37,6 +37,30 @@ $nav-top-item-desktop-active:   $nav-top-item-mobile-active;
     }
 }
 
+.nv-logo-wrap {
+  .logo-height {
+    height: 35px;
+  }
+  .nv-logo {
+    margin: 13px 0 17px 30px;
+    background: url("../../../../assets/img/logo.png") no-repeat;
+    background: -webkit-image-set(
+        url("../../../../assets/img/logo.png") 1x,
+        url("../../../../assets/img/logo@2x.png") 2x
+      )
+      no-repeat;
+  }
+  .nv-logo-collapsed {
+    margin: 0 0 0 15px;
+    background: url("../../../../assets/img/logo-single.png") no-repeat;
+    background: -webkit-image-set(
+        url("../../../../assets/img/logo-single.png") 1x,
+        url("../../../../assets/img/logo-single@2x.png") 2x
+      )
+      no-repeat;
+  }
+}
+
 .topnavbar {
     position: relative;
 
@@ -55,17 +79,17 @@ $nav-top-item-desktop-active:   $nav-top-item-mobile-active;
         .navbar-brand {
             padding: 0;
         }
-        .brand-logo,
-        .brand-logo-collapsed {
+        .brand-logo,.nv-logo
+        .brand-logo-collapsed, .nv-logo-collapsed {
             >img {
                 margin: 0 auto;
             }
         }
-        .brand-logo {
+        .brand-logo, .nv-logo {
             display: block;
             padding: 15px 15px;
         }
-        .brand-logo-collapsed {
+        .brand-logo-collapsed, .nv-logo-collapsed {
             display: none;
             padding: 10px 15px;
         }
@@ -270,10 +294,10 @@ $nav-top-item-desktop-active:   $nav-top-item-mobile-active;
     .left-side-collapsed {
         .topnavbar {
             .navbar-header {
-                .brand-logo {
+                .brand-logo, .nv-logo {
                     display: none;
                 }
-                .brand-logo-collapsed {
+                .brand-logo-collapsed, .nv-logo-collapsed {
                     display: block;
                 }
             }
@@ -293,10 +317,10 @@ $nav-top-item-desktop-active:   $nav-top-item-mobile-active;
     .left-side-collapsed-text {
         .topnavbar {
             .navbar-header {
-                .brand-logo {
+                .brand-logo, .nv-logo {
                     display: none;
                 }
-                .brand-logo-collapsed {
+                .brand-logo-collapsed, .nv-logo-collapsed {
                     display: block;
                 }
             }

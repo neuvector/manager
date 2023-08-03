@@ -28,7 +28,7 @@ import { cloneDeep } from 'lodash';
 import { finalize } from 'rxjs/operators';
 import { ConfigFormConfig } from './config-form-config';
 import { OtherWebhookType } from './config-form-config/constants';
-import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-config-form',
@@ -146,7 +146,9 @@ export class ConfigFormComponent implements OnInit {
             error.message &&
             error.message.length > GlobalConstant.MAX_ERROR_MESSAGE_LENGTH
           ) {
-            this.serverErrorMessage = this.domSanitizer.bypassSecurityTrustHtml(error.message);
+            this.serverErrorMessage = this.domSanitizer.bypassSecurityTrustHtml(
+              error.message
+            );
           }
 
           this.notificationService.open(
@@ -193,6 +195,7 @@ export class ConfigFormComponent implements OnInit {
           syslog_categories: base_config.syslog.syslog_categories,
           syslog_in_json: base_config.syslog.syslog_in_json,
           single_cve_per_syslog: base_config.syslog.single_cve_per_syslog,
+          syslog_cve_in_layers: base_config.syslog.syslog_cve_in_layers,
           syslog_server_cert: base_config.syslog.syslog_server_cert,
         },
         auth_cfg: {

@@ -39,6 +39,7 @@ export class ComplianceProfileTemplatesTableComponent
 {
   @Input() rowData!: ComplianceProfileTemplateEntry[];
   @Input() hideSystemInit!: boolean;
+  isNamespaceUser!: boolean;
   gridOptions!: GridOptions;
   filteredCount = 0;
   gridApi!: GridApi;
@@ -132,6 +133,7 @@ export class ComplianceProfileTemplatesTableComponent
   ) {}
 
   ngOnInit(): void {
+    this.isNamespaceUser = this.authUtilsService.userPermission.isNamespaceUser;
     this.isWriteComplianceProfileAuthorized =
       this.authUtilsService.getDisplayFlag('write_compliance_profile');
     if (!this.isWriteComplianceProfileAuthorized) {

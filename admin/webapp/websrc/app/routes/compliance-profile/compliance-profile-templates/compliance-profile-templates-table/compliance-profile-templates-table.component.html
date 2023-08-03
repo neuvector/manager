@@ -10,7 +10,7 @@
           >{{ 'cis.profile.HIDE_SYSTEM' | translate }}</mat-checkbox
         >
       </div>
-      <div class="d-flex flex-row align-items-center">
+      <div class="d-flex flex-row align-items-center" *ngIf="!isNamespaceUser">
         <span *ngIf="totalChanges > 0" class="d-block"
           >{{ totalChanges }}&nbsp;{{ 'cis.profile.PENDING' | translate
           }}{{ 'cis.profile.CHANGES' | translate }}</span

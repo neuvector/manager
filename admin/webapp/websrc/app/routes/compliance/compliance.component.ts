@@ -11,6 +11,7 @@ import { ComplianceFilterService } from './compliance.filter.service';
 import { MapConstant } from '@common/constants/map.constant';
 import { Subscription } from 'rxjs';
 import { MultiClusterService } from '@services/multi-cluster.service';
+import { ComplianceNIST } from '@common/types';
 
 @Component({
   selector: 'app-compliance',
@@ -66,6 +67,10 @@ export class ComplianceComponent implements OnInit, OnDestroy {
 
   printCompliancePDF() {
     this.complianceList = this.getFilteredCis();
+    this.complianceList = this.complianceList.map(compliance => ({
+      ...compliance,
+      ...this.complianceService.complianceNISTMap[compliance.name],
+    }));
     this.statisticCharts = {
       node: (
         document.getElementById('complinceNodesBarPDF') as HTMLCanvasElement
@@ -91,6 +96,10 @@ export class ComplianceComponent implements OnInit, OnDestroy {
       imageMap4Pdf: this.complianceService.imageMap4Pdf,
     };
     this.complianceList = this.getFilteredCis();
+    this.complianceList = this.complianceList.map(compliance => ({
+      ...compliance,
+      ...this.complianceService.complianceNISTMap[compliance.name],
+    }));
     this.isFiltered = this.complianceFilterService.filtered;
     this.advFilter = this.complianceFilterService.advFilter;
 

@@ -1398,7 +1398,10 @@
         "PROFILE": "资料适用性",
         "REMEDIATION": "纠正",
         "COMPLIANCE_LIST": "合规清单",
-        "COMPLIANCE_CNT": "合规数"
+        "COMPLIANCE_CNT": "合规数",
+        "SUBCONTROL": "CIS分控",
+        "CONTROL_ID": "NIST控制标识符",
+        "NIST_TITLE": "NIST标题"
       },
       "data": {
         "PLATFORMS": "平台",

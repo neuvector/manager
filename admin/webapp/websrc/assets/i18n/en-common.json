@@ -1396,9 +1396,12 @@
         "IMPACT": "Impact",
         "SCORED": "Scored",
         "PROFILE": "Profile",
-        "REMEDIATION": "remediation",
+        "REMEDIATION": "Remediation",
         "COMPLIANCE_LIST": "Compliance List",
-        "COMPLIANCE_CNT": "Compliance Count"
+        "COMPLIANCE_CNT": "Compliance Count",
+        "SUBCONTROL": "CIS Sub-Control",
+        "CONTROL_ID": "NIST Control Identifier",
+        "NIST_TITLE": "NIST Title"
       },
       "data": {
         "PLATFORMS": "Platforms",

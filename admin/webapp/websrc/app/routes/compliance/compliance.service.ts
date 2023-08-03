@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, of, Subject } from 'rxjs';
-import { catchError, finalize, map, repeatWhen, tap } from 'rxjs/operators';
+import { catchError, map, repeatWhen, tap } from 'rxjs/operators';
 import {
   Compliance,
   ComplianceData,
+  ComplianceNIST,
+  ComplianceNISTConfig,
+  ComplianceNISTMap,
   HostData,
   HostsData,
   Workload,
@@ -24,6 +27,7 @@ export class ComplianceService {
   kubeVersion!: string;
   workloadMap4Pdf!: {};
   private workloadMap!: Map<string, any>;
+  complianceNISTMap!: {};
   imageMap4Pdf!: {};
   platformMap4Pdf!: {};
   hostMap4Pdf!: {};
@@ -55,6 +59,7 @@ export class ComplianceService {
     this.selectedComplianceSubject$.next(undefined);
     this.workloadMap4Pdf = {};
     this.workloadMap = new Map();
+    this.complianceNISTMap = {};
     this.imageMap4Pdf = {};
     this.platformMap4Pdf = {};
     this.hostMap4Pdf = {};
@@ -105,6 +110,11 @@ export class ComplianceService {
         };
       }),
       tap(({ compliance: { compliances, kubernetes_cis_version } }) => {
+        this.postComplianceNIST({
+          names: compliances.map(c => c.name),
+        }).subscribe(nistMap => {
+          this.complianceNISTMap = nistMap.nist_map;
+        });
         this.kubeVersion = kubernetes_cis_version;
         this.complianceFilterService.workloadMap = this.workloadMap;
         setRisks(compliances, this.workloadMap);
@@ -350,6 +360,12 @@ export class ComplianceService {
         }
       })
     );
+  }
+
+  private postComplianceNIST(
+    config: ComplianceNISTConfig
+  ): Observable<ComplianceNISTMap> {
+    return this.risksHttpService.postComplianceNIST(config);
   }
 
   private getCompliance(): Observable<ComplianceData> {

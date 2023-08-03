@@ -2,10 +2,13 @@ package com.neu.api
 
 import com.google.common.net.UrlEscapers
 import com.neu.client.RestClient
-import com.neu.client.RestClient.baseClusterUri
+import com.neu.client.RestClient._
+import com.neu.core.CisNISTManager
+import com.neu.model.ComplianceNISTJsonProtocol._
 import com.neu.model.ComplianceJsonProtocol._
 import com.neu.model.VulnerabilityJsonProtocol._
 import com.neu.model.{
+  ComplianceNISTConfigData,
   ComplianceProfileConfig,
   ComplianceProfileConfigData,
   VulnerabilityProfileConfigData,
@@ -17,12 +20,13 @@ import spray.http.HttpMethods._
 import spray.http.StatusCodes
 import spray.routing.{ Directives, Route }
 
-import scala.concurrent.{ ExecutionContext, TimeoutException }
+import scala.concurrent.duration._
+import scala.concurrent.{ Await, ExecutionContext, TimeoutException }
 import scala.util.control.NonFatal
 
 //noinspection UnstableApiUsage
 class RiskService()(implicit executionContext: ExecutionContext)
-    extends Directives
+    extends BaseService
     with DefaultJsonFormats
     with LazyLogging {
   private val scanUrl                 = "scan/asset"
@@ -173,12 +177,21 @@ class RiskService()(implicit executionContext: ExecutionContext)
               }
             }
           } ~
+          path("complianceNIST") {
+            post {
+              entity(as[ComplianceNISTConfigData]) { complianceNISTConfigData =>
+                complete {
+                  logger.info("Get NIST compliances: {}", complianceNISTConfigData.config.names)
+                  CisNISTManager.getCompliancesNIST(complianceNISTConfigData.config.names)
+                }
+              }
+            }
+          } ~
           pathPrefix("compliance") {
             pathEnd {
               get {
                 Utils.respondWithNoCacheControl() {
                   complete {
-                    logger.info(s"Getting asset compliances ...")
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/$complianceUrl",
                       GET,

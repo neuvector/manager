@@ -64,3 +64,5 @@ admin/webapp/.angular
 /admin/.angular/
 /admin/webapp/websrc/assets/mockdata
 /admin/webapp/package-lock.json
+admin/webapp/websrc/assets/i18n/en.json
+admin/webapp/websrc/assets/i18n/zh_cn.json

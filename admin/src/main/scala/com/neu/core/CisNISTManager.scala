@@ -3,22 +3,18 @@ package com.neu.core
 import com.neu.model.{ ComplianceNIST, ComplianceNISTMap }
 import com.typesafe.scalalogging.LazyLogging
 import scala.collection.mutable._
-import scala.io.Source
-import scala.math._
-import scala.collection.mutable.Map
-import java.io.{ File, FileReader }
-import org.apache.commons.csv.CSVFormat
+import java.io.{ InputStream, InputStreamReader }
+import org.apache.commons.csv.{ CSVFormat, CSVRecord }
+
 import scala.collection.JavaConverters._
 
 object CisNISTManager extends LazyLogging {
-  val fileURL                                = getClass.getResource("/CIS_NIST-MASTER.CSV")
-  val file                                   = new File(fileURL.toURI)
-  val fileReader                             = new FileReader(file)
-  val csvFormat                              = CSVFormat.DEFAULT.withHeader()
-  val csvRecords                             = csvFormat.parse(fileReader).asScala
-  var arrayNIST: ArrayBuffer[ComplianceNIST] = ArrayBuffer()
-  val mapNIST
-    : scala.collection.mutable.Map[String, ComplianceNIST] = scala.collection.mutable.Map();
+  val inputStream: InputStream                                      = getClass.getResourceAsStream("/CIS_NIST-MASTER.CSV")
+  val inputStreamReader                                             = new InputStreamReader(inputStream, "UTF-8")
+  val csvFormat: CSVFormat                                          = CSVFormat.DEFAULT.builder().setHeader().build()
+  val csvRecords: scala.Iterable[CSVRecord]                         = csvFormat.parse(inputStreamReader).asScala
+  var arrayNIST: ArrayBuffer[ComplianceNIST]                        = ArrayBuffer()
+  val mapNIST: scala.collection.mutable.Map[String, ComplianceNIST] = scala.collection.mutable.Map()
   for (record <- csvRecords) {
     val name       = record.get("Recommendation #")
     val subcontrol = record.get("CIS Sub-Control")
@@ -41,11 +37,11 @@ object CisNISTManager extends LazyLogging {
     mapNIST.get(name)
 
   def getCompliancesNIST(compliances: Array[String]): ComplianceNISTMap = {
-    var nistMap: scala.collection.mutable.Map[String, ComplianceNIST] =
-      scala.collection.mutable.Map();
+    val nistMap: scala.collection.mutable.Map[String, ComplianceNIST] =
+      scala.collection.mutable.Map()
     compliances.foreach(name => {
       mapNIST.get(name) match {
-        case None                 => None
+        case None                 => ()
         case Some(complianceNIST) => nistMap += (name -> complianceNIST)
       }
     })

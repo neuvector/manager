@@ -1201,6 +1201,7 @@
       "SCORE_V2": "Score(V2)",
       "SCORE_V3": "Score(V3)",
       "FEED_RATING": "Feed Rating",
+      "FILE_NAME": "File Name",
       "PACKAGE_NAME": "Package",
       "PACKAGE_VERSION": "Version",
       "VICTIM": "Impact",

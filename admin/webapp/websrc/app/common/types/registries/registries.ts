@@ -115,6 +115,7 @@ export interface Vulnerability {
   cves: string[];
   description: string;
   feed_rating: string;
+  file_name: string;
   fixed_version: string;
   in_base_image: boolean;
   last_modified_timestamp: number;

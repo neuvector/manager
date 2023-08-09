@@ -1,0 +1,242 @@
+﻿ID,Recommendation #,Title of Recommendation,CIS Sub-Control,NIST Control Identifier,NIST Title
+,D.1.1.1,Ensure a separate partition for containers has been created,3.12,,Segment Data Processing and Storage Based on Sensitivity
+,D.1.1.2,Ensure only trusted users are allowed to control Docker daemon,6.1,"IA-4,IA-5,AC-1,AC-2,AC-2(1)",Establish an Access Granting Process
+,D.1.1.3,Ensure auditing is configured for the Docker daemon,8.2,"AU-2,AU-7,AU-12",Collect Audit Logs
+,D.1.1.4,Ensure auditing is configured for Docker files and directories - /run/containerd,8.5,"AU-3,AU-3(1),AU-7,AU-12",Collect Detailed Audit Logs
+,D.1.1.5,Ensure auditing is configured for Docker files and directories - /var/lib/docker,8.5,"AU-3,AU-3(1),AU-7,AU-12",Collect Detailed Audit Logs
+,D.1.1.6,Ensure auditing is configured for Docker files and directories - /etc/docker,8.5,"AU-3,AU-3(1),AU-7,AU-12",Collect Detailed Audit Logs
+,D.1.1.7,Ensure auditing is configured for Docker files and directories - docker.service,8.5,"AU-3,AU-3(1),AU-7,AU-12",Collect Detailed Audit Logs
+,D.1.1.8,Ensure auditing is configured for Docker files and directories - containerd.sock,8.5,"AU-3,AU-3(1),AU-7,AU-12",Collect Detailed Audit Logs
+,D.1.1.9,Ensure auditing is configured for Docker files and directories - docker.socket,8.5,"AU-3,AU-3(1),AU-7,AU-12",Collect Detailed Audit Logs
+,D.1.1.10,Ensure auditing is configured for Docker files and directories - /etc/default/docker,8.5,"AU-3,AU-3(1),AU-7,AU-12",Collect Detailed Audit Logs
+,D.1.1.11,Ensure auditing is configured for Docker files and directories - /etc/docker/daemon.json,8.5,"AU-3,AU-3(1),AU-7,AU-12",Collect Detailed Audit Logs
+,D.1.1.12,Ensure auditing is configured for Docker files and directories - /etc/containerd/config.toml,8.5,"AU-3,AU-3(1),AU-7,AU-12",Collect Detailed Audit Logs
+,D.1.1.13,Ensure auditing is configured for Docker files and directories - /etc/sysconfig/docker,8.5,"AU-3,AU-3(1),AU-7,AU-12",Collect Detailed Audit Logs
+,D.1.1.14,Ensure auditing is configured for Docker files and directories - /usr/bin/containerd,8.5,"AU-3,AU-3(1),AU-7,AU-12",Collect Detailed Audit Logs
+,D.1.1.15,Ensure auditing is configured for Docker files and directories - /usr/bin/containerd-shim,8.5,"AU-3,AU-3(1),AU-7,AU-12",Collect Detailed Audit Logs
+,D.1.1.16,Ensure auditing is configured for Docker files and directories - /usr/bin/containerd-shim-runc-v1,8.5,"AU-3,AU-3(1),AU-7,AU-12",Collect Detailed Audit Logs
+,D.1.1.17,Ensure auditing is configured for Docker files and directories - /usr/bin/containerd-shim-runc-v2,8.5,"AU-3,AU-3(1),AU-7,AU-12",Collect Detailed Audit Logs
+,D.1.1.18,Ensure auditing is configured for Docker files and directories - /usr/bin/runc,8.5,"AU-3,AU-3(1),AU-7,AU-12",Collect Detailed Audit Logs
+,D.1.2.1,Ensure the container host has been Hardened,16.7,"CM-6,CM-7",Use Standard Hardening Configuration Templates for Application Infrastructure
+,D.1.2.2,Ensure that the version of Docker is up to date,16.5,SR-11,Use Up-to-Date and Trusted Third-Party Software Components
+,D.2.1,"Run the Docker daemon as a non-root user, if possible",4.1,"CM-1,CM-2,CM-6,CM-7,CM-7(1),CM-9,SA-3,SA-8,SA-10",Establish and Maintain a Secure Configuration Process
+,D.2.2,Ensure network traffic is restricted between containers on the default bridge,12.3,"CM-6,CM-7,SC-23",Securely Manage Network Infrastructure
+,D.2.3,Ensure the logging level is set to 'info',8.5,"AU-3,AU-3(1),AU-7,AU-12",Collect Detailed Audit Logs
+,D.2.4,Ensure Docker is allowed to make changes to iptables,12.2,"PL-8,PM-7,SA-8,CM-7,CP-6,CP-7,SC-7",Establish and Maintain a Secure Network Architecture
+,D.2.5,Ensure insecure registries are not used,2.5,"CM-7(5),CM-10",Allowlist Authorized Software
+,D.2.6,Ensure aufs storage driver is not used,16,,
+,D.2.7,Ensure TLS authentication for Docker daemon is configured,13.5,"AC-17,AC-17(1),SI-4,SC-7",Manage Access Control for Remote Assets
+,D.2.8,Ensure the default ulimit is configured appropriately,16.7,"CM-6,CM-7",Use Standard Hardening Configuration Templates for Application Infrastructure
+,D.2.9,Enable user namespace support,6,,
+,D.2.10,Ensure the default cgroup usage has been confirmed,6.1,"IA-4,IA-5,AC-1,AC-2,AC-2(1)",Establish an Access Granting Process
+,D.2.11,Ensure base device size is not changed until needed,16.7,"CM-6,CM-7",Use Standard Hardening Configuration Templates for Application Infrastructure
+,D.2.12,Ensure that authorization for Docker client commands is enabled,6,,
+,D.2.13,Ensure centralized and remote logging is configured,"8.1,8.9","AU-1,AU-2,AU-6(3)","Establish and Maintain an Audit Log Management Process, Centralize Audit Logs"
+,D.2.14,Ensure containers are restricted from acquiring new privileges,6.1,"IA-4,IA-5,AC-1,AC-2,AC-2(1)",Establish an Access Granting Process
+,D.2.15,Ensure live restore is enabled,16.1,"SA-3,SA-15",Establish and Maintain a Secure Application Development Process
+,D.2.16,Ensure Userland Proxy is Disabled,4.8,"CM-6,CM-7",Uninstall or Disable Unnecessary Services on Enterprise Assets and Software
+,D.2.17,Ensure that a daemon-wide custom seccomp profile is applied if appropriate,16,,
+,D.2.18,Ensure that experimental features are not implemented in production,4.8,"CM-6,CM-7",Uninstall or Disable Unnecessary Services on Enterprise Assets and Software
+,D.3.1,Ensure that the docker.service file ownership is set to root:root,5.4,"AC-6(2),AC-6(5)",Restrict Administrator Privileges to Dedicated Administrator Accounts
+,D.3.2,Ensure that docker.service file permissions are appropriately set,3.3,"AC-3,AC-5,AC-6,MP-2",Configure Data Access Control Lists
+,D.3.3,Ensure that docker.socket file ownership is set to root:root,5.4,"AC-6(2),AC-6(5)",Restrict Administrator Privileges to Dedicated Administrator Accounts
+,D.3.4,Ensure that docker.socket file permissions are set to 644 or more restrictive,3.3,"AC-3,AC-5,AC-6,MP-2",Configure Data Access Control Lists
+,D.3.5,Ensure that the /etc/docker directory ownership is set to root:root,5.4,"AC-6(2),AC-6(5)",Restrict Administrator Privileges to Dedicated Administrator Accounts
+,D.3.6,Ensure that /etc/docker directory permissions are set to 755 or more restrictively,3.3,"AC-3,AC-5,AC-6,MP-2",Configure Data Access Control Lists
+,D.3.7,Ensure that registry certificate file ownership is set to root:root,5.4,"AC-6(2),AC-6(5)",Restrict Administrator Privileges to Dedicated Administrator Accounts
+,D.3.8,Ensure that registry certificate file permissions are set to 444 or more restrictively,3.3,"AC-3,AC-5,AC-6,MP-2",Configure Data Access Control Lists
+,D.3.9,Ensure that TLS CA certificate file ownership is set to root:root,5.4,"AC-6(2),AC-6(5)",Restrict Administrator Privileges to Dedicated Administrator Accounts
+,D.3.10,Ensure that TLS CA certificate file permissions are set to 444 or more restrictively,3.3,"AC-3,AC-5,AC-6,MP-2",Configure Data Access Control Lists
+,D.3.11,Ensure that Docker server certificate file ownership is set to root:root,5.4,"AC-6(2),AC-6(5)",Restrict Administrator Privileges to Dedicated Administrator Accounts
+,D.3.12,Ensure that the Docker server certificate file permissions are set to 444 or more restrictively,3.3,"AC-3,AC-5,AC-6,MP-2",Configure Data Access Control Lists
+,D.3.13,Ensure that the Docker server certificate key file ownership is set to root:root,5.4,"AC-6(2),AC-6(5)",Restrict Administrator Privileges to Dedicated Administrator Accounts
+,D.3.14,Ensure that the Docker server certificate key file permissions are set to 400,3.3,"AC-3,AC-5,AC-6,MP-2",Configure Data Access Control Lists
+,D.3.15,Ensure that the Docker socket file ownership is set to root:docker,5.4,"AC-6(2),AC-6(5)",Restrict Administrator Privileges to Dedicated Administrator Accounts
+,D.3.16,Ensure that the Docker socket file permissions are set to 660 or more restrictively,3.3,"AC-3,AC-5,AC-6,MP-2",Configure Data Access Control Lists
+,D.3.17,Ensure that the daemon.json file ownership is set to root:root,5.4,"AC-6(2),AC-6(5)",Restrict Administrator Privileges to Dedicated Administrator Accounts
+,D.3.18,Ensure that daemon.json file permissions are set to 644 or more restrictive,3.3,"AC-3,AC-5,AC-6,MP-2",Configure Data Access Control Lists
+,D.3.19,Ensure that the /etc/default/docker file ownership is set to root:root,5.4,"AC-6(2),AC-6(5)",Restrict Administrator Privileges to Dedicated Administrator Accounts
+,D.3.20,Ensure that the /etc/sysconfig/docker file permissions are set to 644 or more restrictively,3.3,"AC-3,AC-5,AC-6,MP-2",Configure Data Access Control Lists
+,D.3.21,Ensure that the /etc/sysconfig/docker file ownership is set to root:root,5.4,"AC-6(2),AC-6(5)",Restrict Administrator Privileges to Dedicated Administrator Accounts
+,D.3.22,Ensure that the /etc/default/docker file permissions are set to 644 or more restrictively,3.3,"AC-3,AC-5,AC-6,MP-2",Configure Data Access Control Lists
+,D.3.23,Ensure that the Containerd socket file ownership is set to root:root,5.4,"AC-6(2),AC-6(5)",Restrict Administrator Privileges to Dedicated Administrator Accounts
+,D.3.24,Ensure that the Containerd socket file permissions are set to 660 or more restrictively,3.3,"AC-3,AC-5,AC-6,MP-2",Configure Data Access Control Lists
+,I.4.1,Ensure that a user for the container has been created,5,,
+,I.4.2,Ensure that containers use only trusted base images,16.7,"CM-6,CM-7",Use Standard Hardening Configuration Templates for Application Infrastructure
+,I.4.3,Ensure that unnecessary packages are not installed in the container,4.8,"CM-6,CM-7",Uninstall or Disable Unnecessary Services on Enterprise Assets and Software
+,I.4.4,Ensure images are scanned and rebuilt to include security patches,7.5,RA-5,Perform Automated Vulnerability Scans of Internal Enterprise Assets
+,I.4.5,Ensure Content trust for Docker is Enabled,3,,
+,I.4.6,Ensure that HEALTHCHECK instructions have been added to container images,16.12,"SA-11,SA-15",Implement Code-Level Security Checks
+,I.4.7,Ensure update instructions are not used alone in Dockerfiles,16.7,"CM-6,CM-7",Use Standard Hardening Configuration Templates for Application Infrastructure
+,I.4.8,Ensure setuid and setgid permissions are removed,4.8,"CM-6,CM-7",Uninstall or Disable Unnecessary Services on Enterprise Assets and Software
+,I.4.9,Ensure that COPY is used instead of ADD in Dockerfiles,16.7,"CM-6,CM-7",Use Standard Hardening Configuration Templates for Application Infrastructure
+,I.4.10,Ensure secrets are not stored in Dockerfiles,3,,
+,I.4.11,Ensure only verified packages are installed,2.2,SA-22,Ensure Authorized Software is Currently Supported 
+,I.4.12,Ensure all signed artifacts are validated,2.7,"CM-7,CM-7(1),SI-7,SI-7(1)",Allowlist Authorized Scripts
+,D.5.1,"Ensure that, if applicable, an AppArmor Profile is enabled",10.5,SI-16,Enable Anti-Exploitation Features
+,D.5.2,"Ensure that, if applicable, SELinux security options are set",10.5,SI-16,Enable Anti-Exploitation Features
+,D.5.3,Ensure that Linux kernel capabilities are restricted within containers,16.7,"CM-6,CM-7",Use Standard Hardening Configuration Templates for Application Infrastructure
+,D.5.4,Ensure that privileged containers are not used,5.4,"AC-6(2),AC-6(5)",Restrict Administrator Privileges to Dedicated Administrator Accounts
+,D.5.5,Ensure sensitive host system directories are not mounted on containers,3,,
+,D.5.6,Ensure sshd is not run within containers,4.8,"CM-6,CM-7",Uninstall or Disable Unnecessary Services on Enterprise Assets and Software
+,D.5.7,Ensure privileged ports are not mapped within containers,13.9,"CM-6,CM-7",Deploy Port-Level Access Control
+,D.5.8,Ensure that only needed ports are open on the container,13.9,"CM-6,CM-7",Deploy Port-Level Access Control
+,D.5.9,Ensure that the host's network namespace is not shared,6,,
+,D.5.10,Ensure that the memory usage for containers is limited,16.7,"CM-6,CM-7",Use Standard Hardening Configuration Templates for Application Infrastructure
+,D.5.11,Ensure that CPU priority is set appropriately on containers,3.12,,Segment Data Processing and Storage Based on Sensitivity
+,D.5.12,Ensure that the container's root filesystem is mounted as read only,3,,
+,D.5.13,Ensure that incoming container traffic is bound to a specific host interface,4.4,"CA-9,SC-7,SC7-(5)",Implement and Manage a Firewall on Servers
+,D.5.14,Ensure that the 'on-failure' container restart policy is set to '5',4,,
+,D.5.15,Ensure that the host's process namespace is not shared,3.12,,Segment Data Processing and Storage Based on Sensitivity
+,D.5.16,Ensure that the host's IPC namespace is not shared,3.12,,Segment Data Processing and Storage Based on Sensitivity
+,D.5.17,Ensure that host devices are not directly exposed to containers,5.4,"AC-6(2),AC-6(5)",Restrict Administrator Privileges to Dedicated Administrator Accounts
+,D.5.18,Ensure that the default ulimit is overwritten at runtime if needed,3.12,,Segment Data Processing and Storage Based on Sensitivity
+,D.5.19,Ensure mount propagation mode is not set to shared,3,,
+,D.5.20,Ensure that the host's UTS namespace is not shared,13.4,"CA-9,SC-7",Perform Traffic Filtering Between Network Segments
+,D.5.21,Ensure the default seccomp profile is not Disabled,16,,
+,D.5.22,Ensure that  docker exec commands are not used with the privileged option,4.1,"CM-1,CM-2,CM-6,CM-7,CM-7(1),CM-9,SA-3,SA-8,SA-10",Establish and Maintain a Secure Configuration Process
+,D.5.23,Ensure that docker exec commands are not used with the user=root option,4.1,"CM-1,CM-2,CM-6,CM-7,CM-7(1),CM-9,SA-3,SA-8,SA-10",Establish and Maintain a Secure Configuration Process
+,D.5.24,Ensure that cgroup usage is confirmed,3.3,"AC-3,AC-5,AC-6,MP-2",Configure Data Access Control Lists
+,D.5.25,Ensure that  the container is restricted from acquiring additional privileges,5.4,"AC-6(2),AC-6(5)",Restrict Administrator Privileges to Dedicated Administrator Accounts
+,D.5.26,Ensure that container health is checked at runtime,10.5,SI-16,Enable Anti-Exploitation Features
+,D.5.27,Ensure that Docker commands always make use of the latest version of their image,16,,
+,D.5.28,Ensure that the PIDs cgroup limit is used,4,,
+,D.5.29,"Ensure that Docker's default bridge ""docker0"" is not used",4.8,"CM-6,CM-7",Uninstall or Disable Unnecessary Services on Enterprise Assets and Software
+,D.5.30,Ensure that the host's user namespaces are not shared,3.12,,Segment Data Processing and Storage Based on Sensitivity
+,D.5.31,Ensure that the Docker socket is not mounted inside any containers,5.4,"AC-6(2),AC-6(5)",Restrict Administrator Privileges to Dedicated Administrator Accounts
+,D.6.1,Ensure that image sprawl is avoided,16.1,"SA-3,SA-15",Establish and Maintain a Secure Application Development Process
+,D.6.2,Ensure that container sprawl is avoided,3.12,,Segment Data Processing and Storage Based on Sensitivity
+,D.7.1,"Ensure swarm mode is not Enabled, if not needed",4.8,"CM-6,CM-7",Uninstall or Disable Unnecessary Services on Enterprise Assets and Software
+,D.7.2,Ensure that the minimum number of manager nodes have been created in a swarm,4,,
+,D.7.3,Ensure that swarm services are bound to a specific host interface,4.4,"CA-9,SC-7,SC7-(5)",Implement and Manage a Firewall on Servers
+,D.7.4,Ensure that all Docker swarm overlay networks are encrypted,3.1,"AU-11,CM-12,SI-12",Establish and Maintain a Data Management Process
+,D.7.5,Ensure that Docker's secret management commands are used for managing secrets in a swarm cluster,4,,
+,D.7.6,Ensure that swarm manager is run in auto-lock mode,3.11,"IA-5(1),SC-28,SC-28(1)",Encrypt Sensitive Data at Rest
+,D.7.7,Ensure that the swarm manager auto-lock key is rotated periodically,5.2,IA-5(1),Use Unique Passwords
+,D.7.8,Ensure that node certificates are rotated as appropriate,5.2,IA-5(1),Use Unique Passwords
+,D.7.9,Ensure that CA certificates are rotated as appropriate,5.2,IA-5(1),Use Unique Passwords
+,D.7.10,Ensure that management plane traffic is separated from data plane traffic,13.4,"CA-9,SC-7",Perform Traffic Filtering Between Network Segments
+,K.1.1.1,,,"AC-3, AC-5, AC-6, MP-2",
+,K.1.1.2,,,"AC-6(2), AC-6(5)",
+,K.1.1.3,,,"AC-3, AC-5, AC-6, MP-2",
+,K.1.1.4,,,"AC-6(2), AC-6(5)",
+,K.1.1.5,,,"AC-3, AC-5, AC-6, MP-2",
+,K.1.1.6,,,"AC-6(2), AC-6(5)",
+,K.1.1.7,,,"AC-3, AC-5, AC-6, MP-2",
+,K.1.1.8,,,"AC-6(2), AC-6(5)",
+,K.1.1.9,,,"AC-3, AC-5, AC-6, MP-2",
+,K.1.1.10,,,"AC-6(2), AC-6(5)",
+,K.1.1.11,,,"AC-3, AC-5, AC-6, MP-2",
+,K.1.1.12,,,"AC-3, AC-5, AC-6, MP-2",
+,K.1.1.13,,,"AC-3, AC-5, AC-6, MP-2",
+,K.1.1.14,,,"AC-6(2), AC-6(5)",
+,K.1.1.15,,,"AC-3, AC-5, AC-6, MP-2",
+,K.1.1.16,,,"AC-6(2), AC-6(5)",
+,K.1.1.17,,,"AC-3, AC-5, AC-6, MP-2",
+,K.1.1.18,,,"AC-6(2), AC-6(5)",
+,K.1.1.19,,,"AC-3, AC-5, AC-6, MP-2",
+,K.1.1.20,,,"AC-6(2), AC-6(5)",
+,K.1.1.21,,,"AC-3, AC-5, AC-6, MP-2",
+,K.1.2.1,,,"AC-3, AC-5, AC-6, MP-2",
+,K.1.2.2,,,MA-4,
+,K.1.2.3,,,MA-4,
+,K.1.2.4,,,SA-15,
+,K.1.2.5,,,SA-15,
+,K.1.2.6,,,"AC-3, AC-5, AC-6, MP-2",
+,K.1.2.7,,,"AC-3, AC-5, AC-6, MP-2",
+,K.1.2.8,,,"AC-2, AC-5, AC-6, AC-6(1), AC-6(7), AU-9(4)",
+,K.1.2.9,,,SA-15,
+,K.1.2.10,,,"AC-3, AC-5, AC-6, MP-2",
+,K.1.2.11,,,"AC-3, AC-5, AC-6, MP-2",
+,K.1.2.12,,,SA-15,
+,K.1.2.13,,,"AC-3, AC-5, AC-6, MP-2",
+,K.1.2.14,,,,
+,K.1.2.15,,,,
+,K.1.2.16,,,,
+,K.1.2.17,,,,
+,K.1.2.18,,,"AU-2, AU-7, AU-12",
+,K.1.2.19,,,AU-4,
+,K.1.2.20,,,AU-4,
+,K.1.2.21,,,AU-4,
+,K.1.2.22,,,,
+,K.1.2.23,,,"AC-3, AC-5, AC-6, MP-2",
+,K.1.2.24,,,IA-5(1),
+,K.1.2.25,,,"IA-5(1), SC-28, SC-28(1)",
+,K.1.2.26,,,,
+,K.1.2.27,,,,
+,K.1.2.28,,,"IA-5(1), SC-28, SC-28(1)",
+,K.1.2.29,,,"IA-5(1), SC-28, SC-28(1)",
+,K.1.2.30,,,"IA-5(1), SC-28, SC-28(1)",
+,K.1.2.31,,,"CM-6, CM-7",
+,K.1.3.1,,,SI-16,
+,K.1.3.2,,,"CM-6, CM-7",
+,K.1.3.3,,,"IA-5(1), AC-2, AC-5, AC-6, AC-6(1), AC-6(7), AU-9(4)",
+,K.1.3.4,,,IA-5(1),
+,K.1.3.5,,,,
+,K.1.3.6,,,,
+,K.1.3.7,,,"AC-18, SC-23",
+,K.1.4.1,,,"CM-6, CM-7",
+,K.1.4.2,,,"AC-18, SC-23",
+,K.2.1,,,"IA-5(1), SC-28, SC-28(1)",
+,K.2.2,,,"IA-5(1), SC-28, SC-28(1)",
+,K.2.3,,,"IA-5(1), SC-28, SC-28(1)",
+,K.2.4,,,"IA-5(1), SC-28, SC-28(1)",
+,K.2.5,,,"AC-3, AC-5, AC-6, MP-2",
+,K.2.6,,,IA-5(1),
+,K.2.7,,,"IA-4, IA-5, AC-1, AC-2, AC-2(1), AC-1, AC-2, AC-2(1)",
+,K.3.1.1,,,"AC-1, AC-2, AC-2(1)",
+,K.3.2.1,,,"AU-2, AU-7, AU-12",
+,K.3.2.2,,,"AU-3, AU-3(1), AU-7, AU-12",
+,K.4.1.1,,,"AC-3, AC-5, AC-6, MP-2",
+,K.4.1.2,,,"AC-6(2), AC-6(5)",
+,K.4.1.3,,,"AC-3, AC-5, AC-6, MP-2",
+,K.4.1.4,,,"AC-6(2), AC-6(5)",
+,K.4.1.5,,,"AC-3, AC-5, AC-6, MP-2",
+,K.4.1.6,,,"AC-6(2), AC-6(5)",
+,K.4.1.7,,,"AC-3, AC-5, AC-6, MP-2",
+,K.4.1.8,,,"AC-6(2), AC-6(5)",
+,K.4.1.9,,,"AC-3, AC-5, AC-6, MP-2",
+,K.4.1.10,,,"AC-6(2), AC-6(5)",
+,K.4.2.1,,,"AC-3, AC-5, AC-6, MP-2",
+,K.4.2.2,,,"AC-3, AC-5, AC-6, MP-2",
+,K.4.2.3,,,,
+,K.4.2.4,,,"CM-6, CM-7",
+,K.4.2.5,,,SI-16,
+,K.4.2.6,,,"CM-6, CM-7",
+,K.4.2.7,,,"CM-7(5), CM-10",
+,K.4.2.8,,,,
+,K.4.2.9,,,"AU-2, AU-7, AU-12",
+,K.4.2.10,,,,
+,K.4.2.11,,,,
+,K.4.2.12,,,,
+,K.4.2.13,,,"CM-6, CM-7",
+,K.5.1.1,,,"AC-2, AC-5, AC-6, AC-6(1), AC-6(7), AU-9(4)",
+,K.5.1.2,,,,
+,K.5.1.3,,,"AC-2, AC-5, AC-6, AC-6(1), AC-6(7), AU-9(4)",
+,K.5.1.4,,,"AC-2, AC-5, AC-6, AC-6(1), AC-6(7), AU-9(4)",
+,K.5.1.5,,,AC-2(3),
+,K.5.1.6,,,,
+,K.5.1.7,,,"AC-6(2), AC-6(5)",
+,K.5.1.8,,,"AC-6(2), AC-6(5)",
+,K.5.2.1,,,,
+,K.5.2.2,,,"AC-6(2), AC-6(5)",
+,K.5.2.3,,,,
+,K.5.2.4,,,,
+,K.5.2.5,,,,
+,K.5.2.6,,,"AC-6(2), AC-6(5)",
+,K.5.2.7,,,"AC-6(2), AC-6(5)",
+,K.5.2.8,,,"CM-6, CM-7",
+,K.5.2.9,,,"CM-6, CM-7",
+,K.5.2.10,,,"CM-6, CM-7",
+,K.5.2.11,,,,
+,K.5.2.12,,,,
+,K.5.2.13,,,,
+,K.5.3.1,,,"CA-9, SC-7, SC-7(5)",
+,K.5.3.2,,,"CA-9, SC-7, SC-7(5)",
+,K.5.4.1,,,,
+,K.5.4.2,,,,
+,K.5.5.1,,,"CM-6, CM-7",
+,K.5.7.1,,,,
+,K.5.7.2,,,"CM-6, CM-7",
+,K.5.7.3,,,,
+,K.5.7.4,,,"PL-8, PM-7, SA-8, CM-7, CP-6, CP-7, SC-7",

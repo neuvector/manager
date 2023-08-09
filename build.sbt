@@ -47,7 +47,9 @@ lazy val commonDependencies = Seq(
   scalaLogging,
   sprayJson,
   ehCache,
-  guava
+  guava,
+  // https://mvnrepository.com/artifact/org.apache.commons/commons-csv
+  "org.apache.commons" % "commons-csv" % "1.9.0"
 )
 
 lazy val buil1dSettings = Defaults.coreDefaultSettings ++ Seq(

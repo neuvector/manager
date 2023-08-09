@@ -1,5 +1,13 @@
 package com.neu.model
 
+case class ComplianceNISTConfig(
+  names: Array[String]
+)
+
+case class ComplianceNISTConfigData(
+  config: ComplianceNISTConfig
+)
+
 case class ComplianceProfileEntry(
   test_number: String,
   tags: Array[String]

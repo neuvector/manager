@@ -44,6 +44,7 @@ export class PathConstant {
   public static POLICY_RULE_URL = 'policy/rule'; //poilcy
   public static RISK_CVE_URL = 'risk/cve'; //risks
   public static RISK_COMPLIANCE_URL = 'risk/compliance'; //risks
+  public static RISK_COMPLIANCE_NIST_URL = 'risk/complianceNIST'; //risks
   public static COMPLIANCE_PROFILE_URL = 'risk/compliance/profile'; //risks
   public static COMPLIANCE_TEMPLATE_URL = 'risk/compliance/template'; //risks
   public static SCAN_URL = 'scan/workload'; //assets

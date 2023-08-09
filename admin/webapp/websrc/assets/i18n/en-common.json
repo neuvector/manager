@@ -1201,6 +1201,7 @@
       "SCORE_V2": "Score(V2)",
       "SCORE_V3": "Score(V3)",
       "FEED_RATING": "Feed Rating",
+      "FILE_NAME": "File Name",
       "PACKAGE_NAME": "Package",
       "PACKAGE_VERSION": "Version",
       "VICTIM": "Impact",
@@ -1396,9 +1397,12 @@
         "IMPACT": "Impact",
         "SCORED": "Scored",
         "PROFILE": "Profile",
-        "REMEDIATION": "remediation",
+        "REMEDIATION": "Remediation",
         "COMPLIANCE_LIST": "Compliance List",
-        "COMPLIANCE_CNT": "Compliance Count"
+        "COMPLIANCE_CNT": "Compliance Count",
+        "SUBCONTROL": "CIS Sub-Control",
+        "CONTROL_ID": "NIST Control Identifier",
+        "NIST_TITLE": "NIST Title"
       },
       "data": {
         "PLATFORMS": "Platforms",

@@ -7,6 +7,7 @@ export * from './workloadData';
 export * from './workloadCompliance';
 export * from './platform';
 export * from './complainceProfile';
+export * from './complianceNIST';
 
 export interface Compliance {
   category: string;

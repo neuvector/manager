@@ -73,6 +73,11 @@ export class VulnerabilitiesGridComponent implements OnInit, OnChanges {
       width: 150,
     },
     {
+      field: 'file_name',
+      headerValueGetter: () =>
+        this.translate.instant('scan.gridHeader.FILE_NAME'),
+    },
+    {
       field: 'package_name',
       headerValueGetter: () =>
         this.translate.instant('scan.gridHeader.PACKAGE_NAME'),

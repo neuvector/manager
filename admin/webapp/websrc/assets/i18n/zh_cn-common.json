@@ -1201,6 +1201,7 @@
       "SCORE_V2": "分数(V2)",
       "SCORE_V3": "分数(V3)",
       "FEED_RATING": "馈送评级",
+      "FILE_NAME": "文件名",
       "PACKAGE_NAME": "软件包",
       "PACKAGE_VERSION": "版本",
       "VICTIM": "影响",
@@ -1398,7 +1399,10 @@
         "PROFILE": "资料适用性",
         "REMEDIATION": "纠正",
         "COMPLIANCE_LIST": "合规清单",
-        "COMPLIANCE_CNT": "合规数"
+        "COMPLIANCE_CNT": "合规数",
+        "SUBCONTROL": "CIS分控",
+        "CONTROL_ID": "NIST控制标识符",
+        "NIST_TITLE": "NIST标题"
       },
       "data": {
         "PLATFORMS": "平台",

@@ -94,6 +94,7 @@ trait BootedCore
 
 //  logger.info(IpGeoManager.readCsv)
   IpGeoManager
+  CisNISTManager
   System.setProperty("net.sf.ehcache.enableShutdownHook", "true")
 
   val useSSL: String = sys.env.getOrElse("MANAGER_SSL", "on")

@@ -31,10 +31,10 @@
             "></ng-template>
         </ng-container>
       </ng-container>
-      <ng-container *ngIf="selectedCompliance.images.length > 0">
+      <ng-container *ngIf="selectedCompliance.filteredImages.length > 0">
         <h3>{{ 'cis.report.data.IMAGES' | translate }}</h3>
         <ng-container
-          *ngFor="let image of selectedCompliance.images"
+          *ngFor="let image of selectedCompliance.filteredImages"
           class="d-block">
           <ng-template
             *ngTemplateOutlet="
@@ -43,10 +43,10 @@
             "></ng-template>
         </ng-container>
       </ng-container>
-      <ng-container *ngIf="selectedCompliance.workloads.length > 0">
+      <ng-container *ngIf="selectedCompliance.filteredWorkloads.length > 0">
         <h3>{{ 'cis.report.data.CONTAINERS' | translate }}</h3>
         <ng-container
-          *ngFor="let workload of selectedCompliance.workloads"
+          *ngFor="let workload of selectedCompliance.filteredWorkloads"
           class="d-block">
           <ng-template
             *ngTemplateOutlet="

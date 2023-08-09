@@ -25,6 +25,8 @@ export interface Compliance {
   type: string;
   domains: string[];
   workloads: IdName[];
+  filteredWorkloads: IdName[];
+  filteredImages: IdName[];
 }
 
 export interface ComplianceRaw {

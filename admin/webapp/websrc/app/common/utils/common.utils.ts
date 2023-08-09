@@ -405,23 +405,32 @@ export function isEmptyObj(obj) {
 
 export function setRisks(risks, workloadMap) {
   return risks.map(risk => {
-    if (risk.workloads.length) {
+    if (risk.workloads.length || risk.images.length) {
       let domains = new Set(),
         services = new Set();
-      risk.workloads.forEach(workload => {
-        const theWorkload = workloadMap.get(workload.id);
-        if (theWorkload && theWorkload.domain) {
-          domains.add(theWorkload.domain);
-          workload.domain = theWorkload.domain;
-        }
-        if (theWorkload && theWorkload.service_group.substring(3)) {
-          services.add(theWorkload.service_group.substring(3));
-          workload.service = theWorkload.service_group.substring(3);
-        }
-        if (theWorkload && theWorkload.image) {
-          workload.image = theWorkload.image;
-        }
-      });
+      if (risk.workloads.length) {
+        risk.workloads.forEach(workload => {
+          const theWorkload = workloadMap.get(workload.id);
+          if (theWorkload && theWorkload.domain) {
+            domains.add(theWorkload.domain);
+            workload.domain = theWorkload.domain;
+          }
+          if (theWorkload && theWorkload.service_group.substring(3)) {
+            services.add(theWorkload.service_group.substring(3));
+            workload.service = theWorkload.service_group.substring(3);
+          }
+          if (theWorkload && theWorkload.image) {
+            workload.image = theWorkload.image;
+          }
+        });
+      }
+      if (risk.images.length) {
+        risk.images.forEach(image => {
+          if (Array.isArray(image.domains) && image.domains.length > 0) {
+            image.domains.forEach(domain => domains.add(domain));
+          }
+        })
+      }
       risk.domains = Array.from(domains);
       risk.services = Array.from(services);
       return risk;

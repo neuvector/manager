@@ -40,6 +40,8 @@ export interface VulnerabilityAsset {
   nodes: IdName[];
   images: IdName[];
   platforms: IdName[];
+  filteredWorkloads: IdName[];
+  filteredImages: IdName[];
 }
 
 export interface VulnerabilitiesData {

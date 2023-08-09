@@ -154,6 +154,28 @@ export class ComplianceFilterService {
         );
       } else return false;
     }
+
+    if (Array.isArray(this.advFilter.selectedDomains) && this.advFilter.selectedDomains.length > 0) {
+      compliance.filteredWorkloads = compliance.workloads.filter(workload => {
+        if (Array.isArray(workload.domains)) {
+          return workload.domains.reduce((res, curr) => {
+            return res || this.advFilter.selectedDomains.includes(curr);
+          }, false);
+        } else {
+          return false;
+        }
+      });
+      compliance.filteredImages = compliance.images.filter(image => {
+        if (Array.isArray(image.domains)) {
+          return image.domains.reduce((res, curr) => {
+            return res || this.advFilter.selectedDomains.includes(curr);
+          }, false);
+        } else {
+          return false;
+        }
+      });
+    }
+
     return result;
   }
 

@@ -114,7 +114,6 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.gridOptions = {
-      rowData: this.rowData,
       columnDefs: this.columnDefs,
       suppressDragLeaveHidesColumns: true,
       rowSelection: 'single',
@@ -168,11 +167,19 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
   onGridReady(params: GridReadyEvent): void {
     this.gridApi = params.api;
     this.complianceService.gridApi = this.gridApi;
-    this.gridApi.sizeColumnsToFit();
-    this.gridApi.forEachNode(node =>
-      node.rowIndex ? 0 : node.setSelected(true)
-    );
-    this.cd.markForCheck();
+    this.rowData = this.rowData.map(compliance => {
+      compliance.filteredImages = compliance.images;
+      compliance.filteredWorkloads = compliance.workloads;
+      return compliance;
+    });
+    setTimeout(() => {
+      this.gridApi.setRowData(this.rowData);
+      this.gridApi.sizeColumnsToFit();
+      this.gridApi.forEachNode(node =>
+        node.rowIndex ? 0 : node.setSelected(true)
+      );
+      this.cd.markForCheck();
+    }, 200);
   }
 
   onRowDataChanged(event: RowDataChangedEvent) {
@@ -217,6 +224,11 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
       };
 
       this.filterDialog.afterClosed().subscribe(filter => {
+        this.rowData = this.rowData.map(compliance => {
+          compliance.filteredImages = compliance.images;
+          compliance.filteredWorkloads = compliance.workloads;
+          return compliance;
+        });
         if (filter && filter.reset) {
           this.complianceFilterService.resetFilter();
           this.setAdvancedFilter();

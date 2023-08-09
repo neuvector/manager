@@ -28,8 +28,8 @@ export class VulnerabilitiesCsvService {
           ''
         );
       }
-      if (cve.images && Array.isArray(cve.images)) {
-        cve.images = cve.images.reduce(
+      if (cve.filteredImages && Array.isArray(cve.filteredImages)) {
+        cve.images = cve.filteredImages.reduce(
           (acc, curr) => acc + curr.display_name + ' ',
           ''
         );

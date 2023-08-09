@@ -23,10 +23,14 @@ export class ComplianceCsvService {
         (acc, curr) => acc + curr.display_name + ' ',
         ''
       );
-      compliance.images = compliance.images.reduce(
-        (acc, curr) => acc + curr.display_name + ' ',
-        ''
-      );
+      
+      if (compliance.filteredImages && Array.isArray(compliance.filteredImages)) {
+        compliance.images = compliance.filteredImages.reduce(
+          (acc, curr) => acc + curr.display_name + ' ',
+          ''
+        );
+      }
+
       compliance.nodes = compliance.nodes.reduce(
         (acc, curr) => acc + curr.display_name + ' ',
         ''

@@ -213,7 +213,7 @@ export class ConfigFormComponent implements OnInit {
           registry_http_proxy_status:
             base_config.proxy.registry_http_proxy_status,
           registry_https_proxy: base_config.proxy.registry_https_proxy.password
-            ? base_config.proxy.registry_http_proxy
+            ? base_config.proxy.registry_https_proxy
             : Object.assign({}, base_config.proxy.registry_https_proxy, {
                 password: null,
               }),

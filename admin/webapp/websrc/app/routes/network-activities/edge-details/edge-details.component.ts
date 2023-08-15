@@ -9,6 +9,7 @@ import {
   Output,
   QueryList,
   ViewChildren,
+  SimpleChanges,
 } from '@angular/core';
 import { GraphService } from '../graph.service';
 import {
@@ -123,14 +124,16 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
     this._entriesGridHeight = value;
   }
 
-  ngOnChanges() {
-    this.prepareGridData();
-    setTimeout(() => {
-      let nodes = this.gridApi.getRenderedNodes();
-      if (nodes.length) {
-        nodes[0].setSelected(true); //selects the first row in the rendered view
-      }
-    }, 500);
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.conversationDetail) {
+      this.prepareGridData();
+      setTimeout(() => {
+        let nodes = this.gridApi.getRenderedNodes();
+        if (nodes.length) {
+          nodes[0].setSelected(true); //selects the first row in the rendered view
+        }
+      }, 500);
+    }
     this.sessionCount = '';
     this.onRule = false;
     this.onThreat = false;
@@ -140,7 +143,6 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
   ngOnInit() {
     this.isWriteNetworkAuthorized =
       this.authUtilsService.getDisplayFlag('write_network_rule');
-    this.prepareGridData();
     this.gridOptions = this.graphService.prepareTrafficHistoryGrid(
       this._conversationDetail
     );

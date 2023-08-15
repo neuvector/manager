@@ -87,10 +87,8 @@ trait StaticResources extends HttpService with LazyLogging {
     } ~
     path(Rest) { path =>
       if (isDev) {
-        logger.info("dev")
         getFromResource(UrlEscapers.urlFragmentEscaper().escape(s"root/$path"))
       } else {
-        logger.info("prod")
         if (path.endsWith(".js")) {
           Utils.respondWithNoCacheControl(true) {
             `Content-Type`(

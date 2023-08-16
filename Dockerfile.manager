@@ -13,7 +13,7 @@ LABEL name="manager" \
       neuvector.role="manager" \
       neuvector.rev="git.xxxx"
 
-RUN adduser -S manager
+RUN useradd manager
 USER manager
 
 ENTRYPOINT ["java", "-Xms256m", "-Xmx2048m", "-Djdk.tls.rejectClientInitiatedRenegotiation=true", "-jar", "/usr/local/bin/admin-assembly-1.0.jar"]

@@ -11,6 +11,13 @@ export type ScannerAutoscaleStrategy =
 
 export type DataOps = 'add' | 'edit' | 'delete';
 
+export type LastModifiedDateOption =
+  | 'all'
+  | 'twoweeks'
+  | 'onemonth'
+  | 'threemonths'
+  | 'custom';
+
 export interface ErrorResponse {
   code: number;
   error: string;

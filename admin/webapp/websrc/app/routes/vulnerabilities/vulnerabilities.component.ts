@@ -4,6 +4,10 @@ import { VulnerabilitiesCsvService } from './csv-generation/vulnerabilities-csv.
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { VulnerabilitiesFilterService } from './vulnerabilities.filter.service';
 import { MapConstant } from '@common/constants/map.constant';
+import { MatDialog } from '@angular/material/dialog';
+import { PdfGenerationDialogComponent } from './pdf-generation-dialog/pdf-generation-dialog.component';
+import { VulnerabilityAsset } from '@common/types';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-vulnerabilities',
@@ -32,7 +36,9 @@ export class VulnerabilitiesComponent {
     private vulnerabilitiesService: VulnerabilitiesService,
     private vulnerabilitiesCsvService: VulnerabilitiesCsvService,
     private multiClusterService: MultiClusterService,
-    public vulnerabilitiesFilterService: VulnerabilitiesFilterService
+    public vulnerabilitiesFilterService: VulnerabilitiesFilterService,
+    private dialog: MatDialog,
+    private tr: TranslateService
   ) {
     //refresh the page when it switched to a remote cluster
     this._switchClusterSubscription =
@@ -56,7 +62,7 @@ export class VulnerabilitiesComponent {
   }
 
   printVulnerabilityPDF() {
-    this.vulnerabilitiesList = this.getFilteredVulnerabilities();
+    this.advFilter = this.vulnerabilitiesFilterService.advFilter;
     this.statisticCharts = {
       node: (
         document.getElementById('vulnNodesBarPDF') as HTMLCanvasElement
@@ -65,46 +71,108 @@ export class VulnerabilitiesComponent {
         document.getElementById('vulnImagesBarPDF') as HTMLCanvasElement
       ).toDataURL(),
     };
-    this.isPrinting = true;
-    setInterval(() => {
-      if (this.printableReportView) {
-        window.print();
-        this.isPrinting = false;
-      }
-    }, 500);
+    if (this.advFilter.modified_dt) {
+      this.vulnerabilitiesList = this.getFilteredVulnerabilities();
+      this.isPrinting = true;
+      setInterval(() => {
+        if (this.printableReportView) {
+          window.print();
+          this.isPrinting = false;
+        }
+      }, 500);
+    } else {
+      const dialogRef = this.dialog.open(PdfGenerationDialogComponent, {
+        width: '550px',
+        data: {
+          pdf_name: this.tr.instant('scan.report.PDF_LINK'),
+        },
+      });
+      dialogRef.componentInstance.submitDate.subscribe(date => {
+        if (date) {
+          this.vulnerabilitiesList = this.getFilteredVulnerabilities(
+            date.getTime() / 1000
+          );
+        } else {
+          this.vulnerabilitiesList = this.getFilteredVulnerabilities();
+        }
+        dialogRef.componentInstance.saving$.next(false);
+        dialogRef.componentInstance.onNoClick();
+        this.isPrinting = true;
+        setInterval(() => {
+          if (this.printableReportView) {
+            window.print();
+            this.isPrinting = false;
+          }
+        }, 500);
+      });
+    }
   }
 
   printAssetsPDF() {
+    this.advFilter = this.vulnerabilitiesFilterService.advFilter;
     this.masterData = {
       workloadMap4Pdf: this.vulnerabilitiesService.workloadMap4Pdf,
       hostMap4Pdf: this.vulnerabilitiesService.hostMap4Pdf,
       platformMap4Pdf: this.vulnerabilitiesService.platformMap4Pdf,
       imageMap4Pdf: this.vulnerabilitiesService.imageMap4Pdf,
     };
-    this.vulnerabilitiesList = this.getFilteredVulnerabilities();
     this.isFiltered = this.vulnerabilitiesFilterService.filtered;
-    this.advFilter = this.vulnerabilitiesFilterService.advFilter;
-
-    this.masterGrids = this.prepareDetails(
-      this.masterData,
-      this.vulnerabilitiesList,
-      this.isFiltered,
-      this.advFilter
-    );
-
-    this.isPrintingAssets = true;
-    setInterval(() => {
-      if (this.printableReportViewAssets) {
-        window.print();
-        this.isPrintingAssets = false;
-      }
-    }, 500);
+    if (this.advFilter.modified_dt) {
+      this.vulnerabilitiesList = this.getFilteredVulnerabilities();
+      this.masterGrids = this.prepareDetails(
+        this.masterData,
+        this.vulnerabilitiesList,
+        this.isFiltered,
+        this.advFilter
+      );
+      this.isPrintingAssets = true;
+      setInterval(() => {
+        if (this.printableReportViewAssets) {
+          window.print();
+          this.isPrintingAssets = false;
+        }
+      }, 500);
+    } else {
+      const dialogRef = this.dialog.open(PdfGenerationDialogComponent, {
+        width: '550px',
+        data: {
+          pdf_name: this.tr.instant('scan.report.PDF_LINK2'),
+        },
+      });
+      dialogRef.componentInstance.submitDate.subscribe(date => {
+        if (date) {
+          this.vulnerabilitiesList = this.getFilteredVulnerabilities(
+            date.getTime() / 1000
+          );
+        } else {
+          this.vulnerabilitiesList = this.getFilteredVulnerabilities();
+        }
+        this.masterGrids = this.prepareDetails(
+          this.masterData,
+          this.vulnerabilitiesList,
+          this.isFiltered,
+          this.advFilter
+        );
+        dialogRef.componentInstance.saving$.next(false);
+        dialogRef.componentInstance.onNoClick();
+        this.isPrintingAssets = true;
+        setInterval(() => {
+          if (this.printableReportViewAssets) {
+            window.print();
+            this.isPrintingAssets = false;
+          }
+        }, 500);
+      });
+    }
   }
 
-  private getFilteredVulnerabilities = () => {
+  private getFilteredVulnerabilities = (lastTimestamp?: number) => {
     let vulnerabilitiesList: any[] = [];
     this.vulnerabilitiesService.gridApi.forEachNodeAfterFilter(rowNode => {
-      vulnerabilitiesList.push(rowNode.data);
+      let vul: VulnerabilityAsset = rowNode.data;
+      if (!lastTimestamp || vul.last_modified_timestamp > lastTimestamp) {
+        vulnerabilitiesList.push(vul);
+      }
     });
     this.isMeetingReportLimit =
       vulnerabilitiesList.length > MapConstant.SEC_RISK_REPORT_MAX_ROW;

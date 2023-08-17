@@ -73,6 +73,7 @@ export class VulnerabilitiesFilterService {
   isAdvFilterOn() {
     return (
       this.advFilter.dt !== null ||
+      this.advFilter.modified_dt !== null ||
       this.advFilter.packageType !== 'all' ||
       this.advFilter.severityType !== 'all' ||
       this.advFilter.selectedDomains.length > 0 ||
@@ -148,6 +149,8 @@ export class VulnerabilitiesFilterService {
       },
       popup: { opened: false },
       dt: null,
+      modified_dt: null,
+      modified_dt_option: 'custom',
       entities: ['Service', 'Image', 'Node', 'Container'],
       entityType: 'Service',
       serviceName: '',

@@ -1121,6 +1121,7 @@
     "IMAGE_NOT_USED": "未使用的镜像",
     "UNPROTECTED_NODE": "未保护的主机",
     "PROTECTED_CONTAINER": "被保护的容器",
+    "LAST_MODIFIED": "上一次更改",
     "PUBLISHED": "发布时间",
     "PUBLISHED_TYPE": "发布类型",
     "WITH_FIX": "修复",
@@ -1136,6 +1137,14 @@
       "TITLE2": "漏洞报告 (资产视角)",
       "PDF_LINK": "漏洞视角",
       "PDF_LINK2": "资产视角",
+      "PRINT_REPORT": "打印漏洞报告",
+      "from": {
+        "ALL": "全选",
+        "TWOWEEKS": "2个星期前",
+        "ONEMONTH": "1个月前",
+        "THREEMONTHS": "3个月前",
+        "CUSTOM": "自定义"
+      },
       "gridHeader": {
         "NAME": "名称",
         "DESC": "描述",

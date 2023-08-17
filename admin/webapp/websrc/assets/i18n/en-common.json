@@ -1121,6 +1121,7 @@
     "IMAGE_NOT_USED": "Image not being used",
     "UNPROTECTED_NODE": "UnProtected Node",
     "PROTECTED_CONTAINER": "Protected container",
+    "LAST_MODIFIED": "Last Modified",
     "PUBLISHED": "Published",
     "PUBLISHED_TYPE": "Published Type",
     "WITH_FIX": "With Fix",
@@ -1136,6 +1137,14 @@
       "TITLE2": "Vulnerability reports (Assets View)",
       "PDF_LINK": "Vulnerability View",
       "PDF_LINK2": "Assets View",
+      "PRINT_REPORT": "Print Vulnerabilities Report",
+      "from": {
+        "ALL": "All",
+        "TWOWEEKS": "2 weeks ago",
+        "ONEMONTH": "1 month ago",
+        "THREEMONTHS": "3 months ago",
+        "CUSTOM": "Custom"
+      },
       "gridHeader": {
         "NAME": "Name",
         "DESC": "Description",

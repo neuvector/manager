@@ -11,10 +11,13 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ComplianceFilterService } from '../../../compliance.filter.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Observable } from 'rxjs';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import {
+  MatAutocompleteActivatedEvent,
+  MatAutocompleteSelectedEvent,
+} from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { map } from 'rxjs/operators';
-import { TranslateService } from "@ngx-translate/core";
+import { TranslateService } from '@ngx-translate/core';
 
 enum FilterView {
   SERVICE = 0,
@@ -35,8 +38,9 @@ export class ComplianceItemsTableFilterComponent implements OnInit {
   form!: FormGroup;
   matchTypes = this.complianceFilterService.matchTypes;
   view = FilterView.SERVICE;
-  viewText = this.translate.instant("admissionControl.names.SERVICE");
+  viewText = this.translate.instant('admissionControl.names.SERVICE');
   FilterView = FilterView;
+  autocompleteTagsOptionActivated = false;
   @ViewChild('namespaceInput') namespaceInput!: ElementRef<HTMLInputElement>;
 
   constructor(
@@ -84,19 +88,23 @@ export class ComplianceItemsTableFilterComponent implements OnInit {
   changeView(num: FilterView) {
     switch (num) {
       case FilterView.SERVICE: {
-        this.viewText = this.translate.instant("admissionControl.names.SERVICE");
+        this.viewText = this.translate.instant(
+          'admissionControl.names.SERVICE'
+        );
         break;
       }
       case FilterView.IMAGE: {
-        this.viewText = this.translate.instant("admissionControl.names.IMAGE");
+        this.viewText = this.translate.instant('admissionControl.names.IMAGE');
         break;
       }
       case FilterView.NODE: {
-        this.viewText = this.translate.instant("admissionControl.names.NODE");
+        this.viewText = this.translate.instant('admissionControl.names.NODE');
         break;
       }
       case FilterView.CONTAINER: {
-        this.viewText = this.translate.instant("admissionControl.names.CONTAINER");
+        this.viewText = this.translate.instant(
+          'admissionControl.names.CONTAINER'
+        );
         break;
       }
     }
@@ -139,6 +147,12 @@ export class ComplianceItemsTableFilterComponent implements OnInit {
     this.dialogRef.close({ reset: true });
   }
 
+  optionActivated(event: MatAutocompleteActivatedEvent): void {
+    if (event.option) {
+      this.autocompleteTagsOptionActivated = true;
+    }
+  }
+
   selected(event: MatAutocompleteSelectedEvent): void {
     this.namespaceInput.nativeElement.value = '';
     if (
@@ -147,12 +161,15 @@ export class ComplianceItemsTableFilterComponent implements OnInit {
       return;
     }
     this.form.controls.selectedDomains.value.push(event.option.viewValue);
+    this.autocompleteTagsOptionActivated = false;
+    this.namespaceCtrl.setValue(null);
   }
 
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
     if (
-      this.data.domains.includes(value) &&
+      !this.autocompleteTagsOptionActivated &&
+      value &&
       !this.form.controls.selectedDomains.value.includes(value)
     ) {
       this.form.controls.selectedDomains.value.push(value);

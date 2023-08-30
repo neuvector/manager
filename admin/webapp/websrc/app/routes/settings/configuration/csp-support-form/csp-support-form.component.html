@@ -1,12 +1,12 @@
 <form (ngSubmit)="submitExport()" [formGroup]="cspExportForm">
   <div class="ml-3 my-md-4">
     <h1 class="h4 font-weight-normal">
-      {{ 'setting.AWS_BILLING' | translate }}
+      {{ 'setting.CLOUD_BILLING' | translate: { cloud: cspTypeText } }}
     </h1>
     <div class="mx-3 text-muted">
-      {{ 'setting.AWS_BILLING_HINT_1' | translate }}
-      <a href="{{ 'setting.AWS_SUPPORT_LINK' | translate }}" target="_blank">{{ 'setting.AWS_SUPPORT_LINK' | translate }}</a>
-      {{ 'setting.AWS_BILLING_HINT_2' | translate }}
+      {{ 'setting.CLOUD_BILLING_HINT_1' | translate: { cloud: cspTypeText } }}
+      <a href="{{ 'setting.CLOUD_SUPPORT_LINK' | translate: { cloud: cspTypeText } }}" target="_blank">{{ 'setting.CLOUD_SUPPORT_LINK' | translate: { cloud: cspTypeText } }}</a>
+      {{ 'setting.CLOUD_BILLING_HINT_2' | translate: { cloud: cspTypeText } }}
     </div>
     <div class="mx-3 mt-3 mat-small">
       <div *ngIf="cspErrors.length > 0">

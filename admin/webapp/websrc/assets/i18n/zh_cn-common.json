@@ -2939,10 +2939,10 @@
     "SERVER_CERTIFICATE": "服务器证书",
     "EXPORT": "输出",
     "IMPORT": "输入",
-    "AWS_BILLING": "AWS市场支持",
-    "AWS_BILLING_HINT_1": "如果您是通过AWS市场（即通过AWS账户整合账单）来订阅SUSE支持的NeuVector, 请下载本支持文件。您将需要用您的SUSE SCC账户上传至",
-    "AWS_SUPPORT_LINK": "https://scc.suse.com/cloudsupport",
-    "AWS_BILLING_HINT_2": "来创建支持案件.",
+    "CLOUD_BILLING": "{{cloud}}市场支持",
+    "CLOUD_BILLING_HINT_1": "如果您是通过{{cloud}}市场（即通过{{cloud}}账户整合账单）来订阅SUSE支持的NeuVector, 请下载本支持文件。您将需要用您的SUSE SCC账户上传至",
+    "CLOUD_SUPPORT_LINK": "https://scc.suse.com/cloudsupport",
+    "CLOUD_BILLING_HINT_2": "来创建支持案件.",
     "DOWNLOAD_SUPPORT_FILE": "下载支持文件",
     "CSP_ERR_TITLE": "CSP适配器错误",
     "NV_ERR_TITLE": "NeuVector错误",
@@ -3028,6 +3028,11 @@
     "MAX_SELECTED_ENFORCER_HINT": "请为支持信息选择不超过{{maxSlectedEnforcer}}个代理.",
     "AS_STANDALONE": "作为独立集群导入配置",
     "RANCHER_EP": "Rancher端点",
+    "cloud_type": {
+      "AWS": "AWD",
+      "AZURE": "Azure",
+      "GCLOUD": "Google Cloud"
+    },
     "autoscale": {
       "TITLE": "扫描仪弹性伸缩",
       "MIN_MAX": "最小/最大 pods",

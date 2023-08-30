@@ -2939,10 +2939,10 @@
     "SERVER_CERTIFICATE": "Server Certificate",
     "EXPORT": "Export",
     "IMPORT": "Import",
-    "AWS_BILLING": "AWS Marketplace Support",
-    "AWS_BILLING_HINT_1": "If you have subscribed to NeuVector by SUSE support through the AWS Marketplace (i.e. integrated billing through your AWS account), please download this special support file. You will need to upload it to your SUSE SCC account at ",
-    "AWS_SUPPORT_LINK": "https://scc.suse.com/cloudsupport",
-    "AWS_BILLING_HINT_2": " in order to create a support case.",
+    "CLOUD_BILLING": "{{cloud}} Marketplace Support",
+    "CLOUD_BILLING_HINT_1": "If you have subscribed to NeuVector by SUSE support through the {{cloud}} Marketplace (i.e. integrated billing through your {{cloud}} account), please download this special support file. You will need to upload it to your SUSE SCC account at ",
+    "CLOUD_SUPPORT_LINK": "https://scc.suse.com/cloudsupport",
+    "CLOUD_BILLING_HINT_2": " in order to create a support case.",
     "DOWNLOAD_SUPPORT_FILE": "Download Support File",
     "CSP_ERR_TITLE": "CSP Adapter Error",
     "NV_ERR_TITLE": "NeuVector Error",
@@ -3028,6 +3028,11 @@
     "MAX_SELECTED_ENFORCER_HINT": "Please select no more than {{maxSlectedEnforcer}} enforcers for support information.",
     "AS_STANDALONE": "Import configuration as standalone cluster",
     "RANCHER_EP": "Rancher Endpoint",
+    "cloud_type": {
+      "AWS": "AWD",
+      "AZURE": "Azure",
+      "GCLOUD": "Google Cloud"
+    },
     "autoscale": {
       "TITLE": "Scanner Autoscale",
       "MIN_MAX": "Min/max pods",

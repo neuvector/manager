@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SettingsService } from '@services/settings.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -17,6 +17,9 @@ import * as moment from 'moment';
 })
 export class CspSupportFormComponent implements OnInit {
 
+  @Input() cspType: string;
+
+  cspTypeText: string
   submittingForm = false;
   errorMsg: string = '';
   cspAdapterErrorMsgObj: any = null;
@@ -35,6 +38,7 @@ export class CspSupportFormComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.cspTypeText = this.tr.instant(`setting.cloud_type.${this.cspType.toUpperCase()}`);
   }
 
   submitExport = () => {
@@ -42,7 +46,7 @@ export class CspSupportFormComponent implements OnInit {
     this.errorMsg = '';
     this.cspErrors = [];
     this.nvError = '';
-    this.billingDataExpireTime = ''
+    this.billingDataExpireTime = '';
     let cspAdapterErrorsBase64 = null;
     this.settingsService
       .getCspSupport()

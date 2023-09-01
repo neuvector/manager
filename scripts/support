@@ -223,7 +223,7 @@ def support(client, jointID, enforcers, output):
         path = "/v1/fed/cluster/{}{}".format(jointID, path)
     data = support_request(path, output)
     entries = data.get("hosts")
-    if len(entries):
+    if entries and len(entries):
         ids = [entry["id"] for entry in entries]
         for _, _path in enumerate(support_host[1:]):
             path = _path
@@ -238,7 +238,7 @@ def support(client, jointID, enforcers, output):
         path = "/v1/fed/cluster/{}{}".format(jointID, path)
     data = support_request(path, output)
     entries = data.get("controllers")
-    if len(entries):
+    if entries and len(entries):
         ids = [entry["id"] for entry in entries]
         for _, _path in enumerate(support_controller[1:]):
             path = _path
@@ -253,7 +253,7 @@ def support(client, jointID, enforcers, output):
         path = "/v1/fed/cluster/{}{}".format(jointID, path)
     data = support_request(path, output)
     entries = data.get("enforcers")
-    if enforcers and len(entries) > 0:
+    if enforcers and entries and len(entries) > 0:
         all = [entry["id"] for entry in entries]
         ids = []
 
@@ -282,7 +282,7 @@ def support(client, jointID, enforcers, output):
         path = "/v1/fed/cluster/{}{}".format(jointID, path)
     data = support_request(path, output)
     entries = data.get("workloads")
-    if len(entries):
+    if entries and len(entries):
         ids = [entry["brief"]["id"] for entry in entries]
         for _, _path in enumerate(support_workload[1:]):
             path = _path

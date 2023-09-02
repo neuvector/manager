@@ -134,36 +134,50 @@ class RoutedHttpService(route: Route) extends Actor with HttpService with ActorL
 object Utils extends LazyLogging with Directives {
   def respondWithNoCacheControl(isStaticResource: Boolean = false): Directive0 = {
     val isUsingSSL: Boolean = sys.env.getOrElse("MANAGER_SSL", "on") == "on"
-    val acceptFrameAncestors =
-      sys.env.getOrElse("FRAME_ANCESTOR_WHITELIST", "none").replaceAll(",", " ")
+    val isDev: Boolean      = sys.env.getOrElse("IS_DEV", "false") == "true"
+    val hdXFrameOptions     = RawHeader("X-Frame-Options", "SAMEORIGIN")
+    val hdStrictTransportSecurity =
+      RawHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload")
+    val hdCacheCtrl       = RawHeader("Cache-Control", "no-cache")
+    val hdContentEncoding = RawHeader("Content-Encoding", "gzip")
     if (isUsingSSL) {
       if (isStaticResource) {
-        respondWithHeaders(
-          RawHeader("Content-Security-Policy", s"frame-ancestors $acceptFrameAncestors"),
-          RawHeader("X-Frame-Options", "DENY"),
-          RawHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload"),
-          RawHeader("Content-Encoding", "gzip")
-        )
+        if (isDev) {
+          respondWithHeaders(
+            hdXFrameOptions,
+            hdStrictTransportSecurity
+          )
+        } else {
+          respondWithHeaders(
+            hdXFrameOptions,
+            hdStrictTransportSecurity,
+            hdContentEncoding
+          )
+        }
       } else {
         respondWithHeaders(
-          RawHeader("Content-Security-Policy", s"frame-ancestors $acceptFrameAncestors"),
-          RawHeader("X-Frame-Options", "DENY"),
-          RawHeader("Cache-Control", "no-cache"),
-          RawHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload")
+          hdXFrameOptions,
+          hdCacheCtrl,
+          hdStrictTransportSecurity
         )
       }
     } else {
       if (isStaticResource) {
-        respondWithHeaders(
-          RawHeader("Content-Security-Policy", s"frame-ancestors $acceptFrameAncestors"),
-          RawHeader("X-Frame-Options", "DENY"),
-          RawHeader("Content-Encoding", "gzip")
-        )
+        if (isDev) {
+          respondWithHeaders(
+            hdXFrameOptions
+          )
+        } else {
+          respondWithHeaders(
+            hdXFrameOptions,
+            hdContentEncoding
+          )
+        }
+
       } else {
         respondWithHeaders(
-          RawHeader("Content-Security-Policy", s"frame-ancestors $acceptFrameAncestors"),
-          RawHeader("X-Frame-Options", "DENY"),
-          RawHeader("Cache-Control", "no-cache")
+          hdXFrameOptions,
+          hdCacheCtrl
         )
       }
     }

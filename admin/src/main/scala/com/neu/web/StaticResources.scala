@@ -17,8 +17,6 @@ trait StaticResources extends HttpService with LazyLogging {
   val shortPath           = 10
   val isUsingSSL: Boolean = sys.env.getOrElse("MANAGER_SSL", "on") == "on"
   val isDev: Boolean      = sys.env.getOrElse("IS_DEV", "false") == "true"
-  val acceptFrameAncestors =
-    sys.env.getOrElse("FRAME_ANCESTOR_WHITELIST", "none").replaceAll(",", " ")
 
   //# Rewrite redirect-implementation base on "spray/spray-routing/src/main/scala/spray/routing/RequestContext.scala, added strict transport security header"
   def redirectMe(uri: Uri, redirectionType: Redirection) =
@@ -27,18 +25,12 @@ trait StaticResources extends HttpService with LazyLogging {
         status = redirectionType,
         headers =
           if (isUsingSSL)
-            Location(uri) :: RawHeader(
-              "Content-Security-Policy",
-              s"frame-ancestors ${acceptFrameAncestors}"
-            ) :: RawHeader("X-Frame-Options", "DENY") :: RawHeader(
+            Location(uri) :: RawHeader("X-Frame-Options", "SAMEORIGIN") :: RawHeader(
               "Strict-Transport-Security",
               "max-age=31536000; includeSubDomains; preload"
             ) :: Nil
           else
-            Location(uri) :: RawHeader(
-              "Content-Security-Policy",
-              s"frame-ancestors ${acceptFrameAncestors}"
-            ) :: RawHeader("X-Frame-Options", "DENY") :: Nil,
+            Location(uri) :: RawHeader("X-Frame-Options", "SAMEORIGIN") :: Nil,
         entity = redirectionType.htmlTemplate match {
           case ""       ⇒ HttpEntity.Empty
           case template ⇒ HttpEntity(`text/html`, template format uri)
@@ -87,7 +79,9 @@ trait StaticResources extends HttpService with LazyLogging {
     } ~
     path(Rest) { path =>
       if (isDev) {
-        getFromResource(UrlEscapers.urlFragmentEscaper().escape(s"root/$path"))
+        Utils.respondWithNoCacheControl(true) {
+          getFromResource(UrlEscapers.urlFragmentEscaper().escape(s"root/$path"))
+        }
       } else {
         if (path.endsWith(".js")) {
           Utils.respondWithNoCacheControl(true) {
@@ -100,7 +94,9 @@ trait StaticResources extends HttpService with LazyLogging {
             )
           }
         } else {
-          getFromResource(UrlEscapers.urlFragmentEscaper().escape(s"root/$path"))
+          Utils.respondWithNoCacheControl(true) {
+            getFromResource(UrlEscapers.urlFragmentEscaper().escape(s"root/$path"))
+          }
         }
       }
 

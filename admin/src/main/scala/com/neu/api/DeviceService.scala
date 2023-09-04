@@ -547,67 +547,87 @@ class DeviceService()(implicit executionContext: ExecutionContext)
                   entity(as[String]) { debuggedEnforcer =>
                     complete {
                       try {
-                        logFile = "/tmp/debug" + new Date().getTime + ".gz"
-                        purgeDebugFiles(new File("/tmp"))
+                        verifyToken(tokenId) match {
+                          case Right(true) => {
+                            logFile = "/tmp/debug" + new Date().getTime + ".gz"
+                            purgeDebugFiles(new File("/tmp"))
 
-                        val id       = AuthenticationManager.getCluster(tokenId).getOrElse("")
-                        val ctrlHost = new URL(baseUri).getHost
-                        SupportLogAuthCacheManager.saveSupportLogAuth(tokenId, logFile)
-                        if (debuggedEnforcer.nonEmpty) {
-                          logger.info("With enforcer debug log")
-                          logger.info(
-                            "Process is running {}",
-                            "/usr/local/bin/support" +
-                            " -s " + ctrlHost +
-                            " -t " + tokenId +
-                            " -r " + AuthenticationManager.suseTokenMap.getOrElse(tokenId, "") +
-                            " -j " + id +
-                            " -e " + debuggedEnforcer +
-                            " -o " + logFile
-                          )
-                          val proc =
-                            Seq(
-                              "/usr/local/bin/support",
-                              "-s",
-                              ctrlHost,
-                              "-t",
-                              tokenId,
-                              "-r",
-                              AuthenticationManager.suseTokenMap.getOrElse(tokenId, ""),
-                              "-j",
-                              id,
-                              "-e",
-                              debuggedEnforcer,
-                              "-o",
-                              logFile
-                            ).run
-                          HttpResponse(StatusCodes.Accepted, "Started to collect debug log.")
-                        } else {
-                          logger.info("Without enforcer debug log")
-                          logger.info(
-                            "Process is running {}",
-                            "/usr/local/bin/support" +
-                            " -s " + ctrlHost +
-                            " -t " + tokenId +
-                            " -r " + AuthenticationManager.suseTokenMap.getOrElse(tokenId, "") +
-                            " -j " + id +
-                            " -o " + logFile
-                          )
-                          val proc =
-                            Seq(
-                              "/usr/local/bin/support",
-                              "-s",
-                              ctrlHost,
-                              "-t",
-                              tokenId,
-                              "-r",
-                              AuthenticationManager.suseTokenMap.getOrElse(tokenId, ""),
-                              "-j",
-                              id,
-                              "-o",
-                              logFile
-                            ).run
-                          HttpResponse(StatusCodes.Accepted, "Started to collect debug log.")
+                            val id       = AuthenticationManager.getCluster(tokenId).getOrElse("")
+                            val ctrlHost = new URL(baseUri).getHost
+                            SupportLogAuthCacheManager.saveSupportLogAuth(tokenId, logFile)
+                            if (debuggedEnforcer.nonEmpty) {
+                              logger.info("With enforcer debug log.")
+                              logger.info(
+                                "Process is running {}",
+                                "/usr/local/bin/support" +
+                                " -s " + ctrlHost +
+                                " -t " + tokenId +
+                                " -r " + AuthenticationManager.suseTokenMap.getOrElse(tokenId, "") +
+                                " -j " + id +
+                                " -e " + debuggedEnforcer +
+                                " -o " + logFile
+                              )
+                              val proc =
+                                Seq(
+                                  "/usr/local/bin/support",
+                                  "-s",
+                                  ctrlHost,
+                                  "-t",
+                                  tokenId,
+                                  "-r",
+                                  AuthenticationManager.suseTokenMap.getOrElse(tokenId, ""),
+                                  "-j",
+                                  id,
+                                  "-e",
+                                  debuggedEnforcer,
+                                  "-o",
+                                  logFile
+                                ).run
+                              HttpResponse(StatusCodes.Accepted, "Started to collect debug log.")
+                            } else {
+                              logger.info("Without enforcer debug log")
+                              logger.info(
+                                "Process is running {}",
+                                "/usr/local/bin/support" +
+                                " -s " + ctrlHost +
+                                " -t " + tokenId +
+                                " -r " + AuthenticationManager.suseTokenMap.getOrElse(tokenId, "") +
+                                " -j " + id +
+                                " -o " + logFile
+                              )
+                              val proc =
+                                Seq(
+                                  "/usr/local/bin/support",
+                                  "-s",
+                                  ctrlHost,
+                                  "-t",
+                                  tokenId,
+                                  "-r",
+                                  AuthenticationManager.suseTokenMap.getOrElse(tokenId, ""),
+                                  "-j",
+                                  id,
+                                  "-o",
+                                  logFile
+                                ).run
+                              HttpResponse(StatusCodes.Accepted, "Started to collect debug log.")
+                            }
+                          }
+                          case Right(false) => {
+                            RestClient.handleError(
+                              timeOutStatus,
+                              authenticationFailedStatus,
+                              serverErrorStatus,
+                              new RuntimeException("Status: 401")
+                            )
+                          }
+                          case Left(error) => {
+                            RestClient.handleError(
+                              timeOutStatus,
+                              authenticationFailedStatus,
+                              serverErrorStatus,
+                              error
+                            )
+                          }
                         }
                       } catch {
                         case NonFatal(e) =>
@@ -722,6 +742,25 @@ class DeviceService()(implicit executionContext: ExecutionContext)
           }
         }
       }
+    }
+
+  private def verifyToken(tokenId: String): Either[Throwable, Boolean] =
+    try {
+      val resultPromise = RestClient.httpRequestWithHeader(
+        s"${baseClusterUri(tokenId)}/$auth",
+        PATCH,
+        "",
+        tokenId
+      )
+      val result: HttpResponse = Await.result(resultPromise, RestClient.waitingLimit.seconds)
+      result match {
+        case HttpResponse(StatusCodes.OK, headers, entity, _)  => Right(true)
+        case HttpResponse(status, _, _, _) if status.isFailure => Right(false)
+        case _                                                 => Right(false)
+      }
+    } catch {
+      case NonFatal(e) =>
+        Left(e)
     }
 
   private def setBaseUrl(tokenId: String, transactionId: String): Unit = {

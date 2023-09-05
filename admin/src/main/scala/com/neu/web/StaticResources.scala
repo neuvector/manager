@@ -84,7 +84,7 @@ trait StaticResources extends HttpService with LazyLogging {
         }
       } else {
         if (path.endsWith(".js")) {
-          Utils.respondWithNoCacheControl(true) {
+          Utils.respondWithNoCacheControl(true, path.endsWith(".js")) {
             `Content-Type`(
               `application/javascript`
             )
@@ -94,7 +94,7 @@ trait StaticResources extends HttpService with LazyLogging {
             )
           }
         } else {
-          Utils.respondWithNoCacheControl(true) {
+          Utils.respondWithNoCacheControl(true, path.endsWith(".js")) {
             getFromResource(UrlEscapers.urlFragmentEscaper().escape(s"root/$path"))
           }
         }

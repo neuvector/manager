@@ -132,7 +132,10 @@ class RoutedHttpService(route: Route) extends Actor with HttpService with ActorL
 }
 
 object Utils extends LazyLogging with Directives {
-  def respondWithNoCacheControl(isStaticResource: Boolean = false): Directive0 = {
+  def respondWithNoCacheControl(
+    isStaticResource: Boolean = false,
+    isJs: Boolean = false
+  ): Directive0 = {
     val isUsingSSL: Boolean = sys.env.getOrElse("MANAGER_SSL", "on") == "on"
     val isDev: Boolean      = sys.env.getOrElse("IS_DEV", "false") == "true"
     val hdXFrameOptions     = RawHeader("X-Frame-Options", "SAMEORIGIN")
@@ -142,7 +145,7 @@ object Utils extends LazyLogging with Directives {
     val hdContentEncoding = RawHeader("Content-Encoding", "gzip")
     if (isUsingSSL) {
       if (isStaticResource) {
-        if (isDev) {
+        if (isDev || !isJs) {
           respondWithHeaders(
             hdXFrameOptions,
             hdStrictTransportSecurity
@@ -163,7 +166,7 @@ object Utils extends LazyLogging with Directives {
       }
     } else {
       if (isStaticResource) {
-        if (isDev) {
+        if (isDev || !isJs) {
           respondWithHeaders(
             hdXFrameOptions
           )

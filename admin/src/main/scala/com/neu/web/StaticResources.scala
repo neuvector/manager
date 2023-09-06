@@ -72,19 +72,19 @@ trait StaticResources extends HttpService with LazyLogging {
       }
     } ~
     path("favicon.ico") {
-      Utils.respondWithNoCacheControl(true) {
+      Utils.respondWithWebServerHeaders(true) {
         complete(StatusCodes.NotFound)
       }
 
     } ~
     path(Rest) { path =>
       if (isDev) {
-        Utils.respondWithNoCacheControl(true) {
+        Utils.respondWithWebServerHeaders(true) {
           getFromResource(UrlEscapers.urlFragmentEscaper().escape(s"root/$path"))
         }
       } else {
         if (path.endsWith(".js")) {
-          Utils.respondWithNoCacheControl(true, path.endsWith(".js")) {
+          Utils.respondWithWebServerHeaders(true, path.endsWith(".js")) {
             `Content-Type`(
               `application/javascript`
             )
@@ -94,7 +94,7 @@ trait StaticResources extends HttpService with LazyLogging {
             )
           }
         } else {
-          Utils.respondWithNoCacheControl(true, path.endsWith(".js")) {
+          Utils.respondWithWebServerHeaders(true, path.endsWith(".js")) {
             getFromResource(UrlEscapers.urlFragmentEscaper().escape(s"root/$path"))
           }
         }

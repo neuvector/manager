@@ -49,7 +49,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
             optionalHeaderValueByName("Host") { host =>
               logger.info(s"get openId_auth: $host")
               parameter('serverName.?) { serverName =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     if (serverName.isEmpty) {
                       logger.info(s"openId-g: no server name.")
@@ -128,12 +128,12 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
           case Some(x) =>
             logger.info("openId-pt: authToken is matched and valid.")
             AuthenticationManager.invalidate(samlKey)
-            Utils.respondWithNoCacheControl() {
+            Utils.respondWithWebServerHeaders() {
               complete(x)
             }
           case _ =>
             logger.info("openId-pt: no authToken")
-            Utils.respondWithNoCacheControl() {
+            Utils.respondWithWebServerHeaders() {
               complete((StatusCodes.Unauthorized, authError))
             }
         }
@@ -143,7 +143,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
       clientIP { _ =>
         optionalHeaderValueByName("Host") { host =>
           parameter('serverName.?) { serverName =>
-            Utils.respondWithNoCacheControl() {
+            Utils.respondWithWebServerHeaders() {
               complete {
                 if (serverName.isEmpty) {
                   logger.info(s"saml-g: servername is empty")
@@ -171,12 +171,12 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
           case Some(x) =>
             logger.info(s"saml-pt: authToken matched.")
             AuthenticationManager.invalidate(samlKey)
-            Utils.respondWithNoCacheControl() {
+            Utils.respondWithWebServerHeaders() {
               complete(x)
             }
           case None =>
             logger.info("saml-pt: no authToken.")
-            Utils.respondWithNoCacheControl() {
+            Utils.respondWithWebServerHeaders() {
               complete((StatusCodes.Unauthorized, authError))
             }
         }
@@ -230,14 +230,14 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
     } ~
     path("gravatar") {
       get {
-        Utils.respondWithNoCacheControl() {
+        Utils.respondWithWebServerHeaders() {
           complete(gravatarEnabled)
         }
       }
     } ~
     path("eula") {
       get {
-        Utils.respondWithNoCacheControl() {
+        Utils.respondWithWebServerHeaders() {
           complete {
             logger.info("Getting EULA")
             if ("true".equalsIgnoreCase(eulaOEMAppSafe)) {
@@ -251,7 +251,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
     } ~
     path("rebrand") {
       get {
-        Utils.respondWithNoCacheControl() {
+        Utils.respondWithWebServerHeaders() {
           complete(
             Rebrand(
               customLoginLogo,
@@ -275,7 +275,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
       {
         pathPrefix(auth) {
           delete {
-            Utils.respondWithNoCacheControl() {
+            Utils.respondWithWebServerHeaders() {
               complete {
                 val cacheKey = tokenId.substring(0, 20)
                 paginationCacheManager[List[org.json4s.JsonAST.JValue]]
@@ -293,7 +293,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
         } ~
         pathPrefix("heartbeat") {
           patch {
-            Utils.respondWithNoCacheControl() {
+            Utils.respondWithWebServerHeaders() {
               complete {
                 RestClient.httpRequestWithHeader(
                   s"${baseClusterUri(tokenId)}/$auth",
@@ -308,7 +308,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
         pathPrefix("role2") {
           path("permission-options") {
             get {
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info(s"Getting permission options ...")
                   RestClient.httpRequestWithHeader(
@@ -324,7 +324,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
           pathEnd {
             get {
               parameter('name.?) { name =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     var url = ""
                     if (name.isEmpty) {
@@ -345,7 +345,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
             } ~
             post {
               entity(as[RoleWrap]) { roleWrap =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     val payload = roleWrapToJson(roleWrap)
                     logger.info("Add role: {}", payload)
@@ -361,7 +361,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
             } ~
             patch {
               entity(as[RoleWrap]) { roleWrap =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     val payload = roleWrapToJson(roleWrap)
                     val name    = roleWrap.config.name
@@ -378,7 +378,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
             } ~
             delete {
               parameter('name) { name =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Deleting role: {}", name)
                     RestClient.httpRequestWithHeader(
@@ -397,7 +397,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
           pathEnd {
             get {
               parameter('name.?) { name =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     if (name.isEmpty) {
                       logger.info("Getting all apikeys")
@@ -422,7 +422,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
             } ~
             post {
               entity(as[ApikeyWrap]) { apikeyWrap =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     val payload = apikeyWrapToJson(apikeyWrap)
                     logger.info("Add apikey: {}", payload)
@@ -435,7 +435,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                   }
                 }
               } ~
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Create apikey")
                   RestClient.httpRequestWithHeader(
@@ -449,7 +449,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
             } ~
             delete {
               parameter('name) { name =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Deleting apikey: {}", name)
                     RestClient.httpRequestWithHeader(
@@ -467,7 +467,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
         pathPrefix("user") {
           get {
             parameter('name.?) { name =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   if (name.nonEmpty) {
                     try {
@@ -535,7 +535,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
           } ~
           post {
             entity(as[User]) { user =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Add user: {}", user.username)
                   RestClient.httpRequestWithHeader(
@@ -584,17 +584,17 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                         None
                       )
                     )
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       complete(profile)
                     }
                   case StatusCodes.RequestTimeout =>
                     logger.warn("Session timed out!")
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       complete((StatusCodes.RequestTimeout, "Timed out"))
                     }
                   case _ =>
                     logger.warn("Error updating profile!")
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       complete(response)
                     }
                 }
@@ -603,7 +603,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
           } ~
           delete {
             parameter('userId) { userId =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Deleting user: {}", userId)
                   RestClient.httpRequestWithHeader(
@@ -620,7 +620,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
         pathPrefix("self") {
           get {
             parameter('isOnNV.?) { isOnNV =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   try {
                     logger.info("Getting self ..")
@@ -665,12 +665,12 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
           }
         } ~
         (get & path("version")) {
-          Utils.respondWithNoCacheControl() {
+          Utils.respondWithWebServerHeaders() {
             complete(managerVersion)
           }
         } ~
         (post & path("token")) {
-          Utils.respondWithNoCacheControl() {
+          Utils.respondWithWebServerHeaders() {
             complete {
               val user = AuthenticationManager.validate(tokenId)
               (StatusCodes.OK, user)
@@ -680,7 +680,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
         path("eula") {
           post {
             entity(as[Eula]) { eula =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Setting EULA: {}", eula.accepted)
                   RestClient.httpRequestWithHeader(
@@ -697,7 +697,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
         pathPrefix("license") {
           pathEnd {
             get {
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Getting license")
                   RestClient.httpRequestWithHeader(
@@ -712,7 +712,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
             post {
               entity(as[LicenseRequestWrap]) { licenseRequestWrap: LicenseRequestWrap =>
                 {
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       logger.info("Getting license code")
                       RestClient.httpRequestWithHeader(
@@ -731,7 +731,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
             post {
               entity(as[LicenseKey]) { licenseKey: LicenseKey =>
                 {
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       logger.info("Loading license")
                       RestClient.httpRequestWithHeader(
@@ -750,7 +750,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
         pathPrefix("password-profile") {
           path("public") {
             get {
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Getting password public profile")
                   RestClient.httpRequestWithHeader(
@@ -766,7 +766,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
           path("user") {
             post {
               entity(as[UserBlockWrap]) { userBlockWrap: UserBlockWrap =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Updating user block")
                     RestClient.httpRequestWithHeader(
@@ -782,7 +782,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
           } ~
           pathEnd {
             get {
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Getting password profile")
                   RestClient.httpRequestWithHeader(
@@ -796,7 +796,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
             } ~
             patch {
               entity(as[PasswordProfileWrap]) { passwordProfileWrap: PasswordProfileWrap =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Updating password profile")
                     RestClient.httpRequestWithHeader(
@@ -814,7 +814,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
         pathPrefix("server") {
           pathEnd {
             get {
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Getting ldap/saml server")
                   RestClient.httpRequestWithHeader(
@@ -829,7 +829,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
             post {
               entity(as[LdapSettingWrap]) { ldapSettingWrap: LdapSettingWrap =>
                 {
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       logger.info("Adding ldap/saml server")
                       logger.debug(ldapSettingWrapToJson(ldapSettingWrap))
@@ -847,7 +847,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
             patch {
               entity(as[LdapSettingWrap]) { ldapSettingWrap: LdapSettingWrap =>
                 {
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       logger.info("Updating Ldap/saml server")
                       logger.debug(ldapSettingWrapToJson(ldapSettingWrap))
@@ -865,7 +865,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
             delete {
               entity(as[LdapSettingWrap]) { ldapSettingWrap: LdapSettingWrap =>
                 {
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       logger.info("Deleting Ldap/saml server")
                       RestClient.httpRequestWithHeader(
@@ -884,7 +884,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
         (post & path("debug")) {
           entity(as[LdapServerAccountWrap]) { ldapAccountWarp: LdapServerAccountWrap =>
             {
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Testing Ldap server config")
                   RestClient.httpRequestWithHeader(
@@ -924,7 +924,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
           AuthenticationManager.suseTokenMap += (authToken.token.token -> suseCookieValue)
           logger.info("login with SUSE cookie")
           logger.info("Client ip {}", ip)
-          Utils.respondWithNoCacheControl() {
+          Utils.respondWithWebServerHeaders() {
             complete(authToken)
           }
         }
@@ -936,7 +936,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
             case NonFatal(e) =>
               logger.warn(e.getMessage)
               if (e.getMessage.contains("Status: 401") || e.getMessage.contains("Status: 403")) {
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   onUnauthorized(e)
                 }
               } else {
@@ -950,34 +950,34 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                     if (e.getMessage.contains("Status: 401") || e.getMessage.contains(
                           "Status: 403"
                         )) {
-                      Utils.respondWithNoCacheControl() {
+                      Utils.respondWithWebServerHeaders() {
                         onUnauthorized(e)
                       }
                     } else {
-                      Utils.respondWithNoCacheControl() {
+                      Utils.respondWithWebServerHeaders() {
                         complete((StatusCodes.InternalServerError, "Controller unavailable!"))
                       }
                     }
                   case e: TimeoutException =>
                     logger.warn(e.getMessage)
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       complete((StatusCodes.NetworkConnectTimeout, "Network connect timeout error"))
                     }
                   case e: ConnectionAttemptFailedException =>
                     logger.warn(e.getMessage)
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       complete((StatusCodes.NetworkConnectTimeout, "Network connect timeout error"))
                     }
                 }
               }
             case e: TimeoutException =>
               logger.warn(e.getMessage)
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete((StatusCodes.NetworkConnectTimeout, "Network connect timeout error"))
               }
             case e: ConnectionAttemptFailedException =>
               logger.warn(e.getMessage)
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete((StatusCodes.NetworkConnectTimeout, "Network connect timeout error"))
               }
           }

@@ -47,7 +47,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
             patch {
               entity(as[Array[String]]) { ipList =>
                 {
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       logger.info("Getting ip locations")
                       try {
@@ -70,7 +70,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
         pathPrefix("event") {
           pathEnd {
             get {
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   RestClient.httpRequestWithHeader(
                     s"${baseClusterUri(tokenId)}/log/event",
@@ -86,7 +86,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
         pathPrefix("incident") {
           pathEnd {
             get {
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   RestClient.httpRequestWithHeader(
                     s"${baseClusterUri(tokenId)}/log/incident",
@@ -102,7 +102,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
         pathPrefix("violation") {
           pathEnd {
             get {
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   RestClient.httpRequestWithHeader(
                     s"${baseClusterUri(tokenId)}/log/violation",
@@ -117,7 +117,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
           path(top) {
             get {
               parameter('category) { category =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     category match {
                       case `client` =>
@@ -160,12 +160,12 @@ class NotificationService()(implicit executionContext: ExecutionContext)
                         violation.reported_at.isAfter(violationBrief.reported_at.minusHours(2)) &&
                         violation.reported_at.isBefore(violationBrief.reported_at.plusHours(2))
                     )
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       complete(track)
                     }
                   } catch {
                     case NonFatal(e) =>
-                      Utils.respondWithNoCacheControl() {
+                      Utils.respondWithWebServerHeaders() {
                         complete(onNonFatal(e))
                       }
                   }
@@ -177,7 +177,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
         pathPrefix("audit") {
           pathEnd {
             get {
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   RestClient.httpRequestWithHeader(
                     s"${baseClusterUri(tokenId)}/log/audit",
@@ -194,7 +194,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
           pathEnd {
             get {
               parameter('start.?, 'limit.?) { (start, limit) =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   logger.info("tokenId: {}", tokenId)
                   val cacheKey = if (tokenId.length > 20) tokenId.substring(0, 20) else tokenId
                   try {
@@ -254,11 +254,11 @@ class NotificationService()(implicit executionContext: ExecutionContext)
                           )) {
                         paginationCacheManager[List[org.json4s.JsonAST.JValue]]
                           .removePagedData(s"$cacheKey-audit")
-                        Utils.respondWithNoCacheControl() {
+                        Utils.respondWithWebServerHeaders() {
                           complete((StatusCodes.Unauthorized, "Authentication failed!"))
                         }
                       } else {
-                        Utils.respondWithNoCacheControl() {
+                        Utils.respondWithWebServerHeaders() {
                           paginationCacheManager[List[org.json4s.JsonAST.JValue]]
                             .removePagedData(s"$cacheKey-audit")
                           complete((StatusCodes.InternalServerError, "Controller unavailable!"))
@@ -266,7 +266,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
                       }
                     case e @ (_: TimeoutException | _: ConnectionAttemptFailedException) =>
                       logger.warn(e.getMessage)
-                      Utils.respondWithNoCacheControl() {
+                      Utils.respondWithWebServerHeaders() {
                         paginationCacheManager[List[org.json4s.JsonAST.JValue]]
                           .removePagedData(s"$cacheKey-audit")
                         complete(
@@ -283,7 +283,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
           pathEnd {
             get {
               parameter('id.?) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     id match {
                       case None =>
@@ -348,12 +348,12 @@ class NotificationService()(implicit executionContext: ExecutionContext)
                           threat.reported_at.isBefore(violationBrief.reported_at.plusHours(2))
                         }
                     )
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       complete(track)
                     }
                   } catch {
                     case NonFatal(e) =>
-                      Utils.respondWithNoCacheControl() {
+                      Utils.respondWithWebServerHeaders() {
                         complete(onNonFatal(e))
                       }
                   }
@@ -363,7 +363,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
           } ~
           path(top) {
             get {
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   try {
                     val threatRes =
@@ -407,7 +407,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
           path("session") {
             get {
               parameter('id) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/session?f_workload=$id&limit=256",
@@ -423,7 +423,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
           path("conversation") {
             delete {
               parameter('from, 'to) { (from, to) =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Clear from {} to {}", from, to)
                     RestClient.httpRequestWithHeader(
@@ -440,7 +440,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
           path("endpoint") {
             patch {
               entity(as[EndpointConfigWrap]) { config =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Renaming endpoint: {}", config.config.id)
                     RestClient.httpRequestWithHeader(
@@ -455,7 +455,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
             } ~
             delete {
               parameter('id) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Removing unmanaged endpoint: {}", id)
                     RestClient.httpRequestWithHeader(
@@ -472,7 +472,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
           path("history") {
             get {
               parameter('from, 'to) { (from, to) =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/conversation/$from/$to",
@@ -489,7 +489,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
             pathEnd {
               get {
                 parameter('user) { user =>
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       try {
 
@@ -536,7 +536,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
                     logger.info("saving positions for user: {}", graphLayout.user)
                     GraphCacheManager.saveNodeLayout(graphLayout)
                     logger.debug(layoutToJson(graphLayout))
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       complete(HttpEntity.Empty)
                     }
                   }
@@ -547,7 +547,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
               get {
                 parameter('user) { user =>
                   {
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       complete {
                         UserGraphLayout(user, GraphCacheManager.getNodeLayout(user))
                       }
@@ -560,7 +560,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
               get {
                 parameter('user) { user =>
                   {
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       complete {
                         BlacklistCacheManager.getBlacklist(user)
                       }
@@ -573,7 +573,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
                   {
                     logger.info("saving blacklist for user: {}", userBlacklist.user)
                     BlacklistCacheManager.saveBlacklist(userBlacklist)
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       complete(HttpEntity.Empty)
                     }
                   }
@@ -585,7 +585,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
         pathPrefix("security-events") {
           pathEnd {
             get {
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   try {
                     val (startTime: DateTime, notifications: (String, String, String)) =
@@ -641,7 +641,7 @@ class NotificationService()(implicit executionContext: ExecutionContext)
         pathPrefix("security-events2") {
           pathEnd {
             get {
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   try {
                     getNotifications(tokenId)._2

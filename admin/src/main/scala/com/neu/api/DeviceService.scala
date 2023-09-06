@@ -48,7 +48,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
         pathPrefix("enforcer") {
           get {
             parameter('id.?) { id =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   if (id.isEmpty) {
                     RestClient.httpRequestWithHeader(
@@ -73,7 +73,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
         pathPrefix("single-enforcer") {
           get {
             parameter('id) { id =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   RestClient.httpRequestWithHeader(
                     s"${baseClusterUri(tokenId)}/enforcer/$id",
@@ -90,7 +90,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
           get {
             implicit val timeout: Timeout = Timeout(RestClient.waitingLimit.seconds)
             parameter('id.?) { id =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   if (id.isEmpty) {
                     RestClient.httpRequestWithHeader(
@@ -115,7 +115,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
         pathPrefix("scanner") {
           get {
             implicit val timeout: Timeout = Timeout(RestClient.waitingLimit.seconds)
-            Utils.respondWithNoCacheControl() {
+            Utils.respondWithWebServerHeaders() {
               complete {
                 RestClient.httpRequestWithHeader(
                   s"${baseClusterUri(tokenId)}/scan/scanner",
@@ -129,7 +129,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
         } ~
         path("summary") {
           get {
-            Utils.respondWithNoCacheControl() {
+            Utils.respondWithWebServerHeaders() {
               complete {
                 RestClient.httpRequestWithHeader(
                   s"${baseClusterUri(tokenId)}/system/summary",
@@ -143,7 +143,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
         } ~
         path("ibmsa_setup") {
           get {
-            Utils.respondWithNoCacheControl() {
+            Utils.respondWithWebServerHeaders() {
               complete {
                 RestClient.httpRequestWithHeader(s"$baseUri/partner/ibm_sa_ep", GET, "", tokenId)
               }
@@ -152,7 +152,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
         } ~
         path("usage") {
           get {
-            Utils.respondWithNoCacheControl() {
+            Utils.respondWithWebServerHeaders() {
               complete {
                 RestClient.httpRequestWithHeader(s"$baseUri/system/usage", GET, "", tokenId)
               }
@@ -161,7 +161,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
         } ~
         path("webhook") {
           post {
-            Utils.respondWithNoCacheControl() {
+            Utils.respondWithWebServerHeaders() {
               entity(as[Webhook]) { webhook =>
                 complete {
                   val payload = webhookConfigWrapToJson(WebhookConfigWrap(webhook))
@@ -178,7 +178,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
             }
           } ~
           patch {
-            Utils.respondWithNoCacheControl() {
+            Utils.respondWithWebServerHeaders() {
               parameter('scope.?) { scope =>
                 entity(as[Webhook]) { webhook =>
                   complete {
@@ -204,7 +204,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
             }
           } ~
           delete {
-            Utils.respondWithNoCacheControl() {
+            Utils.respondWithWebServerHeaders() {
               parameter('name, 'scope.?) { (name, scope) =>
                 complete {
                   logger.info("Delete config: {}", name)
@@ -225,7 +225,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
         } ~
         path("config") {
           get {
-            Utils.respondWithNoCacheControl() {
+            Utils.respondWithWebServerHeaders() {
               parameter('scope.?) { scope =>
                 complete {
                   RestClient.httpRequestWithHeader(
@@ -245,7 +245,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
             entity(as[SystemConfig]) { systemConfig =>
               parameter('scope.?) { scope =>
                 {
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       scope.fold {
                         val payload =
@@ -281,7 +281,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
         } ~
         path("config-v2") {
           get {
-            Utils.respondWithNoCacheControl() {
+            Utils.respondWithWebServerHeaders() {
               parameter('scope.?) { scope =>
                 complete {
                   scope.fold {
@@ -309,7 +309,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
             entity(as[SystemConfigWrap]) { systemConfigWrap =>
               parameter('scope.?) { scope =>
                 {
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       scope.fold {
                         val payload =
@@ -343,7 +343,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
           pathEnd {
             get {
               parameter('id.?) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     if (id.isEmpty) {
                       RestClient.httpRequestWithHeader(
@@ -369,7 +369,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
           path("workload") {
             get {
               parameter('id) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/workload?view=pod&f_host_id=$id",
@@ -385,7 +385,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
           path("compliance") {
             get {
               parameter('id) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/host/$id/compliance",
@@ -403,7 +403,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
           path("config") {
             get {
               parameter('id) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     if (id.equals("all")) {
                       RestClient.httpRequestWithHeader(
@@ -428,7 +428,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
               headerValueByName("X-Transaction-Id") { transactionId =>
                 headerValueByName("X-As-Standalone") { asStandalone =>
                   entity(as[String]) { tempToken =>
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       complete {
                         try {
                           setBaseUrl(tokenId, transactionId)
@@ -472,7 +472,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
               } ~
               entity(as[MultipartFormData]) { formData =>
                 headerValueByName("X-As-Standalone") { asStandalone =>
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       try {
                         val baseUrl = baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
@@ -506,7 +506,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
           pathPrefix("debug") {
             pathEnd {
               get {
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Getting debug log: {}", logFile)
                     try {
@@ -543,7 +543,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
                 }
               } ~
               post {
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   entity(as[String]) { debuggedEnforcer =>
                     complete {
                       try {
@@ -645,7 +645,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
             } ~
             path("check") {
               get {
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     val isFileReady = Files.exists(Paths.get(logFile)) && Files.isReadable(
                         Paths.get(logFile)
@@ -666,7 +666,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
           path("docker") {
             get {
               parameter('id) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/$benchHostPath/$id/docker",
@@ -680,7 +680,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
             } ~
             post {
               entity(as[String]) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Starting cis scan on docker: {}", id)
                     RestClient.httpRequestWithHeader(
@@ -697,7 +697,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
           path("kubernetes") {
             get {
               parameter('id) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/$benchHostPath/$id/kubernetes",
@@ -711,7 +711,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
             } ~
             post {
               entity(as[String]) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Starting scan registry: {}", id)
                     RestClient.httpRequestWithHeader(
@@ -728,7 +728,7 @@ class DeviceService()(implicit executionContext: ExecutionContext)
         } ~
         path("csp-support") {
           post {
-            Utils.respondWithNoCacheControl() {
+            Utils.respondWithWebServerHeaders() {
               complete {
                 logger.info("Downloading CSP support file: {}")
                 RestClient.httpRequestWithHeader(

@@ -23,7 +23,7 @@ class ClusterService()(implicit executionContext: ExecutionContext)
         pathPrefix("fed") {
           path("member") {
             get {
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info(s"Getting cluster..")
                   try {
@@ -44,7 +44,7 @@ class ClusterService()(implicit executionContext: ExecutionContext)
           path("switch") {
             get {
               parameter('id.?) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.switchCluster(tokenId, id)
                     logger.info(s"Switched to: $id")
@@ -57,7 +57,7 @@ class ClusterService()(implicit executionContext: ExecutionContext)
           path("summary") {
             get {
               parameter('id) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
                       RestClient.getClusterSummaryUrl(id),
@@ -73,7 +73,7 @@ class ClusterService()(implicit executionContext: ExecutionContext)
           path("promote") {
             post {
               entity(as[FedPromptRequest]) { fedPromptRequest =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
                       s"$fedUri/promote",
@@ -88,7 +88,7 @@ class ClusterService()(implicit executionContext: ExecutionContext)
           } ~
           path("demote") {
             post {
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   RestClient.httpRequestWithHeader(
                     s"$fedUri/demote",
@@ -102,7 +102,7 @@ class ClusterService()(implicit executionContext: ExecutionContext)
           } ~
           path("join_token") {
             get {
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   RestClient.httpRequestWithHeader(
                     s"$fedUri/join_token",
@@ -118,7 +118,7 @@ class ClusterService()(implicit executionContext: ExecutionContext)
             post {
               entity(as[FedJoinRequest]) { joinRequest =>
                 logger.info(s"Joining cluster: ${joinRequest.server}")
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
                       s"$fedUri/join",
@@ -135,7 +135,7 @@ class ClusterService()(implicit executionContext: ExecutionContext)
             post {
               entity(as[FedLeaveRequest]) { leaveRequest =>
                 logger.info(s"Leaving cluster: $leaveRequest")
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
                       s"$fedUri/leave",
@@ -152,7 +152,7 @@ class ClusterService()(implicit executionContext: ExecutionContext)
             patch {
               entity(as[FedConfigData]) { fedConfigData =>
                 logger.info(s"Updating cluster: ${fedConfigData.rest_info}")
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
                       s"$fedUri/config",
@@ -168,7 +168,7 @@ class ClusterService()(implicit executionContext: ExecutionContext)
           pathEnd {
             delete {
               parameter('id) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Deleting cluster: {}", id)
                     RestClient.httpRequestWithHeader(s"$fedUri/cluster/$id", DELETE, "", tokenId)
@@ -181,7 +181,7 @@ class ClusterService()(implicit executionContext: ExecutionContext)
             post {
               entity(as[DeployFedRulesReq]) { deployRequest =>
                 logger.info(s"Deploy fed rules: ${deployRequest.ids}")
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
                       s"$fedUri/deploy",

@@ -50,7 +50,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
         path("fed-deploy") {
           entity(as[DeployFedRulesConfig]) { deployFedRulesConfig =>
             post {
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Inform rule deployment")
                   RestClient.httpRequestWithHeader(
@@ -66,7 +66,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
         } ~
         path("conditionOption") {
           get {
-            Utils.respondWithNoCacheControl() {
+            Utils.respondWithWebServerHeaders() {
               parameter('scope.?) { scope =>
                 complete {
                   logger.info("Response rule condition options: {}")
@@ -87,7 +87,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
         path("unquarantine") {
           post {
             entity(as[Request]) { request =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Unquarantine response policy: {}")
                   logger.info("Unquarantine response rules: {}", requestToJson(request))
@@ -105,7 +105,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
         path("responseRule") {
           get {
             parameter('id) { id =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Response rule id: {}", id)
                   RestClient.httpRequestWithHeader(
@@ -122,7 +122,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
         path("responsePolicy") {
           get {
             parameter('scope.?) { scope =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   RestClient.httpRequestWithHeader(
                     scope.fold(s"${baseClusterUri(tokenId)}/$responseRulePath") { scope =>
@@ -139,7 +139,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
           } ~
           post {
             entity(as[ResponseRulesWrap]) { responseRulesWrap =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Inserting response policy: {}")
                   logger.info(
@@ -160,7 +160,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
           } ~
           patch {
             entity(as[ResponseRuleConfig]) { responseRuleConfig =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Updating response policy: {}")
                   logger.info("Updating response rules ID: {}", responseRuleConfig.config.id.get)
@@ -183,7 +183,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
           } ~
           delete {
             parameter('scope.?, 'id.?) { (scope, id) =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   var url = s"${baseClusterUri(tokenId)}/$responseRulePath"
                   if (id.nonEmpty) {
@@ -229,7 +229,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
                 if (scope.isDefined) {
                   url = s"$baseUri/$policyPath?scope=${scope.get}"
                 }
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     val cacheKey = if (tokenId.length > 20) tokenId.substring(0, 20) else tokenId
                     try {
@@ -303,7 +303,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
               parameters('scope) { scope =>
                 decompressRequest() {
                   entity(as[Policy2]) { policy =>
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       complete {
                         logger.debug("Updating policy: {}", policy2ToJson(policy))
                         RestClient.httpRequestWithHeader(
@@ -321,7 +321,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
             } ~
             delete {
               parameter('id.?) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     if (id.nonEmpty) {
                       logger.info("Deleting rule: {}", id.get)
@@ -346,7 +346,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
           } ~
           path("application") {
             get {
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Getting policy applications")
                   RestClient.httpRequestWithHeader(
@@ -362,7 +362,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
           path("rule") {
             get {
               parameter('id) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Getting rule: {}", id)
                     RestClient.httpRequestWithHeader(
@@ -377,7 +377,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
             } ~
             post {
               entity(as[Rule]) { rule =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Adding rule: {}", rule.id)
                     RestClient.httpRequestWithHeader(
@@ -392,7 +392,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
             } ~
             patch {
               entity(as[RuleConfig]) { rule =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Updating rule: {}", rule.id)
                     RestClient.httpRequestWithHeader(
@@ -408,7 +408,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
           } ~
           path("graph") {
             get {
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   try {
                     logger.info("Getting policy for graph")
@@ -447,7 +447,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
           path("promote") {
             post {
               entity(as[PromoteConfig]) { promoteConfig =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/policy/rules/promote",
@@ -464,7 +464,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
         pathPrefix("scan") {
           path("status") {
             get {
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Getting scan status")
                   RestClient.httpRequestWithHeader(
@@ -480,7 +480,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
           path("workload") {
             get {
               parameter('id.?, 'show.?) { (id, show) =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     if (id.isEmpty) {
                       logger.info("Getting scan summary")
@@ -509,7 +509,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
             } ~
             post {
               entity(as[String]) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Scan on container: {}", id)
                     RestClient.httpRequestWithHeader(
@@ -526,7 +526,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
           path("host") {
             get {
               parameter('id.?, 'show.?) { (id, show) =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     if (id.isEmpty) {
                       logger.info("Getting nodes scan summary")
@@ -550,7 +550,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
             } ~
             post {
               entity(as[String]) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Scan on node: {}", id)
                     RestClient.httpRequestWithHeader(
@@ -567,7 +567,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
           path("platform") {
             get {
               parameter('platform.?, 'show.?) { (platform, show) =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     platform match {
                       case None =>
@@ -592,7 +592,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
             } ~
             post {
               entity(as[String]) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Scan on node: {}", id)
                     RestClient.httpRequestWithHeader(
@@ -608,7 +608,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
           } ~
           pathPrefix("config") {
             get {
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Getting scan config")
                   RestClient.httpRequestWithHeader(
@@ -622,7 +622,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
             } ~
             post {
               entity(as[ScanConfigWrap]) { scanConfig =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Set auto scan : {}", scanConfig.config.auto_scan)
                     RestClient.httpRequestWithHeader(
@@ -640,7 +640,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
             pathEnd {
               get {
                 parameter('name.?) { name =>
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       if (name.isEmpty) {
                         logger.info("Getting scan registries")
@@ -665,7 +665,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
               } ~
               post {
                 entity(as[RegistryConfigWrap]) { registryConfig =>
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       logger.info(
                         "Adding scan registry: {}",
@@ -684,7 +684,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
               } ~
               patch {
                 entity(as[RegistryConfigDTO]) { registryConfig =>
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       logger.info("Updating scan registry: {}", registryConfig.name)
                       logger.debug(
@@ -703,7 +703,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
               } ~
               delete {
                 parameter('name) { name =>
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       logger.info("Deleting registry: {}", name)
                       RestClient.httpRequestWithHeader(
@@ -721,7 +721,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
               post {
                 headerValueByName("X-Transaction-Id") { transactionId =>
                   entity(as[RegistryConfigWrap]) { registryConfig =>
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       complete {
                         try {
                           val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
@@ -753,7 +753,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
                   }
                 } ~
                 entity(as[RegistryConfigWrap]) { registryConfig =>
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       try {
                         val baseUrl = baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
@@ -783,7 +783,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
               delete {
                 headerValueByName("X-Transaction-Id") { transactionId =>
                   parameter('name) { name =>
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       complete {
                         try {
                           logger.info("Stop registry test: {}", name)
@@ -816,7 +816,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
             path("repo") {
               get {
                 parameter('name) { name =>
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       logger.info("Getting scan registry summary")
                       RestClient.httpRequestWithHeader(
@@ -831,7 +831,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
               } ~
               post {
                 entity(as[String]) { name =>
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       logger.info("Starting scan registry: {}", name)
                       RestClient.httpRequestWithHeader(
@@ -846,7 +846,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
               } ~
               delete {
                 parameter('name) { name =>
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       logger.info("Stopping scan registry: {}", name)
                       RestClient.httpRequestWithHeader(
@@ -863,7 +863,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
             path("image") {
               get {
                 parameter('name, 'imageId, 'show.?) { (name, imageId, show) =>
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       val url =
                         s"${baseClusterUri(tokenId)}/$scanRegistryPath/$name/image/$imageId${if (show.isDefined)
@@ -888,7 +888,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
             } ~
             path("type") {
               get {
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Getting registry types")
                     RestClient.httpRequestWithHeader(
@@ -904,7 +904,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
             path("layer") {
               get {
                 parameter('name, 'imageId, 'show.?) { (name, imageId, show) =>
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       val url =
                         s"${baseClusterUri(tokenId)}/$scanRegistryPath/$name/layers/$imageId${if (show.isDefined)
@@ -930,7 +930,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
           } ~
           path("top") {
             get {
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Getting top vulnerable images")
                   RestClient.httpRequestWithHeader(
@@ -949,7 +949,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
             get {
               parameters('scope.?) { scope =>
                 if (scope.isEmpty) {
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       logger.info("Getting admission rules, {}", baseClusterUri(tokenId))
                       RestClient.httpRequestWithHeader(
@@ -961,7 +961,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
                     }
                   }
                 } else {
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       logger.info("Getting Fed admission rules")
                       RestClient.httpRequestWithHeader(
@@ -979,7 +979,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
           path("rule") {
             post {
               entity(as[AdmRuleConfig]) { admissionRuleConfig =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Adding addmission rule: {}", admissionRuleConfig)
                     logger.info(
@@ -1000,7 +1000,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
             } ~
             patch {
               entity(as[AdmRuleConfig]) { admissionRuleConfig =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Updating addmission rule: {}", admissionRuleConfig)
                     logger.info(
@@ -1021,7 +1021,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
             } ~
             delete {
               parameter('scope.?, 'id) { (scope, id) =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Removing admission deny rules {}", id)
                     RestClient.httpRequestWithHeader(
@@ -1043,7 +1043,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
           path("options") {
             get {
               parameter('scope.?) { scope =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Getting admission deny rule options")
                     RestClient.httpRequestWithHeader(
@@ -1063,7 +1063,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
           } ~
           path("state") {
             get {
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Getting admission state")
                   RestClient.httpRequestWithHeader(
@@ -1077,7 +1077,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
             } ~
             patch {
               entity(as[AdmConfig]) { admConfig =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Updating admission state")
                     RestClient.httpRequestWithHeader(
@@ -1093,7 +1093,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
           } ~
           path("test") {
             get {
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Testing admission control on K8s")
                   RestClient.httpRequestWithHeader(
@@ -1110,7 +1110,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
             post {
               entity(as[String]) { formData =>
                 {
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       val lines: Array[String] = formData.split("\n")
                       val contentLines         = lines.slice(4, lines.length - 1)
@@ -1131,7 +1131,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
           path("export") {
             post {
               entity(as[AdmExport]) { admExport =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Admission export")
                     RestClient.httpRequestWithHeader(
@@ -1148,7 +1148,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
           path("import") {
             post {
               headerValueByName("X-Transaction-Id") { transactionId =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     try {
                       val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
@@ -1180,7 +1180,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
                 }
               } ~
               entity(as[String]) { formData =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     try {
                       val baseUrl = baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
@@ -1213,7 +1213,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
           path("promote") {
             post {
               entity(as[PromoteConfig]) { promoteConfig =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/admission/rule/promote",

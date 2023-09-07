@@ -71,7 +71,7 @@ class DashboardService()(implicit executionContext: ExecutionContext)
       path("multi-cluster-summary") {
         get {
           parameters('clusterId.?) { clusterId =>
-            Utils.respondWithNoCacheControl() {
+            Utils.respondWithWebServerHeaders() {
               complete {
                 try {
                   val baseUrl =
@@ -172,7 +172,7 @@ class DashboardService()(implicit executionContext: ExecutionContext)
       pathPrefix("dashboard") {
         path("rbac") {
           get {
-            Utils.respondWithNoCacheControl() {
+            Utils.respondWithWebServerHeaders() {
               logger.info("Loading RBAC information ...")
               complete {
                 RestClient.httpRequestWithHeader(
@@ -188,7 +188,7 @@ class DashboardService()(implicit executionContext: ExecutionContext)
         path("scores2") {
           get {
             parameters('isGlobalUser, 'domain.?) { (isGlobalUser, domain) =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   try {
                     val url = domain.fold(s"${baseClusterUri(tokenId)}/internal/system") { domain =>
@@ -229,7 +229,7 @@ class DashboardService()(implicit executionContext: ExecutionContext)
             parameters('isGlobalUser, 'totalRunningPods) { (isGlobalUser, totalRunningPods) =>
               entity(as[Metrics]) { metrics =>
                 {
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       try {
                         getScore2(
@@ -256,7 +256,7 @@ class DashboardService()(implicit executionContext: ExecutionContext)
         } ~
         path("details") {
           parameters('isGlobalUser.?, 'domain.?) { (isGlobalUser, domain) =>
-            Utils.respondWithNoCacheControl() {
+            Utils.respondWithWebServerHeaders() {
               complete {
                 try {
                   val domainVal = domain.getOrElse("")
@@ -571,7 +571,7 @@ class DashboardService()(implicit executionContext: ExecutionContext)
             parameters('isGlobalUser.?) { isGlobalUser =>
               entity(as[ScoreInput]) { scoreInput =>
                 {
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       try {
                         getScore(scoreInput, isGlobalUser.getOrElse("true") == "true")
@@ -593,7 +593,7 @@ class DashboardService()(implicit executionContext: ExecutionContext)
           } ~
           get {
             parameters('isGlobalUser.?, 'domain.?) { (isGlobalUser, domain) =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   try {
                     val domainVal = domain.getOrElse("")
@@ -1113,7 +1113,7 @@ class DashboardService()(implicit executionContext: ExecutionContext)
         path("notifications") {
           get {
             parameters('domain.?) { domain =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   try {
                     val startTime = new DateTime()
@@ -1222,7 +1222,7 @@ class DashboardService()(implicit executionContext: ExecutionContext)
         path("notifications2") {
           get {
             parameters('domain.?) { domain =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   try {
                     val startTime = new DateTime()

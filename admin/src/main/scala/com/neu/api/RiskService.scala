@@ -42,7 +42,7 @@ class RiskService()(implicit executionContext: ExecutionContext)
             pathEnd {
               get {
                 parameters('show.?) { show =>
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       val url =
                         s"${baseClusterUri(tokenId)}/$scanUrl${if (show.isDefined) s"?show=${show.get}"
@@ -57,7 +57,7 @@ class RiskService()(implicit executionContext: ExecutionContext)
             pathPrefix("profile") {
               pathEnd {
                 get {
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       logger.info(s"Getting vulnerability profiles ...")
                       RestClient.httpRequestWithHeader(
@@ -71,7 +71,7 @@ class RiskService()(implicit executionContext: ExecutionContext)
                 } ~
                 patch {
                   entity(as[VulnerabilityProfileConfigData]) { vulnerabilityProfileConfigData =>
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       complete {
                         logger.info(
                           s"Update vulnerability profiles: {}",
@@ -91,7 +91,7 @@ class RiskService()(implicit executionContext: ExecutionContext)
               path("entry") {
                 post {
                   entity(as[VulnerabilityProfileConfigData]) { vulnerabilityProfileConfigData =>
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
 
                       complete {
                         try {
@@ -128,7 +128,7 @@ class RiskService()(implicit executionContext: ExecutionContext)
                   parameters('name) { name =>
                     entity(as[VulnerabilityProfileEntryConfigData]) {
                       vulnerabilityProfileEntryConfigData =>
-                        Utils.respondWithNoCacheControl() {
+                        Utils.respondWithWebServerHeaders() {
                           complete {
                             logger.info(
                               "Update vulnerability profile entry (Profile name): {}",
@@ -155,7 +155,7 @@ class RiskService()(implicit executionContext: ExecutionContext)
                 } ~
                 delete {
                   parameter('profile_name, 'entry_id) { (profileName, entryId) =>
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       complete {
                         logger.info(
                           "Delete vulnerability profile entry (Profile name): {}",
@@ -190,7 +190,7 @@ class RiskService()(implicit executionContext: ExecutionContext)
           pathPrefix("compliance") {
             pathEnd {
               get {
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/$complianceUrl",
@@ -204,7 +204,7 @@ class RiskService()(implicit executionContext: ExecutionContext)
             } ~
             path("template") {
               get {
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info(s"Getting compliance template ...")
                     RestClient.httpRequestWithHeader(
@@ -220,7 +220,7 @@ class RiskService()(implicit executionContext: ExecutionContext)
             path("profile") {
               get {
                 parameter('name.?) { name =>
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       logger.info(s"Getting compliance profile $name ...")
                       name.fold {
@@ -245,7 +245,7 @@ class RiskService()(implicit executionContext: ExecutionContext)
               patch {
                 entity(as[ComplianceProfileConfig]) { profileConfig =>
                   {
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       complete {
                         val payload = configWrapToJson(
                           ComplianceProfileConfigData(

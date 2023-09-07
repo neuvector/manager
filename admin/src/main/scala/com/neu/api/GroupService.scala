@@ -37,7 +37,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
         path("group-list") {
           get {
             parameters('scope.?, 'f_kind.?) { (scope, f_kind) =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   var url = s"${baseClusterUri(tokenId)}/group?start=0&brief=true"
                   if (f_kind.isDefined) {
@@ -64,7 +64,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
           path("custom_check") {
             get {
               parameter('name) { name =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info(s"url: ${baseClusterUri(tokenId)}/custom_check/$name")
                     RestClient.httpRequestWithHeader(
@@ -80,7 +80,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
             patch {
               entity(as[CustomCheckConfigDTO]) { customCheckDTO =>
                 {
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       val payload = customConfigToJson(CustomCheckConfigData(customCheckDTO.config))
                       logger.info("Saving custom scripts: {}", payload)
@@ -100,7 +100,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
             post {
               entity(as[Groups4Export]) { groups4Export =>
                 {
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       val payload = groups4ExportToJson(groups4Export)
                       logger.info("Exporting groups: {}", payload)
@@ -119,7 +119,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
           path("import") {
             post {
               headerValueByName("X-Transaction-Id") { transactionId =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     Thread.sleep(1000)
                     RestClient.httpRequestWithHeader(
@@ -134,7 +134,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
               } ~
               entity(as[String]) { formData =>
                 {
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       val lines: Array[String] = formData.split("\n")
                       val contentLines         = lines.slice(4, lines.length - 1)
@@ -175,7 +175,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
                   )
                   if (criteria.nonEmpty) {
                     logger.info("Criteria: {}", criteria)
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       complete {
                         RestClient.httpRequestWithHeader(
                           if (groupConfigDTO.cfg_type.getOrElse("").equals("federal"))
@@ -197,7 +197,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
                       }
                     }
                   } else {
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       complete((StatusCodes.BadRequest, "Bad criteria"))
                     }
                   }
@@ -207,7 +207,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
             get {
               parameter('name.?, 'scope.?, 'start.?, 'limit.?, 'with_cap.?) {
                 (name, scope, start, limit, with_cap) =>
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       val cacheKey                   = if (tokenId.length > 20) tokenId.substring(0, 20) else tokenId
                       var groupDTOs: Array[GroupDTO] = null
@@ -359,7 +359,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
                     (criteriaItem: CriteriaItem) => stringToCriteriaEntry(criteriaItem.name)
                   )
                   if (criteria.nonEmpty) {
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       complete {
                         RestClient.httpRequestWithHeader(
                           if (groupConfigDTO.cfg_type.getOrElse("").equals("federal"))
@@ -381,7 +381,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
                       }
                     }
                   } else {
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       complete((StatusCodes.BadRequest, "Bad criteria"))
                     }
                   }
@@ -390,7 +390,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
             } ~
             delete {
               parameter('name, 'scope.?) { (name, scope) =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Deleting group: {}", name)
                     RestClient.httpRequestWithHeader(
@@ -411,7 +411,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
         pathPrefix("service") {
           get {
             parameter('name.?, 'with_cap.?) { (name, with_cap) =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   if (name.isEmpty) {
                     RestClient.httpRequestWithHeader(
@@ -440,7 +440,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
             decompressRequest() {
               entity(as[ServiceConfig]) { serviceConfig =>
                 {
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       val payload = serviceConfigToJson(serviceConfig)
                       logger.info("Switching policy mode/scorability: {}", payload)
@@ -459,7 +459,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
           post {
             entity(as[ServiceConfigParam]) { serviceConfigParam =>
               {
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     val payload = systemConfigWrapToJson(
                       SystemConfigWrap(
@@ -491,7 +491,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
             patch {
               entity(as[SystemRequestContent]) { systemRequestContent =>
                 {
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       val payload = systemRequestToJson(SystemRequest(systemRequestContent))
                       logger.info("Switching policy mode: {}", payload)
@@ -511,7 +511,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
         pathPrefix("processProfile") {
           get {
             parameter('name) { name =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   RestClient.httpRequestWithHeader(
                     s"${baseClusterUri(tokenId)}/process_profile/$name",
@@ -525,7 +525,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
           } ~
           get {
             parameter('scope.?) { scope =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   RestClient.httpRequestWithHeader(
                     scope.fold(s"${baseClusterUri(tokenId)}/process_profile?start=0&limit=1000") { scope =>
@@ -546,7 +546,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
             parameter('scope.?) { scope =>
               entity(as[ProcessProfileConfigData]) { profile =>
                 {
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       val payload = profileConfigToJson(profile)
                       logger.info("Updating process profile: {}", payload)
@@ -572,7 +572,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
         } ~
         pathPrefix("fileProfile") {
           get {
-            Utils.respondWithNoCacheControl() {
+            Utils.respondWithWebServerHeaders() {
               parameter('name) { name =>
                 complete {
                   RestClient.httpRequestWithHeader(
@@ -587,7 +587,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
           } ~
           get {
             parameter('scope.?) { scope =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   RestClient.httpRequestWithHeader(
                     scope.fold(s"${baseClusterUri(tokenId)}/file_monitor?start=0&limit=1000") {
@@ -609,7 +609,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
             parameter('scope.?) { scope =>
               entity(as[FileMonitorConfigDTO]) { profile =>
                 {
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       val payload = fileProfileToJson(profile.fileMonitorConfigData)
                       logger.info("Updating file monitor profile: {}", payload)
@@ -634,7 +634,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
         pathPrefix("filePreProfile") {
           get {
             parameter('name) { name =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   RestClient.httpRequestWithHeader(
                     s"${baseClusterUri(tokenId)}/file_monitor/$name?predefined",
@@ -654,7 +654,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
                 entity(as[DlpSensorConfigData]) { dlpSensorConfigData =>
                   {
                     logger.info("Adding sensor: {}", dlpSensorConfigData.config.name)
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       complete {
                         RestClient.httpRequestWithHeader(
                           s"${baseClusterUri(tokenId)}/dlp/sensor",
@@ -669,7 +669,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
               } ~
               get {
                 parameter('name.?) { name =>
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       if (name.isEmpty) {
                         logger.info("Getting sensors")
@@ -696,7 +696,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
                 entity(as[DlpSensorConfigData]) { dlpSensorConfigData =>
                   {
                     logger.info("Updating sensor {}", dlpSensorConfigData.config.name)
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       complete {
                         RestClient.httpRequestWithHeader(
                           s"${baseClusterUri(tokenId)}/dlp/sensor/${dlpSensorConfigData.config.name}",
@@ -711,7 +711,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
               } ~
               delete {
                 parameter('name) { name =>
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       logger.info("Deleting sensor: {}", name)
                       RestClient.httpRequestWithHeader(
@@ -729,7 +729,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
               post {
                 entity(as[ExportedDlpSensorList]) { ExportedDlpSensorList =>
                   {
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       logger.info("Export sensors")
                       complete {
                         RestClient.httpRequestWithHeader(
@@ -747,7 +747,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
             path("import") {
               post {
                 headerValueByName("X-Transaction-Id") { transactionId =>
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       try {
                         val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
@@ -779,7 +779,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
                   }
                 } ~
                 entity(as[String]) { formData =>
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       try {
                         val baseUrl = baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
@@ -813,7 +813,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
           path("group") {
             get {
               parameter('name) { name =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
 
                     logger.info(s"Getting rules for group $name")
@@ -832,7 +832,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
               entity(as[DlpGroupConfigData]) { dlpGroupConfigData =>
                 {
                   logger.info("Updating sensor {}", dlpGroupConfigData.config.name)
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       RestClient.httpRequestWithHeader(
                         s"${baseClusterUri(tokenId)}/dlp/group/${dlpGroupConfigData.config.name}",
@@ -854,7 +854,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
                 entity(as[WafSensorConfigData]) { wafSensorConfigData =>
                   {
                     logger.info("Adding sensor: {}", wafSensorConfigData.config.name)
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       complete {
                         RestClient.httpRequestWithHeader(
                           s"${baseClusterUri(tokenId)}/waf/sensor",
@@ -869,7 +869,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
               } ~
               get {
                 parameter('name.?) { name =>
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       if (name.isEmpty) {
                         logger.info("Getting sensors")
@@ -896,7 +896,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
                 entity(as[WafSensorConfigData]) { wafSensorConfigData =>
                   {
                     logger.info("Updating sensor {}", wafSensorConfigData.config.name)
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       complete {
                         RestClient.httpRequestWithHeader(
                           s"${baseClusterUri(tokenId)}/waf/sensor/${wafSensorConfigData.config.name}",
@@ -911,7 +911,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
               } ~
               delete {
                 parameter('name) { name =>
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       logger.info("Deleting sensor: {}", name)
                       RestClient.httpRequestWithHeader(
@@ -929,7 +929,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
               post {
                 entity(as[ExportedWafSensorList]) { exportedWafSensorList =>
                   {
-                    Utils.respondWithNoCacheControl() {
+                    Utils.respondWithWebServerHeaders() {
                       logger.info("Export sensors")
                       complete {
                         RestClient.httpRequestWithHeader(
@@ -947,7 +947,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
             path("import") {
               post {
                 headerValueByName("X-Transaction-Id") { transactionId =>
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       try {
                         val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
@@ -979,7 +979,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
                   }
                 } ~
                 entity(as[String]) { formData =>
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       try {
                         val baseUrl = baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
@@ -1013,7 +1013,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
           path("group") {
             get {
               parameter('name) { name =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
 
                     logger.info(s"Getting rules for group $name")
@@ -1032,7 +1032,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
               entity(as[WafGroupConfigData]) { wafGroupConfigData =>
                 {
                   logger.info("Updating sensor {}", wafGroupConfigData.config.name)
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       RestClient.httpRequestWithHeader(
                         s"${baseClusterUri(tokenId)}/waf/group/${wafGroupConfigData.config.name}",

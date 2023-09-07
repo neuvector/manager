@@ -132,57 +132,91 @@ class RoutedHttpService(route: Route) extends Actor with HttpService with ActorL
 }
 
 object Utils extends LazyLogging with Directives {
-  def respondWithNoCacheControl(
+
+  /**
+   * Wrap the web API response functions to add web server side response headers
+   * The function takes boolean parameters to verify and determine which headers are needed.
+   *
+   * @param  isStaticResource  Boolean: True if requested resource is static resource. e.g.: html, css, js files
+   * @param  isJs              Boolean: True if requested resource is javascript files
+   * @return Directive for wrapping API response functions
+   */
+  def respondWithWebServerHeaders(
     isStaticResource: Boolean = false,
     isJs: Boolean = false
   ): Directive0 = {
-    val isUsingSSL: Boolean = sys.env.getOrElse("MANAGER_SSL", "on") == "on"
-    val isDev: Boolean      = sys.env.getOrElse("IS_DEV", "false") == "true"
-    val hdXFrameOptions     = RawHeader("X-Frame-Options", "SAMEORIGIN")
+    val isUsingSSLBit: Byte = if (sys.env.getOrElse("MANAGER_SSL", "on") == "on") 1 else 0
+    val isStaticResourceBit = if (isStaticResource) 1 else 0
+    val isDevOrNotJsBit: Byte =
+      if (sys.env.getOrElse("IS_DEV", "false") == "true" || !isJs) 1 else 0
+
+    /**
+       bit1                          bit2                                 bit3                         bit4
+       ----------------------------------------------------------------------------------------------------------------------------
+       Supplemental bit 1 ONLY       env MANAGER_SSL on: 1                Request static resources     env IS_DEV == true or NOT requset js files
+                                                     off: 0               true: 1                      true: 1
+                                                     (undefined): 0       false: 0                     false: 0
+     */
+    val headerConfigMapKey: Short =
+      (1000 + isUsingSSLBit * 100 + isStaticResourceBit * 10 + isDevOrNotJsBit).toShort
+    val hdXFrameOptions = RawHeader("X-Frame-Options", "SAMEORIGIN")
     val hdStrictTransportSecurity =
       RawHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload")
     val hdCacheCtrl       = RawHeader("Cache-Control", "no-cache")
     val hdContentEncoding = RawHeader("Content-Encoding", "gzip")
-    if (isUsingSSL) {
-      if (isStaticResource) {
-        if (isDev || !isJs) {
-          respondWithHeaders(
-            hdXFrameOptions,
-            hdStrictTransportSecurity
-          )
-        } else {
-          respondWithHeaders(
-            hdXFrameOptions,
-            hdStrictTransportSecurity,
-            hdContentEncoding
-          )
-        }
-      } else {
-        respondWithHeaders(
-          hdXFrameOptions,
-          hdCacheCtrl,
-          hdStrictTransportSecurity
-        )
-      }
-    } else {
-      if (isStaticResource) {
-        if (isDev || !isJs) {
-          respondWithHeaders(
-            hdXFrameOptions
-          )
-        } else {
-          respondWithHeaders(
-            hdXFrameOptions,
-            hdContentEncoding
-          )
-        }
+    val hdXSSProtection   = RawHeader("X-XSS-Protection", "1")
 
-      } else {
-        respondWithHeaders(
-          hdXFrameOptions,
-          hdCacheCtrl
-        )
-      }
-    }
+    val headerConfigMap = Map(
+      1111 -> respondWithHeaders(
+        hdXFrameOptions,
+        hdStrictTransportSecurity,
+        hdXSSProtection
+      ),
+      1110 -> respondWithHeaders(
+        hdXFrameOptions,
+        hdStrictTransportSecurity,
+        hdContentEncoding,
+        hdXSSProtection
+      ),
+      1101 -> respondWithHeaders(
+        hdXFrameOptions,
+        hdCacheCtrl,
+        hdStrictTransportSecurity,
+        hdXSSProtection
+      ),
+      1100 -> respondWithHeaders(
+        hdXFrameOptions,
+        hdCacheCtrl,
+        hdStrictTransportSecurity,
+        hdXSSProtection
+      ),
+      1011 -> respondWithHeaders(
+        hdXFrameOptions,
+        hdXSSProtection
+      ),
+      1010 -> respondWithHeaders(
+        hdXFrameOptions,
+        hdContentEncoding,
+        hdXSSProtection
+      ),
+      1001 -> respondWithHeaders(
+        hdXFrameOptions,
+        hdCacheCtrl,
+        hdXSSProtection
+      ),
+      1000 -> respondWithHeaders(
+        hdXFrameOptions,
+        hdCacheCtrl,
+        hdXSSProtection
+      )
+    )
+
+    headerConfigMap.getOrElse(
+      headerConfigMapKey,
+      respondWithHeaders(
+        hdXFrameOptions,
+        hdXSSProtection
+      )
+    )
   }
 }

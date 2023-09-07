@@ -22,7 +22,7 @@ class SigstoreService()(implicit executionContext: ExecutionContext)
         pathPrefix("sigstore") {
           pathEnd {
             get {
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Getting sigstore list...")
                   RestClient.httpRequestWithHeader(
@@ -37,7 +37,7 @@ class SigstoreService()(implicit executionContext: ExecutionContext)
             post {
               entity(as[RootOfTrust]) { rootOfTrust =>
                 {
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       val payload = rootOfTrustToJson(rootOfTrust)
                       logger.info("Creating sigstore: {}...", payload)
@@ -55,7 +55,7 @@ class SigstoreService()(implicit executionContext: ExecutionContext)
             patch {
               entity(as[RootOfTrust]) { rootOfTrust =>
                 {
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       val payload = rootOfTrustToJson(rootOfTrust)
                       val url =
@@ -75,7 +75,7 @@ class SigstoreService()(implicit executionContext: ExecutionContext)
             } ~
             delete {
               parameters('rootOfTrustName) { (rootOfTrustName) =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Deleting sigstore: {}...", rootOfTrustName)
                     RestClient.httpRequestWithHeader(
@@ -93,7 +93,7 @@ class SigstoreService()(implicit executionContext: ExecutionContext)
         path("verifier") {
           get {
             parameters('rootOfTrustName) { (rootOfTrustName) =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Getting Verifiers of {}", rootOfTrustName)
                   RestClient.httpRequestWithHeader(
@@ -109,7 +109,7 @@ class SigstoreService()(implicit executionContext: ExecutionContext)
           post {
             entity(as[Verifier]) { verifier =>
               {
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     val payload = verifierToJson(verifier)
                     logger.info("Creating verifier: {}", payload)
@@ -127,7 +127,7 @@ class SigstoreService()(implicit executionContext: ExecutionContext)
           } ~
           patch {
             entity(as[Verifier]) { verifier =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   val payload = verifierToJson(verifier)
                   val url =
@@ -147,7 +147,7 @@ class SigstoreService()(implicit executionContext: ExecutionContext)
           } ~
           delete {
             parameters('rootOfTrustName, 'verifierName) { (rootOfTrustName, verifierName) =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Deleting verifier: {}", verifierName)
                   logger.info("for {}...", rootOfTrustName)

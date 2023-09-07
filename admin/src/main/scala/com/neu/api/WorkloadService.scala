@@ -29,7 +29,7 @@ class WorkloadService()(implicit executionContext: ExecutionContext)
           pathEnd {
             get {
               parameter('id.?) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     id.fold(
                       RestClient.httpRequestWithHeader(
@@ -54,7 +54,7 @@ class WorkloadService()(implicit executionContext: ExecutionContext)
             post {
               entity(as[ContainerQuarantineRequest]) { quarantineRequest =>
                 {
-                  Utils.respondWithNoCacheControl() {
+                  Utils.respondWithWebServerHeaders() {
                     complete {
                       val payload = quarantineConfigWarpToJson(
                         QuarantineConfigWarp(QuarantineConfig(quarantineRequest.quarantine))
@@ -74,7 +74,7 @@ class WorkloadService()(implicit executionContext: ExecutionContext)
           } ~
           path("scanned") {
             parameter('start.?, 'limit.?) { (start, limit) =>
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 val cacheKey                                   = if (tokenId.length > 20) tokenId.substring(0, 20) else tokenId
                 var convertedScannedWorkloads: WorkloadsWrapV2 = null
                 var elements: Array[WorkloadV2]                = null
@@ -142,7 +142,7 @@ class WorkloadService()(implicit executionContext: ExecutionContext)
           path("workload-by-id") {
             get {
               parameter('id.?) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/workload/${id.get}",
@@ -158,7 +158,7 @@ class WorkloadService()(implicit executionContext: ExecutionContext)
           path("monitor") {
             get {
               parameter('id, 'monitor) { (id, monitor) =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info(id + monitor)
                     RestClient.httpRequestWithHeader(
@@ -175,7 +175,7 @@ class WorkloadService()(implicit executionContext: ExecutionContext)
           path("compliance") {
             get {
               parameter('id) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info(s"get compliance for $id")
                     RestClient.httpRequestWithHeader(
@@ -194,7 +194,7 @@ class WorkloadService()(implicit executionContext: ExecutionContext)
           pathEnd {
             get {
               parameter('id.?) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     id.fold(
                       RestClient.httpRequestWithHeader(
@@ -220,7 +220,7 @@ class WorkloadService()(implicit executionContext: ExecutionContext)
           path("process") {
             get {
               parameter('id) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/workload/$id/process",
@@ -236,7 +236,7 @@ class WorkloadService()(implicit executionContext: ExecutionContext)
           path("processHistory") {
             get {
               parameter('id) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/workload/$id/process_history",
@@ -254,7 +254,7 @@ class WorkloadService()(implicit executionContext: ExecutionContext)
           pathEnd {
             get {
               parameter('id) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/sniffer?f_workload=$id",
@@ -268,7 +268,7 @@ class WorkloadService()(implicit executionContext: ExecutionContext)
             } ~
             post {
               entity(as[SnifferData]) { snifferData =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/sniffer?f_workload=${snifferData.workloadId}",
@@ -282,7 +282,7 @@ class WorkloadService()(implicit executionContext: ExecutionContext)
             } ~
             patch {
               entity(as[String]) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/sniffer/stop/$id",
@@ -296,7 +296,7 @@ class WorkloadService()(implicit executionContext: ExecutionContext)
             } ~
             delete {
               parameter('id) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/sniffer/$id",
@@ -312,7 +312,7 @@ class WorkloadService()(implicit executionContext: ExecutionContext)
           path("pcap") {
             get {
               parameter('id) { id =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/sniffer/$id/pcap?limit=104857600",
@@ -329,7 +329,7 @@ class WorkloadService()(implicit executionContext: ExecutionContext)
         pathPrefix("domain") {
           pathEnd {
             get {
-              Utils.respondWithNoCacheControl() {
+              Utils.respondWithWebServerHeaders() {
                 complete {
                   RestClient.httpRequestWithHeader(
                     s"${baseClusterUri(tokenId)}/domain",
@@ -342,7 +342,7 @@ class WorkloadService()(implicit executionContext: ExecutionContext)
             } ~
             patch {
               entity(as[NamespaceConfig]) { config =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     val payload = configWrapToJson(
                       NamespaceConfigData(config)
@@ -359,7 +359,7 @@ class WorkloadService()(implicit executionContext: ExecutionContext)
             } ~
             post {
               entity(as[DomainConfig]) { config =>
-                Utils.respondWithNoCacheControl() {
+                Utils.respondWithWebServerHeaders() {
                   complete {
                     val payload = domainConfigWrapToJson(
                       DomainConfigData(config)

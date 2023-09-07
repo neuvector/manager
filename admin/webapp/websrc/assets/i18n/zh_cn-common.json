@@ -1010,6 +1010,7 @@
       "ENFORCER": "代理端",
       "HOST_NAME": "主机",
       "IMAGE": "镜像",
+      "IMAGE_CREATED_AT": "镜像创建于",
       "BASE_OS": "Base OS",
       "RUNNING": "运行中",
       "SECURED": "安全",

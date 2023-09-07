@@ -30,6 +30,7 @@ export interface WorkloadBriefV2 {
   id: string;
   image: string;
   image_id: string;
+  image_created_at: string;
   name: string;
   service: string;
   service_group: string;

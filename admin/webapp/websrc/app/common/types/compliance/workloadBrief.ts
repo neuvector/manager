@@ -1,4 +1,4 @@
-import { ScanBrief } from "./scanBrief";
+import { ScanBrief } from './scanBrief';
 
 export interface WorkloadBrief {
   id: string;
@@ -7,6 +7,7 @@ export interface WorkloadBrief {
   pod_name: string;
   image: string;
   image_id: string;
+  image_created_at: string;
   platform_role: string;
   domain: string;
   state: string;

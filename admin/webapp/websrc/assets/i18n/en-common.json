@@ -1010,6 +1010,7 @@
       "ENFORCER": "Enforcer",
       "HOST_NAME": "Node",
       "IMAGE": "Image",
+      "IMAGE_CREATED_AT": "Image Created At",
       "BASE_OS": "Base OS",
       "RUNNING": "Running",
       "SECURED": "Secured",

@@ -162,6 +162,7 @@
             <mat-slide-toggle
               [matTooltip]="stateWarning"
               [matTooltipDisabled]="canConfig && isK8s && !admissionStateErr"
+              matTooltipPosition="above"
               matTooltipClass="tooltip-error"
               id="status-toggle"
               [disabled]="

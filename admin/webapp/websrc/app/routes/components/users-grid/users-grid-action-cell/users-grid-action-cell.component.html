@@ -6,6 +6,7 @@
       params.data.blocked_for_password_expired ? 'visible' : 'hidden'
     "
     matTooltip="{{ 'user.tooltips.RESET_PASSWORD' | translate }}"
+    matTooltipPosition="above"
     (click)="reset()">
     <i class="eos-icons text-action">auto_fix_high</i>
   </button>
@@ -15,6 +16,7 @@
       params.data.blocked_for_failed_login ? 'visible' : 'hidden'
     "
     matTooltip="{{ 'user.tooltips.UNLOCK' | translate }}"
+    matTooltipPosition="above"
     (click)="unlock()">
     <i class="eos-icons text-action">lock_open</i>
   </button>
@@ -22,12 +24,14 @@
     mat-icon-button
     [style.visibility]="params.data.fullname !== 'admin' ? 'visible' : 'hidden'"
     matTooltip="{{ 'user.tooltips.REMOVE' | translate }}"
+    matTooltipPosition="above"
     (click)="delete()">
     <i class="eos-icons text-action">delete</i>
   </button>
   <button
     mat-icon-button
     matTooltip="{{ 'user.tooltips.EDIT' | translate }}"
+    matTooltipPosition="above"
     (click)="edit()">
     <i class="eos-icons text-action">edit</i>
   </button>
@@ -36,6 +40,7 @@
   <button
     mat-icon-button
     matTooltip="{{ 'user.tooltips.VIEW' | translate }}"
+    matTooltipPosition="above"
     (click)="view()">
     <i class="eos-icons text-action">feed</i>
   </button>

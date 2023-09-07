@@ -121,6 +121,7 @@
             class="selected-cluster-text mr-lg mb-0 brightness-70"
             [matTooltip]="primaryMasterName"
             [matTooltipDisabled]="primaryMasterName.length < 20"
+            matTooltipPosition="above"
             >{{
               primaryMasterName | shortenFromMiddle: 20
             }}
@@ -132,6 +133,7 @@
             style="position: relative"
             [matTooltip]="managedClusterName"
             [matTooltipDisabled]="managedClusterName.length < 20"
+            matTooltipPosition="above"
             >{{ managedClusterName | shortenFromMiddle: 20 }}
           </label>
         </button>

@@ -1,13 +1,13 @@
 <div *ngIf="!isPredefine">
   <div class="rule-actions-expand fade-in-right">
     <em
-      class="eos-icons icon-18 hand text-action" matTooltip="{{'dlp.TIP.EDIT_RULE' | translate}}"
+      class="eos-icons icon-18 hand text-action" matTooltip="{{'dlp.TIP.EDIT_RULE' | translate}}" matTooltipPosition="above"
       (click)="editRule(params.node.data)"
     >
       edit
     </em>
     <em
-      class="eos-icons icon-18 hand text-action" matTooltip="{{'dlp.TIP.DELETE_RULE' | translate}}"
+      class="eos-icons icon-18 hand text-action" matTooltip="{{'dlp.TIP.DELETE_RULE' | translate}}" matTooltipPosition="above"
       (click)="deleteRule(params.node.data)"
     >
       delete

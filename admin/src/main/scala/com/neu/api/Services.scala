@@ -164,48 +164,58 @@ object Utils extends LazyLogging with Directives {
       RawHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload")
     val hdCacheCtrl       = RawHeader("Cache-Control", "no-cache")
     val hdContentEncoding = RawHeader("Content-Encoding", "gzip")
+    val hdXSSProtection   = RawHeader("X-XSS-Protection", "1")
 
     val headerConfigMap = Map(
       1111 -> respondWithHeaders(
         hdXFrameOptions,
-        hdStrictTransportSecurity
+        hdStrictTransportSecurity,
+        hdXSSProtection
       ),
       1110 -> respondWithHeaders(
         hdXFrameOptions,
         hdStrictTransportSecurity,
-        hdContentEncoding
+        hdContentEncoding,
+        hdXSSProtection
       ),
       1101 -> respondWithHeaders(
         hdXFrameOptions,
         hdCacheCtrl,
-        hdStrictTransportSecurity
+        hdStrictTransportSecurity,
+        hdXSSProtection
       ),
       1100 -> respondWithHeaders(
         hdXFrameOptions,
         hdCacheCtrl,
-        hdStrictTransportSecurity
+        hdStrictTransportSecurity,
+        hdXSSProtection
       ),
       1011 -> respondWithHeaders(
-        hdXFrameOptions
+        hdXFrameOptions,
+        hdXSSProtection
       ),
       1010 -> respondWithHeaders(
         hdXFrameOptions,
-        hdContentEncoding
+        hdContentEncoding,
+        hdXSSProtection
       ),
       1001 -> respondWithHeaders(
         hdXFrameOptions,
-        hdCacheCtrl
+        hdCacheCtrl,
+        hdXSSProtection
       ),
       1000 -> respondWithHeaders(
         hdXFrameOptions,
-        hdCacheCtrl
+        hdCacheCtrl,
+        hdXSSProtection
       )
     )
 
     headerConfigMap.getOrElse(
       headerConfigMapKey,
       respondWithHeaders(
-        hdXFrameOptions
+        hdXFrameOptions,
+        hdXSSProtection
       )
     )
   }

@@ -10,6 +10,7 @@
         ': ' +
         (scannerDate | date: 'medium')
       "
+      matTooltipPosition="above"
       class="eos-icons icon-18"
       >info</i
     >
@@ -96,12 +97,13 @@
         {{ 'registry.SIG_VERIFIERS' | translate}}
         <i
           [matTooltip]="'registry.SIG_VERIFIERS_HINT' | translate"
+          matTooltipPosition="above"
           class="eos-icons icon-18 ml-2"
           >info</i
         >
       </div>
       <div class="vulnerability-verifiers-body">
-        <div *ngFor="let verifier of selectedLayer?.verifiers" class="px-2 type-label info mt-1 auto-hide" style="display: block; text-align: left;" matTooltip="{{ verifier }}">
+        <div *ngFor="let verifier of selectedLayer?.verifiers" class="px-2 type-label info mt-1 auto-hide" style="display: block; text-align: left;" matTooltip="{{ verifier }}" matTooltipPosition="above">
           <i class="eos-icons icon-12 mr-2">verified</i>{{ verifier }}
         </div>
       </div>

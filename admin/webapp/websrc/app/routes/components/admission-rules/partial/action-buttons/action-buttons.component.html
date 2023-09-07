@@ -2,6 +2,7 @@
   <div class="rule-actions-expand fade-in-right">
     <em
       class="eos-icons icon-18 hand text-action"  matTooltip="{{ 'policy.TIP.EDIT' | translate }}"
+      matTooltipPosition="above"
       *ngIf="!params.data['critical'] && isOperatableRuleType && isWriteAdmissionRuleAuthorized"
       (click)="editAdmissionRule($event, params.node.data)"
     >
@@ -9,6 +10,7 @@
     </em>
     <em
       class="eos-icons icon-18 hand text-action"  matTooltip="{{ 'policy.TIP.VIEW' | translate }}"
+      matTooltipPosition="above"
       *ngIf="params.data['critical'] || !isOperatableRuleType || !isWriteAdmissionRuleAuthorized"
       (click)="viewRuleItem($event, params.node.data)"
     >
@@ -16,6 +18,7 @@
     </em>
     <em
       class="eos-icons icon-18 hand text-action"  matTooltip="{{ 'policy.TIP.DISABLE' | translate }}"
+      matTooltipPosition="above"
       *ngIf="!params.data['disable'] && isOperatableRuleType && isWriteAdmissionRuleAuthorized"
       (click)="toggleRuleItem($event, params.node.data, true)"
     >
@@ -23,6 +26,7 @@
     </em>
     <em
       class="eos-icons icon-18 hand text-action"  matTooltip="{{ 'policy.TIP.ENABLE' | translate }}"
+      matTooltipPosition="above"
       *ngIf="params.data['disable'] && isOperatableRuleType && isWriteAdmissionRuleAuthorized"
       (click)="toggleRuleItem($event, params.node.data, false)"
     >
@@ -30,6 +34,7 @@
     </em>
     <em
       class="eos-icons icon-18 hand text-action"  matTooltip="{{ 'policy.TIP.DELETE' | translate }}"
+      matTooltipPosition="above"
       *ngIf="!params.data['critical'] && isOperatableRuleType && isWriteAdmissionRuleAuthorized"
       (click)="deleteRuleItem($event, params.node.data)"
     >

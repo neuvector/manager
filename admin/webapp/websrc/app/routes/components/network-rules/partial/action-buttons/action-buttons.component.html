@@ -1,21 +1,21 @@
 <div class="rule-actions-expand fade-in-right" *ngIf="params.data.id > -1">
   <em class="eos-icons icon-18 hand text-action" *ngIf="buttonDisplayMap.add"
-    (click)="addNetworkRule(params.data.id)" matTooltip="{{'policy.TIP.ADD' | translate}}"> add
+    (click)="addNetworkRule(params.data.id)" matTooltip="{{'policy.TIP.ADD' | translate}}" matTooltipPosition="above"> add
   </em>
   <em class="eos-icons icon-18 hand text-action" *ngIf="buttonDisplayMap.edit"
-    (click)="editNetworkRule(params.data.id)" matTooltip="{{'policy.TIP.EDIT' | translate}}">edit
+    (click)="editNetworkRule(params.data.id)" matTooltip="{{'policy.TIP.EDIT' | translate}}" matTooltipPosition="above">edit
   </em>
   <em class="eos-icons icon-18 hand text-action" id="remove-form-action" *ngIf="buttonDisplayMap.delete"
-    (click)="deleteNetworkRule(params.data.id)" matTooltip="{{'policy.TIP.DELETE' | translate}}">delete
+    (click)="deleteNetworkRule(params.data.id)" matTooltip="{{'policy.TIP.DELETE' | translate}}" matTooltipPosition="above">delete
   </em>
   <em class="eos-icons icon-18 hand text-action" id="remove-form-action" *ngIf="buttonDisplayMap.undelete"
-    (click)="undeleteNetworkRule(params.data.id)" matTooltip="{{'policy.TIP.UNDELETE' | translate}}">recycling
+    (click)="undeleteNetworkRule(params.data.id)" matTooltip="{{'policy.TIP.UNDELETE' | translate}}" matTooltipPosition="above">recycling
   </em>
   <em class="eos-icons icon-18 hand text-action" id="promote-from-action" *ngIf="buttonDisplayMap.promote"
-    (click)="promoteNeworkRuleOnEntry(params.data)" matTooltip="{{'policy.PROMOTE' | translate}}">ingress
+    (click)="promoteNeworkRuleOnEntry(params.data)" matTooltip="{{'policy.PROMOTE' | translate}}" matTooltipPosition="above">ingress
   </em>
   <em class="eos-icons icon-18 hand text-action" id="remove-form-action" *ngIf="buttonDisplayMap.revert"
-    (click)="revertNetworkRule(params.data.id)" matTooltip="{{'policy.TIP.REVERT' | translate}}">settings_backup_restore
+    (click)="revertNetworkRule(params.data.id)" matTooltip="{{'policy.TIP.REVERT' | translate}}" matTooltipPosition="above">settings_backup_restore
   </em>
 </div>
 <div class="rule-actions-collapse text-action" *ngIf="isOperatableRuleType || isPromotable">

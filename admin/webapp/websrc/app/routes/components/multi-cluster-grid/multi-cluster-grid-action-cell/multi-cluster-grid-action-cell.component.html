@@ -5,21 +5,25 @@
       <em
         class="eos-icons icon-18 hand "
         matTooltip="{{ 'multiCluster.tips.policy' | translate }}"
+        matTooltipPosition="above"
         (click)="manageFedPolicy()"
       >gavel</em>
       <em
         class="eos-icons icon-18 hand"
         matTooltip="{{ 'multiCluster.tips.demote' | translate }}"
+        matTooltipPosition="above"
         (click)="demote(params.data)"
       >recycling</em>
       <em
         class="eos-icons icon-18 hand"
         matTooltip="{{ 'multiCluster.tips.token' | translate }}"
+        matTooltipPosition="above"
         (click)="generateToken()"
       >vpn_key</em>
       <em
         class="eos-icons icon-18 hand"
         matTooltip="{{ 'multiCluster.tips.edit' | translate }}"
+        matTooltipPosition="above"
         (click)="showEditClusterDialog(
         $event, params.data, params.context, false);
         $event.stopPropagation();"
@@ -37,31 +41,37 @@
         <em
           class="eos-icons icon-18 hand disabled-color"
           matTooltip="{{ 'multiCluster.tips.syncPolicy' | translate }}"
+          matTooltipPosition="above"
         >sync</em>
         <em
           class="eos-icons icon-18 hand"
           matTooltip="{{ 'multiCluster.tips.remove' | translate }}"
+          matTooltipPosition="above"
           (click)="removeMember(params.data)"
         >person_off</em>
         <em
           class="eos-icons icon-18 hand disabled-color"
           matTooltip="{{ 'multiCluster.tips.manage' | translate }}"
+          matTooltipPosition="above"
         >laptop_windows</em>
       </div>
       <ng-template #valid_status>
         <em
           class="eos-icons icon-18 hand"
           matTooltip="{{ 'multiCluster.tips.syncPolicy' | translate }}"
+          matTooltipPosition="above"
           (click)="syncPolicy(params.data)"
         >sync</em>
         <em
           class="eos-icons icon-18 hand"
           matTooltip="{{ 'multiCluster.tips.remove' | translate }}"
+          matTooltipPosition="above"
           (click)="removeMember(params.data)"
         >person_off</em>
         <em
           class="eos-icons icon-18 hand"
           matTooltip="{{ 'multiCluster.tips.manage' | translate }}"
+          matTooltipPosition="above"
           (click)="manageCluster(params.data)"
         >laptop_windows</em>
       </ng-template>
@@ -75,11 +85,13 @@
     <em
       class="eos-icons icon-18 hand"
       matTooltip="{{ 'multiCluster.tips.edit' | translate }}"
+      matTooltipPosition="above"
       (click)="showEditClusterDialog($event, params.data, params.context, false)"
     >mode_edit</em>
     <em
       class="eos-icons icon-18 hand"
       matTooltip="{{ 'multiCluster.tips.leave' | translate }}"
+      matTooltipPosition="above"
       (click)="leave()"
     >person_off</em>
     </div>

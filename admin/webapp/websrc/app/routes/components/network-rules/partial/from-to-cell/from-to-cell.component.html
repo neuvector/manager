@@ -1,4 +1,4 @@
 <span [ngClass]="{'policy-remove': params.data.remove}" [matTooltipDisabled]="params.value.length <= 50"
-  matTooltip="{{params.value}}">
+  matTooltip="{{params.value}}" matTooltipPosition="above">
   {{params.data.id > -1 ? (params.value | shortenFromMiddle: 50) : params.value}}
 </span>

@@ -66,7 +66,8 @@
                   class="fa fa-file-code text-muted margin-left-s"
                   style="font-size: 10px;"
                   aria-hidden="true"
-                  matTooltip="{{ 'admissionControl.TIP.scanRequirementHint.YAML' | translate}}">
+                  matTooltip="{{ 'admissionControl.TIP.scanRequirementHint.YAML' | translate}}"
+                  matTooltipPosition="above">
                 </em>
               </mat-option>
               <mat-option
@@ -149,7 +150,7 @@
               <mat-chip
                 *ngFor="let chip of valuechips"
                 (removed)="removeValueChip(chip)">
-                <span class="auto-hide" style="max-width: 150px;" [matTooltip]="chip">{{ chip }}</span>
+                <span class="auto-hide" style="max-width: 150px;" [matTooltip]="chip" matTooltipPosition="above">{{ chip }}</span>
                 <button matChipRemove>
                   <mat-icon class="eos-icons icon-18">cancel</mat-icon>
                 </button>
@@ -173,7 +174,7 @@
                 [value]="verifier"
                 [matTooltip]="verifier"
                 [matTooltipDisabled]="isTooltipDisabled(ttVerifier)"
-                matTooltipPosition="right"
+                matTooltipPosition="above"
                 #ttVerifier>
                 {{ verifier }}
               </mat-option>

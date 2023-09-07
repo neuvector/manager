@@ -4,6 +4,7 @@
       class="eos-icons icon-18 hand text-action"
       *ngIf="!isReadonlyRule && !params.data.reserved && !isAddressGroupAndNamespaceUser && params.context.componentParent.isWriteGroupAuthorized"
       matTooltip="{{'group.TIP.EDIT' | translate}}"
+      matTooltipPosition="above"
       (click)="editGroup(params.data)"
     >
       edit
@@ -12,6 +13,7 @@
       class="eos-icons icon-18 hand text-action"
       *ngIf="isReadonlyRule || params.data.reserved || isAddressGroupAndNamespaceUser || !params.context.componentParent.isWriteGroupAuthorized"
       matTooltip="{{'group.TIP.VIEW' | translate}}"
+      matTooltipPosition="above"
       (click)="viewGroup(params.data)"
     >
       text_snippet
@@ -20,6 +22,7 @@
       class="eos-icons icon-18 hand text-action"
       *ngIf="isRemovableGroup && !isAddressGroupAndNamespaceUser && params.context.componentParent.isWriteGroupAuthorized"
       matTooltip="{{'group.TIP.DELETE' | translate}}"
+      matTooltipPosition="above"
       (click)="deleteGroup(params.data)"
     >
       delete

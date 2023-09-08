@@ -1,0 +1,12 @@
+<a [attr.href]="'https://www.whois.com/whois/' + ip" target="_blank">
+  <img
+    *ngIf="countryCode !== '-'"
+    src="{{ './assets/img/country-flag/' + countryCode.toLowerCase() + '.svg'}}"
+    width="16px" height="12px;"
+    class="mr-2"
+    style="margin-top: -3px;"
+    [matTooltip]="countryName"
+    matTooltipPosition="above"
+  />
+  <span>{{ ip }}</span>
+</a>

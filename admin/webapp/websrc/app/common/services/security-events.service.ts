@@ -10,7 +10,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { DatePipe } from '@angular/common';
 import { TimeAgoPipe } from 'time-ago-pipe';
-import getUnicodeFlagIcon from 'country-flag-icons/unicode';
 import { pluck } from 'rxjs/operators';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { EnforcerBriefDialogComponent } from '@routes/components/enforcer-brief/enforcer-brief-dialog/enforcer-brief-dialog.component';
@@ -660,7 +659,6 @@ export class SecurityEventsService {
         service: '',
         countryCode: '',
         countryName: '',
-        countryFlagUnicode: '',
         ip: '',
         group4Rule: '',
         hasDetail: false,
@@ -679,7 +677,6 @@ export class SecurityEventsService {
           if (ip) {
             endpointOut.countryCode = ipMap[ip].country_code.toLowerCase();
             endpointOut.countryName = ipMap[ip].country_name;
-            endpointOut.countryFlagUnicode = getUnicodeFlagIcon(ipMap[ip].country_code === '-' ? '--' : ipMap[ip].country_code);
             endpointOut.ip = ip;
             displayName = getDisplayName(name);
           }
@@ -698,7 +695,6 @@ export class SecurityEventsService {
           if (ip) {
             endpointOut.countryCode = ipMap[ip].country_code.toLowerCase();
             endpointOut.countryName = ipMap[ip].country_name;
-            endpointOut.countryFlagUnicode = getUnicodeFlagIcon(ipMap[ip].country_code === '-' ? '--' : ipMap[ip].country_code);
             endpointOut.ip = ip;
             displayName = getDisplayName(name);
           }

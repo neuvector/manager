@@ -28,6 +28,7 @@ import { SecurityEventsPrintableReportActionColComponent } from './partial/secur
 import { SecurityEventsPrintableReportSeverityColComponent } from './partial/security-events-printable-report-severity-col/security-events-printable-report-severity-col.component';
 import { SecurityEventsPrintableReportChartComponent } from './partial/security-events-printable-report-chart/security-events-printable-report-chart.component';
 import { LoadingTemplateModule } from '@components/ui/loading-template/loading-template.module';
+import { FlagIpFqdnModule } from '@components/ui/flag-ip-fqdn/flag-ip-fqdn.module';
 
 const routes: Routes = [
   { path: '', component: SecurityEventsComponent },
@@ -68,7 +69,8 @@ const routes: Routes = [
     LoadingButtonModule,
     PodBriefModule,
     EnforcerBriefModule,
-    LoadingTemplateModule
+    LoadingTemplateModule,
+    FlagIpFqdnModule
   ]
 })
 export class SecurityEventsModule { }

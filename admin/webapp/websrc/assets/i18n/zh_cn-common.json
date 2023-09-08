@@ -1073,8 +1073,6 @@
     "ACCEPT_VUL": "接受漏洞",
     "NAME": "漏洞名称",
     "REPORTED_WITHIN": "漏洞报告于",
-    "REPORTED_WITHIN_WITH_FIX": "已修复漏洞报告于",
-    "DAYS": "天以内",
     "msg": {
       "REMOVE_CFM": "您确定要删除?",
       "REMOVE_OK": "漏洞配置资料条目删除成功!",
@@ -1086,8 +1084,8 @@
     },
     "gridHeader": {
       "VULNERABILITY": "漏洞名称",
-      "REPORTED_DAYS": "报告于几天之内",
-      "REPORTED_DAYS_WITHOUT_FIX": "报告于几天之内（无修复）",
+      "REPORTED_DAYS": "{{days}}之内报告的漏洞",
+      "REPORTED_DAYS_WITHOUT_FIX": "{{days}}天之内报告的未修复的漏洞",
       "DAYS_PREFIX": "报告于",
       "DAYS_PREFIX_WITHOUT_FIX": "报告于",
       "DAYS_SUFFIX": "天之内",

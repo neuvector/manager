@@ -1073,8 +1073,6 @@
     "ACCEPT_VUL": "Accept Vulnerability",
     "NAME": "Vulnerability Name",
     "REPORTED_WITHIN": "Vulnerability Reported Within",
-    "REPORTED_WITHIN_WITH_FIX": "Vulnerability with Fix Reported within",
-    "DAYS": "Day(s)",
     "msg": {
       "REMOVE_CFM": "Are you sure you want to remove?",
       "REMOVE_OK": "Vulnerability profile entry is removed successfully!",
@@ -1086,8 +1084,8 @@
     },
     "gridHeader": {
       "VULNERABILITY": "Vulnerability Name",
-      "REPORTED_DAYS": "Reported within (Days)",
-      "REPORTED_DAYS_WITHOUT_FIX": "Reported within (Days) without Fix",
+      "REPORTED_DAYS": "Vulnerabilities reported within {{days}} day(s)",
+      "REPORTED_DAYS_WITHOUT_FIX": "Vulnerabilities reported within {{days}} day(s) without fix",
       "DAYS_PREFIX": "Reported within",
       "DAYS_PREFIX_WITHOUT_FIX": "Reported within",
       "DAYS_SUFFIX": "Day(s)",

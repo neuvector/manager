@@ -29,6 +29,7 @@ import {
 } from "@components/vulnerabilities-grid/vulnerabilities-grid.module";
 import { ClientIpCellComponent } from './client-ip-cell/client-ip-cell.component';
 import { ServerIpCellComponent } from './server-ip-cell/server-ip-cell.component';
+import { FlagIpFqdnModule } from '@components/ui/flag-ip-fqdn/flag-ip-fqdn.module';
 
 const routes: Routes = [
   { path: '', component: NetworkActivitiesComponent },
@@ -65,6 +66,7 @@ const routes: Routes = [
     NetworkRulesModule,
     ResponseRulesModule,
     VulnerabilitiesGridModule,
+    FlagIpFqdnModule,
   ],
   providers: [GraphService, SniffService],
 })

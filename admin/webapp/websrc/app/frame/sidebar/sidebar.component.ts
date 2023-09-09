@@ -60,7 +60,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         'margin-top': '28px'
       };
       this.customSideBarStyle = {
-        'height': 'calc(100vh - 184px)'
+        'height': 'calc(100vh - 268px)'
       };
       this.customFooterStyle = {
         'bottom': '28px'

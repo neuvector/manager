@@ -87,6 +87,7 @@ export interface RegistryPatchBody {
 export interface Image {
   author: string;
   base_os: string;
+  created_at: string;
   cvedb_create_time: string;
   digest: string;
   domain: string;

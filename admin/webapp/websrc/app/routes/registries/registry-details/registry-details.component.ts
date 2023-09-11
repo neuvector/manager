@@ -8,7 +8,6 @@ import { catchError } from 'rxjs/operators';
 import { arrayToCsv } from '@common/utils/common.utils';
 import { saveAs } from 'file-saver';
 import { UtilsService } from '@common/utils/app.utils';
-import { Image } from '@common/types';
 
 @Component({
   selector: 'app-registry-details',

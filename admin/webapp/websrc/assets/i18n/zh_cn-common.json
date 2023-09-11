@@ -1327,6 +1327,7 @@
       "VUL": "漏洞",
       "TAG": "标签",
       "IMAGE_ID": "镜像ID",
+      "CREATED_AT": "创建时间",
       "DIGEST": "文摘",
       "JSON_KEY": "JSON key",
       "CMDS": "命令",

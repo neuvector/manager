@@ -1327,6 +1327,7 @@
       "TAG": "Tag",
       "VUL": "Vulnerabilities",
       "IMAGE_ID": "Image ID",
+      "CREATED_AT": "Created at",
       "DIGEST": "Digest",
       "JSON_KEY": "JSON Key",
       "CMDS": "Commands",

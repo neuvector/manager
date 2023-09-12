@@ -184,6 +184,16 @@ export class NetworkRulesService {
       );
     };
 
+    const fromComparator = (value1, value2, node1, node2) => {
+      /** From as primary sort, to as secondary sort */
+      return `${node1.data.from}-${node1.data.to}`.localeCompare(`${node2.data.from}-${node2.data.to}`);
+    };
+
+    const toComparator = (value1, value2, node1, node2) => {
+      /** To as primary sort, from as secondary sort */
+      return `${node1.data.to}-${node1.data.from}`.localeCompare(`${node2.data.to}-${node2.data.from}`);
+    };
+
     const idSelectionFunc = params => {
       if (params.data) {
         return (
@@ -216,12 +226,14 @@ export class NetworkRulesService {
           }
           return 1;
         },
+        comparator: fromComparator,
         width: 280,
       },
       {
         headerName: this.translate.instant('policy.gridHeader.TO'),
         field: 'to',
         cellRenderer: FromToCellComponent,
+        comparator: toComparator,
         width: 280,
       },
       {

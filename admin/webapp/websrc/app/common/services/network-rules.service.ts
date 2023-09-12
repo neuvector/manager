@@ -289,7 +289,7 @@ export class NetworkRulesService {
     return {
       defaultColDef: {
         resizable: true,
-        sortable: true,
+        sortable: source === GlobalConstant.NAV_SOURCE.GROUP,
       },
       headerHeight:  30,
       rowHeight: 30,

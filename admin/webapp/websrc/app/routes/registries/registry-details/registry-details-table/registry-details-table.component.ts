@@ -51,6 +51,12 @@ export class RegistryDetailsTableComponent implements OnInit, OnChanges {
         this.translate.instant('registry.gridHeader.IMAGE_ID'),
     },
     {
+      field: 'created_at',
+      valueFormatter: this.createdAtFormatter.bind(this),
+      headerValueGetter: () =>
+        this.translate.instant('registry.gridHeader.CREATED_AT'),
+    },
+    {
       field: 'base_os',
       headerValueGetter: () => this.translate.instant('scan.gridHeader.OS'),
     },
@@ -154,10 +160,18 @@ export class RegistryDetailsTableComponent implements OnInit, OnChanges {
     this.gridApi.sizeColumnsToFit();
   }
 
+  createdAtFormatter(params: ValueFormatterParams): string {
+    const date = this.date.transform(
+      params.data.created_at,
+      'MMM dd, y HH:mm:ss'
+    );
+    return date ? date : '';
+  }
+
   scannedAtFormatter(params: ValueFormatterParams): string {
     const date = this.date.transform(
       params.data.scanned_at,
-      'MMM d, y h:mm:ss'
+      'MMM dd, y HH:mm:ss'
     );
     return date ? date : '';
   }

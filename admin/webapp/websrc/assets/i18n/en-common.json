@@ -3020,7 +3020,7 @@
     "AS_STANDALONE": "Import configuration as standalone cluster",
     "RANCHER_EP": "Rancher Endpoint",
     "cloud_type": {
-      "AWS": "AWD",
+      "AWS": "AWS",
       "AZURE": "Azure",
       "GCLOUD": "Google Cloud"
     },

@@ -3020,7 +3020,7 @@
     "AS_STANDALONE": "作为独立集群导入配置",
     "RANCHER_EP": "Rancher端点",
     "cloud_type": {
-      "AWS": "AWD",
+      "AWS": "AWS",
       "AZURE": "Azure",
       "GCLOUD": "Google Cloud"
     },

@@ -342,7 +342,7 @@ def custom_check(data, id_or_name):
     if not group["scripts"]:
         return
 
-    columns = ("name", "script")
+    columns = ("name", "script", "enabled", "configurable")
     output.list(columns, group["scripts"])
 
 

@@ -407,7 +407,7 @@ def create_response(data):
 @click.option("--group", help="Group name that the rule is applied to. Not applicable for admission and event")
 @click.option("--event", help="event, cve-report, security-event, admission-control, compliance")
 @click.option("--condition", multiple=True,
-              help="type:value, type can be name, cve-high, cve-medium, level and process")
+              help="type:value, type can be name, cve-high, cve-high-with-fix, cve-medium, level and process")
 @click.option("--action", default=None, multiple=True, help="quarantine, suppress-log, webhook")
 @click.option("--webhook", "-w", multiple=True, help="webhook names")
 @click.option("--id", type=int, default=0, help="Response rule ID. (Optional)")
@@ -481,7 +481,7 @@ def set_response(data):
 @click.option("--group", "group")
 @click.option("--event", help="event, cve-report, security-event, benchmark, admission-control")
 @click.option("--condition", multiple=True,
-              help="type:value, type can be name, cve-high, cve-medium, level and process")
+              help="type:value, type can be name, cve-high, cve-high-with-fix, cve-medium, level and process")
 @click.option("--action", multiple=True, help="quarantine, suppress-log, webhook")
 @click.option("--webhook", "-w", multiple=True, help="webhook names")
 @click.option("--no_webhook", default=False, is_flag=True, help="clear webhooks")

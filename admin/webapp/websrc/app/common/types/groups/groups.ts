@@ -47,6 +47,7 @@ interface ScanBrief {
   status: string;
   high: number;
   medium: number;
+  low: number;
 }
 
 export interface Script {

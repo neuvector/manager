@@ -29,20 +29,20 @@
         {{ image.image_name }}
       </td>
       <td *ngIf="reportPage === 'vulnerabilities'" class="print-cell" style="width: 10%">
-        <div *ngIf="image.high + image.medium > 0">
-          <span class="text-danger">{{ image.high }}</span>&nbsp;/&nbsp;<span class="text-warning">{{ image.medium }}</span>
+        <div *ngIf="image.high + image.medium + image.low > 0">
+          <span class="text-danger">{{ image.high }}</span>&nbsp;/&nbsp;<span class="text-warning">{{ image.medium }}</span>&nbsp;/&nbsp;<span class="text-success">{{ image.low }}</span>
         </div>
-        <div *ngIf="image.high + image.medium === 0">
+        <div *ngIf="image.high + image.medium + image.low === 0">
           <span class="text-success">0</span>
         </div>
       </td>
       <td *ngIf="reportPage === 'vulnerabilities'" class="print-cell" style="width: 60%">
-        <div *ngIf="image.high + image.medium > 0">
+        <div *ngIf="image.high + image.medium + image.low > 0">
           <span *ngFor="let item of image.vulnerabilites" class="margin-right-s text-{{ item.style }}">
             {{item.text.trim()}}
           </span>
         </div>
-        <div *ngIf="image.high + image.medium === 0">
+        <div *ngIf="image.high + image.medium + image.low === 0">
           <span class="text-success">{{ "scan.NO_VULNERABILITIES" | translate }}</span>
         </div>
       </td>

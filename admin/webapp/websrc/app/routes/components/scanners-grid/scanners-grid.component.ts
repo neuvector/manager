@@ -84,6 +84,14 @@ export class ScannersGridComponent implements OnInit, OnChanges {
         sortDescending: '<em class="fa fa-sort-numeric-up"/>',
       },
     },
+    {
+      field: 'id',
+      hide: true,
+    },
+    {
+      field: 'server',
+      hide: true,
+    },
   ];
 
   constructor(

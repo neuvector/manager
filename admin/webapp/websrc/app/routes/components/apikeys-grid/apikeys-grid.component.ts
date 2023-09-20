@@ -63,6 +63,8 @@ export class ApikeysGridComponent implements OnInit {
   @Output() refreshData = new EventEmitter<void>();
   gridOptions!: GridOptions;
   gridApi!: GridApi;
+  filtered: boolean = false;
+  filteredCount!: number;
   get apikeyCount() {
     return this.rowData.length;
   }
@@ -222,5 +224,10 @@ export class ApikeysGridComponent implements OnInit {
           );
         },
       });
+  }
+
+  filterCountChanged(results: number) {
+    this.filteredCount = results;
+    this.filtered = this.filteredCount !== this.apikeyCount;
   }
 }

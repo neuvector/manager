@@ -25,6 +25,11 @@ export class VulnerabilitiesComponent {
     node: null,
     image: null,
   };
+  styleMap4Severity: any = {
+    high: 'danger',
+    medium: 'warning',
+    low: 'success'
+  }
   @ViewChild('vulnerabilityViewReport') printableReportView!: ElementRef;
   @ViewChild('assetsViewReport') printableReportViewAssets!: ElementRef;
 
@@ -81,6 +86,7 @@ export class VulnerabilitiesComponent {
       platformMap4Pdf: this.vulnerabilitiesService.platformMap4Pdf,
       imageMap4Pdf: this.vulnerabilitiesService.imageMap4Pdf,
     };
+    console.log("this.masterData",this.masterData)
     this.vulnerabilitiesList = this.getFilteredVulnerabilities();
     this.isFiltered = this.vulnerabilitiesFilterService.filtered;
     this.advFilter = this.vulnerabilitiesFilterService.advFilter;
@@ -137,6 +143,7 @@ export class VulnerabilitiesComponent {
       scanned_at: '',
       high: 0,
       medium: 0,
+      low: 0,
       evaluation: 0,
       vulnerabilites: [],
     };
@@ -151,6 +158,7 @@ export class VulnerabilitiesComponent {
       scanned_at: '',
       high: 0,
       medium: 0,
+      low: 0,
       evaluation: 0,
       vulnerabilites: [],
     };
@@ -158,6 +166,7 @@ export class VulnerabilitiesComponent {
       image_name: '',
       high: 0,
       medium: 0,
+      low: 0,
       vulnerabilites: [],
     };
     vuls.forEach(vul => {
@@ -221,13 +230,14 @@ export class VulnerabilitiesComponent {
             if (vulWorkload) {
               vulWorkload.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
               vulWorkload.medium +=
-                vul.severity.toLowerCase() === 'high' ? 0 : 1;
+                vul.severity.toLowerCase() === 'medium' ? 1 : 0;
+              vulWorkload.low += vul.severity.toLowerCase() === 'low' ? 1 : 0;
               vulWorkload.evaluation =
                 vulWorkload.high > 0 || vulWorkload.medium > 0 ? 1 : 0;
               vulWorkload.vulnerabilites.push({
                 text: vul.name,
                 style:
-                  vul.severity.toLowerCase() === 'high' ? 'danger' : 'warning',
+                  this.styleMap4Severity[vul.severity.toLowerCase()],
               });
             } else {
               vulWorkload = JSON.parse(JSON.stringify(vulWorkloadInit));
@@ -240,13 +250,14 @@ export class VulnerabilitiesComponent {
               vulWorkload.scanned_at = workloadInfo.scanned_at || '';
               vulWorkload.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
               vulWorkload.medium +=
-                vul.severity.toLowerCase() === 'high' ? 0 : 1;
+                vul.severity.toLowerCase() === 'medium' ? 1 : 0;
+              vulWorkload.low += vul.severity.toLowerCase() === 'low' ? 1 : 0;
               vulWorkload.evaluation =
                 vulWorkload.high > 0 || vulWorkload.medium > 0 ? 1 : 0;
               vulWorkload.vulnerabilites.push({
                 text: vul.name || '',
                 style:
-                  vul.severity.toLowerCase() === 'high' ? 'danger' : 'warning',
+                  this.styleMap4Severity[vul.severity.toLowerCase()],
               });
             }
             workloadMap4FilteredPdf[workload.id] = vulWorkload;
@@ -261,12 +272,13 @@ export class VulnerabilitiesComponent {
           vulWorkload.service_group = workloadInfo.service_group || '';
           vulWorkload.scanned_at = workloadInfo.scanned_at || '';
           vulWorkload.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
-          vulWorkload.medium += vul.severity.toLowerCase() === 'high' ? 0 : 1;
+          vulWorkload.medium += vul.severity.toLowerCase() === 'medium' ? 1 : 0;
+          vulWorkload.low += vul.severity.toLowerCase() === 'low' ? 1 : 0;
           vulWorkload.evaluation =
             vulWorkload.high > 0 || vulWorkload.medium > 0 ? 1 : 0;
           vulWorkload.vulnerabilites.push({
             text: vul.name || '',
-            style: vul.severity.toLowerCase() === 'high' ? 'danger' : 'warning',
+            style: this.styleMap4Severity[vul.severity.toLowerCase()],
           });
           workloadMap4FilteredPdf[workload.id] = vulWorkload;
         }
@@ -283,13 +295,14 @@ export class VulnerabilitiesComponent {
             let vulHost = hostMap4FilteredPdf[host.id];
             if (vulHost) {
               vulHost.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
-              vulHost.medium += vul.severity.toLowerCase() === 'high' ? 0 : 1;
+              vulHost.medium += vul.severity.toLowerCase() === 'medium' ? 1 : 0;
+              vulHost.low += vul.severity.toLowerCase() === 'low' ? 1 : 0;
               vulHost.evaluation =
                 vulHost.high > 0 || vulHost.medium > 0 ? 1 : 0;
               vulHost.vulnerabilites.push({
                 text: vul.name,
                 style:
-                  vul.severity.toLowerCase() === 'high' ? 'danger' : 'warning',
+                  this.styleMap4Severity[vul.severity.toLowerCase()],
               });
             } else {
               vulHost = JSON.parse(JSON.stringify(vulHostInit));
@@ -303,13 +316,14 @@ export class VulnerabilitiesComponent {
               vulHost.policy_mode = host.policy_mode || '';
               vulHost.scanned_at = hostInfo.scanned_at || '';
               vulHost.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
-              vulHost.medium += vul.severity.toLowerCase() === 'high' ? 0 : 1;
+              vulHost.medium += vul.severity.toLowerCase() === 'medium' ? 1 : 0;
+              vulHost.low += vul.severity.toLowerCase() === 'low' ? 1 : 0;
               vulHost.evaluation =
                 vulHost.high > 0 || vulHost.medium > 0 ? 1 : 0;
               vulHost.vulnerabilites.push({
                 text: vul.name || '',
                 style:
-                  vul.severity.toLowerCase() === 'high' ? 'danger' : 'warning',
+                  this.styleMap4Severity[vul.severity.toLowerCase()],
               });
             }
             hostMap4FilteredPdf[host.id] = vulHost;
@@ -326,11 +340,12 @@ export class VulnerabilitiesComponent {
           vulHost.policy_mode = host.policy_mode || '';
           vulHost.scanned_at = hostInfo.scanned_at || '';
           vulHost.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
-          vulHost.medium += vul.severity.toLowerCase() === 'high' ? 0 : 1;
+          vulHost.medium += vul.severity.toLowerCase() === 'medium' ? 1 : 0;
+          vulHost.low += vul.severity.toLowerCase() === 'low' ? 1 : 0;
           vulHost.evaluation = vulHost.high > 0 || vulHost.medium > 0 ? 1 : 0;
           vulHost.vulnerabilites.push({
             text: vul.name || '',
-            style: vul.severity.toLowerCase() === 'high' ? 'danger' : 'warning',
+            style: this.styleMap4Severity[vul.severity.toLowerCase()],
           });
           hostMap4FilteredPdf[host.id] = vulHost;
         }
@@ -349,25 +364,27 @@ export class VulnerabilitiesComponent {
             let vulImage = imageMap4FilteredPdf[image.id];
             if (vulImage) {
               vulImage.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
-              vulImage.medium += vul.severity.toLowerCase() === 'high' ? 0 : 1;
+              vulImage.medium += vul.severity.toLowerCase() === 'medium' ? 1 : 0;
+              vulImage.low += vul.severity.toLowerCase() === 'low' ? 1 : 0;
               vulImage.evaluation =
                 vulImage.high > 0 || vulImage.medium > 0 ? 1 : 0;
               vulImage.vulnerabilites.push({
                 text: vul.name || '',
                 style:
-                  vul.severity.toLowerCase() === 'high' ? 'danger' : 'warning',
+                  this.styleMap4Severity[vul.severity.toLowerCase()],
               });
             } else {
               vulImage = JSON.parse(JSON.stringify(vulImageInit));
               vulImage.image_name = image.display_name || '';
               vulImage.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
-              vulImage.medium += vul.severity.toLowerCase() === 'high' ? 0 : 1;
+              vulImage.medium += vul.severity.toLowerCase() === 'medium' ? 1 : 0;
+              vulImage.low += vul.severity.toLowerCase() === 'low' ? 1 : 0;
               vulImage.evaluation =
                 vulImage.high > 0 || vulImage.medium > 0 ? 1 : 0;
               vulImage.vulnerabilites.push({
                 text: vul.name || '',
                 style:
-                  vul.severity.toLowerCase() === 'high' ? 'danger' : 'warning',
+                  this.styleMap4Severity[vul.severity.toLowerCase()],
               });
             }
             imageMap4FilteredPdf[image.id] = vulImage;
@@ -376,12 +393,13 @@ export class VulnerabilitiesComponent {
           let vulImage = JSON.parse(JSON.stringify(vulImageInit));
           vulImage.image_name = image.display_name || '';
           vulImage.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
-          vulImage.medium += vul.severity.toLowerCase() === 'high' ? 0 : 1;
+          vulImage.medium += vul.severity.toLowerCase() === 'medium' ? 1 : 0;
+          vulImage.low += vul.severity.toLowerCase() === 'low' ? 1 : 0;
           vulImage.evaluation =
             vulImage.high > 0 || vulImage.medium > 0 ? 1 : 0;
           vulImage.vulnerabilites.push({
             text: vul.name || '',
-            style: vul.severity.toLowerCase() === 'high' ? 'danger' : 'warning',
+            style: this.styleMap4Severity[vul.severity.toLowerCase()],
           });
           imageMap4FilteredPdf[image.id] = vulImage;
         }
@@ -409,10 +427,11 @@ export class VulnerabilitiesComponent {
             vulWorkload.vulnerabilites.push({
               text: vul.name || '',
               style:
-                vul.severity.toLowerCase() === 'high' ? 'danger' : 'warning',
+                this.styleMap4Severity[vul.severity.toLowerCase()],
             });
             vulWorkload.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
-            vulWorkload.medium += vul.severity.toLowerCase() === 'high' ? 0 : 1;
+            vulWorkload.medium += vul.severity.toLowerCase() === 'medium' ? 1 : 0;
+            vulWorkload.low += vul.severity.toLowerCase() === 'low' ? 1 : 0;
             vulWorkload.evaluation =
               vulWorkload.high > 0 || vulWorkload.medium > 0 ? 1 : 0;
             masterData.workloadMap4Pdf[workload.id] = vulWorkload;
@@ -426,10 +445,11 @@ export class VulnerabilitiesComponent {
             vulHost.vulnerabilites.push({
               text: vul.name || '',
               style:
-                vul.severity.toLowerCase() === 'high' ? 'danger' : 'warning',
+                this.styleMap4Severity[vul.severity.toLowerCase()],
             });
             vulHost.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
-            vulHost.medium += vul.severity.toLowerCase() === 'high' ? 0 : 1;
+            vulHost.medium += vul.severity.toLowerCase() === 'medium' ? 1 : 0;
+            vulHost.low += vul.severity.toLowerCase() === 'low' ? 1 : 0;
             vulHost.evaluation = vulHost.high > 0 || vulHost.medium > 0 ? 1 : 0;
             masterData.hostMap4Pdf[host.id] = vulHost;
           }
@@ -446,10 +466,11 @@ export class VulnerabilitiesComponent {
             vulPlatform.vulnerabilites.push({
               text: vul.name || '',
               style:
-                vul.severity.toLowerCase() === 'high' ? 'danger' : 'warning',
+                this.styleMap4Severity[vul.severity.toLowerCase()],
             });
             vulPlatform.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
-            vulPlatform.medium += vul.severity.toLowerCase() === 'high' ? 0 : 1;
+            vulPlatform.medium += vul.severity.toLowerCase() ===  'medium' ? 1 : 0;
+            vulPlatform.low += vul.severity.toLowerCase() === 'low' ? 1 : 0;
             masterData.platformMap4Pdf[platform.id] = vulPlatform;
           }
         });
@@ -469,10 +490,11 @@ export class VulnerabilitiesComponent {
             vulImage.vulnerabilites.push({
               text: vul.name || '',
               style:
-                vul.severity.toLowerCase() === 'high' ? 'danger' : 'warning',
+                this.styleMap4Severity[vul.severity.toLowerCase()],
             });
             vulImage.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
-            vulImage.medium += vul.severity.toLowerCase() === 'high' ? 0 : 1;
+            vulImage.medium += vul.severity.toLowerCase() === 'medium' ? 1 : 0;
+            vulImage.low += vul.severity.toLowerCase() === 'low' ? 1 : 0;
             vulImage.evaluation =
               vulImage.high > 0 || vulImage.medium > 0 ? 1 : 0;
             masterData.imageMap4Pdf[image.id] = vulImage;
@@ -483,11 +505,12 @@ export class VulnerabilitiesComponent {
             otherVulImage.vulnerabilites.push({
               text: vul.name || '',
               style:
-                vul.severity.toLowerCase() === 'high' ? 'danger' : 'warning',
+                this.styleMap4Severity[vul.severity.toLowerCase()],
             });
             otherVulImage.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
             otherVulImage.medium +=
-              vul.severity.toLowerCase() === 'high' ? 0 : 1;
+              vul.severity.toLowerCase() === 'medium' ? 1 : 0;
+            otherVulImage.low += vul.severity.toLowerCase() === 'low' ? 1 : 0;
             otherVulImage.evaluation =
               otherVulImage.high > 0 || otherVulImage.medium > 0 ? 1 : 0;
             masterData.imageMap4Pdf[image.id] = otherVulImage;

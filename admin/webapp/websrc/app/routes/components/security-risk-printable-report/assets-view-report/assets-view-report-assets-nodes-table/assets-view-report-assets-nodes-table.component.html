@@ -68,20 +68,20 @@
         <span class="action-label px-1 {{ colourMap[node.policy_mode] }}">{{ node.policy_mode }}</span>
       </td>
       <td *ngIf="reportPage === 'vulnerabilities'" class="print-cell" style="width: 6%">
-        <div *ngIf="node.high + node.medium > 0">
-          <span class="text-danger">{{ node.high }}</span>&nbsp;/&nbsp;<span class="text-warning">{{ node.medium }}</span>
+        <div *ngIf="node.high + node.medium + node.low > 0">
+          <span class="text-danger">{{ node.high }}</span>&nbsp;/&nbsp;<span class="text-warning">{{ node.medium }}</span>&nbsp;/&nbsp;<span class="text-success">{{ node.low }}</span>
         </div>
-        <div *ngIf="node.high + node.medium === 0">
+        <div *ngIf="node.high + node.medium + node.low === 0">
           <span class="text-success">0</span>
         </div>
       </td>
       <td *ngIf="reportPage === 'vulnerabilities'" class="print-cell" style="width: 26%">
-        <div *ngIf="node.high + node.medium > 0">
+        <div *ngIf="node.high + node.medium + node.low > 0">
           <span *ngFor="let item of node.vulnerabilites" class="margin-right-s text-{{ item.style }}">
             {{item.text.trim()}}
           </span>
         </div>
-        <div *ngIf="node.high + node.medium === 0">
+        <div *ngIf="node.high + node.medium + node.low === 0">
           <span class="text-success">{{ "scan.NO_VULNERABILITIES" | translate }}</span>
         </div>
       </td>

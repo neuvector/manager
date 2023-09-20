@@ -2,6 +2,7 @@ export interface ScanBrief {
   status: string;
   high: number;
   medium: number;
+  low: number;
   result: string;
   scanned_timestamp: number;
   scanned_at: string;

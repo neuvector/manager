@@ -106,6 +106,9 @@
           <span *ngIf="host.scan_summary?.medium" class="badge badge-warning">
             {{ host.scan_summary.medium }}</span
           >
+          <span *ngIf="host.scan_summary?.low" class="badge badge-success">
+            {{ host.scan_summary.low }}</span
+          >
           <a
             *ngIf="host.scan_summary?.high || host.scan_summary?.medium"
             [routerLink]="['/hosts']"

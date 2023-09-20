@@ -39,11 +39,7 @@
           </app-risk-view-report-description-col>
         </td>
         <td
-          class="print-cell"
-          [ngClass]="{
-            'text-danger': dataItem.severity.toLowerCase() === 'high',
-            'text-warning': dataItem.severity.toLowerCase() === 'medium'
-          }"
+          class="{{'print-cell ' + (dataItem.severity.toLowerCase() === 'high' ? 'text-danger' : (dataItem.severity.toLowerCase() === 'medium' ? 'text-warning' : 'text-success'))}}"
           style="width: 6%">
           <div><strong>V2:</strong> {{ dataItem.score }}</div>
           <div><strong>V3:</strong> {{ dataItem.score_v3 }}</div>

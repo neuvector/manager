@@ -23,15 +23,16 @@ import { GridApi } from 'ag-grid-community';
 
 @Injectable()
 export class VulnerabilitiesService {
-  imageMap!: Map<string, { high: number; medium: number }>;
-  hostMap!: Map<string, { high: number; medium: number }>;
-  topNodes!: [string, { high: number; medium: number }][];
-  topImages!: [string, { high: number; medium: number }][];
+  imageMap!: Map<string, { high: number; medium: number; low: number }>;
+  hostMap!: Map<string, { high: number; medium: number; low: number }>;
+  topNodes!: [string, { high: number; medium: number; low: number }][];
+  topImages!: [string, { high: number; medium: number; low: number }][];
   topCve!: Compliance[] | VulnerabilityAssetRaw[];
   gridApi!: GridApi;
   countDistribution!: {
     high: number;
     medium: number;
+    low: number;
     platform: number;
     image: number;
     node: number;
@@ -74,6 +75,7 @@ export class VulnerabilitiesService {
     this.countDistribution = {
       high: 0,
       medium: 0,
+      low: 0,
       platform: 0,
       image: 0,
       node: 0,
@@ -90,6 +92,7 @@ export class VulnerabilitiesService {
     let countDistribution = {
       high: 0,
       medium: 0,
+      low: 0,
       platform: 0,
       image: 0,
       node: 0,
@@ -98,6 +101,7 @@ export class VulnerabilitiesService {
     filteredCis.forEach(cve => {
       if (cve.severity === 'High') countDistribution.high += 1;
       if (cve.severity === 'Medium') countDistribution.medium += 1;
+      if (cve.severity === 'Low') countDistribution.low += 1;
       if (cve.platforms.length) countDistribution.platform += 1;
       if (cve.images.length) countDistribution.image += 1;
       if (cve.nodes.length) countDistribution.node += 1;
@@ -231,6 +235,7 @@ export class VulnerabilitiesService {
               : '',
             high: 0,
             medium: 0,
+            low: 0,
             evaluation: 0, //0: compliant, 1: risky
             complianceCnt: 0,
             vulnerabilites: [],
@@ -259,6 +264,7 @@ export class VulnerabilitiesService {
                     : '',
                   high: 0,
                   medium: 0,
+                  low: 0,
                   evaluation: 0, //0: compliant, 1: risky
                   complianceCnt: 0,
                   vulnerabilites: [],
@@ -270,6 +276,7 @@ export class VulnerabilitiesService {
                   image_name: child.image,
                   high: 0,
                   medium: 0,
+                  low: 0,
                   evaluation: 0, //0: compliant, 1: risky
                   complianceCnt: 0,
                   vulnerabilites: [],
@@ -312,6 +319,7 @@ export class VulnerabilitiesService {
               : '',
             high: 0,
             medium: 0,
+            low: 0,
             evaluation: 0, //0: compliant, 1: risky
             complianceCnt: 0,
             vulnerabilites: [],
@@ -344,6 +352,7 @@ export class VulnerabilitiesService {
             openshift_version: platform.openshift_version || '',
             high: 0,
             medium: 0,
+            low: 0,
             complianceCnt: 0,
             vulnerabilites: [],
             complianceList: [],
@@ -418,14 +427,23 @@ export class VulnerabilitiesService {
                 this.hostMap.set(host.display_name, {
                   high: cve.severity === 'High' ? 1 : 0,
                   medium: cve.severity === 'Medium' ? 1 : 0,
+                  low: cve.severity === 'Low' ? 1 : 0,
                 });
               else {
-                if (cve.severity === 'High') {
-                  exist.high += 1;
-                  this.hostMap.set(host.display_name, exist);
-                } else {
-                  exist.medium += 1;
-                  this.hostMap.set(host.display_name, exist);
+                switch (cve.severity) {
+                  case 'High':
+                    exist.high += 1;
+                    this.hostMap.set(host.display_name, exist);
+                    break;
+                  case 'Medium':
+                    exist.medium += 1;
+                    this.hostMap.set(host.display_name, exist);
+                    break;
+                  case 'Low':
+                    exist.low += 1;
+                    this.hostMap.set(host.display_name, exist);
+                    break;
+                  default: break;
                 }
               }
             });
@@ -437,14 +455,23 @@ export class VulnerabilitiesService {
                 this.imageMap.set(image.display_name, {
                   high: cve.severity === 'High' ? 1 : 0,
                   medium: cve.severity === 'Medium' ? 1 : 0,
+                  low: cve.severity === 'Low' ? 1 : 0,
                 });
               else {
-                if (cve.severity === 'High') {
-                  exist.high += 1;
-                  this.imageMap.set(image.display_name, exist);
-                } else {
-                  exist.medium += 1;
-                  this.imageMap.set(image.display_name, exist);
+                switch (cve.severity) {
+                  case 'High':
+                    exist.high += 1;
+                    this.imageMap.set(image.display_name, exist);
+                    break;
+                  case 'Medium':
+                    exist.medium += 1;
+                    this.imageMap.set(image.display_name, exist);
+                    break;
+                  case 'Low':
+                    exist.low += 1;
+                    this.imageMap.set(image.display_name, exist);
+                    break;
+                  default: break;
                 }
               }
             });
@@ -452,20 +479,25 @@ export class VulnerabilitiesService {
           }
           if (cve.severity === 'High') this.countDistribution.high += 1;
           if (cve.severity === 'Medium') this.countDistribution.medium += 1;
+          if (cve.severity === 'Low') this.countDistribution.low += 1;
           if (cve.platforms.length) this.countDistribution.platform += 1;
           if (cve.nodes.length) this.countDistribution.node += 1;
           if (cve.workloads.length) this.countDistribution.container += 1;
         });
         this.topNodes = [...this.hostMap]
           .sort((a, b) => {
-            if (a[1].high === b[1].high) {
+            if (a[1].high === b[1].high && a[1].medium === b[1].medium) {
+              return b[1].low - a[1].low;
+            } else if (a[1].high === b[1].high) {
               return b[1].medium - a[1].medium;
             } else return b[1].high - a[1].high;
           })
           .slice(0, 5);
         this.topImages = [...this.imageMap]
           .sort((a, b) => {
-            if (a[1].high === b[1].high) {
+            if (a[1].high === b[1].high && a[1].medium === b[1].medium) {
+              return b[1].low - a[1].low;
+            } else if (a[1].high === b[1].high) {
               return b[1].medium - a[1].medium;
             } else return b[1].high - a[1].high;
           })

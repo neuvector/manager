@@ -115,7 +115,7 @@ export class MapConstant {
     critical: 'danger',
     Alert: 'pink',
     Emergency: 'danger',
-    Low: 'warning',
+    Low: 'success',
     Medium: 'warning',
     High: 'danger',
     HIGH: 'danger',

@@ -1010,6 +1010,7 @@
       "ENFORCER": "Enforcer",
       "HOST_NAME": "Node",
       "IMAGE": "Image",
+      "IMAGE_CREATED_AT": "Image Created At",
       "BASE_OS": "Base OS",
       "RUNNING": "Running",
       "SECURED": "Secured",
@@ -1072,8 +1073,6 @@
     "ACCEPT_VUL": "Accept Vulnerability",
     "NAME": "Vulnerability Name",
     "REPORTED_WITHIN": "Vulnerability Reported Within",
-    "REPORTED_WITHIN_WITH_FIX": "Vulnerability with Fix Reported within",
-    "DAYS": "Day(s)",
     "msg": {
       "REMOVE_CFM": "Are you sure you want to remove?",
       "REMOVE_OK": "Vulnerability profile entry is removed successfully!",
@@ -1085,8 +1084,8 @@
     },
     "gridHeader": {
       "VULNERABILITY": "Vulnerability Name",
-      "REPORTED_DAYS": "Reported within (Days)",
-      "REPORTED_DAYS_WITHOUT_FIX": "Reported within (Days) without Fix",
+      "REPORTED_DAYS": "Vulnerabilities reported within {{days}} day(s)",
+      "REPORTED_DAYS_WITHOUT_FIX": "Vulnerabilities reported within {{days}} day(s) without fix",
       "DAYS_PREFIX": "Reported within",
       "DAYS_PREFIX_WITHOUT_FIX": "Reported within",
       "DAYS_SUFFIX": "Day(s)",
@@ -1121,6 +1120,7 @@
     "IMAGE_NOT_USED": "Image not being used",
     "UNPROTECTED_NODE": "UnProtected Node",
     "PROTECTED_CONTAINER": "Protected container",
+    "LAST_MODIFIED": "Last Modified",
     "PUBLISHED": "Published",
     "PUBLISHED_TYPE": "Published Type",
     "WITH_FIX": "With Fix",
@@ -1136,6 +1136,14 @@
       "TITLE2": "Vulnerability reports (Assets View)",
       "PDF_LINK": "Vulnerability View",
       "PDF_LINK2": "Assets View",
+      "PRINT_REPORT": "Print Vulnerabilities Report",
+      "from": {
+        "ALL": "All",
+        "TWOWEEKS": "2 weeks ago",
+        "ONEMONTH": "1 month ago",
+        "THREEMONTHS": "3 months ago",
+        "CUSTOM": "Custom"
+      },
       "gridHeader": {
         "NAME": "Name",
         "DESC": "Description",
@@ -1319,6 +1327,7 @@
       "TAG": "Tag",
       "VUL": "Vulnerabilities",
       "IMAGE_ID": "Image ID",
+      "CREATED_AT": "Created at",
       "DIGEST": "Digest",
       "JSON_KEY": "JSON Key",
       "CMDS": "Commands",

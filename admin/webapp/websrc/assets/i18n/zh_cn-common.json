@@ -1010,6 +1010,7 @@
       "ENFORCER": "代理端",
       "HOST_NAME": "主机",
       "IMAGE": "镜像",
+      "IMAGE_CREATED_AT": "镜像创建于",
       "BASE_OS": "Base OS",
       "RUNNING": "运行中",
       "SECURED": "安全",
@@ -1072,8 +1073,6 @@
     "ACCEPT_VUL": "接受漏洞",
     "NAME": "漏洞名称",
     "REPORTED_WITHIN": "漏洞报告于",
-    "REPORTED_WITHIN_WITH_FIX": "已修复漏洞报告于",
-    "DAYS": "天以内",
     "msg": {
       "REMOVE_CFM": "您确定要删除?",
       "REMOVE_OK": "漏洞配置资料条目删除成功!",
@@ -1085,8 +1084,8 @@
     },
     "gridHeader": {
       "VULNERABILITY": "漏洞名称",
-      "REPORTED_DAYS": "报告于几天之内",
-      "REPORTED_DAYS_WITHOUT_FIX": "报告于几天之内（无修复）",
+      "REPORTED_DAYS": "{{days}}之内报告的漏洞",
+      "REPORTED_DAYS_WITHOUT_FIX": "{{days}}天之内报告的未修复的漏洞",
       "DAYS_PREFIX": "报告于",
       "DAYS_PREFIX_WITHOUT_FIX": "报告于",
       "DAYS_SUFFIX": "天之内",
@@ -1121,6 +1120,7 @@
     "IMAGE_NOT_USED": "未使用的镜像",
     "UNPROTECTED_NODE": "未保护的主机",
     "PROTECTED_CONTAINER": "被保护的容器",
+    "LAST_MODIFIED": "上一次更改",
     "PUBLISHED": "发布时间",
     "PUBLISHED_TYPE": "发布类型",
     "WITH_FIX": "修复",
@@ -1136,6 +1136,14 @@
       "TITLE2": "漏洞报告 (资产视角)",
       "PDF_LINK": "漏洞视角",
       "PDF_LINK2": "资产视角",
+      "PRINT_REPORT": "打印漏洞报告",
+      "from": {
+        "ALL": "全选",
+        "TWOWEEKS": "2个星期前",
+        "ONEMONTH": "1个月前",
+        "THREEMONTHS": "3个月前",
+        "CUSTOM": "自定义"
+      },
       "gridHeader": {
         "NAME": "名称",
         "DESC": "描述",
@@ -1319,6 +1327,7 @@
       "VUL": "漏洞",
       "TAG": "标签",
       "IMAGE_ID": "镜像ID",
+      "CREATED_AT": "创建时间",
       "DIGEST": "文摘",
       "JSON_KEY": "JSON key",
       "CMDS": "命令",

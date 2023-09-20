@@ -1,57 +1,84 @@
-<div cdkDrag cdkDragHandle cdkDragRootElement=".cdk-overlay-pane"
-     class="d-flex align-items-center justify-content-between" style="cursor: move; margin-top: -24px;
-    padding-top: 10px;">
-  <h1 mat-dialog-title>{{'general.FILTER_MATCH_ALL' | translate}}</h1>
-  <button aria-label="Close icon button" class="d-flex align-items-center justify-content-center" mat-icon-button>
+<div
+  cdkDrag
+  cdkDragHandle
+  cdkDragRootElement=".cdk-overlay-pane"
+  class="d-flex align-items-center justify-content-between"
+  style="cursor: move; margin-top: -24px; padding-top: 10px">
+  <h1 mat-dialog-title>{{ 'general.FILTER_MATCH_ALL' | translate }}</h1>
+  <button
+    aria-label="Close icon button"
+    class="d-flex align-items-center justify-content-center"
+    mat-icon-button>
     <i (click)="dialogRef.close()" class="eos-icons">close</i>
   </button>
 </div>
-<hr class="fancy mt-1 mb-4 mx-0">
+<hr class="fancy mt-1 mb-4 mx-0" />
 <div mat-dialog-content>
   <form [formGroup]="form">
     <section class="row mx-0" formGroupName="category">
-      <span class="d-block col-2">{{'nodes.gridHeader.CATEGORY' | translate}}</span>
+      <span class="d-block col-2">{{
+        'nodes.gridHeader.CATEGORY' | translate
+      }}</span>
       <mat-checkbox class="col" formControlName="docker">Docker</mat-checkbox>
-      <mat-checkbox class="col" formControlName="kubernetes">Kubernetes</mat-checkbox>
+      <mat-checkbox class="col" formControlName="kubernetes"
+        >Kubernetes</mat-checkbox
+      >
       <mat-checkbox class="col" formControlName="custom">Custom</mat-checkbox>
       <mat-checkbox class="col" formControlName="image">Image</mat-checkbox>
     </section>
     <section class="row mx-0" formGroupName="tags">
-      <span class="d-block col-2">{{'cis.profile.REGULATIONS' | translate}}</span>
+      <span class="d-block col-2">{{
+        'cis.profile.REGULATIONS' | translate
+      }}</span>
       <mat-checkbox class="col" formControlName="gdpr">GDPR</mat-checkbox>
       <mat-checkbox class="col" formControlName="hipaa">HIPAA</mat-checkbox>
       <mat-checkbox class="col" formControlName="nist">NIST</mat-checkbox>
       <mat-checkbox class="col" formControlName="pci">PCI</mat-checkbox>
     </section>
     <section class="row mx-0">
-      <span class="d-block col-2">{{'cis.report.gridHeader.SCORED' | translate}}</span>
-      <mat-radio-group aria-label="Scored" class="col row" formControlName="scoredType">
+      <span class="d-block col-2">{{
+        'cis.report.gridHeader.SCORED' | translate
+      }}</span>
+      <mat-radio-group
+        aria-label="Scored"
+        class="col row"
+        formControlName="scoredType">
         <mat-radio-button class="col" value="all">All</mat-radio-button>
         <mat-radio-button class="col" value="true">True</mat-radio-button>
         <mat-radio-button class="col" value="false">False</mat-radio-button>
       </mat-radio-group>
     </section>
     <section class="row mx-0">
-      <span class="d-block col-2">{{'profile.TITLE' | translate}}</span>
-      <mat-radio-group aria-label="Profile" class="col row" formControlName="profileType">
+      <span class="d-block col-2">{{ 'profile.TITLE' | translate }}</span>
+      <mat-radio-group
+        aria-label="Profile"
+        class="col row"
+        formControlName="profileType">
         <mat-radio-button class="col" value="all">All</mat-radio-button>
         <mat-radio-button class="col" value="Level 1">Level 1</mat-radio-button>
         <mat-radio-button class="col" value="Level 2">Level 2</mat-radio-button>
       </mat-radio-group>
     </section>
     <section class="row mx-0 align-items-center">
-      <label class="col-2 font-weight-normal mb-0"
-             for="namespaceInput">{{ 'ldap.gridHeader.DOMAINS' | translate }}</label>
+      <label class="col-2 font-weight-normal mb-0" for="namespaceInput">{{
+        'ldap.gridHeader.DOMAINS' | translate
+      }}</label>
       <label class="sr-only" for="namespaceMatch">Match</label>
       <mat-form-field appearance="standard" class="col-2 match">
         <mat-select formControlName="matchType4Ns" id="namespaceMatch">
-          <mat-option *ngFor="let matchType of matchTypes" [value]="matchType.id">
-            {{matchType.name}}
+          <mat-option
+            *ngFor="let matchType of matchTypes"
+            [value]="matchType.id">
+            {{ matchType.name }}
           </mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="standard" class="col pl-0">
-        <mat-chip-list #chipList aria-label="Namespace selection" formControlName="selectedDomains" id="namespaceInput">
+        <mat-chip-list
+          #chipList
+          aria-label="Namespace selection"
+          formControlName="selectedDomains"
+          id="namespaceInput">
           <mat-chip
             (removed)="remove(domainChip)"
             *ngFor="let domainChip of form.controls.selectedDomains.value">
@@ -71,6 +98,7 @@
         </mat-chip-list>
         <mat-autocomplete
           #auto="matAutocomplete"
+          (optionActivated)="optionActivated($event)"
           (optionSelected)="selected($event)">
           <mat-option
             *ngFor="let domain of filteredDomains | async"
@@ -81,70 +109,110 @@
       </mat-form-field>
     </section>
     <section class="row mx-0 align-items-center">
-      <button [matMenuTriggerFor]="menu" class="col-2 d-flex" mat-button>{{viewText}}&nbsp;<i class="eos-icons">arrow_drop_down</i>
+      <button [matMenuTriggerFor]="menu" class="col-2 d-flex" mat-button>
+        {{ viewText }}&nbsp;<i class="eos-icons">arrow_drop_down</i>
       </button>
       <mat-menu #menu="matMenu">
-        <button (click)="changeView(0)" mat-menu-item><span>{{'admissionControl.names.SERVICE' | translate}}</span></button>
-        <button (click)="changeView(1)" mat-menu-item><span>{{'admissionControl.names.IMAGE' | translate}}</span></button>
-        <button (click)="changeView(2)" mat-menu-item><span>{{'admissionControl.names.NODE' | translate}}</span></button>
-        <button (click)="changeView(3)" mat-menu-item><span>{{'admissionControl.names.CONTAINER' | translate}}</span></button>
+        <button (click)="changeView(0)" mat-menu-item>
+          <span>{{ 'admissionControl.names.SERVICE' | translate }}</span>
+        </button>
+        <button (click)="changeView(1)" mat-menu-item>
+          <span>{{ 'admissionControl.names.IMAGE' | translate }}</span>
+        </button>
+        <button (click)="changeView(2)" mat-menu-item>
+          <span>{{ 'admissionControl.names.NODE' | translate }}</span>
+        </button>
+        <button (click)="changeView(3)" mat-menu-item>
+          <span>{{ 'admissionControl.names.CONTAINER' | translate }}</span>
+        </button>
       </mat-menu>
       <ng-container [ngSwitch]="view">
         <div class="row col align-items-center">
           <ng-container *ngSwitchCase="FilterView.SERVICE">
-            <label class="sr-only" for="serviceName">{{'admissionControl.names.SERVICE' | translate}}</label>
+            <label class="sr-only" for="serviceName">{{
+              'admissionControl.names.SERVICE' | translate
+            }}</label>
             <label class="sr-only" for="serviceMatch">Match</label>
-            <mat-form-field appearance="standard" class="col-2 pr-0 match" formGroupName="matchTypes">
+            <mat-form-field
+              appearance="standard"
+              class="col-2 pr-0 match"
+              formGroupName="matchTypes">
               <mat-select formControlName="Service" id="serviceMatch">
-                <mat-option *ngFor="let matchType of matchTypes" [value]="matchType.id">
-                  {{matchType.name}}
+                <mat-option
+                  *ngFor="let matchType of matchTypes"
+                  [value]="matchType.id">
+                  {{ matchType.name }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field appearance="standard" class="col">
-              <input formControlName="serviceName" id="serviceName" matInput>
+              <input formControlName="serviceName" id="serviceName" matInput />
             </mat-form-field>
           </ng-container>
           <ng-container *ngSwitchCase="FilterView.IMAGE">
-            <label class="sr-only" for="imageName">{{'admissionControl.names.IMAGE' | translate}}</label>
+            <label class="sr-only" for="imageName">{{
+              'admissionControl.names.IMAGE' | translate
+            }}</label>
             <label class="sr-only" for="imageMatch">Match</label>
-            <mat-form-field appearance="standard" class="col-2 pr-0 match" formGroupName="matchTypes">
+            <mat-form-field
+              appearance="standard"
+              class="col-2 pr-0 match"
+              formGroupName="matchTypes">
               <mat-select formControlName="Image" id="imageMatch">
-                <mat-option *ngFor="let matchType of matchTypes" [value]="matchType.id">
-                  {{matchType.name}}
+                <mat-option
+                  *ngFor="let matchType of matchTypes"
+                  [value]="matchType.id">
+                  {{ matchType.name }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field appearance="standard" class="col">
-              <input formControlName="imageName" id="imageName" matInput>
+              <input formControlName="imageName" id="imageName" matInput />
             </mat-form-field>
           </ng-container>
           <ng-container *ngSwitchCase="FilterView.NODE">
-            <label class="sr-only" for="nodeName">{{'admissionControl.names.NODE' | translate}}</label>
+            <label class="sr-only" for="nodeName">{{
+              'admissionControl.names.NODE' | translate
+            }}</label>
             <label class="sr-only" for="nodeMatch">Match</label>
-            <mat-form-field appearance="standard" class="col-2 pr-0 match" formGroupName="matchTypes">
+            <mat-form-field
+              appearance="standard"
+              class="col-2 pr-0 match"
+              formGroupName="matchTypes">
               <mat-select formControlName="Node" id="nodeMatch">
-                <mat-option *ngFor="let matchType of matchTypes" [value]="matchType.id">
-                  {{matchType.name}}
+                <mat-option
+                  *ngFor="let matchType of matchTypes"
+                  [value]="matchType.id">
+                  {{ matchType.name }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field appearance="standard" class="col">
-              <input formControlName="nodeName" id="nodeName" matInput>
+              <input formControlName="nodeName" id="nodeName" matInput />
             </mat-form-field>
           </ng-container>
           <ng-container *ngSwitchCase="FilterView.CONTAINER">
-            <label class="sr-only" for="containerName">{{'admissionControl.names.CONTAINER' | translate}}</label>
+            <label class="sr-only" for="containerName">{{
+              'admissionControl.names.CONTAINER' | translate
+            }}</label>
             <label class="sr-only" for="containerMatch">Match</label>
-            <mat-form-field appearance="standard" class="col-2 pr-0 match" formGroupName="matchTypes">
+            <mat-form-field
+              appearance="standard"
+              class="col-2 pr-0 match"
+              formGroupName="matchTypes">
               <mat-select formControlName="Container" id="containerMatch">
-                <mat-option *ngFor="let matchType of matchTypes" [value]="matchType.id">
-                  {{matchType.name}}
+                <mat-option
+                  *ngFor="let matchType of matchTypes"
+                  [value]="matchType.id">
+                  {{ matchType.name }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field appearance="standard" class="col">
-              <input formControlName="containerName" id="containerName" matInput>
+              <input
+                formControlName="containerName"
+                id="containerName"
+                matInput />
             </mat-form-field>
           </ng-container>
         </div>
@@ -155,27 +223,59 @@
 <div>
   <ng-container *ngIf="form.controls.serviceName.value">
     <span
-      class="badge badge-secondary mb-1 mr-1 ml-0 d-inline-flex justify-content-center align-items-center">Service {{form.get(['matchTypes', 'Service'])?.value === "equal" ? "=" : "~"}} {{form.controls.serviceName.value}}
-      <button (click)="clear(FilterView.SERVICE)" class="remove-button"><i class="eos-icons">close</i></button></span>
+      class="badge badge-secondary mb-1 mr-1 ml-0 d-inline-flex justify-content-center align-items-center"
+      >Service
+      {{ form.get(['matchTypes', 'Service'])?.value === 'equal' ? '=' : '~' }}
+      {{ form.controls.serviceName.value }}
+      <button (click)="clear(FilterView.SERVICE)" class="remove-button">
+        <i class="eos-icons">close</i>
+      </button></span
+    >
   </ng-container>
   <ng-container *ngIf="form.controls.imageName.value">
     <span
-      class="badge badge-secondary mb-1 mr-1 ml-0 d-inline-flex justify-content-center align-items-center">Image {{form.get(['matchTypes', 'Image'])?.value === "equal" ? "=" : "~"}} {{form.controls.imageName.value}}
-      <button (click)="clear(FilterView.IMAGE)" class="remove-button"><i class="eos-icons">close</i></button></span>
+      class="badge badge-secondary mb-1 mr-1 ml-0 d-inline-flex justify-content-center align-items-center"
+      >Image
+      {{ form.get(['matchTypes', 'Image'])?.value === 'equal' ? '=' : '~' }}
+      {{ form.controls.imageName.value }}
+      <button (click)="clear(FilterView.IMAGE)" class="remove-button">
+        <i class="eos-icons">close</i>
+      </button></span
+    >
   </ng-container>
   <ng-container *ngIf="form.controls.nodeName.value">
     <span
-      class="badge badge-secondary mb-1 mr-1 ml-0 d-inline-flex justify-content-center align-items-center">Node {{form.get(['matchTypes', 'Node'])?.value === "equal" ? "=" : "~"}} {{form.controls.nodeName.value}}
-      <button (click)="clear(FilterView.NODE)" class="remove-button"><i class="eos-icons">close</i></button></span>
+      class="badge badge-secondary mb-1 mr-1 ml-0 d-inline-flex justify-content-center align-items-center"
+      >Node
+      {{ form.get(['matchTypes', 'Node'])?.value === 'equal' ? '=' : '~' }}
+      {{ form.controls.nodeName.value }}
+      <button (click)="clear(FilterView.NODE)" class="remove-button">
+        <i class="eos-icons">close</i>
+      </button></span
+    >
   </ng-container>
   <ng-container *ngIf="form.controls.containerName.value">
     <span
-      class="badge badge-secondary mb-1 mr-1 ml-0 d-inline-flex justify-content-center align-items-center">Container {{form.get(['matchTypes', 'Container'])?.value === "equal" ? "=" : "~"}} {{form.controls.containerName.value}}
-      <button (click)="clear(FilterView.CONTAINER)" class="remove-button"><i class="eos-icons">close</i></button></span>
+      class="badge badge-secondary mb-1 mr-1 ml-0 d-inline-flex justify-content-center align-items-center"
+      >Container
+      {{
+        form.get(['matchTypes', 'Container'])?.value === 'equal' ? '=' : '~'
+      }}
+      {{ form.controls.containerName.value }}
+      <button (click)="clear(FilterView.CONTAINER)" class="remove-button">
+        <i class="eos-icons">close</i>
+      </button></span
+    >
   </ng-container>
 </div>
-<p>{{'scan.CONDITION_HINT' | translate}}</p>
+<p>{{ 'scan.CONDITION_HINT' | translate }}</p>
 <div class="float-right" mat-dialog-actions>
-  <button (click)="reset()" mat-button>{{ 'enum.RESET' | translate}}</button>
-  <button [mat-dialog-close]="form.value" cdkFocusInitial color="primary" mat-raised-button>{{ 'enum.APPLY' | translate}}</button>
+  <button (click)="reset()" mat-button>{{ 'enum.RESET' | translate }}</button>
+  <button
+    [mat-dialog-close]="form.value"
+    cdkFocusInitial
+    color="primary"
+    mat-raised-button>
+    {{ 'enum.APPLY' | translate }}
+  </button>
 </div>

@@ -10,6 +10,7 @@ import { AddApikeyDialogComponent } from './add-apikey-dialog/add-apikey-dialog.
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
 import { GroupDomainRoleModule } from '@routes/settings/common/group-domain-role/group-domain-role.module';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
   imports: [
     CommonModule,
     NvCommonModule,
+    QuickFilterModule,
     AgGridModule.withComponents([
       ApikeysGridStateCellComponent,
       ApikeysGridExpirationCellComponent,

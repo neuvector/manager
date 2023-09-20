@@ -429,7 +429,7 @@ export function setRisks(risks, workloadMap) {
           if (Array.isArray(image.domains) && image.domains.length > 0) {
             image.domains.forEach(domain => domains.add(domain));
           }
-        })
+        });
       }
       risk.domains = Array.from(domains);
       risk.services = Array.from(services);
@@ -616,6 +616,7 @@ export function briefToV2(workload: WorkloadBrief): WorkloadChildV2 {
       id: workload.id || '',
       image: workload.image || '',
       image_id: workload.image_id || '',
+      image_created_at: workload.image_created_at || '',
       name: workload.name || '',
       service: workload.service || '',
       service_group: workload.service_group || '',
@@ -697,6 +698,7 @@ export function workloadToV2(workload: Workload): WorkloadChildV2 {
       id: workload.id,
       image: workload.image,
       image_id: workload.image_id,
+      image_created_at: workload.image_created_at,
       name: workload.name,
       service: workload.service,
       service_group: workload.service_group,

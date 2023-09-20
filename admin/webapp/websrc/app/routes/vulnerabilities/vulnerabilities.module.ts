@@ -28,6 +28,7 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { RisksViewReportModule } from '@components/security-risk-printable-report/risks-view-report/risks-view-report.module';
 import { AssetsViewReportModule } from '@components/security-risk-printable-report/assets-view-report/assets-view-report.module';
 import { NvCommonModule } from '@common/nvCommon.module';
+import { PdfGenerationDialogComponent } from './pdf-generation-dialog/pdf-generation-dialog.component';
 
 const routes: Routes = [{ path: '', component: VulnerabilitiesComponent }];
 
@@ -44,6 +45,7 @@ const routes: Routes = [{ path: '', component: VulnerabilitiesComponent }];
     VulnerabilityItemsTableImpactCellComponent,
     VulnerabilityItemsTableScoreCellComponent,
     VulnerabilityItemsTableSevertiyCellComponent,
+    PdfGenerationDialogComponent,
   ],
   providers: [
     VulnerabilitiesService,

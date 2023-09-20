@@ -13,6 +13,7 @@ export interface Workload {
   pod_name: string;
   image: string;
   image_id: string;
+  image_created_at: string;
   platform_role: string;
   domain: string;
   state: string;

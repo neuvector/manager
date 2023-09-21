@@ -123,8 +123,8 @@ def images(data, name, filter_domain, filter_repo, page):
         for img in images:
             _list_image_display_format(img)
 
-        # columns = ("image", "image_id", "status", "result", "signed", "high", "medium", "base_os") # comment out until we can accurately tell it
-        columns = ("image", "image_id", "status", "result", "high", "medium", "base_os")
+        # columns = ("image", "image_id", "status", "result", "signed", "high", "medium", "base_os", "created_at") # comment out until we can accurately tell it
+        columns = ("image", "image_id", "status", "result", "high", "medium", "base_os", "created_at")
         output.list(columns, images)
 
         if args["limit"] > 0 and len(images) < args["limit"]:

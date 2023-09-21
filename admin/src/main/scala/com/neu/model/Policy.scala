@@ -285,7 +285,7 @@ case class WorkloadBriefV2(
   host_id: String,
   image: String,
   image_id: String,
-  image_created_at: String,
+  image_created_at: Option[String],
   domain: String,
   state: String,
   service: String,

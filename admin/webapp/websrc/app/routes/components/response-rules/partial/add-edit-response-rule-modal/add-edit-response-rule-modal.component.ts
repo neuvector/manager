@@ -74,7 +74,7 @@ export class AddEditResponseRuleModalComponent implements OnInit {
     this.type = this.data.type;
     this.prepareEventDropdown();
     this.InitializeVM(this.events[0]);
-    this.prepareCriteriaSample();
+    this.prepareCriteriaSample(this.events[0]);
     if (this.type !== GlobalConstant.MODAL_OP.ADD) {
       this.prepareExistingValue4Update();
     }
@@ -118,6 +118,7 @@ export class AddEditResponseRuleModalComponent implements OnInit {
         this.responseRulesService.index4Edit
       ];
     this.prepareActions(this.selectedResponseRule.event);
+    this.prepareCriteriaSample(this.selectedResponseRule.event);
     this.responseRule.id = this.selectedResponseRule.id;
     this.responseRule.event = this.selectedResponseRule.event;
     this.responseRule.group = this.selectedResponseRule.group;
@@ -149,9 +150,9 @@ export class AddEditResponseRuleModalComponent implements OnInit {
       GlobalConstant.RESPONSE_RULE[MapConstant.responseRuleActionMap[event]];
   };
 
-  prepareCriteriaSample = () => {
+  prepareCriteriaSample = event => {
     this.conditionPatternSample =
-      MapConstant.responseRuleCriteriaSampleMap[this.responseRule.event];
+      MapConstant.responseRuleCriteriaSampleMap[event];
   };
 
   prepareEventDropdown = () => {
@@ -252,7 +253,7 @@ export class AddEditResponseRuleModalComponent implements OnInit {
   changeEvent = event => {
     this.InitializeVM(event);
     this.prepareCriteriaAutoComplete(event);
-    this.prepareCriteriaSample();
+    this.prepareCriteriaSample(event);
     this.prepareActions(event);
   };
 

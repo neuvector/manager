@@ -56,7 +56,7 @@ export class ImportFileComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.uploader = new FileUploader({
       url: this.importUrl,
-      queueLimit: 1,
+      queueLimit: 2,
       itemAlias: this.alias,
       headers: [
         { name: 'Token', value: this.nvToken },
@@ -134,6 +134,7 @@ export class ImportFileComponent implements OnInit, OnChanges {
   browseFile = () => {
     this.uploader?.clearQueue();
     this.percentage = 0;
+    this.status = '';
   };
 
   addOrReplaceHeaders = (headerName, headerValue) => {
@@ -204,7 +205,6 @@ export class ImportFileComponent implements OnInit, OnChanges {
           headers
         );
       }
-      console.log('headers', headers);
       GlobalVariable.http
         .post(this.importUrl, tempToken, {
           headers: headers,
@@ -239,6 +239,9 @@ export class ImportFileComponent implements OnInit, OnChanges {
   };
 
   public fileOverBase = (e: any): void => {
+    if (this.uploader?.queue.length > 1) this.uploader?.queue.shift();
+    this.percentage = 0;
+    this.status = '';
     this.hasBaseDropZoneOver = e;
   };
 }

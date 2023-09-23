@@ -69,6 +69,10 @@ support_global = [
     "/v1/debug/admission_stats",
 ]
 
+support_global_post = [
+    "/v1/csp/file/support?data=adapter_versions",
+]
+
 support_host = [
     "/v1/host",
     "/v1/debug/ip2workload?f_node=%s",
@@ -179,14 +183,14 @@ class RestClient(object):
 
         return resp.status_code, resp.text, data, raw
 
-def support_request(path, output):
+def support_request(method, path, output):
     output.write('"%s":\n' % path)
 
     if path.find('?') == -1:
         path = "{}?support=true".format(path)
     else:
         path = "{}&support=true".format(path)
-    _, _, data, raw = client.request("GET", path)
+    _, _, data, raw = client.request(method, path)
     if raw:
         output.write(data.content)
     else:
@@ -210,18 +214,25 @@ def support(client, jointID, enforcers, output):
             output.write(json.dumps(data, indent=4, sort_keys=True) + "\n")
             return status
 
-    # Global
+    # Global (GET)
     for _, _path in enumerate(support_global):
         path = _path
         if jointID:
             path = "/v1/fed/cluster/{}{}".format(jointID, _path)
-        support_request(path, output)
+        support_request("GET", path, output)
+
+    # Global (POST)
+    for _, _path in enumerate(support_global_post):
+        path = _path
+        if jointID:
+            path = "/v1/fed/cluster/{}{}".format(jointID, _path)
+        support_request("POST", path, output)
 
     # Host
     path = support_host[0]
     if jointID:
         path = "/v1/fed/cluster/{}{}".format(jointID, path)
-    data = support_request(path, output)
+    data = support_request("GET", path, output)
     entries = data.get("hosts")
     if entries and len(entries):
         ids = [entry["id"] for entry in entries]
@@ -230,13 +241,13 @@ def support(client, jointID, enforcers, output):
             if jointID:
                 path = "/v1/fed/cluster/{}{}".format(jointID, _path)
             for id in ids:
-                support_request(path % id, output)
+                support_request("GET", path % id, output)
 
     # Controller
     path = support_controller[0]
     if jointID:
         path = "/v1/fed/cluster/{}{}".format(jointID, path)
-    data = support_request(path, output)
+    data = support_request("GET", path, output)
     entries = data.get("controllers")
     if entries and len(entries):
         ids = [entry["id"] for entry in entries]
@@ -245,13 +256,13 @@ def support(client, jointID, enforcers, output):
             if jointID:
                 path = "/v1/fed/cluster/{}{}".format(jointID, _path)
             for id in ids:
-                support_request(path % id, output)
+                support_request("GET", path % id, output)
 
     # Enforcer
     path = support_enforcer[0]
     if jointID:
         path = "/v1/fed/cluster/{}{}".format(jointID, path)
-    data = support_request(path, output)
+    data = support_request("GET", path, output)
     entries = data.get("enforcers")
     if enforcers and entries and len(entries) > 0:
         all = [entry["id"] for entry in entries]
@@ -274,13 +285,13 @@ def support(client, jointID, enforcers, output):
                 path = "/v1/fed/cluster/{}{}".format(jointID, _path)
 
             for id in ids:
-                support_request(path % id, output)
+                support_request("GET", path % id, output)
 
     # Workload
     path = support_workload[0]
     if jointID:
         path = "/v1/fed/cluster/{}{}".format(jointID, path)
-    data = support_request(path, output)
+    data = support_request("GET", path, output)
     entries = data.get("workloads")
     if entries and len(entries):
         ids = [entry["brief"]["id"] for entry in entries]
@@ -289,7 +300,7 @@ def support(client, jointID, enforcers, output):
             if jointID:
                 path = "/v1/fed/cluster/{}{}".format(jointID, _path)
             for id in ids:
-                support_request(path % id, output)
+                support_request("GET", path % id, output)
 
     # add a dummy entry to correct the trailing comma
     output.write('"END":{}\n')

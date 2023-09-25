@@ -345,11 +345,15 @@ def custom_check(data, id_or_name):
         enabledDsiplay = "disabled"
     click.echo("custom check is {}".format(enabledDsiplay))
     click.echo("")
+    
+    if not group["writable"]:
+        click.echo("creating/editing custom check scripts is not allowed")
+        click.echo("")
 
     if not group["scripts"]:
         return
 
-    columns = ("name", "script", "configurable")
+    columns = ("name", "script")
     output.list(columns, group["scripts"])
 
 

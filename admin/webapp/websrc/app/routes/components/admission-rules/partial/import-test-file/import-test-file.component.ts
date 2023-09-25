@@ -52,7 +52,7 @@ export class ImportTestFileComponent implements OnInit {
   ngOnInit(): void {
     this.uploader = new FileUploader({
       url: this.importUrl,
-      queueLimit: 1,
+      queueLimit: 2,
       itemAlias: this.alias,
       headers: [
         { name: 'Token', value: this.nvToken },
@@ -108,6 +108,8 @@ export class ImportTestFileComponent implements OnInit {
   };
 
   public fileOverBase = (e: any): void => {
+    if (this.uploader?.queue.length > 1) this.uploader?.queue.shift();
+    this.percentage = 0;
     this.hasBaseDropZoneOver = e;
   };
 }

@@ -21,6 +21,7 @@
       [formlyAttributes]="field"
       [maskOnBlur]="field.templateOptions?.maskOnBlur"
       [required]="field.templateOptions?.required || false"
+      [readonly]="field.templateOptions?.disabled || false"
       [placeholder]="field.templateOptions?.placeholder || ''"
       [type]="passwordVisible ? 'text' : field.templateOptions?.type || 'text'"
       appMaskInput

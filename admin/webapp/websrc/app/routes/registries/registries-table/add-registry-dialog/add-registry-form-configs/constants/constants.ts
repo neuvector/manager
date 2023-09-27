@@ -215,6 +215,23 @@ export const RegistryField = {
   },
 };
 
+export const AWSRegistryField = {
+  key: 'registry',
+  type: FormlyComponents.ICON_INPUT,
+  templateOptions: {
+    alwaysHint: true,
+    hint: '',
+    icon: 'workspaces',
+    label: 'registry.gridHeader.REGISTRY',
+    maxLength: 1000,
+    disabled: true,
+  },
+  validators: {
+    validation: [FormlyValidators.URL],
+  },
+};
+
+
 export const UsernameField = {
   key: 'username',
   type: FormlyComponents.ICON_INPUT,

@@ -247,14 +247,14 @@
                             <span>
                               {{ secEvent.endpoint.source.displayName }}
                             </span>
-                            (
+                            <span *ngIf="secEvent.endpoint.source.ip">(
                             <app-flag-ip-fqdn
                               [ip]="secEvent.endpoint.source.ip"
                               [countryCode]="secEvent.endpoint.source.countryCode"
                               [countryName]="secEvent.endpoint.source.countryName"
                             >
                             </app-flag-ip-fqdn>
-                            )
+                            )</span>
                           </a>
                         </span>
                       </span>
@@ -347,14 +347,14 @@
                             <span>
                               {{ secEvent.endpoint.destination.displayName }}
                             </span>
-                            (
+                            <span *ngIf="secEvent.endpoint.destination.ip">(
                             <app-flag-ip-fqdn
                               [ip]="secEvent.endpoint.destination.ip"
                               [countryCode]="secEvent.endpoint.destination.countryCode"
                               [countryName]="secEvent.endpoint.destination.countryName"
                             >
                             </app-flag-ip-fqdn>
-                            )
+                            )</span>
                           </a>
                         </span>
                         <span

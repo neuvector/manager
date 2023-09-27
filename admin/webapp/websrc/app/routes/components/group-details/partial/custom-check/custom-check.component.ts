@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { GlobalConstant } from '@common/constants/global.constant';
+import { GlobalVariable } from '@common/variables/global.variable';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { GroupsService } from '@services/groups.service';
 import { GridOptions } from 'ag-grid-community';
@@ -33,6 +34,8 @@ export class CustomCheckComponent implements OnInit {
   context = { componentParent: this };
   filteredCount: number = 0;
   isRefreshingForm: boolean = false;
+  isCustomCheckPromiseCompleted: boolean = false;
+  hasConfigurationWarning: boolean = false;
   CFG_TYPE = GlobalConstant.CFG_TYPE;
 
   constructor(
@@ -49,35 +52,54 @@ export class CustomCheckComponent implements OnInit {
         this.quickFilterService.onFilterChange(value, this.gridOptions4CustomCheck);
       });
     }
-    this.isWriteScriptAuthorized = this.authUtilsService.getDisplayFlag("write_script");
+
     this.initializeVM();
-    this.gridOptions4CustomCheck = this.groupsService.prepareGrid4CustomCheck(this.isWriteScriptAuthorized, this.cfgType);
-    this.gridOptions4CustomCheck.onSelectionChanged = () => {
-      this.selectedScript = this.gridOptions4CustomCheck.api!.getSelectedRows()[0];
-      this.opType = GlobalConstant.MODAL_OP.EDIT;
-      if (this.selectedScript) {
-        this.customCheckForm.controls.name.setValue(this.selectedScript.name);
-        this.customCheckForm.controls.script.setValue(this.selectedScript.script);
-      }
-    };
     this.refresh();
   }
-
   refresh = () => {
+    this.isCustomCheckPromiseCompleted = false;
+    this.hasConfigurationWarning = false;
+    let hasWritePermissionUnderStrictControl = GlobalVariable.user.roles.global === '2' || GlobalVariable.user.roles.global === '4';
     this.groupsService.getCustomCheckData(this.groupName)
       .subscribe(
         (response: any) => {
-          if (response) {
-            this.customCheckScripts = response;
-            this.filteredCount = this.customCheckScripts.length;
-            this.gridOptions4CustomCheck.api!.setRowData(response);
-            this.switch2Add();
-          } else {
-            this.gridOptions4CustomCheck.api!.setRowData([]);
-          }
+          this.isCustomCheckPromiseCompleted = true;
+          this.customCheckScripts = response.scripts;
+          this.filteredCount = this.customCheckScripts ? this.customCheckScripts.length : 0;
+          this.isWriteScriptAuthorized = response.enabled && response.writable;
+          this.hasConfigurationWarning = hasWritePermissionUnderStrictControl && !this.isWriteScriptAuthorized;
+          this.gridOptions4CustomCheck = this.groupsService.prepareGrid4CustomCheck(this.isWriteScriptAuthorized, this.cfgType);
+          this.gridOptions4CustomCheck.onSelectionChanged = () => {
+            this.selectedScript = this.gridOptions4CustomCheck.api!.getSelectedRows()[0];
+            this.opType = GlobalConstant.MODAL_OP.EDIT;
+            if (this.selectedScript) {
+              this.customCheckForm.controls.name.setValue(this.selectedScript.name);
+              this.customCheckForm.controls.script.setValue(this.selectedScript.script);
+            }
+          };
+          setTimeout(() => {
+            if (response) {
+              this.gridOptions4CustomCheck.api!.setRowData(this.customCheckScripts);
+              this.switch2Add();
+            } else {
+              this.gridOptions4CustomCheck.api!.setRowData([]);
+            }
+          }, 200);
         },
         error => {
-          this.gridOptions4CustomCheck.api!.setRowData([]);
+          this.isCustomCheckPromiseCompleted = true;
+          this.gridOptions4CustomCheck = this.groupsService.prepareGrid4CustomCheck(false, this.cfgType);
+          this.gridOptions4CustomCheck.onSelectionChanged = () => {
+            this.selectedScript = this.gridOptions4CustomCheck.api!.getSelectedRows()[0];
+            this.opType = GlobalConstant.MODAL_OP.EDIT;
+            if (this.selectedScript) {
+              this.customCheckForm.controls.name.setValue(this.selectedScript.name);
+              this.customCheckForm.controls.script.setValue(this.selectedScript.script);
+            }
+          };
+          setTimeout(() => {
+            this.gridOptions4CustomCheck.api!.setRowData([]);
+          }, 200);
         }
       );
   };

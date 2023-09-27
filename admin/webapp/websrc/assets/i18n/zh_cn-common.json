@@ -2173,6 +2173,7 @@
       "SUBMIT": "提交",
       "NAME": "名称",
       "SCRIPT": "脚本",
+      "CUSTOM_CHECK_CONFIG_HINT": "自定义检查被禁用.请确认环境变量\"CUSTOM_CHECK_CONTROL\"是否设置适当.",
       "msg": {
         "SCRIPT_OK": "脚本已成功更新!",
         "SCRIPT_NG": "脚本更新时发生错误!",

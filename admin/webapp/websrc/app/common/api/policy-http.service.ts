@@ -105,7 +105,7 @@ export class PolicyHttpService {
   getGroupScript(name: string) {
     return GlobalVariable.http
       .get(PathConstant.GROUP_SCRIPT_URL, { params: { name } })
-      .pipe(pluck('config', 'scripts'));
+      .pipe(pluck('config'));
   }
 
   patchGroupScript(payload) {

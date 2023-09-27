@@ -2173,6 +2173,7 @@
       "SUBMIT": "Submit",
       "NAME": "Name",
       "SCRIPT": "Script",
+      "CUSTOM_CHECK_CONFIG_HINT": "Custom scripts are disabled. Please confirm if the environment variable \"CUSTOM_CHECK_CONTROL\" is set properly.",
       "msg": {
         "SCRIPT_OK": "Script list has been updated successfully!",
         "SCRIPT_NG": "Error happens when updating script list!",

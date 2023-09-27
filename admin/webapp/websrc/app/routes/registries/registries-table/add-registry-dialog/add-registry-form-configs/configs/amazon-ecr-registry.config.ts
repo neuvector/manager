@@ -7,14 +7,14 @@ import {
   NameField,
   PeriodicScanField,
   RegionField,
-  RegistryField,
+  AWSRegistryField,
   RescanField,
   ScanLayersField,
   SecretAccessKeyField,
 } from '../constants/constants';
 import { cloneDeep } from 'lodash';
 
-const AmazonRegistryField = cloneDeep(RegistryField);
+const AmazonRegistryField = cloneDeep(AWSRegistryField);
 AmazonRegistryField.templateOptions.hint = 'registry.AMAZON_URL_HINT';
 export const AmazonEcrRegistryConfig: FormlyFieldConfig[] = [
   {

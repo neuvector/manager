@@ -143,7 +143,11 @@
         {{ 'apikey.addApikey.CANCEL' | translate }}
       </button>
       <app-loading-button
-        [disabled]="form.invalid || !!(saving$ | async)"
+        [disabled]="
+          form.invalid ||
+          (selectedRole === '' && domainTableEmpty) ||
+          !!(saving$ | async)
+        "
         [loading]="!!(saving$ | async)"
         [text]="'apikey.addApikey.ADD' | translate"
         appearance="mat-raised-button"

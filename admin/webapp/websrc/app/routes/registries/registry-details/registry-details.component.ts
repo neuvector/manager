@@ -37,6 +37,7 @@ export class RegistryDetailsComponent {
         ? `${image.repository}:${image.tag}`
         : image.repository,
       image_id: image.image_id,
+      created_at: image.created_at,
       base_os: image.base_os,
       size: image.size,
       high: image.high,

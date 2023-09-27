@@ -88,6 +88,11 @@ export class AddApikeyDialogComponent implements OnInit {
   get bearerToken(): string {
     return `${this.apikeyInit.apikey_name}:${this.apikeyInit.apikey_secret}`;
   }
+  get domainTableEmpty(): boolean {
+    return !this.domainTableSource.data.filter(
+      ({ namespaces }) => namespaces.length
+    ).length;
+  }
 
   constructor(
     public dialogRef: MatDialogRef<ApikeysGridComponent>,

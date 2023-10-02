@@ -85,6 +85,11 @@ export class AddEditUserDialogComponent implements OnInit {
       ? 'view'
       : 'add';
   }
+  get domainTableEmpty(): boolean {
+    return !this.domainTableSource.data.filter(
+      ({ namespaces }) => namespaces.length
+    ).length;
+  }
 
   constructor(
     private fb: FormBuilder,

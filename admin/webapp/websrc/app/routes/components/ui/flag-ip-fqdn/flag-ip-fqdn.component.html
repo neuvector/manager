@@ -9,4 +9,5 @@
     matTooltipPosition="above"
   />
   <span>{{ ip }}</span>
+  <span *ngIf="fqdn">&nbsp;-&nbsp;<span [matTooltip]="fqdn">{{ fqdn }}</span></span>
 </a>

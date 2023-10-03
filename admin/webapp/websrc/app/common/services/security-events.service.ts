@@ -198,6 +198,7 @@ export class SecurityEventsService {
         source: {},
         destination: {}
       },
+      fqdn: '',
       applications: '',
       hostId: '',
       hostName: '',
@@ -272,6 +273,7 @@ export class SecurityEventsService {
     displayedViolation.hostName = violation.host_name || '';
     displayedViolation.enforcerId = violation.enforcer_id || '';
     displayedViolation.enforcerName = violation.enforcer_name || '';
+    displayedViolation.fqdn = violation.fqdn || '';
     displayedViolation.details = this._editViolationDetails(violation);
     return displayedViolation;
   };

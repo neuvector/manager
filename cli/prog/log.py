@@ -257,7 +257,7 @@ def violation(ctx, data, client, server, page):
 
         columns = (
         "reported_at", "id", "client", "server", "server_port", "applications", "policy_action", "bytes", "client_ip",
-        "server_ip", "sessions", "xff")
+        "server_ip", "fqdn", "sessions", "xff")
         output.list(columns, logs)
 
         if filter["limit"] > 0 and len(logs) < filter["limit"]:

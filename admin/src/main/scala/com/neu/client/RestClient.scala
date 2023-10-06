@@ -18,6 +18,8 @@ import java.net.InetAddress
 import scala.concurrent.{ Await, Future }
 import scala.concurrent.duration._
 import scala.util.control.NonFatal
+import spray.httpx.unmarshalling._
+import spray.http.HttpCharsets._
 
 object Constant {
   val waitingLimit = 60
@@ -280,6 +282,13 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig {
     token: String,
     nvPage: String = ""
   ): Future[String] = {
+    implicit val utf8StringUnmarshaller: Unmarshaller[String] =
+      Unmarshaller.delegate[HttpEntity, String](MediaTypes.`application/json`) {
+        case HttpEntity.NonEmpty(contentType, data) if contentType.charset == `UTF-8` =>
+          data.asString
+        case HttpEntity.NonEmpty(_, data) =>
+          data.asString(`UTF-8`) // Use a different encoding if not UTF-8
+      }
     val pipeline = sendAndReceive ~> decode(Gzip) ~> unmarshal[String]
     if (!nvPage.equals("dashboard")) {
       pipeline {

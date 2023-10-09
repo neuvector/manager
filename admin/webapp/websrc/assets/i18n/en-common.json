@@ -1137,6 +1137,13 @@
       "PDF_LINK": "Vulnerability View",
       "PDF_LINK2": "Assets View",
       "PRINT_REPORT": "Print Vulnerabilities Report",
+      "view": {
+        "TITLE": "Vulnerabilities View",
+        "ALL": "All",
+        "CONTAINERS": "Containers",
+        "INFRASTRUCTURE": "Infrastructure",
+        "REGISTRY": "Registry"
+      },
       "from": {
         "ALL": "All",
         "TWOWEEKS": "2 weeks ago",

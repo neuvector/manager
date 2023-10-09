@@ -9,6 +9,12 @@ export type ScannerAutoscaleStrategy =
   | 'n/a'
   | '';
 
+export type VulnerabilityView =
+  | 'all'
+  | 'containers'
+  | 'infrastructure'
+  | 'registry';
+
 export type DataOps = 'add' | 'edit' | 'delete';
 
 export type LastModifiedDateOption =

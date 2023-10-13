@@ -136,6 +136,7 @@
         [disabled]="
           form.invalid ||
           (!form.dirty && !domainTableDirty) ||
+          (selectedRole === '' && domainTableEmpty) ||
           !!(saving$ | async)
         "
         [loading]="!!(saving$ | async)"

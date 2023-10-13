@@ -76,6 +76,7 @@
             <mat-select
               [(ngModel)]="customExpUnit"
               [ngModelOptions]="{ standalone: true }"
+              [disabled]="!!data.isReadOnly"
               (selectionChange)="changeExpUnit()">
               <mat-option
                 *ngFor="let expUnit of customExpUnits"

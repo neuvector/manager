@@ -9,6 +9,7 @@ import { PathConstant } from '@common/constants/path.constant';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { MultiClusterService } from '@services/multi-cluster.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-groups-page',
@@ -22,6 +23,7 @@ export class GroupsPageComponent implements OnInit {
   public isShowingSystemGroups: boolean = true;
   public netServiceStatus: boolean;
   public netServicePolicyMode!: string;
+  public linkedGroup: string = '';
   @ViewChild(GroupsComponent) groupsView!: GroupsComponent;
   // @ViewChild(GroupDetailsComponent) groupDetailsView!: GroupDetailsComponent;
   private _switchClusterSubscription;
@@ -31,8 +33,13 @@ export class GroupsPageComponent implements OnInit {
     private dialog: MatDialog,
     private translate: TranslateService,
     private multiClusterService: MultiClusterService,
-    private cd: ChangeDetectorRef
-  ) {}
+    private cd: ChangeDetectorRef,
+    private route: ActivatedRoute
+  ) {
+    this.route.queryParams.subscribe(params => {
+      this.linkedGroup = encodeURIComponent(params['group'] || '');
+    });
+  }
 
   ngOnInit(): void {
     this.navSource = GlobalConstant.NAV_SOURCE.SELF;

@@ -36,6 +36,7 @@ export class GroupsComponent implements OnInit {
   @Input() isExposure: boolean = false;
   @Input() source!: string;
   @Input() height!: number;
+  @Input() linkedGroup!: string;
   @Input() isShowingSystemGroups: boolean = true;
   @Output() selectedGroup = new EventEmitter<Group | null>();
   @Output() refreshing = new EventEmitter<boolean>();
@@ -401,12 +402,19 @@ export class GroupsComponent implements OnInit {
     this.gridOptions4Groups.api!.setRowData(this.groups);
     this.filteredCount = this.groups.length;
     if (this.eof) this.refreshing.emit(false);
+    console.log("this.linkedGroup:", this.linkedGroup)
     setTimeout(() => {
       this.gridOptions4Groups.api!.sizeColumnsToFit();
       this.gridOptions4Groups.api!.forEachNode((node, index) => {
         node.setSelected(false);
         if (this.selectedGroups.length === 1) {
           if (node.data.name === this.selectedGroups[0].name) {
+            node.setSelected(true);
+            this.gridOptions4Groups.api!.ensureNodeVisible(node);
+          }
+        }
+        if (this.linkedGroup) {
+          if (this.linkedGroup === node.data.name) {
             node.setSelected(true);
             this.gridOptions4Groups.api!.ensureNodeVisible(node);
           }

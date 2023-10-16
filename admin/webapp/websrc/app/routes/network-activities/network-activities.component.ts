@@ -115,8 +115,10 @@ export class NetworkActivitiesComponent
   hostId: string = '';
   groupId: string = '';
   group: Group = <Group>{};
+  isGroupInfoReady: boolean = false;
 
   pod: PodDetails = <PodDetails>{};
+  isPodInfoReady: boolean = false;
 
   CONTAINER_TO_ICON = {
     discover: 'container-d',
@@ -1088,6 +1090,7 @@ export class NetworkActivitiesComponent
 
     const showPodInfo = node => {
       let nodeId = node.meshId ? node.meshId : node.id;
+      this.isPodInfoReady = false;
       this.assetsHttpService
         .getContainerBriefById(nodeId)
         .subscribe(workloadData => {
@@ -1119,6 +1122,7 @@ export class NetworkActivitiesComponent
           }
           // @ts-ignore
           this.pod.risk = theNode.cve;
+          this.isPodInfoReady = true;
         });
       setTimeout(() => {
         this.popupState.transitTo(PopupState.onNode);
@@ -1590,9 +1594,11 @@ export class NetworkActivitiesComponent
   }
 
   showGroup(groupName: string) {
+    this.isGroupInfoReady = false;
     this.groupsService.getGroupInfo(groupName).subscribe(
       (response: any) => {
         this.group = response;
+        this.isGroupInfoReady = true;
       },
       error => {
         this.popupState.leave();

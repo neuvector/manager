@@ -109,13 +109,13 @@
 </app-host-info>
 
 <app-group-info
-  *ngIf="popupState.onGroupNode()"
+  *ngIf="popupState.onGroupNode() && isGroupInfoReady"
   [group]="group"
   [popupState]="popupState">
 </app-group-info>
 
 <app-pod-info
-  *ngIf="popupState.onNode()"
+  *ngIf="popupState.onNode() && isPodInfoReady"
   [pod]="pod"
   (onPodGroupSelected)="showGroup($event)"
   [popupState]="popupState">

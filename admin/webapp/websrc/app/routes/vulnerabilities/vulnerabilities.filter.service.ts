@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
+import { VulnerabilityAsset, VulnerabilityView } from '@common/types';
 import { TranslateService } from '@ngx-translate/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class VulnerabilitiesFilterService {
@@ -161,5 +162,23 @@ export class VulnerabilitiesFilterService {
       sliderV2: { minValue: 0, maxValue: 10 },
       sliderV3: { minValue: 0, maxValue: 10 },
     };
+  }
+
+  filterView(
+    vulnerabilites: VulnerabilityAsset[],
+    selectedView: VulnerabilityView
+  ): VulnerabilityAsset[] {
+    switch (selectedView) {
+      case 'all':
+        return vulnerabilites;
+      case 'containers':
+        return vulnerabilites.filter(vul => vul.workloads.length);
+      case 'infrastructure':
+        return vulnerabilites.filter(
+          vul => vul.nodes.length || vul.platforms.length
+        );
+      case 'registry':
+        return vulnerabilites.filter(vul => vul.images.length);
+    }
   }
 }

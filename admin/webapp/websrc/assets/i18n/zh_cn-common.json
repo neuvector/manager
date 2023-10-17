@@ -1137,6 +1137,13 @@
       "PDF_LINK": "漏洞视角",
       "PDF_LINK2": "资产视角",
       "PRINT_REPORT": "打印漏洞报告",
+      "view": {
+        "TITLE": "漏洞视图",
+        "ALL": "全选",
+        "CONTAINERS": "容器",
+        "INFRASTRUCTURE": "基础设施",
+        "REGISTRY": "镜像库"
+      },
       "from": {
         "ALL": "全选",
         "TWOWEEKS": "2个星期前",

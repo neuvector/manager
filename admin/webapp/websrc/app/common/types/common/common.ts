@@ -101,3 +101,9 @@ export interface Rebrand {
   customPageFooterContent: string;
   customPageFooterColor: string;
 }
+
+export interface SsoServer {
+  redirect_url: string;
+  server_name: string;
+  server_type: string;
+}

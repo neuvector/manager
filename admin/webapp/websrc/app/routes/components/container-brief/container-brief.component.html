@@ -69,20 +69,16 @@
         </span>
       </div>
       <div class="col-sm-6 pl-0 pb-0 pt-sm" *ngIf="container.service_group">
-        <div style="margin-top: -10px;">
+        <div>
           <span class="font-weight-bold pod-item-key">
-            {{ 'network.nodeDetails.GROUPS' | translate }}:
+            {{ 'network.legend.GROUP' | translate }}:
           </span>
           <span class="auto-hide pod-item-value">
             {{ container.service_group }}
             <a
-              mat-icon-button
-              aria-label="External link button"
               (click)="goToGroup(container.service_group)"
-              class="external-link text-info">
-              <mat-icon style="font-size: 24px; width: 24px; height: 24px"
-                >open_in_new</mat-icon
-              >
+              style="display: table-cell; font-size: 11px; line-height: 15px">
+              <em class="eos-icons icon-12 ml-2">launch</em>
             </a>
           </span>
         </div>

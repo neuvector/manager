@@ -213,6 +213,7 @@ def showLocalSystemConfig(data, scope):
                        ("syslog_server_cert", "       Server Certificate"),
                        ("syslog_level", "       Level"),
                        ("syslog_in_json", "       In-JSON"),
+                       ("output_event_to_logs", "       Output event to logs"),
                        ("syslog_status", "       Status"),
                        ("syslog_categories", "       Categories"),)
     else:
@@ -220,6 +221,7 @@ def showLocalSystemConfig(data, scope):
                    ("syslog_protocol", "       Protocol"),
                    ("syslog_level", "       Level"),
                    ("syslog_in_json", "       In-JSON"),
+                   ("output_event_to_logs", "       Output event to logs"),
                    ("syslog_status", "       Status"),
                    ("syslog_categories", "       Categories"),)
     if "single_cve_per_syslog" in conf:
@@ -621,7 +623,7 @@ def set_system_syslog_status(data, status):
         data.client.config_system(syslog_status=False)
 
 
-@set_system_syslog.command("in-json")
+@set_system_syslog.command("in_json")
 @click.argument('in_json', type=click.Choice(['enable', 'disable']))
 @click.pass_obj
 def set_system_syslog_in_json(data, in_json):
@@ -630,6 +632,16 @@ def set_system_syslog_in_json(data, in_json):
         data.client.config_system(syslog_in_json=True)
     else:
         data.client.config_system(syslog_in_json=False)
+
+@set_system_syslog.command("output_to_logs")
+@click.argument('output_to_logs', type=click.Choice(['enable', 'disable']))
+@click.pass_obj
+def set_system_syslog_output_to_logs(data, output_to_logs):
+    """Enable/disable syslog output to logs"""
+    if output_to_logs == 'enable':
+        data.client.config_system(output_event_to_logs=True)
+    else:
+        data.client.config_system(output_event_to_logs=False)
 
 
 @set_system_syslog.command("category")

@@ -8,6 +8,10 @@
     [matTooltip]="countryName"
     matTooltipPosition="above"
   />
-  <span>{{ ip }}</span>
-  <span *ngIf="fqdn">&nbsp;-&nbsp;<span [matTooltip]="fqdn">{{ fqdn }}</span></span>
+  <span *ngIf="fqdn; else no_fqdn">
+    <span [matTooltip]="ip">{{ fqdn }}</span>
+  </span>
 </a>
+<ng-template #no_fqdn>
+  <span>{{ ip }}</span>
+</ng-template>

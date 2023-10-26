@@ -32,7 +32,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.router = this.injector.get(Router);
     if (
-      !GlobalVariable.summary.platform
+      !GlobalVariable.summary?.platform
         .toLowerCase()
         .includes(GlobalConstant.KUBE)
     ) {

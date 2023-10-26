@@ -33,6 +33,8 @@ export class RegistryDetailsTableComponent implements OnInit, OnChanges {
   @Input() selectedRegistry!: Summary;
   @Input() rowData!: Image[];
   @Input() filter!: FormControl;
+  @Input() linkedImage: string;
+  @Input() linkedTag: string;
   gridOptions!: GridOptions;
   gridApi!: GridApi;
   columnDefs: ColDef[] = [
@@ -158,6 +160,7 @@ export class RegistryDetailsTableComponent implements OnInit, OnChanges {
   onGridReady(params: GridReadyEvent): void {
     this.gridApi = params.api;
     this.gridApi.sizeColumnsToFit();
+    this.openImageDetailDialogByLinkedImage();
   }
 
   createdAtFormatter(params: ValueFormatterParams): string {
@@ -198,5 +201,19 @@ export class RegistryDetailsTableComponent implements OnInit, OnChanges {
       ' ' +
       units[num]
     );
+  }
+
+  openImageDetailDialogByLinkedImage() {
+    let imageData = this.getImageData(this.rowData, this.linkedImage, this.linkedTag);
+    if (Array.isArray(imageData) && imageData[0] && imageData[0].status === 'finished') {
+      this.openDialog(
+        this.selectedRegistry,
+        imageData[0]
+      );
+    }
+  }
+
+  getImageData(imageList, image, tag) {
+    return imageList.filter(_image => _image.repository === image && _image.tag === tag);
   }
 }

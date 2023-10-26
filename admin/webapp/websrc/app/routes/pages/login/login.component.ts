@@ -46,6 +46,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private version: string = '';
   private gpuEnabled: boolean = false;
   private originalUrl: string = '';
+  private linkedUrl: string = '';
   private now!: Date;
   private currUrl: string = '';
   private w: any;
@@ -87,6 +88,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.localStorage.set('login_time', this.now.toString());
     this.originalUrl = this.localStorage.get(
       GlobalConstant.SESSION_STORAGE_ORIGINAL_URL
+    );
+    this.linkedUrl = this.localStorage.get(
+      GlobalConstant.LOCAL_STORAGE_EXTERNAL_REF
     );
     this.version = this.localStorage.get('version');
     this.gpuEnabled = this.localStorage.get('_gpuEnabled');
@@ -260,12 +264,20 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   private clearToken() {
-    this.localStorage.clear();
+    this.clearLocalStorage();
     this.sessionService.clearSession();
     GlobalVariable.user = null;
     GlobalVariable.sidebarDone = false;
     GlobalVariable.versionDone = false;
     GlobalVariable.isFooterReady = false;
+  }
+
+  private clearLocalStorage() {
+    let externalRef = this.localStorage.get(GlobalConstant.LOCAL_STORAGE_EXTERNAL_REF);
+    let timeoutPath = this.localStorage.get(GlobalConstant.SESSION_STORAGE_ORIGINAL_URL);
+    this.localStorage.clear();
+    if (externalRef) this.localStorage.set(GlobalConstant.LOCAL_STORAGE_EXTERNAL_REF, externalRef);
+    if (timeoutPath) this.localStorage.set(GlobalConstant.SESSION_STORAGE_ORIGINAL_URL, timeoutPath);
   }
 
   //get saml and openID status
@@ -383,15 +395,34 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.setUserInfo(userInfo);
         if (this.originalUrl && !this.originalUrl.includes('login')) {
           this.router.navigate([this.originalUrl]);
+        } else if (this.linkedUrl && !this.linkedUrl.includes('login')) {
+          this.nav2LinkedUrl(this.linkedUrl);
         } else {
           this.router.navigate([GlobalConstant.PATH_DEFAULT]);
         }
+        this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_EXTERNAL_REF);
+        this.localStorage.remove(GlobalConstant.SESSION_STORAGE_ORIGINAL_URL);
       },
       error: () => {
         this.inProgress = true;
         this.cookieService.delete('temp');
       },
     });
+  }
+
+  private nav2LinkedUrl(url) {
+    let trimedUrl = url.split('#')[1];
+    let pathSec = trimedUrl.split('?');
+    let refPath = pathSec[0];
+    let querySec = pathSec[1] ? pathSec[1].split('&') : [];
+    let query = {};
+    querySec.forEach(item => {
+      let itemSec = item.split('=');
+      query[itemSec[0]] = itemSec[1];
+    });
+
+    console.log(refPath, query);
+    this.router.navigate([refPath], { queryParams: query});
   }
 
   private setUserInfo(userInfo) {

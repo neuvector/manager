@@ -37,7 +37,7 @@ export class GroupsPageComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     this.route.queryParams.subscribe(params => {
-      this.linkedGroup = encodeURIComponent(params['group'] || '');
+      this.linkedGroup = decodeURIComponent(params['group'] || '');
     });
   }
 

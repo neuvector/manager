@@ -112,21 +112,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
       },
     };
 
-    this.isAllowedToOperateMultiCluster = isAuthorized(
-      GlobalVariable.user.roles,
-      resource.multiClusterOp
-    );
-
-    this.isAllowedToRedirectMultiCluster = isAuthorized(
-      GlobalVariable.user.roles,
-      resource.redirectAuth
-    );
-
-    this.isAuthReadConfig = this.authUtilsService.getDisplayFlag('read_config');
-    this.isFedQueryAllowed = isAuthorized(
-      GlobalVariable.user.roles,
-      resource.fedQueryAllowed
-    );
+    if (GlobalVariable.user) {
+      this.isAllowedToOperateMultiCluster = isAuthorized(
+        GlobalVariable.user.roles,
+        resource.multiClusterOp
+      );
+      this.isAllowedToRedirectMultiCluster = isAuthorized(
+        GlobalVariable.user.roles,
+        resource.redirectAuth
+      );
+      this.isAuthReadConfig = this.authUtilsService.getDisplayFlag('read_config');
+      this.isFedQueryAllowed = isAuthorized(
+        GlobalVariable.user.roles,
+        resource.fedQueryAllowed
+      );
+    }
 
     this.initMultiClusters();
 
@@ -147,7 +147,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this._multiClusterSubScription.unsubscribe();
+    if (this._multiClusterSubScription) {
+      this._multiClusterSubScription.unsubscribe();
+    }
     if(this._getRebrandCustomValuesSubscription){
       this._getRebrandCustomValuesSubscription.unsubscribe();
     }

@@ -24,13 +24,18 @@
           <mat-card [ngStyle]="{ height: height + 'px' }" class="pt-0">
             <app-registries-table
               [gridHeight]="height - 150"
+              [linkedRegistry]="linkedRegistry"
               [rowData]="registries.summarys">
             </app-registries-table>
           </mat-card>
         </ng-container>
         <ng-container *appContainerTwo="let height">
           <mat-card [ngStyle]="{ height: height + 'px' }" class="pt-0">
-            <app-registry-details [gridHeight]="height - 150">
+            <app-registry-details
+              [linkedImage]="linkedImage"
+              [linkedTag]="linkedTag"
+              [gridHeight]="height - 150"
+            >
             </app-registry-details>
           </mat-card>
         </ng-container>

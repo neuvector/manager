@@ -1011,6 +1011,7 @@
       "HOST_NAME": "Node",
       "IMAGE": "Image",
       "IMAGE_CREATED_AT": "Image Created At",
+      "IMAGE_REG_SCANNED": "Scanned in registry",
       "BASE_OS": "Base OS",
       "RUNNING": "Running",
       "SECURED": "Secured",

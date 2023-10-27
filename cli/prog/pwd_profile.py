@@ -44,11 +44,10 @@ def detail(data, name):
     header1 = "block a user after consecutive login failures"
     header2 = "password is valid for days"
     header3 = "keep password hash history"
-    header4 = "default user session timeout seconds"
     profile = data.client.show("password_profile", "pwd_profile", name)
     columns = (
     "name", "comment", "min_len", "min_uppercase_count", "min_lowercase_count", "min_digit_count", "min_special_count",
-    header1, header2, header3, header4)
+    header1, header2, header3)
     profiles = []
 
     if profile["enable_block_after_failed_login"] is True and profile["block_after_failed_login_count"] > 0 and profile[
@@ -69,21 +68,8 @@ def detail(data, name):
     else:
         profile[header3] = "not enabled"
 
-    profile[header4] = profile["session_timeout"]
-
     profiles.append(profile)
-
-    click.echo("Profile basics:")
-    columns1 = ("name", "comment", header4)
-    output.list(columns1, profiles)
-
-    click.echo("Password Format Requirement:")
-    columns2 = ("min_len", "min_uppercase_count", "min_lowercase_count", "min_digit_count", "min_special_count")
-    output.list(columns2, profiles)
-
-    click.echo("Password Usage:")
-    columns3 = (header1, header2, header3)
-    output.list(columns3, profiles)
+    output.list(columns, profiles)
 
 
 @show_pwd_profile.command()
@@ -127,13 +113,11 @@ def basic_rule(data):
               help="a user password is valid for number of days. User needs to reset password before it expires.")
 @click.option('--enable_password_history', type=bool, help="enable password hash history")
 @click.option('--password_keep_history_count', type=int, help="password hash history count to keep (max: 32)")
-@click.option('--session_timeout', type=int, help="default user session timeout seconds (30 ~ 3600)")
 @click.pass_obj
 def set_pwd_profile(data, name, comment, min_len, min_uppercase_count, min_lowercase_count, min_digit_count,
                     min_special_count, enable_block_after_failed_login,
                     block_after_failed_login_count, block_minutes, enable_password_expiration,
-                    password_expire_after_days, enable_password_history, password_keep_history_count,
-                    session_timeout):
+                    password_expire_after_days, enable_password_history, password_keep_history_count):
     """Set password profile configuration."""
 
     profile = {"name": name}
@@ -163,8 +147,6 @@ def set_pwd_profile(data, name, comment, min_len, min_uppercase_count, min_lower
         profile["enable_password_history"] = enable_password_history
     if password_keep_history_count is not None:
         profile["password_keep_history_count"] = password_keep_history_count
-    if session_timeout is not None:
-        profile["session_timeout"] = session_timeout
     data.client.config("password_profile", name, {"config": profile})
 
 # --

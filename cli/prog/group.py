@@ -339,17 +339,6 @@ def custom_check(data, id_or_name):
     group = data.client.show("custom_check", "config", id_or_name)
     if not group:
         return
-
-    enabledDsiplay = "enabled"
-    if not group["enabled"]:
-        enabledDsiplay = "disabled"
-    click.echo("custom check is {}".format(enabledDsiplay))
-    click.echo("")
-    
-    if not group["writable"]:
-        click.echo("creating/editing custom check scripts is not allowed")
-        click.echo("")
-
     if not group["scripts"]:
         return
 

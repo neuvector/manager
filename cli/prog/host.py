@@ -26,14 +26,18 @@ def _list_display_format(host):
 @click.option('--sort', default=None, help="sort field.")
 @click.option('--sort_dir', type=click.Choice(['asc', 'desc']), default='asc',
               help="sort direction.")
+@click.option('--cluster', help="Cluster name.")
 @click.pass_obj
 @click.pass_context
-def show_host(ctx, data, sort, sort_dir):
+def show_host(ctx, data, sort, sort_dir, cluster):
     """Show node."""
     if ctx.invoked_subcommand is not None:
         return
 
-    hosts = data.client.list("host", "host", sort=sort, sort_dir=sort_dir)
+    if cluster is None:
+        hosts = data.client.list("host", "host", sort=sort, sort_dir=sort_dir)
+    else:
+        hosts = data.client.list("experimental/cluster/%s/v1/host" % cluster, "host", sort=sort, sort_dir=sort_dir)
     for host in hosts:
         _list_display_format(host)
 

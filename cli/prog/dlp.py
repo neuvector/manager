@@ -363,7 +363,7 @@ def _add_dlp_criterion(key, value, context):
     v = value
     op = CriteriaOpRegex
     ctxt = context
-    # Empty value is allowed but not recommended.
+    # Empty value is not allowed.
     if len(v) > 1:
         if v[0] == '~':
             op = CriteriaOpRegex
@@ -374,7 +374,7 @@ def _add_dlp_criterion(key, value, context):
         else:
             return None
     else:
-        v = ''
+        return None
 
     return {"key": k, "value": v, "op": op, "context": ctxt}
 
@@ -413,7 +413,7 @@ def create_dlp_sensor(data, name, comment):
 def create_dlp_sensor_rule(data, name, pattern, context):
     """Create dlp sensor with rule
 
-    For PATTERN, use regex: ~'value', empty string pattern is not recommended.
+    For PATTERN, use regex: ~'value', empty string pattern is not allowed.
     """
     pct = []
     if not _add_dlp_criteria(pct, "pattern", pattern, context):
@@ -435,7 +435,7 @@ def create_dlp_sensor_rule(data, name, pattern, context):
 # def create_dlp_rule(data, name, pattern):
 #    """Create dlp rule
 #
-#    For PATTERN, use regex: ~'value', empty string pattern is not recommended.
+#    For PATTERN, use regex: ~'value', empty string pattern is not allowed.
 #    """
 #    pct = []
 #    if not _add_dlp_criteria(pct, "pattern", pattern):
@@ -498,7 +498,7 @@ def set_dlp_sensor(data, name, comment):
 def set_dlp_sensor_rule(data, name, pattern, context):
     """Add dlp rule to sensor
 
-    For PATTERN, use regex: ~'value', empty string pattern is not recommended.
+    For PATTERN, use regex: ~'value', empty string pattern is not allowed.
     """
 
     pct = []
@@ -521,7 +521,7 @@ def set_dlp_sensor_rule(data, name, pattern, context):
 # def set_dlp_rule(data, name, pattern):
 #    """Modify dlp rule
 #
-#    For PATTERN, use regex: ~'value', empty string pattern is not recommended.
+#    For PATTERN, use regex: ~'value', empty string pattern is not allowed.
 #    """
 #    data.id_or_name = name
 #

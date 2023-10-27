@@ -185,11 +185,9 @@ def setting(data, id_or_name):
         return
 
     f = "debug"
-    fo = output.key_output(f)
-    if f in conf and conf[f]:
+    if f in conf:
+        fo = output.key_output(f)
         conf[fo] = ", ".join(conf[f])
-    else:
-        conf[fo] = ""
 
     columns = ("debug",)
     output.show(columns, conf)

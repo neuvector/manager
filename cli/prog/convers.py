@@ -145,7 +145,7 @@ def pair(data, client, server):
         _show_display_format(e)
 
     columns = ("port", "mapped_port", "application", "policy_action", "policy_id", "severity",
-               "bytes", "sessions", "last_seen_at", "client_ip", "server_ip", "fqdn", "xff", "to_sidecar")
+               "bytes", "sessions", "last_seen_at", "client_ip", "server_ip", "xff", "to_sidecar")
     output.list(columns, conver["entries"])
 
 

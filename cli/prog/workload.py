@@ -111,7 +111,7 @@ def show_workload(ctx, data, brief, view, filter_container, filter_image, filter
             columns = ["id", "name", "service", "state"]
             output.list(columns, wls)
         else:
-            columns = ["id", "name", "host_name", "image", "service_group", "state", "platform_role", "applications", "started_at",
+            columns = ["id", "name", "host_name", "image", "state", "platform_role", "applications", "started_at",
                        "interfaces"]
             output.list(columns, wls)
 
@@ -136,7 +136,7 @@ def detail(data, id_or_name):
         return
 
     _show_display_format(wl)
-    columns = ("id", "name", "display_name", "domain", "host_name", "host_id", "enforcer_id", "image", "service_group", "state",
+    columns = ("id", "name", "display_name", "domain", "host_name", "host_id", "enforcer_id", "image", "state",
                "applications", "created_at", "started_at", "finished_at", "running", "exit_code",
                "platform_role", "network_mode", "interfaces", "ports", "labels",
                "memory_limit", "cpus")

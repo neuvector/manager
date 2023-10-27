@@ -41,8 +41,7 @@ def _list_registry_display_format(config):
     if f in config:
         fo = output.key_output(f)
         config[fo] = "\n".join(config[f])
-    if "cfg_type" in config:
-        config["cfg_type"] = client.CfgTypeDisplay[config["cfg_type"]]
+
 
 def _show_registry_report_vulns_display_format(vul):
     f = "tags"
@@ -55,21 +54,14 @@ def _show_registry_report_vulns_display_format(vul):
 
 
 @show.group("registry", invoke_without_command=True)
-@click.option("--scope", default="all", type=click.Choice(['fed', 'local', 'all']),
-              help="Show federal, local or all registries")
 @click.pass_obj
 @click.pass_context
-def show_registry(ctx, data, scope):
+def show_registry(ctx, data):
     """Show registry."""
     if ctx.invoked_subcommand is not None:
         return
 
-    args = {}
-    if scope == 'fed' or scope == 'local':
-        args["scope"] = scope
-
-    #summarys = data.client.list("scan/registry", "summary")
-    summarys = data.client.show("scan/registry", "summarys", None, **args)  # show(self, path, obj, obj_id, **kwargs)
+    summarys = data.client.list("scan/registry", "summary")
     if summarys == None:
         return
 
@@ -77,7 +69,7 @@ def show_registry(ctx, data, scope):
         output.lift_fields(s, "schedule", ("schedule",))
         _list_registry_display_format(s)
 
-    columns = ("name", "registry", "username", "filters", "status", "rescan_after_db_update", "schedule", "scan_layers", "cfg_type")
+    columns = ("name", "registry", "username", "filters", "status", "rescan_after_db_update", "schedule", "scan_layers")
     output.list(columns, summarys)
 
 
@@ -95,7 +87,7 @@ def detail(data, name):
     columns = (
     "name", "registry_type", "registry", "username", "filters", "rescan_after_db_update", "schedule", "status",
     "error_message",
-    "scanned", "scheduled", "scanning", "failed", "cfg_type")
+    "scanned", "scheduled", "scanning", "failed")
     output.show(columns, summary)
 
 
@@ -123,8 +115,8 @@ def images(data, name, filter_domain, filter_repo, page):
         for img in images:
             _list_image_display_format(img)
 
-        # columns = ("image", "image_id", "status", "result", "signed", "high", "medium", "base_os", "created_at") # comment out until we can accurately tell it
-        columns = ("image", "image_id", "status", "result", "high", "medium", "base_os", "created_at")
+        # columns = ("image", "image_id", "status", "result", "signed", "high", "medium", "base_os") # comment out until we can accurately tell it
+        columns = ("image", "image_id", "status", "result", "high", "medium", "base_os")
         output.list(columns, images)
 
         if args["limit"] > 0 and len(images) < args["limit"]:
@@ -188,26 +180,7 @@ def report(data, name, image, show_accepted):
             output.list(columns, report["setid_perms"])
         else:
             click.echo("No SetUid/SetGid Report")
-            click.echo("")
 
-    signedByVerifiers = 0
-    if "signature_data" in report and report["signature_data"] != None:
-        signature_data = report["signature_data"]
-        if "verifiers" in signature_data and signature_data["verifiers"] != None:
-            if len(signature_data["verifiers"]) > 0:
-                click.echo("Sigstore Verifiers:")
-                verifiers = []
-                for v in signature_data["verifiers"]:
-                    rv = v.split("/", -1)
-                    if len(rv) == 2:
-                        obj = {"root_of_trust": rv[0], "verifier": rv[1]}
-                        verifiers.append(obj)
-                        signedByVerifiers += 1
-                columns = ("root_of_trust", "verifier")
-                output.list(columns, verifiers)
-    if signedByVerifiers == 0:
-        click.echo("The image is not signed by any configured verifier")
-        click.echo("")
 
 @show_registry.command()
 @click.argument("name")
@@ -404,11 +377,6 @@ def registry_create(data, registry_type, name, registry, username, password, tok
         info["ibm_cloud_account"] = ibmcloud_account
     if ibmcloud_token_url:
         info["ibm_cloud_token_url"] = ibmcloud_token_url
-        
-    if name.startswith('fed.'):
-        info["cfg_type"] = client.FederalCfg
-    else:
-        info["cfg_type"] = client.UserCreatedCfg
 
     data.client.create("scan/registry", {"config": info})
 
@@ -439,8 +407,8 @@ def registry_create(data, registry_type, name, registry, username, password, tok
 @click.option('--ibmcloud_token_url', help="ibm cloud iam oauth-tokens url")
 @click.pass_obj
 def set_registry(data, name, registry, username, password, token, auth_with_token,
-                 aws, filter, rescan, scan_layers, schedule, schedule_interval, repolimit, taglimit,
-                 gcr, gitlab_api_url, gitlab_private_token,
+                 aws, filter, rescan, scan_layers, schedule, repolimit, taglimit,
+                 schedule_interval, gitlab_api_url, gitlab_private_token,
                  ibmcloud_account, ibmcloud_token_url):
     """Configure registry."""
 

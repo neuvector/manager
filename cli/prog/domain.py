@@ -5,21 +5,12 @@ from prog.cli import set
 from prog.cli import unset
 from prog import client
 from prog import output
-from prog import utils
 
 
 def _list_domain_display_format(d):
     f = "tags"
     if d.get(f):
         d[output.key_output(f)] = ",".join(d[f])
-    f = "labels"
-    if d.get(f):
-        fo = output.key_output(f)
-        kv = ""
-        keys = sorted(d[f].keys())
-        for key in keys:
-            kv += "%s=%s\n" % (key, d[f][key])
-        d[fo] = kv.rstrip("\n")
 
 
 @show.command("domain")
@@ -38,7 +29,7 @@ def show_domain(ctx, data, page):
         for domain in domains:
             _list_domain_display_format(domain)
 
-        columns = ("name", "workloads", "running_pods", "services", "tags", "labels")
+        columns = ("name", "workloads", "running_pods", "services", "tags")
         output.list(columns, domains)
 
         if args["limit"] > 0 and len(domains) < args["limit"]:

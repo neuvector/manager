@@ -34,6 +34,7 @@ from prog import repository
 from prog import role
 from prog import scan
 from prog import server
+from prog import sigstore
 from prog import system
 from prog import workload
 

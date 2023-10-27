@@ -79,17 +79,13 @@ def _list_audit_display_format(audit):
 
 @log.command()
 @click.option("--page", default=20, type=click.IntRange(1), help="list page size, default=20")
-@click.option('--cluster', help="Cluster name.")
 @click.pass_obj
-def audit(data, page, cluster):
+def audit(data, page):
     """List audit logs."""
     filter = {"start": 0, "limit": page}
 
     while True:
-        if cluster is None:
-            logs = data.client.list("log/audit", "audit", **filter)
-        else:
-            logs = data.client.list("experimental/cluster/%s/v1/log/audit" % cluster, "audit", **filter)
+        logs = data.client.list("log/audit", "audit", **filter)
         if logs is None:
             break
 
@@ -261,7 +257,7 @@ def violation(ctx, data, client, server, page):
 
         columns = (
         "reported_at", "id", "client", "server", "server_port", "applications", "policy_action", "bytes", "client_ip",
-        "server_ip", "sessions", "xff")
+        "server_ip", "fqdn", "sessions", "xff")
         output.list(columns, logs)
 
         if filter["limit"] > 0 and len(logs) < filter["limit"]:

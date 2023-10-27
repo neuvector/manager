@@ -26,10 +26,54 @@ def show_system(data):
 @click.pass_obj
 def usage(data):
     """Show system usage."""
-    usage = data.client.show("system", "usage", "usage")
+    respObj = data.client.show("system", None, "usage")
+    usage = respObj["usage"]
+    click.echo("")
 
     columns = ["reported_at", "platform", "hosts", "cores", "cvedb_version", "domains", "running_pods"]
     output.list(columns, usage)
+
+    if "telemetry_status" in respObj:
+        telemetry_status = respObj["telemetry_status"]
+        if telemetry_status["telemetry_url"] == "" and telemetry_status["telemetry_freq"] == 0:
+            click.echo("Do not report anonymous cluster data")
+            click.echo("")
+        else:
+            click.echo("Anonymous telemetry status")
+            column_map = (("current_version", "Current NeuVector Version"),
+                          ("telemetry_url", "Telemetry Server URL"),
+                          ("telemetry_freq", "Telemetry Data Post Frequency"))
+
+            min_upgrade_info = telemetry_status["min_upgrade_version"]
+            column_map += (("min_upgrade_version_info", "Minimum Version Available for Upgrade to"),)
+            telemetry_status["min_upgrade_version_info"] = " "
+            if min_upgrade_info["version"] == "":
+                telemetry_status["min_upgrade_version"] = "N/A"
+                column_map += (("min_upgrade_version", "       Version"),)
+            else:
+                telemetry_status["min_upgrade_version"] = min_upgrade_info["version"]
+                telemetry_status["min_upgrade_release_date"] = min_upgrade_info["release_date"]
+                telemetry_status["min_upgrade_tag"] = min_upgrade_info["tag"]
+                column_map += (("min_upgrade_version", "       Version"),
+                               ("min_upgrade_release_date", "       Release Date"),
+                               ("min_upgrade_tag", "       Tag"),)
+
+            max_upgrade_info = telemetry_status["max_upgrade_version"]
+            column_map += (("max_upgrade_version_info", "Maximum Version Available for Upgrade to"),)
+            telemetry_status["max_upgrade_version_info"] = " "
+            if max_upgrade_info["version"] == "":
+                telemetry_status["max_upgrade_version"] = "N/A"
+                column_map += (("max_upgrade_version", "       Version"),)
+            else:
+                telemetry_status["max_upgrade_version"] = max_upgrade_info["version"]
+                telemetry_status["max_upgrade_release_date"] = max_upgrade_info["release_date"]
+                telemetry_status["max_upgrade_tag"] = max_upgrade_info["tag"]
+                column_map += (("max_upgrade_version", "       Version"),
+                               ("max_upgrade_release_date", "       Release Date"),
+                               ("max_upgrade_tag", "       Tag"),)
+
+            column_map += (("last_telemetry_upload_time", "Last telemetry data upload time"),)
+            output.show_with_map(column_map, telemetry_status)
 
 
 @show_system.command()
@@ -141,9 +185,15 @@ def showLocalSystemConfig(data, scope):
         conf["syslog_addr"] = "%s:%d" % (conf["syslog_ip"], conf["syslog_port"])
     else:
         conf["syslog_addr"] = ""
+    conf["syslog_protocol"] = ""
     if conf["syslog_ip_proto"] == 6:
         conf["syslog_protocol"] = "TCP"
-    else:
+    elif conf["syslog_ip_proto"] == 66:
+        conf["syslog_protocol"] = "TCP/TLS"
+        cert = conf["syslog_server_cert"]
+        if cert[len(cert)-1] == '\n':
+            conf["syslog_server_cert"] = cert[0:len(cert)-1]
+    elif conf["syslog_ip_proto"] == 17:
         conf["syslog_protocol"] = "UDP"
 
     conf["ibmsa_ep"] = ""
@@ -157,12 +207,23 @@ def showLocalSystemConfig(data, scope):
                    ("ibmsa_ep_dashboard_url", "       NeuVector Dashboard URL"),
                    ("ibmsa_ep_connected_at", "       Connection creation time"),)
 
-    column_map += (("syslog_addr", "Syslog Address"),
+    if conf["syslog_ip_proto"] == 66:
+        column_map += (("syslog_addr", "Syslog Address"),
+                       ("syslog_protocol", "       Protocol"),
+                       ("syslog_server_cert", "       Server Certificate"),
+                       ("syslog_level", "       Level"),
+                       ("syslog_in_json", "       In-JSON"),
+                       ("output_event_to_logs", "       Output event to logs"),
+                       ("syslog_status", "       Status"),
+                       ("syslog_categories", "       Categories"),)
+    else:
+        column_map += (("syslog_addr", "Syslog Address"),
                    ("syslog_protocol", "       Protocol"),
                    ("syslog_level", "       Level"),
                    ("syslog_in_json", "       In-JSON"),
+                   ("output_event_to_logs", "       Output event to logs"),
                    ("syslog_status", "       Status"),
-                   ("syslog_categories", "       categories"),)
+                   ("syslog_categories", "       Categories"),)
     if "single_cve_per_syslog" in conf:
         column_map += (("single_cve_per_syslog", "Single CVE per syslog"),)
     if "auth_order" in conf:
@@ -193,12 +254,42 @@ def showLocalSystemConfig(data, scope):
         column_map += (("net_service_status", "Enable Network Service Policy Mode"),)
     if "net_service_policy_mode" in conf:
         column_map += (("net_service_policy_mode", "Network Service Policy Mode"),)
+    if "disable_net_policy" in conf:
+        column_map += (("disable_net_policy", "Disable Network Policy"),)
+    if "detect_unmanaged_wl" in conf:
+        column_map += (("detect_unmanaged_wl", "Detect unmanaged container"),)
     if "mode_auto_d2m" in conf:
         column_map += (("mode_auto_d2m", "Auto Mode Upgrader: Discover -> Monitor"),
                    ("mode_auto_d2m_duration", "       Duration"),)
     if "mode_auto_m2p" in conf:
         column_map += (("mode_auto_m2p", "Auto Mode Upgrader: Monitor -> Protect"),
                    ("mode_auto_m2p_duration", "       Duration"),)
+    if "no_telemetry_report" not in conf:
+        conf["telemetry"] = True
+    else:
+        conf["telemetry"] = not conf["no_telemetry_report"]
+    column_map += (("telemetry", "Send telemetry data(non-PII under GDPR) to SUSE"),)
+
+    scannerAutoscaleStrategy = "Disabled"
+    minScanners = 0
+    maxScanners = 0
+    allowed = {"immediate":"Immediate", "delayed": "Delayed", "": "Disabled", "n/a": "Not supported"}
+    if "scanner_autoscale" in conf:
+        scannerAutoscale = conf["scanner_autoscale"]
+        if scannerAutoscale["strategy"] in allowed:
+            scannerAutoscaleStrategy = allowed[scannerAutoscale["strategy"]]
+        if "min_pods" in scannerAutoscale:
+            minScanners = scannerAutoscale["min_pods"]
+        if "max_pods" in scannerAutoscale:
+            maxScanners = scannerAutoscale["max_pods"]
+    conf["scanner_autoscale_category"] = ""
+    conf["scanner_autoscale_strategy"] = scannerAutoscaleStrategy
+    conf["min_scanners"] = str(minScanners)
+    conf["max_scanners"] = str(maxScanners)
+    column_map += (("scanner_autoscale_category", "Scanner Autoscaling"),
+                   ("scanner_autoscale_strategy", "       Strategy"),
+                   ("min_scanners", "       Minimum Scanners"),
+                   ("max_scanners", "       Maximum Scanners"),)
 
     _show_system_setting_display_format(conf)
     output.show_with_map(column_map, conf)
@@ -360,6 +451,14 @@ def request_system(data):
 def request_system_policy_mode(data, mode):
     """Set policy mode for all existing services"""
     data.client.request("system", "request", None, {"request": {"policy_mode": mode.title()}})
+
+
+@request_system.command('baseline_profile')
+@click.argument('mode', type=click.Choice(['basic', 'zero-drift']))
+@click.pass_obj
+def request_system_baseline_profile(data, mode):
+    """Set baseline profile"""
+    data.client.request("system", "request", None, {"request": {"baseline_profile": mode.title()}})
 
 
 @request_system.command('unquarantine')
@@ -524,7 +623,7 @@ def set_system_syslog_status(data, status):
         data.client.config_system(syslog_status=False)
 
 
-@set_system_syslog.command("in-json")
+@set_system_syslog.command("in_json")
 @click.argument('in_json', type=click.Choice(['enable', 'disable']))
 @click.pass_obj
 def set_system_syslog_in_json(data, in_json):
@@ -533,6 +632,16 @@ def set_system_syslog_in_json(data, in_json):
         data.client.config_system(syslog_in_json=True)
     else:
         data.client.config_system(syslog_in_json=False)
+
+@set_system_syslog.command("output_to_logs")
+@click.argument('output_to_logs', type=click.Choice(['enable', 'disable']))
+@click.pass_obj
+def set_system_syslog_output_to_logs(data, output_to_logs):
+    """Enable/disable syslog output to logs"""
+    if output_to_logs == 'enable':
+        data.client.config_system(output_event_to_logs=True)
+    else:
+        data.client.config_system(output_event_to_logs=False)
 
 
 @set_system_syslog.command("category")
@@ -569,14 +678,25 @@ def set_system_syslog_server(data, address):
 
 
 @set_system_syslog.command("protocol")
-@click.argument('protocol', type=click.Choice(['UDP', 'TCP']))
+@click.argument('protocol', type=click.Choice(['UDP', 'TCP', 'TCPTLS']))
+@click.option("--cert_file_path", default="", help="file path of syslog server certificate for TCP/TLS protocol")
 @click.pass_obj
-def set_system_syslog_protocol(data, protocol):
-    """Set syslog level"""
+def set_system_syslog_protocol(data, protocol, cert_file_path):
+    """Set syslog protocol"""
     if protocol == 'TCP':
-        data.client.config_system(syslog_ip_proto=6)
+        data.client.config_system(syslog_ip_proto=6, syslog_server_cert="")
+    elif protocol == 'TCPTLS':
+        cert = ""
+        if cert_file_path is not None and cert_file_path != "":
+            f = open(cert_file_path)
+            cert = f.read()
+            f.close()
+        if cert == "":
+            click.echo("Error: Syslog server certificate file path not specified")
+        else:
+            data.client.config_system(syslog_ip_proto=66, syslog_server_cert=cert)
     else:
-        data.client.config_system(syslog_ip_proto=17)
+        data.client.config_system(syslog_ip_proto=17, syslog_server_cert="")
 
 
 @set_system_syslog.command("level")
@@ -600,7 +720,7 @@ def set_system_single_cve_per_syslog(data, status):
 
 @set_system.command("controller_debug")
 @click.option('--category', '-c', multiple=True,
-              type=click.Choice(['all', 'cpath', 'conn', 'mutex', 'scan', 'cluster'])
+              type=click.Choice(['all', 'cpath', 'conn', 'mutex', 'scan', 'cluster', 'k8s_monitor'])
               )
 @click.pass_obj
 def set_system_controller_debug(data, category):
@@ -608,7 +728,7 @@ def set_system_controller_debug(data, category):
     s = set()
     for c in category:
         if c == 'all':
-            s |= set(['cpath', 'conn', 'mutex', 'scan', 'cluster'])
+            s |= set(['cpath', 'conn', 'mutex', 'scan', 'cluster', 'k8s_monitor'])
         else:
             s.add(c)
     # Can't use list(s) because we overwrite list with our own function
@@ -680,6 +800,20 @@ def set_system_webhook_url(data, name, url, type, scope, enable):
     data.client.config("system/config/webhook", name, {"config": body}, **args)
 
 
+@set_system.command("telemetry")
+@click.argument('status', type=click.Choice(['enable', 'disable']))
+@click.pass_obj
+def set_system_telemetry(data, status):
+    """Enable/disable sending telemetry data(non-PII under GDPR) to SUSE"""
+    noTelemetry = False
+    if status == 'disable':
+        noTelemetry = True
+    if status == 'enable':
+        data.client.config_system(no_telemetry_report=noTelemetry)
+    else:
+        data.client.config_system(no_telemetry_report=noTelemetry)
+
+
 @set_system.group("monitor_service_mesh")
 @click.pass_obj
 def set_system_monitor_service_mesh(data):
@@ -735,6 +869,36 @@ def set_system_net_service_policy_mode(data, mode):
     """Set system global network service policy mode."""
     data.client.config_system_net(net_service_policy_mode=mode.title())
 
+@set_system.group('disable_net_policy')
+@click.pass_obj
+def set_system_disable_net_policy(data):
+    """Disable network policy"""
+
+@set_system_disable_net_policy.command("status")
+@click.argument('status', type=click.Choice(['true', 'false']))
+@click.pass_obj
+def set_system_disable_net_policy_status(data, status):
+    """Enable/disable network policy"""
+    if status == 'true':
+        data.client.config_system_net(disable_net_policy=True)
+    else:
+        data.client.config_system_net(disable_net_policy=False)
+
+@set_system.group('detect_unmanaged_wl')
+@click.pass_obj
+def set_system_detect_unmanaged_wl(data):
+    """Detect unmanaged container"""
+
+@set_system_detect_unmanaged_wl.command("status")
+@click.argument('status', type=click.Choice(['true', 'false']))
+@click.pass_obj
+def set_system_detect_unmanaged_wl_status(data, status):
+    """Enable/disable detect unmanaged container"""
+    if status == 'true':
+        data.client.config_system_net(detect_unmanaged_wl=True)
+    else:
+        data.client.config_system_net(detect_unmanaged_wl=False)
+
 @set_system.group("registry")
 @click.pass_obj
 def set_system_registry(data):
@@ -784,6 +948,52 @@ def set_system_registry_https_proxy(data, url, username, password):
     proxy = {"url": url, "username": username, "password": password}
     data.client.config_system(registry_https_proxy=proxy)
 
+@set_system.group("autoscale")
+@click.pass_obj
+def set_system_autoscale(data):
+    """Set autoscaling settings"""
+
+@set_system_autoscale.command("scanner")
+@click.option("--strategy", type=click.Choice(['disable', 'immediate', 'delayed']), help="scanner autoscaling strategy")
+@click.option("--min", help="minimum scanner pods")
+@click.option("--max", help="maximum scanner pods")
+@click.pass_obj
+def set_system_scanner_autoscale(data, strategy, min, max):
+    """Configure scanner autoscaling"""
+    config = {}
+    if strategy is not None:
+        if strategy == 'disable':
+            strategy = ''
+        config["strategy"] = strategy
+    if min is not None:
+        err = ""
+        try:
+            minScanners = int(min)
+            if minScanners >= 0:
+                config["min_pods"] = minScanners
+            else:
+                err = "Invalid option value for --min"
+        except:
+            err = "Invalid option value for --min"
+        if err != "":
+            click.echo(err)
+            return
+
+    if max is not None:
+        err = ""
+        try:
+            maxScanners = int(max)
+            if maxScanners >= 0:
+                config["max_pods"] = maxScanners
+            else:
+                err = "Invalid option value for --max"
+        except:
+            err = "Invalid option value for --max"
+        if err != "":
+            click.echo(err)
+            return
+
+    data.client.config_system(scanner_autoscale=config)
 
 # unset
 
@@ -816,7 +1026,7 @@ def unset_system_syslog_server(data):
 @click.pass_obj
 def unset_system_syslog_protocol(data):
     """Unset syslog protocol."""
-    data.client.config_system(syslog_ip_proto=0)
+    data.client.config_system(syslog_ip_proto=0, syslog_server_cert="")
 
 
 @unset_system_syslog.command("level")

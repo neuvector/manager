@@ -1261,6 +1261,51 @@ def request_export_waf(data, name, filename):
         click.echo(respData)
     return
 
+@request_export.command('vulnerability_profile')
+@click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True))
+@click.pass_obj
+def request_export_vul_profile(data, filename):
+    """Export vulnerability profile configuration."""
+
+    names = ["default"]
+
+    payload = {}
+    if len(names) > 0:
+        payload["profiles"] = names
+    respData = data.client.requestDownload("file", "vulnerability/profile", None, payload)
+    if filename and len(filename) > 0:
+        try:
+            with click.open_file(filename, 'w') as wfp:
+                wfp.write(respData)
+            click.echo("Wrote to %s" % click.format_filename(filename))
+        except IOError:
+            click.echo("Error: Failed to write to %s" % click.format_filename(filename))
+    else:
+        click.echo(respData)
+    return
+
+@request_export.command('compliance_profile')
+@click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True))
+@click.pass_obj
+def request_export_compliance_profile(data, filename):
+    """Export compliance profile configuration."""
+
+    names = ["default"]
+
+    payload = {}
+    if len(names) > 0:
+        payload["profiles"] = names
+    respData = data.client.requestDownload("file", "compliance/profile", None, payload)
+    if filename and len(filename) > 0:
+        try:
+            with click.open_file(filename, 'w') as wfp:
+                wfp.write(respData)
+            click.echo("Wrote to %s" % click.format_filename(filename))
+        except IOError:
+            click.echo("Error: Failed to write to %s" % click.format_filename(filename))
+    else:
+        click.echo(respData)
+    return
 
 @request.group('import')
 @click.pass_obj
@@ -1322,6 +1367,49 @@ def import_config(data, filename, raw, ignoreFed):
         click.echo("[2] Error: Failed to upload configuration file %s" % click.format_filename(filename))
     click.echo("")
 
+def import_function(urlStr, data, filename, message):
+    try:
+        tid = ""
+        resp = data.client.importConfig(urlStr, filename, True, None, tid, 0, "")
+        if tid == "":
+            if resp.status_code == requests.codes.partial:
+                respJson = resp.json()
+                if "data" in respJson:
+                    respData = respJson["data"]
+                    tid = respData["tid"]
+                    click.echo("[progress: {:3d}%] {}".format(respData["percentage"], respData["status"]))
+        status = ""
+        if tid != "":
+            i = 1
+            # click.echo("Info: import task transaction id is {}".format(tid))
+            while resp.status_code == requests.codes.partial:
+                time.sleep(2)
+                resp = data.client.importConfig(urlStr, filename, True, None, tid, i, "")
+                respJson = resp.json()
+                if "data" in respJson:
+                    respData = respJson["data"]
+                    if "status" in respData:
+                        status = respData["status"]
+                    if status != "":
+                        click.echo("[progress: {:3d}%] {}".format(respData["percentage"], status))
+                i = i + 1
+            # click.echo("--------------------------")
+            if resp.status_code == requests.codes.ok:
+                respJson = resp.json()
+                if "data" in respJson:
+                    respData = respJson["data"]
+                    if "status" in respData:
+                        status = respData["status"]
+
+        click.echo("")
+        if resp.status_code == requests.codes.ok and status == "done":
+            click.echo("Imported {} {}.".format(message, click.format_filename(filename)))
+        else:
+            click.echo("[1] Error: Failed to import {} {}".format(message, click.format_filename(filename)))
+    except IOError:
+        click.echo("")
+        click.echo("[2] Error: Failed to import {} {}".format(message, click.format_filename(filename)))
+    click.echo("")
 
 @request_import.command("group")
 @click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))
@@ -1329,49 +1417,7 @@ def import_config(data, filename, raw, ignoreFed):
 @click.pass_obj
 def import_group(data, filename):
     """Import group policy."""
-    try:
-        tid = ""
-        resp = data.client.importConfig("file/group/config", filename, True, None, tid, 0, "")
-        if tid == "":
-            if resp.status_code == requests.codes.partial:
-                respJson = resp.json()
-                if "data" in respJson:
-                    respData = respJson["data"]
-                    tid = respData["tid"]
-                    click.echo("[progress: {:3d}%] {}".format(respData["percentage"], respData["status"]))
-        status = ""
-        if tid != "":
-            i = 1
-            # click.echo("Info: import task transaction id is {}".format(tid))
-            while resp.status_code == requests.codes.partial:
-                time.sleep(2)
-                resp = data.client.importConfig("file/group/config", filename, True, None, tid, i, "")
-                respJson = resp.json()
-                if "data" in respJson:
-                    respData = respJson["data"]
-                    if "status" in respData:
-                        status = respData["status"]
-                    if status != "":
-                        click.echo("[progress: {:3d}%] {}".format(respData["percentage"], status))
-                i = i + 1
-            # click.echo("--------------------------")
-            if resp.status_code == requests.codes.ok:
-                respJson = resp.json()
-                if "data" in respJson:
-                    respData = respJson["data"]
-                    if "status" in respData:
-                        status = respData["status"]
-
-        click.echo("")
-        if resp.status_code == requests.codes.ok and status == "done":
-            click.echo("Imported group policy {}.".format(click.format_filename(filename)))
-        else:
-            click.echo("[1] Error: Failed to import group policy {}".format(click.format_filename(filename)))
-    except IOError:
-        click.echo("")
-        click.echo("[2] Error: Failed to import group policy %s" % click.format_filename(filename))
-    click.echo("")
-
+    import_function("file/group/config", data, filename, "group policy")
 
 @request_import.command('admission')
 @click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))
@@ -1379,146 +1425,36 @@ def import_group(data, filename):
 @click.pass_obj
 def import_admission(data, filename):
     """Import admission control configuration/rules."""
-    try:
-        tid = ""
-        resp = data.client.importConfig("file/admission/config", filename, True, None, tid, 0, "")
-        if tid == "":
-            if resp.status_code == requests.codes.partial:
-                respJson = resp.json()
-                if "data" in respJson:
-                    respData = respJson["data"]
-                    tid = respData["tid"]
-                    click.echo("[progress: {:3d}%] {}".format(respData["percentage"], respData["status"]))
-        status = ""
-        if tid != "":
-            i = 1
-            # click.echo("Info: import task transaction id is {}".format(tid))
-            while resp.status_code == requests.codes.partial:
-                time.sleep(2)
-                resp = data.client.importConfig("file/admission/config", filename, True, None, tid, i, "")
-                respJson = resp.json()
-                if "data" in respJson:
-                    respData = respJson["data"]
-                    if "status" in respData:
-                        status = respData["status"]
-                    if status != "":
-                        click.echo("[progress: {:3d}%] {}".format(respData["percentage"], status))
-                i = i + 1
-            # click.echo("--------------------------")
-            if resp.status_code == requests.codes.ok:
-                respJson = resp.json()
-                if "data" in respJson:
-                    respData = respJson["data"]
-                    if "status" in respData:
-                        status = respData["status"]
-
-        click.echo("")
-        if resp.status_code == requests.codes.ok and status == "done":
-            click.echo("Imported admission control configuration/rules {}.".format(click.format_filename(filename)))
-        else:
-            click.echo("[1] Error: Failed to import admission control configuration/rules {}".format(
-                click.format_filename(filename)))
-    except IOError:
-        click.echo("")
-        click.echo(
-            "[2] Error: Failed to import admission control configuration/rules %s" % click.format_filename(filename))
-    click.echo("")
+    import_function("file/admission/config", data, filename, "admission control configuration/rules")
 
 @request_import.command('dlp')
 @click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))
 @click.pass_obj
 def import_dlp(data, filename):
     """Import DLP sensors/rules."""
-    try:
-        tid = ""
-        resp = data.client.importConfig("file/dlp/config", filename, True, None, tid, 0, "")
-        if tid == "":
-            if resp.status_code == requests.codes.partial:
-                respJson = resp.json()
-                if "data" in respJson:
-                    respData = respJson["data"]
-                    tid = respData["tid"]
-                    click.echo("[progress: {:3d}%] {}".format(respData["percentage"], respData["status"]))
-        status = ""
-        if tid != "":
-            i = 1
-            #click.echo("Info: import task transaction id is {}".format(tid))
-            while resp.status_code == requests.codes.partial:
-                time.sleep(2)
-                resp = data.client.importConfig("file/dlp/config", filename, True, None, tid, i, "")
-                respJson = resp.json()
-                if "data" in respJson:
-                    respData = respJson["data"]
-                    if "status" in respData:
-                        status = respData["status"]
-                    if status != "":
-                        click.echo("[progress: {:3d}%] {}".format(respData["percentage"], status))
-                i = i + 1
-            #click.echo("--------------------------")
-            if resp.status_code == requests.codes.ok:
-                respJson = resp.json()
-                if "data" in respJson:
-                    respData = respJson["data"]
-                    if "status" in respData:
-                        status = respData["status"]
-
-        click.echo("")
-        if resp.status_code == requests.codes.ok and status == "done":
-            click.echo("Imported DLP sensors/rules {}.".format(click.format_filename(filename)))
-        else:
-            click.echo("[1] Error: Failed to import DLP sensors/rules {}".format(click.format_filename(filename)))
-    except IOError:
-        click.echo("")
-        click.echo("[2] Error: Failed to import DLP sensors/rules %s" % click.format_filename(filename))
-    click.echo("")
+    import_function("file/dlp/config", data, filename, "DLP sensors/rules")
 
 @request_import.command('waf')
 @click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))
 @click.pass_obj
 def import_waf(data, filename):
     """Import WAF sensors/rules."""
-    try:
-        tid = ""
-        resp = data.client.importConfig("file/waf/config", filename, True, None, tid, 0, "")
-        if tid == "":
-            if resp.status_code == requests.codes.partial:
-                respJson = resp.json()
-                if "data" in respJson:
-                    respData = respJson["data"]
-                    tid = respData["tid"]
-                    click.echo("[progress: {:3d}%] {}".format(respData["percentage"], respData["status"]))
-        status = ""
-        if tid != "":
-            i = 1
-            # click.echo("Info: import task transaction id is {}".format(tid))
-            while resp.status_code == requests.codes.partial:
-                time.sleep(2)
-                resp = data.client.importConfig("file/waf/config", filename, True, None, tid, i, "")
-                respJson = resp.json()
-                if "data" in respJson:
-                    respData = respJson["data"]
-                    if "status" in respData:
-                        status = respData["status"]
-                    if status != "":
-                        click.echo("[progress: {:3d}%] {}".format(respData["percentage"], status))
-                i = i + 1
-            # click.echo("--------------------------")
-            if resp.status_code == requests.codes.ok:
-                respJson = resp.json()
-                if "data" in respJson:
-                    respData = respJson["data"]
-                    if "status" in respData:
-                        status = respData["status"]
+    import_function("file/waf/config", data, filename, "WAF sensors/rules")
 
-        click.echo("")
-        if resp.status_code == requests.codes.ok and status == "done":
-            click.echo("Imported WAF sensors/rules {}.".format(click.format_filename(filename)))
-        else:
-            click.echo("[1] Error: Failed to import WAF sensors/rules {}".format(click.format_filename(filename)))
-    except IOError:
-        click.echo("")
-        click.echo("[2] Error: Failed to import WAF sensors/rules %s" % click.format_filename(filename))
-    click.echo("")
+@request_import.command('vulnerability_profile')
+@click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))
+@click.option("--option", default="merge", help="import option", type=click.Choice(['merge', 'replace']))
+@click.pass_obj
+def import_vul_profile(data, filename, option):
+    """Import vulnerability profile configuration."""
+    import_function("file/vulnerability/profile/config?option={}".format(option), data, filename, "vulnerability profile configuration")
+
+@request_import.command('compliance_profile')
+@click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))
+@click.pass_obj
+def import_compliance_profile(data, filename):
+    """Import compliance profile configuration."""
+    import_function("file/compliance/profile/config", data, filename, "compliance profile configuration")
 
 
 @request_export.command()

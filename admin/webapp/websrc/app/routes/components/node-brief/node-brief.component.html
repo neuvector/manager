@@ -128,6 +128,22 @@
         </div>
       </div>
     </li>
+    <li class="col-sm-6 p-2">
+      <div class="mda-list-item-text pb-0 pt-sm">
+        <span class="font-weight-bold host-item-key"
+          >{{ 'network.legend.GROUP' | translate }}:</span
+        >
+        <span class="ml mr-lg auto-hide host-item-key">
+          nodes
+          <a
+            (click)="goToGroup('nodes')"
+            style="display: table-cell; font-size: 11px; line-height: 15px">
+            <em class="eos-icons icon-12 ml-2">launch</em>
+          </a>
+        </span>
+
+      </div>
+    </li>
     <li *ngIf="host.interfaces" class="col-sm-12 p-2">
       <div class="mda-list-item-text pb-0 pt-sm">
         <div class="font-weight-bold text-muted">

@@ -18,6 +18,8 @@ import { UtilsService } from '@common/utils/app.utils';
 export class RegistryDetailsComponent {
   error: unknown;
   @Input() gridHeight!: number;
+  @Input() linkedImage: string;
+  @Input() linkedTag: string;
   filter = new FormControl('');
   registryDetails$ = this.registriesCommunicationService.registryDetails$.pipe(
     catchError(err => {

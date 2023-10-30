@@ -252,6 +252,7 @@
                               [ip]="secEvent.endpoint.source.ip"
                               [countryCode]="secEvent.endpoint.source.countryCode"
                               [countryName]="secEvent.endpoint.source.countryName"
+                              [fqdn]="secEvent.fqdn || ''"
                             >
                             </app-flag-ip-fqdn>
                             )</span>
@@ -352,6 +353,7 @@
                               [ip]="secEvent.endpoint.destination.ip"
                               [countryCode]="secEvent.endpoint.destination.countryCode"
                               [countryName]="secEvent.endpoint.destination.countryName"
+                              [fqdn]="secEvent.fqdn || ''"
                             >
                             </app-flag-ip-fqdn>
                             )</span>

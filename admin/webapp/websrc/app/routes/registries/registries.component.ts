@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RegistriesCommunicationService } from './regestries-communication.service';
 import { catchError } from 'rxjs/operators';
 import { MultiClusterService } from '@services/multi-cluster.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-registries',
@@ -17,12 +18,22 @@ export class RegistriesComponent implements OnInit {
     })
   );
   refreshingDetails$ = this.registriesCommunicationService.refreshingDetails$;
+  linkedRegistry: string = '';
+  linkedImage: string = '';
+  linkedTag: string = '';
   private switchClusterSubscription;
 
   constructor(
     private registriesCommunicationService: RegistriesCommunicationService,
-    private multiClusterService: MultiClusterService
-  ) {}
+    private multiClusterService: MultiClusterService,
+    private route: ActivatedRoute
+  ) {
+    this.route.queryParams.subscribe(params => {
+      this.linkedRegistry = decodeURIComponent(params['registry'] || '');
+      this.linkedImage = decodeURIComponent(params['image'] || '');
+      this.linkedTag = decodeURIComponent(params['tag'] || '');
+    });
+  }
 
   ngOnInit(): void {
     //refresh the page when it switched to a remote cluster

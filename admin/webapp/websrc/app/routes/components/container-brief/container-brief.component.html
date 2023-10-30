@@ -58,14 +58,31 @@
       </div>
     </div>
   </li>
-  <li class="col-sm-12 p-1">
-    <div class="pb-0 pt-sm">
-      <span class="font-weight-bold pod-item-key">
-        {{ 'network.nodeDetails.ENFORCER' | translate }}:
-      </span>
-      <span class="ml auto-hide pod-item-value">
-        {{ container.enforcer_name }}
-      </span>
+  <li class="col-sm-12 p-1" style="height: 29px;">
+    <div class="row" style="margin-left: 1px;">
+      <div class="col-sm-6 pl-0 pb-0 pt-sm">
+        <span class="font-weight-bold pod-item-key">
+          {{ 'network.nodeDetails.ENFORCER' | translate }}:
+        </span>
+        <span class="ml auto-hide pod-item-value">
+          {{ container.enforcer_name }}
+        </span>
+      </div>
+      <div class="col-sm-6 pl-0 pb-0 pt-sm" *ngIf="container.service_group">
+        <div>
+          <span class="font-weight-bold pod-item-key">
+            {{ 'network.legend.GROUP' | translate }}:
+          </span>
+          <span class="auto-hide pod-item-value">
+            {{ container.service_group }}
+            <a
+              (click)="goToGroup(container.service_group)"
+              style="display: table-cell; font-size: 11px; line-height: 15px">
+              <em class="eos-icons icon-12 ml-2">launch</em>
+            </a>
+          </span>
+        </div>
+      </div>
     </div>
   </li>
   <li class="col-sm-12 p-1">
@@ -229,7 +246,7 @@
         </span>
       </div>
       <div class="ml auto-hide pod-item-value">
-        {{ apps }}
+        <span>{{ apps }}</span>
       </div>
     </div>
   </li>
@@ -245,7 +262,7 @@
         class="row ml"
         style="width: 380px">
         <div class="col-sm-2 text-left pr0">
-          {{ item.key }}
+          <span>{{ item.key }}</span>
         </div>
         <div class="col-sm-1"></div>
         <div class="col-sm-9 pl-0">
@@ -253,7 +270,7 @@
             <div class="col-sm-12">
               <div class="col-sm-6">IP:{{ net.ip }}/{{ net.ip_prefix }}</div>
               <div *ngIf="net.gateway" class="col-sm-6">
-                {{ 'general.GATEWAY' | translate }}:{{ net.gateway }}
+                <span style="color: #909fa7;">{{ 'general.GATEWAY' | translate }}:{{ net.gateway }}</span>
               </div>
             </div>
           </div>

@@ -128,11 +128,6 @@ export class AuthUtilsService {
   }
 
   getDisplayFlag(displayControl) {
-    console.log(
-      'Authorize - ',
-      displayControl,
-      GlobalVariable.user.global_permissions
-    );
     if (GlobalVariable.user) {
       let ownedPermissions = this.getCacheUserPermission().ownedPermissions;
       if (ownedPermissions.length > 0) {

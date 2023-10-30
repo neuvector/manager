@@ -1370,6 +1370,7 @@ export class GraphService {
           headerName: this.translate.instant('network.gridHeader.SERVER_IP'),
           field: 'server_ip',
           cellRenderer: ServerIpCellComponent,
+          minWidth: 200,
           width: 250,
         },
         {

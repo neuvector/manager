@@ -31,6 +31,7 @@ export interface WorkloadBriefV2 {
   image: string;
   image_id: string;
   image_created_at: string;
+  image_reg_scanned: boolean;
   name: string;
   service: string;
   service_group: string;

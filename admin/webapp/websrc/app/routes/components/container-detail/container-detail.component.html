@@ -77,8 +77,19 @@
     </mat-icon>
     <div class="ml-3 overflow-hidden">
       {{ 'containers.detail.IMAGE' | translate }}
-      <div class="text-muted text-truncate">
-        {{ container.brief.image }}
+      <div class="d-flex align-items-baseline">
+        <div class="text-muted text-truncate">
+          {{ container.brief.image }}
+        </div>
+        <mat-icon
+          *ngIf="container.brief.image_reg_scanned"
+          aria-hidden="false"
+          aria-label="Registry scanned icon"
+          matTooltip="{{ 'containers.detail.IMAGE_REG_SCANNED' | translate }}"
+          matTooltipPosition="above"
+          class="icon-12 text-success">
+          library_add_check
+        </mat-icon>
       </div>
     </div>
   </div>
@@ -94,7 +105,7 @@
       {{ 'containers.detail.IMAGE_CREATED_AT' | translate }}
       <div class="text-muted text-truncate">
         {{
-          (container.brief.image_created_at | date: 'MMM dd, y HH:mm:ss') ||
+          (container.brief.image_created_at | date : 'MMM dd, y HH:mm:ss') ||
             '&nbsp;'
         }}
       </div>
@@ -162,7 +173,7 @@
     <div class="ml-3 overflow-hidden">
       {{ 'enforcers.detail.DISCONNECTED_AT' | translate }}
       <div class="text-muted text-truncate">
-        {{ container.finished_at | date: 'MMM dd, y HH:mm:ss' }}
+        {{ container.finished_at | date : 'MMM dd, y HH:mm:ss' }}
       </div>
     </div>
   </div>
@@ -185,7 +196,7 @@
       </div>
       <div class="col-sm-9 offset-sm-1">
         <div
-          *ngFor="let net of interface.value | slice: 0:MAX_INTERFACE_IP - 1"
+          *ngFor="let net of interface.value | slice : 0 : MAX_INTERFACE_IP - 1"
           class="row mx-0 text-muted">
           <ng-container *ngIf="validateIP(net)">
             <div class="col-sm-4">IP: {{ net.ip }}/{{ net.ip_prefix }}</div>

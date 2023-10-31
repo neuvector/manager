@@ -73,7 +73,7 @@ object PolicyJsonProtocol extends DefaultJsonProtocol with LazyLogging {
   implicit val ruleIdsFormat: RootJsonFormat[RuleIds]             = jsonFormat1(RuleIds)
   implicit val promoteConfigFormat: RootJsonFormat[PromoteConfig] = jsonFormat1(PromoteConfig)
 
-  implicit val workloadBriefV2Format: RootJsonFormat[WorkloadBriefV2] = jsonFormat13(
+  implicit val workloadBriefV2Format: RootJsonFormat[WorkloadBriefV2] = jsonFormat14(
     WorkloadBriefV2
   )
   implicit val workloadSecurityV2Format: RootJsonFormat[WorkloadSecurityV2] = jsonFormat10(

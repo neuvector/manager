@@ -170,7 +170,7 @@ object Utils extends LazyLogging with Directives {
     val hdContentSecurityPolicy =
       RawHeader(
         "Content-Security-Policy",
-        "default-src 'self'; font-src 'self' data: */fonts; img-src 'self' data:; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline';"
+        "default-src 'self'; font-src 'self' data: */fonts; img-src 'self' data:; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
       )
 
     val headerConfigMap = Map(

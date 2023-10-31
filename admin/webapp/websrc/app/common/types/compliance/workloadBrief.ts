@@ -8,6 +8,7 @@ export interface WorkloadBrief {
   image: string;
   image_id: string;
   image_created_at: string;
+  image_reg_scanned: boolean;
   platform_role: string;
   domain: string;
   state: string;

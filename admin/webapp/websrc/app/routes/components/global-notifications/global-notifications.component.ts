@@ -113,8 +113,10 @@ export class GlobalNotificationsComponent implements OnInit {
   generateNotifications(): void {
     if (
       this.telemetryStatus?.max_upgrade_version.tag &&
-      this.telemetryStatus.current_version !==
+      this.isUpgradeNeeded(
+        this.telemetryStatus.current_version,
         this.telemetryStatus.max_upgrade_version.tag
+      )
     ) {
       this.globalNotifications.push({
         name: 'newVersionAvailable',
@@ -270,6 +272,68 @@ export class GlobalNotificationsComponent implements OnInit {
     return cveDBCreateTime > 0
       ? (currentTime - cveDBCreateTime) / (24 * 3600 * 1000)
       : 0;
+  }
+
+  /**
+   * Compares two version strings to determine if an upgrade is needed.
+   *
+   * @param currentVersion - The current version to compare.
+   * @param maxVersion - The maximum allowed version to compare against.
+   * @returns `true` if an upgrade is needed, `false` otherwise.
+   *
+   * Example: ensure "5.2.3" > "5.2.2-s2" > "5.2.2-s1" > "5.2.2"
+   */
+  isUpgradeNeeded(currentVersion: string, maxVersion: string) {
+    if (!currentVersion || !maxVersion) {
+      return false;
+    }
+
+    const parseVersion = (version: string) => {
+      const [major, minor, patch] = version.split('.').map(Number);
+      const hasSuffix = version.includes('-');
+      return { major, minor, patch, hasSuffix };
+    };
+
+    const current = parseVersion(currentVersion);
+    const max = parseVersion(maxVersion);
+
+    if (current.major > max.major) {
+      return false;
+    }
+
+    if (current.major < max.major) {
+      return true;
+    }
+
+    if (current.minor > max.minor) {
+      return false;
+    }
+
+    if (current.minor < max.minor) {
+      return true;
+    }
+
+    if (current.patch > max.patch) {
+      return false;
+    }
+
+    if (current.patch < max.patch) {
+      return true;
+    }
+
+    // Versions are the same up to patch level; consider suffix
+    if (current.hasSuffix && !max.hasSuffix) {
+      return false;
+    }
+
+    if (!current.hasSuffix && max.hasSuffix) {
+      return true;
+    }
+
+    // Both have suffixes; compare the suffix
+    const currentSuffix = currentVersion.split('-')[1];
+    const maxSuffix = maxVersion.split('-')[1];
+    return currentSuffix < maxSuffix;
   }
 
   getVersion() {

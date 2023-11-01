@@ -111,25 +111,26 @@ export class GlobalNotificationsComponent implements OnInit {
   }
 
   generateNotifications(): void {
-    if (
-      this.telemetryStatus?.max_upgrade_version.tag &&
-      this.isUpgradeNeeded(
-        this.telemetryStatus.current_version,
-        this.telemetryStatus.max_upgrade_version.tag
-      )
-    ) {
-      this.globalNotifications.push({
-        name: 'newVersionAvailable',
-        message: this.tr.instant('login.UPGRADE_AVAILABLE', {
-          currentVersion: this.telemetryStatus.current_version,
-          newVersion: this.telemetryStatus.max_upgrade_version.tag,
-        }),
-        link: '',
-        labelClass: 'warning',
-        accepted: false,
-        unClamped: false,
-      });
-    }
+    // todo enable the version checking in 5.3
+    // if (
+    //   this.telemetryStatus?.max_upgrade_version.tag &&
+    //   this.isUpgradeNeeded(
+    //     this.telemetryStatus.current_version,
+    //     this.telemetryStatus.max_upgrade_version.tag
+    //   )
+    // ) {
+    //   this.globalNotifications.push({
+    //     name: 'newVersionAvailable',
+    //     message: this.tr.instant('login.UPGRADE_AVAILABLE', {
+    //       currentVersion: this.telemetryStatus.current_version,
+    //       newVersion: this.telemetryStatus.max_upgrade_version.tag,
+    //     }),
+    //     link: '',
+    //     labelClass: 'warning',
+    //     accepted: false,
+    //     unClamped: false,
+    //   });
+    // }
     if (this.unUpdateDays > GlobalConstant.MAX_UNUPDATED_DAYS) {
       this.globalNotifications.push({
         name: 'isScannerOld',

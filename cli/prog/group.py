@@ -160,6 +160,48 @@ def detail(data, id_or_name, cap):
     columns = ("name", "learned", "criteria", "platform_role", "members", "policy_rules", "type")
     output.show(columns, group)
 
+@show_group.command()
+@click.argument("id_or_name")
+@click.pass_obj
+def stats(data, id_or_name):
+    """Show group statistics."""
+    stats = data.client.show("group", "stats", "%s/stats" % id_or_name)
+    if not stats:
+        return
+
+    display = []
+
+    span = 0
+    stats["total"]["duration"] = "Total"
+    utils.stats_display_format(stats["total"], span)
+    display.append(stats["total"])
+
+    span = stats["interval"]
+    stats["span_1"]["duration"] = "Last %ss" % span
+    utils.stats_display_format(stats["span_1"], span)
+    display.append(stats["span_1"])
+
+    span = stats["interval"] * 12
+    stats["span_12"]["duration"] = "Last %ss" % span
+    utils.stats_display_format(stats["span_12"], span)
+    display.append(stats["span_12"])
+
+    span = stats["interval"] * 60
+    stats["span_60"]["duration"] = "Last %ss" % span
+    utils.stats_display_format(stats["span_60"], span)
+    display.append(stats["span_60"])
+
+    column_map = (("duration", "Duration"),
+                  ("cpu", "CPU (%)"),
+                  ("memory", "Memory (MB)"),
+                  ("session_in", "In Session"),
+                  ("session_out", "Out Session"),
+                  ("packet_in", "In Packet"),
+                  ("packet_out", "Out Packet"),
+                  ("byte_in", "In Tput"),
+                  ("byte_out", "Out Tput"))
+    output.list_with_map(column_map, display)
+
 
 def _list_dlp_group_display_format(group):
     f = "status"

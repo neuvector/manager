@@ -111,23 +111,26 @@ export class GlobalNotificationsComponent implements OnInit {
   }
 
   generateNotifications(): void {
-    if (
-      this.telemetryStatus?.max_upgrade_version.tag &&
-      this.telemetryStatus.current_version !==
-        this.telemetryStatus.max_upgrade_version.tag
-    ) {
-      this.globalNotifications.push({
-        name: 'newVersionAvailable',
-        message: this.tr.instant('login.UPGRADE_AVAILABLE', {
-          currentVersion: this.telemetryStatus.current_version,
-          newVersion: this.telemetryStatus.max_upgrade_version.tag,
-        }),
-        link: '',
-        labelClass: 'warning',
-        accepted: false,
-        unClamped: false,
-      });
-    }
+    // todo enable the version checking in 5.3
+    // if (
+    //   this.telemetryStatus?.max_upgrade_version.tag &&
+    //   this.isUpgradeNeeded(
+    //     this.telemetryStatus.current_version,
+    //     this.telemetryStatus.max_upgrade_version.tag
+    //   )
+    // ) {
+    //   this.globalNotifications.push({
+    //     name: 'newVersionAvailable',
+    //     message: this.tr.instant('login.UPGRADE_AVAILABLE', {
+    //       currentVersion: this.telemetryStatus.current_version,
+    //       newVersion: this.telemetryStatus.max_upgrade_version.tag,
+    //     }),
+    //     link: '',
+    //     labelClass: 'warning',
+    //     accepted: false,
+    //     unClamped: false,
+    //   });
+    // }
     if (this.unUpdateDays > GlobalConstant.MAX_UNUPDATED_DAYS) {
       this.globalNotifications.push({
         name: 'isScannerOld',
@@ -270,6 +273,48 @@ export class GlobalNotificationsComponent implements OnInit {
     return cveDBCreateTime > 0
       ? (currentTime - cveDBCreateTime) / (24 * 3600 * 1000)
       : 0;
+  }
+
+  /**
+   * Compares two version strings to determine if an upgrade is needed.
+   *
+   * @param currentVersion - The current version to compare.
+   * @param maxVersion - The maximum allowed version to compare against.
+   * @returns `true` if an upgrade is needed, `false` otherwise.
+   *
+   * Example: ensure "5.2.3" > "5.2.2-s2" > "5.2.2-s1" > "5.2.2"
+   */
+  isUpgradeNeeded(currentVersion: string, maxVersion: string) {
+    if (!currentVersion || !maxVersion) {
+      return false;
+    }
+
+    const currentParts = currentVersion.split('.');
+    const maxParts = maxVersion.split('.');
+
+    for (let i = 0; i < Math.max(currentParts.length, maxParts.length); i++) {
+      const current = parseInt(currentParts[i]) || 0;
+      const max = parseInt(maxParts[i]) || 0;
+
+      if (current < max) {
+        return true;
+      } else if (current > max) {
+        return false;
+      }
+    }
+
+    // Handle the special case where one version includes a suffix (e.g., -s or -a)
+    if (currentVersion.includes('-') || maxVersion.includes('-')) {
+      const currentSuffix = currentVersion.split('-')[1] || '';
+      const maxSuffix = maxVersion.split('-')[1] || '';
+
+      if (currentSuffix < maxSuffix) {
+        return true;
+      }
+    }
+
+    // Return false when the currentVVersion is the same as the maxVersion
+    return false;
   }
 
   getVersion() {

@@ -13,7 +13,9 @@ LABEL name="manager" \
       neuvector.role="manager" \
       neuvector.rev="git.xxxx"
 
-RUN adduser -S manager
-USER manager
+ARG user=manager
+RUN echo "$user:x:1000:1000::/nonexistent:/bin/bash" >> /etc/passwd && \
+    echo "$user:x:1000:" >> /etc/group
+USER $user
 
 ENTRYPOINT ["java", "-Xms256m", "-Xmx2048m", "-Djdk.tls.rejectClientInitiatedRenegotiation=true", "-jar", "/usr/local/bin/admin-assembly-1.0.jar"]

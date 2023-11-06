@@ -127,10 +127,18 @@ export class VulnerabilitiesComponent {
   printAssetsPDF() {
     this.advFilter = this.vulnerabilitiesFilterService.advFilter;
     this.masterData = {
-      workloadMap4Pdf: this.vulnerabilitiesService.workloadMap4Pdf,
-      hostMap4Pdf: this.vulnerabilitiesService.hostMap4Pdf,
-      platformMap4Pdf: this.vulnerabilitiesService.platformMap4Pdf,
-      imageMap4Pdf: this.vulnerabilitiesService.imageMap4Pdf,
+      workloadMap4Pdf: JSON.parse(
+        JSON.stringify(this.vulnerabilitiesService.workloadMap4Pdf)
+      ),
+      hostMap4Pdf: JSON.parse(
+        JSON.stringify(this.vulnerabilitiesService.hostMap4Pdf)
+      ),
+      platformMap4Pdf: JSON.parse(
+        JSON.stringify(this.vulnerabilitiesService.platformMap4Pdf)
+      ),
+      imageMap4Pdf: JSON.parse(
+        JSON.stringify(this.vulnerabilitiesService.imageMap4Pdf)
+      ),
     };
     console.log('this.masterData', this.masterData);
     this.vulnerabilitiesList = this.getFilteredVulnerabilities();
@@ -556,6 +564,7 @@ export class VulnerabilitiesComponent {
           image_name: '',
           high: 0,
           medium: 0,
+          low: 0,
           evaluation: 0,
           vulnerabilites: [],
         };

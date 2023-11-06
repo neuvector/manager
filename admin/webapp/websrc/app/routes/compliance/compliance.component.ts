@@ -90,10 +90,18 @@ export class ComplianceComponent implements OnInit, OnDestroy {
 
   printAssetsPDF() {
     this.masterData = {
-      workloadMap4Pdf: this.complianceService.workloadMap4Pdf,
-      hostMap4Pdf: this.complianceService.hostMap4Pdf,
-      platformMap4Pdf: this.complianceService.platformMap4Pdf,
-      imageMap4Pdf: this.complianceService.imageMap4Pdf,
+      workloadMap4Pdf: JSON.parse(
+        JSON.stringify(this.complianceService.workloadMap4Pdf)
+      ),
+      hostMap4Pdf: JSON.parse(
+        JSON.stringify(this.complianceService.hostMap4Pdf)
+      ),
+      platformMap4Pdf: JSON.parse(
+        JSON.stringify(this.complianceService.platformMap4Pdf)
+      ),
+      imageMap4Pdf: JSON.parse(
+        JSON.stringify(this.complianceService.imageMap4Pdf)
+      ),
     };
     this.complianceList = this.getFilteredCis();
     this.complianceList = this.complianceList.map(compliance => ({

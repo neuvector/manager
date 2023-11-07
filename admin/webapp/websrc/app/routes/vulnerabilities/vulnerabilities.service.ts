@@ -12,6 +12,7 @@ import {
   VulnerabilityAssetRaw,
   Workload,
   WorkloadsData,
+  CfgType,
 } from '@common/types';
 import { PlatformsData } from '@common/types/compliance/platformsData';
 import { setRisks, sortByDisplayName } from '@common/utils/common.utils';
@@ -190,6 +191,14 @@ export class VulnerabilitiesService {
 
   acceptVulnerability(profile: VulnerabilityProfile) {
     return this.risksHttpService.postCVEProfile(profile);
+  }
+
+  getProfileType(): Observable<CfgType> {
+    return this.risksHttpService.getCVEProfile().pipe(
+      map(profile => {
+        return profile.profiles[0].cfg_type || '';
+      })
+    );
   }
 
   private getDomain(): Observable<String[]> {
@@ -443,7 +452,8 @@ export class VulnerabilitiesService {
                     exist.low += 1;
                     this.hostMap.set(host.display_name, exist);
                     break;
-                  default: break;
+                  default:
+                    break;
                 }
               }
             });
@@ -471,7 +481,8 @@ export class VulnerabilitiesService {
                     exist.low += 1;
                     this.imageMap.set(image.display_name, exist);
                     break;
-                  default: break;
+                  default:
+                    break;
                 }
               }
             });

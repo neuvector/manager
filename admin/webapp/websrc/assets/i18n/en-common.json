@@ -1058,6 +1058,8 @@
   },
   "cveProfile": {
     "TITLE": "Vulnerability Profile",
+    "IMPORT": "Import",
+    "EXPORT": "Export",
     "RESET": "Reset",
     "ADD": "Add",
     "EDIT": "Edit",
@@ -1071,9 +1073,19 @@
     "IMAGES_PLACEHOLDER": "Add Images",
     "DOMAINS_PLACEHOLDER": "Add Namespaces",
     "ACCEPT": "Accept",
+    "CRD_ACCEPT": "Vulnerability profile is controlled by CRD.",
     "ACCEPT_VUL": "Accept Vulnerability",
     "NAME": "Vulnerability Name",
     "REPORTED_WITHIN": "Vulnerability Reported Within",
+    "import": {
+      "TITLE": "Import Option",
+      "MERGE": "Merge",
+      "REPLACE": "Replace"
+    },
+    "type": {
+      "CUSTOM": "User Created",
+      "GROUND": "CRD"
+    },
     "msg": {
       "REMOVE_CFM": "Are you sure you want to remove?",
       "REMOVE_OK": "Vulnerability profile entry is removed successfully!",
@@ -1081,7 +1093,11 @@
       "ADD_OK": "Vulnerability profile entry is added successfully!",
       "ADD_NG": "Error happens when adding vulnerability profile entry!",
       "UPDATE_OK": "Vulnerability profile entry is updated successfully!",
-      "UPDATE_NG": "Error happens when updating vulnerability profile entry!"
+      "UPDATE_NG": "Error happens when updating vulnerability profile entry!",
+      "EXPORT_PROFILE_OK": "Vulnerability profile is exported successfully!",
+      "EXPORT_PROFILE_NG": "Error happens when exporting vulnerability profile!",
+      "IMPORT_FINISH": "Vulnerability profile is imported successfully!",
+      "IMPORT_FAILED": "Error happens when importing vulnerability profile!"
     },
     "gridHeader": {
       "VULNERABILITY": "Vulnerability Name",

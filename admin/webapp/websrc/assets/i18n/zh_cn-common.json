@@ -1058,6 +1058,8 @@
   },
   "cveProfile": {
     "TITLE": "漏洞配置资料",
+    "IMPORT": "导入",
+    "EXPORT": "导出",
     "RESET": "重置",
     "ADD": "添加",
     "EDIT": "编辑",
@@ -1071,9 +1073,19 @@
     "IMAGES_PLACEHOLDER": "添加镜像",
     "DOMAINS_PLACEHOLDER": "添加命名空间",
     "ACCEPT": "接受",
+    "CRD_ACCEPT": "漏洞档案由 CRD 控制。",
     "ACCEPT_VUL": "接受漏洞",
     "NAME": "漏洞名称",
     "REPORTED_WITHIN": "漏洞报告于",
+    "import": {
+      "TITLE": "导入选项",
+      "MERGE": "合并",
+      "REPLACE": "替代"
+    },
+    "type": {
+      "CUSTOM": "用户创建",
+      "GROUND": "CRD"
+    },
     "msg": {
       "REMOVE_CFM": "您确定要删除?",
       "REMOVE_OK": "漏洞配置资料条目删除成功!",
@@ -1081,7 +1093,11 @@
       "ADD_OK": "漏洞配置资料条目添加成功!",
       "ADD_NG": "漏洞配置资料条目添加时发生错误!",
       "UPDATE_OK": "漏洞配置资料条目更新成功!",
-      "UPDATE_NG": "漏洞配置资料条目更新时发生错误!"
+      "UPDATE_NG": "漏洞配置资料条目更新时发生错误!",
+      "EXPORT_PROFILE_OK": "漏洞档案导出成功！",
+      "EXPORT_PROFILE_NG": "导出漏洞档案时出现错误！",
+      "IMPORT_FINISH": "漏洞档案导入成功！",
+      "IMPORT_FAILED": "导入漏洞档案时出现错误！"
     },
     "gridHeader": {
       "VULNERABILITY": "漏洞名称",

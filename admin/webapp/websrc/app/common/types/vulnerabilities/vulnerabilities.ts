@@ -1,4 +1,4 @@
-import { Compliance, IdName } from '@common/types';
+import { CfgType, Compliance, IdName } from '@common/types';
 import { VulnerabilityAssetPackages } from '@common/types/openapi_for_reference_only/vulnerabilityAssetPackages';
 import { VulnPackageVersion } from '@common/types/openapi_for_reference_only/vulnPackageVersion';
 
@@ -55,6 +55,7 @@ export interface VulnerabilitiesData {
 export interface VulnerabilityProfile {
   name: string;
   entries: VulnerabilityProfileEntry[];
+  cfg_type?: CfgType;
 }
 
 export interface VulnerabilityProfileEntry {

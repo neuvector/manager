@@ -12,6 +12,7 @@ import com.neu.model.{
   ComplianceNISTConfigData,
   ComplianceProfileConfig,
   ComplianceProfileConfigData,
+  ComplianceProfileExportData,
   VulnerabilityProfileConfigData,
   VulnerabilityProfileEntryConfigData,
   VulnerabilityProfileExportData
@@ -187,7 +188,7 @@ class RiskService()(implicit executionContext: ExecutionContext)
                         complete {
                           logger.info("Exporting CVE profile")
                           RestClient.httpRequestWithHeader(
-                            s"${baseClusterUri(tokenId)}/file/vulnerability/profile",
+                            s"${baseClusterUri(tokenId)}/file/$vulnerabilityProfileUrl",
                             POST,
                             vulnerabilityProfileExportDataToJson(vulnerabilityProfileExportData),
                             tokenId
@@ -215,7 +216,7 @@ class RiskService()(implicit executionContext: ExecutionContext)
                             logger.info("test baseUrl: {}", baseUrl)
                             logger.info("Transaction ID(Post): {}", transactionId)
                             RestClient.httpRequestWithHeader(
-                              s"$baseUrl/file/vulnerability/profile/config?option=$option",
+                              s"$baseUrl/file/$vulnerabilityProfileUrl/config?option=$option",
                               POST,
                               "",
                               tokenId,
@@ -248,7 +249,7 @@ class RiskService()(implicit executionContext: ExecutionContext)
                             val contentLines         = lines.slice(4, lines.length - 1)
                             val bodyData             = contentLines.mkString("\n").substring(3)
                             RestClient.httpRequestWithHeader(
-                              s"$baseUrl/file/vulnerability/profile/config?option=$option",
+                              s"$baseUrl/file/$vulnerabilityProfileUrl/config?option=$option",
                               POST,
                               bodyData,
                               tokenId
@@ -310,48 +311,135 @@ class RiskService()(implicit executionContext: ExecutionContext)
                 }
               }
             } ~
-            path("profile") {
-              get {
-                parameter('name.?) { name =>
-                  Utils.respondWithWebServerHeaders() {
-                    complete {
-                      logger.info(s"Getting compliance profile $name ...")
-                      name.fold {
-                        RestClient.httpRequestWithHeader(
-                          s"${baseClusterUri(tokenId)}/$complianceProfileUrl",
-                          GET,
-                          "",
-                          tokenId
-                        )
-                      } { profileName =>
-                        RestClient.httpRequestWithHeader(
-                          s"${baseClusterUri(tokenId)}/$complianceProfileUrl/$profileName",
-                          GET,
-                          "",
-                          tokenId
-                        )
+            pathPrefix("profile") {
+              pathEnd {
+                get {
+                  parameter('name.?) { name =>
+                    Utils.respondWithWebServerHeaders() {
+                      complete {
+                        logger.info(s"Getting compliance profile $name ...")
+                        name.fold {
+                          RestClient.httpRequestWithHeader(
+                            s"${baseClusterUri(tokenId)}/$complianceProfileUrl",
+                            GET,
+                            "",
+                            tokenId
+                          )
+                        } { profileName =>
+                          RestClient.httpRequestWithHeader(
+                            s"${baseClusterUri(tokenId)}/$complianceProfileUrl/$profileName",
+                            GET,
+                            "",
+                            tokenId
+                          )
+                        }
+                      }
+                    }
+                  }
+                } ~
+                patch {
+                  entity(as[ComplianceProfileConfig]) { profileConfig =>
+                    {
+                      Utils.respondWithWebServerHeaders() {
+                        complete {
+                          val payload = configWrapToJson(
+                            ComplianceProfileConfigData(
+                              profileConfig
+                            )
+                          )
+                          logger.info("Updating compliance profile: {}", profileConfig.name)
+                          RestClient.httpRequestWithHeader(
+                            s"${baseClusterUri(tokenId)}/$complianceProfileUrl/${UrlEscapers.urlFragmentEscaper().escape(profileConfig.name)}",
+                            PATCH,
+                            payload,
+                            tokenId
+                          )
+                        }
                       }
                     }
                   }
                 }
               } ~
-              patch {
-                entity(as[ComplianceProfileConfig]) { profileConfig =>
-                  {
+              path("export") {
+                post {
+                  entity(as[ComplianceProfileExportData]) { complianceProfileExportData =>
+                    {
+                      Utils.respondWithWebServerHeaders() {
+                        complete {
+                          logger.info("Exporting compliance profile")
+                          RestClient.httpRequestWithHeader(
+                            s"${baseClusterUri(tokenId)}/file/$complianceProfileUrl",
+                            POST,
+                            complianceProfileExportDataToJson(complianceProfileExportData),
+                            tokenId
+                          )
+                        }
+                      }
+                    }
+                  }
+                }
+              } ~
+              path("import") {
+                post {
+                  headerValueByName("X-Transaction-Id") { transactionId =>
                     Utils.respondWithWebServerHeaders() {
                       complete {
-                        val payload = configWrapToJson(
-                          ComplianceProfileConfigData(
-                            profileConfig
+                        try {
+                          val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
+                          val baseUrl = cachedBaseUrl.fold {
+                            baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
+                          }(
+                            cachedBaseUrl => cachedBaseUrl
                           )
-                        )
-                        logger.info("Updating compliance profile: {}", profileConfig.name)
-                        RestClient.httpRequestWithHeader(
-                          s"${baseClusterUri(tokenId)}/$complianceProfileUrl/${UrlEscapers.urlFragmentEscaper().escape(profileConfig.name)}",
-                          PATCH,
-                          payload,
-                          tokenId
-                        )
+                          AuthenticationManager.setBaseUrl(tokenId, baseUrl)
+                          logger.info("test baseUrl: {}", baseUrl)
+                          logger.info("Transaction ID(Post): {}", transactionId)
+                          RestClient.httpRequestWithHeader(
+                            s"$baseUrl/file/$complianceProfileUrl/config",
+                            POST,
+                            "",
+                            tokenId,
+                            Some(transactionId)
+                          )
+                        } catch {
+                          case NonFatal(e) =>
+                            RestClient.handleError(
+                              timeOutStatus,
+                              authenticationFailedStatus,
+                              serverErrorStatus,
+                              e
+                            )
+                        }
+                      }
+                    }
+                  } ~
+                  entity(as[String]) { formData =>
+                    Utils.respondWithWebServerHeaders() {
+                      complete {
+                        try {
+                          val baseUrl =
+                            baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
+                          AuthenticationManager.setBaseUrl(tokenId, baseUrl)
+                          logger.info("test baseUrl: {}", baseUrl)
+                          logger.info("No Transaction ID(Post)")
+                          val lines: Array[String] = formData.split("\n")
+                          val contentLines         = lines.slice(4, lines.length - 1)
+                          val bodyData             = contentLines.mkString("\n").substring(3)
+                          RestClient.httpRequestWithHeader(
+                            s"$baseUrl/file/$complianceProfileUrl/config",
+                            POST,
+                            bodyData,
+                            tokenId
+                          )
+                        } catch {
+                          case NonFatal(e) =>
+                            RestClient.handleError(
+                              timeOutStatus,
+                              authenticationFailedStatus,
+                              serverErrorStatus,
+                              e
+                            )
+                        }
                       }
                     }
                   }

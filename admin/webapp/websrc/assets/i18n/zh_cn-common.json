@@ -1415,7 +1415,13 @@
       "CURR_TEMPLATES": "当前模版",
       "APPLY_REG": "应用法规",
       "CURR_REG": "当前法规",
-      "ADD_REG": "添加法规"
+      "ADD_REG": "添加法规",
+      "msg": {
+        "EXPORT_PROFILE_OK": "合规档案已成功导出！",
+        "EXPORT_PROFILE_NG": "导出合规档案时出现错！",
+        "IMPORT_FINISH": "合规档案导入成功！",
+        "IMPORT_FAILED": "导入合规档案时出现错误！"
+      }
     },
     "report": {
       "TITLE": "合规报告 (合规视角)",

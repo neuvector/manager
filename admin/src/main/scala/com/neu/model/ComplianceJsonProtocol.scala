@@ -44,6 +44,9 @@ object ComplianceJsonProtocol extends DefaultJsonProtocol {
       ComplianceProfileConfigData
     )
 
+  implicit val complianceProfileExportDataFormat: RootJsonFormat[ComplianceProfileExportData] =
+    jsonFormat1(ComplianceProfileExportData)
+
   def complianceNISTConfigDataToJson(config: ComplianceNISTConfigData): String =
     config.toJson.compactPrint
 
@@ -52,4 +55,8 @@ object ComplianceJsonProtocol extends DefaultJsonProtocol {
 
   def profileWrapToJson(profile: ComplianceProfileEntryData): String =
     profile.toJson.compactPrint
+
+  def complianceProfileExportDataToJson(
+    complianceProfileExportData: ComplianceProfileExportData
+  ): String = complianceProfileExportData.toJson.compactPrint
 }

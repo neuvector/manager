@@ -1415,7 +1415,13 @@
       "CURR_TEMPLATES": "Current Templates",
       "APPLY_REG": "Apply Regulations",
       "CURR_REG": "Current Regulations",
-      "ADD_REG": "Add Regulations"
+      "ADD_REG": "Add Regulations",
+      "msg": {
+        "EXPORT_PROFILE_OK": "Compliance profile is exported successfully!",
+        "EXPORT_PROFILE_NG": "Error happens when exporting compliance profile!",
+        "IMPORT_FINISH": "Compliance profile is imported successfully!",
+        "IMPORT_FAILED": "Error happens when importing compliance profile!"
+      }
     },
     "report": {
       "TITLE": "Compliance Reports (Compliance View)",

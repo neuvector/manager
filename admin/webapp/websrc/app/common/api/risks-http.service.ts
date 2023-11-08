@@ -107,6 +107,14 @@ export class RisksHttpService {
     );
   }
 
+  exportComplianceProfile(names: string[]) {
+    return GlobalVariable.http.post(
+      PathConstant.EXPORT_COMPLIANCE_PROFILE,
+      { names },
+      { observe: 'response', responseType: 'text' }
+    );
+  }
+
   getComplianceProfileTemplate(): Observable<ComplianceProfileTemplateData> {
     return GlobalVariable.http.get<ComplianceProfileTemplateData>(
       PathConstant.COMPLIANCE_TEMPLATE_URL

@@ -29,7 +29,7 @@ export class PdfGenerationDialogComponent implements OnInit {
     'custom',
   ];
   form = new FormGroup({
-    dateOption: new FormControl('none'),
+    dateOption: new FormControl('all'),
     customDate: new FormControl(
       {
         value: null,

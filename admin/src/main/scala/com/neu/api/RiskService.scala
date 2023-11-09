@@ -3,6 +3,7 @@ package com.neu.api
 import com.google.common.net.UrlEscapers
 import com.neu.client.RestClient
 import com.neu.client.RestClient._
+import com.neu.core.AuthenticationManager
 import com.neu.core.CisNISTManager
 import com.neu.model.ComplianceNISTJsonProtocol._
 import com.neu.model.ComplianceJsonProtocol._
@@ -12,7 +13,8 @@ import com.neu.model.{
   ComplianceProfileConfig,
   ComplianceProfileConfigData,
   VulnerabilityProfileConfigData,
-  VulnerabilityProfileEntryConfigData
+  VulnerabilityProfileEntryConfigData,
+  VulnerabilityProfileExportData
 }
 import com.typesafe.scalalogging.LazyLogging
 import spray.can.Http._
@@ -33,6 +35,8 @@ class RiskService()(implicit executionContext: ExecutionContext)
   private val complianceUrl           = "compliance/asset"
   private val complianceProfileUrl    = "compliance/profile"
   private val vulnerabilityProfileUrl = "vulnerability/profile"
+
+  final val serverErrorStatus = "Status: 503"
 
   val riskRoute: Route =
     headerValueByName("Token") { tokenId =>
@@ -170,6 +174,95 @@ class RiskService()(implicit executionContext: ExecutionContext)
                           "",
                           tokenId
                         )
+                      }
+                    }
+                  }
+                }
+              } ~
+              path("export") {
+                post {
+                  entity(as[VulnerabilityProfileExportData]) { vulnerabilityProfileExportData =>
+                    {
+                      Utils.respondWithWebServerHeaders() {
+                        complete {
+                          logger.info("Exporting CVE profile")
+                          RestClient.httpRequestWithHeader(
+                            s"${baseClusterUri(tokenId)}/file/vulnerability/profile",
+                            POST,
+                            vulnerabilityProfileExportDataToJson(vulnerabilityProfileExportData),
+                            tokenId
+                          )
+                        }
+                      }
+                    }
+                  }
+                }
+              } ~
+              path("import") {
+                post {
+                  headerValueByName("X-Transaction-Id") { transactionId =>
+                    Utils.respondWithWebServerHeaders() {
+                      parameter('option) { option =>
+                        complete {
+                          try {
+                            val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
+                            val baseUrl = cachedBaseUrl.fold {
+                              baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
+                            }(
+                              cachedBaseUrl => cachedBaseUrl
+                            )
+                            AuthenticationManager.setBaseUrl(tokenId, baseUrl)
+                            logger.info("test baseUrl: {}", baseUrl)
+                            logger.info("Transaction ID(Post): {}", transactionId)
+                            RestClient.httpRequestWithHeader(
+                              s"$baseUrl/file/vulnerability/profile/config?option=$option",
+                              POST,
+                              "",
+                              tokenId,
+                              Some(transactionId)
+                            )
+                          } catch {
+                            case NonFatal(e) =>
+                              RestClient.handleError(
+                                timeOutStatus,
+                                authenticationFailedStatus,
+                                serverErrorStatus,
+                                e
+                              )
+                          }
+                        }
+                      }
+                    }
+                  } ~
+                  entity(as[String]) { formData =>
+                    Utils.respondWithWebServerHeaders() {
+                      parameter('option) { option =>
+                        complete {
+                          try {
+                            val baseUrl =
+                              baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
+                            AuthenticationManager.setBaseUrl(tokenId, baseUrl)
+                            logger.info("test baseUrl: {}", baseUrl)
+                            logger.info("No Transaction ID(Post)")
+                            val lines: Array[String] = formData.split("\n")
+                            val contentLines         = lines.slice(4, lines.length - 1)
+                            val bodyData             = contentLines.mkString("\n").substring(3)
+                            RestClient.httpRequestWithHeader(
+                              s"$baseUrl/file/vulnerability/profile/config?option=$option",
+                              POST,
+                              bodyData,
+                              tokenId
+                            )
+                          } catch {
+                            case NonFatal(e) =>
+                              RestClient.handleError(
+                                timeOutStatus,
+                                authenticationFailedStatus,
+                                serverErrorStatus,
+                                e
+                              )
+                          }
+                        }
                       }
                     }
                   }

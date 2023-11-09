@@ -24,6 +24,8 @@ export type LastModifiedDateOption =
   | 'threemonths'
   | 'custom';
 
+export type CfgType = 'ground' | 'user_created' | '';
+
 export interface ErrorResponse {
   code: number;
   error: string;

@@ -127,6 +127,8 @@ export class PathConstant {
   public static PROMOTE_ADMISSION_RULE = 'admission/promote'; //policy
   public static CVE_PROFILE = 'risk/cve/profile'; //risks
   public static CVE_PROFILE_ENTRY = 'risk/cve/profile/entry'; //risks
+  public static EXPORT_CVE_PROFILE = 'risk/cve/profile/export'; //risks
+  public static IMPORT_CVE_PROFILE = 'risk/cve/profile/import'; //risks
   public static SYSTEM_RBAC_URL = 'dashboard/rbac'; //dashboard
   public static SERVICE_ALL = 'service/all'; //policy
   public static DEBUG_URL = 'debug'; //config

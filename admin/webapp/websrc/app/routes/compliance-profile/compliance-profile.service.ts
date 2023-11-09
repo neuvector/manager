@@ -83,6 +83,10 @@ export class ComplianceProfileService {
     return this.assetsHttpService.postDomain(payload);
   }
 
+  exportProfile(names: string[]) {
+    return this.risksHttpService.exportComplianceProfile(names);
+  }
+
   private getTemplate(): Observable<ComplianceProfileTemplateData> {
     if (!this.authUtils.getDisplayFlag('read_compliance_profile')) {
       return of({ list: { compliance: [] } });

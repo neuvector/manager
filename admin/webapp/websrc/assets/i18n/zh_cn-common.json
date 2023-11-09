@@ -1418,7 +1418,7 @@
       "ADD_REG": "添加法规",
       "msg": {
         "EXPORT_PROFILE_OK": "合规档案已成功导出！",
-        "EXPORT_PROFILE_NG": "导出合规档案时出现错！",
+        "EXPORT_PROFILE_NG": "导出合规档案时出现错误！",
         "IMPORT_FINISH": "合规档案导入成功！",
         "IMPORT_FAILED": "导入合规档案时出现错误！"
       }

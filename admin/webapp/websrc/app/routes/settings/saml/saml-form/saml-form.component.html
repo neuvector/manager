@@ -45,6 +45,47 @@
         </mat-error>
       </mat-form-field>
     </div>
+    <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
+      <i class="eos-icons mr-3 text-primary">logout</i>
+      <span class="mr-3">{{ 'okta.SAML_SLO' | translate }}</span>
+      <mat-slide-toggle formControlName="slo_enabled"></mat-slide-toggle>
+    </div>
+    <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
+      <i class="eos-icons mr-3 text-primary">organization</i>
+      <mat-form-field appearance="standard" class="w-100">
+        <mat-label>{{ 'okta.SLO_URL' | translate }}</mat-label>
+        <input
+          formControlName="slo_url"
+          matInput
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
+        <mat-error *ngIf="samlForm.controls.slo_url.hasError('required')">
+          {{ 'general.REQUIRED' | translate }}
+        </mat-error>
+        <mat-error *ngIf="samlForm.controls.slo_url.hasError('invalidURL')">
+          {{ 'okta.INVALID_URL' | translate }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
+      <i class="eos-icons mr-3 text-primary">verified</i>
+      <mat-form-field appearance="standard" class="w-100">
+        <mat-label>{{ 'okta.SLO_CERT' | translate }}</mat-label>
+        <textarea
+          cdkTextareaAutosize
+          formControlName="signing_cert"
+          matInput></textarea>
+      </mat-form-field>
+    </div>
+    <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
+      <i class="eos-icons mr-3 text-primary">vpn_key</i>
+      <mat-form-field appearance="standard" class="w-100">
+        <mat-label>{{ 'okta.SLO_KEY' | translate }}</mat-label>
+        <textarea
+          cdkTextareaAutosize
+          formControlName="signing_key"
+          matInput></textarea>
+      </mat-form-field>
+    </div>
     <ng-container formArrayName="x509_certs">
       <div
         *ngFor="let _ of x509_certs.controls; let i = index"

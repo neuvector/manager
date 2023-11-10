@@ -387,6 +387,7 @@
         "INGRESS": "Ingress",
         "EGRESS": "Egress",
         "EXPOSURES": "Exposures",
+        "EXTERNAL_HOST": "External Host",
         "POLICY_COUNT": "Application Conversations",
         "BYTES": "Application Volume",
         "INGRESS_CONTAINERS": "Ingress Pods",

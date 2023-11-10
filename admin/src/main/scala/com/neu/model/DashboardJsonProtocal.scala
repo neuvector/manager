@@ -724,6 +724,17 @@ case class Metrics(
   cves: RiskScoreMetricsCVE
 )
 
+case class ConversationReportEntry(
+  bytes: Long,
+  sessions: Int,
+  port: Option[String],
+  application: Option[String],
+  policy_action: String,
+  client_ip: Option[String],
+  server_ip: Option[String],
+  fqdn: Option[String]
+)
+
 case class Exposure(
   id: String,
   name: String,
@@ -735,7 +746,8 @@ case class Exposure(
   policy_action: String,
   protocols: Option[Array[String]],
   applications: Option[Array[String]],
-  ports: Option[Array[String]]
+  ports: Option[Array[String]],
+  entries: Option[Array[ConversationReportEntry]]
 )
 
 case class InternalSystemData(
@@ -968,8 +980,11 @@ object DashboardJsonProtocol extends DefaultJsonProtocol with LazyLogging {
   implicit val riskScoreMetricsCVEFormat: RootJsonFormat[RiskScoreMetricsCVE] = jsonFormat5(
     RiskScoreMetricsCVE
   )
-  implicit val metricsFormat: RootJsonFormat[Metrics]           = jsonFormat9(Metrics)
-  implicit val exposureFormat: RootJsonFormat[Exposure]         = jsonFormat11(Exposure)
+  implicit val metricsFormat: RootJsonFormat[Metrics] = jsonFormat9(Metrics)
+  implicit val conversationReportEntryFormat: RootJsonFormat[ConversationReportEntry] = jsonFormat8(
+    ConversationReportEntry
+  )
+  implicit val exposureFormat: RootJsonFormat[Exposure]         = jsonFormat12(Exposure)
   implicit val scoreOutput2Format: RootJsonFormat[ScoreOutput2] = jsonFormat4(ScoreOutput2)
   implicit val internalSystemDataFormat: RootJsonFormat[InternalSystemData] = jsonFormat4(
     InternalSystemData

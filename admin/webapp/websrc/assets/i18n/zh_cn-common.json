@@ -387,6 +387,7 @@
         "INGRESS": "接入",
         "EGRESS": "接出",
         "EXPOSURES": "暴露的",
+        "EXTERNAL_HOST": "外部主机",
         "POLICY_COUNT": "应用会话",
         "BYTES": "应用流量",
         "INGRESS_CONTAINERS": "入口Pod",

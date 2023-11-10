@@ -11,8 +11,9 @@ import { ExposedServicePodGridComponent } from '@components/exposed-service-pod-
 export class ExposureGridComponent implements OnInit {
   @ViewChild('ingressGrid') ingressGrid!: ExposedServicePodGridComponent;
   @ViewChild('egressGrid') egressGrid!: ExposedServicePodGridComponent;
-  @Input() ingress!: Array<HierarchicalExposure>;
-  @Input() egress!: Array<HierarchicalExposure>;
+  @Input() source: string;
+  @Input() ingress!: Array<any>;
+  @Input() egress!: Array<any>;
   @Input() selectedIndex: number = 0;
   @Input() clearSession: boolean = false;
 

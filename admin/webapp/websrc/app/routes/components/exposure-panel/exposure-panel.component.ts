@@ -1,11 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { InternalSystemInfo, HierarchicalExposure } from '@common/types';
+import { InternalSystemInfo, HierarchicalExposure, ConversationReportEntry, Exposure } from '@common/types';
 import { parseExposureHierarchicalData } from '@common/utils/common.utils';
 import { DashboardExposureConversationsService } from '@routes/dashboard/thread-services/dashboard-exposure-conversations.service';
+import { DashboardService } from '@common/services/dashboard.service';
 import { arrayToCsv } from '@common/utils/common.utils';
 import { saveAs } from 'file-saver';
 import { UtilsService } from '@common/utils/app.utils';
 import { TranslateService } from '@ngx-translate/core';
+import { uuid } from '@common/utils/common.utils';
 
 @Component({
   selector: 'app-exposure-panel',
@@ -17,10 +19,12 @@ export class ExposurePanelComponent implements OnInit {
   hierarchicalIngressList!: Array<HierarchicalExposure>;
   hierarchicalEgressList!: Array<HierarchicalExposure>;
   instructions: Array<string> = [];
+  isIpMapReady: boolean = false;
   Array = Array;
 
   constructor(
     public dashboardExposureConversationsService: DashboardExposureConversationsService,
+    private dashboardService: DashboardService,
     private utilsService: UtilsService,
     private translate: TranslateService
   ) {}
@@ -30,64 +34,103 @@ export class ExposurePanelComponent implements OnInit {
       this.translate.instant('dashboard.help.exposure.txt1'),
       this.translate.instant('dashboard.help.exposure.txt2')
     ];
-    this.hierarchicalIngressList = parseExposureHierarchicalData(
-      this.scoreInfo.ingress
-    );
-    this.hierarchicalEgressList = parseExposureHierarchicalData(
-      this.scoreInfo.egress
-    );
+    this.retrieveIpLocation(this.scoreInfo);
   }
 
+  retrieveIpLocation = (scoreInfo) => {
+    let ipList = this.getIpList(scoreInfo);
+    this.isIpMapReady = false;
+    this.dashboardService.getIpGeoInfo(ipList).subscribe(
+      (response: any) => {
+        let ipMap = response.ip_map;
+        this.hierarchicalIngressList = parseExposureHierarchicalData(
+          this.addIpLocation(this.scoreInfo.ingress, ipMap, 'ingress')
+        ) || [];
+        this.hierarchicalEgressList = parseExposureHierarchicalData(
+          this.addIpLocation(this.scoreInfo.egress, ipMap, 'egress')
+        ) || [];
+        console.log("this.hierarchicalEgressList", this.hierarchicalEgressList)
+        this.isIpMapReady = true;
+      },
+      error => {}
+    );
+  };
+
   downloadExposureConversationCsv = () => {
-    let exposureList: any = [];
-    this.dashboardExposureConversationsService.exposureConversationList.forEach(exposure => {
-      exposure.entries.map((entry, index) => {
-        let _entry = {};
-        if (index === 0) {
-          _entry = Object.assign({
-            Direction: exposure.type,
-            Host: exposure.type === "ingress" ? exposure.to.host_name : exposure.from.host_name,
-            Namespace: exposure.type === "ingress" ? exposure.to.domain : exposure.from.domain,
-            Image: exposure.type === "ingress" ? exposure.to.image : exposure.from.image,
-            Service: exposure.type === "ingress" ? exposure.to.service : exposure.from.service,
-            Pod: exposure.type === "ingress" ? exposure.to.display_name : exposure.from.display_name,
-            Applications: exposure.applications.concat(exposure.ports).join(";"),
-            'Policy Mode': exposure.type === "ingress" ? exposure.to.policy_mode : exposure.from.policy_mode,
-            Action: exposure.policy_action,
-            'External Count': exposure.entries.length
-          }, _entry);
-        } else {
-          _entry = Object.assign({
-            direction: "",
-            host: "",
-            namespace: "",
-            image: "",
-            service: "",
-            pod: "",
-            applications: "",
-            'policy mode': "",
-            action: "",
-            'External Count': ""
-          }, _entry);
-        }
-        _entry = Object.assign(_entry, {
-          'External Host Name': entry.fqdn,
-          'External IP': exposure.type === "ingress" ? entry.client_ip : entry.server_ip,
-          'External Application': entry.application,
-          'External Port': entry.port,
-          'External Data Bytes': entry.bytes,
-          'Exteranl Sessions': entry.sessions,
-          'Exteranl Action': entry.policy_action
-        });
+    let ingressReport = this.getExposureReportData(this.scoreInfo.ingress, 'ingress');
+    let egressReport = this.getExposureReportData(this.scoreInfo.egress, 'egress');
 
-        exposureList.push(_entry);
-      });
-    });
+    let exposureReport = ingressReport.concat(egressReport);
 
-    let csv = arrayToCsv(exposureList);
+    let csv = arrayToCsv(exposureReport);
     let blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
     let filename = `exposure_report_${this.utilsService.parseDatetimeStr(new Date())}.csv`;
 
     saveAs(blob, filename);
+  };
+
+  private getIpList = (scoreInfo) => {
+    return scoreInfo.ingress.flatMap(ingress => {
+      return ingress.entries ? ingress.entries.map(entry => entry.client_ip) : [];
+    }).concat(scoreInfo.egress.flatMap(egress => {
+      return egress.entries ? egress.entries.map(entry => entry.server_ip) : [];
+    }));
+  };
+
+  private addIpLocation = (exposureList: Array<Exposure>, ipMap: any, direction: string) => {
+    return exposureList
+    .sort((a, b) => (a.service + a.pod_name).localeCompare(b.service + b.pod_name))
+    .map((exposure: Exposure) => {
+      exposure.entries = exposure.entries?.map(entry => {
+        entry.id = uuid();
+        entry.ip = direction === 'ingress' ? entry.client_ip : entry.server_ip;
+        entry.country_code = ipMap[entry.ip || ''].country_code.toLowerCase();
+        entry.country_name = ipMap[entry.ip || ''].country_name;
+        return entry;
+      }) || [];
+      return exposure;
+    });
+  };
+
+  private getExposureReportData = (exposureList: Array<Exposure>, direction: string) => {
+    let exposureReport: any = [];
+    exposureList
+    .forEach((exposure: Exposure) => {
+      exposureReport.push(
+        {
+          Direction: direction,
+          Service: exposure.service,
+          Pod: exposure.pod_name,
+          'Policy Mode': exposure.policy_mode,
+          'External Location': '-',
+          'External IP': '-',
+          'External Host': '-',
+          Port: '',
+          Bytes: exposure.entries?.reduce((accu, curr) => accu + curr.bytes, 0) || 0,
+          Applications: exposure.applications?.join(', ') || '',
+          Sessions: exposure.entries?.reduce((accu, curr) => accu + curr.sessions, 0) || 0,
+          Action: exposure.policy_action
+        }
+      );
+      exposure.entries?.forEach(entry => {
+        exposureReport.push(
+          {
+            Direction: '',
+            Service: '',
+            Pod: '',
+            'Policy Mode': '',
+            'External Location': entry.country_name !== '-' ? entry.country_name : '',
+            'External IP': entry.ip,
+            'External Host': entry.fqdn,
+            Port: entry.port,
+            Bytes: entry.bytes,
+            Applications: entry.application,
+            Sessions: entry.sessions,
+            Action: entry.policy_action
+          }
+        );
+      })
+    });
+    return exposureReport;
   };
 }

@@ -64,6 +64,21 @@ export interface Metrics {
   cves: RiskScoreMetricsCVE;
 }
 
+export interface ConversationReportEntry {
+  id: string;
+  bytes: number;
+  sessions: number;
+  port?: string;
+  application?: string;
+  policy_action: string;
+  client_ip?: string;
+  server_ip?: string;
+  fqdn: string;
+  ip?: string;
+  country_code?: string;
+  country_name?: string;
+}
+
 export interface Exposure {
   id: string;
   name: string;
@@ -76,6 +91,7 @@ export interface Exposure {
   protocols?: string[];
   applications?: string[];
   ports?: number[];
+  entries?: ConversationReportEntry[];
 }
 
 export interface InternalSystemInfo {

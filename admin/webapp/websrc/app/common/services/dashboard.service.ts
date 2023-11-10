@@ -52,6 +52,10 @@ export class DashboardService {
     return this.dashboardHttpService.getSystemRBAC().pipe();
   };
 
+  getIpGeoInfo = (ipList: Array<string>) => {
+    return GlobalVariable.http.patch(PathConstant.IP_GEO_URL, ipList).pipe();
+  };
+
   getBasicData = (isGlobalUser: boolean) => {
     if (!GlobalVariable.hasInitializedSummary) {
       console.warn('Summary uninitialized');

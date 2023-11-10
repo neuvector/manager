@@ -1,5 +1,8 @@
+import { CfgType } from '../common/common';
+
 export interface ComplianceProfile {
   name: string;
+  cfg_type: CfgType;
   disable_system: boolean;
   entries: complianceProfileEntries[];
 }

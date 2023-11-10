@@ -7,7 +7,11 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { ComplianceProfileTemplateEntry, ErrorResponse } from '@common/types';
+import {
+  CfgType,
+  ComplianceProfileTemplateEntry,
+  ErrorResponse,
+} from '@common/types';
 import {
   ColDef,
   GridApi,
@@ -28,6 +32,11 @@ import { NotificationService } from '@services/notification.service';
 import { UtilsService } from '@common/utils/app.utils';
 import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
 import { AuthUtilsService } from '@common/utils/auth.utils';
+import { GlobalConstant } from '@common/constants/global.constant';
+import { MapConstant } from '@common/constants/map.constant';
+import { ImportFileModalComponent } from '@components/ui/import-file-modal/import-file-modal.component';
+import { PathConstant } from '@common/constants/path.constant';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-compliance-profile-templates-table',
@@ -39,6 +48,13 @@ export class ComplianceProfileTemplatesTableComponent
 {
   @Input() rowData!: ComplianceProfileTemplateEntry[];
   @Input() hideSystemInit!: boolean;
+  @Input() cfgType!: CfgType;
+  get cfgTypeClass() {
+    let cfgType = (
+      this.cfgType ? this.cfgType : GlobalConstant.CFG_TYPE.CUSTOMER
+    ).toUpperCase();
+    return MapConstant.colourMap[cfgType];
+  }
   isNamespaceUser!: boolean;
   gridOptions!: GridOptions;
   filteredCount = 0;
@@ -136,7 +152,7 @@ export class ComplianceProfileTemplatesTableComponent
     this.isNamespaceUser = this.authUtilsService.userPermission.isNamespaceUser;
     this.isWriteComplianceProfileAuthorized =
       this.authUtilsService.getDisplayFlag('write_compliance_profile');
-    if (!this.isWriteComplianceProfileAuthorized) {
+    if (!this.isWriteComplianceProfileAuthorized || this.cfgType === 'ground') {
       this.columnDefs.pop();
     }
     this.hideSystem = this.hideSystemInit;
@@ -319,6 +335,45 @@ export class ComplianceProfileTemplatesTableComponent
           this.translate.instant('cis.profile.DEPLOY_FAILED')
         );
       },
+    });
+  }
+
+  exportProfile(): void {
+    let names = ['default'];
+    this.complianceProfileService.exportProfile(names).subscribe(
+      response => {
+        let fileName = this.utils.getExportedFileName(response);
+        let blob = new Blob([response.body || ''], {
+          type: 'text/plain;charset=utf-8',
+        });
+        saveAs(blob, fileName);
+        this.notificationService.open(
+          this.translate.instant('cis.profile.msg.EXPORT_PROFILE_OK')
+        );
+      },
+      error => {
+        this.notificationService.openError(
+          error.error,
+          this.translate.instant('cis.profile.msg.EXPORT_PROFILE_NG')
+        );
+      }
+    );
+  }
+
+  openImportProfileModal(): void {
+    const importDialogRef = this.dialog.open(ImportFileModalComponent, {
+      data: {
+        importUrl: PathConstant.IMPORT_COMPLIANCE_PROFILE,
+        importMsg: {
+          success: this.translate.instant('cis.profile.msg.IMPORT_FINISH'),
+          error: this.translate.instant('cis.profile.msg.IMPORT_FAILED'),
+        },
+      },
+    });
+    importDialogRef.afterClosed().subscribe(result => {
+      setTimeout(() => {
+        this.complianceProfileService.refresh();
+      }, 500);
     });
   }
 }

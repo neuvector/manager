@@ -46,6 +46,8 @@ export class PathConstant {
   public static RISK_COMPLIANCE_URL = 'risk/compliance'; //risks
   public static RISK_COMPLIANCE_NIST_URL = 'risk/complianceNIST'; //risks
   public static COMPLIANCE_PROFILE_URL = 'risk/compliance/profile'; //risks
+  public static EXPORT_COMPLIANCE_PROFILE = 'risk/compliance/profile/export'; //risks
+  public static IMPORT_COMPLIANCE_PROFILE = 'risk/compliance/profile/import'; //risks
   public static COMPLIANCE_TEMPLATE_URL = 'risk/compliance/template'; //risks
   public static SCAN_URL = 'scan/workload'; //assets
   public static SCAN_HOST_URL = 'scan/host'; //assets

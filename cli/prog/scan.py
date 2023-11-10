@@ -267,6 +267,9 @@ def show_scan_profile(data, name):
     if not profile:
         return
 
+    if "cfg_type" in profile and profile["cfg_type"] == "ground":
+        click.echo("This profile is controlled by CRD rule")
+
     entries = profile["entries"]
     for e in entries:
         _vuln_profile_list_display_format(e)
@@ -309,7 +312,7 @@ def set_scan_profile(data):
 @click.option('--domains', multiple=True, help="domain filters.")
 @click.pass_obj
 def set_scan_profile_entry(data, id, name, comment, days, images, domains):
-    """Show vulnerability profile entry."""
+    """Set vulnerability profile entry."""
     p = {"id": id, "name": name}
     if comment:
         p["comment"] = comment
@@ -320,7 +323,6 @@ def set_scan_profile_entry(data, id, name, comment, days, images, domains):
     if domains:
         p["domains"] = domains
     data.client.config("vulnerability/profile/default/entry", id, {"config": p})
-
 
 # --
 
@@ -344,7 +346,7 @@ def create_scan_profile(data):
 @click.option('--domains', multiple=True, help="domain filters.")
 @click.pass_obj
 def set_scan_profile_entry(data, name, comment, days, images, domains):
-    """Show vulnerability profile entry."""
+    """Create vulnerability profile entry."""
     p = {"name": name}
     if comment:
         p["comment"] = comment

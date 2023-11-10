@@ -10,19 +10,22 @@ import { GlobalConstant } from '../constants/global.constant';
 import { GlobalVariable } from '../variables/global.variable';
 import { SessionService } from './session.service';
 import { CommonHttpService } from '@common/api/common-http.service';
-import { Subject } from "rxjs";
+import { Subject } from 'rxjs';
+import { AuthHttpService } from '@common/api/auth-http.service';
 
 @Injectable()
 export class AuthService {
   private _environmentVariablesRetrieved = new Subject();
-  public onEnvironmentVariablesRetrieved$ = this._environmentVariablesRetrieved.asObservable();
+  public onEnvironmentVariablesRetrieved$ =
+    this._environmentVariablesRetrieved.asObservable();
 
   constructor(
     private commonHttpService: CommonHttpService,
+    private authHttpService: AuthHttpService,
     private router: Router,
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
     @Inject(LOCAL_STORAGE) private localStorage: StorageService,
-    private sessionService: SessionService,
+    private sessionService: SessionService
   ) {}
 
   getTokenAuthServer() {
@@ -86,7 +89,18 @@ export class AuthService {
     if (GlobalVariable.isSUSESSO && !isNVTimeout && !isSSOTimeout)
       this.router.navigate(['login']);
     else {
-      this.doLogout(isNVTimeout);
+      this.authHttpService.getSamlSLOServer().subscribe({
+        next: saml => {
+          if (saml) {
+            this.doLogout(isNVTimeout, saml.redirect_url);
+          } else {
+            this.doLogout(isNVTimeout, '');
+          }
+        },
+        error: error => {
+          this.doLogout(isNVTimeout, '');
+        },
+      });
     }
   }
 
@@ -128,11 +142,11 @@ export class AuthService {
     return GlobalVariable.http.patch(PathConstant.HEART_BEAT_URL, '').pipe();
   }
 
-  notifyEnvironmentVariablesRetrieved():void{
+  notifyEnvironmentVariablesRetrieved(): void {
     this._environmentVariablesRetrieved.next(true);
   }
 
-  private doLogout = (isNVTimeout: boolean) => {
+  private doLogout = (isNVTimeout: boolean, redirectUrl: string) => {
     GlobalVariable.http.delete(PathConstant.LOGIN_URL).subscribe(
       (response: any) => {
         setTimeout(() => {
@@ -147,7 +161,11 @@ export class AuthService {
             GlobalVariable.isFooterReady = false;
             this.localStorage.set('version', version);
             this.localStorage.set('_gpuEnabled', gpuEnabled);
-            this.router.navigate([GlobalConstant.PATH_LOGIN]);
+            if (redirectUrl) {
+              window.location.href = redirectUrl;
+            } else {
+              this.router.navigate([GlobalConstant.PATH_LOGIN]);
+            }
           } else {
             this.rejectBack();
           }

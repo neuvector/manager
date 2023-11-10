@@ -11,7 +11,12 @@ case class SamlServer(
   group_claim: Option[String] = Some(""),
   enable: Option[Boolean],
   default_role: Option[String],
-  group_mapped_roles: Option[Array[GroupMappedRole]]
+  group_mapped_roles: Option[Array[GroupMappedRole]],
+  authn_signing_enabled: Option[Boolean],
+  slo_enabled: Option[Boolean],
+  slo_url: Option[String],
+  signing_cert: Option[String],
+  signing_key: Option[String]
 )
 
 case class SamlConfig(name: String, saml: SamlServer)
@@ -20,7 +25,7 @@ case class SamlConfigWrap(config: SamlConfig)
 
 case class SsoServer(server_name: String, server_type: String, redirect_url: String)
 
-case class RedirectData(redirect: SsoServer)
+case class SamlRedirectURL(redirect_endpoint: String, issuer: String)
 
 case class SamlToken(
   token: String,

@@ -95,6 +95,11 @@ export interface SAML {
   default_role: string;
   group_mapped_roles: GroupMappedRole[];
   enable: boolean;
+  authn_signing_enabled: boolean;
+  slo_enabled: boolean;
+  slo_url: string;
+  signing_cert: string;
+  signing_key: string;
 }
 
 export interface X509Cert {

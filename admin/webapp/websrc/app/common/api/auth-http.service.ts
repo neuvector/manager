@@ -14,6 +14,7 @@ import {
   SelfGetResponse,
   ServerGetResponse,
   ServerPatchBody,
+  SsoServer,
   User,
   UserGetResponse,
 } from '@common/types';
@@ -23,6 +24,12 @@ import { map, pluck } from 'rxjs/operators';
 
 @Injectable()
 export class AuthHttpService {
+  getSamlSLOServer(): Observable<SsoServer> {
+    return GlobalVariable.http
+      .get<SsoServer>(PathConstant.SAML_SLO_URL)
+      .pipe(pluck('redirect'));
+  }
+
   getLicense(): Observable<LicenseGetResponse> {
     return GlobalVariable.http
       .get<LicenseGetResponse>(PathConstant.LICENSE_URL)

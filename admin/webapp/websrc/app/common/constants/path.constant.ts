@@ -32,6 +32,7 @@ export class PathConstant {
   public static LOGIN_URL = 'auth'; //auth
   public static EULA_URL = 'eula'; //auth
   public static TOKEN_AUTH = 'token_auth_server'; //auth
+  public static SAML_SLO_URL = 'token_auth_server_slo'; //auth
   public static OIDC_AUTH = 'openId_auth'; //auth
   public static LICENSE_LOAD_URL = 'license/update'; //auth
   public static GROUP_URL = 'group'; //poilcy

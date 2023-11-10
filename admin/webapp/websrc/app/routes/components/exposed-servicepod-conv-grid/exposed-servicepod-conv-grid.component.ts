@@ -129,6 +129,11 @@ export class ExposedServicepodConvGridComponent implements OnInit {
                   ? `${params.data.application}, ${params.data.port}`
                   : params.data.application
               );
+            } else {
+              return this.sanitizer.sanitize(
+                SecurityContext.HTML,
+                params.data.port || ''
+              );
             }
           }
           return null;
@@ -166,8 +171,7 @@ export class ExposedServicepodConvGridComponent implements OnInit {
     this.gridOptions = this.utils.createGridOptions(this.columnDefs, this.$win);
     this.gridOptions = {
       ...this.gridOptions,
-      getRowId: params =>
-        params.data.isParent ? params.data.service : params.data.id,
+      getRowId: params => params.data.id,
       onGridReady: this.onGridReady.bind(this),
       isExternalFilterPresent: () => true,
       doesExternalFilterPass: this.isVisible.bind(this),

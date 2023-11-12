@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Host } from '@common/types';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-node-brief',
@@ -9,9 +10,15 @@ import { Host } from '@common/types';
 export class NodeBriefComponent implements OnInit {
   @Input() host!: Host;
 
-  constructor() {}
+  constructor(
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     console.log(this.host);
   }
+
+  goToGroup = (group) => {
+    this.router.navigate(['/group'], { queryParams: { group: encodeURIComponent(group) } });
+  };
 }

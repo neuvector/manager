@@ -19,6 +19,7 @@ import { ScanService } from '@services/scan.service';
 import { interval, Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { GlobalVariable } from '@common/variables/global.variable';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-containers',
@@ -27,6 +28,7 @@ import { GlobalVariable } from '@common/variables/global.variable';
 })
 export class ContainersComponent implements OnInit, OnDestroy {
   _containersGrid!: ContainersGridComponent;
+  linkedContainer: string = '';
   private switchClusterSubscription;
 
   @ViewChild(ContainersGridComponent) set containersGrid(
@@ -72,8 +74,13 @@ export class ContainersComponent implements OnInit, OnDestroy {
     private authUtils: AuthUtilsService,
     private tr: TranslateService,
     private multiClusterService: MultiClusterService,
-    private cd: ChangeDetectorRef
-  ) {}
+    private cd: ChangeDetectorRef,
+    private route: ActivatedRoute
+  ) {
+    this.route.queryParams.subscribe(params => {
+      this.linkedContainer = decodeURIComponent(params['container'] || '');
+    });
+  }
 
   ngOnInit(): void {
     this.isAutoScanAuthorized = this.authUtils.getDisplayFlag('runtime_scan');

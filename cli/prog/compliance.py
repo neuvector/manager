@@ -26,6 +26,9 @@ def show_compliance_profile(data, name):
     if not profile:
         return
 
+    if "cfg_type" in profile and profile["cfg_type"] == "ground":
+        click.echo("This profile is controlled by CRD rule")
+
     entries = profile["entries"]
     for e in entries:
         _list_compliance_entry_display_format(e)

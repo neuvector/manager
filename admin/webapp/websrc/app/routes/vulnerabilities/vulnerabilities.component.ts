@@ -6,7 +6,7 @@ import { VulnerabilitiesFilterService } from './vulnerabilities.filter.service';
 import { MapConstant } from '@common/constants/map.constant';
 import { MatDialog } from '@angular/material/dialog';
 import { PdfGenerationDialogComponent } from './pdf-generation-dialog/pdf-generation-dialog.component';
-import { VulnerabilityAsset } from '@common/types';
+import { VulnerabilityAsset, VulnerabilityView } from '@common/types';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -32,8 +32,15 @@ export class VulnerabilitiesComponent {
   styleMap4Severity: any = {
     high: 'danger',
     medium: 'warning',
-    low: 'success'
-  }
+    low: 'success',
+  };
+  displayViews: VulnerabilityView[] = [
+    'all',
+    'containers',
+    'infrastructure',
+    'registry',
+  ];
+  selectedView = this.displayViews[0];
   @ViewChild('vulnerabilityViewReport') printableReportView!: ElementRef;
   @ViewChild('assetsViewReport') printableReportViewAssets!: ElementRef;
 
@@ -56,6 +63,10 @@ export class VulnerabilitiesComponent {
     if (this._switchClusterSubscription) {
       this._switchClusterSubscription.unsubscribe();
     }
+  }
+
+  changeSelectedView(view: VulnerabilityView) {
+    this.selectedView = view;
   }
 
   refresh() {
@@ -116,12 +127,20 @@ export class VulnerabilitiesComponent {
   printAssetsPDF() {
     this.advFilter = this.vulnerabilitiesFilterService.advFilter;
     this.masterData = {
-      workloadMap4Pdf: this.vulnerabilitiesService.workloadMap4Pdf,
-      hostMap4Pdf: this.vulnerabilitiesService.hostMap4Pdf,
-      platformMap4Pdf: this.vulnerabilitiesService.platformMap4Pdf,
-      imageMap4Pdf: this.vulnerabilitiesService.imageMap4Pdf,
+      workloadMap4Pdf: JSON.parse(
+        JSON.stringify(this.vulnerabilitiesService.workloadMap4Pdf)
+      ),
+      hostMap4Pdf: JSON.parse(
+        JSON.stringify(this.vulnerabilitiesService.hostMap4Pdf)
+      ),
+      platformMap4Pdf: JSON.parse(
+        JSON.stringify(this.vulnerabilitiesService.platformMap4Pdf)
+      ),
+      imageMap4Pdf: JSON.parse(
+        JSON.stringify(this.vulnerabilitiesService.imageMap4Pdf)
+      ),
     };
-    console.log("this.masterData",this.masterData)
+    console.log('this.masterData', this.masterData);
     this.vulnerabilitiesList = this.getFilteredVulnerabilities();
     this.isFiltered = this.vulnerabilitiesFilterService.filtered;
     if (this.advFilter.modified_dt) {
@@ -305,8 +324,7 @@ export class VulnerabilitiesComponent {
                 vulWorkload.high > 0 || vulWorkload.medium > 0 ? 1 : 0;
               vulWorkload.vulnerabilites.push({
                 text: vul.name,
-                style:
-                  this.styleMap4Severity[vul.severity.toLowerCase()],
+                style: this.styleMap4Severity[vul.severity.toLowerCase()],
               });
             } else {
               vulWorkload = JSON.parse(JSON.stringify(vulWorkloadInit));
@@ -325,8 +343,7 @@ export class VulnerabilitiesComponent {
                 vulWorkload.high > 0 || vulWorkload.medium > 0 ? 1 : 0;
               vulWorkload.vulnerabilites.push({
                 text: vul.name || '',
-                style:
-                  this.styleMap4Severity[vul.severity.toLowerCase()],
+                style: this.styleMap4Severity[vul.severity.toLowerCase()],
               });
             }
             workloadMap4FilteredPdf[workload.id] = vulWorkload;
@@ -370,8 +387,7 @@ export class VulnerabilitiesComponent {
                 vulHost.high > 0 || vulHost.medium > 0 ? 1 : 0;
               vulHost.vulnerabilites.push({
                 text: vul.name,
-                style:
-                  this.styleMap4Severity[vul.severity.toLowerCase()],
+                style: this.styleMap4Severity[vul.severity.toLowerCase()],
               });
             } else {
               vulHost = JSON.parse(JSON.stringify(vulHostInit));
@@ -391,8 +407,7 @@ export class VulnerabilitiesComponent {
                 vulHost.high > 0 || vulHost.medium > 0 ? 1 : 0;
               vulHost.vulnerabilites.push({
                 text: vul.name || '',
-                style:
-                  this.styleMap4Severity[vul.severity.toLowerCase()],
+                style: this.styleMap4Severity[vul.severity.toLowerCase()],
               });
             }
             hostMap4FilteredPdf[host.id] = vulHost;
@@ -433,27 +448,27 @@ export class VulnerabilitiesComponent {
             let vulImage = imageMap4FilteredPdf[image.id];
             if (vulImage) {
               vulImage.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
-              vulImage.medium += vul.severity.toLowerCase() === 'medium' ? 1 : 0;
+              vulImage.medium +=
+                vul.severity.toLowerCase() === 'medium' ? 1 : 0;
               vulImage.low += vul.severity.toLowerCase() === 'low' ? 1 : 0;
               vulImage.evaluation =
                 vulImage.high > 0 || vulImage.medium > 0 ? 1 : 0;
               vulImage.vulnerabilites.push({
                 text: vul.name || '',
-                style:
-                  this.styleMap4Severity[vul.severity.toLowerCase()],
+                style: this.styleMap4Severity[vul.severity.toLowerCase()],
               });
             } else {
               vulImage = JSON.parse(JSON.stringify(vulImageInit));
               vulImage.image_name = image.display_name || '';
               vulImage.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
-              vulImage.medium += vul.severity.toLowerCase() === 'medium' ? 1 : 0;
+              vulImage.medium +=
+                vul.severity.toLowerCase() === 'medium' ? 1 : 0;
               vulImage.low += vul.severity.toLowerCase() === 'low' ? 1 : 0;
               vulImage.evaluation =
                 vulImage.high > 0 || vulImage.medium > 0 ? 1 : 0;
               vulImage.vulnerabilites.push({
                 text: vul.name || '',
-                style:
-                  this.styleMap4Severity[vul.severity.toLowerCase()],
+                style: this.styleMap4Severity[vul.severity.toLowerCase()],
               });
             }
             imageMap4FilteredPdf[image.id] = vulImage;
@@ -495,11 +510,11 @@ export class VulnerabilitiesComponent {
           if (vulWorkload) {
             vulWorkload.vulnerabilites.push({
               text: vul.name || '',
-              style:
-                this.styleMap4Severity[vul.severity.toLowerCase()],
+              style: this.styleMap4Severity[vul.severity.toLowerCase()],
             });
             vulWorkload.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
-            vulWorkload.medium += vul.severity.toLowerCase() === 'medium' ? 1 : 0;
+            vulWorkload.medium +=
+              vul.severity.toLowerCase() === 'medium' ? 1 : 0;
             vulWorkload.low += vul.severity.toLowerCase() === 'low' ? 1 : 0;
             vulWorkload.evaluation =
               vulWorkload.high > 0 || vulWorkload.medium > 0 ? 1 : 0;
@@ -513,8 +528,7 @@ export class VulnerabilitiesComponent {
           if (vulHost) {
             vulHost.vulnerabilites.push({
               text: vul.name || '',
-              style:
-                this.styleMap4Severity[vul.severity.toLowerCase()],
+              style: this.styleMap4Severity[vul.severity.toLowerCase()],
             });
             vulHost.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
             vulHost.medium += vul.severity.toLowerCase() === 'medium' ? 1 : 0;
@@ -534,11 +548,11 @@ export class VulnerabilitiesComponent {
           if (vulPlatform) {
             vulPlatform.vulnerabilites.push({
               text: vul.name || '',
-              style:
-                this.styleMap4Severity[vul.severity.toLowerCase()],
+              style: this.styleMap4Severity[vul.severity.toLowerCase()],
             });
             vulPlatform.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
-            vulPlatform.medium += vul.severity.toLowerCase() ===  'medium' ? 1 : 0;
+            vulPlatform.medium +=
+              vul.severity.toLowerCase() === 'medium' ? 1 : 0;
             vulPlatform.low += vul.severity.toLowerCase() === 'low' ? 1 : 0;
             masterData.platformMap4Pdf[platform.id] = vulPlatform;
           }
@@ -550,6 +564,7 @@ export class VulnerabilitiesComponent {
           image_name: '',
           high: 0,
           medium: 0,
+          low: 0,
           evaluation: 0,
           vulnerabilites: [],
         };
@@ -558,8 +573,7 @@ export class VulnerabilitiesComponent {
           if (vulImage) {
             vulImage.vulnerabilites.push({
               text: vul.name || '',
-              style:
-                this.styleMap4Severity[vul.severity.toLowerCase()],
+              style: this.styleMap4Severity[vul.severity.toLowerCase()],
             });
             vulImage.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
             vulImage.medium += vul.severity.toLowerCase() === 'medium' ? 1 : 0;
@@ -573,8 +587,7 @@ export class VulnerabilitiesComponent {
             otherVulImage.image_name = image.display_name || '';
             otherVulImage.vulnerabilites.push({
               text: vul.name || '',
-              style:
-                this.styleMap4Severity[vul.severity.toLowerCase()],
+              style: this.styleMap4Severity[vul.severity.toLowerCase()],
             });
             otherVulImage.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
             otherVulImage.medium +=

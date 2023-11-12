@@ -201,11 +201,8 @@ export class ContainersService {
     return workloadsCsvData;
   }
 
-  private makeWorkloadData(
-    workload: Workload | WorkloadBrief,
-    isChild: boolean
-  ) {
-    workload = workload as Workload;
+  private makeWorkloadData(w: Workload | WorkloadBrief, isChild: boolean) {
+    let workload = w as Workload;
     return {
       layer: isChild ? '      Children' : 'Parent',
       id: workload.id,

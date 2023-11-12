@@ -8,8 +8,9 @@ import { Component, OnInit, Input } from '@angular/core';
 export class FlagIpFqdnComponent implements OnInit {
 
   @Input() ip: string;
-  @Input() countryCode: string = '-'
+  @Input() countryCode: string = '-';
   @Input() countryName: string = '';
+  @Input() fqdn: string = '';
 
   constructor() { }
 

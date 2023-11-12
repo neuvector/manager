@@ -1,5 +1,5 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // this is needed!
-import { NgModule } from '@angular/core';
+import { NgModule, Inject } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -11,6 +11,12 @@ import { FrameModule } from './frame/frame.module';
 import { NvCommonModule } from '@common/nvCommon.module';
 import { RoutesModule } from './routes/routes.module';
 import { GlobalVariable } from '@common/variables/global.variable';
+import { GlobalConstant } from '@common/constants/global.constant';
+import {
+  LOCAL_STORAGE,
+  StorageService
+} from 'ngx-webstorage-service';
+
 
 // import { NgxFancyLoggerModule } from 'ngx-fancy-logger';
 
@@ -45,8 +51,13 @@ export function getWindow() {
   bootstrap: [AppComponent],
 })
 export class AppModule {
-  constructor(w: WindowWrapper, http: HttpClient) {
+  constructor(
+    w: WindowWrapper,
+    http: HttpClient,
+    @Inject(LOCAL_STORAGE) private localStorage: StorageService,
+  ) {
     GlobalVariable.window = w;
     GlobalVariable.http = http;
+    this.localStorage.set(GlobalConstant.LOCAL_STORAGE_EXTERNAL_REF, location.hash)
   }
 }

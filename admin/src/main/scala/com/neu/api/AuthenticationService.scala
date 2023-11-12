@@ -35,7 +35,9 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
     with LazyLogging {
 
   val auth               = "auth"
+  val samlSloResp        = "samlslo"
   val saml               = "token_auth_server"
+  val samlslo            = "token_auth_server_slo"
   val openId             = "openId_auth"
   private val rootPath   = "/"
   private val samlKey    = "samlSso"
@@ -153,7 +155,9 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                   RestClient.httpRequest(
                     s"$baseUri/$saml/saml1",
                     GET,
-                    redirectUrlToJson(RedirectURL(s"https://${host.get}/$saml"))
+                    samlRedirectUrlToJson(
+                      SamlRedirectURL(s"https://${host.get}/$saml", s"https://${host.get}/$saml")
+                    )
                   )
                 }
               }
@@ -227,6 +231,12 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
           }
         }
       }
+    } ~
+    (post & path(samlSloResp)) {
+      redirect(rootPath, StatusCodes.Found)
+    } ~
+    (get & path(samlSloResp)) {
+      redirect(rootPath, StatusCodes.Found)
     } ~
     path("gravatar") {
       get {
@@ -891,6 +901,28 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                     s"${baseClusterUri(tokenId)}/debug/server/test",
                     POST,
                     ldapAccountWarpToJson(ldapAccountWarp),
+                    tokenId
+                  )
+                }
+              }
+            }
+          }
+        } ~
+        (get & path(samlslo)) {
+          clientIP { _ =>
+            optionalHeaderValueByName("Host") { host =>
+              Utils.respondWithWebServerHeaders() {
+                complete {
+                  logger.info(s"saml-g: slo")
+                  RestClient.httpRequestWithHeader(
+                    s"$baseUri/$saml/saml1/slo",
+                    GET,
+                    samlRedirectUrlToJson(
+                      SamlRedirectURL(
+                        s"https://${host.get}/$samlSloResp",
+                        s"https://${host.get}/$saml"
+                      )
+                    ),
                     tokenId
                   )
                 }

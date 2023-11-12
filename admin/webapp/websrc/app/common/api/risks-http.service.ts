@@ -86,6 +86,14 @@ export class RisksHttpService {
     });
   }
 
+  exportCVEProfile(names: string[]) {
+    return GlobalVariable.http.post(
+      PathConstant.EXPORT_CVE_PROFILE,
+      { names },
+      { observe: 'response', responseType: 'text' }
+    );
+  }
+
   getComplianceProfile(): Observable<ComplianceProfileData> {
     return GlobalVariable.http.get<ComplianceProfileData>(
       PathConstant.COMPLIANCE_PROFILE_URL
@@ -96,6 +104,14 @@ export class RisksHttpService {
     return GlobalVariable.http.patch<ComplianceProfileData>(
       PathConstant.COMPLIANCE_PROFILE_URL,
       payload
+    );
+  }
+
+  exportComplianceProfile(names: string[]) {
+    return GlobalVariable.http.post(
+      PathConstant.EXPORT_COMPLIANCE_PROFILE,
+      { names },
+      { observe: 'response', responseType: 'text' }
     );
   }
 

@@ -11,7 +11,11 @@ import { MapConstant } from '@common/constants/map.constant';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { PathConstant } from '@common/constants/path.constant';
-import { LOCAL_STORAGE, SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
+import {
+  LOCAL_STORAGE,
+  SESSION_STORAGE,
+  StorageService,
+} from 'ngx-webstorage-service';
 import { UtilsService } from '@common/utils/app.utils';
 import { TranslateService } from '@ngx-translate/core';
 import { HttpResponse } from '@angular/common/http';
@@ -111,7 +115,11 @@ export class ImportFileComponent implements OnInit, OnChanges {
         }
         self.status = 'error';
         self.percentage = 0;
-        self.errMsg = self.utils.getAlertifyMsg(resp.message, self.translate.instant('setting.IMPORT_FAILED'), false);
+        self.errMsg = self.utils.getAlertifyMsg(
+          resp.message,
+          self.translate.instant('setting.IMPORT_FAILED'),
+          false
+        );
         if (!MapConstant.USER_TIMEOUT.includes(status)) {
           self.notificationService.open(
             self.errMsg,
@@ -128,6 +136,9 @@ export class ImportFileComponent implements OnInit, OnChanges {
       typeof this.isStandAlone !== 'undefined'
     ) {
       this.addOrReplaceHeaders('X-As-Standalone', this.isStandAlone);
+    }
+    if (changes.importUrl && this.uploader) {
+      this.uploader.setOptions({ url: changes.importUrl.currentValue });
     }
   }
 
@@ -165,7 +176,9 @@ export class ImportFileComponent implements OnInit, OnChanges {
 
     if (this.status === 'done') {
       if (this.importUrl === PathConstant.SYSTEM_CONFIG_URL) {
-        this.notificationService.open(this.translate.instant("setting.message.UPLOAD_FINISH"));
+        this.notificationService.open(
+          this.translate.instant('setting.message.UPLOAD_FINISH')
+        );
         setTimeout(() => {
           this.sessionStorage.set(
             GlobalConstant.SESSION_STORAGE_ORIGINAL_URL,
@@ -179,10 +192,7 @@ export class ImportFileComponent implements OnInit, OnChanges {
         this.notificationService.open(this.msg.success);
       }
     } else {
-      this.notificationService.openError(
-        this.msg.error,
-        this.status
-      );
+      this.notificationService.openError(this.msg.error, this.status);
     }
   };
 
@@ -226,11 +236,18 @@ export class ImportFileComponent implements OnInit, OnChanges {
               });
             }
           },
-          error: ({ status, error }: {status: number, error: ErrorResponse }) => {
+          error: ({
+            status,
+            error,
+          }: {
+            status: number;
+            error: ErrorResponse;
+          }) => {
             console.warn(error);
             this.status = 'error';
             if (!MapConstant.USER_TIMEOUT.includes(status)) {
-              if (this.msg.error) this.notificationService.openError(error, this.msg.error);
+              if (this.msg.error)
+                this.notificationService.openError(error, this.msg.error);
               this.errMsg = error.message || error.error;
             }
           },

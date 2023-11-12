@@ -45,6 +45,7 @@ export class ContainersGridComponent implements OnInit {
   @Input() rowData!: Array<WorkloadRow>;
   @Input() isMemberData: boolean = false;
   @Input() source!: string;
+  @Input() linkedContainer: string;
   @Output() scan = new EventEmitter<WorkloadRow>();
   @ViewChild(QuickFilterComponent) quickFilter!: QuickFilterComponent;
   gridOptions!: GridOptions;
@@ -271,6 +272,14 @@ export class ContainersGridComponent implements OnInit {
     this.gridApi = params.api;
     this.gridApi.sizeColumnsToFit();
     this.gridApi.getDisplayedRowAtIndex(0)?.setSelected(true);
+    if (this.linkedContainer) {
+      this.gridApi.forEachNode((node, index) => {
+        if (this.linkedContainer === node.data.brief.display_name) {
+          node.setSelected(true);
+          this.gridApi.ensureNodeVisible(node);
+        }
+      });
+    }
   }
 
   onRowSelected(params: RowSelectedEvent) {

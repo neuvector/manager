@@ -23,6 +23,7 @@ import { NotificationService } from '@services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { AuthUtilsService } from '@common/utils/auth.utils';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-saml-form',
@@ -41,6 +42,13 @@ export class SamlFormComponent implements OnInit, OnChanges {
   samlForm = new FormGroup({
     sso_url: new FormControl(null, [Validators.required, urlValidator()]),
     issuer: new FormControl(null, [Validators.required, urlValidator()]),
+    slo_enabled: new FormControl(false, [Validators.required]),
+    slo_url: new FormControl({ value: null, disabled: true }, [
+      Validators.required,
+      urlValidator(),
+    ]),
+    signing_cert: new FormControl({ value: null, disabled: true }),
+    signing_key: new FormControl({ value: null, disabled: true }),
     x509_certs: new FormArray([], [Validators.maxLength(4)]),
     group_claim: new FormControl(),
     default_role: new FormControl(''),
@@ -65,6 +73,9 @@ export class SamlFormComponent implements OnInit, OnChanges {
     if (!this.isWriteSamlAuthorized) {
       this.samlForm.disable();
     }
+    this.samlForm.get('slo_enabled')?.valueChanges.subscribe(enabled => {
+      this.toggleSlo(enabled);
+    });
     this.initForm();
   }
 
@@ -72,6 +83,18 @@ export class SamlFormComponent implements OnInit, OnChanges {
     if (changes.samlData) {
       this.samlForm.reset();
       this.initForm();
+    }
+  }
+
+  toggleSlo(enabled: boolean): void {
+    if (enabled) {
+      this.samlForm.controls['slo_url'].enable();
+      this.samlForm.controls['signing_cert'].enable();
+      this.samlForm.controls['signing_key'].enable();
+    } else {
+      this.samlForm.controls['slo_url'].disable();
+      this.samlForm.controls['signing_cert'].disable();
+      this.samlForm.controls['signing_key'].disable();
     }
   }
 
@@ -114,7 +137,7 @@ export class SamlFormComponent implements OnInit, OnChanges {
     if (!this.samlForm.valid) {
       return;
     }
-    const { x509_certs, ...samlForm } = this.samlForm.value;
+    const { x509_certs, ...samlForm } = this.samlForm.getRawValue();
     const saml: SAMLPatch = {
       group_mapped_roles: this.groupMappedRoles,
       x509_cert: x509_certs[0],

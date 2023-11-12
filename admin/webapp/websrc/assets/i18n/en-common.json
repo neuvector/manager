@@ -1011,6 +1011,7 @@
       "HOST_NAME": "Node",
       "IMAGE": "Image",
       "IMAGE_CREATED_AT": "Image Created At",
+      "IMAGE_REG_SCANNED": "Scanned in registry",
       "BASE_OS": "Base OS",
       "RUNNING": "Running",
       "SECURED": "Secured",
@@ -1057,6 +1058,8 @@
   },
   "cveProfile": {
     "TITLE": "Vulnerability Profile",
+    "IMPORT": "Import",
+    "EXPORT": "Export",
     "RESET": "Reset",
     "ADD": "Add",
     "EDIT": "Edit",
@@ -1070,9 +1073,19 @@
     "IMAGES_PLACEHOLDER": "Add Images",
     "DOMAINS_PLACEHOLDER": "Add Namespaces",
     "ACCEPT": "Accept",
+    "CRD_ACCEPT": "Vulnerability profile is controlled by CRD.",
     "ACCEPT_VUL": "Accept Vulnerability",
     "NAME": "Vulnerability Name",
     "REPORTED_WITHIN": "Vulnerability Reported Within",
+    "import": {
+      "TITLE": "Import Option",
+      "MERGE": "Merge",
+      "REPLACE": "Replace"
+    },
+    "type": {
+      "CUSTOM": "User Created",
+      "GROUND": "CRD"
+    },
     "msg": {
       "REMOVE_CFM": "Are you sure you want to remove?",
       "REMOVE_OK": "Vulnerability profile entry is removed successfully!",
@@ -1080,7 +1093,11 @@
       "ADD_OK": "Vulnerability profile entry is added successfully!",
       "ADD_NG": "Error happens when adding vulnerability profile entry!",
       "UPDATE_OK": "Vulnerability profile entry is updated successfully!",
-      "UPDATE_NG": "Error happens when updating vulnerability profile entry!"
+      "UPDATE_NG": "Error happens when updating vulnerability profile entry!",
+      "EXPORT_PROFILE_OK": "Vulnerability profile is exported successfully!",
+      "EXPORT_PROFILE_NG": "Error happens when exporting vulnerability profile!",
+      "IMPORT_FINISH": "Vulnerability profile is imported successfully!",
+      "IMPORT_FAILED": "Error happens when importing vulnerability profile!"
     },
     "gridHeader": {
       "VULNERABILITY": "Vulnerability Name",
@@ -1137,6 +1154,13 @@
       "PDF_LINK": "Vulnerability View",
       "PDF_LINK2": "Assets View",
       "PRINT_REPORT": "Print Vulnerabilities Report",
+      "view": {
+        "TITLE": "Vulnerabilities View",
+        "ALL": "All",
+        "CONTAINERS": "Containers",
+        "INFRASTRUCTURE": "Infrastructure",
+        "REGISTRY": "Registry"
+      },
       "from": {
         "ALL": "All",
         "TWOWEEKS": "2 weeks ago",
@@ -1391,7 +1415,13 @@
       "CURR_TEMPLATES": "Current Templates",
       "APPLY_REG": "Apply Regulations",
       "CURR_REG": "Current Regulations",
-      "ADD_REG": "Add Regulations"
+      "ADD_REG": "Add Regulations",
+      "msg": {
+        "EXPORT_PROFILE_OK": "Compliance profile is exported successfully!",
+        "EXPORT_PROFILE_NG": "Error happens when exporting compliance profile!",
+        "IMPORT_FINISH": "Compliance profile is imported successfully!",
+        "IMPORT_FAILED": "Error happens when importing compliance profile!"
+      }
     },
     "report": {
       "TITLE": "Compliance Reports (Compliance View)",
@@ -3173,6 +3203,10 @@
     },
     "IDP_URL": "Identity Provider Single Sign-On URL",
     "IDP_ISSUER": "Identity Provider Issuer",
+    "SAML_SLO": "SAML Single Logout",
+    "SLO_URL": "Identity Provider Single Logout URL",
+    "SLO_CERT": "Single Logout Signing Certificate",
+    "SLO_KEY": "Single Logout Signing Key",
     "CERTIFICATE": "X.509 Certificate",
     "ADD_EXTRA_CERT": "Add extra X.509 Certificate",
     "EXTRA_CERT": "Extra X.509 Certificate",

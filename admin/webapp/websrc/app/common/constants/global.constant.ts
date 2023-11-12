@@ -3,6 +3,7 @@ export class GlobalConstant {
   public static SESSION_STORAGE_CLUSTER = 'cluster';
   public static SESSION_STORAGE_TOKEN = 'token';
   public static SESSION_STORAGE_ORIGINAL_URL = 'original_url';
+  public static LOCAL_STORAGE_EXTERNAL_REF = 'external_Ref';
   public static SESSION_STORAGE_TIMEOUT = 'session_timeout';
   public static SESSION_STORAGE_THEME = 'theme';
   public static SESSION_STORAGE_NOTIFICATIONS = 'notifications';

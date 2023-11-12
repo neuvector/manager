@@ -32,6 +32,7 @@ export class PathConstant {
   public static LOGIN_URL = 'auth'; //auth
   public static EULA_URL = 'eula'; //auth
   public static TOKEN_AUTH = 'token_auth_server'; //auth
+  public static SAML_SLO_URL = 'token_auth_server_slo'; //auth
   public static OIDC_AUTH = 'openId_auth'; //auth
   public static LICENSE_LOAD_URL = 'license/update'; //auth
   public static GROUP_URL = 'group'; //poilcy
@@ -46,6 +47,8 @@ export class PathConstant {
   public static RISK_COMPLIANCE_URL = 'risk/compliance'; //risks
   public static RISK_COMPLIANCE_NIST_URL = 'risk/complianceNIST'; //risks
   public static COMPLIANCE_PROFILE_URL = 'risk/compliance/profile'; //risks
+  public static EXPORT_COMPLIANCE_PROFILE = 'risk/compliance/profile/export'; //risks
+  public static IMPORT_COMPLIANCE_PROFILE = 'risk/compliance/profile/import'; //risks
   public static COMPLIANCE_TEMPLATE_URL = 'risk/compliance/template'; //risks
   public static SCAN_URL = 'scan/workload'; //assets
   public static SCAN_HOST_URL = 'scan/host'; //assets
@@ -127,6 +130,8 @@ export class PathConstant {
   public static PROMOTE_ADMISSION_RULE = 'admission/promote'; //policy
   public static CVE_PROFILE = 'risk/cve/profile'; //risks
   public static CVE_PROFILE_ENTRY = 'risk/cve/profile/entry'; //risks
+  public static EXPORT_CVE_PROFILE = 'risk/cve/profile/export'; //risks
+  public static IMPORT_CVE_PROFILE = 'risk/cve/profile/import'; //risks
   public static SYSTEM_RBAC_URL = 'dashboard/rbac'; //dashboard
   public static SERVICE_ALL = 'service/all'; //policy
   public static DEBUG_URL = 'debug'; //config

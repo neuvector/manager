@@ -14,6 +14,7 @@ import spray.util.LoggingContext
 
 import scala.concurrent.Future
 import scala.util.control.NonFatal
+import shapeless._
 
 /**
  * Holds potential error response with the HTTP status and optional body
@@ -161,62 +162,87 @@ object Utils extends LazyLogging with Directives {
       (1000 + isUsingSSLBit * 100 + isStaticResourceBit * 10 + isDevOrNotJsBit).toShort
     val hdXFrameOptions = RawHeader("X-Frame-Options", "SAMEORIGIN")
     val hdStrictTransportSecurity =
-      RawHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload")
-    val hdCacheCtrl       = RawHeader("Cache-Control", "no-cache")
-    val hdContentEncoding = RawHeader("Content-Encoding", "gzip")
-    val hdXSSProtection   = RawHeader("X-XSS-Protection", "1")
+      RawHeader("Strict-Transport-Security", "max-age=15724800; includeSubDomains; preload")
+    val hdCacheCtrl          = RawHeader("Cache-Control", "private, no-cache, no-store, must-revalidate")
+    val hdContentEncoding    = RawHeader("Content-Encoding", "gzip")
+    val hdXSSProtection      = RawHeader("X-XSS-Protection", "1; mode=block")
+    val hdContentTypeOptions = RawHeader("X-Content-Type-Options", "nosniff")
+    val hdContentSecurityPolicy =
+      RawHeader(
+        "Content-Security-Policy",
+        "default-src 'self'; font-src 'self' data: */fonts; img-src 'self' data:; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
+      )
 
     val headerConfigMap = Map(
       1111 -> respondWithHeaders(
         hdXFrameOptions,
         hdStrictTransportSecurity,
-        hdXSSProtection
+        hdXSSProtection,
+        hdContentTypeOptions,
+        hdContentSecurityPolicy
       ),
       1110 -> respondWithHeaders(
         hdXFrameOptions,
         hdStrictTransportSecurity,
         hdContentEncoding,
-        hdXSSProtection
+        hdXSSProtection,
+        hdContentTypeOptions,
+        hdContentSecurityPolicy
       ),
       1101 -> respondWithHeaders(
         hdXFrameOptions,
         hdCacheCtrl,
         hdStrictTransportSecurity,
-        hdXSSProtection
+        hdXSSProtection,
+        hdContentTypeOptions,
+        hdContentSecurityPolicy
       ),
       1100 -> respondWithHeaders(
         hdXFrameOptions,
         hdCacheCtrl,
         hdStrictTransportSecurity,
-        hdXSSProtection
+        hdXSSProtection,
+        hdContentTypeOptions,
+        hdContentSecurityPolicy
       ),
       1011 -> respondWithHeaders(
         hdXFrameOptions,
-        hdXSSProtection
+        hdXSSProtection,
+        hdContentTypeOptions,
+        hdContentSecurityPolicy
       ),
       1010 -> respondWithHeaders(
         hdXFrameOptions,
         hdContentEncoding,
-        hdXSSProtection
+        hdXSSProtection,
+        hdContentTypeOptions,
+        hdContentSecurityPolicy
       ),
       1001 -> respondWithHeaders(
         hdXFrameOptions,
         hdCacheCtrl,
-        hdXSSProtection
+        hdXSSProtection,
+        hdContentTypeOptions,
+        hdContentSecurityPolicy
       ),
       1000 -> respondWithHeaders(
         hdXFrameOptions,
         hdCacheCtrl,
-        hdXSSProtection
+        hdXSSProtection,
+        hdContentTypeOptions,
+        hdContentSecurityPolicy
       )
     )
 
-    headerConfigMap.getOrElse(
-      headerConfigMapKey,
-      respondWithHeaders(
-        hdXFrameOptions,
-        hdXSSProtection
+    headerConfigMap
+      .getOrElse(
+        headerConfigMapKey,
+        respondWithHeaders(
+          hdXFrameOptions,
+          hdXSSProtection,
+          hdContentTypeOptions,
+          hdContentSecurityPolicy
+        )
       )
-    )
   }
 }

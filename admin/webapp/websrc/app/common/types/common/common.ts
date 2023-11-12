@@ -9,6 +9,12 @@ export type ScannerAutoscaleStrategy =
   | 'n/a'
   | '';
 
+export type VulnerabilityView =
+  | 'all'
+  | 'containers'
+  | 'infrastructure'
+  | 'registry';
+
 export type DataOps = 'add' | 'edit' | 'delete';
 
 export type LastModifiedDateOption =
@@ -17,6 +23,8 @@ export type LastModifiedDateOption =
   | 'onemonth'
   | 'threemonths'
   | 'custom';
+
+export type CfgType = 'ground' | 'user_created' | '';
 
 export interface ErrorResponse {
   code: number;
@@ -92,4 +100,10 @@ export interface Rebrand {
   customPageHeaderColor: string;
   customPageFooterContent: string;
   customPageFooterColor: string;
+}
+
+export interface SsoServer {
+  redirect_url: string;
+  server_name: string;
+  server_type: string;
 }

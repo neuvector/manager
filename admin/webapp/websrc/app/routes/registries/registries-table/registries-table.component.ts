@@ -39,6 +39,7 @@ import { AuthUtilsService } from '@common/utils/auth.utils';
 export class RegistriesTableComponent implements OnInit, OnChanges {
   @Input() rowData!: Summary[];
   @Input() gridHeight!: number;
+  @Input() linkedRegistry: string;
   filtered: boolean = false;
   filteredCount!: number;
   gridOptions!: GridOptions;
@@ -291,10 +292,15 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
   onGridReady(params: GridReadyEvent): void {
     this.gridApi = params.api;
     this.gridApi.sizeColumnsToFit();
-    this.gridApi.forEachNode(node =>
-      node.rowIndex ? 0 : node.setSelected(true)
-    );
+    this.gridApi.getDisplayedRowAtIndex(0)?.setSelected(true);
+    this.gridApi.forEachNode(node => {
+      if (this.linkedRegistry === node.data.name) {
+        node.setSelected(true)
+        this.gridApi.ensureNodeVisible(node, 'middle');
+      }
+    });
     this.cd.markForCheck();
+
   }
 
   onResize(): void {

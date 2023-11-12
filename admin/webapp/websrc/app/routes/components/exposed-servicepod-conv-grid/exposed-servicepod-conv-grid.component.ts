@@ -55,123 +55,6 @@ export class ExposedServicepodConvGridComponent implements OnInit {
   }
 
   setGrid = () => {
-    // this.columnDefs = [
-    //   {
-    //     headerName: this.translate.instant(
-    //       'dashboard.body.panel_title.SERVICE'
-    //     ),
-    //     field: 'service',
-    //     cellRenderer: 'serviceCellRenderer',
-    //     width: 180,
-    //     sortable: false,
-    //   },
-    //   {
-    //     headerName: 'Pods',
-    //     field: 'children',
-    //     valueFormatter: params => {
-    //       return params.data.isParent ? params.value.length : '';
-    //     },
-    //     width: 70,
-    //   },
-    //   {
-    //     headerName: 'Parent ID',
-    //     field: 'parent_id',
-    //     hide: true,
-    //   },
-    //   {
-    //     headerName: 'Child Names',
-    //     field: 'child_names',
-    //     hide: true,
-    //   },
-    //   {
-    //     headerName: this.translate.instant(
-    //       'dashboard.body.panel_title.POLICY_MODE'
-    //     ),
-    //     field: 'policy_mode',
-    //     cellRenderer: params => {
-    //       let mode = '';
-    //       if (params.data && params.value && params.data.isParent) {
-    //         mode = this.utils.getI18Name(params.value);
-    //         let labelCode = MapConstant.colourMap[params.value];
-    //         if (!labelCode) return null;
-    //         else
-    //           return `<span class='type-label policy_mode ${labelCode}'>${this.sanitizer.sanitize(
-    //             SecurityContext.HTML,
-    //             mode
-    //           )}</span>`;
-    //       }
-    //       return null;
-    //     },
-    //     width: 110,
-    //     maxWidth: 110,
-    //     minWidth: 110,
-    //     sortable: false,
-    //   },
-    //   {
-    //     headerName: this.translate.instant(
-    //       'dashboard.body.panel_title.EXTERNAL_HOST'
-    //     ),
-    //     field: 'ip',
-    //     cellRenderer: 'externalHostCellRender'
-    //   },
-    //   {
-    //     headerName: this.translate.instant(
-    //       'dashboard.body.panel_title.SESSIONS'
-    //     ),
-    //     field: 'sessions',
-    //     valueFormatter: params => {
-    //       return params.data.isParent ? '' : params.value;
-    //     },
-    //     width: 100,
-    //   },
-    //   {
-    //     headerName: this.translate.instant(
-    //       'dashboard.body.panel_title.APPLICATIONS'
-    //     ),
-    //     field: 'applications',
-    //     cellRenderer: params => {
-    //       if (params.data) {
-    //         if (params.value) {
-    //           return this.sanitizer.sanitize(
-    //             SecurityContext.HTML,
-    //             params.data.ports
-    //               ? params.value.concat(params.data.ports).join(', ')
-    //               : params.value.join(', ')
-    //           );
-    //         }
-    //       }
-    //       return null;
-    //     },
-    //     width: 100,
-    //     sortable: false,
-    //   },
-    //   {
-    //     headerName: this.translate.instant(
-    //       'dashboard.body.panel_title.POLICY_ACTION'
-    //     ),
-    //     field: 'policy_action',
-    //     cellRenderer: params => {
-    //       if (params.value) {
-    //         return `<span ng-class='{\'policy-remove\': data.remove}'
-    //               class='action-label px-1 ${
-    //                 MapConstant.colourMap[params.value.toLowerCase()]
-    //               }'>
-    //               ${this.sanitizer.sanitize(
-    //                 SecurityContext.HTML,
-    //                 this.translate.instant(
-    //                   'policy.action.' + params.value.toUpperCase()
-    //                 )
-    //               )}
-    //             </span>`;
-    //       }
-    //       return null;
-    //     },
-    //     width: 80,
-    //     maxWidth: 80,
-    //     minWidth: 80,
-    //     sortable: false,
-    //   }
-    // ];
     this.columnDefs = [
       {
         headerName: this.translate.instant(
@@ -179,29 +62,26 @@ export class ExposedServicepodConvGridComponent implements OnInit {
         ),
         field: 'service',
         cellRenderer: 'serviceCellRenderer',
-        rowSpan: params => {
-          if (params.data.rowSpan)
-            return params.data.rowSpan;
-          return 1;
-        },
-        cellClass: ['cell-span'],
         width: 180,
         sortable: false,
       },
       {
         headerName: 'Pods',
-        field: 'pods',
+        field: 'children',
         valueFormatter: params => {
-          if (params.value) return params.value;
-          return null;
+          return params.data.isParent ? params.value.length : '';
         },
-        rowSpan: params => {
-          if (params.data.rowSpan)
-            return params.data.rowSpan;
-          return 1;
-        },
-        cellClass: ['cell-span'],
         width: 70,
+      },
+      {
+        headerName: 'Parent ID',
+        field: 'parent_id',
+        hide: true,
+      },
+      {
+        headerName: 'Child Names',
+        field: 'child_names',
+        hide: true,
       },
       {
         headerName: this.translate.instant(
@@ -209,8 +89,8 @@ export class ExposedServicepodConvGridComponent implements OnInit {
         ),
         field: 'policy_mode',
         cellRenderer: params => {
-          if (params.value) {
-            let mode = '';
+          let mode = '';
+          if (params.data && params.value && params.data.isParent) {
             mode = this.utils.getI18Name(params.value);
             let labelCode = MapConstant.colourMap[params.value];
             if (!labelCode) return null;
@@ -222,12 +102,6 @@ export class ExposedServicepodConvGridComponent implements OnInit {
           }
           return null;
         },
-        rowSpan: params => {
-          if (params.data.rowSpan)
-            return params.data.rowSpan;
-          return 1;
-        },
-        cellClass: ['cell-span'],
         width: 110,
         maxWidth: 110,
         minWidth: 110,
@@ -245,6 +119,9 @@ export class ExposedServicepodConvGridComponent implements OnInit {
           'dashboard.body.panel_title.SESSIONS'
         ),
         field: 'sessions',
+        valueFormatter: params => {
+          return params.data.isParent ? '' : params.value;
+        },
         width: 100,
       },
       {
@@ -295,6 +172,7 @@ export class ExposedServicepodConvGridComponent implements OnInit {
         sortable: false,
       }
     ];
+
     this.gridOptions = this.utils.createGridOptions(this.columnDefs, this.$win);
     this.gridOptions = {
       ...this.gridOptions,
@@ -329,58 +207,31 @@ export class ExposedServicepodConvGridComponent implements OnInit {
     this.gridApi.sizeColumnsToFit();
   };
 
-  // preprocessHierarchicalData = (
-  //   exposures: Array<HierarchicalExposure>
-  // ): Array<any> => {
-  //   let res: Array<any> = [];
-  //   exposures.forEach(exposure => {
-  //     const parent_id = exposure.service;
-  //     const child_ids = exposure.entries?.map(c => c.ip) || [];
-  //     const child_names = exposure.entries?.map(c => c.ip) || [];
-  //     res.push({
-  //       ...exposure,
-  //       child_ids,
-  //       child_names,
-  //       isParent: true,
-  //       visible: true,
-  //     });
-  //     exposure.entries?.forEach(child => {
-  //       res.push({
-  //         ...child,
-  //         parent_id,
-  //         isParent: false,
-  //         visible: true,
-  //       });
-  //     });
-  //   });
-  //   console.log('preprocessHierarchicalData',res)
-  //   return res;
-  // };
-
   preprocessHierarchicalData = (
     exposures: Array<HierarchicalExposure>
   ): Array<any> => {
     let res: Array<any> = [];
     exposures.forEach(exposure => {
-      exposure.entries?.forEach((child, index) => {
-        if (index === 0) {
-          res.push({
-            service: exposure.service,
-            pods: exposure.children.length,
-            policy_mode: exposure.policy_mode,
-            rowSpan: exposure.entries.length,
-            ...child
-          });
-        } else {
-          res.push({
-            ...child
-          });
-        }
-
+      const parent_id = exposure.service;
+      const child_ids = exposure.entries?.map(c => c.ip) || [];
+      const child_names = exposure.entries?.map(c => c.ip) || [];
+      res.push({
+        ...exposure,
+        child_ids,
+        child_names,
+        isParent: true,
+        visible: true,
+      });
+      exposure.entries?.forEach(child => {
+        res.push({
+          ...child,
+          parent_id,
+          isParent: false,
+          visible: true,
+        });
       });
     });
     console.log('preprocessHierarchicalData',res)
     return res;
   };
-
 }

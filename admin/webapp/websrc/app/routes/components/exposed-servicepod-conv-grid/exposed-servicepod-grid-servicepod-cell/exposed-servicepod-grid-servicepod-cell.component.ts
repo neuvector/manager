@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
+import { accumulateActionLevel } from '@common/utils/common.utils';
 
 @Component({
   selector: 'app-exposed-servicepod-grid-servicepod-cell',
@@ -13,16 +14,16 @@ export class ExposedServicepodGridServicepodCellComponent implements ICellRender
   name!: string;
   isParent!: boolean;
   rowStyle: any;
-  // get isChildVisible() {
-  //   return this.params.data.visible;
-  // }
+  get isChildVisible() {
+    return this.params.data.visible;
+  }
 
   constructor() {}
 
   agInit(params: ICellRendererParams): void {
     this.params = params;
-    // this.name = params.data.isParent ? params.data.service : '';
-    // this.isParent = params.data.isParent;
+    this.name = params.data.isParent ? params.data.service : '';
+    this.isParent = params.data.isParent;
     if (params.data.service)
       this.rowStyle = this.getServicePodStyle(this.params);
   }
@@ -31,14 +32,14 @@ export class ExposedServicepodGridServicepodCellComponent implements ICellRender
     return false;
   }
 
-  // toggleVisible(): void {
-  //   this.params.data.visible = !this.params.data.visible;
-  //   this.params.data.child_ids.forEach(child_id => {
-  //     const child_node = this.params.api.getRowNode(child_id);
-  //     if (child_node) child_node.data.visible = !child_node.data.visible;
-  //   });
-  //   this.params.api.onFilterChanged();
-  // }
+  toggleVisible(): void {
+    this.params.data.visible = !this.params.data.visible;
+    this.params.data.child_ids.forEach(child_id => {
+      const child_node = this.params.api.getRowNode(child_id);
+      if (child_node) child_node.data.visible = !child_node.data.visible;
+    });
+    this.params.api.onFilterChanged();
+  }
 
   private getServicePodStyle = params => {
     const colorArray = [
@@ -68,6 +69,11 @@ export class ExposedServicepodGridServicepodCellComponent implements ICellRender
 
     let actionType = "";
     let level: number[] = [];
+    this.params.data.policy_action = 'allow';
+    this.params.data.entries.forEach(entry => {
+      this.params.data.policy_action = accumulateActionLevel(this.params.data.policy_action, entry.policy_action);
+    });
+
     if (this.params.data.severity) {
         level.push(levelMap[this.params.data.severity.toLowerCase()]);
       } else if (

@@ -714,7 +714,7 @@ const summarizeEntries = (exposedPods) => {
   return Object.values(entryMap) as ConversationReportEntryByServce[];
 };
 
-const accumulateActionLevel = (accuAction: string = 'allow', currAction: string) => {
+export const accumulateActionLevel = (accuAction: string = 'allow', currAction: string) => {
   const actionMap = {
     deny: 3,
     alert: 2,

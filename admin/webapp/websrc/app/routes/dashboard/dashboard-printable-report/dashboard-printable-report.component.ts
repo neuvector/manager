@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { InternalSystemInfo, HierarchicalExposure } from '@common/types';
 import { parseExposureHierarchicalData } from '@common/utils/common.utils';
+import { DashboardService } from '@common/services/dashboard.service';
 
 @Component({
   selector: 'app-dashboard-printable-report',
@@ -14,27 +15,25 @@ export class DashboardPrintableReportComponent implements OnInit {
   hierarchicalIngressList!: Array<HierarchicalExposure>;
   hierarchicalEgressList!: Array<HierarchicalExposure>;
 
-  constructor() { }
+  constructor(
+    private dashboardService: DashboardService
+  ) { }
 
   ngOnInit(): void {
+    this.hierarchicalIngressList = this.dashboardService.hierarchicalIngressList;
+    this.hierarchicalEgressList = this.dashboardService.hierarchicalEgressList;
+
     if (this.domain) {
-      this.reportInfo.scoreInfo.ingress = this.filterExposure(this.reportInfo.scoreInfo.ingress);
-      this.reportInfo.scoreInfo.egress = this.filterExposure(this.reportInfo.scoreInfo.egress);
+      this.hierarchicalIngressList = this.filterExposure(this.hierarchicalIngressList, this.domain);
+      this.hierarchicalEgressList = this.filterExposure(this.hierarchicalEgressList, this.domain);
     }
-    console.log("this.reportInfo.scoreInfo.egress", this.reportInfo.scoreInfo.egress);
-    this.hierarchicalIngressList = parseExposureHierarchicalData(
-      this.reportInfo.scoreInfo.ingress
-    );
-    this.hierarchicalEgressList = parseExposureHierarchicalData(
-      this.reportInfo.scoreInfo.egress
-    );
   }
 
-  private filterExposure = (exposure: any[]) => {
+  private filterExposure = (exposure: Array<HierarchicalExposure>, domain: string) => {
     return exposure.filter(row => {
       let serviceNameSec = row.service.split('.');
-      console.log("serviceNameSec", serviceNameSec, this.domain);
-      return serviceNameSec[serviceNameSec.length - 1] === this.domain;
+      console.log("serviceNameSec", serviceNameSec, domain);
+      return serviceNameSec[serviceNameSec.length - 1] === domain;
     });
   };
 

@@ -137,6 +137,16 @@ export interface ExposedContainer {
   severity: string;
 }
 
+export interface ConversationReportEntryByServce {
+  ip: string;
+  fqdn?: string;
+  protocols: string[];
+  sessions: number;
+  application: string;
+  country_code: string;
+  country_name: string;
+}
+
 export interface HierarchicalExposure {
   workload_id: string;
   peerEndpoint: string;
@@ -151,5 +161,6 @@ export interface HierarchicalExposure {
   protocols: string;
   applications: string[];
   ports: number[];
+  entries: ConversationReportEntryByServce[];
   children: ExposedContainer[];
 }

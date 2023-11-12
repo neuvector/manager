@@ -10,28 +10,41 @@ import { MapConstant } from '@common/constants/map.constant';
 })
 export class ExposureServicePodReportGridComponent implements OnInit {
 
-  @Input() reportGridData: Array<HierarchicalExposure>;
+  @Input() reportGridData: Array<any>;
   groupedGridData: any;
   colourMap: any = MapConstant.colourMap;
 
   constructor() { }
 
   ngOnInit(): void {
-    this.groupedGridData = Object.values(groupBy(JSON.parse(JSON.stringify(this.reportGridData)), 'service'));
-    this.groupedGridData = this.groupedGridData.map(serviceGroup => {
-      return serviceGroup.filter(row => row.service).map((row, index) => {
+    this.groupedGridData = this.preprocessHierarchicalData(this.reportGridData);
+    console.log("this.groupedGridData", this.groupedGridData)
+  }
+
+  preprocessHierarchicalData = (
+    exposures: Array<HierarchicalExposure>
+  ): Array<any> => {
+    let res: Array<any> = [];
+    exposures.forEach(exposure => {
+      exposure.entries?.forEach((child, index) => {
         if (index === 0) {
-          row.rowspan = serviceGroup.length;
+          res.push({
+            service: exposure.service,
+            pods: exposure.children.length,
+            policy_mode: exposure.policy_mode,
+            rowSpan: exposure.entries.length,
+            ...child
+          });
         } else {
-          delete row.service
+          res.push({
+            ...child
+          });
         }
-        if (row.ports) row.applications = row.applications.concat(row.ports);
-        row.applications = row.applications.join(', ');
-        return row;
+
       });
     });
-    this.groupedGridData = this.groupedGridData.flat();
-    console.log("groupedGridData", this.groupedGridData);
-  }
+    console.log('preprocessHierarchicalData',res)
+    return res;
+  };
 
 }

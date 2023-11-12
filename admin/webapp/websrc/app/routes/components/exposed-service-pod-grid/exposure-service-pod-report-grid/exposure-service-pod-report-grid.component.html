@@ -1,38 +1,63 @@
-<table class="print-table margin-top-s">
+<table class="print-table margin-top-s" *ngIf="groupedGridData.length > 0">
   <thead>
     <tr class="print-header">
-      <th class="print-cell" style="width: 20%">
-        {{'dashboard.summary.SERVICE' | translate }}
+      <th class="print-cell" style="width: 16%">
+        {{'dashboard.body.panel_title.SERVICE' | translate }}
       </th>
-      <th class="print-cell" style="width: 30%">
-        {{ 'dashboard.summary.POD' | translate }}
+      <th class="print-cell" style="width: 4%">
+        Pods
       </th>
-      <th class="print-cell" style="width: 30%">
-        {{ 'dashboard.body.panel_title.APPLICATIONS' | translate }}
-      </th>
-      <th class="print-cell" style="width: 10%">
+      <th class="print-cell" style="width: 7%">
         {{ 'dashboard.body.panel_title.POLICY_MODE' | translate }}
       </th>
-      <th class="print-cell" style="width: 10%">
+      <th class="print-cell" style="width: 12%">
+        {{ 'dashboard.body.panel_title.EXTERNAL_HOST' | translate }} (IP)
+      </th>
+      <th class="print-cell" style="width: 30%">
+        {{ 'dashboard.body.panel_title.EXTERNAL_HOST' | translate }} (FQDN)
+      </th>
+      <th class="print-cell" style="width: 6%">
+        {{ 'dashboard.body.panel_title.SESSIONS' | translate }}
+      </th>
+      <th class="print-cell" style="width: 18%">
+        {{ 'dashboard.body.panel_title.APPLICATIONS' | translate }}
+      </th>
+      <th class="print-cell" style="width: 7%">
         {{ 'dashboard.body.panel_title.POLICY_ACTION' | translate }}
       </th>
     </tr>
   </thead>
   <tbody>
     <tr class="print-row" *ngFor="let row of groupedGridData; let i = index" [attr.data-index]="i">
-      <td class="print-cell" style="width: 20%" *ngIf="row.service" [attr.rowspan]="row.rowspan">
+      <td class="print-cell" style="width: 16%" *ngIf="row.service" [attr.rowspan]="row.rowSpan">
         {{ row.service }}
       </td>
-      <td class="print-cell" style="width: 30%">
-        {{ row.pod_name }}
+      <td class="print-cell" style="width: 4%" *ngIf="row.service" [attr.rowspan]="row.rowSpan">
+        {{ row.pods }}
       </td>
-      <td class="print-cell" style="width: 30%">
-        {{ row.applications }}
-      </td>
-      <td class="print-cell" style="width: 10%">
+      <td class="print-cell" style="width: 7%" *ngIf="row.service" [attr.rowspan]="row.rowSpan">
         <span class="action-label {{ colourMap[row.policy_mode] }}">{{ row.policy_mode }}</span>
       </td>
-      <td class="print-cell" style="width: 10%">
+      <td class="print-cell" style="width: 12%">
+        <img
+          *ngIf="row.country_code !== '-'"
+          src="{{ './assets/img/country-flag/' + row.country_code.toLowerCase() + '.svg'}}"
+          width="16px" height="12px;"
+          class="mr-2"
+          style="margin-top: -3px;"
+        />
+        {{ row.ip }}
+      </td>
+      <td class="print-cell" style="width: 30%">
+        {{ row.fqdn }}
+      </td>
+      <td class="print-cell" style="width: 6%">
+        {{ row.sessions }}
+      </td>
+      <td class="print-cell" style="width: 18%">
+        {{ row.applications }}
+      </td>
+      <td class="print-cell" style="width: 7%">
         <span class="action-label {{ colourMap[row.policy_action] }}">
           {{ 'policy.action.' + row.policy_action.toUpperCase() | translate }}
         </span>

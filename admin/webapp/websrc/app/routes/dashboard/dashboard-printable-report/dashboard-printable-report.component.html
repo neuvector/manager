@@ -42,14 +42,14 @@
   <div class="clearfix" *ngIf="reportInfo.scoreInfo.ingress.length > 0">
     <div><strong>{{ 'dashboard.body.panel_title.INGRESS' | translate }}</strong></div>
     <app-exposure-service-pod-report-grid
-      [reportGridData]="reportInfo.scoreInfo.ingress"
+      [reportGridData]="hierarchicalIngressList"
     >
     </app-exposure-service-pod-report-grid>
   </div>
   <div class="clearfix margin-top-l" *ngIf="reportInfo.scoreInfo.egress.length > 0">
     <div><strong>{{ 'dashboard.body.panel_title.EGRESS' | translate }}</strong></div>
     <app-exposure-service-pod-report-grid
-      [reportGridData]="reportInfo.scoreInfo.egress"
+      [reportGridData]="hierarchicalEgressList"
     >
     </app-exposure-service-pod-report-grid>
   </div>

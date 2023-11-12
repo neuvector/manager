@@ -49,7 +49,8 @@ export class ExposurePanelComponent implements OnInit {
         this.hierarchicalEgressList = parseExposureHierarchicalData(
           this.addIpLocation(this.scoreInfo.egress, ipMap, 'egress')
         ) || [];
-        console.log("this.hierarchicalEgressList", this.hierarchicalEgressList)
+        this.dashboardService.hierarchicalIngressList = JSON.parse(JSON.stringify(this.hierarchicalIngressList));
+        this.dashboardService.hierarchicalEgressList = JSON.parse(JSON.stringify(this.hierarchicalEgressList));
         this.isIpMapReady = true;
       },
       error => {}

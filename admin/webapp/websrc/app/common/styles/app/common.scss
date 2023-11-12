@@ -1518,3 +1518,10 @@ ngx-avatar.userIcon img.avatar-content {
   margin: 15px 0;
   align-items: flex-start;
 }
+
+.cell-span {
+  background: white;
+  border-bottom: 1px solid lightgrey !important;
+  display: flex !important;
+  align-items: center;
+}

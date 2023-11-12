@@ -6,6 +6,7 @@ import { AuthService } from '@services/auth.service';
 import { BehaviorSubject, forkJoin } from 'rxjs';
 import { DashboardHttpService } from '@common/api/dashboard-http.service';
 import { AssetsHttpService } from '@common/api/assets-http.service';
+import { HierarchicalExposure } from '@common/types';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,8 @@ export class DashboardService {
     undefined
   );
   refreshEvent$ = this.refreshEventSubject$.asObservable();
+  hierarchicalIngressList: Array<HierarchicalExposure>;
+  hierarchicalEgressList: Array<HierarchicalExposure>;
 
   constructor(
     private authService: AuthService,

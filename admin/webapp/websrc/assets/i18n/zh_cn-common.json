@@ -377,7 +377,7 @@
         "POLICY_MODE_RATIO": "策略模式比例",
         "CONTAINER_SEC": "暴露的Pod",
         "EXPOSED_RATIO": "暴露的Pod比例",
-        "SERVICE": "服务/Pod",
+        "SERVICE": "服务",
         "CONTAINER_NAME": "Pod名",
         "PORTS": "端口",
         "PROTOCOLS": "协议",
@@ -399,7 +399,8 @@
         "THREAT": "威胁",
         "VUL_POD": "有漏洞的Pod",
         "VUL_NODE": "有漏洞的主机",
-        "EXPO_CONV_RPT": "暴露对话报告"
+        "EXPO_CONV_RPT": "暴露对话报告",
+        "SESSIONS": "会话"
       },
       "comments": {
         "SAFE": "您的服务已经被全部保护! ",

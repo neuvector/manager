@@ -1,4 +1,4 @@
-<div class="d-flex">
+<!-- <div class="d-flex">
   <div *ngIf="isParent" class="mr-1" (click)="toggleVisible()">
     <i class="fa fa-minus-circle" *ngIf="isChildVisible"></i>
     <i class="fa fa-plus-circle" *ngIf="!isChildVisible"></i>
@@ -7,4 +7,8 @@
     <em *ngIf="isParent" class="{{ rowStyle.actionIcon }}"></em>
     {{ name }}
   </div>
+</div> -->
+<div class="{{ rowStyle.color }}" *ngIf="params.data.service">
+    <em class="{{ rowStyle.actionIcon }}"></em>
+    {{ params.data.service }}
 </div>

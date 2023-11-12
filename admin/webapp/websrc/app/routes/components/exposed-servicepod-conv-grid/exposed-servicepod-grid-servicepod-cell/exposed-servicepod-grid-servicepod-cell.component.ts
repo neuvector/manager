@@ -13,31 +13,32 @@ export class ExposedServicepodGridServicepodCellComponent implements ICellRender
   name!: string;
   isParent!: boolean;
   rowStyle: any;
-  get isChildVisible() {
-    return this.params.data.visible;
-  }
+  // get isChildVisible() {
+  //   return this.params.data.visible;
+  // }
 
   constructor() {}
 
   agInit(params: ICellRendererParams): void {
     this.params = params;
-    this.name = params.data.isParent ? `${params.data.service}/${params.data.pod_name}` : '';
-    this.isParent = params.data.isParent;
-    this.rowStyle = this.getServicePodStyle(this.params);
+    // this.name = params.data.isParent ? params.data.service : '';
+    // this.isParent = params.data.isParent;
+    if (params.data.service)
+      this.rowStyle = this.getServicePodStyle(this.params);
   }
 
   refresh(params: ICellRendererParams): boolean {
     return false;
   }
 
-  toggleVisible(): void {
-    this.params.data.visible = !this.params.data.visible;
-    this.params.data.child_ids.forEach(child_id => {
-      const child_node = this.params.api.getRowNode(child_id);
-      if (child_node) child_node.data.visible = !child_node.data.visible;
-    });
-    this.params.api.onFilterChanged();
-  }
+  // toggleVisible(): void {
+  //   this.params.data.visible = !this.params.data.visible;
+  //   this.params.data.child_ids.forEach(child_id => {
+  //     const child_node = this.params.api.getRowNode(child_id);
+  //     if (child_node) child_node.data.visible = !child_node.data.visible;
+  //   });
+  //   this.params.api.onFilterChanged();
+  // }
 
   private getServicePodStyle = params => {
     const colorArray = [
@@ -66,27 +67,27 @@ export class ExposedServicepodGridServicepodCellComponent implements ICellRender
     };
 
     let actionType = "";
-    let level = 0;
+    let level: number[] = [];
     if (this.params.data.severity) {
-      level = levelMap[this.params.data.severity.toLowerCase()];
-      actionType = actionTypeIconMap["threat"];
-    } else if (
-      this.params.data.policy_action &&
-      (this.params.data.policy_action.toLowerCase() === "deny" ||
-        this.params.data.policy_action.toLowerCase() === "violate")
-    ) {
-      level = levelMap[this.params.data.policy_action.toLowerCase()];
-      actionType =
-        actionTypeIconMap[this.params.data.policy_action.toLowerCase()];
-    } else {
-      if (!this.params.data.policy_mode) this.params.data.policy_mode = "discover";
-      level = levelMap[this.params.data.policy_mode.toLowerCase()];
-      actionType =
-        actionTypeIconMap[this.params.data.policy_mode.toLowerCase()];
-    }
-    return {
-      color: colorArray[level],
-      actionIcon: actionType
-    };
+        level.push(levelMap[this.params.data.severity.toLowerCase()]);
+      } else if (
+        this.params.data.policy_action &&
+        (this.params.data.policy_action.toLowerCase() === "deny" ||
+          this.params.data.policy_action.toLowerCase() === "violate")
+      ) {
+        level.push(levelMap[this.params.data.policy_action.toLowerCase()]);
+        actionType =
+          actionTypeIconMap[this.params.data.policy_action.toLowerCase()];
+      } else {
+        if (!this.params.data.policy_mode) this.params.data.policy_mode = "discover";
+        level.push(levelMap[this.params.data.policy_mode.toLowerCase()]);
+        actionType =
+          actionTypeIconMap[this.params.data.policy_mode.toLowerCase()];
+      }
+      let serviceColor = colorArray[Math.min(...level)];
+      return {
+        color: serviceColor,
+        actionIcon: actionType
+      };
   }
 }

@@ -80,7 +80,7 @@ export class SamlFormComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.samlData) {
+    if (changes.samlData && !changes.samlData.isFirstChange()) {
       this.samlForm.reset();
       this.initForm();
     }
@@ -151,7 +151,6 @@ export class SamlFormComponent implements OnInit, OnChanges {
       submission = this.settingsService.postServer(config).pipe(
         finalize(() => {
           this.submittingForm = false;
-          this.isCreated = true;
           this.refresh.emit();
         })
       );
@@ -165,6 +164,7 @@ export class SamlFormComponent implements OnInit, OnChanges {
     }
     submission.subscribe({
       complete: () => {
+        this.isCreated = true;
         this.notificationService.open(this.tr.instant('ldap.SERVER_SAVED'));
       },
       error: ({ error }: { error: ErrorResponse }) => {

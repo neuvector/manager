@@ -73,7 +73,7 @@ export class LdapFormComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.ldapData) {
+    if (changes.ldapData && !changes.ldapData.isFirstChange()) {
       this.ldapForm.reset();
       this.initForm();
     }
@@ -117,7 +117,6 @@ export class LdapFormComponent implements OnInit, OnChanges {
       submission = this.settingsService.postServer(config).pipe(
         finalize(() => {
           this.submittingForm = false;
-          this.isCreated = true;
           this.refresh.emit();
         })
       );
@@ -131,6 +130,7 @@ export class LdapFormComponent implements OnInit, OnChanges {
     }
     submission.subscribe({
       complete: () => {
+        this.isCreated = true;
         this.notificationService.open(this.tr.instant('ldap.SERVER_SAVED'));
       },
       error: ({ error }: { error: ErrorResponse }) => {

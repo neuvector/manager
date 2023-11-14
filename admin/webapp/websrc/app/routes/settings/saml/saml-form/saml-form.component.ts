@@ -137,11 +137,14 @@ export class SamlFormComponent implements OnInit, OnChanges {
     if (!this.samlForm.valid) {
       return;
     }
-    const { x509_certs, ...samlForm } = this.samlForm.getRawValue();
+    const { x509_certs, signing_cert, signing_key, ...samlForm } =
+      this.samlForm.getRawValue();
     const saml: SAMLPatch = {
       group_mapped_roles: this.groupMappedRoles,
       x509_cert: x509_certs[0],
       x509_cert_extra: x509_certs.slice(1).filter(cert => cert),
+      signing_cert: signing_cert || null,
+      signing_key: signing_key || null,
       ...samlForm,
     };
     const config: ServerPatchBody = { config: { name: this.serverName, saml } };

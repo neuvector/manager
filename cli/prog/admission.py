@@ -235,6 +235,10 @@ def _list_admission_rule_display_format(rule):
     for attrib in attribs:
         if attrib not in rule:
             rule[attrib] = ""
+
+    if ("containers" not in rule) or len(rule["containers"]) == 3:
+        rule["containers"] = "all"
+
     criteria = ""
     if "criteria" in rule:
         types = {}
@@ -329,7 +333,7 @@ def show_admission_rule(ctx, data, id, scope):
     rules.append(rule)
     click.echo(" ")
     # columns = ("id", "category", "criteria", "disable", "comment", "type")
-    columns = ("id", "criteria", "disable", "rule_mode", "comment", "action", "type")
+    columns = ("id", "criteria", "disable", "rule_mode", "containers", "comment", "action", "type")
     output.list(columns, rules)
 
 
@@ -350,7 +354,7 @@ def show_admission_rules(ctx, data, scope):
 
     if len(rules) > 0:
         # columns = ("id", "category", "criteria", "disable", "comment", "type")
-        columns = ("id", "criteria", "disable", "rule_mode", "comment", "action", "type")
+        columns = ("id", "criteria", "disable", "rule_mode", "containers", "comment", "action", "type")
         output.list(columns, rules)
 
 
@@ -529,6 +533,11 @@ def _parse_adm_sabindriskyrole_criterion(c):
     crit = {"name": d[0], "op": d[1], "value": d[2]}
     return crit
 
+def _parse_adm_target(targets):
+    if len(targets) == 0:
+        values = ["init_containers", "containers", "ephemeral_containers"]
+    else:
+        return targets
 
 def _parse_adm_criteria(criteria):
     crits = []
@@ -594,9 +603,10 @@ def _parse_adm_criteria(criteria):
               help="Format is name:op:value{/subName:op:value}. name can be annotations, allowPrivEscalation, count, cpuLimit, cpuRequest, cveHighCount, cveHighWithFixCount, cveMediumCount, cveNames, cveScoreCount, envVarSecrets, image, imageCompliance, imageNoOS, imageScanned, imageSigned, imageVerifiers, labels, memoryLimit, memoryRequest, modules, mountVolumes, namespace, pspCompliance, resourceLimit. subName can be publishDays, runAsRoot, shareIpcWithHost, shareNetWithHost, sharePidWithHost, user, userGroups, violatePssPolicy. Format for criteira named customPath is name:op:path:valuetype:value. Format for criteria named saBindRiskyRole is name:op:value. See command: show admission rule options")
 @click.option("--disable/--enable", default=False, help="Disable/enable the admission control rule [default: --enable]")
 @click.option("--mode", default="", type=click.Choice(['','monitor', 'protect']), help="Rule mode, only for deny rules")
+@click.option("--target", required=False, multiple=True, help="Elevate this rule for what type of containers. Supported values: init_containers, containers, ephemeral_containers")
 @click.option("--comment", default="", help="Rule comment")
 @click.pass_obj
-def create_admission_rule(data, type, scope, criteria, disable, mode, comment):
+def create_admission_rule(data, type, scope, criteria, disable, mode, target, comment):
     """Create an admission control rule.\n
        Notice: \n
        For criteria/comment options, you need to use double quote character around the option value, like --criteria \"cveHighCount:>=:2/publishDays:>=:30\" or --criteria \"cveScoreCount:>=:7/count:>=:5\" """
@@ -612,6 +622,7 @@ def create_admission_rule(data, type, scope, criteria, disable, mode, comment):
     if not result:
         return
 
+    rule["containers"] = _parse_adm_target(target)
     rule["criteria"] = crits
     rule["comment"] = comment
     rule["category"] = "Kubernetes"
@@ -689,9 +700,10 @@ def set_admission_state(data, disable, mode, client_mode):
 @click.option("--enable", "state", flag_value='enable', help="Enable the admission control rule")
 @click.option("--disable", "state", flag_value='disable', help="Enable the admission control rule")
 @click.option("--mode", required=False, type=click.Choice(['', 'monitor', 'protect']), help="Rule mode, only for deny rules")
+@click.option("--target", required=False, multiple=True, help="Elevate this rule for what type of containers. Supported values: init_containers, containers, ephemeral_containers")
 @click.option("--comment", help="Rule comment")
 @click.pass_obj
-def set_admission_rule(data, id, scope, criteria, state, mode, comment):
+def set_admission_rule(data, id, scope, criteria, state, mode, target, comment):
     category = None  # Do not allow category yet
     disable = False
     """Configure admission control deny rule.\n
@@ -749,6 +761,13 @@ def set_admission_rule(data, id, scope, criteria, state, mode, comment):
             click.echo("Abort because --mode cannot be set for allow rules.")
             click.echo("")
             return
+    if len(target) > 0:
+        if defaultRule:
+            click.echo("Abort because target of the default rule cannot be modified.")
+            click.echo("")
+            return
+        rule["containers"] = _parse_adm_target(target)
+        modify = True
 
     if modify:
         body = dict()

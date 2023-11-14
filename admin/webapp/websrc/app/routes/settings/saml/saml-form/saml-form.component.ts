@@ -80,7 +80,7 @@ export class SamlFormComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.samlData) {
+    if (changes.samlData && !changes.samlData.isFirstChange()) {
       this.samlForm.reset();
       this.initForm();
     }
@@ -137,11 +137,14 @@ export class SamlFormComponent implements OnInit, OnChanges {
     if (!this.samlForm.valid) {
       return;
     }
-    const { x509_certs, ...samlForm } = this.samlForm.getRawValue();
+    const { x509_certs, signing_cert, signing_key, ...samlForm } =
+      this.samlForm.getRawValue();
     const saml: SAMLPatch = {
       group_mapped_roles: this.groupMappedRoles,
       x509_cert: x509_certs[0],
       x509_cert_extra: x509_certs.slice(1).filter(cert => cert),
+      signing_cert: signing_cert || null,
+      signing_key: signing_key || null,
       ...samlForm,
     };
     const config: ServerPatchBody = { config: { name: this.serverName, saml } };
@@ -151,7 +154,6 @@ export class SamlFormComponent implements OnInit, OnChanges {
       submission = this.settingsService.postServer(config).pipe(
         finalize(() => {
           this.submittingForm = false;
-          this.isCreated = true;
           this.refresh.emit();
         })
       );
@@ -165,6 +167,7 @@ export class SamlFormComponent implements OnInit, OnChanges {
     }
     submission.subscribe({
       complete: () => {
+        this.isCreated = true;
         this.notificationService.open(this.tr.instant('ldap.SERVER_SAVED'));
       },
       error: ({ error }: { error: ErrorResponse }) => {

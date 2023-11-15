@@ -16,6 +16,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { SettingsService } from '@services/settings.service';
 import { MatIconModule } from '@angular/material/icon';
 import { LoadingTemplateModule } from '@components/ui/loading-template/loading-template.module';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 const routes: Routes = [
   { path: '', component: SamlComponent },
@@ -31,6 +32,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     MatProgressSpinnerModule,
     MatInputModule,
+    MatSlideToggleModule,
     MatCheckboxModule,
     MatButtonModule,
     MatIconModule,

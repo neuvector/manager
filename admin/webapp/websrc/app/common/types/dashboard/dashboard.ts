@@ -1,11 +1,18 @@
 import { RiskType } from './enum';
 
-export interface RbacStatus {
-  neuvector_crd_errors: string[];
-  clusterrole_errors: string[];
-  clusterrolebinding_errors: string[];
-  rolebinding_errors: string[];
-  role_errors: string[];
+export interface RbacAlertsSummary {
+  acceptable_alerts: RbacAlertsData;
+  accepted_alerts: string[] | null;
+  neuvector_upgrade_info: string;
+}
+
+export interface RbacAlertsData {
+  neuvector_crd_errors: Record<string, string>[] | null;
+  clusterrole_errors: Record<string, string>[] | null;
+  clusterrolebinding_errors: Record<string, string>[] | null;
+  rolebinding_errors: Record<string, string>[] | null;
+  role_errors: Record<string, string>[] | null;
+  other_alerts: Record<string, string>[] | null;
 }
 
 export interface Score {

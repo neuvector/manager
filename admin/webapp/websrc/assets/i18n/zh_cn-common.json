@@ -796,7 +796,9 @@
       "LESS": "隐藏部分通知",
       "END": "通知末尾",
       "MARK_ALL_AS_READ": "将所有标为已读",
-      "MARK_AS_READ": "标为已读"
+      "MARK_AS_READ": "标为已读",
+      "ACCEPTED_FAILURE": "无法接受全局通知",
+      "ACCEPTED_SUCCESS": "全局通知已被接受"
     },
     "mode": {
       "LEARNING": "学习",
@@ -1060,6 +1062,8 @@
   },
   "cveProfile": {
     "TITLE": "漏洞配置资料",
+    "IMPORT": "导入",
+    "EXPORT": "导出",
     "RESET": "重置",
     "ADD": "添加",
     "EDIT": "编辑",
@@ -1073,9 +1077,19 @@
     "IMAGES_PLACEHOLDER": "添加镜像",
     "DOMAINS_PLACEHOLDER": "添加命名空间",
     "ACCEPT": "接受",
+    "CRD_ACCEPT": "漏洞档案由 CRD 控制。",
     "ACCEPT_VUL": "接受漏洞",
     "NAME": "漏洞名称",
     "REPORTED_WITHIN": "漏洞报告于",
+    "import": {
+      "TITLE": "导入选项",
+      "MERGE": "合并",
+      "REPLACE": "替代"
+    },
+    "type": {
+      "CUSTOM": "用户创建",
+      "GROUND": "CRD"
+    },
     "msg": {
       "REMOVE_CFM": "您确定要删除?",
       "REMOVE_OK": "漏洞配置资料条目删除成功!",
@@ -1083,7 +1097,11 @@
       "ADD_OK": "漏洞配置资料条目添加成功!",
       "ADD_NG": "漏洞配置资料条目添加时发生错误!",
       "UPDATE_OK": "漏洞配置资料条目更新成功!",
-      "UPDATE_NG": "漏洞配置资料条目更新时发生错误!"
+      "UPDATE_NG": "漏洞配置资料条目更新时发生错误!",
+      "EXPORT_PROFILE_OK": "漏洞档案导出成功！",
+      "EXPORT_PROFILE_NG": "导出漏洞档案时出现错误！",
+      "IMPORT_FINISH": "漏洞档案导入成功！",
+      "IMPORT_FAILED": "导入漏洞档案时出现错误！"
     },
     "gridHeader": {
       "VULNERABILITY": "漏洞名称",
@@ -1401,7 +1419,13 @@
       "CURR_TEMPLATES": "当前模版",
       "APPLY_REG": "应用法规",
       "CURR_REG": "当前法规",
-      "ADD_REG": "添加法规"
+      "ADD_REG": "添加法规",
+      "msg": {
+        "EXPORT_PROFILE_OK": "合规档案已成功导出！",
+        "EXPORT_PROFILE_NG": "导出合规档案时出现错误！",
+        "IMPORT_FINISH": "合规档案导入成功！",
+        "IMPORT_FAILED": "导入合规档案时出现错误！"
+      }
     },
     "report": {
       "TITLE": "合规报告 (合规视角)",
@@ -3184,6 +3208,10 @@
     },
     "IDP_URL": "身份提供者单点登录网址",
     "IDP_ISSUER": "身份提供者",
+    "SAML_SLO": "SAML单点注销",
+    "SLO_URL": "身份提供商单点注销URL",
+    "SLO_CERT": "单点注销签名证书",
+    "SLO_KEY": "单点注销签名密钥",
     "CERTIFICATE": "X.509证书",
     "ADD_EXTRA_CERT": "添加额外的X.509证书",
     "EXTRA_CERT": "额外的X.509证书",

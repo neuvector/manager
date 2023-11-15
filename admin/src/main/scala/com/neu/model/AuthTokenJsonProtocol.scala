@@ -46,7 +46,7 @@ object AuthTokenJsonProtocol extends DefaultJsonProtocol {
 
   implicit val groupMappedRoleFormat: RootJsonFormat[GroupMappedRole] = jsonFormat3(GroupMappedRole)
   implicit val ldapServerFormat: RootJsonFormat[LdapServer]           = jsonFormat12(LdapServer)
-  implicit val samlServerFormat: RootJsonFormat[SamlServer]           = jsonFormat8(SamlServer)
+  implicit val samlServerFormat: RootJsonFormat[SamlServer]           = jsonFormat13(SamlServer)
   implicit val ssoServerFormat: RootJsonFormat[SsoServer]             = jsonFormat3(SsoServer)
   implicit val samlTokenFormat: RootJsonFormat[SamlToken]             = jsonFormat3(SamlToken)
   implicit val samlResponseFormat: RootJsonFormat[SamlResponse]       = jsonFormat3(SamlResponse)
@@ -58,7 +58,8 @@ object AuthTokenJsonProtocol extends DefaultJsonProtocol {
   implicit val openIdServerConfigFormat: RootJsonFormat[OpenIdServerConfig] = jsonFormat2(
     OpenIdServerConfig
   )
-  implicit val redirectURLFormat: RootJsonFormat[RedirectURL] = jsonFormat1(RedirectURL)
+  implicit val redirectURLFormat: RootJsonFormat[RedirectURL]         = jsonFormat1(RedirectURL)
+  implicit val samlRedirectURLFormat: RootJsonFormat[SamlRedirectURL] = jsonFormat2(SamlRedirectURL)
 
   implicit val ldapSettingFormat: RootJsonFormat[LdapSetting]         = jsonFormat4(LdapSetting)
   implicit val ldapSettingWrapFormat: RootJsonFormat[LdapSettingWrap] = jsonFormat1(LdapSettingWrap)
@@ -134,6 +135,9 @@ object AuthTokenJsonProtocol extends DefaultJsonProtocol {
     ldapServerAccountWrap.toJson.compactPrint
 
   def redirectUrlToJson(redirectURL: RedirectURL): String = redirectURL.toJson.compactPrint
+
+  def samlRedirectUrlToJson(samlRedirectURL: SamlRedirectURL): String =
+    samlRedirectURL.toJson.compactPrint
 
   def roleWrapToJson(roleWrap: RoleWrap): String = roleWrap.toJson.compactPrint
 

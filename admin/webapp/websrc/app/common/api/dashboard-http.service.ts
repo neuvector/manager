@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { PathConstant } from '@common/constants/path.constant';
-import { InternalSystemInfo, Metrics, RbacStatus, Score } from '@common/types';
+import {
+  InternalSystemInfo,
+  Metrics,
+  RbacAlertsSummary,
+  Score,
+} from '@common/types';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { Observable } from 'rxjs';
 
@@ -34,18 +39,26 @@ export class DashboardHttpService {
   }
 
   getSystemRBAC() {
-    return GlobalVariable.http.get<RbacStatus>(PathConstant.SYSTEM_RBAC_URL);
+    return GlobalVariable.http.get<RbacAlertsSummary>(
+      PathConstant.SYSTEM_RBAC_URL
+    );
   }
 
   getDashboardSecurityEventData(domain: string) {
-    return GlobalVariable.http.get(PathConstant.DASHBOARD_NOTIFICATIONS_URL, {params: {domain: domain}});
+    return GlobalVariable.http.get(PathConstant.DASHBOARD_NOTIFICATIONS_URL, {
+      params: { domain: domain },
+    });
   }
 
   getDashboardDetailsData(domain: string) {
-    return GlobalVariable.http.get(PathConstant.DASHBOARD_DETAILS_URL, {params: {domain: domain}});
+    return GlobalVariable.http.get(PathConstant.DASHBOARD_DETAILS_URL, {
+      params: { domain: domain },
+    });
   }
 
   getSummaryData(domain: string) {
-    return GlobalVariable.http.get(PathConstant.DASHBOARD_SUMMARY_URL, {params: {domain: domain}});
+    return GlobalVariable.http.get(PathConstant.DASHBOARD_SUMMARY_URL, {
+      params: { domain: domain },
+    });
   }
 }

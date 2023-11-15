@@ -45,3 +45,7 @@ case class ComplianceProfileConfig(
 case class ComplianceProfileConfigData(
   config: ComplianceProfileConfig
 )
+
+case class ComplianceProfileExportData(
+  names: Array[String]
+)

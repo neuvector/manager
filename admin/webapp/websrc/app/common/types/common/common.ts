@@ -24,6 +24,8 @@ export type LastModifiedDateOption =
   | 'threemonths'
   | 'custom';
 
+export type CfgType = 'ground' | 'user_created' | '';
+
 export interface ErrorResponse {
   code: number;
   error: string;
@@ -36,11 +38,18 @@ export function isErrorResponse(err: ErrorResponse): err is ErrorResponse {
 
 export interface GlobalNotification {
   name: string;
+  key: string;
   message: string;
   link: string;
   labelClass: string;
   accepted: boolean;
   unClamped: boolean;
+}
+
+export interface GlobalNotificationPayLoad {
+  manager_alerts?: string[];
+  controller_alerts?: string[];
+  user_alerts?: string[];
 }
 
 export interface ScanConfig {
@@ -98,4 +107,10 @@ export interface Rebrand {
   customPageHeaderColor: string;
   customPageFooterContent: string;
   customPageFooterColor: string;
+}
+
+export interface SsoServer {
+  redirect_url: string;
+  server_name: string;
+  server_type: string;
 }

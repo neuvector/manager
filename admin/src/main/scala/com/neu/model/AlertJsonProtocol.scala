@@ -37,6 +37,12 @@ case class ThreatDTO(
   sess_ingress: Boolean
 )
 
+case class GlobalNotificationRequest(
+  manager_alerts: Option[Array[String]],
+  controller_alerts: Option[Array[String]],
+  user_alerts: Option[Array[String]]
+)
+
 case class ThreatDTOWrap(threats: Array[ThreatDTO])
 case class NewThreatDTOWrap(threats: Array[ConvertedThreat])
 
@@ -49,6 +55,8 @@ object AlertJsonProtocol extends DefaultJsonProtocol {
   implicit val threatDTOFormat        = jsonFormat13(ThreatDTO)
   implicit val threatDTOWrapFormat    = jsonFormat1(ThreatDTOWrap)
   implicit val newThreatDTOWrapFormat = jsonFormat1(NewThreatDTOWrap)
+  implicit val globalNotificationRequestFmt: RootJsonFormat[GlobalNotificationRequest] =
+    jsonFormat3(GlobalNotificationRequest)
 
   def jsonToViolationWrap(violations: String): ViolationWrap =
     violations.parseJson.convertTo[ViolationWrap]
@@ -56,4 +64,6 @@ object AlertJsonProtocol extends DefaultJsonProtocol {
   def jsonToThreatDTOWrap(threats: String): ThreatDTOWrap =
     threats.parseJson.convertTo[ThreatDTOWrap]
 
+  def acceptNotificationToJson(notificationRequest: GlobalNotificationRequest): String =
+    notificationRequest.toJson.compactPrint
 }

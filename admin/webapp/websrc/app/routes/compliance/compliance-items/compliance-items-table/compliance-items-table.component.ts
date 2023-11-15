@@ -41,7 +41,6 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
   matchTypes = this.complianceFilterService.matchTypes;
   filteredCount = 0;
   filtered$ = this.complianceFilterService.filtered$;
-  advFilter: any = this.complianceFilterService.advFilter;
   filterDialog!: MatDialogRef<any>;
   filterOpen = false;
   gridOptions!: GridOptions;
@@ -198,7 +197,6 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
     if (filter) {
       this.complianceFilterService.advFilter = filter;
     }
-    this.advFilter = this.complianceFilterService.advFilter;
     this.gridApi.onFilterChanged();
     this.filteredCount =
       this.gridApi.getModel()['rootNode'].childrenAfterFilter.length;
@@ -213,7 +211,10 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
         ComplianceItemsTableFilterComponent,
         {
           width: '675px',
-          data: { filter: this.advFilter, domains: this.domains },
+          data: {
+            filter: this.complianceFilterService.advFilter,
+            domains: this.domains,
+          },
           hasBackdrop: false,
           position: { right: '25px', top: '130px' },
         }

@@ -1,9 +1,10 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Component, Inject, OnInit } from "@angular/core";
 import { PathConstant } from "@common/constants/path.constant";
+import { MapConstant } from "@common/constants/map.constant";
 import { AdmissionRulesService } from "@common/services/admission-rules.service";
 import { GridOptions } from "ag-grid-community";
-import { AdmissionConfigurationAssessment } from "@common/types/admission/admission";
+import { AdmissionConfigurationAssessment, AdmissionTestResult } from "@common/types/admission/admission";
 import { TranslateService } from "@ngx-translate/core";
 import { UtilsService } from "@common/utils/app.utils";
 import { arrayToCsv } from "@common/utils/common.utils";
@@ -20,12 +21,14 @@ export class ConfigurationAssessmentModalComponent implements OnInit {
   gridOptions: GridOptions = <GridOptions>{};
   gridHeight: number = 0;
   configAssessmentResult!: AdmissionConfigurationAssessment;
+  admissionTestResults: Array<AdmissionTestResult>;
+  MapConstant = MapConstant;
 
   constructor(
     public dialogRef: MatDialogRef<ConfigurationAssessmentModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private admissionRulesService: AdmissionRulesService,
-    private utils: UtilsService,
+    public utils: UtilsService,
     public translate: TranslateService
   ) { }
 
@@ -40,6 +43,7 @@ export class ConfigurationAssessmentModalComponent implements OnInit {
 
   getImportResult = (response: AdmissionConfigurationAssessment) => {
     this.configAssessmentResult = response;
+    this.admissionTestResults = this.admissionRulesService.formatAdmissionTestResults(this.configAssessmentResult.results);
   };
 
   exportCsv = () => {

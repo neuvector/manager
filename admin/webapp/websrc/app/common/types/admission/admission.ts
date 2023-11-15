@@ -48,15 +48,26 @@ export interface AdmissionStateRec {
   state?: AdmissionState;
 }
 
-interface AdmissionTestResult {
+export interface MatchedRule {
+  id: number;
+  disabled: boolean;
+  type: string;
+  mode: string;
+  rule_details: string;
+  rule_cfg_type: string;
+}
+
+export interface AdmissionTestResult {
   allowed: Boolean;
   index: number;
   kind: string;
   message: string;
   name: string;
+  matched_rules: MatchedRule[] | null;
 }
 
 export interface AdmissionConfigurationAssessment {
   props_unavailable: Array<string>;
+  global_mode: string;
   results: Array<AdmissionTestResult>;
 }

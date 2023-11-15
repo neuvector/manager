@@ -22,6 +22,8 @@ import { NgJsonEditorModule } from 'ang-jsoneditor';
 import { CriterionDescriptionIconComponent } from './partial/criterion-description-icon/criterion-description-icon.component'
 import { MultiSelectorDropdownModule } from '@routes/components/ui/multi-selector-dropdown/multi-selector-dropdown.module';
 import { ConfigurationAssessmentResultPrintableReportComponent } from './partial/configuration-assessment-result-printable-report/configuration-assessment-result-printable-report.component';
+import { MatchedRuleListComponent } from './partial/configuration-assessment-modal/matched-rule-list/matched-rule-list.component';
+import { IndexCellComponent } from './partial/configuration-assessment-modal/index-cell/index-cell.component';
 
 
 @NgModule({
@@ -34,7 +36,9 @@ import { ConfigurationAssessmentResultPrintableReportComponent } from './partial
     ConfigurationAssessmentModalComponent,
     ImportTestFileComponent,
     CriterionDescriptionIconComponent,
-    ConfigurationAssessmentResultPrintableReportComponent
+    ConfigurationAssessmentResultPrintableReportComponent,
+    MatchedRuleListComponent,
+    IndexCellComponent
   ],
   imports: [
     CommonModule,

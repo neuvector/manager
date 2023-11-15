@@ -22,3 +22,4 @@ export * from './multi-cluster/cluster-summary';
 export * from './multi-cluster/sessionStorageCluster';
 export * from './federated-configuration/FederatedConfiguration';
 export * from './signatures/signature';
+export * from './admission/admission';

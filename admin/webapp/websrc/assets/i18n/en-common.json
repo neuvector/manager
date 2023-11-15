@@ -794,7 +794,9 @@
       "LESS": "VIEW LESS PREVIOUS NOTIFICATIONS",
       "END": "END OF NOTIFICATIONS",
       "MARK_ALL_AS_READ": "Mark All as Read",
-      "MARK_AS_READ": "Mark as Read"
+      "MARK_AS_READ": "Mark as Read",
+      "ACCEPTED_FAILURE": "Failed to accept the global notification.",
+      "ACCEPTED_SUCCESS": "The global notification has been accepted."
     },
     "mode": {
       "LEARNING": "Discover",

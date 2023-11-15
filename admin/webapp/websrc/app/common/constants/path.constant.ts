@@ -143,4 +143,5 @@ export class PathConstant {
   public static SIGNATURE_EXPORT_URL = 'signature/export';
   public static CSP_SUPPORT_URL = 'csp-support';
   public static REBRAND = 'rebrand';
+  public static NOTIFICATION_PERSIST_URL = 'notification/accept';
 }

@@ -38,11 +38,18 @@ export function isErrorResponse(err: ErrorResponse): err is ErrorResponse {
 
 export interface GlobalNotification {
   name: string;
+  key: string;
   message: string;
   link: string;
   labelClass: string;
   accepted: boolean;
   unClamped: boolean;
+}
+
+export interface GlobalNotificationPayLoad {
+  manager_alerts?: string[];
+  controller_alerts?: string[];
+  user_alerts?: string[];
 }
 
 export interface ScanConfig {

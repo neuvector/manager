@@ -4,7 +4,7 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { DashboardService } from '@services/dashboard.service';
 import {
   SystemSummaryDetails,
-  RbacStatus,
+  RbacAlertsData,
   InternalSystemInfo,
 } from '@common/types';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -27,7 +27,7 @@ import { SummaryService } from '@services/summary.service';
 export class DashboardComponent implements OnInit {
   isGlobalUser: boolean = false;
   summaryInfo!: SystemSummaryDetails;
-  rbacInfo!: RbacStatus;
+  rbacInfo!: RbacAlertsData;
   scoreInfo!: InternalSystemInfo;
   isPrinting: boolean = false;
   iskube: boolean = false;
@@ -99,7 +99,7 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.getBasicData(this.isGlobalUser).subscribe(
       (response: any) => {
         this.summaryInfo = GlobalVariable.summary as SystemSummaryDetails;
-        this.rbacInfo = response[0] as RbacStatus;
+        this.rbacInfo = response[0] as RbacAlertsData;
         this.scoreInfo = response[1] as InternalSystemInfo;
         console.log(
           'summaryInfo',

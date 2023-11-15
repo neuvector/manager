@@ -3,13 +3,22 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { CommonHttpService } from '@common/api/common-http.service';
 import { ConfigHttpService } from '@common/api/config-http.service';
 import { GlobalConstant } from '@common/constants/global.constant';
-import { GlobalNotification, RbacStatus, TelemetryStatus } from '@common/types';
+import {
+  GlobalNotification,
+  RbacAlertsSummary,
+  TelemetryStatus,
+  ManagerAlertKey,
+  UserAlertKey,
+  GlobalNotificationPayLoad,
+} from '@common/types';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { TranslateService } from '@ngx-translate/core';
 import { DashboardService } from '@services/dashboard.service';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
+import { NotificationService } from '@services/notification.service';
+import { UtilsService } from '@common/utils/app.utils';
 
 @Component({
   selector: 'app-global-notifications',
@@ -21,7 +30,8 @@ export class GlobalNotificationsComponent implements OnInit {
   notificationMenuTrigger!: MatMenuTrigger;
   globalNotifications: GlobalNotification[] = [];
   version: any;
-  rbacData!: RbacStatus;
+  rbacData!: RbacAlertsSummary;
+  payload: GlobalNotificationPayLoad = {};
   telemetryStatus!: TelemetryStatus | null;
   unUpdateDays!: number;
   get isVersionMismatch() {
@@ -50,7 +60,9 @@ export class GlobalNotificationsComponent implements OnInit {
     private tr: TranslateService,
     private commonHttpService: CommonHttpService,
     private configHttpService: ConfigHttpService,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private notificationService: NotificationService,
+    private utils: UtilsService
   ) {}
 
   ngOnInit(): void {
@@ -61,19 +73,24 @@ export class GlobalNotificationsComponent implements OnInit {
   }
 
   accept(notification: GlobalNotification, event: MouseEvent) {
-    let globalNotifs = {};
-    let currentNotifs = this.sessionStorage.get(
-      GlobalConstant.SESSION_STORAGE_NOTIFICATIONS
-    )?.[this.currentUser];
-    if (currentNotifs) {
-      globalNotifs[this.currentUser] = [...currentNotifs, notification.name];
-    } else {
-      globalNotifs[this.currentUser] = [notification.name];
+    if (this.isRbacNotif(notification.name)) {
+      this.payload.controller_alerts = [notification.key];
     }
-    notification.accepted = true;
-    this.sessionStorage.set(
-      GlobalConstant.SESSION_STORAGE_NOTIFICATIONS,
-      globalNotifs
+    if (this.isManagerNotif(notification.name)) {
+      this.payload.manager_alerts = [notification.key];
+    }
+    if (this.isUserNotif(notification.name)) {
+      this.payload.user_alerts = [notification.key];
+    }
+    this.notificationService.acceptNotification(this.payload).subscribe(
+      () => {
+        notification.accepted = true;
+      },
+      error => {
+        this.notificationService.open(
+          this.utils.getAlertifyMsg(error.error, this.tr.instant(''), false)
+        );
+      }
     );
     if (this.notificationLength) event.stopPropagation();
   }
@@ -111,57 +128,74 @@ export class GlobalNotificationsComponent implements OnInit {
   }
 
   generateNotifications(): void {
-    // todo enable the version checking in 5.3
-    // if (
-    //   this.telemetryStatus?.max_upgrade_version.tag &&
-    //   this.isUpgradeNeeded(
-    //     this.telemetryStatus.current_version,
-    //     this.telemetryStatus.max_upgrade_version.tag
-    //   )
-    // ) {
-    //   this.globalNotifications.push({
-    //     name: 'newVersionAvailable',
-    //     message: this.tr.instant('login.UPGRADE_AVAILABLE', {
-    //       currentVersion: this.telemetryStatus.current_version,
-    //       newVersion: this.telemetryStatus.max_upgrade_version.tag,
-    //     }),
-    //     link: '',
-    //     labelClass: 'warning',
-    //     accepted: false,
-    //     unClamped: false,
-    //   });
-    // }
+    if (
+      this.telemetryStatus?.max_upgrade_version.tag &&
+      this.isUpgradeNeeded(
+        this.telemetryStatus.current_version,
+        this.telemetryStatus.max_upgrade_version.tag
+      )
+    ) {
+      this.globalNotifications.push({
+        name: 'newVersionAvailable',
+        key: ManagerAlertKey.NewVersionAvailable,
+        message: this.tr.instant('login.UPGRADE_AVAILABLE', {
+          currentVersion: this.telemetryStatus.current_version,
+          newVersion: this.telemetryStatus.max_upgrade_version.tag,
+        }),
+        link: '',
+        labelClass: 'warning',
+        accepted: this.rbacData.accepted_alerts
+          ? this.rbacData.accepted_alerts.includes(
+              ManagerAlertKey.NewVersionAvailable
+            )
+          : false,
+        unClamped: false,
+      });
+    }
     if (this.unUpdateDays > GlobalConstant.MAX_UNUPDATED_DAYS) {
       this.globalNotifications.push({
         name: 'isScannerOld',
+        key: ManagerAlertKey.OutdatedCVE,
         message: this.tr.instant('login.CVE_DB_OLD', {
           day: Math.round(this.unUpdateDays),
         }),
         link: '#/controllers',
         labelClass: 'warning',
-        accepted: false,
+        accepted: this.rbacData.accepted_alerts
+          ? this.rbacData.accepted_alerts.includes(ManagerAlertKey.OutdatedCVE)
+          : false,
         unClamped: false,
       });
     }
     if (this.isVersionMismatch) {
       this.globalNotifications.push({
         name: 'isVersionMismatch',
+        key: ManagerAlertKey.VersionMismatch,
         message: this.tr.instant('login.VERSION_MISMATCHED'),
         link: '#/controllers',
         labelClass: 'warning',
-        accepted: false,
+        accepted: this.rbacData.accepted_alerts
+          ? this.rbacData.accepted_alerts.includes(
+              ManagerAlertKey.VersionMismatch
+            )
+          : false,
         unClamped: false,
       });
     }
     if (this.passwordExpiration >= 0 && this.passwordExpiration < 10) {
       this.globalNotifications.push({
         name: 'isPasswordExpiring',
+        key: UserAlertKey.ExpiringPassword,
         message: this.tr.instant('login.CHANGE_EXPIRING_PASSWORD', {
           expiring_Days: this.passwordExpiration + 1,
         }),
         link: '#/profile',
         labelClass: this.passwordExpiration < 1 ? 'danger' : 'warning',
-        accepted: false,
+        accepted: this.rbacData.accepted_alerts
+          ? this.rbacData.accepted_alerts.includes(
+              UserAlertKey.ExpiringPassword
+            )
+          : false,
         unClamped: false,
       });
     }
@@ -171,97 +205,40 @@ export class GlobalNotificationsComponent implements OnInit {
     ) {
       this.globalNotifications.push({
         name: 'isDefaultPassword',
+        key: UserAlertKey.UnchangedDefaultPassword,
         message: this.tr.instant('login.CHANGE_DEFAULT_PASSWORD'),
         link: '#/profile',
         labelClass: 'warning',
-        accepted: false,
+        accepted: this.rbacData.accepted_alerts
+          ? this.rbacData.accepted_alerts.includes(
+              UserAlertKey.UnchangedDefaultPassword
+            )
+          : false,
         unClamped: false,
       });
     }
-    if (
-      this.rbacData.clusterrole_errors &&
-      this.rbacData.clusterrole_errors.length > 0
-    ) {
-      this.rbacData.clusterrole_errors.forEach(err => {
-        this.globalNotifications.push({
-          name: 'clusterrole_errors:' + err,
-          message: err,
-          link: '',
-          labelClass: 'danger',
-          accepted: false,
-          unClamped: false,
-        });
-      });
-    }
-    if (
-      this.rbacData.clusterrolebinding_errors &&
-      this.rbacData.clusterrolebinding_errors.length > 0
-    ) {
-      this.rbacData.clusterrolebinding_errors.forEach(err => {
-        this.globalNotifications.push({
-          name: 'clusterrolebinding_errors:' + err,
-          message: err,
-          link: '',
-          labelClass: 'danger',
-          accepted: false,
-          unClamped: false,
-        });
-      });
-    }
-    if (
-      this.rbacData.rolebinding_errors &&
-      this.rbacData.rolebinding_errors.length > 0
-    ) {
-      this.rbacData.rolebinding_errors.forEach(err => {
-        this.globalNotifications.push({
-          name: 'rolebinding_errors:' + err,
-          message: err,
-          link: '',
-          labelClass: 'danger',
-          accepted: false,
-          unClamped: false,
-        });
-      });
-    }
-    if (this.rbacData.role_errors && this.rbacData.role_errors.length > 0) {
-      this.rbacData.role_errors.forEach(err => {
-        this.globalNotifications.push({
-          name: 'role_errors:' + err,
-          message: err,
-          link: '',
-          labelClass: 'danger',
-          accepted: false,
-          unClamped: false,
-        });
-      });
-    }
-    if (
-      this.rbacData.neuvector_crd_errors &&
-      this.rbacData.neuvector_crd_errors.length > 0
-    ) {
-      this.rbacData.neuvector_crd_errors.forEach(err => {
-        this.globalNotifications.push({
-          name: 'neuvector_crd_errors:' + err,
-          message: err,
-          link: '',
-          labelClass: 'danger',
-          accepted: false,
-          unClamped: false,
-        });
-      });
-    }
-    const notifs: string[] =
-      this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_NOTIFICATIONS)?.[
-        this.currentUser
-      ] || [];
-    if (notifs && notifs.length > 0) {
-      this.globalNotifications.forEach(globalNotif => {
-        if (notifs.includes(globalNotif.name)) {
-          globalNotif.accepted = true;
+
+    // Loop through each type of RBAC alert in the acceptable_alerts data
+    // Push notifications to the globalNotification array for each alert
+    if (this.rbacData.acceptable_alerts) {
+      Object.keys(this.rbacData.acceptable_alerts).forEach(rbacAlertType => {
+        const alert = this.rbacData.acceptable_alerts[rbacAlertType];
+        if (alert && Object.keys(alert).length > 0) {
+          Object.keys(alert).forEach(key => {
+            this.globalNotifications.push({
+              name: rbacAlertType + ':' + alert[key],
+              key: key,
+              message: alert[key],
+              link: '',
+              labelClass: 'danger',
+              accepted: this.rbacData.accepted_alerts
+                ? this.rbacData.accepted_alerts.includes(key)
+                : false,
+              unClamped: false,
+            });
+          });
         }
       });
-    } else {
-      this.sessionStorage.remove(GlobalConstant.SESSION_STORAGE_NOTIFICATIONS);
     }
   }
 
@@ -374,6 +351,21 @@ export class GlobalNotificationsComponent implements OnInit {
       name.startsWith('rolebinding_errors:') ||
       name.startsWith('role_errors:') ||
       name.startsWith('neuvector_crd_errors:')
+    );
+  }
+
+  isManagerNotif(name: string) {
+    return (
+      name.startsWith('isScannerOld') ||
+      name.startsWith('isVersionMismatch') ||
+      name.startsWith('newVersionAvailable')
+    );
+  }
+
+  isUserNotif(name: string) {
+    return (
+      name.startsWith('isPasswordExpiring') ||
+      name.startsWith('isDefaultPassword')
     );
   }
 

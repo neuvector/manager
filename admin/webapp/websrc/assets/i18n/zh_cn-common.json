@@ -794,7 +794,9 @@
       "LESS": "隐藏部分通知",
       "END": "通知末尾",
       "MARK_ALL_AS_READ": "将所有标为已读",
-      "MARK_AS_READ": "标为已读"
+      "MARK_AS_READ": "标为已读",
+      "ACCEPTED_FAILURE": "无法接受全局通知",
+      "ACCEPTED_SUCCESS": "全局通知已被接受"
     },
     "mode": {
       "LEARNING": "学习",

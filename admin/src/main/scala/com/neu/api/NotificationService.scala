@@ -653,6 +653,29 @@ class NotificationService()(implicit executionContext: ExecutionContext)
               }
             }
           }
+        } ~
+        pathPrefix("notification") {
+          path("accept") {
+            post {
+              entity(as[GlobalNotificationRequest]) { notificationRequest =>
+                logger.info(
+                  "Accept the Global notification {}",
+                  acceptNotificationToJson(notificationRequest)
+                )
+                Utils.respondWithWebServerHeaders() {
+                  complete {
+                    RestClient.httpRequestWithHeader(
+                      s"$baseUri/internal/alert",
+                      POST,
+                      acceptNotificationToJson(notificationRequest),
+                      tokenId
+                    )
+                  }
+                }
+
+              }
+            }
+          }
         }
       }
     }

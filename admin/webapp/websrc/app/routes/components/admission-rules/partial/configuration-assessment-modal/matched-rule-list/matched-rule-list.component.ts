@@ -3,7 +3,6 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 import { MatchedRule } from '@common/types';
 import { MapConstant } from '@common/constants/map.constant';
-import { AdmissionRulesService } from "@services/admission-rules.service";
 
 @Component({
   selector: 'app-matched-rule-list',
@@ -17,17 +16,13 @@ export class MatchedRuleListComponent implements ICellRendererAngularComp {
   colourMap: any = MapConstant.colourMap;
 
   constructor(
-    private admissionRulesService: AdmissionRulesService
   ) {
 
   }
 
   agInit(params: ICellRendererParams): void {
     this.params = params;
-    this.matchedRules = params.data.matched_rules.map(rule => {
-      if (!rule.mode) rule.mode = this.admissionRulesService.globalMode;
-      return rule;
-    });
+    this.matchedRules = this.params.data.matched_rules;
   }
 
   refresh(params: ICellRendererParams): boolean {

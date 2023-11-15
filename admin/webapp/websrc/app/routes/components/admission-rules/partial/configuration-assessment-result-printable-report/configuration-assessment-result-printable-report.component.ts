@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { MapConstant } from '@common/constants/map.constant';
 
 @Component({
   selector: 'app-configuration-assessment-result-printable-report',
@@ -8,10 +9,12 @@ import { Component, OnInit, Input } from '@angular/core';
 export class ConfigurationAssessmentResultPrintableReportComponent implements OnInit {
 
   @Input() testResult: any;
+  colourMap: any = MapConstant.colourMap;
 
   constructor() { }
 
   ngOnInit(): void {
+    console.log("testResult", this.testResult)
   }
 
 }

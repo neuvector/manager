@@ -231,11 +231,14 @@ class RestClient(object):
             else:
                 raise RestRequestError(err=self._errtxt(data), msg=self._errmsg(data))
 
-    def login(self, username, password):
+    def login(self, username, password, new_password):
         if self._token():
             raise AlreadyLogin(user=username)
 
-        body = {"password": {"username": username, "password": password}}
+        pwd = {"username": username, "password": password}
+        if new_password is not None and new_password != "":
+            pwd["new_password"] = new_password
+        body = {"password": pwd}
         status, _, text, data = self._request("POST",
                                               self.url + '/v1/auth',
                                               body=body)
@@ -246,10 +249,15 @@ class RestClient(object):
             if not data:
                 raise ResponseError(msg=text)
 
+            need_to_reset_password = False
+            if "need_to_reset_password" in data:
+                if data["need_to_reset_password"]:
+                    return None, 0, True
+
             if data.get("token") and data["token"].get("token"):
                 token = data["token"]["token"]
                 self.sess.headers.update({"X-Auth-Token": token})
-                return data["token"], data["password_days_until_expire"]
+                return data["token"], data["password_days_until_expire"], False
             else:
                 raise ResponseError(msg=data)
         else:

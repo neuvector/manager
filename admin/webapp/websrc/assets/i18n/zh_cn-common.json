@@ -377,7 +377,7 @@
         "POLICY_MODE_RATIO": "策略模式比例",
         "CONTAINER_SEC": "暴露的Pod",
         "EXPOSED_RATIO": "暴露的Pod比例",
-        "SERVICE": "服务/Pod",
+        "SERVICE": "服务",
         "CONTAINER_NAME": "Pod名",
         "PORTS": "端口",
         "PROTOCOLS": "协议",
@@ -387,6 +387,7 @@
         "INGRESS": "接入",
         "EGRESS": "接出",
         "EXPOSURES": "暴露的",
+        "EXTERNAL_HOST": "外部主机",
         "POLICY_COUNT": "应用会话",
         "BYTES": "应用流量",
         "INGRESS_CONTAINERS": "入口Pod",
@@ -398,7 +399,8 @@
         "THREAT": "威胁",
         "VUL_POD": "有漏洞的Pod",
         "VUL_NODE": "有漏洞的主机",
-        "EXPO_CONV_RPT": "暴露对话报告"
+        "EXPO_CONV_RPT": "暴露对话报告",
+        "SESSIONS": "会话"
       },
       "comments": {
         "SAFE": "您的服务已经被全部保护! ",
@@ -2571,6 +2573,7 @@
     "MORE": "更多操作",
     "GLOBAL_OPS": "高级设置",
     "MATCHING_TEST": "配置评估",
+    "MATCHED_RULES": "匹配的规则",
     "IMPORT": "导入",
     "EXPORT": "导出",
     "DOWNLOAD": "下载",
@@ -2599,6 +2602,10 @@
     "RS_POLICY": "PSS限制策略清单",
     "PSS_POLICY_DETAIL_LINK": "详细内容",
     "PSS_RESTRICT_HINT": "如果部署不能满足\"严格限制\"的水平, 阻止措施将要被实施.",
+    "CONTAINER_TYPES": "容器类型",
+    "INIT_CONTAINERS": "初始容器",
+    "CONTAINERS": "普通容器",
+    "EPHEMERAL_CONTAINERS": "短暂容器",
     "sample": {
       "MULTI_VAL": "格式样例: element1, element2, element3",
       "MULTI_VAL_SIG_VRF": "格式样例: 签名信任根名/检测器名1, 签名信任根名/检测器名2",

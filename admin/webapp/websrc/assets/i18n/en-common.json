@@ -377,7 +377,7 @@
         "POLICY_MODE_RATIO": "Policy Mode Ratio",
         "CONTAINER_SEC": "Ingress and Egress Exposure",
         "EXPOSED_RATIO": "Exposed Pods Ratio",
-        "SERVICE": "Service/Pod",
+        "SERVICE": "Service",
         "CONTAINER_NAME": "Pod Name",
         "PORTS": "Ports",
         "PROTOCOLS": "Protocols",
@@ -387,6 +387,7 @@
         "INGRESS": "Ingress",
         "EGRESS": "Egress",
         "EXPOSURES": "Exposures",
+        "EXTERNAL_HOST": "External Host",
         "POLICY_COUNT": "Application Conversations",
         "BYTES": "Application Volume",
         "INGRESS_CONTAINERS": "Ingress Pods",
@@ -398,7 +399,8 @@
         "THREAT": "Threat",
         "VUL_POD": "Vulnerable Pods",
         "VUL_NODE": "Vulnerable Nodes",
-        "EXPO_CONV_RPT": "Exposure Conversation Report"
+        "EXPO_CONV_RPT": "Exposure Conversation Report",
+        "SESSIONS": "Sessions"
       },
       "comments": {
         "SAFE": "Congrats! All your services are under policy protection perfectly! Please keep it.",
@@ -2571,6 +2573,7 @@
     "MORE": "More Operations",
     "GLOBAL_OPS": "Advanced Setting",
     "MATCHING_TEST": "Configuration Assessment",
+    "MATCHED_RULES": "Matched Rules",
     "IMPORT": "Import",
     "EXPORT": "Export",
     "DOWNLOAD": "Download",
@@ -2599,6 +2602,10 @@
     "RS_POLICY": "PSS Restricted Policy List",
     "PSS_POLICY_DETAIL_LINK": "For Details",
     "PSS_RESTRICT_HINT": "if the deployment doesn't meet \"restricted\" level, the action (block) will be taken.",
+    "CONTAINER_TYPES": "Container Types",
+    "INIT_CONTAINERS": "Initial Containers",
+    "CONTAINERS": "Regular Containers",
+    "EPHEMERAL_CONTAINERS": "Ephemeral Containers",
     "sample": {
       "MULTI_VAL": "Format sample: element1, element2, element3",
       "MULTI_VAL_SIG_VRF": "Format sample: sigstore_root_of_trust_name/verifier_name1, sigstore_root_of_trust_name/verifier_name2",

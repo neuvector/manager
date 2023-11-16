@@ -16,8 +16,19 @@ import { AbstractControl } from '@angular/forms';
 import {
   AdmissionRule,
   AdmissionStateRec,
+  AdmissionTestResult,
 } from '@common/types/admission/admission';
 import { ActionButtonsComponent } from '@components/admission-rules/partial/action-buttons/action-buttons.component';
+import { MatchedRuleListComponent } from '@components/admission-rules/partial/configuration-assessment-modal/matched-rule-list/matched-rule-list.component';
+import { IndexCellComponent } from '@components/admission-rules/partial/configuration-assessment-modal/index-cell/index-cell.component';
+import { uuid } from '@common/utils/common.utils';
+
+export type AdmissionTestRow = AdmissionTestResult & {
+  id: string;
+  parent_id?: string;
+  child_id?: string;
+  visible: boolean;
+};
 
 @Injectable({
   providedIn: 'root',
@@ -222,9 +233,11 @@ export class AdmissionRulesService {
           'admissionControl.matchingTestGrid.INDEX'
         ),
         field: 'index',
+        cellRenderer: 'indexCellRenderer',
         width: 60,
         minWidth: 60,
         maxWidth: 60,
+        sortable: false,
       },
       {
         headerName: this.translate.instant(
@@ -232,6 +245,7 @@ export class AdmissionRulesService {
         ),
         field: 'kind',
         width: 120,
+        sortable: false,
       },
       {
         headerName: this.translate.instant(
@@ -239,6 +253,7 @@ export class AdmissionRulesService {
         ),
         field: 'name',
         width: 120,
+        sortable: false,
       },
       {
         headerName: this.translate.instant(
@@ -253,6 +268,7 @@ export class AdmissionRulesService {
         width: 80,
         minWidth: 80,
         maxWidth: 80,
+        sortable: false,
       },
       {
         headerName: this.translate.instant(
@@ -260,19 +276,36 @@ export class AdmissionRulesService {
         ),
         field: 'message',
         width: 400,
+        sortable: false,
       },
     ];
 
     gridOptions = this.utils.createGridOptions(columnDefs, $win);
-    gridOptions.defaultColDef = {
-      flex: 1,
-      cellClass: 'cell-wrap-text',
-      autoHeight: true,
-      sortable: true,
-      resizable: true,
-    };
-    gridOptions.onColumnResized = function (params) {
-      params.api.resetRowHeights();
+    gridOptions = {
+      ...gridOptions,
+      defaultColDef: {
+        ...gridOptions.defaultColDef,
+        flex: 1,
+        autoHeight: true,
+        sortable: true,
+        resizable: true,
+        cellClass: ['d-flex', 'align-items-center', 'cell-wrap-text'],
+      },
+      onColumnResized: params => {
+        params.api.resetRowHeights();
+      },
+      isExternalFilterPresent: () => true,
+      doesExternalFilterPass: params => !params.data.parent_id || params.data.visible,
+      getRowId: params => params.data.id,
+      getRowHeight: params => !!params.data.parent_id ? 100 : 30,
+      isFullWidthCell: node => !!node.data.parent_id,
+      fullWidthCellRenderer: 'matchedRuleListRenderer',
+      suppressMaintainUnsortedOrder: true,
+      suppressScrollOnNewData: true,
+      components: {
+        indexCellRenderer: IndexCellComponent,
+        matchedRuleListRenderer: MatchedRuleListComponent,
+      },
     };
 
     return gridOptions;
@@ -871,6 +904,26 @@ export class AdmissionRulesService {
         docDefinition.content[7].table?.body.push(this._getRowData(item));
       }
     }
+  };
+
+  formatAdmissionTestResults = (admissionTestResults: AdmissionTestResult[]): AdmissionTestRow[] => {
+    let res: AdmissionTestRow[] = [];
+    admissionTestResults.forEach(admissionTestResult => {
+      const parent_id = uuid();
+      if (admissionTestResult.matched_rules) {
+        const child_id = uuid();
+        res.push({ id: parent_id, child_id, ...admissionTestResult, visible: false });
+        res.push({
+          id: child_id,
+          parent_id,
+          ...admissionTestResult,
+          visible: false,
+        });
+      } else {
+        res.push({ id: parent_id, ...admissionTestResult, visible: true });
+      }
+    });
+    return res;
   };
 
   private _getRowData = item => {

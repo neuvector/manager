@@ -3,17 +3,29 @@
   [selectedIndex]="selectedIndex">
   <mat-tab label="{{ 'dashboard.body.panel_title.INGRESS' | translate }}">
     <app-exposed-service-pod-grid
+      *ngIf="source !== 'exposure-panel'"
       [exposures]="ingress"
       [clearSession]="clearSession"
       #ingressGrid>
     </app-exposed-service-pod-grid>
+    <app-exposed-servicepod-conv-grid
+      *ngIf="source === 'exposure-panel'"
+      [exposures]="ingress"
+      #ingressGrid>
+    </app-exposed-servicepod-conv-grid>
   </mat-tab>
   <mat-tab label="{{ 'dashboard.body.panel_title.EGRESS' | translate }}">
     <app-exposed-service-pod-grid
+      *ngIf="source !== 'exposure-panel'"
       [exposures]="egress"
       [clearSession]="clearSession"
       [isEgress]="true"
       #egressGrid>
     </app-exposed-service-pod-grid>
+    <app-exposed-servicepod-conv-grid
+      *ngIf="source === 'exposure-panel'"
+      [exposures]="egress"
+      #egressGrid>
+    </app-exposed-servicepod-conv-grid>
   </mat-tab>
 </mat-tab-group>

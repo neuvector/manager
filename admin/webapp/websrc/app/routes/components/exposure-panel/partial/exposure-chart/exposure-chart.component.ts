@@ -56,6 +56,7 @@ export class ExposureChartComponent implements OnInit {
             stacked: true,
           },
           y: {
+            stacked: true,
             ticks: {
               callback: (value) => {
                 if (parseFloat(value as string) % 1 === 0) return value;

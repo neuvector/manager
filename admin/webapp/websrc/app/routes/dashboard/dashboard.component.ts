@@ -42,7 +42,7 @@ export class DashboardComponent implements OnInit {
     private dashboardService: DashboardService,
     private dashboardSecurityEventsService: DashboardSecurityEventsService,
     public dashboardDetailsService: DashboardDetailsService,
-    private dashboardExposureConversationsService: DashboardExposureConversationsService,
+    // private dashboardExposureConversationsService: DashboardExposureConversationsService,
     private multiClusterService: MultiClusterService,
     private router: Router,
     private assetsHttpService: AssetsHttpService,
@@ -88,7 +88,7 @@ export class DashboardComponent implements OnInit {
   ngOnDestroy(): void {
     this.dashboardSecurityEventsService.terminateWorker();
     this.dashboardDetailsService.terminateWorker();
-    this.dashboardExposureConversationsService.terminateWorker();
+    // this.dashboardExposureConversationsService.terminateWorker();
     if (this._switchClusterSubscriber) {
       this._switchClusterSubscriber.unsubscribe();
     }
@@ -109,10 +109,10 @@ export class DashboardComponent implements OnInit {
           'scoreInfo',
           this.scoreInfo
         );
-        this.dashboardExposureConversationsService.runWorker(
-          this.isGlobalUser,
-          this.scoreInfo
-        );
+        // this.dashboardExposureConversationsService.runWorker(
+        //   this.isGlobalUser,
+        //   this.scoreInfo
+        // );
         this.iskube = this.summaryInfo.platform
           .toLowerCase()
           .includes(GlobalConstant.KUBE);

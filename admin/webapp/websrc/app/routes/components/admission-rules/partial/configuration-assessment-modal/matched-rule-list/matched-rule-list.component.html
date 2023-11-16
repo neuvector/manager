@@ -1,0 +1,54 @@
+<div class="full-width-panel d-flex">
+  <div>
+    <div class="full-width-flag">
+      <em class="eos-icons text-success">task_alt</em>
+    </div>
+    <div class="full-width-summary">
+      <span class="badge badge-info">
+        {{ 'admissionControl.MATCHED_RULES' | translate }}
+      </span>
+    </div>
+  </div>
+  <div style="height: 87px; overflow-y: auto;">
+    <table style="width: 100%" class="print-table" *ngIf="matchedRules.length > 0">
+      <thead>
+        <tr class="print-header">
+          <th class="print-cell" style="width: 60px;">
+            ID
+          </th>
+          <th class="print-cell" style="width: calc(100% - 280px);">
+            {{ 'nodes.gridHeader.DESCRIPTION' | translate }}
+          </th>
+          <th class="print-cell" style="width: 60px;">
+            {{ 'admissionControl.MODE' | translate }}
+          </th>
+          <th class="print-cell" style="width: 60px;">
+            {{ 'admissionControl.RULE_TYPE' | translate }}
+          </th>
+          <th class="print-cell" style="width: 100px;">
+            {{ 'policy.gridHeader.TYPE' | translate }}
+          </th>
+        </tr>
+      </thead>
+      <tbody style="background-color: #fff;">
+        <tr class="print-row" *ngFor="let row of matchedRules; let i = index" [attr.data-index]="i">
+          <td class="print-cell" style="width: 60px;">
+            {{ row.id }}
+          </td>
+          <td class="print-cell" style="width: calc(100% - 280px);">
+            {{ row.rule_details }}
+          </td>
+          <td class="print-cell" style="width: 60px;">
+            <span class="action-label {{ colourMap[row.mode] }}">{{ 'enum.' + row.mode.toUpperCase() | translate }}</span>
+          </td>
+          <td class="print-cell" style="width: 60px;">
+            <span class="action-label {{ colourMap[row.type.toLowerCase()] }}">{{ 'admissionControl.' + row.type.toUpperCase() | translate }}</span>
+          </td>
+          <td class="print-cell" style="width: 100px;">
+            <span class="action-label px-1 {{ colourMap[row.rule_cfg_type.toLowerCase()] }}">{{ 'group.' + row.rule_cfg_type.toUpperCase() | translate }}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

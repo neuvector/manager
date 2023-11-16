@@ -312,6 +312,27 @@
           </div>
         </div>
         <div class="row">
+          <div class="col-12 col-md-12 mt-2 d-flex" *ngIf="!addEditAdmissionRuleForm.controls.isException.value">
+            <label class="pull-left margin-right-m">{{ 'admissionControl.CONTAINER_TYPES' | translate }}</label>
+            <section
+              class="pull-left margin-right-m d-flex"
+              aria-label="Select a mode"
+              formArrayName="containers"
+            >
+              <ng-container *ngFor="let l of containersFormArray.controls; let i = index">
+                <mat-checkbox
+                  class="mr-3"
+                  [formControlName]="i"
+                  [disabled]="data.opType === modalOp.VIEW"
+                  (change)="updateContainersValidation()"
+                >
+                  {{ getDisplayName(CONTAINER_TYPES[i]) }}
+                </mat-checkbox>
+              </ng-container>
+            </section>
+          </div>
+        </div>
+        <div class="row">
           <div class="col-12 col-md-6 mt-2" *ngIf="!addEditAdmissionRuleForm.controls.isException.value">
             <label class="pull-left margin-right-m">{{ 'admissionControl.MODE' | translate }}</label>
             <mat-radio-group
@@ -319,13 +340,13 @@
               aria-label="Select a mode"
               formControlName="rule_mode"
             >
-              <mat-radio-button value="" class="margin-right-s">{{
+              <mat-radio-button value="" class="margin-right-s" [disabled]="data.opType === modalOp.VIEW">{{
                 'admissionControl.NO_MODE' | translate
               }}</mat-radio-button>
-              <mat-radio-button value="monitor" class="margin-right-s">{{
+              <mat-radio-button value="monitor" class="margin-right-s" [disabled]="data.opType === modalOp.VIEW">{{
                 'topbar.mode.EVALUATION' | translate
               }}</mat-radio-button>
-              <mat-radio-button value="protect" class="margin-right-s">{{
+              <mat-radio-button value="protect" class="margin-right-s" [disabled]="data.opType === modalOp.VIEW">{{
                 'topbar.mode.ENFORCE' | translate
               }}</mat-radio-button>
             </mat-radio-group>
@@ -358,7 +379,7 @@
         <div class="clearfix" *ngIf="data.opType !== modalOp.VIEW">
           <app-loading-button
             [appearance]="'mat-raised-button'"
-            [disabled]="addEditAdmissionRuleForm.invalid"
+            [disabled]="addEditAdmissionRuleForm.invalid || !isContainersValid"
             [color]="'primary'"
             [loading]="submittingUpdate"
             [text]="(data.opType === modalOp.EDIT ? 'policy.editPolicy.UPDATE' : 'policy.addPolicy.ADD') | translate"

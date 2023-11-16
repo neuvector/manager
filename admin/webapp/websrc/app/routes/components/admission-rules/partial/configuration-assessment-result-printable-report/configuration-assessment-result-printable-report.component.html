@@ -11,7 +11,63 @@
     {{ testResult.instruction.title }}:&nbsp;
     <span class="text-info">{{ testResult.instruction.content }}</span>
   </div>
-  <table class="print-table margin-top-l">
+  <div class="row py-2 my-2 mx-2" style="border-bottom: 1px solid #999;" *ngFor="let item of testResult.data;let i = index" [attr.data-index]="i">
+    <div class="col-2 pl-0">
+      <span class="text-bold"><{{ i + 1 }}></span>
+      <em class="fa mx-1" [ngClass]="{'fa-check text-success': item.allowed, 'fa-times text-danger': !item.allowed}" aria-hidden="true"></em>
+      <span class="action-label info mx-1" *ngIf="item.kind">{{ item.kind }}</span>
+    </div>
+    <div class="col-2">
+      <span class="text-bold mr-1" *ngIf="item.name">{{ 'admissionControl.matchingTestGrid.NAME' | translate }}:</span>
+      <span *ngIf="item.name">{{ item.name }}</span>
+    </div>
+    <div class="col-8 pr-0">
+      <span class="text-bold mr-1">{{ 'admissionControl.matchingTestGrid.MSG' | translate }}:</span>
+      <span>{{ item.message }}</span>
+    </div>
+    <div class="text-bold">{{ 'admissionControl.MATCHED_RULES' | translate }}:</div>
+    <table style="width: 100%" class="print-table" *ngIf="item.matched_rules && item.matched_rules.length > 0">
+      <thead>
+        <tr class="print-header">
+          <th class="print-cell" style="width: 60px;">
+            ID
+          </th>
+          <th class="print-cell" style="width: calc(100% - 280px);">
+            {{ 'nodes.gridHeader.DESCRIPTION' | translate }}
+          </th>
+          <th class="print-cell" style="width: 60px;">
+            {{ 'admissionControl.MODE' | translate }}
+          </th>
+          <th class="print-cell" style="width: 60px;">
+            {{ 'admissionControl.RULE_TYPE' | translate }}
+          </th>
+          <th class="print-cell" style="width: 100px;">
+            {{ 'policy.gridHeader.TYPE' | translate }}
+          </th>
+        </tr>
+      </thead>
+      <tbody style="background-color: #fff;">
+        <tr class="print-row" *ngFor="let row of item.matched_rules; let i = index" [attr.data-index]="i">
+          <td class="print-cell" style="width: 60px;">
+            {{ row.id }}
+          </td>
+          <td class="print-cell" style="width: calc(100% - 280px);">
+            {{ row.rule_details }}
+          </td>
+          <td class="print-cell" style="width: 60px;">
+            <span class="action-label {{ colourMap[row.mode] }}">{{ 'enum.' + row.mode.toUpperCase() | translate }}</span>
+          </td>
+          <td class="print-cell" style="width: 60px;">
+            <span class="action-label {{ colourMap[row.type.toLowerCase()] }}">{{ 'admissionControl.' + row.type.toUpperCase() | translate }}</span>
+          </td>
+          <td class="print-cell" style="width: 100px;">
+            <span class="action-label px-1 {{ colourMap[row.rule_cfg_type.toLowerCase()] }}">{{ 'group.' + row.rule_cfg_type.toUpperCase() | translate }}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- <table class="print-table margin-top-l">
     <thead>
       <tr class="print-header">
         <th class="print-cell" style="width: 5%">
@@ -36,10 +92,10 @@
           {{ i + 1 }}
         </td>
         <td class="print-cell" style="width: 10%">
-          {{ item.name }}
+          {{ item.kind }}
         </td>
         <td class="print-cell" style="width: 15%">
-          {{ item.kind }}
+          {{ item.name }}
         </td>
         <td class="print-cell" style="width: 10%">
           <em *ngIf="item.allowed" class="fa fa-check text-success" aria-hidden="true"></em>
@@ -50,5 +106,5 @@
         </td>
       </tr>
     </tbody>
-  </table>
+  </table> -->
 </div>

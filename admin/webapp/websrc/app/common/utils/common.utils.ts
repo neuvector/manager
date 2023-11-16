@@ -13,6 +13,7 @@ import {
   WorkloadChildV2,
   DataOps,
   WorkloadV2,
+  ConversationReportEntryByServce,
 } from '@common/types';
 import { WorkloadBrief } from '@common/types/compliance/workloadBrief';
 import { GridApi, GridOptions } from 'ag-grid-community';
@@ -676,6 +677,7 @@ export const parseExposureHierarchicalData = (
       protocols: '',
       applications: Array.from(applicationSet),
       ports: [],
+      entries: summarizeEntries(v),
       children: v.map(child => ({
         ...child,
         service: '',
@@ -686,6 +688,45 @@ export const parseExposureHierarchicalData = (
     );
   });
   return hierarchicalExposures;
+};
+
+const summarizeEntries = (exposedPods) => {
+  let entryMap = {};
+  exposedPods.forEach(expsosedPod => {
+    expsosedPod.entries.forEach(entry => {
+      if (entryMap[entry.ip]) {
+        entryMap[entry.ip].applications = accumulateProtocols(entryMap[entry.ip].applications, entry.application);
+        entryMap[entry.ip].sessions += entry.sessions;
+        entryMap[entry.ip].policy_action = accumulateActionLevel(entryMap[entry.ip].action, entry.policy_action);
+      } else {
+        entryMap[entry.ip] = {
+          applications: [entry.application],
+          sessions: entry.sessions,
+          policy_action: entry.policy_action,
+          ip: entry.ip,
+          fqdn: entry.fqdn || '',
+          country_code: entry.country_code,
+          country_name: entry.country_name
+        };
+      }
+    });
+  });
+  return Object.values(entryMap) as ConversationReportEntryByServce[];
+};
+
+export const accumulateActionLevel = (accuAction: string = 'allow', currAction: string) => {
+  const actionMap = {
+    deny: 3,
+    alert: 2,
+    allow: 1
+  }
+  return actionMap[accuAction.toLowerCase()] > actionMap[currAction.toLowerCase()] ?
+    accuAction : currAction;
+};
+
+const accumulateProtocols = (accuApps: Array<string> = [], currApp: string) => {
+  if (!accuApps.includes(currApp)) accuApps.push(currApp);
+  return accuApps;
 };
 
 export function workloadToV2(workload: Workload): WorkloadChildV2 {

@@ -3,7 +3,7 @@
     <div class="d-flex align-items-center justify-content-start">
       {{ 'dashboard.body.panel_title.CONTAINER_SEC' | translate }}
       <app-loading-button
-        *ngIf="(scoreInfo.ingress.length > 0 || scoreInfo.egress.length > 0) && (Array.isArray(dashboardExposureConversationsService.exposureConversationList) && dashboardExposureConversationsService.exposureConversationList.length > 0)"
+        *ngIf="scoreInfo.ingress.length > 0 || scoreInfo.egress.length > 0"
         style="margin-top: -6px;"
         (btnClick)="downloadExposureConversationCsv()"
         [text]="'dashboard.body.panel_title.EXPO_CONV_RPT' | translate"
@@ -23,13 +23,16 @@
   </mat-card-title>
   <mat-card-content style="display: flex">
     <app-exposure-chart
+      *ngIf="isIpMapReady"
       class="col-sm-4"
       [ingress]="hierarchicalIngressList"
       [egress]="hierarchicalEgressList"
     >
     </app-exposure-chart>
     <app-exposure-grid
+      *ngIf="isIpMapReady"
       class="col-sm-8"
+      [source]="'exposure-panel'"
       [ingress]="hierarchicalIngressList"
       [egress]="hierarchicalEgressList"
     >

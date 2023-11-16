@@ -1,7 +1,7 @@
 import { MatDialogRef,  MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
 import { GlobalConstant } from "@common/constants/global.constant";
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AdmissionRulesService } from '@common/services/admission-rules.service';
 import { parseDivideStyle } from '@common/utils/common.utils';
 import { AdmRuleCriterion, AdmRuleSubCriterion } from '@common/types/admission/admission';
@@ -12,6 +12,7 @@ import { JsonEditorComponent, JsonEditorOptions, JsonEditorTreeNode } from 'ang-
 import { getValueType4Text, groupBy, updateGridData } from '@common/utils/common.utils';
 import { NotificationService } from '@services/notification.service';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { UtilsService } from '@common/utils/app.utils';
 
 @Component({
   selector: 'app-add-edit-admission-rule-modal',
@@ -63,6 +64,13 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
   valuechips: string[] = [];
   valuechipsModel: any;
   @ViewChild('valueChipsInput') valueChipsInput: ElementRef<HTMLInputElement>;
+  get containers() {
+    return this.CONTAINER_TYPES;
+  }
+  get containersFormArray() {
+    return this.addEditAdmissionRuleForm.controls.containers as FormArray;
+  }
+  isContainersValid: boolean = false;
 
   UNITS = {
     publishDays: ["Day(s)"],
@@ -71,6 +79,12 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     memoryLimit: ["kB", "MB", "GB"],
     memoryRequest: ["kB", "MB", "GB"]
   }
+
+  CONTAINER_TYPES = [
+    'init_containers',
+    'containers',
+    'ephemeral_containers'
+  ];
   hasMultiValue: boolean = false;
   submittingUpdate: boolean = false;
 
@@ -80,6 +94,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     private bytesPipe: BytesPipe,
     private translate: TranslateService,
     private notificationService: NotificationService,
+    private utils: UtilsService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.jsonEditorOptions = new JsonEditorOptions();
@@ -96,9 +111,12 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
       enabled: new FormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? true : !this.data.rule4Edit.disable),
       cfg_type: new FormControl(this.data.cfgType === GlobalConstant.SCOPE.FED ? GlobalConstant.CFG_TYPE.FED : GlobalConstant.CFG_TYPE.CUSTOMER),
       rule_type: new FormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? "deny" : this.data.rule4Edit.rule_type),
+      // containers: new FormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? [] : this.data.rule4Edit.containers, Validators.required),
+      containers: this.getContainersForm(this.data.opType === GlobalConstant.MODAL_OP.ADD ? [] : this.data.rule4Edit.containers),
       rule_mode: new FormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? "" : this.data.rule4Edit.rule_mode),
       disable: new FormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? false : this.data.rule4Edit.disable)
     });
+    this.isContainersValid = this.validateContainers();
     this.getCriteriaOptions();
     if (this.data.opType !== GlobalConstant.MODAL_OP.ADD) {
       let criteria = JSON.parse(JSON.stringify(this.addEditAdmissionRuleForm.controls.criteria.value));
@@ -129,6 +147,33 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
       });
     });
   }
+
+  getContainersForm = (containers: string[]) => {
+    let containerTypeSelectionCnt = 0;
+    let arr = new Array(this.CONTAINER_TYPES.length);
+    arr = this.CONTAINER_TYPES.map(
+      containerType => {
+        if (containers.includes(containerType)) containerTypeSelectionCnt++;
+        return new FormControl(containers.includes(containerType))
+      }
+    );
+    if (containerTypeSelectionCnt === 0 && this.data.opType !== GlobalConstant.MODAL_OP.ADD) {
+      arr = arr.fill(new FormControl(true));
+    }
+    return new FormArray(arr);
+  }
+
+  getDisplayName = (name: string) => {
+    return this.translate.instant(`admissionControl.${name.toUpperCase()}`);
+  }
+
+  updateContainersValidation = () => {
+    this.isContainersValid = this.validateContainers();
+  };
+
+  private validateContainers = () => {
+    return this.addEditAdmissionRuleForm.value.containers.reduce((accu, currContainer) => accu || currContainer, false);
+  };
 
   onCancel = () => {
     this.dialogRef.close(false);
@@ -381,6 +426,9 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
     adminRule.rule_type = adminRule.isException ? "exception" : "deny";
     adminRule.disable = !adminRule.enabled;
     if (adminRule.isException) delete adminRule.rule_mode;
+    adminRule.containers = this.CONTAINER_TYPES.filter((containerType, index) => {
+      return adminRule.containers[index];
+    })
 
     this.admissionRulesService.addUpdateAdmissionRules({config: adminRule}, this.data.opType)
       .subscribe(

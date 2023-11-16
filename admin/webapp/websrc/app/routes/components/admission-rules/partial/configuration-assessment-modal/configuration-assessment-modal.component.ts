@@ -1,9 +1,10 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Component, Inject, OnInit } from "@angular/core";
 import { PathConstant } from "@common/constants/path.constant";
+import { MapConstant } from "@common/constants/map.constant";
 import { AdmissionRulesService } from "@common/services/admission-rules.service";
 import { GridOptions } from "ag-grid-community";
-import { AdmissionConfigurationAssessment } from "@common/types/admission/admission";
+import { AdmissionConfigurationAssessment, AdmissionTestResult } from "@common/types/admission/admission";
 import { TranslateService } from "@ngx-translate/core";
 import { UtilsService } from "@common/utils/app.utils";
 import { arrayToCsv } from "@common/utils/common.utils";
@@ -20,12 +21,14 @@ export class ConfigurationAssessmentModalComponent implements OnInit {
   gridOptions: GridOptions = <GridOptions>{};
   gridHeight: number = 0;
   configAssessmentResult!: AdmissionConfigurationAssessment;
+  admissionTestResults: Array<AdmissionTestResult>;
+  MapConstant = MapConstant;
 
   constructor(
     public dialogRef: MatDialogRef<ConfigurationAssessmentModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private admissionRulesService: AdmissionRulesService,
-    private utils: UtilsService,
+    public utils: UtilsService,
     public translate: TranslateService
   ) { }
 
@@ -40,17 +43,31 @@ export class ConfigurationAssessmentModalComponent implements OnInit {
 
   getImportResult = (response: AdmissionConfigurationAssessment) => {
     this.configAssessmentResult = response;
+    this.configAssessmentResult.results = this.configAssessmentResult.results.map(result => {
+      if (result.matched_rules) {
+        result.matched_rules = result.matched_rules.map(rule => {
+          if (!rule.mode) rule.mode = this.admissionRulesService.globalMode;
+          return rule;
+        });
+      }
+      return result;
+    });
+    this.admissionTestResults = this.admissionRulesService.formatAdmissionTestResults(this.configAssessmentResult.results);
   };
 
   exportCsv = () => {
     if (this.configAssessmentResult) {
-      let csv = arrayToCsv(this.configAssessmentResult.results, `${this.translate.instant("admissionControl.matchingTestGrid.UNAVAILABLE_PROP")}: ${this.configAssessmentResult.props_unavailable.join(", ")}`);
+      let csv = arrayToCsv(
+        this.getConfigAssessmentResultRows(this.configAssessmentResult.results),
+        `${this.translate.instant("admissionControl.matchingTestGrid.UNAVAILABLE_PROP")}: ${this.configAssessmentResult.props_unavailable.join(" | ")}`
+      );
       let blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
       saveAs(blob, `${this.translate.instant("admissionControl.matchingTestGrid.REPORT_TITLE")}_${this.utils.parseDatetimeStr(new Date())}.csv`);
     }
   };
 
   exportPdf = () => {
+    console.log("pdf")
     this.data.printConfigurationAssessmentResultFn({
       data: this.configAssessmentResult.results,
       instruction: {
@@ -58,5 +75,39 @@ export class ConfigurationAssessmentModalComponent implements OnInit {
         content: this.configAssessmentResult.props_unavailable.join(", ")
       }
     });
+  };
+
+  private getConfigAssessmentResultRows = (configAssessmentResults) => {
+    let rows: Array<any> = [];
+    configAssessmentResults.forEach(row => {
+      if (row.matched_rules) {
+        row.matched_rules.forEach((matched_rule, index) => {
+          rows.push({
+            Index: index === 0 ? row.index : '',
+            Kind: index === 0 ? row.kind : '',
+            Name: index === 0 ? row.name : '',
+            Message: index === 0 ? row.message : '',
+            'ID (Matched Rule)': matched_rule.id,
+            'Description (Matched Rule)': matched_rule.rule_details,
+            'Mode (Matched Rule)': matched_rule.mode,
+            'Action (Matched Rule)': matched_rule.type,
+            'Type (Matched Rule)': matched_rule.rule_cfg_type
+          });
+        });
+      } else {
+        rows.push({
+          Index: row.index,
+          Kind: row.kind,
+          Name: row.name,
+          Message: row.message,
+          'ID (Matched Rule)': '',
+          'Description (Matched Rule)': '',
+          'Mode (Matched Rule)': '',
+          'Action (Matched Rule)': '',
+          'Type (Matched Rule)': ''
+        });
+      }
+    });
+    return rows;
   };
 }

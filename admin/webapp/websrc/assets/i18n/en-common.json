@@ -2602,6 +2602,10 @@
     "RS_POLICY": "PSS Restricted Policy List",
     "PSS_POLICY_DETAIL_LINK": "For Details",
     "PSS_RESTRICT_HINT": "if the deployment doesn't meet \"restricted\" level, the action (block) will be taken.",
+    "CONTAINER_TYPES": "Container Types",
+    "INIT_CONTAINERS": "Initial Containers",
+    "CONTAINERS": "Regular Containers",
+    "EPHEMERAL_CONTAINERS": "Ephemeral Containers",
     "sample": {
       "MULTI_VAL": "Format sample: element1, element2, element3",
       "MULTI_VAL_SIG_VRF": "Format sample: sigstore_root_of_trust_name/verifier_name1, sigstore_root_of_trust_name/verifier_name2",

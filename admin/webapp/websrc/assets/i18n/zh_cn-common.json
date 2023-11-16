@@ -2602,6 +2602,10 @@
     "RS_POLICY": "PSS限制策略清单",
     "PSS_POLICY_DETAIL_LINK": "详细内容",
     "PSS_RESTRICT_HINT": "如果部署不能满足\"严格限制\"的水平, 阻止措施将要被实施.",
+    "CONTAINER_TYPES": "容器类型",
+    "INIT_CONTAINERS": "初始容器",
+    "CONTAINERS": "普通容器",
+    "EPHEMERAL_CONTAINERS": "短暂容器",
     "sample": {
       "MULTI_VAL": "格式样例: element1, element2, element3",
       "MULTI_VAL_SIG_VRF": "格式样例: 签名信任根名/检测器名1, 签名信任根名/检测器名2",

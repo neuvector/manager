@@ -59,7 +59,7 @@ export class ConfigurationAssessmentModalComponent implements OnInit {
     if (this.configAssessmentResult) {
       let csv = arrayToCsv(
         this.getConfigAssessmentResultRows(this.configAssessmentResult.results),
-        `${this.translate.instant("admissionControl.matchingTestGrid.UNAVAILABLE_PROP")}: ${this.configAssessmentResult.props_unavailable.join(" | ")}`
+        this.translate.instant("admissionControl.matchingTestGrid.UNAVAILABLE_PROP", { propsUnavailable: this.configAssessmentResult.props_unavailable.join("，") })
       );
       let blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
       saveAs(blob, `${this.translate.instant("admissionControl.matchingTestGrid.REPORT_TITLE")}_${this.utils.parseDatetimeStr(new Date())}.csv`);
@@ -71,8 +71,7 @@ export class ConfigurationAssessmentModalComponent implements OnInit {
     this.data.printConfigurationAssessmentResultFn({
       data: this.configAssessmentResult.results,
       instruction: {
-        title: this.translate.instant("admissionControl.matchingTestGrid.UNAVAILABLE_PROP"),
-        content: this.configAssessmentResult.props_unavailable.join(", ")
+        title: this.translate.instant("admissionControl.matchingTestGrid.UNAVAILABLE_PROP", { propsUnavailable:  this.configAssessmentResult.props_unavailable.join(", ")})
       }
     });
   };
@@ -83,7 +82,7 @@ export class ConfigurationAssessmentModalComponent implements OnInit {
       if (row.matched_rules) {
         row.matched_rules.forEach((matched_rule, index) => {
           rows.push({
-            Index: index === 0 ? row.index : '',
+            Resource: index === 0 ? row.index : '',
             Kind: index === 0 ? row.kind : '',
             Name: index === 0 ? row.name : '',
             Message: index === 0 ? row.message : '',
@@ -96,7 +95,7 @@ export class ConfigurationAssessmentModalComponent implements OnInit {
         });
       } else {
         rows.push({
-          Index: row.index,
+          Resource: row.index,
           Kind: row.kind,
           Name: row.name,
           Message: row.message,

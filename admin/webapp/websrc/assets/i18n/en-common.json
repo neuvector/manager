@@ -2574,6 +2574,7 @@
     "GLOBAL_OPS": "Advanced Setting",
     "MATCHING_TEST": "Configuration Assessment",
     "MATCHED_RULES": "Matched Rules",
+    "GLOBAL_MODE": "Global Policy Mode",
     "IMPORT": "Import",
     "EXPORT": "Export",
     "DOWNLOAD": "Download",
@@ -2804,8 +2805,8 @@
     "matchingTestGrid": {
       "TITLE": "Test results",
       "REPORT_TITLE": "Admission Control Matching Test Report",
-      "UNAVAILABLE_PROP": "Properties unavailable for simulating admission control rule matching",
-      "INDEX": "Index",
+      "UNAVAILABLE_PROP": "Property {{propsUnavailable}} in the resources are not available for evaluation.",
+      "INDEX": "Resource",
       "KIND": "Kind",
       "NAME": "Name",
       "ALLOWED": "Allowed",

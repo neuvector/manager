@@ -265,7 +265,7 @@ def set_user_local_unblock(data):
 
 
 @set_user_local.command("reset_password")
-@click.option('--change_password_in_next_login', type=bool, help="change password in next login")
+@click.option('--change_password_in_next_login', is_flag=True, help="change password in next login")
 @click.pass_obj
 def set_user_local_rest_password(data, change_password_in_next_login):
     """Reset local user's password."""

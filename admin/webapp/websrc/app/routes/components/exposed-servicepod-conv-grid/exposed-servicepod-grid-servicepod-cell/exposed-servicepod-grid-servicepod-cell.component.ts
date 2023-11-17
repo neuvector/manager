@@ -22,8 +22,8 @@ export class ExposedServicepodGridServicepodCellComponent implements ICellRender
 
   agInit(params: ICellRendererParams): void {
     this.params = params;
-    this.name = params.data.isParent ? params.data.service : '';
-    this.isParent = params.data.isParent;
+    this.isParent = !params.data.parent_id && params.data.child_id;
+    this.name = params.data.service;
     if (params.data.service)
       this.rowStyle = this.getServicePodStyle(this.params);
   }
@@ -34,10 +34,8 @@ export class ExposedServicepodGridServicepodCellComponent implements ICellRender
 
   toggleVisible(): void {
     this.params.data.visible = !this.params.data.visible;
-    this.params.data.child_ids.forEach(child_id => {
-      const child_node = this.params.api.getRowNode(child_id);
-      if (child_node) child_node.data.visible = !child_node.data.visible;
-    });
+    const child_node = this.params.api.getRowNode(this.params.data.child_id);
+    if (child_node) child_node.data.visible = !child_node.data.visible;
     this.params.api.onFilterChanged();
   }
 

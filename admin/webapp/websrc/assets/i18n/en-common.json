@@ -236,6 +236,7 @@
     "NAMESPACE": "Namespace",
     "ALL_NAMESPACE": "All Namespaces",
     "CURR_NAMESPACE_VIEW": "Current namespace view",
+    "CONVERSATIONS": "Conversations",
     "summary": {
       "HOST": "Hosts",
       "POD": "Pod",

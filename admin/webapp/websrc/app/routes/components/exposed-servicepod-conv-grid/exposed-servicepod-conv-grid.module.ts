@@ -8,6 +8,7 @@ import { ExposedServicePodGridModule } from '@components/exposed-service-pod-gri
 import { ExposedServicepodGridServicepodCellComponent } from './exposed-servicepod-grid-servicepod-cell/exposed-servicepod-grid-servicepod-cell.component';
 import { ExternalHostCellComponent } from './external-host-cell/external-host-cell.component';
 import { FlagIpFqdnModule } from '@components/ui/flag-ip-fqdn/flag-ip-fqdn.module';
+import { ConversationEntryListComponent } from './conversation-entry-list/conversation-entry-list.component';
 
 
 
@@ -15,7 +16,8 @@ import { FlagIpFqdnModule } from '@components/ui/flag-ip-fqdn/flag-ip-fqdn.modul
   declarations: [
     ExposedServicepodConvGridComponent,
     ExposedServicepodGridServicepodCellComponent,
-    ExternalHostCellComponent
+    ExternalHostCellComponent,
+    ConversationEntryListComponent
   ],
   imports: [
     CommonModule,

@@ -149,7 +149,8 @@ export interface ConversationReportEntryByServce {
   fqdn?: string;
   protocols: string[];
   sessions: number;
-  application: string;
+  applications: string[];
+  policy_action: string;
   country_code: string;
   country_name: string;
 }

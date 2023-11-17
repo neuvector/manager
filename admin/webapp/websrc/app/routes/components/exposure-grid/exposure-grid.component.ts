@@ -22,7 +22,7 @@ export class ExposureGridComponent implements OnInit {
   ngOnInit(): void {}
 
   updateGrid(grid: ExposedServicePodGridComponent) {
-    if (grid) grid.gridApi.sizeColumnsToFit();
+    if (grid) grid.gridApi?.sizeColumnsToFit();
   }
 
   tabChanged(event: MatTabChangeEvent) {

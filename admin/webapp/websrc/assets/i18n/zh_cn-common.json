@@ -236,6 +236,7 @@
     "NAMESPACE": "命名空间",
     "ALL_NAMESPACE": "全部命名空间",
     "CURR_NAMESPACE_VIEW": "当前命名空间视图",
+    "CONVERSATIONS": "对话",
     "summary": {
       "HOST": "主机",
       "POD": "Pod",

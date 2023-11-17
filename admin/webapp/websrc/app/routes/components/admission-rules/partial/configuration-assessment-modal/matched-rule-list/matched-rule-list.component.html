@@ -8,8 +8,7 @@
         {{ 'admissionControl.MATCHED_RULES' | translate }}
       </span>
     </div>
-  </div>
-  <div style="height: 87px; overflow-y: auto;">
+  <div style="height: 87px; overflow-y: auto; background-color: #fff; border: 1px solid #999;">
     <table style="width: 100%" class="print-table" *ngIf="matchedRules.length > 0">
       <thead>
         <tr class="print-header">
@@ -30,7 +29,7 @@
           </th>
         </tr>
       </thead>
-      <tbody style="background-color: #fff;">
+      <tbody>
         <tr class="print-row" *ngFor="let row of matchedRules; let i = index" [attr.data-index]="i">
           <td class="print-cell" style="width: 60px;">
             {{ row.id }}

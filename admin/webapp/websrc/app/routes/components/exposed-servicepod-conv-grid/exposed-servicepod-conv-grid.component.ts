@@ -17,7 +17,9 @@ import { GraphHttpService } from '@common/api/graph-http.service';
 import { NotificationService } from '@services/notification.service';
 import { ExposedServicePodGridActionCellComponent } from '@components/exposed-service-pod-grid/exposed-service-pod-grid-action-cell/exposed-service-pod-grid-action-cell.component';
 import { ExposedServicepodGridServicepodCellComponent } from '@components/exposed-servicepod-conv-grid/exposed-servicepod-grid-servicepod-cell/exposed-servicepod-grid-servicepod-cell.component';
-import { ExternalHostCellComponent } from '@components/exposed-servicepod-conv-grid/external-host-cell/external-host-cell.component'
+import { ExternalHostCellComponent } from '@components/exposed-servicepod-conv-grid/external-host-cell/external-host-cell.component';
+import { ConversationEntryListComponent } from '@components/exposed-servicepod-conv-grid/conversation-entry-list/conversation-entry-list.component';
+import { uuid } from '@common/utils/common.utils';
 
 @Component({
   selector: 'app-exposed-servicepod-conv-grid',
@@ -69,7 +71,7 @@ export class ExposedServicepodConvGridComponent implements OnInit {
         headerName: 'Pods',
         field: 'children',
         valueFormatter: params => {
-          return params.data.isParent ? params.value.length : '';
+          return params.value.length;
         },
         width: 70,
       },
@@ -79,18 +81,13 @@ export class ExposedServicepodConvGridComponent implements OnInit {
         hide: true,
       },
       {
-        headerName: 'Child Names',
-        field: 'child_names',
-        hide: true,
-      },
-      {
         headerName: this.translate.instant(
           'dashboard.body.panel_title.POLICY_MODE'
         ),
         field: 'policy_mode',
         cellRenderer: params => {
           let mode = '';
-          if (params.data && params.value && params.data.isParent) {
+          if (params.data && params.value) {
             mode = this.utils.getI18Name(params.value);
             let labelCode = MapConstant.colourMap[params.value];
             if (!labelCode) return null;
@@ -107,59 +104,42 @@ export class ExposedServicepodConvGridComponent implements OnInit {
         minWidth: 110,
         sortable: false,
       },
-      {
-        headerName: this.translate.instant(
-          'dashboard.body.panel_title.EXTERNAL_HOST'
-        ),
-        field: 'ip',
-        cellRenderer: 'externalHostCellRender'
-      },
-      {
-        headerName: this.translate.instant(
-          'dashboard.body.panel_title.SESSIONS'
-        ),
-        field: 'sessions',
-        valueFormatter: params => {
-          return params.data.isParent ? '' : params.value;
-        },
-        width: 100,
-      },
-      {
-        headerName: this.translate.instant(
-          'dashboard.body.panel_title.APPLICATIONS'
-        ),
-        field: 'applications',
-        cellRenderer: params => {
-          if (params.data) {
-            if (params.value) {
-              return this.sanitizer.sanitize(
-                SecurityContext.HTML,
-                params.data.ports
-                  ? params.value.concat(params.data.ports).join(', ')
-                  : params.value.join(', ')
-              );
-            }
-          }
-          return null;
-        },
-        width: 100,
-        sortable: false,
-      },
+      // {
+      //   headerName: this.translate.instant(
+      //     'dashboard.body.panel_title.APPLICATIONS'
+      //   ),
+      //   field: 'applications',
+      //   cellRenderer: params => {
+      //     if (params.data) {
+      //       if (params.value) {
+      //         return this.sanitizer.sanitize(
+      //           SecurityContext.HTML,
+      //           params.data.ports
+      //             ? params.value.concat(params.data.ports).join(', ')
+      //             : params.value.join(', ')
+      //         );
+      //       }
+      //     }
+      //     return null;
+      //   },
+      //   width: 100,
+      //   sortable: false,
+      // },
       {
         headerName: this.translate.instant(
           'dashboard.body.panel_title.POLICY_ACTION'
         ),
         field: 'policy_action',
         cellRenderer: params => {
-          if (params.value) {
+          if (params.data) {
             return `<span ng-class='{\'policy-remove\': data.remove}'
                   class='action-label px-1 ${
-                    MapConstant.colourMap[params.value.toLowerCase()]
+                    MapConstant.colourMap[params.data.policy_action.toLowerCase()]
                   }'>
                   ${this.sanitizer.sanitize(
                     SecurityContext.HTML,
                     this.translate.instant(
-                      'policy.action.' + params.value.toUpperCase()
+                      'policy.action.' + params.data.policy_action.toUpperCase()
                     )
                   )}
                 </span>`;
@@ -176,23 +156,31 @@ export class ExposedServicepodConvGridComponent implements OnInit {
     this.gridOptions = this.utils.createGridOptions(this.columnDefs, this.$win);
     this.gridOptions = {
       ...this.gridOptions,
-      getRowId: params => params.data.isParent ? params.data.service : params.data.ip,
-      onGridReady: this.onGridReady.bind(this),
+      defaultColDef: {
+        ...this.gridOptions.defaultColDef,
+        flex: 1,
+        autoHeight: true,
+        sortable: true,
+        resizable: true,
+        cellClass: ['d-flex', 'align-items-center', 'cell-wrap-text'],
+      },
+      onColumnResized: params => {
+        params.api.resetRowHeights();
+      },
       isExternalFilterPresent: () => true,
-      doesExternalFilterPass: this.isVisible.bind(this),
+      doesExternalFilterPass: params => !params.data.parent_id || params.data.visible,
+      getRowId: params => params.data.id,
+      getRowHeight: params => !!params.data.parent_id ? 100 : 30,
+      isFullWidthCell: node => !!node.data.parent_id,
+      fullWidthCellRenderer: 'conversationEntryListRenderer',
       suppressMaintainUnsortedOrder: true,
       suppressScrollOnNewData: true,
-      suppressRowTransform: true,
       components: {
         serviceCellRenderer: ExposedServicepodGridServicepodCellComponent,
         actionCellRenderer: ExposedServicePodGridActionCellComponent,
-        externalHostCellRender: ExternalHostCellComponent,
+        conversationEntryListRenderer: ConversationEntryListComponent
       },
     };
-  };
-
-  isVisible = (node: RowNode): boolean => {
-    return !node.data.parent_id || node.data.visible;
   };
 
   onGridReady = (params: GridReadyEvent): void => {
@@ -204,7 +192,7 @@ export class ExposedServicepodConvGridComponent implements OnInit {
   };
 
   onResize = (): void => {
-    this.gridApi.sizeColumnsToFit();
+    this.gridApi?.sizeColumnsToFit();
   };
 
   preprocessHierarchicalData = (
@@ -212,24 +200,20 @@ export class ExposedServicepodConvGridComponent implements OnInit {
   ): Array<any> => {
     let res: Array<any> = [];
     exposures.forEach(exposure => {
-      const parent_id = exposure.service;
-      const child_ids = exposure.entries?.map(c => c.ip) || [];
-      const child_names = exposure.entries?.map(c => c.ip) || [];
-      res.push({
-        ...exposure,
-        child_ids,
-        child_names,
-        isParent: true,
-        visible: true,
-      });
-      exposure.entries?.forEach(child => {
+      const parent_id = uuid();
+      if (exposure.entries) {
+        const child_id = uuid();
+        res.push({ id: parent_id, child_id, ...exposure, pods: exposure.children.length, visible: false });
         res.push({
-          ...child,
+          id: child_id,
           parent_id,
-          isParent: false,
-          visible: true,
+          ...exposure,
+          pods: exposure.children.length,
+          visible: false,
         });
-      });
+      } else {
+        res.push({ id: parent_id, ...exposure, pods: exposure.children.length, visible: true });
+      }
     });
     console.log('preprocessHierarchicalData',res)
     return res;

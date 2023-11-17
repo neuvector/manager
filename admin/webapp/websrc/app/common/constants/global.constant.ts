@@ -245,4 +245,10 @@ export class GlobalConstant {
   };
 
   public static EXCLUDED_DOMAINS = ['_images', '_nodes', '_containers'];
+
+  public static CONTAINER_TYPES = [
+    'init_containers',
+    'containers',
+    'ephemeral_containers'
+  ];
 }

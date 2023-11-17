@@ -312,11 +312,11 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-12 col-md-12 mt-2 d-flex" *ngIf="!addEditAdmissionRuleForm.controls.isException.value">
+          <div class="col-12 col-md-12 mt-2 d-flex">
             <label class="pull-left margin-right-m">{{ 'admissionControl.CONTAINER_TYPES' | translate }}</label>
             <section
               class="pull-left margin-right-m d-flex"
-              aria-label="Select a mode"
+              aria-label="Select a container type"
               formArrayName="containers"
             >
               <ng-container *ngFor="let l of containersFormArray.controls; let i = index">

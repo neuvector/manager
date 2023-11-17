@@ -132,12 +132,20 @@ export class AdmissionRulesService {
         },
       },
       {
+        headerName: this.translate.instant('admissionControl.CONTAINER_TYPES'),
+        field: 'containers',
+        cellRenderer: params => {
+          return this.containersRenderFunc(params);
+        },
+        width: 200,
+      },
+      {
         headerName: this.translate.instant('admissionControl.CRITERIA'),
         field: 'criteria',
         cellRenderer: params => {
           return this.criteriaRenderFunc(params);
         },
-        width: 550,
+        width: 400,
       },
       {
         headerName: this.translate.instant('admissionControl.MODE'),
@@ -345,6 +353,24 @@ export class AdmissionRulesService {
         params.value.length > 60
           ? `${params.value.substring(0, 60)}...`
           : params.value
+      );
+    }
+    return '';
+  };
+
+  containersRenderFunc = params => {
+    let containerTypes: Array<string> = [];
+    if (params && params.value) {
+      if (Array.isArray(params.value) && params.value.length > 0) {
+        containerTypes = params.value;
+      } else {
+        containerTypes = GlobalConstant.CONTAINER_TYPES
+      }
+      return this.sanitizer.sanitize(
+        SecurityContext.HTML,
+        containerTypes.map(containerType => {
+          return this.translate.instant(`admissionControl.${containerType.toUpperCase()}`)
+        }).join(', ')
       );
     }
     return '';

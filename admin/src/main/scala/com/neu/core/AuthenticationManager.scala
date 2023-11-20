@@ -58,38 +58,53 @@ object AuthenticationManager extends LazyLogging {
     var converted_role_domains: Map[String, String] = null
     var userToken: UserTokenNew                     = null
     val authRes                                     = jsonToToken(authToken)
-    token = Some(authRes.token)
+    token = authRes.token
 
-    val tokenNew = TokenNew(
-      token.get.token,
-      token.get.fullname,
-      token.get.server,
-      token.get.username,
-      token.get.email,
-      token.get.role,
-      token.get.locale,
-      token.get.timeout,
-      token.get.default_password,
-      token.get.modify_password,
-      token.get.global_permissions.getOrElse(Array()),
-      token.get.domain_permissions.getOrElse(Map()),
-      Option(authRes.password_days_until_expire.getOrElse(-1))
-    )
+    token match {
+      case Some(token) => {
+        val tokenNew = TokenNew(
+          token.token,
+          token.fullname,
+          token.server,
+          token.username,
+          token.email,
+          token.role,
+          token.locale,
+          token.timeout,
+          token.default_password,
+          token.modify_password,
+          token.global_permissions.getOrElse(Array()),
+          token.domain_permissions.getOrElse(Map()),
+          Option(authRes.password_days_until_expire.getOrElse(-1))
+        )
 
-    token.get.role_domains match {
-      case Some(role_domains) =>
-        converted_role_domains = getRolesDigit(token.get.role, Option(role_domains), timestamp)
-      case None =>
-        converted_role_domains = getRolesDigit(token.get.role, None, timestamp)
+        token.role_domains match {
+          case Some(role_domains) =>
+            converted_role_domains = getRolesDigit(token.role, Option(role_domains), timestamp)
+          case None =>
+            converted_role_domains = getRolesDigit(token.role, None, timestamp)
+        }
+        userToken = UserTokenNew(
+          Some(tokenNew),
+          Md5.hash(token.email),
+          Option(converted_role_domains),
+          Option(datetime),
+          Some(false)
+        )
+        tokenMap += token.token -> userToken
+        userToken
+      }
+      case None => {
+        userToken = UserTokenNew(
+          None,
+          "",
+          None,
+          None,
+          authRes.need_to_reset_password
+        )
+        userToken
+      }
     }
-    userToken = UserTokenNew(
-      tokenNew,
-      Md5.hash(token.get.email),
-      Option(converted_role_domains),
-      Option(datetime)
-    )
-    if (token.nonEmpty) tokenMap += token.get.token -> userToken
-    userToken
   }
 
   def putToken(id: String, userToken: UserTokenNew): Unit =

@@ -176,6 +176,11 @@
       </div>
     </div>
     <div class="user__formGroup">
+      <mat-checkbox formControlName="loginReset" class="m-2">
+        <span class="text-normal">
+          {{ 'user.resetPassword.CHANGE_ON_LOGIN' | translate }}
+        </span>
+      </mat-checkbox>
       <app-password-panel [passwordForm]="passwordForm"></app-password-panel>
     </div>
     <div class="d-flex justify-content-end">

@@ -3,7 +3,7 @@ package com.neu.model
 /**
  * Created by bxu on 3/24/16.
  */
-case class Password(username: String, password: String)
+case class Password(username: String, password: String, new_password: Option[String])
 
 case class AuthRequest(password: Password, client_ip: String)
 
@@ -60,7 +60,9 @@ case class PasswordProfileWrap(
 case class UserBlock(
   fullname: String,
   clear_failed_login: Option[Boolean],
-  new_password: Option[String]
+  new_password: Option[String],
+  force_reset_password: Option[Boolean],
+  reset_password_in_next_login: Option[Boolean]
 )
 
 case class UserBlockWrap(

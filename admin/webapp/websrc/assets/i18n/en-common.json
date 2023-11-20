@@ -1797,6 +1797,8 @@
     },
     "resetPassword": {
       "TITLE": "Reset Password",
+      "CHANGE_ON_LOGIN": "Ask user to change their password on next login",
+      "CHANGE_REQUIRED": "Please change your password",
       "RESET": "Reset",
       "RESET_OK": "Password is reset successfully!",
       "RESET_NG": "Error happens when resetting password!"

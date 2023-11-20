@@ -140,6 +140,7 @@ export class UsersGridComponent implements OnInit {
       cellRendererParams: {
         isWriteUserAuthorized: undefined,
         isRemote: undefined,
+        role: GlobalVariable.user.token.role,
         edit: event => this.editUser(event),
         delete: event => this.deleteUser(event),
         reset: event => this.resetUser(event),
@@ -249,13 +250,14 @@ export class UsersGridComponent implements OnInit {
           complete: () => {
             this.notificationService.open(this.tr.instant('user.ADD_USER_OK'));
             addDialogRef.componentInstance.onNoClick();
-            updateGridData(
-              this.rowData,
-              [user],
-              this.gridOptions.api!,
-              'username',
-              'add'
-            );
+            // updateGridData(
+            //   this.rowData,
+            //   [user],
+            //   this.gridOptions.api!,
+            //   'username',
+            //   'add'
+            // );
+            this.refresh();
           },
           error: ({ error }: { error: ErrorResponse }) => {
             this.notificationService.openError(
@@ -302,13 +304,14 @@ export class UsersGridComponent implements OnInit {
             this.tr.instant('user.editUser.SUBMIT_OK')
           );
           editDialogRef.componentInstance.onNoClick();
-          updateGridData(
-            this.rowData,
-            [userForm],
-            this.gridOptions.api!,
-            'username',
-            'edit'
-          );
+          // updateGridData(
+          //   this.rowData,
+          //   [userForm],
+          //   this.gridOptions.api!,
+          //   'username',
+          //   'edit'
+          // );
+          this.refresh();
         },
         error: ({ error }: { error: ErrorResponse }) => {
           this.notificationService.openError(
@@ -444,6 +447,7 @@ export class UsersGridComponent implements OnInit {
         .resetUser({
           username: userForm.username,
           password: userForm.passwordForm.newPassword,
+          login_reset: userForm.loginReset,
         })
         .subscribe({
           complete: () => {

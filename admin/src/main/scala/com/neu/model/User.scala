@@ -14,6 +14,7 @@ case class User(
   timeout: Option[Int],
   default_password: Boolean,
   modify_password: Boolean,
+  password_resettable: Option[Boolean],
   blocked_for_failed_login: Option[Boolean],
   blocked_for_password_expired: Option[Boolean],
   role_domains: Option[Map[String, Array[String]]]
@@ -29,6 +30,7 @@ case class UserImage(
   locale: String = "en",
   default_password: Boolean,
   modify_password: Boolean,
+  password_resettable: Option[Boolean],
   emailHash: String = "",
   blocked_for_failed_login: Option[Boolean],
   blocked_for_password_expired: Option[Boolean],
@@ -92,7 +94,8 @@ case class TokenNew(
 
 case class TokenWrap(
   password_days_until_expire: Option[Int],
-  token: Token
+  need_to_reset_password: Option[Boolean],
+  token: Option[Token]
 )
 
 case class UserToken(
@@ -103,10 +106,11 @@ case class UserToken(
 )
 
 case class UserTokenNew(
-  token: TokenNew,
+  token: Option[TokenNew],
   emailHash: String = "",
   roles: Option[Map[String, String]],
   login_timestamp: Option[String],
+  need_to_reset_password: Option[Boolean],
   is_suse_authenticated: Boolean = false
 )
 

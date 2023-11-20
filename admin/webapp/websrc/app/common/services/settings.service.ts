@@ -113,10 +113,16 @@ export class SettingsService {
     return this.authHttpService.unblockUser(id);
   }
 
-  resetUser(user: { username: string; password: string }) {
+  resetUser(user: {
+    username: string;
+    password: string;
+    login_reset: boolean;
+  }) {
     return this.authHttpService.resetUser({
       fullname: user.username,
       new_password: user.password,
+      force_reset_password: true,
+      reset_password_in_next_login: user.login_reset,
     });
   }
 

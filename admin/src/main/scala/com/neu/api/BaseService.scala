@@ -42,7 +42,9 @@ class BaseService() extends Directives with LazyLogging {
   }
 
   protected def onUnauthorized(e: Throwable): StandardRoute =
-    if (e.getMessage.contains("\"code\":47")) {
+    if (e.getMessage.contains("\"code\":14")) {
+      complete((StatusCodes.BadRequest, e.getMessage))
+    } else if (e.getMessage.contains("\"code\":47")) {
       complete((StatusCodes.Unauthorized, blocked))
     } else if (e.getMessage.contains("\"code\":48")) {
       complete((StatusCodes.Unauthorized, passwordExpired))

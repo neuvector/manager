@@ -106,6 +106,7 @@ export class AddEditUserDialogComponent implements OnInit {
           { value: this.data.user?.username, disabled: true },
           Validators.required,
         ],
+        loginReset: [false, Validators.required],
         passwordForm: this.fb.group(
           {
             newPassword: ['', Validators.required],

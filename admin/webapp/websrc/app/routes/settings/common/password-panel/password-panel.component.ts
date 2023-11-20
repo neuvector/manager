@@ -11,6 +11,15 @@ import { SettingsService } from '@services/settings.service';
 })
 export class PasswordPanelComponent implements OnInit {
   @Input() passwordForm!: FormGroup;
+  @Input() isReset = false;
+  @Input() resetError!: string;
+  @Input() set resetProfile(profile: PublicPasswordProfile) {
+    if (profile) {
+      this.pwdProfile = profile;
+      this.checkPassword(this.passwordForm.get('newPassword')?.value || '');
+      this.getReqTxt(this.pwdProfile);
+    }
+  }
   pwdProfile!: PublicPasswordProfile;
   isCharReqValid!: {
     isReachingMinLen: boolean;
@@ -36,11 +45,13 @@ export class PasswordPanelComponent implements OnInit {
 
   ngOnInit(): void {
     const passwordField = this.passwordForm.get('newPassword');
-    this.settingsService.getPublicPwdProfile().subscribe(res => {
-      this.pwdProfile = res;
-      this.checkPassword(passwordField?.value || '');
-      this.getReqTxt(this.pwdProfile);
-    });
+    if (!this.isReset) {
+      this.settingsService.getPublicPwdProfile().subscribe(res => {
+        this.pwdProfile = res;
+        this.checkPassword(passwordField?.value || '');
+        this.getReqTxt(this.pwdProfile);
+      });
+    }
     passwordField?.valueChanges.subscribe(password => {
       this.checkPassword(password);
     });
@@ -70,14 +81,16 @@ export class PasswordPanelComponent implements OnInit {
   }
 
   checkPassword(password: string): void {
-    this.isCharReqValid = this.checkCharReq(password || '', this.pwdProfile);
-    this.isPasswordValid = Object.values(this.isCharReqValid).every(
-      charReq => charReq
-    );
-    if (!this.isPasswordValid) {
-      this.passwordForm.get('newPassword')?.setErrors({
-        charReqInvalid: true,
-      });
+    if (this.pwdProfile) {
+      this.isCharReqValid = this.checkCharReq(password || '', this.pwdProfile);
+      this.isPasswordValid = Object.values(this.isCharReqValid).every(
+        charReq => charReq
+      );
+      if (!this.isPasswordValid) {
+        this.passwordForm.get('newPassword')?.setErrors({
+          charReqInvalid: true,
+        });
+      }
     }
   }
 

@@ -18,12 +18,22 @@ import { MatDialog } from '@angular/material/dialog';
 import { AgreementComponent } from '@routes/pages/login/eula/agreement/agreement.component';
 import { NotificationService } from '@services/notification.service';
 import { SummaryService } from '@services/summary.service';
-import { SystemSummary } from '@common/types';
+import {
+  ErrorResponse,
+  PublicPasswordProfile,
+  SystemSummary,
+} from '@common/types';
 import { PathConstant } from '@common/constants/path.constant';
 import { HttpHeaders } from '@angular/common/http';
 import { CommonHttpService } from '@common/api/common-http.service';
 import { isValidBased64 } from '@common/utils/common.utils';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { ResetPasswordModalComponent } from '@routes/settings/common/reset-password-modal/reset-password-modal.component';
+import { Subject } from 'rxjs';
+
+interface ResetError extends ErrorResponse {
+  password_profile_basic: PublicPasswordProfile;
+}
 
 @Component({
   selector: 'app-login',
@@ -54,6 +64,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private _getRebrandCustomValuesSubscription;
   public customLoginLogo: SafeHtml = '';
   public hasCustomHeader: boolean = false;
+  public passwordReset = new Subject();
 
   constructor(
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
@@ -112,11 +123,15 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.openEULAPage();
     }
 
-    if ( GlobalVariable.customPageHeaderColor ) {
+    if (GlobalVariable.customPageHeaderColor) {
       this.hasCustomHeader = true;
     }
 
-    if (!GlobalVariable.customLoginLogo && !GlobalVariable.customPolicy && !GlobalVariable.customPageHeaderColor) {
+    if (
+      !GlobalVariable.customLoginLogo &&
+      !GlobalVariable.customPolicy &&
+      !GlobalVariable.customPageHeaderColor
+    ) {
       this.retrieveCustomizedUIContent();
     }
 
@@ -167,7 +182,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (this._dialogSubscription) {
       this._dialogSubscription.unsubscribe();
     }
-    if(this._getRebrandCustomValuesSubscription){
+    if (this._getRebrandCustomValuesSubscription) {
       this._getRebrandCustomValuesSubscription.unsubscribe();
     }
   }
@@ -206,10 +221,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (this.validEula) {
       this.authMsg = '';
       this.inProgress = true;
-      this.authService
-        .login(value ? value.username : '', value ? value.password : '')
-        .subscribe(
-          (userInfo: any) => {
+      value = value || { username: '', password: '' };
+      this.authService.login(value).subscribe(
+        (userInfo: any) => {
+          if (userInfo.need_to_reset_password) {
+            this.openResetPassword(value);
+          } else {
             GlobalVariable.user = userInfo;
             GlobalVariable.nvToken = userInfo.token.token;
             GlobalVariable.isSUSESSO = userInfo.is_suse_authenticated;
@@ -238,12 +255,14 @@ export class LoginComponent implements OnInit, OnDestroy {
                 }
               );
             }
-          },
-          error => {
-            this.authMsg = error.status === 0 ? error.message : error.error;
-            this.inProgress = false;
           }
-        );
+        },
+        error => {
+          console.log(error);
+          this.authMsg = error.status === 0 ? error.message : error.error;
+          this.inProgress = false;
+        }
+      );
     } else {
       this.authMsg = this.translate.instant('license.message.ACCEPT_EULA_ERR');
       this.inProgress = false;
@@ -273,11 +292,23 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   private clearLocalStorage() {
-    let externalRef = this.localStorage.get(GlobalConstant.LOCAL_STORAGE_EXTERNAL_REF);
-    let timeoutPath = this.localStorage.get(GlobalConstant.SESSION_STORAGE_ORIGINAL_URL);
+    let externalRef = this.localStorage.get(
+      GlobalConstant.LOCAL_STORAGE_EXTERNAL_REF
+    );
+    let timeoutPath = this.localStorage.get(
+      GlobalConstant.SESSION_STORAGE_ORIGINAL_URL
+    );
     this.localStorage.clear();
-    if (externalRef) this.localStorage.set(GlobalConstant.LOCAL_STORAGE_EXTERNAL_REF, externalRef);
-    if (timeoutPath) this.localStorage.set(GlobalConstant.SESSION_STORAGE_ORIGINAL_URL, timeoutPath);
+    if (externalRef)
+      this.localStorage.set(
+        GlobalConstant.LOCAL_STORAGE_EXTERNAL_REF,
+        externalRef
+      );
+    if (timeoutPath)
+      this.localStorage.set(
+        GlobalConstant.SESSION_STORAGE_ORIGINAL_URL,
+        timeoutPath
+      );
   }
 
   //get saml and openID status
@@ -422,7 +453,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
 
     console.log(refPath, query);
-    this.router.navigate([refPath], { queryParams: query});
+    this.router.navigate([refPath], { queryParams: query });
   }
 
   private setUserInfo(userInfo) {
@@ -436,64 +467,66 @@ export class LoginComponent implements OnInit, OnDestroy {
   // Retrieve customized UI content from environment variables (API endpoint is "/rebrand")
   // These variables allow customization of the login page logo, content of Policy (banner) and content of the page header
   private retrieveCustomizedUIContent() {
-    this._getRebrandCustomValuesSubscription = this.commonHttpService.getRebrandCustomValues().subscribe(value => {
-
-      if (value.customLoginLogo) {
-        GlobalVariable.customLoginLogo = isValidBased64(value.customLoginLogo)
-          ? atob(value.customLoginLogo)
-          : value.customLoginLogo;
-        this.customLoginLogo = this.sanitizer.bypassSecurityTrustHtml(
-          GlobalVariable.customLoginLogo
-        );
-      }
-
-      if (value.customPolicy) {
-        GlobalVariable.customPolicy = isValidBased64(value.customPolicy)
-          ? atob(value.customPolicy)
-          : value.customPolicy;
-
-        if (!this.isFromSSO) {
-          this.openEULAPage();
+    this._getRebrandCustomValuesSubscription = this.commonHttpService
+      .getRebrandCustomValues()
+      .subscribe(value => {
+        if (value.customLoginLogo) {
+          GlobalVariable.customLoginLogo = isValidBased64(value.customLoginLogo)
+            ? atob(value.customLoginLogo)
+            : value.customLoginLogo;
+          this.customLoginLogo = this.sanitizer.bypassSecurityTrustHtml(
+            GlobalVariable.customLoginLogo
+          );
         }
-      }
 
-      if (value.customPageHeaderContent) {
-        GlobalVariable.customPageHeaderContent = isValidBased64(
-          value.customPageHeaderContent
-        )
-          ? atob(value.customPageHeaderContent)
-          : value.customPageHeaderContent;
-      }
+        if (value.customPolicy) {
+          GlobalVariable.customPolicy = isValidBased64(value.customPolicy)
+            ? atob(value.customPolicy)
+            : value.customPolicy;
 
-      if (value.customPageHeaderColor) {
-        GlobalVariable.customPageHeaderColor = isValidBased64(
-          value.customPageHeaderColor
-        )
-          ? atob(value.customPageHeaderColor)
-          : value.customPageHeaderColor;
-      }
+          if (!this.isFromSSO) {
+            this.openEULAPage();
+          }
+        }
 
-      if (value.customPageFooterContent) {
-        GlobalVariable.customPageFooterContent = isValidBased64(
-          value.customPageFooterContent
-        )
-          ? atob(value.customPageFooterContent)
-          : value.customPageFooterContent;
-      }
+        if (value.customPageHeaderContent) {
+          GlobalVariable.customPageHeaderContent = isValidBased64(
+            value.customPageHeaderContent
+          )
+            ? atob(value.customPageHeaderContent)
+            : value.customPageHeaderContent;
+        }
 
-      if ( value.customPageFooterColor ) {
-        GlobalVariable.customPageFooterColor = isValidBased64(
-          value.customPageFooterColor
-        )
-          ? atob(value.customPageFooterColor)
-          : value.customPageFooterColor;
-      } else if (GlobalVariable.customPageHeaderColor) {
-        GlobalVariable.customPageFooterColor = GlobalVariable.customPageHeaderColor
-      }
+        if (value.customPageHeaderColor) {
+          GlobalVariable.customPageHeaderColor = isValidBased64(
+            value.customPageHeaderColor
+          )
+            ? atob(value.customPageHeaderColor)
+            : value.customPageHeaderColor;
+        }
 
-      this.authService.notifyEnvironmentVariablesRetrieved();
-      this.hasCustomHeader = true;
-    });
+        if (value.customPageFooterContent) {
+          GlobalVariable.customPageFooterContent = isValidBased64(
+            value.customPageFooterContent
+          )
+            ? atob(value.customPageFooterContent)
+            : value.customPageFooterContent;
+        }
+
+        if (value.customPageFooterColor) {
+          GlobalVariable.customPageFooterColor = isValidBased64(
+            value.customPageFooterColor
+          )
+            ? atob(value.customPageFooterColor)
+            : value.customPageFooterColor;
+        } else if (GlobalVariable.customPageHeaderColor) {
+          GlobalVariable.customPageFooterColor =
+            GlobalVariable.customPageHeaderColor;
+        }
+
+        this.authService.notifyEnvironmentVariablesRetrieved();
+        this.hasCustomHeader = true;
+      });
   }
 
   private openEULAPage() {
@@ -506,6 +539,62 @@ export class LoginComponent implements OnInit, OnDestroy {
       },
       width: '80vw',
       height: '90vh',
+    });
+  }
+
+  private openResetPassword(value?: any) {
+    const dialogRef = this.dialog.open(ResetPasswordModalComponent, {
+      disableClose: true,
+      data: {
+        username: value ? value.username : '',
+        password: value ? value.password : '',
+      },
+      width: '80%',
+      maxWidth: '1100px',
+    });
+    dialogRef.componentInstance.resetData.subscribe(payload => {
+      this.authService.login(payload).subscribe(
+        (userInfo: any) => {
+          GlobalVariable.user = userInfo;
+          GlobalVariable.nvToken = userInfo.token.token;
+          GlobalVariable.isSUSESSO = userInfo.is_suse_authenticated;
+          GlobalVariable.user.global_permissions =
+            userInfo.token.global_permissions;
+          GlobalVariable.user.domain_permissions =
+            userInfo.token.domain_permissions;
+          this.translatorService.useLanguage(GlobalVariable.user.token.locale);
+          this.sessionStorage.set(
+            GlobalConstant.SESSION_STORAGE_TOKEN,
+            GlobalVariable.user
+          );
+
+          if (this.isEulaAccepted) {
+            this.getSummary(userInfo);
+          } else {
+            this.authService.updateEula().subscribe(
+              () => {
+                this.getSummary(userInfo);
+              },
+              error => {
+                this.authMsg = error.message;
+                this.inProgress = false;
+              }
+            );
+          }
+          dialogRef.componentInstance.onClose();
+        },
+        ({ error }) => {
+          let resetError: ResetError = JSON.parse(
+            error.split('Body:')[1].trim()
+          );
+          dialogRef.componentInstance.pwdProfile =
+            resetError.password_profile_basic;
+          dialogRef.componentInstance.resetError = resetError.message;
+        }
+      );
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      this.inProgress = false;
     });
   }
 }

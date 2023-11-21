@@ -138,7 +138,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
                     complete {
                       val lines: Array[String] = formData.split("\n")
                       val contentLines         = lines.slice(4, lines.length - 1)
-                      val bodyData             = contentLines.mkString("\n").substring(3)
+                      val bodyData             = contentLines.mkString("\n")
                       logger.info("Importing groups")
                       RestClient.httpRequestWithHeader(
                         s"${baseClusterUri(tokenId)}/file/group/config",
@@ -788,7 +788,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
                         logger.info("No Transaction ID(Post)")
                         val lines: Array[String] = formData.split("\n")
                         val contentLines         = lines.slice(4, lines.length - 1)
-                        val bodyData             = contentLines.mkString("\n").substring(3)
+                        val bodyData             = contentLines.mkString("\n")
                         RestClient.httpRequestWithHeader(
                           s"$baseUrl/file/dlp/config",
                           POST,
@@ -988,7 +988,7 @@ class GroupService()(implicit executionContext: ExecutionContext)
                         logger.info("No Transaction ID(Post)")
                         val lines: Array[String] = formData.split("\n")
                         val contentLines         = lines.slice(4, lines.length - 1)
-                        val bodyData             = contentLines.mkString("\n").substring(3)
+                        val bodyData             = contentLines.mkString("\n")
                         RestClient.httpRequestWithHeader(
                           s"$baseUrl/file/waf/config",
                           POST,

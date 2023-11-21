@@ -1114,7 +1114,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
                     complete {
                       val lines: Array[String] = formData.split("\n")
                       val contentLines         = lines.slice(4, lines.length - 1)
-                      val bodyData             = contentLines.mkString("\n").substring(3)
+                      val bodyData             = contentLines.mkString("\n")
                       logger.info("Matching test")
                       RestClient.httpRequestWithHeader(
                         s"${baseClusterUri(tokenId)}/assess/admission/rule",
@@ -1189,7 +1189,7 @@ class PolicyService()(implicit executionContext: ExecutionContext)
                       logger.info("No Transaction ID(Post)")
                       val lines: Array[String] = formData.split("\n")
                       val contentLines         = lines.slice(4, lines.length - 1)
-                      val bodyData             = contentLines.mkString("\n").substring(3)
+                      val bodyData             = contentLines.mkString("\n")
                       RestClient.httpRequestWithHeader(
                         s"$baseUrl/$admissionImport",
                         POST,

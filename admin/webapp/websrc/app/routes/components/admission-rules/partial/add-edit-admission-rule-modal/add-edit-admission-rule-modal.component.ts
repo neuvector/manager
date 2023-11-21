@@ -111,8 +111,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
       enabled: new FormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? true : !this.data.rule4Edit.disable),
       cfg_type: new FormControl(this.data.cfgType === GlobalConstant.SCOPE.FED ? GlobalConstant.CFG_TYPE.FED : GlobalConstant.CFG_TYPE.CUSTOMER),
       rule_type: new FormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? "deny" : this.data.rule4Edit.rule_type),
-      // containers: new FormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? [] : this.data.rule4Edit.containers, Validators.required),
-      containers: this.getContainersForm(this.data.opType === GlobalConstant.MODAL_OP.ADD ? [] : this.data.rule4Edit.containers),
+      containers: this.getContainersForm(this.data.opType === GlobalConstant.MODAL_OP.ADD ? [GlobalConstant.CONTAINER_TYPES[1]] : this.data.rule4Edit.containers),
       rule_mode: new FormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? "" : this.data.rule4Edit.rule_mode),
       disable: new FormControl(this.data.opType === GlobalConstant.MODAL_OP.ADD ? false : this.data.rule4Edit.disable)
     });
@@ -157,9 +156,9 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
         return new FormControl(containers.includes(containerType))
       }
     );
-    if (containerTypeSelectionCnt === 0 && this.data.opType !== GlobalConstant.MODAL_OP.ADD) {
-      arr = arr.fill(new FormControl(true));
-    }
+    // if (containerTypeSelectionCnt === 0 && this.data.opType !== GlobalConstant.MODAL_OP.ADD) {
+    //   arr = arr.fill(new FormControl(true));
+    // }
     return new FormArray(arr);
   }
 

@@ -131,14 +131,14 @@ export class AdmissionRulesService {
           return this.commentRendererFunc(params);
         },
       },
-      {
-        headerName: this.translate.instant('admissionControl.CONTAINER_TYPES'),
-        field: 'containers',
-        cellRenderer: params => {
-          return this.containersRenderFunc(params);
-        },
-        width: 200,
-      },
+      // {
+      //   headerName: this.translate.instant('admissionControl.CONTAINER_TYPES'),
+      //   field: 'containers',
+      //   cellRenderer: params => {
+      //     return this.containersRenderFunc(params);
+      //   },
+      //   width: 200,
+      // },
       {
         headerName: this.translate.instant('admissionControl.CRITERIA'),
         field: 'criteria',

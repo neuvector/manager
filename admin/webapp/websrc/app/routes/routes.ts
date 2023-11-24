@@ -179,7 +179,14 @@ export const routes: Routes = [
       {
         path: 'signature-verifiers',
         loadChildren: () =>
-          import('./signature-verifiers/signature-verifiers.module').then(m => m.SignatureVerifiersModule),
+          import('./signature-verifiers/signature-verifiers.module').then(
+            m => m.SignatureVerifiersModule
+          ),
+      },
+      {
+        path: 'support',
+        loadChildren: () =>
+          import('./support/support.module').then(m => m.SupportModule),
       },
     ],
   },

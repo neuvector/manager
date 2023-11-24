@@ -145,6 +145,13 @@ const SETTINGS = {
   icon: 'settings_suggest',
 };
 
+const SUPPORT = {
+  text: 'Get Support',
+  translate: 'sidebar.nav.SUPPORT',
+  link: '/support',
+  icon: 'support',
+};
+
 export const menu = [
   DASHBOARD,
   NETWORK_ACTIVITY,
@@ -153,4 +160,5 @@ export const menu = [
   SECURITY_RISKS,
   NOTIFICATIONS,
   SETTINGS,
+  SUPPORT,
 ];

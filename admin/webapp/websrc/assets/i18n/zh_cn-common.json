@@ -158,6 +158,7 @@
     "CONTAINER.SUSPICIOUS.PROCESS": "容器可疑进程",
     "LOGOUT": "登出",
     "SETTINGS": "设置",
+    "SUPPORT": "获取支持",
     "FED_POLICY": "集群全局策略",
     "MULTI_CLUSTER": "集群管理",
     "MY_PROFILE": "我的个人资料",
@@ -860,6 +861,7 @@
       "VIOLATION": "违规",
       "NETWORK_TRAFFIC": "网络流量",
       "SETTING": "设置",
+      "SUPPORT": "获取支持",
       "PROFILE": "个人资料",
       "USERS": "用户 & 角色",
       "CONSOLE": "控制台",
@@ -3128,6 +3130,27 @@
       "ENABLED_NET_POLICY_MODE": "网络安全策略模式可以全局设置，独立于默认的组策略模式.",
       "ENABLED_NET_POLICY_MODE_GROUP": "网络安全策略将全局设置为单一模式{{name}}，并将独立于当前组进程模式执行网络策略。",
       "DISABLED_NET_POLICY_MODE": "网络安全策略将使用组策略模式进行进程、网络和文件访问."
+    }
+  },
+  "support": {
+    "subtitle": "包含内容：",
+    "community": {
+      "title": "NeuVector 社区支持",
+      "question_slack": "可以在Rancher用户组 <a href=\"https://rancher-users.slack.com/archives/C036F6JDZ8C\" target=\"_blank\" rel=\"noopener noreferrer\">NeuVector 频道</a> 中提问",
+      "documentation": "查看开源项目的 <a href=\"https://open-docs.neuvector.com/\" target=\"_blank\" rel=\"noopener noreferrer\">文档</a>",
+      "git_repo": "查看NeuVector <a href=\"https://github.com/neuvector/\" target=\"_blank\" rel=\"noopener noreferrer\">源代码和 helm 图表存储库</a>",
+      "image_repo": "在 <a href=\"https://hub.docker.com/u/neuvector\" target=\"_blank\" rel=\"noopener noreferrer\">NeuVector docker hub</a> 上查找公共镜像"
+    },
+    "subscriptions": {
+      "title": "NeuVector 订阅",
+      "SLA": "SLA 后端产品支持服务、RCA、故障排除",
+      "24-7": "24/7 和优先支持选项",
+      "cve": "漏洞 (CVE) 调查、分类协助",
+      "assistance": "最佳实践、强化协助（例如分段、网络和进程分析、准入控制）",
+      "run-time": "运行时威胁规则配置、优化。 访问资产和服务（例如性能调整、CVE 查找）",
+      "Rancher": "内置、支持与 Rancher Manager 和 Rancher Distributions（例如 UI 扩展）的本机集成 - 适用于 Rancher Prime 客户",
+      "more": "了解有关 <a href=\"https://links.imagerelay.com/cdn/3404/ql/04c630990dd647f4bab73c61e67f615e/suse_support_flyer.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">SUSE 支持订阅</a> 的更多信息 ",
+      "login": "已经是订阅者？<a href=\"https://scc.suse.com/\" target=\"_blank\" rel=\"noopener noreferrer\">登录</a> SUSE支持"
     }
   },
   "ldap": {

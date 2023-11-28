@@ -3137,7 +3137,7 @@
     "community": {
       "title": "NeuVector Community Support",
       "question_slack": "Ask a question in the Rancher Users <a href=\"https://rancher-users.slack.com/archives/C036F6JDZ8C\" target=\"_blank\" rel=\"noopener noreferrer\">NeuVector Channel</a>",
-      "documentation": "Review the open source project's <a href=\"https://open-docs.neuvector.com/\" target=\"_blank\" rel=\"noopener noreferrer\">document</a>",
+      "documentation": "Review the open source project's <a href=\"https://open-docs.neuvector.com/\" target=\"_blank\" rel=\"noopener noreferrer\">documentation</a>",
       "git_repo": "Explore NeuVector <a href=\"https://github.com/neuvector/\" target=\"_blank\" rel=\"noopener noreferrer\">source code and helm chart repositories</a>",
       "image_repo": "Find the public images on the <a href=\"https://hub.docker.com/u/neuvector\" target=\"_blank\" rel=\"noopener noreferrer\">NeuVector docker hub</a>"
     },

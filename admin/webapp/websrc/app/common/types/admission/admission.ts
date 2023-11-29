@@ -51,6 +51,7 @@ export interface AdmissionStateRec {
 export interface MatchedRule {
   id: number;
   disabled: boolean;
+  allowed: boolean; 
   type: string;
   mode: string;
   rule_details: string;

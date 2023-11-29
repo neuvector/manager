@@ -2,6 +2,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Component, Inject, OnInit } from "@angular/core";
 import { PathConstant } from "@common/constants/path.constant";
 import { MapConstant } from "@common/constants/map.constant";
+import { GlobalConstant } from "@common/constants/global.constant";
 import { AdmissionRulesService } from "@common/services/admission-rules.service";
 import { GridOptions } from "ag-grid-community";
 import { AdmissionConfigurationAssessment, AdmissionTestResult } from "@common/types/admission/admission";
@@ -46,7 +47,7 @@ export class ConfigurationAssessmentModalComponent implements OnInit {
     this.configAssessmentResult.results = this.configAssessmentResult.results.map(result => {
       if (result.matched_rules) {
         result.matched_rules = result.matched_rules.map(rule => {
-          if (!rule.mode) rule.mode = this.admissionRulesService.globalMode;
+          if (!rule.mode && rule.type !== GlobalConstant.ADMISSION.RULE_TYPE.EXCEPTION) rule.mode = this.admissionRulesService.globalMode;
           return rule;
         });
       }

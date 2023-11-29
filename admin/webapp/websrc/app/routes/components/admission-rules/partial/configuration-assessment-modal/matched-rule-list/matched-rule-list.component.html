@@ -30,7 +30,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="print-row" *ngFor="let row of matchedRules; let i = index" [attr.data-index]="i">
+        <tr class="print-row" [ngClass]="{'disabled-row': row.disabled}" *ngFor="let row of matchedRules; let i = index" [attr.data-index]="i">
           <td class="print-cell" style="width: 60px;">
             {{ row.id }}
           </td>
@@ -38,13 +38,13 @@
             {{ row.rule_details }}
           </td>
           <td class="print-cell" style="width: 60px;">
-            <span class="action-label {{ colourMap[row.mode] }}">{{ 'enum.' + row.mode.toUpperCase() | translate }}</span>
+            <span *ngIf="row.mode" class="action-label {{ colourMap[row.mode] }}" [ngClass]="{'disabled-action': row.disabled}">{{ 'enum.' + row.mode.toUpperCase() | translate }}</span>
           </td>
           <td class="print-cell" style="width: 60px;">
-            <span class="action-label {{ colourMap[row.type.toLowerCase()] }}">{{ 'admissionControl.' + row.type.toUpperCase() | translate }}</span>
+            <span class="action-label {{ colourMap[row.type.toLowerCase()] }}" [ngClass]="{'disabled-action': row.disabled}">{{ 'admissionControl.' + row.type.toUpperCase() | translate }}</span>
           </td>
           <td class="print-cell" style="width: 100px;">
-            <span class="action-label px-1 {{ colourMap[row.rule_cfg_type.toLowerCase()] }}">{{ 'group.' + row.rule_cfg_type.toUpperCase() | translate }}</span>
+            <span class="action-label px-1 {{ colourMap[row.rule_cfg_type.toLowerCase()] }}" [ngClass]="{'disabled-rule': row.disabled}">{{ 'group.' + row.rule_cfg_type.toUpperCase() | translate }}</span>
           </td>
         </tr>
       </tbody>

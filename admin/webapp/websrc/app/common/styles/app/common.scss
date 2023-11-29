@@ -382,7 +382,7 @@ hr.fancy {
 }
 
 .disabled-action {
-  background-color: $neuvector-grey-400;
+  background-color: $neuvector-grey-400 !important;
   -webkit-print-color-adjust: exact;
 }
 
@@ -482,16 +482,16 @@ hr.fancy {
 }
 
 .disabled-rule {
-  border: 1px solid $neuvector-grey-400;
-  background-color: $neuvector-grey-100;
-  color: #becfd5;
+  border: 1px solid $neuvector-grey-400 !important;
+  background-color: $neuvector-grey-100 !important;
+  color: #becfd5 !important;
 }
 
 .disabled-rule-print {
-  border: 1px solid $neuvector-grey-600;
-  background-color: $neuvector-grey-100;
+  border: 1px solid $neuvector-grey-600 !important;
+  background-color: $neuvector-grey-100 !important;
   -webkit-print-color-adjust: exact;
-  color: $neuvector-grey-600;
+  color: $neuvector-grey-600 !important;
 }
 
 .removed-rule {

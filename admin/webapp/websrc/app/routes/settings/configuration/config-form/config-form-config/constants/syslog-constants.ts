@@ -27,6 +27,8 @@ export const SyslogToggleField = {
   key: 'syslog.syslog_status',
   type: FormlyComponents.TOGGLE,
   templateOptions: {
+    label: 'setting.SYSLOG',
+    labelPosition: 'after',
     ariaLabelledBy: 'setting.SYSLOG',
   },
   expressionProperties: {
@@ -115,8 +117,7 @@ export const SyslogCategoriesField = {
     options: SyslogCategories,
   },
   expressionProperties: {
-    'templateOptions.disabled':
-      '!model.syslog.syslog_status || !formState.permissions.isSyslogAuthorized',
+    'templateOptions.disabled': '!formState.permissions.isSyslogAuthorized',
   },
 };
 
@@ -128,8 +129,7 @@ export const SyslogInJSONField = {
     labelPosition: 'before',
   },
   expressionProperties: {
-    'templateOptions.disabled':
-      '!model.syslog.syslog_status || !formState.permissions.isSyslogAuthorized',
+    'templateOptions.disabled': '!formState.permissions.isSyslogAuthorized',
   },
 };
 
@@ -140,8 +140,7 @@ export const SyslogSingleCVEField = {
     label: 'setting.SEND_SYSLOG_PER_CVE',
   },
   expressionProperties: {
-    'templateOptions.disabled':
-      '!model.syslog.syslog_status || !formState.permissions.isSyslogAuthorized',
+    'templateOptions.disabled': '!formState.permissions.isSyslogAuthorized',
   },
 };
 
@@ -152,7 +151,19 @@ export const SyslogCVELayersField = {
     label: 'setting.SEND_SYSLOG_PER_LAYER',
   },
   expressionProperties: {
-    'templateOptions.disabled':
-      '!model.syslog.syslog_status || !formState.permissions.isSyslogAuthorized',
+    'templateOptions.disabled': '!formState.permissions.isSyslogAuthorized',
+  },
+};
+
+export const EventReportLoggingToggleField = {
+  type: FormlyComponents.TOGGLE,
+  key: 'syslog.output_event_to_logs',
+  templateOptions: {
+    label: 'setting.EVENT_REPORT_LOGGING',
+    labelPosition: 'after',
+    ariaLabelledBy: 'setting.EVENT_REPORT_LOGGING',
+  },
+  expressionProperties: {
+    'templateOptions.disabled': '!formState.permissions.isSyslogAuthorized',
   },
 };

@@ -28,8 +28,11 @@
           <th class="print-cell" style="width: 60px;">
             ID
           </th>
-          <th class="print-cell" style="width: calc(100% - 280px);">
+          <th class="print-cell" style="width: calc(100% - 430px);">
             {{ 'nodes.gridHeader.DESCRIPTION' | translate }}
+          </th>
+          <th class="print-cell" style="width: 150px;">
+            {{ 'admissionControl.CONTAINER_IMAGE' | translate }}
           </th>
           <th class="print-cell" style="width: 60px;">
             {{ 'admissionControl.MODE' | translate }}
@@ -47,8 +50,11 @@
           <td class="print-cell" style="width: 60px;">
             {{ row.id }}
           </td>
-          <td class="print-cell" style="width: calc(100% - 280px);">
+          <td class="print-cell" style="width: calc(100% - 430px);">
             {{ row.rule_details }}
+          </td>
+          <td class="print-cell" style="width: 150px;">
+            {{ row.container_image }}
           </td>
           <td class="print-cell" style="width: 60px;">
             <span *ngIf="row.mode" class="action-label {{ colourMap[row.mode] }}" [ngClass]="{'disabled-action': row.disabled}">{{ 'enum.' + row.mode.toUpperCase() | translate }}</span>

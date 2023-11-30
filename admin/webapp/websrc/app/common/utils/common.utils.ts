@@ -690,14 +690,20 @@ export const parseExposureHierarchicalData = (
   return hierarchicalExposures;
 };
 
-const summarizeEntries = (exposedPods) => {
+const summarizeEntries = exposedPods => {
   let entryMap = {};
   exposedPods.forEach(expsosedPod => {
     expsosedPod.entries.forEach(entry => {
       if (entryMap[entry.ip]) {
-        entryMap[entry.ip].applications = accumulateProtocols(entryMap[entry.ip].applications, entry.application);
+        entryMap[entry.ip].applications = accumulateProtocols(
+          entryMap[entry.ip].applications,
+          entry.application
+        );
         entryMap[entry.ip].sessions += entry.sessions;
-        entryMap[entry.ip].policy_action = accumulateActionLevel(entryMap[entry.ip].action, entry.policy_action);
+        entryMap[entry.ip].policy_action = accumulateActionLevel(
+          entryMap[entry.ip].action,
+          entry.policy_action
+        );
       } else {
         entryMap[entry.ip] = {
           applications: [entry.application],
@@ -706,7 +712,7 @@ const summarizeEntries = (exposedPods) => {
           ip: entry.ip,
           fqdn: entry.fqdn || '',
           country_code: entry.country_code,
-          country_name: entry.country_name
+          country_name: entry.country_name,
         };
       }
     });
@@ -714,14 +720,19 @@ const summarizeEntries = (exposedPods) => {
   return Object.values(entryMap) as ConversationReportEntryByServce[];
 };
 
-export const accumulateActionLevel = (accuAction: string = 'allow', currAction: string) => {
+export const accumulateActionLevel = (
+  accuAction: string = 'allow',
+  currAction: string
+) => {
   const actionMap = {
     deny: 3,
     alert: 2,
-    allow: 1
-  }
-  return actionMap[accuAction.toLowerCase()] > actionMap[currAction.toLowerCase()] ?
-    accuAction : currAction;
+    allow: 1,
+  };
+  return actionMap[accuAction.toLowerCase()] >
+    actionMap[currAction.toLowerCase()]
+    ? accuAction
+    : currAction;
 };
 
 const accumulateProtocols = (accuApps: Array<string> = [], currApp: string) => {
@@ -966,4 +977,34 @@ export function getNamespaceRoleGridData(
       }))
       .filter(role => role.namespaceRole !== globalRole);
   }
+}
+
+export function sortByOrder<T>(array: T[], order: string[]): T[] {
+  return array.map(item => {
+    const sortedKeys = Object.keys(item).sort((a, b) => {
+      const indexA = order.indexOf(a);
+      const indexB = order.indexOf(b);
+
+      if (indexA !== -1 && indexB !== -1) {
+        return indexA - indexB;
+      }
+
+      if (indexA !== -1) {
+        return -1;
+      }
+
+      if (indexB !== -1) {
+        return 1;
+      }
+
+      return 0;
+    });
+
+    const sortedItem: any = {};
+    sortedKeys.forEach(key => {
+      sortedItem[key] = item[key];
+    });
+
+    return sortedItem;
+  });
 }

@@ -89,6 +89,7 @@ export class ConfigurationAssessmentModalComponent implements OnInit {
             Message: index === 0 ? row.message : '',
             'ID (Matched Rule)': matched_rule.id,
             'Description (Matched Rule)': matched_rule.rule_details,
+            'Container Image': matched_rule.container_image,
             'Mode (Matched Rule)': matched_rule.mode,
             'Action (Matched Rule)': matched_rule.type,
             'Type (Matched Rule)': matched_rule.rule_cfg_type
@@ -102,6 +103,7 @@ export class ConfigurationAssessmentModalComponent implements OnInit {
           Message: row.message,
           'ID (Matched Rule)': '',
           'Description (Matched Rule)': '',
+          'Container Image': '',
           'Mode (Matched Rule)': '',
           'Action (Matched Rule)': '',
           'Type (Matched Rule)': ''

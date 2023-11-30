@@ -2598,6 +2598,7 @@
     "TEST_K8S_INSTRUCTION": "确认Kubernetes相关的配置是否正确和Kubernetes是否可用",
     "TEST": "测试",
     "RULE_TYPE": "操作",
+    "CONTAINER_IMAGE": "容器镜像",
     "PSP_INSTRUCTION": "建议添加更多条件限制规则的范围, 例如: 命名空间",
     "PSP_CRITERIA": "PSP最佳实施包括:",
     "BL_POLICY": "PSS基线策略清单",

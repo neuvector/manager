@@ -68,7 +68,6 @@ export class ConfigurationAssessmentModalComponent implements OnInit {
   };
 
   exportPdf = () => {
-    console.log("pdf")
     this.data.printConfigurationAssessmentResultFn({
       data: this.configAssessmentResult.results,
       instruction: {
@@ -80,7 +79,7 @@ export class ConfigurationAssessmentModalComponent implements OnInit {
   private getConfigAssessmentResultRows = (configAssessmentResults) => {
     let rows: Array<any> = [];
     configAssessmentResults.forEach(row => {
-      if (row.matched_rules) {
+      if (row.matched_rules && Array.isArray(row.matched_rules) && row.matched_rules.length > 0) {
         row.matched_rules.forEach((matched_rule, index) => {
           rows.push({
             Resource: index === 0 ? row.index : '',

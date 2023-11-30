@@ -10,6 +10,7 @@ export class ConfigurationAssessmentResultPrintableReportComponent implements On
 
   @Input() testResult: any;
   colourMap: any = MapConstant.colourMap;
+  Array = Array;
 
   constructor() { }
 

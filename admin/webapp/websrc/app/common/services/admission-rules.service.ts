@@ -936,7 +936,7 @@ export class AdmissionRulesService {
     let res: AdmissionTestRow[] = [];
     admissionTestResults.forEach(admissionTestResult => {
       const parent_id = uuid();
-      if (admissionTestResult.matched_rules) {
+      if (admissionTestResult.matched_rules && Array.isArray(admissionTestResult.matched_rules) && admissionTestResult.matched_rules.length > 0) {
         const child_id = uuid();
         res.push({ id: parent_id, child_id, ...admissionTestResult, visible: false });
         res.push({

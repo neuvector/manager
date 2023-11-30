@@ -21,53 +21,55 @@
       <span class="text-bold mr-1">{{ 'admissionControl.matchingTestGrid.MSG' | translate }}:</span>
       <span>{{ item.message }}</span>
     </div>
-    <div class="text-bold">{{ 'admissionControl.MATCHED_RULES' | translate }}:</div>
-    <table style="width: 100%" class="print-table" *ngIf="item.matched_rules && item.matched_rules.length > 0">
-      <thead>
-        <tr class="print-header">
-          <th class="print-cell" style="width: 60px;">
-            ID
-          </th>
-          <th class="print-cell" style="width: calc(100% - 430px);">
-            {{ 'nodes.gridHeader.DESCRIPTION' | translate }}
-          </th>
-          <th class="print-cell" style="width: 150px;">
-            {{ 'admissionControl.CONTAINER_IMAGE' | translate }}
-          </th>
-          <th class="print-cell" style="width: 60px;">
-            {{ 'admissionControl.MODE' | translate }}
-          </th>
-          <th class="print-cell" style="width: 60px;">
-            {{ 'admissionControl.RULE_TYPE' | translate }}
-          </th>
-          <th class="print-cell" style="width: 100px;">
-            {{ 'policy.gridHeader.TYPE' | translate }}
-          </th>
-        </tr>
-      </thead>
-      <tbody style="background-color: #fff;">
-        <tr class="print-row" *ngFor="let row of item.matched_rules; let i = index" [attr.data-index]="i">
-          <td class="print-cell" style="width: 60px;">
-            {{ row.id }}
-          </td>
-          <td class="print-cell" style="width: calc(100% - 430px);">
-            {{ row.rule_details }}
-          </td>
-          <td class="print-cell" style="width: 150px;">
-            {{ row.container_image }}
-          </td>
-          <td class="print-cell" style="width: 60px;">
-            <span *ngIf="row.mode" class="action-label {{ colourMap[row.mode] }}" [ngClass]="{'disabled-action': row.disabled}">{{ 'enum.' + row.mode.toUpperCase() | translate }}</span>
-          </td>
-          <td class="print-cell" style="width: 60px;">
-            <span class="action-label {{ colourMap[row.type.toLowerCase()] }}" [ngClass]="{'disabled-action': row.disabled}">{{ 'admissionControl.' + row.type.toUpperCase() | translate }}</span>
-          </td>
-          <td class="print-cell" style="width: 100px;">
-            <span class="action-label px-1 {{ colourMap[row.rule_cfg_type.toLowerCase()] }}" [ngClass]="{'disabled-rule-print': row.disabled}">{{ 'group.' + row.rule_cfg_type.toUpperCase() | translate }}</span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div *ngIf="item.matched_rules && Array.isArray(item.matched_rules) && item.matched_rules.length > 0">
+      <div class="text-bold">{{ 'admissionControl.MATCHED_RULES' | translate }}:</div>
+      <table style="width: 100%" class="print-table">
+        <thead>
+          <tr class="print-header">
+            <th class="print-cell" style="width: 60px;">
+              ID
+            </th>
+            <th class="print-cell" style="width: calc(100% - 430px);">
+              {{ 'nodes.gridHeader.DESCRIPTION' | translate }}
+            </th>
+            <th class="print-cell" style="width: 150px;">
+              {{ 'admissionControl.CONTAINER_IMAGE' | translate }}
+            </th>
+            <th class="print-cell" style="width: 60px;">
+              {{ 'admissionControl.MODE' | translate }}
+            </th>
+            <th class="print-cell" style="width: 60px;">
+              {{ 'admissionControl.RULE_TYPE' | translate }}
+            </th>
+            <th class="print-cell" style="width: 100px;">
+              {{ 'policy.gridHeader.TYPE' | translate }}
+            </th>
+          </tr>
+        </thead>
+        <tbody style="background-color: #fff;">
+          <tr class="print-row" *ngFor="let row of item.matched_rules; let i = index" [attr.data-index]="i">
+            <td class="print-cell" style="width: 60px;">
+              {{ row.id }}
+            </td>
+            <td class="print-cell" style="width: calc(100% - 430px);">
+              {{ row.rule_details }}
+            </td>
+            <td class="print-cell" style="width: 150px;">
+              {{ row.container_image }}
+            </td>
+            <td class="print-cell" style="width: 60px;">
+              <span *ngIf="row.mode" class="action-label {{ colourMap[row.mode] }}" [ngClass]="{'disabled-action': row.disabled}">{{ 'enum.' + row.mode.toUpperCase() | translate }}</span>
+            </td>
+            <td class="print-cell" style="width: 60px;">
+              <span class="action-label {{ colourMap[row.type.toLowerCase()] }}" [ngClass]="{'disabled-action': row.disabled}">{{ 'admissionControl.' + row.type.toUpperCase() | translate }}</span>
+            </td>
+            <td class="print-cell" style="width: 100px;">
+              <span class="action-label px-1 {{ colourMap[row.rule_cfg_type.toLowerCase()] }}" [ngClass]="{'disabled-rule-print': row.disabled}">{{ 'group.' + row.rule_cfg_type.toUpperCase() | translate }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
   <div class="text-muted mt-1 ml-1">
     *&nbsp;{{ testResult.instruction.title }}

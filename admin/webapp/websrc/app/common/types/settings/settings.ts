@@ -169,6 +169,7 @@ export interface User {
   email: string;
   emailHash: string;
   default_password: boolean;
+  password_resettable: boolean;
   blocked_for_failed_login: boolean;
   blocked_for_password_expired: boolean;
 }

@@ -70,13 +70,9 @@ export class AuthService {
       .pipe();
   }
 
-  login(username: string, password: string, isRancherSSOUrl: boolean) {
+  login(payload: {username: string, password: string, new_password?: string, isRancherSSOUrl: boolean}) {
     return GlobalVariable.http
-      .post(PathConstant.LOGIN_URL, {
-        username: username,
-        password: password,
-        isRancherSSOUrl: isRancherSSOUrl,
-      })
+      .post(PathConstant.LOGIN_URL, payload)
       .pipe();
   }
 

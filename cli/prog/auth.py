@@ -24,6 +24,13 @@ def user_blocked_format(u):
         u["password expired"] = "Y"
 
 
+def password_resettable_format(u):
+    if "password_resettable" in u and u["password_resettable"] is True:
+        u["password resettable"] = "Y"
+    else:
+        u["password resettable"] = "N"
+
+
 @cli.command()
 @click.option('--username', prompt=True)
 @click.option('--password', prompt='Password', hide_input=True)
@@ -35,7 +42,17 @@ def login(data, username, password):
         return
 
     try:
-        token, password_days_until_expire = data.client.login(username, password)
+        token, password_days_until_expire, need_to_reset_password = data.client.login(username, password, "")
+
+        if need_to_reset_password:
+            click.echo("You need to change your password")
+            click.echo("")
+            newPass1 = click.prompt("New Password", hide_input=True)
+            newPass2 = click.prompt("Confirm New Password", hide_input=True)
+            if newPass1 != newPass2:
+                click.echo("New passwords do not match")
+                return
+            token, password_days_until_expire, need_to_reset_password = data.client.login(username, password, newPass1)
 
         if token.get("default_password"):
             click.echo(DEFAULT_PWD_WARNING)
@@ -84,10 +101,11 @@ def show_user(ctx, data):
     for u in users:
         utils.user_role_domains_display_format(u)
         user_blocked_format(u)
+        password_resettable_format(u)
 
     columns = (
     "username", "server", "role", "email", "timeout", "locale", utils.RoleDomains, "last_login_at", "login_count",
-    "blocked for login", "password expired")
+    "blocked for login", "password expired", "password resettable")
     output.list(columns, users)
 
 
@@ -99,10 +117,11 @@ def detail(data, username):
     user = data.client.show("user", "user", username)
     utils.user_role_domains_display_format(user)
     user_blocked_format(user)
+    password_resettable_format(user)
 
     columns = (
     "username", "server", "role", "email", "timeout", "locale", utils.RoleDomains, "last_login_at", "login_count",
-    "blocked for login", "password expired")
+    "blocked for login", "password expired", "password resettable")
     output.show(columns, user)
 
 
@@ -242,6 +261,25 @@ def set_user_local_unblock(data):
     """Unblock local user so that login is allowed immediately."""
 
     cfg = {"fullname": data.id_or_name, "clear_failed_login": True}
+    data.client.create("user/{}/password".format(data.id_or_name), {"config": cfg})
+
+
+@set_user_local.command("reset_password")
+@click.option('--change_password_in_next_login', is_flag=True, help="change password in next login")
+@click.pass_obj
+def set_user_local_rest_password(data, change_password_in_next_login):
+    """Reset local user's password."""
+
+    pass1 = click.prompt("New Password", hide_input=True)
+    pass2 = click.prompt("Confirm New Password", hide_input=True)
+    if pass1 != pass2:
+        click.echo("New Passwords do not match")
+        return
+
+    cfg = {"fullname": data.id_or_name, "force_reset_password": True}
+    if change_password_in_next_login:
+        cfg["reset_password_in_next_login"] = True
+    cfg["new_password"] = pass1
     data.client.create("user/{}/password".format(data.id_or_name), {"config": cfg})
 
 

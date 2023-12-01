@@ -158,6 +158,7 @@
     "CONTAINER.SUSPICIOUS.PROCESS": "Container suspicious process",
     "LOGOUT": "Logout",
     "SETTINGS": "Settings",
+    "SUPPORT": "Support",
     "FED_POLICY": "Federated Policy",
     "MULTI_CLUSTER": "Multiple Clusters",
     "MY_PROFILE": "My Profile",
@@ -860,6 +861,7 @@
       "VIOLATION": "Violations",
       "NETWORK_TRAFFIC": "Network Traffic",
       "SETTING": "Settings",
+      "SUPPORT": "Get Support",
       "PROFILE": "Profile",
       "USERS": "Users, API Keys & Roles",
       "CONSOLE": "Console",
@@ -1797,6 +1799,8 @@
     },
     "resetPassword": {
       "TITLE": "Reset Password",
+      "CHANGE_ON_LOGIN": "Ask user to change their password on next login",
+      "CHANGE_REQUIRED": "Please change your password",
       "RESET": "Reset",
       "RESET_OK": "Password is reset successfully!",
       "RESET_NG": "Error happens when resetting password!"
@@ -2964,7 +2968,9 @@
   "setting": {
     "TITLE": "System Settings",
     "DESC": "Customize system configuration",
+    "NOTIFICATIONS": "Notifications",
     "SYSLOG": "Syslog   ",
+    "EVENT_REPORT_LOGGING": "Output events and reports to logs",
     "WEBHOOKS": "Webhooks",
     "CLUSTER": "Cluster",
     "CLUSTER_COMMENT": "Used to identify the cluster in notifications",
@@ -2977,8 +2983,8 @@
     "LEVEL": "Level",
     "LOG_IN_JSON": "In JSON:",
     "LOG_CATEGORIES": "Categories:",
-    "SEND_SYSLOG_PER_CVE": "Send individual syslog events per vulnerability",
-    "SEND_SYSLOG_PER_LAYER": "Send syslog events vulnerabilities in image layers",
+    "SEND_SYSLOG_PER_CVE": "Send individual log events per vulnerability",
+    "SEND_SYSLOG_PER_LAYER": "Send log events for vulnerabilities in image layers",
     "SERVER_CERTIFICATE": "Server Certificate",
     "EXPORT": "Export",
     "IMPORT": "Import",
@@ -3127,6 +3133,28 @@
       "ENABLED_NET_POLICY_MODE": "The Network Security Policy Mode can be set globally, independent of the default group policy mode.",
       "ENABLED_NET_POLICY_MODE_GROUP": "The Network Security Policy will be set globally to a single mode {{name}} and will enforce Network policies independently from the current Group process mode.",
       "DISABLED_NET_POLICY_MODE": "The Network Security Policy will use the Group Policy Mode for process, network, and file access."
+    }
+  },
+  "support": {
+    "title": "Options are available for teams of all sizes.",
+    "subtitle": "What's included:",
+    "community": {
+      "title": "NeuVector Community Support",
+      "question_slack": "Ask a question in the Rancher Users <a href=\"https://rancher-users.slack.com/archives/C036F6JDZ8C\" target=\"_blank\" rel=\"noopener noreferrer\">NeuVector Channel</a>",
+      "documentation": "Review the open source project's <a href=\"https://open-docs.neuvector.com/\" target=\"_blank\" rel=\"noopener noreferrer\">documentation</a>",
+      "git_repo": "Explore NeuVector <a href=\"https://github.com/neuvector/\" target=\"_blank\" rel=\"noopener noreferrer\">source code and helm chart repositories</a>",
+      "image_repo": "Find the public images on the <a href=\"https://hub.docker.com/u/neuvector\" target=\"_blank\" rel=\"noopener noreferrer\">NeuVector docker hub</a>"
+    },
+    "subscriptions": {
+      "title": "NeuVector Subscriptions - Benefits",
+      "SLA": "SLA backend Product Support Services, RCA, troubleshooting",
+      "24-7": "24/7 and priority support options",
+      "cve": "Vulnerability (CVE) investigation, triage assistance",
+      "assistance": "Best practices, hardening assistance (e.g. segmentation, network and process profiling, admission controls)",
+      "run-time": "Run-time threat rules configuration, optimization. Access to assets and services (e.g. performance tuning, CVE lookups)",
+      "Rancher": "Built-in, supported native integration with Rancher Manager and Rancher Distributions (e.g. UI Extension) - for Rancher Prime customers",
+      "more": "Learn more about <a href=\"https://links.imagerelay.com/cdn/3404/ql/04c630990dd647f4bab73c61e67f615e/suse_support_flyer.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">SUSE support subscriptions</a>",
+      "login": "Already a subscriber? <a href=\"https://scc.suse.com/\" target=\"_blank\" rel=\"noopener noreferrer\">Log In</a> to SUSE support"
     }
   },
   "ldap": {

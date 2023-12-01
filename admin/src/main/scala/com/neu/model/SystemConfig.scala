@@ -72,7 +72,8 @@ case class SystemConfigSyslogCfgV2(
   syslog_in_json: Option[Boolean] = None,
   single_cve_per_syslog: Boolean,
   syslog_cve_in_layers: Option[Boolean] = None,
-  syslog_server_cert: Option[String] = None
+  syslog_server_cert: Option[String] = None,
+  output_event_to_logs: Option[Boolean] = None
 )
 
 case class SystemConfigAuthCfgV2(
@@ -111,7 +112,7 @@ case class SystemConfigMiscCfgV2(
 
 case class SystemConfigV2(
   svc_cfg: Option[SystemConfigSvcCfgV2] = None,
-  svslog_cfg: Option[SystemConfigSyslogCfgV2] = None,
+  syslog_cfg: Option[SystemConfigSyslogCfgV2] = None,
   auth_cfg: Option[SystemConfigAuthCfgV2] = None,
   proxy_cfg: Option[SystemConfigProxyCfgV2] = None,
   webhooks: Option[Array[Webhook]] = None,

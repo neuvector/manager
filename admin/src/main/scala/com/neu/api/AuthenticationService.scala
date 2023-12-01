@@ -495,18 +495,21 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                       logger.info("user: {}", user)
                       val token1 = TokenWrap(
                         None,
-                        Token(
-                          tokenId,
-                          user.fullname,
-                          user.server,
-                          user.username,
-                          user.email,
-                          user.role,
-                          user.locale,
-                          Some(300),
-                          user.default_password,
-                          user.modify_password,
-                          user.role_domains
+                        None,
+                        Some(
+                          Token(
+                            tokenId,
+                            user.fullname,
+                            user.server,
+                            user.username,
+                            user.email,
+                            user.role,
+                            user.locale,
+                            Some(300),
+                            user.default_password,
+                            user.modify_password,
+                            user.role_domains
+                          )
                         )
                       )
                       logger.info("user token: {}", token1)
@@ -647,20 +650,23 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                     logger.info("user: {}", user)
                     val token1 = TokenWrap(
                       selfWrap.password_days_until_expire,
-                      Token(
-                        tokenId,
-                        user.fullname,
-                        user.server,
-                        user.username,
-                        user.email,
-                        user.role,
-                        user.locale,
-                        if (isOnNV.getOrElse("") == "true") user.timeout else Some(300),
-                        user.default_password,
-                        user.modify_password,
-                        user.role_domains,
-                        selfWrap.global_permissions,
-                        selfWrap.domain_permissions
+                      None,
+                      Some(
+                        Token(
+                          tokenId,
+                          user.fullname,
+                          user.server,
+                          user.username,
+                          user.email,
+                          user.role,
+                          user.locale,
+                          if (isOnNV.getOrElse("") == "true") user.timeout else Some(300),
+                          user.default_password,
+                          user.modify_password,
+                          user.role_domains,
+                          selfWrap.global_permissions,
+                          selfWrap.domain_permissions
+                        )
                       )
                     )
                     val authToken = AuthenticationManager.parseToken(tokenWrapToJson(token1))
@@ -952,10 +958,16 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
             authToken.emailHash,
             authToken.roles,
             authToken.login_timestamp,
+            authToken.need_to_reset_password,
             suseCookie.nonEmpty
           )
-          AuthenticationManager.suseTokenMap += (authToken.token.token -> suseCookie)
-          logger.info("login with SUSE cookie")
+          authToken.token match {
+            case Some(token) => {
+              AuthenticationManager.suseTokenMap += (token.token -> suseCookie)
+              logger.info("login with SUSE cookie")
+            }
+            case None => {}
+          }
           logger.info("Client ip {}", ip)
           Utils.respondWithWebServerHeaders() {
             complete(authToken)
@@ -968,7 +980,8 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
           } catch {
             case NonFatal(e) =>
               logger.warn(e.getMessage)
-              if (e.getMessage.contains("Status: 401") || e.getMessage.contains("Status: 403")) {
+              if (e.getMessage.contains("Status: 400") || e.getMessage.contains("Status: 401") || e.getMessage
+                    .contains("Status: 403")) {
                 Utils.respondWithWebServerHeaders() {
                   onUnauthorized(e)
                 }
@@ -980,9 +993,10 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                 } catch {
                   case NonFatal(`e`) =>
                     logger.warn(e.getMessage)
-                    if (e.getMessage.contains("Status: 401") || e.getMessage.contains(
-                          "Status: 403"
-                        )) {
+                    if (e.getMessage.contains("Status: 400") || e.getMessage.contains("Status: 401") || e.getMessage
+                          .contains(
+                            "Status: 403"
+                          )) {
                       Utils.respondWithWebServerHeaders() {
                         onUnauthorized(e)
                       }

@@ -186,12 +186,13 @@ export class ConfigFormComponent implements OnInit {
           new_service_profile_baseline:
             base_config.new_svc.new_service_profile_baseline,
         },
-        svslog_cfg: {
+        syslog_cfg: {
           syslog_ip: base_config.syslog.syslog_ip,
           syslog_ip_proto: base_config.syslog.syslog_ip_proto,
           syslog_port: Number(base_config.syslog.syslog_port),
           syslog_level: base_config.syslog.syslog_level,
           syslog_status: base_config.syslog.syslog_status,
+          output_event_to_logs: base_config.syslog.output_event_to_logs,
           syslog_categories: base_config.syslog.syslog_categories,
           syslog_in_json: base_config.syslog.syslog_in_json,
           single_cve_per_syslog: base_config.syslog.single_cve_per_syslog,

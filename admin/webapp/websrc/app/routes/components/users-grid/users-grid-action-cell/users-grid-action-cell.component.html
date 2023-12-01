@@ -3,16 +3,6 @@
   <button
     mat-icon-button
     [style.visibility]="
-      params.data.blocked_for_password_expired ? 'visible' : 'hidden'
-    "
-    matTooltip="{{ 'user.tooltips.RESET_PASSWORD' | translate }}"
-    matTooltipPosition="above"
-    (click)="reset()">
-    <i class="eos-icons text-action">auto_fix_high</i>
-  </button>
-  <button
-    mat-icon-button
-    [style.visibility]="
       params.data.blocked_for_failed_login ? 'visible' : 'hidden'
     "
     matTooltip="{{ 'user.tooltips.UNLOCK' | translate }}"
@@ -22,11 +12,11 @@
   </button>
   <button
     mat-icon-button
-    [style.visibility]="params.data.fullname !== 'admin' ? 'visible' : 'hidden'"
-    matTooltip="{{ 'user.tooltips.REMOVE' | translate }}"
+    [style.visibility]="params.data.password_resettable ? 'visible' : 'hidden'"
+    matTooltip="{{ 'user.tooltips.RESET_PASSWORD' | translate }}"
     matTooltipPosition="above"
-    (click)="delete()">
-    <i class="eos-icons text-action">delete</i>
+    (click)="reset()">
+    <i class="eos-icons text-action">auto_fix_high</i>
   </button>
   <button
     mat-icon-button
@@ -34,6 +24,14 @@
     matTooltipPosition="above"
     (click)="edit()">
     <i class="eos-icons text-action">edit</i>
+  </button>
+  <button
+    mat-icon-button
+    [style.visibility]="params.data.fullname !== 'admin' ? 'visible' : 'hidden'"
+    matTooltip="{{ 'user.tooltips.REMOVE' | translate }}"
+    matTooltipPosition="above"
+    (click)="delete()">
+    <i class="eos-icons text-action">delete</i>
   </button>
 </ng-container>
 <ng-template #viewTemplate>

@@ -6,7 +6,9 @@ import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 import { EulaComponent } from './login/eula/eula.component';
 import { AgreementComponent } from './login/eula/agreement/agreement.component';
-import { FrameModule } from "../../frame/frame.module";
+import { FrameModule } from '../../frame/frame.module';
+import { ResetPasswordModalModule } from '@routes/settings/common/reset-password-modal/reset-password-modal.module';
+import { SettingsService } from '@services/settings.service';
 
 /* Use this routes definition in case you want to make them lazy-loaded */
 /*const routes: Routes = [
@@ -20,12 +22,19 @@ import { FrameModule } from "../../frame/frame.module";
 ];*/
 
 @NgModule({
-    imports: [
-        NvCommonModule,
-        FrameModule,
-        // RouterModule.forChild(routes)
-    ],
-  declarations: [LoginComponent, LogoutComponent, EulaComponent, AgreementComponent],
+  imports: [
+    NvCommonModule,
+    ResetPasswordModalModule,
+    FrameModule,
+    // RouterModule.forChild(routes)
+  ],
+  declarations: [
+    LoginComponent,
+    LogoutComponent,
+    EulaComponent,
+    AgreementComponent,
+  ],
   exports: [RouterModule, LoginComponent, LogoutComponent],
+  providers: [SettingsService],
 })
 export class PagesModule {}

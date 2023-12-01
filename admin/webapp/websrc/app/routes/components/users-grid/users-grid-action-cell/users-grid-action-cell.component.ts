@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { MapConstant } from '@common/constants/map.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
@@ -21,6 +22,24 @@ export class UsersGridActionCellComponent implements ICellRendererAngularComp {
 
   refresh(params: ICellRendererParams): boolean {
     return false;
+  }
+
+  allowReset(params: any): boolean {
+    switch (params.role) {
+      case MapConstant.FED_ROLES.ADMIN:
+        return ![
+          MapConstant.FED_ROLES.FEDADMIN,
+          MapConstant.FED_ROLES.FEDREADER,
+        ].includes(params.data.role);
+      case MapConstant.FED_ROLES.FEDADMIN:
+        return true;
+      default:
+        return ![
+          MapConstant.FED_ROLES.ADMIN,
+          MapConstant.FED_ROLES.FEDADMIN,
+          MapConstant.FED_ROLES.FEDREADER,
+        ].includes(params.data.role);
+    }
   }
 
   edit(): void {

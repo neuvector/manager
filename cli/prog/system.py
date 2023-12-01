@@ -162,7 +162,7 @@ def showFedSystemConfig(data, scope):
     if "webhooks" in conf:
         for wh in conf["webhooks"]:
             wh["scope"] = client.CfgTypeDisplay[wh["cfg_type"]]
-    columns = ("name", "url", "type", "enable", "scope")
+    columns = ("name", "url", "type", "enable", "scope", "use_proxy")
     output.list(columns, conf["webhooks"])
 
 
@@ -299,7 +299,7 @@ def showLocalSystemConfig(data, scope):
             wh["scope"] = client.CfgTypeDisplay[wh["cfg_type"]]
     click.echo("")
     click.echo("Webhooks:")
-    columns = ("name", "url", "type", "enable", "scope")
+    columns = ("name", "url", "type", "enable", "scope", "use_proxy")
     output.list(columns, conf["webhooks"])
 
 
@@ -490,18 +490,19 @@ def create_system(data):
 @create_system.command("webhook")
 @click.argument('name')
 @click.argument('url')
-@click.option("--type", default="", help="webhook type", type=click.Choice(['Slack', 'JSON']))
+@click.option("--type", default="", help="webhook type", type=click.Choice(['', 'Slack', 'JSON']))
 @click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=True,
               help="It's for local or federal response rule")
+@click.option("--proxy", default=False, is_flag=True, help="Use proxy to connect")
 @click.option("--enable/--disable", default=True, is_flag=True, help="Enable/Disable the webhook")
 @click.pass_obj
-def create_system_webhook_url(data, name, url, type, scope, enable):
+def create_system_webhook_url(data, name, url, type, scope, proxy, enable):
     """Create webhook settings"""
     if type == "slack":
         type = "Slack"
-    else:
-        type = ""
-    body = {"name": name, "url": url, "enable": enable, "type": type}
+    elif type == 'json':
+        type = "JSON"
+    body = {"name": name, "url": url, "enable": enable, "type": type, "use_proxy": proxy}
     if scope == "fed":
         body["cfg_type"] = "federal"
     else:

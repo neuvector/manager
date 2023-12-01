@@ -19,7 +19,7 @@ import {
   WorkloadCompliance,
 } from '@common/types';
 import { ChartConfiguration } from 'chart.js';
-import { arrayToCsv } from './common.utils';
+import { arrayToCsv, sortByOrder } from './common.utils';
 import { saveAs } from 'file-saver';
 
 @Injectable()
@@ -433,7 +433,7 @@ export class UtilsService {
       vulnerability.tags = vulnerability.tags || ('' as any);
       return vulnerability;
     });
-    const csv = arrayToCsv(vuls);
+    const csv = arrayToCsv(sortByOrder(vuls, GlobalConstant.ORDERED_CVS_KEYS));
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
     const filename = `vulnerabilities-${name}_${this.parseDatetimeStr(
       new Date()

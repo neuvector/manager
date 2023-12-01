@@ -251,4 +251,16 @@ export class GlobalConstant {
     'containers',
     'ephemeral_containers'
   ];
+
+  public static ORDERED_CVS_KEYS = [
+    'name',
+    'link',
+    'severity',
+    'score',
+    'score_v3',
+    'package_name',
+    'package_version',
+    'published_timestamp',
+    'last_modified_timestamp',
+  ];
 }

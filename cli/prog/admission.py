@@ -761,6 +761,8 @@ def set_admission_rule(data, id, scope, criteria, state, mode, target, comment):
             click.echo("Abort because --mode cannot be set for allow rules.")
             click.echo("")
             return
+    if "rule_type" in rule and rule["rule_type"] == 'exception':
+        del rule["rule_mode"]
     if len(target) > 0:
         if defaultRule:
             click.echo("Abort because target of the default rule cannot be modified.")

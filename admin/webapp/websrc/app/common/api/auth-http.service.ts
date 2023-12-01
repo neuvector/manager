@@ -73,6 +73,8 @@ export class AuthHttpService {
   resetUser(config: {
     fullname: string;
     new_password: string;
+    force_reset_password: boolean;
+    reset_password_in_next_login: boolean;
   }): Observable<unknown> {
     return GlobalVariable.http.post<unknown>(PathConstant.USER_BLOCK_URL, {
       config,

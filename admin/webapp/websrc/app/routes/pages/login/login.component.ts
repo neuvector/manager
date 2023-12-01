@@ -207,7 +207,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.authMsg = '';
       this.inProgress = true;
       this.authService
-        .login(value ? value.username : '', value ? value.password : '')
+        .login(value ? value.username : '', value ? value.password : '', this.isFromSSO)
         .subscribe(
           (userInfo: any) => {
             GlobalVariable.user = userInfo;

@@ -3,7 +3,7 @@ package com.neu.model
 /**
  * Created by bxu on 3/24/16.
  */
-case class Password(username: String, password: String)
+case class Password(username: String, password: String, isRancherSSOUrl: Boolean)
 
 case class AuthRequest(password: Password, client_ip: String)
 

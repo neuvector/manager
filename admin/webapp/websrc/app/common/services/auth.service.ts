@@ -70,12 +70,10 @@ export class AuthService {
       .pipe();
   }
 
-  login(payload: {
-    username: string;
-    password: string;
-    new_password?: string;
-  }) {
-    return GlobalVariable.http.post(PathConstant.LOGIN_URL, payload).pipe();
+  login(payload: {username: string, password: string, new_password?: string, isRancherSSOUrl: boolean}) {
+    return GlobalVariable.http
+      .post(PathConstant.LOGIN_URL, payload)
+      .pipe();
   }
 
   refreshToken() {

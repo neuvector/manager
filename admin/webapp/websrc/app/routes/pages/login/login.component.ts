@@ -221,7 +221,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (this.validEula) {
       this.authMsg = '';
       this.inProgress = true;
-      value = value || { username: '', password: '' };
+      value = Object.assign({ isRancherSSOUrl: this.isFromSSO }, value) || { username: '', password: '', isRancherSSOUrl: this.isFromSSO };
       this.authService.login(value).subscribe(
         (userInfo: any) => {
           if (userInfo.need_to_reset_password) {
@@ -553,7 +553,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       maxWidth: '1100px',
     });
     dialogRef.componentInstance.resetData.subscribe(payload => {
-      this.authService.login(payload).subscribe(
+      this.authService.login(Object.assign({ isRancherSSOUrl: this.isFromSSO }, payload)).subscribe(
         (userInfo: any) => {
           GlobalVariable.user = userInfo;
           GlobalVariable.nvToken = userInfo.token.token;

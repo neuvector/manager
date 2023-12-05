@@ -102,7 +102,6 @@ import { DashboardHttpService } from './api/dashboard-http.service';
 import { PolicyHttpService } from './api/policy-http.service';
 import { GraphHttpService } from './api/graph-http.service';
 import { SecurityEventsService } from '@services/security-events.service';
-import { SessionService } from '@services/session.service';
 import { TwoWayInfiniteScrollDirective } from './directives/two-way-infinite-scroll.directive';
 
 import { EnforcerBriefModule } from '@components/enforcer-brief/enforcer-brief.module';
@@ -176,7 +175,6 @@ import { NamespacesService } from '@services/namespaces.service';
     ColorsService,
     UtilsService,
     AuthService,
-    SessionService,
     CookieService,
     AuthUtilsService,
     GroupsService,

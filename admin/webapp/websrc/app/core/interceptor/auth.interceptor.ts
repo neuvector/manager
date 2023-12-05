@@ -1,5 +1,9 @@
 import { Inject, Injectable } from '@angular/core';
-import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
+import {
+  LOCAL_STORAGE,
+  SESSION_STORAGE,
+  StorageService,
+} from 'ngx-webstorage-service';
 import {
   HttpHandler,
   HttpInterceptor,
@@ -13,6 +17,7 @@ import { Router } from '@angular/router';
 export class AuthInterceptor implements HttpInterceptor {
   constructor(
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
+    @Inject(LOCAL_STORAGE) private localStorage: StorageService,
     private router: Router
   ) {}
 
@@ -20,9 +25,8 @@ export class AuthInterceptor implements HttpInterceptor {
     console.log('Auth intercepting...');
     let authToken;
     try {
-      authToken = this.sessionStorage.has(GlobalConstant.SESSION_STORAGE_TOKEN)
-        ? this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_TOKEN).token
-            .token
+      authToken = this.localStorage.has(GlobalConstant.LOCAL_STORAGE_TOKEN)
+        ? this.localStorage.get(GlobalConstant.LOCAL_STORAGE_TOKEN).token.token
         : '';
       if (
         !(
@@ -36,7 +40,7 @@ export class AuthInterceptor implements HttpInterceptor {
         } else {
           const authReq = req.clone({
             headers: req.headers
-              .set(GlobalConstant.SESSION_STORAGE_TOKEN, authToken)
+              .set(GlobalConstant.LOCAL_STORAGE_TOKEN, authToken)
               .set('Cache-Control', 'no-cache')
               .set('Pragma', 'no-cache'),
           });

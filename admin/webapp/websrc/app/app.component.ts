@@ -8,7 +8,11 @@ import {
 import { GlobalVariable } from '@common/variables/global.variable';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { TranslatorService } from '@core/translator/translator.service';
-import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
+import {
+  LOCAL_STORAGE,
+  SESSION_STORAGE,
+  StorageService,
+} from 'ngx-webstorage-service';
 import { SwitchersService } from '@core/switchers/switchers.service';
 import { AuthService } from '@common/services/auth.service';
 import { SummaryService } from '@services/summary.service';
@@ -27,6 +31,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
+    @Inject(LOCAL_STORAGE) private localStorage: StorageService,
     public switchers: SwitchersService,
     private translatorService: TranslatorService,
     private summaryService: SummaryService,
@@ -101,8 +106,8 @@ export class AppComponent implements OnInit {
           GlobalVariable.user.domain_permissions =
             userInfo.token.domain_permissions;
           this.translatorService.useLanguage(GlobalVariable.user.token.locale);
-          this.sessionStorage.set(
-            GlobalConstant.SESSION_STORAGE_TOKEN,
+          this.localStorage.set(
+            GlobalConstant.LOCAL_STORAGE_TOKEN,
             GlobalVariable.user
           );
           if (!GlobalVariable.hasInitializedSummary) {
@@ -112,7 +117,7 @@ export class AppComponent implements OnInit {
           }
         },
         error => {
-          this.sessionStorage.set(GlobalConstant.SESSION_STORAGE_TIMEOUT, true);
+          this.localStorage.set(GlobalConstant.LOCAL_STORAGE_TIMEOUT, true);
           location.reload();
         }
       );

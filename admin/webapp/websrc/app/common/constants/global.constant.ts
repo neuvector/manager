@@ -1,12 +1,12 @@
 export class GlobalConstant {
   public static SAML = 'saml';
-  public static SESSION_STORAGE_CLUSTER = 'cluster';
-  public static SESSION_STORAGE_TOKEN = 'token';
-  public static SESSION_STORAGE_ORIGINAL_URL = 'original_url';
+  public static LOCAL_STORAGE_CLUSTER = 'cluster';
+  public static LOCAL_STORAGE_TOKEN = 'token';
+  public static AUTH_CHANNEL = 'auth-channel';
+  public static LOCAL_STORAGE_ORIGINAL_URL = 'original_url';
   public static LOCAL_STORAGE_EXTERNAL_REF = 'external_Ref';
-  public static SESSION_STORAGE_TIMEOUT = 'session_timeout';
-  public static SESSION_STORAGE_THEME = 'theme';
-  public static SESSION_STORAGE_NOTIFICATIONS = 'notifications';
+  public static LOCAL_STORAGE_TIMEOUT = 'local_timeout';
+  public static LOCAL_STORAGE_THEME = 'theme';
   public static REQ_TOKEN = 'X-Auth-Token';
   // public static REQ_CONTENT_TYPE = "Content-Type";
   // public static REQ_CONTENT_TYPE_VAL = "application/json";
@@ -249,7 +249,7 @@ export class GlobalConstant {
   public static CONTAINER_TYPES = [
     'init_containers',
     'containers',
-    'ephemeral_containers'
+    'ephemeral_containers',
   ];
 
   public static ORDERED_CVS_KEYS = [

@@ -1,28 +1,31 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { UtilsService } from '@common/utils/app.utils';
 import { MapConstant } from '@common/constants/map.constant';
 import { SettingsService } from '@services/settings.service';
 import { Router } from '@angular/router';
-import { LOCAL_STORAGE, SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
+import {
+  LOCAL_STORAGE,
+  SESSION_STORAGE,
+  StorageService,
+} from 'ngx-webstorage-service';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { NotificationService } from '@services/notification.service';
-import { GlobalVariable } from "@common/variables/global.variable";
-import { SessionService } from "@services/session.service";
+import { GlobalVariable } from '@common/variables/global.variable';
 
 export interface EditClusterDialog {
   isEdit: boolean;
   cluster: {
-    name: '',
-    host: '',
-    port: ''
-  } ;
+    name: '';
+    host: '';
+    port: '';
+  };
   useProxy: string;
-  fed_sync_repo_toggle :boolean;
+  fed_sync_repo_toggle: boolean;
 }
 
 @Component({
@@ -42,7 +45,6 @@ export class PromotionModalComponent implements OnInit {
     private clustersService: MultiClusterService,
     private settingsService: SettingsService,
     private notificationService: NotificationService,
-    private sessionService: SessionService,
     private translate: TranslateService,
     private utils: UtilsService,
     private http: HttpClient,
@@ -67,7 +69,7 @@ export class PromotionModalComponent implements OnInit {
     this.isMaster = GlobalVariable.isMaster;
     this.getClusterName();
 
-    if(this.data.isEdit){
+    if (this.data.isEdit) {
       this.cluster = this.data.cluster;
       this.useProxy = this.data.useProxy;
       this.fed_sync_repo_toggle = this.data.fed_sync_repo_toggle;
@@ -91,58 +93,77 @@ export class PromotionModalComponent implements OnInit {
   };
 
   onConfirm = () => {
-    if( this.data.isEdit){
-      const payload = {name:"",api_server:"",api_port:""};
+    if (this.data.isEdit) {
+      const payload = { name: '', api_server: '', api_port: '' };
       payload.name = this.cluster.name;
       payload.api_server = this.cluster.host;
       payload.api_port = this.cluster.port;
-      if(GlobalVariable.isMaster){
-        this.clustersService.updateCluster(payload, true, this.useProxy, this.fed_sync_repo_toggle).subscribe(
-          response => {
-            this.notificationService.open(this.translate.instant('multiCluster.messages.update_ok'));
-            this.dialogRef.close();
-            this.clustersService.dispatchRefreshEvent();
-          },
-          error => {
-            this.notificationService.openError(error.error,
-              this.translate.instant('multiCluster.messages.update_failure'));
-          }
-        );
-      }else{
-        this.clustersService.updateMemberCluster(payload, true, this.useProxy).subscribe(
-          response => {
-            this.notificationService.open(this.translate.instant('multiCluster.messages.update_ok'));
-            this.dialogRef.close();
-            this.clustersService.dispatchRefreshEvent();
-          },
-          error => {
-            this.notificationService.openError(error.error,
-              this.translate.instant('multiCluster.messages.update_failure'));
-          }
-        );
+      if (GlobalVariable.isMaster) {
+        this.clustersService
+          .updateCluster(
+            payload,
+            true,
+            this.useProxy,
+            this.fed_sync_repo_toggle
+          )
+          .subscribe(
+            response => {
+              this.notificationService.open(
+                this.translate.instant('multiCluster.messages.update_ok')
+              );
+              this.dialogRef.close();
+              this.clustersService.dispatchRefreshEvent();
+            },
+            error => {
+              this.notificationService.openError(
+                error.error,
+                this.translate.instant('multiCluster.messages.update_failure')
+              );
+            }
+          );
+      } else {
+        this.clustersService
+          .updateMemberCluster(payload, true, this.useProxy)
+          .subscribe(
+            response => {
+              this.notificationService.open(
+                this.translate.instant('multiCluster.messages.update_ok')
+              );
+              this.dialogRef.close();
+              this.clustersService.dispatchRefreshEvent();
+            },
+            error => {
+              this.notificationService.openError(
+                error.error,
+                this.translate.instant('multiCluster.messages.update_failure')
+              );
+            }
+          );
       }
-    }else{
+    } else {
       this.isProcessing = true;
-      this.clustersService.promoteCluster(
-        this.cluster, this.useProxy,
-        this.fed_sync_repo_toggle).subscribe(
-        response => {
-          this.notificationService.open(this.translate.instant('multiCluster.promotion.success'));
-          setTimeout(() => {
-            this.localStorage.clear();
-            this.sessionStorage.clear();
-            this.sessionService.clearSession();
-            this.router.navigate(['login']);
-          }, 1000);
-          this.isProcessing = false;
-          this.dialogRef.close();
-        },
-        err => {
-          this.isProcessing = false;
-          this.notificationService.openError( err.error,
-            this.translate.instant('multiCluster.promotion.failure'));
-        }
-      );
+      this.clustersService
+        .promoteCluster(this.cluster, this.useProxy, this.fed_sync_repo_toggle)
+        .subscribe(
+          response => {
+            this.notificationService.open(
+              this.translate.instant('multiCluster.promotion.success')
+            );
+            setTimeout(() => {
+              this.localStorage.clear();
+              this.router.navigate(['login']);
+            }, 1000);
+            this.isProcessing = false;
+            this.dialogRef.close();
+          },
+          err => {
+            this.isProcessing = false;
+            this.notificationService.openError(
+              err.error,
+              this.translate.instant('multiCluster.promotion.failure')
+            );
+          }
+        );
     }
   };
 }

@@ -13,7 +13,6 @@ import {
   SESSION_STORAGE,
   StorageService,
 } from 'ngx-webstorage-service';
-import { SessionService } from '@services/session.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AgreementComponent } from '@routes/pages/login/eula/agreement/agreement.component';
 import { NotificationService } from '@services/notification.service';
@@ -69,7 +68,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
     @Inject(LOCAL_STORAGE) private localStorage: StorageService,
-    private sessionService: SessionService,
     private authService: AuthService,
     private switchersService: SwitchersService,
     private cookieService: CookieService,
@@ -98,7 +96,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.app = this.switchersService.getAppSwitcher('');
     this.localStorage.set('login_time', this.now.toString());
     this.originalUrl = this.localStorage.get(
-      GlobalConstant.SESSION_STORAGE_ORIGINAL_URL
+      GlobalConstant.LOCAL_STORAGE_ORIGINAL_URL
     );
     this.linkedUrl = this.localStorage.get(
       GlobalConstant.LOCAL_STORAGE_EXTERNAL_REF
@@ -135,10 +133,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.retrieveCustomizedUIContent();
     }
 
-    if (this.sessionStorage.has('cluster')) {
-      this.sessionStorage.remove('cluster');
-    }
-
     if (this.isFromSSO) {
       this.authService.getEula().subscribe(
         (eulaInfo: any) => {
@@ -172,9 +166,20 @@ export class LoginComponent implements OnInit, OnDestroy {
         }
       );
     } else {
-      this.getAuthServer();
-      this.verifyAuth();
-      this.verifyEula();
+      if (
+        this.localStorage.has(GlobalConstant.LOCAL_STORAGE_TOKEN) &&
+        !this.localStorage.has(GlobalConstant.LOCAL_STORAGE_TIMEOUT)
+      ) {
+        const userInfo = this.localStorage.get(
+          GlobalConstant.LOCAL_STORAGE_TOKEN
+        );
+        this.setUserInfo(userInfo);
+        this.getSummary(userInfo);
+      } else {
+        this.getAuthServer();
+        this.verifyAuth();
+        this.verifyEula();
+      }
     }
   }
 
@@ -237,8 +242,8 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.translatorService.useLanguage(
               GlobalVariable.user.token.locale
             );
-            this.sessionStorage.set(
-              GlobalConstant.SESSION_STORAGE_TOKEN,
+            this.localStorage.set(
+              GlobalConstant.LOCAL_STORAGE_TOKEN,
               GlobalVariable.user
             );
 
@@ -284,7 +289,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   private clearToken() {
     this.clearLocalStorage();
-    this.sessionService.clearSession();
     GlobalVariable.user = null;
     GlobalVariable.sidebarDone = false;
     GlobalVariable.versionDone = false;
@@ -296,7 +300,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       GlobalConstant.LOCAL_STORAGE_EXTERNAL_REF
     );
     let timeoutPath = this.localStorage.get(
-      GlobalConstant.SESSION_STORAGE_ORIGINAL_URL
+      GlobalConstant.LOCAL_STORAGE_ORIGINAL_URL
     );
     this.localStorage.clear();
     if (externalRef)
@@ -306,7 +310,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       );
     if (timeoutPath)
       this.localStorage.set(
-        GlobalConstant.SESSION_STORAGE_ORIGINAL_URL,
+        GlobalConstant.LOCAL_STORAGE_ORIGINAL_URL,
         timeoutPath
       );
   }
@@ -329,12 +333,12 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.authMsg = error.status === 0 ? error.message : error.error;
       },
       () => {
-        if (this.sessionStorage.has(GlobalConstant.SESSION_STORAGE_TIMEOUT)) {
+        if (this.localStorage.has(GlobalConstant.LOCAL_STORAGE_TIMEOUT)) {
           console.log(
-            'SESSION_STORAGE_TIMEOUT',
-            this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_TIMEOUT)
+            'LOCAL_STORAGE_TIMEOUT',
+            this.localStorage.get(GlobalConstant.LOCAL_STORAGE_TIMEOUT)
           );
-          if (this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_TIMEOUT)) {
+          if (this.localStorage.get(GlobalConstant.LOCAL_STORAGE_TIMEOUT)) {
             this.authMsg = 'Session has expired. Please login.'; //this.translate.instant("login.SESSION_TIMEOUT");
           }
         }
@@ -404,7 +408,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   private getSum(authToken) {
     const headers = new HttpHeaders()
-      .set(GlobalConstant.SESSION_STORAGE_TOKEN, authToken)
+      .set(GlobalConstant.LOCAL_STORAGE_TOKEN, authToken)
       .set('Cache-Control', 'no-cache')
       .set('Pragma', 'no-cache');
     return GlobalVariable.http
@@ -432,7 +436,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.router.navigate([GlobalConstant.PATH_DEFAULT]);
         }
         this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_EXTERNAL_REF);
-        this.localStorage.remove(GlobalConstant.SESSION_STORAGE_ORIGINAL_URL);
+        this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_ORIGINAL_URL);
       },
       error: () => {
         this.inProgress = true;
@@ -461,7 +465,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     GlobalVariable.user.global_permissions = userInfo.token.global_permissions;
     GlobalVariable.user.domain_permissions = userInfo.token.domain_permissions;
     this.translatorService.useLanguage(GlobalVariable.user.token.locale);
-    this.sessionStorage.set(GlobalConstant.SESSION_STORAGE_TOKEN, userInfo);
+    this.localStorage.set(GlobalConstant.LOCAL_STORAGE_TOKEN, userInfo);
   }
 
   // Retrieve customized UI content from environment variables (API endpoint is "/rebrand")
@@ -563,8 +567,8 @@ export class LoginComponent implements OnInit, OnDestroy {
           GlobalVariable.user.domain_permissions =
             userInfo.token.domain_permissions;
           this.translatorService.useLanguage(GlobalVariable.user.token.locale);
-          this.sessionStorage.set(
-            GlobalConstant.SESSION_STORAGE_TOKEN,
+          this.localStorage.set(
+            GlobalConstant.LOCAL_STORAGE_TOKEN,
             GlobalVariable.user
           );
 

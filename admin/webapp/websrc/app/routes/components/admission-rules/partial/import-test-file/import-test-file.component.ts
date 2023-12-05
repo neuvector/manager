@@ -6,15 +6,16 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
-import {
-  FileUploader,
-  FileItem,
-} from 'ng2-file-upload';
+import { FileUploader, FileItem } from 'ng2-file-upload';
 import { GlobalConstant } from '@common/constants/global.constant';
-import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
+import {
+  LOCAL_STORAGE,
+  SESSION_STORAGE,
+  StorageService,
+} from 'ngx-webstorage-service';
 import { TranslateService } from '@ngx-translate/core';
 import { AdmissionConfigurationAssessment } from '@common/types/admission/admission';
-import { UtilsService } from "@common/utils/app.utils";
+import { UtilsService } from '@common/utils/app.utils';
 import { NotificationService } from '@services/notification.service';
 import { MapConstant } from '@common/constants/map.constant';
 
@@ -27,7 +28,8 @@ export class ImportTestFileComponent implements OnInit {
   @Input() importUrl: string = '';
   @Input() isStandAlone?: boolean; //Only for system config file import
   @Input() alias: string = '';
-  @Output() getImportResult = new EventEmitter<AdmissionConfigurationAssessment>();
+  @Output() getImportResult =
+    new EventEmitter<AdmissionConfigurationAssessment>();
   uploader!: FileUploader;
   hasBaseDropZoneOver: boolean = false;
   hasAnotherDropZoneOver: boolean = false;
@@ -40,12 +42,13 @@ export class ImportTestFileComponent implements OnInit {
 
   constructor(
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
+    @Inject(LOCAL_STORAGE) private localStorage: StorageService,
     private translate: TranslateService,
     private notificationService: NotificationService,
-    private utils: UtilsService,
+    private utils: UtilsService
   ) {
-    this.nvToken = this.sessionStorage.get(
-      GlobalConstant.SESSION_STORAGE_TOKEN
+    this.nvToken = this.localStorage.get(
+      GlobalConstant.LOCAL_STORAGE_TOKEN
     ).token.token;
   }
 
@@ -56,7 +59,7 @@ export class ImportTestFileComponent implements OnInit {
       itemAlias: this.alias,
       headers: [
         { name: 'Token', value: this.nvToken },
-        { name: 'Accept', value: 'application/octet-stream' }
+        { name: 'Accept', value: 'application/octet-stream' },
       ],
       disableMultipart: false, // 'DisableMultipart' must be 'true' for formatDataFunction to be called.
       formatDataFunctionIsAsync: false,
@@ -72,10 +75,10 @@ export class ImportTestFileComponent implements OnInit {
 
     this.uploader.response.subscribe(
       res => {
-        console.log(res)
+        console.log(res);
       },
       error => {
-        console.error(error)
+        console.error(error);
       }
     );
 
@@ -90,7 +93,11 @@ export class ImportTestFileComponent implements OnInit {
     this.uploader.onErrorItem = (function (self: any) {
       return function (fileItem, response: string, status, headers) {
         let errObj = JSON.parse(response);
-        self.errMsg = self.utils.getAlertifyMsg(errObj.message, self.translate.instant('admissionControl.msg.IMPORT_FAILED'), false);
+        self.errMsg = self.utils.getAlertifyMsg(
+          errObj.message,
+          self.translate.instant('admissionControl.msg.IMPORT_FAILED'),
+          false
+        );
         self.percentage = 0;
         if (!MapConstant.USER_TIMEOUT.includes(status)) {
           self.notificationService.open(

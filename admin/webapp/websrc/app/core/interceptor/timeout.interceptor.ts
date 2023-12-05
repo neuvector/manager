@@ -52,17 +52,14 @@ export class TimeoutInterceptor implements HttpInterceptor {
             req.url === PathConstant.SELF_URL
           ) {
             this.localStorage.set(
-              GlobalConstant.SESSION_STORAGE_ORIGINAL_URL,
+              GlobalConstant.LOCAL_STORAGE_ORIGINAL_URL,
               currentPath
             );
             this.dialog.closeAll();
             if (error.error.code === 51) {
               this.auth.logout(false, true);
             } else {
-              this.sessionStorage.set(
-                GlobalConstant.SESSION_STORAGE_TIMEOUT,
-                true
-              );
+              this.localStorage.set(GlobalConstant.LOCAL_STORAGE_TIMEOUT, true);
               this.auth.timeout(currentPath);
             }
           }

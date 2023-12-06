@@ -226,7 +226,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (this.validEula) {
       this.authMsg = '';
       this.inProgress = true;
-      value = Object.assign({ isRancherSSOUrl: this.isFromSSO }, value) || { username: '', password: '', isRancherSSOUrl: this.isFromSSO };
+      value = value
+        ? Object.assign({ isRancherSSOUrl: this.isFromSSO }, value)
+        : { username: '', password: '', isRancherSSOUrl: this.isFromSSO };
       this.authService.login(value).subscribe(
         (userInfo: any) => {
           if (userInfo.need_to_reset_password) {
@@ -557,45 +559,49 @@ export class LoginComponent implements OnInit, OnDestroy {
       maxWidth: '1100px',
     });
     dialogRef.componentInstance.resetData.subscribe(payload => {
-      this.authService.login(Object.assign({ isRancherSSOUrl: this.isFromSSO }, payload)).subscribe(
-        (userInfo: any) => {
-          GlobalVariable.user = userInfo;
-          GlobalVariable.nvToken = userInfo.token.token;
-          GlobalVariable.isSUSESSO = userInfo.is_suse_authenticated;
-          GlobalVariable.user.global_permissions =
-            userInfo.token.global_permissions;
-          GlobalVariable.user.domain_permissions =
-            userInfo.token.domain_permissions;
-          this.translatorService.useLanguage(GlobalVariable.user.token.locale);
-          this.localStorage.set(
-            GlobalConstant.LOCAL_STORAGE_TOKEN,
-            GlobalVariable.user
-          );
-
-          if (this.isEulaAccepted) {
-            this.getSummary(userInfo);
-          } else {
-            this.authService.updateEula().subscribe(
-              () => {
-                this.getSummary(userInfo);
-              },
-              error => {
-                this.authMsg = error.message;
-                this.inProgress = false;
-              }
+      this.authService
+        .login(Object.assign({ isRancherSSOUrl: this.isFromSSO }, payload))
+        .subscribe(
+          (userInfo: any) => {
+            GlobalVariable.user = userInfo;
+            GlobalVariable.nvToken = userInfo.token.token;
+            GlobalVariable.isSUSESSO = userInfo.is_suse_authenticated;
+            GlobalVariable.user.global_permissions =
+              userInfo.token.global_permissions;
+            GlobalVariable.user.domain_permissions =
+              userInfo.token.domain_permissions;
+            this.translatorService.useLanguage(
+              GlobalVariable.user.token.locale
             );
+            this.localStorage.set(
+              GlobalConstant.LOCAL_STORAGE_TOKEN,
+              GlobalVariable.user
+            );
+
+            if (this.isEulaAccepted) {
+              this.getSummary(userInfo);
+            } else {
+              this.authService.updateEula().subscribe(
+                () => {
+                  this.getSummary(userInfo);
+                },
+                error => {
+                  this.authMsg = error.message;
+                  this.inProgress = false;
+                }
+              );
+            }
+            dialogRef.componentInstance.onClose();
+          },
+          ({ error }) => {
+            let resetError: ResetError = JSON.parse(
+              error.split('Body:')[1].trim()
+            );
+            dialogRef.componentInstance.pwdProfile =
+              resetError.password_profile_basic;
+            dialogRef.componentInstance.resetError = resetError.message;
           }
-          dialogRef.componentInstance.onClose();
-        },
-        ({ error }) => {
-          let resetError: ResetError = JSON.parse(
-            error.split('Body:')[1].trim()
-          );
-          dialogRef.componentInstance.pwdProfile =
-            resetError.password_profile_basic;
-          dialogRef.componentInstance.resetError = resetError.message;
-        }
-      );
+        );
     });
     dialogRef.afterClosed().subscribe(() => {
       this.inProgress = false;

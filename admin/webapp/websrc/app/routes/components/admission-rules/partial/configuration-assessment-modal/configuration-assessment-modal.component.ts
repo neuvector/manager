@@ -2,6 +2,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Component, Inject, OnInit } from "@angular/core";
 import { PathConstant } from "@common/constants/path.constant";
 import { MapConstant } from "@common/constants/map.constant";
+import { GlobalConstant } from "@common/constants/global.constant";
 import { AdmissionRulesService } from "@common/services/admission-rules.service";
 import { GridOptions } from "ag-grid-community";
 import { AdmissionConfigurationAssessment, AdmissionTestResult } from "@common/types/admission/admission";
@@ -46,7 +47,7 @@ export class ConfigurationAssessmentModalComponent implements OnInit {
     this.configAssessmentResult.results = this.configAssessmentResult.results.map(result => {
       if (result.matched_rules) {
         result.matched_rules = result.matched_rules.map(rule => {
-          if (!rule.mode) rule.mode = this.admissionRulesService.globalMode;
+          if (!rule.mode && rule.type !== GlobalConstant.ADMISSION.RULE_TYPE.EXCEPTION) rule.mode = this.admissionRulesService.globalMode;
           return rule;
         });
       }
@@ -67,7 +68,6 @@ export class ConfigurationAssessmentModalComponent implements OnInit {
   };
 
   exportPdf = () => {
-    console.log("pdf")
     this.data.printConfigurationAssessmentResultFn({
       data: this.configAssessmentResult.results,
       instruction: {
@@ -79,7 +79,7 @@ export class ConfigurationAssessmentModalComponent implements OnInit {
   private getConfigAssessmentResultRows = (configAssessmentResults) => {
     let rows: Array<any> = [];
     configAssessmentResults.forEach(row => {
-      if (row.matched_rules) {
+      if (row.matched_rules && Array.isArray(row.matched_rules) && row.matched_rules.length > 0) {
         row.matched_rules.forEach((matched_rule, index) => {
           rows.push({
             Resource: index === 0 ? row.index : '',
@@ -88,6 +88,7 @@ export class ConfigurationAssessmentModalComponent implements OnInit {
             Message: index === 0 ? row.message : '',
             'ID (Matched Rule)': matched_rule.id,
             'Description (Matched Rule)': matched_rule.rule_details,
+            'Container Image': matched_rule.container_image,
             'Mode (Matched Rule)': matched_rule.mode,
             'Action (Matched Rule)': matched_rule.type,
             'Type (Matched Rule)': matched_rule.rule_cfg_type
@@ -101,6 +102,7 @@ export class ConfigurationAssessmentModalComponent implements OnInit {
           Message: row.message,
           'ID (Matched Rule)': '',
           'Description (Matched Rule)': '',
+          'Container Image': '',
           'Mode (Matched Rule)': '',
           'Action (Matched Rule)': '',
           'Type (Matched Rule)': ''

@@ -14,16 +14,20 @@ import { SwitchersService } from '@core/switchers/switchers.service';
 import { MenuService } from '@core/menu/menu.service';
 import { MapConstant } from '@common/constants/map.constant';
 import { Cluster, ClusterData } from '@common/types';
-import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
+import {
+  LOCAL_STORAGE,
+  SESSION_STORAGE,
+  StorageService,
+} from 'ngx-webstorage-service';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { NotificationService } from '@services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { isAuthorized, isValidBased64 } from '@common/utils/common.utils';
 import { AuthUtilsService } from '@common/utils/auth.utils';
-import { DomSanitizer } from "@angular/platform-browser";
-import { CommonHttpService } from "@common/api/common-http.service";
-import { AuthService } from "@services/auth.service";
+import { DomSanitizer } from '@angular/platform-browser';
+import { CommonHttpService } from '@common/api/common-http.service';
+import { AuthService } from '@services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -75,13 +79,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private authService: AuthService,
     private commonHttpService: CommonHttpService,
-    @Inject(SESSION_STORAGE) private sessionStorage: StorageService
+    @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
+    @Inject(LOCAL_STORAGE) private localStorage: StorageService
   ) {
     this.menuItems = menu.getMenu().slice(0, 4);
   }
 
   ngOnInit() {
-    if(!GlobalVariable.customPageHeaderColor && !GlobalVariable.customPageHeaderContent){
+    if (
+      !GlobalVariable.customPageHeaderColor &&
+      !GlobalVariable.customPageHeaderContent
+    ) {
       this.retrieveCustomizedUIContent();
     }
 
@@ -121,7 +129,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
         GlobalVariable.user.roles,
         resource.redirectAuth
       );
-      this.isAuthReadConfig = this.authUtilsService.getDisplayFlag('read_config');
+      this.isAuthReadConfig =
+        this.authUtilsService.getDisplayFlag('read_config');
       this.isFedQueryAllowed = isAuthorized(
         GlobalVariable.user.roles,
         resource.fedQueryAllowed
@@ -130,9 +139,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.initMultiClusters();
 
-    this.email = this.sessionStorage.get('token')?.emailHash;
-    this.username = this.sessionStorage.get('token')?.token?.username;
-    const role = this.sessionStorage.get('token')?.token?.role;
+    this.email = this.localStorage.get(
+      GlobalConstant.LOCAL_STORAGE_TOKEN
+    )?.emailHash;
+    this.username = this.localStorage.get(
+      GlobalConstant.LOCAL_STORAGE_TOKEN
+    )?.token?.username;
+    const role = this.localStorage.get(GlobalConstant.LOCAL_STORAGE_TOKEN)
+      ?.token?.role;
     this.displayRole = role ? role : 'Namespace User';
 
     this._multiClusterSubScription =
@@ -150,7 +164,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (this._multiClusterSubScription) {
       this._multiClusterSubScription.unsubscribe();
     }
-    if(this._getRebrandCustomValuesSubscription){
+    if (this._getRebrandCustomValuesSubscription) {
       this._getRebrandCustomValuesSubscription.unsubscribe();
     }
   }
@@ -270,8 +284,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
               data.fed_role !== MapConstant.FED_ROLES.MASTER);
 
           //get the status of the chosen cluster
-          const sessionCluster = this.sessionStorage.get(
-            GlobalConstant.SESSION_STORAGE_CLUSTER
+          const sessionCluster = this.localStorage.get(
+            GlobalConstant.LOCAL_STORAGE_CLUSTER
           );
           const clusterInSession = sessionCluster
             ? JSON.parse(sessionCluster)
@@ -348,8 +362,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
             id: this.selectedCluster?.id,
             name: this.selectedCluster?.name,
           };
-          this.sessionStorage.set(
-            GlobalConstant.SESSION_STORAGE_CLUSTER,
+          this.localStorage.set(
+            GlobalConstant.LOCAL_STORAGE_CLUSTER,
             JSON.stringify(cluster)
           );
         },
@@ -366,56 +380,59 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  retrieveCustomizedUIContent(){
-    this._getRebrandCustomValuesSubscription = this.commonHttpService.getRebrandCustomValues().subscribe((value) => {
-      if (value.customLoginLogo) {
-        GlobalVariable.customLoginLogo = isValidBased64(value.customLoginLogo)
-          ? atob(value.customLoginLogo)
-          : value.customLoginLogo;
-      }
+  retrieveCustomizedUIContent() {
+    this._getRebrandCustomValuesSubscription = this.commonHttpService
+      .getRebrandCustomValues()
+      .subscribe(value => {
+        if (value.customLoginLogo) {
+          GlobalVariable.customLoginLogo = isValidBased64(value.customLoginLogo)
+            ? atob(value.customLoginLogo)
+            : value.customLoginLogo;
+        }
 
-      if (value.customPolicy) {
-        GlobalVariable.customPolicy = isValidBased64(value.customPolicy)
-          ? atob(value.customPolicy)
-          : value.customPolicy;
-      }
+        if (value.customPolicy) {
+          GlobalVariable.customPolicy = isValidBased64(value.customPolicy)
+            ? atob(value.customPolicy)
+            : value.customPolicy;
+        }
 
-      if (value.customPageHeaderContent) {
-        GlobalVariable.customPageHeaderContent = isValidBased64(
-          value.customPageHeaderContent
-        )
-          ? atob(value.customPageHeaderContent)
-          : value.customPageHeaderContent;
-      }
+        if (value.customPageHeaderContent) {
+          GlobalVariable.customPageHeaderContent = isValidBased64(
+            value.customPageHeaderContent
+          )
+            ? atob(value.customPageHeaderContent)
+            : value.customPageHeaderContent;
+        }
 
-      if (value.customPageHeaderColor) {
-        GlobalVariable.customPageHeaderColor = isValidBased64(
-          value.customPageHeaderColor
-        )
-          ? atob(value.customPageHeaderColor)
-          : value.customPageHeaderColor;
-      }
+        if (value.customPageHeaderColor) {
+          GlobalVariable.customPageHeaderColor = isValidBased64(
+            value.customPageHeaderColor
+          )
+            ? atob(value.customPageHeaderColor)
+            : value.customPageHeaderColor;
+        }
 
-      if (value.customPageFooterContent) {
-        GlobalVariable.customPageFooterContent = isValidBased64(
-          value.customPageFooterContent
-        )
-          ? atob(value.customPageFooterContent)
-          : value.customPageFooterContent;
-      }
+        if (value.customPageFooterContent) {
+          GlobalVariable.customPageFooterContent = isValidBased64(
+            value.customPageFooterContent
+          )
+            ? atob(value.customPageFooterContent)
+            : value.customPageFooterContent;
+        }
 
-      if ( value.customPageFooterColor ) {
-        GlobalVariable.customPageFooterColor = isValidBased64(
-          value.customPageFooterColor
-        )
-          ? atob(value.customPageFooterColor)
-          : value.customPageFooterColor;
-      } else if (GlobalVariable.customPageHeaderColor) {
-        GlobalVariable.customPageFooterColor = GlobalVariable.customPageHeaderColor
-      }
+        if (value.customPageFooterColor) {
+          GlobalVariable.customPageFooterColor = isValidBased64(
+            value.customPageFooterColor
+          )
+            ? atob(value.customPageFooterColor)
+            : value.customPageFooterColor;
+        } else if (GlobalVariable.customPageHeaderColor) {
+          GlobalVariable.customPageFooterColor =
+            GlobalVariable.customPageHeaderColor;
+        }
 
-      this.authService.notifyEnvironmentVariablesRetrieved();
-    });
+        this.authService.notifyEnvironmentVariablesRetrieved();
+      });
   }
 
   logout() {

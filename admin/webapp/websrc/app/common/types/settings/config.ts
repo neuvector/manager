@@ -25,7 +25,7 @@ export interface ConfigPatch {
 
 export interface ConfigV2 {
   svc_cfg: SvcConfig;
-  svslog_cfg: SyslogConfig;
+  syslog_cfg: SyslogConfig;
   auth_cfg: AuthConfig;
   proxy_cfg: ProxyConfig;
   webhooks: Webhook[];
@@ -61,6 +61,7 @@ export interface SyslogConfig {
   syslog_port: number;
   syslog_level: string;
   syslog_status: boolean;
+  output_event_to_logs: boolean;
   syslog_categories: string[];
   syslog_in_json: boolean;
   single_cve_per_syslog: boolean;

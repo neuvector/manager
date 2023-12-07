@@ -943,12 +943,13 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
     clientIP { ip =>
       entity(as[Password]) { userPwd =>
         def login: Route = {
+          val suseCookie = if (userPwd.isRancherSSOUrl) suseCookieValue else ""
           val result =
             RestClient.httpRequestWithTokenHeader(
               s"$baseUri/$auth",
               POST,
               authRequestToJson(AuthRequest(userPwd, ip.toString())),
-              suseCookieValue
+              suseCookie
             )
           val response  = Await.result(result, RestClient.waitingLimit.seconds)
           var authToken = AuthenticationManager.parseToken(response)
@@ -958,11 +959,11 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
             authToken.roles,
             authToken.login_timestamp,
             authToken.need_to_reset_password,
-            suseCookieValue.nonEmpty
+            suseCookie.nonEmpty
           )
           authToken.token match {
             case Some(token) => {
-              AuthenticationManager.suseTokenMap += (token.token -> suseCookieValue)
+              AuthenticationManager.suseTokenMap += (token.token -> suseCookie)
               logger.info("login with SUSE cookie")
             }
             case None => {}

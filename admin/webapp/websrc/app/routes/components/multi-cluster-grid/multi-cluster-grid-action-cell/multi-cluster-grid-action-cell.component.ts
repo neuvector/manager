@@ -14,7 +14,7 @@ import { NotificationService } from '@services/notification.service';
 import { UtilsService } from '@common/utils/app.utils';
 import { PromotionModalComponent } from '@routes/multi-cluster/promotion-modal/promotion-modal.component';
 import { MapConstant } from '@common/constants/map.constant';
-import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
+import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 
 @Component({
   selector: 'app-multi-cluster-grid-action-cell',
@@ -42,7 +42,7 @@ export class MultiClusterGridActionCellComponent
     public dialog: MatDialog,
     private translate: TranslateService,
     private router: Router,
-    @Inject(SESSION_STORAGE) private sessionStorage: StorageService
+    @Inject(LOCAL_STORAGE) private localStorage: StorageService
   ) {}
 
   agInit(params: ICellRendererParams): void {
@@ -143,8 +143,8 @@ export class MultiClusterGridActionCellComponent
           id: rowData.id,
           name: rowData.name,
         };
-        this.sessionStorage.set(
-          GlobalConstant.SESSION_STORAGE_CLUSTER,
+        this.localStorage.set(
+          GlobalConstant.LOCAL_STORAGE_CLUSTER,
           JSON.stringify(cluster)
         );
         this.multiClusterService.refreshSummary();

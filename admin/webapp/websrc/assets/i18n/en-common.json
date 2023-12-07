@@ -2602,6 +2602,7 @@
     "TEST_K8S_INSTRUCTION": "To confirm if Kubernetes connection related configuration is correct, and Kubernetes is available.",
     "TEST": "TEST",
     "RULE_TYPE": "Action",
+    "CONTAINER_IMAGE": "Container Image",
     "PSP_INSTRUCTION": "Suggest to add more criteria, such as namespace, to limit the rule's scope.",
     "PSP_CRITERIA": "PSP Best Practice includes:",
     "BL_POLICY": "PSS Baseline Policy List",
@@ -2967,7 +2968,9 @@
   "setting": {
     "TITLE": "System Settings",
     "DESC": "Customize system configuration",
+    "NOTIFICATIONS": "Notifications",
     "SYSLOG": "Syslog   ",
+    "EVENT_REPORT_LOGGING": "Output events and reports to logs",
     "WEBHOOKS": "Webhooks",
     "CLUSTER": "Cluster",
     "CLUSTER_COMMENT": "Used to identify the cluster in notifications",
@@ -2980,8 +2983,8 @@
     "LEVEL": "Level",
     "LOG_IN_JSON": "In JSON:",
     "LOG_CATEGORIES": "Categories:",
-    "SEND_SYSLOG_PER_CVE": "Send individual syslog events per vulnerability",
-    "SEND_SYSLOG_PER_LAYER": "Send syslog events vulnerabilities in image layers",
+    "SEND_SYSLOG_PER_CVE": "Send individual log events per vulnerability",
+    "SEND_SYSLOG_PER_LAYER": "Send log events for vulnerabilities in image layers",
     "SERVER_CERTIFICATE": "Server Certificate",
     "EXPORT": "Export",
     "IMPORT": "Import",
@@ -3133,6 +3136,7 @@
     }
   },
   "support": {
+    "title": "Options are available for teams of all sizes.",
     "subtitle": "What's included:",
     "community": {
       "title": "NeuVector Community Support",

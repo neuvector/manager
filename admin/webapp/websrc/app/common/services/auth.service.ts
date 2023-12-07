@@ -8,7 +8,6 @@ import {
 } from 'ngx-webstorage-service';
 import { GlobalConstant } from '../constants/global.constant';
 import { GlobalVariable } from '../variables/global.variable';
-import { SessionService } from './session.service';
 import { CommonHttpService } from '@common/api/common-http.service';
 import { Subject } from 'rxjs';
 import { AuthHttpService } from '@common/api/auth-http.service';
@@ -19,13 +18,17 @@ export class AuthService {
   public onEnvironmentVariablesRetrieved$ =
     this._environmentVariablesRetrieved.asObservable();
 
+  private _loginEvent = new Subject();
+  public onLoginEvent$ = this._loginEvent.asObservable();
+  private _logoutEvent = new Subject();
+  public onLogoutEvent$ = this._logoutEvent.asObservable();
+
   constructor(
     private commonHttpService: CommonHttpService,
     private authHttpService: AuthHttpService,
     private router: Router,
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
-    @Inject(LOCAL_STORAGE) private localStorage: StorageService,
-    private sessionService: SessionService
+    @Inject(LOCAL_STORAGE) private localStorage: StorageService
   ) {}
 
   getTokenAuthServer() {
@@ -70,12 +73,10 @@ export class AuthService {
       .pipe();
   }
 
-  login(payload: {
-    username: string;
-    password: string;
-    new_password?: string;
-  }) {
-    return GlobalVariable.http.post(PathConstant.LOGIN_URL, payload).pipe();
+  login(payload: {username: string, password: string, new_password?: string, isRancherSSOUrl: boolean}) {
+    return GlobalVariable.http
+      .post(PathConstant.LOGIN_URL, payload)
+      .pipe();
   }
 
   refreshToken() {
@@ -105,36 +106,32 @@ export class AuthService {
 
   timeout(currUrl: string) {
     let temp4TimeoutFlag = null;
-    if (this.sessionStorage.has(GlobalConstant.SESSION_STORAGE_TIMEOUT)) {
-      temp4TimeoutFlag = this.sessionStorage.get(
-        GlobalConstant.SESSION_STORAGE_TIMEOUT
+    if (this.localStorage.has(GlobalConstant.LOCAL_STORAGE_TIMEOUT)) {
+      temp4TimeoutFlag = this.localStorage.get(
+        GlobalConstant.LOCAL_STORAGE_TIMEOUT
       );
     }
-    this.clearSessionStorage();
+    this.clearLocalStorage();
     if (currUrl !== GlobalConstant.PATH_LOGIN) {
-      this.sessionStorage.set(
-        GlobalConstant.SESSION_STORAGE_ORIGINAL_URL,
-        currUrl
-      );
+      this.localStorage.set(GlobalConstant.LOCAL_STORAGE_ORIGINAL_URL, currUrl);
     }
     if (temp4TimeoutFlag) {
-      this.sessionStorage.set(
-        GlobalConstant.SESSION_STORAGE_TIMEOUT,
+      this.localStorage.set(
+        GlobalConstant.LOCAL_STORAGE_TIMEOUT,
         temp4TimeoutFlag
       );
     }
     this.router.navigate([GlobalConstant.PATH_LOGIN]);
   }
 
-  clearSessionStorage() {
-    let theme = this.sessionStorage.has(GlobalConstant.SESSION_STORAGE_THEME)
-      ? this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_THEME) === 'A' ||
-        this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_THEME) === 'B'
-        ? this.sessionStorage.get(GlobalConstant.SESSION_STORAGE_THEME)
+  clearLocalStorage() {
+    let theme = this.localStorage.has(GlobalConstant.LOCAL_STORAGE_THEME)
+      ? this.localStorage.get(GlobalConstant.LOCAL_STORAGE_THEME) === 'A' ||
+        this.localStorage.get(GlobalConstant.LOCAL_STORAGE_THEME) === 'B'
+        ? this.localStorage.get(GlobalConstant.LOCAL_STORAGE_THEME)
         : 'A'
       : 'A';
-    this.sessionService.clearSession();
-    this.sessionStorage.set(GlobalConstant.SESSION_STORAGE_THEME, theme);
+    this.localStorage.set(GlobalConstant.LOCAL_STORAGE_THEME, theme);
   }
 
   heartbeat() {
@@ -145,6 +142,14 @@ export class AuthService {
     this._environmentVariablesRetrieved.next(true);
   }
 
+  dispatchLoginEvent() {
+    this._loginEvent.next(true);
+  }
+
+  dispatchLogoutEvent() {
+    this._logoutEvent.next(true);
+  }
+
   private doLogout = (isNVTimeout: boolean, redirectUrl: string) => {
     GlobalVariable.http.delete(PathConstant.LOGIN_URL).subscribe(
       (response: any) => {
@@ -153,7 +158,6 @@ export class AuthService {
           let gpuEnabled = this.localStorage.get('_gpuEnabled');
           if (!isNVTimeout && !GlobalVariable.isSUSESSO) {
             this.localStorage.clear();
-            this.sessionService.clearSession();
             GlobalVariable.user = null;
             GlobalVariable.sidebarDone = false;
             GlobalVariable.versionDone = false;

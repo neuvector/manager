@@ -52,8 +52,8 @@ export class ImportFileComponent implements OnInit, OnChanges {
     private location: Location,
     private router: Router
   ) {
-    this.nvToken = this.sessionStorage.get(
-      GlobalConstant.SESSION_STORAGE_TOKEN
+    this.nvToken = this.localStorage.get(
+      GlobalConstant.LOCAL_STORAGE_TOKEN
     ).token.token;
   }
 
@@ -180,12 +180,12 @@ export class ImportFileComponent implements OnInit, OnChanges {
           this.translate.instant('setting.message.UPLOAD_FINISH')
         );
         setTimeout(() => {
-          this.sessionStorage.set(
-            GlobalConstant.SESSION_STORAGE_ORIGINAL_URL,
+          this.localStorage.set(
+            GlobalConstant.LOCAL_STORAGE_ORIGINAL_URL,
             this.location.path()
           );
-          this.sessionStorage.remove(GlobalConstant.SESSION_STORAGE_TOKEN);
-          this.sessionStorage.remove(GlobalConstant.SESSION_STORAGE_CLUSTER);
+          this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_TOKEN);
+          this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_CLUSTER);
           this.router.navigate([GlobalConstant.PATH_LOGIN]);
         }, 8000);
       } else {

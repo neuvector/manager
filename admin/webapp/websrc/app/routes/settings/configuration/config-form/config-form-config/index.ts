@@ -51,6 +51,7 @@ import {
   DisableNetworkPolicyToggleField,
   SyslogTLSCertificate,
   SyslogCVELayersField,
+  EventReportLoggingToggleField,
 } from './constants';
 
 export const ConfigFormConfig: FormlyFieldConfig[] = [
@@ -239,11 +240,6 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
   },
   {
     wrappers: [FormlyComponents.SECTION_WRAPPER],
-    fieldGroup: [WebhookTableField],
-    templateOptions: { label: 'setting.WEBHOOKS', divider: true },
-  },
-  {
-    wrappers: [FormlyComponents.SECTION_WRAPPER],
     fieldGroupClassName: 'row align-items-center',
     fieldGroup: [
       {
@@ -287,33 +283,36 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
   },
   {
     wrappers: [FormlyComponents.SECTION_WRAPPER],
-    fieldGroup: [SyslogToggleField],
-    templateOptions: { label: 'setting.SYSLOG', appendTo: true, inline: true },
-  },
-  {
-    wrappers: [FormlyComponents.SECTION_WRAPPER],
     fieldGroupClassName: 'row',
     fieldGroup: [
       {
-        className: 'col-12 col-md-4',
+        className: 'col-12 col-md-2',
+        ...SyslogToggleField,
+      },
+      {
+        className: 'col-12 col-md-2',
         ...SyslogServerField,
       },
       {
-        className: 'col-12 col-md-1',
+        className: 'col-12 col-md-2',
         ...SyslogProtocolField,
       },
       {
-        className: 'col-12 col-md-3 offset-md-1',
+        className: 'col-12 col-md-3',
         ...SyslogPortField,
       },
       {
-        className: 'col-12 col-md-1',
+        className: 'col-12 col-md-2',
         ...SyslogLevelField,
       },
       {
         hideExpression: `model.syslog.syslog_ip_proto != 66`,
-        className: 'col-12 col-md-5 my-1 ml-3',
+        className: 'col-12 offset-md-2 col-md-6',
         ...SyslogTLSCertificate,
+      },
+      {
+        className: 'col-12 my-1',
+        ...EventReportLoggingToggleField,
       },
       {
         className: 'col-12 col-md-8 my-3',
@@ -332,7 +331,15 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
         ...SyslogCVELayersField,
       },
     ],
-    templateOptions: { append: true, divider: true },
+    templateOptions: {
+      label: 'setting.NOTIFICATIONS',
+      divider: true,
+    },
+  },
+  {
+    wrappers: [FormlyComponents.SECTION_WRAPPER],
+    fieldGroup: [WebhookTableField],
+    templateOptions: { label: 'setting.WEBHOOKS', divider: true },
   },
   {
     wrappers: [FormlyComponents.SECTION_WRAPPER],

@@ -496,7 +496,7 @@ def create_system(data):
 @click.option("--proxy", default=False, is_flag=True, help="Use proxy to connect")
 @click.option("--enable/--disable", default=True, is_flag=True, help="Enable/Disable the webhook")
 @click.pass_obj
-def create_system_webhook_url(data, name, url, type, scope, proxy, enable):
+def create_system_webhook(data, name, url, type, scope, proxy, enable):
     """Create webhook settings"""
     if type == "slack":
         type = "Slack"
@@ -789,13 +789,14 @@ def set_system_cluster_name(data, name):
 @click.option("--type", default="", help="webhook type", type=click.Choice(['Slack', 'JSON']))
 @click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=True,
               help="It's for local or federal response rule")
+@click.option("--proxy", default=False, is_flag=True, help="Use proxy to connect")
 @click.option("--enable/--disable", default=True, is_flag=True, help="Enable/Disable the webhook")
 @click.pass_obj
-def set_system_webhook_url(data, name, url, type, scope, enable):
+def set_system_webhook_url(data, name, url, type, scope, proxy, enable):
     """Set webhook settings"""
     if type == "slack":
         type = "Slack"
-    body = {"name": name, "url": url, "enable": enable, "type": type}
+    body = {"name": name, "url": url, "enable": enable, "type": type, "use_proxy": proxy}
     args = {}
     args["scope"] = scope
     data.client.config("system/config/webhook", name, {"config": body}, **args)

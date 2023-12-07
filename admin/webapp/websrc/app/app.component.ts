@@ -118,7 +118,9 @@ export class AppComponent implements OnInit {
         },
         error => {
           this.localStorage.set(GlobalConstant.LOCAL_STORAGE_TIMEOUT, true);
-          location.reload();
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
         }
       );
     } else {

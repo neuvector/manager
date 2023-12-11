@@ -242,9 +242,9 @@ export class AdmissionRulesService {
         ),
         field: 'index',
         cellRenderer: 'indexCellRenderer',
-        width: 60,
-        minWidth: 60,
-        maxWidth: 60,
+        width: 80,
+        minWidth: 80,
+        maxWidth: 80,
         sortable: false,
       },
       {

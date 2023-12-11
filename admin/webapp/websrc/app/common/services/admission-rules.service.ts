@@ -252,6 +252,12 @@ export class AdmissionRulesService {
           'admissionControl.matchingTestGrid.KIND'
         ),
         field: 'kind',
+        cellRenderer: params => {
+          if (params.value) {
+            return `<span class="auto-hide">${params.value}</span>`;
+          }
+          return null;
+        },
         width: 120,
         sortable: false,
       },
@@ -260,6 +266,12 @@ export class AdmissionRulesService {
           'admissionControl.matchingTestGrid.NAME'
         ),
         field: 'name',
+        cellRenderer: params => {
+          if (params.value) {
+            return `<span class="auto-hide">${params.value}</span>`;
+          }
+          return null;
+        },
         width: 120,
         sortable: false,
       },
@@ -282,6 +294,7 @@ export class AdmissionRulesService {
         headerName: this.translate.instant(
           'admissionControl.matchingTestGrid.MSG'
         ),
+        cellClass: ['d-flex', 'align-items-center', 'cell-wrap-text'],
         field: 'message',
         width: 400,
         sortable: false,
@@ -297,7 +310,6 @@ export class AdmissionRulesService {
         autoHeight: true,
         sortable: true,
         resizable: true,
-        cellClass: ['d-flex', 'align-items-center', 'cell-wrap-text'],
       },
       onColumnResized: params => {
         params.api.resetRowHeights();

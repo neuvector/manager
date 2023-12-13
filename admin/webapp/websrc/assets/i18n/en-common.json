@@ -3096,6 +3096,7 @@
       "WH_TYPE": "Webhook Type",
       "TYPE": "Type",
       "STATUS": "Status",
+      "USE_PROXY": "Use Proxy",
       "NEW": "New Webhook",
       "ADD": "Add Webhook",
       "NAME_EMPTY": "Name is required",

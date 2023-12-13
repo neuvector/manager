@@ -129,6 +129,7 @@ export interface Webhook {
   name: string;
   url: string;
   enable: boolean;
+  use_proxy: boolean;
   type: string;
   cfg_type: string;
   isEditable?: boolean;

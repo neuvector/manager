@@ -13,7 +13,7 @@ object SystemConfigJsonProtocol extends DefaultJsonProtocol {
   implicit val registyHttpProxyFormat: RootJsonFormat[RegistyHttpProxy] = jsonFormat3(
     RegistyHttpProxy
   )
-  implicit val webhookFormat: RootJsonFormat[Webhook]                 = jsonFormat5(Webhook)
+  implicit val webhookFormat: RootJsonFormat[Webhook]                 = jsonFormat6(Webhook)
   implicit val systemConfigFormat: RootJsonFormat[SystemConfig]       = jsonFormat22(SystemConfig)
   implicit val systemNetConfigFormat: RootJsonFormat[SystemNetConfig] = jsonFormat3(SystemNetConfig)
   implicit val systemAtmoConfigFormat: RootJsonFormat[SystemAtmoConfig] = jsonFormat4(

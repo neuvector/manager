@@ -9,6 +9,7 @@ case class Webhook(
   name: String,
   url: String,
   enable: Boolean,
+  use_proxy: Boolean,
   `type`: String,
   cfg_type: String
 )

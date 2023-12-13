@@ -100,6 +100,25 @@ export const WebhookTableField = {
           align: 'center',
           ariaLabelledBy: 'setting.webhook.STATUS',
         },
+        expressionProperties: {
+          'templateOptions.disabled': model => {
+            return !model.isEditable;
+          },
+        },
+      },
+      {
+        key: 'use_proxy',
+        type: FormlyComponents.CHECKBOX,
+        templateOptions: {
+          viewValue: 'setting.webhook.USE_PROXY',
+          flexWidth: '100px',
+          align: 'center',
+        },
+        expressionProperties: {
+          'templateOptions.disabled': model => {
+            return !model.isEditable;
+          },
+        },
       },
       {
         key: 'cfg_type',

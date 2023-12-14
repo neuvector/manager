@@ -1,6 +1,8 @@
 <mat-checkbox
   [formControl]="formControl"
   [formlyAttributes]="field"
-  [labelPosition]="to.labelPosition || 'after'">
+  [labelPosition]="to.labelPosition || 'after'"
+  class="margin-left-m"
+>
   {{ to.label! | translate }}
 </mat-checkbox>

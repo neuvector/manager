@@ -34,6 +34,7 @@ export class SamlFormComponent implements OnInit, OnChanges {
   @Input() samlData!: { server: ServerGetResponse; domains: string[] };
   @Output() refresh = new EventEmitter();
   isCreated = true;
+  signingKeySubmitted = false;
   submittingForm = false;
   groupMappedRoles: GroupMappedRole[] = [];
   serverName = 'saml1';
@@ -121,6 +122,9 @@ export class SamlFormComponent implements OnInit, OnChanges {
           );
         }
       });
+      if (saml.saml.slo_enabled && saml.saml.signing_cert) {
+        this.signingKeySubmitted = true;
+      }
     } else {
       this.isCreated = false;
     }

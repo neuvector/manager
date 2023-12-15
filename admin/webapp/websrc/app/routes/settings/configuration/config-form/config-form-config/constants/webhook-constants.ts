@@ -116,6 +116,7 @@ export const WebhookTableField = {
       {
         key: 'use_proxy',
         type: FormlyComponents.CHECKBOX,
+        defaultValue: false,
         templateOptions: {
           viewValue: 'setting.webhook.USE_PROXY',
           flexWidth: '150px',

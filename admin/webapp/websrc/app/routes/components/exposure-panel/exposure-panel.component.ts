@@ -97,29 +97,13 @@ export class ExposurePanelComponent implements OnInit {
     let exposureReport: any = [];
     exposureList
     .forEach((exposure: Exposure) => {
-      exposureReport.push(
-        {
-          Direction: direction,
-          Service: exposure.service,
-          Pod: exposure.pod_name,
-          'Policy Mode': exposure.policy_mode,
-          'External Location': '-',
-          'External IP': '-',
-          'External Host': '-',
-          Port: '',
-          Bytes: exposure.entries?.reduce((accu, curr) => accu + curr.bytes, 0) || 0,
-          Applications: exposure.applications?.join(', ') || '',
-          Sessions: exposure.entries?.reduce((accu, curr) => accu + curr.sessions, 0) || 0,
-          Action: exposure.policy_action
-        }
-      );
       exposure.entries?.forEach(entry => {
         exposureReport.push(
           {
-            Direction: '',
-            Service: '',
-            Pod: '',
-            'Policy Mode': '',
+            Direction: direction,
+            Service: exposure.service,
+            Pod: exposure.pod_name,
+            'Policy Mode': exposure.policy_mode,
             'External Location': entry.country_name !== '-' ? entry.country_name : '',
             'External IP': entry.ip,
             'External Host': entry.fqdn,

@@ -3248,6 +3248,7 @@
     "SLO_URL": "Identity Provider Single Logout URL",
     "SLO_CERT": "Single Logout Signing Certificate",
     "SLO_KEY": "Single Logout Signing Key",
+    "SLO_KEY_SUBMITTED": "Signing Key has been saved on Controller",
     "CERTIFICATE": "X.509 Certificate",
     "ADD_EXTRA_CERT": "Add extra X.509 Certificate",
     "EXTRA_CERT": "Extra X.509 Certificate",

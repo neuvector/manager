@@ -17,6 +17,7 @@ import { SettingsService } from '@services/settings.service';
 import { MatIconModule } from '@angular/material/icon';
 import { LoadingTemplateModule } from '@components/ui/loading-template/loading-template.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 const routes: Routes = [
   { path: '', component: SamlComponent },
@@ -36,6 +37,7 @@ const routes: Routes = [
     MatCheckboxModule,
     MatButtonModule,
     MatIconModule,
+    MatTooltipModule,
     MatCardModule,
     MatSelectModule,
     ClipboardModule,

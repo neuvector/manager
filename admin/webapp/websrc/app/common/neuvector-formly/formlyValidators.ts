@@ -1,4 +1,4 @@
-import {AbstractControl, FormGroup, ValidationErrors} from '@angular/forms';
+import { AbstractControl, FormGroup, ValidationErrors } from '@angular/forms';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 
@@ -19,7 +19,7 @@ export function objNameValidator(
   control: AbstractControl
 ): ValidationErrors | null {
   const value = control.value;
-  const pattern = new RegExp(/^[a-zA-Z0-9]+[.:a-zA-Z0-9_-]*[^.]$/);
+  const pattern = new RegExp(/^[a-zA-Z0-9]+[.:a-zA-Z0-9_-]*[^.]?$/);
   if (!value) {
     return null;
   }

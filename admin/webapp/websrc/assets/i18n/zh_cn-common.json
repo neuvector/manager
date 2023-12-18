@@ -3248,6 +3248,7 @@
     "SLO_URL": "身份提供商单点注销URL",
     "SLO_CERT": "单点注销签名证书",
     "SLO_KEY": "单点注销签名密钥",
+    "SLO_KEY_SUBMITTED": "签名密钥已保存在控制器上",
     "CERTIFICATE": "X.509证书",
     "ADD_EXTRA_CERT": "添加额外的X.509证书",
     "EXTRA_CERT": "额外的X.509证书",

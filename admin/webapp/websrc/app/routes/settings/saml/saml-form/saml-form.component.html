@@ -84,6 +84,13 @@
           cdkTextareaAutosize
           formControlName="signing_key"
           matInput></textarea>
+        <mat-icon
+          *ngIf="signingKeySubmitted"
+          matSuffix
+          matTooltip="{{ 'okta.SLO_KEY_SUBMITTED' | translate }}"
+          class="text-success">
+          info
+        </mat-icon>
       </mat-form-field>
     </div>
     <ng-container formArrayName="x509_certs">

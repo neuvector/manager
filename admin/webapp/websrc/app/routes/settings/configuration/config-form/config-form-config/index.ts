@@ -286,24 +286,20 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
     fieldGroupClassName: 'row',
     fieldGroup: [
       {
-        className: 'col-12 col-md-2',
+        className: 'col-12 col-md-2 my-4',
         ...SyslogToggleField,
       },
       {
-        className: 'col-12 col-md-2',
+        className: 'col-12 col-md-3',
         ...SyslogServerField,
       },
       {
-        className: 'col-12 col-md-2',
+        className: 'col-12 col-md-3',
         ...SyslogProtocolField,
       },
       {
         className: 'col-12 col-md-3',
         ...SyslogPortField,
-      },
-      {
-        className: 'col-12 col-md-2',
-        ...SyslogLevelField,
       },
       {
         hideExpression: `model.syslog.syslog_ip_proto != 66`,
@@ -315,11 +311,15 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
         ...EventReportLoggingToggleField,
       },
       {
-        className: 'col-12 col-md-8 my-3',
+        className: 'col-12 col-md-2 my-3 ml-3',
+        ...SyslogLevelField,
+      },
+      {
+        className: 'col-12 col-md-7 my-5',
         ...SyslogCategoriesField,
       },
       {
-        className: 'col-12 col-md-2 offset-md-1 my-3',
+        className: 'col-12 col-md-2 my-5',
         ...SyslogInJSONField,
       },
       {

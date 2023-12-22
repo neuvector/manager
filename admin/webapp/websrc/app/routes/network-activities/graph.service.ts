@@ -1296,14 +1296,14 @@ export class GraphService {
             let mode = this.utils.getI18Name(params.value);
             let labelCode = MapConstant.colourMap[params.value];
             if (!labelCode) labelCode = 'info';
-            return `<span class="label label-${labelCode}">${this.sanitizer.sanitize(
+            return `<span class="action-label ${labelCode}">${this.sanitizer.sanitize(
               SecurityContext.HTML,
               mode
             )}</span>`;
           } else return null;
         },
-        width: 100,
-        maxWidth: 110,
+        width: 130,
+        maxWidth: 140,
       },
       {
         headerName: this.translate.instant('network.gridHeader.AGE'),
@@ -1330,7 +1330,7 @@ export class GraphService {
         {
           headerName: ' ',
           cellRenderer: function (params) {
-            const proxy = `<div class="action-label text-info"> Proxy </div>`;
+            const proxy = `<div class="action-label info"> Proxy </div>`;
 
             if (params.data.severity) {
               if (params.data.to_sidecar)

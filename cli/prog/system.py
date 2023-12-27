@@ -1290,8 +1290,9 @@ def export_config(data, section, raw, filename):
 @click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True), help="Local file path when export to local machine")
 @click.option("--remote_repository_nickname", default="default", help="Repository nickname when export to remote repository")
 @click.option("--remote_filepath", default="", help="File path on repository when export to remote repository")
+@click.option("--comment", default="", help="Comment for export to remote repository")
 @click.pass_obj
-def request_export_group(data, name, filename, remote_repository_nickname, remote_filepath):
+def request_export_group(data, name, filename, remote_repository_nickname, remote_filepath, comment):
     """Export group policies."""
 
     groups = []
@@ -1307,7 +1308,11 @@ def request_export_group(data, name, filename, remote_repository_nickname, remot
             click.echo("Error: remote_filepath unspecified")
             return
         else:
-            payload["remote_export_options"] = {"remote_repository_nickname": remote_repository_nickname, "file_path": remote_filepath}
+            payload["remote_export_options"] = {
+                "remote_repository_nickname": remote_repository_nickname,
+                "file_path": remote_filepath,
+                "comment": comment,
+            }
 
     respData = data.client.requestDownload("file", "group", None, payload)
     if filename and len(filename) > 0:
@@ -1328,8 +1333,9 @@ def request_export_group(data, name, filename, remote_repository_nickname, remot
 @click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True), help="Local file path when export to local machine")
 @click.option("--remote_repository_nickname", default="default", help="Repository nickname when export to remote repository")
 @click.option("--remote_filepath", default="", help="File path on repository when export to remote repository")
+@click.option("--comment", default="", help="Comment for export to remote repository")
 @click.pass_obj
-def request_export_admission(data, config, id, filename, remote_repository_nickname, remote_filepath):
+def request_export_admission(data, config, id, filename, remote_repository_nickname, remote_filepath, comment):
     """Export admission control configuration/rules."""
 
     ids = []
@@ -1345,7 +1351,11 @@ def request_export_admission(data, config, id, filename, remote_repository_nickn
             click.echo("Error: remote_filepath unspecified")
             return
         else:
-            payload["remote_export_options"] = {"remote_repository_nickname": remote_repository_nickname, "file_path": remote_filepath}
+            payload["remote_export_options"] = {
+                "remote_repository_nickname": remote_repository_nickname,
+                "file_path": remote_filepath,
+                "comment": comment,
+            }
 
     respData = data.client.requestDownload("file", "admission", None, payload)
     if filename and len(filename) > 0:
@@ -1364,8 +1374,9 @@ def request_export_admission(data, config, id, filename, remote_repository_nickn
 @click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True), help="Local file path when export to local machine")
 @click.option("--remote_repository_nickname", default="default", help="Repository nickname when export to remote repository")
 @click.option("--remote_filepath", default="", help="File path on repository when export to remote repository")
+@click.option("--comment", default="", help="Comment for export to remote repository")
 @click.pass_obj
-def request_export_dlp(data, name, filename, remote_repository_nickname, remote_filepath):
+def request_export_dlp(data, name, filename, remote_repository_nickname, remote_filepath, comment):
     """Export DLP sensors/rules."""
 
     names = []
@@ -1381,9 +1392,13 @@ def request_export_dlp(data, name, filename, remote_repository_nickname, remote_
             click.echo("Error: remote_filepath unspecified")
             return
         else:
-            payload["remote_export_options"] = {"remote_repository_nickname": remote_repository_nickname, "file_path": remote_filepath}
+            payload["remote_export_options"] = {
+                "remote_repository_nickname": remote_repository_nickname,
+                "file_path": remote_filepath,
+                "comment": comment,
+            }
 
-    respData = data.client.requestDownload("file", "dlp", None, remote)
+    respData = data.client.requestDownload("file", "dlp", None, payload)
     if filename and len(filename) > 0:
         try:
             with click.open_file(filename, 'w') as wfp:
@@ -1400,8 +1415,9 @@ def request_export_dlp(data, name, filename, remote_repository_nickname, remote_
 @click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True), help="Local file path when export to local machine")
 @click.option("--remote_repository_nickname", default="default", help="Repository nickname when export to remote repository")
 @click.option("--remote_filepath", default="", help="File path on repository when export to remote repository")
+@click.option("--comment", default="", help="Comment for export to remote repository")
 @click.pass_obj
-def request_export_waf(data, name, filename, remote_repository_nickname, remote_filepath):
+def request_export_waf(data, name, filename, remote_repository_nickname, remote_filepath, comment):
     """Export WAF sensors/rules."""
 
     names = []
@@ -1417,7 +1433,11 @@ def request_export_waf(data, name, filename, remote_repository_nickname, remote_
             click.echo("Error: remote_filepath unspecified")
             return
         else:
-            payload["remote_export_options"] = {"remote_repository_nickname": remote_repository_nickname, "file_path": remote_filepath}
+            payload["remote_export_options"] = {
+                "remote_repository_nickname": remote_repository_nickname,
+                "file_path": remote_filepath,
+                "comment": comment,
+            }
 
     respData = data.client.requestDownload("file", "waf", None, payload)
     if filename and len(filename) > 0:
@@ -1435,8 +1455,9 @@ def request_export_waf(data, name, filename, remote_repository_nickname, remote_
 @click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True), help="Local file path when export to local machine")
 @click.option("--remote_repository_nickname", default="default", help="Repository nickname when export to remote repository")
 @click.option("--remote_filepath", default="", help="File path on repository when export to remote repository")
+@click.option("--comment", default="", help="Comment for export to remote repository")
 @click.pass_obj
-def request_export_vul_profile(data, filename, remote_repository_nickname, remote_filepath):
+def request_export_vul_profile(data, filename, remote_repository_nickname, remote_filepath, comment):
     """Export vulnerability profile configuration."""
 
     names = ["default"]
@@ -1453,7 +1474,11 @@ def request_export_vul_profile(data, filename, remote_repository_nickname, remot
             click.echo("Error: remote_filepath unspecified")
             return
         else:
-            payload["remote_export_options"] = {"remote_repository_nickname": remote_repository_nickname, "file_path": remote_filepath}
+            payload["remote_export_options"] = {
+                "remote_repository_nickname": remote_repository_nickname,
+                "file_path": remote_filepath,
+                "comment": comment,
+            }
 
     respData = data.client.requestDownload("file", "vulnerability/profile", None, payload)
     if filename and len(filename) > 0:
@@ -1471,8 +1496,9 @@ def request_export_vul_profile(data, filename, remote_repository_nickname, remot
 @click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True), help="Local file path when export to local machine")
 @click.option("--remote_repository_nickname", default="default", help="Repository nickname when export to remote repository")
 @click.option("--remote_filepath", default="", help="File path on repository when export to remote repository")
+@click.option("--comment", default="", help="Comment for export to remote repository")
 @click.pass_obj
-def request_export_compliance_profile(data, filename, remote_repository_nickname, remote_filepath):
+def request_export_compliance_profile(data, filename, remote_repository_nickname, remote_filepath, comment):
     """Export compliance profile configuration."""
 
     names = ["default"]
@@ -1489,7 +1515,11 @@ def request_export_compliance_profile(data, filename, remote_repository_nickname
             click.echo("Error: remote_filepath unspecified")
             return
         else:
-            payload["remote_export_options"] = {"remote_repository_nickname": remote_repository_nickname, "file_path": remote_filepath}
+            payload["remote_export_options"] = {
+                "remote_repository_nickname": remote_repository_nickname,
+                "file_path": remote_filepath,
+                "comment": comment,
+            }
 
     respData = data.client.requestDownload("file", "compliance/profile", None, payload)
     if filename and len(filename) > 0:

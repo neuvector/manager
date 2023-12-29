@@ -197,7 +197,8 @@
     "HIDE_DETAILS": "隐藏详细内容",
     "SHOW_DETAILS": "显示详细内容",
     "FILTER": "过滤器",
-    "MATCH": "匹配"
+    "MATCH": "匹配",
+    "MANUAL": "手动的"
   },
   "logout": {
     "SIGN_OUT": "已经登出了",

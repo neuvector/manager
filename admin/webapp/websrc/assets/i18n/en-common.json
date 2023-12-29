@@ -197,7 +197,8 @@
     "HIDE_DETAILS": "Hide Details",
     "SHOW_DETAILS": "Show Details",
     "FILTER": "Filter",
-    "MATCH": "Match"
+    "MATCH": "Match",
+    "MANUAL": "Manual"
   },
   "logout": {
     "SIGN_OUT": "Signed out already",

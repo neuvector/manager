@@ -121,7 +121,7 @@
         </td>
         <td class="print-cell" style="width: 6%">
           <div class="action-label px-1 {{ colourMap[dataItem.level] }}">
-            {{ dataItem.level }}
+            {{ "enum." + dataItem.level.toUpperCase() | translate }}
           </div>
         </td>
         <td class="print-cell" style="width: 6%">

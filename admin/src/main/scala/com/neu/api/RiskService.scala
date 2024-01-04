@@ -13,6 +13,7 @@ import com.neu.model.{
   ComplianceProfileConfig,
   ComplianceProfileConfigData,
   ComplianceProfileExportData,
+  TimeRange,
   VulnerabilityProfileConfigData,
   VulnerabilityProfileEntryConfigData,
   VulnerabilityProfileExportData
@@ -54,6 +55,26 @@ class RiskService()(implicit executionContext: ExecutionContext)
                         else ""}"
                       logger.info(s"Getting asset vulnerabilities ...{}", url)
                       RestClient.httpRequestWithHeader(url, GET, "", tokenId)
+                    }
+                  }
+                }
+              }
+            } ~
+            pathPrefix("assets-view") {
+              pathEnd {
+                patch {
+                  parameter('queryToken) { queryToken =>
+                    entity(as[TimeRange]) { timeRange =>
+                      Utils.respondWithWebServerHeaders() {
+                        complete {
+                          RestClient.httpRequestWithHeader(
+                            s"${baseClusterUri(tokenId)}/assetvul?token=$queryToken",
+                            POST,
+                            timeRangeToJson(timeRange),
+                            tokenId
+                          )
+                        }
+                      }
                     }
                   }
                 }

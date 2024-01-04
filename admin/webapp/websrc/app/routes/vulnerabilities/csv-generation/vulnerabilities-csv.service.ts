@@ -3,6 +3,7 @@ import { UtilsService } from '@common/utils/app.utils';
 import { VulnerabilitiesFilterService } from '../vulnerabilities.filter.service';
 import { MapConstant } from '@common/constants/map.constant';
 import { DatePipe } from '@angular/common';
+import { BytesPipe } from "@common/pipes/app.pipes";
 import { arrayToCsv } from '@common/utils/common.utils';
 import { saveAs } from 'file-saver';
 import { VulnerabilityAsset } from '@common/types';
@@ -12,114 +13,13 @@ export class VulnerabilitiesCsvService {
   constructor(
     private utilsService: UtilsService,
     private datePipe: DatePipe,
+    private bytesPipe: BytesPipe,
     private vulnerabilitiesFilterService: VulnerabilitiesFilterService
   ) {}
 
   downloadCsv(cveEntry?: VulnerabilityAsset) {
     console.log('DOWNLOAD CSV');
     let vulnerabilities4Csv = [];
-    const prepareEntryData = cve => {
-      cve.description = cve.description
-        ? `${cve.description.replace(/\"/g, "'")}`
-        : '';
-      if (cve.platforms && Array.isArray(cve.platform)) {
-        cve.platforms = cve.platforms.reduce(
-          (acc, curr) => acc + curr.display_name + ' ',
-          ''
-        );
-      }
-      if (cve.filteredImages && Array.isArray(cve.filteredImages)) {
-        cve.images = cve.filteredImages.reduce(
-          (acc, curr) => acc + curr.display_name + ' ',
-          ''
-        );
-      }
-      if (cve.nodes && Array.isArray(cve.nodes)) {
-        cve.nodes = cve.nodes.reduce(
-          (acc, curr) => acc + curr.display_name + ' ',
-          ''
-        );
-      }
-      if (cve.workloads && Array.isArray(cve.workloads)) {
-        let filteredWorkload = cve.workloads.filter(workload =>
-          this.vulnerabilitiesFilterService.namespaceFilter(workload)
-        );
-
-        filteredWorkload = filteredWorkload.filter(workload =>
-          this.vulnerabilitiesFilterService.serviceFilter(workload)
-        );
-
-        filteredWorkload = filteredWorkload.filter(workload =>
-          this.vulnerabilitiesFilterService.workloadFilter(workload)
-        );
-
-        cve.workloads = Array.from(
-          filteredWorkload.reduce(
-            (acc, curr) => acc.add(curr.display_name),
-            new Set()
-          )
-        ).join(' ');
-
-        cve.services = Array.from(
-          filteredWorkload.reduce(
-            (acc, curr) => acc.add(curr.service),
-            new Set()
-          )
-        ).join(' ');
-
-        cve.domains = Array.from(
-          filteredWorkload.reduce(
-            (acc, curr) => acc.add(curr.domain),
-            new Set()
-          )
-        ).join(' ');
-
-        cve.images = cve.images.concat(
-          Array.from(
-            filteredWorkload.reduce(
-              (acc, curr) => acc.add(curr.image),
-              new Set()
-            )
-          ).join(' ')
-        );
-        console.log(
-          'cve.workloads: ',
-          cve.workloads,
-          'cve.services:',
-          cve.services,
-          'cve.domains:',
-          cve.domains,
-          'cve.images:',
-          cve.images
-        );
-      }
-
-      if (cve.packages) {
-        cve['package_versions->fixed_version'] = Object.entries(cve.packages)
-          .map(([k, v]) => {
-            return `${k}:(${(v as any).reduce(
-              (acc, curr) =>
-                acc +
-                curr.package_version +
-                ' -> ' +
-                (curr.fixed_version || 'N/A') +
-                ' ',
-              ''
-            )})`;
-          })
-          .join(' ');
-      }
-      cve.last_modified_datetime = this.datePipe.transform(
-        JSON.parse(JSON.stringify(cve.last_modified_timestamp)) * 1000,
-        'MMM dd, y HH:mm:ss'
-      );
-      cve.published_datetime = this.datePipe.transform(
-        JSON.parse(JSON.stringify(cve.published_timestamp)) * 1000,
-        'MMM dd, y HH:mm:ss'
-      );
-      delete cve.package_versions;
-      return cve;
-    };
 
     const listAssets = entryData => {
       let imageList = entryData.images.map(image => image.display_name);
@@ -272,7 +172,7 @@ export class VulnerabilitiesCsvService {
         vulnerabilities4Csv = vulnerabilities4Csv.concat(listAssets(cveEntry));
       } else {
         filteredVulnerabilities.forEach(cve => {
-          let entryData = prepareEntryData(JSON.parse(JSON.stringify(cve)));
+          let entryData = this.prepareEntryData(JSON.parse(JSON.stringify(cve)), 'vulnerability_view');
           vulnerabilities4Csv = vulnerabilities4Csv.concat(
             resolveExcelCellLimit(entryData)
           );
@@ -292,4 +192,227 @@ export class VulnerabilitiesCsvService {
       saveAs(blob, filename);
     }
   }
+
+
+  downloadAssetsViewCsv = (data) => {
+    console.log("data", data)
+    let csvWorkloads = arrayToCsv(this.prepareContainersData(data.workloads));
+    let csvNodes = arrayToCsv(this.prepareNodesData(data.nodes));
+    let csvPlatforms = arrayToCsv(this.preparePlatformsData(data.platforms));
+    let csvImages = arrayToCsv(this.prepareImagesData(data.images));
+    let csvVuls = arrayToCsv(this.preprocessVulnerabilityCsvData(data.vulnerabilities));
+
+    let csvData =
+      'Containers\r\n'
+      .concat(csvWorkloads)
+      .concat('\r\n')
+      .concat('Nodes\r\n')
+      .concat(csvNodes)
+      .concat('\r\n')
+      .concat('Platforms\r\n')
+      .concat(csvPlatforms)
+      .concat('\r\n')
+      .concat('Images\r\n')
+      .concat(csvImages)
+      .concat('\r\n')
+      .concat('Vulnerability Details\r\n')
+      .concat(csvVuls);
+    let blob = new Blob([csvData], { type: 'text/csv;charset=utf-8' });
+    let filename = `vulnerabilities_${this.utilsService.parseDatetimeStr(
+            new Date()
+          )}.csv`;
+    saveAs(blob, filename);
+  };
+
+  private preprocessVulnerabilityCsvData = (vuls) => {
+    return vuls.map(cve => {
+      return this.prepareEntryData(cve, 'assets_view');
+    });
+  };
+
+  private prepareContainersData = (workloads) => {
+    return workloads.map(workload => {
+      return {
+        'Name': workload.name,
+        'ID': workload.id,
+        'Namespace': workload.domain,
+        'Service Group': workload.service_group,
+        'Policy Mode': workload.policy_mode,
+        'Applications': workload.applications,
+        'High': workload.high,
+        'Medium': workload.medium,
+        'Low': workload.low ,
+        'Vulnerabilities': workload.vulnerabilities.map(vul => this.reformCveName(vul)),
+        'Scanned at': this.datePipe.transform(
+            workload.scanned_at,
+            'MMM dd, y HH:mm:ss'
+          )
+      }
+    });
+  };
+  private prepareNodesData = (nodes) => {
+    return nodes.map(node => {
+      return {
+        'Name': node.name,
+        'ID': node.id,
+        'Containers': node.containers,
+        'CPUs': node.cpus,
+        'OS': node.os,
+        'Kernel': node.kernel,
+        'Memory': this.bytesPipe.transform(node.memory),
+        'Policy Mode': node.policy_mode,
+        'High': node.high,
+        'Medium': node.medium,
+        'Low': node.low ,
+        'Vulnerabilities': node.vulnerabilities.map(vul => this.reformCveName(vul)),
+        'Scanned at': this.datePipe.transform(
+            node.scanned_at,
+            'MMM dd, y HH:mm:ss'
+          )
+      }
+    });
+  };
+  private preparePlatformsData = (platforms) => {
+    return platforms.map(platform => {
+      return {
+        'Name': platform.platform,
+        'Version': platform.kube_version,
+        'Base OS': platform.base_os,
+        'High': platform.high,
+        'Medium': platform.medium,
+        'Low': platform.low ,
+        'Vulnerabilities': platform.vulnerabilities.map(vul => this.reformCveName(vul)),
+        'Scanned at': this.datePipe.transform(
+            platform.scanned_at,
+            'MMM dd, y HH:mm:ss'
+          )
+      }
+    });
+  };
+  private prepareImagesData = (images) => {
+    return images.map(image => {
+      return {
+        'Name': image.platform,
+        'ID': image.id,
+        'High': image.high,
+        'Medium': image.medium,
+        'Low': image.low ,
+        'Vulnerabilities': image.vulnerabilities.map(vul => this.reformCveName(vul))
+      }
+    });
+  };
+  
+  private reformCveName = (cveName) => {
+    let cveNameArray = cveName.split('_');
+    return `${cveNameArray[1]} (${cveNameArray[0]})`;
+  };
+
+  private prepareEntryData = (cve, reportType: string) => {
+    cve.description = cve.description
+      ? `${cve.description.replace(/\"/g, "'")}`
+      : '';
+    if (cve.platforms && Array.isArray(cve.platform)) {
+      cve.platforms = cve.platforms.reduce(
+        (acc, curr) => acc + curr.display_name + ' ',
+        ''
+      );
+    }
+    if (cve.filteredImages && Array.isArray(cve.filteredImages)) {
+      cve.images = cve.filteredImages.reduce(
+        (acc, curr) => acc + curr.display_name + ' ',
+        ''
+      );
+    }
+    if (cve.nodes && Array.isArray(cve.nodes)) {
+      cve.nodes = cve.nodes.reduce(
+        (acc, curr) => acc + curr.display_name + ' ',
+        ''
+      );
+    }
+    if (cve.workloads && Array.isArray(cve.workloads)) {
+      let filteredWorkload = cve.workloads.filter(workload =>
+        this.vulnerabilitiesFilterService.namespaceFilter(workload)
+      );
+
+      filteredWorkload = filteredWorkload.filter(workload =>
+        this.vulnerabilitiesFilterService.serviceFilter(workload)
+      );
+
+      filteredWorkload = filteredWorkload.filter(workload =>
+        this.vulnerabilitiesFilterService.workloadFilter(workload)
+      );
+
+      cve.workloads = Array.from(
+        filteredWorkload.reduce(
+          (acc, curr) => acc.add(curr.display_name),
+          new Set()
+        )
+      ).join(' ');
+
+      cve.services = Array.from(
+        filteredWorkload.reduce(
+          (acc, curr) => acc.add(curr.service),
+          new Set()
+        )
+      ).join(' ');
+
+      cve.domains = Array.from(
+        filteredWorkload.reduce(
+          (acc, curr) => acc.add(curr.domain),
+          new Set()
+        )
+      ).join(' ');
+
+      cve.images = cve.images.concat(
+        Array.from(
+          filteredWorkload.reduce(
+            (acc, curr) => acc.add(curr.image),
+            new Set()
+          )
+        ).join(' ')
+      );
+      console.log(
+        'cve.workloads: ',
+        cve.workloads,
+        'cve.services:',
+        cve.services,
+        'cve.domains:',
+        cve.domains,
+        'cve.images:',
+        cve.images
+      );
+    }
+
+    if (cve.packages) {
+      cve['package_versions->fixed_version'] = Object.entries(cve.packages)
+        .map(([k, v]) => {
+          return `${k}:(${(v as any).reduce(
+            (acc, curr) =>
+              acc +
+              curr.package_version +
+              ' -> ' +
+              (curr.fixed_version || 'N/A') +
+              ' ',
+            ''
+          )})`;
+        })
+        .join(' ');
+    }
+    cve.last_modified_datetime = this.datePipe.transform(
+      JSON.parse(JSON.stringify(cve.last_modified_timestamp)) * 1000,
+      'MMM dd, y HH:mm:ss'
+    );
+    cve.published_datetime = this.datePipe.transform(
+      JSON.parse(JSON.stringify(cve.published_timestamp)) * 1000,
+      'MMM dd, y HH:mm:ss'
+    );
+    delete cve.package_versions;
+    if (reportType === 'assets_view') {
+      delete cve.workloads;
+      delete cve.nodes;
+      delete cve.platforms;
+      delete cve.images;
+    }
+    return cve;
+  };
 }

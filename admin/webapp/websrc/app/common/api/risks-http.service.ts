@@ -120,4 +120,12 @@ export class RisksHttpService {
       PathConstant.COMPLIANCE_TEMPLATE_URL
     );
   }
+
+  postAssetsViewData(queryToken: string, lastModifiedTime: number) {
+    return GlobalVariable.http.patch<any>(
+      PathConstant.ASSETS_VULS_URL,
+      { lastModifiedTime: lastModifiedTime },
+      {params: { queryToken: queryToken }}
+    );
+  }
 }

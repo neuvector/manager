@@ -18,6 +18,7 @@ export class AssetsViewReportComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.reportPage === 'vulnerabilities') {
+      console.log("this.masterGrids", this.masterGrids)
       this.masterGrids[0] = this.masterGrids[0].sort((a, b) => {
         return b.high + b.medium - (a.high + a.medium);
       });

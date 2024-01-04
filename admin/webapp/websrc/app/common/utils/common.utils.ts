@@ -54,6 +54,7 @@ export function arrayToCsv(array: any, title: string = '') {
   let line: string = '';
   let result: string = '';
   let columns: string[] = [];
+  if(!Array.isArray(array) || array.length === 0) return result;
   if (title.length > 0) {
     result += title + '\r\n';
   }

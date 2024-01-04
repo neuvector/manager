@@ -46,7 +46,7 @@
       *ngFor="let image of images; let i = index"
       [attr.data-index]="i">
       <td class="print-cell" style="width: 30%">
-        {{ image.image_name }}
+        {{ image.name }}
       </td>
       <td
         *ngIf="reportPage === 'vulnerabilities'"
@@ -67,9 +67,9 @@
         style="width: 60%">
         <div *ngIf="image.high + image.medium + image.low > 0">
           <span
-            *ngFor="let item of image.vulnerabilites"
-            class="margin-right-s text-{{ item.style }}">
-            {{ item.text.trim() }}
+            *ngFor="let item of image.vulnerabilities"
+            class="margin-right-s text-{{ item.split('_')[0] }}">
+            {{ item.split('_')[1].trim() }}
           </span>
         </div>
         <div *ngIf="image.high + image.medium + image.low === 0">

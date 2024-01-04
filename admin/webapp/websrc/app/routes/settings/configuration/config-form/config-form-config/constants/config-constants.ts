@@ -313,7 +313,7 @@ export const DurationToggleField = {
   key: 'duration_toggle',
   type: FormlyComponents.TOGGLE,
   templateOptions: {
-    label: 'audit.gridHeader.DURATION',
+    label: 'setting.ENABLED',
     labelPosition: 'before',
   },
   expressionProperties: {
@@ -322,8 +322,8 @@ export const DurationToggleField = {
   hooks: {
     onInit: field => {
       const ctrl = field.parent.formControl.get('misc.unused_group_aging');
-      ctrl.valueChanges.subscribe(duration => {
-        if (!duration) {
+      ctrl.valueChanges.subscribe(enabled => {
+        if (!enabled) {
           field.formControl.setValue(false);
         }
       });

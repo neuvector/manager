@@ -1131,6 +1131,7 @@ export class NetworkActivitiesComponent
         });
       setTimeout(() => {
         this.popupState.transitTo(PopupState.onNode);
+        this.stopRefreshSession();
       }, 300);
     };
 

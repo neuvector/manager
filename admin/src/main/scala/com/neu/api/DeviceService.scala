@@ -1,11 +1,19 @@
 package com.neu.api
 
 import akka.util.Timeout
+import com.google.common.net.UrlEscapers
 import com.neu.client.RestClient
 import com.neu.client.RestClient._
 import com.neu.core.AuthenticationManager
 import com.neu.model.SystemConfigJsonProtocol._
-import com.neu.model.{ SystemConfig, SystemConfigWrap, Webhook, WebhookConfigWrap }
+import com.neu.model.{
+  RemoteRepository,
+  RemoteRepositoryWrap,
+  SystemConfig,
+  SystemConfigWrap,
+  Webhook,
+  WebhookConfigWrap
+}
 import com.typesafe.scalalogging.LazyLogging
 import spray.http.HttpMethods._
 import spray.http._
@@ -334,6 +342,60 @@ class DeviceService()(implicit executionContext: ExecutionContext)
                       }
                     }
                   }
+                }
+              }
+            }
+          }
+        } ~
+        path("remote_repository") {
+          post {
+            Utils.respondWithWebServerHeaders() {
+              entity(as[RemoteRepository]) { remoteRepository =>
+                complete {
+                  val payload = remoteRepositoryToJson(
+                    remoteRepository
+                  )
+                  logger.info("Create remote repository: {}", payload)
+                  RestClient.httpRequestWithHeader(
+                    s"${baseClusterUri(tokenId)}/system/config/remote_repository",
+                    POST,
+                    payload,
+                    tokenId
+                  )
+                }
+              }
+            }
+          } ~
+          patch {
+            Utils.respondWithWebServerHeaders() {
+              entity(as[RemoteRepositoryWrap]) { remoteRepositoryWrap =>
+                complete {
+                  val payload = remoteRepositoryWrapToJson(
+                    remoteRepositoryWrap
+                  )
+                  val name = remoteRepositoryWrap.config.nickname
+                  logger.info("Update remote repository: {}", payload)
+                  RestClient.httpRequestWithHeader(
+                    s"${baseClusterUri(tokenId)}/system/config/remote_repository/${UrlEscapers.urlFragmentEscaper().escape(name)}",
+                    PATCH,
+                    payload,
+                    tokenId
+                  )
+                }
+              }
+            }
+          } ~
+          delete {
+            Utils.respondWithWebServerHeaders() {
+              parameter('name) { name =>
+                complete {
+                  logger.info("Delete remote repository: {}", name)
+                  RestClient.httpRequestWithHeader(
+                    s"${baseClusterUri(tokenId)}/system/config/remote_repository/${UrlEscapers.urlFragmentEscaper().escape(name)}",
+                    DELETE,
+                    "",
+                    tokenId
+                  )
                 }
               }
             }

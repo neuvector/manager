@@ -6,6 +6,8 @@ import {
   ConfigV2Response,
   DebugPostBody,
   IBMSetupGetResponse,
+  RemoteRepository,
+  RemoteRepositoryWrapper,
   UsageReport,
 } from '@common/types';
 import { GlobalVariable } from '@common/variables/global.variable';
@@ -133,5 +135,26 @@ export class ConfigHttpService {
           return throwError(error);
         })
       );
+  }
+
+  postRemoteRepository(payload: RemoteRepository): Observable<unknown> {
+    return GlobalVariable.http.post<unknown>(
+      PathConstant.REMOTE_REPO_URL,
+      payload
+    );
+  }
+
+  patchRemoteRepository(payload: RemoteRepositoryWrapper): Observable<unknown> {
+    return GlobalVariable.http.patch<unknown>(
+      PathConstant.REMOTE_REPO_URL,
+      payload
+    );
+  }
+
+  deleteRemoteRepository(body): Observable<unknown> {
+    return GlobalVariable.http.delete<unknown>(
+      PathConstant.REMOTE_REPO_URL,
+      body
+    );
   }
 }

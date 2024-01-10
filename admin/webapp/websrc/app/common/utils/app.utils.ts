@@ -190,11 +190,15 @@ export class UtilsService {
       },
       onGridReady: params => {
         setTimeout(() => {
-          params.api.sizeColumnsToFit();
+          if (params.api) {
+            params.api.sizeColumnsToFit();
+          }
         }, 300);
         win.on(GlobalConstant.AG_GRID_RESIZE, () => {
           setTimeout(() => {
-            params.api.sizeColumnsToFit();
+            if (params.api) {
+              params.api.sizeColumnsToFit();
+            }
           }, 100);
         });
       },

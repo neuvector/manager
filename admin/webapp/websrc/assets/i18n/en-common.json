@@ -3110,11 +3110,39 @@
       "DELETE_CONFIRM": "Do you want to remove webhook - {{name}}",
       "OTHER_TYPE": "Key-Value Pairs"
     },
+    "remote_repository": {
+      "title": "Remote Repository Configuration",
+      "description": "To configure a remote GitHub repository for exporting CRD files",
+      "add": "Add Remote Repository",
+      "edit": "Edit Remote Repository",
+      "delete": "Delete Remote Repository",
+      "details": {
+        "provider": "Repository Provider",
+        "provider_hint": "'github' is the only supported provider.",
+        "name": "Name of the remote repository",
+        "name_hint": "'default' is the only supported repository name.",
+        "comment": "Comment",
+        "comment_hint": "",
+        "owner": "Owner User Name",
+        "owner_hint": "Get the owner from the GitHub URL: \"https://github.com/owner/repository\"",
+        "repository_name": "Repository Name",
+        "repository_name_hint": "Get the repository from the GitHub URL: \"https://github.com/owner/repository\"",
+        "repository_branch": "Branch Name",
+        "repository_branch_hint": "The specific branch within the repository that contains the CRD files. The default branch is 'master'.",
+        "personal_access_token": "Personal Access Token",
+        "personal_access_token_hint": "Retrieve the token from GitHub Settings -> Developer settings -> Personal access tokens.",
+        "personal_access_token_committer_name": "Committer Name",
+        "personal_access_token_committer_name_hint": "The name of the committer associated with the personal access token",
+        "personal_access_token_email": "Email",
+        "personal_access_token_email_hint": "The email address associated with the committer"
+      }
+    },
     "directory_type": {
       "OPEN_LDAP": "OpenLDAP",
       "MS_AD": "Microsoft Active Directory"
     },
     "message": {
+      "EMAIL_Format": "Invalid email format.",
       "IP_REQUIRED": "You must specify IP.",
       "IP_INVALID": "That doesn't look like a valid ip.",
       "PORT_REQUIRED": "You must supply a port.",

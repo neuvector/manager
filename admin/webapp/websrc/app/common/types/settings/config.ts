@@ -1,4 +1,9 @@
-import { PolicyMode, ProfileBaseline, ScannerAutoscaleStrategy } from '..';
+import {
+  PolicyMode,
+  ProfileBaseline,
+  RemoteRepository,
+  ScannerAutoscaleStrategy,
+} from '..';
 
 export interface ConfigResponse
   extends SvcConfig,
@@ -40,6 +45,7 @@ export interface ConfigV2Response {
   auth: AuthConfig;
   misc: MiscConfig;
   webhooks: Webhook[];
+  remote_repositories: RemoteRepository[];
   proxy: ProxyConfig;
   ibmsa: IBMSAConfig;
   net_svc: NetConfig;

@@ -19,3 +19,6 @@
 <ng-container *ngIf="field.formControl.hasError(formlyValidators.PortRange)">
   {{ 'setting.message.PORT_RANGE' | translate }}
 </ng-container>
+<ng-container *ngIf="field.formControl.hasError(formlyValidators.EmailFormat)">
+  {{ 'setting.message.EMAIL_Format' | translate }}
+</ng-container>

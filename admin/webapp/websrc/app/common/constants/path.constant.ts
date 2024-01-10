@@ -144,4 +144,5 @@ export class PathConstant {
   public static CSP_SUPPORT_URL = 'csp-support';
   public static REBRAND = 'rebrand';
   public static NOTIFICATION_PERSIST_URL = 'notification/accept';
+  public static REMOTE_REPO_URL = 'remote_repository';
 }

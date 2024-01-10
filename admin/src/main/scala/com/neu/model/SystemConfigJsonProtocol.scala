@@ -1,5 +1,6 @@
 package com.neu.model
 
+import com.neu.client.RestClient.arrayFormat
 import spray.json.{ DefaultJsonProtocol, _ }
 
 /**
@@ -13,7 +14,14 @@ object SystemConfigJsonProtocol extends DefaultJsonProtocol {
   implicit val registyHttpProxyFormat: RootJsonFormat[RegistyHttpProxy] = jsonFormat3(
     RegistyHttpProxy
   )
-  implicit val webhookFormat: RootJsonFormat[Webhook]                 = jsonFormat6(Webhook)
+  implicit val githubConfigurationFormat: RootJsonFormat[GithubConfiguration] = jsonFormat6(
+    GithubConfiguration
+  )
+  implicit val webhookFormat: RootJsonFormat[Webhook]             = jsonFormat6(Webhook)
+  implicit val remoteRepoFormat: RootJsonFormat[RemoteRepository] = jsonFormat4(RemoteRepository)
+  implicit val remoteRepositoryWrapFormat: RootJsonFormat[RemoteRepositoryWrap] = jsonFormat1(
+    RemoteRepositoryWrap
+  )
   implicit val systemConfigFormat: RootJsonFormat[SystemConfig]       = jsonFormat22(SystemConfig)
   implicit val systemNetConfigFormat: RootJsonFormat[SystemNetConfig] = jsonFormat3(SystemNetConfig)
   implicit val systemAtmoConfigFormat: RootJsonFormat[SystemAtmoConfig] = jsonFormat4(
@@ -57,7 +65,7 @@ object SystemConfigJsonProtocol extends DefaultJsonProtocol {
   implicit val systemConfigMiscCfgV2Format: RootJsonFormat[SystemConfigMiscCfgV2] = jsonFormat7(
     SystemConfigMiscCfgV2
   )
-  implicit val systemConfigV2Format: RootJsonFormat[SystemConfigV2] = jsonFormat8(SystemConfigV2)
+  implicit val systemConfigV2Format: RootJsonFormat[SystemConfigV2] = jsonFormat9(SystemConfigV2)
 
   implicit val systemConfigWrapFormat: RootJsonFormat[SystemConfigWrap] = jsonFormat5(
     SystemConfigWrap
@@ -75,6 +83,12 @@ object SystemConfigJsonProtocol extends DefaultJsonProtocol {
 
   def webhookConfigWrapToJson(webhookConfigWrap: WebhookConfigWrap): String =
     webhookConfigWrap.toJson.compactPrint
+
+  def remoteRepositoryToJson(remoteRepository: RemoteRepository): String =
+    remoteRepository.toJson.compactPrint
+
+  def remoteRepositoryWrapToJson(remoteRepositoryWrap: RemoteRepositoryWrap): String =
+    remoteRepositoryWrap.toJson.compactPrint
 
   def jsonToSystemConfigWrap(systemConfigWrap: String): SystemConfigWrap =
     systemConfigWrap.parseJson.convertTo[SystemConfigWrap]

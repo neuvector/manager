@@ -7,13 +7,12 @@ import {
 } from '@angular/core';
 import { MapConstant } from '@common/constants/map.constant';
 import { ComponentCanDeactivate } from '@common/guards/pending-changes.guard';
-import { ConfigV2Response, Enforcer } from '@common/types';
+import { ConfigV2Response, Enforcer, RemoteRepository } from '@common/types';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { TranslateService } from '@ngx-translate/core';
 import { SettingsService } from '@services/settings.service';
-import { Observable, Subject } from 'rxjs';
-import { repeatWhen } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { ConfigFormComponent } from './config-form/config-form.component';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { Router } from '@angular/router';
@@ -37,6 +36,12 @@ export class ConfigurationComponent
       this.config.misc.controller_debug.length > 0 &&
       this.config.misc.controller_debug[0] === 'cpath'
     );
+  }
+  get remoteRepository(): RemoteRepository | undefined {
+    return this.config.remote_repositories &&
+      this.config.remote_repositories.length > 0
+      ? this.config.remote_repositories[0]
+      : undefined;
   }
 
   constructor(

@@ -14,6 +14,7 @@ import {
   PasswordProfile,
   PolicyMode,
   Apikey,
+  RemoteRepository,
 } from '@common/types';
 
 @Injectable()
@@ -176,5 +177,16 @@ export class SettingsService {
 
   getCspSupport() {
     return this.configHttpService.getCspSupport();
+  }
+
+  updateRemoteRepository(payload: RemoteRepository, isEdit: boolean) {
+    if (isEdit) {
+      return this.configHttpService.patchRemoteRepository({ config: payload });
+    } else {
+      return this.configHttpService.postRemoteRepository(payload);
+    }
+  }
+  deleteRemoteRepository(body: any) {
+    return this.configHttpService.deleteRemoteRepository(body);
   }
 }

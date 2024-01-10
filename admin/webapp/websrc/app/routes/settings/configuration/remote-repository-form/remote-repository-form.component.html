@@ -1,0 +1,26 @@
+<div class="my-md-4 mx-3">
+  <div class="d-flex">
+    <h1 class="h4 font-weight-normal" id="remote-repository-title">{{ 'setting.remote_repository.title' | translate }}</h1>
+    <div class="d-flex flex-column margin-left-m margin-top-s">
+      <span class="text-muted">{{'setting.remote_repository.description' | translate}}</span>
+    </div>
+  </div>
+  <div class="my-md-2 mx-3">
+    <form [formGroup]="remoteRepoForm" (ngSubmit)="submit()">
+      <formly-form [fields]="remoteRepoFields" [model]="remoteRepoModel" [form]="remoteRepoForm">
+      </formly-form>
+      <div class="d-flex justify-content-end align-items-center mt-5">
+        <app-loading-button
+          *appDisplayControl="'write_config'"
+          [appearance]="'mat-raised-button'"
+          [color]="'primary'"
+          [disabled]="remoteRepoForm.invalid || remoteRepoForm.pristine || submittingForm"
+          [loading]="submittingForm"
+          [text]="'setting.SUBMIT' | translate"
+          [type]="'submit'"
+        >
+        </app-loading-button>
+      </div>
+    </form>
+  </div>
+</div>

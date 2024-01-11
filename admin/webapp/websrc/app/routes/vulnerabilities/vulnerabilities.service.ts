@@ -3,7 +3,14 @@ import { BehaviorSubject, combineLatest, Observable, of, Subject } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { RisksHttpService } from '@common/api/risks-http.service';
 import { AssetsHttpService } from '@common/api/assets-http.service';
-import { catchError, map, repeatWhen, tap } from 'rxjs/operators';
+import {
+  catchError,
+  finalize,
+  map,
+  repeatWhen,
+  switchMap,
+  tap,
+} from 'rxjs/operators';
 import {
   Compliance,
   HostData,
@@ -13,10 +20,14 @@ import {
   Workload,
   WorkloadsData,
   CfgType,
+  VulnerabilitiesQueryData,
+  VulnerabilitiesQuerySummary,
+  OrderByOption,
+  VulQueryOrderByColumnOption,
 } from '@common/types';
 import { PlatformsData } from '@common/types/compliance/platformsData';
 import { setRisks, sortByDisplayName } from '@common/utils/common.utils';
-import { VulnerabilitiesData } from '@common/types/vulnerabilities/vulnerabilities';
+import { VulnerabilitiesData } from '@common/types';
 import { VulnerabilitiesFilterService } from './vulnerabilities.filter.service';
 import { AssetsViewPdfService } from './pdf-generation/assets-view-pdf.service';
 import { MapConstant } from '@common/constants/map.constant';
@@ -24,6 +35,25 @@ import { GridApi } from 'ag-grid-community';
 
 @Injectable()
 export class VulnerabilitiesService {
+  activeToken!: string;
+  activeCount!: number;
+  activeSummary!: VulnerabilitiesQuerySummary;
+  private activeSummarySubject$ = new Subject();
+  activeSummary$ = this.activeSummarySubject$.asObservable();
+  vulnerabilitiesData$ = this.vulnerabilitiesFilterService.vulQuery$.pipe(
+    switchMap(vulQuery =>
+      this.risksHttpService.postVulnerabilityQuery(vulQuery)
+    ),
+    tap(queryData => {
+      this.activeToken = queryData.query_token;
+      this.activeSummary = queryData.summary;
+      this.activeSummarySubject$.next();
+      this.vulnerabilitiesFilterService.filteredCount =
+        queryData.total_matched_records;
+      this.activeCount = queryData.total_records;
+      this.vulnerabilitiesFilterService.activePage = 0;
+    })
+  );
   imageMap!: Map<string, { high: number; medium: number; low: number }>;
   hostMap!: Map<string, { high: number; medium: number; low: number }>;
   topNodes!: [string, { high: number; medium: number; low: number }][];
@@ -47,6 +77,7 @@ export class VulnerabilitiesService {
   platformMap4Pdf!: {};
   hostMap4Pdf!: {};
   private refreshSubject$ = new Subject();
+  refreshing$ = new Subject();
   private selectedVulnerabilitySubject$ = new BehaviorSubject<any>(undefined);
   selectedVulnerability$ = this.selectedVulnerabilitySubject$.asObservable();
 
@@ -112,43 +143,33 @@ export class VulnerabilitiesService {
     this.countDistributionSubject$.next();
   }
 
-  initVulnerability() {
-    this.initVulnerabilityDetails();
-    return combineLatest([
-      this.getDomain(),
-      this.getContainer(),
-      this.getHost(),
-      this.getPlatform(),
-      this.getVulnerabilities(),
-    ]).pipe(
-      map(([domain, container, host, platform, vulnerabilities]) => {
-        return {
-          domain,
-          container,
-          host,
-          platform,
-          vulnerabilities,
-        };
-      }),
-      tap(({ vulnerabilities: { vulnerabilities } }) => {
-        this.vulnerabilitiesFilterService.workloadMap = this.workloadMap;
-        setRisks(vulnerabilities, this.workloadMap);
-        this.assetsViewPdfService.masterData = {
-          workloadMap4Pdf: this.workloadMap4Pdf,
-          hostMap4Pdf: this.hostMap4Pdf,
-          platformMap4Pdf: this.platformMap4Pdf,
-          imageMap4Pdf: this.imageMap4Pdf,
-        };
-        this.vulnerabilitiesFilterService.resetFilter();
-        this.vulnerabilitiesFilterService.filtered = false;
-        this.vulnerabilitiesFilterService.filteredCis = vulnerabilities;
-      }),
-      repeatWhen(() => this.refreshSubject$)
-    );
+  getVulnerabilitiesPage(
+    start: number,
+    orderby?: OrderByOption,
+    orderbyColumn?: VulQueryOrderByColumnOption
+  ) {
+    if (orderby && orderbyColumn) {
+      return this.risksHttpService.getVulnerabilitiesQuery({
+        token: this.activeToken,
+        start: start,
+        row: this.vulnerabilitiesFilterService.paginationBlockSize,
+        orderbyColumn: orderbyColumn,
+        orderby: orderby,
+      });
+    } else {
+      return this.risksHttpService.getVulnerabilitiesQuery({
+        token: this.activeToken,
+        start: start,
+        row: this.vulnerabilitiesFilterService.paginationBlockSize,
+      });
+    }
   }
 
   refresh() {
-    this.refreshSubject$.next(true);
+    this.refreshing$.next(true);
+    this.vulnerabilitiesFilterService.vulQuerySubject$.next(
+      this.vulnerabilitiesFilterService.vulQuerySubject$.value
+    );
   }
 
   getNodeBrief(id: string): Observable<HostData> {
@@ -177,18 +198,6 @@ export class VulnerabilitiesService {
     );
   }
 
-  compareImpact = (cve1, cve2) => {
-    if (cve1.platforms.length === cve2.platforms.length) {
-      if (cve1.images.length === cve2.images.length) {
-        if (cve1.nodes.length === cve2.nodes.length) {
-          return cve1.workloads.length - cve2.workloads.length;
-        } else return cve1.nodes.length - cve2.nodes.length;
-      } else return cve1.images.length - cve2.images.length;
-    } else {
-      return cve1.platforms.length - cve2.platforms.length;
-    }
-  };
-
   acceptVulnerability(profile: VulnerabilityProfile) {
     return this.risksHttpService.postCVEProfile(profile);
   }
@@ -201,7 +210,7 @@ export class VulnerabilitiesService {
     );
   }
 
-  private getDomain(): Observable<String[]> {
+  getDomain(): Observable<string[]> {
     return this.assetsHttpService.getDomain().pipe(
       map(data => {
         return data.domains
@@ -215,321 +224,6 @@ export class VulnerabilitiesService {
           )
         ) {
           return of([]);
-        } else {
-          throw err;
-        }
-      })
-    );
-  }
-
-  private getContainer(): Observable<WorkloadsData> {
-    return this.assetsHttpService.getContainerBrief().pipe(
-      tap(data => {
-        data.workloads.forEach(workload => {
-          this.workloadMap.set(workload.id, workload);
-          this.workloadMap4Pdf[workload.id] = {
-            id: workload.id,
-            pod_id: workload.id || '',
-            pod_name:
-              workload.display_name || workload.pod_name || workload.name,
-            domain: workload.domain || '',
-            applications: workload.applications || [],
-            policy_mode: workload.policy_mode || '',
-            service: workload.service || '',
-            service_group: workload.service_group || '',
-            image_id: workload.image_id,
-            image: workload.image,
-            scanned_at: workload.scan_summary
-              ? this.transformDate(workload.scan_summary.scanned_at)
-              : '',
-            high: 0,
-            medium: 0,
-            low: 0,
-            evaluation: 0, //0: compliant, 1: risky
-            complianceCnt: 0,
-            vulnerabilites: [],
-            complianceList: [],
-          };
-          if (workload.state !== 'exit') {
-            if (workload.children) {
-              workload.children.forEach(child => {
-                let containerInfo = JSON.parse(JSON.stringify(workload));
-                containerInfo.image_id = child.image_id;
-                containerInfo.image = child.image;
-                this.workloadMap.set(child.id, containerInfo);
-                this.workloadMap4Pdf[child.id] = {
-                  id: child.id,
-                  pod_id: workload.id || '',
-                  pod_name:
-                    workload.display_name || workload.pod_name || workload.name,
-                  domain: workload.domain || '',
-                  applications: workload.applications || [],
-                  policy_mode: workload.policy_mode || '',
-                  service: workload.service || '',
-                  service_group: workload.service_group || '',
-                  image: child.image,
-                  scanned_at: workload.scan_summary
-                    ? this.transformDate(workload.scan_summary.scanned_at)
-                    : '',
-                  high: 0,
-                  medium: 0,
-                  low: 0,
-                  evaluation: 0, //0: compliant, 1: risky
-                  complianceCnt: 0,
-                  vulnerabilites: [],
-                  complianceList: [],
-                };
-                this.imageMap4Pdf[child.image_id] = {
-                  workloadId: child.id,
-                  image_id: child.image_id,
-                  image_name: child.image,
-                  high: 0,
-                  medium: 0,
-                  low: 0,
-                  evaluation: 0, //0: compliant, 1: risky
-                  complianceCnt: 0,
-                  vulnerabilites: [],
-                  complianceList: [],
-                };
-              });
-            }
-          }
-        });
-      }),
-      catchError(err => {
-        if (
-          [MapConstant.NOT_FOUND, MapConstant.ACC_FORBIDDEN].includes(
-            err.status
-          )
-        ) {
-          return of({ workloads: [] });
-        } else {
-          throw err;
-        }
-      })
-    );
-  }
-
-  private getHost(): Observable<HostsData> {
-    return this.assetsHttpService.getNodeBrief().pipe(
-      tap(data => {
-        data.hosts.forEach(host => {
-          this.hostMap4Pdf[host.id] = {
-            id: host.id,
-            name: host.name,
-            containers: host.containers,
-            cpus: host.cpus,
-            memory: host.memory,
-            os: host.os || '',
-            kernel: host.kernel || '',
-            policy_mode: host.policy_mode || '',
-            scanned_at: host.scan_summary
-              ? this.transformDate(host.scan_summary.scanned_at)
-              : '',
-            high: 0,
-            medium: 0,
-            low: 0,
-            evaluation: 0, //0: compliant, 1: risky
-            complianceCnt: 0,
-            vulnerabilites: [],
-            complianceList: [],
-          };
-        });
-      }),
-      catchError(err => {
-        if (
-          [MapConstant.NOT_FOUND, MapConstant.ACC_FORBIDDEN].includes(
-            err.status
-          )
-        ) {
-          return of({ hosts: [] });
-        } else {
-          throw err;
-        }
-      })
-    );
-  }
-
-  private getPlatform(): Observable<PlatformsData> {
-    return this.assetsHttpService.getPlatform().pipe(
-      tap(data => {
-        data.platforms.forEach(platform => {
-          this.platformMap4Pdf[platform.platform] = {
-            platform: platform.platform,
-            base_os: platform.base_os || '',
-            kube_version: platform.kube_version || '',
-            openshift_version: platform.openshift_version || '',
-            high: 0,
-            medium: 0,
-            low: 0,
-            complianceCnt: 0,
-            vulnerabilites: [],
-            complianceList: [],
-          };
-        });
-      }),
-      catchError(err => {
-        if (
-          [MapConstant.NOT_FOUND, MapConstant.ACC_FORBIDDEN].includes(
-            err.status
-          )
-        ) {
-          return of({ platforms: [] });
-        } else {
-          throw err;
-        }
-      })
-    );
-  }
-
-  private getVulnerabilities(): Observable<VulnerabilitiesData> {
-    return this.risksHttpService.getVulnerabilities().pipe(
-      map(vulnerabilityData => {
-        vulnerabilityData.vulnerabilities.forEach(vulnerability => {
-          let domains = new Set();
-          vulnerability.nodes = vulnerability.nodes.map(nodeId => {
-            vulnerabilityData.nodes[nodeId][0].id = nodeId;
-            vulnerabilityData.nodes[nodeId][0].domains?.forEach(domain => {
-              domains.add(domain);
-            });
-            return vulnerabilityData.nodes[nodeId][0];
-          });
-          vulnerability.workloads = vulnerability.workloads.map(workloadId => {
-            vulnerabilityData.workloads[workloadId][0].id = workloadId;
-            vulnerabilityData.workloads[workloadId][0].domains?.forEach(
-              domain => {
-                domains.add(domain);
-              }
-            );
-            return vulnerabilityData.workloads[workloadId][0];
-          });
-          vulnerability.platforms = vulnerability.platforms.map(platformId => {
-            vulnerabilityData.platforms[platformId][0].id = platformId;
-            vulnerabilityData.platforms[platformId][0].domains?.forEach(
-              domain => {
-                domains.add(domain);
-              }
-            );
-            return vulnerabilityData.platforms[platformId][0];
-          });
-          vulnerability.images = vulnerability.images.map(imageId => {
-            vulnerabilityData.images[imageId][0].id = imageId;
-            vulnerabilityData.images[imageId][0].domains?.forEach(domain => {
-              domains.add(domain);
-            });
-            return vulnerabilityData.images[imageId][0];
-          });
-          vulnerability.domains = [...domains];
-          vulnerability.images.sort(sortByDisplayName);
-          vulnerability.workloads.sort(sortByDisplayName);
-          vulnerability.nodes.sort(sortByDisplayName);
-          vulnerability.platforms.sort(sortByDisplayName);
-        });
-        return vulnerabilityData;
-      }),
-      tap(({ vulnerabilities }) => {
-        vulnerabilities.forEach(cve => {
-          if (cve.nodes.length > 0) {
-            cve.nodes.forEach(host => {
-              let exist = this.hostMap.get(host.display_name);
-              if (!exist)
-                this.hostMap.set(host.display_name, {
-                  high: cve.severity === 'High' ? 1 : 0,
-                  medium: cve.severity === 'Medium' ? 1 : 0,
-                  low: cve.severity === 'Low' ? 1 : 0,
-                });
-              else {
-                switch (cve.severity) {
-                  case 'High':
-                    exist.high += 1;
-                    this.hostMap.set(host.display_name, exist);
-                    break;
-                  case 'Medium':
-                    exist.medium += 1;
-                    this.hostMap.set(host.display_name, exist);
-                    break;
-                  case 'Low':
-                    exist.low += 1;
-                    this.hostMap.set(host.display_name, exist);
-                    break;
-                  default:
-                    break;
-                }
-              }
-            });
-          }
-          if (cve.images.length > 0) {
-            cve.images.forEach(image => {
-              let exist = this.imageMap.get(image.display_name);
-              if (!exist)
-                this.imageMap.set(image.display_name, {
-                  high: cve.severity === 'High' ? 1 : 0,
-                  medium: cve.severity === 'Medium' ? 1 : 0,
-                  low: cve.severity === 'Low' ? 1 : 0,
-                });
-              else {
-                switch (cve.severity) {
-                  case 'High':
-                    exist.high += 1;
-                    this.imageMap.set(image.display_name, exist);
-                    break;
-                  case 'Medium':
-                    exist.medium += 1;
-                    this.imageMap.set(image.display_name, exist);
-                    break;
-                  case 'Low':
-                    exist.low += 1;
-                    this.imageMap.set(image.display_name, exist);
-                    break;
-                  default:
-                    break;
-                }
-              }
-            });
-            this.countDistribution.image += 1;
-          }
-          if (cve.severity === 'High') this.countDistribution.high += 1;
-          if (cve.severity === 'Medium') this.countDistribution.medium += 1;
-          if (cve.severity === 'Low') this.countDistribution.low += 1;
-          if (cve.platforms.length) this.countDistribution.platform += 1;
-          if (cve.nodes.length) this.countDistribution.node += 1;
-          if (cve.workloads.length) this.countDistribution.container += 1;
-        });
-        this.topNodes = [...this.hostMap]
-          .sort((a, b) => {
-            if (a[1].high === b[1].high && a[1].medium === b[1].medium) {
-              return b[1].low - a[1].low;
-            } else if (a[1].high === b[1].high) {
-              return b[1].medium - a[1].medium;
-            } else return b[1].high - a[1].high;
-          })
-          .slice(0, 5);
-        this.topImages = [...this.imageMap]
-          .sort((a, b) => {
-            if (a[1].high === b[1].high && a[1].medium === b[1].medium) {
-              return b[1].low - a[1].low;
-            } else if (a[1].high === b[1].high) {
-              return b[1].medium - a[1].medium;
-            } else return b[1].high - a[1].high;
-          })
-          .slice(0, 5);
-        this.topCve = vulnerabilities
-          .sort((a, b) => this.compareImpact(a, b) * -1)
-          .slice(0, 5);
-      }),
-      catchError(err => {
-        if (
-          [MapConstant.NOT_FOUND, MapConstant.ACC_FORBIDDEN].includes(
-            err.status
-          )
-        ) {
-          return of({
-            vulnerabilities: [],
-            nodes: {},
-            platforms: {},
-            images: {},
-            workloads: {},
-          });
         } else {
           throw err;
         }

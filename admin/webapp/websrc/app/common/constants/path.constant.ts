@@ -43,6 +43,7 @@ export class PathConstant {
   public static POLICY_URL = 'policy'; //poilcy
   public static POLICY_APP_URL = 'policy/application'; //poilcy
   public static POLICY_RULE_URL = 'policy/rule'; //poilcy
+  public static VUL_ASSET_URL = 'vulasset'; //risks
   public static RISK_CVE_URL = 'risk/cve'; //risks
   public static RISK_COMPLIANCE_URL = 'risk/compliance'; //risks
   public static RISK_COMPLIANCE_NIST_URL = 'risk/complianceNIST'; //risks

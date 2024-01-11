@@ -54,6 +54,7 @@ export interface IdName {
   policy_mode: string;
   domains: string[];
   service?: string;
+  image?: string;
 }
 
 export interface ComplianceData {

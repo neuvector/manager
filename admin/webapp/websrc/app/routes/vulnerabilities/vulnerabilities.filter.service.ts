@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
-import { VulnerabilityAsset, VulnerabilityView } from '@common/types';
+import {
+  VulnerabilityAsset,
+  VulnerabilityQuery,
+  VulnerabilityView,
+} from '@common/types';
 import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class VulnerabilitiesFilterService {
   readonly matchTypes = [
-    { id: 'equal', name: '=' },
+    { id: 'equals', name: '=' },
     {
       id: 'contains',
       name: this.translate.instant('admissionControl.operators.CONTAINS'),
@@ -17,28 +21,35 @@ export class VulnerabilitiesFilterService {
     { id: 'before', name: this.translate.instant('general.BEFORE') },
     { id: 'after', name: this.translate.instant('general.AFTER') },
   ];
+  vulQuerySubject$ = new BehaviorSubject<VulnerabilityQuery>(
+    this.initVulQuery()
+  );
+  vulQuery$ = this.vulQuerySubject$.asObservable();
   private filteredSubject$ = new BehaviorSubject(false);
   filtered$ = this.filteredSubject$.asObservable();
   filteredCount: number = 0;
   selectedScore = 'V3';
+  activePage: number = 0;
+  paginationPageSize = 100;
+  paginationBlockSize = 300;
 
   constructor(private translate: TranslateService) {}
 
   private _filtered = false;
 
   get filtered() {
-    return this._filtered || this.isAdvFilterOn();
+    return this._filtered;
   }
 
   set filtered(val) {
     this._filtered = val;
-    this.filteredSubject$.next(this.isAdvFilterOn() || this._filtered);
+    this.filteredSubject$.next(this._filtered);
   }
 
   private _filteredCis;
 
   get filteredCis() {
-    return JSON.parse(JSON.stringify(this._filteredCis));
+    return JSON.parse(JSON.stringify(this._filteredCis || '{}'));
   }
 
   set filteredCis(val) {
@@ -63,7 +74,6 @@ export class VulnerabilitiesFilterService {
 
   set advFilter(val) {
     this._advFilter = val;
-    this.filteredSubject$.next(this.isAdvFilterOn() || this._filtered);
   }
 
   resetFilter() {
@@ -240,24 +250,6 @@ export class VulnerabilitiesFilterService {
     return result;
   }
 
-  isAdvFilterOn() {
-    return (
-      this.advFilter.dt !== null ||
-      this.advFilter.modified_dt !== null ||
-      this.advFilter.packageType !== 'all' ||
-      this.advFilter.severityType !== 'all' ||
-      this.advFilter.selectedDomains.length > 0 ||
-      this.advFilter.serviceName ||
-      this.advFilter.imageName ||
-      this.advFilter.nodeName ||
-      this.advFilter.containerName ||
-      this.advFilter.sliderV2.minValue > 0 ||
-      this.advFilter.sliderV2.maxValue < 10 ||
-      this.advFilter.sliderV3.minValue > 0 ||
-      this.advFilter.sliderV3.maxValue < 10
-    );
-  }
-
   namespaceFilter(workload) {
     if (this.advFilter.selectedDomains.length) {
       const container = this.workloadMap.get(workload.id);
@@ -301,6 +293,31 @@ export class VulnerabilitiesFilterService {
         else return this.advFilter.containerName === container.display_name;
       } else return false;
     } else return true;
+  }
+
+  initVulQuery(): VulnerabilityQuery {
+    return {
+      last_modified_timestamp: undefined,
+      last_modified_timestamp_option: 'custom',
+      publishedType: 'before',
+      publishedTime: undefined,
+      packageType: 'all',
+      severityType: 'all',
+      scoreType: 'v3',
+      scoreV3: [0, 10],
+      scoreV2: [0, 10],
+      matchTypeService: 'equals',
+      serviceName: '',
+      matchTypeNs: 'equals',
+      selectedDomains: [],
+      matchTypeImage: 'equals',
+      imageName: '',
+      matchTypeNode: 'equals',
+      nodeName: '',
+      matchTypeContainer: 'equals',
+      containerName: '',
+      viewType: 'all',
+    };
   }
 
   initAdvFilter() {

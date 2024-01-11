@@ -22,6 +22,7 @@ export class QuickFilterComponent implements OnInit, OnChanges {
   @Input() filteredCount: number = 0;
   @Input() showCount: boolean = true;
   @Input() condition: any = false;
+  @Input() disabled: boolean = false;
   @Output() filterCountChange = new EventEmitter<number>();
   public totalCountText: string = '';
   public filteredCountText: string = '';
@@ -32,6 +33,9 @@ export class QuickFilterComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.filter.reset();
     this.displayCount();
+    if (this.disabled) {
+      this.filter.disable();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {

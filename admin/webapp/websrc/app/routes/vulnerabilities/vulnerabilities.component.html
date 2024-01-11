@@ -44,12 +44,7 @@
       <div class="d-flex align-items-center">
         <div
           class="d-flex justify-content-center align-items-center"
-          *ngIf="
-            (!vulnerabilitiesFilterService.filtered &&
-              vulnerabilitiesData.vulnerabilities.vulnerabilities.length > 0) ||
-            (vulnerabilitiesFilterService.filtered &&
-              vulnerabilitiesFilterService.filteredCount > 0)
-          ">
+          *ngIf="vulnerabilitiesData.total_matched_records > 0">
           <app-loading-button
             (btnClick)="printAssetsPDF()"
             [text]="'scan.report.PDF_LINK2' | translate"
@@ -77,11 +72,11 @@
           (btnClick)="refresh()"
           [appearance]="'mat-button'"
           [buttonClasses]="'d-flex justify-content-center align-items-center'"
-          [disabled]="false"
+          [disabled]="!!(refreshing$ | async)"
           [iconClasses]="'eos-icons icon-18'"
           [iconName]="'refresh'"
           [id]="'vulnerabilities-refresh-button'"
-          [loading]="false"
+          [loading]="!!(refreshing$ | async)"
           [text]="'network.REFRESH' | translate"
           [type]="'button'">
         </app-loading-button>
@@ -91,10 +86,7 @@
       <app-vulnerability-charts></app-vulnerability-charts>
     </div>
     <div style="height: calc(100% - 160px)">
-      <app-vulnerability-items
-        [domains]="vulnerabilitiesData.domain"
-        [vulnerabilities]="vulnerabilitiesData.vulnerabilities.vulnerabilities"
-        [selectedView]="selectedView"></app-vulnerability-items>
+      <app-vulnerability-items></app-vulnerability-items>
     </div>
   </div>
 </ng-container>

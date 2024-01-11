@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { VulnerabilitiesService } from './vulnerabilities.service';
 import { VulnerabilitiesCsvService } from './csv-generation/vulnerabilities-csv.service';
 import { MultiClusterService } from '@services/multi-cluster.service';
@@ -8,14 +8,18 @@ import { MatDialog } from '@angular/material/dialog';
 import { PdfGenerationDialogComponent } from './pdf-generation-dialog/pdf-generation-dialog.component';
 import { VulnerabilityAsset, VulnerabilityView } from '@common/types';
 import { TranslateService } from '@ngx-translate/core';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-vulnerabilities',
   templateUrl: './vulnerabilities.component.html',
   styleUrls: ['./vulnerabilities.component.scss'],
 })
-export class VulnerabilitiesComponent {
-  vulnerabilitiesData$ = this.vulnerabilitiesService.initVulnerability();
+export class VulnerabilitiesComponent implements OnDestroy {
+  vulnerabilitiesData$ = this.vulnerabilitiesService.vulnerabilitiesData$.pipe(
+    tap(_ => this.refreshing$.next(false))
+  );
+  refreshing$ = this.vulnerabilitiesService.refreshing$;
   private _switchClusterSubscription;
   vulnerabilitiesList: any[] = [];
   masterData: any;
@@ -67,9 +71,15 @@ export class VulnerabilitiesComponent {
 
   changeSelectedView(view: VulnerabilityView) {
     this.selectedView = view;
+    this.vulnerabilitiesFilterService.vulQuerySubject$.next({
+      ...this.vulnerabilitiesFilterService.vulQuerySubject$.value,
+      viewType: this.selectedView,
+    });
+    this.refresh();
   }
 
   refresh() {
+    this.refreshing$.next(true);
     this.vulnerabilitiesService.refresh();
   }
 

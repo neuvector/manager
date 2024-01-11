@@ -1,4 +1,17 @@
-import { CfgType, Compliance, IdName } from '@common/types';
+import {
+  CfgType,
+  Compliance,
+  IdName,
+  LastModifiedDateOption,
+  MatchTypeOption,
+  OrderByOption,
+  VulnerabilityView,
+  VulQueryOrderByColumnOption,
+  VulQueryPackageTypeOption,
+  VulQueryPublishedTimeOption,
+  VulQueryScoreTypeOption,
+  VulQuerySeverityTypeOption,
+} from '@common/types';
 import { VulnerabilityAssetPackages } from '@common/types/openapi_for_reference_only/vulnerabilityAssetPackages';
 import { VulnPackageVersion } from '@common/types/openapi_for_reference_only/vulnPackageVersion';
 
@@ -26,22 +39,79 @@ export interface VulnerabilityAsset {
   name: string;
   severity: string;
   description: string;
-  packages?: VulnerabilityAssetPackages;
-  package_name: string;
+  packages: VulnerabilityAssetPackages;
   link: string;
   score: number;
-  vectors: string;
   score_v3: number;
+  vectors: string;
   vectors_v3: string;
   published_timestamp: number;
   last_modified_timestamp: number;
-  package_versions: VulnPackageVersion[];
   workloads: IdName[];
   nodes: IdName[];
   images: IdName[];
   platforms: IdName[];
+  // to remove
   filteredWorkloads: IdName[];
   filteredImages: IdName[];
+}
+
+export interface VulnerabilityQuery {
+  last_modified_timestamp?: number;
+  last_modified_timestamp_option?: LastModifiedDateOption;
+  publishedType?: VulQueryPublishedTimeOption;
+  publishedTime?: number;
+  packageType?: VulQueryPackageTypeOption;
+  severityType?: VulQuerySeverityTypeOption;
+  scoreType?: VulQueryScoreTypeOption;
+  scoreV2?: number[];
+  scoreV3?: number[];
+  matchTypeService?: MatchTypeOption;
+  serviceName?: string;
+  matchTypeNs?: MatchTypeOption;
+  selectedDomains?: string[];
+  matchTypeImage?: MatchTypeOption;
+  imageName?: string;
+  matchTypeNode?: MatchTypeOption;
+  nodeName?: string;
+  matchTypeContainer?: MatchTypeOption;
+  containerName?: string;
+  viewType: VulnerabilityView;
+}
+
+export interface VulnerabilitiesQuerySessionData {
+  vulnerabilities: VulnerabilityAsset[];
+}
+
+export interface VulnerabilitiesQueryData {
+  query_token: string;
+  summary: VulnerabilitiesQuerySummary;
+  total_matched_records: number;
+  total_records: number;
+}
+
+export interface VulnerabilitiesQuerySummary {
+  count_distribution: VulnerabilitiesQuerySummaryDistribution;
+  top_images: VulnerabilitiesQuerySummaryTopAsset[];
+  top_nodes: VulnerabilitiesQuerySummaryTopAsset[];
+}
+
+export interface VulnerabilitiesQuerySummaryTopAsset {
+  index: number;
+  display_name: string;
+  high: number;
+  medium: number;
+  low: number;
+}
+
+export interface VulnerabilitiesQuerySummaryDistribution {
+  high: number;
+  medium: number;
+  low: number;
+  container: number;
+  image: number;
+  node: number;
+  platform: number;
 }
 
 export interface VulnerabilitiesData {

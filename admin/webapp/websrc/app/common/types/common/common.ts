@@ -1,3 +1,5 @@
+export * from './remote-grid-api';
+
 export type PolicyMode = 'Discover' | 'Monitor' | 'Protect';
 
 export type ProfileBaseline = 'basic' | 'zero-drift';
@@ -16,6 +18,24 @@ export type VulnerabilityView =
   | 'registry';
 
 export type DataOps = 'add' | 'edit' | 'delete';
+
+export type VulQueryPublishedTimeOption = 'all' | 'before' | 'after';
+
+export type VulQueryPackageTypeOption = 'all' | 'withfix' | 'withoutfix';
+
+export type VulQuerySeverityTypeOption = 'all' | 'high' | 'medium' | 'low';
+
+export type VulQueryScoreTypeOption = 'v2' | 'v3';
+
+export type MatchTypeOption = 'contains' | 'equals';
+
+export type VulQueryOrderByColumnOption =
+  | 'name'
+  | 'score'
+  | 'score_v3'
+  | 'published_timestamp';
+
+export type OrderByOption = 'desc' | 'asc';
 
 export type LastModifiedDateOption =
   | 'all'

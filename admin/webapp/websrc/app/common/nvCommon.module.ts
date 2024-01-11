@@ -108,6 +108,7 @@ import { EnforcerBriefModule } from '@components/enforcer-brief/enforcer-brief.m
 import { CommonHttpService } from './api/common-http.service';
 import { SummaryService } from '@services/summary.service';
 import { NamespacesService } from '@services/namespaces.service';
+import { RemoteGridBindingDirective } from './directives/remote-grid-binding.directive';
 
 // https://angular.io/styleguide#!#04-10
 @NgModule({
@@ -218,7 +219,11 @@ import { NamespacesService } from '@services/namespaces.service';
     GraphHttpService,
     SignaturesService,
   ],
-  declarations: [DisplayControlDirective, TwoWayInfiniteScrollDirective],
+  declarations: [
+    DisplayControlDirective,
+    TwoWayInfiniteScrollDirective,
+    RemoteGridBindingDirective,
+  ],
   exports: [
     CommonModule,
     FormsModule,
@@ -278,6 +283,7 @@ import { NamespacesService } from '@services/namespaces.service';
     MatStepperModule,
     MatBadgeModule,
     DisplayControlDirective,
+    RemoteGridBindingDirective,
     TwoWayInfiniteScrollDirective,
   ],
 })

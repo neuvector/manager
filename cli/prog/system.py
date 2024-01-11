@@ -310,6 +310,7 @@ def showLocalSystemConfig(data, scope):
             column_map = ()
             column_map += (("nickname", "Nickname"),
                            ("comment", "Comment"),
+                           ("enable", "Enable"),
                            ("provider", "Repository Provider"),
                            ("provider_configuration", "Repository Configuration"),)
             if repo["provider"] == "github":
@@ -324,6 +325,7 @@ def showLocalSystemConfig(data, scope):
                 githubConf["nickname"] = repo["nickname"]
                 githubConf["provider"] = repo["provider"]
                 githubConf["comment"] = repo["comment"]
+                githubConf["enable"] = repo["enable"]
                 githubConf["personal_access_token"] = "******"
                 output.show_with_map(column_map, githubConf)
             click.echo("")
@@ -541,6 +543,7 @@ def create_system_webhook(data, name, url, type, scope, proxy, enable):
 @click.option("--nickname", default="default", help='only "default" is supported')
 @click.option("--provider", default="github", help='only "github" is supported')
 @click.option("--comment", help="comment")
+@click.option("--enable/--disable", default=True, is_flag=True, help="Enable/Disable the remote repository")
 @click.option("--repo_owner_username", help="repository owner user name")
 @click.option("--repo_name", default="", help="repository name")
 @click.option("--repo_branch_name", help="repository branch name")
@@ -548,7 +551,7 @@ def create_system_webhook(data, name, url, type, scope, proxy, enable):
 @click.option("--personal_access_token_committer_name", help="personal access token committer name")
 @click.option("--personal_access_token_email", help="personal access token email")
 @click.pass_obj
-def create_system_remote_repository(data, nickname, provider, comment, repo_owner_username, repo_name, repo_branch_name, personal_access_token, personal_access_token_committer_name, personal_access_token_email):
+def create_system_remote_repository(data, nickname, provider, comment, enable, repo_owner_username, repo_name, repo_branch_name, personal_access_token, personal_access_token_committer_name, personal_access_token_email):
     """Create remote repository settings"""
     if nickname != "default":
         click.echo("Error: Unsupported nickname")
@@ -571,6 +574,7 @@ def create_system_remote_repository(data, nickname, provider, comment, repo_owne
         "nickname": nickname,
         "provider": provider,
         "comment": comment,
+        "enable": enable,
         "github_configuration": githubConfig,
     }
     data.client.create("system/config/remote_repository", body)
@@ -880,6 +884,7 @@ def set_system_webhook_url(data, name, url, type, scope, proxy, enable):
 @set_system.command("remote_repository")
 @click.argument('nickname')
 @click.option("--comment", help="comment")
+@click.option("--disable/--enable", default=None, required=False, help="Enable/disable the remote repository")
 @click.option("--repo_owner_username", help="repository owner user name")
 @click.option("--repo_name", help="repository name")
 @click.option("--repo_branch_name", help="repository branch name")
@@ -887,12 +892,18 @@ def set_system_webhook_url(data, name, url, type, scope, proxy, enable):
 @click.option("--personal_access_token_committer_name", help="personal access token committer name")
 @click.option("--personal_access_token_email", help="personal access token email")
 @click.pass_obj
-def set_system_remote_repository(data, nickname, comment, repo_owner_username, repo_name, repo_branch_name, personal_access_token, personal_access_token_committer_name, personal_access_token_email):
+def set_system_remote_repository(data, nickname, comment, disable, repo_owner_username, repo_name, repo_branch_name, personal_access_token, personal_access_token_committer_name, personal_access_token_email):
     """Set remote repository settings"""
     if nickname != "default":
         click.echo("Error: Unsupported nickname")
         click.echo("")
         return
+        
+    enable = None
+    if disable is True:
+        enable = False
+    elif disable is False:
+        enable = True
 
     githubConfig = {}
     if repo_owner_username is not None:
@@ -914,6 +925,8 @@ def set_system_remote_repository(data, nickname, comment, repo_owner_username, r
     }
     if comment is not None:
         body["comment"] = comment
+    if enable is not None:
+        body["enable"] = enable
     args = {}
     data.client.config("system/config/remote_repository", nickname, {"config": body}, **args)
 

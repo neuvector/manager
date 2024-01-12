@@ -18,7 +18,7 @@ export class ExportOptionsComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private settingService: SettingsService,
+    private settingService: SettingsService
   ) {}
 
   ngOnInit(): void {
@@ -40,6 +40,8 @@ export class ExportOptionsComponent implements OnInit {
       .subscribe(value => {
         if (value && value.length > 0) {
           this.remoteRepoEnabled = value[0].enable;
+        } else {
+          this.remoteRepoEnabled = false;
         }
       });
   }

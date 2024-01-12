@@ -3123,7 +3123,7 @@
         "destination_remote": "Export to Remote Repository",
         "name": "Remote Repository Name",
         "file_name": "Exported File Name",
-        "mode_description": "Enable Remote Repository in Settings -> Configuration",
+        "mode_description": "Enable Remote Repository in ",
         "export_ok": "Exported successfully.",
         "export_failed": "Export failed."
       },

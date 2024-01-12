@@ -10,13 +10,18 @@
   <hr class="fancy mb-2" />
   <form (ngSubmit)="onSubmit()" [formGroup]="exportForm">
     <app-export-options [exportOptions]="exportForm" [exportFileName]="exportFileName"></app-export-options>
-    <div>
+    <div class="d-flex justify-content-end mt-2">
+<!--      <button mat-button-->
+<!--              [color]="'primary'"-->
+<!--              (click)="onCancel()"-->
+<!--              class="mr-2">-->
+<!--        {{'general.CANCEL' | translate}}-->
+<!--      </button>-->
       <app-loading-button
         [appearance]="'mat-raised-button'"
         [color]="'primary'"
         [text]="'general.SUBMIT' | translate"
         [type]="'submit'"
-        class="pull-right ml-auto"
       >
       </app-loading-button>
     </div>

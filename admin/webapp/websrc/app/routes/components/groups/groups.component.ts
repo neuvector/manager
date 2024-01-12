@@ -14,6 +14,7 @@ import {
   Group,
   PolicyMode,
   ProfileBaseline,
+  RemoteExportOptions,
   RemoteExportOptionsWrapper,
   Service,
 } from '@common/types';
@@ -365,73 +366,76 @@ export class GroupsComponent implements OnInit {
   exportGroups = (policyMode: string = '') => {
     const dialogRef = this.dialog.open(ExportOptionsModalComponent, {
       width: '50%',
+      disableClose: true,
       data: {
         filename: GlobalConstant.REMOTE_EXPORT_FILENAME.GROUP,
       },
     });
 
-    dialogRef
-      .afterClosed()
-      .subscribe((exportOptionsConfig: RemoteExportOptionsWrapper) => {
-        if (!exportOptionsConfig) {
-          return;
-        }
-        const { export_mode, ...exportOptions } =
-          exportOptionsConfig.export_options;
-
-        if (export_mode === 'local') {
-          let payload = {
-            groups: this.selectedGroups.map(group => group.name),
-            policy_mode: policyMode,
-          };
-          this.groupsService.exportGroupsConfigData(payload).subscribe(
-            response => {
-              let fileName = this.utilsService.getExportedFileName(response);
-              let blob = new Blob([response.body || ''], {
-                type: 'text/plain;charset=utf-8',
-              });
-              saveAs(blob, fileName);
-            },
-            error => {
-              console.warn(error);
-              this.notificationService.openError(
-                error.error,
-                this.translate.instant('group.dlp.msg.EXPORT_NG')
-              );
-            }
-          );
-        } else {
-          let payload = {
-            groups: this.selectedGroups.map(group => group.name),
-            policy_mode: policyMode,
-            remote_export_options: exportOptions,
-          };
-          this.groupsService.exportGroupsConfigData(payload).subscribe(
-            response => {
-              this.notificationService.open(
-                this.translate.instant('group.dlp.msg.EXPORT_OK')
-              );
-            },
-            error => {
-              if (
-                error.message &&
-                error.message.length > GlobalConstant.MAX_ERROR_MESSAGE_LENGTH
-              ) {
-                this.serverErrorMessage =
-                  this.domSanitizer.bypassSecurityTrustHtml(error.message);
-              }
-
-              this.notificationService.open(
-                this.serverErrorMessage
-                  ? this.translate.instant('group.dlp.msg.EXPORT_NG')
-                  : this.utils.getAlertifyMsg(error, '', false),
-                GlobalConstant.NOTIFICATION_TYPE.ERROR
-              );
-            }
-          );
-        }
-      });
+    dialogRef.afterClosed().subscribe((result: RemoteExportOptionsWrapper) => {
+      if (result) {
+        const { export_mode, ...exportOptions } = result.export_options;
+        this.exportUtil(export_mode, exportOptions, policyMode);
+      }
+    });
   };
+
+  exportUtil(mode: string, option: RemoteExportOptions, policyMode: string) {
+    if (mode === 'local') {
+      let payload = {
+        groups: this.selectedGroups.map(group => group.name),
+        policy_mode: policyMode,
+      };
+      this.groupsService.exportGroupsConfigData(payload).subscribe(
+        response => {
+          let fileName = this.utilsService.getExportedFileName(response);
+          let blob = new Blob([response.body || ''], {
+            type: 'text/plain;charset=utf-8',
+          });
+          saveAs(blob, fileName);
+        },
+        error => {
+          console.warn(error);
+          this.notificationService.openError(
+            error.error,
+            this.translate.instant('group.dlp.msg.EXPORT_NG')
+          );
+        }
+      );
+    } else if (mode === 'remote') {
+      let payload = {
+        groups: this.selectedGroups.map(group => group.name),
+        policy_mode: policyMode,
+        remote_export_options: option,
+      };
+      this.groupsService.exportGroupsConfigData(payload).subscribe(
+        response => {
+          this.notificationService.open(
+            this.translate.instant('group.dlp.msg.EXPORT_OK')
+          );
+        },
+        error => {
+          if (
+            error.message &&
+            error.message.length > GlobalConstant.MAX_ERROR_MESSAGE_LENGTH
+          ) {
+            this.serverErrorMessage = this.domSanitizer.bypassSecurityTrustHtml(
+              error.message
+            );
+          }
+
+          this.notificationService.open(
+            this.serverErrorMessage
+              ? this.translate.instant('group.dlp.msg.EXPORT_NG')
+              : this.utils.getAlertifyMsg(error, '', false),
+            GlobalConstant.NOTIFICATION_TYPE.ERROR
+          );
+        }
+      );
+    } else {
+      return;
+    }
+  }
 
   onResize(): void {
     this.gridOptions4Groups.api!.sizeColumnsToFit();

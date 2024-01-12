@@ -15,7 +15,14 @@
       </mat-checkbox>
     </div>
     <app-export-options [exportOptions]="exportForm" [exportFileName]="exportFileName"></app-export-options>
-    <div>
+    <div class="d-flex justify-content-end mt-2">
+<!--      <button mat-button-->
+<!--        [color]="'primary'"-->
+<!--        (click)="onCancel()"-->
+<!--        class="mr-2"-->
+<!--      >-->
+<!--        {{'general.CANCEL' | translate}}-->
+<!--      </button>-->
       <app-loading-button
         [appearance]="'mat-raised-button'"
         [color]="'primary'"
@@ -23,7 +30,6 @@
         [loading]="submittingForm"
         [text]="'general.SUBMIT' | translate"
         [type]="'submit'"
-        class="pull-right ml-auto"
       >
       </app-loading-button>
     </div>

@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthUtilsService } from '@common/utils/auth.utils';
-import { DlpSensor, DlpRule } from '@common/types';
+import {
+  DlpSensor,
+  DlpRule,
+  RemoteExportOptionsWrapper,
+  RemoteExportOptions,
+} from '@common/types';
 import {
   ColDef,
   GridApi,
@@ -23,6 +28,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { NotificationService } from '@services/notification.service';
+import { ExportOptionsModalComponent } from '@components/export-options-modal/export-options-modal.component';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-dlp-sensors',
@@ -48,6 +55,7 @@ export class DlpSensorsComponent implements OnInit {
   context = { componentParent: this };
   $win: any;
   private _switchClusterSubscription;
+  serverErrorMessage: SafeHtml = '';
 
   constructor(
     private dlpSensorsService: DlpSensorsService,
@@ -56,7 +64,8 @@ export class DlpSensorsComponent implements OnInit {
     private utilsService: UtilsService,
     private multiClusterService: MultiClusterService,
     private notificationService: NotificationService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private domSanitizer: DomSanitizer
   ) {
     this.$win = $(GlobalVariable.window);
   }
@@ -102,7 +111,7 @@ export class DlpSensorsComponent implements OnInit {
       data: {
         opType: GlobalConstant.MODAL_OP.ADD,
         dlpSensors: this.dlpSensors,
-        gridApi: this.gridOptions4Sensors.api!
+        gridApi: this.gridOptions4Sensors.api!,
       },
     });
   };
@@ -115,7 +124,7 @@ export class DlpSensorsComponent implements OnInit {
         opType: GlobalConstant.MODAL_OP.ADD,
         gridOptions4EditPatterns: this.gridOptions4EditPatterns,
         index4Sensor: this.index4Sensor,
-        gridApi: this.gridOptions4Rules.api!
+        gridApi: this.gridOptions4Rules.api!,
       },
     });
   };
@@ -138,38 +147,87 @@ export class DlpSensorsComponent implements OnInit {
   };
 
   exportDlpSensors = () => {
-    let payload = {
-      names: this.selectedSensors.map(sensor => sensor.name),
-    };
-    this.dlpSensorsService.getDlpSensorConfigFileData(payload).subscribe(
-      response => {
-        let fileName = this.utilsService.getExportedFileName(response);
-        let blob = new Blob([response.body || ''], {
-          type: 'text/plain;charset=utf-8',
-        });
-        saveAs(blob, fileName);
-        this.notificationService.open(
-          this.translate.instant('dlp.msg.EXPORT_SENSOR_OK')
-        );
+    const dialogRef = this.dialog.open(ExportOptionsModalComponent, {
+      width: '50%',
+      disableClose: true,
+      data: {
+        filename: GlobalConstant.REMOTE_EXPORT_FILENAME.DLP,
       },
-      error => {
-        if (MapConstant.USER_TIMEOUT.includes(error.status)) {
+    });
+
+    dialogRef.afterClosed().subscribe((result: RemoteExportOptionsWrapper) => {
+      if (result) {
+        const { export_mode, ...exportOptions } = result.export_options;
+        this.exportUtil(export_mode, exportOptions);
+      }
+    });
+  };
+
+  exportUtil(mode: string, option: RemoteExportOptions) {
+    if (mode === 'local') {
+      let payload = {
+        names: this.selectedSensors.map(sensor => sensor.name),
+      };
+      this.dlpSensorsService.getDlpSensorConfigFileData(payload).subscribe(
+        response => {
+          let fileName = this.utilsService.getExportedFileName(response);
+          let blob = new Blob([response.body || ''], {
+            type: 'text/plain;charset=utf-8',
+          });
+          saveAs(blob, fileName);
           this.notificationService.open(
-            this.utilsService.getAlertifyMsg(
-              error.error,
-              this.translate.instant('dlp.msg.EXPORT_SENSOR_NG'),
-              false
-            ),
+            this.translate.instant('dlp.msg.EXPORT_SENSOR_OK')
+          );
+        },
+        error => {
+          if (MapConstant.USER_TIMEOUT.includes(error.status)) {
+            this.notificationService.open(
+              this.utilsService.getAlertifyMsg(
+                error.error,
+                this.translate.instant('dlp.msg.EXPORT_SENSOR_NG'),
+                false
+              ),
+              GlobalConstant.NOTIFICATION_TYPE.ERROR
+            );
+          }
+        }
+      );
+    } else if (mode === 'remote') {
+      let payload = {
+        names: this.selectedSensors.map(sensor => sensor.name),
+        remote_export_options: option,
+      };
+      this.dlpSensorsService.getDlpSensorConfigFileData(payload).subscribe(
+        response => {
+          this.notificationService.open(
+            this.translate.instant('dlp.msg.EXPORT_SENSOR_OK')
+          );
+        },
+        error => {
+          if (
+            error.message &&
+            error.message.length > GlobalConstant.MAX_ERROR_MESSAGE_LENGTH
+          ) {
+            this.serverErrorMessage = this.domSanitizer.bypassSecurityTrustHtml(
+              error.message
+            );
+          }
+
+          this.notificationService.open(
+            this.serverErrorMessage
+              ? this.translate.instant('dlp.msg.EXPORT_SENSOR_NG')
+              : this.utilsService.getAlertifyMsg(error, '', false),
             GlobalConstant.NOTIFICATION_TYPE.ERROR
           );
         }
-      }
-    );
-  };
+      );
+    } else {
+      return;
+    }
+  }
 
   get dlpSensorsCount() {
-    if(this.dlpSensors?.length)
-      return this.dlpSensors.length;
+    if (this.dlpSensors?.length) return this.dlpSensors.length;
     else return 0;
   }
 

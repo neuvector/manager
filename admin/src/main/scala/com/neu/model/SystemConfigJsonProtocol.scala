@@ -1,6 +1,5 @@
 package com.neu.model
 
-import com.neu.client.RestClient.arrayFormat
 import spray.json.{ DefaultJsonProtocol, _ }
 
 /**
@@ -18,7 +17,7 @@ object SystemConfigJsonProtocol extends DefaultJsonProtocol {
     GithubConfiguration
   )
   implicit val webhookFormat: RootJsonFormat[Webhook]             = jsonFormat6(Webhook)
-  implicit val remoteRepoFormat: RootJsonFormat[RemoteRepository] = jsonFormat4(RemoteRepository)
+  implicit val remoteRepoFormat: RootJsonFormat[RemoteRepository] = jsonFormat5(RemoteRepository)
   implicit val remoteRepositoryWrapFormat: RootJsonFormat[RemoteRepositoryWrap] = jsonFormat1(
     RemoteRepositoryWrap
   )

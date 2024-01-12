@@ -16,9 +16,12 @@ import {
   Apikey,
   RemoteRepository,
 } from '@common/types';
+import { Subject } from 'rxjs';
 
 @Injectable()
 export class SettingsService {
+  private refreshConfigSubject = new Subject<void>();
+
   constructor(
     private assetsHttpService: AssetsHttpService,
     private authHttpService: AuthHttpService,
@@ -186,7 +189,15 @@ export class SettingsService {
       return this.configHttpService.postRemoteRepository(payload);
     }
   }
-  deleteRemoteRepository(body: any) {
-    return this.configHttpService.deleteRemoteRepository(body);
+  deleteRemoteRepositoryByName(name: string) {
+    return this.configHttpService.deleteRemoteRepositoryByName(name);
+  }
+
+  refreshConfig() {
+    this.refreshConfigSubject.next();
+  }
+
+  getRefreshConfigSubject() {
+    return this.refreshConfigSubject.asObservable();
   }
 }

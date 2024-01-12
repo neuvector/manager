@@ -26,6 +26,7 @@ export class ConfigurationComponent
   implements OnInit, OnDestroy, ComponentCanDeactivate
 {
   private _switchClusterSubscription;
+  private _refreshConfigSubscription;
   @ViewChild(ConfigFormComponent) configForm!: ConfigFormComponent;
   config!: ConfigV2Response;
   enforcers!: Enforcer[];
@@ -77,11 +78,26 @@ export class ConfigurationComponent
             this.router.navigate([currentUrl]);
           });
       });
+    this._refreshConfigSubscription = this.settingsService
+      .getRefreshConfigSubject()
+      .subscribe({
+        next: () => {
+          const currentUrl = this.router.url;
+          this.router
+            .navigateByUrl('/', { skipLocationChange: true })
+            .then(() => {
+              this.router.navigate([currentUrl]);
+            });
+        },
+      });
   }
 
   ngOnDestroy(): void {
     if (this._switchClusterSubscription) {
       this._switchClusterSubscription.unsubscribe();
+    }
+    if (this._refreshConfigSubscription) {
+      this._refreshConfigSubscription.unsubscribe();
     }
   }
 }

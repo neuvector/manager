@@ -9,12 +9,22 @@
     <form [formGroup]="remoteRepoForm" (ngSubmit)="submit()">
       <formly-form [fields]="remoteRepoFields" [model]="remoteRepoModel" [form]="remoteRepoForm">
       </formly-form>
-      <div class="d-flex justify-content-end align-items-center mt-5">
+      <div class="d-flex justify-content-end align-items-center">
+<!--        <app-loading-button-->
+<!--          *appDisplayControl="'write_config'"-->
+<!--          [appearance]="'mat-raised-button'"-->
+<!--          [color]="'primary'"-->
+<!--          [disabled]="!isEdit || removingRemoteRepo || submittingForm"-->
+<!--          [loading]="removingRemoteRepo"-->
+<!--          (btnClick) = "removeRemoteRepo()"-->
+<!--          [text]="'setting.REMOVE' | translate"-->
+<!--        ></app-loading-button>-->
         <app-loading-button
           *appDisplayControl="'write_config'"
+          [buttonClasses]="'ml-3'"
           [appearance]="'mat-raised-button'"
           [color]="'primary'"
-          [disabled]="remoteRepoForm.invalid || remoteRepoForm.pristine || submittingForm"
+          [disabled]="remoteRepoForm.invalid || remoteRepoForm.pristine || submittingForm || removingRemoteRepo"
           [loading]="submittingForm"
           [text]="'setting.SUBMIT' | translate"
           [type]="'submit'"

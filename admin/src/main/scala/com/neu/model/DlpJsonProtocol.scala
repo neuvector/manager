@@ -29,12 +29,16 @@ object DlpJsonProtocol extends DefaultJsonProtocol {
   implicit val dlpRuleConfigDataFmt: RootJsonFormat[DlpRuleConfigData] = jsonFormat1(
     DlpRuleConfigData
   )
-  implicit val exportedDlpSensorListFmt: RootJsonFormat[ExportedDlpSensorList] = jsonFormat1(
+  implicit val remoteExportOptionsFormat: RootJsonFormat[RemoteExportOptions] = jsonFormat3(
+    RemoteExportOptions
+  )
+  implicit val exportedDlpSensorListFmt: RootJsonFormat[ExportedDlpSensorList] = jsonFormat2(
     ExportedDlpSensorList
   )
 
   def dlpSensorConfigToJson(config: DlpSensorConfigData): String       = config.toJson.compactPrint
   def dlpGroupConfigToJson(config: DlpGroupConfigData): String         = config.toJson.compactPrint
   def exportedDlpSensorListToJson(list: ExportedDlpSensorList): String = list.toJson.compactPrint
-
+  def remoteExportOptionsToJson(remoteExportOptions: RemoteExportOptions): String =
+    remoteExportOptions.toJson.compactPrint
 }

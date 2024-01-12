@@ -17,6 +17,7 @@ import { ServiceModeService } from '@services/service-mode.service';
 import { RuleDetailModalComponent } from './partial/rule-detail-modal/rule-detail-modal.component';
 import { RuleDetailModalService } from '@components/groups/partial/rule-detail-modal/rule-detail-modal.service';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ExportOptionsModalModule } from '@components/export-options-modal/export-options-modal.module';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     SwitchModeModalComponent,
     GroupResponseRulesComponent,
     GroupNetworkRulesComponent,
-    RuleDetailModalComponent
+    RuleDetailModalComponent,
   ],
   imports: [
     CommonModule,
@@ -37,14 +38,10 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     LoadingButtonModule,
     PipeModule,
     DragDropModule,
-    AgGridModule.withComponents([
-      ActionButtonsComponent
-    ]),
+    AgGridModule.withComponents([ActionButtonsComponent]),
+    ExportOptionsModalModule,
   ],
-  providers: [
-    ServiceModeService,
-    RuleDetailModalService
-  ],
+  providers: [ServiceModeService, RuleDetailModalService],
   exports: [GroupsComponent],
 })
 export class GroupsModule {}

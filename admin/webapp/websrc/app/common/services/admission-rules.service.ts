@@ -22,6 +22,7 @@ import { ActionButtonsComponent } from '@components/admission-rules/partial/acti
 import { MatchedRuleListComponent } from '@components/admission-rules/partial/configuration-assessment-modal/matched-rule-list/matched-rule-list.component';
 import { IndexCellComponent } from '@components/admission-rules/partial/configuration-assessment-modal/index-cell/index-cell.component';
 import { uuid } from '@common/utils/common.utils';
+import { RemoteExportOptions } from '@common/types';
 
 export type AdmissionTestRow = AdmissionTestResult & {
   id: string;
@@ -154,7 +155,7 @@ export class AdmissionRulesService {
           return this.modeRenderFunc(params);
         },
         cellRendererParams: {
-          globalMode: this.globalMode
+          globalMode: this.globalMode,
         },
         width: 100,
         minWidth: 100,
@@ -217,11 +218,15 @@ export class AdmissionRulesService {
       },
       onGridReady: function (params) {
         setTimeout(() => {
-          params.api.sizeColumnsToFit();
+          if (params && params.api) {
+            params.api.sizeColumnsToFit();
+          }
         }, 500);
         $win.on(GlobalConstant.AG_GRID_RESIZE, () => {
           setTimeout(() => {
-            params.api.sizeColumnsToFit();
+            if (params && params.api) {
+              params.api.sizeColumnsToFit();
+            }
           }, 1000);
         });
       },
@@ -315,9 +320,10 @@ export class AdmissionRulesService {
         params.api.resetRowHeights();
       },
       isExternalFilterPresent: () => true,
-      doesExternalFilterPass: params => !params.data.parent_id || params.data.visible,
+      doesExternalFilterPass: params =>
+        !params.data.parent_id || params.data.visible,
       getRowId: params => params.data.id,
-      getRowHeight: params => !!params.data.parent_id ? 100 : 30,
+      getRowHeight: params => (!!params.data.parent_id ? 100 : 30),
       isFullWidthCell: node => !!node.data.parent_id,
       fullWidthCellRenderer: 'matchedRuleListRenderer',
       suppressMaintainUnsortedOrder: true,
@@ -376,13 +382,17 @@ export class AdmissionRulesService {
       if (Array.isArray(params.value) && params.value.length > 0) {
         containerTypes = params.value;
       } else {
-        containerTypes = GlobalConstant.CONTAINER_TYPES
+        containerTypes = GlobalConstant.CONTAINER_TYPES;
       }
       return this.sanitizer.sanitize(
         SecurityContext.HTML,
-        containerTypes.map(containerType => {
-          return this.translate.instant(`admissionControl.${containerType.toUpperCase()}`)
-        }).join(', ')
+        containerTypes
+          .map(containerType => {
+            return this.translate.instant(
+              `admissionControl.${containerType.toUpperCase()}`
+            );
+          })
+          .join(', ')
       );
     }
     return '';
@@ -409,11 +419,20 @@ export class AdmissionRulesService {
     let mode = '';
     if (params.data) {
       if (params.data.rule_type === GlobalConstant.ADMISSION.RULE_TYPE.DENY) {
-        mode = this.utils.getI18Name(params.value ? params.value : params.globalMode);
-        let labelCode = MapConstant.colourMap[params.value ? params.value : params.globalMode];
+        mode = this.utils.getI18Name(
+          params.value ? params.value : params.globalMode
+        );
+        let labelCode =
+          MapConstant.colourMap[
+            params.value ? params.value : params.globalMode
+          ];
         if (!labelCode) return '';
         else
-          return `<span class="type-label policy_mode ${params.data.disable ? MapConstant.colourMap['disabled_background'] : labelCode}">${mode}</span>`;
+          return `<span class="type-label policy_mode ${
+            params.data.disable
+              ? MapConstant.colourMap['disabled_background']
+              : labelCode
+          }">${mode}</span>`;
       }
     }
     return '';
@@ -552,7 +571,7 @@ export class AdmissionRulesService {
           ? 'true'
           : criterion.value,
         path: criterion.path || criterion.name,
-        value_type: nodeValueType || criterion.value_type
+        value_type: nodeValueType || criterion.value_type,
       },
     });
     return currCriteria;
@@ -645,12 +664,19 @@ export class AdmissionRulesService {
 
   exportAdmissionRules = (
     rules: Array<AdmissionRule> = [],
-    isConfigSelected: boolean
+    isConfigSelected: boolean,
+    exportOption?: RemoteExportOptions | null
   ) => {
-    let payload = {
-      ids: rules.map(rule => rule.id).filter(id => id !== -1),
-      export_config: isConfigSelected,
-    };
+    let payload = exportOption
+      ? {
+          ids: rules.map(rule => rule.id).filter(id => id !== -1),
+          export_config: isConfigSelected,
+          remote_export_options: exportOption,
+        }
+      : {
+          ids: rules.map(rule => rule.id).filter(id => id !== -1),
+          export_config: isConfigSelected,
+        };
     return GlobalVariable.http
       .post(PathConstant.EXPORT_ADM_CTRL, payload, {
         observe: 'response',
@@ -944,13 +970,24 @@ export class AdmissionRulesService {
     }
   };
 
-  formatAdmissionTestResults = (admissionTestResults: AdmissionTestResult[]): AdmissionTestRow[] => {
+  formatAdmissionTestResults = (
+    admissionTestResults: AdmissionTestResult[]
+  ): AdmissionTestRow[] => {
     let res: AdmissionTestRow[] = [];
     admissionTestResults.forEach(admissionTestResult => {
       const parent_id = uuid();
-      if (admissionTestResult.matched_rules && Array.isArray(admissionTestResult.matched_rules) && admissionTestResult.matched_rules.length > 0) {
+      if (
+        admissionTestResult.matched_rules &&
+        Array.isArray(admissionTestResult.matched_rules) &&
+        admissionTestResult.matched_rules.length > 0
+      ) {
         const child_id = uuid();
-        res.push({ id: parent_id, child_id, ...admissionTestResult, visible: false });
+        res.push({
+          id: parent_id,
+          child_id,
+          ...admissionTestResult,
+          visible: false,
+        });
         res.push({
           id: child_id,
           parent_id,

@@ -47,5 +47,6 @@ case class WafRuleConfig(name: String, patterns: Seq[Pattern])
 case class WafRuleConfigData(config: WafRuleConfig)
 
 case class ExportedWafSensorList(
-  names: Array[String]
+  names: Array[String],
+  remote_export_options: Option[RemoteExportOptions] = None
 )

@@ -8,19 +8,12 @@
     </button>
   </div>
   <hr class="fancy mb-2" />
-  <form (ngSubmit)="submitExport()" [formGroup]="exportForm">
-    <div>
-      <mat-checkbox class="mx-3" formControlName="isIncludingConfig">
-        {{ 'admissionControl.CONFIG' | translate}}
-      </mat-checkbox>
-    </div>
+  <form (ngSubmit)="onSubmit()" [formGroup]="exportForm">
     <app-export-options [exportOptions]="exportForm" [exportFileName]="exportFileName"></app-export-options>
     <div>
       <app-loading-button
         [appearance]="'mat-raised-button'"
         [color]="'primary'"
-        [disabled]="!(exportForm.controls.isIncludingConfig.value || data.selectedAdmissionRules) || submittingForm"
-        [loading]="submittingForm"
         [text]="'general.SUBMIT' | translate"
         [type]="'submit'"
         class="pull-right ml-auto"

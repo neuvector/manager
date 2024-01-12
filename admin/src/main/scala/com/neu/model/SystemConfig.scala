@@ -17,6 +17,7 @@ case class RemoteRepository(
   nickname: String,
   provider: String,
   comment: Option[String] = None,
+  enable: Boolean,
   github_configuration: Option[GithubConfiguration]
 )
 
@@ -169,6 +170,12 @@ case class ServiceConfigParam(
   baseline_profile: Option[String],
   services: Option[Array[String]],
   not_scored: Option[Boolean]
+)
+
+case class RemoteExportOptions(
+  remote_repository_nickname: String,
+  file_path: Option[String] = None,
+  comment: Option[String] = None
 )
 
 case class ServiceConfig(config: ServiceConfigParam)

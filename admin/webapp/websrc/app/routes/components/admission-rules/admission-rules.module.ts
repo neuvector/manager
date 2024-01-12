@@ -7,24 +7,22 @@ import { AddEditAdmissionRuleModalComponent } from './partial/add-edit-admission
 import { AdvanceSettingModalComponent } from './partial/advance-setting-modal/advance-setting-modal.component';
 import { ExportAdmissionRulesModalComponent } from './partial/export-admission-rules-modal/export-admission-rules-modal.component';
 import { ConfigurationAssessmentModalComponent } from './partial/configuration-assessment-modal/configuration-assessment-modal.component';
-import { ImportFileModalModule } from '@components/ui/import-file-modal/import-file-modal.module';
-import { ConfirmDialogModule } from "@components/ui/confirm-dialog/confirm-dialog.module";
 import { AgGridModule } from 'ag-grid-angular';
-import { QuickFilterModule } from "@components/quick-filter/quick-filter.module";
+import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
 import { LoadingTemplateModule } from '@components/ui/loading-template/loading-template.module';
-import { FileUploadModule } from "ng2-file-upload";
-import { ImportTestFileComponent } from "@components/admission-rules/partial/import-test-file/import-test-file.component";
-import { PipeModule } from "@common/pipes/pipe.module";
+import { FileUploadModule } from 'ng2-file-upload';
+import { ImportTestFileComponent } from '@components/admission-rules/partial/import-test-file/import-test-file.component';
+import { PipeModule } from '@common/pipes/pipe.module';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgJsonEditorModule } from 'ang-jsoneditor';
-import { CriterionDescriptionIconComponent } from './partial/criterion-description-icon/criterion-description-icon.component'
+import { CriterionDescriptionIconComponent } from './partial/criterion-description-icon/criterion-description-icon.component';
 import { MultiSelectorDropdownModule } from '@routes/components/ui/multi-selector-dropdown/multi-selector-dropdown.module';
 import { ConfigurationAssessmentResultPrintableReportComponent } from './partial/configuration-assessment-result-printable-report/configuration-assessment-result-printable-report.component';
 import { MatchedRuleListComponent } from './partial/configuration-assessment-modal/matched-rule-list/matched-rule-list.component';
 import { IndexCellComponent } from './partial/configuration-assessment-modal/index-cell/index-cell.component';
-
+import { ExportOptionsModule } from '@components/export-options/export-options.module';
 
 @NgModule({
   declarations: [
@@ -38,7 +36,7 @@ import { IndexCellComponent } from './partial/configuration-assessment-modal/ind
     CriterionDescriptionIconComponent,
     ConfigurationAssessmentResultPrintableReportComponent,
     MatchedRuleListComponent,
-    IndexCellComponent
+    IndexCellComponent,
   ],
   imports: [
     CommonModule,
@@ -52,12 +50,9 @@ import { IndexCellComponent } from './partial/configuration-assessment-modal/ind
     MatTooltipModule,
     NgJsonEditorModule,
     MultiSelectorDropdownModule,
-    AgGridModule.withComponents([
-      ActionButtonsComponent
-    ])
+    AgGridModule.withComponents([ActionButtonsComponent]),
+    ExportOptionsModule,
   ],
-  exports: [
-    AdmissionRulesComponent
-  ],
+  exports: [AdmissionRulesComponent],
 })
 export class AdmissionRulesModule {}

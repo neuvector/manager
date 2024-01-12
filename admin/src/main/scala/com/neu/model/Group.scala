@@ -112,7 +112,11 @@ case class Group4SingleWrap(group: Group4Single)
 
 case class Groups(groups: Array[Group])
 
-case class Groups4Export(groups: Array[String], policy_mode: Option[String])
+case class Groups4Export(
+  groups: Array[String],
+  policy_mode: Option[String],
+  remote_export_options: Option[RemoteExportOptions] = None
+)
 
 case class CriteriaItem(name: String)
 

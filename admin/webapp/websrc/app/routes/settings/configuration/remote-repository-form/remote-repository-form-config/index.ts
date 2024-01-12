@@ -8,6 +8,7 @@ import {
   RepositoryBranchNameField,
   RepositoryNameField,
   RepositoryOwnerField,
+  EnabledField,
 } from './constants';
 
 export const RemoteRepoFormConfig: FormlyFieldConfig[] = [
@@ -45,6 +46,10 @@ export const RemoteRepoFormConfig: FormlyFieldConfig[] = [
       {
         className: 'col-12 col-md-6 mt-2',
         ...PersonalAccessTokenEmailField,
+      },
+      {
+        className: 'col-12 mt-3',
+        ...EnabledField,
       },
     ],
   },

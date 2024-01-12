@@ -28,12 +28,16 @@ object WafJsonProtocol extends DefaultJsonProtocol {
   implicit val wafRuleConfigDataFmt: RootJsonFormat[WafRuleConfigData] = jsonFormat1(
     WafRuleConfigData
   )
-  implicit val exportedWafSensorListFmt: RootJsonFormat[ExportedWafSensorList] = jsonFormat1(
+  implicit val remoteExportOptionsFormat: RootJsonFormat[RemoteExportOptions] = jsonFormat3(
+    RemoteExportOptions
+  )
+  implicit val exportedWafSensorListFmt: RootJsonFormat[ExportedWafSensorList] = jsonFormat2(
     ExportedWafSensorList
   )
 
   def wafSensorConfigToJson(config: WafSensorConfigData): String       = config.toJson.compactPrint
   def wafGroupConfigToJson(config: WafGroupConfigData): String         = config.toJson.compactPrint
   def exportedWafSensorListToJson(list: ExportedWafSensorList): String = list.toJson.compactPrint
-
+  def remoteExportOptionsToJson(remoteExportOptions: RemoteExportOptions): String =
+    remoteExportOptions.toJson.compactPrint
 }

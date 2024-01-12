@@ -1,0 +1,24 @@
+<div class="mx-3 mt-3" [formGroup]="exportOptionsForm">
+  <h5>{{"setting.remote_repository.options.destination"|translate}}</h5>
+  <mat-radio-group formControlName="export_mode" class="d-flex flex-column">
+    <mat-radio-button value="local">{{"setting.remote_repository.options.destination_local"|translate}}</mat-radio-button>
+    <mat-radio-button value="remote" [disabled]="!remoteRepoEnabled">
+{{"setting.remote_repository.options.destination_remote"|translate}}
+      <span class="text-muted small ml-2">{{"setting.remote_repository.options.mode_description"|translate}}</span>
+    </mat-radio-button>
+  </mat-radio-group>
+  <div *ngIf="exportOptionsForm.get('export_mode')?.value === 'remote'" class="d-flex flex-column mt-2">
+    <mat-form-field hidden>
+      <mat-label>{{"setting.remote_repository.options.name"|translate}}</mat-label>
+      <input matInput id="remote_repository_nickname" type="text" formControlName="remote_repository_nickname" readonly/>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{"setting.remote_repository.options.file_name"|translate}}</mat-label>
+      <input matInput id="exporting_file_name" type="text" formControlName="file_path" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{"setting.remote_repository.details.comment"|translate}}</mat-label>
+      <input matInput id="comment" type="text" formControlName="comment" />
+    </mat-form-field>
+  </div>
+</div>

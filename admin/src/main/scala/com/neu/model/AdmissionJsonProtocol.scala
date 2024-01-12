@@ -13,7 +13,10 @@ object AdmissionJsonProtocol extends DefaultJsonProtocol {
   implicit val admissionRuleConfigFormat: RootJsonFormat[AdmRuleConfig] = jsonFormat1(AdmRuleConfig)
   implicit val admStateFormat: RootJsonFormat[AdmState]                 = jsonFormat5(AdmState)
   implicit val admConfigFormat: RootJsonFormat[AdmConfig]               = jsonFormat1(AdmConfig)
-  implicit val admExportFormat: RootJsonFormat[AdmExport]               = jsonFormat2(AdmExport)
+  implicit val remoteExportOptionsFormat: RootJsonFormat[RemoteExportOptions] = jsonFormat3(
+    RemoteExportOptions
+  )
+  implicit val admExportFormat: RootJsonFormat[AdmExport] = jsonFormat3(AdmExport)
 
   def admissionRuleCriterionToJson(admissionRuleCriterion: AdmRuleCriterion): String =
     admissionRuleCriterion.toJson.compactPrint
@@ -22,4 +25,6 @@ object AdmissionJsonProtocol extends DefaultJsonProtocol {
     admissionRuleConfig.toJson.compactPrint
   def admConfigToJson(admConfig: AdmConfig): String = admConfig.toJson.compactPrint
   def admExportToJson(admExport: AdmExport): String = admExport.toJson.compactPrint
+  def remoteExportOptionsToJson(remoteExportOptions: RemoteExportOptions): String =
+    remoteExportOptions.toJson.compactPrint
 }

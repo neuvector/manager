@@ -151,10 +151,9 @@ export class ConfigHttpService {
     );
   }
 
-  deleteRemoteRepository(body): Observable<unknown> {
-    return GlobalVariable.http.delete<unknown>(
-      PathConstant.REMOTE_REPO_URL,
-      body
-    );
+  deleteRemoteRepositoryByName(name: string): Observable<unknown> {
+    return GlobalVariable.http.delete<unknown>(PathConstant.REMOTE_REPO_URL, {
+      params: { name },
+    });
   }
 }

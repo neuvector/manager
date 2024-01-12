@@ -2,6 +2,7 @@ export interface RemoteRepository {
   nickname: string;
   provider: string;
   comment: string;
+  enable: boolean;
   github_configuration: GithubConfiguration;
 }
 
@@ -16,4 +17,21 @@ export interface GithubConfiguration {
 
 export interface RemoteRepositoryWrapper {
   config: RemoteRepository;
+}
+
+export interface RemoteExportOptions {
+  remote_repository_nickname: string;
+  file_path?: string;
+  comment?: string;
+}
+
+export interface RemoteExportOptionsWrapper {
+  export_options: RemoteExportOptionsConfig;
+}
+
+export interface RemoteExportOptionsConfig {
+  remote_repository_nickname: string;
+  export_mode: string;
+  file_path?: string;
+  comment?: string;
 }

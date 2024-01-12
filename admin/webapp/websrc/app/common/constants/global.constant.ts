@@ -263,4 +263,13 @@ export class GlobalConstant {
     'published_timestamp',
     'last_modified_timestamp',
   ];
+
+  public static REMOTE_EXPORT_FILENAME = {
+    ADMISSION_RULES: 'cfgAdmissionRulesExport.yaml',
+    GROUP: 'cfgGroupsExport.yaml',
+    DLP: 'cfgDlpExport.yaml',
+    WAF: 'cfgWafExport.yaml',
+    COMPLIANCE_PROFILE: 'cfgComplianceProfileExport.yaml',
+    VUL_PROFILE: 'cfgVulProfileExport.yaml',
+  };
 }

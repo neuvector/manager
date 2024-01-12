@@ -24,10 +24,9 @@ import { uuid } from '@common/utils/common.utils';
 @Component({
   selector: 'app-exposed-servicepod-conv-grid',
   templateUrl: './exposed-servicepod-conv-grid.component.html',
-  styleUrls: ['./exposed-servicepod-conv-grid.component.scss']
+  styleUrls: ['./exposed-servicepod-conv-grid.component.scss'],
 })
 export class ExposedServicepodConvGridComponent implements OnInit {
-
   private readonly $win;
   private _exposures!: Array<HierarchicalExposure>;
   @Input() set exposures(exposure: Array<HierarchicalExposure>) {
@@ -134,7 +133,9 @@ export class ExposedServicepodConvGridComponent implements OnInit {
           if (params.data) {
             return `<span ng-class='{\'policy-remove\': data.remove}'
                   class='action-label px-1 ${
-                    MapConstant.colourMap[params.data.policy_action.toLowerCase()]
+                    MapConstant.colourMap[
+                      params.data.policy_action.toLowerCase()
+                    ]
                   }'>
                   ${this.sanitizer.sanitize(
                     SecurityContext.HTML,
@@ -150,7 +151,7 @@ export class ExposedServicepodConvGridComponent implements OnInit {
         maxWidth: 80,
         minWidth: 80,
         sortable: false,
-      }
+      },
     ];
 
     this.gridOptions = this.utils.createGridOptions(this.columnDefs, this.$win);
@@ -165,12 +166,13 @@ export class ExposedServicepodConvGridComponent implements OnInit {
         cellClass: ['d-flex', 'align-items-center', 'cell-wrap-text'],
       },
       onColumnResized: params => {
-        params.api.resetRowHeights();
+        if (params && params.api) params.api.resetRowHeights();
       },
       isExternalFilterPresent: () => true,
-      doesExternalFilterPass: params => !params.data.parent_id || params.data.visible,
+      doesExternalFilterPass: params =>
+        !params.data.parent_id || params.data.visible,
       getRowId: params => params.data.id,
-      getRowHeight: params => !!params.data.parent_id ? 100 : 30,
+      getRowHeight: params => (!!params.data.parent_id ? 100 : 30),
       isFullWidthCell: node => !!node.data.parent_id,
       fullWidthCellRenderer: 'conversationEntryListRenderer',
       suppressMaintainUnsortedOrder: true,
@@ -178,7 +180,7 @@ export class ExposedServicepodConvGridComponent implements OnInit {
       components: {
         serviceCellRenderer: ExposedServicepodGridServicepodCellComponent,
         actionCellRenderer: ExposedServicePodGridActionCellComponent,
-        conversationEntryListRenderer: ConversationEntryListComponent
+        conversationEntryListRenderer: ConversationEntryListComponent,
       },
     };
   };
@@ -203,7 +205,13 @@ export class ExposedServicepodConvGridComponent implements OnInit {
       const parent_id = uuid();
       if (exposure.entries) {
         const child_id = uuid();
-        res.push({ id: parent_id, child_id, ...exposure, pods: exposure.children.length, visible: false });
+        res.push({
+          id: parent_id,
+          child_id,
+          ...exposure,
+          pods: exposure.children.length,
+          visible: false,
+        });
         res.push({
           id: child_id,
           parent_id,
@@ -212,10 +220,15 @@ export class ExposedServicepodConvGridComponent implements OnInit {
           visible: false,
         });
       } else {
-        res.push({ id: parent_id, ...exposure, pods: exposure.children.length, visible: true });
+        res.push({
+          id: parent_id,
+          ...exposure,
+          pods: exposure.children.length,
+          visible: true,
+        });
       }
     });
-    console.log('preprocessHierarchicalData',res)
+    console.log('preprocessHierarchicalData', res);
     return res;
   };
 }

@@ -45,6 +45,16 @@ export const CommentField = {
   },
 };
 
+export const EnabledField = {
+  key: 'enable',
+  type: FormlyComponents.TOGGLE,
+  defaultValue: true,
+  templateOptions: {
+    label: 'setting.remote_repository.details.enabled',
+    labelPosition: 'before',
+  },
+};
+
 export const RepositoryOwnerField = {
   key: 'github_configuration.repository_owner_username',
   type: FormlyComponents.ICON_INPUT,
@@ -72,7 +82,7 @@ export const RepositoryNameField = {
 export const RepositoryBranchNameField = {
   key: 'github_configuration.repository_branch_name',
   type: FormlyComponents.ICON_INPUT,
-  defaultValue: 'master',
+  defaultValue: 'main',
   templateOptions: {
     icon: 'storage',
     label: 'setting.remote_repository.details.repository_branch',

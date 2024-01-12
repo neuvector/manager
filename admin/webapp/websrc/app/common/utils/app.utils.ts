@@ -86,10 +86,13 @@ export class UtilsService {
       if (contentType.includes('text/plain')) {
         return this.domSanitize.sanitize(SecurityContext.HTML, err.error);
       } else if (contentType.includes('application/json')) {
-        return this.domSanitize.sanitize(
-          SecurityContext.HTML,
-          err.error.message
-        );
+        let message = '';
+        try {
+          message = JSON.parse(err.error).message;
+        } catch (e) {
+          message = this.translate.instant('general.UNFORMATTED_ERR');
+        }
+        return this.domSanitize.sanitize(SecurityContext.HTML, message);
       } else {
         return this.translate.instant('general.UNFORMATTED_ERR');
       }
@@ -110,15 +113,14 @@ export class UtilsService {
   }
 
   getAlertifyMsg(error, errBrief, isHtml) {
-    let message = '';
+    // make sure message is not empty
+    let message = this.translate.instant('general.UNFORMATTED_ERR');
     if (typeof error === 'string') {
       message = error;
     } else if (isErrorResponse(error)) {
       message = error.message || error.error;
     } else if ('headers' in error) {
       message = this.getErrorMessage(error);
-    } else {
-      message = this.translate.instant('general.UNFORMATTED_ERR');
     }
     errBrief = this.removeEndingChar(errBrief);
     if (isHtml) {
@@ -133,9 +135,9 @@ export class UtilsService {
         '</span></div></div>'
       );
     } else {
-      return (
-        errBrief + ': ' + message.charAt(0).toUpperCase() + message.slice(1)
-      );
+      return errBrief
+        ? errBrief + ': ' + message.charAt(0).toUpperCase() + message.slice(1)
+        : message.charAt(0).toUpperCase() + message.slice(1);
     }
   }
 
@@ -190,13 +192,13 @@ export class UtilsService {
       },
       onGridReady: params => {
         setTimeout(() => {
-          if (params.api) {
+          if (params && params.api) {
             params.api.sizeColumnsToFit();
           }
         }, 300);
         win.on(GlobalConstant.AG_GRID_RESIZE, () => {
           setTimeout(() => {
-            if (params.api) {
+            if (params && params.api) {
               params.api.sizeColumnsToFit();
             }
           }, 100);

@@ -1,5 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import {
+  Component,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { FormGroup, FormGroupDirective } from '@angular/forms';
 import { cloneDeep } from 'lodash';
 import { ErrorResponse, RemoteRepository } from '@common/types';
 import { RemoteRepoFormConfig } from './remote-repository-form-config';
@@ -22,8 +27,11 @@ export class RemoteRepositoryFormComponent implements OnInit {
   remoteRepoFields = cloneDeep(RemoteRepoFormConfig);
   serverErrorMessage: SafeHtml = '';
   submittingForm = false;
+  removingRemoteRepo = false;
   isEdit = false;
   remoteRepoModel: any = {};
+  @ViewChild(FormGroupDirective)
+  formGroupDirective!: FormGroupDirective;
   @Input() remoteRepoData: RemoteRepository | undefined;
 
   constructor(
@@ -47,6 +55,42 @@ export class RemoteRepositoryFormComponent implements OnInit {
     }
   }
 
+  removeRemoteRepo(): void {
+    this.removingRemoteRepo = true;
+    this.settingsService
+      .deleteRemoteRepositoryByName('default')
+      .pipe(finalize(() => (this.removingRemoteRepo = false)))
+      .subscribe(
+        () => {
+          this.notificationService.open(
+            this.translateService.instant(
+              'setting.remote_repository.delete_success'
+            )
+          );
+          this.settingsService.refreshConfig();
+        },
+        (error: ErrorResponse) => {
+          if (
+            error.message &&
+            error.message.length > GlobalConstant.MAX_ERROR_MESSAGE_LENGTH
+          ) {
+            this.serverErrorMessage = this.domSanitizer.bypassSecurityTrustHtml(
+              error.message
+            );
+          }
+          this.notificationService.open(
+            this.serverErrorMessage
+              ? this.translateService.instant('setting.REMOVE_ERROR')
+              : this.utils.getAlertifyMsg(
+                  error,
+                  this.translateService.instant('setting.REMOVE_ERROR'),
+                  false
+                ),
+            GlobalConstant.NOTIFICATION_TYPE.ERROR
+          );
+        }
+      );
+  }
   submit(): void {
     let payload: RemoteRepository = this.transformToPayload(
       this.remoteRepoForm.value
@@ -60,18 +104,23 @@ export class RemoteRepositoryFormComponent implements OnInit {
       payload.github_configuration.personal_access_token = null as any;
     }
 
+    this.submittingForm = true;
     this.settingsService
       .updateRemoteRepository(payload, this.isEdit)
-      .pipe(finalize(() => (this.submittingForm = false)))
+      .pipe(
+        finalize(() => {
+          this.submittingForm = false;
+          this.remoteRepoForm.markAsPristine();
+        })
+      )
       .subscribe(
         () => {
-          console.log('updateRemoteRepo success.');
           this.notificationService.open(
             this.translateService.instant('setting.SUBMIT_OK')
           );
+          this.isEdit = true;
         },
         (error: ErrorResponse) => {
-          console.log('updateRemoteRepo error:', error);
           if (
             error.message &&
             error.message.length > GlobalConstant.MAX_ERROR_MESSAGE_LENGTH

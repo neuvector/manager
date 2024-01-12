@@ -3123,7 +3123,7 @@
         "destination_remote": "导出到远程存储库",
         "name": "远程存储库名称",
         "file_name": "导出的文件名",
-        "mode_description": "在\"设置 -> 配置\"中配置远程存储库，并且启用",
+        "mode_description": "配置远程存储库",
         "export_ok": "导出成功",
         "export_failed": "导出失败"
       },

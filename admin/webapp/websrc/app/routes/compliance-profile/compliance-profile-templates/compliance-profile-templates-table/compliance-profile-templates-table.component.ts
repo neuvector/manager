@@ -11,6 +11,8 @@ import {
   CfgType,
   ComplianceProfileTemplateEntry,
   ErrorResponse,
+  RemoteExportOptions,
+  RemoteExportOptionsWrapper,
 } from '@common/types';
 import {
   ColDef,
@@ -37,6 +39,8 @@ import { MapConstant } from '@common/constants/map.constant';
 import { ImportFileModalComponent } from '@components/ui/import-file-modal/import-file-modal.component';
 import { PathConstant } from '@common/constants/path.constant';
 import { saveAs } from 'file-saver';
+import { ExportOptionsModalComponent } from '@components/export-options-modal/export-options-modal.component';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-compliance-profile-templates-table',
@@ -55,6 +59,7 @@ export class ComplianceProfileTemplatesTableComponent
     ).toUpperCase();
     return MapConstant.colourMap[cfgType];
   }
+  serverErrorMessage: SafeHtml = '';
   isNamespaceUser!: boolean;
   gridOptions!: GridOptions;
   filteredCount = 0;
@@ -145,7 +150,8 @@ export class ComplianceProfileTemplatesTableComponent
     private cd: ChangeDetectorRef,
     private dialog: MatDialog,
     private complianceProfileService: ComplianceProfileService,
-    private authUtilsService: AuthUtilsService
+    private authUtilsService: AuthUtilsService,
+    private domSanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
@@ -339,25 +345,77 @@ export class ComplianceProfileTemplatesTableComponent
   }
 
   exportProfile(): void {
-    let names = ['default'];
-    this.complianceProfileService.exportProfile(names).subscribe(
-      response => {
-        let fileName = this.utils.getExportedFileName(response);
-        let blob = new Blob([response.body || ''], {
-          type: 'text/plain;charset=utf-8',
-        });
-        saveAs(blob, fileName);
-        this.notificationService.open(
-          this.translate.instant('cis.profile.msg.EXPORT_PROFILE_OK')
-        );
+    const dialogRef = this.dialog.open(ExportOptionsModalComponent, {
+      width: '50%',
+      disableClose: true,
+      data: {
+        filename: GlobalConstant.REMOTE_EXPORT_FILENAME.COMPLIANCE_PROFILE,
       },
-      error => {
-        this.notificationService.openError(
-          error.error,
-          this.translate.instant('cis.profile.msg.EXPORT_PROFILE_NG')
-        );
+    });
+
+    dialogRef.afterClosed().subscribe((result: RemoteExportOptionsWrapper) => {
+      if (result) {
+        const { export_mode, ...exportOptions } = result.export_options;
+        this.exportUtil(export_mode, exportOptions);
       }
-    );
+    });
+  }
+
+  exportUtil(mode: string, option: RemoteExportOptions) {
+    if (mode === 'local') {
+      let payload = {
+        names: ['default'],
+      };
+      this.complianceProfileService.exportProfile(payload).subscribe(
+        response => {
+          let fileName = this.utils.getExportedFileName(response);
+          let blob = new Blob([response.body || ''], {
+            type: 'text/plain;charset=utf-8',
+          });
+          saveAs(blob, fileName);
+          this.notificationService.open(
+            this.translate.instant('cis.profile.msg.EXPORT_PROFILE_OK')
+          );
+        },
+        error => {
+          this.notificationService.openError(
+            error.error,
+            this.translate.instant('cis.profile.msg.EXPORT_PROFILE_NG')
+          );
+        }
+      );
+    } else if (mode === 'remote') {
+      let payload = {
+        names: ['default'],
+        remote_export_options: option,
+      };
+      this.complianceProfileService.exportProfile(payload).subscribe(
+        response => {
+          this.notificationService.open(
+            this.translate.instant('cis.profile.msg.EXPORT_PROFILE_OK')
+          );
+        },
+        error => {
+          if (
+            error.message &&
+            error.message.length > GlobalConstant.MAX_ERROR_MESSAGE_LENGTH
+          ) {
+            this.serverErrorMessage = this.domSanitizer.bypassSecurityTrustHtml(
+              error.message
+            );
+          }
+
+          this.notificationService.open(
+            this.serverErrorMessage
+              ? this.translate.instant('cis.profile.msg.EXPORT_PROFILE_NG')
+              : this.utils.getAlertifyMsg(error, '', false),
+            GlobalConstant.NOTIFICATION_TYPE.ERROR
+          );
+        }
+      );
+    } else {
+      return;
+    }
   }
 
   openImportProfileModal(): void {

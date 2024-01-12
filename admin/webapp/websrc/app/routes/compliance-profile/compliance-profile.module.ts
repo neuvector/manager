@@ -28,6 +28,7 @@ import { EditTemplateDialogComponent } from './compliance-profile-assets/complia
 import { EditRegulationDialogComponent } from './compliance-profile-templates/compliance-profile-templates-table/edit-regulation-dialog/edit-regulation-dialog.component';
 import { AssetsHttpService } from '@common/api/assets-http.service';
 import { TemplatesCellComponent } from './compliance-profile-assets/compliance-profile-assets-table/templates-cell/templates-cell.component';
+import { ExportOptionsModalModule } from '@components/export-options-modal/export-options-modal.module';
 
 const routes: Routes = [{ path: '', component: ComplianceProfileComponent }];
 
@@ -61,6 +62,7 @@ const routes: Routes = [{ path: '', component: ComplianceProfileComponent }];
     MatCardModule,
     ObserveModule,
     LoadingTemplateModule,
+    ExportOptionsModalModule,
   ],
   providers: [ComplianceProfileService, RisksHttpService, AssetsHttpService],
 })

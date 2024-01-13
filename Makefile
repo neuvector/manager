@@ -7,6 +7,7 @@ BUILD_IMAGE_TAG = latest
 copy_mgr:
 	cp manager/licenses/* ${STAGE_DIR}/licenses/
 	cp manager/cli/cli ${STAGE_DIR}/usr/local/bin/
+	cp manager/cli/cli.py ${STAGE_DIR}/usr/local/bin/
 	cp -r manager/cli/prog ${STAGE_DIR}/usr/local/bin/
 	cp manager/scripts/* ${STAGE_DIR}/usr/local/bin/
 	cp manager/java.security ${STAGE_DIR}/usr/lib/jvm/java-11-openjdk/lib/security/java.security

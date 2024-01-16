@@ -107,6 +107,16 @@ $nv-mobile-width: 480px;
   color: $neuvector-grey-900;
 }
 
+.text-H {
+  color: $eos-color-danger;
+}
+.text-M {
+  color: $eos-color-warning;
+}
+.text-L {
+  color: $eos-color-success;
+}
+
 /* ========================================================================
     Neuvector dialog
   ========================================================================== */
@@ -1524,4 +1534,8 @@ ngx-avatar.userIcon img.avatar-content {
   border-bottom: 1px solid lightgrey !important;
   display: flex !important;
   align-items: center;
+}
+
+.no-min-width {
+  min-width: auto !important;
 }

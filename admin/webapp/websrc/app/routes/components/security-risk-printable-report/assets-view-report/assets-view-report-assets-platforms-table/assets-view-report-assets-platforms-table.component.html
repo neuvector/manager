@@ -77,9 +77,9 @@
         style="width: 50%">
         <div *ngIf="platform.high + platform.medium + platform.low > 0">
           <span
-            *ngFor="let item of platform.vulnerabilites"
-            class="margin-right-s text-{{ item.style }}">
-            {{ item.text.trim() }}
+            *ngFor="let item of platform.vulnerabilities"
+            class="margin-right-s text-{{ item.split('_')[0] }}">
+            {{ item.split('_')[1].trim() }}
           </span>
         </div>
         <div *ngIf="platform.high + platform.medium + platform.low === 0">

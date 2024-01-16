@@ -10,6 +10,7 @@ export class RiskViewReportTableComponent implements OnInit {
 
   @Input() data: any;
   @Input() reportPage: string;
+  @Input() includesImpact: boolean;
   colourMap: any = MapConstant.colourMap;
 
   constructor() { }

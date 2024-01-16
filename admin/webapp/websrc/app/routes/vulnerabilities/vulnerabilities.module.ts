@@ -29,7 +29,6 @@ import { RisksViewReportModule } from '@components/security-risk-printable-repor
 import { AssetsViewReportModule } from '@components/security-risk-printable-report/assets-view-report/assets-view-report.module';
 import { NvCommonModule } from '@common/nvCommon.module';
 import { PdfGenerationDialogComponent } from './pdf-generation-dialog/pdf-generation-dialog.component';
-
 const routes: Routes = [{ path: '', component: VulnerabilitiesComponent }];
 
 @NgModule({

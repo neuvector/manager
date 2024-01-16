@@ -46,27 +46,35 @@
           class="d-flex justify-content-center align-items-center"
           *ngIf="vulnerabilitiesData.total_matched_records > 0">
           <app-loading-button
-            (btnClick)="printAssetsPDF()"
-            [text]="'scan.report.PDF_LINK2' | translate"
+            (btnClick)="printAssetsPDF2()"
             appearance="mat-button"
-            buttonClasses="mr-1 d-flex justify-content-center align-items-center"
+            buttonClasses="mr-1 d-flex justify-content-center align-items-center px-0 no-min-width"
             iconClasses="eos-icons"
             iconName="print">
           </app-loading-button>
           <app-loading-button
-            (btnClick)="printVulnerabilityPDF()"
-            [text]="'scan.report.PDF_LINK' | translate"
+            (btnClick)="downloadAssetsCsv()"
             appearance="mat-button"
-            buttonClasses="mr-1 d-flex justify-content-center align-items-center"
+            buttonClasses="mr-1 d-flex justify-content-center align-items-center px-0 no-min-width"
+            iconClasses="eos-icons"
+            iconName="csv_file">
+          </app-loading-button>
+          <div class="mr-3">{{ 'scan.report.PDF_LINK2' | translate }}</div>
+          <app-loading-button
+            (btnClick)="printVulnerabilityPDF()"
+            appearance="mat-button"
+            buttonClasses="mr-1 d-flex justify-content-center align-items-center px-0 no-min-width"
             iconClasses="eos-icons"
             iconName="print">
           </app-loading-button>
-          <button
-            (click)="downloadCsv()"
-            class="mr-1 d-flex justify-content-center align-items-center"
-            mat-button>
-            <i class="eos-icons icon-18">csv_file</i>
-          </button>
+          <app-loading-button
+            (btnClick)="downloadCsv()"
+            appearance="mat-button"
+            buttonClasses="mr-1 d-flex justify-content-center align-items-center px-0 no-min-width"
+            iconClasses="eos-icons"
+            iconName="csv_file">
+          </app-loading-button>
+          <div>{{ 'scan.report.PDF_LINK' | translate }}</div>
         </div>
         <app-loading-button
           (btnClick)="refresh()"

@@ -210,6 +210,11 @@ export class VulnerabilitiesService {
     );
   }
 
+
+  getAssetsViewReportData(queryToken: string, lastModifiedTime: number): Observable<any> {
+    return this.risksHttpService.postAssetsViewData(queryToken, lastModifiedTime).pipe();
+  }
+
   getDomain(): Observable<string[]> {
     return this.assetsHttpService.getDomain().pipe(
       map(data => {

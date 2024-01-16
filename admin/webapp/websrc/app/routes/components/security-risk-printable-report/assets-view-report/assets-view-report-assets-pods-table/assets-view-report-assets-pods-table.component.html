@@ -67,7 +67,7 @@
       *ngFor="let pod of pods; let i = index"
       [attr.data-index]="i">
       <td class="print-cell" style="width: 15%">
-        {{ pod.pod_name }}
+        {{ pod.name }}
       </td>
       <td class="print-cell" style="width: 10%">
         {{ pod.domain }}
@@ -106,9 +106,9 @@
         style="width: 26%">
         <div *ngIf="pod.high + pod.medium > 0">
           <span
-            *ngFor="let item of pod.vulnerabilites"
-            class="margin-right-s text-{{ item.style }}">
-            {{ item.text.trim() }}
+            *ngFor="let item of pod.vulnerabilities"
+            class="margin-right-s text-{{ item.split('_')[0] }}">
+            {{ item.split('_')[1].trim() }}
           </span>
         </div>
         <div *ngIf="pod.high + pod.medium + pod.low === 0">
@@ -121,7 +121,7 @@
         *ngIf="reportPage === 'vulnerabilities'"
         class="print-cell"
         style="width: 8%">
-        {{ pod.scanned_at }}
+        {{ pod.scanned_at | date }}
       </td>
       <td
         *ngIf="reportPage === 'compliance'"

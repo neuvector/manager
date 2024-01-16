@@ -47,5 +47,6 @@ case class ComplianceProfileConfigData(
 )
 
 case class ComplianceProfileExportData(
-  names: Array[String]
+  names: Array[String],
+  remote_export_options: Option[RemoteExportOptions] = None
 )

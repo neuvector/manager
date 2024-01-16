@@ -217,7 +217,7 @@ export const D2MDurationField = {
   key: 'mode_auto.mode_auto_d2m_duration',
   type: FormlyComponents.NGX_SLIDER,
   templateOptions: {
-    min: 0,
+    min: 1,
     max: 720,
     step: 1,
     showTicks: true,
@@ -272,7 +272,7 @@ export const M2PDurationField = {
   key: 'mode_auto.mode_auto_m2p_duration',
   type: FormlyComponents.NGX_SLIDER,
   templateOptions: {
-    min: 0,
+    min: 1,
     max: 720,
     step: 1,
     showTicks: true,
@@ -313,7 +313,7 @@ export const DurationToggleField = {
   key: 'duration_toggle',
   type: FormlyComponents.TOGGLE,
   templateOptions: {
-    label: 'audit.gridHeader.DURATION',
+    label: 'setting.ENABLED',
     labelPosition: 'before',
   },
   expressionProperties: {
@@ -322,8 +322,8 @@ export const DurationToggleField = {
   hooks: {
     onInit: field => {
       const ctrl = field.parent.formControl.get('misc.unused_group_aging');
-      ctrl.valueChanges.subscribe(duration => {
-        if (!duration) {
+      ctrl.valueChanges.subscribe(enabled => {
+        if (!enabled) {
           field.formControl.setValue(false);
         }
       });
@@ -335,7 +335,7 @@ export const DurationSliderField = {
   key: 'misc.unused_group_aging',
   type: FormlyComponents.NGX_SLIDER,
   templateOptions: {
-    min: 0,
+    min: 1,
     max: 168,
     step: 1,
     showTicks: true,

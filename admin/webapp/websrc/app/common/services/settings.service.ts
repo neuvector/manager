@@ -14,10 +14,14 @@ import {
   PasswordProfile,
   PolicyMode,
   Apikey,
+  RemoteRepository,
 } from '@common/types';
+import { Subject } from 'rxjs';
 
 @Injectable()
 export class SettingsService {
+  private refreshConfigSubject = new Subject<void>();
+
   constructor(
     private assetsHttpService: AssetsHttpService,
     private authHttpService: AuthHttpService,
@@ -176,5 +180,24 @@ export class SettingsService {
 
   getCspSupport() {
     return this.configHttpService.getCspSupport();
+  }
+
+  updateRemoteRepository(payload: RemoteRepository, isEdit: boolean) {
+    if (isEdit) {
+      return this.configHttpService.patchRemoteRepository({ config: payload });
+    } else {
+      return this.configHttpService.postRemoteRepository(payload);
+    }
+  }
+  deleteRemoteRepositoryByName(name: string) {
+    return this.configHttpService.deleteRemoteRepositoryByName(name);
+  }
+
+  refreshConfig() {
+    this.refreshConfigSubject.next();
+  }
+
+  getRefreshConfigSubject() {
+    return this.refreshConfigSubject.asObservable();
   }
 }

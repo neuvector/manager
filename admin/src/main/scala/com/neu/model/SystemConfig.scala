@@ -9,8 +9,29 @@ case class Webhook(
   name: String,
   url: String,
   enable: Boolean,
+  use_proxy: Boolean,
   `type`: String,
   cfg_type: String
+)
+case class RemoteRepository(
+  nickname: String,
+  provider: String,
+  comment: Option[String] = None,
+  enable: Boolean,
+  github_configuration: Option[GithubConfiguration]
+)
+
+case class RemoteRepositoryWrap(
+  config: RemoteRepository
+)
+
+case class GithubConfiguration(
+  repository_owner_username: String,
+  repository_name: String,
+  repository_branch_name: Option[String] = None,
+  personal_access_token: Option[String] = None,
+  personal_access_token_committer_name: Option[String] = None,
+  personal_access_token_email: Option[String] = None
 )
 case class SystemConfig(
   unused_group_aging: Option[Int] = None,
@@ -118,7 +139,8 @@ case class SystemConfigV2(
   webhooks: Option[Array[Webhook]] = None,
   ibmsa_cfg: Option[SystemConfigIBMSAVCfg2] = None,
   scanner_autoscale_cfg: Option[SystemConfigAutoscaleConfig] = None,
-  misc_cfg: Option[SystemConfigMiscCfgV2] = None
+  misc_cfg: Option[SystemConfigMiscCfgV2] = None,
+  remote_repo_cfg: Option[Array[RemoteRepository]] = None
 )
 
 case class SystemConfigWrap(
@@ -148,6 +170,12 @@ case class ServiceConfigParam(
   baseline_profile: Option[String],
   services: Option[Array[String]],
   not_scored: Option[Boolean]
+)
+
+case class RemoteExportOptions(
+  remote_repository_nickname: String,
+  file_path: Option[String] = None,
+  comment: Option[String] = None
 )
 
 case class ServiceConfig(config: ServiceConfigParam)

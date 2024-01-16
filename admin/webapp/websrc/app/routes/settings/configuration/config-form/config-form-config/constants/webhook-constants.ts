@@ -105,8 +105,29 @@ export const WebhookTableField = {
           ariaLabelledBy: 'setting.webhook.STATUS',
         },
         expressionProperties: {
-          'templateOptions.disabled': model =>
-            model.cfg_type === GlobalConstant.CFG_TYPE.FED,
+          'templateOptions.disabled': (model, formState) => {
+            return (
+              !formState.permissions.isWebhookAuthorized ||
+              model.cfg_type === GlobalConstant.CFG_TYPE.FED
+            );
+          },
+        },
+      },
+      {
+        key: 'use_proxy',
+        type: FormlyComponents.CHECKBOX,
+        defaultValue: false,
+        templateOptions: {
+          viewValue: 'setting.webhook.USE_PROXY',
+          flexWidth: '150px',
+        },
+        expressionProperties: {
+          'templateOptions.disabled': (model, formState, _field) => {
+            return (
+              !formState.permissions.isWebhookAuthorized ||
+              model.cfg_type === GlobalConstant.CFG_TYPE.FED
+            );
+          },
         },
       },
       {

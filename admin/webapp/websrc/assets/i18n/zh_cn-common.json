@@ -197,7 +197,8 @@
     "HIDE_DETAILS": "隐藏详细内容",
     "SHOW_DETAILS": "显示详细内容",
     "FILTER": "过滤器",
-    "MATCH": "匹配"
+    "MATCH": "匹配",
+    "MANUAL": "手动的"
   },
   "logout": {
     "SIGN_OUT": "已经登出了",
@@ -2579,7 +2580,7 @@
     "GLOBAL_OPS": "高级设置",
     "MATCHING_TEST": "配置评估",
     "MATCHED_RULES": "匹配的规则",
-    "GLOBAL_MODE": "全局策略模式",
+    "GLOBAL_MODE": "全局模式",
     "IMPORT": "导入",
     "EXPORT": "导出",
     "DOWNLOAD": "下载",
@@ -3096,6 +3097,7 @@
       "WH_TYPE": "网络挂接类型",
       "TYPE": "类型",
       "STATUS": "状态",
+      "USE_PROXY": "使用代理",
       "NEW": "新建网络挂接",
       "ADD": "添加网络挂接",
       "NAME_EMPTY": "名称不可为空",
@@ -3107,6 +3109,45 @@
       "LEAVE_PAGE": "确定要离开此页面，不保存配置设定吗?",
       "DELETE_CONFIRM": "确定删除网络挂接 - {{name}}",
       "OTHER_TYPE": "键-值配对"
+    },
+    "remote_repository": {
+      "title": "远程存储库配置",
+      "description": "配置远程 GitHub 存储库以导出 CRD 文件",
+      "add": "添加远程存储库",
+      "edit": "编辑远程存储库",
+      "delete": "请确认您确实要删除此远程存储库",
+      "delete_success": "远程存储库已成功删除",
+      "options":  {
+        "destination": "目的地",
+        "destination_local": "下载到本地",
+        "destination_remote": "导出到远程存储库",
+        "name": "远程存储库名称",
+        "file_name": "导出的文件名",
+        "mode_description": "配置远程存储库",
+        "export_ok": "导出成功",
+        "export_failed": "导出失败"
+      },
+      "details": {
+        "provider": "提供者",
+        "provider_hint": "GitHub是唯一支持的提供者",
+        "name": "存储库名称",
+        "name_hint": "'default' 是唯一支持的存储库名称",
+        "comment": "注释",
+        "comment_hint": "",
+        "enabled": "启用",
+        "owner": "所有者",
+        "owner_hint": "从 GitHub URL 获取所有者: \"https://github.com/owner/repository\"",
+        "repository_name": "存储库名称",
+        "repository_name_hint": "从 GitHub URL 获取存储库: \"https://github.com/owner/repository\"",
+        "repository_branch": "存储库分支",
+        "repository_branch_hint": "存储库中包含 CRD 文件的特定分支。 默认分支是 'main'.",
+        "personal_access_token": "个人访问令牌",
+        "personal_access_token_hint": "从 https://github.com/settings/tokens 获取。 授予令牌\"repo\"范围",
+        "personal_access_token_committer_name": "提交者名称",
+        "personal_access_token_committer_name_hint": "与个人访问令牌关联的提交者的名称",
+        "personal_access_token_email": "提交者电子邮件",
+        "personal_access_token_email_hint": "与提交者关联的电子邮件地址"
+      }
     },
     "directory_type": {
       "OPEN_LDAP": "OpenLDAP",
@@ -3247,6 +3288,7 @@
     "SLO_URL": "身份提供商单点注销URL",
     "SLO_CERT": "单点注销签名证书",
     "SLO_KEY": "单点注销签名密钥",
+    "SLO_KEY_SUBMITTED": "签名密钥已保存在控制器上",
     "CERTIFICATE": "X.509证书",
     "ADD_EXTRA_CERT": "添加额外的X.509证书",
     "EXTRA_CERT": "额外的X.509证书",

@@ -1,0 +1,29 @@
+<div class="nv-dialog">
+  <div class="d-flex justify-content-between align-items-center">
+    <h4 mat-dialog-title class="mb-2">
+      {{'admissionControl.EXPORT' | translate}}
+    </h4>
+    <button (click)="onCancel()" class="mb-2" aria-label="Close dialog" mat-icon-button>
+      <i class="eos-icons ">close</i>
+    </button>
+  </div>
+  <hr class="fancy mb-2" />
+  <form (ngSubmit)="onSubmit()" [formGroup]="exportForm">
+    <app-export-options [exportOptions]="exportForm" [exportFileName]="exportFileName"></app-export-options>
+    <div class="d-flex justify-content-end mt-2">
+<!--      <button mat-button-->
+<!--              [color]="'primary'"-->
+<!--              (click)="onCancel()"-->
+<!--              class="mr-2">-->
+<!--        {{'general.CANCEL' | translate}}-->
+<!--      </button>-->
+      <app-loading-button
+        [appearance]="'mat-raised-button'"
+        [color]="'primary'"
+        [text]="'general.SUBMIT' | translate"
+        [type]="'submit'"
+      >
+      </app-loading-button>
+    </div>
+  </form>
+</div>

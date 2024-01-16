@@ -222,7 +222,9 @@ export class AdmissionRulesComponent implements OnInit {
       },
       error => {
         console.log(error);
-        const errTitle = this.translate.instant('admissionControl.msg.GET_ADM_STATE_NG');
+        const errTitle = this.translate.instant(
+          'admissionControl.msg.GET_ADM_STATE_NG'
+        );
         this.notificationService.open(
           this.utils.getAlertifyMsg(error.error, errTitle, false),
           GlobalConstant.NOTIFICATION_TYPE.ERROR
@@ -254,6 +256,7 @@ export class AdmissionRulesComponent implements OnInit {
   openExportPopup = () => {
     this.dialog.open(ExportAdmissionRulesModalComponent, {
       width: '50%',
+      disableClose: true,
       data: {
         selectedAdmissionRules: this.selectedAdmissionRules,
       },

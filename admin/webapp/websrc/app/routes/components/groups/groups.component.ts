@@ -14,6 +14,8 @@ import {
   Group,
   PolicyMode,
   ProfileBaseline,
+  RemoteExportOptions,
+  RemoteExportOptionsWrapper,
   Service,
 } from '@common/types';
 import { TranslateService } from '@ngx-translate/core';
@@ -25,6 +27,8 @@ import { NotificationService } from '@services/notification.service';
 import { ServiceModeService } from '@services/service-mode.service';
 import { serviceToGroup } from '@common/utils/common.utils';
 import { RuleDetailModalService } from '@components/groups/partial/rule-detail-modal/rule-detail-modal.service';
+import { ExportOptionsModalComponent } from '@components/export-options-modal/export-options-modal.component';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-groups',
@@ -62,6 +66,7 @@ export class GroupsComponent implements OnInit {
   baselineProfile!: ProfileBaseline | '';
   isAllProtectMode!: boolean;
   navSource = GlobalConstant.NAV_SOURCE;
+  serverErrorMessage: SafeHtml = '';
   get groupsCount() {
     return this.groups.length;
   }
@@ -76,7 +81,8 @@ export class GroupsComponent implements OnInit {
     private translate: TranslateService,
     private utilsService: UtilsService,
     private route: ActivatedRoute,
-    private ruleDetailModalService: RuleDetailModalService
+    private ruleDetailModalService: RuleDetailModalService,
+    private domSanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
@@ -358,28 +364,78 @@ export class GroupsComponent implements OnInit {
   };
 
   exportGroups = (policyMode: string = '') => {
-    let payload = {
-      groups: this.selectedGroups.map(group => group.name),
-      policy_mode: policyMode,
-    };
-
-    this.groupsService.exportGroupsConfigData(payload).subscribe(
-      response => {
-        let fileName = this.utilsService.getExportedFileName(response);
-        let blob = new Blob([response.body || ''], {
-          type: 'text/plain;charset=utf-8',
-        });
-        saveAs(blob, fileName);
+    const dialogRef = this.dialog.open(ExportOptionsModalComponent, {
+      width: '50%',
+      disableClose: true,
+      data: {
+        filename: GlobalConstant.REMOTE_EXPORT_FILENAME.GROUP,
       },
-      error => {
-        console.warn(error);
-        this.notificationService.openError(
-          error.error,
-          this.translate.instant('group.dlp.msg.EXPORT_NG')
-        );
+    });
+
+    dialogRef.afterClosed().subscribe((result: RemoteExportOptionsWrapper) => {
+      if (result) {
+        const { export_mode, ...exportOptions } = result.export_options;
+        this.exportUtil(export_mode, exportOptions, policyMode);
       }
-    );
+    });
   };
+
+  exportUtil(mode: string, option: RemoteExportOptions, policyMode: string) {
+    if (mode === 'local') {
+      let payload = {
+        groups: this.selectedGroups.map(group => group.name),
+        policy_mode: policyMode,
+      };
+      this.groupsService.exportGroupsConfigData(payload).subscribe(
+        response => {
+          let fileName = this.utilsService.getExportedFileName(response);
+          let blob = new Blob([response.body || ''], {
+            type: 'text/plain;charset=utf-8',
+          });
+          saveAs(blob, fileName);
+        },
+        error => {
+          console.warn(error);
+          this.notificationService.openError(
+            error.error,
+            this.translate.instant('group.dlp.msg.EXPORT_NG')
+          );
+        }
+      );
+    } else if (mode === 'remote') {
+      let payload = {
+        groups: this.selectedGroups.map(group => group.name),
+        policy_mode: policyMode,
+        remote_export_options: option,
+      };
+      this.groupsService.exportGroupsConfigData(payload).subscribe(
+        response => {
+          this.notificationService.open(
+            this.translate.instant('group.dlp.msg.EXPORT_OK')
+          );
+        },
+        error => {
+          if (
+            error.message &&
+            error.message.length > GlobalConstant.MAX_ERROR_MESSAGE_LENGTH
+          ) {
+            this.serverErrorMessage = this.domSanitizer.bypassSecurityTrustHtml(
+              error.message
+            );
+          }
+
+          this.notificationService.open(
+            this.serverErrorMessage
+              ? this.translate.instant('group.dlp.msg.EXPORT_NG')
+              : this.utils.getAlertifyMsg(error, '', false),
+            GlobalConstant.NOTIFICATION_TYPE.ERROR
+          );
+        }
+      );
+    } else {
+      return;
+    }
+  }
 
   onResize(): void {
     this.gridOptions4Groups.api!.sizeColumnsToFit();
@@ -402,7 +458,7 @@ export class GroupsComponent implements OnInit {
     this.gridOptions4Groups.api!.setRowData(this.groups);
     this.filteredCount = this.groups.length;
     if (this.eof) this.refreshing.emit(false);
-    console.log("this.linkedGroup:", this.linkedGroup)
+    console.log('this.linkedGroup:', this.linkedGroup);
     setTimeout(() => {
       this.gridOptions4Groups.api!.sizeColumnsToFit();
       this.gridOptions4Groups.api!.forEachNode((node, index) => {
@@ -425,9 +481,13 @@ export class GroupsComponent implements OnInit {
 
   private highlightDisplayedGroup = () => {
     if (!this.selectedGroups || this.selectedGroups.length === 0) return;
-    let index = this.groups.findIndex(group => group.name === this.selectedGroups[0].name);
+    let index = this.groups.findIndex(
+      group => group.name === this.selectedGroups[0].name
+    );
     let rowNode = this.gridOptions4Groups.api!.getDisplayedRowAtIndex(index);
-    let groupGridEl = document.querySelector('#groups-grid .ag-center-cols-container');
+    let groupGridEl = document.querySelector(
+      '#groups-grid .ag-center-cols-container'
+    );
     if (groupGridEl) {
       Array.from(groupGridEl!.children).forEach((el, index) => {
         if (index === rowNode?.rowIndex) {

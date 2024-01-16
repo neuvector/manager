@@ -16,7 +16,8 @@ import com.neu.model.{
   TimeRange,
   VulnerabilityProfileConfigData,
   VulnerabilityProfileEntryConfigData,
-  VulnerabilityProfileExportData
+  VulnerabilityProfileExportData,
+  VulnerabilityQuery
 }
 import com.typesafe.scalalogging.LazyLogging
 import spray.can.Http._
@@ -43,6 +44,43 @@ class RiskService()(implicit executionContext: ExecutionContext)
   val riskRoute: Route =
     headerValueByName("Token") { tokenId =>
       {
+        pathPrefix("vulasset") {
+          pathEnd {
+            post {
+              entity(as[VulnerabilityQuery]) { vulnerabilityQuery =>
+                Utils.respondWithWebServerHeaders() {
+                  complete {
+                    logger.info(s"Getting asset vulnerabilities ...")
+                    RestClient.httpRequestWithHeader(
+                      s"${baseClusterUri(tokenId)}/vulasset",
+                      POST,
+                      vulnerabilityQueryToJson(
+                        vulnerabilityQuery
+                      ),
+                      tokenId
+                    )
+                  }
+                }
+              }
+            } ~
+            get {
+              parameters('token, 'start, 'row, 'orderby.?, 'orderbyColumn.?) {
+                (token, start, row, orderby, orderbyColumn) =>
+                  Utils.respondWithWebServerHeaders() {
+                    complete {
+                      val url =
+                        s"${baseClusterUri(tokenId)}/vulasset?token=$token&start=$start&row=$row${if (orderby.isDefined)
+                          s"&orderby=${orderby.get}"
+                        else ""}${if (orderbyColumn.isDefined)
+                          s"&orderbyColumn=${orderbyColumn.get}"
+                        else ""}"
+                      RestClient.httpRequestWithHeader(url, GET, "", tokenId)
+                    }
+                  }
+              }
+            }
+          }
+        } ~
         pathPrefix("risk") {
           pathPrefix("cve") {
             pathEnd {

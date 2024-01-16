@@ -1,4 +1,4 @@
-import {AbstractControl, FormGroup, ValidationErrors} from '@angular/forms';
+import { AbstractControl, FormGroup, ValidationErrors } from '@angular/forms';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 
@@ -19,7 +19,7 @@ export function objNameValidator(
   control: AbstractControl
 ): ValidationErrors | null {
   const value = control.value;
-  const pattern = new RegExp(/^[a-zA-Z0-9]+[.:a-zA-Z0-9_-]*[^.]$/);
+  const pattern = new RegExp(/^[a-zA-Z0-9]+[.:a-zA-Z0-9_-]*[^.]?$/);
   if (!value) {
     return null;
   }
@@ -35,9 +35,7 @@ export function webhookUsernameValidator(
     return null;
   }
 
-  return pattern.test(value)
-    ? { invalidWebhookUserName: true }
-    : null;
+  return pattern.test(value) ? { invalidWebhookUserName: true } : null;
 }
 
 export function fedNameValidator(
@@ -49,9 +47,7 @@ export function fedNameValidator(
     return null;
   }
 
-  return !pattern.test(value)
-    ? { invalidFedName: true }
-    : null;
+  return !pattern.test(value) ? { invalidFedName: true } : null;
 }
 
 export function portRangeValidator(
@@ -65,4 +61,17 @@ export function portRangeValidator(
   return !pattern.test(value) || +value < 1 || +value > 65535
     ? { invalidPortRange: true }
     : null;
+}
+
+export function emailValidator(
+  control: AbstractControl
+): ValidationErrors | null {
+  const value = control.value;
+  const pattern = new RegExp(
+    /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/
+  );
+  if (!value) {
+    return null;
+  }
+  return pattern.test(value) ? null : { invalidEmail: true };
 }

@@ -10,9 +10,14 @@ import {
   VulnerabilityProfileEntry,
   VulnerabilityProfilesData,
   WorkloadCompliance,
+  VulnerabilitiesData,
+  VulnerabilityQuery,
+  VulnerabilitiesQueryData,
+  VulnerabilitiesQuerySessionData,
+  VulQueryOrderByColumnOption,
+  OrderByOption,
 } from '@common/types';
 import { PathConstant } from '@common/constants/path.constant';
-import { VulnerabilitiesData } from '@common/types/vulnerabilities/vulnerabilities';
 import { Observable } from 'rxjs';
 
 @Injectable()
@@ -37,6 +42,28 @@ export class RisksHttpService {
   getVulnerabilities() {
     return GlobalVariable.http.get<VulnerabilitiesData>(
       PathConstant.RISK_CVE_URL
+    );
+  }
+
+  postVulnerabilityQuery(query: VulnerabilityQuery) {
+    let { last_modified_timestamp_option, ...vulQuery } = query;
+    console.log(query);
+    return GlobalVariable.http.post<VulnerabilitiesQueryData>(
+      PathConstant.VUL_ASSET_URL,
+      vulQuery
+    );
+  }
+
+  getVulnerabilitiesQuery(params: {
+    token: string;
+    start: number;
+    row: number;
+    orderbyColumn?: VulQueryOrderByColumnOption;
+    orderby?: OrderByOption;
+  }) {
+    return GlobalVariable.http.get<VulnerabilitiesQuerySessionData>(
+      PathConstant.VUL_ASSET_URL,
+      { params }
     );
   }
 
@@ -86,12 +113,11 @@ export class RisksHttpService {
     });
   }
 
-  exportCVEProfile(names: string[]) {
-    return GlobalVariable.http.post(
-      PathConstant.EXPORT_CVE_PROFILE,
-      { names },
-      { observe: 'response', responseType: 'text' }
-    );
+  exportCVEProfile(payload) {
+    return GlobalVariable.http.post(PathConstant.EXPORT_CVE_PROFILE, payload, {
+      observe: 'response',
+      responseType: 'text'
+    });
   }
 
   getComplianceProfile(): Observable<ComplianceProfileData> {
@@ -107,10 +133,10 @@ export class RisksHttpService {
     );
   }
 
-  exportComplianceProfile(names: string[]) {
+  exportComplianceProfile(payload) {
     return GlobalVariable.http.post(
       PathConstant.EXPORT_COMPLIANCE_PROFILE,
-      { names },
+      payload,
       { observe: 'response', responseType: 'text' }
     );
   }

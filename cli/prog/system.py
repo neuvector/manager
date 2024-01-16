@@ -299,8 +299,37 @@ def showLocalSystemConfig(data, scope):
             wh["scope"] = client.CfgTypeDisplay[wh["cfg_type"]]
     click.echo("")
     click.echo("Webhooks:")
-    columns = ("name", "url", "type", "enable", "scope", "use_proxy")
-    output.list(columns, conf["webhooks"])
+    if len(conf["webhooks"]) > 0:
+        columns = ("name", "url", "type", "enable", "scope", "use_proxy")
+        output.list(columns, conf["webhooks"])
+
+    click.echo("")
+    click.echo("Remote Repositories:")
+    if len(conf["remote_repositories"]) > 0:
+        for repo in conf["remote_repositories"]:
+            column_map = ()
+            column_map += (("nickname", "Nickname"),
+                           ("comment", "Comment"),
+                           ("enable", "Enable"),
+                           ("provider", "Repository Provider"),
+                           ("provider_configuration", "Repository Configuration"),)
+            if repo["provider"] == "github":
+                column_map += (("repository_owner_username", "       Repository Owner User Name"),
+                               ("repository_name", "       Repository Name"),
+                               ("repository_branch_name", "       Repository Branch Name"),
+                               ("personal_access_token", "       Personal Access Token"),
+                               ("personal_access_token_committer_name", "       Personal Access Token Committer Name"),
+                               ("personal_access_token_email", "       Personal Access Token Email"),)
+                githubConf = repo["github_configuration"]
+                githubConf["provider_configuration"] = ""
+                githubConf["nickname"] = repo["nickname"]
+                githubConf["provider"] = repo["provider"]
+                githubConf["comment"] = repo["comment"]
+                githubConf["enable"] = repo["enable"]
+                githubConf["personal_access_token"] = "******"
+                output.show_with_map(column_map, githubConf)
+            click.echo("")
+    click.echo("")
 
 
 @show_system.group("partner")
@@ -496,7 +525,7 @@ def create_system(data):
 @click.option("--proxy", default=False, is_flag=True, help="Use proxy to connect")
 @click.option("--enable/--disable", default=True, is_flag=True, help="Enable/Disable the webhook")
 @click.pass_obj
-def create_system_webhook_url(data, name, url, type, scope, proxy, enable):
+def create_system_webhook(data, name, url, type, scope, proxy, enable):
     """Create webhook settings"""
     if type == "slack":
         type = "Slack"
@@ -508,6 +537,47 @@ def create_system_webhook_url(data, name, url, type, scope, proxy, enable):
     else:
         body["cfg_type"] = "user_created"
     data.client.create("system/config/webhook", {"config": body})
+
+
+@create_system.command("remote_repository")
+@click.option("--nickname", default="default", help='only "default" is supported')
+@click.option("--provider", default="github", help='only "github" is supported')
+@click.option("--comment", help="comment")
+@click.option("--enable/--disable", default=True, is_flag=True, help="Enable/Disable the remote repository")
+@click.option("--repo_owner_username", help="repository owner user name")
+@click.option("--repo_name", default="", help="repository name")
+@click.option("--repo_branch_name", help="repository branch name")
+@click.option("--personal_access_token", help="personal access token")
+@click.option("--personal_access_token_committer_name", help="personal access token committer name")
+@click.option("--personal_access_token_email", help="personal access token email")
+@click.pass_obj
+def create_system_remote_repository(data, nickname, provider, comment, enable, repo_owner_username, repo_name, repo_branch_name, personal_access_token, personal_access_token_committer_name, personal_access_token_email):
+    """Create remote repository settings"""
+    if nickname != "default":
+        click.echo("Error: Unsupported nickname")
+        click.echo("")
+        return
+    if provider != "github":
+        click.echo("Error: Unsupported provider")
+        click.echo("")
+        return
+        
+    githubConfig = {
+        "repository_owner_username": repo_owner_username,
+        "repository_name": repo_name,
+        "repository_branch_name": repo_branch_name,
+        "personal_access_token": personal_access_token,
+        "personal_access_token_committer_name": personal_access_token_committer_name,
+        "personal_access_token_email": personal_access_token_email,
+    }
+    body = {
+        "nickname": nickname,
+        "provider": provider,
+        "comment": comment,
+        "enable": enable,
+        "github_configuration": githubConfig,
+    }
+    data.client.create("system/config/remote_repository", body)
 
 
 # delete
@@ -527,6 +597,15 @@ def delete_system_webhook_url(data, name, scope):
     args = {}
     args["scope"] = scope
     data.client.delete("system/config/webhook", name, **args)
+
+
+@delete_system.command("remote_repository")
+@click.argument('nickname')
+@click.pass_obj
+def delete_system_remote_repository(data, nickname):
+    """Delete remote repository settings"""
+    args = {}
+    data.client.delete("system/config/remote_repository", nickname, **args)
 
 
 # set
@@ -789,16 +868,67 @@ def set_system_cluster_name(data, name):
 @click.option("--type", default="", help="webhook type", type=click.Choice(['Slack', 'JSON']))
 @click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=True,
               help="It's for local or federal response rule")
+@click.option("--proxy", default=False, is_flag=True, help="Use proxy to connect")
 @click.option("--enable/--disable", default=True, is_flag=True, help="Enable/Disable the webhook")
 @click.pass_obj
-def set_system_webhook_url(data, name, url, type, scope, enable):
+def set_system_webhook_url(data, name, url, type, scope, proxy, enable):
     """Set webhook settings"""
     if type == "slack":
         type = "Slack"
-    body = {"name": name, "url": url, "enable": enable, "type": type}
+    body = {"name": name, "url": url, "enable": enable, "type": type, "use_proxy": proxy}
     args = {}
     args["scope"] = scope
     data.client.config("system/config/webhook", name, {"config": body}, **args)
+
+
+@set_system.command("remote_repository")
+@click.argument('nickname')
+@click.option("--comment", help="comment")
+@click.option("--disable/--enable", default=None, required=False, help="Enable/disable the remote repository")
+@click.option("--repo_owner_username", help="repository owner user name")
+@click.option("--repo_name", help="repository name")
+@click.option("--repo_branch_name", help="repository branch name")
+@click.option("--personal_access_token", help="personal access token")
+@click.option("--personal_access_token_committer_name", help="personal access token committer name")
+@click.option("--personal_access_token_email", help="personal access token email")
+@click.pass_obj
+def set_system_remote_repository(data, nickname, comment, disable, repo_owner_username, repo_name, repo_branch_name, personal_access_token, personal_access_token_committer_name, personal_access_token_email):
+    """Set remote repository settings"""
+    if nickname != "default":
+        click.echo("Error: Unsupported nickname")
+        click.echo("")
+        return
+        
+    enable = None
+    if disable is True:
+        enable = False
+    elif disable is False:
+        enable = True
+
+    githubConfig = {}
+    if repo_owner_username is not None:
+        githubConfig["repository_owner_username"] = repo_owner_username
+    if repo_name is not None:
+        githubConfig["repository_name"] = repo_name
+    if repo_branch_name is not None:
+        githubConfig["repository_branch_name"] = repo_branch_name
+    if personal_access_token is not None:
+        githubConfig["personal_access_token"] = personal_access_token
+    if personal_access_token_committer_name is not None:
+        githubConfig["personal_access_token_committer_name"] = personal_access_token_committer_name
+    if personal_access_token_email is not None:
+        githubConfig["personal_access_token_email"] = personal_access_token_email
+
+    body = {
+        "nickname": nickname,
+        "github_configuration": githubConfig,
+    }
+    if comment is not None:
+        body["comment"] = comment
+    if enable is not None:
+        body["enable"] = enable
+    args = {}
+    data.client.config("system/config/remote_repository", nickname, {"config": body}, **args)
 
 
 @set_system.command("telemetry")
@@ -1119,7 +1249,7 @@ def request_export(data):
 @request_export.command("config")
 @click.option('--section', '-s', multiple=True, type=click.Choice(['user', 'policy']))
 @click.option('--raw', default=False, is_flag=True, help='Export in raw format')
-@click.option('--filename', '-f', type=click.Path(dir_okay=False, writable=True, resolve_path=True))
+@click.option('--filename', '-f', type=click.Path(dir_okay=False, writable=True, resolve_path=True), help="Local file path when export to local machine")
 @click.pass_obj
 def export_config(data, section, raw, filename):
     """Export system configurations."""
@@ -1170,16 +1300,34 @@ def export_config(data, section, raw, filename):
 
 @request_export.command('group')
 @click.option("--name", multiple=True, help="Name of group to export")
-@click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True))
+@click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True), help="Local file path when export to local machine")
+@click.option("--remote_repository_nickname", default="default", help="Repository nickname when export to remote repository")
+@click.option("--remote_filepath", default="", help="File path on repository when export to remote repository")
+@click.option("--comment", default="", help="Comment for export to remote repository")
 @click.pass_obj
-def request_export_group(data, name, filename):
+def request_export_group(data, name, filename, remote_repository_nickname, remote_filepath, comment):
     """Export group policies."""
 
     groups = []
     for n in name:
         groups.append(n)
 
-    respData = data.client.requestDownload("file", "group", None, {"groups": groups})
+    payload = {"groups": groups}
+    if remote_repository_nickname is not None:
+        if remote_repository_nickname != "default":
+            click.echo("Error: Unsupported repository nickname")
+            return
+        elif len(remote_filepath) == 0:
+            click.echo("Error: remote_filepath unspecified")
+            return
+        else:
+            payload["remote_export_options"] = {
+                "remote_repository_nickname": remote_repository_nickname,
+                "file_path": remote_filepath,
+                "comment": comment,
+            }
+
+    respData = data.client.requestDownload("file", "group", None, payload)
     if filename and len(filename) > 0:
         try:
             with click.open_file(filename, 'w') as wfp:
@@ -1195,16 +1343,34 @@ def request_export_group(data, name, filename):
 @request_export.command('admission')
 @click.option("--config", "-c", default=False, is_flag=True, help="Export admission control configuration")
 @click.option("--id", multiple=True, help="ID of admission control rule to export")
-@click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True))
+@click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True), help="Local file path when export to local machine")
+@click.option("--remote_repository_nickname", default="default", help="Repository nickname when export to remote repository")
+@click.option("--remote_filepath", default="", help="File path on repository when export to remote repository")
+@click.option("--comment", default="", help="Comment for export to remote repository")
 @click.pass_obj
-def request_export_admission(data, config, id, filename):
+def request_export_admission(data, config, id, filename, remote_repository_nickname, remote_filepath, comment):
     """Export admission control configuration/rules."""
 
     ids = []
     for n in id:
         ids.append(int(n))
 
-    respData = data.client.requestDownload("file", "admission", None, {"export_config": config, "ids": ids})
+    payload = {"export_config": config, "ids": ids}
+    if remote_repository_nickname is not None:
+        if remote_repository_nickname != "default":
+            click.echo("Error: Unsupported repository nickname")
+            return
+        elif len(remote_filepath) == 0:
+            click.echo("Error: remote_filepath unspecified")
+            return
+        else:
+            payload["remote_export_options"] = {
+                "remote_repository_nickname": remote_repository_nickname,
+                "file_path": remote_filepath,
+                "comment": comment,
+            }
+
+    respData = data.client.requestDownload("file", "admission", None, payload)
     if filename and len(filename) > 0:
         try:
             with click.open_file(filename, 'w') as wfp:
@@ -1218,16 +1384,34 @@ def request_export_admission(data, config, id, filename):
 
 @request_export.command('dlp')
 @click.option("--name",  multiple=True, help="Name of DLP sensor to export")
-@click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True))
+@click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True), help="Local file path when export to local machine")
+@click.option("--remote_repository_nickname", default="default", help="Repository nickname when export to remote repository")
+@click.option("--remote_filepath", default="", help="File path on repository when export to remote repository")
+@click.option("--comment", default="", help="Comment for export to remote repository")
 @click.pass_obj
-def request_export_dlp(data, name, filename):
+def request_export_dlp(data, name, filename, remote_repository_nickname, remote_filepath, comment):
     """Export DLP sensors/rules."""
 
     names = []
     for n in name:
         names.append(n)
 
-    respData = data.client.requestDownload("file", "dlp", None, {"names": names})
+    payload = {"names": names}
+    if remote_repository_nickname is not None:
+        if remote_repository_nickname != "default":
+            click.echo("Error: Unsupported repository nickname")
+            return
+        elif len(remote_filepath) == 0:
+            click.echo("Error: remote_filepath unspecified")
+            return
+        else:
+            payload["remote_export_options"] = {
+                "remote_repository_nickname": remote_repository_nickname,
+                "file_path": remote_filepath,
+                "comment": comment,
+            }
+
+    respData = data.client.requestDownload("file", "dlp", None, payload)
     if filename and len(filename) > 0:
         try:
             with click.open_file(filename, 'w') as wfp:
@@ -1241,16 +1425,34 @@ def request_export_dlp(data, name, filename):
 
 @request_export.command('waf')
 @click.option("--name", multiple=True, help="Name of WAF sensor to export")
-@click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True))
+@click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True), help="Local file path when export to local machine")
+@click.option("--remote_repository_nickname", default="default", help="Repository nickname when export to remote repository")
+@click.option("--remote_filepath", default="", help="File path on repository when export to remote repository")
+@click.option("--comment", default="", help="Comment for export to remote repository")
 @click.pass_obj
-def request_export_waf(data, name, filename):
+def request_export_waf(data, name, filename, remote_repository_nickname, remote_filepath, comment):
     """Export WAF sensors/rules."""
 
     names = []
     for n in name:
         names.append(n)
 
-    respData = data.client.requestDownload("file", "waf", None, {"names": names})
+    payload = {"names": names}
+    if remote_repository_nickname is not None:
+        if remote_repository_nickname != "default":
+            click.echo("Error: Unsupported repository nickname")
+            return
+        elif len(remote_filepath) == 0:
+            click.echo("Error: remote_filepath unspecified")
+            return
+        else:
+            payload["remote_export_options"] = {
+                "remote_repository_nickname": remote_repository_nickname,
+                "file_path": remote_filepath,
+                "comment": comment,
+            }
+
+    respData = data.client.requestDownload("file", "waf", None, payload)
     if filename and len(filename) > 0:
         try:
             with click.open_file(filename, 'w') as wfp:
@@ -1263,9 +1465,12 @@ def request_export_waf(data, name, filename):
     return
 
 @request_export.command('vulnerability_profile')
-@click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True))
+@click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True), help="Local file path when export to local machine")
+@click.option("--remote_repository_nickname", default="default", help="Repository nickname when export to remote repository")
+@click.option("--remote_filepath", default="", help="File path on repository when export to remote repository")
+@click.option("--comment", default="", help="Comment for export to remote repository")
 @click.pass_obj
-def request_export_vul_profile(data, filename):
+def request_export_vul_profile(data, filename, remote_repository_nickname, remote_filepath, comment):
     """Export vulnerability profile configuration."""
 
     names = ["default"]
@@ -1273,6 +1478,21 @@ def request_export_vul_profile(data, filename):
     payload = {}
     if len(names) > 0:
         payload["profiles"] = names
+
+    if remote_repository_nickname is not None:
+        if remote_repository_nickname != "default":
+            click.echo("Error: Unsupported repository nickname")
+            return
+        elif len(remote_filepath) == 0:
+            click.echo("Error: remote_filepath unspecified")
+            return
+        else:
+            payload["remote_export_options"] = {
+                "remote_repository_nickname": remote_repository_nickname,
+                "file_path": remote_filepath,
+                "comment": comment,
+            }
+
     respData = data.client.requestDownload("file", "vulnerability/profile", None, payload)
     if filename and len(filename) > 0:
         try:
@@ -1286,9 +1506,12 @@ def request_export_vul_profile(data, filename):
     return
 
 @request_export.command('compliance_profile')
-@click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True))
+@click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True), help="Local file path when export to local machine")
+@click.option("--remote_repository_nickname", default="default", help="Repository nickname when export to remote repository")
+@click.option("--remote_filepath", default="", help="File path on repository when export to remote repository")
+@click.option("--comment", default="", help="Comment for export to remote repository")
 @click.pass_obj
-def request_export_compliance_profile(data, filename):
+def request_export_compliance_profile(data, filename, remote_repository_nickname, remote_filepath, comment):
     """Export compliance profile configuration."""
 
     names = ["default"]
@@ -1296,6 +1519,21 @@ def request_export_compliance_profile(data, filename):
     payload = {}
     if len(names) > 0:
         payload["profiles"] = names
+
+    if remote_repository_nickname is not None:
+        if remote_repository_nickname != "default":
+            click.echo("Error: Unsupported repository nickname")
+            return
+        elif len(remote_filepath) == 0:
+            click.echo("Error: remote_filepath unspecified")
+            return
+        else:
+            payload["remote_export_options"] = {
+                "remote_repository_nickname": remote_repository_nickname,
+                "file_path": remote_filepath,
+                "comment": comment,
+            }
+
     respData = data.client.requestDownload("file", "compliance/profile", None, payload)
     if filename and len(filename) > 0:
         try:

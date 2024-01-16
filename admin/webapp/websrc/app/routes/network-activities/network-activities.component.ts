@@ -694,6 +694,7 @@ export class NetworkActivitiesComponent
 
     const quickSearch = () => {
       this.popupState.leave();
+      this.stopRefreshSession();
       setTimeout(() => {
         this.popupState.transitTo(PopupState.onQuickSearch);
       }, 300);
@@ -701,6 +702,7 @@ export class NetworkActivitiesComponent
 
     const showFilter = () => {
       this.popupState.leave();
+      this.stopRefreshSession();
       this.domains = this.graphService
         .getDomains()
         .map(domain => ({ name: domain.name }));
@@ -722,6 +724,7 @@ export class NetworkActivitiesComponent
 
     const showBlacklist = () => {
       this.popupState.leave();
+      this.stopRefreshSession();
       this.domains = this.graphService
         .getDomains()
         .map(domain => ({ name: domain.name }));
@@ -1067,6 +1070,7 @@ export class NetworkActivitiesComponent
     const showDomainInfo = item => {
       this.domain = item.getModel();
       this.popupState.leave();
+      this.stopRefreshSession();
 
       setTimeout(() => {
         this.popupState.transitTo(PopupState.onDomain);
@@ -1077,6 +1081,7 @@ export class NetworkActivitiesComponent
       const startIndex = id.indexOf('Host:');
 
       this.popupState.leave();
+      this.stopRefreshSession();
       this.hostId = startIndex >= 0 ? id.slice(startIndex + 5) : id;
       setTimeout(() => {
         this.popupState.transitTo(PopupState.onHost);
@@ -1126,6 +1131,7 @@ export class NetworkActivitiesComponent
         });
       setTimeout(() => {
         this.popupState.transitTo(PopupState.onNode);
+        this.stopRefreshSession();
       }, 300);
     };
 
@@ -1142,6 +1148,7 @@ export class NetworkActivitiesComponent
         showDomainInfo(item);
       } else {
         this.popupState.leave();
+        this.stopRefreshSession();
       }
     };
 
@@ -1239,6 +1246,7 @@ export class NetworkActivitiesComponent
         response => {
           this.conversationDetail = response['conversation'];
           this.popupState.leave();
+          this.stopRefreshSession();
           this.showRuleId = false;
           if (this.conversationDetail.entries!.length > 0)
             this.entriesGridHeight = this.getGridHeight(
@@ -1248,6 +1256,7 @@ export class NetworkActivitiesComponent
         },
         err => {
           this.popupState.leave();
+          this.stopRefreshSession();
           console.warn(err);
         }
       );
@@ -1607,6 +1616,7 @@ export class NetworkActivitiesComponent
     );
 
     setTimeout(() => {
+      this.stopRefreshSession();
       this.popupState.transitTo(PopupState.onGroupNode);
     }, 300);
   }
@@ -2348,6 +2358,7 @@ export class NetworkActivitiesComponent
           ? container.label
           : container.oriLabel;
       this.popupState.leave();
+      this.stopRefreshSession();
 
       this.sniffService.getSniffers(this.containerId).subscribe(
         response => {

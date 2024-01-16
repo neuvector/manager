@@ -83,8 +83,8 @@ export class ComplianceProfileService {
     return this.assetsHttpService.postDomain(payload);
   }
 
-  exportProfile(names: string[]) {
-    return this.risksHttpService.exportComplianceProfile(names);
+  exportProfile(payload) {
+    return this.risksHttpService.exportComplianceProfile(payload);
   }
 
   private getTemplate(): Observable<ComplianceProfileTemplateData> {

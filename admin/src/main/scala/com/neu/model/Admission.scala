@@ -48,5 +48,6 @@ case class AdmConfig(
 
 case class AdmExport(
   ids: Array[Int],
-  export_config: Boolean
+  export_config: Boolean,
+  remote_export_options: Option[RemoteExportOptions] = None
 )

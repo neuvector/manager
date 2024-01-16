@@ -61,5 +61,6 @@ case class DlpRuleConfig(name: String, patterns: Seq[Pattern])
 case class DlpRuleConfigData(config: DlpRuleConfig)
 
 case class ExportedDlpSensorList(
-  names: Array[String]
+  names: Array[String],
+  remote_export_options: Option[RemoteExportOptions] = None
 )

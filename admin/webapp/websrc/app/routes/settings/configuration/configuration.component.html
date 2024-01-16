@@ -11,12 +11,12 @@
     <app-config-form [config]="config"></app-config-form>
   </mat-card>
   <br />
-  <mat-card *ngIf="isConfigAuthorized || isImportAuthorized">
-    <app-export-form></app-export-form>
-  </mat-card>
-  <br />
   <mat-card *ngIf="isConfigAuthorized">
     <app-remote-repository-form [remoteRepoData]="remoteRepository"></app-remote-repository-form>
+  </mat-card>
+  <br />
+  <mat-card *ngIf="isConfigAuthorized || isImportAuthorized">
+    <app-export-form></app-export-form>
   </mat-card>
   <br />
   <mat-card *ngIf="isConfigAuthorized">

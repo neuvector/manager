@@ -2,11 +2,9 @@ import { DOCUMENT } from '@angular/common';
 import {
   ChangeDetectorRef,
   Component,
-  EventEmitter,
   Inject,
   Input,
   OnInit,
-  Output,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { GlobalConstant } from '@common/constants/global.constant';
@@ -95,6 +93,11 @@ export class ConfigFormComponent implements OnInit {
     };
     this.serverErrorMessage = '';
     this.cd.detectChanges();
+
+    // reset the status of the sliders to fix the issue NVSHAS-8599
+    setTimeout(() => {
+      this.configForm.markAsPristine();
+    }, 300);
   }
 
   private _config!: ConfigV2Response;

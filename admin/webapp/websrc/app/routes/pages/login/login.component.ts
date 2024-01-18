@@ -133,7 +133,17 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.retrieveCustomizedUIContent();
     }
 
-    if (this.isFromSSO) {
+    // If the user is already logged in, redirect to the dashboard page
+    if (
+      this.localStorage.has(GlobalConstant.LOCAL_STORAGE_TOKEN) &&
+      !this.localStorage.has(GlobalConstant.LOCAL_STORAGE_TIMEOUT)
+    ) {
+      const userInfo = this.localStorage.get(
+        GlobalConstant.LOCAL_STORAGE_TOKEN
+      );
+      this.setUserInfo(userInfo);
+      this.getSummary(userInfo);
+    } else if (this.isFromSSO) {
       this.authService.getEula().subscribe(
         (eulaInfo: any) => {
           let eula = eulaInfo.eula;
@@ -166,20 +176,9 @@ export class LoginComponent implements OnInit, OnDestroy {
         }
       );
     } else {
-      if (
-        this.localStorage.has(GlobalConstant.LOCAL_STORAGE_TOKEN) &&
-        !this.localStorage.has(GlobalConstant.LOCAL_STORAGE_TIMEOUT)
-      ) {
-        const userInfo = this.localStorage.get(
-          GlobalConstant.LOCAL_STORAGE_TOKEN
-        );
-        this.setUserInfo(userInfo);
-        this.getSummary(userInfo);
-      } else {
-        this.getAuthServer();
-        this.verifyAuth();
-        this.verifyEula();
-      }
+      this.getAuthServer();
+      this.verifyAuth();
+      this.verifyEula();
     }
   }
 

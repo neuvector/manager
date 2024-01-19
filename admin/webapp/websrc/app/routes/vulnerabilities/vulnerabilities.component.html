@@ -46,7 +46,7 @@
           class="d-flex justify-content-center align-items-center"
           *ngIf="vulnerabilitiesData.total_matched_records > 0">
           <app-loading-button
-            (btnClick)="printAssetsPDF2()"
+            (btnClick)="printAssetsPDF()"
             appearance="mat-button"
             buttonClasses="mr-1 d-flex justify-content-center align-items-center px-0 no-min-width"
             iconClasses="eos-icons"
@@ -93,8 +93,14 @@
     <div style="height: 200px">
       <app-vulnerability-charts></app-vulnerability-charts>
     </div>
-    <div style="height: calc(100% - 160px)">
-      <app-vulnerability-items></app-vulnerability-items>
+    <div style="height: calc(100% - 160px); position: relative;">
+      <app-vulnerability-detail-dialog
+        top="-100"
+        [vulnerability]="selectedVulnerability">
+      </app-vulnerability-detail-dialog>
+      <app-vulnerability-items
+        (selectVulnerability)="vulnerabilitySelected($event)"
+      ></app-vulnerability-items>
     </div>
   </div>
 </ng-container>

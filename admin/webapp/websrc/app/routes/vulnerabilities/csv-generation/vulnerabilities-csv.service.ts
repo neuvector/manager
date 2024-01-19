@@ -17,7 +17,7 @@ export class VulnerabilitiesCsvService {
     private vulnerabilitiesFilterService: VulnerabilitiesFilterService
   ) {}
 
-  downloadCsv(cveEntry?: VulnerabilityAsset) {
+  downloadCsv(vulnerabilityList, cveEntry?: VulnerabilityAsset) {
     console.log('DOWNLOAD CSV');
     let vulnerabilities4Csv = [];
 
@@ -93,11 +93,11 @@ export class VulnerabilitiesCsvService {
 
     const resolveExcelCellLimit = function (entryData) {
       let maxLen = Math.max(
-        entryData.images.length,
-        entryData.workloads.length,
-        entryData.services.length,
-        entryData.domains.length,
-        entryData['package_versions->fixed_version'].length
+        entryData.images ? entryData.images.length : 0,
+        entryData.workloads ? entryData.workloads.length : 0,
+        entryData.services ? entryData.services.length : 0,
+        entryData.domains ? entryData.domains.length : 0,
+        entryData['package_versions->fixed_version'] ? entryData['package_versions->fixed_version'].length : 0
       );
       let maxRow4Entry = Math.ceil(maxLen / MapConstant.EXCEL_CELL_LIMIT);
       maxRow4Entry = maxRow4Entry === 0 ? 1 : maxRow4Entry;
@@ -114,84 +114,93 @@ export class VulnerabilitiesCsvService {
           description: i === 0 ? entryData.description : '',
           platforms:
             i === 0
-              ? entryData.platforms
-                  .map(platform => platform.display_name)
-                  .join(' ')
+              ? (entryData.platforms ?
+                  entryData.platforms
+                    .map(platform => platform.display_name)
+                    .join(' ') : '')
               : '',
-          nodes: i === 0 ? entryData.nodes : '',
+          nodes: i === 0 ? (entryData.nodes || '') : '',
           domains:
-            entryData.domains.length > MapConstant.EXCEL_CELL_LIMIT * (i + 1)
-              ? entryData.domains.substring(
-                  MapConstant.EXCEL_CELL_LIMIT * i,
-                  MapConstant.EXCEL_CELL_LIMIT * (i + 1)
-                )
-              : entryData.domains.substring(MapConstant.EXCEL_CELL_LIMIT * i),
+            entryData.domains ?
+              entryData.domains.length > MapConstant.EXCEL_CELL_LIMIT * (i + 1)
+                ? entryData.domains.substring(
+                    MapConstant.EXCEL_CELL_LIMIT * i,
+                    MapConstant.EXCEL_CELL_LIMIT * (i + 1)
+                  )
+                : entryData.domains.substring(MapConstant.EXCEL_CELL_LIMIT * i)
+              : '',
           services:
-            entryData.services.length > MapConstant.EXCEL_CELL_LIMIT * (i + 1)
-              ? entryData.services.substring(
-                  MapConstant.EXCEL_CELL_LIMIT * i,
-                  MapConstant.EXCEL_CELL_LIMIT * (i + 1)
-                )
-              : entryData.services.substring(MapConstant.EXCEL_CELL_LIMIT * i),
+            entryData.services ?
+              entryData.services.length > MapConstant.EXCEL_CELL_LIMIT * (i + 1)
+                ? entryData.services.substring(
+                    MapConstant.EXCEL_CELL_LIMIT * i,
+                    MapConstant.EXCEL_CELL_LIMIT * (i + 1)
+                  )
+                : entryData.services.substring(MapConstant.EXCEL_CELL_LIMIT * i)
+              : '',
           workloads:
-            entryData.workloads.length > MapConstant.EXCEL_CELL_LIMIT * (i + 1)
-              ? entryData.workloads.substring(
-                  MapConstant.EXCEL_CELL_LIMIT * i,
-                  MapConstant.EXCEL_CELL_LIMIT * (i + 1)
-                )
-              : entryData.workloads.substring(MapConstant.EXCEL_CELL_LIMIT * i),
+            entryData.workloads ?
+              entryData.workloads.length > MapConstant.EXCEL_CELL_LIMIT * (i + 1)
+                ? entryData.workloads.substring(
+                    MapConstant.EXCEL_CELL_LIMIT * i,
+                    MapConstant.EXCEL_CELL_LIMIT * (i + 1)
+                  )
+                : entryData.workloads.substring(MapConstant.EXCEL_CELL_LIMIT * i)
+              : '',
           images:
-            entryData.images.length > MapConstant.EXCEL_CELL_LIMIT * (i + 1)
-              ? entryData.images.substring(
-                  MapConstant.EXCEL_CELL_LIMIT * i,
-                  MapConstant.EXCEL_CELL_LIMIT * (i + 1)
-                )
-              : entryData.images.substring(MapConstant.EXCEL_CELL_LIMIT * i),
+            entryData.images ?
+              entryData.images.length > MapConstant.EXCEL_CELL_LIMIT * (i + 1)
+                ? entryData.images.substring(
+                    MapConstant.EXCEL_CELL_LIMIT * i,
+                    MapConstant.EXCEL_CELL_LIMIT * (i + 1)
+                  )
+                : entryData.images.substring(MapConstant.EXCEL_CELL_LIMIT * i)
+              : '',
           'package_versions->fixed_version':
-            entryData['package_versions->fixed_version'].length >
-            MapConstant.EXCEL_CELL_LIMIT * (i + 1)
-              ? entryData['package_versions->fixed_version'].substring(
-                  MapConstant.EXCEL_CELL_LIMIT * i,
-                  MapConstant.EXCEL_CELL_LIMIT * (i + 1)
-                )
-              : entryData['package_versions->fixed_version'].substring(
-                  MapConstant.EXCEL_CELL_LIMIT * i
-                ),
+            entryData['package_versions->fixed_version'] ?
+              entryData['package_versions->fixed_version'].length >
+              MapConstant.EXCEL_CELL_LIMIT * (i + 1)
+                ? entryData['package_versions->fixed_version'].substring(
+                    MapConstant.EXCEL_CELL_LIMIT * i,
+                    MapConstant.EXCEL_CELL_LIMIT * (i + 1)
+                  )
+                : entryData['package_versions->fixed_version'].substring(
+                    MapConstant.EXCEL_CELL_LIMIT * i
+                  )
+              : '',
           last_modified_datetime:
             i === 0 ? entryData.last_modified_datetime : '',
           published_datetime: i === 0 ? entryData.published_datetime : '',
         });
       }
-      console.log('rows', rows);
       return rows;
     };
-    const filteredVulnerabilities =
-      this.vulnerabilitiesFilterService.filteredCis;
-    if (filteredVulnerabilities && filteredVulnerabilities.length > 0) {
-      if (cveEntry) {
-        vulnerabilities4Csv = vulnerabilities4Csv.concat(listAssets(cveEntry));
-      } else {
-        filteredVulnerabilities.forEach(cve => {
+
+    if (cveEntry) {
+      vulnerabilities4Csv = vulnerabilities4Csv.concat(listAssets(cveEntry));
+    } else {
+      if (vulnerabilityList && vulnerabilityList.length > 0) {
+        vulnerabilityList.forEach(cve => {
           let entryData = this.prepareEntryData(JSON.parse(JSON.stringify(cve)), 'vulnerability_view');
           vulnerabilities4Csv = vulnerabilities4Csv.concat(
             resolveExcelCellLimit(entryData)
           );
         });
       }
-
-      let csv = arrayToCsv(vulnerabilities4Csv);
-      let blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
-      let filename =
-        cveEntry && cveEntry.name
-          ? `${cveEntry.name}_${this.utilsService.parseDatetimeStr(
-              new Date()
-            )}.csv`
-          : `vulnerabilities_${this.utilsService.parseDatetimeStr(
-              new Date()
-            )}.csv`;
-      saveAs(blob, filename);
     }
-  }
+
+    let csv = arrayToCsv(vulnerabilities4Csv);
+    let blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    let filename =
+      cveEntry && cveEntry.name
+        ? `${cveEntry.name}_${this.utilsService.parseDatetimeStr(
+            new Date()
+          )}.csv`
+        : `Vulnerabilities_View_${this.utilsService.parseDatetimeStr(
+            new Date()
+          )}.csv`;
+    saveAs(blob, filename);
+}
 
 
   downloadAssetsViewCsv = (data) => {
@@ -218,7 +227,7 @@ export class VulnerabilitiesCsvService {
       .concat('Vulnerability Details\r\n')
       .concat(csvVuls);
     let blob = new Blob([csvData], { type: 'text/csv;charset=utf-8' });
-    let filename = `vulnerabilities_${this.utilsService.parseDatetimeStr(
+    let filename = `Assets_View_${this.utilsService.parseDatetimeStr(
             new Date()
           )}.csv`;
     saveAs(blob, filename);
@@ -301,7 +310,7 @@ export class VulnerabilitiesCsvService {
       }
     });
   };
-  
+
   private reformCveName = (cveName) => {
     let cveNameArray = cveName.split('_');
     return `${cveNameArray[1]} (${cveNameArray[0]})`;
@@ -311,14 +320,14 @@ export class VulnerabilitiesCsvService {
     cve.description = cve.description
       ? `${cve.description.replace(/\"/g, "'")}`
       : '';
-    if (cve.platforms && Array.isArray(cve.platform)) {
+    if (cve.platforms && Array.isArray(cve.platforms)) {
       cve.platforms = cve.platforms.reduce(
         (acc, curr) => acc + curr.display_name + ' ',
         ''
       );
     }
-    if (cve.filteredImages && Array.isArray(cve.filteredImages)) {
-      cve.images = cve.filteredImages.reduce(
+    if (cve.images && Array.isArray(cve.images)) {
+      cve.images = cve.images.reduce(
         (acc, curr) => acc + curr.display_name + ' ',
         ''
       );
@@ -330,18 +339,7 @@ export class VulnerabilitiesCsvService {
       );
     }
     if (cve.workloads && Array.isArray(cve.workloads)) {
-      let filteredWorkload = cve.workloads.filter(workload =>
-        this.vulnerabilitiesFilterService.namespaceFilter(workload)
-      );
-
-      filteredWorkload = filteredWorkload.filter(workload =>
-        this.vulnerabilitiesFilterService.serviceFilter(workload)
-      );
-
-      filteredWorkload = filteredWorkload.filter(workload =>
-        this.vulnerabilitiesFilterService.workloadFilter(workload)
-      );
-
+      let filteredWorkload = cve.workloads;
       cve.workloads = Array.from(
         filteredWorkload.reduce(
           (acc, curr) => acc.add(curr.display_name),
@@ -358,19 +356,17 @@ export class VulnerabilitiesCsvService {
 
       cve.domains = Array.from(
         filteredWorkload.reduce(
-          (acc, curr) => acc.add(curr.domain),
+          (acc, curr) => acc.add(...curr.domains),
           new Set()
         )
       ).join(' ');
 
-      cve.images = cve.images.concat(
-        Array.from(
+      cve.images = `${cve.images}${Array.from(
           filteredWorkload.reduce(
             (acc, curr) => acc.add(curr.image),
             new Set()
           )
-        ).join(' ')
-      );
+        ).join(' ')}`;
       console.log(
         'cve.workloads: ',
         cve.workloads,

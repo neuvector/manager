@@ -210,6 +210,21 @@ export class VulnerabilitiesService {
     );
   }
 
+  getVulnerabilitiesViewReportData(queryToken: string, lastModifiedTime: number): Observable<any> {
+    return this.risksHttpService.getVulnerabilitiesQuery({
+      token: this.activeToken,
+      start: 0,
+      row: -1,
+      lastmtime: lastModifiedTime
+    }).pipe(
+      map(sessionData => {
+        return {
+          data: sessionData.vulnerabilities,
+          totalRecords: this.vulnerabilitiesFilterService.filteredCount,
+        };
+      })
+    );
+  }
 
   getAssetsViewReportData(queryToken: string, lastModifiedTime: number): Observable<any> {
     return this.risksHttpService.postAssetsViewData(queryToken, lastModifiedTime).pipe();

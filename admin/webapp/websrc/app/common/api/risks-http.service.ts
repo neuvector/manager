@@ -58,6 +58,7 @@ export class RisksHttpService {
     token: string;
     start: number;
     row: number;
+    lastmtime?: number;
     orderbyColumn?: VulQueryOrderByColumnOption;
     orderby?: OrderByOption;
   }) {
@@ -150,7 +151,7 @@ export class RisksHttpService {
   postAssetsViewData(queryToken: string, lastModifiedTime: number) {
     return GlobalVariable.http.patch<any>(
       PathConstant.ASSETS_VULS_URL,
-      { lastModifiedTime: lastModifiedTime },
+      { last_modified_timestamp: lastModifiedTime },
       {params: { queryToken: queryToken }}
     );
   }

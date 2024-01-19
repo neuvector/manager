@@ -56,8 +56,8 @@
         <td class="print-cell" style="width: 20%" *ngIf="includesImpact">
           <app-risk-view-report-impact-col
             [nodes]="dataItem.nodes"
-            [containers]="dataItem.filteredWorkloads"
-            [images]="dataItem.filteredImages">
+            [containers]="dataItem.workloads"
+            [images]="dataItem.images">
           </app-risk-view-report-impact-col>
         </td>
       </tr>

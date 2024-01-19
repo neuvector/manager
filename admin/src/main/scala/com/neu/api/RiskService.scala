@@ -64,8 +64,8 @@ class RiskService()(implicit executionContext: ExecutionContext)
               }
             } ~
             get {
-              parameters('token, 'start, 'row, 'orderby.?, 'orderbyColumn.?) {
-                (token, start, row, orderby, orderbyColumn) =>
+              parameters('token, 'start, 'row, 'lastmtime.?, 'orderby.?, 'orderbyColumn.?) {
+                (token, start, row, lastmtime, orderby, orderbyColumn) =>
                   Utils.respondWithWebServerHeaders() {
                     complete {
                       val url =
@@ -73,6 +73,8 @@ class RiskService()(implicit executionContext: ExecutionContext)
                           s"&orderby=${orderby.get}"
                         else ""}${if (orderbyColumn.isDefined)
                           s"&orderbyColumn=${orderbyColumn.get}"
+                        else ""}${if (lastmtime.isDefined)
+                          s"&lastmtime=${lastmtime.get}"
                         else ""}"
                       RestClient.httpRequestWithHeader(url, GET, "", tokenId)
                     }

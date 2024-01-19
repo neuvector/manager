@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { VulnerabilitiesService } from './vulnerabilities.service';
 import { VulnerabilitiesCsvService } from './csv-generation/vulnerabilities-csv.service';
 import { MultiClusterService } from '@services/multi-cluster.service';
@@ -7,7 +7,11 @@ import { MapConstant } from '@common/constants/map.constant';
 import { MatDialog } from '@angular/material/dialog';
 import { PdfGenerationDialogComponent } from './pdf-generation-dialog/pdf-generation-dialog.component';
 import { VulnerabilityAsset, VulnerabilityView } from '@common/types';
+import { VulnerabilityDetailDialogComponent } from '@components/vulnerabilities-grid/vulnerability-detail-dialog/vulnerability-detail-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
+import {
+  Vulnerability
+} from '@common/types';
 import { tap } from 'rxjs/operators';
 
 @Component({
@@ -15,7 +19,7 @@ import { tap } from 'rxjs/operators';
   templateUrl: './vulnerabilities.component.html',
   styleUrls: ['./vulnerabilities.component.scss'],
 })
-export class VulnerabilitiesComponent implements OnDestroy {
+export class VulnerabilitiesComponent implements OnInit, OnDestroy {
   vulnerabilitiesData$ = this.vulnerabilitiesService.vulnerabilitiesData$.pipe(
     tap(_ => this.refreshing$.next(false))
   );
@@ -45,6 +49,8 @@ export class VulnerabilitiesComponent implements OnDestroy {
     'registry',
   ];
   selectedView = this.displayViews[0];
+  selectedVulnerability!: Vulnerability;
+  @ViewChild(VulnerabilityDetailDialogComponent) vulDetails!: VulnerabilityDetailDialogComponent;
   @ViewChild('vulnerabilityViewReport') printableReportView!: ElementRef;
   @ViewChild('assetsViewReport') printableReportViewAssets!: ElementRef;
 
@@ -62,6 +68,8 @@ export class VulnerabilitiesComponent implements OnDestroy {
         this.refresh();
       });
   }
+
+  ngOnInit(): void {}
 
   ngOnDestroy(): void {
     if (this._switchClusterSubscription) {
@@ -83,62 +91,37 @@ export class VulnerabilitiesComponent implements OnDestroy {
     this.vulnerabilitiesService.refresh();
   }
 
+  vulnerabilitySelected(vulnerability: Vulnerability): void {
+    console.log("vulnerability", vulnerability);
+    this.selectedVulnerability = vulnerability;
+    this.vulDetails.show();
+  }
+
   downloadCsv() {
-    this.vulnerabilitiesCsvService.downloadCsv();
+    this.getVulnerabilitiesViewReportData(this.vulnerabilitiesService.activeToken, 0, this.exportVulnerabilitiesViewCsvFile);
   }
 
   downloadAssetsCsv() {
     this.getAssetsViewReportData(this.vulnerabilitiesService.activeToken, 0, this.exportAssetsViewCsvFile);
   }
 
-  printVulnerabilityPDF() {
-    this.advFilter = this.vulnerabilitiesFilterService.advFilter;
-    this.statisticCharts = {
-      node: (
-        document.getElementById('vulnNodesBarPDF') as HTMLCanvasElement
-      ).toDataURL(),
-      image: (
-        document.getElementById('vulnImagesBarPDF') as HTMLCanvasElement
-      ).toDataURL(),
-    };
-    if (this.advFilter.modified_dt) {
-      this.vulnerabilitiesList = this.getFilteredVulnerabilities();
-      this.isPrinting = true;
-      setInterval(() => {
-        if (this.printableReportView) {
-          window.print();
-          this.isPrinting = false;
-        }
-      }, 500);
-    } else {
-      const dialogRef = this.dialog.open(PdfGenerationDialogComponent, {
-        width: '550px',
-        data: {
-          pdf_name: this.tr.instant('scan.report.PDF_LINK'),
-        },
-      });
-      dialogRef.componentInstance.submitDate.subscribe(date => {
-        if (date) {
-          this.vulnerabilitiesList = this.getFilteredVulnerabilities(
-            date.getTime() / 1000
-          );
-        } else {
-          this.vulnerabilitiesList = this.getFilteredVulnerabilities();
-        }
-        dialogRef.componentInstance.saving$.next(false);
-        dialogRef.componentInstance.onNoClick();
-        this.isPrinting = true;
-        setInterval(() => {
-          if (this.printableReportView) {
-            window.print();
-            this.isPrinting = false;
-          }
-        }, 500);
-      });
-    }
-  }
+  printVulnerabilityPDF = () => {
+    const dialogRef = this.dialog.open(PdfGenerationDialogComponent, {
+      width: '550px',
+      data: {
+        pdf_name: this.tr.instant('scan.report.PDF_LINK'),
+      },
+    });
+    dialogRef.componentInstance.submitDate.subscribe(date => {
+      if (date) {
+        this.getVulnerabilitiesViewReportData(this.vulnerabilitiesService.activeToken, date.getTime() / 1000, this.exportVulnerabilitiesViewPdfFile, dialogRef);
+      } else {
+        this.getVulnerabilitiesViewReportData(this.vulnerabilitiesService.activeToken, 0, this.exportVulnerabilitiesViewPdfFile, dialogRef);
+      }
+    });
+  };
 
-  printAssetsPDF2 = () => {
+  printAssetsPDF = () => {
     const dialogRef = this.dialog.open(PdfGenerationDialogComponent, {
       width: '550px',
       data: {
@@ -152,6 +135,38 @@ export class VulnerabilitiesComponent implements OnDestroy {
         this.getAssetsViewReportData(this.vulnerabilitiesService.activeToken, 0, this.exportAssetsViewPdfFile, dialogRef);
       }
     });
+  };
+
+  private getVulnerabilitiesViewReportData = (queryToken: string, lastModifiedTime: number, cb: Function, dialogRef?) => {
+    this.vulnerabilitiesService.getVulnerabilitiesViewReportData(queryToken, lastModifiedTime)
+      .subscribe(
+        (response: any) => {
+          cb(response.data, dialogRef);
+        },
+        error => {}
+      );
+  };
+
+  private exportVulnerabilitiesViewPdfFile = (data: any, dialogRef) => {
+    console.log('Vulnerabilities View data()PDF: ', data);
+    this.vulnerabilitiesList = data;
+    dialogRef.componentInstance.saving$.next(false);
+    dialogRef.componentInstance.onNoClick();
+    this.statisticCharts = {
+      node: (
+        document.getElementById('vulnNodesBarPDF') as HTMLCanvasElement
+      ).toDataURL(),
+      image: (
+        document.getElementById('vulnImagesBarPDF') as HTMLCanvasElement
+      ).toDataURL(),
+    };
+    this.isPrinting = true;
+    setInterval(() => {
+      if (this.printableReportView) {
+        window.print();
+        this.isPrinting = false;
+      }
+    }, 500);
   };
 
   private getAssetsViewReportData = (queryToken: string, lastModifiedTime: number, cb: Function, dialogRef?) => {
@@ -182,6 +197,11 @@ export class VulnerabilitiesComponent implements OnDestroy {
         this.isPrintingAssets = false;
       }
     }, 500);
+  };
+
+  private exportVulnerabilitiesViewCsvFile = (data: any) => {
+    console.log('Vulnerabilities View data(CSV): ', data);
+    this.vulnerabilitiesCsvService.downloadCsv(data);
   };
 
   private exportAssetsViewCsvFile = (data: any) => {

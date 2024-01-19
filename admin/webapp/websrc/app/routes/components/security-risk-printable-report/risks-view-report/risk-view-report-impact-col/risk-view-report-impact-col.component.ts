@@ -10,6 +10,7 @@ export class RiskViewReportImpactColComponent implements OnInit {
   @Input() nodes: any[];
   @Input() containers: any[];
   @Input() images: any[];
+  Array = Array;
 
   constructor() { }
 

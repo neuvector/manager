@@ -64,21 +64,33 @@ class RiskService()(implicit executionContext: ExecutionContext)
               }
             } ~
             get {
-              parameters('token, 'start, 'row, 'lastmtime.?, 'orderby.?, 'orderbyColumn.?) {
-                (token, start, row, lastmtime, orderby, orderbyColumn) =>
-                  Utils.respondWithWebServerHeaders() {
-                    complete {
-                      val url =
-                        s"${baseClusterUri(tokenId)}/vulasset?token=$token&start=$start&row=$row${if (orderby.isDefined)
-                          s"&orderby=${orderby.get}"
-                        else ""}${if (orderbyColumn.isDefined)
-                          s"&orderbyColumn=${orderbyColumn.get}"
-                        else ""}${if (lastmtime.isDefined)
-                          s"&lastmtime=${lastmtime.get}"
-                        else ""}"
-                      RestClient.httpRequestWithHeader(url, GET, "", tokenId)
-                    }
+              parameters(
+                'token,
+                'start,
+                'row,
+                'lastmtime.?,
+                'orderby.?,
+                'orderbyColumn.?,
+                'qf.?,
+                'scoretype.?
+              ) { (token, start, row, lastmtime, orderby, orderbyColumn, qf, scoretype) =>
+                Utils.respondWithWebServerHeaders() {
+                  complete {
+                    val url =
+                      s"${baseClusterUri(tokenId)}/vulasset?token=$token&start=$start&row=$row${if (orderby.isDefined)
+                        s"&orderby=${orderby.get}"
+                      else ""}${if (orderbyColumn.isDefined)
+                        s"&orderbyColumn=${orderbyColumn.get}"
+                      else ""}${if (lastmtime.isDefined)
+                        s"&lastmtime=${lastmtime.get}"
+                      else ""}${if (qf.isDefined)
+                        s"&qf=${qf.get}"
+                      else ""}${if (scoretype.isDefined)
+                        s"&scoretype=${scoretype.get}"
+                      else ""}"
+                    RestClient.httpRequestWithHeader(url, GET, "", tokenId)
                   }
+                }
               }
             }
           }

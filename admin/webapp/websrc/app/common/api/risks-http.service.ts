@@ -16,6 +16,7 @@ import {
   VulnerabilitiesQuerySessionData,
   VulQueryOrderByColumnOption,
   OrderByOption,
+  VulQueryScoreTypeOption,
 } from '@common/types';
 import { PathConstant } from '@common/constants/path.constant';
 import { Observable } from 'rxjs';
@@ -61,6 +62,8 @@ export class RisksHttpService {
     lastmtime?: number;
     orderbyColumn?: VulQueryOrderByColumnOption;
     orderby?: OrderByOption;
+    qf?: string;
+    scoretype?: VulQueryScoreTypeOption;
   }) {
     return GlobalVariable.http.get<VulnerabilitiesQuerySessionData>(
       PathConstant.VUL_ASSET_URL,
@@ -117,7 +120,7 @@ export class RisksHttpService {
   exportCVEProfile(payload) {
     return GlobalVariable.http.post(PathConstant.EXPORT_CVE_PROFILE, payload, {
       observe: 'response',
-      responseType: 'text'
+      responseType: 'text',
     });
   }
 
@@ -152,7 +155,7 @@ export class RisksHttpService {
     return GlobalVariable.http.patch<any>(
       PathConstant.ASSETS_VULS_URL,
       { last_modified_timestamp: lastModifiedTime },
-      {params: { queryToken: queryToken }}
+      { params: { queryToken: queryToken } }
     );
   }
 }

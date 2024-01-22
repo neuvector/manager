@@ -80,6 +80,7 @@ export interface VulnerabilityQuery {
 }
 
 export interface VulnerabilitiesQuerySessionData {
+  qf_matched_records: number;
   vulnerabilities: VulnerabilityAsset[];
 }
 

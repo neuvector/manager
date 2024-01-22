@@ -1,37 +1,22 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, combineLatest, Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { RisksHttpService } from '@common/api/risks-http.service';
 import { AssetsHttpService } from '@common/api/assets-http.service';
-import {
-  catchError,
-  finalize,
-  map,
-  repeatWhen,
-  switchMap,
-  tap,
-} from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import {
   Compliance,
   HostData,
-  HostsData,
   VulnerabilityProfile,
   VulnerabilityAssetRaw,
   Workload,
-  WorkloadsData,
   CfgType,
-  VulnerabilitiesQueryData,
   VulnerabilitiesQuerySummary,
-  OrderByOption,
-  VulQueryOrderByColumnOption,
 } from '@common/types';
-import { PlatformsData } from '@common/types/compliance/platformsData';
-import { setRisks, sortByDisplayName } from '@common/utils/common.utils';
-import { VulnerabilitiesData } from '@common/types';
 import { VulnerabilitiesFilterService } from './vulnerabilities.filter.service';
 import { AssetsViewPdfService } from './pdf-generation/assets-view-pdf.service';
 import { MapConstant } from '@common/constants/map.constant';
-import { GridApi } from 'ag-grid-community';
+import { GridApi, SortModelItem } from 'ag-grid-community';
 
 @Injectable()
 export class VulnerabilitiesService {
@@ -145,24 +130,30 @@ export class VulnerabilitiesService {
 
   getVulnerabilitiesPage(
     start: number,
-    orderby?: OrderByOption,
-    orderbyColumn?: VulQueryOrderByColumnOption
+    sortModel: SortModelItem[],
+    filterModel: any
   ) {
-    if (orderby && orderbyColumn) {
-      return this.risksHttpService.getVulnerabilitiesQuery({
-        token: this.activeToken,
-        start: start,
-        row: this.vulnerabilitiesFilterService.paginationBlockSize,
-        orderbyColumn: orderbyColumn,
-        orderby: orderby,
-      });
-    } else {
-      return this.risksHttpService.getVulnerabilitiesQuery({
-        token: this.activeToken,
-        start: start,
-        row: this.vulnerabilitiesFilterService.paginationBlockSize,
-      });
+    let params: any = {
+      token: this.activeToken,
+      start: start,
+      row: this.vulnerabilitiesFilterService.paginationBlockSize,
+    };
+    if (sortModel.length) {
+      params = {
+        ...params,
+        orderbyColumn: sortModel[0].colId,
+        orderby: sortModel[0].sort,
+      };
     }
+    if ('-' in filterModel) {
+      params = {
+        ...params,
+        qf: filterModel['-'].filter,
+        scoretype:
+          this.vulnerabilitiesFilterService.selectedScore.toLowerCase(),
+      };
+    }
+    return this.risksHttpService.getVulnerabilitiesQuery(params);
   }
 
   refresh() {
@@ -210,24 +201,34 @@ export class VulnerabilitiesService {
     );
   }
 
-  getVulnerabilitiesViewReportData(queryToken: string, lastModifiedTime: number): Observable<any> {
-    return this.risksHttpService.getVulnerabilitiesQuery({
-      token: this.activeToken,
-      start: 0,
-      row: -1,
-      lastmtime: lastModifiedTime
-    }).pipe(
-      map(sessionData => {
-        return {
-          data: sessionData.vulnerabilities,
-          totalRecords: this.vulnerabilitiesFilterService.filteredCount,
-        };
+  getVulnerabilitiesViewReportData(
+    queryToken: string,
+    lastModifiedTime: number
+  ): Observable<any> {
+    return this.risksHttpService
+      .getVulnerabilitiesQuery({
+        token: this.activeToken,
+        start: 0,
+        row: -1,
+        lastmtime: lastModifiedTime,
       })
-    );
+      .pipe(
+        map(sessionData => {
+          return {
+            data: sessionData.vulnerabilities,
+            totalRecords: this.vulnerabilitiesFilterService.filteredCount,
+          };
+        })
+      );
   }
 
-  getAssetsViewReportData(queryToken: string, lastModifiedTime: number): Observable<any> {
-    return this.risksHttpService.postAssetsViewData(queryToken, lastModifiedTime).pipe();
+  getAssetsViewReportData(
+    queryToken: string,
+    lastModifiedTime: number
+  ): Observable<any> {
+    return this.risksHttpService
+      .postAssetsViewData(queryToken, lastModifiedTime)
+      .pipe();
   }
 
   getDomain(): Observable<string[]> {

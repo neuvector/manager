@@ -28,6 +28,7 @@ export class VulnerabilitiesFilterService {
   private filteredSubject$ = new BehaviorSubject(false);
   filtered$ = this.filteredSubject$.asObservable();
   filteredCount: number = 0;
+  qfCount!: number;
   selectedScore = 'V3';
   activePage: number = 0;
   paginationPageSize = 100;

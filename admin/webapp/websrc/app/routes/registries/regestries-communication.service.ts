@@ -31,7 +31,7 @@ export class RegistriesCommunicationService {
   registryDetails$ = this.selectedRegistry$
     .pipe(
       filter(summary => summary !== undefined),
-      distinctUntilChanged(),
+      // distinctUntilChanged(),
       switchMap(summary =>
         this.registriesService.getRepo(summary!.name).pipe(
           map(repositories => ({ selectedRegistry: summary, repositories })),
@@ -39,8 +39,7 @@ export class RegistriesCommunicationService {
             if (this.refreshingDetailsSubject$.value) {
               this.refreshingDetailsSubject$.next(false);
             }
-          }),
-          repeatWhen(() => this.refreshDetailsSubject$)
+          })
         )
       )
     )

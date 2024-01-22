@@ -196,12 +196,24 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
     if (this.gridApi && changes.rowData) {
       this.gridApi.setRowData([]);
       this.gridApi.setRowData(changes.rowData.currentValue);
-      const selected = this.registriesCommunicationService.selectedRegistry,
-        node = selected
-          ? this.gridApi.getRowNode(selected.name)
-          : this.gridApi.getDisplayedRowAtIndex(0);
-      node?.setSelected(true);
-      this.gridApi.ensureNodeVisible(node, 'middle');
+
+      // if selected registry is not in the current page, select the first row
+      if (changes.rowData.currentValue.length > 0) {
+        const selected = this.registriesCommunicationService.selectedRegistry;
+        let node;
+        if (selected && selected.name) {
+          changes.rowData.currentValue.forEach(item => {
+            if (item.name === selected.name) {
+              node = this.gridApi.getRowNode(selected.name);
+            }
+          });
+        }
+        if (!node) {
+          node = this.gridApi.getDisplayedRowAtIndex(0);
+        }
+        node.setSelected(true);
+        this.gridApi.ensureNodeVisible(node, 'middle');
+      }
     }
   }
 
@@ -295,12 +307,11 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
     this.gridApi.getDisplayedRowAtIndex(0)?.setSelected(true);
     this.gridApi.forEachNode(node => {
       if (this.linkedRegistry === node.data.name) {
-        node.setSelected(true)
+        node.setSelected(true);
         this.gridApi.ensureNodeVisible(node, 'middle');
       }
     });
     this.cd.markForCheck();
-
   }
 
   onResize(): void {

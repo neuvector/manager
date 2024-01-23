@@ -73,8 +73,12 @@
           <span class="font-weight-bold pod-item-key">
             {{ 'network.legend.GROUP' | translate }}:
           </span>
-          <span class="auto-hide pod-item-value">
-            {{ container.service_group }}
+          <span class="pod-item-value">
+            <span
+              matTooltip="{{ container.service_group }}"
+              matTooltipPosition="above"
+              [matTooltipDisabled]="container.service_group.length < 30"
+            >{{ container.service_group | shortenFromMiddle: 30}}</span>
             <a
               (click)="goToGroup(container.service_group)"
               style="display: table-cell; font-size: 11px; line-height: 15px">
@@ -97,24 +101,16 @@
       </div>
       <div class="col-sm-6 pl-0 pb-0 pt-sm">
         <span class="font-weight-bold pod-item-key">
-          {{ 'network.gridHeader.SERVICE' | translate }}:
-        </span>
-        <span class="ml auto-hide pod-item-value">
-          {{ container.service }}
-        </span>
-      </div>
-    </div>
-  </li>
-  <li class="col-sm-12 p-1">
-    <div class="row" style="margin-left: 1px">
-      <div class="col-sm-6 pl-0 pb-0 pt-sm">
-        <span class="font-weight-bold pod-item-key">
           {{ 'network.nodeDetails.LOCATION' | translate }}:
         </span>
         <span class="ml auto-hide pod-item-value">
           {{ container.host_name }}
         </span>
       </div>
+    </div>
+  </li>
+  <li class="col-sm-12 p-1">
+    <div class="row" style="margin-left: 1px">
       <div class="col-sm-6 pl-0 pb-0 pt-sm">
         <span class="font-weight-bold pod-item-key">
           {{ 'network.nodeDetails.STATE' | translate }}:
@@ -129,10 +125,6 @@
           {{ container.quarantine_reason }}
         </span>
       </div>
-    </div>
-  </li>
-  <li class="col-sm-12 p-1">
-    <div class="row" style="margin-left: 1px">
       <div class="col-sm-6 pl-0 pb-0 pt-sm">
         <span class="font-weight-bold pod-item-key">
           {{ 'network.nodeDetails.CREATED_AT' | translate }}:
@@ -141,22 +133,22 @@
           {{ container.started_at | date: 'MMM dd, y HH:mm:ss' }}
         </span>
       </div>
-      <div
-        *ngIf="!!container.scan_summary.scanned_at"
-        class="col-sm-6 pl-0 pb-0 pt-sm">
-        <span class="font-weight-bold pod-item-key">
-          {{ 'network.nodeDetails.SCANNED_AT' | translate }}
-        </span>
-        <span
-          class="ml mr-lg auto-hide pod-item-value"
-          style="display: block; width: 150px">
-          {{ container.scan_summary.scanned_at | date: 'MMM dd, y HH:mm:ss' }}
-        </span>
-      </div>
     </div>
   </li>
   <li class="col-sm-12 p-1">
     <div class="row" style="margin-left: 1px">
+      <div
+        *ngIf="!!container.scan_summary.scanned_at"
+        class="col-sm-6 pl-0 pb-0 pt-sm">
+        <span class="font-weight-bold pod-item-key">
+          {{ 'network.nodeDetails.SCANNED_AT' | translate }}:
+        </span>
+        <span
+          class="ml mr-lg auto-hide pod-item-value"
+          style="width: 150px">
+          {{ container.scan_summary.scanned_at | date: 'MMM dd, y HH:mm:ss' }}
+        </span>
+      </div>
       <div class="col-sm-6 pl-0 mda-list-item-text pb-0 pt-sm">
         <span class="font-weight-bold pod-item-key">
           {{ 'network.nodeDetails.PRIVILEGED' | translate }}:
@@ -165,6 +157,10 @@
           {{ container.privileged }}
         </span>
       </div>
+    </div>
+  </li>
+  <li class="col-sm-12 p-1">
+    <div class="row" style="margin-left: 1px">
       <div class="col-sm-6 pl-0 mda-list-item-text pb-0 pt-sm">
         <span class="font-weight-bold pod-item-key">
           {{ 'network.nodeDetails.RUN_AS_ROOT' | translate }}:
@@ -173,55 +169,53 @@
           {{ container.run_as_root }}
         </span>
       </div>
-    </div>
-  </li>
-  <li class="col-sm-12 p-1">
-    <div class="pb-0 pt-sm">
-      <span class="font-weight-bold pod-item-key">
-        {{ 'group.gridHeader.VULNERABILITIES' | translate }}:
-      </span>
-      <div class="pod-item-value d-inline">
-        <span
-          *ngIf="container.scan_summary.high"
-          class="badge badge-danger mr-sm">
-          {{ container.scan_summary.high }}</span
-        >
-        <span *ngIf="container.scan_summary.medium" class="badge badge-warning">
-          {{ container.scan_summary.medium }}</span
-        >
-        <a
-          *ngIf="container.scan_summary.high || container.scan_summary.medium"
-          style="display: table-cell; font-size: 11px; line-height: 15px">
-          <em class="fa fa-external-link ml-lg"></em>
-        </a>
-
-        <span
-          *ngIf="
-            container.scan_summary.scanned_at &&
-            container.scan_summary.high === 0 &&
-            container.scan_summary.medium === 0
-          "
-          class="badge badge-success">
-          <em class="fa fa-shield-alt text-protect mr-1"></em> Clean
+      <div class="col-sm-6 pl-0 mda-list-item-text pb-0 pt-sm">
+        <span class="font-weight-bold pod-item-key">
+          {{ 'group.gridHeader.VULNERABILITIES' | translate }}:
         </span>
+        <div class="pod-item-value d-inline">
+          <span
+            *ngIf="container.scan_summary.high"
+            class="badge badge-danger mr-sm">
+            {{ container.scan_summary.high }}</span
+          >
+          <span *ngIf="container.scan_summary.medium" class="badge badge-warning">
+            {{ container.scan_summary.medium }}</span
+          >
+          <a
+            *ngIf="container.scan_summary.high || container.scan_summary.medium"
+            style="display: table-cell; font-size: 11px; line-height: 15px">
+            <em class="fa fa-external-link ml-lg"></em>
+          </a>
 
-        <button
-          *ngIf="
-            !container.scan_summary.scanned_at &&
-            !container.scan_summary.status &&
-            !isScanStarted4Pod
-          "
-          class="d-inline-flex justify-content-center align-items-center"
-          disabled
-          mat-flat-button
-          style="height: 25px">
-          {{ 'scan.SCAN' | translate }}
-        </button>
+          <span
+            *ngIf="
+              container.scan_summary.scanned_at &&
+              container.scan_summary.high === 0 &&
+              container.scan_summary.medium === 0
+            "
+            class="badge badge-success">
+            <em class="fa fa-shield-alt text-protect mr-1"></em> Clean
+          </span>
 
-        <div *ngIf="isScanStarted4Pod" class="ml mt-sm pull-left">
-          <label class="mt-sm label label-info-tran">
-            <em class="fa fa-cog fa-spin mr-sm"></em> Scanning...
-          </label>
+          <button
+            *ngIf="
+              !container.scan_summary.scanned_at &&
+              !container.scan_summary.status &&
+              !isScanStarted4Pod
+            "
+            class="d-inline-flex justify-content-center align-items-center"
+            disabled
+            mat-flat-button
+            style="height: 25px">
+            {{ 'scan.SCAN' | translate }}
+          </button>
+
+          <div *ngIf="isScanStarted4Pod" class="ml mt-sm pull-left">
+            <label class="mt-sm label label-info-tran">
+              <em class="fa fa-cog fa-spin mr-sm"></em> Scanning...
+            </label>
+          </div>
         </div>
       </div>
     </div>

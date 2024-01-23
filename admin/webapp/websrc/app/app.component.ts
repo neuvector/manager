@@ -110,6 +110,9 @@ export class AppComponent implements OnInit {
             GlobalConstant.LOCAL_STORAGE_TOKEN,
             GlobalVariable.user
           );
+          if (this.localStorage.has(GlobalConstant.LOCAL_STORAGE_TIMEOUT)) {
+            this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_TIMEOUT);
+          }
           if (!GlobalVariable.hasInitializedSummary) {
             this.summaryService.getSummary().subscribe(summaryInfo => {
               this.isSummaryDone = true;

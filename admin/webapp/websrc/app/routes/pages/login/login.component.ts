@@ -247,6 +247,9 @@ export class LoginComponent implements OnInit, OnDestroy {
               GlobalConstant.LOCAL_STORAGE_TOKEN,
               GlobalVariable.user
             );
+            if (this.localStorage.has(GlobalConstant.LOCAL_STORAGE_TIMEOUT)) {
+              this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_TIMEOUT);
+            }
 
             if (this.isEulaAccepted) {
               this.getSummary(userInfo);
@@ -356,6 +359,9 @@ export class LoginComponent implements OnInit, OnDestroy {
         (userInfo: any) => {
           this.inProgress = true;
           this.setUserInfo(userInfo);
+          if (this.localStorage.has(GlobalConstant.LOCAL_STORAGE_TIMEOUT)) {
+            this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_TIMEOUT);
+          }
           this.cookieService.delete('temp');
           if (this.isEulaAccepted) {
             this.getSummary(userInfo);
@@ -576,6 +582,9 @@ export class LoginComponent implements OnInit, OnDestroy {
               GlobalConstant.LOCAL_STORAGE_TOKEN,
               GlobalVariable.user
             );
+            if (this.localStorage.has(GlobalConstant.LOCAL_STORAGE_TIMEOUT)) {
+              this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_TIMEOUT);
+            }
 
             if (this.isEulaAccepted) {
               this.getSummary(userInfo);

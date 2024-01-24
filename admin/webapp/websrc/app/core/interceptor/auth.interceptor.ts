@@ -12,6 +12,7 @@ import {
 import { GlobalConstant } from '@common/constants/global.constant';
 import { PathConstant } from '@common/constants/path.constant';
 import { Router } from '@angular/router';
+import { GlobalVariable } from '@common/variables/global.variable';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -48,7 +49,12 @@ export class AuthInterceptor implements HttpInterceptor {
         }
       }
     } catch (e) {
-      this.router.navigate([GlobalConstant.PATH_LOGIN]);
+      if (GlobalVariable.isSUSESSO) {
+        this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_TOKEN);
+        this.router.navigate([GlobalConstant.PATH_LOGOUT]);
+      } else {
+        this.router.navigate([GlobalConstant.PATH_LOGIN]);
+      }
     }
 
     return next.handle(req);

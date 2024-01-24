@@ -136,10 +136,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     // If the user is already logged in, redirect to the dashboard page
     if (
       this.localStorage.has(GlobalConstant.LOCAL_STORAGE_TOKEN) &&
-      (
-        !this.localStorage.has(GlobalConstant.LOCAL_STORAGE_TIMEOUT) ||
-        this.localStorage.get(GlobalConstant.LOCAL_STORAGE_TIMEOUT) !== 'true'
-      )
+      (!this.localStorage.has(GlobalConstant.LOCAL_STORAGE_TIMEOUT) ||
+        this.localStorage.get(GlobalConstant.LOCAL_STORAGE_TIMEOUT) !== true)
     ) {
       const userInfo = this.localStorage.get(
         GlobalConstant.LOCAL_STORAGE_TOKEN

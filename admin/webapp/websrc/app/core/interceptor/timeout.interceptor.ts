@@ -16,6 +16,7 @@ import {
   SESSION_STORAGE,
   StorageService,
 } from 'ngx-webstorage-service';
+import { GlobalVariable } from '@common/variables/global.variable';
 
 @Injectable()
 export class TimeoutInterceptor implements HttpInterceptor {
@@ -56,8 +57,10 @@ export class TimeoutInterceptor implements HttpInterceptor {
               currentPath
             );
             this.dialog.closeAll();
-            if (error.error.code === 51) {
-              this.auth.logout(false, true);
+            // For SSO, we need to clear the local storage token and redirect to the logout page
+            if (GlobalVariable.isSUSESSO) {
+              this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_TOKEN);
+              this.router.navigate([GlobalConstant.PATH_LOGOUT]);
             } else {
               this.localStorage.set(GlobalConstant.LOCAL_STORAGE_TIMEOUT, true);
               this.auth.timeout(currentPath);

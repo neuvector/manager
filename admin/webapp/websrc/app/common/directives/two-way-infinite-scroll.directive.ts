@@ -21,7 +21,8 @@ export class TwoWayInfiniteScrollDirective {
 
   @HostListener('scroll', ['$event'])
   infinityScroll(): void {
-    this.throttled(20, this.scroll);
+    this.scroll();
+    // this.throttled(20, this.scroll);
     // this.debounced(1, scroll);
     // scroll();
   }

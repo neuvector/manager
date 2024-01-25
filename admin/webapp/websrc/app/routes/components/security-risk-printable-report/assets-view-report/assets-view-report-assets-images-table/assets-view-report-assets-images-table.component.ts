@@ -12,6 +12,7 @@ export class AssetsViewReportAssetsImagesTableComponent implements OnInit {
   @Input() reportPage: string;
   colourMap: any = MapConstant.colourMap;
   safeRate4Images: string;
+  SEC_ASSETS_REPORT_MAX_ROW = MapConstant.SEC_ASSETS_REPORT_MAX_ROW;
 
   constructor() { }
 

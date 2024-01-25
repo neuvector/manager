@@ -19,6 +19,9 @@ export class RisksViewReportComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    if (typeof this.isMeetingReportLimit === 'undefined') {
+      this.isMeetingReportLimit = this.data.length > this.SEC_RISK_REPORT_MAX_ROW;
+    }
   }
 
 }

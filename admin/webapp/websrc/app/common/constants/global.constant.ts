@@ -18,6 +18,7 @@ export class GlobalConstant {
   public static STATUS_NOT_FOUND = 404;
   public static STATUS_FORBIDDEN = 403;
   public static PATH_LOGIN = 'login';
+  public static PATH_LOGOUT = 'logout';
   public static PATH_DEFAULT = 'dashboard';
   public static PATH_MULTICLUSTER = 'multi-cluster';
   public static AG_GRID_RESIZE = 'resize.#agGrid';

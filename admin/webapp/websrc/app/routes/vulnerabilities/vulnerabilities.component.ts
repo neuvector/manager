@@ -208,21 +208,4 @@ export class VulnerabilitiesComponent implements OnInit, OnDestroy {
     console.log('Assets View data(CSV): ', data);
     this.vulnerabilitiesCsvService.downloadAssetsViewCsv(data);
   };
-
-  private getFilteredVulnerabilities = (lastTimestamp?: number) => {
-    let vulnerabilitiesList: any[] = [];
-    this.vulnerabilitiesService.gridApi.forEachNodeAfterFilter(rowNode => {
-      let vul: VulnerabilityAsset = rowNode.data;
-      if (!lastTimestamp || vul.last_modified_timestamp > lastTimestamp) {
-        vulnerabilitiesList.push(vul);
-      }
-    });
-    this.isMeetingReportLimit =
-      vulnerabilitiesList.length > MapConstant.SEC_RISK_REPORT_MAX_ROW;
-    return this.isMeetingReportLimit
-      ? vulnerabilitiesList
-          .sort((a, b) => b.published_timestamp - a.published_timestamp)
-          .slice(0, MapConstant.SEC_RISK_REPORT_MAX_ROW)
-      : vulnerabilitiesList;
-  };
 }

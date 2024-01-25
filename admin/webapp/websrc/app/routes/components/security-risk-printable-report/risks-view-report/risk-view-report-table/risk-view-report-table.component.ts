@@ -12,10 +12,13 @@ export class RiskViewReportTableComponent implements OnInit {
   @Input() reportPage: string;
   @Input() includesImpact: boolean;
   colourMap: any = MapConstant.colourMap;
+  SEC_RISK_REPORT_MAX_ROW = MapConstant.SEC_RISK_REPORT_MAX_ROW;
+  SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW = MapConstant.SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW;
 
   constructor() { }
 
   ngOnInit(): void {
+
   }
 
 }

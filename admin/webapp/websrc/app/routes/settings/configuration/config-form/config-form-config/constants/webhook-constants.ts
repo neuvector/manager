@@ -18,7 +18,7 @@ export const WebhookTableField = {
   type: FormlyComponents.EDIT_TABLE,
   templateOptions: {
     cellHeight: '75px',
-    addButtonText: 'setting.webhook.NEW',
+    addButtonText: 'setting.webhook.ADD',
   },
   expressionProperties: {
     'templateOptions.disabled': '!formState.permissions.isWebhookAuthorized',
@@ -36,9 +36,10 @@ export const WebhookTableField = {
         type: FormlyComponents.ICON_INPUT,
         templateOptions: {
           viewValue: 'setting.webhook.NAME',
-          label: 'setting.webhook.NAME',
+          placeholder: 'setting.webhook.NAME',
           isCell: true,
           required: true,
+          hideRequiredMarker: true,
           maxLength: 1000,
           readOnly: {
             type: 'text',
@@ -55,9 +56,10 @@ export const WebhookTableField = {
         type: FormlyComponents.ICON_INPUT,
         templateOptions: {
           viewValue: 'setting.webhook.URL',
-          label: 'setting.webhook.URL',
+          placeholder: 'setting.webhook.URL',
           isCell: true,
           required: true,
+          hideRequiredMarker: true,
           maxLength: 1000,
           readOnly: {
             type: 'text',
@@ -72,11 +74,13 @@ export const WebhookTableField = {
         key: 'type',
         wrappers: [FormlyComponents.READONLY_WRAPPER],
         type: FormlyComponents.SELECT,
+        defaultValue: WebhookTypes[3].value,
         templateOptions: {
           viewValue: 'setting.webhook.WH_TYPE',
-          label: 'setting.webhook.WH_TYPE',
+          placeholder: 'setting.webhook.WH_TYPE',
           items: WebhookTypes,
           required: true,
+          hideRequiredMarker: true,
           readOnly: {
             type: 'icon',
             template: field => {
@@ -162,7 +166,8 @@ export const WebhookTableField = {
         type: FormlyComponents.EDIT_TABLE_CONTROLS,
         defaultValue: true,
         templateOptions: {
-          flexWidth: '20%',
+          flexWidth: '5%',
+          showDeleteButtonOnly: true,
         },
         expressionProperties: {
           'templateOptions.disabled': (model, formState, _field) => {

@@ -120,7 +120,11 @@ export class ConfigFormComponent implements OnInit {
     this._config.mode_auto.mode_auto_d2m_duration /= 3600;
     this._config.mode_auto.mode_auto_m2p_duration /= 3600;
     this._config.webhooks.forEach(e => {
-      e.isEditable = false;
+      if (e.cfg_type === GlobalConstant.CFG_TYPE.FED) {
+        e.isEditable = false;
+      } else {
+        e.isEditable = true;
+      }
       e.type = e.type || OtherWebhookType;
     });
     this._config.ibmsa.ibmsa_ep_dashboard_url ||= this.dashboardUrl;

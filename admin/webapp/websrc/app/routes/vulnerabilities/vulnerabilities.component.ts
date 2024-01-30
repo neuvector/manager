@@ -92,7 +92,6 @@ export class VulnerabilitiesComponent implements OnInit, OnDestroy {
   }
 
   vulnerabilitySelected(vulnerability: Vulnerability): void {
-    console.log("vulnerability", vulnerability);
     this.selectedVulnerability = vulnerability;
     this.vulDetails.show();
   }

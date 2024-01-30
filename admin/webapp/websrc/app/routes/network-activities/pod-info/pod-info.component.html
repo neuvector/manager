@@ -121,10 +121,16 @@
       <li class="col-sm-6 p-2">
         <div class="pb-0">
           <span class="font-weight-bold host-item-key">
-            {{ 'network.gridHeader.SERVICE' | translate }}:
+            {{ 'network.legend.GROUP' | translate }}:
           </span>
-          <span class="ml auto-hide host-item-value" style="display: block">
-            {{ pod.workload.service }}
+          <span
+            class="ml host-item-value"
+            style="display: block"
+            matTooltip="{{ pod.workload.service_group }}"
+            matTooltipPosition="above"
+            [matTooltipDisabled]="pod.workload.service_group.length < 30"
+          >
+            {{ pod.workload.service_group | shortenFromMiddle: 30}}
             <a
               mat-icon-button
               aria-label="External link button"

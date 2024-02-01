@@ -231,7 +231,6 @@ export const AWSRegistryField = {
   },
 };
 
-
 export const UsernameField = {
   key: 'username',
   type: FormlyComponents.ICON_INPUT,
@@ -345,7 +344,7 @@ export const IntervalField = {
 };
 
 export const IdField = {
-  key: 'id',
+  key: 'aws_key.id',
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
     icon: 'featured_video',
@@ -356,8 +355,9 @@ export const IdField = {
 };
 
 export const AccessKeyField = {
-  key: 'access_key_id',
+  key: 'aws_key.access_key_id',
   type: FormlyComponents.ICON_INPUT,
+  defaultValue: '',
   templateOptions: {
     maskOnBlur: true,
     icon: 'vpn_key',
@@ -366,7 +366,7 @@ export const AccessKeyField = {
 };
 
 export const RegionField = {
-  key: 'region',
+  key: 'aws_key.region',
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
     icon: 'network',
@@ -377,8 +377,9 @@ export const RegionField = {
 };
 
 export const SecretAccessKeyField = {
-  key: 'secret_access_key',
+  key: 'aws_key.secret_access_key',
   type: FormlyComponents.ICON_INPUT,
+  defaultValue: '',
   templateOptions: {
     maskOnBlur: true,
     icon: 'vpn_key',

@@ -72,8 +72,14 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
       let body!: RegistryPostBody;
       const schedule: ScanSchedule = { schedule: 'manual', interval: 0 };
       let gcr_key: GCRKey | undefined;
-      const { auto_scan, periodic_scan, interval, json_key, ...formValue } =
-        this.form.value;
+      const {
+        auto_scan,
+        periodic_scan,
+        interval,
+        aws_key,
+        json_key,
+        ...formValue
+      } = this.form.value;
       if (formValue.isFed) {
         formValue.name = 'fed.' + formValue.name;
       }
@@ -85,7 +91,11 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
         schedule.schedule = 'auto';
         schedule.interval = 300;
       }
-      if (json_key) {
+      if (aws_key && Object.keys(aws_key).length > 0) {
+        body = {
+          config: { ...formValue, schedule, aws_key },
+        };
+      } else if (json_key) {
         gcr_key = {
           json_key,
         };

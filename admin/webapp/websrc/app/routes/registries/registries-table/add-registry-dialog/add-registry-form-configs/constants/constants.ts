@@ -216,7 +216,7 @@ export const RegistryField = {
 };
 
 export const AWSRegistryField = {
-  key: 'awsRegistry',
+  key: 'registry',
   type: FormlyComponents.ICON_INPUT,
   templateOptions: {
     alwaysHint: true,

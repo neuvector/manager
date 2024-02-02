@@ -119,6 +119,15 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
           body.config.password !== this.maskFieldWhenEdit
             ? body.config.password
             : undefined;
+        if (
+          body.config.aws_key &&
+          body.config.aws_key.access_key_id === this.maskFieldWhenEdit &&
+          body.config.aws_key.secret_access_key === this.maskFieldWhenEdit
+        ) {
+          const { access_key_id, secret_access_key, ...aws_key } =
+            body.config.aws_key;
+          body.config.aws_key = aws_key as any;
+        }
         body.config.registry_type = this.model.registry_type;
         body.config.name = this.model.name;
         this.registriesService
@@ -177,7 +186,7 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
 
   ngOnInit(): void {
     if (this.data.config) {
-      const { schedule, ...data } = this.data.config;
+      const { schedule, aws_key, ...data } = this.data.config;
       const interval =
         Object.keys(INTERVAL_STEP_VALUES).find(
           key => INTERVAL_STEP_VALUES[key].value === schedule.interval
@@ -194,12 +203,18 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
           break;
         }
       }
+      if (aws_key) {
+        aws_key.secret_access_key = this.maskFieldWhenEdit;
+        aws_key.access_key_id = this.maskFieldWhenEdit;
+      }
       this.model = {
         ...data,
         isEdit: this.data.isEdit,
         isRemote: GlobalVariable.isRemote,
         isFed: data.cfg_type === GlobalConstant.CFG_TYPE.FED,
         password: this.maskFieldWhenEdit,
+        awsRegistry: this.data.config.registry,
+        aws_key,
         auto_scan,
         periodic_scan,
         interval,

@@ -436,9 +436,17 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         GlobalVariable.hasInitializedSummary = true;
         this.setUserInfo(userInfo);
-        if (this.originalUrl && !this.originalUrl.includes('login')) {
+        if (
+          this.originalUrl &&
+          !this.originalUrl.includes('login') &&
+          !this.originalUrl.includes('logout')
+        ) {
           this.router.navigate([this.originalUrl]);
-        } else if (this.linkedUrl && !this.linkedUrl.includes('login')) {
+        } else if (
+          this.linkedUrl &&
+          !this.linkedUrl.includes('login') &&
+          !this.originalUrl.includes('logout')
+        ) {
           this.nav2LinkedUrl(this.linkedUrl);
         } else {
           this.router.navigate([GlobalConstant.PATH_DEFAULT]);

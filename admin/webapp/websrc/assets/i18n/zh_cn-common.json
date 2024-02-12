@@ -2973,7 +2973,7 @@
     "DESC": "定制系统设置",
     "NOTIFICATIONS": "通知",
     "SYSLOG": "系统日志",
-    "EVENT_REPORT_LOGGING": "输出事件和报告到日志",
+    "EVENT_REPORT_LOGGING": "将通知写入 Controller Pod 日志",
     "WEBHOOK": "网络挂接",
     "CLUSTER": "集群",
     "CLUSTER_COMMENT": "用于在通知里识别集群",

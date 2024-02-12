@@ -2973,7 +2973,7 @@
     "DESC": "Customize system configuration",
     "NOTIFICATIONS": "Notifications",
     "SYSLOG": "Syslog   ",
-    "EVENT_REPORT_LOGGING": "Output events and reports to logs",
+    "EVENT_REPORT_LOGGING": "Write notifications to controller pod logs",
     "WEBHOOKS": "Webhooks",
     "CLUSTER": "Cluster",
     "CLUSTER_COMMENT": "Used to identify the cluster in notifications",

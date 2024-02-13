@@ -9,14 +9,11 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { VulnerabilitiesGridFeedRatingCellComponent } from './vulnerabilities-grid-feed-rating-cell/vulnerabilities-grid-feed-rating-cell.component';
-
 @NgModule({
   declarations: [
     VulnerabilitiesGridComponent,
     VulnerabilitiesGridSeverityCellComponent,
     VulnerabilityDetailDialogComponent,
-    VulnerabilitiesGridFeedRatingCellComponent,
   ],
   imports: [
     CommonModule,

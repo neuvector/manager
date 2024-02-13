@@ -36,6 +36,20 @@ let CALENDAR: any = {
   SECONDS: 'seconds',
 };
 
+export const FEED_RATING_SORT_ORDER = [
+  'untriaged',
+  'not yet assigned',
+  'end-of-life',
+  'negligible',
+  'unimportant',
+  'low',
+  'medium',
+  'moderate',
+  'high',
+  'important',
+  'critical',
+];
+
 export const uuid = () => uuidv4();
 
 export function toBoolean(value: string) {
@@ -54,7 +68,7 @@ export function arrayToCsv(array: any, title: string = '') {
   let line: string = '';
   let result: string = '';
   let columns: string[] = [];
-  if(!Array.isArray(array) || array.length === 0) return result;
+  if (!Array.isArray(array) || array.length === 0) return result;
   if (title.length > 0) {
     result += title + '\r\n';
   }

@@ -3,5 +3,6 @@
     <em class="fa fa-exclamation-circle fa-lg text-warning"></em>
     <h4 class="text-bold text-muted">{{ "logout.SIGN_OUT" | translate }}</h4>
     <p class="text-muted" *ngIf="isSUSESSO">{{ "logout.SIGN_OUT_DESC" | translate }}</p>
+    <a role="button" (click)="gotoLogin()">{{ "logout.GO_TO_LOGIN" | translate }}</a>
   </div>
 </div>

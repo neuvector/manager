@@ -1275,7 +1275,7 @@
     "SONATYPE_URL_HINT": "样本: http://<10.1.7.121:8082>",
     "DOCKER_URL_HINT": "样本: https://registry.hub.docker.com/",
     "REDHAT_URL_HINT": "样本: https://registry.connect.redhat.com/",
-    "OPENSHIFT_URL_HINT": "样本: OpenShift 3.x - https://docker-registry.default.svc:5000, OpenShift 4.x - https://image-registry.openshift-image-registry.svc:5000",
+    "OPENSHIFT_URL_HINT": "样本: OpenShift 4.x - https://image-registry.openshift-image-registry.svc:5000",
     "GOOGLE_URL_HINT": "样本: https://gcr.io",
     "REPO_HINT": "样本: https://registry.hub.docker.com/ https://registry.connect.redhat.com/ https://registry.access.redhat.com/ https://registry.access.redhat.com/",
     "GITLAB_URL_HINT": "样本: https://registry.example.com",

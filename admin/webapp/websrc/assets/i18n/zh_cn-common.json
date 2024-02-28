@@ -202,7 +202,8 @@
   },
   "logout": {
     "SIGN_OUT": "已经登出了",
-    "SIGN_OUT_DESC": "您可以关闭此浏览器窗口, 然后回到Rancher."
+    "SIGN_OUT_DESC": "您可以关闭此浏览器窗口, 然后回到Rancher.",
+    "GO_TO_LOGIN": "返回登陆页面"
   },
   "login": {
     "SIGN_IN": "登录",

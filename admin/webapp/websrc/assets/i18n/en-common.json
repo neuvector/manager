@@ -202,7 +202,8 @@
   },
   "logout": {
     "SIGN_OUT": "Signed out already",
-    "SIGN_OUT_DESC": "You can close this browser window and go to Rancher."
+    "SIGN_OUT_DESC": "You can close this browser window and go to Rancher.",
+    "GO_TO_LOGIN": "Go to Login Page"
   },
   "login": {
     "SIGN_IN": "Sign in",

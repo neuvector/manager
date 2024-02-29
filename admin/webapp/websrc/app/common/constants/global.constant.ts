@@ -273,4 +273,10 @@ export class GlobalConstant {
     COMPLIANCE_PROFILE: 'cfgComplianceProfileExport.yaml',
     VUL_PROFILE: 'cfgVulProfileExport.yaml',
   };
+
+  public static SIGSTORE_ATTRIBUTE = {
+    PRIVATE: 'private',
+    PUBLIC: 'public',
+    ROOTLESS_KEYPAIR_ONLY: 'rootless_keypairs_only',
+  };
 }

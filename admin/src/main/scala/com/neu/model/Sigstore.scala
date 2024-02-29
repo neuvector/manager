@@ -4,6 +4,7 @@ case class RootOfTrust(
   name: Option[String],
   comment: Option[String],
   is_private: Option[Boolean],
+  rootless_keypairs_only: Option[Boolean],
   rekor_public_key: Option[String],
   root_cert: Option[String],
   sct_public_key: Option[String],

@@ -3330,6 +3330,7 @@
   "signatures": {
     "PRIVATE": "私有",
     "PUBLIC": "共有",
+    "Rootless_keypairs_only": "仅限无根密钥对",
     "gridHeader": {
       "NAME": "名称",
       "SIG_NAME": "签名信任根名称",

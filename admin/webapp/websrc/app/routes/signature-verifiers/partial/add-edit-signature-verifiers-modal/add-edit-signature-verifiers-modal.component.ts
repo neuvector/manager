@@ -18,14 +18,12 @@ import {
 } from 'ag-grid-community';
 import { updateGridData } from '@common/utils/common.utils';
 
-
 @Component({
   selector: 'app-add-edit-signature-verifiers-modal',
   templateUrl: './add-edit-signature-verifiers-modal.component.html',
-  styleUrls: ['./add-edit-signature-verifiers-modal.component.scss']
+  styleUrls: ['./add-edit-signature-verifiers-modal.component.scss'],
 })
 export class AddEditSignatureVerifiersModalComponent implements OnInit {
-
   addEditSignatureForm: FormGroup;
   opTypeOptions = GlobalConstant.MODAL_OP;
   submittingUpdate: boolean = false;
@@ -38,7 +36,7 @@ export class AddEditSignatureVerifiersModalComponent implements OnInit {
     private authUtilsService: AuthUtilsService,
     private notificationService: NotificationService,
     private utils: UtilsService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     if (this.data.opType === GlobalConstant.MODAL_OP.ADD) {
@@ -48,7 +46,7 @@ export class AddEditSignatureVerifiersModalComponent implements OnInit {
         rekor_public_key: new FormControl(''),
         root_cert: new FormControl('', Validators.required),
         sct_public_key: new FormControl(''),
-        is_private: new FormControl(true),
+        attribute: new FormControl(GlobalConstant.SIGSTORE_ATTRIBUTE.PRIVATE),
         cfg_type: new FormControl(GlobalConstant.CFG_TYPE.CUSTOMER),
       });
     } else {
@@ -56,9 +54,15 @@ export class AddEditSignatureVerifiersModalComponent implements OnInit {
         name: new FormControl(this.data.signature.name, Validators.required),
         comment: new FormControl(this.data.signature.comment),
         rekor_public_key: new FormControl(this.data.signature.rekor_public_key),
-        root_cert: new FormControl(this.data.signature.root_cert, this.data.signature.is_private ? Validators.required : null),
+        root_cert: new FormControl(
+          this.data.signature.root_cert,
+          this.data.signature.attribute ===
+          GlobalConstant.SIGSTORE_ATTRIBUTE.PRIVATE
+            ? Validators.required
+            : null
+        ),
         sct_public_key: new FormControl(this.data.signature.sct_public_key),
-        is_private: new FormControl(this.data.signature.is_private),
+        attribute: new FormControl(this.data.signature.attribute),
         cfg_type: new FormControl(this.data.cfg_type),
       });
     }
@@ -69,70 +73,77 @@ export class AddEditSignatureVerifiersModalComponent implements OnInit {
   };
 
   changeAttribute = () => {
-    let isPrivate = this.addEditSignatureForm.get('is_private')!.value;
+    let attribute = this.addEditSignatureForm.get('attribute')!.value;
     let name = this.addEditSignatureForm.get('name')!.value;
     let comment = this.addEditSignatureForm.get('comment')!.value;
     let cfgType = this.addEditSignatureForm.get('cfg_type')!.value;
-    if (isPrivate) {
-      this.addEditSignatureForm.get('root_cert')!.setValidators([Validators.required]);
+    if (attribute == GlobalConstant.SIGSTORE_ATTRIBUTE.PRIVATE) {
+      this.addEditSignatureForm
+        .get('root_cert')!
+        .setValidators([Validators.required]);
     } else {
       this.addEditSignatureForm.get('root_cert')!.clearValidators();
     }
     this.addEditSignatureForm.reset();
-    this.addEditSignatureForm.get('is_private')!.setValue(isPrivate);
+    this.addEditSignatureForm.get('attribute')!.setValue(attribute);
     this.addEditSignatureForm.get('name')!.setValue(name);
     this.addEditSignatureForm.get('comment')!.setValue(comment);
     this.addEditSignatureForm.get('cfg_type')!.setValue(cfgType);
   };
 
   updateSigstore = () => {
-    if (!this.addEditSignatureForm.controls.is_private.value) {
+    if (
+      this.addEditSignatureForm.controls.attribute.value !==
+      GlobalConstant.SIGSTORE_ATTRIBUTE.PRIVATE
+    ) {
       this.addEditSignatureForm.controls.rekor_public_key.setValue('');
       this.addEditSignatureForm.controls.root_cert.setValue('');
       this.addEditSignatureForm.controls.sct_public_key.setValue('');
     }
-    this.signaturesService.updateSigstoreData(
-      this.addEditSignatureForm.value,
-      this.data.opType
-    ).subscribe(
-      response => {
-        this.notificationService.open(
-          this.data.opType === GlobalConstant.MODAL_OP.ADD ?
-          this.translate.instant("signatures.msg.INSERT_SIGSTORE_OK") :
-          this.translate.instant("signatures.msg.UPDATE_SIGSTORE_OK")
-        );
-        this.dialogRef.close(true);
-        updateGridData(
-          this.data.sigstores,
-          [this.data.opType === GlobalConstant.MODAL_OP.ADD ?
-            {
-              name: this.addEditSignatureForm.value.name,
-              comment: this.addEditSignatureForm.value.comment,
-              is_private: this.addEditSignatureForm.value.is_private,
-              rekor_public_key: this.addEditSignatureForm.value.rekor_public_key,
-              root_cert: this.addEditSignatureForm.value.root_cert,
-              sct_public_key: this.addEditSignatureForm.value.sct_public_key,
-              cfg_type: GlobalConstant.CFG_TYPE.CUSTOMER,
-            } :
-            this.addEditSignatureForm.value
-          ],
-          this.data.gridApi,
-          'name',
-          this.data.opType === GlobalConstant.MODAL_OP.ADD ? 'add' : 'edit'
-        );
-      },
-      error => {
-        if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
-          let msg = this.data.opType === GlobalConstant.MODAL_OP.ADD ?
-            this.translate.instant("signatures.msg.INSERT_SIGSTORE_NG") :
-            this.translate.instant("signatures.msg.UPDATE_SIGSTORE_NG");
+    this.signaturesService
+      .updateSigstoreData(this.addEditSignatureForm.value, this.data.opType)
+      .subscribe(
+        response => {
           this.notificationService.open(
-            this.utils.getAlertifyMsg(error.error, msg, false),
-            GlobalConstant.NOTIFICATION_TYPE.ERROR
-          )
+            this.data.opType === GlobalConstant.MODAL_OP.ADD
+              ? this.translate.instant('signatures.msg.INSERT_SIGSTORE_OK')
+              : this.translate.instant('signatures.msg.UPDATE_SIGSTORE_OK')
+          );
+          this.dialogRef.close(true);
+          updateGridData(
+            this.data.sigstores,
+            [
+              this.data.opType === GlobalConstant.MODAL_OP.ADD
+                ? {
+                    name: this.addEditSignatureForm.value.name,
+                    comment: this.addEditSignatureForm.value.comment,
+                    attribute: this.addEditSignatureForm.value.attribute,
+                    rekor_public_key:
+                      this.addEditSignatureForm.value.rekor_public_key,
+                    root_cert: this.addEditSignatureForm.value.root_cert,
+                    sct_public_key:
+                      this.addEditSignatureForm.value.sct_public_key,
+                    cfg_type: GlobalConstant.CFG_TYPE.CUSTOMER,
+                  }
+                : this.addEditSignatureForm.value,
+            ],
+            this.data.gridApi,
+            'name',
+            this.data.opType === GlobalConstant.MODAL_OP.ADD ? 'add' : 'edit'
+          );
+        },
+        error => {
+          if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
+            let msg =
+              this.data.opType === GlobalConstant.MODAL_OP.ADD
+                ? this.translate.instant('signatures.msg.INSERT_SIGSTORE_NG')
+                : this.translate.instant('signatures.msg.UPDATE_SIGSTORE_NG');
+            this.notificationService.open(
+              this.utils.getAlertifyMsg(error.error, msg, false),
+              GlobalConstant.NOTIFICATION_TYPE.ERROR
+            );
+          }
         }
-      }
-    );
+      );
   };
-
 }

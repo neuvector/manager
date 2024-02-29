@@ -16,10 +16,11 @@ import { MapConstant } from '@common/constants/map.constant';
 @Component({
   selector: 'app-verifier-action-buttons',
   templateUrl: './verifier-action-buttons.component.html',
-  styleUrls: ['./verifier-action-buttons.component.scss']
+  styleUrls: ['./verifier-action-buttons.component.scss'],
 })
-export class VerifierActionButtonsComponent implements ICellRendererAngularComp {
-
+export class VerifierActionButtonsComponent
+  implements ICellRendererAngularComp
+{
   params!: ICellRendererParams;
 
   constructor(
@@ -28,7 +29,7 @@ export class VerifierActionButtonsComponent implements ICellRendererAngularComp 
     private notificationService: NotificationService,
     private signaturesService: SignaturesService,
     private utils: UtilsService
-  ) { }
+  ) {}
 
   agInit(params: ICellRendererParams): void {
     this.params = params;
@@ -38,7 +39,7 @@ export class VerifierActionButtonsComponent implements ICellRendererAngularComp 
     return false;
   }
 
-  deleteVerifier = (data) => {
+  deleteVerifier = data => {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '700px',
       data: {
@@ -48,7 +49,10 @@ export class VerifierActionButtonsComponent implements ICellRendererAngularComp 
     dialogRef.componentInstance.confirm
       .pipe(
         switchMap(() => {
-          return this.signaturesService.deleteVerifierData(this.params.context.componentParent.selectedSignature.name, data.name);
+          return this.signaturesService.deleteVerifierData(
+            this.params.context.componentParent.selectedSignature.name,
+            data.name
+          );
         })
       )
       .subscribe(
@@ -83,19 +87,22 @@ export class VerifierActionButtonsComponent implements ICellRendererAngularComp 
       );
   };
 
-  editVerifier= (data) => {
+  editVerifier = data => {
     const addEditDialogRef = this.dialog.open(AddEditVerifiersModalComponent, {
       width: '80%',
       data: {
         verifier: data,
         opType: GlobalConstant.MODAL_OP.EDIT,
-        gridOptions4Verifiers: this.params.context.componentParent.gridOptions4Verifiers,
+        gridOptions4Verifiers:
+          this.params.context.componentParent.gridOptions4Verifiers,
         index4Verifier: this.params.context.componentParent.index4Verifier,
         gridApi: this.params.context.componentParent.gridOptions4Verifiers.api!,
         verifiers: this.params.context.componentParent.verifiers,
-        rootOfTrustName: this.params.context.componentParent.selectedSignature.name
+        rootOfTrustName:
+          this.params.context.componentParent.selectedSignature.name,
+        attribute:
+          this.params.context.componentParent.selectedSignature.attribute,
       },
     });
   };
-
 }

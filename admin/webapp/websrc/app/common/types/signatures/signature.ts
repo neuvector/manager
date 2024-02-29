@@ -12,7 +12,19 @@ export class Verifier {
 export class Signature {
   name: string = '';
   comment: String = '';
-  is_private: Boolean;
+  attribute: String = '';
+  rekor_public_key: string = '';
+  root_cert?: string = '';
+  sct_public_key?: string = '';
+  cfg_type?: string = '';
+  verifiers?: Array<Verifier>;
+}
+
+export class SignaturePayload {
+  name: string = '';
+  comment: String = '';
+  is_private: Boolean = false;
+  rootless_keypairs_only: Boolean = false;
   rekor_public_key: string = '';
   root_cert?: string = '';
   sct_public_key?: string = '';

@@ -3331,6 +3331,7 @@
   "signatures": {
     "PRIVATE": "Private",
     "PUBLIC": "Public",
+    "Rootless_keypairs_only": "Rootless Keypairs Only",
     "gridHeader": {
       "NAME": "Name",
       "SIG_NAME": "Sigstore Root of Trust Name",

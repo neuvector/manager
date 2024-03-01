@@ -139,9 +139,10 @@ export class AppComponent implements OnInit {
 
   @HostListener('window:beforeunload', ['$event'])
   unloadHandler = (event: Event) => {
-    this.sessionStorage.clear();
-    this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_TOKEN);
-    this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_TIMEOUT);
+    if (GlobalVariable.isSUSESSO) {
+      this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_EXTERNAL_REF);
+      this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_TIMEOUT);
+    }
   }
 
   private debounced = (delay, fn) => {

@@ -349,6 +349,7 @@
         "TOP_VIOLATIONS": "网络违规行为",
         "TOP_VULNERABLE_CONTAINERS": "Pod安全漏洞评估",
         "TOP_VULNERABLE_NODES": "主机安全漏洞评估",
+        "TOP_VULNERABLE_ASSETS": "资产安全漏洞评估",
         "TOP_INCIDENTS_CONTAINERS": "Pod内恶意行为评估",
         "TOP_INCIDENTS_NODES": "主机内恶意行为评估",
         "TOP_VULNERABILITY": "安全漏洞评估",

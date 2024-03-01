@@ -327,11 +327,12 @@ def source(data, source, filter_domain, filter_repo, page):
 @click.option('--gitlab_private_token', help="Gitlab private token")
 @click.option('--ibmcloud_account', help="ibm cloud account")
 @click.option('--ibmcloud_token_url', help="ibm cloud iam oauth-tokens url")
+@click.option("--ignore_proxy", is_flag=True, help="Set flag for this registry to ignore configured proxy during scans")
 @click.pass_obj
 def registry_create(data, registry_type, name, registry, username, password, token, auth_with_token,
                     filter, rescan, scan_layers, schedule, repolimit, taglimit,
                     jfrog_mode, schedule_interval, gitlab_api_url, gitlab_private_token,
-                    ibmcloud_account, ibmcloud_token_url):
+                    ibmcloud_account, ibmcloud_token_url, ignore_proxy):
     """Create registry."""
 
     info = {"registry_type": _reg_types[registry_type], "name": name}
@@ -410,6 +411,8 @@ def registry_create(data, registry_type, name, registry, username, password, tok
     else:
         info["cfg_type"] = client.UserCreatedCfg
 
+    info["ignore_proxy"] = ignore_proxy
+
     data.client.create("scan/registry", {"config": info})
 
 
@@ -437,11 +440,12 @@ def registry_create(data, registry_type, name, registry, username, password, tok
 @click.option('--gitlab_private_token', help="Gitlab private token")
 @click.option('--ibmcloud_account', help="ibm cloud account")
 @click.option('--ibmcloud_token_url', help="ibm cloud iam oauth-tokens url")
+@click.option("--ignore_proxy", is_flag=True, help="Set flag for this registry to ignore configured proxy during scans")
 @click.pass_obj
 def set_registry(data, name, registry, username, password, token, auth_with_token,
                  aws, filter, rescan, scan_layers, schedule, schedule_interval, repolimit, taglimit,
                  gcr, gitlab_api_url, gitlab_private_token,
-                 ibmcloud_account, ibmcloud_token_url):
+                 ibmcloud_account, ibmcloud_token_url, ignore_proxy):
     """Configure registry."""
 
     info = {"name": name}
@@ -523,6 +527,8 @@ def set_registry(data, name, registry, username, password, token, auth_with_toke
         info["ibm_cloud_account"] = ibmcloud_account
     if ibmcloud_token_url:
         info["ibm_cloud_token_url"] = ibmcloud_token_url
+    
+    info["ignore_proxy"] = ignore_proxy
 
     data.client.config("scan/registry", name, {"config": info})
 

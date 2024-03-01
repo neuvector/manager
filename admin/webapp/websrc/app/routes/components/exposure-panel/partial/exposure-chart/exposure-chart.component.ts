@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { HierarchicalExposure, ExposedContainer } from '@common/types';
 import { TranslateService } from '@ngx-translate/core';
+import { GlobalConstant } from '@common/constants/global.constant';
 
 @Component({
   selector: 'app-exposure-chart',

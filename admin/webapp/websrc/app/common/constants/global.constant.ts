@@ -41,7 +41,7 @@ export class GlobalConstant {
     NETWORK_RULE: 1000000,
   };
   public static POLICY_ACTION = {
-    OPEN: 'open'
+    OPEN: 'open',
     ALLOW: 'allow',
     DENY: 'deny',
     VIOLATE: 'violate',

@@ -44,15 +44,11 @@
     >
     </app-top-security-events-panel>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="!dashboardDetailsService.isAutoScanOn && dashboardDetailsService.highPriorityVulnerabilities && dashboardDetailsService.highPriorityVulnerabilities.containers.top5Containers.length === 0 && dashboardDetailsService.highPriorityVulnerabilities.nodes.top5Nodes.length === 0 else topVulnerableAssets">
     <app-top-vulnerable-assets-panel
-      class="col-lg-6"
-      assetType="containers"
-    >
-    </app-top-vulnerable-assets-panel>
-    <app-top-vulnerable-assets-panel
-      class="col-lg-6"
-      assetType="nodes"
+      class="col-lg-12"
+      [isScanOff]="!dashboardDetailsService.isAutoScanOn"
+      assetType="assets"
     >
     </app-top-vulnerable-assets-panel>
   </div>
@@ -75,3 +71,18 @@
   <app-application-protocols-panel>
   </app-application-protocols-panel>
 </div>
+
+<ng-template #topVulnerableAssets>
+  <div class="row">
+    <app-top-vulnerable-assets-panel
+      class="col-lg-6"
+      assetType="containers"
+    >
+    </app-top-vulnerable-assets-panel>
+    <app-top-vulnerable-assets-panel
+      class="col-lg-6"
+      assetType="nodes"
+    >
+    </app-top-vulnerable-assets-panel>
+  </div>
+</ng-template>

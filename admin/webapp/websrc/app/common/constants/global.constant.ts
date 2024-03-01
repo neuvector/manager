@@ -40,6 +40,13 @@ export class GlobalConstant {
   public static NEW_ID_SEED = {
     NETWORK_RULE: 1000000,
   };
+  public static POLICY_ACTION = {
+    OPEN: 'open'
+    ALLOW: 'allow',
+    DENY: 'deny',
+    VIOLATE: 'violate',
+    THREAT: 'threat'
+  }
   public static CRUD = {
     C: 'post',
     R: 'get',

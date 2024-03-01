@@ -122,6 +122,7 @@
       <app-top-vulnerable-assets-chart
         [highPriorityVulnerabilities]="reportInfo.dashboardDetailsInfo.highPriorityVulnerabilities"
         [isReport]="true"
+        [isAutoScanOff]="!dashboardDetailsService.isAutoScanOn"
         assetType="containers"
       ></app-top-vulnerable-assets-chart>
     </div>
@@ -140,6 +141,7 @@
       <app-top-vulnerable-assets-chart
         [highPriorityVulnerabilities]="reportInfo.dashboardDetailsInfo.highPriorityVulnerabilities"
         [isReport]="true"
+        [isAutoScanOff]="!dashboardDetailsService.isAutoScanOn"
         assetType="nodes"
       >
       </app-top-vulnerable-assets-chart>

@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { InternalSystemInfo, HierarchicalExposure } from '@common/types';
 import { parseExposureHierarchicalData } from '@common/utils/common.utils';
 import { DashboardService } from '@common/services/dashboard.service';
+import { DashboardDetailsService } from '@routes/dashboard/thread-services/dashboard-details.service';
 
 @Component({
   selector: 'app-dashboard-printable-report',
@@ -16,7 +17,8 @@ export class DashboardPrintableReportComponent implements OnInit {
   hierarchicalEgressList!: Array<HierarchicalExposure>;
 
   constructor(
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    public dashboardDetailsService: DashboardDetailsService
   ) { }
 
   ngOnInit(): void {

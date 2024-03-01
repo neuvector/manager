@@ -29,7 +29,8 @@ import { ScoreImprovementModalModule } from '@components/score-improvement-modal
   ],
   exports: [
     SecurityRiskPanelComponent,
-    RiskScoreComponent
+    RiskScoreComponent,
+    VulnerabilityInstructionComponent
   ]
 })
 export class SecurityRiskPanelModule { }

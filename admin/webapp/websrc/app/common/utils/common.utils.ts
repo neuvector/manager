@@ -723,6 +723,7 @@ const summarizeEntries = exposedPods => {
             entry.port
           );
         }
+        entryMap[entry.ip].applications = entryMap[entry.ip].applications.filter(app => !!app);
         entryMap[entry.ip].sessions += entry.sessions;
         entryMap[entry.ip].policy_action = accumulateActionLevel(
           entryMap[entry.ip].action,

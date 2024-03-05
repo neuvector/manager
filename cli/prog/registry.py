@@ -95,7 +95,7 @@ def detail(data, name):
     columns = (
     "name", "registry_type", "registry", "username", "filters", "rescan_after_db_update", "schedule", "status",
     "error_message",
-    "scanned", "scheduled", "scanning", "failed", "cfg_type")
+    "scanned", "scheduled", "scanning", "failed", "cfg_type", "ignore_proxy")
     output.show(columns, summary)
 
 

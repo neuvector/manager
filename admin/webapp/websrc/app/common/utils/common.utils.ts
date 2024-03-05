@@ -687,7 +687,7 @@ export const parseExposureHierarchicalData = (
       bytes: 0,
       sessions: 0,
       severity: '',
-      policy_action: '',
+      policy_action: v[0].policy_action,
       event_type: '',
       protocols: '',
       applications: Array.from(applicationSet),
@@ -698,9 +698,10 @@ export const parseExposureHierarchicalData = (
         service: '',
       })) as any,
     };
-    hierarchicalExposures.push(
-      JSON.parse(JSON.stringify(hierarchicalExposure))
-    );
+    if (hierarchicalExposure.policy_action !== GlobalConstant.POLICY_ACTION.OPEN)
+      hierarchicalExposures.push(
+        JSON.parse(JSON.stringify(hierarchicalExposure))
+      );
   });
   return hierarchicalExposures;
 };
@@ -710,10 +711,19 @@ const summarizeEntries = exposedPods => {
   exposedPods.forEach(expsosedPod => {
     expsosedPod.entries.forEach(entry => {
       if (entryMap[entry.ip]) {
-        entryMap[entry.ip].applications = accumulateProtocols(
-          entryMap[entry.ip].applications,
-          entry.application
-        );
+        if (entry.application) {
+          entryMap[entry.ip].applications = accumulateProtocols(
+            entryMap[entry.ip].applications,
+            entry.application
+          );
+        }
+        if (entry.port) {
+          entryMap[entry.ip].applications = accumulateProtocols(
+            entryMap[entry.ip].applications,
+            entry.port
+          );
+        }
+        entryMap[entry.ip].applications = entryMap[entry.ip].applications.filter(app => !!app);
         entryMap[entry.ip].sessions += entry.sessions;
         entryMap[entry.ip].policy_action = accumulateActionLevel(
           entryMap[entry.ip].action,

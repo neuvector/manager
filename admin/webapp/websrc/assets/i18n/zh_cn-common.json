@@ -202,7 +202,8 @@
   },
   "logout": {
     "SIGN_OUT": "已经登出了",
-    "SIGN_OUT_DESC": "您可以关闭此浏览器窗口, 然后回到Rancher."
+    "SIGN_OUT_DESC": "您可以关闭此浏览器窗口, 然后回到Rancher.",
+    "GO_TO_LOGIN": "返回登陆页面"
   },
   "login": {
     "SIGN_IN": "登录",
@@ -348,6 +349,7 @@
         "TOP_VIOLATIONS": "网络违规行为",
         "TOP_VULNERABLE_CONTAINERS": "Pod安全漏洞评估",
         "TOP_VULNERABLE_NODES": "主机安全漏洞评估",
+        "TOP_VULNERABLE_ASSETS": "资产安全漏洞评估",
         "TOP_INCIDENTS_CONTAINERS": "Pod内恶意行为评估",
         "TOP_INCIDENTS_NODES": "主机内恶意行为评估",
         "TOP_VULNERABILITY": "安全漏洞评估",
@@ -1274,7 +1276,7 @@
     "SONATYPE_URL_HINT": "样本: http://<10.1.7.121:8082>",
     "DOCKER_URL_HINT": "样本: https://registry.hub.docker.com/",
     "REDHAT_URL_HINT": "样本: https://registry.connect.redhat.com/",
-    "OPENSHIFT_URL_HINT": "样本: OpenShift 3.x - https://docker-registry.default.svc:5000, OpenShift 4.x - https://image-registry.openshift-image-registry.svc:5000",
+    "OPENSHIFT_URL_HINT": "样本: OpenShift 4.x - https://image-registry.openshift-image-registry.svc:5000",
     "GOOGLE_URL_HINT": "样本: https://gcr.io",
     "REPO_HINT": "样本: https://registry.hub.docker.com/ https://registry.connect.redhat.com/ https://registry.access.redhat.com/ https://registry.access.redhat.com/",
     "GITLAB_URL_HINT": "样本: https://registry.example.com",
@@ -3329,6 +3331,7 @@
   "signatures": {
     "PRIVATE": "私有",
     "PUBLIC": "共有",
+    "Rootless_keypairs_only": "仅限无根密钥对",
     "gridHeader": {
       "NAME": "名称",
       "SIG_NAME": "签名信任根名称",

@@ -6,6 +6,7 @@ import { NgChartsModule } from 'ng2-charts';
 import { TopVulnerableAssetsChartComponent } from './partial/top-vulnerable-assets-chart/top-vulnerable-assets-chart.component';
 import { EmptyDataChartReplacementModule } from '@components/ui/empty-data-chart-replacement/empty-data-chart-replacement.module';
 import { PanelInstructionCurtainModule } from '@components/ui/panel-instruction-curtain/panel-instruction-curtain.module';
+import { SecurityRiskPanelModule } from '@components/security-risk-panel/security-risk-panel.module';
 
 
 
@@ -20,7 +21,8 @@ import { PanelInstructionCurtainModule } from '@components/ui/panel-instruction-
     NvCommonModule,
     NgChartsModule,
     EmptyDataChartReplacementModule,
-    PanelInstructionCurtainModule
+    PanelInstructionCurtainModule,
+    SecurityRiskPanelModule
   ],
   exports: [
     TopVulnerableAssetsPanelComponent,

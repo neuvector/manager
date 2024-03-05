@@ -56,11 +56,6 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
       this.responseRulesService.responseRules,
       id
     );
-    let rowNode =
-      this.params.context.componentParent.gridOptions.api.getDisplayedRowAtIndex(
-        this.responseRulesService.index4Edit
-      );
-    rowNode.setSelected(true);
     this.responseRulesService.getAutoCompleteData().subscribe(
       response => {
         this.openAddResponseRuleModal(
@@ -169,11 +164,6 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
       this.responseRulesService.responseRules,
       id
     );
-    let rowNode =
-      this.params.context.componentParent.gridOptions.api.getDisplayedRowAtIndex(
-        this.responseRulesService.index4Delete
-      );
-    rowNode.setSelected(true);
     let isQuarantined =
       this.responseRulesService.responseRules[
         this.responseRulesService.index4Delete

@@ -157,7 +157,7 @@ def detail(data, id_or_name, cap):
 
     _show_group_display_format(group)
     # columns = ("name", "learned", "criteria", "members", "policy_rules", "dlp_status", "sensors")
-    columns = ("name", "learned", "criteria", "platform_role", "members", "policy_rules", "type")
+    columns = ("name", "learned", "mon_metric", "grp_sess_cur", "grp_sess_rate", "grp_band_width", "criteria", "platform_role", "members", "policy_rules", "type")
     output.show(columns, group)
 
 @show_group.command()
@@ -475,8 +475,12 @@ def _add_criteria(ct, key, values):
 @click.option('--service', multiple=True, help="container service name.")
 @click.option('--label', multiple=True, help="container label.")
 @click.option('--address', multiple=True, help="IP address range.")
+@click.option("--monitor_metric", type=click.Choice(['enable', 'disable']), default=None, help="monitor metric status")
+@click.option("--cur_sess", default=0, type=int, help="group current active session number threshold")
+@click.option("--sess_rate", default=0, type=int, help="group session rate threshold in cps")
+@click.option("--bandwidth", default=0, type=int, help="group throughput threshold in mbps")
 @click.pass_obj
-def create_group(data, name, scope, image, node, domain, container, service, label, address):
+def create_group(data, name, scope, image, node, domain, container, service, label, address, monitor_metric, cur_sess, sess_rate, bandwidth):
     """Create group with criteria.
 
     If the option value starts with @, the criterion matches string with substring 'value';
@@ -508,8 +512,11 @@ def create_group(data, name, scope, image, node, domain, container, service, lab
     cfg_type = client.UserCreatedCfg
     if scope == "fed":
         cfg_type = client.FederalCfg
-
-    data.client.create("group", {"config": {"name": name, "criteria": ct, "cfg_type": cfg_type}})
+    if monitor_metric == "enable":
+        monmet = True
+    else:
+        monmet = False
+    data.client.create("group", {"config": {"name": name, "criteria": ct, "cfg_type": cfg_type, "mon_metric":monmet, "grp_sess_cur":cur_sess, "grp_sess_rate":sess_rate, "grp_band_width":bandwidth}})
 
 
 @set.group("group")
@@ -529,10 +536,13 @@ def set_group(ctx, data, name):
 @click.option('--service', multiple=True, help="container service name.")
 @click.option('--label', multiple=True, help="container label.")
 @click.option('--address', multiple=True, help="ip address range list.")
-# @click.option("--dlp", type=click.Choice(['enable', 'disable']), default=None, help="dlp status")
+@click.option("--monitor_metric", type=click.Choice(['enable', 'disable']), default=None, help="monitor metric status")
+@click.option("--cur_sess", type=int, default=None, help="group current active session number threshold")
+@click.option("--sess_rate", type=int, default=None, help="group session rate threshold in cps")
+@click.option("--bandwidth", type=int, default=None, help="group throughput threshold in mbps")
 @click.pass_obj
 # def set_group_setting(data, image, node, domain, container, service, label, address, dlp):
-def set_group_setting(data, image, node, domain, container, service, label, address):
+def set_group_setting(data, image, node, domain, container, service, label, address, monitor_metric, cur_sess, sess_rate, bandwidth):
     """Set group configuration.
 
     For partial match, add @ in front of the value streig, for example --image @nginx.
@@ -560,8 +570,14 @@ def set_group_setting(data, image, node, domain, container, service, label, addr
     group = {"name": data.id_or_name}
     if len(ct) > 0:
         group["criteria"] = ct
-    # if dlp != None:
-    #    group["dlp_status"] = dlp == "enable"
+    if monitor_metric != None:
+        group["mon_metric"] = monitor_metric == "enable"
+    if cur_sess != None:
+        group["grp_sess_cur"] = cur_sess
+    if sess_rate != None:
+        group["grp_sess_rate"] = sess_rate
+    if bandwidth != None:
+        group["grp_band_width"] = bandwidth
 
     data.client.config("group", data.id_or_name, {"config": group})
 

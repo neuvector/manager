@@ -60,7 +60,7 @@ def show_sigstore_rootoftrust(data, root_name):
                 resp[k] = ""
         rootOfTrusts.append(resp) 
 
-    columns = ("name", "is_private", "rekor_public_key", "root_cert", "sct_public_key", "comment", "cfg_type")
+    columns = ("name", "is_private", "rootless_keypairs_only", "rekor_public_key", "root_cert", "sct_public_key", "comment", "cfg_type")
     output.list(columns, rootOfTrusts)
 
 

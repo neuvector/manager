@@ -14,8 +14,8 @@
 
 <ng-template #nodata>
   <app-empty-data-chart-replacement
-    type="safe"
-    [message]="'dashboard.body.message.NO_VULNERABLE_CONTAINER' | translate"
+    [type]="isAutoScanOff ? 'warning' : 'safe'"
+    [message]="(isAutoScanOff ? 'dashboard.heading.guideline.AUTO_SCAN_OFF' : 'dashboard.body.message.NO_VULNERABLE_CONTAINER') | translate"
   >
   </app-empty-data-chart-replacement>
 </ng-template>

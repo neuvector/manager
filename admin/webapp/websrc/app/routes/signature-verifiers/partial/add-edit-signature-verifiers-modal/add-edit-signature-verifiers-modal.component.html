@@ -40,24 +40,29 @@
             formControlName="comment"/>
         </mat-form-field>
       </div>
-      <div class="d-flex justify-content-start align-items-center">
-        <label class="pull-left margin-right-m">{{ 'signatures.gridHeader.ATTRIBUTE' | translate }}</label>
-        <mat-radio-group
-          class="pull-left margin-right-m"
-          aria-label="Select attribute"
-          [disabled]="data.opType === opTypeOptions.EDIT"
-          (change)="changeAttribute()"
-          formControlName="is_private"
-        >
-          <mat-radio-button [value]="true" class="margin-right-s">{{
-            'signatures.PRIVATE' | translate
-          }}</mat-radio-button>
-          <mat-radio-button [value]="false" class="margin-right-s">{{
-            'signatures.PUBLIC' | translate
-          }}</mat-radio-button>
-        </mat-radio-group>
+      <div class="row">
+        <div class="d-flex justify-content-start align-items-center">
+          <label class="pull-left margin-right-m">{{ 'signatures.gridHeader.ATTRIBUTE' | translate }}</label>
+          <mat-radio-group
+            class="pull-left margin-right-m"
+            aria-label="Select attribute"
+            [disabled]="data.opType === opTypeOptions.EDIT"
+            (change)="changeAttribute()"
+            formControlName="attribute"
+          >
+            <mat-radio-button value="private" class="margin-right-s">{{
+              'signatures.PRIVATE' | translate
+              }}</mat-radio-button>
+            <mat-radio-button value="public" class="margin-right-s">{{
+              'signatures.PUBLIC' | translate
+              }}</mat-radio-button>
+            <mat-radio-button value="rootless_keypairs_only" class="margin-right-s">{{
+              'signatures.Rootless_keypairs_only' | translate
+              }}</mat-radio-button>
+          </mat-radio-group>
+        </div>
       </div>
-      <div class="row mx-0" *ngIf="addEditSignatureForm.controls.is_private.value">
+      <div class="row mx-0" *ngIf="addEditSignatureForm.controls.attribute.value === 'private'">
         <mat-form-field appearance="standard" class="w-100">
           <mat-label>{{ 'signatures.gridHeader.REKOR_PUBLIC_KEY' | translate }}</mat-label>
           <textarea
@@ -67,7 +72,7 @@
             matInput></textarea>
         </mat-form-field>
       </div>
-      <div class="row mx-0" *ngIf="addEditSignatureForm.controls.is_private.value">
+      <div class="row mx-0" *ngIf="addEditSignatureForm.controls.attribute.value === 'private'">
         <mat-form-field appearance="standard" class="w-100">
           <mat-label>{{ 'signatures.gridHeader.ROOT_CERT' | translate }}</mat-label>
           <textarea
@@ -81,7 +86,7 @@
           </mat-error>
         </mat-form-field>
       </div>
-      <div class="row mx-0" *ngIf="addEditSignatureForm.controls.is_private.value">
+      <div class="row mx-0" *ngIf="addEditSignatureForm.controls.attribute.value === 'private'">
         <mat-form-field appearance="standard" class="w-100">
           <mat-label>{{ 'signatures.gridHeader.SCT_PUBLIC_KEY' | translate }}&nbsp;&nbsp;({{ 'signatures.gridHeader.SCT_PUBLIC_KEY_HINT' | translate }})</mat-label>
           <textarea
@@ -116,5 +121,5 @@
         (btnClick)="updateSigstore()">
       </app-loading-button>
     </div>
-  <div>
+  </div>
 </div>

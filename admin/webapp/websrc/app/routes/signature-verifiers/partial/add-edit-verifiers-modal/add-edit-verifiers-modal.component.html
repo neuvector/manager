@@ -35,18 +35,32 @@
             matInput
             formControlName="comment" />
         </mat-form-field>
-        <mat-form-field appearance="standard" class="ml-4">
-          <mat-label>{{'signatures.gridHeader.V_TYPE' | translate}}</mat-label>
-          <mat-select
-            required
-            [(ngModel)]="vType"
-            [ngModelOptions]="{standalone: true}"
-          >
-            <mat-option *ngFor="let type of types" [value]="type">
-              {{type}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+        <ng-container *ngIf="!isKeypairOnly; else keypairOption">
+          <mat-form-field appearance="standard" class="ml-4">
+            <mat-label>{{'signatures.gridHeader.V_TYPE' | translate}}</mat-label>
+            <mat-select
+              required
+              [(ngModel)]="vType"
+              [ngModelOptions]="{standalone: true}"
+            >
+              <mat-option *ngFor="let type of types" [value]="type">
+                {{type}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </ng-container>
+        <ng-template #keypairOption>
+          <mat-form-field appearance="standard" class="ml-4">
+            <mat-label>{{ 'signatures.gridHeader.V_TYPE' | translate }}</mat-label>
+            <input
+              type="text"
+              matInput
+              readonly
+              [(ngModel)]="vType"
+              [ngModelOptions]="{standalone: true}" />
+          </mat-form-field>
+        </ng-template>
+
         <!-- <mat-checkbox
           class="mt-3 ml-4"
           formControlName="ignore_tlog"
@@ -112,5 +126,5 @@
         (btnClick)="updateVerifier()">
       </app-loading-button>
     </div>
-  <div>
+  </div>
 </div>

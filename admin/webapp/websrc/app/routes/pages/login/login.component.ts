@@ -443,7 +443,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         ) {
           this.router.navigate([this.originalUrl]);
         } else if (
-          this.linkedUrl &&
+          this.linkedUrl && this.originalUrl &&
           !this.linkedUrl.includes('login') &&
           !this.originalUrl.includes('logout')
         ) {

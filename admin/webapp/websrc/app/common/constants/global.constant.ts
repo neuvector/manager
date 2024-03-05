@@ -40,6 +40,13 @@ export class GlobalConstant {
   public static NEW_ID_SEED = {
     NETWORK_RULE: 1000000,
   };
+  public static POLICY_ACTION = {
+    OPEN: 'open',
+    ALLOW: 'allow',
+    DENY: 'deny',
+    VIOLATE: 'violate',
+    THREAT: 'threat'
+  }
   public static CRUD = {
     C: 'post',
     R: 'get',
@@ -272,5 +279,11 @@ export class GlobalConstant {
     WAF: 'cfgWafExport.yaml',
     COMPLIANCE_PROFILE: 'cfgComplianceProfileExport.yaml',
     VUL_PROFILE: 'cfgVulProfileExport.yaml',
+  };
+
+  public static SIGSTORE_ATTRIBUTE = {
+    PRIVATE: 'private',
+    PUBLIC: 'public',
+    ROOTLESS_KEYPAIR_ONLY: 'rootless_keypairs_only',
   };
 }

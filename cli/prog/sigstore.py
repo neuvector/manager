@@ -60,7 +60,7 @@ def show_sigstore_rootoftrust(data, root_name):
                 resp[k] = ""
         rootOfTrusts.append(resp) 
 
-    columns = ("name", "is_private", "rekor_public_key", "root_cert", "sct_public_key", "comment", "cfg_type")
+    columns = ("name", "is_private", "rootless_keypairs_only", "rekor_public_key", "root_cert", "sct_public_key", "comment", "cfg_type")
     output.list(columns, rootOfTrusts)
 
 
@@ -115,12 +115,13 @@ def create_sigstore(data):
 @create_sigstore.group("root_of_trust", invoke_without_command=True)
 @click.option("--root_name", required=True, help="Root of trust name")
 @click.option("--private", is_flag=True, default=False, help="Set this flag for private root of trust")
+@click.option("--rootless_keypairs_only", is_flag=True, default=False, help="Set this flag to only allow explicit keypair verifiers, this will override the `private` flag.")
 @click.option("--rekor_public_key", is_flag=True, default=False, help="Set this flag for configuring Rekor Public Key")
 @click.option("--root_cert", is_flag=True, default=False, help="Set this flag for configuring Root Certificate")
 @click.option("--sct_public_key", is_flag=True, default=False, help="Set this flag for configuring SCT Public Key")
 @click.option("--comment", default="", help="Comment")
 @click.pass_obj
-def create_sigstore_rootoftrust(data, root_name, private, rekor_public_key, root_cert, sct_public_key, comment):
+def create_sigstore_rootoftrust(data, root_name, private, rootless_keypairs_only, rekor_public_key, root_cert, sct_public_key, comment):
     """Create root of trust."""
 
     if root_name == "":
@@ -150,6 +151,7 @@ def create_sigstore_rootoftrust(data, root_name, private, rekor_public_key, root
     info = {
         "name": root_name,
         "is_private": private,
+        "rootless_keypairs_only": rootless_keypairs_only,
         "rekor_public_key": rekor_public_key_value,
         "root_cert": root_cert_value,
         "sct_public_key": sct_public_key_value,

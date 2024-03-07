@@ -112,13 +112,7 @@ export class VulnerabilitiesCsvService {
           vectors: i === 0 ? entryData.vectors : '',
           vectors_v3: i === 0 ? entryData.vectors_v3 : '',
           description: i === 0 ? entryData.description : '',
-          platforms:
-            i === 0
-              ? (entryData.platforms ?
-                  entryData.platforms
-                    .map(platform => platform.display_name)
-                    .join(' ') : '')
-              : '',
+          platforms: i === 0 ? entryData.platforms : '',
           nodes: i === 0 ? (entryData.nodes || '') : '',
           domains:
             entryData.domains ?

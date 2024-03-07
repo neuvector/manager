@@ -115,7 +115,7 @@ def create_sigstore(data):
 @create_sigstore.group("root_of_trust", invoke_without_command=True)
 @click.option("--root_name", required=True, help="Root of trust name")
 @click.option("--private", is_flag=True, default=False, help="Set this flag for private root of trust")
-@click.option("--rootless_keypairs_only", is_flag=True, default=False, help="Set this flag to only allow explicit keypair verifiers")
+@click.option("--rootless_keypairs_only", is_flag=True, default=False, help="Set this flag to only allow explicit keypair verifiers, this will override the `private` flag.")
 @click.option("--rekor_public_key", is_flag=True, default=False, help="Set this flag for configuring Rekor Public Key")
 @click.option("--root_cert", is_flag=True, default=False, help="Set this flag for configuring Root Certificate")
 @click.option("--sct_public_key", is_flag=True, default=False, help="Set this flag for configuring SCT Public Key")

@@ -22,16 +22,16 @@ export class VulnerabilitiesCsvService {
     let vulnerabilities4Csv = [];
 
     const listAssets = entryData => {
-      let imageList = entryData.images.map(image => image.display_name);
-      let workloadList = entryData.workloads.map(
+      let imageList = entryData.images ? entryData.images.map(image => image.display_name) : [];
+      let workloadList = entryData.workloads ? entryData.workloads.map(
         workload => workload.display_name
-      );
-      let serviceList = entryData.services;
-      let domainList = entryData.domains;
-      let nodeList = entryData.nodes.map(node => node.display_name);
-      let platformList = entryData.platforms.map(
+      ) : [];
+      let serviceList = entryData.services || [];
+      let domainList = entryData.domains || [];
+      let nodeList = entryData.nodes ? entryData.nodes.map(node => node.display_name) : [];
+      let platformList = entryData.platforms ? entryData.platforms.map(
         platform => platform.display_name
-      );
+      ) : [];
       let pv2fvList = Object.entries(entryData.packages).map(([k, v]) => {
         return `${k}:(${(v as any).reduce(
           (acc, curr) =>
@@ -169,17 +169,18 @@ export class VulnerabilitiesCsvService {
       }
       return rows;
     };
-
-    if (cveEntry) {
-      vulnerabilities4Csv = vulnerabilities4Csv.concat(listAssets(cveEntry));
-    } else {
-      if (vulnerabilityList && vulnerabilityList.length > 0) {
-        vulnerabilityList.forEach(cve => {
-          let entryData = this.prepareEntryData(JSON.parse(JSON.stringify(cve)), 'vulnerability_view');
-          vulnerabilities4Csv = vulnerabilities4Csv.concat(
-            resolveExcelCellLimit(entryData)
-          );
-        });
+    if (typeof vulnerabilityList === 'object') {
+      if (Array.isArray(vulnerabilityList)) {
+        if (vulnerabilityList && vulnerabilityList.length > 0) {
+          vulnerabilityList.forEach(cve => {
+            let entryData = this.prepareEntryData(JSON.parse(JSON.stringify(cve)), 'vulnerability_view');
+            vulnerabilities4Csv = vulnerabilities4Csv.concat(
+              resolveExcelCellLimit(entryData)
+            );
+          });
+        }
+      } else {
+        vulnerabilities4Csv = vulnerabilities4Csv.concat(listAssets(vulnerabilityList));
       }
     }
 

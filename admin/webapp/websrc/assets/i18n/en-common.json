@@ -1158,8 +1158,8 @@
     "APPENDIX_LIMIT_HINT": "Report does not print appendix as the number of rows is over 200",
     "MAX_REPORT_ROW_HINT": "Report prints the first 500 records",
     "MAX_REPORT_ROW_HINT_2": "according to last modified datetime",
-    "MAX_REPORT_ROW_HINT_3": "Report prints the first 200 records for each type of assets, and first 500 records for vulnerabilities",
-    "APPENDIX_LIMIT_HINT_4": "In appendix，report prints only for first 200 vulnerability records",
+    "MAX_REPORT_ROW_HINT_3": "Report prints the first {{ noAppendixMaxRow }} records for each type of assets",
+    "APPENDIX_LIMIT_HINT_4": "In appendix，report prints only for first {{ noAppendixMaxRow }} vulnerability records",
     "report": {
       "TITLE": "Vulnerability reports (Vulnerability View)",
       "TITLE2": "Vulnerability reports (Assets View)",

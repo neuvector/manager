@@ -8,8 +8,8 @@
 <div class="report-summary pagebreak">
   <div class="summary-title">
     {{ 'scan.report.others.DETAILS' | translate }}
-    <div style="font-size: 16px;" class="text-warning">{{ 'scan.MAX_REPORT_ROW_HINT_3' | translate }}</div>
-    <div style="font-size: 16px;" *ngIf="dictionaryData.length > SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW" class="text-warning">{{ 'scan.APPENDIX_LIMIT_HINT_4' | translate }}</div>
+    <div style="font-size: 16px;" class="text-warning">{{ 'scan.MAX_REPORT_ROW_HINT_3' | translate : { noAppendixMaxRow: SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW } }}</div>
+    <div style="font-size: 16px;" *ngIf="dictionaryData.length > SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW" class="text-warning">{{ 'scan.APPENDIX_LIMIT_HINT_4' | translate : { noAppendixMaxRow: SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW } }}</div>
     <div style="font-size: 16px;" *ngIf="dictionaryData.length <= SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW">({{ (reportPage === 'vulnerabilities' ? 'scan' : 'cis') + '.report.others.DETAIL_SUB' | translate }})</div>
   </div>
   <app-assets-view-report-assets-tables
@@ -29,9 +29,9 @@
   >
   </app-risk-view-report-table>
 </div>
-<div class="report-summary pagebreak" *ngIf="reportPage === 'vulnerabilities' && dictionaryData.length <= SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW">
+<div class="report-summary pagebreak">
   <app-risk-view-report-appendix-packages
-    [data]="dictionaryData"
+    [data]="dictionaryData.slice(0, SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW)"
   >
   </app-risk-view-report-appendix-packages>
 </div>

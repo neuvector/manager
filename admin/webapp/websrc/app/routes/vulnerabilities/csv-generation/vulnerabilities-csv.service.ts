@@ -279,8 +279,8 @@ export class VulnerabilitiesCsvService {
   private preparePlatformsData = (platforms) => {
     return platforms.map(platform => {
       return {
-        'Name': platform.platform,
-        'Version': platform.kube_version,
+        'Name': platform.name,
+        'Version': platform.version,
         'Base OS': platform.base_os,
         'High': platform.high,
         'Medium': platform.medium,

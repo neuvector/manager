@@ -1158,8 +1158,8 @@
     "APPENDIX_LIMIT_HINT": "由于记录超过200条，报告不打印附件内容",
     "MAX_REPORT_ROW_HINT": "报告打印前500条记录",
     "MAX_REPORT_ROW_HINT_2": "(按照最终修改日期时间排序)",
-    "MAX_REPORT_ROW_HINT_3": "报告打印前200个主机、Pod、镜像，和前500条漏洞",
-    "APPENDIX_LIMIT_HINT_4": "报告附件只打印前200条漏洞记录",
+    "MAX_REPORT_ROW_HINT_3": "报告打印前{{ noAppendixMaxRow }}个主机、Pod、镜像",
+    "APPENDIX_LIMIT_HINT_4": "报告附件只打印前{{ noAppendixMaxRow }}条漏洞记录",
     "report": {
       "TITLE": "漏洞报告 (漏洞视角)",
       "TITLE2": "漏洞报告 (资产视角)",

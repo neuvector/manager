@@ -201,7 +201,7 @@
     "MANUAL": "Manual"
   },
   "logout": {
-    "SIGN_OUT": "Signed out already",
+    "SIGN_OUT": "Signed out",
     "SIGN_OUT_DESC": "You can close this browser window and go to Rancher.",
     "GO_TO_LOGIN": "Go to Login Page"
   },

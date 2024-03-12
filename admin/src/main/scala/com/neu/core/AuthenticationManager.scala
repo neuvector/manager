@@ -52,7 +52,7 @@ object AuthenticationManager extends LazyLogging {
   def removeBaseUrl(tokenId: String): Unit =
     tokenBaseUrlMap -= tokenId
 
-  def parseToken: (String) => UserTokenNew = (authToken: String) => {
+  def parseToken(authToken: String, isSUSEAuthenticated: Boolean = false): UserTokenNew = {
     val timestamp: Long                             = System.currentTimeMillis
     val datetime: String                            = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(timestamp)
     var converted_role_domains: Map[String, String] = null
@@ -89,7 +89,8 @@ object AuthenticationManager extends LazyLogging {
           Md5.hash(token.email),
           Option(converted_role_domains),
           Option(datetime),
-          Some(false)
+          Some(false),
+          isSUSEAuthenticated
         )
         tokenMap += token.token -> userToken
         userToken
@@ -100,7 +101,8 @@ object AuthenticationManager extends LazyLogging {
           "",
           None,
           None,
-          authRes.need_to_reset_password
+          authRes.need_to_reset_password,
+          isSUSEAuthenticated
         )
         userToken
       }

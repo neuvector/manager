@@ -96,7 +96,7 @@ export class AppComponent implements OnInit {
       GlobalVariable.gravatar = val;
     });
     if (this.win.location.hash !== '#/login' && this.win.location.hash !== '') {
-      this.authService.refreshToken().subscribe(
+      this.authService.refreshToken(this.win.location.href.includes(GlobalConstant.PROXY_VALUE)).subscribe(
         (userInfo: any) => {
           GlobalVariable.user = userInfo;
           GlobalVariable.nvToken = userInfo.token.token;

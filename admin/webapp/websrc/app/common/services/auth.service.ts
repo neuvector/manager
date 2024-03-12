@@ -79,9 +79,9 @@ export class AuthService {
       .pipe();
   }
 
-  refreshToken() {
+  refreshToken(isRancherSSOUrl: boolean) {
     return GlobalVariable.http
-      .get(PathConstant.SELF_URL, { params: { isOnNV: 'true' } })
+      .get(PathConstant.SELF_URL, { params: { isOnNV: 'true', isRancherSSOUrl: isRancherSSOUrl} })
       .pipe();
   }
 

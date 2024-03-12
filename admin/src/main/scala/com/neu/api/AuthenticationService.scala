@@ -632,51 +632,9 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
         } ~
         pathPrefix("self") {
           get {
-            parameter('isOnNV.?) { isOnNV =>
-              Utils.respondWithWebServerHeaders() {
-                complete {
-                  try {
-                    logger.info("Getting self ..")
-                    val result =
-                      RestClient.requestWithHeaderDecode(
-                        s"$baseUri/selfuser",
-                        GET,
-                        "",
-                        tokenId
-                      )
-                    val selfWrap =
-                      jsonToSelfWrap(Await.result(result, RestClient.waitingLimit.seconds))
-                    val user = selfWrap.user
-                    logger.info("user: {}", user)
-                    val token1 = TokenWrap(
-                      selfWrap.password_days_until_expire,
-                      None,
-                      Some(
-                        Token(
-                          tokenId,
-                          user.fullname,
-                          user.server,
-                          user.username,
-                          user.email,
-                          user.role,
-                          user.locale,
-                          if (isOnNV.getOrElse("") == "true") user.timeout else Some(300),
-                          user.default_password,
-                          user.modify_password,
-                          user.role_domains,
-                          selfWrap.global_permissions,
-                          selfWrap.domain_permissions
-                        )
-                      )
-                    )
-                    val authToken = AuthenticationManager.parseToken(tokenWrapToJson(token1))
-                    authToken
-                  } catch {
-                    case NonFatal(e) =>
-                      onExpiredOrInternalError(e)
-                  }
-                }
-              }
+            optionalCookie(suseCookie) {
+              case Some(sCookie) => refreshTokenWithSUSEToken(sCookie.content, tokenId)
+              case None          => refreshTokenWithSUSEToken("", tokenId)
             }
           }
         } ~
@@ -934,6 +892,57 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                 }
               }
             }
+          }
+        }
+      }
+    }
+
+  private def refreshTokenWithSUSEToken(suseCookieValue: String, tokenId: String) =
+    parameter('isOnNV.?, 'isRancherSSOUrl.?) { (isOnNV, isRancherSSOUrl) =>
+      val suseCookie =
+        if (!isRancherSSOUrl.isEmpty && isRancherSSOUrl.get == "true") suseCookieValue else ""
+      Utils.respondWithWebServerHeaders() {
+        complete {
+          try {
+            logger.info("Getting self ..")
+            val result =
+              RestClient.requestWithHeaderDecode(
+                s"$baseUri/selfuser",
+                GET,
+                "",
+                tokenId
+              )
+            val selfWrap =
+              jsonToSelfWrap(Await.result(result, RestClient.waitingLimit.seconds))
+            val user = selfWrap.user
+            logger.info("user: {}", user)
+            val token1 = TokenWrap(
+              selfWrap.password_days_until_expire,
+              None,
+              Some(
+                Token(
+                  tokenId,
+                  user.fullname,
+                  user.server,
+                  user.username,
+                  user.email,
+                  user.role,
+                  user.locale,
+                  if (isOnNV.getOrElse("") == "true") user.timeout else Some(300),
+                  user.default_password,
+                  user.modify_password,
+                  user.role_domains,
+                  selfWrap.global_permissions,
+                  selfWrap.domain_permissions
+                )
+              )
+            )
+            val authToken =
+              AuthenticationManager.parseToken(tokenWrapToJson(token1), suseCookie.nonEmpty)
+            authToken
+          } catch {
+            case NonFatal(e) =>
+              onExpiredOrInternalError(e)
           }
         }
       }

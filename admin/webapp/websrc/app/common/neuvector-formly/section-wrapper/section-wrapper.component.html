@@ -9,7 +9,7 @@
 <ng-container *ngIf="to.appendTo">
   <div class="mx-3 mt-md-4">
     <div class="d-flex">
-      <h1 class="h4 font-weight-normal" [id]="to.label">
+      <h1 class="h5 font-weight-normal" [id]="to.label">
         {{ to.label! | translate }}
       </h1>
       <div *ngIf="to.inline" class="ml-2">
@@ -28,7 +28,7 @@
 <ng-container *ngIf="!to.append && !to.appendTo">
   <div class="mx-3 my-md-4">
     <div class="d-flex">
-      <h1 class="h4 font-weight-normal" [id]="to.label">
+      <h1 class="h5 font-weight-normal" [id]="to.label">
         {{ to.label! | translate }}
       </h1>
       <div *ngIf="to.inline" class="ml-2">

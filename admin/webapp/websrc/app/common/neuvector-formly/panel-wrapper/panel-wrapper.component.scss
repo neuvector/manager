@@ -1,0 +1,9 @@
+.mat-expansion-panel:not([class*='mat-elevation-z']) {
+  box-shadow: none;
+}
+
+mat-panel-description {
+  justify-content: space-between;
+  align-items: center;
+  max-width: 50%;
+}

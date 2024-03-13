@@ -1,0 +1,15 @@
+<mat-expansion-panel [expanded]="to.expanded" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+  <mat-expansion-panel-header>
+    <mat-panel-title class="h4 font-weight-normal" [id]="to.label">
+      {{ to.label! | translate }}
+    </mat-panel-title>
+    <ng-container *ngIf="to.description">
+      <mat-panel-description class="right-aligned" [id]="to.description">
+        {{ to.description! | translate }}
+      </mat-panel-description>
+    </ng-container>
+  </mat-expansion-panel-header>
+  <mat-divider class="position-relative" *ngIf="panelOpenState"></mat-divider>
+  <ng-container #fieldComponent></ng-container>
+</mat-expansion-panel>
+

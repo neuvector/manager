@@ -48,6 +48,8 @@ import { InputDialogModule } from '@components/ui/input-dialog/input-dialog.modu
 import { MulticheckboxComponent } from './multicheckbox/multicheckbox.component';
 import { FormlySelectModule } from '@ngx-formly/core/select';
 import { EditWebhookTableControlsComponent } from './edit-webhook-table-controls/edit-webhook-table-controls.component';
+import { PanelWrapperComponent } from './panel-wrapper/panel-wrapper.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 export enum FormlyValidators {
   REQUIRED = 'required',
@@ -77,6 +79,7 @@ export enum FormlyComponents {
   READONLY_WRAPPER = 'readonly',
   SECTION_WRAPPER = 'section',
   HINT_WRAPPER = 'hint_wrapper',
+  PANEL_WRAPPER = 'panel_wrapper',
 }
 
 @NgModule({
@@ -100,6 +103,7 @@ export enum FormlyComponents {
     NgxSliderComponent,
     MulticheckboxComponent,
     EditWebhookTableControlsComponent,
+    PanelWrapperComponent,
   ],
   imports: [
     FormlySelectModule,
@@ -134,6 +138,10 @@ export enum FormlyComponents {
         {
           name: FormlyComponents.HINT_WRAPPER,
           component: HintWrapperComponent,
+        },
+        {
+          name: FormlyComponents.PANEL_WRAPPER,
+          component: PanelWrapperComponent,
         },
       ],
       validators: [
@@ -178,6 +186,7 @@ export enum FormlyComponents {
         },
       ],
     }),
+    MatExpansionModule,
   ],
   exports: [FormlyModule, ReactiveFormsModule, FormlyMaterialModule],
 })

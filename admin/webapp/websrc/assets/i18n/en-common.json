@@ -3140,9 +3140,9 @@
         "comment_hint": "",
         "enabled": "Enabled",
         "owner": "Owner User Name",
-        "owner_hint": "Get the owner from the GitHub URL: \"https://github.com/owner/repository\"",
+        "owner_hint": "The repository owner's GitHub user name (e.g. \"john_doe\" in \"https://github.com/john_doe/my_repo\").",
         "repository_name": "Repository Name",
-        "repository_name_hint": "Get the repository from the GitHub URL: \"https://github.com/owner/repository\"",
+        "repository_name_hint": "The repository name (e.g. \"my-repo\" in \"https://github.com/john_doe/my_repo\").",
         "repository_branch": "Branch Name",
         "repository_branch_hint": "The specific branch within the repository that contains the CRD files. The default branch is 'main'.",
         "personal_access_token": "Personal Access Token",
@@ -3156,6 +3156,18 @@
     "directory_type": {
       "OPEN_LDAP": "OpenLDAP",
       "MS_AD": "Microsoft Active Directory"
+    },
+    "category": {
+      "label": {
+        "policy": "Policy Configuration",
+        "notification": "Notification Configuration",
+        "general": "General Configuration"
+      },
+      "description": {
+        "policy": "Configure policy related settings",
+        "notification": "Configure notification related settings",
+        "general": "Configure general settings"
+      }
     },
     "message": {
       "EMAIL_Format": "Invalid email format.",

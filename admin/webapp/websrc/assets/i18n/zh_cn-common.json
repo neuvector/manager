@@ -3140,9 +3140,9 @@
         "comment_hint": "",
         "enabled": "启用",
         "owner": "所有者",
-        "owner_hint": "从 GitHub URL 获取所有者: \"https://github.com/owner/repository\"",
+        "owner_hint": "存储库所有者的用户名 (例如: \"https://github.com/john_doe/my-repo\")中的\"john_doe\" ",
         "repository_name": "存储库名称",
-        "repository_name_hint": "从 GitHub URL 获取存储库: \"https://github.com/owner/repository\"",
+        "repository_name_hint": "存储库名称 (例如: \"https://github.com/john_doe/my-repo\"中的\"my-repo\")",
         "repository_branch": "存储库分支",
         "repository_branch_hint": "存储库中包含 CRD 文件的特定分支。 默认分支是 'main'.",
         "personal_access_token": "个人访问令牌",
@@ -3156,6 +3156,18 @@
     "directory_type": {
       "OPEN_LDAP": "OpenLDAP",
       "MS_AD": "微软活动目录"
+    },
+    "category": {
+      "label": {
+        "policy": "策略配置",
+        "notification": "通知配置",
+        "general": "通用配置"
+      },
+      "description": {
+        "policy": "配置策略相关设置",
+        "notification": "配置通知相关设置",
+        "general": "配置通用设置"
+      }
     },
     "message": {
       "IP_REQUIRED": "您必须指定IP.",

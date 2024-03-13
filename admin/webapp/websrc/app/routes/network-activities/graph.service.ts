@@ -36,29 +36,63 @@ import { ServerIpCellComponent } from './server-ip-cell/server-ip-cell.component
 
 @Injectable()
 export class GraphService {
-  private readonly $win;
-  private _dataSet: GraphData = { edges: [], nodes: [] };
-
   //Todo: define domain and group type to replace any
   _domains: any[] = [];
   _groups: any[] = [];
   _domainMap = new Map();
   _clusterMap = new Map();
-
   filteredDomainMap = new Map();
   filteredClusterMap = new Map();
-
   _nodeIdIndexMap = new Map();
   _edgeIdIndexMap = new Map();
   linkedNodeSet = new Set();
-
+  advFilter: AdvancedFilter = <AdvancedFilter>{};
+  blacklist = {
+    domains: [],
+    groups: [],
+    endpoints: [],
+    hideUnmanaged: false,
+  };
+  public strokeColor = {
+    Protect: '#3E6545',
+    Monitor: '#4E39C1',
+    Discover: '#65B2FF',
+  };
+  public fillColor = {
+    Protect: '#a3bba5',
+    Monitor: '#b7a7f0',
+    Discover: '#EFF4FF',
+  };
+  private readonly $win;
+  private _dataSet: GraphData = { edges: [], nodes: [] };
   private readonly oneMillion = 1000 * 1000;
   private readonly cveColors = {
     high: { fill: '#fa184a', stroke: '#f76987' },
     medium: { fill: '#ff9800', stroke: '#ffbc3e' },
   };
-
-  advFilter: AdvancedFilter = <AdvancedFilter>{};
+  private readonly groupToIconType = {
+    container: 'container',
+    containerDiscover: 'container-d',
+    containerMonitor: 'container-m',
+    containerProtect: 'container-p',
+    containerUnmanaged: 'container-x',
+    mesh: 'serviceMesh',
+    meshDiscover: 'serviceMesh-d',
+    meshMonitor: 'serviceMesh-m',
+    meshProtect: 'serviceMesh-p',
+    ip_service: 'service',
+    address: 'address',
+    node_ip: 'host',
+    host: 'host',
+    hostDiscover: 'host-d',
+    hostMonitor: 'host-m',
+    hostProtect: 'host-p',
+    hostUnmanaged: 'host',
+    workload_ip: 'container-x',
+    meshProxy: 'meshProxy',
+    external: 'cloud',
+  };
+  private readonly domainSizeMap = [35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85];
 
   constructor(
     private utils: UtilsService,
@@ -117,14 +151,8 @@ export class GraphService {
     this.advFilter = filter;
   };
 
-  blacklist = {
-    domains: [],
-    groups: [],
-    endpoints: [],
-    hideUnmanaged: false,
-  };
-
   getBlacklist = () => this.blacklist;
+
   setBlacklist = bl => {
     this.blacklist.domains = bl.domains;
     this.blacklist.groups = bl.groups;
@@ -321,11 +349,6 @@ export class GraphService {
     );
   };
 
-  private getLineWidth: (bytes: number) => number = (bytes: number) => {
-    const bytesInMB = Math.min(this.oneMillion, bytes / this.oneMillion);
-    return bytesInMB < 10 ? 1 : Math.round(Math.log10(bytesInMB));
-  };
-
   formatText = (text, length = 10, ellipsis = '...') => {
     if (!text) return '';
     if (text.length > length) {
@@ -338,41 +361,6 @@ export class GraphService {
     if (text && text.split('').length > minLength)
       return `${text.substring(0, minLength)}...`;
     return text;
-  };
-
-  private readonly groupToIconType = {
-    container: 'container',
-    containerDiscover: 'container-d',
-    containerMonitor: 'container-m',
-    containerProtect: 'container-p',
-    containerUnmanaged: 'container-x',
-    mesh: 'serviceMesh',
-    meshDiscover: 'serviceMesh-d',
-    meshMonitor: 'serviceMesh-m',
-    meshProtect: 'serviceMesh-p',
-    ip_service: 'service',
-    address: 'address',
-    node_ip: 'host',
-    host: 'host',
-    hostDiscover: 'host-d',
-    hostMonitor: 'host-m',
-    hostProtect: 'host-p',
-    hostUnmanaged: 'host',
-    workload_ip: 'container-x',
-    meshProxy: 'meshProxy',
-    external: 'cloud',
-  };
-
-  public strokeColor = {
-    Protect: '#3E6545',
-    Monitor: '#4E39C1',
-    Discover: '#65B2FF',
-  };
-
-  public fillColor = {
-    Protect: '#a3bba5',
-    Monitor: '#b7a7f0',
-    Discover: '#EFF4FF',
   };
 
   /**
@@ -626,8 +614,6 @@ export class GraphService {
 
     return { nodes: nodes, edges: edges };
   };
-
-  private readonly domainSizeMap = [35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85];
 
   getDomainNodeSize = memberCount => {
     if (memberCount > this.domainSizeMap.length)
@@ -931,54 +917,58 @@ export class GraphService {
       return this.fillColor['Discover'];
     };
 
-    const clusterNodes = groups.map(group => {
-      if (group.name !== 'external') {
-        if (group.value === 1) {
-          let clusterNode =
-            serverData.nodes[this._nodeIdIndexMap.get(group.members[0])];
-          clusterNode.cluster = group.domain;
-          return clusterNode;
-        } else {
-          let clusterNode = {
-            id: group.name,
-            type: 'markedNode',
-            size: getComboSize(group.value),
-            oriLabel: group.clusterName,
-            label: this.formatText(group.clusterName, 15, '...'),
-            icon: {
-              show: true,
-              img: `assets/img/icons/graph/${getClusterIcon(group.group)}`,
-              width: Math.round(getComboSize(group.value) * 0.7),
-              height: Math.round(getComboSize(group.value) * 0.7),
-            },
-            style: {
-              stroke: getStrokeColor(group.group),
-              fill: getFillColor(group.group),
-            },
-            cve: group.cve,
-            policyMode: group.policyMode,
-            domain: group.domain,
-            cluster: group.domain,
-            clusterId: group.clusterId,
-            kind: 'group',
-            quarantines: group.quarantines,
+    const clusterNodes = groups
+      .filter(
+        group => !!serverData.nodes[this._nodeIdIndexMap.get(group.members[0])]
+      )
+      .map(group => {
+        if (group.name !== 'external') {
+          if (group.value === 1) {
+            let clusterNode =
+              serverData.nodes[this._nodeIdIndexMap.get(group.members[0])];
+            clusterNode.cluster = group.domain;
+            return clusterNode;
+          } else {
+            let clusterNode = {
+              id: group.name,
+              type: 'markedNode',
+              size: getComboSize(group.value),
+              oriLabel: group.clusterName,
+              label: this.formatText(group.clusterName, 15, '...'),
+              icon: {
+                show: true,
+                img: `assets/img/icons/graph/${getClusterIcon(group.group)}`,
+                width: Math.round(getComboSize(group.value) * 0.7),
+                height: Math.round(getComboSize(group.value) * 0.7),
+              },
+              style: {
+                stroke: getStrokeColor(group.group),
+                fill: getFillColor(group.group),
+              },
+              cve: group.cve,
+              policyMode: group.policyMode,
+              domain: group.domain,
+              cluster: group.domain,
+              clusterId: group.clusterId,
+              kind: 'group',
+              quarantines: group.quarantines,
+            };
+            if (clusterNode.quarantines) clusterNode.style.fill = '#ffcccb';
+            return clusterNode;
+          }
+        } else
+          return {
+            id: 'external',
+            type: 'image',
+            label: group.name,
+            group: 'external',
+            domain: 'external',
+            cluster: 'external',
+            clusterId: 'external',
+            img: 'assets/img/icons/graph/cloud.svg',
+            size: [50, 50],
           };
-          if (clusterNode.quarantines) clusterNode.style.fill = '#ffcccb';
-          return clusterNode;
-        }
-      } else
-        return {
-          id: 'external',
-          type: 'image',
-          label: group.name,
-          group: 'external',
-          domain: 'external',
-          cluster: 'external',
-          clusterId: 'external',
-          img: 'assets/img/icons/graph/cloud.svg',
-          size: [50, 50],
-        };
-    });
+      });
 
     return clusterNodes;
   };
@@ -990,6 +980,8 @@ export class GraphService {
     const toGroup = onRefresh
       ? this._clusterMap.get(edge.toGroup)
       : this.filteredClusterMap.get(edge.toGroup);
+    if (!fromGroup || !toGroup) return { undefined, fromGroup, toGroup };
+
     let edgeId, edgeSource, edgeTarget;
     if (fromGroup.value === 1 && toGroup.value === 1) {
       if (edge.id) edgeId = edge.id;
@@ -1009,12 +1001,6 @@ export class GraphService {
     }
     return { edgeId, edgeSource, edgeTarget };
   };
-
-  private aggregateEdgeLabel(label: string, newLabel: string): string {
-    if(!newLabel || label.length >= 15) return label;
-    let joined = Array.from(new Set([label, newLabel].join(',').split(','))).join(',');
-    return this.formatText(joined, 15);
-  }
 
   createClusterEdge = (serverData, edge, clusterEdgeMap, onRefresh) => {
     let theEdge;
@@ -1066,8 +1052,6 @@ export class GraphService {
     }
   };
 
-
-
   aggregateLinks = (clusterEdge, edge) => {
     clusterEdge.weight += 1;
     clusterEdge.bytes += edge.bytes;
@@ -1083,7 +1067,10 @@ export class GraphService {
       MapConstant.EDGE_STATUS_LEVEL_MAP[clusterEdge.status]
         ? MapConstant.EDGE_STATUS_MAP[edge.status]
         : MapConstant.EDGE_STATUS_MAP[clusterEdge.status];
-    clusterEdge.oriLabel = this.aggregateEdgeLabel(clusterEdge.oriLabel, edge.oriLabel);
+    clusterEdge.oriLabel = this.aggregateEdgeLabel(
+      clusterEdge.oriLabel,
+      edge.oriLabel
+    );
 
     if (clusterEdge.style.stroke !== MapConstant.EDGE_STATUS_MAP['OK'])
       clusterEdge.stateStyles = {
@@ -1174,29 +1161,6 @@ export class GraphService {
 
   keepLive = () => {
     this.http.patch(PathConstant.KEEP_ALIVE_URL, {}).subscribe(() => {});
-  };
-
-  private numberCellFormatter = params => {
-    if(!params.value) return '';
-    return this.sanitizer.sanitize(
-      SecurityContext.HTML,
-      this.bytesPipe.transform(params.value)
-    );
-  };
-
-  private ageFormatter = params =>
-    this.utils.humanizeDuration(moment.duration(params.value, 'seconds'));
-
-  private ageComparator = (value1, value2, node1, node2) =>
-    node1.data.age - node2.data.age;
-
-  private bytesComparator = (value1, value2, node1, node2) =>
-    node1.data.bytes - node2.data.bytes;
-
-  private dateComparator = (value1, value2, node1, node2) => {
-    return (
-      Date.parse(node1.data.last_seen_at) - Date.parse(node2.data.last_seen_at)
-    );
   };
 
   prepareActiveSessionGrid: () => GridOptions = () => {
@@ -1540,4 +1504,40 @@ export class GraphService {
   getNodeIdIndexMap = () => this._nodeIdIndexMap;
 
   getEdgeIdIndexMap = () => this._edgeIdIndexMap;
+
+  private getLineWidth: (bytes: number) => number = (bytes: number) => {
+    const bytesInMB = Math.min(this.oneMillion, bytes / this.oneMillion);
+    return bytesInMB < 10 ? 1 : Math.round(Math.log10(bytesInMB));
+  };
+
+  private aggregateEdgeLabel(label: string, newLabel: string): string {
+    if (!newLabel || label.length >= 15) return label;
+    let joined = Array.from(
+      new Set([label, newLabel].join(',').split(','))
+    ).join(',');
+    return this.formatText(joined, 15);
+  }
+
+  private numberCellFormatter = params => {
+    if (!params.value) return '';
+    return this.sanitizer.sanitize(
+      SecurityContext.HTML,
+      this.bytesPipe.transform(params.value)
+    );
+  };
+
+  private ageFormatter = params =>
+    this.utils.humanizeDuration(moment.duration(params.value, 'seconds'));
+
+  private ageComparator = (value1, value2, node1, node2) =>
+    node1.data.age - node2.data.age;
+
+  private bytesComparator = (value1, value2, node1, node2) =>
+    node1.data.bytes - node2.data.bytes;
+
+  private dateComparator = (value1, value2, node1, node2) => {
+    return (
+      Date.parse(node1.data.last_seen_at) - Date.parse(node2.data.last_seen_at)
+    );
+  };
 }

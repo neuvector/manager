@@ -112,8 +112,8 @@
       </app-loading-button>
       <button
         type="button"
-        [disabled]="submittingForm"
-        (click)="toggleEdit()"
+        [disabled]="submittingForm || !isEdit"
+        (click)="cancelEdit()"
         mat-button>
         {{ 'profile.CANCEL' | translate }}
       </button>
@@ -137,8 +137,8 @@
       </app-loading-button>
       <button
         type="button"
-        [disabled]="submittingForm"
-        (click)="toggleEdit()"
+        [disabled]="submittingForm || !isEdit"
+        (click)="cancelEdit()"
         mat-button>
         {{ 'profile.CANCEL' | translate }}
       </button>

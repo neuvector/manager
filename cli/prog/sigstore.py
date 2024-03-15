@@ -60,7 +60,16 @@ def show_sigstore_rootoftrust(data, root_name):
                 resp[k] = ""
         rootOfTrusts.append(resp) 
 
-    columns = ("name", "is_private", "rootless_keypairs_only", "rekor_public_key", "root_cert", "sct_public_key", "comment", "cfg_type")
+    for r in rootOfTrusts:
+        if r.get("rootless_keypairs_only", False) is True:
+            r["type"] = "rootless_keypairs_only"
+            continue
+        if r.get("is_private", False) is True:
+            r["type"] = "private"
+            continue
+        r["type"] = "public"
+
+    columns = ("name", "type", "rekor_public_key", "root_cert", "sct_public_key", "comment", "cfg_type")
     output.list(columns, rootOfTrusts)
 
 
@@ -129,10 +138,20 @@ def create_sigstore_rootoftrust(data, root_name, private, rootless_keypairs_only
         click.echo("")
         return
 
+    info = {
+        "name": root_name,
+        "comment": comment
+    }
+
+    if rootless_keypairs_only is True:
+        info["rootless_keypairs_only"] = True
+        private = False # rootless_keypairs_only overrides is_private
+
     rekor_public_key_value = ""
     root_cert_value = ""
     sct_public_key_value = ""
     if private is True:
+        info["is_private"] = True
         if root_cert is True:
             root_cert_value = get_user_input("Root Certificate")
             if root_cert_value == "":
@@ -148,15 +167,9 @@ def create_sigstore_rootoftrust(data, root_name, private, rootless_keypairs_only
         if sct_public_key is True:
             sct_public_key_value = get_user_input("SCT Public Key")
 
-    info = {
-        "name": root_name,
-        "is_private": private,
-        "rootless_keypairs_only": rootless_keypairs_only,
-        "rekor_public_key": rekor_public_key_value,
-        "root_cert": root_cert_value,
-        "sct_public_key": sct_public_key_value,
-        "comment": comment
-    }
+    info["rekor_public_key"] = rekor_public_key_value
+    info["root_cert"] = root_cert_value
+    info["sct_public_key"] = sct_public_key_value
 
     data.client.create("scan/sigstore/root_of_trust", info) # create(self, path, body, **kwargs)
 

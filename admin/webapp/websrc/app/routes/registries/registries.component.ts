@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RegistriesCommunicationService } from './regestries-communication.service';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { ActivatedRoute } from '@angular/router';
 
@@ -12,6 +12,13 @@ import { ActivatedRoute } from '@angular/router';
 export class RegistriesComponent implements OnInit {
   error: unknown;
   registries$ = this.registriesCommunicationService.registries$.pipe(
+    map(({ summarys }) => {
+      const updatedSummaries = summarys.map(summary => ({
+        ...summary,
+        use_proxy: !summary.ignore_proxy,
+      }));
+      return { summarys: updatedSummaries };
+    }),
     catchError(err => {
       this.error = err;
       throw err;

@@ -318,7 +318,7 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
     this.gridApi.sizeColumnsToFit();
   }
 
-  openDialog(isEdit = false, data?: RegistryConfig, editable = true): void {
+  openDialog(isEdit = false, data?: Summary, editable = true): void {
     const dialog = this.dialog.open(AddRegistryDialogComponent, {
       width: '80%',
       maxWidth: '1100px',

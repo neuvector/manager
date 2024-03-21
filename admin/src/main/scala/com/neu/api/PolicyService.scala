@@ -664,18 +664,23 @@ class PolicyService()(implicit executionContext: ExecutionContext)
                 }
               } ~
               post {
-                entity(as[RegistryConfigWrap]) { registryConfig =>
+                entity(as[RegistryConfigV2Wrap]) { registryConfigV2 =>
                   Utils.respondWithWebServerHeaders() {
                     complete {
                       logger.info(
                         "Adding scan registry: {}",
-                        jsonToMaskedRegistryConfig(registryConfigToJson(registryConfig.config))
+                        jsonToMaskedRegistryConfigV2(
+                          registryConfigV2ToJson(registryConfigV2.config)
+                        )
                       )
-                      logger.debug("config in json: {}", registryConfigWrapToJson(registryConfig))
+                      logger.debug(
+                        "config in json: {}",
+                        registryConfigV2WrapToJson(registryConfigV2)
+                      )
                       RestClient.httpRequestWithHeader(
-                        s"${baseClusterUri(tokenId)}/$scanRegistryPath",
+                        s"${baseClusterUriV2(tokenId)}/$scanRegistryPath",
                         POST,
-                        registryConfigWrapToJson(registryConfig),
+                        registryConfigV2WrapToJson(registryConfigV2),
                         tokenId
                       )
                     }
@@ -683,18 +688,18 @@ class PolicyService()(implicit executionContext: ExecutionContext)
                 }
               } ~
               patch {
-                entity(as[RegistryConfigDTO]) { registryConfig =>
+                entity(as[RegistryConfigV2DTO]) { registryConfigV2 =>
                   Utils.respondWithWebServerHeaders() {
                     complete {
-                      logger.info("Updating scan registry: {}", registryConfig.name)
+                      logger.info("Updating scan registry: {}", registryConfigV2.name)
                       logger.debug(
                         "config in json: {}",
-                        registryConfigWrapToJson(registryConfig.wrap)
+                        registryConfigV2WrapToJson(registryConfigV2.wrap)
                       )
                       RestClient.httpRequestWithHeader(
-                        s"${baseClusterUri(tokenId)}/$scanRegistryPath/${UrlEscapers.urlFragmentEscaper().escape(registryConfig.name)}",
+                        s"${baseClusterUriV2(tokenId)}/$scanRegistryPath/${UrlEscapers.urlFragmentEscaper().escape(registryConfigV2.name)}",
                         PATCH,
-                        registryConfigWrapToJson(registryConfig.wrap),
+                        registryConfigV2WrapToJson(registryConfigV2.wrap),
                         tokenId
                       )
                     }
@@ -720,22 +725,22 @@ class PolicyService()(implicit executionContext: ExecutionContext)
             path("test") {
               post {
                 headerValueByName("X-Transaction-Id") { transactionId =>
-                  entity(as[RegistryConfigWrap]) { registryConfig =>
+                  entity(as[RegistryConfigV2Wrap]) { registryConfigV2 =>
                     Utils.respondWithWebServerHeaders() {
                       complete {
                         try {
                           val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
-                          val baseUrl = cachedBaseUrl.getOrElse(
-                            baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
+                          val baseUrlV2 = cachedBaseUrl.getOrElse(
+                            baseClusterUriV2(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
                           )
-                          AuthenticationManager.setBaseUrl(tokenId, baseUrl)
-                          logger.info("test baseUrl: {}", baseUrl)
+                          AuthenticationManager.setBaseUrl(tokenId, baseUrlV2)
+                          logger.info("test baseUrl: {}", baseUrlV2)
                           logger.info("Transaction ID(Post): {}", transactionId)
-                          logger.info("Registry name(Post): {}", registryConfig.config.name)
+                          logger.info("Registry name(Post): {}", registryConfigV2.config.name)
                           RestClient.httpRequestWithHeader(
-                            s"$baseUrl/$scanRegistryPath/${UrlEscapers.urlFragmentEscaper().escape(registryConfig.config.name)}/test",
+                            s"$baseUrlV2/$scanRegistryPath/${UrlEscapers.urlFragmentEscaper().escape(registryConfigV2.config.name)}/test",
                             POST,
-                            registryConfigWrapToJson(registryConfig),
+                            registryConfigV2WrapToJson(registryConfigV2),
                             tokenId,
                             Some(transactionId)
                           )
@@ -752,19 +757,20 @@ class PolicyService()(implicit executionContext: ExecutionContext)
                     }
                   }
                 } ~
-                entity(as[RegistryConfigWrap]) { registryConfig =>
+                entity(as[RegistryConfigV2Wrap]) { registryConfigV2 =>
                   Utils.respondWithWebServerHeaders() {
                     complete {
                       try {
-                        val baseUrl = baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
-                        AuthenticationManager.setBaseUrl(tokenId, baseUrl)
-                        logger.info("test baseUrl: {}", baseUrl)
+                        val baseUrlV2 =
+                          baseClusterUriV2(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
+                        AuthenticationManager.setBaseUrl(tokenId, baseUrlV2)
+                        logger.info("test baseUrl: {}", baseUrlV2)
                         logger.info("No Transaction ID(Post)")
-                        logger.info("Registry name(Post): {}", registryConfig.config.name)
+                        logger.info("Registry name(Post): {}", registryConfigV2.config.name)
                         RestClient.httpRequestWithHeader(
-                          s"$baseUrl/$scanRegistryPath/${UrlEscapers.urlFragmentEscaper().escape(registryConfig.config.name)}/test",
+                          s"$baseUrlV2/$scanRegistryPath/${UrlEscapers.urlFragmentEscaper().escape(registryConfigV2.config.name)}/test",
                           POST,
-                          registryConfigWrapToJson(registryConfig),
+                          registryConfigV2WrapToJson(registryConfigV2),
                           tokenId
                         )
                       } catch {

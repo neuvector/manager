@@ -33,10 +33,54 @@ export interface RegistryConfig {
   aws_key?: AWSKey;
   gcr_key?: GCRKey;
   cfg_type?: string;
+  use_proxy: boolean;
 }
 
 export interface RegistryPostBody {
   config: RegistryConfig;
+}
+
+export interface RegistryConfigV2 {
+  name: string;
+  registry_type: string;
+  registry: string;
+  domains?: string[];
+  filters: string[];
+  cfg_type?: string;
+  auth?: RegistryConfigAuth;
+  scan?: RegistryConfigScan;
+  integrations?: RegistryConfigIntegrations;
+}
+
+export interface RegistryConfigAuth {
+  username?: string;
+  password?: string;
+  auth_token?: string;
+  auth_with_token?: boolean;
+  aws_key?: AWSKey;
+  gcr_key?: GCRKey;
+}
+
+export interface RegistryConfigScan {
+  rescan_after_db_update?: boolean;
+  scan_layers?: boolean;
+  repo_limit?: number;
+  tag_limit?: number;
+  schedule?: ScanSchedule;
+  ignore_proxy?: boolean;
+}
+
+export interface RegistryConfigIntegrations {
+  jfrog_mode?: string;
+  jfrog_aql?: boolean;
+  gitlab_external_url?: string;
+  gitlab_private_token?: string;
+  ibm_cloud_account?: string;
+  ibm_cloud_token_url?: string;
+}
+
+export interface RegistryPostBodyV2 {
+  config: RegistryConfigV2;
 }
 
 export interface Summary {
@@ -73,6 +117,8 @@ export interface Summary {
   status: string;
   tag_limit: number;
   username: string;
+  ignore_proxy: boolean;
+  use_proxy: boolean;
 }
 
 export interface RegistryGetResponse {
@@ -81,6 +127,11 @@ export interface RegistryGetResponse {
 
 export interface RegistryPatchBody {
   wrap: RegistryPostBody;
+  name: string;
+}
+
+export interface RegistryPatchBodyV2 {
+  wrap: RegistryPostBodyV2;
   name: string;
 }
 

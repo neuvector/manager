@@ -924,8 +924,7 @@ export class GraphService {
       .map(group => {
         if (group.name !== 'external') {
           if (group.value === 1) {
-            let clusterNode =
-              serverData.nodes[this._nodeIdIndexMap.get(group.members[0])];
+            let clusterNode = serverData.nodes.find(node => node.id === group.members[0]);
             clusterNode.cluster = group.domain;
             return clusterNode;
           } else {

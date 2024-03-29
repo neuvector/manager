@@ -1539,3 +1539,16 @@ ngx-avatar.userIcon img.avatar-content {
 .no-min-width {
   min-width: auto !important;
 }
+
+.risk-assets-legend-modal {
+  @include backdrop-blur-mixin(
+    1,
+    rgba(255, 255, 255, 0.5),
+    rgba(255, 255, 255, 0.97)
+  );
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  z-index: 1000;
+  border-radius: 5px;
+}

@@ -30,6 +30,7 @@ import { AssetsViewReportModule } from '@components/security-risk-printable-repo
 import { NvCommonModule } from '@common/nvCommon.module';
 import { PdfGenerationDialogComponent } from './pdf-generation-dialog/pdf-generation-dialog.component';
 import { VulnerabilitiesGridModule } from '@components/vulnerabilities-grid/vulnerabilities-grid.module';
+import { RiskAssetsLegendModule } from '@components/ui/risk-assets-legend/risk-assets-legend.module';
 const routes: Routes = [{ path: '', component: VulnerabilitiesComponent }];
 
 @NgModule({
@@ -69,6 +70,7 @@ const routes: Routes = [{ path: '', component: VulnerabilitiesComponent }];
     RisksViewReportModule,
     AssetsViewReportModule,
     VulnerabilitiesGridModule,
+    RiskAssetsLegendModule,
   ],
 })
 export class VulnerabilitiesModule {}

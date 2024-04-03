@@ -113,17 +113,17 @@ export class EnforcersGridComponent implements OnInit, OnChanges {
         headerName: this.tr.instant('controllers.detail.DURATION'),
         cellRenderer: params => {
           /** @namespace params.data.joined_at */
-          const diff = moment().diff(params.data.joined_at);
+          const diff = moment().diff(params.data.started_at);
           if (diff < 0) return 'Invalid date';
           return this.sanitizer.sanitize(
             SecurityContext.HTML,
             this.utils.humanizeDuration(
-              moment.duration(moment().diff(params.data.joined_at))
+              moment.duration(moment().diff(params.data.started_at))
             )
           );
         },
         comparator: (value1, value2, node1, node2) =>
-          Date.parse(node1.data.joined_at) - Date.parse(node2.data.joined_at),
+          Date.parse(node1.data.started_at) - Date.parse(node2.data.started_at),
         width: 100,
         icons: {
           sortAscending: '<em class="fa fa-sort-numeric-down"/>',

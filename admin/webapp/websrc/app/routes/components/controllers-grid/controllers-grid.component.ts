@@ -83,12 +83,12 @@ export class ControllersGridComponent implements OnInit, OnChanges {
       headerName: this.tr.instant('controllers.detail.DURATION'),
       cellRenderer: params => {
         return this.utils.humanizeDuration(
-          moment.duration(moment().diff(params.data.joined_at))
+          moment.duration(moment().diff(params.data.started_at))
         );
       },
       comparator: (value1, value2, node1, node2) => {
         return (
-          Date.parse(node1.data.joined_at) - Date.parse(node2.data.joined_at)
+          Date.parse(node1.data.started_at) - Date.parse(node2.data.started_at)
         );
       },
       width: 120,

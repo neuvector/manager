@@ -1,4 +1,5 @@
 import click
+import json
 
 from io import StringIO
 from prog.cli import create
@@ -418,3 +419,30 @@ def node(data, id_or_name):
 def platform(data):
     """Request to scan platform"""
     data.client.request("scan", "platform", "platform", None)
+
+@show_scan.command()
+@click.pass_obj
+def cache_stat(data):
+    """Show scanners' cache stat"""
+    scanners = data.client.list("scan/scanner", "scanner")
+    for s in scanners:
+      try:
+        stat = data.client.show("scan/cache_stat", "", s["id"])
+      except client.ObjectNotFound:
+        return
+      click.echo("scanner: " + s["id"])
+      columns = ["cache_misses", "cache_hits", "record_count", "record_total_size"]
+      output.show(columns, stat)
+
+@show_scan.command()
+@click.argument("id")
+@click.pass_obj
+def cache_data(data, id):
+    """Show scanner cache index data."""
+    try:
+      index = data.client.show("scan/cache_data", "", id)
+    except client.ObjectNotFound:
+      return
+
+    json_formatted_str = json.dumps(index, indent=2)
+    print(json_formatted_str)

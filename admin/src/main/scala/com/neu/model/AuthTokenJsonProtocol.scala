@@ -45,7 +45,7 @@ object AuthTokenJsonProtocol extends DefaultJsonProtocol {
   implicit val licenseKeyFormat: RootJsonFormat[LicenseKey] = jsonFormat1(LicenseKey)
 
   implicit val groupMappedRoleFormat: RootJsonFormat[GroupMappedRole] = jsonFormat3(GroupMappedRole)
-  implicit val ldapServerFormat: RootJsonFormat[LdapServer]           = jsonFormat12(LdapServer)
+  implicit val ldapServerFormat: RootJsonFormat[LdapServer]           = jsonFormat13(LdapServer)
   implicit val samlServerFormat: RootJsonFormat[SamlServer]           = jsonFormat13(SamlServer)
   implicit val ssoServerFormat: RootJsonFormat[SsoServer]             = jsonFormat3(SsoServer)
   implicit val samlTokenFormat: RootJsonFormat[SamlToken]             = jsonFormat3(SamlToken)

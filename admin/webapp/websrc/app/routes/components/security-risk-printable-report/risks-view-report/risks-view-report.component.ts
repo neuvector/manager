@@ -9,6 +9,7 @@ import { MapConstant } from '@common/constants/map.constant';
 export class RisksViewReportComponent implements OnInit {
 
   @Input() reportPage: string = '';
+  @Input() withoutAppendix: boolean = false;
   @Input() data: any;
   @Input() charts: any;
   @Input() isMeetingReportLimit: boolean;

@@ -34,7 +34,7 @@
   >
   </app-risk-view-report-table>
 </div>
-<div class="report-summary pagebreak" *ngIf="data.length <= SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW">
+<div class="report-summary pagebreak" *ngIf="data.length <= SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW && !withoutAppendix">
   <div class="summary-title">
     {{ 'scan.report.others.APPENDIX' | translate }}
     <span class="summary-subtitle margin-left-m">
@@ -71,7 +71,7 @@
     </div>
   </div>
 </div>
-<div class="report-summary pagebreak" *ngIf="reportPage === 'vulnerabilities' && data.length <= SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW">
+<div class="report-summary pagebreak" *ngIf="reportPage === 'vulnerabilities' && data.length <= SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW && !withoutAppendix">
   <app-risk-view-report-appendix-packages
     [data]="data"
   >

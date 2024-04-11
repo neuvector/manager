@@ -9,6 +9,7 @@
     *ngIf="vulnerabilitiesList && isPrinting"
     class="printable-area"
     [reportPage]="'vulnerabilities'"
+    [withoutAppendix]="withoutAppendix"
     [data]="vulnerabilitiesList"
     [charts]="statisticCharts">
   </app-risks-view-report>
@@ -17,6 +18,7 @@
     *ngIf="vulnerabilitiesList && isPrintingAssets"
     class="printable-area"
     [reportPage]="'vulnerabilities'"
+    [withoutAppendix]="withoutAppendix"
     [masterGrids]="masterGrids"
     [dictionaryData]="vulnerabilitiesList">
   </app-assets-view-report>

@@ -43,6 +43,15 @@
       </mat-form-field>
     </ng-container>
   </div>
+  <div *ngIf="data.isPdf">
+    <mat-checkbox
+        class="mt-1"
+        style="margin-left: 12px;"
+        formControlName="withoutAppendix"
+        labelPosition="after">
+      {{ 'scan.WITHOUT_APPENDIX' | translate }}
+    </mat-checkbox>
+  </div>
   <div class="d-flex justify-content-end">
     <app-loading-button
       [disabled]="form.invalid || !!(saving$ | async)"

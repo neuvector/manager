@@ -1154,6 +1154,7 @@
     "UNPROTECTED_NODE": "UnProtected Node",
     "PROTECTED_CONTAINER": "Protected container",
     "LAST_MODIFIED": "Last Modified",
+    "WITHOUT_APPENDIX": "Without Appendix",
     "PUBLISHED": "Published",
     "PUBLISHED_TYPE": "Published Type",
     "WITH_FIX": "With Fix",

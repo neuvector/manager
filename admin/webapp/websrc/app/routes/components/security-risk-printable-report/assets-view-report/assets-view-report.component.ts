@@ -9,6 +9,7 @@ import { MapConstant } from '@common/constants/map.constant';
 export class AssetsViewReportComponent implements OnInit {
 
   @Input() reportPage: string;
+  @Input() withoutAppendix: boolean = false;
   @Input() masterGrids: any[][];
   @Input() dictionaryData: any[];
   @Input() isMeetingReportLimit: boolean;

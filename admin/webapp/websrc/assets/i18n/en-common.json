@@ -2762,8 +2762,8 @@
       "!=": "!=",
       "CONTAINS": "contains",
       "PREFIX": "begins with",
-      "REGEX": "regex",
-      "!REGEX": "not regex",
+      "REGEX": "matches any regex in",
+      "!REGEX": "matches NONE regex in",
       "===": "is",
       "!===": "is not",
       "<": "<",
@@ -2783,10 +2783,8 @@
       "NOTCONTAINSANY_SINGLE": "is NOT one of",
       "EXIST": "exists",
       "NOTEXIST": "NOT exists",
-      "REGEXCONTAINSANY_SINGLE": "matches any regex in",
-      "!REGEXCONTAINSANY_SINGLE": "matches NONE regex in",
-      "REGEXCONTAINSANY": "matches any regex in",
-      "!REGEXCONTAINSANY": "matches NONE regex in",
+      "REGEX_SINGLE": "matches any regex in",
+      "!REGEX_SINGLE": "matches NONE regex in",
       "text": {
         "<=": "less than",
         ">=": "more than"

@@ -97,11 +97,35 @@ export class VulnerabilitiesComponent implements OnInit, OnDestroy {
   }
 
   downloadCsv() {
-    this.getVulnerabilitiesViewReportData(this.vulnerabilitiesService.activeToken, 0, this.exportVulnerabilitiesViewCsvFile);
+    const dialogRef = this.dialog.open(PdfGenerationDialogComponent, {
+      width: '550px',
+      data: {
+        pdf_name: this.tr.instant('scan.report.PDF_LINK'),
+      },
+    });
+    dialogRef.componentInstance.submitDate.subscribe(date => {
+      if (date) {
+        this.getVulnerabilitiesViewReportData(this.vulnerabilitiesService.activeToken, date.getTime() / 1000, this.exportVulnerabilitiesViewCsvFile, dialogRef);
+      } else {
+        this.getVulnerabilitiesViewReportData(this.vulnerabilitiesService.activeToken, 0, this.exportVulnerabilitiesViewCsvFile, dialogRef);
+      }
+    });
   }
 
   downloadAssetsCsv() {
-    this.getAssetsViewReportData(this.vulnerabilitiesService.activeToken, 0, this.exportAssetsViewCsvFile);
+    const dialogRef = this.dialog.open(PdfGenerationDialogComponent, {
+      width: '550px',
+      data: {
+        pdf_name: this.tr.instant('scan.report.PDF_LINK2'),
+      },
+    });
+    dialogRef.componentInstance.submitDate.subscribe(date => {
+      if (date) {
+        this.getAssetsViewReportData(this.vulnerabilitiesService.activeToken, date.getTime() / 1000, this.exportAssetsViewCsvFile, dialogRef);
+      } else {
+        this.getAssetsViewReportData(this.vulnerabilitiesService.activeToken, 0, this.exportAssetsViewCsvFile, dialogRef);
+      }
+    });
   }
 
   printVulnerabilityPDF = () => {
@@ -198,13 +222,17 @@ export class VulnerabilitiesComponent implements OnInit, OnDestroy {
     }, 500);
   };
 
-  private exportVulnerabilitiesViewCsvFile = (data: any) => {
+  private exportVulnerabilitiesViewCsvFile = (data: any, dialogRef) => {
     console.log('Vulnerabilities View data(CSV): ', data);
+    dialogRef.componentInstance.saving$.next(false);
+    dialogRef.componentInstance.onNoClick();
     this.vulnerabilitiesCsvService.downloadCsv(data);
   };
 
-  private exportAssetsViewCsvFile = (data: any) => {
+  private exportAssetsViewCsvFile = (data: any, dialogRef) => {
     console.log('Assets View data(CSV): ', data);
+    dialogRef.componentInstance.saving$.next(false);
+    dialogRef.componentInstance.onNoClick();
     this.vulnerabilitiesCsvService.downloadAssetsViewCsv(data);
   };
 }

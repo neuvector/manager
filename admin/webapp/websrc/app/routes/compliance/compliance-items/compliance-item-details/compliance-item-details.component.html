@@ -167,31 +167,6 @@
   </ng-container>
 </ng-template>
 
-<div
-  *ngIf="legend"
-  class="p-2 d-flex flex-column mat-elevation-z8"
-  style="
-    position: fixed;
-    bottom: 50px;
-    right: 50px;
-    z-index: 1000;
-    border-radius: 5px;
-    background-color: rgba(255, 255, 255, 0.35);
-  ">
-  <span
-    class="m-0 d-inline-flex justify-content-center align-items-center badge text-white"
-    style="background-color: black"
-    ><i class="eos-icons mr-2" style="font-size: 15px"> storage </i
-    >{{ 'scan.IMAGE_NOT_USED' | translate }}</span
-  >
-  <span
-    class="mx-0 my-2 d-inline-flex justify-content-center align-items-center badge badge-danger"
-    ><i class="eos-icons mr-2" style="font-size: 15px"> system_image </i
-    >{{ 'scan.UNPROTECTED_NODE' | translate }}</span
-  >
-  <span
-    class="m-0 d-inline-flex justify-content-center align-items-center badge badge-primary"
-    ><i class="eos-icons mr-2" style="font-size: 15px"> check_box_blank </i
-    >{{ 'scan.PROTECTED_CONTAINER' | translate }}</span
-  >
+<div *ngIf="legend">
+  <app-risk-assets-legend></app-risk-assets-legend>
 </div>

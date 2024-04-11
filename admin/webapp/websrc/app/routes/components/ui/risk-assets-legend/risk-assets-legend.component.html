@@ -1,0 +1,36 @@
+<div
+  class="p-2 d-flex flex-column mat-elevation-z8 risk-assets-legend-modal"
+>
+  <h5 class="mb-0 mt-1 text-left">{{ 'enum.ASSET_TYPE' | translate }}</h5>
+  <hr class="fancy m-0" />
+  <span class="m-0 d-inline-flex justify-content-start align-items-center badge">
+    <i class="eos-icons mr-2" style="font-size: 15px"> storage </i>
+    {{ 'network.nodeDetails.LOCATION' | translate }}
+  </span>
+  <span class="m-0 d-inline-flex justify-content-start align-items-center badge">
+    <i class="eos-icons mr-2" style="font-size: 15px"> system_image </i>
+    {{ 'network.nodeDetails.IMAGE' | translate }}
+  </span>
+  <span class="m-0 d-inline-flex justify-content-start align-items-center badge">
+    <i class="eos-icons mr-2" style="font-size: 15px"> check_box_blank </i>
+    {{ 'dashboard.summary.CONTAINER' | translate }}
+  </span>
+  <h5 class="mb-0 mt-1 text-left">{{ 'enum.ASSET_STATUS' | translate }}</h5>
+  <hr class="fancy m-0" />
+  <span class="mx-2 my-1 d-inline-flex justify-content-start align-items-center badge text-white" style="background-color: black">
+    {{ 'enum.UNUSED' | translate }}
+  </span>
+  <span class="mx-2 my-1 d-inline-flex justify-content-start align-items-start badge badge-danger">
+    {{ 'enum.UNPROTECTED' | translate }}
+  </span>
+  <span class="mx-2 my-1 d-inline-flex justify-content-start align-items-start badge badge-primary">
+    {{ 'enum.PROTECTED' | translate }}
+  </span>
+  <h5 class="mb-0 mt-1 text-left">{{ 'enum.SAMPLE_LABEL' | translate }}</h5>
+  <hr class="fancy m-0" />
+  <span
+    class="mx-0 my-2 d-inline-flex justify-content-start align-items-start badge badge-danger"
+    ><i class="eos-icons mr-2" style="font-size: 15px"> system_image </i
+    >{{ 'scan.UNPROTECTED_NODE' | translate }}</span
+  >
+</div>

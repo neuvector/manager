@@ -198,7 +198,13 @@
     "SHOW_DETAILS": "Show Details",
     "FILTER": "Filter",
     "MATCH": "Match",
-    "MANUAL": "Manual"
+    "MANUAL": "Manual",
+    "UNUSED": "Unused Asset",
+    "PROTECTED": "Protected Asset",
+    "UNPROTECTED": "Unprotected Asset",
+    "ASSET_TYPE": "Asset Type",
+    "ASSET_STATUS": "Asset Status",
+    "SAMPLE_LABEL": "Sample Label"
   },
   "logout": {
     "SIGN_OUT": "Signed out",

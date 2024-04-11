@@ -198,7 +198,13 @@
     "SHOW_DETAILS": "显示详细内容",
     "FILTER": "过滤器",
     "MATCH": "匹配",
-    "MANUAL": "手动的"
+    "MANUAL": "手动的",
+    "UNUSED": "未使用资产",
+    "PROTECTED": "受保护资产",
+    "UNPROTECTED": "未受保护资产",
+    "ASSET_TYPE": "资产类型",
+    "ASSET_STATUS": "资产状态",
+    "SAMPLE_LABEL": "标签实例"
   },
   "logout": {
     "SIGN_OUT": "已登出了",

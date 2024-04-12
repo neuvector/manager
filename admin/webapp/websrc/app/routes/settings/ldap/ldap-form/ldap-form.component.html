@@ -112,6 +112,17 @@
     </mat-form-field>
   </div>
   <div class="d-flex align-items-center my-2 my-md-4">
+    <i class="eos-icons mr-3 text-primary">organization</i>
+    <mat-form-field appearance="standard" class="w-100">
+      <mat-label>{{ 'ldap.GROUP_DN' | translate }}</mat-label>
+      <input
+        formControlName="group_dn"
+        matInput
+        [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
+      <mat-hint>{{ 'ldap.GROUP_DN_HINT' | translate }}</mat-hint>
+    </mat-form-field>
+  </div>
+  <div class="d-flex align-items-center my-2 my-md-4">
     <mat-icon
       aria-hidden="false"
       aria-label="License icon"

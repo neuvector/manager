@@ -14,6 +14,7 @@ case class LdapServer(
   port: Option[Int],
   ssl: Option[Boolean],
   base_dn: Option[String],
+  group_dn: Option[String],
   bind_dn: Option[String],
   bind_password: Option[String],
   enable: Option[Boolean],

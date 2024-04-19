@@ -2784,6 +2784,8 @@
       "NOTCONTAINSANY_SINGLE": "is NOT one of",
       "EXIST": "exists",
       "NOTEXIST": "NOT exists",
+      "REGEXCONTAINSANY_SINGLE": "matches any regex in",
+      "!REGEXCONTAINSANY_SINGLE": "matches NONE regex in",
       "REGEX_SINGLE": "matches any regex in",
       "!REGEX_SINGLE": "matches NONE regex in",
       "text": {

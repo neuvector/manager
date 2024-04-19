@@ -2784,6 +2784,8 @@
       "NOTCONTAINSANY_SINGLE": "不是",
       "EXIST": "存在",
       "NOTEXIST": "不存在",
+      "REGEXCONTAINSANY_SINGLE": "匹配任意",
+      "!REGEXCONTAINSANY_SINGLE": "不匹配任何",
       "REGEX_SINGLE": "匹配任意",
       "!REGEX_SINGLE": "不匹配任何",
       "text": {

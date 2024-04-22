@@ -1263,7 +1263,8 @@
       "SCANNED_IMAGES": "扫描的镜像数"
     },
     "message": {
-      "CONFIG_ERR": "获取扫描配置时发生错误"
+      "CONFIG_ERR": "获取扫描配置时发生错误",
+      "OS_ERR": "无OS"
     }
   },
   "registry": {

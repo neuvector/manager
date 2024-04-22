@@ -1263,7 +1263,8 @@
       "SCANNED_IMAGES": "Scanned Images"
     },
     "message": {
-      "CONFIG_ERR": "Error happened when getting scan configuration"
+      "CONFIG_ERR": "Error happened when getting scan configuration",
+      "OS_ERR": "No OS"
     }
   },
   "registry": {

@@ -398,6 +398,9 @@ export class VulnerabilitiesCsvService {
       'MMM dd, y HH:mm:ss'
     );
     delete cve.package_versions;
+    delete cve.packages;
+    delete cve.published_timestamp;
+    delete cve.last_modified_timestamp;
     if (reportType === 'assets_view') {
       delete cve.workloads;
       delete cve.nodes;

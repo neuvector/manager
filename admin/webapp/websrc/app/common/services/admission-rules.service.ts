@@ -590,6 +590,7 @@ export class AdmissionRulesService {
   };
 
   criterionSelectedInChip = selectedCriterion => {
+    selectedCriterion.value.op = selectedCriterion.value.op.replace('regexContainsAny', 'regex');
     return [
       {
         name: selectedCriterion.value.name,
@@ -1129,7 +1130,7 @@ export class AdmissionRulesService {
         ? `${displayValue.substring(0, 30)}...`
         : displayValue;
     displayValue =
-      criterion.op.toLowerCase().indexOf('contains') >= 0
+      criterion.op.toLowerCase().includes('contains') || criterion.op.toLowerCase().includes('regex')
         ? `[${displayValue}]`
         : displayValue;
     return `${this.translate.instant(

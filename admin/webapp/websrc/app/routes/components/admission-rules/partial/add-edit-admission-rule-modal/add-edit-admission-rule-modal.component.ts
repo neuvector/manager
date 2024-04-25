@@ -212,7 +212,7 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
 
   changeCriterionOperator = (selectedCriterionOperator) => {
     let isPredefined = this.criteriaOptions[this.mainCriterion.name];
-    this.hasMultiValue = selectedCriterionOperator.toLowerCase().includes("contain") && isPredefined;
+    this.hasMultiValue = (selectedCriterionOperator.toLowerCase().includes("contain") || selectedCriterionOperator.toLowerCase().includes("regex")) && isPredefined;
   };
 
   onAutoCompleteListOpened = () => {

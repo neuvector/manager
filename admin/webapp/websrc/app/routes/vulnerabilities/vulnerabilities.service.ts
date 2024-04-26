@@ -66,6 +66,12 @@ export class VulnerabilitiesService {
   private selectedVulnerabilitySubject$ = new BehaviorSubject<any>(undefined);
   selectedVulnerability$ = this.selectedVulnerabilitySubject$.asObservable();
 
+  private cfgTypeSubject$ = new BehaviorSubject<CfgType>('');
+  cfgType$ = this.cfgTypeSubject$.asObservable();
+  setCfgType(cfgType: CfgType): void {
+    this.cfgTypeSubject$.next(cfgType);
+  }
+
   constructor(
     private datePipe: DatePipe,
     private risksHttpService: RisksHttpService,

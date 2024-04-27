@@ -182,7 +182,7 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
     templateOptions: {
       label: 'setting.category.label.notification',
       description: 'setting.category.description.notification',
-      expanded: false,
+      expanded: true,
     },
     fieldGroup: [
       {
@@ -252,7 +252,7 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
     templateOptions: {
       label: 'setting.category.label.general',
       description: 'setting.category.description.general',
-      expanded: false,
+      expanded: true,
     },
     fieldGroup: [
       {

@@ -1,6 +1,12 @@
-<mat-expansion-panel [expanded]="to.expanded" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+<mat-expansion-panel
+  [expanded]="to.expanded"
+  (opened)="panelOpenState = true"
+  (closed)="panelOpenState = false"
+  hideToggle>
   <mat-expansion-panel-header>
     <mat-panel-title class="h4 font-weight-normal" [id]="to.label">
+      <span class="material-icons margin-right-s" *ngIf="panelOpenState">expand_less</span>
+      <span class="material-icons margin-right-s" *ngIf="!panelOpenState">expand_more</span>
       {{ to.label! | translate }}
     </mat-panel-title>
     <ng-container *ngIf="to.description">
@@ -12,4 +18,3 @@
   <mat-divider class="position-relative" *ngIf="panelOpenState"></mat-divider>
   <ng-container #fieldComponent></ng-container>
 </mat-expansion-panel>
-

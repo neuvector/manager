@@ -56,7 +56,7 @@
             name="token"
             required
             (keyup)="parseToken()"
-            (paste)="parseToken()"></textarea>
+            (paste)="handleMousePaste()"></textarea>
         </mat-form-field>
         <div class="invalid" *ngIf="invalidToken"> {{ 'multiCluster.validation.token' | translate }} </div>
       </div>

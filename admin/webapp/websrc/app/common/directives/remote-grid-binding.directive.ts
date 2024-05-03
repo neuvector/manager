@@ -41,7 +41,9 @@ export class RemoteGridBindingDirective {
         .getData(params)
         .pipe(
           tap(({ data, totalRecords }) =>
-            params.successCallback(data, totalRecords)
+            {
+              params.successCallback(data, totalRecords);
+            }
           ),
           catchError(err => this.handleError(err))
         )

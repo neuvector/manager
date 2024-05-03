@@ -16,7 +16,9 @@ import { TranslateService } from '@ngx-translate/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegistryOverviewComponent implements OnChanges {
-  @Input() registryDetails!: Image[];
+  @Input() registryDetails: Image[];
+  @Input() summary4AllView: any;
+  @Input() isAllView!: boolean;
   @Input() gridHeight!: number;
   pieChartData!: ChartConfiguration<'pie', number[], string[]>;
   barChartData!: ChartConfiguration<'bar', number[], string[]>;
@@ -47,7 +49,7 @@ export class RegistryOverviewComponent implements OnChanges {
   constructor(private translate: TranslateService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.registryDetails) {
+    if (!this.isAllView && changes.registryDetails) {
       this.total = changes.registryDetails.currentValue.length;
       this.finished = changes.registryDetails.currentValue.filter(
         ({ status }) => status === 'finished'
@@ -81,91 +83,122 @@ export class RegistryOverviewComponent implements OnChanges {
           vulnerabilities: otherVulnerabilities,
         },
       ];
+      console.log("topSix", topSix)
       this.noVulnerabilities = topSix.every(vul => !vul.vulnerabilities);
-      this.pieChartData = {
-        options: {
-          maintainAspectRatio: false,
-          plugins: {
-            title: {
-              display: false,
-              text: this.translate.instant('registry.TOP_RISKIEST_IMG'),
-            },
-            legend: {
-              display: true,
-              position: 'right',
-            },
-          },
-        },
-        data: {
-          labels: topSix.map(item => {
-            return [
-              item.tag ? `${item.repository}:${item.tag}` : item.repository,
-            ];
-          }),
-          datasets: [
-            {
-              hoverBorderColor: this.pieChartColors,
-              hoverBackgroundColor: this.pieChartColors,
-              backgroundColor: this.pieChartColors,
-              data: topSix.map(item => item.vulnerabilities),
-            },
-          ],
-        },
-        type: 'pie',
-      };
-
-      this.barChartData = {
-        options: {
-          indexAxis: 'y',
-          scales: {
-            x: {
-              ticks: {
-                callback: (value: any) => {
-                  if (value % 1 === 0) {
-                    return value;
-                  }
-                },
-              },
-              beginAtZero: true,
-            },
-          },
-          maintainAspectRatio: false,
-          plugins: {
-            title: {
-              display: false,
-              text: this.translate.instant('registry.TOP_RISKIEST_IMG'),
-            },
-            legend: {
-              display: true,
-              position: 'top',
-            },
-          },
-        },
-        data: {
-          labels: topFive.map(item => {
-            return [
-              item.tag ? `${item.repository}:${item.tag}` : item.repository,
-            ];
-          }),
-          datasets: [
-            {
-              data: topFive.map(i => i.vulnerabilities.high),
-              label: this.translate.instant('enum.HIGH'),
-              backgroundColor: this.barChartColors.high,
-              barThickness: 8,
-              borderWidth: 1,
-            },
-            {
-              data: topFive.map(i => i.vulnerabilities.medium),
-              label: this.translate.instant('enum.MEDIUM'),
-              backgroundColor: this.barChartColors.medium,
-              barThickness: 8,
-              borderWidth: 1,
-            },
-          ],
-        },
-        type: 'bar',
-      };
+      this.pieChartData = this.getPieChartOptions(topSix);
+      this.barChartData = this.getBarChartOptions(topFive);
     }
+    if (this.isAllView && changes.summary4AllView) {
+      const topImages = changes.summary4AllView.currentValue.allScannedImagesSummary.summary.top_images;
+      const topSix = topImages.map(i => {
+          return {
+            repository: i.display_name,
+            vulnerabilities: i.high + i.medium,
+          };
+        });
+
+      const topFive = topImages.slice(0, 5).map(i => {
+          return {
+            repository: i.display_name,
+            vulnerabilities: {
+              high: i.high,
+              medium: i.medium,
+            }
+          };
+        });
+      console.log("topSix", topSix)
+      this.noVulnerabilities = topSix.every(vul => !vul.vulnerabilities);
+      this.pieChartData = this.getPieChartOptions(topSix);
+      this.barChartData = this.getBarChartOptions(topFive);
+    }
+  }
+
+  private getBarChartOptions(topFive): ChartConfiguration<'bar', number[], string[]> {
+    return {
+      options: {
+        indexAxis: 'y',
+        scales: {
+          x: {
+            ticks: {
+              callback: (value: any) => {
+                if (value % 1 === 0) {
+                  return value;
+                }
+              },
+            },
+            beginAtZero: true,
+          },
+        },
+        maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: false,
+            text: this.translate.instant('registry.TOP_RISKIEST_IMG'),
+          },
+          legend: {
+            display: true,
+            position: 'top',
+          },
+        },
+      },
+      data: {
+        labels: topFive.map(item => {
+          return [
+            item.repository
+          ];
+        }),
+        datasets: [
+          {
+            data: topFive.map(i => i.vulnerabilities.high),
+            label: this.translate.instant('enum.HIGH'),
+            backgroundColor: this.barChartColors.high,
+            barThickness: 8,
+            borderWidth: 1,
+          },
+          {
+            data: topFive.map(i => i.vulnerabilities.medium),
+            label: this.translate.instant('enum.MEDIUM'),
+            backgroundColor: this.barChartColors.medium,
+            barThickness: 8,
+            borderWidth: 1,
+          },
+        ],
+      },
+      type: 'bar',
+    };
+  }
+
+  private getPieChartOptions(topSix): ChartConfiguration<'pie', number[], string[]> {
+    return {
+      options: {
+        maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: false,
+            text: this.translate.instant('registry.TOP_RISKIEST_IMG'),
+          },
+          legend: {
+            display: true,
+            position: 'right',
+          },
+        },
+      },
+      data: {
+        labels: topSix.map(item => {
+          return [
+            item.repository
+          ];
+        }),
+        datasets: [
+          {
+            hoverBorderColor: this.pieChartColors,
+            hoverBackgroundColor: this.pieChartColors,
+            backgroundColor: this.pieChartColors,
+            data: topSix.map(item => item.vulnerabilities),
+          },
+        ],
+      },
+      type: 'pie',
+    };
   }
 }

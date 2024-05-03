@@ -1301,6 +1301,7 @@
     "SIG_VERIFIERS": "签名信任根检测器",
     "SIG_VERIFIERS_HINT": "镜像和签名信任根检测器一起被扫描",
     "SIG_VERIFICATION_TIMESTAMP": "核查于",
+    "VIEW_ALL_IMAGES": "浏览全部扫描过的镜像",
     "TIP": {
       "EDIT": "编辑镜像库",
       "DELETE": "删除镜像库",

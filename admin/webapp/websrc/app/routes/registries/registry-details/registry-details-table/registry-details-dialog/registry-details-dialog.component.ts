@@ -53,7 +53,7 @@ export class RegistryDetailsDialogComponent implements OnInit {
   remediationDetails!: RemediationDetailDialogComponent;
   selectedRemediation!: Check;
   get registryTitle() {
-    return `${this.data.selectedRegistry.registry}${this.data.image.repository}:${this.data.image.tag}`;
+    return this.data.selectedRegistry.isAllView ? this.data.image.repo_url : `${this.data.selectedRegistry.registry}${this.data.image.repository}:${this.data.image.tag}`;
   }
 
   constructor(

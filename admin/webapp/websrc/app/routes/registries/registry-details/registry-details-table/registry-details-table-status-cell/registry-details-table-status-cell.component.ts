@@ -18,7 +18,7 @@ export class RegistryDetailsTableStatusCellComponent
 
   agInit(params: ICellRendererParams): void {
     this.params = params;
-    this.status = params.node.data.status;
+    this.status = params && params.node.data ? params.node.data.status : '';
     this.labelCode = MapConstant.colourMap[this.status];
   }
 

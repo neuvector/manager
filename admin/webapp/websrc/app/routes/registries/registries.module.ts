@@ -20,6 +20,7 @@ import { RegistryDetailsComponent } from './registry-details/registry-details.co
 import { MatTabsModule } from '@angular/material/tabs';
 import { RegistryOverviewComponent } from './registry-details/registry-overview/registry-overview.component';
 import { RegistryDetailsTableComponent } from './registry-details/registry-details-table/registry-details-table.component';
+import { RegistryDetailsTableAllViewComponent } from './registry-details/registry-details-table/registry-details-table-all-view.component';
 import { NgChartsModule } from 'ng2-charts';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { RegistryDetailsVulnerabilitiesCellComponent } from './registry-details/registry-details-table/registry-details-vulnerabilities-cell/registry-details-vulnerabilities-cell.component';
@@ -61,6 +62,7 @@ const routes: Routes = [{ path: '', component: RegistriesComponent }];
     RegistryDetailsComponent,
     RegistryOverviewComponent,
     RegistryDetailsTableComponent,
+    RegistryDetailsTableAllViewComponent,
     RegistryDetailsVulnerabilitiesCellComponent,
     TestSettingsDialogComponent,
     RegistryDetailsDialogComponent,

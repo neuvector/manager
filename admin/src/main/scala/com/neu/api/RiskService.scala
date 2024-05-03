@@ -13,6 +13,7 @@ import com.neu.model.{
   ComplianceProfileConfig,
   ComplianceProfileConfigData,
   ComplianceProfileExportData,
+  ScannedAssetsQuery,
   TimeRange,
   VulnerabilityProfileConfigData,
   VulnerabilityProfileEntryConfigData,
@@ -44,6 +45,49 @@ class RiskService()(implicit executionContext: ExecutionContext)
   val riskRoute: Route =
     headerValueByName("Token") { tokenId =>
       {
+        path("scanned-assets") {
+          post {
+            entity(as[ScannedAssetsQuery]) { scannedAssetsQuery =>
+              Utils.respondWithWebServerHeaders() {
+                complete {
+                  logger.info(s"Getting scanned assets ...")
+                  RestClient.httpRequestWithHeader(
+                    s"${baseClusterUri(tokenId)}/scan/asset/view/asset",
+                    POST,
+                    scannedAssetsQueryToJson(
+                      scannedAssetsQuery
+                    ),
+                    tokenId
+                  )
+                }
+              }
+            }
+          } ~
+          get {
+            parameters(
+              'token,
+              'start,
+              'row,
+              'orderby.?,
+              'orderbyColumn.?,
+              'qf.?
+            ) { (token, start, row, orderby, orderbyColumn, qf) =>
+              Utils.respondWithWebServerHeaders() {
+                complete {
+                  val url =
+                    s"${baseClusterUri(tokenId)}/scan/asset/view/asset?token=$token&start=$start&row=$row${if (orderby.isDefined)
+                      s"&orderby=${orderby.get}"
+                    else ""}${if (orderbyColumn.isDefined)
+                      s"&orderbyColumn=${orderbyColumn.get}"
+                    else ""}${if (qf.isDefined)
+                      s"&qf=${qf.get}"
+                    else ""}"
+                  RestClient.httpRequestWithHeader(url, GET, "", tokenId)
+                }
+              }
+            }
+          }
+        } ~
         pathPrefix("vulasset") {
           pathEnd {
             post {
@@ -115,12 +159,17 @@ class RiskService()(implicit executionContext: ExecutionContext)
             pathPrefix("assets-view") {
               pathEnd {
                 patch {
-                  parameter('queryToken) { queryToken =>
+                  parameter('queryToken.?) { queryToken =>
                     entity(as[TimeRange]) { timeRange =>
                       Utils.respondWithWebServerHeaders() {
+                        val url = queryToken.fold(
+                          s"${baseClusterUri(tokenId)}/assetvul"
+                        ) { queryToken =>
+                          s"${baseClusterUri(tokenId)}/assetvul?token=$queryToken"
+                        }
                         complete {
                           RestClient.httpRequestWithHeader(
-                            s"${baseClusterUri(tokenId)}/assetvul?token=$queryToken",
+                            url,
                             POST,
                             timeRangeToJson(timeRange),
                             tokenId

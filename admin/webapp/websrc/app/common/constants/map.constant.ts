@@ -117,6 +117,7 @@ export class MapConstant {
     AUDIT_LOGS: 1000,
     NETWORK_RULES: 3000,
     FED_NETWORK_RULES: 3000,
+    IMAGES: 50,
   };
 
   public static iconMap = {

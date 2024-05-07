@@ -25,6 +25,7 @@ import { RegistryDetailsTableStatusCellComponent } from './registry-details-tabl
 import { RegistriesService } from '@services/registries.service';
 import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, map, tap } from 'rxjs/operators';
+import { MapConstant } from '@common/constants/map.constant';
 
 @Component({
   selector: 'app-registry-details-table-all-view',
@@ -150,8 +151,8 @@ export class RegistryDetailsTableAllViewComponent implements OnInit, OnChanges, 
       onGridReady: event => this.onGridReady(event),
       onRowClicked: event => this.onRowClicked(event),
       rowModelType: 'infinite',
-      cacheBlockSize: 300,
-      paginationPageSize: 100,
+      cacheBlockSize: MapConstant.PAGE.IMAGES * 3,
+      paginationPageSize: MapConstant.PAGE.IMAGES,
       pagination: true,
       components: {
         vulnerabilitiesCellRenderer:

@@ -21,6 +21,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { DatePipe } from '@angular/common';
 import { RegistryDetailsTableStatusCellComponent } from './registry-details-table-status-cell/registry-details-table-status-cell.component';
 import { FormControl } from '@angular/forms';
+import { MapConstant } from '@common/constants/map.constant';
 
 @Component({
   selector: 'app-registry-details-table',
@@ -113,6 +114,9 @@ export class RegistryDetailsTableComponent implements OnInit, OnChanges {
       rowData: this.rowData,
       columnDefs: this.columnDefs,
       rowSelection: 'single',
+      cacheBlockSize: MapConstant.PAGE.IMAGES * 3,
+      paginationPageSize: MapConstant.PAGE.IMAGES,
+      pagination: true,
       suppressDragLeaveHidesColumns: true,
       onGridReady: event => this.onGridReady(event),
       onRowClicked: event => this.onRowClicked(event),

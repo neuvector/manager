@@ -7,6 +7,7 @@ import { SettingsService } from '@services/settings.service';
 import { MapConstant } from '@common/constants/map.constant';
 import { NotificationService } from '@services/notification.service';
 import { Router } from '@angular/router';
+import { ConfigHttpService } from '@common/api/config-http.service';
 
 @Component({
   selector: 'app-joining-modal',
@@ -18,11 +19,13 @@ export class JoiningModalComponent implements OnInit {
   public useProxy: String = '';
   public invalidToken: boolean = false;
   public isProcessing: boolean = false;
+  public isProxyEnabled: boolean = false;
 
   constructor(
     private clustersService: MultiClusterService,
     private settingsService: SettingsService,
     private translate: TranslateService,
+    private configHttpService: ConfigHttpService,
     private utils: UtilsService,
     public dialogRef: MatDialogRef<JoiningModalComponent>,
     private notificationService: NotificationService,
@@ -42,12 +45,19 @@ export class JoiningModalComponent implements OnInit {
     };
     this.useProxy = '';
     this.getClusterName();
+    this.configHttpService.configV2$.subscribe(data => {
+      if (data?.proxy?.registry_https_proxy_status == true) {
+        this.isProxyEnabled = true;
+      } else {
+        this.isProxyEnabled = false;
+      }
+    });
   }
 
   getClusterName = () => {
-    this.settingsService.getConfig().subscribe(
+    this.configHttpService.configV2$.subscribe(
       data => {
-        this.cluster.name = data.misc.cluster_name;
+        this.cluster.name = data?.misc.cluster_name;
       },
       error => {
         this.notificationService.openError(

@@ -13,6 +13,7 @@ import { finalize } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { MultiClusterGridComponent } from '@components/multi-cluster-grid/multi-cluster-grid.component';
+import { ConfigHttpService } from '@common/api/config-http.service';
 
 @Component({
   selector: 'app-multi-cluster',
@@ -59,7 +60,8 @@ export class MultiClusterComponent implements OnInit {
     private translate: TranslateService,
     public multiClusterService: MultiClusterService,
     public utils: UtilsService,
-    private router: Router
+    private router: Router,
+    private configHttpService: ConfigHttpService
   ) {
     this.w = GlobalVariable.window;
     this.$win = $(this.w);
@@ -85,6 +87,9 @@ export class MultiClusterComponent implements OnInit {
       this.multiClusterService.onRefreshClustersEvent$.subscribe(data => {
         this.pageInit();
       });
+    this.configHttpService.getConfig().subscribe(response => {
+      this.configHttpService.setConfigV2(response);
+    });
   }
 
   ngOnDestroy(): void {

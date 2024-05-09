@@ -24,7 +24,7 @@ import { DatePipe } from '@angular/common';
 import { RegistryDetailsTableStatusCellComponent } from './registry-details-table-status-cell/registry-details-table-status-cell.component';
 import { RegistriesService } from '@services/registries.service';
 import { FormControl } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, map, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, tap, retry } from 'rxjs/operators';
 import { MapConstant } from '@common/constants/map.constant';
 
 @Component({
@@ -197,7 +197,8 @@ export class RegistryDetailsTableAllViewComponent implements OnInit, OnChanges, 
           //   ? this.vulnerabilitiesFilterService.qfCount
           //   : this.vulnerabilitiesFilterService.filteredCount,
         };
-      })
+      }),
+      retry(10)
     );
   }
 

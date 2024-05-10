@@ -16,6 +16,7 @@ import {
 import { GlobalConstant } from '@common/constants/global.constant';
 import { NotificationService } from '@services/notification.service';
 import { GlobalVariable } from '@common/variables/global.variable';
+import { ConfigHttpService } from '@common/api/config-http.service';
 
 export interface EditClusterDialog {
   isEdit: boolean;
@@ -40,6 +41,7 @@ export class PromotionModalComponent implements OnInit {
   public isMaster: boolean = false;
   public readOnly: boolean = false;
   public isProcessing: boolean = false;
+  public isProxyEnabled: boolean = false;
 
   constructor(
     private clustersService: MultiClusterService,
@@ -50,6 +52,7 @@ export class PromotionModalComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private location: Location,
+    private configHttpService: ConfigHttpService,
     public dialogRef: MatDialogRef<PromotionModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: EditClusterDialog,
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
@@ -75,12 +78,20 @@ export class PromotionModalComponent implements OnInit {
       this.fed_sync_repo_toggle = this.data.fed_sync_repo_toggle;
       this.readOnly = true;
     }
+    this.configHttpService.configV2$.subscribe(response => {
+      if (response?.proxy?.registry_https_proxy_status == true) {
+        this.isProxyEnabled = true;
+      } else {
+        this.useProxy = '';
+        this.isProxyEnabled = false;
+      }
+    });
   }
 
   getClusterName = () => {
-    this.settingsService.getConfig().subscribe(
+    this.configHttpService.configV2$.subscribe(
       data => {
-        this.cluster.name = data.misc.cluster_name;
+        this.cluster.name = data?.misc.cluster_name;
       },
       error => {
         console.log(error.message);

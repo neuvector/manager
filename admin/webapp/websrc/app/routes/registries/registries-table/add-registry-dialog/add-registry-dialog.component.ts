@@ -32,6 +32,7 @@ import { NotificationService } from '@services/notification.service';
 import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { MapConstant } from '@common/constants/map.constant';
+import { ConfigHttpService } from '@common/api/config-http.service';
 
 @Component({
   selector: 'app-add-registry-dialog',
@@ -49,6 +50,7 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
       isFedAdmin:
         GlobalVariable.user.token.role === MapConstant.FED_ROLES.FEDADMIN,
       isMaster: GlobalVariable.isMaster,
+      isProxyEnabled: false,
     },
   };
   submittingForm = false;
@@ -63,7 +65,8 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
     public data: { isEdit: boolean; editable: boolean; config: RegistryConfig },
     private registriesService: RegistriesService,
     private registriesCommunicationService: RegistriesCommunicationService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private configHttpService: ConfigHttpService
   ) {}
 
   submit(): void {
@@ -185,6 +188,14 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit(): void {
+    this.configHttpService.configV2$.subscribe(response => {
+      if (
+        response?.proxy?.registry_http_proxy_status == true ||
+        response?.proxy?.registry_https_proxy_status == true
+      ) {
+        this.options.formState.isProxyEnabled = true;
+      }
+    });
     if (this.data.config) {
       const { schedule, aws_key, ...data } = this.data.config;
       const interval =

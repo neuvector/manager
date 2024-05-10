@@ -67,6 +67,7 @@ export class AddEditRoleDialogComponent implements OnInit {
       this.permissionChips = this.permissionService.formatRoleChips(
         this.data.role
       );
+      this.form.controls['name'].disable();
     }
   }
 

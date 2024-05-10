@@ -30,6 +30,7 @@ import { NotificationService } from '@services/notification.service';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { catchError } from 'rxjs/operators';
+import { ConfigHttpService } from '@common/api/config-http.service';
 
 @Component({
   selector: 'app-registries-table',
@@ -180,7 +181,8 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
     private registriesCommunicationService: RegistriesCommunicationService,
     private cd: ChangeDetectorRef,
     private authUtilsService: AuthUtilsService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private configHttpService: ConfigHttpService
   ) {}
 
   ngOnInit(): void {
@@ -200,6 +202,9 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
       },
       overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS'),
     };
+    this.configHttpService.getConfig().subscribe(response => {
+      this.configHttpService.setConfigV2(response);
+    });
   }
 
   onSelectionChanged(params: GridReadyEvent): void {

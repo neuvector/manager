@@ -53,6 +53,15 @@ export const AddRegistryFieldConfig: FormlyFieldConfig[] = [
         templateOptions: {
           label: 'registry.USE_PROXY',
         },
+        hooks: {
+          onInit(field) {
+            const control = field?.formControl;
+            if (!field?.options?.formState.isProxyEnabled) {
+              control?.setValue(false);
+              control?.disable();
+            }
+          },
+        },
       },
       {
         className: 'col-12 col-md-3 mt-4',

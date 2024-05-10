@@ -116,10 +116,10 @@
         <button (click)="changeView(0)" mat-menu-item>
           <span>{{ 'admissionControl.names.SERVICE' | translate }}</span>
         </button>
-        <button (click)="changeView(1)" mat-menu-item>
+        <button (click)="changeView(1)" mat-menu-item *ngIf="form.controls.selectedDomains.value.length === 0">
           <span>{{ 'admissionControl.names.IMAGE' | translate }}</span>
         </button>
-        <button (click)="changeView(2)" mat-menu-item>
+        <button (click)="changeView(2)" mat-menu-item *ngIf="form.controls.selectedDomains.value.length === 0">
           <span>{{ 'admissionControl.names.NODE' | translate }}</span>
         </button>
         <button (click)="changeView(3)" mat-menu-item>

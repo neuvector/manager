@@ -406,6 +406,9 @@ export const DisableNetworkPolicyToggleBoolField = {
   hooks: {
     onInit: field => {
       const ctrl = field.formControl;
+      if (!field.options.formState.permissions.isNewServiceModeAuthorized) {
+        ctrl.disable();
+      }
       ctrl.setValue(!field.model['net_svc']['disable_net_policy']);
       ctrl.valueChanges.subscribe((x: boolean) => {
         const formCtrl = field.parent.formControl.get(

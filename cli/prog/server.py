@@ -140,14 +140,14 @@ def show_server_ldap(data):
     servers = data.client.list("server", "server", **arg)
     for s in servers:
         output.lift_fields(s, "ldap", (
-            "directory", "hostname", "port", "base_dn", "ssl", "bind_dn", "enable", "group_member_attr",
+            "directory", "hostname", "port", "base_dn", "group_dn", "ssl", "bind_dn", "enable", "group_member_attr",
             "username_attr",
             "default_role"))
         _show_role_mapping_display_format(s, "ldap")
 
     click.echo("Total LDAP servers: %s" % len(servers))
     columns = (
-        "server_name", "enable", "directory", "hostname", "port", "base_dn", "ssl", "bind_dn", "group_member_attr",
+        "server_name", "enable", "directory", "hostname", "port", "base_dn", "group_dn", "ssl", "bind_dn", "group_member_attr",
         "username_attr", "default_role", RoleMapping)
     output.list(columns, servers)
 
@@ -192,10 +192,10 @@ def show_server_detail(data, name):
 
     if server["server_type"] == "ldap":
         output.lift_fields(server, "ldap",
-                           ("directory", "hostname", "port", "base_dn", "ssl", "bind_dn", "enable", "default_role"))
+                           ("directory", "hostname", "port", "base_dn", "group_dn", "ssl", "bind_dn", "enable", "default_role"))
         _show_role_mapping_display_format(server, "ldap")
         columns = (
-            "server_name", "enable", "directory", "hostname", "port", "base_dn", "ssl", "bind_dn", "default_role",
+            "server_name", "enable", "directory", "hostname", "port", "base_dn", "group_dn", "ssl", "bind_dn", "default_role",
             RoleMapping)
         output.show(columns, server)
     elif server["server_type"] == "saml":
@@ -267,11 +267,12 @@ def create_server_oidc(data, name, issuer, client_id, client_secret, enable, def
 @click.option("--directory", default='OpenLDAP', type=click.Choice(['OpenLDAP', 'MicrosoftAD']), help="Directory type")
 @click.option("--port", type=int, help="Server port, default is 389")
 @click.option("--ssl", default=False, is_flag=True, help="Enable SSL")
+@click.option("--group_dn", help="Group DN if different from Base DN")
 @click.option("--group_member_attr", help="Group members attribute")
 @click.option("--username_attr", help="Username attribute")
 @click.option("--bind", help="Bind distinguish name")
 @click.pass_obj
-def create_server_ldap(data, name, hostname, base, enable, default_role, directory, port, ssl, group_member_attr,
+def create_server_ldap(data, name, hostname, base, enable, default_role, directory, port, ssl, group_dn, group_member_attr,
                        username_attr, bind):
     """Create LDAP server."""
     if default_role == "none":
@@ -280,7 +281,7 @@ def create_server_ldap(data, name, hostname, base, enable, default_role, directo
     if verify_default_role(data, arg, default_role) is False:
         return
     ldap = {
-        "hostname": hostname, "base_dn": base, "ssl": ssl,
+        "hostname": hostname, "base_dn": base, "ssl": ssl, "group_dn": group_dn,
         "enable": enable, "default_role": default_role, "directory": directory,
         "group_member_attr": group_member_attr,
         "username_attr": username_attr,
@@ -381,11 +382,12 @@ def set_server_ldap(ctx, data, name):
 @click.option("--directory", default=None, type=click.Choice(['OpenLDAP', 'MicrosoftAD']), help="Directory type")
 @click.option("--port", type=int, help="Server port, default is 389")
 @click.option("--ssl", type=click.Choice(['enable', 'disable']))
+@click.option("--group_dn", default=None, help="Group DN if different from Base DN")
 @click.option("--group_member_attr", default=None, help="Group members attribute")
 @click.option("--username_attr", default=None, help="Username attribute")
 @click.option("--bind", help="Bind distinguish name")
 @click.pass_obj
-def set_server_ldap_config(data, hostname, base, enable, default_role, directory, port, ssl, group_member_attr,
+def set_server_ldap_config(data, hostname, base, enable, default_role, directory, port, ssl, group_dn, group_member_attr,
                            username_attr, bind):
     """Set LDAP server configuration."""
     ldap = {}
@@ -416,6 +418,9 @@ def set_server_ldap_config(data, hostname, base, enable, default_role, directory
     if ssl != None:
         doit = True
         ldap["ssl"] = True if ssl == 'enable' else False
+    if group_dn != None:
+        doit = True
+        ldap["group_dn"] = group_dn
     if group_member_attr != None:
         doit = True
         ldap["group_member_attr"] = group_member_attr

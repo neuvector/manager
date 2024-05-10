@@ -1263,7 +1263,8 @@
       "SCANNED_IMAGES": "扫描的镜像数"
     },
     "message": {
-      "CONFIG_ERR": "获取扫描配置时发生错误"
+      "CONFIG_ERR": "获取扫描配置时发生错误",
+      "OS_ERR": "无OS"
     }
   },
   "registry": {
@@ -3271,7 +3272,8 @@
     "PASSWORD": "密码",
     "TOKEN": "令牌",
     "DIRECTORY_TYPE": "目录类型",
-    "BASE_DN": "Base DN",
+    "BASE_DN": "基本DN",
+    "GROUP_DN": "组DN",
     "DEFAULT_ROLE": "缺省角色",
     "NONE": "无",
     "GROUP_ADMIN": "角色映射",
@@ -3291,6 +3293,7 @@
     "CI_HINT": "添加 LDAP/AD 组，以映射到CI集成",
     "BASE_DN_HINT": "添加 LDAP/AD Root 节点，以搜索用户和用户组，例如： dc=securitysuite, dc=com",
     "BASE_DN_MESSAGE": "请输入正确的LDAP根节点.",
+    "GROUP_DN_HINT": "如果设置，将仅在此 DN（而不是基本 DN）下搜索组。",
     "HOST_REQUIRED": "请输入服务器IP或名称.",
     "PORT_REQUIRED": "请输入端口.",
     "TEST_CONNECTION": "测试连接",

@@ -7,6 +7,7 @@ import { SettingsService } from '@services/settings.service';
 import { MapConstant } from '@common/constants/map.constant';
 import { NotificationService } from '@services/notification.service';
 import { Router } from '@angular/router';
+import { ConfigHttpService } from '@common/api/config-http.service';
 
 @Component({
   selector: 'app-joining-modal',
@@ -18,17 +19,18 @@ export class JoiningModalComponent implements OnInit {
   public useProxy: String = '';
   public invalidToken: boolean = false;
   public isProcessing: boolean = false;
+  public isProxyEnabled: boolean = false;
 
   constructor(
     private clustersService: MultiClusterService,
     private settingsService: SettingsService,
     private translate: TranslateService,
+    private configHttpService: ConfigHttpService,
     private utils: UtilsService,
     public dialogRef: MatDialogRef<JoiningModalComponent>,
     private notificationService: NotificationService,
-    private router: Router
-  ) // @Inject(MAT_DIALOG_DATA) public data: DialogData
-  {
+    private router: Router // @Inject(MAT_DIALOG_DATA) public data: DialogData
+  ) {
     dialogRef.disableClose = true;
   }
 
@@ -43,15 +45,25 @@ export class JoiningModalComponent implements OnInit {
     };
     this.useProxy = '';
     this.getClusterName();
+    this.configHttpService.configV2$.subscribe(data => {
+      if (data?.proxy?.registry_https_proxy_status == true) {
+        this.isProxyEnabled = true;
+      } else {
+        this.isProxyEnabled = false;
+      }
+    });
   }
 
   getClusterName = () => {
-    this.settingsService.getConfig().subscribe(
+    this.configHttpService.configV2$.subscribe(
       data => {
-        this.cluster.name = data.misc.cluster_name;
+        this.cluster.name = data?.misc.cluster_name;
       },
       error => {
-        this.notificationService.openError(error.error, this.translate.instant("multiCluster.messages.get_name_failure"));
+        this.notificationService.openError(
+          error.error,
+          this.translate.instant('multiCluster.messages.get_name_failure')
+        );
       }
     );
   };
@@ -62,13 +74,13 @@ export class JoiningModalComponent implements OnInit {
 
   parseToken = () => {
     try {
-      if(this.cluster.token){
-        if(this.cluster.token.length % 4 == 0 ){
+      if (this.cluster.token) {
+        if (this.cluster.token.length % 4 == 0) {
           let decodedStr = JSON.parse(atob(this.cluster.token));
           this.cluster.master_host = decodedStr['s'];
           this.cluster.master_port = decodedStr['p'];
           this.invalidToken = false;
-        }else{
+        } else {
           this.invalidToken = true;
         }
       }
@@ -76,6 +88,12 @@ export class JoiningModalComponent implements OnInit {
       this.invalidToken = true;
     }
   };
+
+  handleMousePaste() {
+    setTimeout(() => {
+      this.parseToken();
+    }, 0);
+  }
 
   onConfirm = () => {
     this.isProcessing = true;
@@ -91,7 +109,7 @@ export class JoiningModalComponent implements OnInit {
         this.dialogRef.close();
       },
       err => {
-        this.isProcessing  = false;
+        this.isProcessing = false;
         this.notificationService.openError(
           err.error,
           this.translate.instant('multiCluster.joining.failure')

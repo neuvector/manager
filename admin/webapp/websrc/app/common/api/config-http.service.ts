@@ -11,11 +11,19 @@ import {
   UsageReport,
 } from '@common/types';
 import { GlobalVariable } from '@common/variables/global.variable';
-import { Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { pluck, catchError } from 'rxjs/operators';
 
 @Injectable()
 export class ConfigHttpService {
+  private configV2ResponseSubject$ = new BehaviorSubject<
+    ConfigV2Response | undefined
+  >(undefined);
+  configV2$ = this.configV2ResponseSubject$.asObservable();
+  setConfigV2(configV2: ConfigV2Response): void {
+    this.configV2ResponseSubject$.next(configV2);
+  }
+
   getConfig(): Observable<ConfigV2Response> {
     return GlobalVariable.http
       .get<ConfigV2Response>(PathConstant.CONFIG_V2_URL)

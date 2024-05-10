@@ -11,10 +11,13 @@ import {
   tap,
 } from 'rxjs/operators';
 import { RegistriesService } from '@services/registries.service';
+import { FormControl } from '@angular/forms';
 
 export interface RegistryDetails {
   selectedRegistry: Summary;
-  repositories: RepoGetResponse;
+  isAllView: boolean;
+  repositories?: RepoGetResponse;
+  allScannedImagesSummary?: any;
 }
 
 @Injectable()
@@ -24,6 +27,7 @@ export class RegistriesCommunicationService {
   private selectedRegistrySubject$ = new BehaviorSubject<Summary | undefined>(
     undefined
   );
+  detailFilter: FormControl;
   selectedRegistry$: Observable<Summary | undefined> =
     this.selectedRegistrySubject$.asObservable();
   private refreshingDetailsSubject$ = new BehaviorSubject<boolean>(false);
@@ -33,14 +37,27 @@ export class RegistriesCommunicationService {
       filter(summary => summary !== undefined),
       // distinctUntilChanged(),
       switchMap(summary =>
-        this.registriesService.getRepo(summary!.name).pipe(
-          map(repositories => ({ selectedRegistry: summary, repositories })),
-          finalize(() => {
-            if (this.refreshingDetailsSubject$.value) {
-              this.refreshingDetailsSubject$.next(false);
-            }
-          })
-        )
+        {
+          if (!!summary!.isAllView) {
+            return this.registriesService.getAllScannedImagesSummary().pipe(
+              map(allScannedImagesSummary => ({ selectedRegistry: summary, isAllView: true, allScannedImagesSummary })),
+              finalize(() => {
+                if (this.refreshingDetailsSubject$.value) {
+                  this.refreshingDetailsSubject$.next(false);
+                }
+              })
+            );
+          } else {
+            return this.registriesService.getRepo(summary!.name).pipe(
+              map(repositories => ({ selectedRegistry: summary, isAllView: false, repositories })),
+              finalize(() => {
+                if (this.refreshingDetailsSubject$.value) {
+                  this.refreshingDetailsSubject$.next(false);
+                }
+              })
+            );
+          }
+        }
       )
     )
     .pipe() as Observable<RegistryDetails>;

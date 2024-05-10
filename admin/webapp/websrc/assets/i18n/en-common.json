@@ -1302,6 +1302,7 @@
     "SIG_VERIFIERS": "Sigstore Verifiers",
     "SIG_VERIFIERS_HINT": "The image was scanned with listed sigstore verifiers",
     "SIG_VERIFICATION_TIMESTAMP": "Verified at",
+    "VIEW_ALL_IMAGES": "View all scanned images",
     "TIP": {
       "EDIT": "Edit Registry",
       "DELETE": "Remove Registry",

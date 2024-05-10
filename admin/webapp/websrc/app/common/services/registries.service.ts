@@ -12,8 +12,15 @@ import {
   RepoGetResponse,
   RegistryConfig,
   RegistryConfigV2,
+  VulnerabilitiesQueryData,
+  ImageQueryOrderByColumnOption,
+  OrderByOption,
+  AllScannedImages,
 } from '@common/types';
 import { HttpHeaders } from '@angular/common/http';
+import { MapConstant } from '@common/constants/map.constant';
+import { mergeMap, map } from 'rxjs/operators';
+import { GridApi, SortModelItem } from 'ag-grid-community';
 
 @Injectable()
 export class RegistriesService {
@@ -193,5 +200,63 @@ export class RegistriesService {
         ibm_cloud_account: config.ibm_cloud_account,
       },
     };
+  }
+
+  getAllScannedImagesSummary() {
+    return GlobalVariable.http.post<VulnerabilitiesQueryData>(
+      PathConstant.SCANNED_ASSETS_URL,
+      {
+        type: 'image'
+      }
+    ).pipe(
+      map(
+        res => {
+          return {
+            queryToken: res.query_token,
+            summary: res.summary,
+            totalRecords: res.total_records
+          }
+        }
+      )
+    );
+  }
+
+  getAllScannedImages(
+    token: string,
+    start: number,
+    row: number,
+    sortModel: SortModelItem[],
+    filterModel: any
+  ) {
+    let params: {
+      token: string,
+      start: number,
+      row: number,
+      orderbyColumn?: string,
+      orderby?: string,
+      qf?: string
+    } = {
+      token,
+      start,
+      row,
+    };
+    if (sortModel.length)
+      params = {
+        ...params,
+        orderbyColumn: sortModel![0].colId,
+        orderby: sortModel![0].sort,
+      };
+    if ('-' in filterModel) {
+      params = {
+        ...params,
+        qf: filterModel['-'].filter
+      };
+    }
+    return GlobalVariable.http.get<AllScannedImages>(
+      PathConstant.SCANNED_ASSETS_URL,
+      {
+        params
+      }
+    ).pipe();
   }
 }

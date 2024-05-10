@@ -119,6 +119,7 @@ export interface Summary {
   username: string;
   ignore_proxy: boolean;
   use_proxy: boolean;
+  isAllView?: boolean;
 }
 
 export interface RegistryGetResponse {
@@ -157,6 +158,9 @@ export interface Image {
   size: number;
   status: string;
   tag: string;
+  id?: string;
+  repo_name?: string;
+  repo_url?: string;
 }
 
 export interface RepoGetResponse {
@@ -274,4 +278,10 @@ export interface EntryPostBody {
 export interface SignatureData {
   verification_timestamp: string;
   verifiers: string[];
+}
+
+export interface AllScannedImages {
+  data: Image[];
+  type: string;
+  qf_matched_records: number;
 }

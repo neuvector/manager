@@ -80,6 +80,29 @@ export class MapConstant {
     Critical: 7,
   };
 
+  public static INIT_VUL_ADV_FILTER = {
+    last_modified_timestamp: undefined,
+    last_modified_timestamp_option: 'custom',
+    publishedType: 'before',
+    publishedTime: undefined,
+    packageType: 'all',
+    severityType: 'all',
+    scoreType: 'v3',
+    scoreV3: [0, 10],
+    scoreV2: [0, 10],
+    matchTypeService: 'equals',
+    serviceName: '',
+    matchTypeNs: 'equals',
+    selectedDomains: [],
+    matchTypeImage: 'equals',
+    imageName: '',
+    matchTypeNode: 'equals',
+    nodeName: '',
+    matchTypeContainer: 'equals',
+    containerName: '',
+    viewType: 'all',
+  };
+
   public static PDF_TEXT_COLOR = {
     IMAGE: '#76A4B9',
     CONTAINER: '#1597E4',
@@ -94,6 +117,7 @@ export class MapConstant {
     AUDIT_LOGS: 1000,
     NETWORK_RULES: 3000,
     FED_NETWORK_RULES: 3000,
+    IMAGES: 50,
   };
 
   public static iconMap = {

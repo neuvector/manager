@@ -29,6 +29,7 @@ import { MapConstant } from '@common/constants/map.constant';
 import { NotificationService } from '@services/notification.service';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { AuthUtilsService } from '@common/utils/auth.utils';
+import { catchError } from 'rxjs/operators';
 import { ConfigHttpService } from '@common/api/config-http.service';
 
 @Component({
@@ -41,6 +42,7 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
   @Input() rowData!: Summary[];
   @Input() gridHeight!: number;
   @Input() linkedRegistry: string;
+  error: unknown;
   filtered: boolean = false;
   filteredCount!: number;
   gridOptions!: GridOptions;
@@ -48,9 +50,25 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
   columnDefs: ColDef[] = [
     {
       field: 'name',
+      cellRenderer: params => {
+        if(params.data && params.value) {
+          if (!!params.data.isAllView) {
+            return `<span class="text-info">${params.value}</span>`;
+          }
+          return params.value
+        }
+        return '';
+      },
       sortable: true,
       resizable: true,
-      headerValueGetter: () => this.translate.instant('scan.gridHeader.NAME'),
+      colSpan: function (params) {
+        if (params.data && !!params.data.isAllView) {
+          return 10;
+        }
+        return 1;
+      },
+      headerValueGetter: () =>
+        this.translate.instant('scan.gridHeader.NAME')
     },
     {
       field: 'registry',
@@ -190,10 +208,13 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
   }
 
   onSelectionChanged(params: GridReadyEvent): void {
-    if (params.api.getSelectedNodes().length > 0)
+    if (params.api.getSelectedNodes().length > 0) {
+      console.log(params.api.getSelectedNodes()[0].data)
       this.registriesCommunicationService.setSelectedRegistry(
         params.api.getSelectedNodes()[0].data
       );
+      this.registriesCommunicationService.detailFilter.setValue('');
+    }
     this.cd.markForCheck();
   }
 

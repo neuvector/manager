@@ -6,6 +6,7 @@ import {
 } from '@common/types';
 import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
+import { MapConstant } from '@common/constants/map.constant';
 
 @Injectable()
 export class VulnerabilitiesFilterService {
@@ -297,28 +298,7 @@ export class VulnerabilitiesFilterService {
   }
 
   initVulQuery(): VulnerabilityQuery {
-    return {
-      last_modified_timestamp: undefined,
-      last_modified_timestamp_option: 'custom',
-      publishedType: 'before',
-      publishedTime: undefined,
-      packageType: 'all',
-      severityType: 'all',
-      scoreType: 'v3',
-      scoreV3: [0, 10],
-      scoreV2: [0, 10],
-      matchTypeService: 'equals',
-      serviceName: '',
-      matchTypeNs: 'equals',
-      selectedDomains: [],
-      matchTypeImage: 'equals',
-      imageName: '',
-      matchTypeNode: 'equals',
-      nodeName: '',
-      matchTypeContainer: 'equals',
-      containerName: '',
-      viewType: 'all',
-    };
+    return MapConstant.INIT_VUL_ADV_FILTER as VulnerabilityQuery;
   }
 
   initAdvFilter() {

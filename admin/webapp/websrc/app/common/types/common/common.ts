@@ -36,6 +36,13 @@ export type VulQueryOrderByColumnOption =
   | 'published_timestamp'
   | 'impact';
 
+export type ImageQueryOrderByColumnOption = 'repository'
+  | 'imageid'
+  | 'createdat'
+  | 'os'
+  | 'size'
+  | 'scannedat'
+
 export type OrderByOption = 'desc' | 'asc';
 
 export type LastModifiedDateOption =

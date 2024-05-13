@@ -198,11 +198,18 @@
     "SHOW_DETAILS": "显示详细内容",
     "FILTER": "过滤器",
     "MATCH": "匹配",
-    "MANUAL": "手动的"
+    "MANUAL": "手动的",
+    "UNUSED": "未使用资产",
+    "PROTECTED": "受保护资产",
+    "UNPROTECTED": "未受保护资产",
+    "ASSET_TYPE": "资产类型",
+    "ASSET_STATUS": "资产状态",
+    "SAMPLE_LABEL": "标签实例"
   },
   "logout": {
-    "SIGN_OUT": "已经登出了",
-    "SIGN_OUT_DESC": "您可以关闭此浏览器窗口, 然后回到Rancher."
+    "SIGN_OUT": "已登出了",
+    "SIGN_OUT_DESC": "您可以关闭此浏览器窗口, 然后回到Rancher.",
+    "GO_TO_LOGIN": "返回登陆页面"
   },
   "login": {
     "SIGN_IN": "登录",
@@ -348,6 +355,7 @@
         "TOP_VIOLATIONS": "网络违规行为",
         "TOP_VULNERABLE_CONTAINERS": "Pod安全漏洞评估",
         "TOP_VULNERABLE_NODES": "主机安全漏洞评估",
+        "TOP_VULNERABLE_ASSETS": "资产安全漏洞评估",
         "TOP_INCIDENTS_CONTAINERS": "Pod内恶意行为评估",
         "TOP_INCIDENTS_NODES": "主机内恶意行为评估",
         "TOP_VULNERABILITY": "安全漏洞评估",
@@ -1146,6 +1154,7 @@
     "UNPROTECTED_NODE": "未保护的主机",
     "PROTECTED_CONTAINER": "被保护的容器",
     "LAST_MODIFIED": "上一次更改",
+    "WITHOUT_APPENDIX": "不打印附表",
     "PUBLISHED": "发布时间",
     "PUBLISHED_TYPE": "发布类型",
     "WITH_FIX": "修复",
@@ -1153,11 +1162,11 @@
     "INVALID_DATE": "请输入有效的日期",
     "INVALID_DATE_RANGE": "请输入有效的日期范围",
     "CONDITION_HINT": "样本: 对于Namespace用redis-pod.demo,nv.nvlab:node去匹配matchredis-pod.demo或nv.nvlab:node服务, 其余同理",
-    "APPENDIX_LIMIT_HINT": "由于记录超过200条，报告不打印附件内容",
+    "APPENDIX_LIMIT_HINT": "由于记录超过200条，报告不打印附表内容",
     "MAX_REPORT_ROW_HINT": "报告打印前500条记录",
     "MAX_REPORT_ROW_HINT_2": "(按照最终修改日期时间排序)",
-    "MAX_REPORT_ROW_HINT_3": "报告打印前200个主机、Pod、镜像，和前500条漏洞",
-    "APPENDIX_LIMIT_HINT_4": "报告附件只打印前200条漏洞记录",
+    "MAX_REPORT_ROW_HINT_3": "报告打印前{{ noAppendixMaxRow }}个主机、Pod、镜像",
+    "APPENDIX_LIMIT_HINT_4": "报告附表只打印前{{ noAppendixMaxRow }}条漏洞记录",
     "report": {
       "TITLE": "漏洞报告 (漏洞视角)",
       "TITLE2": "漏洞报告 (资产视角)",
@@ -1199,7 +1208,7 @@
       },
       "others": {
         "DETAILS": "详细",
-        "DETAIL_SUB": "请参考附件的CVE详细内容",
+        "DETAIL_SUB": "请参考附表的CVE详细内容",
         "APPENDIX": "附录(全部影响清单)",
         "APPENDIX_DESC": "显示全部镜像，容器，主机和平台",
         "APPENDIX_PACKAGES": "附录(全部包清单)",
@@ -1254,7 +1263,8 @@
       "SCANNED_IMAGES": "扫描的镜像数"
     },
     "message": {
-      "CONFIG_ERR": "获取扫描配置时发生错误"
+      "CONFIG_ERR": "获取扫描配置时发生错误",
+      "OS_ERR": "无OS"
     }
   },
   "registry": {
@@ -1274,7 +1284,7 @@
     "SONATYPE_URL_HINT": "样本: http://<10.1.7.121:8082>",
     "DOCKER_URL_HINT": "样本: https://registry.hub.docker.com/",
     "REDHAT_URL_HINT": "样本: https://registry.connect.redhat.com/",
-    "OPENSHIFT_URL_HINT": "样本: OpenShift 3.x - https://docker-registry.default.svc:5000, OpenShift 4.x - https://image-registry.openshift-image-registry.svc:5000",
+    "OPENSHIFT_URL_HINT": "样本: OpenShift 4.x - https://image-registry.openshift-image-registry.svc:5000",
     "GOOGLE_URL_HINT": "样本: https://gcr.io",
     "REPO_HINT": "样本: https://registry.hub.docker.com/ https://registry.connect.redhat.com/ https://registry.access.redhat.com/ https://registry.access.redhat.com/",
     "GITLAB_URL_HINT": "样本: https://registry.example.com",
@@ -1292,6 +1302,7 @@
     "SIG_VERIFIERS": "签名信任根检测器",
     "SIG_VERIFIERS_HINT": "镜像和签名信任根检测器一起被扫描",
     "SIG_VERIFICATION_TIMESTAMP": "核查于",
+    "VIEW_ALL_IMAGES": "浏览全部扫描过的镜像",
     "TIP": {
       "EDIT": "编辑镜像库",
       "DELETE": "删除镜像库",
@@ -1318,6 +1329,7 @@
     "AWS_REGION": "地区",
     "AUTH_BY_UN": "通过用户名认证",
     "AUTH_BY_TOKEN": "通过令牌认证",
+    "USE_PROXY": "使用代理",
     "FOR_FED": "在集群全局中使用",
     "JFROG_MODE": "JFrog Docker访问方法",
     "SHOW_LAYERS": "显示镜像层",
@@ -1461,7 +1473,7 @@
       },
       "others": {
         "DETAILS": "详细",
-        "DETAIL_SUB": "请参考附件的合规详细内容",
+        "DETAIL_SUB": "请参考附表的合规详细内容",
         "APPENDIX": "附录(全部影响清单)",
         "APPENDIX_DESC": "显示全部镜像，容器，主机和平台",
         "APPENDIX2": "附录(全部合规清单)",
@@ -2753,8 +2765,8 @@
       "!=": "!=",
       "CONTAINS": "包含",
       "PREFIX": "前缀",
-      "REGEX": "符合",
-      "!REGEX": "不符合",
+      "REGEX": "匹配任意",
+      "!REGEX": "不匹配任何",
       "===": "是",
       "!===": "不是",
       "<": "<",
@@ -2778,6 +2790,8 @@
       "!REGEXCONTAINSANY_SINGLE": "不匹配任何",
       "REGEXCONTAINSANY": "匹配任意",
       "!REGEXCONTAINSANY": "不匹配任何",
+      "REGEX_SINGLE": "匹配任意",
+      "!REGEX_SINGLE": "不匹配任何",
       "text": {
         "<=": "少于",
         ">=": "多于"
@@ -2973,7 +2987,7 @@
     "DESC": "定制系统设置",
     "NOTIFICATIONS": "通知",
     "SYSLOG": "系统日志",
-    "EVENT_REPORT_LOGGING": "输出事件和报告到日志",
+    "EVENT_REPORT_LOGGING": "将通知写入 Controller Pod 日志",
     "WEBHOOK": "网络挂接",
     "CLUSTER": "集群",
     "CLUSTER_COMMENT": "用于在通知里识别集群",
@@ -3138,9 +3152,9 @@
         "comment_hint": "",
         "enabled": "启用",
         "owner": "所有者",
-        "owner_hint": "从 GitHub URL 获取所有者: \"https://github.com/owner/repository\"",
+        "owner_hint": "存储库所有者的用户名 (例如: \"https://github.com/john_doe/my-repo\")中的\"john_doe\" ",
         "repository_name": "存储库名称",
-        "repository_name_hint": "从 GitHub URL 获取存储库: \"https://github.com/owner/repository\"",
+        "repository_name_hint": "存储库名称 (例如: \"https://github.com/john_doe/my-repo\"中的\"my-repo\")",
         "repository_branch": "存储库分支",
         "repository_branch_hint": "存储库中包含 CRD 文件的特定分支。 默认分支是 'main'.",
         "personal_access_token": "个人访问令牌",
@@ -3154,6 +3168,18 @@
     "directory_type": {
       "OPEN_LDAP": "OpenLDAP",
       "MS_AD": "微软活动目录"
+    },
+    "category": {
+      "label": {
+        "policy": "策略配置",
+        "notification": "通知配置",
+        "general": "通用配置"
+      },
+      "description": {
+        "policy": "配置策略相关设置",
+        "notification": "配置通知相关设置",
+        "general": "配置通用设置"
+      }
     },
     "message": {
       "IP_REQUIRED": "您必须指定IP.",
@@ -3246,7 +3272,8 @@
     "PASSWORD": "密码",
     "TOKEN": "令牌",
     "DIRECTORY_TYPE": "目录类型",
-    "BASE_DN": "Base DN",
+    "BASE_DN": "基本DN",
+    "GROUP_DN": "组DN",
     "DEFAULT_ROLE": "缺省角色",
     "NONE": "无",
     "GROUP_ADMIN": "角色映射",
@@ -3266,6 +3293,7 @@
     "CI_HINT": "添加 LDAP/AD 组，以映射到CI集成",
     "BASE_DN_HINT": "添加 LDAP/AD Root 节点，以搜索用户和用户组，例如： dc=securitysuite, dc=com",
     "BASE_DN_MESSAGE": "请输入正确的LDAP根节点.",
+    "GROUP_DN_HINT": "如果设置，将仅在此 DN（而不是基本 DN）下搜索组。",
     "HOST_REQUIRED": "请输入服务器IP或名称.",
     "PORT_REQUIRED": "请输入端口.",
     "TEST_CONNECTION": "测试连接",
@@ -3329,6 +3357,7 @@
   "signatures": {
     "PRIVATE": "私有",
     "PUBLIC": "共有",
+    "Rootless_keypairs_only": "仅限无根密钥对",
     "gridHeader": {
       "NAME": "名称",
       "SIG_NAME": "签名信任根名称",

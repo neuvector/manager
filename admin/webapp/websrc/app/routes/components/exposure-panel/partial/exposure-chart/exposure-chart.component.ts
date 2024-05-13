@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { HierarchicalExposure, ExposedContainer } from '@common/types';
 import { TranslateService } from '@ngx-translate/core';
+import { GlobalConstant } from '@common/constants/global.constant';
 
 @Component({
   selector: 'app-exposure-chart',
@@ -33,16 +34,16 @@ export class ExposureChartComponent implements OnInit {
     });
     this.chartNumbers = {
       ingress: new Map([
-        ['allow', 0],
-        ['deny', 0],
-        ['violate', 0],
-        ['threat', 0]
+        [GlobalConstant.POLICY_ACTION.ALLOW, 0],
+        [GlobalConstant.POLICY_ACTION.DENY, 0],
+        [GlobalConstant.POLICY_ACTION.VIOLATE, 0],
+        [GlobalConstant.POLICY_ACTION.THREAT, 0]
       ]),
       egress: new Map([
-        ['allow', 0],
-        ['deny', 0],
-        ['violate', 0],
-        ['threat', 0]
+        [GlobalConstant.POLICY_ACTION.ALLOW, 0],
+        [GlobalConstant.POLICY_ACTION.DENY, 0],
+        [GlobalConstant.POLICY_ACTION.VIOLATE, 0],
+        [GlobalConstant.POLICY_ACTION.THREAT, 0]
       ])
     };
     this.accumulateData(ingressContainers, 'ingress');

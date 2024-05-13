@@ -36,6 +36,20 @@ let CALENDAR: any = {
   SECONDS: 'seconds',
 };
 
+export const FEED_RATING_SORT_ORDER = [
+  'untriaged',
+  'not yet assigned',
+  'end-of-life',
+  'negligible',
+  'unimportant',
+  'low',
+  'medium',
+  'moderate',
+  'high',
+  'important',
+  'critical',
+];
+
 export const uuid = () => uuidv4();
 
 export function toBoolean(value: string) {
@@ -54,7 +68,7 @@ export function arrayToCsv(array: any, title: string = '') {
   let line: string = '';
   let result: string = '';
   let columns: string[] = [];
-  if(!Array.isArray(array) || array.length === 0) return result;
+  if (!Array.isArray(array) || array.length === 0) return result;
   if (title.length > 0) {
     result += title + '\r\n';
   }
@@ -673,7 +687,7 @@ export const parseExposureHierarchicalData = (
       bytes: 0,
       sessions: 0,
       severity: '',
-      policy_action: '',
+      policy_action: v[0].policy_action,
       event_type: '',
       protocols: '',
       applications: Array.from(applicationSet),
@@ -684,9 +698,10 @@ export const parseExposureHierarchicalData = (
         service: '',
       })) as any,
     };
-    hierarchicalExposures.push(
-      JSON.parse(JSON.stringify(hierarchicalExposure))
-    );
+    if (hierarchicalExposure.policy_action !== GlobalConstant.POLICY_ACTION.OPEN)
+      hierarchicalExposures.push(
+        JSON.parse(JSON.stringify(hierarchicalExposure))
+      );
   });
   return hierarchicalExposures;
 };
@@ -696,10 +711,19 @@ const summarizeEntries = exposedPods => {
   exposedPods.forEach(expsosedPod => {
     expsosedPod.entries.forEach(entry => {
       if (entryMap[entry.ip]) {
-        entryMap[entry.ip].applications = accumulateProtocols(
-          entryMap[entry.ip].applications,
-          entry.application
-        );
+        if (entry.application) {
+          entryMap[entry.ip].applications = accumulateProtocols(
+            entryMap[entry.ip].applications,
+            entry.application
+          );
+        }
+        if (entry.port) {
+          entryMap[entry.ip].applications = accumulateProtocols(
+            entryMap[entry.ip].applications,
+            entry.port
+          );
+        }
+        entryMap[entry.ip].applications = entryMap[entry.ip].applications.filter(app => !!app);
         entryMap[entry.ip].sessions += entry.sessions;
         entryMap[entry.ip].policy_action = accumulateActionLevel(
           entryMap[entry.ip].action,

@@ -67,6 +67,7 @@ export interface GroupMappedRole {
 
 export interface LDAP {
   base_dn: string;
+  group_dn?: string;
   bind_dn: string;
   bind_password: string;
   default_role: string;

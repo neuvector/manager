@@ -37,6 +37,7 @@ export class PdfGenerationDialogComponent implements OnInit {
       },
       Validators.required
     ),
+    withoutAppendix: new FormControl(false),
   });
   saving$ = new Subject();
   get customDate(): Date {
@@ -44,6 +45,10 @@ export class PdfGenerationDialogComponent implements OnInit {
   }
   get selectedDateOption(): LastModifiedDateOption {
     return this.form.get('dateOption')?.value;
+  }
+
+  get withoutAppendix(): boolean {
+    return this.form.get('withoutAppendix')?.value;
   }
 
   constructor(
@@ -61,7 +66,10 @@ export class PdfGenerationDialogComponent implements OnInit {
   submit(): void {
     this.saving$.next(true);
     this.submitDate.emit(
-      this.getDate(this.selectedDateOption, this.customDate)
+      {
+        date: this.getDate(this.selectedDateOption, this.customDate),
+        withoutAppendix: this.withoutAppendix
+      }
     );
   }
 

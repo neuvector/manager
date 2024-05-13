@@ -32,6 +32,7 @@ import { NotificationService } from '@services/notification.service';
 import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { MapConstant } from '@common/constants/map.constant';
+import { ConfigHttpService } from '@common/api/config-http.service';
 
 @Component({
   selector: 'app-add-registry-dialog',
@@ -49,6 +50,7 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
       isFedAdmin:
         GlobalVariable.user.token.role === MapConstant.FED_ROLES.FEDADMIN,
       isMaster: GlobalVariable.isMaster,
+      isProxyEnabled: false,
     },
   };
   submittingForm = false;
@@ -63,7 +65,8 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
     public data: { isEdit: boolean; editable: boolean; config: RegistryConfig },
     private registriesService: RegistriesService,
     private registriesCommunicationService: RegistriesCommunicationService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private configHttpService: ConfigHttpService
   ) {}
 
   submit(): void {
@@ -72,8 +75,14 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
       let body!: RegistryPostBody;
       const schedule: ScanSchedule = { schedule: 'manual', interval: 0 };
       let gcr_key: GCRKey | undefined;
-      const { auto_scan, periodic_scan, interval, json_key, ...formValue } =
-        this.form.value;
+      const {
+        auto_scan,
+        periodic_scan,
+        interval,
+        aws_key,
+        json_key,
+        ...formValue
+      } = this.form.value;
       if (formValue.isFed) {
         formValue.name = 'fed.' + formValue.name;
       }
@@ -85,7 +94,11 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
         schedule.schedule = 'auto';
         schedule.interval = 300;
       }
-      if (json_key) {
+      if (aws_key && Object.keys(aws_key).length > 0) {
+        body = {
+          config: { ...formValue, schedule, aws_key },
+        };
+      } else if (json_key) {
         gcr_key = {
           json_key,
         };
@@ -109,6 +122,15 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
           body.config.password !== this.maskFieldWhenEdit
             ? body.config.password
             : undefined;
+        if (
+          body.config.aws_key &&
+          body.config.aws_key.access_key_id === this.maskFieldWhenEdit &&
+          body.config.aws_key.secret_access_key === this.maskFieldWhenEdit
+        ) {
+          const { access_key_id, secret_access_key, ...aws_key } =
+            body.config.aws_key;
+          body.config.aws_key = aws_key as any;
+        }
         body.config.registry_type = this.model.registry_type;
         body.config.name = this.model.name;
         this.registriesService
@@ -166,8 +188,16 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit(): void {
+    this.configHttpService.configV2$.subscribe(response => {
+      if (
+        response?.proxy?.registry_http_proxy_status == true ||
+        response?.proxy?.registry_https_proxy_status == true
+      ) {
+        this.options.formState.isProxyEnabled = true;
+      }
+    });
     if (this.data.config) {
-      const { schedule, ...data } = this.data.config;
+      const { schedule, aws_key, ...data } = this.data.config;
       const interval =
         Object.keys(INTERVAL_STEP_VALUES).find(
           key => INTERVAL_STEP_VALUES[key].value === schedule.interval
@@ -184,12 +214,18 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
           break;
         }
       }
+      if (aws_key) {
+        aws_key.secret_access_key = this.maskFieldWhenEdit;
+        aws_key.access_key_id = this.maskFieldWhenEdit;
+      }
       this.model = {
         ...data,
         isEdit: this.data.isEdit,
         isRemote: GlobalVariable.isRemote,
         isFed: data.cfg_type === GlobalConstant.CFG_TYPE.FED,
         password: this.maskFieldWhenEdit,
+        awsRegistry: this.data.config.registry,
+        aws_key,
         auto_scan,
         periodic_scan,
         interval,

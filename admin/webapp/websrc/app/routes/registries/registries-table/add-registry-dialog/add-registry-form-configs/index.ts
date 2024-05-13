@@ -22,7 +22,7 @@ export const AddRegistryFieldConfig: FormlyFieldConfig[] = [
     fieldGroupClassName: 'row',
     fieldGroup: [
       {
-        className: 'col-12 col-md-9',
+        className: 'col-12 col-md-6',
         key: 'registry_type',
         type: FormlyComponents.SELECT,
         defaultValue: Registries.DOCKER_REGISTRY,
@@ -43,6 +43,24 @@ export const AddRegistryFieldConfig: FormlyFieldConfig[] = [
         },
         expressionProperties: {
           'templateOptions.disabled': 'model.isEdit',
+        },
+      },
+      {
+        className: 'col-12 col-md-3 mt-4',
+        key: 'use_proxy',
+        defaultValue: true,
+        type: FormlyComponents.TOGGLE,
+        templateOptions: {
+          label: 'registry.USE_PROXY',
+        },
+        hooks: {
+          onInit(field) {
+            const control = field?.formControl;
+            if (!field?.options?.formState.isProxyEnabled) {
+              control?.setValue(false);
+              control?.disable();
+            }
+          },
         },
       },
       {

@@ -22,16 +22,16 @@ export class VulnerabilitiesCsvService {
     let vulnerabilities4Csv = [];
 
     const listAssets = entryData => {
-      let imageList = entryData.images.map(image => image.display_name);
-      let workloadList = entryData.workloads.map(
+      let imageList = entryData.images ? entryData.images.map(image => image.display_name) : [];
+      let workloadList = entryData.workloads ? entryData.workloads.map(
         workload => workload.display_name
-      );
-      let serviceList = entryData.services;
-      let domainList = entryData.domains;
-      let nodeList = entryData.nodes.map(node => node.display_name);
-      let platformList = entryData.platforms.map(
+      ) : [];
+      let serviceList = entryData.services || [];
+      let domainList = entryData.domains || [];
+      let nodeList = entryData.nodes ? entryData.nodes.map(node => node.display_name) : [];
+      let platformList = entryData.platforms ? entryData.platforms.map(
         platform => platform.display_name
-      );
+      ) : [];
       let pv2fvList = Object.entries(entryData.packages).map(([k, v]) => {
         return `${k}:(${(v as any).reduce(
           (acc, curr) =>
@@ -112,13 +112,7 @@ export class VulnerabilitiesCsvService {
           vectors: i === 0 ? entryData.vectors : '',
           vectors_v3: i === 0 ? entryData.vectors_v3 : '',
           description: i === 0 ? entryData.description : '',
-          platforms:
-            i === 0
-              ? (entryData.platforms ?
-                  entryData.platforms
-                    .map(platform => platform.display_name)
-                    .join(' ') : '')
-              : '',
+          platforms: i === 0 ? entryData.platforms : '',
           nodes: i === 0 ? (entryData.nodes || '') : '',
           domains:
             entryData.domains ?
@@ -175,17 +169,18 @@ export class VulnerabilitiesCsvService {
       }
       return rows;
     };
-
-    if (cveEntry) {
-      vulnerabilities4Csv = vulnerabilities4Csv.concat(listAssets(cveEntry));
-    } else {
-      if (vulnerabilityList && vulnerabilityList.length > 0) {
-        vulnerabilityList.forEach(cve => {
-          let entryData = this.prepareEntryData(JSON.parse(JSON.stringify(cve)), 'vulnerability_view');
-          vulnerabilities4Csv = vulnerabilities4Csv.concat(
-            resolveExcelCellLimit(entryData)
-          );
-        });
+    if (typeof vulnerabilityList === 'object') {
+      if (Array.isArray(vulnerabilityList)) {
+        if (vulnerabilityList && vulnerabilityList.length > 0) {
+          vulnerabilityList.forEach(cve => {
+            let entryData = this.prepareEntryData(JSON.parse(JSON.stringify(cve)), 'vulnerability_view');
+            vulnerabilities4Csv = vulnerabilities4Csv.concat(
+              resolveExcelCellLimit(entryData)
+            );
+          });
+        }
+      } else {
+        vulnerabilities4Csv = vulnerabilities4Csv.concat(listAssets(vulnerabilityList));
       }
     }
 
@@ -284,8 +279,8 @@ export class VulnerabilitiesCsvService {
   private preparePlatformsData = (platforms) => {
     return platforms.map(platform => {
       return {
-        'Name': platform.platform,
-        'Version': platform.kube_version,
+        'Name': platform.name,
+        'Version': platform.version,
         'Base OS': platform.base_os,
         'High': platform.high,
         'Medium': platform.medium,
@@ -403,6 +398,9 @@ export class VulnerabilitiesCsvService {
       'MMM dd, y HH:mm:ss'
     );
     delete cve.package_versions;
+    delete cve.packages;
+    delete cve.published_timestamp;
+    delete cve.last_modified_timestamp;
     if (reportType === 'assets_view') {
       delete cve.workloads;
       delete cve.nodes;

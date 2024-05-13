@@ -88,8 +88,7 @@ export const SyslogLevelField = {
     items: SyslogLevels,
   },
   expressionProperties: {
-    'templateOptions.disabled':
-      '!model.syslog.syslog_status || !formState.permissions.isSyslogAuthorized',
+    'templateOptions.disabled': '!formState.permissions.isSyslogAuthorized',
   },
 };
 

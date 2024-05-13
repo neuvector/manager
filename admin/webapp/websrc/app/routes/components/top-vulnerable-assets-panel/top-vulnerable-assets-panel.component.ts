@@ -12,6 +12,7 @@ export class TopVulnerableAssetsPanelComponent implements OnInit {
   instructions: Array<string>;
 
   @Input() assetType: string;
+  @Input() isScanOff: boolean = false;
 
   constructor(
     public dashboardDetailsService: DashboardDetailsService,

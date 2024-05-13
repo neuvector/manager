@@ -21,6 +21,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { DatePipe } from '@angular/common';
 import { RegistryDetailsTableStatusCellComponent } from './registry-details-table-status-cell/registry-details-table-status-cell.component';
 import { FormControl } from '@angular/forms';
+import { MapConstant } from '@common/constants/map.constant';
 
 @Component({
   selector: 'app-registry-details-table',
@@ -33,8 +34,8 @@ export class RegistryDetailsTableComponent implements OnInit, OnChanges {
   @Input() selectedRegistry!: Summary;
   @Input() rowData!: Image[];
   @Input() filter!: FormControl;
-  @Input() linkedImage: string;
-  @Input() linkedTag: string;
+  @Input() linkedImage!: string;
+  @Input() linkedTag!: string;
   gridOptions!: GridOptions;
   gridApi!: GridApi;
   columnDefs: ColDef[] = [
@@ -60,6 +61,8 @@ export class RegistryDetailsTableComponent implements OnInit, OnChanges {
     },
     {
       field: 'base_os',
+      valueFormatter: params =>
+        params.value || this.translate.instant('scan.message.OS_ERR'),
       headerValueGetter: () => this.translate.instant('scan.gridHeader.OS'),
     },
     {
@@ -113,6 +116,9 @@ export class RegistryDetailsTableComponent implements OnInit, OnChanges {
       rowData: this.rowData,
       columnDefs: this.columnDefs,
       rowSelection: 'single',
+      cacheBlockSize: MapConstant.PAGE.IMAGES * 3,
+      paginationPageSize: MapConstant.PAGE.IMAGES,
+      pagination: true,
       suppressDragLeaveHidesColumns: true,
       onGridReady: event => this.onGridReady(event),
       onRowClicked: event => this.onRowClicked(event),
@@ -204,16 +210,23 @@ export class RegistryDetailsTableComponent implements OnInit, OnChanges {
   }
 
   openImageDetailDialogByLinkedImage() {
-    let imageData = this.getImageData(this.rowData, this.linkedImage, this.linkedTag);
-    if (Array.isArray(imageData) && imageData[0] && imageData[0].status === 'finished') {
-      this.openDialog(
-        this.selectedRegistry,
-        imageData[0]
-      );
+    let imageData = this.getImageData(
+      this.rowData,
+      this.linkedImage,
+      this.linkedTag
+    );
+    if (
+      Array.isArray(imageData) &&
+      imageData[0] &&
+      imageData[0].status === 'finished'
+    ) {
+      this.openDialog(this.selectedRegistry, imageData[0]);
     }
   }
 
   getImageData(imageList, image, tag) {
-    return imageList.filter(_image => _image.repository === image && _image.tag === tag);
+    return imageList.filter(
+      _image => _image.repository === image && _image.tag === tag
+    );
   }
 }

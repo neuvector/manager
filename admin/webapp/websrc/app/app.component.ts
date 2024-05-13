@@ -96,7 +96,7 @@ export class AppComponent implements OnInit {
       GlobalVariable.gravatar = val;
     });
     if (this.win.location.hash !== '#/login' && this.win.location.hash !== '') {
-      this.authService.refreshToken().subscribe(
+      this.authService.refreshToken(this.win.location.href.includes(GlobalConstant.PROXY_VALUE)).subscribe(
         (userInfo: any) => {
           GlobalVariable.user = userInfo;
           GlobalVariable.nvToken = userInfo.token.token;
@@ -136,6 +136,14 @@ export class AppComponent implements OnInit {
   heartbeatWithDebounce = () => {
     return this.debounced(200, this.heartbeat)();
   };
+
+  @HostListener('window:beforeunload', ['$event'])
+  unloadHandler = (event: Event) => {
+    if (GlobalVariable.isSUSESSO) {
+      this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_EXTERNAL_REF);
+      this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_TIMEOUT);
+    }
+  }
 
   private debounced = (delay, fn) => {
     let timerId;

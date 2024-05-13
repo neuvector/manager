@@ -14,16 +14,19 @@ import { MultiClusterService } from '@services/multi-cluster.service';
 import { SignaturesService } from '@services/signatures.service';
 import { AddEditSignatureVerifiersModalComponent } from './partial/add-edit-signature-verifiers-modal/add-edit-signature-verifiers-modal.component';
 import { AddEditVerifiersModalComponent } from './partial/add-edit-verifiers-modal/add-edit-verifiers-modal.component';
-import { Signature, Verifier } from '@common/types/signatures/signature';
+import {
+  Signature,
+  SignaturePayload,
+  Verifier,
+} from '@common/types/signatures/signature';
 import { ImportFileModalComponent } from '@components/ui/import-file-modal/import-file-modal.component';
 
 @Component({
   selector: 'app-signature-verifiers',
   templateUrl: './signature-verifiers.component.html',
-  styleUrls: ['./signature-verifiers.component.scss']
+  styleUrls: ['./signature-verifiers.component.scss'],
 })
 export class SignatureVerifiersComponent implements OnInit {
-
   refreshing$ = new Subject();
   isWriteSignaturesAuthorized: boolean = false;
   gridOptions: any;
@@ -43,8 +46,7 @@ export class SignatureVerifiersComponent implements OnInit {
   private _switchClusterSubscription;
 
   get signatureCount() {
-    if(this.signatures?.length)
-      return this.signatures.length;
+    if (this.signatures?.length) return this.signatures.length;
     else return 0;
   }
 
@@ -99,9 +101,47 @@ export class SignatureVerifiersComponent implements OnInit {
       .pipe(finalize(() => this.refreshing$.next(false)))
       .subscribe(
         (response: any) => {
-          this.signatures = response.roots_of_trust || [];
-          this.filteredCount = this.signatures.length;
-          if (this.filteredCount === 0)
+          const signaturePayload: SignaturePayload[] =
+            response.roots_of_trust || [];
+          let signatureArray: Signature[] = [];
+          if (signaturePayload) {
+            for (const payload of signaturePayload) {
+              const signature: Signature = {
+                name: payload.name,
+                comment: payload.comment,
+                rekor_public_key: payload.rekor_public_key,
+                root_cert: payload.root_cert,
+                sct_public_key: payload.sct_public_key,
+                cfg_type: payload.cfg_type,
+                verifiers: payload.verifiers,
+                attribute: '',
+              };
+
+              //Set the attribute based on is_private and rootless_keypairs_only
+              if (!payload.is_private && !payload.rootless_keypairs_only) {
+                signature.attribute = GlobalConstant.SIGSTORE_ATTRIBUTE.PUBLIC;
+              } else if (
+                !payload.is_private &&
+                payload.rootless_keypairs_only
+              ) {
+                signature.attribute =
+                  GlobalConstant.SIGSTORE_ATTRIBUTE.ROOTLESS_KEYPAIR_ONLY;
+              } else if (
+                payload.is_private &&
+                !payload.rootless_keypairs_only
+              ) {
+                signature.attribute = GlobalConstant.SIGSTORE_ATTRIBUTE.PRIVATE;
+              }
+
+              signatureArray.push(signature);
+            }
+          }
+
+          this.signatures = signatureArray;
+
+          // this.filteredCount = this.signatures.length;
+          this.gridOptions4Signatures.api!.setRowData(this.signatures);
+          if (!this.signatures || this.signatures.length === 0)
             this.gridOptions4Verifiers.api!.setRowData([]);
           setTimeout(() => {
             let rowNode =
@@ -119,16 +159,19 @@ export class SignatureVerifiersComponent implements OnInit {
   };
 
   openAddEditSignatureModal = () => {
-    const addEditDialogRef = this.dialog.open(AddEditSignatureVerifiersModalComponent, {
-      width: '80%',
-      data: {
-        opType: GlobalConstant.MODAL_OP.ADD,
-        gridOptions4Signatures: this.gridOptions4Signatures,
-        index4Signature: this.index4Signature,
-        gridApi: this.gridOptions4Signatures.api!,
-        sigstores: this.signatures
-      },
-    });
+    const addEditDialogRef = this.dialog.open(
+      AddEditSignatureVerifiersModalComponent,
+      {
+        width: '80%',
+        data: {
+          opType: GlobalConstant.MODAL_OP.ADD,
+          gridOptions4Signatures: this.gridOptions4Signatures,
+          index4Signature: this.index4Signature,
+          gridApi: this.gridOptions4Signatures.api!,
+          sigstores: this.signatures,
+        },
+      }
+    );
   };
 
   openAddEditVerifierModal = () => {
@@ -140,13 +183,13 @@ export class SignatureVerifiersComponent implements OnInit {
         index4Verifier: this.index4Verifier,
         gridApi: this.gridOptions4Verifiers.api!,
         verifiers: this.verifiers,
-        rootOfTrustName: this.selectedSignature.name
+        rootOfTrustName: this.selectedSignature.name,
+        attribute: this.selectedSignature.attribute,
       },
     });
   };
 
-
-  openImportSigstoreModal = () =>{
+  openImportSigstoreModal = () => {
     const importDialogRef = this.dialog.open(ImportFileModalComponent, {
       data: {
         importUrl: PathConstant.SIGNATURE_IMPORT_URL,
@@ -164,7 +207,8 @@ export class SignatureVerifiersComponent implements OnInit {
   };
 
   private onSelectionChanged4Signature = () => {
-    this.selectedSignatures = this.gridOptions4Signatures.api!.getSelectedRows();
+    this.selectedSignatures =
+      this.gridOptions4Signatures.api!.getSelectedRows();
     this.selectedSignature = this.selectedSignatures[0];
     this.index4Signature = this.signatures.findIndex(
       signature => signature.name === this.selectedSignature.name
@@ -172,39 +216,36 @@ export class SignatureVerifiersComponent implements OnInit {
     this.getVeirfier(this.selectedSignature.name);
   };
   private onSelectionChanged4Verifier = () => {
-    this.selectedVerifier = this.gridOptions4Verifiers.api!.getSelectedRows()[0];
+    this.selectedVerifier =
+      this.gridOptions4Verifiers.api!.getSelectedRows()[0];
     this.index4Verifier = this.verifiers.findIndex(
       verifier => verifier.name === this.selectedVerifier.name
     );
   };
 
   private getVeirfier = (sigstoreName: string) => {
-    this.signaturesService
-      .getVerifiersData(sigstoreName)
-      .subscribe(
-        (response: any) => {
-          setTimeout(() => {
-            this.verifiers = response.verifiers || [];
-            this.gridOptions4Verifiers.api!.setRowData(this.verifiers);
-            if (this.verifiers.length > 0) {
-              let rowNode = this.gridOptions4Verifiers.api!.getDisplayedRowAtIndex(0);
-              rowNode!.setSelected(true);
-              this.gridOptions4Verifiers.api!.sizeColumnsToFit();
-            }
-          }, 200);
-        },
-        error => {}
-      );
-  };
-
-  private convertAPIResponse = (response: any): any[] => {
-    return Object.entries(response).map(
-      ([k, v]) => {
-        let keyDestructoredRes = k.split('/');
-        let name = keyDestructoredRes[keyDestructoredRes.length - 1];
-        return Object.assign(v, {name: name}) as any;
-      }
+    this.signaturesService.getVerifiersData(sigstoreName).subscribe(
+      (response: any) => {
+        setTimeout(() => {
+          this.verifiers = response.verifiers || [];
+          this.gridOptions4Verifiers.api!.setRowData(this.verifiers);
+          if (this.verifiers.length > 0) {
+            let rowNode =
+              this.gridOptions4Verifiers.api!.getDisplayedRowAtIndex(0);
+            rowNode!.setSelected(true);
+            this.gridOptions4Verifiers.api!.sizeColumnsToFit();
+          }
+        }, 200);
+      },
+      error => {}
     );
   };
 
+  private convertAPIResponse = (response: any): any[] => {
+    return Object.entries(response).map(([k, v]) => {
+      let keyDestructoredRes = k.split('/');
+      let name = keyDestructoredRes[keyDestructoredRes.length - 1];
+      return Object.assign(v, { name: name }) as any;
+    });
+  };
 }

@@ -42,6 +42,7 @@ import { AssetsHttpService } from '@common/api/assets-http.service';
 import { RisksHttpService } from '@common/api/risks-http.service';
 import { RisksViewReportModule } from '@components/security-risk-printable-report/risks-view-report/risks-view-report.module';
 import { AssetsViewReportModule } from '@components/security-risk-printable-report/assets-view-report/assets-view-report.module';
+import { RiskAssetsLegendModule } from '@components/ui/risk-assets-legend/risk-assets-legend.module';
 
 
 const routes: Routes = [{ path: '', component: ComplianceComponent }];
@@ -88,6 +89,7 @@ const routes: Routes = [{ path: '', component: ComplianceComponent }];
     ReactiveFormsModule,
     RisksViewReportModule,
     AssetsViewReportModule,
+    RiskAssetsLegendModule,
   ],
   providers: [
     ComplianceService,

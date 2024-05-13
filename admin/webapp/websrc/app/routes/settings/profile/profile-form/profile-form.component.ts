@@ -112,8 +112,7 @@ export class ProfileFormComponent implements OnInit {
     this.profileForm.disable();
   }
 
-  toggleEdit(): void {
-    this.isEdit = !this.isEdit;
+  updateEdit(): void {
     if (this.isEdit) {
       this.profileForm.controls['email'].enable();
       this.profileForm.controls['timeout'].enable();
@@ -123,6 +122,16 @@ export class ProfileFormComponent implements OnInit {
       this.profileForm.disable();
       this.refreshForm();
     }
+  }
+
+  toggleEdit(): void {
+    this.isEdit = !this.isEdit;
+    this.updateEdit();
+  }
+
+  cancelEdit(): void {
+    this.isEdit = false;
+    this.updateEdit();
   }
 
   submitForm(): void {

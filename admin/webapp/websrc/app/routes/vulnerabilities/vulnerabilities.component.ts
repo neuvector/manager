@@ -33,6 +33,7 @@ export class VulnerabilitiesComponent implements OnInit, OnDestroy {
   isMeetingReportLimit: boolean = false;
   isPrinting: boolean = false;
   isPrintingAssets: boolean = false;
+  withoutAppendix: boolean = false;
   statisticCharts: any = {
     node: null,
     image: null,
@@ -97,11 +98,69 @@ export class VulnerabilitiesComponent implements OnInit, OnDestroy {
   }
 
   downloadCsv() {
-    this.getVulnerabilitiesViewReportData(this.vulnerabilitiesService.activeToken, 0, this.exportVulnerabilitiesViewCsvFile);
+    const dialogRef = this.dialog.open(PdfGenerationDialogComponent, {
+      width: '550px',
+      data: {
+        pdf_name: this.tr.instant('scan.report.PDF_LINK'),
+        isPdf: false,
+      },
+    });
+    dialogRef.componentInstance.submitDate.subscribe(params => {
+      if (params.date) {
+        this.getVulnerabilitiesViewReportData(
+          this.vulnerabilitiesService.activeToken,
+          this.exportVulnerabilitiesViewCsvFile,
+          dialogRef,
+          {
+            lastModifiedTime: params.date.getTime() / 1000,
+            withoutAppendix: params.withoutAppendix
+          }
+        );
+      } else {
+        this.getVulnerabilitiesViewReportData(
+          this.vulnerabilitiesService.activeToken,
+          this.exportVulnerabilitiesViewCsvFile,
+          dialogRef,
+          {
+            lastModifiedTime: 0,
+            withoutAppendix: params.withoutAppendix
+          }
+        );
+      }
+    });
   }
 
   downloadAssetsCsv() {
-    this.getAssetsViewReportData(this.vulnerabilitiesService.activeToken, 0, this.exportAssetsViewCsvFile);
+    const dialogRef = this.dialog.open(PdfGenerationDialogComponent, {
+      width: '550px',
+      data: {
+        pdf_name: this.tr.instant('scan.report.PDF_LINK2'),
+        isPdf: false,
+      },
+    });
+    dialogRef.componentInstance.submitDate.subscribe(params => {
+      if (params.date) {
+        this.getAssetsViewReportData(
+          this.vulnerabilitiesService.activeToken,
+          this.exportAssetsViewCsvFile,
+          dialogRef,
+          {
+            lastModifiedTime: params.date.getTime() / 1000,
+            withoutAppendix: params.withoutAppendix
+          }
+        );
+      } else {
+        this.getAssetsViewReportData(
+          this.vulnerabilitiesService.activeToken,
+          this.exportAssetsViewCsvFile,
+          dialogRef,
+          {
+            lastModifiedTime: 0,
+            withoutAppendix: params.withoutAppendix
+          }
+        );
+      }
+    });
   }
 
   printVulnerabilityPDF = () => {
@@ -109,13 +168,30 @@ export class VulnerabilitiesComponent implements OnInit, OnDestroy {
       width: '550px',
       data: {
         pdf_name: this.tr.instant('scan.report.PDF_LINK'),
+        isPdf: true,
       },
     });
-    dialogRef.componentInstance.submitDate.subscribe(date => {
-      if (date) {
-        this.getVulnerabilitiesViewReportData(this.vulnerabilitiesService.activeToken, date.getTime() / 1000, this.exportVulnerabilitiesViewPdfFile, dialogRef);
+    dialogRef.componentInstance.submitDate.subscribe(params => {
+      if (params.date) {
+        this.getVulnerabilitiesViewReportData(
+          this.vulnerabilitiesService.activeToken,
+          this.exportVulnerabilitiesViewPdfFile,
+          dialogRef,
+          {
+            lastModifiedTime: params.date.getTime() / 1000,
+            withoutAppendix: params.withoutAppendix
+          }
+        );
       } else {
-        this.getVulnerabilitiesViewReportData(this.vulnerabilitiesService.activeToken, 0, this.exportVulnerabilitiesViewPdfFile, dialogRef);
+        this.getVulnerabilitiesViewReportData(
+          this.vulnerabilitiesService.activeToken,
+          this.exportVulnerabilitiesViewPdfFile,
+          dialogRef,
+          {
+            lastModifiedTime: 0,
+            withoutAppendix: params.withoutAppendix
+          }
+        );
       }
     });
   };
@@ -125,22 +201,51 @@ export class VulnerabilitiesComponent implements OnInit, OnDestroy {
       width: '550px',
       data: {
         pdf_name: this.tr.instant('scan.report.PDF_LINK2'),
+        isPdf: true,
       },
     });
-    dialogRef.componentInstance.submitDate.subscribe(date => {
-      if (date) {
-        this.getAssetsViewReportData(this.vulnerabilitiesService.activeToken, date.getTime() / 1000, this.exportAssetsViewPdfFile, dialogRef);
+    dialogRef.componentInstance.submitDate.subscribe(params => {
+      if (params.date) {
+        this.getAssetsViewReportData(
+          this.vulnerabilitiesService.activeToken,
+          this.exportAssetsViewPdfFile,
+          dialogRef,
+          {
+            lastModifiedTime: params.date.getTime() / 1000,
+            withoutAppendix: params.withoutAppendix
+          }
+        );
       } else {
-        this.getAssetsViewReportData(this.vulnerabilitiesService.activeToken, 0, this.exportAssetsViewPdfFile, dialogRef);
+        this.getAssetsViewReportData(
+          this.vulnerabilitiesService.activeToken,
+          this.exportAssetsViewPdfFile,
+          dialogRef,
+          {
+            lastModifiedTime: 0,
+            withoutAppendix: params.withoutAppendix
+          }
+        );
       }
     });
   };
 
-  private getVulnerabilitiesViewReportData = (queryToken: string, lastModifiedTime: number, cb: Function, dialogRef?) => {
-    this.vulnerabilitiesService.getVulnerabilitiesViewReportData(queryToken, lastModifiedTime)
+  private getVulnerabilitiesViewReportData = (queryToken: string, cb: Function, dialogRef, options) => {
+    this.withoutAppendix = options.withoutAppendix;
+    this.vulnerabilitiesService.getVulnerabilitiesViewReportData(queryToken, options.lastModifiedTime)
       .subscribe(
         (response: any) => {
           cb(response.data, dialogRef);
+        },
+        error => {}
+      );
+  };
+
+  private getAssetsViewReportData = (queryToken: string, cb: Function, dialogRef, options) => {
+    this.withoutAppendix = options.withoutAppendix;
+    this.vulnerabilitiesService.getAssetsViewReportData(queryToken, options.lastModifiedTime)
+      .subscribe(
+        (response: any) => {
+          cb(response, dialogRef);
         },
         error => {}
       );
@@ -168,16 +273,6 @@ export class VulnerabilitiesComponent implements OnInit, OnDestroy {
     }, 500);
   };
 
-  private getAssetsViewReportData = (queryToken: string, lastModifiedTime: number, cb: Function, dialogRef?) => {
-    this.vulnerabilitiesService.getAssetsViewReportData(queryToken, lastModifiedTime)
-      .subscribe(
-        (response: any) => {
-          cb(response, dialogRef);
-        },
-        error => {}
-      );
-  };
-
   private exportAssetsViewPdfFile = (data: any, dialogRef) => {
     console.log('Assets View data()PDF: ', data);
     this.masterGrids = [
@@ -198,13 +293,17 @@ export class VulnerabilitiesComponent implements OnInit, OnDestroy {
     }, 500);
   };
 
-  private exportVulnerabilitiesViewCsvFile = (data: any) => {
+  private exportVulnerabilitiesViewCsvFile = (data: any, dialogRef) => {
     console.log('Vulnerabilities View data(CSV): ', data);
+    dialogRef.componentInstance.saving$.next(false);
+    dialogRef.componentInstance.onNoClick();
     this.vulnerabilitiesCsvService.downloadCsv(data);
   };
 
-  private exportAssetsViewCsvFile = (data: any) => {
+  private exportAssetsViewCsvFile = (data: any, dialogRef) => {
     console.log('Assets View data(CSV): ', data);
+    dialogRef.componentInstance.saving$.next(false);
+    dialogRef.componentInstance.onNoClick();
     this.vulnerabilitiesCsvService.downloadAssetsViewCsv(data);
   };
 }

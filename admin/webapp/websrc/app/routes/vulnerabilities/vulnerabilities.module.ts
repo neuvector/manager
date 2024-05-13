@@ -6,7 +6,7 @@ import { VulnerabilityItemsTableComponent } from './vulnerability-items/vulnerab
 import { VulnerabilityItemsChartsComponent } from './vulnerability-items/vulnerability-items-charts/vulnerability-items-charts.component';
 import { VulnerabilityItemsDetailsComponent } from './vulnerability-items/vulnerability-items-details/vulnerability-items-details.component';
 import { VulnerabilityItemsTableFilterComponent } from './vulnerability-items/vulnerability-items-table/vulnerability-items-table-filter/vulnerability-items-table-filter.component';
-import { VulnerabilityItemsTableCsvCellComponent } from './vulnerability-items/vulnerability-items-table/vulnerability-items-table-csv-cell/vulnerability-items-table-csv-cell.component';
+import { VulnerabilityItemsTableActionCellComponent } from './vulnerability-items/vulnerability-items-table/vulnerability-items-table-action-cell/vulnerability-items-table-action-cell.component';
 import { VulnerabilityItemsTableImpactCellComponent } from './vulnerability-items/vulnerability-items-table/vulnerability-items-table-impact-cell/vulnerability-items-table-impact-cell.component';
 import { VulnerabilityItemsTableScoreCellComponent } from './vulnerability-items/vulnerability-items-table/vulnerability-items-table-score-cell/vulnerability-items-table-score-cell.component';
 import { VulnerabilityItemsTableSevertiyCellComponent } from './vulnerability-items/vulnerability-items-table/vulnerability-items-table-severtiy-cell/vulnerability-items-table-severtiy-cell.component';
@@ -30,6 +30,7 @@ import { AssetsViewReportModule } from '@components/security-risk-printable-repo
 import { NvCommonModule } from '@common/nvCommon.module';
 import { PdfGenerationDialogComponent } from './pdf-generation-dialog/pdf-generation-dialog.component';
 import { VulnerabilitiesGridModule } from '@components/vulnerabilities-grid/vulnerabilities-grid.module';
+import { RiskAssetsLegendModule } from '@components/ui/risk-assets-legend/risk-assets-legend.module';
 const routes: Routes = [{ path: '', component: VulnerabilitiesComponent }];
 
 @NgModule({
@@ -41,7 +42,7 @@ const routes: Routes = [{ path: '', component: VulnerabilitiesComponent }];
     VulnerabilityItemsChartsComponent,
     VulnerabilityItemsDetailsComponent,
     VulnerabilityItemsTableFilterComponent,
-    VulnerabilityItemsTableCsvCellComponent,
+    VulnerabilityItemsTableActionCellComponent,
     VulnerabilityItemsTableImpactCellComponent,
     VulnerabilityItemsTableScoreCellComponent,
     VulnerabilityItemsTableSevertiyCellComponent,
@@ -68,7 +69,8 @@ const routes: Routes = [{ path: '', component: VulnerabilitiesComponent }];
     QuickFilterModule,
     RisksViewReportModule,
     AssetsViewReportModule,
-    VulnerabilitiesGridModule
+    VulnerabilitiesGridModule,
+    RiskAssetsLegendModule,
   ],
 })
 export class VulnerabilitiesModule {}

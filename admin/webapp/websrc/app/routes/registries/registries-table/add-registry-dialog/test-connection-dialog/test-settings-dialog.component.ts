@@ -7,7 +7,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ErrorResponse, RegistryConfig } from '@common/types';
+import { ErrorResponse, RegistryConfig, RegistryConfigV2 } from '@common/types';
 import { AddRegistryDialogComponent } from '../add-registry-dialog.component';
 import { FormGroup } from '@angular/forms';
 import { cloneDeep } from 'lodash';
@@ -102,19 +102,26 @@ export class TestSettingsDialogComponent implements OnInit, OnDestroy {
   }
 
   testConnection(): void {
-    const config: RegistryConfig = {
+    const config: RegistryConfigV2 = {
       name: this.data.name,
       registry_type: this.data.registry_type,
-      filters: this.form.controls.filters.value,
-      username: this.data.username,
-      password: this.data.password,
-      jfrog_mode: this.data.jfrog_mode,
-      auth_token: this.data.auth_token,
-      auth_with_token: this.data.auth_with_token,
-      scan_layers: this.data.scan_layers,
-      schedule: this.data.schedule,
       registry: this.data.registry,
-      rescan_after_db_update: this.data.rescan_after_db_update,
+      filters: this.form.controls.filters.value,
+      auth: {
+        username: this.data.username,
+        password: this.data.password,
+        auth_token: this.data.auth_token,
+        auth_with_token: this.data.auth_with_token,
+      },
+      scan: {
+        rescan_after_db_update: this.data.rescan_after_db_update,
+        scan_layers: this.data.scan_layers,
+        schedule: this.data.schedule,
+        ignore_proxy: !this.data.use_proxy,
+      },
+      integrations: {
+        jfrog_mode: this.data.jfrog_mode,
+      },
     };
     this.gridData = [];
     this.gridApi.setRowData(this.gridData);

@@ -14,6 +14,7 @@ export class TopVulnerableAssetsChartComponent implements OnInit {
   @Input() highPriorityVulnerabilities: any;
   @Input() assetType: string;
   @Input() isReport: boolean = false;
+  @Input() isAutoScanOff: boolean = false;
   topVulnerableAssetsBarChartConfig: ChartConfiguration<'bar', number[], string>;
   noChartData: boolean = false;
 

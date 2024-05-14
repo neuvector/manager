@@ -51,7 +51,7 @@
     class="h-100 detail-tabs"
     [class]="
       maTabGroup.selectedIndex === 0
-        ? registryDetails.repositories?.images && registryDetails.repositories?.images!.length || registryDetails.allScannedImagesSummary!.total_records > 0
+        ? registryDetails.repositories?.images && registryDetails.repositories?.images!.length || registryDetails.allScannedImagesSummary && registryDetails.allScannedImagesSummary!.total_records > 0
           ? 'filter-icon-1'
           : 'filter-icon-0'
         : ''

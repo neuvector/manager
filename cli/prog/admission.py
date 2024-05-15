@@ -10,10 +10,12 @@ from prog import output
 
 CriteriaOpNotEqual = "!="
 CriteriaOpNotRegex = "!regex"
-CriteriaOpRegexNotContainsAny = "!regexContainsAny"
+CriteriaOpRegexNotContainsAny = "!regexContainsAnyEx"
 CriteriaOpContainsAll = "containsAll"
 CriteriaOpContainsAny = "containsAny"
-CriteriaOpRegexContainsAny = "regexContainsAny"
+CriteriaOpRegexContainsAny = "regexContainsAnyEx"
+CriteriaOpRegex_Deprecated = "regexContainsAny"
+CriteriaOpNotRegex_Deprecated = "!regexContainsAny"
 
 CriteriaOpContainsOtherThan = "containsOtherThan"
 CriteriaOpNotContainsAny = "notContainsAny"
@@ -107,14 +109,22 @@ NamesDisplay2 = {  # for criteria that has sub-criteria
     "resourceLimit": "Resource limit{v1}: {v2}",
 }
 
-OpsDisplay1 = {CriteriaOpContainsAny: 'is', CriteriaOpNotContainsAny: 'is not',
-               CriteriaOpContainsAll: CriteriaOpContainsAll, CriteriaOpContainsOtherThan: CriteriaOpContainsOtherThan,
-               CriteriaOpRegexContainsAny: 'matches any regex in', CriteriaOpRegexNotContainsAny: 'matches none regex in'}
-OpsDisplay2 = {CriteriaOpContainsAny: 'contains any in', CriteriaOpNotContainsAny: 'not contains any in',
-               CriteriaOpContainsAll: 'contains all in', CriteriaOpContainsOtherThan: 'contains value not in',
-               CriteriaOpRegexContainsAny: 'matches any regex in', CriteriaOpRegexNotContainsAny: 'matches none regex in'}
-userOpsDisplay = {CriteriaOpContainsAny: 'is one of', CriteriaOpNotContainsAny: 'is not one of',
-                  CriteriaOpRegexContainsAny: 'matches any regex in', CriteriaOpRegexNotContainsAny: 'matches none regex in'}
+OpsDisplay1 = {CriteriaOpContainsAny: 'is',
+               CriteriaOpNotContainsAny: 'is not',
+               CriteriaOpContainsAll: CriteriaOpContainsAll,
+               CriteriaOpContainsOtherThan: CriteriaOpContainsOtherThan,
+               CriteriaOpRegexContainsAny: 'matches any regex in',
+               CriteriaOpRegexNotContainsAny: 'matches none regex in'}
+OpsDisplay2 = {CriteriaOpContainsAny: 'contains any in',
+               CriteriaOpNotContainsAny: 'not contains any in',
+               CriteriaOpContainsAll: 'contains all in',
+               CriteriaOpContainsOtherThan: 'contains value not in',
+               CriteriaOpRegexContainsAny: 'matches any regex in',
+               CriteriaOpRegexNotContainsAny: 'matches none regex in'}
+userOpsDisplay = {CriteriaOpContainsAny: 'is one of',
+                  CriteriaOpNotContainsAny: 'is not one of',
+                  CriteriaOpRegex_Deprecated: 'matches regex',
+                  CriteriaOpNotRegex_Deprecated: 'does not match regex'}
 
 RiskyRoleDescriptions = {
     "risky_role_view_secret": "Service Account can listing secrets",
@@ -192,7 +202,7 @@ def show_admission_stats(data):
 def _get_criterion_op_value(c):
     opDisplay = c["op"]
     if c["op"] == CriteriaOpContainsAll or c["op"] == CriteriaOpContainsAny or c["op"] == CriteriaOpNotContainsAny or c["op"] == CriteriaOpRegexContainsAny or c["op"] == CriteriaOpRegexNotContainsAny or c["op"] == CriteriaOpContainsOtherThan:
-        if c["name"] == "user":
+        if c["name"] == "user" or c["name"] == "userGroups":
             opDisplay = userOpsDisplay[c["op"]]
         else:
             if SingleValueCrt[c["name"]] is True:
@@ -200,6 +210,9 @@ def _get_criterion_op_value(c):
             else:
                 opDisplay = OpsDisplay2[c["op"]]
         value = "{{{}}}".format(c["value"])
+    elif (c["name"] == "user" or c["name"] == "userGroups") and (c["op"] == CriteriaOpRegex_Deprecated or c["op"] == CriteriaOpNotRegex_Deprecated):
+        opDisplay = userOpsDisplay[c["op"]]
+        value = c["value"]
     elif c["op"] == "notExist":
         opDisplay = "doesn't exist"
         value = ""
@@ -252,7 +265,7 @@ def _list_admission_rule_display_format(rule):
                 continue
             positive = False
             for c in types[t]:
-                if c["op"] != CriteriaOpNotEqual and c["op"] != CriteriaOpNotRegex and c["op"] != CriteriaOpNotContainsAny and c["op"] != CriteriaOpRegexNotContainsAny:  
+                if c["op"] != CriteriaOpNotEqual and c["op"] != CriteriaOpNotRegex and c["op"] != CriteriaOpNotContainsAny and c["op"] != CriteriaOpNotRegex_Deprecated and c["op"] != CriteriaOpRegexNotContainsAny:
                     positive = True
                     break
             tc = ""

@@ -309,6 +309,7 @@
               </div>
             </div>
             <div class="text-warning" *ngIf="isPSSRestricted">{{ 'admissionControl.PSS_RESTRICT_HINT' | translate }}</div>
+            <div class="text-danger" *ngIf="isInvalidCriteriaComb()">{{ 'admissionControl.STORAGE_CLASS_NAME_COMB_ERROR' | translate }}</div>
           </div>
         </div>
         <!-- <div class="row">
@@ -379,7 +380,7 @@
         <div class="clearfix" *ngIf="data.opType !== modalOp.VIEW">
           <app-loading-button
             [appearance]="'mat-raised-button'"
-            [disabled]="addEditAdmissionRuleForm.invalid || !isContainersValid"
+            [disabled]="addEditAdmissionRuleForm.invalid || !isContainersValid || isInvalidCriteriaComb()"
             [color]="'primary'"
             [loading]="submittingUpdate"
             [text]="(data.opType === modalOp.EDIT ? 'policy.editPolicy.UPDATE' : 'policy.addPolicy.ADD') | translate"

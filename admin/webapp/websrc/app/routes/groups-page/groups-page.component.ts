@@ -22,6 +22,7 @@ export class GroupsPageComponent implements OnInit {
   refreshing$ = new Subject();
   public isShowingSystemGroups: boolean = true;
   public netServiceStatus: boolean;
+  public netServicePolicyModeValue!: string;
   public netServicePolicyMode!: string;
   public linkedGroup: string = '';
   @ViewChild(GroupsComponent) groupsView!: GroupsComponent;
@@ -104,6 +105,7 @@ export class GroupsPageComponent implements OnInit {
     this.groupsService.getConfigData().subscribe(
       response => {
         this.netServiceStatus = response.net_svc.net_service_status;
+        this.netServicePolicyModeValue = response.net_svc.net_service_policy_mode.toLowerCase();
         this.netServicePolicyMode = this.translate.instant(
           `enum.${response.net_svc.net_service_policy_mode.toUpperCase()}`
         );

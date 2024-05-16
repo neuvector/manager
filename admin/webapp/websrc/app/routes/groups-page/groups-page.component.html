@@ -17,8 +17,9 @@
               'text-muted': !netServiceStatus,
               'text-success': netServiceStatus
             }">
-            {{ netServiceStatus ? 'ON' : 'OFF' }}
+            {{ netServiceStatus ? '' : 'OFF' }}
           </span>
+          <div *ngIf="netServiceStatus" class="mx-2 type-label policy_mode {{ netServicePolicyModeValue }}">{{ netServicePolicyMode }}</div>
           <em
             class="fa fa-info-circle text-info"
             [matTooltip]="

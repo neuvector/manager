@@ -1676,7 +1676,9 @@
       "TAG": "Tag",
       "RESPONSE_RULE_ID": "Response Rule ID",
       "OCCURRENCES": "Count",
-      "DURATION": "Duration"
+      "DURATION": "Duration",
+      "PVC_NAME": "PVC Name",
+      "PVC_STORAGECLASS_NAME": "PVC StorageClass Name"
     },
     "COUNT_POSTFIX": "risk reports found",
     "LEVEL": "Level",

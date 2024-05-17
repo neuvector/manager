@@ -1676,7 +1676,9 @@
       "TAG": "标签",
       "RESPONSE_RULE_ID": "应对规则ID",
       "OCCURRENCES": "数量",
-      "DURATION": "时间范围"
+      "DURATION": "时间范围",
+      "PVC_NAME": "PVC名称",
+      "PVC_STORAGECLASS_NAME": "PVC仓库类名称"
     },
     "COUNT_POSTFIX": "条审计日志",
     "LEVEL": "级别",

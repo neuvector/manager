@@ -20,6 +20,7 @@ import { ExposedServicepodGridServicepodCellComponent } from '@components/expose
 import { ExternalHostCellComponent } from '@components/exposed-servicepod-conv-grid/external-host-cell/external-host-cell.component';
 import { ConversationEntryListComponent } from '@components/exposed-servicepod-conv-grid/conversation-entry-list/conversation-entry-list.component';
 import { uuid } from '@common/utils/common.utils';
+import { RegistryDetailsVulnerabilitiesCellComponent } from '@routes/registries/registry-details/registry-details-table/registry-details-vulnerabilities-cell/registry-details-vulnerabilities-cell.component';
 
 @Component({
   selector: 'app-exposed-servicepod-conv-grid',
@@ -73,6 +74,17 @@ export class ExposedServicepodConvGridComponent implements OnInit {
           return params.value.length;
         },
         width: 70,
+      },
+      {
+        headerName: this.translate.instant(
+          'dashboard.body.panel_title.VULNERABILITIES'
+        ),
+        field: 'vulnerabilities',
+        cellRenderer: 'vulnerabilitiesCellRenderer',
+        width: 110,
+        maxWidth: 110,
+        minWidth: 110,
+        sortable: false,
       },
       {
         headerName: 'Parent ID',
@@ -178,6 +190,8 @@ export class ExposedServicepodConvGridComponent implements OnInit {
       suppressMaintainUnsortedOrder: true,
       suppressScrollOnNewData: true,
       components: {
+        vulnerabilitiesCellRenderer:
+          RegistryDetailsVulnerabilitiesCellComponent,
         serviceCellRenderer: ExposedServicepodGridServicepodCellComponent,
         actionCellRenderer: ExposedServicePodGridActionCellComponent,
         conversationEntryListRenderer: ConversationEntryListComponent,

@@ -93,6 +93,8 @@ export interface Exposure {
   pod_name: string;
   service: string;
   severity: string;
+  high: number;
+  medium: number;
   policy_mode: string;
   policy_action: string;
   protocols?: string[];
@@ -164,6 +166,8 @@ export interface HierarchicalExposure {
   bytes: number;
   sessions: number;
   severity: string;
+  high: number;
+  medium: number;
   policy_action: string;
   event_type: string;
   protocols: string;

@@ -380,6 +380,7 @@
         "SERVICE_VIEW": "服务视图",
         "POD_VIEW": "Pod视图",
         "PODS": "Pods",
+        "VULNERABILITIES": "漏洞",
         "CONTAINERS": "容器",
         "EVALUATION": "评估",
         "COMMENT": "解释",

@@ -380,6 +380,7 @@
         "SERVICE_VIEW": "Service View",
         "POD_VIEW": "Pod View",
         "PODS": "Pods",
+        "VULNERABILITIES": "Vulnerabilities",
         "CONTAINERS": "Containers",
         "EVALUATION": "Evaluation",
         "COMMENT": "Comment",

@@ -146,7 +146,7 @@ export interface ExposedContainer {
   severity: string;
 }
 
-export interface ConversationReportEntryByServce {
+export interface ConversationReportEntryByService {
   ip: string;
   fqdn?: string;
   protocols: string[];
@@ -173,6 +173,6 @@ export interface HierarchicalExposure {
   protocols: string;
   applications: string[];
   ports: number[];
-  entries: ConversationReportEntryByServce[];
+  entries: ConversationReportEntryByService[];
   children: ExposedContainer[];
 }

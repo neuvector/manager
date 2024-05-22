@@ -12,6 +12,7 @@ import {
   Workload,
   CfgType,
   VulnerabilitiesQuerySummary,
+  VulnerabilitiesQueryData,
 } from '@common/types';
 import { VulnerabilitiesFilterService } from './vulnerabilities.filter.service';
 import { AssetsViewPdfService } from './pdf-generation/assets-view-pdf.service';
@@ -27,7 +28,37 @@ export class VulnerabilitiesService {
   activeSummary$ = this.activeSummarySubject$.asObservable();
   vulnerabilitiesData$ = this.vulnerabilitiesFilterService.vulQuery$.pipe(
     switchMap(vulQuery =>
-      this.risksHttpService.postVulnerabilityQuery(vulQuery)
+      this.risksHttpService.postVulnerabilityQuery(vulQuery).pipe(
+        catchError(err => {
+          if (
+            [MapConstant.NOT_FOUND, MapConstant.ACC_FORBIDDEN].includes(
+              err.status
+            )
+          ) {
+            let emptyQuery: VulnerabilitiesQueryData = {
+              query_token: '',
+              total_matched_records: 0,
+              total_records: 0,
+              summary: {
+                count_distribution: {
+                  high: 0,
+                  medium: 0,
+                  low: 0,
+                  container: 0,
+                  image: 0,
+                  node: 0,
+                  platform: 0,
+                },
+                top_images: [],
+                top_nodes: [],
+              },
+            };
+            return of(emptyQuery);
+          } else {
+            throw err;
+          }
+        })
+      )
     ),
     tap(queryData => {
       this.activeToken = queryData.query_token;

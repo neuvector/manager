@@ -78,7 +78,9 @@ export class AdmissionRulesComponent implements OnInit {
 
   ngOnInit(): void {
     this.isWriteAdmissionRuleAuthorized =
-      this.authUtilsService.getDisplayFlag('write_admission');
+      this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+        ? this.authUtilsService.getDisplayFlag('write_admission') && this.authUtilsService.getDisplayFlag('multi_cluster_w')
+        : this.authUtilsService.getDisplayFlag('write_admission');
     this.isAdmissionRuleAuthorized =
       this.authUtilsService.getDisplayFlag('admission');
     this.context = { componentParent: this };

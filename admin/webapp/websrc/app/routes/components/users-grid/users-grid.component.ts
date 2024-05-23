@@ -97,6 +97,13 @@ export class UsersGridComponent implements OnInit {
     {
       headerName: this.tr.instant('user.gridHeader.ROLE'),
       field: 'role',
+      valueFormatter: params => {
+        if (params && params.value) {
+          return params.value;
+        } else {
+          return params.data.server.toLowerCase().includes(MapConstant.SERVER_TYPE.RANCHER) ? 'Rancher User' : 'Namespace User';
+        }
+      },
       width: 100,
     },
     {

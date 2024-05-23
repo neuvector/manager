@@ -124,17 +124,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.isAllowedToOperateMultiCluster = isAuthorized(
         GlobalVariable.user.roles,
         resource.multiClusterOp
-      );
+      ) || this.authUtilsService.getDisplayFlag('multi_cluster');
       this.isAllowedToRedirectMultiCluster = isAuthorized(
         GlobalVariable.user.roles,
         resource.redirectAuth
-      );
+      ) || this.authUtilsService.getDisplayFlag('multi_cluster');
       this.isAuthReadConfig =
         this.authUtilsService.getDisplayFlag('read_config');
       this.isFedQueryAllowed = isAuthorized(
         GlobalVariable.user.roles,
         resource.fedQueryAllowed
-      );
+      ) || this.authUtilsService.getDisplayFlag('multi_cluster');
     }
 
     this.initMultiClusters();
@@ -147,7 +147,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     )?.token?.username;
     const role = this.localStorage.get(GlobalConstant.LOCAL_STORAGE_TOKEN)
       ?.token?.role;
-    this.displayRole = role ? role : 'Namespace User';
+    this.displayRole = role ? role : (GlobalVariable.user.token.server.toLowerCase().includes(MapConstant.SERVER_TYPE.RANCHER) ? 'Rancher User' : 'Namespace User');
 
     this._multiClusterSubScription =
       this.multiClusterService.onRefreshClustersEvent$.subscribe(data => {
@@ -301,7 +301,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
             this.isAllowedToOperateMultiCluster = isAuthorized(
               GlobalVariable.user.roles,
               resource.manageAuth
-            );
+            ) || this.authUtilsService.getDisplayFlag('multi_cluster');
             if (clusterInSession !== null) {
               this.selectedCluster = clusterInSession;
             } else {
@@ -315,7 +315,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
             this.isAllowedToOperateMultiCluster = isAuthorized(
               GlobalVariable.user.roles,
               resource.multiClusterView
-            );
+            ) || this.authUtilsService.getDisplayFlag('multi_cluster');
             this.clusters.forEach(cluster => {
               if (cluster.clusterType === MapConstant.FED_ROLES.MASTER) {
                 this.primaryMasterName = cluster.name;

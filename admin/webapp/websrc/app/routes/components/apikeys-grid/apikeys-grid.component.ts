@@ -23,6 +23,7 @@ import { NotificationService } from '@services/notification.service';
 import { AddApikeyDialogComponent } from './add-apikey-dialog/add-apikey-dialog.component';
 import { updateGridData } from '@common/utils/common.utils';
 import { MapConstant } from '@common/constants/map.constant';
+import { AuthUtilsService } from '@common/utils/auth.utils';
 
 @Component({
   selector: 'app-apikeys-grid',
@@ -36,6 +37,7 @@ export class ApikeysGridComponent implements OnInit {
   domainRoles!: string[];
   now_ts = Date.now() / 1000;
   _rowData!: Apikey[];
+  isWriteUserAuthorized!: boolean;
   @Input() set apikeyData(value: {
     apikeyData: ApikeyGetResponse;
     domains: string[];
@@ -122,12 +124,15 @@ export class ApikeysGridComponent implements OnInit {
     private notificationService: NotificationService,
     private dialog: MatDialog,
     private utils: UtilsService,
+    private authUtilsService: AuthUtilsService,
     private tr: TranslateService
   ) {
     this.$win = $(GlobalVariable.window);
   }
 
   ngOnInit(): void {
+    this.isWriteUserAuthorized =
+      this.authUtilsService.getDisplayFlag('write_users');
     this.gridOptions = this.utils.createGridOptions(this.columnDefs, this.$win);
     this.gridOptions = {
       ...this.gridOptions,

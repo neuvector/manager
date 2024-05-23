@@ -82,7 +82,7 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
         (this.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER ||
           this.cfgType === GlobalConstant.CFG_TYPE.LEARNED)) ||
       (this.source === GlobalConstant.NAV_SOURCE.FED_POLICY &&
-        this.cfgType === GlobalConstant.CFG_TYPE.FED);
+        this.cfgType === GlobalConstant.CFG_TYPE.FED &&  this.authUtilsService.getDisplayFlag('multi_cluster_w'));
     this.gridOptions = this.fileAccessRulesService.prepareGrid(
       this.isWriteGroupAuthorized,
       this.source,

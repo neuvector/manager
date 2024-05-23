@@ -83,7 +83,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
           this.cfgType === GlobalConstant.CFG_TYPE.GROUND ||
           this.cfgType === GlobalConstant.CFG_TYPE.LEARNED)) ||
       (this.source === GlobalConstant.NAV_SOURCE.FED_POLICY &&
-        this.cfgType === GlobalConstant.CFG_TYPE.FED);
+        this.cfgType === GlobalConstant.CFG_TYPE.FED && this.authUtilsService.getDisplayFlag('multi_cluster_w'));
     this.gridOptions = this.processProfileRulesService.prepareGrid(
       this.isWriteGroupAuthorized,
       this.isWriteProcessProfileRuleAuthorized,

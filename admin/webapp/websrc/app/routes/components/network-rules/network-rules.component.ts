@@ -105,7 +105,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       this.authUtilsService.getDisplayFlag('write_network_rule') &&
       (this.source !== GlobalConstant.NAV_SOURCE.GROUP &&
       this.source !== GlobalConstant.NAV_SOURCE.SELF
-        ? this.authUtilsService.getDisplayFlag('multi_cluster')
+        ? this.authUtilsService.getDisplayFlag('multi_cluster_w')
         : true);
     this.gridOptions = this.networkRulesService.configGrid(
       this.isWriteNetworkRuleAuthorized,

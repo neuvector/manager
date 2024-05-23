@@ -57,7 +57,7 @@ export class ResponseRulesComponent implements OnInit {
       this.authUtilsService.getDisplayFlag('write_response_rule') &&
       (this.source !== GlobalConstant.NAV_SOURCE.GROUP &&
       this.source !== GlobalConstant.NAV_SOURCE.SELF
-        ? this.authUtilsService.getDisplayFlag('multi_cluster')
+        ? this.authUtilsService.getDisplayFlag('multi_cluster_w')
         : true);
     this.gridOptions = this.responseRulesService.prepareGrid(
       this.isWriteResponseRuleAuthorized,

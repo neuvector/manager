@@ -1,5 +1,5 @@
 <ng-container
-  *ngIf="params.isWriteUserAuthorized && !isRemote; else viewTemplate">
+  *ngIf="params.isWriteUserAuthorized && !isRemote && !params.data.server.toLowerCase().includes('rancher'); else viewTemplate">
   <button
     mat-icon-button
     [style.visibility]="

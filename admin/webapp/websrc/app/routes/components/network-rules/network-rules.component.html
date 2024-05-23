@@ -130,7 +130,7 @@
               <button
                 class="mr-3"
                 mat-stroked-button
-                *appDisplayControl="'write_network_rule'"
+                *ngIf="isWriteNetworkRuleAuthorized"
                 (click)="addNetworkRuleToTop()">
                 <em class="eos-icons icon-18">add_circle</em>
                 {{ 'policy.toolBar.INSERT_TO_TOP' | translate }}

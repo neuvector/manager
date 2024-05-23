@@ -96,6 +96,7 @@ NamesDisplay = {"cveHighCount": "High severity CVE count",
                 "modules": "Image Modules/Packages",
                 "violatePssPolicy": "Violates Selected K8s Pod Security Standards Policy",
                 "imageVerifiers": "Image Sigstore Verifiers",
+                "storageClassName": "StorageClass Name",
                 }
 
 SaBindRiskyRoleDisplay = {

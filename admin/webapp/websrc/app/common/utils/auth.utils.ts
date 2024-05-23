@@ -170,4 +170,11 @@ export class AuthUtilsService {
     }
     return false;
   }
+
+  hasExtraPermission(tokenInfo) {
+    return (
+      tokenInfo.extra_permissions && Array.isArray(tokenInfo.extra_permissions) && tokenInfo.extra_permissions.length > 0 ||
+      tokenInfo.extra_permissions_domains && Object.keys(tokenInfo.extra_permissions_domains).length > 0
+    );
+  }
 }

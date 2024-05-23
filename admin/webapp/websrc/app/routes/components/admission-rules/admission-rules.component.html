@@ -122,7 +122,7 @@
               mat-stroked-button
               aria-label="Add rule"
               class="mr-3"
-              *appDisplayControl="'write_admission'"
+              *ngIf="isWriteAdmissionRuleAuthorized"
               (click)="openAddEditAdmissionRuleModal()">
               <em class="eos-icons icon-18">add_circle</em>
               {{ 'admissionControl.INSERT' | translate }}

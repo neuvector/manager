@@ -22,6 +22,7 @@ import { GridApi, SortModelItem } from 'ag-grid-community';
 export class VulnerabilitiesService {
   activeToken!: string;
   activeCount!: number;
+  sortModel: SortModelItem[];
   activeSummary!: VulnerabilitiesQuerySummary;
   private activeSummarySubject$ = new Subject();
   activeSummary$ = this.activeSummarySubject$.asObservable();
@@ -145,11 +146,14 @@ export class VulnerabilitiesService {
       row: this.vulnerabilitiesFilterService.paginationBlockSize,
     };
     if (sortModel.length) {
+      this.sortModel = sortModel;
       params = {
         ...params,
         orderbyColumn: sortModel[0].colId,
         orderby: sortModel[0].sort,
       };
+    } else {
+      this.sortModel = [];
     }
     if ('-' in filterModel) {
       params = {
@@ -211,13 +215,21 @@ export class VulnerabilitiesService {
     queryToken: string,
     lastModifiedTime: number
   ): Observable<any> {
+    let params: any = {
+      token: this.activeToken,
+      start: 0,
+      row: -1,
+      lastmtime: lastModifiedTime,
+    };
+    if (this.sortModel.length) {
+      params = {
+        ...params,
+        orderbyColumn: this.sortModel[0].colId,
+        orderby: this.sortModel[0].sort,
+      };
+    }
     return this.risksHttpService
-      .getVulnerabilitiesQuery({
-        token: this.activeToken,
-        start: 0,
-        row: -1,
-        lastmtime: lastModifiedTime,
-      })
+      .getVulnerabilitiesQuery(params)
       .pipe(
         map(sessionData => {
           return {

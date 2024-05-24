@@ -11,6 +11,7 @@
   </div>
   <div class="d-flex align-items-center justify-content-end">
     <button
+      *ngIf="isWriteUserAuthorized"
       (click)="addApikey()"
       class="d-flex align-items-center justify-content-start px-2 my-3 mr-3"
       id="apikeys-add-dialog"

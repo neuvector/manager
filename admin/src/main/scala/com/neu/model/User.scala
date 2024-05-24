@@ -17,7 +17,14 @@ case class User(
   password_resettable: Option[Boolean],
   blocked_for_failed_login: Option[Boolean],
   blocked_for_password_expired: Option[Boolean],
-  role_domains: Option[Map[String, Array[String]]]
+  role_domains: Option[Map[String, Array[String]]],
+  extra_permissions: Option[Array[Permission]],
+  extra_permissions_domains: Option[Array[ExtraPermission]]
+)
+
+case class ExtraPermission(
+  permissions: Array[Permission],
+  domains: Array[String]
 )
 
 case class UserImage(
@@ -34,7 +41,9 @@ case class UserImage(
   emailHash: String = "",
   blocked_for_failed_login: Option[Boolean],
   blocked_for_password_expired: Option[Boolean],
-  role_domains: Option[Map[String, Array[String]]]
+  role_domains: Option[Map[String, Array[String]]],
+  extra_permissions: Option[Array[Permission]],
+  extra_permissions_domains: Option[Array[ExtraPermission]]
 )
 
 case class UserWrap(

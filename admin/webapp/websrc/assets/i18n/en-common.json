@@ -1781,6 +1781,7 @@
     "REMOVE_USER_OK": "Removing user is successful",
     "REMOVE_USER_ERR": "Failed to remove user",
     "USER_EVENT_HEAD": "Last activity",
+    "RANCHER_PERMISSIONS": "Rancher Permissions",
     "gridHeader": {
       "USER": "User",
       "USER_NAME": "Name",

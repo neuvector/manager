@@ -91,6 +91,26 @@ export class AddEditUserDialogComponent implements OnInit {
     ).length;
   }
 
+  get rancherPermissions() {
+    let rancherPermissions: any[] = [];
+    rancherPermissions.push({
+      namespaces: ["global"],
+      permissions: this.data.user!.extra_permissions!
+    });
+    this.data.user!.extra_permissions_domains!.forEach(entry => {
+      rancherPermissions.push({
+        namespaces: entry.domains,
+        permissions: entry.permissions
+      });
+    });
+    return rancherPermissions;
+  }
+
+  get hasExtraPermissions() {
+    return (this.data.user!.extra_permissions && Array.isArray(this.data.user!.extra_permissions) && this.data.user!.extra_permissions.length > 0 &&
+    this.data.user!.extra_permissions_domains && Array.isArray(this.data.user!.extra_permissions_domains) && this.data.user!.extra_permissions_domains.length > 0);
+  }
+
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<UsersGridComponent>,

@@ -108,7 +108,7 @@
       mat-stroked-button
       type="button"
       *ngIf="
-        isKube && !['admin', 'fedAdmin', ''].includes(form.controls.role.value)
+        isKube && !['admin', 'fedAdmin', ''].includes(form.controls.role.value) && !(data.isEdit && data.user!.server.toLowerCase().includes('rancher'))
       ">
       {{
         (toggleAdvSetting ? 'user.HIDE_ADV_SETTING' : 'user.SHOW_ADV_SETTING')
@@ -121,9 +121,10 @@
       [domains]="data.domains"
       [global_role]="selectedRole"
       [group_roles]="data.domainRoles"
-      [hidden]="!showAdvSetting"
-      [isReadOnly]="data.isReadOnly || false"></app-group-domain-role-table>
-    <div class="mt-2" *ngIf="data.user!.server.toLowerCase().includes('rancher') && hasExtraPermissions">
+      [hidden]="!showAdvSetting || (data.isEdit && data.user!.server.toLowerCase().includes('rancher') && !hasNamespaceRoles)"
+      [isReadOnly]="data.isReadOnly || false">
+    </app-group-domain-role-table>
+    <div class="mt-2" *ngIf="data.isEdit && data.user!.server.toLowerCase().includes('rancher') && hasExtraPermissions">
       <div class="clearfix">
         <div class="rancher-bg pull-left"></div>
         <div class="text-bold ml-2" style="line-height: 38px;">{{ 'user.RANCHER_PERMISSIONS' | translate }}</div>

@@ -30,6 +30,6 @@ import { PermissionService } from './add-edit-role-dialog/permission.service';
     ]),
   ],
   providers: [PermissionService],
-  exports: [RolesGridComponent],
+  exports: [RolesGridComponent, RolesGridPermissionsCellComponent],
 })
 export class RolesGridModule {}

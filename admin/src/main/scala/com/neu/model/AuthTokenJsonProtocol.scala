@@ -23,14 +23,15 @@ object AuthTokenJsonProtocol extends DefaultJsonProtocol {
   implicit val apikeyFormat: RootJsonFormat[Apikey]         = jsonFormat6(Apikey)
   implicit val apikeyWrapFormat: RootJsonFormat[ApikeyWrap] = jsonFormat1(ApikeyWrap)
 
-  implicit val userFormat: RootJsonFormat[User]                 = jsonFormat14(User)
-  implicit val usersFormat: RootJsonFormat[Users]               = jsonFormat3(Users)
-  implicit val userImageFormat: RootJsonFormat[UserImage]       = jsonFormat14(UserImage)
-  implicit val usersOutputFormat: RootJsonFormat[UsersOutput]   = jsonFormat3(UsersOutput)
-  implicit val selfWrapFormat: RootJsonFormat[SelfWrap]         = jsonFormat4(SelfWrap)
-  implicit val userWrapFormat: RootJsonFormat[UserWrap]         = jsonFormat1(UserWrap)
-  implicit val userTokenFormat: RootJsonFormat[UserToken]       = jsonFormat4(UserToken)
-  implicit val userTokenNewFormat: RootJsonFormat[UserTokenNew] = jsonFormat6(UserTokenNew)
+  implicit val extraPermissionFormat: RootJsonFormat[ExtraPermission] = jsonFormat2(ExtraPermission)
+  implicit val userFormat: RootJsonFormat[User]                       = jsonFormat16(User)
+  implicit val usersFormat: RootJsonFormat[Users]                     = jsonFormat3(Users)
+  implicit val userImageFormat: RootJsonFormat[UserImage]             = jsonFormat16(UserImage)
+  implicit val usersOutputFormat: RootJsonFormat[UsersOutput]         = jsonFormat3(UsersOutput)
+  implicit val selfWrapFormat: RootJsonFormat[SelfWrap]               = jsonFormat4(SelfWrap)
+  implicit val userWrapFormat: RootJsonFormat[UserWrap]               = jsonFormat1(UserWrap)
+  implicit val userTokenFormat: RootJsonFormat[UserToken]             = jsonFormat4(UserToken)
+  implicit val userTokenNewFormat: RootJsonFormat[UserTokenNew]       = jsonFormat6(UserTokenNew)
 
   implicit val userProfileFormat: RootJsonFormat[UserProfile]         = jsonFormat11(UserProfile)
   implicit val userProfileWrapFormat: RootJsonFormat[UserProfileWrap] = jsonFormat1(UserProfileWrap)
@@ -119,7 +120,9 @@ object AuthTokenJsonProtocol extends DefaultJsonProtocol {
       Md5.hash(user.email),
       user.blocked_for_failed_login,
       user.blocked_for_password_expired,
-      user.role_domains
+      user.role_domains,
+      user.extra_permissions,
+      user.extra_permissions_domains
     )
   }
 

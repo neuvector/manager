@@ -12,6 +12,8 @@ import { PasswordPanelModule } from 'app/routes/settings/common/password-panel/p
 import { GroupDomainRoleModule } from 'app/routes/settings/common/group-domain-role/group-domain-role.module';
 import { UsersGridUserCellComponent } from './users-grid-user-cell/users-grid-user-cell.component';
 import { AvatarModule } from 'ngx-avatar';
+import { RancherPermissionsGridComponent } from './rancher-permissions-grid/rancher-permissions-grid.component';
+import { RolesGridModule } from '@routes/components/roles-grid/roles-grid.module';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,7 @@ import { AvatarModule } from 'ngx-avatar';
     UsersGridActionCellComponent,
     AddEditUserDialogComponent,
     UsersGridUserCellComponent,
+    RancherPermissionsGridComponent,
   ],
   imports: [
     CommonModule,
@@ -29,6 +32,7 @@ import { AvatarModule } from 'ngx-avatar';
     LoadingButtonModule,
     PasswordPanelModule,
     GroupDomainRoleModule,
+    RolesGridModule,
     AgGridModule.withComponents([
       UsersGridActionCellComponent,
       UsersGridUsernameCellComponent,

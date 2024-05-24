@@ -174,6 +174,8 @@ export interface User {
   password_resettable: boolean;
   blocked_for_failed_login: boolean;
   blocked_for_password_expired: boolean;
+  extra_permissions?: any[];
+  extra_permissions_domains?: any[];
 }
 
 export interface Domain {

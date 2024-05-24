@@ -1785,6 +1785,7 @@
     "REMOVE_USER_OK": "成功删除用户",
     "REMOVE_USER_ERR": "删除用户失败",
     "USER_EVENT_HEAD": "最近的活动",
+    "RANCHER_PERMISSIONS": "Rancher权限",
     "gridHeader": {
       "USER": "用户",
       "USER_NAME": "名称",

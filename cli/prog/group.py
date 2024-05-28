@@ -157,7 +157,7 @@ def detail(data, id_or_name, cap):
 
     _show_group_display_format(group)
     # columns = ("name", "learned", "criteria", "members", "policy_rules", "dlp_status", "sensors")
-    columns = ("name", "learned", "mon_metric", "grp_sess_cur", "grp_sess_rate", "grp_band_width", "criteria", "platform_role", "members", "policy_rules", "type")
+    columns = ("name", "learned", "monitor_metric", "group_sess_cur", "group_sess_rate", "group_band_width", "criteria", "platform_role", "members", "policy_rules", "type")
     output.show(columns, group)
 
 @show_group.command()
@@ -516,7 +516,7 @@ def create_group(data, name, scope, image, node, domain, container, service, lab
         monmet = True
     else:
         monmet = False
-    data.client.create("group", {"config": {"name": name, "criteria": ct, "cfg_type": cfg_type, "mon_metric":monmet, "grp_sess_cur":cur_sess, "grp_sess_rate":sess_rate, "grp_band_width":bandwidth}})
+    data.client.create("group", {"config": {"name": name, "criteria": ct, "cfg_type": cfg_type, "monitor_metric":monmet, "group_sess_cur":cur_sess, "group_sess_rate":sess_rate, "group_band_width":bandwidth}})
 
 
 @set.group("group")
@@ -571,13 +571,13 @@ def set_group_setting(data, image, node, domain, container, service, label, addr
     if len(ct) > 0:
         group["criteria"] = ct
     if monitor_metric != None:
-        group["mon_metric"] = monitor_metric == "enable"
+        group["monitor_metric"] = monitor_metric == "enable"
     if cur_sess != None:
-        group["grp_sess_cur"] = cur_sess
+        group["group_sess_cur"] = cur_sess
     if sess_rate != None:
-        group["grp_sess_rate"] = sess_rate
+        group["group_sess_rate"] = sess_rate
     if bandwidth != None:
-        group["grp_band_width"] = bandwidth
+        group["group_band_width"] = bandwidth
 
     data.client.config("group", data.id_or_name, {"config": group})
 

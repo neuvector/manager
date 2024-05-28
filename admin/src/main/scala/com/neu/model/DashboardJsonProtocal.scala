@@ -742,6 +742,8 @@ case class Exposure(
   pod_name: String,
   service: String,
   severity: String,
+  high: Int,
+  medium: Int,
   policy_mode: String,
   policy_action: String,
   protocols: Option[Array[String]],
@@ -984,7 +986,7 @@ object DashboardJsonProtocol extends DefaultJsonProtocol with LazyLogging {
   implicit val conversationReportEntryFormat: RootJsonFormat[ConversationReportEntry] = jsonFormat8(
     ConversationReportEntry
   )
-  implicit val exposureFormat: RootJsonFormat[Exposure]         = jsonFormat12(Exposure)
+  implicit val exposureFormat: RootJsonFormat[Exposure]         = jsonFormat14(Exposure)
   implicit val scoreOutput2Format: RootJsonFormat[ScoreOutput2] = jsonFormat4(ScoreOutput2)
   implicit val internalSystemDataFormat: RootJsonFormat[InternalSystemData] = jsonFormat4(
     InternalSystemData

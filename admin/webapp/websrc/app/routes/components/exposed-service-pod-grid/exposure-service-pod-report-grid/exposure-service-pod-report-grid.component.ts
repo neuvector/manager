@@ -33,7 +33,9 @@ export class ExposureServicePodReportGridComponent implements OnInit {
             pods: exposure.children.length,
             policy_mode: exposure.policy_mode,
             rowSpan: exposure.entries.length,
-            ...child
+            high: exposure.high,
+            medium: exposure.medium,
+            ...child,
           });
         } else {
           res.push({

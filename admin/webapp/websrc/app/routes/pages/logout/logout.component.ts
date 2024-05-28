@@ -34,6 +34,7 @@ export class LogoutComponent implements OnInit {
     this.sessionStorage.clear();
     this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_EXTERNAL_REF);
     this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_TIMEOUT);
+    this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_CLUSTER);
     this.router.navigate([GlobalConstant.PATH_LOGIN]);
   };
 }

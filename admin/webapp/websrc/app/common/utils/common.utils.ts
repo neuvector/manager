@@ -13,7 +13,7 @@ import {
   WorkloadChildV2,
   DataOps,
   WorkloadV2,
-  ConversationReportEntryByServce,
+  ConversationReportEntryByService,
 } from '@common/types';
 import { WorkloadBrief } from '@common/types/compliance/workloadBrief';
 import { GridApi, GridOptions } from 'ag-grid-community';
@@ -666,6 +666,8 @@ export const parseExposureHierarchicalData = (
 
   Object.entries(groupedExposure).forEach(([k, v]) => {
     let applicationSet = new Set<string>();
+    let total_high_vuls_by_service = 0;
+    let total_medium_vuls_by_service = 0;
     v.forEach(child => {
       if (child.applications) {
         child.applications.forEach(app => {
@@ -677,6 +679,8 @@ export const parseExposureHierarchicalData = (
           applicationSet.add(port as any);
         });
       }
+      total_high_vuls_by_service += child.high;
+      total_medium_vuls_by_service += child.medium;
     });
     let hierarchicalExposure: HierarchicalExposure = {
       workload_id: '',
@@ -687,6 +691,8 @@ export const parseExposureHierarchicalData = (
       bytes: 0,
       sessions: 0,
       severity: '',
+      high: total_high_vuls_by_service,
+      medium: total_medium_vuls_by_service,
       policy_action: v[0].policy_action,
       event_type: '',
       protocols: '',
@@ -698,7 +704,9 @@ export const parseExposureHierarchicalData = (
         service: '',
       })) as any,
     };
-    if (hierarchicalExposure.policy_action !== GlobalConstant.POLICY_ACTION.OPEN)
+    if (
+      hierarchicalExposure.policy_action !== GlobalConstant.POLICY_ACTION.OPEN
+    )
       hierarchicalExposures.push(
         JSON.parse(JSON.stringify(hierarchicalExposure))
       );
@@ -723,7 +731,9 @@ const summarizeEntries = exposedPods => {
             entry.port
           );
         }
-        entryMap[entry.ip].applications = entryMap[entry.ip].applications.filter(app => !!app);
+        entryMap[entry.ip].applications = entryMap[
+          entry.ip
+        ].applications.filter(app => !!app);
         entryMap[entry.ip].sessions += entry.sessions;
         entryMap[entry.ip].policy_action = accumulateActionLevel(
           entryMap[entry.ip].action,
@@ -742,7 +752,7 @@ const summarizeEntries = exposedPods => {
       }
     });
   });
-  return Object.values(entryMap) as ConversationReportEntryByServce[];
+  return Object.values(entryMap) as ConversationReportEntryByService[];
 };
 
 export const accumulateActionLevel = (

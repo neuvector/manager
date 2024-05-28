@@ -200,6 +200,14 @@
     <strong>{{ 'audit.gridHeader.USER' | translate }}:</strong>
     <span> {{ params.data.user }} </span>
   </div>
+  <div *ngIf="params.data.pvc_name" class="mx-1">
+    <strong>{{ 'audit.gridHeader.PVC_NAME' | translate }}:</strong>
+    <span> {{ params.data.pvc_name }} </span>
+  </div>
+  <div *ngIf="params.data.pvc_storageclass_name" class="mx-1">
+    <strong>{{ 'audit.gridHeader.PVC_STORAGECLASS_NAME' | translate }}:</strong>
+    <span> {{ params.data.pvc_storageclass_name }} </span>
+  </div>
   <div *ngIf="params.data.response_rule_id" class="mx-1">
     <strong>{{ 'audit.gridHeader.RESPONSE_RULE_ID' | translate }}:</strong>
     <span> {{ params.data.response_rule_id }} </span>

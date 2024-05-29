@@ -2147,7 +2147,13 @@
       "UPDATE": "Update",
       "CANCEL": "Cancel",
       "ERR_MSG": "Error happens when updating group.",
-      "OK_MSG": "Group is updated successfully!"
+      "OK_MSG": "Group is updated successfully!",
+      "MONITOR_METRIC": "Metric Monitoring",
+      "GROUP_SESS_RATE": "Group Session Rate",
+      "CPS": "CPS",
+      "GROUP_SESS_CUR": "Active Session Count",
+      "GROUP_BAND_WIDTH": "Group Bandwidth",
+      "MBPS": "Mb/s"
     },
     "profile": {
       "COUNT_POSTFIX": "process profiles rules found",

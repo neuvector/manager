@@ -2147,7 +2147,13 @@
       "UPDATE": "更新",
       "CANCEL": "取消",
       "ERR_MSG": "更新组时发生错误。",
-      "OK_MSG": "成功更新组!"
+      "OK_MSG": "成功更新组!",
+      "MONITOR_METRIC": "度量监测",
+      "GROUP_SESS_RATE": "组会话",
+      "CPS": "CPS",
+      "GROUP_SESS_CUR": "活动回话数",
+      "GROUP_BAND_WIDTH": "组带宽",
+      "MBPS": "Mb/s"
     },
     "profile": {
       "COUNT_POSTFIX": "个进程规则",

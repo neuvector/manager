@@ -168,7 +168,11 @@ class GroupService()(implicit executionContext: ExecutionContext)
                           groupConfigDTO.name,
                           groupConfigDTO.comment,
                           criteria,
-                          groupConfigDTO.cfg_type
+                          groupConfigDTO.cfg_type,
+                          groupConfigDTO.monitor_metric,
+                          groupConfigDTO.group_sess_rate,
+                          groupConfigDTO.group_sess_cur,
+                          groupConfigDTO.group_band_width
                         )
                       )
                     )
@@ -188,7 +192,11 @@ class GroupService()(implicit executionContext: ExecutionContext)
                                 groupConfigDTO.name,
                                 groupConfigDTO.comment,
                                 criteria,
-                                groupConfigDTO.cfg_type
+                                groupConfigDTO.cfg_type,
+                                groupConfigDTO.monitor_metric,
+                                groupConfigDTO.group_sess_rate,
+                                groupConfigDTO.group_sess_cur,
+                                groupConfigDTO.group_band_width
                               )
                             )
                           ),
@@ -372,7 +380,11 @@ class GroupService()(implicit executionContext: ExecutionContext)
                                 groupConfigDTO.name,
                                 groupConfigDTO.comment,
                                 criteria,
-                                groupConfigDTO.cfg_type
+                                groupConfigDTO.cfg_type,
+                                groupConfigDTO.monitor_metric,
+                                groupConfigDTO.group_sess_rate,
+                                groupConfigDTO.group_sess_cur,
+                                groupConfigDTO.group_band_width
                               )
                             )
                           ),

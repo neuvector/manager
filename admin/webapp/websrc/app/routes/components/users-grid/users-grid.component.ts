@@ -121,7 +121,7 @@ export class UsersGridComponent implements OnInit {
             result = MapConstant.AUTH_PROVIDER.OPENSHIFT;
           }
           if (server.toLowerCase().includes(MapConstant.SERVER_TYPE.RANCHER)) {
-            result = MapConstant.AUTH_PROVIDER.RANCHER;
+            result = server;
           }
         } else {
           result = this.tr.instant('partner.general.PROVIDER');

@@ -131,6 +131,7 @@ export class AuthService {
         ? this.localStorage.get(GlobalConstant.LOCAL_STORAGE_THEME)
         : 'A'
       : 'A';
+    this.localStorage.clear();
     this.localStorage.set(GlobalConstant.LOCAL_STORAGE_THEME, theme);
   }
 

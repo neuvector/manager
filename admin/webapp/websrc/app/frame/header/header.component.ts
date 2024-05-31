@@ -438,4 +438,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
   logout() {
     this.router.navigate(['logout']);
   }
+  reloadSSO() {
+    let timeoutPath = this.localStorage.get(
+      GlobalConstant.LOCAL_STORAGE_ORIGINAL_URL
+    );
+    this.localStorage.clear();
+    if (timeoutPath)
+      this.localStorage.set(
+        GlobalConstant.LOCAL_STORAGE_ORIGINAL_URL,
+        timeoutPath
+      );
+    GlobalVariable.user = null;
+    GlobalVariable.sidebarDone = false;
+    GlobalVariable.versionDone = false;
+    GlobalVariable.isFooterReady = false;
+    this.router.navigate(['login']);
+  }
 }

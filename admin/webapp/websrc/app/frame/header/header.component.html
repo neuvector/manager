@@ -197,6 +197,10 @@
         <i class="eos-icons icon-18 margin-right-s">logout</i>
         {{ 'enum.LOGOUT' | translate }}
       </button>
+      <button *ngIf="isSUSESSO" mat-menu-item (click)="reloadSSO()">
+        <i class="eos-icons icon-18 margin-right-s">refresh</i>
+        {{ 'enum.RELOAD' | translate }}
+      </button>
     </mat-menu>
   </div>
   <!-- END Right Navbar-->

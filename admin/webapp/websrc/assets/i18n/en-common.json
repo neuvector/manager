@@ -204,7 +204,8 @@
     "UNPROTECTED": "Unprotected Asset",
     "ASSET_TYPE": "Asset Type",
     "ASSET_STATUS": "Asset Status",
-    "SAMPLE_LABEL": "Sample Label"
+    "SAMPLE_LABEL": "Sample Label",
+    "RELOAD": "Reload"
   },
   "logout": {
     "SIGN_OUT": "Signed out",

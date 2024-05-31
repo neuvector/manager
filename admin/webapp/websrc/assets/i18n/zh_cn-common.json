@@ -204,7 +204,8 @@
     "UNPROTECTED": "未受保护资产",
     "ASSET_TYPE": "资产类型",
     "ASSET_STATUS": "资产状态",
-    "SAMPLE_LABEL": "标签实例"
+    "SAMPLE_LABEL": "标签实例",
+    "RELOAD": "重新载入"
   },
   "logout": {
     "SIGN_OUT": "已登出了",

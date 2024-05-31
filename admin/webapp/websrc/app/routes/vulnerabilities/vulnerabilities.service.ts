@@ -12,6 +12,7 @@ import {
   Workload,
   CfgType,
   VulnerabilitiesQuerySummary,
+  VulnerabilitiesQueryData,
 } from '@common/types';
 import { VulnerabilitiesFilterService } from './vulnerabilities.filter.service';
 import { AssetsViewPdfService } from './pdf-generation/assets-view-pdf.service';
@@ -22,12 +23,43 @@ import { GridApi, SortModelItem } from 'ag-grid-community';
 export class VulnerabilitiesService {
   activeToken!: string;
   activeCount!: number;
+  sortModel: SortModelItem[];
   activeSummary!: VulnerabilitiesQuerySummary;
   private activeSummarySubject$ = new Subject();
   activeSummary$ = this.activeSummarySubject$.asObservable();
   vulnerabilitiesData$ = this.vulnerabilitiesFilterService.vulQuery$.pipe(
     switchMap(vulQuery =>
-      this.risksHttpService.postVulnerabilityQuery(vulQuery)
+      this.risksHttpService.postVulnerabilityQuery(vulQuery).pipe(
+        catchError(err => {
+          if (
+            [MapConstant.NOT_FOUND, MapConstant.ACC_FORBIDDEN].includes(
+              err.status
+            )
+          ) {
+            let emptyQuery: VulnerabilitiesQueryData = {
+              query_token: '',
+              total_matched_records: 0,
+              total_records: 0,
+              summary: {
+                count_distribution: {
+                  high: 0,
+                  medium: 0,
+                  low: 0,
+                  container: 0,
+                  image: 0,
+                  node: 0,
+                  platform: 0,
+                },
+                top_images: [],
+                top_nodes: [],
+              },
+            };
+            return of(emptyQuery);
+          } else {
+            throw err;
+          }
+        })
+      )
     ),
     tap(queryData => {
       this.activeToken = queryData.query_token;
@@ -145,11 +177,14 @@ export class VulnerabilitiesService {
       row: this.vulnerabilitiesFilterService.paginationBlockSize,
     };
     if (sortModel.length) {
+      this.sortModel = sortModel;
       params = {
         ...params,
         orderbyColumn: sortModel[0].colId,
         orderby: sortModel[0].sort,
       };
+    } else {
+      this.sortModel = [];
     }
     if ('-' in filterModel) {
       params = {
@@ -211,13 +246,21 @@ export class VulnerabilitiesService {
     queryToken: string,
     lastModifiedTime: number
   ): Observable<any> {
+    let params: any = {
+      token: this.activeToken,
+      start: 0,
+      row: -1,
+      lastmtime: lastModifiedTime,
+    };
+    if (this.sortModel.length) {
+      params = {
+        ...params,
+        orderbyColumn: this.sortModel[0].colId,
+        orderby: this.sortModel[0].sort,
+      };
+    }
     return this.risksHttpService
-      .getVulnerabilitiesQuery({
-        token: this.activeToken,
-        start: 0,
-        row: -1,
-        lastmtime: lastModifiedTime,
-      })
+      .getVulnerabilitiesQuery(params)
       .pipe(
         map(sessionData => {
           return {

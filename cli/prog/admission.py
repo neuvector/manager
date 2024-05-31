@@ -10,10 +10,12 @@ from prog import output
 
 CriteriaOpNotEqual = "!="
 CriteriaOpNotRegex = "!regex"
-CriteriaOpRegexNotContainsAny = "!regexContainsAny"
+CriteriaOpRegexNotContainsAny = "!regexContainsAnyEx"
 CriteriaOpContainsAll = "containsAll"
 CriteriaOpContainsAny = "containsAny"
-CriteriaOpRegexContainsAny = "regexContainsAny"
+CriteriaOpRegexContainsAny = "regexContainsAnyEx"
+CriteriaOpRegex_Deprecated = "regexContainsAny"
+CriteriaOpNotRegex_Deprecated = "!regexContainsAny"
 
 CriteriaOpContainsOtherThan = "containsOtherThan"
 CriteriaOpNotContainsAny = "notContainsAny"
@@ -57,6 +59,7 @@ SingleValueCrt = {"cveHighCount": True,
                   "customPath": False,
                   "saBindRiskyRole": True,
                   "imageVerifiers": True,
+                  "storageClassName": True,
                   }
 
 NamesDisplay = {"cveHighCount": "High severity CVE count",
@@ -93,6 +96,7 @@ NamesDisplay = {"cveHighCount": "High severity CVE count",
                 "modules": "Image Modules/Packages",
                 "violatePssPolicy": "Violates Selected K8s Pod Security Standards Policy",
                 "imageVerifiers": "Image Sigstore Verifiers",
+                "storageClassName": "StorageClass Name",
                 }
 
 SaBindRiskyRoleDisplay = {
@@ -107,14 +111,22 @@ NamesDisplay2 = {  # for criteria that has sub-criteria
     "resourceLimit": "Resource limit{v1}: {v2}",
 }
 
-OpsDisplay1 = {CriteriaOpContainsAny: 'is', CriteriaOpNotContainsAny: 'is not',
-               CriteriaOpContainsAll: CriteriaOpContainsAll, CriteriaOpContainsOtherThan: CriteriaOpContainsOtherThan,
-               CriteriaOpRegexContainsAny: 'matches any regex in', CriteriaOpRegexNotContainsAny: 'matches none regex in'}
-OpsDisplay2 = {CriteriaOpContainsAny: 'contains any in', CriteriaOpNotContainsAny: 'not contains any in',
-               CriteriaOpContainsAll: 'contains all in', CriteriaOpContainsOtherThan: 'contains value not in',
-               CriteriaOpRegexContainsAny: 'matches any regex in', CriteriaOpRegexNotContainsAny: 'matches none regex in'}
-userOpsDisplay = {CriteriaOpContainsAny: 'is one of', CriteriaOpNotContainsAny: 'is not one of',
-                  CriteriaOpRegexContainsAny: 'matches any regex in', CriteriaOpRegexNotContainsAny: 'matches none regex in'}
+OpsDisplay1 = {CriteriaOpContainsAny: 'is',
+               CriteriaOpNotContainsAny: 'is not',
+               CriteriaOpContainsAll: CriteriaOpContainsAll,
+               CriteriaOpContainsOtherThan: CriteriaOpContainsOtherThan,
+               CriteriaOpRegexContainsAny: 'matches any regex in',
+               CriteriaOpRegexNotContainsAny: 'matches none regex in'}
+OpsDisplay2 = {CriteriaOpContainsAny: 'contains any in',
+               CriteriaOpNotContainsAny: 'not contains any in',
+               CriteriaOpContainsAll: 'contains all in',
+               CriteriaOpContainsOtherThan: 'contains value not in',
+               CriteriaOpRegexContainsAny: 'matches any regex in',
+               CriteriaOpRegexNotContainsAny: 'matches none regex in'}
+userOpsDisplay = {CriteriaOpContainsAny: 'is one of',
+                  CriteriaOpNotContainsAny: 'is not one of',
+                  CriteriaOpRegex_Deprecated: 'matches regex',
+                  CriteriaOpNotRegex_Deprecated: 'does not match regex'}
 
 RiskyRoleDescriptions = {
     "risky_role_view_secret": "Service Account can listing secrets",
@@ -192,7 +204,7 @@ def show_admission_stats(data):
 def _get_criterion_op_value(c):
     opDisplay = c["op"]
     if c["op"] == CriteriaOpContainsAll or c["op"] == CriteriaOpContainsAny or c["op"] == CriteriaOpNotContainsAny or c["op"] == CriteriaOpRegexContainsAny or c["op"] == CriteriaOpRegexNotContainsAny or c["op"] == CriteriaOpContainsOtherThan:
-        if c["name"] == "user":
+        if c["name"] == "user" or c["name"] == "userGroups":
             opDisplay = userOpsDisplay[c["op"]]
         else:
             if SingleValueCrt[c["name"]] is True:
@@ -200,6 +212,9 @@ def _get_criterion_op_value(c):
             else:
                 opDisplay = OpsDisplay2[c["op"]]
         value = "{{{}}}".format(c["value"])
+    elif (c["name"] == "user" or c["name"] == "userGroups") and (c["op"] == CriteriaOpRegex_Deprecated or c["op"] == CriteriaOpNotRegex_Deprecated):
+        opDisplay = userOpsDisplay[c["op"]]
+        value = c["value"]
     elif c["op"] == "notExist":
         opDisplay = "doesn't exist"
         value = ""
@@ -252,7 +267,7 @@ def _list_admission_rule_display_format(rule):
                 continue
             positive = False
             for c in types[t]:
-                if c["op"] != CriteriaOpNotEqual and c["op"] != CriteriaOpNotRegex and c["op"] != CriteriaOpNotContainsAny and c["op"] != CriteriaOpRegexNotContainsAny:  
+                if c["op"] != CriteriaOpNotEqual and c["op"] != CriteriaOpNotRegex and c["op"] != CriteriaOpNotContainsAny and c["op"] != CriteriaOpNotRegex_Deprecated and c["op"] != CriteriaOpRegexNotContainsAny:
                     positive = True
                     break
             tc = ""
@@ -600,7 +615,7 @@ def _parse_adm_criteria(criteria):
               help="It's a local or federal rule")
 # @click.option("--category", default="Kubernetes", help="rule category. default: Kubernetes")
 @click.option("--criteria", multiple=True,
-              help="Format is name:op:value{/subName:op:value}. name can be annotations, allowPrivEscalation, count, cpuLimit, cpuRequest, cveHighCount, cveHighWithFixCount, cveMediumCount, cveNames, cveScoreCount, envVarSecrets, image, imageCompliance, imageNoOS, imageScanned, imageSigned, imageVerifiers, labels, memoryLimit, memoryRequest, modules, mountVolumes, namespace, pspCompliance, resourceLimit. subName can be publishDays, runAsRoot, shareIpcWithHost, shareNetWithHost, sharePidWithHost, user, userGroups, violatePssPolicy. Format for criteira named customPath is name:op:path:valuetype:value. Format for criteria named saBindRiskyRole is name:op:value. See command: show admission rule options")
+              help="Format is name:op:value{/subName:op:value}. name can be annotations, allowPrivEscalation, count, cpuLimit, cpuRequest, cveHighCount, cveHighWithFixCount, cveMediumCount, cveNames, cveScoreCount, envVarSecrets, image, imageCompliance, imageNoOS, imageScanned, imageSigned, imageVerifiers, labels, memoryLimit, memoryRequest, modules, mountVolumes, namespace, pspCompliance, resourceLimit. subName can be publishDays, runAsRoot, shareIpcWithHost, shareNetWithHost, sharePidWithHost, storageClassName, user, userGroups, violatePssPolicy. Format for criteira named customPath is name:op:path:valuetype:value. Format for criteria named saBindRiskyRole is name:op:value. See command: show admission rule options")
 @click.option("--disable/--enable", default=False, help="Disable/enable the admission control rule [default: --enable]")
 @click.option("--mode", default="", type=click.Choice(['','monitor', 'protect']), help="Rule mode, only for deny rules")
 @click.option("--target", required=False, multiple=True, help="Elevate this rule for what type of containers. Supported values: init_containers, containers, ephemeral_containers")
@@ -696,7 +711,7 @@ def set_admission_state(data, disable, mode, client_mode):
 @click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=True, help="Obsolete")
 # @click.option("--category", default="Kubernetes", show_default=True, help="Rule category")
 @click.option("--criteria", multiple=True,
-              help="Format is name:op:value{/subName:op:value}. name can be annotations, allowPrivEscalation, count, cpuLimit, cpuRequest, cveHighCount, cveHighWithFixCount, cveMediumCount, cveNames, cveScoreCount, envVarSecrets, image, imageCompliance, imageNoOS, imageScanned, imageSigned, imageVerifiers, labels, memoryLimit, memoryRequest, modules, mountVolumes, namespace, pspCompliance, resourceLimit. subName can be publishDays, runAsRoot, shareIpcWithHost, shareNetWithHost, sharePidWithHost, user, userGroups, violatePssPolicy. Format for criteira named customPath is name:op:path:valuetype:value. Format for criteria named saBindRiskyRole is name:op:value. See command: show admission rule options")
+              help="Format is name:op:value{/subName:op:value}. name can be annotations, allowPrivEscalation, count, cpuLimit, cpuRequest, cveHighCount, cveHighWithFixCount, cveMediumCount, cveNames, cveScoreCount, envVarSecrets, image, imageCompliance, imageNoOS, imageScanned, imageSigned, imageVerifiers, labels, memoryLimit, memoryRequest, modules, mountVolumes, namespace, pspCompliance, resourceLimit. subName can be publishDays, runAsRoot, shareIpcWithHost, shareNetWithHost, sharePidWithHost, storageClassName, user, userGroups, violatePssPolicy. Format for criteira named customPath is name:op:path:valuetype:value. Format for criteria named saBindRiskyRole is name:op:value. See command: show admission rule options")
 @click.option("--enable", "state", flag_value='enable', help="Enable the admission control rule")
 @click.option("--disable", "state", flag_value='disable', help="Enable the admission control rule")
 @click.option("--mode", required=False, type=click.Choice(['', 'monitor', 'protect']), help="Rule mode, only for deny rules")

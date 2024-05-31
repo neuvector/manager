@@ -11,7 +11,8 @@
     [reportPage]="'vulnerabilities'"
     [withoutAppendix]="withoutAppendix"
     [data]="vulnerabilitiesList"
-    [charts]="statisticCharts">
+    [charts]="statisticCharts"
+    [filterService]="vulnerabilitiesFilterService">
   </app-risks-view-report>
   <app-assets-view-report
     #assetsViewReport

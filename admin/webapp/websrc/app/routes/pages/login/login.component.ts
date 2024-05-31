@@ -133,17 +133,27 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.retrieveCustomizedUIContent();
     }
 
+    //check if the saml/openID login button should be enabled
+    this.getAuthServer();
+
     // If the user is already logged in, redirect to the dashboard page
     if (
       this.localStorage.has(GlobalConstant.LOCAL_STORAGE_TOKEN) &&
-      (!this.localStorage.has(GlobalConstant.LOCAL_STORAGE_TIMEOUT) ||
-        this.localStorage.get(GlobalConstant.LOCAL_STORAGE_TIMEOUT) !== true)
+      !(
+        this.localStorage.has(GlobalConstant.LOCAL_STORAGE_TIMEOUT) &&
+        this.localStorage.get(GlobalConstant.LOCAL_STORAGE_TIMEOUT) === true
+      )
     ) {
-      const userInfo = this.localStorage.get(
-        GlobalConstant.LOCAL_STORAGE_TOKEN
-      );
-      this.setUserInfo(userInfo);
-      this.getSummary(userInfo);
+      try {
+        const userInfo = this.localStorage.get(
+          GlobalConstant.LOCAL_STORAGE_TOKEN
+        );
+        this.setUserInfo(userInfo);
+        this.getSummary(userInfo);
+      } catch (e) {
+        console.error('Local storage token error.', (e as Error).message);
+        this.clearLocalStorage();
+      }
     } else if (this.isFromSSO) {
       this.authService.getEula().subscribe(
         (eulaInfo: any) => {
@@ -177,8 +187,9 @@ export class LoginComponent implements OnInit, OnDestroy {
         }
       );
     } else {
-      this.getAuthServer();
-      this.verifyAuth();
+      if (this.cookieService.check('temp')) {
+        this.verifyAuth();
+      }
       this.verifyEula();
     }
   }
@@ -347,44 +358,40 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.authMsg = 'Session has expired. Please login.'; //this.translate.instant("login.SESSION_TIMEOUT");
           }
         }
-        this.clearToken();
       }
     );
   }
 
   //for saml and openID redirection
   private verifyAuth() {
-    let hasAuthCookies = this.cookieService.check('temp');
-    if (hasAuthCookies) {
-      this.authService.updateTokenAuthServer().subscribe(
-        (userInfo: any) => {
-          this.inProgress = true;
-          this.setUserInfo(userInfo);
-          if (this.localStorage.has(GlobalConstant.LOCAL_STORAGE_TIMEOUT)) {
-            this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_TIMEOUT);
-          }
-          this.cookieService.delete('temp');
-          if (this.isEulaAccepted) {
-            this.getSummary(userInfo);
-          } else {
-            this.authService.updateEula().subscribe(
-              () => {
-                this.getSummary(userInfo);
-              },
-              error => {
-                this.authMsg = error.message;
-                this.inProgress = false;
-              }
-            );
-          }
-        },
-        error => {
-          this.inProgress = true;
-          this.authMsg = error.status === 0 ? error.message : error.error;
-          this.cookieService.delete('temp');
+    this.authService.updateTokenAuthServer().subscribe(
+      (userInfo: any) => {
+        this.inProgress = true;
+        this.setUserInfo(userInfo);
+        if (this.localStorage.has(GlobalConstant.LOCAL_STORAGE_TIMEOUT)) {
+          this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_TIMEOUT);
         }
-      );
-    }
+        this.cookieService.delete('temp');
+        if (this.isEulaAccepted) {
+          this.getSummary(userInfo);
+        } else {
+          this.authService.updateEula().subscribe(
+            () => {
+              this.getSummary(userInfo);
+            },
+            error => {
+              this.authMsg = error.message;
+              this.inProgress = false;
+            }
+          );
+        }
+      },
+      error => {
+        this.inProgress = true;
+        this.authMsg = error.status === 0 ? error.message : error.error;
+        this.cookieService.delete('temp');
+      }
+    );
   }
 
   public getEulaStatus(isChecked: boolean) {
@@ -443,7 +450,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         ) {
           this.router.navigate([this.originalUrl]);
         } else if (
-          this.linkedUrl && this.originalUrl &&
+          this.linkedUrl &&
+          this.originalUrl &&
           !this.linkedUrl.includes('login') &&
           !this.originalUrl.includes('logout')
         ) {
@@ -455,7 +463,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_ORIGINAL_URL);
       },
       error: () => {
-        this.inProgress = true;
+        this.inProgress = false;
         this.cookieService.delete('temp');
       },
     });

@@ -403,6 +403,16 @@ export class AddEditAdmissionRuleModalComponent implements OnInit {
 
   };
 
+  isInvalidCriteriaComb = (): boolean => {
+    let criteriaNameList = this.addEditAdmissionRuleForm.value.criteria.map(criterion => {
+      return criterion.value.name;
+    });
+    return (
+      criteriaNameList.includes('storageClassName') && (criteriaNameList.length > 1 && !criteriaNameList.includes('namespace')) ||
+      criteriaNameList.includes('storageClassName') && criteriaNameList.includes('namespace') && criteriaNameList.length > 2
+    );
+  };
+
   updateRule = () => {
     let adminRule = this.addEditAdmissionRuleForm.value;
     adminRule.criteria = adminRule.criteria.map(criterion => {

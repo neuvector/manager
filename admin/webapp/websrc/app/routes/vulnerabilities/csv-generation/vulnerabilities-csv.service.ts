@@ -355,13 +355,6 @@ export class VulnerabilitiesCsvService {
           new Set()
         )
       ).join(' ');
-
-      cve.images = `${cve.images}${Array.from(
-          filteredWorkload.reduce(
-            (acc, curr) => acc.add(curr.image),
-            new Set()
-          )
-        ).join(' ')}`;
       console.log(
         'cve.workloads: ',
         cve.workloads,

@@ -31,10 +31,10 @@ object GroupJsonProtocol extends DefaultJsonProtocol {
   implicit val workloadBriefFormat: RootJsonFormat[WorkloadBrief] = rootFormat(
     lazyFormat(jsonFormat15(WorkloadBrief))
   )
-  implicit val groupFormat: RootJsonFormat[Group]         = jsonFormat17(Group)
+  implicit val groupFormat: RootJsonFormat[Group]         = jsonFormat21(Group)
   implicit val groupWrapFormat: RootJsonFormat[GroupWrap] = jsonFormat1(GroupWrap)
 
-  implicit val groupConfigFormat: RootJsonFormat[GroupConfig]         = jsonFormat4(GroupConfig)
+  implicit val groupConfigFormat: RootJsonFormat[GroupConfig]         = jsonFormat8(GroupConfig)
   implicit val groupConfigWrapFormat: RootJsonFormat[GroupConfigWrap] = jsonFormat1(GroupConfigWrap)
   implicit val groupsFormat: RootJsonFormat[Groups]                   = jsonFormat1(Groups)
   implicit val remoteExportOptionsFormat: RootJsonFormat[RemoteExportOptions] = jsonFormat3(
@@ -43,16 +43,16 @@ object GroupJsonProtocol extends DefaultJsonProtocol {
   implicit val groups4ExportFormat: RootJsonFormat[Groups4Export] = jsonFormat3(Groups4Export)
 
   implicit val criteriaItemFormat: RootJsonFormat[CriteriaItem]     = jsonFormat1(CriteriaItem)
-  implicit val groupConfigDTOFormat: RootJsonFormat[GroupConfigDTO] = jsonFormat4(GroupConfigDTO)
+  implicit val groupConfigDTOFormat: RootJsonFormat[GroupConfigDTO] = jsonFormat8(GroupConfigDTO)
   implicit val serviceAddressFormat: RootJsonFormat[ServiceAddress] = jsonFormat2(ServiceAddress)
-  implicit val groupDTOFormat: RootJsonFormat[GroupDTO]             = jsonFormat17(GroupDTO)
+  implicit val groupDTOFormat: RootJsonFormat[GroupDTO]             = jsonFormat21(GroupDTO)
   implicit val groupDTOsFormat: RootJsonFormat[GroupDTOs]           = jsonFormat1(GroupDTOs)
   implicit val groupDTOWrapFormat: RootJsonFormat[GroupDTOWrap]     = jsonFormat1(GroupDTOWrap)
-  implicit val group4SingleFormat: RootJsonFormat[Group4Single]     = jsonFormat17(Group4Single)
+  implicit val group4SingleFormat: RootJsonFormat[Group4Single]     = jsonFormat21(Group4Single)
   implicit val group4SingleWrapFormat: RootJsonFormat[Group4SingleWrap] = jsonFormat1(
     Group4SingleWrap
   )
-  implicit val grou4SingleDTOFormat: RootJsonFormat[Group4SingleDTO] = jsonFormat17(Group4SingleDTO)
+  implicit val grou4SingleDTOFormat: RootJsonFormat[Group4SingleDTO] = jsonFormat21(Group4SingleDTO)
   implicit val group4SingleDTOWrapFormat: RootJsonFormat[Group4SingleDTOWrap] = jsonFormat1(
     Group4SingleDTOWrap
   )
@@ -137,7 +137,11 @@ object GroupJsonProtocol extends DefaultJsonProtocol {
       group.cap_scorable,
       group.kind,
       group.cfg_type,
-      group.not_scored
+      group.not_scored,
+      group.monitor_metric,
+      group.group_sess_cur,
+      group.group_sess_rate,
+      group.group_band_width
     )
   }
 
@@ -161,7 +165,11 @@ object GroupJsonProtocol extends DefaultJsonProtocol {
       group.cap_scorable,
       group.kind,
       group.cfg_type,
-      group.not_scored
+      group.not_scored,
+      group.monitor_metric,
+      group.group_sess_cur,
+      group.group_sess_rate,
+      group.group_band_width
     )
   }
 }

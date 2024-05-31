@@ -20,7 +20,11 @@ case class Group(
   cap_scorable: Option[Boolean],
   kind: String,
   cfg_type: Option[String] = Some("learned"),
-  not_scored: Boolean
+  not_scored: Boolean,
+  monitor_metric: Boolean,
+  group_sess_cur: Long,
+  group_sess_rate: Long,
+  group_band_width: Long
 )
 
 case class Rule4Group(
@@ -69,7 +73,11 @@ case class Group4Single(
   cap_scorable: Option[Boolean],
   kind: String,
   cfg_type: Option[String] = Some("learned"),
-  not_scored: Boolean
+  not_scored: Boolean,
+  monitor_metric: Boolean,
+  group_sess_cur: Long,
+  group_sess_rate: Long,
+  group_band_width: Long
 )
 
 case class WorkloadBrief(
@@ -102,7 +110,11 @@ case class GroupConfig(
   name: String,
   comment: String,
   criteria: Array[CriteriaEntry],
-  cfg_type: Option[String] = Some("user_created")
+  cfg_type: Option[String] = Some("user_created"),
+  monitor_metric: Boolean,
+  group_sess_cur: Long,
+  group_sess_rate: Long,
+  group_band_width: Long
 )
 
 case class GroupConfigWrap(config: GroupConfig)
@@ -139,7 +151,11 @@ case class GroupDTO(
   cap_scorable: Option[Boolean],
   kind: String,
   cfg_type: Option[String],
-  not_scored: Boolean
+  not_scored: Boolean,
+  monitor_metric: Boolean,
+  group_sess_cur: Long,
+  group_sess_rate: Long,
+  group_band_width: Long
 )
 
 case class Group4SingleDTO(
@@ -159,14 +175,22 @@ case class Group4SingleDTO(
   cap_scorable: Option[Boolean],
   kind: String,
   cfg_type: Option[String],
-  not_scored: Boolean
+  not_scored: Boolean,
+  monitor_metric: Boolean,
+  group_sess_cur: Long,
+  group_sess_rate: Long,
+  group_band_width: Long
 )
 
 case class GroupConfigDTO(
   name: String,
   comment: String,
   criteria: Array[CriteriaItem],
-  cfg_type: Option[String] = Some("user_created")
+  cfg_type: Option[String] = Some("user_created"),
+  monitor_metric: Boolean,
+  group_sess_cur: Long,
+  group_sess_rate: Long,
+  group_band_width: Long
 )
 
 case class GroupDTOs(groups: Array[GroupDTO])

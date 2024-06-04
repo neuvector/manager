@@ -102,6 +102,76 @@
           </mat-hint>
         </ng-container>
       </div>
+      <div class="row mt-2">
+        <div class="col-lg-3 col-md-6">
+          <label class="nv-modal-item-title margin-right-m">{{
+            "group.editGroup.MONITOR_METRIC" | translate
+          }}</label>
+          <mat-slide-toggle
+            class="padding-top-s"
+            id="metric_monitor-toggle"
+            [disabled]="data.opType === modalOp.VIEW"
+            formControlName="monitor_metric"
+          >
+            <span
+              [ngClass]="{
+                'text-muted': !addEditGroupForm.controls.monitor_metric.value,
+                'text-success': addEditGroupForm.controls.monitor_metric.value
+              }"
+            >
+              {{
+                (addEditGroupForm.controls.monitor_metric.value
+                  ? "policy.status.ENABLED"
+                  : "policy.status.DISABLED") | translate
+              }}
+            </span>
+          </mat-slide-toggle>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <mat-form-field class="pull-left" appearance="standard" style="width: 120px;">
+            <mat-label>{{ 'group.editGroup.GROUP_SESS_CUR' | translate }}</mat-label>
+            <input
+              type="number"
+              min="0"
+              step="1"
+              pattern="\d+"
+              matInput
+              formControlName="group_sess_cur"
+              [readonly]="data.opType === modalOp.VIEW || !addEditGroupForm.controls.monitor_metric.value"
+            />
+          </mat-form-field>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <mat-form-field class="pull-left" appearance="standard" style="width: 120px;">
+            <mat-label>{{ 'group.editGroup.GROUP_SESS_RATE' | translate }}</mat-label>
+            <input
+              type="number"
+              min="0"
+              step="1"
+              pattern="\d+"
+              matInput
+              formControlName="group_sess_rate"
+              [readonly]="data.opType === modalOp.VIEW || !addEditGroupForm.controls.monitor_metric.value"
+            />
+          </mat-form-field>
+          <div class="pull-left mt-4">{{ 'group.editGroup.CPS' | translate }}</div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <mat-form-field class="pull-left" appearance="standard" style="width: 120px;">
+            <mat-label>{{ 'group.editGroup.GROUP_BAND_WIDTH' | translate }}</mat-label>
+            <input
+              type="number"
+              min="0"
+              step="1"
+              pattern="\d+"
+              matInput
+              formControlName="group_band_width"
+              [readonly]="data.opType === modalOp.VIEW || !addEditGroupForm.controls.monitor_metric.value"
+            />
+          </mat-form-field>
+          <div class="pull-left mt-4">{{ 'group.editGroup.MBPS' | translate }}</div>
+        </div>
+      </div>
       <div
         class="d-flex justify-content-end align-items-center"
         *ngIf="data.opType !== modalOp.VIEW"

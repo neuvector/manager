@@ -21,7 +21,7 @@ export class AssetsViewReportAssetsImagesTableComponent implements OnInit {
     this.vulImagesCnt =  this.reportPage === 'vulnerabilities' ?
       this.images.length - this.images.filter(image => image.high + image.medium === 0).length :
       this.images.length - this.images.filter(image => image.complianceCnt === 0).length;
-    this.vulRate4Images = `${Math.ceil(this.vulImagesCnt / this.images.length) * 100}%`;
+    this.vulRate4Images = this.images.length > 0 ? `${Math.ceil(this.vulImagesCnt / this.images.length) * 100}%` : '0%';
   }
 
 }

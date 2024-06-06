@@ -3,7 +3,7 @@
     {{
       (reportPage === 'vulnerabilities' ? 'scan' : 'cis') +
         '.report.others.HOST_INS'
-        | translate : { vulRate4Hosts: vulRate4Hosts, hostCnt: nodes.length }
+        | translate : { vulRate4Hosts: vulRate4Hosts, hostCnt: nodes.length || 0 }
     }}
   </span>
 </div>

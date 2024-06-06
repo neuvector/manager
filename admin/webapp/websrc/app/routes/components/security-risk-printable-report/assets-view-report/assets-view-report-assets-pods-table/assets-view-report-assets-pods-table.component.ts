@@ -21,7 +21,7 @@ export class AssetsViewReportAssetsPodsTableComponent implements OnInit {
     this.vulPodsCnt =  this.reportPage === 'vulnerabilities' ?
       this.pods.length - this.pods.filter(pod => pod.high + pod.medium === 0).length :
       this.pods.length - this.pods.filter(pod => pod.complianceCnt === 0).length;
-    this.vulRate4Containers = `${Math.ceil(this.vulPodsCnt / this.pods.length) * 100}%`;
+    this.vulRate4Containers = this.pods.length ? `${Math.ceil(this.vulPodsCnt / this.pods.length) * 100}%` : '0%';
   }
 
 }

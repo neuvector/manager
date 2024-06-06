@@ -4,7 +4,7 @@
       (reportPage === 'vulnerabilities' ? 'scan' : 'cis') +
         '.report.others.IMAGE_INS'
         | translate
-          : { vulRate4Images: vulRate4Images, imageCnt: images.length }
+          : { vulRate4Images: vulRate4Images, imageCnt: images.length || 0 }
     }}
   </span>
 </div>

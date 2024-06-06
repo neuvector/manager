@@ -64,6 +64,8 @@ export class AddEditGroupModalComponent implements OnInit {
         group_sess_cur: new FormControl(0),
         group_band_width: new FormControl(0)
       });
+      this.showMonitorMetric =
+        this.data.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER
     } else {
       this.addEditGroupForm = new FormGroup({
         name: new FormControl(
@@ -149,6 +151,7 @@ export class AddEditGroupModalComponent implements OnInit {
 
   private updateShowMonitorMetric = () => {
     this.showMonitorMetric =
+      this.data.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER &&
       this.criteria.filter(criterion => criterion.name.includes('address')).length === 0;
   };
 

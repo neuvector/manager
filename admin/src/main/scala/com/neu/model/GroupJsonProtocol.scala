@@ -34,9 +34,15 @@ object GroupJsonProtocol extends DefaultJsonProtocol {
   implicit val groupFormat: RootJsonFormat[Group]         = jsonFormat21(Group)
   implicit val groupWrapFormat: RootJsonFormat[GroupWrap] = jsonFormat1(GroupWrap)
 
-  implicit val groupConfigFormat: RootJsonFormat[GroupConfig]         = jsonFormat8(GroupConfig)
+  implicit val groupConfigFormat: RootJsonFormat[GroupConfig] = jsonFormat8(GroupConfig)
+  implicit val groupConfig4LearnedFormat: RootJsonFormat[GroupConfig4Learned] = jsonFormat5(
+    GroupConfig4Learned
+  )
   implicit val groupConfigWrapFormat: RootJsonFormat[GroupConfigWrap] = jsonFormat1(GroupConfigWrap)
-  implicit val groupsFormat: RootJsonFormat[Groups]                   = jsonFormat1(Groups)
+  implicit val groupConfigWrap4LearnedFormat: RootJsonFormat[GroupConfigWrap4Learned] = jsonFormat1(
+    GroupConfigWrap4Learned
+  )
+  implicit val groupsFormat: RootJsonFormat[Groups] = jsonFormat1(Groups)
   implicit val remoteExportOptionsFormat: RootJsonFormat[RemoteExportOptions] = jsonFormat3(
     RemoteExportOptions
   )
@@ -64,6 +70,8 @@ object GroupJsonProtocol extends DefaultJsonProtocol {
 
   def groupConfigWrapToJson(groupConfigWrap: GroupConfigWrap): String =
     groupConfigWrap.toJson.compactPrint
+  def groupConfigWrap4LearnedToJson(groupConfigWrap4Learned: GroupConfigWrap4Learned): String =
+    groupConfigWrap4Learned.toJson.compactPrint
 
   def groupWrapToJson(groupWrap: GroupWrap): String = groupWrap.toJson.compactPrint
 

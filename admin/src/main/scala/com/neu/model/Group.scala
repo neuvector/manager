@@ -117,7 +117,16 @@ case class GroupConfig(
   group_band_width: Long
 )
 
+case class GroupConfig4Learned(
+  name: String,
+  monitor_metric: Boolean,
+  group_sess_cur: Long,
+  group_sess_rate: Long,
+  group_band_width: Long
+)
+
 case class GroupConfigWrap(config: GroupConfig)
+case class GroupConfigWrap4Learned(config: GroupConfig4Learned)
 
 case class GroupWrap(group: Group)
 case class Group4SingleWrap(group: Group4Single)

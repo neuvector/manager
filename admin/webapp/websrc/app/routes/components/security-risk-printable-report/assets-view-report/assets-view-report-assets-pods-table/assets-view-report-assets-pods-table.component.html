@@ -1,12 +1,12 @@
 <div class="report-summary" style="page-break-after: avoid">
-  <span class="summary-title" style="font-size: 16px">
+  <span class="summary-title" [ngClass]="{'text-warning': vulPodsCnt > 0, 'text-success': vulPodsCnt === 0}" style="font-size: 16px">
     {{
       (reportPage === 'vulnerabilities' ? 'scan' : 'cis') +
         '.report.others.CONTAINER_INS'
         | translate
           : {
-              safeRate4Containers: safeRate4Containers,
-              containerCnt: pods.length
+              vulRate4Containers: vulRate4Containers,
+              containerCnt: pods.length || 0
             }
     }}
   </span>

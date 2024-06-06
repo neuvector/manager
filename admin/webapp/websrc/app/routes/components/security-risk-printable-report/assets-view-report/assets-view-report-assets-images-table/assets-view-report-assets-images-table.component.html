@@ -1,10 +1,10 @@
 <div class="report-summary" style="page-break-after: avoid">
-  <span class="summary-title" style="font-size: 16px">
+  <span class="summary-title" [ngClass]="{'text-warning': vulImagesCnt > 0, 'text-success': vulImagesCnt === 0}" style="font-size: 16px">
     {{
       (reportPage === 'vulnerabilities' ? 'scan' : 'cis') +
         '.report.others.IMAGE_INS'
         | translate
-          : { safeRate4Images: safeRate4Images, imageCnt: images.length }
+          : { vulRate4Images: vulRate4Images, imageCnt: images.length || 0 }
     }}
   </span>
 </div>
@@ -46,7 +46,7 @@
       *ngFor="let image of images.slice(0, SEC_ASSETS_REPORT_MAX_ROW); let i = index"
       [attr.data-index]="i">
       <td class="print-cell" style="width: 30%">
-        {{ image.name }}
+        {{ reportPage === 'vulnerabilities' ? image.name : image.image_name }}
       </td>
       <td
         *ngIf="reportPage === 'vulnerabilities'"

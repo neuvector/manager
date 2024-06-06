@@ -1222,10 +1222,10 @@
         "TOP_VULNERABLE_HOSTS": "Top Vulnerable Nodes",
         "SEVERITY_DIS": "Vulnerabilities Severity Distribution",
         "TARGET_DIS": "Vulnerabilities Target Distribution",
-        "CONTAINER_INS": "Containers (Vulnerable Workloads (No Vulnerabilities): {{ safeRate4Containers }} ({{ containerCnt }} Workload(s)))",
-        "HOST_INS": "Hosts (Vulnerable Hosts (NoVulnerabilities): {{ safeRate4Hosts }} ({{ hostCnt }} host(s)))",
+        "CONTAINER_INS": "Containers (Rate of Vulnerable Workloads): {{ containerCnt }} Workload(s) ({{ vulRate4Containers }})",
+        "HOST_INS": "Hosts (Rate of Vulnerable Hosts): {{ hostCnt }} host(s) ({{ vulRate4Hosts }})",
         "PLATFORM_INS": "Platforms",
-        "IMAGE_INS": "Images (Vulnerable Images (No Vulnerabilities): {{ safeRate4Images }} ({{ imageCnt }} image(s)))"
+        "IMAGE_INS": "Images (Vulnerable Images (Rate of Vulnerable Images): {{ imageCnt }} image(s) ({{ vulRate4Images }})"
       }
     },
     "status": {
@@ -1484,10 +1484,10 @@
         "TOP_COMP_CONTAINER": "Top Impactful Compliance on Containers",
         "TARGET_DIS": "Compliance Target Distribution",
         "SEVERITY_DIS": "Compliance Severity Distribution",
-        "CONTAINER_INS": "Containers (Compliant Workloads (No Compliance Violations): {{ safeRate4Containers }} ({{ containerCnt }} Workload(s)))",
-        "HOST_INS": "Hosts (Compliant Hosts (No Compliance Violations): {{ safeRate4Hosts }} ({{ hostCnt }} host(s)))",
+        "CONTAINER_INS": "Containers (Rate of Uncompliant Workloads): {{ containerCnt }} Workload(s) ({{ vulRate4Containers }})",
+        "HOST_INS": "Hosts (Rate of Uncompliant Hosts): {{ hostCnt }} host(s) ({{ vulRate4Hosts }})",
         "PLATFORM_INS": "Platforms",
-        "IMAGE_INS": "Images (Compliant Images (No Compliance Violations): {{ safeRate4Images }} ({{ imageCnt }} image(s)))"
+        "IMAGE_INS": "Images (Rate of Uncompliant Images): {{ imageCnt }} image(s) ({{ vulRate4Images }})"
       }
     },
     "tooltips": {

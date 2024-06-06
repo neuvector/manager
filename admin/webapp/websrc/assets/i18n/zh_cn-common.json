@@ -1222,10 +1222,10 @@
         "TOP_VULNERABLE_HOSTS": "高危主机",
         "SEVERITY_DIS": "漏洞严重程度分布",
         "TARGET_DIS": "漏洞影响目标分布",
-        "CONTAINER_INS": "容器 (高危容器 (无漏洞): {{ safeRate4Containers }} ({{ containerCnt }} 个容器))",
-        "HOST_INS": "主机 (高危主机 (无漏洞): {{ safeRate4Hosts }} ({{ hostCnt }} 个主机))",
+        "CONTAINER_INS": "容器 (容器漏洞率): {{ containerCnt }} 个容器 ({{ vulRate4Containers }})",
+        "HOST_INS": "主机 (主机漏洞率): {{ hostCnt }} 个主机 ({{ vulRate4Hosts }})",
         "PLATFORM_INS": "平台",
-        "IMAGE_INS": "镜像 (高危镜像 (无漏洞): {{ safeRate4Images }} ({{ imageCnt }} 个镜像))"
+        "IMAGE_INS": "镜像 (镜像漏洞率): {{ imageCnt }} 个镜像 ({{ vulRate4Images }})"
       }
     },
     "status": {
@@ -1484,10 +1484,10 @@
         "TOP_COMP_CONTAINER": "高影响合规的容器",
         "TARGET_DIS": "合规影响目标分布",
         "SEVERITY_DIS": "合规严重程度分布",
-        "CONTAINER_INS": "容器 (合规容器 (无合规违反): {{ safeRate4Containers }} ({{ containerCnt }} 个容器))",
-        "HOST_INS": "主机 (合规主机 (无合规违反): {{ safeRate4Hosts }} ({{ hostCnt }} 个主机))",
+        "CONTAINER_INS": "容器 (容器不合规率): {{ containerCnt }} 个容器 ({{ vulRate4Containers }})",
+        "HOST_INS": "主机 (主机不合规率): {{ hostCnt }} 个主机 ({{ vulRate4Hosts }})",
         "PLATFORM_INS": "平台",
-        "IMAGE_INS": "镜像 (合规镜像 (无合规违反): {{ safeRate4Images }} ({{ imageCnt }} 个镜像))"
+        "IMAGE_INS": "镜像 (镜像不合规率): {{ imageCnt }} 个镜像 ({{ vulRate4Images }})"
       }
     },
     "tooltips": {

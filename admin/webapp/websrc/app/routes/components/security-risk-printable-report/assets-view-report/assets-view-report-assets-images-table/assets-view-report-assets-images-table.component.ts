@@ -11,16 +11,17 @@ export class AssetsViewReportAssetsImagesTableComponent implements OnInit {
   @Input() images: any[];
   @Input() reportPage: string;
   colourMap: any = MapConstant.colourMap;
-  safeRate4Images: string;
+  vulRate4Images: string;
+  vulImagesCnt: number;
   SEC_ASSETS_REPORT_MAX_ROW = MapConstant.SEC_ASSETS_REPORT_MAX_ROW;
 
   constructor() { }
 
   ngOnInit(): void {
-    let safeImagesCnt =  this.reportPage === 'vulnerabilities' ?
-      this.images.filter(image => image.high + image.medium === 0).length :
-      this.images.filter(image => image.complianceCnt === 0).length;
-    this.safeRate4Images = `${Math.ceil(safeImagesCnt / this.images.length)}%`;
+    this.vulImagesCnt =  this.reportPage === 'vulnerabilities' ?
+      this.images.length - this.images.filter(image => image.high + image.medium === 0).length :
+      this.images.length - this.images.filter(image => image.complianceCnt === 0).length;
+    this.vulRate4Images = `${Math.ceil(this.vulImagesCnt / this.images.length) * 100}%`;
   }
 
 }

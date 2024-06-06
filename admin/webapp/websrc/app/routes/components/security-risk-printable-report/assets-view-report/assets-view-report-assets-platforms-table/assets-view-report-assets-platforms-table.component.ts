@@ -15,6 +15,7 @@ export class AssetsViewReportAssetsPlatformsTableComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    console.log("platforms", this.platforms)
   }
 
 }

@@ -11,16 +11,17 @@ export class AssetsViewReportAssetsPodsTableComponent implements OnInit {
   @Input() pods: any[];
   @Input() reportPage: string;
   colourMap: any = MapConstant.colourMap;
-  safeRate4Containers: string;
+  vulRate4Containers: string;
+  vulPodsCnt: number;
   SEC_ASSETS_REPORT_MAX_ROW = MapConstant.SEC_ASSETS_REPORT_MAX_ROW;
 
   constructor() { }
 
   ngOnInit(): void {
-    let safePodsCnt =  this.reportPage === 'vulnerabilities' ?
-      this.pods.filter(pod => pod.high + pod.medium === 0).length :
-      this.pods.filter(pod => pod.complianceCnt === 0).length;
-    this.safeRate4Containers = `${Math.ceil(safePodsCnt / this.pods.length)}%`;
+    this.vulPodsCnt =  this.reportPage === 'vulnerabilities' ?
+      this.pods.length - this.pods.filter(pod => pod.high + pod.medium === 0).length :
+      this.pods.length - this.pods.filter(pod => pod.complianceCnt === 0).length;
+    this.vulRate4Containers = `${Math.ceil(this.vulPodsCnt / this.pods.length) * 100}%`;
   }
 
 }

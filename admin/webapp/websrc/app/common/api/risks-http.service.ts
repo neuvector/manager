@@ -152,10 +152,14 @@ export class RisksHttpService {
   }
 
   postAssetsViewData(queryToken: string, lastModifiedTime: number) {
-    return GlobalVariable.http.patch<any>(
+    return GlobalVariable.http.get<any>(
       PathConstant.ASSETS_VULS_URL,
-      { last_modified_timestamp: lastModifiedTime },
       { params: { queryToken: queryToken } }
     );
+    // return GlobalVariable.http.patch<any>(
+    //   PathConstant.ASSETS_VULS_URL,
+    //   { last_modified_timestamp: lastModifiedTime },
+    //   { params: { queryToken: queryToken } }
+    // );
   }
 }

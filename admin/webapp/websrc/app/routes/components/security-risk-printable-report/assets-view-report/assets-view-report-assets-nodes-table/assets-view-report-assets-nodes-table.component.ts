@@ -12,16 +12,17 @@ export class AssetsViewReportAssetsNodesTableComponent implements OnInit {
   @Input() nodes: any[];
   @Input() reportPage: string;
   colourMap: any = MapConstant.colourMap;
-  safeRate4Hosts: string;
+  vulRate4Hosts: string;
+  vulHostsCnt: number;
   SEC_ASSETS_REPORT_MAX_ROW = MapConstant.SEC_ASSETS_REPORT_MAX_ROW;
 
   constructor() { }
 
   ngOnInit(): void {
-    let safeHostsCnt =  this.reportPage === 'vulnerabilities' ?
-      this.nodes.filter(node => node.high + node.medium === 0).length :
-      this.nodes.filter(node => node.complianceCnt === 0).length;
-    this.safeRate4Hosts = `${Math.ceil(safeHostsCnt / this.nodes.length)}%`;
+    this.vulHostsCnt =  this.reportPage === 'vulnerabilities' ?
+      this.nodes.length - this.nodes.filter(node => node.high + node.medium === 0).length :
+      this.nodes.length - this.nodes.filter(node => node.complianceCnt === 0).length;
+    this.vulRate4Hosts = `${Math.ceil(this.vulHostsCnt / this.nodes.length) * 100}%`;
   }
 
 }

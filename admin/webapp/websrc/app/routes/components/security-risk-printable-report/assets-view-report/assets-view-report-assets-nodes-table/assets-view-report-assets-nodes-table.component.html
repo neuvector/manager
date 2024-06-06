@@ -1,9 +1,9 @@
 <div class="report-summary" style="page-break-after: avoid">
-  <span class="summary-title" style="font-size: 16px">
+  <span class="summary-title" [ngClass]="{'text-warning': vulHostsCnt > 0, 'text-success': vulHostsCnt === 0}" style="font-size: 16px">
     {{
       (reportPage === 'vulnerabilities' ? 'scan' : 'cis') +
         '.report.others.HOST_INS'
-        | translate : { safeRate4Hosts: safeRate4Hosts, hostCnt: nodes.length }
+        | translate : { vulRate4Hosts: vulRate4Hosts, hostCnt: nodes.length }
     }}
   </span>
 </div>

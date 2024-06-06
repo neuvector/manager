@@ -374,20 +374,35 @@ class GroupService()(implicit executionContext: ExecutionContext)
                             s"$baseUri/group/${groupConfigDTO.name}"
                           else s"${baseClusterUri(tokenId)}/group/${groupConfigDTO.name}",
                           PATCH,
-                          groupConfigWrapToJson(
-                            GroupConfigWrap(
-                              GroupConfig(
-                                groupConfigDTO.name,
-                                groupConfigDTO.comment,
-                                criteria,
-                                groupConfigDTO.cfg_type,
-                                groupConfigDTO.monitor_metric,
-                                groupConfigDTO.group_sess_rate,
-                                groupConfigDTO.group_sess_cur,
-                                groupConfigDTO.group_band_width
+                          if (groupConfigDTO.cfg_type
+                                .getOrElse("user_created")
+                                .equals("user_created"))
+                            groupConfigWrapToJson(
+                              GroupConfigWrap(
+                                GroupConfig(
+                                  groupConfigDTO.name,
+                                  groupConfigDTO.comment,
+                                  criteria,
+                                  groupConfigDTO.cfg_type,
+                                  groupConfigDTO.monitor_metric,
+                                  groupConfigDTO.group_sess_rate,
+                                  groupConfigDTO.group_sess_cur,
+                                  groupConfigDTO.group_band_width
+                                )
                               )
                             )
-                          ),
+                          else
+                            groupConfigWrap4LearnedToJson(
+                              GroupConfigWrap4Learned(
+                                GroupConfig4Learned(
+                                  groupConfigDTO.name,
+                                  groupConfigDTO.monitor_metric,
+                                  groupConfigDTO.group_sess_rate,
+                                  groupConfigDTO.group_sess_cur,
+                                  groupConfigDTO.group_band_width
+                                )
+                              )
+                            ),
                           tokenId
                         )
                       }

@@ -50,7 +50,7 @@
             type="text"
             matInput
             formControlName="comment"
-            [readonly]="data.opType === modalOp.VIEW"
+            [readonly]="data.opType === modalOp.VIEW || data.cfgType === GlobalConstant.CFG_TYPE.LEARNED"
             [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
           />
         </mat-form-field>
@@ -102,7 +102,7 @@
           </mat-hint>
         </ng-container>
       </div>
-      <div class="row mt-2">
+      <div class="row mt-2" *ngIf="data.cfgType === GlobalConstant.CFG_TYPE.LEARNED || data.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER">
         <div class="col-lg-3 col-md-6">
           <label class="nv-modal-item-title margin-right-m">{{
             "group.editGroup.MONITOR_METRIC" | translate
@@ -137,7 +137,7 @@
               pattern="\d+"
               matInput
               formControlName="group_sess_cur"
-              [readonly]="data.opType === modalOp.VIEW || !addEditGroupForm.controls.monitor_metric.value"
+              [readonly]="(data.opType === modalOp.VIEW) || !addEditGroupForm.controls.monitor_metric.value"
             />
           </mat-form-field>
         </div>

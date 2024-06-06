@@ -34,6 +34,7 @@ export class AddEditGroupModalComponent implements OnInit {
   submittingUpdate: boolean = false;
   groupNameRegex = new RegExp(/^[a-z0-9.-]*$/);
   isShowingWarning: boolean = false;
+  GlobalConstant = GlobalConstant;
 
   constructor(
     public dialogRef: MatDialogRef<AddEditGroupModalComponent>,
@@ -78,7 +79,7 @@ export class AddEditGroupModalComponent implements OnInit {
       this.criteria = JSON.parse(
         JSON.stringify(this.data.selectedGroup.criteria)
       );
-      if (this.data.opType === GlobalConstant.MODAL_OP.VIEW) {
+      if (this.data.opType === GlobalConstant.MODAL_OP.VIEW || this.data.cfgType === GlobalConstant.CFG_TYPE.LEARNED) {
         this.addEditGroupForm.controls.criteriaCtrl.disable();
       } else {
         this.addEditGroupForm.controls.criteriaCtrl.enable();

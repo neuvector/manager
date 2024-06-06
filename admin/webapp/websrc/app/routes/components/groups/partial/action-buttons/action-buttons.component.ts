@@ -39,8 +39,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
       (this.params.context.componentParent.source ===
       GlobalConstant.NAV_SOURCE.FED_POLICY
         ? false
-        : params.data.cfg_type === GlobalConstant.CFG_TYPE.FED) ||
-      params.data.cfg_type === GlobalConstant.CFG_TYPE.LEARNED;
+        : params.data.cfg_type === GlobalConstant.CFG_TYPE.FED);
     this.isAddressGroupAndNamespaceUser =
       this.params.context.componentParent.isNamespaceUser &&
       params.data.kind.toLowerCase() === MapConstant.GROUP_KIND.ADDRESS;
@@ -61,7 +60,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
           this.params.context.componentParent.source ===
           GlobalConstant.NAV_SOURCE.FED_POLICY
             ? GlobalConstant.CFG_TYPE.FED
-            : GlobalConstant.CFG_TYPE.CUSTOMER,
+            : this.params.data.cfg_type,
         selectedGroup: this.params.data,
         refresh:
           this.params.context.componentParent.source ===
@@ -82,7 +81,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
           this.params.context.componentParent.source ===
           GlobalConstant.NAV_SOURCE.FED_POLICY
             ? GlobalConstant.SCOPE.FED
-            : GlobalConstant.SCOPE.LOCAL,
+            : this.params.data.cfg_type,
         selectedGroup: this.params.data,
         refresh: this.params.context.componentParent.getGroups,
       },

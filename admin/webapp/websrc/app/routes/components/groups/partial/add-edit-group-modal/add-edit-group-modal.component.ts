@@ -14,6 +14,7 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { GlobalConstant } from '@common/constants/global.constant';
+import { MapConstant } from '@common/constants/map.constant';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { GroupsService } from '@services/groups.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -34,6 +35,7 @@ export class AddEditGroupModalComponent implements OnInit {
   submittingUpdate: boolean = false;
   groupNameRegex = new RegExp(/^[a-z0-9.-]*$/);
   isShowingWarning: boolean = false;
+  showMonitorMetric: boolean = true;
   GlobalConstant = GlobalConstant;
 
   constructor(
@@ -62,6 +64,8 @@ export class AddEditGroupModalComponent implements OnInit {
         group_sess_cur: new FormControl(0),
         group_band_width: new FormControl(0)
       });
+      this.showMonitorMetric =
+        this.data.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER
     } else {
       this.addEditGroupForm = new FormGroup({
         name: new FormControl(
@@ -84,6 +88,10 @@ export class AddEditGroupModalComponent implements OnInit {
       } else {
         this.addEditGroupForm.controls.criteriaCtrl.enable();
       }
+      this.showMonitorMetric =
+        (this.data.cfgType === GlobalConstant.CFG_TYPE.LEARNED || this.data.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER) &&
+        this.data.selectedGroup.kind === MapConstant.GROUP_KIND.CONTAINER &&
+        !this.data.selectedGroup.reserved;
     }
   }
 
@@ -113,6 +121,7 @@ export class AddEditGroupModalComponent implements OnInit {
     }
 
     event.chipInput!.clear();
+    this.updateShowMonitorMetric();
   };
 
   removeCriterion = (criterion: string) => {
@@ -120,6 +129,7 @@ export class AddEditGroupModalComponent implements OnInit {
     if (index >= 0) {
       this.criteria.splice(index, 1);
     }
+    this.updateShowMonitorMetric();
   };
 
   editCriterion = (criterion: any) => {
@@ -135,7 +145,14 @@ export class AddEditGroupModalComponent implements OnInit {
       if (value) {
         this.criteria[index].name = value;
       }
+      this.updateShowMonitorMetric();
     });
+  };
+
+  private updateShowMonitorMetric = () => {
+    this.showMonitorMetric =
+      this.data.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER &&
+      this.criteria.filter(criterion => criterion.name.includes('address')).length === 0;
   };
 
   updateGroup = () => {

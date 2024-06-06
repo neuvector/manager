@@ -170,8 +170,8 @@ class GroupService()(implicit executionContext: ExecutionContext)
                           criteria,
                           groupConfigDTO.cfg_type,
                           groupConfigDTO.monitor_metric,
-                          groupConfigDTO.group_sess_rate,
                           groupConfigDTO.group_sess_cur,
+                          groupConfigDTO.group_sess_rate,
                           groupConfigDTO.group_band_width
                         )
                       )
@@ -194,8 +194,8 @@ class GroupService()(implicit executionContext: ExecutionContext)
                                 criteria,
                                 groupConfigDTO.cfg_type,
                                 groupConfigDTO.monitor_metric,
-                                groupConfigDTO.group_sess_rate,
                                 groupConfigDTO.group_sess_cur,
+                                groupConfigDTO.group_sess_rate,
                                 groupConfigDTO.group_band_width
                               )
                             )
@@ -385,8 +385,8 @@ class GroupService()(implicit executionContext: ExecutionContext)
                                   criteria,
                                   groupConfigDTO.cfg_type,
                                   groupConfigDTO.monitor_metric,
-                                  groupConfigDTO.group_sess_rate,
                                   groupConfigDTO.group_sess_cur,
+                                  groupConfigDTO.group_sess_rate,
                                   groupConfigDTO.group_band_width
                                 )
                               )
@@ -397,8 +397,8 @@ class GroupService()(implicit executionContext: ExecutionContext)
                                 GroupConfig4Learned(
                                   groupConfigDTO.name,
                                   groupConfigDTO.monitor_metric,
-                                  groupConfigDTO.group_sess_rate,
                                   groupConfigDTO.group_sess_cur,
+                                  groupConfigDTO.group_sess_rate,
                                   groupConfigDTO.group_band_width
                                 )
                               )

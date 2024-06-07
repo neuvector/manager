@@ -1222,10 +1222,10 @@
         "TOP_VULNERABLE_HOSTS": "Top Vulnerable Nodes",
         "SEVERITY_DIS": "Vulnerabilities Severity Distribution",
         "TARGET_DIS": "Vulnerabilities Target Distribution",
-        "CONTAINER_INS": "Containers (Rate of Vulnerable Workloads): {{ containerCnt }} Workload(s) ({{ vulRate4Containers }})",
-        "HOST_INS": "Hosts (Rate of Vulnerable Hosts): {{ hostCnt }} host(s) ({{ vulRate4Hosts }})",
+        "CONTAINER_INS": "Pods ({{ vulPodsCnt }} out of {{ containerCnt }} marked as vulnerable)",
+        "HOST_INS": "Hosts ({{ vulHostsCnt }} out of {{ hostCnt }} marked as vulnerable)",
         "PLATFORM_INS": "Platforms",
-        "IMAGE_INS": "Images (Vulnerable Images (Rate of Vulnerable Images): {{ imageCnt }} image(s) ({{ vulRate4Images }})"
+        "IMAGE_INS": "Images ({{ vulImagesCnt }} out of {{ imageCnt }} marked as vulnerable)"
       }
     },
     "status": {
@@ -1484,10 +1484,10 @@
         "TOP_COMP_CONTAINER": "Top Impactful Compliance on Containers",
         "TARGET_DIS": "Compliance Target Distribution",
         "SEVERITY_DIS": "Compliance Severity Distribution",
-        "CONTAINER_INS": "Containers (Rate of Uncompliant Workloads): {{ containerCnt }} Workload(s) ({{ vulRate4Containers }})",
-        "HOST_INS": "Hosts (Rate of Uncompliant Hosts): {{ hostCnt }} host(s) ({{ vulRate4Hosts }})",
+        "CONTAINER_INS": "Pods ({{ vulPodsCnt }} out of {{ containerCnt }} marked as uncompliant)",
+        "HOST_INS": "Hosts ({{ vulHostsCnt }} out of {{ hostCnt }} marked as uncompliant)",
         "PLATFORM_INS": "Platforms",
-        "IMAGE_INS": "Images (Rate of Uncompliant Images): {{ imageCnt }} image(s) ({{ vulRate4Images }})"
+        "IMAGE_INS": "Images ({{ vulImagesCnt }} out of {{ imageCnt }} marked as uncompliant)"
       }
     },
     "tooltips": {
@@ -2153,7 +2153,7 @@
       "CANCEL": "Cancel",
       "ERR_MSG": "Error happens when updating group.",
       "OK_MSG": "Group is updated successfully!",
-      "MONITOR_METRIC": "Monitoring Metric Threshold",
+      "MONITOR_METRIC": "Network Monitoring Threshold",
       "GROUP_SESS_RATE": "Group Session Rate",
       "CPS": "CPS",
       "GROUP_SESS_CUR": "Active Session Count",

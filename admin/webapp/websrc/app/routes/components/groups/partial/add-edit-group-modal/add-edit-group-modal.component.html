@@ -142,6 +142,11 @@
                 formControlName="group_sess_cur"
                 [readonly]="(data.opType === modalOp.VIEW) || !addEditGroupForm.controls.monitor_metric.value"
               />
+              <mat-error
+                *ngIf="addEditGroupForm.controls.group_sess_cur.hasError('required')"
+              >
+                {{ 'general.REQUIRED' | translate }}
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-lg-4 col-md-4">
@@ -156,6 +161,11 @@
                 formControlName="group_sess_rate"
                 [readonly]="data.opType === modalOp.VIEW || !addEditGroupForm.controls.monitor_metric.value"
               />
+              <mat-error
+                *ngIf="addEditGroupForm.controls.group_sess_rate.hasError('required')"
+              >
+                {{ 'general.REQUIRED' | translate }}
+              </mat-error>
             </mat-form-field>
             <div class="pull-left mt-4">{{ 'group.editGroup.CPS' | translate }}</div>
           </div>
@@ -171,6 +181,11 @@
                 formControlName="group_band_width"
                 [readonly]="data.opType === modalOp.VIEW || !addEditGroupForm.controls.monitor_metric.value"
               />
+              <mat-error
+                *ngIf="addEditGroupForm.controls.group_band_width.hasError('required')"
+              >
+                {{ 'general.REQUIRED' | translate }}
+              </mat-error>
             </mat-form-field>
             <div class="pull-left mt-4">{{ 'group.editGroup.MBPS' | translate }}</div>
           </div>
@@ -187,6 +202,7 @@
           [appearance]="'mat-raised-button'"
           [color]="'primary'"
           [loading]="submittingUpdate"
+          [disabled]="addEditGroupForm.invalid"
           [text]="
             (data.opType === modalOp.EDIT
               ? 'group.editGroup.UPDATE'

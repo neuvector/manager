@@ -59,10 +59,10 @@ export class AddEditGroupModalComponent implements OnInit {
         ),
         comment: new FormControl(''),
         criteriaCtrl: new FormControl(),
-        monitor_metric: new FormControl(false),
-        group_sess_rate: new FormControl(0),
-        group_sess_cur: new FormControl(0),
-        group_band_width: new FormControl(0)
+        monitor_metric: new FormControl(false, Validators.required),
+        group_sess_rate: new FormControl(0, Validators.required),
+        group_sess_cur: new FormControl(0, Validators.required),
+        group_band_width: new FormControl(0, Validators.required)
       });
       this.showMonitorMetric =
         this.data.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER
@@ -74,10 +74,10 @@ export class AddEditGroupModalComponent implements OnInit {
         ),
         comment: new FormControl(this.data.selectedGroup.comment),
         criteriaCtrl: new FormControl(),
-        monitor_metric: new FormControl(this.data.selectedGroup.monitor_metric),
-        group_sess_rate: new FormControl(this.data.selectedGroup.group_sess_rate),
-        group_sess_cur: new FormControl(this.data.selectedGroup.group_sess_cur),
-        group_band_width: new FormControl(this.data.selectedGroup.group_band_width)
+        monitor_metric: new FormControl(this.data.selectedGroup.monitor_metric, Validators.required),
+        group_sess_rate: new FormControl(this.data.selectedGroup.group_sess_rate, Validators.required),
+        group_sess_cur: new FormControl(this.data.selectedGroup.group_sess_cur, Validators.required),
+        group_band_width: new FormControl(this.data.selectedGroup.group_band_width, Validators.required)
       });
       this.isShowingWarning = !this.groupNameRegex.test(this.addEditGroupForm.get('name')!.value);
       this.criteria = JSON.parse(
@@ -150,6 +150,9 @@ export class AddEditGroupModalComponent implements OnInit {
   };
 
   private updateShowMonitorMetric = () => {
+    this.addEditGroupForm.controls['group_sess_rate'].setValue(0);
+    this.addEditGroupForm.controls['group_sess_cur'].setValue(0);
+    this.addEditGroupForm.controls['group_band_width'].setValue(0);
     this.showMonitorMetric =
       this.data.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER &&
       this.criteria.filter(criterion => criterion.name.includes('address')).length === 0;

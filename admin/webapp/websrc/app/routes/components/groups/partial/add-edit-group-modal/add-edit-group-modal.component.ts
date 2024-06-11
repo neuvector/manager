@@ -150,11 +150,12 @@ export class AddEditGroupModalComponent implements OnInit {
   };
 
   private updateShowMonitorMetric = () => {
-    this.addEditGroupForm.controls['group_sess_rate'].setValue(0);
-    this.addEditGroupForm.controls['group_sess_cur'].setValue(0);
-    this.addEditGroupForm.controls['group_band_width'].setValue(0);
+    if (!this.addEditGroupForm.controls['group_sess_rate'].value) this.addEditGroupForm.controls['group_sess_rate'].setValue(0);
+    if (!this.addEditGroupForm.controls['group_sess_cur'].value) this.addEditGroupForm.controls['group_sess_cur'].setValue(0);
+    if (!this.addEditGroupForm.controls['group_band_width'].value) this.addEditGroupForm.controls['group_band_width'].setValue(0);
     this.showMonitorMetric =
-      this.data.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER &&
+      (this.data.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER || this.data.cfgType === GlobalConstant.CFG_TYPE.LEARNED) &&
+      !this.data.selectedGroup.reserved &&
       this.criteria.filter(criterion => criterion.name.includes('address')).length === 0;
   };
 

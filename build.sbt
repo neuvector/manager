@@ -40,6 +40,8 @@ lazy val commonDependencies = Seq(
   "com.sun.xml.ws"     % "jaxws-ri"           % "2.3.3",
   "javax.xml.soap"     % "javax.xml.soap-api" % "1.4.0",
   "org.json4s"         %% "json4s-native"     % "3.6.10",
+  "org.bouncycastle" % "bcprov-jdk15on" % "1.70",
+  "org.bouncycastle" % "bcpkix-jdk15on" % "1.70",
   akka,
   typesafeConfig,
   joda,

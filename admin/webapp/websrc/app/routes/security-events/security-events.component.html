@@ -505,7 +505,7 @@
                   <div class="row margin-right-0">
                     <div class="col-sm-10 padding-left-0">
                       <div
-                        *ngIf="secEvent.container.domain !== ''"
+                        *ngIf="secEvent.container.id !== ''"
                         class="auto-hide"
                         matTooltip="{{ secEvent.container.name }}"
                         matTooltipPosition="above"
@@ -517,7 +517,7 @@
                           >{{ 'securityEvent.CONTAINER' | translate }}:</strong
                         >
                         <span>
-                          <span>
+                          <span *ngIf="secEvent.container.domain !== ''">
                             <em class="eos-icons icon-18 text-primary"
                               >domain</em
                             >
@@ -525,7 +525,7 @@
                               {{ secEvent.container.domain }}
                             </span>
                           </span>
-                          <span *ngIf="secEvent.container.id !== ''">
+                          <span>
                             <span *ngIf="secEvent.container.service">
                               <em class="eos-icons icon-18 text-primary"
                                 >system_group</em

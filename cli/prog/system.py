@@ -1360,15 +1360,16 @@ def request_export_admission(data, config, id, filename, remote_repository_nickn
         if remote_repository_nickname != "default":
             click.echo("Error: Unsupported repository nickname")
             return
-        elif len(remote_filepath) == 0:
-            click.echo("Error: remote_filepath unspecified")
-            return
         else:
-            payload["remote_export_options"] = {
-                "remote_repository_nickname": remote_repository_nickname,
-                "file_path": remote_filepath,
-                "comment": comment,
-            }
+            if len(remote_filepath) > 0:
+                payload["remote_export_options"] = {
+                    "remote_repository_nickname": remote_repository_nickname,
+                    "file_path": remote_filepath,
+                    "comment": comment,
+                }
+            elif len(filename) == 0:
+                click.echo("Error: either filename or remote_filepath must be specified")
+                return
 
     respData = data.client.requestDownload("file", "admission", None, payload)
     if filename and len(filename) > 0:

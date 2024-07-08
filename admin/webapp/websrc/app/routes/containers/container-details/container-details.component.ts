@@ -249,7 +249,7 @@ export class ContainerDetailsComponent implements OnInit, OnDestroy {
             new Date(),
             'MMM dd, y HH:mm:ss'
           )} from Containers page`,
-          images: [],
+          images: [this._container.brief.image],
           domains: [this.container.brief.domain],
         },
       ],

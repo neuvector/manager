@@ -1391,7 +1391,7 @@
       "WILL_NOT_FIX": "Will Not Fix",
       "UNAFFECTED": "Unaffected",
       "TOTAL": "Total",
-      "CVES": "Vulnerability Name",
+      "CVES": "Vulnerabilities",
       "CPES": "CPEs",
       "STATUS": "Status"
     },

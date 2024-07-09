@@ -1391,7 +1391,7 @@
       "WILL_NOT_FIX": "不修复",
       "UNAFFECTED": "无影响",
       "TOTAL": "合计",
-      "CVES": "漏洞名称",
+      "CVES": "漏洞",
       "CPES": "CPEs",
       "STATUS": "状态"
     },

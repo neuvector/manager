@@ -72,10 +72,9 @@ export class RegistryVulnerabilitiesComponent {
     if (cveByLayer.length > 0) {
       const title = `${this.path + this.repository} | Image Id: ${
         this.imageId
-      } |  CVE DB Version: ${this.cveDBVersion}(${moment(this.scannerDate.replace(
-        /\,/g,
-        ' '
-      )).format('MM/DD/YYYY hh:mm:ss')}) | OS: ${this.baseOS}`;
+      } |  CVE DB Version: ${this.cveDBVersion}(${moment(
+        this.scannerDate.replace(/\,/g, ' ')
+      ).format('MM/DD/YYYY hh:mm:ss')}) | OS: ${this.baseOS}`;
       let cveByLayer4Csv = cloneDeep(cveByLayer);
       cveByLayer4Csv = cveByLayer4Csv.map(cve => {
         cve.description = `${cve.description.replace(/\"/g, "'")}`;
@@ -102,11 +101,16 @@ export class RegistryVulnerabilitiesComponent {
     ) {
       const title = `${this.path + this.repository} | Image ID: ${
         this.imageId
-      } |  CVE DB Version: ${this.cveDBVersion}(${moment(this.scannerDate.replace(
-        /\,/g,
-        ' '
-      )).format('MM/DD/YYYY hh:mm:ss')}) | OS: ${this.baseOS}${this.selectedLayer?.verifiers && this.selectedLayer?.verifiers.length > 0 ?
-        `\nSigstore Verifiers: ${this.selectedLayer?.verifiers.join(' | ')} (Verified at: ${this.selectedLayer?.verificationTimestamp})` : ''}`;
+      } |  CVE DB Version: ${this.cveDBVersion}(${moment(
+        this.scannerDate.replace(/\,/g, ' ')
+      ).format('MM/DD/YYYY hh:mm:ss')}) | OS: ${this.baseOS}${
+        this.selectedLayer?.verifiers &&
+        this.selectedLayer?.verifiers.length > 0
+          ? `\nSigstore Verifiers: ${this.selectedLayer?.verifiers.join(
+              ' | '
+            )} (Verified at: ${this.selectedLayer?.verificationTimestamp})`
+          : ''
+      }`;
       let cves4Csv: any = cloneDeep(this.selectedLayer.vulnerabilities);
       cves4Csv = cves4Csv.map(cve => {
         cve.description = `${cve.description.replace(/\"/g, "'")}`;
@@ -125,13 +129,14 @@ export class RegistryVulnerabilitiesComponent {
           vectors: cve.vectors,
           vectors_v3: cve.vectors_v3,
           feed_rating: cve.feed_rating,
+          file_name: cve.file_name,
           package_name: cve.package_name,
           package_version: cve.package_version,
           fixed_version: cve.fixed_version,
           tags: cve.tags,
           published_timestamp: cve.published_timestamp,
-          last_modified_timestamp: cve.last_modified_timestamp
-        }
+          last_modified_timestamp: cve.last_modified_timestamp,
+        };
       });
       const csv = arrayToCsv(cves4Csv, title);
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });

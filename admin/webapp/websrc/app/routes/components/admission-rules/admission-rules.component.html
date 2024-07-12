@@ -26,7 +26,7 @@
           {{ 'admissionControl.MATCHING_TEST' | translate }}
         </button>
       </div>
-      <div class="" *appDisplayControl="'write_admission'">
+      <div class="" *appDisplayControl="'admission'">
         <div *ngIf="source === navSource['SELF']">
           <button mat-button [matMenuTriggerFor]="menu">
             {{ 'admissionControl.MORE' | translate }}
@@ -53,6 +53,7 @@
               </button>
             </div>
             <button
+              *appDisplayControl="'write_admission'"
               mat-menu-item
               class="d-flex align-items-center"
               (click)="openImportPopup()">

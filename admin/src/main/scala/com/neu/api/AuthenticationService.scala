@@ -994,6 +994,10 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                 Utils.respondWithWebServerHeaders() {
                   onUnauthorized(e)
                 }
+              } else if (e.getMessage.contains("Status: 410")) {
+                Utils.respondWithWebServerHeaders() {
+                  complete((StatusCodes.Gone, "Please Login from Rancher again!"))
+                }
               } else {
                 logger.warn(e.getClass.toString)
                 reloadCtrlIp()
@@ -1008,6 +1012,10 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                           )) {
                       Utils.respondWithWebServerHeaders() {
                         onUnauthorized(e)
+                      }
+                    } else if (e.getMessage.contains("Status: 410")) {
+                      Utils.respondWithWebServerHeaders() {
+                        complete((StatusCodes.Gone, "Please Login from Rancher again!"))
                       }
                     } else {
                       Utils.respondWithWebServerHeaders() {

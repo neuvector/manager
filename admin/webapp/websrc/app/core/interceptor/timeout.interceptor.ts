@@ -49,7 +49,9 @@ export class TimeoutInterceptor implements HttpInterceptor {
             (status === GlobalConstant.STATUS_SERVER_UNAVAILABLE &&
               currentPath !== GlobalConstant.PATH_LOGIN &&
               currentPath !== '/' + GlobalConstant.PATH_LOGIN &&
-              currentPath !== GlobalConstant.PATH_MULTICLUSTER) ||
+              currentPath !== GlobalConstant.PATH_MULTICLUSTER &&
+              !req.url.endsWith(PathConstant.MULTI_CLUSTER_SUMMARY)
+            ) ||
             req.url === PathConstant.TOKEN_AUTH ||
             req.url === PathConstant.SELF_URL
           ) {

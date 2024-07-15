@@ -23,6 +23,8 @@ object CommonSettings extends LazyLogging {
   val trustStore: String  = config.getString("rest.trust.store")
   val newCert: String     = config.getString("rest.new.cert")
   val newKey: String      = config.getString("rest.new.key")
+  val newMgrCert: String  = config.getString("rest.new.mgr.cert")
+  val newMgrKey: String   = config.getString("rest.new.mgr.key")
   val newCtrlCert: String = config.getString("rest.new.ctrl.cert")
   val newCtrlKey: String  = config.getString("rest.new.ctrl.key")
 

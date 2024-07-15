@@ -1,13 +1,22 @@
 package com.neu.core
 
-import java.io.{ BufferedInputStream, File, FileInputStream, FileNotFoundException }
+import java.io.{
+  BufferedInputStream,
+  File,
+  FileInputStream,
+  FileNotFoundException,
+  FileOutputStream,
+  IOException,
+  OutputStreamWriter,
+  Writer
+}
 import java.security.cert.{ Certificate, CertificateFactory }
 import java.security.interfaces.RSAPrivateKey
 import java.security.spec.{ RSAPrivateCrtKeySpec, _ }
 import java.security.{ KeyFactory, KeyStore, PrivateKey, SecureRandom }
 import java.util.{ Base64, Date }
 
-import com.neu.core.CommonSettings.{ newCert, newKey }
+import com.neu.core.CommonSettings.{ newCert, newKey, newMgrCert, newMgrKey }
 import com.typesafe.scalalogging.LazyLogging
 import javax.net.ssl.{ KeyManagerFactory, SSLContext, TrustManagerFactory }
 import spray.io.ServerSSLEngineProvider
@@ -32,6 +41,7 @@ import org.bouncycastle.asn1.x509.GeneralName
 import org.bouncycastle.asn1.x509.GeneralNames
 import org.bouncycastle.asn1.x509.ExtendedKeyUsage
 import org.bouncycastle.asn1.x509.KeyPurposeId
+import org.bouncycastle.util.io.pem.{ PemObject, PemWriter }
 
 trait MySslConfiguration extends LazyLogging {
 
@@ -58,8 +68,8 @@ trait MySslConfiguration extends LazyLogging {
       // Save the certificate and private key to files (optional)
       saveCertificateAndKey(certificate, keyPair.getPrivate)
 
-      val fCert: File = new File("ssl-cert.pem")
-      val fKey: File  = new File("ssl-cert.key")
+      val fCert: File = new File(newMgrCert)
+      val fKey: File  = new File(newMgrKey)
       loadCertificateAndKey(fCert, fKey, context)
       context
     }
@@ -116,19 +126,24 @@ trait MySslConfiguration extends LazyLogging {
   }
 
   def saveCertificateAndKey(certificate: X509Certificate, privateKey: PrivateKey): Unit = {
-    // Implementation to save certificate and private key to files
-    // You can use FileOutputStream to save the certificate and private key in PEM format
-    import java.io.{ FileOutputStream, IOException, OutputStreamWriter, Writer }
-    import org.bouncycastle.util.io.pem.{ PemObject, PemWriter }
-
+    val fCert: File = new File(newMgrCert)
+    val fKey: File  = new File(newMgrKey)
+    if (fCert.exists) {
+      if (fCert.delete) logger.info("Removed existing manager certificate")
+      else logger.info("Failed to remove existing manager certificate")
+    }
+    if (fKey.exists) {
+      if (fKey.delete) logger.info("Removed existing manager private key")
+      else logger.info("Failed to remove existing manager private key")
+    }
     try {
       // Save the certificate
-      val certOut = new PemWriter(new OutputStreamWriter(new FileOutputStream("ssl-cert.pem")))
+      val certOut = new PemWriter(new OutputStreamWriter(new FileOutputStream(newMgrCert)))
       certOut.writeObject(new PemObject("CERTIFICATE", certificate.getEncoded))
       certOut.close()
 
       // Save the private key
-      val keyOut = new PemWriter(new OutputStreamWriter(new FileOutputStream("ssl-cert.key")))
+      val keyOut = new PemWriter(new OutputStreamWriter(new FileOutputStream(newMgrKey)))
       keyOut.writeObject(new PemObject("PRIVATE KEY", privateKey.getEncoded))
       keyOut.close()
 

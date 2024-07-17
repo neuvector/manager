@@ -996,7 +996,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                 }
               } else if (e.getMessage.contains("Status: 410")) {
                 Utils.respondWithWebServerHeaders() {
-                  complete((StatusCodes.Gone, "Please Login from Rancher again!"))
+                  complete((StatusCodes.Gone, "Please logout and then login from Rancher again!"))
                 }
               } else {
                 logger.warn(e.getClass.toString)
@@ -1015,7 +1015,9 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                       }
                     } else if (e.getMessage.contains("Status: 410")) {
                       Utils.respondWithWebServerHeaders() {
-                        complete((StatusCodes.Gone, "Please Login from Rancher again!"))
+                        complete(
+                          (StatusCodes.Gone, "Please logout and then login from Rancher again!")
+                        )
                       }
                     } else {
                       Utils.respondWithWebServerHeaders() {

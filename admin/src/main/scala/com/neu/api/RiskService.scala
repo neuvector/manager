@@ -52,7 +52,7 @@ class RiskService()(implicit executionContext: ExecutionContext)
                 complete {
                   logger.info(s"Getting scanned assets ...")
                   RestClient.httpRequestWithHeader(
-                    s"${baseClusterUri(tokenId)}/scan/asset/view/asset",
+                    s"${baseClusterUri(tokenId)}/scan/asset/images",
                     POST,
                     scannedAssetsQueryToJson(
                       scannedAssetsQuery
@@ -75,7 +75,7 @@ class RiskService()(implicit executionContext: ExecutionContext)
               Utils.respondWithWebServerHeaders() {
                 complete {
                   val url =
-                    s"${baseClusterUri(tokenId)}/scan/asset/view/asset?token=$token&start=$start&row=$row${if (orderby.isDefined)
+                    s"${baseClusterUri(tokenId)}/scan/asset/images?token=$token&start=$start&row=$row${if (orderby.isDefined)
                       s"&orderby=${orderby.get}"
                     else ""}${if (orderbyColumn.isDefined)
                       s"&orderbyColumn=${orderbyColumn.get}"

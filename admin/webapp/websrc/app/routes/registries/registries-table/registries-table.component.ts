@@ -178,7 +178,7 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
     private dialog: MatDialog,
     private translate: TranslateService,
     private registriesService: RegistriesService,
-    private registriesCommunicationService: RegistriesCommunicationService,
+    public registriesCommunicationService: RegistriesCommunicationService,
     private cd: ChangeDetectorRef,
     private authUtilsService: AuthUtilsService,
     private notificationService: NotificationService,

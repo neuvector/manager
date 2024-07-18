@@ -48,6 +48,7 @@ export class ConfigurationAssessmentModalComponent implements OnInit {
       if (result.matched_rules) {
         result.matched_rules = result.matched_rules.map(rule => {
           if (!rule.mode && rule.type !== GlobalConstant.ADMISSION.RULE_TYPE.EXCEPTION) rule.mode = this.admissionRulesService.globalMode;
+          if (rule.mode === GlobalConstant.MODE.MONITOR && rule.type !== GlobalConstant.ADMISSION.RULE_TYPE.EXCEPTION) rule.type = '';
           return rule;
         });
       }

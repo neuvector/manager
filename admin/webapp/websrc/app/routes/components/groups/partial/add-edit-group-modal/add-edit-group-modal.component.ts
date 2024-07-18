@@ -65,7 +65,8 @@ export class AddEditGroupModalComponent implements OnInit {
         group_band_width: new FormControl(0, Validators.required)
       });
       this.showMonitorMetric =
-        this.data.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER
+        this.data.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER || this.data.cfgType === GlobalConstant.CFG_TYPE.GROUND ||
+        this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY
     } else {
       this.addEditGroupForm = new FormGroup({
         name: new FormControl(
@@ -89,7 +90,7 @@ export class AddEditGroupModalComponent implements OnInit {
         this.addEditGroupForm.controls.criteriaCtrl.enable();
       }
       this.showMonitorMetric =
-        (this.data.cfgType === GlobalConstant.CFG_TYPE.LEARNED || this.data.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER) &&
+        (this.data.cfgType === GlobalConstant.CFG_TYPE.LEARNED || this.data.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER || this.data.cfgType === GlobalConstant.CFG_TYPE.GROUND || this.data.cfgType === GlobalConstant.CFG_TYPE.FED) &&
         this.data.selectedGroup.kind === MapConstant.GROUP_KIND.CONTAINER &&
         !this.data.selectedGroup.reserved;
     }
@@ -154,8 +155,8 @@ export class AddEditGroupModalComponent implements OnInit {
     if (!this.addEditGroupForm.controls['group_sess_cur'].value) this.addEditGroupForm.controls['group_sess_cur'].setValue(0);
     if (!this.addEditGroupForm.controls['group_band_width'].value) this.addEditGroupForm.controls['group_band_width'].setValue(0);
     this.showMonitorMetric =
-      (this.data.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER || this.data.cfgType === GlobalConstant.CFG_TYPE.LEARNED) &&
-      !this.data.selectedGroup.reserved &&
+      (this.data.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER || this.data.cfgType === GlobalConstant.CFG_TYPE.LEARNED || this.data.cfgType === GlobalConstant.CFG_TYPE.GROUND || this.data.cfgType === GlobalConstant.CFG_TYPE.FED) &&
+      (this.data.opType === GlobalConstant.MODAL_OP.EDIT && !this.data.selectedGroup.reserved || this.data.opType === GlobalConstant.MODAL_OP.ADD) &&
       this.criteria.filter(criterion => criterion.name.includes('address')).length === 0;
   };
 

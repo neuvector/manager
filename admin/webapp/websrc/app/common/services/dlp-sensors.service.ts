@@ -31,18 +31,19 @@ export class DlpSensorsService {
 
     const columnDefs4Sensor = [
       {
-        headerName: this.translate.instant("dlp.gridHeader.SENSOR_NAME"),
-        field: "name",
-        headerCheckboxSelection: isWriteDLPSensorAuthorized,
-        headerCheckboxSelectionFilteredOnly: isWriteDLPSensorAuthorized,
-        checkboxSelection: (params) => {
-          if (params.data)
-            return isWriteDLPSensorAuthorized && !params.data.predefine;
+        headerName: this.translate.instant('dlp.gridHeader.SENSOR_NAME'),
+        field: 'name',
+        headerCheckboxSelection: true,
+        headerCheckboxSelectionFilteredOnly: true,
+        checkboxSelection: params => {
+          if (params.data) return !params.data.predefine;
           return false;
         },
         cellRenderer: (params) => {
           if (params.value)
-            return `<span class="${!isWriteDLPSensorAuthorized || params.data.predefine ? 'left-margin-32' : ''}">
+            return `<span class="${
+              params.data.predefine ? 'left-margin-32' : ''
+            }">
                       ${params.value}
                     </span>`;
           return false;

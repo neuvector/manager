@@ -84,7 +84,11 @@ export class GlobalNotificationsComponent implements OnInit {
     }
     this.notificationService.acceptNotification(this.payload).subscribe(
       () => {
-        notification.accepted = true;
+        if(notification.isRbacNotification) {
+          this.getRBACAndCheckNotificationAccepted(notification);
+        } else {
+          notification.accepted = true;
+        }
       },
       error => {
         this.notificationService.open(
@@ -150,6 +154,7 @@ export class GlobalNotificationsComponent implements OnInit {
             )
           : false,
         unClamped: false,
+        isRbacNotification: false
       });
     }
     if (this.unUpdateDays > GlobalConstant.MAX_UNUPDATED_DAYS) {
@@ -165,6 +170,7 @@ export class GlobalNotificationsComponent implements OnInit {
           ? this.rbacData.accepted_alerts.includes(ManagerAlertKey.OutdatedCVE)
           : false,
         unClamped: false,
+        isRbacNotification: false
       });
     }
     if (this.isVersionMismatch) {
@@ -180,6 +186,7 @@ export class GlobalNotificationsComponent implements OnInit {
             )
           : false,
         unClamped: false,
+        isRbacNotification: false
       });
     }
     if (this.passwordExpiration >= 0 && this.passwordExpiration < 10) {
@@ -197,6 +204,7 @@ export class GlobalNotificationsComponent implements OnInit {
             )
           : false,
         unClamped: false,
+        isRbacNotification: false
       });
     }
     if (
@@ -215,6 +223,7 @@ export class GlobalNotificationsComponent implements OnInit {
             )
           : false,
         unClamped: false,
+        isRbacNotification: false
       });
     }
 
@@ -235,6 +244,7 @@ export class GlobalNotificationsComponent implements OnInit {
                 ? this.rbacData.accepted_alerts.includes(key)
                 : false,
               unClamped: false,
+              isRbacNotification: true
             });
           });
         }
@@ -340,6 +350,28 @@ export class GlobalNotificationsComponent implements OnInit {
     this.dashboardService.getRbacData().subscribe({
       next: rbac => {
         this.rbacData = rbac;
+      },
+    });
+  }
+
+  getRBACAndCheckNotificationAccepted(notification: GlobalNotification) {
+    let isAcceptedNotification = true;
+
+    this.dashboardService.getRbacData().subscribe({
+      next: rbac => {
+        this.rbacData = rbac;
+
+        if(this.rbacData.acceptable_alerts) {
+          Object.keys(this.rbacData.acceptable_alerts).forEach(rbacAlertType => {
+            const alert = this.rbacData.acceptable_alerts[rbacAlertType];
+            if (alert && Object.keys(alert).length > 0) {
+              const existingKey = Object.keys(alert).find(k => k === notification.key);
+              isAcceptedNotification = !!!existingKey;
+            }
+          });
+        }
+
+        notification.accepted = isAcceptedNotification;
       },
     });
   }

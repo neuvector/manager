@@ -72,6 +72,7 @@ export interface GlobalNotification {
   labelClass: string;
   accepted: boolean;
   unClamped: boolean;
+  isRbacNotification: boolean;
 }
 
 export interface GlobalNotificationPayLoad {

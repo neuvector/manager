@@ -79,7 +79,8 @@ export class AdmissionRulesComponent implements OnInit {
   ngOnInit(): void {
     this.isWriteAdmissionRuleAuthorized =
       this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-        ? this.authUtilsService.getDisplayFlag('write_admission') && this.authUtilsService.getDisplayFlag('multi_cluster_w')
+        ? this.authUtilsService.getDisplayFlag('write_admission') &&
+          this.authUtilsService.getDisplayFlag('multi_cluster_w')
         : this.authUtilsService.getDisplayFlag('write_admission');
     this.isAdmissionRuleAuthorized =
       this.authUtilsService.getDisplayFlag('admission');
@@ -141,7 +142,7 @@ export class AdmissionRulesComponent implements OnInit {
           this.mode = this.admissionStateRec.state?.mode!;
           this.admissionRulesService.globalMode = this.mode;
           this.gridOptions = this.admissionRulesService.configRuleGrid(
-            this.isWriteAdmissionRuleAuthorized
+            this.isAdmissionRuleAuthorized
           );
           this.gridOptions.onSelectionChanged = this.onAdmissionRulesSelected;
           this.isGridOptionsReady = true;

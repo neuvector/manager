@@ -98,20 +98,20 @@ export class AdmissionRulesService {
     public bytesPipe: BytesPipe
   ) {}
 
-  configRuleGrid = isWriteAdmissionRuleAuthorized => {
+  configRuleGrid = authorized => {
     let gridOptions: GridOptions;
     const $win = $(GlobalVariable.window);
     const columnDefs = [
       {
         headerName: this.translate.instant('policy.gridHeader.ID'),
         field: 'id',
-        headerCheckboxSelection: isWriteAdmissionRuleAuthorized,
-        headerCheckboxSelectionFilteredOnly: isWriteAdmissionRuleAuthorized,
+        headerCheckboxSelection: authorized,
+        headerCheckboxSelectionFilteredOnly: authorized,
         checkboxSelection: params => {
-          return this.idSelectionFunc(params, isWriteAdmissionRuleAuthorized);
+          return this.idSelectionFunc(params, authorized);
         },
         cellRenderer: params => {
-          return this.idRendererFunc(params, isWriteAdmissionRuleAuthorized);
+          return this.idRendererFunc(params, authorized);
         },
         width: 100,
         minWidth: 100,
@@ -203,7 +203,7 @@ export class AdmissionRulesService {
       rowData: null,
       rowSelection: 'multiple',
       isRowSelectable: params => {
-        return this.idSelectionFunc(params, isWriteAdmissionRuleAuthorized);
+        return this.idSelectionFunc(params, authorized);
       },
       rowClassRules: {
         'disabled-row': params => {
@@ -347,13 +347,12 @@ export class AdmissionRulesService {
     return false;
   };
 
-  idRendererFunc = (params, isWriteAdmissionRuleAuthorized) => {
+  idRendererFunc = (params, authorized) => {
     let id = '';
     if (params && params.value && params.value > 0) {
       if (
-        (isWriteAdmissionRuleAuthorized &&
-          params.data.category !== GlobalConstant.GLOBAL) ||
-        !isWriteAdmissionRuleAuthorized
+        (authorized && params.data.category !== GlobalConstant.GLOBAL) ||
+        !authorized
       ) {
         id = params.value;
       } else {
@@ -590,7 +589,10 @@ export class AdmissionRulesService {
   };
 
   criterionSelectedInChip = selectedCriterion => {
-    selectedCriterion.value.op = selectedCriterion.value.op.replace('regexContainsAny', 'regex');
+    selectedCriterion.value.op = selectedCriterion.value.op.replace(
+      'regexContainsAny',
+      'regex'
+    );
     return [
       {
         name: selectedCriterion.value.name,
@@ -1130,7 +1132,8 @@ export class AdmissionRulesService {
         ? `${displayValue.substring(0, 30)}...`
         : displayValue;
     displayValue =
-      criterion.op.toLowerCase().includes('contains') || criterion.op.toLowerCase().includes('regex')
+      criterion.op.toLowerCase().includes('contains') ||
+      criterion.op.toLowerCase().includes('regex')
         ? `[${displayValue}]`
         : displayValue;
     return `${this.translate.instant(

@@ -21,7 +21,7 @@
       <em
         class="fa fa-circle mx-3"
         [class]="'text-' + notification.labelClass"></em>
-      <ng-container *ngIf="isRbacNotif(notification.name); else globalNotif">
+      <ng-container *ngIf="isRbacNotif(notification); else globalNotif">
         <span
           class="notification-message"
           [class]="notification.unClamped ? 'unclamped' : 'clamped'"

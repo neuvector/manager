@@ -10,6 +10,7 @@ import {
   ManagerAlertKey,
   UserAlertKey,
   GlobalNotificationPayLoad,
+  GlobalNotificationType,
 } from '@common/types';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { TranslateService } from '@ngx-translate/core';
@@ -73,18 +74,22 @@ export class GlobalNotificationsComponent implements OnInit {
   }
 
   accept(notification: GlobalNotification, event: MouseEvent) {
-    if (this.isRbacNotif(notification.name)) {
+    if (this.isRbacNotif(notification)) {
       this.payload.controller_alerts = [notification.key];
     }
-    if (this.isManagerNotif(notification.name)) {
+    if (this.isManagerNotif(notification)) {
       this.payload.manager_alerts = [notification.key];
     }
-    if (this.isUserNotif(notification.name)) {
+    if (this.isUserNotif(notification)) {
       this.payload.user_alerts = [notification.key];
     }
     this.notificationService.acceptNotification(this.payload).subscribe(
       () => {
-        notification.accepted = true;
+        if(this.isRbacNotif(notification)) {
+          this.getRBACAndCheckNotificationAccepted(notification);
+        } else {
+          notification.accepted = true;
+        }
       },
       error => {
         this.notificationService.open(
@@ -136,6 +141,7 @@ export class GlobalNotificationsComponent implements OnInit {
       )
     ) {
       this.globalNotifications.push({
+        type: GlobalNotificationType.MANAGER_NOTIFICATION,
         name: 'newVersionAvailable',
         key: ManagerAlertKey.NewVersionAvailable,
         message: this.tr.instant('login.UPGRADE_AVAILABLE', {
@@ -154,6 +160,7 @@ export class GlobalNotificationsComponent implements OnInit {
     }
     if (this.unUpdateDays > GlobalConstant.MAX_UNUPDATED_DAYS) {
       this.globalNotifications.push({
+        type: GlobalNotificationType.MANAGER_NOTIFICATION,
         name: 'isScannerOld',
         key: ManagerAlertKey.OutdatedCVE,
         message: this.tr.instant('login.CVE_DB_OLD', {
@@ -169,6 +176,7 @@ export class GlobalNotificationsComponent implements OnInit {
     }
     if (this.isVersionMismatch) {
       this.globalNotifications.push({
+        type: GlobalNotificationType.MANAGER_NOTIFICATION,
         name: 'isVersionMismatch',
         key: ManagerAlertKey.VersionMismatch,
         message: this.tr.instant('login.VERSION_MISMATCHED'),
@@ -184,6 +192,7 @@ export class GlobalNotificationsComponent implements OnInit {
     }
     if (this.passwordExpiration >= 0 && this.passwordExpiration < 10) {
       this.globalNotifications.push({
+        type: GlobalNotificationType.USER_NOTIFICATION,
         name: 'isPasswordExpiring',
         key: UserAlertKey.ExpiringPassword,
         message: this.tr.instant('login.CHANGE_EXPIRING_PASSWORD', {
@@ -204,6 +213,7 @@ export class GlobalNotificationsComponent implements OnInit {
       GlobalVariable.user.token.server.toLowerCase() !== 'rancher'
     ) {
       this.globalNotifications.push({
+        type: GlobalNotificationType.USER_NOTIFICATION,
         name: 'isDefaultPassword',
         key: UserAlertKey.UnchangedDefaultPassword,
         message: this.tr.instant('login.CHANGE_DEFAULT_PASSWORD'),
@@ -226,6 +236,7 @@ export class GlobalNotificationsComponent implements OnInit {
         if (alert && Object.keys(alert).length > 0) {
           Object.keys(alert).forEach(key => {
             this.globalNotifications.push({
+              type: GlobalNotificationType.RBAC_NOTIFICATION,
               name: rbacAlertType + ':' + alert[key],
               key: key,
               message: alert[key],
@@ -344,29 +355,38 @@ export class GlobalNotificationsComponent implements OnInit {
     });
   }
 
-  isRbacNotif(name: string) {
-    return (
-      name.startsWith('clusterrole_errors:') ||
-      name.startsWith('clusterrolebinding_errors:') ||
-      name.startsWith('rolebinding_errors:') ||
-      name.startsWith('role_errors:') ||
-      name.startsWith('neuvector_crd_errors:')
-    );
+  getRBACAndCheckNotificationAccepted(notification: GlobalNotification) {
+    let isAcceptedNotification = true;
+
+    this.dashboardService.getRbacData().subscribe({
+      next: rbac => {
+        this.rbacData = rbac;
+
+        if(this.rbacData.acceptable_alerts) {
+          Object.keys(this.rbacData.acceptable_alerts).forEach(rbacAlertType => {
+            const alert = this.rbacData.acceptable_alerts[rbacAlertType];
+            if (alert && Object.keys(alert).length > 0) {
+              const existingKey = Object.keys(alert).find(k => k === notification.key);
+              isAcceptedNotification = !!!existingKey;
+            }
+          });
+        }
+
+        notification.accepted = isAcceptedNotification;
+      },
+    });
   }
 
-  isManagerNotif(name: string) {
-    return (
-      name.startsWith('isScannerOld') ||
-      name.startsWith('isVersionMismatch') ||
-      name.startsWith('newVersionAvailable')
-    );
+  isRbacNotif(notification: GlobalNotification) {
+    return notification.type === GlobalNotificationType.RBAC_NOTIFICATION;
   }
 
-  isUserNotif(name: string) {
-    return (
-      name.startsWith('isPasswordExpiring') ||
-      name.startsWith('isDefaultPassword')
-    );
+  isManagerNotif(notification: GlobalNotification) {
+    return notification.type === GlobalNotificationType.MANAGER_NOTIFICATION;
+  }
+
+  isUserNotif(notification: GlobalNotification) {
+    return notification.type === GlobalNotificationType.USER_NOTIFICATION;
   }
 
   getRbacTitle(name: string) {

@@ -95,8 +95,7 @@ export class RegistryDetailsComponent {
           blob,
           `vulnerabilities of all scanned images_${this.utils.parseDatetimeStr(new Date())}.csv`
         );
-      },
-      error => {}
+      }
     );
   }
 }

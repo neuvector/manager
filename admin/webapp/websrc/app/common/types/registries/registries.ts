@@ -159,6 +159,7 @@ export interface Image {
   status: string;
   tag: string;
   id?: string;
+  reg_name?: string;
   repo_name?: string;
   repo_url?: string;
 }

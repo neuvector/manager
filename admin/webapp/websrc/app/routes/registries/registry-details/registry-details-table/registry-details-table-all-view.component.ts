@@ -34,7 +34,7 @@ import { MapConstant } from '@common/constants/map.constant';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class RegistryDetailsTableAllViewComponent implements OnInit, OnChanges, RemoteGridApi {
+export class RegistryDetailsTableAllViewComponent implements OnInit, RemoteGridApi {
   @Input() gridHeight!: number;
   @Input() selectedRegistry!: Summary;
   @Input() queryToken!: string;
@@ -200,12 +200,6 @@ export class RegistryDetailsTableAllViewComponent implements OnInit, OnChanges, 
       }),
       retry(10)
     );
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    // if (this.gridApi && changes.rowData?.currentValue) {
-    //   this.gridApi.setRowData(changes.rowData.currentValue);
-    // }
   }
 
   onRowClicked(params: GridReadyEvent): void {

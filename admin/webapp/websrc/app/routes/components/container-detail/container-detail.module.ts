@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { RegistriesService } from '@services/registries.service';
 
 @NgModule({
   declarations: [ContainerDetailComponent],
@@ -16,5 +17,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     TranslateModule,
   ],
   exports: [ContainerDetailComponent],
+  providers: [RegistriesService]
 })
 export class ContainerDetailModule {}

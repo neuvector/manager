@@ -24,7 +24,6 @@ import {
 import { FormControl } from '@angular/forms';
 import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
 import { NotificationService } from '@services/notification.service';
-import { UtilsService } from '@common/utils/app.utils';
 import { TranslateService } from '@ngx-translate/core';
 import { RemediationDetailDialogComponent } from '@components/compliance-grid/remediation-detail-dialog/remediation-detail-dialog.component';
 import * as moment from 'moment';
@@ -63,7 +62,6 @@ export class RegistryDetailsDialogComponent implements OnInit {
     private cd: ChangeDetectorRef,
     private quickFilterService: QuickFilterService,
     private notificationService: NotificationService,
-    private utils: UtilsService,
     private tr: TranslateService
   ) {}
 

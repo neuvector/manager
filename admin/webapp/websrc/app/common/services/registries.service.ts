@@ -13,14 +13,11 @@ import {
   RegistryConfig,
   RegistryConfigV2,
   VulnerabilitiesQueryData,
-  ImageQueryOrderByColumnOption,
-  OrderByOption,
   AllScannedImages,
 } from '@common/types';
 import { HttpHeaders } from '@angular/common/http';
-import { MapConstant } from '@common/constants/map.constant';
-import { mergeMap, map } from 'rxjs/operators';
-import { GridApi, SortModelItem } from 'ag-grid-community';
+import { map } from 'rxjs/operators';
+import { SortModelItem } from 'ag-grid-community';
 
 @Injectable()
 export class RegistriesService {

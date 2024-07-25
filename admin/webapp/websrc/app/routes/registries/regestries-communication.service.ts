@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { RepoGetResponse, Summary } from '@common/types';
 import {
-  distinctUntilChanged,
   filter,
   finalize,
   map,

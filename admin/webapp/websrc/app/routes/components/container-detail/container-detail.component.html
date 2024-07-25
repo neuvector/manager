@@ -78,18 +78,26 @@
     <div class="ml-3 overflow-hidden">
       {{ 'containers.detail.IMAGE' | translate }}
       <div class="d-flex align-items-baseline">
-        <div class="text-muted text-truncate">
-          {{ container.brief.image }}
-        </div>
-        <mat-icon
-          *ngIf="container.brief.image_reg_scanned"
-          aria-hidden="false"
-          aria-label="Registry scanned icon"
-          matTooltip="{{ 'containers.detail.IMAGE_REG_SCANNED' | translate }}"
-          matTooltipPosition="above"
-          class="icon-12 text-success">
-          library_add_check
-        </mat-icon>
+        <ng-container *ngIf="container.brief.image_reg_scanned; else Unscanned">
+          <a (click)="redirectToRegistry(container.brief.image_id)">
+            <div class="text-muted text-truncate">
+              {{ container.brief.image }}
+            </div>
+          </a>
+          <mat-icon
+            aria-hidden="false"
+            aria-label="Registry scanned icon"
+            matTooltip="{{ 'containers.detail.IMAGE_REG_SCANNED' | translate }}"
+            matTooltipPosition="above"
+            class="icon-12 text-success">
+            library_add_check
+          </mat-icon>
+        </ng-container>
+        <ng-template #Unscanned>
+          <div class="text-muted text-truncate">
+            {{ container.brief.image }}
+          </div>
+        </ng-template>
       </div>
     </div>
   </div>

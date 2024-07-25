@@ -31,18 +31,19 @@ export class WafSensorsService {
 
     const columnDefs4Sensor = [
       {
-        headerName: this.translate.instant("waf.gridHeader.SENSOR_NAME"),
-        field: "name",
-        headerCheckboxSelection: isWriteWAFSensorAuthorized,
-        headerCheckboxSelectionFilteredOnly: isWriteWAFSensorAuthorized,
-        checkboxSelection: (params) => {
-          if (params.data)
-            return isWriteWAFSensorAuthorized && !params.data.predefine;
+        headerName: this.translate.instant('waf.gridHeader.SENSOR_NAME'),
+        field: 'name',
+        headerCheckboxSelection: true,
+        headerCheckboxSelectionFilteredOnly: true,
+        checkboxSelection: params => {
+          if (params.data) return !params.data.predefine;
           return false;
         },
         cellRenderer: (params) => {
           if (params.value)
-            return `<span class="${!isWriteWAFSensorAuthorized || params.data.predefine ? 'left-margin-32' : ''}">
+            return `<span class="${
+              params.data.predefine ? 'left-margin-32' : ''
+            }">
                       ${params.value}
                     </span>`;
           return false;

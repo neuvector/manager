@@ -16,6 +16,7 @@ import { Observable } from 'rxjs';
 import { ConfigFormComponent } from './config-form/config-form.component';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { Router } from '@angular/router';
+import { ConfigV2Vo } from '@common/types/settings/config-vo';
 
 @Component({
   selector: 'app-configuration',
@@ -25,13 +26,16 @@ import { Router } from '@angular/router';
 export class ConfigurationComponent
   implements OnInit, OnDestroy, ComponentCanDeactivate
 {
+  @ViewChild(ConfigFormComponent) configForm!: ConfigFormComponent;
+
   private _switchClusterSubscription;
   private _refreshConfigSubscription;
-  @ViewChild(ConfigFormComponent) configForm!: ConfigFormComponent;
-  config!: ConfigV2Response;
+
+  config!: ConfigV2Vo;
   enforcers!: Enforcer[];
   isConfigAuthorized!: boolean;
   isImportAuthorized!: boolean;
+
   get debug_enabled(): boolean {
     return (
       this.config.misc.controller_debug.length > 0 &&
@@ -67,7 +71,16 @@ export class ConfigurationComponent
       (GlobalVariable.user.token.role === MapConstant.FED_ROLES.ADMIN &&
         (GlobalVariable.isStandAlone || GlobalVariable.isMember));
     this.settingsService.getConfig().subscribe({
-      next: value => (this.config = value),
+      next: (value: ConfigV2Response) => (this.config = {
+        ...value,
+        tls: {
+          enable_tls_verification: value.tls_cfg.enable_tls_verification,
+          cacerts: value.tls_cfg.cacerts.map((c, i) => ({
+            id: i,
+            context: c
+          }))
+        }
+      }),
     });
     this._switchClusterSubscription =
       this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {

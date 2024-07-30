@@ -1,7 +1,7 @@
 import { Permission } from '..';
 
 export * from './config';
-export * from './remoteRepository';
+export * from './remote-repository';
 
 export interface LicenseGetResponse {
   info: LicenseInfo;

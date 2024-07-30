@@ -3107,6 +3107,8 @@
     "MAX_SELECTED_ENFORCER_HINT": "请为支持信息选择不超过{{maxSlectedEnforcer}}个代理.",
     "AS_STANDALONE": "作为独立集群导入配置",
     "RANCHER_EP": "Rancher端点",
+    "ENABLE_TLS_VERIFICATION": "启用TLS验证",
+    "TLS_SELF_SIGNED_CERTIFICATION_CONTEXT": "TLS自签名证书內文",
     "cloud_type": {
       "AWS": "AWS",
       "AZURE": "Azure",
@@ -3138,6 +3140,11 @@
       "LEAVE_PAGE": "确定要离开此页面，不保存配置设定吗?",
       "DELETE_CONFIRM": "确定删除网络挂接 - {{name}}",
       "OTHER_TYPE": "键-值配对"
+    },
+    "tls": {
+      "ADD": "添加证书",
+      "CERTIFICATE": "证书",
+      "CERTIFICATE_CONTEXT": "证书内文"
     },
     "remote_repository": {
       "title": "远程存储库配置",
@@ -3186,12 +3193,14 @@
       "label": {
         "policy": "策略配置",
         "notification": "通知配置",
-        "general": "通用配置"
+        "general": "通用配置",
+        "tls_self_signed_certification": "TLS自签名证书配置"
       },
       "description": {
         "policy": "配置策略相关设置",
         "notification": "配置通知相关设置",
-        "general": "配置通用设置"
+        "general": "配置通用设置",
+        "tls_self_signed_certification": "配置TLS自签名证书相关设置"
       }
     },
     "message": {

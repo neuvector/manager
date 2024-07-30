@@ -53,6 +53,7 @@ import {
   SyslogCVELayersField,
   EventReportLoggingToggleField,
 } from './constants';
+import { EnableTlsVerificationToggleField, TlsTableField } from './constants/tls-constants';
 
 export const ConfigFormConfig: FormlyFieldConfig[] = [
   {
@@ -410,4 +411,31 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
       },
     ],
   },
+  {
+    wrappers: [FormlyComponents.PANEL_WRAPPER],
+    templateOptions: {
+      label: 'setting.category.label.tls_self_signed_certification',
+      description: 'setting.category.description.tls_self_signed_certification',
+      expanded: true,
+    },
+    fieldGroup: [
+      {
+        wrappers: [FormlyComponents.SECTION_WRAPPER],
+        fieldGroup: [EnableTlsVerificationToggleField],
+        templateOptions: {
+          label: 'setting.ENABLE_TLS_VERIFICATION',
+          inline: true,
+          divider: false,
+        },
+      },
+      {
+        wrappers: [FormlyComponents.SECTION_WRAPPER],
+        fieldGroup: [TlsTableField],
+        templateOptions: { 
+          label: 'setting.TLS_SELF_SIGNED_CERTIFICATION_CONTEXT', 
+          divider: false 
+        },
+      },
+    ],
+  }
 ];

@@ -3107,6 +3107,8 @@
     "MAX_SELECTED_ENFORCER_HINT": "Please select no more than {{maxSlectedEnforcer}} enforcers for support information.",
     "AS_STANDALONE": "Import configuration as standalone cluster",
     "RANCHER_EP": "Rancher Endpoint",
+    "ENABLE_TLS_VERIFICATION": "Enable TLS verification",
+    "TLS_SELF_SIGNED_CERTIFICATION_CONTEXT": "TLS self-signed certificate context",
     "cloud_type": {
       "AWS": "AWS",
       "AZURE": "Azure",
@@ -3138,6 +3140,11 @@
       "LEAVE_PAGE": "Do you want to leave the page without saving configuration setting?",
       "DELETE_CONFIRM": "Do you want to remove webhook - {{name}}",
       "OTHER_TYPE": "Key-Value Pairs"
+    },
+    "tls": {
+      "ADD": "Add Certificate",
+      "CERTIFICATE": "Certificate",
+      "CERTIFICATE_CONTEXT": "Certificate Context"
     },
     "remote_repository": {
       "title": "Remote Repository Configuration",
@@ -3186,12 +3193,14 @@
       "label": {
         "policy": "Policy Configuration",
         "notification": "Notification Configuration",
-        "general": "General Configuration"
+        "general": "General Configuration",
+        "tls_self_signed_certification": "TLS Self-Signed Certification Configuration"
       },
       "description": {
         "policy": "Configure policy related settings",
         "notification": "Configure notification related settings",
-        "general": "Configure general settings"
+        "general": "Configure general settings",
+        "tls_self_signed_certification": "Configure TLS self-signed certification related settings"
       }
     },
     "message": {

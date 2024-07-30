@@ -7,13 +7,13 @@ import {
 
 export interface ConfigResponse
   extends SvcConfig,
-    SyslogConfig,
-    AuthConfig,
-    ProxyConfig,
-    IBMSAConfig,
-    MiscConfig,
-    AtmoConfig,
-    NetConfig {
+  SyslogConfig,
+  AuthConfig,
+  ProxyConfig,
+  IBMSAConfig,
+  MiscConfig,
+  AtmoConfig,
+  NetConfig {
   scanner_autoscale: ScannerAutoscale;
   webhooks: Webhook[];
   duration_toggle?: boolean;
@@ -37,6 +37,7 @@ export interface ConfigV2 {
   ibmsa_cfg: IBMSAConfig;
   scanner_autoscale_cfg: ScannerAutoscale;
   misc_cfg: MiscConfig;
+  tls_cfg: TlsConfig;
 }
 
 export interface ConfigV2Response {
@@ -50,6 +51,7 @@ export interface ConfigV2Response {
   ibmsa: IBMSAConfig;
   net_svc: NetConfig;
   mode_auto: AtmoConfig;
+  tls_cfg: TlsConfig;
   scanner_autoscale: ScannerAutoscale;
   duration_toggle?: boolean;
   ibmsa_setup?: IBMSetupGetResponse;
@@ -117,6 +119,11 @@ export interface NetConfig {
   net_service_policy_mode: PolicyMode;
   net_service_status: boolean;
   disable_net_policy: boolean;
+}
+
+export interface TlsConfig {
+  enable_tls_verification: boolean;
+  cacerts: string[];
 }
 
 export interface ScannerAutoscale {

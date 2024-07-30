@@ -27,6 +27,7 @@ import { finalize } from 'rxjs/operators';
 import { ConfigFormConfig } from './config-form-config';
 import { OtherWebhookType } from './config-form-config/constants';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { ConfigV2Vo } from '@common/types/settings/config-vo';
 
 @Component({
   selector: 'app-config-form',
@@ -34,6 +35,9 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
   styleUrls: ['./config-form.component.scss'],
 })
 export class ConfigFormComponent implements OnInit {
+
+  private _config!: ConfigV2Vo;
+
   ibmSetup!: IBMSetupGetResponse;
   submittingForm = false;
   configForm = new FormGroup({});
@@ -63,46 +67,12 @@ export class ConfigFormComponent implements OnInit {
     },
   };
   serverErrorMessage: SafeHtml = '';
+
   get dashboardUrl(): string {
     return `${this.document.location.origin}/`;
   }
 
-  constructor(
-    private settingsService: SettingsService,
-    private utils: UtilsService,
-    private tr: TranslateService,
-    private domSanitizer: DomSanitizer,
-    private authUtilsService: AuthUtilsService,
-    private notificationService: NotificationService,
-    private cd: ChangeDetectorRef,
-    @Inject(DOCUMENT) private document: Document
-  ) {}
-
-  ngOnInit(): void {
-    const isSettingAuth = this.authUtilsService.getDisplayFlag('write_config');
-    this.configOptions.formState.permissions = {
-      isAuthenticateRBACAuthorized: isSettingAuth,
-      isNewServiceModeAuthorized: isSettingAuth,
-      isClusterAuthorized: isSettingAuth && GlobalVariable.isStandAlone,
-      isWebhookAuthorized: isSettingAuth,
-      isSyslogAuthorized: isSettingAuth,
-      isRegHttpProxyAuthorized: isSettingAuth,
-      isRegHttpsProxyAuthorized: isSettingAuth,
-      isConfigAuthorized: isSettingAuth,
-      isIBMSAAuthorized: isSettingAuth,
-    };
-    this.serverErrorMessage = '';
-    this.cd.detectChanges();
-
-    // reset the status of the sliders to fix the issue NVSHAS-8599
-    setTimeout(() => {
-      this.configForm.markAsPristine();
-    }, 300);
-  }
-
-  private _config!: ConfigV2Response;
-
-  get config(): ConfigV2Response {
+  get config(): ConfigV2Vo {
     return this._config;
   }
 
@@ -130,14 +100,51 @@ export class ConfigFormComponent implements OnInit {
     this._config.ibmsa.ibmsa_ep_dashboard_url ||= this.dashboardUrl;
   }
 
+  constructor(
+    private settingsService: SettingsService,
+    private utils: UtilsService,
+    private tr: TranslateService,
+    private domSanitizer: DomSanitizer,
+    private authUtilsService: AuthUtilsService,
+    private notificationService: NotificationService,
+    private cd: ChangeDetectorRef,
+    @Inject(DOCUMENT) private document: Document
+  ) {}
+
+  ngOnInit(): void {
+    const isSettingAuth = this.authUtilsService.getDisplayFlag('write_config');
+
+    this.configOptions.formState.permissions = {
+      isAuthenticateRBACAuthorized: isSettingAuth,
+      isNewServiceModeAuthorized: isSettingAuth,
+      isClusterAuthorized: isSettingAuth && GlobalVariable.isStandAlone,
+      isWebhookAuthorized: isSettingAuth,
+      isSyslogAuthorized: isSettingAuth,
+      isRegHttpProxyAuthorized: isSettingAuth,
+      isRegHttpsProxyAuthorized: isSettingAuth,
+      isConfigAuthorized: isSettingAuth,
+      isIBMSAAuthorized: isSettingAuth,
+      isTlsAuthorized: isSettingAuth
+    };
+    this.serverErrorMessage = '';
+    this.cd.detectChanges();
+
+    // reset the status of the sliders to fix the issue NVSHAS-8599
+    setTimeout(() => {
+      this.configForm.markAsPristine();
+    }, 300);
+  }
+
   submitForm(): void {
     this.serverErrorMessage = '';
     if (!this.configForm.valid) {
       return;
     }
+
     const configPatch: ConfigPatch = this.formatConfigPatch(
       this.configForm.getRawValue()
     );
+
     this.submittingForm = true;
     this.settingsService
       .patchConfig(configPatch)
@@ -172,7 +179,7 @@ export class ConfigFormComponent implements OnInit {
       });
   }
 
-  formatConfigPatch(base_config: ConfigV2Response): ConfigPatch {
+  formatConfigPatch(base_config: ConfigV2Vo): ConfigPatch {
     return {
       atmo_config: {
         mode_auto_d2m: base_config.mode_auto.mode_auto_d2m,
@@ -253,6 +260,10 @@ export class ConfigFormComponent implements OnInit {
           xff_enabled: base_config.misc.xff_enabled,
           no_telemetry_report: base_config.misc.no_telemetry_report,
         },
+        tls_cfg: {
+          enable_tls_verification: base_config.tls['enable_tls_verification'],
+          cacerts: base_config.tls['cacerts'].map(c => c.context)
+        }
       },
     };
   }

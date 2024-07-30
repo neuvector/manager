@@ -351,7 +351,7 @@ export class VulnerabilitiesCsvService {
 
       cve.domains = Array.from(
         filteredWorkload.reduce(
-          (acc, curr) => acc.add(...curr.domains),
+          (acc, curr) => acc.add(curr.domain),
           new Set()
         )
       ).join(' ');

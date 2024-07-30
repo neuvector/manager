@@ -34,7 +34,7 @@ support_global = [
     "/v1/scan/scanner",
     "/v1/scan/platform",
     "/v1/scan/platform/platform",
-    "/v1/scan/registry",
+    "/v2/scan/registry",
     "/v1/admission/state",
     "/v1/admission/rules",
 

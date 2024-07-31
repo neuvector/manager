@@ -4,7 +4,7 @@ import spray.json.{ DefaultJsonProtocol, _ }
 
 object NamespaceJsonProtocol extends DefaultJsonProtocol {
   implicit val domainFormat: RootJsonFormat[Namespace] = {
-    jsonFormat7(Namespace)
+    jsonFormat8(Namespace)
   }
 
   implicit val domainsDataFormat: RootJsonFormat[NamespacesData] = jsonFormat2(NamespacesData)

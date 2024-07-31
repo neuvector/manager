@@ -17,6 +17,7 @@
     "REFRESH": "刷新",
     "NAME": "名称",
     "NAMESPACES": "命名空间",
+    "NAMESPACE_BOUNDARY_ENABLED": "启用执行命名空间边界",
     "CSV_DOWNLOAD": "下载CSV",
     "PCAP_DOWNLOAD": "下载PCAP文件",
     "CVE_CSV_DOWNLOAD": "下载CVE CSV文件",
@@ -1498,6 +1499,7 @@
   "securityEvent": {
     "VIOLATION_NAME": "违反了网络规则 {{policy_id}} ",
     "VIOLATION_NAME_DEFAULT": "隐性拒绝规则被违反了",
+    "CROSS_NAMESPACE_BOUNDARY": "跨命名空间边界违规",
     "SOURCE": "源",
     "DESTINATION": "目标",
     "SOURCE_DOMAIN": "源命名空间",

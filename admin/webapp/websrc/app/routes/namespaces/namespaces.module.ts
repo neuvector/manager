@@ -8,11 +8,12 @@ import { LoadingTemplateModule } from '@components/ui/loading-template/loading-t
 import { AdjustableDivModule } from '@components/ui/adjustable-div/adjustable-div.module';
 import { NamespacesGridModule } from '@components/namespaces-grid/namespaces-grid.module';
 import { NamespaceDetailsComponent } from './namespace-details/namespace-details.component';
+import { DomainNameCellComponent } from './namespace-items/domain-name-cell/domain-name-cell.component';
 
 const routes: Routes = [{ path: '', component: NamespacesComponent }];
 
 @NgModule({
-  declarations: [NamespacesComponent, NamespaceDetailsComponent],
+  declarations: [NamespacesComponent, NamespaceDetailsComponent, DomainNameCellComponent],
   imports: [
     CommonModule,
     NvCommonModule,

@@ -1,0 +1,32 @@
+.info {
+    background: rgba(239, 246, 255, 0.95);
+    border: solid #bfdbfe;
+    border-width: 1px;
+    color: #2563eb;
+
+    pre {
+        color: #2563eb;
+    }
+}
+
+.warning {
+    background: rgba(254, 252, 232, 0.95);
+    border: solid #fde68a;
+    border-width: 1px;
+    color: #ca8a04;
+    
+    pre {
+        color: #ca8a04;  
+    }
+}
+
+.error {
+    background: rgba(254, 242, 242, 0.95);
+    border: solid #fecaca;
+    border-width: 1px;
+    color: #dc2626;
+
+    pre {
+        color: #dc2626;  
+    }
+}

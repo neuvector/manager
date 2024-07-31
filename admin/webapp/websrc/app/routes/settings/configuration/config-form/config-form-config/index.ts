@@ -53,7 +53,7 @@ import {
   SyslogCVELayersField,
   EventReportLoggingToggleField,
 } from './constants';
-import { EnableTlsVerificationToggleField, TlsTableField } from './constants/tls-constants';
+import { EnableTlsVerificationToggleField, TlsTableField, tlsVerificationNoticeField } from './constants/tls-constants';
 
 export const ConfigFormConfig: FormlyFieldConfig[] = [
   {
@@ -419,6 +419,14 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
       expanded: true,
     },
     fieldGroup: [
+      {
+        wrappers: [FormlyComponents.SECTION_WRAPPER],
+        fieldGroup: [tlsVerificationNoticeField],
+        templateOptions: {
+          label: 'setting.NOTICE',
+          divider: false 
+        },
+      },
       {
         wrappers: [FormlyComponents.SECTION_WRAPPER],
         fieldGroup: [EnableTlsVerificationToggleField],

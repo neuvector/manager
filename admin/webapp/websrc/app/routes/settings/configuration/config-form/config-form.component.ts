@@ -11,7 +11,6 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { MapConstant } from '@common/constants/map.constant';
 import {
   ConfigPatch,
-  ConfigV2Response,
   ErrorResponse,
   IBMSetupGetResponse,
 } from '@common/types';

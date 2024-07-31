@@ -50,6 +50,8 @@ import { FormlySelectModule } from '@ngx-formly/core/select';
 import { EditWebhookTableControlsComponent } from './edit-webhook-table-controls/edit-webhook-table-controls.component';
 import { PanelWrapperComponent } from './panel-wrapper/panel-wrapper.component';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { CardComponent } from './card/card.component';
+import { MatCardModule } from '@angular/material/card';
 
 export enum FormlyValidators {
   REQUIRED = 'required',
@@ -80,6 +82,14 @@ export enum FormlyComponents {
   SECTION_WRAPPER = 'section',
   HINT_WRAPPER = 'hint_wrapper',
   PANEL_WRAPPER = 'panel_wrapper',
+  CARD = 'card'
+}
+
+export enum CardSeverity {
+  INFO = 'info',
+  SUCCESS = 'success',
+  WARNING = 'Warning',
+  ERROR = 'error'
 }
 
 @NgModule({
@@ -104,6 +114,7 @@ export enum FormlyComponents {
     MulticheckboxComponent,
     EditWebhookTableControlsComponent,
     PanelWrapperComponent,
+    CardComponent,
   ],
   imports: [
     FormlySelectModule,
@@ -122,6 +133,7 @@ export enum FormlyComponents {
     MatRadioModule,
     MatTableModule,
     MatTooltipModule,
+    MatCardModule,
     ClipboardModule,
     NgxSliderModule,
     InputDialogModule,
@@ -183,6 +195,10 @@ export enum FormlyComponents {
         {
           name: FormlyComponents.EDIT_WEBHOOK_TABLE_CONTROLS,
           component: EditWebhookTableControlsComponent,
+        },
+        {
+          name: FormlyComponents.CARD,
+          component: CardComponent,
         },
       ],
     }),

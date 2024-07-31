@@ -3107,6 +3107,7 @@
     "MAX_SELECTED_ENFORCER_HINT": "Please select no more than {{maxSlectedEnforcer}} enforcers for support information.",
     "AS_STANDALONE": "Import configuration as standalone cluster",
     "RANCHER_EP": "Rancher Endpoint",
+    "NOTICE": "Notice",
     "ENABLE_TLS_VERIFICATION": "Enable TLS verification",
     "TLS_SELF_SIGNED_CERTIFICATION_CONTEXT": "TLS self-signed certificate context",
     "cloud_type": {
@@ -3144,7 +3145,15 @@
     "tls": {
       "ADD": "Add Certificate",
       "CERTIFICATE": "Certificate",
-      "CERTIFICATE_CONTEXT": "Certificate Context"
+      "CERTIFICATE_CONTEXT": "Certificate Context",
+      "APPLICABLE_NOTICE": {
+        "HEADER": "The TLS self-signed certificates only be applicable for the following services.",
+        "APPLICABLE_SERVICES": {
+          "REGISTRY": "Registry Connections",
+          "AUTH": "Auth Server Connections (SAML, LDAP and OIDC)",
+          "WEBHOOK": "Webhook Connections"
+        }
+      }
     },
     "remote_repository": {
       "title": "Remote Repository Configuration",

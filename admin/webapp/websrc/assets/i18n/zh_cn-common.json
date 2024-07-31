@@ -3107,6 +3107,7 @@
     "MAX_SELECTED_ENFORCER_HINT": "请为支持信息选择不超过{{maxSlectedEnforcer}}个代理.",
     "AS_STANDALONE": "作为独立集群导入配置",
     "RANCHER_EP": "Rancher端点",
+    "NOTICE": "注意",
     "ENABLE_TLS_VERIFICATION": "启用TLS验证",
     "TLS_SELF_SIGNED_CERTIFICATION_CONTEXT": "TLS自签名证书內文",
     "cloud_type": {
@@ -3144,7 +3145,15 @@
     "tls": {
       "ADD": "添加证书",
       "CERTIFICATE": "证书",
-      "CERTIFICATE_CONTEXT": "证书内文"
+      "CERTIFICATE_CONTEXT": "证书内文",
+      "APPLICABLE_NOTICE": {
+        "HEADER": "TLS 自签名证书仅适用于以下服务",
+        "APPLICABLE_SERVICES": {
+          "REGISTRY": "镜像库服务连接",
+          "AUTH": "授权服务连接 (SAML、LDAP 和 OIDC)",
+          "WEBHOOK": "网络挂接服务连接"
+        }
+      }
     },
     "remote_repository": {
       "title": "远程存储库配置",

@@ -74,11 +74,11 @@ export class ConfigurationComponent
       next: (value: ConfigV2Response) => (this.config = {
         ...value,
         tls: {
-          enable_tls_verification: value.tls_cfg.enable_tls_verification,
-          cacerts: value.tls_cfg.cacerts.map((c, i) => ({
+          enable_tls_verification: value.tls_cfg?.enable_tls_verification ?? true,
+          cacerts: value.tls_cfg?.cacerts.map((c, i) => ({
             id: i,
             context: c
-          }))
+          }) ?? [])
         }
       }),
     });

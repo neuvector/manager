@@ -186,6 +186,7 @@ export interface Domain {
   tags: string[];
   workloads: number;
   labels: DomainLabels;
+  nbe: boolean;
 }
 
 export interface DomainLabels {

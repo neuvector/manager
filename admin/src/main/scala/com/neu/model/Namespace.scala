@@ -7,7 +7,8 @@ case class Namespace(
   running_pods: Int,
   services: Int,
   tags: Array[String],
-  labels: Option[Map[String, String]] = None
+  labels: Option[Map[String, String]] = None,
+  nbe: Option[Boolean]
 )
 
 case class NamespacesData(domains: Array[Namespace], tag_per_domain: Option[Boolean])

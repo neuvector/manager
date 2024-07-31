@@ -12,6 +12,8 @@ import {
   RowSelectedEvent,
 } from 'ag-grid-community';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { DomainNameCellComponent } from '@routes/namespaces/namespace-items/domain-name-cell/domain-name-cell.component';
+import { GlobalConstant } from '@common/constants/global.constant';
 
 @Component({
   selector: 'app-namespaces-grid',
@@ -28,6 +30,8 @@ export class NamespacesGridComponent implements OnInit {
   selectedNamespaceSubject$ = new BehaviorSubject<Domain | undefined>(
     undefined
   );
+  namespaceBoundaryDisplayName = GlobalConstant.Namespace_Boundary_Enabled;
+  hasNamespaceBoundaryEnabled: boolean = false;
   selectedNamespace$: Observable<Domain | undefined> =
     this.selectedNamespaceSubject$.asObservable();
   get domainsCount() {
@@ -36,6 +40,7 @@ export class NamespacesGridComponent implements OnInit {
   columnDefs: ColDef[] = [
     {
       field: 'name',
+      cellRenderer: 'nameCellRenderer',
       headerValueGetter: () => this.tr.instant('cis.report.gridHeader.NAME'),
     },
     {
@@ -94,7 +99,13 @@ export class NamespacesGridComponent implements OnInit {
       onGridReady: this.onGridReady.bind(this),
       onRowSelected: this.onRowSelected.bind(this),
       onRowDataUpdated: this.onRowDataUpdated.bind(this),
+      components: {
+        nameCellRenderer: DomainNameCellComponent,
+      },
     };
+    this.hasNamespaceBoundaryEnabled = this.namespacesService.namespaces.some(
+      data => data.nbe
+    );
   }
   onGridReady(params: GridReadyEvent): void {
     this.gridApi = params.api;

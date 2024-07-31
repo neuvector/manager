@@ -199,6 +199,7 @@ export class SecurityEventsService {
         destination: {}
       },
       fqdn: '',
+      nbe: false,
       applications: '',
       hostId: '',
       hostName: '',
@@ -219,22 +220,24 @@ export class SecurityEventsService {
     );
     displayedViolation.name =
       violation.policy_id === 0
-        ? this.translate.instant('securityEvent.VIOLATION_NAME_DEFAULT')
+        ? violation.nbe
+          ? this.translate.instant('securityEvent.CROSS_NAMESPACE_BOUNDARY')
+          : this.translate.instant('securityEvent.VIOLATION_NAME_DEFAULT')
         : this.translate.instant('securityEvent.VIOLATION_NAME', {
-            policy_id: violation.policy_id
+            policy_id: violation.policy_id,
           });
     displayedViolation.name4Pdf =
       violation.policy_id === 0
-        ? this.translate.instant(
-            'securityEvent.VIOLATION_NAME_DEFAULT'
-          )
-        : this.translate.instant(
-            'securityEvent.VIOLATION_NAME',
-            {
-              policy_id: violation.policy_id
-            }
-          );
-    displayedViolation.reviewRulePermission = this.getReviewRulePermission(source!.domain_name, destination!.domain_name);
+        ? violation.nbe
+          ? this.translate.instant('securityEvent.CROSS_NAMESPACE_BOUNDARY')
+          : this.translate.instant('securityEvent.VIOLATION_NAME_DEFAULT')
+        : this.translate.instant('securityEvent.VIOLATION_NAME', {
+            policy_id: violation.policy_id,
+          });
+    displayedViolation.reviewRulePermission = this.getReviewRulePermission(
+      source!.domain_name,
+      destination!.domain_name
+    );
     displayedViolation.ruleId = violation.policy_id;
     displayedViolation.type.name = this.EVENT_TYPE.VIOLATION;
     displayedViolation.type.cssColor = 'fa icon-size-2 fa-ban text-warning';

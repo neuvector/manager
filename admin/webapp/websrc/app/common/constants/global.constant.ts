@@ -37,6 +37,7 @@ export class GlobalConstant {
   public static MULTICLUSTER_CONCURRENT_LIMIT = 8;
   public static MAX_ERROR_MESSAGE_LENGTH = 120;
   public static OtherWebhookType = 'OTHER';
+  public static Namespace_Boundary_Enabled = 'NBE';
   public static NEW_ID_SEED = {
     NETWORK_RULE: 1000000,
   };

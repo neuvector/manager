@@ -7,11 +7,21 @@
     <span *ngIf="!filtered"> {{ 'enum.OUT_OF' | translate }}&nbsp; </span>
     {{ domainsCount }}
   </span>
-  <app-quick-filter
-    [gridOptions]="gridOptions"
-    (filterCountChange)="filterCountChanged($event)"
-    [showCount]="false">
-  </app-quick-filter>
+  <div class="d-flex align-items-center">
+    <span *ngIf="hasNamespaceBoundaryEnabled" class="small d-flex align-items-center">
+      <span class="badge ag-badge badge-info mr-1">{{namespaceBoundaryDisplayName}}</span>
+      <span class="font-weight-bolder mr-1">:</span>
+      <span>
+        {{'general.NAMESPACE_BOUNDARY_ENABLED'|translate}}
+      </span>
+    </span>
+    <app-quick-filter
+      [gridOptions]="gridOptions"
+      (filterCountChange)="filterCountChanged($event)"
+      [showCount]="false"
+      class="ml-5">
+    </app-quick-filter>
+  </div>
 </div>
 <ag-grid-angular
   (window:resize)="onResize()"

@@ -33,6 +33,7 @@ import {
 import { Blacklist } from '@common/types/network-activities/blacklist';
 import { ClientIpCellComponent } from './client-ip-cell/client-ip-cell.component';
 import { ServerIpCellComponent } from './server-ip-cell/server-ip-cell.component';
+import { GlobalConstant } from '@common/constants/global.constant';
 
 @Injectable()
 export class GraphService {
@@ -924,7 +925,9 @@ export class GraphService {
       .map(group => {
         if (group.name !== 'external') {
           if (group.value === 1) {
-            let clusterNode = serverData.nodes.find(node => node.id === group.members[0]);
+            let clusterNode = serverData.nodes.find(
+              node => node.id === group.members[0]
+            );
             clusterNode.cluster = group.domain;
             return clusterNode;
           } else {
@@ -1292,32 +1295,39 @@ export class GraphService {
       const conversationHistoryColumns: ColDef[] = [
         {
           headerName: ' ',
-          cellRenderer: function (params) {
+          cellRenderer: params => {
             const proxy = `<div class="action-label info"> Proxy </div>`;
+            let result;
 
             if (params.data.severity) {
               if (params.data.to_sidecar)
-                return `<span><em class="fas fa-bug text-danger mr-1"></em> ${params.data.threat_name}${proxy}</span>`;
+                result = `<span><em class="fas fa-bug text-danger mr-1"></em> ${params.data.threat_name}${proxy}</span>`;
               else
-                return `<span><em class="fas fa-bug text-danger"></em> ${params.data.threat_name}</span>`;
+                result = `<span><em class="fas fa-bug text-danger"></em> ${params.data.threat_name}</span>`;
             } else if (
               params.data.policy_action === 'violate' ||
               params.data.policy_action === 'deny'
             ) {
               if (params.data.to_sidecar)
-                return `<span><em class="fas fa-ban text-warning mr-1"></em>${proxy}</span>`;
+                result = `<span><em class="fas fa-ban text-warning mr-1"></em>${proxy}</span>`;
               else
-                return `<span><em class="fas fa-ban text-warning"></em></span>`;
+                result = `<span><em class="fas fa-ban text-warning"></em></span>`;
             } else {
               if (params.data.to_sidecar)
-                return `<span><em class="fas fa-check text-success mr-1"></em>${proxy}</span>`;
+                result = `<span><em class="fas fa-check text-success mr-1"></em>${proxy}</span>`;
               else
-                return `<span><em class="fas fa-check text-success"></em></span>`;
+                result = `<span><em class="fas fa-check text-success"></em></span>`;
             }
+
+            // Append the "Namespace Boundary Enabled" if needed and return the final string
+            if (params.data.nbe) {
+              result = `${result} <span class="ml-1 action-label info">${GlobalConstant.Namespace_Boundary_Enabled}</span>`;
+            }
+            return result;
           },
           sortable: false,
-          width: 110,
-          minWidth: 110,
+          width: 180,
+          minWidth: 165,
         },
         {
           headerName: this.translate.instant('network.gridHeader.APP'),
@@ -1327,14 +1337,14 @@ export class GraphService {
           headerName: this.translate.instant('network.gridHeader.CLIENT_IP'),
           field: 'client_ip',
           cellRenderer: ClientIpCellComponent,
-          width: 250,
+          width: 215,
         },
         {
           headerName: this.translate.instant('network.gridHeader.SERVER_IP'),
           field: 'server_ip',
           cellRenderer: ServerIpCellComponent,
           minWidth: 200,
-          width: 250,
+          width: 215,
         },
         {
           headerName: this.translate.instant('network.gridHeader.PORT'),

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FieldType, FieldTypeConfig } from '@ngx-formly/core';
 
-
 /**
  * CardComponent extends the FieldType class from ngx-formly to create a custom form field component.
  * It is used to render a card-like UI element with customizable content and appearance based on form configuration.

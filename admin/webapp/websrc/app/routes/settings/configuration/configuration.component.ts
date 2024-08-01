@@ -17,7 +17,6 @@ import { ConfigFormComponent } from './config-form/config-form.component';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { Router } from '@angular/router';
 import { ConfigV2Vo } from '@common/types/settings/config-vo';
-import { CertificateDeserializer } from '@common/types/settings/certificate';
 
 @Component({
   selector: 'app-configuration',

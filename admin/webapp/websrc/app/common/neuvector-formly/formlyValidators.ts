@@ -1,7 +1,5 @@
-import { AbstractControl, FormGroup, ValidationErrors } from '@angular/forms';
-import { GlobalConstant } from '@common/constants/global.constant';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { CertificateDeserializer } from '@common/types/settings/certificate';
-import { FormlyFieldConfig } from '@ngx-formly/core';
 
 export function urlValidator(
   control: AbstractControl

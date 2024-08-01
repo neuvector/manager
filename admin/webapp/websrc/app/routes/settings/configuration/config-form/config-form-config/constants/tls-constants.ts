@@ -1,6 +1,4 @@
-import { disableDebugTools } from '@angular/platform-browser';
 import { GlobalConstant } from '@common/constants/global.constant';
-import { certificateValidator } from '@common/neuvector-formly/formlyValidators';
 import {
     CardSeverity,
     FormlyComponents,
@@ -58,26 +56,25 @@ export const TlsTableField: FormlyFieldConfig = {
                     'templateOptions.content': (model, formState, field) => {
                         const certificateDeserializer: CertificateDeserializer = CertificateDeserializer.getInstance();
                         const context: string = field?.model['context'];
-                        let manifest: CertificateManifest;
 
                         try{
                             const cert = certificateDeserializer.getCertificate(context);
-                            manifest = certificateDeserializer.getMainfest(cert);
+                            const manifest: CertificateManifest = certificateDeserializer.getMainfest(cert);
+
+                            return {
+                                'setting.tls.CERTIFICATE_MANIFEST.COMMON_NAME': manifest.commonName?.value,
+                                'setting.tls.CERTIFICATE_MANIFEST.SERIAL_NUMBER': manifest.serialNumber,  
+                                'setting.tls.CERTIFICATE_MANIFEST.KEY_ALGORITHM': manifest.keyAlgorithm,
+                                'setting.tls.CERTIFICATE_MANIFEST.SIGNATURE_ALGORITHM': manifest.signatureAlgorithm,
+                                'setting.tls.CERTIFICATE_MANIFEST.ORGANIZATION': manifest.organization?.value,
+                                'setting.tls.CERTIFICATE_MANIFEST.ORGANIZATION_UNIT': manifest.organizationUnit?.value,
+                                'setting.tls.CERTIFICATE_MANIFEST.ISSUER': manifest.issuer,
+                                'setting.tls.CERTIFICATE_MANIFEST.VALID_FROM': moment(manifest.validFrom).format('YYYY-MM-DD HH:mm:ss'),
+                                'setting.tls.CERTIFICATE_MANIFEST.VALID_TO': moment(manifest.validTo).format('YYYY-MM-DD HH:mm:ss'),
+                                'setting.tls.CERTIFICATE_MANIFEST.DAYS_LEFT': manifest.daysLeft
+                            }
                         } catch(e) {
                             return {};
-                        }
-
-                        return {
-                            'setting.tls.CERTIFICATE_MANIFEST.COMMON_NAME': manifest.commonName?.value,
-                            'setting.tls.CERTIFICATE_MANIFEST.SERIAL_NUMBER': manifest.serialNumber,  
-                            'setting.tls.CERTIFICATE_MANIFEST.KEY_ALGORITHM': manifest.keyAlgorithm,
-                            'setting.tls.CERTIFICATE_MANIFEST.SIGNATURE_ALGORITHM': manifest.signatureAlgorithm,
-                            'setting.tls.CERTIFICATE_MANIFEST.ORGANIZATION': manifest.organization?.value,
-                            'setting.tls.CERTIFICATE_MANIFEST.ORGANIZATION_UNIT': manifest.organizationUnit?.value,
-                            'setting.tls.CERTIFICATE_MANIFEST.ISSUER': manifest.issuer,
-                            'setting.tls.CERTIFICATE_MANIFEST.VALID_FROM': moment(manifest.validFrom).format('YYYY-MM-DD HH:mm:ss'),
-                            'setting.tls.CERTIFICATE_MANIFEST.VALID_TO': moment(manifest.validTo).format('YYYY-MM-DD HH:mm:ss'),
-                            'setting.tls.CERTIFICATE_MANIFEST.DAYS_LEFT': manifest.daysLeft
                         }
                     }
                 },

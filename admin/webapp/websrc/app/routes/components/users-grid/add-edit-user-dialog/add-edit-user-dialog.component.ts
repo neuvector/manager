@@ -97,7 +97,7 @@ export class AddEditUserDialogComponent implements OnInit {
       namespaces: ["global"],
       permissions: this.data.user!.extra_permissions!
     });
-    this.data.user!.extra_permissions_domains!.forEach(entry => {
+    this.data.user!.extra_permissions_domains?.forEach(entry => {
       rancherPermissions.push({
         namespaces: entry.domains,
         permissions: entry.permissions
@@ -108,7 +108,7 @@ export class AddEditUserDialogComponent implements OnInit {
 
   get hasExtraPermissions() {
     if (this.data.isEdit) {
-      return (this.data.user!.extra_permissions && Array.isArray(this.data.user!.extra_permissions) && this.data.user!.extra_permissions.length > 0 &&
+      return (this.data.user!.extra_permissions && Array.isArray(this.data.user!.extra_permissions) && this.data.user!.extra_permissions.length > 0 ||
       this.data.user!.extra_permissions_domains && Array.isArray(this.data.user!.extra_permissions_domains) && this.data.user!.extra_permissions_domains.length > 0);
     } else {
       return false;

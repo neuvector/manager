@@ -1,8 +1,14 @@
+import { disableDebugTools } from '@angular/platform-browser';
 import { GlobalConstant } from '@common/constants/global.constant';
+import { certificateValidator } from '@common/neuvector-formly/formlyValidators';
 import {
     CardSeverity,
     FormlyComponents,
+    FormlyValidators,
 } from '@common/neuvector-formly/neuvector-formly.module';
+import { CertificateDeserializer, CertificateManifest } from '@common/types/settings/certificate';
+import { FormlyFieldConfig } from '@ngx-formly/core';
+import * as moment from 'moment';
 
 export const tlsVerificationNoticeField = {
     type: FormlyComponents.CARD,
@@ -29,7 +35,7 @@ export const EnableTlsVerificationToggleField = {
     },
 };
 
-export const TlsTableField = {
+export const TlsTableField: FormlyFieldConfig = {
     key: 'tls.cacerts',
     type: FormlyComponents.EDIT_TABLE,
     templateOptions: {
@@ -41,6 +47,42 @@ export const TlsTableField = {
     fieldArray: {
         fieldGroup: [
             {
+                type: FormlyComponents.CARD,
+                templateOptions: {
+                    viewValue: 'setting.tls.MANIFEST',
+                    flexWidth: '37%',
+                    isBulletMode: true,
+                    isPlainOutfitMode: true
+                },
+                expressionProperties: {
+                    'templateOptions.content': (model, formState, field) => {
+                        const certificateDeserializer: CertificateDeserializer = CertificateDeserializer.getInstance();
+                        const context: string = field?.model['context'];
+                        let manifest: CertificateManifest;
+
+                        try{
+                            const cert = certificateDeserializer.getCertificate(context);
+                            manifest = certificateDeserializer.getMainfest(cert);
+                        } catch(e) {
+                            return {};
+                        }
+
+                        return {
+                            'setting.tls.CERTIFICATE_MANIFEST.COMMON_NAME': manifest.commonName?.value,
+                            'setting.tls.CERTIFICATE_MANIFEST.SERIAL_NUMBER': manifest.serialNumber,  
+                            'setting.tls.CERTIFICATE_MANIFEST.KEY_ALGORITHM': manifest.keyAlgorithm,
+                            'setting.tls.CERTIFICATE_MANIFEST.SIGNATURE_ALGORITHM': manifest.signatureAlgorithm,
+                            'setting.tls.CERTIFICATE_MANIFEST.ORGANIZATION': manifest.organization?.value,
+                            'setting.tls.CERTIFICATE_MANIFEST.ORGANIZATION_UNIT': manifest.organizationUnit?.value,
+                            'setting.tls.CERTIFICATE_MANIFEST.ISSUER': manifest.issuer,
+                            'setting.tls.CERTIFICATE_MANIFEST.VALID_FROM': moment(manifest.validFrom).format('YYYY-MM-DD HH:mm:ss'),
+                            'setting.tls.CERTIFICATE_MANIFEST.VALID_TO': moment(manifest.validTo).format('YYYY-MM-DD HH:mm:ss'),
+                            'setting.tls.CERTIFICATE_MANIFEST.DAYS_LEFT': manifest.daysLeft
+                        }
+                    }
+                },
+            },
+            {
                 key: 'context',
                 wrappers: [FormlyComponents.READONLY_WRAPPER],
                 type: FormlyComponents.TEXT_AREA,
@@ -50,19 +92,22 @@ export const TlsTableField = {
                     isCell: true,
                     required: true,
                     hideRequiredMarker: true,
-                    rows: 10,
+                    rows: 15,
                     readOnly: {
                         type: 'text',
                         template: field => `${field.model[field.key] || ''}`
                     }
                 },
+                validators: {
+                    validation: [FormlyValidators.Certificate],
+                  },
             },
             {
                 key: 'isEditable',
                 type: FormlyComponents.EDIT_TABLE_CONTROLS,
                 defaultValue: true,
                 templateOptions: {
-                    flexWidth: '10%',
+                    flexWidth: '5%',
                     showDeleteButtonOnly: true,
                 },
                 expressionProperties: {

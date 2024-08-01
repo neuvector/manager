@@ -17,6 +17,7 @@ import { ConfigFormComponent } from './config-form/config-form.component';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { Router } from '@angular/router';
 import { ConfigV2Vo } from '@common/types/settings/config-vo';
+import { CertificateDeserializer } from '@common/types/settings/certificate';
 
 @Component({
   selector: 'app-configuration',
@@ -71,16 +72,18 @@ export class ConfigurationComponent
       (GlobalVariable.user.token.role === MapConstant.FED_ROLES.ADMIN &&
         (GlobalVariable.isStandAlone || GlobalVariable.isMember));
     this.settingsService.getConfig().subscribe({
-      next: (value: ConfigV2Response) => (this.config = {
+      next: (value: ConfigV2Response) => {        
+        this.config = {
         ...value,
-        tls: {
-          enable_tls_verification: value.tls_cfg?.enable_tls_verification ?? true,
-          cacerts: value.tls_cfg?.cacerts.map((c, i) => ({
-            id: i,
-            context: c
-          }) ?? [])
+          tls: {
+            enable_tls_verification: value.tls_cfg?.enable_tls_verification ?? true,
+            cacerts: value.tls_cfg?.cacerts.map((c, i) => ({
+              id: i,
+              context: c
+            }) ?? [])
+          }
         }
-      }),
+      },
     });
     this._switchClusterSubscription =
       this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {

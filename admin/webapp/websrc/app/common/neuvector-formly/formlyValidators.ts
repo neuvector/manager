@@ -1,5 +1,6 @@
 import { AbstractControl, FormGroup, ValidationErrors } from '@angular/forms';
 import { GlobalConstant } from '@common/constants/global.constant';
+import { CertificateDeserializer } from '@common/types/settings/certificate';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 
 export function urlValidator(
@@ -74,4 +75,22 @@ export function emailValidator(
     return null;
   }
   return pattern.test(value) ? null : { invalidEmail: true };
+}
+
+export function certificateValidator(
+  control: AbstractControl
+): ValidationErrors | null {
+  const certificateDeserializer = CertificateDeserializer.getInstance();
+  const value = control.value;
+
+  if (!value) {
+    return null;
+  }
+
+  try{
+    certificateDeserializer.getCertificate(value);
+    return null;
+  } catch(e) {
+    return { invalidCertificate: true }
+  }
 }

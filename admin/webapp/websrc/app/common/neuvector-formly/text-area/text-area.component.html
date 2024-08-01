@@ -6,7 +6,7 @@
     [required]="field.templateOptions?.required || false"
     [rows]="to.rows"
     matInput></textarea>
-  <mat-error *ngIf="formControl.invalid">
+  <mat-error *ngIf="formControl?.invalid">
     <app-formly-errors [field]="field"></app-formly-errors>
   </mat-error>
 </mat-form-field>

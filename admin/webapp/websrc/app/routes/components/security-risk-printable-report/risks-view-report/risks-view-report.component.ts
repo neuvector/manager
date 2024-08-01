@@ -13,6 +13,7 @@ export class RisksViewReportComponent implements OnInit {
   @Input() charts: any;
   @Input() isMeetingReportLimit: boolean;
   @Input() filterService: any;
+  @Input() view!: string;
   Array = Array;
   SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW =
     MapConstant.SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW;

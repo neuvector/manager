@@ -5,15 +5,15 @@
     {{ (reportPage === 'vulnerabilities' ? "scan.report.TITLE" : "cis.report.TITLE") | translate }}
   </div>
 </div>
-<div class="report-summary pagebreak">
+<div *ngIf="isNameSpaceFiltered || view !== 'containers'" class="report-summary pagebreak">
   <div class="summary-title">
     {{ 'policy.report.SUMMARY_HEADER' | translate }}
   </div>
   <div class="clearfix text-center">
-    <div *ngIf="!isNameSpaceFiltered" class="margin-top-l">
+    <div *ngIf="!isNameSpaceFiltered && (view === 'all' || view === 'infrastructure')" class="margin-top-l">
       <img src="{{charts.node}}" style="width: 900px; height: auto;"/>
     </div>
-    <div class="margin-top-l">
+    <div *ngIf="!isNameSpaceFiltered && (view === 'all' || view === 'registry')" class="margin-top-l">
       <img src="{{charts.image}}"  style="width: 900px; height: auto"/>
     </div>
   </div>

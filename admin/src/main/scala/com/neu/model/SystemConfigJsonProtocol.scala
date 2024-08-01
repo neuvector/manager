@@ -64,7 +64,10 @@ object SystemConfigJsonProtocol extends DefaultJsonProtocol {
   implicit val systemConfigMiscCfgV2Format: RootJsonFormat[SystemConfigMiscCfgV2] = jsonFormat7(
     SystemConfigMiscCfgV2
   )
-  implicit val systemConfigV2Format: RootJsonFormat[SystemConfigV2] = jsonFormat9(SystemConfigV2)
+  implicit val systemConfigTlsCfgFormat: RootJsonFormat[SystemConfigTlsCfg] = jsonFormat2(
+    SystemConfigTlsCfg
+  )
+  implicit val systemConfigV2Format: RootJsonFormat[SystemConfigV2] = jsonFormat10(SystemConfigV2)
 
   implicit val systemConfigWrapFormat: RootJsonFormat[SystemConfigWrap] = jsonFormat5(
     SystemConfigWrap
@@ -96,65 +99,4 @@ object SystemConfigJsonProtocol extends DefaultJsonProtocol {
     systemConfig4DashboardWrap: String
   ): SystemConfig4DashboardWrap =
     systemConfig4DashboardWrap.parseJson.convertTo[SystemConfig4DashboardWrap]
-
-//  implicit object SystemConfigFormat extends RootJsonFormat[SystemConfig] {
-//    override def write(js: SystemConfig): JsValue =
-//      JsObject(
-//        List(
-//          Some("policy_mode"                 -> js.policy_mode.toJson),
-//          Some("unused_group_aging"          -> js.unused_group_aging.toJson),
-//          Some("syslog_ip"                   -> js.syslog_ip.toJson),
-//          Some("syslog_ip_proto"             -> js.syslog_ip_proto.toJson),
-//          Some("syslog_port"                 -> js.syslog_port.toJson),
-//          Some("syslog_level"                -> js.syslog_level.toJson),
-//          Some("syslog_status"               -> js.syslog_status.toJson),
-//          Some("syslog_in_json"              -> js.syslog_in_json.toJson),
-//          Some("new_service_policy_mode"     -> js.new_service_policy_mode.toJson),
-//          Some("syslog_categories"           -> js.syslog_categories.toJson),
-//          Some("single_cve_per_syslog"       -> js.single_cve_per_syslog.toJson),
-//          Some("webhook_status"              -> js.webhook_status.toJson),
-//          Some("webhook_url"                 -> js.webhook_url.toJson),
-//          Some("webhook_level"               -> js.webhook_level.toJson),
-//          Some("webhook_categories"          -> js.webhook_categories.toJson),
-//          Some("cluster_name"                -> js.cluster_name.toJson),
-//          Some("auth_by_platform"            -> js.auth_by_platform.toJson),
-//          Some("registry_http_proxy"         -> js.registry_http_proxy.toJson),
-//          Some("registry_https_proxy"        -> js.registry_https_proxy.toJson),
-//          Some("registry_http_proxy_status"  -> js.registry_http_proxy_status.toJson),
-//          Some("registry_https_proxy_status" -> js.registry_https_proxy_status.toJson),
-//          Some("ibmsa_ep_dashboard_url"      -> js.ibmsa_ep_dashboard_url.toJson),
-//          Some("ibmsa_ep_enabled"            -> js.ibmsa_ep_enabled.toJson)
-//        ).flatten: _*
-//      )
-//
-//    override def read(json: JsValue): SystemConfig = {
-//      val fields = json.asJsObject.fields
-//      SystemConfig(
-//        fields("policy_mode").convertTo[Option[String]],
-//        fields("unused_group_aging").convertTo[Option[Int]],
-//        fields("syslog_ip").convertTo[Option[String]],
-//        fields("syslog_ip_proto").convertTo[Option[Int]],
-//        fields("syslog_port").convertTo[Option[Int]],
-//        fields("syslog_level").convertTo[Option[String]],
-//        fields("syslog_status").convertTo[Option[Boolean]],
-//        fields("syslog_in_json").convertTo[Option[Boolean]],
-//        fields("new_service_policy_mode").convertTo[Option[String]],
-//        fields("syslog_categories").convertTo[Option[Array[String]]],
-//        fields("single_cve_per_syslog").convertTo[Option[Boolean]],
-//        fields("webhook_status").convertTo[Option[Boolean]],
-//        fields("webhook_url").convertTo[Option[String]],
-//        fields("webhook_level").convertTo[Option[String]],
-//        fields("webhook_categories").convertTo[Option[Array[String]]],
-//        fields("cluster_name").convertTo[Option[String]],
-//        fields("auth_by_platform").convertTo[Option[Boolean]],
-//        fields("registry_http_proxy").convertTo[Option[RegistyHttpProxy]],
-//        fields("registry_https_proxy").convertTo[Option[RegistyHttpsProxy]],
-//        fields("registry_http_proxy_status").convertTo[Option[Boolean]],
-//        fields("registry_https_proxy_status").convertTo[Option[Boolean]],
-//        fields("ibmsa_ep_dashboard_url").convertTo[Option[String]],
-//        fields("ibmsa_ep_enabled").convertTo[Option[Boolean]]
-//      )
-//    }
-//  }
-
 }

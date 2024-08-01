@@ -131,6 +131,11 @@ case class SystemConfigMiscCfgV2(
   csp_type: Option[String] = None
 )
 
+case class SystemConfigTlsCfg(
+  enable_tls_verification: Boolean,
+  cacerts: Option[Array[String]] = None
+)
+
 case class SystemConfigV2(
   svc_cfg: Option[SystemConfigSvcCfgV2] = None,
   syslog_cfg: Option[SystemConfigSyslogCfgV2] = None,
@@ -140,7 +145,8 @@ case class SystemConfigV2(
   ibmsa_cfg: Option[SystemConfigIBMSAVCfg2] = None,
   scanner_autoscale_cfg: Option[SystemConfigAutoscaleConfig] = None,
   misc_cfg: Option[SystemConfigMiscCfgV2] = None,
-  remote_repo_cfg: Option[Array[RemoteRepository]] = None
+  remote_repo_cfg: Option[Array[RemoteRepository]] = None,
+  tls_cfg: Option[SystemConfigTlsCfg] = None
 )
 
 case class SystemConfigWrap(

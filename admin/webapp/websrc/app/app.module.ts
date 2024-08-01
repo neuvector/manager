@@ -17,9 +17,6 @@ import {
   StorageService
 } from 'ngx-webstorage-service';
 
-
-// import { NgxFancyLoggerModule } from 'ngx-fancy-logger';
-
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }

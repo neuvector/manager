@@ -1,0 +1,20 @@
+<mat-card [ngClass]="[this.to.severity?.toLowerCase() ?? '']" appearance="outlined">
+    <mat-card-header *ngIf="to.header" style="margin-bottom: 1rem;">{{ to.header | translate }}</mat-card-header>
+    <mat-card-content *ngIf="to.content">
+        <ng-container *ngIf="isArrayContent(to.content); else NormalStringDiplay">
+            <ng-container *ngIf="to.isBulletMode; else NormalListDiplay">
+                <ul >
+                    <li *ngFor="let c of to.content">{{ c | translate }}</li>
+                </ul>
+            </ng-container>
+            <ng-template #NormalListDiplay>
+                <div *ngFor="let c of to.content">
+                    {{ to.content }}
+                </div>
+            </ng-template>
+        </ng-container>
+        <ng-template #NormalStringDiplay>
+            <pre>{{ to.content }}</pre>
+        </ng-template>
+    </mat-card-content>
+</mat-card>

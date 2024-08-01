@@ -5,3 +5,7 @@
   margin-top: 10px;
   white-space: pre-wrap;
 }
+
+:host ::ng-deep .mat-form-field-wrapper  {
+  width: 40rem !important;
+}

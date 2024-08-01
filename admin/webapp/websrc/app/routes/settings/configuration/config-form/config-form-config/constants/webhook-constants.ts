@@ -24,11 +24,6 @@ export const WebhookTableField = {
     'templateOptions.disabled': '!formState.permissions.isWebhookAuthorized',
   },
   fieldArray: {
-    // validators: {
-    //   validation: [
-    //     { name: FormlyValidators.WebhookUserName, options: { errorPath: 'name' } },
-    //   ],
-    // },
     fieldGroup: [
       {
         key: 'name',

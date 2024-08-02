@@ -63,11 +63,6 @@ export const TlsTableField: FormlyFieldConfig = {
 
                             return {
                                 'setting.tls.CERTIFICATE_MANIFEST.COMMON_NAME': manifest.commonName?.value,
-                                'setting.tls.CERTIFICATE_MANIFEST.SERIAL_NUMBER': manifest.serialNumber,  
-                                'setting.tls.CERTIFICATE_MANIFEST.KEY_ALGORITHM': manifest.keyAlgorithm,
-                                'setting.tls.CERTIFICATE_MANIFEST.SIGNATURE_ALGORITHM': manifest.signatureAlgorithm,
-                                'setting.tls.CERTIFICATE_MANIFEST.ORGANIZATION': manifest.organization?.value,
-                                'setting.tls.CERTIFICATE_MANIFEST.ORGANIZATION_UNIT': manifest.organizationUnit?.value,
                                 'setting.tls.CERTIFICATE_MANIFEST.ISSUER': manifest.issuer,
                                 'setting.tls.CERTIFICATE_MANIFEST.VALID_FROM': moment(manifest.validFrom).format('YYYY-MM-DD HH:mm:ss'),
                                 'setting.tls.CERTIFICATE_MANIFEST.VALID_TO': moment(manifest.validTo).format('YYYY-MM-DD HH:mm:ss'),

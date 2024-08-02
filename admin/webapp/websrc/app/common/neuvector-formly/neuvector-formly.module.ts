@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { IconInputComponent } from './icon-input/icon-input.component';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import {
+  certificateValidator,
   emailValidator,
   fedNameValidator,
   objNameValidator,
@@ -61,6 +62,7 @@ export enum FormlyValidators {
   WebhookUserName = 'invalidWebhookUserName',
   PortRange = 'invalidPortRange',
   EmailFormat = 'invalidEmail',
+  Certificate = 'invalidCertificate'
 }
 
 export enum FormlyComponents {
@@ -166,6 +168,7 @@ export enum CardSeverity {
         },
         { name: FormlyValidators.PortRange, validation: portRangeValidator },
         { name: FormlyValidators.EmailFormat, validation: emailValidator },
+        { name: FormlyValidators.Certificate, validation: certificateValidator },
       ],
       types: [
         {

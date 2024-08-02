@@ -3146,6 +3146,7 @@
     },
     "tls": {
       "ADD": "Add Certificate",
+      "MANIFEST": "Manifest",
       "CERTIFICATE": "Certificate",
       "CERTIFICATE_CONTEXT": "Certificate Context",
       "APPLICABLE_NOTICE": {
@@ -3155,6 +3156,18 @@
           "AUTH": "Auth Server Connections (SAML, LDAP and OIDC)",
           "WEBHOOK": "Webhook Connections"
         }
+      },
+      "CERTIFICATE_MANIFEST": {
+        "COMMON_NAME": "Common Name",
+        "SERIAL_NUMBER": "Serial Number",
+        "KEY_ALGORITHM": "Key Algorithm",
+        "SIGNATURE_ALGORITHM": "Signature Algorithm",
+        "ORGANIZATION": "Organization",
+        "ORGANIZATION_UNIT": "Organization Unit",
+        "ISSUER": "Issuer",
+        "VALID_FROM": "Valid From",
+        "VALID_TO": "Valid To",
+        "DAYS_LEFT": "Days Left"
       }
     },
     "remote_repository": {

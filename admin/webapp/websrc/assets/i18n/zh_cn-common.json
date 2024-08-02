@@ -3146,6 +3146,7 @@
     },
     "tls": {
       "ADD": "添加证书",
+      "MANIFEST": "数据清单",
       "CERTIFICATE": "证书",
       "CERTIFICATE_CONTEXT": "证书内文",
       "APPLICABLE_NOTICE": {
@@ -3155,7 +3156,19 @@
           "AUTH": "授权服务连接 (SAML、LDAP 和 OIDC)",
           "WEBHOOK": "网络挂接服务连接"
         }
-      }
+      },
+      "CERTIFICATE_MANIFEST": {
+          "COMMON_NAME": "通用名称",
+          "SERIAL_NUMBER": "序列号",
+          "KEY_ALGORITHM": "公钥算法",
+          "SIGNATURE_ALGORITHM": "签章算法",
+          "ORGANIZATION": "组织",
+          "ORGANIZATION_UNIT": "组织单位",
+          "ISSUER": "发行人",
+          "VALID_FROM": "签证开始日期",
+          "VALID_TO": "签证结束日期",
+          "DAYS_LEFT": "剩余天数"
+        }
     },
     "remote_repository": {
       "title": "远程存储库配置",

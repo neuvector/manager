@@ -260,6 +260,7 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig {
 
   private def basePost(uri: String, data: MultipartFormData, token: String) =
     Post(uri, data) ~> addHeader(TOKEN_HEADER, token) ~>
+    addHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.getOrElse(token, "")) ~>
     addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
     addHeader(`Cache-Control`(CacheDirectives.`no-cache`))
 

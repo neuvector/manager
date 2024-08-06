@@ -112,6 +112,8 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
       }
       if (!body.config.auth_with_token) {
         body.config.auth_with_token = false;
+      } else {
+        body.config.auth_token = body.config.auth_token || undefined;
       }
       body.config.cfg_type = this.model.isFed
         ? GlobalConstant.CFG_TYPE.FED

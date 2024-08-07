@@ -3,10 +3,9 @@ import { VulnerabilitiesService } from './vulnerabilities.service';
 import { VulnerabilitiesCsvService } from './csv-generation/vulnerabilities-csv.service';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { VulnerabilitiesFilterService } from './vulnerabilities.filter.service';
-import { MapConstant } from '@common/constants/map.constant';
 import { MatDialog } from '@angular/material/dialog';
 import { PdfGenerationDialogComponent } from './pdf-generation-dialog/pdf-generation-dialog.component';
-import { VulnerabilityAsset, VulnerabilityView } from '@common/types';
+import { VulnerabilityView } from '@common/types';
 import { VulnerabilityDetailDialogComponent } from '@components/vulnerabilities-grid/vulnerability-detail-dialog/vulnerability-detail-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
 import {
@@ -231,7 +230,7 @@ export class VulnerabilitiesComponent implements OnInit, OnDestroy {
 
   private getVulnerabilitiesViewReportData = (queryToken: string, cb: Function, dialogRef, options) => {
     this.withoutAppendix = options.withoutAppendix;
-    this.vulnerabilitiesService.getVulnerabilitiesViewReportData(queryToken, options.lastModifiedTime)
+    this.vulnerabilitiesService.getVulnerabilitiesViewReportData(options.lastModifiedTime)
       .subscribe(
         (response: any) => {
           cb(response.data, dialogRef);

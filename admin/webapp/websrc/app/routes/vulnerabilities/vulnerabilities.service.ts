@@ -15,7 +15,6 @@ import {
   VulnerabilitiesQueryData,
 } from '@common/types';
 import { VulnerabilitiesFilterService } from './vulnerabilities.filter.service';
-import { AssetsViewPdfService } from './pdf-generation/assets-view-pdf.service';
 import { MapConstant } from '@common/constants/map.constant';
 import { GridApi, SortModelItem } from 'ag-grid-community';
 
@@ -89,11 +88,9 @@ export class VulnerabilitiesService {
   private countDistributionSubject$ = new Subject();
   countDistribution$ = this.countDistributionSubject$.asObservable();
   workloadMap4Pdf!: {};
-  private workloadMap!: Map<string, any>;
   imageMap4Pdf!: {};
   platformMap4Pdf!: {};
   hostMap4Pdf!: {};
-  private refreshSubject$ = new Subject();
   refreshing$ = new Subject();
   private selectedVulnerabilitySubject$ = new BehaviorSubject<any>(undefined);
   selectedVulnerability$ = this.selectedVulnerabilitySubject$.asObservable();
@@ -109,7 +106,6 @@ export class VulnerabilitiesService {
     private risksHttpService: RisksHttpService,
     private vulnerabilitiesFilterService: VulnerabilitiesFilterService,
     private assetsHttpService: AssetsHttpService,
-    private assetsViewPdfService: AssetsViewPdfService
   ) {}
 
   selectVulnerability(vulnerability) {
@@ -137,7 +133,6 @@ export class VulnerabilitiesService {
       container: 0,
     };
     this.workloadMap4Pdf = {};
-    this.workloadMap = new Map();
     this.imageMap4Pdf = {};
     this.platformMap4Pdf = {};
     this.hostMap4Pdf = {};
@@ -176,7 +171,7 @@ export class VulnerabilitiesService {
       start: start,
       row: this.vulnerabilitiesFilterService.paginationBlockSize,
     };
-    if (sortModel.length) {
+    if (sortModel && sortModel.length) {
       this.sortModel = sortModel;
       params = {
         ...params,
@@ -186,7 +181,7 @@ export class VulnerabilitiesService {
     } else {
       this.sortModel = [];
     }
-    if ('-' in filterModel) {
+    if (filterModel && '-' in filterModel) {
       params = {
         ...params,
         qf: filterModel['-'].filter,
@@ -243,7 +238,6 @@ export class VulnerabilitiesService {
   }
 
   getVulnerabilitiesViewReportData(
-    queryToken: string,
     lastModifiedTime: number
   ): Observable<any> {
     let params: any = {

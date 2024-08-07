@@ -33,7 +33,7 @@ export class VulnerabilitiesFilterService {
   selectedScore = 'V3';
   activePage: number = 0;
   paginationPageSize = 100;
-  paginationBlockSize = 300;
+  paginationBlockSize = 100;
 
   constructor(private translate: TranslateService) {}
 

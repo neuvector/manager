@@ -7,7 +7,6 @@ import {
 } from '@angular/core';
 import { RemoteGridApi } from '@common/types';
 import {
-  GridApi,
   GridReadyEvent,
   IDatasource,
   IGetRowsParams,

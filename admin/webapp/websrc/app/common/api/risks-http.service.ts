@@ -48,7 +48,6 @@ export class RisksHttpService {
 
   postVulnerabilityQuery(query: VulnerabilityQuery) {
     let { last_modified_timestamp_option, ...vulQuery } = query;
-    console.log(query);
     return GlobalVariable.http.post<VulnerabilitiesQueryData>(
       PathConstant.VUL_ASSET_URL,
       vulQuery

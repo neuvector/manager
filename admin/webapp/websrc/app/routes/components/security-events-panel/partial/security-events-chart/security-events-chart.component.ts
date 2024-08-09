@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ChartConfiguration } from 'chart.js';
 import { TranslateService } from '@ngx-translate/core';
 import { threeWayMerge } from '@common/utils/common.utils';
 
@@ -20,7 +19,6 @@ export class SecurityEventsChartComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log('securityEventSummary', this.securityEventSummary);
     this.drawSecurityEventsLineChart();
   }
 
@@ -32,8 +30,6 @@ export class SecurityEventsChartComponent implements OnInit {
       0,
       0
     );
-
-    console.log('securityEventsLabels', securityEventsLabels);
 
     let labelListLength: number = securityEventsLabels.length;
     let criticalTotal: number = 0;
@@ -47,13 +43,13 @@ export class SecurityEventsChartComponent implements OnInit {
       criticalDataList[index] = critical[1];
       criticalTotal += critical[1];
     });
+
     this.securityEventSummary.warning.forEach(warning => {
       let index = securityEventsLabels.findIndex(label => label === warning[0]);
       warningDataList[index] = warning[1];
       warningTotal += warning[1];
     });
 
-    console.log('securityEventsData', criticalDataList, warningDataList);
     this.noChartData = criticalDataList.length === 0 && warningDataList.length === 0;
     this.securityEventsChartConfig = {
       type: 'line',

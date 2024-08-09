@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 import { accumulateActionLevel } from '@common/utils/common.utils';
@@ -13,6 +13,7 @@ export class ExposedServicepodGridServicepodCellComponent implements ICellRender
   params!: ICellRendererParams;
   name!: string;
   isParent!: boolean;
+  isIpMapReady!: boolean;
   rowStyle: any;
   get isChildVisible() {
     return this.params.data.visible;
@@ -23,6 +24,7 @@ export class ExposedServicepodGridServicepodCellComponent implements ICellRender
   agInit(params: ICellRendererParams): void {
     this.params = params;
     this.isParent = !params.data.parent_id && params.data.child_id;
+    this.isIpMapReady = params.data.isIpMapReady;
     this.name = params.data.service;
     if (params.data.service)
       this.rowStyle = this.getServicePodStyle(this.params);

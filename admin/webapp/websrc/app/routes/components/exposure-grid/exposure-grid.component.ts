@@ -11,6 +11,8 @@ import { ExposedServicePodGridComponent } from '@components/exposed-service-pod-
 export class ExposureGridComponent implements OnInit {
   @ViewChild('ingressGrid') ingressGrid!: ExposedServicePodGridComponent;
   @ViewChild('egressGrid') egressGrid!: ExposedServicePodGridComponent;
+
+  @Input() isIpMapReady: any;
   @Input() source: string;
   @Input() ingress!: Array<any>;
   @Input() egress!: Array<any>;

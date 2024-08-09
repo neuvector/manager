@@ -35,7 +35,12 @@
       </div>
     </div>
     <div class="col-xl-3 col-lg-12 col-md-12 margin-bottom-m">
-      <app-risk-instruction *ngIf="scoreInfo" [scoreInfo]="scoreInfo" [activeIndex]="activeIndex4RiskInstruction">
+      <app-risk-instruction 
+        *ngIf="scoreInfo" 
+        [activeIndex]="activeIndex4RiskInstruction"
+        [scoreInfo]="scoreInfo"
+        [details]="details"
+      >
       </app-risk-instruction>
     </div>
   </div>

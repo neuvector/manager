@@ -10,6 +10,7 @@
     </app-exposed-service-pod-grid>
     <app-exposed-servicepod-conv-grid
       *ngIf="source === 'exposure-panel'"
+      [isIpMapReady]="isIpMapReady"
       [exposures]="ingress"
       #ingressGrid>
     </app-exposed-servicepod-conv-grid>
@@ -24,6 +25,7 @@
     </app-exposed-service-pod-grid>
     <app-exposed-servicepod-conv-grid
       *ngIf="source === 'exposure-panel'"
+      [isIpMapReady]="isIpMapReady"
       [exposures]="egress"
       #egressGrid>
     </app-exposed-servicepod-conv-grid>

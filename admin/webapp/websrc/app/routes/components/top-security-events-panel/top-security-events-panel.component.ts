@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { DashboardSecurityEventsService } from '@routes/dashboard/thread-services/dashboard-security-events.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -9,12 +8,12 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class TopSecurityEventsPanelComponent implements OnInit {
 
-  instructions: Array<string>;
-
+  @Input() securityEvents: any;
   @Input() direction: string;
 
+  instructions: Array<string>;
+
   constructor(
-    public dashboardSecurityEventsService: DashboardSecurityEventsService,
     private translate: TranslateService
   ) { }
 

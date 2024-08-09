@@ -5,7 +5,6 @@ import {
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DashboardService } from '@common/services/dashboard.service';
-import { GlobalVariable } from '@common/variables/global.variable';
 
 @Component({
   selector: 'app-report-by-namespace-modal',

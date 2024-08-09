@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { DashboardDetailsService } from '@routes/dashboard/thread-services/dashboard-details.service';
+import { Component, Input, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -9,10 +8,11 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class ApplicationProtocolsPanelComponent implements OnInit {
 
+  @Input() details: any;
+
   instructions: Array<string>;
 
   constructor(
-    public dashboardDetailsService: DashboardDetailsService,
     private translate: TranslateService
   ) { }
 

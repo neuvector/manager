@@ -2,18 +2,20 @@
   <mat-card-title class="d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center justify-content-start">
       {{ 'dashboard.body.panel_title.CONTAINER_SEC' | translate }}
-      <app-loading-button
-        *ngIf="scoreInfo.ingress.length > 0 || scoreInfo.egress.length > 0"
-        style="margin-top: -6px;"
-        (btnClick)="downloadExposureConversationCsv()"
-        [text]="'dashboard.body.panel_title.EXPO_CONV_RPT' | translate"
-        appearance="mat-button"
-        [disabled]="dashboardExposureConversationsService.isLoadingExposureConversation"
-        [loading]="dashboardExposureConversationsService.isLoadingExposureConversation"
-        buttonClasses="d-flex justify-content-center align-items-center"
-        iconClasses="eos-icons"
-        iconName="csv_file">
-      </app-loading-button>
+      <ng-container *ngIf="isIpMapReady">
+        <app-loading-button
+          *ngIf="scoreInfo.ingress.length > 0 || scoreInfo.egress.length > 0"
+          style="margin-top: -6px;"
+          (btnClick)="downloadExposureConversationCsv()"
+          [text]="'dashboard.body.panel_title.EXPO_CONV_RPT' | translate"
+          appearance="mat-button"
+          [disabled]="dashboardExposureConversationsService.isLoadingExposureConversation"
+          [loading]="dashboardExposureConversationsService.isLoadingExposureConversation"
+          buttonClasses="d-flex justify-content-center align-items-center"
+          iconClasses="eos-icons"
+          iconName="csv_file">
+        </app-loading-button>
+      </ng-container>
     </div>
     <app-panel-instruction-curtain
       class="d-flex align-items-center justify-content-end"
@@ -23,15 +25,14 @@
   </mat-card-title>
   <mat-card-content style="display: flex">
     <app-exposure-chart
-      *ngIf="isIpMapReady"
       class="col-sm-4"
       [ingress]="hierarchicalIngressList"
       [egress]="hierarchicalEgressList"
     >
     </app-exposure-chart>
     <app-exposure-grid
-      *ngIf="isIpMapReady"
       class="col-sm-8"
+      [isIpMapReady]="isIpMapReady"
       [source]="'exposure-panel'"
       [ingress]="hierarchicalIngressList"
       [egress]="hierarchicalEgressList"

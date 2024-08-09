@@ -1,23 +1,19 @@
 import { Component, OnInit, SecurityContext, Input } from '@angular/core';
-import { ErrorResponse, HierarchicalExposure } from '@common/types';
+import { HierarchicalExposure } from '@common/types';
 import { GlobalVariable } from '@common/variables/global.variable';
 import {
   ColDef,
   GridApi,
   GridOptions,
   GridReadyEvent,
-  RowNode,
 } from 'ag-grid-community';
 import { TranslateService } from '@ngx-translate/core';
 import * as $ from 'jquery';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UtilsService } from '@common/utils/app.utils';
 import { MapConstant } from '@common/constants/map.constant';
-import { GraphHttpService } from '@common/api/graph-http.service';
-import { NotificationService } from '@services/notification.service';
 import { ExposedServicePodGridActionCellComponent } from '@components/exposed-service-pod-grid/exposed-service-pod-grid-action-cell/exposed-service-pod-grid-action-cell.component';
 import { ExposedServicepodGridServicepodCellComponent } from '@components/exposed-servicepod-conv-grid/exposed-servicepod-grid-servicepod-cell/exposed-servicepod-grid-servicepod-cell.component';
-import { ExternalHostCellComponent } from '@components/exposed-servicepod-conv-grid/external-host-cell/external-host-cell.component';
 import { ConversationEntryListComponent } from '@components/exposed-servicepod-conv-grid/conversation-entry-list/conversation-entry-list.component';
 import { uuid } from '@common/utils/common.utils';
 import { RegistryDetailsVulnerabilitiesCellComponent } from '@routes/registries/registry-details/registry-details-table/registry-details-vulnerabilities-cell/registry-details-vulnerabilities-cell.component';
@@ -28,23 +24,26 @@ import { RegistryDetailsVulnerabilitiesCellComponent } from '@routes/registries/
   styleUrls: ['./exposed-servicepod-conv-grid.component.scss'],
 })
 export class ExposedServicepodConvGridComponent implements OnInit {
-  private readonly $win;
-  private _exposures!: Array<HierarchicalExposure>;
+
+  @Input() isIpMapReady = false
   @Input() set exposures(exposure: Array<HierarchicalExposure>) {
     this._exposures = exposure;
     this.displayedExposure = this.preprocessHierarchicalData(this._exposures);
   }
-  get exposures() {
-    return this._exposures;
-  }
+
   gridOptions!: GridOptions;
   gridApi!: GridApi;
   columnDefs!: ColDef[];
   displayedExposure!: Array<any>;
 
+  private readonly $win;
+  private _exposures!: Array<HierarchicalExposure>;
+
+  get exposures() {
+    return this._exposures;
+  }
+
   constructor(
-    private graphHttpService: GraphHttpService,
-    private notificationService: NotificationService,
     private translate: TranslateService,
     private sanitizer: DomSanitizer,
     private utils: UtilsService
@@ -115,27 +114,6 @@ export class ExposedServicepodConvGridComponent implements OnInit {
         minWidth: 110,
         sortable: false,
       },
-      // {
-      //   headerName: this.translate.instant(
-      //     'dashboard.body.panel_title.APPLICATIONS'
-      //   ),
-      //   field: 'applications',
-      //   cellRenderer: params => {
-      //     if (params.data) {
-      //       if (params.value) {
-      //         return this.sanitizer.sanitize(
-      //           SecurityContext.HTML,
-      //           params.data.ports
-      //             ? params.value.concat(params.data.ports).join(', ')
-      //             : params.value.join(', ')
-      //         );
-      //       }
-      //     }
-      //     return null;
-      //   },
-      //   width: 100,
-      //   sortable: false,
-      // },
       {
         headerName: this.translate.instant(
           'dashboard.body.panel_title.POLICY_ACTION'
@@ -215,6 +193,7 @@ export class ExposedServicepodConvGridComponent implements OnInit {
     exposures: Array<HierarchicalExposure>
   ): Array<any> => {
     let res: Array<any> = [];
+
     exposures.forEach(exposure => {
       const parent_id = uuid();
       if (exposure.entries) {
@@ -239,10 +218,19 @@ export class ExposedServicepodConvGridComponent implements OnInit {
           ...exposure,
           pods: exposure.children.length,
           visible: true,
+          isIpMapReady: this.isIpMapReady
         });
       }
     });
-    console.log('preprocessHierarchicalData', res);
+
+    if(this.isIpMapReady) {
+      res.forEach(d => {
+        if(!d['parent_id']) {
+          d.isIpMapReady = this.isIpMapReady;
+        }
+      })
+    }
+  
     return res;
   };
 }

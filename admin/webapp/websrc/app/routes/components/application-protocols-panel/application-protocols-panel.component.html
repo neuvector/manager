@@ -11,18 +11,18 @@
   </mat-card-title>
   <mat-card-content
     class="row margin-horizon-0"
-    *ngIf="dashboardDetailsService.applications"
+    *ngIf="details?.applications2"
   >
     <mat-tab-group>
       <mat-tab label="{{'dashboard.body.panel_title.POLICY_COUNT' | translate}}">
         <app-application-conversation-chart
-          [applications]="dashboardDetailsService.applications"
+          [applications]="details.applications2"
         >
         </app-application-conversation-chart>
       </mat-tab>
       <mat-tab label="{{'dashboard.body.panel_title.BYTES' | translate}}">
         <app-application-volume-chart
-          [applications]="dashboardDetailsService.applications"
+          [applications]="details.applications2"
         >
         </app-application-volume-chart>
       </mat-tab>

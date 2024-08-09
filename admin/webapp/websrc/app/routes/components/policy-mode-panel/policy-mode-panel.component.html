@@ -13,11 +13,11 @@
     <div
       class="row margin-horizon-0"
       style="height: 300px;"
-      *ngIf="dashboardDetailsService.containers && dashboardDetailsService.services"
+      *ngIf="details?.containers && details?.services"
     >
       <app-policy-mode-chart
         class="col-sm-7"
-        [assetsInfo]="dashboardDetailsService[assetType]"
+        [assetsInfo]="details[assetType]"
         [assetType]="assetType"
         [scoreInfo]="scoreInfo"
       ></app-policy-mode-chart>

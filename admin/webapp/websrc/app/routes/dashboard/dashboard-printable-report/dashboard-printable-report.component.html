@@ -6,19 +6,6 @@
     <div class="margin-top-m" style="font-size: 30px;">{{domain ? '&nbsp;(&nbsp;' + domain + '&nbsp;)' : ''}}</div>
   </div>
 </div>
-<!-- <div class="pagebreak" *ngIf="!domain">
-  <div class="report-summary">
-    <div class="summary-title">
-      {{ 'dashboard.heading.SECURITY_RISK_SCORE' | translate }}
-    </div>
-    <app-risk-score
-      [score]="reportInfo.scoreInfo.score.securityRiskScore"
-      [nodesCnt]="reportInfo.summaryInfo.hosts"
-      [podsCnt]="reportInfo.summaryInfo.running_pods"
-    >
-    </app-risk-score>
-  </div>
-</div> -->
 <div class="report-summary pagebreak">
   <div class="summary-title">
     {{ 'dashboard.body.panel_title.CONTAINER_SEC' | translate }}
@@ -120,10 +107,10 @@
   <div class="row">
     <div class="col-sm-6">
       <app-top-vulnerable-assets-chart
+        assetType="containers"
         [highPriorityVulnerabilities]="reportInfo.dashboardDetailsInfo.highPriorityVulnerabilities"
         [isReport]="true"
-        [isAutoScanOff]="!dashboardDetailsService.isAutoScanOn"
-        assetType="containers"
+        [isAutoScanOff]="!details.autoScanConfig"
       ></app-top-vulnerable-assets-chart>
     </div>
     <div class="col-sm-6 text-muted margin-top-xl">
@@ -139,10 +126,10 @@
     </div>
     <div class="col-sm-6">
       <app-top-vulnerable-assets-chart
+        assetType="nodes"
         [highPriorityVulnerabilities]="reportInfo.dashboardDetailsInfo.highPriorityVulnerabilities"
         [isReport]="true"
-        [isAutoScanOff]="!dashboardDetailsService.isAutoScanOn"
-        assetType="nodes"
+        [isAutoScanOff]="!details.autoScanConfig"
       >
       </app-top-vulnerable-assets-chart>
     </div>
@@ -156,8 +143,8 @@
     <div class="col-sm-6">
       <app-policy-mode-chart
         class="col-sm-7"
-        [assetsInfo]="reportInfo.dashboardDetailsInfo.services"
         assetType="services"
+        [assetsInfo]="reportInfo.dashboardDetailsInfo.services"
         [scoreInfo]="reportInfo.scoreInfo"
         [is4Report]="true"
       ></app-policy-mode-chart>

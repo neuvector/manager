@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import {
   InternalSystemInfo,
   HierarchicalExposure,
-  ConversationReportEntry,
   Exposure,
 } from '@common/types';
 import { parseExposureHierarchicalData } from '@common/utils/common.utils';
@@ -21,11 +20,11 @@ import { uuid } from '@common/utils/common.utils';
 })
 export class ExposurePanelComponent implements OnInit {
   @Input() scoreInfo!: InternalSystemInfo;
+  
   hierarchicalIngressList!: Array<HierarchicalExposure>;
   hierarchicalEgressList!: Array<HierarchicalExposure>;
   instructions: Array<string> = [];
   isIpMapReady: boolean = false;
-  Array = Array;
 
   constructor(
     public dashboardExposureConversationsService: DashboardExposureConversationsService,
@@ -39,6 +38,8 @@ export class ExposurePanelComponent implements OnInit {
       this.translate.instant('dashboard.help.exposure.txt1'),
       this.translate.instant('dashboard.help.exposure.txt2'),
     ];
+    this.hierarchicalIngressList = parseExposureHierarchicalData(this.scoreInfo.ingress) || [];
+    this.hierarchicalEgressList = parseExposureHierarchicalData(this.scoreInfo.egress) || [];
     this.retrieveIpLocation(this.scoreInfo);
   }
 
@@ -63,8 +64,7 @@ export class ExposurePanelComponent implements OnInit {
           JSON.stringify(this.hierarchicalEgressList)
         );
         this.isIpMapReady = true;
-      },
-      error => {}
+      }
     );
   };
 

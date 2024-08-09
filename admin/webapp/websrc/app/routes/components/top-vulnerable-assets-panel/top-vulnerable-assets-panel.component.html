@@ -15,7 +15,9 @@
       class="row margin-horizon-0" style="display: table-cell; vertical-align: middle;"
     >
       <app-vulnerability-instruction
+        *ngIf="details"
         [isAutoScanOn]="false"
+        [details]="details" 
       >
       </app-vulnerability-instruction>
     </div>
@@ -26,11 +28,11 @@
   <mat-card-content>
     <div
       class="row margin-horizon-0"
-      *ngIf="dashboardDetailsService.highPriorityVulnerabilities"
+      *ngIf="details?.highPriorityVulnerabilities"
     >
       <app-top-vulnerable-assets-chart
         class="col-sm-12"
-        [highPriorityVulnerabilities]="dashboardDetailsService.highPriorityVulnerabilities"
+        [highPriorityVulnerabilities]="details.highPriorityVulnerabilities"
         [assetType]="assetType"
       ></app-top-vulnerable-assets-chart>
     </div>

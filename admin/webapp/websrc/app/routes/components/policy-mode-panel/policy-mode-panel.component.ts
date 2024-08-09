@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { DashboardDetailsService } from '@routes/dashboard/thread-services/dashboard-details.service';
 import { InternalSystemInfo } from '@common/types';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -10,13 +9,13 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class PolicyModePanelComponent implements OnInit {
 
-  instructions: Array<string>;
-
+  @Input() details: any;
   @Input() assetType: string;
   @Input() scoreInfo: InternalSystemInfo;
 
+  instructions: Array<string>;
+
   constructor(
-    public dashboardDetailsService: DashboardDetailsService,
     private translate: TranslateService
   ) { }
 

@@ -16,8 +16,11 @@ import { DashboardService } from '@services/dashboard.service';
   styleUrls: ['./security-risk-panel.component.scss'],
 })
 export class SecurityRiskPanelComponent implements OnInit {
+
+  @Input() details: any;
   @Input() scoreInfo!: InternalSystemInfo;
   @Input() summaryInfo!: SystemSummaryDetails;
+  
   riskFactorList: Array<RiskFactor> = new Array(3);
   activeIndex4RiskInstruction: number = 0;
 

@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { DashboardDetailsService } from '@routes/dashboard/thread-services/dashboard-details.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -9,13 +8,13 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class TopVulnerableAssetsPanelComponent implements OnInit {
 
-  instructions: Array<string>;
-
+  @Input() details: any;
   @Input() assetType: string;
   @Input() isScanOff: boolean = false;
 
+  instructions: Array<string>;
+
   constructor(
-    public dashboardDetailsService: DashboardDetailsService,
     private translate: TranslateService
   ) { }
 

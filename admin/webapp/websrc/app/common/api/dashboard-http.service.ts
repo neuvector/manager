@@ -61,7 +61,7 @@ export class DashboardHttpService {
       options['params'] = { domain: domain };
     }
 
-    return GlobalVariable.http.get(PathConstant.DASHBOARD_DETAILS_URL);
+    return GlobalVariable.http.get(PathConstant.DASHBOARD_DETAILS_URL, options);
   }
 
   getSummaryData(domain?: string) {
@@ -71,6 +71,6 @@ export class DashboardHttpService {
       options['params'] = { domain: domain };
     }
 
-    return GlobalVariable.http.get(PathConstant.DASHBOARD_SUMMARY_URL);
+    return GlobalVariable.http.get(PathConstant.DASHBOARD_SUMMARY_URL, options);
   }
 }

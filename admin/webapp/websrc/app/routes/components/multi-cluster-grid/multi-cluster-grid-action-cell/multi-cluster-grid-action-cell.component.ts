@@ -32,6 +32,7 @@ export class MultiClusterGridActionCellComponent
   upgrade_status: string = MapConstant.FED_STATUS.UPGADE_REQUIRED;
   kicked_status: string = MapConstant.FED_STATUS.KICKED;
   pending_status: string = MapConstant.FED_STATUS.PENDING;
+  primaryClusterRestVersion: string = '';
 
   constructor(
     public multiClusterService: MultiClusterService,
@@ -48,6 +49,8 @@ export class MultiClusterGridActionCellComponent
   agInit(params: ICellRendererParams): void {
     this.params = params;
     this.buttonDisplayMap = {};
+    this.primaryClusterRestVersion =
+      this.multiClusterService.primaryClusterRestVersion;
   }
 
   refresh(params: ICellRendererParams): boolean {

@@ -2934,7 +2934,8 @@
       "deploy_failure": "Failed to send the sync notification",
       "api_failure": "Multiple Cluster Service is not available",
       "get_name_failure": "Failed to access the cluster name",
-      "SCORE_UNAVAILIBlE": "Unavailable"
+      "SCORE_UNAVAILIBlE": "Unavailable",
+      "incompatible_version": "Version mismatch with the Primary cluster."
     },
     "prompt": {
       "remove": "Are you sure you want to remove {{ name }} from this Primary Cluster?",

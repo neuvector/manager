@@ -36,7 +36,9 @@
                 params.data.status === disconnect_status ||
                 params.data.status === upgrade_status ||
                 params.data.status === kicked_status ||
-                params.data.status === pending_status);
+                params.data.status === pending_status ||
+                params.data.rest_version !== primaryClusterRestVersion
+                );
            else valid_status" class="grid-space-evenly" style="display: flex;">
         <em
           class="eos-icons icon-18 hand disabled-color"

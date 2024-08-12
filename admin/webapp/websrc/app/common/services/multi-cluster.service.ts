@@ -35,6 +35,7 @@ export interface Cluster2Join {
 @Injectable()
 export class MultiClusterService {
   public clusters: Cluster[] = [];
+  public primaryClusterRestVersion: string = '';
   private _clusterSwitchedEvent = new Subject();
   private _clusterRefreshEvent = new Subject();
   private _manageClusterEvent = new Subject();

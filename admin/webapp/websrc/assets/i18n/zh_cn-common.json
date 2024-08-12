@@ -2934,7 +2934,8 @@
       "deploy_failure": "同步通知无法发送",
       "api_failure": "集群服务不可用",
       "get_name_failure": "访问集群名称失败",
-      "SCORE_UNAVAILIBlE": "不可用"
+      "SCORE_UNAVAILIBlE": "不可用",
+      "incompatible_version": "版本与主集群不匹配。"
     },
     "prompt": {
       "remove": "你确定要从集群中移除{{ name }} ？",

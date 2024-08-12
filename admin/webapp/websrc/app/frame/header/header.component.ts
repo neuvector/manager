@@ -41,6 +41,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   clusterName: string = '';
   clusterNameError: boolean = false;
   clusters: Cluster[] = [];
+  primaryClusterRestVersion: string = '';
   clustersError: boolean = false;
   isMasterRole: boolean = false;
   isMemberRole: boolean = false;
@@ -121,20 +122,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
     };
 
     if (GlobalVariable.user) {
-      this.isAllowedToOperateMultiCluster = isAuthorized(
-        GlobalVariable.user.roles,
-        resource.multiClusterOp
-      ) || this.authUtilsService.getDisplayFlag('multi_cluster');
-      this.isAllowedToRedirectMultiCluster = isAuthorized(
-        GlobalVariable.user.roles,
-        resource.redirectAuth
-      ) || this.authUtilsService.getDisplayFlag('multi_cluster');
+      this.isAllowedToOperateMultiCluster =
+        isAuthorized(GlobalVariable.user.roles, resource.multiClusterOp) ||
+        this.authUtilsService.getDisplayFlag('multi_cluster');
+      this.isAllowedToRedirectMultiCluster =
+        isAuthorized(GlobalVariable.user.roles, resource.redirectAuth) ||
+        this.authUtilsService.getDisplayFlag('multi_cluster');
       this.isAuthReadConfig =
         this.authUtilsService.getDisplayFlag('read_config');
-      this.isFedQueryAllowed = isAuthorized(
-        GlobalVariable.user.roles,
-        resource.fedQueryAllowed
-      ) || this.authUtilsService.getDisplayFlag('multi_cluster');
+      this.isFedQueryAllowed =
+        isAuthorized(GlobalVariable.user.roles, resource.fedQueryAllowed) ||
+        this.authUtilsService.getDisplayFlag('multi_cluster');
     }
 
     this.initMultiClusters();
@@ -147,7 +145,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     )?.token?.username;
     const role = this.localStorage.get(GlobalConstant.LOCAL_STORAGE_TOKEN)
       ?.token?.role;
-    this.displayRole = role ? role : (GlobalVariable.user.token.server.toLowerCase().includes(MapConstant.SERVER_TYPE.RANCHER) ? 'Rancher User' : 'Namespace User');
+    this.displayRole = role
+      ? role
+      : GlobalVariable.user.token.server
+          .toLowerCase()
+          .includes(MapConstant.SERVER_TYPE.RANCHER)
+      ? 'Rancher User'
+      : 'Namespace User';
 
     this._multiClusterSubScription =
       this.multiClusterService.onRefreshClustersEvent$.subscribe(data => {
@@ -257,7 +261,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (data: ClusterData) => {
           this.clusters = data.clusters || [];
-
+          //get primary cluster's rest_version
+          const primaryCluster = this.clusters.find(
+            cluster =>
+              cluster.clusterType === GlobalConstant.CLUSTER_TYPES.MASTER
+          );
+          this.primaryClusterRestVersion = primaryCluster
+            ? primaryCluster.rest_version
+            : '';
+          this.multiClusterService.primaryClusterRestVersion =
+            this.primaryClusterRestVersion;
           //init the cluster role
           this.isMemberRole = data.fed_role === MapConstant.FED_ROLES.MEMBER;
           this.isMasterRole = data.fed_role === MapConstant.FED_ROLES.MASTER;
@@ -298,10 +311,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
           }
 
           if (GlobalVariable.isMaster) {
-            this.isAllowedToOperateMultiCluster = isAuthorized(
-              GlobalVariable.user.roles,
-              resource.manageAuth
-            ) || this.authUtilsService.getDisplayFlag('multi_cluster');
+            this.isAllowedToOperateMultiCluster =
+              isAuthorized(GlobalVariable.user.roles, resource.manageAuth) ||
+              this.authUtilsService.getDisplayFlag('multi_cluster');
             if (clusterInSession !== null) {
               this.selectedCluster = clusterInSession;
             } else {
@@ -312,10 +324,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
           }
 
           if (GlobalVariable.isMember) {
-            this.isAllowedToOperateMultiCluster = isAuthorized(
-              GlobalVariable.user.roles,
-              resource.multiClusterView
-            ) || this.authUtilsService.getDisplayFlag('multi_cluster');
+            this.isAllowedToOperateMultiCluster =
+              isAuthorized(
+                GlobalVariable.user.roles,
+                resource.multiClusterView
+              ) || this.authUtilsService.getDisplayFlag('multi_cluster');
             this.clusters.forEach(cluster => {
               if (cluster.clusterType === MapConstant.FED_ROLES.MASTER) {
                 this.primaryMasterName = cluster.name;

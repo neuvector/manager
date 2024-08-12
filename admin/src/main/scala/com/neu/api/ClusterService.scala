@@ -234,25 +234,33 @@ class ClusterService()(implicit executionContext: ExecutionContext)
   private val masterToClusterServer: FedMasterCluster => ClusterServer =
     (master: FedMasterCluster) => {
       ClusterServer(
+        master.disabled,
         master.name,
         master.id,
+        master.secret,
         master.rest_info.server,
         Some(master.rest_info.port),
         master.status,
         master.user,
-        "master"
+        master.rest_version,
+        "master",
+        Some(false)
       )
     }
 
   private val jointToClusterServer: FedJointCluster => ClusterServer = (joint: FedJointCluster) => {
     ClusterServer(
+      joint.disabled,
       joint.name,
       joint.id,
+      joint.secret,
       joint.rest_info.server,
       Some(joint.rest_info.port),
       joint.status,
       joint.user,
-      "joint"
+      joint.rest_version,
+      "joint",
+      joint.proxy_required
     )
   }
 }

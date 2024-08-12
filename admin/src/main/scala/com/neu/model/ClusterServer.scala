@@ -4,13 +4,17 @@ import com.typesafe.scalalogging.LazyLogging
 import spray.json.{ DefaultJsonProtocol, _ }
 
 case class ClusterServer(
+  disabled: Option[Boolean],
   name: String,
   id: String,
+  secret: String,
   api_server: String,
   api_port: Option[Int],
   status: Option[String],
   username: Option[String],
-  clusterType: String = "" //"" for normal cluster, "master", "joint"
+  rest_version: Option[String],
+  clusterType: String = "", //"" for normal cluster, "master", "joint"
+  proxy_required: Option[Boolean]
 )
 
 case class FedMemberData(
@@ -27,22 +31,23 @@ case class ClusterServerInfo(
 )
 
 case class FedMasterCluster(
+  disabled: Option[Boolean],
   name: String,
   id: String,
   secret: String,
-  ca_cert_path: Option[String],
   user: Option[String],
   status: Option[String],
+  rest_version: Option[String],
   rest_info: ClusterServerInfo
 )
 case class FedJointCluster(
+  disabled: Option[Boolean],
   name: String,
   id: String,
   secret: String,
-  client_key_path: Option[String],
-  client_cert_path: Option[String],
   user: Option[String],
   status: Option[String],
+  rest_version: Option[String],
   rest_info: ClusterServerInfo,
   proxy_required: Option[Boolean]
 )
@@ -90,10 +95,10 @@ case class ClusterSwitched(id: Option[String])
 
 object ClusterJsonProtocol extends DefaultJsonProtocol with LazyLogging {
 
-  implicit val clusterServerFmt: RootJsonFormat[ClusterServer]       = jsonFormat7(ClusterServer)
+  implicit val clusterServerFmt: RootJsonFormat[ClusterServer]       = jsonFormat11(ClusterServer)
   implicit val clusterConfigFmt: RootJsonFormat[ClusterConfig]       = jsonFormat1(ClusterConfig)
   implicit val clusterServerInfo: RootJsonFormat[ClusterServerInfo]  = jsonFormat2(ClusterServerInfo)
-  implicit val fedMasterClusterFmt: RootJsonFormat[FedMasterCluster] = jsonFormat7(FedMasterCluster)
+  implicit val fedMasterClusterFmt: RootJsonFormat[FedMasterCluster] = jsonFormat8(FedMasterCluster)
   implicit val fedJointClusterFmt: RootJsonFormat[FedJointCluster]   = jsonFormat9(FedJointCluster)
   implicit val fedMemberDataFmt: RootJsonFormat[FedMemberData]       = jsonFormat5(FedMemberData)
   implicit val fedMembershipDataFmt: RootJsonFormat[FedMembershipData] = jsonFormat6(

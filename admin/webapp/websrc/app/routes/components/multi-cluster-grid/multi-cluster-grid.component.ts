@@ -459,7 +459,7 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
     let statusText = this.utils.getI18Name(
       'cluster.status.' + this.sanitizer.sanitize(SecurityContext.HTML, status)
     );
-    return `<span class="label label-fs label-${labelCode} badge badge-${labelCode}">${statusText}</span`;
+    return `<span class="label label-fs label-${labelCode} badge badge-${labelCode}">${statusText}</span>`;
   }
 
   podRenderFunction(params) {

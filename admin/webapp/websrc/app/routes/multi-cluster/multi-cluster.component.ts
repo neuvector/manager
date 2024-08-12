@@ -114,6 +114,13 @@ export class MultiClusterComponent implements OnInit {
         this._clusterGrid.updateSummaryForRows();
       }, 500);
     }
+    //get primary cluster's rest_version
+    const primaryCluster = this.clusterData.clusters?.find(
+      cluster => cluster.clusterType === GlobalConstant.CLUSTER_TYPES.MASTER
+    );
+    this.multiClusterService.primaryClusterRestVersion = primaryCluster
+      ? primaryCluster.rest_version
+      : '';
   }
 
   onResize(): void {

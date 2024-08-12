@@ -16,21 +16,14 @@
             ">
             {{ instruction.description }}
           </div>
-          <!-- <app-good-score-instruction
-            *ngIf="isGoodScore() && instruction.type === RiskType.Score"
-          >
-          </app-good-score-instruction>
-          <app-not-good-score-instruction
-            *ngIf="!isGoodScore() && instruction.type === RiskType.Score"
-            [score]="score"
-          >
-          </app-not-good-score-instruction> -->
           <app-score-instruction
             *ngIf="instruction.type === RiskType.Score"
             [scoreInfo]="scoreInfo">
           </app-score-instruction>
           <app-vulnerability-instruction
-            *ngIf="instruction.type === RiskType.Vulnerability">
+            *ngIf="details && instruction.type === RiskType.Vulnerability"
+            [details]="details"  
+          >
           </app-vulnerability-instruction>
         </div>
       </div>

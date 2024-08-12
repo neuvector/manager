@@ -8,14 +8,10 @@ import {
   InternalSystemInfo,
 } from '@common/types';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { DashboardSecurityEventsService } from './thread-services/dashboard-security-events.service';
-import { DashboardDetailsService } from './thread-services/dashboard-details.service';
-import { DashboardExposureConversationsService } from './thread-services/dashboard-exposure-conversations.service';
 import { MultiClusterService } from '@services/multi-cluster.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AssetsHttpService } from '@common/api/assets-http.service';
 import { ReportByNamespaceModalComponent } from './report-by-namespace-modal/report-by-namespace-modal.component';
-import { AuthService } from '@common/services/auth.service';
 import { isAuthorized } from '@common/utils/common.utils';
 import { SummaryService } from '@services/summary.service';
 
@@ -25,9 +21,10 @@ import { SummaryService } from '@services/summary.service';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
+  @ViewChild('dashboardReport') printableReport!: ElementRef;
+
   isGlobalUser: boolean = false;
   summaryInfo!: SystemSummaryDetails;
-  rbacInfo!: RbacAlertsData;
   scoreInfo!: InternalSystemInfo;
   isPrinting: boolean = false;
   iskube: boolean = false;
@@ -35,23 +32,26 @@ export class DashboardComponent implements OnInit {
   reportDomain: string = '';
   reportInfo: any;
   isShowingScore: boolean = false;
+
+  securityEvents: any;
+  details: any;
+
   private _switchClusterSubscriber;
-  @ViewChild('dashboardReport') printableReport!: ElementRef;
 
   constructor(
-    private dashboardService: DashboardService,
-    private dashboardSecurityEventsService: DashboardSecurityEventsService,
-    public dashboardDetailsService: DashboardDetailsService,
-    // private dashboardExposureConversationsService: DashboardExposureConversationsService,
-    private multiClusterService: MultiClusterService,
     private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private dashboardService: DashboardService,
+    private multiClusterService: MultiClusterService,
     private assetsHttpService: AssetsHttpService,
-    private authService: AuthService,
     private summaryService: SummaryService,
     private dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit(): void {
+    this.securityEvents = this.activatedRoute.snapshot.data['securityEvents'];
+    this.dashboardService.getDashboardDetails().subscribe(d => this.details = d);
+
     const resource = {
       seeScore: {
         global: 1,
@@ -63,12 +63,10 @@ export class DashboardComponent implements OnInit {
       resource.seeScore
     );
     this.isGlobalUser = GlobalVariable.user?.global_permissions.length > 0;
-    this.getBasicInfo();
+    this.getBasicData();
     this.dashboardService.refreshEvent$.subscribe(refresh => {
-      if (refresh) this.getBasicInfo();
+      if (refresh) this.getBasicData(true);
     });
-    this.dashboardSecurityEventsService.runWorker();
-    this.dashboardDetailsService.runWorker();
 
     if (!GlobalVariable.hasInitializedSummary) {
       this.getSummary();
@@ -86,43 +84,11 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.dashboardSecurityEventsService.terminateWorker();
-    this.dashboardDetailsService.terminateWorker();
-    // this.dashboardExposureConversationsService.terminateWorker();
     if (this._switchClusterSubscriber) {
       this._switchClusterSubscriber.unsubscribe();
     }
     GlobalVariable.hasInitializedSummary = false;
   }
-
-  getBasicInfo = () => {
-    this.dashboardService.getBasicData(this.isGlobalUser).subscribe(
-      (response: any) => {
-        this.summaryInfo = GlobalVariable.summary as SystemSummaryDetails;
-        this.rbacInfo = response[0] as RbacAlertsData;
-        this.scoreInfo = response[1] as InternalSystemInfo;
-        console.log(
-          'summaryInfo',
-          this.summaryInfo,
-          'rbacInfo',
-          this.rbacInfo,
-          'scoreInfo',
-          this.scoreInfo
-        );
-        // this.dashboardExposureConversationsService.runWorker(
-        //   this.isGlobalUser,
-        //   this.scoreInfo
-        // );
-        this.iskube = this.summaryInfo.platform
-          .toLowerCase()
-          .includes(GlobalConstant.KUBE);
-      },
-      error => {
-        //TODO better error handling
-        console.log('error', error);
-      }
-    );
-  };
 
   openDashboardReportList = () => {
     this.assetsHttpService.getDomain().subscribe(
@@ -144,25 +110,26 @@ export class DashboardComponent implements OnInit {
     this.reportInfo = domain
       ? reportInfo
       : {
-          scoreInfo: this.scoreInfo,
-          summaryInfo: this.summaryInfo,
-          dashboardSecurityEventInfo: {
-            topSecurityEvents:
-              this.dashboardSecurityEventsService.topSecurityEvents,
-            securityEventSummary:
-              this.dashboardSecurityEventsService.securityEventSummary,
-          },
-          dashboardDetailsInfo: {
-            isAutoScanOn: this.dashboardDetailsService.isAutoScanOn,
-            highPriorityVulnerabilities:
-              this.dashboardDetailsService.highPriorityVulnerabilities,
-            containers: this.dashboardDetailsService.containers,
-            services: this.dashboardDetailsService.services,
-            applications: this.dashboardDetailsService.applications,
-          },
-        };
+        scoreInfo: this.scoreInfo,
+        summaryInfo: this.summaryInfo,
+        dashboardSecurityEventInfo: {
+          topSecurityEvents:
+            this.securityEvents.criticalSecurityEvents['top_security_events'],
+          securityEventSummary:
+            this.securityEvents.criticalSecurityEvents['summary'],
+        },
+        dashboardDetailsInfo: {
+          isAutoScanOn: this.details.autoScanConfig,
+          highPriorityVulnerabilities:
+            this.details.highPriorityVulnerabilities,
+          containers: this.details.containers,
+          services: this.details.services,
+          applications: this.details.applications2,
+        },
+      };
 
     this.reportDialog?.close();
+
     setTimeout(() => {
       this.reportDomain = domain;
       this.isPrinting = true;
@@ -174,6 +141,26 @@ export class DashboardComponent implements OnInit {
       }, 500);
     }, 500);
   };
+
+  private getBasicData = (isRefeshing = false) => {
+    if(!isRefeshing) {
+      const response = this.activatedRoute.snapshot.data['basicData'];
+      this.handleBasicData(response);
+    } else {
+      this.dashboardService
+        .getBasicData(GlobalVariable.user?.global_permissions.length > 0)
+        .subscribe(this.handleBasicData);
+    }
+  };
+
+  private handleBasicData(response: InternalSystemInfo) {
+    this.summaryInfo = GlobalVariable.summary as SystemSummaryDetails;
+    this.scoreInfo = response as InternalSystemInfo;
+
+    this.iskube = this.summaryInfo.platform
+      .toLowerCase()
+      .includes(GlobalConstant.KUBE);
+  }
 
   private getDashboardReportListModal = (domainList: string[]) => {
     this.reportDialog = this.dialog.open(ReportByNamespaceModalComponent, {

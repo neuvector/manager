@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { PathConstant } from '@common/constants/path.constant';
-import { AuthService } from '@services/auth.service';
 import { BehaviorSubject, forkJoin } from 'rxjs';
 import { DashboardHttpService } from '@common/api/dashboard-http.service';
 import { AssetsHttpService } from '@common/api/assets-http.service';
@@ -12,7 +11,6 @@ import { HierarchicalExposure } from '@common/types';
   providedIn: 'root',
 })
 export class DashboardService {
-  private readonly $win;
   private refreshEventSubject$ = new BehaviorSubject<boolean | undefined>(
     undefined
   );
@@ -21,7 +19,6 @@ export class DashboardService {
   hierarchicalEgressList: Array<HierarchicalExposure>;
 
   constructor(
-    private authService: AuthService,
     private assetsHttpService: AssetsHttpService,
     private dashboardHttpService: DashboardHttpService
   ) {}
@@ -39,15 +36,15 @@ export class DashboardService {
       .pipe();
   };
 
-  getDashboardSecurityEvent = (domain: string) => {
+  getDashboardSecurityEvent = (domain?: string) => {
     return this.dashboardHttpService.getDashboardSecurityEventData(domain).pipe();
   };
 
-  getDashboardDetails = (domain: string) => {
+  getDashboardDetails = (domain?: string) => {
     return this.dashboardHttpService.getDashboardDetailsData(domain).pipe();
   };
 
-  getSummaryInfo = (domain: string) => {
+  getSummaryInfo = (domain?: string) => {
     return this.dashboardHttpService.getSummaryData(domain).pipe();
   };
 
@@ -64,12 +61,10 @@ export class DashboardService {
       console.warn('Summary uninitialized');
     }
 
-    const rbacPromise = this.getRbacData();
-    const scorePromise = this.getScoreData(
-      isGlobalUser,
-      null
-    );
-    return forkJoin([rbacPromise, scorePromise]).pipe();
+    return this.getScoreData(
+        isGlobalUser,
+        null
+      );
   };
 
   getDomainReportData = (

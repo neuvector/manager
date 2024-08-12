@@ -10,8 +10,8 @@
     </app-panel-instruction-curtain>
   </mat-card-title>
   <app-security-events-chart
-    *ngIf="dashboardSecurityEventsService.securityEventSummary"
-    [securityEventSummary]="dashboardSecurityEventsService.securityEventSummary"
+    *ngIf="securityEvents?.criticalSecurityEvents.summary"
+    [securityEventSummary]="securityEvents.criticalSecurityEvents.summary"
   >
   </app-security-events-chart>
 </mat-card>

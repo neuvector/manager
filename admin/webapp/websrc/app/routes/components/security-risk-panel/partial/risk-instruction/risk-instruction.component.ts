@@ -9,8 +9,11 @@ import { DashboardService } from '@common/services/dashboard.service';
   styleUrls: ['./risk-instruction.component.scss'],
 })
 export class RiskInstructionComponent implements OnInit {
+  
+  @Input() details: any;
   @Input() scoreInfo!: InternalSystemInfo;
   @Input() activeIndex: number;
+
   instructions: Array<RiskInstruction> = new Array(4);
   RiskType = RiskType;
 

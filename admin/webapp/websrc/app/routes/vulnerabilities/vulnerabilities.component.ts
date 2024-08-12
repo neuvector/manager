@@ -19,11 +19,14 @@ import { tap } from 'rxjs/operators';
   styleUrls: ['./vulnerabilities.component.scss'],
 })
 export class VulnerabilitiesComponent implements OnInit, OnDestroy {
+  @ViewChild(VulnerabilityDetailDialogComponent) vulDetails!: VulnerabilityDetailDialogComponent;
+  @ViewChild('vulnerabilityViewReport') printableReportView!: ElementRef;
+  @ViewChild('assetsViewReport') printableReportViewAssets!: ElementRef;
+
   vulnerabilitiesData$ = this.vulnerabilitiesService.vulnerabilitiesData$.pipe(
     tap(_ => this.refreshing$.next(false))
   );
   refreshing$ = this.vulnerabilitiesService.refreshing$;
-  private _switchClusterSubscription;
   vulnerabilitiesList: any[] = [];
   masterData: any;
   masterGrids: any[][] = [];
@@ -50,9 +53,9 @@ export class VulnerabilitiesComponent implements OnInit, OnDestroy {
   ];
   selectedView = this.displayViews[0];
   selectedVulnerability!: Vulnerability;
-  @ViewChild(VulnerabilityDetailDialogComponent) vulDetails!: VulnerabilityDetailDialogComponent;
-  @ViewChild('vulnerabilityViewReport') printableReportView!: ElementRef;
-  @ViewChild('assetsViewReport') printableReportViewAssets!: ElementRef;
+
+  private _switchClusterSubscription;
+  
 
   constructor(
     private vulnerabilitiesService: VulnerabilitiesService,

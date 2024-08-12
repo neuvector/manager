@@ -44,21 +44,33 @@ export class DashboardHttpService {
     );
   }
 
-  getDashboardSecurityEventData(domain: string) {
-    return GlobalVariable.http.get(PathConstant.DASHBOARD_NOTIFICATIONS_URL, {
-      params: { domain: domain },
-    });
+  getDashboardSecurityEventData(domain?: string) {
+    const options = {}
+
+    if(domain) {
+      options['params'] = { domain: domain };
+    }
+    
+    return GlobalVariable.http.get(PathConstant.DASHBOARD_NOTIFICATIONS_URL, options);
   }
 
-  getDashboardDetailsData(domain: string) {
-    return GlobalVariable.http.get(PathConstant.DASHBOARD_DETAILS_URL, {
-      params: { domain: domain },
-    });
+  getDashboardDetailsData(domain?: string) {
+    const options = {}
+
+    if(domain) {
+      options['params'] = { domain: domain };
+    }
+
+    return GlobalVariable.http.get(PathConstant.DASHBOARD_DETAILS_URL, options);
   }
 
-  getSummaryData(domain: string) {
-    return GlobalVariable.http.get(PathConstant.DASHBOARD_SUMMARY_URL, {
-      params: { domain: domain },
-    });
+  getSummaryData(domain?: string) {
+    const options = {}
+
+    if(domain) {
+      options['params'] = { domain: domain };
+    }
+
+    return GlobalVariable.http.get(PathConstant.DASHBOARD_SUMMARY_URL, options);
   }
 }

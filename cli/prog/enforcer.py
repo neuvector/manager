@@ -341,6 +341,23 @@ def set_enforcer_kvcctl(data, disable):
     data.client.config("enforcer", enforcer["id"], {"config": conf})
 
 
+@set_enforcer.command("syslog")
+@click.option('--level',
+              type=click.Choice(
+                  ['panic', 'fatal', 'error', 'warn', 'info', 'debug', 'trace'])
+              )
+@click.pass_obj
+def set_enforcer_syslogLevel(data, level):
+    """Configure enforcer syslog level."""
+    enforcer = utils.get_managed_object(data.client, "enforcer", "enforcer", data.id_or_name)
+    if not enforcer:
+        return
+
+    conf = {"syslog_level": level}
+
+    data.client.config("enforcer", enforcer["id"], {"config": conf})
+
+
 # -- Request
 
 @request.group('enforcer')

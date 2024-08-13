@@ -76,7 +76,7 @@ export class ConfigurationComponent
         ...value,
           tls: {
             enable_tls_verification: value.tls_cfg?.enable_tls_verification ?? true,
-            cacerts: value.tls_cfg?.cacerts.map((c, i) => ({
+            cacerts: value.tls_cfg?.cacerts?.map((c, i) => ({
               id: i,
               context: c
             }) ?? [])

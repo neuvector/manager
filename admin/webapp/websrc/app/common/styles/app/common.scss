@@ -879,7 +879,7 @@ mwl-gauge.score > .gauge > .value {
     .carousel-indicators li {
       width: 6px;
       height: 6px;
-      border: 1px solid $neuvector-grey-600;
+      border: 2px solid $neuvector-grey-800;
       border-radius: 6px;
       margin-left: 6px;
       margin-right: 6px;
@@ -887,9 +887,9 @@ mwl-gauge.score > .gauge > .value {
     }
 
     .carousel-indicators .active {
-      width: 8px;
-      height: 8px;
-      background-color: $neuvector-grey-600;
+      width: 6px;
+      height: 6px;
+      background-color: $neuvector-grey-800;
     }
 
     .instruction-content-wrap {

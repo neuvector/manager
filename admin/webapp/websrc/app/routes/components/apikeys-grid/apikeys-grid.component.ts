@@ -46,13 +46,7 @@ export class ApikeysGridComponent implements OnInit {
     if (value.domains.length) {
       this.domains = value.domains;
     }
-    this.globalRoles = value.apikeyData.global_roles.filter(
-      role =>
-        ![
-          MapConstant.FED_ROLES.FEDADMIN,
-          MapConstant.FED_ROLES.FEDREADER,
-        ].includes(role)
-    );
+    this.globalRoles = value.apikeyData.global_roles;
     this.domainRoles = value.apikeyData.domain_roles;
     if (this.gridApi) {
       this.gridApi.setRowData(this.rowData);

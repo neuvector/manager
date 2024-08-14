@@ -462,11 +462,12 @@
         "AUTO_SCAN_DISABLE_NG": "自动扫描禁用失败!",
         "DISABLE_AUTOSCAN_CONFIRM": "如果自动扫描被禁用, 今后的漏洞不会被及时发现.",
         "RBAC_ERR_TITLE": "RBAC角色错误",
-        "CLUSTERROLE_ERRORS": "集群角色",
-        "CLUSTERROLEBINDING_ERRORS": "集群角色绑定",
-        "ROLEBINDING_ERRORS": "角色绑定",
-        "ROLE_ERRORS": "Role",
-        "NEUVECTOR_CRD_ERRORS": "Neuvector CRD",
+        "CLUSTERROLE_ALERTS": "集群角色",
+        "CLUSTERROLEBINDING_ALERTS": "集群角色绑定",
+        "ROLEBINDING_ALERTS": "角色绑定",
+        "ROLE_ALERTS": "Role",
+        "NEUVECTOR_CRD_ALERTS": "Neuvector CRD",
+        "CERTIFICATE_ALERTS": "TLS自签名证书",
         "OTHER_ALERTS": "其他"
       }
     },

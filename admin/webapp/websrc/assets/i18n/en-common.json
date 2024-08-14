@@ -462,11 +462,12 @@
         "AUTO_SCAN_DISABLE_NG": "Auto scan disabling failed",
         "DISABLE_AUTOSCAN_CONFIRM": "If auto scan is disabled, future vulnerability will not be found immediately.",
         "RBAC_ERR_TITLE": "RBAC Role Error",
-        "CLUSTERROLE_ERRORS": "Cluster Role",
-        "CLUSTERROLEBINDING_ERRORS": "Cluster Role Binding",
-        "ROLEBINDING_ERRORS": "Role Binding",
-        "ROLE_ERRORS": "Role",
-        "NEUVECTOR_CRD_ERRORS": "Neuvector CRD",
+        "CLUSTERROLE_ALERTS": "Cluster Role",
+        "CLUSTERROLEBINDING_ALERTS": "Cluster Role Binding",
+        "ROLEBINDING_ALERTS": "Role Binding",
+        "ROLE_ALERTS": "Role",
+        "NEUVECTOR_CRD_ALERTS": "Neuvector CRD",
+        "CERTIFICATE_ALERTS": "TLS Self-Signed Certificate",
         "OTHER_ALERTS": "Others"
       }
     },

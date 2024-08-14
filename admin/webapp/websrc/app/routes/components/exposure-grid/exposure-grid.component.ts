@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { HierarchicalExposure } from '@common/types';
 import { ExposedServicePodGridComponent } from '@components/exposed-service-pod-grid/exposed-service-pod-grid.component';
 
 @Component({

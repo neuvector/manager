@@ -4,7 +4,6 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { DashboardService } from '@services/dashboard.service';
 import {
   SystemSummaryDetails,
-  RbacAlertsData,
   InternalSystemInfo,
 } from '@common/types';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';

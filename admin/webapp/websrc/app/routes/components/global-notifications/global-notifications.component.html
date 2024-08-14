@@ -21,13 +21,13 @@
       <em
         class="fa fa-circle mx-3"
         [class]="'text-' + notification.labelClass"></em>
-      <ng-container *ngIf="isRbacNotif(notification); else globalNotif">
+      <ng-container *ngIf="isSystemAlertNotif(notification); else globalNotif">
         <span
           class="notification-message"
           [class]="notification.unClamped ? 'unclamped' : 'clamped'"
-          [id]="notification.name"
+          [id]="notification.key"
           (click)="toggleClamp(notification)">
-          <strong>{{ getRbacTitle(notification.name) }}</strong>
+          <strong>{{ getSystemAlertTitle(notification.name) }}</strong>
           <br />
           {{ notification.message }}
         </span>
@@ -36,17 +36,20 @@
         <span
           class="notification-message"
           [class]="notification.unClamped ? 'unclamped' : 'clamped'"
-          [id]="notification.name"
+          [id]="notification.key"
           (click)="toggleClamp(notification)">
           {{ notification.message }}
-          <a
-            *ngIf="notification.link"
-            [href]="notification.link"
-            (click)="closeMenu()">
-            <em class="eos-icons icon-12">launch</em>
-          </a>
         </span>
       </ng-template>
+
+      <span>
+        <a
+          *ngIf="notification.link"
+          [href]="notification.link"
+          (click)="closeMenu()">
+          <em class="eos-icons icon-12">launch</em>
+        </a>
+      </span>
       <em class="ml-3 eos-icons icon-18" (click)="accept(notification, $event)"
         >check_circle</em
       >

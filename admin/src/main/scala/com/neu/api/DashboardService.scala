@@ -170,13 +170,13 @@ class DashboardService()(implicit executionContext: ExecutionContext)
         }
       } ~
       pathPrefix("dashboard") {
-        path("rbac") {
+        path("alerts") {
           get {
             Utils.respondWithWebServerHeaders() {
-              logger.info("Loading RBAC information ...")
+              logger.info("Loading System Alerts information ...")
               complete {
                 RestClient.httpRequestWithHeader(
-                  s"${baseClusterUri(tokenId)}/system/rbac",
+                  s"${baseClusterUri(tokenId)}/system/alerts",
                   GET,
                   "",
                   tokenId

@@ -1,18 +1,41 @@
 import { RiskType } from './enum';
 
-export interface RbacAlertsSummary {
-  acceptable_alerts: RbacAlertsData;
-  accepted_alerts: string[] | null;
-  neuvector_upgrade_info: string;
+export enum SystemAlertType {
+  RBAC = 'RBAC',
+  TLS_CERTIFICATE = 'TLS_CERTIFICATE'
 }
 
-export interface RbacAlertsData {
-  neuvector_crd_errors: Record<string, string>[] | null;
-  clusterrole_errors: Record<string, string>[] | null;
-  clusterrolebinding_errors: Record<string, string>[] | null;
-  rolebinding_errors: Record<string, string>[] | null;
-  role_errors: Record<string, string>[] | null;
-  other_alerts: Record<string, string>[] | null;
+export enum SystemAlertSeverity {
+  CRITICAL = 'Critical',
+  WARNING = 'Warning',
+  INFO = 'Info'
+}
+
+export interface SystemAlertSummary {
+  acceptable_alerts: { [name: string]: SystemAlerts };
+  accepted_alerts: string[] | null;
+  neuvector_upgrade_info: UpgradeInfo;
+}
+
+export interface SystemAlerts {
+  type: SystemAlertType;
+  data: SystemAlert[];
+}
+
+export interface SystemAlert {
+  id: string;
+  message: string;
+}
+
+export interface UpgradeVerion {
+  release_date: Date;
+  tag: string;
+  version: string;
+}
+
+export interface UpgradeInfo {
+  max_upgrade_version?: UpgradeVerion;
+  min_upgrade_version?: UpgradeVerion;
 }
 
 export interface Score {

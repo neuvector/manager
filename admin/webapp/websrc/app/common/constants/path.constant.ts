@@ -134,7 +134,7 @@ export class PathConstant {
   public static EXPORT_CVE_PROFILE = 'risk/cve/profile/export'; //risks
   public static IMPORT_CVE_PROFILE = 'risk/cve/profile/import'; //risks
   public static ASSETS_VULS_URL = 'risk/cve/assets-view';
-  public static SYSTEM_RBAC_URL = 'dashboard/rbac'; //dashboard
+  public static SYSTEM_ALETS_URL = 'dashboard/alerts'; //dashboard
   public static SERVICE_ALL = 'service/all'; //policy
   public static DEBUG_URL = 'debug'; //config
   public static THREAT_URL = 'threat';

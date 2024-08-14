@@ -48,9 +48,9 @@ export class DashboardService {
     return this.dashboardHttpService.getSummaryData(domain).pipe();
   };
 
-  getRbacData = () => {
-    return this.dashboardHttpService.getSystemRBAC().pipe();
-  };
+  getSystemAlerts = () => {
+    return this.dashboardHttpService.getSystemAlerts().pipe();
+  }
 
   getIpGeoInfo = (ipList: Array<string>) => {
     return GlobalVariable.http.patch(PathConstant.IP_GEO_URL, ipList).pipe();

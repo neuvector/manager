@@ -1,21 +1,24 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { CommonHttpService } from '@common/api/common-http.service';
 import { ConfigHttpService } from '@common/api/config-http.service';
 import { GlobalConstant } from '@common/constants/global.constant';
 import {
   GlobalNotification,
-  RbacAlertsSummary,
   TelemetryStatus,
   ManagerAlertKey,
   UserAlertKey,
   GlobalNotificationPayLoad,
   GlobalNotificationType,
+  SystemAlertSummary,
+  SystemAlertType,
+  SystemAlert,
+  SystemAlerts,
+  SystemAlertSeverity,
 } from '@common/types';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { TranslateService } from '@ngx-translate/core';
 import { DashboardService } from '@services/dashboard.service';
-import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { NotificationService } from '@services/notification.service';
@@ -27,23 +30,26 @@ import { UtilsService } from '@common/utils/app.utils';
   styleUrls: ['./global-notifications.component.scss'],
 })
 export class GlobalNotificationsComponent implements OnInit {
-  @ViewChild('notificationMenuTrigger')
-  notificationMenuTrigger!: MatMenuTrigger;
+  @ViewChild('notificationMenuTrigger') notificationMenuTrigger!: MatMenuTrigger;
+
+  readonly MESSAGE_TITLE_PREFIX = 'dashboard.body.message.';
+
   globalNotifications: GlobalNotification[] = [];
   version: any;
-  rbacData!: RbacAlertsSummary;
+  systemAlertSummary!: SystemAlertSummary;
   payload: GlobalNotificationPayLoad = {};
   telemetryStatus!: TelemetryStatus | null;
   unUpdateDays!: number;
+
   get isVersionMismatch() {
     return GlobalVariable.summary.component_versions
       ? (GlobalVariable.summary.component_versions.length > 1 &&
-          GlobalVariable.summary.component_versions[0] !==
-            GlobalVariable.summary.component_versions[1]) ||
-          this.version !==
-            (GlobalVariable.summary.component_versions[0].startsWith('v')
-              ? GlobalVariable.summary.component_versions[0].substring(1)
-              : GlobalVariable.summary.component_versions[0])
+        GlobalVariable.summary.component_versions[0] !==
+        GlobalVariable.summary.component_versions[1]) ||
+      this.version !==
+      (GlobalVariable.summary.component_versions[0].startsWith('v')
+        ? GlobalVariable.summary.component_versions[0].substring(1)
+        : GlobalVariable.summary.component_versions[0])
       : false;
   }
   get passwordExpiration() {
@@ -57,24 +63,23 @@ export class GlobalNotificationsComponent implements OnInit {
   }
 
   constructor(
-    @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
     private tr: TranslateService,
     private commonHttpService: CommonHttpService,
     private configHttpService: ConfigHttpService,
     private dashboardService: DashboardService,
     private notificationService: NotificationService,
     private utils: UtilsService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getVersion();
-    this.getRBAC();
+    this.getSystemAlerts();
     this.getTelemetry();
     this.initNotifData();
   }
 
   accept(notification: GlobalNotification, event: MouseEvent) {
-    if (this.isRbacNotif(notification)) {
+    if (this.isSystemAlertNotif(notification)) {
       this.payload.controller_alerts = [notification.key];
     }
     if (this.isManagerNotif(notification)) {
@@ -85,8 +90,9 @@ export class GlobalNotificationsComponent implements OnInit {
     }
     this.notificationService.acceptNotification(this.payload).subscribe(
       () => {
-        if(this.isRbacNotif(notification)) {
-          this.getRBACAndCheckNotificationAccepted(notification);
+
+        if (this.isSystemAlertNotif(notification)) {
+          this.getSystemAlertsAndCheckNotificationAccepted(notification)
         } else {
           notification.accepted = true;
         }
@@ -120,7 +126,7 @@ export class GlobalNotificationsComponent implements OnInit {
   initNotifData(): void {
     if (
       this.version &&
-      this.rbacData &&
+      this.systemAlertSummary &&
       this.telemetryStatus !== undefined &&
       GlobalVariable.hasInitializedSummary &&
       GlobalVariable.user
@@ -133,124 +139,9 @@ export class GlobalNotificationsComponent implements OnInit {
   }
 
   generateNotifications(): void {
-    if (
-      this.telemetryStatus?.max_upgrade_version.tag &&
-      this.isUpgradeNeeded(
-        this.telemetryStatus.current_version,
-        this.telemetryStatus.max_upgrade_version.tag
-      )
-    ) {
-      this.globalNotifications.push({
-        type: GlobalNotificationType.MANAGER_NOTIFICATION,
-        name: 'newVersionAvailable',
-        key: ManagerAlertKey.NewVersionAvailable,
-        message: this.tr.instant('login.UPGRADE_AVAILABLE', {
-          currentVersion: this.telemetryStatus.current_version,
-          newVersion: this.telemetryStatus.max_upgrade_version.tag,
-        }),
-        link: '',
-        labelClass: 'warning',
-        accepted: this.rbacData.accepted_alerts
-          ? this.rbacData.accepted_alerts.includes(
-              ManagerAlertKey.NewVersionAvailable
-            )
-          : false,
-        unClamped: false,
-      });
-    }
-    if (this.unUpdateDays > GlobalConstant.MAX_UNUPDATED_DAYS) {
-      this.globalNotifications.push({
-        type: GlobalNotificationType.MANAGER_NOTIFICATION,
-        name: 'isScannerOld',
-        key: ManagerAlertKey.OutdatedCVE,
-        message: this.tr.instant('login.CVE_DB_OLD', {
-          day: Math.round(this.unUpdateDays),
-        }),
-        link: '#/controllers',
-        labelClass: 'warning',
-        accepted: this.rbacData.accepted_alerts
-          ? this.rbacData.accepted_alerts.includes(ManagerAlertKey.OutdatedCVE)
-          : false,
-        unClamped: false,
-      });
-    }
-    if (this.isVersionMismatch) {
-      this.globalNotifications.push({
-        type: GlobalNotificationType.MANAGER_NOTIFICATION,
-        name: 'isVersionMismatch',
-        key: ManagerAlertKey.VersionMismatch,
-        message: this.tr.instant('login.VERSION_MISMATCHED'),
-        link: '#/controllers',
-        labelClass: 'warning',
-        accepted: this.rbacData.accepted_alerts
-          ? this.rbacData.accepted_alerts.includes(
-              ManagerAlertKey.VersionMismatch
-            )
-          : false,
-        unClamped: false,
-      });
-    }
-    if (this.passwordExpiration >= 0 && this.passwordExpiration < 10) {
-      this.globalNotifications.push({
-        type: GlobalNotificationType.USER_NOTIFICATION,
-        name: 'isPasswordExpiring',
-        key: UserAlertKey.ExpiringPassword,
-        message: this.tr.instant('login.CHANGE_EXPIRING_PASSWORD', {
-          expiring_Days: this.passwordExpiration + 1,
-        }),
-        link: '#/profile',
-        labelClass: this.passwordExpiration < 1 ? 'danger' : 'warning',
-        accepted: this.rbacData.accepted_alerts
-          ? this.rbacData.accepted_alerts.includes(
-              UserAlertKey.ExpiringPassword
-            )
-          : false,
-        unClamped: false,
-      });
-    }
-    if (
-      GlobalVariable.user.token.default_password &&
-      GlobalVariable.user.token.server.toLowerCase() !== 'rancher'
-    ) {
-      this.globalNotifications.push({
-        type: GlobalNotificationType.USER_NOTIFICATION,
-        name: 'isDefaultPassword',
-        key: UserAlertKey.UnchangedDefaultPassword,
-        message: this.tr.instant('login.CHANGE_DEFAULT_PASSWORD'),
-        link: '#/profile',
-        labelClass: 'warning',
-        accepted: this.rbacData.accepted_alerts
-          ? this.rbacData.accepted_alerts.includes(
-              UserAlertKey.UnchangedDefaultPassword
-            )
-          : false,
-        unClamped: false,
-      });
-    }
-
-    // Loop through each type of RBAC alert in the acceptable_alerts data
-    // Push notifications to the globalNotification array for each alert
-    if (this.rbacData.acceptable_alerts) {
-      Object.keys(this.rbacData.acceptable_alerts).forEach(rbacAlertType => {
-        const alert = this.rbacData.acceptable_alerts[rbacAlertType];
-        if (alert && Object.keys(alert).length > 0) {
-          Object.keys(alert).forEach(key => {
-            this.globalNotifications.push({
-              type: GlobalNotificationType.RBAC_NOTIFICATION,
-              name: rbacAlertType + ':' + alert[key],
-              key: key,
-              message: alert[key],
-              link: '',
-              labelClass: 'danger',
-              accepted: this.rbacData.accepted_alerts
-                ? this.rbacData.accepted_alerts.includes(key)
-                : false,
-              unClamped: false,
-            });
-          });
-        }
-      });
-    }
+    this.generateManagerNotifications();
+    this.generaterUserNotifications();
+    this.generateSystemAlertNotifications();
   }
 
   getUnUpdateDays() {
@@ -333,9 +224,9 @@ export class GlobalNotificationsComponent implements OnInit {
         switchMap(config =>
           !config.misc.no_telemetry_report
             ? this.configHttpService.getUsageReport().pipe(
-                map(usageReport => usageReport.telemetry_status),
-                catchError(() => of(null))
-              )
+              map(usageReport => usageReport.telemetry_status),
+              catchError(() => of(null))
+            )
             : of(null)
         ),
         catchError(() => of(null))
@@ -347,38 +238,23 @@ export class GlobalNotificationsComponent implements OnInit {
       });
   }
 
-  getRBAC() {
-    this.dashboardService.getRbacData().subscribe({
-      next: rbac => {
-        this.rbacData = rbac;
+  getSystemAlerts(): void {
+    this.dashboardService.getSystemAlerts().subscribe((summary: SystemAlertSummary) => this.systemAlertSummary = summary);
+  }
+
+  getSystemAlertsAndCheckNotificationAccepted(notification: GlobalNotification) {
+    this.dashboardService.getSystemAlerts().subscribe({
+      next: summary => {
+        this.systemAlertSummary = JSON.parse(JSON.stringify(summary));
+
+        const existingKey = Object.keys(summary.acceptable_alerts).find(alertKey => summary.acceptable_alerts[alertKey].data.find(a => a.id === notification.key));
+        notification.accepted = !!!existingKey;
       },
     });
   }
 
-  getRBACAndCheckNotificationAccepted(notification: GlobalNotification) {
-    let isAcceptedNotification = true;
-
-    this.dashboardService.getRbacData().subscribe({
-      next: rbac => {
-        this.rbacData = rbac;
-
-        if(this.rbacData.acceptable_alerts) {
-          Object.keys(this.rbacData.acceptable_alerts).forEach(rbacAlertType => {
-            const alert = this.rbacData.acceptable_alerts[rbacAlertType];
-            if (alert && Object.keys(alert).length > 0) {
-              const existingKey = Object.keys(alert).find(k => k === notification.key);
-              isAcceptedNotification = !!!existingKey;
-            }
-          });
-        }
-
-        notification.accepted = isAcceptedNotification;
-      },
-    });
-  }
-
-  isRbacNotif(notification: GlobalNotification) {
-    return notification.type === GlobalNotificationType.RBAC_NOTIFICATION;
+  isSystemAlertNotif(notification: GlobalNotification) {
+    return notification.type === GlobalNotificationType.SYSTEM_ALERT_NOTIFICATION;
   }
 
   isManagerNotif(notification: GlobalNotification) {
@@ -389,9 +265,152 @@ export class GlobalNotificationsComponent implements OnInit {
     return notification.type === GlobalNotificationType.USER_NOTIFICATION;
   }
 
-  getRbacTitle(name: string) {
+  getSystemAlertTitle(name: string): string {
     return this.tr.instant(
-      'dashboard.body.message.' + name.split(':')[0].toUpperCase()
+      this.MESSAGE_TITLE_PREFIX + name.toUpperCase()
     );
+  }
+
+  private generateManagerNotifications(): void {
+    if (
+      this.telemetryStatus?.max_upgrade_version.tag &&
+      this.isUpgradeNeeded(
+        this.telemetryStatus.current_version,
+        this.telemetryStatus.max_upgrade_version.tag
+      )
+    ) {
+      this.globalNotifications.push({
+        type: GlobalNotificationType.MANAGER_NOTIFICATION,
+        name: 'newVersionAvailable',
+        key: ManagerAlertKey.NewVersionAvailable,
+        message: this.tr.instant('login.UPGRADE_AVAILABLE', {
+          currentVersion: this.telemetryStatus.current_version,
+          newVersion: this.telemetryStatus.max_upgrade_version.tag,
+        }),
+        link: '',
+        labelClass: 'warning',
+        accepted: this.systemAlertSummary.accepted_alerts
+          ? this.systemAlertSummary.accepted_alerts.includes(
+            ManagerAlertKey.NewVersionAvailable
+          )
+          : false,
+        unClamped: false,
+      });
+    }
+    if (this.unUpdateDays > GlobalConstant.MAX_UNUPDATED_DAYS) {
+      this.globalNotifications.push({
+        type: GlobalNotificationType.MANAGER_NOTIFICATION,
+        name: 'isScannerOld',
+        key: ManagerAlertKey.OutdatedCVE,
+        message: this.tr.instant('login.CVE_DB_OLD', {
+          day: Math.round(this.unUpdateDays),
+        }),
+        link: '#/controllers',
+        labelClass: 'warning',
+        accepted: this.systemAlertSummary.accepted_alerts
+          ? this.systemAlertSummary.accepted_alerts.includes(ManagerAlertKey.OutdatedCVE)
+          : false,
+        unClamped: false,
+      });
+    }
+    if (this.isVersionMismatch) {
+      this.globalNotifications.push({
+        type: GlobalNotificationType.MANAGER_NOTIFICATION,
+        name: 'isVersionMismatch',
+        key: ManagerAlertKey.VersionMismatch,
+        message: this.tr.instant('login.VERSION_MISMATCHED'),
+        link: '#/controllers',
+        labelClass: 'warning',
+        accepted: this.systemAlertSummary.accepted_alerts
+          ? this.systemAlertSummary.accepted_alerts.includes(
+            ManagerAlertKey.VersionMismatch
+          )
+          : false,
+        unClamped: false,
+      });
+    }
+  }
+
+  private generaterUserNotifications(): void {
+    if (this.passwordExpiration >= 0 && this.passwordExpiration < 10) {
+      this.globalNotifications.push({
+        type: GlobalNotificationType.USER_NOTIFICATION,
+        name: 'isPasswordExpiring',
+        key: UserAlertKey.ExpiringPassword,
+        message: this.tr.instant('login.CHANGE_EXPIRING_PASSWORD', {
+          expiring_Days: this.passwordExpiration + 1,
+        }),
+        link: '#/profile',
+        labelClass: this.passwordExpiration < 1 ? 'danger' : 'warning',
+        accepted: this.systemAlertSummary.accepted_alerts
+          ? this.systemAlertSummary.accepted_alerts.includes(
+            UserAlertKey.ExpiringPassword
+          )
+          : false,
+        unClamped: false,
+      });
+    }
+    if (
+      GlobalVariable.user.token.default_password &&
+      GlobalVariable.user.token.server.toLowerCase() !== 'rancher'
+    ) {
+      this.globalNotifications.push({
+        type: GlobalNotificationType.USER_NOTIFICATION,
+        name: 'isDefaultPassword',
+        key: UserAlertKey.UnchangedDefaultPassword,
+        message: this.tr.instant('login.CHANGE_DEFAULT_PASSWORD'),
+        link: '#/profile',
+        labelClass: 'warning',
+        accepted: this.systemAlertSummary.accepted_alerts
+          ? this.systemAlertSummary.accepted_alerts.includes(
+            UserAlertKey.UnchangedDefaultPassword
+          )
+          : false,
+        unClamped: false,
+      });
+    }
+  }
+
+  private generateSystemAlertNotifications(): void {
+    Object.keys(this.systemAlertSummary.acceptable_alerts).forEach(k => {
+      const alerts: SystemAlerts = this.systemAlertSummary.acceptable_alerts[k];
+      const type: SystemAlertType = alerts.type;
+      let link: string = '';
+      let severity: SystemAlertSeverity = SystemAlertSeverity.INFO;
+
+      if(type === SystemAlertType.TLS_CERTIFICATE) {
+        link = '#/settings/configuration';
+        severity = SystemAlertSeverity.WARNING;
+      } else if(type === SystemAlertType.RBAC) {
+        severity = SystemAlertSeverity.CRITICAL;
+      }
+
+      alerts.data.forEach(a => this.addSystemAlertGlobalNotification(k, a, severity, link));
+    });
+  }
+
+  private addSystemAlertGlobalNotification(name: string, alert: SystemAlert, severity: SystemAlertSeverity ,link: string): void {
+    const notification: GlobalNotification = {
+      type: GlobalNotificationType.SYSTEM_ALERT_NOTIFICATION,
+      name: name,
+      key: alert.id,
+      message: alert.message,
+      link: link,
+      labelClass: this.getLabelClassFromSystemAlertSeverity(severity),
+      unClamped: false,
+    }
+    
+    this.globalNotifications.push(notification);
+  }
+
+  private getLabelClassFromSystemAlertSeverity(severity: SystemAlertSeverity): string {
+    switch (severity) {
+      case SystemAlertSeverity.CRITICAL:
+        return 'danger';
+      case SystemAlertSeverity.WARNING:
+        return 'warning';
+      default:
+        return 'info';
+    }
   }
 }

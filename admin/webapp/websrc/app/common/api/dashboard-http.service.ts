@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { PathConstant } from '@common/constants/path.constant';
 import {
+  SystemAlertSummary,
   InternalSystemInfo,
   Metrics,
-  RbacAlertsSummary,
   Score,
 } from '@common/types';
 import { GlobalVariable } from '@common/variables/global.variable';
@@ -38,9 +38,9 @@ export class DashboardHttpService {
     );
   }
 
-  getSystemRBAC() {
-    return GlobalVariable.http.get<RbacAlertsSummary>(
-      PathConstant.SYSTEM_RBAC_URL
+  getSystemAlerts() {
+    return GlobalVariable.http.get<SystemAlertSummary>(
+      PathConstant.SYSTEM_ALETS_URL
     );
   }
 

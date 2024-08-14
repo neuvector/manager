@@ -53,7 +53,11 @@ import {
   SyslogCVELayersField,
   EventReportLoggingToggleField,
 } from './constants';
-import { EnableTlsVerificationToggleField, TlsTableField, tlsVerificationNoticeField } from './constants/tls-constants';
+import {
+  EnableTlsVerificationToggleField,
+  TlsTableField,
+  tlsVerificationNoticeField,
+} from './constants/tls-constants';
 
 export const ConfigFormConfig: FormlyFieldConfig[] = [
   {
@@ -191,48 +195,51 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
         fieldGroupClassName: 'row',
         fieldGroup: [
           {
-            className: 'col-12 col-md-2 my-4',
+            className: 'col-12',
             ...SyslogToggleField,
           },
           {
-            className: 'col-12 col-md-3',
+            hideExpression: `!model.syslog.syslog_status`,
+            className: 'col-12',
             ...SyslogServerField,
           },
           {
-            className: 'col-12 col-md-3',
+            hideExpression: `!model.syslog.syslog_status`,
+            className: 'col-12 ml-3',
             ...SyslogProtocolField,
           },
           {
-            className: 'col-12 col-md-3',
-            ...SyslogPortField,
-          },
-          {
-            hideExpression: `model.syslog.syslog_ip_proto != 66`,
-            className: 'col-12 offset-md-2 col-md-6',
+            hideExpression: `!model.syslog.syslog_status || model.syslog.syslog_ip_proto != 66`,
+            className: 'col-12 ml-3',
             ...SyslogTLSCertificate,
           },
           {
-            className: 'col-12 my-1',
+            hideExpression: `!model.syslog.syslog_status`,
+            className: 'col-12',
+            ...SyslogPortField,
+          },
+          {
+            className: 'col-12 mt-3',
             ...EventReportLoggingToggleField,
           },
           {
-            className: 'col-12 col-md-2 my-3 ml-3',
+            className: 'col-12 mt-3 ml-3',
             ...SyslogLevelField,
           },
           {
-            className: 'col-12 col-md-7 my-5',
+            className: 'col-12 col-md-6 ml-3',
             ...SyslogCategoriesField,
           },
           {
-            className: 'col-12 col-md-2 my-5',
+            className: 'col-12 col-md-5',
             ...SyslogInJSONField,
           },
           {
-            className: 'col-12 col-md-4',
+            className: 'col-12 mt-3',
             ...SyslogSingleCVEField,
           },
           {
-            className: 'col-12 col-md-4',
+            className: 'col-12',
             ...SyslogCVELayersField,
           },
         ],
@@ -424,7 +431,7 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
         fieldGroup: [tlsVerificationNoticeField],
         templateOptions: {
           label: 'setting.NOTICE',
-          divider: false 
+          divider: false,
         },
       },
       {
@@ -439,11 +446,11 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
       {
         wrappers: [FormlyComponents.SECTION_WRAPPER],
         fieldGroup: [TlsTableField],
-        templateOptions: { 
-          label: 'setting.TLS_SELF_SIGNED_CERTIFICATION_CONTEXT', 
-          divider: false 
+        templateOptions: {
+          label: 'setting.TLS_SELF_SIGNED_CERTIFICATION_CONTEXT',
+          divider: false,
         },
       },
     ],
-  }
+  },
 ];

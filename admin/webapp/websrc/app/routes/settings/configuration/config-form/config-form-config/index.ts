@@ -339,35 +339,35 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
         fieldGroupClassName: 'row align-items-center',
         fieldGroup: [
           {
-            className: 'col-12 col-md-2',
+            className: 'col-12 mt-3',
             ...HTTPProxyStatusField,
           },
           {
-            className: 'col-12 col-md-3',
+            className: 'col-12',
             ...HTTPProxyURLField,
           },
           {
-            className: 'col-12 col-md-3',
+            className: 'col-12',
             ...HTTPProxyUsernameField,
           },
           {
-            className: 'col-12 col-md-3',
+            className: 'col-12',
             ...HTTPProxyPasswordField,
           },
           {
-            className: 'col-12 col-md-2',
+            className: 'col-12 mt-3',
             ...HTTPSProxyStatusField,
           },
           {
-            className: 'col-12 col-md-3',
+            className: 'col-12',
             ...HTTPSProxyURLField,
           },
           {
-            className: 'col-12 col-md-3',
+            className: 'col-12',
             ...HTTPSProxyUsernameField,
           },
           {
-            className: 'col-12 col-md-3',
+            className: 'col-12',
             ...HTTPSProxyPasswordField,
           },
         ],

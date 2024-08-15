@@ -55,7 +55,7 @@ export class VulnerabilitiesComponent implements OnInit, OnDestroy {
   selectedVulnerability!: Vulnerability;
 
   private _switchClusterSubscription;
-  
+
 
   constructor(
     private vulnerabilitiesService: VulnerabilitiesService,
@@ -236,7 +236,7 @@ export class VulnerabilitiesComponent implements OnInit, OnDestroy {
     this.vulnerabilitiesService.getVulnerabilitiesViewReportData(options.lastModifiedTime)
       .subscribe(
         (response: any) => {
-          cb(response.data, dialogRef);
+          cb(this.vulnerabilitiesService.extractPodImage(response.data), dialogRef);
         },
         error => {}
       );

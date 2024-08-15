@@ -14,7 +14,7 @@ export class VulnerabilitiesCsvService {
     private utilsService: UtilsService,
     private datePipe: DatePipe,
     private bytesPipe: BytesPipe,
-    private vulnerabilitiesFilterService: VulnerabilitiesFilterService
+    private vulnerabilitiesFilterService: VulnerabilitiesFilterService,
   ) {}
 
   downloadCsv(vulnerabilityList, cveEntry?: VulnerabilityAsset) {
@@ -242,6 +242,7 @@ export class VulnerabilitiesCsvService {
         'Namespace': workload.domain,
         'Service Group': workload.service_group,
         'Policy Mode': workload.policy_mode,
+        'Image': workload.image,
         'Applications': workload.applications,
         'High': workload.high,
         'Medium': workload.medium,

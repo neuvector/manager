@@ -14,13 +14,16 @@
 <table class="print-table margin-top-l">
   <thead>
     <tr class="print-header">
-      <th class="print-cell" style="width: 15%">
+      <th class="print-cell" style="width: 10%">
         {{ 'cis.report.gridHeader.NAME' | translate }}
       </th>
-      <th class="print-cell" style="width: 10%">
+      <th class="print-cell" style="width: 8%">
         {{ 'audit.gridHeader.DOMAIN' | translate }}
       </th>
-      <th class="print-cell" style="width: 15%">
+      <th class="print-cell" style="width: 10%">
+        {{ 'containers.detail.IMAGE' | translate }}
+      </th>
+      <th class="print-cell" style="width: 12%">
         {{ 'containers.detail.APPLICATIONS' | translate }}
       </th>
       <th class="print-cell" style="width: 8%">
@@ -66,13 +69,16 @@
       class="print-row"
       *ngFor="let pod of pods.slice(0, SEC_ASSETS_REPORT_MAX_ROW); let i = index"
       [attr.data-index]="i">
-      <td class="print-cell" style="width: 15%">
+      <td class="print-cell" style="width: 10%">
         {{ pod.name }}
       </td>
-      <td class="print-cell" style="width: 10%">
+      <td class="print-cell" style="width: 8%">
         {{ pod.domain }}
       </td>
-      <td class="print-cell" style="width: 15%">
+      <td class="print-cell" style="width: 10%">
+        {{ pod.image }}
+      </td>
+      <td class="print-cell" style="width: 12%">
         <div class="row">
           <div *ngFor="let app of pod.applications" class="col-sm-6">
             {{ app }}

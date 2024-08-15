@@ -7,13 +7,13 @@ import {
 
 export interface ConfigResponse
   extends SvcConfig,
-  SyslogConfig,
-  AuthConfig,
-  ProxyConfig,
-  IBMSAConfig,
-  MiscConfig,
-  AtmoConfig,
-  NetConfig {
+    SyslogConfig,
+    AuthConfig,
+    ProxyConfig,
+    IBMSAConfig,
+    MiscConfig,
+    AtmoConfig,
+    NetConfig {
   scanner_autoscale: ScannerAutoscale;
   webhooks: Webhook[];
   duration_toggle?: boolean;
@@ -85,8 +85,10 @@ export interface AuthConfig {
 
 export interface ProxyConfig {
   registry_http_proxy: Proxy;
+  registry_http_proxy_cfg: Proxy;
   registry_http_proxy_status: boolean;
   registry_https_proxy: Proxy;
+  registry_https_proxy_cfg: Proxy;
   registry_https_proxy_status: boolean;
 }
 

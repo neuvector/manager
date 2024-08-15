@@ -5,6 +5,16 @@ package com.neu.model
  */
 case class RegistyHttpProxy(url: String, username: String, password: Option[String])
 case class RegistyHttpsProxy(url: String, username: String, password: Option[String])
+case class RegistyHttpProxyCfg(
+  url: Option[String],
+  username: Option[String],
+  password: Option[String]
+)
+case class RegistyHttpsProxyCfg(
+  url: Option[String],
+  username: Option[String],
+  password: Option[String]
+)
 case class Webhook(
   name: String,
   url: String,
@@ -107,7 +117,9 @@ case class SystemConfigProxyCfgV2(
   registry_http_proxy_status: Option[Boolean] = None,
   registry_https_proxy_status: Option[Boolean] = None,
   registry_http_proxy: Option[RegistyHttpProxy] = None,
-  registry_https_proxy: Option[RegistyHttpsProxy] = None
+  registry_https_proxy: Option[RegistyHttpsProxy] = None,
+  registry_http_proxy_cfg: Option[RegistyHttpProxyCfg] = None,
+  registry_https_proxy_cfg: Option[RegistyHttpsProxyCfg] = None
 )
 
 case class SystemConfigIBMSAVCfg2(

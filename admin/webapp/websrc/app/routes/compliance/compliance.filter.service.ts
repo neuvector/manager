@@ -88,15 +88,16 @@ export class ComplianceFilterService {
       this.advFilter.tags.nist ||
       this.advFilter.tags.pci
     ) {
-      if (compliance.tags && compliance.tags.length > 0) {
+      let comlianceTags = Object.keys(compliance.tags);
+      if (comlianceTags && comlianceTags.length > 0) {
         if (this.advFilter.tags.gdpr)
-          result = result && compliance.tags.includes('GDPR');
+          result = result && comlianceTags.includes('GDPR');
         if (this.advFilter.tags.hipaa)
-          result = result && compliance.tags.includes('HIPAA');
+          result = result && comlianceTags.includes('HIPAA');
         if (this.advFilter.tags.nist)
-          result = result && compliance.tags.includes('NIST');
+          result = result && comlianceTags.includes('NIST');
         if (this.advFilter.tags.pci)
-          result = result && compliance.tags.includes('PCI');
+          result = result && comlianceTags.includes('PCI');
       } else return false;
     }
     if (this.advFilter.scoredType !== 'all') {

@@ -294,4 +294,19 @@ export class VulnerabilitiesService {
       })
     );
   }
+
+  extractPodImage(vulnerabilities) {
+    return vulnerabilities.map(vulnerability => {
+      let imageMap = new Map();
+      vulnerability.workloads?.forEach(workload => {
+        imageMap.set(workload.image, { display_name: workload.image });
+      });
+      if (vulnerability.images) {
+        vulnerability.images.push(...Array.from(imageMap.values()));
+      } else {
+        vulnerability.images = Array.from(imageMap.values());
+      }
+      return vulnerability;
+    })
+  }
 }

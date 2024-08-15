@@ -13,6 +13,12 @@ object SystemConfigJsonProtocol extends DefaultJsonProtocol {
   implicit val registyHttpProxyFormat: RootJsonFormat[RegistyHttpProxy] = jsonFormat3(
     RegistyHttpProxy
   )
+  implicit val registyHttpsProxyCfgFormat: RootJsonFormat[RegistyHttpsProxyCfg] = jsonFormat3(
+    RegistyHttpsProxyCfg
+  )
+  implicit val registyHttpProxyCfgFormat: RootJsonFormat[RegistyHttpProxyCfg] = jsonFormat3(
+    RegistyHttpProxyCfg
+  )
   implicit val githubConfigurationFormat: RootJsonFormat[GithubConfiguration] = jsonFormat6(
     GithubConfiguration
   )
@@ -53,7 +59,7 @@ object SystemConfigJsonProtocol extends DefaultJsonProtocol {
   implicit val systemConfigAuthCfgV2Format: RootJsonFormat[SystemConfigAuthCfgV2] = jsonFormat3(
     SystemConfigAuthCfgV2
   )
-  implicit val systemConfigProxyCfgV2Format: RootJsonFormat[SystemConfigProxyCfgV2] = jsonFormat4(
+  implicit val systemConfigProxyCfgV2Format: RootJsonFormat[SystemConfigProxyCfgV2] = jsonFormat6(
     SystemConfigProxyCfgV2
   )
   implicit val systemConfigIBMSAVCfg2Format: RootJsonFormat[SystemConfigIBMSAVCfg2] = jsonFormat2(

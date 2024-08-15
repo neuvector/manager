@@ -9,11 +9,7 @@ import {
 import { FormGroup } from '@angular/forms';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { MapConstant } from '@common/constants/map.constant';
-import {
-  ConfigPatch,
-  ErrorResponse,
-  IBMSetupGetResponse,
-} from '@common/types';
+import { ConfigPatch, ErrorResponse, IBMSetupGetResponse } from '@common/types';
 import { UtilsService } from '@common/utils/app.utils';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { GlobalVariable } from '@common/variables/global.variable';
@@ -34,7 +30,6 @@ import { ConfigV2Vo } from '@common/types/settings/config-vo';
   styleUrls: ['./config-form.component.scss'],
 })
 export class ConfigFormComponent implements OnInit {
-
   private _config!: ConfigV2Vo;
 
   ibmSetup!: IBMSetupGetResponse;
@@ -123,7 +118,7 @@ export class ConfigFormComponent implements OnInit {
       isRegHttpsProxyAuthorized: isSettingAuth,
       isConfigAuthorized: isSettingAuth,
       isIBMSAAuthorized: isSettingAuth,
-      isTlsAuthorized: isSettingAuth
+      isTlsAuthorized: isSettingAuth,
     };
     this.serverErrorMessage = '';
     this.cd.detectChanges();
@@ -219,14 +214,18 @@ export class ConfigFormComponent implements OnInit {
           rancher_ep: base_config.auth.rancher_ep,
         },
         proxy_cfg: {
-          registry_http_proxy: base_config.proxy.registry_http_proxy.password
+          registry_http_proxy: base_config.proxy.registry_http_proxy,
+          registry_https_proxy: base_config.proxy.registry_https_proxy,
+          registry_http_proxy_cfg: base_config.proxy.registry_http_proxy
+            .password
             ? base_config.proxy.registry_http_proxy
             : Object.assign({}, base_config.proxy.registry_http_proxy, {
                 password: null,
               }),
           registry_http_proxy_status:
             base_config.proxy.registry_http_proxy_status,
-          registry_https_proxy: base_config.proxy.registry_https_proxy.password
+          registry_https_proxy_cfg: base_config.proxy.registry_https_proxy
+            .password
             ? base_config.proxy.registry_https_proxy
             : Object.assign({}, base_config.proxy.registry_https_proxy, {
                 password: null,
@@ -261,8 +260,8 @@ export class ConfigFormComponent implements OnInit {
         },
         tls_cfg: {
           enable_tls_verification: base_config.tls['enable_tls_verification'],
-          cacerts: base_config.tls['cacerts'].map(c => c.context)
-        }
+          cacerts: base_config.tls['cacerts'].map(c => c.context),
+        },
       },
     };
   }

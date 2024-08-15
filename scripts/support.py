@@ -19,7 +19,7 @@ support_global = [
     "/v1/internal/system",
     "/v1/system/summary",
     "/v2/system/config",
-    "/v1/system/rbac",
+    "/v1/system/alerts",
     "/v1/fed/member",
     "/v1/user_role",
     "/v1/user",

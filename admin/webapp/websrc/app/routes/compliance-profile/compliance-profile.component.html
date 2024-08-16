@@ -2,22 +2,26 @@
   <div *ngIf="loaded; else loadingTemplate" class="h-100">
     <mat-tab-group (selectedTabChange)="resize()" class="h-100">
       <mat-tab [label]="'cis.profile.TEMPLATES' | translate" class="h-100">
-        <app-compliance-profile-templates
-          [hideSystemInit]="
-            complianceProfileData.profile.profiles[0]?.disable_system || false
-          "
-          [templates]="complianceProfileData.template.list.compliance"
-          [cfgType]="
-            complianceProfileData.profile.profiles[0]?.cfg_type || ''
-          "></app-compliance-profile-templates>
+        <ng-container *ngIf="!refreshingProfile">
+          <app-compliance-profile-templates
+            [hideSystemInit]="
+              complianceProfileData.profile.profiles[0]?.disable_system || false
+            "
+            [templates]="complianceProfileData.template.list.compliance"
+            [cfgType]="
+              complianceProfileData.profile.profiles[0]?.cfg_type || ''
+            "></app-compliance-profile-templates>
+          </ng-container>
       </mat-tab>
       <mat-tab
         [label]="'sidebar.nav.RESOURCE' | translate"
         *ngIf="!isNamespaceUser">
-        <app-compliance-profile-assets
-          [domains]="
-            complianceProfileData.domains
-          "></app-compliance-profile-assets>
+        <ng-container *ngIf="!refreshingProfile">
+          <app-compliance-profile-assets
+            [domains]="
+              complianceProfileData.domains
+            "></app-compliance-profile-assets>
+          </ng-container>
       </mat-tab>
     </mat-tab-group>
   </div>

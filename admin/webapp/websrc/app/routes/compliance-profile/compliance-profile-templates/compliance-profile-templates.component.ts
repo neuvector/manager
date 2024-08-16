@@ -11,7 +11,5 @@ export class ComplianceProfileTemplatesComponent implements OnInit {
   @Input() hideSystemInit!: boolean;
   @Input() cfgType!: CfgType;
 
-  constructor() {}
-
   ngOnInit(): void {}
 }

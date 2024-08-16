@@ -3,14 +3,11 @@ import { GridOptions } from 'ag-grid-community';
 import { MatDialog } from '@angular/material/dialog';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { PathConstant } from '@common/constants/path.constant';
-import { MapConstant } from '@common/constants/map.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { finalize } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificationService } from '@services/notification.service';
 import { AuthUtilsService } from '@common/utils/auth.utils';
-import { MultiClusterService } from '@services/multi-cluster.service';
 import { SignaturesService } from '@services/signatures.service';
 import { AddEditSignatureVerifiersModalComponent } from './partial/add-edit-signature-verifiers-modal/add-edit-signature-verifiers-modal.component';
 import { AddEditVerifiersModalComponent } from './partial/add-edit-verifiers-modal/add-edit-verifiers-modal.component';
@@ -43,7 +40,6 @@ export class SignatureVerifiersComponent implements OnInit {
   filtered: boolean = false;
   context = { componentParent: this };
   $win: any;
-  private _switchClusterSubscription;
 
   get signatureCount() {
     if (this.signatures?.length) return this.signatures.length;
@@ -53,8 +49,6 @@ export class SignatureVerifiersComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private authUtilsService: AuthUtilsService,
-    private multiClusterService: MultiClusterService,
-    private notificationService: NotificationService,
     private translate: TranslateService,
     private signaturesService: SignaturesService
   ) {
@@ -77,18 +71,6 @@ export class SignatureVerifiersComponent implements OnInit {
       this.onSelectionChanged4Verifier;
 
     this.refresh();
-
-    //refresh the page when it switched to a remote cluster
-    this._switchClusterSubscription =
-      this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
-        this.refresh();
-      });
-  }
-
-  ngOnDestroy(): void {
-    if (this._switchClusterSubscription) {
-      this._switchClusterSubscription.unsubscribe();
-    }
   }
 
   refresh = (index: number = 0) => {

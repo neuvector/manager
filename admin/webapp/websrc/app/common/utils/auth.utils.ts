@@ -18,17 +18,19 @@ export class AuthUtilsService {
     this.permissionMap = MapConstant.PERMISSION_MAP;
     this.userPermission = {
       globalPermissions: null,
+      remoteGlobalPermissions: null,
       ownedPermissions: null,
+      fedPermissions: null,
       isNamespaceUser: false,
     };
   }
 
   private parseGlobalPermission(g_permissions) {
-    return g_permissions.map(permission => {
+    return g_permissions?.map(permission => {
       return `${permission.id}_${
         permission.write ? 'w' : permission.read ? 'r' : ''
       }`;
-    });
+    }) ?? [];
   }
 
   private parseDomainPermission(d_permission: Map<string, Array<Permission>>) {
@@ -50,6 +52,28 @@ export class AuthUtilsService {
         return `${perimssion.id}_r`;
       }
     });
+  }
+
+  private parseFedPermission(e_permissions: any[], own_permissions: any[]): string[] {
+    const fedPermission = e_permissions?.find(p => p.id === 'fed');
+    let parsedPermissions: string[] = [];
+
+    if(fedPermission) {
+      if(fedPermission.write) {
+        parsedPermissions = parsedPermissions.concat(this.parseGlobalPermission(own_permissions));
+      } else if(fedPermission.read){
+        const readGlobalPermissions = own_permissions?.filter(p => p.read) ?? [];
+        parsedPermissions = parsedPermissions.concat(
+          readGlobalPermissions.map(p => {
+            return `${p.id}_${
+              p.read ? 'r' : ''
+            }`;
+          })
+        );
+      }
+    }
+
+    return parsedPermissions;
   }
 
   private getNamespaces4NamespaceUser(d_permission) {
@@ -88,39 +112,59 @@ export class AuthUtilsService {
       let globalPermissions = this.parseGlobalPermission(
         GlobalVariable.user.global_permissions
       );
+      let remoteGlobalPermissions = this.parseGlobalPermission(
+        GlobalVariable.user.remote_global_permissions
+      );
       let domainPermissions = this.parseDomainPermission(
         GlobalVariable.user.domain_permissions
       );
+      let fedPermissions = this.parseFedPermission(
+        GlobalVariable.user.extra_permissions, GlobalVariable.user.global_permissions
+      );
+      
       GlobalVariable.namespaces4NamespaceUser =
         this.getNamespaces4NamespaceUser(
           GlobalVariable.user.domain_permissions
         );
+
       this.userPermission.isNamespaceUser =
         globalPermissions.length === 0 && domainPermissions.length > 0;
       this.userPermission.globalPermissions = globalPermissions;
+      this.userPermission.remoteGlobalPermissions = remoteGlobalPermissions;
       this.userPermission.ownedPermissions =
         domainPermissions.concat(globalPermissions);
-      this.tokenBakeup = GlobalVariable.user.token.token;
+      this.userPermission.fedPermissions = fedPermissions;
     }
     return this.userPermission;
   }
 
   getRowBasedPermission(domain, neededPermission) {
     let gPermissions = GlobalVariable.user.global_permissions;
+    let rgPermissions = GlobalVariable.user.remote_global_permissions;
     let dPermissions = GlobalVariable.user.domain_permissions;
     let result = '';
-    for (let gPermission of gPermissions) {
-      if (neededPermission === gPermission.id) {
-        result = gPermission.write ? 'w' : 'r';
-        break;
-      }
-    }
-    if (result === 'w') return result;
-    if (dPermissions[domain]) {
-      for (let dPermission of dPermissions[domain]) {
-        if (neededPermission === dPermission.id) {
-          result = dPermission.write ? 'w' : 'r';
+
+    if(GlobalVariable.isRemote) {
+      for (let rgPermission of rgPermissions) {
+        if (neededPermission === rgPermission.id) {
+          result = rgPermission.write ? 'w' : 'r';
           break;
+        }
+      }
+    } else {
+      for (let gPermission of gPermissions) {
+        if (neededPermission === gPermission.id) {
+          result = gPermission.write ? 'w' : 'r';
+          break;
+        }
+      }
+      if (result === 'w') return result;
+      if (dPermissions[domain]) {
+        for (let dPermission of dPermissions[domain]) {
+          if (neededPermission === dPermission.id) {
+            result = dPermission.write ? 'w' : 'r';
+            break;
+          }
         }
       }
     }
@@ -129,7 +173,28 @@ export class AuthUtilsService {
 
   getDisplayFlag(displayControl) {
     if (GlobalVariable.user) {
+      let ownedPermissions;
+
+      if(this.getCacheUserPermission().fedPermissions?.length > 0) {
+        ownedPermissions = this.getCacheUserPermission().fedPermissions;
+      } else {
+        ownedPermissions = GlobalVariable.isRemote ? this.getCacheUserPermission().remoteGlobalPermissions : this.getCacheUserPermission().ownedPermissions;
+      }
+
+      if (ownedPermissions.length > 0) {
+        return ownedPermissions
+          .map(permission => {
+            return this.permissionMap[displayControl].indexOf(permission) > -1;
+          })
+          .reduce((res, curr) => (res = res || curr));
+      }
+    }
+  }
+
+  getGlobalPermissionDisplayFlag(displayControl) {
+    if (GlobalVariable.user) {
       let ownedPermissions = this.getCacheUserPermission().ownedPermissions;
+
       if (ownedPermissions.length > 0) {
         return ownedPermissions
           .map(permission => {
@@ -151,10 +216,13 @@ export class AuthUtilsService {
     );
     if (GlobalVariable.user) {
       let ownedPermissions = [];
-      if (isWithDomainPermission) {
+
+      if(this.getCacheUserPermission().fedPermissions?.length > 0 ) {
+        ownedPermissions = this.getCacheUserPermission().fedPermissions;
+      } else if (isWithDomainPermission && !GlobalVariable.isRemote) {
         ownedPermissions = this.getCacheUserPermission().ownedPermissions;
       } else {
-        ownedPermissions = this.getCacheUserPermission().globalPermissions;
+        ownedPermissions = GlobalVariable.isRemote ? this.getCacheUserPermission().remoteGlobalPermissions : this.getCacheUserPermission().globalPermissions;
       }
       console.log(
         'ownedPermissions:',

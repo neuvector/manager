@@ -932,7 +932,9 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                   user.default_password,
                   user.modify_password,
                   user.role_domains,
+                  user.extra_permissions,
                   selfWrap.global_permissions,
+                  selfWrap.remote_global_permissions,
                   selfWrap.domain_permissions
                 )
               )

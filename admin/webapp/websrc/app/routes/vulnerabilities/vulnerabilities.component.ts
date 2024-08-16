@@ -1,7 +1,6 @@
 import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { VulnerabilitiesService } from './vulnerabilities.service';
 import { VulnerabilitiesCsvService } from './csv-generation/vulnerabilities-csv.service';
-import { MultiClusterService } from '@services/multi-cluster.service';
 import { VulnerabilitiesFilterService } from './vulnerabilities.filter.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PdfGenerationDialogComponent } from './pdf-generation-dialog/pdf-generation-dialog.component';
@@ -18,7 +17,7 @@ import { tap } from 'rxjs/operators';
   templateUrl: './vulnerabilities.component.html',
   styleUrls: ['./vulnerabilities.component.scss'],
 })
-export class VulnerabilitiesComponent implements OnInit, OnDestroy {
+export class VulnerabilitiesComponent {
   @ViewChild(VulnerabilityDetailDialogComponent) vulDetails!: VulnerabilityDetailDialogComponent;
   @ViewChild('vulnerabilityViewReport') printableReportView!: ElementRef;
   @ViewChild('assetsViewReport') printableReportViewAssets!: ElementRef;
@@ -54,31 +53,13 @@ export class VulnerabilitiesComponent implements OnInit, OnDestroy {
   selectedView = this.displayViews[0];
   selectedVulnerability!: Vulnerability;
 
-  private _switchClusterSubscription;
-
-
   constructor(
     private vulnerabilitiesService: VulnerabilitiesService,
     private vulnerabilitiesCsvService: VulnerabilitiesCsvService,
-    private multiClusterService: MultiClusterService,
     public vulnerabilitiesFilterService: VulnerabilitiesFilterService,
     private dialog: MatDialog,
     private tr: TranslateService
-  ) {
-    //refresh the page when it switched to a remote cluster
-    this._switchClusterSubscription =
-      this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
-        this.refresh();
-      });
-  }
-
-  ngOnInit(): void {}
-
-  ngOnDestroy(): void {
-    if (this._switchClusterSubscription) {
-      this._switchClusterSubscription.unsubscribe();
-    }
-  }
+  ) {}
 
   changeSelectedView(view: VulnerabilityView) {
     this.selectedView = view;

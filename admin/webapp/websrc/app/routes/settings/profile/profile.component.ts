@@ -1,9 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { ProfileFormComponent } from './profile-form/profile-form.component';
 import { SettingsService } from '@services/settings.service';
-import { MultiClusterService } from '@services/multi-cluster.service';
+import { GlobalVariable } from '@common/variables/global.variable';
 
 @Component({
   selector: 'app-profile',
@@ -21,7 +21,6 @@ export class ProfileComponent {
   );
 
   constructor(
-    private multiClusterService: MultiClusterService,
     private settingsService: SettingsService
   ) {}
 

@@ -10,8 +10,8 @@ import spray.json.{ DefaultJsonProtocol, _ }
 object AuthTokenJsonProtocol extends DefaultJsonProtocol {
   implicit val permissionFormat: RootJsonFormat[Permission] = jsonFormat3(Permission)
   implicit val keyFormat: RootJsonFormat[Key]               = jsonFormat2(Key)
-  implicit val tokenFormat: RootJsonFormat[Token]           = jsonFormat13(Token)
-  implicit val tokenNewFormat: RootJsonFormat[TokenNew]     = jsonFormat13(TokenNew)
+  implicit val tokenFormat: RootJsonFormat[Token]           = jsonFormat15(Token)
+  implicit val tokenNewFormat: RootJsonFormat[TokenNew]     = jsonFormat15(TokenNew)
   implicit val tokenWrapFormat: RootJsonFormat[TokenWrap]   = jsonFormat3(TokenWrap)
 
   implicit val passFormat: RootJsonFormat[Password]           = jsonFormat4(Password)
@@ -28,7 +28,7 @@ object AuthTokenJsonProtocol extends DefaultJsonProtocol {
   implicit val usersFormat: RootJsonFormat[Users]                     = jsonFormat3(Users)
   implicit val userImageFormat: RootJsonFormat[UserImage]             = jsonFormat16(UserImage)
   implicit val usersOutputFormat: RootJsonFormat[UsersOutput]         = jsonFormat3(UsersOutput)
-  implicit val selfWrapFormat: RootJsonFormat[SelfWrap]               = jsonFormat4(SelfWrap)
+  implicit val selfWrapFormat: RootJsonFormat[SelfWrap]               = jsonFormat5(SelfWrap)
   implicit val userWrapFormat: RootJsonFormat[UserWrap]               = jsonFormat1(UserWrap)
   implicit val userTokenFormat: RootJsonFormat[UserToken]             = jsonFormat4(UserToken)
   implicit val userTokenNewFormat: RootJsonFormat[UserTokenNew]       = jsonFormat6(UserTokenNew)

@@ -25,9 +25,9 @@ import { NotificationService } from '@services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { isAuthorized, isValidBased64 } from '@common/utils/common.utils';
 import { AuthUtilsService } from '@common/utils/auth.utils';
-import { DomSanitizer } from '@angular/platform-browser';
 import { CommonHttpService } from '@common/api/common-http.service';
 import { AuthService } from '@services/auth.service';
+import { SettingsService } from '@services/settings.service';
 
 @Component({
   selector: 'app-header',
@@ -63,6 +63,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   displayRole = '';
 
   isNavSearchVisible: boolean = false;
+  private _clusterSwitchedSubScription;
   private _multiClusterSubScription;
   private _getRebrandCustomValuesSubscription;
   public isAuthReadConfig: boolean = false;
@@ -77,9 +78,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     public switchers: SwitchersService,
     public authUtilsService: AuthUtilsService,
     public injector: Injector,
-    private sanitizer: DomSanitizer,
     private authService: AuthService,
     private commonHttpService: CommonHttpService,
+    private settingsService: SettingsService,
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
     @Inject(LOCAL_STORAGE) private localStorage: StorageService
   ) {
@@ -124,15 +125,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (GlobalVariable.user) {
       this.isAllowedToOperateMultiCluster =
         isAuthorized(GlobalVariable.user.roles, resource.multiClusterOp) ||
-        this.authUtilsService.getDisplayFlag('multi_cluster');
+        this.authUtilsService.getGlobalPermissionDisplayFlag('multi_cluster');
       this.isAllowedToRedirectMultiCluster =
         isAuthorized(GlobalVariable.user.roles, resource.redirectAuth) ||
-        this.authUtilsService.getDisplayFlag('multi_cluster');
+        this.authUtilsService.getGlobalPermissionDisplayFlag('multi_cluster');
       this.isAuthReadConfig =
-        this.authUtilsService.getDisplayFlag('read_config');
+        this.authUtilsService.getGlobalPermissionDisplayFlag('read_config');
       this.isFedQueryAllowed =
         isAuthorized(GlobalVariable.user.roles, resource.fedQueryAllowed) ||
-        this.authUtilsService.getDisplayFlag('multi_cluster');
+        this.authUtilsService.getGlobalPermissionDisplayFlag('multi_cluster');
     }
 
     this.initMultiClusters();
@@ -148,26 +149,48 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.displayRole = role
       ? role
       : GlobalVariable.user.token.server
-          .toLowerCase()
-          .includes(MapConstant.SERVER_TYPE.RANCHER)
-      ? 'Rancher User'
-      : 'Namespace User';
+        .toLowerCase()
+        .includes(MapConstant.SERVER_TYPE.RANCHER)
+        ? 'Rancher User'
+        : 'Namespace User';
+
+    this._clusterSwitchedSubScription =
+      this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
+        const currentUrl = this.router.url;
+        this.router
+          .navigateByUrl('/', { skipLocationChange: true })
+          .then(() => {
+            this.router.navigate([currentUrl]);
+          });
+      });
+
+    if (!GlobalVariable.user?.remote_domain_permissions || !GlobalVariable.user?.extra_permissions) {
+      this.settingsService.getSelf().subscribe((userInfo) => {
+        GlobalVariable.user.remote_domain_permissions = userInfo.token.remote_global_permissions;
+        GlobalVariable.user.extra_permissions = userInfo.token.extra_permissions;
+      });
+    }
 
     this._multiClusterSubScription =
-      this.multiClusterService.onRefreshClustersEvent$.subscribe(data => {
+      this.multiClusterService.onRefreshClustersEvent$.subscribe(() => {
         this.initMultiClusters();
       });
 
     this._multiClusterSubScription =
-      this.multiClusterService.onManageMemberClusterEvent$.subscribe(data => {
+      this.multiClusterService.onManageMemberClusterEvent$.subscribe(() => {
         this.initMultiClusters();
       });
   }
 
   ngOnDestroy() {
+    if (this._clusterSwitchedSubScription) {
+      this._clusterSwitchedSubScription.unsubscribe();
+    }
+
     if (this._multiClusterSubScription) {
       this._multiClusterSubScription.unsubscribe();
     }
+
     if (this._getRebrandCustomValuesSubscription) {
       this._getRebrandCustomValuesSubscription.unsubscribe();
     }
@@ -292,7 +315,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           };
 
           this.isAllowedToRedirectMultiCluster =
-            this.authUtilsService.getDisplayFlag('multi_cluster') ||
+            this.authUtilsService.getGlobalPermissionDisplayFlag('multi_cluster') ||
             (isAuthorized(GlobalVariable.user.roles, resource.multiClusterOp) &&
               data.fed_role !== MapConstant.FED_ROLES.MASTER);
 
@@ -313,7 +336,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           if (GlobalVariable.isMaster) {
             this.isAllowedToOperateMultiCluster =
               isAuthorized(GlobalVariable.user.roles, resource.manageAuth) ||
-              this.authUtilsService.getDisplayFlag('multi_cluster');
+              this.authUtilsService.getGlobalPermissionDisplayFlag('multi_cluster');
             if (clusterInSession !== null) {
               this.selectedCluster = clusterInSession;
             } else {
@@ -328,7 +351,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
               isAuthorized(
                 GlobalVariable.user.roles,
                 resource.multiClusterView
-              ) || this.authUtilsService.getDisplayFlag('multi_cluster');
+              ) || this.authUtilsService.getGlobalPermissionDisplayFlag('multi_cluster');
             this.clusters.forEach(cluster => {
               if (cluster.clusterType === MapConstant.FED_ROLES.MASTER) {
                 this.primaryMasterName = cluster.name;
@@ -337,6 +360,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
               }
             });
           }
+
+          this.multiClusterService.dispatchGetClustersFinishEvent();
         },
         error: error => {
           this.clustersError = true;

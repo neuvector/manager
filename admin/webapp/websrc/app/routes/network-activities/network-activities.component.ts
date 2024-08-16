@@ -148,6 +148,7 @@ export class NetworkActivitiesComponent
   domains: GraphItem[] = [];
   groups: { name: string; displayName: string }[] = [];
   endpoints: { name: string; id: string }[] = [];
+  refreshing = false;
 
   constructor(
     private translate: TranslateService,
@@ -1663,7 +1664,7 @@ export class NetworkActivitiesComponent
 
     this._switchClusterSubscription =
       this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
-        this.refresh();
+        window.location.reload();
       });
   }
 

@@ -73,7 +73,9 @@ object AuthenticationManager extends LazyLogging {
           token.timeout,
           token.default_password,
           token.modify_password,
+          token.extra_permissions.getOrElse(Array()),
           token.global_permissions.getOrElse(Array()),
+          token.remote_global_permissions.getOrElse(Array()),
           token.domain_permissions.getOrElse(Map()),
           Option(authRes.password_days_until_expire.getOrElse(-1))
         )

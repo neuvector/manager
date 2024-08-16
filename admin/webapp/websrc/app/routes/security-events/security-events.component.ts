@@ -28,7 +28,6 @@ import {
 import { TranslateService } from '@ngx-translate/core';
 import { arrayToCsv } from '@common/utils/common.utils';
 import { saveAs } from 'file-saver';
-import { MultiClusterService } from '@services/multi-cluster.service';
 
 @Component({
   selector: 'app-security-events',
@@ -36,7 +35,6 @@ import { MultiClusterService } from '@services/multi-cluster.service';
   styleUrls: ['./security-events.component.scss'],
 })
 export class SecurityEventsComponent implements OnInit {
-  private _switchClusterSubscription;
   threatList: any;
   violationList: any;
   incidentList: any;
@@ -72,7 +70,6 @@ export class SecurityEventsComponent implements OnInit {
   @ViewChild('securityEventsPrintableReport') printableReportView!: ElementRef;
 
   constructor(
-    private multiClusterService: MultiClusterService,
     public securityEventsService: SecurityEventsService,
     private authUtilsService: AuthUtilsService,
     private cd: ChangeDetectorRef,
@@ -143,42 +140,8 @@ export class SecurityEventsComponent implements OnInit {
         reportSummary: this.translate.instant('enum.SUMMARY'),
         logoName: this.translate.instant('partner.general.LOGO_NAME'),
         byEventType: this.translate.instant('securityEvent.pdf.TYPEDIST'),
-        // summaryRange:
-        //   options.filteredCount === 0
-        //     ? ""
-        //     : options.filteredCount === options.rangedCount
-        //     ? this.translate.instant(
-        //         "general.PDF_SUMMARY_RANGE",
-        //         {
-        //           from: options.from,
-        //           to: options.to,
-        //           rangedCount: options.rangedCount
-        //         },
-        //         "",
-        //         "en"
-        //       )
-        //     : this.translate.instant(
-        //         "general.PDF_SUMMARY_RANGE_FILTERED",
-        //         {
-        //           from: options.from,
-        //           to: options.to,
-        //           rangedCount: options.rangedCount,
-        //           filteredCount: options.filteredCount
-        //         },
-        //         "",
-        //         "en"
-        //       ),
-        // detailsLimit:
-        //   options.filteredCount > REPORT_TABLE_ROW_LIMIT
-        //     ? this.translate.instant("general.PDF_TBL_ROW_LIMIT", {max: $scope.REPORT_TABLE_ROW_LIMIT}, "", "en")
-        //     : ""
       },
     };
-
-    this._switchClusterSubscription =
-      this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
-        this.refresh();
-      });
   }
 
   ngAfterViewInit() {

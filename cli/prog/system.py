@@ -177,6 +177,8 @@ def showLocalSystemConfig(data, scope):
         column_map += (("policy_mode", "Policy Mode"),)
     if "new_service_policy_mode" in conf:
         column_map += (("new_service_policy_mode", "New Service Policy Mode"),)
+    if "new_service_profile_mode" in conf:
+        column_map += (("new_service_profile_mode", "New Service Profile Mode"),)
     if "new_service_profile_baseline" in conf:
         column_map += (("new_service_profile_baseline", "New Service Profile Baseline"),)
     if "unused_group_aging" in conf:
@@ -627,6 +629,14 @@ def set_system_new_service(data):
 def set_system_new_service_policy_mode(data, mode):
     """Set system new service policy mode."""
     data.client.config_system(new_service_policy_mode=mode.title())
+
+
+@set_system_new_service.command("profile_mode")
+@click.argument('mode', type=click.Choice(['discover', 'monitor', 'protect']))
+@click.pass_obj
+def set_system_new_service_profile_mode(data, mode):
+    """Set system new service profile mode."""
+    data.client.config_system(new_service_profile_mode=mode.title())
 
 
 @set_system_new_service.command("profile_baseline")
@@ -1186,6 +1196,7 @@ def unset_system_single_cve_per_syslog(data):
 def unset_system_new_service(data):
     """Unset system new service"""
     data.client.config_system(new_service_policy_mode="")
+    data.client.config_system(new_service_profile_mode="")
     data.client.config_system(new_service_profile_setting="")
 
 

@@ -3153,7 +3153,7 @@
       "CERTIFICATE": "证书",
       "CERTIFICATE_CONTEXT": "证书内文",
       "APPLICABLE_NOTICE": {
-        "HEADER": "TLS 自签名证书仅适用于以下服务",
+        "HEADER": "TLS 自签名证书仅适用于以下服务：",
         "APPLICABLE_SERVICES": {
           "REGISTRY": "镜像库服务连接",
           "AUTH": "授权服务连接 (SAML、LDAP 和 OIDC)",

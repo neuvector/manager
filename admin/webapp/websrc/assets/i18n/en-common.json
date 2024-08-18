@@ -1971,6 +1971,7 @@
       "COMPLIANCE": "Compliance",
       "CONFIG": "System Config",
       "VULNERABILITY": "Vulnerability",
+      "FED": "Federation",
       "description": {
         "AUDIT_EVENTS": "Access risk and compliance event logs.",
         "EVENTS": "Access system activity event logs.",
@@ -1984,7 +1985,8 @@
         "CI_SCAN": "Trigger build-phase vulnerability scan.",
         "COMPLIANCE": "Review Compliance check results, manage compliance profile and configure custom compliance scripts.",
         "CONFIG": "Manage system configurations.",
-        "VULNERABILITY": "Review and configure vulnerability management profile."
+        "VULNERABILITY": "Review and configure vulnerability management profile.",
+        "FED": "Manage multiple clusters."
       }
     }
   },

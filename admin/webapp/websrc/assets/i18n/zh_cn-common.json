@@ -1971,6 +1971,7 @@
       "COMPLIANCE": "合规",
       "CONFIG": "系统配置",
       "VULNERABILITY": "漏洞",
+      "FED": "多集群",
       "description": {
         "AUDIT_EVENTS": "访问风险和合规事件日志.",
         "EVENTS": "访问系统活动事件日志.",
@@ -1984,7 +1985,8 @@
         "CI_SCAN": "触发构筑阶段漏洞扫描.",
         "COMPLIANCE": "浏览合规检查结果, 管理合规资料和配置自定义合规脚本.",
         "CONFIG": "管理系统配置",
-        "VULNERABILITY": "浏览和配置漏洞管理资料"
+        "VULNERABILITY": "浏览和配置漏洞管理资料",
+        "FED": "管理多集群"
       }
     }
   },

@@ -1,8 +1,38 @@
-<ng-container *ngFor="let tag of tags">
-  <ng-container [ngSwitch]="tag">
-    <span *ngSwitchCase="'GDPR'" class="badge text-white" style="padding-left: 3px; background-color: #ff9800;">⋮⋮&nbsp;&nbsp;GDPR</span>
-    <span *ngSwitchCase="'HIPAA'" class="badge text-white" style="padding-left: 3px; background-color: #4e39c1;">⋮⋮&nbsp;&nbsp;HIPAA</span>
-    <span *ngSwitchCase="'NIST'" class="badge badge-dark" style="padding-left: 3px;">⋮⋮&nbsp;&nbsp;NIST</span>
-    <span *ngSwitchCase="'PCI'" class="badge text-white" style="padding-left: 3px; background-color: #009688;">⋮⋮&nbsp;&nbsp;PCI</span>
-  </ng-container>
+<ng-container *ngIf="tags">
+  <span
+    *ngIf="tags.includes('DISA')"
+    class="badge badge-dark"
+    style="padding-left: 3px"
+    >⋮⋮&nbsp;&nbsp;DISA</span
+  >
+  <span
+    *ngIf="tags.includes('GDPR')"
+    class="badge text-white"
+    style="padding-left: 3px; background-color: #ff9800"
+    >⋮⋮&nbsp;&nbsp;GDPR</span
+  >
+  <span
+    *ngIf="tags.includes('HIPAA')"
+    class="badge text-white"
+    style="padding-left: 3px; background-color: #4e39c1"
+    >⋮⋮&nbsp;&nbsp;HIPAA</span
+  >
+  <span
+    *ngIf="tags.includes('NIST')"
+    class="badge badge-dark"
+    style="padding-left: 3px"
+    >⋮⋮&nbsp;&nbsp;NIST</span
+  >
+  <span
+    *ngIf="tags.includes('PCI')"
+    class="badge text-white"
+    style="padding-left: 3px; background-color: #009688"
+    >⋮⋮&nbsp;&nbsp;PCI</span
+  >
+  <span
+    *ngIf="tags.includes('PCIv4')"
+    class="badge text-white"
+    style="padding-left: 3px; background-color: #009688"
+    >⋮⋮&nbsp;&nbsp;PCIv4</span
+  >
 </ng-container>

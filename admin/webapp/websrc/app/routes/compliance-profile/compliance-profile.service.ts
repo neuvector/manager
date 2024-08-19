@@ -4,6 +4,7 @@ import { BehaviorSubject, combineLatest, Observable, of, Subject } from 'rxjs';
 import { catchError, map, repeatWhen, tap } from 'rxjs/operators';
 import { AssetsHttpService } from '@common/api/assets-http.service';
 import {
+  ComplianceAvailableFilters,
   ComplianceProfileData,
   complianceProfileEntries,
   ComplianceProfileTemplateData,
@@ -42,12 +43,14 @@ export class ComplianceProfileService {
       this.getTemplate(),
       this.getProfile(),
       this.getDomain(),
+      this.getAvailableFilters(),
     ]).pipe(
-      map(([template, profile, domains]) => {
+      map(([template, profile, domains, filters]) => {
         return {
           template,
           profile,
           domains,
+          filters,
         };
       }),
       tap(({ profile }) => {
@@ -85,6 +88,10 @@ export class ComplianceProfileService {
 
   exportProfile(payload) {
     return this.risksHttpService.exportComplianceProfile(payload);
+  }
+
+  private getAvailableFilters(): Observable<ComplianceAvailableFilters> {
+    return this.risksHttpService.getAvailableComplianceFilter();
   }
 
   private getTemplate(): Observable<ComplianceProfileTemplateData> {

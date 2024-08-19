@@ -53,6 +53,7 @@ export class ComplianceProfileTemplatesTableComponent
   @Input() rowData!: ComplianceProfileTemplateEntry[];
   @Input() hideSystemInit!: boolean;
   @Input() cfgType!: CfgType;
+  @Input() availableFilters!: string[];
   get cfgTypeClass() {
     let cfgType = (
       this.cfgType ? this.cfgType : GlobalConstant.CFG_TYPE.CUSTOMER
@@ -69,6 +70,7 @@ export class ComplianceProfileTemplatesTableComponent
   totalChanges = 0;
   regulationChanges = {};
   isWriteComplianceProfileAuthorized!: boolean;
+  filterForm!: { [filter: string]: boolean };
   all = true;
   pci = false;
   gdpr = false;
@@ -178,6 +180,9 @@ export class ComplianceProfileTemplatesTableComponent
       isExternalFilterPresent: () => true,
       overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS'),
     };
+    this.filterForm = Object.fromEntries(
+      this.availableFilters.map(filter => [filter, false])
+    );
   }
 
   ngAfterViewInit() {
@@ -206,7 +211,7 @@ export class ComplianceProfileTemplatesTableComponent
     const dialog = this.dialog.open(EditRegulationDialogComponent, {
       width: '100%',
       maxWidth: '500px',
-      data,
+      data: { ...data, regulations: this.availableFilters },
     });
     dialog.afterClosed().subscribe(dialogData => {
       if (dialogData) {
@@ -253,19 +258,9 @@ export class ComplianceProfileTemplatesTableComponent
   doesExternalFilterPass(node: RowNode) {
     if (this.all) return true;
     else {
-      let res: string[] = [];
-      if (this.pci) {
-        res.push('PCI');
-      }
-      if (this.gdpr) {
-        res.push('GDPR');
-      }
-      if (this.hipaa) {
-        res.push('HIPAA');
-      }
-      if (this.nist) {
-        res.push('NIST');
-      }
+      let res = Object.keys(this.filterForm).filter(
+        filter => this.filterForm[filter]
+      );
       return node.data.tags?.some(tag => res.includes(tag));
     }
   }
@@ -276,12 +271,11 @@ export class ComplianceProfileTemplatesTableComponent
       this.filteredSubject$.next(true);
     } else {
       this.all = true;
-      this.pci = false;
-      this.gdpr = false;
-      this.nist = false;
-      this.hipaa = false;
+      Object.keys(this.filterForm).forEach(
+        filter => (this.filterForm[filter] = false)
+      );
     }
-    if (!this.pci && !this.gdpr && !this.nist && !this.hipaa) {
+    if (Object.values(this.filterForm).every(filter => !filter)) {
       this.all = true;
     }
     this.gridApi.onFilterChanged();

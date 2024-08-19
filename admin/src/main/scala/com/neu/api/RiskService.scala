@@ -38,6 +38,7 @@ class RiskService()(implicit executionContext: ExecutionContext)
   private val scanUrl                 = "scan/asset"
   private val complianceUrl           = "compliance/asset"
   private val complianceProfileUrl    = "compliance/profile"
+  private val complianceFilterUrl     = "compliance/available_filter"
   private val vulnerabilityProfileUrl = "vulnerability/profile"
 
   final val serverErrorStatus = "Status: 503"
@@ -425,6 +426,21 @@ class RiskService()(implicit executionContext: ExecutionContext)
                     logger.info(s"Getting compliance template ...")
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/list/compliance",
+                      GET,
+                      "",
+                      tokenId
+                    )
+                  }
+                }
+              }
+            } ~
+            path("available_filter") {
+              get {
+                Utils.respondWithWebServerHeaders() {
+                  complete {
+                    logger.info(s"Getting available compliance filters ...")
+                    RestClient.httpRequestWithHeader(
+                      s"${baseClusterUri(tokenId)}/$complianceFilterUrl",
                       GET,
                       "",
                       tokenId

@@ -26,6 +26,10 @@ export interface ComplianceProfileTemplateData {
   list: ComplianceProfileTemplateEntries;
 }
 
+export interface ComplianceAvailableFilters {
+  available_filter: string[];
+}
+
 export interface ComplianceProfileTemplateEntries {
   compliance: ComplianceProfileTemplateEntry[];
 }

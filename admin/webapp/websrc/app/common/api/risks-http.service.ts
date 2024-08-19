@@ -17,6 +17,7 @@ import {
   VulQueryOrderByColumnOption,
   OrderByOption,
   VulQueryScoreTypeOption,
+  ComplianceAvailableFilters,
 } from '@common/types';
 import { PathConstant } from '@common/constants/path.constant';
 import { Observable } from 'rxjs';
@@ -147,6 +148,12 @@ export class RisksHttpService {
   getComplianceProfileTemplate(): Observable<ComplianceProfileTemplateData> {
     return GlobalVariable.http.get<ComplianceProfileTemplateData>(
       PathConstant.COMPLIANCE_TEMPLATE_URL
+    );
+  }
+
+  getAvailableComplianceFilter(): Observable<ComplianceAvailableFilters> {
+    return GlobalVariable.http.get<ComplianceAvailableFilters>(
+      PathConstant.COMPLIANCE_FILTER_URL
     );
   }
 

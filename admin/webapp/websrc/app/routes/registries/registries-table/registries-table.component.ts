@@ -167,7 +167,7 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
     return false;
   }
   get isFedAdmin() {
-    return GlobalVariable.user.token.role === MapConstant.FED_ROLES.FEDADMIN;
+    return this.authUtilsService.getDisplayFlag('multi_cluster');
   }
 
   get isRemote() {

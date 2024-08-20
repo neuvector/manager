@@ -90,14 +90,21 @@ export class ComplianceFilterService {
     ) {
       let comlianceTags = Object.keys(compliance.tags);
       if (comlianceTags && comlianceTags.length > 0) {
-        if (this.advFilter.tags.gdpr)
-          result = result && comlianceTags.includes('GDPR');
-        if (this.advFilter.tags.hipaa)
-          result = result && comlianceTags.includes('HIPAA');
-        if (this.advFilter.tags.nist)
-          result = result && comlianceTags.includes('NIST');
-        if (this.advFilter.tags.pci)
-          result = result && comlianceTags.includes('PCI');
+        let res: string[] = [];
+        if (this.advFilter.tags.pci) {
+          res.push('PCI');
+        }
+        if (this.advFilter.tags.gdpr) {
+          res.push('GDPR');
+        }
+        if (this.advFilter.tags.hipaa) {
+          res.push('HIPAA');
+        }
+        if (this.advFilter.tags.nist) {
+          res.push('NIST');
+        }
+        console.log('selected', res, 'compliance', comlianceTags)
+        return comlianceTags.some(tag => res.includes(tag));
       } else return false;
     }
     if (this.advFilter.scoredType !== 'all') {

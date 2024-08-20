@@ -34,11 +34,15 @@ export interface Cluster2Join {
 
 @Injectable()
 export class MultiClusterService {
+  public clusterName: string = '';
   public clusters: Cluster[] = [];
   public primaryClusterRestVersion: string = '';
   private _clusterSwitchedEvent = new Subject();
   private _clusterRefreshEvent = new Subject();
   private _manageClusterEvent = new Subject();
+  private _clusterNameChangeEvent = new Subject();
+  public onClusterNameChangeEvent$ =
+    this._clusterNameChangeEvent.asObservable();
   public onManageMemberClusterEvent$ = this._manageClusterEvent.asObservable();
   public onClusterSwitchedEvent$ = this._clusterSwitchedEvent.asObservable();
   public onRefreshClustersEvent$ = this._clusterRefreshEvent.asObservable();
@@ -228,5 +232,9 @@ export class MultiClusterService {
 
   dispatchManageMemberEvent() {
     this._manageClusterEvent.next(true);
+  }
+
+  dispatchClusterNameChangeEvent() {
+    this._clusterNameChangeEvent.next(true);
   }
 }

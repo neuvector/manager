@@ -71,17 +71,22 @@ export class ConfigurationComponent
       (GlobalVariable.user.token.role === MapConstant.FED_ROLES.ADMIN &&
         (GlobalVariable.isStandAlone || GlobalVariable.isMember));
     this.settingsService.getConfig().subscribe({
-      next: (value: ConfigV2Response) => {        
+      next: (value: ConfigV2Response) => {
         this.config = {
-        ...value,
+          ...value,
           tls: {
-            enable_tls_verification: value.tls_cfg?.enable_tls_verification ?? true,
-            cacerts: value.tls_cfg?.cacerts?.map((c, i) => ({
-              id: i,
-              context: c
-            }) ?? [])
-          }
-        }
+            enable_tls_verification:
+              value.tls_cfg?.enable_tls_verification ?? true,
+            cacerts: value.tls_cfg?.cacerts?.map(
+              (c, i) =>
+                ({
+                  id: i,
+                  context: c,
+                } ?? [])
+            ),
+          },
+        };
+        this.multiClusterService.clusterName = value.misc.cluster_name;
       },
     });
     this._switchClusterSubscription =

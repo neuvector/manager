@@ -3155,7 +3155,7 @@
       "CERTIFICATE": "Certificate",
       "CERTIFICATE_CONTEXT": "Certificate Context",
       "APPLICABLE_NOTICE": {
-        "HEADER": "The TLS self-signed certificates only be applicable for the following services.",
+        "HEADER": "The TLS self-signed certificates listed on this page can only be used in the following services :",
         "APPLICABLE_SERVICES": {
           "REGISTRY": "Registry Connections",
           "AUTH": "Auth Server Connections (SAML, LDAP and OIDC)",

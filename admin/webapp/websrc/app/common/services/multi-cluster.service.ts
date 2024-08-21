@@ -40,12 +40,14 @@ export class MultiClusterService {
   private _clusterSwitchedEvent = new Subject();
   private _clusterRefreshEvent = new Subject();
   private _manageClusterEvent = new Subject();
+  private _getClustersFinishEvent = new Subject();
   private _clusterNameChangeEvent = new Subject();
   public onClusterNameChangeEvent$ =
     this._clusterNameChangeEvent.asObservable();
   public onManageMemberClusterEvent$ = this._manageClusterEvent.asObservable();
   public onClusterSwitchedEvent$ = this._clusterSwitchedEvent.asObservable();
   public onRefreshClustersEvent$ = this._clusterRefreshEvent.asObservable();
+  public onGetClustersFinishEvent$ = this._getClustersFinishEvent.asObservable();
   private readonly $win;
   private _selectedClusterSubject$ = new BehaviorSubject<Cluster | undefined>(
     undefined
@@ -234,6 +236,10 @@ export class MultiClusterService {
     this._manageClusterEvent.next(true);
   }
 
+  dispatchGetClustersFinishEvent() {
+    this._getClustersFinishEvent.next(true);
+  }
+  
   dispatchClusterNameChangeEvent() {
     this._clusterNameChangeEvent.next(true);
   }

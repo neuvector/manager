@@ -17,6 +17,7 @@ import { SwitchersService } from '@core/switchers/switchers.service';
 import { AuthService } from '@common/services/auth.service';
 import { SummaryService } from '@services/summary.service';
 import { CommonHttpService } from '@common/api/common-http.service';
+import { SettingsService } from '@services/settings.service';
 
 @Component({
   selector: 'app-root',
@@ -36,7 +37,7 @@ export class AppComponent implements OnInit {
     private translatorService: TranslatorService,
     private summaryService: SummaryService,
     private authService: AuthService,
-    private commonHttpService: CommonHttpService
+    private commonHttpService: CommonHttpService,
   ) {
     this.win = GlobalVariable.window;
     this.initTimer = new Date().getTime();
@@ -103,8 +104,12 @@ export class AppComponent implements OnInit {
           GlobalVariable.isSUSESSO = userInfo.is_suse_authenticated;
           GlobalVariable.user.global_permissions =
             userInfo.token.global_permissions;
+          GlobalVariable.user.remote_domain_permissions =
+            userInfo.token.remote_domain_permissions;
           GlobalVariable.user.domain_permissions =
             userInfo.token.domain_permissions;
+          GlobalVariable.user.extra_permissions =
+            userInfo.token.extra_permissions;
           this.translatorService.useLanguage(GlobalVariable.user.token.locale);
           this.localStorage.set(
             GlobalConstant.LOCAL_STORAGE_TOKEN,

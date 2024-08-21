@@ -13,7 +13,7 @@ import { pollUntilResult } from '@common/utils/rxjs.utils';
   styleUrls: ['./saml.component.scss'],
 })
 export class SamlComponent implements OnInit, OnDestroy {
-  private _switchClusterSubscription;
+  private _getClustersFinishSubscription;
   samlError!: string;
   refreshing$ = new Subject();
   samlData!: { domains: string[]; server: ServerGetResponse };
@@ -25,8 +25,8 @@ export class SamlComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._switchClusterSubscription =
-      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
+    this._getClustersFinishSubscription =
+      this.multiClusterService.onGetClustersFinishEvent$.subscribe(data => {
         this.router.navigate(['settings']);
       });
     combineLatest([
@@ -51,8 +51,8 @@ export class SamlComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this._switchClusterSubscription) {
-      this._switchClusterSubscription.unsubscribe();
+    if (this._getClustersFinishSubscription) {
+      this._getClustersFinishSubscription.unsubscribe();
     }
   }
 

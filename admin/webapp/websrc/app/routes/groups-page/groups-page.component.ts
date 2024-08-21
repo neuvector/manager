@@ -2,13 +2,11 @@ import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { GroupsService } from '@services/groups.service';
 import { GroupsComponent } from '@components/groups/groups.component';
-// import { GroupDetailsComponent } from '@components/group-details/group-details.component'
 import { ImportFileModalComponent } from '@components/ui/import-file-modal/import-file-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { PathConstant } from '@common/constants/path.constant';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
-import { MultiClusterService } from '@services/multi-cluster.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -26,14 +24,11 @@ export class GroupsPageComponent implements OnInit {
   public netServicePolicyMode!: string;
   public linkedGroup: string = '';
   @ViewChild(GroupsComponent) groupsView!: GroupsComponent;
-  // @ViewChild(GroupDetailsComponent) groupDetailsView!: GroupDetailsComponent;
-  private _switchClusterSubscription;
 
   constructor(
     private groupsService: GroupsService,
     private dialog: MatDialog,
     private translate: TranslateService,
-    private multiClusterService: MultiClusterService,
     private cd: ChangeDetectorRef,
     private route: ActivatedRoute
   ) {
@@ -45,17 +40,6 @@ export class GroupsPageComponent implements OnInit {
   ngOnInit(): void {
     this.navSource = GlobalConstant.NAV_SOURCE.SELF;
     this.getConfig();
-    //refresh the page when it switched to a remote cluster
-    this._switchClusterSubscription =
-      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
-        this.refresh();
-      });
-  }
-
-  ngOnDestroy(): void {
-    if (this._switchClusterSubscription) {
-      this._switchClusterSubscription.unsubscribe();
-    }
   }
 
   refreshing(isRefresh: boolean) {

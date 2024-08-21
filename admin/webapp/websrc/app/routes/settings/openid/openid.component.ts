@@ -13,10 +13,11 @@ import { pollUntilResult } from '@common/utils/rxjs.utils';
   styleUrls: ['./openid.component.scss'],
 })
 export class OpenidComponent implements OnInit, OnDestroy {
-  private _switchClusterSubscription;
   openidError!: string;
   refreshing$ = new Subject();
   openidData!: { domains: string[]; server: ServerGetResponse };
+
+  private _getClustersFinishSubscription;
 
   constructor(
     private multiClusterService: MultiClusterService,
@@ -25,10 +26,11 @@ export class OpenidComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._switchClusterSubscription =
-      this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
+    this._getClustersFinishSubscription =
+      this.multiClusterService.onGetClustersFinishEvent$.subscribe(() => {
         this.router.navigate(['settings']);
       });
+
     combineLatest([
       this.settingsService.getServer(),
       this.settingsService.getDomain(),
@@ -51,8 +53,8 @@ export class OpenidComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this._switchClusterSubscription) {
-      this._switchClusterSubscription.unsubscribe();
+    if (this._getClustersFinishSubscription) {
+      this._getClustersFinishSubscription.unsubscribe();
     }
   }
   refresh(): void {

@@ -14,7 +14,6 @@ import { ContainersGridComponent } from '@components/containers-grid/containers-
 import { TranslateService } from '@ngx-translate/core';
 import { ContainersService, WorkloadRow } from '@services/containers.service';
 import { NotificationService } from '@services/notification.service';
-import { MultiClusterService } from '@services/multi-cluster.service';
 import { ScanService } from '@services/scan.service';
 import { interval, Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
@@ -29,7 +28,6 @@ import { ActivatedRoute } from '@angular/router';
 export class ContainersComponent implements OnInit, OnDestroy {
   _containersGrid!: ContainersGridComponent;
   linkedContainer: string = '';
-  private switchClusterSubscription;
 
   @ViewChild(ContainersGridComponent) set containersGrid(
     grid: ContainersGridComponent
@@ -73,7 +71,6 @@ export class ContainersComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private authUtils: AuthUtilsService,
     private tr: TranslateService,
-    private multiClusterService: MultiClusterService,
     private cd: ChangeDetectorRef,
     private route: ActivatedRoute
   ) {
@@ -86,19 +83,11 @@ export class ContainersComponent implements OnInit, OnDestroy {
     this.isAutoScanAuthorized = this.authUtils.getDisplayFlag('runtime_scan');
     this.getContainers();
     if (this.isAutoScanAuthorized) this.getScanConfig();
-    //refresh the page when it switched to a remote cluster
-    this.switchClusterSubscription =
-      this.multiClusterService.onClusterSwitchedEvent$.subscribe(data => {
-        this.refresh();
-      });
   }
 
   ngOnDestroy(): void {
     this.stopContainerScan$.next(true);
     this.stopFullScan$.next(true);
-    if (this.switchClusterSubscription) {
-      this.switchClusterSubscription.unsubscribe();
-    }
   }
   refresh(
     cb?: (containers: WorkloadV2[], displayContainers: WorkloadRow[]) => void

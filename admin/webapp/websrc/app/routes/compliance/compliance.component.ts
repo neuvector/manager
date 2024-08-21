@@ -3,23 +3,18 @@ import {
   ViewChild,
   ElementRef,
   OnInit,
-  OnDestroy,
 } from '@angular/core';
 import { ComplianceService } from './compliance.service';
 import { ComplianceCsvService } from './csv-generation/compliance-csv.service';
 import { ComplianceFilterService } from './compliance.filter.service';
 import { MapConstant } from '@common/constants/map.constant';
-import { Subscription } from 'rxjs';
-import { MultiClusterService } from '@services/multi-cluster.service';
-import { ComplianceNIST } from '@common/types';
 
 @Component({
   selector: 'app-compliance',
   templateUrl: './compliance.component.html',
   styleUrls: ['./compliance.component.scss'],
 })
-export class ComplianceComponent implements OnInit, OnDestroy {
-  private _switchClusterSubscription!: Subscription;
+export class ComplianceComponent implements OnInit {
   complianceData$ = this.complianceService.initCompliance();
   masterData: any;
   masterGrids: any[][] = [];
@@ -40,21 +35,9 @@ export class ComplianceComponent implements OnInit, OnDestroy {
     private complianceService: ComplianceService,
     private complianceCsvService: ComplianceCsvService,
     public complianceFilterService: ComplianceFilterService,
-    private multiClusterService: MultiClusterService
   ) {}
 
-  ngOnInit(): void {
-    this._switchClusterSubscription =
-      this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
-        this.refresh();
-      });
-  }
-
-  ngOnDestroy(): void {
-    if (this._switchClusterSubscription) {
-      this._switchClusterSubscription.unsubscribe();
-    }
-  }
+  ngOnInit(): void {}
 
   refresh() {
     this.complianceService.refresh();

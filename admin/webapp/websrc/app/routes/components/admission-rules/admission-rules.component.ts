@@ -16,7 +16,6 @@ import { GlobalVariable } from '@common/variables/global.variable';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { TranslateService } from '@ngx-translate/core';
-import { MultiClusterService } from '@services/multi-cluster.service';
 import { UtilsService } from '@common/utils/app.utils';
 import { NotificationService } from '@services/notification.service';
 import { MapConstant } from '@common/constants/map.constant';
@@ -56,7 +55,6 @@ export class AdmissionRulesComponent implements OnInit {
   private default_action: string = 'deny';
   private w: any;
   private isModalOpen: boolean = false;
-  private switchClusterSubscription;
   isPrinting: boolean = false;
   configAssessmentDialogRef!: MatDialogRef<ConfigurationAssessmentModalComponent>;
   configTestResult: any;
@@ -69,7 +67,6 @@ export class AdmissionRulesComponent implements OnInit {
     private admissionRulesService: AdmissionRulesService,
     private authUtilsService: AuthUtilsService,
     private translate: TranslateService,
-    private multiClusterService: MultiClusterService,
     private notificationService: NotificationService,
     private utils: UtilsService
   ) {
@@ -92,17 +89,6 @@ export class AdmissionRulesComponent implements OnInit {
         ? this.w.innerHeight - 300
         : 0;
     this.refresh();
-    //refresh the page when it switched to a remote cluster
-    this.switchClusterSubscription =
-      this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
-        this.refresh();
-      });
-  }
-
-  ngOnDestroy(): void {
-    if (this.switchClusterSubscription) {
-      this.switchClusterSubscription.unsubscribe();
-    }
   }
 
   onAdmissionRulesSelected = () => {

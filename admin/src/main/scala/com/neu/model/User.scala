@@ -52,6 +52,7 @@ case class UserWrap(
 
 case class SelfWrap(
   global_permissions: Option[Array[Permission]] = None,
+  remote_global_permissions: Option[Array[Permission]] = None,
   domain_permissions: Option[Map[String, Array[Permission]]] = None,
   password_days_until_expire: Option[Int],
   user: User
@@ -81,7 +82,9 @@ case class Token(
   default_password: Boolean,
   modify_password: Boolean,
   role_domains: Option[Map[String, Array[String]]],
+  extra_permissions: Option[Array[Permission]] = None,
   global_permissions: Option[Array[Permission]] = None,
+  remote_global_permissions: Option[Array[Permission]] = None,
   domain_permissions: Option[Map[String, Array[Permission]]] = None
 )
 
@@ -96,7 +99,9 @@ case class TokenNew(
   timeout: Option[Int],
   default_password: Boolean,
   modify_password: Boolean,
+  extra_permissions: Array[Permission],
   global_permissions: Array[Permission],
+  remote_global_permissions: Array[Permission],
   domain_permissions: Map[String, Array[Permission]],
   password_days_until_expire: Option[Int]
 )

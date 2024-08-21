@@ -14,6 +14,8 @@ export interface TokenNew {
   default_password: boolean;
   modify_password: boolean;
   global_permissions: Array;
+  remote_global_permissions: Array;
+  extra_permissions: Array;
   domain_permissions: { [key: string]: Array };
   password_days_until_expire?: number;
 }
@@ -31,6 +33,8 @@ export function isTokenNew(v: any): v is TokenNew {
     ((typeof v['default_password']) === 'boolean') &&
     ((typeof v['modify_password']) === 'boolean') &&
     (v['global_permissions'] && isArray(v['global_permissions'])) &&
+    (v['remote_global_permissions'] && isArray(v['remote_global_permissions'])) &&
+    (v['extra_permissions'] && isArray(v['extra_permissions'])) && 
     ((typeof v['domain_permissions']) == 'object' && Object.keys(v['domain_permissions']).every(key => ((typeof key) === 'string') && (v['domain_permissions'][key] && isArray(v['domain_permissions'][key])))) &&
     (!v['password_days_until_expire'] || ((typeof v['password_days_until_expire']) === 'number'))
   );

@@ -18,7 +18,6 @@ import { AddEditRuleModalComponent } from '@routes/waf-sensors/partial/add-edit-
 import { UtilsService } from '@common/utils/app.utils';
 import { saveAs } from 'file-saver';
 import { ImportFileModalComponent } from '@components/ui/import-file-modal/import-file-modal.component';
-import { MultiClusterService } from '@services/multi-cluster.service';
 import { finalize } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
@@ -49,7 +48,6 @@ export class WafSensorsComponent implements OnInit {
   filtered: boolean = false;
   context = { componentParent: this };
   $win: any;
-  private _switchClusterSubscription;
   serverErrorMessage: SafeHtml = '';
 
   get wafSensorsCount() {
@@ -62,7 +60,6 @@ export class WafSensorsComponent implements OnInit {
     private dialog: MatDialog,
     private authUtilsService: AuthUtilsService,
     private utilsService: UtilsService,
-    private multiClusterService: MultiClusterService,
     private notificationService: NotificationService,
     private translate: TranslateService,
     private domSanitizer: DomSanitizer
@@ -86,18 +83,6 @@ export class WafSensorsComponent implements OnInit {
     this.gridOptions4Rules.onSelectionChanged = this.onSelectionChanged4Rule;
 
     this.refresh();
-
-    //refresh the page when it switched to a remote cluster
-    this._switchClusterSubscription =
-      this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
-        this.refresh();
-      });
-  }
-
-  ngOnDestroy(): void {
-    if (this._switchClusterSubscription) {
-      this._switchClusterSubscription.unsubscribe();
-    }
   }
 
   refresh = (index: number = 0) => {

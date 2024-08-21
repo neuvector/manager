@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import { UtilsService } from '@common/utils/app.utils';
 import { MapConstant } from '@common/constants/map.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { Permission } from '@common/types/others/permission';
@@ -10,25 +8,25 @@ import { groupBy } from '@common/utils/common.utils';
 export class AuthUtilsService {
   private tokenBakeup: string;
   private permissionMap: any;
-  private utils: UtilsService;
   public userPermission: any;
 
-  constructor(utils: UtilsService) {
+  constructor() {
     this.tokenBakeup = '';
     this.permissionMap = MapConstant.PERMISSION_MAP;
     this.userPermission = {
       globalPermissions: null,
+      remoteGlobalPermissions: null,
       ownedPermissions: null,
       isNamespaceUser: false,
     };
   }
 
   private parseGlobalPermission(g_permissions) {
-    return g_permissions.map(permission => {
+    return g_permissions?.map(permission => {
       return `${permission.id}_${
         permission.write ? 'w' : permission.read ? 'r' : ''
       }`;
-    });
+    }) ?? [];
   }
 
   private parseDomainPermission(d_permission: Map<string, Array<Permission>>) {
@@ -88,16 +86,22 @@ export class AuthUtilsService {
       let globalPermissions = this.parseGlobalPermission(
         GlobalVariable.user.global_permissions
       );
+      let remoteGlobalPermissions = this.parseGlobalPermission(
+        GlobalVariable.user.remote_global_permissions
+      );
       let domainPermissions = this.parseDomainPermission(
         GlobalVariable.user.domain_permissions
       );
+      
       GlobalVariable.namespaces4NamespaceUser =
         this.getNamespaces4NamespaceUser(
           GlobalVariable.user.domain_permissions
         );
+
       this.userPermission.isNamespaceUser =
         globalPermissions.length === 0 && domainPermissions.length > 0;
       this.userPermission.globalPermissions = globalPermissions;
+      this.userPermission.remoteGlobalPermissions = remoteGlobalPermissions;
       this.userPermission.ownedPermissions =
         domainPermissions.concat(globalPermissions);
       this.tokenBakeup = GlobalVariable.user.token.token;
@@ -107,20 +111,31 @@ export class AuthUtilsService {
 
   getRowBasedPermission(domain, neededPermission) {
     let gPermissions = GlobalVariable.user.global_permissions;
+    let rgPermissions = GlobalVariable.user.remote_global_permissions;
     let dPermissions = GlobalVariable.user.domain_permissions;
     let result = '';
-    for (let gPermission of gPermissions) {
-      if (neededPermission === gPermission.id) {
-        result = gPermission.write ? 'w' : 'r';
-        break;
-      }
-    }
-    if (result === 'w') return result;
-    if (dPermissions[domain]) {
-      for (let dPermission of dPermissions[domain]) {
-        if (neededPermission === dPermission.id) {
-          result = dPermission.write ? 'w' : 'r';
+
+    if(GlobalVariable.isRemote) {
+      for (let rgPermission of rgPermissions) {
+        if (neededPermission === rgPermission.id) {
+          result = rgPermission.write ? 'w' : 'r';
           break;
+        }
+      }
+    } else {
+      for (let gPermission of gPermissions) {
+        if (neededPermission === gPermission.id) {
+          result = gPermission.write ? 'w' : 'r';
+          break;
+        }
+      }
+      if (result === 'w') return result;
+      if (dPermissions[domain]) {
+        for (let dPermission of dPermissions[domain]) {
+          if (neededPermission === dPermission.id) {
+            result = dPermission.write ? 'w' : 'r';
+            break;
+          }
         }
       }
     }
@@ -129,7 +144,28 @@ export class AuthUtilsService {
 
   getDisplayFlag(displayControl) {
     if (GlobalVariable.user) {
+      let ownedPermissions;
+
+      if(!GlobalVariable.isRemote || this.isFedPermission(this.getCacheUserPermission().global_permissions)) {
+        ownedPermissions = this.getCacheUserPermission().ownedPermissions;
+      } else {
+        ownedPermissions = this.getCacheUserPermission().remoteGlobalPermissions;
+      }
+
+      if (ownedPermissions.length > 0) {
+        return ownedPermissions
+          .map(permission => {
+            return this.permissionMap[displayControl].indexOf(permission) > -1;
+          })
+          .reduce((res, curr) => (res = res || curr));
+      }
+    }
+  }
+
+  getGlobalPermissionDisplayFlag(displayControl) {
+    if (GlobalVariable.user) {
       let ownedPermissions = this.getCacheUserPermission().ownedPermissions;
+
       if (ownedPermissions.length > 0) {
         return ownedPermissions
           .map(permission => {
@@ -151,10 +187,11 @@ export class AuthUtilsService {
     );
     if (GlobalVariable.user) {
       let ownedPermissions = [];
-      if (isWithDomainPermission) {
-        ownedPermissions = this.getCacheUserPermission().ownedPermissions;
+
+      if (!GlobalVariable.isRemote || this.isFedPermission(this.getCacheUserPermission().global_permissions)) {
+        ownedPermissions = isWithDomainPermission ? this.getCacheUserPermission().ownedPermissions : this.getCacheUserPermission().globalPermissions;
       } else {
-        ownedPermissions = this.getCacheUserPermission().globalPermissions;
+        ownedPermissions = this.getCacheUserPermission().remoteGlobalPermissions;
       }
       console.log(
         'ownedPermissions:',
@@ -176,5 +213,9 @@ export class AuthUtilsService {
       tokenInfo.extra_permissions && Array.isArray(tokenInfo.extra_permissions) && tokenInfo.extra_permissions.length > 0 ||
       tokenInfo.extra_permissions_domains && Object.keys(tokenInfo.extra_permissions_domains).length > 0
     );
+  }
+
+  private isFedPermission(permissions: any): boolean {
+    return permissions?.find(p => p.id === 'fed');
   }
 }

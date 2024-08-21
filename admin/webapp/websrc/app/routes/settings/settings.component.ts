@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { GlobalVariable } from '@common/variables/global.variable';
+import { MultiClusterService } from '@services/multi-cluster.service';
 
 @Component({
   selector: 'app-settings',
@@ -12,11 +13,13 @@ export class SettingsComponent implements OnInit {
   isConfigAuth!: boolean;
   isAuthenticationAuth!: boolean;
   isNamespaceUser!: boolean;
+
+  
   get isWorker() {
     return GlobalVariable.isRemote;
   }
 
-  constructor(private authUtils: AuthUtilsService) {}
+  constructor(private authUtils: AuthUtilsService, private multiClusterService: MultiClusterService) {}
 
   breakPoints(): void {
     switch (true) {
@@ -33,6 +36,14 @@ export class SettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.breakPoints();
+    this.getParameters();
+
+    this.multiClusterService.onGetClustersFinishEvent$.subscribe(() => {
+      this.getParameters();
+    });
+  }
+
+  getParameters(): void {
     this.isConfigAuth = this.authUtils.getDisplayFlag('read_config');
     this.isAuthenticationAuth =
       this.authUtils.getDisplayFlag('read_auth_server');

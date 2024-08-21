@@ -11,7 +11,6 @@ import { NotificationService } from '@services/notification.service';
 import { ScanService } from '@services/scan.service';
 import { interval, Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
-import { MultiClusterService } from '@services/multi-cluster.service';
 import { GlobalVariable } from '@common/variables/global.variable';
 
 @Component({
@@ -44,7 +43,6 @@ export class NodesComponent implements OnInit {
   stopFullScan$ = new Subject();
   stopNodeScan$ = new Subject();
   selectedNode!: Host;
-  private _switchClusterSubscription;
 
   get auto_scan() {
     return this.autoScan.value;
@@ -60,7 +58,6 @@ export class NodesComponent implements OnInit {
     private authUtils: AuthUtilsService,
     private tr: TranslateService,
     private cd: ChangeDetectorRef,
-    private multiClusterService: MultiClusterService
   ) {}
 
   ngOnInit(): void {
@@ -69,20 +66,11 @@ export class NodesComponent implements OnInit {
     if (this.isAutoScanAuthorized) {
       this.getScanConfig();
     }
-
-    //refresh the page when it switched to a remote cluster
-    this._switchClusterSubscription =
-      this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
-        this.refresh();
-      });
   }
 
   ngOnDestroy(): void {
     this.stopNodeScan$.next(true);
     this.stopFullScan$.next(true);
-    if (this._switchClusterSubscription) {
-      this._switchClusterSubscription.unsubscribe();
-    }
   }
 
   refresh(cb?: (nodes: Host[]) => void): void {

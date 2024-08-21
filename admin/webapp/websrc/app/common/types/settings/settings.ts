@@ -45,6 +45,8 @@ export interface Self {
   email: string;
   fullname: string;
   global_permissions: object[];
+  remote_global_permissions: object[];
+  extra_permissions: object[];
   locale: string;
   modify_password: boolean;
   password_days_until_expire: number;

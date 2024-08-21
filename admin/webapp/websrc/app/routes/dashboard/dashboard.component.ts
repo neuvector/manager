@@ -7,8 +7,7 @@ import {
   InternalSystemInfo,
 } from '@common/types';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MultiClusterService } from '@services/multi-cluster.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { AssetsHttpService } from '@common/api/assets-http.service';
 import { ReportByNamespaceModalComponent } from './report-by-namespace-modal/report-by-namespace-modal.component';
 import { isAuthorized } from '@common/utils/common.utils';
@@ -35,13 +34,9 @@ export class DashboardComponent implements OnInit {
   securityEvents: any;
   details: any;
 
-  private _switchClusterSubscriber;
-
   constructor(
-    private router: Router,
     private activatedRoute: ActivatedRoute,
     private dashboardService: DashboardService,
-    private multiClusterService: MultiClusterService,
     private assetsHttpService: AssetsHttpService,
     private summaryService: SummaryService,
     private dialog: MatDialog
@@ -70,22 +65,9 @@ export class DashboardComponent implements OnInit {
     if (!GlobalVariable.hasInitializedSummary) {
       this.getSummary();
     }
-
-    this._switchClusterSubscriber =
-      this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
-        const currentUrl = this.router.url;
-        this.router
-          .navigateByUrl('/', { skipLocationChange: true })
-          .then(() => {
-            this.router.navigate([currentUrl]);
-          });
-      });
   }
 
   ngOnDestroy(): void {
-    if (this._switchClusterSubscriber) {
-      this._switchClusterSubscriber.unsubscribe();
-    }
     GlobalVariable.hasInitializedSummary = false;
   }
 

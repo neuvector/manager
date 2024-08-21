@@ -1,13 +1,11 @@
 import {
   ChangeDetectorRef,
   Component,
-  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
 import { Domain, ErrorResponse } from '@common/types';
 import { NamespacesGridComponent } from '@components/namespaces-grid/namespaces-grid.component';
-import { MultiClusterService } from '@services/multi-cluster.service';
 import { NamespacesService } from '@services/namespaces.service';
 import { Subject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
@@ -17,7 +15,7 @@ import { finalize } from 'rxjs/operators';
   templateUrl: './namespaces.component.html',
   styleUrls: ['./namespaces.component.scss'],
 })
-export class NamespacesComponent implements OnInit, OnDestroy {
+export class NamespacesComponent implements OnInit {
   _namespacesGrid!: NamespacesGridComponent;
   @ViewChild(NamespacesGridComponent) set namespacesGrid(
     grid: NamespacesGridComponent
@@ -36,28 +34,14 @@ export class NamespacesComponent implements OnInit, OnDestroy {
   error!: string;
   loaded = false;
   selectedNamespace!: Domain;
-  private _switchClusterSubscription;
 
   constructor(
     private namespacesService: NamespacesService,
-    private multiClusterService: MultiClusterService,
     private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.getNamespaces();
-
-    //refresh the page when it switched to a remote cluster
-    this._switchClusterSubscription =
-      this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
-        this.refresh();
-      });
-  }
-
-  ngOnDestroy(): void {
-    if (this._switchClusterSubscription) {
-      this._switchClusterSubscription.unsubscribe();
-    }
   }
 
   refresh(): void {

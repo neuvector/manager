@@ -43,7 +43,9 @@ import { RisksHttpService } from '@common/api/risks-http.service';
 import { RisksViewReportModule } from '@components/security-risk-printable-report/risks-view-report/risks-view-report.module';
 import { AssetsViewReportModule } from '@components/security-risk-printable-report/assets-view-report/assets-view-report.module';
 import { RiskAssetsLegendModule } from '@components/ui/risk-assets-legend/risk-assets-legend.module';
-
+import { ComplianceItemsDetailsComponent } from './compliance-items/compliance-items-details/compliance-items-details.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { ComplianceRegulationGridModule } from '@components/compliance-regulation-grid/compliance-regulation-grid.module';
 
 const routes: Routes = [{ path: '', component: ComplianceComponent }];
 
@@ -59,6 +61,7 @@ const routes: Routes = [{ path: '', component: ComplianceComponent }];
     ComplianceItemsTableStatusCellComponent,
     ComplianceItemsChartsComponent,
     ComplianceItemsTableFilterComponent,
+    ComplianceItemsDetailsComponent,
   ],
   imports: [
     CommonModule,
@@ -80,8 +83,10 @@ const routes: Routes = [{ path: '', component: ComplianceComponent }];
     MatInputModule,
     MatSelectModule,
     MatRadioModule,
+    MatTabsModule,
     NodeBriefModule,
     ContainerBriefModule,
+    ComplianceRegulationGridModule,
     MatMenuModule,
     MatChipsModule,
     MatAutocompleteModule,

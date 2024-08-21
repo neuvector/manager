@@ -1467,8 +1467,8 @@
         "COMPLIANCE_LIST": "Compliance List",
         "COMPLIANCE_CNT": "Compliance Count",
         "SUBCONTROL": "CIS Sub-Control",
-        "CONTROL_ID": "NIST Control Identifier",
-        "NIST_TITLE": "NIST Title"
+        "CONTROL_ID": "Control Identifier",
+        "TITLE": "Title"
       },
       "data": {
         "PLATFORMS": "Platforms",

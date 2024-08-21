@@ -64,6 +64,10 @@ def setting(data, id_or_name):
     except client.ObjectNotFound:
         return
 
+    f_log = "log_level"
+    fo_log = output.key_output(f_log)
+    conf[fo_log] = conf.get(f_log, "")
+
     f = "debug"
     fo = output.key_output(f)
     if f in conf and conf[f]:
@@ -71,7 +75,7 @@ def setting(data, id_or_name):
     else:
         conf[fo] = ""
 
-    columns = ("debug",)
+    columns = ("log_level", "debug")
     output.show(columns, conf)
 
 
@@ -137,6 +141,23 @@ def debug(data, category):
     for c in s:
         l.append(c)
     conf["debug"] = l
+
+    data.client.config("controller", ctrler["id"], {"config": conf})
+
+
+@set_controller.command("log_level")
+@click.argument('level',
+                type=click.Choice(
+                    ['error', 'warn', 'info', 'debug'])
+                )
+@click.pass_obj
+def set_controller_log_level(data, level):
+    """Configure controller log level."""
+    ctrler = utils.get_managed_object(data.client, "controller", "controller", data.id_or_name)
+    if not ctrler:
+        return
+
+    conf = {"log_level": level}
 
     data.client.config("controller", ctrler["id"], {"config": conf})
 

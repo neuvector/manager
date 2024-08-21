@@ -184,6 +184,10 @@ def setting(data, id_or_name):
     except client.ObjectNotFound:
         return
 
+    f_log = "log_level"
+    fo_log = output.key_output(f_log)
+    conf[fo_log] = conf.get(f_log, "")
+
     f = "debug"
     fo = output.key_output(f)
     if f in conf and conf[f]:
@@ -191,7 +195,7 @@ def setting(data, id_or_name):
     else:
         conf[fo] = ""
 
-    columns = ("debug",)
+    columns = ("log_level", "debug")
     output.show(columns, conf)
 
 
@@ -341,19 +345,19 @@ def set_enforcer_kvcctl(data, disable):
     data.client.config("enforcer", enforcer["id"], {"config": conf})
 
 
-@set_enforcer.command("syslog")
-@click.option('--level',
-              type=click.Choice(
-                  ['panic', 'fatal', 'error', 'warn', 'info', 'debug', 'trace'])
-              )
+@set_enforcer.command("log_level")
+@click.argument('level',
+                type=click.Choice(
+                    ['error', 'warn', 'info', 'debug'])
+                )
 @click.pass_obj
-def set_enforcer_syslogLevel(data, level):
-    """Configure enforcer syslog level."""
+def set_enforcer_log_level(data, level):
+    """Configure enforcer log level."""
     enforcer = utils.get_managed_object(data.client, "enforcer", "enforcer", data.id_or_name)
     if not enforcer:
         return
 
-    conf = {"syslog_level": level}
+    conf = {"log_level": level}
 
     data.client.config("enforcer", enforcer["id"], {"config": conf})
 

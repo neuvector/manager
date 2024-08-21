@@ -66,6 +66,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private _clusterSwitchedSubScription;
   private _multiClusterSubScription;
   private _getRebrandCustomValuesSubscription;
+  private _clusterNameSubScription;
   public isAuthReadConfig: boolean = false;
 
   @ViewChild('fsbutton', { static: true }) fsbutton;
@@ -180,6 +181,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.multiClusterService.onManageMemberClusterEvent$.subscribe(() => {
         this.initMultiClusters();
       });
+
+    this._clusterNameSubScription =
+      this.multiClusterService.onClusterNameChangeEvent$.subscribe(data => {
+        this.clusterName = this.multiClusterService.clusterName;
+      });
   }
 
   ngOnDestroy() {
@@ -193,6 +199,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     if (this._getRebrandCustomValuesSubscription) {
       this._getRebrandCustomValuesSubscription.unsubscribe();
+    }
+    if (this._clusterNameSubScription) {
+      this._clusterNameSubScription.unsubscribe();
     }
   }
 

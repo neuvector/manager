@@ -33,6 +33,7 @@ import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { MapConstant } from '@common/constants/map.constant';
 import { ConfigHttpService } from '@common/api/config-http.service';
+import { AuthUtilsService } from '@common/utils/auth.utils';
 
 @Component({
   selector: 'app-add-registry-dialog',
@@ -48,7 +49,7 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
   options: FormlyFormOptions = {
     formState: {
       isFedAdmin:
-        GlobalVariable.user.token.role === MapConstant.FED_ROLES.FEDADMIN,
+        this.authUtilsService.getDisplayFlag('multi_cluster'),
       isMaster: GlobalVariable.isMaster,
       isProxyEnabled: false,
     },
@@ -66,7 +67,8 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
     private registriesService: RegistriesService,
     private registriesCommunicationService: RegistriesCommunicationService,
     private notificationService: NotificationService,
-    private configHttpService: ConfigHttpService
+    private configHttpService: ConfigHttpService,
+    private authUtilsService: AuthUtilsService,
   ) {}
 
   submit(): void {

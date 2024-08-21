@@ -146,7 +146,7 @@ export class AuthUtilsService {
     if (GlobalVariable.user) {
       let ownedPermissions;
 
-      if(!GlobalVariable.isRemote || this.isFedPermission()) {
+      if(!GlobalVariable.isRemote || this.isFedPermission(this.getCacheUserPermission().global_permissions)) {
         ownedPermissions = this.getCacheUserPermission().ownedPermissions;
       } else {
         ownedPermissions = this.getCacheUserPermission().remoteGlobalPermissions;
@@ -188,7 +188,7 @@ export class AuthUtilsService {
     if (GlobalVariable.user) {
       let ownedPermissions = [];
 
-      if (!GlobalVariable.isRemote || this.isFedPermission()) {
+      if (!GlobalVariable.isRemote || this.isFedPermission(this.getCacheUserPermission().global_permissions)) {
         ownedPermissions = isWithDomainPermission ? this.getCacheUserPermission().ownedPermissions : this.getCacheUserPermission().globalPermissions;
       } else {
         ownedPermissions = this.getCacheUserPermission().remoteGlobalPermissions;
@@ -215,8 +215,7 @@ export class AuthUtilsService {
     );
   }
 
-  private isFedPermission(): boolean {
-    const role = GlobalVariable.user.token.role;
-    return role && (role === MapConstant.FED_ROLES.FEDADMIN || role === MapConstant.FED_ROLES.FEDREADER);
+  private isFedPermission(permissions: any): boolean {
+    return permissions?.find(p => p.id === 'fed');
   }
 }

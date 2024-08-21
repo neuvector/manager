@@ -23,6 +23,7 @@ import { ConfigFormConfig } from './config-form-config';
 import { OtherWebhookType } from './config-form-config/constants';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ConfigV2Vo } from '@common/types/settings/config-vo';
+import { MultiClusterService } from '@services/multi-cluster.service';
 
 @Component({
   selector: 'app-config-form',
@@ -96,6 +97,7 @@ export class ConfigFormComponent implements OnInit {
 
   constructor(
     private settingsService: SettingsService,
+    private multiClusterService: MultiClusterService,
     private utils: UtilsService,
     private tr: TranslateService,
     private domSanitizer: DomSanitizer,
@@ -145,6 +147,14 @@ export class ConfigFormComponent implements OnInit {
       .pipe(finalize(() => (this.submittingForm = false)))
       .subscribe({
         complete: () => {
+          if (
+            this._config.misc.cluster_name !==
+            this.multiClusterService.clusterName
+          ) {
+            this.multiClusterService.clusterName =
+              this._config.misc.cluster_name;
+            this.multiClusterService.dispatchClusterNameChangeEvent();
+          }
           this.notificationService.open(this.tr.instant('setting.SUBMIT_OK'));
           this.configOptions.resetModel?.(this._config);
           setTimeout(() => this.configOptions.resetModel?.(this._config));

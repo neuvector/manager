@@ -266,7 +266,7 @@ export class ComplianceProfileTemplatesTableComponent
       if (this.nist) {
         res.push('NIST');
       }
-      return node.data.tags.some(tag => res.includes(tag));
+      return node.data.tags?.some(tag => res.includes(tag));
     }
   }
 

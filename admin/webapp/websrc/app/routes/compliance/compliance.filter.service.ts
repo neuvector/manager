@@ -88,15 +88,23 @@ export class ComplianceFilterService {
       this.advFilter.tags.nist ||
       this.advFilter.tags.pci
     ) {
-      if (compliance.tags && compliance.tags.length > 0) {
-        if (this.advFilter.tags.gdpr)
-          result = result && compliance.tags.includes('GDPR');
-        if (this.advFilter.tags.hipaa)
-          result = result && compliance.tags.includes('HIPAA');
-        if (this.advFilter.tags.nist)
-          result = result && compliance.tags.includes('NIST');
-        if (this.advFilter.tags.pci)
-          result = result && compliance.tags.includes('PCI');
+      let comlianceTags = Object.keys(compliance.tags);
+      if (comlianceTags && comlianceTags.length > 0) {
+        let res: string[] = [];
+        if (this.advFilter.tags.pci) {
+          res.push('PCI');
+        }
+        if (this.advFilter.tags.gdpr) {
+          res.push('GDPR');
+        }
+        if (this.advFilter.tags.hipaa) {
+          res.push('HIPAA');
+        }
+        if (this.advFilter.tags.nist) {
+          res.push('NIST');
+        }
+        console.log('selected', res, 'compliance', comlianceTags)
+        return comlianceTags.some(tag => res.includes(tag));
       } else return false;
     }
     if (this.advFilter.scoredType !== 'all') {

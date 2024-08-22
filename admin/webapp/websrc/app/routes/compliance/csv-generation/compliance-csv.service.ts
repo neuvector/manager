@@ -4,7 +4,7 @@ import { MapConstant } from '@common/constants/map.constant';
 import { UtilsService } from '@common/utils/app.utils';
 import { arrayToCsv } from '@common/utils/common.utils';
 import { ComplianceFilterService } from '../compliance.filter.service';
-import { Compliance, ComplianceNIST } from '@common/types';
+import { Compliance, ComplianceNIST, ComplianceTagData } from '@common/types';
 import { ComplianceService } from '../compliance.service';
 
 @Injectable()
@@ -15,6 +15,35 @@ export class ComplianceCsvService {
     private complianceService: ComplianceService
   ) {}
 
+  downloadRegulationCsv(data: {
+    content: ComplianceTagData[];
+    type: string;
+    name: string;
+  }) {
+    let tags4Csv = [];
+    const prepareEntryData = (tag: ComplianceTagData) => {
+      tag.description = `${tag.description.replace(/\"/g, "'")}`;
+      tag.title = `${tag.title.replace(/\"/g, "'")}`;
+      return tag;
+    };
+
+    data.content.forEach(tag => {
+      let entryData = prepareEntryData(JSON.parse(JSON.stringify(tag)));
+      tags4Csv = tags4Csv.concat({
+        cis_subcontrol: entryData.CIS_Sub_Control,
+        description: entryData.description,
+        id: entryData.id,
+        title: entryData.title,
+      } as any);
+    });
+    let csv = arrayToCsv(tags4Csv);
+    let blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    let filename = `${data.name}_${
+      data.type
+    }_${this.utilsService.parseDatetimeStr(new Date())}.csv`;
+    saveAs(blob, filename);
+  }
+
   downloadCsv(compEntry?: Compliance) {
     let compliance4Csv = [];
     const prepareEntryData = compliance => {
@@ -23,8 +52,12 @@ export class ComplianceCsvService {
         (acc, curr) => acc + curr.display_name + ' ',
         ''
       );
-      
-      if (compliance.filteredImages && Array.isArray(compliance.filteredImages)) {
+      compliance.tags = Object.keys(compliance.tags).join(', ');
+
+      if (
+        compliance.filteredImages &&
+        Array.isArray(compliance.filteredImages)
+      ) {
         compliance.images = compliance.filteredImages.reduce(
           (acc, curr) => acc + curr.display_name + ' ',
           ''
@@ -125,7 +158,7 @@ export class ComplianceCsvService {
           nist_control_id: i === 0 ? complianceNIST?.control_id : '',
           nist_title: i === 0 ? complianceNIST?.title : '',
           scored: i === 0 ? entryData.scored : '',
-          tags: i === 0 ? entryData.tags : '',
+          tags: i === 0 ? Object.keys(entryData.tags).join(', ') : '',
           type: i === 0 ? entryData.type : '',
           platforms: i > platformList.length - 1 ? '' : platformList[i],
           nodes: i > nodeList.length - 1 ? '' : nodeList[i],

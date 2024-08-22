@@ -73,14 +73,21 @@
             <ng-template
               *ngTemplateOutlet="
                 complianceRegulationButton;
-                context: { content: tag.value, type: tag.key }
+                context: {
+                  name: selectedCompliance.name,
+                  content: tag.value,
+                  type: tag.key
+                }
               "></ng-template>
           </ng-container>
           <ng-template #emptyRegulation>
             <ng-template
               *ngTemplateOutlet="
                 complianceRegulationSpan;
-                context: { content: tag.value, type: tag.key }
+                context: {
+                  content: tag.value,
+                  type: tag.key
+                }
               "></ng-template>
           </ng-template>
         </ng-container>
@@ -98,9 +105,13 @@
   </span>
 </ng-template>
 
-<ng-template #complianceRegulationButton let-content="content" let-type="type">
+<ng-template
+  #complianceRegulationButton
+  let-name="name"
+  let-content="content"
+  let-type="type">
   <button
-    (click)="openRegulation(type, content)"
+    (click)="openRegulation(type, content, name)"
     [class]="getComplianceTagClass(type)"
     [style]="getComplianceTagStyle(type)"
     class="border-0 badge ml-0 mr-2 mb-2 d-inline-flex justify-content-center align-items-center">

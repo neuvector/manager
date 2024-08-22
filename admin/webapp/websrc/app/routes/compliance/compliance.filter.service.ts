@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Compliance } from '@common/types';
+import { Compliance, ComplianceAvailableFilters } from '@common/types';
 import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -60,6 +60,8 @@ export class ComplianceFilterService {
     this.filteredSubject$.next(this.isAdvFilterOn() || this._filtered);
   }
 
+  availableFilters!: ComplianceAvailableFilters;
+
   resetFilter(filter?) {
     this._advFilter = filter ? filter : this.initAdvFilter();
     this.filteredSubject$.next(!!filter);
@@ -83,27 +85,14 @@ export class ComplianceFilterService {
         result = result && compliance.category !== 'image';
     }
     if (
-      this.advFilter.tags.gdpr ||
-      this.advFilter.tags.hipaa ||
-      this.advFilter.tags.nist ||
-      this.advFilter.tags.pci
+      Object.keys(this.advFilter.tags).some(tag => this.advFilter.tags[tag])
     ) {
       let comlianceTags = Object.keys(compliance.tags);
       if (comlianceTags && comlianceTags.length > 0) {
-        let res: string[] = [];
-        if (this.advFilter.tags.pci) {
-          res.push('PCI');
-        }
-        if (this.advFilter.tags.gdpr) {
-          res.push('GDPR');
-        }
-        if (this.advFilter.tags.hipaa) {
-          res.push('HIPAA');
-        }
-        if (this.advFilter.tags.nist) {
-          res.push('NIST');
-        }
-        console.log('selected', res, 'compliance', comlianceTags)
+        let res = Object.keys(this.advFilter.tags).filter(
+          filter => this.advFilter.tags[filter]
+        );
+        console.log('selected', res, 'compliance', comlianceTags);
         return comlianceTags.some(tag => res.includes(tag));
       } else return false;
     }
@@ -237,10 +226,9 @@ export class ComplianceFilterService {
       !this._advFilter.category.docker ||
       !this._advFilter.category.kubernetes ||
       !this._advFilter.category.image ||
-      this._advFilter.tags.gdpr ||
-      this._advFilter.tags.hipaa ||
-      this._advFilter.tags.nist ||
-      this._advFilter.tags.pci ||
+      Object.keys(this._advFilter.tags).some(
+        filter => !!this._advFilter.tags[filter]
+      ) ||
       this._advFilter.selectedDomains.length > 0 ||
       !!this._advFilter.serviceName ||
       !!this._advFilter.imageName ||
@@ -303,12 +291,17 @@ export class ComplianceFilterService {
         custom: true,
         image: true,
       },
-      tags: {
-        gdpr: false,
-        hipaa: false,
-        nist: false,
-        pci: false,
-      },
+      tags: this.availableFilters
+        ? this.availableFilters.available_filter.reduce(
+            (acc, curr) => ({ ...acc, [curr]: false }),
+            {}
+          )
+        : {
+            GDPR: false,
+            HIPAA: false,
+            NIST: false,
+            PCI: false,
+          },
       scoredType: 'all',
       profileType: 'all',
       matchType4Ns: this.matchTypes[0],

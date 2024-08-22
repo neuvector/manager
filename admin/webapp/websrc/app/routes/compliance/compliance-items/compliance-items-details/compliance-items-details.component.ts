@@ -109,7 +109,7 @@ export class ComplianceItemsDetailsComponent implements OnDestroy {
       .subscribe(() => (this.openDialog = false));
   }
 
-  openRegulation(type: string, content: ComplianceTagData[]) {
+  openRegulation(type: string, content: ComplianceTagData[], name: string) {
     console.log(content);
     this.openDialog = true;
     this.currentDialog = this.dialog.open(
@@ -118,7 +118,7 @@ export class ComplianceItemsDetailsComponent implements OnDestroy {
         width: '800px',
         position: { left: '25px', top: '130px' },
         hasBackdrop: false,
-        data: { type, content },
+        data: { type, content, name },
       }
     );
     this.currentDialog

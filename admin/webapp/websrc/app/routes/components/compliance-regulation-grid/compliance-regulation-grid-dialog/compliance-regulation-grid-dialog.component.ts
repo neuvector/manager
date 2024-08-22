@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ComplianceCsvService } from '@routes/compliance/csv-generation/compliance-csv.service';
 
 @Component({
   selector: 'app-compliance-regulation-grid-dialog',
@@ -9,10 +10,15 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 export class ComplianceRegulationGridDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<ComplianceRegulationGridDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private complianceCsvService: ComplianceCsvService
   ) {}
 
   onNoClick(): void {
     this.dialogRef.close();
+  }
+
+  downloadCsv(): void {
+    this.complianceCsvService.downloadRegulationCsv(this.data);
   }
 }

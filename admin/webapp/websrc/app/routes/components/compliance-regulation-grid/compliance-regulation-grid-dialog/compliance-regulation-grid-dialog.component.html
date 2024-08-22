@@ -7,12 +7,20 @@
   <div class="d-flex align-items-center justify-content-center">
     <h3 class="d-block">{{ data.type }}</h3>
   </div>
-  <button
-    aria-label="Close icon button"
-    class="d-flex align-items-center justify-content-center"
-    mat-icon-button>
-    <i (click)="onNoClick()" class="eos-icons">close</i>
-  </button>
+  <div class="d-flex align-items-center justify-content-center">
+    <button
+      (click)="downloadCsv()"
+      aria-label="Download CSV icon button"
+      mat-icon-button>
+      <i class="eos-icons">download</i>
+    </button>
+    <button
+      (click)="onNoClick()"
+      aria-label="Close icon button"
+      mat-icon-button>
+      <i class="eos-icons">close</i>
+    </button>
+  </div>
 </div>
 <app-compliance-regulation-grid
   [rowData]="data.content"></app-compliance-regulation-grid>

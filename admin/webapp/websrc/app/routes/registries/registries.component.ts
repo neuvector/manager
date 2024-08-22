@@ -4,6 +4,7 @@ import { catchError, map } from 'rxjs/operators';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { AuthUtilsService } from '@common/utils/auth.utils';
 
 @Component({
   selector: 'app-registries',
@@ -12,13 +13,16 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class RegistriesComponent implements OnInit {
   error: unknown;
+  isVulAuthorized: Boolean;
   registries$ = this.registriesCommunicationService.registries$.pipe(
     map((res) => {
       const updatedSummaries = res.summarys.map(summary => ({
         ...summary,
         use_proxy: !summary.ignore_proxy,
       }));
-      if (res.summarys && res.summarys.length > 0) {
+      this.isVulAuthorized =
+        this.authUtilsService.getDisplayFlag('vuls_profile');
+      if (res.summarys && res.summarys.length > 0 && this.isVulAuthorized) {
         updatedSummaries.push(
           {
             "auth_token": "",
@@ -76,6 +80,7 @@ export class RegistriesComponent implements OnInit {
   constructor(
     private registriesCommunicationService: RegistriesCommunicationService,
     private multiClusterService: MultiClusterService,
+    private authUtilsService: AuthUtilsService,
     private route: ActivatedRoute,
     private tr: TranslateService,
   ) {

@@ -1819,3 +1819,35 @@ def set_system_atmo_config(data, path, enable, duration):
         data.client.config_system_atmo(mode_auto_d2m=enabled, mode_auto_d2m_duration=duration)
     else:
         data.client.config_system_atmo(mode_auto_m2p=enabled, mode_auto_m2p_duration=duration)
+
+
+@set_system.group('log_level')
+@click.pass_obj
+def set_system_log_level(data):
+    """Set system log level configuration for enforcers and controllers."""
+
+@set_system_log_level.command("enforcers")
+@click.argument('level',
+                type=click.Choice(
+                    ['error', 'warn', 'info', 'debug'])
+                )
+@click.pass_obj
+def set_enforcers_logLevel(data, level):
+    """Configure all enforcers log level."""
+    enforcers = data.client.list("enforcer", "enforcer")
+    conf = {"log_level": level}
+    for enforcer in enforcers:
+        data.client.config("enforcer", enforcer["id"], {"config": conf})
+
+@set_system_log_level.command("controllers")
+@click.argument('level',
+                type=click.Choice(
+                    ['error', 'warn', 'info', 'debug'])
+                )
+@click.pass_obj
+def set_controllers_logLevel(data, level):
+    """Configure all controllers log level."""
+    controllers = data.client.list("controller", "controller")
+    conf = {"log_level": level}
+    for controller in controllers:
+        data.client.config("controller", controller["id"], {"config": conf})

@@ -244,7 +244,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   getClusterName() {
-    this.multiClusterService.getClusterName().subscribe({
+    this.multiClusterService.getClusterName('navbar').subscribe({
       next: clusterName => {
         this.clusterName = clusterName;
       },

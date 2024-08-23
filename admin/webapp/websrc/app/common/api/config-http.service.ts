@@ -24,9 +24,14 @@ export class ConfigHttpService {
     this.configV2ResponseSubject$.next(configV2);
   }
 
-  getConfig(): Observable<ConfigV2Response> {
+  getConfig(source?): Observable<ConfigV2Response> {
+    let options = {};
+    if (source) options = Object.assign(options, { params: { source: source } });
     return GlobalVariable.http
-      .get<ConfigV2Response>(PathConstant.CONFIG_V2_URL)
+      .get<ConfigV2Response>(
+        PathConstant.CONFIG_V2_URL,
+        options
+      )
       .pipe(pluck('config'));
   }
 

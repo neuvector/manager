@@ -67,7 +67,7 @@ object RestClient extends RestClient with LazyLogging {
 
 }
 
-class RestClient extends DefaultJsonFormats with ClientSslConfig {
+class RestClient extends DefaultJsonFormats with ClientSslConfig with LazyLogging {
 
   implicit val system: ActorSystem = ActorSystem("api-spray-client")
 
@@ -162,39 +162,58 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig {
     data: String = "",
     token: String,
     transactionId: Option[String] = None,
-    asStandalone: Option[String] = None
+    asStandalone: Option[String] = None,
+    source: Option[String] = None
   ): Future[HttpResponse] = {
-    val pipeline = sendAndReceive
+    logger.info("httpRequestWithHeader {}", source)
+    val pipeline          = sendAndReceive
+    var requestWithHeader = baseRequest(uri, method, data, token)
     transactionId.fold(
       asStandalone.fold(
-        pipeline {
-          baseRequest(uri, method, data, token)
+        source.fold(
+          ) { source =>
+          requestWithHeader = requestWithHeader ~> addHeader(X_NV_PAGE, source)
         }
       ) { asStandalone =>
-        pipeline {
-          baseRequest(uri, method, data, token) ~> addHeader(
-            X_AS_STANDALONE,
-            asStandalone
-          )
+        source.fold(
+          requestWithHeader = requestWithHeader ~>
+            addHeader(X_AS_STANDALONE, asStandalone)
+        ) { source =>
+          requestWithHeader = requestWithHeader ~> addHeader(X_NV_PAGE, source) ~>
+            addHeader(X_AS_STANDALONE, asStandalone)
         }
       }
     ) { transactionId =>
       asStandalone.fold(
-        pipeline {
-          baseRequest(uri, method, data, token) ~> addHeader(
-            X_TRN_ID,
-            transactionId
-          )
+        source.fold(
+          requestWithHeader = requestWithHeader ~> addHeader(
+              X_TRN_ID,
+              transactionId
+            )
+        ) { source =>
+          requestWithHeader = requestWithHeader ~> addHeader(X_NV_PAGE, source) ~> addHeader(
+              X_TRN_ID,
+              transactionId
+            )
         }
       ) { asStandalone =>
-        pipeline {
-          baseRequest(uri, method, data, token) ~> addHeader(
-            X_TRN_ID,
-            transactionId
-          ) ~>
-          addHeader(X_AS_STANDALONE, asStandalone)
+        source.fold(
+          requestWithHeader = requestWithHeader ~> addHeader(
+              X_TRN_ID,
+              transactionId
+            ) ~>
+            addHeader(X_AS_STANDALONE, asStandalone)
+        ) { source =>
+          requestWithHeader = requestWithHeader ~> addHeader(
+              X_TRN_ID,
+              transactionId
+            ) ~> addHeader(X_AS_STANDALONE, asStandalone) ~> addHeader(X_NV_PAGE, source)
         }
       }
+    }
+    logger.info("httpRequestWithHeader {}", requestWithHeader)
+    pipeline {
+      requestWithHeader
     }
   }
 

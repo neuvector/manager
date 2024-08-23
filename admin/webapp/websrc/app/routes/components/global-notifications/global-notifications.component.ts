@@ -219,7 +219,7 @@ export class GlobalNotificationsComponent implements OnInit {
 
   getTelemetry() {
     this.configHttpService
-      .getConfig()
+      .getConfig('navbar')
       .pipe(
         switchMap(config =>
           !config.misc.no_telemetry_report
@@ -399,7 +399,7 @@ export class GlobalNotificationsComponent implements OnInit {
       labelClass: this.getLabelClassFromSystemAlertSeverity(severity),
       unClamped: false,
     }
-    
+
     this.globalNotifications.push(notification);
   }
 

@@ -179,7 +179,10 @@ class DashboardService()(implicit executionContext: ExecutionContext)
                   s"${baseClusterUri(tokenId)}/system/alerts",
                   GET,
                   "",
-                  tokenId
+                  tokenId,
+                  None,
+                  None,
+                  Some("globalAlerts")
                 )
               }
             }

@@ -84,9 +84,9 @@ export class MultiClusterService {
     return GlobalVariable.http.post(PathConstant.FED_DEPLOY, payload);
   }
 
-  getClusterName(): Observable<string> {
+  getClusterName(source?): Observable<string> {
     return this.configHttpService
-      .getConfig()
+      .getConfig(source)
       .pipe(map(config => config.misc.cluster_name));
   }
 

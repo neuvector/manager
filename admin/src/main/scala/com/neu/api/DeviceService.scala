@@ -290,23 +290,32 @@ class DeviceService()(implicit executionContext: ExecutionContext)
         path("config-v2") {
           get {
             Utils.respondWithWebServerHeaders() {
-              parameter('scope.?) { scope =>
+              parameter('scope.?, 'source.?) { (scope, source) =>
                 complete {
+                  val _source = source.fold("") { source =>
+                    source
+                  }
                   scope.fold {
-                    logger.info("Get config")
+                    logger.info("Get config {}", _source)
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUriV2(tokenId)}/system/config",
                       GET,
                       "",
-                      tokenId
+                      tokenId,
+                      None,
+                      None,
+                      Some(_source)
                     )
                   } { scope =>
-                    logger.info("Get fed config")
+                    logger.info("Get fed config {}", _source)
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUriV2(tokenId)}/system/config?scope=$scope",
                       GET,
                       "",
-                      tokenId
+                      tokenId,
+                      None,
+                      None,
+                      Some(_source)
                     )
                   }
                 }

@@ -210,7 +210,7 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
       this.filterDialog = this.dialog.open(
         ComplianceItemsTableFilterComponent,
         {
-          width: '675px',
+          width: '700px',
           data: {
             filter: this.complianceFilterService.advFilter,
             domains: this.domains,

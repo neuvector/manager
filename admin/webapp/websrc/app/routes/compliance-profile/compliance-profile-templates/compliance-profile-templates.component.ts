@@ -1,5 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CfgType, ComplianceProfileTemplateEntry } from '@common/types';
+import {
+  CfgType,
+  ComplianceAvailableFilters,
+  ComplianceProfileTemplateEntry,
+} from '@common/types';
 
 @Component({
   selector: 'app-compliance-profile-templates',
@@ -10,6 +14,7 @@ export class ComplianceProfileTemplatesComponent implements OnInit {
   @Input() templates!: ComplianceProfileTemplateEntry[];
   @Input() hideSystemInit!: boolean;
   @Input() cfgType!: CfgType;
+  @Input() availableFilters!: ComplianceAvailableFilters;
 
   ngOnInit(): void {}
 }

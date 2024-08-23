@@ -22,7 +22,7 @@ export interface Compliance {
   profile: string;
   remediation: string;
   scored: boolean;
-  tags: string[];
+  tags: ComplianceTags;
   type: string;
   domains: string[];
   workloads: IdName[];
@@ -46,6 +46,17 @@ export interface ComplianceRaw {
   tags: string[];
   type: string;
   workloads: string[];
+}
+
+export interface ComplianceTags {
+  [tag: string]: ComplianceTagData[];
+}
+
+export interface ComplianceTagData {
+  CIS_Sub_Control: string;
+  description: string;
+  id: string;
+  title: string;
 }
 
 export interface IdName {

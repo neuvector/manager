@@ -7,7 +7,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./edit-regulation-dialog.component.scss'],
 })
 export class EditRegulationDialogComponent implements OnInit {
-  regulations = ['NIST', 'HIPAA', 'GDPR', 'PCI'];
+  regulations: string[] = [];
   available: string[] = [];
   applied: string[] = [];
 
@@ -17,6 +17,7 @@ export class EditRegulationDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.regulations = this.data.regulations;
     this.applied = this.data.tags || [];
     this.filterApplied();
   }

@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { GlobalVariable } from '@common/variables/global.variable';
 import {
   ComplianceData,
-  ComplianceNISTConfig,
-  ComplianceNISTMap,
   ComplianceProfileData,
   ComplianceProfileTemplateData,
   VulnerabilityProfile,
@@ -17,6 +15,7 @@ import {
   VulQueryOrderByColumnOption,
   OrderByOption,
   VulQueryScoreTypeOption,
+  ComplianceAvailableFilters,
 } from '@common/types';
 import { PathConstant } from '@common/constants/path.constant';
 import { Observable } from 'rxjs';
@@ -26,17 +25,6 @@ export class RisksHttpService {
   getCompliance(): Observable<ComplianceData> {
     return GlobalVariable.http.get<ComplianceData>(
       PathConstant.RISK_COMPLIANCE_URL
-    );
-  }
-
-  postComplianceNIST(
-    config: ComplianceNISTConfig
-  ): Observable<ComplianceNISTMap> {
-    return GlobalVariable.http.post<ComplianceNISTMap>(
-      PathConstant.RISK_COMPLIANCE_NIST_URL,
-      {
-        config,
-      }
     );
   }
 
@@ -147,6 +135,12 @@ export class RisksHttpService {
   getComplianceProfileTemplate(): Observable<ComplianceProfileTemplateData> {
     return GlobalVariable.http.get<ComplianceProfileTemplateData>(
       PathConstant.COMPLIANCE_TEMPLATE_URL
+    );
+  }
+
+  getAvailableComplianceFilter(): Observable<ComplianceAvailableFilters> {
+    return GlobalVariable.http.get<ComplianceAvailableFilters>(
+      PathConstant.COMPLIANCE_FILTER_URL
     );
   }
 

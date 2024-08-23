@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
+  ComplianceAvailableFilters,
   ComplianceProfileData,
   ComplianceProfileTemplateData,
 } from '@common/types';
@@ -22,6 +23,7 @@ export class ComplianceProfileComponent implements OnInit, OnDestroy {
     template: ComplianceProfileTemplateData;
     profile: ComplianceProfileData;
     domains: DomainResponse;
+    filters: ComplianceAvailableFilters;
   };
   loaded = false;
   refreshingProfile = false;

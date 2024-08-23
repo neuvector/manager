@@ -1,9 +1,4 @@
-import {
-  Component,
-  ViewChild,
-  ElementRef,
-  OnInit,
-} from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { ComplianceService } from './compliance.service';
 import { ComplianceCsvService } from './csv-generation/compliance-csv.service';
 import { ComplianceFilterService } from './compliance.filter.service';
@@ -34,7 +29,7 @@ export class ComplianceComponent implements OnInit {
   constructor(
     private complianceService: ComplianceService,
     private complianceCsvService: ComplianceCsvService,
-    public complianceFilterService: ComplianceFilterService,
+    public complianceFilterService: ComplianceFilterService
   ) {}
 
   ngOnInit(): void {}
@@ -50,10 +45,6 @@ export class ComplianceComponent implements OnInit {
 
   printCompliancePDF() {
     this.complianceList = this.getFilteredCis();
-    this.complianceList = this.complianceList.map(compliance => ({
-      ...compliance,
-      ...this.complianceService.complianceNISTMap[compliance.name],
-    }));
     this.statisticCharts = {
       node: (
         document.getElementById('complinceNodesBarPDF') as HTMLCanvasElement
@@ -87,10 +78,6 @@ export class ComplianceComponent implements OnInit {
       ),
     };
     this.complianceList = this.getFilteredCis();
-    this.complianceList = this.complianceList.map(compliance => ({
-      ...compliance,
-      ...this.complianceService.complianceNISTMap[compliance.name],
-    }));
     this.isFiltered = this.complianceFilterService.filtered;
     this.advFilter = this.complianceFilterService.advFilter;
 

@@ -28,7 +28,15 @@
     <tbody>
       <tr
         class="print-row"
-        *ngFor="let dataItem of data.slice(0, includesImpact ? SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW : SEC_RISK_REPORT_MAX_ROW); let i = index"
+        *ngFor="
+          let dataItem of data.slice(
+            0,
+            includesImpact
+              ? SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW
+              : SEC_RISK_REPORT_MAX_ROW
+          );
+          let i = index
+        "
         [attr.data-index]="i">
         <td class="print-cell" style="width: 10%">
           {{ dataItem.name }}
@@ -39,7 +47,14 @@
           </app-risk-view-report-description-col>
         </td>
         <td
-          class="{{'print-cell ' + (dataItem.severity.toLowerCase() === 'high' ? 'text-danger' : (dataItem.severity.toLowerCase() === 'medium' ? 'text-warning' : 'text-success'))}}"
+          class="{{
+            'print-cell ' +
+              (dataItem.severity.toLowerCase() === 'high'
+                ? 'text-danger'
+                : dataItem.severity.toLowerCase() === 'medium'
+                ? 'text-warning'
+                : 'text-success')
+          }}"
           style="width: 6%">
           <div><strong>V2:</strong> {{ dataItem.score }}</div>
           <div><strong>V3:</strong> {{ dataItem.score_v3 }}</div>
@@ -51,7 +66,7 @@
           </app-risk-view-report-packages-col>
         </td>
         <td class="print-cell" style="width: 8%">
-          {{ dataItem.published_timestamp * 1000 | date: 'MMM d, y hh:mm:ss' }}
+          {{ dataItem.published_timestamp * 1000 | date : 'MMM d, y hh:mm:ss' }}
         </td>
         <td class="print-cell" style="width: 20%" *ngIf="includesImpact">
           <app-risk-view-report-impact-col
@@ -68,7 +83,7 @@
   <table class="print-table margin-top-l">
     <thead>
       <tr class="print-header">
-        <th class="print-cell" style="width: 8%">
+        <th class="print-cell" style="width: 10%">
           {{ 'cis.report.gridHeader.CATEGORY' | translate }}
         </th>
         <th class="print-cell" style="width: 6%">
@@ -86,20 +101,11 @@
         <th class="print-cell" style="width: 6%">
           {{ 'cis.report.gridHeader.PROFILE' | translate }}
         </th>
-        <th class="print-cell" style="width: 10%">
+        <th class="print-cell" style="width: 20%">
           {{ 'cis.report.gridHeader.IMPACT' | translate }}
         </th>
-        <th class="print-cell" style="width: 21%">
+        <th class="print-cell" style="width: 31%">
           {{ 'cis.report.gridHeader.REMEDIATION' | translate }}
-        </th>
-        <th class="print-cell" style="width: 6%">
-          {{ 'cis.report.gridHeader.SUBCONTROL' | translate }}
-        </th>
-        <th class="print-cell" style="width: 6%">
-          {{ 'cis.report.gridHeader.CONTROL_ID' | translate }}
-        </th>
-        <th class="print-cell" style="width: 10%">
-          {{ 'cis.report.gridHeader.NIST_TITLE' | translate }}
         </th>
       </tr>
     </thead>
@@ -108,7 +114,7 @@
         class="print-row"
         *ngFor="let dataItem of data; let i = index"
         [attr.data-index]="i">
-        <td class="print-cell" style="width: 8%">
+        <td class="print-cell" style="width: 10%">
           {{ dataItem.category }}
         </td>
         <td class="print-cell" style="width: 6%">
@@ -121,7 +127,7 @@
         </td>
         <td class="print-cell" style="width: 6%">
           <div class="action-label px-1 {{ colourMap[dataItem.level] }}">
-            {{ "enum." + dataItem.level.toUpperCase() | translate }}
+            {{ 'enum.' + dataItem.level.toUpperCase() | translate }}
           </div>
         </td>
         <td class="print-cell" style="width: 6%">
@@ -130,27 +136,17 @@
         <td class="print-cell" style="width: 6%">
           {{ dataItem.profile }}
         </td>
-        <td class="print-cell" style="width: 10%">
+        <td class="print-cell" style="width: 20%">
           <app-risk-view-report-impact-col
             [nodes]="dataItem.nodes"
             [containers]="dataItem.filteredWorkloads"
             [images]="dataItem.filteredImages">
           </app-risk-view-report-impact-col>
         </td>
-        <td class="print-cell" style="width: 21%">
+        <td class="print-cell" style="width: 31%">
           <app-risk-view-report-description-col
             [description]="dataItem.remediation">
           </app-risk-view-report-description-col>
-        </td>
-        <td class="print-cell" style="width: 6%">
-          {{ dataItem.subcontrol }}
-        </td>
-        <td class="print-cell" style="width: 6%">
-          <app-risk-view-report-control-col [control_id]="dataItem.control_id">
-          </app-risk-view-report-control-col>
-        </td>
-        <td class="print-cell" style="width: 10%">
-          {{ dataItem.title }}
         </td>
       </tr>
     </tbody>

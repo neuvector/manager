@@ -8,10 +8,11 @@
               complianceProfileData.profile.profiles[0]?.disable_system || false
             "
             [templates]="complianceProfileData.template.list.compliance"
+            [availableFilters]="complianceProfileData.filters"
             [cfgType]="
               complianceProfileData.profile.profiles[0]?.cfg_type || ''
             "></app-compliance-profile-templates>
-          </ng-container>
+        </ng-container>
       </mat-tab>
       <mat-tab
         [label]="'sidebar.nav.RESOURCE' | translate"
@@ -21,7 +22,7 @@
             [domains]="
               complianceProfileData.domains
             "></app-compliance-profile-assets>
-          </ng-container>
+        </ng-container>
       </mat-tab>
     </mat-tab-group>
   </div>

@@ -30,10 +30,16 @@
       <span class="d-block col-2">{{
         'cis.profile.REGULATIONS' | translate
       }}</span>
-      <mat-checkbox class="col" formControlName="gdpr">GDPR</mat-checkbox>
+      <mat-checkbox
+        *ngFor="let tag of tagsGroup.controls | keyvalue"
+        class="col"
+        [formControlName]="tag.key"
+        >{{ tag.key }}</mat-checkbox
+      >
+      <!-- <mat-checkbox class="col" formControlName="gdpr">GDPR</mat-checkbox>
       <mat-checkbox class="col" formControlName="hipaa">HIPAA</mat-checkbox>
       <mat-checkbox class="col" formControlName="nist">NIST</mat-checkbox>
-      <mat-checkbox class="col" formControlName="pci">PCI</mat-checkbox>
+      <mat-checkbox class="col" formControlName="pci">PCI</mat-checkbox> -->
     </section>
     <section class="row mx-0">
       <span class="d-block col-2">{{
@@ -116,10 +122,16 @@
         <button (click)="changeView(0)" mat-menu-item>
           <span>{{ 'admissionControl.names.SERVICE' | translate }}</span>
         </button>
-        <button (click)="changeView(1)" mat-menu-item *ngIf="form.controls.selectedDomains.value.length === 0">
+        <button
+          (click)="changeView(1)"
+          mat-menu-item
+          *ngIf="form.controls.selectedDomains.value.length === 0">
           <span>{{ 'admissionControl.names.IMAGE' | translate }}</span>
         </button>
-        <button (click)="changeView(2)" mat-menu-item *ngIf="form.controls.selectedDomains.value.length === 0">
+        <button
+          (click)="changeView(2)"
+          mat-menu-item
+          *ngIf="form.controls.selectedDomains.value.length === 0">
           <span>{{ 'admissionControl.names.NODE' | translate }}</span>
         </button>
         <button (click)="changeView(3)" mat-menu-item>
@@ -258,9 +270,7 @@
     <span
       class="badge badge-secondary mb-1 mr-1 ml-0 d-inline-flex justify-content-center align-items-center"
       >Container
-      {{
-        form.get(['matchTypes', 'Container'])?.value === 'equal' ? '=' : '~'
-      }}
+      {{ form.get(['matchTypes', 'Container'])?.value === 'equal' ? '=' : '~' }}
       {{ form.controls.containerName.value }}
       <button (click)="clear(FilterView.CONTAINER)" class="remove-button">
         <i class="eos-icons">close</i>

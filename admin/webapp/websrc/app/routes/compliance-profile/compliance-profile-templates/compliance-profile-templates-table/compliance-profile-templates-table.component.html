@@ -46,37 +46,23 @@
           >ALL</span
         >
       </div>
-      <div class="d-flex flex-row align-items-center">
+      <div
+        *ngFor="let filter of filterForm | keyvalue"
+        class="d-flex flex-row align-items-center mr-2">
         <mat-checkbox
-          (change)="filterChange('PCI')"
-          [(ngModel)]="pci"
-          aria-label="PCI"
+          (change)="filterChange(filter.key)"
+          [(ngModel)]="filterForm[filter.key]"
+          [aria-label]="filter.key"
           class="mr-2"></mat-checkbox>
-        <img alt="pci" src="assets/img/icons/pci.png" />
-      </div>
-      <div class="d-flex flex-row align-items-center mr-2">
-        <mat-checkbox
-          (change)="filterChange('GDPR')"
-          [(ngModel)]="gdpr"
-          aria-label="GDPR"
-          class="mr-2"></mat-checkbox>
-        <img alt="gdpr" src="assets/img/icons/gdpr.svg" />
-      </div>
-      <div class="d-flex flex-row align-items-center mr-2">
-        <mat-checkbox
-          (change)="filterChange('HIPAA')"
-          [(ngModel)]="hipaa"
-          aria-label="HIPAA"
-          class="mr-2"></mat-checkbox>
-        <img alt="hipaa" src="assets/img/icons/hipaa.png" />
-      </div>
-      <div class="d-flex flex-row align-items-center mr-2">
-        <mat-checkbox
-          (change)="filterChange('NIST')"
-          [(ngModel)]="nist"
-          aria-label="NIST"
-          class="mr-2"></mat-checkbox>
-        <img alt="nist" src="assets/img/icons/nist.png" />
+        <ng-container *ngIf="filter.key !== 'PCIv4'; else pciv4">
+          <img
+            [alt]="filter.key"
+            [src]="'assets/img/icons/' + filter.key.toLowerCase() + '.png'" />
+        </ng-container>
+        <ng-template #pciv4>
+          <img alt="pci" src="assets/img/icons/pci.png" />
+          <p class="font-weight-bold">v4</p>
+        </ng-template>
       </div>
     </div>
   </ng-container>

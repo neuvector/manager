@@ -43,6 +43,10 @@ export class ComplianceItemsTableFilterComponent implements OnInit {
   autocompleteTagsOptionActivated = false;
   @ViewChild('namespaceInput') namespaceInput!: ElementRef<HTMLInputElement>;
 
+  get tagsGroup(): FormGroup {
+    return this.form.get('tags') as FormGroup;
+  }
+
   constructor(
     public dialogRef: MatDialogRef<ComplianceItemsTableComponent>,
     @Inject(MAT_DIALOG_DATA) public data,
@@ -113,6 +117,10 @@ export class ComplianceItemsTableFilterComponent implements OnInit {
 
   ngOnInit() {
     const filter = this.data.filter;
+    let tagsGroup: { [tag: string]: FormControl } = {};
+    Object.keys(filter.tags).forEach(tag => {
+      tagsGroup[tag] = new FormControl(filter.tags[tag]);
+    });
     this.form = new FormGroup({
       category: new FormGroup({
         docker: new FormControl(filter.category.docker),
@@ -120,12 +128,7 @@ export class ComplianceItemsTableFilterComponent implements OnInit {
         custom: new FormControl(filter.category.custom),
         image: new FormControl(filter.category.image),
       }),
-      tags: new FormGroup({
-        gdpr: new FormControl(filter.tags.gdpr),
-        hipaa: new FormControl(filter.tags.hipaa),
-        nist: new FormControl(filter.tags.nist),
-        pci: new FormControl(filter.tags.pci),
-      }),
+      tags: new FormGroup(tagsGroup),
       scoredType: new FormControl(filter.scoredType),
       profileType: new FormControl(filter.profileType),
       selectedDomains: new FormControl(filter.selectedDomains),

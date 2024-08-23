@@ -3,10 +3,8 @@ import { BehaviorSubject, combineLatest, Observable, of, Subject } from 'rxjs';
 import { catchError, map, repeatWhen, tap } from 'rxjs/operators';
 import {
   Compliance,
+  ComplianceAvailableFilters,
   ComplianceData,
-  ComplianceNIST,
-  ComplianceNISTConfig,
-  ComplianceNISTMap,
   HostData,
   HostsData,
   Workload,
@@ -27,7 +25,6 @@ export class ComplianceService {
   kubeVersion!: string;
   workloadMap4Pdf!: {};
   private workloadMap!: Map<string, any>;
-  complianceNISTMap!: {};
   imageMap4Pdf!: {};
   platformMap4Pdf!: {};
   hostMap4Pdf!: {};
@@ -59,7 +56,6 @@ export class ComplianceService {
     this.selectedComplianceSubject$.next(undefined);
     this.workloadMap4Pdf = {};
     this.workloadMap = new Map();
-    this.complianceNISTMap = {};
     this.imageMap4Pdf = {};
     this.platformMap4Pdf = {};
     this.hostMap4Pdf = {};
@@ -73,8 +69,9 @@ export class ComplianceService {
       this.getHost(),
       this.getPlatform(),
       this.getCompliance(),
+      this.getAvailableFilters(),
     ]).pipe(
-      map(([domain, container, host, platform, compliance]) => {
+      map(([domain, container, host, platform, compliance, filters]) => {
         const complianceDist = {
           error: 0,
           high: 0,
@@ -106,35 +103,36 @@ export class ComplianceService {
           host,
           platform,
           compliance,
+          filters,
           complianceDist,
         };
       }),
-      tap(({ compliance: { compliances, kubernetes_cis_version } }) => {
-        this.postComplianceNIST({
-          names: compliances.map(c => c.name),
-        }).subscribe(nistMap => {
-          this.complianceNISTMap = nistMap.nist_map;
-        });
-        this.kubeVersion = kubernetes_cis_version;
-        this.complianceFilterService.workloadMap = this.workloadMap;
-        setRisks(compliances, this.workloadMap);
-        this.assetsViewPdfService.masterData = {
-          workloadMap4Pdf: this.workloadMap4Pdf,
-          hostMap4Pdf: this.hostMap4Pdf,
-          platformMap4Pdf: this.platformMap4Pdf,
-          imageMap4Pdf: this.imageMap4Pdf,
-        };
-        if (this.complianceFilterService.isAdvFilterOn()) {
-          this.complianceFilterService.resetFilter(
-            this.complianceFilterService.advFilter
-          );
-          this.complianceFilterService.filtered = true;
-        } else {
-          this.complianceFilterService.resetFilter();
-          this.complianceFilterService.filtered = false;
+      tap(
+        ({ compliance: { compliances, kubernetes_cis_version }, filters }) => {
+          this.kubeVersion = kubernetes_cis_version;
+          this.complianceFilterService.workloadMap = this.workloadMap;
+          this.complianceFilterService.availableFilters = filters;
+          this.complianceFilterService.advFilter =
+            this.complianceFilterService.initAdvFilter();
+          setRisks(compliances, this.workloadMap);
+          this.assetsViewPdfService.masterData = {
+            workloadMap4Pdf: this.workloadMap4Pdf,
+            hostMap4Pdf: this.hostMap4Pdf,
+            platformMap4Pdf: this.platformMap4Pdf,
+            imageMap4Pdf: this.imageMap4Pdf,
+          };
+          if (this.complianceFilterService.isAdvFilterOn()) {
+            this.complianceFilterService.resetFilter(
+              this.complianceFilterService.advFilter
+            );
+            this.complianceFilterService.filtered = true;
+          } else {
+            this.complianceFilterService.resetFilter();
+            this.complianceFilterService.filtered = false;
+          }
+          this.complianceFilterService.filteredCis = compliances;
         }
-        this.complianceFilterService.filteredCis = compliances;
-      }),
+      ),
       // finalize(() => {
       //   this.runWorkers();
       // }),
@@ -188,6 +186,10 @@ export class ComplianceService {
         return container;
       })
     );
+  }
+
+  private getAvailableFilters(): Observable<ComplianceAvailableFilters> {
+    return this.risksHttpService.getAvailableComplianceFilter();
   }
 
   private getDomain(): Observable<String[]> {
@@ -360,12 +362,6 @@ export class ComplianceService {
         }
       })
     );
-  }
-
-  private postComplianceNIST(
-    config: ComplianceNISTConfig
-  ): Observable<ComplianceNISTMap> {
-    return this.risksHttpService.postComplianceNIST(config);
   }
 
   private getCompliance(): Observable<ComplianceData> {

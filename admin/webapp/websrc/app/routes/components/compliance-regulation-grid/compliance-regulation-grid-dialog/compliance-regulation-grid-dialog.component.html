@@ -1,0 +1,26 @@
+<div
+  cdkDrag
+  cdkDragHandle
+  cdkDragRootElement=".cdk-overlay-pane"
+  class="d-flex align-items-center justify-content-between"
+  style="cursor: move; margin-top: -24px; padding-top: 10px">
+  <div class="d-flex align-items-center justify-content-center">
+    <h3 class="d-block">{{ data.type }}</h3>
+  </div>
+  <div class="d-flex align-items-center justify-content-center">
+    <button
+      (click)="downloadCsv()"
+      aria-label="Download CSV icon button"
+      mat-icon-button>
+      <i class="eos-icons">download</i>
+    </button>
+    <button
+      (click)="onNoClick()"
+      aria-label="Close icon button"
+      mat-icon-button>
+      <i class="eos-icons">close</i>
+    </button>
+  </div>
+</div>
+<app-compliance-regulation-grid
+  [rowData]="data.content"></app-compliance-regulation-grid>

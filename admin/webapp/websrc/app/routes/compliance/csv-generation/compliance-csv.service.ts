@@ -4,7 +4,7 @@ import { MapConstant } from '@common/constants/map.constant';
 import { UtilsService } from '@common/utils/app.utils';
 import { arrayToCsv } from '@common/utils/common.utils';
 import { ComplianceFilterService } from '../compliance.filter.service';
-import { Compliance, ComplianceNIST, ComplianceTagData } from '@common/types';
+import { Compliance, ComplianceTagData } from '@common/types';
 import { ComplianceService } from '../compliance.service';
 
 @Injectable()
@@ -126,9 +126,13 @@ export class ComplianceCsvService {
     };
 
     const listAssets = (entryData: Compliance) => {
-      let complianceNIST = this.complianceService.complianceNISTMap[
-        entryData.name
-      ] as ComplianceNIST;
+      let regulationsList = Object.entries(entryData.tags).filter(
+        ([tagName, tags]) => {
+          return (
+            this.complianceFilterService.advFilter.tags[tagName] && tags.length
+          );
+        }
+      );
       let imageList = entryData.images.map(image => image.display_name);
       let workloadList = entryData.workloads.map(
         workload => workload.display_name
@@ -141,12 +145,13 @@ export class ComplianceCsvService {
         imageList.length,
         workloadList.length,
         nodeList.length,
-        platformList.length
+        platformList.length,
+        Math.max(...regulationsList.map(([_, tags]) => tags.length))
       );
       maxRow4Entry = maxRow4Entry === 0 ? 1 : maxRow4Entry;
       let rows: any = [];
       for (let i = 0; i < maxRow4Entry; i++) {
-        rows.push({
+        let row = {
           name: i === 0 ? entryData.name : '',
           description: i === 0 ? entryData.description : '',
           category: i === 0 ? entryData.category : '',
@@ -154,9 +159,6 @@ export class ComplianceCsvService {
           message: i === 0 ? entryData.message : '',
           profile: i === 0 ? entryData.profile : '',
           remediation: i === 0 ? entryData.remediation : '',
-          cis_subcontrol: i === 0 ? complianceNIST?.subcontrol : '',
-          nist_control_id: i === 0 ? complianceNIST?.control_id : '',
-          nist_title: i === 0 ? complianceNIST?.title : '',
           scored: i === 0 ? entryData.scored : '',
           tags: i === 0 ? Object.keys(entryData.tags).join(', ') : '',
           type: i === 0 ? entryData.type : '',
@@ -164,15 +166,24 @@ export class ComplianceCsvService {
           nodes: i > nodeList.length - 1 ? '' : nodeList[i],
           workloads: i > workloadList.length - 1 ? '' : workloadList[i],
           images: i > imageList.length - 1 ? '' : imageList[i],
-        });
+        };
+        for (let [tagName, tags] of regulationsList) {
+          row = {
+            ...row,
+            [`${tagName}_cis_subcontrol`]:
+              i > tags.length - 1 ? '' : tags[i].CIS_Sub_Control,
+            [`${tagName}_description`]:
+              i > tags.length - 1 ? '' : tags[i].description,
+            [`${tagName}_id`]: i > tags.length - 1 ? '' : tags[i].id,
+            [`${tagName}_title`]: i > tags.length - 1 ? '' : tags[i].title,
+          };
+        }
+        rows.push(row);
       }
       return rows;
     };
 
     const resolveExcelCellLimit = entryData => {
-      let complianceNIST = this.complianceService.complianceNISTMap[
-        entryData.name
-      ] as ComplianceNIST;
       let maxLen = Math.max(
         entryData.images.length,
         entryData.workloads.length,
@@ -191,9 +202,6 @@ export class ComplianceCsvService {
           message: i === 0 ? entryData.message : '',
           profile: i === 0 ? entryData.profile : '',
           remediation: i === 0 ? entryData.remediation : '',
-          cis_subcontrol: i === 0 ? complianceNIST?.subcontrol : '',
-          nist_control_id: i === 0 ? complianceNIST?.control_id : '',
-          nist_title: i === 0 ? complianceNIST?.title : '',
           scored: i === 0 ? entryData.scored : '',
           tags: i === 0 ? entryData.tags : '',
           type: i === 0 ? entryData.type : '',

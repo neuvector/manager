@@ -83,7 +83,7 @@
   <table class="print-table margin-top-l">
     <thead>
       <tr class="print-header">
-        <th class="print-cell" style="width: 8%">
+        <th class="print-cell" style="width: 10%">
           {{ 'cis.report.gridHeader.CATEGORY' | translate }}
         </th>
         <th class="print-cell" style="width: 6%">
@@ -101,20 +101,11 @@
         <th class="print-cell" style="width: 6%">
           {{ 'cis.report.gridHeader.PROFILE' | translate }}
         </th>
-        <th class="print-cell" style="width: 10%">
+        <th class="print-cell" style="width: 20%">
           {{ 'cis.report.gridHeader.IMPACT' | translate }}
         </th>
-        <th class="print-cell" style="width: 21%">
+        <th class="print-cell" style="width: 31%">
           {{ 'cis.report.gridHeader.REMEDIATION' | translate }}
-        </th>
-        <th class="print-cell" style="width: 6%">
-          {{ 'cis.report.gridHeader.SUBCONTROL' | translate }}
-        </th>
-        <th class="print-cell" style="width: 6%">
-          {{ 'cis.report.gridHeader.CONTROL_ID' | translate }}
-        </th>
-        <th class="print-cell" style="width: 10%">
-          {{ 'cis.report.gridHeader.TITLE' | translate }}
         </th>
       </tr>
     </thead>
@@ -123,7 +114,7 @@
         class="print-row"
         *ngFor="let dataItem of data; let i = index"
         [attr.data-index]="i">
-        <td class="print-cell" style="width: 8%">
+        <td class="print-cell" style="width: 10%">
           {{ dataItem.category }}
         </td>
         <td class="print-cell" style="width: 6%">
@@ -145,27 +136,17 @@
         <td class="print-cell" style="width: 6%">
           {{ dataItem.profile }}
         </td>
-        <td class="print-cell" style="width: 10%">
+        <td class="print-cell" style="width: 20%">
           <app-risk-view-report-impact-col
             [nodes]="dataItem.nodes"
             [containers]="dataItem.filteredWorkloads"
             [images]="dataItem.filteredImages">
           </app-risk-view-report-impact-col>
         </td>
-        <td class="print-cell" style="width: 21%">
+        <td class="print-cell" style="width: 31%">
           <app-risk-view-report-description-col
             [description]="dataItem.remediation">
           </app-risk-view-report-description-col>
-        </td>
-        <td class="print-cell" style="width: 6%">
-          {{ dataItem.subcontrol }}
-        </td>
-        <td class="print-cell" style="width: 6%">
-          <app-risk-view-report-control-col [control_id]="dataItem.control_id">
-          </app-risk-view-report-control-col>
-        </td>
-        <td class="print-cell" style="width: 10%">
-          {{ dataItem.title }}
         </td>
       </tr>
     </tbody>

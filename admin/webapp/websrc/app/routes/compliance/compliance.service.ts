@@ -5,9 +5,6 @@ import {
   Compliance,
   ComplianceAvailableFilters,
   ComplianceData,
-  ComplianceNIST,
-  ComplianceNISTConfig,
-  ComplianceNISTMap,
   HostData,
   HostsData,
   Workload,
@@ -28,7 +25,6 @@ export class ComplianceService {
   kubeVersion!: string;
   workloadMap4Pdf!: {};
   private workloadMap!: Map<string, any>;
-  complianceNISTMap!: {};
   imageMap4Pdf!: {};
   platformMap4Pdf!: {};
   hostMap4Pdf!: {};
@@ -60,7 +56,6 @@ export class ComplianceService {
     this.selectedComplianceSubject$.next(undefined);
     this.workloadMap4Pdf = {};
     this.workloadMap = new Map();
-    this.complianceNISTMap = {};
     this.imageMap4Pdf = {};
     this.platformMap4Pdf = {};
     this.hostMap4Pdf = {};
@@ -114,11 +109,6 @@ export class ComplianceService {
       }),
       tap(
         ({ compliance: { compliances, kubernetes_cis_version }, filters }) => {
-          this.postComplianceNIST({
-            names: compliances.map(c => c.name),
-          }).subscribe(nistMap => {
-            this.complianceNISTMap = nistMap.nist_map;
-          });
           this.kubeVersion = kubernetes_cis_version;
           this.complianceFilterService.workloadMap = this.workloadMap;
           this.complianceFilterService.availableFilters = filters;
@@ -372,12 +362,6 @@ export class ComplianceService {
         }
       })
     );
-  }
-
-  private postComplianceNIST(
-    config: ComplianceNISTConfig
-  ): Observable<ComplianceNISTMap> {
-    return this.risksHttpService.postComplianceNIST(config);
   }
 
   private getCompliance(): Observable<ComplianceData> {

@@ -64,6 +64,7 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
   gridApi!: GridApi;
   traffic: any;
   showRuleId: boolean = false;
+  isRuleAccessible: boolean = false;
   ruleId: string = '';
   sessionCount: string = '';
   onThreat: boolean = false;
@@ -213,6 +214,11 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
       this.traffic.policy_action === 'violate' ||
       this.traffic.policy_action === 'deny';
     this.graphService.keepLive();
+    if (this.traffic.policy_id !== 0) {
+      this.showRule(this.traffic.policy_id);
+    } else {
+      this.isRuleAccessible = true;
+    }
   }
 
   onFilterChanged(value) {
@@ -225,8 +231,9 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
   }
 
   overrideRule(traffic, edgeDetails) {
-    if (traffic.policy_id !== 0) this.showRule(traffic.policy_id);
-    else this.proposeRule(traffic, edgeDetails);
+    if (traffic.policy_id === 0)
+      this.proposeRule(traffic, edgeDetails);
+    this.onRule = true;
   }
 
   closeRuleDetail() {
@@ -285,11 +292,13 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
     this.securityEventsService.getNetworkRule(id).subscribe(
       response => {
         this.rule = response;
-        this.onRule = true;
         this.rule.allowed = this.rule.action === 'allow';
+        this.isRuleAccessible = true;
       },
       err => {
         console.warn(err);
+        this.isRuleAccessible = false;
+        this.onRule = false;
       }
     );
   }

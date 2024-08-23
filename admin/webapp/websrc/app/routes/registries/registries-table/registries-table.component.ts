@@ -45,6 +45,8 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
   error: unknown;
   filtered: boolean = false;
   filteredCount!: number;
+  isVulAuthorized: boolean =
+    this.authUtilsService.getDisplayFlag('vuls_profile');
   gridOptions!: GridOptions;
   gridApi!: GridApi;
   columnDefs: ColDef[] = [
@@ -244,8 +246,10 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
   }
 
   filterCountChanged(results: number) {
-    this.filteredCount = results;
-    this.filtered = this.filteredCount !== this.rowData.length;
+    let filteredRowNodes = this.gridApi.getRenderedNodes();
+    let includesViewAll = filteredRowNodes.length > 0 && filteredRowNodes[filteredRowNodes.length - 1].data.isAllView;
+    this.filteredCount = results - (includesViewAll ? 1 : 0);
+    this.filtered = this.filteredCount !== this.rowData.length - (!this.isVulAuthorized ? 0 : 1);
   }
 
   deleteRegistry(event): void {

@@ -223,15 +223,15 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
             ...EventReportLoggingToggleField,
           },
           {
-            className: 'col-12 col-md-6 mt-3 ml-3',
+            className: 'col-12 col-md-4 mt-3 ml-3',
             ...SyslogLevelField,
           },
           {
-            className: 'col-12 col-md-7 ml-3',
+            className: 'col-12 col-md-8 ml-3',
             ...SyslogCategoriesField,
           },
           {
-            className: 'col-12 col-md-4',
+            className: 'col-12 col-md-3',
             ...SyslogInJSONField,
           },
           {

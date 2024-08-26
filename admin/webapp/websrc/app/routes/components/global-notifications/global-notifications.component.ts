@@ -379,7 +379,6 @@ export class GlobalNotificationsComponent implements OnInit {
       let severity: SystemAlertSeverity = SystemAlertSeverity.INFO;
 
       if(type === SystemAlertType.TLS_CERTIFICATE) {
-        link = '#/settings/configuration';
         severity = SystemAlertSeverity.WARNING;
       } else if(type === SystemAlertType.RBAC) {
         severity = SystemAlertSeverity.CRITICAL;

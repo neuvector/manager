@@ -223,15 +223,15 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
             ...EventReportLoggingToggleField,
           },
           {
-            className: 'col-12 mt-3 ml-3',
+            className: 'col-12 col-md-6 mt-3 ml-3',
             ...SyslogLevelField,
           },
           {
-            className: 'col-12 col-md-6 ml-3',
+            className: 'col-12 col-md-7 ml-3',
             ...SyslogCategoriesField,
           },
           {
-            className: 'col-12 col-md-5',
+            className: 'col-12 col-md-4',
             ...SyslogInJSONField,
           },
           {
@@ -425,6 +425,7 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
       description: 'setting.category.description.tls_self_signed_certification',
       expanded: true,
     },
+    fieldGroupClassName: 'self-signed-cert',
     fieldGroup: [
       {
         wrappers: [FormlyComponents.SECTION_WRAPPER],

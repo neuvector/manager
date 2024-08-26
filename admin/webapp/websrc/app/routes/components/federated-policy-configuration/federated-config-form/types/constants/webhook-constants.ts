@@ -31,9 +31,10 @@ export const WebhookTableField = {
         defaultValue: 'fed.',
         templateOptions: {
           viewValue: 'setting.webhook.NAME',
-          label: 'setting.webhook.NAME',
+          placeholder: 'setting.webhook.NAME',
           isCell: true,
           required: true,
+          hideRequiredMarker: true,
           maxLength: 1000,
           readOnly: {
             type: 'text',
@@ -50,9 +51,10 @@ export const WebhookTableField = {
         type: FormlyComponents.ICON_INPUT,
         templateOptions: {
           viewValue: 'setting.webhook.URL',
-          label: 'setting.webhook.URL',
+          placeholder: 'setting.webhook.URL',
           isCell: true,
           required: true,
+          hideRequiredMarker: true,
           maxLength: 1000,
           readOnly: {
             type: 'text',
@@ -67,10 +69,12 @@ export const WebhookTableField = {
         key: 'type',
         wrappers: [FormlyComponents.READONLY_WRAPPER],
         type: FormlyComponents.SELECT,
+        defaultValue: WebhookTypes[3].value,
         templateOptions: {
           viewValue: 'setting.webhook.WH_TYPE',
-          label: 'setting.webhook.WH_TYPE',
+          placeholder: 'setting.webhook.WH_TYPE',
           items: WebhookTypes,
+          hideRequiredMarker: true,
           required: true,
           readOnly: {
             type: 'icon',

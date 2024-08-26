@@ -67,6 +67,7 @@ export class FederatedConfigFormComponent
 
   ngOnInit(): void {
     this.isFedOpAllowed =
+      this.authUtilsService.getDisplayFlag('write_config') &&
       this.authUtilsService.getDisplayFlag('multi_cluster_w');
     this.fedConfigOptions.formState.permissions = {
       isWebhookAuthorized: this.isFedOpAllowed,

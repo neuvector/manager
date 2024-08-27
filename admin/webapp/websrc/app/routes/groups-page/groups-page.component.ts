@@ -86,10 +86,12 @@ export class GroupsPageComponent implements OnInit {
   };
 
   private getConfig = () => {
+    console.log('in group page');
     this.groupsService.getConfigData().subscribe(
       response => {
         this.netServiceStatus = response.net_svc.net_service_status;
-        this.netServicePolicyModeValue = response.net_svc.net_service_policy_mode.toLowerCase();
+        this.netServicePolicyModeValue =
+          response.net_svc.net_service_policy_mode.toLowerCase();
         this.netServicePolicyMode = this.translate.instant(
           `enum.${response.net_svc.net_service_policy_mode.toUpperCase()}`
         );

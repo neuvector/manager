@@ -1,3 +1,24 @@
-<span class="badge" [class]="'badge-' + labelCode">{{
-  status | titlecase
-}}</span>
+<ng-container *ngIf="params.node.data.status === 'failed'; else Default">
+  <span 
+    class="badge" 
+    style="cursor: pointer;"
+    [class]="'badge-' + labelCode" 
+    [matMenuTriggerFor]="menu"
+  >
+    {{ status | titlecase }}
+  </span>
+</ng-container>
+<ng-template #Default>
+  <span class="badge" [class]="'badge-' + labelCode">
+    {{ status | titlecase }}
+  </span>
+</ng-template>
+
+
+<mat-menu #menu="matMenu" class="error-message">
+  <div class="error-message-content" (click)="onMenuClick($event)">
+    <span>
+      {{ params.node.data.result }}
+    </span>
+  </div>
+</mat-menu>

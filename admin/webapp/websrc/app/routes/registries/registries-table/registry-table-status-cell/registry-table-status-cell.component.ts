@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
+import { param } from 'jquery';
 
 @Component({
   selector: 'app-registry-table-status-cell',
@@ -19,5 +20,9 @@ export class RegistryTableStatusCellComponent
 
   refresh(params: ICellRendererParams): boolean {
     return false;
+  }
+
+  onMenuClick(event: MouseEvent): void {
+    event.stopPropagation();
   }
 }

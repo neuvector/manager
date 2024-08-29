@@ -16,3 +16,8 @@
         }
     }
 }
+
+::ng-deep .error-message-info.mat-button {
+    min-width: 0;
+    width: 3rem;
+}

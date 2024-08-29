@@ -1,12 +1,17 @@
 <ng-container *ngIf="params.node.data.status === 'failed'; else Default">
-  <span 
-    class="badge" 
-    style="cursor: pointer;"
-    [class]="'badge-' + labelCode" 
-    [matMenuTriggerFor]="menu"
-  >
-    {{ status | titlecase }}
-  </span>
+  <div class="row" style="width: 100%;">
+    <div class="col-7">
+      <span class="badge" [class]="'badge-' + labelCode"
+        [matMenuTriggerFor]="errorMessageInfoMenu">
+        {{ status | titlecase }}
+      </span>
+    </div>
+    <div class="col-5">
+      <button mat-button class="error-message-info" [matMenuTriggerFor]="errorMessageInfoMenu">
+        <em class="eos-icons icon-18 text-muted">info</em>
+      </button>
+    </div>
+  </div>
 </ng-container>
 <ng-template #Default>
   <span class="badge" [class]="'badge-' + labelCode">
@@ -14,8 +19,7 @@
   </span>
 </ng-template>
 
-
-<mat-menu #menu="matMenu" class="error-message">
+<mat-menu #errorMessageInfoMenu="matMenu" class="error-message">
   <div class="error-message-content" (click)="onMenuClick($event)">
     <span>
       {{ params.node.data.result }}

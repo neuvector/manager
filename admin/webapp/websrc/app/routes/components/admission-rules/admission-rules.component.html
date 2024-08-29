@@ -38,7 +38,7 @@
                 mat-menu-item
                 class="d-flex align-items-center"
                 (click)="showAdvancedSetting()"
-                *ngIf="globalStatus">
+                *ngIf="globalStatus && isWriteAdmissionRuleAuthorized">
                 <em class="eos-icons mr-2">config_map</em>
                 {{ 'admissionControl.GLOBAL_OPS' | translate }}
               </button>

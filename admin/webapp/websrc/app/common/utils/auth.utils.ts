@@ -22,11 +22,13 @@ export class AuthUtilsService {
   }
 
   private parseGlobalPermission(g_permissions) {
-    return g_permissions?.map(permission => {
-      return `${permission.id}_${
-        permission.write ? 'w' : permission.read ? 'r' : ''
-      }`;
-    }) ?? [];
+    return (
+      g_permissions?.map(permission => {
+        return `${permission.id}_${
+          permission.write ? 'w' : permission.read ? 'r' : ''
+        }`;
+      }) ?? []
+    );
   }
 
   private parseDomainPermission(d_permission: Map<string, Array<Permission>>) {
@@ -92,7 +94,7 @@ export class AuthUtilsService {
       let domainPermissions = this.parseDomainPermission(
         GlobalVariable.user.domain_permissions
       );
-      
+
       GlobalVariable.namespaces4NamespaceUser =
         this.getNamespaces4NamespaceUser(
           GlobalVariable.user.domain_permissions
@@ -146,10 +148,14 @@ export class AuthUtilsService {
     if (GlobalVariable.user) {
       let ownedPermissions;
 
-      if(!GlobalVariable.isRemote || this.isFedPermission(this.getCacheUserPermission().globalPermissions)) {
+      if (
+        !GlobalVariable.isRemote ||
+        this.isFedRole(GlobalVariable.user.token?.role)
+      ) {
         ownedPermissions = this.getCacheUserPermission().ownedPermissions;
       } else {
-        ownedPermissions = this.getCacheUserPermission().remoteGlobalPermissions;
+        ownedPermissions =
+          this.getCacheUserPermission().remoteGlobalPermissions;
       }
 
       if (ownedPermissions.length > 0) {
@@ -188,10 +194,16 @@ export class AuthUtilsService {
     if (GlobalVariable.user) {
       let ownedPermissions = [];
 
-      if (!GlobalVariable.isRemote || this.isFedPermission(this.getCacheUserPermission().globalPermissions)) {
-        ownedPermissions = isWithDomainPermission ? this.getCacheUserPermission().ownedPermissions : this.getCacheUserPermission().globalPermissions;
+      if (
+        !GlobalVariable.isRemote ||
+        this.isFedRole(GlobalVariable.user.token?.role)
+      ) {
+        ownedPermissions = isWithDomainPermission
+          ? this.getCacheUserPermission().ownedPermissions
+          : this.getCacheUserPermission().globalPermissions;
       } else {
-        ownedPermissions = this.getCacheUserPermission().remoteGlobalPermissions;
+        ownedPermissions =
+          this.getCacheUserPermission().remoteGlobalPermissions;
       }
       console.log(
         'ownedPermissions:',
@@ -210,12 +222,18 @@ export class AuthUtilsService {
 
   hasExtraPermission(tokenInfo) {
     return (
-      tokenInfo.extra_permissions && Array.isArray(tokenInfo.extra_permissions) && tokenInfo.extra_permissions.length > 0 ||
-      tokenInfo.extra_permissions_domains && Object.keys(tokenInfo.extra_permissions_domains).length > 0
+      (tokenInfo.extra_permissions &&
+        Array.isArray(tokenInfo.extra_permissions) &&
+        tokenInfo.extra_permissions.length > 0) ||
+      (tokenInfo.extra_permissions_domains &&
+        Object.keys(tokenInfo.extra_permissions_domains).length > 0)
     );
   }
 
-  private isFedPermission(permissions: any): boolean {
-    return permissions?.find(p => (p as string).startsWith('fed_'));
+  private isFedRole(role: string | null): boolean {
+    if (!role) {
+      return false;
+    }
+    return role.toLowerCase().includes('fed');
   }
 }

@@ -155,7 +155,9 @@ export class AdmissionRulesComponent implements OnInit {
           this.filteredCount = this.admissionRules.length;
 
           this.canConfig =
-            state.state!.cfg_type !== GlobalConstant.CFG_TYPE.GROUND;
+            state.state == null
+              ? false
+              : state.state.cfg_type !== GlobalConstant.CFG_TYPE.GROUND;
           this.isK8s = state.k8s_env;
           if (!this.canConfig) {
             this.stateWarning = this.translate.instant(

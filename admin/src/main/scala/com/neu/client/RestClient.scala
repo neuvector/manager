@@ -165,7 +165,6 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig with LazyLoggin
     asStandalone: Option[String] = None,
     source: Option[String] = None
   ): Future[HttpResponse] = {
-    logger.info("httpRequestWithHeader {}", source)
     val pipeline          = sendAndReceive
     var requestWithHeader = baseRequest(uri, method, data, token)
     transactionId.fold(
@@ -211,7 +210,6 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig with LazyLoggin
         }
       }
     }
-    logger.info("httpRequestWithHeader {}", requestWithHeader)
     pipeline {
       requestWithHeader
     }

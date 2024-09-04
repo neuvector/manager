@@ -633,20 +633,43 @@ class GroupService()(implicit executionContext: ExecutionContext)
             }
           } ~
           patch {
-            parameter('scope.?) { scope =>
+            parameter('scope.?, 'predefined.?) { (scope, predefined) =>
               entity(as[FileMonitorConfigDTO]) { profile =>
                 {
                   Utils.respondWithWebServerHeaders() {
                     complete {
                       val payload = fileProfileToJson(profile.fileMonitorConfigData)
                       logger.info("Updating file monitor profile: {}", payload)
-                      RestClient.httpRequestWithHeader(
-                        scope.fold(s"${baseClusterUri(tokenId)}/file_monitor/${profile.group}") { scope =>
+                      val url =
+                        scope.fold {
+                          predefined.fold {
+                            s"${baseClusterUri(tokenId)}/file_monitor/${profile.group}"
+                          } { predefined =>
+                            if (predefined.equals("true"))
+                              s"${baseClusterUri(tokenId)}/file_monitor/${profile.group}?predefined"
+                            else s"${baseClusterUri(tokenId)}/file_monitor/${profile.group}"
+                          }
+                        } { scope =>
                           if (scope.equals("fed"))
-                            s"$baseUri/file_monitor/${profile.group}?scope=$scope"
-                          else
-                            s"${baseClusterUri(tokenId)}/file_monitor/${profile.group}?scope=$scope"
-                        },
+                            predefined.fold(s"$baseUri/file_monitor/${profile.group}?scope=$scope") {
+                              predefined =>
+                                if (predefined.equals("true"))
+                                  s"$baseUri/file_monitor/${profile.group}?scope=$scope&predefined"
+                                else s"$baseUri/file_monitor/${profile.group}?scope=$scope"
+                            } else
+                            predefined.fold(
+                              s"${baseClusterUri(tokenId)}/file_monitor/${profile.group}?scope=$scope"
+                            ) { predefined =>
+                              if (predefined.equals("true"))
+                                s"${baseClusterUri(tokenId)}/file_monitor/${profile.group}?scope=$scope&predefined"
+                              else
+                                s"${baseClusterUri(tokenId)}/file_monitor/${profile.group}?scope=$scope"
+                            }
+
+                        };
+                      logger.info("URL: {}", url)
+                      RestClient.httpRequestWithHeader(
+                        url,
                         PATCH,
                         payload,
                         tokenId

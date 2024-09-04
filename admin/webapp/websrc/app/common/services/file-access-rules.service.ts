@@ -8,6 +8,7 @@ import { MapConstant } from '@common/constants/map.constant';
 import { DatePipe } from '@angular/common';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
+import { OperationCellComponent } from '@components/file-access-rules/partial/predefined-file-access-rules-modal/operation-cell/operation-cell/operation-cell.component';
 
 @Injectable()
 export class FileAccessRulesService {
@@ -132,10 +133,18 @@ export class FileAccessRulesService {
       maxWidth: 90
     };
 
+    const operationColumn = {
+      headerName: '',
+      cellRenderer: OperationCellComponent,
+      maxWidth: 60,
+      minWidth: 60,
+      width: 60,
+    };
+
     const fileColumnDefs = isScoreImprovement
       ? [...filterColumn, timeColumn, actionColumn]
       : [...filterPrefix, applicationColumn, actionColumn, typeColumn, timeColumn];
-    const predefinedFilterColumns = [...filterPrefix, actionColumn];
+    const predefinedFilterColumns = [...filterPrefix, actionColumn, operationColumn];
 
     return {
       gridOptions4fileAccessRules: this.utils.createGridOptions(
@@ -180,7 +189,8 @@ export class FileAccessRulesService {
     operation,
     data,
     groupName,
-    scope = GlobalConstant.SCOPE.LOCAL
+    scope = GlobalConstant.SCOPE.LOCAL,
+    predefined = false,
   ) {
     let payload = {};
     switch (operation) {
@@ -222,12 +232,18 @@ export class FileAccessRulesService {
         {
           params: {
             scope: GlobalConstant.SCOPE.FED,
+            predefined: predefined
           }
         },
       ).pipe() :
       this.http.patch(
         PathConstant.FILE_PROFILE_URL,
-        payload
+        payload,
+        {
+          params: {
+            predefined: predefined
+          }
+        }
       ).pipe();
   }
 }

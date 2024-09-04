@@ -6,12 +6,14 @@ import { NvCommonModule } from '@common/nvCommon.module';
 import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
 import { AddEditFileAccessRuleModalComponent } from './partial/add-edit-file-access-rule-modal/add-edit-file-access-rule-modal.component';
 import { PredefinedFileAccessRulesModalComponent } from './partial/predefined-file-access-rules-modal/predefined-file-access-rules-modal.component';
+import { OperationCellComponent } from './partial/predefined-file-access-rules-modal/operation-cell/operation-cell/operation-cell.component';
 
 @NgModule({
   declarations: [
     FileAccessRulesComponent,
     AddEditFileAccessRuleModalComponent,
     PredefinedFileAccessRulesModalComponent,
+    OperationCellComponent,
   ],
   imports: [
     CommonModule,

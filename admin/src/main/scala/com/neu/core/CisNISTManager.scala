@@ -9,12 +9,13 @@ import org.apache.commons.csv.{ CSVFormat, CSVRecord }
 import scala.collection.JavaConverters._
 
 object CisNISTManager extends LazyLogging {
-  val inputStream: InputStream                                      = getClass.getResourceAsStream("/CIS_NIST-MASTER.CSV")
-  val inputStreamReader                                             = new InputStreamReader(inputStream, "UTF-8")
-  val csvFormat: CSVFormat                                          = CSVFormat.DEFAULT.builder().setHeader().build()
-  val csvRecords: scala.Iterable[CSVRecord]                         = csvFormat.parse(inputStreamReader).asScala
-  var arrayNIST: ArrayBuffer[ComplianceNIST]                        = ArrayBuffer()
-  val mapNIST: scala.collection.mutable.Map[String, ComplianceNIST] = scala.collection.mutable.Map()
+  private val inputStream: InputStream               = getClass.getResourceAsStream("/CIS_NIST-MASTER.CSV")
+  private val inputStreamReader                      = new InputStreamReader(inputStream, "UTF-8")
+  private val csvFormat: CSVFormat                   = CSVFormat.DEFAULT.builder().setHeader().build()
+  private val csvRecords: scala.Iterable[CSVRecord]  = csvFormat.parse(inputStreamReader).asScala
+  private val arrayNIST: ArrayBuffer[ComplianceNIST] = ArrayBuffer()
+  private val mapNIST: scala.collection.mutable.Map[String, ComplianceNIST] =
+    scala.collection.mutable.Map()
   for (record <- csvRecords) {
     val name       = record.get("Recommendation #")
     val subcontrol = record.get("CIS Sub-Control")

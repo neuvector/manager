@@ -1,29 +1,27 @@
 package com.neu.core
 
-import java.security.MessageDigest
-import java.text.SimpleDateFormat
-import java.util.Calendar
-
 import com.neu.model.AuthTokenJsonProtocol._
-import com.neu.model.{ Key, Token, TokenNew, UserTokenNew }
+import com.neu.model.{ Token, TokenNew, UserTokenNew }
 import com.typesafe.scalalogging.LazyLogging
 
+import java.security.MessageDigest
+import java.text.SimpleDateFormat
 import scala.Array._
 import scala.collection.mutable
-import scala.io.Source
-import scala.util.control.Breaks._
 
 /**
  * Created by bxu on 3/25/16.
  */
 object AuthenticationManager extends LazyLogging {
   var token: Option[Token] = None
-  val tokenMap: mutable.Map[String, UserTokenNew] =
+  private val tokenMap: mutable.Map[String, UserTokenNew] =
     scala.collection.mutable.Map[String, UserTokenNew]()
 
-  val tokenClusterMap: mutable.Map[String, String] = scala.collection.mutable.Map[String, String]()
+  private val tokenClusterMap: mutable.Map[String, String] =
+    scala.collection.mutable.Map[String, String]()
 
-  val tokenBaseUrlMap: mutable.Map[String, String] = scala.collection.mutable.Map[String, String]()
+  private val tokenBaseUrlMap: mutable.Map[String, String] =
+    scala.collection.mutable.Map[String, String]()
 
   val suseTokenMap: mutable.Map[String, String]   = scala.collection.mutable.Map[String, String]()
   def getCluster(tokenId: String): Option[String] = tokenClusterMap.get(tokenId)
@@ -114,7 +112,7 @@ object AuthenticationManager extends LazyLogging {
   def putToken(id: String, userToken: UserTokenNew): Unit =
     tokenMap += id -> userToken
 
-  def getRolesDigit(
+  private def getRolesDigit(
     global_role: String,
     role_domains: Option[Map[String, Array[String]]],
     timestamp: Long

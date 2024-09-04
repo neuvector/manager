@@ -1,6 +1,6 @@
 package com.neu
 
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 import com.typesafe.config.ConfigFactory
 
 /**
@@ -14,5 +14,5 @@ package object process {
    *  The actor system is responsible for monitoring process.
    */
   implicit lazy val actorSystem: ActorSystem =
-    ActorSystem("process", ConfigFactory.parseString("akka.daemonic=on"))
+    ActorSystem("process", ConfigFactory.parseString("pekko.daemonic=on"))
 }

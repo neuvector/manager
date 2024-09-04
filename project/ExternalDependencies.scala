@@ -15,21 +15,17 @@ object ExternalDependencies {
     def scalaTestExclude: ModuleID =
       module exclude (scalaModule, "scala-xml")
 
-    def akkaExclude: ModuleID =
-      module
-        .exclude(scalaLang, scalaLib)
-        .exclude("com.typesafe", "config")
+     def pekkoExclude: ModuleID =
+       module
+         .exclude(scalaLang, scalaLib)
+         .exclude("com.typesafe", "config")
   }
 
   val sprayV         = "1.3.3"
-  val akkaV          = "2.3.14"
 
   val typesafeConfig = "com.typesafe"               % "config"         % "1.3.0"
   val slf4jLog4j     = "org.slf4j"                  % "slf4j-log4j12"  % "1.7.21"
   val scalaLogging   = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4"
-
-  val akka           = "com.typesafe.akka" %% "akka-actor" % akkaV akkaExclude
-  val akkaLog        = "com.typesafe.akka" %% "akka-slf4j" % akkaV
 
   val joda           = "joda-time"         % "joda-time"   % "2.9.2"
 
@@ -37,11 +33,16 @@ object ExternalDependencies {
   val guava          = "com.google.guava"  % "guava"       % "16.0.1"
 
   private val ioSpray: String = "io.spray"
-  val sprayRoutingShapeless   = ioSpray %% "spray-routing-shapeless2" % sprayV
-  val sprayCan                = ioSpray %% "spray-can" % sprayV
-  val sprayJson               = ioSpray %% "spray-json" % "1.3.2" exclude ("org.scala-lang", "scala-library")
-  val sprayClient             = ioSpray %% "spray-client" % sprayV exclude ("org.xerial.snappy", "snappy-java")
+  val sprayJson               = ioSpray %% "spray-json" % "1.3.6" exclude ("org.scala-lang", "scala-library")
 
-  val scalaTest = "org.scalatest" %% "scalatest" % "2.2.5" % "test" scalaTestExclude
-  val spec2     = "org.specs2" %% "specs2" % "3.7" % "test"
+  val scalaTest = "org.scalatest" %% "scalatest" % "3.2.16" % "test" scalaTestExclude
+  // val spec2     = "org.specs2" %% "specs2" % "3.7" % "test"
+
+
+  val pekkoV = "1.0.2"
+
+  val pekkoActor   = "org.apache.pekko" %% "pekko-actor"   % pekkoV pekkoExclude
+  val pekkoHttp   = "org.apache.pekko" %% "pekko-http"   % "1.0.1"
+  val pekkoSlf4j   = "org.apache.pekko" %% "pekko-slf4j"   % pekkoV
+  val pekkoStream  = "org.apache.pekko" %% "pekko-stream"  % pekkoV
 }

@@ -9,17 +9,18 @@ import com.neu.core.{ AuthenticationManager, Md5 }
 import com.neu.model.AuthTokenJsonProtocol.{ jsonToUserWrap, tokenWrapToJson, _ }
 import com.neu.model.RebrandJsonProtocol._
 import com.neu.model._
+import com.neu.web.Rest.materializer
 import com.typesafe.scalalogging.LazyLogging
-import spray.can.Http._
-import spray.http.HttpMethods._
-import spray.http.{ HttpCookie, StatusCodes }
-import spray.httpx.ResponseTransformation
-import spray.routing.Route
+import org.apache.pekko.http.scaladsl.model.headers.HttpCookie
+import org.apache.pekko.http.scaladsl.model.{ HttpMethods, StatusCodes }
+import org.apache.pekko.http.scaladsl.server.Route
+import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshal
 
 import java.nio.charset.StandardCharsets
 import java.util.Base64
 import scala.concurrent.duration._
-import scala.concurrent.{ Await, ExecutionContext, TimeoutException }
+import scala.concurrent.{ Await, ExecutionContext, Future, TimeoutException }
+import scala.util.{ Failure, Success }
 import scala.util.control.NonFatal
 
 /**
@@ -31,7 +32,6 @@ import scala.util.control.NonFatal
 class AuthenticationService()(implicit executionContext: ExecutionContext)
     extends BaseService
     with DefaultJsonFormats
-    with ResponseTransformation
     with LazyLogging {
 
   val auth               = "auth"
@@ -45,7 +45,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
 
   val authRoute: Route =
     (get & path(openId)) {
-      clientIP { ip =>
+      extractClientIP { ip =>
         parameters('code.?, 'state.?) { (code, state) =>
           if (state.isEmpty) {
             optionalHeaderValueByName("Host") { host =>
@@ -55,16 +55,16 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                   complete {
                     if (serverName.isEmpty) {
                       logger.info(s"openId-g: no server name.")
-                      RestClient.httpRequest(s"$baseUri/$saml", GET)
+                      RestClient.httpRequest(s"$baseUri/$saml", HttpMethods.GET)
                     } else {
                       if (host.isEmpty) {
                         logger.info(s"openId-g: no host.")
-                        RestClient.httpRequest(s"$baseUri/$saml/openId1", GET)
+                        RestClient.httpRequest(s"$baseUri/$saml/openId1", HttpMethods.GET)
                       } else {
                         logger.info(s"openId-g: to get redirect url")
                         RestClient.httpRequest(
                           s"$baseUri/$saml/openId1",
-                          POST,
+                          HttpMethods.POST,
                           redirectUrlToJson(RedirectURL(s"https://${host.get}/$openId"))
                         )
                       }
@@ -80,13 +80,13 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
               logger.info(s"openId-g:  host is ${host.get}")
               val text =
                 Base64.getEncoder.encodeToString(samlKey.getBytes(StandardCharsets.UTF_8))
-              val cookie = HttpCookie("temp", content = text)
+              val cookie = HttpCookie("temp", text)
 
               setCookie(cookie) { ctx =>
                 {
                   val result = RestClient.passHttpRequest(
                     s"$baseUri/$auth/openId1",
-                    POST,
+                    HttpMethods.POST,
                     samlResponseToJson(
                       SamlResponse(
                         client_ip = ip.toString,
@@ -105,11 +105,12 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
 
                   response.status match {
                     case StatusCodes.OK =>
-                      val authToken = AuthenticationManager.parseToken(response.entity.asString)
-                      logger.info(
-                        s"openId-g: added authToken"
-                      )
-                      AuthenticationManager.putToken(samlKey, authToken)
+                      // Use Unmarshal to convert the entity to a String
+                      val authTokenFuture: Future[String] = Unmarshal(response.entity).to[String]
+                      val authToken                       = Await.result(authTokenFuture, RestClient.waitingLimit.seconds)
+                      val userToken: UserTokenNew         = AuthenticationManager.parseToken(authToken)
+                      logger.info(s"openId-g: added authToken")
+                      AuthenticationManager.putToken(samlKey, userToken)
                       ctx.redirect(rootPath, StatusCodes.Found)
                     case _ =>
                       logger.warn(s"openId-g: invalid response. redirect /")
@@ -123,7 +124,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
       }
     } ~
     (patch & path(openId)) {
-      clientIP { ip =>
+      extractClientIP { ip =>
         logger.info(s"openId-pt: to validate authToken from {}", ip)
         val authToken = AuthenticationManager.validate(samlKey)
         authToken match {
@@ -142,19 +143,19 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
       }
     } ~
     (get & path(saml)) {
-      clientIP { _ =>
+      extractClientIP { _ =>
         optionalHeaderValueByName("Host") { host =>
           parameter('serverName.?) { serverName =>
             Utils.respondWithWebServerHeaders() {
               complete {
                 if (serverName.isEmpty) {
                   logger.info(s"saml-g: servername is empty")
-                  RestClient.httpRequest(s"$baseUri/$saml", GET)
+                  RestClient.httpRequest(s"$baseUri/$saml", HttpMethods.GET)
                 } else {
                   logger.info(s"saml-g: $serverName")
                   RestClient.httpRequest(
                     s"$baseUri/$saml/saml1",
-                    GET,
+                    HttpMethods.GET,
                     samlRedirectUrlToJson(
                       SamlRedirectURL(s"https://${host.get}/$saml", s"https://${host.get}/$saml")
                     )
@@ -167,7 +168,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
       }
     } ~
     (patch & path(saml)) {
-      clientIP { _ =>
+      extractClientIP { _ =>
         logger.info(s"saml-pt: to validate authToken.")
         val authToken = AuthenticationManager.validate(samlKey)
 
@@ -187,48 +188,67 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
       }
     } ~
     (post & path(saml)) {
-      clientIP { ip =>
-        optionalHeaderValueByName("Host") { host =>
-          logger.info(s"saml-p: ${host.get}")
-          val text = Base64.getEncoder.encodeToString(samlKey.getBytes(StandardCharsets.UTF_8))
+      extractClientIP { ip =>
+        optionalHeaderValueByName("Host") {
+          case Some(host) =>
+            logger.info(s"saml-p: $host")
+            val text = Base64.getEncoder.encodeToString(samlKey.getBytes(StandardCharsets.UTF_8))
 
-          setCookie(HttpCookie("temp", content = text)) { ctx =>
-            {
-              val result = RestClient.passHttpRequest(
-                s"$baseUri/$auth/saml1",
-                POST,
-                samlResponseToJson(
-                  SamlResponse(
-                    client_ip = ip.toString,
-                    Token = Some(
-                      SamlToken(
-                        ctx.request.entity.asString,
-                        None,
-                        Some(s"https://${host.get}/$saml")
+            setCookie(HttpCookie("temp", text)) {
+              extractRequestContext { ctx =>
+                onComplete(Unmarshal(ctx.request.entity).to[String]) {
+                  case Success(entityString) =>
+                    val result = RestClient.passHttpRequest(
+                      s"$baseUri/$auth/saml1",
+                      HttpMethods.POST,
+                      samlResponseToJson(
+                        SamlResponse(
+                          client_ip = ip.toString,
+                          Token = Some(
+                            SamlToken(
+                              entityString,
+                              None,
+                              Some(s"https://$host/$saml")
+                            )
+                          )
+                        )
                       )
                     )
-                  )
-                )
-              )
-              val response = Await.result(result, RestClient.waitingLimit.seconds)
 
-              logger.info("saml-p: added temp cookie.")
-
-              response.status match {
-                case StatusCodes.OK =>
-                  logger.info(s"saml-p: added authToken. redirect to $rootPath")
-                  val authToken = AuthenticationManager.parseToken(response.entity.asString)
-                  AuthenticationManager.putToken("samlSso", authToken)
-                  ctx.redirect(rootPath, StatusCodes.Found)
-                case _ =>
-                  logger.warn(
-                    s"saml-p: {} . SAML login error. redirect to $rootPath ",
-                    response.status
-                  )
-                  ctx.redirect(rootPath, StatusCodes.MovedPermanently)
+                    onComplete(result) {
+                      case Success(response) =>
+                        logger.info("saml-p: added temp cookie.")
+                        response.status match {
+                          case StatusCodes.OK =>
+                            logger.info(s"saml-p: added authToken. redirect to $rootPath")
+                            onComplete(Unmarshal(response.entity).to[String]) {
+                              case Success(authToken) =>
+                                val userToken: UserTokenNew =
+                                  AuthenticationManager.parseToken(authToken)
+                                AuthenticationManager.putToken("samlSso", userToken)
+                                redirect(rootPath, StatusCodes.Found)
+                              case Failure(ex) =>
+                                logger.error("Failed to unmarshal auth token", ex)
+                                complete(StatusCodes.InternalServerError)
+                            }
+                          case _ =>
+                            logger.warn(
+                              s"saml-p: ${response.status}. SAML login error. redirect to $rootPath "
+                            )
+                            redirect(rootPath, StatusCodes.MovedPermanently)
+                        }
+                      case Failure(ex) =>
+                        logger.error("HTTP request failed", ex)
+                        complete(StatusCodes.InternalServerError)
+                    }
+                  case Failure(ex) =>
+                    logger.error("Failed to unmarshal request entity", ex)
+                    complete(StatusCodes.InternalServerError)
+                }
               }
             }
-          }
+          case None =>
+            complete(StatusCodes.BadRequest, "Host header is missing")
         }
       }
     } ~
@@ -253,7 +273,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
             if ("true".equalsIgnoreCase(eulaOEMAppSafe)) {
               eulaWrapToJson(EulaWrap(Eula(true)))
             } else {
-              RestClient.httpRequest(s"$baseUri/eula", GET)
+              RestClient.httpRequest(s"$baseUri/eula", HttpMethods.GET)
             }
           }
         }
@@ -277,7 +297,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
     } ~
     (post & path(auth)) {
       optionalCookie(suseCookie) {
-        case Some(sCookie) => loginWithSUSEToken(sCookie.content)
+        case Some(sCookie) => loginWithSUSEToken(sCookie.value)
         case None          => loginWithSUSEToken("")
       }
     } ~
@@ -296,7 +316,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                 paginationCacheManager[List[org.json4s.JsonAST.JValue]]
                   .removePagedData(s"$cacheKey-network-rule")
                 AuthenticationManager.invalidate(tokenId)
-                RestClient.httpRequestWithHeader(s"$baseUri/$auth", DELETE, "", tokenId)
+                RestClient.httpRequestWithHeader(s"$baseUri/$auth", HttpMethods.DELETE, "", tokenId)
               }
             }
           }
@@ -307,7 +327,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
               complete {
                 RestClient.httpRequestWithHeader(
                   s"${baseClusterUri(tokenId)}/$auth",
-                  PATCH,
+                  HttpMethods.PATCH,
                   "",
                   tokenId
                 )
@@ -323,7 +343,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                   logger.info(s"Getting permission options ...")
                   RestClient.httpRequestWithHeader(
                     s"${baseClusterUri(tokenId)}/user_role_permission/options",
-                    GET,
+                    HttpMethods.GET,
                     "",
                     tokenId
                   )
@@ -345,7 +365,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                     logger.info(s"Getting roles ...")
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/$url",
-                      GET,
+                      HttpMethods.GET,
                       "",
                       tokenId
                     )
@@ -361,7 +381,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                     logger.info("Add role: {}", payload)
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/user_role",
-                      POST,
+                      HttpMethods.POST,
                       payload,
                       tokenId
                     )
@@ -378,7 +398,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                     logger.info("Add role: {}", payload)
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/user_role/${UrlEscapers.urlFragmentEscaper().escape(name)}",
-                      PATCH,
+                      HttpMethods.PATCH,
                       payload,
                       tokenId
                     )
@@ -393,7 +413,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                     logger.info("Deleting role: {}", name)
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/user_role/${UrlEscapers.urlFragmentEscaper().escape(name)}",
-                      DELETE,
+                      HttpMethods.DELETE,
                       "",
                       tokenId
                     )
@@ -413,7 +433,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                       logger.info("Getting all apikeys")
                       RestClient.httpRequestWithHeader(
                         s"${baseClusterUri(tokenId)}/api_key",
-                        GET,
+                        HttpMethods.GET,
                         "",
                         tokenId
                       )
@@ -421,7 +441,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                       logger.info("Getting apikey: {}", name.get)
                       RestClient.httpRequestWithHeader(
                         s"${baseClusterUri(tokenId)}/api_key/${UrlEscapers.urlFragmentEscaper().escape(name.get)}",
-                        GET,
+                        HttpMethods.GET,
                         "",
                         tokenId
                       )
@@ -438,7 +458,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                     logger.info("Add apikey: {}", payload)
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/api_key",
-                      POST,
+                      HttpMethods.POST,
                       payload,
                       tokenId
                     )
@@ -450,7 +470,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                   logger.info("Create apikey")
                   RestClient.httpRequestWithHeader(
                     s"${baseClusterUri(tokenId)}/api_key",
-                    POST,
+                    HttpMethods.POST,
                     "",
                     tokenId
                   )
@@ -464,7 +484,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                     logger.info("Deleting apikey: {}", name)
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/api_key/${UrlEscapers.urlFragmentEscaper().escape(name)}",
-                      DELETE,
+                      HttpMethods.DELETE,
                       "",
                       tokenId
                     )
@@ -485,7 +505,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                       val result =
                         RestClient.requestWithHeaderDecode(
                           s"$baseUri/user/${name.get}",
-                          GET,
+                          HttpMethods.GET,
                           "",
                           tokenId
                         )
@@ -524,7 +544,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                       val result =
                         RestClient.requestWithHeaderDecode(
                           s"${baseClusterUri(tokenId)}/user",
-                          GET,
+                          HttpMethods.GET,
                           "",
                           tokenId
                         )
@@ -553,7 +573,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                   logger.info("Add user: {}", user.username)
                   RestClient.httpRequestWithHeader(
                     s"${baseClusterUri(tokenId)}/user",
-                    POST,
+                    HttpMethods.POST,
                     userWrapToJson(UserWrap(user)),
                     tokenId
                   )
@@ -568,7 +588,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                 val result =
                   RestClient.httpRequestWithHeaderDecode(
                     s"$baseUri/user/${UrlEscapers.urlFragmentEscaper().escape(user.fullname)}",
-                    PATCH,
+                    HttpMethods.PATCH,
                     userProfileWrapToJson(UserProfileWrap(user)),
                     tokenId
                   )
@@ -621,7 +641,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                   logger.info("Deleting user: {}", userId)
                   RestClient.httpRequestWithHeader(
                     s"${baseClusterUri(tokenId)}/user/${UrlEscapers.urlFragmentEscaper().escape(userId)}",
-                    DELETE,
+                    HttpMethods.DELETE,
                     "",
                     tokenId
                   )
@@ -633,7 +653,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
         pathPrefix("self") {
           get {
             optionalCookie(suseCookie) {
-              case Some(sCookie) => refreshTokenWithSUSEToken(sCookie.content, tokenId)
+              case Some(sCookie) => refreshTokenWithSUSEToken(sCookie.value, tokenId)
               case None          => refreshTokenWithSUSEToken("", tokenId)
             }
           }
@@ -659,7 +679,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                   logger.info("Setting EULA: {}", eula.accepted)
                   RestClient.httpRequestWithHeader(
                     s"$baseUri/eula",
-                    POST,
+                    HttpMethods.POST,
                     eulaWrapToJson(EulaWrap(eula)),
                     tokenId
                   )
@@ -676,7 +696,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                   logger.info("Getting license")
                   RestClient.httpRequestWithHeader(
                     s"${baseClusterUri(tokenId)}/system/license",
-                    GET,
+                    HttpMethods.GET,
                     "",
                     tokenId
                   )
@@ -691,7 +711,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                       logger.info("Getting license code")
                       RestClient.httpRequestWithHeader(
                         s"${baseClusterUri(tokenId)}/system/license/request",
-                        POST,
+                        HttpMethods.POST,
                         licenseRequestToJson(licenseRequestWrap),
                         tokenId
                       )
@@ -710,7 +730,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                       logger.info("Loading license")
                       RestClient.httpRequestWithHeader(
                         s"${baseClusterUri(tokenId)}/system/license/update",
-                        POST,
+                        HttpMethods.POST,
                         licenseKeyToJson(licenseKey),
                         tokenId
                       )
@@ -729,7 +749,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                   logger.info("Getting password public profile")
                   RestClient.httpRequestWithHeader(
                     s"${baseClusterUri(tokenId)}/password_profile/nvsyspwdprofile",
-                    GET,
+                    HttpMethods.GET,
                     "",
                     tokenId
                   )
@@ -745,7 +765,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                     logger.info("Updating user block")
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/user/${userBlockWrap.config.fullname}/password",
-                      POST,
+                      HttpMethods.POST,
                       userBlockWrapToJson(userBlockWrap),
                       tokenId
                     )
@@ -761,7 +781,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                   logger.info("Getting password profile")
                   RestClient.httpRequestWithHeader(
                     s"${baseClusterUri(tokenId)}/password_profile",
-                    GET,
+                    HttpMethods.GET,
                     "",
                     tokenId
                   )
@@ -775,7 +795,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                     logger.info("Updating password profile")
                     RestClient.httpRequestWithHeader(
                       s"${baseClusterUri(tokenId)}/password_profile/${passwordProfileWrap.config.name}",
-                      PATCH,
+                      HttpMethods.PATCH,
                       passwordProfileWrapToJson(passwordProfileWrap),
                       tokenId
                     )
@@ -793,7 +813,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                   logger.info("Getting ldap/saml server")
                   RestClient.httpRequestWithHeader(
                     s"${baseClusterUri(tokenId)}/server",
-                    GET,
+                    HttpMethods.GET,
                     "",
                     tokenId
                   )
@@ -809,7 +829,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                       logger.debug(ldapSettingWrapToJson(ldapSettingWrap))
                       RestClient.httpRequestWithHeader(
                         s"${baseClusterUri(tokenId)}/server",
-                        POST,
+                        HttpMethods.POST,
                         ldapSettingWrapToJson(ldapSettingWrap),
                         tokenId
                       )
@@ -827,7 +847,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                       logger.debug(ldapSettingWrapToJson(ldapSettingWrap))
                       RestClient.httpRequestWithHeader(
                         s"${baseClusterUri(tokenId)}/server/${ldapSettingWrap.config.name}",
-                        PATCH,
+                        HttpMethods.PATCH,
                         ldapSettingWrapToJson(ldapSettingWrap),
                         tokenId
                       )
@@ -844,7 +864,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                       logger.info("Deleting Ldap/saml server")
                       RestClient.httpRequestWithHeader(
                         s"${baseClusterUri(tokenId)}/server/${ldapSettingWrap.config.name}",
-                        DELETE,
+                        HttpMethods.DELETE,
                         ldapSettingWrapToJson(ldapSettingWrap),
                         tokenId
                       )
@@ -863,7 +883,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                   logger.info("Testing Ldap server config")
                   RestClient.httpRequestWithHeader(
                     s"${baseClusterUri(tokenId)}/debug/server/test",
-                    POST,
+                    HttpMethods.POST,
                     ldapAccountWarpToJson(ldapAccountWarp),
                     tokenId
                   )
@@ -873,14 +893,14 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
           }
         } ~
         (get & path(samlslo)) {
-          clientIP { _ =>
+          extractClientIP { _ =>
             optionalHeaderValueByName("Host") { host =>
               Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info(s"saml-g: slo")
                   RestClient.httpRequestWithHeader(
                     s"$baseUri/$saml/saml1/slo",
-                    GET,
+                    HttpMethods.GET,
                     samlRedirectUrlToJson(
                       SamlRedirectURL(
                         s"https://${host.get}/$samlSloResp",
@@ -908,7 +928,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
             val result =
               RestClient.requestWithHeaderDecode(
                 s"$baseUri/selfuser",
-                GET,
+                HttpMethods.GET,
                 "",
                 tokenId
               )
@@ -951,14 +971,14 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
     }
 
   private def loginWithSUSEToken(suseCookieValue: String) =
-    clientIP { ip =>
+    extractClientIP { ip =>
       entity(as[Password]) { userPwd =>
         def login: Route = {
           val suseCookie = if (userPwd.isRancherSSOUrl) suseCookieValue else ""
           val result =
             RestClient.httpRequestWithTokenHeader(
               s"$baseUri/$auth",
-              POST,
+              HttpMethods.POST,
               authRequestToJson(AuthRequest(userPwd, ip.toString())),
               suseCookie
             )
@@ -1031,11 +1051,11 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                     Utils.respondWithWebServerHeaders() {
                       complete((StatusCodes.NetworkConnectTimeout, "Network connect timeout error"))
                     }
-                  case e: ConnectionAttemptFailedException =>
-                    logger.warn(e.getMessage)
-                    Utils.respondWithWebServerHeaders() {
-                      complete((StatusCodes.NetworkConnectTimeout, "Network connect timeout error"))
-                    }
+//                  case e: ConnectionAttemptFailedException =>
+//                    logger.warn(e.getMessage)
+//                    Utils.respondWithWebServerHeaders() {
+//                      complete((StatusCodes.NetworkConnectTimeout, "Network connect timeout error"))
+//                    }
                 }
               }
             case e: TimeoutException =>
@@ -1043,11 +1063,11 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
               Utils.respondWithWebServerHeaders() {
                 complete((StatusCodes.NetworkConnectTimeout, "Network connect timeout error"))
               }
-            case e: ConnectionAttemptFailedException =>
-              logger.warn(e.getMessage)
-              Utils.respondWithWebServerHeaders() {
-                complete((StatusCodes.NetworkConnectTimeout, "Network connect timeout error"))
-              }
+//            case e: ConnectionAttemptFailedException =>
+//              logger.warn(e.getMessage)
+//              Utils.respondWithWebServerHeaders() {
+//                complete((StatusCodes.NetworkConnectTimeout, "Network connect timeout error"))
+//              }
           }
         }
       }

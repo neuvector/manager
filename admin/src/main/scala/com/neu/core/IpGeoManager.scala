@@ -13,12 +13,12 @@ import java.net.{ Inet4Address, Inet6Address, InetAddress }
  * Created by bxu on 3/25/16.
  */
 object IpGeoManager extends LazyLogging {
-  val fileStreamIpV4                = getClass.getResourceAsStream("/IP2LOCATION-LITE-DB1.CSV")
-  val fileStreamIpV6                = getClass.getResourceAsStream("/IP2LOCATION-LITE-DB1.IPV6.CSV")
-  val fileStreamBufferIpV4          = Source.fromInputStream(fileStreamIpV4)
-  val fileStreamBufferIpV6          = Source.fromInputStream(fileStreamIpV6)
-  var arrayIpV4: ArrayBuffer[IpGeo] = ArrayBuffer()
-  var arrayIpV6: ArrayBuffer[IpGeo] = ArrayBuffer()
+  private val fileStreamIpV4                = getClass.getResourceAsStream("/IP2LOCATION-LITE-DB1.CSV")
+  private val fileStreamIpV6                = getClass.getResourceAsStream("/IP2LOCATION-LITE-DB1.IPV6.CSV")
+  private val fileStreamBufferIpV4          = Source.fromInputStream(fileStreamIpV4)
+  private val fileStreamBufferIpV6          = Source.fromInputStream(fileStreamIpV6)
+  private val arrayIpV4: ArrayBuffer[IpGeo] = ArrayBuffer()
+  private val arrayIpV6: ArrayBuffer[IpGeo] = ArrayBuffer()
   for (line <- fileStreamBufferIpV4.getLines) {
     val cols = line.split(",").map(_.trim)
     arrayIpV4 += IpGeo(
@@ -40,13 +40,13 @@ object IpGeoManager extends LazyLogging {
   fileStreamBufferIpV4.close
   fileStreamBufferIpV6.close
 
-  def ipV4ToNum(ip: String): BigInt =
+  private def ipV4ToNum(ip: String): BigInt =
     InetAddress.getByName(ip).getAddress.foldLeft(0L)((acc, b) => (acc << 8) + (b & 0xff))
 
-  def ipV6ToNum(ip: String): BigInt =
+  private def ipV6ToNum(ip: String): BigInt =
     BigInt(1, InetAddress.getByName(ip).getAddress)
 
-  def isIpV4(ip: String): Boolean = {
+  private def isIpV4(ip: String): Boolean = {
     val regexIPv4 =
       "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$".r
     ip.trim match {
@@ -55,7 +55,7 @@ object IpGeoManager extends LazyLogging {
     }
   }
 
-  def isIpV6(ip: String): Boolean = {
+  private def isIpV6(ip: String): Boolean = {
     val regexIPv6 =
       "^(?:(?:(?:[A-F0-9]{1,4}:){6}|(?=(?:[A-F0-9]{0,4}:){0,6}(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$)(([0-9A-F]{1,4}:){0,5}|:)((:[0-9A-F]{1,4}){1,5}:|:))(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)|(?:[A-F0-9]{1,4}:){7}[A-F0-9]{1,4}|(?=(?:[A-F0-9]{0,4}:){0,7}[A-F0-9]{0,4}$)(([0-9A-F]{1,4}:){1,7}|:)((:[0-9A-F]{1,4}){1,7}|:))$".r
     ip.trim match {
@@ -86,7 +86,7 @@ object IpGeoManager extends LazyLogging {
     )
   }
 
-  def getCountry(ip: String): IpGeo =
+  private def getCountry(ip: String): IpGeo =
     if (isIpV4(ip)) {
       binarySearch(arrayIpV4, ipV4ToNum(ip))
     } else if (isIpV6(ip)) {

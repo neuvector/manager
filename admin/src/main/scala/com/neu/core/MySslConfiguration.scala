@@ -1,47 +1,24 @@
 package com.neu.core
 
-import java.io.{
-  BufferedInputStream,
-  File,
-  FileInputStream,
-  FileNotFoundException,
-  FileOutputStream,
-  IOException,
-  OutputStreamWriter,
-  Writer
-}
-import java.security.cert.{ Certificate, CertificateFactory }
-import java.security.interfaces.RSAPrivateKey
-import java.security.spec.{ RSAPrivateCrtKeySpec, _ }
-import java.security.{ KeyFactory, KeyStore, PrivateKey, SecureRandom }
-import java.util.{ Base64, Date }
-
 import com.neu.core.CommonSettings.{ newCert, newKey, newMgrCert, newMgrKey }
 import com.typesafe.scalalogging.LazyLogging
-import javax.net.ssl.{ KeyManagerFactory, SSLContext, TrustManagerFactory }
-import spray.io.ServerSSLEngineProvider
+import org.bouncycastle.asn1.x500.X500Name
+import org.bouncycastle.asn1.x509._
+import org.bouncycastle.cert.jcajce.{ JcaX509CertificateConverter, JcaX509v3CertificateBuilder }
+import org.bouncycastle.jce.provider.BouncyCastleProvider
+import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder
+import org.bouncycastle.util.io.pem.{ PemObject, PemWriter }
 import sun.security.util.DerInputStream
 
-import scala.collection.JavaConverters._
-
+import java.io._
 import java.math.BigInteger
 import java.security._
-import java.security.cert.X509Certificate
-import org.bouncycastle.asn1.x500.X500Name
-import org.bouncycastle.cert.X509CertificateHolder
-import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter
-import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder
-import org.bouncycastle.jce.provider.BouncyCastleProvider
-import org.bouncycastle.operator.ContentSigner
-import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder
-import org.bouncycastle.asn1.x509.KeyUsage
-import org.bouncycastle.asn1.x509.Extension
-import org.bouncycastle.asn1.x509.BasicConstraints
-import org.bouncycastle.asn1.x509.GeneralName
-import org.bouncycastle.asn1.x509.GeneralNames
-import org.bouncycastle.asn1.x509.ExtendedKeyUsage
-import org.bouncycastle.asn1.x509.KeyPurposeId
-import org.bouncycastle.util.io.pem.{ PemObject, PemWriter }
+import java.security.cert.{ Certificate, CertificateFactory, X509Certificate }
+import java.security.interfaces.RSAPrivateKey
+import java.security.spec._
+import java.util.{ Base64, Date }
+import javax.net.ssl.{ KeyManagerFactory, SSLContext, SSLEngine, TrustManagerFactory }
+import scala.collection.JavaConverters._
 
 trait MySslConfiguration extends LazyLogging {
 
@@ -52,6 +29,9 @@ trait MySslConfiguration extends LazyLogging {
     val context     = SSLContext.getInstance("TLS")
     val fCert: File = new File(newCert)
     val fKey: File  = new File(newKey)
+    logger.info(s"Cert Path: $newCert")
+    logger.info(s"Key Path: $newKey")
+
     if (fCert.isFile && fKey.isFile) {
       loadCertificateAndKey(fCert, fKey, context)
     } else {
@@ -75,13 +55,13 @@ trait MySslConfiguration extends LazyLogging {
     }
   }
 
-  def generateKeyPair(): KeyPair = {
+  private def generateKeyPair(): KeyPair = {
     val keyPairGenerator = KeyPairGenerator.getInstance("RSA")
     keyPairGenerator.initialize(2048)
     keyPairGenerator.generateKeyPair()
   }
 
-  def generateSelfSignedCertificate(keyPair: KeyPair): X509Certificate = {
+  private def generateSelfSignedCertificate(keyPair: KeyPair): X509Certificate = {
     // Certificate details
     val issuer    = new X500Name("CN=neuvector, O=NeuVector, L=San Jose, ST=California, C=USA")
     val subject   = new X500Name("CN=neuvector")
@@ -115,7 +95,9 @@ trait MySslConfiguration extends LazyLogging {
     )
     certificateBuilder.addExtension(Extension.basicConstraints, true, new BasicConstraints(false))
 
-    val san = new GeneralNames(new GeneralName(GeneralName.dNSName, "neuvector"))
+    val sanBuilder = new GeneralNamesBuilder()
+    sanBuilder.addName(new GeneralName(GeneralName.dNSName, "neuvector"))
+    val san = sanBuilder.build()
     certificateBuilder.addExtension(Extension.subjectAlternativeName, false, san)
 
     // Sign and generate the certificate
@@ -125,7 +107,7 @@ trait MySslConfiguration extends LazyLogging {
     new JcaX509CertificateConverter().setProvider("BC").getCertificate(certificateHolder)
   }
 
-  def saveCertificateAndKey(certificate: X509Certificate, privateKey: PrivateKey): Unit = {
+  private def saveCertificateAndKey(certificate: X509Certificate, privateKey: PrivateKey): Unit = {
     val fCert: File = new File(newMgrCert)
     val fKey: File  = new File(newMgrKey)
     if (fCert.exists) {
@@ -153,7 +135,7 @@ trait MySslConfiguration extends LazyLogging {
     }
   }
 
-  def loadCertificateAndKey(fCert: File, fKey: File, context: SSLContext): SSLContext = {
+  private def loadCertificateAndKey(fCert: File, fKey: File, context: SSLContext): SSLContext = {
 
     val password               = Array('n', 'e', 'u', 'v', 'e', 'c', 't', 'o', 'r')
     val cf: CertificateFactory = CertificateFactory.getInstance("X.509")
@@ -276,7 +258,8 @@ trait MySslConfiguration extends LazyLogging {
     }
   }
 
-  implicit val myEngineProvider = ServerSSLEngineProvider { engine =>
+  def configureSSLEngine(engine: SSLEngine): SSLEngine = {
+    engine.setUseClientMode(false)
     engine.setEnabledCipherSuites(Array("TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256"))
     engine.setEnabledProtocols(Array("TLSv1.2"))
     engine

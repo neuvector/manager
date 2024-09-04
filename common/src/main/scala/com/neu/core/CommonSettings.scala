@@ -1,6 +1,6 @@
 package com.neu.core
 
-import akka.japi.Util.immutableSeq
+import org.apache.pekko.japi.Util.immutableSeq;
 import com.typesafe.config.{ Config, ConfigFactory }
 import com.typesafe.scalalogging.LazyLogging
 

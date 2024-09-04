@@ -1,20 +1,15 @@
 package com.neu.api
 
-import akka.actor.{ Actor, ActorContext, ActorLogging }
-import akka.pattern.AskTimeoutException
 import com.google.common.base.Throwables
 import com.typesafe.scalalogging.LazyLogging
-import spray.can.Http.{ Bound, CommandFailed, ConnectionAttemptFailedException }
-import spray.http.ContentTypes._
-import spray.http.HttpHeaders._
-import spray.http.StatusCodes._
-import spray.http._
-import spray.routing._
-import spray.util.LoggingContext
+import org.apache.pekko.actor.{ Actor, ActorLogging, ActorSystem }
+import org.apache.pekko.event.LoggingAdapter
+import org.apache.pekko.http.scaladsl.model.headers.RawHeader
+import org.apache.pekko.http.scaladsl.model.{ HttpEntity, HttpResponse, StatusCode, StatusCodes }
+import org.apache.pekko.http.scaladsl.server._
+import org.apache.pekko.io.Tcp.{ Bound, CommandFailed }
 
-import scala.concurrent.Future
 import scala.util.control.NonFatal
-import shapeless._
 
 /**
  * Holds potential error response with the HTTP status and optional body
@@ -30,49 +25,48 @@ case class ErrorResponseException(responseStatus: StatusCode, response: Option[H
  * responses to be provided, logs to be captured, and potentially remedial actions.
  *
  */
-trait FailureHandling {
-  this: HttpService =>
+trait FailureHandling extends Directives {
+  implicit val log: LoggingAdapter
 
-  // For Spray > 1.1-M7 use routeRouteResponse
-  // see https://groups.google.com/d/topic/spray-user/zA_KR4OBs1I/discussion
-  def rejectionHandler: RejectionHandler = RejectionHandler.Default
+  def rejectionHandler: RejectionHandler = RejectionHandler.default
 
-  def exceptionHandler(implicit log: LoggingContext): ExceptionHandler = ExceptionHandler {
-
+  def exceptionHandler: ExceptionHandler = ExceptionHandler {
     case e: IllegalArgumentException =>
-      ctx =>
-        loggedFailureResponse(
+      extractRequestContext { ctx =>
+        logFailureResponse(
           ctx,
           e,
           message = "The server was asked a question that didn't make sense: " + e.getMessage,
-          error = NotAcceptable
+          error = StatusCodes.NotAcceptable
         )
+      }
 
     case e: NoSuchElementException =>
-      ctx =>
-        loggedFailureResponse(
+      extractRequestContext { ctx =>
+        logFailureResponse(
           ctx,
           e,
           message = "The server is missing some information. Try again in a few moments.",
-          error = NotFound
+          error = StatusCodes.NotFound
         )
+      }
 
     case t: Throwable =>
-      ctx =>
-        // note that toString here may expose information and cause a security leak, so don't do it.
-        loggedFailureResponse(ctx, t)
+      extractRequestContext { ctx =>
+        logFailureResponse(ctx, t)
+      }
   }
 
-  private def loggedFailureResponse(
+  private def logFailureResponse(
     ctx: RequestContext,
     thrown: Throwable,
     message: String = "The server is having problems.",
-    error: StatusCode = InternalServerError
-  )(implicit log: LoggingContext): Unit = {
-    log.error(Throwables.getStackTraceAsString(thrown))
-    ctx.complete((error, message))
-  }
-
+    error: StatusCode = StatusCodes.InternalServerError
+  ): Route =
+    extractLog { log =>
+      log.error(Throwables.getStackTraceAsString(thrown))
+      complete((error, message))
+    }
 }
 
 /**
@@ -82,53 +76,25 @@ trait FailureHandling {
  *
  * @param route the (concatenated) route
  */
-class RoutedHttpService(route: Route) extends Actor with HttpService with ActorLogging {
+class RoutedHttpService(route: Route) extends Actor with ActorLogging with Directives {
 
-  implicit def actorRefFactory: ActorContext = context
+  implicit val system: ActorSystem = context.system
 
   implicit val handler: ExceptionHandler = ExceptionHandler {
-    case NonFatal(ErrorResponseException(statusCode, entity)) =>
-      ctx => ctx.complete((statusCode, "server internal error"))
-
-    case e: ConnectionAttemptFailedException ⇒
-      ctx ⇒ {
-        log.warning("Controller is not available ..." + e.getMessage)
-        ctx.complete((StatusCodes.InternalServerError, "Controller is not available ..."))
-      }
-
-    case e: AskTimeoutException ⇒
-      ctx ⇒ {
-        log.warning("Unable to get data from controller." + e.getMessage)
-        ctx.complete(StatusCodes.InternalServerError, "Unable to get data from controller.")
+    case NonFatal(e) =>
+      extractLog { log =>
+        log.warning(s"Exception caught: ${e.getMessage}")
+        complete(HttpResponse(StatusCodes.InternalServerError, entity = "Server internal error"))
       }
   }
 
-  def receive: Receive =
-    handleConnection orElse handleTimeouts orElse
-    runRoute(route)(
-      handler,
-      RejectionHandler.Default,
-      context,
-      RoutingSettings.default,
-      LoggingContext.fromActorRefFactory
-    )
+  def receive: Receive = Actor.emptyBehavior // No need to handle messages directly
 
   def handleConnection: Receive = {
     case b: Bound =>
       log.info("***REST Server Started***")
-      Future.successful(b)
     case failed: CommandFailed =>
       log.warning("***REST Server Could not be Started***" + failed.cmd.failureMessage)
-      Future.failed(new RuntimeException("Binding failed"))
-  }
-
-  def handleTimeouts: Receive = {
-    case Timedout(x: HttpRequest) =>
-      sender ! HttpResponse(
-        StatusCodes.RequestTimeout,
-        "Time out! " + x.uri.scheme,
-        List(`Content-Type`(`text/plain`))
-      )
   }
 }
 

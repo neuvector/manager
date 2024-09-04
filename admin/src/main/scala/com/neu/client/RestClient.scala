@@ -1,25 +1,24 @@
 package com.neu.client
 
-import akka.actor.ActorSystem
 import com.neu.api.DefaultJsonFormats
-import com.neu.core.CommonSettings._
 import com.neu.core.{ AuthenticationManager, ClientSslConfig }
+import com.neu.core.CommonSettings._
+import com.neu.web.Rest.{ executionContext, system }
 import com.typesafe.scalalogging.LazyLogging
-import spray.client.pipelining._
-import spray.http.HttpEncodings._
-import spray.http.HttpHeaders.{ `Accept-Encoding`, `Cache-Control`, `Transfer-Encoding` }
-import spray.http.HttpMethods._
-import spray.http.Uri.apply
-import spray.http._
-import spray.httpx.encoding.Gzip
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.http.scaladsl.Http
+import org.apache.pekko.http.scaladsl.coding.Coders
+import org.apache.pekko.http.scaladsl.model._
+import org.apache.pekko.http.scaladsl.model.headers._
+import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshal
+import org.apache.pekko.http.scaladsl.marshalling.Marshal
+import org.apache.pekko.stream.Materializer
 
 import java.io.{ PrintWriter, StringWriter }
 import java.net.InetAddress
-import scala.concurrent.{ Await, Future }
 import scala.concurrent.duration._
+import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.util.control.NonFatal
-import spray.httpx.unmarshalling._
-import spray.http.HttpCharsets._
 
 object Constant {
   val waitingLimit = 60
@@ -67,19 +66,24 @@ object RestClient extends RestClient with LazyLogging {
 
 }
 
-class RestClient extends DefaultJsonFormats with ClientSslConfig with LazyLogging {
-
-  implicit val system: ActorSystem = ActorSystem("api-spray-client")
+class RestClient()(
+  implicit system: ActorSystem,
+  executionContext: ExecutionContext
+) extends DefaultJsonFormats
+    with ClientSslConfig
+    with LazyLogging {
 
   final val auth = "auth"
 
-  //noinspection ScalaStyle
-  import system.dispatcher
-
   var token: Option[String] = None
 
-  //To be able to mock
-  def sendAndReceive: SendReceive = mySendReceive
+  private val TOKEN_HEADER: String    = "X-Auth-Token"
+  private val X_NV_PAGE: String       = "X-Nv-Page"
+  private val X_TRN_ID: String        = "X-Transaction-Id"
+  private val X_AS_STANDALONE: String = "X-As-Standalone"
+  private val X_SUSE_TOKEN: String    = "X-R-Sess"
+
+  def sendAndReceive: HttpRequest => Future[HttpResponse] = mySendReceive
 
   def createHttpRequest(uri: String, method: HttpMethod, data: String): HttpRequest =
     HttpRequest(method = method, uri = uri, entity = HttpEntity(data))
@@ -95,10 +99,14 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig with LazyLoggin
    * @param method The method of the request
    * @return
    */
-  def httpRequest(uri: String, method: HttpMethod = GET, data: String = ""): Future[String] = {
-    val pipeline: HttpRequest => Future[String] = sendAndReceive ~> unmarshal[String]
-    pipeline {
-      createHttpRequest(uri, method, data)
+  def httpRequest(
+    uri: String,
+    method: HttpMethod = HttpMethods.GET,
+    data: String = ""
+  ): Future[String] = {
+    val request = createHttpRequest(uri, method, data)
+    sendAndReceive(request).flatMap { response =>
+      response.entity.toStrict(5.seconds).map(_.data.utf8String)
     }
   }
 
@@ -112,211 +120,151 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig with LazyLoggin
    */
   def passHttpRequest(
     uri: String,
-    method: HttpMethod = GET,
+    method: HttpMethod = HttpMethods.GET,
     data: String = ""
   ): Future[HttpResponse] = {
-    val pipeline: HttpRequest => Future[HttpResponse] = sendAndReceive
-    pipeline {
-      createHttpRequest(uri, method, data)
-    }
+    val request = createHttpRequest(uri, method, data)
+    sendAndReceive(request)
   }
 
   def proxyHttpRequest(uri: String, request: HttpRequest): Future[HttpResponse] = {
-    val pipeline: HttpRequest => Future[HttpResponse] = sendAndReceive
-    pipeline {
-      cloneHttpRequest(uri, request)
-    }
+    val clonedRequest = cloneHttpRequest(uri, request)
+    sendAndReceive(clonedRequest)
   }
 
-  private val TOKEN_HEADER: String    = "X-Auth-Token"
-  private val X_NV_PAGE: String       = "X-Nv-Page"
-  private val X_TRN_ID: String        = "X-Transaction-Id"
-  private val X_AS_STANDALONE: String = "X-As-Standalone"
-  private val X_SUSE_TOKEN: String    = "X-R-Sess"
-
-  /**
-   * Makes HTTP request
-   *
-   * @param uri    The request uri
-   * @param data   The payload
-   * @param method The method of the request
-   * @param suseToken  The token header
-   * @return
-   */
   def httpRequestWithTokenHeader(
     uri: String,
-    method: HttpMethod = GET,
+    method: HttpMethod = HttpMethods.GET,
     data: String = "",
     suseToken: String = ""
   ): Future[String] = {
-    val pipeline: HttpRequest => Future[String] = sendAndReceive ~> unmarshal[String]
-    pipeline {
-      createHttpRequest(uri, method, data) ~>
-      addHeader(X_SUSE_TOKEN, suseToken)
+    val request =
+      createHttpRequest(uri, method, data).withHeaders(RawHeader(X_SUSE_TOKEN, suseToken))
+    sendAndReceive(request).flatMap { response =>
+      response.entity.toStrict(5.seconds).map(_.data.utf8String)
     }
   }
 
   def httpRequestWithHeader(
     uri: String,
-    method: HttpMethod = GET,
+    method: HttpMethod = HttpMethods.GET,
     data: String = "",
     token: String,
     transactionId: Option[String] = None,
     asStandalone: Option[String] = None,
     source: Option[String] = None
   ): Future[HttpResponse] = {
-    val pipeline          = sendAndReceive
-    var requestWithHeader = baseRequest(uri, method, data, token)
-    transactionId.fold(
-      asStandalone.fold(
-        source.fold(
-          ) { source =>
-          requestWithHeader = requestWithHeader ~> addHeader(X_NV_PAGE, source)
-        }
-      ) { asStandalone =>
-        source.fold(
-          requestWithHeader = requestWithHeader ~>
-            addHeader(X_AS_STANDALONE, asStandalone)
-        ) { source =>
-          requestWithHeader = requestWithHeader ~> addHeader(X_NV_PAGE, source) ~>
-            addHeader(X_AS_STANDALONE, asStandalone)
-        }
-      }
-    ) { transactionId =>
-      asStandalone.fold(
-        source.fold(
-          requestWithHeader = requestWithHeader ~> addHeader(
-              X_TRN_ID,
-              transactionId
-            )
-        ) { source =>
-          requestWithHeader = requestWithHeader ~> addHeader(X_NV_PAGE, source) ~> addHeader(
-              X_TRN_ID,
-              transactionId
-            )
-        }
-      ) { asStandalone =>
-        source.fold(
-          requestWithHeader = requestWithHeader ~> addHeader(
-              X_TRN_ID,
-              transactionId
-            ) ~>
-            addHeader(X_AS_STANDALONE, asStandalone)
-        ) { source =>
-          requestWithHeader = requestWithHeader ~> addHeader(
-              X_TRN_ID,
-              transactionId
-            ) ~> addHeader(X_AS_STANDALONE, asStandalone) ~> addHeader(X_NV_PAGE, source)
-        }
-      }
-    }
-    pipeline {
-      requestWithHeader
-    }
+    logger.info("httpRequestWithHeader {}", source)
+    var request = createHttpRequest(uri, method, data).withHeaders(RawHeader(TOKEN_HEADER, token))
+
+    transactionId.foreach(id => request = request.withHeaders(RawHeader(X_TRN_ID, id)))
+    asStandalone.foreach(
+      standalone => request = request.withHeaders(RawHeader(X_AS_STANDALONE, standalone))
+    )
+    source.foreach(src => request = request.withHeaders(RawHeader(X_NV_PAGE, src)))
+
+    logger.info("httpRequestWithHeader {}", request)
+    sendAndReceive(request)
   }
 
-  private def baseRequest(uri: String, method: HttpMethod, data: String, token: String) =
-    createHttpRequest(uri, method, data) ~> addHeader(TOKEN_HEADER, token) ~>
-    addHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.getOrElse(token, "")) ~>
-    addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
-    addHeader(`Cache-Control`(CacheDirectives.`no-cache`))
+  private def baseRequest(
+    uri: String,
+    method: HttpMethod,
+    data: String,
+    token: String
+  ): HttpRequest =
+    HttpRequest(method, uri, entity = HttpEntity(ContentTypes.`application/json`, data))
+      .withHeaders(
+        RawHeader(TOKEN_HEADER, token),
+        RawHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.getOrElse(token, "")),
+        `Accept-Encoding`(HttpEncodings.gzip),
+        RawHeader("Transfer-Encoding", "gzip"),
+        `Cache-Control`(CacheDirectives.`no-cache`)
+      )
 
   def httpRequestWithHeaderDecode(
     uri: String,
-    method: HttpMethod = GET,
+    method: HttpMethod = HttpMethods.GET,
     data: String = "",
     token: String
   ): Future[HttpResponse] = {
-    val pipeline = sendAndReceive ~> decode(Gzip)
-    pipeline {
-      baseRequest(uri, method, data, token)
-    }
+    val request = baseRequest(uri, method, data, token)
+    sendAndReceive(request)
   }
 
   def binaryWithHeader(
     uri: String,
-    method: HttpMethod = GET,
-    data: MultipartFormData,
+    method: HttpMethod = HttpMethods.POST,
+    data: Multipart.FormData,
     token: String,
     transactionId: Option[String] = None,
     asStandalone: Option[String] = None
   ): Future[HttpResponse] = {
-    val pipeline = sendAndReceive
-    transactionId.fold(
-      asStandalone.fold(
-        pipeline {
-          basePost(uri, data, token)
-        }
-      ) { asStandalone =>
-        pipeline {
-          basePost(uri, data, token) ~> addHeader(
-            X_AS_STANDALONE,
-            asStandalone
-          )
-        }
-      }
-    ) { transactionId =>
-      asStandalone.fold(
-        pipeline {
-          basePost(uri, data, token) ~> addHeader(
-            X_TRN_ID,
-            transactionId
-          )
-        }
-      ) { asStandalone =>
-        pipeline {
-          basePost(uri, data, token) ~> addHeader(
-            X_TRN_ID,
-            transactionId
-          ) ~>
-          addHeader(X_AS_STANDALONE, asStandalone)
-        }
-      }
+    // Create the base request with the URI, method, and entity
+    val baseRequest = HttpRequest(
+      method = method,
+      uri = uri,
+      entity = data.toEntity()
+    ).withHeaders(RawHeader(TOKEN_HEADER, token))
+
+    // Add optional headers
+    val requestWithTransactionId = transactionId.fold(baseRequest) { id =>
+      baseRequest.withHeaders(baseRequest.headers :+ RawHeader(X_TRN_ID, id))
     }
+
+    val finalRequest = asStandalone.fold(requestWithTransactionId) { standalone =>
+      requestWithTransactionId.withHeaders(
+        requestWithTransactionId.headers :+ RawHeader(X_AS_STANDALONE, standalone)
+      )
+    }
+
+    // Send the request
+    sendAndReceive(finalRequest)
   }
 
-  private def basePost(uri: String, data: MultipartFormData, token: String) =
-    Post(uri, data) ~> addHeader(TOKEN_HEADER, token) ~>
-    addHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.getOrElse(token, "")) ~>
-    addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
-    addHeader(`Cache-Control`(CacheDirectives.`no-cache`))
+  private def basePost(uri: String, data: Multipart.FormData, token: String): Future[HttpRequest] =
+    // Marshal the Multipart.FormData to an entity
+    Marshal(data).to[RequestEntity].map { entity =>
+      HttpRequest(
+        method = HttpMethods.POST,
+        uri = uri,
+        entity = entity
+      ).withHeaders(
+        RawHeader(TOKEN_HEADER, token),
+        RawHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.getOrElse(token, "")),
+        `Accept-Encoding`(HttpEncodings.gzip),
+        RawHeader("Transfer-Encoding", "gzip"),
+        `Cache-Control`(CacheDirectives.`no-cache`)
+      )
+    }
 
   def requestWithHeader(
     uri: String,
-    method: HttpMethod = GET,
+    method: HttpMethod = HttpMethods.GET,
     data: String = "",
     token: String
   ): Future[String] = {
-    val pipeline = sendAndReceive ~> unmarshal[String]
-    pipeline {
-      baseRequest(uri, method, data, token)
+    val request = baseRequest(uri, method, data, token)
+    sendAndReceive(request).flatMap { response =>
+      response.entity.toStrict(5.seconds).map(_.data.utf8String)
     }
   }
 
   def requestWithHeaderDecode(
     uri: String,
-    method: HttpMethod = GET,
+    method: HttpMethod = HttpMethods.GET,
     data: String = "",
     token: String,
     nvPage: String = ""
   ): Future[String] = {
-    implicit val utf8StringUnmarshaller: Unmarshaller[String] =
-      Unmarshaller.delegate[HttpEntity, String](MediaTypes.`application/json`) {
-        case HttpEntity.NonEmpty(contentType, data) if contentType.charset == `UTF-8` =>
-          data.asString
-        case HttpEntity.NonEmpty(_, data) =>
-          data.asString(`UTF-8`) // Use a different encoding if not UTF-8
-      }
-    val pipeline = sendAndReceive ~> decode(Gzip) ~> unmarshal[String]
-    if (!nvPage.equals("dashboard")) {
-      pipeline {
-        baseRequest(uri, method, data, token)
-      }
+    val request = if (nvPage != "dashboard") {
+      baseRequest(uri, method, data, token)
     } else {
-      pipeline {
-        baseRequest(uri, method, data, token) ~>
-        addHeader(X_NV_PAGE, "dashboard")
-      }
+      baseRequest(uri, method, data, token).withHeaders(RawHeader(X_NV_PAGE, "dashboard"))
+    }
+
+    sendAndReceive(request).flatMap { response =>
+      Unmarshal(response.entity.withContentType(ContentTypes.`application/json`)).to[String]
     }
   }
 
@@ -325,9 +273,9 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig with LazyLoggin
     logger.info("Controller ips: {}", ctrlCluster.mkString(" "))
     val ctrlIp = ctrlCluster(index)
     try {
-      val res = RestClient.httpRequestWithHeader(
+      val res = requestWithHeader(
         s"https://$ctrlIp:$ctrlPort/v1/$auth",
-        PATCH,
+        HttpMethods.PATCH,
         "",
         tokenId
       )
@@ -350,7 +298,7 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig with LazyLoggin
     authenticationFailedStatus: String,
     serverErrorStatus: String,
     e: Throwable
-  ) = {
+  ): (StatusCode, String) = {
     val PERMISSION_DENIED = "Permission denied"
     val sw                = new StringWriter
     e.printStackTrace(new PrintWriter(sw))

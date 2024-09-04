@@ -4,9 +4,8 @@ import com.neu.client.RestClient
 import com.neu.client.RestClient.baseClusterUri
 import com.neu.core.AuthenticationManager
 import com.typesafe.scalalogging.LazyLogging
-import spray.http.StatusCodes
-import spray.routing.{ Directives, StandardRoute }
-
+import org.apache.pekko.http.scaladsl.model.StatusCodes
+import org.apache.pekko.http.scaladsl.server.{ Directives, StandardRoute }
 import java.io.{ PrintWriter, StringWriter }
 
 class BaseService() extends Directives with LazyLogging {

@@ -1,25 +1,27 @@
 package com.neu.web
 
-import spray.routing.{ HttpService, Route }
-import spray.http.StatusCodes
+import com.google.common.net.UrlEscapers
+import com.neu.api.Utils
 import com.neu.core.CommonSettings._
 import com.neu.core.Md5
 import com.typesafe.scalalogging.LazyLogging
+import org.apache.pekko.http.scaladsl.model.headers.{ Location, RawHeader }
+import org.apache.pekko.http.scaladsl.model.{
+  ContentTypes,
+  HttpEntity,
+  HttpResponse,
+  StatusCodes,
+  Uri
+}
+import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
 
-import spray.http._
-import StatusCodes._
-import HttpHeaders._
-import MediaTypes._
-import com.neu.api.Utils
-import com.google.common.net.UrlEscapers
-
-trait StaticResources extends HttpService with LazyLogging {
+trait StaticResources extends Directives with LazyLogging {
   val shortPath           = 10
   val isUsingSSL: Boolean = sys.env.getOrElse("MANAGER_SSL", "on") == "on"
   val isDev: Boolean      = sys.env.getOrElse("IS_DEV", "false") == "true"
 
   //# Rewrite redirect-implementation base on "spray/spray-routing/src/main/scala/spray/routing/RequestContext.scala, added strict transport security header"
-  def redirectMe(uri: Uri, redirectionType: Redirection) =
+  def redirectMe(uri: Uri, redirectionType: StatusCodes.Redirection) =
     complete {
       HttpResponse(
         status = redirectionType,
@@ -29,11 +31,12 @@ trait StaticResources extends HttpService with LazyLogging {
               "Strict-Transport-Security",
               "max-age=31536000; includeSubDomains; preload"
             ) :: Nil
-          else
-            Location(uri) :: RawHeader("X-Frame-Options", "SAMEORIGIN") :: Nil,
+          else {
+            Location(uri) :: RawHeader("X-Frame-Options", "SAMEORIGIN") :: Nil
+          },
         entity = redirectionType.htmlTemplate match {
           case ""       ⇒ HttpEntity.Empty
-          case template ⇒ HttpEntity(`text/html`, template format uri)
+          case template ⇒ HttpEntity(ContentTypes.`text/html(UTF-8)`, template format uri)
         }
       )
     }
@@ -75,31 +78,29 @@ trait StaticResources extends HttpService with LazyLogging {
       Utils.respondWithWebServerHeaders(true) {
         complete(StatusCodes.NotFound)
       }
-
     } ~
-    path(Rest) { path =>
+    path(Remaining) { path =>
       if (isDev) {
         Utils.respondWithWebServerHeaders(true) {
           getFromResource(UrlEscapers.urlFragmentEscaper().escape(s"root/$path"))
         }
       } else {
         if (path.endsWith(".js")) {
-          Utils.respondWithWebServerHeaders(true, path.endsWith(".js")) {
-            `Content-Type`(
-              `application/javascript`
-            )
-            getFromResource(
-              UrlEscapers.urlFragmentEscaper().escape(s"root/${path}.gz"),
-              `application/javascript`
-            )
+          Utils.respondWithWebServerHeaders(true) {
+            respondWithHeader(RawHeader("Content-Type", "application/javascript")) {
+              encodeResponse {
+                getFromResource(
+                  UrlEscapers.urlFragmentEscaper().escape(s"root/${path}.gz")
+                )
+              }
+            }
           }
         } else {
-          Utils.respondWithWebServerHeaders(true, path.endsWith(".js")) {
+          Utils.respondWithWebServerHeaders(true) {
             getFromResource(UrlEscapers.urlFragmentEscaper().escape(s"root/$path"))
           }
         }
       }
-
     }
   }
 }

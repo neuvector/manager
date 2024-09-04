@@ -5,7 +5,7 @@ import sbt.Keys._
 import sbt._
 
 ThisBuild / version := "1.0"
-ThisBuild / scalaVersion := "2.11.12"
+ThisBuild / scalaVersion := "2.12.19"
 ThisBuild / organization := "com.neuvector"
 ThisBuild / scalafmtOnCompile := true
 ThisBuild / Test / fork := true
@@ -42,7 +42,10 @@ lazy val commonDependencies = Seq(
   "org.json4s"         %% "json4s-native"     % "3.6.10",
   "org.bouncycastle" % "bcprov-jdk15on" % "1.70",
   "org.bouncycastle" % "bcpkix-jdk15on" % "1.70",
-  akka,
+  pekkoActor,
+  pekkoHttp,
+  pekkoSlf4j,
+  pekkoStream,
   typesafeConfig,
   joda,
   slf4jLog4j,
@@ -88,11 +91,6 @@ lazy val admin = (project in file("admin"))
     name := "admin",
     buildSettings,
     promptTheme := ScalapenosTheme,
-    libraryDependencies += sprayRoutingShapeless,
-    libraryDependencies += sprayCan,
-    libraryDependencies += sprayClient,
-    libraryDependencies += akkaLog,
-    libraryDependencies += spec2
   )
 
 resolvers ++= Seq(

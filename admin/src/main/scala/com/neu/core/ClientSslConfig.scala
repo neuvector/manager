@@ -1,30 +1,34 @@
 package com.neu.core
 
 import com.typesafe.scalalogging.LazyLogging
-import spray.client.pipelining.SendReceive
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.http.scaladsl.{ ConnectionContext, Http, HttpsConnectionContext }
+import org.apache.pekko.http.scaladsl.model._
+import org.apache.pekko.http.scaladsl.settings.ConnectionPoolSettings
+import org.apache.pekko.stream.Materializer
+import org.apache.pekko.stream.scaladsl.{ Sink, Source }
+
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
-import javax.net.ssl.{ SSLContext, TrustManager, X509TrustManager }
+import javax.net.ssl.{
+  HostnameVerifier,
+  HttpsURLConnection,
+  SSLContext,
+  SSLEngine,
+  TrustManager,
+  X509TrustManager
+}
+import scala.concurrent.{ ExecutionContext, Future }
+import scala.util.{ Failure, Success }
 
-import akka.actor.ActorRefFactory
-import akka.io.IO
-import akka.pattern.ask
-import akka.util.Timeout
-import spray.can.Http
-import spray.can.Http.HostConnectorSetup
-import spray.http.{ HttpResponse, HttpResponsePart }
-import spray.io.ClientSSLEngineProvider
-import spray.util._
-import com.neu.client.RestClient
-
-import scala.concurrent.ExecutionContext
-import scala.concurrent.duration._
-
-/**
- * Created by bxu on 6/6/16.
- */
 trait ClientSslConfig extends LazyLogging {
-  implicit lazy val engineProvider = ClientSSLEngineProvider(engine => engine)
+
+  implicit lazy val httpsContext: HttpsConnectionContext = ConnectionContext.httpsClient {
+    (host, port) =>
+      val engine: SSLEngine = sslContext.createSSLEngine(host, port)
+      engine.setUseClientMode(true)
+      engine
+  }
 
   implicit lazy val sslContext: SSLContext = {
     val context = SSLContext.getInstance("TLS")
@@ -45,25 +49,39 @@ trait ClientSslConfig extends LazyLogging {
     override def checkServerTrusted(x509Certificates: Array[X509Certificate], s: String): Unit = {}
   }
 
-  // rewrite sendReceiveMethod from spray.client.pipelining
   def mySendReceive(
-    implicit refFactory: ActorRefFactory,
-    executionContext: ExecutionContext,
-    futureTimeout: Timeout = RestClient.waitingLimit.seconds
-  ): SendReceive = {
-    val transport = IO(Http)(actorSystem)
-    // HttpManager actually also accepts Msg (HttpRequest, HostConnectorSetup)
-    request =>
-      val uri = request.uri
-      val setup =
-        HostConnectorSetup(uri.authority.host.toString, uri.effectivePort, uri.scheme == "https")
-      transport ? ((request, setup)) map {
-        case x: HttpResponse => x
-        case x: HttpResponsePart =>
-          sys.error("sendReceive doesn't support chunked responses, try sendTo instead")
-        case x: Http.ConnectionClosed =>
-          sys.error("Connection closed before reception of response: " + x)
-        case x => sys.error("Unexpected response from HTTP transport: " + x)
+    implicit system: ActorSystem,
+    materializer: Materializer,
+    executionContext: ExecutionContext
+  ): HttpRequest => Future[HttpResponse] = { request: HttpRequest =>
+    val poolSettings = ConnectionPoolSettings(system)
+
+    val connectionPool = if (request.uri.scheme == "https") {
+      Http().cachedHostConnectionPoolHttps[HttpRequest](
+        request.uri.authority.host.toString,
+        request.uri.effectivePort,
+        connectionContext = httpsContext,
+        settings = poolSettings
+      )
+    } else {
+      Http().cachedHostConnectionPool[HttpRequest](
+        request.uri.authority.host.toString,
+        request.uri.effectivePort,
+        settings = poolSettings
+      )
+    }
+
+    Source
+      .single(request -> request)
+      .via(connectionPool)
+      .runWith(Sink.head)
+      .flatMap {
+        case (Success(response: HttpResponse), _) =>
+          Future.successful(response)
+        case (Failure(exception), _) =>
+          Future.failed(exception)
+        case (Success(unexpected), _) =>
+          Future.failed(new Exception(s"Unexpected response from HTTP transport: $unexpected"))
       }
   }
 }

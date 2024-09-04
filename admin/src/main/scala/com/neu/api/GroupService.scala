@@ -667,7 +667,6 @@ class GroupService()(implicit executionContext: ExecutionContext)
                             }
 
                         };
-                      logger.info("URL: {}", url)
                       RestClient.httpRequestWithHeader(
                         url,
                         PATCH,

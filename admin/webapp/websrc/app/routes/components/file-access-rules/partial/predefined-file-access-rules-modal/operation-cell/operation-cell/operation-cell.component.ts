@@ -42,7 +42,6 @@ export class OperationCellComponent implements ICellRendererAngularComp {
         message: message,
       },
     });
-    console.log(this.params)
     dialogRef.componentInstance.confirm
       .pipe(
         switchMap(() => {

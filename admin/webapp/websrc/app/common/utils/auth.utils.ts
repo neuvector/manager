@@ -82,6 +82,7 @@ export class AuthUtilsService {
 
   private getCacheUserPermission() {
     if (
+      GlobalVariable.isRemote ||
       !this.userPermission.ownedPermissions ||
       this.tokenBakeup !== GlobalVariable.user.token.token
     ) {
@@ -117,7 +118,7 @@ export class AuthUtilsService {
     let dPermissions = GlobalVariable.user.domain_permissions;
     let result = '';
 
-    if(GlobalVariable.isRemote) {
+    if (GlobalVariable.isRemote) {
       for (let rgPermission of rgPermissions) {
         if (neededPermission === rgPermission.id) {
           result = rgPermission.write ? 'w' : 'r';

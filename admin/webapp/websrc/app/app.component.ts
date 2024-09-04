@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
     private translatorService: TranslatorService,
     private summaryService: SummaryService,
     private authService: AuthService,
-    private commonHttpService: CommonHttpService,
+    private commonHttpService: CommonHttpService
   ) {
     this.win = GlobalVariable.window;
     this.initTimer = new Date().getTime();
@@ -97,40 +97,46 @@ export class AppComponent implements OnInit {
       GlobalVariable.gravatar = val;
     });
     if (this.win.location.hash !== '#/login' && this.win.location.hash !== '') {
-      this.authService.refreshToken(this.win.location.href.includes(GlobalConstant.PROXY_VALUE)).subscribe(
-        (userInfo: any) => {
-          GlobalVariable.user = userInfo;
-          GlobalVariable.nvToken = userInfo.token.token;
-          GlobalVariable.isSUSESSO = userInfo.is_suse_authenticated;
-          GlobalVariable.user.global_permissions =
-            userInfo.token.global_permissions;
-          GlobalVariable.user.remote_domain_permissions =
-            userInfo.token.remote_domain_permissions;
-          GlobalVariable.user.domain_permissions =
-            userInfo.token.domain_permissions;
-          GlobalVariable.user.extra_permissions =
-            userInfo.token.extra_permissions;
-          this.translatorService.useLanguage(GlobalVariable.user.token.locale);
-          this.localStorage.set(
-            GlobalConstant.LOCAL_STORAGE_TOKEN,
-            GlobalVariable.user
-          );
-          if (this.localStorage.has(GlobalConstant.LOCAL_STORAGE_TIMEOUT)) {
-            this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_TIMEOUT);
+      this.authService
+        .refreshToken(
+          this.win.location.href.includes(GlobalConstant.PROXY_VALUE)
+        )
+        .subscribe(
+          (userInfo: any) => {
+            GlobalVariable.user = userInfo;
+            GlobalVariable.nvToken = userInfo.token.token;
+            GlobalVariable.isSUSESSO = userInfo.is_suse_authenticated;
+            GlobalVariable.user.global_permissions =
+              userInfo.token.global_permissions;
+            GlobalVariable.user.remote_global_permissions =
+              userInfo.token.remote_global_permissions;
+            GlobalVariable.user.domain_permissions =
+              userInfo.token.domain_permissions;
+            GlobalVariable.user.extra_permissions =
+              userInfo.token.extra_permissions;
+            this.translatorService.useLanguage(
+              GlobalVariable.user.token.locale
+            );
+            this.localStorage.set(
+              GlobalConstant.LOCAL_STORAGE_TOKEN,
+              GlobalVariable.user
+            );
+            if (this.localStorage.has(GlobalConstant.LOCAL_STORAGE_TIMEOUT)) {
+              this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_TIMEOUT);
+            }
+            if (!GlobalVariable.hasInitializedSummary) {
+              this.summaryService.getSummary().subscribe(summaryInfo => {
+                this.isSummaryDone = true;
+              });
+            }
+          },
+          error => {
+            this.localStorage.set(GlobalConstant.LOCAL_STORAGE_TIMEOUT, true);
+            setTimeout(() => {
+              location.reload();
+            }, 1000);
           }
-          if (!GlobalVariable.hasInitializedSummary) {
-            this.summaryService.getSummary().subscribe(summaryInfo => {
-              this.isSummaryDone = true;
-            });
-          }
-        },
-        error => {
-          this.localStorage.set(GlobalConstant.LOCAL_STORAGE_TIMEOUT, true);
-          setTimeout(() => {
-            location.reload();
-          }, 1000);
-        }
-      );
+        );
     } else {
       this.isSummaryDone = true;
     }

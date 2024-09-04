@@ -150,10 +150,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.displayRole = role
       ? role
       : GlobalVariable.user.token.server
-        .toLowerCase()
-        .includes(MapConstant.SERVER_TYPE.RANCHER)
-        ? 'Rancher User'
-        : 'Namespace User';
+          .toLowerCase()
+          .includes(MapConstant.SERVER_TYPE.RANCHER)
+      ? 'Rancher User'
+      : 'Namespace User';
 
     this._clusterSwitchedSubScription =
       this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
@@ -164,13 +164,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
             this.router.navigate([currentUrl]);
           });
       });
-
-    if (!GlobalVariable.user?.remote_domain_permissions || !GlobalVariable.user?.extra_permissions) {
-      this.settingsService.getSelf().subscribe((userInfo) => {
-        GlobalVariable.user.remote_domain_permissions = userInfo.token.remote_global_permissions;
-        GlobalVariable.user.extra_permissions = userInfo.token.extra_permissions;
-      });
-    }
 
     this._multiClusterSubScription =
       this.multiClusterService.onRefreshClustersEvent$.subscribe(() => {
@@ -324,7 +317,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
           };
 
           this.isAllowedToRedirectMultiCluster =
-            this.authUtilsService.getGlobalPermissionDisplayFlag('multi_cluster') ||
+            this.authUtilsService.getGlobalPermissionDisplayFlag(
+              'multi_cluster'
+            ) ||
             (isAuthorized(GlobalVariable.user.roles, resource.multiClusterOp) &&
               data.fed_role !== MapConstant.FED_ROLES.MASTER);
 
@@ -345,7 +340,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
           if (GlobalVariable.isMaster) {
             this.isAllowedToOperateMultiCluster =
               isAuthorized(GlobalVariable.user.roles, resource.manageAuth) ||
-              this.authUtilsService.getGlobalPermissionDisplayFlag('multi_cluster');
+              this.authUtilsService.getGlobalPermissionDisplayFlag(
+                'multi_cluster'
+              );
             if (clusterInSession !== null) {
               this.selectedCluster = clusterInSession;
             } else {
@@ -360,7 +357,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
               isAuthorized(
                 GlobalVariable.user.roles,
                 resource.multiClusterView
-              ) || this.authUtilsService.getGlobalPermissionDisplayFlag('multi_cluster');
+              ) ||
+              this.authUtilsService.getGlobalPermissionDisplayFlag(
+                'multi_cluster'
+              );
             this.clusters.forEach(cluster => {
               if (cluster.clusterType === MapConstant.FED_ROLES.MASTER) {
                 this.primaryMasterName = cluster.name;
@@ -393,6 +393,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
       if (selectedItem?.clusterType === MapConstant.FED_ROLES.MASTER) {
         selectedID = '';
+      } else {
+        this.updateRemotePermissions();
       }
 
       this.multiClusterService.switchCluster(selectedID, currentID).subscribe({
@@ -480,6 +482,37 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
         this.authService.notifyEnvironmentVariablesRetrieved();
       });
+  }
+
+  updateRemotePermissions() {
+    if (
+      !GlobalVariable.user?.remote_domain_permissions ||
+      !GlobalVariable.user?.extra_permissions
+    ) {
+      this.authService
+        .refreshToken(
+          GlobalVariable.window.location.href.includes(
+            GlobalConstant.PROXY_VALUE
+          )
+        )
+        .subscribe((userInfo: any) => {
+          GlobalVariable.user = userInfo;
+          GlobalVariable.nvToken = userInfo.token.token;
+          GlobalVariable.isSUSESSO = userInfo.is_suse_authenticated;
+          GlobalVariable.user.global_permissions =
+            userInfo.token.global_permissions;
+          GlobalVariable.user.remote_global_permissions =
+            userInfo.token.remote_global_permissions;
+          GlobalVariable.user.domain_permissions =
+            userInfo.token.domain_permissions;
+          GlobalVariable.user.extra_permissions =
+            userInfo.token.extra_permissions;
+          this.localStorage.set(
+            GlobalConstant.LOCAL_STORAGE_TOKEN,
+            GlobalVariable.user
+          );
+        });
+    }
   }
 
   logout() {

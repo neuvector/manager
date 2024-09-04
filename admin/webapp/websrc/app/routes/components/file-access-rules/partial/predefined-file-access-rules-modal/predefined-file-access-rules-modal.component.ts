@@ -22,9 +22,10 @@ export class PredefinedFileAccessRulesModalComponent implements OnInit {
     private fileAccessRulesService: FileAccessRulesService,
     private translate: TranslateService
   ) {}
-
+  context;
   ngOnInit(): void {
     this.initializeVM();
+    this.context = { componentParent: this };
   }
 
   onCancel() {

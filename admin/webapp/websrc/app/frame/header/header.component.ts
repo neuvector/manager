@@ -28,6 +28,7 @@ import { AuthUtilsService } from '@common/utils/auth.utils';
 import { CommonHttpService } from '@common/api/common-http.service';
 import { AuthService } from '@services/auth.service';
 import { SettingsService } from '@services/settings.service';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
@@ -150,10 +151,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.displayRole = role
       ? role
       : GlobalVariable.user.token.server
-        .toLowerCase()
-        .includes(MapConstant.SERVER_TYPE.RANCHER)
-        ? 'Rancher User'
-        : 'Namespace User';
+          .toLowerCase()
+          .includes(MapConstant.SERVER_TYPE.RANCHER)
+      ? 'Rancher User'
+      : 'Namespace User';
 
     this._clusterSwitchedSubScription =
       this.multiClusterService.onClusterSwitchedEvent$.subscribe(() => {
@@ -164,13 +165,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
             this.router.navigate([currentUrl]);
           });
       });
-
-    if (!GlobalVariable.user?.remote_domain_permissions || !GlobalVariable.user?.extra_permissions) {
-      this.settingsService.getSelf().subscribe((userInfo) => {
-        GlobalVariable.user.remote_domain_permissions = userInfo.token.remote_global_permissions;
-        GlobalVariable.user.extra_permissions = userInfo.token.extra_permissions;
-      });
-    }
 
     this._multiClusterSubScription =
       this.multiClusterService.onRefreshClustersEvent$.subscribe(() => {
@@ -324,7 +318,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
           };
 
           this.isAllowedToRedirectMultiCluster =
-            this.authUtilsService.getGlobalPermissionDisplayFlag('multi_cluster') ||
+            this.authUtilsService.getGlobalPermissionDisplayFlag(
+              'multi_cluster'
+            ) ||
             (isAuthorized(GlobalVariable.user.roles, resource.multiClusterOp) &&
               data.fed_role !== MapConstant.FED_ROLES.MASTER);
 
@@ -345,7 +341,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
           if (GlobalVariable.isMaster) {
             this.isAllowedToOperateMultiCluster =
               isAuthorized(GlobalVariable.user.roles, resource.manageAuth) ||
-              this.authUtilsService.getGlobalPermissionDisplayFlag('multi_cluster');
+              this.authUtilsService.getGlobalPermissionDisplayFlag(
+                'multi_cluster'
+              );
             if (clusterInSession !== null) {
               this.selectedCluster = clusterInSession;
             } else {
@@ -360,7 +358,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
               isAuthorized(
                 GlobalVariable.user.roles,
                 resource.multiClusterView
-              ) || this.authUtilsService.getGlobalPermissionDisplayFlag('multi_cluster');
+              ) ||
+              this.authUtilsService.getGlobalPermissionDisplayFlag(
+                'multi_cluster'
+              );
             this.clusters.forEach(cluster => {
               if (cluster.clusterType === MapConstant.FED_ROLES.MASTER) {
                 this.primaryMasterName = cluster.name;
@@ -379,51 +380,113 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   redirectCluster(cluster: Cluster) {
-    let currentID = this.selectedCluster?.id;
-    let selectedID = cluster.id;
+    const currentID = this.selectedCluster?.id;
+    const selectedID = cluster.id;
 
-    if (currentID !== selectedID) {
-      if (this.selectedCluster?.clusterType === MapConstant.FED_ROLES.MASTER) {
-        currentID = '';
-      }
+    //early exit if the selected cluster is the same as the current one
+    if (currentID === selectedID) return;
 
-      let selectedItem = this.clusters.find(clusterNode => {
-        return clusterNode.id === cluster.id;
-      });
+    //Determine new selected ID based on cluster type
+    const newCurrentID =
+      this.selectedCluster?.clusterType === MapConstant.FED_ROLES.MASTER
+        ? ''
+        : currentID;
 
-      if (selectedItem?.clusterType === MapConstant.FED_ROLES.MASTER) {
-        selectedID = '';
-      }
+    const selectedItem = this.clusters.find(
+      clusterNode => clusterNode.id === cluster.id
+    );
 
-      this.multiClusterService.switchCluster(selectedID, currentID).subscribe({
-        next: () => {
-          this.selectedCluster = selectedItem;
-          this.isOnRemoteCluster =
-            this.selectedCluster?.clusterType !== MapConstant.FED_ROLES.MASTER;
-          this.multiClusterService.refreshSummary();
-          this.multiClusterService.dispatchSwitchEvent();
-          //to save and restore the selected cluster in case the page gets refreshed
-          GlobalVariable.isRemote = this.isOnRemoteCluster;
-          const cluster = {
-            isRemote: this.isOnRemoteCluster,
-            id: this.selectedCluster?.id,
-            name: this.selectedCluster?.name,
-          };
-          this.localStorage.set(
-            GlobalConstant.LOCAL_STORAGE_CLUSTER,
-            JSON.stringify(cluster)
-          );
-        },
-        error: error => {
-          this.notificationService.openError(
-            error,
-            this.translateService.instant(
-              'multiCluster.messages.redirect_failure',
-              { name: cluster.name }
-            )
-          );
-        },
-      });
+    const newSelectedID =
+      selectedItem?.clusterType === MapConstant.FED_ROLES.MASTER
+        ? ''
+        : selectedID;
+
+    // Function to handle successful cluster switch
+    const handleSuccess = () => {
+      this.selectedCluster = selectedItem;
+      this.isOnRemoteCluster =
+        this.selectedCluster?.clusterType !== MapConstant.FED_ROLES.MASTER;
+      this.multiClusterService.refreshSummary();
+      this.multiClusterService.dispatchSwitchEvent();
+
+      // Save and restore the selected cluster
+      GlobalVariable.isRemote = this.isOnRemoteCluster;
+      const clusterData = {
+        isRemote: this.isOnRemoteCluster,
+        id: this.selectedCluster?.id,
+        name: this.selectedCluster?.name,
+      };
+      this.localStorage.set(
+        GlobalConstant.LOCAL_STORAGE_CLUSTER,
+        JSON.stringify(clusterData)
+      );
+    };
+
+    // Function to handle errors
+    const handleError = (error: any) => {
+      this.notificationService.openError(
+        error,
+        this.translateService.instant(
+          'multiCluster.messages.redirect_failure',
+          { name: cluster.name }
+        )
+      );
+    };
+
+    // Refresh the token to update the remote_global_permissions if necessary and switch cluster
+    if (
+      !(
+        GlobalVariable.user?.remote_global_permissions &&
+        GlobalVariable.user?.remote_global_permissions.length > 0
+      ) ||
+      !(
+        GlobalVariable.user?.extra_permissions &&
+        GlobalVariable.user?.extra_permissions.length > 0
+      )
+    ) {
+      this.authService
+        .refreshToken(
+          GlobalVariable.window.location.href.includes(
+            GlobalConstant.PROXY_VALUE
+          )
+        )
+        .pipe(
+          switchMap((userInfo: any) => {
+            // Update global variables
+            GlobalVariable.user = userInfo;
+            GlobalVariable.nvToken = userInfo.token.token;
+            GlobalVariable.isSUSESSO = userInfo.is_suse_authenticated;
+            GlobalVariable.user.global_permissions =
+              userInfo.token.global_permissions;
+            GlobalVariable.user.remote_global_permissions =
+              userInfo.token.remote_global_permissions;
+            GlobalVariable.user.domain_permissions =
+              userInfo.token.domain_permissions;
+            GlobalVariable.user.extra_permissions =
+              userInfo.token.extra_permissions;
+            this.localStorage.set(
+              GlobalConstant.LOCAL_STORAGE_TOKEN,
+              GlobalVariable.user
+            );
+
+            // Perform the cluster switch
+            return this.multiClusterService.switchCluster(
+              newSelectedID,
+              newCurrentID
+            );
+          })
+        )
+        .subscribe({
+          next: handleSuccess,
+          error: handleError,
+        });
+    } else {
+      this.multiClusterService
+        .switchCluster(newSelectedID, newCurrentID)
+        .subscribe({
+          next: handleSuccess,
+          error: handleError,
+        });
     }
   }
 

@@ -82,7 +82,11 @@ export class AuthUtilsService {
 
   private getCacheUserPermission() {
     if (
-      GlobalVariable.isRemote ||
+      (GlobalVariable.isRemote &&
+        !(
+          this.userPermission.remoteGlobalPermissions &&
+          this.userPermission.remoteGlobalPermissions.length > 0
+        )) ||
       !this.userPermission.ownedPermissions ||
       this.tokenBakeup !== GlobalVariable.user.token.token
     ) {

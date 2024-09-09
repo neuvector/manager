@@ -7,14 +7,17 @@ import com.neu.web.Rest.{ executionContext, system }
 
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.Http
-import org.apache.pekko.http.scaladsl.coding.Coders
 import org.apache.pekko.http.scaladsl.model._
+import org.apache.pekko.http.scaladsl.model.HttpHeader
 import org.apache.pekko.http.scaladsl.model.headers._
+import org.apache.pekko.http.scaladsl.model.headers.RawHeader
 import org.apache.pekko.http.scaladsl.unmarshalling._
 import org.apache.pekko.http.scaladsl.marshalling.Marshal
 import org.apache.pekko.stream.Materializer
 import org.apache.pekko.http.scaladsl.coding.Gzip
+import org.apache.pekko.util.ByteString
+
+import spray.json._
 
 import java.io.{ PrintWriter, StringWriter }
 import java.net.InetAddress
@@ -88,8 +91,11 @@ class RestClient()(
 
   def sendAndReceive: HttpRequest => Future[HttpResponse] = mySendReceive
 
-  def createHttpRequest(uri: String, method: HttpMethod, data: String): HttpRequest =
-    HttpRequest(method = method, uri = uri, entity = HttpEntity(data))
+  def createHttpRequest(uri: String, method: HttpMethod, data: String): HttpRequest = HttpRequest(
+    method = method,
+    uri = uri,
+    entity = HttpEntity(data)
+  )
 
   def cloneHttpRequest(uri: String, request: HttpRequest): HttpRequest =
     request.copy(uri = uri, headers = Nil)
@@ -142,7 +148,9 @@ class RestClient()(
     suseToken: String = ""
   ): Future[String] = {
     val request =
-      createHttpRequest(uri, method, data).withHeaders(RawHeader(X_SUSE_TOKEN, suseToken))
+      createHttpRequest(uri, method, data).addHeader(RawHeader(X_SUSE_TOKEN, suseToken))
+    logger.info(s"Request data: $data")
+    logger.info(s"Request: $request")
     sendAndReceive(request).flatMap { response =>
       response.entity.toStrict(5.seconds).map(_.data.utf8String)
     }
@@ -160,11 +168,11 @@ class RestClient()(
     logger.info("httpRequestWithHeader {}", source)
     var request = baseRequest(uri, method, data, token)
 
-    transactionId.foreach(id => request = request.withHeaders(RawHeader(X_TRN_ID, id)))
+    transactionId.foreach(id => request = request.addHeader(RawHeader(X_TRN_ID, id)))
     asStandalone.foreach(
-      standalone => request = request.withHeaders(RawHeader(X_AS_STANDALONE, standalone))
+      standalone => request = request.addHeader(RawHeader(X_AS_STANDALONE, standalone))
     )
-    source.foreach(src => request = request.withHeaders(RawHeader(X_NV_PAGE, src)))
+    source.foreach(src => request = request.addHeader(RawHeader(X_NV_PAGE, src)))
 
     logger.info("httpRequestWithHeader {}", request)
     sendAndReceive(request)
@@ -177,13 +185,11 @@ class RestClient()(
     token: String
   ): HttpRequest =
     HttpRequest(method, uri, entity = HttpEntity(ContentTypes.`application/json`, data))
-      .withHeaders(
-        RawHeader(TOKEN_HEADER, token),
-        RawHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.getOrElse(token, "")),
-        `Accept-Encoding`(HttpEncodings.gzip),
-        RawHeader("Transfer-Encoding", "gzip"),
-        `Cache-Control`(CacheDirectives.`no-cache`)
-      )
+      .addHeader(RawHeader(TOKEN_HEADER, token))
+      .addHeader(RawHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.getOrElse(token, "")))
+      .addHeader(`Accept-Encoding`(HttpEncodings.gzip))
+      .addHeader(RawHeader("Transfer-Encoding", "gzip"))
+      .addHeader(`Cache-Control`(CacheDirectives.`no-cache`))
 
   def httpRequestWithHeaderDecode(
     uri: String,
@@ -208,17 +214,15 @@ class RestClient()(
       method = method,
       uri = uri,
       entity = data.toEntity()
-    ).withHeaders(RawHeader(TOKEN_HEADER, token))
+    ).addHeader(RawHeader(TOKEN_HEADER, token))
 
     // Add optional headers
     val requestWithTransactionId = transactionId.fold(baseRequest) { id =>
-      baseRequest.withHeaders(baseRequest.headers :+ RawHeader(X_TRN_ID, id))
+      baseRequest.addHeader(RawHeader(X_TRN_ID, id))
     }
 
     val finalRequest = asStandalone.fold(requestWithTransactionId) { standalone =>
-      requestWithTransactionId.withHeaders(
-        requestWithTransactionId.headers :+ RawHeader(X_AS_STANDALONE, standalone)
-      )
+      requestWithTransactionId.addHeader(RawHeader(X_AS_STANDALONE, standalone))
     }
 
     // Send the request
@@ -232,13 +236,11 @@ class RestClient()(
         method = HttpMethods.POST,
         uri = uri,
         entity = entity
-      ).withHeaders(
-        RawHeader(TOKEN_HEADER, token),
-        RawHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.getOrElse(token, "")),
-        `Accept-Encoding`(HttpEncodings.gzip),
-        RawHeader("Transfer-Encoding", "gzip"),
-        `Cache-Control`(CacheDirectives.`no-cache`)
-      )
+      ).addHeader(RawHeader(TOKEN_HEADER, token))
+        .addHeader(RawHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.getOrElse(token, "")))
+        .addHeader(`Accept-Encoding`(HttpEncodings.gzip))
+        .addHeader(RawHeader("Transfer-Encoding", "gzip"))
+        .addHeader(`Cache-Control`(CacheDirectives.`no-cache`))
     }
 
   def requestWithHeader(

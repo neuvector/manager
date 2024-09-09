@@ -23,7 +23,6 @@ import java.util.Base64
 import scala.concurrent.duration._
 import scala.concurrent.{ Await, ExecutionContext, Future, TimeoutException }
 import scala.util.{ Failure, Success }
-import scala.util.control.NonFatal
 
 class AuthenticationService(
   implicit executionContext: ExecutionContext

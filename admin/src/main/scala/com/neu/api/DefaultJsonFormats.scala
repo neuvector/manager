@@ -33,16 +33,15 @@ trait DefaultJsonFormats extends DefaultJsonProtocol {
   implicit def sprayJsonUnmarshaller[T](
     implicit reader: spray.json.JsonReader[T]
   ): FromEntityUnmarshaller[T] =
-    Unmarshaller.byteStringUnmarshaller.forContentTypes(ContentTypes.`application/json`).map {
-      data =>
-        JsonParser(data.utf8String).convertTo[T]
-    }
+    Unmarshaller.stringUnmarshaller
+      .forContentTypes(ContentTypes.`application/json`)
+      .map(JsonParser(_).convertTo[T])
 
   implicit def sprayJsonMarshaller[T](
     implicit writer: spray.json.JsonWriter[T]
   ): ToEntityMarshaller[T] =
     Marshaller.withFixedContentType(ContentTypes.`application/json`) { value =>
-      HttpEntity(ContentTypes.`application/json`, ByteString(value.toJson.toString()))
+      HttpEntity(ContentTypes.`application/json`, value.toJson.compactPrint)
     }
 
   /**

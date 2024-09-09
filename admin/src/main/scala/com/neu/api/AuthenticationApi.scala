@@ -9,7 +9,6 @@ import com.neu.core.{ AuthenticationManager, Md5 }
 import com.neu.model.AuthTokenJsonProtocol.{ jsonToUserWrap, tokenWrapToJson, _ }
 import com.neu.model.RebrandJsonProtocol._
 import com.neu.model._
-import com.neu.service.{ AuthenticationService }
 import com.neu.web.Rest.materializer
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.http.scaladsl.model.headers.HttpCookie
@@ -981,10 +980,12 @@ class AuthenticationApi()(
             RestClient.httpRequestWithTokenHeader(
               s"$baseUri/$auth",
               HttpMethods.POST,
-              authRequestToJson(AuthRequest(userPwd, ip.toString())),
+              authRequestToJson(
+                AuthRequest(userPwd, ip.toOption.map(_.getHostAddress).getOrElse(""))
+              ),
               suseCookie
             )
-          val response  = Await.result(result, RestClient.waitingLimit.seconds)
+          val response = Await.result(result, RestClient.waitingLimit.seconds)
           var authToken = AuthenticationManager.parseToken(response)
           authToken = UserTokenNew(
             authToken.token,
@@ -1064,5 +1065,4 @@ class AuthenticationApi()(
         }
       }
     }
-
 }

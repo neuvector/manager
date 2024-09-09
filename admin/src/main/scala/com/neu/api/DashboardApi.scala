@@ -172,7 +172,7 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
         path("alerts") {
           get {
             Utils.respondWithWebServerHeaders() {
-              logger.info("Loading System Alerts information ...")
+              logger.info(s"Loading System Alerts information ...")
               complete {
                 RestClient.httpRequestWithHeader(
                   s"${baseClusterUri(tokenId)}/system/alerts",

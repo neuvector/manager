@@ -5,7 +5,7 @@ import com.neu.client.RestClient.fedUri
 import com.neu.model.ClusterJsonProtocol._
 import com.neu.model._
 import com.typesafe.scalalogging.LazyLogging
-import org.apache.pekko.http.scaladsl.model.{ HttpMethods, StatusCodes }
+import org.apache.pekko.http.scaladsl.model.HttpMethods
 import org.apache.pekko.http.scaladsl.server.Route
 
 import scala.concurrent.duration._

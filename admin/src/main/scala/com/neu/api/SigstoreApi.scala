@@ -3,16 +3,13 @@ package com.neu.api
 import com.neu.client.RestClient
 import com.neu.client.RestClient._
 import com.neu.model.SigstoreJsonProtocol._
-import com.neu.model.JsonProtocol._
 import com.neu.model._
 
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.http.scaladsl.model.HttpMethods._
-import org.apache.pekko.http.scaladsl.model.StatusCodes
 import org.apache.pekko.http.scaladsl.server.Route
 
-import scala.util.control.NonFatal
-import scala.concurrent.{ Await, ExecutionContext, TimeoutException }
+import scala.concurrent.{ Await, ExecutionContext }
 
 class SigstoreApi()(implicit executionContext: ExecutionContext)
     extends BaseService

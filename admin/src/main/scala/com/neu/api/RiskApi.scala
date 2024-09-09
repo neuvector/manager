@@ -24,10 +24,10 @@ import com.neu.model.{
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.http.scaladsl.model.HttpMethods._
 import org.apache.pekko.http.scaladsl.model.StatusCodes
-import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
+import org.apache.pekko.http.scaladsl.server.{ Route }
 
 import scala.concurrent.duration._
-import scala.concurrent.{ Await, ExecutionContext, TimeoutException }
+import scala.concurrent.{ ExecutionContext, TimeoutException }
 import scala.util.control.NonFatal
 
 //noinspection UnstableApiUsage

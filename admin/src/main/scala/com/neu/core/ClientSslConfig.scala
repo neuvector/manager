@@ -10,14 +10,7 @@ import org.apache.pekko.stream.scaladsl.{ Sink, Source }
 
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
-import javax.net.ssl.{
-  HostnameVerifier,
-  HttpsURLConnection,
-  SSLContext,
-  SSLEngine,
-  TrustManager,
-  X509TrustManager
-}
+import javax.net.ssl.{ HttpsURLConnection, SSLContext, SSLEngine, TrustManager, X509TrustManager }
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Failure, Success }
 

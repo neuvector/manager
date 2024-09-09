@@ -15,10 +15,6 @@ import org.apache.pekko.http.scaladsl.unmarshalling._
 import org.apache.pekko.http.scaladsl.marshalling.Marshal
 import org.apache.pekko.stream.Materializer
 import org.apache.pekko.http.scaladsl.coding.Gzip
-import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshal
-
-import spray.json._
-import DefaultJsonProtocol._
 
 import java.io.{ PrintWriter, StringWriter }
 import java.net.InetAddress

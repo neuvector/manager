@@ -9,6 +9,7 @@ import com.neu.core.{ AuthenticationManager, Md5 }
 import com.neu.model.AuthTokenJsonProtocol.{ jsonToUserWrap, tokenWrapToJson, _ }
 import com.neu.model.RebrandJsonProtocol._
 import com.neu.model._
+import com.neu.service.{ AuthenticationService }
 import com.neu.web.Rest.materializer
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.http.scaladsl.model.headers.HttpCookie

@@ -54,8 +54,8 @@ trait BootedCore
   // Bind the server with HTTPS
   val bindingFuture: Future[Http.ServerBinding] = Http()
     .newServerAt("0.0.0.0", httpPort.toInt)
-    .enableHttps(https)
     .withSettings(sslSettings)
+    .enableHttps(https)
     .bind(rootService)
 
   bindingFuture.map { binding =>

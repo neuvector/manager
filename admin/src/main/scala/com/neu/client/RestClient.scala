@@ -4,15 +4,21 @@ import com.neu.api.DefaultJsonFormats
 import com.neu.core.{ AuthenticationManager, ClientSslConfig }
 import com.neu.core.CommonSettings._
 import com.neu.web.Rest.{ executionContext, system }
+
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.http.scaladsl.Http
 import org.apache.pekko.http.scaladsl.coding.Coders
 import org.apache.pekko.http.scaladsl.model._
 import org.apache.pekko.http.scaladsl.model.headers._
-import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshal
+import org.apache.pekko.http.scaladsl.unmarshalling._
 import org.apache.pekko.http.scaladsl.marshalling.Marshal
 import org.apache.pekko.stream.Materializer
+import org.apache.pekko.http.scaladsl.coding.Gzip
+import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshal
+
+import spray.json._
+import DefaultJsonProtocol._
 
 import java.io.{ PrintWriter, StringWriter }
 import java.net.InetAddress
@@ -68,7 +74,8 @@ object RestClient extends RestClient with LazyLogging {
 
 class RestClient()(
   implicit system: ActorSystem,
-  executionContext: ExecutionContext
+  mat: Materializer,
+  ec: ExecutionContext
 ) extends DefaultJsonFormats
     with ClientSslConfig
     with LazyLogging {
@@ -103,11 +110,11 @@ class RestClient()(
     uri: String,
     method: HttpMethod = HttpMethods.GET,
     data: String = ""
-  ): Future[String] = {
+  ): Future[JsValue] = {
     val request = createHttpRequest(uri, method, data)
     sendAndReceive(request).flatMap { response =>
       response.entity.toStrict(5.seconds).map(_.data.utf8String)
-    }
+    }.map(_.parseJson)
   }
 
   /**
@@ -155,7 +162,7 @@ class RestClient()(
     source: Option[String] = None
   ): Future[HttpResponse] = {
     logger.info("httpRequestWithHeader {}", source)
-    var request = createHttpRequest(uri, method, data).withHeaders(RawHeader(TOKEN_HEADER, token))
+    var request = baseRequest(uri, method, data, token)
 
     transactionId.foreach(id => request = request.withHeaders(RawHeader(X_TRN_ID, id)))
     asStandalone.foreach(
@@ -257,14 +264,29 @@ class RestClient()(
     token: String,
     nvPage: String = ""
   ): Future[String] = {
+    implicit val utf8StringUnmarshaller: FromEntityUnmarshaller[String] =
+      Unmarshaller.byteStringUnmarshaller.mapWithCharset { (bytes, charset) =>
+        bytes.decodeString(charset.nioCharset)
+      }
+
     val request = if (nvPage != "dashboard") {
       baseRequest(uri, method, data, token)
     } else {
-      baseRequest(uri, method, data, token).withHeaders(RawHeader(X_NV_PAGE, "dashboard"))
+      baseRequest(uri, method, data, token).addHeader(RawHeader(X_NV_PAGE, "dashboard"))
     }
 
     sendAndReceive(request).flatMap { response =>
-      Unmarshal(response.entity.withContentType(ContentTypes.`application/json`)).to[String]
+      response.status match {
+        case StatusCodes.OK =>
+          val decodedEntity = if (response.encoding == HttpEncodings.gzip) {
+            Gzip.decodeMessage(response)
+          } else {
+            response
+          }
+          Unmarshal(decodedEntity.entity).to[String]
+        case _ =>
+          Future.failed(new Exception(s"Request failed with status code ${response.status}"))
+      }
     }
   }
 

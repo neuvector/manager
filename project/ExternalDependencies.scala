@@ -43,6 +43,7 @@ object ExternalDependencies {
 
   val pekkoActor   = "org.apache.pekko" %% "pekko-actor"   % pekkoV pekkoExclude
   val pekkoHttp   = "org.apache.pekko" %% "pekko-http"   % "1.0.1"
+  // val pekkoJson = "org.apache.pekko" %% "pekko-http-spray-json" % "1.0.1"
   val pekkoSlf4j   = "org.apache.pekko" %% "pekko-slf4j"   % pekkoV
   val pekkoStream  = "org.apache.pekko" %% "pekko-stream"  % pekkoV
 }

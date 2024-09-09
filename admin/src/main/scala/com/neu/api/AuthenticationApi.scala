@@ -29,8 +29,9 @@ import scala.util.control.NonFatal
  * Authentication rest service
  */
 //noinspection UnstableApiUsage
-class AuthenticationService()(implicit executionContext: ExecutionContext)
-    extends BaseService
+class AuthenticationApi()(
+  implicit executionContext: ExecutionContext
+) extends BaseService
     with DefaultJsonFormats
     with LazyLogging {
 
@@ -43,7 +44,7 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
   private val samlKey    = "samlSso"
   private val suseCookie = "R_SESS"
 
-  val authRoute: Route =
+  val route: Route =
     (get & path(openId)) {
       extractClientIP { ip =>
         parameters('code.?, 'state.?) { (code, state) =>
@@ -1051,11 +1052,6 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
                     Utils.respondWithWebServerHeaders() {
                       complete((StatusCodes.NetworkConnectTimeout, "Network connect timeout error"))
                     }
-//                  case e: ConnectionAttemptFailedException =>
-//                    logger.warn(e.getMessage)
-//                    Utils.respondWithWebServerHeaders() {
-//                      complete((StatusCodes.NetworkConnectTimeout, "Network connect timeout error"))
-//                    }
                 }
               }
             case e: TimeoutException =>
@@ -1063,11 +1059,6 @@ class AuthenticationService()(implicit executionContext: ExecutionContext)
               Utils.respondWithWebServerHeaders() {
                 complete((StatusCodes.NetworkConnectTimeout, "Network connect timeout error"))
               }
-//            case e: ConnectionAttemptFailedException =>
-//              logger.warn(e.getMessage)
-//              Utils.respondWithWebServerHeaders() {
-//                complete((StatusCodes.NetworkConnectTimeout, "Network connect timeout error"))
-//              }
           }
         }
       }

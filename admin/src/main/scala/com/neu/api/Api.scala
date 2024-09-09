@@ -14,40 +14,27 @@ import scala.concurrent.ExecutionContext.Implicits.global
  */
 trait Api extends Directives with CoreActors with Core {
 
+  val authenticationApi = new AuthenticationApi()
+  val dashboardApi      = new DashboardApi()
+  val clusterApi        = new ClusterApi()
+  val deviceApi         = new DeviceApi()
+  val groupApi          = new GroupApi()
+  val notificationApi   = new NotificationApi()
+  val policyApi         = new PolicyApi()
+  val riskApi           = new RiskApi()
+  val sigstoreApi       = new SigstoreApi()
+  val workloadApi       = new WorkloadApi()
+
   val routes: Route = {
-    new AuthenticationService().authRoute
-//    pathPrefix("api") {
-//      concat(
-//        path("hello") {
-//          get {
-//            complete("Hello, World!")
-//          }
-//        },
-//        path("users") {
-//          get {
-//            // Fetch users logic
-//            complete("List of users")
-//          } ~
-//          post {
-//            // Create user logic
-//            complete("User created")
-//          }
-//        }
-//        // Add more routes as needed
-//      )
-//    }
+    authenticationApi.route ~
+    dashboardApi.route ~
+    clusterApi.route ~
+    deviceApi.route ~
+    groupApi.route ~
+    notificationApi.route ~
+    policyApi.route ~
+    riskApi.route ~
+    sigstoreApi.route ~
+    workloadApi.route
   }
-//  val routes: Route = encodeResponse {
-////    new AuthenticationService().authRoute ~
-////    new ClusterService().clusterRoute ~
-////    new PolicyService().route ~
-////    new WorkloadService().workloadRoute ~
-////    new DeviceService().deviceRoute ~
-////    new NotificationService().eventRoute ~
-////    new GroupService().groupRoute ~
-////    new DashboardService().dashboardRoute ~
-////    new ClusterService().clusterRoute ~
-////    new RiskService().riskRoute ~
-////    new SigstoreService().sigstoreRoute
-//  }
 }

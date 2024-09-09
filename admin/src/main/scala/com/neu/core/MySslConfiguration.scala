@@ -29,8 +29,6 @@ trait MySslConfiguration extends LazyLogging {
     val context     = SSLContext.getInstance("TLS")
     val fCert: File = new File(newCert)
     val fKey: File  = new File(newKey)
-    logger.info(s"Cert Path: $newCert")
-    logger.info(s"Key Path: $newKey")
 
     if (fCert.isFile && fKey.isFile) {
       loadCertificateAndKey(fCert, fKey, context)

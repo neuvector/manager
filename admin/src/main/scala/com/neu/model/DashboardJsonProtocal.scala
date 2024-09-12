@@ -800,6 +800,18 @@ case class DashboardScoreDTO2(
 object DashboardJsonProtocol extends DefaultJsonProtocol with LazyLogging {
   implicit val dateTimeFormat = DateTimeFormat
 
+  implicit object StringJsonArrayFormat extends RootJsonFormat[List[String]] {
+    def write(obj: List[String]): JsValue = JsArray(obj.map(JsString(_)).toVector)
+    def read(json: JsValue): List[String] = json match {
+      case JsArray(elements) =>
+        elements.map {
+          case JsString(s) => s
+          case other       => deserializationError(s"Expected JsString, but got $other")
+        }.toList
+      case other => deserializationError(s"Expected JsArray, but got $other")
+    }
+  }
+
   implicit val errorFormat: RootJsonFormat[Error] = jsonFormat1(Error)
   implicit val violationEndpointFormat: RootJsonFormat[ViolationEndpoint] = jsonFormat21(
     ViolationEndpoint

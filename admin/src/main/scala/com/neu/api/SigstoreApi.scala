@@ -4,12 +4,11 @@ import com.neu.client.RestClient
 import com.neu.client.RestClient._
 import com.neu.model.SigstoreJsonProtocol._
 import com.neu.model._
-
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.http.scaladsl.model.HttpMethods._
 import org.apache.pekko.http.scaladsl.server.Route
 
-import scala.concurrent.{ Await, ExecutionContext }
+import scala.concurrent.ExecutionContext
 
 class SigstoreApi()(implicit executionContext: ExecutionContext)
     extends BaseService
@@ -74,7 +73,7 @@ class SigstoreApi()(implicit executionContext: ExecutionContext)
               }
             } ~
             delete {
-              parameters('rootOfTrustName) { (rootOfTrustName) =>
+              parameters(Symbol("rootOfTrustName")) { rootOfTrustName =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Deleting sigstore: {}...", rootOfTrustName)
@@ -92,12 +91,12 @@ class SigstoreApi()(implicit executionContext: ExecutionContext)
         } ~
         path("verifier") {
           get {
-            parameters('rootOfTrustName) { (rootOfTrustName) =>
+            parameters(Symbol("rootOfTrustName")) { rootOfTrustName =>
               Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Getting Verifiers of {}", rootOfTrustName)
                   RestClient.httpRequestWithHeader(
-                    s"${baseClusterUri(tokenId)}/scan/sigstore/root_of_trust/${rootOfTrustName}/verifier",
+                    s"${baseClusterUri(tokenId)}/scan/sigstore/root_of_trust/$rootOfTrustName/verifier",
                     GET,
                     "",
                     tokenId
@@ -146,19 +145,20 @@ class SigstoreApi()(implicit executionContext: ExecutionContext)
             }
           } ~
           delete {
-            parameters('rootOfTrustName, 'verifierName) { (rootOfTrustName, verifierName) =>
-              Utils.respondWithWebServerHeaders() {
-                complete {
-                  logger.info("Deleting verifier: {}", verifierName)
-                  logger.info("for {}...", rootOfTrustName)
-                  RestClient.httpRequestWithHeader(
-                    s"${baseClusterUri(tokenId)}/scan/sigstore/root_of_trust/${rootOfTrustName}/verifier/${verifierName}",
-                    DELETE,
-                    "",
-                    tokenId
-                  )
+            parameters(Symbol("rootOfTrustName"), Symbol("verifierName")) {
+              (rootOfTrustName, verifierName) =>
+                Utils.respondWithWebServerHeaders() {
+                  complete {
+                    logger.info("Deleting verifier: {}", verifierName)
+                    logger.info("for {}...", rootOfTrustName)
+                    RestClient.httpRequestWithHeader(
+                      s"${baseClusterUri(tokenId)}/scan/sigstore/root_of_trust/$rootOfTrustName/verifier/$verifierName",
+                      DELETE,
+                      "",
+                      tokenId
+                    )
+                  }
                 }
-              }
             }
           }
         }

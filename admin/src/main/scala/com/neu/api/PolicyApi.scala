@@ -11,14 +11,12 @@ import com.neu.model.JsonProtocol._
 import com.neu.model.PolicyJsonProtocol._
 import com.neu.model.RegistryConfigJsonProtocol._
 import com.neu.model._
-
 import com.typesafe.scalalogging.LazyLogging
+import org.apache.pekko.http.scaladsl.model.HttpMethods._
+import org.apache.pekko.http.scaladsl.model.StatusCodes
+import org.apache.pekko.http.scaladsl.server.Route
 import org.json4s._
 import org.json4s.native.JsonMethods._
-import org.apache.pekko.http.scaladsl.model.StatusCodes
-import org.apache.pekko.http.scaladsl.model.HttpMethods._
-import org.apache.pekko.http.scaladsl.server.Route
-import org.apache.pekko.http.scaladsl.server.Directives.decodeRequest
 
 import scala.concurrent.duration._
 import scala.concurrent.{ Await, ExecutionContext, TimeoutException }
@@ -68,7 +66,7 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
         path("conditionOption") {
           get {
             Utils.respondWithWebServerHeaders() {
-              parameter('scope.?) { scope =>
+              parameter(Symbol("scope").?) { scope =>
                 complete {
                   logger.info("Response rule condition options: {}")
                   RestClient.httpRequestWithHeader(
@@ -105,7 +103,7 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
         } ~
         path("responseRule") {
           get {
-            parameter('id) { id =>
+            parameter(Symbol("id")) { id =>
               Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Response rule id: {}", id)
@@ -122,7 +120,7 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
         } ~
         path("responsePolicy") {
           get {
-            parameter('scope.?) { scope =>
+            parameter(Symbol("scope").?) { scope =>
               Utils.respondWithWebServerHeaders() {
                 complete {
                   RestClient.httpRequestWithHeader(
@@ -183,7 +181,7 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
             }
           } ~
           delete {
-            parameter('scope.?, 'id.?) { (scope, id) =>
+            parameter(Symbol("scope").?, Symbol("id").?) { (scope, id) =>
               Utils.respondWithWebServerHeaders() {
                 complete {
                   var url = s"${baseClusterUri(tokenId)}/$responseRulePath"
@@ -225,83 +223,84 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
         pathPrefix("policy") {
           pathEnd {
             get {
-              parameters('scope.?, 'start.?, 'limit.?) { (scope, start, limit) =>
-                var url = s"${baseClusterUri(tokenId)}/$policyPath"
-                if (scope.isDefined) {
-                  url = s"$baseUri/$policyPath?scope=${scope.get}"
-                }
-                Utils.respondWithWebServerHeaders() {
-                  complete {
-                    val cacheKey = if (tokenId.length > 20) tokenId.substring(0, 20) else tokenId
-                    try {
-                      var elements: List[org.json4s.JsonAST.JValue] = null
-                      var ruleStr: String                           = null
-                      if (start.isEmpty || start.get.toInt == 0) {
-                        logger.info("Getting policy")
-                        val ruleRes = RestClient.requestWithHeaderDecode(url, GET, "", tokenId)
-                        ruleStr = Await.result(ruleRes, RestClient.waitingLimit.seconds)
-                        val json = parse(ruleStr)
-                        elements = (json \ "rules").children
-                        if (start.isDefined && start.get.toInt == 0) {
-                          paginationCacheManager[List[org.json4s.JsonAST.JValue]]
-                            .savePagedData(s"$cacheKey-network-rule", elements)
+              parameters(Symbol("scope").?, Symbol("start").?, Symbol("limit").?) {
+                (scope, start, limit) =>
+                  var url = s"${baseClusterUri(tokenId)}/$policyPath"
+                  if (scope.isDefined) {
+                    url = s"$baseUri/$policyPath?scope=${scope.get}"
+                  }
+                  Utils.respondWithWebServerHeaders() {
+                    complete {
+                      val cacheKey = if (tokenId.length > 20) tokenId.substring(0, 20) else tokenId
+                      try {
+                        var elements: List[org.json4s.JsonAST.JValue] = null
+                        var ruleStr: String                           = null
+                        if (start.isEmpty || start.get.toInt == 0) {
+                          logger.info("Getting policy")
+                          val ruleRes = RestClient.requestWithHeaderDecode(url, GET, "", tokenId)
+                          ruleStr = Await.result(ruleRes, RestClient.waitingLimit.seconds)
+                          val json = parse(ruleStr)
+                          elements = (json \ "rules").children
+                          if (start.isDefined && start.get.toInt == 0) {
+                            paginationCacheManager[List[org.json4s.JsonAST.JValue]]
+                              .savePagedData(s"$cacheKey-network-rule", elements)
+                          }
                         }
-                      }
 
-                      if (start.isDefined && limit.isDefined) {
-                        if (elements == null) {
-                          elements = paginationCacheManager[List[org.json4s.JsonAST.JValue]]
+                        if (start.isDefined && limit.isDefined) {
+                          if (elements == null) {
+                            elements = paginationCacheManager[List[org.json4s.JsonAST.JValue]]
+                              .getPagedData(s"$cacheKey-network-rule")
+                              .getOrElse(List[org.json4s.JsonAST.JValue]())
+                          }
+                          val output =
+                            elements.slice(start.get.toInt, start.get.toInt + limit.get.toInt)
+                          if (output.length < limit.get.toInt) {
+                            paginationCacheManager[List[org.json4s.JsonAST.JValue]]
+                              .removePagedData(s"$cacheKey-network-rule")
+                          }
+                          val pagedRes = compact(render(JArray(output)))
+                          val cachedData = paginationCacheManager[List[org.json4s.JsonAST.JValue]]
                             .getPagedData(s"$cacheKey-network-rule")
                             .getOrElse(List[org.json4s.JsonAST.JValue]())
+                          logger.info("Cached data size: {}", cachedData.size)
+                          logger.info(
+                            "Paged response size: {}",
+                            compact(render(JArray(output))).length
+                          )
+                          pagedRes
+                        } else {
+                          ruleStr
                         }
-                        val output =
-                          elements.slice(start.get.toInt, start.get.toInt + limit.get.toInt)
-                        if (output.length < limit.get.toInt) {
+                      } catch {
+                        case NonFatal(e) =>
+                          logger.warn(e.getMessage)
                           paginationCacheManager[List[org.json4s.JsonAST.JValue]]
                             .removePagedData(s"$cacheKey-network-rule")
-                        }
-                        val pagedRes = compact(render(JArray(output)))
-                        val cachedData = paginationCacheManager[List[org.json4s.JsonAST.JValue]]
-                          .getPagedData(s"$cacheKey-network-rule")
-                          .getOrElse(List[org.json4s.JsonAST.JValue]())
-                        logger.info("Cached data size: {}", cachedData.size)
-                        logger.info(
-                          "Paged response size: {}",
-                          compact(render(JArray(output))).length
-                        )
-                        pagedRes
-                      } else {
-                        ruleStr
+                          if (e.getMessage.contains("Status: 401") || e.getMessage.contains(
+                                "Status: 403"
+                              )) {
+                            (StatusCodes.Unauthorized, "Authentication failed!")
+                          } else {
+                            (StatusCodes.InternalServerError, "Controller unavailable!")
+                          }
+                        case e: TimeoutException =>
+                          logger.warn(e.getMessage)
+                          paginationCacheManager[List[org.json4s.JsonAST.JValue]]
+                            .removePagedData(s"$cacheKey-network-rule")
+                          (StatusCodes.NetworkConnectTimeout, "Network connect timeout error")
+                        //  case e: ConnectionAttemptFailedException =>
+                        //    logger.warn(e.getMessage)
+                        //    paginationCacheManager[List[org.json4s.JsonAST.JValue]]
+                        //      .removePagedData(s"$cacheKey-network-rule")
+                        //    (StatusCodes.NetworkConnectTimeout, "Network connect timeout error")
                       }
-                    } catch {
-                      case NonFatal(e) =>
-                        logger.warn(e.getMessage)
-                        paginationCacheManager[List[org.json4s.JsonAST.JValue]]
-                          .removePagedData(s"$cacheKey-network-rule")
-                        if (e.getMessage.contains("Status: 401") || e.getMessage.contains(
-                              "Status: 403"
-                            )) {
-                          (StatusCodes.Unauthorized, "Authentication failed!")
-                        } else {
-                          (StatusCodes.InternalServerError, "Controller unavailable!")
-                        }
-                      case e: TimeoutException =>
-                        logger.warn(e.getMessage)
-                        paginationCacheManager[List[org.json4s.JsonAST.JValue]]
-                          .removePagedData(s"$cacheKey-network-rule")
-                        (StatusCodes.NetworkConnectTimeout, "Network connect timeout error")
-                      //  case e: ConnectionAttemptFailedException =>
-                      //    logger.warn(e.getMessage)
-                      //    paginationCacheManager[List[org.json4s.JsonAST.JValue]]
-                      //      .removePagedData(s"$cacheKey-network-rule")
-                      //    (StatusCodes.NetworkConnectTimeout, "Network connect timeout error")
                     }
                   }
-                }
               }
             } ~
             patch {
-              parameters('scope) { scope =>
+              parameters(Symbol("scope")) { scope =>
                 decodeRequest {
                   entity(as[Policy2]) { policy =>
                     Utils.respondWithWebServerHeaders() {
@@ -321,7 +320,7 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
               }
             } ~
             delete {
-              parameter('id.?) { id =>
+              parameter(Symbol("id").?) { id =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     if (id.nonEmpty) {
@@ -362,7 +361,7 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
           } ~
           path("rule") {
             get {
-              parameter('id) { id =>
+              parameter(Symbol("id")) { id =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Getting rule: {}", id)
@@ -480,7 +479,7 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
           } ~
           path("workload") {
             get {
-              parameter('id.?, 'show.?) { (id, show) =>
+              parameter(Symbol("id").?, Symbol("show").?) { (id, show) =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     if (id.isEmpty) {
@@ -526,7 +525,7 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
           } ~
           path("host") {
             get {
-              parameter('id.?, 'show.?) { (id, show) =>
+              parameter(Symbol("id").?, Symbol("show").?) { (id, show) =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     if (id.isEmpty) {
@@ -567,7 +566,7 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
           } ~
           path("platform") {
             get {
-              parameter('platform.?, 'show.?) { (platform, show) =>
+              parameter(Symbol("platform").?, Symbol("show").?) { (platform, show) =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     platform match {
@@ -640,7 +639,7 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
           pathPrefix("registry") {
             pathEnd {
               get {
-                parameter('name.?) { name =>
+                parameter(Symbol("name").?) { name =>
                   Utils.respondWithWebServerHeaders() {
                     complete {
                       if (name.isEmpty) {
@@ -708,7 +707,7 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
                 }
               } ~
               delete {
-                parameter('name) { name =>
+                parameter(Symbol("name")) { name =>
                   Utils.respondWithWebServerHeaders() {
                     complete {
                       logger.info("Deleting registry: {}", name)
@@ -789,7 +788,7 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
               } ~
               delete {
                 headerValueByName("X-Transaction-Id") { transactionId =>
-                  parameter('name) { name =>
+                  parameter(Symbol("name")) { name =>
                     Utils.respondWithWebServerHeaders() {
                       complete {
                         try {
@@ -822,7 +821,7 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
             } ~
             path("repo") {
               get {
-                parameter('name) { name =>
+                parameter(Symbol("name")) { name =>
                   Utils.respondWithWebServerHeaders() {
                     complete {
                       logger.info("Getting scan registry summary")
@@ -852,7 +851,7 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
                 }
               } ~
               delete {
-                parameter('name) { name =>
+                parameter(Symbol("name")) { name =>
                   Utils.respondWithWebServerHeaders() {
                     complete {
                       logger.info("Stopping scan registry: {}", name)
@@ -869,27 +868,28 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
             } ~
             path("image") {
               get {
-                parameter('name, 'imageId, 'show.?) { (name, imageId, show) =>
-                  Utils.respondWithWebServerHeaders() {
-                    complete {
-                      val url =
-                        s"${baseClusterUri(tokenId)}/$scanRegistryPath/$name/image/$imageId${if (show.isDefined)
-                          s"?show=${show.get}"
-                        else ""}"
-                      logger.info(
-                        "Getting scan report for {} on {}, with URL {}",
-                        name,
-                        imageId,
-                        url
-                      )
-                      RestClient.httpRequestWithHeader(
-                        url,
-                        GET,
-                        "",
-                        tokenId
-                      )
+                parameter(Symbol("name"), Symbol("imageId"), Symbol("show").?) {
+                  (name, imageId, show) =>
+                    Utils.respondWithWebServerHeaders() {
+                      complete {
+                        val url =
+                          s"${baseClusterUri(tokenId)}/$scanRegistryPath/$name/image/$imageId${if (show.isDefined)
+                            s"?show=${show.get}"
+                          else ""}"
+                        logger.info(
+                          "Getting scan report for {} on {}, with URL {}",
+                          name,
+                          imageId,
+                          url
+                        )
+                        RestClient.httpRequestWithHeader(
+                          url,
+                          GET,
+                          "",
+                          tokenId
+                        )
+                      }
                     }
-                  }
                 }
               }
             } ~
@@ -910,27 +910,28 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
             } ~
             path("layer") {
               get {
-                parameter('name, 'imageId, 'show.?) { (name, imageId, show) =>
-                  Utils.respondWithWebServerHeaders() {
-                    complete {
-                      val url =
-                        s"${baseClusterUri(tokenId)}/$scanRegistryPath/$name/layers/$imageId${if (show.isDefined)
-                          s"?show=$show"
-                        else ""}"
-                      logger.info(
-                        "Getting layer scan report for {} on {}, URL: {}",
-                        name,
-                        imageId,
-                        url
-                      )
-                      RestClient.httpRequestWithHeader(
-                        url,
-                        GET,
-                        "",
-                        tokenId
-                      )
+                parameter(Symbol("name"), Symbol("imageId"), Symbol("show").?) {
+                  (name, imageId, show) =>
+                    Utils.respondWithWebServerHeaders() {
+                      complete {
+                        val url =
+                          s"${baseClusterUri(tokenId)}/$scanRegistryPath/$name/layers/$imageId${if (show.isDefined)
+                            s"?show=$show"
+                          else ""}"
+                        logger.info(
+                          "Getting layer scan report for {} on {}, URL: {}",
+                          name,
+                          imageId,
+                          url
+                        )
+                        RestClient.httpRequestWithHeader(
+                          url,
+                          GET,
+                          "",
+                          tokenId
+                        )
+                      }
                     }
-                  }
                 }
               }
             }
@@ -954,7 +955,7 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
         pathPrefix("admission") {
           path("rules") {
             get {
-              parameters('scope.?) { scope =>
+              parameters(Symbol("scope").?) { scope =>
                 if (scope.isEmpty) {
                   Utils.respondWithWebServerHeaders() {
                     complete {
@@ -1027,7 +1028,7 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
               }
             } ~
             delete {
-              parameter('scope.?, 'id) { (scope, id) =>
+              parameter(Symbol("scope").?, Symbol("id")) { (scope, id) =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Removing admission deny rules {}", id)
@@ -1049,7 +1050,7 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
           } ~
           path("options") {
             get {
-              parameter('scope.?) { scope =>
+              parameter(Symbol("scope").?) { scope =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Getting admission deny rule options")
@@ -1160,7 +1161,7 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
                     try {
                       val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
                       val baseUrl = cachedBaseUrl.fold {
-                        baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
+                        baseClusterUri(tokenId)
                       }(
                         cachedBaseUrl => cachedBaseUrl
                       )
@@ -1190,7 +1191,7 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     try {
-                      val baseUrl = baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
+                      val baseUrl = baseClusterUri(tokenId)
                       AuthenticationManager.setBaseUrl(tokenId, baseUrl)
                       logger.info("test baseUrl: {}", baseUrl)
                       logger.info("No Transaction ID(Post)")

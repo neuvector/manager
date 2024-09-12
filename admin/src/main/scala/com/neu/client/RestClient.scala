@@ -1,22 +1,17 @@
 package com.neu.client
 
 import com.neu.api.DefaultJsonFormats
-import com.neu.core.{ AuthenticationManager, ClientSslConfig }
 import com.neu.core.CommonSettings._
+import com.neu.core.{ AuthenticationManager, ClientSslConfig }
 import com.neu.web.Rest.{ executionContext, system }
-
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.model._
-import org.apache.pekko.http.scaladsl.model.HttpHeader
-import org.apache.pekko.http.scaladsl.model.headers._
-import org.apache.pekko.http.scaladsl.model.headers.RawHeader
-import org.apache.pekko.http.scaladsl.unmarshalling._
-import org.apache.pekko.http.scaladsl.marshalling.Marshal
-import org.apache.pekko.stream.Materializer
 import org.apache.pekko.http.scaladsl.coding.Gzip
-import org.apache.pekko.util.ByteString
-
+import org.apache.pekko.http.scaladsl.marshalling.Marshal
+import org.apache.pekko.http.scaladsl.model._
+import org.apache.pekko.http.scaladsl.model.headers._
+import org.apache.pekko.http.scaladsl.unmarshalling._
+import org.apache.pekko.stream.Materializer
 import spray.json._
 
 import java.io.{ PrintWriter, StringWriter }

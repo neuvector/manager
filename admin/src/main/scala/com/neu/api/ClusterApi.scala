@@ -48,7 +48,7 @@ class ClusterApi()(implicit executionContext: ExecutionContext)
           } ~
           path("switch") {
             get {
-              parameter('id.?) { id =>
+              parameter(Symbol("id").?) { id =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.switchCluster(tokenId, id)
@@ -61,7 +61,7 @@ class ClusterApi()(implicit executionContext: ExecutionContext)
           } ~
           path("summary") {
             get {
-              parameter('id) { id =>
+              parameter(Symbol("id")) { id =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
@@ -172,7 +172,7 @@ class ClusterApi()(implicit executionContext: ExecutionContext)
           } ~
           pathEnd {
             delete {
-              parameter('id) { id =>
+              parameter(Symbol("id")) { id =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Deleting cluster: {}", id)

@@ -3,30 +3,16 @@ package com.neu.api
 import com.google.common.net.UrlEscapers
 import com.neu.client.RestClient
 import com.neu.client.RestClient._
-import com.neu.core.AuthenticationManager
-import com.neu.core.CisNISTManager
-import com.neu.model.ComplianceNISTJsonProtocol._
+import com.neu.core.{ AuthenticationManager, CisNISTManager }
 import com.neu.model.ComplianceJsonProtocol._
+import com.neu.model.ComplianceNISTJsonProtocol._
 import com.neu.model.VulnerabilityJsonProtocol._
-import com.neu.model.{
-  ComplianceNISTConfigData,
-  ComplianceProfileConfig,
-  ComplianceProfileConfigData,
-  ComplianceProfileExportData,
-  ScannedAssetsQuery,
-  TimeRange,
-  VulnerabilityProfileConfigData,
-  VulnerabilityProfileEntryConfigData,
-  VulnerabilityProfileExportData,
-  VulnerabilityQuery
-}
-
+import com.neu.model._
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.http.scaladsl.model.HttpMethods._
 import org.apache.pekko.http.scaladsl.model.StatusCodes
-import org.apache.pekko.http.scaladsl.server.{ Route }
+import org.apache.pekko.http.scaladsl.server.Route
 
-import scala.concurrent.duration._
 import scala.concurrent.{ ExecutionContext, TimeoutException }
 import scala.util.control.NonFatal
 
@@ -66,12 +52,12 @@ class RiskApi()(implicit executionContext: ExecutionContext)
           } ~
           get {
             parameters(
-              'token,
-              'start,
-              'row,
-              'orderby.?,
-              'orderbyColumn.?,
-              'qf.?
+              Symbol("token"),
+              Symbol("start"),
+              Symbol("row"),
+              Symbol("orderby").?,
+              Symbol("orderbyColumn").?,
+              Symbol("qf").?
             ) { (token, start, row, orderby, orderbyColumn, qf) =>
               Utils.respondWithWebServerHeaders() {
                 complete {
@@ -110,15 +96,15 @@ class RiskApi()(implicit executionContext: ExecutionContext)
             } ~
             get {
               parameters(
-                'token,
-                'start,
-                'row,
-                'lastmtime.?,
-                'orderby.?,
-                'orderbyColumn.?,
-                'qf.?,
-                'scoretype.?
-              ) { (token, start, row, lastmtime, orderby, orderbyColumn, qf, scoretype) =>
+                Symbol("token"),
+                Symbol("start"),
+                Symbol("row"),
+                Symbol("lastmtime").?,
+                Symbol("orderby").?,
+                Symbol("orderbyColumn").?,
+                Symbol("qf").?,
+                Symbol("scoretype").?
+              )((token, start, row, lastmtime, orderby, orderbyColumn, qf, scoretype) => {
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     val url =
@@ -136,7 +122,7 @@ class RiskApi()(implicit executionContext: ExecutionContext)
                     RestClient.httpRequestWithHeader(url, GET, "", tokenId)
                   }
                 }
-              }
+              })
             }
           }
         } ~
@@ -144,7 +130,7 @@ class RiskApi()(implicit executionContext: ExecutionContext)
           pathPrefix("cve") {
             pathEnd {
               get {
-                parameters('show.?) { show =>
+                parameters(Symbol("show").?) { show =>
                   Utils.respondWithWebServerHeaders() {
                     complete {
                       val url =
@@ -160,7 +146,7 @@ class RiskApi()(implicit executionContext: ExecutionContext)
             pathPrefix("assets-view") {
               pathEnd {
                 patch {
-                  parameter('queryToken.?) { queryToken =>
+                  parameter(Symbol("queryToken").?) { queryToken =>
                     entity(as[TimeRange]) { timeRange =>
                       Utils.respondWithWebServerHeaders() {
                         val url = queryToken.fold(
@@ -253,7 +239,7 @@ class RiskApi()(implicit executionContext: ExecutionContext)
                   }
                 } ~
                 patch {
-                  parameters('name) { name =>
+                  parameters(Symbol("name")) { name =>
                     entity(as[VulnerabilityProfileEntryConfigData]) {
                       vulnerabilityProfileEntryConfigData =>
                         Utils.respondWithWebServerHeaders() {
@@ -282,7 +268,7 @@ class RiskApi()(implicit executionContext: ExecutionContext)
                   }
                 } ~
                 delete {
-                  parameter('profile_name, 'entry_id) { (profileName, entryId) =>
+                  parameter(Symbol("profile_name"), Symbol("entry_id")) { (profileName, entryId) =>
                     Utils.respondWithWebServerHeaders() {
                       complete {
                         logger.info(
@@ -326,12 +312,12 @@ class RiskApi()(implicit executionContext: ExecutionContext)
                 post {
                   headerValueByName("X-Transaction-Id") { transactionId =>
                     Utils.respondWithWebServerHeaders() {
-                      parameter('option) { option =>
+                      parameter(Symbol("option")) { option =>
                         complete {
                           try {
                             val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
                             val baseUrl = cachedBaseUrl.fold {
-                              baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
+                              baseClusterUri(tokenId)
                             }(
                               cachedBaseUrl => cachedBaseUrl
                             )
@@ -360,11 +346,11 @@ class RiskApi()(implicit executionContext: ExecutionContext)
                   } ~
                   entity(as[String]) { formData =>
                     Utils.respondWithWebServerHeaders() {
-                      parameter('option) { option =>
+                      parameter(Symbol("option")) { option =>
                         complete {
                           try {
                             val baseUrl =
-                              baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
+                              baseClusterUri(tokenId)
                             AuthenticationManager.setBaseUrl(tokenId, baseUrl)
                             logger.info("test baseUrl: {}", baseUrl)
                             logger.info("No Transaction ID(Post)")
@@ -452,7 +438,7 @@ class RiskApi()(implicit executionContext: ExecutionContext)
             pathPrefix("profile") {
               pathEnd {
                 get {
-                  parameter('name.?) { name =>
+                  parameter(Symbol("name").?) { name =>
                     Utils.respondWithWebServerHeaders() {
                       complete {
                         logger.info(s"Getting compliance profile $name ...")
@@ -525,7 +511,7 @@ class RiskApi()(implicit executionContext: ExecutionContext)
                         try {
                           val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
                           val baseUrl = cachedBaseUrl.fold {
-                            baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
+                            baseClusterUri(tokenId)
                           }(
                             cachedBaseUrl => cachedBaseUrl
                           )
@@ -556,7 +542,7 @@ class RiskApi()(implicit executionContext: ExecutionContext)
                       complete {
                         try {
                           val baseUrl =
-                            baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
+                            baseClusterUri(tokenId)
                           AuthenticationManager.setBaseUrl(tokenId, baseUrl)
                           logger.info("test baseUrl: {}", baseUrl)
                           logger.info("No Transaction ID(Post)")

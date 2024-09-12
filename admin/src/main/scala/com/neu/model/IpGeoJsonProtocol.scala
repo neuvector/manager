@@ -1,7 +1,6 @@
 package com.neu.model
 
 import spray.json.{ DefaultJsonProtocol, _ }
-import scala.collection.mutable.Map
 
 object IpGeoJsonProtocol extends DefaultJsonProtocol {
   implicit val ipGeoFormat: RootJsonFormat[IpGeo] = jsonFormat4(IpGeo)

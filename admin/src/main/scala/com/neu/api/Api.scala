@@ -1,5 +1,6 @@
 package com.neu.api
 
+import com.neu.api.authentication.AuthenticationApi
 import com.neu.service._
 import com.neu.core.{ Core, CoreActors }
 import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
@@ -14,17 +15,16 @@ import scala.concurrent.ExecutionContext.Implicits.global
  */
 trait Api extends Directives with CoreActors with Core {
 
-  val authenticationService = new AuthenticationService()
-  val authenticationApi     = new AuthenticationApi(authenticationService)
-  val dashboardApi          = new DashboardApi()
-  val clusterApi            = new ClusterApi()
-  val deviceApi             = new DeviceApi()
-  val groupApi              = new GroupApi()
-  val notificationApi       = new NotificationApi()
-  val policyApi             = new PolicyApi()
-  val riskApi               = new RiskApi()
-  val sigstoreApi           = new SigstoreApi()
-  val workloadApi           = new WorkloadApi()
+  private val authenticationApi = new AuthenticationApi()
+  private val dashboardApi      = new DashboardApi()
+  private val clusterApi        = new ClusterApi()
+  private val deviceApi         = new DeviceApi()
+  private val groupApi          = new GroupApi()
+  private val notificationApi   = new NotificationApi()
+  private val policyApi         = new PolicyApi()
+  private val riskApi           = new RiskApi()
+  private val sigstoreApi       = new SigstoreApi()
+  private val workloadApi       = new WorkloadApi()
 
   val routes: Route = {
     authenticationApi.route ~

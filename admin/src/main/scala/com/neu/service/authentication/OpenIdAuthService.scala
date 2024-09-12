@@ -19,10 +19,10 @@ import java.util.Base64
 import scala.concurrent.duration._
 import scala.concurrent.{ Await, ExecutionContext, Future }
 
-class OpenIdAuthProcessor()(
+class OpenIdAuthService()(
   implicit mat: Materializer,
   ec: ExecutionContext
-) extends AuthProcessor {
+) extends AuthService {
 
   private val AUTH_SERVER = "token_auth_server"
   private val OPEN_ID     = "openId_auth"
@@ -35,19 +35,17 @@ class OpenIdAuthProcessor()(
     ip: String,
     host: Option[String],
     serverName: Option[String]
-  ): Either[Route, Unit] =
+  ): Route =
     if (state.isEmpty) {
       val result =
         Await.result(handleEmptyResources(host, serverName), RestClient.waitingLimit.seconds)
-      Left(complete(result))
+      complete(result)
     } else {
-      Left(
-        Await
-          .result(handleExistingResoureces(code, state, ip, host), RestClient.waitingLimit.seconds)
-      )
+      Await
+        .result(handleExistingResoureces(code, state, ip, host), RestClient.waitingLimit.seconds)
     }
 
-  override def validateToken(): Route = {
+  override def validateToken(tokenId: Option[String]): Route = {
     val authToken = AuthenticationManager.validate(KEY)
     authToken match {
       case Some(x) =>
@@ -60,11 +58,18 @@ class OpenIdAuthProcessor()(
     }
   }
 
-  override def login(ip: RemoteAddress, host: String, ctx: RequestContext): Either[Route, Unit] =
-    Right(None)
+  override def login(ip: RemoteAddress, host: String, ctx: RequestContext): Route =
+    complete((StatusCodes.MethodNotAllowed, "Method not allowed."))
 
-  override def logout(host: Option[String], tokenId: String): Either[Route, Unit] =
-    Right(None)
+  override def logout(host: Option[String], tokenId: String): Route =
+    complete((StatusCodes.MethodNotAllowed, "Method not allowed."))
+
+  override def getSelf(
+    isOnNV: Option[String],
+    isRancherSSOUrl: Option[String],
+    suseCookieValue: String,
+    tokenId: String
+  ): Route = complete((StatusCodes.MethodNotAllowed, "Method not allowed."))
 
   private def handleEmptyResources(
     host: Option[String],

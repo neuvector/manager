@@ -35,11 +35,11 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
     with DefaultJsonFormats
     with LazyLogging {
 
-  private var logFile                  = "/tmp/debug.gz"
-  private final val benchHostPath      = "bench/host"
   final val timeOutStatus              = "Status: 408"
   final val authenticationFailedStatus = "Status: 401"
   final val serverErrorStatus          = "Status: 503"
+  private final val benchHostPath      = "bench/host"
+  private var logFile                  = "/tmp/debug.gz"
 
   private val purgeDebugFiles = (dir: File) => {
     val tempFiles: List[File] = dir.listFiles.filter(_.isFile).toList.filter { file =>
@@ -56,7 +56,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
       {
         pathPrefix("enforcer") {
           get {
-            parameter('id.?) { id =>
+            parameter(Symbol("id").?) { id =>
               Utils.respondWithWebServerHeaders() {
                 complete {
                   if (id.isEmpty) {
@@ -81,7 +81,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
         } ~
         pathPrefix("single-enforcer") {
           get {
-            parameter('id) { id =>
+            parameter(Symbol("id")) { id =>
               Utils.respondWithWebServerHeaders() {
                 complete {
                   RestClient.httpRequestWithHeader(
@@ -98,7 +98,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
         pathPrefix("controller") {
           get {
             implicit val timeout: Timeout = Timeout(RestClient.waitingLimit.seconds)
-            parameter('id.?) { id =>
+            parameter(Symbol("id").?) { id =>
               Utils.respondWithWebServerHeaders() {
                 complete {
                   if (id.isEmpty) {
@@ -198,7 +198,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
           } ~
           patch {
             Utils.respondWithWebServerHeaders() {
-              parameter('scope.?) { scope =>
+              parameter(Symbol("scope").?) { scope =>
                 entity(as[Webhook]) { webhook =>
                   complete {
                     val payload = webhookConfigWrapToJson(WebhookConfigWrap(webhook))
@@ -224,7 +224,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
           } ~
           delete {
             Utils.respondWithWebServerHeaders() {
-              parameter('name, 'scope.?) { (name, scope) =>
+              parameter(Symbol("name"), Symbol("scope").?) { (name, scope) =>
                 complete {
                   logger.info("Delete config: {}", name)
 
@@ -245,7 +245,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
         path("config") {
           get {
             Utils.respondWithWebServerHeaders() {
-              parameter('scope.?) { scope =>
+              parameter(Symbol("scope").?) { scope =>
                 complete {
                   RestClient.httpRequestWithHeader(
                     scope.fold(s"${baseClusterUri(tokenId)}/system/config") { scope =>
@@ -262,7 +262,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
           } ~
           patch {
             entity(as[SystemConfig]) { systemConfig =>
-              parameter('scope.?) { scope =>
+              parameter(Symbol("scope").?) { scope =>
                 {
                   Utils.respondWithWebServerHeaders() {
                     complete {
@@ -301,7 +301,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
         path("config-v2") {
           get {
             Utils.respondWithWebServerHeaders() {
-              parameter('scope.?, 'source.?) { (scope, source) =>
+              parameter(Symbol("scope").?, Symbol("source").?) { (scope, source) =>
                 complete {
                   val _source = source.fold("") { source =>
                     source
@@ -335,7 +335,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
           } ~
           patch {
             entity(as[SystemConfigWrap]) { systemConfigWrap =>
-              parameter('scope.?) { scope =>
+              parameter(Symbol("scope").?) { scope =>
                 {
                   Utils.respondWithWebServerHeaders() {
                     complete {
@@ -407,7 +407,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
           } ~
           delete {
             Utils.respondWithWebServerHeaders() {
-              parameter('name) { name =>
+              parameter(Symbol("name")) { name =>
                 complete {
                   logger.info("Delete remote repository: {}", name)
                   RestClient.httpRequestWithHeader(
@@ -424,7 +424,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
         pathPrefix("host") {
           pathEnd {
             get {
-              parameter('id.?) { id =>
+              parameter(Symbol("id").?) { id =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     if (id.isEmpty) {
@@ -450,7 +450,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
           } ~
           path("workload") {
             get {
-              parameter('id) { id =>
+              parameter(Symbol("id")) { id =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
@@ -466,7 +466,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
           } ~
           path("compliance") {
             get {
-              parameter('id) { id =>
+              parameter(Symbol("id")) { id =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
@@ -484,7 +484,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
         pathPrefix("file") {
           path("config") {
             get {
-              parameter('id) { id =>
+              parameter(Symbol("id")) { id =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     if (id.equals("all")) {
@@ -557,7 +557,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
                   Utils.respondWithWebServerHeaders() {
                     complete {
                       try {
-                        val baseUrl = baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
+                        val baseUrl = baseClusterUri(tokenId)
                         logger.info("testing baseUrl")
                         logger.info("No Transaction ID(Post),{}", asStandalone.getClass.toString)
                         AuthenticationManager.setBaseUrl(tokenId, baseUrl)
@@ -633,7 +633,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
                     complete {
                       try {
                         verifyToken(tokenId) match {
-                          case Right(true) => {
+                          case Right(true) =>
                             logFile = "/tmp/debug" + new Date().getTime + ".gz"
                             purgeDebugFiles(new File("/tmp"))
 
@@ -702,23 +702,20 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
                                 entity = "Started to collect debug log."
                               )
                             }
-                          }
-                          case Right(false) => {
+                          case Right(false) =>
                             RestClient.handleError(
                               timeOutStatus,
                               authenticationFailedStatus,
                               serverErrorStatus,
                               new RuntimeException("Status: 401")
                             )
-                          }
-                          case Left(error) => {
+                          case Left(error) =>
                             RestClient.handleError(
                               timeOutStatus,
                               authenticationFailedStatus,
                               serverErrorStatus,
                               error
                             )
-                          }
                         }
                       } catch {
                         case NonFatal(e) =>
@@ -756,7 +753,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
         pathPrefix("bench") {
           path("docker") {
             get {
-              parameter('id) { id =>
+              parameter(Symbol("id")) { id =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
@@ -787,7 +784,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
           } ~
           path("kubernetes") {
             get {
-              parameter('id) { id =>
+              parameter(Symbol("id")) { id =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
@@ -845,7 +842,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
       )
       val result: HttpResponse = Await.result(resultPromise, RestClient.waitingLimit.seconds)
       result match {
-        case HttpResponse(StatusCodes.OK, headers, entity, _)  => Right(true)
+        case HttpResponse(StatusCodes.OK, _, _, _)             => Right(true)
         case HttpResponse(status, _, _, _) if status.isFailure => Right(false)
         case _                                                 => Right(false)
       }
@@ -857,7 +854,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
   private def setBaseUrl(tokenId: String, transactionId: String): Unit = {
     val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
     val baseUrl = cachedBaseUrl.getOrElse(
-      baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
+      baseClusterUri(tokenId)
     )
     AuthenticationManager.setBaseUrl(tokenId, baseUrl)
     logger.info("test base Url: {}", baseUrl)

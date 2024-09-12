@@ -2,15 +2,15 @@ package com.neu.core
 
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.{ ConnectionContext, Http, HttpsConnectionContext }
 import org.apache.pekko.http.scaladsl.model._
 import org.apache.pekko.http.scaladsl.settings.ConnectionPoolSettings
+import org.apache.pekko.http.scaladsl.{ ConnectionContext, Http, HttpsConnectionContext }
 import org.apache.pekko.stream.Materializer
 import org.apache.pekko.stream.scaladsl.{ Sink, Source }
 
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
-import javax.net.ssl.{ HttpsURLConnection, SSLContext, SSLEngine, TrustManager, X509TrustManager }
+import javax.net.ssl.{ SSLContext, SSLEngine, TrustManager, X509TrustManager }
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Failure, Success }
 

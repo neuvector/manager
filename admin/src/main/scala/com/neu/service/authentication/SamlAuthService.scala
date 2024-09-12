@@ -5,22 +5,19 @@ import com.neu.client.RestClient._
 import com.neu.core.AuthenticationManager
 import com.neu.model.AuthTokenJsonProtocol._
 import com.neu.model._
-
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.http.scaladsl.model._
 import org.apache.pekko.http.scaladsl.server.{ RequestContext, Route }
 import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshal
 
-import spray.json._
-
-import scala.util.{ Failure, Success }
 import scala.concurrent.duration._
 import scala.concurrent.{ Await, ExecutionContext, Future }
+import scala.util.{ Failure, Success }
 
-class SamlAuthProcessor()(
+class SamlAuthService()(
   implicit system: ActorSystem,
   ec: ExecutionContext
-) extends AuthProcessor {
+) extends AuthService {
 
   val samlSloResp      = "samlslo"
   val saml             = "token_auth_server"
@@ -34,7 +31,7 @@ class SamlAuthProcessor()(
     ip: String,
     host: Option[String],
     serverName: Option[String]
-  ): Either[Route, Unit] = {
+  ): Route = {
     val resourcesFuture = if (serverName.isEmpty) {
       logger.info(s"saml-g: servername is empty")
       RestClient.httpRequest(s"$baseUri/$saml", HttpMethods.GET)
@@ -54,10 +51,10 @@ class SamlAuthProcessor()(
 
     val result = Await.result(resourcesFuture, RestClient.waitingLimit.seconds)
 
-    Left(complete(result))
+    complete(result)
   }
 
-  override def validateToken(): Route = {
+  override def validateToken(tokenId: Option[String]): Route = {
     val authToken = AuthenticationManager.validate(samlKey)
     authToken match {
       case Some(token) =>
@@ -70,20 +67,18 @@ class SamlAuthProcessor()(
     }
   }
 
-  override def login(ip: RemoteAddress, host: String, ctx: RequestContext): Either[Route, Unit] = {
+  override def login(ip: RemoteAddress, host: String, ctx: RequestContext): Route = {
     logger.info(s"saml-p: $host")
-    Left(
-      onComplete(processLoginRequest(ctx, ip, host)) {
-        case Success(route) => route
-        case Failure(ex) =>
-          logger.error("Login process failed", ex)
-          complete(StatusCodes.InternalServerError)
-      }
-    )
+    onComplete(processLoginRequest(ctx, ip, host)) {
+      case Success(route) => route
+      case Failure(ex) =>
+        logger.error("Login process failed", ex)
+        complete(StatusCodes.InternalServerError)
+    }
   }
 
-  override def logout(host: Option[String], tokenId: String): Either[Route, Unit] =
-    Left(complete {
+  override def logout(host: Option[String], tokenId: String): Route =
+    complete {
       logger.info(s"saml-g: slo")
       RestClient.httpRequestWithHeader(
         s"$baseUri/$saml/saml1/slo",
@@ -96,7 +91,14 @@ class SamlAuthProcessor()(
         ),
         tokenId
       )
-    })
+    }
+
+  override def getSelf(
+    isOnNV: Option[String],
+    isRancherSSOUrl: Option[String],
+    suseCookieValue: String,
+    tokenId: String
+  ): Route = complete((StatusCodes.MethodNotAllowed, "Method not allowed."))
 
   private def processLoginRequest(
     ctx: RequestContext,

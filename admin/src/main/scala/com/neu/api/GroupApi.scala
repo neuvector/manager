@@ -12,12 +12,10 @@ import com.neu.model.ProcessProfileJsonProtocol._
 import com.neu.model.SystemConfigJsonProtocol._
 import com.neu.model.WafJsonProtocol._
 import com.neu.model._
-
 import com.typesafe.scalalogging.LazyLogging
-import org.apache.pekko.http.scaladsl.model.StatusCodes
 import org.apache.pekko.http.scaladsl.model.HttpMethods._
+import org.apache.pekko.http.scaladsl.model.StatusCodes
 import org.apache.pekko.http.scaladsl.server.Route
-import org.apache.pekko.http.scaladsl.server.Directives.decodeRequest
 
 import scala.concurrent.duration._
 import scala.concurrent.{ Await, ExecutionContext }
@@ -781,7 +779,7 @@ class GroupApi()(implicit executionContext: ExecutionContext)
                       try {
                         val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
                         val baseUrl = cachedBaseUrl.fold {
-                          baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
+                          baseClusterUri(tokenId)
                         }(
                           cachedBaseUrl => cachedBaseUrl
                         )
@@ -811,7 +809,7 @@ class GroupApi()(implicit executionContext: ExecutionContext)
                   Utils.respondWithWebServerHeaders() {
                     complete {
                       try {
-                        val baseUrl = baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
+                        val baseUrl = baseClusterUri(tokenId)
                         AuthenticationManager.setBaseUrl(tokenId, baseUrl)
                         logger.info("test baseUrl: {}", baseUrl)
                         logger.info("No Transaction ID(Post)")
@@ -981,7 +979,7 @@ class GroupApi()(implicit executionContext: ExecutionContext)
                       try {
                         val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
                         val baseUrl = cachedBaseUrl.fold {
-                          baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
+                          baseClusterUri(tokenId)
                         }(
                           cachedBaseUrl => cachedBaseUrl
                         )
@@ -1011,7 +1009,7 @@ class GroupApi()(implicit executionContext: ExecutionContext)
                   Utils.respondWithWebServerHeaders() {
                     complete {
                       try {
-                        val baseUrl = baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
+                        val baseUrl = baseClusterUri(tokenId)
                         AuthenticationManager.setBaseUrl(tokenId, baseUrl)
                         logger.info("test baseUrl: {}", baseUrl)
                         logger.info("No Transaction ID(Post)")

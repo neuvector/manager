@@ -28,7 +28,7 @@ class WorkloadApi()(implicit executionContext: ExecutionContext)
         pathPrefix("workload") {
           pathEnd {
             get {
-              parameter('id.?) { id =>
+              parameter(Symbol("id").?) { id =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     id.fold(
@@ -73,7 +73,7 @@ class WorkloadApi()(implicit executionContext: ExecutionContext)
             }
           } ~
           path("scanned") {
-            parameter('start.?, 'limit.?) { (start, limit) =>
+            parameter(Symbol("start").?, Symbol("limit").?) { (start, limit) =>
               Utils.respondWithWebServerHeaders() {
                 val cacheKey                                   = if (tokenId.length > 20) tokenId.substring(0, 20) else tokenId
                 var convertedScannedWorkloads: WorkloadsWrapV2 = null
@@ -141,7 +141,7 @@ class WorkloadApi()(implicit executionContext: ExecutionContext)
           } ~
           path("workload-by-id") {
             get {
-              parameter('id.?) { id =>
+              parameter(Symbol("id").?) { id =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
@@ -157,7 +157,7 @@ class WorkloadApi()(implicit executionContext: ExecutionContext)
           } ~
           path("monitor") {
             get {
-              parameter('id, 'monitor) { (id, monitor) =>
+              parameter(Symbol("id"), Symbol("monitor")) { (id, monitor) =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info(id + monitor)
@@ -174,7 +174,7 @@ class WorkloadApi()(implicit executionContext: ExecutionContext)
           } ~
           path("compliance") {
             get {
-              parameter('id) { id =>
+              parameter(Symbol("id")) { id =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info(s"get compliance for $id")
@@ -193,7 +193,7 @@ class WorkloadApi()(implicit executionContext: ExecutionContext)
         pathPrefix("container") {
           pathEnd {
             get {
-              parameter('id.?) { id =>
+              parameter(Symbol("id").?) { id =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     id.fold(
@@ -219,7 +219,7 @@ class WorkloadApi()(implicit executionContext: ExecutionContext)
           } ~
           path("process") {
             get {
-              parameter('id) { id =>
+              parameter(Symbol("id")) { id =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
@@ -235,7 +235,7 @@ class WorkloadApi()(implicit executionContext: ExecutionContext)
           } ~
           path("processHistory") {
             get {
-              parameter('id) { id =>
+              parameter(Symbol("id")) { id =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
@@ -253,7 +253,7 @@ class WorkloadApi()(implicit executionContext: ExecutionContext)
         pathPrefix("sniffer") {
           pathEnd {
             get {
-              parameter('id) { id =>
+              parameter(Symbol("id")) { id =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
@@ -295,7 +295,7 @@ class WorkloadApi()(implicit executionContext: ExecutionContext)
               }
             } ~
             delete {
-              parameter('id) { id =>
+              parameter(Symbol("id")) { id =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
@@ -311,7 +311,7 @@ class WorkloadApi()(implicit executionContext: ExecutionContext)
           } ~
           path("pcap") {
             get {
-              parameter('id) { id =>
+              parameter(Symbol("id")) { id =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(

@@ -6,7 +6,6 @@ import com.typesafe.scalalogging.LazyLogging
 
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
-import scala.Array._
 import scala.collection.mutable
 
 /**

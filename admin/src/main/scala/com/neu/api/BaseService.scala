@@ -1,20 +1,28 @@
 package com.neu.api
 
-import com.neu.client.RestClient
-import com.neu.client.RestClient.baseClusterUri
+import com.neu.client.RestClient.{ arrayFormat, baseClusterUri, StringJsonFormat }
 import com.neu.core.AuthenticationManager
 import com.typesafe.scalalogging.LazyLogging
-import org.apache.pekko.http.scaladsl.model.StatusCodes
+import org.apache.pekko.http.scaladsl.model.{ HttpEntity, StatusCodes }
 import org.apache.pekko.http.scaladsl.server.{ Directives, StandardRoute }
+import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshaller
+import spray.json._
+
 import java.io.{ PrintWriter, StringWriter }
 
 class BaseService() extends Directives with LazyLogging {
+  implicit val arrayStringUnmarshaller: Unmarshaller[HttpEntity, Array[String]] =
+    Unmarshaller.stringUnmarshaller
+      .map(JsonParser(_).convertTo[Array[String]])
+
   val authError                  = "Authentication failed!"
-  val blocked                    = "Temporarily blocked because of too many login failures"
-  val authSSODisabledError       = "Authentication using OpenShift's or Rancher's RBAC was disabled!"
-  val passwordExpired            = "Password expired"
   val timeOutStatus              = "Status: 408"
   val authenticationFailedStatus = "Status: 401"
+
+  private val blocked = "Temporarily blocked because of too many login failures"
+  private val authSSODisabledError =
+    "Authentication using OpenShift's or Rancher's RBAC was disabled!"
+  private val passwordExpired = "Password expired"
 
   protected def onExpiredOrInternalError(e: Throwable) = {
     logger.warn(e.getMessage)
@@ -56,7 +64,7 @@ class BaseService() extends Directives with LazyLogging {
   protected def setBaseUrl(tokenId: String, transactionId: String): Unit = {
     val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
     val baseUrl = cachedBaseUrl.fold(
-      baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
+      baseClusterUri(tokenId)
     )(
       cachedBaseUrl => cachedBaseUrl
     )

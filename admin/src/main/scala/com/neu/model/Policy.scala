@@ -1,7 +1,5 @@
 package com.neu.model
 
-import com.neu.model.DashboardJsonProtocol._
-
 /**
  * Created by bxu on 4/29/16.
  */

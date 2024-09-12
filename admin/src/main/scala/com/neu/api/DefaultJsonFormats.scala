@@ -7,7 +7,6 @@ import org.apache.pekko.http.scaladsl.marshalling.{
 }
 import org.apache.pekko.http.scaladsl.model.{ ContentTypes, HttpEntity, HttpResponse, StatusCode }
 import org.apache.pekko.http.scaladsl.unmarshalling.{ FromEntityUnmarshaller, Unmarshaller }
-import org.apache.pekko.util.ByteString
 import spray.json.{
   deserializationError,
   enrichAny,
@@ -65,7 +64,7 @@ trait DefaultJsonFormats extends DefaultJsonProtocol {
     }
   }
 
-  type ErrorSelector[A] = A => StatusCode
+  private type ErrorSelector[A] = A => StatusCode
 
   /**
    * Marshals instances of ``Either[A, B]`` into appropriate HTTP responses by marshalling the values

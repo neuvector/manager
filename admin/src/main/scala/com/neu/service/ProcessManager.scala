@@ -15,21 +15,21 @@ import scala.util.control.Breaks.{ break, breakable }
 class ProcessManager extends Actor with ActorLogging {
   val builder = new ProcessBuilder("bash", "-i")
   builder.redirectErrorStream(true)
-  val proc: Process = builder.start()
-  val inputWriter   = new BufferedWriter(new OutputStreamWriter(proc.getOutputStream))
-  val outputReader  = new BufferedReader(new InputStreamReader(proc.getInputStream))
+  private val proc: Process = builder.start()
+  private val inputWriter   = new BufferedWriter(new OutputStreamWriter(proc.getOutputStream))
+  private val outputReader  = new BufferedReader(new InputStreamReader(proc.getInputStream))
 
   /**
    * Destroy the process and return its exit value.
    * If process has not been started, an IllegalStateException is thrown.
    */
-  def destroy(): Int = {
+  private def destroy(): Int = {
     proc.destroy()
     proc.waitFor()
   }
 
-  def collectOutput(): List[String] = {
-    var lines = new ListBuffer[String]()
+  private def collectOutput(): List[String] = {
+    val lines = new ListBuffer[String]()
     try {
       breakable {
         while (true) {

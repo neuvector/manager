@@ -5,13 +5,12 @@ import java.io.BufferedWriter
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 
-import scala.util.control.Breaks.break
-import scala.util.control.Breaks.breakable
+import scala.util.control.Breaks.{ break, breakable }
 
 /**
  * An operating system process.
  */
-class Proc(args: String*)(env: Env) extends Traversable[String] {
+class Proc(args: String*)(env: Env) extends Iterable[String] {
   protected val pb                           = new ProcessBuilder(args: _*)
   protected var proc: Process                = _
   protected var inputWriter: BufferedWriter  = _
@@ -21,37 +20,37 @@ class Proc(args: String*)(env: Env) extends Traversable[String] {
   /**
    * Start process and traverse lines in standard output.
    */
-  def stdout = new Traversable[String] {
-    def foreach[U](fun: String => U) {
+  def stdout: Iterable[String] = new Iterable[String] {
+    def iterator: Iterator[String] = {
       startProc()
-      collectOutput(fun, outputReader)
+      collectOutput(outputReader)
     }
   }
 
   /**
    * Start process and traverse lines in standard error.
    */
-  def stderr = new Traversable[String] {
-    def foreach[U](fun: String => U) {
+  def stderr: Iterable[String] = new Iterable[String] {
+    def iterator: Iterator[String] = {
       startProc()
-      collectOutput(fun, errorReader)
+      collectOutput(errorReader)
     }
   }
 
   /**
    * Start process and traverse lines in both standard output and error.
    */
-  def foreach[U](fun: String => U) {
+  def iterator: Iterator[String] = {
     pb.redirectErrorStream(true)
     startProc()
-    collectOutput(fun, outputReader)
+    collectOutput(outputReader)
   }
 
   /**
    * Start process and return all output in standard output and error.
    */
   override def toString: String = {
-    val output = collect { case s: String => s }.mkString(String format "%n")
+    val output = iterator.mkString(System.lineSeparator())
     waitFor()
     output
   }
@@ -116,19 +115,29 @@ class Proc(args: String*)(env: Env) extends Traversable[String] {
   /**
    * Collect process output to feed to the function.
    */
-  protected def collectOutput[U](fun: String => U, reader: BufferedReader) {
-    try {
-      breakable {
-        while (true) {
-          val line = reader.readLine()
-          if (line == null) {
-            break
+  protected def collectOutput(reader: BufferedReader): Iterator[String] =
+    new Iterator[String] {
+      private var nextLine: String    = null
+      private var reachedEnd: Boolean = false
+
+      def hasNext: Boolean = {
+        if (nextLine == null && !reachedEnd) {
+          nextLine = reader.readLine()
+          if (nextLine == null) {
+            reachedEnd = true
+            reader.close()
           }
-          fun(line)
         }
+        nextLine != null
       }
-    } finally {
-      reader.close()
+
+      def next(): String =
+        if (hasNext) {
+          val line = nextLine
+          nextLine = null
+          line
+        } else {
+          throw new NoSuchElementException("No more lines")
+        }
     }
-  }
 }

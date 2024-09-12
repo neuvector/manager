@@ -18,7 +18,7 @@ import java.security.interfaces.RSAPrivateKey
 import java.security.spec._
 import java.util.{ Base64, Date }
 import javax.net.ssl.{ KeyManagerFactory, SSLContext, SSLEngine, TrustManagerFactory }
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 trait MySslConfiguration extends LazyLogging {
 

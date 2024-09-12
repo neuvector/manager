@@ -144,6 +144,10 @@ object ResourceJsonProtocol extends DefaultJsonProtocol with LazyLogging {
   implicit val threatBriefDTOFormat: RootJsonFormat[ThreatBriefDTO]   = jsonFormat4(ThreatBriefDTO)
   implicit val threatBriefWrapFormat: RootJsonFormat[ThreatBriefWrap] = jsonFormat1(ThreatBriefWrap)
 
+  implicit val threatBriefArrayFormat: RootJsonFormat[Array[ThreatBrief]] = arrayFormat[ThreatBrief]
+  implicit val threatBriefDTOArrayFormat: RootJsonFormat[Array[ThreatBriefDTO]] =
+    arrayFormat[ThreatBriefDTO]
+
   private val address = "address"
 
   def jsonToContainerWrap(container: String): ContainerWrap =

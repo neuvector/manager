@@ -49,14 +49,22 @@ case class NewThreatDTOWrap(threats: Array[ConvertedThreat])
 object AlertJsonProtocol extends DefaultJsonProtocol {
   implicit val dateTimeFormat = DateTimeFormat
 
-  implicit val violationFormat        = jsonFormat10(Violation)
-  implicit val violationBriefFormat   = jsonFormat3(ViolationBrief)
-  implicit val violationWrapFormat    = jsonFormat1(ViolationWrap)
-  implicit val threatDTOFormat        = jsonFormat13(ThreatDTO)
-  implicit val threatDTOWrapFormat    = jsonFormat1(ThreatDTOWrap)
-  implicit val newThreatDTOWrapFormat = jsonFormat1(NewThreatDTOWrap)
+  implicit val violationFormat: RootJsonFormat[Violation]           = jsonFormat10(Violation)
+  implicit val violationBriefFormat: RootJsonFormat[ViolationBrief] = jsonFormat3(ViolationBrief)
+  implicit val violationWrapFormat: RootJsonFormat[ViolationWrap]   = jsonFormat1(ViolationWrap)
+  implicit val threatDTOFormat: RootJsonFormat[ThreatDTO]           = jsonFormat13(ThreatDTO)
+  implicit val threatDTOWrapFormat: RootJsonFormat[ThreatDTOWrap]   = jsonFormat1(ThreatDTOWrap)
+  implicit val newThreatDTOWrapFormat: RootJsonFormat[NewThreatDTOWrap] = jsonFormat1(
+    NewThreatDTOWrap
+  )
   implicit val globalNotificationRequestFmt: RootJsonFormat[GlobalNotificationRequest] =
     jsonFormat3(GlobalNotificationRequest)
+
+  implicit val violationArrayFormat: RootJsonFormat[Array[Violation]] = arrayFormat[Violation]
+  implicit val violationBriefArrayFormat: RootJsonFormat[Array[ViolationBrief]] =
+    arrayFormat[ViolationBrief]
+  implicit val threatDTOArrayFormat: RootJsonFormat[Array[ThreatDTO]] =
+    arrayFormat[ThreatDTO]
 
   def jsonToViolationWrap(violations: String): ViolationWrap =
     violations.parseJson.convertTo[ViolationWrap]

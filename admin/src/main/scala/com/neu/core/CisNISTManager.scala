@@ -6,7 +6,7 @@ import scala.collection.mutable._
 import java.io.{ InputStream, InputStreamReader }
 import org.apache.commons.csv.{ CSVFormat, CSVRecord }
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 object CisNISTManager extends LazyLogging {
   private val inputStream: InputStream               = getClass.getResourceAsStream("/CIS_NIST-MASTER.CSV")

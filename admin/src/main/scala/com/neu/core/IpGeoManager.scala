@@ -1,13 +1,12 @@
 package com.neu.core
 
-import com.neu.model.IpGeo
-import com.neu.model.IpMap
+import com.neu.model.{ IpGeo, IpMap }
 import com.typesafe.scalalogging.LazyLogging
+
+import java.net.InetAddress
 import scala.collection.mutable._
 import scala.io.Source
 import scala.math._
-import scala.collection.mutable.Map
-import java.net.{ Inet4Address, Inet6Address, InetAddress }
 
 /**
  * Created by bxu on 3/25/16.

@@ -16,12 +16,12 @@ import org.apache.pekko.http.scaladsl.model.{
 import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
 
 trait StaticResources extends Directives with LazyLogging {
-  val shortPath           = 10
-  val isUsingSSL: Boolean = sys.env.getOrElse("MANAGER_SSL", "on") == "on"
-  val isDev: Boolean      = sys.env.getOrElse("IS_DEV", "false") == "true"
+  private val shortPath           = 10
+  private val isUsingSSL: Boolean = sys.env.getOrElse("MANAGER_SSL", "on") == "on"
+  private val isDev: Boolean      = sys.env.getOrElse("IS_DEV", "false") == "true"
 
   //# Rewrite redirect-implementation base on "spray/spray-routing/src/main/scala/spray/routing/RequestContext.scala, added strict transport security header"
-  def redirectMe(uri: Uri, redirectionType: StatusCodes.Redirection) =
+  private def redirectMe(uri: Uri, redirectionType: StatusCodes.Redirection) =
     complete {
       HttpResponse(
         status = redirectionType,
@@ -35,8 +35,8 @@ trait StaticResources extends Directives with LazyLogging {
             Location(uri) :: RawHeader("X-Frame-Options", "SAMEORIGIN") :: Nil
           },
         entity = redirectionType.htmlTemplate match {
-          case ""       ⇒ HttpEntity.Empty
-          case template ⇒ HttpEntity(ContentTypes.`text/html(UTF-8)`, template format uri)
+          case ""       => HttpEntity.Empty
+          case template => HttpEntity(ContentTypes.`text/html(UTF-8)`, template format uri)
         }
       )
     }
@@ -51,7 +51,7 @@ trait StaticResources extends Directives with LazyLogging {
       )
     } ~
     path("index.html") {
-      parameters('v.?) { v =>
+      parameters(Symbol("v").?) { v =>
         {
           val hash = Md5.hash(managerVersion).take(shortPath)
           if (v.isEmpty) {
@@ -75,28 +75,28 @@ trait StaticResources extends Directives with LazyLogging {
       }
     } ~
     path("favicon.ico") {
-      Utils.respondWithWebServerHeaders(true) {
+      Utils.respondWithWebServerHeaders(isStaticResource = true) {
         complete(StatusCodes.NotFound)
       }
     } ~
     path(Remaining) { path =>
       if (isDev) {
-        Utils.respondWithWebServerHeaders(true) {
+        Utils.respondWithWebServerHeaders(isStaticResource = true) {
           getFromResource(UrlEscapers.urlFragmentEscaper().escape(s"root/$path"))
         }
       } else {
         if (path.endsWith(".js")) {
-          Utils.respondWithWebServerHeaders(true) {
+          Utils.respondWithWebServerHeaders(isStaticResource = true) {
             respondWithHeader(RawHeader("Content-Type", "application/javascript")) {
               encodeResponse {
                 getFromResource(
-                  UrlEscapers.urlFragmentEscaper().escape(s"root/${path}.gz")
+                  UrlEscapers.urlFragmentEscaper().escape(s"root/$path.gz")
                 )
               }
             }
           }
         } else {
-          Utils.respondWithWebServerHeaders(true) {
+          Utils.respondWithWebServerHeaders(isStaticResource = true) {
             getFromResource(UrlEscapers.urlFragmentEscaper().escape(s"root/$path"))
           }
         }

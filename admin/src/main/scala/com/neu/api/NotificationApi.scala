@@ -13,12 +13,12 @@ import com.neu.model.ResourceJsonProtocol._
 import com.neu.model._
 import com.neu.utils.EnumUtils
 import com.typesafe.scalalogging.LazyLogging
-import org.joda.time.DateTime
-import org.json4s._
-import org.json4s.native.JsonMethods._
 import org.apache.pekko.http.scaladsl.model.HttpMethods._
 import org.apache.pekko.http.scaladsl.model.{ HttpEntity, StatusCodes }
 import org.apache.pekko.http.scaladsl.server.Route
+import org.joda.time.DateTime
+import org.json4s._
+import org.json4s.native.JsonMethods._
 
 import java.io.{ PrintWriter, StringWriter }
 import scala.concurrent.duration._
@@ -115,7 +115,7 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
           } ~
           path(top) {
             get {
-              parameter('category) { category =>
+              parameter(Symbol("category")) { category =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     category match {
@@ -192,7 +192,7 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
         pathPrefix("audit2") {
           pathEnd {
             get {
-              parameter('start.?, 'limit.?) { (start, limit) =>
+              parameter(Symbol("start").?, Symbol("limit").?) { (start, limit) =>
                 Utils.respondWithWebServerHeaders() {
                   logger.info("tokenId: {}", tokenId)
                   val cacheKey = if (tokenId.length > 20) tokenId.substring(0, 20) else tokenId
@@ -281,7 +281,7 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
         pathPrefix("threat") {
           pathEnd {
             get {
-              parameter('id.?) { id =>
+              parameter(Symbol("id").?) { id =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     id match {
@@ -405,7 +405,7 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
         pathPrefix("network") {
           path("session") {
             get {
-              parameter('id) { id =>
+              parameter(Symbol("id")) { id =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
@@ -421,7 +421,7 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
           } ~
           path("conversation") {
             delete {
-              parameter('from, 'to) { (from, to) =>
+              parameter(Symbol("from"), Symbol("to")) { (from, to) =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Clear from {} to {}", from, to)
@@ -453,7 +453,7 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
               }
             } ~
             delete {
-              parameter('id) { id =>
+              parameter(Symbol("id")) { id =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     logger.info("Removing unmanaged endpoint: {}", id)
@@ -470,7 +470,7 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
           } ~
           path("history") {
             get {
-              parameter('from, 'to) { (from, to) =>
+              parameter(Symbol("from"), Symbol("to")) { (from, to) =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     RestClient.httpRequestWithHeader(
@@ -487,7 +487,7 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
           pathPrefix("graph") {
             pathEnd {
               get {
-                parameter('user) { user =>
+                parameter(Symbol("user")) { user =>
                   Utils.respondWithWebServerHeaders() {
                     complete {
                       try {
@@ -544,7 +544,7 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
             } ~
             path("layout") {
               get {
-                parameter('user) { user =>
+                parameter(Symbol("user")) { user =>
                   {
                     Utils.respondWithWebServerHeaders() {
                       complete {
@@ -557,7 +557,7 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
             } ~
             path("blacklist") {
               get {
-                parameter('user) { user =>
+                parameter(Symbol("user")) { user =>
                   {
                     Utils.respondWithWebServerHeaders() {
                       complete {
@@ -643,7 +643,8 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
               Utils.respondWithWebServerHeaders() {
                 complete {
                   try {
-                    getNotifications(tokenId)._2
+                    val (_, (threats, violations, incidents)) = getNotifications(tokenId)
+                    List(threats, violations, incidents)
                   } catch {
                     case NonFatal(e) =>
                       onNonFatal(e)

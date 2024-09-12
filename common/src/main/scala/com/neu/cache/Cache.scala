@@ -12,14 +12,12 @@ trait Cache[K, V] {
   final def get(key: K): Option[V] = doGet(cacheKey(key))
 
   /** Sets cache value */
-  final def put(key: K, value: V) {
+  final def put(key: K, value: V): Unit =
     doPut(cacheKey(key), value)
-  }
 
   /** Removes cache value */
-  final def remove(key: K) {
+  final def remove(key: K): Unit =
     doRemove(cacheKey(key))
-  }
 
   /** Returns cached value by using cache key */
   protected def doGet(cacheKey: Any): Option[V]
@@ -55,13 +53,11 @@ private class MapCache[K, V](override val cacheKeyGenerator: CacheKeyGenerator[_
 
   def doGet(key: Any): Option[V] = map.get(key)
 
-  def doPut(key: Any, value: V) {
+  def doPut(key: Any, value: V): Unit =
     map += (key -> value)
-  }
 
-  def doRemove(key: Any) {
-    map.-(key)
-  }
+  def doRemove(key: Any): Unit =
+    map -= key
 
   override def toString: String = "MapCache(%s)".format(map)
 }

@@ -5,7 +5,7 @@ import sbt.Keys._
 import sbt._
 
 ThisBuild / version := "1.0"
-ThisBuild / scalaVersion := "2.12.19"
+ThisBuild / scalaVersion := "2.13.14"
 ThisBuild / organization := "com.neuvector"
 ThisBuild / scalafmtOnCompile := true
 ThisBuild / Test / fork := true
@@ -27,19 +27,18 @@ lazy val buildSettings = Seq(
       "-feature",              // warn about misused language features
       "-language:higherKinds", // allow higher kinded types without `import scala.language.higherKinds`
       "-Xlint",                // enable handy linter warnings
-      "-Ypartial-unification"  // allow the compiler to unify type constructors of different arities
     ),
   Compile / console / scalacOptions --= Seq("-Ywarn-unused", "-Ywarn-unused-import")
 )
 
 lazy val commonDependencies = Seq(
   scalaTest,
-  "javax.activation"   % "activation"         % "1.1",
-  "org.glassfish.jaxb" % "jaxb-runtime"       % "2.3.0",
-  "javax.xml.bind"     % "jaxb-api"           % "2.3.0",
-  "com.sun.xml.ws"     % "jaxws-ri"           % "2.3.3",
+  "javax.activation"   % "activation"         % "1.1.1",
+  "org.glassfish.jaxb" % "jaxb-runtime"       % "4.0.5",
+  "javax.xml.bind"     % "jaxb-api"           % "2.3.1",
+  "com.sun.xml.ws"     % "jaxws-ri"           % "4.0.2",
   "javax.xml.soap"     % "javax.xml.soap-api" % "1.4.0",
-  "org.json4s"         %% "json4s-native"     % "3.6.10",
+  "org.json4s"         %% "json4s-native"     % "4.0.7",
   "org.bouncycastle" % "bcprov-jdk15on" % "1.70",
   "org.bouncycastle" % "bcpkix-jdk15on" % "1.70",
   pekkoActor,

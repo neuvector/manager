@@ -118,6 +118,9 @@
                   "
                   >{{ 'login.PASSWORD_REQUIRED' | translate }}</span
                 >
+                <span class="text-info" *ngIf="validEula && loginForm.valid && rbacAlertMessage">
+                  {{rbacAlertMessage}}
+                </span>
               </div>
               <div
                 class="mt-xl clearfix"

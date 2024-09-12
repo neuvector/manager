@@ -52,6 +52,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   public isEulaAccepted: boolean = true;
   public isEulaValid: boolean = true;
   public validEula: boolean = true;
+  public rbacAlertMessage: string = '';
   private version: string = '';
   private gpuEnabled: boolean = false;
   private originalUrl: string = '';
@@ -402,6 +403,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authService.getEula().subscribe(
       (eulaInfo: any) => {
         let eula = eulaInfo.eula;
+        this.rbacAlertMessage = eulaInfo.k8s_rbac_alert_message
+          ? eulaInfo.k8s_rbac_alert_message
+          : '';
         if (eula && eula.accepted) {
           this.isEulaAccepted = true;
         } else {

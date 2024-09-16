@@ -209,11 +209,11 @@ class ClusterApi()(implicit executionContext: ExecutionContext)
     }
 
   private lazy val toClusters: FedMembershipData => FedMemberData =
-    (fedMembershipData: FedMembershipData) => {
+    (fedMembershipData: FedMembershipData) =>
       fedMembershipData.fed_role match {
         case "" =>
           FedMemberData(fedMembershipData.fed_role)
-        case _ =>
+        case _  =>
           val clusters =
             fedMembershipData.master_cluster.fold {
               val joints = fedMembershipData.joint_clusters
@@ -222,7 +222,7 @@ class ClusterApi()(implicit executionContext: ExecutionContext)
               joints
             } { cluster =>
               val masterCluster = masterToClusterServer(cluster)
-              val joints = fedMembershipData.joint_clusters
+              val joints        = fedMembershipData.joint_clusters
                 .getOrElse(Seq.empty[FedJointCluster])
                 .map(jointToClusterServer)
               masterCluster +: joints
@@ -239,10 +239,9 @@ class ClusterApi()(implicit executionContext: ExecutionContext)
           )
 
       }
-    }
 
   private val masterToClusterServer: FedMasterCluster => ClusterServer =
-    (master: FedMasterCluster) => {
+    (master: FedMasterCluster) =>
       ClusterServer(
         master.disabled,
         master.name,
@@ -256,9 +255,8 @@ class ClusterApi()(implicit executionContext: ExecutionContext)
         "master",
         Some(false)
       )
-    }
 
-  private val jointToClusterServer: FedJointCluster => ClusterServer = (joint: FedJointCluster) => {
+  private val jointToClusterServer: FedJointCluster => ClusterServer = (joint: FedJointCluster) =>
     ClusterServer(
       joint.disabled,
       joint.name,
@@ -272,5 +270,4 @@ class ClusterApi()(implicit executionContext: ExecutionContext)
       "joint",
       joint.proxy_required
     )
-  }
 }

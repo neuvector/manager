@@ -4,7 +4,7 @@ import com.neu.api.Api
 import com.neu.core.CommonSettings.httpPort
 import com.neu.web.StaticResources
 import com.typesafe.config.Config
-import com.typesafe.config.ConfigFactory._
+import com.typesafe.config.ConfigFactory.*
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.http.scaladsl.server.Route
@@ -25,9 +25,9 @@ trait BootedCore
     with MySslConfiguration
     with LazyLogging {
 
-  implicit lazy val system: ActorSystem                   = ActorSystem("manager-system")
-  implicit val materializer: Materializer                 = Materializer(system)
-  implicit val executionContext: ExecutionContextExecutor = system.dispatcher
+  given system: ActorSystem                        = ActorSystem("manager-system")
+  given materializer: Materializer                 = Materializer(system)
+  given executionContext: ExecutionContextExecutor = system.dispatcher
 
   private val rootService: Route = routes ~ staticResources
 
@@ -35,24 +35,24 @@ trait BootedCore
   CisNISTManager
   System.setProperty("net.sf.ehcache.enableShutdownHook", "true")
 
-  val https: HttpsConnectionContext = ConnectionContext.httpsServer(() => {
+  private val https: HttpsConnectionContext = ConnectionContext.httpsServer { () =>
     val engine = sslContext.createSSLEngine()
     configureSSLEngine(engine)
-  })
+  }
 
   // Use your existing configuration logic
-  val useSSL: String = sys.env.getOrElse("MANAGER_SSL", "on")
-  private var sslConfig: Config =
+  private val useSSL: String    = sys.env.getOrElse("MANAGER_SSL", "on")
+  private val sslConfig: Config =
     load.getConfig("ssl").withFallback(defaultReference(getClass.getClassLoader))
 
   private val sslSettings = ServerSettings(sslConfig)
 
-  val bindingFuture: Future[Http.ServerBinding] = useSSL match {
+  private val bindingFuture: Future[Http.ServerBinding] = useSSL match {
     case "off" =>
       Http()
         .newServerAt("0.0.0.0", httpPort.toInt)
         .bind(rootService)
-    case _ =>
+    case _     =>
       Http()
         .newServerAt("0.0.0.0", httpPort.toInt)
         .enableHttps(https)
@@ -62,10 +62,9 @@ trait BootedCore
 
   bindingFuture.map { binding =>
     logger.info(s"Server is listening on ${binding.localAddress}")
-  }.recover {
-    case ex =>
-      logger.error(s"Failed to bind HTTP server: ${ex.getMessage}")
-      system.terminate()
+  }.recover { case ex =>
+    logger.error(s"Failed to bind HTTP server: ${ex.getMessage}")
+    system.terminate()
   }
 
   sys.addShutdownHook(system.terminate())

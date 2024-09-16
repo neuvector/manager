@@ -16,11 +16,11 @@ import spray.json._
 
 import java.nio.charset.StandardCharsets
 import java.util.Base64
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.concurrent.{ Await, ExecutionContext, Future }
 
-class OpenIdAuthService()(
-  implicit mat: Materializer,
+class OpenIdAuthService()(implicit
+  mat: Materializer,
   ec: ExecutionContext
 ) extends AuthService {
 
@@ -52,7 +52,7 @@ class OpenIdAuthService()(
         logger.info("openId-pt: authToken is matched and valid.")
         AuthenticationManager.invalidate(KEY)
         complete(x)
-      case _ =>
+      case _       =>
         logger.info("openId-pt: no authToken")
         complete((StatusCodes.Unauthorized, authError))
     }
@@ -106,7 +106,7 @@ class OpenIdAuthService()(
     val cookie = HttpCookie("temp", text)
 
     setCookie(cookie) { ctx =>
-      val result = RestClient.passHttpRequest(
+      val result   = RestClient.passHttpRequest(
         s"$baseUri/$auth/openId1",
         HttpMethods.POST,
         samlResponseToJson(
@@ -133,7 +133,7 @@ class OpenIdAuthService()(
           logger.info(s"openId-g: added authToken")
           AuthenticationManager.putToken(KEY, userToken)
           ctx.redirect(ROOT_PATH, StatusCodes.Found)
-        case _ =>
+        case _              =>
           logger.warn(s"openId-g: invalid response. redirect /")
           ctx.redirect(ROOT_PATH, StatusCodes.MovedPermanently)
       }

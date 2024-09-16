@@ -1,6 +1,6 @@
 package com.neu.model
 
-import spray.json.{ DefaultJsonProtocol, RootJsonFormat, _ }
+import spray.json.*
 
 object RebrandJsonProtocol extends DefaultJsonProtocol {
 

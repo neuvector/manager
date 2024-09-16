@@ -4,9 +4,9 @@ import com.neu.model.{ IpGeo, IpMap }
 import com.typesafe.scalalogging.LazyLogging
 
 import java.net.InetAddress
-import scala.collection.mutable._
+import scala.collection.mutable.*
 import scala.io.Source
-import scala.math._
+import scala.math.*
 
 /**
  * Created by bxu on 3/25/16.
@@ -101,12 +101,12 @@ object IpGeoManager extends LazyLogging {
 
   def getCountries(ipList: Array[String]): IpMap = {
     var ipMap: scala.collection.mutable.Map[String, IpGeo] = scala.collection.mutable.Map();
-    ipList.foreach(ip => {
+    ipList.foreach { ip =>
       ipMap.get(ip) match {
         case Some(ipGeo) => None
         case None        => ipMap += (ip -> getCountry(ip))
       }
-    })
+    }
     IpMap(ipMap.toMap)
   }
 }

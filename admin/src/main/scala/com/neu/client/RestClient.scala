@@ -26,7 +26,6 @@ object Constant {
 
 /**
  * Rest client
- *
  */
 object RestClient extends RestClient with LazyLogging {
 
@@ -50,24 +49,20 @@ object RestClient extends RestClient with LazyLogging {
     val clusterId: Option[String] = AuthenticationManager.getCluster(tokenId)
     clusterId.fold(
       s"https://$ctrlHost:$ctrlPort/v1"
-    )(
-      id => s"https://$ctrlHost:$ctrlPort/v1/fed/cluster/$id/v1"
-    )
+    )(id => s"https://$ctrlHost:$ctrlPort/v1/fed/cluster/$id/v1")
   }
 
   def baseClusterUriV2(tokenId: String, ctrlHostIp: String = ctrlHost): String = {
     val clusterId: Option[String] = AuthenticationManager.getCluster(tokenId)
     clusterId.fold(
       s"https://$ctrlHost:$ctrlPort/v2"
-    )(
-      id => s"https://$ctrlHost:$ctrlPort/v1/fed/cluster/$id/v2"
-    )
+    )(id => s"https://$ctrlHost:$ctrlPort/v1/fed/cluster/$id/v2")
   }
 
 }
 
-class RestClient()(
-  implicit system: ActorSystem,
+class RestClient()(using
+  system: ActorSystem,
   mat: Materializer,
   ec: ExecutionContext
 ) extends DefaultJsonFormats
@@ -84,23 +79,28 @@ class RestClient()(
   private val X_AS_STANDALONE: String = "X-As-Standalone"
   private val X_SUSE_TOKEN: String    = "X-R-Sess"
 
-  def sendAndReceive: HttpRequest => Future[HttpResponse] = sendReceiver
+  private def sendAndReceive: HttpRequest => Future[HttpResponse] =
+    sendReceiver(using system, mat, ec)
 
-  def createHttpRequest(uri: String, method: HttpMethod, data: String): HttpRequest = HttpRequest(
-    method = method,
-    uri = uri,
-    entity = HttpEntity(data)
-  )
+  private def createHttpRequest(uri: String, method: HttpMethod, data: String): HttpRequest =
+    HttpRequest(
+      method = method,
+      uri = uri,
+      entity = HttpEntity(data)
+    )
 
-  def cloneHttpRequest(uri: String, request: HttpRequest): HttpRequest =
+  private def cloneHttpRequest(uri: String, request: HttpRequest): HttpRequest =
     request.copy(uri = uri, headers = Nil)
 
   /**
    * Makes HTTP request
    *
-   * @param uri    The request uri
-   * @param data   The payload
-   * @param method The method of the request
+   * @param uri
+   *   The request uri
+   * @param data
+   *   The payload
+   * @param method
+   *   The method of the request
    * @return
    */
   def httpRequest(
@@ -117,9 +117,12 @@ class RestClient()(
   /**
    * Makes HTTP request
    *
-   * @param uri    The request uri
-   * @param data   The payload
-   * @param method The method of the request
+   * @param uri
+   *   The request uri
+   * @param data
+   *   The payload
+   * @param method
+   *   The method of the request
    * @return
    */
   def passHttpRequest(
@@ -161,8 +164,8 @@ class RestClient()(
     var request = baseRequest(uri, method, data, token)
 
     transactionId.foreach(id => request = request.addHeader(RawHeader(X_TRN_ID, id)))
-    asStandalone.foreach(
-      standalone => request = request.addHeader(RawHeader(X_AS_STANDALONE, standalone))
+    asStandalone.foreach(standalone =>
+      request = request.addHeader(RawHeader(X_AS_STANDALONE, standalone))
     )
     source.foreach(src => request = request.addHeader(RawHeader(X_NV_PAGE, src)))
 
@@ -204,7 +207,7 @@ class RestClient()(
     val baseRequest = HttpRequest(
       method = method,
       uri = uri,
-      entity = data.toEntity()
+      entity = data.toEntity(java.util.UUID.randomUUID().toString)
     ).addHeader(RawHeader(TOKEN_HEADER, token))
 
     // Add optional headers
@@ -234,7 +237,7 @@ class RestClient()(
         .addHeader(`Cache-Control`(CacheDirectives.`no-cache`))
     }
 
-  def requestWithHeader(
+  private def requestWithHeader(
     uri: String,
     method: HttpMethod = HttpMethods.GET,
     data: String = "",
@@ -273,7 +276,7 @@ class RestClient()(
             response
           }
           Unmarshal(decodedEntity.entity).to[String]
-        case _ =>
+        case _              =>
           Future.failed(new Exception(s"Request failed with status code ${response.status}"))
       }
     }
@@ -282,7 +285,7 @@ class RestClient()(
   def reloadCtrlIp(tokenId: String, index: Int): String = {
     val ctrlCluster: Array[String] = InetAddress.getAllByName(ctrlHost).map(_.getHostAddress)
     logger.info("Controller ips: {}", ctrlCluster.mkString(" "))
-    val ctrlIp = ctrlCluster(index)
+    val ctrlIp                     = ctrlCluster(index)
     try {
       val res = requestWithHeader(
         s"https://$ctrlIp:$ctrlPort/v1/$auth",
@@ -294,9 +297,11 @@ class RestClient()(
       ctrlIp
     } catch {
       case NonFatal(e) =>
-        if (!e.getMessage.contains("Status: 401") &&
-            !e.getMessage.contains("Status: 408") &&
-            index < ctrlCluster.length - 1) {
+        if (
+          !e.getMessage.contains("Status: 401") &&
+          !e.getMessage.contains("Status: 408") &&
+          index < ctrlCluster.length - 1
+        ) {
           reloadCtrlIp(tokenId, index + 1)
         } else {
           throw e

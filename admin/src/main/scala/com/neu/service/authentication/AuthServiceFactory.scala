@@ -38,8 +38,8 @@ trait AuthService extends BaseService with DefaultJsonFormats with LazyLogging {
   ): Route
 }
 
-class AuthServiceFactory()(
-  implicit system: ActorSystem,
+class AuthServiceFactory()(implicit
+  system: ActorSystem,
   ec: ExecutionContext
 ) {
 

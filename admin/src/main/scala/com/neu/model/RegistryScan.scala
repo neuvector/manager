@@ -88,31 +88,31 @@ case class RegistryConfigV2Wrap(config: RegistryConfigV2)
 case class RegistryConfigV2DTO(wrap: RegistryConfigV2Wrap, name: String)
 
 object RegistryConfigJsonProtocol extends DefaultJsonProtocol {
-  implicit val aWSAccountFormat: RootJsonFormat[AWSAccount] = jsonFormat4(AWSAccount)
-  implicit val jfrogXrayFormat: RootJsonFormat[JfrogXray]   = jsonFormat4(JfrogXray)
-  implicit val maskedAWSAccountFormat: RootJsonFormat[MaskedAWSAccount] = jsonFormat2(
+  implicit val aWSAccountFormat: RootJsonFormat[AWSAccount]                 = jsonFormat4(AWSAccount)
+  implicit val jfrogXrayFormat: RootJsonFormat[JfrogXray]                   = jsonFormat4(JfrogXray)
+  implicit val maskedAWSAccountFormat: RootJsonFormat[MaskedAWSAccount]     = jsonFormat2(
     MaskedAWSAccount
   )
   implicit val maskedRegistryAuthFormat: RootJsonFormat[MaskedRegistryAuth] = jsonFormat3(
     MaskedRegistryAuth
   )
-  implicit val maskedJfrogXrayFormat: RootJsonFormat[MaskedJfrogXray] = jsonFormat3(MaskedJfrogXray)
-  implicit val ScanScheduleFormat: RootJsonFormat[ScanSchedule]       = jsonFormat2(ScanSchedule)
-  implicit val GcrKeyFormat: RootJsonFormat[GcrKey]                   = jsonFormat1(GcrKey)
+  implicit val maskedJfrogXrayFormat: RootJsonFormat[MaskedJfrogXray]       = jsonFormat3(MaskedJfrogXray)
+  implicit val ScanScheduleFormat: RootJsonFormat[ScanSchedule]             = jsonFormat2(ScanSchedule)
+  implicit val GcrKeyFormat: RootJsonFormat[GcrKey]                         = jsonFormat1(GcrKey)
 
-  implicit val registryIntegrationsFormat: RootJsonFormat[RegistryIntegrations] = jsonFormat6(
+  implicit val registryIntegrationsFormat: RootJsonFormat[RegistryIntegrations]             = jsonFormat6(
     RegistryIntegrations
   )
   implicit val maskedRegistryIntegrationsFormat: RootJsonFormat[MaskedRegistryIntegrations] =
     jsonFormat4(
       MaskedRegistryIntegrations
     )
-  implicit val registryScanFormat: RootJsonFormat[RegistryScan] = jsonFormat6(RegistryScan)
-  implicit val registryAuthFormat: RootJsonFormat[RegistryAuth] = jsonFormat6(RegistryAuth)
-  implicit val registryConfigV2Format: RootJsonFormat[RegistryConfigV2] = jsonFormat9(
+  implicit val registryScanFormat: RootJsonFormat[RegistryScan]                             = jsonFormat6(RegistryScan)
+  implicit val registryAuthFormat: RootJsonFormat[RegistryAuth]                             = jsonFormat6(RegistryAuth)
+  implicit val registryConfigV2Format: RootJsonFormat[RegistryConfigV2]                     = jsonFormat9(
     RegistryConfigV2
   )
-  implicit val registryConfigV2WrapFormat: RootJsonFormat[RegistryConfigV2Wrap] = jsonFormat1(
+  implicit val registryConfigV2WrapFormat: RootJsonFormat[RegistryConfigV2Wrap]             = jsonFormat1(
     RegistryConfigV2Wrap
   )
 

@@ -27,19 +27,19 @@ import scala.util.control.NonFatal
  * Authentication rest service
  */
 //noinspection UnstableApiUsage
-class AuthenticationApi()(
-  implicit system: ActorSystem,
+class AuthenticationApi()(implicit
+  system: ActorSystem,
   ec: ExecutionContext
 ) extends BaseService
     with DefaultJsonFormats
     with LazyLogging {
 
-  private val authProcessorFactory = new AuthServiceFactory()
+  private val authProcessorFactory             = new AuthServiceFactory()
   private val openIdAuthProcessor: AuthService =
     authProcessorFactory.createService(AuthProcessorBrand.OPEN_ID)
-  private val samlAuthProcessor: AuthService =
+  private val samlAuthProcessor: AuthService   =
     authProcessorFactory.createService(AuthProcessorBrand.SAML)
-  private val suseAuthProcessor: AuthService =
+  private val suseAuthProcessor: AuthService   =
     authProcessorFactory.createService(AuthProcessorBrand.SUSE)
 
   val route: Route =
@@ -251,18 +251,18 @@ class AuthenticationApi()(
                 if (name.nonEmpty) {
                   try {
                     logger.info("Getting user")
-                    val result =
+                    val result    =
                       RestClient.requestWithHeaderDecode(
                         s"$baseUri/user/${name.get}",
                         HttpMethods.GET,
                         "",
                         tokenId
                       )
-                    val userWrap =
+                    val userWrap  =
                       jsonToUserWrap(Await.result(result, RestClient.waitingLimit.seconds))
-                    val user = userWrap.user
+                    val user      = userWrap.user
                     logger.info("user: {}", user)
-                    val token1 = TokenWrap(
+                    val token1    = TokenWrap(
                       None,
                       None,
                       Some(
@@ -290,14 +290,14 @@ class AuthenticationApi()(
                   }
                 } else {
                   try {
-                    val result =
+                    val result    =
                       RestClient.requestWithHeaderDecode(
                         s"${baseClusterUri(tokenId)}/user",
                         HttpMethods.GET,
                         "",
                         tokenId
                       )
-                    val users = jsonToUsers(Await.result(result, RestClient.waitingLimit.seconds))
+                    val users     = jsonToUsers(Await.result(result, RestClient.waitingLimit.seconds))
                     val userImage =
                       users.users.map(userToUserImage).sortWith(_.username < _.username)
                     UsersOutput(
@@ -332,54 +332,52 @@ class AuthenticationApi()(
         } ~
         patch {
           entity(as[UserProfile]) { user =>
-            {
-              logger.info("Updating user: {}", user.fullname)
-              val result =
-                RestClient.httpRequestWithHeaderDecode(
-                  s"$baseUri/user/${UrlEscapers.urlFragmentEscaper().escape(user.fullname)}",
-                  HttpMethods.PATCH,
-                  userProfileWrapToJson(UserProfileWrap(user)),
-                  tokenId
-                )
-              val response = Await.result(result, RestClient.waitingLimit.seconds)
-              logger.info("Server response {}", response.status)
-              response.status match {
-                case StatusCodes.OK =>
-                  val profile = Some(
-                    UserToken(
-                      Token(
-                        tokenId,
-                        user.fullname,
-                        "",
-                        user.username,
-                        user.email,
-                        user.role
-                          .getOrElse("none"),
-                        user.locale,
-                        user.timeout,
-                        user.default_password,
-                        user.modify_password,
-                        user.role_domains
-                      ),
-                      Md5.hash(user.email),
-                      None,
-                      None
-                    )
+            logger.info("Updating user: {}", user.fullname)
+            val result   =
+              RestClient.httpRequestWithHeaderDecode(
+                s"$baseUri/user/${UrlEscapers.urlFragmentEscaper().escape(user.fullname)}",
+                HttpMethods.PATCH,
+                userProfileWrapToJson(UserProfileWrap(user)),
+                tokenId
+              )
+            val response = Await.result(result, RestClient.waitingLimit.seconds)
+            logger.info("Server response {}", response.status)
+            response.status match {
+              case StatusCodes.OK             =>
+                val profile = Some(
+                  UserToken(
+                    Token(
+                      tokenId,
+                      user.fullname,
+                      "",
+                      user.username,
+                      user.email,
+                      user.role
+                        .getOrElse("none"),
+                      user.locale,
+                      user.timeout,
+                      user.default_password,
+                      user.modify_password,
+                      user.role_domains
+                    ),
+                    Md5.hash(user.email),
+                    None,
+                    None
                   )
-                  Utils.respondWithWebServerHeaders() {
-                    complete(profile)
-                  }
-                case StatusCodes.RequestTimeout =>
-                  logger.warn("Session timed out!")
-                  Utils.respondWithWebServerHeaders() {
-                    complete((StatusCodes.RequestTimeout, "Timed out"))
-                  }
-                case _ =>
-                  logger.warn("Error updating profile!")
-                  Utils.respondWithWebServerHeaders() {
-                    complete(response)
-                  }
-              }
+                )
+                Utils.respondWithWebServerHeaders() {
+                  complete(profile)
+                }
+              case StatusCodes.RequestTimeout =>
+                logger.warn("Session timed out!")
+                Utils.respondWithWebServerHeaders() {
+                  complete((StatusCodes.RequestTimeout, "Timed out"))
+                }
+              case _                          =>
+                logger.warn("Error updating profile!")
+                Utils.respondWithWebServerHeaders() {
+                  complete(response)
+                }
             }
           }
         } ~
@@ -445,18 +443,16 @@ class AuthenticationApi()(
             }
           } ~
           post {
-            entity(as[LicenseRequestWrap]) { licenseRequestWrap: LicenseRequestWrap =>
-              {
-                Utils.respondWithWebServerHeaders() {
-                  complete {
-                    logger.info("Getting license code")
-                    RestClient.httpRequestWithHeader(
-                      s"${baseClusterUri(tokenId)}/system/license/request",
-                      HttpMethods.POST,
-                      licenseRequestToJson(licenseRequestWrap),
-                      tokenId
-                    )
-                  }
+            entity(as[LicenseRequestWrap]) { (licenseRequestWrap: LicenseRequestWrap) =>
+              Utils.respondWithWebServerHeaders() {
+                complete {
+                  logger.info("Getting license code")
+                  RestClient.httpRequestWithHeader(
+                    s"${baseClusterUri(tokenId)}/system/license/request",
+                    HttpMethods.POST,
+                    licenseRequestToJson(licenseRequestWrap),
+                    tokenId
+                  )
                 }
               }
             }
@@ -464,18 +460,16 @@ class AuthenticationApi()(
         } ~
         path("update") {
           post {
-            entity(as[LicenseKey]) { licenseKey: LicenseKey =>
-              {
-                Utils.respondWithWebServerHeaders() {
-                  complete {
-                    logger.info("Loading license")
-                    RestClient.httpRequestWithHeader(
-                      s"${baseClusterUri(tokenId)}/system/license/update",
-                      HttpMethods.POST,
-                      licenseKeyToJson(licenseKey),
-                      tokenId
-                    )
-                  }
+            entity(as[LicenseKey]) { (licenseKey: LicenseKey) =>
+              Utils.respondWithWebServerHeaders() {
+                complete {
+                  logger.info("Loading license")
+                  RestClient.httpRequestWithHeader(
+                    s"${baseClusterUri(tokenId)}/system/license/update",
+                    HttpMethods.POST,
+                    licenseKeyToJson(licenseKey),
+                    tokenId
+                  )
                 }
               }
             }
@@ -500,7 +494,7 @@ class AuthenticationApi()(
         } ~
         path("user") {
           post {
-            entity(as[UserBlockWrap]) { userBlockWrap: UserBlockWrap =>
+            entity(as[UserBlockWrap]) { (userBlockWrap: UserBlockWrap) =>
               Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Updating user block")
@@ -530,7 +524,7 @@ class AuthenticationApi()(
             }
           } ~
           patch {
-            entity(as[PasswordProfileWrap]) { passwordProfileWrap: PasswordProfileWrap =>
+            entity(as[PasswordProfileWrap]) { (passwordProfileWrap: PasswordProfileWrap) =>
               Utils.respondWithWebServerHeaders() {
                 complete {
                   logger.info("Updating password profile")
@@ -562,54 +556,48 @@ class AuthenticationApi()(
             }
           } ~
           post {
-            entity(as[LdapSettingWrap]) { ldapSettingWrap: LdapSettingWrap =>
-              {
-                Utils.respondWithWebServerHeaders() {
-                  complete {
-                    logger.info("Adding ldap/saml server")
-                    logger.debug(ldapSettingWrapToJson(ldapSettingWrap))
-                    RestClient.httpRequestWithHeader(
-                      s"${baseClusterUri(tokenId)}/server",
-                      HttpMethods.POST,
-                      ldapSettingWrapToJson(ldapSettingWrap),
-                      tokenId
-                    )
-                  }
+            entity(as[LdapSettingWrap]) { (ldapSettingWrap: LdapSettingWrap) =>
+              Utils.respondWithWebServerHeaders() {
+                complete {
+                  logger.info("Adding ldap/saml server")
+                  logger.debug(ldapSettingWrapToJson(ldapSettingWrap))
+                  RestClient.httpRequestWithHeader(
+                    s"${baseClusterUri(tokenId)}/server",
+                    HttpMethods.POST,
+                    ldapSettingWrapToJson(ldapSettingWrap),
+                    tokenId
+                  )
                 }
               }
             }
           } ~
           patch {
-            entity(as[LdapSettingWrap]) { ldapSettingWrap: LdapSettingWrap =>
-              {
-                Utils.respondWithWebServerHeaders() {
-                  complete {
-                    logger.info("Updating Ldap/saml server")
-                    logger.debug(ldapSettingWrapToJson(ldapSettingWrap))
-                    RestClient.httpRequestWithHeader(
-                      s"${baseClusterUri(tokenId)}/server/${ldapSettingWrap.config.name}",
-                      HttpMethods.PATCH,
-                      ldapSettingWrapToJson(ldapSettingWrap),
-                      tokenId
-                    )
-                  }
+            entity(as[LdapSettingWrap]) { (ldapSettingWrap: LdapSettingWrap) =>
+              Utils.respondWithWebServerHeaders() {
+                complete {
+                  logger.info("Updating Ldap/saml server")
+                  logger.debug(ldapSettingWrapToJson(ldapSettingWrap))
+                  RestClient.httpRequestWithHeader(
+                    s"${baseClusterUri(tokenId)}/server/${ldapSettingWrap.config.name}",
+                    HttpMethods.PATCH,
+                    ldapSettingWrapToJson(ldapSettingWrap),
+                    tokenId
+                  )
                 }
               }
             }
           } ~
           delete {
-            entity(as[LdapSettingWrap]) { ldapSettingWrap: LdapSettingWrap =>
-              {
-                Utils.respondWithWebServerHeaders() {
-                  complete {
-                    logger.info("Deleting Ldap/saml server")
-                    RestClient.httpRequestWithHeader(
-                      s"${baseClusterUri(tokenId)}/server/${ldapSettingWrap.config.name}",
-                      HttpMethods.DELETE,
-                      ldapSettingWrapToJson(ldapSettingWrap),
-                      tokenId
-                    )
-                  }
+            entity(as[LdapSettingWrap]) { (ldapSettingWrap: LdapSettingWrap) =>
+              Utils.respondWithWebServerHeaders() {
+                complete {
+                  logger.info("Deleting Ldap/saml server")
+                  RestClient.httpRequestWithHeader(
+                    s"${baseClusterUri(tokenId)}/server/${ldapSettingWrap.config.name}",
+                    HttpMethods.DELETE,
+                    ldapSettingWrapToJson(ldapSettingWrap),
+                    tokenId
+                  )
                 }
               }
             }
@@ -617,18 +605,16 @@ class AuthenticationApi()(
         }
       } ~
       (post & path("debug")) {
-        entity(as[LdapServerAccountWrap]) { ldapAccountWarp: LdapServerAccountWrap =>
-          {
-            Utils.respondWithWebServerHeaders() {
-              complete {
-                logger.info("Testing Ldap server config")
-                RestClient.httpRequestWithHeader(
-                  s"${baseClusterUri(tokenId)}/debug/server/test",
-                  HttpMethods.POST,
-                  ldapAccountWarpToJson(ldapAccountWarp),
-                  tokenId
-                )
-              }
+        entity(as[LdapServerAccountWrap]) { (ldapAccountWarp: LdapServerAccountWrap) =>
+          Utils.respondWithWebServerHeaders() {
+            complete {
+              logger.info("Testing Ldap server config")
+              RestClient.httpRequestWithHeader(
+                s"${baseClusterUri(tokenId)}/debug/server/test",
+                HttpMethods.POST,
+                ldapAccountWarpToJson(ldapAccountWarp),
+                tokenId
+              )
             }
           }
         }

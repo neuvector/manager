@@ -20,7 +20,7 @@ trait StaticResources extends Directives with LazyLogging {
   private val isUsingSSL: Boolean = sys.env.getOrElse("MANAGER_SSL", "on") == "on"
   private val isDev: Boolean      = sys.env.getOrElse("IS_DEV", "false") == "true"
 
-  //# Rewrite redirect-implementation base on "spray/spray-routing/src/main/scala/spray/routing/RequestContext.scala, added strict transport security header"
+  // # Rewrite redirect-implementation base on "spray/spray-routing/src/main/scala/spray/routing/RequestContext.scala, added strict transport security header"
   private def redirectMe(uri: Uri, redirectionType: StatusCodes.Redirection) =
     complete {
       HttpResponse(
@@ -36,7 +36,7 @@ trait StaticResources extends Directives with LazyLogging {
           },
         entity = redirectionType.htmlTemplate match {
           case ""       => HttpEntity.Empty
-          case template => HttpEntity(ContentTypes.`text/html(UTF-8)`, template format uri)
+          case template => HttpEntity(ContentTypes.`text/html(UTF-8)`, template.format(uri))
         }
       )
     }
@@ -52,24 +52,22 @@ trait StaticResources extends Directives with LazyLogging {
     } ~
     path("index.html") {
       parameters(Symbol("v").?) { v =>
-        {
-          val hash = Md5.hash(managerVersion).take(shortPath)
-          if (v.isEmpty) {
+        val hash = Md5.hash(managerVersion).take(shortPath)
+        if (v.isEmpty) {
+          redirectMe(
+            UrlEscapers.urlFragmentEscaper().escape("/index.html?v=" + hash),
+            StatusCodes.MovedPermanently
+          )
+        } else {
+          if (v.get.equals(hash)) {
+            getFromResource("/index.html")
+          } else {
+            logger.info("Previous version hash: {}", v.get)
+            logger.info("Current version hash: {}", hash)
             redirectMe(
               UrlEscapers.urlFragmentEscaper().escape("/index.html?v=" + hash),
               StatusCodes.MovedPermanently
             )
-          } else {
-            if (v.get.equals(hash)) {
-              getFromResource("/index.html")
-            } else {
-              logger.info("Previous version hash: {}", v.get)
-              logger.info("Current version hash: {}", hash)
-              redirectMe(
-                UrlEscapers.urlFragmentEscaper().escape("/index.html?v=" + hash),
-                StatusCodes.MovedPermanently
-              )
-            }
           }
         }
       }

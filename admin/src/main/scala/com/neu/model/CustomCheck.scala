@@ -19,18 +19,18 @@ case class CustomCheckConfigDTO(group: String, config: CustomCheckConfig)
 case class CustomCheckData(config: CustomChecks)
 
 object CustomCheckConfigJsonProtocol extends DefaultJsonProtocol {
-  implicit val customCheckFormat: RootJsonFormat[CustomCheck]    = jsonFormat2(CustomCheck)
-  implicit val customChecksFormats: RootJsonFormat[CustomChecks] = jsonFormat1(CustomChecks)
-  implicit val customCheckConfigFormat: RootJsonFormat[CustomCheckConfig] = jsonFormat3(
+  implicit val customCheckFormat: RootJsonFormat[CustomCheck]                     = jsonFormat2(CustomCheck)
+  implicit val customChecksFormats: RootJsonFormat[CustomChecks]                  = jsonFormat1(CustomChecks)
+  implicit val customCheckConfigFormat: RootJsonFormat[CustomCheckConfig]         = jsonFormat3(
     CustomCheckConfig
   )
   implicit val customCheckConfigDataFormat: RootJsonFormat[CustomCheckConfigData] = jsonFormat1(
     CustomCheckConfigData
   )
-  implicit val customCheckConfigDTOFormat: RootJsonFormat[CustomCheckConfigDTO] = jsonFormat2(
+  implicit val customCheckConfigDTOFormat: RootJsonFormat[CustomCheckConfigDTO]   = jsonFormat2(
     CustomCheckConfigDTO
   )
-  implicit val customConfigFormat: RootJsonFormat[CustomCheckData] = jsonFormat1(CustomCheckData)
+  implicit val customConfigFormat: RootJsonFormat[CustomCheckData]                = jsonFormat1(CustomCheckData)
 
   def customConfigToJson(configWrap: CustomCheckConfigData): String = configWrap.toJson.compactPrint
 }

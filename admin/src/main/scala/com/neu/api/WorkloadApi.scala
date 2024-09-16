@@ -38,14 +38,13 @@ class WorkloadApi()(implicit executionContext: ExecutionContext)
                         "",
                         tokenId
                       )
-                    )(
-                      someId =>
-                        RestClient.httpRequestWithHeader(
-                          s"${baseClusterUri(tokenId)}/workload/$someId/stats",
-                          GET,
-                          "",
-                          tokenId
-                        )
+                    )(someId =>
+                      RestClient.httpRequestWithHeader(
+                        s"${baseClusterUri(tokenId)}/workload/$someId/stats",
+                        GET,
+                        "",
+                        tokenId
+                      )
                     )
                   }
                 }
@@ -53,20 +52,18 @@ class WorkloadApi()(implicit executionContext: ExecutionContext)
             } ~
             post {
               entity(as[ContainerQuarantineRequest]) { quarantineRequest =>
-                {
-                  Utils.respondWithWebServerHeaders() {
-                    complete {
-                      val payload = quarantineConfigWarpToJson(
-                        QuarantineConfigWarp(QuarantineConfig(quarantineRequest.quarantine))
-                      )
-                      logger.info("Quarantining container: {}", payload)
-                      RestClient.httpRequestWithHeader(
-                        s"${baseClusterUri(tokenId)}/workload/${quarantineRequest.id}",
-                        PATCH,
-                        payload,
-                        tokenId
-                      )
-                    }
+                Utils.respondWithWebServerHeaders() {
+                  complete {
+                    val payload = quarantineConfigWarpToJson(
+                      QuarantineConfigWarp(QuarantineConfig(quarantineRequest.quarantine))
+                    )
+                    logger.info("Quarantining container: {}", payload)
+                    RestClient.httpRequestWithHeader(
+                      s"${baseClusterUri(tokenId)}/workload/${quarantineRequest.id}",
+                      PATCH,
+                      payload,
+                      tokenId
+                    )
                   }
                 }
               }
@@ -81,7 +78,7 @@ class WorkloadApi()(implicit executionContext: ExecutionContext)
                 complete {
                   try {
                     if (start.isEmpty || start.get.toInt == 0) {
-                      val url = s"${baseClusterUriV2(tokenId)}/workload?view=pod"
+                      val url              = s"${baseClusterUriV2(tokenId)}/workload?view=pod"
                       logger.info("Get workloads data from {}", url)
                       val scannedWorkloads = RestClient.requestWithHeaderDecode(
                         url,
@@ -107,7 +104,7 @@ class WorkloadApi()(implicit executionContext: ExecutionContext)
                           .getPagedData(s"$cacheKey-workload")
                           .getOrElse(Array[WorkloadV2]())
                       }
-                      val output =
+                      val output     =
                         elements.slice(start.get.toInt, start.get.toInt + limit.get.toInt)
                       if (output.length < limit.get.toInt) {
                         paginationCacheManager[Array[WorkloadV2]]
@@ -126,9 +123,11 @@ class WorkloadApi()(implicit executionContext: ExecutionContext)
                     case NonFatal(e) =>
                       paginationCacheManager[Array[WorkloadV2]]
                         .removePagedData(s"$cacheKey-workload")
-                      if (e.getMessage.contains("Status: 408") || e.getMessage.contains(
-                            "Status: 401"
-                          )) {
+                      if (
+                        e.getMessage.contains("Status: 408") || e.getMessage.contains(
+                          "Status: 401"
+                        )
+                      ) {
                         (StatusCodes.RequestTimeout, "Session expired!")
                       } else {
                         logger.info("Error message: {}", e.getMessage)
@@ -203,14 +202,13 @@ class WorkloadApi()(implicit executionContext: ExecutionContext)
                         "",
                         tokenId
                       )
-                    )(
-                      someId =>
-                        RestClient.httpRequestWithHeader(
-                          s"${baseClusterUri(tokenId)}/workload/$someId?view=pod",
-                          GET,
-                          "",
-                          tokenId
-                        )
+                    )(someId =>
+                      RestClient.httpRequestWithHeader(
+                        s"${baseClusterUri(tokenId)}/workload/$someId?view=pod",
+                        GET,
+                        "",
+                        tokenId
+                      )
                     )
                   }
                 }

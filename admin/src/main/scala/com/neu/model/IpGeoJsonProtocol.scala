@@ -1,6 +1,6 @@
 package com.neu.model
 
-import spray.json.{ DefaultJsonProtocol, _ }
+import spray.json.*
 
 object IpGeoJsonProtocol extends DefaultJsonProtocol {
   implicit val ipGeoFormat: RootJsonFormat[IpGeo] = jsonFormat4(IpGeo)

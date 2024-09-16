@@ -11,7 +11,7 @@ class EhcacheSuite extends FunSuite with BeforeAndAfterAll {
   val cacheName = "posCache"
 
   test("caches value if there's no cache") {
-    val cache = Ehcache[String, String](cacheName)
+    val cache  = Ehcache[String, String](cacheName)
     cache.getOrElseInsert("key1")("value1")
     val result = cache.get("key1").get
     assert(result === "value1")
@@ -24,7 +24,7 @@ class EhcacheSuite extends FunSuite with BeforeAndAfterAll {
   }
 
   test("getOrElseInsert returns cached value matched") {
-    val cache = Ehcache[String, String](cacheName)
+    val cache  = Ehcache[String, String](cacheName)
     cache.put("key3", "value31")
     val result = cache.getOrElseInsert("key3")("value32")
     assert(result === "value31")

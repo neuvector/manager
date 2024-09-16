@@ -19,7 +19,8 @@ object SupportLogAuthCacheManager {
   /**
    * Get supportLogAuth for support log
    * @param token
-   * @return [[String]]
+   * @return
+   *   [[String]]
    */
   def getSupportLogAuth(token: String): Option[String] = cache.get(token)
 

@@ -7,10 +7,9 @@ import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
- * The REST API layer. It exposes the REST services, but does not provide any
- * web server interface.<br/>
- * Notice that it requires to be mixed in with ``core.CoreActors``, which provides access
- * to the top-level actors that make up the system.
+ * The REST API layer. It exposes the REST services, but does not provide any web server
+ * interface.<br/> Notice that it requires to be mixed in with ``core.CoreActors``, which provides
+ * access to the top-level actors that make up the system.
  */
 trait Api extends Directives with CoreActors with Core {
 
@@ -25,7 +24,7 @@ trait Api extends Directives with CoreActors with Core {
   private val sigstoreApi       = new SigstoreApi()
   private val workloadApi       = new WorkloadApi()
 
-  val routes: Route = {
+  val routes: Route =
     authenticationApi.route ~
     dashboardApi.route ~
     clusterApi.route ~
@@ -36,5 +35,4 @@ trait Api extends Directives with CoreActors with Core {
     riskApi.route ~
     sigstoreApi.route ~
     workloadApi.route
-  }
 }

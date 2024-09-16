@@ -35,39 +35,35 @@ class SigstoreApi()(implicit executionContext: ExecutionContext)
             } ~
             post {
               entity(as[RootOfTrust]) { rootOfTrust =>
-                {
-                  Utils.respondWithWebServerHeaders() {
-                    complete {
-                      val payload = rootOfTrustToJson(rootOfTrust)
-                      logger.info("Creating sigstore: {}...", payload)
-                      RestClient.httpRequestWithHeaderDecode(
-                        s"${baseClusterUri(tokenId)}/scan/sigstore/root_of_trust",
-                        POST,
-                        payload,
-                        tokenId
-                      )
-                    }
+                Utils.respondWithWebServerHeaders() {
+                  complete {
+                    val payload = rootOfTrustToJson(rootOfTrust)
+                    logger.info("Creating sigstore: {}...", payload)
+                    RestClient.httpRequestWithHeaderDecode(
+                      s"${baseClusterUri(tokenId)}/scan/sigstore/root_of_trust",
+                      POST,
+                      payload,
+                      tokenId
+                    )
                   }
                 }
               }
             } ~
             patch {
               entity(as[RootOfTrust]) { rootOfTrust =>
-                {
-                  Utils.respondWithWebServerHeaders() {
-                    complete {
-                      val payload = rootOfTrustToJson(rootOfTrust)
-                      val url =
-                        s"${baseClusterUri(tokenId)}/scan/sigstore/root_of_trust/${rootOfTrust.name.get}"
-                      logger.info("Updating sigstore: {}...", payload)
-                      logger.info("url: {}...", url)
-                      RestClient.httpRequestWithHeader(
-                        url,
-                        PATCH,
-                        payload,
-                        tokenId
-                      )
-                    }
+                Utils.respondWithWebServerHeaders() {
+                  complete {
+                    val payload = rootOfTrustToJson(rootOfTrust)
+                    val url     =
+                      s"${baseClusterUri(tokenId)}/scan/sigstore/root_of_trust/${rootOfTrust.name.get}"
+                    logger.info("Updating sigstore: {}...", payload)
+                    logger.info("url: {}...", url)
+                    RestClient.httpRequestWithHeader(
+                      url,
+                      PATCH,
+                      payload,
+                      tokenId
+                    )
                   }
                 }
               }
@@ -107,19 +103,17 @@ class SigstoreApi()(implicit executionContext: ExecutionContext)
           } ~
           post {
             entity(as[Verifier]) { verifier =>
-              {
-                Utils.respondWithWebServerHeaders() {
-                  complete {
-                    val payload = verifierToJson(verifier)
-                    logger.info("Creating verifier: {}", payload)
-                    logger.info("for {}...", verifier.root_of_trust_name.get)
-                    RestClient.httpRequestWithHeaderDecode(
-                      s"${baseClusterUri(tokenId)}/scan/sigstore/root_of_trust/${verifier.root_of_trust_name.get}/verifier",
-                      POST,
-                      payload,
-                      tokenId
-                    )
-                  }
+              Utils.respondWithWebServerHeaders() {
+                complete {
+                  val payload = verifierToJson(verifier)
+                  logger.info("Creating verifier: {}", payload)
+                  logger.info("for {}...", verifier.root_of_trust_name.get)
+                  RestClient.httpRequestWithHeaderDecode(
+                    s"${baseClusterUri(tokenId)}/scan/sigstore/root_of_trust/${verifier.root_of_trust_name.get}/verifier",
+                    POST,
+                    payload,
+                    tokenId
+                  )
                 }
               }
             }
@@ -129,7 +123,7 @@ class SigstoreApi()(implicit executionContext: ExecutionContext)
               Utils.respondWithWebServerHeaders() {
                 complete {
                   val payload = verifierToJson(verifier)
-                  val url =
+                  val url     =
                     s"${baseClusterUri(tokenId)}/scan/sigstore/root_of_trust/${verifier.root_of_trust_name.get}/verifier/${verifier.name.get}"
                   logger.info("Updating verifier: {}", payload)
                   logger.info("for {}...", verifier.root_of_trust_name.get)

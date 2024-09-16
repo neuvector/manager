@@ -20,8 +20,10 @@ object BlacklistCacheManager {
 
   /**
    * Get blacklist of user for Graph
-   * @param user the user
-   * @return [[com.neu.model.Blacklist]]
+   * @param user
+   *   the user
+   * @return
+   *   [[com.neu.model.Blacklist]]
    */
   def getBlacklist(user: String): Option[Blacklist] = cache.get(user + "blacklist")
 }

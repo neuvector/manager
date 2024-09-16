@@ -1,6 +1,6 @@
 package com.neu.model
 
-import spray.json.{ DefaultJsonProtocol, _ }
+import spray.json.*
 import org.joda.time.DateTime
 import com.typesafe.scalalogging.LazyLogging
 
@@ -117,39 +117,39 @@ case class DashboardNotificationDTO2(
 )
 
 object DashboardSecurityEventsProtocol extends DefaultJsonProtocol with LazyLogging {
-  implicit val dateTimeFormat: DateTimeFormat.type = DateTimeFormat
-  implicit val errorFormat: RootJsonFormat[Error]  = jsonFormat1(Error)
-  implicit val dashboardThreatFormat: RootJsonFormat[DashboardThreat] = jsonFormat17(
+  implicit val dateTimeFormat: DateTimeFormat.type                                                = DateTimeFormat
+  implicit val errorFormat: RootJsonFormat[Error]                                                 = jsonFormat1(Error)
+  implicit val dashboardThreatFormat: RootJsonFormat[DashboardThreat]                             = jsonFormat17(
     DashboardThreat
   )
-  implicit val dashboardThreatDataFormat: RootJsonFormat[DashboardThreatData] = jsonFormat2(
+  implicit val dashboardThreatDataFormat: RootJsonFormat[DashboardThreatData]                     = jsonFormat2(
     DashboardThreatData
   )
-  implicit val dashboardViolationFormat: RootJsonFormat[DashboardViolation] = jsonFormat14(
+  implicit val dashboardViolationFormat: RootJsonFormat[DashboardViolation]                       = jsonFormat14(
     DashboardViolation
   )
-  implicit val dashboardViolationDataFormat: RootJsonFormat[DashboardViolationData] = jsonFormat2(
+  implicit val dashboardViolationDataFormat: RootJsonFormat[DashboardViolationData]               = jsonFormat2(
     DashboardViolationData
   )
-  implicit val dashboardIncidentFormat: RootJsonFormat[DashboardIncident] = jsonFormat16(
+  implicit val dashboardIncidentFormat: RootJsonFormat[DashboardIncident]                         = jsonFormat16(
     DashboardIncident
   )
-  implicit val dashboardIncidentDataFormat: RootJsonFormat[DashboardIncidentData] = jsonFormat2(
+  implicit val dashboardIncidentDataFormat: RootJsonFormat[DashboardIncidentData]                 = jsonFormat2(
     DashboardIncidentData
   )
-  implicit val dashboardSecurityEventsFormat: RootJsonFormat[DashboardSecurityEvents] = jsonFormat4(
+  implicit val dashboardSecurityEventsFormat: RootJsonFormat[DashboardSecurityEvents]             = jsonFormat4(
     DashboardSecurityEvents
   )
   implicit val convertedDashboardSecurityEventFormat
     : RootJsonFormat[ConvertedDashboardSecurityEvent] = jsonFormat17(
     ConvertedDashboardSecurityEvent
   )
-  implicit val topSecurityEventFormat: RootJsonFormat[TopSecurityEvent] = jsonFormat2(
+  implicit val topSecurityEventFormat: RootJsonFormat[TopSecurityEvent]                           = jsonFormat2(
     TopSecurityEvent
   )
   implicit val criticalSecurityEventDTO2Format: RootJsonFormat[CriticalDashboardSecurityEventDTO] =
     jsonFormat2(CriticalDashboardSecurityEventDTO)
-  implicit val dashboardNotificationDTO2Format: RootJsonFormat[DashboardNotificationDTO2] =
+  implicit val dashboardNotificationDTO2Format: RootJsonFormat[DashboardNotificationDTO2]         =
     jsonFormat1(DashboardNotificationDTO2)
 
   def jsonToDashboardThreatData(endpointData: String): DashboardThreatData =
@@ -167,11 +167,13 @@ object DashboardSecurityEventsProtocol extends DefaultJsonProtocol with LazyLogg
   def threatsToConvertedDashboardThreats: DashboardThreat => ConvertedDashboardSecurityEvent =
     (threat: DashboardThreat) => {
 
+      val isClient = threat.target.getOrElse("") == "client"
+
       ConvertedDashboardSecurityEvent(
         None,
         Some(threat.name),
         Some(threat.server_workload_id),
-        if (threat.target == "client") {
+        if (isClient) {
           if (threat.server_workload_name.getOrElse("").nonEmpty) threat.server_workload_name
           else if (threat.server_ip.getOrElse("").nonEmpty) threat.server_ip
           else Some(threat.server_workload_id)
@@ -181,7 +183,7 @@ object DashboardSecurityEventsProtocol extends DefaultJsonProtocol with LazyLogg
           else Some(threat.client_workload_id)
         },
         Some(threat.server_workload_id),
-        if (threat.target == "client") {
+        if (isClient) {
           if (threat.client_workload_name.getOrElse("").nonEmpty) threat.client_workload_name
           else if (threat.client_ip.getOrElse("").nonEmpty) threat.client_ip
           else Some(threat.client_workload_id)
@@ -190,17 +192,17 @@ object DashboardSecurityEventsProtocol extends DefaultJsonProtocol with LazyLogg
           else if (threat.server_ip.getOrElse("").nonEmpty) threat.server_ip
           else Some(threat.server_workload_id)
         },
-        if (threat.target == "client") threat.server_workload_domain
+        if (isClient) threat.server_workload_domain
         else threat.client_workload_domain,
-        if (threat.target == "client") threat.client_workload_domain
+        if (isClient) threat.client_workload_domain
         else threat.server_workload_domain,
         threat.level,
         threat.host_name,
-        if (threat.target == "client") threat.server_port else threat.client_port,
-        if (threat.target == "client") threat.client_port else threat.server_port,
+        if (isClient) threat.server_port else threat.client_port,
+        if (isClient) threat.client_port else threat.server_port,
         threat.server_conn_port,
-        if (threat.target == "client") threat.server_ip else threat.client_ip,
-        if (threat.target == "client") threat.client_ip else threat.server_ip,
+        if (isClient) threat.server_ip else threat.client_ip,
+        if (isClient) threat.client_ip else threat.server_ip,
         threat.application,
         threat.reported_at
       )
@@ -208,8 +210,7 @@ object DashboardSecurityEventsProtocol extends DefaultJsonProtocol with LazyLogg
 
   def violationsToConvertedDashboardViolations
     : DashboardViolation => ConvertedDashboardSecurityEvent =
-    (violation: DashboardViolation) => {
-
+    (violation: DashboardViolation) =>
       ConvertedDashboardSecurityEvent(
         Some(violation.policy_id),
         None,
@@ -233,7 +234,6 @@ object DashboardSecurityEventsProtocol extends DefaultJsonProtocol with LazyLogg
         violation.application,
         violation.reported_at
       )
-    }
 
   def incidentsToConvertedDashboardIncidents: DashboardIncident => ConvertedDashboardSecurityEvent =
     (incident: DashboardIncident) => {

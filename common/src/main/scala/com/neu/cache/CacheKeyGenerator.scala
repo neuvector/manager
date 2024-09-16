@@ -3,7 +3,8 @@ package com.neu.cache
 import scala.collection.immutable.ArraySeq
 
 /**
- * @tparam A type of cache key
+ * @tparam A
+ *   type of cache key
  */
 trait CacheKeyGenerator[A] {
   def generate(data: Any*): A

@@ -2,7 +2,7 @@ package com.neu.core
 
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.model._
+import org.apache.pekko.http.scaladsl.model.*
 import org.apache.pekko.http.scaladsl.settings.ConnectionPoolSettings
 import org.apache.pekko.http.scaladsl.{ ConnectionContext, Http, HttpsConnectionContext }
 import org.apache.pekko.stream.Materializer
@@ -31,11 +31,11 @@ trait ClientSslConfig extends LazyLogging {
 
   private final val SENSITIVE_HEADER = Set("X-Auth-Token", "Authorization")
 
-  def sendReceiver(
-    implicit system: ActorSystem,
+  def sendReceiver(using
+    system: ActorSystem,
     materializer: Materializer,
     executionContext: ExecutionContext
-  ): HttpRequest => Future[HttpResponse] = { request: HttpRequest =>
+  ): HttpRequest => Future[HttpResponse] = { (request: HttpRequest) =>
     val poolSettings = ConnectionPoolSettings(system)
 
     logger.info(s"Sending Request\n${maskSensitiveInfo(request.toString)}")
@@ -65,10 +65,10 @@ trait ClientSslConfig extends LazyLogging {
         case (Success(response: HttpResponse), _) =>
           logger.info(s"Received Response - Success\n$response")
           Future.successful(response)
-        case (Failure(exception), _) =>
+        case (Failure(exception), _)              =>
           logger.info(s"Received Response - Failure\n$exception")
           Future.failed(exception)
-        case (Success(unexpected), _) =>
+        case (Success(unexpected), _)             =>
           logger.info(s"Received Response - Unexpected Exception\n$unexpected")
           Future.failed(new Exception(s"Unexpected response from HTTP transport: $unexpected"))
       }
@@ -84,10 +84,11 @@ trait ClientSslConfig extends LazyLogging {
 
   private def logHeaders(headers: Seq[HttpHeader]): String =
     headers
-      .map(
-        h =>
-          s"${h.name}: ${if (SENSITIVE_HEADER.contains(h.name)) maskToken(h.value)
-          else h.value}"
+      .map(h =>
+        s"${h.name}: ${
+            if (SENSITIVE_HEADER.contains(h.name)) maskToken(h.value)
+            else h.value
+          }"
       )
       .mkString(", ")
 

@@ -62,13 +62,19 @@ class RiskApi()(implicit executionContext: ExecutionContext)
               Utils.respondWithWebServerHeaders() {
                 complete {
                   val url =
-                    s"${baseClusterUri(tokenId)}/scan/asset/images?token=$token&start=$start&row=$row${if (orderby.isDefined)
-                      s"&orderby=${orderby.get}"
-                    else ""}${if (orderbyColumn.isDefined)
-                      s"&orderbyColumn=${orderbyColumn.get}"
-                    else ""}${if (qf.isDefined)
-                      s"&qf=${qf.get}"
-                    else ""}"
+                    s"${baseClusterUri(tokenId)}/scan/asset/images?token=$token&start=$start&row=$row${
+                        if (orderby.isDefined)
+                          s"&orderby=${orderby.get}"
+                        else ""
+                      }${
+                        if (orderbyColumn.isDefined)
+                          s"&orderbyColumn=${orderbyColumn.get}"
+                        else ""
+                      }${
+                        if (qf.isDefined)
+                          s"&qf=${qf.get}"
+                        else ""
+                      }"
                   RestClient.httpRequestWithHeader(url, GET, "", tokenId)
                 }
               }
@@ -104,25 +110,35 @@ class RiskApi()(implicit executionContext: ExecutionContext)
                 Symbol("orderbyColumn").?,
                 Symbol("qf").?,
                 Symbol("scoretype").?
-              )((token, start, row, lastmtime, orderby, orderbyColumn, qf, scoretype) => {
+              ) { (token, start, row, lastmtime, orderby, orderbyColumn, qf, scoretype) =>
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     val url =
-                      s"${baseClusterUri(tokenId)}/vulasset?token=$token&start=$start&row=$row${if (orderby.isDefined)
-                        s"&orderby=${orderby.get}"
-                      else ""}${if (orderbyColumn.isDefined)
-                        s"&orderbyColumn=${orderbyColumn.get}"
-                      else ""}${if (lastmtime.isDefined)
-                        s"&lastmtime=${lastmtime.get}"
-                      else ""}${if (qf.isDefined)
-                        s"&qf=${qf.get}"
-                      else ""}${if (scoretype.isDefined)
-                        s"&scoretype=${scoretype.get}"
-                      else ""}"
+                      s"${baseClusterUri(tokenId)}/vulasset?token=$token&start=$start&row=$row${
+                          if (orderby.isDefined)
+                            s"&orderby=${orderby.get}"
+                          else ""
+                        }${
+                          if (orderbyColumn.isDefined)
+                            s"&orderbyColumn=${orderbyColumn.get}"
+                          else ""
+                        }${
+                          if (lastmtime.isDefined)
+                            s"&lastmtime=${lastmtime.get}"
+                          else ""
+                        }${
+                          if (qf.isDefined)
+                            s"&qf=${qf.get}"
+                          else ""
+                        }${
+                          if (scoretype.isDefined)
+                            s"&scoretype=${scoretype.get}"
+                          else ""
+                        }"
                     RestClient.httpRequestWithHeader(url, GET, "", tokenId)
                   }
                 }
-              })
+              }
             }
           }
         } ~
@@ -134,8 +150,10 @@ class RiskApi()(implicit executionContext: ExecutionContext)
                   Utils.respondWithWebServerHeaders() {
                     complete {
                       val url =
-                        s"${baseClusterUri(tokenId)}/$scanUrl${if (show.isDefined) s"?show=${show.get}"
-                        else ""}"
+                        s"${baseClusterUri(tokenId)}/$scanUrl${
+                            if (show.isDefined) s"?show=${show.get}"
+                            else ""
+                          }"
                       logger.info(s"Getting asset vulnerabilities ...{}", url)
                       RestClient.httpRequestWithHeader(url, GET, "", tokenId)
                     }
@@ -224,7 +242,7 @@ class RiskApi()(implicit executionContext: ExecutionContext)
                             tokenId
                           )
                         } catch {
-                          case NonFatal(e) =>
+                          case NonFatal(e)         =>
                             logger.warn(e.getMessage)
                             (StatusCodes.InternalServerError, "No entry has in the config data!")
                           case e: TimeoutException =>
@@ -254,8 +272,8 @@ class RiskApi()(implicit executionContext: ExecutionContext)
                             )
                             RestClient.httpRequestWithHeader(
                               s"${baseClusterUri(tokenId)}/$vulnerabilityProfileUrl/${UrlEscapers
-                                .urlFragmentEscaper()
-                                .escape(name)}/entry/${vulnerabilityProfileEntryConfigData.config.id.get}",
+                                  .urlFragmentEscaper()
+                                  .escape(name)}/entry/${vulnerabilityProfileEntryConfigData.config.id.get}",
                               PATCH,
                               vulnerabilityProfileEntryConfigDataToJson(
                                 vulnerabilityProfileEntryConfigData
@@ -278,8 +296,8 @@ class RiskApi()(implicit executionContext: ExecutionContext)
                         logger.info("Delete vulnerability profile entry (Entry ID): {}", entryId)
                         RestClient.httpRequestWithHeader(
                           s"${baseClusterUri(tokenId)}/$vulnerabilityProfileUrl/${UrlEscapers
-                            .urlFragmentEscaper()
-                            .escape(profileName)}/entry/${UrlEscapers.urlFragmentEscaper().escape(entryId)}",
+                              .urlFragmentEscaper()
+                              .escape(profileName)}/entry/${UrlEscapers.urlFragmentEscaper().escape(entryId)}",
                           DELETE,
                           "",
                           tokenId
@@ -292,17 +310,15 @@ class RiskApi()(implicit executionContext: ExecutionContext)
               path("export") {
                 post {
                   entity(as[VulnerabilityProfileExportData]) { vulnerabilityProfileExportData =>
-                    {
-                      Utils.respondWithWebServerHeaders() {
-                        complete {
-                          logger.info("Exporting CVE profile")
-                          RestClient.httpRequestWithHeader(
-                            s"${baseClusterUri(tokenId)}/file/$vulnerabilityProfileUrl",
-                            POST,
-                            vulnerabilityProfileExportDataToJson(vulnerabilityProfileExportData),
-                            tokenId
-                          )
-                        }
+                    Utils.respondWithWebServerHeaders() {
+                      complete {
+                        logger.info("Exporting CVE profile")
+                        RestClient.httpRequestWithHeader(
+                          s"${baseClusterUri(tokenId)}/file/$vulnerabilityProfileUrl",
+                          POST,
+                          vulnerabilityProfileExportDataToJson(vulnerabilityProfileExportData),
+                          tokenId
+                        )
                       }
                     }
                   }
@@ -316,11 +332,9 @@ class RiskApi()(implicit executionContext: ExecutionContext)
                         complete {
                           try {
                             val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
-                            val baseUrl = cachedBaseUrl.fold {
+                            val baseUrl       = cachedBaseUrl.fold {
                               baseClusterUri(tokenId)
-                            }(
-                              cachedBaseUrl => cachedBaseUrl
-                            )
+                            }(cachedBaseUrl => cachedBaseUrl)
                             AuthenticationManager.setBaseUrl(tokenId, baseUrl)
                             logger.info("test baseUrl: {}", baseUrl)
                             logger.info("Transaction ID(Post): {}", transactionId)
@@ -349,7 +363,7 @@ class RiskApi()(implicit executionContext: ExecutionContext)
                       parameter(Symbol("option")) { option =>
                         complete {
                           try {
-                            val baseUrl =
+                            val baseUrl              =
                               baseClusterUri(tokenId)
                             AuthenticationManager.setBaseUrl(tokenId, baseUrl)
                             logger.info("test baseUrl: {}", baseUrl)
@@ -463,22 +477,20 @@ class RiskApi()(implicit executionContext: ExecutionContext)
                 } ~
                 patch {
                   entity(as[ComplianceProfileConfig]) { profileConfig =>
-                    {
-                      Utils.respondWithWebServerHeaders() {
-                        complete {
-                          val payload = configWrapToJson(
-                            ComplianceProfileConfigData(
-                              profileConfig
-                            )
+                    Utils.respondWithWebServerHeaders() {
+                      complete {
+                        val payload = configWrapToJson(
+                          ComplianceProfileConfigData(
+                            profileConfig
                           )
-                          logger.info("Updating compliance profile: {}", profileConfig.name)
-                          RestClient.httpRequestWithHeader(
-                            s"${baseClusterUri(tokenId)}/$complianceProfileUrl/${UrlEscapers.urlFragmentEscaper().escape(profileConfig.name)}",
-                            PATCH,
-                            payload,
-                            tokenId
-                          )
-                        }
+                        )
+                        logger.info("Updating compliance profile: {}", profileConfig.name)
+                        RestClient.httpRequestWithHeader(
+                          s"${baseClusterUri(tokenId)}/$complianceProfileUrl/${UrlEscapers.urlFragmentEscaper().escape(profileConfig.name)}",
+                          PATCH,
+                          payload,
+                          tokenId
+                        )
                       }
                     }
                   }
@@ -487,17 +499,15 @@ class RiskApi()(implicit executionContext: ExecutionContext)
               path("export") {
                 post {
                   entity(as[ComplianceProfileExportData]) { complianceProfileExportData =>
-                    {
-                      Utils.respondWithWebServerHeaders() {
-                        complete {
-                          logger.info("Exporting compliance profile")
-                          RestClient.httpRequestWithHeader(
-                            s"${baseClusterUri(tokenId)}/file/$complianceProfileUrl",
-                            POST,
-                            complianceProfileExportDataToJson(complianceProfileExportData),
-                            tokenId
-                          )
-                        }
+                    Utils.respondWithWebServerHeaders() {
+                      complete {
+                        logger.info("Exporting compliance profile")
+                        RestClient.httpRequestWithHeader(
+                          s"${baseClusterUri(tokenId)}/file/$complianceProfileUrl",
+                          POST,
+                          complianceProfileExportDataToJson(complianceProfileExportData),
+                          tokenId
+                        )
                       }
                     }
                   }
@@ -510,11 +520,9 @@ class RiskApi()(implicit executionContext: ExecutionContext)
                       complete {
                         try {
                           val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
-                          val baseUrl = cachedBaseUrl.fold {
+                          val baseUrl       = cachedBaseUrl.fold {
                             baseClusterUri(tokenId)
-                          }(
-                            cachedBaseUrl => cachedBaseUrl
-                          )
+                          }(cachedBaseUrl => cachedBaseUrl)
                           AuthenticationManager.setBaseUrl(tokenId, baseUrl)
                           logger.info("test baseUrl: {}", baseUrl)
                           logger.info("Transaction ID(Post): {}", transactionId)
@@ -541,7 +549,7 @@ class RiskApi()(implicit executionContext: ExecutionContext)
                     Utils.respondWithWebServerHeaders() {
                       complete {
                         try {
-                          val baseUrl =
+                          val baseUrl              =
                             baseClusterUri(tokenId)
                           AuthenticationManager.setBaseUrl(tokenId, baseUrl)
                           logger.info("test baseUrl: {}", baseUrl)

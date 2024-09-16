@@ -1,10 +1,10 @@
 package com.neu.cache
 
-import net.sf.ehcache.{ CacheManager, Cache => ECache, Element }
+import net.sf.ehcache.{ Cache => ECache, CacheManager, Element }
 
 /**
  * Cache implementation using Ehcache
-  **/
+ */
 private class EhcacheCache[K, V](
   underlying: ECache,
   override val cacheKeyGenerator: CacheKeyGenerator[_]
@@ -27,17 +27,21 @@ private class EhcacheCache[K, V](
 
 /**
  * Cache factory using Ehcache
-  **/
+ */
 object Ehcache {
 
-  /** Returns Cache instance
+  /**
+   * Returns Cache instance
    *
-   * @tparam K type of key
-   * @tparam V type of value
-   * @param name the cache name
+   * @tparam K
+   *   type of key
+   * @tparam V
+   *   type of value
+   * @param name
+   *   the cache name
    */
-  def apply[K, V](name: String)(
-    implicit cacheManager: CacheManager,
+  def apply[K, V](name: String)(implicit
+    cacheManager: CacheManager,
     cacheKeyGenerator: CacheKeyGenerator[_] = NoOpCacheKeyGenerator
   ): Cache[K, V] = {
     val c = cacheManager.getCache(name)

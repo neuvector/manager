@@ -1,6 +1,6 @@
 package com.neu.core
 
-import com.neu.model.AuthTokenJsonProtocol._
+import com.neu.model.AuthTokenJsonProtocol.*
 import com.neu.model.{ Token, TokenNew, UserTokenNew }
 import com.typesafe.scalalogging.LazyLogging
 
@@ -12,7 +12,7 @@ import scala.collection.mutable
  * Created by bxu on 3/25/16.
  */
 object AuthenticationManager extends LazyLogging {
-  var token: Option[Token] = None
+  var token: Option[Token]                                = None
   private val tokenMap: mutable.Map[String, UserTokenNew] =
     scala.collection.mutable.Map[String, UserTokenNew]()
 
@@ -22,14 +22,12 @@ object AuthenticationManager extends LazyLogging {
   private val tokenBaseUrlMap: mutable.Map[String, String] =
     scala.collection.mutable.Map[String, String]()
 
-  val suseTokenMap: mutable.Map[String, String]   = scala.collection.mutable.Map[String, String]()
-  def getCluster(tokenId: String): Option[String] = tokenClusterMap.get(tokenId)
+  val suseTokenMap: mutable.Map[String, String]                       = scala.collection.mutable.Map[String, String]()
+  def getCluster(tokenId: String): Option[String]                     = tokenClusterMap.get(tokenId)
   def switchCluster(tokenId: String, clusterId: Option[String]): Unit =
     clusterId.fold(
       tokenClusterMap -= tokenId
-    )(
-      id => tokenClusterMap += tokenId -> id
-    )
+    )(id => tokenClusterMap += tokenId -> id)
 
   def validate(tokenId: String): Option[UserTokenNew] =
     tokenMap.get(tokenId)
@@ -58,7 +56,7 @@ object AuthenticationManager extends LazyLogging {
     token = authRes.token
 
     token match {
-      case Some(token) => {
+      case Some(token) =>
         val tokenNew = TokenNew(
           token.token,
           token.fullname,
@@ -80,7 +78,7 @@ object AuthenticationManager extends LazyLogging {
         token.role_domains match {
           case Some(role_domains) =>
             converted_role_domains = getRolesDigit(token.role, Option(role_domains), timestamp)
-          case None =>
+          case None               =>
             converted_role_domains = getRolesDigit(token.role, None, timestamp)
         }
         userToken = UserTokenNew(
@@ -93,8 +91,7 @@ object AuthenticationManager extends LazyLogging {
         )
         tokenMap += token.token -> userToken
         userToken
-      }
-      case None => {
+      case None        =>
         userToken = UserTokenNew(
           None,
           "",
@@ -104,7 +101,6 @@ object AuthenticationManager extends LazyLogging {
           isSUSEAuthenticated
         )
         userToken
-      }
     }
   }
 
@@ -127,7 +123,7 @@ object AuthenticationManager extends LazyLogging {
       case "reader"    => global_role_digit = "1"
       case default     => global_role_digit = "0"
     }
-    val global = Map(
+    val global                              = Map(
       "global" -> global_role_digit
     )
     roles_domains = global
@@ -135,45 +131,37 @@ object AuthenticationManager extends LazyLogging {
       case Some(role_domains) =>
         role_domains.get("fedAdmin") match {
           case Some(admin) =>
-            admin_domains = admin
-              .map(namespace => {
-                namespace -> "4"
-              })
-              .toMap
+            admin_domains = admin.map { namespace =>
+              namespace -> "4"
+            }.toMap
             roles_domains ++= admin_domains
-          case None => None
+          case None        => None
         }
         role_domains.get("fedReader") match {
           case Some(reader) =>
-            reader_domains = reader
-              .map(namespace => {
-                namespace -> "3"
-              })
-              .toMap
+            reader_domains = reader.map { namespace =>
+              namespace -> "3"
+            }.toMap
             roles_domains ++= reader_domains
-          case None => None
+          case None         => None
         }
         role_domains.get("admin") match {
           case Some(admin) =>
-            admin_domains = admin
-              .map(namespace => {
-                namespace -> "2"
-              })
-              .toMap
+            admin_domains = admin.map { namespace =>
+              namespace -> "2"
+            }.toMap
             roles_domains ++= admin_domains
-          case None => None
+          case None        => None
         }
         role_domains.get("reader") match {
           case Some(reader) =>
-            reader_domains = reader
-              .map(namespace => {
-                namespace -> "1"
-              })
-              .toMap
+            reader_domains = reader.map { namespace =>
+              namespace -> "1"
+            }.toMap
             roles_domains ++= reader_domains
-          case None => None
+          case None         => None
         }
-      case None =>
+      case None               =>
         roles_domains = global
     }
     roles_domains
@@ -181,13 +169,13 @@ object AuthenticationManager extends LazyLogging {
 }
 
 object Md5 {
-  val MD5 = "MD5"
+  val MD5                             = "MD5"
   def hash(s: Option[String]): String =
     s match {
       case Some(str) =>
         val md5 = MessageDigest.getInstance(MD5).digest(str.getBytes)
         asString(md5)
-      case None =>
+      case None      =>
         val md5 = MessageDigest.getInstance(MD5).digest("".getBytes)
         asString(md5)
     }

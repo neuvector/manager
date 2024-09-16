@@ -1,11 +1,10 @@
 package com.neu.model
 
 import com.neu.core.Md5
-import spray.json.{ DefaultJsonProtocol, _ }
+import spray.json.*
 
 /**
  * Json protocol for authentication token
- *
  */
 object AuthTokenJsonProtocol extends DefaultJsonProtocol {
   implicit val permissionFormat: RootJsonFormat[Permission] = jsonFormat3(Permission)
@@ -39,11 +38,11 @@ object AuthTokenJsonProtocol extends DefaultJsonProtocol {
   implicit val eulaFormat: RootJsonFormat[Eula]         = jsonFormat1(Eula)
   implicit val eulaWrapFormat: RootJsonFormat[EulaWrap] = jsonFormat1(EulaWrap)
 
-  implicit val licenseRequestFormat: RootJsonFormat[LicenseRequest] = jsonFormat9(LicenseRequest)
+  implicit val licenseRequestFormat: RootJsonFormat[LicenseRequest]         = jsonFormat9(LicenseRequest)
   implicit val licenseRequestWrapFormat: RootJsonFormat[LicenseRequestWrap] = jsonFormat1(
     LicenseRequestWrap
   )
-  implicit val licenseKeyFormat: RootJsonFormat[LicenseKey] = jsonFormat1(LicenseKey)
+  implicit val licenseKeyFormat: RootJsonFormat[LicenseKey]                 = jsonFormat1(LicenseKey)
 
   implicit val groupMappedRoleFormat: RootJsonFormat[GroupMappedRole] = jsonFormat3(GroupMappedRole)
   implicit val ldapServerFormat: RootJsonFormat[LdapServer]           = jsonFormat13(LdapServer)
@@ -52,29 +51,29 @@ object AuthTokenJsonProtocol extends DefaultJsonProtocol {
   implicit val samlTokenFormat: RootJsonFormat[SamlToken]             = jsonFormat3(SamlToken)
   implicit val samlResponseFormat: RootJsonFormat[SamlResponse]       = jsonFormat3(SamlResponse)
 
-  implicit val serverOIDCFormat: RootJsonFormat[ServerOIDC] = jsonFormat11(ServerOIDC)
-  implicit val openIdServerFormat: RootJsonFormat[OpenIdServer] = jsonFormat8(
+  implicit val serverOIDCFormat: RootJsonFormat[ServerOIDC]                 = jsonFormat11(ServerOIDC)
+  implicit val openIdServerFormat: RootJsonFormat[OpenIdServer]             = jsonFormat8(
     OpenIdServer
   )
   implicit val openIdServerConfigFormat: RootJsonFormat[OpenIdServerConfig] = jsonFormat2(
     OpenIdServerConfig
   )
-  implicit val redirectURLFormat: RootJsonFormat[RedirectURL]         = jsonFormat1(RedirectURL)
-  implicit val samlRedirectURLFormat: RootJsonFormat[SamlRedirectURL] = jsonFormat2(SamlRedirectURL)
+  implicit val redirectURLFormat: RootJsonFormat[RedirectURL]               = jsonFormat1(RedirectURL)
+  implicit val samlRedirectURLFormat: RootJsonFormat[SamlRedirectURL]       = jsonFormat2(SamlRedirectURL)
 
-  implicit val ldapSettingFormat: RootJsonFormat[LdapSetting]         = jsonFormat4(LdapSetting)
-  implicit val ldapSettingWrapFormat: RootJsonFormat[LdapSettingWrap] = jsonFormat1(LdapSettingWrap)
-  implicit val ldapTestAccountFormat: RootJsonFormat[LdapTestAccount] = jsonFormat2(LdapTestAccount)
-  implicit val ldapServerAccountFormat: RootJsonFormat[LdapServerTestAccount] = jsonFormat3(
+  implicit val ldapSettingFormat: RootJsonFormat[LdapSetting]                     = jsonFormat4(LdapSetting)
+  implicit val ldapSettingWrapFormat: RootJsonFormat[LdapSettingWrap]             = jsonFormat1(LdapSettingWrap)
+  implicit val ldapTestAccountFormat: RootJsonFormat[LdapTestAccount]             = jsonFormat2(LdapTestAccount)
+  implicit val ldapServerAccountFormat: RootJsonFormat[LdapServerTestAccount]     = jsonFormat3(
     LdapServerTestAccount
   )
   implicit val ldapServerAccountWrapFormat: RootJsonFormat[LdapServerAccountWrap] = jsonFormat1(
     LdapServerAccountWrap
   )
-  implicit val passwordProfileFormat: RootJsonFormat[PasswordProfile] = jsonFormat14(
+  implicit val passwordProfileFormat: RootJsonFormat[PasswordProfile]             = jsonFormat14(
     PasswordProfile
   )
-  implicit val passwordProfileWrapFormat: RootJsonFormat[PasswordProfileWrap] = jsonFormat1(
+  implicit val passwordProfileWrapFormat: RootJsonFormat[PasswordProfileWrap]     = jsonFormat1(
     PasswordProfileWrap
   )
 
@@ -105,7 +104,7 @@ object AuthTokenJsonProtocol extends DefaultJsonProtocol {
 
   def userBlockWrapToJson(userBlockWrap: UserBlockWrap): String = userBlockWrap.toJson.compactPrint
 
-  def userToUserImage: User => UserImage = (user: User) => {
+  def userToUserImage: User => UserImage = (user: User) =>
     UserImage(
       user.fullname,
       user.server,
@@ -124,16 +123,15 @@ object AuthTokenJsonProtocol extends DefaultJsonProtocol {
       user.extra_permissions,
       user.extra_permissions_domains
     )
-  }
 
   def eulaWrapToJson(eulaWrap: EulaWrap): String = eulaWrap.toJson.compactPrint
 
   def licenseRequestToJson(licenseRequestWrap: LicenseRequestWrap): String =
     licenseRequestWrap.toJson.compactPrint
-  def licenseKeyToJson(licenseKey: LicenseKey): String = licenseKey.toJson.compactPrint
+  def licenseKeyToJson(licenseKey: LicenseKey): String                     = licenseKey.toJson.compactPrint
 
-  def samlResponseToJson(samlResponse: SamlResponse): String = samlResponse.toJson.compactPrint
-  def ldapSettingWrapToJson(ldapSettingWrap: LdapSettingWrap): String =
+  def samlResponseToJson(samlResponse: SamlResponse): String                      = samlResponse.toJson.compactPrint
+  def ldapSettingWrapToJson(ldapSettingWrap: LdapSettingWrap): String             =
     ldapSettingWrap.toJson.compactPrint
   def ldapAccountWarpToJson(ldapServerAccountWrap: LdapServerAccountWrap): String =
     ldapServerAccountWrap.toJson.compactPrint

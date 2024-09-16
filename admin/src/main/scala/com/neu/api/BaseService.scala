@@ -19,10 +19,10 @@ class BaseService() extends Directives with LazyLogging {
   val timeOutStatus              = "Status: 408"
   val authenticationFailedStatus = "Status: 401"
 
-  private val blocked = "Temporarily blocked because of too many login failures"
+  private val blocked              = "Temporarily blocked because of too many login failures"
   private val authSSODisabledError =
     "Authentication using OpenShift's or Rancher's RBAC was disabled!"
-  private val passwordExpired = "Password expired"
+  private val passwordExpired      = "Password expired"
 
   protected def onExpiredOrInternalError(e: Throwable) = {
     logger.warn(e.getMessage)
@@ -39,9 +39,11 @@ class BaseService() extends Directives with LazyLogging {
     val sw = new StringWriter
     e.printStackTrace(new PrintWriter(sw))
     logger.warn(sw.toString)
-    if (e.getMessage.contains(timeOutStatus) || e.getMessage.contains(
-          authenticationFailedStatus
-        )) {
+    if (
+      e.getMessage.contains(timeOutStatus) || e.getMessage.contains(
+        authenticationFailedStatus
+      )
+    ) {
       (StatusCodes.RequestTimeout, "Session expired!")
     } else {
       (StatusCodes.InternalServerError, "Internal server error")
@@ -63,11 +65,9 @@ class BaseService() extends Directives with LazyLogging {
 
   protected def setBaseUrl(tokenId: String, transactionId: String): Unit = {
     val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
-    val baseUrl = cachedBaseUrl.fold(
+    val baseUrl       = cachedBaseUrl.fold(
       baseClusterUri(tokenId)
-    )(
-      cachedBaseUrl => cachedBaseUrl
-    )
+    )(cachedBaseUrl => cachedBaseUrl)
     AuthenticationManager.setBaseUrl(tokenId, baseUrl)
     logger.info("test baseUrl: {}", baseUrl)
     logger.info("Transaction ID(Post): {}", transactionId)

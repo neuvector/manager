@@ -55,29 +55,27 @@ class Proc(args: String*)(env: Env) extends Iterable[String] {
    */
   def input(lines: String*): Proc = {
     startProc()
-    try {
-      for (s <- lines) {
+    try
+      for (s <- lines)
         inputWriter.write(s)
-      }
-    } finally {
+    finally
       inputWriter.close()
-    }
     this
   }
 
   /**
-   * Wait for process to finish and return its exit code.
-   * If process has not been started, it will be started and then waited.
+   * Wait for process to finish and return its exit code. If process has not been started, it will
+   * be started and then waited.
    */
   def waitFor(): Int = {
     if (proc == null) {
       startProc()
     }
-    try {
+    try
       if (inputWriter != null) {
         inputWriter.close()
       }
-    } finally {}
+    finally {}
     proc.waitFor()
   }
 
@@ -87,8 +85,8 @@ class Proc(args: String*)(env: Env) extends Iterable[String] {
   def bg(): Unit = this.startProc()
 
   /**
-   * Destroy the process and return its exit value.
-   * If process has not been started, an IllegalStateException is thrown.
+   * Destroy the process and return its exit value. If process has not been started, an
+   * IllegalStateException is thrown.
    */
   def destroy(): Int = proc match {
     case null => throw new IllegalStateException("Process has not started")

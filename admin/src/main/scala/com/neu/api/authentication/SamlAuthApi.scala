@@ -54,7 +54,7 @@ class SamlAuthApi(
                   authProcessor.login(ip, host, ctx)
                 }
               }
-            case None =>
+            case None       =>
               complete(StatusCodes.BadRequest, "Host header is missing")
           }
         }
@@ -66,13 +66,11 @@ class SamlAuthApi(
         redirect(rootPath, StatusCodes.Found)
       } ~
       headerValueByName("Token") { tokenId =>
-        {
-          (get & path(samlslo)) {
-            extractClientIP { _ =>
-              optionalHeaderValueByName("Host") { host =>
-                Utils.respondWithWebServerHeaders() {
-                  authProcessor.logout(host, tokenId)
-                }
+        (get & path(samlslo)) {
+          extractClientIP { _ =>
+            optionalHeaderValueByName("Host") { host =>
+              Utils.respondWithWebServerHeaders() {
+                authProcessor.logout(host, tokenId)
               }
             }
           }

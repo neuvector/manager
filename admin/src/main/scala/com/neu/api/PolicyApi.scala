@@ -239,7 +239,7 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
                           logger.info("Getting policy")
                           val ruleRes = RestClient.requestWithHeaderDecode(url, GET, "", tokenId)
                           ruleStr = Await.result(ruleRes, RestClient.waitingLimit.seconds)
-                          val json = parse(ruleStr)
+                          val json    = parse(ruleStr)
                           elements = (json \ "rules").children
                           if (start.isDefined && start.get.toInt == 0) {
                             paginationCacheManager[List[org.json4s.JsonAST.JValue]]
@@ -253,13 +253,13 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
                               .getPagedData(s"$cacheKey-network-rule")
                               .getOrElse(List[org.json4s.JsonAST.JValue]())
                           }
-                          val output =
+                          val output     =
                             elements.slice(start.get.toInt, start.get.toInt + limit.get.toInt)
                           if (output.length < limit.get.toInt) {
                             paginationCacheManager[List[org.json4s.JsonAST.JValue]]
                               .removePagedData(s"$cacheKey-network-rule")
                           }
-                          val pagedRes = compact(render(JArray(output)))
+                          val pagedRes   = compact(render(JArray(output)))
                           val cachedData = paginationCacheManager[List[org.json4s.JsonAST.JValue]]
                             .getPagedData(s"$cacheKey-network-rule")
                             .getOrElse(List[org.json4s.JsonAST.JValue]())
@@ -277,9 +277,11 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
                           logger.warn(e.getMessage)
                           paginationCacheManager[List[org.json4s.JsonAST.JValue]]
                             .removePagedData(s"$cacheKey-network-rule")
-                          if (e.getMessage.contains("Status: 401") || e.getMessage.contains(
-                                "Status: 403"
-                              )) {
+                          if (
+                            e.getMessage.contains("Status: 401") || e.getMessage.contains(
+                              "Status: 403"
+                            )
+                          ) {
                             (StatusCodes.Unauthorized, "Authentication failed!")
                           } else {
                             (StatusCodes.InternalServerError, "Controller unavailable!")
@@ -421,7 +423,7 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
                       )
                     val groups =
                       jsonToGroups(Await.result(result, RestClient.waitingLimit.seconds)).groups
-                    val nodes = groups.map(groupToNode)
+                    val nodes  = groups.map(groupToNode)
 
                     val policyStr =
                       RestClient.requestWithHeaderDecode(
@@ -430,9 +432,9 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
                         "",
                         tokenId
                       )
-                    val rules =
+                    val rules     =
                       jsonToPolicy(Await.result(policyStr, RestClient.waitingLimit.seconds)).rules
-                    val edges = rules.zipWithIndex.map { case (rule, i) => ruleToEdge(rule, i) }
+                    val edges     = rules.zipWithIndex.map { case (rule, i) => ruleToEdge(rule, i) }
 
                     logger.info("Policy graph nodes size {}", nodes.length)
                     NetworkGraph(nodes, edges)
@@ -497,9 +499,11 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
                       )
                     } else {
                       val url =
-                        s"${baseClusterUri(tokenId)}/scan/workload/${id.get}${if (show.isDefined)
-                          s"?show=${show.get}"
-                        else ""}"
+                        s"${baseClusterUri(tokenId)}/scan/workload/${id.get}${
+                            if (show.isDefined)
+                              s"?show=${show.get}"
+                            else ""
+                          }"
                       logger.info("Getting scan workload details, URL: {}", url)
                       RestClient.httpRequestWithHeader(url, GET, "", tokenId)
                     }
@@ -538,9 +542,11 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
                       )
                     } else {
                       val url =
-                        s"${baseClusterUri(tokenId)}/scan/host/${id.get}${if (show.isDefined)
-                          s"?show=${show.get}"
-                        else ""}"
+                        s"${baseClusterUri(tokenId)}/scan/host/${id.get}${
+                            if (show.isDefined)
+                              s"?show=${show.get}"
+                            else ""
+                          }"
                       logger.info("Getting single node scan summary, URL: {}", url)
                       RestClient.httpRequestWithHeader(url, GET, "", tokenId)
                     }
@@ -570,7 +576,7 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     platform match {
-                      case None =>
+                      case None    =>
                         logger.info("Getting platform scan summary")
                         RestClient.httpRequestWithHeader(
                           s"${baseClusterUri(tokenId)}/scan/platform",
@@ -580,9 +586,11 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
                         )
                       case Some(_) =>
                         val url =
-                          s"${baseClusterUri(tokenId)}/scan/platform/platform${if (show.isDefined)
-                            s"?show=${show.get}"
-                          else ""}"
+                          s"${baseClusterUri(tokenId)}/scan/platform/platform${
+                              if (show.isDefined)
+                                s"?show=${show.get}"
+                              else ""
+                            }"
                         logger.info("Getting platform scan result, URL: {}", url)
                         RestClient.httpRequestWithHeader(url, GET, "", tokenId)
                     }
@@ -730,7 +738,7 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
                       complete {
                         try {
                           val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
-                          val baseUrlV2 = cachedBaseUrl.getOrElse(
+                          val baseUrlV2     = cachedBaseUrl.getOrElse(
                             baseClusterUriV2(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
                           )
                           AuthenticationManager.setBaseUrl(tokenId, baseUrlV2)
@@ -873,9 +881,11 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
                     Utils.respondWithWebServerHeaders() {
                       complete {
                         val url =
-                          s"${baseClusterUri(tokenId)}/$scanRegistryPath/$name/image/$imageId${if (show.isDefined)
-                            s"?show=${show.get}"
-                          else ""}"
+                          s"${baseClusterUri(tokenId)}/$scanRegistryPath/$name/image/$imageId${
+                              if (show.isDefined)
+                                s"?show=${show.get}"
+                              else ""
+                            }"
                         logger.info(
                           "Getting scan report for {} on {}, with URL {}",
                           name,
@@ -915,9 +925,11 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
                     Utils.respondWithWebServerHeaders() {
                       complete {
                         val url =
-                          s"${baseClusterUri(tokenId)}/$scanRegistryPath/$name/layers/$imageId${if (show.isDefined)
-                            s"?show=$show"
-                          else ""}"
+                          s"${baseClusterUri(tokenId)}/$scanRegistryPath/$name/layers/$imageId${
+                              if (show.isDefined)
+                                s"?show=$show"
+                              else ""
+                            }"
                         logger.info(
                           "Getting layer scan report for {} on {}, URL: {}",
                           name,
@@ -1117,20 +1129,18 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
           path("matching-test") {
             post {
               entity(as[String]) { formData =>
-                {
-                  Utils.respondWithWebServerHeaders() {
-                    complete {
-                      val lines: Array[String] = formData.split("\n")
-                      val contentLines         = lines.slice(4, lines.length - 1)
-                      val bodyData             = contentLines.mkString("\n")
-                      logger.info("Matching test")
-                      RestClient.httpRequestWithHeader(
-                        s"${baseClusterUri(tokenId)}/assess/admission/rule",
-                        POST,
-                        bodyData,
-                        tokenId
-                      )
-                    }
+                Utils.respondWithWebServerHeaders() {
+                  complete {
+                    val lines: Array[String] = formData.split("\n")
+                    val contentLines         = lines.slice(4, lines.length - 1)
+                    val bodyData             = contentLines.mkString("\n")
+                    logger.info("Matching test")
+                    RestClient.httpRequestWithHeader(
+                      s"${baseClusterUri(tokenId)}/assess/admission/rule",
+                      POST,
+                      bodyData,
+                      tokenId
+                    )
                   }
                 }
               }
@@ -1160,11 +1170,9 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
                   complete {
                     try {
                       val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
-                      val baseUrl = cachedBaseUrl.fold {
+                      val baseUrl       = cachedBaseUrl.fold {
                         baseClusterUri(tokenId)
-                      }(
-                        cachedBaseUrl => cachedBaseUrl
-                      )
+                      }(cachedBaseUrl => cachedBaseUrl)
                       AuthenticationManager.setBaseUrl(tokenId, baseUrl)
                       logger.info("test baseUrl: {}", baseUrl)
                       logger.info("Transaction ID(Post): {}", transactionId)
@@ -1191,7 +1199,7 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     try {
-                      val baseUrl = baseClusterUri(tokenId)
+                      val baseUrl              = baseClusterUri(tokenId)
                       AuthenticationManager.setBaseUrl(tokenId, baseUrl)
                       logger.info("test baseUrl: {}", baseUrl)
                       logger.info("No Transaction ID(Post)")

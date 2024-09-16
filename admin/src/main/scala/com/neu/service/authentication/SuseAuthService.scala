@@ -5,20 +5,20 @@ import com.neu.client.RestClient
 import com.neu.client.RestClient._
 import com.neu.core.AuthenticationManager
 import com.neu.model.AuthTokenJsonProtocol._
-import com.neu.model._
+import com.neu.model.*
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.http.scaladsl.model._
 import org.apache.pekko.http.scaladsl.server.{ RequestContext, Route }
 import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshal
-import spray.json._
+import spray.json.*
 
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.concurrent.{ Await, ExecutionContext, Future, TimeoutException }
 import scala.util.control.NonFatal
 import scala.util.{ Failure, Success }
 
-class SuseAuthService()(
-  implicit system: ActorSystem,
+class SuseAuthService()(implicit
+  system: ActorSystem,
   ec: ExecutionContext
 ) extends AuthService {
 
@@ -41,11 +41,11 @@ class SuseAuthService()(
     }
 
   override def login(ip: RemoteAddress, host: String, ctx: RequestContext): Route = {
-    val suseCookieOpt = ctx.request.cookies.find(_.name == "session")
+    val suseCookieOpt              = ctx.request.cookies.find(_.name == "session")
     val bodyFuture: Future[String] = ctx.request.entity match {
       case HttpEntity.Strict(_, data) =>
         Future.successful(data.utf8String)
-      case _ =>
+      case _                          =>
         Unmarshal(ctx.request.entity).to[String]
     }
 
@@ -56,7 +56,7 @@ class SuseAuthService()(
           suseCookieOpt match {
             case Some(suseCookie) =>
               performLogin(ip, password, suseCookie.value)
-            case None =>
+            case None             =>
               performLogin(ip, password, "")
           }
         } catch {
@@ -74,25 +74,31 @@ class SuseAuthService()(
       logger.info(s"post path auth")
       processSuseLoginRequest(ip, userPwd, suseCookieValue)
     } catch {
-      case NonFatal(e) =>
+      case NonFatal(e)         =>
         logger.warn(e.getMessage)
-        if (e.getMessage.contains("Status: 400") || e.getMessage.contains("Status: 401") || e.getMessage
-              .contains("Status: 403")) {
+        if (
+          e.getMessage
+            .contains("Status: 400") || e.getMessage.contains("Status: 401") || e.getMessage
+            .contains("Status: 403")
+        ) {
           onUnauthorized(e)
         } else if (e.getMessage.contains("Status: 410")) {
           complete((StatusCodes.Gone, "Please logout and then login from Rancher again!"))
         } else {
           logger.warn(e.getClass.toString)
           reloadCtrlIp()
-          try {
+          try
             processSuseLoginRequest(ip, userPwd, suseCookieValue)
-          } catch {
-            case NonFatal(`e`) =>
+          catch {
+            case NonFatal(`e`)       =>
               logger.warn(e.getMessage)
-              if (e.getMessage.contains("Status: 400") || e.getMessage.contains("Status: 401") || e.getMessage
-                    .contains(
-                      "Status: 403"
-                    )) {
+              if (
+                e.getMessage
+                  .contains("Status: 400") || e.getMessage.contains("Status: 401") || e.getMessage
+                  .contains(
+                    "Status: 403"
+                  )
+              ) {
                 onUnauthorized(e)
               } else if (e.getMessage.contains("Status: 410")) {
                 complete(
@@ -137,18 +143,18 @@ class SuseAuthService()(
         logger.info("Getting self ..")
         val suseCookie =
           if (isRancherSSOUrl.isDefined && isRancherSSOUrl.get == "true") suseCookieValue else ""
-        val result =
+        val result     =
           RestClient.requestWithHeaderDecode(
             s"$baseUri/selfuser",
             HttpMethods.GET,
             "",
             tokenId
           )
-        val selfWrap =
+        val selfWrap   =
           jsonToSelfWrap(Await.result(result, RestClient.waitingLimit.seconds))
-        val user = selfWrap.user
+        val user       = selfWrap.user
         logger.info("user: {}", user)
-        val token1 = TokenWrap(
+        val token1     = TokenWrap(
           selfWrap.password_days_until_expire,
           None,
           Some(
@@ -171,7 +177,7 @@ class SuseAuthService()(
             )
           )
         )
-        val authToken =
+        val authToken  =
           AuthenticationManager.parseToken(tokenWrapToJson(token1), suseCookie.nonEmpty)
         authToken
       } catch {
@@ -186,7 +192,7 @@ class SuseAuthService()(
     suseCookieValue: String
   ): Route = {
     val suseCookie = if (userPwd.isRancherSSOUrl) suseCookieValue else ""
-    val result =
+    val result     =
       RestClient.httpRequestWithTokenHeader(
         s"$baseUri/$auth",
         HttpMethods.POST,
@@ -195,8 +201,8 @@ class SuseAuthService()(
         ),
         suseCookie
       )
-    val response  = Await.result(result, RestClient.waitingLimit.seconds)
-    var authToken = AuthenticationManager.parseToken(response)
+    val response   = Await.result(result, RestClient.waitingLimit.seconds)
+    var authToken  = AuthenticationManager.parseToken(response)
     authToken = UserTokenNew(
       authToken.token,
       authToken.emailHash,
@@ -209,7 +215,7 @@ class SuseAuthService()(
       case Some(token) =>
         AuthenticationManager.suseTokenMap += (token.token -> suseCookie)
         logger.info("login with SUSE cookie")
-      case None =>
+      case None        =>
     }
 
     complete(authToken)

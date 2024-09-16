@@ -1,15 +1,20 @@
 package com.neu.model
 
-import spray.json.{ DefaultJsonProtocol, RootJsonFormat, _ }
+import spray.json.*
 
 /**
  * Process profile entry
  *
- * @param name the name of the process
- * @param path the path of the process
- * @param user the user who run it
- * @param uid the uid
- * @param action the action
+ * @param name
+ *   the name of the process
+ * @param path
+ *   the path of the process
+ * @param user
+ *   the user who run it
+ * @param uid
+ *   the uid
+ * @param action
+ *   the action
  */
 case class ProcessProfileEntry(
   name: String,
@@ -31,10 +36,10 @@ case class ProcessProfileConfig(
 case class ProcessProfileConfigData(process_profile_config: ProcessProfileConfig)
 
 object ProcessProfileJsonProtocol extends DefaultJsonProtocol {
-  implicit val processProfileEntryFormat: RootJsonFormat[ProcessProfileEntry] = jsonFormat5(
+  implicit val processProfileEntryFormat: RootJsonFormat[ProcessProfileEntry]           = jsonFormat5(
     ProcessProfileEntry
   )
-  implicit val processProfileFormat: RootJsonFormat[ProcessProfileConfig] = jsonFormat6(
+  implicit val processProfileFormat: RootJsonFormat[ProcessProfileConfig]               = jsonFormat6(
     ProcessProfileConfig
   )
   implicit val ProcessProfileConfigDataFormat: RootJsonFormat[ProcessProfileConfigData] =

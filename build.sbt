@@ -1,11 +1,11 @@
-import com.scalapenos.sbt.prompt.SbtPrompt.autoImport._
+import com.scalapenos.sbt.prompt.SbtPrompt.autoImport.*
 import sbt.Keys.watchSources
-import ExternalDependencies._
-import sbt.Keys._
-import sbt._
+import ExternalDependencies.*
+import sbt.Keys.*
+import sbt.*
 
 ThisBuild / version := "1.0"
-ThisBuild / scalaVersion := "2.13.14"
+ThisBuild / scalaVersion := "3.3.0"
 ThisBuild / organization := "com.neuvector"
 ThisBuild / scalafmtOnCompile := true
 ThisBuild / Test / fork := true
@@ -26,7 +26,7 @@ lazy val buildSettings = Seq(
       "-unchecked",            // warn about unchecked type parameters
       "-feature",              // warn about misused language features
       "-language:higherKinds", // allow higher kinded types without `import scala.language.higherKinds`
-      "-Xlint",                // enable handy linter warnings
+      "-Xlint"                 // enable handy linter warnings
     ),
   Compile / console / scalacOptions --= Seq("-Ywarn-unused", "-Ywarn-unused-import")
 )
@@ -39,8 +39,8 @@ lazy val commonDependencies = Seq(
   "com.sun.xml.ws"     % "jaxws-ri"           % "4.0.2",
   "javax.xml.soap"     % "javax.xml.soap-api" % "1.4.0",
   "org.json4s"         %% "json4s-native"     % "4.0.7",
-  "org.bouncycastle" % "bcprov-jdk18on" % "1.78.1",
-  "org.bouncycastle" % "bcpkix-jdk18on" % "1.78.1",
+  "org.bouncycastle"   % "bcprov-jdk18on"     % "1.78.1",
+  "org.bouncycastle"   % "bcpkix-jdk18on"     % "1.78.1",
   pekkoActor,
   pekkoHttp,
   pekkoJson,
@@ -54,18 +54,18 @@ lazy val commonDependencies = Seq(
   ehCache,
   guava,
   // https://mvnrepository.com/artifact/org.apache.commons/commons-csv
-  "org.apache.commons" % "commons-csv" % "1.9.0"
+  "org.apache.commons" % "commons-csv" % "1.10.0"
 )
 
 lazy val buil1dSettings = Defaults.coreDefaultSettings ++ Seq(
     scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-target:jvm-1.7"),
     libraryDependencies := Seq(scalaTest),
-    libraryDependencies += "javax.activation"   % "activation"         % "1.1",
-    libraryDependencies += "org.glassfish.jaxb" % "jaxb-runtime"       % "2.3.0",
-    libraryDependencies += "javax.xml.bind"     % "jaxb-api"           % "2.3.0",
-    libraryDependencies += "com.sun.xml.ws"     % "jaxws-ri"           % "2.3.3",
+    libraryDependencies += "javax.activation"   % "activation"         % "1.1.1",
+    libraryDependencies += "org.glassfish.jaxb" % "jaxb-runtime"       % "4.0.5",
+    libraryDependencies += "javax.xml.bind"     % "jaxb-api"           % "2.3.1",
+    libraryDependencies += "com.sun.xml.ws"     % "jaxws-ri"           % "4.0.2",
     libraryDependencies += "javax.xml.soap"     % "javax.xml.soap-api" % "1.4.0",
-    libraryDependencies += "org.json4s"         %% "json4s-native"     % "3.6.10"
+    libraryDependencies += "org.json4s"         %% "json4s-native"     % "4.0.7"
   )
 
 lazy val manager = (project in file("."))
@@ -90,7 +90,7 @@ lazy val admin = (project in file("admin"))
   .settings(
     name := "admin",
     buildSettings,
-    promptTheme := ScalapenosTheme,
+    promptTheme := ScalapenosTheme
   )
 
 resolvers ++= Seq(
@@ -107,8 +107,6 @@ resolvers ++= Seq(
     .withAllowInsecureProtocol(true),
   ("geomajas repo" at "http://maven.geomajas.org").withAllowInsecureProtocol(true)
 )
-
-addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3")
 
 Test / scalacOptions ++= Seq("-Yrangepos")
 

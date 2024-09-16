@@ -5,7 +5,7 @@ import java.io.File
 /**
  * Environment variables for running script or command.
  */
-class Env(var vars: Map[String, String] = Map(), var pwd: String = System getProperty "user.dir") {
+class Env(var vars: Map[String, String] = Map(), var pwd: String = System.getProperty("user.dir")) {
   implicit var self: Env = this
 
   override def toString: String = pwd + vars.toString
@@ -16,11 +16,10 @@ class Env(var vars: Map[String, String] = Map(), var pwd: String = System getPro
   def cd(newPwd: String)(fun: => Unit): Unit = {
     val oldPwd = pwd
     pwd = newPwd
-    try {
+    try
       fun
-    } finally {
+    finally
       pwd = oldPwd
-    }
   }
 
   /**
@@ -29,16 +28,15 @@ class Env(var vars: Map[String, String] = Map(), var pwd: String = System getPro
   def env(extra: Map[String, String])(fun: => Unit): Unit = {
     val oldVars = vars
     vars ++= extra
-    try {
+    try
       fun
-    } finally {
+    finally
       vars = oldVars
-    }
   }
 
   def applyTo(pb: ProcessBuilder): Unit = {
     val env = pb.environment()
-    vars foreach { kv =>
+    vars.foreach { kv =>
       env.put(kv._1, kv._2)
     }
     pb.directory(new File(pwd))

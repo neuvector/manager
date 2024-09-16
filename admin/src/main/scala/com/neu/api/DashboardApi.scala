@@ -17,15 +17,17 @@ import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
 import scala.concurrent.duration._
 import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.util.control.NonFatal
+import scala.reflect.ClassTag
 
 /**
  * Rest service for dashboard
- *
  */
 class DashboardApi()(implicit executionContext: ExecutionContext)
     extends Directives
     with DefaultJsonFormats
     with LazyLogging {
+
+  given workloadChildrenClassTag: ClassTag[WorkloadChildren] = ClassTag(classOf[WorkloadChildren])
 
   val topLimit                                      = 5
   private final val DISCOVER                        = "discover"
@@ -60,94 +62,151 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
   private final val DASHBOARD                       = "dashboard"
 
   val route: Route = headerValueByName("Token") { tokenId =>
-    {
-      val timeOutStatus              = "Status: 408"
-      val authenticationFailedStatus = "Status: 401"
-      val serverErrorStatus          = "Status: 503"
-      path("multi-cluster-summary") {
+    val timeOutStatus              = "Status: 408"
+    val authenticationFailedStatus = "Status: 401"
+    val serverErrorStatus          = "Status: 503"
+    path("multi-cluster-summary") {
+      get {
+        parameters(Symbol("clusterId").?) { clusterId =>
+          Utils.respondWithWebServerHeaders() {
+            complete {
+              try {
+                val baseUrl                                          =
+                  if (clusterId.isDefined)
+                    s"${baseClusterUri(tokenId)}/fed/cluster/${clusterId.get}/v1"
+                  else s"${baseClusterUri(tokenId)}"
+                val summaryOwner                                     = clusterId.fold("master") { clusterId =>
+                  clusterId
+                }
+                val summaryRes                                       = RestClient.requestWithHeaderDecode(
+                  s"$baseUrl/system/summary",
+                  HttpMethods.GET,
+                  "",
+                  tokenId
+                )
+                val internalSystemRes                                = RestClient.requestWithHeaderDecode(
+                  s"$baseUrl/internal/system",
+                  HttpMethods.GET,
+                  "",
+                  tokenId
+                )
+                val multiClusterSummaryRes: Future[(String, String)] =
+                  for {
+                    summary        <- summaryRes.recoverWith { case _: Exception =>
+                                        val cachedSummaryJsonStr =
+                                          JsonStringCacheManager.getJson(summaryOwner)
+                                        cachedSummaryJsonStr.fold(
+                                          Future {
+                                            "error"
+                                          }
+                                        ) { cachedSummaryJsonStr =>
+                                          Future {
+                                            cachedSummaryJsonStr
+                                          }
+                                        }
+                                      }
+                    internalSystem <- internalSystemRes.recoverWith { case _: Exception =>
+                                        Future {
+                                          internalSystemDataToJson(
+                                            InternalSystemData(
+                                              Metrics(
+                                                "",
+                                                "",
+                                                "",
+                                                "",
+                                                0,
+                                                0,
+                                                RiskScoreMetricsWL(0, 0, 0, 0, 0, 0, 0, 0),
+                                                RiskScoreMetricsGroup(0, 0, 0, 0, 0, 0, 0),
+                                                RiskScoreMetricsCVE(0, 0, 0, 0, 0)
+                                              ),
+                                              Array(),
+                                              Array(),
+                                              Some(true)
+                                            )
+                                          )
+                                        }
+                                      }
+                  } yield (
+                    summary,
+                    internalSystem
+                  )
+
+                val multiClusterSummary: (String, String) =
+                  Await.result(multiClusterSummaryRes, RestClient.waitingLimit.seconds)
+                val summary                               = multiClusterSummary._1
+
+                JsonStringCacheManager.saveJson(summaryOwner, summary)
+                val internalSystem = jsonToInternalSystemData(multiClusterSummary._2)
+
+                MultiClusterSummary(
+                  getScore2(
+                    internalSystem.metrics,
+                    None,
+                    internalSystem.hasError.getOrElse(false),
+                    true
+                  ),
+                  summary
+                )
+              } catch {
+                case NonFatal(e) =>
+                  RestClient.handleError(
+                    timeOutStatus,
+                    authenticationFailedStatus,
+                    serverErrorStatus,
+                    e
+                  )
+              }
+            }
+          }
+        }
+      }
+    } ~
+    pathPrefix("dashboard") {
+      path("alerts") {
         get {
-          parameters(Symbol("clusterId").?) { clusterId =>
+          Utils.respondWithWebServerHeaders() {
+            logger.info(s"Loading System Alerts information ...")
+            complete {
+              RestClient.httpRequestWithHeader(
+                s"${baseClusterUri(tokenId)}/system/alerts",
+                HttpMethods.GET,
+                "",
+                tokenId,
+                None,
+                None,
+                Some("globalAlerts")
+              )
+            }
+          }
+        }
+      } ~
+      path("scores2") {
+        get {
+          parameters(Symbol("isGlobalUser"), Symbol("domain").?) { (isGlobalUser, domain) =>
             Utils.respondWithWebServerHeaders() {
               complete {
                 try {
-                  val baseUrl =
-                    if (clusterId.isDefined)
-                      s"${baseClusterUri(tokenId)}/fed/cluster/${clusterId.get}/v1"
-                    else s"${baseClusterUri(tokenId)}"
-                  val summaryOwner = clusterId.fold("master") { clusterId =>
-                    clusterId
+                  val url                   = domain.fold(s"${baseClusterUri(tokenId)}/internal/system") { domain =>
+                    if (domain == "") s"${baseClusterUri(tokenId)}/internal/system"
+                    else s"${baseClusterUri(tokenId)}/internal/system?f_domain=$domain"
                   }
-                  val summaryRes = RestClient.requestWithHeaderDecode(
-                    s"$baseUrl/system/summary",
+                  logger.info("Url: {}", url)
+                  val internalSystemDataRes = RestClient.requestWithHeaderDecode(
+                    url,
                     HttpMethods.GET,
                     "",
                     tokenId
                   )
-                  val internalSystemRes = RestClient.requestWithHeaderDecode(
-                    s"$baseUrl/internal/system",
-                    HttpMethods.GET,
-                    "",
-                    tokenId
+                  val internalSystemData    = jsonToInternalSystemData(
+                    Await.result(internalSystemDataRes, RestClient.waitingLimit.seconds)
                   )
-                  val multiClusterSummaryRes: Future[(String, String)] =
-                    for {
-                      summary <- summaryRes.recoverWith {
-                                  case _: Exception =>
-                                    val cachedSummaryJsonStr =
-                                      JsonStringCacheManager.getJson(summaryOwner)
-                                    cachedSummaryJsonStr.fold(
-                                      Future {
-                                        "error"
-                                      }
-                                    ) { cachedSummaryJsonStr =>
-                                      Future {
-                                        cachedSummaryJsonStr
-                                      }
-                                    }
-                                }
-                      internalSystem <- internalSystemRes.recoverWith {
-                                         case _: Exception =>
-                                           Future {
-                                             internalSystemDataToJson(
-                                               InternalSystemData(
-                                                 Metrics(
-                                                   "",
-                                                   "",
-                                                   "",
-                                                   "",
-                                                   0,
-                                                   0,
-                                                   RiskScoreMetricsWL(0, 0, 0, 0, 0, 0, 0, 0),
-                                                   RiskScoreMetricsGroup(0, 0, 0, 0, 0, 0, 0),
-                                                   RiskScoreMetricsCVE(0, 0, 0, 0, 0)
-                                                 ),
-                                                 Array(),
-                                                 Array(),
-                                                 Some(true)
-                                               )
-                                             )
-                                           }
-                                       }
-                    } yield (
-                      summary,
-                      internalSystem
-                    )
-
-                  val multiClusterSummary: (String, String) =
-                    Await.result(multiClusterSummaryRes, RestClient.waitingLimit.seconds)
-                  val summary = multiClusterSummary._1
-
-                  JsonStringCacheManager.saveJson(summaryOwner, summary)
-                  val internalSystem = jsonToInternalSystemData(multiClusterSummary._2)
-
-                  MultiClusterSummary(
-                    getScore2(
-                      internalSystem.metrics,
-                      None,
-                      internalSystem.hasError.getOrElse(false),
-                      true
-                    ),
-                    summary
+                  logger.info("internalSystemData: {}", internalSystemData)
+                  ScoreOutput2(
+                    getScore2(internalSystemData.metrics, None, false, isGlobalUser == "true"),
+                    internalSystemData.metrics,
+                    internalSystemData.ingress,
+                    internalSystemData.egress
                   )
                 } catch {
                   case NonFatal(e) =>
@@ -161,144 +220,422 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
               }
             }
           }
+        } ~
+        patch {
+          parameters(Symbol("isGlobalUser"), Symbol("totalRunningPods")) {
+            (isGlobalUser, totalRunningPods) =>
+              entity(as[Metrics]) { metrics =>
+                Utils.respondWithWebServerHeaders() {
+                  complete {
+                    try
+                      getScore2(
+                        metrics,
+                        Some(totalRunningPods.toInt),
+                        false,
+                        isGlobalUser == "true"
+                      )
+                    catch {
+                      case NonFatal(e) =>
+                        RestClient.handleError(
+                          timeOutStatus,
+                          authenticationFailedStatus,
+                          serverErrorStatus,
+                          e
+                        )
+                    }
+                  }
+                }
+              }
+          }
         }
       } ~
-      pathPrefix("dashboard") {
-        path("alerts") {
-          get {
-            Utils.respondWithWebServerHeaders() {
-              logger.info(s"Loading System Alerts information ...")
-              complete {
-                RestClient.httpRequestWithHeader(
-                  s"${baseClusterUri(tokenId)}/system/alerts",
+      path("details") {
+        parameters(Symbol("isGlobalUser").?, Symbol("domain").?) { (_, domain) =>
+          Utils.respondWithWebServerHeaders() {
+            complete {
+              try {
+                val domainVal     = domain.getOrElse("")
+                val query4Domain1 =
+                  if (domainVal.isEmpty) ""
+                  else s"?f_domain=${UrlEscapers.urlFragmentEscaper().escape(domainVal)}"
+                val query4Domain2 =
+                  if (domainVal.isEmpty) ""
+                  else s"&f_domain=${UrlEscapers.urlFragmentEscaper().escape(domainVal)}"
+                val startTime     = new DateTime()
+                logger.info("dashboard scores Start: {}", startTime)
+
+                /*========================================================================================
+                    Pull data from Controller's APIs
+                 ========================================================================================*/
+                val vulNodesRes       = RestClient.requestWithHeaderDecode(
+                  s"${baseClusterUri(tokenId)}/host?start=0&limit=0$query4Domain2",
                   HttpMethods.GET,
                   "",
                   tokenId,
-                  None,
-                  None,
-                  Some("globalAlerts")
+                  DASHBOARD
                 )
+                val servicesRes       = RestClient.requestWithHeaderDecode(
+                  s"${baseClusterUri(tokenId)}/group?view=pod&scope=local$query4Domain2",
+                  HttpMethods.GET,
+                  "",
+                  tokenId,
+                  DASHBOARD
+                )
+                val policiesRes       = RestClient.requestWithHeaderDecode(
+                  s"${baseClusterUri(tokenId)}/policy/rule$query4Domain1",
+                  HttpMethods.GET,
+                  "",
+                  tokenId,
+                  DASHBOARD
+                )
+                val containersRes     = RestClient.requestWithHeaderDecode(
+                  s"${baseClusterUri(tokenId)}/workload?view=pod",
+                  HttpMethods.GET,
+                  "",
+                  tokenId,
+                  DASHBOARD
+                )
+                val conversationsRes  = RestClient.requestWithHeaderDecode(
+                  s"${baseClusterUri(tokenId)}/conversation$query4Domain1",
+                  HttpMethods.GET,
+                  "",
+                  tokenId,
+                  DASHBOARD
+                )
+                val autoScanConfigRes = RestClient.requestWithHeaderDecode(
+                  s"${baseClusterUri(tokenId)}/scan/config",
+                  HttpMethods.GET,
+                  "",
+                  tokenId,
+                  DASHBOARD
+                )
+
+                /*========================================================================================
+                    Asynchronously get json response from APIs
+                 ========================================================================================*/
+                val dashboardRes: Future[
+                  (
+                    String,
+                    String,
+                    String,
+                    String,
+                    String,
+                    String
+                  )
+                ] =
+                  for {
+                    vulNodes       <- vulNodesRes.recoverWith { case e: Exception =>
+                                        handleScanHostException(e)
+                                      }
+                    services       <- servicesRes.recoverWith { case e: Exception =>
+                                        handleServiceException(e)
+                                      }
+                    policies       <- policiesRes.recoverWith { case e: Exception =>
+                                        handlePolicyException(e)
+                                      }
+                    conversations  <- conversationsRes.recoverWith { case e: Exception =>
+                                        handleConversationException(e)
+                                      }
+                    containers     <- containersRes.recoverWith { case e: Exception =>
+                                        handleWorkloadException(e)
+                                      }
+                    autoScanConfig <- autoScanConfigRes.recoverWith { case e: Exception =>
+                                        handleAutoScanConfigException(e)
+                                      }
+                  } yield (
+                    vulNodes,
+                    services,
+                    policies,
+                    conversations,
+                    containers,
+                    autoScanConfig
+                  )
+
+                val dashboard: (
+                  String,
+                  String,
+                  String,
+                  String,
+                  String,
+                  String
+                ) =
+                  Await.result(dashboardRes, RestClient.waitingLimit.seconds)
+
+                val endTimeAPI           = new DateTime()
+                logger.info("Dashboard scores - Multiple API call end: {}", endTimeAPI)
+                logger.info(
+                  "Dashboard scores - Multiple API call duration: {}",
+                  endTimeAPI.getMillis - startTime.getMillis
+                )
+                /*========================================================================================
+                    Parse json response into object
+                 ========================================================================================*/
+                val calculationStartTime = new DateTime()
+                logger.info("Dashboard scores - Calculation Start: {}", calculationStartTime)
+
+                val vulNodes       = jsonToVulnerableNodeEndpoint(dashboard._1)
+                val services       = jsonToServiceStatesIn(dashboard._2)
+                val policies       = jsonToApplicationsInPolicyWrap(dashboard._3)
+                val conversations  = jsonToGraphData(dashboard._4)
+                val containers     = jsonToWorkloadsWrap(dashboard._5)
+                val autoScanConfig = jsonToAutoScanConfig(dashboard._6)
+                val autoScan       =
+                  if (autoScanConfig.error.isDefined) {
+                    Left(autoScanConfig.error.get)
+                  } else {
+                    Right(getAutoScan(autoScanConfig))
+                  }
+
+                if (containers.error.isDefined) {
+                  Left(containers.error.get)
+                } else {
+                  Right(
+                    getDomains(containers)
+                  )
+                }
+
+                val policyOutput =
+                  if (policies.error.isDefined) {
+                    Left(policies.error.get)
+                  } else {
+                    Right(getPolicyOutput(policies))
+                  }
+
+                val serviceMaps =
+                  if (services.error.isDefined) {
+                    Left(services.error.get)
+                  } else {
+                    policyOutput match {
+                      case Left(x)  => Left(x)
+                      case Right(x) => Right(getServiceMaps(services, x.groupSet))
+                    }
+                  }
+
+                val runningContainers =
+                  if (containers.error.isDefined) {
+                    Left(containers.error.get)
+                  } else {
+                    serviceMaps match {
+                      case Left(x)  => Left(x)
+                      case Right(x) =>
+                        Right(
+                          if (domainVal.isEmpty)
+                            containers.workloads
+                              .filter((workload: Workload) =>
+                                workload.state != "exit" && x.serviceMap
+                                  .contains(s"nv.${workload.service}")
+                              )
+                          else
+                            containers.workloads
+                              .filter((workload: Workload) =>
+                                workload.state != "exit" && workload.domain == domainVal && x.serviceMap
+                                  .contains(s"nv.${workload.service}")
+                              )
+                        )
+                    }
+                  }
+
+                runningContainers match {
+                  case Right(x) => Right(x.length)
+                  case Left(x)  => Left(x)
+                }
+
+                val runningContainersOutput =
+                  runningContainers match {
+                    case Left(x)  => Left(x)
+                    case Right(x) =>
+                      serviceMaps match {
+                        case Left(y)  => Left(y)
+                        case Right(y) => Right(getRunningContainersOutput(x, y))
+                      }
+                  }
+
+                if (containers.error.isDefined) {
+                  Left(containers.error.get)
+                } else {
+                  serviceMaps match {
+                    case Left(_)  =>
+                    case Right(x) => Right(getVulContainerOutput(containers, domainVal, x))
+                  }
+                }
+
+                if (vulNodes.error.isDefined) {
+                  Left(vulNodes.error.get)
+                } else {
+                  Right(getVulNodeOutput(vulNodes))
+                }
+
+                val servicesOutput =
+                  serviceMaps match {
+                    case Left(x)  => Left(x)
+                    case Right(x) => Right(x.groups)
+                  }
+
+                val conversationsOutput =
+                  if (conversations.error.isDefined) {
+                    Left(conversations.error.get)
+                  } else {
+                    runningContainersOutput match {
+                      case Left(x)  => Left(x)
+                      case Right(x) =>
+                        serviceMaps match {
+                          case Left(y)  => Left(y)
+                          case Right(y) =>
+                            Right(getConversationsOutput(conversations.conversations, x, y))
+                        }
+                    }
+                  }
+
+                /*========================================================================================
+                   Construct dashboard API response
+                 ========================================================================================*/
+                val dashboardScoreDTO = DashboardScoreDTO2(
+                  serviceMaps match {
+                    case Left(x)  => Left(x)
+                    case Right(x) =>
+                      Right(getHighPriorityVulnerabilities(containers, vulNodes, domainVal, x))
+                  },
+                  runningContainers,
+                  servicesOutput,
+                  policyOutput match {
+                    case Left(x)  => Left(x)
+                    case Right(x) => Right(x.applicationsInPolicy)
+                  },
+                  conversationsOutput match {
+                    case Left(x)  => Left(x)
+                    case Right(x) => Right(x.applicationsInPolicy2)
+                  },
+                  serviceMaps match {
+                    case Left(x)  => Left(x)
+                    case Right(x) =>
+                      Right(
+                        PolicyCoverage(
+                          x.serviceUnderRulesMap.values.toArray,
+                          x.otherServiceMap.values.toArray
+                        )
+                      )
+                  },
+                  // conversationsOutput match {
+                  //   case Left(x) => Left(x)
+                  //   case Right(x) =>
+                  //     runningContainersOutput match {
+                  //       case Left(y) => Left(y)
+                  //       case Right(y) =>
+                  //         Right(
+                  //           ExposedConversations(
+                  //             x.ingressConversations,
+                  //             x.egressConversations
+                  //           )
+                  //         )
+                  //     }
+                  // },
+                  autoScan
+                )
+                logger.debug("Got {}", dashboardScoreDTO)
+                val endTime           = new DateTime()
+                logger.info("Dashbaord scores - End: {}", endTime)
+                logger.info(
+                  "Dashbaord scores - Calculation Duration: {}",
+                  endTime.getMillis - calculationStartTime.getMillis
+                )
+                logger.info(
+                  "Dashbaord scores - Duration: {}",
+                  endTime.getMillis - startTime.getMillis
+                )
+
+                dashboardScoreDTO
+              } catch {
+                case NonFatal(e) =>
+                  RestClient.handleError(
+                    timeOutStatus,
+                    authenticationFailedStatus,
+                    serverErrorStatus,
+                    e
+                  )
               }
             }
           }
-        } ~
-        path("scores2") {
-          get {
-            parameters(Symbol("isGlobalUser"), Symbol("domain").?) { (isGlobalUser, domain) =>
+        }
+      } ~
+      path("scores") {
+        patch {
+          parameters(Symbol("isGlobalUser").?) { isGlobalUser =>
+            entity(as[ScoreInput]) { scoreInput =>
               Utils.respondWithWebServerHeaders() {
                 complete {
-                  try {
-                    val url = domain.fold(s"${baseClusterUri(tokenId)}/internal/system") { domain =>
-                      if (domain == "") s"${baseClusterUri(tokenId)}/internal/system"
-                      else s"${baseClusterUri(tokenId)}/internal/system?f_domain=$domain"
-                    }
-                    logger.info("Url: {}", url)
-                    val internalSystemDataRes = RestClient.requestWithHeaderDecode(
-                      url,
-                      HttpMethods.GET,
-                      "",
-                      tokenId
-                    )
-                    val internalSystemData = jsonToInternalSystemData(
-                      Await.result(internalSystemDataRes, RestClient.waitingLimit.seconds)
-                    )
-                    logger.info("internalSystemData: {}", internalSystemData)
-                    ScoreOutput2(
-                      getScore2(internalSystemData.metrics, None, false, isGlobalUser == "true"),
-                      internalSystemData.metrics,
-                      internalSystemData.ingress,
-                      internalSystemData.egress
-                    )
-                  } catch {
+                  try
+                    getScore(scoreInput, isGlobalUser.getOrElse("true") == "true")
+                  catch {
                     case NonFatal(e) =>
-                      RestClient.handleError(
-                        timeOutStatus,
-                        authenticationFailedStatus,
-                        serverErrorStatus,
-                        e
-                      )
+                      if (
+                        e.getMessage.contains("Status: 408") || e.getMessage.contains(
+                          "Status: 401"
+                        )
+                      ) {
+                        (StatusCodes.RequestTimeout, "Session expired!")
+                      } else {
+                        (StatusCodes.InternalServerError, "Internal server error")
+                      }
                   }
                 }
               }
             }
-          } ~
-          patch {
-            parameters(Symbol("isGlobalUser"), Symbol("totalRunningPods")) {
-              (isGlobalUser, totalRunningPods) =>
-                entity(as[Metrics]) { metrics =>
-                  {
-                    Utils.respondWithWebServerHeaders() {
-                      complete {
-                        try {
-                          getScore2(
-                            metrics,
-                            Some(totalRunningPods.toInt),
-                            false,
-                            isGlobalUser == "true"
-                          )
-                        } catch {
-                          case NonFatal(e) =>
-                            RestClient.handleError(
-                              timeOutStatus,
-                              authenticationFailedStatus,
-                              serverErrorStatus,
-                              e
-                            )
-                        }
-                      }
-                    }
-                  }
-                }
-            }
           }
         } ~
-        path("details") {
-          parameters(Symbol("isGlobalUser").?, Symbol("domain").?) { (_, domain) =>
+        get {
+          parameters(Symbol("isGlobalUser").?, Symbol("domain").?) { (isGlobalUser, domain) =>
             Utils.respondWithWebServerHeaders() {
               complete {
                 try {
-                  val domainVal = domain.getOrElse("")
+                  val domainVal     = domain.getOrElse("")
                   val query4Domain1 =
                     if (domainVal.isEmpty) ""
                     else s"?f_domain=${UrlEscapers.urlFragmentEscaper().escape(domainVal)}"
                   val query4Domain2 =
                     if (domainVal.isEmpty) ""
                     else s"&f_domain=${UrlEscapers.urlFragmentEscaper().escape(domainVal)}"
-                  val startTime = new DateTime()
+                  val startTime     = new DateTime()
                   logger.info("dashboard scores Start: {}", startTime)
 
                   /*========================================================================================
-                    Pull data from Controller's APIs
-                 ========================================================================================*/
-                  val vulNodesRes = RestClient.requestWithHeaderDecode(
-                    s"${baseClusterUri(tokenId)}/host?start=0&limit=0$query4Domain2",
+                        Pull data from Controller's APIs
+                     ========================================================================================*/
+                  val vulNodesRes       = RestClient.requestWithHeaderDecode(
+                    s"${baseClusterUri(tokenId)}/host?Estart=0&limit=0$query4Domain2",
                     HttpMethods.GET,
                     "",
                     tokenId,
                     DASHBOARD
                   )
-                  val servicesRes = RestClient.requestWithHeaderDecode(
+                  val servicesRes       = RestClient.requestWithHeaderDecode(
                     s"${baseClusterUri(tokenId)}/group?view=pod&scope=local$query4Domain2",
                     HttpMethods.GET,
                     "",
                     tokenId,
                     DASHBOARD
                   )
-                  val policiesRes = RestClient.requestWithHeaderDecode(
+                  val policiesRes       = RestClient.requestWithHeaderDecode(
                     s"${baseClusterUri(tokenId)}/policy/rule$query4Domain1",
                     HttpMethods.GET,
                     "",
                     tokenId,
                     DASHBOARD
                   )
-                  val containersRes = RestClient.requestWithHeaderDecode(
+                  val containersRes     = RestClient.requestWithHeaderDecode(
                     s"${baseClusterUri(tokenId)}/workload?view=pod",
                     HttpMethods.GET,
                     "",
                     tokenId,
                     DASHBOARD
                   )
-                  val conversationsRes = RestClient.requestWithHeaderDecode(
+                  val vulPlatformsRes   = RestClient.requestWithHeaderDecode(
+                    s"${baseClusterUri(tokenId)}/scan/platform$query4Domain1",
+                    HttpMethods.GET,
+                    "",
+                    tokenId,
+                    DASHBOARD
+                  )
+                  val conversationsRes  = RestClient.requestWithHeaderDecode(
                     s"${baseClusterUri(tokenId)}/conversation$query4Domain1",
                     HttpMethods.GET,
                     "",
@@ -312,12 +649,37 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
                     tokenId,
                     DASHBOARD
                   )
+                  val systemConfigRes   = RestClient.requestWithHeaderDecode(
+                    s"${baseClusterUri(tokenId)}/system/config",
+                    HttpMethods.GET,
+                    "",
+                    tokenId,
+                    DASHBOARD
+                  )
+                  val admissionRuleRes  = RestClient.requestWithHeaderDecode(
+                    s"${baseClusterUri(tokenId)}/admission/rules",
+                    HttpMethods.GET,
+                    "",
+                    tokenId,
+                    DASHBOARD
+                  )
+                  val admissionStateRes = RestClient.requestWithHeaderDecode(
+                    s"${baseClusterUri(tokenId)}/admission/state",
+                    HttpMethods.GET,
+                    "",
+                    tokenId,
+                    DASHBOARD
+                  )
 
                   /*========================================================================================
-                    Asynchronously get json response from APIs
-                 ========================================================================================*/
+                        Asynchronously get json response from APIs
+                     ========================================================================================*/
                   val dashboardRes: Future[
                     (
+                      String,
+                      String,
+                      String,
+                      String,
                       String,
                       String,
                       String,
@@ -327,34 +689,54 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
                     )
                   ] =
                     for {
-                      vulNodes <- vulNodesRes.recoverWith {
-                                   case e: Exception => handleScanHostException(e)
-                                 }
-                      services <- servicesRes.recoverWith {
-                                   case e: Exception => handleServiceException(e)
-                                 }
-                      policies <- policiesRes.recoverWith {
-                                   case e: Exception => handlePolicyException(e)
-                                 }
-                      conversations <- conversationsRes.recoverWith {
-                                        case e: Exception => handleConversationException(e)
-                                      }
-                      containers <- containersRes.recoverWith {
-                                     case e: Exception => handleWorkloadException(e)
-                                   }
-                      autoScanConfig <- autoScanConfigRes.recoverWith {
-                                         case e: Exception => handleAutoScanConfigException(e)
-                                       }
+                      vulNodes       <- vulNodesRes.recoverWith { case e: Exception =>
+                                          handleScanHostException(e)
+                                        }
+                      services       <- servicesRes.recoverWith { case e: Exception =>
+                                          handleServiceException(e)
+                                        }
+                      policies       <- policiesRes.recoverWith { case e: Exception =>
+                                          handlePolicyException(e)
+                                        }
+                      conversations  <- conversationsRes.recoverWith { case e: Exception =>
+                                          handleConversationException(e)
+                                        }
+                      vulPlatforms   <- vulPlatformsRes.recoverWith { case e: Exception =>
+                                          handleScanPlatformException(e)
+                                        }
+                      systemConfig   <- systemConfigRes.recoverWith { case e: Exception =>
+                                          handleSystemConfigException(e)
+                                        }
+                      containers     <- containersRes.recoverWith { case e: Exception =>
+                                          handleWorkloadException(e)
+                                        }
+                      admissionRule  <- admissionRuleRes.recoverWith { case e: Exception =>
+                                          handleAdmissionRuleException(e)
+                                        }
+                      autoScanConfig <- autoScanConfigRes.recoverWith { case e: Exception =>
+                                          handleAutoScanConfigException(e)
+                                        }
+                      admissionState <- admissionStateRes.recoverWith { case e: Exception =>
+                                          handleAdmissionStateException(e)
+                                        }
                     } yield (
                       vulNodes,
                       services,
                       policies,
                       conversations,
+                      vulPlatforms,
+                      systemConfig,
                       containers,
-                      autoScanConfig
+                      admissionRule,
+                      autoScanConfig,
+                      admissionState
                     )
 
                   val dashboard: (
+                    String,
+                    String,
+                    String,
+                    String,
                     String,
                     String,
                     String,
@@ -364,15 +746,15 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
                   ) =
                     Await.result(dashboardRes, RestClient.waitingLimit.seconds)
 
-                  val endTimeAPI = new DateTime()
+                  val endTimeAPI           = new DateTime()
                   logger.info("Dashboard scores - Multiple API call end: {}", endTimeAPI)
                   logger.info(
                     "Dashboard scores - Multiple API call duration: {}",
                     endTimeAPI.getMillis - startTime.getMillis
                   )
                   /*========================================================================================
-                    Parse json response into object
-                 ========================================================================================*/
+                        Parse json response into object
+                     ========================================================================================*/
                   val calculationStartTime = new DateTime()
                   logger.info("Dashboard scores - Calculation Start: {}", calculationStartTime)
 
@@ -380,16 +762,20 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
                   val services       = jsonToServiceStatesIn(dashboard._2)
                   val policies       = jsonToApplicationsInPolicyWrap(dashboard._3)
                   val conversations  = jsonToGraphData(dashboard._4)
-                  val containers     = jsonToWorkloadsWrap(dashboard._5)
-                  val autoScanConfig = jsonToAutoScanConfig(dashboard._6)
-                  val autoScan =
+                  val vulPlatforms   = jsonToVulnerablePlatforms(dashboard._5)
+                  val systemConfig   = jsonToSystemConfig4DashboardWrap(dashboard._6)
+                  val containers     = jsonToWorkloadsWrap(dashboard._7)
+                  val admissionRule  = jsonToAdmissionRulesWrap(dashboard._8)
+                  val autoScanConfig = jsonToAutoScanConfig(dashboard._9)
+                  val admissionState = jsonToAdmissionStateWrap(dashboard._10)
+                  val autoScan       =
                     if (autoScanConfig.error.isDefined) {
                       Left(autoScanConfig.error.get)
                     } else {
                       Right(getAutoScan(autoScanConfig))
                     }
 
-                  if (containers.error.isDefined) {
+                  val domains = if (containers.error.isDefined) {
                     Left(containers.error.get)
                   } else {
                     Right(
@@ -419,35 +805,34 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
                       Left(containers.error.get)
                     } else {
                       serviceMaps match {
-                        case Left(x) => Left(x)
+                        case Left(x)  => Left(x)
                         case Right(x) =>
                           Right(
                             if (domainVal.isEmpty)
                               containers.workloads
-                                .filter(
-                                  (workload: Workload) =>
-                                    workload.state != "exit" && x.serviceMap
-                                      .contains(s"nv.${workload.service}")
+                                .filter((workload: Workload) =>
+                                  workload.state != "exit" && x.serviceMap
+                                    .contains(s"nv.${workload.service}")
                                 )
                             else
                               containers.workloads
-                                .filter(
-                                  (workload: Workload) =>
-                                    workload.state != "exit" && workload.domain == domainVal && x.serviceMap
-                                      .contains(s"nv.${workload.service}")
+                                .filter((workload: Workload) =>
+                                  workload.state != "exit" && workload.domain == domainVal && x.serviceMap
+                                    .contains(s"nv.${workload.service}")
                                 )
                           )
                       }
                     }
 
-                  runningContainers match {
-                    case Right(x) => Right(x.length)
-                    case Left(x)  => Left(x)
-                  }
+                  val totalRunningPods =
+                    runningContainers match {
+                      case Right(x) => Right(x.length)
+                      case Left(x)  => Left(x)
+                    }
 
                   val runningContainersOutput =
                     runningContainers match {
-                      case Left(x) => Left(x)
+                      case Left(x)  => Left(x)
                       case Right(x) =>
                         serviceMaps match {
                           case Left(y)  => Left(y)
@@ -455,19 +840,38 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
                         }
                     }
 
-                  if (containers.error.isDefined) {
-                    Left(containers.error.get)
-                  } else {
-                    serviceMaps match {
-                      case Left(_)  =>
-                      case Right(x) => Right(getVulContainerOutput(containers, domainVal, x))
+                  val hasPrivilegedContainer =
+                    runningContainersOutput match {
+                      case Left(x)  => Left(x)
+                      case Right(x) => Right(x.hasPrivilegedContainer)
                     }
-                  }
 
-                  if (vulNodes.error.isDefined) {
+                  val hasRunAsRoot =
+                    runningContainersOutput match {
+                      case Left(x)  => Left(x)
+                      case Right(x) => Right(x.hasRunAsRoot)
+                    }
+
+                  val vulContainerOutput =
+                    if (containers.error.isDefined) {
+                      Left(containers.error.get)
+                    } else {
+                      serviceMaps match {
+                        case Left(x)  => Left(x)
+                        case Right(x) => Right(getVulContainerOutput(containers, domainVal, x))
+                      }
+                    }
+
+                  val vulNodeOutput = if (vulNodes.error.isDefined) {
                     Left(vulNodes.error.get)
                   } else {
                     Right(getVulNodeOutput(vulNodes))
+                  }
+
+                  val vulPlatformOutput = if (vulPlatforms.error.isDefined) {
+                    Left(vulPlatforms.error.get)
+                  } else {
+                    Right(getVulPlatformOutput(vulPlatforms))
                   }
 
                   val servicesOutput =
@@ -481,22 +885,152 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
                       Left(conversations.error.get)
                     } else {
                       runningContainersOutput match {
-                        case Left(x) => Left(x)
+                        case Left(x)  => Left(x)
                         case Right(x) =>
                           serviceMaps match {
-                            case Left(y) => Left(y)
+                            case Left(y)  => Left(y)
                             case Right(y) =>
                               Right(getConversationsOutput(conversations.conversations, x, y))
                           }
                       }
                     }
 
-                  /*========================================================================================
-                   Construct dashboard API response
-                 ========================================================================================*/
-                  val dashboardScoreDTO = DashboardScoreDTO2(
+                  val hasAdmissionRules =
+                    if (admissionRule.error.isDefined) {
+                      Left(admissionRule.error.get)
+                    } else if (admissionState.error.isDefined) {
+                      Left(admissionState.error.get)
+                    } else if (vulPlatforms.error.isDefined) {
+                      Left(vulPlatforms.error.get)
+                    } else {
+                      Right(getHasAdmissionRules(admissionRule, admissionState, vulPlatforms))
+                    }
+
+                  val isNewServiceDiscover =
+                    if (systemConfig.error.isDefined) {
+                      Left(systemConfig.error.get)
+                    } else {
+                      Right(getIsNewServiceDiscover(systemConfig))
+                    }
+
+                  val scoreInput = ScoreInput(
+                    VulnerabilityExploitRisk(
+                      vulContainerOutput match {
+                        case Left(x)  => Left(x)
+                        case Right(x) =>
+                          Right(
+                            VulnerabilityCount(
+                              x.highVulsMap.getOrElse(DISCOVER, 0),
+                              x.medVulsMap.getOrElse(DISCOVER, 0)
+                            )
+                          )
+                      },
+                      vulContainerOutput match {
+                        case Left(x)  => Left(x)
+                        case Right(x) =>
+                          Right(
+                            VulnerabilityCount(
+                              x.highVulsMap.getOrElse(MONITOR, 0),
+                              x.medVulsMap.getOrElse(MONITOR, 0)
+                            )
+                          )
+                      },
+                      vulContainerOutput match {
+                        case Left(x)  => Left(x)
+                        case Right(x) =>
+                          Right(
+                            VulnerabilityCount(
+                              x.highVulsMap.getOrElse(PROTECT, 0),
+                              x.medVulsMap.getOrElse(PROTECT, 0)
+                            )
+                          )
+                      },
+                      vulContainerOutput match {
+                        case Left(x)  => Left(x)
+                        case Right(x) =>
+                          Right(
+                            VulnerabilityCount(
+                              x.highVulsMap.getOrElse(QUARANTINED, 0),
+                              x.medVulsMap.getOrElse(QUARANTINED, 0)
+                            )
+                          )
+                      },
+                      vulNodeOutput match {
+                        case Left(x)  => Left(x)
+                        case Right(x) =>
+                          Right(
+                            VulnerabilityCount(
+                              x.nodeHighVuls,
+                              x.nodeMedVuls
+                            )
+                          )
+                      },
+                      vulPlatformOutput match {
+                        case Left(x)  => Left(x)
+                        case Right(x) =>
+                          Right(
+                            VulnerabilityCount(
+                              x.platformHighVuls,
+                              x.platformMedVuls
+                            )
+                          )
+                      },
+                      vulNodeOutput match {
+                        case Left(x)  => Left(x)
+                        case Right(x) => Right(x.totalHost)
+                      },
+                      vulContainerOutput match {
+                        case Left(x)  => Left(x)
+                        case Right(x) => Right(x.totalScannedPods)
+                      },
+                      vulContainerOutput match {
+                        case Left(x)  => Left(x)
+                        case Right(x) => Right(x.totalScannedPodsWithoutSystem)
+                      }
+                    ),
                     serviceMaps match {
-                      case Left(x) => Left(x)
+                      case Left(x)  => Left(x)
+                      case Right(x) =>
+                        Right(
+                          ServiceConnectionRisk(
+                            x.serviceModeMap.getOrElse(DISCOVER, 0),
+                            x.serviceModeMap.getOrElse(MONITOR, 0),
+                            x.serviceModeMap.getOrElse(PROTECT, 0)
+                          )
+                        )
+                    },
+                    conversationsOutput match {
+                      case Left(x)  => Left(x)
+                      case Right(x) =>
+                        Right(
+                          IngressEgressRisk(
+                            x.exposureModeMap.getOrElse(DISCOVER, 0),
+                            x.exposureModeMap.getOrElse(MONITOR, 0),
+                            x.exposureModeMap.getOrElse(PROTECT, 0),
+                            x.exposureThreat,
+                            x.exposureViolation
+                          )
+                        )
+                    },
+                    hasPrivilegedContainer,
+                    hasRunAsRoot,
+                    hasAdmissionRules,
+                    isNewServiceDiscover,
+                    totalRunningPods,
+                    domains
+                  )
+
+                  val scoreOutput = getScore(
+                    scoreInput,
+                    isGlobalUser.getOrElse("true") == "true" || domainVal.nonEmpty
+                  )
+
+                  /*========================================================================================
+                       Construct dashboard API response
+                     ========================================================================================*/
+                  val dashboardScoreDTO = DashboardScoreDTO(
+                    serviceMaps match {
+                      case Left(x)  => Left(x)
                       case Right(x) =>
                         Right(getHighPriorityVulnerabilities(containers, vulNodes, domainVal, x))
                     },
@@ -511,7 +1045,7 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
                       case Right(x) => Right(x.applicationsInPolicy2)
                     },
                     serviceMaps match {
-                      case Left(x) => Left(x)
+                      case Left(x)  => Left(x)
                       case Right(x) =>
                         Right(
                           PolicyCoverage(
@@ -520,24 +1054,26 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
                           )
                         )
                     },
-                    // conversationsOutput match {
-                    //   case Left(x) => Left(x)
-                    //   case Right(x) =>
-                    //     runningContainersOutput match {
-                    //       case Left(y) => Left(y)
-                    //       case Right(y) =>
-                    //         Right(
-                    //           ExposedConversations(
-                    //             x.ingressConversations,
-                    //             x.egressConversations
-                    //           )
-                    //         )
-                    //     }
-                    // },
-                    autoScan
+                    conversationsOutput match {
+                      case Left(x)  => Left(x)
+                      case Right(x) =>
+                        runningContainersOutput match {
+                          case Left(y)  => Left(y)
+                          case Right(_) =>
+                            Right(
+                              ExposedConversations(
+                                x.ingressConversations,
+                                x.egressConversations
+                              )
+                            )
+                        }
+                    },
+                    autoScan,
+                    scoreInput,
+                    scoreOutput
                   )
                   logger.debug("Got {}", dashboardScoreDTO)
-                  val endTime = new DateTime()
+                  val endTime           = new DateTime()
                   logger.info("Dashbaord scores - End: {}", endTime)
                   logger.info(
                     "Dashbaord scores - Calculation Duration: {}",
@@ -561,762 +1097,218 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
               }
             }
           }
-        } ~
-        path("scores") {
-          patch {
-            parameters(Symbol("isGlobalUser").?) { isGlobalUser =>
-              entity(as[ScoreInput]) { scoreInput =>
-                {
-                  Utils.respondWithWebServerHeaders() {
-                    complete {
-                      try {
-                        getScore(scoreInput, isGlobalUser.getOrElse("true") == "true")
-                      } catch {
-                        case NonFatal(e) =>
-                          if (e.getMessage.contains("Status: 408") || e.getMessage.contains(
-                                "Status: 401"
-                              )) {
-                            (StatusCodes.RequestTimeout, "Session expired!")
-                          } else {
-                            (StatusCodes.InternalServerError, "Internal server error")
-                          }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          } ~
-          get {
-            parameters(Symbol("isGlobalUser").?, Symbol("domain").?) { (isGlobalUser, domain) =>
-              Utils.respondWithWebServerHeaders() {
-                complete {
-                  try {
-                    val domainVal = domain.getOrElse("")
-                    val query4Domain1 =
-                      if (domainVal.isEmpty) ""
-                      else s"?f_domain=${UrlEscapers.urlFragmentEscaper().escape(domainVal)}"
-                    val query4Domain2 =
-                      if (domainVal.isEmpty) ""
-                      else s"&f_domain=${UrlEscapers.urlFragmentEscaper().escape(domainVal)}"
-                    val startTime = new DateTime()
-                    logger.info("dashboard scores Start: {}", startTime)
+        }
+      } ~
+      path("notifications") {
+        get {
+          parameters(Symbol("domain").?) { domain =>
+            Utils.respondWithWebServerHeaders() {
+              complete {
+                try {
+                  val startTime    = new DateTime()
+                  logger.info("Dashboard notifications - Start: {}", startTime)
+                  val domainVal    = domain.getOrElse("")
+                  val query4Domain = if (domainVal.isEmpty) "" else s"f_domain=$domainVal"
 
-                    /*========================================================================================
-                        Pull data from Controller's APIs
-                     ========================================================================================*/
-                    val vulNodesRes = RestClient.requestWithHeaderDecode(
-                      s"${baseClusterUri(tokenId)}/host?Estart=0&limit=0$query4Domain2",
-                      HttpMethods.GET,
-                      "",
-                      tokenId,
-                      DASHBOARD
+                  /*========================================================================================
+                      Pull data from Controller's APIs
+                   ========================================================================================*/
+                  val threatsRes    = RestClient.requestWithHeaderDecode(
+                    s"${baseClusterUri(tokenId)}/log/threat$query4Domain",
+                    HttpMethods.GET,
+                    "",
+                    tokenId,
+                    DASHBOARD
+                  )
+                  val violationsRes = RestClient.requestWithHeaderDecode(
+                    s"${baseClusterUri(tokenId)}/log/violation$query4Domain",
+                    HttpMethods.GET,
+                    "",
+                    tokenId,
+                    DASHBOARD
+                  )
+                  val incidentsRes  = RestClient.requestWithHeaderDecode(
+                    s"${baseClusterUri(tokenId)}/log/incident$query4Domain",
+                    HttpMethods.GET,
+                    "",
+                    tokenId,
+                    DASHBOARD
+                  )
+
+                  /*========================================================================================
+                      Asynchronously get json response from APIs
+                   ========================================================================================*/
+                  val dashboardRes: Future[(String, String, String)] =
+                    for {
+                      threats    <- threatsRes.recoverWith { case e: Exception =>
+                                      handleLogThreatException(e)
+                                    }
+                      violations <- violationsRes.recoverWith { case e: Exception =>
+                                      handleLogViolationException(e)
+                                    }
+                      incidents  <- incidentsRes.recoverWith { case e: Exception =>
+                                      handleLogIncidentException(e)
+                                    }
+                    } yield (threats, violations, incidents)
+
+                  val dashboard: (String, String, String) =
+                    Await.result(dashboardRes, RestClient.waitingLimit.seconds)
+
+                  val endTimeAPI           = new DateTime()
+                  logger.info("Dashboard notifications - Multiple API call end: {}", endTimeAPI)
+                  logger.info(
+                    "Dashboard notifications - Multiple API call duration: {}",
+                    endTimeAPI.getMillis - startTime.getMillis
+                  )
+                  /*========================================================================================
+                      Parse json response into object
+                   ========================================================================================*/
+                  val calculationStartTime = new DateTime()
+                  logger.info(
+                    "Dashboard notifications - Calculation Start: {}",
+                    calculationStartTime
+                  )
+
+                  val threats          = jsonToThreatsEndpointData(dashboard._1)
+                  val violations       = jsonToViolationsEndpointData(dashboard._2)
+                  val incidents        = jsonToIncidentsEndpointData(dashboard._3)
+                  val incidentsDetails = jsonToIncidentsEndpoint(dashboard._3)
+
+                  /*========================================================================================
+                     Construct dashboard API response
+                   ========================================================================================*/
+                  val dashboardNotificationDTO = DashboardNotificationDTO(
+                    getCriticalSecurityEvents(threats, violations, incidents, incidentsDetails),
+                    getTopIncidents(incidentsDetails)
+                  )
+                  logger.debug("Got {}", dashboardNotificationDTO)
+                  val endTime                  = new DateTime()
+                  logger.info("Dashboard notifications - End: {}", endTime)
+                  logger.info(
+                    "Dashboard notifications - Calculation Duration: {}",
+                    endTime.getMillis - calculationStartTime.getMillis
+                  )
+                  logger.info(
+                    "Dashboard notifications - Duration: {}",
+                    endTime.getMillis - startTime.getMillis
+                  )
+
+                  dashboardNotificationDTO
+                } catch {
+                  case NonFatal(e) =>
+                    RestClient.handleError(
+                      timeOutStatus,
+                      authenticationFailedStatus,
+                      serverErrorStatus,
+                      e
                     )
-                    val servicesRes = RestClient.requestWithHeaderDecode(
-                      s"${baseClusterUri(tokenId)}/group?view=pod&scope=local$query4Domain2",
-                      HttpMethods.GET,
-                      "",
-                      tokenId,
-                      DASHBOARD
-                    )
-                    val policiesRes = RestClient.requestWithHeaderDecode(
-                      s"${baseClusterUri(tokenId)}/policy/rule$query4Domain1",
-                      HttpMethods.GET,
-                      "",
-                      tokenId,
-                      DASHBOARD
-                    )
-                    val containersRes = RestClient.requestWithHeaderDecode(
-                      s"${baseClusterUri(tokenId)}/workload?view=pod",
-                      HttpMethods.GET,
-                      "",
-                      tokenId,
-                      DASHBOARD
-                    )
-                    val vulPlatformsRes = RestClient.requestWithHeaderDecode(
-                      s"${baseClusterUri(tokenId)}/scan/platform$query4Domain1",
-                      HttpMethods.GET,
-                      "",
-                      tokenId,
-                      DASHBOARD
-                    )
-                    val conversationsRes = RestClient.requestWithHeaderDecode(
-                      s"${baseClusterUri(tokenId)}/conversation$query4Domain1",
-                      HttpMethods.GET,
-                      "",
-                      tokenId,
-                      DASHBOARD
-                    )
-                    val autoScanConfigRes = RestClient.requestWithHeaderDecode(
-                      s"${baseClusterUri(tokenId)}/scan/config",
-                      HttpMethods.GET,
-                      "",
-                      tokenId,
-                      DASHBOARD
-                    )
-                    val systemConfigRes = RestClient.requestWithHeaderDecode(
-                      s"${baseClusterUri(tokenId)}/system/config",
-                      HttpMethods.GET,
-                      "",
-                      tokenId,
-                      DASHBOARD
-                    )
-                    val admissionRuleRes = RestClient.requestWithHeaderDecode(
-                      s"${baseClusterUri(tokenId)}/admission/rules",
-                      HttpMethods.GET,
-                      "",
-                      tokenId,
-                      DASHBOARD
-                    )
-                    val admissionStateRes = RestClient.requestWithHeaderDecode(
-                      s"${baseClusterUri(tokenId)}/admission/state",
-                      HttpMethods.GET,
-                      "",
-                      tokenId,
-                      DASHBOARD
-                    )
-
-                    /*========================================================================================
-                        Asynchronously get json response from APIs
-                     ========================================================================================*/
-                    val dashboardRes: Future[
-                      (
-                        String,
-                        String,
-                        String,
-                        String,
-                        String,
-                        String,
-                        String,
-                        String,
-                        String,
-                        String
-                      )
-                    ] =
-                      for {
-                        vulNodes <- vulNodesRes.recoverWith {
-                                     case e: Exception => handleScanHostException(e)
-                                   }
-                        services <- servicesRes.recoverWith {
-                                     case e: Exception => handleServiceException(e)
-                                   }
-                        policies <- policiesRes.recoverWith {
-                                     case e: Exception => handlePolicyException(e)
-                                   }
-                        conversations <- conversationsRes.recoverWith {
-                                          case e: Exception => handleConversationException(e)
-                                        }
-                        vulPlatforms <- vulPlatformsRes.recoverWith {
-                                         case e: Exception => handleScanPlatformException(e)
-                                       }
-                        systemConfig <- systemConfigRes.recoverWith {
-                                         case e: Exception => handleSystemConfigException(e)
-                                       }
-                        containers <- containersRes.recoverWith {
-                                       case e: Exception => handleWorkloadException(e)
-                                     }
-                        admissionRule <- admissionRuleRes.recoverWith {
-                                          case e: Exception => handleAdmissionRuleException(e)
-                                        }
-                        autoScanConfig <- autoScanConfigRes.recoverWith {
-                                           case e: Exception => handleAutoScanConfigException(e)
-                                         }
-                        admissionState <- admissionStateRes.recoverWith {
-                                           case e: Exception => handleAdmissionStateException(e)
-                                         }
-                      } yield (
-                        vulNodes,
-                        services,
-                        policies,
-                        conversations,
-                        vulPlatforms,
-                        systemConfig,
-                        containers,
-                        admissionRule,
-                        autoScanConfig,
-                        admissionState
-                      )
-
-                    val dashboard: (
-                      String,
-                      String,
-                      String,
-                      String,
-                      String,
-                      String,
-                      String,
-                      String,
-                      String,
-                      String
-                    ) =
-                      Await.result(dashboardRes, RestClient.waitingLimit.seconds)
-
-                    val endTimeAPI = new DateTime()
-                    logger.info("Dashboard scores - Multiple API call end: {}", endTimeAPI)
-                    logger.info(
-                      "Dashboard scores - Multiple API call duration: {}",
-                      endTimeAPI.getMillis - startTime.getMillis
-                    )
-                    /*========================================================================================
-                        Parse json response into object
-                     ========================================================================================*/
-                    val calculationStartTime = new DateTime()
-                    logger.info("Dashboard scores - Calculation Start: {}", calculationStartTime)
-
-                    val vulNodes       = jsonToVulnerableNodeEndpoint(dashboard._1)
-                    val services       = jsonToServiceStatesIn(dashboard._2)
-                    val policies       = jsonToApplicationsInPolicyWrap(dashboard._3)
-                    val conversations  = jsonToGraphData(dashboard._4)
-                    val vulPlatforms   = jsonToVulnerablePlatforms(dashboard._5)
-                    val systemConfig   = jsonToSystemConfig4DashboardWrap(dashboard._6)
-                    val containers     = jsonToWorkloadsWrap(dashboard._7)
-                    val admissionRule  = jsonToAdmissionRulesWrap(dashboard._8)
-                    val autoScanConfig = jsonToAutoScanConfig(dashboard._9)
-                    val admissionState = jsonToAdmissionStateWrap(dashboard._10)
-                    val autoScan =
-                      if (autoScanConfig.error.isDefined) {
-                        Left(autoScanConfig.error.get)
-                      } else {
-                        Right(getAutoScan(autoScanConfig))
-                      }
-
-                    val domains = if (containers.error.isDefined) {
-                      Left(containers.error.get)
-                    } else {
-                      Right(
-                        getDomains(containers)
-                      )
-                    }
-
-                    val policyOutput =
-                      if (policies.error.isDefined) {
-                        Left(policies.error.get)
-                      } else {
-                        Right(getPolicyOutput(policies))
-                      }
-
-                    val serviceMaps =
-                      if (services.error.isDefined) {
-                        Left(services.error.get)
-                      } else {
-                        policyOutput match {
-                          case Left(x)  => Left(x)
-                          case Right(x) => Right(getServiceMaps(services, x.groupSet))
-                        }
-                      }
-
-                    val runningContainers =
-                      if (containers.error.isDefined) {
-                        Left(containers.error.get)
-                      } else {
-                        serviceMaps match {
-                          case Left(x) => Left(x)
-                          case Right(x) =>
-                            Right(
-                              if (domainVal.isEmpty)
-                                containers.workloads
-                                  .filter(
-                                    (workload: Workload) =>
-                                      workload.state != "exit" && x.serviceMap
-                                        .contains(s"nv.${workload.service}")
-                                  )
-                              else
-                                containers.workloads
-                                  .filter(
-                                    (workload: Workload) =>
-                                      workload.state != "exit" && workload.domain == domainVal && x.serviceMap
-                                        .contains(s"nv.${workload.service}")
-                                  )
-                            )
-                        }
-                      }
-
-                    val totalRunningPods =
-                      runningContainers match {
-                        case Right(x) => Right(x.length)
-                        case Left(x)  => Left(x)
-                      }
-
-                    val runningContainersOutput =
-                      runningContainers match {
-                        case Left(x) => Left(x)
-                        case Right(x) =>
-                          serviceMaps match {
-                            case Left(y)  => Left(y)
-                            case Right(y) => Right(getRunningContainersOutput(x, y))
-                          }
-                      }
-
-                    val hasPrivilegedContainer =
-                      runningContainersOutput match {
-                        case Left(x)  => Left(x)
-                        case Right(x) => Right(x.hasPrivilegedContainer)
-                      }
-
-                    val hasRunAsRoot =
-                      runningContainersOutput match {
-                        case Left(x)  => Left(x)
-                        case Right(x) => Right(x.hasRunAsRoot)
-                      }
-
-                    val vulContainerOutput =
-                      if (containers.error.isDefined) {
-                        Left(containers.error.get)
-                      } else {
-                        serviceMaps match {
-                          case Left(x)  => Left(x)
-                          case Right(x) => Right(getVulContainerOutput(containers, domainVal, x))
-                        }
-                      }
-
-                    val vulNodeOutput = if (vulNodes.error.isDefined) {
-                      Left(vulNodes.error.get)
-                    } else {
-                      Right(getVulNodeOutput(vulNodes))
-                    }
-
-                    val vulPlatformOutput = if (vulPlatforms.error.isDefined) {
-                      Left(vulPlatforms.error.get)
-                    } else {
-                      Right(getVulPlatformOutput(vulPlatforms))
-                    }
-
-                    val servicesOutput =
-                      serviceMaps match {
-                        case Left(x)  => Left(x)
-                        case Right(x) => Right(x.groups)
-                      }
-
-                    val conversationsOutput =
-                      if (conversations.error.isDefined) {
-                        Left(conversations.error.get)
-                      } else {
-                        runningContainersOutput match {
-                          case Left(x) => Left(x)
-                          case Right(x) =>
-                            serviceMaps match {
-                              case Left(y) => Left(y)
-                              case Right(y) =>
-                                Right(getConversationsOutput(conversations.conversations, x, y))
-                            }
-                        }
-                      }
-
-                    val hasAdmissionRules =
-                      if (admissionRule.error.isDefined) {
-                        Left(admissionRule.error.get)
-                      } else if (admissionState.error.isDefined) {
-                        Left(admissionState.error.get)
-                      } else if (vulPlatforms.error.isDefined) {
-                        Left(vulPlatforms.error.get)
-                      } else {
-                        Right(getHasAdmissionRules(admissionRule, admissionState, vulPlatforms))
-                      }
-
-                    val isNewServiceDiscover =
-                      if (systemConfig.error.isDefined) {
-                        Left(systemConfig.error.get)
-                      } else {
-                        Right(getIsNewServiceDiscover(systemConfig))
-                      }
-
-                    val scoreInput = ScoreInput(
-                      VulnerabilityExploitRisk(
-                        vulContainerOutput match {
-                          case Left(x) => Left(x)
-                          case Right(x) =>
-                            Right(
-                              VulnerabilityCount(
-                                x.highVulsMap.getOrElse(DISCOVER, 0),
-                                x.medVulsMap.getOrElse(DISCOVER, 0)
-                              )
-                            )
-                        },
-                        vulContainerOutput match {
-                          case Left(x) => Left(x)
-                          case Right(x) =>
-                            Right(
-                              VulnerabilityCount(
-                                x.highVulsMap.getOrElse(MONITOR, 0),
-                                x.medVulsMap.getOrElse(MONITOR, 0)
-                              )
-                            )
-                        },
-                        vulContainerOutput match {
-                          case Left(x) => Left(x)
-                          case Right(x) =>
-                            Right(
-                              VulnerabilityCount(
-                                x.highVulsMap.getOrElse(PROTECT, 0),
-                                x.medVulsMap.getOrElse(PROTECT, 0)
-                              )
-                            )
-                        },
-                        vulContainerOutput match {
-                          case Left(x) => Left(x)
-                          case Right(x) =>
-                            Right(
-                              VulnerabilityCount(
-                                x.highVulsMap.getOrElse(QUARANTINED, 0),
-                                x.medVulsMap.getOrElse(QUARANTINED, 0)
-                              )
-                            )
-                        },
-                        vulNodeOutput match {
-                          case Left(x) => Left(x)
-                          case Right(x) =>
-                            Right(
-                              VulnerabilityCount(
-                                x.nodeHighVuls,
-                                x.nodeMedVuls
-                              )
-                            )
-                        },
-                        vulPlatformOutput match {
-                          case Left(x) => Left(x)
-                          case Right(x) =>
-                            Right(
-                              VulnerabilityCount(
-                                x.platformHighVuls,
-                                x.platformMedVuls
-                              )
-                            )
-                        },
-                        vulNodeOutput match {
-                          case Left(x)  => Left(x)
-                          case Right(x) => Right(x.totalHost)
-                        },
-                        vulContainerOutput match {
-                          case Left(x)  => Left(x)
-                          case Right(x) => Right(x.totalScannedPods)
-                        },
-                        vulContainerOutput match {
-                          case Left(x)  => Left(x)
-                          case Right(x) => Right(x.totalScannedPodsWithoutSystem)
-                        }
-                      ),
-                      serviceMaps match {
-                        case Left(x) => Left(x)
-                        case Right(x) =>
-                          Right(
-                            ServiceConnectionRisk(
-                              x.serviceModeMap.getOrElse(DISCOVER, 0),
-                              x.serviceModeMap.getOrElse(MONITOR, 0),
-                              x.serviceModeMap.getOrElse(PROTECT, 0)
-                            )
-                          )
-                      },
-                      conversationsOutput match {
-                        case Left(x) => Left(x)
-                        case Right(x) =>
-                          Right(
-                            IngressEgressRisk(
-                              x.exposureModeMap.getOrElse(DISCOVER, 0),
-                              x.exposureModeMap.getOrElse(MONITOR, 0),
-                              x.exposureModeMap.getOrElse(PROTECT, 0),
-                              x.exposureThreat,
-                              x.exposureViolation
-                            )
-                          )
-                      },
-                      hasPrivilegedContainer,
-                      hasRunAsRoot,
-                      hasAdmissionRules,
-                      isNewServiceDiscover,
-                      totalRunningPods,
-                      domains
-                    )
-
-                    val scoreOutput = getScore(
-                      scoreInput,
-                      isGlobalUser.getOrElse("true") == "true" || domainVal.nonEmpty
-                    )
-
-                    /*========================================================================================
-                       Construct dashboard API response
-                     ========================================================================================*/
-                    val dashboardScoreDTO = DashboardScoreDTO(
-                      serviceMaps match {
-                        case Left(x) => Left(x)
-                        case Right(x) =>
-                          Right(getHighPriorityVulnerabilities(containers, vulNodes, domainVal, x))
-                      },
-                      runningContainers,
-                      servicesOutput,
-                      policyOutput match {
-                        case Left(x)  => Left(x)
-                        case Right(x) => Right(x.applicationsInPolicy)
-                      },
-                      conversationsOutput match {
-                        case Left(x)  => Left(x)
-                        case Right(x) => Right(x.applicationsInPolicy2)
-                      },
-                      serviceMaps match {
-                        case Left(x) => Left(x)
-                        case Right(x) =>
-                          Right(
-                            PolicyCoverage(
-                              x.serviceUnderRulesMap.values.toArray,
-                              x.otherServiceMap.values.toArray
-                            )
-                          )
-                      },
-                      conversationsOutput match {
-                        case Left(x) => Left(x)
-                        case Right(x) =>
-                          runningContainersOutput match {
-                            case Left(y) => Left(y)
-                            case Right(_) =>
-                              Right(
-                                ExposedConversations(
-                                  x.ingressConversations,
-                                  x.egressConversations
-                                )
-                              )
-                          }
-                      },
-                      autoScan,
-                      scoreInput,
-                      scoreOutput
-                    )
-                    logger.debug("Got {}", dashboardScoreDTO)
-                    val endTime = new DateTime()
-                    logger.info("Dashbaord scores - End: {}", endTime)
-                    logger.info(
-                      "Dashbaord scores - Calculation Duration: {}",
-                      endTime.getMillis - calculationStartTime.getMillis
-                    )
-                    logger.info(
-                      "Dashbaord scores - Duration: {}",
-                      endTime.getMillis - startTime.getMillis
-                    )
-
-                    dashboardScoreDTO
-                  } catch {
-                    case NonFatal(e) =>
-                      RestClient.handleError(
-                        timeOutStatus,
-                        authenticationFailedStatus,
-                        serverErrorStatus,
-                        e
-                      )
-                  }
                 }
               }
             }
           }
-        } ~
-        path("notifications") {
-          get {
-            parameters(Symbol("domain").?) { domain =>
-              Utils.respondWithWebServerHeaders() {
-                complete {
-                  try {
-                    val startTime = new DateTime()
-                    logger.info("Dashboard notifications - Start: {}", startTime)
-                    val domainVal    = domain.getOrElse("")
-                    val query4Domain = if (domainVal.isEmpty) "" else s"f_domain=$domainVal"
+        }
+      } ~
+      path("notifications2") {
+        get {
+          parameters(Symbol("domain").?) { domain =>
+            Utils.respondWithWebServerHeaders() {
+              complete {
+                try {
+                  val startTime    = new DateTime()
+                  logger.info("Dashboard notifications - Start: {}", startTime)
+                  val domainVal    = domain.getOrElse("")
+                  val query4Domain = if (domainVal.isEmpty) "" else s"f_domain=$domainVal"
 
-                    /*========================================================================================
+                  /*========================================================================================
                       Pull data from Controller's APIs
                    ========================================================================================*/
-                    val threatsRes = RestClient.requestWithHeaderDecode(
-                      s"${baseClusterUri(tokenId)}/log/threat$query4Domain",
-                      HttpMethods.GET,
-                      "",
-                      tokenId,
-                      DASHBOARD
-                    )
-                    val violationsRes = RestClient.requestWithHeaderDecode(
-                      s"${baseClusterUri(tokenId)}/log/violation$query4Domain",
-                      HttpMethods.GET,
-                      "",
-                      tokenId,
-                      DASHBOARD
-                    )
-                    val incidentsRes = RestClient.requestWithHeaderDecode(
-                      s"${baseClusterUri(tokenId)}/log/incident$query4Domain",
-                      HttpMethods.GET,
-                      "",
-                      tokenId,
-                      DASHBOARD
-                    )
+                  val threatsRes    = RestClient.requestWithHeaderDecode(
+                    s"${baseClusterUri(tokenId)}/log/threat$query4Domain",
+                    HttpMethods.GET,
+                    "",
+                    tokenId,
+                    DASHBOARD
+                  )
+                  val violationsRes = RestClient.requestWithHeaderDecode(
+                    s"${baseClusterUri(tokenId)}/log/violation$query4Domain",
+                    HttpMethods.GET,
+                    "",
+                    tokenId,
+                    DASHBOARD
+                  )
+                  val incidentsRes  = RestClient.requestWithHeaderDecode(
+                    s"${baseClusterUri(tokenId)}/log/incident$query4Domain",
+                    HttpMethods.GET,
+                    "",
+                    tokenId,
+                    DASHBOARD
+                  )
 
-                    /*========================================================================================
+                  /*========================================================================================
                       Asynchronously get json response from APIs
                    ========================================================================================*/
-                    val dashboardRes: Future[(String, String, String)] =
-                      for {
-                        threats <- threatsRes.recoverWith {
-                                    case e: Exception => handleLogThreatException(e)
-                                  }
-                        violations <- violationsRes.recoverWith {
-                                       case e: Exception => handleLogViolationException(e)
-                                     }
-                        incidents <- incidentsRes.recoverWith {
-                                      case e: Exception => handleLogIncidentException(e)
+                  val dashboardRes: Future[(String, String, String)] =
+                    for {
+                      threats    <- threatsRes.recoverWith { case e: Exception =>
+                                      handleLogThreatException(e)
                                     }
-                      } yield (threats, violations, incidents)
+                      violations <- violationsRes.recoverWith { case e: Exception =>
+                                      handleLogViolationException(e)
+                                    }
+                      incidents  <- incidentsRes.recoverWith { case e: Exception =>
+                                      handleLogIncidentException(e)
+                                    }
+                    } yield (threats, violations, incidents)
 
-                    val dashboard: (String, String, String) =
-                      Await.result(dashboardRes, RestClient.waitingLimit.seconds)
+                  val dashboard: (String, String, String) =
+                    Await.result(dashboardRes, RestClient.waitingLimit.seconds)
 
-                    val endTimeAPI = new DateTime()
-                    logger.info("Dashboard notifications - Multiple API call end: {}", endTimeAPI)
-                    logger.info(
-                      "Dashboard notifications - Multiple API call duration: {}",
-                      endTimeAPI.getMillis - startTime.getMillis
-                    )
-                    /*========================================================================================
+                  val endTimeAPI           = new DateTime()
+                  logger.info("Dashboard notifications - Multiple API call end: {}", endTimeAPI)
+                  logger.info(
+                    "Dashboard notifications - Multiple API call duration: {}",
+                    endTimeAPI.getMillis - startTime.getMillis
+                  )
+                  /*========================================================================================
                       Parse json response into object
                    ========================================================================================*/
-                    val calculationStartTime = new DateTime()
-                    logger.info(
-                      "Dashboard notifications - Calculation Start: {}",
-                      calculationStartTime
-                    )
+                  val calculationStartTime = new DateTime()
+                  logger.info(
+                    "Dashboard notifications - Calculation Start: {}",
+                    calculationStartTime
+                  )
 
-                    val threats          = jsonToThreatsEndpointData(dashboard._1)
-                    val violations       = jsonToViolationsEndpointData(dashboard._2)
-                    val incidents        = jsonToIncidentsEndpointData(dashboard._3)
-                    val incidentsDetails = jsonToIncidentsEndpoint(dashboard._3)
+                  val threats    = jsonToDashboardThreatData(dashboard._1)
+                  val violations = jsonToDashboardViolationData(dashboard._2)
+                  val incidents  = jsonToDashboardIncidentData(dashboard._3)
 
-                    /*========================================================================================
+                  /*========================================================================================
                      Construct dashboard API response
                    ========================================================================================*/
-                    val dashboardNotificationDTO = DashboardNotificationDTO(
-                      getCriticalSecurityEvents(threats, violations, incidents, incidentsDetails),
-                      getTopIncidents(incidentsDetails)
-                    )
-                    logger.debug("Got {}", dashboardNotificationDTO)
-                    val endTime = new DateTime()
-                    logger.info("Dashboard notifications - End: {}", endTime)
-                    logger.info(
-                      "Dashboard notifications - Calculation Duration: {}",
-                      endTime.getMillis - calculationStartTime.getMillis
-                    )
-                    logger.info(
-                      "Dashboard notifications - Duration: {}",
-                      endTime.getMillis - startTime.getMillis
-                    )
+                  val dashboardNotificationDTO = DashboardNotificationDTO2(
+                    getCriticalSecurityEvents2(threats, violations, incidents)
+                  )
+                  logger.debug("Got {}", dashboardNotificationDTO)
+                  val endTime                  = new DateTime()
+                  logger.info("Dashboard notifications - End: {}", endTime)
+                  logger.info(
+                    "Dashboard notifications - Calculation Duration: {}",
+                    endTime.getMillis - calculationStartTime.getMillis
+                  )
+                  logger.info(
+                    "Dashboard notifications - Duration: {}",
+                    endTime.getMillis - startTime.getMillis
+                  )
 
-                    dashboardNotificationDTO
-                  } catch {
-                    case NonFatal(e) =>
-                      RestClient.handleError(
-                        timeOutStatus,
-                        authenticationFailedStatus,
-                        serverErrorStatus,
-                        e
-                      )
-                  }
-                }
-              }
-            }
-          }
-        } ~
-        path("notifications2") {
-          get {
-            parameters(Symbol("domain").?) { domain =>
-              Utils.respondWithWebServerHeaders() {
-                complete {
-                  try {
-                    val startTime = new DateTime()
-                    logger.info("Dashboard notifications - Start: {}", startTime)
-                    val domainVal    = domain.getOrElse("")
-                    val query4Domain = if (domainVal.isEmpty) "" else s"f_domain=$domainVal"
-
-                    /*========================================================================================
-                      Pull data from Controller's APIs
-                   ========================================================================================*/
-                    val threatsRes = RestClient.requestWithHeaderDecode(
-                      s"${baseClusterUri(tokenId)}/log/threat$query4Domain",
-                      HttpMethods.GET,
-                      "",
-                      tokenId,
-                      DASHBOARD
+                  dashboardNotificationDTO
+                } catch {
+                  case NonFatal(e) =>
+                    RestClient.handleError(
+                      timeOutStatus,
+                      authenticationFailedStatus,
+                      serverErrorStatus,
+                      e
                     )
-                    val violationsRes = RestClient.requestWithHeaderDecode(
-                      s"${baseClusterUri(tokenId)}/log/violation$query4Domain",
-                      HttpMethods.GET,
-                      "",
-                      tokenId,
-                      DASHBOARD
-                    )
-                    val incidentsRes = RestClient.requestWithHeaderDecode(
-                      s"${baseClusterUri(tokenId)}/log/incident$query4Domain",
-                      HttpMethods.GET,
-                      "",
-                      tokenId,
-                      DASHBOARD
-                    )
-
-                    /*========================================================================================
-                      Asynchronously get json response from APIs
-                   ========================================================================================*/
-                    val dashboardRes: Future[(String, String, String)] =
-                      for {
-                        threats <- threatsRes.recoverWith {
-                                    case e: Exception => handleLogThreatException(e)
-                                  }
-                        violations <- violationsRes.recoverWith {
-                                       case e: Exception => handleLogViolationException(e)
-                                     }
-                        incidents <- incidentsRes.recoverWith {
-                                      case e: Exception => handleLogIncidentException(e)
-                                    }
-                      } yield (threats, violations, incidents)
-
-                    val dashboard: (String, String, String) =
-                      Await.result(dashboardRes, RestClient.waitingLimit.seconds)
-
-                    val endTimeAPI = new DateTime()
-                    logger.info("Dashboard notifications - Multiple API call end: {}", endTimeAPI)
-                    logger.info(
-                      "Dashboard notifications - Multiple API call duration: {}",
-                      endTimeAPI.getMillis - startTime.getMillis
-                    )
-                    /*========================================================================================
-                      Parse json response into object
-                   ========================================================================================*/
-                    val calculationStartTime = new DateTime()
-                    logger.info(
-                      "Dashboard notifications - Calculation Start: {}",
-                      calculationStartTime
-                    )
-
-                    val threats    = jsonToDashboardThreatData(dashboard._1)
-                    val violations = jsonToDashboardViolationData(dashboard._2)
-                    val incidents  = jsonToDashboardIncidentData(dashboard._3)
-
-                    /*========================================================================================
-                     Construct dashboard API response
-                   ========================================================================================*/
-                    val dashboardNotificationDTO = DashboardNotificationDTO2(
-                      getCriticalSecurityEvents2(threats, violations, incidents)
-                    )
-                    logger.debug("Got {}", dashboardNotificationDTO)
-                    val endTime = new DateTime()
-                    logger.info("Dashboard notifications - End: {}", endTime)
-                    logger.info(
-                      "Dashboard notifications - Calculation Duration: {}",
-                      endTime.getMillis - calculationStartTime.getMillis
-                    )
-                    logger.info(
-                      "Dashboard notifications - Duration: {}",
-                      endTime.getMillis - startTime.getMillis
-                    )
-
-                    dashboardNotificationDTO
-                  } catch {
-                    case NonFatal(e) =>
-                      RestClient.handleError(
-                        timeOutStatus,
-                        authenticationFailedStatus,
-                        serverErrorStatus,
-                        e
-                      )
-                  }
                 }
               }
             }
@@ -1328,18 +1320,17 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
 
   private lazy val getDomains = (
     containers: WorkloadsWrap
-  ) => {
+  ) =>
     containers.workloads
       .map(workload => workload.domain)
       .distinct
       .filter(domain => domain.nonEmpty)
-  }
 
   private lazy val getHasAdmissionRules = (
     admissionRule: AdmissionRulesWrap,
     admissionState: AdmissionStateWrap,
     vulPlatforms: VulnerablePlatforms
-  ) => {
+  ) =>
     (vulPlatforms.platforms.length > 0 && !vulPlatforms
       .platforms(0)
       .platform
@@ -1347,7 +1338,6 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
       .contains("kube")) ||
     admissionRule.rules.count(rule => !rule.critical && !rule.disable) > 0 &&
     admissionState.state.enable
-  }
 
   private lazy val getVulPlatformOutput = (
     vulPlatforms: VulnerablePlatforms
@@ -1384,9 +1374,7 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
 
   private lazy val getIsNewServiceDiscover = (
     systemConfig: SystemConfig4DashboardWrap
-  ) => {
-    systemConfig.config.new_service_policy_mode.getOrElse("").toLowerCase == DISCOVER
-  }
+  ) => systemConfig.config.new_service_policy_mode.getOrElse("").toLowerCase == DISCOVER
 
   private lazy val getVulContainerOutput = (
     vulContainers: WorkloadsWrap,
@@ -1398,20 +1386,19 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
     var totalScannedPodsWithoutSystem = 0
     logger.info("serviceMaps.serviceMap: {}", serviceMaps.serviceMap)
     logger.info("serviceMaps.serviceMap.isEmpty: {}", serviceMaps.serviceMap.isEmpty)
-    val vulContainersByDomain =
+    val vulContainersByDomain         =
       vulContainers.workloads
-        .filter(
-          (container: Workload) =>
-            container.state != "exit" &&
-            container.platform_role == "" &&
+        .filter((container: Workload) =>
+          container.state != "exit" &&
+          container.platform_role == "" &&
+          (
+            serviceMaps.serviceMap.isEmpty ||
             (
-              serviceMaps.serviceMap.isEmpty ||
-              (
-                serviceMaps.serviceMap.nonEmpty &&
-                serviceMaps.serviceMap.contains(s"nv.${container.service}")
-              )
-            ) &&
-            (domain.isEmpty || container.domain.equals(domain))
+              serviceMaps.serviceMap.nonEmpty &&
+              serviceMaps.serviceMap.contains(s"nv.${container.service}")
+            )
+          ) &&
+          (domain.isEmpty || container.domain.equals(domain))
         )
 
     logger.info("vulContainersByDomain: {}", vulContainersByDomain)
@@ -1429,7 +1416,11 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
         )
       )
       totalScannedPodsWithoutSystem += 1
-      if (container.children.isDefined && container.children.getOrElse(Array()).length > 0) {
+      if (
+        container.children.isDefined && container.children
+          .getOrElse(Array.empty[WorkloadChildren])
+          .nonEmpty
+      ) {
         container.children.get.filter(child => child.state != "exit").foreach { child =>
           highVulsMap += (
             container.state -> (
@@ -1460,21 +1451,23 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
     containersOutput: WorkloadsOutput,
     servicesMaps: ServiceMaps
   ) => {
-    var ingressConversationsArray: Array[ServiceLevelConversation] =
+    var ingressConversationsArray: Array[ServiceLevelConversation]           =
       Array[ServiceLevelConversation]()
-    var egressConversationsArray: Array[ServiceLevelConversation] =
+    var egressConversationsArray: Array[ServiceLevelConversation]            =
       Array[ServiceLevelConversation]()
     val conversationMap: collection.mutable.Map[String, ApplicationAnalysis] =
       collection.mutable.Map[String, ApplicationAnalysis]()
     conversations.foreach { conversation =>
-      //1 -------part 1 start
-      if ((
-            conversation.from == "external" ||
-            conversation.from == "Workload:ingress"
-          ) && containersOutput.containerMap.contains(conversation.to)) {
-        val containerVal = containersOutput.containerMap(conversation.to)
-        val groupName    = "nv." + containerVal.service
-        val serviceMode =
+      // 1 -------part 1 start
+      if (
+        (
+          conversation.from == "external" ||
+          conversation.from == "Workload:ingress"
+        ) && containersOutput.containerMap.contains(conversation.to)
+      ) {
+        val containerVal          = containersOutput.containerMap(conversation.to)
+        val groupName             = "nv." + containerVal.service
+        val serviceMode           =
           if (servicesMaps.serviceUnderRulesMap.contains(groupName))
             servicesMaps.serviceUnderRulesMap(groupName).policy_mode.getOrElse("")
           else if (servicesMaps.otherServiceMap.contains(groupName))
@@ -1497,13 +1490,15 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
         )
         ingressConversationsArray = ingressConversationsArray :+ convertedConversation
       }
-      if ((
-            conversation.to == "external" ||
-            conversation.to == "Workload:ingress"
-          ) && containersOutput.containerMap.contains(conversation.from)) {
-        val containerVal = containersOutput.containerMap(conversation.from)
-        val groupName    = "nv." + containerVal.service
-        val serviceMode =
+      if (
+        (
+          conversation.to == "external" ||
+          conversation.to == "Workload:ingress"
+        ) && containersOutput.containerMap.contains(conversation.from)
+      ) {
+        val containerVal          = containersOutput.containerMap(conversation.from)
+        val groupName             = "nv." + containerVal.service
+        val serviceMode           =
           if (servicesMaps.serviceUnderRulesMap.contains(groupName))
             servicesMaps.serviceUnderRulesMap(groupName).policy_mode.getOrElse("")
           else if (servicesMaps.otherServiceMap.contains(groupName))
@@ -1526,8 +1521,8 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
         )
         egressConversationsArray = egressConversationsArray :+ convertedConversation
       }
-      //1 ------- part 1 end
-      //2 ------- part 1 start
+      // 1 ------- part 1 end
+      // 2 ------- part 1 start
       if (conversation.applications.isEmpty) {
         val application = "Others"
         conversationMap += (application -> accumulateApplicationAnalysisData(
@@ -1544,29 +1539,27 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
           ))
         }
       }
-      //2 ------- part 1 end
+      // 2 ------- part 1 end
     }
-    //1 ------- part 2 start
-    val filteredIngressConversations = ingressConversationsArray
-    val filteredEgressConversations  = egressConversationsArray
+    // 1 ------- part 2 start
+    val filteredIngressConversations                                         = ingressConversationsArray
+    val filteredEgressConversations                                          = egressConversationsArray
     logger.info("ingressConversations: {}", filteredIngressConversations.length)
     logger.info("egressConversations: {}", filteredEgressConversations.length)
 
     var ingressConversations: Array[ServiceLevelConversationWrap] =
       Array[ServiceLevelConversationWrap]()
 
-    filteredIngressConversations.groupBy(_.service).foreach {
-      case (k, v) =>
-        val serviceGroup = getExposedConversation(k, v)
-        ingressConversations = ingressConversations :+ serviceGroup
+    filteredIngressConversations.groupBy(_.service).foreach { case (k, v) =>
+      val serviceGroup = getExposedConversation(k, v)
+      ingressConversations = ingressConversations :+ serviceGroup
     }
 
     var egressConversations: Array[ServiceLevelConversationWrap] =
       Array[ServiceLevelConversationWrap]()
-    filteredEgressConversations.groupBy(_.service).foreach {
-      case (k, v) =>
-        val serviceGroup = getExposedConversation(k, v)
-        egressConversations = egressConversations :+ serviceGroup
+    filteredEgressConversations.groupBy(_.service).foreach { case (k, v) =>
+      val serviceGroup = getExposedConversation(k, v)
+      egressConversations = egressConversations :+ serviceGroup
     }
 
     val exposureModeMap: collection.mutable.Map[String, Int] = collection.mutable.Map[String, Int]()
@@ -1581,7 +1574,9 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
       ingressConversation.children.foreach { child =>
         if (child.severity.getOrElse("") != "") {
           exposureThreat += 1
-        } else if (child.policy_action.toLowerCase == DENY || child.policy_action.toLowerCase == VIOLATE) {
+        } else if (
+          child.policy_action.toLowerCase == DENY || child.policy_action.toLowerCase == VIOLATE
+        ) {
           exposureViolation += 1
         }
       }
@@ -1595,16 +1590,18 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
       egressConversation.children.foreach { child =>
         if (child.severity.getOrElse("") != "") {
           exposureThreat += 1
-        } else if (child.policy_action.toLowerCase == DENY || child.policy_action.toLowerCase == VIOLATE) {
+        } else if (
+          child.policy_action.toLowerCase == DENY || child.policy_action.toLowerCase == VIOLATE
+        ) {
           exposureViolation += 1
         }
       }
     }
-    //1 ------- part 2 end
+    // 1 ------- part 2 end
 
-    //2 ------- part 2 start
+    // 2 ------- part 2 start
     val applicationsInPolicy2 = conversationMap.toList
-    //2 ------- part 2 end
+    // 2 ------- part 2 end
     ConversationOutput(
       exposureModeMap.toMap,
       exposureThreat,
@@ -1621,13 +1618,13 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
   ) => {
     val serviceUnderRulesMap: collection.mutable.Map[String, ServiceStateIn] =
       collection.mutable.Map[String, ServiceStateIn]()
-    val otherServiceMap: collection.mutable.Map[String, ServiceStateIn] =
+    val otherServiceMap: collection.mutable.Map[String, ServiceStateIn]      =
       collection.mutable.Map[String, ServiceStateIn]()
-    val serviceMap: collection.mutable.Map[String, ServiceStateIn] =
+    val serviceMap: collection.mutable.Map[String, ServiceStateIn]           =
       collection.mutable.Map[String, ServiceStateIn]()
-    val ipServiceMap: collection.mutable.Map[String, ServiceStateIn] =
+    val ipServiceMap: collection.mutable.Map[String, ServiceStateIn]         =
       collection.mutable.Map[String, ServiceStateIn]()
-    val serviceModeMap: collection.mutable.Map[String, Int] = collection.mutable.Map[String, Int]()
+    val serviceModeMap: collection.mutable.Map[String, Int]                  = collection.mutable.Map[String, Int]()
 
     services.groups
       .filter(group => !group.not_scored && group.platform_role == "" && group.kind != "node")
@@ -1642,7 +1639,7 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
               otherServiceMap += (service.name -> service)
             }
           }
-          serviceMap += (service.name -> service)
+          serviceMap += (service.name                                      -> service)
         }
         if (service.kind.equals("ip_service")) {
           ipServiceMap += (service.name -> service)
@@ -1655,8 +1652,8 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
       ipServiceMap.toMap,
       serviceMap.toMap,
       serviceModeMap.toMap,
-      services.groups.filter(
-        group => !group.not_scored && group.platform_role == "" && group.kind != "node"
+      services.groups.filter(group =>
+        !group.not_scored && group.platform_role == "" && group.kind != "node"
       )
     )
   }
@@ -1693,19 +1690,21 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
     runningContainers: Array[Workload],
     serviceMaps: ServiceMaps
   ) => {
-    var hasPrivilegedContainer = false
-    var hasRunAsRoot           = false
+    var hasPrivilegedContainer                                       = false
+    var hasRunAsRoot                                                 = false
     val containerMap: collection.mutable.Map[String, WorkloadBrief2] =
       collection.mutable.Map[String, WorkloadBrief2]()
     runningContainers.foreach { workload =>
       containerMap += (workload.id -> WorkloadBrief2(workload.display_name, workload.service))
-      if (workload.children.isDefined &&
-          workload.children
-            .getOrElse(Array())
-            .length > 0 &&
-          serviceMaps.serviceMap.contains(s"nv.${workload.service}") &&
-          workload.platform_role == "") {
-        workload.children.getOrElse(Array()).foreach { child =>
+      if (
+        workload.children.isDefined &&
+        workload.children
+          .getOrElse(Array.empty[WorkloadChildren])
+          .nonEmpty &&
+        serviceMaps.serviceMap.contains(s"nv.${workload.service}") &&
+        workload.platform_role == ""
+      ) {
+        workload.children.getOrElse(Array.empty[WorkloadChildren]).foreach { child =>
           if (child.privileged) {
             hasPrivilegedContainer = true
           }
@@ -1724,21 +1723,19 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
 
   private lazy val getAutoScan = (
     autoScanConfig: AutoScanConfig
-  ) => {
-    autoScanConfig.config.auto_scan
-  }
+  ) => autoScanConfig.config.auto_scan
 
   private lazy val getNewServiceModeScore = (
     isNewServiceDiscover: Boolean
-  ) => {
+  ) =>
     if (isNewServiceDiscover) MAX_NEW_SERVICE_MODE_SCORE
     else 0
-  }
 
   private lazy val getServiceModeScore = (
     serviceConnectionRisk: ServiceConnectionRisk
   ) => {
-    val totalServices = serviceConnectionRisk.discover + serviceConnectionRisk.monitor + serviceConnectionRisk.protect
+    val totalServices =
+      serviceConnectionRisk.discover + serviceConnectionRisk.monitor + serviceConnectionRisk.protect
     totalServices match {
       case 0 => 0
       case _ => (serviceConnectionRisk.discover / totalServices.toDouble * 100).toInt
@@ -1747,28 +1744,28 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
 
   private lazy val getExposureDensity = (
     runningPodsCount: Int
-  ) => {
+  ) =>
     if (runningPodsCount > 10000) 1 / THRESHOLD_EXPOSURE_10000
     else if (runningPodsCount > 1000)
       1 / (THRESHOLD_EXPOSURE_1000 + (THRESHOLD_EXPOSURE_10000 - THRESHOLD_EXPOSURE_1000) * runningPodsCount / 10000.0)
     else if (runningPodsCount > 100)
       1 / (THRESHOLD_EXPOSURE_100 + (THRESHOLD_EXPOSURE_1000 - THRESHOLD_EXPOSURE_100) * runningPodsCount / 1000.0)
     else 1 / (1 + THRESHOLD_EXPOSURE_100 * runningPodsCount / 100.0)
-  }
 
   private lazy val getExposureScore = (
     ingressEgressRisk: IngressEgressRisk,
     totalRunningPods: Int
-  ) => {
+  ) =>
     totalRunningPods match {
       case 0 => 0
       case _ =>
         val exposureDensity = getExposureDensity(totalRunningPods)
         logger.info("Exposure density: {}", exposureDensity)
-        var modeScore = (ingressEgressRisk.protectMode + ingressEgressRisk.monitorMode) * exposureDensity * RATIO_PROTECT_MONITOR_EXPOSURE +
+        var modeScore       =
+          (ingressEgressRisk.protectMode + ingressEgressRisk.monitorMode) * exposureDensity * RATIO_PROTECT_MONITOR_EXPOSURE +
           ingressEgressRisk.discoverMode * exposureDensity * RATIO_DISCOVER_EXPOSURE
-        var violationScore = ingressEgressRisk.violation * exposureDensity * RATIO_VIOLATED_EXPOSURE
-        var threatScore    = ingressEgressRisk.threat * exposureDensity * RATIO_THREATENED_EXPOSURE
+        var violationScore  = ingressEgressRisk.violation * exposureDensity * RATIO_VIOLATED_EXPOSURE
+        var threatScore     = ingressEgressRisk.threat * exposureDensity * RATIO_THREATENED_EXPOSURE
         modeScore = if (modeScore > MAX_MODE_EXPOSURE) MAX_MODE_EXPOSURE else modeScore
         violationScore =
           if (violationScore > MAX_VIOLATE_EXPOSURE) MAX_VIOLATE_EXPOSURE else violationScore
@@ -1776,28 +1773,24 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
 
         (modeScore + violationScore + threatScore).toInt
     }
-  }
 
   private lazy val getPrivilegedContainerScore = (
     hasPrivilegedContainer: Boolean
-  ) => {
+  ) =>
     if (hasPrivilegedContainer) MAX_PRIVILEGED_CONTAINER_SCORE
     else 0
-  }
 
   private lazy val getRunAsRootScore = (
     hasRunAsRoot: Boolean
-  ) => {
+  ) =>
     if (hasRunAsRoot) MAX_RUN_AS_ROOT_CONTAINER_SCORE
     else 0
-  }
 
   private lazy val getAdmissionRuleScore = (
     hasAdmissionRules: Boolean
-  ) => {
+  ) =>
     if (!hasAdmissionRules) MAX_ADMISSION_RULE_SCORE
     else 0
-  }
 
   private lazy val getVulnerabilityScore = (
     discover: VulnerabilityCount,
@@ -1814,7 +1807,8 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
     totalScannedPodsWithoutSystem match {
       case 0 =>
       case _ =>
-        podScore = (discover.highVul + discover.mediumVul) / totalScannedPodsWithoutSystem * RATIO_DISCOVER_VUL +
+        podScore =
+          (discover.highVul + discover.mediumVul) / totalScannedPodsWithoutSystem * RATIO_DISCOVER_VUL +
           (monitor.highVul + monitor.mediumVul) / totalScannedPodsWithoutSystem * RATIO_MONITOR_VUL +
           (protect.highVul + protect.mediumVul) / totalScannedPodsWithoutSystem * RATIO_PROTECT_VUL +
           (quarantined.highVul + quarantined.mediumVul) / totalScannedPodsWithoutSystem * RATIO_QUARANTINED_VUL
@@ -1838,7 +1832,7 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
     hasError: Boolean,
     isGlobalUser: Boolean
   ) => {
-    val totalRunningPods = totalRunningPodsOption.fold(metrics.workloads.running_pods) {
+    val totalRunningPods    = totalRunningPodsOption.fold(metrics.workloads.running_pods) {
       totalRunningPodsOption =>
         totalRunningPodsOption
     }
@@ -1863,10 +1857,13 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
       case _ =>
         val exposureDensity = getExposureDensity(totalRunningPods)
         logger.info("Exposure density: {}", exposureDensity)
-        var modeScore = (metrics.workloads.protect_ext_eps + metrics.workloads.monitor_ext_eps) * exposureDensity * RATIO_PROTECT_MONITOR_EXPOSURE +
+        var modeScore       =
+          (metrics.workloads.protect_ext_eps + metrics.workloads.monitor_ext_eps) * exposureDensity * RATIO_PROTECT_MONITOR_EXPOSURE +
           metrics.workloads.discover_ext_eps * exposureDensity * RATIO_DISCOVER_EXPOSURE
-        var violationScore = metrics.workloads.violate_ext_eps * exposureDensity * RATIO_VIOLATED_EXPOSURE
-        var threatScore    = metrics.workloads.threat_ext_eps * exposureDensity * RATIO_THREATENED_EXPOSURE
+        var violationScore  =
+          metrics.workloads.violate_ext_eps * exposureDensity * RATIO_VIOLATED_EXPOSURE
+        var threatScore     =
+          metrics.workloads.threat_ext_eps * exposureDensity * RATIO_THREATENED_EXPOSURE
         modeScore = if (modeScore > MAX_MODE_EXPOSURE) MAX_MODE_EXPOSURE else modeScore
         violationScore =
           if (violationScore > MAX_VIOLATE_EXPOSURE) MAX_VIOLATE_EXPOSURE else violationScore
@@ -1886,8 +1883,8 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
 
     val admissionRuleScore = getAdmissionRuleScore(metrics.deny_adm_ctrl_rules > 0)
 
-    var podScore: Double  = 0.0
-    var hostScore: Double = 0.0
+    var podScore: Double   = 0.0
+    var hostScore: Double  = 0.0
     totalRunningPods match {
       case 0 =>
       case _ =>
@@ -1943,68 +1940,68 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
     scoreInput: ScoreInput,
     isGlobalUser: Boolean
   ) => {
-    val newServiceModeScore = scoreInput.isNewServiceDiscover match {
+    val newServiceModeScore                          = scoreInput.isNewServiceDiscover match {
       case Right(x) => Right(getNewServiceModeScore(x))
       case Left(x)  => Left(x)
     }
-    val serviceModeScoreBy100 = scoreInput.serviceConnectionRisk match {
+    val serviceModeScoreBy100                        = scoreInput.serviceConnectionRisk match {
       case Right(x) => Right(getServiceModeScore(x))
       case Left(x)  => Left(x)
     }
-    val serviceModeScore = serviceModeScoreBy100 match {
+    val serviceModeScore                             = serviceModeScoreBy100 match {
       case Right(x) => Right((x / 100.0 * MAX_SERVICE_MODE_SCORE).toInt)
       case Left(x)  => Left(x)
     }
-    val exposureScore: Either[Error, Int] = scoreInput.ingressEgressRisk match {
-      case Left(x) => Left(x)
+    val exposureScore: Either[Error, Int]            = scoreInput.ingressEgressRisk match {
+      case Left(x)  => Left(x)
       case Right(x) =>
         scoreInput.totalRunningPods match {
           case Left(y)  => Left(y)
           case Right(y) => Right(getExposureScore(x, y))
         }
     }
-    val exposureScoreBy100 = exposureScore match {
+    val exposureScoreBy100                           = exposureScore match {
       case Right(x) =>
         Right(
           (x * 100 / (MAX_MODE_EXPOSURE + MAX_VIOLATE_EXPOSURE + MAX_THREAT_EXPOSURE).toDouble).toInt
         )
-      case Left(x) => Left(x)
+      case Left(x)  => Left(x)
     }
     val privilegedContainerScore: Either[Error, Int] = scoreInput.hasPrivilegedContainer match {
       case Right(x) => Right(getPrivilegedContainerScore(x))
       case Left(x)  => Left(x)
     }
-    val runAsRootScore = scoreInput.hasRunAsRoot match {
+    val runAsRootScore                               = scoreInput.hasRunAsRoot match {
       case Right(x) => Right(getRunAsRootScore(x))
       case Left(x)  => Left(x)
     }
-    val admissionRuleScore = scoreInput.hasAdmissionRules match {
+    val admissionRuleScore                           = scoreInput.hasAdmissionRules match {
       case Left(x)  => Left(x)
       case Right(x) => Right(getAdmissionRuleScore(x))
     }
-    val vulnerabilityScore = scoreInput.vulnerabilityExploitRisk.discover match {
-      case Left(x) => Left(x)
+    val vulnerabilityScore                           = scoreInput.vulnerabilityExploitRisk.discover match {
+      case Left(x)  => Left(x)
       case Right(x) =>
         scoreInput.vulnerabilityExploitRisk.monitor match {
-          case Left(y) => Left(y)
+          case Left(y)  => Left(y)
           case Right(y) =>
             scoreInput.vulnerabilityExploitRisk.protect match {
-              case Left(z) => Left(z)
+              case Left(z)  => Left(z)
               case Right(z) =>
                 scoreInput.vulnerabilityExploitRisk.quarantined match {
-                  case Left(a) => Left(a)
+                  case Left(a)  => Left(a)
                   case Right(a) =>
                     scoreInput.vulnerabilityExploitRisk.host match {
-                      case Left(b) => Left(b)
+                      case Left(b)  => Left(b)
                       case Right(b) =>
                         scoreInput.vulnerabilityExploitRisk.platform match {
-                          case Left(c) => Left(c)
+                          case Left(c)  => Left(c)
                           case Right(c) =>
                             scoreInput.vulnerabilityExploitRisk.totalScannedHost match {
-                              case Left(d) => Left(d)
+                              case Left(d)  => Left(d)
                               case Right(d) =>
                                 scoreInput.vulnerabilityExploitRisk.totalScannedPodsWithoutSystem match {
-                                  case Left(e) => Left(e)
+                                  case Left(e)  => Left(e)
                                   case Right(e) =>
                                     Right(getVulnerabilityScore(x, y, z, a, b, c, d, e))
                                 }
@@ -2015,8 +2012,8 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
             }
         }
     }
-    val vulnerabilityScoreBy100 = vulnerabilityScore match {
-      case Left(x) => Left(x)
+    val vulnerabilityScoreBy100                      = vulnerabilityScore match {
+      case Left(x)  => Left(x)
       case Right(x) =>
         Right(
           (x * 100 / (MAX_POD_VUL_SCORE + MAX_HOST_VUL_SCORE + MAX_PLATFORM_VUL_SCORE).toDouble).toInt
@@ -2025,25 +2022,25 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
 
     val securityRiskScore =
       exposureScore match {
-        case Left(x) => Left(x)
+        case Left(x)  => Left(x)
         case Right(x) =>
           privilegedContainerScore match {
-            case Left(y) => Left(y)
+            case Left(y)  => Left(y)
             case Right(y) =>
               runAsRootScore match {
-                case Left(z) => Left(z)
+                case Left(z)  => Left(z)
                 case Right(z) =>
                   serviceModeScore match {
-                    case Left(a) => Left(a)
+                    case Left(a)  => Left(a)
                     case Right(a) =>
                       vulnerabilityScore match {
-                        case Left(b) => Left(b)
+                        case Left(b)  => Left(b)
                         case Right(b) =>
                           admissionRuleScore match {
-                            case Left(c) => Left(c)
+                            case Left(c)  => Left(c)
                             case Right(c) =>
                               newServiceModeScore match {
-                                case Left(d) => Left(d)
+                                case Left(d)  => Left(d)
                                 case Right(d) =>
                                   if (isGlobalUser) {
                                     Right(d + a + x + y + z + c + b)
@@ -2081,12 +2078,11 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
     k: String,
     v: Array[ServiceLevelConversation]
   ) => {
-    var applications = Set[String]()
-    v.foreach(
-      child =>
-        applications = applications ++
-          child.applications.getOrElse(Array[String]()) ++
-          child.ports.getOrElse(Array[String]())
+    var applications    = Set[String]()
+    v.foreach(child =>
+      applications = applications ++
+        child.applications.getOrElse(Array[String]()) ++
+        child.ports.getOrElse(Array[String]())
     )
     val policyActionMap = Map(
       "deny"    -> 0,
@@ -2124,12 +2120,11 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
     data: ApplicationAnalysis,
     count: Int,
     bytes: BigInt
-  ) => {
+  ) =>
     ApplicationAnalysis(
       data.count + count,
       data.totalBytes + bytes
     )
-  }
 
   private lazy val getCriticalSecurityEvents = (
     threats: ThreatEndpointData,
@@ -2140,8 +2135,8 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
     val topThreats = if (threats.error.isDefined) {
       Left(threats.error.get)
     } else {
-      val convertedThreats = threats.threats.zipWithIndex.map {
-        case (threat, _) => threatsToConvertedThreats(threat)
+      val convertedThreats      = threats.threats.zipWithIndex.map { case (threat, _) =>
+        threatsToConvertedThreats(threat)
       }
       val topThreateningSources = convertedThreats
         .groupBy(_.source_workload_name)
@@ -2165,8 +2160,8 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
     val topViolations = if (violations.error.isDefined) {
       Left(violations.error.get)
     } else {
-      val convertedViolations = violations.violations.zipWithIndex.map {
-        case (violation, _) => violationsToConvertedviolations(violation)
+      val convertedViolations = violations.violations.zipWithIndex.map { case (violation, _) =>
+        violationsToConvertedviolations(violation)
       }
       val topViolatingClients = convertedViolations
         .groupBy(_.client_name)
@@ -2193,21 +2188,25 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
     } else {
       var alertsSet = Set("")
 
-      violations.violations.foreach(violation => {
+      violations.violations.foreach { violation =>
         alertsSet += violation.client_name
         alertsSet += violation.server_name
-      })
+      }
 
-      incidentsDetails.incidents.foreach(incidentsDetail => {
-        if (incidentsDetail.workload_name.isDefined
-            && incidentsDetail.workload_name.get != ""
-            && incidentsDetail.workload_name.get != "external")
+      incidentsDetails.incidents.foreach { incidentsDetail =>
+        if (
+          incidentsDetail.workload_name.isDefined
+          && incidentsDetail.workload_name.get != ""
+          && incidentsDetail.workload_name.get != "external"
+        )
           alertsSet += incidentsDetail.workload_name.get
-        if (incidentsDetail.remote_workload_name.isDefined
-            && incidentsDetail.remote_workload_name.get != ""
-            && incidentsDetail.remote_workload_name.get != "external")
+        if (
+          incidentsDetail.remote_workload_name.isDefined
+          && incidentsDetail.remote_workload_name.get != ""
+          && incidentsDetail.remote_workload_name.get != "external"
+        )
           alertsSet += incidentsDetail.remote_workload_name.get
-      })
+      }
 
       Right(alertsSet.toList)
     }
@@ -2221,27 +2220,23 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
         Right(
           Map(
             "violations" -> violations.violations
-              .groupBy(
-                violation => new DateTime(violation.reported_at).toString().split("T").head
-              )
-              .map {
-                case (k, v) => k -> v.length
+              .groupBy(violation => new DateTime(violation.reported_at).toString().split("T").head)
+              .map { case (k, v) =>
+                k -> v.length
               }
               .toSeq
               .sortBy(_._1),
-            "threats" -> threats.threats
+            "threats"    -> threats.threats
               .groupBy(threat => new DateTime(threat.reported_at).toString().split("T").head)
-              .map {
-                case (k, v) => (k, v.length)
+              .map { case (k, v) =>
+                (k, v.length)
               }
               .toSeq
               .sortBy(_._1),
-            "incidents" -> incidents.incidents
-              .groupBy(
-                incident => new DateTime(incident.reported_at).toString().split("T").head
-              )
-              .map {
-                case (k, v) => (k, v.length)
+            "incidents"  -> incidents.incidents
+              .groupBy(incident => new DateTime(incident.reported_at).toString().split("T").head)
+              .map { case (k, v) =>
+                (k, v.length)
               }
               .toSeq
               .sortBy(_._1)
@@ -2256,7 +2251,7 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
     threats: DashboardThreatData,
     violations: DashboardViolationData,
     incidents: DashboardIncidentData
-  ) => {
+  ) =>
     if (threats.error.isDefined) {
       Left(threats.error.get)
     } else if (violations.error.isDefined) {
@@ -2264,14 +2259,14 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
     } else if (incidents.error.isDefined) {
       Left(incidents.error.get)
     } else {
-      val convertedThreats = threats.threats.zipWithIndex.map {
-        case (threat, _) => threatsToConvertedDashboardThreats(threat)
+      val convertedThreats    = threats.threats.zipWithIndex.map { case (threat, _) =>
+        threatsToConvertedDashboardThreats(threat)
       }
-      val convertedViolations = violations.violations.zipWithIndex.map {
-        case (violation, _) => violationsToConvertedDashboardViolations(violation)
+      val convertedViolations = violations.violations.zipWithIndex.map { case (violation, _) =>
+        violationsToConvertedDashboardViolations(violation)
       }
-      val convertedIncidents = incidents.incidents.zipWithIndex.map {
-        case (incident, _) => incidentsToConvertedDashboardIncidents(incident)
+      val convertedIncidents  = incidents.incidents.zipWithIndex.map { case (incident, _) =>
+        incidentsToConvertedDashboardIncidents(incident)
       }
 
       val convertedSecurityEvents =
@@ -2297,20 +2292,20 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
 
       val summary = Map(
         "critical" -> convertedSecurityEvents
-          .groupBy(
-            securityEvent => new DateTime(securityEvent.reported_at).toString().split("T").head
+          .groupBy(securityEvent =>
+            new DateTime(securityEvent.reported_at).toString().split("T").head
           )
-          .map {
-            case (k, v) => k -> v.count(_.level.toLowerCase.equals("critical"))
+          .map { case (k, v) =>
+            k -> v.count(_.level.toLowerCase.equals("critical"))
           }
           .toSeq
           .sortBy(_._1),
-        "warning" -> convertedSecurityEvents
-          .groupBy(
-            securityEvent => new DateTime(securityEvent.reported_at).toString().split("T").head
+        "warning"  -> convertedSecurityEvents
+          .groupBy(securityEvent =>
+            new DateTime(securityEvent.reported_at).toString().split("T").head
           )
-          .map {
-            case (k, v) => k -> v.count(_.level.toLowerCase.equals("warning"))
+          .map { case (k, v) =>
+            k -> v.count(_.level.toLowerCase.equals("warning"))
           }
           .toSeq
           .sortBy(_._1)
@@ -2323,7 +2318,6 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
         )
       )
     }
-  }
 
   private lazy val getHighPriorityVulnerabilities = (
     vulContainers: WorkloadsWrap,
@@ -2336,65 +2330,56 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
     } else {
       val vulContainersByDomain =
         vulContainers.workloads
-          .filter(
-            (container: Workload) =>
-              container.state != "exit" &&
-              container.platform_role == "" &&
+          .filter((container: Workload) =>
+            container.state != "exit" &&
+            container.platform_role == "" &&
+            (
+              serviceMaps.serviceMap.isEmpty ||
               (
-                serviceMaps.serviceMap.isEmpty ||
-                (
-                  serviceMaps.serviceMap.nonEmpty &&
-                  serviceMaps.serviceMap.contains(s"nv.${container.service}")
-                )
-              ) &&
-              (domain.isEmpty || container.domain.equals(domain))
+                serviceMaps.serviceMap.nonEmpty &&
+                serviceMaps.serviceMap.contains(s"nv.${container.service}")
+              )
+            ) &&
+            (domain.isEmpty || container.domain.equals(domain))
           )
 
-      val top5Workloads = vulContainersByDomain
-        .map(
-          container => {
-            val vulnerabilityNum = container.children.fold(
+      val top5Workloads = vulContainersByDomain.map { container =>
+        val vulnerabilityNum = container.children.fold(
+          (
+            container.scan_summary.fold(0)(scan_summary => scan_summary.high),
+            container.scan_summary.fold(0)(scan_summary => scan_summary.medium)
+          )
+        )(children =>
+          children
+            .filter(child => child.state != "exit")
+            .foldLeft(
+              container.scan_summary.fold(0)(scan_summary => scan_summary.high),
+              container.scan_summary.fold(0)(scan_summary => scan_summary.medium)
+            ) { (container, child) =>
               (
-                container.scan_summary.fold(0)(scan_summary => scan_summary.high),
-                container.scan_summary.fold(0)(scan_summary => scan_summary.medium)
+                container._1 + child.scan_summary
+                  .fold(0)(scan_summary => scan_summary.high),
+                container._2 + child.scan_summary
+                  .fold(0)(scan_summary => scan_summary.medium)
               )
-            )(
-              children =>
-                children
-                  .filter(child => child.state != "exit")
-                  .foldLeft(
-                    container.scan_summary.fold(0)(scan_summary => scan_summary.high),
-                    container.scan_summary.fold(0)(scan_summary => scan_summary.medium)
-                  ) { (container, child) =>
-                    {
-                      (
-                        container._1 + child.scan_summary
-                          .fold(0)(scan_summary => scan_summary.high),
-                        container._2 + child.scan_summary
-                          .fold(0)(scan_summary => scan_summary.medium)
-                      )
-                    }
-                  }
-            )
-
-            val workload = container.copy(
-              high4Dashboard = Some(vulnerabilityNum._1),
-              medium4Dashboard = Some(vulnerabilityNum._2)
-            )
-            workload
-          }
+            }
         )
+
+        val workload = container.copy(
+          high4Dashboard = Some(vulnerabilityNum._1),
+          medium4Dashboard = Some(vulnerabilityNum._2)
+        )
+        workload
+      }
         .sortWith(
           _.medium4Dashboard.fold(0)(medium => medium) > _.medium4Dashboard
             .fold(0)(medium => medium)
         )
         .sortWith(_.high4Dashboard.fold(0)(high => high) > _.high4Dashboard.fold(0)(high => high))
-        .filterNot(
-          workloads => {
-            workloads.high4Dashboard.fold(0)(high => high) == 0 &&
-            workloads.medium4Dashboard.fold(0)(medium => medium) == 0
-          }
-        )
+        .filterNot { workloads =>
+          workloads.high4Dashboard.fold(0)(high => high) == 0 &&
+          workloads.medium4Dashboard.fold(0)(medium => medium) == 0
+        }
 
       Right(
         VulnerableContainers(
@@ -2417,11 +2402,11 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
           _.scan_summary.fold(0)(scan_summary => scan_summary.high) > _.scan_summary
             .fold(0)(scan_summary => scan_summary.high)
         )
-        .filterNot(vulNodes => {
+        .filterNot { vulNodes =>
           vulNodes.scan_summary
             .fold(0)(scan_summary => scan_summary.high) == 0 && vulNodes.scan_summary
             .fold(0)(scan_summary => scan_summary.medium) == 0
-        })
+        }
 
       Right(
         VulnerableNodes(
@@ -2439,20 +2424,19 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
 
   private lazy val getTopIncidents = (
     incidentsDetails: IncidentsEndpoint
-  ) => {
+  ) =>
     if (incidentsDetails.error.isDefined) {
       Left(incidentsDetails.error.get)
     } else {
 
-      val hostTotal = incidentsDetails.incidents.length
+      val hostTotal         = incidentsDetails.incidents.length
       val containerIncident = incidentsDetails.incidents
-        .filterNot(
-          incident =>
-            incident.workload_name.isEmpty
-            || incident.workload_name.get == ""
-            || incident.workload_name.get == "external"
+        .filterNot(incident =>
+          incident.workload_name.isEmpty
+          || incident.workload_name.get == ""
+          || incident.workload_name.get == "external"
         )
-      val containerTotal = containerIncident.length
+      val containerTotal    = containerIncident.length
 
       val groupByContainer = containerIncident
         .groupBy(_.workload_name.get)
@@ -2473,16 +2457,17 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
 
       Right(TopIncidentsDTO(groupByContainer, groupByNode, hostTotal, containerTotal))
     }
-  }
 
   private def handleException(
     e: Exception,
     defaultResponseObj: String,
     f: Exception => Boolean = _.getMessage.contains("Status: 4")
   ): Future[String] =
-    if (e.getMessage.contains("Status: 408") ||
-        e.getMessage.contains("Status: 401") ||
-        e.getMessage.contains("Status: 503"))
+    if (
+      e.getMessage.contains("Status: 408") ||
+      e.getMessage.contains("Status: 401") ||
+      e.getMessage.contains("Status: 503")
+    )
       throw e
     else {
       if (f(e)) {
@@ -2492,8 +2477,8 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
       } else {
         Future {
           s"""{$defaultResponseObj, "error":{"message":"${e.getMessage
-            .replace("\"", "\\\"")
-            .replace("\n", ", ")}"}}"""
+              .replace("\"", "\\\"")
+              .replace("\n", ", ")}"}}"""
         }
       }
     }
@@ -2523,10 +2508,13 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
     handleException(e, "\"platforms\": []")
 
   private def handleSystemConfigException(e: Exception): Future[String] =
-    handleException(e, "\"config\":{\"new_service_policy_mode\":\"discover\"}", e => {
-      e.getMessage.contains("Status: 4") ||
-      e.getMessage.contains("\"code\":25")
-    })
+    handleException(
+      e,
+      "\"config\":{\"new_service_policy_mode\":\"discover\"}",
+      e =>
+        e.getMessage.contains("Status: 4") ||
+        e.getMessage.contains("\"code\":25")
+    )
 
   private def handleWorkloadException(e: Exception): Future[String] =
     handleException(e, "\"workloads\": []")
@@ -2535,7 +2523,7 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
     handleException(
       e,
       "\"rules\": []",
-      e => {
+      e =>
         e.getMessage.contains("Status: 4") ||
         e.getMessage.contains("\"code\":30") ||
         e.getMessage.contains("\"code\":31") ||
@@ -2543,21 +2531,20 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
         e.getMessage.contains("\"code\":33") ||
         e.getMessage.contains("\"code\":34") ||
         e.getMessage.contains("\"code\":7")
-      }
     )
 
   private def handleAutoScanConfigException(e: Exception): Future[String] =
     Future {
       s"""{\"config\":{\"auto_scan\":false}, "error":{"message":"${e.getMessage
-        .replace("\"", "\\\"")
-        .replace("\n", ", ")}"}}"""
+          .replace("\"", "\\\"")
+          .replace("\n", ", ")}"}}"""
     }
 
   private def handleAdmissionStateException(e: Exception): Future[String] =
     handleException(
       e,
       "\"state\":{\"enable\":false}",
-      e => {
+      e =>
         e.getMessage.contains("Status: 4") ||
         e.getMessage.contains("\"code\":30") ||
         e.getMessage.contains("\"code\":31") ||
@@ -2565,6 +2552,5 @@ class DashboardApi()(implicit executionContext: ExecutionContext)
         e.getMessage.contains("\"code\":33") ||
         e.getMessage.contains("\"code\":34") ||
         e.getMessage.contains("\"code\":7")
-      }
     )
 }

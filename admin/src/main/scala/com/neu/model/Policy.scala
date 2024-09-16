@@ -78,9 +78,10 @@ case class DeployFedRulesConfig(
 
 /**
  * New rules to insert into policy
- * @param after the id of the rule before new rules, use 0 to insert in
- *              front, -1 to put on the end
- * @param rules the rules
+ * @param after
+ *   the id of the rule before new rules, use 0 to insert in front, -1 to put on the end
+ * @param rules
+ *   the rules
  */
 case class RuleInsert(after: Int = 0, rules: Array[Rule])
 

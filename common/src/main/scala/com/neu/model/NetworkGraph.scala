@@ -7,9 +7,12 @@ package com.neu.model
  */
 /**
  * Scan brief summary for the endpoint
- * @param status The status of the scanning process on the endpoint
- * @param high The high risky vulnerable item number
- * @param medium The medium risky vulnerable item number
+ * @param status
+ *   The status of the scanning process on the endpoint
+ * @param high
+ *   The high risky vulnerable item number
+ * @param medium
+ *   The medium risky vulnerable item number
  */
 case class ScanBrief(status: String, high: Int, medium: Int)
 
@@ -24,8 +27,10 @@ case class Fixed(x: Boolean, y: Boolean)
 
 /**
  * The node of the network graph which represent current active container
- * @param id the id of the container
- * @param label the name of the container
+ * @param id
+ *   the id of the container
+ * @param label
+ *   the name of the container
  */
 case class Node(
   id: String,
@@ -58,9 +63,12 @@ case class GraphItem(name: String)
 
 /**
  * Hidden items for Graph Layout.
- * @param domains The hidden domains
- * @param groups The hidden groups
- * @param endpoints The hidden endpoints
+ * @param domains
+ *   The hidden domains
+ * @param groups
+ *   The hidden groups
+ * @param endpoints
+ *   The hidden endpoints
  */
 case class Blacklist(
   domains: Array[GraphItem],
@@ -76,9 +84,12 @@ case class Direction(to: Scale)
 
 /**
  * Edge of the network graph
- * @param source the id of the client container
- * @param target the id of the server container
- * @param status the status of the conversation
+ * @param source
+ *   the id of the client container
+ * @param target
+ *   the id of the server container
+ * @param status
+ *   the status of the conversation
  */
 case class Edge(
   id: Option[String],

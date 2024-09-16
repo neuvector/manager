@@ -1,21 +1,21 @@
 package com.neu.service.authentication
 
 import com.neu.client.RestClient
-import com.neu.client.RestClient._
+import com.neu.client.RestClient.*
 import com.neu.core.AuthenticationManager
-import com.neu.model.AuthTokenJsonProtocol._
-import com.neu.model._
+import com.neu.model.AuthTokenJsonProtocol.*
+import com.neu.model.*
 import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.model._
+import org.apache.pekko.http.scaladsl.model.*
 import org.apache.pekko.http.scaladsl.server.{ RequestContext, Route }
 import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshal
 
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.util.{ Failure, Success }
 
-class SamlAuthService()(
-  implicit system: ActorSystem,
+class SamlAuthService()(implicit
+  system: ActorSystem,
   ec: ExecutionContext
 ) extends AuthService {
 
@@ -61,7 +61,7 @@ class SamlAuthService()(
         logger.info("saml-pt: authToken matched.")
         AuthenticationManager.invalidate(samlKey)
         complete(token)
-      case None =>
+      case None        =>
         logger.info("saml-pt: no authToken.")
         complete((StatusCodes.Unauthorized, authError))
     }
@@ -71,7 +71,7 @@ class SamlAuthService()(
     logger.info(s"saml-p: $host")
     onComplete(processLoginRequest(ctx, ip, host)) {
       case Success(route) => route
-      case Failure(ex) =>
+      case Failure(ex)    =>
         logger.error("Login process failed", ex)
         complete(StatusCodes.InternalServerError)
     }
@@ -143,7 +143,7 @@ class SamlAuthService()(
           AuthenticationManager.putToken("samlSso", userToken)
           redirect(rootPath, StatusCodes.Found)
         }
-      case _ =>
+      case _              =>
         logger.warn(s"saml-p: ${response.status}. SAML login error. redirect to $rootPath ")
         Future.successful(redirect(rootPath, StatusCodes.MovedPermanently))
     }

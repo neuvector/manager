@@ -1,6 +1,6 @@
 package com.neu.model
 
-import spray.json.{ DefaultJsonProtocol, _ }
+import spray.json.*
 
 object ComplianceJsonProtocol extends DefaultJsonProtocol {
   implicit val complianceNISTConfigFormat: RootJsonFormat[ComplianceNISTConfig] =
@@ -43,18 +43,18 @@ object ComplianceJsonProtocol extends DefaultJsonProtocol {
     jsonFormat1(
       ComplianceProfileConfigData
     )
-  implicit val remoteExportOptionsFormat: RootJsonFormat[RemoteExportOptions] = jsonFormat3(
+  implicit val remoteExportOptionsFormat: RootJsonFormat[RemoteExportOptions]                 = jsonFormat3(
     RemoteExportOptions
   )
   implicit val complianceProfileExportDataFormat: RootJsonFormat[ComplianceProfileExportData] =
     jsonFormat2(ComplianceProfileExportData)
-  def complianceNISTConfigDataToJson(config: ComplianceNISTConfigData): String =
+  def complianceNISTConfigDataToJson(config: ComplianceNISTConfigData): String                =
     config.toJson.compactPrint
 
   def configWrapToJson(config: ComplianceProfileConfigData): String =
     config.toJson.compactPrint
 
-  def profileWrapToJson(profile: ComplianceProfileEntryData): String =
+  def profileWrapToJson(profile: ComplianceProfileEntryData): String              =
     profile.toJson.compactPrint
 
   def complianceProfileExportDataToJson(

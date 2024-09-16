@@ -26,38 +26,35 @@ class SuseAuthApi(
       }
     } ~
     headerValueByName("Token") { tokenId =>
-      {
-        pathPrefix(auth) {
-          delete {
-            Utils.respondWithWebServerHeaders() {
-              authProcessor.logout(None, tokenId)
-            }
+      pathPrefix(auth) {
+        delete {
+          Utils.respondWithWebServerHeaders() {
+            authProcessor.logout(None, tokenId)
           }
-        } ~
-        pathPrefix("heartbeat") {
-          patch {
-            Utils.respondWithWebServerHeaders() {
-              authProcessor.validateToken(Some(tokenId))
-            }
+        }
+      } ~
+      pathPrefix("heartbeat") {
+        patch {
+          Utils.respondWithWebServerHeaders() {
+            authProcessor.validateToken(Some(tokenId))
           }
-        } ~
-        pathPrefix("self") {
-          get {
-            parameter(Symbol("isOnNV").?, Symbol("isRancherSSOUrl").?) {
-              (isOnNV, isRancherSSOUrl) =>
-                Utils.respondWithWebServerHeaders() {
-                  optionalCookie(suseCookie) {
-                    case Some(sCookie) =>
-                      authProcessor.getSelf(
-                        isOnNV,
-                        isRancherSSOUrl,
-                        sCookie.value,
-                        tokenId
-                      )
-                    case None =>
-                      authProcessor.getSelf(isOnNV, isRancherSSOUrl, "", tokenId)
-                  }
-                }
+        }
+      } ~
+      pathPrefix("self") {
+        get {
+          parameter(Symbol("isOnNV").?, Symbol("isRancherSSOUrl").?) { (isOnNV, isRancherSSOUrl) =>
+            Utils.respondWithWebServerHeaders() {
+              optionalCookie(suseCookie) {
+                case Some(sCookie) =>
+                  authProcessor.getSelf(
+                    isOnNV,
+                    isRancherSSOUrl,
+                    sCookie.value,
+                    tokenId
+                  )
+                case None          =>
+                  authProcessor.getSelf(isOnNV, isRancherSSOUrl, "", tokenId)
+              }
             }
           }
         }

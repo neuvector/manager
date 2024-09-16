@@ -263,34 +263,32 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
           patch {
             entity(as[SystemConfig]) { systemConfig =>
               parameter(Symbol("scope").?) { scope =>
-                {
-                  Utils.respondWithWebServerHeaders() {
-                    complete {
-                      scope.fold {
-                        val payload =
-                          systemConfigWrapToJson(
-                            SystemConfigWrap(Some(systemConfig), None, None, None, None)
-                          )
-                        logger.info("Updating config: {}", payload)
-                        RestClient.httpRequestWithHeader(
-                          s"${baseClusterUri(tokenId)}/system/config",
-                          HttpMethods.PATCH,
-                          payload,
-                          tokenId
+                Utils.respondWithWebServerHeaders() {
+                  complete {
+                    scope.fold {
+                      val payload =
+                        systemConfigWrapToJson(
+                          SystemConfigWrap(Some(systemConfig), None, None, None, None)
                         )
-                      } { scope =>
-                        val fedPayload =
-                          systemConfigWrapToJson(
-                            SystemConfigWrap(None, None, Some(systemConfig), None, None)
-                          )
-                        logger.info("Updating fed config: {}", fedPayload)
-                        RestClient.httpRequestWithHeader(
-                          s"${baseClusterUri(tokenId)}/system/config?scope=$scope",
-                          HttpMethods.PATCH,
-                          fedPayload,
-                          tokenId
+                      logger.info("Updating config: {}", payload)
+                      RestClient.httpRequestWithHeader(
+                        s"${baseClusterUri(tokenId)}/system/config",
+                        HttpMethods.PATCH,
+                        payload,
+                        tokenId
+                      )
+                    } { scope =>
+                      val fedPayload =
+                        systemConfigWrapToJson(
+                          SystemConfigWrap(None, None, Some(systemConfig), None, None)
                         )
-                      }
+                      logger.info("Updating fed config: {}", fedPayload)
+                      RestClient.httpRequestWithHeader(
+                        s"${baseClusterUri(tokenId)}/system/config?scope=$scope",
+                        HttpMethods.PATCH,
+                        fedPayload,
+                        tokenId
+                      )
                     }
                   }
                 }
@@ -336,30 +334,28 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
           patch {
             entity(as[SystemConfigWrap]) { systemConfigWrap =>
               parameter(Symbol("scope").?) { scope =>
-                {
-                  Utils.respondWithWebServerHeaders() {
-                    complete {
-                      scope.fold {
-                        val payload =
-                          systemConfigWrapToJson(systemConfigWrap)
-                        logger.info("Updating config")
-                        RestClient.httpRequestWithHeader(
-                          s"${baseClusterUriV2(tokenId)}/system/config",
-                          HttpMethods.PATCH,
-                          payload,
-                          tokenId
-                        )
-                      } { scope =>
-                        val fedPayload =
-                          systemConfigWrapToJson(systemConfigWrap)
-                        logger.info("Updating fed config")
-                        RestClient.httpRequestWithHeader(
-                          s"${baseClusterUriV2(tokenId)}/system/config?scope=$scope",
-                          HttpMethods.PATCH,
-                          fedPayload,
-                          tokenId
-                        )
-                      }
+                Utils.respondWithWebServerHeaders() {
+                  complete {
+                    scope.fold {
+                      val payload =
+                        systemConfigWrapToJson(systemConfigWrap)
+                      logger.info("Updating config")
+                      RestClient.httpRequestWithHeader(
+                        s"${baseClusterUriV2(tokenId)}/system/config",
+                        HttpMethods.PATCH,
+                        payload,
+                        tokenId
+                      )
+                    } { scope =>
+                      val fedPayload =
+                        systemConfigWrapToJson(systemConfigWrap)
+                      logger.info("Updating fed config")
+                      RestClient.httpRequestWithHeader(
+                        s"${baseClusterUriV2(tokenId)}/system/config?scope=$scope",
+                        HttpMethods.PATCH,
+                        fedPayload,
+                        tokenId
+                      )
                     }
                   }
                 }
@@ -393,7 +389,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
                   val payload = remoteRepositoryWrapToJson(
                     remoteRepositoryWrap
                   )
-                  val name = remoteRepositoryWrap.config.nickname
+                  val name    = remoteRepositoryWrap.config.nickname
                   logger.info("Update remote repository: {}", payload)
                   RestClient.httpRequestWithHeader(
                     s"${baseClusterUri(tokenId)}/system/config/remote_repository/${UrlEscapers.urlFragmentEscaper().escape(name)}",
@@ -523,7 +519,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
                             Some(transactionId),
                             Some(asStandalone)
                           )
-                          val importRes =
+                          val importRes       =
                             Await.result(importResFuture, RestClient.waitingLimit.seconds)
                           if (importRes.toString.contains("408 Request Timeout")) {
 
@@ -598,7 +594,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
                         "",
                         tokenId
                       )
-                      val result = Await.result(authRes, RestClient.waitingLimit.seconds)
+                      val result  = Await.result(authRes, RestClient.waitingLimit.seconds)
                       if (SupportLogAuthCacheManager.getSupportLogAuth(tokenId).isDefined) {
                         val byteArray = Files.readAllBytes(Paths.get(logFile))
                         purgeDebugFiles(new File("/tmp"))
@@ -631,9 +627,9 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
                 Utils.respondWithWebServerHeaders() {
                   entity(as[String]) { debuggedEnforcer =>
                     complete {
-                      try {
+                      try
                         verifyToken(tokenId) match {
-                          case Right(true) =>
+                          case Right(true)  =>
                             logFile = "/tmp/debug" + new Date().getTime + ".gz"
                             purgeDebugFiles(new File("/tmp"))
 
@@ -709,7 +705,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
                               serverErrorStatus,
                               new RuntimeException("Status: 401")
                             )
-                          case Left(error) =>
+                          case Left(error)  =>
                             RestClient.handleError(
                               timeOutStatus,
                               authenticationFailedStatus,
@@ -717,7 +713,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
                               error
                             )
                         }
-                      } catch {
+                      catch {
                         case NonFatal(e) =>
                           RestClient.handleError(
                             timeOutStatus,
@@ -736,8 +732,8 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     val isFileReady = Files.exists(Paths.get(logFile)) && Files.isReadable(
-                        Paths.get(logFile)
-                      )
+                      Paths.get(logFile)
+                    )
                     logger.info(s"Log file $logFile  is ready: $isFileReady")
                     if (isFileReady) {
                       HttpResponse(StatusCodes.OK, entity = "Ready")
@@ -834,7 +830,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
 
   private def verifyToken(tokenId: String): Either[Throwable, Boolean] =
     try {
-      val resultPromise = RestClient.httpRequestWithHeader(
+      val resultPromise        = RestClient.httpRequestWithHeader(
         s"${baseClusterUri(tokenId)}/$auth",
         HttpMethods.PATCH,
         "",
@@ -853,7 +849,7 @@ class DeviceApi()(implicit executionContext: ExecutionContext)
 
   private def setBaseUrl(tokenId: String, transactionId: String): Unit = {
     val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
-    val baseUrl = cachedBaseUrl.getOrElse(
+    val baseUrl       = cachedBaseUrl.getOrElse(
       baseClusterUri(tokenId)
     )
     AuthenticationManager.setBaseUrl(tokenId, baseUrl)

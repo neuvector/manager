@@ -12,13 +12,13 @@ import sun.security.util.DerInputStream
 
 import java.io._
 import java.math.BigInteger
-import java.security._
+import java.security.*
 import java.security.cert.{ Certificate, CertificateFactory, X509Certificate }
 import java.security.interfaces.RSAPrivateKey
-import java.security.spec._
+import java.security.spec.*
 import java.util.{ Base64, Date }
 import javax.net.ssl.{ KeyManagerFactory, SSLContext, SSLEngine, TrustManagerFactory }
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 trait MySslConfiguration extends LazyLogging {
 
@@ -95,7 +95,7 @@ trait MySslConfiguration extends LazyLogging {
 
     val sanBuilder = new GeneralNamesBuilder()
     sanBuilder.addName(new GeneralName(GeneralName.dNSName, "neuvector"))
-    val san = sanBuilder.build()
+    val san        = sanBuilder.build()
     certificateBuilder.addExtension(Extension.subjectAlternativeName, false, san)
 
     // Sign and generate the certificate
@@ -155,7 +155,7 @@ trait MySslConfiguration extends LazyLogging {
       bisKey = new BufferedInputStream(fisKey)
 
       if (bisCert.available > 0 && bisKey.available > 0) {
-        val privateKeyBytes = new Array[Byte](fKey.length.toInt)
+        val privateKeyBytes        = new Array[Byte](fKey.length.toInt)
         bisKey.read(privateKeyBytes)
         var privateKey: PrivateKey = null
 
@@ -183,8 +183,8 @@ trait MySslConfiguration extends LazyLogging {
 
           val bytes = Base64.getDecoder.decode(encodedPrivateKey)
 
-          val derReader = new DerInputStream(bytes)
-          val seq       = derReader.getSequence(0)
+          val derReader  = new DerInputStream(bytes)
+          val seq        = derReader.getSequence(0)
           // skip version seq[0];
           val modulus    = seq(1).getBigInteger
           val publicExp  = seq(2).getBigInteger
@@ -195,7 +195,7 @@ trait MySslConfiguration extends LazyLogging {
           val exp2       = seq(7).getBigInteger
           val crtCoef    = seq(8).getBigInteger
 
-          val keySpec = new RSAPrivateCrtKeySpec(
+          val keySpec    = new RSAPrivateCrtKeySpec(
             modulus,
             publicExp,
             privateExp,
@@ -211,7 +211,7 @@ trait MySslConfiguration extends LazyLogging {
           throw new SecurityException("Invalid private key is being used")
         }
         val certs: Array[Certificate] = cf.generateCertificates(bisCert).asScala.toArray
-        val keyEntry: KeyStore.Entry = new KeyStore.PrivateKeyEntry(
+        val keyEntry: KeyStore.Entry  = new KeyStore.PrivateKeyEntry(
           privateKey,
           certs
         )
@@ -237,7 +237,7 @@ trait MySslConfiguration extends LazyLogging {
       case e: FileNotFoundException =>
         logger.warn(e.getMessage)
         context
-      case e: SecurityException =>
+      case e: SecurityException     =>
         logger.warn(e.getMessage)
         context
     } finally {

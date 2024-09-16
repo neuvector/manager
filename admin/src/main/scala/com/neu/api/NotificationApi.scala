@@ -27,7 +27,6 @@ import scala.util.control.NonFatal
 
 /**
  * Notification rest service
- *
  */
 class NotificationApi()(implicit executionContext: ExecutionContext)
     extends BaseService
@@ -45,20 +44,18 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
           pathEnd {
             patch {
               entity(as[Array[String]]) { ipList =>
-                {
-                  Utils.respondWithWebServerHeaders() {
-                    complete {
-                      logger.info("Getting ip locations")
-                      try {
-                        IpGeoManager.getCountries(ipList)
-                      } catch {
-                        case NonFatal(e) =>
-                          if (e.getMessage.contains("Status: 408")) {
-                            (StatusCodes.RequestTimeout, "Session expired!")
-                          } else {
-                            (StatusCodes.InternalServerError, "Internal server error")
-                          }
-                      }
+                Utils.respondWithWebServerHeaders() {
+                  complete {
+                    logger.info("Getting ip locations")
+                    try
+                      IpGeoManager.getCountries(ipList)
+                    catch {
+                      case NonFatal(e) =>
+                        if (e.getMessage.contains("Status: 408")) {
+                          (StatusCodes.RequestTimeout, "Session expired!")
+                        } else {
+                          (StatusCodes.InternalServerError, "Internal server error")
+                        }
                     }
                   }
                 }
@@ -126,7 +123,7 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
                           "",
                           tokenId
                         )
-                      case _ =>
+                      case _        =>
                         RestClient.httpRequestWithHeader(
                           s"${baseClusterUri(tokenId)}/log/violation/workload?s_server=desc&start=0&limit=5",
                           GET,
@@ -142,32 +139,31 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
           path("track") {
             post {
               entity(as[ViolationBrief]) { violationBrief =>
-                {
-                  try {
-                    val result = RestClient.requestWithHeaderDecode(
-                      s"${baseClusterUri(tokenId)}/log/violation",
-                      GET,
-                      "",
-                      tokenId
-                    )
-                    val violations =
-                      jsonToViolationWrap(Await.result(result, RestClient.waitingLimit.seconds)).violations
-                    val track = violations.filter(
-                      violation =>
-                        violation.client_id.equals(violationBrief.client_name) &&
-                        violation.server_id.equals(violationBrief.server_name) &&
-                        violation.reported_at.isAfter(violationBrief.reported_at.minusHours(2)) &&
-                        violation.reported_at.isBefore(violationBrief.reported_at.plusHours(2))
-                    )
-                    Utils.respondWithWebServerHeaders() {
-                      complete(track)
-                    }
-                  } catch {
-                    case NonFatal(e) =>
-                      Utils.respondWithWebServerHeaders() {
-                        complete(onNonFatal(e))
-                      }
+                try {
+                  val result     = RestClient.requestWithHeaderDecode(
+                    s"${baseClusterUri(tokenId)}/log/violation",
+                    GET,
+                    "",
+                    tokenId
+                  )
+                  val violations =
+                    jsonToViolationWrap(
+                      Await.result(result, RestClient.waitingLimit.seconds)
+                    ).violations
+                  val track      = violations.filter(violation =>
+                    violation.client_id.equals(violationBrief.client_name) &&
+                    violation.server_id.equals(violationBrief.server_name) &&
+                    violation.reported_at.isAfter(violationBrief.reported_at.minusHours(2)) &&
+                    violation.reported_at.isBefore(violationBrief.reported_at.plusHours(2))
+                  )
+                  Utils.respondWithWebServerHeaders() {
+                    complete(track)
                   }
+                } catch {
+                  case NonFatal(e) =>
+                    Utils.respondWithWebServerHeaders() {
+                      complete(onNonFatal(e))
+                    }
                 }
               }
             }
@@ -196,12 +192,12 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
                 Utils.respondWithWebServerHeaders() {
                   logger.info("tokenId: {}", tokenId)
                   val cacheKey = if (tokenId.length > 20) tokenId.substring(0, 20) else tokenId
-                  try {
+                  try
                     complete {
                       var elements: List[org.json4s.JsonAST.JValue] = null
                       var auditStr: String                          = null
                       if (start.isEmpty || start.get.toInt == 0) {
-                        val url = s"${baseClusterUri(tokenId)}/log/audit"
+                        val url      = s"${baseClusterUri(tokenId)}/log/audit"
                         logger.info("Get audit log data from {}", url)
                         val auditRes = RestClient.requestWithHeaderDecode(
                           url,
@@ -225,13 +221,13 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
                             .getPagedData(s"$cacheKey-audit")
                             .getOrElse(List[org.json4s.JsonAST.JValue]())
                         }
-                        val output =
+                        val output     =
                           elements.slice(start.get.toInt, start.get.toInt + limit.get.toInt)
                         if (output.length < limit.get.toInt) {
                           paginationCacheManager[List[org.json4s.JsonAST.JValue]]
                             .removePagedData(s"$cacheKey-audit")
                         }
-                        val pagedRes = compact(render(JArray(output)))
+                        val pagedRes   = compact(render(JArray(output)))
                         val cachedData = paginationCacheManager[List[org.json4s.JsonAST.JValue]]
                           .getPagedData(s"$cacheKey-audit")
                           .getOrElse(List[org.json4s.JsonAST.JValue]())
@@ -245,12 +241,14 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
                         auditStr
                       }
                     }
-                  } catch {
+                  catch {
                     case NonFatal(e) =>
                       logger.warn(e.getMessage)
-                      if (e.getMessage.contains("Status: 401") || e.getMessage.contains(
-                            "Status: 403"
-                          )) {
+                      if (
+                        e.getMessage.contains("Status: 401") || e.getMessage.contains(
+                          "Status: 403"
+                        )
+                      ) {
                         paginationCacheManager[List[org.json4s.JsonAST.JValue]]
                           .removePagedData(s"$cacheKey-audit")
                         Utils.respondWithWebServerHeaders() {
@@ -285,20 +283,20 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
                 Utils.respondWithWebServerHeaders() {
                   complete {
                     id match {
-                      case None =>
+                      case None       =>
                         try {
-                          val threatsRes = RestClient.requestWithHeaderDecode(
+                          val threatsRes       = RestClient.requestWithHeaderDecode(
                             s"${baseClusterUri(tokenId)}/log/threat",
                             GET,
                             "",
                             tokenId
                           )
-                          val threats =
+                          val threats          =
                             jsonToThreatsEndpointData(
                               Await.result(threatsRes, RestClient.waitingLimit.seconds)
                             ).threats
-                          val convertedThreats = threats.zipWithIndex.map {
-                            case (threat, _) => threatsToConvertedThreats(threat)
+                          val convertedThreats = threats.zipWithIndex.map { case (threat, _) =>
+                            threatsToConvertedThreats(threat)
                           }
                           val newThreatDTOWrap = NewThreatDTOWrap(convertedThreats)
                           newThreatDTOWrap
@@ -322,40 +320,37 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
           path("track") {
             post {
               entity(as[ViolationBrief]) { violationBrief =>
-                {
-                  try {
-                    val result =
-                      RestClient.requestWithHeaderDecode(
-                        s"${baseClusterUri(tokenId)}/log/threat",
-                        GET,
-                        "",
-                        tokenId
-                      )
-                    val threats = jsonToThreatDTOWrap(
-                      Await.result(result, RestClient.waitingLimit.seconds)
-                    ).threats
-                    logger.info("Number of threats: {}", threats.length)
-                    val track = threats.filter(
-                      threat =>
-                        if (threat.sess_ingress) {
-                          threat.workload_id.equals(violationBrief.server_name) &&
-                          threat.reported_at.isAfter(violationBrief.reported_at.minusHours(2)) &&
-                          threat.reported_at.isBefore(violationBrief.reported_at.plusHours(2))
-                        } else {
-                          threat.workload_id.equals(violationBrief.client_name) &&
-                          threat.reported_at.isAfter(violationBrief.reported_at.minusHours(2)) &&
-                          threat.reported_at.isBefore(violationBrief.reported_at.plusHours(2))
-                        }
+                try {
+                  val result  =
+                    RestClient.requestWithHeaderDecode(
+                      s"${baseClusterUri(tokenId)}/log/threat",
+                      GET,
+                      "",
+                      tokenId
                     )
-                    Utils.respondWithWebServerHeaders() {
-                      complete(track)
+                  val threats = jsonToThreatDTOWrap(
+                    Await.result(result, RestClient.waitingLimit.seconds)
+                  ).threats
+                  logger.info("Number of threats: {}", threats.length)
+                  val track   = threats.filter(threat =>
+                    if (threat.sess_ingress) {
+                      threat.workload_id.equals(violationBrief.server_name) &&
+                      threat.reported_at.isAfter(violationBrief.reported_at.minusHours(2)) &&
+                      threat.reported_at.isBefore(violationBrief.reported_at.plusHours(2))
+                    } else {
+                      threat.workload_id.equals(violationBrief.client_name) &&
+                      threat.reported_at.isAfter(violationBrief.reported_at.minusHours(2)) &&
+                      threat.reported_at.isBefore(violationBrief.reported_at.plusHours(2))
                     }
-                  } catch {
-                    case NonFatal(e) =>
-                      Utils.respondWithWebServerHeaders() {
-                        complete(onNonFatal(e))
-                      }
+                  )
+                  Utils.respondWithWebServerHeaders() {
+                    complete(track)
                   }
+                } catch {
+                  case NonFatal(e) =>
+                    Utils.respondWithWebServerHeaders() {
+                      complete(onNonFatal(e))
+                    }
                 }
               }
             }
@@ -372,21 +367,20 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
                         "",
                         tokenId
                       )
-                    val threats = jsonToThreatWrap(
+                    val threats   = jsonToThreatWrap(
                       Await.result(threatRes, RestClient.waitingLimit.seconds)
                     ).threats
-                    val DTOs = threats
-                      .map(
-                        brief =>
-                          ThreatBriefDTO(
-                            brief.name,
-                            brief.severity,
-                            EnumUtils.getCode(brief.severity),
-                            brief.application
-                          )
+                    val DTOs      = threats
+                      .map(brief =>
+                        ThreatBriefDTO(
+                          brief.name,
+                          brief.severity,
+                          EnumUtils.getCode(brief.severity),
+                          brief.application
+                        )
                       )
                       .distinct
-                    val size = DTOs.length
+                    val size      = DTOs.length
                     if (size < topLimit) {
                       (DTOs ++ Array.fill(topLimit - size)(emptyThreatBriefDTO))
                         .sortBy(-_.severityId)
@@ -530,14 +524,12 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
                 }
               } ~
               post {
-                entity(as[UserGraphLayout]) { graphLayout: UserGraphLayout =>
-                  {
-                    logger.info("saving positions for user: {}", graphLayout.user)
-                    GraphCacheManager.saveNodeLayout(graphLayout)
-                    logger.debug(layoutToJson(graphLayout))
-                    Utils.respondWithWebServerHeaders() {
-                      complete(HttpEntity.Empty)
-                    }
+                entity(as[UserGraphLayout]) { (graphLayout: UserGraphLayout) =>
+                  logger.info("saving positions for user: {}", graphLayout.user)
+                  GraphCacheManager.saveNodeLayout(graphLayout)
+                  logger.debug(layoutToJson(graphLayout))
+                  Utils.respondWithWebServerHeaders() {
+                    complete(HttpEntity.Empty)
                   }
                 }
               }
@@ -545,11 +537,9 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
             path("layout") {
               get {
                 parameter(Symbol("user")) { user =>
-                  {
-                    Utils.respondWithWebServerHeaders() {
-                      complete {
-                        UserGraphLayout(user, GraphCacheManager.getNodeLayout(user))
-                      }
+                  Utils.respondWithWebServerHeaders() {
+                    complete {
+                      UserGraphLayout(user, GraphCacheManager.getNodeLayout(user))
                     }
                   }
                 }
@@ -558,23 +548,19 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
             path("blacklist") {
               get {
                 parameter(Symbol("user")) { user =>
-                  {
-                    Utils.respondWithWebServerHeaders() {
-                      complete {
-                        BlacklistCacheManager.getBlacklist(user)
-                      }
+                  Utils.respondWithWebServerHeaders() {
+                    complete {
+                      BlacklistCacheManager.getBlacklist(user)
                     }
                   }
                 }
               } ~
               post {
-                entity(as[UserBlacklist]) { userBlacklist: UserBlacklist =>
-                  {
-                    logger.info("saving blacklist for user: {}", userBlacklist.user)
-                    BlacklistCacheManager.saveBlacklist(userBlacklist)
-                    Utils.respondWithWebServerHeaders() {
-                      complete(HttpEntity.Empty)
-                    }
+                entity(as[UserBlacklist]) { (userBlacklist: UserBlacklist) =>
+                  logger.info("saving blacklist for user: {}", userBlacklist.user)
+                  BlacklistCacheManager.saveBlacklist(userBlacklist)
+                  Utils.respondWithWebServerHeaders() {
+                    complete(HttpEntity.Empty)
                   }
                 }
               }
@@ -605,15 +591,14 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
 
                     var notificationsOut = Array[SecurityEvent]()
 
-                    notificationsOut ++= threatMajor.zipWithIndex.map {
-                      case (threat, i) => threatsToSecurityEvents(threatDetails, threat, i)
+                    notificationsOut ++= threatMajor.zipWithIndex.map { case (threat, i) =>
+                      threatsToSecurityEvents(threatDetails, threat, i)
                     }
-                    notificationsOut ++= violationMajor.zipWithIndex.map {
-                      case (violation, i) =>
-                        violationsToSecurityEvents(violationDetails, violation, i)
+                    notificationsOut ++= violationMajor.zipWithIndex.map { case (violation, i) =>
+                      violationsToSecurityEvents(violationDetails, violation, i)
                     }
-                    notificationsOut ++= incidentMajor.zipWithIndex.map {
-                      case (incident, i) => incidentsToSecurityEvents(incidentDetails, incident, i)
+                    notificationsOut ++= incidentMajor.zipWithIndex.map { case (incident, i) =>
+                      incidentsToSecurityEvents(incidentDetails, incident, i)
                     }
                     notificationsOut =
                       notificationsOut.sortWith(_.reported_timestamp > _.reported_timestamp)
@@ -681,9 +666,9 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
     }
 
   private def getNotifications(tokenId: String) = {
-    val startTime = new DateTime()
+    val startTime     = new DateTime()
     logger.info("notifications Start: {}", startTime)
-    val threatsRes = RestClient.requestWithHeaderDecode(
+    val threatsRes    = RestClient.requestWithHeaderDecode(
       s"${baseClusterUri(tokenId)}/log/threat",
       GET,
       "",
@@ -695,7 +680,7 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
       "",
       tokenId
     )
-    val incidentsRes = RestClient.requestWithHeaderDecode(
+    val incidentsRes  = RestClient.requestWithHeaderDecode(
       s"${baseClusterUri(tokenId)}/log/incident",
       GET,
       "",
@@ -715,11 +700,10 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
 
   private val getDataSet = (graphData: GraphData) => {
     val nodes = graphData.endpoints
-      .filter(
-        x =>
-          !"exit".equals(x.state) && x.share_ns_with.isEmpty && x.id.nonEmpty
-          && !(x.domain.isEmpty && !x.service_group
-            .exists(_.trim.nonEmpty) && x.kind == "container")
+      .filter(x =>
+        !"exit".equals(x.state) && x.share_ns_with.isEmpty && x.id.nonEmpty
+        && !(x.domain.isEmpty && !x.service_group
+          .exists(_.trim.nonEmpty) && x.kind == "container")
       )
       .map(endpointToNode)
 
@@ -734,13 +718,12 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
 
     logger.debug("Network graph edges size: {}", edges.length)
 
-    val markedNodes = nodes.map(
-      node =>
-        if (node.platform_role.nonEmpty) {
-          node.copy(platform_role = "System")
-        } else {
-          node
-        }
+    val markedNodes = nodes.map(node =>
+      if (node.platform_role.nonEmpty) {
+        node.copy(platform_role = "System")
+      } else {
+        node
+      }
     )
     (edges, markedNodes)
   }

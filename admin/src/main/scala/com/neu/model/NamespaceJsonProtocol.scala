@@ -1,11 +1,10 @@
 package com.neu.model
 
-import spray.json.{ DefaultJsonProtocol, _ }
+import spray.json.*
 
 object NamespaceJsonProtocol extends DefaultJsonProtocol {
-  implicit val domainFormat: RootJsonFormat[Namespace] = {
+  implicit val domainFormat: RootJsonFormat[Namespace] =
     jsonFormat8(Namespace)
-  }
 
   implicit val domainsDataFormat: RootJsonFormat[NamespacesData] = jsonFormat2(NamespacesData)
 

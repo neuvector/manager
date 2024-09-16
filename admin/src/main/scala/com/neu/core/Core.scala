@@ -44,19 +44,21 @@ trait BootedCore
   val useSSL: String = sys.env.getOrElse("MANAGER_SSL", "on")
   private var sslConfig: Config =
     load.getConfig("ssl").withFallback(defaultReference(getClass.getClassLoader))
-  useSSL match {
-    case "off" =>
-      sslConfig = load.getConfig("noneSsl").withFallback(defaultReference(getClass.getClassLoader))
-    case _ =>
-  }
+
   private val sslSettings = ServerSettings(sslConfig)
 
-  // Bind the server with HTTPS
-  val bindingFuture: Future[Http.ServerBinding] = Http()
-    .newServerAt("0.0.0.0", httpPort.toInt)
-    .withSettings(sslSettings)
-    .enableHttps(https)
-    .bind(rootService)
+  val bindingFuture: Future[Http.ServerBinding] = useSSL match {
+    case "off" =>
+      Http()
+        .newServerAt("0.0.0.0", httpPort.toInt)
+        .bind(rootService)
+    case _ =>
+      Http()
+        .newServerAt("0.0.0.0", httpPort.toInt)
+        .enableHttps(https)
+        .withSettings(sslSettings)
+        .bind(rootService)
+  }
 
   bindingFuture.map { binding =>
     logger.info(s"Server is listening on ${binding.localAddress}")

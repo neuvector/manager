@@ -1,7 +1,6 @@
 package com.neu.api
 
 import com.neu.api.authentication.AuthenticationApi
-import com.neu.service._
 import com.neu.core.{ Core, CoreActors }
 import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
 

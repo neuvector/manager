@@ -13,7 +13,7 @@ class Env(var vars: Map[String, String] = Map(), var pwd: String = System getPro
   /**
    * Change current working directory in this environment.
    */
-  def cd(newPwd: String)(fun: => Unit) {
+  def cd(newPwd: String)(fun: => Unit): Unit = {
     val oldPwd = pwd
     pwd = newPwd
     try {
@@ -26,7 +26,7 @@ class Env(var vars: Map[String, String] = Map(), var pwd: String = System getPro
   /**
    * Give more environment variables to this environment.
    */
-  def env(extra: Map[String, String])(fun: => Unit) {
+  def env(extra: Map[String, String])(fun: => Unit): Unit = {
     val oldVars = vars
     vars ++= extra
     try {
@@ -36,7 +36,7 @@ class Env(var vars: Map[String, String] = Map(), var pwd: String = System getPro
     }
   }
 
-  def applyTo(pb: ProcessBuilder) {
+  def applyTo(pb: ProcessBuilder): Unit = {
     val env = pb.environment()
     vars foreach { kv =>
       env.put(kv._1, kv._2)

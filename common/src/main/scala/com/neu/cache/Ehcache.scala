@@ -14,12 +14,12 @@ private class EhcacheCache[K, V](
     if (e != null && e.getObjectValue != null) Some(e.getObjectValue.asInstanceOf[V]) else None
   }
 
-  def doPut(key: Any, value: V) {
+  def doPut(key: Any, value: V): Unit = {
     underlying.put(new Element(key, value))
     underlying.flush()
   }
 
-  def doRemove(key: Any) {
+  def doRemove(key: Any): Unit = {
     underlying.remove(key)
     underlying.flush()
   }

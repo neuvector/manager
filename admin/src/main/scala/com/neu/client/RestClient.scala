@@ -84,7 +84,7 @@ class RestClient()(
   private val X_AS_STANDALONE: String = "X-As-Standalone"
   private val X_SUSE_TOKEN: String    = "X-R-Sess"
 
-  def sendAndReceive: HttpRequest => Future[HttpResponse] = mySendReceive
+  def sendAndReceive: HttpRequest => Future[HttpResponse] = sendReceiver
 
   def createHttpRequest(uri: String, method: HttpMethod, data: String): HttpRequest = HttpRequest(
     method = method,
@@ -144,8 +144,6 @@ class RestClient()(
   ): Future[String] = {
     val request =
       createHttpRequest(uri, method, data).addHeader(RawHeader(X_SUSE_TOKEN, suseToken))
-    logger.info(s"Request data: $data")
-    logger.info(s"Request: $request")
     sendAndReceive(request).flatMap { response =>
       response.entity.toStrict(5.seconds).map(_.data.utf8String)
     }
@@ -160,7 +158,6 @@ class RestClient()(
     asStandalone: Option[String] = None,
     source: Option[String] = None
   ): Future[HttpResponse] = {
-    logger.info("httpRequestWithHeader {}", source)
     var request = baseRequest(uri, method, data, token)
 
     transactionId.foreach(id => request = request.addHeader(RawHeader(X_TRN_ID, id)))
@@ -169,7 +166,6 @@ class RestClient()(
     )
     source.foreach(src => request = request.addHeader(RawHeader(X_NV_PAGE, src)))
 
-    logger.info("httpRequestWithHeader {}", request)
     sendAndReceive(request)
   }
 

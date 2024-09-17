@@ -118,9 +118,6 @@
                   "
                   >{{ 'login.PASSWORD_REQUIRED' | translate }}</span
                 >
-                <span class="text-info" *ngIf="validEula && loginForm.valid && rbacAlertMessage">
-                  {{rbacAlertMessage}}
-                </span>
               </div>
               <div
                 class="mt-xl clearfix"
@@ -208,10 +205,15 @@
             <div
               class="text-danger text-center clearfix"
               [ngClass]="{ 'mt-3': servers && servers.length === 2 }"
-              *ngIf="authMsg"
               style="padding: 0 10px; clear:both"
             >
-              {{ authMsg }}
+              <div *ngIf="authMsg">
+                {{ authMsg }}
+              </div>
+              <div *ngIf="rbacAlertMessage">
+                {{ 'login.RBAC_ALERT.PASSWORD_RETRIEVAL_ERROR' | translate }}
+                <a (click)="showAlertDetails()">{{ 'login.RBAC_ALERT.ROLEBINDING_DETAILS_LINK' | translate }}</a>
+              </div>
             </div>
             <div *ngIf="!isEulaAccepted">
               <app-eula (eulaStatus)="getEulaStatus($event)"></app-eula>

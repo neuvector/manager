@@ -234,7 +234,15 @@
     "UNSUPPORTED_ROLE": "This user account is only for CI integration.",
     "VERSION_MISMATCHED": "Manager, Controller, Enforcer are running different versions.",
     "CVE_DB_OLD": "CVE Database has not been updated for {{day}} days",
-    "UPGRADE_AVAILABLE": "NeuVector is running {{currentVersion}} and can be upgraded to {{newVersion}}"
+    "UPGRADE_AVAILABLE": "NeuVector is running {{currentVersion}} and can be upgraded to {{newVersion}}",
+    "RBAC_ALERT": {
+      "PASSWORD_RETRIEVAL_ERROR": "Unable to get password from K8s Secret ",
+      "ROLEBINDING_DETAILS_LINK": "(role/rolebinding error)",
+      "TITLE_GET_BOOTSTRAP_PASSWORD": "Get Bootstrap Password",
+      "CONTENT_GET_BOOTSTRAP_PASSWORD": "The command to retrieve the bootstrap password from Kubernetes Secret.",
+      "TITLE_RBAC_ERROR": "RBAC Configuration Errors",
+      "CONTENT_RBAC_ERROR": "Kubernetes RBAC role/rolebinding neuvector-binding-secret misconfigured, blocking NeuVector from accessing the password from K8s Secret."
+    }
   },
   "dashboard": {
     "WELCOME": "Welcome to {{appName}}",

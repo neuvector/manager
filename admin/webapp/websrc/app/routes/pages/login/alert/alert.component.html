@@ -1,0 +1,21 @@
+<div class="dialog-container">
+  <button mat-icon-button (click)="onClose()" class="close-button">
+    <mat-icon>close</mat-icon>
+  </button>
+
+  <div mat-dialog-content>
+    <!-- First Section: Bootstrap Password Command -->
+    <div>
+      <h4>{{ 'login.RBAC_ALERT.TITLE_GET_BOOTSTRAP_PASSWORD' | translate}}</h4>
+      <p>{{ 'login.RBAC_ALERT.CONTENT_GET_BOOTSTRAP_PASSWORD' | translate}}</p>
+      <pre><code>{{ bootstrap_password_command }}</code></pre>
+    </div>
+
+    <!-- Second Section: RBAC Alerts -->
+    <div>
+      <h4>{{ 'login.RBAC_ALERT.TITLE_RBAC_ERROR' | translate }}</h4>
+      <p>{{ 'login.RBAC_ALERT.CONTENT_RBAC_ERROR' | translate }}</p>
+      <p class="alert-message">{{ k8s_rbac_alert_message }}</p>
+    </div>
+  </div>
+</div>

@@ -29,6 +29,7 @@ import { isValidBased64 } from '@common/utils/common.utils';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ResetPasswordModalComponent } from '@routes/settings/common/reset-password-modal/reset-password-modal.component';
 import { Subject } from 'rxjs';
+import { AlertComponent } from '@routes/pages/login/alert/alert.component';
 
 interface ResetError extends ErrorResponse {
   password_profile_basic: PublicPasswordProfile;
@@ -53,6 +54,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   public isEulaValid: boolean = true;
   public validEula: boolean = true;
   public rbacAlertMessage: string = '';
+  public bootstrapPasswordCommand: string = '';
   private version: string = '';
   private gpuEnabled: boolean = false;
   private originalUrl: string = '';
@@ -403,9 +405,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authService.getEula().subscribe(
       (eulaInfo: any) => {
         let eula = eulaInfo.eula;
-        this.rbacAlertMessage = eulaInfo.k8s_rbac_alert_message
-          ? eulaInfo.k8s_rbac_alert_message
-          : '';
+        if (eulaInfo.k8s_rbac_alert_message) {
+          this.rbacAlertMessage = eulaInfo.k8s_rbac_alert_message;
+          this.bootstrapPasswordCommand = eulaInfo.bootstrap_password_command;
+        }
         if (eula && eula.accepted) {
           this.isEulaAccepted = true;
         } else {
@@ -636,6 +639,20 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
     dialogRef.afterClosed().subscribe(() => {
       this.inProgress = false;
+    });
+  }
+
+  public showAlertDetails() {
+    const dialogRef = this.dialog.open(AlertComponent, {
+      autoFocus: false,
+      disableClose: true,
+      data: {
+        k8s_rbac_alert_message: this.rbacAlertMessage,
+        bootstrap_password_command: this.bootstrapPasswordCommand,
+      },
+      width: '60vw',
+      height: 'auto',
+      maxHeight: '500px',
     });
   }
 }

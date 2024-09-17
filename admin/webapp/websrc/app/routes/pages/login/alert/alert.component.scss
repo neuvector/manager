@@ -1,0 +1,46 @@
+.dialog-container {
+  position: relative;
+}
+
+.close-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+.mat-dialog-content {
+  padding: 16px;
+  overflow: auto;
+}
+
+.mat-dialog-container {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+}
+
+.mat-dialog-title {
+  margin-bottom: 16px;
+}
+
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  background: #f5f5f5;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+code {
+  display: block;
+}
+
+.alert-message {
+  color: #d9534f;
+  background-color: #f9d6d5;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #d9534f;
+}

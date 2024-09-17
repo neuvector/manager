@@ -9,6 +9,7 @@ import { AgreementComponent } from './login/eula/agreement/agreement.component';
 import { FrameModule } from '../../frame/frame.module';
 import { ResetPasswordModalModule } from '@routes/settings/common/reset-password-modal/reset-password-modal.module';
 import { SettingsService } from '@services/settings.service';
+import { AlertComponent } from './login/alert/alert.component';
 
 /* Use this routes definition in case you want to make them lazy-loaded */
 /*const routes: Routes = [
@@ -33,6 +34,7 @@ import { SettingsService } from '@services/settings.service';
     LogoutComponent,
     EulaComponent,
     AgreementComponent,
+    AlertComponent,
   ],
   exports: [RouterModule, LoginComponent, LogoutComponent],
   providers: [SettingsService],

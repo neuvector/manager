@@ -234,7 +234,15 @@
     "UNSUPPORTED_ROLE": "该用户仅用于CI集成。",
     "VERSION_MISMATCHED": "管理界面, 控制器和代理之间有运行版本差异",
     "CVE_DB_OLD": "CVE数据库有{{day}}天没有更新",
-    "UPGRADE_AVAILABLE": "NeuVector 正在运行{{currentVersion}}可以升级到{{newVersion}}"
+    "UPGRADE_AVAILABLE": "NeuVector 正在运行{{currentVersion}}可以升级到{{newVersion}}",
+    "RBAC_ALERT": {
+      "PASSWORD_RETRIEVAL_ERROR": "无法从K8s Secret获取密码",
+      "ROLEBINDING_DETAILS_LINK": "（角色/角色绑定错误）",
+      "TITLE_GET_BOOTSTRAP_PASSWORD": "获取 Bootstrap 密码",
+      "CONTENT_GET_BOOTSTRAP_PASSWORD": "从 Kubernetes Secret 中查询到 Bootstrap 密码的命令。",
+      "TITLE_RBAC_ERROR": "RBAC 配置错误",
+      "CONTENT_RBAC_ERROR": "Kubernetes RBAC 角色/角色绑定 neuvector-binding-secret 配置错误，阻止 NeuVector 从 K8s Secret 访问密码。"
+    }
   },
   "dashboard": {
     "WELCOME": "欢迎使用 {{appName}}",

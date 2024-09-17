@@ -11,3 +11,8 @@ input[type="text"]{
   width: 100%;
   z-index: 121;
 }
+
+.text-danger a {
+  color: inherit;
+  text-decoration: underline;
+}

@@ -13,7 +13,7 @@ import com.neu.model.RegistryConfigJsonProtocol._
 import com.neu.model._
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.http.scaladsl.model.HttpMethods._
-import org.apache.pekko.http.scaladsl.model.StatusCodes
+import org.apache.pekko.http.scaladsl.model.{ ContentTypes, HttpEntity, StatusCodes }
 import org.apache.pekko.http.scaladsl.server.Route
 import org.json4s._
 import org.json4s.native.JsonMethods._
@@ -268,7 +268,7 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
                             "Paged response size: {}",
                             compact(render(JArray(output))).length
                           )
-                          pagedRes
+                          HttpEntity(ContentTypes.`application/json`, pagedRes)
                         } else {
                           ruleStr
                         }
@@ -291,11 +291,6 @@ class PolicyApi()(implicit executionContext: ExecutionContext)
                           paginationCacheManager[List[org.json4s.JsonAST.JValue]]
                             .removePagedData(s"$cacheKey-network-rule")
                           (StatusCodes.NetworkConnectTimeout, "Network connect timeout error")
-                        //  case e: ConnectionAttemptFailedException =>
-                        //    logger.warn(e.getMessage)
-                        //    paginationCacheManager[List[org.json4s.JsonAST.JValue]]
-                        //      .removePagedData(s"$cacheKey-network-rule")
-                        //    (StatusCodes.NetworkConnectTimeout, "Network connect timeout error")
                       }
                     }
                   }

@@ -6,7 +6,7 @@ import spray.json.*
 
 object DateTimeFormat extends RootJsonFormat[DateTime] {
 
-  val formatter: DateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis
+  private val formatter: DateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis
 
   def write(obj: DateTime): JsValue =
     JsString(formatter.print(obj))

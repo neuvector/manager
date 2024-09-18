@@ -33,9 +33,9 @@ class NotificationApi()(implicit executionContext: ExecutionContext)
     with DefaultJsonFormats
     with LazyLogging {
 
-  val topLimit = 5
-  val top      = "top"
-  val client   = "client"
+  val topLimit    = 5
+  val client      = "client"
+  private val top = "top"
 
   val route: Route =
     headerValueByName("Token") { tokenId =>

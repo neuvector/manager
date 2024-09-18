@@ -21,5 +21,5 @@ trait PaginationCacheManagerImpl[T] {
 }
 
 object paginationCacheManager extends PaginationCacheManagerImpl[Nothing] {
-  def apply[T] = this.asInstanceOf[PaginationCacheManagerImpl[T]]
+  def apply[T]: PaginationCacheManagerImpl[T] = this.asInstanceOf[PaginationCacheManagerImpl[T]]
 }

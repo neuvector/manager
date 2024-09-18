@@ -6,7 +6,7 @@ import com.neu.core.{ AuthenticationManager, ClientSslConfig }
 import com.neu.web.Rest.{ executionContext, system }
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.coding.Gzip
+import org.apache.pekko.http.scaladsl.coding.{ Coders, Gzip }
 import org.apache.pekko.http.scaladsl.marshalling.Marshal
 import org.apache.pekko.http.scaladsl.model._
 import org.apache.pekko.http.scaladsl.model.headers._
@@ -90,7 +90,7 @@ class RestClient()(using
     )
 
   private def cloneHttpRequest(uri: String, request: HttpRequest): HttpRequest =
-    request.copy(uri = uri, headers = Nil)
+    request.withUri(uri).withHeaders(Nil)
 
   /**
    * Makes HTTP request
@@ -271,11 +271,11 @@ class RestClient()(using
       response.status match {
         case StatusCodes.OK =>
           val decodedEntity = if (response.encoding == HttpEncodings.gzip) {
-            Gzip.decodeMessage(response)
+            response.entity.transformDataBytes(Coders.Gzip.decoderFlow)
           } else {
-            response
+            response.entity
           }
-          Unmarshal(decodedEntity.entity).to[String]
+          Unmarshal(decodedEntity).to[String]
         case _              =>
           Future.failed(new Exception(s"Request failed with status code ${response.status}"))
       }

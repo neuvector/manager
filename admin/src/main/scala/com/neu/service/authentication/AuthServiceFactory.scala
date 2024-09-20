@@ -1,6 +1,9 @@
 package com.neu.service.authentication
 
-import com.neu.api.{ BaseService, DefaultJsonFormats }
+import com.neu.client.RestClient
+import com.neu.client.RestClient.fedUri
+import com.neu.service.{ BaseService, DefaultJsonFormats }
+
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.http.scaladsl.model.RemoteAddress
@@ -9,10 +12,8 @@ import org.apache.pekko.stream.Materializer
 
 import scala.concurrent.ExecutionContext
 
-object AuthProcessorBrand extends Enumeration {
-  type AuthProcessorBrand = Value
-  val SUSE, OPEN_ID, SAML = Value
-}
+enum AuthProvider:
+  case SUSE, OPEN_ID, SAML
 
 trait AuthService extends BaseService with DefaultJsonFormats with LazyLogging {
 
@@ -24,7 +25,7 @@ trait AuthService extends BaseService with DefaultJsonFormats with LazyLogging {
     serverName: Option[String]
   ): Route
 
-  def validateToken(tokenId: Option[String]): Route
+  def validateToken(tokenId: Option[String], ip: Option[RemoteAddress]): Route
 
   def login(ip: RemoteAddress, host: String, ctx: RequestContext): Route
 
@@ -44,11 +45,13 @@ class AuthServiceFactory()(implicit
 ) {
 
   def createService(
-    brand: AuthProcessorBrand.Value
+    brand: AuthProvider
   )(implicit mat: Materializer): AuthService =
     brand match {
-      case AuthProcessorBrand.SUSE    => new SuseAuthService()
-      case AuthProcessorBrand.OPEN_ID => new OpenIdAuthService()
-      case AuthProcessorBrand.SAML    => new SamlAuthService()
+      case AuthProvider.SUSE    => new SuseAuthService()
+      case AuthProvider.OPEN_ID => new OpenIdAuthService()
+      case AuthProvider.SAML    => new SamlAuthService()
     }
+
+  def createExtraAuthService()(implicit mat: Materializer): ExtraAuthService = new ExtraAuthService
 }

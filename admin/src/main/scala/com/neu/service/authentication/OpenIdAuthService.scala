@@ -35,7 +35,8 @@ class OpenIdAuthService()(implicit
     ip: String,
     host: Option[String],
     serverName: Option[String]
-  ): Route =
+  ): Route = {
+    logger.info(s"get openId_auth: {}", host.get)
     if (state.isEmpty) {
       val result =
         Await.result(handleEmptyResources(host, serverName), RestClient.waitingLimit.seconds)
@@ -44,8 +45,10 @@ class OpenIdAuthService()(implicit
       Await
         .result(handleExistingResoureces(code, state, ip, host), RestClient.waitingLimit.seconds)
     }
+  }
 
-  override def validateToken(tokenId: Option[String]): Route = {
+  override def validateToken(tokenId: Option[String], ip: Option[RemoteAddress]): Route = {
+    logger.info(s"openId-pt: to validate authToken from {}", ip.get)
     val authToken = AuthenticationManager.validate(KEY)
     authToken match {
       case Some(x) =>

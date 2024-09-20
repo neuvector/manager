@@ -16,10 +16,8 @@ class Env(var vars: Map[String, String] = Map(), var pwd: String = System.getPro
   def cd(newPwd: String)(fun: => Unit): Unit = {
     val oldPwd = pwd
     pwd = newPwd
-    try
-      fun
-    finally
-      pwd = oldPwd
+    try fun
+    finally pwd = oldPwd
   }
 
   /**
@@ -28,10 +26,8 @@ class Env(var vars: Map[String, String] = Map(), var pwd: String = System.getPro
   def env(extra: Map[String, String])(fun: => Unit): Unit = {
     val oldVars = vars
     vars ++= extra
-    try
-      fun
-    finally
-      vars = oldVars
+    try fun
+    finally vars = oldVars
   }
 
   def applyTo(pb: ProcessBuilder): Unit = {

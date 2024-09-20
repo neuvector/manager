@@ -1,4 +1,4 @@
-package com.neu.api
+package com.neu.service
 
 import org.apache.pekko.http.scaladsl.marshalling.{
   Marshaller,
@@ -27,6 +27,9 @@ import scala.reflect.ClassTag
  * ``Date``s, ``UUID``s and such like.
  */
 trait DefaultJsonFormats extends DefaultJsonProtocol {
+
+  implicit val stringUnmarshaller: FromEntityUnmarshaller[String] =
+    Unmarshaller.stringUnmarshaller.forContentTypes(ContentTypes.`text/plain(UTF-8)`)
 
   // JSON marshalling and unmarshalling support
   implicit def sprayJsonUnmarshaller[T](implicit

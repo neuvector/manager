@@ -54,7 +54,8 @@ class SamlAuthService()(implicit
     complete(result)
   }
 
-  override def validateToken(tokenId: Option[String]): Route = {
+  override def validateToken(tokenId: Option[String], ip: Option[RemoteAddress]): Route = {
+    logger.info(s"saml-pt: to validate authToken.")
     val authToken = AuthenticationManager.validate(samlKey)
     authToken match {
       case Some(token) =>

@@ -135,7 +135,7 @@ object AuthenticationManager extends LazyLogging {
               namespace -> "4"
             }.toMap
             roles_domains ++= admin_domains
-          case None        => None
+          case None        =>
         }
         role_domains.get("fedReader") match {
           case Some(reader) =>
@@ -143,7 +143,7 @@ object AuthenticationManager extends LazyLogging {
               namespace -> "3"
             }.toMap
             roles_domains ++= reader_domains
-          case None         => None
+          case None         =>
         }
         role_domains.get("admin") match {
           case Some(admin) =>
@@ -151,7 +151,7 @@ object AuthenticationManager extends LazyLogging {
               namespace -> "2"
             }.toMap
             roles_domains ++= admin_domains
-          case None        => None
+          case None        =>
         }
         role_domains.get("reader") match {
           case Some(reader) =>
@@ -159,7 +159,7 @@ object AuthenticationManager extends LazyLogging {
               namespace -> "1"
             }.toMap
             roles_domains ++= reader_domains
-          case None         => None
+          case None         =>
         }
       case None               =>
         roles_domains = global
@@ -169,7 +169,7 @@ object AuthenticationManager extends LazyLogging {
 }
 
 object Md5 {
-  val MD5                             = "MD5"
+  private val MD5                     = "MD5"
   def hash(s: Option[String]): String =
     s match {
       case Some(str) =>
@@ -185,7 +185,7 @@ object Md5 {
     asString(md5)
   }
 
-  val hexDigits: Array[Char] = "0123456789abcdef".toCharArray
+  private val hexDigits: Array[Char] = "0123456789abcdef".toCharArray
 
   private def asString(bytes: Array[Byte]): String =
     bytes.foldLeft("") { case (agg, b) => agg + hexDigits((b >> 4) & 0xf) + hexDigits(b & 0xf) }

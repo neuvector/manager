@@ -30,7 +30,7 @@ class SuseAuthService()(implicit
     serverName: Option[String]
   ): Route = complete((StatusCodes.MethodNotAllowed, "Method not allowed."))
 
-  override def validateToken(tokenId: Option[String]): Route =
+  override def validateToken(tokenId: Option[String], ip: Option[RemoteAddress]): Route =
     complete {
       RestClient.httpRequestWithHeader(
         s"${baseClusterUri(tokenId.get)}/$auth",

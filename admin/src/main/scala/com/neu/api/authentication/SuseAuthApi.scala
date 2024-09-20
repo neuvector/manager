@@ -1,16 +1,15 @@
 package com.neu.api.authentication
 
-import com.neu.api._
+import com.neu.api.*
+import com.neu.service.{ BaseService, DefaultJsonFormats, Utils }
 import com.neu.service.authentication.AuthService
 import com.typesafe.scalalogging.LazyLogging
-import org.apache.pekko.http.scaladsl.server.Route
+import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
 
 //noinspection UnstableApiUsage
 class SuseAuthApi(
-  authProcessor: AuthService
-) extends BaseService
-    with DefaultJsonFormats
-    with LazyLogging {
+  authService: AuthService
+) extends Directives {
 
   private val auth       = "auth"
   private val suseCookie = "R_SESS"
@@ -20,7 +19,7 @@ class SuseAuthApi(
       extractClientIP { ip =>
         extractRequestContext { ctx =>
           Utils.respondWithWebServerHeaders() {
-            authProcessor.login(ip, "", ctx)
+            authService.login(ip, "", ctx)
           }
         }
       }
@@ -29,14 +28,14 @@ class SuseAuthApi(
       pathPrefix(auth) {
         delete {
           Utils.respondWithWebServerHeaders() {
-            authProcessor.logout(None, tokenId)
+            authService.logout(None, tokenId)
           }
         }
       } ~
       pathPrefix("heartbeat") {
         patch {
           Utils.respondWithWebServerHeaders() {
-            authProcessor.validateToken(Some(tokenId))
+            authService.validateToken(Some(tokenId), None)
           }
         }
       } ~
@@ -46,14 +45,14 @@ class SuseAuthApi(
             Utils.respondWithWebServerHeaders() {
               optionalCookie(suseCookie) {
                 case Some(sCookie) =>
-                  authProcessor.getSelf(
+                  authService.getSelf(
                     isOnNV,
                     isRancherSSOUrl,
                     sCookie.value,
                     tokenId
                   )
                 case None          =>
-                  authProcessor.getSelf(isOnNV, isRancherSSOUrl, "", tokenId)
+                  authService.getSelf(isOnNV, isRancherSSOUrl, "", tokenId)
               }
             }
           }

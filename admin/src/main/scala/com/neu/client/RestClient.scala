@@ -1,8 +1,8 @@
 package com.neu.client
 
-import com.neu.api.DefaultJsonFormats
 import com.neu.core.CommonSettings._
 import com.neu.core.{ AuthenticationManager, ClientSslConfig }
+import com.neu.service.DefaultJsonFormats
 import com.neu.web.Rest.{ executionContext, system }
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.actor.ActorSystem
@@ -178,11 +178,10 @@ class RestClient()(using
     data: String,
     token: String
   ): HttpRequest =
-    HttpRequest(method, uri, entity = HttpEntity(ContentTypes.`application/json`, data))
+    createHttpRequest(uri, method, data)
       .addHeader(RawHeader(TOKEN_HEADER, token))
       .addHeader(RawHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.getOrElse(token, "")))
       .addHeader(`Accept-Encoding`(HttpEncodings.gzip))
-      .addHeader(RawHeader("Transfer-Encoding", "gzip"))
       .addHeader(`Cache-Control`(CacheDirectives.`no-cache`))
 
   def httpRequestWithHeaderDecode(

@@ -1,4 +1,4 @@
-package com.neu.api
+package com.neu.service
 
 import com.neu.client.RestClient.{ arrayFormat, baseClusterUri, StringJsonFormat }
 import com.neu.core.AuthenticationManager
@@ -6,12 +6,12 @@ import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.http.scaladsl.model.{ HttpEntity, StatusCodes }
 import org.apache.pekko.http.scaladsl.server.{ Directives, StandardRoute }
 import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshaller
-import spray.json._
+import spray.json.*
 
 import java.io.{ PrintWriter, StringWriter }
 
 class BaseService extends Directives with LazyLogging {
-  implicit val arrayStringUnmarshaller: Unmarshaller[HttpEntity, Array[String]] =
+  given arrayStringUnmarshaller: Unmarshaller[HttpEntity, Array[String]] =
     Unmarshaller.stringUnmarshaller
       .map(JsonParser(_).convertTo[Array[String]])
 

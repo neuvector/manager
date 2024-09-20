@@ -1,9 +1,9 @@
 package com.neu.web
 
 import com.google.common.net.UrlEscapers
-import com.neu.api.Utils
 import com.neu.core.CommonSettings._
 import com.neu.core.Md5
+import com.neu.service.Utils
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.http.scaladsl.model.headers.{ Location, RawHeader }
 import org.apache.pekko.http.scaladsl.model.{

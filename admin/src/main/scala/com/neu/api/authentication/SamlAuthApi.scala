@@ -1,21 +1,21 @@
 package com.neu.api.authentication
 
-import com.neu.api._
-import com.neu.client.RestClient._
+import com.neu.api.*
+import com.neu.client.RestClient.*
+import com.neu.service.{ BaseService, Utils }
 import com.neu.service.authentication.AuthService
 import com.typesafe.scalalogging.LazyLogging
-import org.apache.pekko.http.scaladsl.model.StatusCodes
+import org.apache.pekko.http.scaladsl.model.{ RemoteAddress, StatusCodes }
 import org.apache.pekko.http.scaladsl.model.headers.HttpCookie
-import org.apache.pekko.http.scaladsl.server.Route
+import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
 
 import java.nio.charset.StandardCharsets
 import java.util.Base64
 
 //noinspection UnstableApiUsage
 class SamlAuthApi(
-  authProcessor: AuthService
-) extends BaseService
-    with LazyLogging {
+  authService: AuthService
+) extends Directives {
 
   private val samlSloResp = "samlslo"
   private val saml        = "token_auth_server"
@@ -29,16 +29,15 @@ class SamlAuthApi(
         optionalHeaderValueByName("Host") { host =>
           parameter(Symbol("serverName").?) { serverName =>
             Utils.respondWithWebServerHeaders() {
-              authProcessor.getResources(None, None, "", host, serverName)
+              authService.getResources(None, None, "", host, serverName)
             }
           }
         }
       } ~
       (patch & path(saml)) {
         extractClientIP { _ =>
-          logger.info(s"saml-pt: to validate authToken.")
           Utils.respondWithWebServerHeaders() {
-            authProcessor.validateToken(None)
+            authService.validateToken(None, None)
           }
         }
       } ~
@@ -46,12 +45,11 @@ class SamlAuthApi(
         extractClientIP { ip =>
           optionalHeaderValueByName("Host") {
             case Some(host) =>
-              logger.info(s"saml-p: $host")
               val text = Base64.getEncoder.encodeToString(samlKey.getBytes(StandardCharsets.UTF_8))
 
               setCookie(HttpCookie("temp", text)) {
                 extractRequestContext { ctx =>
-                  authProcessor.login(ip, host, ctx)
+                  authService.login(ip, host, ctx)
                 }
               }
             case None       =>
@@ -70,7 +68,7 @@ class SamlAuthApi(
           extractClientIP { _ =>
             optionalHeaderValueByName("Host") { host =>
               Utils.respondWithWebServerHeaders() {
-                authProcessor.logout(host, tokenId)
+                authService.logout(host, tokenId)
               }
             }
           }

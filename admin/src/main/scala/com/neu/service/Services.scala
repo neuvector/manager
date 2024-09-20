@@ -1,4 +1,4 @@
-package com.neu.api
+package com.neu.service
 
 import com.google.common.base.Throwables
 import com.typesafe.scalalogging.LazyLogging
@@ -6,7 +6,7 @@ import org.apache.pekko.actor.{ Actor, ActorLogging, ActorSystem }
 import org.apache.pekko.event.LoggingAdapter
 import org.apache.pekko.http.scaladsl.model.headers.RawHeader
 import org.apache.pekko.http.scaladsl.model.{ HttpEntity, HttpResponse, StatusCode, StatusCodes }
-import org.apache.pekko.http.scaladsl.server._
+import org.apache.pekko.http.scaladsl.server.*
 import org.apache.pekko.io.Tcp.{ Bound, CommandFailed }
 
 import scala.util.control.NonFatal

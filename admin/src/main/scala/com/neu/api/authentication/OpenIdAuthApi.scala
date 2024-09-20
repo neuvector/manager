@@ -1,15 +1,16 @@
 package com.neu.api.authentication
 
-import com.neu.api._
+import com.neu.api.*
+import com.neu.service.{ BaseService, Utils }
 import com.neu.service.authentication.AuthService
 import com.typesafe.scalalogging.LazyLogging
-import org.apache.pekko.http.scaladsl.server.Route
+import org.apache.pekko.http.scaladsl.model.RemoteAddress
+import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
 
 //noinspection UnstableApiUsage
 class OpenIdAuthApi(
-  authProcessor: AuthService
-) extends BaseService
-    with LazyLogging {
+  authService: AuthService
+) extends Directives {
 
   private val openId = "openId_auth"
 
@@ -18,10 +19,9 @@ class OpenIdAuthApi(
       extractClientIP { ip =>
         parameters(Symbol("code").?, Symbol("state").?) { (code, state) =>
           optionalHeaderValueByName("Host") { host =>
-            logger.info(s"get openId_auth: $host")
             parameter(Symbol("serverName").?) { serverName =>
               Utils.respondWithWebServerHeaders() {
-                authProcessor.getResources(
+                authService.getResources(
                   code,
                   state,
                   ip.toString(),
@@ -36,9 +36,8 @@ class OpenIdAuthApi(
     } ~
     (patch & path(openId)) {
       extractClientIP { ip =>
-        logger.info(s"openId-pt: to validate authToken from {}", ip)
         Utils.respondWithWebServerHeaders() {
-          authProcessor.validateToken(None)
+          authService.validateToken(None, Some(ip))
         }
       }
     }

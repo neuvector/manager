@@ -10,7 +10,7 @@ class Proc(args: String*)(env: Env) extends Iterable[String] {
   protected var proc: Process                = _
   protected var inputWriter: BufferedWriter  = _
   protected var outputReader: BufferedReader = _
-  private var errorReader: BufferedReader    = _
+  protected var errorReader: BufferedReader  = _
 
   /**
    * Start process and traverse lines in standard output.
@@ -58,8 +58,7 @@ class Proc(args: String*)(env: Env) extends Iterable[String] {
     try
       for (s <- lines)
         inputWriter.write(s)
-    finally
-      inputWriter.close()
+    finally inputWriter.close()
     this
   }
 
@@ -96,7 +95,7 @@ class Proc(args: String*)(env: Env) extends Iterable[String] {
   /**
    * Start the process.
    */
-  private def startProc(): Unit =
+  protected def startProc(): Unit =
     if (proc == null) {
       env.applyTo(pb)
       proc = pb.start()

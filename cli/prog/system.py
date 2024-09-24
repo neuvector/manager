@@ -15,6 +15,33 @@ from prog import multipart
 from prog import output
 from prog import utils
 
+def validate_export_filepath(filename, remote_repository_nickname, remote_filepath):
+    """Validate export file path."""
+    remote_export_options = {}
+    useRemote = False
+    ok = False
+    if len(remote_repository_nickname) > 0:
+        if remote_repository_nickname != "default":
+            click.echo("Error: Unsupported repository nickname")
+        else:
+            if len(remote_filepath) > 0:
+                remote_export_options["remote_repository_nickname"] = remote_repository_nickname
+                remote_export_options["file_path"] = remote_filepath
+                remote_export_options["comment"] = comment
+                useRemote = True
+                ok = True
+            elif len(filename) == 0:
+                click.echo("Error: remote_filepath unspecified")
+            else:
+                ok = True
+    else:
+        if len(filename) == 0:
+            click.echo("Error: filename unspecified")
+        else:
+            ok = True
+
+    return remote_export_options, useRemote, ok
+
 
 @show.group('system')
 @click.pass_obj
@@ -1311,32 +1338,33 @@ def export_config(data, section, raw, filename):
 
 @request_export.command('group')
 @click.option("--name", multiple=True, help="Name of group to export")
+@click.option('--policy_mode', default="", type=click.Choice(['discover', 'monitor', 'protect', '']), help="Network policy mode of the exported group")
+@click.option('--profile_mode', default="", type=click.Choice(['discover', 'monitor', 'protect', '']), help="Process/file profile mode of the exported group")
 @click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True), help="Local file path when export to local machine")
 @click.option("--remote_repository_nickname", default="default", help="Repository nickname when export to remote repository")
 @click.option("--remote_filepath", default="", help="File path on repository when export to remote repository")
 @click.option("--comment", default="", help="Comment for export to remote repository")
 @click.pass_obj
-def request_export_group(data, name, filename, remote_repository_nickname, remote_filepath, comment):
+def request_export_group(data, name, policy_mode, profile_mode, filename, remote_repository_nickname, remote_filepath, comment):
     """Export group policies."""
 
     groups = []
     for n in name:
         groups.append(n)
 
+    modeOptions = {"discover": "Discover", "monitor": "Monitor", "protect": "Protect"}
     payload = {"groups": groups}
-    if remote_repository_nickname is not None:
-        if remote_repository_nickname != "default":
-            click.echo("Error: Unsupported repository nickname")
-            return
-        elif len(remote_filepath) == 0:
-            click.echo("Error: remote_filepath unspecified")
-            return
-        else:
-            payload["remote_export_options"] = {
-                "remote_repository_nickname": remote_repository_nickname,
-                "file_path": remote_filepath,
-                "comment": comment,
-            }
+    if policy_mode in modeOptions:
+        payload["policy_mode"] = modeOptions[policy_mode]
+    if profile_mode in modeOptions:
+        payload["profile_mode"] = modeOptions[profile_mode]
+
+    remote_export_options, useRemote, ok = validate_export_filepath(filename, remote_repository_nickname, remote_filepath)
+    if ok:
+        if useRemote:
+            payload["remote_export_options"] = remote_export_options
+    else:
+        return
 
     respData = data.client.requestDownload("file", "group", None, payload)
     if filename and len(filename) > 0:
@@ -1367,20 +1395,12 @@ def request_export_admission(data, config, id, filename, remote_repository_nickn
         ids.append(int(n))
 
     payload = {"export_config": config, "ids": ids}
-    if remote_repository_nickname is not None:
-        if remote_repository_nickname != "default":
-            click.echo("Error: Unsupported repository nickname")
-            return
-        else:
-            if len(remote_filepath) > 0:
-                payload["remote_export_options"] = {
-                    "remote_repository_nickname": remote_repository_nickname,
-                    "file_path": remote_filepath,
-                    "comment": comment,
-                }
-            elif len(filename) == 0:
-                click.echo("Error: either filename or remote_filepath must be specified")
-                return
+    remote_export_options, useRemote, ok = validate_export_filepath(filename, remote_repository_nickname, remote_filepath)
+    if ok:
+        if useRemote:
+            payload["remote_export_options"] = remote_export_options
+    else:
+        return
 
     respData = data.client.requestDownload("file", "admission", None, payload)
     if filename and len(filename) > 0:
@@ -1409,19 +1429,12 @@ def request_export_dlp(data, name, filename, remote_repository_nickname, remote_
         names.append(n)
 
     payload = {"names": names}
-    if remote_repository_nickname is not None:
-        if remote_repository_nickname != "default":
-            click.echo("Error: Unsupported repository nickname")
-            return
-        elif len(remote_filepath) == 0:
-            click.echo("Error: remote_filepath unspecified")
-            return
-        else:
-            payload["remote_export_options"] = {
-                "remote_repository_nickname": remote_repository_nickname,
-                "file_path": remote_filepath,
-                "comment": comment,
-            }
+    remote_export_options, useRemote, ok = validate_export_filepath(filename, remote_repository_nickname, remote_filepath)
+    if ok:
+        if useRemote:
+            payload["remote_export_options"] = remote_export_options
+    else:
+        return
 
     respData = data.client.requestDownload("file", "dlp", None, payload)
     if filename and len(filename) > 0:
@@ -1450,19 +1463,12 @@ def request_export_waf(data, name, filename, remote_repository_nickname, remote_
         names.append(n)
 
     payload = {"names": names}
-    if remote_repository_nickname is not None:
-        if remote_repository_nickname != "default":
-            click.echo("Error: Unsupported repository nickname")
-            return
-        elif len(remote_filepath) == 0:
-            click.echo("Error: remote_filepath unspecified")
-            return
-        else:
-            payload["remote_export_options"] = {
-                "remote_repository_nickname": remote_repository_nickname,
-                "file_path": remote_filepath,
-                "comment": comment,
-            }
+    remote_export_options, useRemote, ok = validate_export_filepath(filename, remote_repository_nickname, remote_filepath)
+    if ok:
+        if useRemote:
+            payload["remote_export_options"] = remote_export_options
+    else:
+        return
 
     respData = data.client.requestDownload("file", "waf", None, payload)
     if filename and len(filename) > 0:
@@ -1491,19 +1497,12 @@ def request_export_vul_profile(data, filename, remote_repository_nickname, remot
     if len(names) > 0:
         payload["profiles"] = names
 
-    if remote_repository_nickname is not None:
-        if remote_repository_nickname != "default":
-            click.echo("Error: Unsupported repository nickname")
-            return
-        elif len(remote_filepath) == 0:
-            click.echo("Error: remote_filepath unspecified")
-            return
-        else:
-            payload["remote_export_options"] = {
-                "remote_repository_nickname": remote_repository_nickname,
-                "file_path": remote_filepath,
-                "comment": comment,
-            }
+    remote_export_options, useRemote, ok = validate_export_filepath(filename, remote_repository_nickname, remote_filepath)
+    if ok:
+        if useRemote:
+            payload["remote_export_options"] = remote_export_options
+    else:
+        return
 
     respData = data.client.requestDownload("file", "vulnerability/profile", None, payload)
     if filename and len(filename) > 0:
@@ -1532,19 +1531,12 @@ def request_export_compliance_profile(data, filename, remote_repository_nickname
     if len(names) > 0:
         payload["profiles"] = names
 
-    if remote_repository_nickname is not None:
-        if remote_repository_nickname != "default":
-            click.echo("Error: Unsupported repository nickname")
-            return
-        elif len(remote_filepath) == 0:
-            click.echo("Error: remote_filepath unspecified")
-            return
-        else:
-            payload["remote_export_options"] = {
-                "remote_repository_nickname": remote_repository_nickname,
-                "file_path": remote_filepath,
-                "comment": comment,
-            }
+    remote_export_options, useRemote, ok = validate_export_filepath(filename, remote_repository_nickname, remote_filepath)
+    if ok:
+        if useRemote:
+            payload["remote_export_options"] = remote_export_options
+    else:
+        return
 
     respData = data.client.requestDownload("file", "compliance/profile", None, payload)
     if filename and len(filename) > 0:

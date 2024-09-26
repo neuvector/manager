@@ -49,7 +49,7 @@ class DashboardService()(implicit executionContext: ExecutionContext)
   final val RATIO_PROTECT_VUL               = 1.0 / 120
   final val RATIO_QUARANTINED_VUL           = 1.0 / 240
   final val RATIO_HOST_VUL                  = 1.0 / 20
-  final val MAX_NEW_SERVICE_MODE_SCORE      = 4
+  final val MAX_NEW_SERVICE_MODE_SCORE      = 2
   final val MAX_SERVICE_MODE_SCORE          = 26
   final val MAX_MODE_EXPOSURE               = 10
   final val MAX_VIOLATE_EXPOSURE            = 12
@@ -121,10 +121,12 @@ class DashboardService()(implicit executionContext: ExecutionContext)
                                                    "",
                                                    "",
                                                    "",
+                                                   "",
                                                    0,
                                                    0,
                                                    RiskScoreMetricsWL(0, 0, 0, 0, 0, 0, 0, 0),
-                                                   RiskScoreMetricsGroup(0, 0, 0, 0, 0, 0, 0),
+                                                   RiskScoreMetricsGroup(0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                                     0),
                                                    RiskScoreMetricsCVE(0, 0, 0, 0, 0)
                                                  ),
                                                  Array(),
@@ -1851,15 +1853,17 @@ class DashboardService()(implicit executionContext: ExecutionContext)
         totalRunningPodsOption
     }
     val newServiceModeScore = getNewServiceModeScore(
-      metrics.new_service_policy_mode.toLowerCase == "discover"
-    )
+        metrics.new_service_policy_mode.toLowerCase == "discover"
+      ) + getNewServiceModeScore(
+        metrics.new_service_profile_mode.toLowerCase == "discover"
+      )
 
     val serviceModeScoreBy100 = metrics.groups.groups match {
       case 0 => 0
       case _ =>
         math
           .ceil(
-            ((metrics.groups.discover_groups - metrics.groups.discover_groups_zero_drift) + metrics.groups.discover_groups_zero_drift * 0.5) / metrics.groups.groups.toDouble * 100
+            ((metrics.groups.discover_groups + metrics.groups.profile_discover_groups) * 0.5 - metrics.groups.discover_groups_zero_drift * 0.3) / metrics.groups.groups.toDouble * 100
           )
           .toInt
     }

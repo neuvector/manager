@@ -20,7 +20,7 @@ export class SecurityRiskPanelComponent implements OnInit {
   @Input() details: any;
   @Input() scoreInfo!: InternalSystemInfo;
   @Input() summaryInfo!: SystemSummaryDetails;
-  
+
   riskFactorList: Array<RiskFactor> = new Array(3);
   activeIndex4RiskInstruction: number = 0;
 
@@ -57,6 +57,9 @@ export class SecurityRiskPanelComponent implements OnInit {
           amount: scoreInfo.header_data.groups.protect_groups.toString(),
           comment: scoreInfo.header_data.groups.protect_groups_zero_drift.toString(),
         },
+      ],
+      factorComment: [
+        this.translate.instant('dashboard.heading.BASED_ON_POLICY_MODE'),
       ],
       subScore: { height: `${95 - scoreInfo.score.serviceModeScoreBy100}%` },
       isFactorError: false,

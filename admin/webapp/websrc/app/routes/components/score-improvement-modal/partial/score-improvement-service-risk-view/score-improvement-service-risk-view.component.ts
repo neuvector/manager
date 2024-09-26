@@ -19,6 +19,7 @@ export class ScoreImprovementServiceRiskViewComponent implements OnInit {
   }
   projectedScore!: number;
   newServiceMode!: PolicyMode;
+  newServiceProfileMode!: PolicyMode;
   selectedGroup!: Group | null;
   get serviceModes() {
     return ServiceModeTypes;
@@ -40,14 +41,17 @@ export class ScoreImprovementServiceRiskViewComponent implements OnInit {
   getServiceMode() {
     this.settingsService.getConfig().subscribe(config => {
       this.newServiceMode = config.new_svc.new_service_policy_mode;
+      this.newServiceProfileMode = config.new_svc.new_service_profile_mode;
     });
   }
 
-  switchNewServiceMode() {
+  switchNewServiceMode(type) {
     this.settingsService
-      .patchConfigServiceMode({
+      .patchConfigServiceMode( type === 'network' ? {
         new_service_policy_mode: this.newServiceMode,
-      })
+      } : {
+        new_service_profile_mode: this.newServiceProfileMode,
+      } )
       .subscribe({
         complete: () => {
           this.notificationService.open(this.tr.instant('setting.SUBMIT_OK'));
@@ -64,9 +68,11 @@ export class ScoreImprovementServiceRiskViewComponent implements OnInit {
   getPredictionScores() {
     const metrics = JSON.parse(JSON.stringify(this.scoreImprovementModalService.newMetrics()))
     metrics.new_service_policy_mode = 'Protect';
+    metrics.new_service_profile_mode = 'Protect';
     metrics.groups.protect_groups += metrics.groups.discover_groups + metrics.groups.monitor_groups;
     metrics.groups.monitor_groups = 0;
     metrics.groups.discover_groups = 0;
+    metrics.groups.profile_discover_groups = 0;
     metrics.groups.discover_groups_zero_drift = 0;
     this.scoreImprovementModalService
       .calculateScoreData(

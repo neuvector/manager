@@ -24,11 +24,27 @@ export const ServiceModeField = {
   wrappers: [FormlyComponents.HINT_WRAPPER],
   type: FormlyComponents.RADIO,
   templateOptions: {
+    label: 'group.POLICY_MODE',
     items: ServiceModeTypes,
     hintPosition: 'after',
     hint: 'setting.NEW_SERVICE_COMMENT',
     hintClass: 'ml-4 text-muted',
-    fieldClass: 'col-md-4',
+    fieldClass: 'col-md-5',
+  },
+  expressionProperties: {
+    'templateOptions.disabled':
+      '!formState.permissions.isNewServiceModeAuthorized',
+  },
+};
+
+export const ServiceProfileModeField = {
+  key: 'new_svc.new_service_profile_mode',
+  wrappers: [FormlyComponents.HINT_WRAPPER],
+  type: FormlyComponents.RADIO,
+  templateOptions: {
+    label: 'group.PROFILE_MODE',
+    items: ServiceModeTypes,
+    fieldClass: 'col-md-5',
   },
   expressionProperties: {
     'templateOptions.disabled':

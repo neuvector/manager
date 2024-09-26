@@ -37,10 +37,10 @@ object SystemConfigJsonProtocol extends DefaultJsonProtocol {
   )
   implicit val systemConfig4DashboardWrapFormat: RootJsonFormat[SystemConfig4DashboardWrap] =
     jsonFormat2(SystemConfig4DashboardWrap)
-  implicit val serviceConfigParamFormat: RootJsonFormat[ServiceConfigParam] = jsonFormat4(
+  implicit val serviceConfigParamFormat: RootJsonFormat[ServiceConfigParam] = jsonFormat5(
     ServiceConfigParam
   )
-  implicit val systemRequestContentFormat: RootJsonFormat[SystemRequestContent] = jsonFormat2(
+  implicit val systemRequestContentFormat: RootJsonFormat[SystemRequestContent] = jsonFormat3(
     SystemRequestContent
   )
   implicit val systemRequestFormat: RootJsonFormat[SystemRequest] = jsonFormat1(SystemRequest)
@@ -49,7 +49,7 @@ object SystemConfigJsonProtocol extends DefaultJsonProtocol {
     WebhookConfigWrap
   )
 
-  implicit val systemConfigSvcCfgV2Format: RootJsonFormat[SystemConfigSvcCfgV2] = jsonFormat2(
+  implicit val systemConfigSvcCfgV2Format: RootJsonFormat[SystemConfigSvcCfgV2] = jsonFormat3(
     SystemConfigSvcCfgV2
   )
   implicit val systemConfigSyslogCfgV2Format: RootJsonFormat[SystemConfigSyslogCfgV2] =

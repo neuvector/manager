@@ -196,8 +196,7 @@ export class GroupsComponent implements OnInit {
           .map(service => serviceToGroup(service));
         this.isAllProtectMode =
           this.groups
-            .map(service => service.policy_mode)
-            .filter(serviceMode => serviceMode?.toLowerCase() !== 'protect')
+            .filter(service => service.policy_mode?.toLowerCase() !== 'protect' || service.profile_mode?.toLowerCase() !== 'protect')
             .length === 0;
         this.gridOptions4Groups.api!.setRowData(
           this.groups.filter(p => !p.platform_role)
@@ -223,8 +222,7 @@ export class GroupsComponent implements OnInit {
         this.groups = groups.filter(g => g.cap_change_mode);
         this.isAllProtectMode =
           this.groups
-            .map(service => service.policy_mode)
-            .filter(serviceMode => serviceMode?.toLowerCase() !== 'protect')
+            .filter(service => service.policy_mode?.toLowerCase() !== 'protect' || service.profile_mode?.toLowerCase() !== 'protect')
             .length === 0;
         this.gridOptions4Groups.api!.setRowData(
           this.groups.filter(g => !g.platform_role)
@@ -346,12 +344,13 @@ export class GroupsComponent implements OnInit {
     });
   };
 
-  switchServiceMode = (mode: PolicyMode) => {
+  switchServiceMode = (mode: PolicyMode, profileMode: PolicyMode) => {
     const forAll = this.selectedGroups.length === this.groups.length;
     this.serviceModeService.switchServiceMode(
       this.selectedGroups,
       forAll,
-      mode
+      mode,
+      profileMode,
     );
   };
 

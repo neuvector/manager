@@ -121,7 +121,7 @@
           {{
             (isAllProtectMode
               ? 'dashboard.improveScoreModal.ALL_PROTECT_MODE_DECLARE'
-              : 'service.SWITCH_MODE'
+              : 'service.SWITCH_POLICY_MODE'
             ) | translate
           }}
         </span>
@@ -133,21 +133,62 @@
         <button
           mat-menu-item
           class="d-flex align-items-center"
-          (click)="switchServiceMode('Discover')">
+          (click)="switchServiceMode('Discover', '')">
           <em class="fa fa-binoculars fa-fw text-discover mr-2"></em>
           {{ 'enum.DISCOVER' | translate }}
         </button>
         <button
           mat-menu-item
           class="d-flex align-items-center"
-          (click)="switchServiceMode('Monitor')">
+          (click)="switchServiceMode('Monitor', '')">
           <em class="fa fa-bell fa-fw text-monitor mr-2"></em>
           {{ 'enum.MONITOR' | translate }}
         </button>
         <button
           mat-menu-item
           class="d-flex align-items-center"
-          (click)="switchServiceMode('Protect')">
+          (click)="switchServiceMode('Protect', '')">
+          <em class="fa fa-shield-alt fa-fw text-protect mr-2"></em>
+          {{ 'enum.PROTECT' | translate }}
+        </button>
+      </mat-menu>
+      <button
+        mat-button
+        [disabled]="isAllProtectMode"
+        class="d-flex align-items-center font-weight-bold pr-1 mr-2"
+        aria-label="Switch profile mode"
+        [matMenuTriggerFor]="switchMenu4ProfileModes">
+        <span [ngClass]="{ 'mat-small text-success': isAllProtectMode }">
+          {{
+            (isAllProtectMode
+              ? ''
+              : 'service.SWITCH_PROFILE_MODE'
+            ) | translate
+          }}
+        </span>
+        <i class="eos-icons m-auto" *ngIf="!isAllProtectMode"
+          >arrow_drop_down</i
+        >
+      </button>
+      <mat-menu #switchMenu4ProfileModes="matMenu">
+        <button
+          mat-menu-item
+          class="d-flex align-items-center"
+          (click)="switchServiceMode('', 'Discover')">
+          <em class="fa fa-binoculars fa-fw text-discover mr-2"></em>
+          {{ 'enum.DISCOVER' | translate }}
+        </button>
+        <button
+          mat-menu-item
+          class="d-flex align-items-center"
+          (click)="switchServiceMode('', 'Monitor')">
+          <em class="fa fa-bell fa-fw text-monitor mr-2"></em>
+          {{ 'enum.MONITOR' | translate }}
+        </button>
+        <button
+          mat-menu-item
+          class="d-flex align-items-center"
+          (click)="switchServiceMode('', 'Protect')">
           <em class="fa fa-shield-alt fa-fw text-protect mr-2"></em>
           {{ 'enum.PROTECT' | translate }}
         </button>

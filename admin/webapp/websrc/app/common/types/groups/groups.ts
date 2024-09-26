@@ -4,6 +4,7 @@ export interface Group {
   cfg_type: string;
   reserved: boolean;
   policy_mode?: string;
+  profile_mode?: string;
   domain: string;
   creater_domains?: string[];
   kind: string;

@@ -15,10 +15,29 @@
   <div mat-dialog-content>
     <form>
       <div class="clearfix margin-top-m">
+        <label class="pull-left text-bold margin-right-m">{{ 'group.POLICY_MODE' | translate }}</label>
         <mat-radio-group
           class="pull-left margin-right-m"
           aria-label="Select a mode"
           [(ngModel)]="mode"
+          [ngModelOptions]="{ standalone: true }">
+          <mat-radio-button value="discover" class="margin-right-s">{{
+            'topbar.mode.LEARNING' | translate
+          }}</mat-radio-button>
+          <mat-radio-button value="monitor" class="margin-right-s">{{
+            'topbar.mode.EVALUATION' | translate
+          }}</mat-radio-button>
+          <mat-radio-button value="protect" class="margin-right-s">{{
+            'topbar.mode.ENFORCE' | translate
+          }}</mat-radio-button>
+        </mat-radio-group>
+      <div class="clearfix margin-top-m">
+      </div>
+        <label class="pull-left text-bold margin-right-m">{{ 'group.PROFILE_MODE' | translate }}&nbsp;</label>
+        <mat-radio-group
+          class="pull-left margin-right-m"
+          aria-label="Select a mode"
+          [(ngModel)]="profileMode"
           [ngModelOptions]="{ standalone: true }">
           <mat-radio-button value="discover" class="margin-right-s">{{
             'topbar.mode.LEARNING' | translate
@@ -35,6 +54,7 @@
         </div>
       </div>
       <div class="clearfix margin-top-m">
+        <label class="pull-left text-bold margin-right-m">{{ 'group.ZERODRIFT_SETTING' | translate }}</label>
         <mat-radio-group
           aria-label="Select a baseline profile"
           class="pull-left margin-right-m"

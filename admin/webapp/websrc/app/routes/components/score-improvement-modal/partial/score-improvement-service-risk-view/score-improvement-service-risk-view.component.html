@@ -10,11 +10,31 @@
   <div class="d-flex">
     <span class="mat-small font-weight-bold mr-3">{{
       'setting.NEW_SERVICE' | translate
+    }}:&nbsp;</span>
+    <span class="mat-small mr-3">{{
+      'group.POLICY_MODE' | translate
     }}</span>
     <mat-radio-group
       [(ngModel)]="newServiceMode"
-      (change)="switchNewServiceMode()"
+      (change)="switchNewServiceMode('network')"
       aria-label="New services policy mode"
+      class="d-flex">
+      <mat-radio-button
+        *ngFor="let type of serviceModes"
+        [value]="type.value"
+        class="mr-3">
+        <span class="mat-small font-weight-bold">
+          {{ type.viewValue | translate }}
+        </span>
+      </mat-radio-button>
+    </mat-radio-group>
+    <span style="margin-left: 50px;" class="mat-small mr-3">{{
+      'group.PROFILE_MODE' | translate
+    }}</span>
+    <mat-radio-group
+      [(ngModel)]="newServiceProfileMode"
+      (change)="switchNewServiceMode('profile')"
+      aria-label="New services profile mode"
       class="d-flex">
       <mat-radio-button
         *ngFor="let type of serviceModes"

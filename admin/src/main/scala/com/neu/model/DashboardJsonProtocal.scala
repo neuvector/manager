@@ -699,6 +699,9 @@ case class RiskScoreMetricsGroup(
   discover_groups: Int,
   monitor_groups: Int,
   protect_groups: Int,
+  profile_discover_groups: Int,
+  profile_monitor_groups: Int,
+  profile_protect_groups: Int,
   discover_groups_zero_drift: Int,
   monitor_groups_zero_drift: Int,
   protect_groups_zero_drift: Int
@@ -717,6 +720,7 @@ case class Metrics(
   kube_version: String,
   openshift_version: String,
   new_service_policy_mode: String,
+  new_service_profile_mode: String,
   deny_adm_ctrl_rules: Int,
   hosts: Int,
   workloads: RiskScoreMetricsWL,
@@ -976,13 +980,13 @@ object DashboardJsonProtocol extends DefaultJsonProtocol with LazyLogging {
   implicit val riskScoreMetricsWLFormat: RootJsonFormat[RiskScoreMetricsWL] = jsonFormat8(
     RiskScoreMetricsWL
   )
-  implicit val riskScoreMetricsGroupFormat: RootJsonFormat[RiskScoreMetricsGroup] = jsonFormat7(
+  implicit val riskScoreMetricsGroupFormat: RootJsonFormat[RiskScoreMetricsGroup] = jsonFormat10(
     RiskScoreMetricsGroup
   )
   implicit val riskScoreMetricsCVEFormat: RootJsonFormat[RiskScoreMetricsCVE] = jsonFormat5(
     RiskScoreMetricsCVE
   )
-  implicit val metricsFormat: RootJsonFormat[Metrics] = jsonFormat9(Metrics)
+  implicit val metricsFormat: RootJsonFormat[Metrics] = jsonFormat10(Metrics)
   implicit val conversationReportEntryFormat: RootJsonFormat[ConversationReportEntry] = jsonFormat8(
     ConversationReportEntry
   )

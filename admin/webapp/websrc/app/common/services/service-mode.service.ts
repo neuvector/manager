@@ -16,6 +16,7 @@ import { NotificationService } from './notification.service';
 export interface RefreshEvent {
   all: boolean;
   mode?: PolicyMode;
+  profileMode?: PolicyMode;
   baseline?: ProfileBaseline;
 }
 
@@ -37,7 +38,8 @@ export class ServiceModeService {
   switchServiceMode(
     selectedGroups: Group[],
     forAll: boolean,
-    mode: PolicyMode
+    mode: PolicyMode,
+    profileMode: PolicyMode,
   ) {
     const nodesGroup = selectedGroups.find(group => group.name === 'nodes');
     if (nodesGroup) {
@@ -46,9 +48,9 @@ export class ServiceModeService {
         this.selectNodesAlert(
           (isAlerted: boolean) => {
             if (!isAlerted) {
-              this.switchAllAlert(selectedGroups, mode);
+              this.switchAllAlert(selectedGroups, mode, profileMode);
             } else {
-              this.switchAll(mode);
+              this.switchAll(mode, profileMode);
             }
           },
           mode,
@@ -59,9 +61,9 @@ export class ServiceModeService {
         this.selectNodesAlert(
           (isAlerted: boolean) => {
             if (!isAlerted) {
-              this.switchSomeAlert(selectedGroups, mode);
+              this.switchSomeAlert(selectedGroups, mode, profileMode);
             } else {
-              this.switchSome(selectedGroups, mode);
+              this.switchSome(selectedGroups, mode, profileMode);
             }
           },
           mode,
@@ -70,7 +72,7 @@ export class ServiceModeService {
         );
       }
     } else {
-      this.switchSomeAlert(selectedGroups, mode);
+      this.switchSomeAlert(selectedGroups, mode, profileMode);
     }
   }
 
@@ -119,13 +121,14 @@ export class ServiceModeService {
     }
   }
 
-  private switchAll(mode: PolicyMode) {
-    this.groupsService.updateMode4All(mode, 'no-change').subscribe({
+  private switchAll(mode: PolicyMode, profileMode: PolicyMode) {
+    this.groupsService.updateMode4All(mode, profileMode, 'no-change').subscribe({
       complete: () => {
         this.notificationService.open(this.tr.instant('service.ALL_SUBMIT_OK'));
         this.refreshEventSubject$.next({
           all: true,
           mode: mode,
+          profileMode: profileMode,
         });
       },
       error: ({ error }: { error: ErrorResponse }) => {
@@ -137,7 +140,7 @@ export class ServiceModeService {
     });
   }
 
-  private switchAllAlert(selectedGroups: Group[], mode: PolicyMode) {
+  private switchAllAlert(selectedGroups: Group[], mode: PolicyMode, profileMode: PolicyMode) {
     if (!this.suppressSwitchMode(selectedGroups, mode)) {
       const message = this.getMessage(mode);
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
@@ -149,7 +152,7 @@ export class ServiceModeService {
       });
       dialogRef.afterClosed().subscribe((result: boolean) => {
         if (result) {
-          this.switchAll(mode);
+          this.switchAll(mode, profileMode);
         }
       });
     }
@@ -157,7 +160,7 @@ export class ServiceModeService {
 
   private switchBaseline(selectedGroups: Group[], baseline: ProfileBaseline) {
     this.groupsService
-      .updateModeByService('', baseline, selectedGroups)
+      .updateModeByService('', '', baseline, selectedGroups)
       .subscribe({
         complete: () => {
           this.notificationService.open(
@@ -177,15 +180,18 @@ export class ServiceModeService {
       });
   }
 
-  private switchSome(selectedGroups: Group[], mode: PolicyMode) {
+  private switchSome(selectedGroups: Group[], mode: PolicyMode, profileMode: PolicyMode) {
     this.groupsService
-      .updateModeByService(mode, 'no-change', selectedGroups)
+      .updateModeByService(mode, profileMode, 'no-change', selectedGroups)
       .subscribe({
         complete: () => {
           this.notificationService.open(
             this.tr.instant('service.ALL_SUBMIT_OK')
           );
-          selectedGroups.forEach(g => (g.policy_mode = mode));
+          selectedGroups.forEach(g => {
+            g.policy_mode = mode || g.policy_mode;
+            g.profile_mode = profileMode || g.profile_mode;
+          });
           this.refreshEventSubject$.next({
             all: false,
           });
@@ -199,7 +205,7 @@ export class ServiceModeService {
       });
   }
 
-  private switchSomeAlert(selectedGroups: Group[], mode: PolicyMode) {
+  private switchSomeAlert(selectedGroups: Group[], mode: PolicyMode, profileMode: PolicyMode) {
     if (!this.suppressSwitchMode(selectedGroups, mode)) {
       const message = this.getMessage(mode);
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
@@ -211,7 +217,7 @@ export class ServiceModeService {
       });
       dialogRef.afterClosed().subscribe((result: boolean) => {
         if (result) {
-          this.switchSome(selectedGroups, mode);
+          this.switchSome(selectedGroups, mode, profileMode);
         }
       });
     }

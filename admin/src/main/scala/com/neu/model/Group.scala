@@ -138,6 +138,7 @@ case class Groups(groups: Array[Group])
 case class Groups4Export(
   groups: Array[String],
   policy_mode: Option[String],
+  profile_mode: Option[String],
   remote_export_options: Option[RemoteExportOptions] = None
 )
 

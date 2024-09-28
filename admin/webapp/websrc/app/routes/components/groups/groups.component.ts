@@ -29,11 +29,13 @@ import { serviceToGroup } from '@common/utils/common.utils';
 import { RuleDetailModalService } from '@components/groups/partial/rule-detail-modal/rule-detail-modal.service';
 import { ExportOptionsModalComponent } from '@components/export-options-modal/export-options-modal.component';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-groups',
   templateUrl: './groups.component.html',
   styleUrls: ['./groups.component.scss'],
+  providers: [TitleCasePipe],
 })
 export class GroupsComponent implements OnInit {
   @Input() isScoreImprovement: boolean = false;
@@ -82,7 +84,8 @@ export class GroupsComponent implements OnInit {
     private utilsService: UtilsService,
     private route: ActivatedRoute,
     private ruleDetailModalService: RuleDetailModalService,
-    private domSanitizer: DomSanitizer
+    private domSanitizer: DomSanitizer,
+    private titleCasePipe: TitleCasePipe,
   ) {}
 
   ngOnInit(): void {
@@ -373,17 +376,18 @@ export class GroupsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: RemoteExportOptionsWrapper) => {
       if (result) {
-        const { export_mode, ...exportOptions } = result.export_options;
-        this.exportUtil(export_mode, exportOptions, policyMode);
+        const { policy_mode, profile_mode, export_mode, ...exportOptions } = result.export_options;
+        this.exportUtil(export_mode, exportOptions, policy_mode, profile_mode);
       }
     });
   };
 
-  exportUtil(mode: string, option: RemoteExportOptions, policyMode: string) {
+  exportUtil(mode: string, option: RemoteExportOptions, policyMode: string, profileMode: string) {
     if (mode === 'local') {
       let payload = {
         groups: this.selectedGroups.map(group => group.name),
-        policy_mode: policyMode,
+        policy_mode: this.titleCasePipe.transform(policyMode),
+        profile_mode: this.titleCasePipe.transform(profileMode),
       };
       this.groupsService.exportGroupsConfigData(payload).subscribe(
         response => {

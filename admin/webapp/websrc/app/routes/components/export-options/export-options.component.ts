@@ -23,6 +23,8 @@ export class ExportOptionsComponent implements OnInit {
 
   ngOnInit(): void {
     this.exportOptionsForm = this.fb.group({
+      policy_mode: '',
+      profile_mode: '',
       export_mode: ['local'],
       remote_repository_nickname: ['default'],
       file_path: [this.exportFileName],

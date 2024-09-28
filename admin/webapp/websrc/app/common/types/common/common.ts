@@ -1,6 +1,6 @@
 export * from './remote-grid-api';
 
-export type PolicyMode = 'Discover' | 'Monitor' | 'Protect';
+export type PolicyMode = 'Discover' | 'Monitor' | 'Protect' | '';
 
 export type ProfileBaseline = 'basic' | 'zero-drift';
 

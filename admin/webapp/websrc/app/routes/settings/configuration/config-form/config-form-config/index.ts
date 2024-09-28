@@ -35,6 +35,7 @@ import {
   ScannerAutoscaleMinField,
   ScannerAutoscaleMinMaxField,
   ServiceModeField,
+  ServiceProfileModeField,
   SyslogCategoriesField,
   SyslogInJSONField,
   SyslogLevelField,
@@ -75,6 +76,10 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
           {
             className: 'col-12 my-md-2',
             ...ServiceModeField,
+          },
+          {
+            className: 'col-12 my-md-2',
+            ...ServiceProfileModeField,
           },
           {
             className: 'col-12 my-md-2',

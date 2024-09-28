@@ -60,6 +60,7 @@ export interface ConfigV2Response {
 
 export interface SvcConfig {
   new_service_policy_mode: PolicyMode;
+  new_service_profile_mode: PolicyMode;
   new_service_profile_baseline: ProfileBaseline;
 }
 

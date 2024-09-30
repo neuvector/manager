@@ -43,33 +43,11 @@
     <button
       mat-button
       *ngIf="selectedGroups.length > 0 && source === navSource['SELF']"
-      [matMenuTriggerFor]="exportOptions"
+      (click)="exportGroups()"
       class="mr-3">
       <em class="eos-icons icon-18">download</em>
       {{ 'group.export.TITLE' | translate }}
     </button>
-    <mat-menu #exportOptions="matMenu">
-      <button mat-menu-item (click)="exportGroups('')">
-        <em class="eos-icons icon-18 text-primary margin-right-s">emergency</em>
-        {{ 'enum.DEFAULT' | translate }}
-      </button>
-      <button mat-menu-item (click)="exportGroups('Discover')">
-        <em class="eos-icons icon-18 text-discover margin-right-s"
-          >machine_learning</em
-        >
-        {{ 'enum.DISCOVER' | translate }}
-      </button>
-      <button mat-menu-item (click)="exportGroups('Monitor')">
-        <em class="eos-icons icon-18 text-monitor margin-right-s"
-          >circle_notifications</em
-        >
-        {{ 'enum.MONITOR' | translate }}
-      </button>
-      <button mat-menu-item (click)="exportGroups('Protect')">
-        <em class="eos-icons icon-18 text-protect margin-right-s">shield</em>
-        {{ 'enum.PROTECT' | translate }}
-      </button>
-    </mat-menu>
     <mat-checkbox
       *ngIf="
         isWriteGroupAuthorized &&

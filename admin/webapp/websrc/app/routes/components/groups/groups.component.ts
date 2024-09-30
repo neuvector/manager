@@ -362,7 +362,7 @@ export class GroupsComponent implements OnInit {
     );
   };
 
-  exportGroups = (policyMode: string = '') => {
+  exportGroups = () => {
     const dialogRef = this.dialog.open(ExportOptionsModalComponent, {
       width: '50%',
       disableClose: true,

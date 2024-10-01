@@ -37,10 +37,10 @@ object SystemConfigJsonProtocol extends DefaultJsonProtocol {
   )
   given systemConfig4DashboardWrapFormat: RootJsonFormat[SystemConfig4DashboardWrap] =
     jsonFormat2(SystemConfig4DashboardWrap.apply)
-  given serviceConfigParamFormat: RootJsonFormat[ServiceConfigParam]                 = jsonFormat4(
+  given serviceConfigParamFormat: RootJsonFormat[ServiceConfigParam]                 = jsonFormat5(
     ServiceConfigParam.apply
   )
-  given systemRequestContentFormat: RootJsonFormat[SystemRequestContent]             = jsonFormat2(
+  given systemRequestContentFormat: RootJsonFormat[SystemRequestContent]             = jsonFormat3(
     SystemRequestContent.apply
   )
   given systemRequestFormat: RootJsonFormat[SystemRequest]                           = jsonFormat1(SystemRequest.apply)
@@ -49,7 +49,7 @@ object SystemConfigJsonProtocol extends DefaultJsonProtocol {
     WebhookConfigWrap.apply
   )
 
-  given systemConfigSvcCfgV2Format: RootJsonFormat[SystemConfigSvcCfgV2]               = jsonFormat2(
+  given systemConfigSvcCfgV2Format: RootJsonFormat[SystemConfigSvcCfgV2]               = jsonFormat3(
     SystemConfigSvcCfgV2.apply
   )
   given systemConfigSyslogCfgV2Format: RootJsonFormat[SystemConfigSyslogCfgV2]         =

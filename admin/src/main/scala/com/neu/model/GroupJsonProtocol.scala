@@ -31,7 +31,7 @@ object GroupJsonProtocol extends DefaultJsonProtocol {
   given workloadBriefFormat: RootJsonFormat[WorkloadBrief]                       = rootFormat(
     lazyFormat(jsonFormat15(WorkloadBrief.apply))
   )
-  given groupFormat: RootJsonFormat[Group]                                       = jsonFormat21(Group.apply)
+  given groupFormat: RootJsonFormat[Group]                                       = jsonFormat22(Group.apply)
   given groupWrapFormat: RootJsonFormat[GroupWrap]                               = jsonFormat1(GroupWrap.apply)
 
   given groupConfigFormat: RootJsonFormat[GroupConfig]                         = jsonFormat8(GroupConfig.apply)
@@ -51,14 +51,14 @@ object GroupJsonProtocol extends DefaultJsonProtocol {
   given criteriaItemFormat: RootJsonFormat[CriteriaItem]               = jsonFormat1(CriteriaItem.apply)
   given groupConfigDTOFormat: RootJsonFormat[GroupConfigDTO]           = jsonFormat8(GroupConfigDTO.apply)
   given serviceAddressFormat: RootJsonFormat[ServiceAddress]           = jsonFormat2(ServiceAddress.apply)
-  given groupDTOFormat: RootJsonFormat[GroupDTO]                       = jsonFormat21(GroupDTO.apply)
+  given groupDTOFormat: RootJsonFormat[GroupDTO]                       = jsonFormat22(GroupDTO.apply)
   given groupDTOsFormat: RootJsonFormat[GroupDTOs]                     = jsonFormat1(GroupDTOs.apply)
   given groupDTOWrapFormat: RootJsonFormat[GroupDTOWrap]               = jsonFormat1(GroupDTOWrap.apply)
-  given group4SingleFormat: RootJsonFormat[Group4Single]               = jsonFormat21(Group4Single.apply)
+  given group4SingleFormat: RootJsonFormat[Group4Single]               = jsonFormat22(Group4Single.apply)
   given group4SingleWrapFormat: RootJsonFormat[Group4SingleWrap]       = jsonFormat1(
     Group4SingleWrap.apply
   )
-  given grou4SingleDTOFormat: RootJsonFormat[Group4SingleDTO]          = jsonFormat21(Group4SingleDTO.apply)
+  given grou4SingleDTOFormat: RootJsonFormat[Group4SingleDTO]          = jsonFormat22(Group4SingleDTO.apply)
   given group4SingleDTOWrapFormat: RootJsonFormat[Group4SingleDTOWrap] = jsonFormat1(
     Group4SingleDTOWrap.apply
   )
@@ -136,6 +136,7 @@ object GroupJsonProtocol extends DefaultJsonProtocol {
       group.policy_rules,
       group.response_rules.getOrElse(Array()),
       group.policy_mode,
+      group.profile_mode,
       group.baseline_profile,
       group.platform_role,
       group.cap_change_mode,
@@ -164,6 +165,7 @@ object GroupJsonProtocol extends DefaultJsonProtocol {
       group.policy_rules,
       group.response_rules,
       group.policy_mode,
+      group.profile_mode,
       group.baseline_profile,
       group.platform_role,
       group.cap_change_mode,

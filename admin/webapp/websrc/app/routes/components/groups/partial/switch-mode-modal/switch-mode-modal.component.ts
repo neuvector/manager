@@ -20,6 +20,7 @@ import { NotificationService } from '@services/notification.service';
 export class SwitchModeModalComponent implements OnInit {
   submittingUpdate: boolean = false;
   mode: string;
+  profileMode: string;
   baselineProfile: string;
   zeroDriftHint: string;
   noModeGroupList: Array<Group> = [];
@@ -38,6 +39,7 @@ export class SwitchModeModalComponent implements OnInit {
   ngOnInit(): void {
     let counts = this.getModeCounts();
     this.mode = this.getDefaultMode(counts.modeCount);
+    this.profileMode = this.getDefaultMode(counts.profileModeCount);
     this.baselineProfile = this.getDefaultBaseline(counts.baselineCount);
     this.noModeGroupList = this.data.selectedGroups.filter(group => !group.cap_change_mode);
     this.noModeGroupMsg = this.noModeGroupList.length > 0 ?
@@ -73,6 +75,7 @@ export class SwitchModeModalComponent implements OnInit {
         this.selectNodesAlert(
           this.switchAllMode,
           this.mode,
+          this.profileMode,
           this.baselineProfile,
           nodesGroup[0]
         );
@@ -80,17 +83,23 @@ export class SwitchModeModalComponent implements OnInit {
         this.selectNodesAlert(
           this.switchSomeMode,
           this.mode,
+          this.profileMode,
           this.baselineProfile,
           nodesGroup[0]
         );
       }
     } else {
-      this.switchSomeMode(this.mode, this.baselineProfile, false);
+      this.switchSomeMode(this.mode, this.profileMode, this.baselineProfile, false);
     }
   };
 
   private getModeCounts = () => {
     let modeCountMap: Map<string, number> = new Map([
+      ['discover', 0],
+      ['monitor', 0],
+      ['protect', 0],
+    ]);
+    let profileModeCountMap: Map<string, number> = new Map([
       ['discover', 0],
       ['monitor', 0],
       ['protect', 0],
@@ -105,13 +114,17 @@ export class SwitchModeModalComponent implements OnInit {
           group.policy_mode.toLowerCase(),
           modeCountMap.get(group.policy_mode.toLowerCase())! + 1
         );
+        profileModeCountMap.set(
+          group.profile_mode.toLowerCase(),
+          profileModeCountMap.get(group.profile_mode.toLowerCase())! + 1
+        );
         baselineCountMap.set(
           group.baseline_profile.toLowerCase(),
           baselineCountMap.get(group.baseline_profile.toLowerCase())! + 1
         );
       }
     });
-    return { modeCount: modeCountMap, baselineCount: baselineCountMap };
+    return { modeCount: modeCountMap, profileModeCount: profileModeCountMap, baselineCount: baselineCountMap };
   };
 
   private getDefaultMode = (modeCount: Map<string, number>) => {
@@ -146,6 +159,7 @@ export class SwitchModeModalComponent implements OnInit {
   private selectNodesAlert = (
     cb: Function,
     mode: string,
+    profileMode: string,
     baselineProfile: string,
     nodesGroup: Group
   ) => {
@@ -160,16 +174,17 @@ export class SwitchModeModalComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          cb(mode, baselineProfile, true);
+          cb(mode, profileMode, baselineProfile, true);
         }
       });
     } else {
-      cb(mode, baselineProfile);
+      cb(mode, profileMode, baselineProfile);
     }
   };
 
   private switchSomeMode = (
     mode: string,
+    profileMode: string,
     baselineProfile: string,
     isAlerted: boolean
   ) => {
@@ -177,7 +192,7 @@ export class SwitchModeModalComponent implements OnInit {
       let switchableGroups = this.getSwitchableGroups(this.data.selectedGroups);
       this.submittingUpdate = true;
       this.groupsService
-        .updateModeByService(mode, baselineProfile, switchableGroups)
+        .updateModeByService(mode, profileMode, baselineProfile, switchableGroups)
         .subscribe(
           response => {
             this.notificationService.open(
@@ -217,9 +232,9 @@ export class SwitchModeModalComponent implements OnInit {
     }
   };
 
-  private switchAllMode = (mode: string, baselineProfile: string) => {
+  private switchAllMode = (mode: string, profileMode: string, baselineProfile: string) => {
     this.submittingUpdate = true;
-    this.groupsService.updateMode4All(mode, baselineProfile).subscribe(
+    this.groupsService.updateMode4All(mode, profileMode, baselineProfile).subscribe(
       response => {
         this.notificationService.open(
           this.translate.instant('service.SUBMIT_OK')

@@ -90,6 +90,7 @@ case class SystemConfig4Dashboard(
 
 case class SystemConfigSvcCfgV2(
   new_service_policy_mode: Option[String] = None,
+  new_service_profile_mode: Option[String] = None,
   new_service_profile_baseline: Option[String] = None
 )
 
@@ -180,11 +181,13 @@ case class SystemConfig4DashboardWrap(
 
 case class SystemRequestContent(
   policy_mode: Option[String],
+  profile_mode: Option[String],
   baseline_profile: Option[String]
 )
 
 case class ServiceConfigParam(
   policy_mode: Option[String],
+  profile_mode: Option[String],
   baseline_profile: Option[String],
   services: Option[Array[String]],
   not_scored: Option[Boolean]

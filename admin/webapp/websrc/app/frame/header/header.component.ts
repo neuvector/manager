@@ -29,6 +29,7 @@ import { CommonHttpService } from '@common/api/common-http.service';
 import { AuthService } from '@services/auth.service';
 import { SettingsService } from '@services/settings.service';
 import { switchMap } from 'rxjs/operators';
+import { FrameService } from '../frame.service';
 
 @Component({
   selector: 'app-header',
@@ -70,6 +71,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private _clusterNameSubScription;
   public isAuthReadConfig: boolean = false;
 
+
   @ViewChild('fsbutton', { static: true }) fsbutton;
 
   constructor(
@@ -83,6 +85,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private commonHttpService: CommonHttpService,
     private settingsService: SettingsService,
+    private frameService: FrameService,
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
     @Inject(LOCAL_STORAGE) private localStorage: StorageService
   ) {
@@ -223,6 +226,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   toggleCollapsedSidebar() {
     this.switchers.toggleFrameSwitcher('isCollapsed');
+    this.frameService.dispatchToggleSidebarEvent();
   }
 
   isCollapsedText() {

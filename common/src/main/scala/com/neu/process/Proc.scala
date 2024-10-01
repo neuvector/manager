@@ -1,16 +1,17 @@
 package com.neu.process
 
 import java.io.{ BufferedReader, BufferedWriter, InputStreamReader, OutputStreamWriter }
+import scala.compiletime.uninitialized
 
 /**
  * An operating system process.
  */
 class Proc(args: String*)(env: Env) extends Iterable[String] {
-  protected val pb                           = new ProcessBuilder(args: _*)
-  protected var proc: Process                = _
-  protected var inputWriter: BufferedWriter  = _
-  protected var outputReader: BufferedReader = _
-  protected var errorReader: BufferedReader  = _
+  protected val pb                           = new ProcessBuilder(args*)
+  protected var proc: Process                = uninitialized
+  protected var inputWriter: BufferedWriter  = uninitialized
+  protected var outputReader: BufferedReader = uninitialized
+  protected var errorReader: BufferedReader  = uninitialized
 
   /**
    * Start process and traverse lines in standard output.
@@ -66,7 +67,7 @@ class Proc(args: String*)(env: Env) extends Iterable[String] {
    * Wait for process to finish and return its exit code. If process has not been started, it will
    * be started and then waited.
    */
-  def waitFor(): Int = {
+  private def waitFor(): Int = {
     if (proc == null) {
       startProc()
     }
@@ -95,7 +96,7 @@ class Proc(args: String*)(env: Env) extends Iterable[String] {
   /**
    * Start the process.
    */
-  protected def startProc(): Unit =
+  private def startProc(): Unit =
     if (proc == null) {
       env.applyTo(pb)
       proc = pb.start()
@@ -107,7 +108,7 @@ class Proc(args: String*)(env: Env) extends Iterable[String] {
   /**
    * Collect process output to feed to the function.
    */
-  protected def collectOutput(reader: BufferedReader): Iterator[String] =
+  private def collectOutput(reader: BufferedReader): Iterator[String] =
     new Iterator[String] {
       private var nextLine: String    = null
       private var reachedEnd: Boolean = false

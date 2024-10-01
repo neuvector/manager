@@ -4,6 +4,7 @@ import {
   Inject,
   OnDestroy,
   OnInit,
+  HostBinding,
 } from '@angular/core';
 import G6, { Graph } from '@antv/g6';
 import { GraphService } from '@routes/network-activities/graph.service';
@@ -41,6 +42,8 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { ConfirmDialogComponent } from "@components/ui/confirm-dialog/confirm-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
+import { SwitchersService } from '@core/switchers/switchers.service';
+import { FrameService } from '../../frame/frame.service';
 
 @Component({
   selector: 'app-network-activities',
@@ -62,6 +65,7 @@ export class NetworkActivitiesComponent
 
   private readonly TOP_BAR = 65;
   private readonly SIDE_BAR = 220;
+  private readonly SIDE_BAR_S = 50;
   private readonly PADDING = 26 * 2 + 5 * 2;
   private user = GlobalVariable.user.token.username;
 
@@ -73,6 +77,7 @@ export class NetworkActivitiesComponent
   private graph: Graph = <Graph>{};
 
   private lastRevealedNodeIds: string[] = [];
+  private _toggleSidebarSubscription;
 
   public popupState: ActivityState;
 
@@ -161,7 +166,9 @@ export class NetworkActivitiesComponent
     private sniffService: SniffService,
     private multiClusterService: MultiClusterService,
     private dialog: MatDialog,
-    private utils: UtilsService
+    private utils: UtilsService,
+    private switchers: SwitchersService,
+    private frameService: FrameService,
   ) {
     this.w = GlobalVariable.window;
     this.popupState = new ActivityState(PopupState.onInit);
@@ -1623,6 +1630,25 @@ export class NetworkActivitiesComponent
   }
 
   ngOnInit(): void {
+    this._toggleSidebarSubscription =
+      this.frameService.onSidebarCollapseEvent$.subscribe(data => {
+        if (!this.graph || this.graph.get('destroyed')) return;
+        if (
+          !this.container ||
+          !this.container.scrollWidth ||
+          !this.container.clientHeight
+        )
+          return;
+        this.graph.changeSize(
+          this.w.innerWidth -
+            (this.switchers.getFrameSwitcher('isCollapsed') ?
+              this.SIDE_BAR_S : this.SIDE_BAR
+            ) -
+            this.PADDING,
+          this.w.innerHeight - this.TOP_BAR - this.PADDING
+        );
+        this.graph.fitView();
+      });
     this.graphService.registerG6Components();
     this.domainGridOptions = this.graphService.prepareDomainGrid();
     this.initSettings();
@@ -1649,7 +1675,11 @@ export class NetworkActivitiesComponent
       )
         return;
       this.graph.changeSize(
-        this.w.innerWidth - this.SIDE_BAR - this.PADDING,
+        this.w.innerWidth -
+          (this.switchers.getFrameSwitcher('isCollapsed') ?
+            this.SIDE_BAR_S : this.SIDE_BAR
+          ) -
+          this.PADDING,
         this.w.innerHeight - this.TOP_BAR - this.PADDING
       );
       this.graph.fitView();
@@ -2184,6 +2214,9 @@ export class NetworkActivitiesComponent
   ngOnDestroy(): void {
     if (this._switchClusterSubscription) {
       this._switchClusterSubscription.unsubscribe();
+    }
+    if (this._toggleSidebarSubscription) {
+      this._toggleSidebarSubscription.unsubscribe();
     }
   }
 

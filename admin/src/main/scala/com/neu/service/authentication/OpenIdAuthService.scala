@@ -12,7 +12,7 @@ import org.apache.pekko.http.scaladsl.model.headers.HttpCookie
 import org.apache.pekko.http.scaladsl.server.{ RequestContext, Route }
 import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshal
 
-import spray.json._
+import spray.json.*
 
 import java.nio.charset.StandardCharsets
 import java.util.Base64

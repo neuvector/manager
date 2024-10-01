@@ -1,6 +1,6 @@
 package com.neu.client
 
-import com.neu.core.CommonSettings._
+import com.neu.core.CommonSettings.*
 import com.neu.core.{ AuthenticationManager, ClientSslConfig }
 import com.neu.service.DefaultJsonFormats
 import com.neu.web.Rest.{ executionContext, system }
@@ -8,15 +8,15 @@ import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.http.scaladsl.coding.{ Coders, Gzip }
 import org.apache.pekko.http.scaladsl.marshalling.Marshal
-import org.apache.pekko.http.scaladsl.model._
-import org.apache.pekko.http.scaladsl.model.headers._
-import org.apache.pekko.http.scaladsl.unmarshalling._
+import org.apache.pekko.http.scaladsl.model.*
+import org.apache.pekko.http.scaladsl.model.headers.*
+import org.apache.pekko.http.scaladsl.unmarshalling.*
 import org.apache.pekko.stream.Materializer
-import spray.json._
+import spray.json.*
 
 import java.io.{ PrintWriter, StringWriter }
 import java.net.InetAddress
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.util.control.NonFatal
 

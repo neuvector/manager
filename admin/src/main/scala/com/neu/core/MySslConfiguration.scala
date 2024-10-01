@@ -3,14 +3,14 @@ package com.neu.core
 import com.neu.core.CommonSettings.{ newCert, newKey, newMgrCert, newMgrKey }
 import com.typesafe.scalalogging.LazyLogging
 import org.bouncycastle.asn1.x500.X500Name
-import org.bouncycastle.asn1.x509._
+import org.bouncycastle.asn1.x509.*
 import org.bouncycastle.cert.jcajce.{ JcaX509CertificateConverter, JcaX509v3CertificateBuilder }
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder
 import org.bouncycastle.util.io.pem.{ PemObject, PemWriter }
 import sun.security.util.DerInputStream
 
-import java.io._
+import java.io.*
 import java.math.BigInteger
 import java.security.*
 import java.security.cert.{ Certificate, CertificateFactory, X509Certificate }

@@ -1,7 +1,7 @@
 package com.neu.api.authentication
 
 import com.neu.model.*
-import com.neu.model.AuthTokenJsonProtocol.*
+import com.neu.model.AuthTokenJsonProtocol.{ *, given }
 import com.neu.service.{ DefaultJsonFormats, Utils }
 import com.neu.service.authentication.ExtraAuthService
 import org.apache.pekko.http.scaladsl.server.{ Directives, Route }

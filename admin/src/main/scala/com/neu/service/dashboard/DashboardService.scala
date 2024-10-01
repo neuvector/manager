@@ -4,10 +4,10 @@ import com.google.common.net.UrlEscapers
 import com.neu.cache.JsonStringCacheManager
 import com.neu.client.RestClient
 import com.neu.client.RestClient.*
-import com.neu.model.DashboardJsonProtocol.*
-import com.neu.model.DashboardSecurityEventsProtocol.*
-import com.neu.model.ResourceJsonProtocol.*
-import com.neu.model.SystemConfigJsonProtocol.*
+import com.neu.model.DashboardJsonProtocol.{ *, given }
+import com.neu.model.DashboardSecurityEventsProtocol.{ *, given }
+import com.neu.model.ResourceJsonProtocol.{ *, given }
+import com.neu.model.SystemConfigJsonProtocol.{ *, given }
 import com.neu.model.*
 import com.neu.service.DefaultJsonFormats
 import com.typesafe.scalalogging.LazyLogging

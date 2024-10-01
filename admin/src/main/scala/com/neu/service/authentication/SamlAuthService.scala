@@ -3,7 +3,7 @@ package com.neu.service.authentication
 import com.neu.client.RestClient
 import com.neu.client.RestClient.*
 import com.neu.core.AuthenticationManager
-import com.neu.model.AuthTokenJsonProtocol.*
+import com.neu.model.AuthTokenJsonProtocol.{ *, given }
 import com.neu.model.*
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.http.scaladsl.model.*

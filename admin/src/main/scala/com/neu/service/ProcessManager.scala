@@ -45,11 +45,12 @@ class ProcessManager extends Actor with ActorLogging {
   override def receive: Receive = {
     case ReadOutput =>
       sender() ! collectOutput()
+    case "exit"     =>
+      destroy()
     case s: String  =>
       log.info("get command: {}", s)
       inputWriter.write(s)
       inputWriter.flush()
-    case "exit"     => destroy()
   }
 }
 

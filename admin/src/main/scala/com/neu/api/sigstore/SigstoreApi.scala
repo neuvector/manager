@@ -3,7 +3,7 @@ package com.neu.api.sigstore
 import com.neu.client.RestClient
 import com.neu.client.RestClient.*
 import com.neu.model.*
-import com.neu.model.SigstoreJsonProtocol.*
+import com.neu.model.SigstoreJsonProtocol.{ *, given }
 import com.neu.service.Utils
 import com.neu.service.sigstore.SigstoreService
 import com.typesafe.scalalogging.LazyLogging

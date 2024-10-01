@@ -3,9 +3,9 @@ package com.neu.api.notification
 import com.neu.client.RestClient
 import com.neu.client.RestClient.*
 import com.neu.model.*
-import com.neu.model.AlertJsonProtocol.*
-import com.neu.model.EndpointConfigJsonProtocol.*
-import com.neu.model.JsonProtocol.*
+import com.neu.model.AlertJsonProtocol.{ *, given }
+import com.neu.model.EndpointConfigJsonProtocol.{ *, given }
+import com.neu.model.JsonProtocol.{ *, given }
 import com.neu.service.Utils
 import com.neu.service.notification.NotificationService
 import org.apache.pekko.http.scaladsl.server.{ Directives, Route }

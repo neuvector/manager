@@ -5,12 +5,12 @@ import com.neu.client.RestClient
 import com.neu.client.RestClient.*
 import com.neu.core.IpGeoManager
 import com.neu.model.*
-import com.neu.model.AlertJsonProtocol.*
-import com.neu.model.DashboardJsonProtocol.*
-import com.neu.model.EndpointConfigJsonProtocol.*
-import com.neu.model.IpGeoJsonProtocol.*
-import com.neu.model.JsonProtocol.*
-import com.neu.model.ResourceJsonProtocol.*
+import com.neu.model.AlertJsonProtocol.{ *, given }
+import com.neu.model.DashboardJsonProtocol.{ *, given }
+import com.neu.model.EndpointConfigJsonProtocol.{ *, given }
+import com.neu.model.IpGeoJsonProtocol.{ *, given }
+import com.neu.model.JsonProtocol.{ *, given }
+import com.neu.model.ResourceJsonProtocol.{ *, given }
 import com.neu.service.BaseService
 import com.neu.utils.EnumUtils
 import com.typesafe.scalalogging.LazyLogging

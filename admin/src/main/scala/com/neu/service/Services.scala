@@ -27,7 +27,7 @@ case class ErrorResponseException(responseStatus: StatusCode, response: Option[H
  * provided, logs to be captured, and potentially remedial actions.
  */
 trait FailureHandling extends Directives {
-  implicit val log: LoggingAdapter
+  given log: LoggingAdapter
 
   def rejectionHandler: RejectionHandler = RejectionHandler.default
 
@@ -79,9 +79,9 @@ trait FailureHandling extends Directives {
  */
 class RoutedHttpService(route: Route) extends Actor with ActorLogging with Directives {
 
-  implicit val system: ActorSystem = context.system
+  given system: ActorSystem = context.system
 
-  implicit val handler: ExceptionHandler = ExceptionHandler { case NonFatal(e) =>
+  given handler: ExceptionHandler = ExceptionHandler { case NonFatal(e) =>
     extractLog { log =>
       log.warning(s"Exception caught: ${e.getMessage}")
       complete(HttpResponse(StatusCodes.InternalServerError, entity = "Server internal error"))

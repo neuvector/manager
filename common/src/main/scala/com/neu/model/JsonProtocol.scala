@@ -20,29 +20,29 @@ object JsonProtocol extends DefaultJsonProtocol {
     }
   }
 
-  implicit val dateTimeFormat: DateTimeFormat.type = DateTimeFormat
+  given dateTimeFormat: DateTimeFormat.type = DateTimeFormat
 
-  implicit val networkTrafficSumFormat: RootJsonFormat[NetworkTrafficSum] = jsonFormat3(
+  given networkTrafficSumFormat: RootJsonFormat[NetworkTrafficSum] = jsonFormat3(
     NetworkTrafficSum
   )
 
-  implicit val scaleFormat: RootJsonFormat[Scale]         = jsonFormat2(Scale)
-  implicit val directionFormat: RootJsonFormat[Direction] = jsonFormat1(Direction)
-  implicit val scanBriefFormat: RootJsonFormat[ScanBrief] = jsonFormat3(ScanBrief)
-  implicit val subNodeFormat: RootJsonFormat[SubNode]     = jsonFormat4(SubNode)
-  implicit val fixedFormat: RootJsonFormat[Fixed]         = jsonFormat2(Fixed)
-  implicit val nodeFormat: RootJsonFormat[Node]           = jsonFormat19(Node)
+  given scaleFormat: RootJsonFormat[Scale]         = jsonFormat2(Scale)
+  given directionFormat: RootJsonFormat[Direction] = jsonFormat1(Direction)
+  given scanBriefFormat: RootJsonFormat[ScanBrief] = jsonFormat3(ScanBrief)
+  given subNodeFormat: RootJsonFormat[SubNode]     = jsonFormat4(SubNode)
+  given fixedFormat: RootJsonFormat[Fixed]         = jsonFormat2(Fixed)
+  given nodeFormat: RootJsonFormat[Node]           = jsonFormat19(Node)
 
-  implicit val graphEndpointFormat: RootJsonFormat[GraphEndpoint] = jsonFormat2(GraphEndpoint)
-  implicit val graphItemFormat: RootJsonFormat[GraphItem]         = jsonFormat1(GraphItem)
-  implicit val blacklist: RootJsonFormat[Blacklist]               = jsonFormat3(Blacklist)
-  implicit val userBlacklist: RootJsonFormat[UserBlacklist]       = jsonFormat2(UserBlacklist)
+  given graphEndpointFormat: RootJsonFormat[GraphEndpoint] = jsonFormat2(GraphEndpoint)
+  given graphItemFormat: RootJsonFormat[GraphItem]         = jsonFormat1(GraphItem)
+  given blacklist: RootJsonFormat[Blacklist]               = jsonFormat3(Blacklist)
+  given userBlacklist: RootJsonFormat[UserBlacklist]       = jsonFormat2(UserBlacklist)
 
-  implicit val positionFormat: RootJsonFormat[Position]               = jsonFormat2(Position)
-  implicit val userGraphLayoutFormat: RootJsonFormat[UserGraphLayout] = jsonFormat2(UserGraphLayout)
+  given positionFormat: RootJsonFormat[Position]               = jsonFormat2(Position)
+  given userGraphLayoutFormat: RootJsonFormat[UserGraphLayout] = jsonFormat2(UserGraphLayout)
 
-  implicit val edgeFormat: RootJsonFormat[Edge]                 = jsonFormat14(Edge)
-  implicit val networkGraphFormat: RootJsonFormat[NetworkGraph] = jsonFormat3(NetworkGraph)
+  given edgeFormat: RootJsonFormat[Edge]                 = jsonFormat14(Edge)
+  given networkGraphFormat: RootJsonFormat[NetworkGraph] = jsonFormat3(NetworkGraph)
 
   def layoutToJson(layout: UserGraphLayout): String = layout.toJson.compactPrint
 }

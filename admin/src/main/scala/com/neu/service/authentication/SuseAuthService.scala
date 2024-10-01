@@ -2,12 +2,12 @@ package com.neu.service.authentication
 
 import com.neu.cache.paginationCacheManager
 import com.neu.client.RestClient
-import com.neu.client.RestClient._
+import com.neu.client.RestClient.*
 import com.neu.core.AuthenticationManager
-import com.neu.model.AuthTokenJsonProtocol._
+import com.neu.model.AuthTokenJsonProtocol.{ *, given }
 import com.neu.model.*
 import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.model._
+import org.apache.pekko.http.scaladsl.model.*
 import org.apache.pekko.http.scaladsl.server.{ RequestContext, Route }
 import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshal
 import spray.json.*

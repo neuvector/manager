@@ -20,47 +20,47 @@ object GroupJsonProtocol extends DefaultJsonProtocol {
   val notRegexSign = "!regex"
   val ops          = Seq(equalOp, notEqualOp, containsOp, prefixOp, regexOp, notRegexOp)
 
-  implicit val rule4GroupFormat: RootJsonFormat[Rule4Group]                             = jsonFormat11(Rule4Group)
-  implicit val CLUSEventCondition4GroupFormat: RootJsonFormat[CLUSEventCondition4Group] =
-    jsonFormat2(CLUSEventCondition4Group)
-  implicit val responseRule4GroupFormat: RootJsonFormat[ResponseRule4Group]             = jsonFormat8(
-    ResponseRule4Group
+  given rule4GroupFormat: RootJsonFormat[Rule4Group]                             = jsonFormat11(Rule4Group.apply)
+  given CLUSEventCondition4GroupFormat: RootJsonFormat[CLUSEventCondition4Group] =
+    jsonFormat2(CLUSEventCondition4Group.apply)
+  given responseRule4GroupFormat: RootJsonFormat[ResponseRule4Group]             = jsonFormat8(
+    ResponseRule4Group.apply
   )
-  implicit val criteriaEntryFormat: RootJsonFormat[CriteriaEntry]                       = jsonFormat3(CriteriaEntry)
-  implicit val scanBriefFormat: RootJsonFormat[ScanBrief]                               = jsonFormat3(ScanBrief)
-  implicit val workloadBriefFormat: RootJsonFormat[WorkloadBrief]                       = rootFormat(
-    lazyFormat(jsonFormat15(WorkloadBrief))
+  given criteriaEntryFormat: RootJsonFormat[CriteriaEntry]                       = jsonFormat3(CriteriaEntry.apply)
+  given scanBriefFormat: RootJsonFormat[ScanBrief]                               = jsonFormat3(ScanBrief.apply)
+  given workloadBriefFormat: RootJsonFormat[WorkloadBrief]                       = rootFormat(
+    lazyFormat(jsonFormat15(WorkloadBrief.apply))
   )
-  implicit val groupFormat: RootJsonFormat[Group]                                       = jsonFormat21(Group)
-  implicit val groupWrapFormat: RootJsonFormat[GroupWrap]                               = jsonFormat1(GroupWrap)
+  given groupFormat: RootJsonFormat[Group]                                       = jsonFormat21(Group.apply)
+  given groupWrapFormat: RootJsonFormat[GroupWrap]                               = jsonFormat1(GroupWrap.apply)
 
-  implicit val groupConfigFormat: RootJsonFormat[GroupConfig]                         = jsonFormat8(GroupConfig)
-  implicit val groupConfig4LearnedFormat: RootJsonFormat[GroupConfig4Learned]         = jsonFormat5(
-    GroupConfig4Learned
+  given groupConfigFormat: RootJsonFormat[GroupConfig]                         = jsonFormat8(GroupConfig.apply)
+  given groupConfig4LearnedFormat: RootJsonFormat[GroupConfig4Learned]         = jsonFormat5(
+    GroupConfig4Learned.apply
   )
-  implicit val groupConfigWrapFormat: RootJsonFormat[GroupConfigWrap]                 = jsonFormat1(GroupConfigWrap)
-  implicit val groupConfigWrap4LearnedFormat: RootJsonFormat[GroupConfigWrap4Learned] = jsonFormat1(
-    GroupConfigWrap4Learned
+  given groupConfigWrapFormat: RootJsonFormat[GroupConfigWrap]                 = jsonFormat1(GroupConfigWrap.apply)
+  given groupConfigWrap4LearnedFormat: RootJsonFormat[GroupConfigWrap4Learned] = jsonFormat1(
+    GroupConfigWrap4Learned.apply
   )
-  implicit val groupsFormat: RootJsonFormat[Groups]                                   = jsonFormat1(Groups)
-  implicit val remoteExportOptionsFormat: RootJsonFormat[RemoteExportOptions]         = jsonFormat3(
-    RemoteExportOptions
+  given groupsFormat: RootJsonFormat[Groups]                                   = jsonFormat1(Groups.apply)
+  given remoteExportOptionsFormat: RootJsonFormat[RemoteExportOptions]         = jsonFormat3(
+    RemoteExportOptions.apply
   )
-  implicit val groups4ExportFormat: RootJsonFormat[Groups4Export]                     = jsonFormat3(Groups4Export)
+  given groups4ExportFormat: RootJsonFormat[Groups4Export]                     = jsonFormat3(Groups4Export.apply)
 
-  implicit val criteriaItemFormat: RootJsonFormat[CriteriaItem]               = jsonFormat1(CriteriaItem)
-  implicit val groupConfigDTOFormat: RootJsonFormat[GroupConfigDTO]           = jsonFormat8(GroupConfigDTO)
-  implicit val serviceAddressFormat: RootJsonFormat[ServiceAddress]           = jsonFormat2(ServiceAddress)
-  implicit val groupDTOFormat: RootJsonFormat[GroupDTO]                       = jsonFormat21(GroupDTO)
-  implicit val groupDTOsFormat: RootJsonFormat[GroupDTOs]                     = jsonFormat1(GroupDTOs)
-  implicit val groupDTOWrapFormat: RootJsonFormat[GroupDTOWrap]               = jsonFormat1(GroupDTOWrap)
-  implicit val group4SingleFormat: RootJsonFormat[Group4Single]               = jsonFormat21(Group4Single)
-  implicit val group4SingleWrapFormat: RootJsonFormat[Group4SingleWrap]       = jsonFormat1(
-    Group4SingleWrap
+  given criteriaItemFormat: RootJsonFormat[CriteriaItem]               = jsonFormat1(CriteriaItem.apply)
+  given groupConfigDTOFormat: RootJsonFormat[GroupConfigDTO]           = jsonFormat8(GroupConfigDTO.apply)
+  given serviceAddressFormat: RootJsonFormat[ServiceAddress]           = jsonFormat2(ServiceAddress.apply)
+  given groupDTOFormat: RootJsonFormat[GroupDTO]                       = jsonFormat21(GroupDTO.apply)
+  given groupDTOsFormat: RootJsonFormat[GroupDTOs]                     = jsonFormat1(GroupDTOs.apply)
+  given groupDTOWrapFormat: RootJsonFormat[GroupDTOWrap]               = jsonFormat1(GroupDTOWrap.apply)
+  given group4SingleFormat: RootJsonFormat[Group4Single]               = jsonFormat21(Group4Single.apply)
+  given group4SingleWrapFormat: RootJsonFormat[Group4SingleWrap]       = jsonFormat1(
+    Group4SingleWrap.apply
   )
-  implicit val grou4SingleDTOFormat: RootJsonFormat[Group4SingleDTO]          = jsonFormat21(Group4SingleDTO)
-  implicit val group4SingleDTOWrapFormat: RootJsonFormat[Group4SingleDTOWrap] = jsonFormat1(
-    Group4SingleDTOWrap
+  given grou4SingleDTOFormat: RootJsonFormat[Group4SingleDTO]          = jsonFormat21(Group4SingleDTO.apply)
+  given group4SingleDTOWrapFormat: RootJsonFormat[Group4SingleDTOWrap] = jsonFormat1(
+    Group4SingleDTOWrap.apply
   )
 
   def remoteExportOptionsToJson(remoteExportOptions: RemoteExportOptions): String =

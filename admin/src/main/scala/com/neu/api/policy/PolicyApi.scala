@@ -6,11 +6,11 @@ import com.neu.client.RestClient
 import com.neu.client.RestClient.*
 import com.neu.core.AuthenticationManager
 import com.neu.model.*
-import com.neu.model.AdmissionJsonProtocol.*
-import com.neu.model.GroupJsonProtocol.*
-import com.neu.model.JsonProtocol.*
-import com.neu.model.PolicyJsonProtocol.*
-import com.neu.model.RegistryConfigJsonProtocol.*
+import com.neu.model.AdmissionJsonProtocol.{ *, given }
+import com.neu.model.GroupJsonProtocol.{ *, given }
+import com.neu.model.JsonProtocol.{ *, given }
+import com.neu.model.PolicyJsonProtocol.{ *, given }
+import com.neu.model.RegistryConfigJsonProtocol.{ *, given }
 import com.neu.service.Utils
 import com.neu.service.policy.PolicyService
 import com.typesafe.scalalogging.LazyLogging

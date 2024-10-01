@@ -2,7 +2,7 @@ package com.neu.api.cluster
 
 import com.neu.client.RestClient
 import com.neu.model.*
-import com.neu.model.ClusterJsonProtocol.*
+import com.neu.model.ClusterJsonProtocol.{ *, given }
 import com.neu.service.cluster.ClusterService
 import com.neu.service.{ BaseService, DefaultJsonFormats, Utils }
 import com.typesafe.scalalogging.LazyLogging

@@ -3,7 +3,7 @@ package com.neu.service.cluster
 import com.neu.client.RestClient
 import com.neu.client.RestClient.{ baseClusterUri, fedUri }
 import com.neu.model.*
-import com.neu.model.ClusterJsonProtocol.*
+import com.neu.model.ClusterJsonProtocol.{ *, given }
 import com.neu.service.{ BaseService, DefaultJsonFormats }
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.http.scaladsl.model.HttpMethods

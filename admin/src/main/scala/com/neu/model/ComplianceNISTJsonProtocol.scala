@@ -4,9 +4,9 @@ import spray.json.*
 import scala.collection.mutable.Map
 
 object ComplianceNISTJsonProtocol extends DefaultJsonProtocol {
-  implicit val complianceNISTFormat: RootJsonFormat[ComplianceNIST]       = jsonFormat4(ComplianceNIST)
-  implicit val complianceNISTMapFormat: RootJsonFormat[ComplianceNISTMap] = jsonFormat1(
-    ComplianceNISTMap
+  given complianceNISTFormat: RootJsonFormat[ComplianceNIST]       = jsonFormat4(ComplianceNIST.apply)
+  given complianceNISTMapFormat: RootJsonFormat[ComplianceNISTMap] = jsonFormat1(
+    ComplianceNISTMap.apply
   )
 
   def complianceNISTToJson(complianceNIST: ComplianceNIST): String          =

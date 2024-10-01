@@ -121,45 +121,45 @@ case class ThreatBriefWrap(threats: Array[ThreatBrief])
 
 object ResourceJsonProtocol extends DefaultJsonProtocol with LazyLogging {
 
-  implicit val errorFormat: RootJsonFormat[Error]                 = jsonFormat1(Error)
-  implicit val containerFormat: RootJsonFormat[Container]         = jsonFormat7(Container)
-  implicit val containerWrapFormat: RootJsonFormat[ContainerWrap] = jsonFormat1(ContainerWrap)
+  given errorFormat: RootJsonFormat[Error]                 = jsonFormat1(Error.apply)
+  given containerFormat: RootJsonFormat[Container]         = jsonFormat7(Container.apply)
+  given containerWrapFormat: RootJsonFormat[ContainerWrap] = jsonFormat1(ContainerWrap.apply)
 
-  implicit val conversationBriefFormat: RootJsonFormat[ConversationBrief]         = jsonFormat5(
-    ConversationBrief
+  given conversationBriefFormat: RootJsonFormat[ConversationBrief]         = jsonFormat5(
+    ConversationBrief.apply
   )
-  implicit val conversationBriefWrapFormat: RootJsonFormat[ConversationBriefWrap] = jsonFormat1(
-    ConversationBriefWrap
-  )
-
-  implicit val scanBriefFormat: RootJsonFormat[ScanBrief]                   = jsonFormat3(ScanBrief)
-  implicit val workloadBriefFormat: RootJsonFormat[WorkloadBrief]           = rootFormat(
-    lazyFormat(jsonFormat15(WorkloadBrief))
-  )
-  implicit val endpointFormat: RootJsonFormat[ConversationEndpoint]         = jsonFormat17(
-    ConversationEndpoint
-  )
-  //  implicit val endpointFormat: RootJsonFormat[ConversationEndpoint] = rootFormat(lazyFormat(jsonFormat12(ConversationEndpoint)))
-  implicit val endpointWrapFormat: RootJsonFormat[ConversationEndpointData] = jsonFormat1(
-    ConversationEndpointData
+  given conversationBriefWrapFormat: RootJsonFormat[ConversationBriefWrap] = jsonFormat1(
+    ConversationBriefWrap.apply
   )
 
-  implicit val endpointConversationFormat: RootJsonFormat[EndPointConversation]         = jsonFormat11(
-    EndPointConversation
+  given scanBriefFormat: RootJsonFormat[ScanBrief]                   = jsonFormat3(ScanBrief.apply)
+  given workloadBriefFormat: RootJsonFormat[WorkloadBrief]           = rootFormat(
+    lazyFormat(jsonFormat15(WorkloadBrief.apply))
   )
-  implicit val endpointConversationDataFormat: RootJsonFormat[EndpointConversationData] =
-    jsonFormat1(EndpointConversationData)
+  given endpointFormat: RootJsonFormat[ConversationEndpoint]         = jsonFormat17(
+    ConversationEndpoint.apply
+  )
+  //  given endpointFormat: RootJsonFormat[ConversationEndpoint] = rootFormat(lazyFormat(jsonFormat12(ConversationEndpoint)))
+  given endpointWrapFormat: RootJsonFormat[ConversationEndpointData] = jsonFormat1(
+    ConversationEndpointData.apply
+  )
 
-  implicit val graphDataFormat: RootJsonFormat[GraphData] = jsonFormat3(GraphData)
+  given endpointConversationFormat: RootJsonFormat[EndPointConversation]         = jsonFormat11(
+    EndPointConversation.apply
+  )
+  given endpointConversationDataFormat: RootJsonFormat[EndpointConversationData] =
+    jsonFormat1(EndpointConversationData.apply)
 
-  implicit val serverVolume: RootJsonFormat[ServerVolume] = jsonFormat3(ServerVolume)
+  given graphDataFormat: RootJsonFormat[GraphData] = jsonFormat3(GraphData.apply)
 
-  implicit val threatBriefFormat: RootJsonFormat[ThreatBrief]         = jsonFormat3(ThreatBrief)
-  implicit val threatBriefDTOFormat: RootJsonFormat[ThreatBriefDTO]   = jsonFormat4(ThreatBriefDTO)
-  implicit val threatBriefWrapFormat: RootJsonFormat[ThreatBriefWrap] = jsonFormat1(ThreatBriefWrap)
+  given serverVolume: RootJsonFormat[ServerVolume] = jsonFormat3(ServerVolume.apply)
 
-  implicit val threatBriefArrayFormat: RootJsonFormat[Array[ThreatBrief]]       = arrayFormat[ThreatBrief]
-  implicit val threatBriefDTOArrayFormat: RootJsonFormat[Array[ThreatBriefDTO]] =
+  given threatBriefFormat: RootJsonFormat[ThreatBrief]         = jsonFormat3(ThreatBrief.apply)
+  given threatBriefDTOFormat: RootJsonFormat[ThreatBriefDTO]   = jsonFormat4(ThreatBriefDTO.apply)
+  given threatBriefWrapFormat: RootJsonFormat[ThreatBriefWrap] = jsonFormat1(ThreatBriefWrap.apply)
+
+  given threatBriefArrayFormat: RootJsonFormat[Array[ThreatBrief]]       = arrayFormat[ThreatBrief]
+  given threatBriefDTOArrayFormat: RootJsonFormat[Array[ThreatBriefDTO]] =
     arrayFormat[ThreatBriefDTO]
 
   private val address = "address"

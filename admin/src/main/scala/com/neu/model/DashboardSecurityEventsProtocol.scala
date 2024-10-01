@@ -117,40 +117,40 @@ case class DashboardNotificationDTO2(
 )
 
 object DashboardSecurityEventsProtocol extends DefaultJsonProtocol with LazyLogging {
-  implicit val dateTimeFormat: DateTimeFormat.type                                                = DateTimeFormat
-  implicit val errorFormat: RootJsonFormat[Error]                                                 = jsonFormat1(Error)
-  implicit val dashboardThreatFormat: RootJsonFormat[DashboardThreat]                             = jsonFormat17(
-    DashboardThreat
+  given dateTimeFormat: DateTimeFormat.type                                                    = DateTimeFormat
+  given errorFormat: RootJsonFormat[Error]                                                     = jsonFormat1(Error.apply)
+  given dashboardThreatFormat: RootJsonFormat[DashboardThreat]                                 = jsonFormat17(
+    DashboardThreat.apply
   )
-  implicit val dashboardThreatDataFormat: RootJsonFormat[DashboardThreatData]                     = jsonFormat2(
-    DashboardThreatData
+  given dashboardThreatDataFormat: RootJsonFormat[DashboardThreatData]                         = jsonFormat2(
+    DashboardThreatData.apply
   )
-  implicit val dashboardViolationFormat: RootJsonFormat[DashboardViolation]                       = jsonFormat14(
-    DashboardViolation
+  given dashboardViolationFormat: RootJsonFormat[DashboardViolation]                           = jsonFormat14(
+    DashboardViolation.apply
   )
-  implicit val dashboardViolationDataFormat: RootJsonFormat[DashboardViolationData]               = jsonFormat2(
-    DashboardViolationData
+  given dashboardViolationDataFormat: RootJsonFormat[DashboardViolationData]                   = jsonFormat2(
+    DashboardViolationData.apply
   )
-  implicit val dashboardIncidentFormat: RootJsonFormat[DashboardIncident]                         = jsonFormat16(
-    DashboardIncident
+  given dashboardIncidentFormat: RootJsonFormat[DashboardIncident]                             = jsonFormat16(
+    DashboardIncident.apply
   )
-  implicit val dashboardIncidentDataFormat: RootJsonFormat[DashboardIncidentData]                 = jsonFormat2(
-    DashboardIncidentData
+  given dashboardIncidentDataFormat: RootJsonFormat[DashboardIncidentData]                     = jsonFormat2(
+    DashboardIncidentData.apply
   )
-  implicit val dashboardSecurityEventsFormat: RootJsonFormat[DashboardSecurityEvents]             = jsonFormat4(
-    DashboardSecurityEvents
+  given dashboardSecurityEventsFormat: RootJsonFormat[DashboardSecurityEvents]                 = jsonFormat4(
+    DashboardSecurityEvents.apply
   )
-  implicit val convertedDashboardSecurityEventFormat
-    : RootJsonFormat[ConvertedDashboardSecurityEvent] = jsonFormat17(
-    ConvertedDashboardSecurityEvent
+  given convertedDashboardSecurityEventFormat: RootJsonFormat[ConvertedDashboardSecurityEvent] =
+    jsonFormat17(
+      ConvertedDashboardSecurityEvent.apply
+    )
+  given topSecurityEventFormat: RootJsonFormat[TopSecurityEvent]                               = jsonFormat2(
+    TopSecurityEvent.apply
   )
-  implicit val topSecurityEventFormat: RootJsonFormat[TopSecurityEvent]                           = jsonFormat2(
-    TopSecurityEvent
-  )
-  implicit val criticalSecurityEventDTO2Format: RootJsonFormat[CriticalDashboardSecurityEventDTO] =
-    jsonFormat2(CriticalDashboardSecurityEventDTO)
-  implicit val dashboardNotificationDTO2Format: RootJsonFormat[DashboardNotificationDTO2]         =
-    jsonFormat1(DashboardNotificationDTO2)
+  given criticalSecurityEventDTO2Format: RootJsonFormat[CriticalDashboardSecurityEventDTO]     =
+    jsonFormat2(CriticalDashboardSecurityEventDTO.apply)
+  given dashboardNotificationDTO2Format: RootJsonFormat[DashboardNotificationDTO2]             =
+    jsonFormat1(DashboardNotificationDTO2.apply)
 
   def jsonToDashboardThreatData(endpointData: String): DashboardThreatData =
     endpointData.parseJson

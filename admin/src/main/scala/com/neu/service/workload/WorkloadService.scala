@@ -3,9 +3,9 @@ package com.neu.service.workload
 import com.neu.cache.paginationCacheManager
 import com.neu.client.RestClient
 import com.neu.client.RestClient.*
-import com.neu.model.ContainerConfigJsonProtocol.*
-import com.neu.model.NamespaceJsonProtocol.*
-import com.neu.model.PolicyJsonProtocol.*
+import com.neu.model.ContainerConfigJsonProtocol.{ *, given }
+import com.neu.model.NamespaceJsonProtocol.{ *, given }
+import com.neu.model.PolicyJsonProtocol.{ *, given }
 import com.neu.model.*
 import com.neu.service.{ BaseService, DefaultJsonFormats }
 import com.typesafe.scalalogging.LazyLogging

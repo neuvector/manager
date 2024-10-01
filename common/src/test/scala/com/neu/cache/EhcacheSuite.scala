@@ -5,8 +5,8 @@ import org.scalatest.{ BeforeAndAfterAll, FunSuite }
 
 class EhcacheSuite extends FunSuite with BeforeAndAfterAll {
 
-  implicit val cacheKeyGenerator: ToStringCacheKeyGenerator.type = ToStringCacheKeyGenerator
-  implicit val cacheManager: CacheManager                        = CacheManager.getInstance()
+  given cacheKeyGenerator: ToStringCacheKeyGenerator.type = ToStringCacheKeyGenerator
+  given cacheManager: CacheManager                        = CacheManager.getInstance()
 
   val cacheName = "posCache"
 

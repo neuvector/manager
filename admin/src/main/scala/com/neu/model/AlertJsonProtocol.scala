@@ -1,8 +1,8 @@
 package com.neu.model
 
-import com.neu.model.DashboardJsonProtocol._
+import com.neu.model.DashboardJsonProtocol.{ *, given }
 import org.joda.time.DateTime
-import spray.json._
+import spray.json.*
 
 case class Violation(
   client_id: String,
@@ -47,23 +47,23 @@ case class ThreatDTOWrap(threats: Array[ThreatDTO])
 case class NewThreatDTOWrap(threats: Array[ConvertedThreat])
 
 object AlertJsonProtocol extends DefaultJsonProtocol {
-  implicit val dateTimeFormat: DateTimeFormat.type = DateTimeFormat
+  given dateTimeFormat: DateTimeFormat.type = DateTimeFormat
 
-  implicit val violationFormat: RootJsonFormat[Violation]                              = jsonFormat10(Violation)
-  implicit val violationBriefFormat: RootJsonFormat[ViolationBrief]                    = jsonFormat3(ViolationBrief)
-  implicit val violationWrapFormat: RootJsonFormat[ViolationWrap]                      = jsonFormat1(ViolationWrap)
-  implicit val threatDTOFormat: RootJsonFormat[ThreatDTO]                              = jsonFormat13(ThreatDTO)
-  implicit val threatDTOWrapFormat: RootJsonFormat[ThreatDTOWrap]                      = jsonFormat1(ThreatDTOWrap)
-  implicit val newThreatDTOWrapFormat: RootJsonFormat[NewThreatDTOWrap]                = jsonFormat1(
-    NewThreatDTOWrap
+  given violationFormat: RootJsonFormat[Violation]                              = jsonFormat10(Violation.apply)
+  given violationBriefFormat: RootJsonFormat[ViolationBrief]                    = jsonFormat3(ViolationBrief.apply)
+  given violationWrapFormat: RootJsonFormat[ViolationWrap]                      = jsonFormat1(ViolationWrap.apply)
+  given threatDTOFormat: RootJsonFormat[ThreatDTO]                              = jsonFormat13(ThreatDTO.apply)
+  given threatDTOWrapFormat: RootJsonFormat[ThreatDTOWrap]                      = jsonFormat1(ThreatDTOWrap.apply)
+  given newThreatDTOWrapFormat: RootJsonFormat[NewThreatDTOWrap]                = jsonFormat1(
+    NewThreatDTOWrap.apply
   )
-  implicit val globalNotificationRequestFmt: RootJsonFormat[GlobalNotificationRequest] =
-    jsonFormat3(GlobalNotificationRequest)
+  given globalNotificationRequestFmt: RootJsonFormat[GlobalNotificationRequest] =
+    jsonFormat3(GlobalNotificationRequest.apply)
 
-  implicit val violationArrayFormat: RootJsonFormat[Array[Violation]]           = arrayFormat[Violation]
-  implicit val violationBriefArrayFormat: RootJsonFormat[Array[ViolationBrief]] =
+  given violationArrayFormat: RootJsonFormat[Array[Violation]]           = arrayFormat[Violation]
+  given violationBriefArrayFormat: RootJsonFormat[Array[ViolationBrief]] =
     arrayFormat[ViolationBrief]
-  implicit val threatDTOArrayFormat: RootJsonFormat[Array[ThreatDTO]]           =
+  given threatDTOArrayFormat: RootJsonFormat[Array[ThreatDTO]]           =
     arrayFormat[ThreatDTO]
 
   def jsonToViolationWrap(violations: String): ViolationWrap =

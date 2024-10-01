@@ -4,8 +4,8 @@ import com.neu.model.{ Blacklist, UserBlacklist }
 import net.sf.ehcache.CacheManager
 
 object BlacklistCacheManager {
-  implicit val cacheKeyGenerator: ToStringCacheKeyGenerator.type = ToStringCacheKeyGenerator
-  implicit val cacheManager: CacheManager                        = CacheManager.getInstance()
+  given cacheKeyGenerator: ToStringCacheKeyGenerator.type = ToStringCacheKeyGenerator
+  given cacheManager: CacheManager                        = CacheManager.getInstance()
 
   val cacheName = "blacklistCache"
 

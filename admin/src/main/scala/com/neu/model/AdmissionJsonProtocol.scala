@@ -3,20 +3,20 @@ package com.neu.model
 import spray.json.*
 
 object AdmissionJsonProtocol extends DefaultJsonProtocol {
-  implicit val admissionRuleSubCriterionFormat: RootJsonFormat[AdmRuleSubCriterion] = jsonFormat3(
-    AdmRuleSubCriterion
+  given admissionRuleSubCriterionFormat: RootJsonFormat[AdmRuleSubCriterion] = jsonFormat3(
+    AdmRuleSubCriterion.apply
   )
-  implicit val admissionRuleCriterionFormat: RootJsonFormat[AdmRuleCriterion]       = jsonFormat8(
-    AdmRuleCriterion
+  given admissionRuleCriterionFormat: RootJsonFormat[AdmRuleCriterion]       = jsonFormat8(
+    AdmRuleCriterion.apply
   )
-  implicit val admissionRuleFormat: RootJsonFormat[AdmRule]                         = jsonFormat10(AdmRule)
-  implicit val admissionRuleConfigFormat: RootJsonFormat[AdmRuleConfig]             = jsonFormat1(AdmRuleConfig)
-  implicit val admStateFormat: RootJsonFormat[AdmState]                             = jsonFormat5(AdmState)
-  implicit val admConfigFormat: RootJsonFormat[AdmConfig]                           = jsonFormat1(AdmConfig)
-  implicit val remoteExportOptionsFormat: RootJsonFormat[RemoteExportOptions]       = jsonFormat3(
-    RemoteExportOptions
+  given admissionRuleFormat: RootJsonFormat[AdmRule]                         = jsonFormat10(AdmRule.apply)
+  given admissionRuleConfigFormat: RootJsonFormat[AdmRuleConfig]             = jsonFormat1(AdmRuleConfig.apply)
+  given admStateFormat: RootJsonFormat[AdmState]                             = jsonFormat5(AdmState.apply)
+  given admConfigFormat: RootJsonFormat[AdmConfig]                           = jsonFormat1(AdmConfig.apply)
+  given remoteExportOptionsFormat: RootJsonFormat[RemoteExportOptions]       = jsonFormat3(
+    RemoteExportOptions.apply
   )
-  implicit val admExportFormat: RootJsonFormat[AdmExport]                           = jsonFormat3(AdmExport)
+  given admExportFormat: RootJsonFormat[AdmExport]                           = jsonFormat3(AdmExport.apply)
 
   def admissionRuleCriterionToJson(admissionRuleCriterion: AdmRuleCriterion): String =
     admissionRuleCriterion.toJson.compactPrint

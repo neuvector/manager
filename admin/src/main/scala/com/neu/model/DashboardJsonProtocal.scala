@@ -799,7 +799,7 @@ case class DashboardScoreDTO2(
 )
 
 object DashboardJsonProtocol extends DefaultJsonProtocol with LazyLogging {
-  implicit val dateTimeFormat: DateTimeFormat.type = DateTimeFormat
+  given dateTimeFormat: DateTimeFormat.type = DateTimeFormat
 
   implicit object StringJsonArrayFormat extends RootJsonFormat[List[String]] {
     def write(obj: List[String]): JsValue = JsArray(obj.map(JsString(_)).toVector)
@@ -813,202 +813,202 @@ object DashboardJsonProtocol extends DefaultJsonProtocol with LazyLogging {
     }
   }
 
-  implicit val errorFormat: RootJsonFormat[Error]                                 = jsonFormat1(Error)
-  implicit val violationEndpointFormat: RootJsonFormat[ViolationEndpoint]         = jsonFormat21(
-    ViolationEndpoint
+  given errorFormat: RootJsonFormat[Error]                                 = jsonFormat1(Error.apply)
+  given violationEndpointFormat: RootJsonFormat[ViolationEndpoint]         = jsonFormat21(
+    ViolationEndpoint.apply
   )
-  implicit val violationEndpointDataFormat: RootJsonFormat[ViolationEndpointData] =
-    jsonFormat2(ViolationEndpointData)
+  given violationEndpointDataFormat: RootJsonFormat[ViolationEndpointData] =
+    jsonFormat2(ViolationEndpointData.apply)
 
-  implicit val threatEndpointFormat: RootJsonFormat[ThreatEndpoint]         = jsonFormat22(ThreatEndpoint)
-  implicit val threatEndpointDataFormat: RootJsonFormat[ThreatEndpointData] =
-    jsonFormat2(ThreatEndpointData)
+  given threatEndpointFormat: RootJsonFormat[ThreatEndpoint]         = jsonFormat22(ThreatEndpoint.apply)
+  given threatEndpointDataFormat: RootJsonFormat[ThreatEndpointData] =
+    jsonFormat2(ThreatEndpointData.apply)
 
-  implicit val incidentEndpointFormat: RootJsonFormat[IncidentEndpoint]         = jsonFormat2(
-    IncidentEndpoint
+  given incidentEndpointFormat: RootJsonFormat[IncidentEndpoint]         = jsonFormat2(
+    IncidentEndpoint.apply
   )
-  implicit val incidentEndpointDataFormat: RootJsonFormat[IncidentEndpointData] =
-    jsonFormat2(IncidentEndpointData)
+  given incidentEndpointDataFormat: RootJsonFormat[IncidentEndpointData] =
+    jsonFormat2(IncidentEndpointData.apply)
 
-  implicit val domain: RootJsonFormat[Domain]                   = jsonFormat2(Domain)
-  implicit val convertedThreat: RootJsonFormat[ConvertedThreat] = jsonFormat22(ConvertedThreat)
-  implicit val topThreat: RootJsonFormat[TopThreat]             = jsonFormat2(TopThreat)
-  implicit val topViolation: RootJsonFormat[TopViolation]       = jsonFormat2(TopViolation)
+  given domain: RootJsonFormat[Domain]                   = jsonFormat2(Domain.apply)
+  given convertedThreat: RootJsonFormat[ConvertedThreat] = jsonFormat22(ConvertedThreat.apply)
+  given topThreat: RootJsonFormat[TopThreat]             = jsonFormat2(TopThreat.apply)
+  given topViolation: RootJsonFormat[TopViolation]       = jsonFormat2(TopViolation.apply)
 
-  implicit val criticalSecurityEventDTOFormat: RootJsonFormat[CriticalSecurityEventDTO] =
-    jsonFormat4(CriticalSecurityEventDTO)
+  given criticalSecurityEventDTOFormat: RootJsonFormat[CriticalSecurityEventDTO] =
+    jsonFormat4(CriticalSecurityEventDTO.apply)
 
-  implicit val workloadsStatusFormat: RootJsonFormat[WorkloadsStatus]                         = jsonFormat6(WorkloadsStatus)
-  implicit val workloadsChildrenFormat: RootJsonFormat[WorkloadsChildren]                     = jsonFormat8(
-    WorkloadsChildren
+  given workloadsStatusFormat: RootJsonFormat[WorkloadsStatus]                         = jsonFormat6(WorkloadsStatus.apply)
+  given workloadsChildrenFormat: RootJsonFormat[WorkloadsChildren]                     = jsonFormat8(
+    WorkloadsChildren.apply
   )
-  implicit val workloadsFormat: RootJsonFormat[Workloads]                                     = jsonFormat10(Workloads)
-  implicit val vulnerableContainerEndpointFormat: RootJsonFormat[VulnerableContainerEndpoint] =
-    jsonFormat3(VulnerableContainerEndpoint)
-  implicit val nodeScanSummaryFormat: RootJsonFormat[ScanSummary4Dashboard]                   = jsonFormat3(
-    ScanSummary4Dashboard
+  given workloadsFormat: RootJsonFormat[Workloads]                                     = jsonFormat10(Workloads.apply)
+  given vulnerableContainerEndpointFormat: RootJsonFormat[VulnerableContainerEndpoint] =
+    jsonFormat3(VulnerableContainerEndpoint.apply)
+  given nodeScanSummaryFormat: RootJsonFormat[ScanSummary4Dashboard]                   = jsonFormat3(
+    ScanSummary4Dashboard.apply
   )
-  implicit val NodesFormat: RootJsonFormat[Nodes]                                             = jsonFormat4(Nodes)
-  implicit val platformFormat: RootJsonFormat[Platform]                                       = jsonFormat5(Platform)
-  implicit val vulnerablePlatformsFormat: RootJsonFormat[VulnerablePlatforms]                 = jsonFormat2(
-    VulnerablePlatforms
+  given NodesFormat: RootJsonFormat[Nodes]                                             = jsonFormat4(Nodes.apply)
+  given platformFormat: RootJsonFormat[Platform]                                       = jsonFormat5(Platform.apply)
+  given vulnerablePlatformsFormat: RootJsonFormat[VulnerablePlatforms]                 = jsonFormat2(
+    VulnerablePlatforms.apply
   )
-  implicit val vulnerableNodesFormat: RootJsonFormat[VulnerableNodes]                         = jsonFormat2(VulnerableNodes)
-  implicit val vulnerableNodeEndpointFormat: RootJsonFormat[VulnerableNodeEndpoint]           = jsonFormat2(
-    VulnerableNodeEndpoint
+  given vulnerableNodesFormat: RootJsonFormat[VulnerableNodes]                         = jsonFormat2(VulnerableNodes.apply)
+  given vulnerableNodeEndpointFormat: RootJsonFormat[VulnerableNodeEndpoint]           = jsonFormat2(
+    VulnerableNodeEndpoint.apply
   )
 
-  implicit val IncidentsFormat: RootJsonFormat[Incidents]                 = jsonFormat10(Incidents)
-  implicit val IncidentsEndpointFormat: RootJsonFormat[IncidentsEndpoint] = jsonFormat2(
-    IncidentsEndpoint
+  given IncidentsFormat: RootJsonFormat[Incidents]                 = jsonFormat10(Incidents.apply)
+  given IncidentsEndpointFormat: RootJsonFormat[IncidentsEndpoint] = jsonFormat2(
+    IncidentsEndpoint.apply
   )
-  implicit val TopIncidentsDTOFormat: RootJsonFormat[TopIncidentsDTO]     = jsonFormat4(TopIncidentsDTO)
+  given TopIncidentsDTOFormat: RootJsonFormat[TopIncidentsDTO]     = jsonFormat4(TopIncidentsDTO.apply)
 
   /*=========================================
       For new notifications API
     =========================================*/
 
-  implicit val threatMajorFormat: RootJsonFormat[ThreatMajor]             = jsonFormat17(ThreatMajor)
-  implicit val threatDetailsFormat: RootJsonFormat[ThreatDetails]         = jsonFormat8(ThreatDetails)
-  implicit val threatMajorDataFormat: RootJsonFormat[ThreatMajorData]     = jsonFormat1(ThreatMajorData)
-  implicit val threatDetailsDataFormat: RootJsonFormat[ThreatDetailsData] = jsonFormat1(
-    ThreatDetailsData
+  given threatMajorFormat: RootJsonFormat[ThreatMajor]             = jsonFormat17(ThreatMajor.apply)
+  given threatDetailsFormat: RootJsonFormat[ThreatDetails]         = jsonFormat8(ThreatDetails.apply)
+  given threatMajorDataFormat: RootJsonFormat[ThreatMajorData]     = jsonFormat1(ThreatMajorData.apply)
+  given threatDetailsDataFormat: RootJsonFormat[ThreatDetailsData] = jsonFormat1(
+    ThreatDetailsData.apply
   )
 
-  implicit val violationMajorFormat: RootJsonFormat[ViolationMajor]             = jsonFormat14(ViolationMajor)
-  implicit val violationDetailsFormat: RootJsonFormat[ViolationDetails]         = jsonFormat8(
-    ViolationDetails
+  given violationMajorFormat: RootJsonFormat[ViolationMajor]             = jsonFormat14(ViolationMajor.apply)
+  given violationDetailsFormat: RootJsonFormat[ViolationDetails]         = jsonFormat8(
+    ViolationDetails.apply
   )
-  implicit val violationMajorDataFormat: RootJsonFormat[ViolationMajorData]     = jsonFormat1(
-    ViolationMajorData
+  given violationMajorDataFormat: RootJsonFormat[ViolationMajorData]     = jsonFormat1(
+    ViolationMajorData.apply
   )
-  implicit val violationDetailsDataFormat: RootJsonFormat[ViolationDetailsData] = jsonFormat1(
-    ViolationDetailsData
-  )
-
-  implicit val incidentMajorFormat: RootJsonFormat[IncidentMajor]             = jsonFormat18(IncidentMajor)
-  implicit val incidentDetailsFormat: RootJsonFormat[IncidentDetails]         = jsonFormat14(
-    IncidentDetails
-  )
-  implicit val incidentMajorDataFormat: RootJsonFormat[IncidentMajorData]     = jsonFormat1(
-    IncidentMajorData
-  )
-  implicit val incidentDetailsDataFormat: RootJsonFormat[IncidentDetailsData] = jsonFormat1(
-    IncidentDetailsData
+  given violationDetailsDataFormat: RootJsonFormat[ViolationDetailsData] = jsonFormat1(
+    ViolationDetailsData.apply
   )
 
-  implicit val endpointFormat: RootJsonFormat[Endpoint]                 = jsonFormat6(Endpoint)
-  implicit val securityEventFormat: RootJsonFormat[SecurityEvent]       = jsonFormat10(SecurityEvent)
-  implicit val securityEventDTOFormat: RootJsonFormat[SecurityEventDTO] = jsonFormat1(
-    SecurityEventDTO
+  given incidentMajorFormat: RootJsonFormat[IncidentMajor]             = jsonFormat18(IncidentMajor.apply)
+  given incidentDetailsFormat: RootJsonFormat[IncidentDetails]         = jsonFormat14(
+    IncidentDetails.apply
+  )
+  given incidentMajorDataFormat: RootJsonFormat[IncidentMajorData]     = jsonFormat1(
+    IncidentMajorData.apply
+  )
+  given incidentDetailsDataFormat: RootJsonFormat[IncidentDetailsData] = jsonFormat1(
+    IncidentDetailsData.apply
+  )
+
+  given endpointFormat: RootJsonFormat[Endpoint]                 = jsonFormat6(Endpoint.apply)
+  given securityEventFormat: RootJsonFormat[SecurityEvent]       = jsonFormat10(SecurityEvent.apply)
+  given securityEventDTOFormat: RootJsonFormat[SecurityEventDTO] = jsonFormat1(
+    SecurityEventDTO.apply
   )
 
   /*=========================================
       For new dashbaord API
     =========================================*/
 
-  implicit val podFormat: RootJsonFormat[Pod]                                                   = jsonFormat7(Pod)
-  implicit val serviceStateInFormat: RootJsonFormat[ServiceStateIn]                             = jsonFormat7(ServiceStateIn)
-  implicit val serviceStatesInFormat: RootJsonFormat[ServiceStatesIn]                           = jsonFormat2(ServiceStatesIn)
-  implicit val applicationsInPolicyFormat: RootJsonFormat[ApplicationsInPolicy]                 = jsonFormat4(
-    ApplicationsInPolicy
+  given podFormat: RootJsonFormat[Pod]                                                   = jsonFormat7(Pod.apply)
+  given serviceStateInFormat: RootJsonFormat[ServiceStateIn]                             = jsonFormat7(ServiceStateIn.apply)
+  given serviceStatesInFormat: RootJsonFormat[ServiceStatesIn]                           = jsonFormat2(ServiceStatesIn.apply)
+  given applicationsInPolicyFormat: RootJsonFormat[ApplicationsInPolicy]                 = jsonFormat4(
+    ApplicationsInPolicy.apply
   )
-  implicit val applicationsInPolicyWrapFormat: RootJsonFormat[ApplicationsInPolicyWrap]         =
-    jsonFormat2(ApplicationsInPolicyWrap)
-  implicit val policyCoverageFormat: RootJsonFormat[PolicyCoverage]                             = jsonFormat2(PolicyCoverage)
-  implicit val workloadBrief2Format: RootJsonFormat[WorkloadBrief2]                             = jsonFormat2(WorkloadBrief2)
-  implicit val serviceLevelConversationFormat: RootJsonFormat[ServiceLevelConversation]         =
-    jsonFormat13(ServiceLevelConversation)
-  implicit val serviceLevelConversationWrapFormat: RootJsonFormat[ServiceLevelConversationWrap] =
-    jsonFormat14(ServiceLevelConversationWrap)
-  implicit val exposedConversationsFormat: RootJsonFormat[ExposedConversations]                 = jsonFormat2(
-    ExposedConversations
+  given applicationsInPolicyWrapFormat: RootJsonFormat[ApplicationsInPolicyWrap]         =
+    jsonFormat2(ApplicationsInPolicyWrap.apply)
+  given policyCoverageFormat: RootJsonFormat[PolicyCoverage]                             = jsonFormat2(PolicyCoverage.apply)
+  given workloadBrief2Format: RootJsonFormat[WorkloadBrief2]                             = jsonFormat2(WorkloadBrief2.apply)
+  given serviceLevelConversationFormat: RootJsonFormat[ServiceLevelConversation]         =
+    jsonFormat13(ServiceLevelConversation.apply)
+  given serviceLevelConversationWrapFormat: RootJsonFormat[ServiceLevelConversationWrap] =
+    jsonFormat14(ServiceLevelConversationWrap.apply)
+  given exposedConversationsFormat: RootJsonFormat[ExposedConversations]                 = jsonFormat2(
+    ExposedConversations.apply
   )
-  implicit val applicationAnalysisFormat: RootJsonFormat[ApplicationAnalysis]                   = jsonFormat2(
-    ApplicationAnalysis
+  given applicationAnalysisFormat: RootJsonFormat[ApplicationAnalysis]                   = jsonFormat2(
+    ApplicationAnalysis.apply
   )
-  implicit val autoScanFormat: RootJsonFormat[AutoScan]                                         = jsonFormat1(AutoScan)
-  implicit val autoScanConfigFormat: RootJsonFormat[AutoScanConfig]                             = jsonFormat2(AutoScanConfig)
-  implicit val admissionRuleFormat: RootJsonFormat[AdmissionRule]                               = jsonFormat3(AdmissionRule)
-  implicit val admissionRulesWrapFormat: RootJsonFormat[AdmissionRulesWrap]                     = jsonFormat2(
-    AdmissionRulesWrap
+  given autoScanFormat: RootJsonFormat[AutoScan]                                         = jsonFormat1(AutoScan.apply)
+  given autoScanConfigFormat: RootJsonFormat[AutoScanConfig]                             = jsonFormat2(AutoScanConfig.apply)
+  given admissionRuleFormat: RootJsonFormat[AdmissionRule]                               = jsonFormat3(AdmissionRule.apply)
+  given admissionRulesWrapFormat: RootJsonFormat[AdmissionRulesWrap]                     = jsonFormat2(
+    AdmissionRulesWrap.apply
   )
-  implicit val admissionStateFormat: RootJsonFormat[AdmissionState]                             = jsonFormat1(AdmissionState)
-  implicit val admissionStateWrapFormat: RootJsonFormat[AdmissionStateWrap]                     = jsonFormat2(
-    AdmissionStateWrap
+  given admissionStateFormat: RootJsonFormat[AdmissionState]                             = jsonFormat1(AdmissionState.apply)
+  given admissionStateWrapFormat: RootJsonFormat[AdmissionStateWrap]                     = jsonFormat2(
+    AdmissionStateWrap.apply
   )
-  implicit val workloadsOutputFormat: RootJsonFormat[WorkloadsOutput]                           = jsonFormat3(WorkloadsOutput)
-  implicit val serviceMapsFormat: RootJsonFormat[ServiceMaps]                                   = jsonFormat6(ServiceMaps)
-  implicit val conversationOutputFormat: RootJsonFormat[ConversationOutput]                     = jsonFormat6(
-    ConversationOutput
+  given workloadsOutputFormat: RootJsonFormat[WorkloadsOutput]                           = jsonFormat3(WorkloadsOutput.apply)
+  given serviceMapsFormat: RootJsonFormat[ServiceMaps]                                   = jsonFormat6(ServiceMaps.apply)
+  given conversationOutputFormat: RootJsonFormat[ConversationOutput]                     = jsonFormat6(
+    ConversationOutput.apply
   )
-  implicit val vulContainerOutputFormat: RootJsonFormat[VulContainerOutput]                     = jsonFormat4(
-    VulContainerOutput
+  given vulContainerOutputFormat: RootJsonFormat[VulContainerOutput]                     = jsonFormat4(
+    VulContainerOutput.apply
   )
-  implicit val vulNodeOutputFormat: RootJsonFormat[VulNodeOutput]                               = jsonFormat3(VulNodeOutput)
-  implicit val vulPlatformOutputFormat: RootJsonFormat[VulPlatformOutput]                       = jsonFormat2(
-    VulPlatformOutput
+  given vulNodeOutputFormat: RootJsonFormat[VulNodeOutput]                               = jsonFormat3(VulNodeOutput.apply)
+  given vulPlatformOutputFormat: RootJsonFormat[VulPlatformOutput]                       = jsonFormat2(
+    VulPlatformOutput.apply
   )
-  implicit val policyOutputFormat: RootJsonFormat[PolicyOutput]                                 = jsonFormat2(PolicyOutput)
+  given policyOutputFormat: RootJsonFormat[PolicyOutput]                                 = jsonFormat2(PolicyOutput.apply)
 
   // Scoring
   // =========================================
-  implicit val vulnerabilityCountFormat: RootJsonFormat[VulnerabilityCount]             = jsonFormat2(
-    VulnerabilityCount
+  given vulnerabilityCountFormat: RootJsonFormat[VulnerabilityCount]             = jsonFormat2(
+    VulnerabilityCount.apply
   )
-  implicit val vulnerabilityExploitRiskFormat: RootJsonFormat[VulnerabilityExploitRisk] =
-    jsonFormat9(VulnerabilityExploitRisk)
-  implicit val serviceConnectionRiskFormat: RootJsonFormat[ServiceConnectionRisk]       = jsonFormat3(
-    ServiceConnectionRisk
+  given vulnerabilityExploitRiskFormat: RootJsonFormat[VulnerabilityExploitRisk] =
+    jsonFormat9(VulnerabilityExploitRisk.apply)
+  given serviceConnectionRiskFormat: RootJsonFormat[ServiceConnectionRisk]       = jsonFormat3(
+    ServiceConnectionRisk.apply
   )
-  implicit val ingressEgressRiskFormat: RootJsonFormat[IngressEgressRisk]               = jsonFormat5(
-    IngressEgressRisk
+  given ingressEgressRiskFormat: RootJsonFormat[IngressEgressRisk]               = jsonFormat5(
+    IngressEgressRisk.apply
   )
-  implicit val workloadChildrenFormat: RootJsonFormat[WorkloadChildren]                 = jsonFormat5(
-    WorkloadChildren
+  given workloadChildrenFormat: RootJsonFormat[WorkloadChildren]                 = jsonFormat5(
+    WorkloadChildren.apply
   )
-  implicit val workloadFormat: RootJsonFormat[Workload]                                 = jsonFormat10(Workload)
-  implicit val vulnerableContainersFormat: RootJsonFormat[VulnerableContainers]         = jsonFormat3(
-    VulnerableContainers
+  given workloadFormat: RootJsonFormat[Workload]                                 = jsonFormat10(Workload.apply)
+  given vulnerableContainersFormat: RootJsonFormat[VulnerableContainers]         = jsonFormat3(
+    VulnerableContainers.apply
   )
-  implicit val vulnerabilitiesDTOFormat: RootJsonFormat[VulnerabilitiesDTO]             = jsonFormat2(
-    VulnerabilitiesDTO
+  given vulnerabilitiesDTOFormat: RootJsonFormat[VulnerabilitiesDTO]             = jsonFormat2(
+    VulnerabilitiesDTO.apply
   )
-  implicit val workloadsWrapFormat: RootJsonFormat[WorkloadsWrap]                       = jsonFormat2(WorkloadsWrap)
-  implicit val scoreInputFormat: RootJsonFormat[ScoreInput]                             = jsonFormat9(ScoreInput)
-  implicit val scoreOutputFormat: RootJsonFormat[ScoreOutput]                           = jsonFormat11(ScoreOutput)
-  implicit val scoreFormat: RootJsonFormat[Score]                                       = jsonFormat12(Score)
+  given workloadsWrapFormat: RootJsonFormat[WorkloadsWrap]                       = jsonFormat2(WorkloadsWrap.apply)
+  given scoreInputFormat: RootJsonFormat[ScoreInput]                             = jsonFormat9(ScoreInput.apply)
+  given scoreOutputFormat: RootJsonFormat[ScoreOutput]                           = jsonFormat11(ScoreOutput.apply)
+  given scoreFormat: RootJsonFormat[Score]                                       = jsonFormat12(Score.apply)
 
-  implicit val dashboardNotificationDTOFormat: RootJsonFormat[DashboardNotificationDTO] =
-    jsonFormat2(DashboardNotificationDTO)
-  implicit val dashboardScoreDTOFormat: RootJsonFormat[DashboardScoreDTO]               = jsonFormat10(
-    DashboardScoreDTO
+  given dashboardNotificationDTOFormat: RootJsonFormat[DashboardNotificationDTO] =
+    jsonFormat2(DashboardNotificationDTO.apply)
+  given dashboardScoreDTOFormat: RootJsonFormat[DashboardScoreDTO]               = jsonFormat10(
+    DashboardScoreDTO.apply
   )
-  implicit val dashboardDTOFormat: RootJsonFormat[DashboardDTO]                         = jsonFormat12(DashboardDTO)
+  given dashboardDTOFormat: RootJsonFormat[DashboardDTO]                         = jsonFormat12(DashboardDTO.apply)
 
-  implicit val riskScoreMetricsWLFormat: RootJsonFormat[RiskScoreMetricsWL]           = jsonFormat8(
-    RiskScoreMetricsWL
+  given riskScoreMetricsWLFormat: RootJsonFormat[RiskScoreMetricsWL]           = jsonFormat8(
+    RiskScoreMetricsWL.apply
   )
-  implicit val riskScoreMetricsGroupFormat: RootJsonFormat[RiskScoreMetricsGroup]     = jsonFormat7(
-    RiskScoreMetricsGroup
+  given riskScoreMetricsGroupFormat: RootJsonFormat[RiskScoreMetricsGroup]     = jsonFormat7(
+    RiskScoreMetricsGroup.apply
   )
-  implicit val riskScoreMetricsCVEFormat: RootJsonFormat[RiskScoreMetricsCVE]         = jsonFormat5(
-    RiskScoreMetricsCVE
+  given riskScoreMetricsCVEFormat: RootJsonFormat[RiskScoreMetricsCVE]         = jsonFormat5(
+    RiskScoreMetricsCVE.apply
   )
-  implicit val metricsFormat: RootJsonFormat[Metrics]                                 = jsonFormat9(Metrics)
-  implicit val conversationReportEntryFormat: RootJsonFormat[ConversationReportEntry] = jsonFormat8(
-    ConversationReportEntry
+  given metricsFormat: RootJsonFormat[Metrics]                                 = jsonFormat9(Metrics.apply)
+  given conversationReportEntryFormat: RootJsonFormat[ConversationReportEntry] = jsonFormat8(
+    ConversationReportEntry.apply
   )
-  implicit val exposureFormat: RootJsonFormat[Exposure]                               = jsonFormat14(Exposure)
-  implicit val scoreOutput2Format: RootJsonFormat[ScoreOutput2]                       = jsonFormat4(ScoreOutput2)
-  implicit val internalSystemDataFormat: RootJsonFormat[InternalSystemData]           = jsonFormat4(
-    InternalSystemData
+  given exposureFormat: RootJsonFormat[Exposure]                               = jsonFormat14(Exposure.apply)
+  given scoreOutput2Format: RootJsonFormat[ScoreOutput2]                       = jsonFormat4(ScoreOutput2.apply)
+  given internalSystemDataFormat: RootJsonFormat[InternalSystemData]           = jsonFormat4(
+    InternalSystemData.apply
   )
-  implicit val dashboardScoreDTO2Format: RootJsonFormat[DashboardScoreDTO2]           = jsonFormat7(
-    DashboardScoreDTO2
+  given dashboardScoreDTO2Format: RootJsonFormat[DashboardScoreDTO2]           = jsonFormat7(
+    DashboardScoreDTO2.apply
   )
-  implicit val multiClusterSummaryFormat: RootJsonFormat[MultiClusterSummary]         = jsonFormat2(
-    MultiClusterSummary
+  given multiClusterSummaryFormat: RootJsonFormat[MultiClusterSummary]         = jsonFormat2(
+    MultiClusterSummary.apply
   )
 
   def jsonToViolationsEndpointData(endpointData: String): ViolationEndpointData =

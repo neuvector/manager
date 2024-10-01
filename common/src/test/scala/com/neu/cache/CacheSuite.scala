@@ -27,11 +27,11 @@ class CacheSuite extends FunSuite {
   }
 
   test("works fine with implicit CacheKeyGenerator") {
-    implicit val KeyGenerator: ToStringCacheKeyGenerator.type = ToStringCacheKeyGenerator
-    val cache                                                 = MapCache[String, String]
+    given KeyGenerator: ToStringCacheKeyGenerator.type = ToStringCacheKeyGenerator
+    val cache                                          = MapCache[String, String]
     cache.put("key4", "value4")
     cache.put("key5", "value5")
-    val result                                                = cache.get("key4").get
+    val result                                         = cache.get("key4").get
     assert(result === "value4")
   }
 

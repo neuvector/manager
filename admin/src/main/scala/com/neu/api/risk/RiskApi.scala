@@ -5,9 +5,9 @@ import com.neu.client.RestClient
 import com.neu.client.RestClient.*
 import com.neu.core.{ AuthenticationManager, CisNISTManager }
 import com.neu.model.*
-import com.neu.model.ComplianceJsonProtocol.*
-import com.neu.model.ComplianceNISTJsonProtocol.*
-import com.neu.model.VulnerabilityJsonProtocol.*
+import com.neu.model.ComplianceJsonProtocol.{ *, given }
+import com.neu.model.ComplianceNISTJsonProtocol.{ *, given }
+import com.neu.model.VulnerabilityJsonProtocol.{ *, given }
 import com.neu.service.Utils
 import com.neu.service.risk.RiskService
 import com.typesafe.scalalogging.LazyLogging

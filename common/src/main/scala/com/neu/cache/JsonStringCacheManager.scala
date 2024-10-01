@@ -7,8 +7,8 @@ import net.sf.ehcache.CacheManager
  * store.
  */
 object JsonStringCacheManager {
-  implicit val cacheKeyGenerator: ToStringCacheKeyGenerator.type = ToStringCacheKeyGenerator
-  implicit val cacheManager: CacheManager                        = CacheManager.getInstance()
+  given cacheKeyGenerator: ToStringCacheKeyGenerator.type = ToStringCacheKeyGenerator
+  given cacheManager: CacheManager                        = CacheManager.getInstance()
 
   val cacheName = "jsonCache"
 

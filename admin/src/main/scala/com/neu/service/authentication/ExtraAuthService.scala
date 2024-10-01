@@ -5,8 +5,8 @@ import com.neu.client.RestClient
 import com.neu.client.RestClient.*
 import com.neu.core.{ AuthenticationManager, Md5 }
 import com.neu.core.CommonSettings.*
-import com.neu.model.AuthTokenJsonProtocol.*
-import com.neu.model.RebrandJsonProtocol.*
+import com.neu.model.AuthTokenJsonProtocol.{ *, given }
+import com.neu.model.RebrandJsonProtocol.{ *, given }
 import com.neu.model.*
 import com.neu.service.{ BaseService, DefaultJsonFormats }
 import com.typesafe.scalalogging.LazyLogging

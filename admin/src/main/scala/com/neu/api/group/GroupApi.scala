@@ -5,13 +5,13 @@ import com.neu.client.RestClient
 import com.neu.client.RestClient.*
 import com.neu.core.AuthenticationManager
 import com.neu.model.*
-import com.neu.model.CustomCheckConfigJsonProtocol.*
-import com.neu.model.DlpJsonProtocol.*
-import com.neu.model.FileProfileJsonProtocol.*
-import com.neu.model.GroupJsonProtocol.*
-import com.neu.model.ProcessProfileJsonProtocol.*
-import com.neu.model.SystemConfigJsonProtocol.*
-import com.neu.model.WafJsonProtocol.*
+import com.neu.model.CustomCheckConfigJsonProtocol.{ *, given }
+import com.neu.model.DlpJsonProtocol.{ *, given }
+import com.neu.model.FileProfileJsonProtocol.{ *, given }
+import com.neu.model.GroupJsonProtocol.{ *, given }
+import com.neu.model.ProcessProfileJsonProtocol.{ *, given }
+import com.neu.model.SystemConfigJsonProtocol.{ *, given }
+import com.neu.model.WafJsonProtocol.{ *, given }
 import com.neu.service.Utils
 import com.neu.service.group.GroupService
 import com.typesafe.scalalogging.LazyLogging

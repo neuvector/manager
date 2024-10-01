@@ -3,7 +3,7 @@ package com.neu.api.device
 import com.neu.client.RestClient
 import com.neu.client.RestClient.*
 import com.neu.model.*
-import com.neu.model.SystemConfigJsonProtocol.*
+import com.neu.model.SystemConfigJsonProtocol.{ *, given }
 import com.neu.service.Utils
 import com.neu.service.device.DeviceService
 import org.apache.pekko.http.scaladsl.model.*
@@ -39,7 +39,7 @@ class DeviceApi(resourceService: DeviceService)(implicit executionContext: Execu
         } ~
         pathPrefix("controller") {
           get {
-            implicit val timeout: Timeout = Timeout(RestClient.waitingLimit.seconds)
+            given timeout: Timeout = Timeout(RestClient.waitingLimit.seconds)
             parameter(Symbol("id").?) { id =>
               Utils.respondWithWebServerHeaders() {
                 resourceService.getController(tokenId, id)
@@ -49,7 +49,7 @@ class DeviceApi(resourceService: DeviceService)(implicit executionContext: Execu
         } ~
         pathPrefix("scanner") {
           get {
-            implicit val timeout: Timeout = Timeout(RestClient.waitingLimit.seconds)
+            given timeout: Timeout = Timeout(RestClient.waitingLimit.seconds)
             Utils.respondWithWebServerHeaders() {
               resourceService.getScanner(tokenId)
             }

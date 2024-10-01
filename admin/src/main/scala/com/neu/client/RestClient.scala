@@ -255,7 +255,7 @@ class RestClient()(using
     token: String,
     nvPage: String = ""
   ): Future[String] = {
-    implicit val utf8StringUnmarshaller: FromEntityUnmarshaller[String] =
+    given utf8StringUnmarshaller: FromEntityUnmarshaller[String] =
       Unmarshaller.byteStringUnmarshaller.mapWithCharset { (bytes, charset) =>
         bytes.decodeString(charset.nioCharset)
       }

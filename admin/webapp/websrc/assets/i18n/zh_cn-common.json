@@ -3270,7 +3270,7 @@
       "OPENID": "用OpenID Connect配置单一登录.",
       "ENABLED_NET_POLICY_MODE": "网络安全策略模式可以全局设置，独立于默认的组策略模式.",
       "ENABLED_NET_POLICY_MODE_GROUP": "网络安全策略将全局设置为单一模式{{name}}，并将独立于当前组进程模式执行网络策略。",
-      "DISABLED_NET_POLICY_MODE": "网络安全策略将使用组策略模式进行进程、网络和文件访问."
+      "DISABLED_NET_POLICY_MODE": "网络安全策略将使用组策略模式进行网络访问."
     }
   },
   "support": {

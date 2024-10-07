@@ -3271,7 +3271,7 @@
       "OPENID": "Configure single sign on using OpenID Connect.",
       "ENABLED_NET_POLICY_MODE": "The Network Security Policy Mode can be set globally, independent of the default group policy mode.",
       "ENABLED_NET_POLICY_MODE_GROUP": "The Network Security Policy will be set globally to a single mode {{name}} and will enforce Network policies independently from the current Group process mode.",
-      "DISABLED_NET_POLICY_MODE": "The Network Security Policy will use the Group Policy Mode for process, network, and file access."
+      "DISABLED_NET_POLICY_MODE": "The Network Security Policy will use the Group Policy Mode for network."
     }
   },
   "support": {

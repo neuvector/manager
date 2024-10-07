@@ -8,7 +8,7 @@ package com.neu.cache
  */
 trait Cache[K, V] {
 
-  protected val cacheKeyGenerator: CacheKeyGenerator[_] = NoOpCacheKeyGenerator
+  protected val cacheKeyGenerator: CacheKeyGenerator[?] = NoOpCacheKeyGenerator
 
   /** Returns value corresponding to the given key */
   final def get(key: K): Option[V] = doGet(cacheKey(key))
@@ -53,7 +53,7 @@ trait Cache[K, V] {
   private def cacheKey(key: K): Any = cacheKeyGenerator.generate(key)
 }
 
-private class MapCache[K, V](override val cacheKeyGenerator: CacheKeyGenerator[_])
+private class MapCache[K, V](override val cacheKeyGenerator: CacheKeyGenerator[?])
     extends Cache[K, V] {
   private val map = scala.collection.mutable.Map.empty[Any, V]
 
@@ -70,7 +70,7 @@ private class MapCache[K, V](override val cacheKeyGenerator: CacheKeyGenerator[_
 
 object MapCache {
   def apply[K, V](implicit
-    cacheKeyGenerator: CacheKeyGenerator[_] = NoOpCacheKeyGenerator
+    cacheKeyGenerator: CacheKeyGenerator[?] = NoOpCacheKeyGenerator
   ): Cache[K, V] =
     new MapCache[K, V](cacheKeyGenerator)
 }

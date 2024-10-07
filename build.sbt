@@ -42,10 +42,6 @@ lazy val commonDependencies = Seq(
   "org.bouncycastle"   % "bcprov-jdk18on"     % "1.78.1",
   "org.bouncycastle"   % "bcpkix-jdk18on"     % "1.78.1",
   pekkoActor,
-  pekkoHttp,
-  pekkoJson,
-  pekkoSlf4j,
-  pekkoStream,
   typesafeConfig,
   joda,
   slf4jLog4j,
@@ -90,7 +86,11 @@ lazy val admin = (project in file("admin"))
   .settings(
     name        := "admin",
     buildSettings,
-    promptTheme := ScalapenosTheme
+    promptTheme := ScalapenosTheme,
+    libraryDependencies += pekkoHttp,
+    libraryDependencies += pekkoJson,
+    libraryDependencies += pekkoSlf4j,
+    libraryDependencies += pekkoStream,
   )
 
 resolvers ++= Seq(

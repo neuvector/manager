@@ -68,9 +68,6 @@ trait ClientSslConfig extends LazyLogging {
         case (Failure(exception), _)              =>
           logger.info(s"Received Response - Failure\n$exception")
           Future.failed(exception)
-        case (Success(unexpected), _)             =>
-          logger.info(s"Received Response - Unexpected Exception\n$unexpected")
-          Future.failed(new Exception(s"Unexpected response from HTTP transport: $unexpected"))
       }
   }
 

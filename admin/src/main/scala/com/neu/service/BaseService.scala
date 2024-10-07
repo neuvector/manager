@@ -10,7 +10,7 @@ import spray.json.*
 
 import java.io.{ PrintWriter, StringWriter }
 
-class BaseService extends Directives with LazyLogging {
+open class BaseService extends Directives with LazyLogging {
   given arrayStringUnmarshaller: Unmarshaller[HttpEntity, Array[String]] =
     Unmarshaller.stringUnmarshaller
       .map(JsonParser(_).convertTo[Array[String]])

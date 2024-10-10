@@ -5,28 +5,28 @@ import com.neu.cache.paginationCacheManager
 import com.neu.client.RestClient
 import com.neu.client.RestClient.*
 import com.neu.core.AuthenticationManager
-import com.neu.model.*
-import com.neu.model.AdmissionJsonProtocol.{ *, given }
-import com.neu.model.GroupJsonProtocol.{ *, given }
-import com.neu.model.JsonProtocol.{ *, given }
+import com.neu.model.AdmissionJsonProtocol.*
+import com.neu.model.GroupJsonProtocol.*
+import com.neu.model.JsonProtocol.given
 import com.neu.model.PolicyJsonProtocol.{ *, given }
-import com.neu.model.RegistryConfigJsonProtocol.{ *, given }
+import com.neu.model.RegistryConfigJsonProtocol.*
+import com.neu.model.*
 import com.neu.service.BaseService
 import com.typesafe.scalalogging.LazyLogging
+import org.apache.pekko.http.scaladsl.model.ContentTypes
+import org.apache.pekko.http.scaladsl.model.HttpEntity
 import org.apache.pekko.http.scaladsl.model.HttpMethods.*
-import org.apache.pekko.http.scaladsl.model.{ ContentTypes, HttpEntity, StatusCodes }
+import org.apache.pekko.http.scaladsl.model.StatusCodes
 import org.apache.pekko.http.scaladsl.server.Route
 import org.json4s.*
 import org.json4s.native.JsonMethods.*
 
+import scala.concurrent.Await
+import scala.concurrent.TimeoutException
 import scala.concurrent.duration.*
-import scala.concurrent.{ Await, ExecutionContext, TimeoutException }
 import scala.util.control.NonFatal
 
-class PolicyService()(implicit executionContext: ExecutionContext)
-    extends BaseService
-    with DefaultJsonFormats
-    with LazyLogging {
+class PolicyService() extends BaseService with DefaultJsonFormats with LazyLogging {
 
   private final val policyPath                 = "policy/rule"
   private final val responseRulePath           = "response/rule"

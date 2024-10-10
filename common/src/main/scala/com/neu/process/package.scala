@@ -1,7 +1,7 @@
 package com.neu
 
-import org.apache.pekko.actor.ActorSystem
 import com.typesafe.config.ConfigFactory
+import org.apache.pekko.actor.ActorSystem
 
 /**
  * Created by bxu on 1/18/18.

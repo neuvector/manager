@@ -7,12 +7,15 @@ import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory.*
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.http.scaladsl.ConnectionContext
+import org.apache.pekko.http.scaladsl.Http
+import org.apache.pekko.http.scaladsl.HttpsConnectionContext
 import org.apache.pekko.http.scaladsl.server.Route
 import org.apache.pekko.http.scaladsl.settings.ServerSettings
-import org.apache.pekko.http.scaladsl.{ ConnectionContext, Http, HttpsConnectionContext }
 import org.apache.pekko.stream.Materializer
 
-import scala.concurrent.{ ExecutionContextExecutor, Future }
+import scala.concurrent.ExecutionContextExecutor
+import scala.concurrent.Future
 
 trait Core {
   protected implicit def system: ActorSystem

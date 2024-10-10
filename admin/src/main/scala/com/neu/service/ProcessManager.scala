@@ -1,10 +1,12 @@
 package com.neu.service
 
-import org.apache.pekko.actor.{ Actor, ActorLogging }
+import org.apache.pekko.actor.Actor
+import org.apache.pekko.actor.ActorLogging
 
 import java.io.*
 import scala.collection.mutable.ListBuffer
-import scala.util.control.Breaks.{ break, breakable }
+import scala.util.control.Breaks.break
+import scala.util.control.Breaks.breakable
 
 /**
  * Created by bxu on 1/18/18. Manage process life cycle, including start, interact, close the

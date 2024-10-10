@@ -1,18 +1,14 @@
 package com.neu.api.cluster
 
-import com.neu.client.RestClient
+import com.neu.model.ClusterJsonProtocol.given
 import com.neu.model.*
-import com.neu.model.ClusterJsonProtocol.{ *, given }
+import com.neu.service.DefaultJsonFormats
+import com.neu.service.Utils
 import com.neu.service.cluster.ClusterService
-import com.neu.service.{ BaseService, DefaultJsonFormats, Utils }
-import com.typesafe.scalalogging.LazyLogging
-import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
+import org.apache.pekko.http.scaladsl.server.Directives
+import org.apache.pekko.http.scaladsl.server.Route
 
-import scala.concurrent.ExecutionContext
-
-class ClusterApi(resourceService: ClusterService)(implicit executionContext: ExecutionContext)
-    extends Directives
-    with DefaultJsonFormats {
+class ClusterApi(resourceService: ClusterService) extends Directives with DefaultJsonFormats {
 
   val route: Route =
     headerValueByName("Token") { tokenId =>

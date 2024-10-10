@@ -7,12 +7,16 @@ import com.neu.model.AuthTokenJsonProtocol.{ *, given }
 import com.neu.model.*
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.http.scaladsl.model.*
-import org.apache.pekko.http.scaladsl.server.{ RequestContext, Route }
+import org.apache.pekko.http.scaladsl.server.RequestContext
+import org.apache.pekko.http.scaladsl.server.Route
 import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshal
 
+import scala.concurrent.Await
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 import scala.concurrent.duration.*
-import scala.concurrent.{ Await, ExecutionContext, Future }
-import scala.util.{ Failure, Success }
+import scala.util.Failure
+import scala.util.Success
 
 class SamlAuthService()(implicit
   system: ActorSystem,
@@ -33,7 +37,7 @@ class SamlAuthService()(implicit
     serverName: Option[String]
   ): Route = {
     val resourcesFuture = if (serverName.isEmpty) {
-      logger.info(s"saml-g: servername is empty")
+      logger.info("saml-g: servername is empty")
       RestClient.httpRequest(s"$baseUri/$saml", HttpMethods.GET)
     } else {
       logger.info(s"saml-g: $serverName")
@@ -55,7 +59,7 @@ class SamlAuthService()(implicit
   }
 
   override def validateToken(tokenId: Option[String], ip: Option[RemoteAddress]): Route = {
-    logger.info(s"saml-pt: to validate authToken.")
+    logger.info("saml-pt: to validate authToken.")
     val authToken = AuthenticationManager.validate(samlKey)
     authToken match {
       case Some(token) =>
@@ -80,7 +84,7 @@ class SamlAuthService()(implicit
 
   override def logout(host: Option[String], tokenId: String): Route =
     complete {
-      logger.info(s"saml-g: slo")
+      logger.info("saml-g: slo")
       RestClient.httpRequestWithHeader(
         s"$baseUri/$saml/saml1/slo",
         HttpMethods.GET,
@@ -109,7 +113,7 @@ class SamlAuthService()(implicit
     for {
       entityString <- Unmarshal(ctx.request.entity).to[String]
       response     <- makeAuthRequest(entityString, ip.toString, host)
-      route        <- handleAuthResponse(response, host)
+      route        <- handleAuthResponse(response)
     } yield route
 
   private def makeAuthRequest(
@@ -134,7 +138,7 @@ class SamlAuthService()(implicit
       )
     )
 
-  private def handleAuthResponse(response: HttpResponse, host: String): Future[Route] = {
+  private def handleAuthResponse(response: HttpResponse): Future[Route] = {
     logger.info("saml-p: added temp cookie.")
     response.status match {
       case StatusCodes.OK =>

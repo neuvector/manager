@@ -1,6 +1,7 @@
 package com.neu.core
 
-import com.neu.model.{ IpGeo, IpMap }
+import com.neu.model.IpGeo
+import com.neu.model.IpMap
 import com.typesafe.scalalogging.LazyLogging
 
 import java.net.InetAddress
@@ -100,7 +101,7 @@ object IpGeoManager extends LazyLogging {
     }
 
   def getCountries(ipList: Array[String]): IpMap = {
-    var ipMap: scala.collection.mutable.Map[String, IpGeo] = scala.collection.mutable.Map();
+    val ipMap: scala.collection.mutable.Map[String, IpGeo] = scala.collection.mutable.Map();
     ipList.foreach { ip =>
       ipMap.get(ip) match {
         case Some(ipGeo) => None

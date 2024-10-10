@@ -2,18 +2,14 @@ package com.neu.api.sigstore
 
 import com.neu.client.RestClient
 import com.neu.client.RestClient.*
+import com.neu.model.SigstoreJsonProtocol.given
 import com.neu.model.*
-import com.neu.model.SigstoreJsonProtocol.{ *, given }
 import com.neu.service.Utils
 import com.neu.service.sigstore.SigstoreService
-import com.typesafe.scalalogging.LazyLogging
-import org.apache.pekko.http.scaladsl.model.HttpMethods.*
-import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
+import org.apache.pekko.http.scaladsl.server.Directives
+import org.apache.pekko.http.scaladsl.server.Route
 
-import scala.concurrent.ExecutionContext
-
-class SigstoreApi(resourceService: SigstoreService)(implicit executionContext: ExecutionContext)
-    extends Directives {
+class SigstoreApi(resourceService: SigstoreService) extends Directives {
 
   val route: Route =
     headerValueByName("Token") { tokenId =>

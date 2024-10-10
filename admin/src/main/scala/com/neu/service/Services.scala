@@ -2,12 +2,18 @@ package com.neu.service
 
 import com.google.common.base.Throwables
 import com.typesafe.scalalogging.LazyLogging
-import org.apache.pekko.actor.{ Actor, ActorLogging, ActorSystem }
+import org.apache.pekko.actor.Actor
+import org.apache.pekko.actor.ActorLogging
+import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.event.LoggingAdapter
+import org.apache.pekko.http.scaladsl.model.HttpEntity
+import org.apache.pekko.http.scaladsl.model.HttpResponse
+import org.apache.pekko.http.scaladsl.model.StatusCode
+import org.apache.pekko.http.scaladsl.model.StatusCodes
 import org.apache.pekko.http.scaladsl.model.headers.RawHeader
-import org.apache.pekko.http.scaladsl.model.{ HttpEntity, HttpResponse, StatusCode, StatusCodes }
 import org.apache.pekko.http.scaladsl.server.*
-import org.apache.pekko.io.Tcp.{ Bound, CommandFailed }
+import org.apache.pekko.io.Tcp.Bound
+import org.apache.pekko.io.Tcp.CommandFailed
 
 import scala.util.control.NonFatal
 
@@ -33,9 +39,8 @@ trait FailureHandling extends Directives {
 
   def exceptionHandler: ExceptionHandler = ExceptionHandler {
     case e: IllegalArgumentException =>
-      extractRequestContext { ctx =>
+      extractRequestContext { _ =>
         logFailureResponse(
-          ctx,
           e,
           message = "The server was asked a question that didn't make sense: " + e.getMessage,
           error = StatusCodes.NotAcceptable
@@ -43,9 +48,8 @@ trait FailureHandling extends Directives {
       }
 
     case e: NoSuchElementException =>
-      extractRequestContext { ctx =>
+      extractRequestContext { _ =>
         logFailureResponse(
-          ctx,
           e,
           message = "The server is missing some information. Try again in a few moments.",
           error = StatusCodes.NotFound
@@ -53,13 +57,12 @@ trait FailureHandling extends Directives {
       }
 
     case t: Throwable =>
-      extractRequestContext { ctx =>
-        logFailureResponse(ctx, t)
+      extractRequestContext { _ =>
+        logFailureResponse(t)
       }
   }
 
   private def logFailureResponse(
-    ctx: RequestContext,
     thrown: Throwable,
     message: String = "The server is having problems.",
     error: StatusCode = StatusCodes.InternalServerError
@@ -73,11 +76,8 @@ trait FailureHandling extends Directives {
 /**
  * Allows you to construct Spray ``HttpService`` from a concatenation of routes; and wires in the
  * error handler. It also logs all internal server errors using ``SprayActorLogging``.
- *
- * @param route
- *   the (concatenated) route
  */
-class RoutedHttpService(route: Route) extends Actor with ActorLogging with Directives {
+class RoutedHttpService() extends Actor with ActorLogging with Directives {
 
   given system: ActorSystem = context.system
 

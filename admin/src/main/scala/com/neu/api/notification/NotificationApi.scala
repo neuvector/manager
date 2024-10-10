@@ -2,22 +2,19 @@ package com.neu.api.notification
 
 import com.neu.client.RestClient
 import com.neu.client.RestClient.*
-import com.neu.model.*
-import com.neu.model.AlertJsonProtocol.{ *, given }
-import com.neu.model.EndpointConfigJsonProtocol.{ *, given }
+import com.neu.model.AlertJsonProtocol.given
+import com.neu.model.EndpointConfigJsonProtocol.given
 import com.neu.model.JsonProtocol.{ *, given }
+import com.neu.model.*
 import com.neu.service.Utils
 import com.neu.service.notification.NotificationService
-import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
-
-import scala.concurrent.ExecutionContext
+import org.apache.pekko.http.scaladsl.server.Directives
+import org.apache.pekko.http.scaladsl.server.Route
 
 /**
  * Notification rest service
  */
-class NotificationApi(resourceService: NotificationService)(implicit
-  executionContext: ExecutionContext
-) extends Directives {
+class NotificationApi(resourceService: NotificationService) extends Directives {
 
   private val top = "top"
 

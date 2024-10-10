@@ -1,6 +1,6 @@
 package com.neu.model
 
-import spray.json.DefaultJsonProtocol.{ *, given }
+import spray.json.DefaultJsonProtocol.*
 import spray.json.*
 
 case class AWSAccount(

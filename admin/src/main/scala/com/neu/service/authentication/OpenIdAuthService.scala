@@ -1,23 +1,24 @@
 package com.neu.service.authentication
 
-import com.neu.core.AuthenticationManager
 import com.neu.client.RestClient
 import com.neu.client.RestClient.*
-import com.neu.model.*
+import com.neu.core.AuthenticationManager
 import com.neu.model.AuthTokenJsonProtocol.{ *, given }
-
-import org.apache.pekko.stream.Materializer
+import com.neu.model.*
 import org.apache.pekko.http.scaladsl.model.*
 import org.apache.pekko.http.scaladsl.model.headers.HttpCookie
-import org.apache.pekko.http.scaladsl.server.{ RequestContext, Route }
+import org.apache.pekko.http.scaladsl.server.RequestContext
+import org.apache.pekko.http.scaladsl.server.Route
 import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshal
-
+import org.apache.pekko.stream.Materializer
 import spray.json.*
 
 import java.nio.charset.StandardCharsets
 import java.util.Base64
+import scala.concurrent.Await
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 import scala.concurrent.duration.*
-import scala.concurrent.{ Await, ExecutionContext, Future }
 
 class OpenIdAuthService()(implicit
   mat: Materializer,
@@ -36,7 +37,7 @@ class OpenIdAuthService()(implicit
     host: Option[String],
     serverName: Option[String]
   ): Route = {
-    logger.info(s"get openId_auth: {}", host.get)
+    logger.info("get openId_auth: {}", host.get)
     if (state.isEmpty) {
       val result =
         Await.result(handleEmptyResources(host, serverName), RestClient.waitingLimit.seconds)
@@ -48,7 +49,7 @@ class OpenIdAuthService()(implicit
   }
 
   override def validateToken(tokenId: Option[String], ip: Option[RemoteAddress]): Route = {
-    logger.info(s"openId-pt: to validate authToken from {}", ip.get)
+    logger.info("openId-pt: to validate authToken from {}", ip.get)
     val authToken = AuthenticationManager.validate(KEY)
     authToken match {
       case Some(x) =>
@@ -79,14 +80,14 @@ class OpenIdAuthService()(implicit
     serverName: Option[String]
   ): Future[JsValue] =
     if (serverName.isEmpty) {
-      logger.info(s"openId-g: no server name.")
+      logger.info("openId-g: no server name.")
       RestClient.httpRequest(s"$baseUri/$AUTH_SERVER", HttpMethods.GET)
     } else {
       if (host.isEmpty) {
-        logger.info(s"openId-g: no host.")
+        logger.info("openId-g: no host.")
         RestClient.httpRequest(s"$baseUri/$AUTH_SERVER/openId1", HttpMethods.GET)
       } else {
-        logger.info(s"openId-g: to get redirect url")
+        logger.info("openId-g: to get redirect url")
         RestClient.httpRequest(
           s"$baseUri/$AUTH_SERVER/openId1",
           HttpMethods.POST,
@@ -133,11 +134,11 @@ class OpenIdAuthService()(implicit
           val authTokenFuture: Future[String] = Unmarshal(response.entity).to[String]
           val authToken                       = Await.result(authTokenFuture, RestClient.waitingLimit.seconds)
           val userToken: UserTokenNew         = AuthenticationManager.parseToken(authToken)
-          logger.info(s"openId-g: added authToken")
+          logger.info("openId-g: added authToken")
           AuthenticationManager.putToken(KEY, userToken)
           ctx.redirect(ROOT_PATH, StatusCodes.Found)
         case _              =>
-          logger.warn(s"openId-g: invalid response. redirect /")
+          logger.warn("openId-g: invalid response. redirect /")
           ctx.redirect(ROOT_PATH, StatusCodes.MovedPermanently)
       }
     }

@@ -1,6 +1,5 @@
 package com.neu.model
 
-import spray.json.{ DefaultJsonProtocol, RootJsonFormat }
 import spray.json.*
 
 case class CustomCheck(name: String, script: String)

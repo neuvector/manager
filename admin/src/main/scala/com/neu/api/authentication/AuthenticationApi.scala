@@ -1,10 +1,8 @@
 package com.neu.api.authentication
 
 import com.neu.service.authentication.*
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
-
-import scala.concurrent.ExecutionContext
+import org.apache.pekko.http.scaladsl.server.Directives
+import org.apache.pekko.http.scaladsl.server.Route
 
 /**
  * Created by bxu on 3/24/16.
@@ -17,9 +15,6 @@ class AuthenticationApi(
   samlAuthService: AuthService,
   suseAuthService: AuthService,
   extraAuthService: ExtraAuthService
-)(implicit
-  system: ActorSystem,
-  ec: ExecutionContext
 ) extends Directives {
 
   val route: Route =

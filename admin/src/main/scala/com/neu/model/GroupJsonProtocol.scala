@@ -1,6 +1,5 @@
 package com.neu.model
 
-import spray.json.DefaultJsonProtocol
 import spray.json.*
 
 /**
@@ -14,11 +13,11 @@ object GroupJsonProtocol extends DefaultJsonProtocol {
   val regexOp    = "~"
   val notRegexOp = "!~"
 
-  val containsSign = "contains"
-  val prefixSign   = "prefix"
-  val regexSign    = "regex"
-  val notRegexSign = "!regex"
-  val ops          = Seq(equalOp, notEqualOp, containsOp, prefixOp, regexOp, notRegexOp)
+  val containsSign     = "contains"
+  val prefixSign       = "prefix"
+  val regexSign        = "regex"
+  val notRegexSign     = "!regex"
+  val ops: Seq[String] = Seq(equalOp, notEqualOp, containsOp, prefixOp, regexOp, notRegexOp)
 
   given rule4GroupFormat: RootJsonFormat[Rule4Group]                             = jsonFormat11(Rule4Group.apply)
   given CLUSEventCondition4GroupFormat: RootJsonFormat[CLUSEventCondition4Group] =

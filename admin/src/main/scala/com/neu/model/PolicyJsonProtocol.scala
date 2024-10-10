@@ -1,9 +1,8 @@
 package com.neu.model
 
-import spray.json.DefaultJsonProtocol
-import spray.json.*
 import com.neu.model.DashboardJsonProtocol.{ *, given }
 import com.typesafe.scalalogging.LazyLogging
+import spray.json.*
 
 /**
  * Created by bxu on 4/29/16.

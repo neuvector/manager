@@ -8,14 +8,19 @@ import com.neu.model.AuthTokenJsonProtocol.{ *, given }
 import com.neu.model.*
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.http.scaladsl.model.*
-import org.apache.pekko.http.scaladsl.server.{ RequestContext, Route }
+import org.apache.pekko.http.scaladsl.server.RequestContext
+import org.apache.pekko.http.scaladsl.server.Route
 import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshal
 import spray.json.*
 
+import scala.concurrent.Await
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
+import scala.concurrent.TimeoutException
 import scala.concurrent.duration.*
-import scala.concurrent.{ Await, ExecutionContext, Future, TimeoutException }
+import scala.util.Failure
+import scala.util.Success
 import scala.util.control.NonFatal
-import scala.util.{ Failure, Success }
 
 class SuseAuthService()(implicit
   system: ActorSystem,
@@ -71,7 +76,7 @@ class SuseAuthService()(implicit
 
   private def performLogin(ip: RemoteAddress, userPwd: Password, suseCookieValue: String): Route =
     try {
-      logger.info(s"post path auth")
+      logger.info("post path auth")
       processSuseLoginRequest(ip, userPwd, suseCookieValue)
     } catch {
       case NonFatal(e)         =>

@@ -1,23 +1,34 @@
 package com.neu.core
 
-import com.neu.core.CommonSettings.{ newCert, newKey, newMgrCert, newMgrKey }
+import com.neu.core.CommonSettings.newCert
+import com.neu.core.CommonSettings.newKey
+import com.neu.core.CommonSettings.newMgrCert
+import com.neu.core.CommonSettings.newMgrKey
 import com.typesafe.scalalogging.LazyLogging
 import org.bouncycastle.asn1.x500.X500Name
 import org.bouncycastle.asn1.x509.*
-import org.bouncycastle.cert.jcajce.{ JcaX509CertificateConverter, JcaX509v3CertificateBuilder }
+import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter
+import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder
-import org.bouncycastle.util.io.pem.{ PemObject, PemWriter }
+import org.bouncycastle.util.io.pem.PemObject
+import org.bouncycastle.util.io.pem.PemWriter
 import sun.security.util.DerInputStream
 
 import java.io.*
 import java.math.BigInteger
 import java.security.*
-import java.security.cert.{ Certificate, CertificateFactory, X509Certificate }
+import java.security.cert.Certificate
+import java.security.cert.CertificateFactory
+import java.security.cert.X509Certificate
 import java.security.interfaces.RSAPrivateKey
 import java.security.spec.*
-import java.util.{ Base64, Date }
-import javax.net.ssl.{ KeyManagerFactory, SSLContext, SSLEngine, TrustManagerFactory }
+import java.util.Base64
+import java.util.Date
+import javax.net.ssl.KeyManagerFactory
+import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLEngine
+import javax.net.ssl.TrustManagerFactory
 import scala.jdk.CollectionConverters.*
 
 trait MySslConfiguration extends LazyLogging {

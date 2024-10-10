@@ -10,14 +10,13 @@ import com.neu.api.policy.PolicyApi
 import com.neu.api.risk.RiskApi
 import com.neu.api.sigstore.SigstoreApi
 import com.neu.api.workload.WorkloadApi
-import com.neu.core.{ Core, CoreActors }
+import com.neu.core.Core
+import com.neu.core.CoreActors
 import com.neu.service.*
-import com.neu.service.authentication.{
-  AuthProvider,
-  AuthService,
-  AuthServiceFactory,
-  ExtraAuthService
-}
+import com.neu.service.authentication.AuthProvider
+import com.neu.service.authentication.AuthService
+import com.neu.service.authentication.AuthServiceFactory
+import com.neu.service.authentication.ExtraAuthService
 import com.neu.service.cluster.ClusterService
 import com.neu.service.dashboard.DashboardService
 import com.neu.service.device.DeviceService
@@ -27,7 +26,8 @@ import com.neu.service.policy.PolicyService
 import com.neu.service.risk.RiskService
 import com.neu.service.sigstore.SigstoreService
 import com.neu.service.workload.WorkloadService
-import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
+import org.apache.pekko.http.scaladsl.server.Directives
+import org.apache.pekko.http.scaladsl.server.Route
 
 import scala.concurrent.ExecutionContext.Implicits.global
 

@@ -1,6 +1,7 @@
 package com.neu.cache
 
-import com.neu.model.{ Position, UserGraphLayout }
+import com.neu.model.Position
+import com.neu.model.UserGraphLayout
 import net.sf.ehcache.CacheManager
 
 /**

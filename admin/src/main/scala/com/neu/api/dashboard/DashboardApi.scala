@@ -1,31 +1,18 @@
 package com.neu.api.dashboard
 
-import com.google.common.net.UrlEscapers
-import com.neu.cache.JsonStringCacheManager
 import com.neu.client.RestClient
 import com.neu.client.RestClient.*
+import com.neu.model.DashboardJsonProtocol.given
 import com.neu.model.*
-import com.neu.model.DashboardJsonProtocol.{ *, given }
-import com.neu.model.DashboardSecurityEventsProtocol.{ *, given }
-import com.neu.model.ResourceJsonProtocol.{ *, given }
-import com.neu.model.SystemConfigJsonProtocol.{ *, given }
+import com.neu.service.Utils
 import com.neu.service.dashboard.DashboardService
-import com.neu.service.{ DefaultJsonFormats, Utils }
-import com.typesafe.scalalogging.LazyLogging
-import org.apache.pekko.http.scaladsl.model.{ HttpMethods, StatusCodes }
-import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
-import org.joda.time.DateTime
-
-import scala.concurrent.duration.*
-import scala.concurrent.{ Await, ExecutionContext, Future }
-import scala.reflect.ClassTag
-import scala.util.control.NonFatal
+import org.apache.pekko.http.scaladsl.server.Directives
+import org.apache.pekko.http.scaladsl.server.Route
 
 /**
  * Rest service for dashboard
  */
-class DashboardApi(resourceService: DashboardService)(implicit executionContext: ExecutionContext)
-    extends Directives {
+class DashboardApi(resourceService: DashboardService) extends Directives {
 
   val route: Route = headerValueByName("Token") { tokenId =>
     path("multi-cluster-summary") {

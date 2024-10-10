@@ -1,7 +1,9 @@
 package com.neu.core
 
 import com.neu.model.AuthTokenJsonProtocol.*
-import com.neu.model.{ Token, TokenNew, UserTokenNew }
+import com.neu.model.Token
+import com.neu.model.TokenNew
+import com.neu.model.UserTokenNew
 import com.typesafe.scalalogging.LazyLogging
 
 import java.security.MessageDigest
@@ -77,9 +79,9 @@ object AuthenticationManager extends LazyLogging {
 
         token.role_domains match {
           case Some(role_domains) =>
-            converted_role_domains = getRolesDigit(token.role, Option(role_domains), timestamp)
+            converted_role_domains = getRolesDigit(token.role, Option(role_domains))
           case None               =>
-            converted_role_domains = getRolesDigit(token.role, None, timestamp)
+            converted_role_domains = getRolesDigit(token.role, None)
         }
         userToken = UserTokenNew(
           Some(tokenNew),
@@ -109,8 +111,7 @@ object AuthenticationManager extends LazyLogging {
 
   private def getRolesDigit(
     global_role: String,
-    role_domains: Option[Map[String, Array[String]]],
-    timestamp: Long
+    role_domains: Option[Map[String, Array[String]]]
   ): Map[String, String] = {
     var global_role_digit                   = "0"
     var roles_domains: Map[String, String]  = null

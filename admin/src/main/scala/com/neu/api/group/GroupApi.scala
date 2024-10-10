@@ -1,33 +1,24 @@
 package com.neu.api.group
 
-import com.neu.cache.paginationCacheManager
 import com.neu.client.RestClient
 import com.neu.client.RestClient.*
-import com.neu.core.AuthenticationManager
+import com.neu.model.CustomCheckConfigJsonProtocol.given
+import com.neu.model.DlpJsonProtocol.given
+import com.neu.model.FileProfileJsonProtocol.given
+import com.neu.model.GroupJsonProtocol.given
+import com.neu.model.ProcessProfileJsonProtocol.given
+import com.neu.model.SystemConfigJsonProtocol.given
+import com.neu.model.WafJsonProtocol.given
 import com.neu.model.*
-import com.neu.model.CustomCheckConfigJsonProtocol.{ *, given }
-import com.neu.model.DlpJsonProtocol.{ *, given }
-import com.neu.model.FileProfileJsonProtocol.{ *, given }
-import com.neu.model.GroupJsonProtocol.{ *, given }
-import com.neu.model.ProcessProfileJsonProtocol.{ *, given }
-import com.neu.model.SystemConfigJsonProtocol.{ *, given }
-import com.neu.model.WafJsonProtocol.{ *, given }
 import com.neu.service.Utils
 import com.neu.service.group.GroupService
-import com.typesafe.scalalogging.LazyLogging
-import org.apache.pekko.http.scaladsl.model.HttpMethods.*
-import org.apache.pekko.http.scaladsl.model.StatusCodes
-import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
-
-import scala.concurrent.duration.*
-import scala.concurrent.{ Await, ExecutionContext }
-import scala.util.control.NonFatal
+import org.apache.pekko.http.scaladsl.server.Directives
+import org.apache.pekko.http.scaladsl.server.Route
 
 /**
  * Created by bxu on 4/25/16.
  */
-class GroupApi(resourceService: GroupService)(implicit executionContext: ExecutionContext)
-    extends Directives {
+class GroupApi(resourceService: GroupService) extends Directives {
 
   val route: Route =
     headerValueByName("Token") { tokenId =>

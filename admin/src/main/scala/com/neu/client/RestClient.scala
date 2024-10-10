@@ -1,23 +1,27 @@
 package com.neu.client
 
+import com.neu.core.AuthenticationManager
+import com.neu.core.ClientSslConfig
 import com.neu.core.CommonSettings.*
-import com.neu.core.{ AuthenticationManager, ClientSslConfig }
 import com.neu.service.DefaultJsonFormats
-import com.neu.web.Rest.{ executionContext, system }
+import com.neu.web.Rest.executionContext
+import com.neu.web.Rest.system
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.coding.{ Coders, Gzip }
-import org.apache.pekko.http.scaladsl.marshalling.Marshal
+import org.apache.pekko.http.scaladsl.coding.Coders
 import org.apache.pekko.http.scaladsl.model.*
 import org.apache.pekko.http.scaladsl.model.headers.*
 import org.apache.pekko.http.scaladsl.unmarshalling.*
 import org.apache.pekko.stream.Materializer
 import spray.json.*
 
-import java.io.{ PrintWriter, StringWriter }
+import java.io.PrintWriter
+import java.io.StringWriter
 import java.net.InetAddress
+import scala.concurrent.Await
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 import scala.concurrent.duration.*
-import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.util.control.NonFatal
 
 object Constant {
@@ -221,20 +225,6 @@ class RestClient()(using
     // Send the request
     sendAndReceive(finalRequest)
   }
-
-  private def basePost(uri: String, data: Multipart.FormData, token: String): Future[HttpRequest] =
-    // Marshal the Multipart.FormData to an entity
-    Marshal(data).to[RequestEntity].map { entity =>
-      HttpRequest(
-        method = HttpMethods.POST,
-        uri = uri,
-        entity = entity
-      ).addHeader(RawHeader(TOKEN_HEADER, token))
-        .addHeader(RawHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.getOrElse(token, "")))
-        .addHeader(`Accept-Encoding`(HttpEncodings.gzip))
-        .addHeader(RawHeader("Transfer-Encoding", "gzip"))
-        .addHeader(`Cache-Control`(CacheDirectives.`no-cache`))
-    }
 
   private def requestWithHeader(
     uri: String,

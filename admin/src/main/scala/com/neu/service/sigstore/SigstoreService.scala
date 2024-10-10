@@ -4,17 +4,13 @@ import com.neu.client.RestClient
 import com.neu.client.RestClient.*
 import com.neu.model.SigstoreJsonProtocol.*
 import com.neu.model.*
-import com.neu.service.{ BaseService, DefaultJsonFormats }
+import com.neu.service.BaseService
+import com.neu.service.DefaultJsonFormats
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.http.scaladsl.model.HttpMethods.*
 import org.apache.pekko.http.scaladsl.server.Route
 
-import scala.concurrent.ExecutionContext
-
-class SigstoreService()(implicit executionContext: ExecutionContext)
-    extends BaseService
-    with DefaultJsonFormats
-    with LazyLogging {
+class SigstoreService() extends BaseService with DefaultJsonFormats with LazyLogging {
 
   def getSigstoreList(tokenId: String): Route = complete {
     logger.info("Getting sigstore list...")

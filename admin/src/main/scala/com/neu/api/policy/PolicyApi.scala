@@ -1,32 +1,18 @@
 package com.neu.api.policy
 
-import com.google.common.net.UrlEscapers
-import com.neu.cache.paginationCacheManager
 import com.neu.client.RestClient
 import com.neu.client.RestClient.*
-import com.neu.core.AuthenticationManager
+import com.neu.model.AdmissionJsonProtocol.given
+import com.neu.model.PolicyJsonProtocol.given
+import com.neu.model.RegistryConfigJsonProtocol.given
 import com.neu.model.*
-import com.neu.model.AdmissionJsonProtocol.{ *, given }
-import com.neu.model.GroupJsonProtocol.{ *, given }
-import com.neu.model.JsonProtocol.{ *, given }
-import com.neu.model.PolicyJsonProtocol.{ *, given }
-import com.neu.model.RegistryConfigJsonProtocol.{ *, given }
 import com.neu.service.Utils
 import com.neu.service.policy.PolicyService
-import com.typesafe.scalalogging.LazyLogging
-import org.apache.pekko.http.scaladsl.model.HttpMethods.*
-import org.apache.pekko.http.scaladsl.model.{ ContentTypes, HttpEntity, StatusCodes }
-import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
-import org.json4s.*
-import org.json4s.native.JsonMethods.*
-
-import scala.concurrent.duration.*
-import scala.concurrent.{ Await, ExecutionContext, TimeoutException }
-import scala.util.control.NonFatal
+import org.apache.pekko.http.scaladsl.server.Directives
+import org.apache.pekko.http.scaladsl.server.Route
 
 //noinspection UnstableApiUsage
-class PolicyApi(resourceService: PolicyService)(implicit executionContext: ExecutionContext)
-    extends Directives {
+class PolicyApi(resourceService: PolicyService) extends Directives {
 
   val route: Route =
     headerValueByName("Token") { tokenId =>

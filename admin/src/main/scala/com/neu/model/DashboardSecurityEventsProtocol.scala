@@ -1,8 +1,8 @@
 package com.neu.model
 
-import spray.json.*
-import org.joda.time.DateTime
 import com.typesafe.scalalogging.LazyLogging
+import org.joda.time.DateTime
+import spray.json.*
 
 case class DashboardThreat(
   name: String,

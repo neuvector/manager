@@ -1,25 +1,16 @@
 package com.neu.api.workload
 
-import com.neu.cache.paginationCacheManager
 import com.neu.client.RestClient
 import com.neu.client.RestClient.*
+import com.neu.model.ContainerConfigJsonProtocol.given
+import com.neu.model.NamespaceJsonProtocol.given
 import com.neu.model.*
-import com.neu.model.ContainerConfigJsonProtocol.{ *, given }
-import com.neu.model.NamespaceJsonProtocol.{ *, given }
-import com.neu.model.PolicyJsonProtocol.{ *, given }
 import com.neu.service.Utils
 import com.neu.service.workload.WorkloadService
-import com.typesafe.scalalogging.LazyLogging
-import org.apache.pekko.http.scaladsl.model.HttpMethods.*
-import org.apache.pekko.http.scaladsl.model.StatusCodes
-import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
+import org.apache.pekko.http.scaladsl.server.Directives
+import org.apache.pekko.http.scaladsl.server.Route
 
-import scala.concurrent.duration.*
-import scala.concurrent.{ Await, ExecutionContext }
-import scala.util.control.NonFatal
-
-class WorkloadApi(resourceService: WorkloadService)(implicit executionContext: ExecutionContext)
-    extends Directives {
+class WorkloadApi(resourceService: WorkloadService) extends Directives {
 
   val route: Route =
     headerValueByName("Token") { tokenId =>

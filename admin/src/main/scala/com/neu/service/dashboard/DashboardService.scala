@@ -6,19 +6,23 @@ import com.neu.client.RestClient
 import com.neu.client.RestClient.*
 import com.neu.model.DashboardJsonProtocol.{ *, given }
 import com.neu.model.DashboardSecurityEventsProtocol.{ *, given }
-import com.neu.model.ResourceJsonProtocol.{ *, given }
-import com.neu.model.SystemConfigJsonProtocol.{ *, given }
+import com.neu.model.ResourceJsonProtocol.*
+import com.neu.model.SystemConfigJsonProtocol.*
 import com.neu.model.*
 import com.neu.service.DefaultJsonFormats
 import com.typesafe.scalalogging.LazyLogging
+import org.apache.pekko.http.scaladsl.model.HttpMethods
+import org.apache.pekko.http.scaladsl.model.StatusCodes
+import org.apache.pekko.http.scaladsl.server.Directives
+import org.apache.pekko.http.scaladsl.server.Route
 import org.joda.time.DateTime
-import org.apache.pekko.http.scaladsl.model.{ HttpMethods, StatusCodes }
-import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
 
+import scala.concurrent.Await
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 import scala.concurrent.duration.*
-import scala.concurrent.{ Await, ExecutionContext, Future }
-import scala.util.control.NonFatal
 import scala.reflect.ClassTag
+import scala.util.control.NonFatal
 
 class DashboardService()(implicit executionContext: ExecutionContext)
     extends Directives
@@ -155,7 +159,7 @@ class DashboardService()(implicit executionContext: ExecutionContext)
   }
 
   def getSystemAlertInformation(tokenId: String): Route = {
-    logger.info(s"Loading System Alerts information ...")
+    logger.info("Loading System Alerts information ...")
     complete {
       RestClient.httpRequestWithHeader(
         s"${baseClusterUri(tokenId)}/system/alerts",

@@ -5,15 +5,15 @@ import com.neu.core.CommonSettings.*
 import com.neu.core.Md5
 import com.neu.service.Utils
 import com.typesafe.scalalogging.LazyLogging
-import org.apache.pekko.http.scaladsl.model.headers.{ Location, RawHeader }
-import org.apache.pekko.http.scaladsl.model.{
-  ContentTypes,
-  HttpEntity,
-  HttpResponse,
-  StatusCodes,
-  Uri
-}
-import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
+import org.apache.pekko.http.scaladsl.model.ContentTypes
+import org.apache.pekko.http.scaladsl.model.HttpEntity
+import org.apache.pekko.http.scaladsl.model.HttpResponse
+import org.apache.pekko.http.scaladsl.model.StatusCodes
+import org.apache.pekko.http.scaladsl.model.Uri
+import org.apache.pekko.http.scaladsl.model.headers.Location
+import org.apache.pekko.http.scaladsl.model.headers.RawHeader
+import org.apache.pekko.http.scaladsl.server.Directives
+import org.apache.pekko.http.scaladsl.server.Route
 
 trait StaticResources extends Directives with LazyLogging {
   private val shortPath           = 10

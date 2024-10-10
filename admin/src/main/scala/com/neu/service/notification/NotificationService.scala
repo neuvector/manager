@@ -1,29 +1,36 @@
 package com.neu.service.notification
 
-import com.neu.cache.{ paginationCacheManager, BlacklistCacheManager, GraphCacheManager }
+import com.neu.cache.BlacklistCacheManager
+import com.neu.cache.GraphCacheManager
+import com.neu.cache.paginationCacheManager
 import com.neu.client.RestClient
 import com.neu.client.RestClient.*
 import com.neu.core.IpGeoManager
-import com.neu.model.*
 import com.neu.model.AlertJsonProtocol.{ *, given }
 import com.neu.model.DashboardJsonProtocol.{ *, given }
-import com.neu.model.EndpointConfigJsonProtocol.{ *, given }
-import com.neu.model.IpGeoJsonProtocol.{ *, given }
+import com.neu.model.EndpointConfigJsonProtocol.*
+import com.neu.model.IpGeoJsonProtocol.given
 import com.neu.model.JsonProtocol.{ *, given }
 import com.neu.model.ResourceJsonProtocol.{ *, given }
+import com.neu.model.*
 import com.neu.service.BaseService
 import com.neu.utils.EnumUtils
 import com.typesafe.scalalogging.LazyLogging
+import org.apache.pekko.http.scaladsl.model.HttpEntity
 import org.apache.pekko.http.scaladsl.model.HttpMethods.*
-import org.apache.pekko.http.scaladsl.model.{ HttpEntity, StatusCodes }
+import org.apache.pekko.http.scaladsl.model.StatusCodes
 import org.apache.pekko.http.scaladsl.server.Route
 import org.joda.time.DateTime
 import org.json4s.*
 import org.json4s.native.JsonMethods.*
 
-import java.io.{ PrintWriter, StringWriter }
+import java.io.PrintWriter
+import java.io.StringWriter
+import scala.concurrent.Await
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
+import scala.concurrent.TimeoutException
 import scala.concurrent.duration.*
-import scala.concurrent.{ Await, ExecutionContext, Future, TimeoutException }
 import scala.util.control.NonFatal
 
 class NotificationService()(implicit
@@ -32,9 +39,8 @@ class NotificationService()(implicit
     with DefaultJsonFormats
     with LazyLogging {
 
-  val topLimit    = 5
-  val client      = "client"
-  private val top = "top"
+  val topLimit = 5
+  val client   = "client"
 
   def getIpLocations(ipList: Array[String]): Route = complete {
     logger.info("Getting ip locations")

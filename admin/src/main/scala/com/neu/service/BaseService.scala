@@ -1,14 +1,21 @@
 package com.neu.service
 
-import com.neu.client.RestClient.{ arrayFormat, baseClusterUri, StringJsonFormat }
+import com.neu.client.RestClient.StringJsonFormat
+import com.neu.client.RestClient.arrayFormat
+import com.neu.client.RestClient.baseClusterUri
 import com.neu.core.AuthenticationManager
 import com.typesafe.scalalogging.LazyLogging
-import org.apache.pekko.http.scaladsl.model.{ HttpEntity, StatusCodes }
-import org.apache.pekko.http.scaladsl.server.{ Directives, StandardRoute }
+import org.apache.pekko.http.scaladsl.model.HttpEntity
+import org.apache.pekko.http.scaladsl.model.StatusCodes
+import org.apache.pekko.http.scaladsl.model.StatusCodes.ClientError
+import org.apache.pekko.http.scaladsl.model.StatusCodes.ServerError
+import org.apache.pekko.http.scaladsl.server.Directives
+import org.apache.pekko.http.scaladsl.server.StandardRoute
 import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshaller
 import spray.json.*
 
-import java.io.{ PrintWriter, StringWriter }
+import java.io.PrintWriter
+import java.io.StringWriter
 
 open class BaseService extends Directives with LazyLogging {
   given arrayStringUnmarshaller: Unmarshaller[HttpEntity, Array[String]] =
@@ -24,7 +31,7 @@ open class BaseService extends Directives with LazyLogging {
     "Authentication using OpenShift's or Rancher's RBAC was disabled!"
   private val passwordExpired      = "Password expired"
 
-  protected def onExpiredOrInternalError(e: Throwable) = {
+  protected def onExpiredOrInternalError(e: Throwable): (ClientError | ServerError, String) = {
     logger.warn(e.getMessage)
     if (e.getMessage.contains(timeOutStatus)) {
       (StatusCodes.RequestTimeout, "Session expired!")
@@ -35,7 +42,7 @@ open class BaseService extends Directives with LazyLogging {
     }
   }
 
-  protected def onNonFatal(e: Throwable) = {
+  protected def onNonFatal(e: Throwable): (ClientError | ServerError, String) = {
     val sw = new StringWriter
     e.printStackTrace(new PrintWriter(sw))
     logger.warn(sw.toString)

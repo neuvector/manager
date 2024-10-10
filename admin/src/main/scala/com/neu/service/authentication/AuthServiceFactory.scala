@@ -1,13 +1,12 @@
 package com.neu.service.authentication
 
-import com.neu.client.RestClient
-import com.neu.client.RestClient.fedUri
-import com.neu.service.{ BaseService, DefaultJsonFormats }
-
+import com.neu.service.BaseService
+import com.neu.service.DefaultJsonFormats
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.http.scaladsl.model.RemoteAddress
-import org.apache.pekko.http.scaladsl.server.{ RequestContext, Route }
+import org.apache.pekko.http.scaladsl.server.RequestContext
+import org.apache.pekko.http.scaladsl.server.Route
 import org.apache.pekko.stream.Materializer
 
 import scala.concurrent.ExecutionContext

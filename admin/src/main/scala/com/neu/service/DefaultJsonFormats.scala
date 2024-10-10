@@ -1,22 +1,22 @@
 package com.neu.service
 
-import org.apache.pekko.http.scaladsl.marshalling.{
-  Marshaller,
-  ToEntityMarshaller,
-  ToResponseMarshaller
-}
-import org.apache.pekko.http.scaladsl.model.{ ContentTypes, HttpEntity, HttpResponse, StatusCode }
-import org.apache.pekko.http.scaladsl.unmarshalling.{ FromEntityUnmarshaller, Unmarshaller }
-import spray.json.{
-  deserializationError,
-  enrichAny,
-  DefaultJsonProtocol,
-  JsObject,
-  JsString,
-  JsValue,
-  JsonParser,
-  RootJsonFormat
-}
+import org.apache.pekko.http.scaladsl.marshalling.Marshaller
+import org.apache.pekko.http.scaladsl.marshalling.ToEntityMarshaller
+import org.apache.pekko.http.scaladsl.marshalling.ToResponseMarshaller
+import org.apache.pekko.http.scaladsl.model.ContentTypes
+import org.apache.pekko.http.scaladsl.model.HttpEntity
+import org.apache.pekko.http.scaladsl.model.HttpResponse
+import org.apache.pekko.http.scaladsl.model.StatusCode
+import org.apache.pekko.http.scaladsl.unmarshalling.FromEntityUnmarshaller
+import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshaller
+import spray.json.DefaultJsonProtocol
+import spray.json.JsObject
+import spray.json.JsString
+import spray.json.JsValue
+import spray.json.JsonParser
+import spray.json.RootJsonFormat
+import spray.json.deserializationError
+import spray.json.enrichAny
 
 import java.util.UUID
 import scala.reflect.ClassTag

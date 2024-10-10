@@ -1,26 +1,17 @@
 package com.neu.api.risk
 
-import com.google.common.net.UrlEscapers
 import com.neu.client.RestClient
 import com.neu.client.RestClient.*
-import com.neu.core.{ AuthenticationManager, CisNISTManager }
+import com.neu.model.ComplianceJsonProtocol.given
+import com.neu.model.VulnerabilityJsonProtocol.given
 import com.neu.model.*
-import com.neu.model.ComplianceJsonProtocol.{ *, given }
-import com.neu.model.ComplianceNISTJsonProtocol.{ *, given }
-import com.neu.model.VulnerabilityJsonProtocol.{ *, given }
 import com.neu.service.Utils
 import com.neu.service.risk.RiskService
-import com.typesafe.scalalogging.LazyLogging
-import org.apache.pekko.http.scaladsl.model.HttpMethods.*
-import org.apache.pekko.http.scaladsl.model.StatusCodes
-import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
-
-import scala.concurrent.{ ExecutionContext, TimeoutException }
-import scala.util.control.NonFatal
+import org.apache.pekko.http.scaladsl.server.Directives
+import org.apache.pekko.http.scaladsl.server.Route
 
 //noinspection UnstableApiUsage
-class RiskApi(resourceService: RiskService)(implicit executionContext: ExecutionContext)
-    extends Directives {
+class RiskApi(resourceService: RiskService) extends Directives {
 
   val route: Route =
     headerValueByName("Token") { tokenId =>

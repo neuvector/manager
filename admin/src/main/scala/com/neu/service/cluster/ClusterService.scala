@@ -1,23 +1,23 @@
 package com.neu.service.cluster
 
 import com.neu.client.RestClient
-import com.neu.client.RestClient.{ baseClusterUri, fedUri }
-import com.neu.model.*
+import com.neu.client.RestClient.fedUri
 import com.neu.model.ClusterJsonProtocol.{ *, given }
-import com.neu.service.{ BaseService, DefaultJsonFormats }
+import com.neu.model.*
+import com.neu.service.BaseService
+import com.neu.service.DefaultJsonFormats
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.http.scaladsl.model.HttpMethods
-import org.apache.pekko.http.scaladsl.model.HttpMethods.GET
 import org.apache.pekko.http.scaladsl.server.Route
 
+import scala.concurrent.Await
 import scala.concurrent.duration.*
-import scala.concurrent.{ Await, ExecutionContext }
 import scala.util.control.NonFatal
 
 class ClusterService extends BaseService with DefaultJsonFormats with LazyLogging {
 
   def getMember(tokenId: String): Route = complete {
-    logger.info(s"Getting cluster..")
+    logger.info("Getting cluster..")
     try {
       val result =
         RestClient.requestWithHeaderDecode(

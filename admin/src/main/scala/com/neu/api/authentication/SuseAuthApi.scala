@@ -1,10 +1,10 @@
 package com.neu.api.authentication
 
 import com.neu.api.*
-import com.neu.service.{ BaseService, DefaultJsonFormats, Utils }
+import com.neu.service.Utils
 import com.neu.service.authentication.AuthService
-import com.typesafe.scalalogging.LazyLogging
-import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
+import org.apache.pekko.http.scaladsl.server.Directives
+import org.apache.pekko.http.scaladsl.server.Route
 
 //noinspection UnstableApiUsage
 class SuseAuthApi(

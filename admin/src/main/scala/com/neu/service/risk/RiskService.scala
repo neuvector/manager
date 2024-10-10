@@ -3,24 +3,23 @@ package com.neu.service.risk
 import com.google.common.net.UrlEscapers
 import com.neu.client.RestClient
 import com.neu.client.RestClient.*
-import com.neu.core.{ AuthenticationManager, CisNISTManager }
-import com.neu.model.ComplianceJsonProtocol.{ *, given }
-import com.neu.model.ComplianceNISTJsonProtocol.{ *, given }
-import com.neu.model.VulnerabilityJsonProtocol.{ *, given }
+import com.neu.core.AuthenticationManager
+import com.neu.core.CisNISTManager
+import com.neu.model.ComplianceJsonProtocol.*
+import com.neu.model.ComplianceNISTJsonProtocol.given
+import com.neu.model.VulnerabilityJsonProtocol.*
 import com.neu.model.*
-import com.neu.service.{ BaseService, DefaultJsonFormats }
+import com.neu.service.BaseService
+import com.neu.service.DefaultJsonFormats
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.http.scaladsl.model.HttpMethods.*
 import org.apache.pekko.http.scaladsl.model.StatusCodes
 import org.apache.pekko.http.scaladsl.server.Route
 
-import scala.concurrent.{ ExecutionContext, TimeoutException }
+import scala.concurrent.TimeoutException
 import scala.util.control.NonFatal
 
-class RiskService(implicit executionContext: ExecutionContext)
-    extends BaseService
-    with DefaultJsonFormats
-    with LazyLogging {
+class RiskService extends BaseService with DefaultJsonFormats with LazyLogging {
 
   private val scanUrl                 = "scan/asset"
   private val complianceUrl           = "compliance/asset"
@@ -32,7 +31,7 @@ class RiskService(implicit executionContext: ExecutionContext)
 
   def queryScannedAssets(tokenId: String, scannedAssetsQuery: ScannedAssetsQuery): Route =
     complete {
-      logger.info(s"Getting scanned assets ...")
+      logger.info("Getting scanned assets ...")
       RestClient.httpRequestWithHeader(
         s"${baseClusterUri(tokenId)}/scan/asset/images",
         POST,
@@ -71,7 +70,7 @@ class RiskService(implicit executionContext: ExecutionContext)
 
   def queryAssetVulnerabilities(tokenId: String, vulnerabilityQuery: VulnerabilityQuery): Route =
     complete {
-      logger.info(s"Getting asset vulnerabilities ...")
+      logger.info("Getting asset vulnerabilities ...")
       RestClient.httpRequestWithHeader(
         s"${baseClusterUri(tokenId)}/vulasset",
         POST,
@@ -124,7 +123,7 @@ class RiskService(implicit executionContext: ExecutionContext)
           if (show.isDefined) s"?show=${show.get}"
           else ""
         }"
-    logger.info(s"Getting asset vulnerabilities ...{}", url)
+    logger.info("Getting asset vulnerabilities ...{}", url)
     RestClient.httpRequestWithHeader(url, GET, "", tokenId)
   }
 
@@ -149,7 +148,7 @@ class RiskService(implicit executionContext: ExecutionContext)
   }
 
   def getCveVulnerabilityProfiles(tokenId: String): Route = complete {
-    logger.info(s"Getting vulnerability profiles ...")
+    logger.info("Getting vulnerability profiles ...")
     RestClient.httpRequestWithHeader(
       s"${baseClusterUri(tokenId)}/$vulnerabilityProfileUrl",
       GET,
@@ -163,7 +162,7 @@ class RiskService(implicit executionContext: ExecutionContext)
     vulnerabilityProfileConfigData: VulnerabilityProfileConfigData
   ): Route = complete {
     logger.info(
-      s"Update vulnerability profiles: {}",
+      "Update vulnerability profiles: {}",
       vulnerabilityProfileConfigData.config.name
     )
     RestClient.httpRequestWithHeader(
@@ -331,7 +330,7 @@ class RiskService(implicit executionContext: ExecutionContext)
   }
 
   def getComplianceTemplate(tokenId: String): Route = complete {
-    logger.info(s"Getting compliance template ...")
+    logger.info("Getting compliance template ...")
     RestClient.httpRequestWithHeader(
       s"${baseClusterUri(tokenId)}/list/compliance",
       GET,
@@ -341,7 +340,7 @@ class RiskService(implicit executionContext: ExecutionContext)
   }
 
   def getAvailableComplianceFilters(tokenId: String): Route = complete {
-    logger.info(s"Getting available compliance filters ...")
+    logger.info("Getting available compliance filters ...")
     RestClient.httpRequestWithHeader(
       s"${baseClusterUri(tokenId)}/$complianceFilterUrl",
       GET,

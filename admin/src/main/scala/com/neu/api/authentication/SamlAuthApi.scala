@@ -2,12 +2,12 @@ package com.neu.api.authentication
 
 import com.neu.api.*
 import com.neu.client.RestClient.*
-import com.neu.service.{ BaseService, Utils }
+import com.neu.service.Utils
 import com.neu.service.authentication.AuthService
-import com.typesafe.scalalogging.LazyLogging
-import org.apache.pekko.http.scaladsl.model.{ RemoteAddress, StatusCodes }
+import org.apache.pekko.http.scaladsl.model.StatusCodes
 import org.apache.pekko.http.scaladsl.model.headers.HttpCookie
-import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
+import org.apache.pekko.http.scaladsl.server.Directives
+import org.apache.pekko.http.scaladsl.server.Route
 
 import java.nio.charset.StandardCharsets
 import java.util.Base64

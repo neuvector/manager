@@ -1,7 +1,8 @@
 package com.neu.model
 
 import org.joda.time.DateTime
-import org.joda.time.format.{ DateTimeFormatter, ISODateTimeFormat }
+import org.joda.time.format.DateTimeFormatter
+import org.joda.time.format.ISODateTimeFormat
 import spray.json.*
 
 object DateTimeFormat extends RootJsonFormat[DateTime] {

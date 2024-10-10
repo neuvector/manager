@@ -1,8 +1,9 @@
 package com.neu.core
 
-import org.apache.pekko.japi.Util.immutableSeq;
-import com.typesafe.config.{ Config, ConfigFactory }
+import com.typesafe.config.Config
+import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
+import org.apache.pekko.japi.Util.immutableSeq
 
 /**
  * Configuration for the system, load from application.conf

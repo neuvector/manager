@@ -3,27 +3,24 @@ package com.neu.service.authentication
 import com.google.common.net.UrlEscapers
 import com.neu.client.RestClient
 import com.neu.client.RestClient.*
-import com.neu.core.{ AuthenticationManager, Md5 }
+import com.neu.core.AuthenticationManager
 import com.neu.core.CommonSettings.*
+import com.neu.core.Md5
 import com.neu.model.AuthTokenJsonProtocol.{ *, given }
 import com.neu.model.RebrandJsonProtocol.{ *, given }
 import com.neu.model.*
-import com.neu.service.{ BaseService, DefaultJsonFormats }
+import com.neu.service.BaseService
+import com.neu.service.DefaultJsonFormats
 import com.typesafe.scalalogging.LazyLogging
-import org.apache.pekko.http.scaladsl.model.{ HttpMethods, StatusCodes }
+import org.apache.pekko.http.scaladsl.model.HttpMethods
+import org.apache.pekko.http.scaladsl.model.StatusCodes
 import org.apache.pekko.http.scaladsl.server.Route
-import org.apache.pekko.stream.Materializer
 
+import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
-import scala.concurrent.{ Await, ExecutionContext }
 import scala.util.control.NonFatal
 
-class ExtraAuthService()(implicit
-  mat: Materializer,
-  ec: ExecutionContext
-) extends BaseService
-    with DefaultJsonFormats
-    with LazyLogging {
+class ExtraAuthService() extends BaseService with DefaultJsonFormats with LazyLogging {
 
   def getGravatar: Route = complete(gravatarEnabled)
 
@@ -48,7 +45,7 @@ class ExtraAuthService()(implicit
   )
 
   def getPermissionOptions(tokenId: String): Route = complete {
-    logger.info(s"Getting permission options ...")
+    logger.info("Getting permission options ...")
     RestClient.httpRequestWithHeader(
       s"${baseClusterUri(tokenId)}/user_role_permission/options",
       HttpMethods.GET,
@@ -64,7 +61,7 @@ class ExtraAuthService()(implicit
     } else {
       url = s"user_role/${UrlEscapers.urlFragmentEscaper().escape(name.get)}"
     }
-    logger.info(s"Getting roles ...")
+    logger.info("Getting roles ...")
     RestClient.httpRequestWithHeader(
       s"${baseClusterUri(tokenId)}/$url",
       HttpMethods.GET,

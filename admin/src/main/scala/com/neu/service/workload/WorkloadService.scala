@@ -3,24 +3,22 @@ package com.neu.service.workload
 import com.neu.cache.paginationCacheManager
 import com.neu.client.RestClient
 import com.neu.client.RestClient.*
-import com.neu.model.ContainerConfigJsonProtocol.{ *, given }
-import com.neu.model.NamespaceJsonProtocol.{ *, given }
+import com.neu.model.ContainerConfigJsonProtocol.*
+import com.neu.model.NamespaceJsonProtocol.*
 import com.neu.model.PolicyJsonProtocol.{ *, given }
 import com.neu.model.*
-import com.neu.service.{ BaseService, DefaultJsonFormats }
+import com.neu.service.BaseService
+import com.neu.service.DefaultJsonFormats
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.http.scaladsl.model.HttpMethods.*
 import org.apache.pekko.http.scaladsl.model.StatusCodes
-import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
+import org.apache.pekko.http.scaladsl.server.Route
 
+import scala.concurrent.Await
 import scala.concurrent.duration.*
-import scala.concurrent.{ Await, ExecutionContext }
 import scala.util.control.NonFatal
 
-class WorkloadService()(implicit executionContext: ExecutionContext)
-    extends BaseService
-    with DefaultJsonFormats
-    with LazyLogging {
+class WorkloadService() extends BaseService with DefaultJsonFormats with LazyLogging {
 
   private val monitorConfig = """{"config": {"monitor": """
 

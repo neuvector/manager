@@ -2,17 +2,25 @@ package com.neu.core
 
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.http.scaladsl.ConnectionContext
+import org.apache.pekko.http.scaladsl.Http
+import org.apache.pekko.http.scaladsl.HttpsConnectionContext
 import org.apache.pekko.http.scaladsl.model.*
 import org.apache.pekko.http.scaladsl.settings.ConnectionPoolSettings
-import org.apache.pekko.http.scaladsl.{ ConnectionContext, Http, HttpsConnectionContext }
 import org.apache.pekko.stream.Materializer
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
+import org.apache.pekko.stream.scaladsl.Sink
+import org.apache.pekko.stream.scaladsl.Source
 
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
-import javax.net.ssl.{ SSLContext, SSLEngine, TrustManager, X509TrustManager }
-import scala.concurrent.{ ExecutionContext, Future }
-import scala.util.{ Failure, Success }
+import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLEngine
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
+import scala.util.Failure
+import scala.util.Success
 
 trait ClientSslConfig extends LazyLogging {
 
@@ -78,16 +86,6 @@ trait ClientSslConfig extends LazyLogging {
     }
 
   private def maskToken(token: String): String = s"${token.take(4)}****${token.takeRight(4)}"
-
-  private def logHeaders(headers: Seq[HttpHeader]): String =
-    headers
-      .map(h =>
-        s"${h.name}: ${
-            if (SENSITIVE_HEADER.contains(h.name)) maskToken(h.value)
-            else h.value
-          }"
-      )
-      .mkString(", ")
 
   private class DummyTrustManager extends X509TrustManager {
 

@@ -5,11 +5,13 @@ import sbt.Keys.*
 import sbt.*
 
 ThisBuild / version                  := "1.0"
-ThisBuild / scalaVersion             := "3.3.3"
+ThisBuild / scalaVersion             := "3.3.4"
 ThisBuild / organization             := "com.neuvector"
 ThisBuild / scalafmtOnCompile        := true
+ThisBuild / semanticdbEnabled        := true
 ThisBuild / Test / fork              := true
 ThisBuild / Test / parallelExecution := true
+ThisBuild / semanticdbVersion        := scalafixSemanticdb.revision
 
 lazy val promptSettings = Seq(
   description :=
@@ -26,7 +28,8 @@ lazy val buildSettings = Seq(
     "-unchecked",            // warn about unchecked type parameters
     "-feature",              // warn about misused language features
     "-language:higherKinds", // allow higher kinded types without `import scala.language.higherKinds`
-    "-source:future"         // enable future language features
+    "-source:future",         // enable future language features
+    "-Wunused:all"           // add required compiler option for RemoveUnused[1]
   ),
   Compile / console / scalacOptions --= Seq("-Ywarn-unused", "-Ywarn-unused-import")
 )
@@ -90,7 +93,7 @@ lazy val admin = (project in file("admin"))
     libraryDependencies += pekkoHttp,
     libraryDependencies += pekkoJson,
     libraryDependencies += pekkoSlf4j,
-    libraryDependencies += pekkoStream,
+    libraryDependencies += pekkoStream
   )
 
 resolvers ++= Seq(

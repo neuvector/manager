@@ -1,7 +1,6 @@
 package com.neu.model
 
 import spray.json.*
-import scala.collection.mutable.Map
 
 object ComplianceNISTJsonProtocol extends DefaultJsonProtocol {
   given complianceNISTFormat: RootJsonFormat[ComplianceNIST]       = jsonFormat4(ComplianceNIST.apply)

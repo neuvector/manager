@@ -5,17 +5,19 @@ import com.neu.cache.SupportLogAuthCacheManager
 import com.neu.client.RestClient
 import com.neu.client.RestClient.*
 import com.neu.core.AuthenticationManager
-import com.neu.model.*
 import com.neu.model.SystemConfigJsonProtocol.*
+import com.neu.model.*
 import com.neu.service.DefaultJsonFormats
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.http.scaladsl.model.*
 import org.apache.pekko.http.scaladsl.model.headers.*
-import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
+import org.apache.pekko.http.scaladsl.server.Directives
+import org.apache.pekko.http.scaladsl.server.Route
 
 import java.io.File
 import java.net.URL
-import java.nio.file.{ Files, Paths }
+import java.nio.file.Files
+import java.nio.file.Paths
 import java.util.Date
 import scala.concurrent.Await
 import scala.concurrent.duration.*
@@ -431,7 +433,7 @@ class DeviceService extends Directives with DefaultJsonFormats with LazyLogging 
         "",
         tokenId
       )
-      val result  = Await.result(authRes, RestClient.waitingLimit.seconds)
+      Await.result(authRes, RestClient.waitingLimit.seconds)
       if (SupportLogAuthCacheManager.getSupportLogAuth(tokenId).isDefined) {
         val byteArray = Files.readAllBytes(Paths.get(logFile))
         purgeDebugFiles(new File("/tmp"))
@@ -480,22 +482,21 @@ class DeviceService extends Directives with DefaultJsonFormats with LazyLogging 
               " -e " + debuggedEnforcer +
               " -o " + logFile
             )
-            val proc =
-              Seq(
-                "/usr/local/bin/support",
-                "-s",
-                ctrlHost,
-                "-t",
-                tokenId,
-                "-r",
-                AuthenticationManager.suseTokenMap.getOrElse(tokenId, ""),
-                "-j",
-                id,
-                "-e",
-                debuggedEnforcer,
-                "-o",
-                logFile
-              ).run
+            Seq(
+              "/usr/local/bin/support",
+              "-s",
+              ctrlHost,
+              "-t",
+              tokenId,
+              "-r",
+              AuthenticationManager.suseTokenMap.getOrElse(tokenId, ""),
+              "-j",
+              id,
+              "-e",
+              debuggedEnforcer,
+              "-o",
+              logFile
+            ).run
             HttpResponse(
               StatusCodes.Accepted,
               entity = "Started to collect debug log."
@@ -511,20 +512,19 @@ class DeviceService extends Directives with DefaultJsonFormats with LazyLogging 
               " -j " + id +
               " -o " + logFile
             )
-            val proc =
-              Seq(
-                "/usr/local/bin/support",
-                "-s",
-                ctrlHost,
-                "-t",
-                tokenId,
-                "-r",
-                AuthenticationManager.suseTokenMap.getOrElse(tokenId, ""),
-                "-j",
-                id,
-                "-o",
-                logFile
-              ).run
+            Seq(
+              "/usr/local/bin/support",
+              "-s",
+              ctrlHost,
+              "-t",
+              tokenId,
+              "-r",
+              AuthenticationManager.suseTokenMap.getOrElse(tokenId, ""),
+              "-j",
+              id,
+              "-o",
+              logFile
+            ).run
             HttpResponse(
               StatusCodes.Accepted,
               entity = "Started to collect debug log."

@@ -1,10 +1,12 @@
 package com.neu.api.authentication
 
+import com.neu.model.AuthTokenJsonProtocol.given
 import com.neu.model.*
-import com.neu.model.AuthTokenJsonProtocol.{ *, given }
-import com.neu.service.{ DefaultJsonFormats, Utils }
+import com.neu.service.DefaultJsonFormats
+import com.neu.service.Utils
 import com.neu.service.authentication.ExtraAuthService
-import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
+import org.apache.pekko.http.scaladsl.server.Directives
+import org.apache.pekko.http.scaladsl.server.Route
 
 //noinspection UnstableApiUsage
 class ExtraAuthApi(

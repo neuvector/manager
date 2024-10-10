@@ -1,11 +1,14 @@
 package com.neu.core
 
-import com.neu.model.{ ComplianceNIST, ComplianceNISTMap }
+import com.neu.model.ComplianceNIST
+import com.neu.model.ComplianceNISTMap
 import com.typesafe.scalalogging.LazyLogging
-import scala.collection.mutable.*
-import java.io.{ InputStream, InputStreamReader }
-import org.apache.commons.csv.{ CSVFormat, CSVRecord }
+import org.apache.commons.csv.CSVFormat
+import org.apache.commons.csv.CSVRecord
 
+import java.io.InputStream
+import java.io.InputStreamReader
+import scala.collection.mutable.*
 import scala.jdk.CollectionConverters.*
 
 object CisNISTManager extends LazyLogging {

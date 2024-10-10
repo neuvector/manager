@@ -6,9 +6,11 @@ package com.neu.utils
 object EnumUtils {
   val info = "info"
 
-  val codeSeverityMap = Map(5 -> "Critical", 4 -> "high", 3 -> "medium", 2 -> "low", 1 -> info)
+  private val codeSeverityMap =
+    Map(5 -> "Critical", 4 -> "high", 3 -> "medium", 2 -> "low", 1 -> info)
 
-  val severityCodeMap = Map("Critical" -> 5, "high" -> 4, "medium" -> 3, "low" -> 2, info -> 1)
+  private val severityCodeMap =
+    Map("Critical" -> 5, "high" -> 4, "medium" -> 3, "low" -> 2, info -> 1)
 
   def getSeverity(code: Int): String = codeSeverityMap.getOrElse(code, info)
 

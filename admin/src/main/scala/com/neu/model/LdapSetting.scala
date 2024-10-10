@@ -37,9 +37,10 @@ case class LdapSettingWrap(config: LdapSetting)
 case class LdapTestAccount(username: String, password: String)
 
 /**
- *
- * @param name Ldap server name
- * @param ldap LdapTestAccount
+ * @param name
+ *   Ldap server name
+ * @param ldap
+ *   LdapTestAccount
  */
 case class LdapServerTestAccount(
   name: Option[String],

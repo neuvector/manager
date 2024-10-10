@@ -102,9 +102,12 @@ case class WorkloadBrief(
 
 /**
  * Criteria to define group
- * @param key the key, include {{{image, host, workload, neuvector.application}}}
- * @param value value
- * @param op operations include: "=", "contains" and "prefix"
+ * @param key
+ *   the key, include {{{image, host, workload, neuvector.application}}}
+ * @param value
+ *   value
+ * @param op
+ *   operations include: "=", "contains" and "prefix"
  */
 case class CriteriaEntry(key: String, value: String, op: String)
 

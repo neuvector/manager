@@ -1,82 +1,82 @@
 package com.neu.model
 
-import spray.json.{ DefaultJsonProtocol, _ }
+import spray.json.*
 
 /**
  * Created by bxu on 4/28/16.
  */
 object SystemConfigJsonProtocol extends DefaultJsonProtocol {
-  implicit val errorFormat: RootJsonFormat[Error] = jsonFormat1(Error)
-  implicit val registyHttpsProxyFormat: RootJsonFormat[RegistyHttpsProxy] = jsonFormat3(
-    RegistyHttpsProxy
+  given errorFormat: RootJsonFormat[Error]                                           = jsonFormat1(Error.apply)
+  given registyHttpsProxyFormat: RootJsonFormat[RegistyHttpsProxy]                   = jsonFormat3(
+    RegistyHttpsProxy.apply
   )
-  implicit val registyHttpProxyFormat: RootJsonFormat[RegistyHttpProxy] = jsonFormat3(
-    RegistyHttpProxy
+  given registyHttpProxyFormat: RootJsonFormat[RegistyHttpProxy]                     = jsonFormat3(
+    RegistyHttpProxy.apply
   )
-  implicit val registyHttpsProxyCfgFormat: RootJsonFormat[RegistyHttpsProxyCfg] = jsonFormat3(
-    RegistyHttpsProxyCfg
+  given registyHttpsProxyCfgFormat: RootJsonFormat[RegistyHttpsProxyCfg]             = jsonFormat3(
+    RegistyHttpsProxyCfg.apply
   )
-  implicit val registyHttpProxyCfgFormat: RootJsonFormat[RegistyHttpProxyCfg] = jsonFormat3(
-    RegistyHttpProxyCfg
+  given registyHttpProxyCfgFormat: RootJsonFormat[RegistyHttpProxyCfg]               = jsonFormat3(
+    RegistyHttpProxyCfg.apply
   )
-  implicit val githubConfigurationFormat: RootJsonFormat[GithubConfiguration] = jsonFormat6(
-    GithubConfiguration
+  given githubConfigurationFormat: RootJsonFormat[GithubConfiguration]               = jsonFormat6(
+    GithubConfiguration.apply
   )
-  implicit val webhookFormat: RootJsonFormat[Webhook]             = jsonFormat6(Webhook)
-  implicit val remoteRepoFormat: RootJsonFormat[RemoteRepository] = jsonFormat5(RemoteRepository)
-  implicit val remoteRepositoryWrapFormat: RootJsonFormat[RemoteRepositoryWrap] = jsonFormat1(
-    RemoteRepositoryWrap
+  given webhookFormat: RootJsonFormat[Webhook]                                       = jsonFormat6(Webhook.apply)
+  given remoteRepoFormat: RootJsonFormat[RemoteRepository]                           = jsonFormat5(RemoteRepository.apply)
+  given remoteRepositoryWrapFormat: RootJsonFormat[RemoteRepositoryWrap]             = jsonFormat1(
+    RemoteRepositoryWrap.apply
   )
-  implicit val systemConfigFormat: RootJsonFormat[SystemConfig]       = jsonFormat22(SystemConfig)
-  implicit val systemNetConfigFormat: RootJsonFormat[SystemNetConfig] = jsonFormat3(SystemNetConfig)
-  implicit val systemAtmoConfigFormat: RootJsonFormat[SystemAtmoConfig] = jsonFormat4(
-    SystemAtmoConfig
+  given systemConfigFormat: RootJsonFormat[SystemConfig]                             = jsonFormat22(SystemConfig.apply)
+  given systemNetConfigFormat: RootJsonFormat[SystemNetConfig]                       = jsonFormat3(SystemNetConfig.apply)
+  given systemAtmoConfigFormat: RootJsonFormat[SystemAtmoConfig]                     = jsonFormat4(
+    SystemAtmoConfig.apply
   )
-  implicit val systemConfig4DashboardFormat: RootJsonFormat[SystemConfig4Dashboard] = jsonFormat1(
-    SystemConfig4Dashboard
+  given systemConfig4DashboardFormat: RootJsonFormat[SystemConfig4Dashboard]         = jsonFormat1(
+    SystemConfig4Dashboard.apply
   )
-  implicit val systemConfig4DashboardWrapFormat: RootJsonFormat[SystemConfig4DashboardWrap] =
-    jsonFormat2(SystemConfig4DashboardWrap)
-  implicit val serviceConfigParamFormat: RootJsonFormat[ServiceConfigParam] = jsonFormat5(
-    ServiceConfigParam
+  given systemConfig4DashboardWrapFormat: RootJsonFormat[SystemConfig4DashboardWrap] =
+    jsonFormat2(SystemConfig4DashboardWrap.apply)
+  given serviceConfigParamFormat: RootJsonFormat[ServiceConfigParam]                 = jsonFormat5(
+    ServiceConfigParam.apply
   )
-  implicit val systemRequestContentFormat: RootJsonFormat[SystemRequestContent] = jsonFormat3(
-    SystemRequestContent
+  given systemRequestContentFormat: RootJsonFormat[SystemRequestContent]             = jsonFormat3(
+    SystemRequestContent.apply
   )
-  implicit val systemRequestFormat: RootJsonFormat[SystemRequest] = jsonFormat1(SystemRequest)
-  implicit val serviceConfigFormat: RootJsonFormat[ServiceConfig] = jsonFormat1(ServiceConfig)
-  implicit val webhookConfigWrapFormat: RootJsonFormat[WebhookConfigWrap] = jsonFormat1(
-    WebhookConfigWrap
+  given systemRequestFormat: RootJsonFormat[SystemRequest]                           = jsonFormat1(SystemRequest.apply)
+  given serviceConfigFormat: RootJsonFormat[ServiceConfig]                           = jsonFormat1(ServiceConfig.apply)
+  given webhookConfigWrapFormat: RootJsonFormat[WebhookConfigWrap]                   = jsonFormat1(
+    WebhookConfigWrap.apply
   )
 
-  implicit val systemConfigSvcCfgV2Format: RootJsonFormat[SystemConfigSvcCfgV2] = jsonFormat3(
-    SystemConfigSvcCfgV2
+  given systemConfigSvcCfgV2Format: RootJsonFormat[SystemConfigSvcCfgV2]               = jsonFormat3(
+    SystemConfigSvcCfgV2.apply
   )
-  implicit val systemConfigSyslogCfgV2Format: RootJsonFormat[SystemConfigSyslogCfgV2] =
+  given systemConfigSyslogCfgV2Format: RootJsonFormat[SystemConfigSyslogCfgV2]         =
     jsonFormat11(
-      SystemConfigSyslogCfgV2
+      SystemConfigSyslogCfgV2.apply
     )
-  implicit val systemConfigAuthCfgV2Format: RootJsonFormat[SystemConfigAuthCfgV2] = jsonFormat3(
-    SystemConfigAuthCfgV2
+  given systemConfigAuthCfgV2Format: RootJsonFormat[SystemConfigAuthCfgV2]             = jsonFormat3(
+    SystemConfigAuthCfgV2.apply
   )
-  implicit val systemConfigProxyCfgV2Format: RootJsonFormat[SystemConfigProxyCfgV2] = jsonFormat6(
-    SystemConfigProxyCfgV2
+  given systemConfigProxyCfgV2Format: RootJsonFormat[SystemConfigProxyCfgV2]           = jsonFormat6(
+    SystemConfigProxyCfgV2.apply
   )
-  implicit val systemConfigIBMSAVCfg2Format: RootJsonFormat[SystemConfigIBMSAVCfg2] = jsonFormat2(
-    SystemConfigIBMSAVCfg2
+  given systemConfigIBMSAVCfg2Format: RootJsonFormat[SystemConfigIBMSAVCfg2]           = jsonFormat2(
+    SystemConfigIBMSAVCfg2.apply
   )
-  implicit val systemConfigAutoscaleConfigFormat: RootJsonFormat[SystemConfigAutoscaleConfig] =
-    jsonFormat3(SystemConfigAutoscaleConfig)
-  implicit val systemConfigMiscCfgV2Format: RootJsonFormat[SystemConfigMiscCfgV2] = jsonFormat7(
-    SystemConfigMiscCfgV2
+  given systemConfigAutoscaleConfigFormat: RootJsonFormat[SystemConfigAutoscaleConfig] =
+    jsonFormat3(SystemConfigAutoscaleConfig.apply)
+  given systemConfigMiscCfgV2Format: RootJsonFormat[SystemConfigMiscCfgV2]             = jsonFormat7(
+    SystemConfigMiscCfgV2.apply
   )
-  implicit val systemConfigTlsCfgFormat: RootJsonFormat[SystemConfigTlsCfg] = jsonFormat2(
-    SystemConfigTlsCfg
+  given systemConfigTlsCfgFormat: RootJsonFormat[SystemConfigTlsCfg]                   = jsonFormat2(
+    SystemConfigTlsCfg.apply
   )
-  implicit val systemConfigV2Format: RootJsonFormat[SystemConfigV2] = jsonFormat10(SystemConfigV2)
+  given systemConfigV2Format: RootJsonFormat[SystemConfigV2]                           = jsonFormat10(SystemConfigV2.apply)
 
-  implicit val systemConfigWrapFormat: RootJsonFormat[SystemConfigWrap] = jsonFormat5(
-    SystemConfigWrap
+  given systemConfigWrapFormat: RootJsonFormat[SystemConfigWrap] = jsonFormat5(
+    SystemConfigWrap.apply
   )
 
   def systemConfigWrapToJson(systemConfigWrap: SystemConfigWrap): String =

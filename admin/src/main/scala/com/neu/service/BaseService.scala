@@ -1,23 +1,37 @@
-package com.neu.api
+package com.neu.service
 
-import com.neu.client.RestClient
+import com.neu.client.RestClient.StringJsonFormat
+import com.neu.client.RestClient.arrayFormat
 import com.neu.client.RestClient.baseClusterUri
 import com.neu.core.AuthenticationManager
 import com.typesafe.scalalogging.LazyLogging
-import spray.http.StatusCodes
-import spray.routing.{ Directives, StandardRoute }
+import org.apache.pekko.http.scaladsl.model.HttpEntity
+import org.apache.pekko.http.scaladsl.model.StatusCodes
+import org.apache.pekko.http.scaladsl.model.StatusCodes.ClientError
+import org.apache.pekko.http.scaladsl.model.StatusCodes.ServerError
+import org.apache.pekko.http.scaladsl.server.Directives
+import org.apache.pekko.http.scaladsl.server.StandardRoute
+import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshaller
+import spray.json.*
 
-import java.io.{ PrintWriter, StringWriter }
+import java.io.PrintWriter
+import java.io.StringWriter
 
-class BaseService() extends Directives with LazyLogging {
+open class BaseService extends Directives with LazyLogging {
+  given arrayStringUnmarshaller: Unmarshaller[HttpEntity, Array[String]] =
+    Unmarshaller.stringUnmarshaller
+      .map(JsonParser(_).convertTo[Array[String]])
+
   val authError                  = "Authentication failed!"
-  val blocked                    = "Temporarily blocked because of too many login failures"
-  val authSSODisabledError       = "Authentication using OpenShift's or Rancher's RBAC was disabled!"
-  val passwordExpired            = "Password expired"
   val timeOutStatus              = "Status: 408"
   val authenticationFailedStatus = "Status: 401"
 
-  protected def onExpiredOrInternalError(e: Throwable) = {
+  private val blocked              = "Temporarily blocked because of too many login failures"
+  private val authSSODisabledError =
+    "Authentication using OpenShift's or Rancher's RBAC was disabled!"
+  private val passwordExpired      = "Password expired"
+
+  protected def onExpiredOrInternalError(e: Throwable): (ClientError | ServerError, String) = {
     logger.warn(e.getMessage)
     if (e.getMessage.contains(timeOutStatus)) {
       (StatusCodes.RequestTimeout, "Session expired!")
@@ -28,13 +42,15 @@ class BaseService() extends Directives with LazyLogging {
     }
   }
 
-  protected def onNonFatal(e: Throwable) = {
+  protected def onNonFatal(e: Throwable): (ClientError | ServerError, String) = {
     val sw = new StringWriter
     e.printStackTrace(new PrintWriter(sw))
     logger.warn(sw.toString)
-    if (e.getMessage.contains(timeOutStatus) || e.getMessage.contains(
-          authenticationFailedStatus
-        )) {
+    if (
+      e.getMessage.contains(timeOutStatus) || e.getMessage.contains(
+        authenticationFailedStatus
+      )
+    ) {
       (StatusCodes.RequestTimeout, "Session expired!")
     } else {
       (StatusCodes.InternalServerError, "Internal server error")
@@ -56,11 +72,9 @@ class BaseService() extends Directives with LazyLogging {
 
   protected def setBaseUrl(tokenId: String, transactionId: String): Unit = {
     val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
-    val baseUrl = cachedBaseUrl.fold(
-      baseClusterUri(tokenId, RestClient.reloadCtrlIp(tokenId, 0))
-    )(
-      cachedBaseUrl => cachedBaseUrl
-    )
+    val baseUrl       = cachedBaseUrl.fold(
+      baseClusterUri(tokenId)
+    )(cachedBaseUrl => cachedBaseUrl)
     AuthenticationManager.setBaseUrl(tokenId, baseUrl)
     logger.info("test baseUrl: {}", baseUrl)
     logger.info("Transaction ID(Post): {}", transactionId)

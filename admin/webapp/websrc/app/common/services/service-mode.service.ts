@@ -230,23 +230,43 @@ export class ServiceModeService {
   }
 
   private suppressSwitchMode(selectedGroups: Group[], mode: PolicyMode, profileMode: PolicyMode) {
-    const mode4Verification = mode || profileMode
-    let modeCountMap = {
-      discover: 0,
-      monitor: 0,
-      protect: 0,
-      '': 0,
-    };
-    selectedGroups.forEach(group => {
-      if (group.cap_change_mode)
-        modeCountMap[(group.policy_mode || '').toLowerCase()]++;
-    });
-    let areAllGroupsInSameTargetMode =
-      modeCountMap[mode4Verification.toLowerCase()] ===
-      Object.values(modeCountMap).reduce(
-        (accumulator, currentValue) => accumulator + currentValue
-      );
-    return areAllGroupsInSameTargetMode;
+    if (mode) {
+      const modeCountMap = {
+        discover: 0,
+        monitor: 0,
+        protect: 0,
+        '': 0,
+      };
+      selectedGroups.forEach(group => {
+        if (group.cap_change_mode) {
+          modeCountMap[(group.policy_mode || '').toLowerCase()]++;
+        }
+      });
+      let areAllGroupsInSameTargetMode =
+        modeCountMap[mode.toLowerCase()] ===
+        Object.values(modeCountMap).reduce(
+          (accumulator, currentValue) => accumulator + currentValue
+        );
+      return areAllGroupsInSameTargetMode;
+    } else {
+      const profileModeCountMap = {
+        discover: 0,
+        monitor: 0,
+        protect: 0,
+        '': 0,
+      };
+      selectedGroups.forEach(group => {
+        if (group.cap_change_mode) {
+          profileModeCountMap[(group.profile_mode || '').toLowerCase()]++;
+        }
+      });
+      let areAllGroupsInSameTargetMode =
+        profileModeCountMap[profileMode.toLowerCase()] ===
+        Object.values(profileModeCountMap).reduce(
+          (accumulator, currentValue) => accumulator + currentValue
+        );
+      return areAllGroupsInSameTargetMode;
+    }
   }
 
   private suppressShowNodesAlerts(
@@ -255,23 +275,45 @@ export class ServiceModeService {
     nodesGroup: Group,
     isMultipleSelected: boolean
   ) {
-    const mode4Verification = mode || profileMode;
-    const modeGradeMap = {
-      discover: 0,
-      monitor: 1,
-      protect: 2,
-    };
-    let currMode = nodesGroup.policy_mode?.toLowerCase();
-    let targetMode = mode4Verification.toLowerCase();
-    let isSwitchingSameMode = currMode === targetMode;
-    let isDowngradingMode = modeGradeMap[targetMode] === 0;
-    console.log(
-      'isSwitchingSameMode: ',
-      isSwitchingSameMode,
-      'isDowngradingMode: ',
-      isDowngradingMode
-    );
-    return isSwitchingSameMode || isDowngradingMode || !isMultipleSelected;
+    if (mode) {
+      const modeGradeMap = {
+        discover: 0,
+        monitor: 1,
+        protect: 2,
+      };
+      let currMode = nodesGroup.policy_mode?.toLowerCase();
+      let targetMode = mode.toLowerCase();
+      let isSwitchingSameMode = currMode === targetMode;
+      let isDowngradingMode = modeGradeMap[targetMode] === 0;
+      console.log(
+        'isSwitchingSameMode: ',
+        isSwitchingSameMode,
+        'isDowngradingMode: ',
+        isDowngradingMode
+      );
+      return isSwitchingSameMode ||
+        isDowngradingMode ||
+        !isMultipleSelected;
+    } else {
+      const policyModeGradeMap = {
+        discover: 0,
+        monitor: 1,
+        protect: 2,
+      };
+      let currProfileMode = nodesGroup.policy_mode?.toLowerCase();
+      let targetProfileMode = profileMode.toLowerCase();
+      let isSwitchingSameProfileMode = currProfileMode === targetProfileMode;
+      let isDowngradingProfileMode = policyModeGradeMap[targetProfileMode] === 0;
+      console.log(
+        'isSwitchingSameProfileMode: ',
+        isSwitchingSameProfileMode,
+        'isDowngradingProfileMode: ',
+        isDowngradingProfileMode
+      );
+      return isSwitchingSameProfileMode ||
+        isDowngradingProfileMode ||
+        !isMultipleSelected;
+    }
   }
 
   private getMessage4NodesSelected(mode: PolicyMode) {

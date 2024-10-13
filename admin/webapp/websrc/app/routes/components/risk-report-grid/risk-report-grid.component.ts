@@ -13,7 +13,8 @@ import {
   GridReadyEvent,
   RowDataChangedEvent,
   RowDataUpdatedEvent,
-  RowNode,
+  IRowNode,
+  IsFullWidthRowParams,
 } from 'ag-grid-community';
 import * as $ from 'jquery';
 import { RiskReportGridCsvService } from './csv-generation/risk-report-grid-csv.service';
@@ -159,7 +160,7 @@ export class RiskReportGridComponent implements OnInit {
       onRowDataChanged: this.onRowDataChanged.bind(this),
       onRowDataUpdated: this.onRowDataUpdated.bind(this),
       isExternalFilterPresent: () => true,
-      isFullWidthCell: node => !this.isParent(node),
+      isFullWidthRow: (params: IsFullWidthRowParams<any, any>) => !this.isParent(params.rowNode),
       fullWidthCellRenderer: 'messageCellRenderer',
       fullWidthCellRendererParams: {
         exportBenchCSV: this.exportBenchCSV.bind(this),
@@ -242,7 +243,7 @@ export class RiskReportGridComponent implements OnInit {
     }
   }
 
-  postSort(nodes: RowNode[]): void {
+  postSort(nodes: IRowNode[]): void {
     let lastParentIdx = -1;
     for (let i = 0; i < nodes.length; i++) {
       const pid = nodes[i].data.parent_id;
@@ -309,7 +310,7 @@ export class RiskReportGridComponent implements OnInit {
       this.filteredCount !== this.reportsCount;
   }
 
-  isParent(node: RowNode) {
+  isParent(node: IRowNode) {
     return !node.data.parent_id;
   }
 

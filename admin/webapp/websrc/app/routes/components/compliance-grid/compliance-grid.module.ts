@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ComplianceGridComponent } from './compliance-grid.component';
-import { AgGridModule } from 'ag-grid-angular';
+import { AgGridAngular } from 'ag-grid-angular';
 import { MatButtonModule } from '@angular/material/button';
 import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
 import { ComplianceGridCategoryCellComponent } from './compliance-grid-category-cell/compliance-grid-category-cell.component';
@@ -23,7 +23,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
   ],
   imports: [
     CommonModule,
-    AgGridModule,
+    AgGridAngular,
     DragDropModule,
     MatButtonModule,
     MatCardModule,

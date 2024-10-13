@@ -8,7 +8,7 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BytesPipe } from '@common/pipes/app.pipes';
-import { GridOptions } from 'ag-grid-community';
+import { GridOptions, IsFullWidthRowParams } from 'ag-grid-community';
 import { forkJoin, Observable } from 'rxjs';
 import { pluck } from 'rxjs/operators';
 import { capitalizeWord, parseDivideStyle } from '@common/utils/common.utils';
@@ -324,7 +324,7 @@ export class AdmissionRulesService {
         !params.data.parent_id || params.data.visible,
       getRowId: params => params.data.id,
       getRowHeight: params => (!!params.data.parent_id ? 100 : 30),
-      isFullWidthCell: node => !!node.data.parent_id,
+      isFullWidthRow: (params: IsFullWidthRowParams<any, any>) => !!params.rowNode.data?.parent_id,
       fullWidthCellRenderer: 'matchedRuleListRenderer',
       suppressMaintainUnsortedOrder: true,
       suppressScrollOnNewData: true,

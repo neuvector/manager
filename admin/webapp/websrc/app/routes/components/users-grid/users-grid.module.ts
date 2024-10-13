@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UsersGridComponent } from './users-grid.component';
 import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
-import { AgGridModule } from 'ag-grid-angular';
+import { AgGridAngular } from 'ag-grid-angular';
 import { UsersGridUsernameCellComponent } from './users-grid-username-cell/users-grid-username-cell.component';
 import { UsersGridActionCellComponent } from './users-grid-action-cell/users-grid-action-cell.component';
 import { NvCommonModule } from '@common/nvCommon.module';
@@ -33,10 +33,10 @@ import { RolesGridModule } from '@routes/components/roles-grid/roles-grid.module
     PasswordPanelModule,
     GroupDomainRoleModule,
     RolesGridModule,
-    AgGridModule.withComponents([
-      UsersGridActionCellComponent,
-      UsersGridUsernameCellComponent,
-    ]),
+    // AgGridModule.withComponents([
+    //   UsersGridActionCellComponent,
+    //   UsersGridUsernameCellComponent,
+    // ]),
   ],
   exports: [UsersGridComponent],
 })

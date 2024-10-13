@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { NvCommonModule } from '@common/nvCommon.module';
 import { AdjustableDivModule } from '@components/ui/adjustable-div/adjustable-div.module';
-import { AgGridModule } from 'ag-grid-angular';
+import { AgGridAngular } from 'ag-grid-angular';
 import { WafSensorsComponent } from './waf-sensors.component';
 import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
 import { PipeModule } from '@common/pipes/pipe.module';
@@ -39,10 +39,10 @@ const routes: Routes = [
     LoadingButtonModule,
     ImportFileModalModule,
     RouterModule.forChild(routes),
-    AgGridModule.withComponents([
-      SensorActionButtonsComponent,
-      RuleActionButtonsComponent,
-    ]),
+    // AgGridModule.withComponents([
+    //   SensorActionButtonsComponent,
+    //   RuleActionButtonsComponent,
+    // ]),
     ExportOptionsModalModule,
   ],
 })

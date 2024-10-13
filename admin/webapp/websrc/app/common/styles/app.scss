@@ -37,8 +37,8 @@
 @import 'app/material/ngmaterial';
 @import 'app/material/overrides';
 // ag-grid
-@import 'ag-grid-community/dist/styles/ag-grid.css';
-@import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+@import '~ag-grid-community/styles/ag-grid.css';
+@import '~ag-grid-community/styles/ag-theme-alpine.css';
 
 @import '~jsoneditor/dist/jsoneditor.min.css';
 

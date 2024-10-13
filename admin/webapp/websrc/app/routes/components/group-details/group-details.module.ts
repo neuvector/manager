@@ -12,7 +12,7 @@ import { ProcessProfileRulesModule } from '@components/process-profile-rules/pro
 import { FileAccessRulesModule } from '@components/file-access-rules/file-access-rules.module';
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
 import { CustomCheckActionButtonComponent } from './partial/custom-check-action-button/custom-check-action-button.component';
-import { AgGridModule } from 'ag-grid-angular';
+import { AgGridAngular } from 'ag-grid-angular';
 import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
 import { GroupDlpConfigModalComponent } from './partial/group-dlp-config-modal/group-dlp-config-modal.component';
 import { GroupDlpConfigActionButtonComponent } from './partial/group-dlp-config-action-button/group-dlp-config-action-button.component';
@@ -46,10 +46,10 @@ import { NodesGridModule } from '@components/nodes-grid/nodes-grid.module';
     QuickFilterModule,
     ContainersGridModule,
     NodesGridModule,
-    AgGridModule.withComponents([
-      CustomCheckActionButtonComponent,
-      GroupDlpConfigActionButtonComponent
-    ]),
+    // AgGridModule.withComponents([
+    //   CustomCheckActionButtonComponent,
+    //   GroupDlpConfigActionButtonComponent
+    // ]),
   ],
   exports: [
     MembersComponent,

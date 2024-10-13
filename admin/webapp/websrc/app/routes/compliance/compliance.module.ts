@@ -7,7 +7,7 @@ import { ComplianceItemsTableComponent } from './compliance-items/compliance-ite
 import { ComplianceItemDetailsComponent } from './compliance-items/compliance-item-details/compliance-item-details.component';
 import { RouterModule, Routes } from '@angular/router';
 import { ComplianceService } from './compliance.service';
-import { AgGridModule } from 'ag-grid-angular';
+import { AgGridAngular } from 'ag-grid-angular';
 import { ObserveModule } from '@common/directives/observe/observe.module';
 import { LoadingTemplateModule } from '@components/ui/loading-template/loading-template.module';
 import { TranslateModule } from '@ngx-translate/core';
@@ -69,7 +69,7 @@ const routes: Routes = [{ path: '', component: ComplianceComponent }];
     MatCardModule,
     RouterModule.forChild(routes),
     TranslateModule,
-    AgGridModule,
+    AgGridAngular,
     MatButtonModule,
     LoadingButtonModule,
     MatDialogModule,

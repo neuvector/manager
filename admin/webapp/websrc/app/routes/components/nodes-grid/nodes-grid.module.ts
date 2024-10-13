@@ -4,7 +4,7 @@ import { NodesGridComponent } from './nodes-grid.component';
 import { NvCommonModule } from '@common/nvCommon.module';
 import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
-import { AgGridModule } from 'ag-grid-angular';
+import { AgGridAngular } from 'ag-grid-angular';
 import { NodesGridStatusCellComponent } from './nodes-grid-status-cell/nodes-grid-status-cell.component';
 import { NodesGridStateCellComponent } from './nodes-grid-state-cell/nodes-grid-state-cell.component';
 
@@ -15,7 +15,7 @@ import { NodesGridStateCellComponent } from './nodes-grid-state-cell/nodes-grid-
     NvCommonModule,
     QuickFilterModule,
     LoadingButtonModule,
-    AgGridModule.withComponents([]),
+    // AgGridModule.withComponents([]),
   ],
   exports: [NodesGridComponent],
 })

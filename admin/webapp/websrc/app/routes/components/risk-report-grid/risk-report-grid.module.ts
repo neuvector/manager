@@ -5,7 +5,7 @@ import { NvCommonModule } from '@common/nvCommon.module';
 import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { AgGridModule } from 'ag-grid-angular';
+import { AgGridAngular } from 'ag-grid-angular';
 import { RiskReportGridFilterService } from './risk-report-grid.filter.service';
 import { RiskReportGridNameCellComponent } from './risk-report-grid-name-cell/risk-report-grid-name-cell.component';
 import { RiskReportGridLevelCellComponent } from './risk-report-grid-level-cell/risk-report-grid-level-cell.component';
@@ -29,7 +29,7 @@ import { RiskReportGridCsvService } from './csv-generation/risk-report-grid-csv.
     QuickFilterModule,
     LoadingButtonModule,
     DragDropModule,
-    AgGridModule.withComponents([]),
+    // AgGridModule.withComponents([]),
   ],
   providers: [RiskReportGridFilterService, RiskReportGridCsvService],
   exports: [RiskReportGridComponent],

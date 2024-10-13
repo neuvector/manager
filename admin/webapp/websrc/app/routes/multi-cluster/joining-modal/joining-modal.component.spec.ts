@@ -40,7 +40,7 @@ describe("JoiningModalComponent", () => {
         HttpClientTestingModule,
         MatDialogModule,
         RouterTestingModule.withRoutes([]),
-        AgGridModule.withComponents([])
+        // AgGridModule.withComponents([])
       ]
     }).compileComponents();
   }));

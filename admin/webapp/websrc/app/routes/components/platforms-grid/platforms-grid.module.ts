@@ -4,7 +4,7 @@ import { PlatformsGridComponent } from './platforms-grid.component';
 import { NvCommonModule } from '@common/nvCommon.module';
 import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
-import { AgGridModule } from 'ag-grid-angular';
+import { AgGridAngular } from 'ag-grid-angular';
 import { PlatformsGridStatusCellComponent } from './platforms-grid-status-cell/platforms-grid-status-cell.component';
 
 @NgModule({
@@ -14,7 +14,7 @@ import { PlatformsGridStatusCellComponent } from './platforms-grid-status-cell/p
     NvCommonModule,
     QuickFilterModule,
     LoadingButtonModule,
-    AgGridModule.withComponents([]),
+    // AgGridModule.withComponents([]),
   ],
   exports: [PlatformsGridComponent],
 })

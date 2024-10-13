@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AgGridModule } from 'ag-grid-angular';
+import { AgGridAngular } from 'ag-grid-angular';
 import { FileAccessRulesComponent } from './file-access-rules.component';
 import { NvCommonModule } from '@common/nvCommon.module';
 import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
@@ -19,7 +19,7 @@ import { OperationCellComponent } from './partial/predefined-file-access-rules-m
     CommonModule,
     NvCommonModule,
     QuickFilterModule,
-    AgGridModule.withComponents([]),
+    // AgGridModule.withComponents([]),
   ],
   entryComponents: [
     AddEditFileAccessRuleModalComponent,

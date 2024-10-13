@@ -15,7 +15,7 @@ import {
   GridOptions,
   GridReadyEvent,
   RowDataChangedEvent,
-  RowNode,
+  IRowNode,
 } from 'ag-grid-community';
 import { TranslateService } from '@ngx-translate/core';
 import { ComplianceItemsTableStatusCellComponent } from './compliance-items-table-status-cell/compliance-items-table-status-cell.component';
@@ -135,7 +135,7 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
     this.toggleChartView.emit();
   }
 
-  doesExternalFilterPass(node: RowNode) {
+  doesExternalFilterPass(node: IRowNode) {
     if (!this.complianceFilterService.isAdvFilterOn()) return true;
     else {
       return this.complianceFilterService.filterFn(node.data);

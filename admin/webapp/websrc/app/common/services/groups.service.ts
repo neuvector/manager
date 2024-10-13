@@ -204,7 +204,7 @@ export class GroupsService {
         hide: !isFed,
       },
       {
-        headerComponentFramework: ScorableHeaderComponent,
+        headerComponent: ScorableHeaderComponent,
         field: 'not_scored',
         cellRenderer: scorableRendererFunc,
         hide: isFed,

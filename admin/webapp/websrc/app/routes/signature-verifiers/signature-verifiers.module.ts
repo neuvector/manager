@@ -6,7 +6,7 @@ import { SignatureVerifiersComponent } from './signature-verifiers.component';
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
 import { AdjustableDivModule } from '@components/ui/adjustable-div/adjustable-div.module';
 import { QuickFilterModule } from "@components/quick-filter/quick-filter.module";
-import { AgGridModule } from 'ag-grid-angular';
+import { AgGridAngular } from 'ag-grid-angular';
 import { PipeModule } from "@common/pipes/pipe.module";
 import { AddEditSignatureVerifiersModalComponent } from './partial/add-edit-signature-verifiers-modal/add-edit-signature-verifiers-modal.component';
 import { SignatureActionButtonsComponent } from './partial/signature-action-buttons/signature-action-buttons.component';
@@ -30,7 +30,7 @@ const routes: Routes = [{ path: '', component: SignatureVerifiersComponent }];
     LoadingButtonModule,
     AdjustableDivModule,
     QuickFilterModule,
-    AgGridModule,
+    AgGridAngular,
     PipeModule,
   ]
 })

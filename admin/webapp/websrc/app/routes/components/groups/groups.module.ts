@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NvCommonModule } from '@common/nvCommon.module';
 import { GroupsComponent } from './groups.component';
 import { ActionButtonsComponent } from './partial/action-buttons/action-buttons.component';
-import { AgGridModule } from 'ag-grid-angular';
+import { AgGridAngular } from 'ag-grid-angular';
 import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
 import { AddEditGroupModalComponent } from './partial/add-edit-group-modal/add-edit-group-modal.component';
 import { ConfirmDialogModule } from '@components/ui/confirm-dialog/confirm-dialog.module';
@@ -38,7 +38,7 @@ import { ExportOptionsModalModule } from '@components/export-options-modal/expor
     LoadingButtonModule,
     PipeModule,
     DragDropModule,
-    AgGridModule.withComponents([ActionButtonsComponent]),
+    // AgGridModule.withComponents([ActionButtonsComponent]),
     ExportOptionsModalModule,
   ],
   providers: [ServiceModeService, RuleDetailModalService],

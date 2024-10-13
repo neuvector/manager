@@ -11,7 +11,7 @@ import {
   GridApi,
   GridOptions,
   GridReadyEvent,
-  RowNode,
+  IRowNode,
   ValueFormatterParams,
 } from 'ag-grid-community';
 import { Check } from '@common/types';
@@ -191,7 +191,7 @@ export class ComplianceGridComponent implements OnInit {
     this.gridApi.sizeColumnsToFit();
   }
 
-  postSort(nodes: RowNode[]): void {
+  postSort(nodes: IRowNode[]): void {
     let lastParentIdx = -1;
     for (let i = 0; i < nodes.length; i++) {
       const pid = nodes[i].data.parent_id;
@@ -209,7 +209,7 @@ export class ComplianceGridComponent implements OnInit {
     }
   }
 
-  isVisible(node: RowNode): boolean {
+  isVisible(node: IRowNode): boolean {
     return !node.data.parent_id || node.data.visible;
   }
 

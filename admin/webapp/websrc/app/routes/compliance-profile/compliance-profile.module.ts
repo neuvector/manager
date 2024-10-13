@@ -10,7 +10,7 @@ import { ComplianceProfileTemplatesTableComponent } from './compliance-profile-t
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { AgGridModule } from 'ag-grid-angular';
+import { AgGridAngular } from 'ag-grid-angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
@@ -54,7 +54,7 @@ const routes: Routes = [{ path: '', component: ComplianceProfileComponent }];
     MatButtonModule,
     MatInputModule,
     MatCheckboxModule,
-    AgGridModule,
+    AgGridAngular,
     TranslateModule,
     MatDialogModule,
     QuickFilterModule,

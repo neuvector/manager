@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VulnerabilitiesGridComponent } from './vulnerabilities-grid.component';
-import { AgGridModule } from 'ag-grid-angular';
+import { AgGridAngular } from 'ag-grid-angular';
 import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
 import { VulnerabilitiesGridSeverityCellComponent } from './vulnerabilities-grid-severity-cell/vulnerabilities-grid-severity-cell.component';
 import { VulnerabilityDetailDialogComponent } from './vulnerability-detail-dialog/vulnerability-detail-dialog.component';
@@ -18,7 +18,7 @@ import { MatButtonModule } from '@angular/material/button';
   imports: [
     CommonModule,
     DragDropModule,
-    AgGridModule,
+    AgGridAngular,
     MatCardModule,
     MatIconModule,
     MatButtonModule,

@@ -6,7 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { RegistriesTableComponent } from './registries-table/registries-table.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { AgGridModule } from 'ag-grid-angular';
+import { AgGridAngular } from 'ag-grid-angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatInputModule } from '@angular/material/input';
 import { RegistriesService } from '@services/registries.service';
@@ -84,7 +84,7 @@ const routes: Routes = [{ path: '', component: RegistriesComponent }];
     CommonModule,
     RouterModule.forChild(routes),
     NeuVectorFormlyModule,
-    AgGridModule,
+    AgGridAngular,
     TranslateModule,
     MatDialogModule,
     MatCardModule,

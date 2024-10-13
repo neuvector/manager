@@ -20,7 +20,7 @@ import {
   GridOptions,
   GridReadyEvent,
   RowDataUpdatedEvent,
-  RowNode,
+  IRowNode,
   RowSelectedEvent,
 } from 'ag-grid-community';
 import * as $ from 'jquery';
@@ -302,7 +302,7 @@ export class ContainersGridComponent implements OnInit {
     this.quickFilter?.onFilterChange(this.quickFilter.filter.value);
   }
 
-  postSort(nodes: RowNode[]): void {
+  postSort(nodes: IRowNode[]): void {
     // sort parents first
     nodes = nodes.sort((a, b) =>
       !a.data.parent_id ? -1 : !b.data.parent_id ? 1 : 0
@@ -317,7 +317,7 @@ export class ContainersGridComponent implements OnInit {
     }
   }
 
-  isVisible(node: RowNode): boolean {
+  isVisible(node: IRowNode): boolean {
     return !node.data.parent_id || node.data.visible;
   }
 
@@ -330,7 +330,7 @@ export class ContainersGridComponent implements OnInit {
     this.filtered = this.filteredCount !== this.containersCount;
   }
 
-  quickFilterParents(node: RowNode) {
+  quickFilterParents(node: IRowNode) {
     return !node.data.parent_id;
   }
 }

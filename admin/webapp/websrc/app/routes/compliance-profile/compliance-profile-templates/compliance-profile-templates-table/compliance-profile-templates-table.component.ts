@@ -19,7 +19,7 @@ import {
   GridApi,
   GridOptions,
   GridReadyEvent,
-  RowNode,
+  IRowNode,
 } from 'ag-grid-community';
 import { TranslateService } from '@ngx-translate/core';
 import { RegulationsCellComponent } from '@routes/compliance-profile/compliance-profile-templates/compliance-profile-templates-table/regulations-cell/regulations-cell.component';
@@ -255,13 +255,13 @@ export class ComplianceProfileTemplatesTableComponent
       Object.keys(this.regulationChanges).length + this.systemChanges;
   }
 
-  doesExternalFilterPass(node: RowNode) {
+  doesExternalFilterPass(node: IRowNode) {
     if (this.all) return true;
     else {
       let res = Object.keys(this.filterForm).filter(
         filter => this.filterForm[filter]
       );
-      return node.data.tags?.some(tag => res.includes(tag));
+      return node.data.tags?.some(tag => res.includes(tag)).length > 0;
     }
   }
 

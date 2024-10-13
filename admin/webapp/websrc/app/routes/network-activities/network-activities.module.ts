@@ -7,7 +7,7 @@ import { NvCommonModule } from '@common/nvCommon.module';
 import { LegendComponent } from './legend/legend.component';
 import { ActiveSessionComponent } from './active-session/active-session.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { AgGridModule } from 'ag-grid-angular';
+import { AgGridAngular } from 'ag-grid-angular';
 import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
 import { EdgeDetailsComponent } from './edge-details/edge-details.component';
 import { SnifferComponent } from "./sniffer/sniffer.component";
@@ -57,7 +57,7 @@ const routes: Routes = [
     NvCommonModule,
     RouterModule.forChild(routes),
     DragDropModule,
-    AgGridModule,
+    AgGridAngular,
     NgxSliderModule,
     QuickFilterModule,
     PipeModule,

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ExposedServicePodGridComponent } from './exposed-service-pod-grid.component';
 import { ExposedServicePodGridServiceCellComponent } from './exposed-service-pod-grid-service-cell/exposed-service-pod-grid-service-cell.component';
-import { AgGridModule } from 'ag-grid-angular';
+import { AgGridAngular } from 'ag-grid-angular';
 import { ExposedServicePodGridActionCellComponent } from './exposed-service-pod-grid-action-cell/exposed-service-pod-grid-action-cell.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -19,7 +19,7 @@ import { ExposureServicePodReportGridComponent } from './exposure-service-pod-re
     CommonModule,
     TranslateModule,
     MatTooltipModule,
-    AgGridModule.withComponents([ExposedServicePodGridServiceCellComponent]),
+    // AgGridModule.withComponents([ExposedServicePodGridServiceCellComponent]),
   ],
   exports: [
     ExposedServicePodGridComponent,

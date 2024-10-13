@@ -4,7 +4,7 @@ import { ContainersGridComponent } from './containers-grid.component';
 import { NvCommonModule } from '@common/nvCommon.module';
 import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
-import { AgGridModule } from 'ag-grid-angular';
+import { AgGridAngular } from 'ag-grid-angular';
 import { ContainersGridNameCellComponent } from './containers-grid-name-cell/containers-grid-name-cell.component';
 import { ContainersGridStateCellComponent } from './containers-grid-state-cell/containers-grid-state-cell.component';
 import { ContainersGridStatusCellComponent } from './containers-grid-status-cell/containers-grid-status-cell.component';
@@ -16,7 +16,7 @@ import { ContainersGridStatusCellComponent } from './containers-grid-status-cell
     NvCommonModule,
     QuickFilterModule,
     LoadingButtonModule,
-    AgGridModule.withComponents([]),
+    // AgGridModule.withComponents([]),
   ],
   exports: [ContainersGridComponent],
 })

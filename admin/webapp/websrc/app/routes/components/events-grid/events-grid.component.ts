@@ -13,7 +13,8 @@ import {
   GridReadyEvent,
   RowDataChangedEvent,
   RowDataUpdatedEvent,
-  RowNode,
+  IRowNode,
+  IsFullWidthRowParams,
 } from 'ag-grid-community';
 import * as $ from 'jquery';
 import { EventsGridCsvService } from './csv-generation/events-grid-csv.service';
@@ -175,7 +176,7 @@ export class EventsGridComponent implements OnInit {
       onRowDataChanged: this.onRowDataChanged.bind(this),
       onRowDataUpdated: this.onRowDataUpdated.bind(this),
       isExternalFilterPresent: () => true,
-      isFullWidthCell: node => !this.isParent(node),
+      isFullWidthRow: (params: IsFullWidthRowParams<any, any>) => !this.isParent(params.rowNode),
       fullWidthCellRenderer: 'messageCellRenderer',
       doesExternalFilterPass: ({ data }) =>
         this.isVisible(data) && this.doesExternalFilterPass(data),
@@ -243,7 +244,7 @@ export class EventsGridComponent implements OnInit {
     }
   }
 
-  postSort(nodes: RowNode[]): void {
+  postSort(nodes: IRowNode[]): void {
     let lastParentIdx = -1;
     for (let i = 0; i < nodes.length; i++) {
       const pid = nodes[i].data.parent_id;
@@ -319,7 +320,7 @@ export class EventsGridComponent implements OnInit {
       this.filteredCount !== this.eventsCount;
   }
 
-  isParent(node: RowNode) {
+  isParent(node: IRowNode) {
     return !node.data.parent_id;
   }
 

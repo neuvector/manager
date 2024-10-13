@@ -12,7 +12,7 @@
         <div class="mr-3" *ngIf="autoScanAuthorized && containers.length > 0">
           <mat-slide-toggle
             [formControl]="autoScan"
-            (change)="configAutoScan(auto_scan)">
+            (change)="configAutoScan(auto_scan || false)">
             {{ 'scan.AUTO' | translate }}
             <em
               class="fa fa-info-circle"

@@ -48,7 +48,7 @@ export class ScoreImprovementRunAsRootContainersViewComponent
 
   ngOnInit(): void {
     this.filter.valueChanges
-      .pipe(tap((value: string) => this.quickFilterService.setTextInput(value)))
+      .pipe(tap((value: string | null) => this.quickFilterService.setTextInput(value || '')))
       .subscribe();
     this.getPredictionScores();
     this.getWorkloads();

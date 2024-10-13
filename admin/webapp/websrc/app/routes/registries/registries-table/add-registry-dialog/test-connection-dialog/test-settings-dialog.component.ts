@@ -41,7 +41,7 @@ import { FormlyFormOptions } from '@ngx-formly/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TestSettingsDialogComponent implements OnInit, OnDestroy {
-  form = new FormGroup({});
+  form = new FormGroup<any>({});
   destroy$ = new Subject();
   model: any = {};
   gridData: { step_type: string; step_content: string }[] = [];

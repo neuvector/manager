@@ -75,7 +75,7 @@ export class SamlFormComponent implements OnInit, OnChanges {
       this.samlForm.disable();
     }
     this.samlForm.get('slo_enabled')?.valueChanges.subscribe(enabled => {
-      this.toggleSlo(enabled);
+      this.toggleSlo(enabled || false);
     });
     this.initForm();
   }
@@ -106,7 +106,7 @@ export class SamlFormComponent implements OnInit, OnChanges {
     );
     if (saml && saml.saml) {
       this.serverName = saml.server_name;
-      this.groupMappedRoles = saml.saml.group_mapped_roles;
+      this.groupMappedRoles = saml.saml.group_mapped_roles || [];
       saml.saml.x509_certs.forEach((x509_cert, idx) => {
         this.x509_certs.push(
           new FormControl(
@@ -144,11 +144,11 @@ export class SamlFormComponent implements OnInit, OnChanges {
     const { x509_certs, signing_cert, signing_key, ...samlForm } =
       this.samlForm.getRawValue();
     const saml: SAMLPatch = {
-      group_mapped_roles: this.groupMappedRoles,
+      group_mapped_roles: this.groupMappedRoles || [],
       x509_cert: x509_certs[0],
       x509_cert_extra: x509_certs.slice(1).filter(cert => cert),
-      signing_cert: signing_cert || null,
-      signing_key: signing_key || null,
+      signing_cert: signing_cert || '',
+      signing_key: signing_key || '',
       ...samlForm,
     };
     const config: ServerPatchBody = { config: { name: this.serverName, saml } };

@@ -99,7 +99,7 @@ export class RegistryDetailsDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.filter.valueChanges
-      .pipe(tap((value: string) => this.quickFilterService.setTextInput(value)))
+      .pipe(tap((value: string | null) => this.quickFilterService.setTextInput(value || '')))
       .subscribe();
     this.imageAndLayers$ = this.toggleViewSubject$.pipe(
       tap(bool => (this.acceptedVulnerabilityStatus = bool)),

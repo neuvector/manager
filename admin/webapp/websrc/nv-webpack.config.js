@@ -3,7 +3,7 @@ const BrotliPlugin = require("brotli-webpack-plugin");
 const webpack = require('webpack');
 
 const customConfig = {
-  plugins: []
+  plugins: [],
 };
 console.log("IS_DEV:", process.env.IS_DEV);
 if (!process.env.IS_DEV || process.env.IS_DEV !== 'true') {

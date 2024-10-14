@@ -86,7 +86,7 @@ export class LdapFormComponent implements OnInit, OnChanges {
     );
     if (ldap && ldap.ldap) {
       this.serverName = ldap.server_name;
-      this.groupMappedRoles = ldap.ldap.group_mapped_roles;
+      this.groupMappedRoles = ldap.ldap.group_mapped_roles || [];
       Object.keys(ldap.ldap).forEach((key: string) => {
         if (this.ldapForm.controls[key]) {
           this.ldapForm.controls[key].setValue(
@@ -105,7 +105,7 @@ export class LdapFormComponent implements OnInit, OnChanges {
       return;
     }
     const ldap: LDAP = {
-      group_mapped_roles: this.groupMappedRoles,
+      group_mapped_roles: this.groupMappedRoles || [],
       ...this.ldapForm.value,
     };
     if (!this.ldapForm.get('bind_password')?.dirty) {
@@ -145,7 +145,7 @@ export class LdapFormComponent implements OnInit, OnChanges {
 
   openDialog(): void {
     const ldap: LDAP = {
-      group_mapped_roles: this.groupMappedRoles,
+      group_mapped_roles: this.groupMappedRoles || [],
       ...this.ldapForm.value,
     };
     this.dialog.open(TestConnectionDialogComponent, {

@@ -11,7 +11,7 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { RegistriesTableComponent } from '../registries-table.component';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { AddRegistryFieldConfig } from './add-registry-form-configs';
 import { cloneDeep } from 'lodash';
 import { INTERVAL_STEP_VALUES } from './add-registry-form-configs/constants/constants';
@@ -43,7 +43,7 @@ import { AuthUtilsService } from '@common/utils/auth.utils';
 })
 export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
   maskFieldWhenEdit = '********';
-  form = new FormGroup({});
+  form = new FormGroup<any>({});
   model: any = {};
   fields = cloneDeep(AddRegistryFieldConfig);
   options: FormlyFormOptions = {

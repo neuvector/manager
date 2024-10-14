@@ -157,7 +157,7 @@ def detail(data, id_or_name, cap):
 
     _show_group_display_format(group)
     # columns = ("name", "learned", "criteria", "members", "policy_rules", "dlp_status", "sensors")
-    columns = ("name", "learned", "monitor_metric", "group_sess_cur", "group_sess_rate", "group_band_width", "criteria", "platform_role", "members", "policy_rules", "type")
+    columns = ("name", "learned", "policy_mode", "monitor_metric", "group_sess_cur", "group_sess_rate", "group_band_width", "criteria", "platform_role", "members", "policy_rules", "type")
     output.show(columns, group)
 
 @show_group.command()

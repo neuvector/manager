@@ -5,12 +5,12 @@
         <ng-container *ngIf="!refreshingProfile">
           <app-compliance-profile-templates
             [hideSystemInit]="
-              complianceProfileData.profile.profiles[0]?.disable_system || false
+              complianceProfileData.profile.profiles[0].disable_system || false
             "
             [templates]="complianceProfileData.template.list.compliance"
             [availableFilters]="complianceProfileData.filters"
             [cfgType]="
-              complianceProfileData.profile.profiles[0]?.cfg_type || ''
+              complianceProfileData.profile.profiles[0].cfg_type || ''
             "></app-compliance-profile-templates>
         </ng-container>
       </mat-tab>

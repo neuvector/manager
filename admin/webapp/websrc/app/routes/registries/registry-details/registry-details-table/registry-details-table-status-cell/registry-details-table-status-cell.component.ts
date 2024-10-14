@@ -20,9 +20,14 @@ export class RegistryDetailsTableStatusCellComponent
     this.params = params;
     this.status = params && params.node.data ? params.node.data.status : '';
     this.labelCode = MapConstant.colourMap[this.status];
+    console.log(params);
   }
 
   refresh(params: ICellRendererParams): boolean {
     return false;
+  }
+
+  onMenuClick(event: MouseEvent): void {
+    event.stopPropagation();
   }
 }

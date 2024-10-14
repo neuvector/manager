@@ -85,7 +85,7 @@
         class="example-full-width pull-right">
         <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
         <input
-          (keyup)="onQuickFilterChange(filter.value)"
+          (keyup)="onQuickFilterChange(filter.value || '')"
           [formControl]="filter"
           matInput />
       </mat-form-field>

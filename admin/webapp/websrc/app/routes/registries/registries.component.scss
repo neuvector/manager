@@ -1,0 +1,23 @@
+::ng-deep .error-message.mat-menu-panel {
+    margin-top: 0.3rem;
+}
+
+::ng-deep .error-message  {
+
+    .mat-menu-panel {
+        margin: .5rem;
+    }
+
+    .mat-menu-content:not(:empty) {
+        max-width: 33vw;
+
+        .error-message-content {
+            padding: .7rem;
+        }
+    }
+}
+
+::ng-deep .error-message-info.mat-button {
+    min-width: 0;
+    width: 3rem;
+}

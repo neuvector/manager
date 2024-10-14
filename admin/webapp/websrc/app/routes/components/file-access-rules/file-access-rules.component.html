@@ -50,7 +50,7 @@
             style="width: 200px"
             name="group-name"
             (selectionChange)="
-              onGroupChanged(groupSelection.value, gridOptions)
+              onGroupChanged(groupSelection.value || '', gridOptions)
             ">
             <mat-option *ngFor="let groupName of groups" [value]="groupName"
               ><span>{{ groupName }}</span>

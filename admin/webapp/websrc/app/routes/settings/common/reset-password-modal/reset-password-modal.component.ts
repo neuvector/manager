@@ -36,7 +36,7 @@ export class ResetPasswordModalComponent {
     this.resetData.emit({
       username: this.data.username,
       password: this.data.password,
-      new_password: this.passwordForm.controls.newPassword.value,
+      new_password: this.passwordForm.controls.newPassword.value || '',
     });
   }
 

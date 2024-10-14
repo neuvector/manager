@@ -68,19 +68,19 @@ export interface GroupMappedRole {
 }
 
 export interface LDAP {
-  base_dn: string;
-  group_dn?: string;
-  bind_dn: string;
-  bind_password: string;
-  default_role: string;
-  directory: string;
-  enable: boolean;
-  group_mapped_roles: GroupMappedRole[];
-  group_member_attr: string;
-  hostname: string;
-  port: number;
-  ssl: boolean;
-  username_attr: string;
+  base_dn?: string | null | undefined;
+  group_dn?: string | null | undefined;
+  bind_dn?: string | null | undefined;
+  bind_password?: string | null | undefined;
+  default_role?: string | null | undefined;
+  directory?: string | null | undefined;
+  enable?: boolean | null | undefined;
+  group_mapped_roles?: GroupMappedRole[] | null | undefined;
+  group_member_attr?: string | null | undefined;
+  hostname?: string | null | undefined;
+  port?: number | null | undefined;
+  ssl?: boolean | null | undefined;
+  username_attr?: string | null | undefined;
 }
 
 export interface SAMLGetResponse extends SAML {
@@ -92,18 +92,18 @@ export interface SAMLPatch extends SAML {
 }
 
 export interface SAML {
-  sso_url: string;
-  issuer: string;
-  x509_cert: string;
-  group_claim: string;
-  default_role: string;
-  group_mapped_roles: GroupMappedRole[];
-  enable: boolean;
-  authn_signing_enabled: boolean;
-  slo_enabled: boolean;
-  slo_url: string;
-  signing_cert: string;
-  signing_key: string;
+  sso_url?: string | null | undefined;
+  issuer?: string | null | undefined;
+  x509_cert?: string | null | undefined;
+  group_claim?: string | null | undefined;
+  default_role?: string | null | undefined;
+  group_mapped_roles?: GroupMappedRole[] | null | undefined;
+  enable?: boolean | null | undefined;
+  authn_signing_enabled?: boolean | null | undefined;
+  slo_enabled?: boolean | null | undefined;
+  slo_url?: string | null | undefined;
+  signing_cert?: string | null | undefined;
+  signing_key?: string | null | undefined;
 }
 
 export interface X509Cert {
@@ -114,17 +114,17 @@ export interface X509Cert {
 }
 
 export interface OPENID {
-  default_role: string;
-  issuer: string;
-  client_id: string;
-  client_secret: string;
-  group_claim: string;
-  scopes: string[];
-  group_mapped_roles: GroupMappedRole[];
-  enable: boolean;
-  authorization_endpoint?: string;
-  token_endpoint?: string;
-  user_info_endpoint?: string;
+  default_role?: string | null | undefined;
+  issuer?: string | null | undefined;
+  client_id?: string | null | undefined;
+  client_secret?: string | null | undefined;
+  group_claim?: string | null | undefined;
+  scopes?: string[] | null | undefined;
+  group_mapped_roles?: GroupMappedRole[] | null | undefined;
+  enable?: boolean | null | undefined;
+  authorization_endpoint?: string | null | undefined;
+  token_endpoint?: string | null | undefined;
+  user_info_endpoint?: string | null | undefined;
 }
 
 export interface Server {
@@ -205,8 +205,8 @@ export interface DebugPostBody {
     name: string;
     ldap: LDAP;
     test_ldap: {
-      username: string;
-      password: string;
+      username?: string | null | undefined;
+      password?: string | null | undefined;
     };
   };
 }

@@ -290,14 +290,14 @@ export class SecurityEventsComponent implements OnInit {
                 this.displayedSecurityEventsJsonBeforeApplyAdvFilter
               );
             }
-            this.onQuickFilterChange(this.filter.value);
+            this.onQuickFilterChange(this.filter.value || '');
           } else if (filter) {
             filter.severity = this.getSeverities(filter.severity);
             filter.location = this.getLocations(filter.location);
             filter.category = this.getCategories(filter.category);
             filter.other = this.getOther(filter.other);
             this.setAdvancedFilter(filter);
-            this.onQuickFilterChange(this.filter.value);
+            this.onQuickFilterChange(this.filter.value || '');
           }
         },
         error => {},
@@ -872,11 +872,11 @@ export class SecurityEventsComponent implements OnInit {
         }
         this.securityEventsService.displayedSecurityEvents =
           this.securityEventsService.displayedSecurityEvents.filter(event => {
-            return this.advancedFilterModalService._includeFilter(event, this.filter.value);
+            return this.advancedFilterModalService._includeFilter(event, this.filter.value || '');
           });
         console.log("this.advFilterConf", this.advFilterConf);
         this.setAdvancedFilter(this.advFilterConf);
-        this.onQuickFilterChange(this.filter.value);
+        this.onQuickFilterChange(this.filter.value || '');
         this.isDataReady = true;
       },
       error => {}

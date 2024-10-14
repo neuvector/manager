@@ -51,7 +51,7 @@ export class ExportFormComponent implements OnInit {
   }
 
   get as_standalone(): boolean {
-    return this.exportForm.get('as_standalone')?.value;
+    return this.exportForm.get('as_standalone')?.value || false;
   }
 
   ngOnInit(): void {
@@ -60,7 +60,7 @@ export class ExportFormComponent implements OnInit {
   }
 
   submitExport(): void {
-    const exportMode = this.exportForm.get('export')?.value;
+    const exportMode: string = this.exportForm.get('export')?.value || '';
     this.submittingForm = true;
     this.errorMsg = '';
     this.settingsService

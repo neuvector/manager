@@ -2,8 +2,8 @@ package com.neu.cache
 import net.sf.ehcache.CacheManager
 
 object SupportLogAuthCacheManager {
-  implicit val cacheKeyGenerator: ToStringCacheKeyGenerator.type = ToStringCacheKeyGenerator
-  implicit val cacheManager: CacheManager                        = CacheManager.getInstance()
+  given cacheKeyGenerator: ToStringCacheKeyGenerator.type = ToStringCacheKeyGenerator
+  given cacheManager: CacheManager                        = CacheManager.getInstance()
 
   val cacheName = "supportLogAuthCache"
 
@@ -19,7 +19,8 @@ object SupportLogAuthCacheManager {
   /**
    * Get supportLogAuth for support log
    * @param token
-   * @return [[String]]
+   * @return
+   *   [[String]]
    */
   def getSupportLogAuth(token: String): Option[String] = cache.get(token)
 

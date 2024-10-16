@@ -1,6 +1,6 @@
 package com.neu.model
 
-import spray.json.{ DefaultJsonProtocol, _ }
+import spray.json.*
 
 /**
  * Created by bxu on 3/8/17.
@@ -12,19 +12,19 @@ case class QuarantineConfig(quarantine: Boolean)
 case class QuarantineConfigWarp(config: QuarantineConfig)
 
 object ContainerConfigJsonProtocol extends DefaultJsonProtocol {
-  implicit val ContainerQuarantineRequestFormat: RootJsonFormat[ContainerQuarantineRequest] =
-    jsonFormat2(ContainerQuarantineRequest)
-  implicit val quarantineConfigFormat: RootJsonFormat[QuarantineConfig] = jsonFormat1(
-    QuarantineConfig
+  given ContainerQuarantineRequestFormat: RootJsonFormat[ContainerQuarantineRequest] =
+    jsonFormat2(ContainerQuarantineRequest.apply)
+  given quarantineConfigFormat: RootJsonFormat[QuarantineConfig]                     = jsonFormat1(
+    QuarantineConfig.apply
   )
-  implicit val quarantineConfigWarpFormat: RootJsonFormat[QuarantineConfigWarp] = jsonFormat1(
-    QuarantineConfigWarp
+  given quarantineConfigWarpFormat: RootJsonFormat[QuarantineConfigWarp]             = jsonFormat1(
+    QuarantineConfigWarp.apply
   )
-  implicit val snifferParamFormat: RootJsonFormat[SnifferParam] = jsonFormat3(SnifferParam)
-  implicit val snifferParamWrapFormat: RootJsonFormat[SnifferParamWarp] = jsonFormat1(
-    SnifferParamWarp
+  given snifferParamFormat: RootJsonFormat[SnifferParam]                             = jsonFormat3(SnifferParam.apply)
+  given snifferParamWrapFormat: RootJsonFormat[SnifferParamWarp]                     = jsonFormat1(
+    SnifferParamWarp.apply
   )
-  implicit val snifferDataFormat: RootJsonFormat[SnifferData] = jsonFormat2(SnifferData)
+  given snifferDataFormat: RootJsonFormat[SnifferData]                               = jsonFormat2(SnifferData.apply)
 
   def quarantineConfigWarpToJson(config: QuarantineConfigWarp): String = config.toJson.compactPrint
   def snifferParamWarpToJson(paramWarp: SnifferParamWarp): String      = paramWarp.toJson.compactPrint

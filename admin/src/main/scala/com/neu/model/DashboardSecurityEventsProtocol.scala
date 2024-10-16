@@ -1,8 +1,8 @@
 package com.neu.model
 
-import spray.json.{ DefaultJsonProtocol, _ }
-import org.joda.time.DateTime
 import com.typesafe.scalalogging.LazyLogging
+import org.joda.time.DateTime
+import spray.json.*
 
 case class DashboardThreat(
   name: String,
@@ -117,40 +117,40 @@ case class DashboardNotificationDTO2(
 )
 
 object DashboardSecurityEventsProtocol extends DefaultJsonProtocol with LazyLogging {
-  implicit val dateTimeFormat                     = DateTimeFormat
-  implicit val errorFormat: RootJsonFormat[Error] = jsonFormat1(Error)
-  implicit val dashboardThreatFormat: RootJsonFormat[DashboardThreat] = jsonFormat17(
-    DashboardThreat
+  given dateTimeFormat: DateTimeFormat.type                                                    = DateTimeFormat
+  given errorFormat: RootJsonFormat[Error]                                                     = jsonFormat1(Error.apply)
+  given dashboardThreatFormat: RootJsonFormat[DashboardThreat]                                 = jsonFormat17(
+    DashboardThreat.apply
   )
-  implicit val dashboardThreatDataFormat: RootJsonFormat[DashboardThreatData] = jsonFormat2(
-    DashboardThreatData
+  given dashboardThreatDataFormat: RootJsonFormat[DashboardThreatData]                         = jsonFormat2(
+    DashboardThreatData.apply
   )
-  implicit val dashboardViolationFormat: RootJsonFormat[DashboardViolation] = jsonFormat14(
-    DashboardViolation
+  given dashboardViolationFormat: RootJsonFormat[DashboardViolation]                           = jsonFormat14(
+    DashboardViolation.apply
   )
-  implicit val dashboardViolationDataFormat: RootJsonFormat[DashboardViolationData] = jsonFormat2(
-    DashboardViolationData
+  given dashboardViolationDataFormat: RootJsonFormat[DashboardViolationData]                   = jsonFormat2(
+    DashboardViolationData.apply
   )
-  implicit val dashboardIncidentFormat: RootJsonFormat[DashboardIncident] = jsonFormat16(
-    DashboardIncident
+  given dashboardIncidentFormat: RootJsonFormat[DashboardIncident]                             = jsonFormat16(
+    DashboardIncident.apply
   )
-  implicit val dashboardIncidentDataFormat: RootJsonFormat[DashboardIncidentData] = jsonFormat2(
-    DashboardIncidentData
+  given dashboardIncidentDataFormat: RootJsonFormat[DashboardIncidentData]                     = jsonFormat2(
+    DashboardIncidentData.apply
   )
-  implicit val dashboardSecurityEventsFormat: RootJsonFormat[DashboardSecurityEvents] = jsonFormat4(
-    DashboardSecurityEvents
+  given dashboardSecurityEventsFormat: RootJsonFormat[DashboardSecurityEvents]                 = jsonFormat4(
+    DashboardSecurityEvents.apply
   )
-  implicit val convertedDashboardSecurityEventFormat
-    : RootJsonFormat[ConvertedDashboardSecurityEvent] = jsonFormat17(
-    ConvertedDashboardSecurityEvent
+  given convertedDashboardSecurityEventFormat: RootJsonFormat[ConvertedDashboardSecurityEvent] =
+    jsonFormat17(
+      ConvertedDashboardSecurityEvent.apply
+    )
+  given topSecurityEventFormat: RootJsonFormat[TopSecurityEvent]                               = jsonFormat2(
+    TopSecurityEvent.apply
   )
-  implicit val topSecurityEventFormat: RootJsonFormat[TopSecurityEvent] = jsonFormat2(
-    TopSecurityEvent
-  )
-  implicit val criticalSecurityEventDTO2Format: RootJsonFormat[CriticalDashboardSecurityEventDTO] =
-    jsonFormat2(CriticalDashboardSecurityEventDTO)
-  implicit val dashboardNotificationDTO2Format: RootJsonFormat[DashboardNotificationDTO2] =
-    jsonFormat1(DashboardNotificationDTO2)
+  given criticalSecurityEventDTO2Format: RootJsonFormat[CriticalDashboardSecurityEventDTO]     =
+    jsonFormat2(CriticalDashboardSecurityEventDTO.apply)
+  given dashboardNotificationDTO2Format: RootJsonFormat[DashboardNotificationDTO2]             =
+    jsonFormat1(DashboardNotificationDTO2.apply)
 
   def jsonToDashboardThreatData(endpointData: String): DashboardThreatData =
     endpointData.parseJson
@@ -164,62 +164,63 @@ object DashboardSecurityEventsProtocol extends DefaultJsonProtocol with LazyLogg
     endpointData.parseJson
       .convertTo[DashboardIncidentData]
 
-  def threatsToConvertedDashboardThreats: (DashboardThreat) => ConvertedDashboardSecurityEvent =
+  def threatsToConvertedDashboardThreats: DashboardThreat => ConvertedDashboardSecurityEvent =
     (threat: DashboardThreat) => {
+
+      val isClient = threat.target.getOrElse("") == "client"
 
       ConvertedDashboardSecurityEvent(
         None,
         Some(threat.name),
         Some(threat.server_workload_id),
-        if (threat.target == "client") {
-          if (!threat.server_workload_name.getOrElse("").isEmpty()) threat.server_workload_name
-          else if (!threat.server_ip.getOrElse("").isEmpty()) threat.server_ip
+        if (isClient) {
+          if (threat.server_workload_name.getOrElse("").nonEmpty) threat.server_workload_name
+          else if (threat.server_ip.getOrElse("").nonEmpty) threat.server_ip
           else Some(threat.server_workload_id)
         } else {
-          if (!threat.client_workload_name.getOrElse("").isEmpty()) threat.client_workload_name
-          else if (!threat.client_ip.getOrElse("").isEmpty()) threat.client_ip
+          if (threat.client_workload_name.getOrElse("").nonEmpty) threat.client_workload_name
+          else if (threat.client_ip.getOrElse("").nonEmpty) threat.client_ip
           else Some(threat.client_workload_id)
         },
         Some(threat.server_workload_id),
-        if (threat.target == "client") {
-          if (!threat.client_workload_name.getOrElse("").isEmpty()) threat.client_workload_name
-          else if (!threat.client_ip.getOrElse("").isEmpty()) threat.client_ip
+        if (isClient) {
+          if (threat.client_workload_name.getOrElse("").nonEmpty) threat.client_workload_name
+          else if (threat.client_ip.getOrElse("").nonEmpty) threat.client_ip
           else Some(threat.client_workload_id)
         } else {
-          if (!threat.server_workload_name.getOrElse("").isEmpty()) threat.server_workload_name
-          else if (!threat.server_ip.getOrElse("").isEmpty()) threat.server_ip
+          if (threat.server_workload_name.getOrElse("").nonEmpty) threat.server_workload_name
+          else if (threat.server_ip.getOrElse("").nonEmpty) threat.server_ip
           else Some(threat.server_workload_id)
         },
-        if (threat.target == "client") threat.server_workload_domain
+        if (isClient) threat.server_workload_domain
         else threat.client_workload_domain,
-        if (threat.target == "client") threat.client_workload_domain
+        if (isClient) threat.client_workload_domain
         else threat.server_workload_domain,
         threat.level,
         threat.host_name,
-        if (threat.target == "client") threat.server_port else threat.client_port,
-        if (threat.target == "client") threat.client_port else threat.server_port,
+        if (isClient) threat.server_port else threat.client_port,
+        if (isClient) threat.client_port else threat.server_port,
         threat.server_conn_port,
-        if (threat.target == "client") threat.server_ip else threat.client_ip,
-        if (threat.target == "client") threat.client_ip else threat.server_ip,
+        if (isClient) threat.server_ip else threat.client_ip,
+        if (isClient) threat.client_ip else threat.server_ip,
         threat.application,
         threat.reported_at
       )
     }
 
   def violationsToConvertedDashboardViolations
-    : (DashboardViolation) => ConvertedDashboardSecurityEvent =
-    (violation: DashboardViolation) => {
-
+    : DashboardViolation => ConvertedDashboardSecurityEvent =
+    (violation: DashboardViolation) =>
       ConvertedDashboardSecurityEvent(
         Some(violation.policy_id),
         None,
         Some(violation.client_id),
-        if (!violation.client_name.getOrElse("").isEmpty()) violation.client_name
-        else if (!violation.client_ip.getOrElse("").isEmpty()) violation.client_ip
+        if (violation.client_name.getOrElse("").nonEmpty) violation.client_name
+        else if (violation.client_ip.getOrElse("").nonEmpty) violation.client_ip
         else Some(violation.client_id),
         Some(violation.server_id),
-        if (!violation.server_name.getOrElse("").isEmpty()) violation.server_name
-        else if (!violation.server_ip.getOrElse("").isEmpty()) violation.server_ip
+        if (violation.server_name.getOrElse("").nonEmpty) violation.server_name
+        else if (violation.server_ip.getOrElse("").nonEmpty) violation.server_ip
         else Some(violation.server_id),
         violation.client_domain,
         violation.server_domain,
@@ -233,10 +234,8 @@ object DashboardSecurityEventsProtocol extends DefaultJsonProtocol with LazyLogg
         violation.application,
         violation.reported_at
       )
-    }
 
-  def incidentsToConvertedDashboardIncidents
-    : (DashboardIncident) => ConvertedDashboardSecurityEvent =
+  def incidentsToConvertedDashboardIncidents: DashboardIncident => ConvertedDashboardSecurityEvent =
     (incident: DashboardIncident) => {
 
       ConvertedDashboardSecurityEvent(
@@ -246,17 +245,17 @@ object DashboardSecurityEventsProtocol extends DefaultJsonProtocol with LazyLogg
         if (incident.conn_ingress.isDefined) {
           if (incident.conn_ingress.get) {
             if (incident.remote_workload_id.isDefined) {
-              if (!incident.remote_workload_name.getOrElse("").isEmpty())
+              if (incident.remote_workload_name.getOrElse("").nonEmpty)
                 incident.remote_workload_name
-              else if (!incident.server_ip.getOrElse("").isEmpty()) incident.server_ip
+              else if (incident.server_ip.getOrElse("").nonEmpty) incident.server_ip
               else incident.remote_workload_id
             } else {
               None
             }
           } else {
             if (incident.workload_id.isDefined) {
-              if (!incident.workload_name.getOrElse("").isEmpty()) incident.workload_name
-              else if (!incident.client_ip.getOrElse("").isEmpty()) incident.client_ip
+              if (incident.workload_name.getOrElse("").nonEmpty) incident.workload_name
+              else if (incident.client_ip.getOrElse("").nonEmpty) incident.client_ip
               else incident.workload_id
             } else {
               None
@@ -264,13 +263,13 @@ object DashboardSecurityEventsProtocol extends DefaultJsonProtocol with LazyLogg
           }
         } else {
           if (incident.workload_id.isDefined) {
-            if (!incident.workload_name.getOrElse("").isEmpty()) incident.workload_name
-            else if (!incident.client_ip.getOrElse("").isEmpty()) incident.client_ip
+            if (incident.workload_name.getOrElse("").nonEmpty) incident.workload_name
+            else if (incident.client_ip.getOrElse("").nonEmpty) incident.client_ip
             else incident.workload_id
           } else if (incident.remote_workload_id.isDefined) {
-            if (!incident.remote_workload_name.getOrElse("").isEmpty())
+            if (incident.remote_workload_name.getOrElse("").nonEmpty)
               incident.remote_workload_name
-            else if (!incident.server_ip.getOrElse("").isEmpty()) incident.server_ip
+            else if (incident.server_ip.getOrElse("").nonEmpty) incident.server_ip
             else incident.remote_workload_id
           } else {
             Some("Host: " + incident.host_name)
@@ -280,17 +279,17 @@ object DashboardSecurityEventsProtocol extends DefaultJsonProtocol with LazyLogg
         if (incident.conn_ingress.isDefined) {
           if (incident.conn_ingress.get) {
             if (incident.workload_id.isDefined) {
-              if (!incident.workload_name.getOrElse("").isEmpty()) incident.workload_name
-              else if (!incident.client_ip.getOrElse("").isEmpty()) incident.client_ip
+              if (incident.workload_name.getOrElse("").nonEmpty) incident.workload_name
+              else if (incident.client_ip.getOrElse("").nonEmpty) incident.client_ip
               else incident.workload_id
             } else {
               None
             }
           } else {
             if (incident.remote_workload_id.isDefined) {
-              if (!incident.remote_workload_name.getOrElse("").isEmpty())
+              if (incident.remote_workload_name.getOrElse("").nonEmpty)
                 incident.remote_workload_name
-              else if (!incident.server_ip.getOrElse("").isEmpty()) incident.server_ip
+              else if (incident.server_ip.getOrElse("").nonEmpty) incident.server_ip
               else incident.remote_workload_id
             } else {
               None
@@ -298,13 +297,13 @@ object DashboardSecurityEventsProtocol extends DefaultJsonProtocol with LazyLogg
           }
         } else {
           if (incident.workload_id.isDefined) {
-            if (!incident.workload_name.getOrElse("").isEmpty()) incident.workload_name
-            else if (!incident.client_ip.getOrElse("").isEmpty()) incident.client_ip
+            if (incident.workload_name.getOrElse("").nonEmpty) incident.workload_name
+            else if (incident.client_ip.getOrElse("").nonEmpty) incident.client_ip
             else incident.workload_id
           } else if (incident.remote_workload_id.isDefined) {
-            if (!incident.remote_workload_name.getOrElse("").isEmpty())
+            if (incident.remote_workload_name.getOrElse("").nonEmpty)
               incident.remote_workload_name
-            else if (!incident.server_ip.getOrElse("").isEmpty()) incident.server_ip
+            else if (incident.server_ip.getOrElse("").nonEmpty) incident.server_ip
             else incident.remote_workload_id
           } else {
             Some("Host: " + incident.host_name)

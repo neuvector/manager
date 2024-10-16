@@ -17,6 +17,7 @@ export class GlobalConstant {
   public static STATUS_INTERNAL_SERVER_ERR = 500;
   public static STATUS_NOT_FOUND = 404;
   public static STATUS_FORBIDDEN = 403;
+  public static RANCHER_AUTH_FAIL_MSG = 'system:unauthenticated';
   public static PATH_LOGIN = 'login';
   public static PATH_LOGOUT = 'logout';
   public static PATH_DEFAULT = 'dashboard';

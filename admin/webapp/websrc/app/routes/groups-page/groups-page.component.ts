@@ -60,7 +60,7 @@ export class GroupsPageComponent implements OnInit {
       this.groupsView.groups = this.groupsView.groups.filter(function (item) {
         return !item.platform_role;
       });
-      this.groupsView.gridOptions4Groups.api!.setRowData(
+      this.groupsView.gridApi!.setRowData(
         this.groupsView.groups
       );
     } else {

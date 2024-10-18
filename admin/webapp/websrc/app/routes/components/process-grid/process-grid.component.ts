@@ -91,11 +91,6 @@ export class ProcessGridComponent implements OnInit {
         actionCellRenderer: ProcessGridActionCellComponent,
       },
     };
-    if (this.useQuickFilterService) {
-      this.quickFilterService.textInput$.subscribe((value: string) => {
-        this.quickFilterService.onFilterChange(value, this.gridOptions);
-      });
-    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -109,6 +104,11 @@ export class ProcessGridComponent implements OnInit {
 
   onGridReady(params: GridReadyEvent): void {
     this.gridApi = params.api;
+    if (this.useQuickFilterService) {
+      this.quickFilterService.textInput$.subscribe((value: string) => {
+        this.quickFilterService.onFilterChange(value, this.gridOptions, this.gridApi);
+      });
+    }
     this.gridApi.sizeColumnsToFit();
     if (this.rowData) {
       this.gridApi.setRowData(this.rowData);

@@ -4,7 +4,7 @@ import { EventsGridComponent } from './events-grid.component';
 import { NvCommonModule } from '@common/nvCommon.module';
 import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
-import { AgGridAngular } from 'ag-grid-angular';
+import { AgGridModule } from 'ag-grid-angular';
 import { EventsGridNameCellComponent } from './events-grid-name-cell/events-grid-name-cell.component';
 import { EventsGridLevelCellComponent } from './events-grid-level-cell/events-grid-level-cell.component';
 import { EventsGridUserCellComponent } from './events-grid-user-cell/events-grid-user-cell.component';
@@ -34,6 +34,7 @@ import { EventsGridCsvService } from './csv-generation/events-grid-csv.service';
     LoadingButtonModule,
     NgxSliderModule,
     DragDropModule,
+    AgGridModule
     // AgGridModule.withComponents([]),
   ],
   exports: [EventsGridComponent],

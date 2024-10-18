@@ -21,6 +21,7 @@ import {
   GridReadyEvent,
   RowDataUpdatedEvent,
   IRowNode,
+  PostSortRowsParams,
   RowSelectedEvent,
 } from 'ag-grid-community';
 import * as $ from 'jquery';
@@ -244,7 +245,7 @@ export class ContainersGridComponent implements OnInit {
     this.gridOptions = {
       ...this.gridOptions,
       getRowId: params => params.data.brief.id,
-      postSort: this.postSort.bind(this),
+      postSortRows: this.postSortRows.bind(this),
       onGridReady: this.onGridReady.bind(this),
       onRowSelected: this.onRowSelected.bind(this),
       onRowDataUpdated: this.onRowDataUpdated.bind(this),
@@ -258,11 +259,6 @@ export class ContainersGridComponent implements OnInit {
         statusCellRenderer: ContainersGridStatusCellComponent,
       },
     };
-    if (this.useQuickFilterService) {
-      this.quickFilterService.textInput$.subscribe((value: string) => {
-        this.quickFilterService.onFilterChange(value, this.gridOptions);
-      });
-    }
     if (this.isMemberData) {
       this.containersService.displayContainers = this.rowData;
     }
@@ -270,6 +266,11 @@ export class ContainersGridComponent implements OnInit {
 
   onGridReady(params: GridReadyEvent): void {
     this.gridApi = params.api;
+    if (this.useQuickFilterService) {
+      this.quickFilterService.textInput$.subscribe((value: string) => {
+        this.quickFilterService.onFilterChange(value, this.gridOptions, this.gridApi);
+      });
+    }
     this.gridApi.sizeColumnsToFit();
     this.gridApi.getDisplayedRowAtIndex(0)?.setSelected(true);
     if (this.linkedContainer) {
@@ -302,17 +303,17 @@ export class ContainersGridComponent implements OnInit {
     this.quickFilter?.onFilterChange(this.quickFilter.filter.value || '');
   }
 
-  postSort(nodes: IRowNode[]): void {
+  postSortRows(params: PostSortRowsParams<any, any>): void {
     // sort parents first
-    nodes = nodes.sort((a, b) =>
+    params.nodes = params.nodes.sort((a, b) =>
       !a.data.parent_id ? -1 : !b.data.parent_id ? 1 : 0
     );
-    for (let i = 0; i < nodes.length; i++) {
-      const pid = nodes[i].data.parent_id;
+    for (let i = 0; i < params.nodes.length; i++) {
+      const pid = params.nodes[i].data.parent_id;
       if (pid) {
-        const pidx = nodes.findIndex(node => node.data.brief.id === pid);
+        const pidx = params.nodes.findIndex(node => node.data.brief.id === pid);
         // splice child after parent
-        nodes.splice(pidx + 1, 0, nodes.splice(i, 1)[0]);
+        params.nodes.splice(pidx + 1, 0, params.nodes.splice(i, 1)[0]);
       }
     }
   }

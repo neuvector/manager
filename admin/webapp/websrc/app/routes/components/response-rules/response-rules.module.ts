@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NvCommonModule } from '@common/nvCommon.module';
 import { ResponseRulesComponent } from './response-rules.component';
-import { AgGridAngular } from 'ag-grid-angular';
+import { AgGridModule } from 'ag-grid-angular';
 import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
 import { ActionButtonsComponent } from './partial/action-buttons/action-buttons.component';
 import { AddEditResponseRuleModalComponent } from './partial/add-edit-response-rule-modal/add-edit-response-rule-modal.component';
@@ -21,6 +21,7 @@ import { ConfirmDialogResponseRuleComponent } from './partial/confirm-dialog-res
     CommonModule,
     NvCommonModule,
     QuickFilterModule,
+    AgGridModule,
     // AgGridModule.withComponents([
     //   ActionButtonsComponent,
     //   AddEditResponseRuleModalComponent,

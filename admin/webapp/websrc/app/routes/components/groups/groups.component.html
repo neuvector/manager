@@ -66,6 +66,7 @@
     </mat-checkbox>
     <app-quick-filter
       [gridOptions]="gridOptions4Groups"
+      [gridApi]="gridApi"
       (filterCountChange)="filterCountChanged($event)"
       [showCount]="false">
     </app-quick-filter>
@@ -193,6 +194,7 @@
     </div>
     <app-quick-filter
       [gridOptions]="gridOptions4Groups"
+      [gridApi]="gridApi"
       (filterCountChange)="filterCountChanged($event)"
       [showCount]="false">
     </app-quick-filter>

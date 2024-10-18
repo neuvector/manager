@@ -73,6 +73,7 @@
     <app-quick-filter
       *ngIf="!useQuickFilterService"
       [gridOptions]="gridOptions"
+      [gridApi]="gridApi"
       (filterCountChange)="filterCountChanged($event)"
       [showCount]="false"
       [condition]="quickFilterParents">

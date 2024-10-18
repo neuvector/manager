@@ -20,6 +20,7 @@
     </button>
     <app-quick-filter
       [gridOptions]="gridOptions"
+      [gridApi]="gridApi"
       (filterCountChange)="filterCountChanged($event)"
       [showCount]="false"
       [condition]="isParent">
@@ -30,6 +31,7 @@
   (window:resize)="onResize()"
   [gridOptions]="gridOptions"
   [rowData]="riskReportsService.displayReports"
+  (rowDataChanged)="refreshAutoCompleteData()"
   id="risk-report-grid"
   style="width: 100%; height: calc(100vh - 280px)"
   class="ag-theme-balham">

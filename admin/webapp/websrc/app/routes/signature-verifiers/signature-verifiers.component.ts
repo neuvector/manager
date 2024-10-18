@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { GridOptions } from 'ag-grid-community';
+import { GridOptions, GridApi } from 'ag-grid-community';
 import { MatDialog } from '@angular/material/dialog';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { PathConstant } from '@common/constants/path.constant';
@@ -17,6 +17,7 @@ import {
   Verifier,
 } from '@common/types/signatures/signature';
 import { ImportFileModalComponent } from '@components/ui/import-file-modal/import-file-modal.component';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-signature-verifiers',
@@ -29,6 +30,8 @@ export class SignatureVerifiersComponent implements OnInit {
   gridOptions: any;
   gridOptions4Signatures!: GridOptions;
   gridOptions4Verifiers!: GridOptions;
+  gridApi4Signatures!: GridApi;
+  gridApi4Verifiers!: GridApi;
   filteredCount: number = 0;
   signatures: Signature[] = [];
   verifiers: Verifier[] = [];
@@ -64,7 +67,39 @@ export class SignatureVerifiersComponent implements OnInit {
       this.isWriteSignaturesAuthorized
     );
     this.gridOptions4Signatures = this.gridOptions.gridOptions4Signatures;
+    this.gridOptions4Signatures.onGridReady = params => {
+      const $win = $(GlobalVariable.window);
+      setTimeout(() => {
+        if (params && params.api) {
+          this.gridApi4Signatures = params.api;
+          params.api.sizeColumnsToFit();
+        }
+      }, 300);
+      $win.on(GlobalConstant.AG_GRID_RESIZE, () => {
+        setTimeout(() => {
+          if (params && params.api) {
+            params.api.sizeColumnsToFit();
+          }
+        }, 100);
+      });
+    };
     this.gridOptions4Verifiers = this.gridOptions.gridOptions4Verifiers;
+    this.gridOptions4Verifiers.onGridReady = params => {
+      const $win = $(GlobalVariable.window);
+      setTimeout(() => {
+        if (params && params.api) {
+          this.gridApi4Verifiers = params.api;
+          params.api.sizeColumnsToFit();
+        }
+      }, 300);
+      $win.on(GlobalConstant.AG_GRID_RESIZE, () => {
+        setTimeout(() => {
+          if (params && params.api) {
+            params.api.sizeColumnsToFit();
+          }
+        }, 100);
+      });
+    };
     this.gridOptions4Signatures.onSelectionChanged =
       this.onSelectionChanged4Signature;
     this.gridOptions4Verifiers.onSelectionChanged =
@@ -122,12 +157,12 @@ export class SignatureVerifiersComponent implements OnInit {
           this.signatures = signatureArray;
 
           // this.filteredCount = this.signatures.length;
-          this.gridOptions4Signatures.api!.setRowData(this.signatures);
+          this.gridApi4Signatures!.setRowData(this.signatures);
           if (!this.signatures || this.signatures.length === 0)
-            this.gridOptions4Verifiers.api!.setRowData([]);
+            this.gridApi4Verifiers!.setRowData([]);
           setTimeout(() => {
             let rowNode =
-              this.gridOptions4Signatures.api!.getDisplayedRowAtIndex(index);
+              this.gridApi4Signatures!.getDisplayedRowAtIndex(index);
             rowNode?.setSelected(true);
           }, 200);
         },
@@ -149,7 +184,7 @@ export class SignatureVerifiersComponent implements OnInit {
           opType: GlobalConstant.MODAL_OP.ADD,
           gridOptions4Signatures: this.gridOptions4Signatures,
           index4Signature: this.index4Signature,
-          gridApi: this.gridOptions4Signatures.api!,
+          gridApi: this.gridApi4Signatures!,
           sigstores: this.signatures,
         },
       }
@@ -163,7 +198,7 @@ export class SignatureVerifiersComponent implements OnInit {
         opType: GlobalConstant.MODAL_OP.ADD,
         gridOptions4Verifiers: this.gridOptions4Verifiers,
         index4Verifier: this.index4Verifier,
-        gridApi: this.gridOptions4Verifiers.api!,
+        gridApi: this.gridApi4Verifiers!,
         verifiers: this.verifiers,
         rootOfTrustName: this.selectedSignature.name,
         attribute: this.selectedSignature.attribute,
@@ -190,7 +225,7 @@ export class SignatureVerifiersComponent implements OnInit {
 
   private onSelectionChanged4Signature = () => {
     this.selectedSignatures =
-      this.gridOptions4Signatures.api!.getSelectedRows();
+      this.gridApi4Signatures!.getSelectedRows();
     this.selectedSignature = this.selectedSignatures[0];
     this.index4Signature = this.signatures.findIndex(
       signature => signature.name === this.selectedSignature.name
@@ -199,7 +234,7 @@ export class SignatureVerifiersComponent implements OnInit {
   };
   private onSelectionChanged4Verifier = () => {
     this.selectedVerifier =
-      this.gridOptions4Verifiers.api!.getSelectedRows()[0];
+      this.gridApi4Verifiers!.getSelectedRows()[0];
     this.index4Verifier = this.verifiers.findIndex(
       verifier => verifier.name === this.selectedVerifier.name
     );
@@ -210,12 +245,12 @@ export class SignatureVerifiersComponent implements OnInit {
       (response: any) => {
         setTimeout(() => {
           this.verifiers = response.verifiers || [];
-          this.gridOptions4Verifiers.api!.setRowData(this.verifiers);
+          this.gridApi4Verifiers!.setRowData(this.verifiers);
           if (this.verifiers.length > 0) {
             let rowNode =
-              this.gridOptions4Verifiers.api!.getDisplayedRowAtIndex(0);
+              this.gridApi4Verifiers!.getDisplayedRowAtIndex(0);
             rowNode!.setSelected(true);
-            this.gridOptions4Verifiers.api!.sizeColumnsToFit();
+            this.gridApi4Verifiers!.sizeColumnsToFit();
           }
         }, 200);
       },

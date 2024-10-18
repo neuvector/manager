@@ -296,7 +296,7 @@ export class NetworkRulesService {
       animateRows: true,
       suppressDragLeaveHidesColumns: true,
       columnDefs: columnDefs,
-      rowSelection: 'multiple',
+      rowSelection: 'multiple' as "single" | "multiple" | undefined,
       isRowSelectable: idSelectionFunc,
       rowClassRules: {
         'disabled-row': function (params) {

@@ -14,7 +14,7 @@ import {
   GridApi,
   GridOptions,
   GridReadyEvent,
-  RowDataChangedEvent,
+  RowDataUpdatedEvent,
   IRowNode,
 } from 'ag-grid-community';
 import { TranslateService } from '@ngx-translate/core';
@@ -117,7 +117,7 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
       suppressDragLeaveHidesColumns: true,
       rowSelection: 'single',
       onGridReady: event => this.onGridReady(event),
-      onRowDataChanged: event => this.onRowDataChanged(event),
+      onRowDataUpdated: event => this.onRowDataUpdated(event),
       onSelectionChanged: event => this.onSelectionChanged(event),
       components: {
         impactCellRenderer: ComplianceItemsTableImpactCellComponent,
@@ -181,7 +181,7 @@ export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
     }, 200);
   }
 
-  onRowDataChanged(event: RowDataChangedEvent) {
+  onRowDataUpdated(event: RowDataUpdatedEvent) {
     if (this.complianceFilterService.isAdvFilterOn()) {
       event.api.onFilterChanged();
       this.filteredCount =

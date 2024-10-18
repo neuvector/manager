@@ -115,7 +115,6 @@ export class ControllersGridComponent implements OnInit, OnChanges {
       ...this.gridOptions,
       onRowSelected: params => this.onRowSelected(params),
       onGridReady: event => this.onGridReady(event),
-      onRowDataChanged: () => this.setDefaultSelection(),
       components: {
         statusCellRenderer: ControllersGridStatusCellComponent,
       },

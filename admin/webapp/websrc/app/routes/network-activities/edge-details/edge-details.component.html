@@ -23,7 +23,7 @@
     *ngIf="conversationDetail.entries && conversationDetail.entries.length > 8"
     class="d-flex flex-row justify-content-end align-items-center">
 
-    <app-quick-filter [gridOptions]="gridOptions" [showCount]="false">
+    <app-quick-filter [gridOptions]="gridOptions" [gridApi]="gridApi" [showCount]="false">
     </app-quick-filter>
   </div>
   <ag-grid-angular

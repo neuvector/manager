@@ -66,6 +66,7 @@
               <app-quick-filter
                 class=""
                 [gridOptions]="gridOptions4Signatures"
+                [gridApi]="gridApi4Signatures"
                 (filterCountChange)="filterCountChanged4Signature($event)"
                 [showCount]="false">
               </app-quick-filter>
@@ -104,6 +105,7 @@
               <app-quick-filter
                 class=""
                 [gridOptions]="gridOptions4Verifiers"
+                [gridApi]="gridApi4Verifiers"
                 [showCount]="false">
               </app-quick-filter>
             </div>

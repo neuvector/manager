@@ -6,7 +6,7 @@ import {
   RemoteExportOptionsWrapper,
   RemoteExportOptions,
 } from '@common/types';
-import { GridOptions } from 'ag-grid-community';
+import { GridOptions, GridApi } from 'ag-grid-community';
 import { WafSensorsService } from '@services/waf-sensors.service';
 import { MatDialog } from '@angular/material/dialog';
 import { GlobalConstant } from '@common/constants/global.constant';
@@ -39,6 +39,9 @@ export class WafSensorsComponent implements OnInit {
   gridOptions4Rules!: GridOptions;
   gridOptions4Patterns!: GridOptions;
   gridOptions4EditPatterns!: GridOptions;
+  gridApi4Sensors!: GridApi;
+  gridApi4Rules!: GridApi;
+  gridApi4Patterns!: GridApi;
   filteredCount: number = 0;
   selectedSensors!: Array<WafSensor>;
   selectedSensor!: WafSensor;
@@ -75,8 +78,56 @@ export class WafSensorsComponent implements OnInit {
       this.isWriteWAFSensorAuthorized
     );
     this.gridOptions4Sensors = this.gridOptions.gridOptions;
+    this.gridOptions4Sensors.onGridReady = params => {
+      const $win = $(GlobalVariable.window);
+      setTimeout(() => {
+        if (params && params.api) {
+          this.gridApi4Sensors = params.api;
+          params.api.sizeColumnsToFit();
+        }
+      }, 300);
+      $win.on(GlobalConstant.AG_GRID_RESIZE, () => {
+        setTimeout(() => {
+          if (params && params.api) {
+            params.api.sizeColumnsToFit();
+          }
+        }, 100);
+      });
+    };
     this.gridOptions4Rules = this.gridOptions.gridOptions4Rules;
+    this.gridOptions4Rules.onGridReady = params => {
+      const $win = $(GlobalVariable.window);
+      setTimeout(() => {
+        if (params && params.api) {
+          this.gridApi4Rules = params.api;
+          params.api.sizeColumnsToFit();
+        }
+      }, 300);
+      $win.on(GlobalConstant.AG_GRID_RESIZE, () => {
+        setTimeout(() => {
+          if (params && params.api) {
+            params.api.sizeColumnsToFit();
+          }
+        }, 100);
+      });
+    };
     this.gridOptions4Patterns = this.gridOptions.gridOptions4Patterns;
+    this.gridOptions4Patterns.onGridReady = params => {
+      const $win = $(GlobalVariable.window);
+      setTimeout(() => {
+        if (params && params.api) {
+          this.gridApi4Patterns = params.api;
+          params.api.sizeColumnsToFit();
+        }
+      }, 300);
+      $win.on(GlobalConstant.AG_GRID_RESIZE, () => {
+        setTimeout(() => {
+          if (params && params.api) {
+            params.api.sizeColumnsToFit();
+          }
+        }, 100);
+      });
+    };
     this.gridOptions4EditPatterns = this.gridOptions.gridOptions4EditPatterns;
     this.gridOptions4Sensors.onSelectionChanged =
       this.onSelectionChanged4Sensor;
@@ -95,7 +146,7 @@ export class WafSensorsComponent implements OnInit {
       data: {
         opType: GlobalConstant.MODAL_OP.ADD,
         wafSensors: this.wafSensors,
-        gridApi: this.gridOptions4Sensors.api!
+        gridApi: this.gridApi4Sensors!
       },
     });
   };
@@ -108,7 +159,7 @@ export class WafSensorsComponent implements OnInit {
         opType: GlobalConstant.MODAL_OP.ADD,
         gridOptions4EditPatterns: this.gridOptions4EditPatterns,
         index4Sensor: this.index4Sensor,
-        gridApi: this.gridOptions4Rules.api!
+        gridApi: this.gridApi4Rules!
       },
     });
   };
@@ -225,7 +276,7 @@ export class WafSensorsComponent implements OnInit {
           this.filteredCount = this.wafSensors.length;
           setTimeout(() => {
             let rowNode =
-              this.gridOptions4Sensors.api!.getDisplayedRowAtIndex(index);
+              this.gridApi4Sensors!.getDisplayedRowAtIndex(index);
             rowNode?.setSelected(true);
           }, 200);
         },
@@ -234,27 +285,27 @@ export class WafSensorsComponent implements OnInit {
   };
 
   private onSelectionChanged4Sensor = () => {
-    this.selectedSensors = this.gridOptions4Sensors.api!.getSelectedRows();
+    this.selectedSensors = this.gridApi4Sensors!.getSelectedRows();
     this.selectedSensor = this.selectedSensors[0];
     this.index4Sensor = this.wafSensors.findIndex(
       sensor => sensor.name === this.selectedSensor.name
     );
     this.isPredefine = this.selectedSensor.predefine;
     setTimeout(() => {
-      this.gridOptions4Rules.api!.setRowData(this.selectedSensor.rules);
-      this.gridOptions4Patterns.api!.setRowData([]);
+      this.gridApi4Rules!.setRowData(this.selectedSensor.rules);
+      this.gridApi4Patterns!.setRowData([]);
       if (this.selectedSensor.rules.length > 0) {
-        let rowNode = this.gridOptions4Rules.api!.getDisplayedRowAtIndex(0);
+        let rowNode = this.gridApi4Rules!.getDisplayedRowAtIndex(0);
         rowNode!.setSelected(true);
-        this.gridOptions4Rules.api!.sizeColumnsToFit();
+        this.gridApi4Rules!.sizeColumnsToFit();
       }
     }, 200);
   };
   private onSelectionChanged4Rule = () => {
-    this.selectedRule = this.gridOptions4Rules.api!.getSelectedRows()[0];
-    this.gridOptions4Patterns.api!.setRowData(this.selectedRule.patterns);
+    this.selectedRule = this.gridApi4Rules!.getSelectedRows()[0];
+    this.gridApi4Patterns!.setRowData(this.selectedRule.patterns);
     setTimeout(() => {
-      this.gridOptions4Patterns.api!.sizeColumnsToFit();
+      this.gridApi4Patterns!.sizeColumnsToFit();
     }, 200);
   };
 }

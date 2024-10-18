@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AgGridAngular } from 'ag-grid-angular';
+import { AgGridModule } from 'ag-grid-angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ExposedServicepodConvGridComponent } from './exposed-servicepod-conv-grid.component';
@@ -24,6 +24,7 @@ import { ConversationEntryListComponent } from './conversation-entry-list/conver
     TranslateModule,
     MatTooltipModule,
     FlagIpFqdnModule,
+    AgGridModule,
     // AgGridModule.withComponents([ExposedServicepodGridServicepodCellComponent]),
   ],
   exports: [

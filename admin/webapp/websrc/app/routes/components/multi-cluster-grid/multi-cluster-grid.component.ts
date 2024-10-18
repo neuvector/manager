@@ -28,6 +28,7 @@ import { finalize, takeWhile } from 'rxjs/operators';
 import { interval } from 'rxjs';
 import { GlobalConstant } from '@common/constants/global.constant';
 
+
 type Task = {
   index: number;
   rowNode: IRowNode;
@@ -261,8 +262,8 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
 
   updateSummaryForRows() {
     this.clusterData.clusters!.forEach((cluster, index) => {
-      if (this.gridOptions && this.gridOptions.api) {
-        const rowNode = this.gridOptions.api!.getDisplayedRowAtIndex(index);
+      if (this.gridOptions && this.gridApi) {
+        const rowNode = this.gridApi!.getDisplayedRowAtIndex(index);
         if (rowNode) {
           const task: Task = {
             index: index,
@@ -519,8 +520,8 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
       );
     }
 
-    if (this.gridOptions && this.gridOptions.api) {
-      this.gridOptions.api!.redrawRows({ rowNodes: [rowNode] });
+    if (this.gridOptions && this.gridApi) {
+      this.gridApi!.redrawRows({ rowNodes: [rowNode] });
     }
   }
 
@@ -530,6 +531,6 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
     rowNode.data.cvedb_version = message;
     rowNode.data.score = message;
 
-    this.gridOptions.api!.redrawRows({ rowNodes: [rowNode] });
+    this.gridApi!.redrawRows({ rowNodes: [rowNode] });
   }
 }

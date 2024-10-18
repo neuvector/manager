@@ -1,10 +1,13 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef,  MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { GridOptions } from 'ag-grid-community';
+import { GridOptions, GridApi } from 'ag-grid-community';
 import { GroupsService } from '@services/groups.service';
 import { DlpSensor } from '@common/types';
 import { NotificationService } from '@services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
+import { GlobalVariable } from '@common/variables/global.variable';
+import { GlobalConstant } from '@common/constants/global.constant';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-group-dlp-config-modal',
@@ -14,6 +17,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class GroupDlpConfigModalComponent implements OnInit {
 
   gridOptions4DlpSensorOption: GridOptions;
+  gridApi!: GridApi;
   filteredCount: number = 0;
   filtered: boolean = false;
   dlpSensorOption: Array<DlpSensor> = [];
@@ -33,9 +37,25 @@ export class GroupDlpConfigModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.gridOptions4DlpSensorOption = this.groupsService.prepareGrid4DlpSensorOption();
+    this.gridOptions4DlpSensorOption.onGridReady = params => {
+      const $win = $(GlobalVariable.window);
+      setTimeout(() => {
+        if (params && params.api) {
+          this.gridApi = params.api;
+          params.api.sizeColumnsToFit();
+        }
+      }, 300);
+      $win.on(GlobalConstant.AG_GRID_RESIZE, () => {
+        setTimeout(() => {
+          if (params && params.api) {
+            params.api.sizeColumnsToFit();
+          }
+        }, 100);
+      });
+    };
     this.gridOptions4DlpSensorOption.onSelectionChanged = () => {
-      this.selectedDlpSensors = this.gridOptions4DlpSensorOption.api!.getSelectedRows();
-      this.selectedDLPSensorNodes = this.gridOptions4DlpSensorOption.api!.getSelectedNodes();
+      this.selectedDlpSensors = this.gridApi!.getSelectedRows();
+      this.selectedDLPSensorNodes = this.gridApi!.getSelectedNodes();
     };
     this.refresh();
   }
@@ -52,9 +72,9 @@ export class GroupDlpConfigModalComponent implements OnInit {
           this.dlpSensorOption = this.dlpSensorOption.map(sensor => {
             return Object.assign(sensor, { isAllowed: false });
           });
-          this.gridOptions4DlpSensorOption.api!.setRowData(this.dlpSensorOption);
+          this.gridApi!.setRowData(this.dlpSensorOption);
           setTimeout(() => {
-            this.gridOptions4DlpSensorOption.api!.forEachNode((node, index) => {
+            this.gridApi!.forEachNode((node, index) => {
               this.data.configuredSensors.forEach(configuredSensor => {
                 if (node.data.name === configuredSensor.name) {
                   node.data.isAllowed = configuredSensor.action === "allow";

@@ -4,7 +4,7 @@ import { ControllersGridComponent } from './controllers-grid.component';
 import { NvCommonModule } from '@common/nvCommon.module';
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
 import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
-import { AgGridAngular } from 'ag-grid-angular';
+import { AgGridModule } from 'ag-grid-angular';
 import { ControllersGridStatusCellComponent } from './controllers-grid-status-cell/controllers-grid-status-cell.component';
 
 @NgModule({
@@ -14,6 +14,7 @@ import { ControllersGridStatusCellComponent } from './controllers-grid-status-ce
     NvCommonModule,
     QuickFilterModule,
     LoadingButtonModule,
+    AgGridModule
     // AgGridModule.withComponents([]),
   ],
   exports: [ControllersGridComponent],

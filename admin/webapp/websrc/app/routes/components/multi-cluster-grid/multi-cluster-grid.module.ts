@@ -15,6 +15,7 @@ import { MultiClusterGridActionCellComponent } from './multi-cluster-grid-action
     NvCommonModule,
     QuickFilterModule,
     LoadingButtonModule,
+    AgGridModule,
     // AgGridModule.withComponents([])
   ],
   exports: [ MultiClusterGridComponent ]

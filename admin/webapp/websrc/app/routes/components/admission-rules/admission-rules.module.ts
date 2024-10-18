@@ -7,7 +7,6 @@ import { AddEditAdmissionRuleModalComponent } from './partial/add-edit-admission
 import { AdvanceSettingModalComponent } from './partial/advance-setting-modal/advance-setting-modal.component';
 import { ExportAdmissionRulesModalComponent } from './partial/export-admission-rules-modal/export-admission-rules-modal.component';
 import { ConfigurationAssessmentModalComponent } from './partial/configuration-assessment-modal/configuration-assessment-modal.component';
-import { AgGridAngular } from 'ag-grid-angular';
 import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
 import { LoadingTemplateModule } from '@components/ui/loading-template/loading-template.module';
@@ -23,6 +22,7 @@ import { ConfigurationAssessmentResultPrintableReportComponent } from './partial
 import { MatchedRuleListComponent } from './partial/configuration-assessment-modal/matched-rule-list/matched-rule-list.component';
 import { IndexCellComponent } from './partial/configuration-assessment-modal/index-cell/index-cell.component';
 import { ExportOptionsModule } from '@components/export-options/export-options.module';
+import { AgGridModule } from 'ag-grid-angular';
 
 @NgModule({
   declarations: [
@@ -50,7 +50,8 @@ import { ExportOptionsModule } from '@components/export-options/export-options.m
     MatTooltipModule,
     NgJsonEditorModule,
     MultiSelectorDropdownModule,
-    // // AgGridModule.withComponents([ActionButtonsComponent]),
+    AgGridModule,
+    // AgGridModule.withComponents([ActionButtonsComponent]),
     ExportOptionsModule,
   ],
   exports: [AdmissionRulesComponent],

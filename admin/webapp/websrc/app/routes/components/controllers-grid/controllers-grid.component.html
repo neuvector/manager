@@ -12,6 +12,7 @@
   <div class="d-flex align-items-center justify-content-end">
     <app-quick-filter
       [gridOptions]="gridOptions"
+      [gridApi]="gridApi"
       (filterCountChange)="filterCountChanged($event)"
       [showCount]="false">
     </app-quick-filter>
@@ -34,6 +35,7 @@
   (window:resize)="onResize()"
   [ngStyle]="{ height: gridHeight + 'px' }"
   [gridOptions]="gridOptions"
+  (rowDataChanged)="setDefaultSelection()"
   [rowData]="controllersService.controllers"
   id="controllers-grid"
   style="width: 100%"

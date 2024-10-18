@@ -12,6 +12,7 @@
   <div class="d-flex align-items-center justify-content-end">
     <app-quick-filter
       [gridOptions]="gridOptions"
+      [gridApi]="gridApi"
       (filterCountChange)="filterCountChanged($event)"
       [showCount]="false">
     </app-quick-filter>
@@ -34,6 +35,7 @@
   [ngStyle]="{ height: gridHeight + 'px' }"
   [gridOptions]="gridOptions"
   [rowData]="scannersService.scanners"
+  (rowDataChanged)="setDefaultSelection()"
   id="scanners-grid"
   style="width: 100%"
   class="ag-theme-balham">

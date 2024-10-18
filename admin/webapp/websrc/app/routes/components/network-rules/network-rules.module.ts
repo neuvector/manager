@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NetworkRulesComponent } from './network-rules.component';
 import { NvCommonModule } from '@common/nvCommon.module';
 import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
-import { AgGridAngular } from 'ag-grid-angular';
+import { AgGridModule } from 'ag-grid-angular';
 import { NgChartsModule } from 'ng2-charts';
 import { ActionButtonsComponent } from './partial/action-buttons/action-buttons.component';
 import { AddEditNetworkRuleModalComponent } from './partial/add-edit-network-rule-modal/add-edit-network-rule-modal.component';
@@ -39,6 +39,7 @@ import { ConfirmDialogModule } from "@components/ui/confirm-dialog/confirm-dialo
     LoadingButtonModule,
     PipeModule,
     ConfirmDialogModule,
+    AgGridModule,
     // AgGridModule.withComponents([
     //   ActionButtonsComponent,
     //   IdCellComponent,

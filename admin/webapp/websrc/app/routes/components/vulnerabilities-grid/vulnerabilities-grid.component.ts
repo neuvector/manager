@@ -135,11 +135,6 @@ export class VulnerabilitiesGridComponent implements OnInit, OnChanges {
         severityCellRenderer: VulnerabilitiesGridSeverityCellComponent,
       },
     };
-    if (this.useQuickFilterService) {
-      this.quickFilterService.textInput$.subscribe((value: string) => {
-        this.quickFilterService.onFilterChange(value, this.gridOptions);
-      });
-    }
   }
 
   onSelectionChanged(params: GridReadyEvent): void {
@@ -170,6 +165,11 @@ export class VulnerabilitiesGridComponent implements OnInit, OnChanges {
 
   onGridReady(params: GridReadyEvent): void {
     this.gridApi = params.api;
+    if (this.useQuickFilterService) {
+      this.quickFilterService.textInput$.subscribe((value: string) => {
+        this.quickFilterService.onFilterChange(value, this.gridOptions, this.gridApi);
+      });
+    }
     this.gridApi.sizeColumnsToFit();
     if (this.preselect) {
       this.gridApi.forEachNode(node =>

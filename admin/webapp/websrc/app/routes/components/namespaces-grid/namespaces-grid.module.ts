@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NamespacesGridComponent } from './namespaces-grid.component';
 import { NvCommonModule } from '@common/nvCommon.module';
 import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
-import { AgGridAngular } from 'ag-grid-angular';
+import { AgGridModule } from 'ag-grid-angular';
 
 @NgModule({
   declarations: [NamespacesGridComponent],
@@ -11,6 +11,7 @@ import { AgGridAngular } from 'ag-grid-angular';
     CommonModule,
     NvCommonModule,
     QuickFilterModule,
+    AgGridModule
     // AgGridModule.withComponents([]),
   ],
   exports: [NamespacesGridComponent],

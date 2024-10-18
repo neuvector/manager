@@ -11,7 +11,7 @@ import {
   AdmissionStateRec,
 } from '@common/types/admission/admission';
 import { AdmissionRulesService } from '@common/services/admission-rules.service';
-import { GridOptions } from 'ag-grid-community';
+import { GridOptions, GridApi } from 'ag-grid-community';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { AuthUtilsService } from '@common/utils/auth.utils';
@@ -22,6 +22,7 @@ import { MapConstant } from '@common/constants/map.constant';
 import { Subject } from 'rxjs';
 import { finalize, switchMap } from 'rxjs/operators';
 import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-admission-rules',
@@ -38,6 +39,7 @@ export class AdmissionRulesComponent implements OnInit {
   mode: string = '';
   admissionOptions: any;
   gridOptions: GridOptions = <GridOptions>{};
+  gridApi: GridApi = <GridApi>{};
   gridHeight: number = 0;
   filtered: boolean = false;
   filteredCount!: number;
@@ -93,7 +95,7 @@ export class AdmissionRulesComponent implements OnInit {
 
   onAdmissionRulesSelected = () => {
     this.selectedAdmissionRules =
-      this.gridOptions.api?.getSelectedRows() as Array<AdmissionRule>;
+      this.gridApi?.getSelectedRows() as Array<AdmissionRule>;
     this.hasSelectedDefaultRule = this.selectedAdmissionRules.some(
       rule => rule.critical || rule.cfg_type === GlobalConstant.CFG_TYPE.FED
     );
@@ -130,6 +132,21 @@ export class AdmissionRulesComponent implements OnInit {
           this.gridOptions = this.admissionRulesService.configRuleGrid(
             this.isAdmissionRuleAuthorized
           );
+          this.gridOptions.onGridReady = function (params) {
+            const $win = $(GlobalVariable.window);
+            setTimeout(() => {
+              if (params && params.api) {
+                params.api.sizeColumnsToFit();
+              }
+            }, 500);
+            $win.on(GlobalConstant.AG_GRID_RESIZE, () => {
+              setTimeout(() => {
+                if (params && params.api) {
+                  params.api.sizeColumnsToFit();
+                }
+              }, 1000);
+            });
+          };
           this.gridOptions.onSelectionChanged = this.onAdmissionRulesSelected;
           this.isGridOptionsReady = true;
           this.default_action = this.admissionStateRec.state?.default_action!;
@@ -175,7 +192,7 @@ export class AdmissionRulesComponent implements OnInit {
             );
           }
           setTimeout(() => {
-            this.gridOptions.api!.setRowData(this.admissionRules);
+            this.gridApi.setRowData(this.admissionRules);
           }, 200);
         },
         error => {
@@ -186,18 +203,18 @@ export class AdmissionRulesComponent implements OnInit {
             if (error.status === 404) {
               this.gridOptions.overlayNoRowsTemplate =
                 this.utils.getOverlayTemplateMsg(error);
-              this.gridOptions!.api!.setRowData([]);
+              this.gridApi!.setRowData([]);
               this.stateWarning = this.translate.instant(
                 'admissionControl.NOT_BINDING'
               );
             } else if (error.status === 403) {
               this.gridOptions.overlayNoRowsTemplate =
                 this.translate.instant('general.NO_ROWS');
-              this.gridOptions!.api!.setRowData([]);
+              this.gridApi!.setRowData([]);
             } else {
               this.gridOptions.overlayNoRowsTemplate =
                 this.utils.getOverlayTemplateMsg(error);
-              this.gridOptions!.api!.setRowData([]);
+              this.gridApi!.setRowData([]);
             }
           }, 200);
         }

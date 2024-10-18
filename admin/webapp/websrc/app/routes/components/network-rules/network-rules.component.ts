@@ -15,7 +15,7 @@ import { MapConstant } from '@common/constants/map.constant';
 import { PathConstant } from '@common/constants/path.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { NetworkRule } from '@common/types';
-import { GridOptions } from 'ag-grid-community';
+import { GridOptions, GridApi } from 'ag-grid-community';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { UpdateType } from '@common/types/network-rules/enum';
 import { Subscription } from 'rxjs';
@@ -35,6 +35,7 @@ import { Subject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { NotificationService } from '@services/notification.service';
 import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
+import * as $ from 'jquery';
 
 const READONLY_RULE_MODIFIED = 46;
 const UNPROMOTABLE_ENDPOINT_PATTERN = new RegExp(/^Host\:*|^Workload\:*/);
@@ -60,6 +61,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   isWriteNetworkRuleAuthorized!: boolean;
   networkRuleOptions: any;
   gridOptions!: GridOptions;
+  gridApi!: GridApi;
   gridHeight!: number;
   filtered: boolean = false;
   filteredCount: number = 0;
@@ -112,8 +114,29 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       this.source,
       this.isScoreImprovement
     );
+    this.gridOptions.onGridReady = params => {
+      const $win = $(GlobalVariable.window);
+      setTimeout(() => {
+        if (params && params.api) {
+          this.gridApi = params.api;
+          if (this.useQuickFilterService) {
+            this.quickFilterService.textInput$.subscribe((value: string) => {
+              this.quickFilterService.onFilterChange(value, this.gridOptions, this.gridApi);
+            });
+          }
+          params.api.sizeColumnsToFit();
+        }
+      }, 300);
+      $win.on(GlobalConstant.AG_GRID_RESIZE, () => {
+        setTimeout(() => {
+          if (params && params.api) {
+            params.api.sizeColumnsToFit();
+          }
+        }, 100);
+      });
+    };
     this.gridOptions.onSelectionChanged = () => {
-      this.selectedNetworkRules = this.gridOptions.api!.getSelectedRows();
+      this.selectedNetworkRules = this.gridApi!.getSelectedRows();
       this.isIncludingCRD = this.selectedNetworkRules.some(rule => {
         return rule.cfg_type === GlobalConstant.CFG_TYPE.GROUND;
       });
@@ -132,11 +155,6 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
         }
       );
     };
-    if (this.useQuickFilterService) {
-      this.quickFilterService.textInput$.subscribe((value: string) => {
-        this.quickFilterService.onFilterChange(value, this.gridOptions);
-      });
-    }
     if (!this.isScoreImprovement) {
       this.networkRulesService.getAutoCompleteData(this.source).subscribe(
         ([groupList, hostList, appList]) => {
@@ -310,7 +328,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe({
         next: service => {
           this.ruleCount = service.policy_rules.length;
-          this.gridOptions.api!.setRowData(service.policy_rules);
+          this.gridApi!.setRowData(service.policy_rules);
         },
         error: err => {
           console.warn(err);
@@ -319,7 +337,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
               this.utils.getOverlayTemplateMsg(err);
           }
           this.ruleCount = 0;
-          this.gridOptions.api!.setRowData([]);
+          this.gridApi!.setRowData([]);
         },
       });
   };
@@ -331,7 +349,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(
         (response: any) => {
           this.ruleCount = response.policy_rules.length;
-          this.gridOptions.api!.setRowData(response.policy_rules);
+          this.gridApi!.setRowData(response.policy_rules);
         },
         error => {
           console.error(error);
@@ -391,7 +409,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
           dialogRef.componentInstance.loading = false;
           // confirm actions
           setTimeout(() => {
-            this.gridOptions.api!.deselectAll();
+            this.gridApi!.deselectAll();
             this.networkRulesService.squence = GlobalConstant.NEW_ID_SEED.NETWORK_RULE;
             this.getNetworkRules();
           }, 2000);
@@ -437,7 +455,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
 
   exportCsv = () => {
     let reportData: Array<any> = [];
-    this.gridOptions.api!.forEachNodeAfterFilterAndSort((node, index) => {
+    this.gridApi!.forEachNodeAfterFilterAndSort((node, index) => {
       if (node.data.id > 0) {
         reportData.push({
           sequence: index + 1,
@@ -490,7 +508,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
     });
     console.log('this.networkRules', this.networkRules);
     this.ruleCount = this.networkRules.length;
-    this.gridOptions.api!.setRowData(this.networkRules);
+    this.gridApi!.setRowData(this.networkRules);
   };
 
   private mergeRulesByWebWorkerClient = (rulesBlock: Array<any>) => {
@@ -524,7 +542,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       });
     }
     this.ruleCount = networkRules.length;
-    this.gridOptions.api!.setRowData(networkRules);
+    this.gridApi!.setRowData(networkRules);
     if (this.eof) this.refreshing$.next(false);
   };
 
@@ -536,9 +554,9 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
     this.networkRulesService.isNetworkRuleChanged = true;
     setTimeout(() => {
       this.ruleCount = this.networkRules.length;
-      this.gridOptions.api!.setRowData(this.networkRules);
-      // this.gridOptions.api!.redrawRows();
-      this.gridOptions.api!.ensureIndexVisible(targetIndex, 'top');
+      this.gridApi!.setRowData(this.networkRules);
+      // this.gridApi!.redrawRows();
+      this.gridApi!.ensureIndexVisible(targetIndex, 'top');
     }, 500);
   };
 
@@ -547,11 +565,11 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
     targetIndex: number
   ) => {
     this.networkRules.splice(targetIndex, 1, updatedNetworkRule);
-    let row = this.gridOptions.api!.getDisplayedRowAtIndex(targetIndex)!;
-    this.gridOptions.api!.setRowData(this.networkRules);
+    let row = this.gridApi!.getDisplayedRowAtIndex(targetIndex)!;
+    this.gridApi!.setRowData(this.networkRules);
     this.networkRulesService.isNetworkRuleChanged = true;
     setTimeout(() => {
-      this.gridOptions.api!.ensureIndexVisible(targetIndex, 'top');
+      this.gridApi!.ensureIndexVisible(targetIndex, 'top');
     }, 500);
   };
 
@@ -572,8 +590,8 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
     }
     this.networkRules = networkRulesTmp;
     this.ruleCount = this.networkRules.length;
-    this.gridOptions.api!.setRowData(this.networkRules);
-    // this.gridOptions.api!.redrawRows();
+    this.gridApi!.setRowData(this.networkRules);
+    // this.gridApi!.redrawRows();
     this.networkRulesService.isNetworkRuleChanged = true;
     this.selectedNetworkRules = [];
   };
@@ -588,8 +606,8 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       return rule;
     });
     this.ruleCount = this.networkRules.length;
-    this.gridOptions.api!.setRowData(this.networkRules);
-    // this.gridOptions.api!.redrawRows();
+    this.gridApi!.setRowData(this.networkRules);
+    // this.gridApi!.redrawRows();
     this.networkRulesService.isNetworkRuleChanged = true;
   };
 

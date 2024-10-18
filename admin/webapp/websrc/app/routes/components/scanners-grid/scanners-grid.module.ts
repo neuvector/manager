@@ -4,7 +4,7 @@ import { ScannersGridComponent } from './scanners-grid.component';
 import { NvCommonModule } from '@common/nvCommon.module';
 import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
-import { AgGridAngular } from 'ag-grid-angular';
+import { AgGridModule } from 'ag-grid-angular';
 
 @NgModule({
   declarations: [ScannersGridComponent],
@@ -13,6 +13,7 @@ import { AgGridAngular } from 'ag-grid-angular';
     NvCommonModule,
     QuickFilterModule,
     LoadingButtonModule,
+    AgGridModule,
     // AgGridModule.withComponents([]),
   ],
   exports: [ScannersGridComponent],

@@ -39,9 +39,11 @@ export class GroupWafConfigModalComponent implements OnInit {
     this.gridOptions4WafSensorOption = this.groupsService.prepareGrid4WafSensorOption();
     this.gridOptions4WafSensorOption.onGridReady = params => {
       const $win = $(GlobalVariable.window);
+      if (params && params.api) {
+        this.gridApi = params.api;
+      }
       setTimeout(() => {
         if (params && params.api) {
-          this.gridApi = params.api;
           params.api.sizeColumnsToFit();
         }
       }, 300);

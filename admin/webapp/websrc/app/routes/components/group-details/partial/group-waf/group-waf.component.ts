@@ -52,9 +52,11 @@ export class GroupWafComponent implements OnInit {
       this.groupsService.prepareGrid4GroupWafSensors();
     this.gridOptions4GroupWafSensors.onGridReady = params => {
       const $win = $(GlobalVariable.window);
+      if (params && params.api) {
+        this.gridApi = params.api;
+      }
       setTimeout(() => {
         if (params && params.api) {
-          this.gridApi = params.api;
           if (this.useQuickFilterService) {
             this.quickFilterService.textInput$.subscribe((value: string) => {
               this.quickFilterService.onFilterChange(value, this.gridOptions4GroupWafSensors, this.gridApi);

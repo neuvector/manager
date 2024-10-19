@@ -1,4 +1,4 @@
-<ng-container *ngIf="params.node.data.status === 'failed'; else Default">
+<ng-container *ngIf="status === 'failed'; else Default">
   <div class="row" style="width: 100%;">
     <div class="col-7">
       <span class="badge" [class]="'badge-' + labelCode"
@@ -22,7 +22,7 @@
 <mat-menu #errorMessageInfoMenu="matMenu" class="error-message">
   <div class="error-message-content" (click)="onMenuClick($event)">
     <span>
-      {{ params.node.data.result }}
+      {{ result }}
     </span>
   </div>
 </mat-menu>

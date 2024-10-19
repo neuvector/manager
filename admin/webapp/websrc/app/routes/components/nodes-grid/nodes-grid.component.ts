@@ -200,7 +200,9 @@ export class NodesGridComponent implements OnInit {
         ? event.api.getRowNode(selected.id)
         : event.api.getDisplayedRowAtIndex(0);
     node?.setSelected(true);
-    this.gridApi.ensureNodeVisible(node, 'middle');
+    setTimeout(() => {
+      this.gridApi.ensureNodeVisible(node, 'middle');
+    }, 200);
   }
 
   filterCountChanged(results: number) {

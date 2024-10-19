@@ -299,8 +299,10 @@ export class ContainersGridComponent implements OnInit {
         ? event.api.getRowNode(selected.brief.id)
         : event.api.getDisplayedRowAtIndex(0);
     node?.setSelected(true);
-    this.gridApi.ensureNodeVisible(node, 'middle');
     this.quickFilter?.onFilterChange(this.quickFilter.filter.value || '');
+    setTimeout(() => {
+      this.gridApi.ensureNodeVisible(node, 'middle');
+    }, 200);
   }
 
   postSortRows(params: PostSortRowsParams<any, any>): void {

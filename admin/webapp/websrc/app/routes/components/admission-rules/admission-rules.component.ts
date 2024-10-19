@@ -39,7 +39,7 @@ export class AdmissionRulesComponent implements OnInit {
   mode: string = '';
   admissionOptions: any;
   gridOptions: GridOptions = <GridOptions>{};
-  gridApi: GridApi = <GridApi>{};
+  gridApi!: GridApi;
   gridHeight: number = 0;
   filtered: boolean = false;
   filteredCount!: number;
@@ -132,8 +132,11 @@ export class AdmissionRulesComponent implements OnInit {
           this.gridOptions = this.admissionRulesService.configRuleGrid(
             this.isAdmissionRuleAuthorized
           );
-          this.gridOptions.onGridReady = function (params) {
+          this.gridOptions.onGridReady = (params) => {
             const $win = $(GlobalVariable.window);
+            if (params && params.api) {
+              this.gridApi = params.api;
+            }
             setTimeout(() => {
               if (params && params.api) {
                 params.api.sizeColumnsToFit();

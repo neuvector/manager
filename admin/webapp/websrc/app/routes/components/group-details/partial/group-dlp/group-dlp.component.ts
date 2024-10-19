@@ -51,9 +51,11 @@ export class GroupDlpComponent implements OnInit {
       this.groupsService.prepareGrid4GroupDlpSensors();
     this.gridOptions4GroupDlpSensors.onGridReady = params => {
       const $win = $(GlobalVariable.window);
+      if (params && params.api) {
+        this.gridApi = params.api;
+      }
       setTimeout(() => {
         if (params && params.api) {
-          this.gridApi = params.api;
           if (this.useQuickFilterService) {
             this.quickFilterService.textInput$.subscribe((value: string) => {
               this.quickFilterService.onFilterChange(value, this.gridOptions4GroupDlpSensors, this.gridApi);

@@ -160,7 +160,9 @@ export class PlatformsGridComponent implements OnInit {
         ? event.api.getRowNode(selected.platform)
         : event.api.getDisplayedRowAtIndex(0);
     platform?.setSelected(true);
-    this.gridApi.ensureNodeVisible(platform, 'middle');
+    setTimeout(() => {
+      this.gridApi.ensureNodeVisible(platform, 'middle');
+    }, 200);
   }
 
   filterCountChanged(results: number) {

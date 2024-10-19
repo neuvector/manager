@@ -166,6 +166,9 @@ export class ExposedServicepodConvGridComponent implements OnInit {
       getRowHeight: params => (!!params.data.parent_id ? 100 : 30),
       isFullWidthRow: (params: IsFullWidthRowParams<any, any>) => !!params.rowNode.data?.parent_id,
       fullWidthCellRenderer: 'conversationEntryListRenderer',
+      rowClassRules: {
+        'nv-full-width-row': (params) => !!params.data?.parent_id,
+      },
       suppressMaintainUnsortedOrder: true,
       suppressScrollOnNewData: true,
       components: {

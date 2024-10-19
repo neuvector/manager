@@ -177,6 +177,9 @@ export class EventsGridComponent implements OnInit {
       isExternalFilterPresent: () => true,
       isFullWidthRow: (params: IsFullWidthRowParams<any, any>) => !this.isParent(params.rowNode),
       fullWidthCellRenderer: 'messageCellRenderer',
+      rowClassRules: {
+        'nv-full-width-row': (params) => !this.isParent(params.node),
+      },
       doesExternalFilterPass: ({ data }) =>
         this.isVisible(data) && this.doesExternalFilterPass(data),
       suppressMaintainUnsortedOrder: true,

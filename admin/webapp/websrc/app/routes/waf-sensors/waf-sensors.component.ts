@@ -80,9 +80,11 @@ export class WafSensorsComponent implements OnInit {
     this.gridOptions4Sensors = this.gridOptions.gridOptions;
     this.gridOptions4Sensors.onGridReady = params => {
       const $win = $(GlobalVariable.window);
+      if (params && params.api) {
+        this.gridApi4Sensors = params.api;
+      }
       setTimeout(() => {
         if (params && params.api) {
-          this.gridApi4Sensors = params.api;
           params.api.sizeColumnsToFit();
         }
       }, 300);
@@ -97,9 +99,11 @@ export class WafSensorsComponent implements OnInit {
     this.gridOptions4Rules = this.gridOptions.gridOptions4Rules;
     this.gridOptions4Rules.onGridReady = params => {
       const $win = $(GlobalVariable.window);
+      if (params && params.api) {
+        this.gridApi4Rules = params.api;
+      }
       setTimeout(() => {
         if (params && params.api) {
-          this.gridApi4Rules = params.api;
           params.api.sizeColumnsToFit();
         }
       }, 300);
@@ -114,9 +118,11 @@ export class WafSensorsComponent implements OnInit {
     this.gridOptions4Patterns = this.gridOptions.gridOptions4Patterns;
     this.gridOptions4Patterns.onGridReady = params => {
       const $win = $(GlobalVariable.window);
+      if (params && params.api) {
+        this.gridApi4Patterns = params.api;
+      }
       setTimeout(() => {
         if (params && params.api) {
-          this.gridApi4Patterns = params.api;
           params.api.sizeColumnsToFit();
         }
       }, 300);

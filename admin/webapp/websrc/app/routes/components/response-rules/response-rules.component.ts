@@ -66,9 +66,11 @@ export class ResponseRulesComponent implements OnInit {
     );
     this.gridOptions.onGridReady = params => {
       const $win = $(GlobalVariable.window);
+      if (params && params.api) {
+        this.gridApi = params.api;
+      }
       setTimeout(() => {
         if (params && params.api) {
-          this.gridApi = params.api;
           if (this.useQuickFilterService) {
             this.quickFilterService.textInput$.subscribe((value: string) => {
               this.quickFilterService.onFilterChange(value, this.gridOptions, this.gridApi);

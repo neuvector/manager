@@ -88,9 +88,11 @@ export class AddEditRuleModalComponent implements OnInit {
     this.gridOptions4EditPatterns = gridOptions.gridOptions4EditPatterns;
     this.gridOptions4EditPatterns.onGridReady = params => {
       const $win = $(GlobalVariable.window);
+      if (params && params.api) {
+        this.gridApi4EditPatterns = params.api;
+      }
       setTimeout(() => {
         if (params && params.api) {
-          this.gridApi4EditPatterns = params.api;
           params.api.sizeColumnsToFit();
         }
       }, 300);

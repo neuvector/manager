@@ -67,16 +67,18 @@ export class CustomCheckComponent implements OnInit {
           this.gridOptions4CustomCheck = this.groupsService.prepareGrid4CustomCheck(this.isWriteScriptAuthorized, this.cfgType);
           this.gridOptions4CustomCheck.onGridReady = params => {
             const $win = $(GlobalVariable.window);
+            if (params && params.api) {
+              this.gridApi = params.api;
+            }
             setTimeout(() => {
               if (params && params.api) {
-                this.gridApi = params.api;
                 if (this.useQuickFilterService) {
                   this.quickFilterService.textInput$.subscribe((value: string) => {
                     this.quickFilterService.onFilterChange(value, this.gridOptions4CustomCheck, this.gridApi);
                   });
                 }
                 if (response) {
-                  this.gridApi!.setRowData(this.customCheckScripts);
+                  this.gridApi!.setRowData(this.customCheckScripts || []);
                   this.switch2Add();
                 } else {
                   this.gridApi!.setRowData([]);
@@ -109,9 +111,11 @@ export class CustomCheckComponent implements OnInit {
           this.gridOptions4CustomCheck = this.groupsService.prepareGrid4CustomCheck(false, this.cfgType);
           this.gridOptions4CustomCheck.onGridReady = params => {
             const $win = $(GlobalVariable.window);
+            if (params && params.api) {
+              this.gridApi = params.api;
+            }
             setTimeout(() => {
               if (params && params.api) {
-                this.gridApi = params.api;
                 this.gridApi!.setRowData([]);
                 setTimeout(() => {
                   params.api.sizeColumnsToFit();

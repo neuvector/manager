@@ -39,9 +39,11 @@ export class GroupDlpConfigModalComponent implements OnInit {
     this.gridOptions4DlpSensorOption = this.groupsService.prepareGrid4DlpSensorOption();
     this.gridOptions4DlpSensorOption.onGridReady = params => {
       const $win = $(GlobalVariable.window);
+      if (params && params.api) {
+        this.gridApi = params.api;
+      }
       setTimeout(() => {
         if (params && params.api) {
-          this.gridApi = params.api;
           params.api.sizeColumnsToFit();
         }
       }, 300);

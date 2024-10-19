@@ -1559,3 +1559,17 @@ ngx-avatar.userIcon img.avatar-content {
   z-index: 1000;
   border-radius: 5px;
 }
+
+.nv-full-width-row {
+  &.ag-row-selected::before {
+    background-color: unset !important;
+    position: unset !important;
+    display: unset !important;
+  }
+  &.ag-row-hover .ag-row-selected::before {
+    background-color: unset !important;
+    background-image: unset !important;
+    position: unset !important;
+    display: unset !important;
+  }
+}

@@ -110,9 +110,11 @@ export class GroupsComponent implements OnInit {
     );
     this.gridOptions4Groups.onGridReady = params => {
       const $win = $(GlobalVariable.window);
+      if (params && params.api) {
+        this.gridApi = params.api;
+      }
       setTimeout(() => {
         if (params && params.api) {
-          this.gridApi = params.api;
           params.api.sizeColumnsToFit();
         }
       }, 300);

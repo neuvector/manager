@@ -69,9 +69,11 @@ export class SignatureVerifiersComponent implements OnInit {
     this.gridOptions4Signatures = this.gridOptions.gridOptions4Signatures;
     this.gridOptions4Signatures.onGridReady = params => {
       const $win = $(GlobalVariable.window);
+      if (params && params.api) {
+        this.gridApi4Signatures = params.api;
+      }
       setTimeout(() => {
         if (params && params.api) {
-          this.gridApi4Signatures = params.api;
           params.api.sizeColumnsToFit();
         }
       }, 300);
@@ -86,9 +88,11 @@ export class SignatureVerifiersComponent implements OnInit {
     this.gridOptions4Verifiers = this.gridOptions.gridOptions4Verifiers;
     this.gridOptions4Verifiers.onGridReady = params => {
       const $win = $(GlobalVariable.window);
+      if (params && params.api) {
+        this.gridApi4Verifiers = params.api;
+      }
       setTimeout(() => {
         if (params && params.api) {
-          this.gridApi4Verifiers = params.api;
           params.api.sizeColumnsToFit();
         }
       }, 300);

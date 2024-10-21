@@ -15,6 +15,7 @@
       <div *ngIf="conversations && conversations.length > 4" class="mr-4">
         <app-quick-filter
           [gridOptions]="gridOptions"
+          [gridApi]="gridApi"
           (filterCountChange)="filterCountChanged($event)"
           [showCount]="false">
         </app-quick-filter>

@@ -14,7 +14,8 @@ import { PlatformsGridStatusCellComponent } from './platforms-grid-status-cell/p
     NvCommonModule,
     QuickFilterModule,
     LoadingButtonModule,
-    AgGridModule.withComponents([]),
+    AgGridModule,
+    // AgGridModule.withComponents([]),
   ],
   exports: [PlatformsGridComponent],
 })

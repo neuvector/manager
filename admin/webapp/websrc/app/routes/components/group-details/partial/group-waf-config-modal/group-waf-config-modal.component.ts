@@ -1,10 +1,13 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef,  MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { GridOptions } from 'ag-grid-community';
+import { GridOptions, GridApi } from 'ag-grid-community';
 import { GroupsService } from '@services/groups.service';
 import { WafSensor } from '@common/types';
 import { NotificationService } from '@services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
+import { GlobalVariable } from '@common/variables/global.variable';
+import { GlobalConstant } from '@common/constants/global.constant';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-group-waf-config-modal',
@@ -14,6 +17,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class GroupWafConfigModalComponent implements OnInit {
 
   gridOptions4WafSensorOption: GridOptions;
+  gridApi!: GridApi;
   filteredCount: number = 0;
   filtered: boolean = false;
   wafSensorOption: Array<WafSensor> = [];
@@ -33,9 +37,27 @@ export class GroupWafConfigModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.gridOptions4WafSensorOption = this.groupsService.prepareGrid4WafSensorOption();
+    this.gridOptions4WafSensorOption.onGridReady = params => {
+      const $win = $(GlobalVariable.window);
+      if (params && params.api) {
+        this.gridApi = params.api;
+      }
+      setTimeout(() => {
+        if (params && params.api) {
+          params.api.sizeColumnsToFit();
+        }
+      }, 300);
+      $win.on(GlobalConstant.AG_GRID_RESIZE, () => {
+        setTimeout(() => {
+          if (params && params.api) {
+            params.api.sizeColumnsToFit();
+          }
+        }, 100);
+      });
+    };
     this.gridOptions4WafSensorOption.onSelectionChanged = () => {
-      this.selectedWafSensors = this.gridOptions4WafSensorOption.api!.getSelectedRows();
-      this.selectedWafSensorNodes = this.gridOptions4WafSensorOption.api!.getSelectedNodes();
+      this.selectedWafSensors = this.gridApi!.getSelectedRows();
+      this.selectedWafSensorNodes = this.gridApi!.getSelectedNodes();
     };
     this.refresh();
   }
@@ -52,9 +74,9 @@ export class GroupWafConfigModalComponent implements OnInit {
           this.wafSensorOption = this.wafSensorOption.map(sensor => {
             return Object.assign(sensor, { isAllowed: false });
           });
-          this.gridOptions4WafSensorOption.api!.setRowData(this.wafSensorOption);
+          this.gridApi!.setRowData(this.wafSensorOption);
           setTimeout(() => {
-            this.gridOptions4WafSensorOption.api!.forEachNode((node, index) => {
+            this.gridApi!.forEachNode((node, index) => {
               this.data.configuredSensors.forEach(configuredSensor => {
                 if (node.data.name === configuredSensor.name) {
                   node.data.isAllowed = configuredSensor.action === "allow";

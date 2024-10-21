@@ -128,7 +128,7 @@ export class ComplianceProfileAssetsTableComponent
         actionCellRenderer: ActionCellComponent,
       },
       overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS'),
-    };
+    } as GridOptions;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -212,9 +212,9 @@ export class ComplianceProfileAssetsTableComponent
 
   toggleNamespaceActions() {
     if (this.namespaceEnabled && this.isWriteComplianceProfileAuthorized) {
-      this.gridOptions.columnApi?.setColumnVisible('action', true);
+      this.gridApi?.setColumnVisible('action', true);
     } else {
-      this.gridOptions.columnApi?.setColumnVisible('action', false);
+      this.gridApi?.setColumnVisible('action', false);
     }
     this.gridApi.sizeColumnsToFit();
     this.cd.markForCheck();

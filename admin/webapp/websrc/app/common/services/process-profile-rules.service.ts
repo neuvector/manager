@@ -39,7 +39,7 @@ export class ProcessProfileRulesService {
         hide: source === GlobalConstant.NAV_SOURCE.GROUP,
       },
       {
-        headerComponentFramework: ProcessProfileRuleNameHeaderComponent,
+        headerComponent: ProcessProfileRuleNameHeaderComponent,
         headerCheckboxSelection: params => {
           return isWriteGroupAuthorized &&
             isWriteProcessProfileRuleAuthorized;
@@ -56,7 +56,7 @@ export class ProcessProfileRulesService {
           isWriteProcessProfileRuleAuthorized)
       },
       {
-        headerComponentFramework: ProcessProfileRuleNameHeaderComponent,
+        headerComponent: ProcessProfileRuleNameHeaderComponent,
         field: 'name',
         hide: source === GlobalConstant.NAV_SOURCE.GROUP &&
           isWriteGroupAuthorized &&

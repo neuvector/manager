@@ -8,7 +8,7 @@ import {
   EventEmitter
 } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { GridOptions } from 'ag-grid-community';
+import { GridOptions, GridApi } from 'ag-grid-community';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { TranslateService } from '@ngx-translate/core';
 import { UtilsService } from '@common/utils/app.utils';
@@ -23,6 +23,7 @@ import { switchMap } from 'rxjs/operators';
 import { NotificationService } from '@services/notification.service';
 import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
 import { updateGridData } from '@common/utils/common.utils';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-file-access-rules',
@@ -46,6 +47,7 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
   public groups: Set<string> = new Set();
   public gridHeight: number = 0;
   public gridOptions!: GridOptions;
+  public gridApi!: GridApi;
   public fileAccessRules: Array<any> = [];
   public selectedFileAccessRules;
   public navSource = GlobalConstant.NAV_SOURCE;
@@ -88,16 +90,34 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
       this.source,
       this.isScoreImprovement
     ).gridOptions4fileAccessRules;
+    this.gridOptions.onGridReady = params => {
+      const $win = $(GlobalVariable.window);
+      if (params && params.api) {
+        this.gridApi = params.api;
+      }
+      setTimeout(() => {
+        if (params && params.api) {
+          if (this.useQuickFilterService) {
+            this.quickFilterService.textInput$.subscribe((value: string) => {
+              this.quickFilterService.onFilterChange(value, this.gridOptions, this.gridApi);
+            });
+          }
+          params.api.sizeColumnsToFit();
+        }
+      }, 300);
+      $win.on(GlobalConstant.AG_GRID_RESIZE, () => {
+        setTimeout(() => {
+          if (params && params.api) {
+            params.api.sizeColumnsToFit();
+          }
+        }, 100);
+      });
+    };
     this.gridOptions.onSelectionChanged = () => {
       this.onSelectionChanged4File();
     };
     this.getFileAccessRules(this.groupName);
     this.groups.add('All');
-    if (this.useQuickFilterService) {
-      this.quickFilterService.textInput$.subscribe((value: string) => {
-        this.quickFilterService.onFilterChange(value, this.gridOptions);
-      });
-    }
     this.emitObjects();
   }
 
@@ -152,27 +172,27 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
               : 0;
           setTimeout(() => {
             this.getSelectedFileAccessRules.emit(this.selectedFileAccessRules);
-            if (this.gridOptions.api) {
-              // this.gridOptions.api.setRowData($scope.profile);
-              this.gridOptions.api.forEachNode((node, index) => {
+            if (this.gridApi) {
+              // this.gridApi.setRowData($scope.profile);
+              this.gridApi.forEachNode((node, index) => {
                 if (this.selectedFileAccessRules) {
                   if (
                     node.data.name === this.selectedFileAccessRules.name &&
                     node.data.path === this.selectedFileAccessRules.path
                   ) {
                     node.setSelected(true);
-                    if (this.gridOptions.api)
-                      this.gridOptions.api.ensureNodeVisible(node);
+                    if (this.gridApi)
+                      this.gridApi.ensureNodeVisible(node);
                     this.getSelectedFileAccessRules.emit(this.selectedFileAccessRules);
                   }
                 } else if (index === 0) {
                   node.setSelected(true);
-                  if (this.gridOptions.api)
-                    this.gridOptions.api.ensureNodeVisible(node);
+                  if (this.gridApi)
+                    this.gridApi.ensureNodeVisible(node);
                   this.getSelectedFileAccessRules.emit(this.selectedFileAccessRules);
                 }
               });
-              this.gridOptions.api.sizeColumnsToFit();
+              this.gridApi.sizeColumnsToFit();
             }
           });
         },
@@ -234,7 +254,7 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
           updateGridData(
             this.fileAccessRules,
             [data],
-            this.gridOptions.api!,
+            this.gridApi!,
             'filter',
             'delete'
           );
@@ -263,7 +283,7 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
         selectedRule: data,
         source: this.source,
         getFileAccessRules: this.getFileAccessRules,
-        gridApi: this.gridOptions.api!,
+        gridApi: this.gridApi!,
         fileAccessRules: this.fileAccessRules
       },
       width: '70%'
@@ -282,7 +302,7 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
         groupName: this.groupName,
         source: this.source,
         getFileAccessRules: this.getFileAccessRules,
-        gridApi: this.gridOptions.api!,
+        gridApi: this.gridApi!,
         fileAccessRules: this.fileAccessRules
       },
       width: '70%'
@@ -294,24 +314,24 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
   };
 
   onGroupChanged = (groupName: string, gridOptions: GridOptions) => {
-    if (gridOptions && gridOptions.api) {
-      const filterInstance = gridOptions.api.getFilterInstance('group');
+    if (gridOptions && this.gridApi) {
+      const filterInstance = this.gridApi.getFilterInstance('group');
       if (filterInstance) {
         const model = filterInstance.getModel();
         filterInstance.setModel({
           type: 'equals',
           filter: groupName === 'All' ? '' : groupName,
         });
-        gridOptions.api.onFilterChanged();
+        this.gridApi.onFilterChanged();
         this.filteredCount =
-          gridOptions.api.getModel()['rootNode'].childrenAfterFilter.length;
+          this.gridApi.getModel()['rootNode'].childrenAfterFilter.length;
       }
     }
   };
 
   private onSelectionChanged4File = () => {
-    if (this.gridOptions && this.gridOptions.api) {
-      let selectedRows = this.gridOptions.api.getSelectedRows();
+    if (this.gridOptions && this.gridApi) {
+      let selectedRows = this.gridApi.getSelectedRows();
       if (selectedRows.length > 0) {
         setTimeout(() => {
           this.selectedFileAccessRules = selectedRows[0];

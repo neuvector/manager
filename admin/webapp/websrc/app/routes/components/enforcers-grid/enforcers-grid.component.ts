@@ -18,7 +18,7 @@ import {
   GridApi,
   GridOptions,
   GridReadyEvent,
-  RowNode,
+  IRowNode,
   RowSelectedEvent,
 } from 'ag-grid-community';
 import * as moment from 'moment';
@@ -45,7 +45,7 @@ export class EnforcersGridComponent implements OnInit, OnChanges {
   gridApi!: GridApi;
   filtered: boolean = false;
   filteredCount!: number;
-  selectedNodes: RowNode[] = [];
+  selectedNodes: IRowNode[] = [];
   selectedEnforcerSubject$ = new BehaviorSubject<Enforcer | undefined>(
     undefined
   );
@@ -150,7 +150,6 @@ export class EnforcersGridComponent implements OnInit, OnChanges {
       ...this.gridOptions,
       onRowSelected: params => this.onRowSelected(params),
       onGridReady: event => this.onGridReady(event),
-      onRowDataChanged: () => this.setDefaultSelection(),
       components: {
         statusCellRenderer: EnforcersGridStatusCellComponent,
       },

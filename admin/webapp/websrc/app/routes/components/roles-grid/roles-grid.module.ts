@@ -24,10 +24,11 @@ import { PermissionService } from './add-edit-role-dialog/permission.service';
     QuickFilterModule,
     NvCommonModule,
     LoadingButtonModule,
-    AgGridModule.withComponents([
-      RolesGridActionCellComponent,
-      RolesGridPermissionsCellComponent,
-    ]),
+    AgGridModule,
+    // AgGridModule.withComponents([
+    //   RolesGridActionCellComponent,
+    //   RolesGridPermissionsCellComponent,
+    // ]),
   ],
   providers: [PermissionService],
   exports: [RolesGridComponent, RolesGridPermissionsCellComponent],

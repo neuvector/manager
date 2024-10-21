@@ -5,7 +5,7 @@ import { MapConstant } from '@common/constants/map.constant';
 import { PathConstant } from '@common/constants/path.constant';
 import { UtilsService } from '@common/utils/app.utils';
 import { GroupsService } from '@services/groups.service';
-import { GridOptions } from 'ag-grid-community';
+import { GridOptions, GridApi } from 'ag-grid-community';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { AddEditGroupModalComponent } from './partial/add-edit-group-modal/add-edit-group-modal.component';
 import { SwitchModeModalComponent } from './partial/switch-mode-modal/switch-mode-modal.component';
@@ -30,6 +30,9 @@ import { RuleDetailModalService } from '@components/groups/partial/rule-detail-m
 import { ExportOptionsModalComponent } from '@components/export-options-modal/export-options-modal.component';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TitleCasePipe } from '@angular/common';
+import { GlobalVariable } from '@common/variables/global.variable';
+import * as $ from 'jquery';
+
 
 @Component({
   selector: 'app-groups',
@@ -53,6 +56,7 @@ export class GroupsComponent implements OnInit {
   isWriteGroupAuthorized: boolean = false;
   isNamespaceUser: boolean = false;
   gridOptions4Groups!: GridOptions;
+  gridApi!: GridApi;
   filtered: boolean = false;
   filteredCount!: number;
   selectedGroups: Array<Group> = [];
@@ -104,12 +108,30 @@ export class GroupsComponent implements OnInit {
       this.isScoreImprovement,
       this.source === this.navSource.FED_POLICY
     );
+    this.gridOptions4Groups.onGridReady = params => {
+      const $win = $(GlobalVariable.window);
+      if (params && params.api) {
+        this.gridApi = params.api;
+      }
+      setTimeout(() => {
+        if (params && params.api) {
+          params.api.sizeColumnsToFit();
+        }
+      }, 300);
+      $win.on(GlobalConstant.AG_GRID_RESIZE, () => {
+        setTimeout(() => {
+          if (params && params.api) {
+            params.api.sizeColumnsToFit();
+          }
+        }, 100);
+      });
+    };
     this.gridOptions4Groups.getRowId = params => params.data.name;
     this.gridOptions4Groups.onSelectionChanged = () => {
       this.selectedGroups = [];
       setTimeout(() => {
-        this.selectedGroups = this.gridOptions4Groups.api!.getSelectedRows();
-        this.gridOptions4Groups.api!.redrawRows();
+        this.selectedGroups = this.gridApi!.getSelectedRows();
+        this.gridApi!.redrawRows();
         this.highlightDisplayedGroup();
         this.selectedGroup.emit(
           this.selectedGroups.length > 0 ? this.selectedGroups[0] : null
@@ -155,7 +177,7 @@ export class GroupsComponent implements OnInit {
             this.groups.forEach(g => (g.policy_mode = refresh.mode));
           }
           this.groups = [...this.groups];
-          this.gridOptions4Groups.api?.refreshCells({ force: true });
+          this.gridApi?.refreshCells({ force: true });
         }
       });
     } else {
@@ -201,7 +223,7 @@ export class GroupsComponent implements OnInit {
           this.groups
             .filter(service => service.policy_mode?.toLowerCase() !== 'protect' || service.profile_mode?.toLowerCase() !== 'protect')
             .length === 0;
-        this.gridOptions4Groups.api!.setRowData(
+        this.gridApi!.setRowData(
           this.groups.filter(p => !p.platform_role)
         );
         this.filteredCount = this.groups.length;
@@ -227,7 +249,7 @@ export class GroupsComponent implements OnInit {
           this.groups
             .filter(service => service.policy_mode?.toLowerCase() !== 'protect' || service.profile_mode?.toLowerCase() !== 'protect')
             .length === 0;
-        this.gridOptions4Groups.api!.setRowData(
+        this.gridApi!.setRowData(
           this.groups.filter(g => !g.platform_role)
         );
         this.filteredCount = this.groups.length;
@@ -279,11 +301,10 @@ export class GroupsComponent implements OnInit {
 
   setDefaultSelection = () => {
     if (this.selectedGroups.length > 0) {
-      this.gridOptions4Groups
-        .api!.getRowNode(this.selectedGroups[0].name)
+      this.gridApi!.getRowNode(this.selectedGroups[0].name)
         ?.setSelected(true);
     } else {
-      this.gridOptions4Groups.api!.getDisplayedRowAtIndex(0)?.setSelected(true);
+      this.gridApi!.getDisplayedRowAtIndex(0)?.setSelected(true);
     }
   };
 
@@ -441,7 +462,7 @@ export class GroupsComponent implements OnInit {
   }
 
   onResize(): void {
-    this.gridOptions4Groups.api!.sizeColumnsToFit();
+    this.gridApi!.sizeColumnsToFit();
   }
 
   filterCountChanged(results: number) {
@@ -458,24 +479,24 @@ export class GroupsComponent implements OnInit {
       });
     }
     console.log('this.groups', this.groups);
-    this.gridOptions4Groups.api!.setRowData(this.groups);
+    this.gridApi!.setRowData(this.groups);
     this.filteredCount = this.groups.length;
     if (this.eof) this.refreshing.emit(false);
     console.log('this.linkedGroup:', this.linkedGroup);
     setTimeout(() => {
-      this.gridOptions4Groups.api!.sizeColumnsToFit();
-      this.gridOptions4Groups.api!.forEachNode((node, index) => {
+      this.gridApi!.sizeColumnsToFit();
+      this.gridApi!.forEachNode((node, index) => {
         node.setSelected(false);
         if (this.selectedGroups.length === 1) {
           if (node.data.name === this.selectedGroups[0].name) {
             node.setSelected(true);
-            this.gridOptions4Groups.api!.ensureNodeVisible(node);
+            this.gridApi!.ensureNodeVisible(node);
           }
         }
         if (this.linkedGroup) {
           if (this.linkedGroup === node.data.name) {
             node.setSelected(true);
-            this.gridOptions4Groups.api!.ensureNodeVisible(node);
+            this.gridApi!.ensureNodeVisible(node);
           }
         }
       });
@@ -487,7 +508,7 @@ export class GroupsComponent implements OnInit {
     let index = this.groups.findIndex(
       group => group.name === this.selectedGroups[0].name
     );
-    let rowNode = this.gridOptions4Groups.api!.getDisplayedRowAtIndex(index);
+    let rowNode = this.gridApi!.getDisplayedRowAtIndex(index);
     let groupGridEl = document.querySelector(
       '#groups-grid .ag-center-cols-container'
     );

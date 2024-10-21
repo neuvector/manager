@@ -11,7 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { GlobalConstant } from '@common/constants/global.constant';
-import { GridOptions } from 'ag-grid-community';
+import { GridOptions, GridApi } from 'ag-grid-community';
 import { UtilsService } from '@common/utils/app.utils';
 import { ProcessProfileRulesService } from '@services/process-profile-rules.service';
 import { AddEditProcessProfileRuleModalComponent } from './partial/add-edit-process-profile-rule-modal/add-edit-process-profile-rule-modal.component';
@@ -22,6 +22,7 @@ import { switchMap } from 'rxjs/operators';
 import { NotificationService } from '@services/notification.service';
 import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
 import { updateGridData } from '@common/utils/common.utils';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-process-profile-rules',
@@ -43,6 +44,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
   public groups: Set<string> = new Set();
   public gridHeight: number = 0;
   public gridOptions!: GridOptions;
+  public gridApi!: GridApi;
   public processProfileRules: Array<any> = [];
   public selectedProcessProfileRules;
   public navSource = GlobalConstant.NAV_SOURCE;
@@ -90,16 +92,34 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
       this.source,
       this.isScoreImprovement,
     );
+    this.gridOptions.onGridReady = params => {
+      const $win = $(GlobalVariable.window);
+      if (params && params.api) {
+        this.gridApi = params.api;
+      }
+      setTimeout(() => {
+        if (params && params.api) {
+          if (this.useQuickFilterService) {
+            this.quickFilterService.textInput$.subscribe((value: string) => {
+              this.quickFilterService.onFilterChange(value, this.gridOptions, this.gridApi);
+            });
+          }
+          params.api.sizeColumnsToFit();
+        }
+      }, 300);
+      $win.on(GlobalConstant.AG_GRID_RESIZE, () => {
+        setTimeout(() => {
+          if (params && params.api) {
+            params.api.sizeColumnsToFit();
+          }
+        }, 100);
+      });
+    };
     this.gridOptions.onSelectionChanged = () => {
       this.onSelectionChanged4Profile();
     };
     this.getProcessProfileRules(this.groupName);
     this.groups.add('All');
-    if (this.useQuickFilterService) {
-      this.quickFilterService.textInput$.subscribe((value: string) => {
-        this.quickFilterService.onFilterChange(value, this.gridOptions);
-      });
-    }
     this.emitObjects();
   }
 
@@ -155,8 +175,8 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
                 ? this.w.innerHeight - 300
                 : 0;
             setTimeout(() => {
-              if (this.gridOptions.api) {
-                this.gridOptions.api.sizeColumnsToFit();
+              if (this.gridApi) {
+                this.gridApi.sizeColumnsToFit();
               }
               this.getSelectedProcessProfileRules.emit(this.selectedProcessProfileRules);
             });
@@ -174,8 +194,8 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
   };
 
   onSelectionChanged4Profile = () => {
-    if (this.gridOptions && this.gridOptions.api) {
-      let selectedRows = this.gridOptions.api.getSelectedRows();
+    if (this.gridOptions && this.gridApi) {
+      let selectedRows = this.gridApi.getSelectedRows();
       setTimeout(() => {
         this.selectedProcessProfileRules = selectedRows;
         this.getSelectedProcessProfileRules.emit(this.selectedProcessProfileRules);
@@ -195,7 +215,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
           oldData: data,
           source: this.source,
           getProcessProfileRules: this.getProcessProfileRules,
-          gridApi: this.gridOptions.api!,
+          gridApi: this.gridApi!,
           processProfileRules: this.processProfileRules
         },
         width: "70%"
@@ -243,7 +263,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
           updateGridData(
             this.processProfileRules,
             data,
-            this.gridOptions.api!,
+            this.gridApi!,
             ['name', 'path'],
             'delete'
           );
@@ -273,7 +293,7 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
           groupName: this.groupName,
           source: this.source,
           getProcessProfileRules: this.getProcessProfileRules,
-          gridApi: this.gridOptions.api!,
+          gridApi: this.gridApi!,
           processProfileRules: this.processProfileRules
         },
         width: "70%"
@@ -287,17 +307,17 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
   };
 
   onGroupChanged = (groupName: string, gridOptions: GridOptions) => {
-    if (gridOptions && gridOptions.api) {
-      const filterInstance = gridOptions.api.getFilterInstance('group');
+    if (gridOptions && this.gridApi) {
+      const filterInstance = this.gridApi.getFilterInstance('group');
       if (filterInstance) {
         const model = filterInstance.getModel();
         filterInstance.setModel({
           type: 'equals',
           filter: groupName === 'All' ? '' : groupName,
         });
-        gridOptions.api.onFilterChanged();
+        this.gridApi.onFilterChanged();
         this.filteredCount =
-          gridOptions.api.getModel()['rootNode'].childrenAfterFilter.length;
+          this.gridApi.getModel()['rootNode'].childrenAfterFilter.length;
       }
     }
   };

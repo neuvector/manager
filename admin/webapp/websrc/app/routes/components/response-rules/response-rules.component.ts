@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ResponseRulesService } from '@services/response-rules.service';
 import { TranslateService } from '@ngx-translate/core';
-import { GridOptions } from 'ag-grid-community';
+import { GridOptions, GridApi } from 'ag-grid-community';
 import { UtilsService } from '@common/utils/app.utils';
 import { MatDialog } from '@angular/material/dialog';
 import { AddEditResponseRuleModalComponent } from './partial/add-edit-response-rule-modal/add-edit-response-rule-modal.component';
@@ -29,6 +29,7 @@ export class ResponseRulesComponent implements OnInit {
   private isModalOpen: boolean = false;
   public responsePolicyErr: boolean = false;
   public gridOptions: GridOptions = <GridOptions>{};
+  public gridApi!: GridApi;
   public gridHeight: number = 0;
   public filtered: boolean = false;
   public filteredCount: number = 0;
@@ -63,11 +64,29 @@ export class ResponseRulesComponent implements OnInit {
       this.isWriteResponseRuleAuthorized,
       this.source
     );
-    if (this.useQuickFilterService) {
-      this.quickFilterService.textInput$.subscribe((value: string) => {
-        this.quickFilterService.onFilterChange(value, this.gridOptions);
+    this.gridOptions.onGridReady = params => {
+      const $win = $(GlobalVariable.window);
+      if (params && params.api) {
+        this.gridApi = params.api;
+      }
+      setTimeout(() => {
+        if (params && params.api) {
+          if (this.useQuickFilterService) {
+            this.quickFilterService.textInput$.subscribe((value: string) => {
+              this.quickFilterService.onFilterChange(value, this.gridOptions, this.gridApi);
+            });
+          }
+          params.api.sizeColumnsToFit();
+        }
+      }, 300);
+      $win.on(GlobalConstant.AG_GRID_RESIZE, () => {
+        setTimeout(() => {
+          if (params && params.api) {
+            params.api.sizeColumnsToFit();
+          }
+        }, 100);
       });
-    }
+    };
     this.context = { componentParent: this };
     this.responseRulesService.scope = getScope(this.source);
     this.refresh();
@@ -146,7 +165,7 @@ export class ResponseRulesComponent implements OnInit {
           let convertedRules = this.responseRulesService.destructConditions(
             response.response_rules
           );
-          this.gridOptions.api!.setRowData(convertedRules);
+          this.gridApi!.setRowData(convertedRules);
         },
         error => {}
       );

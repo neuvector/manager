@@ -39,12 +39,13 @@ import { ConfirmDialogModule } from "@components/ui/confirm-dialog/confirm-dialo
     LoadingButtonModule,
     PipeModule,
     ConfirmDialogModule,
-    AgGridModule.withComponents([
-      ActionButtonsComponent,
-      IdCellComponent,
-      FromToCellComponent,
-      PortsCellComponent
-    ]),
+    AgGridModule,
+    // AgGridModule.withComponents([
+    //   ActionButtonsComponent,
+    //   IdCellComponent,
+    //   FromToCellComponent,
+    //   PortsCellComponent
+    // ]),
   ],
   entryComponents: [
   ],

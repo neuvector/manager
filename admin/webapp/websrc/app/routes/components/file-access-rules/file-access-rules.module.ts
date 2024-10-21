@@ -19,7 +19,8 @@ import { OperationCellComponent } from './partial/predefined-file-access-rules-m
     CommonModule,
     NvCommonModule,
     QuickFilterModule,
-    AgGridModule.withComponents([]),
+    AgGridModule,
+    // AgGridModule.withComponents([]),
   ],
   entryComponents: [
     AddEditFileAccessRuleModalComponent,

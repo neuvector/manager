@@ -17,7 +17,7 @@ import { ObserveModule } from '@common/directives/observe/observe.module';
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
 import { AssetsHttpService } from '@common/api/assets-http.service';
 import { RisksHttpService } from '@common/api/risks-http.service';
-import { AgGridModule } from 'ag-grid-angular';
+import { AgGridAngular } from 'ag-grid-angular';
 import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
 import { NgChartsModule } from 'ng2-charts';
 import { VulnerabilitiesFilterService } from './vulnerabilities.filter.service';
@@ -65,7 +65,7 @@ const routes: Routes = [{ path: '', component: VulnerabilitiesComponent }];
     DragDropModule,
     LoadingButtonModule,
     NgxSliderModule,
-    AgGridModule,
+    AgGridAngular,
     QuickFilterModule,
     RisksViewReportModule,
     AssetsViewReportModule,

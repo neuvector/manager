@@ -125,7 +125,9 @@ export class NamespacesGridComponent implements OnInit {
         ? event.api.getRowNode(selected.name)
         : event.api.getDisplayedRowAtIndex(0);
     platform?.setSelected(true);
-    this.gridApi.ensureNodeVisible(platform, 'middle');
+    setTimeout(() => {
+      this.gridApi.ensureNodeVisible(platform, 'middle');
+    }, 200);
   }
 
   filterCountChanged(results: number) {

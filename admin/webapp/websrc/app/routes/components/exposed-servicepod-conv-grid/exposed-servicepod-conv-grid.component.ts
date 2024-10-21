@@ -6,6 +6,7 @@ import {
   GridApi,
   GridOptions,
   GridReadyEvent,
+  IsFullWidthRowParams,
 } from 'ag-grid-community';
 import { TranslateService } from '@ngx-translate/core';
 import * as $ from 'jquery';
@@ -163,8 +164,11 @@ export class ExposedServicepodConvGridComponent implements OnInit {
         !params.data.parent_id || params.data.visible,
       getRowId: params => params.data.id,
       getRowHeight: params => (!!params.data.parent_id ? 100 : 30),
-      isFullWidthCell: node => !!node.data.parent_id,
+      isFullWidthRow: (params: IsFullWidthRowParams<any, any>) => !!params.rowNode.data?.parent_id,
       fullWidthCellRenderer: 'conversationEntryListRenderer',
+      rowClassRules: {
+        'nv-full-width-row': (params) => !!params.data?.parent_id,
+      },
       suppressMaintainUnsortedOrder: true,
       suppressScrollOnNewData: true,
       components: {
@@ -230,7 +234,7 @@ export class ExposedServicepodConvGridComponent implements OnInit {
         }
       })
     }
-  
+
     return res;
   };
 }

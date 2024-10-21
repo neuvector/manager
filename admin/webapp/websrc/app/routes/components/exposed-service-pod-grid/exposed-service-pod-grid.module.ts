@@ -19,7 +19,8 @@ import { ExposureServicePodReportGridComponent } from './exposure-service-pod-re
     CommonModule,
     TranslateModule,
     MatTooltipModule,
-    AgGridModule.withComponents([ExposedServicePodGridServiceCellComponent]),
+    AgGridModule,
+    // AgGridModule.withComponents([ExposedServicePodGridServiceCellComponent]),
   ],
   exports: [
     ExposedServicePodGridComponent,

@@ -3,13 +3,14 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { GroupsService } from '@services/groups.service';
-import { GridOptions } from 'ag-grid-community';
+import { GridOptions, GridApi } from 'ag-grid-community';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { Script } from '@common/types';
 import { NotificationService } from '@services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
 import { updateGridData } from '@common/utils/common.utils';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-custom-check',
@@ -28,6 +29,7 @@ export class CustomCheckComponent implements OnInit {
   modalOp = GlobalConstant.MODAL_OP;
   customCheckForm: FormGroup;
   gridOptions4CustomCheck: GridOptions;
+  gridApi!: GridApi;
   isWriteScriptAuthorized: boolean = false;
   customCheckScripts: Array<Script> = [];
   selectedScript: Script;
@@ -47,12 +49,6 @@ export class CustomCheckComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if (this.useQuickFilterService) {
-      this.quickFilterService.textInput$.subscribe((value: string) => {
-        this.quickFilterService.onFilterChange(value, this.gridOptions4CustomCheck);
-      });
-    }
-
     this.initializeVM();
     this.refresh();
   }
@@ -69,43 +65,86 @@ export class CustomCheckComponent implements OnInit {
           this.isWriteScriptAuthorized = response.enabled && response.writable;
           this.hasConfigurationWarning = hasWritePermissionUnderStrictControl && !this.isWriteScriptAuthorized;
           this.gridOptions4CustomCheck = this.groupsService.prepareGrid4CustomCheck(this.isWriteScriptAuthorized, this.cfgType);
+          this.gridOptions4CustomCheck.onGridReady = params => {
+            const $win = $(GlobalVariable.window);
+            if (params && params.api) {
+              this.gridApi = params.api;
+            }
+            setTimeout(() => {
+              if (params && params.api) {
+                if (this.useQuickFilterService) {
+                  this.quickFilterService.textInput$.subscribe((value: string) => {
+                    this.quickFilterService.onFilterChange(value, this.gridOptions4CustomCheck, this.gridApi);
+                  });
+                }
+                if (response) {
+                  this.gridApi!.setRowData(this.customCheckScripts || []);
+                  this.switch2Add();
+                } else {
+                  this.gridApi!.setRowData([]);
+                }
+                setTimeout(() => {
+                  params.api.sizeColumnsToFit();
+                }, 100);
+              }
+            }, 100);
+            $win.on(GlobalConstant.AG_GRID_RESIZE, () => {
+              setTimeout(() => {
+                if (params && params.api) {
+                  params.api.sizeColumnsToFit();
+                }
+              }, 100);
+            });
+          };
           this.gridOptions4CustomCheck.onSelectionChanged = () => {
-            this.selectedScript = this.gridOptions4CustomCheck.api!.getSelectedRows()[0];
+            this.selectedScript = this.gridApi!.getSelectedRows()[0];
             this.opType = GlobalConstant.MODAL_OP.EDIT;
             if (this.selectedScript) {
               this.customCheckForm.controls.name.setValue(this.selectedScript.name);
               this.customCheckForm.controls.script.setValue(this.selectedScript.script);
             }
           };
-          setTimeout(() => {
-            if (response) {
-              this.gridOptions4CustomCheck.api!.setRowData(this.customCheckScripts);
-              this.switch2Add();
-            } else {
-              this.gridOptions4CustomCheck.api!.setRowData([]);
-            }
-          }, 200);
+
         },
         error => {
           this.isCustomCheckPromiseCompleted = true;
           this.gridOptions4CustomCheck = this.groupsService.prepareGrid4CustomCheck(false, this.cfgType);
+          this.gridOptions4CustomCheck.onGridReady = params => {
+            const $win = $(GlobalVariable.window);
+            if (params && params.api) {
+              this.gridApi = params.api;
+            }
+            setTimeout(() => {
+              if (params && params.api) {
+                this.gridApi!.setRowData([]);
+                setTimeout(() => {
+                  params.api.sizeColumnsToFit();
+                }, 100);
+              }
+            }, 100);
+            $win.on(GlobalConstant.AG_GRID_RESIZE, () => {
+              setTimeout(() => {
+                if (params && params.api) {
+                  params.api.sizeColumnsToFit();
+                }
+              }, 100);
+            });
+          };
           this.gridOptions4CustomCheck.onSelectionChanged = () => {
-            this.selectedScript = this.gridOptions4CustomCheck.api!.getSelectedRows()[0];
+            this.selectedScript = this.gridApi!.getSelectedRows()[0];
             this.opType = GlobalConstant.MODAL_OP.EDIT;
             if (this.selectedScript) {
               this.customCheckForm.controls.name.setValue(this.selectedScript.name);
               this.customCheckForm.controls.script.setValue(this.selectedScript.script);
             }
           };
-          setTimeout(() => {
-            this.gridOptions4CustomCheck.api!.setRowData([]);
-          }, 200);
-        }
+
+        },
       );
   };
 
   switch2Add = () => {
-    this.gridOptions4CustomCheck.api!.deselectAll();
+    this.gridApi!.deselectAll();
     this.customCheckForm.reset();
     setTimeout(() => {
       this.opType = GlobalConstant.MODAL_OP.ADD;
@@ -142,7 +181,7 @@ export class CustomCheckComponent implements OnInit {
           updateGridData(
             this.customCheckScripts,
             payload.config[this.opType === GlobalConstant.MODAL_OP.ADD ? 'add' : 'update']!.scripts,
-            this.gridOptions4CustomCheck.api!,
+            this.gridApi!,
             'name',
             this.opType === GlobalConstant.MODAL_OP.ADD ? 'add' : 'edit'
           );

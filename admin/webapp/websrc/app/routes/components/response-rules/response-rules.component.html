@@ -57,6 +57,7 @@
           <app-quick-filter
             (filterCountChange)="filterCountChanged($event)"
             [gridOptions]="gridOptions"
+            [gridApi]="gridApi"
             [showCount]="false">
           </app-quick-filter>
         </div>
@@ -66,6 +67,7 @@
           *ngIf="!useQuickFilterService"
           class="pull-right"
           [gridOptions]="gridOptions"
+          [gridApi]="gridApi"
           [filteredCount]="filteredCount"
           [showCount]="false">
         </app-quick-filter>

@@ -39,10 +39,11 @@ const routes: Routes = [
     LoadingButtonModule,
     ImportFileModalModule,
     RouterModule.forChild(routes),
-    AgGridModule.withComponents([
-      SensorActionButtonsComponent,
-      RuleActionButtonsComponent,
-    ]),
+    AgGridModule,
+    // AgGridModule.withComponents([
+    //   SensorActionButtonsComponent,
+    //   RuleActionButtonsComponent,
+    // ]),
     ExportOptionsModalModule,
   ],
 })

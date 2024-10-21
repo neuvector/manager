@@ -191,6 +191,7 @@
           <app-quick-filter
             (filterCountChange)="filterCountChanged($event)"
             [gridOptions]="gridOptions"
+            [gridApi]="gridApi"
             [showCount]="false">
           </app-quick-filter>
           <ng-container *ngIf="source === navSource['FED_POLICY']">

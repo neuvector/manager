@@ -33,10 +33,11 @@ import { RolesGridModule } from '@routes/components/roles-grid/roles-grid.module
     PasswordPanelModule,
     GroupDomainRoleModule,
     RolesGridModule,
-    AgGridModule.withComponents([
-      UsersGridActionCellComponent,
-      UsersGridUsernameCellComponent,
-    ]),
+    AgGridModule,
+    // AgGridModule.withComponents([
+    //   UsersGridActionCellComponent,
+    //   UsersGridUsernameCellComponent,
+    // ]),
   ],
   exports: [UsersGridComponent],
 })

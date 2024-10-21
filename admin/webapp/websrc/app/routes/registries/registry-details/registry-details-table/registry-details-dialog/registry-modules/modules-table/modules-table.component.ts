@@ -93,9 +93,6 @@ export class ModulesTableComponent implements OnInit, OnChanges {
       components: { statusCellRenderer: ModuleVulnerabilitiesCellComponent },
       overlayNoRowsTemplate: this.translate.instant('general.NO_ROWS'),
     };
-    this.quickFilterService.textInput$.subscribe((value: string) => {
-      this.quickFilterService.onFilterChange(value, this.gridOptions);
-    });
   }
 
   onSelectionChanged(params: GridReadyEvent): void {
@@ -130,6 +127,9 @@ export class ModulesTableComponent implements OnInit, OnChanges {
       ],
     });
     this.gridApi = params.api;
+    this.quickFilterService.textInput$.subscribe((value: string) => {
+      this.quickFilterService.onFilterChange(value, this.gridOptions, this.gridApi);
+    });
     this.gridApi.sizeColumnsToFit();
     this.gridApi.forEachNode(node =>
       node.rowIndex ? 0 : node.setSelected(true)

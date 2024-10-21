@@ -13,7 +13,8 @@ import { AgGridModule } from 'ag-grid-angular';
     NvCommonModule,
     QuickFilterModule,
     LoadingButtonModule,
-    AgGridModule.withComponents([]),
+    AgGridModule,
+    // AgGridModule.withComponents([]),
   ],
   exports: [ScannersGridComponent],
 })

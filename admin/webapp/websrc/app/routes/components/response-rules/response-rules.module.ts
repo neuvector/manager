@@ -21,10 +21,11 @@ import { ConfirmDialogResponseRuleComponent } from './partial/confirm-dialog-res
     CommonModule,
     NvCommonModule,
     QuickFilterModule,
-    AgGridModule.withComponents([
-      ActionButtonsComponent,
-      AddEditResponseRuleModalComponent,
-    ]),
+    AgGridModule,
+    // AgGridModule.withComponents([
+    //   ActionButtonsComponent,
+    //   AddEditResponseRuleModalComponent,
+    // ]),
     LoadingButtonModule,
   ],
   entryComponents: [AddEditResponseRuleModalComponent],

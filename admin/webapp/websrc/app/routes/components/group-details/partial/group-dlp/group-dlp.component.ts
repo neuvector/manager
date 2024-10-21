@@ -1,14 +1,16 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { GridOptions } from 'ag-grid-community';
+import { GridOptions, GridApi } from 'ag-grid-community';
 import { GroupsService } from '@services/groups.service';
 import { DlpSetting } from '@common/types';
 import { MatDialog } from '@angular/material/dialog';
 import { GroupDlpConfigModalComponent } from '@components/group-details/partial/group-dlp-config-modal/group-dlp-config-modal.component';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { GlobalConstant } from '@common/constants/global.constant';
+import { GlobalVariable } from '@common/variables/global.variable';
 import { NotificationService } from '@services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-group-dlp',
@@ -25,6 +27,7 @@ export class GroupDlpComponent implements OnInit {
   @Output() getToggleDLPConfigEnablement = new EventEmitter();
   @Output() getStatus = new EventEmitter();
   gridOptions4GroupDlpSensors: GridOptions;
+  gridApi!: GridApi;
   groupDlpSensors: Array<DlpSetting> = [];
   filteredCount: number = 0;
   selectedSensor: DlpSetting;
@@ -46,15 +49,33 @@ export class GroupDlpComponent implements OnInit {
       this.authUtilsService.getDisplayFlag('write_dlp_rule');
     this.gridOptions4GroupDlpSensors =
       this.groupsService.prepareGrid4GroupDlpSensors();
+    this.gridOptions4GroupDlpSensors.onGridReady = params => {
+      const $win = $(GlobalVariable.window);
+      if (params && params.api) {
+        this.gridApi = params.api;
+      }
+      setTimeout(() => {
+        if (params && params.api) {
+          if (this.useQuickFilterService) {
+            this.quickFilterService.textInput$.subscribe((value: string) => {
+              this.quickFilterService.onFilterChange(value, this.gridOptions4GroupDlpSensors, this.gridApi);
+            });
+          }
+          params.api.sizeColumnsToFit();
+        }
+      }, 300);
+      $win.on(GlobalConstant.AG_GRID_RESIZE, () => {
+        setTimeout(() => {
+          if (params && params.api) {
+            params.api.sizeColumnsToFit();
+          }
+        }, 100);
+      });
+    };
     this.gridOptions4GroupDlpSensors.onSelectionChanged = () => {
       this.selectedSensor =
-        this.gridOptions4GroupDlpSensors.api!.getSelectedRows()[0];
+        this.gridApi!.getSelectedRows()[0];
     };
-    if (this.useQuickFilterService) {
-      this.quickFilterService.textInput$.subscribe((value: string) => {
-        this.quickFilterService.onFilterChange(value, this.gridOptions4GroupDlpSensors);
-      });
-    }
     this.getEditGroupSensorModal.emit(this.openEditGroupSensorModal);
     this.getToggleDLPConfigEnablement.emit(this.toggleDLPConfigEnablement);
     this.refresh();
@@ -87,7 +108,7 @@ export class GroupDlpComponent implements OnInit {
           }
         }
         this.groupDlpSensors = response.sensors;
-        this.gridOptions4GroupDlpSensors.api!.setRowData(this.groupDlpSensors);
+        this.gridApi!.setRowData(this.groupDlpSensors);
         this.enabled = response.status;
         this.getStatus.emit(this.enabled);
         this.filteredCount = this.groupDlpSensors.length;

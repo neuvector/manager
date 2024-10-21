@@ -14,7 +14,8 @@ import { EnforcersGridStatusCellComponent } from './enforcers-grid-status-cell/e
     NvCommonModule,
     QuickFilterModule,
     LoadingButtonModule,
-    AgGridModule.withComponents([]),
+    AgGridModule,
+    // AgGridModule.withComponents([]),
   ],
   exports: [EnforcersGridComponent],
 })

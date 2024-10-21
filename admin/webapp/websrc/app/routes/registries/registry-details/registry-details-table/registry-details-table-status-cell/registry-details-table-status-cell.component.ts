@@ -14,11 +14,13 @@ export class RegistryDetailsTableStatusCellComponent
 {
   params!: ICellRendererParams;
   status!: string;
+  result!: string;
   labelCode!: string;
 
   agInit(params: ICellRendererParams): void {
     this.params = params;
     this.status = params && params.node.data ? params.node.data.status : '';
+    this.result = params && params.node.data ? params.node.data.result : '';
     this.labelCode = MapConstant.colourMap[this.status];
     console.log(params);
   }

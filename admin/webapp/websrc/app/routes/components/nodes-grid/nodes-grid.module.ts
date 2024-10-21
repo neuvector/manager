@@ -15,7 +15,8 @@ import { NodesGridStateCellComponent } from './nodes-grid-state-cell/nodes-grid-
     NvCommonModule,
     QuickFilterModule,
     LoadingButtonModule,
-    AgGridModule.withComponents([]),
+    AgGridModule,
+    // AgGridModule.withComponents([]),
   ],
   exports: [NodesGridComponent],
 })

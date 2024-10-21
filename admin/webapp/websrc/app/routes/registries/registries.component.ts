@@ -22,7 +22,8 @@ export class RegistriesComponent implements OnInit {
       }));
       this.isVulAuthorized =
         this.authUtilsService.getDisplayFlag('vuls_profile');
-      if (res.summarys && res.summarys.length > 0 && this.isVulAuthorized) {
+      let scannedCnt = res.summarys.reduce((sum, curr) => sum + curr.scanned, 0);
+      if (res.summarys && res.summarys.length > 0 && scannedCnt > 0 && this.isVulAuthorized) {
         updatedSummaries.push(
           {
             "auth_token": "",

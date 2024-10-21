@@ -8,7 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { PipeModule } from '@common/pipes/pipe.module';
-import { AgGridModule } from 'ag-grid-angular';
+import { AgGridAngular } from 'ag-grid-angular';
 
 @NgModule({
   declarations: [
@@ -18,7 +18,7 @@ import { AgGridModule } from 'ag-grid-angular';
   imports: [
     CommonModule,
     NvCommonModule,
-    AgGridModule,
+    AgGridAngular,
     MatDialogModule,
     TranslateModule,
     MatButtonModule,

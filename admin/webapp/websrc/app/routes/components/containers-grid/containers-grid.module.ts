@@ -16,7 +16,8 @@ import { ContainersGridStatusCellComponent } from './containers-grid-status-cell
     NvCommonModule,
     QuickFilterModule,
     LoadingButtonModule,
-    AgGridModule.withComponents([]),
+    AgGridModule,
+    // AgGridModule.withComponents([]),
   ],
   exports: [ContainersGridComponent],
 })

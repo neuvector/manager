@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { GridOptions } from 'ag-grid-community';
+import { GridOptions, GridApi } from 'ag-grid-community';
 
 @Injectable()
 export class QuickFilterService {
@@ -11,9 +11,9 @@ export class QuickFilterService {
     this.textInputSubject$.next(str);
   }
 
-  onFilterChange(filterStr: string, gridOptions: GridOptions): void {
-    if (gridOptions && gridOptions.api) {
-      gridOptions.api.setQuickFilter(filterStr);
+  onFilterChange(filterStr: string, gridOptions: GridOptions, gridApi: GridApi): void {
+    if (gridOptions && gridApi) {
+      gridApi.setQuickFilter(filterStr);
     }
   }
 }

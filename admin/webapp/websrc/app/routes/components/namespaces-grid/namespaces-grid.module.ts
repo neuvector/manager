@@ -11,7 +11,8 @@ import { AgGridModule } from 'ag-grid-angular';
     CommonModule,
     NvCommonModule,
     QuickFilterModule,
-    AgGridModule.withComponents([]),
+    AgGridModule
+    // AgGridModule.withComponents([]),
   ],
   exports: [NamespacesGridComponent],
 })

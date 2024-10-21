@@ -11,9 +11,11 @@ import {
   GridApi,
   GridOptions,
   GridReadyEvent,
-  RowDataChangedEvent,
+  RowValueChangedEvent,
   RowDataUpdatedEvent,
-  RowNode,
+  IRowNode,
+  IsFullWidthRowParams,
+  PostSortRowsParams,
 } from 'ag-grid-community';
 import * as $ from 'jquery';
 import { RiskReportGridCsvService } from './csv-generation/risk-report-grid-csv.service';
@@ -154,16 +156,18 @@ export class RiskReportGridComponent implements OnInit {
       },
       getRowId: params => params.data.id,
       getRowHeight: params => (!this.isParent(params.node) ? 110 : 90),
-      postSort: this.postSort.bind(this),
+      postSortRows: this.postSortRows.bind(this),
       onGridReady: this.onGridReady.bind(this),
-      onRowDataChanged: this.onRowDataChanged.bind(this),
       onRowDataUpdated: this.onRowDataUpdated.bind(this),
       isExternalFilterPresent: () => true,
-      isFullWidthCell: node => !this.isParent(node),
+      isFullWidthRow: (params: IsFullWidthRowParams<any, any>) => !this.isParent(params.rowNode),
       fullWidthCellRenderer: 'messageCellRenderer',
       fullWidthCellRendererParams: {
         exportBenchCSV: this.exportBenchCSV.bind(this),
         exportCVECSV: this.exportCVECSV.bind(this),
+      },
+      rowClassRules: {
+        'nv-full-width-row': (params) => !this.isParent(params.node),
       },
       doesExternalFilterPass: ({ data }) =>
         this.isVisible(data) && this.doesExternalFilterPass(data),
@@ -182,10 +186,6 @@ export class RiskReportGridComponent implements OnInit {
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
     this.gridApi.sizeColumnsToFit();
-  }
-
-  onRowDataChanged(event: RowDataChangedEvent) {
-    this.refreshAutoCompleteData();
   }
 
   onRowDataUpdated(event: RowDataUpdatedEvent) {
@@ -242,14 +242,14 @@ export class RiskReportGridComponent implements OnInit {
     }
   }
 
-  postSort(nodes: RowNode[]): void {
+  postSortRows(params: PostSortRowsParams<any, any>): void {
     let lastParentIdx = -1;
-    for (let i = 0; i < nodes.length; i++) {
-      const pid = nodes[i].data.parent_id;
+    for (let i = 0; i < params.nodes.length; i++) {
+      const pid = params.nodes[i].data.parent_id;
       if (pid) {
-        const pidx = nodes.findIndex(node => node.data.id === pid);
+        const pidx = params.nodes.findIndex(node => node.data.id === pid);
         if (lastParentIdx !== pidx) {
-          nodes.splice(pidx + 1, 0, nodes.splice(i, 1)[0]);
+          params.nodes.splice(pidx + 1, 0, params.nodes.splice(i, 1)[0]);
           if (pidx > i) {
             i--;
           }
@@ -309,7 +309,7 @@ export class RiskReportGridComponent implements OnInit {
       this.filteredCount !== this.reportsCount;
   }
 
-  isParent(node: RowNode) {
+  isParent(node: IRowNode) {
     return !node.data.parent_id;
   }
 

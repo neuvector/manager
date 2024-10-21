@@ -7,7 +7,7 @@ import {
   GridApi,
   GridOptions,
   GridReadyEvent,
-  RowNode,
+  IRowNode,
 } from 'ag-grid-community';
 import { TranslateService } from '@ngx-translate/core';
 import * as $ from 'jquery';
@@ -173,7 +173,7 @@ export class ExposedServicePodGridComponent implements OnInit {
     };
   };
 
-  isVisible = (node: RowNode): boolean => {
+  isVisible = (node: IRowNode): boolean => {
     return !node.data.parent_id || node.data.visible;
   };
 

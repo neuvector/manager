@@ -46,10 +46,11 @@ import { NodesGridModule } from '@components/nodes-grid/nodes-grid.module';
     QuickFilterModule,
     ContainersGridModule,
     NodesGridModule,
-    AgGridModule.withComponents([
-      CustomCheckActionButtonComponent,
-      GroupDlpConfigActionButtonComponent
-    ]),
+    AgGridModule,
+    // AgGridModule.withComponents([
+    //   CustomCheckActionButtonComponent,
+    //   GroupDlpConfigActionButtonComponent
+    // ]),
   ],
   exports: [
     MembersComponent,

@@ -10,6 +10,10 @@ import {
 import { GraphService } from '../graph.service';
 import { SniffService } from './sniff.service';
 import {
+  GridApi,
+  GridOptions,
+} from 'ag-grid-community';
+import {
   ActivityState,
   PopupState,
 } from '@common/types/network-activities/activityState';
@@ -19,6 +23,9 @@ import { UtilsService } from '@common/utils/app.utils';
 import {ChangeContext, Options} from '@angular-slider/ngx-slider';
 import { DomSanitizer } from '@angular/platform-browser';
 import { interval, Subscription } from 'rxjs';
+import { GlobalVariable } from '@common/variables/global.variable';
+import { GlobalConstant } from '@common/constants/global.constant';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-sniffer',
@@ -47,7 +54,8 @@ export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
 
   private _sniffers;
 
-  gridOptions;
+  gridOptions: GridOptions;
+  gridApi!: GridApi;
 
   pcap;
   options: Options = {};
@@ -100,6 +108,24 @@ export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
       this.authUtilsService.getDisplayFlag('write_network_rule');
     this.sniffService.prepareSnifferColumns();
     this.gridOptions = this.sniffService.snifferGridOptions;
+    this.gridOptions.onGridReady = (params) => {
+      const $win = $(GlobalVariable.window);
+      if (params && params.api) {
+        this.gridApi = params.api;
+      }
+      setTimeout(() => {
+        if (params && params.api) {
+          params.api.sizeColumnsToFit();
+        }
+      }, 500);
+      $win.on(GlobalConstant.AG_GRID_RESIZE, () => {
+        setTimeout(() => {
+          if (params && params.api) {
+            params.api.sizeColumnsToFit();
+          }
+        }, 1000);
+      });
+    };
     this.gridOptions.onSelectionChanged = () => {
       this.onSnifferChanged();
     };
@@ -143,7 +169,7 @@ export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   onSnifferChanged() {
-    let selectedRows = this.gridOptions.api.getSelectedRows();
+    let selectedRows = this.gridApi.getSelectedRows();
     this.sniffer = selectedRows[0];
   }
 
@@ -154,10 +180,10 @@ export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
         item => item.status === 'running'
       );
       if (!!runningSniffer) {
-        this.gridOptions.api.forEachNode(node => {
+        this.gridApi.forEachNode(node => {
           if (node.data.status === 'running') {
             node.setSelected(true);
-            this.gridOptions.api.ensureNodeVisible(node);
+            this.gridApi.ensureNodeVisible(node);
           }
         });
         if (!this.snifferSubscription) {
@@ -166,21 +192,21 @@ export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
         }
       } else {
         this.stopRefresh();
-        this.gridOptions.api.forEachNode((node, index) => {
+        this.gridApi.forEachNode((node, index) => {
           if (this.sniffer !== null) {
             if (node.data.id === this.sniffer.id) {
               node.setSelected(true);
-              this.gridOptions.api.ensureNodeVisible(node);
+              this.gridApi.ensureNodeVisible(node);
             }
           } else if (index === 0) {
             node.setSelected(true);
-            this.gridOptions.api.ensureNodeVisible(node);
+            this.gridApi.ensureNodeVisible(node);
           }
         });
         if (this.sniffer !== null)
           this.sniffer.status = 'stopped';
       }
-      let selectedRows = this.gridOptions.api.getSelectedRows();
+      let selectedRows = this.gridApi.getSelectedRows();
       this.sniffer = selectedRows[0];
     }
   };
@@ -291,8 +317,8 @@ export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
   mouseUp(event) {
     if (event.target?.id == 'sniffer') {
       this._entriesGridHeight = event.target.clientHeight - 190;
-      this.gridOptions.api.resetRowHeights();
-      this.gridOptions.api.sizeColumnsToFit();
+      this.gridApi.resetRowHeights();
+      this.gridApi.sizeColumnsToFit();
     }
   }
 

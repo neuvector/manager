@@ -24,7 +24,8 @@ import { ConversationEntryListComponent } from './conversation-entry-list/conver
     TranslateModule,
     MatTooltipModule,
     FlagIpFqdnModule,
-    AgGridModule.withComponents([ExposedServicepodGridServicepodCellComponent]),
+    AgGridModule,
+    // AgGridModule.withComponents([ExposedServicepodGridServicepodCellComponent]),
   ],
   exports: [
     ExposedServicepodConvGridComponent

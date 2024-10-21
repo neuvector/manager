@@ -16,7 +16,7 @@ import {
   GridApi,
   GridOptions,
   GridReadyEvent,
-  RowNode,
+  IRowNode,
   RowSelectedEvent,
 } from 'ag-grid-community';
 import { Subject } from 'rxjs';
@@ -28,9 +28,10 @@ import { finalize, takeWhile } from 'rxjs/operators';
 import { interval } from 'rxjs';
 import { GlobalConstant } from '@common/constants/global.constant';
 
+
 type Task = {
   index: number;
-  rowNode: RowNode;
+  rowNode: IRowNode;
   cluster: Cluster;
 };
 
@@ -227,7 +228,7 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
     };
   }
 
-  updateSummaryForRow(rowNode: RowNode, cluster: Cluster, index: number) {
+  updateSummaryForRow(rowNode: IRowNode, cluster: Cluster, index: number) {
     if (
       cluster.status === MapConstant.FED_STATUS.DISCONNECTED ||
       cluster.status === MapConstant.FED_STATUS.LEFT ||
@@ -261,8 +262,8 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
 
   updateSummaryForRows() {
     this.clusterData.clusters!.forEach((cluster, index) => {
-      if (this.gridOptions && this.gridOptions.api) {
-        const rowNode = this.gridOptions.api!.getDisplayedRowAtIndex(index);
+      if (this.gridOptions && this.gridApi) {
+        const rowNode = this.gridApi!.getDisplayedRowAtIndex(index);
         if (rowNode) {
           const task: Task = {
             index: index,
@@ -314,7 +315,7 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
   }
 
   updateSummaryForSelectedRow(
-    rowNode: RowNode,
+    rowNode: IRowNode,
     cluster: Cluster,
     index: number
   ) {
@@ -382,7 +383,7 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
     return '';
   }
 
-  quickFilterParents(node: RowNode) {
+  quickFilterParents(node: IRowNode) {
     return !node.data.parent_id;
   }
 
@@ -519,17 +520,17 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
       );
     }
 
-    if (this.gridOptions && this.gridOptions.api) {
-      this.gridOptions.api!.redrawRows({ rowNodes: [rowNode] });
+    if (this.gridOptions && this.gridApi) {
+      this.gridApi!.redrawRows({ rowNodes: [rowNode] });
     }
   }
 
-  updateRow4Error(rowNode: RowNode, message: string) {
+  updateRow4Error(rowNode: IRowNode, message: string) {
     rowNode.data.hosts = message;
     rowNode.data.running_pods = message;
     rowNode.data.cvedb_version = message;
     rowNode.data.score = message;
 
-    this.gridOptions.api!.redrawRows({ rowNodes: [rowNode] });
+    this.gridApi!.redrawRows({ rowNodes: [rowNode] });
   }
 }

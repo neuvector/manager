@@ -11,8 +11,9 @@ import {
   GridApi,
   GridOptions,
   GridReadyEvent,
-  RowNode,
+  IRowNode,
   ValueFormatterParams,
+  PostSortRowsParams,
 } from 'ag-grid-community';
 import { Check } from '@common/types';
 import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
@@ -166,7 +167,7 @@ export class ComplianceGridComponent implements OnInit {
       suppressDragLeaveHidesColumns: true,
       getRowId: params => params.data.id,
       onGridReady: event => this.onGridReady(event),
-      postSort: this.postSort.bind(this),
+      postSortRows: this.postSortRows.bind(this),
       isExternalFilterPresent: () => true,
       doesExternalFilterPass: this.isVisible.bind(this),
       components: {
@@ -175,15 +176,15 @@ export class ComplianceGridComponent implements OnInit {
         nameCellRenderer: ComplianceGridNameCellComponent,
       },
     };
-    if (this.useQuickFilterService) {
-      this.quickFilterService.textInput$.subscribe((value: string) => {
-        this.quickFilterService.onFilterChange(value, this.gridOptions);
-      });
-    }
   }
 
   onGridReady(params: GridReadyEvent): void {
     this.gridApi = params.api;
+    if (this.useQuickFilterService) {
+      this.quickFilterService.textInput$.subscribe((value: string) => {
+        this.quickFilterService.onFilterChange(value, this.gridOptions, this.gridApi);
+      });
+    }
     this.gridApi.sizeColumnsToFit();
   }
 
@@ -191,14 +192,14 @@ export class ComplianceGridComponent implements OnInit {
     this.gridApi.sizeColumnsToFit();
   }
 
-  postSort(nodes: RowNode[]): void {
+  postSortRows(params: PostSortRowsParams<any, any>): void {
     let lastParentIdx = -1;
-    for (let i = 0; i < nodes.length; i++) {
-      const pid = nodes[i].data.parent_id;
+    for (let i = 0; i < params.nodes.length; i++) {
+      const pid = params.nodes[i].data.parent_id;
       if (pid) {
-        const pidx = nodes.findIndex(node => node.data.id === pid);
+        const pidx = params.nodes.findIndex(node => node.data.id === pid);
         if (lastParentIdx !== pidx) {
-          nodes.splice(pidx + 1, 0, nodes.splice(i, 1)[0]);
+          params.nodes.splice(pidx + 1, 0, params.nodes.splice(i, 1)[0]);
           if (pidx > i) {
             i--;
           }
@@ -209,7 +210,7 @@ export class ComplianceGridComponent implements OnInit {
     }
   }
 
-  isVisible(node: RowNode): boolean {
+  isVisible(node: IRowNode): boolean {
     return !node.data.parent_id || node.data.visible;
   }
 

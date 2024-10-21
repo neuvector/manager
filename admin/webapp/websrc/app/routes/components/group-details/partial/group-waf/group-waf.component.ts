@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { GridOptions } from 'ag-grid-community';
+import { GridOptions, GridApi } from 'ag-grid-community';
 import { GroupsService } from '@services/groups.service';
 import { WafSetting } from '@common/types';
 import { MatDialog } from '@angular/material/dialog';
@@ -9,6 +9,9 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { NotificationService } from '@services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
+import { GlobalVariable } from '@common/variables/global.variable';
+import * as $ from 'jquery';
+
 
 @Component({
   selector: 'app-group-waf',
@@ -25,6 +28,7 @@ export class GroupWafComponent implements OnInit {
   @Output() getToggleWAFConfigEnablement = new EventEmitter();
   @Output() getStatus = new EventEmitter();
   gridOptions4GroupWafSensors: GridOptions;
+  gridApi!: GridApi;
   groupWafSensors: Array<WafSetting> = [];
   filteredCount: number = 0;
   selectedSensor: WafSetting;
@@ -46,15 +50,33 @@ export class GroupWafComponent implements OnInit {
       this.authUtilsService.getDisplayFlag('write_waf_rule');
     this.gridOptions4GroupWafSensors =
       this.groupsService.prepareGrid4GroupWafSensors();
+    this.gridOptions4GroupWafSensors.onGridReady = params => {
+      const $win = $(GlobalVariable.window);
+      if (params && params.api) {
+        this.gridApi = params.api;
+      }
+      setTimeout(() => {
+        if (params && params.api) {
+          if (this.useQuickFilterService) {
+            this.quickFilterService.textInput$.subscribe((value: string) => {
+              this.quickFilterService.onFilterChange(value, this.gridOptions4GroupWafSensors, this.gridApi);
+            });
+          }
+          params.api.sizeColumnsToFit();
+        }
+      }, 300);
+      $win.on(GlobalConstant.AG_GRID_RESIZE, () => {
+        setTimeout(() => {
+          if (params && params.api) {
+            params.api.sizeColumnsToFit();
+          }
+        }, 100);
+      });
+    };
     this.gridOptions4GroupWafSensors.onSelectionChanged = () => {
       this.selectedSensor =
-        this.gridOptions4GroupWafSensors.api!.getSelectedRows()[0];
+        this.gridApi!.getSelectedRows()[0];
     };
-    if (this.useQuickFilterService) {
-      this.quickFilterService.textInput$.subscribe((value: string) => {
-        this.quickFilterService.onFilterChange(value, this.gridOptions4GroupWafSensors);
-      });
-    }
     this.getEditGroupSensorModal.emit(this.openEditGroupSensorModal);
     this.getToggleWAFConfigEnablement.emit(this.toggleWAFConfigEnablement);
     this.refresh();
@@ -87,7 +109,7 @@ export class GroupWafComponent implements OnInit {
           }
         }
         this.groupWafSensors = response.sensors;
-        this.gridOptions4GroupWafSensors.api!.setRowData(this.groupWafSensors);
+        this.gridApi!.setRowData(this.groupWafSensors);
         this.enabled = response.status;
         this.getStatus.emit(this.enabled);
         this.filteredCount = this.groupWafSensors.length;

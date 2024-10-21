@@ -8,7 +8,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { GridOptions, RowNode } from 'ag-grid-community';
+import { GridOptions, IRowNode, GridApi } from 'ag-grid-community';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -18,6 +18,7 @@ import { FormControl } from '@angular/forms';
 })
 export class QuickFilterComponent implements OnInit, OnChanges {
   @Input() gridOptions!: GridOptions;
+  @Input() gridApi!: GridApi;
   @Input() count: number = 0;
   @Input() filteredCount: number = 0;
   @Input() showCount: boolean = true;
@@ -43,11 +44,11 @@ export class QuickFilterComponent implements OnInit, OnChanges {
   }
 
   onFilterChange(filterStr: string) {
-    if (this.gridOptions && this.gridOptions.api) {
-      this.count = this.gridOptions.api.getDisplayedRowCount();
-      this.gridOptions.api.setQuickFilter(filterStr);
-      const childrenAfterFilter: RowNode[] =
-        this.gridOptions.api.getModel()['rootNode'].childrenAfterFilter;
+    if (this.gridOptions && this.gridApi) {
+      this.count = this.gridApi.getDisplayedRowCount();
+      this.gridApi.setQuickFilter(filterStr);
+      const childrenAfterFilter: IRowNode[] =
+        this.gridApi.getModel()['rootNode'].childrenAfterFilter;
       if (this.condition) {
         this.filteredCount = childrenAfterFilter.filter(this.condition).length;
       } else {

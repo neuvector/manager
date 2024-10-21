@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SystemComponentsComponent } from './system-components.component';
 import { NvCommonModule } from '@common/nvCommon.module';
 import { RouterModule, Routes } from '@angular/router';
-import { AgGridModule } from 'ag-grid-angular';
+import { AgGridAngular } from 'ag-grid-angular';
 import { SystemComponentsCommunicationService } from './system-components-communication.service';
 import { LoadingTemplateModule } from '@components/ui/loading-template/loading-template.module';
 import { EnforcersGridModule } from '@components/enforcers-grid/enforcers-grid.module';

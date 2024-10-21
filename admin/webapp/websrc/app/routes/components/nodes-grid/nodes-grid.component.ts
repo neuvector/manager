@@ -67,11 +67,6 @@ export class NodesGridComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.useQuickFilterService) {
-      this.quickFilterService.textInput$.subscribe((value: string) => {
-        this.quickFilterService.onFilterChange(value, this.gridOptions);
-      });
-    }
     this.columnDefs = [
       {
         headerName: this.tr.instant('nodes.detail.NAME'),
@@ -184,6 +179,11 @@ export class NodesGridComponent implements OnInit {
 
   onGridReady(params: GridReadyEvent): void {
     this.gridApi = params.api;
+    if (this.useQuickFilterService) {
+      this.quickFilterService.textInput$.subscribe((value: string) => {
+        this.quickFilterService.onFilterChange(value, this.gridOptions, this.gridApi);
+      });
+    }
     this.gridApi.sizeColumnsToFit();
     this.gridApi.getDisplayedRowAtIndex(0)?.setSelected(true);
   }
@@ -200,7 +200,9 @@ export class NodesGridComponent implements OnInit {
         ? event.api.getRowNode(selected.id)
         : event.api.getDisplayedRowAtIndex(0);
     node?.setSelected(true);
-    this.gridApi.ensureNodeVisible(node, 'middle');
+    setTimeout(() => {
+      this.gridApi.ensureNodeVisible(node, 'middle');
+    }, 200);
   }
 
   filterCountChanged(results: number) {

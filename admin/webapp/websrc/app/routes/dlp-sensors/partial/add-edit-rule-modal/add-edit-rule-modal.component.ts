@@ -15,6 +15,7 @@ import {
   GridOptions,
   GridReadyEvent,
 } from 'ag-grid-community';
+import { GlobalVariable } from '@common/variables/global.variable';
 
 @Component({
   selector: 'app-add-edit-rule-modal',
@@ -36,6 +37,7 @@ export class AddEditRuleModalComponent implements OnInit {
   isMatched: boolean;
   context = { componentParent: this };
   gridOptions4EditPatterns: GridOptions;
+  gridApi4EditPatterns!: GridApi;
   patternErrorMsg: string = "";
 
 
@@ -82,9 +84,27 @@ export class AddEditRuleModalComponent implements OnInit {
     let isWriteDLPSensorAuthorized = this.authUtilsService.getDisplayFlag("write_dlp_rule") && !this.authUtilsService.userPermission.isNamespaceUser;
     let gridOptions = this.dlpSensorsService.configGrids(isWriteDLPSensorAuthorized);
     this.gridOptions4EditPatterns = gridOptions.gridOptions4EditPatterns;
+    this.gridOptions4EditPatterns.onGridReady = params => {
+      const $win = $(GlobalVariable.window);
+      if (params && params.api) {
+        this.gridApi4EditPatterns = params.api;
+      }
+      setTimeout(() => {
+        if (params && params.api) {
+          params.api.sizeColumnsToFit();
+        }
+      }, 300);
+      $win.on(GlobalConstant.AG_GRID_RESIZE, () => {
+        setTimeout(() => {
+          if (params && params.api) {
+            params.api.sizeColumnsToFit();
+          }
+        }, 100);
+      });
+    };
     this.gridOptions4EditPatterns.onSelectionChanged = this.onPatternChanged;
     setTimeout(() => {
-      this.gridOptions4EditPatterns.api!.setRowData(this.patterns);
+      this.gridApi4EditPatterns!.setRowData(this.patterns);
     }, 200);
   }
 
@@ -117,7 +137,7 @@ export class AddEditRuleModalComponent implements OnInit {
             this.pattern
           );
         }
-        this.gridOptions4EditPatterns.api!.setRowData(this.patterns);
+        this.gridApi4EditPatterns!.setRowData(this.patterns);
         this.patternErrorMsg = "";
         this.initializePattern();
       }
@@ -199,7 +219,7 @@ export class AddEditRuleModalComponent implements OnInit {
   };
 
   private onPatternChanged = () => {
-    this.pattern = this.gridOptions4EditPatterns.api!.getSelectedRows()[0];
+    this.pattern = this.gridApi4EditPatterns!.getSelectedRows()[0];
   };
 
   private checkReciprocalPattern = (patternList, currPattern) => {

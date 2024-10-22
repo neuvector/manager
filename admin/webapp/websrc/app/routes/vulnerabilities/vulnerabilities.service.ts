@@ -299,7 +299,7 @@ export class VulnerabilitiesService {
     return vulnerabilities.map(vulnerability => {
       let imageMap = new Map();
       vulnerability.workloads?.forEach(workload => {
-        imageMap.set(workload.image, { display_name: workload.image });
+        imageMap.set(workload.image, { display_name: workload.image, policy_mode: workload.policy_mode });
       });
       if (vulnerability.images) {
         vulnerability.images.push(...Array.from(imageMap.values()));

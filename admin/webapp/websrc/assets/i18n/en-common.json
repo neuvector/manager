@@ -203,7 +203,7 @@
     "FILTER": "Filter",
     "MATCH": "Match",
     "MANUAL": "Manual",
-    "UNUSED": "Unused Asset",
+    "UNUSED": "Static or unused Asset",
     "PROTECTED": "Protected Asset",
     "UNPROTECTED": "Unprotected Asset",
     "ASSET_TYPE": "Asset Type",

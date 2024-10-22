@@ -331,7 +331,7 @@ export class DlpSensorsComponent implements OnInit {
   };
   private onSelectionChanged4Rule = () => {
     this.selectedRule = this.gridApi4Rules!.getSelectedRows()[0];
-    this.gridApi4Patterns!.setRowData(this.selectedRule.patterns);
+    this.gridApi4Patterns!.setRowData(this.selectedRule?.patterns);
     setTimeout(() => {
       this.gridApi4Patterns!.sizeColumnsToFit();
     }, 200);

@@ -67,7 +67,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
               : GlobalConstant.SCOPE.LOCAL,
           rule4Edit: rule,
           admissionRules: this.params.context.componentParent.admissionRules,
-          gridApi: this.params.context.componentParent.gridOptions.api!
+          gridApi: this.params.context.componentParent.gridApi!
         },
       }
     );
@@ -148,7 +148,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
             updateGridData(
               this.params.context.componentParent.admissionRules,
               [selectedRule],
-              this.params.context.componentParent.gridOptions.api!,
+              this.params.context.componentParent.gridApi!,
               'id',
               'edit'
             );
@@ -167,7 +167,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
           updateGridData(
             this.params.context.componentParent.admissionRules,
             [selectedRule],
-            this.params.context.componentParent.gridOptions.api!,
+            this.params.context.componentParent.gridApi!,
             'id',
             'edit'
           );
@@ -203,7 +203,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
           updateGridData(
             this.params.context.componentParent.admissionRules,
             [rule],
-            this.params.context.componentParent.gridOptions.api!,
+            this.params.context.componentParent.gridApi!,
             'id',
             'delete'
           );

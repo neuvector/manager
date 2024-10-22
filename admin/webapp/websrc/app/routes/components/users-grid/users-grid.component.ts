@@ -362,7 +362,7 @@ export class UsersGridComponent implements OnInit {
             users.map(user => {
               return { username: user };
             }),
-            this.gridOptions.api!,
+            this.gridApi!,
             'username',
             'delete'
           );
@@ -417,7 +417,7 @@ export class UsersGridComponent implements OnInit {
           updateGridData(
             this.rowData,
             [{ username: user, blocked_for_failed_login: false }],
-            this.gridOptions.api!,
+            this.gridApi!,
             'username',
             'edit'
           );
@@ -470,7 +470,7 @@ export class UsersGridComponent implements OnInit {
                   blocked_for_password_expired: false,
                 },
               ],
-              this.gridOptions.api!,
+              this.gridApi!,
               'username',
               'edit'
             );

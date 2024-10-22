@@ -41,14 +41,14 @@ export class PdfGenerationDialogComponent implements OnInit {
   });
   saving$ = new Subject();
   get customDate(): Date {
-    return this.form.get('customDate')?.value;
+    return this.form.get('customDate')?.value || new Date();
   }
   get selectedDateOption(): LastModifiedDateOption {
-    return this.form.get('dateOption')?.value;
+    return this.form.get('dateOption')?.value as LastModifiedDateOption || this.dateOptions[0];
   }
 
   get withoutAppendix(): boolean {
-    return this.form.get('withoutAppendix')?.value;
+    return this.form.get('withoutAppendix')?.value || false;
   }
 
   constructor(

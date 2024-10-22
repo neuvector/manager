@@ -2,7 +2,7 @@
   <mat-form-field appearance="standard" class="example-full-width pull-left">
     <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
     <input
-      (keyup)="onFilterChange(filter.value)"
+      (keyup)="onFilterChange(filter.value || '')"
       [formControl]="filter"
       matInput
       [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />

@@ -54,6 +54,7 @@ export class ServiceModeService {
             }
           },
           mode,
+          profileMode,
           nodesGroup,
           isMultipleSelected
         );
@@ -67,6 +68,7 @@ export class ServiceModeService {
             }
           },
           mode,
+          profileMode,
           nodesGroup,
           isMultipleSelected
         );
@@ -99,11 +101,13 @@ export class ServiceModeService {
   private selectNodesAlert(
     cb: (isAlerted: boolean) => void,
     mode: PolicyMode,
+    profileMode: PolicyMode,
     nodesGroup: Group,
     isMultipleSelected: boolean
   ) {
-    if (!this.suppressShowNodesAlerts(mode, nodesGroup, isMultipleSelected)) {
-      const message = this.getMessage4NodesSelected(mode);
+    if (!this.suppressShowNodesAlerts(mode, profileMode, nodesGroup, isMultipleSelected)) {
+      const mode4Msg = mode || profileMode;
+      const message = this.getMessage4NodesSelected(mode4Msg);
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         maxWidth: '700px',
         data: {
@@ -141,8 +145,9 @@ export class ServiceModeService {
   }
 
   private switchAllAlert(selectedGroups: Group[], mode: PolicyMode, profileMode: PolicyMode) {
-    if (!this.suppressSwitchMode(selectedGroups, mode)) {
-      const message = this.getMessage(mode);
+    if (!this.suppressSwitchMode(selectedGroups, mode, profileMode)) {
+      const mode4Msg = mode || profileMode;
+      const message = this.getMessage(mode4Msg);
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         maxWidth: '700px',
         data: {
@@ -206,8 +211,9 @@ export class ServiceModeService {
   }
 
   private switchSomeAlert(selectedGroups: Group[], mode: PolicyMode, profileMode: PolicyMode) {
-    if (!this.suppressSwitchMode(selectedGroups, mode)) {
-      const message = this.getMessage(mode);
+    if (!this.suppressSwitchMode(selectedGroups, mode, profileMode)) {
+      const mode4Msg = mode || profileMode;
+      const message = this.getMessage(mode4Msg);
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         maxWidth: '700px',
         data: {
@@ -223,60 +229,105 @@ export class ServiceModeService {
     }
   }
 
-  private suppressSwitchMode(selectedGroups: Group[], mode: PolicyMode) {
-    let modeCountMap = {
-      discover: 0,
-      monitor: 0,
-      protect: 0,
-      '': 0,
-    };
-    selectedGroups.forEach(group => {
-      if (group.cap_change_mode)
-        modeCountMap[(group.policy_mode || '').toLowerCase()]++;
-    });
-    let areAllGroupsInSameTargetMode =
-      modeCountMap[mode.toLowerCase()] ===
-      Object.values(modeCountMap).reduce(
-        (accumulator, currentValue) => accumulator + currentValue
-      );
-    return areAllGroupsInSameTargetMode;
+  private suppressSwitchMode(selectedGroups: Group[], mode: PolicyMode, profileMode: PolicyMode) {
+    if (mode) {
+      const modeCountMap = {
+        discover: 0,
+        monitor: 0,
+        protect: 0,
+        '': 0,
+      };
+      selectedGroups.forEach(group => {
+        if (group.cap_change_mode) {
+          modeCountMap[(group.policy_mode || '').toLowerCase()]++;
+        }
+      });
+      let areAllGroupsInSameTargetMode =
+        modeCountMap[mode.toLowerCase()] ===
+        Object.values(modeCountMap).reduce(
+          (accumulator, currentValue) => accumulator + currentValue
+        );
+      return areAllGroupsInSameTargetMode;
+    } else {
+      const profileModeCountMap = {
+        discover: 0,
+        monitor: 0,
+        protect: 0,
+        '': 0,
+      };
+      selectedGroups.forEach(group => {
+        if (group.cap_change_mode) {
+          profileModeCountMap[(group.profile_mode || '').toLowerCase()]++;
+        }
+      });
+      let areAllGroupsInSameTargetMode =
+        profileModeCountMap[profileMode.toLowerCase()] ===
+        Object.values(profileModeCountMap).reduce(
+          (accumulator, currentValue) => accumulator + currentValue
+        );
+      return areAllGroupsInSameTargetMode;
+    }
   }
 
   private suppressShowNodesAlerts(
     mode: PolicyMode,
+    profileMode: PolicyMode,
     nodesGroup: Group,
     isMultipleSelected: boolean
   ) {
-    const modeGradeMap = {
-      discover: 0,
-      monitor: 1,
-      protect: 2,
-    };
-    let currMode = nodesGroup.policy_mode?.toLowerCase();
-    let targetMode = mode.toLowerCase();
-    let isSwitchingSameMode = currMode === targetMode;
-    let isDowngradingMode = modeGradeMap[targetMode] === 0;
-    console.log(
-      'isSwitchingSameMode: ',
-      isSwitchingSameMode,
-      'isDowngradingMode: ',
-      isDowngradingMode
-    );
-    return isSwitchingSameMode || isDowngradingMode || !isMultipleSelected;
+    if (mode) {
+      const modeGradeMap = {
+        discover: 0,
+        monitor: 1,
+        protect: 2,
+      };
+      let currMode = nodesGroup.policy_mode?.toLowerCase();
+      let targetMode = mode.toLowerCase();
+      let isSwitchingSameMode = currMode === targetMode;
+      let isDowngradingMode = modeGradeMap[targetMode] === 0;
+      console.log(
+        'isSwitchingSameMode: ',
+        isSwitchingSameMode,
+        'isDowngradingMode: ',
+        isDowngradingMode
+      );
+      return isSwitchingSameMode ||
+        isDowngradingMode ||
+        !isMultipleSelected;
+    } else {
+      const policyModeGradeMap = {
+        discover: 0,
+        monitor: 1,
+        protect: 2,
+      };
+      let currProfileMode = nodesGroup.policy_mode?.toLowerCase();
+      let targetProfileMode = profileMode.toLowerCase();
+      let isSwitchingSameProfileMode = currProfileMode === targetProfileMode;
+      let isDowngradingProfileMode = policyModeGradeMap[targetProfileMode] === 0;
+      console.log(
+        'isSwitchingSameProfileMode: ',
+        isSwitchingSameProfileMode,
+        'isDowngradingProfileMode: ',
+        isDowngradingProfileMode
+      );
+      return isSwitchingSameProfileMode ||
+        isDowngradingProfileMode ||
+        !isMultipleSelected;
+    }
   }
 
-  private getMessage4NodesSelected(id: PolicyMode) {
+  private getMessage4NodesSelected(mode: PolicyMode) {
     return (
       this.tr.instant('group.SELECT_ALL_ALERT') +
-      this.tr.instant('enum.' + id.toUpperCase()) +
+      this.tr.instant('enum.' + mode.toUpperCase()) +
       this.tr.instant('group.MODE_NODES')
     );
   }
 
-  private getMessage(id: PolicyMode) {
+  private getMessage(mode: PolicyMode) {
     return (
       this.tr.instant('topbar.mode.SWITCH') +
-      this.tr.instant('enum.' + id.toUpperCase()) +
+      this.tr.instant('enum.' + mode.toUpperCase()) +
       this.tr.instant('topbar.mode.MODE') +
       '?'
     );

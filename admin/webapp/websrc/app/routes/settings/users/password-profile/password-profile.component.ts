@@ -28,11 +28,11 @@ export class PasswordProfileComponent implements OnInit {
     return this._pwdProfile;
   }
   get pwdFormatValid() {
-    const min_len = this.profileForm.get('min_len')?.value,
-      min_lowercase_count = this.profileForm.get('min_lowercase_count')?.value,
-      min_uppercase_count = this.profileForm.get('min_uppercase_count')?.value,
-      min_digit_count = this.profileForm.get('min_digit_count')?.value,
-      min_special_count = this.profileForm.get('min_special_count')?.value;
+    const min_len = this.profileForm.get('min_len')?.value || 0,
+      min_lowercase_count = this.profileForm.get('min_lowercase_count')?.value || 0,
+      min_uppercase_count = this.profileForm.get('min_uppercase_count')?.value || 0,
+      min_digit_count = this.profileForm.get('min_digit_count')?.value || 0,
+      min_special_count = this.profileForm.get('min_special_count')?.value || 0;
     return (
       min_len >=
       min_lowercase_count +

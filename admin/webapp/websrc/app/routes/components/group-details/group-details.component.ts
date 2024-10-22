@@ -76,7 +76,7 @@ export class GroupDetailsComponent implements OnInit {
     this.isWriteProcessProfileRuleAuthorized = this.isWriteFileAccessRuleAuthorized || this.cfgType === GlobalConstant.CFG_TYPE.GROUND;
     this.navSource = GlobalConstant.NAV_SOURCE.GROUP;
     this.filter.valueChanges
-      .pipe(tap((value: string) => this.quickFilterService.setTextInput(value)))
+      .pipe(tap((value: string | null) => this.quickFilterService.setTextInput(value || '')))
       .subscribe();
   }
 

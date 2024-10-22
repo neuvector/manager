@@ -138,7 +138,7 @@ export class ConfigFormComponent implements OnInit {
     }
 
     const configPatch: ConfigPatch = this.formatConfigPatch(
-      this.configForm.getRawValue()
+      this.configForm.getRawValue() as ConfigV2Vo
     );
 
     this.submittingForm = true;

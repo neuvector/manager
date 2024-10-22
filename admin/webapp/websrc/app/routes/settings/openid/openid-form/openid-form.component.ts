@@ -86,8 +86,8 @@ export class OpenidFormComponent implements OnInit, OnChanges {
     );
     if (openid && openid.oidc) {
       this.serverName = openid.server_name;
-      this.groupMappedRoles = openid.oidc.group_mapped_roles;
-      this.scopes = openid.oidc.scopes;
+      this.groupMappedRoles = openid.oidc.group_mapped_roles || [];
+      this.scopes = openid.oidc.scopes || [];
       Object.keys(openid.oidc).forEach((key: string) => {
         if (this.openidForm.controls[key]) {
           this.openidForm.controls[key].setValue(
@@ -114,7 +114,7 @@ export class OpenidFormComponent implements OnInit, OnChanges {
     }
     const oidc: OPENID = {
       scopes: this.scopes,
-      group_mapped_roles: this.groupMappedRoles,
+      group_mapped_roles: this.groupMappedRoles || [],
       ...this.openidForm.value,
     };
     if (!this.openidForm.get('client_secret')?.dirty) {

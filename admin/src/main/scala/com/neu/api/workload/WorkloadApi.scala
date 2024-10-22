@@ -1,16 +1,14 @@
 package com.neu.api.workload
 
-import com.neu.client.RestClient
-import com.neu.client.RestClient.*
+import com.neu.api.BaseApi
+import com.neu.model.*
 import com.neu.model.ContainerConfigJsonProtocol.given
 import com.neu.model.NamespaceJsonProtocol.given
-import com.neu.model.*
 import com.neu.service.Utils
 import com.neu.service.workload.WorkloadService
-import org.apache.pekko.http.scaladsl.server.Directives
 import org.apache.pekko.http.scaladsl.server.Route
 
-class WorkloadApi(resourceService: WorkloadService) extends Directives {
+class WorkloadApi(resourceService: WorkloadService) extends BaseApi {
 
   val route: Route =
     headerValueByName("Token") { tokenId =>

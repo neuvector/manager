@@ -6,7 +6,6 @@ import com.neu.service.Utils
 import com.neu.service.authentication.AuthService
 import org.apache.pekko.http.scaladsl.model.StatusCodes
 import org.apache.pekko.http.scaladsl.model.headers.HttpCookie
-import org.apache.pekko.http.scaladsl.server.Directives
 import org.apache.pekko.http.scaladsl.server.Route
 
 import java.nio.charset.StandardCharsets
@@ -15,7 +14,7 @@ import java.util.Base64
 //noinspection UnstableApiUsage
 class SamlAuthApi(
   authService: AuthService
-) extends Directives {
+) extends BaseApi {
 
   private val samlSloResp = "samlslo"
   private val saml        = "token_auth_server"

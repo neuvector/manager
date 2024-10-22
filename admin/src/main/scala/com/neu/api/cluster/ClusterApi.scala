@@ -1,14 +1,13 @@
 package com.neu.api.cluster
 
-import com.neu.model.ClusterJsonProtocol.given
+import com.neu.api.BaseApi
 import com.neu.model.*
-import com.neu.service.DefaultJsonFormats
+import com.neu.model.ClusterJsonProtocol.given
 import com.neu.service.Utils
 import com.neu.service.cluster.ClusterService
-import org.apache.pekko.http.scaladsl.server.Directives
 import org.apache.pekko.http.scaladsl.server.Route
 
-class ClusterApi(resourceService: ClusterService) extends Directives with DefaultJsonFormats {
+class ClusterApi(resourceService: ClusterService) extends BaseApi {
 
   val route: Route =
     headerValueByName("Token") { tokenId =>

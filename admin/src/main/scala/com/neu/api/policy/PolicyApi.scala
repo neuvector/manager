@@ -1,18 +1,18 @@
 package com.neu.api.policy
 
-import com.neu.client.RestClient
+import com.neu.api.BaseApi
 import com.neu.client.RestClient.*
+import com.neu.model.*
 import com.neu.model.AdmissionJsonProtocol.given
 import com.neu.model.PolicyJsonProtocol.given
 import com.neu.model.RegistryConfigJsonProtocol.given
-import com.neu.model.*
 import com.neu.service.Utils
 import com.neu.service.policy.PolicyService
-import org.apache.pekko.http.scaladsl.server.Directives
 import org.apache.pekko.http.scaladsl.server.Route
+import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshaller
 
 //noinspection UnstableApiUsage
-class PolicyApi(resourceService: PolicyService) extends Directives {
+class PolicyApi(resourceService: PolicyService) extends BaseApi {
 
   val route: Route =
     headerValueByName("Token") { tokenId =>

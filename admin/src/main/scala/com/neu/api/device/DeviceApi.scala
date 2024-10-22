@@ -1,16 +1,16 @@
 package com.neu.api.device
 
-import com.neu.client.RestClient
+import com.neu.api.BaseApi
 import com.neu.client.RestClient.*
-import com.neu.model.SystemConfigJsonProtocol.given
 import com.neu.model.*
+import com.neu.model.SystemConfigJsonProtocol.given
 import com.neu.service.Utils
 import com.neu.service.device.DeviceService
 import org.apache.pekko.http.scaladsl.model.*
-import org.apache.pekko.http.scaladsl.server.Directives
 import org.apache.pekko.http.scaladsl.server.Route
+import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshaller
 
-class DeviceApi(resourceService: DeviceService) extends Directives {
+class DeviceApi(resourceService: DeviceService) extends BaseApi {
 
   val route: Route =
     headerValueByName("Token") { tokenId =>

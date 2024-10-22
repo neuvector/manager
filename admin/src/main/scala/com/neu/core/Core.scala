@@ -38,7 +38,7 @@ trait BootedCore
   CisNISTManager
   System.setProperty("net.sf.ehcache.enableShutdownHook", "true")
 
-  private val https: HttpsConnectionContext = ConnectionContext.httpsServer { () =>
+  private lazy val https: HttpsConnectionContext = ConnectionContext.httpsServer { () =>
     val engine = sslContext.createSSLEngine()
     configureSSLEngine(engine)
   }

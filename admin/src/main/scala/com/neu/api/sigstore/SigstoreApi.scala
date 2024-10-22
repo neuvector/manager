@@ -1,15 +1,14 @@
 package com.neu.api.sigstore
 
-import com.neu.client.RestClient
+import com.neu.api.BaseApi
 import com.neu.client.RestClient.*
-import com.neu.model.SigstoreJsonProtocol.given
 import com.neu.model.*
+import com.neu.model.SigstoreJsonProtocol.given
 import com.neu.service.Utils
 import com.neu.service.sigstore.SigstoreService
-import org.apache.pekko.http.scaladsl.server.Directives
 import org.apache.pekko.http.scaladsl.server.Route
 
-class SigstoreApi(resourceService: SigstoreService) extends Directives {
+class SigstoreApi(resourceService: SigstoreService) extends BaseApi {
 
   val route: Route =
     headerValueByName("Token") { tokenId =>

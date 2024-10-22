@@ -13,10 +13,8 @@ import com.neu.model.RegistryConfigJsonProtocol.*
 import com.neu.model.*
 import com.neu.service.BaseService
 import com.typesafe.scalalogging.LazyLogging
-import org.apache.pekko.http.scaladsl.model.ContentTypes
-import org.apache.pekko.http.scaladsl.model.HttpEntity
+import org.apache.pekko.http.scaladsl.model.{ ContentTypes, HttpEntity, Multipart, StatusCodes }
 import org.apache.pekko.http.scaladsl.model.HttpMethods.*
-import org.apache.pekko.http.scaladsl.model.StatusCodes
 import org.apache.pekko.http.scaladsl.server.Route
 import org.json4s.*
 import org.json4s.native.JsonMethods.*

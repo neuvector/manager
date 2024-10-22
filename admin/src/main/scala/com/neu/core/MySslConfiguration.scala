@@ -35,7 +35,7 @@ trait MySslConfiguration extends LazyLogging {
 
   // if there is no SSLContext in scope implicitly the HttpServer uses the default SSLContext,
   // since we want non-default settings in this example we make a custom SSLContext available here
-  implicit def sslContext: SSLContext = {
+  lazy val sslContext: SSLContext = {
     logger.info("Import manager's certificate and private key to manager's keystore")
     val context     = SSLContext.getInstance("TLS")
     val fCert: File = new File(newCert)

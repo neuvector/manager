@@ -1,7 +1,7 @@
 package com.neu.api.authentication
 
+import com.neu.api.BaseApi
 import com.neu.service.authentication.*
-import org.apache.pekko.http.scaladsl.server.Directives
 import org.apache.pekko.http.scaladsl.server.Route
 
 /**
@@ -15,7 +15,7 @@ class AuthenticationApi(
   samlAuthService: AuthService,
   suseAuthService: AuthService,
   extraAuthService: ExtraAuthService
-) extends Directives {
+) extends BaseApi {
 
   val route: Route =
     new OpenIdAuthApi(openIdAuthService).route ~

@@ -1,17 +1,16 @@
 package com.neu.api.risk
 
-import com.neu.client.RestClient
+import com.neu.api.BaseApi
 import com.neu.client.RestClient.*
+import com.neu.model.*
 import com.neu.model.ComplianceJsonProtocol.given
 import com.neu.model.VulnerabilityJsonProtocol.given
-import com.neu.model.*
 import com.neu.service.Utils
 import com.neu.service.risk.RiskService
-import org.apache.pekko.http.scaladsl.server.Directives
 import org.apache.pekko.http.scaladsl.server.Route
 
 //noinspection UnstableApiUsage
-class RiskApi(resourceService: RiskService) extends Directives {
+class RiskApi(resourceService: RiskService) extends BaseApi {
 
   val route: Route =
     headerValueByName("Token") { tokenId =>

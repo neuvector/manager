@@ -3,13 +3,12 @@ package com.neu.api.authentication
 import com.neu.api.*
 import com.neu.service.Utils
 import com.neu.service.authentication.AuthService
-import org.apache.pekko.http.scaladsl.server.Directives
 import org.apache.pekko.http.scaladsl.server.Route
 
 //noinspection UnstableApiUsage
 class SuseAuthApi(
   authService: AuthService
-) extends Directives {
+) extends BaseApi {
 
   private val auth       = "auth"
   private val suseCookie = "R_SESS"

@@ -203,7 +203,7 @@
     "FILTER": "过滤器",
     "MATCH": "匹配",
     "MANUAL": "手动的",
-    "UNUSED": "未使用资产",
+    "UNUSED": "静态或未使用资产",
     "PROTECTED": "受保护资产",
     "UNPROTECTED": "未受保护资产",
     "ASSET_TYPE": "资产类型",

@@ -22,7 +22,7 @@ export class ScoreInstructionComponent implements OnInit {
 
   isPoorScore = (): boolean => {
     return (
-      this.scoreInfo.score.securityRiskScore > GlobalConstant.SCORE_LEVEL.POOR
+      this.scoreInfo.score.securityRiskScore > GlobalConstant.SCORE_LEVEL.FAIR
     );
   };
 

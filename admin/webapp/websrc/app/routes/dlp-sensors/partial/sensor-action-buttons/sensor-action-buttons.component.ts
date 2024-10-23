@@ -46,7 +46,7 @@ export class SensorActionButtonsComponent implements ICellRendererAngularComp {
         opType: GlobalConstant.MODAL_OP.EDIT,
         index: this.params.rowIndex,
         dlpSensors: this.params.context.componentParent.dlpSensors,
-        gridApi: this.params.context.componentParent.gridOptions4Sensors.api!
+        gridApi: this.params.context.componentParent.gridApi4Sensors!
       },
     });
   };
@@ -70,7 +70,7 @@ export class SensorActionButtonsComponent implements ICellRendererAngularComp {
           updateGridData(
             this.params.context.componentParent.dlpSensors,
             [sensor],
-            this.params.context.componentParent.gridOptions4Sensors.api!,
+            this.params.context.componentParent.gridApi4Sensors!,
             'name',
             'delete'
           );

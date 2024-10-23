@@ -4,54 +4,52 @@ import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
-
-import scala.util.control.Breaks.break
-import scala.util.control.Breaks.breakable
+import scala.compiletime.uninitialized
 
 /**
  * An operating system process.
  */
-class Proc(args: String*)(env: Env) extends Traversable[String] {
-  protected val pb                           = new ProcessBuilder(args: _*)
-  protected var proc: Process                = _
-  protected var inputWriter: BufferedWriter  = _
-  protected var outputReader: BufferedReader = _
-  protected var errorReader: BufferedReader  = _
+class Proc(args: String*)(env: Env) extends Iterable[String] {
+  protected val pb                           = new ProcessBuilder(args*)
+  protected var proc: Process                = uninitialized
+  protected var inputWriter: BufferedWriter  = uninitialized
+  protected var outputReader: BufferedReader = uninitialized
+  protected var errorReader: BufferedReader  = uninitialized
 
   /**
    * Start process and traverse lines in standard output.
    */
-  def stdout = new Traversable[String] {
-    def foreach[U](fun: String => U) {
+  def stdout: Iterable[String] = new Iterable[String] {
+    def iterator: Iterator[String] = {
       startProc()
-      collectOutput(fun, outputReader)
+      collectOutput(outputReader)
     }
   }
 
   /**
    * Start process and traverse lines in standard error.
    */
-  def stderr = new Traversable[String] {
-    def foreach[U](fun: String => U) {
+  def stderr: Iterable[String] = new Iterable[String] {
+    def iterator: Iterator[String] = {
       startProc()
-      collectOutput(fun, errorReader)
+      collectOutput(errorReader)
     }
   }
 
   /**
    * Start process and traverse lines in both standard output and error.
    */
-  def foreach[U](fun: String => U) {
+  def iterator: Iterator[String] = {
     pb.redirectErrorStream(true)
     startProc()
-    collectOutput(fun, outputReader)
+    collectOutput(outputReader)
   }
 
   /**
    * Start process and return all output in standard output and error.
    */
   override def toString: String = {
-    val output = collect { case s: String => s }.mkString(String format "%n")
+    val output = iterator.mkString(System.lineSeparator())
     waitFor()
     output
   }
@@ -61,29 +59,26 @@ class Proc(args: String*)(env: Env) extends Traversable[String] {
    */
   def input(lines: String*): Proc = {
     startProc()
-    try {
-      for (s <- lines) {
+    try
+      for (s <- lines)
         inputWriter.write(s)
-      }
-    } finally {
-      inputWriter.close()
-    }
+    finally inputWriter.close()
     this
   }
 
   /**
-   * Wait for process to finish and return its exit code.
-   * If process has not been started, it will be started and then waited.
+   * Wait for process to finish and return its exit code. If process has not been started, it will
+   * be started and then waited.
    */
-  def waitFor(): Int = {
+  private def waitFor(): Int = {
     if (proc == null) {
       startProc()
     }
-    try {
+    try
       if (inputWriter != null) {
         inputWriter.close()
       }
-    } finally {}
+    finally {}
     proc.waitFor()
   }
 
@@ -93,8 +88,8 @@ class Proc(args: String*)(env: Env) extends Traversable[String] {
   def bg(): Unit = this.startProc()
 
   /**
-   * Destroy the process and return its exit value.
-   * If process has not been started, an IllegalStateException is thrown.
+   * Destroy the process and return its exit value. If process has not been started, an
+   * IllegalStateException is thrown.
    */
   def destroy(): Int = proc match {
     case null => throw new IllegalStateException("Process has not started")
@@ -104,7 +99,7 @@ class Proc(args: String*)(env: Env) extends Traversable[String] {
   /**
    * Start the process.
    */
-  protected def startProc(): Unit =
+  private def startProc(): Unit =
     if (proc == null) {
       env.applyTo(pb)
       proc = pb.start()
@@ -116,19 +111,29 @@ class Proc(args: String*)(env: Env) extends Traversable[String] {
   /**
    * Collect process output to feed to the function.
    */
-  protected def collectOutput[U](fun: String => U, reader: BufferedReader) {
-    try {
-      breakable {
-        while (true) {
-          val line = reader.readLine()
-          if (line == null) {
-            break
+  private def collectOutput(reader: BufferedReader): Iterator[String] =
+    new Iterator[String] {
+      private var nextLine: String    = null
+      private var reachedEnd: Boolean = false
+
+      def hasNext: Boolean = {
+        if (nextLine == null && !reachedEnd) {
+          nextLine = reader.readLine()
+          if (nextLine == null) {
+            reachedEnd = true
+            reader.close()
           }
-          fun(line)
         }
+        nextLine != null
       }
-    } finally {
-      reader.close()
+
+      def next(): String =
+        if (hasNext) {
+          val line = nextLine
+          nextLine = null
+          line
+        } else {
+          throw new NoSuchElementException("No more lines")
+        }
     }
-  }
 }

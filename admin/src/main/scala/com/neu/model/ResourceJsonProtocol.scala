@@ -1,7 +1,7 @@
 package com.neu.model
 
 import com.typesafe.scalalogging.LazyLogging
-import spray.json.{ DefaultJsonProtocol, _ }
+import spray.json.*
 
 /**
  * Created by bxu on 5/11/16.
@@ -9,14 +9,21 @@ import spray.json.{ DefaultJsonProtocol, _ }
 /**
  * Refer to RESTWorkloadBrief in go
  *
- * @param id The id of the container
- * @param name The name of the container
- * @param display_name The normalized display name
- * @param platform_role The role of the container, like "core", "addon", ""
- * @param state The state of the container which includes: "disconnected", "exit", "un-managed",
- *              "monitor", "protect"
- * @param service The service
- * @param service_group The service group name
+ * @param id
+ *   The id of the container
+ * @param name
+ *   The name of the container
+ * @param display_name
+ *   The normalized display name
+ * @param platform_role
+ *   The role of the container, like "core", "addon", ""
+ * @param state
+ *   The state of the container which includes: "disconnected", "exit", "un-managed", "monitor",
+ *   "protect"
+ * @param service
+ *   The service
+ * @param service_group
+ *   The service group name
  */
 case class Container(
   id: String,
@@ -41,17 +48,24 @@ case class ConversationBrief(
 case class ConversationBriefWrap(conversations: Array[ConversationBrief])
 
 /**
- *
- * @param id The id of the container
- * @param name The name of the container
- * @param display_name The normalized display name
- * @param platform_role The role of the container, like "core", "addon"
- * @param state The state of the container which includes: "disconnected", "exit", "un-managed",
- *              "monitor", "protect",  "quarantined"
- * @param kind The type of the endpoint, including: "external", "container", "node_ip",
- *             "workload_ip", "address", "service"
- * @param service_group The service group name
- * @param share_ns_with Share network with endpoint specified by id
+ * @param id
+ *   The id of the container
+ * @param name
+ *   The name of the container
+ * @param display_name
+ *   The normalized display name
+ * @param platform_role
+ *   The role of the container, like "core", "addon"
+ * @param state
+ *   The state of the container which includes: "disconnected", "exit", "un-managed", "monitor",
+ *   "protect", "quarantined"
+ * @param kind
+ *   The type of the endpoint, including: "external", "container", "node_ip", "workload_ip",
+ *   "address", "service"
+ * @param service_group
+ *   The service group name
+ * @param share_ns_with
+ *   Share network with endpoint specified by id
  */
 case class ConversationEndpoint(
   id: String,
@@ -107,42 +121,46 @@ case class ThreatBriefWrap(threats: Array[ThreatBrief])
 
 object ResourceJsonProtocol extends DefaultJsonProtocol with LazyLogging {
 
-  implicit val errorFormat: RootJsonFormat[Error]                 = jsonFormat1(Error)
-  implicit val containerFormat: RootJsonFormat[Container]         = jsonFormat7(Container)
-  implicit val containerWrapFormat: RootJsonFormat[ContainerWrap] = jsonFormat1(ContainerWrap)
+  given errorFormat: RootJsonFormat[Error]                 = jsonFormat1(Error.apply)
+  given containerFormat: RootJsonFormat[Container]         = jsonFormat7(Container.apply)
+  given containerWrapFormat: RootJsonFormat[ContainerWrap] = jsonFormat1(ContainerWrap.apply)
 
-  implicit val conversationBriefFormat: RootJsonFormat[ConversationBrief] = jsonFormat5(
-    ConversationBrief
+  given conversationBriefFormat: RootJsonFormat[ConversationBrief]         = jsonFormat5(
+    ConversationBrief.apply
   )
-  implicit val conversationBriefWrapFormat: RootJsonFormat[ConversationBriefWrap] = jsonFormat1(
-    ConversationBriefWrap
-  )
-
-  implicit val scanBriefFormat: RootJsonFormat[ScanBrief] = jsonFormat3(ScanBrief)
-  implicit val workloadBriefFormat: RootJsonFormat[WorkloadBrief] = rootFormat(
-    lazyFormat(jsonFormat15(WorkloadBrief))
-  )
-  implicit val endpointFormat: RootJsonFormat[ConversationEndpoint] = jsonFormat17(
-    ConversationEndpoint
-  )
-  //  implicit val endpointFormat: RootJsonFormat[ConversationEndpoint] = rootFormat(lazyFormat(jsonFormat12(ConversationEndpoint)))
-  implicit val endpointWrapFormat: RootJsonFormat[ConversationEndpointData] = jsonFormat1(
-    ConversationEndpointData
+  given conversationBriefWrapFormat: RootJsonFormat[ConversationBriefWrap] = jsonFormat1(
+    ConversationBriefWrap.apply
   )
 
-  implicit val endpointConversationFormat: RootJsonFormat[EndPointConversation] = jsonFormat11(
-    EndPointConversation
+  given scanBriefFormat: RootJsonFormat[ScanBrief]                   = jsonFormat3(ScanBrief.apply)
+  given workloadBriefFormat: RootJsonFormat[WorkloadBrief]           = rootFormat(
+    lazyFormat(jsonFormat15(WorkloadBrief.apply))
   )
-  implicit val endpointConversationDataFormat: RootJsonFormat[EndpointConversationData] =
-    jsonFormat1(EndpointConversationData)
+  given endpointFormat: RootJsonFormat[ConversationEndpoint]         = jsonFormat17(
+    ConversationEndpoint.apply
+  )
+  //  given endpointFormat: RootJsonFormat[ConversationEndpoint] = rootFormat(lazyFormat(jsonFormat12(ConversationEndpoint)))
+  given endpointWrapFormat: RootJsonFormat[ConversationEndpointData] = jsonFormat1(
+    ConversationEndpointData.apply
+  )
 
-  implicit val graphDataFormat: RootJsonFormat[GraphData] = jsonFormat3(GraphData)
+  given endpointConversationFormat: RootJsonFormat[EndPointConversation]         = jsonFormat11(
+    EndPointConversation.apply
+  )
+  given endpointConversationDataFormat: RootJsonFormat[EndpointConversationData] =
+    jsonFormat1(EndpointConversationData.apply)
 
-  implicit val serverVolume: RootJsonFormat[ServerVolume] = jsonFormat3(ServerVolume)
+  given graphDataFormat: RootJsonFormat[GraphData] = jsonFormat3(GraphData.apply)
 
-  implicit val threatBriefFormat: RootJsonFormat[ThreatBrief]         = jsonFormat3(ThreatBrief)
-  implicit val threatBriefDTOFormat: RootJsonFormat[ThreatBriefDTO]   = jsonFormat4(ThreatBriefDTO)
-  implicit val threatBriefWrapFormat: RootJsonFormat[ThreatBriefWrap] = jsonFormat1(ThreatBriefWrap)
+  given serverVolume: RootJsonFormat[ServerVolume] = jsonFormat3(ServerVolume.apply)
+
+  given threatBriefFormat: RootJsonFormat[ThreatBrief]         = jsonFormat3(ThreatBrief.apply)
+  given threatBriefDTOFormat: RootJsonFormat[ThreatBriefDTO]   = jsonFormat4(ThreatBriefDTO.apply)
+  given threatBriefWrapFormat: RootJsonFormat[ThreatBriefWrap] = jsonFormat1(ThreatBriefWrap.apply)
+
+  given threatBriefArrayFormat: RootJsonFormat[Array[ThreatBrief]]       = arrayFormat[ThreatBrief]
+  given threatBriefDTOArrayFormat: RootJsonFormat[Array[ThreatBriefDTO]] =
+    arrayFormat[ThreatBriefDTO]
 
   private val address = "address"
 
@@ -202,17 +220,12 @@ object ResourceJsonProtocol extends DefaultJsonProtocol with LazyLogging {
   def jsonToThreatWrap(threatWrap: String): ThreatBriefWrap =
     threatWrap.parseJson.convertTo[ThreatBriefWrap]
 
-  private def getCluster: Node => Option[String] = (node: Node) => {
-    Some(node.clusterId)
-  }
+  private def getCluster: Node => Option[String] = (node: Node) => Some(node.clusterId)
 
-  private def getNamespace: Node => Option[String] = (node: Node) => {
-    Some(node.domain)
-  }
+  private def getNamespace: Node => Option[String] = (node: Node) => Some(node.domain)
 
-  private def strToOp: Option[String] => Option[String] = (str: Option[String]) => {
+  private def strToOp: Option[String] => Option[String] = (str: Option[String]) =>
     if (str.isEmpty) None else if (str.get.isEmpty) None else str
-  }
 
   private def getLabel: EndPointConversation => Option[String] =
     (conversation: EndPointConversation) => {
@@ -222,8 +235,12 @@ object ResourceJsonProtocol extends DefaultJsonProtocol with LazyLogging {
       )
       if ("deny".equalsIgnoreCase(conversation.policy_action)) {
         (Some("X") ++ label).reduceOption(_ + " " + _)
-      } else if (conversation.event_type.nonEmpty && (conversation.event_type.get.contains("dlp") || conversation.event_type.get
-                   .contains("waf"))) {
+      } else if (
+        conversation.event_type.nonEmpty && (conversation.event_type.get.contains(
+          "dlp"
+        ) || conversation.event_type.get
+          .contains("waf"))
+      ) {
         (Some("$") ++ label).reduceOption(_ + " " + _)
       } else
         label
@@ -232,40 +249,39 @@ object ResourceJsonProtocol extends DefaultJsonProtocol with LazyLogging {
   private def merge(xs: Option[Array[String]]*) = xs.flatten.reduceLeftOption(_ ++ _)
 
   private def getChildren: ConversationEndpoint => Option[Array[SubNode]] =
-    (endpoint: ConversationEndpoint) => {
+    (endpoint: ConversationEndpoint) =>
       endpoint.children match {
-        case None => None
+        case None        => None
         case Some(nodes) =>
           Some(
-            nodes.map(
-              x =>
-                SubNode(
-                  x.id,
-                  getCompactName(x.display_name, x.name),
-                  x.scan_summary,
-                  x.service_mesh_sidecar
-                )
+            nodes.map(x =>
+              SubNode(
+                x.id,
+                getCompactName(x.display_name, x.name),
+                x.scan_summary,
+                x.service_mesh_sidecar
+              )
             )
           )
       }
-    }
 
   private def getStatus: (EndPointConversation, Map[String, Node]) => String =
-    (conversation: EndPointConversation, nodeMap: Map[String, Node]) => {
-      if (!"allow".equalsIgnoreCase(conversation.policy_action) && !"open".equalsIgnoreCase(
-            conversation.policy_action
-          )) {
+    (conversation: EndPointConversation, nodeMap: Map[String, Node]) =>
+      if (
+        !"allow".equalsIgnoreCase(conversation.policy_action) && !"open".equalsIgnoreCase(
+          conversation.policy_action
+        )
+      ) {
         conversation.policy_action
       } else {
         conversation.severity match {
-          case None =>
+          case None        =>
             getCode(conversation, nodeMap)
-          case Some("") =>
+          case Some("")    =>
             getCode(conversation, nodeMap)
           case Some(value) => value
         }
       }
-    }
 
   private def getCode: (EndPointConversation, Map[String, Node]) => String =
     (conversation: EndPointConversation, nodeMap: Map[String, Node]) => {
@@ -287,11 +303,11 @@ object ResourceJsonProtocol extends DefaultJsonProtocol with LazyLogging {
 
     }
 
-  private def getGroup: ConversationEndpoint => String = (endpoint: ConversationEndpoint) => {
+  private def getGroup: ConversationEndpoint => String = (endpoint: ConversationEndpoint) =>
     if ("container".equals(endpoint.kind) || "ip_service".equals(endpoint.kind)) {
       endpoint.state match {
         case "unmanaged" => "containerUnmanaged"
-        case _ =>
+        case _           =>
           if (endpoint.service_mesh.getOrElse(false))
             s"mesh${endpoint.policy_mode.getOrElse("")}"
           else
@@ -300,16 +316,17 @@ object ResourceJsonProtocol extends DefaultJsonProtocol with LazyLogging {
     } else {
       endpoint.kind match {
         case "node_ip" =>
-          if (endpoint.service_group.isDefined &&
-              endpoint.service_group.get.equalsIgnoreCase("nodes")) {
+          if (
+            endpoint.service_group.isDefined &&
+            endpoint.service_group.get.equalsIgnoreCase("nodes")
+          ) {
             if (endpoint.state.equalsIgnoreCase("unmanaged"))
               "hostUnmanaged"
             else s"host${endpoint.policy_mode.getOrElse("")}"
           } else endpoint.kind
-        case _ => endpoint.kind
+        case _         => endpoint.kind
       }
     }
-  }
 
   private def getClusterId: ConversationEndpoint => String = (endpoint: ConversationEndpoint) => {
     val cluster = endpoint.service_group.getOrElse("")
@@ -338,17 +355,19 @@ object ResourceJsonProtocol extends DefaultJsonProtocol with LazyLogging {
   private def setClusterName(endpoint: ConversationEndpoint): String =
     endpoint.kind match {
       case "node_ip" | "workload_ip" | `address` | "ip_service" => endpoint.id
-      case _ =>
+      case _                                                    =>
         logger.info(endpoint.toJson.prettyPrint)
         s"${endpoint.domain}_group"
     }
 
-  private def getDomain: ConversationEndpoint => String = (endpoint: ConversationEndpoint) => {
+  private def getDomain: ConversationEndpoint => String = (endpoint: ConversationEndpoint) =>
     if (endpoint.domain.isEmpty) {
       endpoint.kind match {
-        case "node_ip" =>
-          if (endpoint.service_group.isDefined &&
-              endpoint.service_group.get.equalsIgnoreCase("nodes")) "nvManagedNode"
+        case "node_ip"                 =>
+          if (
+            endpoint.service_group.isDefined &&
+            endpoint.service_group.get.equalsIgnoreCase("nodes")
+          ) "nvManagedNode"
           else "nvUnmanagedNode"
         case "workload_ip" | `address` => "nvUnmanagedWorkload"
         case "external"                => "external"
@@ -357,15 +376,13 @@ object ResourceJsonProtocol extends DefaultJsonProtocol with LazyLogging {
     } else {
       endpoint.domain
     }
-  }
 
   val emptyThreatBriefDTO: ThreatBriefDTO = ThreatBriefDTO(" ", "", 0, "")
 
-  private def getCompactName: (String, String) => String = (display_name: String, name: String) => {
+  private def getCompactName: (String, String) => String = (display_name: String, name: String) =>
     display_name match {
       case x if x.isEmpty => name
       case _              => display_name
     }
-  }
 
 }

@@ -1,36 +1,91 @@
 package com.neu.core
 
 import com.typesafe.scalalogging.LazyLogging
-import spray.client.pipelining.SendReceive
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.http.scaladsl.ConnectionContext
+import org.apache.pekko.http.scaladsl.Http
+import org.apache.pekko.http.scaladsl.HttpsConnectionContext
+import org.apache.pekko.http.scaladsl.model.*
+import org.apache.pekko.http.scaladsl.settings.ConnectionPoolSettings
+import org.apache.pekko.stream.Materializer
+import org.apache.pekko.stream.scaladsl.Sink
+import org.apache.pekko.stream.scaladsl.Source
+
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
-import javax.net.ssl.{ SSLContext, TrustManager, X509TrustManager }
-
-import akka.actor.ActorRefFactory
-import akka.io.IO
-import akka.pattern.ask
-import akka.util.Timeout
-import spray.can.Http
-import spray.can.Http.HostConnectorSetup
-import spray.http.{ HttpResponse, HttpResponsePart }
-import spray.io.ClientSSLEngineProvider
-import spray.util._
-import com.neu.client.RestClient
-
+import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLEngine
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
 import scala.concurrent.ExecutionContext
-import scala.concurrent.duration._
+import scala.concurrent.Future
+import scala.util.Failure
+import scala.util.Success
 
-/**
- * Created by bxu on 6/6/16.
- */
 trait ClientSslConfig extends LazyLogging {
-  implicit lazy val engineProvider = ClientSSLEngineProvider(engine => engine)
+
+  implicit lazy val httpsContext: HttpsConnectionContext = ConnectionContext.httpsClient {
+    (host, port) =>
+      val engine: SSLEngine = sslContext.createSSLEngine(host, port)
+      engine.setUseClientMode(true)
+      engine
+  }
 
   implicit lazy val sslContext: SSLContext = {
     val context = SSLContext.getInstance("TLS")
     context.init(null, Array[TrustManager](new DummyTrustManager), new SecureRandom)
     context
   }
+
+  private final val SENSITIVE_HEADER = Set("X-Auth-Token", "Authorization")
+
+  def sendReceiver(using
+    system: ActorSystem,
+    materializer: Materializer,
+    executionContext: ExecutionContext
+  ): HttpRequest => Future[HttpResponse] = { (request: HttpRequest) =>
+    val poolSettings = ConnectionPoolSettings(system)
+
+    logger.info(s"Sending Request\n${maskSensitiveInfo(request.toString)}")
+
+    val connectionPool = if (request.uri.scheme == "https") {
+      logger.debug("Using HTTPS connection pool")
+      Http().cachedHostConnectionPoolHttps[HttpRequest](
+        request.uri.authority.host.toString,
+        request.uri.effectivePort,
+        connectionContext = httpsContext,
+        settings = poolSettings
+      )
+    } else {
+      logger.debug("Using HTTP connection pool")
+      Http().cachedHostConnectionPool[HttpRequest](
+        request.uri.authority.host.toString,
+        request.uri.effectivePort,
+        settings = poolSettings
+      )
+    }
+
+    Source
+      .single(request -> request)
+      .via(connectionPool)
+      .runWith(Sink.head)
+      .flatMap {
+        case (Success(response: HttpResponse), _) =>
+          logger.info(s"Received Response - Success\n$response")
+          Future.successful(response)
+        case (Failure(exception), _)              =>
+          logger.info(s"Received Response - Failure\n$exception")
+          Future.failed(exception)
+      }
+  }
+
+  private def maskSensitiveInfo(str: String): String =
+    SENSITIVE_HEADER.foldLeft(str) { (acc, header) =>
+      val regex = s"($header:\\s*)([^\\s,]+)".r
+      regex.replaceAllIn(acc, m => s"${m.group(1)}${maskToken(m.group(2))}")
+    }
+
+  private def maskToken(token: String): String = s"${token.take(4)}****${token.takeRight(4)}"
 
   private class DummyTrustManager extends X509TrustManager {
 
@@ -43,27 +98,5 @@ trait ClientSslConfig extends LazyLogging {
     override def checkClientTrusted(x509Certificates: Array[X509Certificate], s: String): Unit = {}
 
     override def checkServerTrusted(x509Certificates: Array[X509Certificate], s: String): Unit = {}
-  }
-
-  // rewrite sendReceiveMethod from spray.client.pipelining
-  def mySendReceive(
-    implicit refFactory: ActorRefFactory,
-    executionContext: ExecutionContext,
-    futureTimeout: Timeout = RestClient.waitingLimit.seconds
-  ): SendReceive = {
-    val transport = IO(Http)(actorSystem)
-    // HttpManager actually also accepts Msg (HttpRequest, HostConnectorSetup)
-    request =>
-      val uri = request.uri
-      val setup =
-        HostConnectorSetup(uri.authority.host.toString, uri.effectivePort, uri.scheme == "https")
-      transport ? ((request, setup)) map {
-        case x: HttpResponse => x
-        case x: HttpResponsePart =>
-          sys.error("sendReceive doesn't support chunked responses, try sendTo instead")
-        case x: Http.ConnectionClosed =>
-          sys.error("Connection closed before reception of response: " + x)
-        case x => sys.error("Unexpected response from HTTP transport: " + x)
-      }
   }
 }

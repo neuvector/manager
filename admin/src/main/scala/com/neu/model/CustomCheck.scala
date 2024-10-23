@@ -1,7 +1,6 @@
 package com.neu.model
 
-import spray.json.{ DefaultJsonProtocol, RootJsonFormat }
-import spray.json._
+import spray.json.*
 
 case class CustomCheck(name: String, script: String)
 
@@ -19,18 +18,18 @@ case class CustomCheckConfigDTO(group: String, config: CustomCheckConfig)
 case class CustomCheckData(config: CustomChecks)
 
 object CustomCheckConfigJsonProtocol extends DefaultJsonProtocol {
-  implicit val customCheckFormat: RootJsonFormat[CustomCheck]    = jsonFormat2(CustomCheck)
-  implicit val customChecksFormats: RootJsonFormat[CustomChecks] = jsonFormat1(CustomChecks)
-  implicit val customCheckConfigFormat: RootJsonFormat[CustomCheckConfig] = jsonFormat3(
-    CustomCheckConfig
+  given customCheckFormat: RootJsonFormat[CustomCheck]                     = jsonFormat2(CustomCheck.apply)
+  given customChecksFormats: RootJsonFormat[CustomChecks]                  = jsonFormat1(CustomChecks.apply)
+  given customCheckConfigFormat: RootJsonFormat[CustomCheckConfig]         = jsonFormat3(
+    CustomCheckConfig.apply
   )
-  implicit val customCheckConfigDataFormat: RootJsonFormat[CustomCheckConfigData] = jsonFormat1(
-    CustomCheckConfigData
+  given customCheckConfigDataFormat: RootJsonFormat[CustomCheckConfigData] = jsonFormat1(
+    CustomCheckConfigData.apply
   )
-  implicit val customCheckConfigDTOFormat: RootJsonFormat[CustomCheckConfigDTO] = jsonFormat2(
-    CustomCheckConfigDTO
+  given customCheckConfigDTOFormat: RootJsonFormat[CustomCheckConfigDTO]   = jsonFormat2(
+    CustomCheckConfigDTO.apply
   )
-  implicit val customConfigFormat: RootJsonFormat[CustomCheckData] = jsonFormat1(CustomCheckData)
+  given customConfigFormat: RootJsonFormat[CustomCheckData]                = jsonFormat1(CustomCheckData.apply)
 
   def customConfigToJson(configWrap: CustomCheckConfigData): String = configWrap.toJson.compactPrint
 }

@@ -1,60 +1,61 @@
 package com.neu.model
 
-import spray.json.{ DefaultJsonProtocol, _ }
+import spray.json.*
 
 object ComplianceJsonProtocol extends DefaultJsonProtocol {
-  implicit val complianceNISTConfigFormat: RootJsonFormat[ComplianceNISTConfig] =
-    jsonFormat1(ComplianceNISTConfig)
+  given complianceNISTConfigFormat: RootJsonFormat[ComplianceNISTConfig] =
+    jsonFormat1(ComplianceNISTConfig.apply)
 
-  implicit val complianceNISTConfigDataFormat: RootJsonFormat[ComplianceNISTConfigData] =
-    jsonFormat1(ComplianceNISTConfigData)
+  given complianceNISTConfigDataFormat: RootJsonFormat[ComplianceNISTConfigData] =
+    jsonFormat1(ComplianceNISTConfigData.apply)
 
-  implicit val complianceProfileEntryFormat: RootJsonFormat[ComplianceProfileEntry] = jsonFormat2(
-    ComplianceProfileEntry
+  given complianceProfileEntryFormat: RootJsonFormat[ComplianceProfileEntry] = jsonFormat2(
+    ComplianceProfileEntry.apply
   )
 
-  implicit val complianceProfileEntryDataFormat: RootJsonFormat[ComplianceProfileEntryData] =
+  given complianceProfileEntryDataFormat: RootJsonFormat[ComplianceProfileEntryData] =
     jsonFormat1(
-      ComplianceProfileEntryData
+      ComplianceProfileEntryData.apply
     )
 
-  implicit val complianceProfileEntryDTOFormat: RootJsonFormat[ComplianceProfileEntryDTO] =
+  given complianceProfileEntryDTOFormat: RootJsonFormat[ComplianceProfileEntryDTO] =
     jsonFormat2(
-      ComplianceProfileEntryDTO
+      ComplianceProfileEntryDTO.apply
     )
 
-  implicit val complianceProfileFormat: RootJsonFormat[ComplianceProfile] = jsonFormat3(
-    ComplianceProfile
+  given complianceProfileFormat: RootJsonFormat[ComplianceProfile] = jsonFormat3(
+    ComplianceProfile.apply
   )
 
-  implicit val complianceProfileDataFormat: RootJsonFormat[ComplianceProfileData] = jsonFormat1(
-    ComplianceProfileData
+  given complianceProfileDataFormat: RootJsonFormat[ComplianceProfileData] = jsonFormat1(
+    ComplianceProfileData.apply
   )
 
-  implicit val complianceProfilesDataFormat: RootJsonFormat[ComplianceProfilesData] = jsonFormat1(
-    ComplianceProfilesData
+  given complianceProfilesDataFormat: RootJsonFormat[ComplianceProfilesData] = jsonFormat1(
+    ComplianceProfilesData.apply
   )
 
-  implicit val complianceProfileConfigFormat: RootJsonFormat[ComplianceProfileConfig] = jsonFormat3(
-    ComplianceProfileConfig
+  given complianceProfileConfigFormat: RootJsonFormat[ComplianceProfileConfig] = jsonFormat3(
+    ComplianceProfileConfig.apply
   )
 
-  implicit val complianceProfileConfigDataFormat: RootJsonFormat[ComplianceProfileConfigData] =
+  given complianceProfileConfigDataFormat: RootJsonFormat[ComplianceProfileConfigData] =
     jsonFormat1(
-      ComplianceProfileConfigData
+      ComplianceProfileConfigData.apply
     )
-  implicit val remoteExportOptionsFormat: RootJsonFormat[RemoteExportOptions] = jsonFormat3(
-    RemoteExportOptions
+  given remoteExportOptionsFormat: RootJsonFormat[RemoteExportOptions]                 = jsonFormat3(
+    RemoteExportOptions.apply
   )
-  implicit val complianceProfileExportDataFormat: RootJsonFormat[ComplianceProfileExportData] =
-    jsonFormat2(ComplianceProfileExportData)
+  given complianceProfileExportDataFormat: RootJsonFormat[ComplianceProfileExportData] =
+    jsonFormat2(ComplianceProfileExportData.apply)
+
   def complianceNISTConfigDataToJson(config: ComplianceNISTConfigData): String =
     config.toJson.compactPrint
 
   def configWrapToJson(config: ComplianceProfileConfigData): String =
     config.toJson.compactPrint
 
-  def profileWrapToJson(profile: ComplianceProfileEntryData): String =
+  def profileWrapToJson(profile: ComplianceProfileEntryData): String              =
     profile.toJson.compactPrint
 
   def complianceProfileExportDataToJson(

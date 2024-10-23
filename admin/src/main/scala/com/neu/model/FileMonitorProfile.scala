@@ -1,6 +1,6 @@
 package com.neu.model
 
-import spray.json.{ DefaultJsonProtocol, _ }
+import spray.json.*
 
 case class FileMonitorFilter(
   filter: String,
@@ -27,30 +27,30 @@ case class FileMonitorConfigDTO(group: String, fileMonitorConfigData: FileMonito
 
 object FileProfileJsonProtocol extends DefaultJsonProtocol {
 
-  implicit val fileMonitorFilter: RootJsonFormat[FileMonitorFilter] = jsonFormat4(FileMonitorFilter)
+  given fileMonitorFilter: RootJsonFormat[FileMonitorFilter] = jsonFormat4(FileMonitorFilter.apply)
 
-  implicit val fileMonitorProfile: RootJsonFormat[FileMonitorProfile] = jsonFormat2(
-    FileMonitorProfile
+  given fileMonitorProfile: RootJsonFormat[FileMonitorProfile] = jsonFormat2(
+    FileMonitorProfile.apply
   )
 
-  implicit val fileMonitorProfileData: RootJsonFormat[FileMonitorProfileData] = jsonFormat1(
-    FileMonitorProfileData
+  given fileMonitorProfileData: RootJsonFormat[FileMonitorProfileData] = jsonFormat1(
+    FileMonitorProfileData.apply
   )
 
-  implicit val fileMonitorProfilesData: RootJsonFormat[FileMonitorProfilesData] = jsonFormat1(
-    FileMonitorProfilesData
+  given fileMonitorProfilesData: RootJsonFormat[FileMonitorProfilesData] = jsonFormat1(
+    FileMonitorProfilesData.apply
   )
 
-  implicit val fileMonitorConfigFormat: RootJsonFormat[FileMonitorConfig] = jsonFormat3(
-    FileMonitorConfig
+  given fileMonitorConfigFormat: RootJsonFormat[FileMonitorConfig] = jsonFormat3(
+    FileMonitorConfig.apply
   )
 
-  implicit val fileMonitorConfigDataFormat: RootJsonFormat[FileMonitorConfigData] = jsonFormat1(
-    FileMonitorConfigData
+  given fileMonitorConfigDataFormat: RootJsonFormat[FileMonitorConfigData] = jsonFormat1(
+    FileMonitorConfigData.apply
   )
 
-  implicit val configDTOFormat: RootJsonFormat[FileMonitorConfigDTO] = jsonFormat2(
-    FileMonitorConfigDTO
+  given configDTOFormat: RootJsonFormat[FileMonitorConfigDTO] = jsonFormat2(
+    FileMonitorConfigDTO.apply
   )
 
   def fileProfileToJson(profileConfig: FileMonitorConfigData): String =

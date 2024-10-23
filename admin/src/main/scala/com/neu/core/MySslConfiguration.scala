@@ -1,57 +1,46 @@
 package com.neu.core
 
-import java.io.{
-  BufferedInputStream,
-  File,
-  FileInputStream,
-  FileNotFoundException,
-  FileOutputStream,
-  IOException,
-  OutputStreamWriter,
-  Writer
-}
-import java.security.cert.{ Certificate, CertificateFactory }
-import java.security.interfaces.RSAPrivateKey
-import java.security.spec.{ RSAPrivateCrtKeySpec, _ }
-import java.security.{ KeyFactory, KeyStore, PrivateKey, SecureRandom }
-import java.util.{ Base64, Date }
-
-import com.neu.core.CommonSettings.{ newCert, newKey, newMgrCert, newMgrKey }
+import com.neu.core.CommonSettings.newCert
+import com.neu.core.CommonSettings.newKey
+import com.neu.core.CommonSettings.newMgrCert
+import com.neu.core.CommonSettings.newMgrKey
 import com.typesafe.scalalogging.LazyLogging
-import javax.net.ssl.{ KeyManagerFactory, SSLContext, TrustManagerFactory }
-import spray.io.ServerSSLEngineProvider
-import sun.security.util.DerInputStream
-
-import scala.collection.JavaConverters._
-
-import java.math.BigInteger
-import java.security._
-import java.security.cert.X509Certificate
 import org.bouncycastle.asn1.x500.X500Name
-import org.bouncycastle.cert.X509CertificateHolder
+import org.bouncycastle.asn1.x509.*
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder
 import org.bouncycastle.jce.provider.BouncyCastleProvider
-import org.bouncycastle.operator.ContentSigner
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder
-import org.bouncycastle.asn1.x509.KeyUsage
-import org.bouncycastle.asn1.x509.Extension
-import org.bouncycastle.asn1.x509.BasicConstraints
-import org.bouncycastle.asn1.x509.GeneralName
-import org.bouncycastle.asn1.x509.GeneralNames
-import org.bouncycastle.asn1.x509.ExtendedKeyUsage
-import org.bouncycastle.asn1.x509.KeyPurposeId
-import org.bouncycastle.util.io.pem.{ PemObject, PemWriter }
+import org.bouncycastle.util.io.pem.PemObject
+import org.bouncycastle.util.io.pem.PemWriter
+import sun.security.util.DerInputStream
+
+import java.io.*
+import java.math.BigInteger
+import java.security.*
+import java.security.cert.Certificate
+import java.security.cert.CertificateFactory
+import java.security.cert.X509Certificate
+import java.security.interfaces.RSAPrivateKey
+import java.security.spec.*
+import java.util.Base64
+import java.util.Date
+import javax.net.ssl.KeyManagerFactory
+import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLEngine
+import javax.net.ssl.TrustManagerFactory
+import scala.jdk.CollectionConverters.*
 
 trait MySslConfiguration extends LazyLogging {
 
   // if there is no SSLContext in scope implicitly the HttpServer uses the default SSLContext,
   // since we want non-default settings in this example we make a custom SSLContext available here
-  implicit def sslContext: SSLContext = {
+  lazy val sslContext: SSLContext = {
     logger.info("Import manager's certificate and private key to manager's keystore")
     val context     = SSLContext.getInstance("TLS")
     val fCert: File = new File(newCert)
     val fKey: File  = new File(newKey)
+
     if (fCert.isFile && fKey.isFile) {
       loadCertificateAndKey(fCert, fKey, context)
     } else {
@@ -75,13 +64,13 @@ trait MySslConfiguration extends LazyLogging {
     }
   }
 
-  def generateKeyPair(): KeyPair = {
+  private def generateKeyPair(): KeyPair = {
     val keyPairGenerator = KeyPairGenerator.getInstance("RSA")
     keyPairGenerator.initialize(2048)
     keyPairGenerator.generateKeyPair()
   }
 
-  def generateSelfSignedCertificate(keyPair: KeyPair): X509Certificate = {
+  private def generateSelfSignedCertificate(keyPair: KeyPair): X509Certificate = {
     // Certificate details
     val issuer    = new X500Name("CN=neuvector, O=NeuVector, L=San Jose, ST=California, C=USA")
     val subject   = new X500Name("CN=neuvector")
@@ -115,7 +104,9 @@ trait MySslConfiguration extends LazyLogging {
     )
     certificateBuilder.addExtension(Extension.basicConstraints, true, new BasicConstraints(false))
 
-    val san = new GeneralNames(new GeneralName(GeneralName.dNSName, "neuvector"))
+    val sanBuilder = new GeneralNamesBuilder()
+    sanBuilder.addName(new GeneralName(GeneralName.dNSName, "neuvector"))
+    val san        = sanBuilder.build()
     certificateBuilder.addExtension(Extension.subjectAlternativeName, false, san)
 
     // Sign and generate the certificate
@@ -125,7 +116,7 @@ trait MySslConfiguration extends LazyLogging {
     new JcaX509CertificateConverter().setProvider("BC").getCertificate(certificateHolder)
   }
 
-  def saveCertificateAndKey(certificate: X509Certificate, privateKey: PrivateKey): Unit = {
+  private def saveCertificateAndKey(certificate: X509Certificate, privateKey: PrivateKey): Unit = {
     val fCert: File = new File(newMgrCert)
     val fKey: File  = new File(newMgrKey)
     if (fCert.exists) {
@@ -153,7 +144,7 @@ trait MySslConfiguration extends LazyLogging {
     }
   }
 
-  def loadCertificateAndKey(fCert: File, fKey: File, context: SSLContext): SSLContext = {
+  private def loadCertificateAndKey(fCert: File, fKey: File, context: SSLContext): SSLContext = {
 
     val password               = Array('n', 'e', 'u', 'v', 'e', 'c', 't', 'o', 'r')
     val cf: CertificateFactory = CertificateFactory.getInstance("X.509")
@@ -175,7 +166,7 @@ trait MySslConfiguration extends LazyLogging {
       bisKey = new BufferedInputStream(fisKey)
 
       if (bisCert.available > 0 && bisKey.available > 0) {
-        val privateKeyBytes = new Array[Byte](fKey.length.toInt)
+        val privateKeyBytes        = new Array[Byte](fKey.length.toInt)
         bisKey.read(privateKeyBytes)
         var privateKey: PrivateKey = null
 
@@ -203,8 +194,8 @@ trait MySslConfiguration extends LazyLogging {
 
           val bytes = Base64.getDecoder.decode(encodedPrivateKey)
 
-          val derReader = new DerInputStream(bytes)
-          val seq       = derReader.getSequence(0)
+          val derReader  = new DerInputStream(bytes)
+          val seq        = derReader.getSequence(0)
           // skip version seq[0];
           val modulus    = seq(1).getBigInteger
           val publicExp  = seq(2).getBigInteger
@@ -215,7 +206,7 @@ trait MySslConfiguration extends LazyLogging {
           val exp2       = seq(7).getBigInteger
           val crtCoef    = seq(8).getBigInteger
 
-          val keySpec = new RSAPrivateCrtKeySpec(
+          val keySpec    = new RSAPrivateCrtKeySpec(
             modulus,
             publicExp,
             privateExp,
@@ -231,7 +222,7 @@ trait MySslConfiguration extends LazyLogging {
           throw new SecurityException("Invalid private key is being used")
         }
         val certs: Array[Certificate] = cf.generateCertificates(bisCert).asScala.toArray
-        val keyEntry: KeyStore.Entry = new KeyStore.PrivateKeyEntry(
+        val keyEntry: KeyStore.Entry  = new KeyStore.PrivateKeyEntry(
           privateKey,
           certs
         )
@@ -257,7 +248,7 @@ trait MySslConfiguration extends LazyLogging {
       case e: FileNotFoundException =>
         logger.warn(e.getMessage)
         context
-      case e: SecurityException =>
+      case e: SecurityException     =>
         logger.warn(e.getMessage)
         context
     } finally {
@@ -276,7 +267,8 @@ trait MySslConfiguration extends LazyLogging {
     }
   }
 
-  implicit val myEngineProvider = ServerSSLEngineProvider { engine =>
+  def configureSSLEngine(engine: SSLEngine): SSLEngine = {
+    engine.setUseClientMode(false)
     engine.setEnabledCipherSuites(Array("TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256"))
     engine.setEnabledProtocols(Array("TLSv1.2"))
     engine

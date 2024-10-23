@@ -144,7 +144,8 @@ case class UserProfile(
 
 /**
  * For core module restful web service only
- * @param config [[com.neu.model.UserProfile]]
+ * @param config
+ *   [[com.neu.model.UserProfile]]
  */
 case class UserProfileWrap(config: UserProfile)
 

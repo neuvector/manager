@@ -156,7 +156,11 @@
           </div>
           <div
             class="mx-3 d-flex align-items-center"
-            *ngIf="source === navSource['SELF'] && isAdmissionRuleAuthorized && !admissionStateErr">
+            *ngIf="
+              source === navSource['SELF'] &&
+              isAdmissionRuleAuthorized &&
+              !admissionStateErr
+            ">
             <label class="nv-modal-item-title margin-right-s mb-0">
               {{ 'responsePolicy.gridHeader.STATUS' | translate }}
             </label>

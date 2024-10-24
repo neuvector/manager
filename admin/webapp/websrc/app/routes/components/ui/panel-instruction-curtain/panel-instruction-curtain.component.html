@@ -1,6 +1,9 @@
 <button mat-button [matMenuTriggerFor]="beforeMenu">
   <em class="eos-icons icon-18 text-muted">info</em>
 </button>
-<mat-menu #beforeMenu="matMenu" xPosition="before" class="dashboard-panel-instruction-content">
+<mat-menu
+  #beforeMenu="matMenu"
+  xPosition="before"
+  class="dashboard-panel-instruction-content">
   <div *ngFor="let instruction of instructions">{{ instruction }}</div>
 </mat-menu>

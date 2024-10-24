@@ -8,9 +8,8 @@ describe('PacketModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PacketModalComponent ]
-    })
-    .compileComponents();
+      declarations: [PacketModalComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

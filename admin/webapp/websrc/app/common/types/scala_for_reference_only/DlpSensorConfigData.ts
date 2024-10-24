@@ -7,7 +7,5 @@ export interface DlpSensorConfigData {
 }
 
 export function isDlpSensorConfigData(v: any): v is DlpSensorConfigData {
-  return (
-    (v['config'] && isDlpSensorConfig(v['config']))
-  );
+  return v['config'] && isDlpSensorConfig(v['config']);
 }

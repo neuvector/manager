@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+} from '@angular/core';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ComponentChartData, Controller, ErrorResponse } from '@common/types';
 import { UtilsService } from '@common/utils/app.utils';
@@ -14,7 +20,9 @@ import { SystemComponentsCommunicationService } from '../system-components-commu
   templateUrl: './controller-details.component.html',
   styleUrls: ['./controller-details.component.scss'],
 })
-export class ControllerDetailsComponent implements OnInit, OnDestroy {
+export class ControllerDetailsComponent
+  implements OnInit, OnDestroy, AfterViewInit
+{
   @ViewChild(BaseChartDirective) chart!: BaseChartDirective;
   @ViewChild('detailsTabGroup', { static: false })
   detailsTabGroup!: MatTabGroup;

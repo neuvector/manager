@@ -8,9 +8,8 @@ describe('NodeBriefDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NodeBriefDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [NodeBriefDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

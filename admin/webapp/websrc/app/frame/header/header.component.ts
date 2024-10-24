@@ -71,7 +71,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private _clusterNameSubScription;
   public isAuthReadConfig: boolean = false;
 
-
   @ViewChild('fsbutton', { static: true }) fsbutton;
 
   constructor(

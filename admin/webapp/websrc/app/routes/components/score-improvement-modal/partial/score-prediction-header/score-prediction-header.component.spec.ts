@@ -8,9 +8,8 @@ describe('ScorePredictionHeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ScorePredictionHeaderComponent ]
-    })
-    .compileComponents();
+      declarations: [ScorePredictionHeaderComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

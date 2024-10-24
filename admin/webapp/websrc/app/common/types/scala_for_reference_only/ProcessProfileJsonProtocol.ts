@@ -14,8 +14,14 @@ export class ProcessProfileJsonProtocol {
   }
 }
 
-export const ProcessProfileJsonProtocolInhabitant: ProcessProfileJsonProtocol = ProcessProfileJsonProtocol.getInstance();
+export const ProcessProfileJsonProtocolInhabitant: ProcessProfileJsonProtocol =
+  ProcessProfileJsonProtocol.getInstance();
 
-export function isProcessProfileJsonProtocol(v: any): v is ProcessProfileJsonProtocol {
-  return (v instanceof ProcessProfileJsonProtocol) && (v === ProcessProfileJsonProtocolInhabitant);
+export function isProcessProfileJsonProtocol(
+  v: any
+): v is ProcessProfileJsonProtocol {
+  return (
+    v instanceof ProcessProfileJsonProtocol &&
+    v === ProcessProfileJsonProtocolInhabitant
+  );
 }

@@ -1,5 +1,5 @@
-import { ScanReport } from "./scanReport";
-import { ScanBrief } from "./scanBrief";
+import { ScanReport } from './scanReport';
+import { ScanBrief } from './scanBrief';
 
 export interface ScanAwsFuncDetail {
   scan_brief: ScanBrief;

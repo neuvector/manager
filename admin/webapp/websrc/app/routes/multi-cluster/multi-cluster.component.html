@@ -18,14 +18,12 @@
         <mat-grid-list
           (window:resize)="onResize()"
           [cols]="columns"
-          rowHeight="600px"
-        >
+          rowHeight="600px">
           <mat-grid-tile>
             <button
               (click)="showPromotionDialog()"
               class="cluster_link"
-              mat-button
-            >
+              mat-button>
               <mat-card class="cluster_card">
                 <div class="promote_image"></div>
                 <mat-card-title>{{
@@ -41,8 +39,7 @@
             <button
               (click)="showJoiningDialog()"
               class="cluster_link"
-              mat-button
-            >
+              mat-button>
               <mat-card class="cluster_card">
                 <div class="joining_image"></div>
                 <mat-card-title>{{
@@ -84,15 +81,13 @@
             <mat-card [ngStyle]="{ height: height + 'px' }" class="pt-0">
               <app-multi-cluster-grid
                 [gridHeight]="height - 85"
-                [clusterData]="clusterData"
-              ></app-multi-cluster-grid>
+                [clusterData]="clusterData"></app-multi-cluster-grid>
             </mat-card>
           </ng-container>
           <ng-container *appContainerTwo="let height" class="myContainer">
             <mat-card
               [ngStyle]="{ height: height + 'px' }"
-              class="pt-0 scrollable"
-            >
+              class="pt-0 scrollable">
               <mat-card-content>
                 <app-multi-cluster-details [gridHeight]="height - 80">
                 </app-multi-cluster-details>
@@ -106,8 +101,7 @@
       <div *ngIf="isMemberRole">
         <mat-card class="pt-0">
           <app-multi-cluster-grid
-            [clusterData]="clusterData"
-          ></app-multi-cluster-grid>
+            [clusterData]="clusterData"></app-multi-cluster-grid>
         </mat-card>
       </div>
     </div>
@@ -117,13 +111,12 @@
   <ng-container *ngIf="error; else loadingTemplate">
     <div
       class="server-error-sm details"
-      style="height: 145px; padding-top: 30px;"
-    >
+      style="height: 145px; padding-top: 30px">
       <div>
         <em class="fa fa-times-circle error-signal" aria-hidden="true"></em>
-      <span class="error-text padding-left-m">
-        {{'multiCluster.messages.api_failure' | translate }}
-      </span>
+        <span class="error-text padding-left-m">
+          {{ 'multiCluster.messages.api_failure' | translate }}
+        </span>
       </div>
     </div>
   </ng-container>

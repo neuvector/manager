@@ -67,15 +67,12 @@ export class RegistryDetailsComponent {
   }
 
   exportAllScannedImagesCSV(): void {
-    this.registriesService.getAllScannedImages(
-      this.queryToken,
-      0,
-      -1,
-      [],
-      { '-': { filter: this.filter.value } }
-    ).subscribe(
-      res => {
-        console.log("csv", res);
+    this.registriesService
+      .getAllScannedImages(this.queryToken, 0, -1, [], {
+        '-': { filter: this.filter.value },
+      })
+      .subscribe(res => {
+        console.log('csv', res);
         let images4Csv = res.data.map(image => ({
           repository: image.tag
             ? `${image.repository}:${image.tag}`
@@ -93,9 +90,10 @@ export class RegistryDetailsComponent {
         const blob = new Blob([imagesCSV], { type: 'text/csv;charset=utf-8' });
         saveAs(
           blob,
-          `vulnerabilities of all scanned images_${this.utils.parseDatetimeStr(new Date())}.csv`
+          `vulnerabilities of all scanned images_${this.utils.parseDatetimeStr(
+            new Date()
+          )}.csv`
         );
-      }
-    );
+      });
   }
 }

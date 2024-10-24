@@ -1,4 +1,4 @@
-import { ScanBrief } from "./scanBrief";
+import { ScanBrief } from './scanBrief';
 
 export interface ScanSummary {
   id: string;

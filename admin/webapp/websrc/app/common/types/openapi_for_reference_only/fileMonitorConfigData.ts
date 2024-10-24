@@ -1,4 +1,4 @@
-import { FileMonitorConfig } from "./fileMonitorConfig";
+import { FileMonitorConfig } from './fileMonitorConfig';
 
 export interface FileMonitorConfigData {
   config: FileMonitorConfig;

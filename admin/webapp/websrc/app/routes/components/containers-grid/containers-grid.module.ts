@@ -10,7 +10,12 @@ import { ContainersGridStateCellComponent } from './containers-grid-state-cell/c
 import { ContainersGridStatusCellComponent } from './containers-grid-status-cell/containers-grid-status-cell.component';
 
 @NgModule({
-  declarations: [ContainersGridComponent, ContainersGridNameCellComponent, ContainersGridStateCellComponent, ContainersGridStatusCellComponent],
+  declarations: [
+    ContainersGridComponent,
+    ContainersGridNameCellComponent,
+    ContainersGridStateCellComponent,
+    ContainersGridStatusCellComponent,
+  ],
   imports: [
     CommonModule,
     NvCommonModule,

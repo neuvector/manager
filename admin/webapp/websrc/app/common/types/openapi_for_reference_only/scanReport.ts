@@ -1,9 +1,9 @@
-import { ScanReportLabels } from "./scanReportLabels";
-import { Vulnerability } from "./vulnerability";
-import { BenchItem } from "./benchItem";
-import { ScanSecret } from "./scanSecret";
-import { ScanSetIdPerm } from "./scanSetIdPerm";
-import { ScanModule } from "./scanModule";
+import { ScanReportLabels } from './scanReportLabels';
+import { Vulnerability } from './vulnerability';
+import { BenchItem } from './benchItem';
+import { ScanSecret } from './scanSecret';
+import { ScanSetIdPerm } from './scanSetIdPerm';
+import { ScanModule } from './scanModule';
 
 export interface ScanReport {
   vulnerabilities: Vulnerability[];

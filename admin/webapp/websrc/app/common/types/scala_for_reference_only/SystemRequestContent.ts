@@ -5,7 +5,5 @@ export interface SystemRequestContent {
 }
 
 export function isSystemRequestContent(v: any): v is SystemRequestContent {
-  return (
-    (!v['policy_mode'] || ((typeof v['policy_mode']) === 'string'))
-  );
+  return !v['policy_mode'] || typeof v['policy_mode'] === 'string';
 }

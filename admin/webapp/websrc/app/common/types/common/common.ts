@@ -36,12 +36,13 @@ export type VulQueryOrderByColumnOption =
   | 'published_timestamp'
   | 'impact';
 
-export type ImageQueryOrderByColumnOption = 'repository'
+export type ImageQueryOrderByColumnOption =
+  | 'repository'
   | 'imageid'
   | 'createdat'
   | 'os'
   | 'size'
-  | 'scannedat'
+  | 'scannedat';
 
 export type OrderByOption = 'desc' | 'asc';
 
@@ -67,7 +68,7 @@ export function isErrorResponse(err: ErrorResponse): err is ErrorResponse {
 export enum GlobalNotificationType {
   SYSTEM_ALERT_NOTIFICATION = 'SYSTEM_ALERT_NOTIFICATION',
   MANAGER_NOTIFICATION = 'MANAGER_NOTIFICATION',
-  USER_NOTIFICATION = 'USER_NOTIFICATION'
+  USER_NOTIFICATION = 'USER_NOTIFICATION',
 }
 
 export interface GlobalNotification {

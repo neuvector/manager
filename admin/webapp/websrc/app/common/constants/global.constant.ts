@@ -47,8 +47,8 @@ export class GlobalConstant {
     ALLOW: 'allow',
     DENY: 'deny',
     VIOLATE: 'violate',
-    THREAT: 'threat'
-  }
+    THREAT: 'threat',
+  };
   public static CRUD = {
     C: 'post',
     R: 'get',

@@ -8,9 +8,8 @@ describe('DlpSensorsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DlpSensorsComponent ]
-    })
-    .compileComponents();
+      declarations: [DlpSensorsComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

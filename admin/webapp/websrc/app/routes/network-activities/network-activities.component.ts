@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   Inject,
   OnDestroy,
@@ -40,8 +39,8 @@ import { NotificationService } from '@services/notification.service';
 import { ConversationPair } from './edge-details/edge-details.component';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { MultiClusterService } from '@services/multi-cluster.service';
-import { ConfirmDialogComponent } from "@components/ui/confirm-dialog/confirm-dialog.component";
-import { MatDialog } from "@angular/material/dialog";
+import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 import { SwitchersService } from '@core/switchers/switchers.service';
 import { FrameService } from '../../frame/frame.service';
 
@@ -50,9 +49,7 @@ import { FrameService } from '../../frame/frame.service';
   templateUrl: './network-activities.component.html',
   styleUrls: ['./network-activities.component.scss'],
 })
-export class NetworkActivitiesComponent
-  implements AfterViewInit, OnInit, OnDestroy
-{
+export class NetworkActivitiesComponent implements OnInit, OnDestroy {
   private _switchClusterSubscription;
   private data: GraphDataSet = { nodes: [], edges: [] };
   serverData: GraphDataSet = { nodes: [], edges: [] };
@@ -61,7 +58,6 @@ export class NetworkActivitiesComponent
   private w: any;
   resizeObservable$: Observable<Event> = <Observable<Event>>{};
   resizeSubscription$: Subscription = <Subscription>{};
-
 
   private readonly TOP_BAR = 65;
   private readonly SIDE_BAR = 220;
@@ -168,7 +164,7 @@ export class NetworkActivitiesComponent
     private dialog: MatDialog,
     private utils: UtilsService,
     private switchers: SwitchersService,
-    private frameService: FrameService,
+    private frameService: FrameService
   ) {
     this.w = GlobalVariable.window;
     this.popupState = new ActivityState(PopupState.onInit);
@@ -1641,9 +1637,9 @@ export class NetworkActivitiesComponent
           return;
         this.graph.changeSize(
           this.w.innerWidth -
-            (this.switchers.getFrameSwitcher('isCollapsed') ?
-              this.SIDE_BAR_S : this.SIDE_BAR
-            ) -
+            (this.switchers.getFrameSwitcher('isCollapsed')
+              ? this.SIDE_BAR_S
+              : this.SIDE_BAR) -
             this.PADDING,
           this.w.innerHeight - this.TOP_BAR - this.PADDING
         );
@@ -1676,9 +1672,9 @@ export class NetworkActivitiesComponent
         return;
       this.graph.changeSize(
         this.w.innerWidth -
-          (this.switchers.getFrameSwitcher('isCollapsed') ?
-            this.SIDE_BAR_S : this.SIDE_BAR
-          ) -
+          (this.switchers.getFrameSwitcher('isCollapsed')
+            ? this.SIDE_BAR_S
+            : this.SIDE_BAR) -
           this.PADDING,
         this.w.innerHeight - this.TOP_BAR - this.PADDING
       );
@@ -1698,98 +1694,94 @@ export class NetworkActivitiesComponent
       });
   }
 
-  private inHiddenDomain ( node)  {
-  if (this.blacklist.domains?.length > 0) {
-    return this.blacklist.domains.some(
-      domain => domain.name === node.domain
-    );
-  } else return false;
+  private inHiddenDomain(node) {
+    if (this.blacklist.domains?.length > 0) {
+      return this.blacklist.domains.some(domain => domain.name === node.domain);
+    } else return false;
   }
 
-  private inHiddenGroup ( node ) {
-  if (this.blacklist.groups?.length > 0) {
-    return this.blacklist.groups.some(
-      group => group.name === node.clusterId
-    );
-  } else return false;
-}
+  private inHiddenGroup(node) {
+    if (this.blacklist.groups?.length > 0) {
+      return this.blacklist.groups.some(group => group.name === node.clusterId);
+    } else return false;
+  }
 
-  private isHiddenEndpoint(node)  {
-  if (this.blacklist.endpoints?.length > 0) {
-    return this.blacklist.endpoints.some(
-      endpoint =>
-        endpoint.name === node.label || endpoint.name === node.oriLabel
-    );
-  } else return false;
-}
+  private isHiddenEndpoint(node) {
+    if (this.blacklist.endpoints?.length > 0) {
+      return this.blacklist.endpoints.some(
+        endpoint =>
+          endpoint.name === node.label || endpoint.name === node.oriLabel
+      );
+    } else return false;
+  }
 
   private readonly unmanagedEndpoints = ['node_ip', 'workload_ip'];
 
-  private filterHiddenNodes (nodes)  {
-  return nodes.filter(
-    node =>
-      !this.inHiddenDomain(node) &&
-      !this.inHiddenGroup(node) &&
-      !this.isHiddenEndpoint(node) &&
-      !(
-        this.blacklist?.hideUnmanaged &&
-        this.unmanagedEndpoints.includes(node.group)
-      )
-  );
-}
-
-  private edgeWithHiddenDomain ( edge) {
-  if (this.blacklist === undefined) return false;
-  if (this.blacklist.domains?.length > 0) {
-    return this.blacklist.domains.some(
-      domain =>
-        domain.name === edge.fromDomain || domain.name === edge.toDomain
+  private filterHiddenNodes(nodes) {
+    return nodes.filter(
+      node =>
+        !this.inHiddenDomain(node) &&
+        !this.inHiddenGroup(node) &&
+        !this.isHiddenEndpoint(node) &&
+        !(
+          this.blacklist?.hideUnmanaged &&
+          this.unmanagedEndpoints.includes(node.group)
+        )
     );
-  } else return false;
-}
+  }
 
-  private edgeWithHiddenGroup (edge)  {
-  if (this.blacklist === undefined) return false;
-  if (this.blacklist.groups?.length > 0) {
-    return this.blacklist.groups.some(
-      group => group.name === edge.fromGroup || group.name === edge.toGroup
+  private edgeWithHiddenDomain(edge) {
+    if (this.blacklist === undefined) return false;
+    if (this.blacklist.domains?.length > 0) {
+      return this.blacklist.domains.some(
+        domain =>
+          domain.name === edge.fromDomain || domain.name === edge.toDomain
+      );
+    } else return false;
+  }
+
+  private edgeWithHiddenGroup(edge) {
+    if (this.blacklist === undefined) return false;
+    if (this.blacklist.groups?.length > 0) {
+      return this.blacklist.groups.some(
+        group => group.name === edge.fromGroup || group.name === edge.toGroup
+      );
+    } else return false;
+  }
+
+  private edgeWithHiddenEndpoint(edge) {
+    if (this.blacklist === undefined) return false;
+    if (this.blacklist.endpoints?.length > 0) {
+      return this.blacklist.endpoints.some(
+        endpoint => endpoint.id === edge.source || endpoint.id === edge.target
+      );
+    } else return false;
+  }
+
+  private readonly unmanagedDomains = [
+    'nvUnmanagedWorkload',
+    'nvUnmanagedNode',
+  ];
+  private edgeWithUnmanagedEndpoint(edge) {
+    if (this.blacklist === undefined) return false;
+    if (this.blacklist.hideUnmanaged) {
+      return (
+        this.unmanagedDomains.includes(edge.fromDomain) ||
+        this.unmanagedDomains.includes(edge.toDomain)
+      );
+    } else return false;
+  }
+  private filterHiddenEdges(edges) {
+    return edges.filter(
+      edge =>
+        !this.edgeWithHiddenDomain(edge) &&
+        !this.edgeWithHiddenGroup(edge) &&
+        !this.edgeWithHiddenEndpoint(edge) &&
+        !this.edgeWithUnmanagedEndpoint(edge)
     );
-  } else return false;
-}
-
-  private edgeWithHiddenEndpoint  (edge) {
-  if (this.blacklist === undefined) return false;
-  if (this.blacklist.endpoints?.length > 0) {
-    return this.blacklist.endpoints.some(
-      endpoint => endpoint.id === edge.source || endpoint.id === edge.target
-    );
-  } else return false;
-}
-
-  private readonly unmanagedDomains = ['nvUnmanagedWorkload', 'nvUnmanagedNode'];
-  private edgeWithUnmanagedEndpoint (edge) {
-  if (this.blacklist === undefined) return false;
-  if (this.blacklist.hideUnmanaged) {
-    return (
-      this.unmanagedDomains.includes(edge.fromDomain) ||
-      this.unmanagedDomains.includes(edge.toDomain)
-    );
-  } else return false;
-}
-  private filterHiddenEdges (edges) {
-  return edges.filter(
-    edge =>
-      !this.edgeWithHiddenDomain(edge) &&
-      !this.edgeWithHiddenGroup(edge) &&
-      !this.edgeWithHiddenEndpoint(edge) &&
-      !this.edgeWithUnmanagedEndpoint(edge)
-  );
-}
-
+  }
 
   loadGraph(onRefresh: boolean = true, callback?: () => void) {
-
-
     this.graphService.getNetworkData(this.user).subscribe(response => {
       if (!this.blacklist) {
         this.blacklist = response.blacklist
@@ -2013,8 +2005,9 @@ export class NetworkActivitiesComponent
       const members = cluster.members;
       if (members && members.length > 0) {
         clusterNodes = members.map(member => {
-          const memberNode =
-            this.serverData.nodes.find(node => node.id === member);
+          const memberNode = this.serverData.nodes.find(
+            node => node.id === member
+          );
           // @ts-ignore
           memberNode.comboId = `co${clusterNode.id}`;
           const theNode = Object.assign({}, memberNode);
@@ -2034,7 +2027,7 @@ export class NetworkActivitiesComponent
 
       clusterNodes.forEach((item, i) => {
         let oldNode = this.graph.findById(item.id);
-        if(oldNode){
+        if (oldNode) {
           this.graph.removeItem(oldNode);
         }
 
@@ -2111,7 +2104,10 @@ export class NetworkActivitiesComponent
         edge.style.endArrow = {
           path: G6.Arrow.triangle(2, 3),
         };
-        if(this.graph.findById(edge.source) && this.graph.findById(edge.target))
+        if (
+          this.graph.findById(edge.source) &&
+          this.graph.findById(edge.target)
+        )
           this.graph.addItem('edge', edge);
       });
 
@@ -2209,8 +2205,6 @@ export class NetworkActivitiesComponent
     }
   }
 
-  ngAfterViewInit(): void {}
-
   ngOnDestroy(): void {
     if (this._switchClusterSubscription) {
       this._switchClusterSubscription.unsubscribe();
@@ -2302,8 +2296,8 @@ export class NetworkActivitiesComponent
     const id: string = item.getModel().id;
 
     const message = toQuarantine
-      ? this.translate.instant("policy.QUARANTINE_CONFIRM")
-      : this.translate.instant("policy.UNQUARANTINE_CONFIRM");
+      ? this.translate.instant('policy.QUARANTINE_CONFIRM')
+      : this.translate.instant('policy.UNQUARANTINE_CONFIRM');
 
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '700px',
@@ -2323,10 +2317,12 @@ export class NetworkActivitiesComponent
                 const theNode =
                   this.serverData.nodes[
                     this.graphService.getNodeIdIndexMap().get(model.id)
-                    ];
+                  ];
                 if (theNode) theNode.state = model.state;
                 const group = item.get('group');
-                const stroke = group.find(e => e.get('name') === 'stroke-shape');
+                const stroke = group.find(
+                  e => e.get('name') === 'stroke-shape'
+                );
                 stroke && stroke.show();
 
                 const clusterNode = this.graph.findById(model.clusterId);
@@ -2336,7 +2332,9 @@ export class NetworkActivitiesComponent
                 }
               } else {
                 const group = item.get('group');
-                const stroke = group.find(e => e.get('name') === 'stroke-shape');
+                const stroke = group.find(
+                  e => e.get('name') === 'stroke-shape'
+                );
                 stroke && stroke.hide();
 
                 model.state = model.group
@@ -2345,7 +2343,7 @@ export class NetworkActivitiesComponent
                 const theNode =
                   this.serverData.nodes[
                     this.graphService.getNodeIdIndexMap().get(model.id)
-                    ];
+                  ];
                 if (theNode) theNode.state = model.state;
 
                 const clusterNode = this.graph.findById(model.clusterId);
@@ -2370,7 +2368,6 @@ export class NetworkActivitiesComponent
         );
       }
     });
-
   }
 
   //region Sniffer

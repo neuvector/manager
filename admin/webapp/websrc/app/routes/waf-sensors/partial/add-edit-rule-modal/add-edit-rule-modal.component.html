@@ -2,10 +2,17 @@
   <div class="d-flex justify-content-between align-items-center">
     <h4 mat-dialog-title class="mb-2">
       {{
-        (data.opType === opTypeOptions.ADD ? 'waf.ruleModal.ADD_RULE' : 'waf.ruleModal.EDIT_RULE') | translate
+        (data.opType === opTypeOptions.ADD
+          ? 'waf.ruleModal.ADD_RULE'
+          : 'waf.ruleModal.EDIT_RULE'
+        ) | translate
       }}
     </h4>
-    <button (click)="onCancel()" class="mb-2" aria-label="Close dialog" mat-icon-button>
+    <button
+      (click)="onCancel()"
+      class="mb-2"
+      aria-label="Close dialog"
+      mat-icon-button>
       <i class="eos-icons">close</i>
     </button>
   </div>
@@ -14,104 +21,112 @@
     <form [formGroup]="addEditRuleForm">
       <div class="row">
         <mat-form-field class="col-sm-3" appearance="standard">
-          <mat-label>{{'waf.sensorModal.SENSOR_NAME' | translate}}</mat-label>
-          <input type="text" matInput formControlName="sensorName" readonly>
+          <mat-label>{{ 'waf.sensorModal.SENSOR_NAME' | translate }}</mat-label>
+          <input type="text" matInput formControlName="sensorName" readonly />
         </mat-form-field>
         <mat-form-field class="col-sm-9" appearance="standard">
-          <mat-label>{{'waf.sensorModal.COMMENT' | translate}}</mat-label>
-          <input type="text" matInput formControlName="comment" readonly>
+          <mat-label>{{ 'waf.sensorModal.COMMENT' | translate }}</mat-label>
+          <input type="text" matInput formControlName="comment" readonly />
         </mat-form-field>
       </div>
       <div class="row">
         <mat-form-field class="col-sm-3" appearance="standard">
-          <mat-label>{{'waf.ruleModal.PATTERN_NAME' | translate}}</mat-label>
+          <mat-label>{{ 'waf.ruleModal.PATTERN_NAME' | translate }}</mat-label>
           <input
             type="text"
             matInput
             formControlName="ruleName"
             [readonly]="data.opType === opTypeOptions.EDIT"
-            [attr.maxlength]="255"
-          >
+            [attr.maxlength]="255" />
         </mat-form-field>
       </div>
-      <hr class="solid margin-top-s margin-bottom-s"/>
+      <hr class="solid margin-top-s margin-bottom-s" />
       <div class="row">
         <mat-form-field appearance="standard" class="col-sm-2">
-          <mat-label>{{'waf.patternGrid.LOGIC_IS_NOT' | translate}}</mat-label>
+          <mat-label>{{
+            'waf.patternGrid.LOGIC_IS_NOT' | translate
+          }}</mat-label>
           <mat-select
             required
             [(ngModel)]="pattern.op"
-            [ngModelOptions]="{standalone: true}"
-            [(value)]="pattern.op"
-          >
-            <mat-option *ngFor="let operator of operators" [value]="operator.value">
-              {{operator.viewValue}}
+            [ngModelOptions]="{ standalone: true }"
+            [(value)]="pattern.op">
+            <mat-option
+              *ngFor="let operator of operators"
+              [value]="operator.value">
+              {{ operator.viewValue }}
             </mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field class="col-sm-7" appearance="standard">
-          <mat-label>{{'waf.ruleModal.PATTERN' | translate}}</mat-label>
+          <mat-label>{{ 'waf.ruleModal.PATTERN' | translate }}</mat-label>
           <input
-            style="position: relative; padding-right: 60px;"
+            style="position: relative; padding-right: 60px"
             matInput
             required
             type="text"
             [(ngModel)]="pattern.value"
-            [ngModelOptions]="{standalone: true}"
+            [ngModelOptions]="{ standalone: true }"
             (keyup)="initTestArea(pattern.value)"
-            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-          >
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
           <button
             aria-hidden="true"
             class="primary-button hightlighted-button"
-            style="position: absolute; right: 0; top: -5px; line-height: 21px; z-index:10; min-height: 24px; min-width: 60px;"
+            style="
+              position: absolute;
+              right: 0;
+              top: -5px;
+              line-height: 21px;
+              z-index: 10;
+              min-height: 24px;
+              min-width: 60px;
+            "
             aria-hidden="true"
             (click)="isShowingTestPattern = true"
-            [disabled]="!pattern.value"
-          >
-            {{ 'waf.sensorModal.TEST_BTN' |translate}}
+            [disabled]="!pattern.value">
+            {{ 'waf.sensorModal.TEST_BTN' | translate }}
           </button>
         </mat-form-field>
         <mat-form-field appearance="standard" class="col-sm-2">
-          <mat-label>{{'waf.patternGrid.CONTEXT' | translate}}</mat-label>
+          <mat-label>{{ 'waf.patternGrid.CONTEXT' | translate }}</mat-label>
           <mat-select
             matNativeControl
             required
             [(ngModel)]="pattern.context"
-            [ngModelOptions]="{standalone: true}"
-            [(value)]="pattern.context"
-          >
+            [ngModelOptions]="{ standalone: true }"
+            [(value)]="pattern.context">
             <mat-option *ngFor="let context of contexts" [value]="context">
-              {{context}}
+              {{ context }}
             </mat-option>
           </mat-select>
         </mat-form-field>
         <div class="col-sm-1">
           <button
             class="primary-button hightlighted-button pull-right"
-            style="margin-top: 20px;" (click)="addPattern()"
-          ><em class="eos-icons icon-18">add</em></button>
+            style="margin-top: 20px"
+            (click)="addPattern()">
+            <em class="eos-icons icon-18">add</em>
+          </button>
         </div>
       </div>
       <div class="row" *ngIf="isShowingTestPattern">
         <mat-form-field class="col-sm-12" appearance="outline">
           <mat-label>
-            {{'waf.ruleModal.TEST' | translate}}
+            {{ 'waf.ruleModal.TEST' | translate }}
           </mat-label>
           <input
             matInput
-            placeholder="{{'waf.ruleModal.TEST_INFO' | translate}}"
+            placeholder="{{ 'waf.ruleModal.TEST_INFO' | translate }}"
             type="text"
             [(ngModel)]="testCase"
-            [ngModelOptions]="{standalone: true}"
+            [ngModelOptions]="{ standalone: true }"
             (keyup)="testRegex(pattern.value, testCase)"
-            (paste)="testRegex(pattern.value, testCase)"
-          >
+            (paste)="testRegex(pattern.value, testCase)" />
           <mat-hint *ngIf="isMatched" class="text-success">
-            {{testResult}}
+            {{ testResult }}
           </mat-hint>
           <mat-hint *ngIf="!isMatched" class="text-danger">
-            {{testResult}}
+            {{ testResult }}
           </mat-hint>
         </mat-form-field>
       </div>
@@ -119,27 +134,34 @@
         <ag-grid-angular
           #wafPatternEditGrid
           id="waf-pattern-edit-grid"
-          style="width: 100%; height: 200px;"
+          style="width: 100%; height: 200px"
           class="ag-theme-balham col-sm-12"
           [gridOptions]="gridOptions4EditPatterns"
-          [context]="context"
-          >
+          [context]="context">
         </ag-grid-angular>
         <div *ngIf="patternErrorMsg" class="col-sm-12 text-danger">
-          {{patternErrorMsg}}
+          {{ patternErrorMsg }}
         </div>
       </div>
       <div class="d-flex justify-content-end align-items-center mt-2">
-        <button mat-stroked-button aria-label="cancel" class="mr-2" (click)="onCancel()">
-          {{'waf.ruleModal.CANCEL' | translate}}
+        <button
+          mat-stroked-button
+          aria-label="cancel"
+          class="mr-2"
+          (click)="onCancel()">
+          {{ 'waf.ruleModal.CANCEL' | translate }}
         </button>
         <app-loading-button
           [appearance]="'mat-raised-button'"
           [color]="'primary'"
           [loading]="submittingUpdate"
-          [text]="(data.opType === opTypeOptions.EDIT ? 'waf.ruleModal.UPDATE' : 'waf.ruleModal.ADD') | translate"
-          (btnClick)="updateRule()"
-        >
+          [text]="
+            (data.opType === opTypeOptions.EDIT
+              ? 'waf.ruleModal.UPDATE'
+              : 'waf.ruleModal.ADD'
+            ) | translate
+          "
+          (btnClick)="updateRule()">
         </app-loading-button>
       </div>
     </form>

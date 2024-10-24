@@ -8,9 +8,8 @@ describe('ScorableHeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ScorableHeaderComponent ]
-    })
-    .compileComponents();
+      declarations: [ScorableHeaderComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

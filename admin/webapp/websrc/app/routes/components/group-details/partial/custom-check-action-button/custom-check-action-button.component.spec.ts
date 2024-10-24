@@ -8,9 +8,8 @@ describe('CustomCheckActionButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CustomCheckActionButtonComponent ]
-    })
-    .compileComponents();
+      declarations: [CustomCheckActionButtonComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

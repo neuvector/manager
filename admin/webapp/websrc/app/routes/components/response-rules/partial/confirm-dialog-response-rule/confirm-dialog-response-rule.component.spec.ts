@@ -8,9 +8,8 @@ describe('ConfirmDialogResponseRuleComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ConfirmDialogResponseRuleComponent ]
-    })
-    .compileComponents();
+      declarations: [ConfirmDialogResponseRuleComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

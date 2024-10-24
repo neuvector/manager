@@ -1,4 +1,4 @@
-import { AwsFuncSummary } from "./awsFuncSummary";
+import { AwsFuncSummary } from './awsFuncSummary';
 
 export interface AwsLambdaResDetail {
   status: string;

@@ -6,8 +6,5 @@ export interface CLUSEventCondition {
 }
 
 export function isCLUSEventCondition(v: any): v is CLUSEventCondition {
-  return (
-    ((typeof v['type']) === 'string') &&
-    ((typeof v['value']) === 'string')
-  );
+  return typeof v['type'] === 'string' && typeof v['value'] === 'string';
 }

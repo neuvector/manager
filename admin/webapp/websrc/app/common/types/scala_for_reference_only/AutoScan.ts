@@ -5,7 +5,5 @@ export interface AutoScan {
 }
 
 export function isAutoScan(v: any): v is AutoScan {
-  return (
-    ((typeof v['auto_scan']) === 'boolean')
-  );
+  return typeof v['auto_scan'] === 'boolean';
 }

@@ -10,8 +10,9 @@ export interface FedPromptRequest {
 
 export function isFedPromptRequest(v: any): v is FedPromptRequest {
   return (
-    ((typeof v['name']) === 'string') &&
-    (!v['master_rest_info'] || (v['master_rest_info'] && isClusterServerInfo(v['master_rest_info']))) &&
-    (!v['use_proxy'] || ((typeof v['use_proxy']) === 'string'))
+    typeof v['name'] === 'string' &&
+    (!v['master_rest_info'] ||
+      (v['master_rest_info'] && isClusterServerInfo(v['master_rest_info']))) &&
+    (!v['use_proxy'] || typeof v['use_proxy'] === 'string')
   );
 }

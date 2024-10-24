@@ -24,7 +24,13 @@ import { DatePipe } from '@angular/common';
 import { RegistryDetailsTableStatusCellComponent } from './registry-details-table-status-cell/registry-details-table-status-cell.component';
 import { RegistriesService } from '@services/registries.service';
 import { FormControl } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, map, tap, retry } from 'rxjs/operators';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  tap,
+  retry,
+} from 'rxjs/operators';
 import { MapConstant } from '@common/constants/map.constant';
 
 @Component({
@@ -33,8 +39,9 @@ import { MapConstant } from '@common/constants/map.constant';
   styleUrls: ['./registry-details-table-all-view.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
-export class RegistryDetailsTableAllViewComponent implements OnInit, RemoteGridApi {
+export class RegistryDetailsTableAllViewComponent
+  implements OnInit, RemoteGridApi
+{
   @Input() gridHeight!: number;
   @Input() selectedRegistry!: Summary;
   @Input() queryToken!: string;
@@ -136,7 +143,7 @@ export class RegistryDetailsTableAllViewComponent implements OnInit, RemoteGridA
     private translate: TranslateService,
     private date: DatePipe,
     private registriesService: RegistriesService,
-    private cd: ChangeDetectorRef,
+    private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -178,28 +185,33 @@ export class RegistryDetailsTableAllViewComponent implements OnInit, RemoteGridA
   }
 
   getData(params: IGetRowsParams) {
-    return this.registriesService.getAllScannedImages(
-      this.queryToken,
-      params.startRow,
-      300,
-      params.sortModel,
-      params.filterModel
-    ).pipe(
-      tap(sessionData => {
-        // this.vulnerabilitiesFilterService.qfCount =
-        //   sessionData.qf_matched_records;
-      }),
-      map(sessionData => {
-        return {
-          data: sessionData.data.map(image => {image.status = 'finished'; return image;}),
-          totalRecords: sessionData.qf_matched_records
-          // totalRecords: this.filter.value
-          //   ? this.vulnerabilitiesFilterService.qfCount
-          //   : this.vulnerabilitiesFilterService.filteredCount,
-        };
-      }),
-      retry(10)
-    );
+    return this.registriesService
+      .getAllScannedImages(
+        this.queryToken,
+        params.startRow,
+        300,
+        params.sortModel,
+        params.filterModel
+      )
+      .pipe(
+        tap(sessionData => {
+          // this.vulnerabilitiesFilterService.qfCount =
+          //   sessionData.qf_matched_records;
+        }),
+        map(sessionData => {
+          return {
+            data: sessionData.data.map(image => {
+              image.status = 'finished';
+              return image;
+            }),
+            totalRecords: sessionData.qf_matched_records,
+            // totalRecords: this.filter.value
+            //   ? this.vulnerabilitiesFilterService.qfCount
+            //   : this.vulnerabilitiesFilterService.filteredCount,
+          };
+        }),
+        retry(10)
+      );
   }
 
   onRowClicked(params: GridReadyEvent): void {
@@ -208,10 +220,7 @@ export class RegistryDetailsTableAllViewComponent implements OnInit, RemoteGridA
       if (!!this.selectedRegistry.isAllView) {
         this.selectedRegistry.name = selectedImage.reg_name;
       }
-      this.openDialog(
-        this.selectedRegistry,
-        selectedImage
-      );
+      this.openDialog(this.selectedRegistry, selectedImage);
     }
   }
 
@@ -236,7 +245,7 @@ export class RegistryDetailsTableAllViewComponent implements OnInit, RemoteGridA
     this.gridApi.sizeColumnsToFit();
     setTimeout(() => {
       this.cd.markForCheck();
-    }, 200)
+    }, 200);
   }
 
   createdAtFormatter(params: ValueFormatterParams): string {
@@ -283,6 +292,8 @@ export class RegistryDetailsTableAllViewComponent implements OnInit, RemoteGridA
   }
 
   getImageData(imageList, image, tag) {
-    return imageList.filter(_image => _image.repository === image && _image.tag === tag);
+    return imageList.filter(
+      _image => _image.repository === image && _image.tag === tag
+    );
   }
 }

@@ -8,9 +8,8 @@ describe('ScoreImprovementGeneralHeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ScoreImprovementGeneralHeaderComponent ]
-    })
-    .compileComponents();
+      declarations: [ScoreImprovementGeneralHeaderComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

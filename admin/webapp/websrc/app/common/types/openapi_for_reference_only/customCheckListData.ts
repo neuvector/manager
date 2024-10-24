@@ -1,4 +1,4 @@
-import { CustomChecks } from "./customChecks";
+import { CustomChecks } from './customChecks';
 
 export interface CustomCheckListData {
   configs: CustomChecks[];

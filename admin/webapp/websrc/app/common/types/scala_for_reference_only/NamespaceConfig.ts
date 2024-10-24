@@ -5,7 +5,5 @@ export interface NamespaceConfig {
 }
 
 export function isNamespaceConfig(v: any): v is NamespaceConfig {
-  return (
-    ((typeof v['name']) === 'string')
-  );
+  return typeof v['name'] === 'string';
 }

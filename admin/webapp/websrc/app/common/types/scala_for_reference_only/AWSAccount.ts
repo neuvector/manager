@@ -9,9 +9,9 @@ export interface AWSAccount {
 
 export function isAWSAccount(v: any): v is AWSAccount {
   return (
-    ((typeof v['id']) === 'string') &&
-    (!v['access_key_id'] || ((typeof v['access_key_id']) === 'string')) &&
-    (!v['secret_access_key'] || ((typeof v['secret_access_key']) === 'string')) &&
-    ((typeof v['region']) === 'string')
+    typeof v['id'] === 'string' &&
+    (!v['access_key_id'] || typeof v['access_key_id'] === 'string') &&
+    (!v['secret_access_key'] || typeof v['secret_access_key'] === 'string') &&
+    typeof v['region'] === 'string'
   );
 }

@@ -12,7 +12,7 @@ export class PodBriefDialogComponent {
     public dialogRef: MatDialogRef<PodBriefDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    console.log("data", data)
+    console.log('data', data);
   }
 
   onNoClick(): void {

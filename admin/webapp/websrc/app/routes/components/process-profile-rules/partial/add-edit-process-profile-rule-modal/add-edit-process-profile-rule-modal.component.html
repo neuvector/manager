@@ -6,10 +6,7 @@
       }}
     </h4>
     <div class="d-flex align-items-center justify-content-center mb-1">
-      <button
-        mat-icon-button
-        aria-label="close"
-      >
+      <button mat-icon-button aria-label="close">
         <i class="eos-icons" (click)="onCancel()">close</i>
       </button>
     </div>
@@ -48,8 +45,7 @@
             matInput
             name="path"
             formControlName="path"
-            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-          />
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
         </mat-form-field>
         <div class="mt-4">
           <span class="nv-modal-item-title mr-2">{{
@@ -75,14 +71,21 @@
       </div>
       <div>
         <div class="text-info">
-          <em class="eos-icons icon-18 mr-2">info</em>{{ 'general.SAMPLE'| translate }}
+          <em class="eos-icons icon-18 mr-2">info</em
+          >{{ 'general.SAMPLE' | translate }}
         </div>
         <div class="p-2 text-muted">
           <table>
             <tr class="sample-table-header">
-              <th class="sample-table-border column-1">{{'service.gridHeader.NAME' | translate }}</th>
-              <th class="sample-table-border column-2">{{'service.gridHeader.PATH' | translate }}</th>
-              <th class="sample-table-border column-3">{{'policy.addPolicy.COMMENT' | translate }}</th>
+              <th class="sample-table-border column-1">
+                {{ 'service.gridHeader.NAME' | translate }}
+              </th>
+              <th class="sample-table-border column-2">
+                {{ 'service.gridHeader.PATH' | translate }}
+              </th>
+              <th class="sample-table-border column-3">
+                {{ 'policy.addPolicy.COMMENT' | translate }}
+              </th>
             </tr>
             <tr>
               <td class="sample-table-border column-1">cat</td>
@@ -92,22 +95,27 @@
             <tr>
               <td class="sample-table-border column-1">cat</td>
               <td class="sample-table-border column-2">/bin/cat</td>
-              <td class="sample-table-border column-3">"cat" in a specific path</td>
+              <td class="sample-table-border column-3">
+                "cat" in a specific path
+              </td>
             </tr>
             <tr>
               <td class="sample-table-border column-1">cat</td>
               <td class="sample-table-border column-2">/bin/*</td>
-              <td class="sample-table-border column-3">"cat" under a specific path</td>
+              <td class="sample-table-border column-3">
+                "cat" under a specific path
+              </td>
             </tr>
             <tr>
               <td class="sample-table-border column-1">*</td>
               <td class="sample-table-border column-2">*</td>
-              <td class="sample-table-border column-3">a special rule for allowing all binary to run ( not for deny rules)</td>
+              <td class="sample-table-border column-3">
+                a special rule for allowing all binary to run ( not for deny
+                rules)
+              </td>
             </tr>
           </table>
-          <div class="text-bold">
-            A single wildcard must be at the end
-          </div>
+          <div class="text-bold">A single wildcard must be at the end</div>
         </div>
       </div>
     </form>

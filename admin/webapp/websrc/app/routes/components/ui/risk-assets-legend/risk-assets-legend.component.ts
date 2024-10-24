@@ -1,15 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-risk-assets-legend',
   templateUrl: './risk-assets-legend.component.html',
-  styleUrls: ['./risk-assets-legend.component.scss']
+  styleUrls: ['./risk-assets-legend.component.scss'],
 })
-export class RiskAssetsLegendComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+export class RiskAssetsLegendComponent {
+  constructor() {}
 }

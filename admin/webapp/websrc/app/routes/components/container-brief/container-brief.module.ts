@@ -7,7 +7,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { PipeModule } from "@common/pipes/pipe.module";
+import { PipeModule } from '@common/pipes/pipe.module';
 
 @NgModule({
   declarations: [ContainerBriefComponent, ContainerBriefDialogComponent],
@@ -18,7 +18,7 @@ import { PipeModule } from "@common/pipes/pipe.module";
     TranslateModule,
     MatButtonModule,
     DragDropModule,
-    PipeModule
+    PipeModule,
   ],
   exports: [ContainerBriefComponent, ContainerBriefDialogComponent],
 })

@@ -8,11 +8,15 @@
     {{ domainsCount }}
   </span>
   <div class="d-flex align-items-center">
-    <span *ngIf="hasNamespaceBoundaryEnabled" class="small d-flex align-items-center">
-      <span class="badge ag-badge badge-info mr-1">{{namespaceBoundaryDisplayName}}</span>
+    <span
+      *ngIf="hasNamespaceBoundaryEnabled"
+      class="small d-flex align-items-center">
+      <span class="badge ag-badge badge-info mr-1">{{
+        namespaceBoundaryDisplayName
+      }}</span>
       <span class="font-weight-bolder mr-1">:</span>
       <span>
-        {{'general.NAMESPACE_BOUNDARY_ENABLED'|translate}}
+        {{ 'general.NAMESPACE_BOUNDARY_ENABLED' | translate }}
       </span>
     </span>
     <app-quick-filter

@@ -9,7 +9,8 @@ export interface RegistryConfigDTO {
 
 export function isRegistryConfigDTO(v: any): v is RegistryConfigDTO {
   return (
-    (v['wrap'] && isRegistryConfigWrap(v['wrap'])) &&
-    ((typeof v['name']) === 'string')
+    v['wrap'] &&
+    isRegistryConfigWrap(v['wrap']) &&
+    typeof v['name'] === 'string'
   );
 }

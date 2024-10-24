@@ -7,15 +7,22 @@ export class CustomCheckConfigJsonProtocol {
 
   public static getInstance() {
     if (!CustomCheckConfigJsonProtocol.instance) {
-      CustomCheckConfigJsonProtocol.instance = new CustomCheckConfigJsonProtocol();
+      CustomCheckConfigJsonProtocol.instance =
+        new CustomCheckConfigJsonProtocol();
     }
 
     return CustomCheckConfigJsonProtocol.instance;
   }
 }
 
-export const CustomCheckConfigJsonProtocolInhabitant: CustomCheckConfigJsonProtocol = CustomCheckConfigJsonProtocol.getInstance();
+export const CustomCheckConfigJsonProtocolInhabitant: CustomCheckConfigJsonProtocol =
+  CustomCheckConfigJsonProtocol.getInstance();
 
-export function isCustomCheckConfigJsonProtocol(v: any): v is CustomCheckConfigJsonProtocol {
-  return (v instanceof CustomCheckConfigJsonProtocol) && (v === CustomCheckConfigJsonProtocolInhabitant);
+export function isCustomCheckConfigJsonProtocol(
+  v: any
+): v is CustomCheckConfigJsonProtocol {
+  return (
+    v instanceof CustomCheckConfigJsonProtocol &&
+    v === CustomCheckConfigJsonProtocolInhabitant
+  );
 }

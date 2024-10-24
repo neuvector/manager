@@ -8,8 +8,8 @@ export interface AdmissionRule {
 
 export function isAdmissionRule(v: any): v is AdmissionRule {
   return (
-    ((typeof v['id']) === 'number') &&
-    ((typeof v['critical']) === 'boolean') &&
-    ((typeof v['disable']) === 'boolean')
+    typeof v['id'] === 'number' &&
+    typeof v['critical'] === 'boolean' &&
+    typeof v['disable'] === 'boolean'
   );
 }

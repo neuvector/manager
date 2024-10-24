@@ -10,10 +10,10 @@ export interface Webhook {
 
 export function isWebhook(v: any): v is Webhook {
   return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['url']) === 'string') &&
-    ((typeof v['enable']) === 'boolean') &&
-    ((typeof v['type']) === 'string') &&
-    ((typeof v['cfg_type']) === 'string')
+    typeof v['name'] === 'string' &&
+    typeof v['url'] === 'string' &&
+    typeof v['enable'] === 'boolean' &&
+    typeof v['type'] === 'string' &&
+    typeof v['cfg_type'] === 'string'
   );
 }

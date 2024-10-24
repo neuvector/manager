@@ -8,9 +8,8 @@ describe('WafSensorsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WafSensorsComponent ]
-    })
-    .compileComponents();
+      declarations: [WafSensorsComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -15,9 +15,8 @@
       (click)="onCancel()"
       class="mb-2"
       aria-label="Close dialog"
-      mat-icon-button
-    >
-      <i class="eos-icons ">close</i>
+      mat-icon-button>
+      <i class="eos-icons">close</i>
     </button>
   </div>
   <hr class="fancy mb-2" />
@@ -33,11 +32,9 @@
             (keyup)="checkGroupName()"
             (keydown)="suppressInvalidTyping($event)"
             [readonly]="data.opType !== modalOp.ADD"
-            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-          />
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
           <mat-error
-            *ngIf="addEditGroupForm.controls.name.hasError('required')"
-          >
+            *ngIf="addEditGroupForm.controls.name.hasError('required')">
             {{ 'general.REQUIRED' | translate }}
           </mat-error>
           <mat-error *ngIf="addEditGroupForm.controls.name.hasError('fedName')">
@@ -50,9 +47,11 @@
             type="text"
             matInput
             formControlName="comment"
-            [readonly]="data.opType === modalOp.VIEW || data.cfgType === GlobalConstant.CFG_TYPE.LEARNED"
-            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-          />
+            [readonly]="
+              data.opType === modalOp.VIEW ||
+              data.cfgType === GlobalConstant.CFG_TYPE.LEARNED
+            "
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
         </mat-form-field>
       </div>
       <div class="row">
@@ -63,13 +62,11 @@
           <mat-chip-list
             #chipList
             aria-label="Criteria"
-            formControlName="criteriaCtrl"
-          >
+            formControlName="criteriaCtrl">
             <mat-chip
               *ngFor="let criterion of criteria"
               (removed)="removeCriterion(criterion)"
-              (click)="editCriterion(criterion)"
-            >
+              (click)="editCriterion(criterion)">
               {{ criterion.name }}
               <button matChipRemove>
                 <mat-icon class="eos-icons icon-18">cancel</mat-icon>
@@ -79,7 +76,8 @@
               placeholder="{{
                 (data.opType !== modalOp.VIEW
                   ? 'group.editGroup.ADD_CRITERIA'
-                  : '') | translate
+                  : ''
+                ) | translate
               }}"
               #criteriaInput
               [readonly]="data.opType === modalOp.VIEW"
@@ -87,8 +85,7 @@
               [matChipInputFor]="chipList"
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               matChipInputAddOnBlur="true"
-              (matChipInputTokenEnd)="addCriterion($event)"
-            />
+              (matChipInputTokenEnd)="addCriterion($event)" />
           </mat-chip-list>
         </mat-form-field>
         <ng-container *ngIf="data.opType !== modalOp.VIEW">
@@ -96,7 +93,9 @@
             {{ 'partner.group.CRITERIA_HINT' | translate }}
           </mat-hint>
         </ng-container>
-        <ng-container *ngIf="isShowingWarning && data.opType !== modalOp.VIEW" class="apikey__field full">
+        <ng-container
+          *ngIf="isShowingWarning && data.opType !== modalOp.VIEW"
+          class="apikey__field full">
           <mat-hint class="type-label px-1 ml-3 mt-2 view-permission">
             {{ 'group.K8S_NAME_WARNING' | translate }}
           </mat-hint>
@@ -106,24 +105,23 @@
         <div class="row mt-2">
           <div class="col-lg-12 col-md-12">
             <label class="nv-modal-item-title margin-right-m">{{
-              "group.editGroup.MONITOR_METRIC" | translate
+              'group.editGroup.MONITOR_METRIC' | translate
             }}</label>
             <mat-slide-toggle
               class="padding-top-s"
               id="metric_monitor-toggle"
               [disabled]="data.opType === modalOp.VIEW"
-              formControlName="monitor_metric"
-            >
+              formControlName="monitor_metric">
               <span
                 [ngClass]="{
                   'text-muted': !addEditGroupForm.controls.monitor_metric.value,
                   'text-success': addEditGroupForm.controls.monitor_metric.value
-                }"
-              >
+                }">
                 {{
                   (addEditGroupForm.controls.monitor_metric.value
-                    ? "policy.status.ENABLED"
-                    : "policy.status.DISABLED") | translate
+                    ? 'policy.status.ENABLED'
+                    : 'policy.status.DISABLED'
+                  ) | translate
                 }}
               </span>
             </mat-slide-toggle>
@@ -131,8 +129,13 @@
         </div>
         <div class="row mt-2">
           <div class="col-lg-4 col-md-4">
-            <mat-form-field class="pull-left" appearance="standard" style="width: 120px;">
-              <mat-label>{{ 'group.editGroup.GROUP_SESS_CUR' | translate }}</mat-label>
+            <mat-form-field
+              class="pull-left"
+              appearance="standard"
+              style="width: 120px">
+              <mat-label>{{
+                'group.editGroup.GROUP_SESS_CUR' | translate
+              }}</mat-label>
               <input
                 type="number"
                 min="0"
@@ -140,18 +143,26 @@
                 pattern="\d+"
                 matInput
                 formControlName="group_sess_cur"
-                [readonly]="(data.opType === modalOp.VIEW) || !addEditGroupForm.controls.monitor_metric.value"
-              />
+                [readonly]="
+                  data.opType === modalOp.VIEW ||
+                  !addEditGroupForm.controls.monitor_metric.value
+                " />
               <mat-error
-                *ngIf="addEditGroupForm.controls.group_sess_cur.hasError('required')"
-              >
+                *ngIf="
+                  addEditGroupForm.controls.group_sess_cur.hasError('required')
+                ">
                 {{ 'general.REQUIRED' | translate }}
               </mat-error>
             </mat-form-field>
           </div>
           <div class="col-lg-4 col-md-4">
-            <mat-form-field class="pull-left" appearance="standard" style="width: 120px;">
-              <mat-label>{{ 'group.editGroup.GROUP_SESS_RATE' | translate }}</mat-label>
+            <mat-form-field
+              class="pull-left"
+              appearance="standard"
+              style="width: 120px">
+              <mat-label>{{
+                'group.editGroup.GROUP_SESS_RATE' | translate
+              }}</mat-label>
               <input
                 type="number"
                 min="0"
@@ -159,19 +170,29 @@
                 pattern="\d+"
                 matInput
                 formControlName="group_sess_rate"
-                [readonly]="data.opType === modalOp.VIEW || !addEditGroupForm.controls.monitor_metric.value"
-              />
+                [readonly]="
+                  data.opType === modalOp.VIEW ||
+                  !addEditGroupForm.controls.monitor_metric.value
+                " />
               <mat-error
-                *ngIf="addEditGroupForm.controls.group_sess_rate.hasError('required')"
-              >
+                *ngIf="
+                  addEditGroupForm.controls.group_sess_rate.hasError('required')
+                ">
                 {{ 'general.REQUIRED' | translate }}
               </mat-error>
             </mat-form-field>
-            <div class="pull-left mt-4">{{ 'group.editGroup.CPS' | translate }}</div>
+            <div class="pull-left mt-4">
+              {{ 'group.editGroup.CPS' | translate }}
+            </div>
           </div>
           <div class="col-lg-4 col-md-4">
-            <mat-form-field class="pull-left" appearance="standard" style="width: 120px;">
-              <mat-label>{{ 'group.editGroup.GROUP_BAND_WIDTH' | translate }}</mat-label>
+            <mat-form-field
+              class="pull-left"
+              appearance="standard"
+              style="width: 120px">
+              <mat-label>{{
+                'group.editGroup.GROUP_BAND_WIDTH' | translate
+              }}</mat-label>
               <input
                 type="number"
                 min="0"
@@ -179,22 +200,28 @@
                 pattern="\d+"
                 matInput
                 formControlName="group_band_width"
-                [readonly]="data.opType === modalOp.VIEW || !addEditGroupForm.controls.monitor_metric.value"
-              />
+                [readonly]="
+                  data.opType === modalOp.VIEW ||
+                  !addEditGroupForm.controls.monitor_metric.value
+                " />
               <mat-error
-                *ngIf="addEditGroupForm.controls.group_band_width.hasError('required')"
-              >
+                *ngIf="
+                  addEditGroupForm.controls.group_band_width.hasError(
+                    'required'
+                  )
+                ">
                 {{ 'general.REQUIRED' | translate }}
               </mat-error>
             </mat-form-field>
-            <div class="pull-left mt-4">{{ 'group.editGroup.MBPS' | translate }}</div>
+            <div class="pull-left mt-4">
+              {{ 'group.editGroup.MBPS' | translate }}
+            </div>
           </div>
         </div>
       </div>
       <div
         class="d-flex justify-content-end align-items-center"
-        *ngIf="data.opType !== modalOp.VIEW"
-      >
+        *ngIf="data.opType !== modalOp.VIEW">
         <button mat-stroked-button class="mr-2" (click)="onCancel()">
           {{ 'group.editGroup.CANCEL' | translate }}
         </button>
@@ -206,10 +233,10 @@
           [text]="
             (data.opType === modalOp.EDIT
               ? 'group.editGroup.UPDATE'
-              : 'group.addGroup.ADD') | translate
+              : 'group.addGroup.ADD'
+            ) | translate
           "
-          (btnClick)="updateGroup()"
-        >
+          (btnClick)="updateGroup()">
         </app-loading-button>
       </div>
     </form>

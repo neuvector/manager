@@ -1,7 +1,7 @@
-<div *ngIf="noChartData; then nodata else chart"></div>
+<div *ngIf="noChartData; then nodata; else chart"></div>
 
 <ng-template #chart>
-  <div style="height: 220px;">
+  <div style="height: 220px">
     <canvas
       [data]="applicationConversationBarChartConfig.data"
       [labels]="applicationConversationBarChartConfig.data.labels"
@@ -15,7 +15,6 @@
 <ng-template #nodata>
   <app-empty-data-chart-replacement
     type="warning"
-    [message]="'dashboard.body.message.NO_POLICY_APPLICATION' | translate"
-  >
+    [message]="'dashboard.body.message.NO_POLICY_APPLICATION' | translate">
   </app-empty-data-chart-replacement>
 </ng-template>

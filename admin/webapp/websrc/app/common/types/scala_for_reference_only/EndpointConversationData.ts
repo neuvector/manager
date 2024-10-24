@@ -6,8 +6,8 @@ export interface EndpointConversationData {
   conversations: Array;
 }
 
-export function isEndpointConversationData(v: any): v is EndpointConversationData {
-  return (
-    (v['conversations'] && isArray(v['conversations']))
-  );
+export function isEndpointConversationData(
+  v: any
+): v is EndpointConversationData {
+  return v['conversations'] && isArray(v['conversations']);
 }

@@ -8,9 +8,8 @@ describe('RiskScoreComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RiskScoreComponent ]
-    })
-    .compileComponents();
+      declarations: [RiskScoreComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

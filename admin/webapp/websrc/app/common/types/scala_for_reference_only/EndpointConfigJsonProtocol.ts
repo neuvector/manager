@@ -14,8 +14,14 @@ export class EndpointConfigJsonProtocol {
   }
 }
 
-export const EndpointConfigJsonProtocolInhabitant: EndpointConfigJsonProtocol = EndpointConfigJsonProtocol.getInstance();
+export const EndpointConfigJsonProtocolInhabitant: EndpointConfigJsonProtocol =
+  EndpointConfigJsonProtocol.getInstance();
 
-export function isEndpointConfigJsonProtocol(v: any): v is EndpointConfigJsonProtocol {
-  return (v instanceof EndpointConfigJsonProtocol) && (v === EndpointConfigJsonProtocolInhabitant);
+export function isEndpointConfigJsonProtocol(
+  v: any
+): v is EndpointConfigJsonProtocol {
+  return (
+    v instanceof EndpointConfigJsonProtocol &&
+    v === EndpointConfigJsonProtocolInhabitant
+  );
 }

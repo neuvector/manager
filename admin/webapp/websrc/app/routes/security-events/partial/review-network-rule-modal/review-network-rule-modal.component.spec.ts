@@ -8,9 +8,8 @@ describe('ReviewNetworkRuleModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ReviewNetworkRuleModalComponent ]
-    })
-    .compileComponents();
+      declarations: [ReviewNetworkRuleModalComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -8,9 +8,8 @@ describe('NodesGridStatusCellComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NodesGridStatusCellComponent ]
-    })
-    .compileComponents();
+      declarations: [NodesGridStatusCellComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

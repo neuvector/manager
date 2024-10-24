@@ -85,10 +85,10 @@ export function certificateValidator(
     return null;
   }
 
-  try{
+  try {
     certificateDeserializer.getCertificate(value);
     return null;
-  } catch(e) {
-    return { invalidCertificate: true }
+  } catch (e) {
+    return { invalidCertificate: true };
   }
 }

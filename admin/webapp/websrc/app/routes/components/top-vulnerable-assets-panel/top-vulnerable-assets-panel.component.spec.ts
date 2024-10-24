@@ -8,9 +8,8 @@ describe('TopVulnerableAssetsPanelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TopVulnerableAssetsPanelComponent ]
-    })
-    .compileComponents();
+      declarations: [TopVulnerableAssetsPanelComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

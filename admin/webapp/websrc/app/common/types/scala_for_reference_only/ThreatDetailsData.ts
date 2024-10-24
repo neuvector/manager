@@ -7,7 +7,5 @@ export interface ThreatDetailsData {
 }
 
 export function isThreatDetailsData(v: any): v is ThreatDetailsData {
-  return (
-    (v['threats'] && isArray(v['threats']))
-  );
+  return v['threats'] && isArray(v['threats']);
 }

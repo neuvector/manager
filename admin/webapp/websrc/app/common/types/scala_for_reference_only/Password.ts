@@ -6,8 +6,5 @@ export interface Password {
 }
 
 export function isPassword(v: any): v is Password {
-  return (
-    ((typeof v['username']) === 'string') &&
-    ((typeof v['password']) === 'string')
-  );
+  return typeof v['username'] === 'string' && typeof v['password'] === 'string';
 }

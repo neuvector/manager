@@ -11,9 +11,10 @@ export interface GroupConfig {
 
 export function isGroupConfig(v: any): v is GroupConfig {
   return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['comment']) === 'string') &&
-    (v['criteria'] && isArray(v['criteria'])) &&
-    (!v['cfg_type'] || ((typeof v['cfg_type']) === 'string'))
+    typeof v['name'] === 'string' &&
+    typeof v['comment'] === 'string' &&
+    v['criteria'] &&
+    isArray(v['criteria']) &&
+    (!v['cfg_type'] || typeof v['cfg_type'] === 'string')
   );
 }

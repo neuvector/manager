@@ -1,4 +1,4 @@
-import { AgentLabels } from "./agentLabels";
+import { AgentLabels } from './agentLabels';
 
 export interface Agent {
   id: string;

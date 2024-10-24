@@ -4,18 +4,16 @@ import { MapConstant } from '@common/constants/map.constant';
 @Component({
   selector: 'app-security-events-printable-report-action-col',
   templateUrl: './security-events-printable-report-action-col.component.html',
-  styleUrls: ['./security-events-printable-report-action-col.component.scss']
+  styleUrls: ['./security-events-printable-report-action-col.component.scss'],
 })
 export class SecurityEventsPrintableReportActionColComponent implements OnInit {
-
   colourMap: any;
 
   @Input() action: string;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
     this.colourMap = MapConstant.colourMap;
   }
-
 }

@@ -10,7 +10,8 @@ export interface AdmissionRulesWrap {
 
 export function isAdmissionRulesWrap(v: any): v is AdmissionRulesWrap {
   return (
-    (v['rules'] && isArray(v['rules'])) &&
+    v['rules'] &&
+    isArray(v['rules']) &&
     (!v['error'] || (v['error'] && isError(v['error'])))
   );
 }

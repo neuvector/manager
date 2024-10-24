@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ChangeDetectorRef,
+  AfterViewInit,
+} from '@angular/core';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { GroupsService } from '@services/groups.service';
 import { GroupsComponent } from '@components/groups/groups.component';
@@ -14,7 +20,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './groups-page.component.html',
   styleUrls: ['./groups-page.component.scss'],
 })
-export class GroupsPageComponent implements OnInit {
+export class GroupsPageComponent implements OnInit, AfterViewInit {
   public navSource!: string;
   public refresh!: Function;
   refreshing$ = new Subject();
@@ -60,9 +66,7 @@ export class GroupsPageComponent implements OnInit {
       this.groupsView.groups = this.groupsView.groups.filter(function (item) {
         return !item.platform_role;
       });
-      this.groupsView.gridApi!.setRowData(
-        this.groupsView.groups
-      );
+      this.groupsView.gridApi!.setRowData(this.groupsView.groups);
     } else {
       this.refresh();
     }
@@ -89,7 +93,8 @@ export class GroupsPageComponent implements OnInit {
     this.groupsService.getConfigData().subscribe(
       response => {
         this.netServiceStatus = response.net_svc.net_service_status;
-        this.netServicePolicyModeValue = response.net_svc.net_service_policy_mode.toLowerCase();
+        this.netServicePolicyModeValue =
+          response.net_svc.net_service_policy_mode.toLowerCase();
         this.netServicePolicyMode = this.translate.instant(
           `enum.${response.net_svc.net_service_policy_mode.toUpperCase()}`
         );

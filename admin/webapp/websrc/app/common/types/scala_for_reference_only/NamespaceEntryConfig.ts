@@ -9,7 +9,7 @@ export interface NamespaceEntryConfig {
 
 export function isNamespaceEntryConfig(v: any): v is NamespaceEntryConfig {
   return (
-    ((typeof v['name']) === 'string') &&
+    typeof v['name'] === 'string' &&
     (!v['tags'] || (v['tags'] && isArray(v['tags'])))
   );
 }

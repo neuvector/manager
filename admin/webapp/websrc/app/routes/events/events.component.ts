@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ErrorResponse } from '@common/types';
 import { EventsGridComponent } from '@components/events-grid/events-grid.component';
 import { EventsService } from '@services/events.service';
@@ -11,7 +11,7 @@ import { MultiClusterService } from '@services/multi-cluster.service';
   templateUrl: './events.component.html',
   styleUrls: ['./events.component.scss'],
 })
-export class EventsComponent implements OnInit {
+export class EventsComponent implements OnInit, OnDestroy {
   @ViewChild(EventsGridComponent) eventsGrid!: EventsGridComponent;
   refreshing$ = new Subject();
   error!: string;

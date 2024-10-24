@@ -8,9 +8,12 @@ export interface ApplicationsInPolicyWrap {
   error?: Error;
 }
 
-export function isApplicationsInPolicyWrap(v: any): v is ApplicationsInPolicyWrap {
+export function isApplicationsInPolicyWrap(
+  v: any
+): v is ApplicationsInPolicyWrap {
   return (
-    (v['rules'] && isArray(v['rules'])) &&
+    v['rules'] &&
+    isArray(v['rules']) &&
     (!v['error'] || (v['error'] && isError(v['error'])))
   );
 }

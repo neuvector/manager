@@ -7,7 +7,5 @@ export interface ThreatBriefWrap {
 }
 
 export function isThreatBriefWrap(v: any): v is ThreatBriefWrap {
-  return (
-    (v['threats'] && isArray(v['threats']))
-  );
+  return v['threats'] && isArray(v['threats']);
 }

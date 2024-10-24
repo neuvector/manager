@@ -8,9 +8,8 @@ describe('ScoreImprovementGeneralListItemComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ScoreImprovementGeneralListItemComponent ]
-    })
-    .compileComponents();
+      declarations: [ScoreImprovementGeneralListItemComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

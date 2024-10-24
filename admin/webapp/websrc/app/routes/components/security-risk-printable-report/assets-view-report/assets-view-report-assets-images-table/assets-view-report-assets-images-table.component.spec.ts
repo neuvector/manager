@@ -8,13 +8,14 @@ describe('AssetsViewReportAssetsImagesTableComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AssetsViewReportAssetsImagesTableComponent ]
-    })
-    .compileComponents();
+      declarations: [AssetsViewReportAssetsImagesTableComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AssetsViewReportAssetsImagesTableComponent);
+    fixture = TestBed.createComponent(
+      AssetsViewReportAssetsImagesTableComponent
+    );
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -14,8 +14,11 @@ export class ClusterJsonProtocol {
   }
 }
 
-export const ClusterJsonProtocolInhabitant: ClusterJsonProtocol = ClusterJsonProtocol.getInstance();
+export const ClusterJsonProtocolInhabitant: ClusterJsonProtocol =
+  ClusterJsonProtocol.getInstance();
 
 export function isClusterJsonProtocol(v: any): v is ClusterJsonProtocol {
-  return (v instanceof ClusterJsonProtocol) && (v === ClusterJsonProtocolInhabitant);
+  return (
+    v instanceof ClusterJsonProtocol && v === ClusterJsonProtocolInhabitant
+  );
 }

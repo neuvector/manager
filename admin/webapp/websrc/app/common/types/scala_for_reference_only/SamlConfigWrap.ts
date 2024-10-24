@@ -7,7 +7,5 @@ export interface SamlConfigWrap {
 }
 
 export function isSamlConfigWrap(v: any): v is SamlConfigWrap {
-  return (
-    (v['config'] && isSamlConfig(v['config']))
-  );
+  return v['config'] && isSamlConfig(v['config']);
 }

@@ -247,15 +247,20 @@
                             <span>
                               {{ secEvent.endpoint.source.displayName }}
                             </span>
-                            <span *ngIf="secEvent.endpoint.source.ip">(
-                            <app-flag-ip-fqdn
-                              [ip]="secEvent.endpoint.source.ip"
-                              [countryCode]="secEvent.endpoint.source.countryCode"
-                              [countryName]="secEvent.endpoint.source.countryName"
-                              [fqdn]="secEvent.fqdn || ''"
+                            <span *ngIf="secEvent.endpoint.source.ip"
+                              >(
+                              <app-flag-ip-fqdn
+                                [ip]="secEvent.endpoint.source.ip"
+                                [countryCode]="
+                                  secEvent.endpoint.source.countryCode
+                                "
+                                [countryName]="
+                                  secEvent.endpoint.source.countryName
+                                "
+                                [fqdn]="secEvent.fqdn || ''">
+                              </app-flag-ip-fqdn>
+                              )</span
                             >
-                            </app-flag-ip-fqdn>
-                            )</span>
                           </a>
                         </span>
                       </span>
@@ -348,15 +353,20 @@
                             <span>
                               {{ secEvent.endpoint.destination.displayName }}
                             </span>
-                            <span *ngIf="secEvent.endpoint.destination.ip">(
-                            <app-flag-ip-fqdn
-                              [ip]="secEvent.endpoint.destination.ip"
-                              [countryCode]="secEvent.endpoint.destination.countryCode"
-                              [countryName]="secEvent.endpoint.destination.countryName"
-                              [fqdn]="secEvent.fqdn || ''"
+                            <span *ngIf="secEvent.endpoint.destination.ip"
+                              >(
+                              <app-flag-ip-fqdn
+                                [ip]="secEvent.endpoint.destination.ip"
+                                [countryCode]="
+                                  secEvent.endpoint.destination.countryCode
+                                "
+                                [countryName]="
+                                  secEvent.endpoint.destination.countryName
+                                "
+                                [fqdn]="secEvent.fqdn || ''">
+                              </app-flag-ip-fqdn>
+                              )</span
                             >
-                            </app-flag-ip-fqdn>
-                            )</span>
                           </a>
                         </span>
                         <span
@@ -534,7 +544,9 @@
                                 {{ secEvent.container.service }}
                               </span>
                             </span>
-                            <em class="eos-icons icon-18 text-primary">workload</em>
+                            <em class="eos-icons icon-18 text-primary"
+                              >workload</em
+                            >
                             <span
                               class="link"
                               *ngIf="secEvent.container.isHyperlinkEnabled"

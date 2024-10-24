@@ -18,18 +18,22 @@ export interface ServiceLevelConversation {
   ports?: Array;
 }
 
-export function isServiceLevelConversation(v: any): v is ServiceLevelConversation {
+export function isServiceLevelConversation(
+  v: any
+): v is ServiceLevelConversation {
   return (
-    ((typeof v['workload_id']) === 'string') &&
-    ((typeof v['peerEndpoint']) === 'string') &&
-    ((typeof v['service']) === 'string') &&
-    ((typeof v['policy_mode']) === 'string') &&
-    ((typeof v['workload']) === 'string') &&
-    ((typeof v['bytes']) === 'number') &&
-    ((typeof v['sessions']) === 'number') &&
-    (!v['severity'] || ((typeof v['severity']) === 'string')) &&
-    ((typeof v['policy_action']) === 'string') &&
-    (!v['event_type'] || (Array.isArray(v['event_type']) && v['event_type'].every(elmt => (typeof elmt) === 'string'))) &&
+    typeof v['workload_id'] === 'string' &&
+    typeof v['peerEndpoint'] === 'string' &&
+    typeof v['service'] === 'string' &&
+    typeof v['policy_mode'] === 'string' &&
+    typeof v['workload'] === 'string' &&
+    typeof v['bytes'] === 'number' &&
+    typeof v['sessions'] === 'number' &&
+    (!v['severity'] || typeof v['severity'] === 'string') &&
+    typeof v['policy_action'] === 'string' &&
+    (!v['event_type'] ||
+      (Array.isArray(v['event_type']) &&
+        v['event_type'].every(elmt => typeof elmt === 'string'))) &&
     (!v['protocols'] || (v['protocols'] && isArray(v['protocols']))) &&
     (!v['applications'] || (v['applications'] && isArray(v['applications']))) &&
     (!v['ports'] || (v['ports'] && isArray(v['ports'])))

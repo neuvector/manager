@@ -7,7 +7,5 @@ export interface PasswordProfileWrap {
 }
 
 export function isPasswordProfileWrap(v: any): v is PasswordProfileWrap {
-  return (
-    (v['config'] && isPasswordProfile(v['config']))
-  );
+  return v['config'] && isPasswordProfile(v['config']);
 }

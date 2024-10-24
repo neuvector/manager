@@ -8,6 +8,7 @@ export interface DlpGroupsData {
 
 export function isDlpGroupsData(v: any): v is DlpGroupsData {
   return (
-    (Array.isArray(v['dlp_groups']) && v['dlp_groups'].every(elmt => elmt && isDlpGroup(elmt)))
+    Array.isArray(v['dlp_groups']) &&
+    v['dlp_groups'].every(elmt => elmt && isDlpGroup(elmt))
   );
 }

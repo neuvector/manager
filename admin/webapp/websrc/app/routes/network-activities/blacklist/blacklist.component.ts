@@ -58,10 +58,10 @@ export class BlacklistComponent implements OnInit {
   private _blacklist!: Blacklist;
 
   @Output()
-  onReset: EventEmitter<string> = new EventEmitter<string>();
+  doReset: EventEmitter<string> = new EventEmitter<string>();
 
   @Output()
-  onApply: EventEmitter<Blacklist> = new EventEmitter<Blacklist>();
+  doApply: EventEmitter<Blacklist> = new EventEmitter<Blacklist>();
 
   get popupState(): ActivityState {
     return this._popupState;
@@ -138,7 +138,7 @@ export class BlacklistComponent implements OnInit {
       endpoints: [],
       hideUnmanaged: false,
     };
-    this.onReset.emit('reset');
+    this.doReset.emit('reset');
   }
 
   apply() {
@@ -146,7 +146,7 @@ export class BlacklistComponent implements OnInit {
     this.blacklist.groups = this.form.value.selectedGroups;
     this.blacklist.endpoints = this.form.value.selectedNodes;
     this.blacklist.hideUnmanaged = this.form.value.hideUnmanaged;
-    this.onApply.emit(this.blacklist);
+    this.doApply.emit(this.blacklist);
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
@@ -158,7 +158,7 @@ export class BlacklistComponent implements OnInit {
   }
 
   add(event: MatChipInputEvent): void {
-    this.addItem(event, this._domains, "name", "domain");
+    this.addItem(event, this._domains, 'name', 'domain');
     this.namespaceCtrl.setValue(null);
   }
 
@@ -175,7 +175,7 @@ export class BlacklistComponent implements OnInit {
   }
 
   addGroup(event: MatChipInputEvent): void {
-    this.addItem(event, this._groups, "name", "group");
+    this.addItem(event, this._groups, 'name', 'group');
     this.groupCtrl.setValue(null);
   }
 
@@ -192,7 +192,7 @@ export class BlacklistComponent implements OnInit {
   }
 
   addNode(event: MatChipInputEvent): void {
-    this.addItem(event, this._nodes, "id", "endpoint");
+    this.addItem(event, this._nodes, 'id', 'endpoint');
     this.nodeCtrl.setValue(null);
   }
 
@@ -201,22 +201,22 @@ export class BlacklistComponent implements OnInit {
   }
 
   private _filter(value: any): GraphItem[] {
-    return this.filter(value, this._domains, "name", "domain");
+    return this.filter(value, this._domains, 'name', 'domain');
   }
 
   private _groupFilter(value: any): GroupItem[] {
-    return this.filter(value, this._groups, "name", "group");
+    return this.filter(value, this._groups, 'name', 'group');
   }
 
   private _nodeFilter(value: any): GraphEndpoint[] {
-    return this.filter(value, this._nodes, "id", "endpoint");
+    return this.filter(value, this._nodes, 'id', 'endpoint');
   }
 
-  private filter(value: any, list: any [], key: string, type: string): any[] {
+  private filter(value: any, list: any[], key: string, type: string): any[] {
     const selectedItems = {
-      "domain": this.form.controls.selectedDomains,
-      "group": this.form.controls.selectedGroups,
-      "endpoint": this.form.controls.selectedNodes,
+      domain: this.form.controls.selectedDomains,
+      group: this.form.controls.selectedGroups,
+      endpoint: this.form.controls.selectedNodes,
     };
     const filterValue =
       value === null || value instanceof Object ? '' : value.toLowerCase();
@@ -230,17 +230,20 @@ export class BlacklistComponent implements OnInit {
       : matches.filter(x => !formValue.find(y => y[key] === x[key]));
   }
 
-  private addItem(event: MatChipInputEvent, list: any [], key: string, type: string): void {
+  private addItem(
+    event: MatChipInputEvent,
+    list: any[],
+    key: string,
+    type: string
+  ): void {
     const selectedItems = {
-      "domain": this.form.controls.selectedDomains,
-      "group": this.form.controls.selectedGroups,
-      "endpoint": this.form.controls.selectedNodes,
+      domain: this.form.controls.selectedDomains,
+      group: this.form.controls.selectedGroups,
+      endpoint: this.form.controls.selectedNodes,
     };
     const value = (event.value || '').trim();
 
-    const matches = list.filter(
-      item => item[key].toLowerCase() === value
-    );
+    const matches = list.filter(item => item[key].toLowerCase() === value);
     const formValue = selectedItems[type].value;
     const matchesNotYetSelected =
       formValue === null

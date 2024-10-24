@@ -8,9 +8,8 @@ describe('RiskReportsPrintableReportComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RiskReportsPrintableReportComponent ]
-    })
-    .compileComponents();
+      declarations: [RiskReportsPrintableReportComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -8,6 +8,7 @@ export interface CustomChecks {
 
 export function isCustomChecks(v: any): v is CustomChecks {
   return (
-    (Array.isArray(v['scripts']) && v['scripts'].every(elmt => elmt && isCustomCheck(elmt)))
+    Array.isArray(v['scripts']) &&
+    v['scripts'].every(elmt => elmt && isCustomCheck(elmt))
   );
 }

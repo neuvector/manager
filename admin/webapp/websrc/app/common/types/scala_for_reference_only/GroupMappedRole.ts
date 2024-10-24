@@ -10,8 +10,15 @@ export interface GroupMappedRole {
 
 export function isGroupMappedRole(v: any): v is GroupMappedRole {
   return (
-    ((typeof v['group']) === 'string') &&
-    ((typeof v['global_role']) === 'string') &&
-    (!v['role_domains'] || ((typeof v['role_domains']) == 'object' && Object.keys(v['role_domains']).every(key => ((typeof key) === 'string') && (v['role_domains'][key] && isArray(v['role_domains'][key])))))
+    typeof v['group'] === 'string' &&
+    typeof v['global_role'] === 'string' &&
+    (!v['role_domains'] ||
+      (typeof v['role_domains'] == 'object' &&
+        Object.keys(v['role_domains']).every(
+          key =>
+            typeof key === 'string' &&
+            v['role_domains'][key] &&
+            isArray(v['role_domains'][key])
+        )))
   );
 }

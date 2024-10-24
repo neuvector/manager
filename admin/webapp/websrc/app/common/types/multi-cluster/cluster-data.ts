@@ -1,4 +1,4 @@
-import {Cluster} from "@common/types";
+import { Cluster } from '@common/types';
 
 export interface ClusterData {
   fed_role: string;
@@ -8,5 +8,5 @@ export interface ClusterData {
   };
   clusters?: Cluster[];
   use_proxy?: string;
-  deploy_repo_scan_data?: boolean
+  deploy_repo_scan_data?: boolean;
 }

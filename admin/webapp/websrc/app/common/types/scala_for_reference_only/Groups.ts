@@ -7,7 +7,5 @@ export interface Groups {
 }
 
 export function isGroups(v: any): v is Groups {
-  return (
-    (v['groups'] && isArray(v['groups']))
-  );
+  return v['groups'] && isArray(v['groups']);
 }

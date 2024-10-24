@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { VulnerabilitiesService } from './vulnerabilities.service';
 import { VulnerabilitiesCsvService } from './csv-generation/vulnerabilities-csv.service';
 import { VulnerabilitiesFilterService } from './vulnerabilities.filter.service';
@@ -7,9 +7,7 @@ import { PdfGenerationDialogComponent } from './pdf-generation-dialog/pdf-genera
 import { VulnerabilityView } from '@common/types';
 import { VulnerabilityDetailDialogComponent } from '@components/vulnerabilities-grid/vulnerability-detail-dialog/vulnerability-detail-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
-import {
-  Vulnerability
-} from '@common/types';
+import { Vulnerability } from '@common/types';
 import { tap } from 'rxjs/operators';
 
 @Component({
@@ -18,7 +16,8 @@ import { tap } from 'rxjs/operators';
   styleUrls: ['./vulnerabilities.component.scss'],
 })
 export class VulnerabilitiesComponent {
-  @ViewChild(VulnerabilityDetailDialogComponent) vulDetails!: VulnerabilityDetailDialogComponent;
+  @ViewChild(VulnerabilityDetailDialogComponent)
+  vulDetails!: VulnerabilityDetailDialogComponent;
   @ViewChild('vulnerabilityViewReport') printableReportView!: ElementRef;
   @ViewChild('assetsViewReport') printableReportViewAssets!: ElementRef;
 
@@ -96,7 +95,7 @@ export class VulnerabilitiesComponent {
           dialogRef,
           {
             lastModifiedTime: params.date.getTime() / 1000,
-            withoutAppendix: params.withoutAppendix
+            withoutAppendix: params.withoutAppendix,
           }
         );
       } else {
@@ -106,7 +105,7 @@ export class VulnerabilitiesComponent {
           dialogRef,
           {
             lastModifiedTime: 0,
-            withoutAppendix: params.withoutAppendix
+            withoutAppendix: params.withoutAppendix,
           }
         );
       }
@@ -129,7 +128,7 @@ export class VulnerabilitiesComponent {
           dialogRef,
           {
             lastModifiedTime: params.date.getTime() / 1000,
-            withoutAppendix: params.withoutAppendix
+            withoutAppendix: params.withoutAppendix,
           }
         );
       } else {
@@ -139,7 +138,7 @@ export class VulnerabilitiesComponent {
           dialogRef,
           {
             lastModifiedTime: 0,
-            withoutAppendix: params.withoutAppendix
+            withoutAppendix: params.withoutAppendix,
           }
         );
       }
@@ -162,7 +161,7 @@ export class VulnerabilitiesComponent {
           dialogRef,
           {
             lastModifiedTime: params.date.getTime() / 1000,
-            withoutAppendix: params.withoutAppendix
+            withoutAppendix: params.withoutAppendix,
           }
         );
       } else {
@@ -172,7 +171,7 @@ export class VulnerabilitiesComponent {
           dialogRef,
           {
             lastModifiedTime: 0,
-            withoutAppendix: params.withoutAppendix
+            withoutAppendix: params.withoutAppendix,
           }
         );
       }
@@ -195,7 +194,7 @@ export class VulnerabilitiesComponent {
           dialogRef,
           {
             lastModifiedTime: params.date.getTime() / 1000,
-            withoutAppendix: params.withoutAppendix
+            withoutAppendix: params.withoutAppendix,
           }
         );
       } else {
@@ -205,27 +204,42 @@ export class VulnerabilitiesComponent {
           dialogRef,
           {
             lastModifiedTime: 0,
-            withoutAppendix: params.withoutAppendix
+            withoutAppendix: params.withoutAppendix,
           }
         );
       }
     });
   };
 
-  private getVulnerabilitiesViewReportData = (queryToken: string, cb: Function, dialogRef, options) => {
+  private getVulnerabilitiesViewReportData = (
+    queryToken: string,
+    cb: Function,
+    dialogRef,
+    options
+  ) => {
     this.withoutAppendix = options.withoutAppendix;
-    this.vulnerabilitiesService.getVulnerabilitiesViewReportData(options.lastModifiedTime)
+    this.vulnerabilitiesService
+      .getVulnerabilitiesViewReportData(options.lastModifiedTime)
       .subscribe(
         (response: any) => {
-          cb(this.vulnerabilitiesService.extractPodImage(response.data), dialogRef);
+          cb(
+            this.vulnerabilitiesService.extractPodImage(response.data),
+            dialogRef
+          );
         },
         error => {}
       );
   };
 
-  private getAssetsViewReportData = (queryToken: string, cb: Function, dialogRef, options) => {
+  private getAssetsViewReportData = (
+    queryToken: string,
+    cb: Function,
+    dialogRef,
+    options
+  ) => {
     this.withoutAppendix = options.withoutAppendix;
-    this.vulnerabilitiesService.getAssetsViewReportData(queryToken, options.lastModifiedTime)
+    this.vulnerabilitiesService
+      .getAssetsViewReportData(queryToken, options.lastModifiedTime)
       .subscribe(
         (response: any) => {
           cb(response, dialogRef);
@@ -262,7 +276,7 @@ export class VulnerabilitiesComponent {
       data.workloads,
       data.nodes,
       data.platforms,
-      data.images
+      data.images,
     ];
     this.vulnerabilitiesList = data.vulnerabilities;
     dialogRef.componentInstance.saving$.next(false);

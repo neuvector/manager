@@ -5,13 +5,11 @@
     </div>
     <app-panel-instruction-curtain
       class="d-flex align-items-center justify-content-end"
-      [instructions]="instructions"
-    >
+      [instructions]="instructions">
     </app-panel-instruction-curtain>
   </mat-card-title>
   <app-security-events-chart
     *ngIf="securityEvents?.criticalSecurityEvents.summary"
-    [securityEventSummary]="securityEvents.criticalSecurityEvents.summary"
-  >
+    [securityEventSummary]="securityEvents.criticalSecurityEvents.summary">
   </app-security-events-chart>
 </mat-card>

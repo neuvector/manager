@@ -1,4 +1,4 @@
-import { DomainConfig } from "./domainConfig";
+import { DomainConfig } from './domainConfig';
 
 export interface DomainConfigData {
   config: DomainConfig;

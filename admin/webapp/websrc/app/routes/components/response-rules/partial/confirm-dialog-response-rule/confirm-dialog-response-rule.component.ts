@@ -1,12 +1,12 @@
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Component, OnInit, Inject, Output, EventEmitter } from '@angular/core';
+import { Component, Inject, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-confirm-dialog-response-rule',
   templateUrl: './confirm-dialog-response-rule.component.html',
   styleUrls: ['./confirm-dialog-response-rule.component.scss'],
 })
-export class ConfirmDialogResponseRuleComponent implements OnInit {
+export class ConfirmDialogResponseRuleComponent {
   loading: boolean = false;
   isUnquarantined: boolean = false;
 
@@ -14,9 +14,6 @@ export class ConfirmDialogResponseRuleComponent implements OnInit {
     public dialogRef: MatDialogRef<ConfirmDialogResponseRuleComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
-
-  ngOnInit(): void {
-  }
 
   @Output() confirm = new EventEmitter();
   onConfirm(): void {

@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+} from '@angular/core';
 import { GridOptions, GridApi } from 'ag-grid-community';
 import { GroupsService } from '@services/groups.service';
 import { WafSetting } from '@common/types';
@@ -12,13 +19,12 @@ import { QuickFilterService } from '@components/quick-filter/quick-filter.servic
 import { GlobalVariable } from '@common/variables/global.variable';
 import * as $ from 'jquery';
 
-
 @Component({
   selector: 'app-group-waf',
   templateUrl: './group-waf.component.html',
   styleUrls: ['./group-waf.component.scss'],
 })
-export class GroupWafComponent implements OnInit {
+export class GroupWafComponent implements OnInit, OnChanges {
   @Input() source: string;
   @Input() groupName: string = '';
   @Input() resizableHeight: number;
@@ -59,7 +65,11 @@ export class GroupWafComponent implements OnInit {
         if (params && params.api) {
           if (this.useQuickFilterService) {
             this.quickFilterService.textInput$.subscribe((value: string) => {
-              this.quickFilterService.onFilterChange(value, this.gridOptions4GroupWafSensors, this.gridApi);
+              this.quickFilterService.onFilterChange(
+                value,
+                this.gridOptions4GroupWafSensors,
+                this.gridApi
+              );
             });
           }
           params.api.sizeColumnsToFit();
@@ -74,8 +84,7 @@ export class GroupWafComponent implements OnInit {
       });
     };
     this.gridOptions4GroupWafSensors.onSelectionChanged = () => {
-      this.selectedSensor =
-        this.gridApi!.getSelectedRows()[0];
+      this.selectedSensor = this.gridApi!.getSelectedRows()[0];
     };
     this.getEditGroupSensorModal.emit(this.openEditGroupSensorModal);
     this.getToggleWAFConfigEnablement.emit(this.toggleWAFConfigEnablement);

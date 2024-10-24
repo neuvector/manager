@@ -15,13 +15,13 @@ export interface ViolationDetails {
 
 export function isViolationDetails(v: any): v is ViolationDetails {
   return (
-    ((typeof v['cluster_name']) === 'string') &&
-    ((typeof v['client_image']) === 'string') &&
-    ((typeof v['server_image']) === 'string') &&
-    ((typeof v['server_port']) === 'number') &&
-    ((typeof v['ip_proto']) === 'number') &&
+    typeof v['cluster_name'] === 'string' &&
+    typeof v['client_image'] === 'string' &&
+    typeof v['server_image'] === 'string' &&
+    typeof v['server_port'] === 'number' &&
+    typeof v['ip_proto'] === 'number' &&
     (!v['servers'] || (v['servers'] && isArray(v['servers']))) &&
-    ((typeof v['sessions']) === 'number') &&
-    ((typeof v['policy_action']) === 'string')
+    typeof v['sessions'] === 'number' &&
+    typeof v['policy_action'] === 'string'
   );
 }

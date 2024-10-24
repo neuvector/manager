@@ -7,7 +7,5 @@ export interface GroupConfigWrap {
 }
 
 export function isGroupConfigWrap(v: any): v is GroupConfigWrap {
-  return (
-    (v['config'] && isGroupConfig(v['config']))
-  );
+  return v['config'] && isGroupConfig(v['config']);
 }

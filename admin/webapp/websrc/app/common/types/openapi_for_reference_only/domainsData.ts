@@ -1,4 +1,4 @@
-import { Domain } from "./domain";
+import { Domain } from './domain';
 
 export interface DomainsData {
   domains: Domain[];

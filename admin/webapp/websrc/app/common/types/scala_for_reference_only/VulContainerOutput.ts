@@ -9,9 +9,16 @@ export interface VulContainerOutput {
 
 export function isVulContainerOutput(v: any): v is VulContainerOutput {
   return (
-    ((typeof v['highVulsMap']) == 'object' && Object.keys(v['highVulsMap']).every(key => ((typeof key) === 'string') && ((typeof v['highVulsMap'][key]) === 'number'))) &&
-    ((typeof v['medVulsMap']) == 'object' && Object.keys(v['medVulsMap']).every(key => ((typeof key) === 'string') && ((typeof v['medVulsMap'][key]) === 'number'))) &&
-    ((typeof v['totalScannedPods']) === 'number') &&
-    ((typeof v['totalScannedPodsWithoutSystem']) === 'number')
+    typeof v['highVulsMap'] == 'object' &&
+    Object.keys(v['highVulsMap']).every(
+      key =>
+        typeof key === 'string' && typeof v['highVulsMap'][key] === 'number'
+    ) &&
+    typeof v['medVulsMap'] == 'object' &&
+    Object.keys(v['medVulsMap']).every(
+      key => typeof key === 'string' && typeof v['medVulsMap'][key] === 'number'
+    ) &&
+    typeof v['totalScannedPods'] === 'number' &&
+    typeof v['totalScannedPodsWithoutSystem'] === 'number'
   );
 }

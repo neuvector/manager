@@ -6,8 +6,7 @@ export class AssetsViewPdfService {
   private progressSubject$ = new BehaviorSubject<number>(0);
   progress$ = this.progressSubject$.asObservable();
 
-  constructor(
-  ) {}
+  constructor() {}
 
   private _masterData;
 

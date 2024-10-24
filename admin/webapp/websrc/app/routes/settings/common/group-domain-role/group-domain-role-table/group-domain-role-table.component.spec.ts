@@ -8,9 +8,8 @@ describe('GroupDomainRoleTableComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GroupDomainRoleTableComponent ]
-    })
-    .compileComponents();
+      declarations: [GroupDomainRoleTableComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

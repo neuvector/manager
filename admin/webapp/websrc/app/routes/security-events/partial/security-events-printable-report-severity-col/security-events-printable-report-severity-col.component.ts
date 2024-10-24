@@ -4,18 +4,18 @@ import { MapConstant } from '@common/constants/map.constant';
 @Component({
   selector: 'app-security-events-printable-report-severity-col',
   templateUrl: './security-events-printable-report-severity-col.component.html',
-  styleUrls: ['./security-events-printable-report-severity-col.component.scss']
+  styleUrls: ['./security-events-printable-report-severity-col.component.scss'],
 })
-export class SecurityEventsPrintableReportSeverityColComponent implements OnInit {
-
+export class SecurityEventsPrintableReportSeverityColComponent
+  implements OnInit
+{
   @Input() severity: string;
 
   colourMap: any;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
     this.colourMap = MapConstant.colourMap;
   }
-
 }

@@ -8,9 +8,8 @@ describe('AddEditSignatureVerifiersModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AddEditSignatureVerifiersModalComponent ]
-    })
-    .compileComponents();
+      declarations: [AddEditSignatureVerifiersModalComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

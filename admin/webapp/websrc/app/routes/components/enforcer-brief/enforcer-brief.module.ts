@@ -7,13 +7,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
-
-
 @NgModule({
-  declarations: [
-    EnforcerBriefComponent,
-    EnforcerBriefDialogComponent
-  ],
+  declarations: [EnforcerBriefComponent, EnforcerBriefDialogComponent],
   imports: [
     CommonModule,
     MatDialogModule,
@@ -23,4 +18,4 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
   ],
   exports: [EnforcerBriefComponent, EnforcerBriefDialogComponent],
 })
-export class EnforcerBriefModule { }
+export class EnforcerBriefModule {}

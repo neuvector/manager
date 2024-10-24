@@ -10,8 +10,8 @@ export interface ServiceConfigParam {
 
 export function isServiceConfigParam(v: any): v is ServiceConfigParam {
   return (
-    (!v['policy_mode'] || ((typeof v['policy_mode']) === 'string')) &&
+    (!v['policy_mode'] || typeof v['policy_mode'] === 'string') &&
     (!v['services'] || (v['services'] && isArray(v['services']))) &&
-    (!v['not_scored'] || ((typeof v['not_scored']) === 'boolean'))
+    (!v['not_scored'] || typeof v['not_scored'] === 'boolean')
   );
 }

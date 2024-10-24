@@ -16,7 +16,6 @@ import { DashboardService } from '@services/dashboard.service';
   styleUrls: ['./security-risk-panel.component.scss'],
 })
 export class SecurityRiskPanelComponent implements OnInit {
-
   @Input() details: any;
   @Input() scoreInfo!: InternalSystemInfo;
   @Input() summaryInfo!: SystemSummaryDetails;
@@ -45,17 +44,20 @@ export class SecurityRiskPanelComponent implements OnInit {
         {
           title: this.translate.instant('dashboard.body.panel_title.DISCOVER'),
           amount: scoreInfo.header_data.groups.discover_groups.toString(),
-          comment: scoreInfo.header_data.groups.discover_groups_zero_drift.toString(),
+          comment:
+            scoreInfo.header_data.groups.discover_groups_zero_drift.toString(),
         },
         {
           title: this.translate.instant('dashboard.body.panel_title.MONITOR'),
           amount: scoreInfo.header_data.groups.monitor_groups.toString(),
-          comment: scoreInfo.header_data.groups.monitor_groups_zero_drift.toString(),
+          comment:
+            scoreInfo.header_data.groups.monitor_groups_zero_drift.toString(),
         },
         {
           title: this.translate.instant('dashboard.body.panel_title.PROTECT'),
           amount: scoreInfo.header_data.groups.protect_groups.toString(),
-          comment: scoreInfo.header_data.groups.protect_groups_zero_drift.toString(),
+          comment:
+            scoreInfo.header_data.groups.protect_groups_zero_drift.toString(),
         },
       ],
       factorComment: [

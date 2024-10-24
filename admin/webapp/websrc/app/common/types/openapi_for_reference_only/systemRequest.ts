@@ -1,4 +1,4 @@
-import { UnquarReq } from "./unquarReq";
+import { UnquarReq } from './unquarReq';
 
 export interface SystemRequest {
   policy_mode?: string;

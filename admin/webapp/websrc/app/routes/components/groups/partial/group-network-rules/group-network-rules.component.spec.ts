@@ -8,9 +8,8 @@ describe('GroupNetworkRulesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GroupNetworkRulesComponent ]
-    })
-    .compileComponents();
+      declarations: [GroupNetworkRulesComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

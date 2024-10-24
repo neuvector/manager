@@ -1,20 +1,21 @@
 <div>
-    <div (mouseleave)="showDropDown = false">
-        <button class="drop-toggle btn flat" (click)="showDropDown=!showDropDown">
-            <span *ngIf="checkedList.length<=0">Select</span>
-            <span *ngIf="checkedList.length>0" style="font-size: 12px;">{{displaySelection.join(', ')}}</span>
-            <i class="fa fa-angle-down"></i>
-        </button>
-        <div class="drop-show" *ngIf="showDropDown">
-            <label *ngFor="let a of list">
-                <mat-checkbox
-                  [(ngModel)]="a.checked"
-                  [ngModelOptions]="{standalone: true}"
-                  (change)="getSelectedValue(a.checked,a.value)"
-                >
-                  {{a.name}}
-                </mat-checkbox>
-            </label>
-        </div>
+  <div (mouseleave)="showDropDown = false">
+    <button class="drop-toggle btn flat" (click)="showDropDown = !showDropDown">
+      <span *ngIf="checkedList.length <= 0">Select</span>
+      <span *ngIf="checkedList.length > 0" style="font-size: 12px">{{
+        displaySelection.join(', ')
+      }}</span>
+      <i class="fa fa-angle-down"></i>
+    </button>
+    <div class="drop-show" *ngIf="showDropDown">
+      <label *ngFor="let a of list">
+        <mat-checkbox
+          [(ngModel)]="a.checked"
+          [ngModelOptions]="{ standalone: true }"
+          (change)="getSelectedValue(a.checked, a.value)">
+          {{ a.name }}
+        </mat-checkbox>
+      </label>
     </div>
+  </div>
 </div>

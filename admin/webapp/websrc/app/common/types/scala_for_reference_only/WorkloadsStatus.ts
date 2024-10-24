@@ -11,11 +11,11 @@ export interface WorkloadsStatus {
 
 export function isWorkloadsStatus(v: any): v is WorkloadsStatus {
   return (
-    ((typeof v['scanned']) === 'number') &&
-    ((typeof v['scheduled']) === 'number') &&
-    ((typeof v['scanning']) === 'number') &&
-    ((typeof v['failed']) === 'number') &&
-    ((typeof v['cvedb_version']) === 'string') &&
-    ((typeof v['cvedb_create_time']) === 'string')
+    typeof v['scanned'] === 'number' &&
+    typeof v['scheduled'] === 'number' &&
+    typeof v['scanning'] === 'number' &&
+    typeof v['failed'] === 'number' &&
+    typeof v['cvedb_version'] === 'string' &&
+    typeof v['cvedb_create_time'] === 'string'
   );
 }

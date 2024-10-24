@@ -1,7 +1,7 @@
-import { Vulnerability } from "./vulnerability";
-import { RegistryImageSummaryLabels } from "./registryImageSummaryLabels";
-import { ScanModule } from "./scanModule";
-import { ScanLayer } from "./scanLayer";
+import { Vulnerability } from './vulnerability';
+import { RegistryImageSummaryLabels } from './registryImageSummaryLabels';
+import { ScanModule } from './scanModule';
+import { ScanLayer } from './scanLayer';
 
 export interface ScanRepoReport {
   verdict?: string;

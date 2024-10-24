@@ -1,4 +1,4 @@
-import { Audit } from "./audit";
+import { Audit } from './audit';
 
 export interface AuditsData {
   audits: Audit[];

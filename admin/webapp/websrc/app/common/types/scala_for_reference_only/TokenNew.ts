@@ -22,20 +22,30 @@ export interface TokenNew {
 
 export function isTokenNew(v: any): v is TokenNew {
   return (
-    ((typeof v['token']) === 'string') &&
-    ((typeof v['fullname']) === 'string') &&
-    ((typeof v['server']) === 'string') &&
-    ((typeof v['username']) === 'string') &&
-    (!v['email'] || ((typeof v['email']) === 'string')) &&
-    ((typeof v['role']) === 'string') &&
-    ((typeof v['locale']) === 'string') &&
-    (!v['timeout'] || ((typeof v['timeout']) === 'number')) &&
-    ((typeof v['default_password']) === 'boolean') &&
-    ((typeof v['modify_password']) === 'boolean') &&
-    (v['global_permissions'] && isArray(v['global_permissions'])) &&
-    (v['remote_global_permissions'] && isArray(v['remote_global_permissions'])) &&
-    (v['extra_permissions'] && isArray(v['extra_permissions'])) && 
-    ((typeof v['domain_permissions']) == 'object' && Object.keys(v['domain_permissions']).every(key => ((typeof key) === 'string') && (v['domain_permissions'][key] && isArray(v['domain_permissions'][key])))) &&
-    (!v['password_days_until_expire'] || ((typeof v['password_days_until_expire']) === 'number'))
+    typeof v['token'] === 'string' &&
+    typeof v['fullname'] === 'string' &&
+    typeof v['server'] === 'string' &&
+    typeof v['username'] === 'string' &&
+    (!v['email'] || typeof v['email'] === 'string') &&
+    typeof v['role'] === 'string' &&
+    typeof v['locale'] === 'string' &&
+    (!v['timeout'] || typeof v['timeout'] === 'number') &&
+    typeof v['default_password'] === 'boolean' &&
+    typeof v['modify_password'] === 'boolean' &&
+    v['global_permissions'] &&
+    isArray(v['global_permissions']) &&
+    v['remote_global_permissions'] &&
+    isArray(v['remote_global_permissions']) &&
+    v['extra_permissions'] &&
+    isArray(v['extra_permissions']) &&
+    typeof v['domain_permissions'] == 'object' &&
+    Object.keys(v['domain_permissions']).every(
+      key =>
+        typeof key === 'string' &&
+        v['domain_permissions'][key] &&
+        isArray(v['domain_permissions'][key])
+    ) &&
+    (!v['password_days_until_expire'] ||
+      typeof v['password_days_until_expire'] === 'number')
   );
 }

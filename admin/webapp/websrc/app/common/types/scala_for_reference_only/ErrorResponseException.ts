@@ -10,7 +10,8 @@ export interface ErrorResponseException {
 
 export function isErrorResponseException(v: any): v is ErrorResponseException {
   return (
-    (v['responseStatus'] && isStatusCode(v['responseStatus'])) &&
+    v['responseStatus'] &&
+    isStatusCode(v['responseStatus']) &&
     (!v['response'] || (v['response'] && isHttpEntity(v['response'])))
   );
 }

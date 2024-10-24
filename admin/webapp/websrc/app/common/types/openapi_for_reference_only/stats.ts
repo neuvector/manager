@@ -1,4 +1,4 @@
-import { Metry } from "./metry";
+import { Metry } from './metry';
 
 export interface Stats {
   interval: number;

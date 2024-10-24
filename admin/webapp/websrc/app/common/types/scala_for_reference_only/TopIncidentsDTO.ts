@@ -11,9 +11,11 @@ export interface TopIncidentsDTO {
 
 export function isTopIncidentsDTO(v: any): v is TopIncidentsDTO {
   return (
-    (v['top5Containers'] && isArray(v['top5Containers'])) &&
-    (v['top5Nodes'] && isArray(v['top5Nodes'])) &&
-    ((typeof v['hostTotal']) === 'number') &&
-    ((typeof v['containerTotal']) === 'number')
+    v['top5Containers'] &&
+    isArray(v['top5Containers']) &&
+    v['top5Nodes'] &&
+    isArray(v['top5Nodes']) &&
+    typeof v['hostTotal'] === 'number' &&
+    typeof v['containerTotal'] === 'number'
   );
 }

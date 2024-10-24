@@ -14,8 +14,9 @@ export class UuidJsonFormat {
   }
 }
 
-export const UuidJsonFormatInhabitant: UuidJsonFormat = UuidJsonFormat.getInstance();
+export const UuidJsonFormatInhabitant: UuidJsonFormat =
+  UuidJsonFormat.getInstance();
 
 export function isUuidJsonFormat(v: any): v is UuidJsonFormat {
-  return (v instanceof UuidJsonFormat) && (v === UuidJsonFormatInhabitant);
+  return v instanceof UuidJsonFormat && v === UuidJsonFormatInhabitant;
 }

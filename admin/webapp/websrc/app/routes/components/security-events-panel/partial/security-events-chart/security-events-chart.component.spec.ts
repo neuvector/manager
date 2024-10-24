@@ -8,9 +8,8 @@ describe('SecurityEventsChartComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SecurityEventsChartComponent ]
-    })
-    .compileComponents();
+      declarations: [SecurityEventsChartComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

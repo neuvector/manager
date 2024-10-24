@@ -1,7 +1,7 @@
-import { CriteriaEntry } from "./criteriaEntry";
-import { ResponseRule } from "./responseRule";
-import { PolicyRule } from "./policyRule";
-import { WorkloadBrief } from "./workloadBrief";
+import { CriteriaEntry } from './criteriaEntry';
+import { ResponseRule } from './responseRule';
+import { PolicyRule } from './policyRule';
+import { WorkloadBrief } from './workloadBrief';
 
 export interface GroupDetail {
   name: string;

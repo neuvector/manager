@@ -1,5 +1,11 @@
 <div class="report-summary" style="page-break-after: avoid">
-  <span class="summary-title" [ngClass]="{'text-warning': vulHostsCnt > 0, 'text-success': vulHostsCnt === 0}" style="font-size: 16px">
+  <span
+    class="summary-title"
+    [ngClass]="{
+      'text-warning': vulHostsCnt > 0,
+      'text-success': vulHostsCnt === 0
+    }"
+    style="font-size: 16px">
     {{
       (reportPage === 'vulnerabilities' ? 'scan' : 'cis') +
         '.report.others.HOST_INS'
@@ -66,7 +72,10 @@
   <tbody>
     <tr
       class="print-row"
-      *ngFor="let node of nodes.slice(0, SEC_ASSETS_REPORT_MAX_ROW); let i = index"
+      *ngFor="
+        let node of nodes.slice(0, SEC_ASSETS_REPORT_MAX_ROW);
+        let i = index
+      "
       [attr.data-index]="i">
       <td class="print-cell" style="width: 15%">
         {{ node.name }}

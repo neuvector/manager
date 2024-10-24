@@ -8,9 +8,8 @@ describe('AssetsViewReportAssetsPodsTableComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AssetsViewReportAssetsPodsTableComponent ]
-    })
-    .compileComponents();
+      declarations: [AssetsViewReportAssetsPodsTableComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

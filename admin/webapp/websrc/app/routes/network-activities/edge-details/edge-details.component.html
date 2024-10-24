@@ -1,11 +1,8 @@
-<div
-  id="conversationHistory"
-  class="infoBox topLeftSession"
-  cdkDrag>
+<div id="conversationHistory" class="infoBox topLeftSession" cdkDrag>
   <div
     cdkDragHandle
     class="d-flex align-items-center justify-content-between handle">
-    <h4 class=" mt-1">
+    <h4 class="mt-1">
       {{ conversationDetail.from.display_name }}
       <em class="fas fa-long-arrow-alt-right text-info"></em>
       {{ conversationDetail.to.display_name }}
@@ -22,8 +19,10 @@
   <div
     *ngIf="conversationDetail.entries && conversationDetail.entries.length > 8"
     class="d-flex flex-row justify-content-end align-items-center">
-
-    <app-quick-filter [gridOptions]="gridOptions" [gridApi]="gridApi" [showCount]="false">
+    <app-quick-filter
+      [gridOptions]="gridOptions"
+      [gridApi]="gridApi"
+      [showCount]="false">
     </app-quick-filter>
   </div>
   <ag-grid-angular
@@ -46,30 +45,37 @@
     </div>
   </div>
   <div class="d-flex flex-row justify-content-between my-3">
-    <div class="d-flex flex-row justify-content-start align-items-center"
-         *ngIf="showRuleId"
-    >
+    <div
+      class="d-flex flex-row justify-content-start align-items-center"
+      *ngIf="showRuleId">
       <span
-        *ngIf=" sessionCount &&
-        conversationDetail.entries && conversationDetail.entries.length > 0
-      "
+        *ngIf="
+          sessionCount &&
+          conversationDetail.entries &&
+          conversationDetail.entries.length > 0
+        "
         class="text-muted mr-2"
-      >{{ 'network.edgeDetails.SESSIONS' | translate }}
+        >{{ 'network.edgeDetails.SESSIONS' | translate }}
         {{ sessionCount }}</span
       >
       <span class="action-label warning px-1" *ngIf="onViolation"
-      ><em class="fa fa-ban mr-1"></em>
+        ><em class="fa fa-ban mr-1"></em>
         {{ 'network.edgeDetails.VIOLATION' | translate }}
-    </span>
+      </span>
       <span class="action-label danger px-1" *ngIf="onThreat"
-      ><em class="fas fa-bug mr-1"></em>
+        ><em class="fas fa-bug mr-1"></em>
         {{ 'network.edgeDetails.THREAT' | translate }}
-    </span>
+      </span>
     </div>
 
     <div class="d-flex flex-row justify-content-end align-items-center">
       <button
-        *ngIf="isRuleAccessible && showRuleId && traffic && traffic.policy_action !== 'open'"
+        *ngIf="
+          isRuleAccessible &&
+          showRuleId &&
+          traffic &&
+          traffic.policy_action !== 'open'
+        "
         [disabled]="!isWriteNetworkAuthorized"
         mat-raised-button
         color="primary"
@@ -85,17 +91,16 @@
         class="mt-1"
         aria-label="clear sessions"
         (click)="
-        clearSessions(conversationDetail.from.id, conversationDetail.to.id)
-      "
+          clearSessions(conversationDetail.from.id, conversationDetail.to.id)
+        "
         [disabled]="!isWriteNetworkAuthorized"
         *ngIf="
-        conversationDetail.entries && conversationDetail.entries.length > 0
-      ">
+          conversationDetail.entries && conversationDetail.entries.length > 0
+        ">
         <em class="fa fa-magic mr-1"></em
         >{{ 'network.edgeDetails.CLEAR' | translate }}
       </button>
     </div>
-
   </div>
 
   <div *ngIf="onRule" class="col-sm-12">
@@ -135,7 +140,7 @@
               <input matInput value="{{ rule.to }}" disabled aria-label="To" />
             </mat-form-field>
           </div>
-          <div class="full-width ">
+          <div class="full-width">
             <mat-form-field appearance="fill" class="full-width">
               <mat-label>{{ 'policy.addPolicy.APP' | translate }}</mat-label>
               <input
@@ -160,14 +165,16 @@
           <div class="full-width mr-2">
             <ng-container *ngIf="rule.created_timestamp">
               <mat-form-field appearance="fill" class="full-width">
-                <mat-label>{{ 'controllers.detail.CREATED_AT' | translate }}</mat-label>
+                <mat-label>{{
+                  'controllers.detail.CREATED_AT' | translate
+                }}</mat-label>
                 <input
                   matInput
                   disabled
                   aria-label="Created date"
                   value="{{
-                rule.created_timestamp * 1000 | date: 'MMM dd, y HH:mm:ss'
-              }}" />
+                    rule.created_timestamp * 1000 | date : 'MMM dd, y HH:mm:ss'
+                  }}" />
               </mat-form-field>
             </ng-container>
           </div>
@@ -182,9 +189,11 @@
                   !isWriteNetworkAuthorized || rule.action === 'open'
                 ">
                 <span
-                  [ngClass]="{ 'text-danger': !rule.allowed, 'text-success': rule.allowed }"
-                >
-                  {{(rule.allowed ? "enum.ALLOW" : "enum.DENY") | translate}}
+                  [ngClass]="{
+                    'text-danger': !rule.allowed,
+                    'text-success': rule.allowed
+                  }">
+                  {{ (rule.allowed ? 'enum.ALLOW' : 'enum.DENY') | translate }}
                 </span>
               </mat-slide-toggle>
             </div>

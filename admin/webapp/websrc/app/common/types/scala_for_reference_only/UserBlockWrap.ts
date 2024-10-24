@@ -7,7 +7,5 @@ export interface UserBlockWrap {
 }
 
 export function isUserBlockWrap(v: any): v is UserBlockWrap {
-  return (
-    (v['config'] && isUserBlock(v['config']))
-  );
+  return v['config'] && isUserBlock(v['config']);
 }

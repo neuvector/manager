@@ -27,13 +27,16 @@ export class ScoreImprovementAdmissionControlStatusViewComponent
   }
 
   getPredictionScores() {
-    const metrics = JSON.parse(JSON.stringify(this.scoreImprovementModalService.newMetrics()))
+    const metrics = JSON.parse(
+      JSON.stringify(this.scoreImprovementModalService.newMetrics())
+    );
     metrics.deny_adm_ctrl_rules = 1;
     this.scoreImprovementModalService
       .calculateScoreData(
         metrics,
         this.isGlobalUser,
-        this.scoreImprovementModalService.scoreInfo.header_data.workloads.running_pods
+        this.scoreImprovementModalService.scoreInfo.header_data.workloads
+          .running_pods
       )
       .subscribe(scores => {
         this.projectedScore = scores.securityRiskScore;

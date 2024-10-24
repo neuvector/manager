@@ -6,8 +6,5 @@ export interface ApplicationAnalysis {
 }
 
 export function isApplicationAnalysis(v: any): v is ApplicationAnalysis {
-  return (
-    ((typeof v['count']) === 'number') &&
-    ((typeof v['totalBytes']) === 'number')
-  );
+  return typeof v['count'] === 'number' && typeof v['totalBytes'] === 'number';
 }

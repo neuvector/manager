@@ -73,14 +73,14 @@
   *ngIf="popupState.onActiveSession()"
   [popupState]="popupState"
   [entriesGridHeight]="activeSessionGridHeight"
-  (onAutoRefresh)="toggleRefresh($event)"
+  (doAutoRefresh)="toggleRefresh($event)"
   [currentName]="currentNodeName"
   [conversations]="conversations"></app-active-session>
 
 <app-edge-details
   *ngIf="popupState.onEdge()"
   [popupState]="popupState"
-  (onClearSession)="clearSessions($event)"
+  (doClearSession)="clearSessions($event)"
   [conversationDetail]="conversationDetail"
   [entriesGridHeight]="entriesGridHeight"
   [edgeDetails]="edgeDetails">
@@ -117,7 +117,7 @@
 <app-pod-info
   *ngIf="popupState.onNode() && isPodInfoReady"
   [pod]="pod"
-  (onPodGroupSelected)="showGroup($event)"
+  (doPodGroupSelected)="showGroup($event)"
   [popupState]="popupState">
 </app-pod-info>
 
@@ -128,8 +128,8 @@
   [nodes]="endpoints"
   [blacklist]="blacklist"
   [popupState]="popupState"
-  (onReset)="resetBlacklist()"
-  (onApply)="applyBlacklist($event)" >
+  (doReset)="resetBlacklist()"
+  (doApply)="applyBlacklist($event)">
 </app-blacklist>
 
 <app-advanced-filter
@@ -139,6 +139,6 @@
   [advFilter]="advFilter"
   [settings]="settings"
   [popupState]="popupState"
-  (onReset)="resetAdvFilter()"
-  (onApply)="applyAdvFilter($event)" >
+  (doReset)="resetAdvFilter()"
+  (doApply)="applyAdvFilter($event)">
 </app-advanced-filter>

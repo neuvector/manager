@@ -1,4 +1,4 @@
-import { Webhook } from "./webhook";
+import { Webhook } from './webhook';
 
 export interface SystemWebhookConfigData {
   config: Webhook;

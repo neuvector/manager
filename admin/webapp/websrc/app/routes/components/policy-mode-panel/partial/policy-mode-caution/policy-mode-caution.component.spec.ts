@@ -8,9 +8,8 @@ describe('PolicyModeCautionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PolicyModeCautionComponent ]
-    })
-    .compileComponents();
+      declarations: [PolicyModeCautionComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

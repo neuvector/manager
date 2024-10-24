@@ -9,7 +9,6 @@ export interface AdmExport {
 
 export function isAdmExport(v: any): v is AdmExport {
   return (
-    (v['ids'] && isArray(v['ids'])) &&
-    ((typeof v['export_config']) === 'boolean')
+    v['ids'] && isArray(v['ids']) && typeof v['export_config'] === 'boolean'
   );
 }

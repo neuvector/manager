@@ -24,7 +24,7 @@
             style="margin-top: 2px; width: 620px">
             <span class="font-weight-bold pl-lg" style="display: inline-block">
               <em class="fa fa-square-o mr-sm"></em>
-              {{ child.display_name | slice: 0:55
+              {{ child.display_name | slice : 0 : 55
               }}{{ child.display_name.length > 35 ? '...' : '' }}
             </span>
             <label
@@ -58,8 +58,8 @@
       </div>
     </div>
   </li>
-  <li class="col-sm-12 p-1" style="height: 29px;">
-    <div class="row" style="margin-left: 1px;">
+  <li class="col-sm-12 p-1" style="height: 29px">
+    <div class="row" style="margin-left: 1px">
       <div class="col-sm-6 pl-0 pb-0 pt-sm">
         <span class="font-weight-bold pod-item-key">
           {{ 'network.nodeDetails.ENFORCER' | translate }}:
@@ -78,7 +78,8 @@
               matTooltip="{{ container.service_group }}"
               matTooltipPosition="above"
               [matTooltipDisabled]="container.service_group.length < 30"
-            >{{ container.service_group | shortenFromMiddle: 30}}</span>
+              >{{ container.service_group | shortenFromMiddle : 30 }}</span
+            >
             <a
               (click)="goToGroup(container.service_group)"
               style="display: table-cell; font-size: 11px; line-height: 15px">
@@ -130,7 +131,7 @@
           {{ 'network.nodeDetails.CREATED_AT' | translate }}:
         </span>
         <span class="ml auto-hide pod-item-value">
-          {{ container.started_at | date: 'MMM dd, y HH:mm:ss' }}
+          {{ container.started_at | date : 'MMM dd, y HH:mm:ss' }}
         </span>
       </div>
     </div>
@@ -143,10 +144,8 @@
         <span class="font-weight-bold pod-item-key">
           {{ 'network.nodeDetails.SCANNED_AT' | translate }}:
         </span>
-        <span
-          class="ml mr-lg auto-hide pod-item-value"
-          style="width: 150px">
-          {{ container.scan_summary.scanned_at | date: 'MMM dd, y HH:mm:ss' }}
+        <span class="ml mr-lg auto-hide pod-item-value" style="width: 150px">
+          {{ container.scan_summary.scanned_at | date : 'MMM dd, y HH:mm:ss' }}
         </span>
       </div>
       <div class="col-sm-6 pl-0 mda-list-item-text pb-0 pt-sm">
@@ -179,7 +178,9 @@
             class="badge badge-danger mr-sm">
             {{ container.scan_summary.high }}</span
           >
-          <span *ngIf="container.scan_summary.medium" class="badge badge-warning">
+          <span
+            *ngIf="container.scan_summary.medium"
+            class="badge badge-warning">
             {{ container.scan_summary.medium }}</span
           >
           <a
@@ -264,7 +265,9 @@
             <div class="col-sm-12">
               <div class="col-sm-6">IP:{{ net.ip }}/{{ net.ip_prefix }}</div>
               <div *ngIf="net.gateway" class="col-sm-6">
-                <span style="color: #909fa7;">{{ 'general.GATEWAY' | translate }}:{{ net.gateway }}</span>
+                <span style="color: #909fa7"
+                  >{{ 'general.GATEWAY' | translate }}:{{ net.gateway }}</span
+                >
               </div>
             </div>
           </div>

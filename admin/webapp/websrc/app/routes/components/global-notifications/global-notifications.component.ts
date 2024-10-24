@@ -30,7 +30,8 @@ import { UtilsService } from '@common/utils/app.utils';
   styleUrls: ['./global-notifications.component.scss'],
 })
 export class GlobalNotificationsComponent implements OnInit {
-  @ViewChild('notificationMenuTrigger') notificationMenuTrigger!: MatMenuTrigger;
+  @ViewChild('notificationMenuTrigger')
+  notificationMenuTrigger!: MatMenuTrigger;
 
   readonly MESSAGE_TITLE_PREFIX = 'dashboard.body.message.';
 
@@ -44,12 +45,12 @@ export class GlobalNotificationsComponent implements OnInit {
   get isVersionMismatch() {
     return GlobalVariable.summary.component_versions
       ? (GlobalVariable.summary.component_versions.length > 1 &&
-        GlobalVariable.summary.component_versions[0] !==
-        GlobalVariable.summary.component_versions[1]) ||
-      this.version !==
-      (GlobalVariable.summary.component_versions[0].startsWith('v')
-        ? GlobalVariable.summary.component_versions[0].substring(1)
-        : GlobalVariable.summary.component_versions[0])
+          GlobalVariable.summary.component_versions[0] !==
+            GlobalVariable.summary.component_versions[1]) ||
+          this.version !==
+            (GlobalVariable.summary.component_versions[0].startsWith('v')
+              ? GlobalVariable.summary.component_versions[0].substring(1)
+              : GlobalVariable.summary.component_versions[0])
       : false;
   }
   get passwordExpiration() {
@@ -69,7 +70,7 @@ export class GlobalNotificationsComponent implements OnInit {
     private dashboardService: DashboardService,
     private notificationService: NotificationService,
     private utils: UtilsService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getVersion();
@@ -90,9 +91,8 @@ export class GlobalNotificationsComponent implements OnInit {
     }
     this.notificationService.acceptNotification(this.payload).subscribe(
       () => {
-
         if (this.isSystemAlertNotif(notification)) {
-          this.getSystemAlertsAndCheckNotificationAccepted(notification)
+          this.getSystemAlertsAndCheckNotificationAccepted(notification);
         } else {
           notification.accepted = true;
         }
@@ -224,9 +224,9 @@ export class GlobalNotificationsComponent implements OnInit {
         switchMap(config =>
           !config.misc.no_telemetry_report
             ? this.configHttpService.getUsageReport().pipe(
-              map(usageReport => usageReport.telemetry_status),
-              catchError(() => of(null))
-            )
+                map(usageReport => usageReport.telemetry_status),
+                catchError(() => of(null))
+              )
             : of(null)
         ),
         catchError(() => of(null))
@@ -239,22 +239,35 @@ export class GlobalNotificationsComponent implements OnInit {
   }
 
   getSystemAlerts(): void {
-    this.dashboardService.getSystemAlerts().subscribe((summary: SystemAlertSummary) => this.systemAlertSummary = summary);
+    this.dashboardService
+      .getSystemAlerts()
+      .subscribe(
+        (summary: SystemAlertSummary) => (this.systemAlertSummary = summary)
+      );
   }
 
-  getSystemAlertsAndCheckNotificationAccepted(notification: GlobalNotification) {
+  getSystemAlertsAndCheckNotificationAccepted(
+    notification: GlobalNotification
+  ) {
     this.dashboardService.getSystemAlerts().subscribe({
       next: summary => {
         this.systemAlertSummary = JSON.parse(JSON.stringify(summary));
 
-        const existingKey = Object.keys(summary.acceptable_alerts).find(alertKey => summary.acceptable_alerts[alertKey].data.find(a => a.id === notification.key));
+        const existingKey = Object.keys(summary.acceptable_alerts).find(
+          alertKey =>
+            summary.acceptable_alerts[alertKey].data.find(
+              a => a.id === notification.key
+            )
+        );
         notification.accepted = !!!existingKey;
       },
     });
   }
 
   isSystemAlertNotif(notification: GlobalNotification) {
-    return notification.type === GlobalNotificationType.SYSTEM_ALERT_NOTIFICATION;
+    return (
+      notification.type === GlobalNotificationType.SYSTEM_ALERT_NOTIFICATION
+    );
   }
 
   isManagerNotif(notification: GlobalNotification) {
@@ -266,9 +279,7 @@ export class GlobalNotificationsComponent implements OnInit {
   }
 
   getSystemAlertTitle(name: string): string {
-    return this.tr.instant(
-      this.MESSAGE_TITLE_PREFIX + name.toUpperCase()
-    );
+    return this.tr.instant(this.MESSAGE_TITLE_PREFIX + name.toUpperCase());
   }
 
   private generateManagerNotifications(): void {
@@ -291,8 +302,8 @@ export class GlobalNotificationsComponent implements OnInit {
         labelClass: 'warning',
         accepted: this.systemAlertSummary.accepted_alerts
           ? this.systemAlertSummary.accepted_alerts.includes(
-            ManagerAlertKey.NewVersionAvailable
-          )
+              ManagerAlertKey.NewVersionAvailable
+            )
           : false,
         unClamped: false,
       });
@@ -308,7 +319,9 @@ export class GlobalNotificationsComponent implements OnInit {
         link: '#/controllers',
         labelClass: 'warning',
         accepted: this.systemAlertSummary.accepted_alerts
-          ? this.systemAlertSummary.accepted_alerts.includes(ManagerAlertKey.OutdatedCVE)
+          ? this.systemAlertSummary.accepted_alerts.includes(
+              ManagerAlertKey.OutdatedCVE
+            )
           : false,
         unClamped: false,
       });
@@ -323,8 +336,8 @@ export class GlobalNotificationsComponent implements OnInit {
         labelClass: 'warning',
         accepted: this.systemAlertSummary.accepted_alerts
           ? this.systemAlertSummary.accepted_alerts.includes(
-            ManagerAlertKey.VersionMismatch
-          )
+              ManagerAlertKey.VersionMismatch
+            )
           : false,
         unClamped: false,
       });
@@ -344,8 +357,8 @@ export class GlobalNotificationsComponent implements OnInit {
         labelClass: this.passwordExpiration < 1 ? 'danger' : 'warning',
         accepted: this.systemAlertSummary.accepted_alerts
           ? this.systemAlertSummary.accepted_alerts.includes(
-            UserAlertKey.ExpiringPassword
-          )
+              UserAlertKey.ExpiringPassword
+            )
           : false,
         unClamped: false,
       });
@@ -363,8 +376,8 @@ export class GlobalNotificationsComponent implements OnInit {
         labelClass: 'warning',
         accepted: this.systemAlertSummary.accepted_alerts
           ? this.systemAlertSummary.accepted_alerts.includes(
-            UserAlertKey.UnchangedDefaultPassword
-          )
+              UserAlertKey.UnchangedDefaultPassword
+            )
           : false,
         unClamped: false,
       });
@@ -378,17 +391,24 @@ export class GlobalNotificationsComponent implements OnInit {
       let link: string = '';
       let severity: SystemAlertSeverity = SystemAlertSeverity.INFO;
 
-      if(type === SystemAlertType.TLS_CERTIFICATE) {
+      if (type === SystemAlertType.TLS_CERTIFICATE) {
         severity = SystemAlertSeverity.WARNING;
-      } else if(type === SystemAlertType.RBAC) {
+      } else if (type === SystemAlertType.RBAC) {
         severity = SystemAlertSeverity.CRITICAL;
       }
 
-      alerts.data.forEach(a => this.addSystemAlertGlobalNotification(k, a, severity, link));
+      alerts.data.forEach(a =>
+        this.addSystemAlertGlobalNotification(k, a, severity, link)
+      );
     });
   }
 
-  private addSystemAlertGlobalNotification(name: string, alert: SystemAlert, severity: SystemAlertSeverity ,link: string): void {
+  private addSystemAlertGlobalNotification(
+    name: string,
+    alert: SystemAlert,
+    severity: SystemAlertSeverity,
+    link: string
+  ): void {
     const notification: GlobalNotification = {
       type: GlobalNotificationType.SYSTEM_ALERT_NOTIFICATION,
       name: name,
@@ -397,12 +417,14 @@ export class GlobalNotificationsComponent implements OnInit {
       link: link,
       labelClass: this.getLabelClassFromSystemAlertSeverity(severity),
       unClamped: false,
-    }
+    };
 
     this.globalNotifications.push(notification);
   }
 
-  private getLabelClassFromSystemAlertSeverity(severity: SystemAlertSeverity): string {
+  private getLabelClassFromSystemAlertSeverity(
+    severity: SystemAlertSeverity
+  ): string {
     switch (severity) {
       case SystemAlertSeverity.CRITICAL:
         return 'danger';

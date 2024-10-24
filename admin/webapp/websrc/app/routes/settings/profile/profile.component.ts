@@ -20,9 +20,5 @@ export class ProfileComponent {
     })
   );
 
-  constructor(
-    private settingsService: SettingsService
-  ) {}
-
-  ngOnInit(): void {}
+  constructor(private settingsService: SettingsService) {}
 }

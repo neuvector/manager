@@ -10,7 +10,8 @@ export interface DashboardIncidentData {
 
 export function isDashboardIncidentData(v: any): v is DashboardIncidentData {
   return (
-    (v['incidents'] && isArray(v['incidents'])) &&
+    v['incidents'] &&
+    isArray(v['incidents']) &&
     (!v['error'] || (v['error'] && isError(v['error'])))
   );
 }

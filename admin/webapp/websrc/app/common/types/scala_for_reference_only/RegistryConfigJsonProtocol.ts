@@ -14,8 +14,14 @@ export class RegistryConfigJsonProtocol {
   }
 }
 
-export const RegistryConfigJsonProtocolInhabitant: RegistryConfigJsonProtocol = RegistryConfigJsonProtocol.getInstance();
+export const RegistryConfigJsonProtocolInhabitant: RegistryConfigJsonProtocol =
+  RegistryConfigJsonProtocol.getInstance();
 
-export function isRegistryConfigJsonProtocol(v: any): v is RegistryConfigJsonProtocol {
-  return (v instanceof RegistryConfigJsonProtocol) && (v === RegistryConfigJsonProtocolInhabitant);
+export function isRegistryConfigJsonProtocol(
+  v: any
+): v is RegistryConfigJsonProtocol {
+  return (
+    v instanceof RegistryConfigJsonProtocol &&
+    v === RegistryConfigJsonProtocolInhabitant
+  );
 }

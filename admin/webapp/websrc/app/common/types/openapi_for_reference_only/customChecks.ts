@@ -1,4 +1,4 @@
-import { CustomCheck } from "./customCheck";
+import { CustomCheck } from './customCheck';
 
 export interface CustomChecks {
   group: string;

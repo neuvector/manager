@@ -10,14 +10,12 @@ import { ExternalHostCellComponent } from './external-host-cell/external-host-ce
 import { FlagIpFqdnModule } from '@components/ui/flag-ip-fqdn/flag-ip-fqdn.module';
 import { ConversationEntryListComponent } from './conversation-entry-list/conversation-entry-list.component';
 
-
-
 @NgModule({
   declarations: [
     ExposedServicepodConvGridComponent,
     ExposedServicepodGridServicepodCellComponent,
     ExternalHostCellComponent,
-    ConversationEntryListComponent
+    ConversationEntryListComponent,
   ],
   imports: [
     CommonModule,
@@ -27,8 +25,6 @@ import { ConversationEntryListComponent } from './conversation-entry-list/conver
     AgGridModule,
     // AgGridModule.withComponents([ExposedServicepodGridServicepodCellComponent]),
   ],
-  exports: [
-    ExposedServicepodConvGridComponent
-  ]
+  exports: [ExposedServicepodConvGridComponent],
 })
-export class ExposedServicepodConvGridModule { }
+export class ExposedServicepodConvGridModule {}

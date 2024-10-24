@@ -17,5 +17,5 @@ export class ReadOutput {
 export const ReadOutputInhabitant: ReadOutput = ReadOutput.getInstance();
 
 export function isReadOutput(v: any): v is ReadOutput {
-  return (v instanceof ReadOutput) && (v === ReadOutputInhabitant);
+  return v instanceof ReadOutput && v === ReadOutputInhabitant;
 }

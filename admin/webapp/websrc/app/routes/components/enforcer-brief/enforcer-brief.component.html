@@ -2,72 +2,62 @@
   <ul class="row">
     <li class="col-sm-12 p-2">
       <div class="mda-list-item-text pb-0 pt-sm">
-        <span class="font-weight-bold host-item-key">{{'controllers.detail.ID' | translate}}:</span>
-        <span
-          class="ml  auto-hide host-item-value"
+        <span class="font-weight-bold host-item-key"
+          >{{ 'controllers.detail.ID' | translate }}:</span
         >
-                  {{enforcer.id}}
-                </span>
+        <span class="ml auto-hide host-item-value">
+          {{ enforcer.id }}
+        </span>
       </div>
     </li>
     <li class="col-sm-6 p-2">
       <div class="mda-list-item-text pb-0 pt-sm">
-                <span class="font-weight-bold host-item-key">
-                  {{'containers.detail.HOST_NAME' | translate}}:
-                </span>
-        <span
-          class="ml  auto-hide host-item-value"
-        >
-                  {{enforcer.host_name}}
-                </span>
+        <span class="font-weight-bold host-item-key">
+          {{ 'containers.detail.HOST_NAME' | translate }}:
+        </span>
+        <span class="ml auto-hide host-item-value">
+          {{ enforcer.host_name }}
+        </span>
       </div>
     </li>
     <li class="col-sm-6 p-2">
       <div class="mda-list-item-text pb-0 pt-sm">
-                <span class="font-weight-bold host-item-key">
-                  {{'scan.gridHeader.DOMAIN' | translate}}:
-                </span>
-        <span
-          class="ml  auto-hide host-item-value"
-        >
-                  {{enforcer.domain}}
-                </span>
+        <span class="font-weight-bold host-item-key">
+          {{ 'scan.gridHeader.DOMAIN' | translate }}:
+        </span>
+        <span class="ml auto-hide host-item-value">
+          {{ enforcer.domain }}
+        </span>
       </div>
     </li>
     <li class="col-sm-6 p-2">
       <div class="mda-list-item-text pb-0 pt-sm">
-                <span class="font-weight-bold host-item-key">
-                  {{'enforcers.detail.VERSION' | translate}}:
-                </span>
-        <span
-          class="ml  auto-hide host-item-value"
-        >
-                  {{enforcer.version}}
-                </span>
+        <span class="font-weight-bold host-item-key">
+          {{ 'enforcers.detail.VERSION' | translate }}:
+        </span>
+        <span class="ml auto-hide host-item-value">
+          {{ enforcer.version }}
+        </span>
       </div>
     </li>
     <li class="col-sm-6 p-2">
       <div class="mda-list-item-text pb-0 pt-sm">
-                <span class="font-weight-bold host-item-key">
-                  {{'enforcers.detail.CLUSTER_IP' | translate}}:
-                </span>
-        <span
-          class="ml  auto-hide host-item-value"
-        >
-                  {{enforcer.cluster_ip}}
-                </span>
+        <span class="font-weight-bold host-item-key">
+          {{ 'enforcers.detail.CLUSTER_IP' | translate }}:
+        </span>
+        <span class="ml auto-hide host-item-value">
+          {{ enforcer.cluster_ip }}
+        </span>
       </div>
     </li>
     <li class="col-sm-6 p-2">
       <div class="mda-list-item-text pb-0 pt-sm">
-                <span class="font-weight-bold host-item-key">
-                  {{'controllers.detail.DURATION' | translate}}:
-                </span>
-        <span
-          class="ml  auto-hide host-item-value"
-        >
-                  {{upTime}}
-                </span>
+        <span class="font-weight-bold host-item-key">
+          {{ 'controllers.detail.DURATION' | translate }}:
+        </span>
+        <span class="ml auto-hide host-item-value">
+          {{ upTime }}
+        </span>
       </div>
     </li>
   </ul>

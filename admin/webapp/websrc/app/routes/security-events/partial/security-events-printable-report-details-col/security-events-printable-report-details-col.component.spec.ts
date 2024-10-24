@@ -8,13 +8,14 @@ describe('SecurityEventsPrintableReportDetailsColComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SecurityEventsPrintableReportDetailsColComponent ]
-    })
-    .compileComponents();
+      declarations: [SecurityEventsPrintableReportDetailsColComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SecurityEventsPrintableReportDetailsColComponent);
+    fixture = TestBed.createComponent(
+      SecurityEventsPrintableReportDetailsColComponent
+    );
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

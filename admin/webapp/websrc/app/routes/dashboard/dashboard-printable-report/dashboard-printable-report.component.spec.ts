@@ -8,9 +8,8 @@ describe('DashboardPrintableReportComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DashboardPrintableReportComponent ]
-    })
-    .compileComponents();
+      declarations: [DashboardPrintableReportComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

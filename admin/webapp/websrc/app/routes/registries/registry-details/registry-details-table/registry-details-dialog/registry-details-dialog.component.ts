@@ -52,7 +52,9 @@ export class RegistryDetailsDialogComponent implements OnInit {
   remediationDetails!: RemediationDetailDialogComponent;
   selectedRemediation!: Check;
   get registryTitle() {
-    return this.data.selectedRegistry.isAllView ? this.data.image.repo_url : `${this.data.selectedRegistry.registry}${this.data.image.repository}:${this.data.image.tag}`;
+    return this.data.selectedRegistry.isAllView
+      ? this.data.image.repo_url
+      : `${this.data.selectedRegistry.registry}${this.data.image.repository}:${this.data.image.tag}`;
   }
 
   constructor(
@@ -84,8 +86,14 @@ export class RegistryDetailsDialogComponent implements OnInit {
         layer.report.layers.unshift({
           cmds: image.report.cmds.join(','),
           digest: this.data.image.digest,
-          verifiers: image.report.signature_data ? image.report.signature_data.verifiers || [] : [],
-          verificationTimestamp: image.report.signature_data ? moment(image.report.signature_data.verification_timestamp).format('MM/DD/YYYY hh:mm:ss') : '',
+          verifiers: image.report.signature_data
+            ? image.report.signature_data.verifiers || []
+            : [],
+          verificationTimestamp: image.report.signature_data
+            ? moment(image.report.signature_data.verification_timestamp).format(
+                'MM/DD/YYYY hh:mm:ss'
+              )
+            : '',
           size: 0,
           vulnerabilities: image.report.vulnerabilities,
         });
@@ -99,7 +107,11 @@ export class RegistryDetailsDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.filter.valueChanges
-      .pipe(tap((value: string | null) => this.quickFilterService.setTextInput(value || '')))
+      .pipe(
+        tap((value: string | null) =>
+          this.quickFilterService.setTextInput(value || '')
+        )
+      )
       .subscribe();
     this.imageAndLayers$ = this.toggleViewSubject$.pipe(
       tap(bool => (this.acceptedVulnerabilityStatus = bool)),

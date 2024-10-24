@@ -14,8 +14,11 @@ export class NamespaceJsonProtocol {
   }
 }
 
-export const NamespaceJsonProtocolInhabitant: NamespaceJsonProtocol = NamespaceJsonProtocol.getInstance();
+export const NamespaceJsonProtocolInhabitant: NamespaceJsonProtocol =
+  NamespaceJsonProtocol.getInstance();
 
 export function isNamespaceJsonProtocol(v: any): v is NamespaceJsonProtocol {
-  return (v instanceof NamespaceJsonProtocol) && (v === NamespaceJsonProtocolInhabitant);
+  return (
+    v instanceof NamespaceJsonProtocol && v === NamespaceJsonProtocolInhabitant
+  );
 }

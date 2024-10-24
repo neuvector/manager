@@ -49,7 +49,7 @@ export class RuleActionButtonsComponent implements ICellRendererAngularComp {
         index4Sensor: this.params.context.componentParent.index4Sensor,
         gridOptions4EditPatterns:
           this.params.context.componentParent.gridOptions4EditPatterns,
-        gridApi: this.params.context.componentParent.gridApi4Rules!
+        gridApi: this.params.context.componentParent.gridApi4Rules!,
       },
     });
   };
@@ -84,17 +84,19 @@ export class RuleActionButtonsComponent implements ICellRendererAngularComp {
       )
       .subscribe(
         res => {
-          let gridApi = this.params.context.componentParent.gridApi4Rules!;
+          let gridApi =
+            this.params.context.componentParent.gridApi4Rules!;
           let rules = this.params.context.componentParent.selectedSensor.rules;
           gridApi.setRowData(rules);
           if (rules.length > 0) {
             setTimeout(() => {
-              let rowNode =
-                gridApi.getDisplayedRowAtIndex(0);
+              let rowNode = gridApi.getDisplayedRowAtIndex(0);
               rowNode?.setSelected(true);
             }, 200);
           } else {
-            this.params.context.componentParent.gridApi4Patterns!.setRowData([]);
+            this.params.context.componentParent.gridApi4Patterns!.setRowData(
+              []
+            );
           }
           this.notificationService.open(
             this.translate.instant('dlp.msg.REMOVE_RULE_OK')

@@ -1,8 +1,7 @@
 <div>
   <div
     class="d-flex align-items-center justify-content-end"
-    *ngIf="!useQuickFilterService"
-  >
+    *ngIf="!useQuickFilterService">
     <div
       role="button"
       class="hand mr-3"
@@ -11,25 +10,24 @@
       <em class="eos-icons">edit</em>
     </div>
     <section class="status-section">
-      <label class="status-margin text-label">{{ 'setting.STATUS' | translate }}:</label>
+      <label class="status-margin text-label"
+        >{{ 'setting.STATUS' | translate }}:</label
+      >
       <mat-slide-toggle
         class="mr-2"
         id="group-dlp-sensor-status-toggle"
         [disabled]="!isWriteDlpAuthorized || cfgType === CFG_TYPE.GROUND"
         [(ngModel)]="enabled"
-        [ngModelOptions]="{standalone: true}"
-        (toggleChange)="toggleDLPConfigEnablement(enabled)"
-      >
+        [ngModelOptions]="{ standalone: true }"
+        (toggleChange)="toggleDLPConfigEnablement(enabled)">
         <span
           [ngClass]="{
             'text-muted': !enabled,
             'text-success': enabled
-          }"
-        >
+          }">
           {{
-            (enabled
-              ? "policy.status.ENABLED"
-              : "policy.status.DISABLED") | translate
+            (enabled ? 'policy.status.ENABLED' : 'policy.status.DISABLED')
+              | translate
           }}
         </span>
       </mat-slide-toggle>
@@ -38,23 +36,26 @@
       class="pull-left"
       [gridOptions]="gridOptions4GroupDlpSensors"
       [gridApi]="gridApi"
-      [showCount]="false"
-    >
+      [showCount]="false">
     </app-quick-filter>
   </div>
-  <div class="clearfix" style="position: relative;">
+  <div class="clearfix" style="position: relative">
     <ag-grid-angular
       id="group-dlp-sensors-grid"
-      style="width: 100%;"
-      [ngStyle]="{ height: (resizableHeight - 90) + 'px' }"
+      style="width: 100%"
+      [ngStyle]="{ height: resizableHeight - 90 + 'px' }"
       class="ag-theme-balham"
-      [gridOptions]="gridOptions4GroupDlpSensors"
-      >
+      [gridOptions]="gridOptions4GroupDlpSensors">
     </ag-grid-angular>
     <div
       *ngIf="!enabled"
-      style="position: absolute; top: 0; width: 100%; background-color: rgba(0, 0, 0, 0.2); z-index: 50;"
-      [ngStyle]="{ height: (resizableHeight - 90) + 'px' }">
-    </div>
+      style="
+        position: absolute;
+        top: 0;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.2);
+        z-index: 50;
+      "
+      [ngStyle]="{ height: resizableHeight - 90 + 'px' }"></div>
   </div>
 </div>

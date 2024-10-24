@@ -9,13 +9,13 @@
     "ng": "ng",
     "start": "ng serve",
     "prebuild": "node merge-i18n.js",
-    "build": "ng build --configuration production",
+    "build": "ng lint --fix; ng build --configuration production",
     "lint": "ng lint --fix",
     "lint:check": "ng lint",
     "format": "prettier --write \"websrc/app/**/*.{ts,html,json}\"",
     "format:check": "prettier --config ./.prettierrc --list-different \"websrc/app/**/*.{ts,html,json}\"",
     "prebuild:watch": "npm run prebuild",
-    "build:watch": "ng build --watch --configuration development",
+    "build:watch": "ng lint --fix; ng build --watch --configuration development",
     "test": "ng test"
   },
   "dependencies": {

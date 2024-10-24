@@ -7,7 +7,5 @@ export interface DlpSensorData {
 }
 
 export function isDlpSensorData(v: any): v is DlpSensorData {
-  return (
-    (v['sensor'] && isDlpSensor(v['sensor']))
-  );
+  return v['sensor'] && isDlpSensor(v['sensor']);
 }

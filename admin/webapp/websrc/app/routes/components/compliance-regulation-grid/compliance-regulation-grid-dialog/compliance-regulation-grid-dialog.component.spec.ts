@@ -8,9 +8,8 @@ describe('ComplianceRegulationGridDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ComplianceRegulationGridDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [ComplianceRegulationGridDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

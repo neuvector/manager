@@ -52,16 +52,34 @@ export class GroupsService {
       return '';
     };
     const policyModeRendererFunc = params => {
-      let policyMode, profileMode = '';
-      if (params.value && (params.value.policy_mode || params.value.profile_mode)) {
-        policyMode = params.value.policy_mode ? this.utils.getI18Name(`${params.value.policy_mode}_S`) : '';
-        profileMode = params.value.profile_mode ? this.utils.getI18Name(`${params.value.profile_mode}_S`) : '';
-        let labelCode4PolicyMode = MapConstant.colourMap[params.value.policy_mode] || '';
-        let labelCode4ProfileMode = MapConstant.colourMap[params.value.profile_mode] || '';
+      let policyMode,
+        profileMode = '';
+      if (
+        params.value &&
+        (params.value.policy_mode || params.value.profile_mode)
+      ) {
+        policyMode = params.value.policy_mode
+          ? this.utils.getI18Name(`${params.value.policy_mode}_S`)
+          : '';
+        profileMode = params.value.profile_mode
+          ? this.utils.getI18Name(`${params.value.profile_mode}_S`)
+          : '';
+        let labelCode4PolicyMode =
+          MapConstant.colourMap[params.value.policy_mode] || '';
+        let labelCode4ProfileMode =
+          MapConstant.colourMap[params.value.profile_mode] || '';
         if (!(labelCode4PolicyMode || labelCode4ProfileMode)) return '';
         else
-          return `${policyMode ? `<span class="type-label type-label-s ${labelCode4PolicyMode}">${policyMode}</span>` : ''}
-            ${profileMode ? `<span class="type-label type-label-s ${labelCode4ProfileMode}">${profileMode}</span>` : ''}
+          return `${
+            policyMode
+              ? `<span class="type-label type-label-s ${labelCode4PolicyMode}">${policyMode}</span>`
+              : ''
+          }
+            ${
+              profileMode
+                ? `<span class="type-label type-label-s ${labelCode4ProfileMode}">${profileMode}</span>`
+                : ''
+            }
             ${
               params.value.baseline_profile?.toLowerCase() === 'zero-drift'
                 ? '<em class="eos-icons icon-18">anchor</em>'
@@ -119,7 +137,9 @@ export class GroupsService {
         width: 100,
       },
       {
-        headerName: this.translate.instant('group.gridHeader.POLICY_PROFILE_MODE'),
+        headerName: this.translate.instant(
+          'group.gridHeader.POLICY_PROFILE_MODE'
+        ),
         valueGetter: params => {
           return {
             policy_mode: params.data.policy_mode || '',
@@ -129,8 +149,9 @@ export class GroupsService {
         },
         cellRenderer: policyModeRendererFunc,
         comparator: (value1, value2, node1, node2) => {
-          return `${value1.policy_mode.toLowerCase()}-${value1.profile_mode.toLowerCase()}-${value1.baseline_profile.toLowerCase()}`
-                  .localeCompare(`${value2.policy_mode.toLowerCase()}-${value1.profile_mode.toLowerCase()}-${value1.baseline_profile.toLowerCase()}`);
+          return `${value1.policy_mode.toLowerCase()}-${value1.profile_mode.toLowerCase()}-${value1.baseline_profile.toLowerCase()}`.localeCompare(
+            `${value2.policy_mode.toLowerCase()}-${value1.profile_mode.toLowerCase()}-${value1.baseline_profile.toLowerCase()}`
+          );
         },
         hide: isFed,
         width: 120,
@@ -236,7 +257,9 @@ export class GroupsService {
           field: 'domain',
         },
         {
-          headerName: this.translate.instant('group.gridHeader.POLICY_PROFILE_MODE'),
+          headerName: this.translate.instant(
+            'group.gridHeader.POLICY_PROFILE_MODE'
+          ),
           valueGetter: params => {
             return {
               policy_mode: params.data.policy_mode || '',
@@ -246,8 +269,9 @@ export class GroupsService {
           },
           cellRenderer: policyModeRendererFunc,
           comparator: (value1, value2, node1, node2) => {
-            return `${value1.policy_mode.toLowerCase()}-${value1.profile_mode.toLowerCase()}-${value1.baseline_profile.toLowerCase()}`
-                    .localeCompare(`${value2.policy_mode.toLowerCase()}-${value1.profile_mode.toLowerCase()}-${value1.baseline_profile.toLowerCase()}`);
+            return `${value1.policy_mode.toLowerCase()}-${value1.profile_mode.toLowerCase()}-${value1.baseline_profile.toLowerCase()}`.localeCompare(
+              `${value2.policy_mode.toLowerCase()}-${value1.profile_mode.toLowerCase()}-${value1.baseline_profile.toLowerCase()}`
+            );
           },
           width: 130,
           minWidth: 130,
@@ -779,7 +803,11 @@ export class GroupsService {
     return this.policyHttpService.patchService(data, config);
   };
 
-  updateMode4All = (mode: string, profileMode: string, baselineProfile: string) => {
+  updateMode4All = (
+    mode: string,
+    profileMode: string,
+    baselineProfile: string
+  ) => {
     let payload = {};
     if (baselineProfile !== 'no-change') {
       payload = Object.assign({ baseline_profile: baselineProfile }, payload);

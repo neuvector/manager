@@ -1,9 +1,12 @@
 <span
   *ngFor="let ruleId of params.data.policy_rules"
   class="type-label mr-1"
-  style="min-width: 0; padding-left: 3px; padding-right: 3px;"
-  [ngClass]="{'fed-rule': ruleId >= 100000, 'learn-rule': ruleId >= 10000, 'customer-rule': ruleId < 10000}"
-  (click)="openNetworkRuleDetailModal(ruleId)"
->
+  style="min-width: 0; padding-left: 3px; padding-right: 3px"
+  [ngClass]="{
+    'fed-rule': ruleId >= 100000,
+    'learn-rule': ruleId >= 10000,
+    'customer-rule': ruleId < 10000
+  }"
+  (click)="openNetworkRuleDetailModal(ruleId)">
   {{ ruleId }}
 </span>

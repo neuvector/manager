@@ -18,16 +18,23 @@ export interface Token {
 
 export function isToken(v: any): v is Token {
   return (
-    ((typeof v['token']) === 'string') &&
-    ((typeof v['fullname']) === 'string') &&
-    ((typeof v['server']) === 'string') &&
-    ((typeof v['username']) === 'string') &&
-    (!v['email'] || ((typeof v['email']) === 'string')) &&
-    ((typeof v['role']) === 'string') &&
-    ((typeof v['locale']) === 'string') &&
-    (!v['timeout'] || ((typeof v['timeout']) === 'number')) &&
-    ((typeof v['default_password']) === 'boolean') &&
-    ((typeof v['modify_password']) === 'boolean') &&
-    (!v['role_domains'] || ((typeof v['role_domains']) == 'object' && Object.keys(v['role_domains']).every(key => ((typeof key) === 'string') && (v['role_domains'][key] && isArray(v['role_domains'][key])))))
+    typeof v['token'] === 'string' &&
+    typeof v['fullname'] === 'string' &&
+    typeof v['server'] === 'string' &&
+    typeof v['username'] === 'string' &&
+    (!v['email'] || typeof v['email'] === 'string') &&
+    typeof v['role'] === 'string' &&
+    typeof v['locale'] === 'string' &&
+    (!v['timeout'] || typeof v['timeout'] === 'number') &&
+    typeof v['default_password'] === 'boolean' &&
+    typeof v['modify_password'] === 'boolean' &&
+    (!v['role_domains'] ||
+      (typeof v['role_domains'] == 'object' &&
+        Object.keys(v['role_domains']).every(
+          key =>
+            typeof key === 'string' &&
+            v['role_domains'][key] &&
+            isArray(v['role_domains'][key])
+        )))
   );
 }

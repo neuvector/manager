@@ -9,7 +9,9 @@ export interface DlpRuleDetail {
 
 export function isDlpRuleDetail(v: any): v is DlpRuleDetail {
   return (
-    (Array.isArray(v['sensors']) && v['sensors'].every(elmt => (typeof elmt) === 'string')) &&
-    (Array.isArray(v['rules']) && v['rules'].every(elmt => elmt && isDlpRule(elmt)))
+    Array.isArray(v['sensors']) &&
+    v['sensors'].every(elmt => typeof elmt === 'string') &&
+    Array.isArray(v['rules']) &&
+    v['rules'].every(elmt => elmt && isDlpRule(elmt))
   );
 }

@@ -5,58 +5,91 @@
   class="d-flex align-items-center justify-content-between"
   style="cursor: move; margin-top: -24px; padding-top: 10px">
   <h1 mat-dialog-title class="dialog-title">
-    {{ (data.ruleType === 'network' ? 'securityEvent.NETWORK_RULE' : 'securityEvent.RESPONSE_RULE') | translate }} (ID: {{data.rule.id}})
+    {{
+      (data.ruleType === 'network'
+        ? 'securityEvent.NETWORK_RULE'
+        : 'securityEvent.RESPONSE_RULE'
+      ) | translate
+    }}
+    (ID: {{ data.rule.id }})
   </h1>
   <button
     aria-label="Close icon button"
     class="d-flex align-items-center justify-content-center"
     mat-icon-button>
-    <i (click)="dialogRef.close(); ruleDetailModalService.isDialogOpen = false" class="eos-icons">close</i>
+    <i
+      (click)="dialogRef.close(); ruleDetailModalService.isDialogOpen = false"
+      class="eos-icons"
+      >close</i
+    >
   </button>
 </div>
 <hr class="fancy mt-1 mb-4 mx-0" />
 <div mat-dialog-content>
-  <div *ngIf="data.ruleType === 'network' then networkRule; else responseRule"></div>
+  <div
+    *ngIf="
+      data.ruleType === 'network';
+      then networkRule;
+      else responseRule
+    "></div>
 </div>
 
 <ng-template #networkRule>
-  <div class="text-muted" style="font-size: 14px;">
+  <div class="text-muted" style="font-size: 14px">
     <div class="row mx-0 mb-2">
       <div class="col-sm-6 text-">
-        <span class="mr-2 text-bold">{{'policy.addPolicy.FROM' | translate}}:</span>
+        <span class="mr-2 text-bold"
+          >{{ 'policy.addPolicy.FROM' | translate }}:</span
+        >
         <span>{{ data.rule.from }}</span>
       </div>
       <div class="col-sm-6">
-        <span class="mr-2 text-bold">{{'policy.addPolicy.TO' | translate}}:</span>
+        <span class="mr-2 text-bold"
+          >{{ 'policy.addPolicy.TO' | translate }}:</span
+        >
         <span>{{ data.rule.to }}</span>
       </div>
     </div>
     <div class="row mx-0 mb-2">
       <div class="col-sm-6">
-        <span class="mr-2 text-bold">{{'policy.addPolicy.APP' | translate}}:</span>
+        <span class="mr-2 text-bold"
+          >{{ 'policy.addPolicy.APP' | translate }}:</span
+        >
         <span>{{ data.rule.applications.join(', ') }}</span>
       </div>
       <div class="col-sm-6">
-        <span class="mr-2 text-bold">{{'policy.addPolicy.PORT' | translate}}:</span>
+        <span class="mr-2 text-bold"
+          >{{ 'policy.addPolicy.PORT' | translate }}:</span
+        >
         <span>{{ data.rule.ports }}</span>
       </div>
     </div>
     <div class="row mx-0 mb-2">
       <div class="col-sm-6">
-        <span class="mr-2 text-bold">{{'controllers.detail.CREATED_AT' | translate}}:</span>
-        <span>{{ data.rule.created_timestamp * 1000 | date:'MMM dd, y HH:mm:ss' }}</span>
+        <span class="mr-2 text-bold"
+          >{{ 'controllers.detail.CREATED_AT' | translate }}:</span
+        >
+        <span>{{
+          data.rule.created_timestamp * 1000 | date : 'MMM dd, y HH:mm:ss'
+        }}</span>
       </div>
       <div class="col-sm-4">
-        <span class="mr-2 text-bold">{{'policy.gridHeader.UPDATE_AT' | translate}}:</span>
-        <span>{{ data.rule.last_modified_timestamp * 1000 | date:'MMM dd, y HH:mm:ss' }}</span>
+        <span class="mr-2 text-bold"
+          >{{ 'policy.gridHeader.UPDATE_AT' | translate }}:</span
+        >
+        <span>{{
+          data.rule.last_modified_timestamp * 1000 | date : 'MMM dd, y HH:mm:ss'
+        }}</span>
       </div>
       <div class="col-sm-2">
-        <span class="mr-2 text-bold">{{'policy.ACTIONS' | translate}}:</span>
+        <span class="mr-2 text-bold">{{ 'policy.ACTIONS' | translate }}:</span>
         <span
           class="type-label"
-          [ngClass]="{'deny': data.rule.action === 'deny', 'success': data.rule.action === 'allow'}"
-          style="font-size: 14px;"
-        >
+          [ngClass]="{
+            deny: data.rule.action === 'deny',
+            success: data.rule.action === 'allow'
+          }"
+          style="font-size: 14px">
           {{ data.rule.action }}
         </span>
       </div>
@@ -65,27 +98,38 @@
 </ng-template>
 
 <ng-template #responseRule>
-  <div class="text-muted" style="font-size: 14px;">
+  <div class="text-muted" style="font-size: 14px">
     <div class="row mx-0 mb-2">
       <div class="col-sm-3">
-        <span class="mr-2 text-bold">{{'responsePolicy.gridHeader.GROUP' | translate}}:</span>
-        <span>{{data.rule.group}}</span>
+        <span class="mr-2 text-bold"
+          >{{ 'responsePolicy.gridHeader.GROUP' | translate }}:</span
+        >
+        <span>{{ data.rule.group }}</span>
       </div>
       <div class="col-sm-9">
-        <span class="mr-2 text-bold">{{'responsePolicy.gridHeader.TYPE' | translate}}:</span>
-        <span>{{'responsePolicy.categories.' + data.rule.event.toUpperCase() | translate}}</span>
+        <span class="mr-2 text-bold"
+          >{{ 'responsePolicy.gridHeader.TYPE' | translate }}:</span
+        >
+        <span>{{
+          'responsePolicy.categories.' + data.rule.event.toUpperCase()
+            | translate
+        }}</span>
       </div>
     </div>
     <div class="row mx-0 mb-2">
       <div class="col-sm-12">
-        <span class="mr-2 text-bold">{{'responsePolicy.gridHeader.CRITERIA' | translate}}:</span>
-        <span>{{data.rule.conditions}}</span>
+        <span class="mr-2 text-bold"
+          >{{ 'responsePolicy.gridHeader.CRITERIA' | translate }}:</span
+        >
+        <span>{{ data.rule.conditions }}</span>
       </div>
     </div>
     <div class="row mx-0 mb-2">
       <div class="col-sm-12">
-        <span class="mr-2 text-bold">{{'responsePolicy.gridHeader.ACTION' | translate}}:</span>
-        <span>{{data.rule.actions}}</span>
+        <span class="mr-2 text-bold"
+          >{{ 'responsePolicy.gridHeader.ACTION' | translate }}:</span
+        >
+        <span>{{ data.rule.actions }}</span>
       </div>
     </div>
   </div>

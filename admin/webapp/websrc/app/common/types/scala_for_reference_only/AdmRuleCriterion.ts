@@ -12,8 +12,8 @@ export interface AdmRuleCriterion {
 export function isAdmRuleCriterion(v: any): v is AdmRuleCriterion {
   return (
     (!v['sub_criteria'] || (v['sub_criteria'] && isArray(v['sub_criteria']))) &&
-    ((typeof v['name']) === 'string') &&
-    (!v['op'] || ((typeof v['op']) === 'string')) &&
-    (!v['value'] || ((typeof v['value']) === 'string'))
+    typeof v['name'] === 'string' &&
+    (!v['op'] || typeof v['op'] === 'string') &&
+    (!v['value'] || typeof v['value'] === 'string')
   );
 }

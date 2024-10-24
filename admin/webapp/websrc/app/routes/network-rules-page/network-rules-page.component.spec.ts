@@ -8,9 +8,8 @@ describe('NetworkRulesPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NetworkRulesPageComponent ]
-    })
-    .compileComponents();
+      declarations: [NetworkRulesPageComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -8,13 +8,14 @@ describe('ExposedServicepodGridServicepodCellComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ExposedServicepodGridServicepodCellComponent ]
-    })
-    .compileComponents();
+      declarations: [ExposedServicepodGridServicepodCellComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ExposedServicepodGridServicepodCellComponent);
+    fixture = TestBed.createComponent(
+      ExposedServicepodGridServicepodCellComponent
+    );
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

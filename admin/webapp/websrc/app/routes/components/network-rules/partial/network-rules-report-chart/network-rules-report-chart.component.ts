@@ -5,26 +5,23 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-network-rules-report-chart',
   templateUrl: './network-rules-report-chart.component.html',
-  styleUrls: ['./network-rules-report-chart.component.scss']
+  styleUrls: ['./network-rules-report-chart.component.scss'],
 })
-
 export class NetworkRulesReportChartComponent implements OnInit {
-  @Input() statisticData
+  @Input() statisticData;
   pieChartData!: ChartConfiguration<'pie', number[], string[]>;
 
-  constructor(
-    private translate: TranslateService
-  ) { }
+  constructor(private translate: TranslateService) {}
 
   ngOnInit(): void {
-    const TYPE_PIE_COLORS = ["#45505c", "#ff8a65", "#e6e600", "#d2aff1"];
+    const TYPE_PIE_COLORS = ['#45505c', '#ff8a65', '#e6e600', '#d2aff1'];
     const TYPE_PIE_LABELS = [
-      this.translate.instant("policy.head.FED_RULE"),
-      this.translate.instant("policy.head.GROUND_RULE"),
-      this.translate.instant("policy.head.CUSTOMER_RULE"),
-      this.translate.instant("policy.head.LEARN_RULE")
+      this.translate.instant('policy.head.FED_RULE'),
+      this.translate.instant('policy.head.GROUND_RULE'),
+      this.translate.instant('policy.head.CUSTOMER_RULE'),
+      this.translate.instant('policy.head.LEARN_RULE'),
     ];
-    console.log("this.statisticData.values()", this.statisticData.values())
+    console.log('this.statisticData.values()', this.statisticData.values());
     this.pieChartData = {
       options: {
         animation: false,
@@ -47,12 +44,11 @@ export class NetworkRulesReportChartComponent implements OnInit {
             hoverBorderColor: TYPE_PIE_COLORS,
             hoverBackgroundColor: TYPE_PIE_COLORS,
             backgroundColor: TYPE_PIE_COLORS,
-            data: Array.from(this.statisticData.values())
+            data: Array.from(this.statisticData.values()),
           },
         ],
       },
       type: 'pie',
     };
   }
-
 }

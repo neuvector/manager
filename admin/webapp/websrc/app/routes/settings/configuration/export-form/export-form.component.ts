@@ -80,9 +80,7 @@ export class ExportFormComponent implements OnInit {
               ? `NV${this.utils.parseDatetimeStr(new Date())}.conf.gz`
               : `NV${this.utils.parseDatetimeStr(new Date())}_policy.conf.gz`;
           saveAs(exportUrl, fileName);
-          this.notificationService.open(
-            this.tr.instant('setting.EXPORT_OK')
-          );
+          this.notificationService.open(this.tr.instant('setting.EXPORT_OK'));
         },
         error => {
           console.warn(error);

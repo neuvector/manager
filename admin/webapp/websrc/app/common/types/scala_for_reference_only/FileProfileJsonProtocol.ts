@@ -14,8 +14,14 @@ export class FileProfileJsonProtocol {
   }
 }
 
-export const FileProfileJsonProtocolInhabitant: FileProfileJsonProtocol = FileProfileJsonProtocol.getInstance();
+export const FileProfileJsonProtocolInhabitant: FileProfileJsonProtocol =
+  FileProfileJsonProtocol.getInstance();
 
-export function isFileProfileJsonProtocol(v: any): v is FileProfileJsonProtocol {
-  return (v instanceof FileProfileJsonProtocol) && (v === FileProfileJsonProtocolInhabitant);
+export function isFileProfileJsonProtocol(
+  v: any
+): v is FileProfileJsonProtocol {
+  return (
+    v instanceof FileProfileJsonProtocol &&
+    v === FileProfileJsonProtocolInhabitant
+  );
 }

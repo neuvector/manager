@@ -1,4 +1,4 @@
-import { SystemRequest } from "./systemRequest";
+import { SystemRequest } from './systemRequest';
 
 export interface SystemRequestData {
   request: SystemRequest;

@@ -13,7 +13,7 @@ import { updateGridData } from '@common/utils/common.utils';
 @Component({
   selector: 'app-operation-cell',
   templateUrl: './operation-cell.component.html',
-  styleUrls: ['./operation-cell.component.scss']
+  styleUrls: ['./operation-cell.component.scss'],
 })
 export class OperationCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
@@ -21,8 +21,8 @@ export class OperationCellComponent implements ICellRendererAngularComp {
     private translate: TranslateService,
     private dialog: MatDialog,
     private notificationService: NotificationService,
-    private fileAccessRulesService: FileAccessRulesService,
-  ) { }
+    private fileAccessRulesService: FileAccessRulesService
+  ) {}
 
   agInit(params: ICellRendererParams): void {
     this.params = params;
@@ -63,7 +63,8 @@ export class OperationCellComponent implements ICellRendererAngularComp {
           updateGridData(
             this.params.context.componentParent.predefinedFileAccessRules,
             [predefinedRule],
-            this.params.context.componentParent.gridOptions4PredefinedFileAccessRules.api!,
+            this.params.context.componentParent
+              .gridOptions4PredefinedFileAccessRules.api!,
             'filter',
             'delete'
           );
@@ -72,7 +73,7 @@ export class OperationCellComponent implements ICellRendererAngularComp {
           dialogRef.componentInstance.loading = false;
         },
         error => {
-          console.log(error)
+          console.log(error);
           this.notificationService.openError(
             error.error,
             this.translate.instant('group.file.REMOVE_NG')
@@ -81,5 +82,4 @@ export class OperationCellComponent implements ICellRendererAngularComp {
         }
       );
   }
-
 }

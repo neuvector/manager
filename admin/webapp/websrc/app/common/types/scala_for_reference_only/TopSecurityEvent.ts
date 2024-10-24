@@ -9,7 +9,9 @@ export interface TopSecurityEvent {
 
 export function isTopSecurityEvent(v: any): v is TopSecurityEvent {
   return (
-    (v['source'] && isArray(v['source'])) &&
-    (v['destination'] && isArray(v['destination']))
+    v['source'] &&
+    isArray(v['source']) &&
+    v['destination'] &&
+    isArray(v['destination'])
   );
 }

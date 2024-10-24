@@ -1,20 +1,29 @@
 <ng-container [ngSwitch]="params.node.data.status">
   <ng-container *ngIf="params.node.data.error_message; else EmptyErrorMessage">
-    <div class="row" style="width: 100%;">
+    <div class="row" style="width: 100%">
       <div class="col-7">
-        <span *ngSwitchCase="'idle'" class="badge text-white" style="background-color: #49596e;">
+        <span
+          *ngSwitchCase="'idle'"
+          class="badge text-white"
+          style="background-color: #49596e">
           {{ params.node.data.status | titlecase }}
         </span>
       </div>
       <div class="col-5">
-        <button mat-button class="error-message-info" [matMenuTriggerFor]="errorMessageInfoMenu">
+        <button
+          mat-button
+          class="error-message-info"
+          [matMenuTriggerFor]="errorMessageInfoMenu">
           <em class="eos-icons icon-18 text-muted">info</em>
         </button>
       </div>
     </div>
   </ng-container>
   <ng-template #EmptyErrorMessage>
-    <span *ngSwitchCase="'idle'" class="badge text-white" style="background-color: #49596e;">
+    <span
+      *ngSwitchCase="'idle'"
+      class="badge text-white"
+      style="background-color: #49596e">
       {{ params.node.data.status | titlecase }}
     </span>
   </ng-template>
@@ -23,7 +32,6 @@
   </span>
   <span *ngSwitchDefault>{{ params.node.data.status | titlecase }}</span>
 </ng-container>
-
 
 <mat-menu #errorMessageInfoMenu="matMenu" class="error-message">
   <div class="error-message-content" (click)="onMenuClick($event)">

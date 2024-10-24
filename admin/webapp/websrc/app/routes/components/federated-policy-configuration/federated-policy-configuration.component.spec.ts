@@ -8,9 +8,8 @@ describe('FederatedPolicyConfigurationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FederatedPolicyConfigurationComponent ]
-    })
-    .compileComponents();
+      declarations: [FederatedPolicyConfigurationComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

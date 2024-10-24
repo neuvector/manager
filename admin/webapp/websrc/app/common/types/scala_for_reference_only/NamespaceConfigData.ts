@@ -7,7 +7,5 @@ export interface NamespaceConfigData {
 }
 
 export function isNamespaceConfigData(v: any): v is NamespaceConfigData {
-  return (
-    (v['config'] && isNamespaceConfig(v['config']))
-  );
+  return v['config'] && isNamespaceConfig(v['config']);
 }

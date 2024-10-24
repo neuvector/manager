@@ -47,7 +47,7 @@ export class ActiveSessionComponent implements AfterViewInit, OnInit {
   }
 
   public autoRefresh: boolean = false;
-  @Output() onAutoRefresh = new EventEmitter<boolean>();
+  @Output() doAutoRefresh = new EventEmitter<boolean>();
 
   private _conversations;
 
@@ -106,12 +106,12 @@ export class ActiveSessionComponent implements AfterViewInit, OnInit {
   }
 
   stopRefreshSession = () => {
-    this.onAutoRefresh.emit(false);
+    this.doAutoRefresh.emit(false);
     this.autoRefresh = false;
   };
 
-  onAutoRefreshToggle = value => {
-    this.onAutoRefresh.emit(value);
+  doAutoRefreshToggle = value => {
+    this.doAutoRefresh.emit(value);
     this.autoRefresh = value;
   };
 
@@ -138,7 +138,7 @@ export class ActiveSessionComponent implements AfterViewInit, OnInit {
   }
 
   mouseUp(event) {
-    if(event.target?.id == "activeSessions") {
+    if (event.target?.id == 'activeSessions') {
       this._entriesGridHeight = event.target.clientHeight - 120;
       this.gridApi.resetRowHeights();
       this.gridApi.sizeColumnsToFit();

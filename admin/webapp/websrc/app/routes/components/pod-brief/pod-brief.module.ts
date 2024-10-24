@@ -8,14 +8,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NvCommonModule } from '@common/nvCommon.module';
 
-
-
-
 @NgModule({
-  declarations: [
-    PodBriefComponent,
-    PodBriefDialogComponent
-  ],
+  declarations: [PodBriefComponent, PodBriefDialogComponent],
   imports: [
     CommonModule,
     NvCommonModule,
@@ -26,4 +20,4 @@ import { NvCommonModule } from '@common/nvCommon.module';
   ],
   exports: [PodBriefComponent, PodBriefDialogComponent],
 })
-export class PodBriefModule { }
+export class PodBriefModule {}

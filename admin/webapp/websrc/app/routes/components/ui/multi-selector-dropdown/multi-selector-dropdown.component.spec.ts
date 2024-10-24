@@ -8,9 +8,8 @@ describe('MultiSelectorDropdownComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MultiSelectorDropdownComponent ]
-    })
-    .compileComponents();
+      declarations: [MultiSelectorDropdownComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

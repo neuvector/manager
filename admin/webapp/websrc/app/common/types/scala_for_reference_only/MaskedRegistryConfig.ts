@@ -11,9 +11,9 @@ export interface MaskedRegistryConfig {
 
 export function isMaskedRegistryConfig(v: any): v is MaskedRegistryConfig {
   return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['registry_type']) === 'string') &&
+    typeof v['name'] === 'string' &&
+    typeof v['registry_type'] === 'string' &&
     (!v['filters'] || (v['filters'] && isArray(v['filters']))) &&
-    ((typeof v['auth_with_token']) === 'boolean')
+    typeof v['auth_with_token'] === 'boolean'
   );
 }

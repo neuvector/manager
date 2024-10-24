@@ -4,19 +4,17 @@ import { FederatedPolicyConfigurationComponent } from './federated-policy-config
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
 import { LoadingTemplateModule } from '@components/ui/loading-template/loading-template.module';
 import { FederatedConfigFormComponent } from './federated-config-form/federated-config-form.component';
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {TranslateModule} from "@ngx-translate/core";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 import { NeuVectorFormlyModule } from '@common/neuvector-formly/neuvector-formly.module';
-import {FederatedConfigurationService} from "@services/federated-configuration.service";
+import { FederatedConfigurationService } from '@services/federated-configuration.service';
 
 @NgModule({
   declarations: [
     FederatedPolicyConfigurationComponent,
-    FederatedConfigFormComponent
+    FederatedConfigFormComponent,
   ],
-  exports: [
-    FederatedPolicyConfigurationComponent
-  ],
+  exports: [FederatedPolicyConfigurationComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -24,8 +22,8 @@ import {FederatedConfigurationService} from "@services/federated-configuration.s
     FormsModule,
     LoadingButtonModule,
     LoadingTemplateModule,
-    NeuVectorFormlyModule
+    NeuVectorFormlyModule,
   ],
-  providers: [FederatedConfigurationService]
+  providers: [FederatedConfigurationService],
 })
-export class FederatedPolicyConfigurationModule { }
+export class FederatedPolicyConfigurationModule {}

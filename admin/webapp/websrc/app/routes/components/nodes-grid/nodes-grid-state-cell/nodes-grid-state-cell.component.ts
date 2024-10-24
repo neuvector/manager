@@ -10,9 +10,7 @@ import { ICellRendererParams } from 'ag-grid-community';
   styleUrls: ['./nodes-grid-state-cell.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NodesGridStateCellComponent
-  implements ICellRendererAngularComp
-{
+export class NodesGridStateCellComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;
   state!: string;
   displayState!: string;

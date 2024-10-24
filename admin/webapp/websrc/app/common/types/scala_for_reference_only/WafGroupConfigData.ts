@@ -7,7 +7,5 @@ export interface WafGroupConfigData {
 }
 
 export function isWafGroupConfigData(v: any): v is WafGroupConfigData {
-  return (
-    (v['config'] && isWafGroupConfig(v['config']))
-  );
+  return v['config'] && isWafGroupConfig(v['config']);
 }

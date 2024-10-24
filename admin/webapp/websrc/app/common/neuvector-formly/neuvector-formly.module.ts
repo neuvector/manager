@@ -62,7 +62,7 @@ export enum FormlyValidators {
   WebhookUserName = 'invalidWebhookUserName',
   PortRange = 'invalidPortRange',
   EmailFormat = 'invalidEmail',
-  Certificate = 'invalidCertificate'
+  Certificate = 'invalidCertificate',
 }
 
 export enum FormlyComponents {
@@ -84,14 +84,14 @@ export enum FormlyComponents {
   SECTION_WRAPPER = 'section',
   HINT_WRAPPER = 'hint_wrapper',
   PANEL_WRAPPER = 'panel_wrapper',
-  CARD = 'card'
+  CARD = 'card',
 }
 
 export enum CardSeverity {
   INFO = 'info',
   SUCCESS = 'success',
   WARNING = 'Warning',
-  ERROR = 'error'
+  ERROR = 'error',
 }
 
 @NgModule({
@@ -168,7 +168,10 @@ export enum CardSeverity {
         },
         { name: FormlyValidators.PortRange, validation: portRangeValidator },
         { name: FormlyValidators.EmailFormat, validation: emailValidator },
-        { name: FormlyValidators.Certificate, validation: certificateValidator },
+        {
+          name: FormlyValidators.Certificate,
+          validation: certificateValidator,
+        },
       ],
       types: [
         {

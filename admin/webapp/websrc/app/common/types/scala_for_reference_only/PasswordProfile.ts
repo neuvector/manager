@@ -18,18 +18,26 @@ export interface PasswordProfile {
 
 export function isPasswordProfile(v: any): v is PasswordProfile {
   return (
-    ((typeof v['name']) === 'string') &&
-    (!v['min_len'] || ((typeof v['min_len']) === 'number')) &&
-    (!v['min_uppercase_count'] || ((typeof v['min_uppercase_count']) === 'number')) &&
-    (!v['min_lowercase_count'] || ((typeof v['min_lowercase_count']) === 'number')) &&
-    (!v['min_digit_count'] || ((typeof v['min_digit_count']) === 'number')) &&
-    (!v['min_special_count'] || ((typeof v['min_special_count']) === 'number')) &&
-    (!v['block_after_failed_login_count'] || ((typeof v['block_after_failed_login_count']) === 'number')) &&
-    (!v['password_expire_after_days'] || ((typeof v['password_expire_after_days']) === 'number')) &&
-    (!v['password_keep_history_count'] || ((typeof v['password_keep_history_count']) === 'number')) &&
-    (!v['block_minutes'] || ((typeof v['block_minutes']) === 'number')) &&
-    (!v['enable_block_after_failed_login'] || ((typeof v['enable_block_after_failed_login']) === 'boolean')) &&
-    (!v['enable_password_expiration'] || ((typeof v['enable_password_expiration']) === 'boolean')) &&
-    (!v['enable_password_history'] || ((typeof v['enable_password_history']) === 'boolean'))
+    typeof v['name'] === 'string' &&
+    (!v['min_len'] || typeof v['min_len'] === 'number') &&
+    (!v['min_uppercase_count'] ||
+      typeof v['min_uppercase_count'] === 'number') &&
+    (!v['min_lowercase_count'] ||
+      typeof v['min_lowercase_count'] === 'number') &&
+    (!v['min_digit_count'] || typeof v['min_digit_count'] === 'number') &&
+    (!v['min_special_count'] || typeof v['min_special_count'] === 'number') &&
+    (!v['block_after_failed_login_count'] ||
+      typeof v['block_after_failed_login_count'] === 'number') &&
+    (!v['password_expire_after_days'] ||
+      typeof v['password_expire_after_days'] === 'number') &&
+    (!v['password_keep_history_count'] ||
+      typeof v['password_keep_history_count'] === 'number') &&
+    (!v['block_minutes'] || typeof v['block_minutes'] === 'number') &&
+    (!v['enable_block_after_failed_login'] ||
+      typeof v['enable_block_after_failed_login'] === 'boolean') &&
+    (!v['enable_password_expiration'] ||
+      typeof v['enable_password_expiration'] === 'boolean') &&
+    (!v['enable_password_history'] ||
+      typeof v['enable_password_history'] === 'boolean')
   );
 }

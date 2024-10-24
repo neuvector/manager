@@ -1,4 +1,4 @@
-import { AwsFuncPermission } from "./awsFuncPermission";
+import { AwsFuncPermission } from './awsFuncPermission';
 
 export interface ScanAwsFuncReportAllowedResources {
   key?: string;

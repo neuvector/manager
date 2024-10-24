@@ -1,18 +1,27 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TokenModalComponent } from "./token-modal.component";
-import {TranslateLoader, TranslateModule, TranslateService} from "@ngx-translate/core";
-import {MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {RouterTestingModule} from "@angular/router/testing";
-import {HttpClient} from "@angular/common/http";
+import { TokenModalComponent } from './token-modal.component';
+import {
+  TranslateLoader,
+  TranslateModule,
+  TranslateService,
+} from '@ngx-translate/core';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClient } from '@angular/common/http';
 
-describe("TokenModalComponent", () => {
+describe('TokenModalComponent', () => {
   let component: TokenModalComponent;
   let fixture: ComponentFixture<TokenModalComponent>;
   const mockDialogRef = {
-    close: jasmine.createSpy('close')
+    close: jasmine.createSpy('close'),
   };
 
   beforeEach(async(() => {
@@ -22,19 +31,19 @@ describe("TokenModalComponent", () => {
         MatDialog,
         {
           provide: MatDialogRef,
-          useValue: mockDialogRef
+          useValue: mockDialogRef,
         },
         {
           provide: MAT_DIALOG_DATA,
-          useValue: {}
-        }
+          useValue: {},
+        },
       ],
       imports: [
         BrowserAnimationsModule,
         HttpClientTestingModule,
         MatDialogModule,
         RouterTestingModule.withRoutes([]),
-      ]
+      ],
     }).compileComponents();
   }));
 
@@ -44,7 +53,7 @@ describe("TokenModalComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

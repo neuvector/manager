@@ -17,5 +17,5 @@ export class Utils {
 export const UtilsInhabitant: Utils = Utils.getInstance();
 
 export function isUtils(v: any): v is Utils {
-  return (v instanceof Utils) && (v === UtilsInhabitant);
+  return v instanceof Utils && v === UtilsInhabitant;
 }

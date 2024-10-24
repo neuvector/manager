@@ -24,7 +24,10 @@
   </button>
 </div>
 <button
-  *ngIf="!isWriteRegistryAuthorized || (params.data.cfg_type === CFG_TYPE.FED && (isRemote || !isFedAdmin))"
+  *ngIf="
+    !isWriteRegistryAuthorized ||
+    (params.data.cfg_type === CFG_TYPE.FED && (isRemote || !isFedAdmin))
+  "
   (click)="view()"
   aria-label="View button"
   matTooltip="{{ 'registry.TIP.VIEW' | translate }}"

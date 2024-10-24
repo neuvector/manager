@@ -8,9 +8,8 @@ describe('ScoreImprovementModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ScoreImprovementModalComponent ]
-    })
-    .compileComponents();
+      declarations: [ScoreImprovementModalComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

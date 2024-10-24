@@ -7,7 +7,5 @@ export interface FileMonitorConfigData {
 }
 
 export function isFileMonitorConfigData(v: any): v is FileMonitorConfigData {
-  return (
-    (v['config'] && isFileMonitorConfig(v['config']))
-  );
+  return v['config'] && isFileMonitorConfig(v['config']);
 }

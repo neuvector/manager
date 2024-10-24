@@ -12,12 +12,12 @@ export interface Pod {
 
 export function isPod(v: any): v is Pod {
   return (
-    ((typeof v['id']) === 'string') &&
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['display_name']) === 'string') &&
-    ((typeof v['domain']) === 'string') &&
-    (!v['policy_mode'] || ((typeof v['policy_mode']) === 'string')) &&
-    ((typeof v['image']) === 'string') &&
-    ((typeof v['state']) === 'string')
+    typeof v['id'] === 'string' &&
+    typeof v['name'] === 'string' &&
+    typeof v['display_name'] === 'string' &&
+    typeof v['domain'] === 'string' &&
+    (!v['policy_mode'] || typeof v['policy_mode'] === 'string') &&
+    typeof v['image'] === 'string' &&
+    typeof v['state'] === 'string'
   );
 }

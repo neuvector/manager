@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 
-
 @Injectable()
 export class ThemesService {
   styleTag: any;
@@ -17,7 +16,7 @@ export class ThemesService {
     this.styleTag.id = 'appthemes';
     head.appendChild(this.styleTag);
   }
-  
+
   injectStylesheet(css) {
     this.styleTag.innerHTML = css.default;
   }

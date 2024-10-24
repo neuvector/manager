@@ -1,15 +1,14 @@
 package com.neu.model
 
-import spray.json.{ DefaultJsonProtocol, _ }
-import scala.collection.mutable.Map
+import spray.json.*
 
 object ComplianceNISTJsonProtocol extends DefaultJsonProtocol {
-  implicit val complianceNISTFormat: RootJsonFormat[ComplianceNIST] = jsonFormat4(ComplianceNIST)
-  implicit val complianceNISTMapFormat: RootJsonFormat[ComplianceNISTMap] = jsonFormat1(
-    ComplianceNISTMap
+  given complianceNISTFormat: RootJsonFormat[ComplianceNIST]       = jsonFormat4(ComplianceNIST.apply)
+  given complianceNISTMapFormat: RootJsonFormat[ComplianceNISTMap] = jsonFormat1(
+    ComplianceNISTMap.apply
   )
 
-  def complianceNISTToJson(complianceNIST: ComplianceNIST): String =
+  def complianceNISTToJson(complianceNIST: ComplianceNIST): String          =
     complianceNIST.toJson.compactPrint
   def complianceNISTMapToJson(complianceNISTMap: ComplianceNISTMap): String =
     complianceNISTMap.toJson.compactPrint

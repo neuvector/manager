@@ -20,7 +20,7 @@ export class ScoreInstructionComponent {
 
   isPoorScore = (): boolean => {
     return (
-      this.scoreInfo.score.securityRiskScore > GlobalConstant.SCORE_LEVEL.POOR
+      this.scoreInfo.score.securityRiskScore > GlobalConstant.SCORE_LEVEL.FAIR
     );
   };
 

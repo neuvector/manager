@@ -1,7 +1,7 @@
 package com.neu.model
 
 import com.typesafe.scalalogging.LazyLogging
-import spray.json.{ DefaultJsonProtocol, _ }
+import spray.json.*
 
 case class ClusterServer(
   disabled: Option[Boolean],
@@ -13,7 +13,7 @@ case class ClusterServer(
   status: Option[String],
   username: Option[String],
   rest_version: Option[String],
-  clusterType: String = "", //"" for normal cluster, "master", "joint"
+  clusterType: String = "", // "" for normal cluster, "master", "joint"
   proxy_required: Option[Boolean]
 )
 
@@ -56,7 +56,7 @@ case class ClusterConfig(config: ClusterServer)
 
 case class FedMembershipData(
   fed_role: String,                                  // "", "master" or "joint"
-  local_rest_info: Option[ClusterServerInfo] = None, //only meaningful while fed_role is ""
+  local_rest_info: Option[ClusterServerInfo] = None, // only meaningful while fed_role is ""
   master_cluster: Option[FedMasterCluster] = None,
   joint_clusters: Option[Seq[FedJointCluster]] = None,
   use_proxy: Option[String] = None,
@@ -95,31 +95,31 @@ case class ClusterSwitched(id: Option[String])
 
 object ClusterJsonProtocol extends DefaultJsonProtocol with LazyLogging {
 
-  implicit val clusterServerFmt: RootJsonFormat[ClusterServer]       = jsonFormat11(ClusterServer)
-  implicit val clusterConfigFmt: RootJsonFormat[ClusterConfig]       = jsonFormat1(ClusterConfig)
-  implicit val clusterServerInfo: RootJsonFormat[ClusterServerInfo]  = jsonFormat2(ClusterServerInfo)
-  implicit val fedMasterClusterFmt: RootJsonFormat[FedMasterCluster] = jsonFormat8(FedMasterCluster)
-  implicit val fedJointClusterFmt: RootJsonFormat[FedJointCluster]   = jsonFormat9(FedJointCluster)
-  implicit val fedMemberDataFmt: RootJsonFormat[FedMemberData]       = jsonFormat5(FedMemberData)
-  implicit val fedMembershipDataFmt: RootJsonFormat[FedMembershipData] = jsonFormat6(
-    FedMembershipData
+  given clusterServerFmt: RootJsonFormat[ClusterServer]         = jsonFormat11(ClusterServer.apply)
+  given clusterConfigFmt: RootJsonFormat[ClusterConfig]         = jsonFormat1(ClusterConfig.apply)
+  given clusterServerInfo: RootJsonFormat[ClusterServerInfo]    = jsonFormat2(ClusterServerInfo.apply)
+  given fedMasterClusterFmt: RootJsonFormat[FedMasterCluster]   = jsonFormat8(FedMasterCluster.apply)
+  given fedJointClusterFmt: RootJsonFormat[FedJointCluster]     = jsonFormat9(FedJointCluster.apply)
+  given fedMemberDataFmt: RootJsonFormat[FedMemberData]         = jsonFormat5(FedMemberData.apply)
+  given fedMembershipDataFmt: RootJsonFormat[FedMembershipData] = jsonFormat6(
+    FedMembershipData.apply
   )
-  implicit val fedPromptRequestFmt: RootJsonFormat[FedPromptRequest] = jsonFormat4(FedPromptRequest)
-  implicit val fedConfigDataFmt: RootJsonFormat[FedConfigData]       = jsonFormat5(FedConfigData)
-  implicit val fedJoinRequestFmt: RootJsonFormat[FedJoinRequest]     = jsonFormat6(FedJoinRequest)
-  implicit val fedLeaveRequestFmt: RootJsonFormat[FedLeaveRequest]   = jsonFormat1(FedLeaveRequest)
-  implicit val deployFedRulesReqFmt: RootJsonFormat[DeployFedRulesReq] = jsonFormat1(
-    DeployFedRulesReq
+  given fedPromptRequestFmt: RootJsonFormat[FedPromptRequest]   = jsonFormat4(FedPromptRequest.apply)
+  given fedConfigDataFmt: RootJsonFormat[FedConfigData]         = jsonFormat5(FedConfigData.apply)
+  given fedJoinRequestFmt: RootJsonFormat[FedJoinRequest]       = jsonFormat6(FedJoinRequest.apply)
+  given fedLeaveRequestFmt: RootJsonFormat[FedLeaveRequest]     = jsonFormat1(FedLeaveRequest.apply)
+  given deployFedRulesReqFmt: RootJsonFormat[DeployFedRulesReq] = jsonFormat1(
+    DeployFedRulesReq.apply
   )
-  implicit val clusterSwitchedFmt: RootJsonFormat[ClusterSwitched] = jsonFormat1(ClusterSwitched)
+  given clusterSwitchedFmt: RootJsonFormat[ClusterSwitched]     = jsonFormat1(ClusterSwitched.apply)
 
-  def clusterConfigToJson(clusterConfig: ClusterConfig): String = clusterConfig.toJson.compactPrint
-  def promptToJson(fedPromptRequest: FedPromptRequest): String =
+  def clusterConfigToJson(clusterConfig: ClusterConfig): String    = clusterConfig.toJson.compactPrint
+  def promptToJson(fedPromptRequest: FedPromptRequest): String     =
     fedPromptRequest.toJson.compactPrint
-  def joinToJson(fedJoinRequest: FedJoinRequest): String    = fedJoinRequest.toJson.compactPrint
-  def leaveToJson(leaveRequest: FedLeaveRequest): String    = leaveRequest.toJson.compactPrint
-  def fedConfigToJson(config: FedConfigData): String        = config.toJson.compactPrint
-  def deployReqToJson(deployReq: DeployFedRulesReq): String = deployReq.toJson.compactPrint
+  def joinToJson(fedJoinRequest: FedJoinRequest): String           = fedJoinRequest.toJson.compactPrint
+  def leaveToJson(leaveRequest: FedLeaveRequest): String           = leaveRequest.toJson.compactPrint
+  def fedConfigToJson(config: FedConfigData): String               = config.toJson.compactPrint
+  def deployReqToJson(deployReq: DeployFedRulesReq): String        = deployReq.toJson.compactPrint
   def jsonToFedMembershipData(response: String): FedMembershipData =
     response.parseJson.convertTo[FedMembershipData]
 }

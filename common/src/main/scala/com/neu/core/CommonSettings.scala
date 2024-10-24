@@ -1,24 +1,24 @@
 package com.neu.core
 
-import akka.japi.Util.immutableSeq
-import com.typesafe.config.{ Config, ConfigFactory }
+import com.typesafe.config.Config
+import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
+import org.apache.pekko.japi.Util.immutableSeq
 
 /**
  * Configuration for the system, load from application.conf
- *
  */
 object CommonSettings extends LazyLogging {
 
   protected val config: Config = ConfigFactory.load.getConfig("common")
 
   val gravatarEnabled: String = sys.env.getOrElse("GRAVATAR_ENABLED", "false")
-  val ctrlHost: String =
+  val ctrlHost: String        =
     sys.env.getOrElse("CTRL_SERVER_IP", config.getString("rest.ctrl.server.ip"))
-  val ctrlPort: String =
+  val ctrlPort: String        =
     sys.env.getOrElse("CTRL_SERVER_PORT", config.getString("rest.ctrl.server.port"))
 
-  val httpPort: String =
+  val httpPort: String    =
     sys.env.getOrElse("MANAGER_SERVER_PORT", config.getString("rest.server.port"))
   val trustStore: String  = config.getString("rest.trust.store")
   val newCert: String     = config.getString("rest.new.cert")

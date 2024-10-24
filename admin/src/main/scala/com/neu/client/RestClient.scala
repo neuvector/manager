@@ -1,25 +1,28 @@
 package com.neu.client
 
-import akka.actor.ActorSystem
-import com.neu.api.DefaultJsonFormats
-import com.neu.core.CommonSettings._
-import com.neu.core.{ AuthenticationManager, ClientSslConfig }
+import com.neu.core.AuthenticationManager
+import com.neu.core.ClientSslConfig
+import com.neu.core.CommonSettings.*
+import com.neu.service.DefaultJsonFormats
+import com.neu.web.Rest.executionContext
+import com.neu.web.Rest.system
 import com.typesafe.scalalogging.LazyLogging
-import spray.client.pipelining._
-import spray.http.HttpEncodings._
-import spray.http.HttpHeaders.{ `Accept-Encoding`, `Cache-Control`, `Transfer-Encoding` }
-import spray.http.HttpMethods._
-import spray.http.Uri.apply
-import spray.http._
-import spray.httpx.encoding.Gzip
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.http.scaladsl.coding.Coders
+import org.apache.pekko.http.scaladsl.model.*
+import org.apache.pekko.http.scaladsl.model.headers.*
+import org.apache.pekko.http.scaladsl.unmarshalling.*
+import org.apache.pekko.stream.Materializer
+import spray.json.*
 
-import java.io.{ PrintWriter, StringWriter }
+import java.io.PrintWriter
+import java.io.StringWriter
 import java.net.InetAddress
-import scala.concurrent.{ Await, Future }
-import scala.concurrent.duration._
+import scala.concurrent.Await
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
+import scala.concurrent.duration.*
 import scala.util.control.NonFatal
-import spray.httpx.unmarshalling._
-import spray.http.HttpCharsets._
 
 object Constant {
   val waitingLimit = 60
@@ -27,7 +30,6 @@ object Constant {
 
 /**
  * Rest client
- *
  */
 object RestClient extends RestClient with LazyLogging {
 
@@ -51,82 +53,29 @@ object RestClient extends RestClient with LazyLogging {
     val clusterId: Option[String] = AuthenticationManager.getCluster(tokenId)
     clusterId.fold(
       s"https://$ctrlHost:$ctrlPort/v1"
-    )(
-      id => s"https://$ctrlHost:$ctrlPort/v1/fed/cluster/$id/v1"
-    )
+    )(id => s"https://$ctrlHost:$ctrlPort/v1/fed/cluster/$id/v1")
   }
 
   def baseClusterUriV2(tokenId: String, ctrlHostIp: String = ctrlHost): String = {
     val clusterId: Option[String] = AuthenticationManager.getCluster(tokenId)
     clusterId.fold(
       s"https://$ctrlHost:$ctrlPort/v2"
-    )(
-      id => s"https://$ctrlHost:$ctrlPort/v1/fed/cluster/$id/v2"
-    )
+    )(id => s"https://$ctrlHost:$ctrlPort/v1/fed/cluster/$id/v2")
   }
 
 }
 
-class RestClient extends DefaultJsonFormats with ClientSslConfig with LazyLogging {
-
-  implicit val system: ActorSystem = ActorSystem("api-spray-client")
+class RestClient()(using
+  system: ActorSystem,
+  mat: Materializer,
+  ec: ExecutionContext
+) extends DefaultJsonFormats
+    with ClientSslConfig
+    with LazyLogging {
 
   final val auth = "auth"
 
-  //noinspection ScalaStyle
-  import system.dispatcher
-
   var token: Option[String] = None
-
-  //To be able to mock
-  def sendAndReceive: SendReceive = mySendReceive
-
-  def createHttpRequest(uri: String, method: HttpMethod, data: String): HttpRequest =
-    HttpRequest(method = method, uri = uri, entity = HttpEntity(data))
-
-  def cloneHttpRequest(uri: String, request: HttpRequest): HttpRequest =
-    request.copy(uri = uri, headers = Nil)
-
-  /**
-   * Makes HTTP request
-   *
-   * @param uri    The request uri
-   * @param data   The payload
-   * @param method The method of the request
-   * @return
-   */
-  def httpRequest(uri: String, method: HttpMethod = GET, data: String = ""): Future[String] = {
-    val pipeline: HttpRequest => Future[String] = sendAndReceive ~> unmarshal[String]
-    pipeline {
-      createHttpRequest(uri, method, data)
-    }
-  }
-
-  /**
-   * Makes HTTP request
-   *
-   * @param uri    The request uri
-   * @param data   The payload
-   * @param method The method of the request
-   * @return
-   */
-  def passHttpRequest(
-    uri: String,
-    method: HttpMethod = GET,
-    data: String = ""
-  ): Future[HttpResponse] = {
-    val pipeline: HttpRequest => Future[HttpResponse] = sendAndReceive
-    pipeline {
-      createHttpRequest(uri, method, data)
-    }
-  }
-
-  def proxyHttpRequest(uri: String, request: HttpRequest): Future[HttpResponse] = {
-    val pipeline: HttpRequest => Future[HttpResponse] = sendAndReceive
-    pipeline {
-      cloneHttpRequest(uri, request)
-    }
-  }
 
   private val TOKEN_HEADER: String    = "X-Auth-Token"
   private val X_NV_PAGE: String       = "X-Nv-Page"
@@ -134,188 +83,190 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig with LazyLoggin
   private val X_AS_STANDALONE: String = "X-As-Standalone"
   private val X_SUSE_TOKEN: String    = "X-R-Sess"
 
+  private def sendAndReceive: HttpRequest => Future[HttpResponse] =
+    sendReceiver(using system, mat, ec)
+
+  private def createHttpRequest(uri: String, method: HttpMethod, data: String): HttpRequest =
+    HttpRequest(
+      method = method,
+      uri = uri,
+      entity = HttpEntity(data)
+    )
+
+  private def cloneHttpRequest(uri: String, request: HttpRequest): HttpRequest =
+    request.withUri(uri).withHeaders(Nil)
+
   /**
    * Makes HTTP request
    *
-   * @param uri    The request uri
-   * @param data   The payload
-   * @param method The method of the request
-   * @param suseToken  The token header
+   * @param uri
+   *   The request uri
+   * @param data
+   *   The payload
+   * @param method
+   *   The method of the request
    * @return
    */
+  def httpRequest(
+    uri: String,
+    method: HttpMethod = HttpMethods.GET,
+    data: String = ""
+  ): Future[JsValue] = {
+    val request = createHttpRequest(uri, method, data)
+    sendAndReceive(request).flatMap { response =>
+      response.entity.toStrict(5.seconds).map(_.data.utf8String)
+    }.map(_.parseJson)
+  }
+
+  /**
+   * Makes HTTP request
+   *
+   * @param uri
+   *   The request uri
+   * @param data
+   *   The payload
+   * @param method
+   *   The method of the request
+   * @return
+   */
+  def passHttpRequest(
+    uri: String,
+    method: HttpMethod = HttpMethods.GET,
+    data: String = ""
+  ): Future[HttpResponse] = {
+    val request = createHttpRequest(uri, method, data)
+    sendAndReceive(request)
+  }
+
+  def proxyHttpRequest(uri: String, request: HttpRequest): Future[HttpResponse] = {
+    val clonedRequest = cloneHttpRequest(uri, request)
+    sendAndReceive(clonedRequest)
+  }
+
   def httpRequestWithTokenHeader(
     uri: String,
-    method: HttpMethod = GET,
+    method: HttpMethod = HttpMethods.GET,
     data: String = "",
     suseToken: String = ""
   ): Future[String] = {
-    val pipeline: HttpRequest => Future[String] = sendAndReceive ~> unmarshal[String]
-    pipeline {
-      createHttpRequest(uri, method, data) ~>
-      addHeader(X_SUSE_TOKEN, suseToken)
+    val request =
+      createHttpRequest(uri, method, data).addHeader(RawHeader(X_SUSE_TOKEN, suseToken))
+    sendAndReceive(request).flatMap { response =>
+      response.entity.toStrict(5.seconds).map(_.data.utf8String)
     }
   }
 
   def httpRequestWithHeader(
     uri: String,
-    method: HttpMethod = GET,
+    method: HttpMethod = HttpMethods.GET,
     data: String = "",
     token: String,
     transactionId: Option[String] = None,
     asStandalone: Option[String] = None,
     source: Option[String] = None
   ): Future[HttpResponse] = {
-    val pipeline          = sendAndReceive
-    var requestWithHeader = baseRequest(uri, method, data, token)
-    transactionId.fold(
-      asStandalone.fold(
-        source.fold(
-          ) { source =>
-          requestWithHeader = requestWithHeader ~> addHeader(X_NV_PAGE, source)
-        }
-      ) { asStandalone =>
-        source.fold(
-          requestWithHeader = requestWithHeader ~>
-            addHeader(X_AS_STANDALONE, asStandalone)
-        ) { source =>
-          requestWithHeader = requestWithHeader ~> addHeader(X_NV_PAGE, source) ~>
-            addHeader(X_AS_STANDALONE, asStandalone)
-        }
-      }
-    ) { transactionId =>
-      asStandalone.fold(
-        source.fold(
-          requestWithHeader = requestWithHeader ~> addHeader(
-              X_TRN_ID,
-              transactionId
-            )
-        ) { source =>
-          requestWithHeader = requestWithHeader ~> addHeader(X_NV_PAGE, source) ~> addHeader(
-              X_TRN_ID,
-              transactionId
-            )
-        }
-      ) { asStandalone =>
-        source.fold(
-          requestWithHeader = requestWithHeader ~> addHeader(
-              X_TRN_ID,
-              transactionId
-            ) ~>
-            addHeader(X_AS_STANDALONE, asStandalone)
-        ) { source =>
-          requestWithHeader = requestWithHeader ~> addHeader(
-              X_TRN_ID,
-              transactionId
-            ) ~> addHeader(X_AS_STANDALONE, asStandalone) ~> addHeader(X_NV_PAGE, source)
-        }
-      }
-    }
-    pipeline {
-      requestWithHeader
-    }
+    var request = baseRequest(uri, method, data, token)
+
+    transactionId.foreach(id => request = request.addHeader(RawHeader(X_TRN_ID, id)))
+    asStandalone.foreach(standalone =>
+      request = request.addHeader(RawHeader(X_AS_STANDALONE, standalone))
+    )
+    source.foreach(src => request = request.addHeader(RawHeader(X_NV_PAGE, src)))
+
+    sendAndReceive(request)
   }
 
-  private def baseRequest(uri: String, method: HttpMethod, data: String, token: String) =
-    createHttpRequest(uri, method, data) ~> addHeader(TOKEN_HEADER, token) ~>
-    addHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.getOrElse(token, "")) ~>
-    addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
-    addHeader(`Cache-Control`(CacheDirectives.`no-cache`))
+  private def baseRequest(
+    uri: String,
+    method: HttpMethod,
+    data: String,
+    token: String
+  ): HttpRequest =
+    createHttpRequest(uri, method, data)
+      .addHeader(RawHeader(TOKEN_HEADER, token))
+      .addHeader(RawHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.getOrElse(token, "")))
+      .addHeader(`Accept-Encoding`(HttpEncodings.gzip))
+      .addHeader(`Cache-Control`(CacheDirectives.`no-cache`))
 
   def httpRequestWithHeaderDecode(
     uri: String,
-    method: HttpMethod = GET,
+    method: HttpMethod = HttpMethods.GET,
     data: String = "",
     token: String
   ): Future[HttpResponse] = {
-    val pipeline = sendAndReceive ~> decode(Gzip)
-    pipeline {
-      baseRequest(uri, method, data, token)
-    }
+    val request = baseRequest(uri, method, data, token)
+    sendAndReceive(request)
   }
 
   def binaryWithHeader(
     uri: String,
-    method: HttpMethod = GET,
-    data: MultipartFormData,
+    method: HttpMethod = HttpMethods.POST,
+    data: Multipart.FormData,
     token: String,
     transactionId: Option[String] = None,
     asStandalone: Option[String] = None
   ): Future[HttpResponse] = {
-    val pipeline = sendAndReceive
-    transactionId.fold(
-      asStandalone.fold(
-        pipeline {
-          basePost(uri, data, token)
-        }
-      ) { asStandalone =>
-        pipeline {
-          basePost(uri, data, token) ~> addHeader(
-            X_AS_STANDALONE,
-            asStandalone
-          )
-        }
-      }
-    ) { transactionId =>
-      asStandalone.fold(
-        pipeline {
-          basePost(uri, data, token) ~> addHeader(
-            X_TRN_ID,
-            transactionId
-          )
-        }
-      ) { asStandalone =>
-        pipeline {
-          basePost(uri, data, token) ~> addHeader(
-            X_TRN_ID,
-            transactionId
-          ) ~>
-          addHeader(X_AS_STANDALONE, asStandalone)
-        }
-      }
+    // Create the base request with the URI, method, and entity
+    val baseRequest = HttpRequest(
+      method = method,
+      uri = uri,
+      entity = data.toEntity(java.util.UUID.randomUUID().toString)
+    ).addHeader(RawHeader(TOKEN_HEADER, token))
+
+    // Add optional headers
+    val requestWithTransactionId = transactionId.fold(baseRequest) { id =>
+      baseRequest.addHeader(RawHeader(X_TRN_ID, id))
     }
+
+    val finalRequest = asStandalone.fold(requestWithTransactionId) { standalone =>
+      requestWithTransactionId.addHeader(RawHeader(X_AS_STANDALONE, standalone))
+    }
+
+    // Send the request
+    sendAndReceive(finalRequest)
   }
 
-  private def basePost(uri: String, data: MultipartFormData, token: String) =
-    Post(uri, data) ~> addHeader(TOKEN_HEADER, token) ~>
-    addHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.getOrElse(token, "")) ~>
-    addHeader(`Accept-Encoding`(gzip)) ~> addHeader(`Transfer-Encoding`("gzip")) ~>
-    addHeader(`Cache-Control`(CacheDirectives.`no-cache`))
-
-  def requestWithHeader(
+  private def requestWithHeader(
     uri: String,
-    method: HttpMethod = GET,
+    method: HttpMethod = HttpMethods.GET,
     data: String = "",
     token: String
   ): Future[String] = {
-    val pipeline = sendAndReceive ~> unmarshal[String]
-    pipeline {
-      baseRequest(uri, method, data, token)
+    val request = baseRequest(uri, method, data, token)
+    sendAndReceive(request).flatMap { response =>
+      response.entity.toStrict(5.seconds).map(_.data.utf8String)
     }
   }
 
   def requestWithHeaderDecode(
     uri: String,
-    method: HttpMethod = GET,
+    method: HttpMethod = HttpMethods.GET,
     data: String = "",
     token: String,
     nvPage: String = ""
   ): Future[String] = {
-    implicit val utf8StringUnmarshaller: Unmarshaller[String] =
-      Unmarshaller.delegate[HttpEntity, String](MediaTypes.`application/json`) {
-        case HttpEntity.NonEmpty(contentType, data) if contentType.charset == `UTF-8` =>
-          data.asString
-        case HttpEntity.NonEmpty(_, data) =>
-          data.asString(`UTF-8`) // Use a different encoding if not UTF-8
+    given utf8StringUnmarshaller: FromEntityUnmarshaller[String] =
+      Unmarshaller.byteStringUnmarshaller.mapWithCharset { (bytes, charset) =>
+        bytes.decodeString(charset.nioCharset)
       }
-    val pipeline = sendAndReceive ~> decode(Gzip) ~> unmarshal[String]
-    if (!nvPage.equals("dashboard")) {
-      pipeline {
-        baseRequest(uri, method, data, token)
-      }
+
+    val request = if (nvPage != "dashboard") {
+      baseRequest(uri, method, data, token)
     } else {
-      pipeline {
-        baseRequest(uri, method, data, token) ~>
-        addHeader(X_NV_PAGE, "dashboard")
+      baseRequest(uri, method, data, token).addHeader(RawHeader(X_NV_PAGE, "dashboard"))
+    }
+
+    sendAndReceive(request).flatMap { response =>
+      response.status match {
+        case StatusCodes.OK =>
+          val decodedEntity = if (response.encoding == HttpEncodings.gzip) {
+            response.entity.transformDataBytes(Coders.Gzip.decoderFlow)
+          } else {
+            response.entity
+          }
+          Unmarshal(decodedEntity).to[String]
+        case _              =>
+          Future.failed(new Exception(s"Request failed with status code ${response.status}"))
       }
     }
   }
@@ -323,11 +274,11 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig with LazyLoggin
   def reloadCtrlIp(tokenId: String, index: Int): String = {
     val ctrlCluster: Array[String] = InetAddress.getAllByName(ctrlHost).map(_.getHostAddress)
     logger.info("Controller ips: {}", ctrlCluster.mkString(" "))
-    val ctrlIp = ctrlCluster(index)
+    val ctrlIp                     = ctrlCluster(index)
     try {
-      val res = RestClient.httpRequestWithHeader(
+      val res = requestWithHeader(
         s"https://$ctrlIp:$ctrlPort/v1/$auth",
-        PATCH,
+        HttpMethods.PATCH,
         "",
         tokenId
       )
@@ -335,9 +286,11 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig with LazyLoggin
       ctrlIp
     } catch {
       case NonFatal(e) =>
-        if (!e.getMessage.contains("Status: 401") &&
-            !e.getMessage.contains("Status: 408") &&
-            index < ctrlCluster.length - 1) {
+        if (
+          !e.getMessage.contains("Status: 401") &&
+          !e.getMessage.contains("Status: 408") &&
+          index < ctrlCluster.length - 1
+        ) {
           reloadCtrlIp(tokenId, index + 1)
         } else {
           throw e
@@ -350,7 +303,7 @@ class RestClient extends DefaultJsonFormats with ClientSslConfig with LazyLoggin
     authenticationFailedStatus: String,
     serverErrorStatus: String,
     e: Throwable
-  ) = {
+  ): (StatusCode, String) = {
     val PERMISSION_DENIED = "Permission denied"
     val sw                = new StringWriter
     e.printStackTrace(new PrintWriter(sw))

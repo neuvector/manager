@@ -1,12 +1,12 @@
 <div class="panel mb0">
   <div class="panel-heading panel-default clearfix">
     <div class="panel-title">
-      <label class="panel-text-title margin-top-s margin-left-s subtitle"
+      <label *ngIf="selectedCluster" class="panel-text-title margin-top-s margin-left-s subtitle"
         >{{ selectedCluster.name }}
       </label>
     </div>
   </div>
-  <div class="panel-body">
+  <div class="panel-body" *ngIf="summary">
     <div class="containers-detail-sec">
       <div class="row w-100 mx-0">
         <div class="col-md-4 my-md-4 details-item">
@@ -20,7 +20,7 @@
           <div class="ml-3 overflow-hidden">
             <div>{{ 'nodes.detail.PLATFORM' | translate }}</div>
             <div class="text-muted text-truncate">
-              {{ summary.platform }}
+              {{ summary.platform || ''}}
             </div>
           </div>
         </div>

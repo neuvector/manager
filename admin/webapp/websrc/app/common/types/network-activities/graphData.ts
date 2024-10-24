@@ -1,6 +1,6 @@
-import {Node} from "@common/types/network-activities/node";
-import {Edge} from "@common/types/network-activities/edge";
-import {Blacklist} from "@common/types/network-activities/blacklist";
+import { Node } from '@common/types/network-activities/node';
+import { Edge } from '@common/types/network-activities/edge';
+import { Blacklist } from '@common/types/network-activities/blacklist';
 
 export interface GraphData {
   nodes: Node[];

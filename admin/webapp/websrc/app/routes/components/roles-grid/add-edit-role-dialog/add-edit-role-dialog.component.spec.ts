@@ -8,9 +8,8 @@ describe('AddEditRoleDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AddEditRoleDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [AddEditRoleDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

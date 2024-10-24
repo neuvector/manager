@@ -199,13 +199,19 @@ export class ContainersComponent implements OnInit, OnDestroy {
 
   nodeFilterInit(containers: WorkloadV2[]): void {
     this.containersService.addDisplayContainers(
-      this.containersService.filterNode(this.showSystem.value || false, containers)
+      this.containersService.filterNode(
+        this.showSystem.value || false,
+        containers
+      )
     );
   }
 
   nodeFilterChange(): void {
     this.containersService.displayContainers =
-      this.containersService.filterNode(this.showSystem.value || false, this.containers);
+      this.containersService.filterNode(
+        this.showSystem.value || false,
+        this.containers
+      );
   }
 
   print = () => {

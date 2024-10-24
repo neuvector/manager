@@ -1,4 +1,4 @@
-import { ScanStatus } from "./scanStatus";
+import { ScanStatus } from './scanStatus';
 
 export interface ScanStatusData {
   status: ScanStatus;

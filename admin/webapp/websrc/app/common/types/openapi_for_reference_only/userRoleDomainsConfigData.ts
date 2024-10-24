@@ -1,4 +1,4 @@
-import { UserRoleDomainsConfig } from "./userRoleDomainsConfig";
+import { UserRoleDomainsConfig } from './userRoleDomainsConfig';
 
 export interface UserRoleDomainsConfigData {
   config: UserRoleDomainsConfig;

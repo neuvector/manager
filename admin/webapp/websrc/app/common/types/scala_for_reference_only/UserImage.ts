@@ -18,16 +18,25 @@ export interface UserImage {
 
 export function isUserImage(v: any): v is UserImage {
   return (
-    ((typeof v['fullname']) === 'string') &&
-    ((typeof v['server']) === 'string') &&
-    ((typeof v['username']) === 'string') &&
-    ((typeof v['password']) === 'string') &&
-    (!v['email'] || ((typeof v['email']) === 'string')) &&
-    ((typeof v['role']) === 'string') &&
-    ((typeof v['default_password']) === 'boolean') &&
-    ((typeof v['modify_password']) === 'boolean') &&
-    (!v['blocked_for_failed_login'] || ((typeof v['blocked_for_failed_login']) === 'boolean')) &&
-    (!v['blocked_for_password_expired'] || ((typeof v['blocked_for_password_expired']) === 'boolean')) &&
-    (!v['role_domains'] || ((typeof v['role_domains']) == 'object' && Object.keys(v['role_domains']).every(key => ((typeof key) === 'string') && (v['role_domains'][key] && isArray(v['role_domains'][key])))))
+    typeof v['fullname'] === 'string' &&
+    typeof v['server'] === 'string' &&
+    typeof v['username'] === 'string' &&
+    typeof v['password'] === 'string' &&
+    (!v['email'] || typeof v['email'] === 'string') &&
+    typeof v['role'] === 'string' &&
+    typeof v['default_password'] === 'boolean' &&
+    typeof v['modify_password'] === 'boolean' &&
+    (!v['blocked_for_failed_login'] ||
+      typeof v['blocked_for_failed_login'] === 'boolean') &&
+    (!v['blocked_for_password_expired'] ||
+      typeof v['blocked_for_password_expired'] === 'boolean') &&
+    (!v['role_domains'] ||
+      (typeof v['role_domains'] == 'object' &&
+        Object.keys(v['role_domains']).every(
+          key =>
+            typeof key === 'string' &&
+            v['role_domains'][key] &&
+            isArray(v['role_domains'][key])
+        )))
   );
 }

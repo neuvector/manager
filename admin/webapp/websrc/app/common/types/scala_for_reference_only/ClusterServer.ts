@@ -11,11 +11,11 @@ export interface ClusterServer {
 
 export function isClusterServer(v: any): v is ClusterServer {
   return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['id']) === 'string') &&
-    ((typeof v['api_server']) === 'string') &&
-    (!v['api_port'] || ((typeof v['api_port']) === 'number')) &&
-    (!v['status'] || ((typeof v['status']) === 'string')) &&
-    (!v['username'] || ((typeof v['username']) === 'string'))
+    typeof v['name'] === 'string' &&
+    typeof v['id'] === 'string' &&
+    typeof v['api_server'] === 'string' &&
+    (!v['api_port'] || typeof v['api_port'] === 'number') &&
+    (!v['status'] || typeof v['status'] === 'string') &&
+    (!v['username'] || typeof v['username'] === 'string')
   );
 }

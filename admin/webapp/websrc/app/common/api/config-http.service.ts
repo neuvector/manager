@@ -26,12 +26,10 @@ export class ConfigHttpService {
 
   getConfig(source?): Observable<ConfigV2Response> {
     let options = {};
-    if (source) options = Object.assign(options, { params: { source: source } });
+    if (source)
+      options = Object.assign(options, { params: { source: source } });
     return GlobalVariable.http
-      .get<ConfigV2Response>(
-        PathConstant.CONFIG_V2_URL,
-        options
-      )
+      .get<ConfigV2Response>(PathConstant.CONFIG_V2_URL, options)
       .pipe(pluck('config'));
   }
 

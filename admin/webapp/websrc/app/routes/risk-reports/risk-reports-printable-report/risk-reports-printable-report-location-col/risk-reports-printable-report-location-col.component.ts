@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Audit } from '@common/types';
 
 @Component({
@@ -6,7 +6,7 @@ import { Audit } from '@common/types';
   templateUrl: './risk-reports-printable-report-location-col.component.html',
   styleUrls: ['./risk-reports-printable-report-location-col.component.scss'],
 })
-export class RiskReportsPrintableReportLocationColComponent implements OnInit {
+export class RiskReportsPrintableReportLocationColComponent {
   @Input() audit!: Audit;
   get formattedPlatform() {
     return this.audit.platform_version
@@ -15,6 +15,4 @@ export class RiskReportsPrintableReportLocationColComponent implements OnInit {
   }
 
   constructor() {}
-
-  ngOnInit(): void {}
 }

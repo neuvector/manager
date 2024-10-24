@@ -6,8 +6,5 @@ export interface ServiceAddress {
 }
 
 export function isServiceAddress(v: any): v is ServiceAddress {
-  return (
-    ((typeof v['ip']) === 'string') &&
-    ((typeof v['port']) === 'number')
-  );
+  return typeof v['ip'] === 'string' && typeof v['port'] === 'number';
 }

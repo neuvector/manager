@@ -8,7 +8,9 @@
         </span>
       </div>
     </li>
-    <li class="col-sm-12 p-2" *ngIf="pod.workload.children && pod.workload.children.length > 1">
+    <li
+      class="col-sm-12 p-2"
+      *ngIf="pod.workload.children && pod.workload.children.length > 1">
       <div class="mda-list-item-text pb-0 pt-sm">
         <div>
           <span class="font-weight-bold host-item-key">
@@ -19,23 +21,23 @@
           <ng-container *ngFor="let child of pod.workload.children">
             <div class="row" *ngIf="child.state !== 'exit'">
               <div style="margin-top: 2px; width: 620px" class="auto-hide">
-              <span
-                class="text-muted text-bold pl-lg"
-                style="display: inline-block">
-                <em class="fa fa-square-o text-muted mr-2"></em>
-                {{ child.display_name }}
-              </span>
-              <label
-                style="display: inline-block"
-                class="label label-info-tran ml-2 mt-1"
-                *ngIf="child.service_mesh_sidecar">
-                Sidecar
-              </label>
-              <em class="fa fa-archive text-info pl-2 mr-1"></em>
-              <span class="text-muted auto-hide" style="margin-top: -2px">
-                {{ child.image }}
-              </span>
-            </div>
+                <span
+                  class="text-muted text-bold pl-lg"
+                  style="display: inline-block">
+                  <em class="fa fa-square-o text-muted mr-2"></em>
+                  {{ child.display_name }}
+                </span>
+                <label
+                  style="display: inline-block"
+                  class="label label-info-tran ml-2 mt-1"
+                  *ngIf="child.service_mesh_sidecar">
+                  Sidecar
+                </label>
+                <em class="fa fa-archive text-info pl-2 mr-1"></em>
+                <span class="text-muted auto-hide" style="margin-top: -2px">
+                  {{ child.image }}
+                </span>
+              </div>
             </div>
           </ng-container>
         </div>
@@ -58,7 +60,8 @@
                 class="details-icon text-info"
                 fontSet="fa"
                 fontIcon="fa-archive">
-            </mat-icon>{{ image }}
+              </mat-icon
+              >{{ image }}
             </span>
           </div>
         </div>
@@ -126,7 +129,7 @@
           {{ 'network.nodeDetails.CREATED_AT' | translate }}:
         </span>
         <span class="ml auto-hide host-item-value">
-          {{ pod.workload.started_at | date: 'MMM dd, y HH:mm:ss' }}
+          {{ pod.workload.started_at | date : 'MMM dd, y HH:mm:ss' }}
         </span>
       </div>
     </li>
@@ -136,7 +139,9 @@
           >{{ 'network.nodeDetails.SCANNED_AT' | translate }}:</span
         >
         <span class="ml mr-lg auto-hide host-item-key">
-          {{ pod.workload.scan_summary.scanned_at | date: 'MMM dd, y HH:mm:ss' }}
+          {{
+            pod.workload.scan_summary.scanned_at | date : 'MMM dd, y HH:mm:ss'
+          }}
         </span>
       </div>
     </li>
@@ -172,11 +177,16 @@
             class="badge badge-danger mr-sm">
             {{ pod.workload.scan_summary.high }}</span
           >
-          <span *ngIf="pod.workload.scan_summary?.medium" class="badge badge-warning">
+          <span
+            *ngIf="pod.workload.scan_summary?.medium"
+            class="badge badge-warning">
             {{ pod.workload.scan_summary.medium }}</span
           >
           <a
-            *ngIf="pod.workload.scan_summary?.medium || pod.workload.scan_summary?.medium"
+            *ngIf="
+              pod.workload.scan_summary?.medium ||
+              pod.workload.scan_summary?.medium
+            "
             style="display: table-cell; font-size: 11px; line-height: 15px">
             <em class="fa fa-external-link ml-lg"></em>
           </a>

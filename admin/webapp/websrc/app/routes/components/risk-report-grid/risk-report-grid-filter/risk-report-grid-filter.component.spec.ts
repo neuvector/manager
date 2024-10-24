@@ -8,9 +8,8 @@ describe('RiskReportGridFilterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RiskReportGridFilterComponent ]
-    })
-    .compileComponents();
+      declarations: [RiskReportGridFilterComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

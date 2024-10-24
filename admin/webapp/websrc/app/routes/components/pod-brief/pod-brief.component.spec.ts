@@ -8,9 +8,8 @@ describe('PodBriefComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PodBriefComponent ]
-    })
-    .compileComponents();
+      declarations: [PodBriefComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

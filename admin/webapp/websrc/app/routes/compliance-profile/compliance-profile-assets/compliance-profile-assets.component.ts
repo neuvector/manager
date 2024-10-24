@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { DomainResponse } from '../compliance-profile.service';
 
 @Component({
@@ -6,10 +6,8 @@ import { DomainResponse } from '../compliance-profile.service';
   templateUrl: './compliance-profile-assets.component.html',
   styleUrls: ['./compliance-profile-assets.component.scss'],
 })
-export class ComplianceProfileAssetsComponent implements OnInit {
+export class ComplianceProfileAssetsComponent {
   @Input() domains!: DomainResponse;
 
   constructor() {}
-
-  ngOnInit(): void {}
 }

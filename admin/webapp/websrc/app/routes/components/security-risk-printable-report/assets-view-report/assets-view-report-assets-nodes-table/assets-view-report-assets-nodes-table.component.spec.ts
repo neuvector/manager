@@ -8,13 +8,14 @@ describe('AssetsViewReportAssetsNodesTableComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AssetsViewReportAssetsNodesTableComponent ]
-    })
-    .compileComponents();
+      declarations: [AssetsViewReportAssetsNodesTableComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AssetsViewReportAssetsNodesTableComponent);
+    fixture = TestBed.createComponent(
+      AssetsViewReportAssetsNodesTableComponent
+    );
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

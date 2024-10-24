@@ -14,7 +14,7 @@ import { ControllersGridStatusCellComponent } from './controllers-grid-status-ce
     NvCommonModule,
     QuickFilterModule,
     LoadingButtonModule,
-    AgGridModule
+    AgGridModule,
     // AgGridModule.withComponents([]),
   ],
   exports: [ControllersGridComponent],

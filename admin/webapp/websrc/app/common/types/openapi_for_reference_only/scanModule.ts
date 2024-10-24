@@ -1,4 +1,4 @@
-import { ModuleCve } from "./moduleCve";
+import { ModuleCve } from './moduleCve';
 
 export interface ScanModule {
   name: string;

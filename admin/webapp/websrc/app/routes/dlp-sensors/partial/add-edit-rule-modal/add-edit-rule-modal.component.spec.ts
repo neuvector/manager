@@ -8,9 +8,8 @@ describe('AddEditRuleModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AddEditRuleModalComponent ]
-    })
-    .compileComponents();
+      declarations: [AddEditRuleModalComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

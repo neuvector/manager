@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AgreementComponent } from '@routes/pages/login/eula/agreement/agreement.component';
 
@@ -7,12 +7,10 @@ import { AgreementComponent } from '@routes/pages/login/eula/agreement/agreement
   templateUrl: './eula.component.html',
   styleUrls: ['./eula.component.scss'],
 })
-export class EulaComponent implements OnInit {
+export class EulaComponent {
   @Output() eulaStatus = new EventEmitter<boolean>();
 
   constructor(private dialog: MatDialog) {}
-
-  ngOnInit(): void {}
 
   openEULAPage() {
     this.dialog.open(AgreementComponent, {

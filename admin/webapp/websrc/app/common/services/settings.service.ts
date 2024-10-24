@@ -58,7 +58,10 @@ export class SettingsService {
     });
   }
 
-  patchConfigServiceMode(body: { new_service_policy_mode?: PolicyMode , new_service_profile_mode?: PolicyMode }) {
+  patchConfigServiceMode(body: {
+    new_service_policy_mode?: PolicyMode;
+    new_service_profile_mode?: PolicyMode;
+  }) {
     return this.configHttpService.patchConfigAny({
       config_v2: { svc_cfg: body },
     });

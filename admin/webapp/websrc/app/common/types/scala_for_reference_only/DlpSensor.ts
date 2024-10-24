@@ -11,9 +11,11 @@ export interface DlpSensor {
 
 export function isDlpSensor(v: any): v is DlpSensor {
   return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['comment']) === 'string') &&
-    (Array.isArray(v['groups']) && v['groups'].every(elmt => (typeof elmt) === 'string')) &&
-    (Array.isArray(v['rules']) && v['rules'].every(elmt => elmt && isDlpRule(elmt)))
+    typeof v['name'] === 'string' &&
+    typeof v['comment'] === 'string' &&
+    Array.isArray(v['groups']) &&
+    v['groups'].every(elmt => typeof elmt === 'string') &&
+    Array.isArray(v['rules']) &&
+    v['rules'].every(elmt => elmt && isDlpRule(elmt))
   );
 }

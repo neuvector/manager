@@ -11,9 +11,12 @@ export interface ProcessProfileConfig {
 
 export function isProcessProfileConfig(v: any): v is ProcessProfileConfig {
   return (
-    ((typeof v['group']) === 'string') &&
-    (!v['process_delete_list'] || (v['process_delete_list'] && isArray(v['process_delete_list']))) &&
-    (!v['process_change_list'] || (v['process_change_list'] && isArray(v['process_change_list']))) &&
-    (!v['process_replace_list'] || (v['process_replace_list'] && isArray(v['process_replace_list'])))
+    typeof v['group'] === 'string' &&
+    (!v['process_delete_list'] ||
+      (v['process_delete_list'] && isArray(v['process_delete_list']))) &&
+    (!v['process_change_list'] ||
+      (v['process_change_list'] && isArray(v['process_change_list']))) &&
+    (!v['process_replace_list'] ||
+      (v['process_replace_list'] && isArray(v['process_replace_list'])))
   );
 }

@@ -1,4 +1,4 @@
-import { AdminRuleCriterion } from "./adminRuleCriterion";
+import { AdminRuleCriterion } from './adminRuleCriterion';
 
 export interface AdmissionRule {
   id: number;

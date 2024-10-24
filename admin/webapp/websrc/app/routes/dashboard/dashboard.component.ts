@@ -1,11 +1,14 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  OnDestroy,
+} from '@angular/core';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { DashboardService } from '@services/dashboard.service';
-import {
-  SystemSummaryDetails,
-  InternalSystemInfo,
-} from '@common/types';
+import { SystemSummaryDetails, InternalSystemInfo } from '@common/types';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { AssetsHttpService } from '@common/api/assets-http.service';
@@ -18,7 +21,7 @@ import { SummaryService } from '@services/summary.service';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild('dashboardReport') printableReport!: ElementRef;
 
   isGlobalUser: boolean = false;
@@ -40,11 +43,13 @@ export class DashboardComponent implements OnInit {
     private assetsHttpService: AssetsHttpService,
     private summaryService: SummaryService,
     private dialog: MatDialog
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.securityEvents = this.activatedRoute.snapshot.data['securityEvents'];
-    this.dashboardService.getDashboardDetails().subscribe(d => this.details = d);
+    this.dashboardService
+      .getDashboardDetails()
+      .subscribe(d => (this.details = d));
 
     const resource = {
       seeScore: {
@@ -91,23 +96,23 @@ export class DashboardComponent implements OnInit {
     this.reportInfo = domain
       ? reportInfo
       : {
-        scoreInfo: this.scoreInfo,
-        summaryInfo: this.summaryInfo,
-        dashboardSecurityEventInfo: {
-          topSecurityEvents:
-            this.securityEvents.criticalSecurityEvents['top_security_events'],
-          securityEventSummary:
-            this.securityEvents.criticalSecurityEvents['summary'],
-        },
-        dashboardDetailsInfo: {
-          isAutoScanOn: this.details.autoScanConfig,
-          highPriorityVulnerabilities:
-            this.details.highPriorityVulnerabilities,
-          containers: this.details.containers,
-          services: this.details.services,
-          applications: this.details.applications2,
-        },
-      };
+          scoreInfo: this.scoreInfo,
+          summaryInfo: this.summaryInfo,
+          dashboardSecurityEventInfo: {
+            topSecurityEvents:
+              this.securityEvents.criticalSecurityEvents['top_security_events'],
+            securityEventSummary:
+              this.securityEvents.criticalSecurityEvents['summary'],
+          },
+          dashboardDetailsInfo: {
+            isAutoScanOn: this.details.autoScanConfig,
+            highPriorityVulnerabilities:
+              this.details.highPriorityVulnerabilities,
+            containers: this.details.containers,
+            services: this.details.services,
+            applications: this.details.applications2,
+          },
+        };
 
     this.reportDialog?.close();
 
@@ -124,7 +129,7 @@ export class DashboardComponent implements OnInit {
   };
 
   private getBasicData = (isRefeshing = false) => {
-    if(!isRefeshing) {
+    if (!isRefeshing) {
       const response = this.activatedRoute.snapshot.data['basicData'];
       this.handleBasicData(response);
     } else {

@@ -1,12 +1,15 @@
-import { Component, Input, OnInit } from "@angular/core";
-import { ActivityState, PopupState } from "@common/types/network-activities/activityState";
-import { Group } from "@common/types";
-import { GlobalConstant } from "@common/constants/global.constant";
+import { Component, Input, OnInit } from '@angular/core';
+import {
+  ActivityState,
+  PopupState,
+} from '@common/types/network-activities/activityState';
+import { Group } from '@common/types';
+import { GlobalConstant } from '@common/constants/global.constant';
 
 @Component({
   selector: 'app-group-info',
   templateUrl: './group-info.component.html',
-  styleUrls: ['./group-info.component.scss']
+  styleUrls: ['./group-info.component.scss'],
 })
 export class GroupInfoComponent implements OnInit {
   private _group!: Group;
@@ -41,8 +44,7 @@ export class GroupInfoComponent implements OnInit {
     this.navSource = GlobalConstant.NAV_SOURCE.GROUP;
   }
 
-  activateTab = (event) => {
+  activateTab = event => {
     this.activeTabIndex = event.index;
   };
-
 }

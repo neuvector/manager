@@ -8,9 +8,8 @@ describe('ReportByNamespaceModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ReportByNamespaceModalComponent ]
-    })
-    .compileComponents();
+      declarations: [ReportByNamespaceModalComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

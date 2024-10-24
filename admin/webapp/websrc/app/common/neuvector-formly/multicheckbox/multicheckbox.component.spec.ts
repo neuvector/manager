@@ -8,9 +8,8 @@ describe('MulticheckboxComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MulticheckboxComponent ]
-    })
-    .compileComponents();
+      declarations: [MulticheckboxComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

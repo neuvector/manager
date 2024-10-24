@@ -108,7 +108,7 @@
           *ngIf="form.controls.host.hasError('invalidAutocompleteString')">
           {{
             'securityEvent.AUTOCOMPLETE_INVALID'
-              | translate: { field: ('securityEvent.HOST' | translate) }
+              | translate : { field: ('securityEvent.HOST' | translate) }
           }}
         </mat-error>
       </mat-form-field>
@@ -136,7 +136,8 @@
           *ngIf="form.controls.container.hasError('invalidAutocompleteString')">
           {{
             'securityEvent.AUTOCOMPLETE_INVALID'
-              | translate: { field: ('event.gridHeader.CONTAINER' | translate) }
+              | translate
+                : { field: ('event.gridHeader.CONTAINER' | translate) }
           }}
         </mat-error>
       </mat-form-field>
@@ -163,7 +164,7 @@
           *ngIf="form.controls.image.hasError('invalidAutocompleteString')">
           {{
             'securityEvent.AUTOCOMPLETE_INVALID'
-              | translate: { field: ('event.gridHeader.IMAGE' | translate) }
+              | translate : { field: ('event.gridHeader.IMAGE' | translate) }
           }}
         </mat-error>
       </mat-form-field>

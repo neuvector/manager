@@ -1,4 +1,4 @@
-import { PolicyRuleConfig } from "./policyRuleConfig";
+import { PolicyRuleConfig } from './policyRuleConfig';
 
 export interface PolicyRuleConfigData {
   config: PolicyRuleConfig;

@@ -1,7 +1,7 @@
-import { HostInterfaces } from "./hostInterfaces";
-import { HostLabels } from "./hostLabels";
-import { HostAnnotations } from "./hostAnnotations";
-import { ScanBrief } from "./scanBrief";
+import { HostInterfaces } from './hostInterfaces';
+import { HostLabels } from './hostLabels';
+import { HostAnnotations } from './hostAnnotations';
+import { ScanBrief } from './scanBrief';
 
 export interface Host {
   name: string;

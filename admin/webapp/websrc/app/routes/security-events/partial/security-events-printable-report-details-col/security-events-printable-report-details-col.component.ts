@@ -3,18 +3,18 @@ import { Component, OnInit, Input } from '@angular/core';
 @Component({
   selector: 'app-security-events-printable-report-details-col',
   templateUrl: './security-events-printable-report-details-col.component.html',
-  styleUrls: ['./security-events-printable-report-details-col.component.scss']
+  styleUrls: ['./security-events-printable-report-details-col.component.scss'],
 })
-export class SecurityEventsPrintableReportDetailsColComponent implements OnInit {
-
+export class SecurityEventsPrintableReportDetailsColComponent
+  implements OnInit
+{
   detailList: string[];
 
   @Input() details: string;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
     this.detailList = this.details.split('<br/>');
   }
-
 }

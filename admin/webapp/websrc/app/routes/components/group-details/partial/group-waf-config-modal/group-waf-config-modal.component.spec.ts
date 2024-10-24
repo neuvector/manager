@@ -8,9 +8,8 @@ describe('GroupWafConfigModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GroupWafConfigModalComponent ]
-    })
-    .compileComponents();
+      declarations: [GroupWafConfigModalComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

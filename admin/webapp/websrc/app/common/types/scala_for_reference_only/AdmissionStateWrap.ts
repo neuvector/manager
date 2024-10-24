@@ -10,7 +10,8 @@ export interface AdmissionStateWrap {
 
 export function isAdmissionStateWrap(v: any): v is AdmissionStateWrap {
   return (
-    (v['state'] && isAdmissionState(v['state'])) &&
+    v['state'] &&
+    isAdmissionState(v['state']) &&
     (!v['error'] || (v['error'] && isError(v['error'])))
   );
 }

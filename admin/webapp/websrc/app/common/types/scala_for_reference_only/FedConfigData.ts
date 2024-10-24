@@ -11,9 +11,9 @@ export interface FedConfigData {
 
 export function isFedConfigData(v: any): v is FedConfigData {
   return (
-    ((typeof v['poll_interval']) === 'number') &&
-    (!v['name'] || ((typeof v['name']) === 'string')) &&
-    (!v['use_proxy'] || ((typeof v['use_proxy']) === 'string')) &&
+    typeof v['poll_interval'] === 'number' &&
+    (!v['name'] || typeof v['name'] === 'string') &&
+    (!v['use_proxy'] || typeof v['use_proxy'] === 'string') &&
     (!v['rest_info'] || (v['rest_info'] && isClusterServerInfo(v['rest_info'])))
   );
 }

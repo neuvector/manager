@@ -1,4 +1,4 @@
-import { ScanRepoReq } from "./scanRepoReq";
+import { ScanRepoReq } from './scanRepoReq';
 
 export interface ScanRepoReqData {
   request: ScanRepoReq;

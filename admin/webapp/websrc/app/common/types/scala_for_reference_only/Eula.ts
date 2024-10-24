@@ -5,7 +5,5 @@ export interface Eula {
 }
 
 export function isEula(v: any): v is Eula {
-  return (
-    ((typeof v['accepted']) === 'boolean')
-  );
+  return typeof v['accepted'] === 'boolean';
 }

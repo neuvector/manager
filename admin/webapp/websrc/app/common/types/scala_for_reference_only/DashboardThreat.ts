@@ -24,22 +24,27 @@ export interface DashboardThreat {
 
 export function isDashboardThreat(v: any): v is DashboardThreat {
   return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['host_name']) === 'string') &&
-    ((typeof v['level']) === 'string') &&
-    ((typeof v['client_workload_id']) === 'string') &&
-    (!v['client_workload_name'] || ((typeof v['client_workload_name']) === 'string')) &&
-    (!v['client_workload_domain'] || ((typeof v['client_workload_domain']) === 'string')) &&
-    (!v['client_ip'] || ((typeof v['client_ip']) === 'string')) &&
-    (!v['client_port'] || ((typeof v['client_port']) === 'number')) &&
-    ((typeof v['server_workload_id']) === 'string') &&
-    (!v['server_workload_name'] || ((typeof v['server_workload_name']) === 'string')) &&
-    (!v['server_workload_domain'] || ((typeof v['server_workload_domain']) === 'string')) &&
-    (!v['server_ip'] || ((typeof v['server_ip']) === 'string')) &&
-    (!v['server_port'] || ((typeof v['server_port']) === 'number')) &&
-    (!v['server_conn_port'] || ((typeof v['server_conn_port']) === 'number')) &&
-    (!v['application'] || ((typeof v['application']) === 'string')) &&
-    (!v['target'] || ((typeof v['target']) === 'string')) &&
-    (v['reported_at'] && isDateTime(v['reported_at']))
+    typeof v['name'] === 'string' &&
+    typeof v['host_name'] === 'string' &&
+    typeof v['level'] === 'string' &&
+    typeof v['client_workload_id'] === 'string' &&
+    (!v['client_workload_name'] ||
+      typeof v['client_workload_name'] === 'string') &&
+    (!v['client_workload_domain'] ||
+      typeof v['client_workload_domain'] === 'string') &&
+    (!v['client_ip'] || typeof v['client_ip'] === 'string') &&
+    (!v['client_port'] || typeof v['client_port'] === 'number') &&
+    typeof v['server_workload_id'] === 'string' &&
+    (!v['server_workload_name'] ||
+      typeof v['server_workload_name'] === 'string') &&
+    (!v['server_workload_domain'] ||
+      typeof v['server_workload_domain'] === 'string') &&
+    (!v['server_ip'] || typeof v['server_ip'] === 'string') &&
+    (!v['server_port'] || typeof v['server_port'] === 'number') &&
+    (!v['server_conn_port'] || typeof v['server_conn_port'] === 'number') &&
+    (!v['application'] || typeof v['application'] === 'string') &&
+    (!v['target'] || typeof v['target'] === 'string') &&
+    v['reported_at'] &&
+    isDateTime(v['reported_at'])
   );
 }

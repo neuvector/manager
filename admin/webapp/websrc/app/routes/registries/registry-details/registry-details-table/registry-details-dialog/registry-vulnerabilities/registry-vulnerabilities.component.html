@@ -8,7 +8,7 @@
       [matTooltip]="
         ('registry.CVE_DB_DATE' | translate) +
         ': ' +
-        (scannerDate | date: 'medium')
+        (scannerDate | date : 'medium')
       "
       matTooltipPosition="above"
       class="eos-icons icon-18"
@@ -80,7 +80,13 @@
       [resize]="resize"
       [rowData]="layers"></app-layers-table>
   </div>
-  <div class="terminal" [ngClass]="{'p0 col-8': !selectedLayer.verifiers || selectedLayer.verifiers!.length === 0, 'col-6': selectedLayer.verifiers && selectedLayer.verifiers!.length > 0}">
+  <div
+    class="terminal"
+    [ngClass]="{
+      'p0 col-8':
+        !selectedLayer.verifiers || selectedLayer.verifiers!.length === 0,
+      'col-6': selectedLayer.verifiers && selectedLayer.verifiers!.length > 0
+    }">
     <div class="cmds">
       <ng-container *ngIf="selectedLayer?.cmds">
         <span
@@ -91,10 +97,12 @@
       </ng-container>
     </div>
   </div>
-  <div class="col-2 vulnerability-description-container pr-0" *ngIf="selectedLayer?.verifiers && selectedLayer?.verifiers!.length > 0">
+  <div
+    class="col-2 vulnerability-description-container pr-0"
+    *ngIf="selectedLayer?.verifiers && (selectedLayer?.verifiers)!.length > 0">
     <div class="vulnerability-description">
       <div class="vulnerability-description-header">
-        {{ 'registry.SIG_VERIFIERS' | translate}}
+        {{ 'registry.SIG_VERIFIERS' | translate }}
         <i
           [matTooltip]="'registry.SIG_VERIFIERS_HINT' | translate"
           matTooltipPosition="above"
@@ -103,7 +111,12 @@
         >
       </div>
       <div class="vulnerability-verifiers-body">
-        <div *ngFor="let verifier of selectedLayer?.verifiers" class="px-2 type-label info mt-1 auto-hide" style="display: block; text-align: left;" matTooltip="{{ verifier }}" matTooltipPosition="above">
+        <div
+          *ngFor="let verifier of selectedLayer?.verifiers"
+          class="px-2 type-label info mt-1 auto-hide"
+          style="display: block; text-align: left"
+          matTooltip="{{ verifier }}"
+          matTooltipPosition="above">
           <i class="eos-icons icon-12 mr-2">verified</i>{{ verifier }}
         </div>
       </div>

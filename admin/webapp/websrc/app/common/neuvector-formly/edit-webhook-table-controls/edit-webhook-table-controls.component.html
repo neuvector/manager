@@ -1,10 +1,18 @@
 <div [hidden]="to.disabled">
   <ng-container *ngIf="isEditable.value">
-    <button mat-stroked-button color="primary" class="mr-3" (click)="submit()">{{ 'setting.SUBMIT' | translate }}</button>
-    <button mat-stroked-button color="primary" (click)="cancel()">{{ 'cveProfile.CANCEL' | translate }}</button>
+    <button mat-stroked-button color="primary" class="mr-3" (click)="submit()">
+      {{ 'setting.SUBMIT' | translate }}
+    </button>
+    <button mat-stroked-button color="primary" (click)="cancel()">
+      {{ 'cveProfile.CANCEL' | translate }}
+    </button>
   </ng-container>
   <ng-container *ngIf="!isEditable.value">
-    <button mat-stroked-button color="primary" class="mr-3" (click)="edit()">{{ 'cveProfile.EDIT' | translate }}</button>
-    <button mat-stroked-button  color="primary" (click)="delete()">{{ 'cveProfile.REMOVE' | translate }}</button>
+    <button mat-stroked-button color="primary" class="mr-3" (click)="edit()">
+      {{ 'cveProfile.EDIT' | translate }}
+    </button>
+    <button mat-stroked-button color="primary" (click)="delete()">
+      {{ 'cveProfile.REMOVE' | translate }}
+    </button>
   </ng-container>
 </div>

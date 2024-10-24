@@ -5,7 +5,6 @@ import { InternalSystemInfo } from '@common/types';
 
 @Injectable()
 export class DashboardExposureConversationsService {
-
   private worker;
   isLoadingExposureConversation: boolean = false;
   exposureConversationList: any[] = [];
@@ -32,16 +31,16 @@ export class DashboardExposureConversationsService {
         JSON.stringify({
           exposures: {
             ingress: scoreInfo.ingress,
-            egress: scoreInfo.egress
+            egress: scoreInfo.egress,
           },
           currUrl: window.location.href,
           token: GlobalVariable.user?.token.token,
           isGlobalUser: isGlobalUser,
-          isSUSESSO: GlobalVariable.isSUSESSO ? GlobalVariable.isSUSESSO : "",
-          neuvectorProxy: GlobalConstant.PROXY_VALUE
+          isSUSESSO: GlobalVariable.isSUSESSO ? GlobalVariable.isSUSESSO : '',
+          neuvectorProxy: GlobalConstant.PROXY_VALUE,
         })
       );
-      this.worker.onmessage = (message) => {
+      this.worker.onmessage = message => {
         this.isLoadingExposureConversation = false;
         this.exposureConversationList = message.data;
       };

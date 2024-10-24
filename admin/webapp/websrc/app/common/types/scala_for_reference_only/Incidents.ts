@@ -17,15 +17,18 @@ export interface Incidents {
 
 export function isIncidents(v: any): v is Incidents {
   return (
-    ((typeof v['name']) === 'string') &&
-    (!v['proc_cmd'] || ((typeof v['proc_cmd']) === 'string')) &&
-    (!v['proc_effective_user'] || ((typeof v['proc_effective_user']) === 'string')) &&
-    (!v['workload_name'] || ((typeof v['workload_name']) === 'string')) &&
-    (!v['remote_workload_name'] || ((typeof v['remote_workload_name']) === 'string')) &&
-    (!v['host_name'] || ((typeof v['host_name']) === 'string')) &&
-    (!v['client_ip'] || ((typeof v['client_ip']) === 'string')) &&
-    (!v['server_ip'] || ((typeof v['server_ip']) === 'string')) &&
-    (v['reported_at'] && isDateTime(v['reported_at'])) &&
-    ((typeof v['reported_timestamp']) === 'number')
+    typeof v['name'] === 'string' &&
+    (!v['proc_cmd'] || typeof v['proc_cmd'] === 'string') &&
+    (!v['proc_effective_user'] ||
+      typeof v['proc_effective_user'] === 'string') &&
+    (!v['workload_name'] || typeof v['workload_name'] === 'string') &&
+    (!v['remote_workload_name'] ||
+      typeof v['remote_workload_name'] === 'string') &&
+    (!v['host_name'] || typeof v['host_name'] === 'string') &&
+    (!v['client_ip'] || typeof v['client_ip'] === 'string') &&
+    (!v['server_ip'] || typeof v['server_ip'] === 'string') &&
+    v['reported_at'] &&
+    isDateTime(v['reported_at']) &&
+    typeof v['reported_timestamp'] === 'number'
   );
 }

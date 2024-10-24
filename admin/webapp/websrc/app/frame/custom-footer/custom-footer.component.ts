@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AuthService } from '@services/auth.service';
-import {getContrastRatio, isGoodContrastRatio} from "@common/utils/common.utils";
+import {
+  getContrastRatio,
+  isGoodContrastRatio,
+} from '@common/utils/common.utils';
 
 @Component({
   selector: 'app-custom-footer',
@@ -43,26 +46,33 @@ export class CustomFooterComponent implements OnInit {
     if (GlobalVariable.customPageFooterColor) {
       this.footerStyle = {
         ...style,
-        'color': isGoodContrastRatio(getContrastRatio(GlobalVariable.customPageFooterColor, 'FFFFFF'))?'white':'black',
+        color: isGoodContrastRatio(
+          getContrastRatio(GlobalVariable.customPageFooterColor, 'FFFFFF')
+        )
+          ? 'white'
+          : 'black',
         'background-color': GlobalVariable.customPageFooterColor,
       };
     } else {
-      this._environmentVariablesRetrievedSubscription = this.authService.onEnvironmentVariablesRetrieved$.subscribe(
-        value => {
-          if(GlobalVariable.customPageFooterContent){
+      this._environmentVariablesRetrievedSubscription =
+        this.authService.onEnvironmentVariablesRetrieved$.subscribe(value => {
+          if (GlobalVariable.customPageFooterContent) {
             this.footerText = this.sanitizer.bypassSecurityTrustHtml(
               GlobalVariable.customPageFooterContent
             );
           }
-          if(GlobalVariable.customPageFooterColor){
+          if (GlobalVariable.customPageFooterColor) {
             this.footerStyle = {
               ...style,
-              'color': isGoodContrastRatio(getContrastRatio(GlobalVariable.customPageFooterColor, 'FFFFFF'))?'white':'black',
+              color: isGoodContrastRatio(
+                getContrastRatio(GlobalVariable.customPageFooterColor, 'FFFFFF')
+              )
+                ? 'white'
+                : 'black',
               'background-color': GlobalVariable.customPageFooterColor,
             };
           }
-        }
-      );
+        });
     }
   }
 }

@@ -8,9 +8,8 @@ describe('ApplicationProtocolsPanelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ApplicationProtocolsPanelComponent ]
-    })
-    .compileComponents();
+      declarations: [ApplicationProtocolsPanelComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

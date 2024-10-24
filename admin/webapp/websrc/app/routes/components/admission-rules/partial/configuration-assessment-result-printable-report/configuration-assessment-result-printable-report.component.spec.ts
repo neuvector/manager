@@ -8,13 +8,14 @@ describe('ConfigurationAssessmentResultPrintableReportComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ConfigurationAssessmentResultPrintableReportComponent ]
-    })
-    .compileComponents();
+      declarations: [ConfigurationAssessmentResultPrintableReportComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ConfigurationAssessmentResultPrintableReportComponent);
+    fixture = TestBed.createComponent(
+      ConfigurationAssessmentResultPrintableReportComponent
+    );
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

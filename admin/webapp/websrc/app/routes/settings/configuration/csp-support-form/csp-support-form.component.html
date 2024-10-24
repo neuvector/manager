@@ -1,18 +1,30 @@
 <form (ngSubmit)="submitExport()" [formGroup]="cspExportForm">
   <div class="ml-3 my-md-4">
     <h1 class="h4 font-weight-normal">
-      {{ 'setting.CLOUD_BILLING' | translate: { cloud: cspTypeText } }}
+      {{ 'setting.CLOUD_BILLING' | translate : { cloud: cspTypeText } }}
     </h1>
     <div class="mx-3 text-muted">
-      {{ 'setting.CLOUD_BILLING_HINT_1' | translate: { cloud: cspTypeText } }}
-      <a href="{{ 'setting.CLOUD_SUPPORT_LINK' | translate: { cloud: cspTypeText } }}" target="_blank">{{ 'setting.CLOUD_SUPPORT_LINK' | translate: { cloud: cspTypeText } }}</a>
-      {{ 'setting.CLOUD_BILLING_HINT_2' | translate: { cloud: cspTypeText } }}
+      {{ 'setting.CLOUD_BILLING_HINT_1' | translate : { cloud: cspTypeText } }}
+      <a
+        href="{{
+          'setting.CLOUD_SUPPORT_LINK' | translate : { cloud: cspTypeText }
+        }}"
+        target="_blank"
+        >{{
+          'setting.CLOUD_SUPPORT_LINK' | translate : { cloud: cspTypeText }
+        }}</a
+      >
+      {{ 'setting.CLOUD_BILLING_HINT_2' | translate : { cloud: cspTypeText } }}
     </div>
     <div class="mx-3 mt-3 mat-small">
       <div *ngIf="cspErrors.length > 0">
-        <div class="text-danger text-bold">{{ 'setting.CSP_ERR_TITLE' | translate }}</div>
+        <div class="text-danger text-bold">
+          {{ 'setting.CSP_ERR_TITLE' | translate }}
+        </div>
         <ul>
-          <li *ngFor="let cspError of cspErrors let i = index" class="text-danger py-0">
+          <li
+            *ngFor="let cspError of cspErrors; let i = index"
+            class="text-danger py-0">
             <div *ngFor="let cspErrorLine of cspError">
               {{ cspErrorLine }}
             </div>
@@ -20,16 +32,20 @@
         </ul>
       </div>
       <div *ngIf="nvError.length > 0">
-        <div class="text-danger text-bold">{{ 'setting.NV_ERR_TITLE' | translate }}</div>
+        <div class="text-danger text-bold">
+          {{ 'setting.NV_ERR_TITLE' | translate }}
+        </div>
         <div class="text-danger py-0">{{ nvError }}</div>
       </div>
       <div *ngIf="billingDataExpireTime" class="text-warning">
         <div class="text-bold">{{ 'setting.EXPIRE_TITLE' | translate }}</div>
-        <div>{{ 'setting.EXPIRE_STATE' | translate }} {{ billingDataExpireTime }}</div>
+        <div>
+          {{ 'setting.EXPIRE_STATE' | translate }} {{ billingDataExpireTime }}
+        </div>
       </div>
     </div>
     <div class="ml-3 mr-4 my-md-2 d-flex align-items-center">
-      <div *ngIf="errorMsg" class="text-danger">{{errorMsg}}</div>
+      <div *ngIf="errorMsg" class="text-danger">{{ errorMsg }}</div>
       <app-loading-button
         [appearance]="'mat-raised-button'"
         [color]="'primary'"

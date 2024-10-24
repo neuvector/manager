@@ -48,8 +48,7 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
   fields = cloneDeep(AddRegistryFieldConfig);
   options: FormlyFormOptions = {
     formState: {
-      isFedAdmin:
-        this.authUtilsService.getDisplayFlag('multi_cluster'),
+      isFedAdmin: this.authUtilsService.getDisplayFlag('multi_cluster'),
       isMaster: GlobalVariable.isMaster,
       isProxyEnabled: false,
     },
@@ -68,7 +67,7 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
     private registriesCommunicationService: RegistriesCommunicationService,
     private notificationService: NotificationService,
     private configHttpService: ConfigHttpService,
-    private authUtilsService: AuthUtilsService,
+    private authUtilsService: AuthUtilsService
   ) {}
 
   submit(): void {

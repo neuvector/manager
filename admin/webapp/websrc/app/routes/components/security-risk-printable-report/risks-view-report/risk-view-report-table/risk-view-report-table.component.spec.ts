@@ -8,9 +8,8 @@ describe('RiskViewReportTableComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RiskViewReportTableComponent ]
-    })
-    .compileComponents();
+      declarations: [RiskViewReportTableComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

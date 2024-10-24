@@ -7,7 +7,6 @@ export interface WorkloadBrief2 {
 
 export function isWorkloadBrief2(v: any): v is WorkloadBrief2 {
   return (
-    ((typeof v['display_name']) === 'string') &&
-    ((typeof v['service']) === 'string')
+    typeof v['display_name'] === 'string' && typeof v['service'] === 'string'
   );
 }

@@ -12,10 +12,7 @@ import { NvCommonModule } from '@common/nvCommon.module';
 import { RoutesModule } from './routes/routes.module';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { GlobalConstant } from '@common/constants/global.constant';
-import {
-  LOCAL_STORAGE,
-  StorageService
-} from 'ngx-webstorage-service';
+import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -51,10 +48,13 @@ export class AppModule {
   constructor(
     w: WindowWrapper,
     http: HttpClient,
-    @Inject(LOCAL_STORAGE) private localStorage: StorageService,
+    @Inject(LOCAL_STORAGE) private localStorage: StorageService
   ) {
     GlobalVariable.window = w;
     GlobalVariable.http = http;
-    this.localStorage.set(GlobalConstant.LOCAL_STORAGE_EXTERNAL_REF, location.hash)
+    this.localStorage.set(
+      GlobalConstant.LOCAL_STORAGE_EXTERNAL_REF,
+      location.hash
+    );
   }
 }

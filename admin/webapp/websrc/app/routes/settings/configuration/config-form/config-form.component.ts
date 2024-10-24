@@ -201,7 +201,8 @@ export class ConfigFormComponent implements OnInit {
       config_v2: {
         svc_cfg: {
           new_service_policy_mode: base_config.new_svc.new_service_policy_mode,
-          new_service_profile_mode: base_config.new_svc.new_service_profile_mode,
+          new_service_profile_mode:
+            base_config.new_svc.new_service_profile_mode,
           new_service_profile_baseline:
             base_config.new_svc.new_service_profile_baseline,
         },

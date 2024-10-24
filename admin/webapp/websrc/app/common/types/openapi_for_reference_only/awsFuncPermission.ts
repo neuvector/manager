@@ -1,4 +1,4 @@
-import { AwsFuncPermissionAllowedDetail } from "./awsFuncPermissionAllowedDetail";
+import { AwsFuncPermissionAllowedDetail } from './awsFuncPermissionAllowedDetail';
 
 export interface AwsFuncPermission {
   aws_attached_policy: boolean;

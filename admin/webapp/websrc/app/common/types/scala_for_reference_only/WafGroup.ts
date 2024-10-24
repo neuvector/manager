@@ -10,8 +10,9 @@ export interface WafGroup {
 
 export function isWafGroup(v: any): v is WafGroup {
   return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['status']) === 'boolean') &&
-    (Array.isArray(v['sensors']) && v['sensors'].every(elmt => elmt && isWafSetting(elmt)))
+    typeof v['name'] === 'string' &&
+    typeof v['status'] === 'boolean' &&
+    Array.isArray(v['sensors']) &&
+    v['sensors'].every(elmt => elmt && isWafSetting(elmt))
   );
 }

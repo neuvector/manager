@@ -20,7 +20,7 @@ import { EnforcerBriefModule } from '@components/enforcer-brief/enforcer-brief.m
 import { ReviewProcessRuleModalComponent } from './partial/review-process-rule-modal/review-process-rule-modal.component';
 import { ReviewNetworkRuleModalComponent } from './partial/review-network-rule-modal/review-network-rule-modal.component';
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
-import { PodBriefModule } from  '@components/pod-brief/pod-brief.module';
+import { PodBriefModule } from '@components/pod-brief/pod-brief.module';
 import { SecurityEventsPrintableReportComponent } from './partial/security-events-printable-report/security-events-printable-report.component';
 import { SecurityEventsPrintableReportLocationColComponent } from './partial/security-events-printable-report-location-col/security-events-printable-report-location-col.component';
 import { SecurityEventsPrintableReportDetailsColComponent } from './partial/security-events-printable-report-details-col/security-events-printable-report-details-col.component';
@@ -54,9 +54,7 @@ const routes: Routes = [
     SecurityEventsPrintableReportSeverityColComponent,
     SecurityEventsPrintableReportChartComponent,
   ],
-  providers: [
-    AdvancedFilterModalService
-  ],
+  providers: [AdvancedFilterModalService],
   imports: [
     CommonModule,
     NvCommonModule,
@@ -70,7 +68,7 @@ const routes: Routes = [
     PodBriefModule,
     EnforcerBriefModule,
     LoadingTemplateModule,
-    FlagIpFqdnModule
-  ]
+    FlagIpFqdnModule,
+  ],
 })
-export class SecurityEventsModule { }
+export class SecurityEventsModule {}

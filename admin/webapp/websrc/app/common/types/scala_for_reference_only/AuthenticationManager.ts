@@ -19,8 +19,11 @@ export class AuthenticationManager {
   }
 }
 
-export const AuthenticationManagerInhabitant: AuthenticationManager = AuthenticationManager.getInstance();
+export const AuthenticationManagerInhabitant: AuthenticationManager =
+  AuthenticationManager.getInstance();
 
 export function isAuthenticationManager(v: any): v is AuthenticationManager {
-  return (v instanceof AuthenticationManager) && (v === AuthenticationManagerInhabitant);
+  return (
+    v instanceof AuthenticationManager && v === AuthenticationManagerInhabitant
+  );
 }

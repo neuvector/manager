@@ -12,6 +12,7 @@ export function isUsers(v: any): v is Users {
   return (
     (!v['domain_roles'] || (v['domain_roles'] && isArray(v['domain_roles']))) &&
     (!v['global_roles'] || (v['global_roles'] && isArray(v['global_roles']))) &&
-    (v['users'] && isArray(v['users']))
+    v['users'] &&
+    isArray(v['users'])
   );
 }

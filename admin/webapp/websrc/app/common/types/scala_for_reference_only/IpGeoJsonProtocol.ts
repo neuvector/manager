@@ -14,8 +14,9 @@ export class IpGeoJsonProtocol {
   }
 }
 
-export const IpGeoJsonProtocolInhabitant: IpGeoJsonProtocol = IpGeoJsonProtocol.getInstance();
+export const IpGeoJsonProtocolInhabitant: IpGeoJsonProtocol =
+  IpGeoJsonProtocol.getInstance();
 
 export function isIpGeoJsonProtocol(v: any): v is IpGeoJsonProtocol {
-  return (v instanceof IpGeoJsonProtocol) && (v === IpGeoJsonProtocolInhabitant);
+  return v instanceof IpGeoJsonProtocol && v === IpGeoJsonProtocolInhabitant;
 }

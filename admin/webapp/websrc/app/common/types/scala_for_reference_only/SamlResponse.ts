@@ -5,7 +5,5 @@ export interface SamlResponse {
 }
 
 export function isSamlResponse(v: any): v is SamlResponse {
-  return (
-    ((typeof v['client_ip']) === 'string')
-  );
+  return typeof v['client_ip'] === 'string';
 }

@@ -1,4 +1,4 @@
-import { LicenseInfo } from "./licenseInfo";
+import { LicenseInfo } from './licenseInfo';
 
 export interface LicenseShow {
   info: LicenseInfo;

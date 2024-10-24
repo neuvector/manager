@@ -7,7 +7,5 @@ export interface WafGroupData {
 }
 
 export function isWafGroupData(v: any): v is WafGroupData {
-  return (
-    (v['waf_group'] && isWafGroup(v['waf_group']))
-  );
+  return v['waf_group'] && isWafGroup(v['waf_group']);
 }

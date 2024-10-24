@@ -3,7 +3,9 @@
   <div class="page-cover-logo"></div>
   <div class="page-cover-title">
     {{ 'dashboard.report.TITLE' | translate }}
-    <div class="margin-top-m" style="font-size: 30px;">{{domain ? '&nbsp;(&nbsp;' + domain + '&nbsp;)' : ''}}</div>
+    <div class="margin-top-m" style="font-size: 30px">
+      {{ domain ? '&nbsp;(&nbsp;' + domain + '&nbsp;)' : '' }}
+    </div>
   </div>
 </div>
 <div class="report-summary pagebreak">
@@ -15,29 +17,32 @@
       <app-exposure-chart
         [ingress]="hierarchicalIngressList"
         [egress]="hierarchicalEgressList"
-        [isReport]="true"
-      >
+        [isReport]="true">
       </app-exposure-chart>
     </div>
     <div class="col-sm-8 text-muted">
-      <div style="margin-top: 30px;">
+      <div style="margin-top: 30px">
         <div>{{ 'dashboard.help.exposure.txt1' | translate }}</div>
         <div>{{ 'dashboard.help.exposure.txt2' | translate }}</div>
       </div>
     </div>
   </div>
   <div class="clearfix" *ngIf="reportInfo.scoreInfo.ingress.length > 0">
-    <div><strong>{{ 'dashboard.body.panel_title.INGRESS' | translate }}</strong></div>
+    <div>
+      <strong>{{ 'dashboard.body.panel_title.INGRESS' | translate }}</strong>
+    </div>
     <app-exposure-service-pod-report-grid
-      [reportGridData]="hierarchicalIngressList"
-    >
+      [reportGridData]="hierarchicalIngressList">
     </app-exposure-service-pod-report-grid>
   </div>
-  <div class="clearfix margin-top-l" *ngIf="reportInfo.scoreInfo.egress.length > 0">
-    <div><strong>{{ 'dashboard.body.panel_title.EGRESS' | translate }}</strong></div>
+  <div
+    class="clearfix margin-top-l"
+    *ngIf="reportInfo.scoreInfo.egress.length > 0">
+    <div>
+      <strong>{{ 'dashboard.body.panel_title.EGRESS' | translate }}</strong>
+    </div>
     <app-exposure-service-pod-report-grid
-      [reportGridData]="hierarchicalEgressList"
-    >
+      [reportGridData]="hierarchicalEgressList">
     </app-exposure-service-pod-report-grid>
   </div>
 </div>
@@ -48,9 +53,10 @@
   <div>
     <app-security-events-chart
       *ngIf="reportInfo.dashboardSecurityEventInfo.securityEventSummary"
-      [securityEventSummary]="reportInfo.dashboardSecurityEventInfo.securityEventSummary"
-      [isReport]="true"
-    >
+      [securityEventSummary]="
+        reportInfo.dashboardSecurityEventInfo.securityEventSummary
+      "
+      [isReport]="true">
     </app-security-events-chart>
     <div class="text-muted margin-top-xl">
       <div>{{ 'dashboard.help.criticalEvent.txt1' | translate }}</div>
@@ -62,17 +68,20 @@
   <div class="summary-title">
     {{ 'dashboard.body.panel_title.TOP_SEC_EVENTS' | translate }}
   </div>
-  <div><strong>{{ 'securityEvent.SOURCE' | translate }}</strong></div>
+  <div>
+    <strong>{{ 'securityEvent.SOURCE' | translate }}</strong>
+  </div>
   <div class="row">
     <div class="col-sm-5">
       <app-top-security-events-chart
-        [topSecurityEvents]="reportInfo.dashboardSecurityEventInfo.topSecurityEvents"
+        [topSecurityEvents]="
+          reportInfo.dashboardSecurityEventInfo.topSecurityEvents
+        "
         [isReport]="true"
-        direction="source"
-      >
+        direction="source">
       </app-top-security-events-chart>
     </div>
-    <div class="col-sm-7 text-muted margin-top-xl" style="line-height: 16px;">
+    <div class="col-sm-7 text-muted margin-top-xl" style="line-height: 16px">
       <div>{{ 'dashboard.help.top_security_events.txt1' | translate }}</div>
       <div>{{ 'dashboard.help.top_security_events.txt2' | translate }}</div>
       <div>{{ 'dashboard.help.top_security_events.txt2_1' | translate }}</div>
@@ -80,9 +89,11 @@
       <div>{{ 'dashboard.help.top_security_events.txt2_3' | translate }}</div>
     </div>
   </div>
-  <div><strong>{{ 'securityEvent.DESTINATION' | translate }}</strong></div>
+  <div>
+    <strong>{{ 'securityEvent.DESTINATION' | translate }}</strong>
+  </div>
   <div class="row">
-    <div class="col-sm-7 text-muted margin-top-xl" style="line-height: 16px;">
+    <div class="col-sm-7 text-muted margin-top-xl" style="line-height: 16px">
       <div>{{ 'dashboard.help.top_security_events.txt3' | translate }}</div>
       <div>{{ 'dashboard.help.top_security_events.txt4' | translate }}</div>
       <div>{{ 'dashboard.help.top_security_events.txt4_1' | translate }}</div>
@@ -91,10 +102,11 @@
     </div>
     <div class="col-sm-5">
       <app-top-security-events-chart
-        [topSecurityEvents]="reportInfo.dashboardSecurityEventInfo.topSecurityEvents"
+        [topSecurityEvents]="
+          reportInfo.dashboardSecurityEventInfo.topSecurityEvents
+        "
         [isReport]="true"
-        direction="destination"
-      >
+        direction="destination">
       </app-top-security-events-chart>
     </div>
   </div>
@@ -103,22 +115,29 @@
   <div class="summary-title">
     {{ 'dashboard.body.panel_title.TOP_VULNERABILITY' | translate }}
   </div>
-  <div><strong>{{ 'dashboard.body.panel_title.BY_PODS' | translate }}</strong></div>
+  <div>
+    <strong>{{ 'dashboard.body.panel_title.BY_PODS' | translate }}</strong>
+  </div>
   <div class="row">
     <div class="col-sm-6">
       <app-top-vulnerable-assets-chart
         assetType="containers"
-        [highPriorityVulnerabilities]="reportInfo.dashboardDetailsInfo.highPriorityVulnerabilities"
+        [highPriorityVulnerabilities]="
+          reportInfo.dashboardDetailsInfo.highPriorityVulnerabilities
+        "
         [isReport]="true"
-        [isAutoScanOff]="!details.autoScanConfig"
-      ></app-top-vulnerable-assets-chart>
+        [isAutoScanOff]="
+          !details.autoScanConfig
+        "></app-top-vulnerable-assets-chart>
     </div>
     <div class="col-sm-6 text-muted margin-top-xl">
       <div>{{ 'dashboard.help.top_incident_pod.txt1' | translate }}</div>
       <div>{{ 'dashboard.help.top_incident_pod.txt2' | translate }}</div>
     </div>
   </div>
-  <div><strong>{{ 'dashboard.body.panel_title.BY_NODES' | translate }}</strong></div>
+  <div>
+    <strong>{{ 'dashboard.body.panel_title.BY_NODES' | translate }}</strong>
+  </div>
   <div class="row">
     <div class="col-sm-6 text-muted margin-top-xl">
       <div>{{ 'dashboard.help.top_incident_node.txt1' | translate }}</div>
@@ -127,10 +146,11 @@
     <div class="col-sm-6">
       <app-top-vulnerable-assets-chart
         assetType="nodes"
-        [highPriorityVulnerabilities]="reportInfo.dashboardDetailsInfo.highPriorityVulnerabilities"
+        [highPriorityVulnerabilities]="
+          reportInfo.dashboardDetailsInfo.highPriorityVulnerabilities
+        "
         [isReport]="true"
-        [isAutoScanOff]="!details.autoScanConfig"
-      >
+        [isAutoScanOff]="!details.autoScanConfig">
       </app-top-vulnerable-assets-chart>
     </div>
   </div>
@@ -146,12 +166,8 @@
         assetType="services"
         [assetsInfo]="reportInfo.dashboardDetailsInfo.services"
         [scoreInfo]="reportInfo.scoreInfo"
-        [is4Report]="true"
-      ></app-policy-mode-chart>
-      <app-policy-mode-caution
-        class="col-sm-5"
-        assetType="services"
-      >
+        [is4Report]="true"></app-policy-mode-chart>
+      <app-policy-mode-caution class="col-sm-5" assetType="services">
       </app-policy-mode-caution>
     </div>
     <div class="col-sm-6">
@@ -160,12 +176,8 @@
         [assetsInfo]="reportInfo.dashboardDetailsInfo.containers"
         assetType="containers"
         [scoreInfo]="reportInfo.scoreInfo"
-        [is4Report]="true"
-      ></app-policy-mode-chart>
-      <app-policy-mode-caution
-        class="col-sm-5"
-        assetType="containers"
-      >
+        [is4Report]="true"></app-policy-mode-chart>
+      <app-policy-mode-caution class="col-sm-5" assetType="containers">
       </app-policy-mode-caution>
     </div>
   </div>
@@ -178,13 +190,14 @@
   <div class="summary-title">
     {{ 'dashboard.body.panel_title.PROTOCOL_APPS_IN_POLICY' | translate }}
   </div>
-  <div><strong>{{ 'dashboard.body.panel_title.POLICY_COUNT' | translate }}</strong></div>
+  <div>
+    <strong>{{ 'dashboard.body.panel_title.POLICY_COUNT' | translate }}</strong>
+  </div>
   <div class="row">
     <div class="col-sm-6">
       <app-application-conversation-chart
         [applications]="reportInfo.dashboardDetailsInfo.applications"
-        [isReport]="true"
-      >
+        [isReport]="true">
       </app-application-conversation-chart>
     </div>
     <div class="col-sm-6 text-muted margin-top-xl">
@@ -192,7 +205,9 @@
       <div>{{ 'dashboard.help.application.txt2' | translate }}</div>
     </div>
   </div>
-  <div><strong>{{ 'dashboard.body.panel_title.BYTES' | translate }}</strong></div>
+  <div>
+    <strong>{{ 'dashboard.body.panel_title.BYTES' | translate }}</strong>
+  </div>
   <div class="row">
     <div class="col-sm-6 text-muted margin-top-xl">
       <div>{{ 'dashboard.help.application.txt3' | translate }}</div>
@@ -201,8 +216,7 @@
     <div class="col-sm-6">
       <app-application-volume-chart
         [applications]="reportInfo.dashboardDetailsInfo.applications"
-        [isReport]="true"
-      >
+        [isReport]="true">
       </app-application-volume-chart>
     </div>
   </div>

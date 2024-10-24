@@ -10,8 +10,9 @@ export interface DlpRule {
 
 export function isDlpRule(v: any): v is DlpRule {
   return (
-    ((typeof v['name']) === 'string') &&
-    (!v['id'] || ((typeof v['id']) === 'number')) &&
-    (Array.isArray(v['patterns']) && v['patterns'].every(elmt => elmt && isPattern(elmt)))
+    typeof v['name'] === 'string' &&
+    (!v['id'] || typeof v['id'] === 'number') &&
+    Array.isArray(v['patterns']) &&
+    v['patterns'].every(elmt => elmt && isPattern(elmt))
   );
 }

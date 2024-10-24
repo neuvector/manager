@@ -8,9 +8,8 @@ describe('ApikeysGridActionCellComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ApikeysGridActionCellComponent ]
-    })
-    .compileComponents();
+      declarations: [ApikeysGridActionCellComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -9,7 +9,9 @@ export interface TokenWrap {
 
 export function isTokenWrap(v: any): v is TokenWrap {
   return (
-    (!v['password_days_until_expire'] || ((typeof v['password_days_until_expire']) === 'number')) &&
-    (v['token'] && isToken(v['token']))
+    (!v['password_days_until_expire'] ||
+      typeof v['password_days_until_expire'] === 'number') &&
+    v['token'] &&
+    isToken(v['token'])
   );
 }

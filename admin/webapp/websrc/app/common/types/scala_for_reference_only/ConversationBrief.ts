@@ -12,10 +12,12 @@ export interface ConversationBrief {
 
 export function isConversationBrief(v: any): v is ConversationBrief {
   return (
-    (v['from'] && isContainer(v['from'])) &&
-    (v['to'] && isContainer(v['to'])) &&
-    ((typeof v['bytes']) === 'number') &&
-    (!v['severity'] || ((typeof v['severity']) === 'string')) &&
-    ((typeof v['policy_action']) === 'string')
+    v['from'] &&
+    isContainer(v['from']) &&
+    v['to'] &&
+    isContainer(v['to']) &&
+    typeof v['bytes'] === 'number' &&
+    (!v['severity'] || typeof v['severity'] === 'string') &&
+    typeof v['policy_action'] === 'string'
   );
 }

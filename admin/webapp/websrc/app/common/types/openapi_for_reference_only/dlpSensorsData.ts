@@ -1,4 +1,4 @@
-import { DlpSensor } from "./dlpSensor";
+import { DlpSensor } from './dlpSensor';
 
 export interface DlpSensorsData {
   sensors: DlpSensor[];

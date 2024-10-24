@@ -1,5 +1,11 @@
 <div class="report-summary" style="page-break-after: avoid">
-  <span class="summary-title" [ngClass]="{'text-warning': vulPodsCnt > 0, 'text-success': vulPodsCnt === 0}" style="font-size: 16px">
+  <span
+    class="summary-title"
+    [ngClass]="{
+      'text-warning': vulPodsCnt > 0,
+      'text-success': vulPodsCnt === 0
+    }"
+    style="font-size: 16px">
     {{
       (reportPage === 'vulnerabilities' ? 'scan' : 'cis') +
         '.report.others.CONTAINER_INS'
@@ -67,7 +73,10 @@
   <tbody>
     <tr
       class="print-row"
-      *ngFor="let pod of pods.slice(0, SEC_ASSETS_REPORT_MAX_ROW); let i = index"
+      *ngFor="
+        let pod of pods.slice(0, SEC_ASSETS_REPORT_MAX_ROW);
+        let i = index
+      "
       [attr.data-index]="i">
       <td class="print-cell" style="width: 10%">
         {{ pod.name }}

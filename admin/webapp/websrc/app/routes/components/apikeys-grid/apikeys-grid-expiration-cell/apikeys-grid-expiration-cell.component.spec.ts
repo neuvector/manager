@@ -8,9 +8,8 @@ describe('ApikeysGridExpirationCellComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ApikeysGridExpirationCellComponent ]
-    })
-    .compileComponents();
+      declarations: [ApikeysGridExpirationCellComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

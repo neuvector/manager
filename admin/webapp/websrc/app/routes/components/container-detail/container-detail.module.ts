@@ -17,6 +17,6 @@ import { RegistriesService } from '@services/registries.service';
     TranslateModule,
   ],
   exports: [ContainerDetailComponent],
-  providers: [RegistriesService]
+  providers: [RegistriesService],
 })
 export class ContainerDetailModule {}

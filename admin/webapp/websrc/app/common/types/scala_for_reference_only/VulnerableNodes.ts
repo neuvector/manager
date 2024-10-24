@@ -9,7 +9,8 @@ export interface VulnerableNodes {
 
 export function isVulnerableNodes(v: any): v is VulnerableNodes {
   return (
-    (v['top5Nodes'] && isArray(v['top5Nodes'])) &&
-    ((typeof v['vulnerabilitiesTotal']) === 'number')
+    v['top5Nodes'] &&
+    isArray(v['top5Nodes']) &&
+    typeof v['vulnerabilitiesTotal'] === 'number'
   );
 }

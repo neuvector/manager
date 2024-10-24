@@ -7,7 +7,5 @@ export interface RuleIds {
 }
 
 export function isRuleIds(v: any): v is RuleIds {
-  return (
-    (v['ids'] && isArray(v['ids']))
-  );
+  return v['ids'] && isArray(v['ids']);
 }

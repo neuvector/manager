@@ -7,7 +7,5 @@ export interface ScanConfigWrap {
 }
 
 export function isScanConfigWrap(v: any): v is ScanConfigWrap {
-  return (
-    (v['config'] && isScanConfig(v['config']))
-  );
+  return v['config'] && isScanConfig(v['config']);
 }

@@ -21,7 +21,6 @@ import { GroupWafConfigActionButtonComponent } from './partial/group-waf-config-
 import { ContainersGridModule } from '@components/containers-grid/containers-grid.module';
 import { NodesGridModule } from '@components/nodes-grid/nodes-grid.module';
 
-
 @NgModule({
   declarations: [
     GroupDetailsComponent,
@@ -33,7 +32,7 @@ import { NodesGridModule } from '@components/nodes-grid/nodes-grid.module';
     GroupDlpConfigModalComponent,
     GroupDlpConfigActionButtonComponent,
     GroupWafConfigModalComponent,
-    GroupWafConfigActionButtonComponent
+    GroupWafConfigActionButtonComponent,
   ],
   imports: [
     CommonModule,
@@ -52,9 +51,6 @@ import { NodesGridModule } from '@components/nodes-grid/nodes-grid.module';
     //   GroupDlpConfigActionButtonComponent
     // ]),
   ],
-  exports: [
-    MembersComponent,
-    GroupDetailsComponent
-  ]
+  exports: [MembersComponent, GroupDetailsComponent],
 })
-export class GroupDetailsModule { }
+export class GroupDetailsModule {}

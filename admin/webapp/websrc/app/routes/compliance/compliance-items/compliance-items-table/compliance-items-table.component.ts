@@ -7,6 +7,7 @@ import {
   OnInit,
   Output,
   SimpleChanges,
+  OnChanges,
 } from '@angular/core';
 import { Compliance } from '@common/types';
 import {
@@ -32,7 +33,9 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
   templateUrl: './compliance-items-table.component.html',
   styleUrls: ['./compliance-items-table.component.scss'],
 })
-export class ComplianceItemsTableComponent implements OnInit, OnDestroy {
+export class ComplianceItemsTableComponent
+  implements OnInit, OnDestroy, OnChanges
+{
   @Input() rowData!: Compliance[];
   @Input() gridHeight!: number;
   @Input() domains!: string[];

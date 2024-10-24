@@ -25,8 +25,7 @@ import { RegistryDetailsVulnerabilitiesCellComponent } from '@routes/registries/
   styleUrls: ['./exposed-servicepod-conv-grid.component.scss'],
 })
 export class ExposedServicepodConvGridComponent implements OnInit {
-
-  @Input() isIpMapReady = false
+  @Input() isIpMapReady = false;
   @Input() set exposures(exposure: Array<HierarchicalExposure>) {
     this._exposures = exposure;
     this.displayedExposure = this.preprocessHierarchicalData(this._exposures);
@@ -164,10 +163,11 @@ export class ExposedServicepodConvGridComponent implements OnInit {
         !params.data.parent_id || params.data.visible,
       getRowId: params => params.data.id,
       getRowHeight: params => (!!params.data.parent_id ? 100 : 30),
-      isFullWidthRow: (params: IsFullWidthRowParams<any, any>) => !!params.rowNode.data?.parent_id,
+      isFullWidthRow: (params: IsFullWidthRowParams<any, any>) =>
+        !!params.rowNode.data?.parent_id,
       fullWidthCellRenderer: 'conversationEntryListRenderer',
       rowClassRules: {
-        'nv-full-width-row': (params) => !!params.data?.parent_id,
+        'nv-full-width-row': params => !!params.data?.parent_id,
       },
       suppressMaintainUnsortedOrder: true,
       suppressScrollOnNewData: true,
@@ -222,17 +222,17 @@ export class ExposedServicepodConvGridComponent implements OnInit {
           ...exposure,
           pods: exposure.children.length,
           visible: true,
-          isIpMapReady: this.isIpMapReady
+          isIpMapReady: this.isIpMapReady,
         });
       }
     });
 
-    if(this.isIpMapReady) {
+    if (this.isIpMapReady) {
       res.forEach(d => {
-        if(!d['parent_id']) {
+        if (!d['parent_id']) {
           d.isIpMapReady = this.isIpMapReady;
         }
-      })
+      });
     }
 
     return res;

@@ -1,4 +1,4 @@
-import { ScanImageSummary } from "./scanImageSummary";
+import { ScanImageSummary } from './scanImageSummary';
 
 export interface ScanImageSummaryData {
   images: ScanImageSummary[];

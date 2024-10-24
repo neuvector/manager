@@ -5,7 +5,5 @@ export interface Error {
 }
 
 export function isError(v: any): v is Error {
-  return (
-    ((typeof v['message']) === 'string')
-  );
+  return typeof v['message'] === 'string';
 }

@@ -7,7 +7,5 @@ export interface WafRuleConfigData {
 }
 
 export function isWafRuleConfigData(v: any): v is WafRuleConfigData {
-  return (
-    (v['config'] && isWafRuleConfig(v['config']))
-  );
+  return v['config'] && isWafRuleConfig(v['config']);
 }

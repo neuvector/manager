@@ -26,26 +26,26 @@ export interface Metrics {
 
 export function isMetrics(v: any): v is Metrics {
   return (
-    ((typeof v['deny_adm_ctrl_rules']) === 'number') &&
-    ((typeof v['discover_cves']) === 'number') &&
-    ((typeof v['discover_ext_eps']) === 'number') &&
-    ((typeof v['discover_groups']) === 'number') &&
-    ((typeof v['monitor_groups']) === 'number') &&
-    ((typeof v['protect_groups']) === 'number') &&
-    ((typeof v['running_pods']) === 'number') &&
-    ((typeof v['groups']) === 'number') &&
-    ((typeof v['host_cves']) === 'number') &&
-    ((typeof v['hosts']) === 'number') &&
-    ((typeof v['monitor_cves']) === 'number') &&
-    ((typeof v['monitor_ext_eps']) === 'number') &&
-    ((typeof v['new_service_policy_mode']) === 'string') &&
-    ((typeof v['platform']) === 'string') &&
-    ((typeof v['platform_cves']) === 'number') &&
-    ((typeof v['privileged_wls']) === 'number') &&
-    ((typeof v['protect_cves']) === 'number') &&
-    ((typeof v['protect_ext_eps']) === 'number') &&
-    ((typeof v['root_wls']) === 'number') &&
-    ((typeof v['threat_ext_eps']) === 'number') &&
-    ((typeof v['violate_ext_eps']) === 'number')
+    typeof v['deny_adm_ctrl_rules'] === 'number' &&
+    typeof v['discover_cves'] === 'number' &&
+    typeof v['discover_ext_eps'] === 'number' &&
+    typeof v['discover_groups'] === 'number' &&
+    typeof v['monitor_groups'] === 'number' &&
+    typeof v['protect_groups'] === 'number' &&
+    typeof v['running_pods'] === 'number' &&
+    typeof v['groups'] === 'number' &&
+    typeof v['host_cves'] === 'number' &&
+    typeof v['hosts'] === 'number' &&
+    typeof v['monitor_cves'] === 'number' &&
+    typeof v['monitor_ext_eps'] === 'number' &&
+    typeof v['new_service_policy_mode'] === 'string' &&
+    typeof v['platform'] === 'string' &&
+    typeof v['platform_cves'] === 'number' &&
+    typeof v['privileged_wls'] === 'number' &&
+    typeof v['protect_cves'] === 'number' &&
+    typeof v['protect_ext_eps'] === 'number' &&
+    typeof v['root_wls'] === 'number' &&
+    typeof v['threat_ext_eps'] === 'number' &&
+    typeof v['violate_ext_eps'] === 'number'
   );
 }

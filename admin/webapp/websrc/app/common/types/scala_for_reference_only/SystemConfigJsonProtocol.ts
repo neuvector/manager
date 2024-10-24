@@ -14,8 +14,14 @@ export class SystemConfigJsonProtocol {
   }
 }
 
-export const SystemConfigJsonProtocolInhabitant: SystemConfigJsonProtocol = SystemConfigJsonProtocol.getInstance();
+export const SystemConfigJsonProtocolInhabitant: SystemConfigJsonProtocol =
+  SystemConfigJsonProtocol.getInstance();
 
-export function isSystemConfigJsonProtocol(v: any): v is SystemConfigJsonProtocol {
-  return (v instanceof SystemConfigJsonProtocol) && (v === SystemConfigJsonProtocolInhabitant);
+export function isSystemConfigJsonProtocol(
+  v: any
+): v is SystemConfigJsonProtocol {
+  return (
+    v instanceof SystemConfigJsonProtocol &&
+    v === SystemConfigJsonProtocolInhabitant
+  );
 }

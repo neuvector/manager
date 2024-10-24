@@ -34,7 +34,7 @@ import { EventsGridCsvService } from './csv-generation/events-grid-csv.service';
     LoadingButtonModule,
     NgxSliderModule,
     DragDropModule,
-    AgGridModule
+    AgGridModule,
     // AgGridModule.withComponents([]),
   ],
   exports: [EventsGridComponent],

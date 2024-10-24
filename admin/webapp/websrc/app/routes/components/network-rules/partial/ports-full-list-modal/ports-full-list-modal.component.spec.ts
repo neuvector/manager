@@ -8,9 +8,8 @@ describe('PortsFullListModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PortsFullListModalComponent ]
-    })
-    .compileComponents();
+      declarations: [PortsFullListModalComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

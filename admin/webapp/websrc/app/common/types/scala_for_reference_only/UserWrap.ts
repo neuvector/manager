@@ -7,7 +7,5 @@ export interface UserWrap {
 }
 
 export function isUserWrap(v: any): v is UserWrap {
-  return (
-    (v['user'] && isUser(v['user']))
-  );
+  return v['user'] && isUser(v['user']);
 }

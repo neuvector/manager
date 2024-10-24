@@ -7,7 +7,5 @@ export interface ViolationWrap {
 }
 
 export function isViolationWrap(v: any): v is ViolationWrap {
-  return (
-    (v['violations'] && isArray(v['violations']))
-  );
+  return v['violations'] && isArray(v['violations']);
 }

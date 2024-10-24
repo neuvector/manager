@@ -17,12 +17,17 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ContainerDetailModule } from '@components/container-detail/container-detail.module';
 import { ContainersPrintableReportComponent } from './containers-printable-report/containers-printable-report.component';
 import { ContainersPrintableReportChartComponent } from './containers-printable-report/containers-printable-report-chart/containers-printable-report-chart.component';
-import {NgChartsModule} from "ng2-charts";
+import { NgChartsModule } from 'ng2-charts';
 
 const routes: Routes = [{ path: '', component: ContainersComponent }];
 
 @NgModule({
-  declarations: [ContainersComponent, ContainerDetailsComponent, ContainersPrintableReportComponent, ContainersPrintableReportChartComponent],
+  declarations: [
+    ContainersComponent,
+    ContainerDetailsComponent,
+    ContainersPrintableReportComponent,
+    ContainersPrintableReportChartComponent,
+  ],
   imports: [
     CommonModule,
     NvCommonModule,
@@ -38,7 +43,7 @@ const routes: Routes = [{ path: '', component: ContainersComponent }];
     VulnerabilitiesGridModule,
     ProcessGridModule,
     QuickFilterModule,
-    NgChartsModule
+    NgChartsModule,
   ],
 })
 export class ContainersModule {}

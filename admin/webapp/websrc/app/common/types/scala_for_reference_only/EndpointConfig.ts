@@ -7,7 +7,7 @@ export interface EndpointConfig {
 
 export function isEndpointConfig(v: any): v is EndpointConfig {
   return (
-    ((typeof v['id']) === 'string') &&
-    (!v['display_name'] || ((typeof v['display_name']) === 'string'))
+    typeof v['id'] === 'string' &&
+    (!v['display_name'] || typeof v['display_name'] === 'string')
   );
 }

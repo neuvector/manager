@@ -4,8 +4,8 @@ declare var $: any;
 
 import { MenuService } from '@core/menu/menu.service';
 import { SwitchersService } from '@core/switchers/switchers.service';
-import {GlobalVariable} from "@common/variables/global.variable";
-import {GlobalConstant} from "@common/constants/global.constant";
+import { GlobalVariable } from '@common/variables/global.variable';
+import { GlobalConstant } from '@common/constants/global.constant';
 
 @Component({
   selector: 'app-sidebar',
@@ -55,16 +55,16 @@ export class SidebarComponent implements OnInit, OnDestroy {
       }
     });
 
-    if(GlobalVariable.customPageHeaderColor){
+    if (GlobalVariable.customPageHeaderColor) {
       this.customHeaderStyle = {
-        'margin-top': '28px'
+        'margin-top': '28px',
       };
       this.customSideBarStyle = {
-        'height': 'calc(100vh - 268px)'
+        height: 'calc(100vh - 268px)',
       };
       this.customFooterStyle = {
-        'bottom': '28px'
-      }
+        bottom: '28px',
+      };
     }
   }
 
@@ -223,9 +223,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
     return this.switchers.getFrameSwitcher('leftSideHover');
   }
 
-  private removeSubMenu = function(menu: Array<any>, menuItemName: string, submenuItemName: string): Array<any> {
+  private removeSubMenu = function (
+    menu: Array<any>,
+    menuItemName: string,
+    submenuItemName: string
+  ): Array<any> {
     let _menu = JSON.parse(JSON.stringify(menu));
-    let menuItemIndex = _menu.findIndex(item => item.text.toLowerCase() === menuItemName.toLowerCase());
+    let menuItemIndex = _menu.findIndex(
+      item => item.text.toLowerCase() === menuItemName.toLowerCase()
+    );
     let submenu = _menu[menuItemIndex].submenu;
     if (submenu) {
       let submenuItemIndex = submenu.findIndex(

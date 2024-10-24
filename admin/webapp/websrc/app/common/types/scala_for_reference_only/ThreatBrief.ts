@@ -8,8 +8,8 @@ export interface ThreatBrief {
 
 export function isThreatBrief(v: any): v is ThreatBrief {
   return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['severity']) === 'string') &&
-    ((typeof v['application']) === 'string')
+    typeof v['name'] === 'string' &&
+    typeof v['severity'] === 'string' &&
+    typeof v['application'] === 'string'
   );
 }

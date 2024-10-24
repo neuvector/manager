@@ -14,8 +14,9 @@ export class PolicyJsonProtocol {
   }
 }
 
-export const PolicyJsonProtocolInhabitant: PolicyJsonProtocol = PolicyJsonProtocol.getInstance();
+export const PolicyJsonProtocolInhabitant: PolicyJsonProtocol =
+  PolicyJsonProtocol.getInstance();
 
 export function isPolicyJsonProtocol(v: any): v is PolicyJsonProtocol {
-  return (v instanceof PolicyJsonProtocol) && (v === PolicyJsonProtocolInhabitant);
+  return v instanceof PolicyJsonProtocol && v === PolicyJsonProtocolInhabitant;
 }

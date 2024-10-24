@@ -1,4 +1,4 @@
-import { SystemConfigConfig } from "./systemConfigConfig";
+import { SystemConfigConfig } from './systemConfigConfig';
 
 export interface SystemConfigConfigData {
   config: SystemConfigConfig;

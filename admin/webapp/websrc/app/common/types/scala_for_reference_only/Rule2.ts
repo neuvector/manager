@@ -17,15 +17,15 @@ export interface Rule2 {
 
 export function isRule2(v: any): v is Rule2 {
   return (
-    (!v['id'] || ((typeof v['id']) === 'number')) &&
-    (!v['comment'] || ((typeof v['comment']) === 'string')) &&
-    (!v['from'] || ((typeof v['from']) === 'string')) &&
-    (!v['to'] || ((typeof v['to']) === 'string')) &&
+    (!v['id'] || typeof v['id'] === 'number') &&
+    (!v['comment'] || typeof v['comment'] === 'string') &&
+    (!v['from'] || typeof v['from'] === 'string') &&
+    (!v['to'] || typeof v['to'] === 'string') &&
     (!v['applications'] || (v['applications'] && isArray(v['applications']))) &&
-    (!v['ports'] || ((typeof v['ports']) === 'string')) &&
-    (!v['action'] || ((typeof v['action']) === 'string')) &&
-    (!v['learned'] || ((typeof v['learned']) === 'boolean')) &&
-    (!v['cfg_type'] || ((typeof v['cfg_type']) === 'string')) &&
-    (!v['disable'] || ((typeof v['disable']) === 'boolean'))
+    (!v['ports'] || typeof v['ports'] === 'string') &&
+    (!v['action'] || typeof v['action'] === 'string') &&
+    (!v['learned'] || typeof v['learned'] === 'boolean') &&
+    (!v['cfg_type'] || typeof v['cfg_type'] === 'string') &&
+    (!v['disable'] || typeof v['disable'] === 'boolean')
   );
 }

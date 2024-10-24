@@ -14,8 +14,9 @@ export class WafJsonProtocol {
   }
 }
 
-export const WafJsonProtocolInhabitant: WafJsonProtocol = WafJsonProtocol.getInstance();
+export const WafJsonProtocolInhabitant: WafJsonProtocol =
+  WafJsonProtocol.getInstance();
 
 export function isWafJsonProtocol(v: any): v is WafJsonProtocol {
-  return (v instanceof WafJsonProtocol) && (v === WafJsonProtocolInhabitant);
+  return v instanceof WafJsonProtocol && v === WafJsonProtocolInhabitant;
 }

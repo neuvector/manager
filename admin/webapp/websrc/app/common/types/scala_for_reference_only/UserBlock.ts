@@ -8,8 +8,9 @@ export interface UserBlock {
 
 export function isUserBlock(v: any): v is UserBlock {
   return (
-    ((typeof v['fullname']) === 'string') &&
-    (!v['clear_failed_login'] || ((typeof v['clear_failed_login']) === 'boolean')) &&
-    (!v['new_password'] || ((typeof v['new_password']) === 'string'))
+    typeof v['fullname'] === 'string' &&
+    (!v['clear_failed_login'] ||
+      typeof v['clear_failed_login'] === 'boolean') &&
+    (!v['new_password'] || typeof v['new_password'] === 'string')
   );
 }

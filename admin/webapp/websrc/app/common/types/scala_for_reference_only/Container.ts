@@ -11,11 +11,11 @@ export interface Container {
 
 export function isContainer(v: any): v is Container {
   return (
-    ((typeof v['id']) === 'string') &&
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['display_name']) === 'string') &&
-    ((typeof v['state']) === 'string') &&
-    ((typeof v['service']) === 'string') &&
-    ((typeof v['service_group']) === 'string')
+    typeof v['id'] === 'string' &&
+    typeof v['name'] === 'string' &&
+    typeof v['display_name'] === 'string' &&
+    typeof v['state'] === 'string' &&
+    typeof v['service'] === 'string' &&
+    typeof v['service_group'] === 'string'
   );
 }

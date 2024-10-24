@@ -8,9 +8,8 @@ describe('EnforcerBriefComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EnforcerBriefComponent ]
-    })
-    .compileComponents();
+      declarations: [EnforcerBriefComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

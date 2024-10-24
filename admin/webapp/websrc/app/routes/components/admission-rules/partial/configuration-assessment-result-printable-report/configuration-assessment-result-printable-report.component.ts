@@ -3,19 +3,22 @@ import { MapConstant } from '@common/constants/map.constant';
 
 @Component({
   selector: 'app-configuration-assessment-result-printable-report',
-  templateUrl: './configuration-assessment-result-printable-report.component.html',
-  styleUrls: ['./configuration-assessment-result-printable-report.component.scss']
+  templateUrl:
+    './configuration-assessment-result-printable-report.component.html',
+  styleUrls: [
+    './configuration-assessment-result-printable-report.component.scss',
+  ],
 })
-export class ConfigurationAssessmentResultPrintableReportComponent implements OnInit {
-
+export class ConfigurationAssessmentResultPrintableReportComponent
+  implements OnInit
+{
   @Input() testResult: any;
   colourMap: any = MapConstant.colourMap;
   Array = Array;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
-    console.log("testResult", this.testResult)
+    console.log('testResult', this.testResult);
   }
-
 }

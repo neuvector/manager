@@ -5,36 +5,37 @@ import { RuleDetailModalService } from '@components/groups/partial/rule-detail-m
 @Component({
   selector: 'app-rule-detail-modal',
   templateUrl: './rule-detail-modal.component.html',
-  styleUrls: ['./rule-detail-modal.component.scss']
+  styleUrls: ['./rule-detail-modal.component.scss'],
 })
 export class RuleDetailModalComponent implements OnInit {
-
   constructor(
     public ruleDetailModalService: RuleDetailModalService,
     public dialogRef: MatDialogRef<RuleDetailModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     if (this.data.ruleType === 'response') {
-      this.data.rule.conditions = this.destructConditions(this.data.rule.conditions);
+      this.data.rule.conditions = this.destructConditions(
+        this.data.rule.conditions
+      );
     }
   }
 
-  private destructConditions = (conditions) => {
-    let resCondition = "";
+  private destructConditions = conditions => {
+    let resCondition = '';
     if (
       conditions !== null &&
-      conditions !== "" &&
-      typeof conditions !== "undefined"
+      conditions !== '' &&
+      typeof conditions !== 'undefined'
     ) {
-      conditions.forEach(function(condition) {
-        resCondition += condition.type + ":" + condition.value + ", ";
+      conditions.forEach(function (condition) {
+        resCondition += condition.type + ':' + condition.value + ', ';
       });
       resCondition = resCondition.substring(0, resCondition.length - 2);
     } else {
-      resCondition = "";
+      resCondition = '';
     }
     return resCondition;
-  }
+  };
 }

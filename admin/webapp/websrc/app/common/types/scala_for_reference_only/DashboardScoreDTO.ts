@@ -4,29 +4,57 @@ import { ScoreInput, isScoreInput } from './ScoreInput';
 import { ScoreOutput, isScoreOutput } from './ScoreOutput';
 
 export interface DashboardScoreDTO {
-  highPriorityVulnerabilities: (Error | VulnerabilitiesDTO);
-  containers: (Error | Array);
-  services: (Error | Array);
-  applications: (Error | ReadonlyArray<[string, number]>);
-  applications2: (Error | ReadonlyArray<[string, ApplicationAnalysis]>);
-  policyCoverage: (Error | PolicyCoverage);
-  exposedConversations: (Error | ExposedConversations);
-  autoScanConfig: (Error | boolean);
+  highPriorityVulnerabilities: Error | VulnerabilitiesDTO;
+  containers: Error | Array;
+  services: Error | Array;
+  applications: Error | ReadonlyArray<[string, number]>;
+  applications2: Error | ReadonlyArray<[string, ApplicationAnalysis]>;
+  policyCoverage: Error | PolicyCoverage;
+  exposedConversations: Error | ExposedConversations;
+  autoScanConfig: Error | boolean;
   scoreInput: ScoreInput;
   scoreOutput: ScoreOutput;
 }
 
 export function isDashboardScoreDTO(v: any): v is DashboardScoreDTO {
   return (
-    ((v['highPriorityVulnerabilities'] && isError(v['highPriorityVulnerabilities'])) || (v['highPriorityVulnerabilities'] && isVulnerabilitiesDTO(v['highPriorityVulnerabilities']))) &&
-    ((v['containers'] && isError(v['containers'])) || (v['containers'] && isArray(v['containers']))) &&
-    ((v['services'] && isError(v['services'])) || (v['services'] && isArray(v['services']))) &&
-    ((v['applications'] && isError(v['applications'])) || (Array.isArray(v['applications']) && v['applications'].every(elmt => Array.isArray(elmt) && elmt.length == 2 && ((typeof elmt[0]) === 'string') && ((typeof elmt[1]) === 'number')))) &&
-    ((v['applications2'] && isError(v['applications2'])) || (Array.isArray(v['applications2']) && v['applications2'].every(elmt => Array.isArray(elmt) && elmt.length == 2 && ((typeof elmt[0]) === 'string') && (elmt[1] && isApplicationAnalysis(elmt[1]))))) &&
-    ((v['policyCoverage'] && isError(v['policyCoverage'])) || (v['policyCoverage'] && isPolicyCoverage(v['policyCoverage']))) &&
-    ((v['exposedConversations'] && isError(v['exposedConversations'])) || (v['exposedConversations'] && isExposedConversations(v['exposedConversations']))) &&
-    ((v['autoScanConfig'] && isError(v['autoScanConfig'])) || ((typeof v['autoScanConfig']) === 'boolean')) &&
-    (v['scoreInput'] && isScoreInput(v['scoreInput'])) &&
-    (v['scoreOutput'] && isScoreOutput(v['scoreOutput']))
+    ((v['highPriorityVulnerabilities'] &&
+      isError(v['highPriorityVulnerabilities'])) ||
+      (v['highPriorityVulnerabilities'] &&
+        isVulnerabilitiesDTO(v['highPriorityVulnerabilities']))) &&
+    ((v['containers'] && isError(v['containers'])) ||
+      (v['containers'] && isArray(v['containers']))) &&
+    ((v['services'] && isError(v['services'])) ||
+      (v['services'] && isArray(v['services']))) &&
+    ((v['applications'] && isError(v['applications'])) ||
+      (Array.isArray(v['applications']) &&
+        v['applications'].every(
+          elmt =>
+            Array.isArray(elmt) &&
+            elmt.length == 2 &&
+            typeof elmt[0] === 'string' &&
+            typeof elmt[1] === 'number'
+        ))) &&
+    ((v['applications2'] && isError(v['applications2'])) ||
+      (Array.isArray(v['applications2']) &&
+        v['applications2'].every(
+          elmt =>
+            Array.isArray(elmt) &&
+            elmt.length == 2 &&
+            typeof elmt[0] === 'string' &&
+            elmt[1] &&
+            isApplicationAnalysis(elmt[1])
+        ))) &&
+    ((v['policyCoverage'] && isError(v['policyCoverage'])) ||
+      (v['policyCoverage'] && isPolicyCoverage(v['policyCoverage']))) &&
+    ((v['exposedConversations'] && isError(v['exposedConversations'])) ||
+      (v['exposedConversations'] &&
+        isExposedConversations(v['exposedConversations']))) &&
+    ((v['autoScanConfig'] && isError(v['autoScanConfig'])) ||
+      typeof v['autoScanConfig'] === 'boolean') &&
+    v['scoreInput'] &&
+    isScoreInput(v['scoreInput']) &&
+    v['scoreOutput'] &&
+    isScoreOutput(v['scoreOutput'])
   );
 }

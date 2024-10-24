@@ -6,10 +6,7 @@
       }}
     </h4>
     <div class="d-flex align-items-center justify-content-center mb-1">
-      <button
-        mat-icon-button
-        aria-label="close"
-      >
+      <button mat-icon-button aria-label="close">
         <i class="eos-icons" (click)="onCancel()">close</i>
       </button>
     </div>
@@ -34,7 +31,9 @@
         <div class="col-8">
           <div class="d-flex justify-content-start align-items-center mt-2">
             <mat-form-field appearance="fill" class="flex-grow-1">
-              <mat-label>{{ 'service.gridHeader.FILTER' | translate }}</mat-label>
+              <mat-label>{{
+                'service.gridHeader.FILTER' | translate
+              }}</mat-label>
               <input
                 matInput
                 name="filter"
@@ -94,12 +93,15 @@
         </div>
         <div class="col-4">
           <div class="text-info">
-            <em class="eos-icons icon-18 mr-2">info</em>{{ 'general.SAMPLE'| translate }}
+            <em class="eos-icons icon-18 mr-2">info</em
+            >{{ 'general.SAMPLE' | translate }}
           </div>
           <div class="p-2 text-muted">
             <table>
               <tr class="sample-table-header">
-                <th class="sample-table-border">{{ 'service.gridHeader.FILTER' | translate }}</th>
+                <th class="sample-table-border">
+                  {{ 'service.gridHeader.FILTER' | translate }}
+                </th>
               </tr>
               <tr>
                 <td class="sample-table-border">/dir/xxx</td>

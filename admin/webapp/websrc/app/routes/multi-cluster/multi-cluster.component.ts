@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { UtilsService } from '@common/utils/app.utils';
@@ -20,7 +20,7 @@ import { ConfigHttpService } from '@common/api/config-http.service';
   templateUrl: './multi-cluster.component.html',
   styleUrls: ['./multi-cluster.component.scss'],
 })
-export class MultiClusterComponent implements OnInit {
+export class MultiClusterComponent implements OnInit, OnDestroy {
   public switch: string = '';
   public loaded = false;
   public error!: string;

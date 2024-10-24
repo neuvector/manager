@@ -4,10 +4,9 @@ import { MapConstant } from '@common/constants/map.constant';
 @Component({
   selector: 'app-assets-view-report-assets-images-table',
   templateUrl: './assets-view-report-assets-images-table.component.html',
-  styleUrls: ['./assets-view-report-assets-images-table.component.scss']
+  styleUrls: ['./assets-view-report-assets-images-table.component.scss'],
 })
 export class AssetsViewReportAssetsImagesTableComponent implements OnInit {
-
   @Input() images: any[];
   @Input() reportPage: string;
   colourMap: any = MapConstant.colourMap;
@@ -15,13 +14,18 @@ export class AssetsViewReportAssetsImagesTableComponent implements OnInit {
   vulImagesCnt: number;
   SEC_ASSETS_REPORT_MAX_ROW = MapConstant.SEC_ASSETS_REPORT_MAX_ROW;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
-    this.vulImagesCnt =  this.reportPage === 'vulnerabilities' ?
-      this.images.length - this.images.filter(image => image.high + image.medium === 0).length :
-      this.images.length - this.images.filter(image => image.complianceCnt === 0).length;
-    this.vulRate4Images = this.images.length > 0 ? `${Math.ceil(this.vulImagesCnt / this.images.length) * 100}%` : '0%';
+    this.vulImagesCnt =
+      this.reportPage === 'vulnerabilities'
+        ? this.images.length -
+          this.images.filter(image => image.high + image.medium === 0).length
+        : this.images.length -
+          this.images.filter(image => image.complianceCnt === 0).length;
+    this.vulRate4Images =
+      this.images.length > 0
+        ? `${Math.ceil(this.vulImagesCnt / this.images.length) * 100}%`
+        : '0%';
   }
-
 }

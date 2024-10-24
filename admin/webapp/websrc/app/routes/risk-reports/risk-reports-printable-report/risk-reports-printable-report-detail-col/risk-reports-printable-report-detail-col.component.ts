@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Audit } from '@common/types';
 
 @Component({
@@ -6,10 +6,8 @@ import { Audit } from '@common/types';
   templateUrl: './risk-reports-printable-report-detail-col.component.html',
   styleUrls: ['./risk-reports-printable-report-detail-col.component.scss'],
 })
-export class RiskReportsPrintableReportDetailColComponent implements OnInit {
+export class RiskReportsPrintableReportDetailColComponent {
   @Input() audit!: Audit;
 
   constructor() {}
-
-  ngOnInit(): void {}
 }

@@ -9,7 +9,8 @@ export interface CustomCheckConfigDTO {
 
 export function isCustomCheckConfigDTO(v: any): v is CustomCheckConfigDTO {
   return (
-    ((typeof v['group']) === 'string') &&
-    (v['config'] && isCustomCheckConfig(v['config']))
+    typeof v['group'] === 'string' &&
+    v['config'] &&
+    isCustomCheckConfig(v['config'])
   );
 }

@@ -4,19 +4,13 @@ import { EmptyDataChartReplacementComponent } from './empty-data-chart-replaceme
 import { SafeNotificationComponent } from './safe-notification/safe-notification.component';
 import { WarningNotificationComponent } from './warning-notification/warning-notification.component';
 
-
-
 @NgModule({
   declarations: [
     EmptyDataChartReplacementComponent,
     SafeNotificationComponent,
-    WarningNotificationComponent
+    WarningNotificationComponent,
   ],
-  imports: [
-    CommonModule
-  ],
-  exports: [
-    EmptyDataChartReplacementComponent
-  ]
+  imports: [CommonModule],
+  exports: [EmptyDataChartReplacementComponent],
 })
-export class EmptyDataChartReplacementModule { }
+export class EmptyDataChartReplacementModule {}

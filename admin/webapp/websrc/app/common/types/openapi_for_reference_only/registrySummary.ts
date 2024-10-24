@@ -1,7 +1,7 @@
-import { ScanSchedule } from "./scanSchedule";
-import { JfrogXray } from "./jfrogXray";
-import { AwsAccountKey } from "./awsAccountKey";
-import { GcrKey } from "./gcrKey";
+import { ScanSchedule } from './scanSchedule';
+import { JfrogXray } from './jfrogXray';
+import { AwsAccountKey } from './awsAccountKey';
+import { GcrKey } from './gcrKey';
 
 export interface RegistrySummary {
   name: string;

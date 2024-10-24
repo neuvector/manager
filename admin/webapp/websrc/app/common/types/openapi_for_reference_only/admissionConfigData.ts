@@ -1,5 +1,5 @@
-import { AdminRuleTypeOptions } from "./adminRuleTypeOptions";
-import { AdmissionState } from "./admissionState";
+import { AdminRuleTypeOptions } from './adminRuleTypeOptions';
+import { AdmissionState } from './admissionState';
 
 export interface AdmissionConfigData {
   state?: AdmissionState;

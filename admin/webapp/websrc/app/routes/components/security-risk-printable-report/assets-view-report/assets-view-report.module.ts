@@ -10,8 +10,6 @@ import { AssetsViewReportAssetsPlatformsTableComponent } from './assets-view-rep
 import { AssetsViewReportAssetsImagesTableComponent } from './assets-view-report-assets-images-table/assets-view-report-assets-images-table.component';
 import { PipeModule } from '@common/pipes/pipe.module';
 
-
-
 @NgModule({
   declarations: [
     AssetsViewReportComponent,
@@ -19,16 +17,9 @@ import { PipeModule } from '@common/pipes/pipe.module';
     AssetsViewReportAssetsPodsTableComponent,
     AssetsViewReportAssetsNodesTableComponent,
     AssetsViewReportAssetsPlatformsTableComponent,
-    AssetsViewReportAssetsImagesTableComponent
+    AssetsViewReportAssetsImagesTableComponent,
   ],
-  imports: [
-    CommonModule,
-    NvCommonModule,
-    RisksViewReportModule,
-    PipeModule
-  ],
-  exports: [
-    AssetsViewReportComponent
-  ]
+  imports: [CommonModule, NvCommonModule, RisksViewReportModule, PipeModule],
+  exports: [AssetsViewReportComponent],
 })
-export class AssetsViewReportModule { }
+export class AssetsViewReportModule {}

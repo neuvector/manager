@@ -25,11 +25,7 @@
           class="col-2 col-md-2"
           *ngIf="data.opType !== modalOp.ADD">
           <mat-label>{{ 'policy.editPolicy.POLICY_ID' | translate }}</mat-label>
-          <input
-            matInput
-            formControlName="id"
-            [readonly]="'true'"
-          />
+          <input matInput formControlName="id" [readonly]="'true'" />
         </mat-form-field>
         <mat-form-field
           appearance="standard"
@@ -41,8 +37,7 @@
           <input
             matInput
             formControlName="comment"
-            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-          />
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
         </mat-form-field>
       </div>
       <div class="row">
@@ -129,7 +124,9 @@
         </mat-form-field>
         <div class="col-2 col-md-3 mt-1">
           <section class="status-section">
-            <label class="status-margin text-label">{{ 'policy.editPolicy.DENY_ALLOW' | translate }}</label>
+            <label class="status-margin text-label">{{
+              'policy.editPolicy.DENY_ALLOW' | translate
+            }}</label>
             <mat-slide-toggle
               id="network-action-toggle"
               [(ngModel)]="isAllow"
@@ -148,11 +145,11 @@
             </mat-slide-toggle>
           </section>
         </div>
-        <div
-          class="col-2 col-md-3 mt-1"
-          *ngIf="data.opType !== modalOp.ADD">
+        <div class="col-2 col-md-3 mt-1" *ngIf="data.opType !== modalOp.ADD">
           <section class="status-section">
-            <label class="status-margin text-label">{{ 'setting.STATUS' | translate }}</label>
+            <label class="status-margin text-label">{{
+              'setting.STATUS' | translate
+            }}</label>
             <mat-slide-toggle
               id="network-status-toggle"
               [(ngModel)]="enable"
@@ -161,8 +158,7 @@
                 [ngClass]="{
                   'text-muted': !enable,
                   'text-success': enable
-                }"
-              >
+                }">
                 {{
                   (enable ? 'policy.status.ENABLED' : 'policy.status.DISABLED')
                     | translate

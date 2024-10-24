@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { ResponseRulesService } from '@services/response-rules.service';
 import { TranslateService } from '@ngx-translate/core';
 import { GridOptions, GridApi } from 'ag-grid-community';
@@ -20,7 +20,7 @@ import { QuickFilterService } from '@components/quick-filter/quick-filter.servic
   templateUrl: './response-rules.component.html',
   styleUrls: ['./response-rules.component.scss'],
 })
-export class ResponseRulesComponent implements OnInit {
+export class ResponseRulesComponent implements OnInit, OnDestroy {
   @Input() source: string = '';
   @Input() groupName: string = '';
   @Input() resizableHeight: number = 0;
@@ -73,7 +73,11 @@ export class ResponseRulesComponent implements OnInit {
         if (params && params.api) {
           if (this.useQuickFilterService) {
             this.quickFilterService.textInput$.subscribe((value: string) => {
-              this.quickFilterService.onFilterChange(value, this.gridOptions, this.gridApi);
+              this.quickFilterService.onFilterChange(
+                value,
+                this.gridOptions,
+                this.gridApi
+              );
             });
           }
           params.api.sizeColumnsToFit();
@@ -179,7 +183,7 @@ export class ResponseRulesComponent implements OnInit {
         autoCompleteData: autoCompleteData,
         source: this.source,
         type: 'add',
-        refresh: this.getResponseRules
+        refresh: this.getResponseRules,
       },
       width: '70vw',
     });

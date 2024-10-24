@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { ComplianceService } from './compliance.service';
 import { ComplianceCsvService } from './csv-generation/compliance-csv.service';
 import { ComplianceFilterService } from './compliance.filter.service';
@@ -9,7 +9,7 @@ import { MapConstant } from '@common/constants/map.constant';
   templateUrl: './compliance.component.html',
   styleUrls: ['./compliance.component.scss'],
 })
-export class ComplianceComponent implements OnInit {
+export class ComplianceComponent {
   complianceData$ = this.complianceService.initCompliance();
   masterData: any;
   masterGrids: any[][] = [];
@@ -31,8 +31,6 @@ export class ComplianceComponent implements OnInit {
     private complianceCsvService: ComplianceCsvService,
     public complianceFilterService: ComplianceFilterService
   ) {}
-
-  ngOnInit(): void {}
 
   refresh() {
     this.complianceService.refresh();

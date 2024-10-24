@@ -1,11 +1,11 @@
-import {NgModule} from '@angular/core';
+import { NgModule } from '@angular/core';
 import {
   ShortenFromMiddlePipe,
   CapitalizePipe,
   CapitalizeWordsPipe,
   BytesPipe,
-  FindByKeyPipe
-} from "@common/pipes/app.pipes";
+  FindByKeyPipe,
+} from '@common/pipes/app.pipes';
 
 @NgModule({
   declarations: [
@@ -13,16 +13,14 @@ import {
     CapitalizePipe,
     CapitalizeWordsPipe,
     BytesPipe,
-    FindByKeyPipe
+    FindByKeyPipe,
   ],
   exports: [
     ShortenFromMiddlePipe,
     CapitalizePipe,
     CapitalizeWordsPipe,
     BytesPipe,
-    FindByKeyPipe
-  ]
+    FindByKeyPipe,
+  ],
 })
-
-export class PipeModule {
-}
+export class PipeModule {}

@@ -97,7 +97,7 @@
           *ngIf="form.controls.name.hasError('invalidAutocompleteString')">
           {{
             'securityEvent.AUTOCOMPLETE_INVALID'
-              | translate: { field: ('event.gridHeader.NAME' | translate) }
+              | translate : { field: ('event.gridHeader.NAME' | translate) }
           }}
         </mat-error>
       </mat-form-field>
@@ -125,7 +125,8 @@
           *ngIf="form.controls.userName.hasError('invalidAutocompleteString')">
           {{
             'securityEvent.AUTOCOMPLETE_INVALID'
-              | translate: { field: ('event.gridHeader.USER_NAME' | translate) }
+              | translate
+                : { field: ('event.gridHeader.USER_NAME' | translate) }
           }}
         </mat-error>
       </mat-form-field>
@@ -149,7 +150,7 @@
           *ngIf="form.controls.host.hasError('invalidAutocompleteString')">
           {{
             'securityEvent.AUTOCOMPLETE_INVALID'
-              | translate: { field: ('securityEvent.HOST' | translate) }
+              | translate : { field: ('securityEvent.HOST' | translate) }
           }}
         </mat-error>
       </mat-form-field>
@@ -177,7 +178,8 @@
           *ngIf="form.controls.container.hasError('invalidAutocompleteString')">
           {{
             'securityEvent.AUTOCOMPLETE_INVALID'
-              | translate: { field: ('event.gridHeader.CONTAINER' | translate) }
+              | translate
+                : { field: ('event.gridHeader.CONTAINER' | translate) }
           }}
         </mat-error>
       </mat-form-field>
@@ -204,7 +206,7 @@
           *ngIf="form.controls.image.hasError('invalidAutocompleteString')">
           {{
             'securityEvent.AUTOCOMPLETE_INVALID'
-              | translate: { field: ('event.gridHeader.IMAGE' | translate) }
+              | translate : { field: ('event.gridHeader.IMAGE' | translate) }
           }}
         </mat-error>
       </mat-form-field>
@@ -274,13 +276,13 @@
   </form>
 </div>
 <div class="float-right" mat-dialog-actions>
-  <button (click)="reset()" mat-button>{{'enum.RESET' | translate}}</button>
+  <button (click)="reset()" mat-button>{{ 'enum.RESET' | translate }}</button>
   <button
     [mat-dialog-close]="form.value"
     [disabled]="!form.valid"
     cdkFocusInitial
     color="primary"
     mat-raised-button>
-    {{'securityEvent.APPLY' | translate}}
+    {{ 'securityEvent.APPLY' | translate }}
   </button>
 </div>

@@ -1,4 +1,4 @@
-import { AdmissionRuleConfig } from "./admissionRuleConfig";
+import { AdmissionRuleConfig } from './admissionRuleConfig';
 
 export interface AdmissionRuleConfigData {
   config: AdmissionRuleConfig;

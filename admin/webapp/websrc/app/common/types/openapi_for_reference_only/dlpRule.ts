@@ -1,4 +1,4 @@
-import { CriteriaEntry } from "./criteriaEntry";
+import { CriteriaEntry } from './criteriaEntry';
 
 export interface DlpRule {
   name: string;

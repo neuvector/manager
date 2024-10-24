@@ -7,7 +7,5 @@ export interface GroupDTOWrap {
 }
 
 export function isGroupDTOWrap(v: any): v is GroupDTOWrap {
-  return (
-    (v['group'] && isGroupDTO(v['group']))
-  );
+  return v['group'] && isGroupDTO(v['group']);
 }

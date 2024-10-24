@@ -5,6 +5,7 @@ import {
   OnChanges,
   OnInit,
   SimpleChanges,
+  OnDestroy,
 } from '@angular/core';
 import { Scanner } from '@common/types';
 import { UtilsService } from '@common/utils/app.utils';
@@ -28,7 +29,7 @@ import { finalize } from 'rxjs/operators';
   templateUrl: './scanners-grid.component.html',
   styleUrls: ['./scanners-grid.component.scss'],
 })
-export class ScannersGridComponent implements OnInit, OnChanges {
+export class ScannersGridComponent implements OnInit, OnChanges, OnDestroy {
   private readonly $win;
   @Input() gridHeight: number = 200;
   @Input() resize!: boolean;

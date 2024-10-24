@@ -8,8 +8,8 @@ export interface MaskedJfrogXray {
 
 export function isMaskedJfrogXray(v: any): v is MaskedJfrogXray {
   return (
-    ((typeof v['url']) === 'string') &&
-    ((typeof v['enable']) === 'boolean') &&
-    ((typeof v['username']) === 'string')
+    typeof v['url'] === 'string' &&
+    typeof v['enable'] === 'boolean' &&
+    typeof v['username'] === 'string'
   );
 }

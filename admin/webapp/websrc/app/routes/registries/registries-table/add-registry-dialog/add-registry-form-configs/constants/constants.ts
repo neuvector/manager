@@ -416,7 +416,7 @@ export const JsonKeyField = {
   key: 'json_key',
   type: FormlyComponents.TEXT_AREA,
   templateOptions: {
-    label: 'registry.gridHeader.JSON_KEY'
+    label: 'registry.gridHeader.JSON_KEY',
   },
   expressionProperties: {
     'templateOptions.required': '!model.isEdit',

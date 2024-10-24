@@ -8,9 +8,8 @@ describe('MoveNetworkRulesModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MoveNetworkRulesModalComponent ]
-    })
-    .compileComponents();
+      declarations: [MoveNetworkRulesModalComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

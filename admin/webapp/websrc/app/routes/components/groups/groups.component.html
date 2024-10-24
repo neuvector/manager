@@ -139,10 +139,7 @@
         [matMenuTriggerFor]="switchMenu4ProfileModes">
         <span [ngClass]="{ 'mat-small text-success': isAllProtectMode }">
           {{
-            (isAllProtectMode
-              ? ''
-              : 'service.SWITCH_PROFILE_MODE'
-            ) | translate
+            (isAllProtectMode ? '' : 'service.SWITCH_PROFILE_MODE') | translate
           }}
         </span>
         <i class="eos-icons m-auto" *ngIf="!isAllProtectMode"

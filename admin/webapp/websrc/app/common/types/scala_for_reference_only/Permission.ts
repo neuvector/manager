@@ -8,8 +8,8 @@ export interface Permission {
 
 export function isPermission(v: any): v is Permission {
   return (
-    ((typeof v['id']) === 'string') &&
-    ((typeof v['read']) === 'boolean') &&
-    ((typeof v['write']) === 'boolean')
+    typeof v['id'] === 'string' &&
+    typeof v['read'] === 'boolean' &&
+    typeof v['write'] === 'boolean'
   );
 }

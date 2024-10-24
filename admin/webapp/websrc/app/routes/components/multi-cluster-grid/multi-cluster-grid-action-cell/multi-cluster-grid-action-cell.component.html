@@ -1,61 +1,74 @@
 <div class="rule-actions-expand fade-in-right">
-  <div *ngIf="isMasterRole(); else isMemberRole" class="grid-space-evenly"
-    style="display: flex;">
+  <div
+    *ngIf="isMasterRole(); else isMemberRole"
+    class="grid-space-evenly"
+    style="display: flex">
     <div *ngIf="isMasterCluster(); else isMemberCluster">
       <em
-        class="eos-icons icon-18 hand "
+        class="eos-icons icon-18 hand"
         matTooltip="{{ 'multiCluster.tips.policy' | translate }}"
         matTooltipPosition="above"
         (click)="manageFedPolicy()"
-      >gavel</em>
+        >gavel</em
+      >
       <em
         class="eos-icons icon-18 hand"
         matTooltip="{{ 'multiCluster.tips.demote' | translate }}"
         matTooltipPosition="above"
         (click)="demote(params.data)"
-      >recycling</em>
+        >recycling</em
+      >
       <em
         class="eos-icons icon-18 hand"
         matTooltip="{{ 'multiCluster.tips.token' | translate }}"
         matTooltipPosition="above"
         (click)="generateToken()"
-      >vpn_key</em>
+        >vpn_key</em
+      >
       <em
         class="eos-icons icon-18 hand"
         matTooltip="{{ 'multiCluster.tips.edit' | translate }}"
         matTooltipPosition="above"
-        (click)="showEditClusterDialog(
-        $event, params.data, params.context, false);
-        $event.stopPropagation();"
-      >mode_edit</em>
+        (click)="
+          showEditClusterDialog($event, params.data, params.context, false);
+          $event.stopPropagation()
+        "
+        >mode_edit</em
+      >
     </div>
     <ng-template #isMemberCluster>
-      <div *ngIf="
-      params.data &&
-      ( params.data.status === left_status ||
-                params.data.status === disconnect_status ||
-                params.data.status === upgrade_status ||
-                params.data.status === kicked_status ||
-                params.data.status === pending_status ||
-                params.data.rest_version !== primaryClusterRestVersion
-                );
-           else valid_status" class="grid-space-evenly" style="display: flex;">
+      <div
+        *ngIf="
+          params.data &&
+            (params.data.status === left_status ||
+              params.data.status === disconnect_status ||
+              params.data.status === upgrade_status ||
+              params.data.status === kicked_status ||
+              params.data.status === pending_status ||
+              params.data.rest_version !== primaryClusterRestVersion);
+          else valid_status
+        "
+        class="grid-space-evenly"
+        style="display: flex">
         <em
           class="eos-icons icon-18 hand disabled-color"
           matTooltip="{{ 'multiCluster.tips.syncPolicy' | translate }}"
           matTooltipPosition="above"
-        >sync</em>
+          >sync</em
+        >
         <em
           class="eos-icons icon-18 hand"
           matTooltip="{{ 'multiCluster.tips.remove' | translate }}"
           matTooltipPosition="above"
           (click)="removeMember(params.data)"
-        >person_off</em>
+          >person_off</em
+        >
         <em
           class="eos-icons icon-18 hand disabled-color"
           matTooltip="{{ 'multiCluster.tips.manage' | translate }}"
           matTooltipPosition="above"
-        >laptop_windows</em>
+          >laptop_windows</em
+        >
       </div>
       <ng-template #valid_status>
         <em
@@ -63,44 +76,50 @@
           matTooltip="{{ 'multiCluster.tips.syncPolicy' | translate }}"
           matTooltipPosition="above"
           (click)="syncPolicy(params.data)"
-        >sync</em>
+          >sync</em
+        >
         <em
           class="eos-icons icon-18 hand"
           matTooltip="{{ 'multiCluster.tips.remove' | translate }}"
           matTooltipPosition="above"
           (click)="removeMember(params.data)"
-        >person_off</em>
+          >person_off</em
+        >
         <em
           class="eos-icons icon-18 hand"
           matTooltip="{{ 'multiCluster.tips.manage' | translate }}"
           matTooltipPosition="above"
           (click)="manageCluster(params.data)"
-        >laptop_windows</em>
+          >laptop_windows</em
+        >
       </ng-template>
-
-
     </ng-template>
-
   </div>
   <ng-template #isMemberRole>
-    <div *ngIf="!isMasterCluster()" class="grid-space-evenly" style="display: flex;">
-    <em
-      class="eos-icons icon-18 hand"
-      matTooltip="{{ 'multiCluster.tips.edit' | translate }}"
-      matTooltipPosition="above"
-      (click)="showEditClusterDialog($event, params.data, params.context, false)"
-    >mode_edit</em>
-    <em
-      class="eos-icons icon-18 hand"
-      matTooltip="{{ 'multiCluster.tips.leave' | translate }}"
-      matTooltipPosition="above"
-      (click)="leave()"
-    >person_off</em>
+    <div
+      *ngIf="!isMasterCluster()"
+      class="grid-space-evenly"
+      style="display: flex">
+      <em
+        class="eos-icons icon-18 hand"
+        matTooltip="{{ 'multiCluster.tips.edit' | translate }}"
+        matTooltipPosition="above"
+        (click)="
+          showEditClusterDialog($event, params.data, params.context, false)
+        "
+        >mode_edit</em
+      >
+      <em
+        class="eos-icons icon-18 hand"
+        matTooltip="{{ 'multiCluster.tips.leave' | translate }}"
+        matTooltipPosition="above"
+        (click)="leave()"
+        >person_off</em
+      >
     </div>
   </ng-template>
 </div>
 
 <div *ngIf="isMasterRole() || !isMasterCluster()" class="rule-actions-collapse">
-  <em class="fa fa-ellipsis-h fa-lg mr-sm text-action hand">
-  </em>
+  <em class="fa fa-ellipsis-h fa-lg mr-sm text-action hand"> </em>
 </div>

@@ -8,13 +8,14 @@ describe('ScoreImprovementAdmissionControlStatusViewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ScoreImprovementAdmissionControlStatusViewComponent ]
-    })
-    .compileComponents();
+      declarations: [ScoreImprovementAdmissionControlStatusViewComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ScoreImprovementAdmissionControlStatusViewComponent);
+    fixture = TestBed.createComponent(
+      ScoreImprovementAdmissionControlStatusViewComponent
+    );
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

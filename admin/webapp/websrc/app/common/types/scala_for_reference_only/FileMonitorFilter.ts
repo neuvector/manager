@@ -6,8 +6,5 @@ export interface FileMonitorFilter {
 }
 
 export function isFileMonitorFilter(v: any): v is FileMonitorFilter {
-  return (
-    ((typeof v['filter']) === 'string') &&
-    ((typeof v['behavior']) === 'string')
-  );
+  return typeof v['filter'] === 'string' && typeof v['behavior'] === 'string';
 }

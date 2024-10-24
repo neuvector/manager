@@ -20,25 +20,23 @@ import { DashboardBasicDataResolver } from '@common/resolvers/dashboard-basic-da
 import { DashboardSecurityEventsResolver } from '@common/resolvers/dashboard-security-events.resolver';
 
 const routes: Routes = [
-  { 
-    path: '', 
-    component: DashboardComponent ,
+  {
+    path: '',
+    component: DashboardComponent,
     resolve: {
       basicData: DashboardBasicDataResolver,
-      securityEvents: DashboardSecurityEventsResolver
-    }
-  }
+      securityEvents: DashboardSecurityEventsResolver,
+    },
+  },
 ];
 
 @NgModule({
   declarations: [
     DashboardComponent,
     DashboardPrintableReportComponent,
-    ReportByNamespaceModalComponent
+    ReportByNamespaceModalComponent,
   ],
-  providers: [
-    DashboardExposureConversationsService
-  ],
+  providers: [DashboardExposureConversationsService],
   imports: [
     CommonModule,
     NvCommonModule,
@@ -53,6 +51,6 @@ const routes: Routes = [
     DragDropModule,
     ExposedServicePodGridModule,
     RouterModule.forChild(routes),
-  ]
+  ],
 })
-export class DashboardModule { }
+export class DashboardModule {}

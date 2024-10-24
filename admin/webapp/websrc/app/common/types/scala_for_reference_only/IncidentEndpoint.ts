@@ -6,8 +6,5 @@ export interface IncidentEndpoint {
 }
 
 export function isIncidentEndpoint(v: any): v is IncidentEndpoint {
-  return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['reported_at']) === 'string')
-  );
+  return typeof v['name'] === 'string' && typeof v['reported_at'] === 'string';
 }

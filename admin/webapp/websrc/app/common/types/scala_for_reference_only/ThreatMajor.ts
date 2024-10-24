@@ -24,22 +24,23 @@ export interface ThreatMajor {
 
 export function isThreatMajor(v: any): v is ThreatMajor {
   return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['reported_timestamp']) === 'number') &&
-    (v['reported_at'] && isDateTime(v['reported_at'])) &&
-    ((typeof v['level']) === 'string') &&
-    ((typeof v['client_workload_id']) === 'string') &&
-    ((typeof v['client_workload_name']) === 'string') &&
-    ((typeof v['client_workload_domain']) === 'string') &&
-    ((typeof v['server_workload_id']) === 'string') &&
-    ((typeof v['server_workload_name']) === 'string') &&
-    ((typeof v['server_workload_domain']) === 'string') &&
-    ((typeof v['client_port']) === 'number') &&
-    ((typeof v['server_port']) === 'number') &&
-    ((typeof v['server_conn_port']) === 'number') &&
-    ((typeof v['client_ip']) === 'string') &&
-    ((typeof v['server_ip']) === 'string') &&
-    ((typeof v['target']) === 'string') &&
-    ((typeof v['application']) === 'string')
+    typeof v['name'] === 'string' &&
+    typeof v['reported_timestamp'] === 'number' &&
+    v['reported_at'] &&
+    isDateTime(v['reported_at']) &&
+    typeof v['level'] === 'string' &&
+    typeof v['client_workload_id'] === 'string' &&
+    typeof v['client_workload_name'] === 'string' &&
+    typeof v['client_workload_domain'] === 'string' &&
+    typeof v['server_workload_id'] === 'string' &&
+    typeof v['server_workload_name'] === 'string' &&
+    typeof v['server_workload_domain'] === 'string' &&
+    typeof v['client_port'] === 'number' &&
+    typeof v['server_port'] === 'number' &&
+    typeof v['server_conn_port'] === 'number' &&
+    typeof v['client_ip'] === 'string' &&
+    typeof v['server_ip'] === 'string' &&
+    typeof v['target'] === 'string' &&
+    typeof v['application'] === 'string'
   );
 }

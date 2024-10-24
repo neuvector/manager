@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { IpAddr } from '@common/types/compliance/ipAddr';
@@ -11,7 +11,7 @@ import { RegistriesService } from '@services/registries.service';
   templateUrl: './container-detail.component.html',
   styleUrls: ['./container-detail.component.scss'],
 })
-export class ContainerDetailComponent implements OnInit {
+export class ContainerDetailComponent {
   @Input() container!: WorkloadRow;
   get labels() {
     return Object.keys(this.container.rt_attributes.labels || {});
@@ -20,9 +20,10 @@ export class ContainerDetailComponent implements OnInit {
     return GlobalConstant.MAX_INTERFACE_IP;
   }
 
-  constructor(private router: Router, private registriesService: RegistriesService) {}
-
-  ngOnInit(): void {}
+  constructor(
+    private router: Router,
+    private registriesService: RegistriesService
+  ) {}
 
   hasObject(obj: {}): boolean {
     return obj && !!Object.keys(obj).length;
@@ -33,17 +34,29 @@ export class ContainerDetailComponent implements OnInit {
   }
 
   redirectToRegistry(imageId: string) {
-    this.registriesService.getAllScannedImagesSummary().subscribe((data) => {
-      this.registriesService.getAllScannedImages(data.queryToken, 0, 1, [],  {
-        '-': {
-          filter: imageId
-        }
-      }).subscribe((images) => {
-        if(images.data && images.data.length > 0 && images.data[0].reg_name) {
-          const image = images.data[0];
-          this.router.navigate(['/regScan'], { queryParams: { registry: image.reg_name, image: image.repository, tag: image.tag }});
-        }
-      });
+    this.registriesService.getAllScannedImagesSummary().subscribe(data => {
+      this.registriesService
+        .getAllScannedImages(data.queryToken, 0, 1, [], {
+          '-': {
+            filter: imageId,
+          },
+        })
+        .subscribe(images => {
+          if (
+            images.data &&
+            images.data.length > 0 &&
+            images.data[0].reg_name
+          ) {
+            const image = images.data[0];
+            this.router.navigate(['/regScan'], {
+              queryParams: {
+                registry: image.reg_name,
+                image: image.repository,
+                tag: image.tag,
+              },
+            });
+          }
+        });
     });
   }
 }

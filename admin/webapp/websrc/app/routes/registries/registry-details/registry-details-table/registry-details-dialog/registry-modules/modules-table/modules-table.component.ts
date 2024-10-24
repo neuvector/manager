@@ -128,7 +128,11 @@ export class ModulesTableComponent implements OnInit, OnChanges {
     });
     this.gridApi = params.api;
     this.quickFilterService.textInput$.subscribe((value: string) => {
-      this.quickFilterService.onFilterChange(value, this.gridOptions, this.gridApi);
+      this.quickFilterService.onFilterChange(
+        value,
+        this.gridOptions,
+        this.gridApi
+      );
     });
     this.gridApi.sizeColumnsToFit();
     this.gridApi.forEachNode(node =>

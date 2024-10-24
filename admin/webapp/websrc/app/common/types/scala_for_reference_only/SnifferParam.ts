@@ -8,8 +8,8 @@ export interface SnifferParam {
 
 export function isSnifferParam(v: any): v is SnifferParam {
   return (
-    (!v['file_number'] || ((typeof v['file_number']) === 'number')) &&
-    (!v['duration'] || ((typeof v['duration']) === 'number')) &&
-    (!v['filter'] || ((typeof v['filter']) === 'string'))
+    (!v['file_number'] || typeof v['file_number'] === 'number') &&
+    (!v['duration'] || typeof v['duration'] === 'number') &&
+    (!v['filter'] || typeof v['filter'] === 'string')
   );
 }

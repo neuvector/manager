@@ -160,14 +160,15 @@ export class RiskReportGridComponent implements OnInit {
       onGridReady: this.onGridReady.bind(this),
       onRowDataUpdated: this.onRowDataUpdated.bind(this),
       isExternalFilterPresent: () => true,
-      isFullWidthRow: (params: IsFullWidthRowParams<any, any>) => !this.isParent(params.rowNode),
+      isFullWidthRow: (params: IsFullWidthRowParams<any, any>) =>
+        !this.isParent(params.rowNode),
       fullWidthCellRenderer: 'messageCellRenderer',
       fullWidthCellRendererParams: {
         exportBenchCSV: this.exportBenchCSV.bind(this),
         exportCVECSV: this.exportCVECSV.bind(this),
       },
       rowClassRules: {
-        'nv-full-width-row': (params) => !this.isParent(params.node),
+        'nv-full-width-row': params => !this.isParent(params.node),
       },
       doesExternalFilterPass: ({ data }) =>
         this.isVisible(data) && this.doesExternalFilterPass(data),

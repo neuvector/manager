@@ -5,6 +5,7 @@ import {
   OnInit,
   SecurityContext,
   SimpleChanges,
+  OnDestroy,
 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { GlobalConstant } from '@common/constants/global.constant';
@@ -33,7 +34,7 @@ import { finalize, map } from 'rxjs/operators';
   templateUrl: './enforcers-grid.component.html',
   styleUrls: ['./enforcers-grid.component.scss'],
 })
-export class EnforcersGridComponent implements OnInit, OnChanges {
+export class EnforcersGridComponent implements OnInit, OnChanges, OnDestroy {
   private readonly $win;
   @Input() selectable = false;
   @Input() refreshable = true;

@@ -8,9 +8,8 @@ describe('GlobalNotificationsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GlobalNotificationsComponent ]
-    })
-    .compileComponents();
+      declarations: [GlobalNotificationsComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

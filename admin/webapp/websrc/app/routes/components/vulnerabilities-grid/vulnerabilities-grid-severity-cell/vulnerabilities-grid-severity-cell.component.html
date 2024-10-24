@@ -1,5 +1,11 @@
 <ng-container [ngSwitch]="severity">
-  <span *ngSwitchCase="'High'" class="badge badge-danger">{{ severityDisplay }}</span>
-  <span *ngSwitchCase="'Medium'" class="badge badge-warning">{{ severityDisplay }}</span>
-  <span *ngSwitchDefault class="badge badge-success">{{ severityDisplay }}</span>
+  <span *ngSwitchCase="'High'" class="badge badge-danger">{{
+    severityDisplay
+  }}</span>
+  <span *ngSwitchCase="'Medium'" class="badge badge-warning">{{
+    severityDisplay
+  }}</span>
+  <span *ngSwitchDefault class="badge badge-success">{{
+    severityDisplay
+  }}</span>
 </ng-container>

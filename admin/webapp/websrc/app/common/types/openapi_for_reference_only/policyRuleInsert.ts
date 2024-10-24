@@ -1,4 +1,4 @@
-import { PolicyRule } from "./policyRule";
+import { PolicyRule } from './policyRule';
 
 export interface PolicyRuleInsert {
   after?: number;

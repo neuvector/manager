@@ -8,9 +8,8 @@ describe('MultiClusterDetailsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MultiClusterDetailsComponent ]
-    })
-    .compileComponents();
+      declarations: [MultiClusterDetailsComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

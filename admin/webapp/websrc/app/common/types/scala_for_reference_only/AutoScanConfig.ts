@@ -10,7 +10,8 @@ export interface AutoScanConfig {
 
 export function isAutoScanConfig(v: any): v is AutoScanConfig {
   return (
-    (v['config'] && isAutoScan(v['config'])) &&
+    v['config'] &&
+    isAutoScan(v['config']) &&
     (!v['error'] || (v['error'] && isError(v['error'])))
   );
 }

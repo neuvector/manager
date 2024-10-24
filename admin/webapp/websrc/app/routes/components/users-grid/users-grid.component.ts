@@ -101,7 +101,11 @@ export class UsersGridComponent implements OnInit {
         if (params && params.value) {
           return params.value;
         } else {
-          return params.data.server.toLowerCase().includes(MapConstant.SERVER_TYPE.RANCHER) ? 'Rancher User' : 'Namespace User';
+          return params.data.server
+            .toLowerCase()
+            .includes(MapConstant.SERVER_TYPE.RANCHER)
+            ? 'Rancher User'
+            : 'Namespace User';
         }
       },
       width: 100,

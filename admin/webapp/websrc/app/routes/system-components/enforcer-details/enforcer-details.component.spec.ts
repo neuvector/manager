@@ -8,9 +8,8 @@ describe('EnforcerDetailsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EnforcerDetailsComponent ]
-    })
-    .compileComponents();
+      declarations: [EnforcerDetailsComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

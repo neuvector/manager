@@ -8,6 +8,7 @@ export interface WafGroupsData {
 
 export function isWafGroupsData(v: any): v is WafGroupsData {
   return (
-    (Array.isArray(v['waf_groups']) && v['waf_groups'].every(elmt => elmt && isWafGroup(elmt)))
+    Array.isArray(v['waf_groups']) &&
+    v['waf_groups'].every(elmt => elmt && isWafGroup(elmt))
   );
 }

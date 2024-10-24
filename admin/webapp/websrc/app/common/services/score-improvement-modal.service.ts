@@ -43,10 +43,7 @@ export class ScoreImprovementModalService {
   }
 
   getScores(isGlobalUser: boolean, domain: any) {
-    return this.dashboardHttpService.getScores(
-      isGlobalUser,
-      domain
-    );
+    return this.dashboardHttpService.getScores(isGlobalUser, domain);
   }
 
   calculateScoreData(

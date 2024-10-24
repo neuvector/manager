@@ -6,8 +6,5 @@ export interface ClusterServerInfo {
 }
 
 export function isClusterServerInfo(v: any): v is ClusterServerInfo {
-  return (
-    ((typeof v['server']) === 'string') &&
-    ((typeof v['port']) === 'number')
-  );
+  return typeof v['server'] === 'string' && typeof v['port'] === 'number';
 }

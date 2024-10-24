@@ -1,4 +1,4 @@
-import { ScanPkgReport } from "./scanPkgReport";
+import { ScanPkgReport } from './scanPkgReport';
 
 export interface ScanPkgReportData {
   report: ScanPkgReport;

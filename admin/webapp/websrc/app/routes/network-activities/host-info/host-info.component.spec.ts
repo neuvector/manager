@@ -8,9 +8,8 @@ describe('HostInfoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HostInfoComponent ]
-    })
-    .compileComponents();
+      declarations: [HostInfoComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

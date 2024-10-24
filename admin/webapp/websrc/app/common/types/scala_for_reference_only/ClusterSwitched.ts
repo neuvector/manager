@@ -5,7 +5,5 @@ export interface ClusterSwitched {
 }
 
 export function isClusterSwitched(v: any): v is ClusterSwitched {
-  return (
-    (!v['id'] || ((typeof v['id']) === 'string'))
-  );
+  return !v['id'] || typeof v['id'] === 'string';
 }

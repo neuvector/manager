@@ -17,5 +17,5 @@ export class IpGeoManager {
 export const IpGeoManagerInhabitant: IpGeoManager = IpGeoManager.getInstance();
 
 export function isIpGeoManager(v: any): v is IpGeoManager {
-  return (v instanceof IpGeoManager) && (v === IpGeoManagerInhabitant);
+  return v instanceof IpGeoManager && v === IpGeoManagerInhabitant;
 }

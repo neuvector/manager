@@ -4,18 +4,15 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-application-conversation-chart',
   templateUrl: './application-conversation-chart.component.html',
-  styleUrls: ['./application-conversation-chart.component.scss']
+  styleUrls: ['./application-conversation-chart.component.scss'],
 })
 export class ApplicationConversationChartComponent implements OnInit {
-
   @Input() applications: any;
   @Input() isReport: boolean = false;
   applicationConversationBarChartConfig: any;
   noChartData: boolean = false;
 
-  constructor(
-    private translate: TranslateService
-  ) { }
+  constructor(private translate: TranslateService) {}
 
   ngOnInit(): void {
     this.drawApplicationConversationBarChart(this.applications);
@@ -49,12 +46,11 @@ export class ApplicationConversationChartComponent implements OnInit {
             borderColor: '#186d33',
             hoverBackgroundColor: 'rgba(24, 109, 51, 0.3)',
             hoverBorderColor: '#186d33',
-            borderWidth: 2
+            borderWidth: 2,
           },
         ],
       },
       type: 'bar',
     };
   };
-
 }

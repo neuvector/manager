@@ -1,4 +1,4 @@
-import { AwsLambdaRes } from "./awsLambdaRes";
+import { AwsLambdaRes } from './awsLambdaRes';
 
 export interface AwsResource {
   acc_id?: string;

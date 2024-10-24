@@ -1,10 +1,13 @@
-<div *ngIf="params.context.componentParent._conversationDetail.to.id === 'external'; else internalEndpoint">
+<div
+  *ngIf="
+    params.context.componentParent._conversationDetail.to.id === 'external';
+    else internalEndpoint
+  ">
   <app-flag-ip-fqdn
     [ip]="params.data.server_ip"
     [fqdn]="params.data.fqdn"
     [countryCode]="params.data.server_ip_location.country_code"
-    [countryName]="params.data.server_ip_location.country_name"
-  >
+    [countryName]="params.data.server_ip_location.country_name">
   </app-flag-ip-fqdn>
 </div>
 

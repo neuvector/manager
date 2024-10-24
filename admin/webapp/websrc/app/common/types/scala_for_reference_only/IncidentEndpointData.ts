@@ -10,7 +10,8 @@ export interface IncidentEndpointData {
 
 export function isIncidentEndpointData(v: any): v is IncidentEndpointData {
   return (
-    (v['incidents'] && isArray(v['incidents'])) &&
+    v['incidents'] &&
+    isArray(v['incidents']) &&
     (!v['error'] || (v['error'] && isError(v['error'])))
   );
 }

@@ -5,9 +5,8 @@ export interface ContainerQuarantineRequest {
   quarantine: boolean;
 }
 
-export function isContainerQuarantineRequest(v: any): v is ContainerQuarantineRequest {
-  return (
-    ((typeof v['id']) === 'string') &&
-    ((typeof v['quarantine']) === 'boolean')
-  );
+export function isContainerQuarantineRequest(
+  v: any
+): v is ContainerQuarantineRequest {
+  return typeof v['id'] === 'string' && typeof v['quarantine'] === 'boolean';
 }

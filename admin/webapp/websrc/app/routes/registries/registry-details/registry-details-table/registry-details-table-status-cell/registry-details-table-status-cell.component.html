@@ -1,13 +1,18 @@
 <ng-container *ngIf="status === 'failed'; else Default">
-  <div class="row" style="width: 100%;">
+  <div class="row" style="width: 100%">
     <div class="col-7">
-      <span class="badge" [class]="'badge-' + labelCode"
+      <span
+        class="badge"
+        [class]="'badge-' + labelCode"
         [matMenuTriggerFor]="errorMessageInfoMenu">
         {{ status | titlecase }}
       </span>
     </div>
     <div class="col-5">
-      <button mat-button class="error-message-info" [matMenuTriggerFor]="errorMessageInfoMenu">
+      <button
+        mat-button
+        class="error-message-info"
+        [matMenuTriggerFor]="errorMessageInfoMenu">
         <em class="eos-icons icon-18 text-muted">info</em>
       </button>
     </div>

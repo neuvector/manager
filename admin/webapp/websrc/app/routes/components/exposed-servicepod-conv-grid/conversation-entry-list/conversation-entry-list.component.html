@@ -9,47 +9,61 @@
       </span>
     </div>
   </div>
-  <div style="height: 87px; overflow-y: auto; background-color: #fff; border: 1px solid #999;">
-  <table style="width: 100%" class="print-table" *ngIf="conversationEntryList.length > 0">
-    <thead>
-      <tr class="print-header">
-        <th class="print-cell" style="width: 50%">
-          {{ 'dashboard.body.panel_title.EXTERNAL_HOST' | translate }}
-        </th>
-        <th class="print-cell" style="width: 15%">
-          {{ 'dashboard.body.panel_title.SESSIONS' | translate }}
-        </th>
-        <th class="print-cell" style="width: 20%">
-          {{ 'dashboard.body.panel_title.APPLICATIONS' | translate }}
-        </th>
-        <th class="print-cell" style="width: 15%">
-          {{ 'dashboard.body.panel_title.POLICY_ACTION' | translate }}
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="print-row" *ngFor="let row of conversationEntryList; let i = index" [attr.data-index]="i">
-        <td class="print-cell" style="width: 50%">
-          <app-flag-ip-fqdn
-            [ip]="row.ip"
-            [fqdn]="row.fqdn!"
-            [countryCode]="row.country_code"
-            [countryName]="row.country_name"
-          >
-          </app-flag-ip-fqdn>
-        </td>
-        <td class="print-cell" style="width: 15%">
-          {{ row.sessions }}
-        </td>
-        <td class="print-cell" style="width: 20%">
-          {{ row.applications }}
-        </td>
-        <td class="print-cell" style="width: 15%">
-          <span class="action-label {{ colourMap[row.policy_action] }}">
-            {{ 'policy.action.' + row.policy_action.toUpperCase() | translate }}
-          </span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div
+    style="
+      height: 87px;
+      overflow-y: auto;
+      background-color: #fff;
+      border: 1px solid #999;
+    ">
+    <table
+      style="width: 100%"
+      class="print-table"
+      *ngIf="conversationEntryList.length > 0">
+      <thead>
+        <tr class="print-header">
+          <th class="print-cell" style="width: 50%">
+            {{ 'dashboard.body.panel_title.EXTERNAL_HOST' | translate }}
+          </th>
+          <th class="print-cell" style="width: 15%">
+            {{ 'dashboard.body.panel_title.SESSIONS' | translate }}
+          </th>
+          <th class="print-cell" style="width: 20%">
+            {{ 'dashboard.body.panel_title.APPLICATIONS' | translate }}
+          </th>
+          <th class="print-cell" style="width: 15%">
+            {{ 'dashboard.body.panel_title.POLICY_ACTION' | translate }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class="print-row"
+          *ngFor="let row of conversationEntryList; let i = index"
+          [attr.data-index]="i">
+          <td class="print-cell" style="width: 50%">
+            <app-flag-ip-fqdn
+              [ip]="row.ip"
+              [fqdn]="row.fqdn!"
+              [countryCode]="row.country_code"
+              [countryName]="row.country_name">
+            </app-flag-ip-fqdn>
+          </td>
+          <td class="print-cell" style="width: 15%">
+            {{ row.sessions }}
+          </td>
+          <td class="print-cell" style="width: 20%">
+            {{ row.applications }}
+          </td>
+          <td class="print-cell" style="width: 15%">
+            <span class="action-label {{ colourMap[row.policy_action] }}">
+              {{
+                'policy.action.' + row.policy_action.toUpperCase() | translate
+              }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

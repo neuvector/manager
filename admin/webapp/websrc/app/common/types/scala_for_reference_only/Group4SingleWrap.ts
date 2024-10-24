@@ -7,7 +7,5 @@ export interface Group4SingleWrap {
 }
 
 export function isGroup4SingleWrap(v: any): v is Group4SingleWrap {
-  return (
-    (v['group'] && isGroup4Single(v['group']))
-  );
+  return v['group'] && isGroup4Single(v['group']);
 }

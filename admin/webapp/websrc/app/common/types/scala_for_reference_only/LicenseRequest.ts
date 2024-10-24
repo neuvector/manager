@@ -12,12 +12,13 @@ export interface LicenseRequest {
 
 export function isLicenseRequest(v: any): v is LicenseRequest {
   return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['email']) === 'string') &&
-    ((typeof v['months']) === 'number') &&
-    ((typeof v['node_limit']) === 'number') &&
-    (!v['multi_cluster_limit'] || ((typeof v['multi_cluster_limit']) === 'number')) &&
-    ((typeof v['scan']) === 'boolean') &&
-    (!v['enforce'] || ((typeof v['enforce']) === 'boolean'))
+    typeof v['name'] === 'string' &&
+    typeof v['email'] === 'string' &&
+    typeof v['months'] === 'number' &&
+    typeof v['node_limit'] === 'number' &&
+    (!v['multi_cluster_limit'] ||
+      typeof v['multi_cluster_limit'] === 'number') &&
+    typeof v['scan'] === 'boolean' &&
+    (!v['enforce'] || typeof v['enforce'] === 'boolean')
   );
 }

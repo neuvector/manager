@@ -8,9 +8,8 @@ describe('ProcessGridComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ProcessGridComponent ]
-    })
-    .compileComponents();
+      declarations: [ProcessGridComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -8,9 +8,8 @@ describe('PatternActionButtonsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PatternActionButtonsComponent ]
-    })
-    .compileComponents();
+      declarations: [PatternActionButtonsComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -15,7 +15,9 @@
   <div mat-dialog-content>
     <form>
       <div class="clearfix margin-top-m">
-        <label class="pull-left text-bold margin-right-m">{{ 'group.POLICY_MODE' | translate }}</label>
+        <label class="pull-left text-bold margin-right-m">{{
+          'group.POLICY_MODE' | translate
+        }}</label>
         <mat-radio-group
           class="pull-left margin-right-m"
           aria-label="Select a mode"
@@ -31,9 +33,10 @@
             'topbar.mode.ENFORCE' | translate
           }}</mat-radio-button>
         </mat-radio-group>
-      <div class="clearfix margin-top-m">
-      </div>
-        <label class="pull-left text-bold margin-right-m">{{ 'group.PROFILE_MODE' | translate }}&nbsp;</label>
+        <div class="clearfix margin-top-m"></div>
+        <label class="pull-left text-bold margin-right-m"
+          >{{ 'group.PROFILE_MODE' | translate }}&nbsp;</label
+        >
         <mat-radio-group
           class="pull-left margin-right-m"
           aria-label="Select a mode"
@@ -54,7 +57,9 @@
         </div>
       </div>
       <div class="clearfix margin-top-m">
-        <label class="pull-left text-bold margin-right-m">{{ 'group.ZERODRIFT_SETTING' | translate }}</label>
+        <label class="pull-left text-bold margin-right-m">{{
+          'group.ZERODRIFT_SETTING' | translate
+        }}</label>
         <mat-radio-group
           aria-label="Select a baseline profile"
           class="pull-left margin-right-m"
@@ -74,13 +79,24 @@
       </div>
       <div class="clearfix pb-2" *ngIf="noModeGroupList.length > 0">
         <div class="my-3">
-          <span>{{noModeGroupMsg}}</span>
-          <a role="button" class="pl-2" (click)="isExpandingGroupList = !isExpandingGroupList">
-            {{ (isExpandingGroupList ? 'enum.HIDE_DETAILS' : 'enum.SHOW_DETAILS') | translate}}
+          <span>{{ noModeGroupMsg }}</span>
+          <a
+            role="button"
+            class="pl-2"
+            (click)="isExpandingGroupList = !isExpandingGroupList">
+            {{
+              (isExpandingGroupList ? 'enum.HIDE_DETAILS' : 'enum.SHOW_DETAILS')
+                | translate
+            }}
           </a>
         </div>
-        <div *ngIf="isExpandingGroupList" class="pt-1 pb-1 pl-2 pr-2" style="max-height: 150px; overflow-y: scroll; background-color: #eee;">
-          <div *ngFor="let noModeGroup of noModeGroupList">{{noModeGroup.name}}</div>
+        <div
+          *ngIf="isExpandingGroupList"
+          class="pt-1 pb-1 pl-2 pr-2"
+          style="max-height: 150px; overflow-y: scroll; background-color: #eee">
+          <div *ngFor="let noModeGroup of noModeGroupList">
+            {{ noModeGroup.name }}
+          </div>
         </div>
       </div>
       <div class="d-flex justify-content-between align-items-center">

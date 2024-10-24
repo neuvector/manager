@@ -7,7 +7,5 @@ export interface RedirectData {
 }
 
 export function isRedirectData(v: any): v is RedirectData {
-  return (
-    (v['redirect'] && isSsoServer(v['redirect']))
-  );
+  return v['redirect'] && isSsoServer(v['redirect']);
 }

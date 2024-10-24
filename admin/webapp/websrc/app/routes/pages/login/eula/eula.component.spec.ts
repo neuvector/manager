@@ -8,9 +8,8 @@ describe('EulaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EulaComponent ]
-    })
-    .compileComponents();
+      declarations: [EulaComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

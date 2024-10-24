@@ -25,7 +25,7 @@ export class PodInfoComponent implements OnInit {
   vulnerabilities: Vulnerability[] = [];
 
   @Output()
-  onPodGroupSelected: EventEmitter<string> = new EventEmitter<string>();
+  doPodGroupSelected: EventEmitter<string> = new EventEmitter<string>();
   onCveInfo: boolean = false;
 
   get pod(): PodDetails {
@@ -57,7 +57,7 @@ export class PodInfoComponent implements OnInit {
   }
 
   showPodGroup() {
-    this.onPodGroupSelected.emit(this.pod.workload.service_group);
+    this.doPodGroupSelected.emit(this.pod.workload.service_group);
   }
 
   showCve() {

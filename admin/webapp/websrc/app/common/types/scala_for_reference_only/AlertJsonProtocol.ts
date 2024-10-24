@@ -14,8 +14,9 @@ export class AlertJsonProtocol {
   }
 }
 
-export const AlertJsonProtocolInhabitant: AlertJsonProtocol = AlertJsonProtocol.getInstance();
+export const AlertJsonProtocolInhabitant: AlertJsonProtocol =
+  AlertJsonProtocol.getInstance();
 
 export function isAlertJsonProtocol(v: any): v is AlertJsonProtocol {
-  return (v instanceof AlertJsonProtocol) && (v === AlertJsonProtocolInhabitant);
+  return v instanceof AlertJsonProtocol && v === AlertJsonProtocolInhabitant;
 }

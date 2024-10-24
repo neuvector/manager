@@ -10,8 +10,6 @@ import { RiskViewReportAppendixPackagesComponent } from './risk-view-report-appe
 import { RiskViewReportPackageTableComponent } from './risk-view-report-package-table/risk-view-report-package-table.component';
 import { RiskViewReportControlColComponent } from './risk-view-report-control-col/risk-view-report-control-col.component';
 
-
-
 @NgModule({
   declarations: [
     RisksViewReportComponent,
@@ -21,16 +19,13 @@ import { RiskViewReportControlColComponent } from './risk-view-report-control-co
     RiskViewReportTableComponent,
     RiskViewReportAppendixPackagesComponent,
     RiskViewReportPackageTableComponent,
-    RiskViewReportControlColComponent
+    RiskViewReportControlColComponent,
   ],
-  imports: [
-    CommonModule,
-    NvCommonModule
-  ],
+  imports: [CommonModule, NvCommonModule],
   exports: [
     RisksViewReportComponent,
     RiskViewReportTableComponent,
-    RiskViewReportAppendixPackagesComponent
-  ]
+    RiskViewReportAppendixPackagesComponent,
+  ],
 })
-export class RisksViewReportModule { }
+export class RisksViewReportModule {}

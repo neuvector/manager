@@ -6,8 +6,5 @@ export interface MaskedAWSAccount {
 }
 
 export function isMaskedAWSAccount(v: any): v is MaskedAWSAccount {
-  return (
-    ((typeof v['id']) === 'string') &&
-    ((typeof v['region']) === 'string')
-  );
+  return typeof v['id'] === 'string' && typeof v['region'] === 'string';
 }

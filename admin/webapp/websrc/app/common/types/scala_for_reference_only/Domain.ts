@@ -7,7 +7,7 @@ export interface Domain {
 
 export function isDomain(v: any): v is Domain {
   return (
-    (!v['source'] || ((typeof v['source']) === 'string')) &&
-    (!v['destination'] || ((typeof v['destination']) === 'string'))
+    (!v['source'] || typeof v['source'] === 'string') &&
+    (!v['destination'] || typeof v['destination'] === 'string')
   );
 }

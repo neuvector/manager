@@ -152,7 +152,7 @@ export class WafSensorsComponent implements OnInit {
       data: {
         opType: GlobalConstant.MODAL_OP.ADD,
         wafSensors: this.wafSensors,
-        gridApi: this.gridApi4Sensors!
+        gridApi: this.gridApi4Sensors!,
       },
     });
   };
@@ -165,7 +165,7 @@ export class WafSensorsComponent implements OnInit {
         opType: GlobalConstant.MODAL_OP.ADD,
         gridOptions4EditPatterns: this.gridOptions4EditPatterns,
         index4Sensor: this.index4Sensor,
-        gridApi: this.gridApi4Rules!
+        gridApi: this.gridApi4Rules!,
       },
     });
   };
@@ -281,8 +281,7 @@ export class WafSensorsComponent implements OnInit {
           this.wafSensors = response as Array<WafSensor>;
           this.filteredCount = this.wafSensors.length;
           setTimeout(() => {
-            let rowNode =
-              this.gridApi4Sensors!.getDisplayedRowAtIndex(index);
+            let rowNode = this.gridApi4Sensors!.getDisplayedRowAtIndex(index);
             rowNode?.setSelected(true);
           }, 200);
         },
@@ -294,13 +293,13 @@ export class WafSensorsComponent implements OnInit {
     this.selectedSensors = this.gridApi4Sensors!.getSelectedRows();
     this.selectedSensor = this.selectedSensors[0];
     this.index4Sensor = this.wafSensors.findIndex(
-      sensor => sensor.name === this.selectedSensor.name
+      sensor => sensor.name === (this.selectedSensor?.name || '')
     );
-    this.isPredefine = this.selectedSensor.predefine;
+    this.isPredefine = this.selectedSensor?.predefine || false;
     setTimeout(() => {
-      this.gridApi4Rules!.setRowData(this.selectedSensor.rules);
+      this.gridApi4Rules!.setRowData(this.selectedSensor?.rules || []);
       this.gridApi4Patterns!.setRowData([]);
-      if (this.selectedSensor.rules.length > 0) {
+      if (this.selectedSensor?.rules.length > 0) {
         let rowNode = this.gridApi4Rules!.getDisplayedRowAtIndex(0);
         rowNode!.setSelected(true);
         this.gridApi4Rules!.sizeColumnsToFit();
@@ -309,7 +308,7 @@ export class WafSensorsComponent implements OnInit {
   };
   private onSelectionChanged4Rule = () => {
     this.selectedRule = this.gridApi4Rules!.getSelectedRows()[0];
-    this.gridApi4Patterns!.setRowData(this.selectedRule.patterns);
+    this.gridApi4Patterns!.setRowData(this.selectedRule?.patterns || []);
     setTimeout(() => {
       this.gridApi4Patterns!.sizeColumnsToFit();
     }, 200);

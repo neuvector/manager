@@ -1,7 +1,7 @@
-<div *ngIf="noChartData; then nodata else chart"></div>
+<div *ngIf="noChartData; then nodata; else chart"></div>
 
 <ng-template #chart>
-  <div style="height: 250px;">
+  <div style="height: 250px">
     <canvas
       [data]="topVulnerableAssetsBarChartConfig.data"
       [labels]="topVulnerableAssetsBarChartConfig.data.labels"
@@ -15,7 +15,11 @@
 <ng-template #nodata>
   <app-empty-data-chart-replacement
     [type]="isAutoScanOff ? 'warning' : 'safe'"
-    [message]="(isAutoScanOff ? 'dashboard.heading.guideline.AUTO_SCAN_OFF' : 'dashboard.body.message.NO_VULNERABLE_CONTAINER') | translate"
-  >
+    [message]="
+      (isAutoScanOff
+        ? 'dashboard.heading.guideline.AUTO_SCAN_OFF'
+        : 'dashboard.body.message.NO_VULNERABLE_CONTAINER'
+      ) | translate
+    ">
   </app-empty-data-chart-replacement>
 </ng-template>

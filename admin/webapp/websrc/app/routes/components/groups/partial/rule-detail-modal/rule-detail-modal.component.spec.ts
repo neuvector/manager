@@ -8,9 +8,8 @@ describe('RuleDetailModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RuleDetailModalComponent ]
-    })
-    .compileComponents();
+      declarations: [RuleDetailModalComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -10,8 +10,9 @@ export interface ComplianceProfile {
 
 export function isComplianceProfile(v: any): v is ComplianceProfile {
   return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['disable_system']) === 'boolean') &&
-    (v['entries'] && isArray(v['entries']))
+    typeof v['name'] === 'string' &&
+    typeof v['disable_system'] === 'boolean' &&
+    v['entries'] &&
+    isArray(v['entries'])
   );
 }

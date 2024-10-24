@@ -9,9 +9,9 @@ export interface ThreatBriefDTO {
 
 export function isThreatBriefDTO(v: any): v is ThreatBriefDTO {
   return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['severity']) === 'string') &&
-    ((typeof v['severityId']) === 'number') &&
-    ((typeof v['application']) === 'string')
+    typeof v['name'] === 'string' &&
+    typeof v['severity'] === 'string' &&
+    typeof v['severityId'] === 'number' &&
+    typeof v['application'] === 'string'
   );
 }

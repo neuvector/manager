@@ -103,7 +103,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
         type: type,
         source: this.params.context.componentParent.source,
         isReadonly: isReadonly,
-        gridApi: this.params.context.componentParent.gridOptions.api!
+        gridApi: this.params.context.componentParent.gridOptions.api!,
       },
       width: '70vw',
     });
@@ -205,7 +205,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
           );
           updateGridData(
             this.responseRulesService.responseRules,
-            [{id: id}],
+            [{ id: id }],
             this.params.context.componentParent.gridOptions.api!,
             'id',
             'delete'

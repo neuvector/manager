@@ -8,9 +8,8 @@ describe('DomainNameCellComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DomainNameCellComponent ]
-    })
-    .compileComponents();
+      declarations: [DomainNameCellComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

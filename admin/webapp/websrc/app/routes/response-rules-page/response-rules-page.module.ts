@@ -10,13 +10,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    ResponseRulesPageComponent
-  ],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    ResponseRulesModule,
-  ]
+  declarations: [ResponseRulesPageComponent],
+  imports: [CommonModule, RouterModule.forChild(routes), ResponseRulesModule],
 })
-export class ResponseRulesPageModule { }
+export class ResponseRulesPageModule {}

@@ -10,6 +10,7 @@ import {
   QueryList,
   ViewChildren,
   SimpleChanges,
+  OnChanges,
 } from '@angular/core';
 import { GraphService } from '../graph.service';
 import {
@@ -36,7 +37,7 @@ export interface ConversationPair {
   templateUrl: './edge-details.component.html',
   styleUrls: ['./edge-details.component.scss'],
 })
-export class EdgeDetailsComponent implements AfterViewInit, OnInit {
+export class EdgeDetailsComponent implements AfterViewInit, OnInit, OnChanges {
   get edgeDetails(): any {
     return this._edgeDetails;
   }
@@ -87,7 +88,8 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
   }
 
   @Output()
-  onClearSession: EventEmitter<ConversationPair> = new EventEmitter<ConversationPair>();
+  doClearSession: EventEmitter<ConversationPair> =
+    new EventEmitter<ConversationPair>();
 
   constructor(
     private authUtilsService: AuthUtilsService,
@@ -201,7 +203,6 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
   }
 
   onTrafficChanged() {
-
     let selectedRows = this.gridApi.getSelectedRows();
     this.traffic = selectedRows[0];
     this.showRuleId = true;
@@ -227,12 +228,11 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit {
   }
 
   clearSessions(from, to) {
-    this.onClearSession.emit({ from: from, to: to });
+    this.doClearSession.emit({ from: from, to: to });
   }
 
   overrideRule(traffic, edgeDetails) {
-    if (traffic.policy_id === 0)
-      this.proposeRule(traffic, edgeDetails);
+    if (traffic.policy_id === 0) this.proposeRule(traffic, edgeDetails);
     this.onRule = true;
   }
 

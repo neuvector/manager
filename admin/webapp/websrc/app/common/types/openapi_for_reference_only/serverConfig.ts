@@ -1,6 +1,6 @@
-import { ServerOIDCConfig } from "./serverOIDCConfig";
-import { ServerSAMLConfig } from "./serverSAMLConfig";
-import { ServerLDAPConfig } from "./serverLDAPConfig";
+import { ServerOIDCConfig } from './serverOIDCConfig';
+import { ServerSAMLConfig } from './serverSAMLConfig';
+import { ServerLDAPConfig } from './serverLDAPConfig';
 
 export interface ServerConfig {
   name: string;

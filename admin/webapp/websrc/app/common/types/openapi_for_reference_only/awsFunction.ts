@@ -1,4 +1,4 @@
-import { ScanAwsFuncReport } from "./scanAwsFuncReport";
+import { ScanAwsFuncReport } from './scanAwsFuncReport';
 
 export interface AwsFunction {
   function_name: string;

@@ -8,9 +8,8 @@ describe('FromToCellComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FromToCellComponent ]
-    })
-    .compileComponents();
+      declarations: [FromToCellComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

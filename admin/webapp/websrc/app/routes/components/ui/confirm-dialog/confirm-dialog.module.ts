@@ -5,20 +5,14 @@ import { LoadingButtonModule } from '../loading-button/loading-button.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 
-
-
 @NgModule({
-  declarations: [
-    ConfirmDialogComponent
-  ],
+  declarations: [ConfirmDialogComponent],
   imports: [
     CommonModule,
     LoadingButtonModule,
     MatButtonModule,
     TranslateModule,
   ],
-  exports: [
-    ConfirmDialogComponent
-  ]
+  exports: [ConfirmDialogComponent],
 })
-export class ConfirmDialogModule { }
+export class ConfirmDialogModule {}

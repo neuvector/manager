@@ -1,4 +1,4 @@
-import { RegistryImageSummaryLabels } from "./registryImageSummaryLabels";
+import { RegistryImageSummaryLabels } from './registryImageSummaryLabels';
 
 export interface RegistryImageSummary {
   domain: string;

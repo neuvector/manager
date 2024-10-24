@@ -7,7 +7,5 @@ export interface NewThreatDTOWrap {
 }
 
 export function isNewThreatDTOWrap(v: any): v is NewThreatDTOWrap {
-  return (
-    (v['threats'] && isArray(v['threats']))
-  );
+  return v['threats'] && isArray(v['threats']);
 }

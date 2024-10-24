@@ -7,7 +7,5 @@ export interface FileMonitorProfileData {
 }
 
 export function isFileMonitorProfileData(v: any): v is FileMonitorProfileData {
-  return (
-    (v['profile'] && isFileMonitorProfile(v['profile']))
-  );
+  return v['profile'] && isFileMonitorProfile(v['profile']);
 }

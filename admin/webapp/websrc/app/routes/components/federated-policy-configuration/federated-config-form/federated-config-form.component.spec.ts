@@ -8,9 +8,8 @@ describe('FederatedConfigFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FederatedConfigFormComponent ]
-    })
-    .compileComponents();
+      declarations: [FederatedConfigFormComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

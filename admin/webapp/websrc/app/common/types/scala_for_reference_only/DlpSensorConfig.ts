@@ -15,12 +15,18 @@ export interface DlpSensorConfig {
 
 export function isDlpSensorConfig(v: any): v is DlpSensorConfig {
   return (
-    ((typeof v['name']) === 'string') &&
-    (!v['comment'] || ((typeof v['comment']) === 'string')) &&
-    (!v['change'] || (Array.isArray(v['change']) && v['change'].every(elmt => elmt && isDlpRule(elmt)))) &&
-    (!v['delete'] || (Array.isArray(v['delete']) && v['delete'].every(elmt => elmt && isDlpRule(elmt)))) &&
-    (!v['rules'] || (Array.isArray(v['rules']) && v['rules'].every(elmt => elmt && isDlpRule(elmt)))) &&
-    (!v['predefine'] || ((typeof v['predefine']) === 'boolean')) &&
+    typeof v['name'] === 'string' &&
+    (!v['comment'] || typeof v['comment'] === 'string') &&
+    (!v['change'] ||
+      (Array.isArray(v['change']) &&
+        v['change'].every(elmt => elmt && isDlpRule(elmt)))) &&
+    (!v['delete'] ||
+      (Array.isArray(v['delete']) &&
+        v['delete'].every(elmt => elmt && isDlpRule(elmt)))) &&
+    (!v['rules'] ||
+      (Array.isArray(v['rules']) &&
+        v['rules'].every(elmt => elmt && isDlpRule(elmt)))) &&
+    (!v['predefine'] || typeof v['predefine'] === 'boolean') &&
     (!v['prerules'] || (v['prerules'] && isArray(v['prerules'])))
   );
 }

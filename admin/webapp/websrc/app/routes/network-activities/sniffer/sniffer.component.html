@@ -48,7 +48,10 @@
     </div>
 
     <div class="custom-slider col-8 pl-0">
-      <ngx-slider [value]="pcap.minValue" [options]="pcap.options" (userChangeEnd)="onUserChangeEnd($event)"></ngx-slider>
+      <ngx-slider
+        [value]="pcap.minValue"
+        [options]="pcap.options"
+        (userChangeEnd)="onUserChangeEnd($event)"></ngx-slider>
     </div>
   </div>
   <div class="row mx-0">
@@ -88,7 +91,8 @@
         <button
           mat-mini-fab
           aria-label="Stop sniff"
-          color="primary" class="mr-2"
+          color="primary"
+          class="mr-2"
           [disabled]="
             !isPacketCapAuthorized || !sniffer || sniffer.status === 'stopped'
           "
@@ -98,7 +102,8 @@
         <button
           mat-mini-fab
           aria-label="Download packet"
-          color="primary" class="mr-2"
+          color="primary"
+          class="mr-2"
           [disabled]="!isPacketCapAuthorized || !sniffer"
           (click)="downloadPacket(sniffer.id)">
           <em class="far fa-file-archive"></em>

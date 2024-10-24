@@ -8,9 +8,8 @@ describe('TopVulnerableAssetsChartComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TopVulnerableAssetsChartComponent ]
-    })
-    .compileComponents();
+      declarations: [TopVulnerableAssetsChartComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

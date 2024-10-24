@@ -29,7 +29,7 @@ export class ProcessProfileRulesService {
     isWriteGroupAuthorized: boolean,
     isWriteProcessProfileRuleAuthorized: boolean,
     source: string,
-    isScoreImprovement: boolean = false,
+    isScoreImprovement: boolean = false
   ) {
     let columnDefs = [
       {
@@ -41,26 +41,33 @@ export class ProcessProfileRulesService {
       {
         headerComponent: ProcessProfileRuleNameHeaderComponent,
         headerCheckboxSelection: params => {
-          return isWriteGroupAuthorized &&
-            isWriteProcessProfileRuleAuthorized;
+          return isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized;
         },
         headerCheckboxSelectionFilteredOnly: true,
         checkboxSelection: params => {
-          return isWriteGroupAuthorized &&
+          return (
+            isWriteGroupAuthorized &&
             isWriteProcessProfileRuleAuthorized &&
-            [GlobalConstant.CFG_TYPE.CUSTOMER, GlobalConstant.CFG_TYPE.LEARNED].includes(params.data.cfg_type);
+            [
+              GlobalConstant.CFG_TYPE.CUSTOMER,
+              GlobalConstant.CFG_TYPE.LEARNED,
+            ].includes(params.data.cfg_type)
+          );
         },
         field: 'name',
-        hide: !(source === GlobalConstant.NAV_SOURCE.GROUP &&
+        hide: !(
+          source === GlobalConstant.NAV_SOURCE.GROUP &&
           isWriteGroupAuthorized &&
-          isWriteProcessProfileRuleAuthorized)
+          isWriteProcessProfileRuleAuthorized
+        ),
       },
       {
         headerComponent: ProcessProfileRuleNameHeaderComponent,
         field: 'name',
-        hide: source === GlobalConstant.NAV_SOURCE.GROUP &&
+        hide:
+          source === GlobalConstant.NAV_SOURCE.GROUP &&
           isWriteGroupAuthorized &&
-          isWriteProcessProfileRuleAuthorized
+          isWriteProcessProfileRuleAuthorized,
       },
       {
         headerName: this.translate.instant('service.gridHeader.PATH'),
@@ -87,12 +94,14 @@ export class ProcessProfileRulesService {
         cellRenderer: params => {
           if (params && params.value) {
             let typeClass =
-              params.value === GlobalConstant.CFG_TYPE.GROUND || params.value === GlobalConstant.CFG_TYPE.FED
+              params.value === GlobalConstant.CFG_TYPE.GROUND ||
+              params.value === GlobalConstant.CFG_TYPE.FED
                 ? MapConstant.colourMap[params.value.toUpperCase()]
                 : MapConstant.colourMap[params.value];
 
             let typeName =
-              params.value === GlobalConstant.CFG_TYPE.GROUND || params.value === GlobalConstant.CFG_TYPE.FED
+              params.value === GlobalConstant.CFG_TYPE.GROUND ||
+              params.value === GlobalConstant.CFG_TYPE.FED
                 ? this.translate.instant(`group.${params.value.toUpperCase()}`)
                 : this.sanitizer.sanitize(
                     SecurityContext.HTML,

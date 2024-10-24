@@ -7,7 +7,5 @@ export interface PolicyRuleInsert {
 }
 
 export function isPolicyRuleInsert(v: any): v is PolicyRuleInsert {
-  return (
-    (v['insert'] && isRuleInsert(v['insert']))
-  );
+  return v['insert'] && isRuleInsert(v['insert']);
 }

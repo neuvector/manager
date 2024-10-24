@@ -18,7 +18,6 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./compliance-profile.component.scss'],
 })
 export class ComplianceProfileComponent implements OnInit, OnDestroy {
-
   complianceProfileData!: {
     template: ComplianceProfileTemplateData;
     profile: ComplianceProfileData;
@@ -47,7 +46,7 @@ export class ComplianceProfileComponent implements OnInit, OnDestroy {
           this.authUtilsService.userPermission.isNamespaceUser;
       });
 
-      this._getClustersFinishSubscription =
+    this._getClustersFinishSubscription =
       this.multiClusterService.onGetClustersFinishEvent$.subscribe(() => {
         this.complianceProfileService
           .initComplianceProfile()
@@ -55,14 +54,14 @@ export class ComplianceProfileComponent implements OnInit, OnDestroy {
             this.complianceProfileData = profileData;
             this.loaded = true;
             this.isNamespaceUser =
-            this.authUtilsService.userPermission.isNamespaceUser;
+              this.authUtilsService.userPermission.isNamespaceUser;
             this.refreshingProfile = false;
           });
       });
   }
 
   ngOnDestroy(): void {
-    if(this._getClustersFinishSubscription) {
+    if (this._getClustersFinishSubscription) {
       this._getClustersFinishSubscription.unsubscribe();
     }
   }

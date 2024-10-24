@@ -8,9 +8,8 @@ describe('ComplianceItemsTableFilterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ComplianceItemsTableFilterComponent ]
-    })
-    .compileComponents();
+      declarations: [ComplianceItemsTableFilterComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

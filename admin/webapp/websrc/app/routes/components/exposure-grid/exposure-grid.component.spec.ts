@@ -8,9 +8,8 @@ describe('ExposureGridComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ExposureGridComponent ]
-    })
-    .compileComponents();
+      declarations: [ExposureGridComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

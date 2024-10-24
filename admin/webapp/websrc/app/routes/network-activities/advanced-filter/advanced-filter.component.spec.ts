@@ -8,9 +8,8 @@ describe('AdvancedFilterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AdvancedFilterComponent ]
-    })
-    .compileComponents();
+      declarations: [AdvancedFilterComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -2,13 +2,13 @@ import { RiskType } from './enum';
 
 export enum SystemAlertType {
   RBAC = 'RBAC',
-  TLS_CERTIFICATE = 'TLS_CERTIFICATE'
+  TLS_CERTIFICATE = 'TLS_CERTIFICATE',
 }
 
 export enum SystemAlertSeverity {
   CRITICAL = 'Critical',
   WARNING = 'Warning',
-  INFO = 'Info'
+  INFO = 'Info',
 }
 
 export interface SystemAlertSummary {

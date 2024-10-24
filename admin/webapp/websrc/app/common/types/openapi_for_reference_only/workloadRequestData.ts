@@ -1,4 +1,4 @@
-import { WorkloadRequest } from "./workloadRequest";
+import { WorkloadRequest } from './workloadRequest';
 
 export interface WorkloadRequestData {
   request: WorkloadRequest;

@@ -1,4 +1,4 @@
-import { ScanReport } from "./scanReport";
+import { ScanReport } from './scanReport';
 
 export interface ScanReportData {
   report: ScanReport;

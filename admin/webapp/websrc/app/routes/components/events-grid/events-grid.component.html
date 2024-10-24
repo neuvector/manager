@@ -5,7 +5,12 @@
         {{ 'enum.FOUND' | translate }}
         {{ filteredCount }}&nbsp;/
       </span>
-      <span *ngIf="!(filtered$ | async)">
+      <span
+        *ngIf="
+          (filtered$ | async) === false ||
+          (filtered$ | async) === null ||
+          (filtered$ | async) === undefined
+        ">
         {{ 'enum.OUT_OF' | translate }}&nbsp;
       </span>
       {{ eventsCount }}

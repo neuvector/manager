@@ -17,15 +17,15 @@ export interface Workloads {
 
 export function isWorkloads(v: any): v is Workloads {
   return (
-    ((typeof v['id']) === 'string') &&
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['display_name']) === 'string') &&
-    ((typeof v['domain']) === 'string') &&
-    ((typeof v['high']) === 'number') &&
-    ((typeof v['medium']) === 'number') &&
-    ((typeof v['state']) === 'string') &&
-    ((typeof v['service']) === 'string') &&
-    ((typeof v['platform_role']) === 'string') &&
+    typeof v['id'] === 'string' &&
+    typeof v['name'] === 'string' &&
+    typeof v['display_name'] === 'string' &&
+    typeof v['domain'] === 'string' &&
+    typeof v['high'] === 'number' &&
+    typeof v['medium'] === 'number' &&
+    typeof v['state'] === 'string' &&
+    typeof v['service'] === 'string' &&
+    typeof v['platform_role'] === 'string' &&
     (!v['children'] || (v['children'] && isArray(v['children'])))
   );
 }

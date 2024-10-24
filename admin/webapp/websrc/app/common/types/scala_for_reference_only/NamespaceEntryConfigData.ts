@@ -6,8 +6,8 @@ export interface NamespaceEntryConfigData {
   config: NamespaceConfig;
 }
 
-export function isNamespaceEntryConfigData(v: any): v is NamespaceEntryConfigData {
-  return (
-    (v['config'] && isNamespaceConfig(v['config']))
-  );
+export function isNamespaceEntryConfigData(
+  v: any
+): v is NamespaceEntryConfigData {
+  return v['config'] && isNamespaceConfig(v['config']);
 }

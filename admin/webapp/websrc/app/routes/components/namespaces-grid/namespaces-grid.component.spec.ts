@@ -8,9 +8,8 @@ describe('NamespacesGridComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NamespacesGridComponent ]
-    })
-    .compileComponents();
+      declarations: [NamespacesGridComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

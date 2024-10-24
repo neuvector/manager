@@ -10,7 +10,8 @@ export interface WorkloadsWrap {
 
 export function isWorkloadsWrap(v: any): v is WorkloadsWrap {
   return (
-    (v['workloads'] && isArray(v['workloads'])) &&
+    v['workloads'] &&
+    isArray(v['workloads']) &&
     (!v['error'] || (v['error'] && isError(v['error'])))
   );
 }

@@ -11,8 +11,8 @@ export interface Protocol {
 }
 
 export interface AdvancedFilter {
-  domains: string[],
-  groups: string[],
+  domains: string[];
+  groups: string[];
   policyMode: PolicyMode;
   cve: string;
   protocol: Protocol;

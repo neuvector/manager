@@ -110,27 +110,29 @@ export class FileAccessRulesService {
     };
 
     const typeColumn = {
-      headerName: this.translate.instant("policy.gridHeader.TYPE"),
-      field: "cfg_type",
+      headerName: this.translate.instant('policy.gridHeader.TYPE'),
+      field: 'cfg_type',
       cellRenderer: params => {
         if (params && params.value) {
           let typeClass =
-            params.value === GlobalConstant.CFG_TYPE.GROUND || params.value === GlobalConstant.CFG_TYPE.FED
+            params.value === GlobalConstant.CFG_TYPE.GROUND ||
+            params.value === GlobalConstant.CFG_TYPE.FED
               ? MapConstant.colourMap[params.value.toUpperCase()]
-              : "local-rule";
+              : 'local-rule';
 
           let typeName =
-            params.value === GlobalConstant.CFG_TYPE.GROUND || params.value === GlobalConstant.CFG_TYPE.FED
+            params.value === GlobalConstant.CFG_TYPE.GROUND ||
+            params.value === GlobalConstant.CFG_TYPE.FED
               ? this.translate.instant(`group.${params.value.toUpperCase()}`)
-              : this.translate.instant("group.LOCAL");
+              : this.translate.instant('group.LOCAL');
           return `<div class="action-label nv-label ${typeClass}">${typeName}</div>`;
         }
         return '';
       },
-      cellClass: "grid-center-align",
+      cellClass: 'grid-center-align',
       width: 90,
       minWidth: 90,
-      maxWidth: 90
+      maxWidth: 90,
     };
 
     const operationColumn = {
@@ -143,8 +145,18 @@ export class FileAccessRulesService {
 
     const fileColumnDefs = isScoreImprovement
       ? [...filterColumn, timeColumn, actionColumn]
-      : [...filterPrefix, applicationColumn, actionColumn, typeColumn, timeColumn];
-    const predefinedFilterColumns = [...filterPrefix, actionColumn, operationColumn];
+      : [
+          ...filterPrefix,
+          applicationColumn,
+          actionColumn,
+          typeColumn,
+          timeColumn,
+        ];
+    const predefinedFilterColumns = [
+      ...filterPrefix,
+      actionColumn,
+      operationColumn,
+    ];
 
     return {
       gridOptions4fileAccessRules: this.utils.createGridOptions(
@@ -190,7 +202,7 @@ export class FileAccessRulesService {
     data,
     groupName,
     scope = GlobalConstant.SCOPE.LOCAL,
-    predefined = false,
+    predefined = false
   ) {
     let payload = {};
     switch (operation) {
@@ -225,25 +237,21 @@ export class FileAccessRulesService {
         };
         break;
     }
-    return scope === GlobalConstant.SCOPE.FED ?
-      this.http.patch(
-        PathConstant.FILE_PROFILE_URL,
-        payload,
-        {
-          params: {
-            scope: GlobalConstant.SCOPE.FED,
-            predefined: predefined
-          }
-        },
-      ).pipe() :
-      this.http.patch(
-        PathConstant.FILE_PROFILE_URL,
-        payload,
-        {
-          params: {
-            predefined: predefined
-          }
-        }
-      ).pipe();
+    return scope === GlobalConstant.SCOPE.FED
+      ? this.http
+          .patch(PathConstant.FILE_PROFILE_URL, payload, {
+            params: {
+              scope: GlobalConstant.SCOPE.FED,
+              predefined: predefined,
+            },
+          })
+          .pipe()
+      : this.http
+          .patch(PathConstant.FILE_PROFILE_URL, payload, {
+            params: {
+              predefined: predefined,
+            },
+          })
+          .pipe();
   }
 }

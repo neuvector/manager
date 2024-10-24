@@ -1,6 +1,6 @@
-import { ServerLDAP } from "./serverLDAP";
-import { ServerOIDC } from "./serverOIDC";
-import { ServerSAML } from "./serverSAML";
+import { ServerLDAP } from './serverLDAP';
+import { ServerOIDC } from './serverOIDC';
+import { ServerSAML } from './serverSAML';
 
 export interface Server {
   server_name: string;

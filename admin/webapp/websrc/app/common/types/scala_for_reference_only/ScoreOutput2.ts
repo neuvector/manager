@@ -13,9 +13,13 @@ export interface ScoreOutput2 {
 
 export function isScoreOutput2(v: any): v is ScoreOutput2 {
   return (
-    (v['score'] && isScore(v['score'])) &&
-    (v['header_data'] && isMetrics(v['header_data'])) &&
-    (v['ingress'] && isArray(v['ingress'])) &&
-    (v['egress'] && isArray(v['egress']))
+    v['score'] &&
+    isScore(v['score']) &&
+    v['header_data'] &&
+    isMetrics(v['header_data']) &&
+    v['ingress'] &&
+    isArray(v['ingress']) &&
+    v['egress'] &&
+    isArray(v['egress'])
   );
 }

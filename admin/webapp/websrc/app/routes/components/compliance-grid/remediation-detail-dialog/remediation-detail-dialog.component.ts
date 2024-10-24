@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Check } from '@common/types';
 
 @Component({
@@ -6,14 +6,12 @@ import { Check } from '@common/types';
   templateUrl: './remediation-detail-dialog.component.html',
   styleUrls: ['./remediation-detail-dialog.component.scss'],
 })
-export class RemediationDetailDialogComponent implements OnInit {
+export class RemediationDetailDialogComponent {
   @Input() compliance!: Check;
   @Input() isRegistryDialog: boolean = false;
   visible: boolean = false;
 
   constructor() {}
-
-  ngOnInit(): void {}
 
   show(): void {
     this.visible = true;

@@ -8,13 +8,10 @@ import { EmptyDataChartReplacementModule } from '@components/ui/empty-data-chart
 import { PanelInstructionCurtainModule } from '@components/ui/panel-instruction-curtain/panel-instruction-curtain.module';
 import { SecurityRiskPanelModule } from '@components/security-risk-panel/security-risk-panel.module';
 
-
-
-
 @NgModule({
   declarations: [
     TopVulnerableAssetsPanelComponent,
-    TopVulnerableAssetsChartComponent
+    TopVulnerableAssetsChartComponent,
   ],
   imports: [
     CommonModule,
@@ -22,11 +19,11 @@ import { SecurityRiskPanelModule } from '@components/security-risk-panel/securit
     NgChartsModule,
     EmptyDataChartReplacementModule,
     PanelInstructionCurtainModule,
-    SecurityRiskPanelModule
+    SecurityRiskPanelModule,
   ],
   exports: [
     TopVulnerableAssetsPanelComponent,
-    TopVulnerableAssetsChartComponent
-  ]
+    TopVulnerableAssetsChartComponent,
+  ],
 })
-export class TopVulnerableAssetsPanelModule { }
+export class TopVulnerableAssetsPanelModule {}

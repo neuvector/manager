@@ -8,13 +8,14 @@ describe('SecurityEventsPrintableReportLocationColComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SecurityEventsPrintableReportLocationColComponent ]
-    })
-    .compileComponents();
+      declarations: [SecurityEventsPrintableReportLocationColComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SecurityEventsPrintableReportLocationColComponent);
+    fixture = TestBed.createComponent(
+      SecurityEventsPrintableReportLocationColComponent
+    );
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

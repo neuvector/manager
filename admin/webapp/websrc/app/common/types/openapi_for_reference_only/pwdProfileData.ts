@@ -1,4 +1,4 @@
-import { PwdProfile } from "./pwdProfile";
+import { PwdProfile } from './pwdProfile';
 
 export interface PwdProfileData {
   pwd_profile: PwdProfile;

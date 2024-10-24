@@ -1,8 +1,8 @@
-import { HostInterfaces } from "./hostInterfaces";
-import { WorkloadLabels } from "./workloadLabels";
-import { WorkloadDetailAppPorts } from "./workloadDetailAppPorts";
-import { WorkloadPorts } from "./workloadPorts";
-import { ScanBrief } from "./scanBrief";
+import { HostInterfaces } from './hostInterfaces';
+import { WorkloadLabels } from './workloadLabels';
+import { WorkloadDetailAppPorts } from './workloadDetailAppPorts';
+import { WorkloadPorts } from './workloadPorts';
+import { ScanBrief } from './scanBrief';
 
 export interface WorkloadDetail {
   id: string;

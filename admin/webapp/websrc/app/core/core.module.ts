@@ -5,7 +5,7 @@ import { ThemesService } from './themes/themes.service';
 import { TranslatorService } from './translator/translator.service';
 import { MenuService } from './menu/menu.service';
 import { HttpInterceptorProviders } from './interceptor/index';
-import { MultiClusterService } from "@services/multi-cluster.service";
+import { MultiClusterService } from '@services/multi-cluster.service';
 
 import { throwDuplicatedInstance } from './singleInstanceModule';
 
@@ -17,7 +17,7 @@ import { throwDuplicatedInstance } from './singleInstanceModule';
     TranslatorService,
     MenuService,
     HttpInterceptorProviders,
-    MultiClusterService
+    MultiClusterService,
   ],
   declarations: [],
   exports: [],

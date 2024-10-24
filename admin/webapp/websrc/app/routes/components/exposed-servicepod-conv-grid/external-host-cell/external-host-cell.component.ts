@@ -5,10 +5,9 @@ import { ICellRendererParams } from 'ag-grid-community';
 @Component({
   selector: 'app-external-host-cell',
   templateUrl: './external-host-cell.component.html',
-  styleUrls: ['./external-host-cell.component.scss']
+  styleUrls: ['./external-host-cell.component.scss'],
 })
 export class ExternalHostCellComponent implements ICellRendererAngularComp {
-
   params!: ICellRendererParams;
 
   constructor() {}
@@ -20,5 +19,4 @@ export class ExternalHostCellComponent implements ICellRendererAngularComp {
   refresh(params: ICellRendererParams): boolean {
     return false;
   }
-
 }

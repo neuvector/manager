@@ -28,7 +28,6 @@ import { finalize, takeWhile } from 'rxjs/operators';
 import { interval } from 'rxjs';
 import { GlobalConstant } from '@common/constants/global.constant';
 
-
 type Task = {
   index: number;
   rowNode: IRowNode;

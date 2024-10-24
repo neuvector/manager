@@ -9,10 +9,7 @@
     [type]="type"
     color="undefined"
     mat-button>
-    <mat-spinner
-      *ngIf="loading"
-      class="btn__spinner"
-      diameter="20">
+    <mat-spinner *ngIf="loading" class="btn__spinner" diameter="20">
     </mat-spinner>
     <i *ngIf="iconName" [class]="iconClasses">{{ iconName }}</i>
     {{ text }}
@@ -26,10 +23,7 @@
     [disabled]="disabled"
     [type]="type"
     mat-raised-button>
-    <mat-spinner
-      *ngIf="loading"
-      class="btn__spinner"
-      diameter="20">
+    <mat-spinner *ngIf="loading" class="btn__spinner" diameter="20">
     </mat-spinner>
     <i *ngIf="iconName" [class]="iconClasses">{{ iconName }}</i>
     {{ text }}
@@ -43,10 +37,7 @@
     [disabled]="disabled"
     [type]="type"
     mat-stroked-button>
-    <mat-spinner
-      *ngIf="loading"
-      class="btn__spinner"
-      diameter="20">
+    <mat-spinner *ngIf="loading" class="btn__spinner" diameter="20">
     </mat-spinner>
     <i *ngIf="iconName" [class]="iconClasses">{{ iconName }}</i>
     {{ text }}
@@ -60,10 +51,7 @@
     [disabled]="disabled"
     [type]="type"
     mat-flat-button>
-    <mat-spinner
-      *ngIf="loading"
-      class="btn__spinner"
-      diameter="20">
+    <mat-spinner *ngIf="loading" class="btn__spinner" diameter="20">
     </mat-spinner>
     <i *ngIf="iconName" [class]="iconClasses">{{ iconName }}</i>
     {{ text }}
@@ -78,10 +66,7 @@
     [disabled]="disabled"
     [type]="type"
     mat-icon-button>
-    <mat-spinner
-      *ngIf="loading"
-      class="btn__spinner"
-      diameter="20">
+    <mat-spinner *ngIf="loading" class="btn__spinner" diameter="20">
     </mat-spinner>
     <i [class]="iconClasses">{{ iconName }}</i>
   </button>
@@ -95,10 +80,7 @@
     [disabled]="disabled"
     [type]="type"
     mat-fab>
-    <mat-spinner
-      *ngIf="loading"
-      class="btn__spinner"
-      diameter="20">
+    <mat-spinner *ngIf="loading" class="btn__spinner" diameter="20">
     </mat-spinner>
     <i [class]="iconClasses">{{ iconName }}</i>
   </button>
@@ -112,10 +94,7 @@
     [disabled]="disabled"
     [type]="type"
     mat-mini-fab>
-    <mat-spinner
-      *ngIf="loading"
-      class="btn__spinner"
-      diameter="20">
+    <mat-spinner *ngIf="loading" class="btn__spinner" diameter="20">
     </mat-spinner>
     <i [class]="iconClasses">{{ iconName }}</i>
   </button>

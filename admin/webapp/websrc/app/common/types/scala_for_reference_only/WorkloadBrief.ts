@@ -20,17 +20,18 @@ export interface WorkloadBrief {
 
 export function isWorkloadBrief(v: any): v is WorkloadBrief {
   return (
-    ((typeof v['id']) === 'string') &&
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['display_name']) === 'string') &&
-    ((typeof v['state']) === 'string') &&
-    ((typeof v['service']) === 'string') &&
-    ((typeof v['service_group']) === 'string') &&
-    (!v['share_ns_with'] || ((typeof v['share_ns_with']) === 'string')) &&
-    (!v['policy_mode'] || ((typeof v['policy_mode']) === 'string')) &&
-    ((typeof v['domain']) === 'string') &&
-    ((typeof v['cap_quarantine']) === 'boolean') &&
-    (!v['scan_summary'] || (v['scan_summary'] && isScanBrief(v['scan_summary']))) &&
+    typeof v['id'] === 'string' &&
+    typeof v['name'] === 'string' &&
+    typeof v['display_name'] === 'string' &&
+    typeof v['state'] === 'string' &&
+    typeof v['service'] === 'string' &&
+    typeof v['service_group'] === 'string' &&
+    (!v['share_ns_with'] || typeof v['share_ns_with'] === 'string') &&
+    (!v['policy_mode'] || typeof v['policy_mode'] === 'string') &&
+    typeof v['domain'] === 'string' &&
+    typeof v['cap_quarantine'] === 'boolean' &&
+    (!v['scan_summary'] ||
+      (v['scan_summary'] && isScanBrief(v['scan_summary']))) &&
     (!v['children'] || (v['children'] && isArray(v['children'])))
   );
 }

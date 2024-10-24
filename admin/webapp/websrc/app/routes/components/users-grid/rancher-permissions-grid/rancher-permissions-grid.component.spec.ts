@@ -8,9 +8,8 @@ describe('RancherPermissionsGridComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RancherPermissionsGridComponent ]
-    })
-    .compileComponents();
+      declarations: [RancherPermissionsGridComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

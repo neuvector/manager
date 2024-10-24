@@ -7,7 +7,5 @@ export interface ResponseRuleConfig {
 }
 
 export function isResponseRuleConfig(v: any): v is ResponseRuleConfig {
-  return (
-    (v['config'] && isResponseRule(v['config']))
-  );
+  return v['config'] && isResponseRule(v['config']);
 }

@@ -10,15 +10,15 @@ import { Router } from '@angular/router';
 export class NodeBriefComponent implements OnInit {
   @Input() host!: Host;
 
-  constructor(
-    private router: Router
-  ) {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     console.log(this.host);
   }
 
-  goToGroup = (group) => {
-    this.router.navigate(['/group'], { queryParams: { group: encodeURIComponent(group) } });
+  goToGroup = group => {
+    this.router.navigate(['/group'], {
+      queryParams: { group: encodeURIComponent(group) },
+    });
   };
 }

@@ -8,9 +8,8 @@ describe('ContainerBriefDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ContainerBriefDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [ContainerBriefDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

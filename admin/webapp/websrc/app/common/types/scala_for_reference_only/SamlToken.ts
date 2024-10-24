@@ -5,7 +5,5 @@ export interface SamlToken {
 }
 
 export function isSamlToken(v: any): v is SamlToken {
-  return (
-    ((typeof v['token']) === 'string')
-  );
+  return typeof v['token'] === 'string';
 }

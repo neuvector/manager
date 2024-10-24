@@ -8,8 +8,8 @@ export interface AdmRuleSubCriterion {
 
 export function isAdmRuleSubCriterion(v: any): v is AdmRuleSubCriterion {
   return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['op']) === 'string') &&
-    ((typeof v['value']) === 'string')
+    typeof v['name'] === 'string' &&
+    typeof v['op'] === 'string' &&
+    typeof v['value'] === 'string'
   );
 }

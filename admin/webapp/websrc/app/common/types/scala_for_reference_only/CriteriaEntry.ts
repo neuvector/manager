@@ -8,8 +8,8 @@ export interface CriteriaEntry {
 
 export function isCriteriaEntry(v: any): v is CriteriaEntry {
   return (
-    ((typeof v['key']) === 'string') &&
-    ((typeof v['value']) === 'string') &&
-    ((typeof v['op']) === 'string')
+    typeof v['key'] === 'string' &&
+    typeof v['value'] === 'string' &&
+    typeof v['op'] === 'string'
   );
 }

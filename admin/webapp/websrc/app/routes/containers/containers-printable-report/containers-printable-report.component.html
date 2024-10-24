@@ -37,60 +37,73 @@
   <div class="clearfix">
     <span class="mat-headline text-info">{{
       'containers.report.details' | translate
-      }}</span>
+    }}</span>
     <table class="print-table">
       <thead>
-      <tr class="print-header">
-        <th class="print-cell" style="width: 5%">
-          {{ 'general.ID' | translate }}
-        </th>
-        <th class="print-cell" style="width: 12%">
-          {{ 'general.NAME' | translate }}
-        </th>
-        <th class="print-cell" style="width: 12%">
-          {{ 'group.gridHeader.DOMAIN' | translate }}
-        </th>
-        <th class="print-cell" style="width: 12%">
-          {{ 'containers.detail.HOST_NAME' | translate }}
-        </th>
-        <th class="print-cell" style="width: 25%">
-          {{ 'containers.detail.IMAGE' | translate }}
-        </th>
-        <th class="print-cell" style="width: 10%">
-          {{ 'containers.detail.APPLICATIONS' | translate }}
-        </th>
-        <th class="print-cell" style="width: 12%">
-          {{ 'containers.report.reason' | translate }}
-        </th>
-        <th class="print-cell" style="width: 12%">
-          {{ 'containers.detail.STARTED_AT' | translate }}
-        </th>
-      </tr>
+        <tr class="print-header">
+          <th class="print-cell" style="width: 5%">
+            {{ 'general.ID' | translate }}
+          </th>
+          <th class="print-cell" style="width: 12%">
+            {{ 'general.NAME' | translate }}
+          </th>
+          <th class="print-cell" style="width: 12%">
+            {{ 'group.gridHeader.DOMAIN' | translate }}
+          </th>
+          <th class="print-cell" style="width: 12%">
+            {{ 'containers.detail.HOST_NAME' | translate }}
+          </th>
+          <th class="print-cell" style="width: 25%">
+            {{ 'containers.detail.IMAGE' | translate }}
+          </th>
+          <th class="print-cell" style="width: 10%">
+            {{ 'containers.detail.APPLICATIONS' | translate }}
+          </th>
+          <th class="print-cell" style="width: 12%">
+            {{ 'containers.report.reason' | translate }}
+          </th>
+          <th class="print-cell" style="width: 12%">
+            {{ 'containers.detail.STARTED_AT' | translate }}
+          </th>
+        </tr>
       </thead>
       <tbody>
-      <tr
-        class="print-row"
-        *ngFor="let container of containers; let i = index"
-        [attr.data-index]="i">
-        <td class="print-cell" style="width: 5%">{{ i + 1 }}</td>
-        <td class="print-cell" style="width: 12%">{{ container.brief.display_name }}</td>
-        <td class="print-cell" style="width: 12%">{{ container.brief.domain }}</td>
-        <td class="print-cell" style="width: 12%">
-          {{ container.brief.host_name }}
-        </td>
-        <td class="print-cell" style="width: 25%">
-          {{ container.brief.image }}
-        </td>
-        <td class="print-cell" style="width: 10%">
-          {{ container.rt_attributes.applications?.join(", ") }}
-        </td>
-        <td class="print-cell" style="width: 12%">
-          {{ container.security.quarantine_reason?(container.security.quarantine_reason!="user-configured"?('containers.report.ruleTriggered'|translate):('containers.report.userConfig'|translate)):('containers.report.userConfig'|translate) }}
-        </td>
-        <td class="print-cell" style="width: 12%">
-          {{ container.security.scan_summary.scanned_at | date: 'MMM dd, y HH:mm:ss' }}
-        </td>
-      </tr>
+        <tr
+          class="print-row"
+          *ngFor="let container of containers; let i = index"
+          [attr.data-index]="i">
+          <td class="print-cell" style="width: 5%">{{ i + 1 }}</td>
+          <td class="print-cell" style="width: 12%">
+            {{ container.brief.display_name }}
+          </td>
+          <td class="print-cell" style="width: 12%">
+            {{ container.brief.domain }}
+          </td>
+          <td class="print-cell" style="width: 12%">
+            {{ container.brief.host_name }}
+          </td>
+          <td class="print-cell" style="width: 25%">
+            {{ container.brief.image }}
+          </td>
+          <td class="print-cell" style="width: 10%">
+            {{ container.rt_attributes.applications?.join(', ') }}
+          </td>
+          <td class="print-cell" style="width: 12%">
+            {{
+              container.security.quarantine_reason
+                ? container.security.quarantine_reason !== 'user-configured'
+                  ? ('containers.report.ruleTriggered' | translate)
+                  : ('containers.report.userConfig' | translate)
+                : ('containers.report.userConfig' | translate)
+            }}
+          </td>
+          <td class="print-cell" style="width: 12%">
+            {{
+              container.security.scan_summary.scanned_at
+                | date : 'MMM dd, y HH:mm:ss'
+            }}
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>

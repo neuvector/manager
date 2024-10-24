@@ -11,11 +11,11 @@ export interface StatusCode {
 
 export function isStatusCode(v: any): v is StatusCode {
   return (
-    ((typeof v['intValue']) === 'number') &&
-    ((typeof v['reason']) === 'string') &&
-    ((typeof v['defaultMessage']) === 'string') &&
-    ((typeof v['isSuccess']) === 'boolean') &&
-    ((typeof v['isFailure']) === 'boolean') &&
-    ((typeof v['allowsEntity']) === 'boolean')
+    typeof v['intValue'] === 'number' &&
+    typeof v['reason'] === 'string' &&
+    typeof v['defaultMessage'] === 'string' &&
+    typeof v['isSuccess'] === 'boolean' &&
+    typeof v['isFailure'] === 'boolean' &&
+    typeof v['allowsEntity'] === 'boolean'
   );
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Host } from '@common/types';
 
 @Component({
@@ -6,15 +6,13 @@ import { Host } from '@common/types';
   templateUrl: './node-detail.component.html',
   styleUrls: ['./node-detail.component.scss'],
 })
-export class NodeDetailComponent implements OnInit {
+export class NodeDetailComponent {
   @Input() node!: Host;
   get labels() {
     return Object.keys(this.node.labels);
   }
 
   constructor() {}
-
-  ngOnInit(): void {}
 
   hasObject(obj: {}): boolean {
     return obj && !!Object.keys(obj).length;

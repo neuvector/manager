@@ -22,7 +22,10 @@
       </div>
     </div>
     <div class="margin-top-xxxl margin-right-xl">
-      <app-security-events-printable-report-chart [statisticData]="severityMap"></app-security-events-printable-report-chart>
+      <app-security-events-printable-report-chart
+        [statisticData]="
+          severityMap
+        "></app-security-events-printable-report-chart>
     </div>
   </div>
 </div>
@@ -34,7 +37,7 @@
     <thead>
       <tr class="print-header">
         <th class="print-cell" style="width: 5%">
-          {{'securityEvent.pdf.ID' | translate }}
+          {{ 'securityEvent.pdf.ID' | translate }}
         </th>
         <th class="print-cell" style="width: 18%">
           {{ 'securityEvent.pdf.TITLE' | translate }}
@@ -57,7 +60,10 @@
       </tr>
     </thead>
     <tbody>
-      <tr class="print-row" *ngFor="let securityEvent of securityEvents; let i = index" [attr.data-index]="i">
+      <tr
+        class="print-row"
+        *ngFor="let securityEvent of securityEvents; let i = index"
+        [attr.data-index]="i">
         <ng-container>
           <td class="print-cell" style="width: 5%">
             {{ securityEvent.ID }}
@@ -67,26 +73,22 @@
           </td>
           <td class="print-cell" style="width: 7%">
             <app-security-events-printable-report-severity-col
-              [severity]="securityEvent.Severity"
-            >
+              [severity]="securityEvent.Severity">
             </app-security-events-printable-report-severity-col>
           </td>
           <td class="print-cell" style="width: 20%">
             <app-security-events-printable-report-location-col
-              [location]="securityEvent.Location"
-            >
+              [location]="securityEvent.Location">
             </app-security-events-printable-report-location-col>
           </td>
           <td class="print-cell" style="width: 35%">
             <app-security-events-printable-report-details-col
-              [details]="securityEvent.Details"
-            >
+              [details]="securityEvent.Details">
             </app-security-events-printable-report-details-col>
           </td>
           <td class="print-cell" style="width: 7%">
             <app-security-events-printable-report-action-col
-              [action]="securityEvent.Action"
-            >
+              [action]="securityEvent.Action">
             </app-security-events-printable-report-action-col>
           </td>
           <td class="print-cell" style="width: 8%">

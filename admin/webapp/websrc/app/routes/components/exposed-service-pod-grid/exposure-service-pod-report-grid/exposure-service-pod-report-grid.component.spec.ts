@@ -8,9 +8,8 @@ describe('ExposureServicePodReportGridComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ExposureServicePodReportGridComponent ]
-    })
-    .compileComponents();
+      declarations: [ExposureServicePodReportGridComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

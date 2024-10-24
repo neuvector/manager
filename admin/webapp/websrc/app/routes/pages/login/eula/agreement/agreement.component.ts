@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { GlobalVariable } from '@common/variables/global.variable';
-import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-agreement',
@@ -12,7 +12,7 @@ export class AgreementComponent implements OnInit {
   showAcceptButton: boolean = false;
 
   showCustomPolicy: boolean = false;
-  customPolicy: SafeHtml = "";
+  customPolicy: SafeHtml = '';
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -23,8 +23,10 @@ export class AgreementComponent implements OnInit {
   ngOnInit(): void {
     this.showAcceptButton = this.data.showAcceptButton;
     this.showCustomPolicy = this.data.showCustomPolicy;
-    if(this.showCustomPolicy && GlobalVariable.customPolicy){
-      this.customPolicy = this.sanitizer.bypassSecurityTrustHtml(GlobalVariable.customPolicy);
+    if (this.showCustomPolicy && GlobalVariable.customPolicy) {
+      this.customPolicy = this.sanitizer.bypassSecurityTrustHtml(
+        GlobalVariable.customPolicy
+      );
     }
   }
 

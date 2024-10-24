@@ -7,7 +7,5 @@ export interface Unquarantine {
 }
 
 export function isUnquarantine(v: any): v is Unquarantine {
-  return (
-    (v['unquarantine'] && isResponseRuleID(v['unquarantine']))
-  );
+  return v['unquarantine'] && isResponseRuleID(v['unquarantine']);
 }

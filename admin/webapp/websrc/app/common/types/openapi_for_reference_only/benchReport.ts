@@ -1,4 +1,4 @@
-import { BenchItem } from "./benchItem";
+import { BenchItem } from './benchItem';
 
 export interface BenchReport {
   run_timestamp: number;

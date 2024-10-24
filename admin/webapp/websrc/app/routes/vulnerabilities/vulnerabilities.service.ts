@@ -105,7 +105,7 @@ export class VulnerabilitiesService {
     private datePipe: DatePipe,
     private risksHttpService: RisksHttpService,
     private vulnerabilitiesFilterService: VulnerabilitiesFilterService,
-    private assetsHttpService: AssetsHttpService,
+    private assetsHttpService: AssetsHttpService
   ) {}
 
   selectVulnerability(vulnerability) {
@@ -237,9 +237,7 @@ export class VulnerabilitiesService {
     );
   }
 
-  getVulnerabilitiesViewReportData(
-    lastModifiedTime: number
-  ): Observable<any> {
+  getVulnerabilitiesViewReportData(lastModifiedTime: number): Observable<any> {
     let params: any = {
       token: this.activeToken,
       start: 0,
@@ -253,16 +251,14 @@ export class VulnerabilitiesService {
         orderby: this.sortModel[0].sort,
       };
     }
-    return this.risksHttpService
-      .getVulnerabilitiesQuery(params)
-      .pipe(
-        map(sessionData => {
-          return {
-            data: sessionData.vulnerabilities,
-            totalRecords: this.vulnerabilitiesFilterService.filteredCount,
-          };
-        })
-      );
+    return this.risksHttpService.getVulnerabilitiesQuery(params).pipe(
+      map(sessionData => {
+        return {
+          data: sessionData.vulnerabilities,
+          totalRecords: this.vulnerabilitiesFilterService.filteredCount,
+        };
+      })
+    );
   }
 
   getAssetsViewReportData(
@@ -299,7 +295,10 @@ export class VulnerabilitiesService {
     return vulnerabilities.map(vulnerability => {
       let imageMap = new Map();
       vulnerability.workloads?.forEach(workload => {
-        imageMap.set(workload.image, { display_name: workload.image, policy_mode: workload.policy_mode });
+        imageMap.set(workload.image, {
+          display_name: workload.image,
+          policy_mode: workload.policy_mode,
+        });
       });
       if (vulnerability.images) {
         vulnerability.images.push(...Array.from(imageMap.values()));
@@ -307,6 +306,6 @@ export class VulnerabilitiesService {
         vulnerability.images = Array.from(imageMap.values());
       }
       return vulnerability;
-    })
+    });
   }
 }

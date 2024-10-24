@@ -10,8 +10,14 @@ export interface WorkloadsOutput {
 
 export function isWorkloadsOutput(v: any): v is WorkloadsOutput {
   return (
-    ((typeof v['containerMap']) == 'object' && Object.keys(v['containerMap']).every(key => ((typeof key) === 'string') && (v['containerMap'][key] && isWorkloadBrief2(v['containerMap'][key])))) &&
-    ((typeof v['hasPrivilegedContainer']) === 'boolean') &&
-    ((typeof v['hasRunAsRoot']) === 'boolean')
+    typeof v['containerMap'] == 'object' &&
+    Object.keys(v['containerMap']).every(
+      key =>
+        typeof key === 'string' &&
+        v['containerMap'][key] &&
+        isWorkloadBrief2(v['containerMap'][key])
+    ) &&
+    typeof v['hasPrivilegedContainer'] === 'boolean' &&
+    typeof v['hasRunAsRoot'] === 'boolean'
   );
 }

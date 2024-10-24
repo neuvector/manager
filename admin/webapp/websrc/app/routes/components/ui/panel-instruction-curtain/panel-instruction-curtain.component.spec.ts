@@ -8,9 +8,8 @@ describe('PanelInstructionCurtainComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PanelInstructionCurtainComponent ]
-    })
-    .compileComponents();
+      declarations: [PanelInstructionCurtainComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

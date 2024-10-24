@@ -8,9 +8,8 @@ describe('SwitchModeModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SwitchModeModalComponent ]
-    })
-    .compileComponents();
+      declarations: [SwitchModeModalComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

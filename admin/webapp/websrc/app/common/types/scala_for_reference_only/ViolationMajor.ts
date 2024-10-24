@@ -22,19 +22,21 @@ export interface ViolationMajor {
 
 export function isViolationMajor(v: any): v is ViolationMajor {
   return (
-    ((typeof v['policy_id']) === 'number') &&
-    ((typeof v['reported_timestamp']) === 'number') &&
-    (v['reported_at'] && isDateTime(v['reported_at'])) &&
-    ((typeof v['level']) === 'string') &&
-    ((typeof v['client_id']) === 'string') &&
-    ((typeof v['client_name']) === 'string') &&
-    ((typeof v['client_domain']) === 'string') &&
-    ((typeof v['server_id']) === 'string') &&
-    ((typeof v['server_name']) === 'string') &&
-    ((typeof v['server_domain']) === 'string') &&
-    ((typeof v['client_ip']) === 'string') &&
-    ((typeof v['server_ip']) === 'string') &&
-    ((typeof v['server_port']) === 'number') &&
-    (v['applications'] && isArray(v['applications']))
+    typeof v['policy_id'] === 'number' &&
+    typeof v['reported_timestamp'] === 'number' &&
+    v['reported_at'] &&
+    isDateTime(v['reported_at']) &&
+    typeof v['level'] === 'string' &&
+    typeof v['client_id'] === 'string' &&
+    typeof v['client_name'] === 'string' &&
+    typeof v['client_domain'] === 'string' &&
+    typeof v['server_id'] === 'string' &&
+    typeof v['server_name'] === 'string' &&
+    typeof v['server_domain'] === 'string' &&
+    typeof v['client_ip'] === 'string' &&
+    typeof v['server_ip'] === 'string' &&
+    typeof v['server_port'] === 'number' &&
+    v['applications'] &&
+    isArray(v['applications'])
   );
 }

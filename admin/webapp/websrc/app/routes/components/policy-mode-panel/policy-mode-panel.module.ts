@@ -8,25 +8,23 @@ import { PolicyModeCautionComponent } from './partial/policy-mode-caution/policy
 import { EmptyDataChartReplacementModule } from '@components/ui/empty-data-chart-replacement/empty-data-chart-replacement.module';
 import { PanelInstructionCurtainModule } from '@components/ui/panel-instruction-curtain/panel-instruction-curtain.module';
 
-
-
 @NgModule({
   declarations: [
     PolicyModePanelComponent,
     PolicyModeChartComponent,
-    PolicyModeCautionComponent
+    PolicyModeCautionComponent,
   ],
   imports: [
     CommonModule,
     NvCommonModule,
     NgChartsModule,
     EmptyDataChartReplacementModule,
-    PanelInstructionCurtainModule
+    PanelInstructionCurtainModule,
   ],
   exports: [
     PolicyModePanelComponent,
     PolicyModeChartComponent,
-    PolicyModeCautionComponent
-  ]
+    PolicyModeCautionComponent,
+  ],
 })
-export class PolicyModePanelModule { }
+export class PolicyModePanelModule {}

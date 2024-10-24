@@ -1,4 +1,9 @@
-<ng-container *appObserve="complianceData$ as complianceData; error:errorTemplate loading:loadingTemplate">
+<ng-container
+  *appObserve="
+    complianceData$ as complianceData;
+    error: errorTemplate;
+    loading: loadingTemplate
+  ">
   <app-risks-view-report
     #complianceViewReport
     *ngIf="complianceList && isPrinting"
@@ -7,8 +12,7 @@
     [data]="complianceList"
     [isMeetingReportLimit]="isMeetingReportLimit"
     [charts]="statisticCharts"
-    [filterService]="complianceFilterService"
-  >
+    [filterService]="complianceFilterService">
   </app-risks-view-report>
   <app-assets-view-report
     #assetsViewReport
@@ -17,15 +21,18 @@
     [reportPage]="'compliance'"
     [masterGrids]="masterGrids"
     [isMeetingReportLimit]="isMeetingReportLimit"
-    [dictionaryData]="complianceList"
-  >
+    [dictionaryData]="complianceList">
   </app-assets-view-report>
   <div class="screen-area" style="height: calc(100vh - 180px)">
     <div class="d-flex justify-content-end align-items-center">
       <div
         class="d-flex justify-content-end align-items-center"
-        *ngIf="!complianceFilterService.filtered && complianceData.compliance.compliances.length > 0 || complianceFilterService.filtered && complianceFilterService.filteredCount > 0"
-      >
+        *ngIf="
+          (!complianceFilterService.filtered &&
+            complianceData.compliance.compliances.length > 0) ||
+          (complianceFilterService.filtered &&
+            complianceFilterService.filteredCount > 0)
+        ">
         <app-loading-button
           (btnClick)="printAssetsPDF()"
           [text]="'cis.report.PDF_LINK2' | translate"
@@ -47,8 +54,7 @@
           (click)="downloadCsv()"
           class="mr-1 d-flex justify-content-center align-items-center"
           mat-button>
-          <i
-            class="eos-icons icon-18">csv_file</i>
+          <i class="eos-icons icon-18">csv_file</i>
         </button>
       </div>
       <app-loading-button
@@ -65,7 +71,10 @@
       </app-loading-button>
     </div>
     <div style="height: 200px">
-      <app-compliance-charts [compliances]="complianceData.compliance.compliances"></app-compliance-charts>
+      <app-compliance-charts
+        [compliances]="
+          complianceData.compliance.compliances
+        "></app-compliance-charts>
     </div>
     <div style="height: calc(100% - 160px)">
       <app-compliance-items

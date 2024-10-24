@@ -9,7 +9,6 @@ export interface ComplianceProfileEntry {
 
 export function isComplianceProfileEntry(v: any): v is ComplianceProfileEntry {
   return (
-    ((typeof v['test_number']) === 'string') &&
-    (v['tags'] && isArray(v['tags']))
+    typeof v['test_number'] === 'string' && v['tags'] && isArray(v['tags'])
   );
 }

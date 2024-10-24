@@ -11,7 +11,7 @@ export interface LdapServerTestAccount {
 
 export function isLdapServerTestAccount(v: any): v is LdapServerTestAccount {
   return (
-    (!v['name'] || ((typeof v['name']) === 'string')) &&
+    (!v['name'] || typeof v['name'] === 'string') &&
     (!v['ldap'] || (v['ldap'] && isLdapServer(v['ldap']))) &&
     (!v['test_ldap'] || (v['test_ldap'] && isLdapTestAccount(v['test_ldap'])))
   );

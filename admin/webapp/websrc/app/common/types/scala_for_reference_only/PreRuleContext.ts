@@ -6,8 +6,5 @@ export interface PreRuleContext {
 }
 
 export function isPreRuleContext(v: any): v is PreRuleContext {
-  return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['context']) === 'string')
-  );
+  return typeof v['name'] === 'string' && typeof v['context'] === 'string';
 }

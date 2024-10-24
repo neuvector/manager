@@ -20,21 +20,18 @@
             [ngClass]="{
               'openID-saml-eula':
                 !isEulaAccepted && servers && servers.length === 2
-            }"
-          ></div>
+            }"></div>
         </ng-template>
         <div class="panel-body p0">
           <div id="loadingBar" style="width: 100%">
             <mat-progress-bar
               *ngIf="(inProgress || isFromSSO) && !authMsg"
               class="sso-auth-progress"
-              mode="indeterminate"
-            ></mat-progress-bar>
+              mode="indeterminate"></mat-progress-bar>
             <div
               class="text-danger text-center clearfix"
               *ngIf="authMsg && isFromSSO"
-              style="padding: 0 10px; clear:both"
-            >
+              style="padding: 0 10px; clear: both">
               {{ authMsg }}
             </div>
           </div>
@@ -46,18 +43,15 @@
               'login-panel-openid-saml-eula':
                 !isEulaAccepted && servers && servers.length === 2
             }"
-            *ngIf="!isFromSSO"
-          >
+            *ngIf="!isFromSSO">
             <p
               class="text-center login-title mt-0"
-              translate="{{ 'login.SIGN_IN_LEGACY' }}"
-            ></p>
+              translate="{{ 'login.SIGN_IN_LEGACY' }}"></p>
             <form
               class="form-validate mb-lg login-form"
               [formGroup]="loginForm"
               novalidate=""
-              role="form"
-            >
+              role="form">
               <div class="form-group has-feedback">
                 <label>{{ 'login.USERNAME' | translate }}</label>
                 <input
@@ -69,11 +63,9 @@
                   [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
                   formControlName="username"
                   required
-                  type="text"
-                />
+                  type="text" />
                 <span
-                  class="fa fa-user form-control-feedback text-muted login-icon"
-                ></span>
+                  class="fa fa-user form-control-feedback text-muted login-icon"></span>
                 <!--suppress JSUnresolvedVariable -->
                 <span
                   class="text-danger login-error"
@@ -93,8 +85,7 @@
                   [type]="showPassword ? 'text' : 'password'"
                   name="account_password"
                   formControlName="password"
-                  required
-                />
+                  required />
                 <i
                   class="eos-icons login-icon text-muted"
                   *ngIf="loginForm.controls['password'].value"
@@ -105,8 +96,7 @@
                     position: absolute;
                     right: 20px;
                     top: 35px;
-                  "
-                >
+                  ">
                   {{ showPassword ? 'visibility_off' : 'visibility' }}
                 </i>
                 <!--suppress JSUnresolvedVariable -->
@@ -121,28 +111,29 @@
               </div>
               <div
                 class="mt-xl clearfix"
-                *ngIf="servers && servers.length === 1"
-              >
+                *ngIf="servers && servers.length === 1">
                 <!--suppress JSUnresolvedVariable -->
                 <button
                   (click)="submitForm($event, loginForm.value, '')"
                   [disabled]="!validEula || loginForm.invalid"
                   style="float: left"
-                  type="submit"
-                >
+                  type="submit">
                   {{ 'login.LOGIN' | translate }}
                 </button>
                 <div
-                  style="padding: 12px; text-align:center; width: 8%; float: left"
-                  translate="{{ 'login.OR' }}"
-                ></div>
+                  style="
+                    padding: 12px;
+                    text-align: center;
+                    width: 8%;
+                    float: left;
+                  "
+                  translate="{{ 'login.OR' }}"></div>
                 <!--suppress JSUnresolvedVariable -->
                 <button
                   (click)="submitForm($event, loginForm.value, 'okta')"
                   *ngIf="samlEnabled"
                   [disabled]="!validEula"
-                  style="float: left"
-                >
+                  style="float: left">
                   {{ 'login.OKTA_LOGIN' | translate }}
                 </button>
                 <!--suppress JSUnresolvedVariable -->
@@ -150,8 +141,7 @@
                   (click)="submitForm($event, loginForm.value, 'oidc')"
                   *ngIf="oidcEnabled"
                   [disabled]="!validEula"
-                  style="float: left"
-                >
+                  style="float: left">
                   {{ 'login.OIDC_LOGIN' | translate }}
                 </button>
               </div>
@@ -161,8 +151,7 @@
                   (click)="submitForm($event, loginForm.value, '')"
                   [disabled]="!validEula || loginForm.invalid"
                   style="width: 100%; margin-bottom: 15px"
-                  type="submit"
-                >
+                  type="submit">
                   {{ 'login.LOGIN' | translate }}
                 </button>
                 <div class="clearfix">
@@ -171,21 +160,23 @@
                     (click)="submitForm($event, loginForm.value, 'okta')"
                     *ngIf="samlEnabled"
                     [disabled]="!validEula"
-                    style="float: left"
-                  >
+                    style="float: left">
                     {{ 'login.OKTA_LOGIN' | translate }}
                   </button>
                   <div
-                    style="padding: 12px; text-align:center; width: 8%; float: left"
-                    translate="{{ 'login.OR' }}"
-                  ></div>
+                    style="
+                      padding: 12px;
+                      text-align: center;
+                      width: 8%;
+                      float: left;
+                    "
+                    translate="{{ 'login.OR' }}"></div>
                   <!--suppress JSUnresolvedVariable -->
                   <button
                     (click)="submitForm($event, loginForm.value, 'oidc')"
                     *ngIf="oidcEnabled"
                     [disabled]="!validEula"
-                    style="float: left"
-                  >
+                    style="float: left">
                     {{ 'login.OIDC_LOGIN' | translate }}
                   </button>
                 </div>
@@ -196,8 +187,7 @@
                   (click)="submitForm($event, loginForm.value, '')"
                   [disabled]="!validEula || loginForm.invalid"
                   style="width: 100%"
-                  type="submit"
-                >
+                  type="submit">
                   {{ 'login.LOGIN' | translate }}
                 </button>
               </div>
@@ -205,14 +195,15 @@
             <div
               class="text-danger text-center clearfix"
               [ngClass]="{ 'mt-3': servers && servers.length === 2 }"
-              style="padding: 0 10px; clear:both"
-            >
+              style="padding: 0 10px; clear: both">
               <div *ngIf="authMsg">
                 {{ authMsg }}
               </div>
               <div *ngIf="rbacAlertMessage">
                 {{ 'login.RBAC_ALERT.PASSWORD_RETRIEVAL_ERROR' | translate }}
-                <a (click)="showAlertDetails()">{{ 'login.RBAC_ALERT.ROLEBINDING_DETAILS_LINK' | translate }}</a>
+                <a (click)="showAlertDetails()">{{
+                  'login.RBAC_ALERT.ROLEBINDING_DETAILS_LINK' | translate
+                }}</a>
               </div>
             </div>
             <div *ngIf="!isEulaAccepted">

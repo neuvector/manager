@@ -8,9 +8,8 @@ describe('ApplicationVolumeChartComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ApplicationVolumeChartComponent ]
-    })
-    .compileComponents();
+      declarations: [ApplicationVolumeChartComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

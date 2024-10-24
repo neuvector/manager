@@ -8,9 +8,8 @@ describe('RiskReportGridMessageCellComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RiskReportGridMessageCellComponent ]
-    })
-    .compileComponents();
+      declarations: [RiskReportGridMessageCellComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

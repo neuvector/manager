@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
-import {UtilsService} from "@common/utils/app.utils";
+import { UtilsService } from '@common/utils/app.utils';
 
 @Component({
   selector: 'app-vulnerabilities-grid-severity-cell',

@@ -1,4 +1,4 @@
-import { ProcessProfileEntry } from "./processProfileEntry";
+import { ProcessProfileEntry } from './processProfileEntry';
 
 export interface ProcessProfile {
   group: string;

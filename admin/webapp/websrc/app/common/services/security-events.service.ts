@@ -16,7 +16,6 @@ import { EnforcerBriefDialogComponent } from '@routes/components/enforcer-brief/
 
 @Injectable()
 export class SecurityEventsService {
-
   private readonly $win;
   securityEventsList: Array<any> = new Array();
   dateSliderCtx: any;
@@ -42,17 +41,17 @@ export class SecurityEventsService {
   EVENT_TYPE = {
     THREAT: 'threat',
     VIOLATION: 'violation',
-    INCIDENT: 'incident'
+    INCIDENT: 'incident',
   };
 
   ENDPOINT = {
     DESTINATION: 'destination',
-    SOURCE: 'source'
+    SOURCE: 'source',
   };
 
   TARGET = {
     SERVER: 'server',
-    CLIENT: 'client'
+    CLIENT: 'client',
   };
 
   LABELS = {
@@ -64,7 +63,7 @@ export class SecurityEventsService {
     HOST: 'host',
     CONTAINER: 'container',
     PACKAGE: 'package',
-    OTHER: 'other'
+    OTHER: 'other',
   };
 
   cachedSecurityEvents: Array<any> = [];
@@ -105,14 +104,14 @@ export class SecurityEventsService {
       name4Pdf: '',
       type: {
         name: '',
-        cssColor: ''
+        cssColor: '',
       },
       reportedAt: '',
       reportedTimestamp: 0,
       relativeDate: '',
       endpoint: {
         source: {},
-        destination: {}
+        destination: {},
       },
       applications: '',
       hostId: '',
@@ -121,7 +120,7 @@ export class SecurityEventsService {
       enforcerName: '',
       details: {},
       orgReportedAt: '',
-      reportedOn: ''
+      reportedOn: '',
     };
     let source = this._getEndpointDirection(
       threat,
@@ -165,7 +164,9 @@ export class SecurityEventsService {
       ipMap
     );
     displayedThreat.applications =
-      threat.application && threat.application.length > 0 ? threat.application : null;
+      threat.application && threat.application.length > 0
+        ? threat.application
+        : null;
     displayedThreat.hostId = threat.host_id || '';
     displayedThreat.hostName = threat.host_name || '';
     displayedThreat.enforcerId = threat.enforcer_id || '';
@@ -178,10 +179,7 @@ export class SecurityEventsService {
     return displayedThreat;
   };
 
-  editDisplayedViolation = (
-    violation,
-    ipMap
-  ) => {
+  editDisplayedViolation = (violation, ipMap) => {
     let displayedViolation: any = {
       name: '',
       name4Pdf: '',
@@ -189,14 +187,14 @@ export class SecurityEventsService {
       reviewRulePermission: '',
       type: {
         name: '',
-        cssColor: ''
+        cssColor: '',
       },
       reportedAt: '',
       reportedTimestamp: 0,
       relativeDate: '',
       endpoint: {
         source: {},
-        destination: {}
+        destination: {},
       },
       fqdn: '',
       nbe: false,
@@ -205,7 +203,7 @@ export class SecurityEventsService {
       hostName: '',
       enforcerId: '',
       enforcerName: '',
-      details: {}
+      details: {},
     };
 
     let source = this._getEndpointDirection(
@@ -298,19 +296,18 @@ export class SecurityEventsService {
       icon: '',
       id: '',
       service: '',
-      isHyperlinkEnabled: false
+      isHyperlinkEnabled: false,
     };
     if (source!.workload_id || destination!.workload_id) {
       if (source!.workload_id) {
-        container.domain = source!.domain_name
-          ? `${source!.domain_name}`
-          : '';
+        container.domain = source!.domain_name ? `${source!.domain_name}` : '';
         container.name = source!.workload_name
           ? getDisplayName(source!.workload_name)
           : source!.workload_id;
         container.id = source!.workload_id;
         container.service = source!.service;
-        container.isHyperlinkEnabled = source!.workload_id !== source!.client_ip;
+        container.isHyperlinkEnabled =
+          source!.workload_id !== source!.client_ip;
       } else if (!source!.workload_id && destination!.workload_id) {
         container.domain = destination!.domain_name
           ? `${destination!.domain_name}`
@@ -320,7 +317,8 @@ export class SecurityEventsService {
           : destination!.workload_id;
         container.id = destination!.workload_id;
         container.service = destination!.service;
-        container.isHyperlinkEnabled = destination!.workload_id !== destination!.client_ip;
+        container.isHyperlinkEnabled =
+          destination!.workload_id !== destination!.client_ip;
       }
     }
 
@@ -330,14 +328,14 @@ export class SecurityEventsService {
       reviewRulePermission: '',
       type: {
         name: '',
-        cssColor: ''
+        cssColor: '',
       },
       reportedAt: '',
       reportedTimestamp: 0,
       relativeDate: '',
       endpoint: {
         source: {},
-        destination: {}
+        destination: {},
       },
       host_name: '',
       container: {},
@@ -348,12 +346,12 @@ export class SecurityEventsService {
       enforcerName: '',
       details: {},
       orgReportedAt: '',
-      reportedOn: ''
+      reportedOn: '',
     };
 
     const getIncidentName = (incident, container) => {
       const constName = incident.name.replace(/\./g, '_').toUpperCase();
-        let translateConst = `securityEvent.${constName}`;
+      let translateConst = `securityEvent.${constName}`;
       const PROC_NAME_RELATED_INCIDENTS = [
         'HOST_SUSPICIOUS_PROCESS',
         'CONTAINER_SUSPICIOUS_PROCESS',
@@ -362,37 +360,43 @@ export class SecurityEventsService {
         'PROCESS_PROFILE_VIOLATION',
         'HOST_PROCESS_VIOLATION',
         'CONTAINER_FILEACCESS_VIOLATION',
-        'HOST_FILEACCESS_VIOLATION'
+        'HOST_FILEACCESS_VIOLATION',
       ];
       const PROC_CMD_RELATED_INCIDENTS = [
         'HOST_PRIVILEGE_ESCALATION',
-        'CONTAINER_PRIVILEGE_ESCALATION'
+        'CONTAINER_PRIVILEGE_ESCALATION',
       ];
-      if (!incident.proc_name && PROC_NAME_RELATED_INCIDENTS.includes(constName)) {
+      if (
+        !incident.proc_name &&
+        PROC_NAME_RELATED_INCIDENTS.includes(constName)
+      ) {
         translateConst = `securityEvent.${constName}_NO_PROC_NAME`;
       }
-      if (!incident.proc_cmd && PROC_CMD_RELATED_INCIDENTS.includes(constName)) {
+      if (
+        !incident.proc_cmd &&
+        PROC_CMD_RELATED_INCIDENTS.includes(constName)
+      ) {
         translateConst = `securityEvent.${constName}_NO_PROC_CMD`;
       }
-      return this.translate.instant(
-        translateConst,
-        {
-          host_name: incident.host_name || '',
-          container: container.id
-            ? `${container.domain ? `${container.domain}:` : ''}${
-                container.service ? `${container.service}:` : ''
-              }${container.name}`
-            : '',
-          file_path: incident.file_path || '',
-          proc_name: incident.proc_name || '',
-          proc_cmd: incident.proc_cmd || ''
-        }
-      );
+      return this.translate.instant(translateConst, {
+        host_name: incident.host_name || '',
+        container: container.id
+          ? `${container.domain ? `${container.domain}:` : ''}${
+              container.service ? `${container.service}:` : ''
+            }${container.name}`
+          : '',
+        file_path: incident.file_path || '',
+        proc_name: incident.proc_name || '',
+        proc_cmd: incident.proc_cmd || '',
+      });
     };
 
     displayedIncident.name = getIncidentName(incident, container);
     displayedIncident.name4Pdf = displayedIncident.name;
-    displayedIncident.reviewRulePermission = this.getReviewRulePermission(source!.domain_name, destination!.domain_name);
+    displayedIncident.reviewRulePermission = this.getReviewRulePermission(
+      source!.domain_name,
+      destination!.domain_name
+    );
     displayedIncident.type.name = this.EVENT_TYPE.INCIDENT;
     displayedIncident.type.cssColor =
       'fa icon-size-2 fa-exclamation-triangle text-muted';
@@ -441,26 +445,34 @@ export class SecurityEventsService {
     return GlobalVariable.http.get(PathConstant.SECURITY_EVENTS_URL_2).pipe();
   };
 
-  getContainer = (id) => {
-    return GlobalVariable.http.get(PathConstant.CONTAINER_BY_ID, {
-      params: { id: id }
-    }).pipe();
+  getContainer = id => {
+    return GlobalVariable.http
+      .get(PathConstant.CONTAINER_BY_ID, {
+        params: { id: id },
+      })
+      .pipe();
   };
 
-  getHost = (id) => {
-    return GlobalVariable.http.get(PathConstant.NODES_URL, {
-      params: { id: id }
-    }).pipe(pluck('host'));
-  }
+  getHost = id => {
+    return GlobalVariable.http
+      .get(PathConstant.NODES_URL, {
+        params: { id: id },
+      })
+      .pipe(pluck('host'));
+  };
 
-  getEnforcer = (id) => {
-    return GlobalVariable.http.get(PathConstant.SINGLE_ENFORCER, {
-      params: { id: id }
-    }).pipe(pluck('enforcer'));
-  }
+  getEnforcer = id => {
+    return GlobalVariable.http
+      .get(PathConstant.SINGLE_ENFORCER, {
+        params: { id: id },
+      })
+      .pipe(pluck('enforcer'));
+  };
 
-  getProcess = (id) => {
-    return GlobalVariable.http.get(PathConstant.CONTAINER_PROCESS_URL, { params: { id: id } }).pipe();
+  getProcess = id => {
+    return GlobalVariable.http
+      .get(PathConstant.CONTAINER_PROCESS_URL, { params: { id: id } })
+      .pipe();
   };
 
   getIpGeoInfo = (ipList: Array<string>) => {
@@ -468,55 +480,69 @@ export class SecurityEventsService {
   };
 
   getPacketData = (id: string) => {
-    return GlobalVariable.http.get(PathConstant.THREAT_URL, { params: { id: id } }).pipe(pluck('threat'));
+    return GlobalVariable.http
+      .get(PathConstant.THREAT_URL, { params: { id: id } })
+      .pipe(pluck('threat'));
   };
 
   getProcessRule = (name: string) => {
-    return GlobalVariable.http.get(PathConstant.PROCESS_PROFILE_URL, { params: { name: name } }).pipe(pluck('process_profile'));
+    return GlobalVariable.http
+      .get(PathConstant.PROCESS_PROFILE_URL, { params: { name: name } })
+      .pipe(pluck('process_profile'));
   };
 
   updateProcessRule = (payload: any) => {
-    return GlobalVariable.http.patch(PathConstant.PROCESS_PROFILE_URL, payload).pipe();
+    return GlobalVariable.http
+      .patch(PathConstant.PROCESS_PROFILE_URL, payload)
+      .pipe();
   };
 
   getNetworkRule = (ruleId: number) => {
-    return GlobalVariable.http.get(PathConstant.POLICY_RULE_URL, { params: { id: ruleId } }).pipe(pluck('rule'));
+    return GlobalVariable.http
+      .get(PathConstant.POLICY_RULE_URL, { params: { id: ruleId } })
+      .pipe(pluck('rule'));
   };
 
   updateNetworkRule = (networkRule: any) => {
-    return GlobalVariable.http.post(PathConstant.POLICY_RULE_URL, networkRule).pipe();
+    return GlobalVariable.http
+      .post(PathConstant.POLICY_RULE_URL, networkRule)
+      .pipe();
   };
 
   updateNetworkRuleAction = (id: number, action: string) => {
-    return GlobalVariable.http.patch(PathConstant.POLICY_RULE_URL, { id: id, action: action }).pipe();
+    return GlobalVariable.http
+      .patch(PathConstant.POLICY_RULE_URL, { id: id, action: action })
+      .pipe();
   };
 
   showEnforcerDetails = (ev, enforcerId: string, enforcerName: string) => {
-    this.getEnforcer(enforcerId)
-      .subscribe(
-        (response: any) => {
-          this.enforcerModal = this.dialog.open(EnforcerBriefDialogComponent, {
-            width: '900px',
-            position: { left: '25px', top: '130px' },
-            hasBackdrop: false,
-            data: {
-              enforcer: response
-            }
-          });
-        },
-        error => {}
-      );
+    this.getEnforcer(enforcerId).subscribe(
+      (response: any) => {
+        this.enforcerModal = this.dialog.open(EnforcerBriefDialogComponent, {
+          width: '900px',
+          position: { left: '25px', top: '130px' },
+          hasBackdrop: false,
+          data: {
+            enforcer: response,
+          },
+        });
+      },
+      error => {}
+    );
   };
 
   prepareContext4TwoWayInfinityScroll = (context: any = null) => {
-    console.log('this.securityEventsService.displayedSecurityEvents', this.displayedSecurityEvents);
+    console.log(
+      'this.securityEventsService.displayedSecurityEvents',
+      this.displayedSecurityEvents
+    );
     this.dateSliderCtx = {
       page: context?.page || this.page,
       begin: context?.begin || this.begin,
       openedIndex: context?.openedIndex || this.openedIndex,
       openedPage: context?.openedPage || this.openedPage,
       limit: context?.limit || this.limit,
-      array: this.displayedSecurityEvents
+      array: this.displayedSecurityEvents,
     };
   };
 
@@ -524,7 +550,8 @@ export class SecurityEventsService {
     switch (type) {
       case this.EVENT_TYPE.THREAT:
         if (
-          (secEvent.target === this.TARGET.SERVER && side == this.ENDPOINT.SOURCE) ||
+          (secEvent.target === this.TARGET.SERVER &&
+            side == this.ENDPOINT.SOURCE) ||
           (secEvent.target !== this.TARGET.SERVER &&
             side == this.ENDPOINT.DESTINATION)
         ) {
@@ -536,8 +563,9 @@ export class SecurityEventsService {
             port: secEvent.client_port || 0,
             server_conn_port: 0,
             service: secEvent.client_workload_service || '',
-            isHyperlinkEnabled: secEvent.client_ip !== secEvent.client_workload_id,
-            client_ip: secEvent.client_ip
+            isHyperlinkEnabled:
+              secEvent.client_ip !== secEvent.client_workload_id,
+            client_ip: secEvent.client_ip,
           };
         } else {
           return {
@@ -548,8 +576,9 @@ export class SecurityEventsService {
             port: secEvent.server_port || 0,
             server_conn_port: secEvent.server_conn_port || 0,
             service: secEvent.server_workload_service || '',
-            isHyperlinkEnabled: secEvent.server_ip !== secEvent.server_workload_id,
-            client_ip: secEvent.client_ip
+            isHyperlinkEnabled:
+              secEvent.server_ip !== secEvent.server_workload_id,
+            client_ip: secEvent.client_ip,
           };
         }
       case this.EVENT_TYPE.VIOLATION:
@@ -563,7 +592,7 @@ export class SecurityEventsService {
             server_conn_port: 0,
             service: secEvent.client_service || '',
             isHyperlinkEnabled: secEvent.client_ip !== secEvent.client_id,
-            client_ip: secEvent.client_ip
+            client_ip: secEvent.client_ip,
           };
         } else {
           return {
@@ -575,7 +604,7 @@ export class SecurityEventsService {
             server_conn_port: 0,
             service: secEvent.server_service || '',
             isHyperlinkEnabled: secEvent.server_ip !== secEvent.server_id,
-            client_ip: secEvent.client_ip
+            client_ip: secEvent.client_ip,
           };
         }
       case this.EVENT_TYPE.INCIDENT:
@@ -591,20 +620,21 @@ export class SecurityEventsService {
             port: secEvent.server_port || 0,
             server_conn_port: secEvent.server_conn_port || 0,
             service: secEvent.remote_workload_service || '',
-            isHyperlinkEnabled: secEvent.server_ip !== secEvent.remote_workload_id,
-            client_ip: secEvent.client_ip
+            isHyperlinkEnabled:
+              secEvent.server_ip !== secEvent.remote_workload_id,
+            client_ip: secEvent.client_ip,
           };
         } else {
           return {
             domain_name: secEvent.workload_domain || '',
-            workload_id:  secEvent.workload_id || '',
+            workload_id: secEvent.workload_id || '',
             workload_name: secEvent.workload_name || '',
             ip: secEvent.client_ip || '',
             port: secEvent.client_port || 0,
             server_conn_port: 0,
             service: secEvent.workload_service || '',
             isHyperlinkEnabled: secEvent.client_ip !== secEvent.workload_id,
-            client_ip: secEvent.client_ip
+            client_ip: secEvent.client_ip,
           };
         }
       default:
@@ -617,17 +647,23 @@ export class SecurityEventsService {
       function: prepareGroup
       description: It only serves for propose rule
     */
-    const prepareGroup = function(service, endpointName) {
+    const prepareGroup = function (service, endpointName) {
       if (service) {
         return service === MapConstant.securityEventLocation.EXTERNAL
           ? service //external
-          : (endpointName.startsWith(MapConstant.securityEventLocation.IP_GROUP) ?
-            `nv.ip.${service}`.replace(/\/|\?|\%|\&|\s/g, ':') /* Add 'nv.ip.' for IP service */:
-            `nv.${service}`.replace(/\/|\?|\%|\&|\s/g, ':')); /* Add 'nv.' for learnt service */
-            // replace(/\/|\?|\%|\&|\s/g, ':') is for resolving irregular symbol in service name
+          : endpointName.startsWith(MapConstant.securityEventLocation.IP_GROUP)
+          ? `nv.ip.${service}`.replace(
+              /\/|\?|\%|\&|\s/g,
+              ':'
+            ) /* Add 'nv.ip.' for IP service */
+          : `nv.${service}`.replace(
+              /\/|\?|\%|\&|\s/g,
+              ':'
+            ); /* Add 'nv.' for learnt service */
+        // replace(/\/|\?|\%|\&|\s/g, ':') is for resolving irregular symbol in service name
       } else {
         if (
-          endpointName.startsWith(MapConstant.securityEventLocation.HOST)//Host format is like Host:<host_name or IP>:host ID
+          endpointName.startsWith(MapConstant.securityEventLocation.HOST) //Host format is like Host:<host_name or IP>:host ID
         ) {
           let hostName = endpointName.substring(5);
           if (isIpV4(hostName) || isIpV6(hostName)) {
@@ -667,7 +703,7 @@ export class SecurityEventsService {
         ip: '',
         group4Rule: '',
         hasDetail: false,
-        isHyperlinkEnabled: endpoint.isHyperlinkEnabled
+        isHyperlinkEnabled: endpoint.isHyperlinkEnabled,
       };
       if (side === this.ENDPOINT.SOURCE) {
         displayName = getDisplayName(name);
@@ -714,9 +750,13 @@ export class SecurityEventsService {
             }
           } else {
             if (displayName) {
-              displayName = `${displayName}${port !== '0' ? `:${port}` : ''}${server_conn_port !== '0' ? `(${server_conn_port})` : ''}`;
+              displayName = `${displayName}${port !== '0' ? `:${port}` : ''}${
+                server_conn_port !== '0' ? `(${server_conn_port})` : ''
+              }`;
             } else {
-              displayName = `${port !== '0' ? `${port}` : ''}${server_conn_port !== '0' ? `(${server_conn_port})` : ''}`;
+              displayName = `${port !== '0' ? `${port}` : ''}${
+                server_conn_port !== '0' ? `(${server_conn_port})` : ''
+              }`;
             }
           }
         }
@@ -728,11 +768,11 @@ export class SecurityEventsService {
       if (name.indexOf(MapConstant.securityEventLocation.HOST) === 0) {
         endpointOut.icon = 'cluster';
         endpointOut.hasDetail = true;
-      }
-      else if (name.indexOf(MapConstant.securityEventLocation.WORKLOAD) === 0) {
+      } else if (
+        name.indexOf(MapConstant.securityEventLocation.WORKLOAD) === 0
+      ) {
         endpointOut.icon = 'workload';
-      }
-      else if (name.indexOf(MapConstant.securityEventLocation.EXTERNAL) === 0)
+      } else if (name.indexOf(MapConstant.securityEventLocation.EXTERNAL) === 0)
         endpointOut.icon = 'cloud';
       else if (name.indexOf(MapConstant.securityEventLocation.IP_GROUP) === 0)
         endpointOut.icon = 'system_group';
@@ -748,7 +788,7 @@ export class SecurityEventsService {
     return '';
   };
 
-  private _convertThreatAction = (action) => {
+  private _convertThreatAction = action => {
     if (action.toLowerCase() === 'monitor') return 'alert';
     if (action.toLowerCase() === 'block') return 'deny';
     return action.toLowerCase();
@@ -760,18 +800,18 @@ export class SecurityEventsService {
       Low: 'fa-support',
       Medium: 'fa-bell',
       High: 'fa-bug',
-      Critical: 'fa-bomb'
+      Critical: 'fa-bomb',
     };
     let details: any = {
       id: '',
       level: {
         name: '',
-        cssColor: ''
+        cssColor: '',
       },
       action: {
         name: '',
         name4Pdf: '',
-        cssColor: ''
+        cssColor: '',
       },
       count: 0,
       clusterName: '',
@@ -781,9 +821,9 @@ export class SecurityEventsService {
         icon: '',
         cssColor: '',
         content: '',
-        cap_len: 0
+        cap_len: 0,
       },
-      labels: []
+      labels: [],
     };
     details.id = threat.id;
     details.level.name = threat.level;
@@ -794,32 +834,33 @@ export class SecurityEventsService {
     );
     details.action.name4pdf = this._convertThreatAction(threat.action);
     details.action.cssColor =
-      `${MapConstant.colourMap[this._convertThreatAction(threat.action)]}` || 'info';
+      `${MapConstant.colourMap[this._convertThreatAction(threat.action)]}` ||
+      'info';
     details.count = threat.count;
     details.clusterName = threat.cluster_name;
     details.message.sourceLink = `${source.ip}:${source.port}`;
-    details.message.destinationLink = this.sanitizer.sanitize(SecurityContext.HTML,
+    details.message.destinationLink = this.sanitizer.sanitize(
+      SecurityContext.HTML,
       destination.port !== destination.server_conn_port
-        ? `${destination.ip}:${destination.port}(${
-            destination.server_conn_port
-          })`
-        : `${destination.ip}:${destination.port}`);
+        ? `${destination.ip}:${destination.port}(${destination.server_conn_port})`
+        : `${destination.ip}:${destination.port}`
+    );
     details.message.icon = iconMap[threat.severity];
     details.message.cssColor = MapConstant.colourMap[threat.severity];
     details.message.content = threat.message
-                              .replace('&amp;', '&')
-                              .replace('&lt;', '<')
-                              .replace('&gt;', '>');
+      .replace('&amp;', '&')
+      .replace('&lt;', '<')
+      .replace('&gt;', '>');
     details.message.cap_len = threat.cap_len;
     details.labels.push(this.LABELS.NETWORK);
     return details;
   };
 
-  private _editViolationDetails = (violation) => {
+  private _editViolationDetails = violation => {
     let details: any = {
       level: {
         name: '',
-        cssColor: ''
+        cssColor: '',
       },
       port: 0,
       serverPort: '',
@@ -829,12 +870,12 @@ export class SecurityEventsService {
       action: {
         name: '',
         name4Pdf: '',
-        cssColor: ''
+        cssColor: '',
       },
       message: {
-        cssColor: ''
+        cssColor: '',
       },
-      labels: []
+      labels: [],
     };
     details.level.name = violation.level;
     details.level.cssColor =
@@ -851,17 +892,28 @@ export class SecurityEventsService {
     details.clusterName = violation.cluster_name;
     details.action.name = this.utils.getI18Name(violation.policy_action);
     details.action.name4Pdf = violation.policy_action;
-    details.action.cssColor = MapConstant.colourMap[violation.policy_action] || 'info';
+    details.action.cssColor =
+      MapConstant.colourMap[violation.policy_action] || 'info';
     details.labels.push(this.LABELS.NETWORK);
     return details;
   };
 
   private getReviewRulePermission = (sourceDomain, destinationDomain) => {
-    let sourceDomainPermission = this.authUtilsService.getRowBasedPermission(sourceDomain, 'rt_policy');
-    let destinationDomainPermission = this.authUtilsService.getRowBasedPermission(destinationDomain, 'rt_policy');
+    let sourceDomainPermission = this.authUtilsService.getRowBasedPermission(
+      sourceDomain,
+      'rt_policy'
+    );
+    let destinationDomainPermission =
+      this.authUtilsService.getRowBasedPermission(
+        destinationDomain,
+        'rt_policy'
+      );
     if (sourceDomainPermission === 'w' && destinationDomainPermission === 'w') {
       return 'w';
-    } else if (sourceDomainPermission === '' && destinationDomainPermission === '') {
+    } else if (
+      sourceDomainPermission === '' &&
+      destinationDomainPermission === ''
+    ) {
       return '';
     } else {
       return 'r';
@@ -881,7 +933,7 @@ export class SecurityEventsService {
       'Container.Privilege.Escalation': 'fa-cube',
       'Container.File.Modified': 'fa-cube',
       'Container.Package.Updated': 'fa-cube',
-      'Container.FileAccess.Violation': 'fa-cube'
+      'Container.FileAccess.Violation': 'fa-cube',
     };
     const messageCategoryMap = {
       'Host.File.Modified': 'hostFileModified',
@@ -897,7 +949,7 @@ export class SecurityEventsService {
       'Process.Profile.Violation': 'processProfileViolation',
       'Host.Process.Violation': 'hostProcessViolation',
       'Container.FileAccess.Violation': 'containerFileAccessViolation',
-      'Host.FileAccess.Violation': 'hostFileAccessViolation'
+      'Host.FileAccess.Violation': 'hostFileAccessViolation',
     };
     const labelMap = {
       'Host.File.Modified': [this.LABELS.HOST, this.LABELS.FILE],
@@ -905,10 +957,13 @@ export class SecurityEventsService {
       'Host.Privilege.Escalation': [this.LABELS.HOST, this.LABELS.PRIVILEGE],
       'Container.Privilege.Escalation': [
         this.LABELS.CONTAINER,
-        this.LABELS.PRIVILEGE
+        this.LABELS.PRIVILEGE,
       ],
       'Host.Suspicious.Process': [this.LABELS.HOST, this.LABELS.PROCESS],
-      'Container.Suspicious.Process': [this.LABELS.CONTAINER, this.LABELS.PROCESS],
+      'Container.Suspicious.Process': [
+        this.LABELS.CONTAINER,
+        this.LABELS.PROCESS,
+      ],
       'Host.Tunnel.Detected': [this.LABELS.HOST, this.LABELS.TUNNEL],
       'Container.Tunnel.Detected': [this.LABELS.CONTAINER, this.LABELS.TUNNEL],
       'Container.File.Modified': [this.LABELS.CONTAINER, this.LABELS.FILE],
@@ -918,31 +973,31 @@ export class SecurityEventsService {
       'Host.FileAccess.Violation': [
         this.LABELS.HOST,
         this.LABELS.PROCESS,
-        this.LABELS.FILE
+        this.LABELS.FILE,
       ],
       'Container.FileAccess.Violation': [
         this.LABELS.CONTAINER,
         this.LABELS.PROCESS,
-        this.LABELS.FILE
-      ]
+        this.LABELS.FILE,
+      ],
     };
-    const getAction = (action) => {
+    const getAction = action => {
       return {
         name: this.utils.getI18Name(action ? action.toUpperCase() : 'ALERT'),
         name4Pdf: action ? action : 'Alert',
-        color: action ? action.toLowerCase() : 'alert'
+        color: action ? action.toLowerCase() : 'alert',
       };
     };
     let action = getAction(incident.action);
     let details: any = {
       level: {
         name: '',
-        cssColor: ''
+        cssColor: '',
       },
       action: {
         name: '',
         name4Pdf: '',
-        cssColor: ''
+        cssColor: '',
       },
       clusterName: '',
       message: {
@@ -969,8 +1024,8 @@ export class SecurityEventsService {
         fileNames: '',
         messageCategory: '',
         labels: [],
-        count: 0
-      }
+        count: 0,
+      },
     };
     details.level.name = incident.level;
     details.level.cssColor =
@@ -980,9 +1035,9 @@ export class SecurityEventsService {
     details.action.cssColor = MapConstant.colourMap[action.color];
     details.clusterName = incident.cluster_name;
     details.message.content = incident.message
-                              .replace('&amp;', '&')
-                              .replace('&lt;', '<')
-                              .replace('&gt;', '>');
+      .replace('&amp;', '&')
+      .replace('&lt;', '<')
+      .replace('&gt;', '>');
     details.message.icon = iconMap[incident.name];
     details.message.cssColor = MapConstant.colourMap[incident.level];
     details.message.messageCategory = messageCategoryMap[incident.name];
@@ -1030,5 +1085,4 @@ export class SecurityEventsService {
     else if (protocol === 17) return 'udp/' + port;
     else return port;
   };
-
 }

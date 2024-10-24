@@ -14,8 +14,12 @@ export class ComplianceJsonProtocol {
   }
 }
 
-export const ComplianceJsonProtocolInhabitant: ComplianceJsonProtocol = ComplianceJsonProtocol.getInstance();
+export const ComplianceJsonProtocolInhabitant: ComplianceJsonProtocol =
+  ComplianceJsonProtocol.getInstance();
 
 export function isComplianceJsonProtocol(v: any): v is ComplianceJsonProtocol {
-  return (v instanceof ComplianceJsonProtocol) && (v === ComplianceJsonProtocolInhabitant);
+  return (
+    v instanceof ComplianceJsonProtocol &&
+    v === ComplianceJsonProtocolInhabitant
+  );
 }

@@ -22,7 +22,7 @@ export class ContainersGridStateCellComponent
 
   agInit(params: ICellRendererParams): void {
     this.params = params;
-    this.state = this.params.data.brief.state || 'unmanaged'
+    this.state = this.params.data.brief.state || 'unmanaged';
     this.displayState = this.utils.getI18Name(this.state);
     this.labelCode = MapConstant.colourMap[this.state] || 'inverse';
   }

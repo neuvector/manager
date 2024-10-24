@@ -1,16 +1,16 @@
 <div class="nv-dialog">
   <div mat-dialog-title class="dialog-header">
     <div class="pull-left">
-      <span>{{'policy.ALL_PORTS' | translate}}</span>
+      <span>{{ 'policy.ALL_PORTS' | translate }}</span>
     </div>
     <div class="pull-right">
       <em class="icon-close hand" (click)="onCancel()"></em>
     </div>
   </div>
-  <div mat-dialog-content style="max-height: 600px; overflow-y: scroll;">
+  <div mat-dialog-content style="max-height: 600px; overflow-y: scroll">
     <div class="row margin-top-m">
       <div class="col-sm-2" *ngFor="let port of data.ports">
-        {{port}}
+        {{ port }}
       </div>
     </div>
   </div>

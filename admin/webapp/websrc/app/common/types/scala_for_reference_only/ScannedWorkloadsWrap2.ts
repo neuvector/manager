@@ -7,7 +7,5 @@ export interface ScannedWorkloadsWrap2 {
 }
 
 export function isScannedWorkloadsWrap2(v: any): v is ScannedWorkloadsWrap2 {
-  return (
-    (v['workloads'] && isArray(v['workloads']))
-  );
+  return v['workloads'] && isArray(v['workloads']);
 }

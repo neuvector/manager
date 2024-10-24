@@ -8,9 +8,8 @@ describe('RiskAssetsLegendComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RiskAssetsLegendComponent ]
-    })
-    .compileComponents();
+      declarations: [RiskAssetsLegendComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

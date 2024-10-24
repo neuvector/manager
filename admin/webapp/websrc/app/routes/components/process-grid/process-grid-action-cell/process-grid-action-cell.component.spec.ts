@@ -8,9 +8,8 @@ describe('ProcessGridActionCellComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ProcessGridActionCellComponent ]
-    })
-    .compileComponents();
+      declarations: [ProcessGridActionCellComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

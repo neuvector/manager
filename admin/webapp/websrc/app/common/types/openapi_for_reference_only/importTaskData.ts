@@ -1,4 +1,4 @@
-import { ImportTask } from "./importTask";
+import { ImportTask } from './importTask';
 
 export interface ImportTaskData {
   data: ImportTask;

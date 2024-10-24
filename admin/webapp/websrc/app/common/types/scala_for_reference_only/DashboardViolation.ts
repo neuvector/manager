@@ -21,19 +21,20 @@ export interface DashboardViolation {
 
 export function isDashboardViolation(v: any): v is DashboardViolation {
   return (
-    ((typeof v['policy_id']) === 'number') &&
-    ((typeof v['host_name']) === 'string') &&
-    ((typeof v['level']) === 'string') &&
-    ((typeof v['client_id']) === 'string') &&
-    (!v['client_ip'] || ((typeof v['client_ip']) === 'string')) &&
-    (!v['client_name'] || ((typeof v['client_name']) === 'string')) &&
-    (!v['client_domain'] || ((typeof v['client_domain']) === 'string')) &&
-    ((typeof v['server_id']) === 'string') &&
-    (!v['server_ip'] || ((typeof v['server_ip']) === 'string')) &&
-    (!v['server_name'] || ((typeof v['server_name']) === 'string')) &&
-    (!v['server_domain'] || ((typeof v['server_domain']) === 'string')) &&
-    (!v['server_port'] || ((typeof v['server_port']) === 'number')) &&
-    (!v['application'] || ((typeof v['application']) === 'string')) &&
-    (v['reported_at'] && isDateTime(v['reported_at']))
+    typeof v['policy_id'] === 'number' &&
+    typeof v['host_name'] === 'string' &&
+    typeof v['level'] === 'string' &&
+    typeof v['client_id'] === 'string' &&
+    (!v['client_ip'] || typeof v['client_ip'] === 'string') &&
+    (!v['client_name'] || typeof v['client_name'] === 'string') &&
+    (!v['client_domain'] || typeof v['client_domain'] === 'string') &&
+    typeof v['server_id'] === 'string' &&
+    (!v['server_ip'] || typeof v['server_ip'] === 'string') &&
+    (!v['server_name'] || typeof v['server_name'] === 'string') &&
+    (!v['server_domain'] || typeof v['server_domain'] === 'string') &&
+    (!v['server_port'] || typeof v['server_port'] === 'number') &&
+    (!v['application'] || typeof v['application'] === 'string') &&
+    v['reported_at'] &&
+    isDateTime(v['reported_at'])
   );
 }

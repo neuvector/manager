@@ -1,25 +1,35 @@
 <div *ngIf="nodes && Array.isArray(nodes) && nodes.length > 0">
-  <div><strong>{{ "scan.report.data.NODES" | translate }}</strong></div>
-  <div *ngFor="let node of nodes | slice: 0 : 5">
-    {{ node.display_name}}
+  <div>
+    <strong>{{ 'scan.report.data.NODES' | translate }}</strong>
+  </div>
+  <div *ngFor="let node of nodes | slice : 0 : 5">
+    {{ node.display_name }}
   </div>
 </div>
 <div *ngIf="nodes && Array.isArray(nodes) && nodes.length > 5">
   ...({{ nodes.length }} nodes)
 </div>
-<div *ngIf="containers && Array.isArray(containers) && containers.length > 0" class="margin-top-s">
-  <div><strong>{{ "scan.report.data.CONTAINERS" | translate }}</strong></div>
-  <div *ngFor="let container of containers | slice: 0 : 5">
-    {{ container.display_name}}
+<div
+  *ngIf="containers && Array.isArray(containers) && containers.length > 0"
+  class="margin-top-s">
+  <div>
+    <strong>{{ 'scan.report.data.CONTAINERS' | translate }}</strong>
+  </div>
+  <div *ngFor="let container of containers | slice : 0 : 5">
+    {{ container.display_name }}
   </div>
 </div>
 <div *ngIf="containers && Array.isArray(containers) && containers.length > 5">
   ...({{ containers.length }} containers)
 </div>
-<div *ngIf="images && Array.isArray(images) && images.length > 0" class="margin-top-s">
-  <div><strong>{{ "scan.report.data.IMAGES" | translate }}</strong></div>
-  <div *ngFor="let image of images | slice: 0 : 5">
-    {{ image.display_name}}
+<div
+  *ngIf="images && Array.isArray(images) && images.length > 0"
+  class="margin-top-s">
+  <div>
+    <strong>{{ 'scan.report.data.IMAGES' | translate }}</strong>
+  </div>
+  <div *ngFor="let image of images | slice : 0 : 5">
+    {{ image.display_name }}
   </div>
 </div>
 <div *ngIf="images && Array.isArray(images) && images.length > 5">

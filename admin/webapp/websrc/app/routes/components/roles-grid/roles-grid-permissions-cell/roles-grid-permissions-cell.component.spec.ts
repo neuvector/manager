@@ -8,9 +8,8 @@ describe('RolesGridPermissionsCellComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RolesGridPermissionsCellComponent ]
-    })
-    .compileComponents();
+      declarations: [RolesGridPermissionsCellComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

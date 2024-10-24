@@ -8,9 +8,8 @@ describe('EventsGridLevelCellComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EventsGridLevelCellComponent ]
-    })
-    .compileComponents();
+      declarations: [EventsGridLevelCellComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

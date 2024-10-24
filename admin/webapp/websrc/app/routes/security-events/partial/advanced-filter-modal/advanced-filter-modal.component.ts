@@ -12,17 +12,21 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { map } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { FilterSeverity, FilterLocation, FilterCategory, Other } from './advanced-filter-modal.service';
+import {
+  FilterSeverity,
+  FilterLocation,
+  FilterCategory,
+  Other,
+} from './advanced-filter-modal.service';
 import { autocompleteValidator } from '@common/validators';
-import {UtilsService} from "@common/utils/app.utils";
+import { UtilsService } from '@common/utils/app.utils';
 
 @Component({
   selector: 'app-advanced-filter-modal',
   templateUrl: './advanced-filter-modal.component.html',
-  styleUrls: ['./advanced-filter-modal.component.scss']
+  styleUrls: ['./advanced-filter-modal.component.scss'],
 })
 export class AdvancedFilterModalComponent implements OnInit {
-
   separatorKeysCodes: number[] = [ENTER, COMMA];
   namespaceCtrl = new FormControl();
   filteredSources!: Observable<string[]>;
@@ -96,10 +100,9 @@ export class AdvancedFilterModalComponent implements OnInit {
     return new FormArray(arr);
   }
 
-  getDisplayName(name: string){
+  getDisplayName(name: string) {
     return this.utils.getI18Name(name);
   }
-
 
   ngOnInit() {
     const filter = this.data.filter;
@@ -135,11 +138,12 @@ export class AdvancedFilterModalComponent implements OnInit {
         return source ? this._filterSource(source) : [];
       })
     );
-    this.filteredDestinations = this.form.controls.destination.valueChanges.pipe(
-      map((destination: string) => {
-        return destination ? this._filterDestination(destination) : [];
-      })
-    );
+    this.filteredDestinations =
+      this.form.controls.destination.valueChanges.pipe(
+        map((destination: string) => {
+          return destination ? this._filterDestination(destination) : [];
+        })
+      );
     this.filteredHosts = this.form.controls.host.valueChanges.pipe(
       map((host: string) => {
         return host ? this._filterHost(host) : [];

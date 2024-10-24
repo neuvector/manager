@@ -7,7 +7,5 @@ export interface DlpGroupConfigData {
 }
 
 export function isDlpGroupConfigData(v: any): v is DlpGroupConfigData {
-  return (
-    (v['config'] && isDlpGroupConfig(v['config']))
-  );
+  return v['config'] && isDlpGroupConfig(v['config']);
 }

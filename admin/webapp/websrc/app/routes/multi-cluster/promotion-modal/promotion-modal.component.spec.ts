@@ -1,14 +1,14 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PromotionModalComponent } from "./promotion-modal.component";
+import { PromotionModalComponent } from './promotion-modal.component';
 
-describe("PromotionModalComponent", () => {
+describe('PromotionModalComponent', () => {
   let component: PromotionModalComponent;
   let fixture: ComponentFixture<PromotionModalComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PromotionModalComponent]
+      declarations: [PromotionModalComponent],
     }).compileComponents();
   }));
 
@@ -18,7 +18,7 @@ describe("PromotionModalComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

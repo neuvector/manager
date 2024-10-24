@@ -8,9 +8,8 @@ describe('AddEditNetworkRuleModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AddEditNetworkRuleModalComponent ]
-    })
-    .compileComponents();
+      declarations: [AddEditNetworkRuleModalComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

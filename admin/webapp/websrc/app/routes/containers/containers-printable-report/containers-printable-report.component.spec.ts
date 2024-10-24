@@ -8,9 +8,8 @@ describe('ContainersPrintableReportComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ContainersPrintableReportComponent ]
-    })
-    .compileComponents();
+      declarations: [ContainersPrintableReportComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

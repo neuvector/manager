@@ -14,8 +14,11 @@ export class DashboardJsonProtocol {
   }
 }
 
-export const DashboardJsonProtocolInhabitant: DashboardJsonProtocol = DashboardJsonProtocol.getInstance();
+export const DashboardJsonProtocolInhabitant: DashboardJsonProtocol =
+  DashboardJsonProtocol.getInstance();
 
 export function isDashboardJsonProtocol(v: any): v is DashboardJsonProtocol {
-  return (v instanceof DashboardJsonProtocol) && (v === DashboardJsonProtocolInhabitant);
+  return (
+    v instanceof DashboardJsonProtocol && v === DashboardJsonProtocolInhabitant
+  );
 }

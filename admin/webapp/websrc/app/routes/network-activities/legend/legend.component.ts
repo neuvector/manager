@@ -1,12 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from '@angular/core';
 
 @Component({
-  selector: "app-legend",
-  templateUrl: "./legend.component.html",
-  styleUrls: ["./legend.component.scss"]
+  selector: 'app-legend',
+  templateUrl: './legend.component.html',
+  styleUrls: ['./legend.component.scss'],
 })
-export class LegendComponent implements OnInit {
+export class LegendComponent {
   constructor() {}
-
-  ngOnInit() {}
 }

@@ -5,7 +5,5 @@ export interface DomainConfig {
 }
 
 export function isDomainConfig(v: any): v is DomainConfig {
-  return (
-    (!v['tag_per_domain'] || ((typeof v['tag_per_domain']) === 'boolean'))
-  );
+  return !v['tag_per_domain'] || typeof v['tag_per_domain'] === 'boolean';
 }

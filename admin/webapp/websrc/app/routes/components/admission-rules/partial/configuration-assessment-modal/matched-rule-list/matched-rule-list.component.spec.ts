@@ -8,9 +8,8 @@ describe('MatchedRuleListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MatchedRuleListComponent ]
-    })
-    .compileComponents();
+      declarations: [MatchedRuleListComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

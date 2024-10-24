@@ -8,13 +8,14 @@ describe('ScoreImprovementRunAsRootContainersViewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ScoreImprovementRunAsRootContainersViewComponent ]
-    })
-    .compileComponents();
+      declarations: [ScoreImprovementRunAsRootContainersViewComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ScoreImprovementRunAsRootContainersViewComponent);
+    fixture = TestBed.createComponent(
+      ScoreImprovementRunAsRootContainersViewComponent
+    );
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

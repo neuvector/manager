@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { Audit } from '@common/types';
 import { groupBy } from '@common/utils/common.utils';
@@ -10,7 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './risk-reports-printable-report.component.html',
   styleUrls: ['./risk-reports-printable-report.component.scss'],
 })
-export class RiskReportsPrintableReportComponent implements OnInit {
+export class RiskReportsPrintableReportComponent {
   private _riskReports!: Audit[];
   @Input() set riskReports(audits: Audit[]) {
     const filtered = audits
@@ -32,8 +32,6 @@ export class RiskReportsPrintableReportComponent implements OnInit {
   summaryRangeMsg!: string;
 
   constructor(private tr: TranslateService, private datePipe: DatePipe) {}
-
-  ngOnInit(): void {}
 
   textClass(level: string) {
     if (['error', 'critical'].includes(level.toLowerCase())) {

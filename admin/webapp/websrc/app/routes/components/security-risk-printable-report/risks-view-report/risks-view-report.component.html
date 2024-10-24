@@ -2,68 +2,140 @@
   <div class="page-cover-decro"></div>
   <div class="page-cover-logo"></div>
   <div class="page-cover-title">
-    {{ (reportPage === 'vulnerabilities' ? "scan.report.TITLE" : "cis.report.TITLE") | translate }}
+    {{
+      (reportPage === 'vulnerabilities'
+        ? 'scan.report.TITLE'
+        : 'cis.report.TITLE'
+      ) | translate
+    }}
   </div>
 </div>
-<div *ngIf="isNameSpaceFiltered || view !== 'containers'" class="report-summary pagebreak">
+<div
+  *ngIf="isNameSpaceFiltered || view !== 'containers'"
+  class="report-summary pagebreak">
   <div class="summary-title">
     {{ 'policy.report.SUMMARY_HEADER' | translate }}
   </div>
   <div class="clearfix text-center">
-    <div *ngIf="!isNameSpaceFiltered && (view === 'all' || view === 'infrastructure')" class="margin-top-l">
-      <img src="{{charts.node}}" style="width: 900px; height: auto;"/>
+    <div
+      *ngIf="
+        !isNameSpaceFiltered && (view === 'all' || view === 'infrastructure')
+      "
+      class="margin-top-l">
+      <img src="{{ charts.node }}" style="width: 900px; height: auto" />
     </div>
-    <div *ngIf="!isNameSpaceFiltered && (view === 'all' || view === 'registry')" class="margin-top-l">
-      <img src="{{charts.image}}"  style="width: 900px; height: auto"/>
+    <div
+      *ngIf="!isNameSpaceFiltered && (view === 'all' || view === 'registry')"
+      class="margin-top-l">
+      <img src="{{ charts.image }}" style="width: 900px; height: auto" />
     </div>
   </div>
 </div>
 <div class="report-summary pagebreak">
   <div class="summary-title">
     {{ 'scan.report.others.DETAILS' | translate }}
-    <div *ngIf="isMeetingReportLimit" class="text-warning" style="font-size: 16px;">
+    <div
+      *ngIf="isMeetingReportLimit"
+      class="text-warning"
+      style="font-size: 16px">
       {{ 'scan.MAX_REPORT_ROW_HINT' | translate }}&nbsp;
-      <span *ngIf="reportPage === 'vulnerabilities'">{{ 'scan.MAX_REPORT_ROW_HINT_2' | translate }}</span>
+      <span *ngIf="reportPage === 'vulnerabilities'">{{
+        'scan.MAX_REPORT_ROW_HINT_2' | translate
+      }}</span>
     </div>
-    <div *ngIf="data.length > SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW" class="text-warning" style="font-size: 16px;">{{ 'scan.APPENDIX_LIMIT_HINT' | translate }}</div>
+    <div
+      *ngIf="data.length > SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW"
+      class="text-warning"
+      style="font-size: 16px">
+      {{ 'scan.APPENDIX_LIMIT_HINT' | translate }}
+    </div>
   </div>
   <app-risk-view-report-table
     [data]="data"
     [reportPage]="reportPage"
-    [includesImpact]="true"
-  >
+    [includesImpact]="true">
   </app-risk-view-report-table>
 </div>
-<div class="report-summary pagebreak" *ngIf="data.length <= SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW && !withoutAppendix">
+<div
+  class="report-summary pagebreak"
+  *ngIf="
+    data.length <= SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW && !withoutAppendix
+  ">
   <div class="summary-title">
     {{ 'scan.report.others.APPENDIX' | translate }}
     <span class="summary-subtitle margin-left-m">
       ({{ 'scan.report.others.APPENDIX_DESC' | translate }})
     </span>
   </div>
-  <div class="margin-top-l" *ngFor="let dataItem of data; let i = index" [attr.data-index]="i">
-    <div *ngIf="(dataItem.nodes && Array.isArray(dataItem.nodes) ? dataItem.nodes.length : 0) + (dataItem.workloads && Array.isArray(dataItem.workloads) ? dataItem.workloads.length : 0) + (dataItem.images && Array.isArray(dataItem.images) ? dataItem.images.length : 0) > 0">
-      <div style="font-size: 14px;"><strong>{{ dataItem.name }}</strong></div>
-      <div *ngIf="dataItem.nodes && Array.isArray(dataItem.nodes) && dataItem.nodes.length > 0">
-        <div><strong>{{ "scan.report.data.NODES" | translate }}</strong></div>
+  <div
+    class="margin-top-l"
+    *ngFor="let dataItem of data; let i = index"
+    [attr.data-index]="i">
+    <div
+      *ngIf="
+        (dataItem.nodes && Array.isArray(dataItem.nodes)
+          ? dataItem.nodes.length
+          : 0) +
+          (dataItem.workloads && Array.isArray(dataItem.workloads)
+            ? dataItem.workloads.length
+            : 0) +
+          (dataItem.images && Array.isArray(dataItem.images)
+            ? dataItem.images.length
+            : 0) >
+        0
+      ">
+      <div style="font-size: 14px">
+        <strong>{{ dataItem.name }}</strong>
+      </div>
+      <div
+        *ngIf="
+          dataItem.nodes &&
+          Array.isArray(dataItem.nodes) &&
+          dataItem.nodes.length > 0
+        ">
+        <div>
+          <strong>{{ 'scan.report.data.NODES' | translate }}</strong>
+        </div>
         <div class="row">
-          <div class="col-sm-4 padding-vertical-0" *ngFor="let node of dataItem.nodes">
+          <div
+            class="col-sm-4 padding-vertical-0"
+            *ngFor="let node of dataItem.nodes">
             {{ node.display_name }}
           </div>
         </div>
       </div>
-      <div *ngIf="dataItem.workloads && Array.isArray(dataItem.workloads) && dataItem.workloads.length > 0" class="text-info">
-        <div><strong>{{ "scan.report.data.CONTAINERS" | translate }}</strong></div>
+      <div
+        *ngIf="
+          dataItem.workloads &&
+          Array.isArray(dataItem.workloads) &&
+          dataItem.workloads.length > 0
+        "
+        class="text-info">
+        <div>
+          <strong>{{ 'scan.report.data.CONTAINERS' | translate }}</strong>
+        </div>
         <div class="row">
-          <div class="col-sm-4 padding-vertical-0" *ngFor="let container of dataItem.workloads">
+          <div
+            class="col-sm-4 padding-vertical-0"
+            *ngFor="let container of dataItem.workloads">
             {{ container.display_name }}
           </div>
         </div>
       </div>
-      <div *ngIf="dataItem.images && Array.isArray(dataItem.images) && dataItem.images.length > 0" class="text-danger">
-        <div><strong>{{ "scan.report.data.IMAGES" | translate }}</strong></div>
+      <div
+        *ngIf="
+          dataItem.images &&
+          Array.isArray(dataItem.images) &&
+          dataItem.images.length > 0
+        "
+        class="text-danger">
+        <div>
+          <strong>{{ 'scan.report.data.IMAGES' | translate }}</strong>
+        </div>
         <div class="row">
-          <div class="col-sm-4 padding-vertical-0" *ngFor="let image of dataItem.images">
+          <div
+            class="col-sm-4 padding-vertical-0"
+            *ngFor="let image of dataItem.images">
             {{ image.display_name }}
           </div>
         </div>
@@ -71,9 +143,13 @@
     </div>
   </div>
 </div>
-<div class="report-summary pagebreak" *ngIf="reportPage === 'vulnerabilities' && data.length <= SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW && !withoutAppendix">
-  <app-risk-view-report-appendix-packages
-    [data]="data"
-  >
+<div
+  class="report-summary pagebreak"
+  *ngIf="
+    reportPage === 'vulnerabilities' &&
+    data.length <= SEC_RISK_REPORT_NO_APPENDIX_MAX_ROW &&
+    !withoutAppendix
+  ">
+  <app-risk-view-report-appendix-packages [data]="data">
   </app-risk-view-report-appendix-packages>
 </div>

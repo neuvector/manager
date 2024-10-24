@@ -8,6 +8,7 @@ export interface WafSensorsData {
 
 export function isWafSensorsData(v: any): v is WafSensorsData {
   return (
-    (Array.isArray(v['sensors']) && v['sensors'].every(elmt => elmt && isWafSensor(elmt)))
+    Array.isArray(v['sensors']) &&
+    v['sensors'].every(elmt => elmt && isWafSensor(elmt))
   );
 }

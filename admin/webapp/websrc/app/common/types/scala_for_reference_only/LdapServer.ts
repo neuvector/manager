@@ -19,17 +19,18 @@ export interface LdapServer {
 
 export function isLdapServer(v: any): v is LdapServer {
   return (
-    (!v['hostname'] || ((typeof v['hostname']) === 'string')) &&
-    (!v['port'] || ((typeof v['port']) === 'number')) &&
-    (!v['ssl'] || ((typeof v['ssl']) === 'boolean')) &&
-    (!v['base_dn'] || ((typeof v['base_dn']) === 'string')) &&
-    (!v['bind_dn'] || ((typeof v['bind_dn']) === 'string')) &&
-    (!v['bind_password'] || ((typeof v['bind_password']) === 'string')) &&
-    (!v['enable'] || ((typeof v['enable']) === 'boolean')) &&
-    (!v['default_role'] || ((typeof v['default_role']) === 'string')) &&
-    (!v['directory'] || ((typeof v['directory']) === 'string')) &&
-    (!v['group_mapped_roles'] || (v['group_mapped_roles'] && isArray(v['group_mapped_roles']))) &&
-    (!v['group_member_attr'] || ((typeof v['group_member_attr']) === 'string')) &&
-    (!v['username_attr'] || ((typeof v['username_attr']) === 'string'))
+    (!v['hostname'] || typeof v['hostname'] === 'string') &&
+    (!v['port'] || typeof v['port'] === 'number') &&
+    (!v['ssl'] || typeof v['ssl'] === 'boolean') &&
+    (!v['base_dn'] || typeof v['base_dn'] === 'string') &&
+    (!v['bind_dn'] || typeof v['bind_dn'] === 'string') &&
+    (!v['bind_password'] || typeof v['bind_password'] === 'string') &&
+    (!v['enable'] || typeof v['enable'] === 'boolean') &&
+    (!v['default_role'] || typeof v['default_role'] === 'string') &&
+    (!v['directory'] || typeof v['directory'] === 'string') &&
+    (!v['group_mapped_roles'] ||
+      (v['group_mapped_roles'] && isArray(v['group_mapped_roles']))) &&
+    (!v['group_member_attr'] || typeof v['group_member_attr'] === 'string') &&
+    (!v['username_attr'] || typeof v['username_attr'] === 'string')
   );
 }

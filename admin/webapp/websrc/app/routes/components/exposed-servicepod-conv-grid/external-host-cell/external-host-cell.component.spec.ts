@@ -8,9 +8,8 @@ describe('ExternalHostCellComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ExternalHostCellComponent ]
-    })
-    .compileComponents();
+      declarations: [ExternalHostCellComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

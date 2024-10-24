@@ -14,8 +14,11 @@ export class AdmissionJsonProtocol {
   }
 }
 
-export const AdmissionJsonProtocolInhabitant: AdmissionJsonProtocol = AdmissionJsonProtocol.getInstance();
+export const AdmissionJsonProtocolInhabitant: AdmissionJsonProtocol =
+  AdmissionJsonProtocol.getInstance();
 
 export function isAdmissionJsonProtocol(v: any): v is AdmissionJsonProtocol {
-  return (v instanceof AdmissionJsonProtocol) && (v === AdmissionJsonProtocolInhabitant);
+  return (
+    v instanceof AdmissionJsonProtocol && v === AdmissionJsonProtocolInhabitant
+  );
 }

@@ -1,9 +1,13 @@
-<div class="nv-dialog ">
+<div class="nv-dialog">
   <div class="d-flex justify-content-between align-items-center">
     <h4 mat-dialog-title>
       {{
-        (type === 'add' ? 'policy.addPolicy.TITLE' : (data.isReadonly ? 'policy.editPolicy.VIEW' : 'policy.editPolicy.TITLE'))
-          | translate
+        (type === 'add'
+          ? 'policy.addPolicy.TITLE'
+          : data.isReadonly
+          ? 'policy.editPolicy.VIEW'
+          : 'policy.editPolicy.TITLE'
+        ) | translate
       }}
     </h4>
     <button (click)="onCancel()" aria-label="Close dialog" mat-icon-button>
@@ -12,16 +16,21 @@
   </div>
   <hr class="fancy" />
   <div mat-dialog-content class="dialog-content p0 m0">
-    <form >
+    <form>
       <div class="d-flex justify-content-between align-items-center mt-2">
-        <mat-form-field appearance="fill" class=" mr-4" *ngIf="type === 'edit'">
+        <mat-form-field appearance="fill" class="mr-4" *ngIf="type === 'edit'">
           <mat-label>{{
             'responsePolicy.gridHeader.ID' | translate
           }}</mat-label>
           <input matInput name="id" [(ngModel)]="responseRule.id" disabled />
           <em matSuffix class="icon-tag input-icon"></em>
         </mat-form-field>
-        <mat-form-field appearance="fill" class="flex-grow-1" [ngClass]="{'mr-4': !EVENT_WITHOUT_GROUP.includes(responseRule.event)}">
+        <mat-form-field
+          appearance="fill"
+          class="flex-grow-1"
+          [ngClass]="{
+            'mr-4': !EVENT_WITHOUT_GROUP.includes(responseRule.event)
+          }">
           <mat-select
             name="event"
             placeholder="{{ 'responsePolicy.gridHeader.TYPE' | translate }}*"
@@ -37,7 +46,10 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field appearance="fill" class="flex-grow-1" *ngIf="!EVENT_WITHOUT_GROUP.includes(responseRule.event)">
+        <mat-form-field
+          appearance="fill"
+          class="flex-grow-1"
+          *ngIf="!EVENT_WITHOUT_GROUP.includes(responseRule.event)">
           <mat-label>{{
             'responsePolicy.gridHeader.GROUP' | translate
           }}</mat-label>
@@ -62,19 +74,21 @@
       </div>
       <div class="d-flex justify-content-start align-items-start">
         <mat-form-field appearance="fill" class="flex-grow-1">
-          <mat-label>{{ "admissionControl.COMMENT" | translate }}</mat-label>
+          <mat-label>{{ 'admissionControl.COMMENT' | translate }}</mat-label>
           <input
             matInput
             [readonly]="data.isReadonly"
             [(ngModel)]="responseRule.comment"
             [ngModelOptions]="{ standalone: true }"
-            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-          />
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
         </mat-form-field>
       </div>
       <div class="d-flex justify-content-start align-items-start">
         <mat-form-field appearance="fill" class="flex-grow-1">
-          <mat-chip-list #chipList aria-label="Criteria selection" [disabled]="data.isReadonly">
+          <mat-chip-list
+            #chipList
+            aria-label="Criteria selection"
+            [disabled]="data.isReadonly">
             <mat-chip
               *ngFor="let criterion of responseRule.criteria"
               [selectable]="true"
@@ -110,8 +124,10 @@
             </mat-option>
           </mat-autocomplete>
           <em matSuffix class="icon-puzzle input-icon"></em>
-          <mat-hint >{{ 'responsePolicy.dialog.content.HINT' | translate
-            }}{{ conditionPatternSample }}</mat-hint>
+          <mat-hint
+            >{{ 'responsePolicy.dialog.content.HINT' | translate
+            }}{{ conditionPatternSample }}</mat-hint
+          >
           <mat-error *ngIf="!isValidCriteria">Invalid criterion</mat-error>
         </mat-form-field>
       </div>
@@ -136,7 +152,11 @@
       </div>
       <div
         class="d-flex justify-content-start align-items-start my-2"
-        *ngIf="isWebhookSelected && webhookOptions.length > 0 && !shouldHideWebhookList">
+        *ngIf="
+          isWebhookSelected &&
+          webhookOptions.length > 0 &&
+          !shouldHideWebhookList
+        ">
         <div class="flex-grow-1">
           <label class="nv-modal-item-title control-label mr-4"
             >{{ 'setting.WEBHOOKS' | translate }}
@@ -179,8 +199,15 @@
       </div>
     </form>
   </div>
-  <div mat-dialog-actions class="d-flex justify-content-end align-items-center" *ngIf="!data.isReadonly">
-    <button mat-stroked-button aria-label="cancel" class="mr-2" (click)="onCancel()">
+  <div
+    mat-dialog-actions
+    class="d-flex justify-content-end align-items-center"
+    *ngIf="!data.isReadonly">
+    <button
+      mat-stroked-button
+      aria-label="cancel"
+      class="mr-2"
+      (click)="onCancel()">
       {{ 'policy.addPolicy.CANCEL' | translate }}
     </button>
     <button

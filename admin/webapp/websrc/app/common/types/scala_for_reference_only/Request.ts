@@ -7,7 +7,5 @@ export interface Request {
 }
 
 export function isRequest(v: any): v is Request {
-  return (
-    (v['request'] && isUnquarantine(v['request']))
-  );
+  return v['request'] && isUnquarantine(v['request']);
 }

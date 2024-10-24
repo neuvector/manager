@@ -7,7 +7,5 @@ export interface ConversationBriefWrap {
 }
 
 export function isConversationBriefWrap(v: any): v is ConversationBriefWrap {
-  return (
-    (v['conversations'] && isArray(v['conversations']))
-  );
+  return v['conversations'] && isArray(v['conversations']);
 }

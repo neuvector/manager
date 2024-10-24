@@ -8,9 +8,8 @@ describe('GroupResponseRulesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GroupResponseRulesComponent ]
-    })
-    .compileComponents();
+      declarations: [GroupResponseRulesComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

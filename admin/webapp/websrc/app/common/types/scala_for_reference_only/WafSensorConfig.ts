@@ -12,10 +12,16 @@ export interface WafSensorConfig {
 
 export function isWafSensorConfig(v: any): v is WafSensorConfig {
   return (
-    ((typeof v['name']) === 'string') &&
-    (!v['comment'] || ((typeof v['comment']) === 'string')) &&
-    (!v['change'] || (Array.isArray(v['change']) && v['change'].every(elmt => elmt && isWafRule(elmt)))) &&
-    (!v['delete'] || (Array.isArray(v['delete']) && v['delete'].every(elmt => elmt && isWafRule(elmt)))) &&
-    (!v['rules'] || (Array.isArray(v['rules']) && v['rules'].every(elmt => elmt && isWafRule(elmt))))
+    typeof v['name'] === 'string' &&
+    (!v['comment'] || typeof v['comment'] === 'string') &&
+    (!v['change'] ||
+      (Array.isArray(v['change']) &&
+        v['change'].every(elmt => elmt && isWafRule(elmt)))) &&
+    (!v['delete'] ||
+      (Array.isArray(v['delete']) &&
+        v['delete'].every(elmt => elmt && isWafRule(elmt)))) &&
+    (!v['rules'] ||
+      (Array.isArray(v['rules']) &&
+        v['rules'].every(elmt => elmt && isWafRule(elmt))))
   );
 }

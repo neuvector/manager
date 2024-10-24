@@ -1,5 +1,5 @@
-import { Webhook } from "./webhook";
-import { Proxy } from "./proxy";
+import { Webhook } from './webhook';
+import { Proxy } from './proxy';
 
 export interface SystemConfig {
   new_service_policy_mode: string;

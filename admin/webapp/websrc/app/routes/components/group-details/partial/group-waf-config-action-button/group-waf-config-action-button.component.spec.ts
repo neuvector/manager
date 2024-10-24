@@ -8,9 +8,8 @@ describe('GroupWafConfigActionButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GroupWafConfigActionButtonComponent ]
-    })
-    .compileComponents();
+      declarations: [GroupWafConfigActionButtonComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -9,7 +9,8 @@ export interface NamespacesData {
 
 export function isNamespacesData(v: any): v is NamespacesData {
   return (
-    (v['domains'] && isArray(v['domains'])) &&
-    (!v['tag_per_domain'] || ((typeof v['tag_per_domain']) === 'boolean'))
+    v['domains'] &&
+    isArray(v['domains']) &&
+    (!v['tag_per_domain'] || typeof v['tag_per_domain'] === 'boolean')
   );
 }

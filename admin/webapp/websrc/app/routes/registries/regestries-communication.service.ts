@@ -35,29 +35,35 @@ export class RegistriesCommunicationService {
     .pipe(
       filter(summary => summary !== undefined),
       // distinctUntilChanged(),
-      switchMap(summary =>
-        {
-          if (!!summary!.isAllView) {
-            return this.registriesService.getAllScannedImagesSummary().pipe(
-              map(allScannedImagesSummary => ({ selectedRegistry: summary, isAllView: true, allScannedImagesSummary })),
-              finalize(() => {
-                if (this.refreshingDetailsSubject$.value) {
-                  this.refreshingDetailsSubject$.next(false);
-                }
-              })
-            );
-          } else {
-            return this.registriesService.getRepo(summary!.name).pipe(
-              map(repositories => ({ selectedRegistry: summary, isAllView: false, repositories })),
-              finalize(() => {
-                if (this.refreshingDetailsSubject$.value) {
-                  this.refreshingDetailsSubject$.next(false);
-                }
-              })
-            );
-          }
+      switchMap(summary => {
+        if (!!summary!.isAllView) {
+          return this.registriesService.getAllScannedImagesSummary().pipe(
+            map(allScannedImagesSummary => ({
+              selectedRegistry: summary,
+              isAllView: true,
+              allScannedImagesSummary,
+            })),
+            finalize(() => {
+              if (this.refreshingDetailsSubject$.value) {
+                this.refreshingDetailsSubject$.next(false);
+              }
+            })
+          );
+        } else {
+          return this.registriesService.getRepo(summary!.name).pipe(
+            map(repositories => ({
+              selectedRegistry: summary,
+              isAllView: false,
+              repositories,
+            })),
+            finalize(() => {
+              if (this.refreshingDetailsSubject$.value) {
+                this.refreshingDetailsSubject$.next(false);
+              }
+            })
+          );
         }
-      )
+      })
     )
     .pipe() as Observable<RegistryDetails>;
   private startingScanSubject$ = new BehaviorSubject<boolean>(false);

@@ -16,14 +16,15 @@ export interface FedJointCluster {
 
 export function isFedJointCluster(v: any): v is FedJointCluster {
   return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['id']) === 'string') &&
-    ((typeof v['secret']) === 'string') &&
-    (!v['client_key_path'] || ((typeof v['client_key_path']) === 'string')) &&
-    (!v['client_cert_path'] || ((typeof v['client_cert_path']) === 'string')) &&
-    (!v['user'] || ((typeof v['user']) === 'string')) &&
-    (!v['status'] || ((typeof v['status']) === 'string')) &&
-    (v['rest_info'] && isClusterServerInfo(v['rest_info'])) &&
-    (!v['proxy_required'] || ((typeof v['proxy_required']) === 'boolean'))
+    typeof v['name'] === 'string' &&
+    typeof v['id'] === 'string' &&
+    typeof v['secret'] === 'string' &&
+    (!v['client_key_path'] || typeof v['client_key_path'] === 'string') &&
+    (!v['client_cert_path'] || typeof v['client_cert_path'] === 'string') &&
+    (!v['user'] || typeof v['user'] === 'string') &&
+    (!v['status'] || typeof v['status'] === 'string') &&
+    v['rest_info'] &&
+    isClusterServerInfo(v['rest_info']) &&
+    (!v['proxy_required'] || typeof v['proxy_required'] === 'boolean')
   );
 }

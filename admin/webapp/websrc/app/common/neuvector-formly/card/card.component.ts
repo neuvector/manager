@@ -18,10 +18,10 @@ import { FieldType, FieldTypeConfig } from '@ngx-formly/core';
  *
  * The card outfit(border) can with shadow or not:
  * - Determined by `isPlainOutfitMode` flag.
- * 
+ *
  * @example
  * Example usage with Formly configuration:
- * 
+ *
  * export const field = {
  *   type: FormlyComponents.CARD,
  *   templateOptions: {
@@ -40,10 +40,9 @@ import { FieldType, FieldTypeConfig } from '@ngx-formly/core';
 @Component({
   selector: 'app-card',
   templateUrl: './card.component.html',
-  styleUrls: ['./card.component.scss']
+  styleUrls: ['./card.component.scss'],
 })
 export class CardComponent extends FieldType<FieldTypeConfig> {
-
   isArrayContent(content: any): boolean {
     return Array.isArray(content);
   }

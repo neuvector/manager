@@ -9,7 +9,9 @@ export interface SelfWrap {
 
 export function isSelfWrap(v: any): v is SelfWrap {
   return (
-    (!v['password_days_until_expire'] || ((typeof v['password_days_until_expire']) === 'number')) &&
-    (v['user'] && isUser(v['user']))
+    (!v['password_days_until_expire'] ||
+      typeof v['password_days_until_expire'] === 'number') &&
+    v['user'] &&
+    isUser(v['user'])
   );
 }

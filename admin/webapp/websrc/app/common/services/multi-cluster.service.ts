@@ -47,7 +47,8 @@ export class MultiClusterService {
   public onManageMemberClusterEvent$ = this._manageClusterEvent.asObservable();
   public onClusterSwitchedEvent$ = this._clusterSwitchedEvent.asObservable();
   public onRefreshClustersEvent$ = this._clusterRefreshEvent.asObservable();
-  public onGetClustersFinishEvent$ = this._getClustersFinishEvent.asObservable();
+  public onGetClustersFinishEvent$ =
+    this._getClustersFinishEvent.asObservable();
   private readonly $win;
   private _selectedClusterSubject$ = new BehaviorSubject<Cluster | undefined>(
     undefined
@@ -239,7 +240,7 @@ export class MultiClusterService {
   dispatchGetClustersFinishEvent() {
     this._getClustersFinishEvent.next(true);
   }
-  
+
   dispatchClusterNameChangeEvent() {
     this._clusterNameChangeEvent.next(true);
   }

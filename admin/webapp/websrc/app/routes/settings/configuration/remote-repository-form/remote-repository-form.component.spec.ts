@@ -8,9 +8,8 @@ describe('RemoteRepositoryFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RemoteRepositoryFormComponent ]
-    })
-    .compileComponents();
+      declarations: [RemoteRepositoryFormComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -154,7 +154,7 @@ export class AppComponent implements OnInit {
       this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_EXTERNAL_REF);
       this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_TIMEOUT);
     }
-  }
+  };
 
   private debounced = (delay, fn) => {
     let timerId;

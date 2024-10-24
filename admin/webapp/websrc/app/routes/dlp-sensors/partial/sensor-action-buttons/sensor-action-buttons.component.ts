@@ -46,7 +46,7 @@ export class SensorActionButtonsComponent implements ICellRendererAngularComp {
         opType: GlobalConstant.MODAL_OP.EDIT,
         index: this.params.rowIndex,
         dlpSensors: this.params.context.componentParent.dlpSensors,
-        gridApi: this.params.context.componentParent.gridApi4Sensors!
+        gridApi: this.params.context.componentParent.gridApi4Sensors!,
       },
     });
   };

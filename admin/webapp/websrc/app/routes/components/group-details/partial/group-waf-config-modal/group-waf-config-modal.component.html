@@ -1,34 +1,28 @@
 <div class="nv-dialog">
   <div class="d-flex align-items-center">
     <h4 mat-dialog-title class="mb-1">
-      {{'group.waf.setting.TITLE' | translate}}
+      {{ 'group.waf.setting.TITLE' | translate }}
     </h4>
     <section class="ml-4 status-section">
       <mat-slide-toggle
         class="mr-2"
         id="group-waf-sensor-status-toggle"
         [(ngModel)]="data.status"
-        [ngModelOptions]="{standalone: true}"
-      >
+        [ngModelOptions]="{ standalone: true }">
         <span
           [ngClass]="{
             'text-muted': !data.status,
             'text-success': data.status
-          }"
-        >
+          }">
           {{
-            (data.status
-              ? "policy.status.ENABLED"
-              : "policy.status.DISABLED") | translate
+            (data.status ? 'policy.status.ENABLED' : 'policy.status.DISABLED')
+              | translate
           }}
         </span>
       </mat-slide-toggle>
     </section>
     <div class="ml-auto align-items-center mb-1">
-      <button
-        mat-icon-button
-        aria-label="close"
-      >
+      <button mat-icon-button aria-label="close">
         <i class="eos-icons" (click)="onCancel()">close</i>
       </button>
     </div>
@@ -41,9 +35,7 @@
           {{ 'enum.FOUND' | translate }}
           {{ filteredCount }}&nbsp;/
         </span>
-        <span *ngIf="!filtered" >
-          {{ 'enum.OUT_OF' | translate }}&nbsp;
-        </span>
+        <span *ngIf="!filtered"> {{ 'enum.OUT_OF' | translate }}&nbsp; </span>
         {{ wafSensorOption.length }}
       </div>
       <app-quick-filter
@@ -56,11 +48,10 @@
     <ag-grid-angular
       #groupWafSensorOptionGrid
       id="group-waf-sensor-option-grid"
-      style="width: 100%; height: 400px;"
+      style="width: 100%; height: 400px"
       class="ag-theme-balham"
       [gridOptions]="gridOptions4WafSensorOption"
-      [context]="context"
-      >
+      [context]="context">
     </ag-grid-angular>
   </div>
   <div
@@ -72,8 +63,7 @@
       [loading]="submittingUpdate"
       [text]="'group.waf.setting.ADOPT' | translate"
       (btnClick)="adoptSensors()"
-      class="pull-right"
-    >
+      class="pull-right">
     </app-loading-button>
   </div>
 </div>

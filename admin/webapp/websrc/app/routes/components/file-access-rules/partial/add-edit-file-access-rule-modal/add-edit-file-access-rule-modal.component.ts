@@ -50,7 +50,12 @@ export class AddEditFileAccessRuleModalComponent implements OnInit {
   ngOnInit() {
     this.fileAccessRuleForm = new FormGroup({
       group: new FormControl(
-        { value: '', disabled: this.type === GlobalConstant.MODAL_OP.EDIT || this.data.source === GlobalConstant.NAV_SOURCE.GROUP },
+        {
+          value: '',
+          disabled:
+            this.type === GlobalConstant.MODAL_OP.EDIT ||
+            this.data.source === GlobalConstant.NAV_SOURCE.GROUP,
+        },
         [Validators.required]
       ),
       filter: new FormControl(
@@ -58,10 +63,7 @@ export class AddEditFileAccessRuleModalComponent implements OnInit {
         [Validators.required, Validators.pattern('^/.*')]
       ),
       recursive: new FormControl(false),
-      behavior: new FormControl(
-        this.actionEnum.MONITOR,
-        [Validators.required]
-      ),
+      behavior: new FormControl(this.actionEnum.MONITOR, [Validators.required]),
       applications: new FormControl([]),
     });
     this.initializeVM();
@@ -91,25 +93,32 @@ export class AddEditFileAccessRuleModalComponent implements OnInit {
       console.log(this.data.selectedRule, this.fileAccessRuleForm.value);
     }
     if (!this.fileAccessRuleForm.controls.group.value) {
-      this.fileAccessRuleForm.controls.group.setValue(this.data.groupName || "");
+      this.fileAccessRuleForm.controls.group.setValue(
+        this.data.groupName || ''
+      );
     }
   };
 
   getGroupOptions() {
-    this.groupsService.getGroupList(
-      this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY ?
-      GlobalConstant.SCOPE.FED :
-      GlobalConstant.SCOPE.LOCAL
-    ).subscribe(
-      response => {
-        this.groupOptions = response['groups']
-          .map(group => group.name)
-          .filter(group => group !== GlobalConstant.EXTERNAL && group !== 'fed.nodes');
-      },
-      err => {
-        console.warn(err);
-      }
-    );
+    this.groupsService
+      .getGroupList(
+        this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+          ? GlobalConstant.SCOPE.FED
+          : GlobalConstant.SCOPE.LOCAL
+      )
+      .subscribe(
+        response => {
+          this.groupOptions = response['groups']
+            .map(group => group.name)
+            .filter(
+              group =>
+                group !== GlobalConstant.EXTERNAL && group !== 'fed.nodes'
+            );
+        },
+        err => {
+          console.warn(err);
+        }
+      );
   }
 
   addAppIntoChip = (event: MatChipInputEvent): void => {
@@ -143,16 +152,19 @@ export class AddEditFileAccessRuleModalComponent implements OnInit {
         ? ['added', 'add']
         : ['updated', 'update'];
     let fileAccessRuleData = {
-      cfg_type: this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY ?
-        GlobalConstant.CFG_TYPE.FED : GlobalConstant.CFG_TYPE.LEARNED,
+      cfg_type:
+        this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+          ? GlobalConstant.CFG_TYPE.FED
+          : GlobalConstant.CFG_TYPE.LEARNED,
       applications: this.applicationChipsArray,
       ...this.fileAccessRuleForm.value,
-      last_modified_timestamp: new Date().getTime() / 1000
+      last_modified_timestamp: new Date().getTime() / 1000,
     };
 
     fileAccessRuleData.group = this.fileAccessRuleForm.controls.group.value;
     fileAccessRuleData.filter = this.fileAccessRuleForm.controls.filter.value;
-    fileAccessRuleData.recursive = this.fileAccessRuleForm.controls.recursive.value;
+    fileAccessRuleData.recursive =
+      this.fileAccessRuleForm.controls.recursive.value;
     fileAccessRuleData.applications = this.applicationChipsArray;
 
     this.fileAccessRulesService
@@ -165,9 +177,10 @@ export class AddEditFileAccessRuleModalComponent implements OnInit {
       )
       .subscribe(
         response => {
-          let msgTitle = this.type === GlobalConstant.MODAL_OP.ADD ?
-            this.translate.instant('group.file.ADD_OK') :
-            this.translate.instant('group.file.EDIT_OK');
+          let msgTitle =
+            this.type === GlobalConstant.MODAL_OP.ADD
+              ? this.translate.instant('group.file.ADD_OK')
+              : this.translate.instant('group.file.EDIT_OK');
           this.notificationService.open(msgTitle);
           updateGridData(
             this.data.fileAccessRules,
@@ -179,9 +192,10 @@ export class AddEditFileAccessRuleModalComponent implements OnInit {
           this.onCancel();
         },
         error => {
-          let msgTitle = this.type === GlobalConstant.MODAL_OP.ADD ?
-            this.translate.instant('group.file.ADD_NG') :
-            this.translate.instant('group.file.EDIT_NG');
+          let msgTitle =
+            this.type === GlobalConstant.MODAL_OP.ADD
+              ? this.translate.instant('group.file.ADD_NG')
+              : this.translate.instant('group.file.EDIT_NG');
           this.notificationService.openError(error.error, msgTitle);
         }
       );

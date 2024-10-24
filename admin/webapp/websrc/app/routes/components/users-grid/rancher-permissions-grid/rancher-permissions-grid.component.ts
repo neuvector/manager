@@ -15,7 +15,7 @@ import { RolesGridPermissionsCellComponent } from '@components/roles-grid/roles-
 @Component({
   selector: 'app-rancher-permissions-grid',
   templateUrl: './rancher-permissions-grid.component.html',
-  styleUrls: ['./rancher-permissions-grid.component.scss']
+  styleUrls: ['./rancher-permissions-grid.component.scss'],
 })
 export class RancherPermissionsGridComponent implements OnInit {
   @Input() rancherPermissions;
@@ -29,9 +29,11 @@ export class RancherPermissionsGridComponent implements OnInit {
       field: 'namespaces',
       valueFormatter: params => {
         if (!params.value) return '';
-        return (params.value.length > 5 ?
-          `${params.value.slice(0, 5).join(', ')}...(Total: ${params.value.length})` :
-          params.value.join(', '));
+        return params.value.length > 5
+          ? `${params.value.slice(0, 5).join(', ')}...(Total: ${
+              params.value.length
+            })`
+          : params.value.join(', ');
       },
       width: 150,
       minWidth: 100,
@@ -42,14 +44,11 @@ export class RancherPermissionsGridComponent implements OnInit {
       cellRenderer: 'permissionsCellRenderer',
       autoHeight: true,
       width: 500,
-    }
+    },
   ];
 
-  constructor(
-    private tr: TranslateService,
-    private utils: UtilsService,
-  ) {
-      this.$win = $(GlobalVariable.window);
+  constructor(private tr: TranslateService, private utils: UtilsService) {
+    this.$win = $(GlobalVariable.window);
   }
 
   ngOnInit(): void {
@@ -66,5 +65,4 @@ export class RancherPermissionsGridComponent implements OnInit {
   onResize(): void {
     this.gridApi.sizeColumnsToFit();
   }
-
 }

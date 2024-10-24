@@ -1,6 +1,8 @@
 <div class="mx-3 mt-3" [formGroup]="exportOptionsForm">
   <div class="clearfix margin-top-m">
-    <label class="pull-left text-bold margin-right-m">{{ 'group.POLICY_MODE' | translate }}</label>
+    <label class="pull-left text-bold margin-right-m">{{
+      'group.POLICY_MODE' | translate
+    }}</label>
     <mat-radio-group
       class="pull-left margin-right-m"
       aria-label="Select a mode"
@@ -15,9 +17,10 @@
         'topbar.mode.ENFORCE' | translate
       }}</mat-radio-button>
     </mat-radio-group>
-  <div class="clearfix margin-top-m">
-  </div>
-    <label class="pull-left text-bold margin-right-m">{{ 'group.PROFILE_MODE' | translate }}&nbsp;</label>
+    <div class="clearfix margin-top-m"></div>
+    <label class="pull-left text-bold margin-right-m"
+      >{{ 'group.PROFILE_MODE' | translate }}&nbsp;</label
+    >
     <mat-radio-group
       class="pull-left margin-right-m"
       aria-label="Select a mode"
@@ -35,33 +38,56 @@
   </div>
   <hr />
   <mat-radio-group formControlName="export_mode" class="d-flex flex-column">
-    <mat-radio-button value="local">{{"setting.remote_repository.options.destination_local"|translate}}
+    <mat-radio-button value="local"
+      >{{ 'setting.remote_repository.options.destination_local' | translate }}
     </mat-radio-button>
     <div class="d-flex flex-column flex-md-row">
-    <mat-radio-button value="remote" class="mr-2" [disabled]="!remoteRepoEnabled">
-{{"setting.remote_repository.options.destination_remote"|translate}}
-    </mat-radio-button>
-    <div class="mt-2 mt-md-0 ml-md-2">
-      <span class="text-muted small">{{"setting.remote_repository.options.mode_description"|translate}}</span>
-      <a href="#/settings/configuration" class="small">
-        {{ 'sidebar.nav.SETTING' | translate }}&nbsp;>&nbsp;{{
-        'sidebar.nav.CONFIGURATION' | translate
-        }}
-      </a>
-    </div>
+      <mat-radio-button
+        value="remote"
+        class="mr-2"
+        [disabled]="!remoteRepoEnabled">
+        {{ 'setting.remote_repository.options.destination_remote' | translate }}
+      </mat-radio-button>
+      <div class="mt-2 mt-md-0 ml-md-2">
+        <span class="text-muted small">{{
+          'setting.remote_repository.options.mode_description' | translate
+        }}</span>
+        <a href="#/settings/configuration" class="small">
+          {{ 'sidebar.nav.SETTING' | translate }}&nbsp;>&nbsp;{{
+            'sidebar.nav.CONFIGURATION' | translate
+          }}
+        </a>
+      </div>
     </div>
   </mat-radio-group>
-  <div *ngIf="exportOptionsForm.get('export_mode')?.value === 'remote'" class="d-flex flex-column mt-2">
+  <div
+    *ngIf="exportOptionsForm.get('export_mode')?.value === 'remote'"
+    class="d-flex flex-column mt-2">
     <mat-form-field hidden>
-      <mat-label>{{"setting.remote_repository.options.name"|translate}}</mat-label>
-      <input matInput id="remote_repository_nickname" type="text" formControlName="remote_repository_nickname" readonly/>
+      <mat-label>{{
+        'setting.remote_repository.options.name' | translate
+      }}</mat-label>
+      <input
+        matInput
+        id="remote_repository_nickname"
+        type="text"
+        formControlName="remote_repository_nickname"
+        readonly />
     </mat-form-field>
     <mat-form-field>
-      <mat-label>{{"setting.remote_repository.options.destination"|translate}}</mat-label>
-      <input matInput id="exporting_file_name" type="text" formControlName="file_path" />
+      <mat-label>{{
+        'setting.remote_repository.options.destination' | translate
+      }}</mat-label>
+      <input
+        matInput
+        id="exporting_file_name"
+        type="text"
+        formControlName="file_path" />
     </mat-form-field>
     <mat-form-field>
-      <mat-label>{{"setting.remote_repository.details.comment"|translate}}</mat-label>
+      <mat-label>{{
+        'setting.remote_repository.details.comment' | translate
+      }}</mat-label>
       <input matInput id="comment" type="text" formControlName="comment" />
     </mat-form-field>
   </div>

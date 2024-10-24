@@ -11,9 +11,11 @@ export interface WafSensor {
 
 export function isWafSensor(v: any): v is WafSensor {
   return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['comment']) === 'string') &&
-    (Array.isArray(v['groups']) && v['groups'].every(elmt => (typeof elmt) === 'string')) &&
-    (Array.isArray(v['rules']) && v['rules'].every(elmt => elmt && isWafRule(elmt)))
+    typeof v['name'] === 'string' &&
+    typeof v['comment'] === 'string' &&
+    Array.isArray(v['groups']) &&
+    v['groups'].every(elmt => typeof elmt === 'string') &&
+    Array.isArray(v['rules']) &&
+    v['rules'].every(elmt => elmt && isWafRule(elmt))
   );
 }

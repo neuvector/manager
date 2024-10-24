@@ -1,4 +1,4 @@
-import { RolePermission } from "./rolePermission";
+import { RolePermission } from './rolePermission';
 
 export interface UserRole {
   name: string;

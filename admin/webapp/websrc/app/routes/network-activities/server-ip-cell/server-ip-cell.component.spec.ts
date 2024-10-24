@@ -8,9 +8,8 @@ describe('ServerIpCellComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ServerIpCellComponent ]
-    })
-    .compileComponents();
+      declarations: [ServerIpCellComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

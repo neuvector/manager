@@ -10,13 +10,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    AdmissionRulesPageComponent
-  ],
-  imports: [
-    CommonModule,
-    AdmissionRulesModule,
-    RouterModule.forChild(routes),
-  ]
+  declarations: [AdmissionRulesPageComponent],
+  imports: [CommonModule, AdmissionRulesModule, RouterModule.forChild(routes)],
 })
-export class AdmissionRulesPageModule { }
+export class AdmissionRulesPageModule {}

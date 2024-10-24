@@ -7,7 +7,5 @@ export interface PromoteConfig {
 }
 
 export function isPromoteConfig(v: any): v is PromoteConfig {
-  return (
-    (v['request'] && isRuleIds(v['request']))
-  );
+  return v['request'] && isRuleIds(v['request']);
 }

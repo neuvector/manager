@@ -7,7 +7,5 @@ export interface SnifferParamWarp {
 }
 
 export function isSnifferParamWarp(v: any): v is SnifferParamWarp {
-  return (
-    (v['sniffer'] && isSnifferParam(v['sniffer']))
-  );
+  return v['sniffer'] && isSnifferParam(v['sniffer']);
 }

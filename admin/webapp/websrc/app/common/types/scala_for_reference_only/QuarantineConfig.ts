@@ -5,7 +5,5 @@ export interface QuarantineConfig {
 }
 
 export function isQuarantineConfig(v: any): v is QuarantineConfig {
-  return (
-    ((typeof v['quarantine']) === 'boolean')
-  );
+  return typeof v['quarantine'] === 'boolean';
 }

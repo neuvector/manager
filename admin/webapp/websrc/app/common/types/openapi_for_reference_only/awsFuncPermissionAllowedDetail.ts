@@ -1,4 +1,4 @@
-import { AwsResDetail } from "./awsResDetail";
+import { AwsResDetail } from './awsResDetail';
 
 export interface AwsFuncPermissionAllowedDetail {
   key?: string;

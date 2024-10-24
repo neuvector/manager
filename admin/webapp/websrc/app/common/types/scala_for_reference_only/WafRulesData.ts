@@ -8,6 +8,7 @@ export interface WafRulesData {
 
 export function isWafRulesData(v: any): v is WafRulesData {
   return (
-    (Array.isArray(v['rules']) && v['rules'].every(elmt => elmt && isWafRule(elmt)))
+    Array.isArray(v['rules']) &&
+    v['rules'].every(elmt => elmt && isWafRule(elmt))
   );
 }

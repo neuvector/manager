@@ -9,7 +9,6 @@ export interface OpenIdServerConfig {
 
 export function isOpenIdServerConfig(v: any): v is OpenIdServerConfig {
   return (
-    ((typeof v['name']) === 'string') &&
-    (v['oidc'] && isOpenIdServer(v['oidc']))
+    typeof v['name'] === 'string' && v['oidc'] && isOpenIdServer(v['oidc'])
   );
 }

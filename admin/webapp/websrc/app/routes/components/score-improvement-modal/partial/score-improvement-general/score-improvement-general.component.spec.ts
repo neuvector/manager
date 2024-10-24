@@ -8,9 +8,8 @@ describe('ScoreImprovementGeneralComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ScoreImprovementGeneralComponent ]
-    })
-    .compileComponents();
+      declarations: [ScoreImprovementGeneralComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

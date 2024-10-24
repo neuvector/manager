@@ -16,16 +16,16 @@ export interface ScanSummary {
 
 export function isScanSummary(v: any): v is ScanSummary {
   return (
-    ((typeof v['status']) === 'string') &&
-    ((typeof v['high']) === 'number') &&
-    ((typeof v['medium']) === 'number') &&
-    (!v['hidden_high'] || ((typeof v['hidden_high']) === 'number')) &&
-    (!v['hidden_medium'] || ((typeof v['hidden_medium']) === 'number')) &&
-    ((typeof v['result']) === 'string') &&
-    ((typeof v['scanned_timestamp']) === 'number') &&
-    ((typeof v['scanned_at']) === 'string') &&
-    ((typeof v['base_os']) === 'string') &&
-    ((typeof v['scanner_version']) === 'string') &&
-    ((typeof v['cvedb_create_time']) === 'string')
+    typeof v['status'] === 'string' &&
+    typeof v['high'] === 'number' &&
+    typeof v['medium'] === 'number' &&
+    (!v['hidden_high'] || typeof v['hidden_high'] === 'number') &&
+    (!v['hidden_medium'] || typeof v['hidden_medium'] === 'number') &&
+    typeof v['result'] === 'string' &&
+    typeof v['scanned_timestamp'] === 'number' &&
+    typeof v['scanned_at'] === 'string' &&
+    typeof v['base_os'] === 'string' &&
+    typeof v['scanner_version'] === 'string' &&
+    typeof v['cvedb_create_time'] === 'string'
   );
 }

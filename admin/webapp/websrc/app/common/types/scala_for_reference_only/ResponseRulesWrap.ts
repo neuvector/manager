@@ -7,7 +7,5 @@ export interface ResponseRulesWrap {
 }
 
 export function isResponseRulesWrap(v: any): v is ResponseRulesWrap {
-  return (
-    (v['insert'] && isResponseRules(v['insert']))
-  );
+  return v['insert'] && isResponseRules(v['insert']);
 }

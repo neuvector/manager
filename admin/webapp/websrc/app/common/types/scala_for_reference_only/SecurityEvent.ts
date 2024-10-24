@@ -19,15 +19,19 @@ export interface SecurityEvent {
 
 export function isSecurityEvent(v: any): v is SecurityEvent {
   return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['security_event_type']) === 'string') &&
-    ((typeof v['level']) === 'string') &&
-    (v['source'] && isEndpoint(v['source'])) &&
-    (v['destination'] && isEndpoint(v['destination'])) &&
-    (!v['host_name'] || ((typeof v['host_name']) === 'string')) &&
-    (v['applications'] && isArray(v['applications'])) &&
-    ((typeof v['details']) === 'string') &&
-    ((typeof v['reported_timestamp']) === 'number') &&
-    (v['reported_at'] && isDateTime(v['reported_at']))
+    typeof v['name'] === 'string' &&
+    typeof v['security_event_type'] === 'string' &&
+    typeof v['level'] === 'string' &&
+    v['source'] &&
+    isEndpoint(v['source']) &&
+    v['destination'] &&
+    isEndpoint(v['destination']) &&
+    (!v['host_name'] || typeof v['host_name'] === 'string') &&
+    v['applications'] &&
+    isArray(v['applications']) &&
+    typeof v['details'] === 'string' &&
+    typeof v['reported_timestamp'] === 'number' &&
+    v['reported_at'] &&
+    isDateTime(v['reported_at'])
   );
 }

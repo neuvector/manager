@@ -7,7 +7,5 @@ export interface ExportedWafSensorList {
 }
 
 export function isExportedWafSensorList(v: any): v is ExportedWafSensorList {
-  return (
-    (v['names'] && isArray(v['names']))
-  );
+  return v['names'] && isArray(v['names']);
 }

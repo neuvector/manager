@@ -1,7 +1,7 @@
 export class AdmRuleSubCriterion {
-  name: string = "";
-  op: string = "";
-  value: string = "";
+  name: string = '';
+  op: string = '';
+  value: string = '';
   unit?: string;
 }
 
@@ -51,7 +51,7 @@ export interface AdmissionStateRec {
 export interface MatchedRule {
   id: number;
   disabled: boolean;
-  container_image: string; 
+  container_image: string;
   type: string;
   mode: string;
   rule_details: string;

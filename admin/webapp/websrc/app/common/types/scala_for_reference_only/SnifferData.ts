@@ -9,7 +9,8 @@ export interface SnifferData {
 
 export function isSnifferData(v: any): v is SnifferData {
   return (
-    ((typeof v['workloadId']) === 'string') &&
-    (v['snifferParamWarp'] && isSnifferParamWarp(v['snifferParamWarp']))
+    typeof v['workloadId'] === 'string' &&
+    v['snifferParamWarp'] &&
+    isSnifferParamWarp(v['snifferParamWarp'])
   );
 }

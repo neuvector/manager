@@ -8,9 +8,8 @@ describe('SafeNotificationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SafeNotificationComponent ]
-    })
-    .compileComponents();
+      declarations: [SafeNotificationComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

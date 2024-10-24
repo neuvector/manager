@@ -34,7 +34,10 @@ export class PredefinedFileAccessRulesModalComponent implements OnInit {
 
   initializeVM() {
     this.gridOptions4PredefinedFileAccessRules =
-      this.fileAccessRulesService.prepareGrid(false, this.data.source).gridOptions4PredefinedFileAccessRules;
+      this.fileAccessRulesService.prepareGrid(
+        false,
+        this.data.source
+      ).gridOptions4PredefinedFileAccessRules;
     this.getPredefinedFileAccessRules();
   }
 

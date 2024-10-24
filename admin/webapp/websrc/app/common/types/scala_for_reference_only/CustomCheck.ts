@@ -6,8 +6,5 @@ export interface CustomCheck {
 }
 
 export function isCustomCheck(v: any): v is CustomCheck {
-  return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['script']) === 'string')
-  );
+  return typeof v['name'] === 'string' && typeof v['script'] === 'string';
 }

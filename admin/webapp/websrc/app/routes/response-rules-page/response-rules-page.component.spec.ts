@@ -8,9 +8,8 @@ describe('ResponseRulesPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ResponseRulesPageComponent ]
-    })
-    .compileComponents();
+      declarations: [ResponseRulesPageComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

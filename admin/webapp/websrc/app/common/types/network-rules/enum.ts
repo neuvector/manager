@@ -3,5 +3,5 @@ export enum UpdateType {
   Insert,
   Edit,
   MoveBefore,
-  MoveAfter
+  MoveAfter,
 }

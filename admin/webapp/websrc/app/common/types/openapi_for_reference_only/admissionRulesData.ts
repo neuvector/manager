@@ -1,4 +1,4 @@
-import { AdmissionRule } from "./admissionRule";
+import { AdmissionRule } from './admissionRule';
 
 export interface AdmissionRulesData {
   rules: AdmissionRule[];

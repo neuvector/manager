@@ -1,7 +1,7 @@
-import { ResponseRule } from "./responseRule";
-import { IpPort } from "./ipPort";
-import { PolicyRule } from "./policyRule";
-import { WorkloadBrief } from "./workloadBrief";
+import { ResponseRule } from './responseRule';
+import { IpPort } from './ipPort';
+import { PolicyRule } from './policyRule';
+import { WorkloadBrief } from './workloadBrief';
 
 export interface Service {
   name: string;

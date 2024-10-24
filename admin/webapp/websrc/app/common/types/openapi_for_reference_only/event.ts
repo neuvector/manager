@@ -1,4 +1,4 @@
-import { EventUserRoles } from "./eventUserRoles";
+import { EventUserRoles } from './eventUserRoles';
 
 export interface Event {
   name?: string;

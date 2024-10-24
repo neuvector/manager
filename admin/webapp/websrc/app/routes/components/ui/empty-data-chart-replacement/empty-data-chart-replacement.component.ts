@@ -1,18 +1,13 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-empty-data-chart-replacement',
   templateUrl: './empty-data-chart-replacement.component.html',
-  styleUrls: ['./empty-data-chart-replacement.component.scss']
+  styleUrls: ['./empty-data-chart-replacement.component.scss'],
 })
-export class EmptyDataChartReplacementComponent implements OnInit {
-
+export class EmptyDataChartReplacementComponent {
   @Input() type: string;
   @Input() message: string;
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  constructor() {}
 }

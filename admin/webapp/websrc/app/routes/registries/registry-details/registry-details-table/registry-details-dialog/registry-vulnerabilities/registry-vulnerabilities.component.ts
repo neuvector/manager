@@ -31,7 +31,9 @@ export class RegistryVulnerabilitiesComponent {
     this._layers = layers;
     this.hasLayers =
       this._layers.length > 1 &&
-      this._layers.some((l, index)=> index > 0 && l.vulnerabilities.length > 0);
+      this._layers.some(
+        (l, index) => index > 0 && l.vulnerabilities.length > 0
+      );
   }
   get layers() {
     return this._layers;

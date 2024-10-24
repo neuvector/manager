@@ -7,41 +7,58 @@ import { ChartConfiguration } from 'chart.js';
 @Component({
   selector: 'app-top-vulnerable-assets-chart',
   templateUrl: './top-vulnerable-assets-chart.component.html',
-  styleUrls: ['./top-vulnerable-assets-chart.component.scss']
+  styleUrls: ['./top-vulnerable-assets-chart.component.scss'],
 })
 export class TopVulnerableAssetsChartComponent implements OnInit {
-
   @Input() highPriorityVulnerabilities: any;
   @Input() assetType: string;
   @Input() isReport: boolean = false;
   @Input() isAutoScanOff: boolean = false;
-  topVulnerableAssetsBarChartConfig: ChartConfiguration<'bar', number[], string>;
+  topVulnerableAssetsBarChartConfig: ChartConfiguration<
+    'bar',
+    number[],
+    string
+  >;
   noChartData: boolean = false;
 
   constructor(
     private translate: TranslateService,
     private sanitizer: DomSanitizer,
     private capitalizePipe: CapitalizePipe
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-    this.drawTopVulnerableAssetsBarChart(this.highPriorityVulnerabilities, this.assetType);
+    this.drawTopVulnerableAssetsBarChart(
+      this.highPriorityVulnerabilities,
+      this.assetType
+    );
   }
 
-  drawTopVulnerableAssetsBarChart = (highPriorityVulnerabilities: any, assetType: string) => {
+  drawTopVulnerableAssetsBarChart = (
+    highPriorityVulnerabilities: any,
+    assetType: string
+  ) => {
     let topVulnerableAssetsLabel: Array<string> = new Array(5);
     let topHighVulnerableAssetsData: Array<number> = new Array(5);
     let topMediumVulnerableAssetsData: Array<number> = new Array(5);
     topVulnerableAssetsLabel.fill('');
     topHighVulnerableAssetsData.fill(0);
     topMediumVulnerableAssetsData.fill(0);
-    highPriorityVulnerabilities[assetType][`top5${this.capitalizePipe.transform(assetType)}`].forEach((asset, index) => {
+    highPriorityVulnerabilities[assetType][
+      `top5${this.capitalizePipe.transform(assetType)}`
+    ].forEach((asset, index) => {
       if (assetType === 'containers') {
-        topVulnerableAssetsLabel[index] = this.sanitizer.sanitize(SecurityContext.HTML, asset.display_name)!;
+        topVulnerableAssetsLabel[index] = this.sanitizer.sanitize(
+          SecurityContext.HTML,
+          asset.display_name
+        )!;
         topHighVulnerableAssetsData[index] = asset.high4Dashboard;
         topMediumVulnerableAssetsData[index] = asset.medium4Dashboard;
       } else {
-        topVulnerableAssetsLabel[index] = this.sanitizer.sanitize(SecurityContext.HTML, asset.name)!;
+        topVulnerableAssetsLabel[index] = this.sanitizer.sanitize(
+          SecurityContext.HTML,
+          asset.name
+        )!;
         topHighVulnerableAssetsData[index] = asset.scan_summary.high;
         topMediumVulnerableAssetsData[index] = asset.scan_summary.medium;
       }
@@ -49,7 +66,7 @@ export class TopVulnerableAssetsChartComponent implements OnInit {
 
     this.noChartData =
       topHighVulnerableAssetsData.reduce((prev, curr) => prev + curr) === 0 &&
-      topMediumVulnerableAssetsData.reduce((prev, curr) => prev + curr) === 0
+      topMediumVulnerableAssetsData.reduce((prev, curr) => prev + curr) === 0;
 
     this.topVulnerableAssetsBarChartConfig = {
       options: {
@@ -68,13 +85,15 @@ export class TopVulnerableAssetsChartComponent implements OnInit {
           },
           y: {
             ticks: {
-              crossAlign: "far",
-              callback: function(value, index, values): string {
+              crossAlign: 'far',
+              callback: function (value, index, values): string {
                 let label = this.getLabelForValue(value as number);
-                return label.length > 22 ? `${label.substring(0, 22)}...` : label;
+                return label.length > 22
+                  ? `${label.substring(0, 22)}...`
+                  : label;
               },
-            }
-          }
+            },
+          },
         },
         maintainAspectRatio: false,
         plugins: {
@@ -116,5 +135,4 @@ export class TopVulnerableAssetsChartComponent implements OnInit {
       type: 'bar',
     };
   };
-
 }

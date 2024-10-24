@@ -10,8 +10,9 @@ export interface VulnerableContainers {
 
 export function isVulnerableContainers(v: any): v is VulnerableContainers {
   return (
-    (v['top5Containers'] && isArray(v['top5Containers'])) &&
-    ((typeof v['vulnerabilitiesTotal']) === 'number') &&
-    ((typeof v['total']) === 'number')
+    v['top5Containers'] &&
+    isArray(v['top5Containers']) &&
+    typeof v['vulnerabilitiesTotal'] === 'number' &&
+    typeof v['total'] === 'number'
   );
 }

@@ -1,4 +1,4 @@
-import { Incident } from "./incident";
+import { Incident } from './incident';
 
 export interface IncidentsData {
   incidents: Incident[];

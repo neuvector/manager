@@ -13,7 +13,11 @@ import { DomainNameCellComponent } from './namespace-items/domain-name-cell/doma
 const routes: Routes = [{ path: '', component: NamespacesComponent }];
 
 @NgModule({
-  declarations: [NamespacesComponent, NamespaceDetailsComponent, DomainNameCellComponent],
+  declarations: [
+    NamespacesComponent,
+    NamespaceDetailsComponent,
+    DomainNameCellComponent,
+  ],
   imports: [
     CommonModule,
     NvCommonModule,

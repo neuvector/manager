@@ -11,7 +11,9 @@ export interface FileMonitorConfig {
 export function isFileMonitorConfig(v: any): v is FileMonitorConfig {
   return (
     (!v['add_filters'] || (v['add_filters'] && isArray(v['add_filters']))) &&
-    (!v['delete_filters'] || (v['delete_filters'] && isArray(v['delete_filters']))) &&
-    (!v['update_filters'] || (v['update_filters'] && isArray(v['update_filters'])))
+    (!v['delete_filters'] ||
+      (v['delete_filters'] && isArray(v['delete_filters']))) &&
+    (!v['update_filters'] ||
+      (v['update_filters'] && isArray(v['update_filters'])))
   );
 }

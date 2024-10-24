@@ -5,7 +5,5 @@ export interface AdmissionState {
 }
 
 export function isAdmissionState(v: any): v is AdmissionState {
-  return (
-    ((typeof v['enable']) === 'boolean')
-  );
+  return typeof v['enable'] === 'boolean';
 }

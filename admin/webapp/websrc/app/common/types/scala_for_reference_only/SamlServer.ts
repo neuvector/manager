@@ -14,12 +14,13 @@ export interface SamlServer {
 
 export function isSamlServer(v: any): v is SamlServer {
   return (
-    ((typeof v['sso_url']) === 'string') &&
-    ((typeof v['issuer']) === 'string') &&
-    (!v['x509_cert'] || ((typeof v['x509_cert']) === 'string')) &&
-    (!v['group_claim'] || ((typeof v['group_claim']) === 'string')) &&
-    (!v['enable'] || ((typeof v['enable']) === 'boolean')) &&
-    (!v['default_role'] || ((typeof v['default_role']) === 'string')) &&
-    (!v['group_mapped_roles'] || (v['group_mapped_roles'] && isArray(v['group_mapped_roles'])))
+    typeof v['sso_url'] === 'string' &&
+    typeof v['issuer'] === 'string' &&
+    (!v['x509_cert'] || typeof v['x509_cert'] === 'string') &&
+    (!v['group_claim'] || typeof v['group_claim'] === 'string') &&
+    (!v['enable'] || typeof v['enable'] === 'boolean') &&
+    (!v['default_role'] || typeof v['default_role'] === 'string') &&
+    (!v['group_mapped_roles'] ||
+      (v['group_mapped_roles'] && isArray(v['group_mapped_roles'])))
   );
 }

@@ -14,12 +14,13 @@ export interface ServiceStateIn {
 
 export function isServiceStateIn(v: any): v is ServiceStateIn {
   return (
-    ((typeof v['domain']) === 'string') &&
-    ((typeof v['name']) === 'string') &&
-    (!v['policy_mode'] || ((typeof v['policy_mode']) === 'string')) &&
-    ((typeof v['platform_role']) === 'string') &&
-    (v['members'] && isArray(v['members'])) &&
-    ((typeof v['not_scored']) === 'boolean') &&
-    ((typeof v['kind']) === 'string')
+    typeof v['domain'] === 'string' &&
+    typeof v['name'] === 'string' &&
+    (!v['policy_mode'] || typeof v['policy_mode'] === 'string') &&
+    typeof v['platform_role'] === 'string' &&
+    v['members'] &&
+    isArray(v['members']) &&
+    typeof v['not_scored'] === 'boolean' &&
+    typeof v['kind'] === 'string'
   );
 }

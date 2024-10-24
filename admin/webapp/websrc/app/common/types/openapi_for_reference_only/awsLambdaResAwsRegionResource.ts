@@ -1,4 +1,4 @@
-import { AwsLambdaResDetail } from "./awsLambdaResDetail";
+import { AwsLambdaResDetail } from './awsLambdaResDetail';
 
 export interface AwsLambdaResAwsRegionResource {
   key?: string;

@@ -68,7 +68,11 @@ export class PlatformDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.filter.valueChanges
-      .pipe(tap((value: string | null) => this.quickFilterService.setTextInput(value || '')))
+      .pipe(
+        tap((value: string | null) =>
+          this.quickFilterService.setTextInput(value || '')
+        )
+      )
       .subscribe();
     this.isVulsAuthorized = this.authUtils.getDisplayFlag('vuls_profile');
     this.isWriteVulsAuthorized =

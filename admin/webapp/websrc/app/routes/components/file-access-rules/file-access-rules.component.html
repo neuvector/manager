@@ -3,7 +3,11 @@
     [ngClass]="{ panel: source === navSource['SELF'] }"
     *ngIf="source === navSource['FED_POLICY'] || groupName">
     <div [ngClass]="{ 'panel-body': source === navSource['SELF'] }">
-      <div class="clearfix" *ngIf="groupName !== globalConstant4Html.EXTERNAL && !useQuickFilterService">
+      <div
+        class="clearfix"
+        *ngIf="
+          groupName !== globalConstant4Html.EXTERNAL && !useQuickFilterService
+        ">
         <app-quick-filter
           class="pull-right"
           [gridOptions]="gridOptions"
@@ -14,21 +18,29 @@
         </app-quick-filter>
         <div
           class="pull-right margin-right-m hand"
-          [ngClass]="{'margin-top-l': !useQuickFilterService}"
-          *ngIf="selectedFileAccessRules && isWriteGroupAuthorized && isWriteFileAccessRuleAuthorized"
+          [ngClass]="{ 'margin-top-l': !useQuickFilterService }"
+          *ngIf="
+            selectedFileAccessRules &&
+            isWriteGroupAuthorized &&
+            isWriteFileAccessRuleAuthorized
+          "
           (click)="removeProfile(selectedFileAccessRules)">
           <em class="eos-icons">delete</em>
         </div>
         <div
           class="pull-right margin-right-m hand"
-          [ngClass]="{'margin-top-l': !useQuickFilterService}"
-          *ngIf="selectedFileAccessRules && isWriteGroupAuthorized && isWriteFileAccessRuleAuthorized"
+          [ngClass]="{ 'margin-top-l': !useQuickFilterService }"
+          *ngIf="
+            selectedFileAccessRules &&
+            isWriteGroupAuthorized &&
+            isWriteFileAccessRuleAuthorized
+          "
           (click)="editProfile(selectedFileAccessRules)">
           <em class="eos-icons">edit</em>
         </div>
         <div
           class="pull-right margin-right-m hand"
-          [ngClass]="{'margin-top-l': !useQuickFilterService}"
+          [ngClass]="{ 'margin-top-l': !useQuickFilterService }"
           *ngIf="isWriteGroupAuthorized && isWriteFileAccessRuleAuthorized"
           (click)="addProfile()">
           <em class="eos-icons">add</em>
@@ -36,7 +48,11 @@
         <div
           class="pull-right margin-right-s hand"
           (click)="showPredefinedRules()"
-          *ngIf="source !== navSource['FED_POLICY'] && cfgType!==CFG_TYPE.FED && cfgType!==CFG_TYPE.CUSTOMER">
+          *ngIf="
+            source !== navSource['FED_POLICY'] &&
+            cfgType !== CFG_TYPE.FED &&
+            cfgType !== CFG_TYPE.CUSTOMER
+          ">
           <em class="eos-icons margin-right-s icon-18">info</em>
           <span class="text-plain">{{
             'service.PREDEFINED_FILTERS' | translate
@@ -58,7 +74,6 @@
             </mat-option>
           </mat-select>
         </div>
-
       </div>
       <div class="mt-sm mb0">
         <ag-grid-angular

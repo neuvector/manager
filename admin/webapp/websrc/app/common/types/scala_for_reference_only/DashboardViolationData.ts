@@ -10,7 +10,8 @@ export interface DashboardViolationData {
 
 export function isDashboardViolationData(v: any): v is DashboardViolationData {
   return (
-    (v['violations'] && isArray(v['violations'])) &&
+    v['violations'] &&
+    isArray(v['violations']) &&
     (!v['error'] || (v['error'] && isError(v['error'])))
   );
 }

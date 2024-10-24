@@ -1,4 +1,4 @@
-import { IpAddr } from "./ipAddr";
+import { IpAddr } from './ipAddr';
 
 export interface HostInterfaces {
   key?: string;

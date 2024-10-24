@@ -13,7 +13,9 @@
         <div class="summary-subtitle margin-top-m margin-bottom-m">
           {{ 'policy.report.BY_TYPE' | translate }}
         </div>
-        <div class="row statistic-row" *ngFor="let entry of statisticData | keyvalue">
+        <div
+          class="row statistic-row"
+          *ngFor="let entry of statisticData | keyvalue">
           <div class="col-sm-9 statistic-cell">
             {{ entry.key }}
           </div>
@@ -23,7 +25,8 @@
         </div>
       </div>
       <div class="pull-right margin-top-xxxl margin-right-xl">
-        <app-network-rules-report-chart [statisticData]="statisticData"></app-network-rules-report-chart>
+        <app-network-rules-report-chart
+          [statisticData]="statisticData"></app-network-rules-report-chart>
       </div>
     </div>
   </div>
@@ -35,7 +38,7 @@
       <thead>
         <tr class="print-header">
           <th class="print-cell" style="width: 5%">
-            {{'policy.gridHeader.SEQ' | translate }}
+            {{ 'policy.gridHeader.SEQ' | translate }}
           </th>
           <th class="print-cell" style="width: 5%">
             {{ 'policy.gridHeader.ID' | translate }}
@@ -56,10 +59,10 @@
             {{ 'policy.gridHeader.PORT' | translate }}
           </th>
           <th class="print-cell" style="width: 6%">
-            {{ 'policy.gridHeader.ACTION' | translate}}
+            {{ 'policy.gridHeader.ACTION' | translate }}
           </th>
           <th class="print-cell" style="width: 8%">
-            {{ 'policy.gridHeader.TYPE' | translate}}
+            {{ 'policy.gridHeader.TYPE' | translate }}
           </th>
           <th class="print-cell" style="width: 8%">
             {{ 'policy.gridHeader.UPDATE_AT' | translate }}
@@ -67,47 +70,99 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="print-row" *ngFor="let rule of networkRules; let i = index" [attr.data-index]="i">
+        <tr
+          class="print-row"
+          *ngFor="let rule of networkRules; let i = index"
+          [attr.data-index]="i">
           <ng-container *ngIf="rule.id > -1">
-            <td class="print-cell" style="width: 5%" [ngClass]="{'disabled-row-print': rule.disable}">
+            <td
+              class="print-cell"
+              style="width: 5%"
+              [ngClass]="{ 'disabled-row-print': rule.disable }">
               {{ i + 1 }}
             </td>
-            <td class="print-cell" style="width: 5%" [ngClass]="{'disabled-row-print': rule.disable}">
+            <td
+              class="print-cell"
+              style="width: 5%"
+              [ngClass]="{ 'disabled-row-print': rule.disable }">
               {{ rule.id }}
             </td>
-            <td class="print-cell" style="width: 12%" [ngClass]="{'disabled-row-print': rule.disable}">
+            <td
+              class="print-cell"
+              style="width: 12%"
+              [ngClass]="{ 'disabled-row-print': rule.disable }">
               {{ rule.comment }}
             </td>
-            <td class="print-cell" style="width: 15%" [ngClass]="{'disabled-row-print': rule.disable}">
+            <td
+              class="print-cell"
+              style="width: 15%"
+              [ngClass]="{ 'disabled-row-print': rule.disable }">
               {{ rule.from }}
             </td>
-            <td class="print-cell" style="width: 15%" [ngClass]="{'disabled-row-print': rule.disable}">
+            <td
+              class="print-cell"
+              style="width: 15%"
+              [ngClass]="{ 'disabled-row-print': rule.disable }">
               {{ rule.to }}
             </td>
-            <td class="print-cell" style="width: 12%" [ngClass]="{'disabled-row-print': rule.disable}">
+            <td
+              class="print-cell"
+              style="width: 12%"
+              [ngClass]="{ 'disabled-row-print': rule.disable }">
               {{ rule.applications.join(',') }}
             </td>
-            <td class="print-cell" style="width: 12%" [ngClass]="{'disabled-row-print': rule.disable}">
+            <td
+              class="print-cell"
+              style="width: 12%"
+              [ngClass]="{ 'disabled-row-print': rule.disable }">
               {{ rule.ports }}
             </td>
-            <td class="print-cell text-center" style="width: 6%" [ngClass]="{'disabled-row-print': rule.disable}">
-              <span class="action-label px-1 {{ colourMap[rule.action] }}" *ngIf="!rule.disable">
+            <td
+              class="print-cell text-center"
+              style="width: 6%"
+              [ngClass]="{ 'disabled-row-print': rule.disable }">
+              <span
+                class="action-label px-1 {{ colourMap[rule.action] }}"
+                *ngIf="!rule.disable">
                 {{ 'policy.action.' + rule.action.toUpperCase() | translate }}
               </span>
-              <span class="action-label px-1 disabled-rule-print" *ngIf="rule.disable">
+              <span
+                class="action-label px-1 disabled-rule-print"
+                *ngIf="rule.disable">
                 {{ 'policy.action.' + rule.action.toUpperCase() | translate }}
               </span>
             </td>
-            <td class="print-cell text-center" style="width: 8%" [ngClass]="{'disabled-row-print': rule.disable}">
-              <span *ngIf="colourMap[rule.cfg_type] && !rule.disable" class="action-label px-1 {{colourMap[rule.cfg_type]}}">
-                {{ ('policy.head.' + colourMap[rule.cfg_type].replace("-", "_").toUpperCase()) | translate }}
+            <td
+              class="print-cell text-center"
+              style="width: 8%"
+              [ngClass]="{ 'disabled-row-print': rule.disable }">
+              <span
+                *ngIf="colourMap[rule.cfg_type] && !rule.disable"
+                class="action-label px-1 {{ colourMap[rule.cfg_type] }}">
+                {{
+                  'policy.head.' +
+                    colourMap[rule.cfg_type].replace('-', '_').toUpperCase()
+                    | translate
+                }}
               </span>
-              <span *ngIf="colourMap[rule.cfg_type] && rule.disable" class="action-label px-1 disabled-rule-print">
-                {{ ('policy.head.' + colourMap[rule.cfg_type].replace("-", "_").toUpperCase()) | translate }}
+              <span
+                *ngIf="colourMap[rule.cfg_type] && rule.disable"
+                class="action-label px-1 disabled-rule-print">
+                {{
+                  'policy.head.' +
+                    colourMap[rule.cfg_type].replace('-', '_').toUpperCase()
+                    | translate
+                }}
               </span>
             </td>
-            <td class="print-cell" style="width: 8%" [ngClass]="{'disabled-row-print': rule.disable}">
-              {{ rule.last_modified_timestamp * 1000 | date: 'MMM dd, y HH:mm:ss'}}
+            <td
+              class="print-cell"
+              style="width: 8%"
+              [ngClass]="{ 'disabled-row-print': rule.disable }">
+              {{
+                rule.last_modified_timestamp * 1000
+                  | date : 'MMM dd, y HH:mm:ss'
+              }}
             </td>
           </ng-container>
         </tr>

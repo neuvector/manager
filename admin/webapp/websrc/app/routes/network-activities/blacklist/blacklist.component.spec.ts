@@ -8,9 +8,8 @@ describe('BlacklistComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BlacklistComponent ]
-    })
-    .compileComponents();
+      declarations: [BlacklistComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

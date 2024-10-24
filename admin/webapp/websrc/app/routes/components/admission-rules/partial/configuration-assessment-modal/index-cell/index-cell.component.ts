@@ -2,14 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
-
 @Component({
   selector: 'app-index-cell',
   templateUrl: './index-cell.component.html',
-  styleUrls: ['./index-cell.component.scss']
+  styleUrls: ['./index-cell.component.scss'],
 })
 export class IndexCellComponent implements ICellRendererAngularComp {
-
   params!: ICellRendererParams;
   index!: string;
   isParent!: boolean;
@@ -35,5 +33,4 @@ export class IndexCellComponent implements ICellRendererAngularComp {
     if (child_node) child_node.data.visible = !child_node.data.visible;
     this.params.api.onFilterChanged();
   }
-
 }

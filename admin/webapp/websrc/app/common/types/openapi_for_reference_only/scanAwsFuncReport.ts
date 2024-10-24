@@ -1,6 +1,6 @@
-import { ScanAwsFuncReportReqResources } from "./scanAwsFuncReportReqResources";
-import { ScanAwsFuncReportAllowedResources } from "./scanAwsFuncReportAllowedResources";
-import { ScanAwsFuncDetail } from "./scanAwsFuncDetail";
+import { ScanAwsFuncReportReqResources } from './scanAwsFuncReportReqResources';
+import { ScanAwsFuncReportAllowedResources } from './scanAwsFuncReportAllowedResources';
+import { ScanAwsFuncDetail } from './scanAwsFuncDetail';
 
 export interface ScanAwsFuncReport {
   function_id: string;

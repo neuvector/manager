@@ -1,22 +1,25 @@
-import { Directive, ElementRef, Input, HostListener } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  Input,
+  HostListener,
+  OnInit,
+} from '@angular/core';
 
 @Directive({
-  selector: '[appTwoWayInfiniteScroll]'
+  selector: '[appTwoWayInfiniteScroll]',
 })
-export class TwoWayInfiniteScrollDirective {
-
+export class TwoWayInfiniteScrollDirective implements OnInit {
   @Input() ctx: any;
   element: HTMLDivElement;
 
-  constructor(
-    private elementRef: ElementRef
-  ) {
+  constructor(private elementRef: ElementRef) {
     console.log('appTwoWayInfiniteScroll is working...');
   }
 
   ngOnInit(): void {
     this.element = this.elementRef.nativeElement;
-    console.log("this.element", this.element, this.ctx);
+    console.log('this.element', this.element, this.ctx);
   }
 
   @HostListener('scroll', ['$event'])
@@ -66,9 +69,9 @@ export class TwoWayInfiniteScrollDirective {
     }
   };
 
-  private throttled = (function(delay, fn) {
+  private throttled = (function (delay, fn) {
     let lastCall = 0;
-    return function(delay, fn, ...args) {
+    return function (delay, fn, ...args) {
       const now = new Date().getTime();
       if (now - lastCall < delay) {
         return;
@@ -78,9 +81,9 @@ export class TwoWayInfiniteScrollDirective {
     };
   })();
 
-  private debounced = (function(delay, fn) {
+  private debounced = (function (delay, fn) {
     let timerId;
-    return function(delay, fn, ...args) {
+    return function (delay, fn, ...args) {
       if (timerId) {
         clearTimeout(timerId);
       }

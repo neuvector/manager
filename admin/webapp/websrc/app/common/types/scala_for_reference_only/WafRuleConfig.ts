@@ -9,7 +9,8 @@ export interface WafRuleConfig {
 
 export function isWafRuleConfig(v: any): v is WafRuleConfig {
   return (
-    ((typeof v['name']) === 'string') &&
-    (Array.isArray(v['patterns']) && v['patterns'].every(elmt => elmt && isPattern(elmt)))
+    typeof v['name'] === 'string' &&
+    Array.isArray(v['patterns']) &&
+    v['patterns'].every(elmt => elmt && isPattern(elmt))
   );
 }

@@ -45,19 +45,22 @@ export class DashboardHttpService {
   }
 
   getDashboardSecurityEventData(domain?: string) {
-    const options = {}
+    const options = {};
 
-    if(domain) {
+    if (domain) {
       options['params'] = { domain: domain };
     }
-    
-    return GlobalVariable.http.get(PathConstant.DASHBOARD_NOTIFICATIONS_URL, options);
+
+    return GlobalVariable.http.get(
+      PathConstant.DASHBOARD_NOTIFICATIONS_URL,
+      options
+    );
   }
 
   getDashboardDetailsData(domain?: string) {
-    const options = {}
+    const options = {};
 
-    if(domain) {
+    if (domain) {
       options['params'] = { domain: domain };
     }
 
@@ -65,9 +68,9 @@ export class DashboardHttpService {
   }
 
   getSummaryData(domain?: string) {
-    const options = {}
+    const options = {};
 
-    if(domain) {
+    if (domain) {
       options['params'] = { domain: domain };
     }
 

@@ -1,4 +1,9 @@
-<ng-container *ngIf="summary4AllView && summary4AllView.isAllView || registryDetails && registryDetails.length; else noneScannedTemplate">
+<ng-container
+  *ngIf="
+    (summary4AllView && summary4AllView.isAllView) ||
+      (registryDetails && registryDetails.length);
+    else noneScannedTemplate
+  ">
   <ng-container *ngIf="gridHeight > 100">
     <ng-container *ngIf="noVulnerabilities; else vulnerabilitiesTemplate">
       <div
@@ -40,7 +45,9 @@
       </div>
       <div *ngIf="!isAllView">
         {{ 'registry.SCAN_PROGRESS' | translate }} {{ percent }}%
-        <mat-progress-bar [value]="percent" mode="determinate"></mat-progress-bar>
+        <mat-progress-bar
+          [value]="percent"
+          mode="determinate"></mat-progress-bar>
       </div>
     </ng-template>
   </ng-container>

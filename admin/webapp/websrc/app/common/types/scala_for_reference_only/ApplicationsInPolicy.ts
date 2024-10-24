@@ -11,9 +11,10 @@ export interface ApplicationsInPolicy {
 
 export function isApplicationsInPolicy(v: any): v is ApplicationsInPolicy {
   return (
-    ((typeof v['id']) === 'number') &&
-    ((typeof v['from']) === 'string') &&
-    ((typeof v['to']) === 'string') &&
-    (v['applications'] && isArray(v['applications']))
+    typeof v['id'] === 'number' &&
+    typeof v['from'] === 'string' &&
+    typeof v['to'] === 'string' &&
+    v['applications'] &&
+    isArray(v['applications'])
   );
 }

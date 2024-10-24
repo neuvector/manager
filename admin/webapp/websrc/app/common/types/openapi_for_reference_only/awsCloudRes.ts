@@ -1,4 +1,4 @@
-import { AwsLambdaRes } from "./awsLambdaRes";
+import { AwsLambdaRes } from './awsLambdaRes';
 
 export interface AwsCloudRes {
   cloud_type: string;

@@ -8,8 +8,8 @@ export interface ServerVolume {
 
 export function isServerVolume(v: any): v is ServerVolume {
   return (
-    ((typeof v['id']) === 'string') &&
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['volume']) === 'number')
+    typeof v['id'] === 'string' &&
+    typeof v['name'] === 'string' &&
+    typeof v['volume'] === 'number'
   );
 }

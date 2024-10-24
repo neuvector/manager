@@ -7,15 +7,22 @@ export class DashboardSecurityEventsProtocol {
 
   public static getInstance() {
     if (!DashboardSecurityEventsProtocol.instance) {
-      DashboardSecurityEventsProtocol.instance = new DashboardSecurityEventsProtocol();
+      DashboardSecurityEventsProtocol.instance =
+        new DashboardSecurityEventsProtocol();
     }
 
     return DashboardSecurityEventsProtocol.instance;
   }
 }
 
-export const DashboardSecurityEventsProtocolInhabitant: DashboardSecurityEventsProtocol = DashboardSecurityEventsProtocol.getInstance();
+export const DashboardSecurityEventsProtocolInhabitant: DashboardSecurityEventsProtocol =
+  DashboardSecurityEventsProtocol.getInstance();
 
-export function isDashboardSecurityEventsProtocol(v: any): v is DashboardSecurityEventsProtocol {
-  return (v instanceof DashboardSecurityEventsProtocol) && (v === DashboardSecurityEventsProtocolInhabitant);
+export function isDashboardSecurityEventsProtocol(
+  v: any
+): v is DashboardSecurityEventsProtocol {
+  return (
+    v instanceof DashboardSecurityEventsProtocol &&
+    v === DashboardSecurityEventsProtocolInhabitant
+  );
 }

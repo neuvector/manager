@@ -7,7 +7,5 @@ export interface AdmRuleConfig {
 }
 
 export function isAdmRuleConfig(v: any): v is AdmRuleConfig {
-  return (
-    (v['config'] && isAdmRule(v['config']))
-  );
+  return v['config'] && isAdmRule(v['config']);
 }

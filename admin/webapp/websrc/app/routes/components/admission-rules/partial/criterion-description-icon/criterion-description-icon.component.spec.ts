@@ -8,9 +8,8 @@ describe('CriterionDescriptionIconComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CriterionDescriptionIconComponent ]
-    })
-    .compileComponents();
+      declarations: [CriterionDescriptionIconComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

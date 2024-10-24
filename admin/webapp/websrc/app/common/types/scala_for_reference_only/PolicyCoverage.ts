@@ -9,7 +9,6 @@ export interface PolicyCoverage {
 
 export function isPolicyCoverage(v: any): v is PolicyCoverage {
   return (
-    (v['learnt'] && isArray(v['learnt'])) &&
-    (v['others'] && isArray(v['others']))
+    v['learnt'] && isArray(v['learnt']) && v['others'] && isArray(v['others'])
   );
 }

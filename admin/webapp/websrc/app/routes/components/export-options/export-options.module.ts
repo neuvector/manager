@@ -7,12 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [ExportOptionsComponent],
-  imports: [
-    CommonModule,
-    NvCommonModule,
-    MatFormFieldModule,
-    MatInputModule,
-  ],
+  imports: [CommonModule, NvCommonModule, MatFormFieldModule, MatInputModule],
   exports: [ExportOptionsComponent],
 })
 export class ExportOptionsModule {}

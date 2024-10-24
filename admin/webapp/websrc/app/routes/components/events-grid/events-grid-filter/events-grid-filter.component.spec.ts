@@ -8,9 +8,8 @@ describe('EventsGridFilterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EventsGridFilterComponent ]
-    })
-    .compileComponents();
+      declarations: [EventsGridFilterComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

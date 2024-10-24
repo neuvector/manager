@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+} from '@angular/core';
 import { GridOptions, GridApi } from 'ag-grid-community';
 import { GroupsService } from '@services/groups.service';
 import { DlpSetting } from '@common/types';
@@ -17,7 +24,7 @@ import * as $ from 'jquery';
   templateUrl: './group-dlp.component.html',
   styleUrls: ['./group-dlp.component.scss'],
 })
-export class GroupDlpComponent implements OnInit {
+export class GroupDlpComponent implements OnInit, OnChanges {
   @Input() source: string;
   @Input() groupName: string = '';
   @Input() resizableHeight: number;
@@ -58,7 +65,11 @@ export class GroupDlpComponent implements OnInit {
         if (params && params.api) {
           if (this.useQuickFilterService) {
             this.quickFilterService.textInput$.subscribe((value: string) => {
-              this.quickFilterService.onFilterChange(value, this.gridOptions4GroupDlpSensors, this.gridApi);
+              this.quickFilterService.onFilterChange(
+                value,
+                this.gridOptions4GroupDlpSensors,
+                this.gridApi
+              );
             });
           }
           params.api.sizeColumnsToFit();
@@ -73,8 +84,7 @@ export class GroupDlpComponent implements OnInit {
       });
     };
     this.gridOptions4GroupDlpSensors.onSelectionChanged = () => {
-      this.selectedSensor =
-        this.gridApi!.getSelectedRows()[0];
+      this.selectedSensor = this.gridApi!.getSelectedRows()[0];
     };
     this.getEditGroupSensorModal.emit(this.openEditGroupSensorModal);
     this.getToggleDLPConfigEnablement.emit(this.toggleDLPConfigEnablement);

@@ -9,9 +9,9 @@ export interface Pattern {
 
 export function isPattern(v: any): v is Pattern {
   return (
-    ((typeof v['key']) === 'string') &&
-    ((typeof v['op']) === 'string') &&
-    ((typeof v['value']) === 'string') &&
-    (!v['context'] || ((typeof v['context']) === 'string'))
+    typeof v['key'] === 'string' &&
+    typeof v['op'] === 'string' &&
+    typeof v['value'] === 'string' &&
+    (!v['context'] || typeof v['context'] === 'string')
   );
 }

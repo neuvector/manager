@@ -1,5 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  ViewChild,
+  OnDestroy,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MapConstant } from '@common/constants/map.constant';
 import { ErrorResponse, Host, ScanConfig } from '@common/types';
@@ -18,7 +24,7 @@ import { GlobalVariable } from '@common/variables/global.variable';
   templateUrl: './nodes.component.html',
   styleUrls: ['./nodes.component.scss'],
 })
-export class NodesComponent implements OnInit {
+export class NodesComponent implements OnInit, OnDestroy {
   _nodesGrid!: NodesGridComponent;
   @ViewChild(NodesGridComponent) set nodesGrid(grid: NodesGridComponent) {
     this._nodesGrid = grid;
@@ -57,7 +63,7 @@ export class NodesComponent implements OnInit {
     private notificationService: NotificationService,
     private authUtils: AuthUtilsService,
     private tr: TranslateService,
-    private cd: ChangeDetectorRef,
+    private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {

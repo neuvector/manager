@@ -8,9 +8,8 @@ describe('ExposedServicePodGridActionCellComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ExposedServicePodGridActionCellComponent ]
-    })
-    .compileComponents();
+      declarations: [ExposedServicePodGridActionCellComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -14,12 +14,14 @@ export class SettingsComponent implements OnInit {
   isAuthenticationAuth!: boolean;
   isNamespaceUser!: boolean;
 
-  
   get isWorker() {
     return GlobalVariable.isRemote;
   }
 
-  constructor(private authUtils: AuthUtilsService, private multiClusterService: MultiClusterService) {}
+  constructor(
+    private authUtils: AuthUtilsService,
+    private multiClusterService: MultiClusterService
+  ) {}
 
   breakPoints(): void {
     switch (true) {

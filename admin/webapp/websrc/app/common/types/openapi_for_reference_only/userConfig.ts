@@ -1,4 +1,4 @@
-import { GroupRoleMappingRoleDomains } from "./groupRoleMappingRoleDomains";
+import { GroupRoleMappingRoleDomains } from './groupRoleMappingRoleDomains';
 
 export interface UserConfig {
   fullname: string;

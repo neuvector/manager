@@ -8,9 +8,8 @@ describe('SecurityRiskPanelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SecurityRiskPanelComponent ]
-    })
-    .compileComponents();
+      declarations: [SecurityRiskPanelComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

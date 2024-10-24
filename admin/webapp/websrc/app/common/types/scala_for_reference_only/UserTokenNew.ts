@@ -10,8 +10,13 @@ export interface UserTokenNew {
 
 export function isUserTokenNew(v: any): v is UserTokenNew {
   return (
-    (v['token'] && isTokenNew(v['token'])) &&
-    (!v['roles'] || ((typeof v['roles']) == 'object' && Object.keys(v['roles']).every(key => ((typeof key) === 'string') && ((typeof v['roles'][key]) === 'string')))) &&
-    (!v['login_timestamp'] || ((typeof v['login_timestamp']) === 'string'))
+    v['token'] &&
+    isTokenNew(v['token']) &&
+    (!v['roles'] ||
+      (typeof v['roles'] == 'object' &&
+        Object.keys(v['roles']).every(
+          key => typeof key === 'string' && typeof v['roles'][key] === 'string'
+        ))) &&
+    (!v['login_timestamp'] || typeof v['login_timestamp'] === 'string')
   );
 }

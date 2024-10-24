@@ -8,9 +8,8 @@ describe('ComplianceItemsTableImpactCellComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ComplianceItemsTableImpactCellComponent ]
-    })
-    .compileComponents();
+      declarations: [ComplianceItemsTableImpactCellComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

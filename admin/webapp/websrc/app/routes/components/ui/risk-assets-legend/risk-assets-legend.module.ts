@@ -3,18 +3,9 @@ import { CommonModule } from '@angular/common';
 import { NvCommonModule } from '@common/nvCommon.module';
 import { RiskAssetsLegendComponent } from './risk-assets-legend.component';
 
-
-
 @NgModule({
-  declarations: [
-    RiskAssetsLegendComponent
-  ],
-  imports: [
-    CommonModule,
-    NvCommonModule
-  ],
-  exports: [
-    RiskAssetsLegendComponent
-  ]
+  declarations: [RiskAssetsLegendComponent],
+  imports: [CommonModule, NvCommonModule],
+  exports: [RiskAssetsLegendComponent],
 })
-export class RiskAssetsLegendModule { }
+export class RiskAssetsLegendModule {}

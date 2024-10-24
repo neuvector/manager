@@ -5,25 +5,19 @@
     </div>
     <app-panel-instruction-curtain
       class="d-flex align-items-center justify-content-end"
-      [instructions]="instructions"
-    >
+      [instructions]="instructions">
     </app-panel-instruction-curtain>
   </mat-card-title>
-  <mat-card-content
-    class="row margin-horizon-0"
-    *ngIf="details?.applications2"
-  >
+  <mat-card-content class="row margin-horizon-0" *ngIf="details?.applications2">
     <mat-tab-group>
-      <mat-tab label="{{'dashboard.body.panel_title.POLICY_COUNT' | translate}}">
+      <mat-tab
+        label="{{ 'dashboard.body.panel_title.POLICY_COUNT' | translate }}">
         <app-application-conversation-chart
-          [applications]="details.applications2"
-        >
+          [applications]="details.applications2">
         </app-application-conversation-chart>
       </mat-tab>
-      <mat-tab label="{{'dashboard.body.panel_title.BYTES' | translate}}">
-        <app-application-volume-chart
-          [applications]="details.applications2"
-        >
+      <mat-tab label="{{ 'dashboard.body.panel_title.BYTES' | translate }}">
+        <app-application-volume-chart [applications]="details.applications2">
         </app-application-volume-chart>
       </mat-tab>
     </mat-tab-group>

@@ -7,7 +7,5 @@ export interface LicenseRequestWrap {
 }
 
 export function isLicenseRequestWrap(v: any): v is LicenseRequestWrap {
-  return (
-    (v['license_request'] && isLicenseRequest(v['license_request']))
-  );
+  return v['license_request'] && isLicenseRequest(v['license_request']);
 }

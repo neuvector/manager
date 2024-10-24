@@ -6,8 +6,5 @@ export interface ScanSchedule {
 }
 
 export function isScanSchedule(v: any): v is ScanSchedule {
-  return (
-    ((typeof v['schedule']) === 'string') &&
-    ((typeof v['interval']) === 'number')
-  );
+  return typeof v['schedule'] === 'string' && typeof v['interval'] === 'number';
 }

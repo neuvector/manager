@@ -1,21 +1,31 @@
 <h1 class="font-weight-light">{{ 'enum.SUPPORT' | translate }}</h1>
-<div class="mt-3 mb-3 mat-card-title d-flex justify-content-center">{{ 'support.title' | translate }}</div>
+<div class="mt-3 mb-3 mat-card-title d-flex justify-content-center">
+  {{ 'support.title' | translate }}
+</div>
 
 <div class="row" style="height: calc(100vh - 300px)">
-  <div class="card-wrapper col-md-12 col-lg-6 ">
+  <div class="card-wrapper col-md-12 col-lg-6">
     <mat-card class="support-card light-theme">
-      <mat-card-title class="support-title">{{ 'support.community.title' | translate }}</mat-card-title>
+      <mat-card-title class="support-title">{{
+        'support.community.title' | translate
+      }}</mat-card-title>
       <mat-card-content class="justify-content-start support-content">
         <ul>
           <li class="support-line"></li>
-          <li >{{ 'support.subtitle' | translate }}</li>
+          <li>{{ 'support.subtitle' | translate }}</li>
           <li>
             <i class="fas fa-check-circle mr-1 mt-1"></i>
-            <span [innerHTML]="'support.community.question_slack' | translate"></span>
+            <span
+              [innerHTML]="
+                'support.community.question_slack' | translate
+              "></span>
           </li>
           <li>
             <i class="fas fa-check-circle mr-1 mt-1"></i>
-            <span [innerHTML]="'support.community.documentation' | translate"></span>
+            <span
+              [innerHTML]="
+                'support.community.documentation' | translate
+              "></span>
           </li>
           <li>
             <i class="fas fa-check-circle mr-1 mt-1"></i>
@@ -23,55 +33,57 @@
           </li>
           <li>
             <i class="fas fa-check-circle mr-1 mt-1"></i>
-            <span [innerHTML]="'support.community.image_repo' | translate"></span>
+            <span
+              [innerHTML]="'support.community.image_repo' | translate"></span>
           </li>
         </ul>
       </mat-card-content>
     </mat-card>
   </div>
-  <div class="card-wrapper col-md-12 col-lg-6 ">
+  <div class="card-wrapper col-md-12 col-lg-6">
     <mat-card class="support-card dark-theme">
-        <mat-card-title class="support-title">{{ 'support.subscriptions.title' | translate }}</mat-card-title>
-        <mat-card-content class="justify-content-start support-content">
-          <ul>
-            <li class="support-line">
-            </li>
-            <li>
-              {{ 'support.subtitle' | translate }}
-            </li>
-            <li>
-              <i class="far fa-check-circle mr-1 mt-1"></i>
-              {{'support.subscriptions.SLA' | translate}}
-            </li>
-            <li>
-              <i class="far fa-check-circle mr-1 mt-1"></i>
-              {{'support.subscriptions.24-7' | translate}}
-            </li>
-            <li>
-              <i class="far fa-check-circle mr-1 mt-1"></i>
-              {{'support.subscriptions.cve' | translate}}
-            </li>
-            <li>
-              <i class="far fa-check-circle mr-1 mt-1"></i>
-              {{'support.subscriptions.assistance' | translate}}
-            </li>
-            <li>
-              <i class="far fa-check-circle mr-1 mt-1"></i>
-              {{'support.subscriptions.run-time' | translate}}
-            </li>
-            <li>
-              <i class="far fa-check-circle mr-1 mt-1"></i>
-              {{'support.subscriptions.Rancher' | translate}}
-            </li>
-            <li class="margin-top-m">
-              <span [innerHTML]="'support.subscriptions.more' | translate"></span>
-            </li>
-            <li>
-              <span [innerHTML]="'support.subscriptions.login' | translate"></span>
-            </li>
-          </ul>
-        </mat-card-content>
+      <mat-card-title class="support-title">{{
+        'support.subscriptions.title' | translate
+      }}</mat-card-title>
+      <mat-card-content class="justify-content-start support-content">
+        <ul>
+          <li class="support-line"></li>
+          <li>
+            {{ 'support.subtitle' | translate }}
+          </li>
+          <li>
+            <i class="far fa-check-circle mr-1 mt-1"></i>
+            {{ 'support.subscriptions.SLA' | translate }}
+          </li>
+          <li>
+            <i class="far fa-check-circle mr-1 mt-1"></i>
+            {{ 'support.subscriptions.24-7' | translate }}
+          </li>
+          <li>
+            <i class="far fa-check-circle mr-1 mt-1"></i>
+            {{ 'support.subscriptions.cve' | translate }}
+          </li>
+          <li>
+            <i class="far fa-check-circle mr-1 mt-1"></i>
+            {{ 'support.subscriptions.assistance' | translate }}
+          </li>
+          <li>
+            <i class="far fa-check-circle mr-1 mt-1"></i>
+            {{ 'support.subscriptions.run-time' | translate }}
+          </li>
+          <li>
+            <i class="far fa-check-circle mr-1 mt-1"></i>
+            {{ 'support.subscriptions.Rancher' | translate }}
+          </li>
+          <li class="margin-top-m">
+            <span [innerHTML]="'support.subscriptions.more' | translate"></span>
+          </li>
+          <li>
+            <span
+              [innerHTML]="'support.subscriptions.login' | translate"></span>
+          </li>
+        </ul>
+      </mat-card-content>
     </mat-card>
   </div>
-
 </div>

@@ -9,7 +9,6 @@ export interface TopViolation {
 
 export function isTopViolation(v: any): v is TopViolation {
   return (
-    (v['client'] && isArray(v['client'])) &&
-    (v['server'] && isArray(v['server']))
+    v['client'] && isArray(v['client']) && v['server'] && isArray(v['server'])
   );
 }

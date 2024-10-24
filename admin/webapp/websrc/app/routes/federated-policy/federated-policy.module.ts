@@ -29,6 +29,6 @@ const routes: Routes = [
     NetworkRulesModule,
     GroupsModule,
     RouterModule.forChild(routes),
-  ]
+  ],
 })
 export class FederatedPolicyModule {}

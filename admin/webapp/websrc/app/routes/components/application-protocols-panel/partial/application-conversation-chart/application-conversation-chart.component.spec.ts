@@ -8,9 +8,8 @@ describe('ApplicationConversationChartComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ApplicationConversationChartComponent ]
-    })
-    .compileComponents();
+      declarations: [ApplicationConversationChartComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

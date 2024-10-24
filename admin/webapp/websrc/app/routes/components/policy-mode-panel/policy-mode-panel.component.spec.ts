@@ -8,9 +8,8 @@ describe('PolicyModePanelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PolicyModePanelComponent ]
-    })
-    .compileComponents();
+      declarations: [PolicyModePanelComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

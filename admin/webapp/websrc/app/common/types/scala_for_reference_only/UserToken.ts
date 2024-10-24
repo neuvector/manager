@@ -10,8 +10,13 @@ export interface UserToken {
 
 export function isUserToken(v: any): v is UserToken {
   return (
-    (v['token'] && isToken(v['token'])) &&
-    (!v['roles'] || ((typeof v['roles']) == 'object' && Object.keys(v['roles']).every(key => ((typeof key) === 'string') && ((typeof v['roles'][key]) === 'string')))) &&
-    (!v['login_timestamp'] || ((typeof v['login_timestamp']) === 'string'))
+    v['token'] &&
+    isToken(v['token']) &&
+    (!v['roles'] ||
+      (typeof v['roles'] == 'object' &&
+        Object.keys(v['roles']).every(
+          key => typeof key === 'string' && typeof v['roles'][key] === 'string'
+        ))) &&
+    (!v['login_timestamp'] || typeof v['login_timestamp'] === 'string')
   );
 }

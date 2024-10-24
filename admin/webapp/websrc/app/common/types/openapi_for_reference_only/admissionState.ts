@@ -1,5 +1,5 @@
-import { AdmissionStateCtrlStates } from "./admissionStateCtrlStates";
-import { AdmissionStateAdmClientModeOptions } from "./admissionStateAdmClientModeOptions";
+import { AdmissionStateCtrlStates } from './admissionStateCtrlStates';
+import { AdmissionStateAdmClientModeOptions } from './admissionStateAdmClientModeOptions';
 
 export interface AdmissionState {
   enable?: boolean;

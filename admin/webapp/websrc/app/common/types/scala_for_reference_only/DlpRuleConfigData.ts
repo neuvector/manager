@@ -7,7 +7,5 @@ export interface DlpRuleConfigData {
 }
 
 export function isDlpRuleConfigData(v: any): v is DlpRuleConfigData {
-  return (
-    (v['config'] && isDlpRuleConfig(v['config']))
-  );
+  return v['config'] && isDlpRuleConfig(v['config']);
 }

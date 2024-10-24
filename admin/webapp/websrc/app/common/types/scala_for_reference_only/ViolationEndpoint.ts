@@ -29,26 +29,27 @@ export interface ViolationEndpoint {
 
 export function isViolationEndpoint(v: any): v is ViolationEndpoint {
   return (
-    ((typeof v['level']) === 'string') &&
-    ((typeof v['reported_timestamp']) === 'number') &&
-    (v['reported_at'] && isDateTime(v['reported_at'])) &&
-    ((typeof v['cluster_name']) === 'string') &&
-    ((typeof v['client_id']) === 'string') &&
-    ((typeof v['client_name']) === 'string') &&
-    (!v['client_domain'] || ((typeof v['client_domain']) === 'string')) &&
-    (!v['client_image'] || ((typeof v['client_image']) === 'string')) &&
-    ((typeof v['server_id']) === 'string') &&
-    ((typeof v['server_name']) === 'string') &&
-    (!v['server_domain'] || ((typeof v['server_domain']) === 'string')) &&
-    (!v['server_image'] || ((typeof v['server_image']) === 'string')) &&
-    ((typeof v['server_port']) === 'number') &&
-    ((typeof v['ip_proto']) === 'number') &&
+    typeof v['level'] === 'string' &&
+    typeof v['reported_timestamp'] === 'number' &&
+    v['reported_at'] &&
+    isDateTime(v['reported_at']) &&
+    typeof v['cluster_name'] === 'string' &&
+    typeof v['client_id'] === 'string' &&
+    typeof v['client_name'] === 'string' &&
+    (!v['client_domain'] || typeof v['client_domain'] === 'string') &&
+    (!v['client_image'] || typeof v['client_image'] === 'string') &&
+    typeof v['server_id'] === 'string' &&
+    typeof v['server_name'] === 'string' &&
+    (!v['server_domain'] || typeof v['server_domain'] === 'string') &&
+    (!v['server_image'] || typeof v['server_image'] === 'string') &&
+    typeof v['server_port'] === 'number' &&
+    typeof v['ip_proto'] === 'number' &&
     (!v['applications'] || (v['applications'] && isArray(v['applications']))) &&
     (!v['servers'] || (v['servers'] && isArray(v['servers']))) &&
-    ((typeof v['sessions']) === 'number') &&
-    ((typeof v['policy_action']) === 'string') &&
-    ((typeof v['policy_id']) === 'number') &&
-    ((typeof v['client_ip']) === 'string') &&
-    ((typeof v['server_ip']) === 'string')
+    typeof v['sessions'] === 'number' &&
+    typeof v['policy_action'] === 'string' &&
+    typeof v['policy_id'] === 'number' &&
+    typeof v['client_ip'] === 'string' &&
+    typeof v['server_ip'] === 'string'
   );
 }

@@ -1,5 +1,5 @@
-import { PwdProfileBasic } from "./pwdProfileBasic";
-import { ImportTaskData } from "./importTaskData";
+import { PwdProfileBasic } from './pwdProfileBasic';
+import { ImportTaskData } from './importTaskData';
 
 export interface Error {
   code: number;

@@ -11,11 +11,11 @@ export interface Endpoint {
 
 export function isEndpoint(v: any): v is Endpoint {
   return (
-    (!v['domain_name'] || ((typeof v['domain_name']) === 'string')) &&
-    (!v['workload_id'] || ((typeof v['workload_id']) === 'string')) &&
-    (!v['workload_name'] || ((typeof v['workload_name']) === 'string')) &&
-    (!v['ip'] || ((typeof v['ip']) === 'string')) &&
-    (!v['port'] || ((typeof v['port']) === 'number')) &&
-    (!v['server_conn_port'] || ((typeof v['server_conn_port']) === 'number'))
+    (!v['domain_name'] || typeof v['domain_name'] === 'string') &&
+    (!v['workload_id'] || typeof v['workload_id'] === 'string') &&
+    (!v['workload_name'] || typeof v['workload_name'] === 'string') &&
+    (!v['ip'] || typeof v['ip'] === 'string') &&
+    (!v['port'] || typeof v['port'] === 'number') &&
+    (!v['server_conn_port'] || typeof v['server_conn_port'] === 'number')
   );
 }

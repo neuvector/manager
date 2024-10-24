@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Workload } from '@common/types';
 import { Router } from '@angular/router';
 
@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   templateUrl: './container-brief.component.html',
   styleUrls: ['./container-brief.component.scss'],
 })
-export class ContainerBriefComponent implements OnInit {
+export class ContainerBriefComponent {
   @Input() container!: Workload;
   @Input() hasApps!: boolean;
   @Input() hasInterfaces!: boolean;
@@ -15,15 +15,11 @@ export class ContainerBriefComponent implements OnInit {
 
   isScanStarted4Pod = false;
 
-  constructor(
-    private router: Router
-  ) {}
+  constructor(private router: Router) {}
 
-  ngOnInit(): void {
-
-  }
-
-  goToGroup = (group) => {
-    this.router.navigate(['/group'], { queryParams: { group: encodeURIComponent(group) } });
+  goToGroup = group => {
+    this.router.navigate(['/group'], {
+      queryParams: { group: encodeURIComponent(group) },
+    });
   };
 }

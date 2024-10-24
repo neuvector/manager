@@ -1,8 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Input
-} from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { GroupsService } from '@common/services/groups.service';
 import { FormControl } from '@angular/forms';
@@ -26,8 +22,7 @@ export const groupDetailsTabs = {
   templateUrl: './group-details.component.html',
   styleUrls: ['./group-details.component.scss'],
 })
-
-export class GroupDetailsComponent implements OnInit {
+export class GroupDetailsComponent implements OnInit, AfterViewInit {
   @Input() resizableHeight!: number;
   @Input() selectedGroupName!: string;
   @Input() members: any;
@@ -73,29 +68,39 @@ export class GroupDetailsComponent implements OnInit {
     this.isWriteFileAccessRuleAuthorized =
       this.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER ||
       this.cfgType === GlobalConstant.CFG_TYPE.LEARNED;
-    this.isWriteProcessProfileRuleAuthorized = this.isWriteFileAccessRuleAuthorized || this.cfgType === GlobalConstant.CFG_TYPE.GROUND;
+    this.isWriteProcessProfileRuleAuthorized =
+      this.isWriteFileAccessRuleAuthorized ||
+      this.cfgType === GlobalConstant.CFG_TYPE.GROUND;
     this.navSource = GlobalConstant.NAV_SOURCE.GROUP;
     this.filter.valueChanges
-      .pipe(tap((value: string | null) => this.quickFilterService.setTextInput(value || '')))
+      .pipe(
+        tap((value: string | null) =>
+          this.quickFilterService.setTextInput(value || '')
+        )
+      )
       .subscribe();
   }
 
   ngAfterViewInit() {
     const TAB_VISIBLE_MATRIX = [
       true,
-      (this.kind==='container' || this.kind==='node') && this.cfgType !== GlobalConstant.CFG_TYPE.FED,
-      this.kind==='container' || this.kind==='node',
-      this.kind==='container',
+      (this.kind === 'container' || this.kind === 'node') &&
+        this.cfgType !== GlobalConstant.CFG_TYPE.FED,
+      this.kind === 'container' || this.kind === 'node',
+      this.kind === 'container',
       true,
       true,
-      this.kind==='container' && this.cfgType !== GlobalConstant.CFG_TYPE.FED,
-      this.kind==='container' && this.cfgType !== GlobalConstant.CFG_TYPE.FED
+      this.kind === 'container' && this.cfgType !== GlobalConstant.CFG_TYPE.FED,
+      this.kind === 'container' && this.cfgType !== GlobalConstant.CFG_TYPE.FED,
     ];
-    if (!TAB_VISIBLE_MATRIX[this.groupsService.activeTabIndex]) this.groupsService.activeTabIndex = 0;
+    if (!TAB_VISIBLE_MATRIX[this.groupsService.activeTabIndex])
+      this.groupsService.activeTabIndex = 0;
   }
 
   isIncludingGroundRule = () => {
-    let index = this.selectedProcessProfileRules.findIndex(rule => rule.cfg_type === GlobalConstant.CFG_TYPE.GROUND);
+    let index = this.selectedProcessProfileRules.findIndex(
+      rule => rule.cfg_type === GlobalConstant.CFG_TYPE.GROUND
+    );
     return index > -1;
   };
 

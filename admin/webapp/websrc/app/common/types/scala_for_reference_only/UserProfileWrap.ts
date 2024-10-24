@@ -7,7 +7,5 @@ export interface UserProfileWrap {
 }
 
 export function isUserProfileWrap(v: any): v is UserProfileWrap {
-  return (
-    (v['config'] && isUserProfile(v['config']))
-  );
+  return v['config'] && isUserProfile(v['config']);
 }

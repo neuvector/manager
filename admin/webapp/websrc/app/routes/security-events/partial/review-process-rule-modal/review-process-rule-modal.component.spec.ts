@@ -8,9 +8,8 @@ describe('ReviewProcessRuleModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ReviewProcessRuleModalComponent ]
-    })
-    .compileComponents();
+      declarations: [ReviewProcessRuleModalComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -13,13 +13,12 @@ import * as moment from 'moment';
 @Component({
   selector: 'app-csp-support-form',
   templateUrl: './csp-support-form.component.html',
-  styleUrls: ['./csp-support-form.component.scss']
+  styleUrls: ['./csp-support-form.component.scss'],
 })
 export class CspSupportFormComponent implements OnInit {
-
   @Input() cspType: string;
 
-  cspTypeText: string
+  cspTypeText: string;
   submittingForm = false;
   errorMsg: string = '';
   cspAdapterErrorMsgObj: any = null;
@@ -27,7 +26,7 @@ export class CspSupportFormComponent implements OnInit {
   nvError: string = '';
   billingDataExpireTime: string = '';
   cspExportForm = new FormGroup({
-    export: new FormControl(null, Validators.required)
+    export: new FormControl(null, Validators.required),
   });
 
   constructor(
@@ -35,10 +34,12 @@ export class CspSupportFormComponent implements OnInit {
     private tr: TranslateService,
     private utils: UtilsService,
     private notificationService: NotificationService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-    this.cspTypeText = this.tr.instant(`setting.cloud_type.${this.cspType.toUpperCase()}`);
+    this.cspTypeText = this.tr.instant(
+      `setting.cloud_type.${this.cspType.toUpperCase()}`
+    );
   }
 
   submitExport = () => {
@@ -57,33 +58,38 @@ export class CspSupportFormComponent implements OnInit {
       )
       .subscribe(
         response => {
-          let exportUrl = new Blob([response['body'] || ""], {
+          let exportUrl = new Blob([response['body'] || ''], {
             type: 'application/zip',
           });
           let fileName = `${this.utils.getExportedFileName(response)}`;
-          cspAdapterErrorsBase64 = response['headers'].get('X-Nv-Csp-Adapter-Errors');
-          this.cspAdapterErrorMsgObj = cspAdapterErrorsBase64 ? JSON.parse(atob(cspAdapterErrorsBase64)) : null;
+          cspAdapterErrorsBase64 = response['headers'].get(
+            'X-Nv-Csp-Adapter-Errors'
+          );
+          this.cspAdapterErrorMsgObj = cspAdapterErrorsBase64
+            ? JSON.parse(atob(cspAdapterErrorsBase64))
+            : null;
           if (this.cspAdapterErrorMsgObj) {
             if (this.cspAdapterErrorMsgObj.csp_errors) {
-              this.cspErrors = this.cspAdapterErrorMsgObj.csp_errors.map(cspError => cspError.split('\n'));
+              this.cspErrors = this.cspAdapterErrorMsgObj.csp_errors.map(
+                cspError => cspError.split('\n')
+              );
             }
             if (this.cspAdapterErrorMsgObj.nv_error) {
               this.nvError = this.cspAdapterErrorMsgObj.nv_error;
             }
             if (this.cspAdapterErrorMsgObj.billing_data_expire_time) {
-              this.billingDataExpireTime = moment(this.cspAdapterErrorMsgObj.billing_data_expire_time * 1000).format('MM/DD/YYYY hh:mm:ss');
+              this.billingDataExpireTime = moment(
+                this.cspAdapterErrorMsgObj.billing_data_expire_time * 1000
+              ).format('MM/DD/YYYY hh:mm:ss');
             }
           }
           saveAs(exportUrl, fileName);
-          this.notificationService.open(
-            this.tr.instant('setting.EXPORT_OK')
-          );
+          this.notificationService.open(this.tr.instant('setting.EXPORT_OK'));
         },
         error => {
           console.warn(error);
           this.errorMsg = error.error;
         }
       );
-  }
-
+  };
 }

@@ -7,7 +7,5 @@ export interface DlpGroupData {
 }
 
 export function isDlpGroupData(v: any): v is DlpGroupData {
-  return (
-    (v['dlp_group'] && isDlpGroup(v['dlp_group']))
-  );
+  return v['dlp_group'] && isDlpGroup(v['dlp_group']);
 }

@@ -228,8 +228,7 @@ export class SignatureVerifiersComponent implements OnInit {
   };
 
   private onSelectionChanged4Signature = () => {
-    this.selectedSignatures =
-      this.gridApi4Signatures!.getSelectedRows();
+    this.selectedSignatures = this.gridApi4Signatures!.getSelectedRows();
     this.selectedSignature = this.selectedSignatures[0];
     this.index4Signature = this.signatures.findIndex(
       signature => signature.name === this.selectedSignature.name
@@ -237,8 +236,7 @@ export class SignatureVerifiersComponent implements OnInit {
     this.getVeirfier(this.selectedSignature.name);
   };
   private onSelectionChanged4Verifier = () => {
-    this.selectedVerifier =
-      this.gridApi4Verifiers!.getSelectedRows()[0];
+    this.selectedVerifier = this.gridApi4Verifiers!.getSelectedRows()[0];
     this.index4Verifier = this.verifiers.findIndex(
       verifier => verifier.name === this.selectedVerifier.name
     );
@@ -251,8 +249,7 @@ export class SignatureVerifiersComponent implements OnInit {
           this.verifiers = response.verifiers || [];
           this.gridApi4Verifiers!.setRowData(this.verifiers);
           if (this.verifiers.length > 0) {
-            let rowNode =
-              this.gridApi4Verifiers!.getDisplayedRowAtIndex(0);
+            let rowNode = this.gridApi4Verifiers!.getDisplayedRowAtIndex(0);
             rowNode!.setSelected(true);
             this.gridApi4Verifiers!.sizeColumnsToFit();
           }

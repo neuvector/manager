@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  OnDestroy,
+} from '@angular/core';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { MatDialog } from '@angular/material/dialog';
 import { MapConstant } from '@common/constants/map.constant';
@@ -33,14 +40,13 @@ import { TitleCasePipe } from '@angular/common';
 import { GlobalVariable } from '@common/variables/global.variable';
 import * as $ from 'jquery';
 
-
 @Component({
   selector: 'app-groups',
   templateUrl: './groups.component.html',
   styleUrls: ['./groups.component.scss'],
   providers: [TitleCasePipe],
 })
-export class GroupsComponent implements OnInit {
+export class GroupsComponent implements OnInit, OnDestroy {
   @Input() isScoreImprovement: boolean = false;
   @Input() isExposure: boolean = false;
   @Input() source!: string;
@@ -89,7 +95,7 @@ export class GroupsComponent implements OnInit {
     private route: ActivatedRoute,
     private ruleDetailModalService: RuleDetailModalService,
     private domSanitizer: DomSanitizer,
-    private titleCasePipe: TitleCasePipe,
+    private titleCasePipe: TitleCasePipe
   ) {}
 
   ngOnInit(): void {
@@ -220,12 +226,12 @@ export class GroupsComponent implements OnInit {
           )
           .map(service => serviceToGroup(service));
         this.isAllProtectMode =
-          this.groups
-            .filter(service => service.policy_mode?.toLowerCase() !== 'protect' || service.profile_mode?.toLowerCase() !== 'protect')
-            .length === 0;
-        this.gridApi!.setRowData(
-          this.groups.filter(p => !p.platform_role)
-        );
+          this.groups.filter(
+            service =>
+              service.policy_mode?.toLowerCase() !== 'protect' ||
+              service.profile_mode?.toLowerCase() !== 'protect'
+          ).length === 0;
+        this.gridApi!.setRowData(this.groups.filter(p => !p.platform_role));
         this.filteredCount = this.groups.length;
         this.setDefaultSelection();
       },
@@ -246,12 +252,12 @@ export class GroupsComponent implements OnInit {
       next: groups => {
         this.groups = groups.filter(g => g.cap_change_mode);
         this.isAllProtectMode =
-          this.groups
-            .filter(service => service.policy_mode?.toLowerCase() !== 'protect' || service.profile_mode?.toLowerCase() !== 'protect')
-            .length === 0;
-        this.gridApi!.setRowData(
-          this.groups.filter(g => !g.platform_role)
-        );
+          this.groups.filter(
+            service =>
+              service.policy_mode?.toLowerCase() !== 'protect' ||
+              service.profile_mode?.toLowerCase() !== 'protect'
+          ).length === 0;
+        this.gridApi!.setRowData(this.groups.filter(g => !g.platform_role));
         this.filteredCount = this.groups.length;
         this.setDefaultSelection();
       },
@@ -301,8 +307,7 @@ export class GroupsComponent implements OnInit {
 
   setDefaultSelection = () => {
     if (this.selectedGroups.length > 0) {
-      this.gridApi!.getRowNode(this.selectedGroups[0].name)
-        ?.setSelected(true);
+      this.gridApi!.getRowNode(this.selectedGroups[0].name)?.setSelected(true);
     } else {
       this.gridApi!.getDisplayedRowAtIndex(0)?.setSelected(true);
     }
@@ -374,7 +379,7 @@ export class GroupsComponent implements OnInit {
       this.selectedGroups,
       forAll,
       mode,
-      profileMode,
+      profileMode
     );
   };
 
@@ -397,13 +402,19 @@ export class GroupsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: RemoteExportOptionsWrapper) => {
       if (result) {
-        const { policy_mode, profile_mode, export_mode, ...exportOptions } = result.export_options;
+        const { policy_mode, profile_mode, export_mode, ...exportOptions } =
+          result.export_options;
         this.exportUtil(export_mode, exportOptions, policy_mode, profile_mode);
       }
     });
   };
 
-  exportUtil(mode: string, option: RemoteExportOptions, policyMode: string, profileMode: string) {
+  exportUtil(
+    mode: string,
+    option: RemoteExportOptions,
+    policyMode: string,
+    profileMode: string
+  ) {
     if (mode === 'local') {
       let payload = {
         groups: this.selectedGroups.map(group => group.name),

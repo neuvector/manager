@@ -1,4 +1,4 @@
-import { ScanConfig } from "./scanConfig";
+import { ScanConfig } from './scanConfig';
 
 export interface ScanConfigData {
   config: ScanConfig;

@@ -17,15 +17,15 @@ export interface Rule4Group {
 
 export function isRule4Group(v: any): v is Rule4Group {
   return (
-    (!v['id'] || ((typeof v['id']) === 'number')) &&
-    (!v['comment'] || ((typeof v['comment']) === 'string')) &&
-    ((typeof v['from']) === 'string') &&
-    ((typeof v['to']) === 'string') &&
+    (!v['id'] || typeof v['id'] === 'number') &&
+    (!v['comment'] || typeof v['comment'] === 'string') &&
+    typeof v['from'] === 'string' &&
+    typeof v['to'] === 'string' &&
     (!v['applications'] || (v['applications'] && isArray(v['applications']))) &&
-    (!v['ports'] || ((typeof v['ports']) === 'string')) &&
-    ((typeof v['action']) === 'string') &&
-    ((typeof v['learned']) === 'boolean') &&
-    (!v['cfg_type'] || ((typeof v['cfg_type']) === 'string')) &&
-    ((typeof v['disable']) === 'boolean')
+    (!v['ports'] || typeof v['ports'] === 'string') &&
+    typeof v['action'] === 'string' &&
+    typeof v['learned'] === 'boolean' &&
+    (!v['cfg_type'] || typeof v['cfg_type'] === 'string') &&
+    typeof v['disable'] === 'boolean'
   );
 }

@@ -8,9 +8,8 @@ describe('AddEditSensorModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AddEditSensorModalComponent ]
-    })
-    .compileComponents();
+      declarations: [AddEditSensorModalComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

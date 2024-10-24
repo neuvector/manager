@@ -5,7 +5,5 @@ export interface ScanConfig {
 }
 
 export function isScanConfig(v: any): v is ScanConfig {
-  return (
-    ((typeof v['auto_scan']) === 'boolean')
-  );
+  return typeof v['auto_scan'] === 'boolean';
 }

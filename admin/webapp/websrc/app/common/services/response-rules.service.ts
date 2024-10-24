@@ -32,7 +32,10 @@ export class ResponseRulesService {
     this.$win = $(GlobalVariable.window);
   }
 
-  prepareGrid(isWriteResponseRuleAuthorized: boolean, source: string): GridOptions {
+  prepareGrid(
+    isWriteResponseRuleAuthorized: boolean,
+    source: string
+  ): GridOptions {
     let columnDefs = [
       {
         headerName: this.translate.instant('responsePolicy.gridHeader.ID'),
@@ -94,7 +97,7 @@ export class ResponseRulesService {
         width: 123,
         maxWidth: 123,
         minWidth: 123,
-        hide: source === GlobalConstant.NAV_SOURCE.GROUP
+        hide: source === GlobalConstant.NAV_SOURCE.GROUP,
       },
     ];
 
@@ -103,7 +106,6 @@ export class ResponseRulesService {
       'disabled-row': params => {
         if (!params.data) return false;
         return !!params.data.disable;
-
       },
     };
     return gridOptions;

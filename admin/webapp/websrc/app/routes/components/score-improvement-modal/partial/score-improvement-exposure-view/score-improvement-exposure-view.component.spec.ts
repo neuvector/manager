@@ -8,9 +8,8 @@ describe('ScoreImprovementExposureViewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ScoreImprovementExposureViewComponent ]
-    })
-    .compileComponents();
+      declarations: [ScoreImprovementExposureViewComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

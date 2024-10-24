@@ -10,7 +10,8 @@ export interface DashboardThreatData {
 
 export function isDashboardThreatData(v: any): v is DashboardThreatData {
   return (
-    (v['threats'] && isArray(v['threats'])) &&
+    v['threats'] &&
+    isArray(v['threats']) &&
     (!v['error'] || (v['error'] && isError(v['error'])))
   );
 }

@@ -41,9 +41,15 @@ export class SwitchModeModalComponent implements OnInit {
     this.mode = this.getDefaultMode(counts.modeCount);
     this.profileMode = this.getDefaultMode(counts.profileModeCount);
     this.baselineProfile = this.getDefaultBaseline(counts.baselineCount);
-    this.noModeGroupList = this.data.selectedGroups.filter(group => !group.cap_change_mode);
-    this.noModeGroupMsg = this.noModeGroupList.length > 0 ?
-        this.translate.instant("group.SWITCH_MODE_DISABLED", {noModeGroupCount: this.noModeGroupList.length}): '';
+    this.noModeGroupList = this.data.selectedGroups.filter(
+      group => !group.cap_change_mode
+    );
+    this.noModeGroupMsg =
+      this.noModeGroupList.length > 0
+        ? this.translate.instant('group.SWITCH_MODE_DISABLED', {
+            noModeGroupCount: this.noModeGroupList.length,
+          })
+        : '';
   }
 
   onCancel = () => {
@@ -89,7 +95,12 @@ export class SwitchModeModalComponent implements OnInit {
         );
       }
     } else {
-      this.switchSomeMode(this.mode, this.profileMode, this.baselineProfile, false);
+      this.switchSomeMode(
+        this.mode,
+        this.profileMode,
+        this.baselineProfile,
+        false
+      );
     }
   };
 
@@ -124,7 +135,11 @@ export class SwitchModeModalComponent implements OnInit {
         );
       }
     });
-    return { modeCount: modeCountMap, profileModeCount: profileModeCountMap, baselineCount: baselineCountMap };
+    return {
+      modeCount: modeCountMap,
+      profileModeCount: profileModeCountMap,
+      baselineCount: baselineCountMap,
+    };
   };
 
   private getDefaultMode = (modeCount: Map<string, number>) => {
@@ -192,7 +207,12 @@ export class SwitchModeModalComponent implements OnInit {
       let switchableGroups = this.getSwitchableGroups(this.data.selectedGroups);
       this.submittingUpdate = true;
       this.groupsService
-        .updateModeByService(mode, profileMode, baselineProfile, switchableGroups)
+        .updateModeByService(
+          mode,
+          profileMode,
+          baselineProfile,
+          switchableGroups
+        )
         .subscribe(
           response => {
             this.notificationService.open(
@@ -232,27 +252,33 @@ export class SwitchModeModalComponent implements OnInit {
     }
   };
 
-  private switchAllMode = (mode: string, profileMode: string, baselineProfile: string) => {
+  private switchAllMode = (
+    mode: string,
+    profileMode: string,
+    baselineProfile: string
+  ) => {
     this.submittingUpdate = true;
-    this.groupsService.updateMode4All(mode, profileMode, baselineProfile).subscribe(
-      response => {
-        this.notificationService.open(
-          this.translate.instant('service.SUBMIT_OK')
-        );
-        setTimeout(() => {
-          this.data.refresh();
-        }, 1000);
-        this.dialogRef.close(true);
-        this.submittingUpdate = false;
-      },
-      error => {
-        this.notificationService.openError(
-          error.error,
-          this.translate.instant('service.SUBMIT_FAILED')
-        );
-        this.submittingUpdate = false;
-      }
-    );
+    this.groupsService
+      .updateMode4All(mode, profileMode, baselineProfile)
+      .subscribe(
+        response => {
+          this.notificationService.open(
+            this.translate.instant('service.SUBMIT_OK')
+          );
+          setTimeout(() => {
+            this.data.refresh();
+          }, 1000);
+          this.dialogRef.close(true);
+          this.submittingUpdate = false;
+        },
+        error => {
+          this.notificationService.openError(
+            error.error,
+            this.translate.instant('service.SUBMIT_FAILED')
+          );
+          this.submittingUpdate = false;
+        }
+      );
   };
 
   private suppressShowNodesAlerts = (mode: string, nodesGroup: Group) => {

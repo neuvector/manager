@@ -21,19 +21,20 @@ export interface IncidentDetails {
 
 export function isIncidentDetails(v: any): v is IncidentDetails {
   return (
-    ((typeof v['host_name']) === 'string') &&
-    ((typeof v['cluster_name']) === 'string') &&
-    ((typeof v['ether_type']) === 'number') &&
-    ((typeof v['ip_proto']) === 'number') &&
-    (!v['proc_name'] || ((typeof v['proc_name']) === 'string')) &&
-    (!v['proc_path'] || ((typeof v['proc_path']) === 'string')) &&
-    (!v['proc_cmd'] || ((typeof v['proc_cmd']) === 'string')) &&
-    (!v['proc_real_uid'] || ((typeof v['proc_real_uid']) === 'number')) &&
-    (!v['proc_effective_uid'] || ((typeof v['proc_effective_uid']) === 'number')) &&
-    (!v['proc_real_user'] || ((typeof v['proc_real_user']) === 'string')) &&
-    (!v['proc_effective_user'] || ((typeof v['proc_effective_user']) === 'string')) &&
-    (!v['file_path'] || ((typeof v['file_path']) === 'string')) &&
+    typeof v['host_name'] === 'string' &&
+    typeof v['cluster_name'] === 'string' &&
+    typeof v['ether_type'] === 'number' &&
+    typeof v['ip_proto'] === 'number' &&
+    (!v['proc_name'] || typeof v['proc_name'] === 'string') &&
+    (!v['proc_path'] || typeof v['proc_path'] === 'string') &&
+    (!v['proc_cmd'] || typeof v['proc_cmd'] === 'string') &&
+    (!v['proc_real_uid'] || typeof v['proc_real_uid'] === 'number') &&
+    (!v['proc_effective_uid'] || typeof v['proc_effective_uid'] === 'number') &&
+    (!v['proc_real_user'] || typeof v['proc_real_user'] === 'string') &&
+    (!v['proc_effective_user'] ||
+      typeof v['proc_effective_user'] === 'string') &&
+    (!v['file_path'] || typeof v['file_path'] === 'string') &&
     (!v['file_name'] || (v['file_name'] && isArray(v['file_name']))) &&
-    ((typeof v['message']) === 'string')
+    typeof v['message'] === 'string'
   );
 }

@@ -23,7 +23,7 @@
       class="navbar-brand nv-logo-wrap"
       href="{{ 'partner.general.DOCUMENT_URL' | translate }}"
       target="_blank">
-      <div class="nv-logo logo-height" style="width: 160px;"></div>
+      <div class="nv-logo logo-height" style="width: 160px"></div>
       <div class="nv-logo-collapsed logo-height"></div>
     </a>
   </div>
@@ -90,7 +90,11 @@
         <mat-menu #dropdown_multiCluster="matMenu">
           <ng-container *ngFor="let cluster of clusters; last as last">
             <div class="cluster-menu-width">
-              <ng-container *ngIf="cluster.rest_version === primaryClusterRestVersion; else incompatibleVersionTemplate">
+              <ng-container
+                *ngIf="
+                  cluster.rest_version === primaryClusterRestVersion;
+                  else incompatibleVersionTemplate
+                ">
                 <button
                   mat-menu-item
                   (click)="redirectCluster(cluster)"
@@ -100,31 +104,28 @@
                     cluster.status === 'joint_upgrade_required' ||
                     cluster.status === 'kicked' ||
                     cluster.status === 'pending'
-                  "
-                >
+                  ">
                   <i
                     class="fa-md mr-1"
                     [ngClass]="
-                    cluster.clusterType === 'master'
-                      ? 'fa fa-home'
-                      : 'fa fa-laptop'
-                  "></i>
+                      cluster.clusterType === 'master'
+                        ? 'fa fa-home'
+                        : 'fa fa-laptop'
+                    "></i>
                   <span>{{ cluster?.name }}</span>
                 </button>
               </ng-container>
               <ng-template #incompatibleVersionTemplate>
-                <button
-                  mat-menu-item
-                  readonly
-                  style="cursor: default"
-                >
-                  <i
-                    class="fa-md mr-1 text-muted"
-                    ngClass="fa fa-laptop"></i>
-                  <span class="text-muted"
-                        matTooltip="{{ 'multiCluster.messages.incompatible_version' | translate }}"
-                        matTooltipPosition="after"
-                  >{{ cluster?.name }}</span>
+                <button mat-menu-item readonly style="cursor: default">
+                  <i class="fa-md mr-1 text-muted" ngClass="fa fa-laptop"></i>
+                  <span
+                    class="text-muted"
+                    matTooltip="{{
+                      'multiCluster.messages.incompatible_version' | translate
+                    }}"
+                    matTooltipPosition="after"
+                    >{{ cluster?.name }}</span
+                  >
                 </button>
               </ng-template>
             </div>
@@ -141,7 +142,7 @@
             [matTooltipDisabled]="primaryMasterName.length < 20"
             matTooltipPosition="above"
             >{{
-              primaryMasterName | shortenFromMiddle: 20
+              primaryMasterName | shortenFromMiddle : 20
             }}
             &nbsp;&nbsp;/&nbsp;&nbsp;</label
           >
@@ -152,7 +153,7 @@
             [matTooltip]="managedClusterName"
             [matTooltipDisabled]="managedClusterName.length < 20"
             matTooltipPosition="above"
-            >{{ managedClusterName | shortenFromMiddle: 20 }}
+            >{{ managedClusterName | shortenFromMiddle : 20 }}
           </label>
         </button>
       </div>

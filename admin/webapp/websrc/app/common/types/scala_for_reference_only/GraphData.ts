@@ -11,8 +11,10 @@ export interface GraphData {
 
 export function isGraphData(v: any): v is GraphData {
   return (
-    (v['endpoints'] && isArray(v['endpoints'])) &&
-    (v['conversations'] && isArray(v['conversations'])) &&
+    v['endpoints'] &&
+    isArray(v['endpoints']) &&
+    v['conversations'] &&
+    isArray(v['conversations']) &&
     (!v['error'] || (v['error'] && isError(v['error'])))
   );
 }

@@ -19,5 +19,5 @@ export class Constant {
 export const ConstantInhabitant: Constant = Constant.getInstance();
 
 export function isConstant(v: any): v is Constant {
-  return (v instanceof Constant) && (v === ConstantInhabitant);
+  return v instanceof Constant && v === ConstantInhabitant;
 }

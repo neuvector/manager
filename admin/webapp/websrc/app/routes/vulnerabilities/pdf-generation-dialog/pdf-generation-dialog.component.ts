@@ -3,7 +3,6 @@ import {
   Component,
   EventEmitter,
   Inject,
-  OnInit,
   Output,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -20,7 +19,7 @@ const today = new Date();
   styleUrls: ['./pdf-generation-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PdfGenerationDialogComponent implements OnInit {
+export class PdfGenerationDialogComponent {
   dateOptions: LastModifiedDateOption[] = [
     'all',
     'twoweeks',
@@ -44,7 +43,10 @@ export class PdfGenerationDialogComponent implements OnInit {
     return this.form.get('customDate')?.value || new Date();
   }
   get selectedDateOption(): LastModifiedDateOption {
-    return this.form.get('dateOption')?.value as LastModifiedDateOption || this.dateOptions[0];
+    return (
+      (this.form.get('dateOption')?.value as LastModifiedDateOption) ||
+      this.dateOptions[0]
+    );
   }
 
   get withoutAppendix(): boolean {
@@ -56,8 +58,6 @@ export class PdfGenerationDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
-  ngOnInit(): void {}
-
   onNoClick(): void {
     this.dialogRef.close();
   }
@@ -65,12 +65,10 @@ export class PdfGenerationDialogComponent implements OnInit {
   @Output() submitDate = new EventEmitter();
   submit(): void {
     this.saving$.next(true);
-    this.submitDate.emit(
-      {
-        date: this.getDate(this.selectedDateOption, this.customDate),
-        withoutAppendix: this.withoutAppendix
-      }
-    );
+    this.submitDate.emit({
+      date: this.getDate(this.selectedDateOption, this.customDate),
+      withoutAppendix: this.withoutAppendix,
+    });
   }
 
   changeDateOption(selectedDateOption: LastModifiedDateOption) {

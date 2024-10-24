@@ -8,9 +8,13 @@ export interface ConvertedScannedWorkloadsWrap {
   status: WorkloadsStatus;
 }
 
-export function isConvertedScannedWorkloadsWrap(v: any): v is ConvertedScannedWorkloadsWrap {
+export function isConvertedScannedWorkloadsWrap(
+  v: any
+): v is ConvertedScannedWorkloadsWrap {
   return (
-    (v['workloads'] && isArray(v['workloads'])) &&
-    (v['status'] && isWorkloadsStatus(v['status']))
+    v['workloads'] &&
+    isArray(v['workloads']) &&
+    v['status'] &&
+    isWorkloadsStatus(v['status'])
   );
 }

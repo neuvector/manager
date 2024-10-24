@@ -1,21 +1,27 @@
 <div [hidden]="to.disabled">
   <ng-container *ngIf="to.showDeleteButtonOnly; else otherButtons">
     <ng-container>
-      <button
-        mat-button
-        (click)="delete()">
+      <button mat-button (click)="delete()">
         <em class="eos-icons">delete</em>
       </button>
     </ng-container>
   </ng-container>
   <ng-template #otherButtons>
     <ng-container *ngIf="isEditable.value">
-      <button type="button" mat-button (click)="submit()">{{ 'cveProfile.ACCEPT' | translate }}</button>
-      <button type="button" mat-button (click)="cancel()">{{ 'cveProfile.CANCEL' | translate }}</button>
+      <button type="button" mat-button (click)="submit()">
+        {{ 'cveProfile.ACCEPT' | translate }}
+      </button>
+      <button type="button" mat-button (click)="cancel()">
+        {{ 'cveProfile.CANCEL' | translate }}
+      </button>
     </ng-container>
     <ng-container *ngIf="!isEditable.value">
-      <button type="button" mat-button (click)="edit()">{{ 'cveProfile.EDIT' | translate }}</button>
-      <button type="button" mat-button (click)="delete()">{{ 'cveProfile.REMOVE' | translate }}</button>
+      <button type="button" mat-button (click)="edit()">
+        {{ 'cveProfile.EDIT' | translate }}
+      </button>
+      <button type="button" mat-button (click)="delete()">
+        {{ 'cveProfile.REMOVE' | translate }}
+      </button>
     </ng-container>
   </ng-template>
 </div>

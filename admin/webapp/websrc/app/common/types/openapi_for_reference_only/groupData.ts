@@ -1,4 +1,4 @@
-import { GroupDetail } from "./groupDetail";
+import { GroupDetail } from './groupDetail';
 
 export interface GroupData {
   group: GroupDetail;

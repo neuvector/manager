@@ -35,5 +35,4 @@ export class FederatedPolicyComponent implements OnInit {
   private setHeight = (innerHeight: number) => {
     return innerHeight - 210;
   };
-
 }

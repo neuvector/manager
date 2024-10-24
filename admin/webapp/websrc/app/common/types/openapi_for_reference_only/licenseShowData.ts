@@ -1,4 +1,4 @@
-import { LicenseShow } from "./licenseShow";
+import { LicenseShow } from './licenseShow';
 
 export interface LicenseShowData {
   license: LicenseShow;

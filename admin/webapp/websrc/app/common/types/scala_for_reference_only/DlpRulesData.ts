@@ -8,6 +8,7 @@ export interface DlpRulesData {
 
 export function isDlpRulesData(v: any): v is DlpRulesData {
   return (
-    (Array.isArray(v['rules']) && v['rules'].every(elmt => elmt && isDlpRule(elmt)))
+    Array.isArray(v['rules']) &&
+    v['rules'].every(elmt => elmt && isDlpRule(elmt))
   );
 }

@@ -5,7 +5,5 @@ export interface FedMembershipData {
 }
 
 export function isFedMembershipData(v: any): v is FedMembershipData {
-  return (
-    ((typeof v['fed_role']) === 'string')
-  );
+  return typeof v['fed_role'] === 'string';
 }

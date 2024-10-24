@@ -17,15 +17,22 @@ export interface ServerOIDC {
 
 export function isServerOIDC(v: any): v is ServerOIDC {
   return (
-    ((typeof v['issuer']) === 'string') &&
-    ((typeof v['authorization_endpoint']) === 'string') &&
-    ((typeof v['token_endpoint']) === 'string') &&
-    ((typeof v['user_info_endpoint']) === 'string') &&
-    ((typeof v['client_id']) === 'string') &&
-    (!v['client_secret'] || ((typeof v['client_secret']) === 'string')) &&
-    (!v['group_claim'] || ((typeof v['group_claim']) === 'string')) &&
-    (!v['enable'] || ((typeof v['enable']) === 'boolean')) &&
-    (!v['default_role'] || ((typeof v['default_role']) === 'string')) &&
-    (!v['role_groups'] || ((typeof v['role_groups']) == 'object' && Object.keys(v['role_groups']).every(key => ((typeof key) === 'string') && (v['role_groups'][key] && isArray(v['role_groups'][key])))))
+    typeof v['issuer'] === 'string' &&
+    typeof v['authorization_endpoint'] === 'string' &&
+    typeof v['token_endpoint'] === 'string' &&
+    typeof v['user_info_endpoint'] === 'string' &&
+    typeof v['client_id'] === 'string' &&
+    (!v['client_secret'] || typeof v['client_secret'] === 'string') &&
+    (!v['group_claim'] || typeof v['group_claim'] === 'string') &&
+    (!v['enable'] || typeof v['enable'] === 'boolean') &&
+    (!v['default_role'] || typeof v['default_role'] === 'string') &&
+    (!v['role_groups'] ||
+      (typeof v['role_groups'] == 'object' &&
+        Object.keys(v['role_groups']).every(
+          key =>
+            typeof key === 'string' &&
+            v['role_groups'][key] &&
+            isArray(v['role_groups'][key])
+        )))
   );
 }

@@ -159,9 +159,7 @@ export class SupportFormComponent implements OnDestroy {
           type: 'application/x-gzip',
         });
         saveAs(exportUrl, filename);
-        this.notificationService.open(
-          this.tr.instant('setting.EXPORT_OK')
-        );
+        this.notificationService.open(this.tr.instant('setting.EXPORT_OK'));
       },
       error => {
         console.warn(error);

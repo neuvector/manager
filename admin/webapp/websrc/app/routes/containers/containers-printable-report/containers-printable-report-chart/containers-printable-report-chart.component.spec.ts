@@ -8,9 +8,8 @@ describe('ContainersPrintableReportChartComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ContainersPrintableReportChartComponent ]
-    })
-    .compileComponents();
+      declarations: [ContainersPrintableReportChartComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

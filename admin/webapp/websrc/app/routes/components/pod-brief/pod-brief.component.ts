@@ -1,14 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { Workload } from "@common/types";
-import { ActivityState, PopupState } from "@common/types/network-activities/activityState";
-import { MapConstant } from "@common/constants/map.constant";
-import { UtilsService } from "@common/utils/app.utils";
-import { PodDetails } from "@common/types/network-activities/podDetails";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Workload } from '@common/types';
+import {
+  ActivityState,
+  PopupState,
+} from '@common/types/network-activities/activityState';
+import { MapConstant } from '@common/constants/map.constant';
+import { UtilsService } from '@common/utils/app.utils';
+import { PodDetails } from '@common/types/network-activities/podDetails';
 
 @Component({
   selector: 'app-pod-brief',
   templateUrl: './pod-brief.component.html',
-  styleUrls: ['./pod-brief.component.scss']
+  styleUrls: ['./pod-brief.component.scss'],
 })
 export class PodBriefComponent implements OnInit {
   private _pod!: PodDetails;
@@ -18,7 +21,7 @@ export class PodBriefComponent implements OnInit {
   labelCode!: string;
 
   @Output()
-  onPodGroupSelected: EventEmitter<string> = new EventEmitter<string>();
+  doPodGroupSelected: EventEmitter<string> = new EventEmitter<string>();
 
   get pod(): PodDetails {
     return this._pod;
@@ -44,10 +47,11 @@ export class PodBriefComponent implements OnInit {
 
   ngOnInit(): void {
     this.displayState = this.utils.getI18Name(this.pod.workload.state);
-    this.labelCode = MapConstant.colourMap[this.pod.workload.state] || 'inverse';
+    this.labelCode =
+      MapConstant.colourMap[this.pod.workload.state] || 'inverse';
   }
 
   showPodGroup() {
-    this.onPodGroupSelected.emit(this.pod.workload.service_group);
+    this.doPodGroupSelected.emit(this.pod.workload.service_group);
   }
 }

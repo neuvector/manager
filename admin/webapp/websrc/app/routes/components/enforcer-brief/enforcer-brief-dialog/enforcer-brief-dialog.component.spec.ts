@@ -8,9 +8,8 @@ describe('EnforcerBriefDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EnforcerBriefDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [EnforcerBriefDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -12,10 +12,16 @@ export interface WafGroupConfig {
 
 export function isWafGroupConfig(v: any): v is WafGroupConfig {
   return (
-    ((typeof v['name']) === 'string') &&
-    (!v['status'] || ((typeof v['status']) === 'boolean')) &&
-    (!v['delete'] || (Array.isArray(v['delete']) && v['delete'].every(elmt => (typeof elmt) === 'string'))) &&
-    (!v['sensors'] || (Array.isArray(v['sensors']) && v['sensors'].every(elmt => elmt && isWafSetting(elmt)))) &&
-    (!v['replace'] || (Array.isArray(v['replace']) && v['replace'].every(elmt => elmt && isWafSetting(elmt))))
+    typeof v['name'] === 'string' &&
+    (!v['status'] || typeof v['status'] === 'boolean') &&
+    (!v['delete'] ||
+      (Array.isArray(v['delete']) &&
+        v['delete'].every(elmt => typeof elmt === 'string'))) &&
+    (!v['sensors'] ||
+      (Array.isArray(v['sensors']) &&
+        v['sensors'].every(elmt => elmt && isWafSetting(elmt)))) &&
+    (!v['replace'] ||
+      (Array.isArray(v['replace']) &&
+        v['replace'].every(elmt => elmt && isWafSetting(elmt))))
   );
 }

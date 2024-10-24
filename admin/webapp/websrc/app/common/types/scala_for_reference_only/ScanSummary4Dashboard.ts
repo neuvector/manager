@@ -8,8 +8,8 @@ export interface ScanSummary4Dashboard {
 
 export function isScanSummary4Dashboard(v: any): v is ScanSummary4Dashboard {
   return (
-    ((typeof v['status']) === 'string') &&
-    ((typeof v['high']) === 'number') &&
-    ((typeof v['medium']) === 'number')
+    typeof v['status'] === 'string' &&
+    typeof v['high'] === 'number' &&
+    typeof v['medium'] === 'number'
   );
 }

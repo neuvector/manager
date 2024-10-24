@@ -50,13 +50,12 @@ export class TimeoutInterceptor implements HttpInterceptor {
               currentPath !== GlobalConstant.PATH_LOGIN &&
               currentPath !== '/' + GlobalConstant.PATH_LOGIN &&
               currentPath !== GlobalConstant.PATH_MULTICLUSTER &&
-              !req.url.endsWith(PathConstant.MULTI_CLUSTER_SUMMARY)
-            ) ||
-            (
-              //For Rancher SSO from downstream cluster
-              status === GlobalConstant.STATUS_FORBIDDEN &&
-              error.error.Message.includes(GlobalConstant.RANCHER_AUTH_FAIL_MSG)
-            ) ||
+              !req.url.endsWith(PathConstant.MULTI_CLUSTER_SUMMARY)) ||
+            //For Rancher SSO from downstream cluster
+            (status === GlobalConstant.STATUS_FORBIDDEN &&
+              error.error.Message.includes(
+                GlobalConstant.RANCHER_AUTH_FAIL_MSG
+              )) ||
             req.url === PathConstant.TOKEN_AUTH ||
             req.url === PathConstant.SELF_URL
           ) {

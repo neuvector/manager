@@ -50,10 +50,16 @@
       *ngFor="let platform of platforms; let i = index"
       [attr.data-index]="i">
       <td class="print-cell" style="width: 15%">
-        {{ reportPage === 'vulnerabilities' ? platform.name : platform.platform }}
+        {{
+          reportPage === 'vulnerabilities' ? platform.name : platform.platform
+        }}
       </td>
       <td class="print-cell" style="width: 10%">
-        {{ reportPage === 'vulnerabilities' ? platform.version : (platform.kube_version || platform.openshift_version)}}
+        {{
+          reportPage === 'vulnerabilities'
+            ? platform.version
+            : platform.kube_version || platform.openshift_version
+        }}
       </td>
       <td class="print-cell" style="width: 15%">
         {{ platform.base_os }}

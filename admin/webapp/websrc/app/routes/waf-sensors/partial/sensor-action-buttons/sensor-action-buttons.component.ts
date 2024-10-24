@@ -46,7 +46,7 @@ export class SensorActionButtonsComponent implements ICellRendererAngularComp {
         opType: GlobalConstant.MODAL_OP.EDIT,
         index: this.params.rowIndex,
         wafSensors: this.params.context.componentParent.wafSensors,
-        gridApi: this.params.context.componentParent.gridApi4Sensors!
+        gridApi: this.params.context.componentParent.gridApi4Sensors!,
       },
     });
   };

@@ -10,8 +10,9 @@ export interface ViolationBrief {
 
 export function isViolationBrief(v: any): v is ViolationBrief {
   return (
-    ((typeof v['client_name']) === 'string') &&
-    ((typeof v['server_name']) === 'string') &&
-    (v['reported_at'] && isDateTime(v['reported_at']))
+    typeof v['client_name'] === 'string' &&
+    typeof v['server_name'] === 'string' &&
+    v['reported_at'] &&
+    isDateTime(v['reported_at'])
   );
 }

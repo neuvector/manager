@@ -39,7 +39,7 @@ export class ServiceModeService {
     selectedGroups: Group[],
     forAll: boolean,
     mode: PolicyMode,
-    profileMode: PolicyMode,
+    profileMode: PolicyMode
   ) {
     const nodesGroup = selectedGroups.find(group => group.name === 'nodes');
     if (nodesGroup) {
@@ -105,7 +105,14 @@ export class ServiceModeService {
     nodesGroup: Group,
     isMultipleSelected: boolean
   ) {
-    if (!this.suppressShowNodesAlerts(mode, profileMode, nodesGroup, isMultipleSelected)) {
+    if (
+      !this.suppressShowNodesAlerts(
+        mode,
+        profileMode,
+        nodesGroup,
+        isMultipleSelected
+      )
+    ) {
       const mode4Msg = mode || profileMode;
       const message = this.getMessage4NodesSelected(mode4Msg);
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
@@ -126,25 +133,33 @@ export class ServiceModeService {
   }
 
   private switchAll(mode: PolicyMode, profileMode: PolicyMode) {
-    this.groupsService.updateMode4All(mode, profileMode, 'no-change').subscribe({
-      complete: () => {
-        this.notificationService.open(this.tr.instant('service.ALL_SUBMIT_OK'));
-        this.refreshEventSubject$.next({
-          all: true,
-          mode: mode,
-          profileMode: profileMode,
-        });
-      },
-      error: ({ error }: { error: ErrorResponse }) => {
-        this.notificationService.openError(
-          error,
-          this.tr.instant('service.ALL_SUBMIT_FAILED')
-        );
-      },
-    });
+    this.groupsService
+      .updateMode4All(mode, profileMode, 'no-change')
+      .subscribe({
+        complete: () => {
+          this.notificationService.open(
+            this.tr.instant('service.ALL_SUBMIT_OK')
+          );
+          this.refreshEventSubject$.next({
+            all: true,
+            mode: mode,
+            profileMode: profileMode,
+          });
+        },
+        error: ({ error }: { error: ErrorResponse }) => {
+          this.notificationService.openError(
+            error,
+            this.tr.instant('service.ALL_SUBMIT_FAILED')
+          );
+        },
+      });
   }
 
-  private switchAllAlert(selectedGroups: Group[], mode: PolicyMode, profileMode: PolicyMode) {
+  private switchAllAlert(
+    selectedGroups: Group[],
+    mode: PolicyMode,
+    profileMode: PolicyMode
+  ) {
     if (!this.suppressSwitchMode(selectedGroups, mode, profileMode)) {
       const mode4Msg = mode || profileMode;
       const message = this.getMessage(mode4Msg);
@@ -185,7 +200,11 @@ export class ServiceModeService {
       });
   }
 
-  private switchSome(selectedGroups: Group[], mode: PolicyMode, profileMode: PolicyMode) {
+  private switchSome(
+    selectedGroups: Group[],
+    mode: PolicyMode,
+    profileMode: PolicyMode
+  ) {
     this.groupsService
       .updateModeByService(mode, profileMode, 'no-change', selectedGroups)
       .subscribe({
@@ -210,7 +229,11 @@ export class ServiceModeService {
       });
   }
 
-  private switchSomeAlert(selectedGroups: Group[], mode: PolicyMode, profileMode: PolicyMode) {
+  private switchSomeAlert(
+    selectedGroups: Group[],
+    mode: PolicyMode,
+    profileMode: PolicyMode
+  ) {
     if (!this.suppressSwitchMode(selectedGroups, mode, profileMode)) {
       const mode4Msg = mode || profileMode;
       const message = this.getMessage(mode4Msg);
@@ -229,7 +252,11 @@ export class ServiceModeService {
     }
   }
 
-  private suppressSwitchMode(selectedGroups: Group[], mode: PolicyMode, profileMode: PolicyMode) {
+  private suppressSwitchMode(
+    selectedGroups: Group[],
+    mode: PolicyMode,
+    profileMode: PolicyMode
+  ) {
     if (mode) {
       const modeCountMap = {
         discover: 0,
@@ -291,9 +318,7 @@ export class ServiceModeService {
         'isDowngradingMode: ',
         isDowngradingMode
       );
-      return isSwitchingSameMode ||
-        isDowngradingMode ||
-        !isMultipleSelected;
+      return isSwitchingSameMode || isDowngradingMode || !isMultipleSelected;
     } else {
       const policyModeGradeMap = {
         discover: 0,
@@ -303,16 +328,19 @@ export class ServiceModeService {
       let currProfileMode = nodesGroup.policy_mode?.toLowerCase();
       let targetProfileMode = profileMode.toLowerCase();
       let isSwitchingSameProfileMode = currProfileMode === targetProfileMode;
-      let isDowngradingProfileMode = policyModeGradeMap[targetProfileMode] === 0;
+      let isDowngradingProfileMode =
+        policyModeGradeMap[targetProfileMode] === 0;
       console.log(
         'isSwitchingSameProfileMode: ',
         isSwitchingSameProfileMode,
         'isDowngradingProfileMode: ',
         isDowngradingProfileMode
       );
-      return isSwitchingSameProfileMode ||
+      return (
+        isSwitchingSameProfileMode ||
         isDowngradingProfileMode ||
-        !isMultipleSelected;
+        !isMultipleSelected
+      );
     }
   }
 

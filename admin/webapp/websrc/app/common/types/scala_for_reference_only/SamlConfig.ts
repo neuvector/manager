@@ -8,8 +8,5 @@ export interface SamlConfig {
 }
 
 export function isSamlConfig(v: any): v is SamlConfig {
-  return (
-    ((typeof v['name']) === 'string') &&
-    (v['saml'] && isSamlServer(v['saml']))
-  );
+  return typeof v['name'] === 'string' && v['saml'] && isSamlServer(v['saml']);
 }

@@ -128,9 +128,8 @@
             style="display: block"
             matTooltip="{{ pod.workload.service_group }}"
             matTooltipPosition="above"
-            [matTooltipDisabled]="pod.workload.service_group.length < 30"
-          >
-            {{ pod.workload.service_group | shortenFromMiddle: 30}}
+            [matTooltipDisabled]="pod.workload.service_group.length < 30">
+            {{ pod.workload.service_group | shortenFromMiddle : 30 }}
             <a
               mat-icon-button
               aria-label="External link button"
@@ -176,7 +175,7 @@
             {{ 'network.nodeDetails.CREATED_AT' | translate }}:
           </span>
           <span class="ml auto-hide host-item-value" style="display: block">
-            {{ pod.workload.started_at | date: 'MMM dd, y HH:mm:ss' }}
+            {{ pod.workload.started_at | date : 'MMM dd, y HH:mm:ss' }}
           </span>
         </div>
       </li>
@@ -187,7 +186,7 @@
           >
           <span class="ml mr-lg auto-hide host-item-key" style="display: block">
             {{
-              pod.workload.scan_summary.scanned_at | date: 'MMM dd, y HH:mm:ss'
+              pod.workload.scan_summary.scanned_at | date : 'MMM dd, y HH:mm:ss'
             }}
           </span>
         </div>

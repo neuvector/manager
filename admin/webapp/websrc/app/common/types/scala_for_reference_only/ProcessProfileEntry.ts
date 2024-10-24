@@ -10,10 +10,10 @@ export interface ProcessProfileEntry {
 
 export function isProcessProfileEntry(v: any): v is ProcessProfileEntry {
   return (
-    ((typeof v['name']) === 'string') &&
-    (!v['path'] || ((typeof v['path']) === 'string')) &&
-    (!v['user'] || ((typeof v['user']) === 'string')) &&
-    (!v['uid'] || ((typeof v['uid']) === 'number')) &&
-    ((typeof v['action']) === 'string')
+    typeof v['name'] === 'string' &&
+    (!v['path'] || typeof v['path'] === 'string') &&
+    (!v['user'] || typeof v['user'] === 'string') &&
+    (!v['uid'] || typeof v['uid'] === 'number') &&
+    typeof v['action'] === 'string'
   );
 }

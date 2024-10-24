@@ -9,7 +9,11 @@ import { NodesGridStatusCellComponent } from './nodes-grid-status-cell/nodes-gri
 import { NodesGridStateCellComponent } from './nodes-grid-state-cell/nodes-grid-state-cell.component';
 
 @NgModule({
-  declarations: [NodesGridComponent, NodesGridStatusCellComponent, NodesGridStateCellComponent],
+  declarations: [
+    NodesGridComponent,
+    NodesGridStatusCellComponent,
+    NodesGridStateCellComponent,
+  ],
   imports: [
     CommonModule,
     NvCommonModule,

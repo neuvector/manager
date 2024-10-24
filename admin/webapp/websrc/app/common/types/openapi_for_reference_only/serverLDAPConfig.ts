@@ -1,5 +1,5 @@
-import { ServerLDAPRoleGroups } from "./serverLDAPRoleGroups";
-import { GroupRoleMapping } from "./groupRoleMapping";
+import { ServerLDAPRoleGroups } from './serverLDAPRoleGroups';
+import { GroupRoleMapping } from './groupRoleMapping';
 
 export interface ServerLDAPConfig {
   directory?: string;

@@ -5,9 +5,9 @@ import { NvCommonModule } from '@common/nvCommon.module';
 import { SignatureVerifiersComponent } from './signature-verifiers.component';
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
 import { AdjustableDivModule } from '@components/ui/adjustable-div/adjustable-div.module';
-import { QuickFilterModule } from "@components/quick-filter/quick-filter.module";
+import { QuickFilterModule } from '@components/quick-filter/quick-filter.module';
 import { AgGridAngular } from 'ag-grid-angular';
-import { PipeModule } from "@common/pipes/pipe.module";
+import { PipeModule } from '@common/pipes/pipe.module';
 import { AddEditSignatureVerifiersModalComponent } from './partial/add-edit-signature-verifiers-modal/add-edit-signature-verifiers-modal.component';
 import { SignatureActionButtonsComponent } from './partial/signature-action-buttons/signature-action-buttons.component';
 import { VerifierActionButtonsComponent } from './partial/verifier-action-buttons/verifier-action-buttons.component';
@@ -21,7 +21,7 @@ const routes: Routes = [{ path: '', component: SignatureVerifiersComponent }];
     AddEditSignatureVerifiersModalComponent,
     SignatureActionButtonsComponent,
     VerifierActionButtonsComponent,
-    AddEditVerifiersModalComponent
+    AddEditVerifiersModalComponent,
   ],
   imports: [
     CommonModule,
@@ -32,6 +32,6 @@ const routes: Routes = [{ path: '', component: SignatureVerifiersComponent }];
     QuickFilterModule,
     AgGridAngular,
     PipeModule,
-  ]
+  ],
 })
-export class SignatureVerifiersModule { }
+export class SignatureVerifiersModule {}

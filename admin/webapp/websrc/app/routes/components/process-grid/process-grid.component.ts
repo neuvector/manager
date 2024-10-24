@@ -1,4 +1,10 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  SimpleChanges,
+  OnChanges,
+} from '@angular/core';
 import { ProcessInfo } from '@common/types';
 import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
 import {
@@ -20,7 +26,7 @@ import { UtilsService } from '@common/utils/app.utils';
   templateUrl: './process-grid.component.html',
   styleUrls: ['./process-grid.component.scss'],
 })
-export class ProcessGridComponent implements OnInit {
+export class ProcessGridComponent implements OnInit, OnChanges {
   private readonly $win;
   @Input() tableHeight!: string;
   @Input() resize!: boolean;
@@ -106,7 +112,11 @@ export class ProcessGridComponent implements OnInit {
     this.gridApi = params.api;
     if (this.useQuickFilterService) {
       this.quickFilterService.textInput$.subscribe((value: string) => {
-        this.quickFilterService.onFilterChange(value, this.gridOptions, this.gridApi);
+        this.quickFilterService.onFilterChange(
+          value,
+          this.gridOptions,
+          this.gridApi
+        );
       });
     }
     this.gridApi.sizeColumnsToFit();

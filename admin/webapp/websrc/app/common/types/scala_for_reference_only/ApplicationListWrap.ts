@@ -7,7 +7,5 @@ export interface ApplicationListWrap {
 }
 
 export function isApplicationListWrap(v: any): v is ApplicationListWrap {
-  return (
-    (v['list'] && isApplicationList(v['list']))
-  );
+  return v['list'] && isApplicationList(v['list']);
 }

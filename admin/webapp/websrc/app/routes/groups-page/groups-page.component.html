@@ -19,13 +19,18 @@
             }">
             {{ netServiceStatus ? '' : 'OFF' }}
           </span>
-          <div *ngIf="netServiceStatus" class="mx-2 type-label policy_mode {{ netServicePolicyModeValue }}">{{ netServicePolicyMode }}</div>
+          <div
+            *ngIf="netServiceStatus"
+            class="mx-2 type-label policy_mode {{ netServicePolicyModeValue }}">
+            {{ netServicePolicyMode }}
+          </div>
           <em
             class="fa fa-info-circle text-info"
             [matTooltip]="
-                ((netServiceStatus
-                  ? 'setting.description.ENABLED_NET_POLICY_MODE_GROUP'
-                  : 'setting.description.DISABLED_NET_POLICY_MODE') | translate:{name: netServicePolicyMode})
+              (netServiceStatus
+                ? 'setting.description.ENABLED_NET_POLICY_MODE_GROUP'
+                : 'setting.description.DISABLED_NET_POLICY_MODE'
+              ) | translate : { name: netServicePolicyMode }
             "
             matTooltipPosition="above">
           </em>
@@ -83,8 +88,7 @@
             [height]="height"
             [isShowingSystemGroups]="isShowingSystemGroups"
             [linkedGroup]="linkedGroup"
-            (refreshing)="refreshing($event)"
-          ></app-groups>
+            (refreshing)="refreshing($event)"></app-groups>
         </mat-card>
       </ng-container>
       <ng-container *appContainerTwo="let height">
@@ -98,8 +102,7 @@
             [members]="groupsView.selectedGroups[0].members"
             [cfgType]="groupsView.selectedGroups[0].cfg_type || ''"
             [kind]="groupsView.selectedGroups[0].kind || ''"
-            [baselineProfile]="groupsView.selectedGroups[0].baseline_profile"
-          >
+            [baselineProfile]="groupsView.selectedGroups[0].baseline_profile">
           </app-group-details>
         </mat-card>
         <mat-card
@@ -107,7 +110,9 @@
           *ngIf="groupsView && groupsView.selectedGroups.length === 0">
           <mat-card-content>
             <div class="hint-info">
-              <em class="eos-icons hint-info-signal mr-2" aria-hidden="true">info</em>
+              <em class="eos-icons hint-info-signal mr-2" aria-hidden="true"
+                >info</em
+              >
               <div class="hint-info-text">
                 {{ 'group.SELECT_GROUP_HINT' | translate }}
               </div>

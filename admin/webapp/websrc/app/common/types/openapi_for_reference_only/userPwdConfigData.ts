@@ -1,4 +1,4 @@
-import { UserPwdConfig } from "./userPwdConfig";
+import { UserPwdConfig } from './userPwdConfig';
 
 export interface UserPwdConfigData {
   config: UserPwdConfig;

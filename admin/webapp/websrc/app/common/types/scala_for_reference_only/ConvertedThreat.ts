@@ -30,27 +30,30 @@ export interface ConvertedThreat {
 
 export function isConvertedThreat(v: any): v is ConvertedThreat {
   return (
-    ((typeof v['id']) === 'string') &&
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['reported_timestamp']) === 'number') &&
-    (v['reported_at'] && isDateTime(v['reported_at'])) &&
-    ((typeof v['count']) === 'number') &&
-    ((typeof v['source_workload_id']) === 'string') &&
-    ((typeof v['source_workload_name']) === 'string') &&
-    ((typeof v['destination_workload_id']) === 'string') &&
-    ((typeof v['destination_workload_name']) === 'string') &&
-    (v['domain'] && isDomain(v['domain'])) &&
-    ((typeof v['severity']) === 'string') &&
-    ((typeof v['action']) === 'string') &&
-    ((typeof v['source_port']) === 'number') &&
-    ((typeof v['destination_port']) === 'number') &&
-    (!v['source_conn_port'] || ((typeof v['source_conn_port']) === 'number')) &&
-    (!v['destination_conn_port'] || ((typeof v['destination_conn_port']) === 'number')) &&
-    ((typeof v['source_ip']) === 'string') &&
-    ((typeof v['destination_ip']) === 'string') &&
-    ((typeof v['application']) === 'string') &&
-    ((typeof v['target']) === 'string') &&
-    (!v['cap_len'] || ((typeof v['cap_len']) === 'number')) &&
-    ((typeof v['message']) === 'string')
+    typeof v['id'] === 'string' &&
+    typeof v['name'] === 'string' &&
+    typeof v['reported_timestamp'] === 'number' &&
+    v['reported_at'] &&
+    isDateTime(v['reported_at']) &&
+    typeof v['count'] === 'number' &&
+    typeof v['source_workload_id'] === 'string' &&
+    typeof v['source_workload_name'] === 'string' &&
+    typeof v['destination_workload_id'] === 'string' &&
+    typeof v['destination_workload_name'] === 'string' &&
+    v['domain'] &&
+    isDomain(v['domain']) &&
+    typeof v['severity'] === 'string' &&
+    typeof v['action'] === 'string' &&
+    typeof v['source_port'] === 'number' &&
+    typeof v['destination_port'] === 'number' &&
+    (!v['source_conn_port'] || typeof v['source_conn_port'] === 'number') &&
+    (!v['destination_conn_port'] ||
+      typeof v['destination_conn_port'] === 'number') &&
+    typeof v['source_ip'] === 'string' &&
+    typeof v['destination_ip'] === 'string' &&
+    typeof v['application'] === 'string' &&
+    typeof v['target'] === 'string' &&
+    (!v['cap_len'] || typeof v['cap_len'] === 'number') &&
+    typeof v['message'] === 'string'
   );
 }

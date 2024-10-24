@@ -4,6 +4,8 @@ import {
   ChangeDetectorRef,
   ViewChild,
   ElementRef,
+  AfterViewInit,
+  OnDestroy,
 } from '@angular/core';
 import { SecurityEventsService } from '@services/security-events.service';
 import { MapConstant } from '@common/constants/map.constant';
@@ -34,7 +36,9 @@ import { saveAs } from 'file-saver';
   templateUrl: './security-events.component.html',
   styleUrls: ['./security-events.component.scss'],
 })
-export class SecurityEventsComponent implements OnInit {
+export class SecurityEventsComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   threatList: any;
   violationList: any;
   incidentList: any;
@@ -309,10 +313,13 @@ export class SecurityEventsComponent implements OnInit {
   };
 
   onQuickFilterChange = (filterStr: string) => {
-    this.securityEventsService.displayedSecurityEvents =
-      (this.advFilterConf ? this.securityEventsService.displayedSecurityEvents : this.securityEventsService.cachedSecurityEvents).filter(event => {
-        return this.advancedFilterModalService._includeFilter(event, filterStr);
-      });
+    this.securityEventsService.displayedSecurityEvents = (
+      this.advFilterConf
+        ? this.securityEventsService.displayedSecurityEvents
+        : this.securityEventsService.cachedSecurityEvents
+    ).filter(event => {
+      return this.advancedFilterModalService._includeFilter(event, filterStr);
+    });
     this.printableData = this.getPrintableData(
       this.securityEventsService.displayedSecurityEvents
     );
@@ -407,7 +414,9 @@ export class SecurityEventsComponent implements OnInit {
                 secEvent.endpoint.destination.domain
                   ? `${secEvent.endpoint.destination.domain}: `
                   : ''
-              }${secEvent.endpoint.destination.displayName} (${secEvent.endpoint.destination.ip})`,
+              }${secEvent.endpoint.destination.displayName} (${
+                secEvent.endpoint.destination.ip
+              })`,
             ],
           },
         ],
@@ -872,9 +881,12 @@ export class SecurityEventsComponent implements OnInit {
         }
         this.securityEventsService.displayedSecurityEvents =
           this.securityEventsService.displayedSecurityEvents.filter(event => {
-            return this.advancedFilterModalService._includeFilter(event, this.filter.value || '');
+            return this.advancedFilterModalService._includeFilter(
+              event,
+              this.filter.value || ''
+            );
           });
-        console.log("this.advFilterConf", this.advFilterConf);
+        console.log('this.advFilterConf', this.advFilterConf);
         this.setAdvancedFilter(this.advFilterConf);
         this.onQuickFilterChange(this.filter.value || '');
         this.isDataReady = true;

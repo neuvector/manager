@@ -90,9 +90,7 @@ export class NetworkRulesService {
           params.value[0] === 'any'
             ? this.translate.instant('enum.ANY')
             : params.value;
-        return `<span ${
-          params.data.remove ? `class="policy-remove"` : ''
-        }>
+        return `<span ${params.data.remove ? `class="policy-remove"` : ''}>
           ${this.sanitizer.sanitize(SecurityContext.HTML, app)}
         </span>`;
       }
@@ -154,18 +152,16 @@ export class NetworkRulesService {
         } else {
           let typeClass = params.data.disable
             ? MapConstant.colourMap['disabled-rule']
-            : (
-              params.data.state
-              ? MapConstant.colourMap[params.data.state]
-              : MapConstant.colourMap[
-                  params.data.cfg_type ? params.data.cfg_type : 'customer-rule'
-              ]
-            );
+            : params.data.state
+            ? MapConstant.colourMap[params.data.state]
+            : MapConstant.colourMap[
+                params.data.cfg_type ? params.data.cfg_type : 'customer-rule'
+              ];
           let type = params.data.state
             ? MapConstant.colourMap[params.data.state]
             : MapConstant.colourMap[
                 params.data.cfg_type ? params.data.cfg_type : 'customer-rule'
-            ]
+              ];
           return `<div class="type-label px-1 ${typeClass}">${this.sanitizer.sanitize(
             SecurityContext.HTML,
             this.translate.instant(
@@ -186,12 +182,16 @@ export class NetworkRulesService {
 
     const fromComparator = (value1, value2, node1, node2) => {
       /** From as primary sort, to as secondary sort */
-      return `${node1.data.from}-${node1.data.to}`.localeCompare(`${node2.data.from}-${node2.data.to}`);
+      return `${node1.data.from}-${node1.data.to}`.localeCompare(
+        `${node2.data.from}-${node2.data.to}`
+      );
     };
 
     const toComparator = (value1, value2, node1, node2) => {
       /** To as primary sort, from as secondary sort */
-      return `${node1.data.to}-${node1.data.from}`.localeCompare(`${node2.data.to}-${node2.data.from}`);
+      return `${node1.data.to}-${node1.data.from}`.localeCompare(
+        `${node2.data.to}-${node2.data.from}`
+      );
     };
 
     const idSelectionFunc = params => {
@@ -207,8 +207,12 @@ export class NetworkRulesService {
     const columnDefs = [
       {
         headerName: this.translate.instant('policy.gridHeader.ID'),
-        headerCheckboxSelection: isWriteNetworkRuleAuthorized && source !== GlobalConstant.NAV_SOURCE.GROUP,
-        headerCheckboxSelectionFilteredOnly: isWriteNetworkRuleAuthorized && source !== GlobalConstant.NAV_SOURCE.GROUP,
+        headerCheckboxSelection:
+          isWriteNetworkRuleAuthorized &&
+          source !== GlobalConstant.NAV_SOURCE.GROUP,
+        headerCheckboxSelectionFilteredOnly:
+          isWriteNetworkRuleAuthorized &&
+          source !== GlobalConstant.NAV_SOURCE.GROUP,
         field: 'id',
         checkboxSelection: checkboxSelectionFunc,
         cellRenderer: IdCellComponent,
@@ -282,7 +286,9 @@ export class NetworkRulesService {
         width: 90,
         maxWidth: 90,
         minWidth: 90,
-        hide: !isWriteNetworkRuleAuthorized || source === GlobalConstant.NAV_SOURCE.GROUP,
+        hide:
+          !isWriteNetworkRuleAuthorized ||
+          source === GlobalConstant.NAV_SOURCE.GROUP,
       },
     ];
 
@@ -291,12 +297,12 @@ export class NetworkRulesService {
         resizable: true,
         sortable: source === GlobalConstant.NAV_SOURCE.GROUP,
       },
-      headerHeight:  30,
+      headerHeight: 30,
       rowHeight: 30,
       animateRows: true,
       suppressDragLeaveHidesColumns: true,
       columnDefs: columnDefs,
-      rowSelection: 'multiple' as "single" | "multiple" | undefined,
+      rowSelection: 'multiple' as 'single' | 'multiple' | undefined,
       isRowSelectable: idSelectionFunc,
       rowClassRules: {
         'disabled-row': function (params) {

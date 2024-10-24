@@ -24,14 +24,14 @@
         id="autoRefresh"
         name="refreshStatus"
         [(ngModel)]="autoRefresh"
-        (ngModelChange)="onAutoRefreshToggle(autoRefresh)">
-      <span
-        [ngClass]="{
-          'text-muted': !autoRefresh,
-          'text-success': autoRefresh
-        }">
-        {{ 'network.AUTO_REFRESH' | translate }}
-      </span>
+        (ngModelChange)="doAutoRefreshToggle(autoRefresh)">
+        <span
+          [ngClass]="{
+            'text-muted': !autoRefresh,
+            'text-success': autoRefresh
+          }">
+          {{ 'network.AUTO_REFRESH' | translate }}
+        </span>
       </mat-slide-toggle>
       <button
         id="closeActiveSessions"
@@ -39,7 +39,7 @@
         class="d-flex align-items-center justify-content-center ml-2"
         mat-icon-button>
         <i (click)="stopRefreshSession(); popupState.leave()" class="eos-icons"
-        >close</i
+          >close</i
         >
       </button>
     </div>
@@ -57,7 +57,7 @@
     </ag-grid-angular>
   </div>
 
-  <div class="mv-sm" *ngIf="conversations.length == 0">
+  <div class="mv-sm" *ngIf="conversations.length === 0">
     <span translate="{{ 'network.NO_ACTIVE_SESSIONS' }}"> </span>
   </div>
 </div>

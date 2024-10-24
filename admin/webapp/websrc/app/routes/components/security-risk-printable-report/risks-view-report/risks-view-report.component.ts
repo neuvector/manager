@@ -30,16 +30,11 @@ export class RisksViewReportComponent implements OnInit {
 
     if (this.reportPage === 'vulnerabilities') {
       this.isNameSpaceFiltered =
-        (
-          this.filterService.vulQuerySubject$.value
-            .selectedDomains ?? []
-        ).length > 0;
+        (this.filterService.vulQuerySubject$.value.selectedDomains ?? [])
+          .length > 0;
     } else {
       this.isNameSpaceFiltered =
-        (
-          this.filterService.advFilter
-            .selectedDomains ?? []
-        ).length > 0;
+        (this.filterService.advFilter.selectedDomains ?? []).length > 0;
     }
   }
 }

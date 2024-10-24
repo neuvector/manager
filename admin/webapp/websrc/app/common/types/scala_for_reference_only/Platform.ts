@@ -10,10 +10,10 @@ export interface Platform {
 
 export function isPlatform(v: any): v is Platform {
   return (
-    ((typeof v['platform']) === 'string') &&
-    ((typeof v['high']) === 'number') &&
-    ((typeof v['medium']) === 'number') &&
-    ((typeof v['scanned_timestamp']) === 'number') &&
-    ((typeof v['scanned_at']) === 'string')
+    typeof v['platform'] === 'string' &&
+    typeof v['high'] === 'number' &&
+    typeof v['medium'] === 'number' &&
+    typeof v['scanned_timestamp'] === 'number' &&
+    typeof v['scanned_at'] === 'string'
   );
 }

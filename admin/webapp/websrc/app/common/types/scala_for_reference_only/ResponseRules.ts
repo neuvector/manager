@@ -9,7 +9,8 @@ export interface ResponseRules {
 
 export function isResponseRules(v: any): v is ResponseRules {
   return (
-    (!v['after'] || ((typeof v['after']) === 'number')) &&
-    (v['rules'] && isArray(v['rules']))
+    (!v['after'] || typeof v['after'] === 'number') &&
+    v['rules'] &&
+    isArray(v['rules'])
   );
 }

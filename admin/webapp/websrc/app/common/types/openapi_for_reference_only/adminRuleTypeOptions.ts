@@ -1,5 +1,5 @@
-import { AdminCatOptions } from "./adminCatOptions";
-import { AdminRuleCriterion } from "./adminRuleCriterion";
+import { AdminCatOptions } from './adminCatOptions';
+import { AdminRuleCriterion } from './adminRuleCriterion';
 
 export interface AdminRuleTypeOptions {
   deny_options: AdminCatOptions;

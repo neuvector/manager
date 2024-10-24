@@ -1,4 +1,4 @@
-import { DlpGroup } from "./dlpGroup";
+import { DlpGroup } from './dlpGroup';
 
 export interface DlpGroupData {
   dlp_group: DlpGroup;

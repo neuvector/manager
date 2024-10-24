@@ -5,7 +5,5 @@ export interface ResponseRuleID {
 }
 
 export function isResponseRuleID(v: any): v is ResponseRuleID {
-  return (
-    ((typeof v['response_rule']) === 'number')
-  );
+  return typeof v['response_rule'] === 'number';
 }

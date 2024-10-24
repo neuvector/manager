@@ -8,9 +8,8 @@ describe('ProcessProfileRuleNameHeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ProcessProfileRuleNameHeaderComponent ]
-    })
-    .compileComponents();
+      declarations: [ProcessProfileRuleNameHeaderComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

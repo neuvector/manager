@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Domain } from '@common/types';
 
 @Component({
@@ -6,15 +6,13 @@ import { Domain } from '@common/types';
   templateUrl: './namespace-details.component.html',
   styleUrls: ['./namespace-details.component.scss'],
 })
-export class NamespaceDetailsComponent implements OnInit {
+export class NamespaceDetailsComponent {
   @Input() namespace!: Domain;
   get labels() {
     return Object.keys(this.namespace.labels || {});
   }
 
   constructor() {}
-
-  ngOnInit(): void {}
 
   hasObject(obj: {}): boolean {
     return obj && !!Object.keys(obj).length;

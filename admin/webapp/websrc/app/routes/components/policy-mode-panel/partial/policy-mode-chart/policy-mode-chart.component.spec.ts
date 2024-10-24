@@ -8,9 +8,8 @@ describe('PolicyModeChartComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PolicyModeChartComponent ]
-    })
-    .compileComponents();
+      declarations: [PolicyModeChartComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

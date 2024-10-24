@@ -7,7 +7,5 @@ export interface GroupWrap {
 }
 
 export function isGroupWrap(v: any): v is GroupWrap {
-  return (
-    (v['group'] && isGroup(v['group']))
-  );
+  return v['group'] && isGroup(v['group']);
 }

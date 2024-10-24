@@ -7,7 +7,5 @@ export interface Group4SingleDTOWrap {
 }
 
 export function isGroup4SingleDTOWrap(v: any): v is Group4SingleDTOWrap {
-  return (
-    (v['group'] && isGroup4SingleDTO(v['group']))
-  );
+  return v['group'] && isGroup4SingleDTO(v['group']);
 }

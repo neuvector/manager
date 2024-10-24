@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   ScoreImprovementModalService,
   ScoreImprovementModalTemplate,
@@ -8,7 +8,7 @@ import {
   templateUrl: './score-improvement-general-list-item.component.html',
   styleUrls: ['./score-improvement-general-list-item.component.scss'],
 })
-export class ScoreImprovementGeneralListItemComponent implements OnInit {
+export class ScoreImprovementGeneralListItemComponent {
   expanded = {
     serviceRisk: false,
     exposure: false,
@@ -23,8 +23,6 @@ export class ScoreImprovementGeneralListItemComponent implements OnInit {
   constructor(
     private scoreImprovementModalService: ScoreImprovementModalService
   ) {}
-
-  ngOnInit(): void {}
 
   go(template: ScoreImprovementModalTemplate, event: Event) {
     this.scoreImprovementModalService.go(template);

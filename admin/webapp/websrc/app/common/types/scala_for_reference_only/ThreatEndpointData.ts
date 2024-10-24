@@ -10,7 +10,8 @@ export interface ThreatEndpointData {
 
 export function isThreatEndpointData(v: any): v is ThreatEndpointData {
   return (
-    (v['threats'] && isArray(v['threats'])) &&
+    v['threats'] &&
+    isArray(v['threats']) &&
     (!v['error'] || (v['error'] && isError(v['error'])))
   );
 }

@@ -1,10 +1,4 @@
-<app-safe-notification
-  *ngIf="type === 'safe'"
-  [message]="message"
->
+<app-safe-notification *ngIf="type === 'safe'" [message]="message">
 </app-safe-notification>
-<app-warning-notification
-  *ngIf="type === 'warning'"
-  [message]="message"
->
+<app-warning-notification *ngIf="type === 'warning'" [message]="message">
 </app-warning-notification>

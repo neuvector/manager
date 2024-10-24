@@ -11,9 +11,10 @@ export interface GroupConfigDTO {
 
 export function isGroupConfigDTO(v: any): v is GroupConfigDTO {
   return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['comment']) === 'string') &&
-    (v['criteria'] && isArray(v['criteria'])) &&
-    (!v['cfg_type'] || ((typeof v['cfg_type']) === 'string'))
+    typeof v['name'] === 'string' &&
+    typeof v['comment'] === 'string' &&
+    v['criteria'] &&
+    isArray(v['criteria']) &&
+    (!v['cfg_type'] || typeof v['cfg_type'] === 'string')
   );
 }

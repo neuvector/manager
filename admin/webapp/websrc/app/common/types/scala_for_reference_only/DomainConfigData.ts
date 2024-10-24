@@ -7,7 +7,5 @@ export interface DomainConfigData {
 }
 
 export function isDomainConfigData(v: any): v is DomainConfigData {
-  return (
-    (v['config'] && isDomainConfig(v['config']))
-  );
+  return v['config'] && isDomainConfig(v['config']);
 }

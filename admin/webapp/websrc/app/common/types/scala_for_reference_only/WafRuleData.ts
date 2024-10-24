@@ -7,7 +7,5 @@ export interface WafRuleData {
 }
 
 export function isWafRuleData(v: any): v is WafRuleData {
-  return (
-    (v['rule'] && isWafRuleDetail(v['rule']))
-  );
+  return v['rule'] && isWafRuleDetail(v['rule']);
 }

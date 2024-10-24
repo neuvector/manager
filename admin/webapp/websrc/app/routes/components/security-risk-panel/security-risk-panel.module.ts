@@ -10,8 +10,6 @@ import { VulnerabilityInstructionComponent } from './partial/vulnerability-instr
 import { ScoreInstructionComponent } from './partial/score-instruction/score-instruction.component';
 import { ScoreImprovementModalModule } from '@components/score-improvement-modal/score-improvement-modal.module';
 
-
-
 @NgModule({
   declarations: [
     SecurityRiskPanelComponent,
@@ -19,18 +17,18 @@ import { ScoreImprovementModalModule } from '@components/score-improvement-modal
     RiskFactorComponent,
     RiskInstructionComponent,
     VulnerabilityInstructionComponent,
-    ScoreInstructionComponent
+    ScoreInstructionComponent,
   ],
   imports: [
     CommonModule,
     NvCommonModule,
     GaugeModule.forRoot(),
-    ScoreImprovementModalModule
+    ScoreImprovementModalModule,
   ],
   exports: [
     SecurityRiskPanelComponent,
     RiskScoreComponent,
-    VulnerabilityInstructionComponent
-  ]
+    VulnerabilityInstructionComponent,
+  ],
 })
-export class SecurityRiskPanelModule { }
+export class SecurityRiskPanelModule {}

@@ -7,7 +7,5 @@ export interface ViolationDetailsData {
 }
 
 export function isViolationDetailsData(v: any): v is ViolationDetailsData {
-  return (
-    (v['violations'] && isArray(v['violations']))
-  );
+  return v['violations'] && isArray(v['violations']);
 }

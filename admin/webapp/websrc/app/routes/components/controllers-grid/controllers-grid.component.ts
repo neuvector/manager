@@ -4,6 +4,7 @@ import {
   OnChanges,
   OnInit,
   SimpleChanges,
+  OnDestroy,
 } from '@angular/core';
 import { Controller } from '@common/types';
 import { UtilsService } from '@common/utils/app.utils';
@@ -29,7 +30,7 @@ import { finalize, map } from 'rxjs/operators';
   templateUrl: './controllers-grid.component.html',
   styleUrls: ['./controllers-grid.component.scss'],
 })
-export class ControllersGridComponent implements OnInit, OnChanges {
+export class ControllersGridComponent implements OnInit, OnChanges, OnDestroy {
   private readonly $win;
   @Input() gridHeight: number = 200;
   @Input() resize!: boolean;

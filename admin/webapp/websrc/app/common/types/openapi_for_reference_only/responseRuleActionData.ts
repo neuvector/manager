@@ -1,4 +1,4 @@
-import { ResponseRuleInsert } from "./responseRuleInsert";
+import { ResponseRuleInsert } from './responseRuleInsert';
 
 export interface ResponseRuleActionData {
   insert?: ResponseRuleInsert;

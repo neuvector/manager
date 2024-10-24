@@ -7,20 +7,19 @@
     [animationDuration]="1"
     [color]="getGaugeColor"
     [showValue]="true"
-    [dialRadius]="40"
-  >
+    [dialRadius]="40">
   </mwl-gauge>
-  <div class="score-label" [ngStyle]="{'color': gaugeLabelColor}">
+  <div class="score-label" [ngStyle]="{ color: gaugeLabelColor }">
     {{ gaugeLabel }}
   </div>
-  <table style="margin: -20px auto 0 auto;">
+  <table style="margin: -20px auto 0 auto">
     <tr class="mb-sm text-sm text-center dashboard-summary-title">
-      <td>{{"dashboard.heading.NODES" | translate}}</td>
-      <td>{{"dashboard.heading.PODS" | translate}}</td>
+      <td>{{ 'dashboard.heading.NODES' | translate }}</td>
+      <td>{{ 'dashboard.heading.PODS' | translate }}</td>
     </tr>
     <tr class="mb-sm text-sm text-center dashboard-summary-value">
-      <td>{{nodesCnt}}</td>
-      <td>{{podsCnt}}</td>
+      <td>{{ nodesCnt }}</td>
+      <td>{{ podsCnt }}</td>
     </tr>
   </table>
 </div>

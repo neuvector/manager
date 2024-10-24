@@ -1,5 +1,5 @@
-import { AuthPassword } from "./authPassword";
-import { AuthToken } from "./authToken";
+import { AuthPassword } from './authPassword';
+import { AuthToken } from './authToken';
 
 export interface AuthData {
   client_ip: string;

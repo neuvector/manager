@@ -4,8 +4,7 @@
   class="printable-area"
   [domain]="reportDomain"
   [reportInfo]="reportInfo"
-  [details]="details"
->
+  [details]="details">
 </app-dashboard-printable-report>
 <div class="screen-area">
   <div class="clearfix">
@@ -17,46 +16,47 @@
       iconName="print">
     </app-loading-button>
     <h1 class="font-weight-light" id="events-title">
-      {{'dashboard.TITLE' | translate}}
+      {{ 'dashboard.TITLE' | translate }}
     </h1>
   </div>
   <app-security-risk-panel
     *ngIf="scoreInfo && summaryInfo && isShowingScore"
     [scoreInfo]="scoreInfo"
     [details]="details"
-    [summaryInfo]="summaryInfo"
-  >
+    [summaryInfo]="summaryInfo">
   </app-security-risk-panel>
-  <app-exposure-panel
-    *ngIf="scoreInfo"
-    [scoreInfo]="scoreInfo"
-  >
+  <app-exposure-panel *ngIf="scoreInfo" [scoreInfo]="scoreInfo">
   </app-exposure-panel>
-  <app-security-events-panel
-  [securityEvents]="securityEvents"
-  >
+  <app-security-events-panel [securityEvents]="securityEvents">
   </app-security-events-panel>
   <div class="row">
     <app-top-security-events-panel
       class="col-lg-6"
       direction="source"
-      [securityEvents]="securityEvents"
-    >
+      [securityEvents]="securityEvents">
     </app-top-security-events-panel>
     <app-top-security-events-panel
       class="col-lg-6"
       direction="destination"
-      [securityEvents]="securityEvents"
-    >
+      [securityEvents]="securityEvents">
     </app-top-security-events-panel>
   </div>
-  <div class="row" *ngIf="details && !details.autoScanConfig && details.highPriorityVulnerabilities && details.highPriorityVulnerabilities.containers.top5Containers.length === 0 && details.highPriorityVulnerabilities.nodes.top5Nodes.length === 0 else topVulnerableAssets">
+  <div
+    class="row"
+    *ngIf="
+      details &&
+        !details.autoScanConfig &&
+        details.highPriorityVulnerabilities &&
+        details.highPriorityVulnerabilities.containers.top5Containers.length ===
+          0 &&
+        details.highPriorityVulnerabilities.nodes.top5Nodes.length === 0;
+      else topVulnerableAssets
+    ">
     <app-top-vulnerable-assets-panel
       class="col-lg-12"
       assetType="assets"
       [isScanOff]="!details.autoScanConfig"
-      [details]="details"
-    >
+      [details]="details">
     </app-top-vulnerable-assets-panel>
   </div>
   <div class="row">
@@ -65,21 +65,17 @@
       class="col-xl-6"
       assetType="services"
       [scoreInfo]="scoreInfo"
-      [details]="details"
-    >
+      [details]="details">
     </app-policy-mode-panel>
     <app-policy-mode-panel
       *ngIf="scoreInfo"
       class="col-xl-6"
       assetType="containers"
       [scoreInfo]="scoreInfo"
-      [details]="details"
-    >
+      [details]="details">
     </app-policy-mode-panel>
   </div>
-  <app-application-protocols-panel
-    [details]="details"
-  >
+  <app-application-protocols-panel [details]="details">
   </app-application-protocols-panel>
 </div>
 
@@ -88,14 +84,12 @@
     <app-top-vulnerable-assets-panel
       class="col-lg-6"
       assetType="containers"
-      [details]="details"
-    >
+      [details]="details">
     </app-top-vulnerable-assets-panel>
     <app-top-vulnerable-assets-panel
       class="col-lg-6"
       assetType="nodes"
-      [details]="details"
-    >
+      [details]="details">
     </app-top-vulnerable-assets-panel>
   </div>
 </ng-template>

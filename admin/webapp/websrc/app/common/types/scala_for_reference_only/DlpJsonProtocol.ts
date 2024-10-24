@@ -14,8 +14,9 @@ export class DlpJsonProtocol {
   }
 }
 
-export const DlpJsonProtocolInhabitant: DlpJsonProtocol = DlpJsonProtocol.getInstance();
+export const DlpJsonProtocolInhabitant: DlpJsonProtocol =
+  DlpJsonProtocol.getInstance();
 
 export function isDlpJsonProtocol(v: any): v is DlpJsonProtocol {
-  return (v instanceof DlpJsonProtocol) && (v === DlpJsonProtocolInhabitant);
+  return v instanceof DlpJsonProtocol && v === DlpJsonProtocolInhabitant;
 }

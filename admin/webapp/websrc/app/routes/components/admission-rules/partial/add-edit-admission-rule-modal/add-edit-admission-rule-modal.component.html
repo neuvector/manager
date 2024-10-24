@@ -1,156 +1,230 @@
 <div class="nv-dialog">
   <div class="d-flex justify-content-between align-items-center">
     <h4 mat-dialog-title class="mb-2">
-      <span *ngIf="data.opType === modalOp.ADD">{{ "admissionControl.addRule.TITLE" | translate }}</span>
-      <span *ngIf="data.opType === modalOp.EDIT">{{ "admissionControl.editRule.TITLE" | translate }}</span>
-      <span *ngIf="data.opType === modalOp.VIEW">{{ "admissionControl.editRule.TITLE2" | translate }}</span>
-      <span *ngIf="!isMainView"> - {{ "admissionControl.names.ADD_CUSTOMIZED_CRITERION" | translate }}</span>
+      <span *ngIf="data.opType === modalOp.ADD">{{
+        'admissionControl.addRule.TITLE' | translate
+      }}</span>
+      <span *ngIf="data.opType === modalOp.EDIT">{{
+        'admissionControl.editRule.TITLE' | translate
+      }}</span>
+      <span *ngIf="data.opType === modalOp.VIEW">{{
+        'admissionControl.editRule.TITLE2' | translate
+      }}</span>
+      <span *ngIf="!isMainView">
+        -
+        {{
+          'admissionControl.names.ADD_CUSTOMIZED_CRITERION' | translate
+        }}</span
+      >
     </h4>
-    <button (click)="onCancel()" class="mb-2" aria-label="Close dialog" mat-icon-button>
-      <i class="eos-icons ">close</i>
+    <button
+      (click)="onCancel()"
+      class="mb-2"
+      aria-label="Close dialog"
+      mat-icon-button>
+      <i class="eos-icons">close</i>
     </button>
   </div>
   <hr class="fancy mb-2" />
   <div mat-dialog-content>
-    <form
-      [formGroup]="addEditAdmissionRuleForm"
-    >
+    <form [formGroup]="addEditAdmissionRuleForm">
       <div *ngIf="isMainView; else customizedCriterionView">
         <div class="row">
           <div class="col-12 col-md-3 margin-top-l">
             <label class="nv-modal-item-title margin-right-m">{{
-              "admissionControl.TYPE" | translate
+              'admissionControl.TYPE' | translate
             }}</label>
             <mat-slide-toggle
               id="admission-action-toggle"
               formControlName="isException"
               [disabled]="data.opType !== modalOp.ADD"
-              (change)="toggleType()"
-            >
+              (change)="toggleType()">
               <span
                 [ngClass]="{
-                  'text-deny': !addEditAdmissionRuleForm.controls.isException.value,
-                  'text-success': addEditAdmissionRuleForm.controls.isException.value
-                }"
-              >
+                  'text-deny':
+                    !addEditAdmissionRuleForm.controls.isException.value,
+                  'text-success':
+                    addEditAdmissionRuleForm.controls.isException.value
+                }">
                 {{
                   (addEditAdmissionRuleForm.controls.isException.value
-                    ? "policy.action.ALLOW"
-                    : "policy.action.DENY") | translate
+                    ? 'policy.action.ALLOW'
+                    : 'policy.action.DENY'
+                  ) | translate
                 }}
               </span>
             </mat-slide-toggle>
           </div>
           <mat-form-field appearance="standard" class="col-12 col-md-9">
-              <mat-label>{{ "admissionControl.COMMENT" | translate }}</mat-label>
-              <input
-                matInput
-                [readonly]="data.opType === modalOp.VIEW"
-                [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-                formControlName="comment"
-              />
+            <mat-label>{{ 'admissionControl.COMMENT' | translate }}</mat-label>
+            <input
+              matInput
+              [readonly]="data.opType === modalOp.VIEW"
+              [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
+              formControlName="comment" />
           </mat-form-field>
           <mat-form-field appearance="standard" class="col-12 col-md-4">
             <mat-select
               placeholder="{{ 'admissionControl.NAME' | translate }}*"
               [disabled]="data.opType === modalOp.VIEW"
-              [ngModelOptions]="{standalone: true}"
+              [ngModelOptions]="{ standalone: true }"
               [(ngModel)]="mainCriterion.name"
-              (selectionChange)="changeCriterionName(mainCriterion.name, true)"
-            >
-              <mat-option *ngIf="!addEditAdmissionRuleForm.controls.isException.value" (click)="switchCustomizedCriterionView()">
-                <span class="text-discover">{{
-                  "admissionControl.names.ADD_CUSTOMIZED_CRITERION" | translate
-                }} ...</span>
+              (selectionChange)="changeCriterionName(mainCriterion.name, true)">
+              <mat-option
+                *ngIf="!addEditAdmissionRuleForm.controls.isException.value"
+                (click)="switchCustomizedCriterionView()">
+                <span class="text-discover"
+                  >{{
+                    'admissionControl.names.ADD_CUSTOMIZED_CRITERION'
+                      | translate
+                  }}
+                  ...</span
+                >
                 <em
                   class="fa fa-file-code text-muted margin-left-s"
-                  style="font-size: 10px;"
+                  style="font-size: 10px"
                   aria-hidden="true"
-                  matTooltip="{{ 'admissionControl.TIP.scanRequirementHint.YAML' | translate}}"
+                  matTooltip="{{
+                    'admissionControl.TIP.scanRequirementHint.YAML' | translate
+                  }}"
                   matTooltipPosition="above">
                 </em>
               </mat-option>
-              <mat-option
-                *ngFor="let name of criterionNameList"
-                [value]="name"
+              <mat-option *ngFor="let name of criterionNameList" [value]="name"
                 ><span *ngIf="criteriaOptions[name]">{{
-                  "admissionControl.names." + parseDivideStyle(name).toUpperCase()
-                    | translate
+                  'admissionControl.names.' +
+                    parseDivideStyle(name).toUpperCase() | translate
                 }}</span>
-                <span *ngIf="!criteriaOptions[name]">{{name}}</span>
+                <span *ngIf="!criteriaOptions[name]">{{ name }}</span>
                 <span class="margin-left-s">
                   <app-criterion-description-icon
                     [criteriaOptions]="criteriaOptions"
-                    [name]="name"
-                  >
+                    [name]="name">
                   </app-criterion-description-icon>
                 </span>
               </mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field
-            *ngIf="!(CRITERIA_PATTERN.NAME_ONLY.concat(CRITERIA_PATTERN.RESOURCE)).includes(mainCriterion.name)"
+            *ngIf="
+              !CRITERIA_PATTERN.NAME_ONLY.concat(
+                CRITERIA_PATTERN.RESOURCE
+              ).includes(mainCriterion.name)
+            "
             appearance="standard"
-            class="col-12 col-md-3"
-          >
+            class="col-12 col-md-3">
             <mat-select
               placeholder="{{ 'admissionControl.OP' | translate }}*"
-              [disabled]="criterionOperatorList.length === 1 || data.opType === modalOp.VIEW"
-              [ngModelOptions]="{standalone: true}"
+              [disabled]="
+                criterionOperatorList.length === 1 ||
+                data.opType === modalOp.VIEW
+              "
+              [ngModelOptions]="{ standalone: true }"
               [(ngModel)]="mainCriterion.op"
-              (selectionChange)="changeCriterionOperator(mainCriterion.op)"
-            >
-              <mat-option *ngFor="let op of criterionOperatorList" [value]="op">{{'admissionControl.operators.' + op.toUpperCase() + (CRITERIA_PATTERN.SINGLE_VALUE_CRITERIA.includes(mainCriterion.name) ? '_SINGLE' : '') | translate}}</mat-option>
+              (selectionChange)="changeCriterionOperator(mainCriterion.op)">
+              <mat-option
+                *ngFor="let op of criterionOperatorList"
+                [value]="op"
+                >{{
+                  'admissionControl.operators.' +
+                    op.toUpperCase() +
+                    (CRITERIA_PATTERN.SINGLE_VALUE_CRITERIA.includes(
+                      mainCriterion.name
+                    )
+                      ? '_SINGLE'
+                      : '') | translate
+                }}</mat-option
+              >
             </mat-select>
           </mat-form-field>
           <mat-form-field
-            *ngIf="!(CRITERIA_PATTERN.NAME_ONLY.concat(CRITERIA_PATTERN.RESOURCE)).includes(mainCriterion.name) && !hasMultiValue && criterionValueList.length <= 1 && !mainCriterion.op.toLowerCase().includes('exist'.toLowerCase()) && mainCriterion.name !== 'saBindRiskyRole' && mainCriterion.name !== 'imageVerifiers'"
+            *ngIf="
+              !CRITERIA_PATTERN.NAME_ONLY.concat(
+                CRITERIA_PATTERN.RESOURCE
+              ).includes(mainCriterion.name) &&
+              !hasMultiValue &&
+              criterionValueList.length <= 1 &&
+              !mainCriterion.op.toLowerCase().includes('exist'.toLowerCase()) &&
+              mainCriterion.name !== 'saBindRiskyRole' &&
+              mainCriterion.name !== 'imageVerifiers'
+            "
             appearance="standard"
-            class="col-12 col-md-4"
-          >
+            class="col-12 col-md-4">
             <input
               matInput
               [readonly]="data.opType === modalOp.VIEW"
               [type]="mainCriterion.value_type === 'number' ? 'number' : 'text'"
-              [ngModelOptions]="{standalone: true}"
+              [ngModelOptions]="{ standalone: true }"
               [(ngModel)]="mainCriterion.value"
-              [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-            />
+              [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
           </mat-form-field>
           <mat-form-field
-            *ngIf="!(CRITERIA_PATTERN.NAME_ONLY.concat(CRITERIA_PATTERN.RESOURCE)).includes(mainCriterion.name) && hasMultiValue && criterionValueList.length <= 1 && !mainCriterion.op.toLowerCase().includes('exist'.toLowerCase()) && mainCriterion.name !== 'saBindRiskyRole' && mainCriterion.name !== 'imageVerifiers'"
+            *ngIf="
+              !CRITERIA_PATTERN.NAME_ONLY.concat(
+                CRITERIA_PATTERN.RESOURCE
+              ).includes(mainCriterion.name) &&
+              hasMultiValue &&
+              criterionValueList.length <= 1 &&
+              !mainCriterion.op.toLowerCase().includes('exist'.toLowerCase()) &&
+              mainCriterion.name !== 'saBindRiskyRole' &&
+              mainCriterion.name !== 'imageVerifiers'
+            "
             appearance="outline"
-            class="col-12 col-md-4"
-          >
+            class="col-12 col-md-4">
             <textarea
               matInput
-              style="min-height: 60px;"
+              style="min-height: 60px"
               [readonly]="data.opType === modalOp.VIEW"
-              [ngModelOptions]="{standalone: true}"
+              [ngModelOptions]="{ standalone: true }"
               [(ngModel)]="mainCriterion.value"
-              [placeholder]="(mainCriterion.name === 'imageVerifiers' ? 'admissionControl.sample.MULTI_VAL_SIG_VRF' : 'admissionControl.sample.MULTI_VAL') | translate"
-            ></textarea>
+              [placeholder]="
+                (mainCriterion.name === 'imageVerifiers'
+                  ? 'admissionControl.sample.MULTI_VAL_SIG_VRF'
+                  : 'admissionControl.sample.MULTI_VAL'
+                ) | translate
+              "></textarea>
           </mat-form-field>
           <mat-form-field
-            *ngIf="!(CRITERIA_PATTERN.NAME_ONLY.concat(CRITERIA_PATTERN.RESOURCE)).includes(mainCriterion.name) && criterionValueList.length > 1 && !mainCriterion.op.toLowerCase().includes('exist'.toLowerCase()) && mainCriterion.name !== 'saBindRiskyRole' && mainCriterion.name !== 'imageVerifiers'"
+            *ngIf="
+              !CRITERIA_PATTERN.NAME_ONLY.concat(
+                CRITERIA_PATTERN.RESOURCE
+              ).includes(mainCriterion.name) &&
+              criterionValueList.length > 1 &&
+              !mainCriterion.op.toLowerCase().includes('exist'.toLowerCase()) &&
+              mainCriterion.name !== 'saBindRiskyRole' &&
+              mainCriterion.name !== 'imageVerifiers'
+            "
             appearance="standard"
-            class="col-12 col-md-4"
-          >
+            class="col-12 col-md-4">
             <mat-select
               placeholder="{{ 'admissionControl.VALUE' | translate }}*"
-              [disabled]="criterionValueList.length === 1 || data.opType === modalOp.VIEW"
-              [ngModelOptions]="{standalone: true}"
-              [(ngModel)]="mainCriterion.value"
-            >
-              <mat-option *ngFor="let value of criterionValueList" [value]="value">{{value}}</mat-option>
+              [disabled]="
+                criterionValueList.length === 1 || data.opType === modalOp.VIEW
+              "
+              [ngModelOptions]="{ standalone: true }"
+              [(ngModel)]="mainCriterion.value">
+              <mat-option
+                *ngFor="let value of criterionValueList"
+                [value]="value"
+                >{{ value }}</mat-option
+              >
             </mat-select>
           </mat-form-field>
-          <mat-form-field class="col-12 col-md-4" appearance="standard" *ngIf="mainCriterion.name === 'imageVerifiers'">
+          <mat-form-field
+            class="col-12 col-md-4"
+            appearance="standard"
+            *ngIf="mainCriterion.name === 'imageVerifiers'">
             <mat-chip-list #valueChipList aria-label="criteria value">
               <mat-chip
                 *ngFor="let chip of valuechips"
                 (removed)="removeValueChip(chip)">
-                <span class="auto-hide" style="max-width: 150px;" [matTooltip]="chip" matTooltipPosition="above">{{ chip }}</span>
+                <span
+                  class="auto-hide"
+                  style="max-width: 150px"
+                  [matTooltip]="chip"
+                  matTooltipPosition="above"
+                  >{{ chip }}</span
+                >
                 <button matChipRemove>
                   <mat-icon class="eos-icons icon-18">cancel</mat-icon>
                 </button>
@@ -158,7 +232,7 @@
               <input
                 placeholder="{{ 'admissionControl.VALUE' | translate }}*"
                 #valueChipsInput
-                [ngModelOptions]="{standalone: true}"
+                [ngModelOptions]="{ standalone: true }"
                 [(ngModel)]="valuechipsModel"
                 [matAutocomplete]="autoValueChip"
                 [matChipInputFor]="valueChipList"
@@ -167,8 +241,7 @@
             <mat-autocomplete
               #autoValueChip="matAutocomplete"
               (optionSelected)="onValueAutocompleteSelected($event)"
-              (opened)="onAutoCompleteListOpened()"
-            >
+              (opened)="onAutoCompleteListOpened()">
               <mat-option
                 *ngFor="let verifier of sigVerifierOptions"
                 [value]="verifier"
@@ -185,94 +258,122 @@
             class="margin-top-m"
             [list]="criterionValueList"
             (shareCheckedList)="shareCheckedList($event)">
-          >
+            >
           </app-multi-selector-dropdown>
           <div class="col-12 col-md-1" *ngIf="data.opType !== modalOp.VIEW">
             <button
-              class="primary-button hightlighted-button pull-right" [disabled]="isInvalidCriterion(mainCriterion, subCriterion)"
-              style="margin-top: 20px;" (click)="addCriterionIntoChip4HTML(mainCriterion, subCriterion)"
-            ><em class="eos-icons icon-18">add</em></button>
+              class="primary-button hightlighted-button pull-right"
+              [disabled]="isInvalidCriterion(mainCriterion, subCriterion)"
+              style="margin-top: 20px"
+              (click)="addCriterionIntoChip4HTML(mainCriterion, subCriterion)">
+              <em class="eos-icons icon-18">add</em>
+            </button>
           </div>
         </div>
         <div
           *ngIf="mainCriterion.name && subOptions"
-          style="max-height: 300px; overflow-y: scroll;"
-        >
+          style="max-height: 300px; overflow-y: scroll">
           <div
             *ngFor="let subOption of subOptions; let i = index"
-            [attr.data-index]="i"
-          >
+            [attr.data-index]="i">
             <div class="row">
               <div class="col-12 col-md-4 margin-top-xl">
-                <div>{{'admissionControl.names.' + parseDivideStyle(subOption.name).toUpperCase() | translate}}</div>
+                <div>
+                  {{
+                    'admissionControl.names.' +
+                      parseDivideStyle(subOption.name).toUpperCase() | translate
+                  }}
+                </div>
               </div>
               <mat-form-field
-                *ngIf="!(CRITERIA_PATTERN.NAME_ONLY.concat(CRITERIA_PATTERN.RESOURCE)).includes(subOption.name) && subOption.ops.length > 1"
+                *ngIf="
+                  !CRITERIA_PATTERN.NAME_ONLY.concat(
+                    CRITERIA_PATTERN.RESOURCE
+                  ).includes(subOption.name) && subOption.ops.length > 1
+                "
                 appearance="standard"
-                class="col-12 col-md-3"
-              >
+                class="col-12 col-md-3">
                 <mat-select
                   placeholder="{{ 'admissionControl.OP' | translate }}*"
                   [disabled]="data.opType === modalOp.VIEW"
-                  [ngModelOptions]="{standalone: true}"
-                  [(ngModel)]="subCriterion[i]['op']"
-                >
-                  <mat-option *ngFor="let subOp of subOption.ops" [value]="subOp">
-                    {{'admissionControl.operators.' + subOp.toUpperCase() | translate}}
+                  [ngModelOptions]="{ standalone: true }"
+                  [(ngModel)]="subCriterion[i]['op']">
+                  <mat-option
+                    *ngFor="let subOp of subOption.ops"
+                    [value]="subOp">
+                    {{
+                      'admissionControl.operators.' + subOp.toUpperCase()
+                        | translate
+                    }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
               <div
-                *ngIf="!(CRITERIA_PATTERN.NAME_ONLY.concat(CRITERIA_PATTERN.RESOURCE)).includes(subOption.name) && subOption.ops.length === 1"
-                class="col-12 col-md-3 margin-top-xl"
-              >
-                {{'admissionControl.operators.text.' + subOption.ops[0].toUpperCase() | translate}}
+                *ngIf="
+                  !CRITERIA_PATTERN.NAME_ONLY.concat(
+                    CRITERIA_PATTERN.RESOURCE
+                  ).includes(subOption.name) && subOption.ops.length === 1
+                "
+                class="col-12 col-md-3 margin-top-xl">
+                {{
+                  'admissionControl.operators.text.' +
+                    subOption.ops[0].toUpperCase() | translate
+                }}
               </div>
-              <mat-form-field
-                appearance="standard"
-                class="col-12 col-md-3"
-              >
+              <mat-form-field appearance="standard" class="col-12 col-md-3">
                 <input
                   matInput
                   [readonly]="data.opType === modalOp.VIEW"
-                  [ngModelOptions]="{standalone: true}"
+                  [ngModelOptions]="{ standalone: true }"
                   [(ngModel)]="subCriterion[i]['value']"
-                  [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-                />
+                  [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
               </mat-form-field>
               <mat-form-field
-                *ngIf="UNITS[subOption.name] && UNITS[subOption.name].length > 1"
+                *ngIf="
+                  UNITS[subOption.name] && UNITS[subOption.name].length > 1
+                "
                 appearance="standard"
-                class="col-12 col-md-1"
-              >
+                class="col-12 col-md-1">
                 <mat-select
                   [disabled]="data.opType === modalOp.VIEW"
-                  [ngModelOptions]="{standalone: true}"
-                  [(ngModel)]="subCriterion[i]['unit']"
-                >
-                  <mat-option *ngFor="let unit of UNITS[subOption.name]" [value]="unit">{{unit}}</mat-option>
+                  [ngModelOptions]="{ standalone: true }"
+                  [(ngModel)]="subCriterion[i]['unit']">
+                  <mat-option
+                    *ngFor="let unit of UNITS[subOption.name]"
+                    [value]="unit"
+                    >{{ unit }}</mat-option
+                  >
                 </mat-select>
               </mat-form-field>
               <div
                 class="col-12 col-md-1 margin-top-xl"
-                *ngIf="UNITS[subOption.name] && UNITS[subOption.name].length === 1">
-                {{UNITS[subOption.name][0]}}
+                *ngIf="
+                  UNITS[subOption.name] && UNITS[subOption.name].length === 1
+                ">
+                {{ UNITS[subOption.name][0] }}
               </div>
             </div>
           </div>
         </div>
         <div class="row">
           <mat-form-field appearance="outline" class="col-12 col-md-12">
-            <mat-chip-list #chipList aria-label="admisson criteria" formControlName="criteria">
+            <mat-chip-list
+              #chipList
+              aria-label="admisson criteria"
+              formControlName="criteria">
               <mat-chip
-                *ngFor="let criterion of addEditAdmissionRuleForm.controls.criteria.value"
+                *ngFor="
+                  let criterion of addEditAdmissionRuleForm.controls.criteria
+                    .value
+                "
                 [selectable]="data.opType !== modalOp.VIEW"
                 [removable]="data.opType !== modalOp.VIEW"
                 (removed)="removeCriterionFromChip(criterion)"
-                (click)="criterionSelectedInChip(criterion)"
-              >
+                (click)="criterionSelectedInChip(criterion)">
                 {{ criterion.name }}
-                <mat-icon matChipRemove *ngIf="data.opType !== modalOp.VIEW">cancel</mat-icon>
+                <mat-icon matChipRemove *ngIf="data.opType !== modalOp.VIEW"
+                  >cancel</mat-icon
+                >
               </mat-chip>
               <input
                 #criteriaInput
@@ -280,36 +381,54 @@
                 [readonly]="true"
                 placeholder="{{ 'admissionControl.CRITERIA' | translate }}"
                 [matChipInputFor]="chipList"
-                [matChipInputSeparatorKeyCodes]="SEPARATOR_KEYS_CODES"
-              />
+                [matChipInputSeparatorKeyCodes]="SEPARATOR_KEYS_CODES" />
             </mat-chip-list>
           </mat-form-field>
           <div class="margin-left-m margin-right-m">
-            <div class="text-muted" *ngIf="hasPSP">{{pspCriteria}}</div>
-            <div class="text-warning" *ngIf="hasPSP">{{'admissionControl.PSP_INSTRUCTION'| translate}}</div>
+            <div class="text-muted" *ngIf="hasPSP">{{ pspCriteria }}</div>
+            <div class="text-warning" *ngIf="hasPSP">
+              {{ 'admissionControl.PSP_INSTRUCTION' | translate }}
+            </div>
             <div class="text-muted">
               <div *ngIf="isPSSBaseline || isPSSRestricted">
-                <span class="text-bold">{{ (isPSSBaseline ? 'admissionControl.BL_POLICY' : 'admissionControl.RS_POLICY') | translate }}:</span>
+                <span class="text-bold"
+                  >{{
+                    (isPSSBaseline
+                      ? 'admissionControl.BL_POLICY'
+                      : 'admissionControl.RS_POLICY'
+                    ) | translate
+                  }}:</span
+                >
                 <span class="text-info">
                   ({{ 'admissionControl.PSS_POLICY_DETAIL_LINK' | translate }}:
-                    <a
-                      target="_blank"
-                      class="eos-icons icon-18"
-                      href="https://kubernetes.io/docs/concepts/security/pod-security-standards/"
+                  <a
+                    target="_blank"
+                    class="eos-icons icon-18"
+                    href="https://kubernetes.io/docs/concepts/security/pod-security-standards/"
                     >link
-                    </a>
+                  </a>
                   )
                 </span>
               </div>
               <div *ngIf="isPSSBaseline" class="row mx-0">
-                <div *ngFor="let item of pssCollections.baseline" class="col-sm-6">- {{ item }}</div>
+                <div
+                  *ngFor="let item of pssCollections.baseline"
+                  class="col-sm-6">
+                  - {{ item }}
+                </div>
               </div>
               <div *ngIf="isPSSRestricted">
-                <div *ngFor="let item of pssCollections.restricted">- {{ item }}</div>
+                <div *ngFor="let item of pssCollections.restricted">
+                  - {{ item }}
+                </div>
               </div>
             </div>
-            <div class="text-warning" *ngIf="isPSSRestricted">{{ 'admissionControl.PSS_RESTRICT_HINT' | translate }}</div>
-            <div class="text-danger" *ngIf="isInvalidCriteriaComb()">{{ 'admissionControl.STORAGE_CLASS_NAME_COMB_ERROR' | translate }}</div>
+            <div class="text-warning" *ngIf="isPSSRestricted">
+              {{ 'admissionControl.PSS_RESTRICT_HINT' | translate }}
+            </div>
+            <div class="text-danger" *ngIf="isInvalidCriteriaComb()">
+              {{ 'admissionControl.STORAGE_CLASS_NAME_COMB_ERROR' | translate }}
+            </div>
           </div>
         </div>
         <!-- <div class="row">
@@ -334,44 +453,57 @@
           </div>
         </div> -->
         <div class="row">
-          <div class="col-12 col-md-6 mt-2" *ngIf="!addEditAdmissionRuleForm.controls.isException.value">
-            <label class="pull-left margin-right-m">{{ 'admissionControl.MODE' | translate }}</label>
+          <div
+            class="col-12 col-md-6 mt-2"
+            *ngIf="!addEditAdmissionRuleForm.controls.isException.value">
+            <label class="pull-left margin-right-m">{{
+              'admissionControl.MODE' | translate
+            }}</label>
             <mat-radio-group
               class="pull-left margin-right-m"
               aria-label="Select a mode"
-              formControlName="rule_mode"
-            >
-              <mat-radio-button value="" class="margin-right-s" [disabled]="data.opType === modalOp.VIEW">{{
-                'admissionControl.NO_MODE' | translate
-              }}</mat-radio-button>
-              <mat-radio-button value="monitor" class="margin-right-s" [disabled]="data.opType === modalOp.VIEW">{{
-                'topbar.mode.EVALUATION' | translate
-              }}</mat-radio-button>
-              <mat-radio-button value="protect" class="margin-right-s" [disabled]="data.opType === modalOp.VIEW">{{
-                'topbar.mode.ENFORCE' | translate
-              }}</mat-radio-button>
+              formControlName="rule_mode">
+              <mat-radio-button
+                value=""
+                class="margin-right-s"
+                [disabled]="data.opType === modalOp.VIEW"
+                >{{ 'admissionControl.NO_MODE' | translate }}</mat-radio-button
+              >
+              <mat-radio-button
+                value="monitor"
+                class="margin-right-s"
+                [disabled]="data.opType === modalOp.VIEW"
+                >{{ 'topbar.mode.EVALUATION' | translate }}</mat-radio-button
+              >
+              <mat-radio-button
+                value="protect"
+                class="margin-right-s"
+                [disabled]="data.opType === modalOp.VIEW"
+                >{{ 'topbar.mode.ENFORCE' | translate }}</mat-radio-button
+              >
             </mat-radio-group>
           </div>
           <div class="col-12 col-md-3">
             <label class="nv-modal-item-title margin-right-m">{{
-              "responsePolicy.gridHeader.STATUS" | translate
+              'responsePolicy.gridHeader.STATUS' | translate
             }}</label>
             <mat-slide-toggle
               class="padding-top-s"
               id="network-status-toggle"
               [disabled]="data.opType === modalOp.VIEW"
-              formControlName="enabled"
-            >
+              formControlName="enabled">
               <span
                 [ngClass]="{
-                  'text-muted': !addEditAdmissionRuleForm.controls.enabled.value,
-                  'text-success': addEditAdmissionRuleForm.controls.enabled.value
-                }"
-              >
+                  'text-muted':
+                    !addEditAdmissionRuleForm.controls.enabled.value,
+                  'text-success':
+                    addEditAdmissionRuleForm.controls.enabled.value
+                }">
                 {{
                   (addEditAdmissionRuleForm.controls.enabled.value
-                    ? "policy.status.ENABLED"
-                    : "policy.status.DISABLED") | translate
+                    ? 'policy.status.ENABLED'
+                    : 'policy.status.DISABLED'
+                  ) | translate
                 }}
               </span>
             </mat-slide-toggle>
@@ -380,18 +512,27 @@
         <div class="clearfix" *ngIf="data.opType !== modalOp.VIEW">
           <app-loading-button
             [appearance]="'mat-raised-button'"
-            [disabled]="addEditAdmissionRuleForm.invalid || !isContainersValid || isInvalidCriteriaComb()"
+            [disabled]="
+              addEditAdmissionRuleForm.invalid ||
+              !isContainersValid ||
+              isInvalidCriteriaComb()
+            "
             [color]="'primary'"
             [loading]="submittingUpdate"
-            [text]="(data.opType === modalOp.EDIT ? 'policy.editPolicy.UPDATE' : 'policy.addPolicy.ADD') | translate"
+            [text]="
+              (data.opType === modalOp.EDIT
+                ? 'policy.editPolicy.UPDATE'
+                : 'policy.addPolicy.ADD'
+              ) | translate
+            "
             (btnClick)="updateRule()"
-            class="pull-right"
-          >
+            class="pull-right">
           </app-loading-button>
           <button
             mat-stroked-button
-            class="pull-right mr-2" (click)="onCancel()">
-            {{ "policy.addPolicy.CANCEL" | translate }}
+            class="pull-right mr-2"
+            (click)="onCancel()">
+            {{ 'policy.addPolicy.CANCEL' | translate }}
           </button>
         </div>
       </div>
@@ -400,11 +541,11 @@
 </div>
 
 <ng-template #customizedCriterionView>
-  <div class="row margin-top-s" style="min-height: 500px;">
+  <div class="row margin-top-s" style="min-height: 500px">
     <json-editor
       id="template-editor"
       class="col-md-6 margin-top-m"
-      style="max-height: 450px; overflow-y: auto;"
+      style="max-height: 450px; overflow-y: auto"
       [options]="jsonEditorOptions"
       [data]="podTemplateTreeData"
       (click)="clickEditor($event)">
@@ -413,56 +554,75 @@
       <mat-form-field
         *ngIf="customCriterion.name"
         appearance="standard"
-        style="width: 100%;"
-      >
+        style="width: 100%">
         <input
           matInput
           readonly
           placeholder="{{ 'admissionControl.NAME' | translate }}*"
-          [ngModelOptions]="{standalone: true}"
+          [ngModelOptions]="{ standalone: true }"
           [(ngModel)]="customCriterion.name"
-          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-        />
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
       </mat-form-field>
       <mat-form-field
         *ngIf="nodeValueType"
         appearance="standard"
-        style="width: 100%;"
-      >
+        style="width: 100%">
         <mat-select
           placeholder="{{ 'admissionControl.OP' | translate }}*"
           [disabled]="customizedOps.length === 1"
-          [ngModelOptions]="{standalone: true}"
+          [ngModelOptions]="{ standalone: true }"
           [(ngModel)]="customCriterion.op"
-          (selectionChange)="changeCustomizedCriterionOperator(customCriterion.op)"
-        >
-          <mat-option *ngFor="let op of customizedOps" [value]="op">{{'admissionControl.operators.' + op.toUpperCase() + (CRITERIA_PATTERN.SINGLE_VALUE_CRITERIA.includes(mainCriterion.name) ? '_SINGLE' : '') | translate}}</mat-option>
+          (selectionChange)="
+            changeCustomizedCriterionOperator(customCriterion.op)
+          ">
+          <mat-option *ngFor="let op of customizedOps" [value]="op">{{
+            'admissionControl.operators.' +
+              op.toUpperCase() +
+              (CRITERIA_PATTERN.SINGLE_VALUE_CRITERIA.includes(
+                mainCriterion.name
+              )
+                ? '_SINGLE'
+                : '') | translate
+          }}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field
-        *ngIf="customizedValues.length < 1 && !customCriterion.op.toLowerCase().includes('exist'.toLowerCase()) && nodeValueType !== 'key' && nodeValueType"
+        *ngIf="
+          customizedValues.length < 1 &&
+          !customCriterion.op.toLowerCase().includes('exist'.toLowerCase()) &&
+          nodeValueType !== 'key' &&
+          nodeValueType
+        "
         appearance="standard"
-        style="width: 100%;"
-      >
+        style="width: 100%">
         <input
           matInput
-          type="{{ nodeValueType === 'number' ? 'number' : 'text'}}"
-          [ngModelOptions]="{standalone: true}"
+          type="{{ nodeValueType === 'number' ? 'number' : 'text' }}"
+          [ngModelOptions]="{ standalone: true }"
           [(ngModel)]="customCriterion.value"
-          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-        />
+          [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
       </mat-form-field>
       <mat-form-field
-        *ngIf="customizedValues.length > 1 && !customCriterion.op.toLowerCase().includes('exist'.toLowerCase()) && nodeValueType !== 'key' && nodeValueType"
+        *ngIf="
+          customizedValues.length > 1 &&
+          !customCriterion.op.toLowerCase().includes('exist'.toLowerCase()) &&
+          nodeValueType !== 'key' &&
+          nodeValueType
+        "
         appearance="standard"
-        style="width: 100%;"
-      >
+        style="width: 100%">
         <mat-select
           placeholder="{{ 'admissionControl.VALUE' | translate }}*"
-          [ngModelOptions]="{standalone: true}"
-          [(ngModel)]="customCriterion.value"
-        >
-          <mat-option *ngFor="let customizedValue of customizedValues" [value]="customizedValue">{{ "admissionControl.values." + customizedValue.toUpperCase() | translate }}</mat-option>
+          [ngModelOptions]="{ standalone: true }"
+          [(ngModel)]="customCriterion.value">
+          <mat-option
+            *ngFor="let customizedValue of customizedValues"
+            [value]="customizedValue"
+            >{{
+              'admissionControl.values.' + customizedValue.toUpperCase()
+                | translate
+            }}</mat-option
+          >
         </mat-select>
       </mat-form-field>
     </div>
@@ -471,8 +631,9 @@
     <div class="d-flex justify-content-end align-items-center">
       <button
         mat-stroked-button
-        class="mr-2" (click)="onCustomizedViewCancel()">
-        {{ "policy.addPolicy.CANCEL" | translate }}
+        class="mr-2"
+        (click)="onCustomizedViewCancel()">
+        {{ 'policy.addPolicy.CANCEL' | translate }}
       </button>
       <app-loading-button
         [appearance]="'mat-raised-button'"
@@ -480,8 +641,7 @@
         [disabled]="!isCustomCriterionValid(customCriterion)"
         [loading]="submittingUpdate"
         [text]="'policy.addPolicy.ADD' | translate"
-        (btnClick)="addCustomizedCriteria(customCriterion)"
-      >
+        (btnClick)="addCustomizedCriteria(customCriterion)">
       </app-loading-button>
     </div>
   </div>

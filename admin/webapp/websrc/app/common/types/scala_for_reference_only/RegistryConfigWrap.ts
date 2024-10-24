@@ -7,7 +7,5 @@ export interface RegistryConfigWrap {
 }
 
 export function isRegistryConfigWrap(v: any): v is RegistryConfigWrap {
-  return (
-    (v['config'] && isRegistryConfig(v['config']))
-  );
+  return v['config'] && isRegistryConfig(v['config']);
 }

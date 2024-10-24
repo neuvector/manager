@@ -1,6 +1,18 @@
-import { CertificateManifest } from "./certificate";
-import { AtmoConfig, AuthConfig, IBMSAConfig, IBMSetupGetResponse, MiscConfig, NetConfig, ProxyConfig, ScannerAutoscale, SvcConfig, SyslogConfig, Webhook } from "./config";
-import { RemoteRepository } from "./remote-repository";
+import { CertificateManifest } from './certificate';
+import {
+  AtmoConfig,
+  AuthConfig,
+  IBMSAConfig,
+  IBMSetupGetResponse,
+  MiscConfig,
+  NetConfig,
+  ProxyConfig,
+  ScannerAutoscale,
+  SvcConfig,
+  SyslogConfig,
+  Webhook,
+} from './config';
+import { RemoteRepository } from './remote-repository';
 
 export interface ConfigV2Vo {
   new_svc: SvcConfig;

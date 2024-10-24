@@ -28,25 +28,27 @@ export interface ScannedWorkloads2 {
 
 export function isScannedWorkloads2(v: any): v is ScannedWorkloads2 {
   return (
-    ((typeof v['id']) === 'string') &&
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['display_name']) === 'string') &&
-    ((typeof v['image']) === 'string') &&
-    ((typeof v['domain']) === 'string') &&
-    ((typeof v['state']) === 'string') &&
-    ((typeof v['service']) === 'string') &&
-    ((typeof v['platform_role']) === 'string') &&
-    (v['scan_summary'] && isScanSummary(v['scan_summary'])) &&
-    (!v['quarantine_reason'] || ((typeof v['quarantine_reason']) === 'string')) &&
-    ((typeof v['privileged']) === 'boolean') &&
-    ((typeof v['run_as_root']) === 'boolean') &&
-    ((typeof v['host_name']) === 'string') &&
-    ((typeof v['enforcer_id']) === 'string') &&
-    ((typeof v['network_mode']) === 'string') &&
-    ((typeof v['started_at']) === 'string') &&
-    ((typeof v['finished_at']) === 'string') &&
+    typeof v['id'] === 'string' &&
+    typeof v['name'] === 'string' &&
+    typeof v['display_name'] === 'string' &&
+    typeof v['image'] === 'string' &&
+    typeof v['domain'] === 'string' &&
+    typeof v['state'] === 'string' &&
+    typeof v['service'] === 'string' &&
+    typeof v['platform_role'] === 'string' &&
+    v['scan_summary'] &&
+    isScanSummary(v['scan_summary']) &&
+    (!v['quarantine_reason'] || typeof v['quarantine_reason'] === 'string') &&
+    typeof v['privileged'] === 'boolean' &&
+    typeof v['run_as_root'] === 'boolean' &&
+    typeof v['host_name'] === 'string' &&
+    typeof v['enforcer_id'] === 'string' &&
+    typeof v['network_mode'] === 'string' &&
+    typeof v['started_at'] === 'string' &&
+    typeof v['finished_at'] === 'string' &&
     (!v['ports'] || (v['ports'] && isArray(v['ports']))) &&
     (!v['applications'] || (v['applications'] && isArray(v['applications']))) &&
-    (v['children'] && isArray(v['children']))
+    v['children'] &&
+    isArray(v['children'])
   );
 }

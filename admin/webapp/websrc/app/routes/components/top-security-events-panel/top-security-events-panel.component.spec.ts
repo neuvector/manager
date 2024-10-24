@@ -8,9 +8,8 @@ describe('TopSecurityEventsPanelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TopSecurityEventsPanelComponent ]
-    })
-    .compileComponents();
+      declarations: [TopSecurityEventsPanelComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -5,7 +5,5 @@ export interface CriteriaItem {
 }
 
 export function isCriteriaItem(v: any): v is CriteriaItem {
-  return (
-    ((typeof v['name']) === 'string')
-  );
+  return typeof v['name'] === 'string';
 }

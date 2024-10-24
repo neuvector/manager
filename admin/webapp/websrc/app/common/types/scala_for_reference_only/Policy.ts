@@ -7,7 +7,5 @@ export interface Policy {
 }
 
 export function isPolicy(v: any): v is Policy {
-  return (
-    (v['rules'] && isArray(v['rules']))
-  );
+  return v['rules'] && isArray(v['rules']);
 }

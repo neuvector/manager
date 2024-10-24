@@ -7,7 +7,5 @@ export interface WebhookConfigWrap {
 }
 
 export function isWebhookConfigWrap(v: any): v is WebhookConfigWrap {
-  return (
-    (v['config'] && isWebhook(v['config']))
-  );
+  return v['config'] && isWebhook(v['config']);
 }

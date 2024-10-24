@@ -9,7 +9,8 @@ export interface DlpRuleConfig {
 
 export function isDlpRuleConfig(v: any): v is DlpRuleConfig {
   return (
-    ((typeof v['name']) === 'string') &&
-    (Array.isArray(v['patterns']) && v['patterns'].every(elmt => elmt && isPattern(elmt)))
+    typeof v['name'] === 'string' &&
+    Array.isArray(v['patterns']) &&
+    v['patterns'].every(elmt => elmt && isPattern(elmt))
   );
 }

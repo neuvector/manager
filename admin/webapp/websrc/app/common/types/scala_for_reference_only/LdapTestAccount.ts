@@ -6,8 +6,5 @@ export interface LdapTestAccount {
 }
 
 export function isLdapTestAccount(v: any): v is LdapTestAccount {
-  return (
-    ((typeof v['username']) === 'string') &&
-    ((typeof v['password']) === 'string')
-  );
+  return typeof v['username'] === 'string' && typeof v['password'] === 'string';
 }

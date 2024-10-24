@@ -1,5 +1,5 @@
-import { CriteriaEntry } from "./criteriaEntry";
-import { WorkloadBrief } from "./workloadBrief";
+import { CriteriaEntry } from './criteriaEntry';
+import { WorkloadBrief } from './workloadBrief';
 
 export interface Group {
   name: string;

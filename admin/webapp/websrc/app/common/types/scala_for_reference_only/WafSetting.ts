@@ -6,8 +6,5 @@ export interface WafSetting {
 }
 
 export function isWafSetting(v: any): v is WafSetting {
-  return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['action']) === 'string')
-  );
+  return typeof v['name'] === 'string' && typeof v['action'] === 'string';
 }

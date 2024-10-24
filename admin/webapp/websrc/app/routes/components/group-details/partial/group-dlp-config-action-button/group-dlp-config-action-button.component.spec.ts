@@ -8,9 +8,8 @@ describe('GroupDlpConfigActionButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GroupDlpConfigActionButtonComponent ]
-    })
-    .compileComponents();
+      declarations: [GroupDlpConfigActionButtonComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

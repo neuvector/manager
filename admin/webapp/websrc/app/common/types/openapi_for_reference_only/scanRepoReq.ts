@@ -1,4 +1,4 @@
-import { ScanMeta } from "./scanMeta";
+import { ScanMeta } from './scanMeta';
 
 export interface ScanRepoReq {
   metadata: ScanMeta;

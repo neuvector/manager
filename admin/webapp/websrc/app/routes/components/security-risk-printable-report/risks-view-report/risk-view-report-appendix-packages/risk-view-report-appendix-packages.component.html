@@ -6,11 +6,12 @@
 </div>
 <div class="margin-top-l" *ngFor="let dataItem of data; let i = index">
   <div *ngIf="dataItem.packages">
-    <div style="font-size: 14px;"><strong>{{ dataItem.name }}</strong></div>
+    <div style="font-size: 14px">
+      <strong>{{ dataItem.name }}</strong>
+    </div>
     <app-risk-view-report-packages-col
       [packages]="dataItem.packages"
-      [isInAppendix]="true"
-    >
+      [isInAppendix]="true">
     </app-risk-view-report-packages-col>
   </div>
 </div>

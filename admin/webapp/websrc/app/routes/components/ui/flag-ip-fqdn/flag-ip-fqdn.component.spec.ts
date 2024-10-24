@@ -8,9 +8,8 @@ describe('FlagIpFqdnComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FlagIpFqdnComponent ]
-    })
-    .compileComponents();
+      declarations: [FlagIpFqdnComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

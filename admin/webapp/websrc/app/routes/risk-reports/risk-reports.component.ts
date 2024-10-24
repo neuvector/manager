@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ErrorResponse } from '@common/types';
 import { RiskReportGridComponent } from '@components/risk-report-grid/risk-report-grid.component';
 import { RiskReportsService } from '@services/risk-reports.service';
@@ -11,7 +11,7 @@ import { MultiClusterService } from '@services/multi-cluster.service';
   templateUrl: './risk-reports.component.html',
   styleUrls: ['./risk-reports.component.scss'],
 })
-export class RiskReportsComponent implements OnInit {
+export class RiskReportsComponent implements OnInit, OnDestroy {
   @ViewChild(RiskReportGridComponent) riskReportGrid!: RiskReportGridComponent;
   refreshing$ = new Subject();
   error!: string;

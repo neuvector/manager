@@ -8,9 +8,8 @@ describe('MultiClusterGridComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MultiClusterGridComponent ]
-    })
-    .compileComponents();
+      declarations: [MultiClusterGridComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

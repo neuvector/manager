@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SettingsService } from '@services/settings.service';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -9,7 +9,7 @@ import { MultiClusterService } from '@services/multi-cluster.service';
   templateUrl: './license.component.html',
   styleUrls: ['./license.component.scss'],
 })
-export class LicenseComponent implements OnInit, OnDestroy{
+export class LicenseComponent implements OnInit, OnDestroy {
   private _switchClusterSubscription;
   licenseError: unknown;
   renewLicenseView = false;
@@ -38,7 +38,7 @@ export class LicenseComponent implements OnInit, OnDestroy{
   }
 
   ngOnDestroy(): void {
-    if(this._switchClusterSubscription){
+    if (this._switchClusterSubscription) {
       this._switchClusterSubscription.unsubscribe();
     }
   }

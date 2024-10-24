@@ -32,13 +32,17 @@ export class AddEditProcessProfileRuleModalComponent implements OnInit {
     private notificationService: NotificationService
   ) {
     this.type = this.data.type;
-
   }
 
   ngOnInit(): void {
     this.processProfileRuleForm = new FormGroup({
       group: new FormControl(
-        { value: '', disabled: this.type === GlobalConstant.MODAL_OP.EDIT || this.data.source === GlobalConstant.NAV_SOURCE.GROUP },
+        {
+          value: '',
+          disabled:
+            this.type === GlobalConstant.MODAL_OP.EDIT ||
+            this.data.source === GlobalConstant.NAV_SOURCE.GROUP,
+        },
         [Validators.required]
       ),
       name: new FormControl('', Validators.required),
@@ -53,34 +57,37 @@ export class AddEditProcessProfileRuleModalComponent implements OnInit {
   }
 
   getGroupOptions() {
-    this.groupsService.getGroupList(
-      this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY ?
-      GlobalConstant.SCOPE.FED :
-      GlobalConstant.SCOPE.LOCAL
-    ).subscribe(
-      response => {
-        this.groupOptions = response['groups']
-          .map(group => group.name)
-          .filter(group => group !== GlobalConstant.EXTERNAL);
-      },
-      err => {
-        console.warn(err);
-      }
-    );
+    this.groupsService
+      .getGroupList(
+        this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+          ? GlobalConstant.SCOPE.FED
+          : GlobalConstant.SCOPE.LOCAL
+      )
+      .subscribe(
+        response => {
+          this.groupOptions = response['groups']
+            .map(group => group.name)
+            .filter(group => group !== GlobalConstant.EXTERNAL);
+        },
+        err => {
+          console.warn(err);
+        }
+      );
   }
 
   initializeVM() {
     if (this.type === GlobalConstant.MODAL_OP.ADD) {
       this.processProfileRuleForm.reset();
     } else {
-      this.oldData = this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY ?
-        this.data.oldData :
-        this.data.oldData[0];
+      this.oldData =
+        this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+          ? this.data.oldData
+          : this.data.oldData[0];
       Object.keys(this.oldData).forEach((key: string) => {
         if (this.processProfileRuleForm.get(key)) {
-          this.processProfileRuleForm.get(key)!.setValue(
-            this.oldData ? this.oldData[key] : null
-          );
+          this.processProfileRuleForm
+            .get(key)!
+            .setValue(this.oldData ? this.oldData[key] : null);
         }
       });
       this.isAllowed =
@@ -88,7 +95,9 @@ export class AddEditProcessProfileRuleModalComponent implements OnInit {
         GlobalConstant.PROCESS_PROFILE_RULE.ACTION.ALLOW;
     }
     if (!this.processProfileRuleForm.get('group')!.value) {
-      this.processProfileRuleForm.get('group')!.setValue(this.data.groupName || "");
+      this.processProfileRuleForm
+        .get('group')!
+        .setValue(this.data.groupName || '');
     }
   }
 
@@ -102,7 +111,7 @@ export class AddEditProcessProfileRuleModalComponent implements OnInit {
         ? GlobalConstant.PROCESS_PROFILE_RULE.ACTION.ALLOW
         : GlobalConstant.PROCESS_PROFILE_RULE.ACTION.DENY,
       ...this.processProfileRuleForm.value,
-      last_modified_timestamp: new Date().getTime() / 1000
+      last_modified_timestamp: new Date().getTime() / 1000,
     };
 
     newData.cfg_type =
@@ -120,15 +129,16 @@ export class AddEditProcessProfileRuleModalComponent implements OnInit {
         this.processProfileRuleForm.get('group')!.value,
         newData,
         this.oldData,
-        this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY ?
-        GlobalConstant.SCOPE.FED :
-        GlobalConstant.SCOPE.LOCAL
+        this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+          ? GlobalConstant.SCOPE.FED
+          : GlobalConstant.SCOPE.LOCAL
       )
       .subscribe(
         response => {
-          let msgTitle = this.type === GlobalConstant.MODAL_OP.ADD ?
-            this.translate.instant('group.profile.ADD_OK') :
-            this.translate.instant('group.profile.EDIT_OK');
+          let msgTitle =
+            this.type === GlobalConstant.MODAL_OP.ADD
+              ? this.translate.instant('group.profile.ADD_OK')
+              : this.translate.instant('group.profile.EDIT_OK');
           this.notificationService.open(msgTitle);
           updateGridData(
             this.data.processProfileRules,
@@ -142,9 +152,10 @@ export class AddEditProcessProfileRuleModalComponent implements OnInit {
           this.onCancel();
         },
         error => {
-          let msgTitle = this.type === GlobalConstant.MODAL_OP.ADD ?
-            this.translate.instant('group.profile.ADD_NG') :
-            this.translate.instant('group.profile.EDIT_NG');
+          let msgTitle =
+            this.type === GlobalConstant.MODAL_OP.ADD
+              ? this.translate.instant('group.profile.ADD_NG')
+              : this.translate.instant('group.profile.EDIT_NG');
           this.notificationService.openError(error.error, msgTitle);
         }
       );

@@ -10,7 +10,11 @@ export interface Key {
 
 export function isKey(v: any): v is Key {
   return (
-    (v['keyTable'] && isArray(v['keyTable'])) &&
-    ((typeof v['keyMap']) == 'object' && Object.keys(v['keyMap']).every(key => (key && isChar(key)) && (v['keyMap'][key] && isArray(v['keyMap'][key]))))
+    v['keyTable'] &&
+    isArray(v['keyTable']) &&
+    typeof v['keyMap'] == 'object' &&
+    Object.keys(v['keyMap']).every(
+      key => key && isChar(key) && v['keyMap'][key] && isArray(v['keyMap'][key])
+    )
   );
 }

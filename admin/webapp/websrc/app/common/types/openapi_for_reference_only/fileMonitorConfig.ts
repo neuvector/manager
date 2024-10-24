@@ -1,4 +1,4 @@
-import { FileMonitorFilterConfig } from "./fileMonitorFilterConfig";
+import { FileMonitorFilterConfig } from './fileMonitorFilterConfig';
 
 export interface FileMonitorConfig {
   add_filters?: FileMonitorFilterConfig[];

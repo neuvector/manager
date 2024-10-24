@@ -1,4 +1,4 @@
-import { AdmissionStats } from "./admissionStats";
+import { AdmissionStats } from './admissionStats';
 
 export interface AdmissionStatsData {
   stats: AdmissionStats;

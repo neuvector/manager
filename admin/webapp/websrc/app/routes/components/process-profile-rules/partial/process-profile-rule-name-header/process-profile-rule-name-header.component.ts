@@ -5,20 +5,21 @@ import { IHeaderParams } from 'ag-grid-community';
 @Component({
   selector: 'app-process-profile-rule-name-header',
   templateUrl: './process-profile-rule-name-header.component.html',
-  styleUrls: ['./process-profile-rule-name-header.component.scss']
+  styleUrls: ['./process-profile-rule-name-header.component.scss'],
 })
-export class ProcessProfileRuleNameHeaderComponent implements IHeaderAngularComp {
-
+export class ProcessProfileRuleNameHeaderComponent
+  implements IHeaderAngularComp
+{
   isZeroDrift: boolean = false;
 
-  constructor() { }
+  constructor() {}
 
   agInit(headerParams: IHeaderParams): void {
-    this.isZeroDrift = headerParams.context.componentParent.baselineProfile === "zero-drift";
+    this.isZeroDrift =
+      headerParams.context.componentParent.baselineProfile === 'zero-drift';
   }
 
   refresh(params: IHeaderParams): boolean {
     return false;
   }
-
 }

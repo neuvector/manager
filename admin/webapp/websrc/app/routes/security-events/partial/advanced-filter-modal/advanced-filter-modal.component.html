@@ -22,8 +22,9 @@
         {{ 'securityEvent.SEVERITY' | translate }}
       </span>
       <div formArrayName="severity" class="mt-2 col-9 row">
-        <ng-container *ngFor="let severity of severityFormArray.controls; let i = index">
-          <mat-checkbox class="mr-3" [formControlName]="i"  class="col-sm-3">
+        <ng-container
+          *ngFor="let severity of severityFormArray.controls; let i = index">
+          <mat-checkbox class="mr-3" [formControlName]="i" class="col-sm-3">
             {{ getDisplayName(filterSeverity[i]) }}
           </mat-checkbox>
         </ng-container>
@@ -34,9 +35,13 @@
         {{ 'securityEvent.LOCATION' | translate }}
       </span>
       <div formArrayName="location" class="mt-2 col-9 row">
-        <ng-container *ngFor="let location of locationFormArray.controls; let i = index">
+        <ng-container
+          *ngFor="let location of locationFormArray.controls; let i = index">
           <mat-checkbox class="mr-3" [formControlName]="i" class="col-sm-3">
-            {{ 'securityEvent.label.' + filterLocation[i].toUpperCase() | translate }}
+            {{
+              'securityEvent.label.' + filterLocation[i].toUpperCase()
+                | translate
+            }}
           </mat-checkbox>
         </ng-container>
       </div>
@@ -46,18 +51,22 @@
         {{ 'event.gridHeader.CATEGORY' | translate }}
       </span>
       <div formArrayName="category" class="mt-2 col-9 row">
-        <ng-container *ngFor="let category of categoryFormArray.controls; let i = index">
+        <ng-container
+          *ngFor="let category of categoryFormArray.controls; let i = index">
           <mat-checkbox class="mr-3" [formControlName]="i" class="col-sm-3">
-            {{ 'securityEvent.label.' + filterCategory[i].toUpperCase() | translate }}
+            {{
+              'securityEvent.label.' + filterCategory[i].toUpperCase()
+                | translate
+            }}
           </mat-checkbox>
         </ng-container>
       </div>
     </section>
     <section class="row mx-0 my-3 align-items-center">
-      <span class="d-block col-3">
-      </span>
+      <span class="d-block col-3"> </span>
       <div formArrayName="other" class="mt-2 col-9 row">
-        <ng-container *ngFor="let other of otherFormArray.controls; let i = index">
+        <ng-container
+          *ngFor="let other of otherFormArray.controls; let i = index">
           <mat-checkbox class="mr-3" [formControlName]="i" class="col-sm-3">
             {{ filterOther[i] | translate }}
           </mat-checkbox>
@@ -84,13 +93,15 @@
           *ngIf="form.controls.host.hasError('invalidAutocompleteString')">
           {{
             'securityEvent.AUTOCOMPLETE_INVALID'
-              | translate: { field: ('securityEvent.HOST' | translate) }
+              | translate : { field: ('securityEvent.HOST' | translate) }
           }}
         </mat-error>
       </mat-form-field>
     </section>
     <section class="row mx-0 align-items-center">
-      <span class="d-block col-3">{{'securityEvent.SOURCE' | translate}}</span>
+      <span class="d-block col-3">{{
+        'securityEvent.SOURCE' | translate
+      }}</span>
       <mat-form-field appearance="standard" class="col pl-0">
         <input
           type="text"
@@ -100,7 +111,9 @@
           id="selectedSource"
           [matAutocomplete]="sourceAuto" />
         <mat-autocomplete #sourceAuto="matAutocomplete">
-          <mat-option *ngFor="let source of filteredSources | async" [value]="source">
+          <mat-option
+            *ngFor="let source of filteredSources | async"
+            [value]="source">
             {{ source }}
           </mat-option>
         </mat-autocomplete>
@@ -108,13 +121,15 @@
           *ngIf="form.controls.source.hasError('invalidAutocompleteString')">
           {{
             'securityEvent.AUTOCOMPLETE_INVALID'
-              | translate: { field: ('securityEvent.SOURCE' | translate) }
+              | translate : { field: ('securityEvent.SOURCE' | translate) }
           }}
         </mat-error>
       </mat-form-field>
     </section>
     <section class="row mx-0 align-items-center">
-      <span class="d-block col-3">{{ 'securityEvent.DESTINATION' | translate }}</span>
+      <span class="d-block col-3">{{
+        'securityEvent.DESTINATION' | translate
+      }}</span>
       <mat-form-field appearance="standard" class="col pl-0">
         <input
           type="text"
@@ -124,15 +139,19 @@
           id="selectedDestination"
           [matAutocomplete]="destinationAuto" />
         <mat-autocomplete #destinationAuto="matAutocomplete">
-          <mat-option *ngFor="let destination of filteredDestinations | async" [value]="destination">
+          <mat-option
+            *ngFor="let destination of filteredDestinations | async"
+            [value]="destination">
             {{ destination }}
           </mat-option>
         </mat-autocomplete>
         <mat-error
-          *ngIf="form.controls.destination.hasError('invalidAutocompleteString')">
+          *ngIf="
+            form.controls.destination.hasError('invalidAutocompleteString')
+          ">
           {{
             'securityEvent.AUTOCOMPLETE_INVALID'
-              | translate: { field: ('securityEvent.DESTINATION' | translate) }
+              | translate : { field: ('securityEvent.DESTINATION' | translate) }
           }}
         </mat-error>
       </mat-form-field>

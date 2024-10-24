@@ -1,4 +1,8 @@
-<ng-container *ngFor="let option of to.options | formlySelectOptions: field | async; let i = index">
+<ng-container
+  *ngFor="
+    let option of to.options | formlySelectOptions : field | async;
+    let i = index
+  ">
   <mat-checkbox
     [id]="id + '_' + i"
     [formlyAttributes]="field"
@@ -7,8 +11,7 @@
     [labelPosition]="to.labelPosition || 'after'"
     [checked]="isChecked(option)"
     [disabled]="formControl.disabled || to.disabled"
-    (change)="onChange(option.value, $event.checked)"
-  >
-    {{ option.label! | translate}}
+    (change)="onChange(option.value, $event.checked)">
+    {{ option.label! | translate }}
   </mat-checkbox>
 </ng-container>

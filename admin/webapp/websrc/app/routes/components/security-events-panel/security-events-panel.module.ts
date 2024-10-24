@@ -7,23 +7,15 @@ import { EmptyDataChartReplacementModule } from '@components/ui/empty-data-chart
 import { NgChartsModule } from 'ng2-charts';
 import { PanelInstructionCurtainModule } from '@components/ui/panel-instruction-curtain/panel-instruction-curtain.module';
 
-
-
 @NgModule({
-  declarations: [
-    SecurityEventsPanelComponent,
-    SecurityEventsChartComponent
-  ],
+  declarations: [SecurityEventsPanelComponent, SecurityEventsChartComponent],
   imports: [
     CommonModule,
     NvCommonModule,
     NgChartsModule,
     EmptyDataChartReplacementModule,
-    PanelInstructionCurtainModule
+    PanelInstructionCurtainModule,
   ],
-  exports: [
-    SecurityEventsPanelComponent,
-    SecurityEventsChartComponent
-  ]
+  exports: [SecurityEventsPanelComponent, SecurityEventsChartComponent],
 })
-export class SecurityEventsPanelModule { }
+export class SecurityEventsPanelModule {}

@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   Input,
@@ -9,10 +8,7 @@ import {
 } from '@angular/core';
 import { GraphService } from '../graph.service';
 import { SniffService } from './sniff.service';
-import {
-  GridApi,
-  GridOptions,
-} from 'ag-grid-community';
+import { GridApi, GridOptions } from 'ag-grid-community';
 import {
   ActivityState,
   PopupState,
@@ -20,7 +16,7 @@ import {
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { TranslateService } from '@ngx-translate/core';
 import { UtilsService } from '@common/utils/app.utils';
-import {ChangeContext, Options} from '@angular-slider/ngx-slider';
+import { ChangeContext, Options } from '@angular-slider/ngx-slider';
 import { DomSanitizer } from '@angular/platform-browser';
 import { interval, Subscription } from 'rxjs';
 import { GlobalVariable } from '@common/variables/global.variable';
@@ -32,7 +28,7 @@ import * as $ from 'jquery';
   templateUrl: './sniffer.component.html',
   styleUrls: ['./sniffer.component.scss'],
 })
-export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
+export class SnifferComponent implements OnInit, OnDestroy {
   isPacketCapAuthorized: boolean = false;
   sniffer: any;
   exportUrl: any;
@@ -87,8 +83,6 @@ export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
     this._popupState = new ActivityState(PopupState.onInit);
   }
 
-  ngAfterViewInit(): void {}
-
   get sniffers() {
     return this._sniffers;
   }
@@ -108,7 +102,7 @@ export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
       this.authUtilsService.getDisplayFlag('write_network_rule');
     this.sniffService.prepareSnifferColumns();
     this.gridOptions = this.sniffService.snifferGridOptions;
-    this.gridOptions.onGridReady = (params) => {
+    this.gridOptions.onGridReady = params => {
       const $win = $(GlobalVariable.window);
       if (params && params.api) {
         this.gridApi = params.api;
@@ -203,8 +197,7 @@ export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
             this.gridApi.ensureNodeVisible(node);
           }
         });
-        if (this.sniffer !== null)
-          this.sniffer.status = 'stopped';
+        if (this.sniffer !== null) this.sniffer.status = 'stopped';
       }
       let selectedRows = this.gridApi.getSelectedRows();
       this.sniffer = selectedRows[0];
@@ -269,7 +262,10 @@ export class SnifferComponent implements AfterViewInit, OnInit, OnDestroy {
     this.sniffService.downloadPacket(jobId).subscribe(
       response => {
         let raw = response.headers.get('Content-Type');
-        let nameAndParts = this.sniffService.multiPart_parse(response.body, raw);
+        let nameAndParts = this.sniffService.multiPart_parse(
+          response.body,
+          raw
+        );
         this.exportFilename = nameAndParts.filename;
         this.exportUrl = this.sanitizer.bypassSecurityTrustUrl(
           URL.createObjectURL(

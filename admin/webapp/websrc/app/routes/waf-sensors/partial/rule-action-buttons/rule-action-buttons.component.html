@@ -1,20 +1,21 @@
 <div *ngIf="!isPredefine">
   <div class="rule-actions-expand fade-in-right">
     <em
-      class="eos-icons icon-18 hand text-action" matTooltip="{{'waf.TIP.EDIT_RULE' | translate}}" matTooltipPosition="above"
-      (click)="editRule(params.node.data)"
-    >
+      class="eos-icons icon-18 hand text-action"
+      matTooltip="{{ 'waf.TIP.EDIT_RULE' | translate }}"
+      matTooltipPosition="above"
+      (click)="editRule(params.node.data)">
       edit
     </em>
     <em
-      class="eos-icons icon-18 hand text-action" matTooltip="{{'waf.TIP.DELETE_RULE' | translate}}" matTooltipPosition="above"
-      (click)="deleteRule(params.node.data)"
-    >
+      class="eos-icons icon-18 hand text-action"
+      matTooltip="{{ 'waf.TIP.DELETE_RULE' | translate }}"
+      matTooltipPosition="above"
+      (click)="deleteRule(params.node.data)">
       delete
     </em>
   </div>
   <div class="rule-actions-collapse text-action">
-    <em class="fa fa-ellipsis-h fa-lg mr-sm text-action hand">
-    </em>
+    <em class="fa fa-ellipsis-h fa-lg mr-sm text-action hand"> </em>
   </div>
 </div>

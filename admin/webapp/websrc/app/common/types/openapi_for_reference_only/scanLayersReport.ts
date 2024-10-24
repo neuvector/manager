@@ -1,4 +1,4 @@
-import { ScanLayer } from "./scanLayer";
+import { ScanLayer } from './scanLayer';
 
 export interface ScanLayersReport {
   layers: ScanLayer[];

@@ -8,9 +8,8 @@ describe('EmptyDataChartReplacementComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EmptyDataChartReplacementComponent ]
-    })
-    .compileComponents();
+      declarations: [EmptyDataChartReplacementComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

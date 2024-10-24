@@ -8,9 +8,8 @@ describe('AddApikeyDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AddApikeyDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [AddApikeyDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

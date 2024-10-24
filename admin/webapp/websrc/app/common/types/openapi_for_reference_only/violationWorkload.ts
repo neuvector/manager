@@ -1,4 +1,4 @@
-import { WorkloadBrief } from "./workloadBrief";
+import { WorkloadBrief } from './workloadBrief';
 
 export interface ViolationWorkload {
   workload: WorkloadBrief;

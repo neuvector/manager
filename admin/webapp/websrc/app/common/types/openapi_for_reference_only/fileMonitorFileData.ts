@@ -1,4 +1,4 @@
-import { FileMonitorFile } from "./fileMonitorFile";
+import { FileMonitorFile } from './fileMonitorFile';
 
 export interface FileMonitorFileData {
   files: FileMonitorFile[];

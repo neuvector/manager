@@ -24,7 +24,7 @@ import { ExposureServicePodReportGridComponent } from './exposure-service-pod-re
   ],
   exports: [
     ExposedServicePodGridComponent,
-    ExposureServicePodReportGridComponent
+    ExposureServicePodReportGridComponent,
   ],
 })
 export class ExposedServicePodGridModule {}

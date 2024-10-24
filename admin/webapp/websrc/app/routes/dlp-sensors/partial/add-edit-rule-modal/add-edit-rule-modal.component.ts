@@ -20,10 +20,9 @@ import { GlobalVariable } from '@common/variables/global.variable';
 @Component({
   selector: 'app-add-edit-rule-modal',
   templateUrl: './add-edit-rule-modal.component.html',
-  styleUrls: ['./add-edit-rule-modal.component.scss']
+  styleUrls: ['./add-edit-rule-modal.component.scss'],
 })
 export class AddEditRuleModalComponent implements OnInit {
-
   opTypeOptions = GlobalConstant.MODAL_OP;
   addEditRuleForm: FormGroup;
   submittingUpdate: boolean = false;
@@ -38,8 +37,7 @@ export class AddEditRuleModalComponent implements OnInit {
   context = { componentParent: this };
   gridOptions4EditPatterns: GridOptions;
   gridApi4EditPatterns!: GridApi;
-  patternErrorMsg: string = "";
-
+  patternErrorMsg: string = '';
 
   constructor(
     private dialogRef: MatDialogRef<AddEditRuleModalComponent>,
@@ -49,18 +47,18 @@ export class AddEditRuleModalComponent implements OnInit {
     private authUtilsService: AuthUtilsService,
     private notificationService: NotificationService,
     private utils: UtilsService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.operators = [
       {
         value: 'regex',
-        viewValue: this.translate.instant('dlp.patternGrid.REGEX')
+        viewValue: this.translate.instant('dlp.patternGrid.REGEX'),
       },
       {
         value: '!regex',
-        viewValue: this.translate.instant('dlp.patternGrid.!REGEX')
-      }
+        viewValue: this.translate.instant('dlp.patternGrid.!REGEX'),
+      },
     ];
     this.contexts = ['packet', 'url', 'header', 'body'];
 
@@ -70,19 +68,23 @@ export class AddEditRuleModalComponent implements OnInit {
       this.addEditRuleForm = new FormGroup({
         sensorName: new FormControl(this.data.sensor.name, Validators.required),
         comment: new FormControl(this.data.sensor.comment),
-        ruleName: new FormControl('', Validators.required)
+        ruleName: new FormControl('', Validators.required),
       });
       this.patterns = [];
     } else {
       this.addEditRuleForm = new FormGroup({
         sensorName: new FormControl(this.data.sensor.name, Validators.required),
         comment: new FormControl(this.data.sensor.comment),
-        ruleName: new FormControl(this.data.rule.name, Validators.required)
+        ruleName: new FormControl(this.data.rule.name, Validators.required),
       });
       this.patterns = JSON.parse(JSON.stringify(this.data.rule.patterns));
     }
-    let isWriteDLPSensorAuthorized = this.authUtilsService.getDisplayFlag("write_dlp_rule") && !this.authUtilsService.userPermission.isNamespaceUser;
-    let gridOptions = this.dlpSensorsService.configGrids(isWriteDLPSensorAuthorized);
+    let isWriteDLPSensorAuthorized =
+      this.authUtilsService.getDisplayFlag('write_dlp_rule') &&
+      !this.authUtilsService.userPermission.isNamespaceUser;
+    let gridOptions = this.dlpSensorsService.configGrids(
+      isWriteDLPSensorAuthorized
+    );
     this.gridOptions4EditPatterns = gridOptions.gridOptions4EditPatterns;
     this.gridOptions4EditPatterns.onGridReady = params => {
       const $win = $(GlobalVariable.window);
@@ -110,35 +112,34 @@ export class AddEditRuleModalComponent implements OnInit {
 
   onCancel = () => {
     this.dialogRef.close(false);
-  }
+  };
 
-  initTestArea = (pattern) => {
-    this.testCase = "";
-    this.testRegex(pattern, "");
+  initTestArea = pattern => {
+    this.testCase = '';
+    this.testRegex(pattern, '');
   };
 
   addPattern = () => {
     if (this.patterns.length >= 16) {
-      this.patternErrorMsg = this.translate.instant("dlp.msg.ADD_PATTERN_NG");
+      this.patternErrorMsg = this.translate.instant('dlp.msg.ADD_PATTERN_NG');
     } else {
       let indexOfExistingPattern = this.patterns.findIndex(pattern => {
-        return pattern.value === this.pattern.value &&
-          pattern.op === this.pattern.op
+        return (
+          pattern.value === this.pattern.value && pattern.op === this.pattern.op
+        );
       });
       if (this.checkReciprocalPattern(this.patterns, this.pattern)) {
-        this.patternErrorMsg = this.translate.instant("dlp.msg.RECIPROCAL_PATTERN_NG")
+        this.patternErrorMsg = this.translate.instant(
+          'dlp.msg.RECIPROCAL_PATTERN_NG'
+        );
       } else {
         if (indexOfExistingPattern === -1) {
           this.patterns.push(this.pattern);
         } else {
-          this.patterns.splice(
-            indexOfExistingPattern,
-            1,
-            this.pattern
-          );
+          this.patterns.splice(indexOfExistingPattern, 1, this.pattern);
         }
         this.gridApi4EditPatterns!.setRowData(this.patterns);
-        this.patternErrorMsg = "";
+        this.patternErrorMsg = '';
         this.initializePattern();
       }
     }
@@ -148,44 +149,49 @@ export class AddEditRuleModalComponent implements OnInit {
     if (this.data.opType === GlobalConstant.MODAL_OP.ADD) {
       this.data.sensor.rules.push({
         name: this.addEditRuleForm.controls.ruleName.value,
-        patterns: this.patterns
-      })
+        patterns: this.patterns,
+      });
     } else {
-      this.data.sensor.rules.splice(
-        this.data.index,
-        1,
-        {
-          id: this.data.rule.id,
-          name: this.data.rule.name,
-          patterns: this.patterns
-        }
-      )
+      this.data.sensor.rules.splice(this.data.index, 1, {
+        id: this.data.rule.id,
+        name: this.data.rule.name,
+        patterns: this.patterns,
+      });
     }
     let payload = {
       config: {
         name: this.data.sensor.name,
         comment: this.data.sensor.comment,
-        rules: this.data.sensor.rules
-      }
-    }
+        rules: this.data.sensor.rules,
+      },
+    };
 
-    this.dlpSensorsService.updateDlpSensorData(payload, GlobalConstant.MODAL_OP.EDIT)
+    this.dlpSensorsService
+      .updateDlpSensorData(payload, GlobalConstant.MODAL_OP.EDIT)
       .subscribe(
         response => {
-          this.notificationService.open(this.translate.instant("dlp.msg.UPDATE_RULE_OK"));
+          this.notificationService.open(
+            this.translate.instant('dlp.msg.UPDATE_RULE_OK')
+          );
           this.data.gridApi.setRowData(payload.config.rules);
           setTimeout(() => {
-            let rowNode =
-              this.data.gridApi.getDisplayedRowAtIndex(this.data.index);
+            let rowNode = this.data.gridApi.getDisplayedRowAtIndex(
+              this.data.index
+            );
             rowNode?.setSelected(true);
           }, 200);
           this.dialogRef.close(true);
         },
         error => {
-          if (this.data.opType === GlobalConstant.MODAL_OP.ADD) this.data.sensor.rules.pop();
+          if (this.data.opType === GlobalConstant.MODAL_OP.ADD)
+            this.data.sensor.rules.pop();
           if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
             this.notificationService.open(
-              this.utils.getAlertifyMsg(error.error, this.translate.instant("dlp.msg.UPDATE_RULE_NG"), false),
+              this.utils.getAlertifyMsg(
+                error.error,
+                this.translate.instant('dlp.msg.UPDATE_RULE_NG'),
+                false
+              ),
               GlobalConstant.NOTIFICATION_TYPE.ERROR
             );
           }
@@ -196,16 +202,16 @@ export class AddEditRuleModalComponent implements OnInit {
   testRegex = (pattern, testCase) => {
     if (!pattern) return;
     if (!testCase) {
-      this.testResult = "";
+      this.testResult = '';
       this.isMatched = true;
       return;
     }
-    this.isMatched = RegExp(`^${pattern}`, "g").test(testCase);
+    this.isMatched = RegExp(`^${pattern}`, 'g').test(testCase);
     if (this.isMatched && testCase.length > 0) {
-      this.testResult = this.translate.instant("dlp.msg.MATCH");
+      this.testResult = this.translate.instant('dlp.msg.MATCH');
     }
     if (!this.isMatched && testCase.length > 0) {
-      this.testResult = this.translate.instant("dlp.msg.MISMATCH");
+      this.testResult = this.translate.instant('dlp.msg.MISMATCH');
     }
   };
 
@@ -214,7 +220,7 @@ export class AddEditRuleModalComponent implements OnInit {
       key: 'pattern',
       op: this.operators[0].value,
       value: '',
-      context: this.contexts[0]
+      context: this.contexts[0],
     };
   };
 
@@ -223,10 +229,14 @@ export class AddEditRuleModalComponent implements OnInit {
   };
 
   private checkReciprocalPattern = (patternList, currPattern) => {
-    return patternList.findIndex(pattern => {
-      return pattern.value === currPattern.value &&
-             pattern.op !== currPattern.op &&
-             pattern.context === currPattern.context
-    }) > -1
+    return (
+      patternList.findIndex(pattern => {
+        return (
+          pattern.value === currPattern.value &&
+          pattern.op !== currPattern.op &&
+          pattern.context === currPattern.context
+        );
+      }) > -1
+    );
   };
 }

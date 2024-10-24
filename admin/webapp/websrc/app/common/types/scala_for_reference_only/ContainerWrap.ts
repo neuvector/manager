@@ -7,7 +7,5 @@ export interface ContainerWrap {
 }
 
 export function isContainerWrap(v: any): v is ContainerWrap {
-  return (
-    (v['workloads'] && isArray(v['workloads']))
-  );
+  return v['workloads'] && isArray(v['workloads']);
 }

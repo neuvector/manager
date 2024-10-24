@@ -34,8 +34,6 @@ export class ComplianceChartsComponent implements OnChanges {
 
   constructor(private translate: TranslateService) {}
 
-  ngOnInit(): void {}
-
   ngOnChanges(changes: SimpleChanges) {
     if (changes.compliances) {
       this.findTopFive(changes.compliances.currentValue);

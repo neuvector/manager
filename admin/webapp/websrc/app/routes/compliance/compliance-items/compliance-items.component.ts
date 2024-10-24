@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Compliance } from '@common/types';
 
 @Component({
@@ -6,7 +6,7 @@ import { Compliance } from '@common/types';
   templateUrl: './compliance-items.component.html',
   styleUrls: ['./compliance-items.component.scss'],
 })
-export class ComplianceItemsComponent implements OnInit {
+export class ComplianceItemsComponent {
   @Input() compliances!: Compliance[];
   @Input() domains!: string[];
   @Input() complianceDist!: any;
@@ -45,6 +45,4 @@ export class ComplianceItemsComponent implements OnInit {
     });
     this.complianceDist = complianceDist;
   }
-
-  ngOnInit(): void {}
 }

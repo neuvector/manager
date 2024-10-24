@@ -8,8 +8,8 @@ export interface VulNodeOutput {
 
 export function isVulNodeOutput(v: any): v is VulNodeOutput {
   return (
-    ((typeof v['nodeHighVuls']) === 'number') &&
-    ((typeof v['nodeMedVuls']) === 'number') &&
-    ((typeof v['totalHost']) === 'number')
+    typeof v['nodeHighVuls'] === 'number' &&
+    typeof v['nodeMedVuls'] === 'number' &&
+    typeof v['totalHost'] === 'number'
   );
 }

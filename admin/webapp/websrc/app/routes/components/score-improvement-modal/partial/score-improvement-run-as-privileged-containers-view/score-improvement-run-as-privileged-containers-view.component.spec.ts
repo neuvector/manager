@@ -8,13 +8,14 @@ describe('ScoreImprovementRunAsPrivilegedContainersViewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ScoreImprovementRunAsPrivilegedContainersViewComponent ]
-    })
-    .compileComponents();
+      declarations: [ScoreImprovementRunAsPrivilegedContainersViewComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ScoreImprovementRunAsPrivilegedContainersViewComponent);
+    fixture = TestBed.createComponent(
+      ScoreImprovementRunAsPrivilegedContainersViewComponent
+    );
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

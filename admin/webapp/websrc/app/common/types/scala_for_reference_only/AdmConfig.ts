@@ -7,7 +7,5 @@ export interface AdmConfig {
 }
 
 export function isAdmConfig(v: any): v is AdmConfig {
-  return (
-    (v['state'] && isAdmState(v['state']))
-  );
+  return v['state'] && isAdmState(v['state']);
 }

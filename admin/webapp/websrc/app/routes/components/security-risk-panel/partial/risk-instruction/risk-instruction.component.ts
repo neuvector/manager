@@ -1,4 +1,10 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  SimpleChanges,
+  OnChanges,
+} from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { InternalSystemInfo, RiskInstruction, RiskType } from '@common/types';
 import { DashboardService } from '@common/services/dashboard.service';
@@ -8,8 +14,7 @@ import { DashboardService } from '@common/services/dashboard.service';
   templateUrl: './risk-instruction.component.html',
   styleUrls: ['./risk-instruction.component.scss'],
 })
-export class RiskInstructionComponent implements OnInit {
-  
+export class RiskInstructionComponent implements OnInit, OnChanges {
   @Input() details: any;
   @Input() scoreInfo!: InternalSystemInfo;
   @Input() activeIndex: number;
@@ -73,13 +78,14 @@ export class RiskInstructionComponent implements OnInit {
       ),
       active: false,
     };
-
   };
 
-  switchInstruction = (activeIndex) => {
+  switchInstruction = activeIndex => {
     let elemCarousel = document.getElementsByClassName('carousel-indicators');
     if (elemCarousel.length > 0) {
-      let elCarouselItem = elemCarousel[0].children[activeIndex] as HTMLButtonElement;
+      let elCarouselItem = elemCarousel[0].children[
+        activeIndex
+      ] as HTMLButtonElement;
       elCarouselItem.click();
     }
   };

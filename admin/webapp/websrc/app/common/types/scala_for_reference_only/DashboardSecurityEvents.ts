@@ -10,7 +10,9 @@ export interface DashboardSecurityEvents {
   error?: Error;
 }
 
-export function isDashboardSecurityEvents(v: any): v is DashboardSecurityEvents {
+export function isDashboardSecurityEvents(
+  v: any
+): v is DashboardSecurityEvents {
   return (
     (!v['threats'] || (v['threats'] && isArray(v['threats']))) &&
     (!v['violations'] || (v['violations'] && isArray(v['violations']))) &&

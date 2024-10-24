@@ -30,8 +30,8 @@ export interface Node {
   domain: string;
   cap_quarantine: boolean;
   cap_change_mode: boolean;
-  cap_sniff: boolean,
-  service_mesh?: boolean,
+  cap_sniff: boolean;
+  service_mesh?: boolean;
   service_mesh_sidecar?: boolean;
   children?: SubNode[];
   policyMode?: string;

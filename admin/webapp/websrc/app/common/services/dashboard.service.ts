@@ -27,17 +27,14 @@ export class DashboardService {
     return score <= GlobalConstant.SCORE_LEVEL.GOOD;
   };
 
-  getScoreData = (
-    isGlobalUser: boolean,
-    domain: string | null
-  ) => {
-    return this.dashboardHttpService
-      .getScores(isGlobalUser, domain)
-      .pipe();
+  getScoreData = (isGlobalUser: boolean, domain: string | null) => {
+    return this.dashboardHttpService.getScores(isGlobalUser, domain).pipe();
   };
 
   getDashboardSecurityEvent = (domain?: string) => {
-    return this.dashboardHttpService.getDashboardSecurityEventData(domain).pipe();
+    return this.dashboardHttpService
+      .getDashboardSecurityEventData(domain)
+      .pipe();
   };
 
   getDashboardDetails = (domain?: string) => {
@@ -50,7 +47,7 @@ export class DashboardService {
 
   getSystemAlerts = () => {
     return this.dashboardHttpService.getSystemAlerts().pipe();
-  }
+  };
 
   getIpGeoInfo = (ipList: Array<string>) => {
     return GlobalVariable.http.patch(PathConstant.IP_GEO_URL, ipList).pipe();
@@ -61,28 +58,20 @@ export class DashboardService {
       console.warn('Summary uninitialized');
     }
 
-    return this.getScoreData(
-        isGlobalUser,
-        null
-      );
+    return this.getScoreData(isGlobalUser, null);
   };
 
-  getDomainReportData = (
-    isGlobalUser: boolean,
-    domain: string
-  ) => {
-    const scorePromise = this.getScoreData(
-      isGlobalUser,
-      domain
-    );
-    const dashboardSecurityEventPromise = this.getDashboardSecurityEvent(domain);
+  getDomainReportData = (isGlobalUser: boolean, domain: string) => {
+    const scorePromise = this.getScoreData(isGlobalUser, domain);
+    const dashboardSecurityEventPromise =
+      this.getDashboardSecurityEvent(domain);
     const dashboardDetailsPromise = this.getDashboardDetails(domain);
-    const dashboardSummaryPromise = this.getSummaryInfo(domain)
+    const dashboardSummaryPromise = this.getSummaryInfo(domain);
     return forkJoin([
       scorePromise,
       dashboardSecurityEventPromise,
       dashboardDetailsPromise,
-      dashboardSummaryPromise
+      dashboardSummaryPromise,
     ]).pipe();
   };
 

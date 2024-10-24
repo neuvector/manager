@@ -1,13 +1,15 @@
 <a [attr.href]="'https://www.whois.com/whois/' + ip" target="_blank">
   <img
     *ngIf="countryCode !== '-'"
-    src="{{ './assets/img/country-flag/' + countryCode.toLowerCase() + '.svg'}}"
-    width="16px" height="12px;"
+    src="{{
+      './assets/img/country-flag/' + countryCode.toLowerCase() + '.svg'
+    }}"
+    width="16px"
+    height="12px;"
     class="mr-2"
-    style="margin-top: -3px;"
+    style="margin-top: -3px"
     [matTooltip]="countryName"
-    matTooltipPosition="above"
-  />
+    matTooltipPosition="above" />
   <span *ngIf="fqdn; else no_fqdn">
     <span [matTooltip]="ip">{{ fqdn }}</span>
   </span>

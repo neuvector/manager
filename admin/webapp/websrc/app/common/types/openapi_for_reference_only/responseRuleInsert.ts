@@ -1,4 +1,4 @@
-import { ResponseRule } from "./responseRule";
+import { ResponseRule } from './responseRule';
 
 export interface ResponseRuleInsert {
   after?: number;

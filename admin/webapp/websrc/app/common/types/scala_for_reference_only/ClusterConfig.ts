@@ -7,7 +7,5 @@ export interface ClusterConfig {
 }
 
 export function isClusterConfig(v: any): v is ClusterConfig {
-  return (
-    (v['config'] && isClusterServer(v['config']))
-  );
+  return v['config'] && isClusterServer(v['config']);
 }

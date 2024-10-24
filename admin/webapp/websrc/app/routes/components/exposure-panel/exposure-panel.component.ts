@@ -20,7 +20,7 @@ import { uuid } from '@common/utils/common.utils';
 })
 export class ExposurePanelComponent implements OnInit {
   @Input() scoreInfo!: InternalSystemInfo;
-  
+
   hierarchicalIngressList!: Array<HierarchicalExposure>;
   hierarchicalEgressList!: Array<HierarchicalExposure>;
   instructions: Array<string> = [];
@@ -38,34 +38,34 @@ export class ExposurePanelComponent implements OnInit {
       this.translate.instant('dashboard.help.exposure.txt1'),
       this.translate.instant('dashboard.help.exposure.txt2'),
     ];
-    this.hierarchicalIngressList = parseExposureHierarchicalData(this.scoreInfo.ingress) || [];
-    this.hierarchicalEgressList = parseExposureHierarchicalData(this.scoreInfo.egress) || [];
+    this.hierarchicalIngressList =
+      parseExposureHierarchicalData(this.scoreInfo.ingress) || [];
+    this.hierarchicalEgressList =
+      parseExposureHierarchicalData(this.scoreInfo.egress) || [];
     this.retrieveIpLocation(this.scoreInfo);
   }
 
   retrieveIpLocation = scoreInfo => {
     let ipList = this.getIpList(scoreInfo);
     this.isIpMapReady = false;
-    this.dashboardService.getIpGeoInfo(ipList).subscribe(
-      (response: any) => {
-        let ipMap = response.ip_map;
-        this.hierarchicalIngressList =
-          parseExposureHierarchicalData(
-            this.addIpLocation(this.scoreInfo.ingress, ipMap, 'ingress')
-          ) || [];
-        this.hierarchicalEgressList =
-          parseExposureHierarchicalData(
-            this.addIpLocation(this.scoreInfo.egress, ipMap, 'egress')
-          ) || [];
-        this.dashboardService.hierarchicalIngressList = JSON.parse(
-          JSON.stringify(this.hierarchicalIngressList)
-        );
-        this.dashboardService.hierarchicalEgressList = JSON.parse(
-          JSON.stringify(this.hierarchicalEgressList)
-        );
-        this.isIpMapReady = true;
-      }
-    );
+    this.dashboardService.getIpGeoInfo(ipList).subscribe((response: any) => {
+      let ipMap = response.ip_map;
+      this.hierarchicalIngressList =
+        parseExposureHierarchicalData(
+          this.addIpLocation(this.scoreInfo.ingress, ipMap, 'ingress')
+        ) || [];
+      this.hierarchicalEgressList =
+        parseExposureHierarchicalData(
+          this.addIpLocation(this.scoreInfo.egress, ipMap, 'egress')
+        ) || [];
+      this.dashboardService.hierarchicalIngressList = JSON.parse(
+        JSON.stringify(this.hierarchicalIngressList)
+      );
+      this.dashboardService.hierarchicalEgressList = JSON.parse(
+        JSON.stringify(this.hierarchicalEgressList)
+      );
+      this.isIpMapReady = true;
+    });
   };
 
   downloadExposureConversationCsv = () => {

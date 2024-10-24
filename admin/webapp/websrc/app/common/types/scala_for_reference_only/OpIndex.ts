@@ -8,8 +8,8 @@ export interface OpIndex {
 
 export function isOpIndex(v: any): v is OpIndex {
   return (
-    ((typeof v['op']) === 'string') &&
-    ((typeof v['sign']) === 'string') &&
-    ((typeof v['index']) === 'number')
+    typeof v['op'] === 'string' &&
+    typeof v['sign'] === 'string' &&
+    typeof v['index'] === 'number'
   );
 }

@@ -1,4 +1,4 @@
-import { AdmissionRuleOption } from "./admissionRuleOption";
+import { AdmissionRuleOption } from './admissionRuleOption';
 
 export interface AdmissionRuleOptionSubOptions {
   rule?: string;

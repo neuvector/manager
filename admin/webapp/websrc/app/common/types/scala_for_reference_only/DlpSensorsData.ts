@@ -8,6 +8,7 @@ export interface DlpSensorsData {
 
 export function isDlpSensorsData(v: any): v is DlpSensorsData {
   return (
-    (Array.isArray(v['sensors']) && v['sensors'].every(elmt => elmt && isDlpSensor(elmt)))
+    Array.isArray(v['sensors']) &&
+    v['sensors'].every(elmt => elmt && isDlpSensor(elmt))
   );
 }

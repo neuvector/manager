@@ -7,7 +7,5 @@ export interface ComplianceProfileData {
 }
 
 export function isComplianceProfileData(v: any): v is ComplianceProfileData {
-  return (
-    (v['profile'] && isComplianceProfile(v['profile']))
-  );
+  return v['profile'] && isComplianceProfile(v['profile']);
 }

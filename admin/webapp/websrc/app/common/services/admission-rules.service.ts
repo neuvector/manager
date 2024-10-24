@@ -324,7 +324,8 @@ export class AdmissionRulesService {
         !params.data.parent_id || params.data.visible,
       getRowId: params => params.data.id,
       getRowHeight: params => (!!params.data.parent_id ? 100 : 30),
-      isFullWidthRow: (params: IsFullWidthRowParams<any, any>) => !!params.rowNode.data?.parent_id,
+      isFullWidthRow: (params: IsFullWidthRowParams<any, any>) =>
+        !!params.rowNode.data?.parent_id,
       fullWidthCellRenderer: 'matchedRuleListRenderer',
       suppressMaintainUnsortedOrder: true,
       suppressScrollOnNewData: true,

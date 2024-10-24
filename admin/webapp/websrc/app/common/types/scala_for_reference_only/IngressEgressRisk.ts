@@ -10,10 +10,10 @@ export interface IngressEgressRisk {
 
 export function isIngressEgressRisk(v: any): v is IngressEgressRisk {
   return (
-    ((typeof v['discoverMode']) === 'number') &&
-    ((typeof v['monitorMode']) === 'number') &&
-    ((typeof v['protectMode']) === 'number') &&
-    ((typeof v['threat']) === 'number') &&
-    ((typeof v['violation']) === 'number')
+    typeof v['discoverMode'] === 'number' &&
+    typeof v['monitorMode'] === 'number' &&
+    typeof v['protectMode'] === 'number' &&
+    typeof v['threat'] === 'number' &&
+    typeof v['violation'] === 'number'
   );
 }

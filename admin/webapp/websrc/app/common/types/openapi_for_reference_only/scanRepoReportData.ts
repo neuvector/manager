@@ -1,4 +1,4 @@
-import { ScanRepoReport } from "./scanRepoReport";
+import { ScanRepoReport } from './scanRepoReport';
 
 export interface ScanRepoReportData {
   report: ScanRepoReport;

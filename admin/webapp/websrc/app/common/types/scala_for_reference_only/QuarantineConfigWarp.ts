@@ -7,7 +7,5 @@ export interface QuarantineConfigWarp {
 }
 
 export function isQuarantineConfigWarp(v: any): v is QuarantineConfigWarp {
-  return (
-    (v['config'] && isQuarantineConfig(v['config']))
-  );
+  return v['config'] && isQuarantineConfig(v['config']);
 }

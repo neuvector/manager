@@ -8,9 +8,8 @@ describe('SensorActionButtonsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SensorActionButtonsComponent ]
-    })
-    .compileComponents();
+      declarations: [SensorActionButtonsComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

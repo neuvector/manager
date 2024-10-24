@@ -9,7 +9,8 @@ export interface RuleConfigData {
 
 export function isRuleConfigData(v: any): v is RuleConfigData {
   return (
-    (v['config'] && isRuleConfig(v['config'])) &&
-    (!v['replicate'] || ((typeof v['replicate']) === 'boolean'))
+    v['config'] &&
+    isRuleConfig(v['config']) &&
+    (!v['replicate'] || typeof v['replicate'] === 'boolean')
   );
 }

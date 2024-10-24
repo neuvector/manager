@@ -8,9 +8,8 @@ describe('ConversationEntryListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ConversationEntryListComponent ]
-    })
-    .compileComponents();
+      declarations: [ConversationEntryListComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

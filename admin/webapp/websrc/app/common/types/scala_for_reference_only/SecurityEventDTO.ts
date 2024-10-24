@@ -7,7 +7,5 @@ export interface SecurityEventDTO {
 }
 
 export function isSecurityEventDTO(v: any): v is SecurityEventDTO {
-  return (
-    (v['securityEvents'] && isArray(v['securityEvents']))
-  );
+  return v['securityEvents'] && isArray(v['securityEvents']);
 }

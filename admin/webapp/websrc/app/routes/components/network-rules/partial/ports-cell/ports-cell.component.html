@@ -1,13 +1,19 @@
-<span *ngIf="portCount > 2; then withPopup else withoutPopup"></span>
+<span *ngIf="portCount > 2; then withPopup; else withoutPopup"></span>
 
 <ng-template #withoutPopup>
-  <span style="word-wrap: break-word;" [ngClass]="{'policy-remove': params.data.remove}">
-    {{ports}}
+  <span
+    style="word-wrap: break-word"
+    [ngClass]="{ 'policy-remove': params.data.remove }">
+    {{ ports }}
   </span>
 </ng-template>
 
 <ng-template #withPopup>
-  <span style="word-wrap: break-word;" class="hand" [ngClass]="{'policy-remove': params.data.remove}" (click)="showAllPorts(params.data.id, params.data.ports)">
-    {{ports}}&nbsp;...
+  <span
+    style="word-wrap: break-word"
+    class="hand"
+    [ngClass]="{ 'policy-remove': params.data.remove }"
+    (click)="showAllPorts(params.data.id, params.data.ports)">
+    {{ ports }}&nbsp;...
   </span>
 </ng-template>

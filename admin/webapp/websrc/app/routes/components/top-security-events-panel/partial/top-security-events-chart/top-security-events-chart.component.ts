@@ -7,27 +7,36 @@ import { ChartConfiguration } from 'chart.js';
 @Component({
   selector: 'app-top-security-events-chart',
   templateUrl: './top-security-events-chart.component.html',
-  styleUrls: ['./top-security-events-chart.component.scss']
+  styleUrls: ['./top-security-events-chart.component.scss'],
 })
 export class TopSecurityEventsChartComponent implements OnInit {
-
   @Input() topSecurityEvents: any;
   @Input() direction!: string;
   @Input() isReport: boolean = false;
-  topSecurityEventsHorizontalBarChartConfig: ChartConfiguration<'bar', number[], string>;
+  topSecurityEventsHorizontalBarChartConfig: ChartConfiguration<
+    'bar',
+    number[],
+    string
+  >;
   noChartData: boolean = false;
 
   constructor(
     private translate: TranslateService,
     private sanitizer: DomSanitizer,
     private capitalizePipe: CapitalizePipe
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-    this.drawTopSecurityEventsHorizontalBarChart(this.topSecurityEvents, this.direction);
+    this.drawTopSecurityEventsHorizontalBarChart(
+      this.topSecurityEvents,
+      this.direction
+    );
   }
 
-  drawTopSecurityEventsHorizontalBarChart = (topSecurityEvents: any, direction: string) => {
+  drawTopSecurityEventsHorizontalBarChart = (
+    topSecurityEvents: any,
+    direction: string
+  ) => {
     let topSecurityEventsLabels: Array<string> = new Array(5);
     let topSecurityEventsData: Array<number> = new Array(5);
     let barChartColors: Array<string> = new Array(5);
@@ -37,24 +46,32 @@ export class TopSecurityEventsChartComponent implements OnInit {
     barChartColors.fill('rgba(239, 83, 80, 0.3)');
     barChartBorderColors.fill('#ef5350');
     topSecurityEvents[direction].forEach((workloadEvents, index) => {
-      topSecurityEventsLabels[index] = this.sanitizer.sanitize(SecurityContext.HTML, workloadEvents[0][`${direction}_workload_name`])!;
+      topSecurityEventsLabels[index] = this.sanitizer.sanitize(
+        SecurityContext.HTML,
+        workloadEvents[0][`${direction}_workload_name`]
+      )!;
       topSecurityEventsData[index] = workloadEvents.length;
     });
-    this.noChartData = topSecurityEventsData.reduce((prev, curr) => prev + curr) === 0
+    this.noChartData =
+      topSecurityEventsData.reduce((prev, curr) => prev + curr) === 0;
     this.topSecurityEventsHorizontalBarChartConfig = {
       type: 'bar',
       data: {
         labels: topSecurityEventsLabels,
-        datasets: [{
-          label: `${this.translate.instant('dashboard.body.panel_title.TOP_SEC_EVENTS')} - ${this.capitalizePipe.transform(direction)}`,
-          data: topSecurityEventsData,
-          backgroundColor: barChartColors,
-          borderColor: barChartBorderColors,
-          hoverBackgroundColor: barChartColors,
-          hoverBorderColor: barChartBorderColors,
-          barThickness: 15,
-          borderWidth: 2
-        }]
+        datasets: [
+          {
+            label: `${this.translate.instant(
+              'dashboard.body.panel_title.TOP_SEC_EVENTS'
+            )} - ${this.capitalizePipe.transform(direction)}`,
+            data: topSecurityEventsData,
+            backgroundColor: barChartColors,
+            borderColor: barChartBorderColors,
+            hoverBackgroundColor: barChartColors,
+            hoverBorderColor: barChartBorderColors,
+            barThickness: 15,
+            borderWidth: 2,
+          },
+        ],
       },
       options: {
         animation: false,
@@ -64,24 +81,25 @@ export class TopSecurityEventsChartComponent implements OnInit {
         scales: {
           x: {
             ticks: {
-              callback: (value) => {
+              callback: value => {
                 if (parseFloat(value as string) % 1 === 0) return value;
                 return null;
-              }
-            }
+              },
+            },
           },
           y: {
             ticks: {
-              crossAlign: "far",
-              callback: function(value, index, values): string {
+              crossAlign: 'far',
+              callback: function (value, index, values): string {
                 let label = this.getLabelForValue(value as number);
-                return label.length > 22 ? `${label.substring(0, 22)}...` : label;
+                return label.length > 22
+                  ? `${label.substring(0, 22)}...`
+                  : label;
               },
-            }
-          }
+            },
+          },
         },
-      }
+      },
     };
-
   };
 }

@@ -10,10 +10,14 @@ export interface VulnerableContainerEndpoint {
   error?: Error;
 }
 
-export function isVulnerableContainerEndpoint(v: any): v is VulnerableContainerEndpoint {
+export function isVulnerableContainerEndpoint(
+  v: any
+): v is VulnerableContainerEndpoint {
   return (
-    (v['workloads'] && isArray(v['workloads'])) &&
-    (v['status'] && isWorkloadsStatus(v['status'])) &&
+    v['workloads'] &&
+    isArray(v['workloads']) &&
+    v['status'] &&
+    isWorkloadsStatus(v['status']) &&
     (!v['error'] || (v['error'] && isError(v['error'])))
   );
 }

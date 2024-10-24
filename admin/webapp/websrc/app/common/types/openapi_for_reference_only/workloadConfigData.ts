@@ -1,4 +1,4 @@
-import { WorkloadConfig } from "./workloadConfig";
+import { WorkloadConfig } from './workloadConfig';
 
 export interface WorkloadConfigData {
   config: WorkloadConfig;

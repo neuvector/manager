@@ -7,7 +7,5 @@ export interface CustomCheckData {
 }
 
 export function isCustomCheckData(v: any): v is CustomCheckData {
-  return (
-    (v['config'] && isCustomChecks(v['config']))
-  );
+  return v['config'] && isCustomChecks(v['config']);
 }

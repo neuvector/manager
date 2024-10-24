@@ -1,4 +1,4 @@
-export interface ClusterSummary{
+export interface ClusterSummary {
   platform?: string;
   domains?: string;
   services?: string;

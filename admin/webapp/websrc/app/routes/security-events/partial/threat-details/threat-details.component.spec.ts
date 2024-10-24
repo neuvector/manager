@@ -8,9 +8,8 @@ describe('ThreatDetailsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ThreatDetailsComponent ]
-    })
-    .compileComponents();
+      declarations: [ThreatDetailsComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

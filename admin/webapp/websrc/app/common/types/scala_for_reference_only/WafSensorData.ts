@@ -7,7 +7,5 @@ export interface WafSensorData {
 }
 
 export function isWafSensorData(v: any): v is WafSensorData {
-  return (
-    (v['sensor'] && isWafSensor(v['sensor']))
-  );
+  return v['sensor'] && isWafSensor(v['sensor']);
 }

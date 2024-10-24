@@ -8,9 +8,8 @@ describe('ExposedServicepodConvGridComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ExposedServicepodConvGridComponent ]
-    })
-    .compileComponents();
+      declarations: [ExposedServicepodConvGridComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

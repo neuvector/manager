@@ -14,12 +14,13 @@ export interface OpenIdServer {
 
 export function isOpenIdServer(v: any): v is OpenIdServer {
   return (
-    ((typeof v['issuer']) === 'string') &&
-    ((typeof v['client_id']) === 'string') &&
-    (!v['client_secret'] || ((typeof v['client_secret']) === 'string')) &&
-    (!v['group_claim'] || ((typeof v['group_claim']) === 'string')) &&
-    (!v['enable'] || ((typeof v['enable']) === 'boolean')) &&
-    (!v['default_role'] || ((typeof v['default_role']) === 'string')) &&
-    (!v['group_mapped_roles'] || (v['group_mapped_roles'] && isArray(v['group_mapped_roles'])))
+    typeof v['issuer'] === 'string' &&
+    typeof v['client_id'] === 'string' &&
+    (!v['client_secret'] || typeof v['client_secret'] === 'string') &&
+    (!v['group_claim'] || typeof v['group_claim'] === 'string') &&
+    (!v['enable'] || typeof v['enable'] === 'boolean') &&
+    (!v['default_role'] || typeof v['default_role'] === 'string') &&
+    (!v['group_mapped_roles'] ||
+      (v['group_mapped_roles'] && isArray(v['group_mapped_roles'])))
   );
 }

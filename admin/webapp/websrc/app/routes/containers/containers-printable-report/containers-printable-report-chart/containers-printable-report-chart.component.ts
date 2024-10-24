@@ -1,13 +1,13 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {ChartConfiguration} from "chart.js";
-import {TranslateService} from "@ngx-translate/core";
+import { Component, Input } from '@angular/core';
+import { ChartConfiguration } from 'chart.js';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-containers-printable-report-chart',
   templateUrl: './containers-printable-report-chart.component.html',
-  styleUrls: ['./containers-printable-report-chart.component.scss']
+  styleUrls: ['./containers-printable-report-chart.component.scss'],
 })
-export class ContainersPrintableReportChartComponent implements OnInit {
+export class ContainersPrintableReportChartComponent {
   private _statisticData!: Map<string, number>;
   @Input() set statisticData(stats: Map<string, number>) {
     this._statisticData = stats;
@@ -18,10 +18,7 @@ export class ContainersPrintableReportChartComponent implements OnInit {
   }
   barChartData!: ChartConfiguration<'bar', number[], string[]>;
 
-  constructor(private tr: TranslateService) { }
-
-  ngOnInit(): void {
-  }
+  constructor(private tr: TranslateService) {}
 
   genBarChart() {
     const TYPE_BAR_COLOR = '#ff9800';
@@ -57,5 +54,4 @@ export class ContainersPrintableReportChartComponent implements OnInit {
       type: 'bar',
     };
   }
-
 }

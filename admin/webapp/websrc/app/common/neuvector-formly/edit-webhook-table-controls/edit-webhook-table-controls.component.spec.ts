@@ -8,9 +8,8 @@ describe('EditWebhookTableControlsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EditWebhookTableControlsComponent ]
-    })
-    .compileComponents();
+      declarations: [EditWebhookTableControlsComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

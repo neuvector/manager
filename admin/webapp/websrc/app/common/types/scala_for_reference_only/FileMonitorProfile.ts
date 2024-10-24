@@ -9,7 +9,6 @@ export interface FileMonitorProfile {
 
 export function isFileMonitorProfile(v: any): v is FileMonitorProfile {
   return (
-    ((typeof v['group']) === 'string') &&
-    (v['filters'] && isArray(v['filters']))
+    typeof v['group'] === 'string' && v['filters'] && isArray(v['filters'])
   );
 }

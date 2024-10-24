@@ -7,7 +7,5 @@ export interface Timeout {
 }
 
 export function isTimeout(v: any): v is Timeout {
-  return (
-    (v['duration'] && isFiniteDuration(v['duration']))
-  );
+  return v['duration'] && isFiniteDuration(v['duration']);
 }

@@ -200,22 +200,19 @@ export class RegistriesService {
   }
 
   getAllScannedImagesSummary() {
-    return GlobalVariable.http.post<VulnerabilitiesQueryData>(
-      PathConstant.SCANNED_ASSETS_URL,
-      {
-        type: 'image'
-      }
-    ).pipe(
-      map(
-        res => {
+    return GlobalVariable.http
+      .post<VulnerabilitiesQueryData>(PathConstant.SCANNED_ASSETS_URL, {
+        type: 'image',
+      })
+      .pipe(
+        map(res => {
           return {
             queryToken: res.query_token,
             summary: res.summary,
-            totalRecords: res.total_records
-          }
-        }
-      )
-    );
+            totalRecords: res.total_records,
+          };
+        })
+      );
   }
 
   getAllScannedImages(
@@ -226,12 +223,12 @@ export class RegistriesService {
     filterModel: any
   ) {
     let params: {
-      token: string,
-      start: number,
-      row: number,
-      orderbyColumn?: string,
-      orderby?: string,
-      qf?: string
+      token: string;
+      start: number;
+      row: number;
+      orderbyColumn?: string;
+      orderby?: string;
+      qf?: string;
     } = {
       token,
       start,
@@ -246,14 +243,13 @@ export class RegistriesService {
     if ('-' in filterModel) {
       params = {
         ...params,
-        qf: filterModel['-'].filter
+        qf: filterModel['-'].filter,
       };
     }
-    return GlobalVariable.http.get<AllScannedImages>(
-      PathConstant.SCANNED_ASSETS_URL,
-      {
-        params
-      }
-    ).pipe();
+    return GlobalVariable.http
+      .get<AllScannedImages>(PathConstant.SCANNED_ASSETS_URL, {
+        params,
+      })
+      .pipe();
   }
 }

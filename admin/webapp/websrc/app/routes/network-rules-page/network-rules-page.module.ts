@@ -10,13 +10,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    NetworkRulesPageComponent
-  ],
-  imports: [
-    CommonModule,
-    NetworkRulesModule,
-    RouterModule.forChild(routes),
-  ]
+  declarations: [NetworkRulesPageComponent],
+  imports: [CommonModule, NetworkRulesModule, RouterModule.forChild(routes)],
 })
-export class NetworkRulesPageModule { }
+export class NetworkRulesPageModule {}

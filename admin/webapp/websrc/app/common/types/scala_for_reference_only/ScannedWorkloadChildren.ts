@@ -22,26 +22,28 @@ export interface ScannedWorkloadChildren {
   scanned_at: string;
 }
 
-export function isScannedWorkloadChildren(v: any): v is ScannedWorkloadChildren {
+export function isScannedWorkloadChildren(
+  v: any
+): v is ScannedWorkloadChildren {
   return (
-    ((typeof v['id']) === 'string') &&
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['base_os']) === 'string') &&
-    ((typeof v['display_name']) === 'string') &&
-    ((typeof v['domain']) === 'string') &&
-    ((typeof v['high']) === 'number') &&
-    ((typeof v['medium']) === 'number') &&
-    ((typeof v['host']) === 'string') &&
-    ((typeof v['image']) === 'string') &&
-    ((typeof v['platform_role']) === 'string') &&
-    (!v['policy_mode'] || ((typeof v['policy_mode']) === 'string')) &&
-    ((typeof v['result']) === 'string') &&
-    ((typeof v['service']) === 'string') &&
-    ((typeof v['service_group']) === 'string') &&
-    ((typeof v['state']) === 'string') &&
-    ((typeof v['status']) === 'string') &&
-    ((typeof v['scanner_version']) === 'string') &&
-    ((typeof v['scanned_timestamp']) === 'number') &&
-    ((typeof v['scanned_at']) === 'string')
+    typeof v['id'] === 'string' &&
+    typeof v['name'] === 'string' &&
+    typeof v['base_os'] === 'string' &&
+    typeof v['display_name'] === 'string' &&
+    typeof v['domain'] === 'string' &&
+    typeof v['high'] === 'number' &&
+    typeof v['medium'] === 'number' &&
+    typeof v['host'] === 'string' &&
+    typeof v['image'] === 'string' &&
+    typeof v['platform_role'] === 'string' &&
+    (!v['policy_mode'] || typeof v['policy_mode'] === 'string') &&
+    typeof v['result'] === 'string' &&
+    typeof v['service'] === 'string' &&
+    typeof v['service_group'] === 'string' &&
+    typeof v['state'] === 'string' &&
+    typeof v['status'] === 'string' &&
+    typeof v['scanner_version'] === 'string' &&
+    typeof v['scanned_timestamp'] === 'number' &&
+    typeof v['scanned_at'] === 'string'
   );
 }

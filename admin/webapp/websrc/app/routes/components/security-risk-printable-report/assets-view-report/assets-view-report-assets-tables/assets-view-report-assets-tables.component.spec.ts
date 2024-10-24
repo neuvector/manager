@@ -8,9 +8,8 @@ describe('AssetsViewReportAssetsTablesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AssetsViewReportAssetsTablesComponent ]
-    })
-    .compileComponents();
+      declarations: [AssetsViewReportAssetsTablesComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

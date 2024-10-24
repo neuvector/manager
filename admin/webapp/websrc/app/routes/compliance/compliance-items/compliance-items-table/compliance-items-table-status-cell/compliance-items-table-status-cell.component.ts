@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { UtilsService } from '@common/utils/app.utils';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
-import {MapConstant} from "@common/constants/map.constant";
+import { MapConstant } from '@common/constants/map.constant';
 
 @Component({
   selector: 'app-compliance-items-table-status-cell',

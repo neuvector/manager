@@ -8,9 +8,8 @@ describe('PortsCellComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PortsCellComponent ]
-    })
-    .compileComponents();
+      declarations: [PortsCellComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

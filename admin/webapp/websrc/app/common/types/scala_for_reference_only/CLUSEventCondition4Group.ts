@@ -5,9 +5,8 @@ export interface CLUSEventCondition4Group {
   value: string;
 }
 
-export function isCLUSEventCondition4Group(v: any): v is CLUSEventCondition4Group {
-  return (
-    ((typeof v['type']) === 'string') &&
-    ((typeof v['value']) === 'string')
-  );
+export function isCLUSEventCondition4Group(
+  v: any
+): v is CLUSEventCondition4Group {
+  return typeof v['type'] === 'string' && typeof v['value'] === 'string';
 }

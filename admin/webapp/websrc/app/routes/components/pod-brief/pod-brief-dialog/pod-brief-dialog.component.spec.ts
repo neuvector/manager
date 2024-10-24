@@ -8,9 +8,8 @@ describe('PodBriefDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PodBriefDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [PodBriefDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

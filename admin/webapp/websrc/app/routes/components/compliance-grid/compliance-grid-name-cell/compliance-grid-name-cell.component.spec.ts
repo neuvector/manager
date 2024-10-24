@@ -8,9 +8,8 @@ describe('ComplianceGridNameCellComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ComplianceGridNameCellComponent ]
-    })
-    .compileComponents();
+      declarations: [ComplianceGridNameCellComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

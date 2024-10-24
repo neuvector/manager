@@ -8,9 +8,8 @@ describe('PdfGenerationDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PdfGenerationDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [PdfGenerationDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

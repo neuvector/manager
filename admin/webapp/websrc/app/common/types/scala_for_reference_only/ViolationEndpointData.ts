@@ -10,7 +10,8 @@ export interface ViolationEndpointData {
 
 export function isViolationEndpointData(v: any): v is ViolationEndpointData {
   return (
-    (v['violations'] && isArray(v['violations'])) &&
+    v['violations'] &&
+    isArray(v['violations']) &&
     (!v['error'] || (v['error'] && isError(v['error'])))
   );
 }

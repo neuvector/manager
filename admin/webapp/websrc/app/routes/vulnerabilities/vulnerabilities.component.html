@@ -95,14 +95,15 @@
     <div style="height: 200px">
       <app-vulnerability-charts></app-vulnerability-charts>
     </div>
-    <div style="height: calc(100% - 160px); position: relative;">
+    <div style="height: calc(100% - 160px); position: relative">
       <app-vulnerability-detail-dialog
         top="-100"
         [vulnerability]="selectedVulnerability">
       </app-vulnerability-detail-dialog>
       <app-vulnerability-items
-        (selectVulnerability)="vulnerabilitySelected($event)"
-      ></app-vulnerability-items>
+        (selectVulnerability)="
+          vulnerabilitySelected($event)
+        "></app-vulnerability-items>
     </div>
   </div>
 </ng-container>

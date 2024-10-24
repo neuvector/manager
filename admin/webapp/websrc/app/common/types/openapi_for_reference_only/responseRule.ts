@@ -1,4 +1,4 @@
-import { ClusterEventCondition } from "./clusterEventCondition";
+import { ClusterEventCondition } from './clusterEventCondition';
 
 export interface ResponseRule {
   id: number;

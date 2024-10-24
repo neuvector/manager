@@ -6,8 +6,10 @@
     aria-label="sidebar"
     [class.show-scrollbar]="switchers.getFrameSwitcher('leftSideScrollbar')">
     <!-- START sidebar nav-->
-    <ul class="sidebar-nav" style="height: calc(100vh - 212px);"
-        [ngStyle]="customSideBarStyle">
+    <ul
+      class="sidebar-nav"
+      style="height: calc(100vh - 212px)"
+      [ngStyle]="customSideBarStyle">
       <!-- END user info-->
 
       <li
@@ -21,15 +23,20 @@
           mat-ripple
           *ngIf="!item.heading && !item.submenu && item.elink"
           [attr.target]="item.target"
-          [attr.href]="item.elink"
-        >
+          [attr.href]="item.elink">
           <span
             class="float-right"
             *ngIf="item.alert"
             [ngClass]="item.label || 'badge badge-success'"
             >{{ item.alert }}</span
           >
-          <em class="eos-icons icon-18" *ngIf="item.icon" matTooltip="{{ item.text }}" matTooltipPosition="above">{{ item.icon }}</em>
+          <em
+            class="eos-icons icon-18"
+            *ngIf="item.icon"
+            matTooltip="{{ item.text }}"
+            matTooltipPosition="above"
+            >{{ item.icon }}</em
+          >
           <span>{{ (item.translate | translate) || item.text }}</span>
         </a>
         <!-- single menu item -->
@@ -47,7 +54,13 @@
             [ngClass]="item.label || 'badge badge-success'"
             >{{ item.alert }}</span
           >
-          <em class="eos-icons icon-18" *ngIf="item.icon" matTooltip="{{ item.text }}" matTooltipPosition="above">{{ item.icon }}</em>
+          <em
+            class="eos-icons icon-18"
+            *ngIf="item.icon"
+            matTooltip="{{ item.text }}"
+            matTooltipPosition="above"
+            >{{ item.icon }}</em
+          >
           <span>{{ (item.translate | translate) || item.text }}</span>
         </a>
         <!-- has submenu -->
@@ -63,9 +76,17 @@
             [ngClass]="item.label || 'badge badge-success'"
             >{{ item.alert }}</span
           >
-          <em class="eos-icons icon-18" *ngIf="item.icon" matTooltip="{{ item.text }}" matTooltipPosition="above">{{ item.icon }}</em>
+          <em
+            class="eos-icons icon-18"
+            *ngIf="item.icon"
+            matTooltip="{{ item.text }}"
+            matTooltipPosition="above"
+            >{{ item.icon }}</em
+          >
           <span>{{ (item.translate | translate) || item.text }}</span>
-          <em id="{{ 'drop_down_' + idx }}" class="eos-icons icon-18 pull-right menu-arrow"
+          <em
+            id="{{ 'drop_down_' + idx }}"
+            class="eos-icons icon-18 pull-right menu-arrow"
             >arrow_drop_down</em
           >
         </a>
@@ -86,8 +107,7 @@
               mat-ripple
               *ngIf="!subitem.heading && !subitem.submenu && subitem.elink"
               [attr.target]="subitem.target"
-              [attr.href]="subitem.elink"
-            >
+              [attr.href]="subitem.elink">
               <span
                 class="float-right"
                 *ngIf="subitem.alert"
@@ -105,8 +125,7 @@
               mat-ripple
               *ngIf="!subitem.submenu && !subitem.elink"
               [routerLink]="subitem.link"
-              [attr.route]="subitem.link"
-            >
+              [attr.route]="subitem.link">
               <span
                 class="float-right"
                 *ngIf="subitem.alert"
@@ -116,10 +135,9 @@
               <em class="eos-icons icon-18" *ngIf="subitem.icon">{{
                 subitem.icon
               }}</em>
-              <span
-                [routerLink]="subitem.link"
-                [attr.route]="subitem.link"
-              >{{ (subitem.translate | translate) || subitem.text }}</span>
+              <span [routerLink]="subitem.link" [attr.route]="subitem.link">{{
+                (subitem.translate | translate) || subitem.text
+              }}</span>
             </a>
           </li>
 
@@ -129,7 +147,11 @@
     </ul>
     <!-- END sidebar nav-->
     <!-- Page footer-->
-    <footer class="footer-container" style="height: 100px; text-align: center;" [ngStyle]="customFooterStyle" app-footer></footer>
+    <footer
+      class="footer-container"
+      style="height: 100px; text-align: center"
+      [ngStyle]="customFooterStyle"
+      app-footer></footer>
     <!-- END sidebar nav-->
   </nav>
 </div>

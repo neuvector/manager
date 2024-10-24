@@ -1,23 +1,21 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { SecurityEventsService } from '@services/security-events.service';
 
 @Component({
   selector: 'app-threat-details',
   templateUrl: './threat-details.component.html',
-  styleUrls: ['./threat-details.component.scss']
+  styleUrls: ['./threat-details.component.scss'],
 })
-export class ThreatDetailsComponent implements OnInit {
-
+export class ThreatDetailsComponent {
   @Input() secEvent: any;
 
-  constructor(
-    private securityEventsService: SecurityEventsService
-  ) { }
-
-  ngOnInit(): void {
-  }
+  constructor(private securityEventsService: SecurityEventsService) {}
 
   showEnforcerDetails = (ev, enforcerId: string, enforcerName: string) => {
-    this.securityEventsService.showEnforcerDetails(ev, enforcerId, enforcerName);
+    this.securityEventsService.showEnforcerDetails(
+      ev,
+      enforcerId,
+      enforcerName
+    );
   };
 }

@@ -14,12 +14,13 @@ export interface FedMasterCluster {
 
 export function isFedMasterCluster(v: any): v is FedMasterCluster {
   return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['id']) === 'string') &&
-    ((typeof v['secret']) === 'string') &&
-    (!v['ca_cert_path'] || ((typeof v['ca_cert_path']) === 'string')) &&
-    (!v['user'] || ((typeof v['user']) === 'string')) &&
-    (!v['status'] || ((typeof v['status']) === 'string')) &&
-    (v['rest_info'] && isClusterServerInfo(v['rest_info']))
+    typeof v['name'] === 'string' &&
+    typeof v['id'] === 'string' &&
+    typeof v['secret'] === 'string' &&
+    (!v['ca_cert_path'] || typeof v['ca_cert_path'] === 'string') &&
+    (!v['user'] || typeof v['user'] === 'string') &&
+    (!v['status'] || typeof v['status'] === 'string') &&
+    v['rest_info'] &&
+    isClusterServerInfo(v['rest_info'])
   );
 }

@@ -8,9 +8,8 @@ describe('ComplianceItemsTableCsvCellComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ComplianceItemsTableCsvCellComponent ]
-    })
-    .compileComponents();
+      declarations: [ComplianceItemsTableCsvCellComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

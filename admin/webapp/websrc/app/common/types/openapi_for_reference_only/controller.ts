@@ -1,4 +1,4 @@
-import { ControllerLabels } from "./controllerLabels";
+import { ControllerLabels } from './controllerLabels';
 
 export interface Controller {
   id: string;

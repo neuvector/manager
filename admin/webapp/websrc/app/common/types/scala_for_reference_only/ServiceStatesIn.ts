@@ -10,7 +10,8 @@ export interface ServiceStatesIn {
 
 export function isServiceStatesIn(v: any): v is ServiceStatesIn {
   return (
-    (v['groups'] && isArray(v['groups'])) &&
+    v['groups'] &&
+    isArray(v['groups']) &&
     (!v['error'] || (v['error'] && isError(v['error'])))
   );
 }

@@ -1,18 +1,13 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-assets-view-report-assets-tables',
   templateUrl: './assets-view-report-assets-tables.component.html',
-  styleUrls: ['./assets-view-report-assets-tables.component.scss']
+  styleUrls: ['./assets-view-report-assets-tables.component.scss'],
 })
-export class AssetsViewReportAssetsTablesComponent implements OnInit {
-
+export class AssetsViewReportAssetsTablesComponent {
   @Input() masterGrids: any[][];
   @Input() reportPage: string;
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  constructor() {}
 }

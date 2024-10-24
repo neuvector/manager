@@ -5,7 +5,5 @@ export interface LicenseCode {
 }
 
 export function isLicenseCode(v: any): v is LicenseCode {
-  return (
-    ((typeof v['license_code']) === 'string')
-  );
+  return typeof v['license_code'] === 'string';
 }

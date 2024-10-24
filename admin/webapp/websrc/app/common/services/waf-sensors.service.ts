@@ -13,10 +13,9 @@ import { RuleActionButtonsComponent } from '@routes/waf-sensors/partial/rule-act
 import { PatternActionButtonsComponent } from '@routes/waf-sensors/partial/pattern-action-buttons/pattern-action-buttons.component';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WafSensorsService {
-
   private readonly $win;
 
   constructor(
@@ -28,7 +27,6 @@ export class WafSensorsService {
   }
 
   configGrids = (isWriteWAFSensorAuthorized: boolean) => {
-
     const columnDefs4Sensor = [
       {
         headerName: this.translate.instant('waf.gridHeader.SENSOR_NAME'),
@@ -39,7 +37,7 @@ export class WafSensorsService {
           if (params.data) return !params.data.predefine;
           return false;
         },
-        cellRenderer: (params) => {
+        cellRenderer: params => {
           if (params.value)
             return `<span class="${
               params.data.predefine ? 'left-margin-32' : ''
@@ -49,157 +47,192 @@ export class WafSensorsService {
           return false;
         },
         width: 100,
-        minWidth: 100
+        minWidth: 100,
       },
       {
-        headerName: this.translate.instant("waf.gridHeader.COMMENT"),
-        field: "comment",
+        headerName: this.translate.instant('waf.gridHeader.COMMENT'),
+        field: 'comment',
         width: 420,
-        minWidth: 420
+        minWidth: 420,
       },
       {
-        headerName: this.translate.instant("waf.gridHeader.GROUPS"),
-        field: "groups",
-        cellRenderer: (params) => {
-            if (params && params.value) {
-                return this.sanitizer.sanitize(SecurityContext.HTML, params.value.join(", "));
-            }
-            return "";
+        headerName: this.translate.instant('waf.gridHeader.GROUPS'),
+        field: 'groups',
+        cellRenderer: params => {
+          if (params && params.value) {
+            return this.sanitizer.sanitize(
+              SecurityContext.HTML,
+              params.value.join(', ')
+            );
+          }
+          return '';
         },
-        width: 200
+        width: 200,
       },
       {
-        headerName: this.translate.instant("admissionControl.TYPE"),
-        field: "cfg_type",
-        cellRenderer: (params) => {
+        headerName: this.translate.instant('admissionControl.TYPE'),
+        field: 'cfg_type',
+        cellRenderer: params => {
           if (params) {
-            let cfgType = params.value ? params.value.toUpperCase() : GlobalConstant.CFG_TYPE.CUSTOMER.toUpperCase();
+            let cfgType = params.value
+              ? params.value.toUpperCase()
+              : GlobalConstant.CFG_TYPE.CUSTOMER.toUpperCase();
             let type = MapConstant.colourMap[cfgType];
-            return `<div class="type-label px-1 ${type}">${this.sanitizer.sanitize(SecurityContext.HTML,
+            return `<div class="type-label px-1 ${type}">${this.sanitizer.sanitize(
+              SecurityContext.HTML,
               this.translate.instant(`group.${cfgType}`)
             )}</div>`;
           }
-          return "";
+          return '';
         },
         width: 110,
         minWidth: 110,
-        maxWidth: 110
+        maxWidth: 110,
       },
       {
-        cellClass: "grid-right-align",
+        cellClass: 'grid-right-align',
         suppressSorting: true,
         cellRenderer: SensorActionButtonsComponent,
         hide: !isWriteWAFSensorAuthorized,
         width: 60,
         minWidth: 60,
-        maxWidth: 60
-      }
+        maxWidth: 60,
+      },
     ];
 
     const columnDefs4Rules = [
       {
-        headerName: this.translate.instant("waf.gridHeader.PATTERN_NAME"),
-        field: "name",
+        headerName: this.translate.instant('waf.gridHeader.PATTERN_NAME'),
+        field: 'name',
         width: 150,
-        minWidth: 120
+        minWidth: 120,
       },
       {
-        cellClass: "grid-right-align",
+        cellClass: 'grid-right-align',
         suppressSorting: true,
         cellRenderer: RuleActionButtonsComponent,
         hide: !isWriteWAFSensorAuthorized,
         width: 60,
         minWidth: 60,
-        maxWidth: 60
-      }
+        maxWidth: 60,
+      },
     ];
 
     let columnDefs4Patterns = [
       {
-        headerName: this.translate.instant("waf.patternGrid.LOGIC_IS_NOT"),
-        field: "op",
-        cellRenderer: (params) => {
+        headerName: this.translate.instant('waf.patternGrid.LOGIC_IS_NOT'),
+        field: 'op',
+        cellRenderer: params => {
           if (params && params.value) {
-            return this.translate.instant(`waf.patternGrid.${params.value.toUpperCase()}`);
+            return this.translate.instant(
+              `waf.patternGrid.${params.value.toUpperCase()}`
+            );
           }
-          return "";
+          return '';
         },
         width: 120,
         maxWidth: 120,
-        minWidth: 120
+        minWidth: 120,
       },
       {
-          headerName: this.translate.instant("waf.patternGrid.PATTERN"),
-          field: "value",
-          cellRenderer: (params) => {
-              if (params && params.value) {
-                  return this.sanitizer.sanitize(SecurityContext.HTML, params.value.replace(/\</g, "&lt;").replace(/\>/g, "&gt;"));
-              }
-              return "";
-          },
-          suppressSorting: true,
-          width: 450,
-          minWidth: 350
+        headerName: this.translate.instant('waf.patternGrid.PATTERN'),
+        field: 'value',
+        cellRenderer: params => {
+          if (params && params.value) {
+            return this.sanitizer.sanitize(
+              SecurityContext.HTML,
+              params.value.replace(/\</g, '&lt;').replace(/\>/g, '&gt;')
+            );
+          }
+          return '';
+        },
+        suppressSorting: true,
+        width: 450,
+        minWidth: 350,
       },
       {
-        headerName: this.translate.instant("waf.patternGrid.CONTEXT"),
-        field: "context",
+        headerName: this.translate.instant('waf.patternGrid.CONTEXT'),
+        field: 'context',
         width: 100,
         maxWidth: 100,
-        minWidth: 100
-      }
+        minWidth: 100,
+      },
     ];
 
     const editPatternColumn = [
       {
-        headerName: "",
+        headerName: '',
         cellRenderer: PatternActionButtonsComponent,
         hide: !isWriteWAFSensorAuthorized,
         width: 30,
         maxWidth: 30,
-        minWidth: 30
-      }
+        minWidth: 30,
+      },
     ];
 
     let grids = {
       gridOptions: this.utils.createGridOptions(columnDefs4Sensor, this.$win),
-      gridOptions4Rules: this.utils.createGridOptions(columnDefs4Rules, this.$win),
-      gridOptions4Patterns: this.utils.createGridOptions(columnDefs4Patterns, this.$win),
-      gridOptions4EditPatterns: this.utils.createGridOptions([...columnDefs4Patterns, ...editPatternColumn], this.$win)
+      gridOptions4Rules: this.utils.createGridOptions(
+        columnDefs4Rules,
+        this.$win
+      ),
+      gridOptions4Patterns: this.utils.createGridOptions(
+        columnDefs4Patterns,
+        this.$win
+      ),
+      gridOptions4EditPatterns: this.utils.createGridOptions(
+        [...columnDefs4Patterns, ...editPatternColumn],
+        this.$win
+      ),
     };
 
-    grids.gridOptions.rowSelection = "multiple";
+    grids.gridOptions.rowSelection = 'multiple';
 
     grids.gridOptions.rowClassRules = {
-      "disabled-row": (params) => {
-          if (!params.data) return false;
-          if (params.data.disable) {
-              return true;
-          }
-          return false;
+      'disabled-row': params => {
+        if (!params.data) return false;
+        if (params.data.disable) {
+          return true;
+        }
+        return false;
       },
-      "critical-row": (params) => {
-          if (!params.data) return;
-          return params.data.id === "" && params.data.critical;
-      }
+      'critical-row': params => {
+        if (!params.data) return;
+        return params.data.id === '' && params.data.critical;
+      },
     };
     return grids;
   };
 
   getWafSensorsData = () => {
-    return GlobalVariable.http.get(PathConstant.WAF_SENSORS_URL).pipe(pluck('sensors'));
+    return GlobalVariable.http
+      .get(PathConstant.WAF_SENSORS_URL)
+      .pipe(pluck('sensors'));
   };
 
   updateWafSensorData = (payload, opType) => {
-    let httpMethod = opType === GlobalConstant.MODAL_OP.ADD ? GlobalConstant.CRUD.C : GlobalConstant.CRUD.U;
-    return GlobalVariable.http[httpMethod](PathConstant.WAF_SENSORS_URL, payload).pipe();
+    let httpMethod =
+      opType === GlobalConstant.MODAL_OP.ADD
+        ? GlobalConstant.CRUD.C
+        : GlobalConstant.CRUD.U;
+    return GlobalVariable.http[httpMethod](
+      PathConstant.WAF_SENSORS_URL,
+      payload
+    ).pipe();
   };
 
-  deleteWafSensorData = (name) => {
-    return GlobalVariable.http.delete(PathConstant.WAF_SENSORS_URL, {params: {name: name}}).pipe();
+  deleteWafSensorData = name => {
+    return GlobalVariable.http
+      .delete(PathConstant.WAF_SENSORS_URL, { params: { name: name } })
+      .pipe();
   };
 
-  getWafSensorConfigFileData = (payload) => {
-    return GlobalVariable.http.post(PathConstant.WAF_SENSORS_EXPORT_URL, payload, { observe: 'response', responseType: 'text' }).pipe();
-  }
+  getWafSensorConfigFileData = payload => {
+    return GlobalVariable.http
+      .post(PathConstant.WAF_SENSORS_EXPORT_URL, payload, {
+        observe: 'response',
+        responseType: 'text',
+      })
+      .pipe();
+  };
 }

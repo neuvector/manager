@@ -9,7 +9,8 @@ export interface Groups4Export {
 
 export function isGroups4Export(v: any): v is Groups4Export {
   return (
-    (v['groups'] && isArray(v['groups'])) &&
-    (!v['policy_mode'] || ((typeof v['policy_mode']) === 'string'))
+    v['groups'] &&
+    isArray(v['groups']) &&
+    (!v['policy_mode'] || typeof v['policy_mode'] === 'string')
   );
 }

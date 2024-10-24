@@ -1,4 +1,4 @@
-import { Workload } from "./workload";
+import { Workload } from './workload';
 
 export interface WorkloadsData {
   workloads: Workload[];

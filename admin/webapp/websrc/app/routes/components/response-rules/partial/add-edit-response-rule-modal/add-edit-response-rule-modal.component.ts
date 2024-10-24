@@ -126,22 +126,20 @@ export class AddEditResponseRuleModalComponent implements OnInit {
     this.responseRule.enabled = this.selectedResponseRule.disable
       ? !this.selectedResponseRule.disable
       : true;
-    this.responseRule.criteria =
-      this.selectedResponseRule.conditions.split(', ').filter(condition => !!condition);
+    this.responseRule.criteria = this.selectedResponseRule.conditions
+      .split(', ')
+      .filter(condition => !!condition);
     this.selectedResponseRule.actions.forEach(action => {
       this.responseRule.actions[this.actions.indexOf(action)] = true;
     });
     this.isWebhookSelected =
       this.selectedResponseRule.actions.includes('webhook');
     this.shouldHideWebhookList =
-      (
-        this.type === GlobalConstant.MODAL_OP.EDIT &&
-        (
-          this.selectedResponseRule.cfg_type === GlobalConstant.CFG_TYPE.FED ||
-          this.selectedResponseRule.cfg_type === GlobalConstant.CFG_TYPE.GROUND
-        ) &&
-        this.data.isReadonly
-      ) &&
+      this.type === GlobalConstant.MODAL_OP.EDIT &&
+      (this.selectedResponseRule.cfg_type === GlobalConstant.CFG_TYPE.FED ||
+        this.selectedResponseRule.cfg_type ===
+          GlobalConstant.CFG_TYPE.GROUND) &&
+      this.data.isReadonly &&
       this.data.source !== GlobalConstant.NAV_SOURCE.FED_POLICY;
   };
 
@@ -327,9 +325,13 @@ export class AddEditResponseRuleModalComponent implements OnInit {
         response => {
           this.onCancel();
           this.notificationService.open(
-            this.type === GlobalConstant.MODAL_OP.ADD ?
-              this.translate.instant('responsePolicy.dialog.content.INSERT_OK') :
-              this.translate.instant('responsePolicy.dialog.content.UPDATE_OK')
+            this.type === GlobalConstant.MODAL_OP.ADD
+              ? this.translate.instant(
+                  'responsePolicy.dialog.content.INSERT_OK'
+                )
+              : this.translate.instant(
+                  'responsePolicy.dialog.content.UPDATE_OK'
+                )
           );
           if (this.type === GlobalConstant.MODAL_OP.ADD) {
             setTimeout(() => {
@@ -338,25 +340,30 @@ export class AddEditResponseRuleModalComponent implements OnInit {
           } else {
             updateGridData(
               this.responseRulesService.responseRules,
-              [{
-                id: this.responseRule.id,
-                event: this.responseRule.event,
-                // comment: Option[String],
-                group: this.responseRule.group || '',
-                conditions: this.responseRulesService.parseConditions(this.responseRule.criteria),
-                actions: this.responseRulesService.filterSelectedOptions(
-                  this.responseRule.actions,
-                  this.actions
-                ),
-                disable: !this.responseRule.enabled,
-                cfg_type: this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY ?
-                  GlobalConstant.CFG_TYPE.FED :
-                  GlobalConstant.CFG_TYPE.CUSTOMER,
-                webhooks: this.responseRulesService.filterSelectedOptions(
-                  this.responseRule.webhooks,
-                  this.webhookOptions
-                ),
-              }],
+              [
+                {
+                  id: this.responseRule.id,
+                  event: this.responseRule.event,
+                  // comment: Option[String],
+                  group: this.responseRule.group || '',
+                  conditions: this.responseRulesService.parseConditions(
+                    this.responseRule.criteria
+                  ),
+                  actions: this.responseRulesService.filterSelectedOptions(
+                    this.responseRule.actions,
+                    this.actions
+                  ),
+                  disable: !this.responseRule.enabled,
+                  cfg_type:
+                    this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+                      ? GlobalConstant.CFG_TYPE.FED
+                      : GlobalConstant.CFG_TYPE.CUSTOMER,
+                  webhooks: this.responseRulesService.filterSelectedOptions(
+                    this.responseRule.webhooks,
+                    this.webhookOptions
+                  ),
+                },
+              ],
               this.data.gridApi,
               'id',
               'edit'
@@ -366,9 +373,13 @@ export class AddEditResponseRuleModalComponent implements OnInit {
         error => {
           this.notificationService.openError(
             error.error,
-            this.type === GlobalConstant.MODAL_OP.ADD ?
-              this.translate.instant('responsePolicy.dialog.content.INSERT_NG') :
-              this.translate.instant('responsePolicy.dialog.content.UPDATE_NG')
+            this.type === GlobalConstant.MODAL_OP.ADD
+              ? this.translate.instant(
+                  'responsePolicy.dialog.content.INSERT_NG'
+                )
+              : this.translate.instant(
+                  'responsePolicy.dialog.content.UPDATE_NG'
+                )
           );
         }
       );

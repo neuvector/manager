@@ -6,6 +6,8 @@ export interface DeployFedRulesReq {
 
 export function isDeployFedRulesReq(v: any): v is DeployFedRulesReq {
   return (
-    (!v['ids'] || (Array.isArray(v['ids']) && v['ids'].every(elmt => (typeof elmt) === 'string')))
+    !v['ids'] ||
+    (Array.isArray(v['ids']) &&
+      v['ids'].every(elmt => typeof elmt === 'string'))
   );
 }

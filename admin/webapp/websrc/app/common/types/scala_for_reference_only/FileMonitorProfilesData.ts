@@ -6,8 +6,8 @@ export interface FileMonitorProfilesData {
   profiles: Array;
 }
 
-export function isFileMonitorProfilesData(v: any): v is FileMonitorProfilesData {
-  return (
-    (v['profiles'] && Array.isArray(v['profiles']))
-  );
+export function isFileMonitorProfilesData(
+  v: any
+): v is FileMonitorProfilesData {
+  return v['profiles'] && Array.isArray(v['profiles']);
 }

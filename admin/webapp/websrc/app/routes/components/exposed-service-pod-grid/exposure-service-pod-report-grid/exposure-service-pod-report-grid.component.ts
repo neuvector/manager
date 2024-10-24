@@ -6,19 +6,18 @@ import { MapConstant } from '@common/constants/map.constant';
 @Component({
   selector: 'app-exposure-service-pod-report-grid',
   templateUrl: './exposure-service-pod-report-grid.component.html',
-  styleUrls: ['./exposure-service-pod-report-grid.component.scss']
+  styleUrls: ['./exposure-service-pod-report-grid.component.scss'],
 })
 export class ExposureServicePodReportGridComponent implements OnInit {
-
   @Input() reportGridData: Array<any>;
   groupedGridData: any;
   colourMap: any = MapConstant.colourMap;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
     this.groupedGridData = this.preprocessHierarchicalData(this.reportGridData);
-    console.log("this.groupedGridData", this.groupedGridData)
+    console.log('this.groupedGridData', this.groupedGridData);
   }
 
   preprocessHierarchicalData = (
@@ -39,14 +38,12 @@ export class ExposureServicePodReportGridComponent implements OnInit {
           });
         } else {
           res.push({
-            ...child
+            ...child,
           });
         }
-
       });
     });
-    console.log('preprocessHierarchicalData',res)
+    console.log('preprocessHierarchicalData', res);
     return res;
   };
-
 }

@@ -45,5 +45,4 @@ export class RegistriesTableButtonsComponent
   refresh(params: ICellRendererParams): boolean {
     return false;
   }
-
 }

@@ -10,8 +10,9 @@ export interface DlpGroup {
 
 export function isDlpGroup(v: any): v is DlpGroup {
   return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['status']) === 'boolean') &&
-    (Array.isArray(v['sensors']) && v['sensors'].every(elmt => elmt && isDlpSetting(elmt)))
+    typeof v['name'] === 'string' &&
+    typeof v['status'] === 'boolean' &&
+    Array.isArray(v['sensors']) &&
+    v['sensors'].every(elmt => elmt && isDlpSetting(elmt))
   );
 }

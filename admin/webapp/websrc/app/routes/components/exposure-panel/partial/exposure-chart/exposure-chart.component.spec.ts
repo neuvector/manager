@@ -8,9 +8,8 @@ describe('ExposureChartComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ExposureChartComponent ]
-    })
-    .compileComponents();
+      declarations: [ExposureChartComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

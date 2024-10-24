@@ -8,10 +8,12 @@ export interface ComplianceProfileConfig {
   entries?: Array;
 }
 
-export function isComplianceProfileConfig(v: any): v is ComplianceProfileConfig {
+export function isComplianceProfileConfig(
+  v: any
+): v is ComplianceProfileConfig {
   return (
-    ((typeof v['name']) === 'string') &&
-    (!v['disable_system'] || ((typeof v['disable_system']) === 'boolean')) &&
+    typeof v['name'] === 'string' &&
+    (!v['disable_system'] || typeof v['disable_system'] === 'boolean') &&
     (!v['entries'] || (v['entries'] && isArray(v['entries'])))
   );
 }

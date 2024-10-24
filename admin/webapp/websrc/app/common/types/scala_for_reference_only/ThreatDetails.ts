@@ -13,13 +13,13 @@ export interface ThreatDetails {
 
 export function isThreatDetails(v: any): v is ThreatDetails {
   return (
-    ((typeof v['id']) === 'string') &&
-    ((typeof v['host_name']) === 'string') &&
-    ((typeof v['cluster_name']) === 'string') &&
-    ((typeof v['count']) === 'number') &&
-    ((typeof v['severity']) === 'string') &&
-    ((typeof v['action']) === 'string') &&
-    (!v['cap_len'] || ((typeof v['cap_len']) === 'number')) &&
-    ((typeof v['message']) === 'string')
+    typeof v['id'] === 'string' &&
+    typeof v['host_name'] === 'string' &&
+    typeof v['cluster_name'] === 'string' &&
+    typeof v['count'] === 'number' &&
+    typeof v['severity'] === 'string' &&
+    typeof v['action'] === 'string' &&
+    (!v['cap_len'] || typeof v['cap_len'] === 'number') &&
+    typeof v['message'] === 'string'
   );
 }

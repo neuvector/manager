@@ -9,7 +9,9 @@ export interface TopThreat {
 
 export function isTopThreat(v: any): v is TopThreat {
   return (
-    (v['source'] && isArray(v['source'])) &&
-    (v['destination'] && isArray(v['destination']))
+    v['source'] &&
+    isArray(v['source']) &&
+    v['destination'] &&
+    isArray(v['destination'])
   );
 }

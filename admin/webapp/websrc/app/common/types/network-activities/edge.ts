@@ -3,7 +3,7 @@ export interface Edge {
   source: string;
   target: string;
   label?: string;
-  status: string,
+  status: string;
   fromGroup?: string;
   toGroup?: string;
   fromDomain?: string;

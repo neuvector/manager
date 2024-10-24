@@ -18,16 +18,18 @@ export interface EndPointConversation {
 
 export function isEndPointConversation(v: any): v is EndPointConversation {
   return (
-    ((typeof v['from']) === 'string') &&
-    ((typeof v['to']) === 'string') &&
-    ((typeof v['bytes']) === 'number') &&
-    ((typeof v['sessions']) === 'number') &&
-    (!v['severity'] || ((typeof v['severity']) === 'string')) &&
-    ((typeof v['policy_action']) === 'string') &&
-    (!v['event_type'] || (Array.isArray(v['event_type']) && v['event_type'].every(elmt => (typeof elmt) === 'string'))) &&
+    typeof v['from'] === 'string' &&
+    typeof v['to'] === 'string' &&
+    typeof v['bytes'] === 'number' &&
+    typeof v['sessions'] === 'number' &&
+    (!v['severity'] || typeof v['severity'] === 'string') &&
+    typeof v['policy_action'] === 'string' &&
+    (!v['event_type'] ||
+      (Array.isArray(v['event_type']) &&
+        v['event_type'].every(elmt => typeof elmt === 'string'))) &&
     (!v['protocols'] || (v['protocols'] && isArray(v['protocols']))) &&
     (!v['applications'] || (v['applications'] && isArray(v['applications']))) &&
     (!v['ports'] || (v['ports'] && isArray(v['ports']))) &&
-    (!v['sidecar_proxy'] || ((typeof v['sidecar_proxy']) === 'boolean'))
+    (!v['sidecar_proxy'] || typeof v['sidecar_proxy'] === 'boolean')
   );
 }

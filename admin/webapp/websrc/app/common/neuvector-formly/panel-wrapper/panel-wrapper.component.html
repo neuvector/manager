@@ -5,8 +5,12 @@
   hideToggle>
   <mat-expansion-panel-header>
     <mat-panel-title class="h4 font-weight-normal" [id]="to.label">
-      <span class="material-icons margin-right-s" *ngIf="panelOpenState">expand_less</span>
-      <span class="material-icons margin-right-s" *ngIf="!panelOpenState">expand_more</span>
+      <span class="material-icons margin-right-s" *ngIf="panelOpenState"
+        >expand_less</span
+      >
+      <span class="material-icons margin-right-s" *ngIf="!panelOpenState"
+        >expand_more</span
+      >
       {{ to.label! | translate }}
     </mat-panel-title>
     <ng-container *ngIf="to.description">

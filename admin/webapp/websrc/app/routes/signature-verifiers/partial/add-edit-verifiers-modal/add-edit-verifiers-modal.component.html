@@ -29,35 +29,37 @@
             formControlName="name" />
         </mat-form-field>
         <mat-form-field appearance="standard" class="ml-4 flex-grow-1">
-          <mat-label>{{ 'signatures.gridHeader.COMMENT' | translate }}</mat-label>
-          <input
-            type="text"
-            matInput
-            formControlName="comment" />
+          <mat-label>{{
+            'signatures.gridHeader.COMMENT' | translate
+          }}</mat-label>
+          <input type="text" matInput formControlName="comment" />
         </mat-form-field>
         <ng-container *ngIf="!isKeypairOnly; else keypairOption">
           <mat-form-field appearance="standard" class="ml-4">
-            <mat-label>{{'signatures.gridHeader.V_TYPE' | translate}}</mat-label>
+            <mat-label>{{
+              'signatures.gridHeader.V_TYPE' | translate
+            }}</mat-label>
             <mat-select
               required
               [(ngModel)]="vType"
-              [ngModelOptions]="{standalone: true}"
-            >
+              [ngModelOptions]="{ standalone: true }">
               <mat-option *ngFor="let type of types" [value]="type">
-                {{type}}
+                {{ type }}
               </mat-option>
             </mat-select>
           </mat-form-field>
         </ng-container>
         <ng-template #keypairOption>
           <mat-form-field appearance="standard" class="ml-4">
-            <mat-label>{{ 'signatures.gridHeader.V_TYPE' | translate }}</mat-label>
+            <mat-label>{{
+              'signatures.gridHeader.V_TYPE' | translate
+            }}</mat-label>
             <input
               type="text"
               matInput
               readonly
               [(ngModel)]="vType"
-              [ngModelOptions]="{standalone: true}" />
+              [ngModelOptions]="{ standalone: true }" />
           </mat-form-field>
         </ng-template>
 
@@ -74,31 +76,35 @@
           {{ 'signatures.gridHeader.IGNORE_SCT' | translate}}
         </mat-checkbox> -->
       </div>
-      <div class="d-flex justify-content-start align-items-center" *ngIf="vType === VERIFIER_TYPE.KEYPAIR">
+      <div
+        class="d-flex justify-content-start align-items-center"
+        *ngIf="vType === VERIFIER_TYPE.KEYPAIR">
         <mat-form-field appearance="standard" class="w-100">
-          <mat-label>{{ 'signatures.gridHeader.PUBLIC_KEY' | translate }}</mat-label>
+          <mat-label>{{
+            'signatures.gridHeader.PUBLIC_KEY' | translate
+          }}</mat-label>
           <textarea
             cdkTextareaAutosize
-            style="min-height: 30px;"
+            style="min-height: 30px"
             formControlName="public_key"
             matInput>
           </textarea>
         </mat-form-field>
       </div>
-      <div class="d-flex justify-content-start align-items-center" *ngIf="vType === VERIFIER_TYPE.KEYLESS">
+      <div
+        class="d-flex justify-content-start align-items-center"
+        *ngIf="vType === VERIFIER_TYPE.KEYLESS">
         <mat-form-field class="mr-4" appearance="standard">
-          <mat-label>{{ 'signatures.gridHeader.CERT_ISSUER' | translate }}</mat-label>
-          <input
-            type="text"
-            matInput
-            formControlName="cert_issuer" />
+          <mat-label>{{
+            'signatures.gridHeader.CERT_ISSUER' | translate
+          }}</mat-label>
+          <input type="text" matInput formControlName="cert_issuer" />
         </mat-form-field>
         <mat-form-field appearance="standard" class="flex-grow-1">
-          <mat-label>{{ 'signatures.gridHeader.CERT_SUBJECT' | translate }}</mat-label>
-          <input
-            type="text"
-            matInput
-            formControlName="cert_subject" />
+          <mat-label>{{
+            'signatures.gridHeader.CERT_SUBJECT' | translate
+          }}</mat-label>
+          <input type="text" matInput formControlName="cert_subject" />
         </mat-form-field>
       </div>
     </form>

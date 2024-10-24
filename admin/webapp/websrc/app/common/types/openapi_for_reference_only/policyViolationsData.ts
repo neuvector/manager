@@ -1,4 +1,4 @@
-import { Violation } from "./violation";
+import { Violation } from './violation';
 
 export interface PolicyViolationsData {
   violations: Violation[];

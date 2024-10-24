@@ -9,9 +9,9 @@ export interface JfrogXray {
 
 export function isJfrogXray(v: any): v is JfrogXray {
   return (
-    ((typeof v['url']) === 'string') &&
-    ((typeof v['enable']) === 'boolean') &&
-    ((typeof v['username']) === 'string') &&
-    (!v['password'] || ((typeof v['password']) === 'string'))
+    typeof v['url'] === 'string' &&
+    typeof v['enable'] === 'boolean' &&
+    typeof v['username'] === 'string' &&
+    (!v['password'] || typeof v['password'] === 'string')
   );
 }

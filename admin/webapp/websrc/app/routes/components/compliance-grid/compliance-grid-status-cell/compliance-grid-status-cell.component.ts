@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MapConstant } from '@common/constants/map.constant';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
-import {UtilsService} from "@common/utils/app.utils";
+import { UtilsService } from '@common/utils/app.utils';
 
 @Component({
   selector: 'app-compliance-grid-status-cell',

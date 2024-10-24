@@ -8,9 +8,8 @@ describe('VulnerabilitiesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ VulnerabilitiesComponent ]
-    })
-    .compileComponents();
+      declarations: [VulnerabilitiesComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

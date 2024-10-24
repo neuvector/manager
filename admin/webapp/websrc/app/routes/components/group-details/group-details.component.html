@@ -1,6 +1,6 @@
 <ng-container [ngSwitch]="activeTab" *ngIf="!isScoreImprovement">
   <ng-container *ngSwitchCase="'member'">
-    <div class="filter" style="position: absolute; right: 20px; top: 5px;">
+    <div class="filter" style="position: absolute; right: 20px; top: 5px">
       <mat-form-field appearance="standard">
         <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
         <input [formControl]="filter" matInput />
@@ -8,7 +8,7 @@
     </div>
   </ng-container>
   <ng-container *ngSwitchCase="'custom check'">
-    <div class="filter" style="position: absolute; right: 20px; top: 5px;">
+    <div class="filter" style="position: absolute; right: 20px; top: 5px">
       <mat-form-field appearance="standard">
         <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
         <input [formControl]="filter" matInput />
@@ -17,16 +17,14 @@
   </ng-container>
   <ng-container *ngSwitchCase="'process profile rules'">
     <div
-      style="position: absolute; right: 20px; top: 5px;"
-      class="d-flex align-items-center justify-content-end"
-    >
+      style="position: absolute; right: 20px; top: 5px"
+      class="d-flex align-items-center justify-content-end">
       <button
-        *ngIf="isWriteGroupAuthorized && cfgType!==CFG_TYPE.FED"
+        *ngIf="isWriteGroupAuthorized && cfgType !== CFG_TYPE.FED"
         mat-button
         class="mr-2 mt-1"
         [matMenuTriggerFor]="menu"
-        aria-label="Action menu"
-      >
+        aria-label="Action menu">
         <mat-icon>more_vert</mat-icon>
         {{ 'policy.ACTIONS' | translate }}
       </button>
@@ -34,7 +32,13 @@
         <div>
           <button
             mat-button
-            *ngIf="selectedProcessProfileRules && selectedProcessProfileRules.length >= 1 && isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized && !isIncludingGroundRule()"
+            *ngIf="
+              selectedProcessProfileRules &&
+              selectedProcessProfileRules.length >= 1 &&
+              isWriteGroupAuthorized &&
+              isWriteProcessProfileRuleAuthorized &&
+              !isIncludingGroundRule()
+            "
             (click)="removeProfile(selectedProcessProfileRules)">
             <em class="eos-icons">delete</em>
             {{ 'service.DELETE_RULE' | translate }}
@@ -43,7 +47,13 @@
         <div>
           <button
             mat-button
-            *ngIf="selectedProcessProfileRules && selectedProcessProfileRules.length === 1 && isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized && !isIncludingGroundRule()"
+            *ngIf="
+              selectedProcessProfileRules &&
+              selectedProcessProfileRules.length === 1 &&
+              isWriteGroupAuthorized &&
+              isWriteProcessProfileRuleAuthorized &&
+              !isIncludingGroundRule()
+            "
             (click)="editProfile(selectedProcessProfileRules)">
             <em class="eos-icons">edit</em>
             {{ 'service.EDIT_RULE' | translate }}
@@ -52,7 +62,9 @@
         <div>
           <button
             mat-button
-            *ngIf="isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized"
+            *ngIf="
+              isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized
+            "
             (click)="addProfile()">
             <em class="eos-icons">add</em>
             {{ 'service.ADD_RULE' | translate }}
@@ -69,16 +81,14 @@
   </ng-container>
   <ng-container *ngSwitchCase="'file access rules'">
     <div
-      style="position: absolute; right: 20px; top: 5px;"
-      class="d-flex align-items-center justify-content-end"
-    >
+      style="position: absolute; right: 20px; top: 5px"
+      class="d-flex align-items-center justify-content-end">
       <button
         *ngIf="isWriteFileAccessRuleAuthorized || cfgType === CFG_TYPE.GROUND"
         mat-button
         class="mr-2 mt-1"
         [matMenuTriggerFor]="menu"
-        aria-label="Action menu"
-      >
+        aria-label="Action menu">
         <mat-icon>more_vert</mat-icon>
         {{ 'policy.ACTIONS' | translate }}
       </button>
@@ -86,7 +96,11 @@
         <div>
           <button
             mat-button
-            *ngIf="selectedFileAccessRules && isWriteGroupAuthorized && isWriteFileAccessRuleAuthorized"
+            *ngIf="
+              selectedFileAccessRules &&
+              isWriteGroupAuthorized &&
+              isWriteFileAccessRuleAuthorized
+            "
             (click)="removeProfile(selectedFileAccessRules)">
             <em class="eos-icons">delete</em>
             {{ 'service.DELETE_RULE' | translate }}
@@ -95,7 +109,11 @@
         <div>
           <button
             mat-button
-            *ngIf="selectedFileAccessRules && isWriteGroupAuthorized && isWriteFileAccessRuleAuthorized"
+            *ngIf="
+              selectedFileAccessRules &&
+              isWriteGroupAuthorized &&
+              isWriteFileAccessRuleAuthorized
+            "
             (click)="editProfile(selectedFileAccessRules)">
             <em class="eos-icons">edit</em>
             {{ 'service.EDIT_RULE' | translate }}
@@ -114,7 +132,7 @@
           <button
             mat-button
             (click)="showPredefinedRules()"
-            *ngIf="cfgType!==CFG_TYPE.FED && cfgType!==CFG_TYPE.CUSTOMER">
+            *ngIf="cfgType !== CFG_TYPE.FED && cfgType !== CFG_TYPE.CUSTOMER">
             <em class="eos-icons">info</em>
             <span class="text-plain">{{
               'service.PREDEFINED_FILTERS' | translate
@@ -131,7 +149,7 @@
     </div>
   </ng-container>
   <ng-container *ngSwitchCase="'network rules'">
-    <div class="filter" style="position: absolute; right: 20px; top: 5px;">
+    <div class="filter" style="position: absolute; right: 20px; top: 5px">
       <mat-form-field appearance="standard">
         <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
         <input [formControl]="filter" matInput />
@@ -139,7 +157,7 @@
     </div>
   </ng-container>
   <ng-container *ngSwitchCase="'response rules'">
-    <div class="filter" style="position: absolute; right: 20px; top: 5px;">
+    <div class="filter" style="position: absolute; right: 20px; top: 5px">
       <mat-form-field appearance="standard">
         <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
         <input [formControl]="filter" matInput />
@@ -148,15 +166,13 @@
   </ng-container>
   <ng-container *ngSwitchCase="'DLP'">
     <div
-      style="position: absolute; right: 20px; top: 5px;"
-      class="d-flex align-items-center justify-content-end"
-    >
+      style="position: absolute; right: 20px; top: 5px"
+      class="d-flex align-items-center justify-content-end">
       <button
         mat-button
         class="mr-2 mt-1"
         [matMenuTriggerFor]="menu"
-        aria-label="Action menu"
-      >
+        aria-label="Action menu">
         <mat-icon>more_vert</mat-icon>
         {{ 'policy.ACTIONS' | translate }}
       </button>
@@ -180,15 +196,13 @@
   </ng-container>
   <ng-container *ngSwitchCase="'WAF'">
     <div
-      style="position: absolute; right: 20px; top: 5px;"
-      class="d-flex align-items-center justify-content-end"
-    >
+      style="position: absolute; right: 20px; top: 5px"
+      class="d-flex align-items-center justify-content-end">
       <button
         mat-button
         class="mr-2 mt-1"
         [matMenuTriggerFor]="menu"
-        aria-label="Action menu"
-      >
+        aria-label="Action menu">
         <mat-icon>more_vert</mat-icon>
         {{ 'policy.ACTIONS' | translate }}
       </button>
@@ -217,9 +231,7 @@
   animationDuration="0ms"
   [selectedIndex]="groupsService.activeTabIndex"
   (selectedTabChange)="activateTab($event)">
-  <mat-tab
-    label="{{ 'group.gridHeader.MEMBERS' | translate }}"
-  >
+  <mat-tab label="{{ 'group.gridHeader.MEMBERS' | translate }}">
     <app-members
       *ngIf="groupsService.activeTabIndex === 0"
       [source]="navSource"
@@ -231,10 +243,17 @@
   </mat-tab>
   <mat-tab
     label="{{ 'group.script.TITLE' | translate }}"
-    [labelClass]="(kind==='container' || kind==='node') && cfgType !== CFG_TYPE.FED ? '' : 'hide'"
-  >
+    [labelClass]="
+      (kind === 'container' || kind === 'node') && cfgType !== CFG_TYPE.FED
+        ? ''
+        : 'hide'
+    ">
     <app-custom-check
-      *ngIf="groupsService.activeTabIndex === 1 && ((kind==='container' || kind==='node') && cfgType !== CFG_TYPE.FED)"
+      *ngIf="
+        groupsService.activeTabIndex === 1 &&
+        (kind === 'container' || kind === 'node') &&
+        cfgType !== CFG_TYPE.FED
+      "
       [source]="navSource"
       [groupName]="selectedGroupName"
       [cfgType]="cfgType"
@@ -244,10 +263,12 @@
   </mat-tab>
   <mat-tab
     label="{{ 'service.PROCESS_PROFILE' | translate }}"
-    [labelClass]="kind==='container' || kind==='node' ? '' : 'hide'"
-  >
+    [labelClass]="kind === 'container' || kind === 'node' ? '' : 'hide'">
     <app-process-profile-rules
-      *ngIf="groupsService.activeTabIndex === 2 && (kind==='container' || kind==='node')"
+      *ngIf="
+        groupsService.activeTabIndex === 2 &&
+        (kind === 'container' || kind === 'node')
+      "
       [source]="navSource"
       [groupName]="selectedGroupName"
       [baselineProfile]="baselineProfile"
@@ -257,16 +278,14 @@
       (getSelectedProcessProfileRules)="getSelectedProcessProfileRules($event)"
       (getRemoveProfile)="getRemoveProfile($event)"
       (getEditProfile)="getEditProfile($event)"
-      (getAddProfile)="getAddProfile($event)"
-    >
+      (getAddProfile)="getAddProfile($event)">
     </app-process-profile-rules>
   </mat-tab>
   <mat-tab
     label="{{ 'service.FILE_PROFILE' | translate }}"
-    [labelClass]="kind==='container' ? '' : 'hide'"
-  >
+    [labelClass]="kind === 'container' ? '' : 'hide'">
     <app-file-access-rules
-      *ngIf="groupsService.activeTabIndex === 3 && kind==='container'"
+      *ngIf="groupsService.activeTabIndex === 3 && kind === 'container'"
       [source]="navSource"
       [groupName]="selectedGroupName"
       [resizableHeight]="resizableHeight"
@@ -276,13 +295,10 @@
       (getRemoveProfile)="getRemoveProfile($event)"
       (getEditProfile)="getEditProfile($event)"
       (getAddProfile)="getAddProfile($event)"
-      (getShowPredefinedRules)="getShowPredefinedRules($event)"
-    >
+      (getShowPredefinedRules)="getShowPredefinedRules($event)">
     </app-file-access-rules>
   </mat-tab>
-  <mat-tab
-    label="{{ 'service.POLICY_RULES' | translate }}"
-  >
+  <mat-tab label="{{ 'service.POLICY_RULES' | translate }}">
     <app-network-rules
       *ngIf="groupsService.activeTabIndex === 4"
       [source]="navSource"
@@ -291,9 +307,7 @@
       [resizableHeight]="resizableHeight">
     </app-network-rules>
   </mat-tab>
-  <mat-tab
-    label="{{ 'group.RESPONSE_RULES' | translate }}"
-  >
+  <mat-tab label="{{ 'group.RESPONSE_RULES' | translate }}">
     <app-response-rules
       *ngIf="groupsService.activeTabIndex === 5"
       [source]="navSource"
@@ -304,10 +318,15 @@
   </mat-tab>
   <mat-tab
     label="{{ 'group.dlp.TITLE' | translate }}"
-    [labelClass]="kind==='container' && cfgType !== CFG_TYPE.FED ? '' : 'hide'"
-  >
+    [labelClass]="
+      kind === 'container' && cfgType !== CFG_TYPE.FED ? '' : 'hide'
+    ">
     <app-group-dlp
-      *ngIf="groupsService.activeTabIndex === 6 && (kind==='container' && cfgType !== CFG_TYPE.FED)"
+      *ngIf="
+        groupsService.activeTabIndex === 6 &&
+        kind === 'container' &&
+        cfgType !== CFG_TYPE.FED
+      "
       (getEditGroupSensorModal)="getEditGroupSensorModal($event)"
       (getToggleDLPConfigEnablement)="getToggleDLPConfigEnablement($event)"
       (getStatus)="getStatus($event)"
@@ -320,10 +339,15 @@
   </mat-tab>
   <mat-tab
     label="{{ 'group.waf.TITLE' | translate }}"
-    [labelClass]="kind==='container' && cfgType !== CFG_TYPE.FED ? '' : 'hide'"
-  >
+    [labelClass]="
+      kind === 'container' && cfgType !== CFG_TYPE.FED ? '' : 'hide'
+    ">
     <app-group-waf
-      *ngIf="groupsService.activeTabIndex === 7 && (kind==='container' && cfgType !== CFG_TYPE.FED)"
+      *ngIf="
+        groupsService.activeTabIndex === 7 &&
+        kind === 'container' &&
+        cfgType !== CFG_TYPE.FED
+      "
       (getEditGroupSensorModal)="getEditGroupSensorModal($event)"
       (getToggleWAFConfigEnablement)="getToggleWAFConfigEnablement($event)"
       (getStatus)="getStatus($event)"
@@ -347,8 +371,7 @@
           [baselineProfile]="baselineProfile"
           [resizableHeight]="resizableHeight"
           [isScoreImprovement]="isScoreImprovement"
-          [cfgType]="cfgType"
-        >
+          [cfgType]="cfgType">
         </app-process-profile-rules>
       </ng-template>
     </mat-tab>
@@ -361,8 +384,7 @@
           [groupName]="selectedGroupName"
           [resizableHeight]="resizableHeight"
           [isScoreImprovement]="isScoreImprovement"
-          [cfgType]="cfgType"
-        >
+          [cfgType]="cfgType">
         </app-file-access-rules>
       </ng-template>
     </mat-tab>

@@ -5,7 +5,7 @@ import {
   OnChanges,
   OnInit,
   SimpleChanges,
-  EventEmitter
+  EventEmitter,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { FormControl, Validators } from '@angular/forms';
@@ -72,7 +72,11 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    console.log('on process profile rules init: ', this.source, this.baselineProfile);
+    console.log(
+      'on process profile rules init: ',
+      this.source,
+      this.baselineProfile
+    );
     this.source = this.source ? this.source : GlobalConstant.NAV_SOURCE.SELF;
     this.isWriteGroupAuthorized =
       this.authUtilsService.getDisplayFlag('write_group') &&
@@ -85,12 +89,13 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
           this.cfgType === GlobalConstant.CFG_TYPE.GROUND ||
           this.cfgType === GlobalConstant.CFG_TYPE.LEARNED)) ||
       (this.source === GlobalConstant.NAV_SOURCE.FED_POLICY &&
-        this.cfgType === GlobalConstant.CFG_TYPE.FED && this.authUtilsService.getDisplayFlag('multi_cluster_w'));
+        this.cfgType === GlobalConstant.CFG_TYPE.FED &&
+        this.authUtilsService.getDisplayFlag('multi_cluster_w'));
     this.gridOptions = this.processProfileRulesService.prepareGrid(
       this.isWriteGroupAuthorized,
       this.isWriteProcessProfileRuleAuthorized,
       this.source,
-      this.isScoreImprovement,
+      this.isScoreImprovement
     );
     this.gridOptions.onGridReady = params => {
       const $win = $(GlobalVariable.window);
@@ -101,7 +106,11 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
         if (params && params.api) {
           if (this.useQuickFilterService) {
             this.quickFilterService.textInput$.subscribe((value: string) => {
-              this.quickFilterService.onFilterChange(value, this.gridOptions, this.gridApi);
+              this.quickFilterService.onFilterChange(
+                value,
+                this.gridOptions,
+                this.gridApi
+              );
             });
           }
           params.api.sizeColumnsToFit();
@@ -178,7 +187,9 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
               if (this.gridApi) {
                 this.gridApi.sizeColumnsToFit();
               }
-              this.getSelectedProcessProfileRules.emit(this.selectedProcessProfileRules);
+              this.getSelectedProcessProfileRules.emit(
+                this.selectedProcessProfileRules
+              );
             });
           },
           err => {
@@ -198,13 +209,15 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
       let selectedRows = this.gridApi.getSelectedRows();
       setTimeout(() => {
         this.selectedProcessProfileRules = selectedRows;
-        this.getSelectedProcessProfileRules.emit(this.selectedProcessProfileRules);
+        this.getSelectedProcessProfileRules.emit(
+          this.selectedProcessProfileRules
+        );
       });
     }
   };
 
   editProfile = data => {
-    console.log(data)
+    console.log(data);
     this.isModalOpen = true;
     let editDialogRef = this.dialog.open(
       AddEditProcessProfileRuleModalComponent,
@@ -216,15 +229,17 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
           source: this.source,
           getProcessProfileRules: this.getProcessProfileRules,
           gridApi: this.gridApi!,
-          processProfileRules: this.processProfileRules
+          processProfileRules: this.processProfileRules,
         },
-        width: "70%"
+        width: '70%',
       }
     );
     editDialogRef.afterClosed().subscribe(() => {
       this.isModalOpen = false;
       this.selectedProcessProfileRules = null;
-      this.getSelectedProcessProfileRules.emit(this.selectedProcessProfileRules);
+      this.getSelectedProcessProfileRules.emit(
+        this.selectedProcessProfileRules
+      );
     });
   };
 
@@ -268,7 +283,9 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
             'delete'
           );
           this.selectedProcessProfileRules = null;
-          this.getSelectedProcessProfileRules.emit(this.selectedProcessProfileRules);
+          this.getSelectedProcessProfileRules.emit(
+            this.selectedProcessProfileRules
+          );
           // close dialog
           dialogRef.componentInstance.onCancel();
           dialogRef.componentInstance.loading = false;
@@ -294,15 +311,17 @@ export class ProcessProfileRulesComponent implements OnInit, OnChanges {
           source: this.source,
           getProcessProfileRules: this.getProcessProfileRules,
           gridApi: this.gridApi!,
-          processProfileRules: this.processProfileRules
+          processProfileRules: this.processProfileRules,
         },
-        width: "70%"
+        width: '70%',
       }
     );
     addDialogRef.afterClosed().subscribe(result => {
       this.isModalOpen = false;
       this.selectedProcessProfileRules = null;
-      this.getSelectedProcessProfileRules.emit(this.selectedProcessProfileRules);
+      this.getSelectedProcessProfileRules.emit(
+        this.selectedProcessProfileRules
+      );
     });
   };
 

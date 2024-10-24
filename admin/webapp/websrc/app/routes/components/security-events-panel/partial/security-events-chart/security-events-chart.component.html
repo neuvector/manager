@@ -1,14 +1,13 @@
-<div *ngIf="noChartData; then nodata else chart"></div>
+<div *ngIf="noChartData; then nodata; else chart"></div>
 
 <ng-template #chart>
-  <div style="height: 250px;">
+  <div style="height: 250px">
     <canvas
       [data]="securityEventsChartConfig.data"
       [labels]="securityEventsChartConfig.data.labels"
       [options]="securityEventsChartConfig.options"
       [type]="securityEventsChartConfig.type"
-      baseChart
-    >
+      baseChart>
     </canvas>
   </div>
 </ng-template>
@@ -16,7 +15,6 @@
 <ng-template #nodata>
   <app-empty-data-chart-replacement
     type="safe"
-    [message]="'dashboard.body.message.NO_CRITICAL_SECURITY_EVENT' | translate"
-  >
+    [message]="'dashboard.body.message.NO_CRITICAL_SECURITY_EVENT' | translate">
   </app-empty-data-chart-replacement>
 </ng-template>

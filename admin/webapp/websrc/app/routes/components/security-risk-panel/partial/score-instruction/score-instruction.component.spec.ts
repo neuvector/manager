@@ -8,9 +8,8 @@ describe('ScoreInstructionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ScoreInstructionComponent ]
-    })
-    .compileComponents();
+      declarations: [ScoreInstructionComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

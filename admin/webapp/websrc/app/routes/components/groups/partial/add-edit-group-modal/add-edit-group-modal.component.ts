@@ -62,11 +62,12 @@ export class AddEditGroupModalComponent implements OnInit {
         monitor_metric: new FormControl(false, Validators.required),
         group_sess_rate: new FormControl(0, Validators.required),
         group_sess_cur: new FormControl(0, Validators.required),
-        group_band_width: new FormControl(0, Validators.required)
+        group_band_width: new FormControl(0, Validators.required),
       });
       this.showMonitorMetric =
-        this.data.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER || this.data.cfgType === GlobalConstant.CFG_TYPE.GROUND ||
-        this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+        this.data.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER ||
+        this.data.cfgType === GlobalConstant.CFG_TYPE.GROUND ||
+        this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY;
     } else {
       this.addEditGroupForm = new FormGroup({
         name: new FormControl(
@@ -75,22 +76,42 @@ export class AddEditGroupModalComponent implements OnInit {
         ),
         comment: new FormControl(this.data.selectedGroup.comment),
         criteriaCtrl: new FormControl(),
-        monitor_metric: new FormControl(this.data.selectedGroup.monitor_metric, Validators.required),
-        group_sess_rate: new FormControl(this.data.selectedGroup.group_sess_rate, Validators.required),
-        group_sess_cur: new FormControl(this.data.selectedGroup.group_sess_cur, Validators.required),
-        group_band_width: new FormControl(this.data.selectedGroup.group_band_width, Validators.required)
+        monitor_metric: new FormControl(
+          this.data.selectedGroup.monitor_metric,
+          Validators.required
+        ),
+        group_sess_rate: new FormControl(
+          this.data.selectedGroup.group_sess_rate,
+          Validators.required
+        ),
+        group_sess_cur: new FormControl(
+          this.data.selectedGroup.group_sess_cur,
+          Validators.required
+        ),
+        group_band_width: new FormControl(
+          this.data.selectedGroup.group_band_width,
+          Validators.required
+        ),
       });
-      this.isShowingWarning = !this.groupNameRegex.test(this.addEditGroupForm.get('name')!.value);
+      this.isShowingWarning = !this.groupNameRegex.test(
+        this.addEditGroupForm.get('name')!.value
+      );
       this.criteria = JSON.parse(
         JSON.stringify(this.data.selectedGroup.criteria)
       );
-      if (this.data.opType === GlobalConstant.MODAL_OP.VIEW || this.data.cfgType === GlobalConstant.CFG_TYPE.LEARNED) {
+      if (
+        this.data.opType === GlobalConstant.MODAL_OP.VIEW ||
+        this.data.cfgType === GlobalConstant.CFG_TYPE.LEARNED
+      ) {
         this.addEditGroupForm.controls.criteriaCtrl.disable();
       } else {
         this.addEditGroupForm.controls.criteriaCtrl.enable();
       }
       this.showMonitorMetric =
-        (this.data.cfgType === GlobalConstant.CFG_TYPE.LEARNED || this.data.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER || this.data.cfgType === GlobalConstant.CFG_TYPE.GROUND || this.data.cfgType === GlobalConstant.CFG_TYPE.FED) &&
+        (this.data.cfgType === GlobalConstant.CFG_TYPE.LEARNED ||
+          this.data.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER ||
+          this.data.cfgType === GlobalConstant.CFG_TYPE.GROUND ||
+          this.data.cfgType === GlobalConstant.CFG_TYPE.FED) &&
         this.data.selectedGroup.kind === MapConstant.GROUP_KIND.CONTAINER &&
         !this.data.selectedGroup.reserved;
     }
@@ -104,10 +125,12 @@ export class AddEditGroupModalComponent implements OnInit {
   }
 
   checkGroupName = () => {
-    this.isShowingWarning = !this.groupNameRegex.test(this.addEditGroupForm.get('name')!.value);
+    this.isShowingWarning = !this.groupNameRegex.test(
+      this.addEditGroupForm.get('name')!.value
+    );
   };
 
-  suppressInvalidTyping = (event) => {
+  suppressInvalidTyping = event => {
     return validTypingOnly(event, /[a-z]|[A-Z]|[0-9]|\.|\-/);
   };
 
@@ -151,13 +174,22 @@ export class AddEditGroupModalComponent implements OnInit {
   };
 
   private updateShowMonitorMetric = () => {
-    if (!this.addEditGroupForm.controls['group_sess_rate'].value) this.addEditGroupForm.controls['group_sess_rate'].setValue(0);
-    if (!this.addEditGroupForm.controls['group_sess_cur'].value) this.addEditGroupForm.controls['group_sess_cur'].setValue(0);
-    if (!this.addEditGroupForm.controls['group_band_width'].value) this.addEditGroupForm.controls['group_band_width'].setValue(0);
+    if (!this.addEditGroupForm.controls['group_sess_rate'].value)
+      this.addEditGroupForm.controls['group_sess_rate'].setValue(0);
+    if (!this.addEditGroupForm.controls['group_sess_cur'].value)
+      this.addEditGroupForm.controls['group_sess_cur'].setValue(0);
+    if (!this.addEditGroupForm.controls['group_band_width'].value)
+      this.addEditGroupForm.controls['group_band_width'].setValue(0);
     this.showMonitorMetric =
-      (this.data.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER || this.data.cfgType === GlobalConstant.CFG_TYPE.LEARNED || this.data.cfgType === GlobalConstant.CFG_TYPE.GROUND || this.data.cfgType === GlobalConstant.CFG_TYPE.FED) &&
-      (this.data.opType === GlobalConstant.MODAL_OP.EDIT && !this.data.selectedGroup.reserved || this.data.opType === GlobalConstant.MODAL_OP.ADD) &&
-      this.criteria.filter(criterion => criterion.name.includes('address')).length === 0;
+      (this.data.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER ||
+        this.data.cfgType === GlobalConstant.CFG_TYPE.LEARNED ||
+        this.data.cfgType === GlobalConstant.CFG_TYPE.GROUND ||
+        this.data.cfgType === GlobalConstant.CFG_TYPE.FED) &&
+      ((this.data.opType === GlobalConstant.MODAL_OP.EDIT &&
+        !this.data.selectedGroup.reserved) ||
+        this.data.opType === GlobalConstant.MODAL_OP.ADD) &&
+      this.criteria.filter(criterion => criterion.name.includes('address'))
+        .length === 0;
   };
 
   updateGroup = () => {

@@ -1,4 +1,4 @@
-import { ScanAppPackage } from "./scanAppPackage";
+import { ScanAppPackage } from './scanAppPackage';
 
 export interface ScanPackageReqData {
   source: string;

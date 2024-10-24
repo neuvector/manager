@@ -7,7 +7,5 @@ export interface IncidentMajorData {
 }
 
 export function isIncidentMajorData(v: any): v is IncidentMajorData {
-  return (
-    (v['incidents'] && isArray(v['incidents']))
-  );
+  return v['incidents'] && isArray(v['incidents']);
 }

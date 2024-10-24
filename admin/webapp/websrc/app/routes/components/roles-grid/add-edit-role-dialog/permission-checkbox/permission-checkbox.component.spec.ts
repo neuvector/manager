@@ -8,9 +8,8 @@ describe('PermissionCheckboxComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PermissionCheckboxComponent ]
-    })
-    .compileComponents();
+      declarations: [PermissionCheckboxComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

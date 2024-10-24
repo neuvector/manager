@@ -9,7 +9,6 @@ export interface MultiClusterSummary {
 
 export function isMultiClusterSummary(v: any): v is MultiClusterSummary {
   return (
-    (v['score'] && isScore(v['score'])) &&
-    ((typeof v['summaryJson']) === 'string')
+    v['score'] && isScore(v['score']) && typeof v['summaryJson'] === 'string'
   );
 }

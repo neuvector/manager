@@ -14,8 +14,11 @@ export class AuthTokenJsonProtocol {
   }
 }
 
-export const AuthTokenJsonProtocolInhabitant: AuthTokenJsonProtocol = AuthTokenJsonProtocol.getInstance();
+export const AuthTokenJsonProtocolInhabitant: AuthTokenJsonProtocol =
+  AuthTokenJsonProtocol.getInstance();
 
 export function isAuthTokenJsonProtocol(v: any): v is AuthTokenJsonProtocol {
-  return (v instanceof AuthTokenJsonProtocol) && (v === AuthTokenJsonProtocolInhabitant);
+  return (
+    v instanceof AuthTokenJsonProtocol && v === AuthTokenJsonProtocolInhabitant
+  );
 }

@@ -1,4 +1,4 @@
-import { UserRole } from "./userRole";
+import { UserRole } from './userRole';
 
 export interface UserRolesData {
   roles: UserRole[];

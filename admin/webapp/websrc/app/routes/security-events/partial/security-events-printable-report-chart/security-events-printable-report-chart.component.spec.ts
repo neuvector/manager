@@ -8,13 +8,14 @@ describe('SecurityEventsPrintableReportChartComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SecurityEventsPrintableReportChartComponent ]
-    })
-    .compileComponents();
+      declarations: [SecurityEventsPrintableReportChartComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SecurityEventsPrintableReportChartComponent);
+    fixture = TestBed.createComponent(
+      SecurityEventsPrintableReportChartComponent
+    );
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

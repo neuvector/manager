@@ -8,8 +8,5 @@ export interface DeployFedRulesConfig {
 }
 
 export function isDeployFedRulesConfig(v: any): v is DeployFedRulesConfig {
-  return (
-    ((typeof v['force']) === 'boolean') &&
-    (v['ids'] && isArray(v['ids']))
-  );
+  return typeof v['force'] === 'boolean' && v['ids'] && isArray(v['ids']);
 }

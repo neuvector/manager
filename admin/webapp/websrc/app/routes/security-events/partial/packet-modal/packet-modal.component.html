@@ -1,42 +1,39 @@
-<div
-  id="packetPreview"
-  class="sec-event-packetPreview pl-sm pr"
->
+<div id="packetPreview" class="sec-event-packetPreview pl-sm pr">
   <button
     class="btn btn-xs btn-link pull-right fixed-close"
-    (click)="dialogRef.close()"
-  >
+    (click)="dialogRef.close()">
     <em class="fa fa-times"></em>
   </button>
   <div
     data-role="button"
     *ngIf="data.packet.length > 0"
     class="margin-top-s margin-left-m"
-    (click)="exportPcap()"
-  >
+    (click)="exportPcap()">
     <em class="fa fa-download text-action"></em>
     <label class="text-gray-label hand"
-      >{{'general.PCAP_DOWNLOAD' | translate}}
+      >{{ 'general.PCAP_DOWNLOAD' | translate }}
     </label>
   </div>
   <div class="packetContent">
     <div class="view view-offset">
-      <b *ngFor="let pos of positions">{{pos}}</b>
+      <b *ngFor="let pos of positions">{{ pos }}</b>
     </div>
     <div class="view view-hex">
       <span
-        *ngFor="let hex of hexItems; index as $index"  [attr.data-index]="$index"
-        [ngClass]="{current: current == $index + offset}"
+        *ngFor="let hex of hexItems; index as $index"
+        [attr.data-index]="$index"
+        [ngClass]="{ current: current === $index + offset }"
         (click)="setCurrent($index + offset)"
-        >{{hex}}
+        >{{ hex }}
       </span>
     </div>
     <div class="view view-char mr-sm" ng-show="!packetErr">
       <span
-        *ngFor="let character of chars; index as $index" [attr.data-index]="$index"
-        [ngClass]="{current: current == $index + offset}"
+        *ngFor="let character of chars; index as $index"
+        [attr.data-index]="$index"
+        [ngClass]="{ current: current === $index + offset }"
         (click)="setCurrent($index + offset)"
-        >{{character}}
+        >{{ character }}
       </span>
     </div>
   </div>

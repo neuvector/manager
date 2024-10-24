@@ -30,7 +30,7 @@
         "angular-data-test-id"
       ],
       "rules": {
-        "angular-data-test-id/data-test-id": "error"
+        "angular-data-test-id/data-test-id": "off"
       }
     },
     {

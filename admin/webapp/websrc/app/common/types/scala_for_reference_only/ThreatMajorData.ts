@@ -7,7 +7,5 @@ export interface ThreatMajorData {
 }
 
 export function isThreatMajorData(v: any): v is ThreatMajorData {
-  return (
-    (v['threats'] && isArray(v['threats']))
-  );
+  return v['threats'] && isArray(v['threats']);
 }

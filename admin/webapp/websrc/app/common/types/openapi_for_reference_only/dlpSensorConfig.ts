@@ -1,4 +1,4 @@
-import { DlpRule } from "./dlpRule";
+import { DlpRule } from './dlpRule';
 
 export interface DlpSensorConfig {
   name: string;

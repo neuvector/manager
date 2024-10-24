@@ -122,11 +122,16 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
   };
 
   deleteNetworkRule = id => {
-    let displayId = id >= GlobalConstant.NEW_ID_SEED.NETWORK_RULE ? `New-${id - GlobalConstant.NEW_ID_SEED.NETWORK_RULE + 1}` : id;
+    let displayId =
+      id >= GlobalConstant.NEW_ID_SEED.NETWORK_RULE
+        ? `New-${id - GlobalConstant.NEW_ID_SEED.NETWORK_RULE + 1}`
+        : id;
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '700px',
       data: {
-        message: `${this.translate.instant('policy.dialog.REMOVE')} ${displayId}`,
+        message: `${this.translate.instant(
+          'policy.dialog.REMOVE'
+        )} ${displayId}`,
         isSync: true,
       },
     });
@@ -138,11 +143,16 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
   };
 
   undeleteNetworkRule = id => {
-    let displayId = id >= GlobalConstant.NEW_ID_SEED.NETWORK_RULE ? `New-${id - GlobalConstant.NEW_ID_SEED.NETWORK_RULE + 1}` : id;
+    let displayId =
+      id >= GlobalConstant.NEW_ID_SEED.NETWORK_RULE
+        ? `New-${id - GlobalConstant.NEW_ID_SEED.NETWORK_RULE + 1}`
+        : id;
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '700px',
       data: {
-        message: `${this.translate.instant('policy.dialog.UNREMOVE')} ${displayId}`,
+        message: `${this.translate.instant(
+          'policy.dialog.UNREMOVE'
+        )} ${displayId}`,
         isSync: true,
       },
     });

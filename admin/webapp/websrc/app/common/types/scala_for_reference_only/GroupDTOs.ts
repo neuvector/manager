@@ -7,7 +7,5 @@ export interface GroupDTOs {
 }
 
 export function isGroupDTOs(v: any): v is GroupDTOs {
-  return (
-    (v['groups'] && isArray(v['groups']))
-  );
+  return v['groups'] && isArray(v['groups']);
 }

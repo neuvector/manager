@@ -7,7 +7,5 @@ export interface LdapSettingWrap {
 }
 
 export function isLdapSettingWrap(v: any): v is LdapSettingWrap {
-  return (
-    (v['config'] && isLdapSetting(v['config']))
-  );
+  return v['config'] && isLdapSetting(v['config']);
 }

@@ -5,7 +5,5 @@ export interface GcrKey {
 }
 
 export function isGcrKey(v: any): v is GcrKey {
-  return (
-    (!v['json_key'] || ((typeof v['json_key']) === 'string'))
-  );
+  return !v['json_key'] || typeof v['json_key'] === 'string';
 }

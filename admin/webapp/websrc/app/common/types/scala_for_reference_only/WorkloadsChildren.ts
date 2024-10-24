@@ -13,13 +13,13 @@ export interface WorkloadsChildren {
 
 export function isWorkloadsChildren(v: any): v is WorkloadsChildren {
   return (
-    ((typeof v['id']) === 'string') &&
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['display_name']) === 'string') &&
-    ((typeof v['domain']) === 'string') &&
-    ((typeof v['high']) === 'number') &&
-    ((typeof v['medium']) === 'number') &&
-    ((typeof v['state']) === 'string') &&
-    ((typeof v['privileged']) === 'boolean')
+    typeof v['id'] === 'string' &&
+    typeof v['name'] === 'string' &&
+    typeof v['display_name'] === 'string' &&
+    typeof v['domain'] === 'string' &&
+    typeof v['high'] === 'number' &&
+    typeof v['medium'] === 'number' &&
+    typeof v['state'] === 'string' &&
+    typeof v['privileged'] === 'boolean'
   );
 }

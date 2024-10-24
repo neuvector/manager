@@ -8,8 +8,8 @@ export interface IpAddress {
 
 export function isIpAddress(v: any): v is IpAddress {
   return (
-    ((typeof v['ip']) === 'string') &&
-    ((typeof v['ip_prefix']) === 'number') &&
-    ((typeof v['gateway']) === 'string')
+    typeof v['ip'] === 'string' &&
+    typeof v['ip_prefix'] === 'number' &&
+    typeof v['gateway'] === 'string'
   );
 }

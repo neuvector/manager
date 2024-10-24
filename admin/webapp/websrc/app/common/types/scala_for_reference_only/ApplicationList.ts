@@ -5,7 +5,5 @@ export interface ApplicationList {
 }
 
 export function isApplicationList(v: any): v is ApplicationList {
-  return (
-    (!v['application'] || ((typeof v['application']) === 'string'))
-  );
+  return !v['application'] || typeof v['application'] === 'string';
 }

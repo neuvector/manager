@@ -9,7 +9,6 @@ export interface ExposedConversations {
 
 export function isExposedConversations(v: any): v is ExposedConversations {
   return (
-    (v['ingress'] && isArray(v['ingress'])) &&
-    (v['egress'] && isArray(v['egress']))
+    v['ingress'] && isArray(v['ingress']) && v['egress'] && isArray(v['egress'])
   );
 }

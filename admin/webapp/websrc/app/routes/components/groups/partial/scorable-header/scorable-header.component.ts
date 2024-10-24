@@ -5,11 +5,10 @@ import { IHeaderParams } from 'ag-grid-community';
 @Component({
   selector: 'app-scorable-header',
   templateUrl: './scorable-header.component.html',
-  styleUrls: ['./scorable-header.component.scss']
+  styleUrls: ['./scorable-header.component.scss'],
 })
 export class ScorableHeaderComponent implements IHeaderAngularComp {
-
-  constructor() { }
+  constructor() {}
 
   agInit(headerParams: IHeaderParams): void {}
 

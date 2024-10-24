@@ -13,11 +13,12 @@ export interface Namespace {
 
 export function isNamespace(v: any): v is Namespace {
   return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['workloads']) === 'number') &&
-    ((typeof v['running_workloads']) === 'number') &&
-    ((typeof v['running_pods']) === 'number') &&
-    ((typeof v['services']) === 'number') &&
-    (v['tags'] && isArray(v['tags']))
+    typeof v['name'] === 'string' &&
+    typeof v['workloads'] === 'number' &&
+    typeof v['running_workloads'] === 'number' &&
+    typeof v['running_pods'] === 'number' &&
+    typeof v['services'] === 'number' &&
+    v['tags'] &&
+    isArray(v['tags'])
   );
 }

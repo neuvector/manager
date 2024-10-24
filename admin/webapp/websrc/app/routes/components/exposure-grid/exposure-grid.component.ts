@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ExposedServicePodGridComponent } from '@components/exposed-service-pod-grid/exposed-service-pod-grid.component';
 
@@ -7,7 +7,7 @@ import { ExposedServicePodGridComponent } from '@components/exposed-service-pod-
   templateUrl: './exposure-grid.component.html',
   styleUrls: ['./exposure-grid.component.scss'],
 })
-export class ExposureGridComponent implements OnInit {
+export class ExposureGridComponent {
   @ViewChild('ingressGrid') ingressGrid!: ExposedServicePodGridComponent;
   @ViewChild('egressGrid') egressGrid!: ExposedServicePodGridComponent;
 
@@ -19,8 +19,6 @@ export class ExposureGridComponent implements OnInit {
   @Input() clearSession: boolean = false;
 
   constructor() {}
-
-  ngOnInit(): void {}
 
   updateGrid(grid: ExposedServicePodGridComponent) {
     if (grid) grid.gridApi?.sizeColumnsToFit();

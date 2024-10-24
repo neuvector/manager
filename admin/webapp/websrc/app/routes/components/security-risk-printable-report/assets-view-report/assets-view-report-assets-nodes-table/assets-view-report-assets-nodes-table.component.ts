@@ -5,10 +5,9 @@ import { BytesPipe } from '@common/pipes/app.pipes';
 @Component({
   selector: 'app-assets-view-report-assets-nodes-table',
   templateUrl: './assets-view-report-assets-nodes-table.component.html',
-  styleUrls: ['./assets-view-report-assets-nodes-table.component.scss']
+  styleUrls: ['./assets-view-report-assets-nodes-table.component.scss'],
 })
 export class AssetsViewReportAssetsNodesTableComponent implements OnInit {
-
   @Input() nodes: any[];
   @Input() reportPage: string;
   colourMap: any = MapConstant.colourMap;
@@ -16,13 +15,17 @@ export class AssetsViewReportAssetsNodesTableComponent implements OnInit {
   vulHostsCnt: number;
   SEC_ASSETS_REPORT_MAX_ROW = MapConstant.SEC_ASSETS_REPORT_MAX_ROW;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
-    this.vulHostsCnt =  this.reportPage === 'vulnerabilities' ?
-      this.nodes.length - this.nodes.filter(node => node.high + node.medium === 0).length :
-      this.nodes.length - this.nodes.filter(node => node.complianceCnt === 0).length;
-    this.vulRate4Hosts = this.nodes.length ? `${Math.ceil(this.vulHostsCnt / this.nodes.length) * 100}%` : '0%';
+    this.vulHostsCnt =
+      this.reportPage === 'vulnerabilities'
+        ? this.nodes.length -
+          this.nodes.filter(node => node.high + node.medium === 0).length
+        : this.nodes.length -
+          this.nodes.filter(node => node.complianceCnt === 0).length;
+    this.vulRate4Hosts = this.nodes.length
+      ? `${Math.ceil(this.vulHostsCnt / this.nodes.length) * 100}%`
+      : '0%';
   }
-
 }

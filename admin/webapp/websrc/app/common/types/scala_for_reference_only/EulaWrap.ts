@@ -7,7 +7,5 @@ export interface EulaWrap {
 }
 
 export function isEulaWrap(v: any): v is EulaWrap {
-  return (
-    (v['eula'] && isEula(v['eula']))
-  );
+  return v['eula'] && isEula(v['eula']);
 }

@@ -2,56 +2,63 @@
   <form
     [formGroup]="customCheckForm"
     *ngIf="!isRefreshingForm"
-    class="col-sm-6"
-  >
-    <mat-form-field appearance="standard" class="col-12"
-    >
-      <mat-label>{{'group.script.NAME' | translate}}</mat-label>
+    class="col-sm-6">
+    <mat-form-field appearance="standard" class="col-12">
+      <mat-label>{{ 'group.script.NAME' | translate }}</mat-label>
       <input
         matInput
-        [readonly]="cfgType === CFG_TYPE.GROUND || !isWriteScriptAuthorized || opType === modalOp.EDIT"
+        [readonly]="
+          cfgType === CFG_TYPE.GROUND ||
+          !isWriteScriptAuthorized ||
+          opType === modalOp.EDIT
+        "
         (blur)="blurOnName()"
         [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
-        formControlName="name"
-      />
+        formControlName="name" />
       <mat-error *ngIf="customCheckForm.controls.name.hasError('required')">
-        {{'general.REQUIRED' | translate}}
+        {{ 'general.REQUIRED' | translate }}
       </mat-error>
     </mat-form-field>
-    <mat-form-field appearance="fill" class="col-12"
-    >
-      <mat-label>{{'group.script.SCRIPT' | translate}}</mat-label>
+    <mat-form-field appearance="fill" class="col-12">
+      <mat-label>{{ 'group.script.SCRIPT' | translate }}</mat-label>
       <textarea
         matInput
         [readonly]="cfgType === CFG_TYPE.GROUND || !isWriteScriptAuthorized"
         formControlName="script"
-        [ngStyle]="{ height: (resizableHeight - 245) + 'px' }"
-      >
+        [ngStyle]="{ height: resizableHeight - 245 + 'px' }">
       </textarea>
     </mat-form-field>
     <div class="clearfix">
       <app-loading-button
-        *ngIf="cfgType !== CFG_TYPE.GROUND && isWriteScriptAuthorized; else configWarningTemplate"
+        *ngIf="
+          cfgType !== CFG_TYPE.GROUND && isWriteScriptAuthorized;
+          else configWarningTemplate
+        "
         [appearance]="'mat-raised-button'"
         [color]="'primary'"
         [loading]="submittingUpdate"
-        [text]="(opType === modalOp.EDIT ? 'group.script.UPDATE' : 'group.script.ADD') | translate"
+        [text]="
+          (opType === modalOp.EDIT ? 'group.script.UPDATE' : 'group.script.ADD')
+            | translate
+        "
         (btnClick)="updateScript()"
-        class="pull-right"
-      >
+        class="pull-right">
       </app-loading-button>
       <ng-template #configWarningTemplate>
-        <div class="text-danger ml-3 mr-3" style="margin-top: -10px;" *ngIf="hasConfigurationWarning">
+        <div
+          class="text-danger ml-3 mr-3"
+          style="margin-top: -10px"
+          *ngIf="hasConfigurationWarning">
           {{ 'group.script.CUSTOM_CHECK_CONFIG_HINT' | translate }}
         </div>
       </ng-template>
     </div>
   </form>
-  <div class="col-sm-6 px-0" style="position: relative;">
+  <div class="col-sm-6 px-0" style="position: relative">
     <div
       role="button"
       *ngIf="cfgType !== CFG_TYPE.GROUND && isWriteScriptAuthorized"
-      style="position: absolute; z-index: 10; right: 14px; top: 5px;"
+      style="position: absolute; z-index: 10; right: 14px; top: 5px"
       (click)="switch2Add()">
       <em class="eos-icons">add</em>
     </div>
@@ -59,12 +66,11 @@
       #customCheckGrid
       *ngIf="isCustomCheckPromiseCompleted"
       id="custom-check-grid"
-      style="width: 100%;"
-      [ngStyle]="{ height: (resizableHeight - 90) + 'px' }"
+      style="width: 100%"
+      [ngStyle]="{ height: resizableHeight - 90 + 'px' }"
       class="ag-theme-balham"
       [gridOptions]="gridOptions4CustomCheck"
-      [context]="context"
-      >
+      [context]="context">
     </ag-grid-angular>
   </div>
 </div>

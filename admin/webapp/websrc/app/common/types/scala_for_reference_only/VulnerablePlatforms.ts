@@ -10,7 +10,8 @@ export interface VulnerablePlatforms {
 
 export function isVulnerablePlatforms(v: any): v is VulnerablePlatforms {
   return (
-    (v['platforms'] && isArray(v['platforms'])) &&
+    v['platforms'] &&
+    isArray(v['platforms']) &&
     (!v['error'] || (v['error'] && isError(v['error'])))
   );
 }

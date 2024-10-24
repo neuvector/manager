@@ -83,37 +83,41 @@ export class RegistryOverviewComponent implements OnChanges {
           vulnerabilities: otherVulnerabilities,
         },
       ];
-      console.log("topSix", topSix)
+      console.log('topSix', topSix);
       this.noVulnerabilities = topSix.every(vul => !vul.vulnerabilities);
       this.pieChartData = this.getPieChartOptions(topSix);
       this.barChartData = this.getBarChartOptions(topFive);
     }
     if (this.isAllView && changes.summary4AllView) {
-      const topImages = changes.summary4AllView.currentValue.allScannedImagesSummary.summary.top_images;
+      const topImages =
+        changes.summary4AllView.currentValue.allScannedImagesSummary.summary
+          .top_images;
       const topSix = topImages.map(i => {
-          return {
-            repository: i.display_name,
-            vulnerabilities: i.high + i.medium,
-          };
-        });
+        return {
+          repository: i.display_name,
+          vulnerabilities: i.high + i.medium,
+        };
+      });
 
       const topFive = topImages.slice(0, 5).map(i => {
-          return {
-            repository: i.display_name,
-            vulnerabilities: {
-              high: i.high,
-              medium: i.medium,
-            }
-          };
-        });
-      console.log("topSix", topSix)
+        return {
+          repository: i.display_name,
+          vulnerabilities: {
+            high: i.high,
+            medium: i.medium,
+          },
+        };
+      });
+      console.log('topSix', topSix);
       this.noVulnerabilities = topSix.every(vul => !vul.vulnerabilities);
       this.pieChartData = this.getPieChartOptions(topSix);
       this.barChartData = this.getBarChartOptions(topFive);
     }
   }
 
-  private getBarChartOptions(topFive): ChartConfiguration<'bar', number[], string[]> {
+  private getBarChartOptions(
+    topFive
+  ): ChartConfiguration<'bar', number[], string[]> {
     return {
       options: {
         indexAxis: 'y',
@@ -143,9 +147,7 @@ export class RegistryOverviewComponent implements OnChanges {
       },
       data: {
         labels: topFive.map(item => {
-          return [
-            item.repository
-          ];
+          return [item.repository];
         }),
         datasets: [
           {
@@ -168,7 +170,9 @@ export class RegistryOverviewComponent implements OnChanges {
     };
   }
 
-  private getPieChartOptions(topSix): ChartConfiguration<'pie', number[], string[]> {
+  private getPieChartOptions(
+    topSix
+  ): ChartConfiguration<'pie', number[], string[]> {
     return {
       options: {
         maintainAspectRatio: false,
@@ -185,9 +189,7 @@ export class RegistryOverviewComponent implements OnChanges {
       },
       data: {
         labels: topSix.map(item => {
-          return [
-            item.repository
-          ];
+          return [item.repository];
         }),
         datasets: [
           {

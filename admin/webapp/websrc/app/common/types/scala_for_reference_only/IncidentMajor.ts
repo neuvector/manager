@@ -25,23 +25,26 @@ export interface IncidentMajor {
 
 export function isIncidentMajor(v: any): v is IncidentMajor {
   return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['level']) === 'string') &&
-    (!v['host_name'] || ((typeof v['host_name']) === 'string')) &&
-    (!v['workload_id'] || ((typeof v['workload_id']) === 'string')) &&
-    (!v['workload_name'] || ((typeof v['workload_name']) === 'string')) &&
-    (!v['workload_domain'] || ((typeof v['workload_domain']) === 'string')) &&
-    (!v['remote_workload_id'] || ((typeof v['remote_workload_id']) === 'string')) &&
-    (!v['remote_workload_name'] || ((typeof v['remote_workload_name']) === 'string')) &&
-    (!v['remote_workload_domain'] || ((typeof v['remote_workload_domain']) === 'string')) &&
-    (!v['client_ip'] || ((typeof v['client_ip']) === 'string')) &&
-    (!v['server_ip'] || ((typeof v['server_ip']) === 'string')) &&
-    (!v['client_port'] || ((typeof v['client_port']) === 'number')) &&
-    (!v['server_port'] || ((typeof v['server_port']) === 'number')) &&
-    (!v['server_conn_port'] || ((typeof v['server_conn_port']) === 'number')) &&
-    (!v['conn_ingress'] || ((typeof v['conn_ingress']) === 'boolean')) &&
-    (!v['proc_path'] || ((typeof v['proc_path']) === 'string')) &&
-    ((typeof v['reported_timestamp']) === 'number') &&
-    (v['reported_at'] && isDateTime(v['reported_at']))
+    typeof v['name'] === 'string' &&
+    typeof v['level'] === 'string' &&
+    (!v['host_name'] || typeof v['host_name'] === 'string') &&
+    (!v['workload_id'] || typeof v['workload_id'] === 'string') &&
+    (!v['workload_name'] || typeof v['workload_name'] === 'string') &&
+    (!v['workload_domain'] || typeof v['workload_domain'] === 'string') &&
+    (!v['remote_workload_id'] || typeof v['remote_workload_id'] === 'string') &&
+    (!v['remote_workload_name'] ||
+      typeof v['remote_workload_name'] === 'string') &&
+    (!v['remote_workload_domain'] ||
+      typeof v['remote_workload_domain'] === 'string') &&
+    (!v['client_ip'] || typeof v['client_ip'] === 'string') &&
+    (!v['server_ip'] || typeof v['server_ip'] === 'string') &&
+    (!v['client_port'] || typeof v['client_port'] === 'number') &&
+    (!v['server_port'] || typeof v['server_port'] === 'number') &&
+    (!v['server_conn_port'] || typeof v['server_conn_port'] === 'number') &&
+    (!v['conn_ingress'] || typeof v['conn_ingress'] === 'boolean') &&
+    (!v['proc_path'] || typeof v['proc_path'] === 'string') &&
+    typeof v['reported_timestamp'] === 'number' &&
+    v['reported_at'] &&
+    isDateTime(v['reported_at'])
   );
 }

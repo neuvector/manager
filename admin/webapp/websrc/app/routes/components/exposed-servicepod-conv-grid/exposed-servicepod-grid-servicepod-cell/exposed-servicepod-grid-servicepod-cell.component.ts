@@ -6,10 +6,11 @@ import { accumulateActionLevel } from '@common/utils/common.utils';
 @Component({
   selector: 'app-exposed-servicepod-grid-servicepod-cell',
   templateUrl: './exposed-servicepod-grid-servicepod-cell.component.html',
-  styleUrls: ['./exposed-servicepod-grid-servicepod-cell.component.scss']
+  styleUrls: ['./exposed-servicepod-grid-servicepod-cell.component.scss'],
 })
-export class ExposedServicepodGridServicepodCellComponent implements ICellRendererAngularComp {
-
+export class ExposedServicepodGridServicepodCellComponent
+  implements ICellRendererAngularComp
+{
   params!: ICellRendererParams;
   name!: string;
   isParent!: boolean;
@@ -43,11 +44,11 @@ export class ExposedServicepodGridServicepodCellComponent implements ICellRender
 
   private getServicePodStyle = params => {
     const colorArray = [
-      "text-danger",
-      "text-warning",
-      "text-caution",
-      "text-monitor",
-      "text-protect",
+      'text-danger',
+      'text-warning',
+      'text-caution',
+      'text-monitor',
+      'text-protect',
     ];
     const levelMap = {
       protect: 4,
@@ -59,41 +60,45 @@ export class ExposedServicepodGridServicepodCellComponent implements ICellRender
       critical: 0,
     };
     const actionTypeIconMap = {
-      discover: "fa icon-size-2 fa-exclamation-triangle",
-      violate: "fa icon-size-2 fa-ban",
-      protect: "fa icon-size-2 fa-shield",
-      monitor: "fa icon-size-2 fa-bell",
-      deny: "fa icon-size-2 fa-minus-circle",
-      threat: "fa icon-size-2 fa-bug",
+      discover: 'fa icon-size-2 fa-exclamation-triangle',
+      violate: 'fa icon-size-2 fa-ban',
+      protect: 'fa icon-size-2 fa-shield',
+      monitor: 'fa icon-size-2 fa-bell',
+      deny: 'fa icon-size-2 fa-minus-circle',
+      threat: 'fa icon-size-2 fa-bug',
     };
 
-    let actionType = "";
+    let actionType = '';
     let level: number[] = [];
     this.params.data.policy_action = 'allow';
     this.params.data.entries.forEach(entry => {
-      this.params.data.policy_action = accumulateActionLevel(this.params.data.policy_action, entry.policy_action);
+      this.params.data.policy_action = accumulateActionLevel(
+        this.params.data.policy_action,
+        entry.policy_action
+      );
     });
 
     if (this.params.data.severity) {
-        level.push(levelMap[this.params.data.severity.toLowerCase()]);
-      } else if (
-        this.params.data.policy_action &&
-        (this.params.data.policy_action.toLowerCase() === "deny" ||
-          this.params.data.policy_action.toLowerCase() === "violate")
-      ) {
-        level.push(levelMap[this.params.data.policy_action.toLowerCase()]);
-        actionType =
-          actionTypeIconMap[this.params.data.policy_action.toLowerCase()];
-      } else {
-        if (!this.params.data.policy_mode) this.params.data.policy_mode = "discover";
-        level.push(levelMap[this.params.data.policy_mode.toLowerCase()]);
-        actionType =
-          actionTypeIconMap[this.params.data.policy_mode.toLowerCase()];
-      }
-      let serviceColor = colorArray[Math.min(...level)];
-      return {
-        color: serviceColor,
-        actionIcon: actionType
-      };
-  }
+      level.push(levelMap[this.params.data.severity.toLowerCase()]);
+    } else if (
+      this.params.data.policy_action &&
+      (this.params.data.policy_action.toLowerCase() === 'deny' ||
+        this.params.data.policy_action.toLowerCase() === 'violate')
+    ) {
+      level.push(levelMap[this.params.data.policy_action.toLowerCase()]);
+      actionType =
+        actionTypeIconMap[this.params.data.policy_action.toLowerCase()];
+    } else {
+      if (!this.params.data.policy_mode)
+        this.params.data.policy_mode = 'discover';
+      level.push(levelMap[this.params.data.policy_mode.toLowerCase()]);
+      actionType =
+        actionTypeIconMap[this.params.data.policy_mode.toLowerCase()];
+    }
+    let serviceColor = colorArray[Math.min(...level)];
+    return {
+      color: serviceColor,
+      actionIcon: actionType,
+    };
+  };
 }

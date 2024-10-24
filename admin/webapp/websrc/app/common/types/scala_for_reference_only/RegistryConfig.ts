@@ -12,10 +12,10 @@ export interface RegistryConfig {
 
 export function isRegistryConfig(v: any): v is RegistryConfig {
   return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['registry_type']) === 'string') &&
+    typeof v['name'] === 'string' &&
+    typeof v['registry_type'] === 'string' &&
     (!v['filters'] || (v['filters'] && isArray(v['filters']))) &&
-    ((typeof v['auth_with_token']) === 'boolean') &&
-    (!v['auth_token'] || ((typeof v['auth_token']) === 'string'))
+    typeof v['auth_with_token'] === 'boolean' &&
+    (!v['auth_token'] || typeof v['auth_token'] === 'string')
   );
 }

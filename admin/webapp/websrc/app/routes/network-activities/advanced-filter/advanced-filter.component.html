@@ -6,7 +6,8 @@
       {{ 'general.FILTER_MATCH_ALL' | translate }}
     </h4>
     <button
-      id="closeAdvFilter" aria-label="Close icon button"
+      id="closeAdvFilter"
+      aria-label="Close icon button"
       class="d-flex align-items-center justify-content-center"
       mat-icon-button>
       <i (click)="popupState.leave()" class="eos-icons">close</i>
@@ -16,11 +17,9 @@
   <div>
     <form [formGroup]="advFilterForm">
       <section class="row mx-0 align-items-center">
-        <label
-          class="col-2 font-weight-normal mb-0 mr-2"
-          for="domainInput"
-          >{{ 'ldap.gridHeader.DOMAINS' | translate }}</label
-        >
+        <label class="col-2 font-weight-normal mb-0 mr-2" for="domainInput">{{
+          'ldap.gridHeader.DOMAINS' | translate
+        }}</label>
         <mat-form-field appearance="standard" class="col pl-0">
           <mat-chip-list
             #domainChips
@@ -144,7 +143,7 @@
       <section class="row mx-0" formGroupName="protocols">
         <span class="d-block col-2">{{
           'dashboard.body.panel_title.PROTOCOLS' | translate
-          }}</span>
+        }}</span>
         <mat-checkbox class="col" formControlName="tcp">TCP</mat-checkbox>
         <mat-checkbox class="col" formControlName="udp">UDP</mat-checkbox>
         <mat-checkbox class="col" formControlName="icmp">ICMP</mat-checkbox>
@@ -179,7 +178,11 @@
     </form>
   </div>
   <div class="float-right" mat-dialog-actions>
-    <button (click)="reset()" mat-stroked-button class="mr-2" aria-label="reset">
+    <button
+      (click)="reset()"
+      mat-stroked-button
+      class="mr-2"
+      aria-label="reset">
       Reset
     </button>
     <button

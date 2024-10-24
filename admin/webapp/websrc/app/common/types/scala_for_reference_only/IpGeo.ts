@@ -9,9 +9,9 @@ export interface IpGeo {
 
 export function isIpGeo(v: any): v is IpGeo {
   return (
-    ((typeof v['from']) === 'number') &&
-    ((typeof v['to']) === 'number') &&
-    ((typeof v['country_code']) === 'string') &&
-    ((typeof v['country_name']) === 'string')
+    typeof v['from'] === 'number' &&
+    typeof v['to'] === 'number' &&
+    typeof v['country_code'] === 'string' &&
+    typeof v['country_name'] === 'string'
   );
 }

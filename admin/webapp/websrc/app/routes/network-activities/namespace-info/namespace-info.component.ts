@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   ActivityState,
   PopupState,
@@ -11,7 +11,7 @@ import { GraphService } from '@routes/network-activities/graph.service';
   templateUrl: './namespace-info.component.html',
   styleUrls: ['./namespace-info.component.scss'],
 })
-export class NamespaceInfoComponent implements AfterViewInit, OnInit {
+export class NamespaceInfoComponent implements OnInit {
   private _popupState: ActivityState;
   private _domainName: string = '';
   private _members;
@@ -48,8 +48,6 @@ export class NamespaceInfoComponent implements AfterViewInit, OnInit {
   constructor(public graphService: GraphService) {
     this._popupState = new ActivityState(PopupState.onInit);
   }
-
-  ngAfterViewInit(): void {}
 
   ngOnInit(): void {
     this.gridOptions = this.graphService.prepareDomainGrid();

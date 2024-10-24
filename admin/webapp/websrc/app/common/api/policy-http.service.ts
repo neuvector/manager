@@ -7,8 +7,10 @@ import { pluck } from 'rxjs/operators';
 
 @Injectable()
 export class PolicyHttpService {
-  getFedGroups(): Observable<Group[]>{
-    return GlobalVariable.http.get<Group[]>(PathConstant.GROUP_URL, {params: {scope: 'fed'}});
+  getFedGroups(): Observable<Group[]> {
+    return GlobalVariable.http.get<Group[]>(PathConstant.GROUP_URL, {
+      params: { scope: 'fed' },
+    });
   }
 
   getGroups(params?: any): Observable<Group[]> {

@@ -6,8 +6,5 @@ export interface DlpSetting {
 }
 
 export function isDlpSetting(v: any): v is DlpSetting {
-  return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['action']) === 'string')
-  );
+  return typeof v['name'] === 'string' && typeof v['action'] === 'string';
 }

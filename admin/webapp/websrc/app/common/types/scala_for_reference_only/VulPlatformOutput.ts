@@ -7,7 +7,7 @@ export interface VulPlatformOutput {
 
 export function isVulPlatformOutput(v: any): v is VulPlatformOutput {
   return (
-    ((typeof v['platformHighVuls']) === 'number') &&
-    ((typeof v['platformMedVuls']) === 'number')
+    typeof v['platformHighVuls'] === 'number' &&
+    typeof v['platformMedVuls'] === 'number'
   );
 }

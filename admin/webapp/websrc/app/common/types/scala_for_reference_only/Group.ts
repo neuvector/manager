@@ -19,17 +19,20 @@ export interface Group {
 
 export function isGroup(v: any): v is Group {
   return (
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['comment']) === 'string') &&
-    ((typeof v['domain']) === 'string') &&
-    (v['criteria'] && isArray(v['criteria'])) &&
-    (v['members'] && isArray(v['members'])) &&
-    (!v['response_rules'] || (v['response_rules'] && isArray(v['response_rules']))) &&
-    (!v['policy_mode'] || ((typeof v['policy_mode']) === 'string')) &&
-    (!v['cap_change_mode'] || ((typeof v['cap_change_mode']) === 'boolean')) &&
-    (!v['cap_scorable'] || ((typeof v['cap_scorable']) === 'boolean')) &&
-    ((typeof v['kind']) === 'string') &&
-    (!v['cfg_type'] || ((typeof v['cfg_type']) === 'string')) &&
-    ((typeof v['not_scored']) === 'boolean')
+    typeof v['name'] === 'string' &&
+    typeof v['comment'] === 'string' &&
+    typeof v['domain'] === 'string' &&
+    v['criteria'] &&
+    isArray(v['criteria']) &&
+    v['members'] &&
+    isArray(v['members']) &&
+    (!v['response_rules'] ||
+      (v['response_rules'] && isArray(v['response_rules']))) &&
+    (!v['policy_mode'] || typeof v['policy_mode'] === 'string') &&
+    (!v['cap_change_mode'] || typeof v['cap_change_mode'] === 'boolean') &&
+    (!v['cap_scorable'] || typeof v['cap_scorable'] === 'boolean') &&
+    typeof v['kind'] === 'string' &&
+    (!v['cfg_type'] || typeof v['cfg_type'] === 'string') &&
+    typeof v['not_scored'] === 'boolean'
   );
 }

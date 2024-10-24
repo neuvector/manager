@@ -132,7 +132,7 @@ export class AdmissionRulesComponent implements OnInit {
           this.gridOptions = this.admissionRulesService.configRuleGrid(
             this.isAdmissionRuleAuthorized
           );
-          this.gridOptions.onGridReady = (params) => {
+          this.gridOptions.onGridReady = params => {
             const $win = $(GlobalVariable.window);
             if (params && params.api) {
               this.gridApi = params.api;

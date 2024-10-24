@@ -7,7 +7,5 @@ export interface RuleInsert {
 }
 
 export function isRuleInsert(v: any): v is RuleInsert {
-  return (
-    (v['rules'] && isArray(v['rules']))
-  );
+  return v['rules'] && isArray(v['rules']);
 }

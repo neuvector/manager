@@ -14,8 +14,14 @@ export class ContainerConfigJsonProtocol {
   }
 }
 
-export const ContainerConfigJsonProtocolInhabitant: ContainerConfigJsonProtocol = ContainerConfigJsonProtocol.getInstance();
+export const ContainerConfigJsonProtocolInhabitant: ContainerConfigJsonProtocol =
+  ContainerConfigJsonProtocol.getInstance();
 
-export function isContainerConfigJsonProtocol(v: any): v is ContainerConfigJsonProtocol {
-  return (v instanceof ContainerConfigJsonProtocol) && (v === ContainerConfigJsonProtocolInhabitant);
+export function isContainerConfigJsonProtocol(
+  v: any
+): v is ContainerConfigJsonProtocol {
+  return (
+    v instanceof ContainerConfigJsonProtocol &&
+    v === ContainerConfigJsonProtocolInhabitant
+  );
 }

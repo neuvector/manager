@@ -1,9 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Domain, ErrorResponse } from '@common/types';
 import { NamespacesGridComponent } from '@components/namespaces-grid/namespaces-grid.component';
 import { NamespacesService } from '@services/namespaces.service';

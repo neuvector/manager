@@ -1,4 +1,4 @@
-import { DlpSetting } from "./dlpSetting";
+import { DlpSetting } from './dlpSetting';
 
 export interface DlpGroup {
   name: string;

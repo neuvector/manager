@@ -10,7 +10,8 @@ export interface VulnerableNodeEndpoint {
 
 export function isVulnerableNodeEndpoint(v: any): v is VulnerableNodeEndpoint {
   return (
-    (v['hosts'] && isArray(v['hosts'])) &&
+    v['hosts'] &&
+    isArray(v['hosts']) &&
     (!v['error'] || (v['error'] && isError(v['error'])))
   );
 }

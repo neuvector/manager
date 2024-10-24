@@ -8,8 +8,8 @@ export interface RegistyHttpProxy {
 
 export function isRegistyHttpProxy(v: any): v is RegistyHttpProxy {
   return (
-    ((typeof v['url']) === 'string') &&
-    ((typeof v['username']) === 'string') &&
-    (!v['password'] || ((typeof v['password']) === 'string'))
+    typeof v['url'] === 'string' &&
+    typeof v['username'] === 'string' &&
+    (!v['password'] || typeof v['password'] === 'string')
   );
 }

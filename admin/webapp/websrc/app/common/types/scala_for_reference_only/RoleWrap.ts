@@ -7,7 +7,5 @@ export interface RoleWrap {
 }
 
 export function isRoleWrap(v: any): v is RoleWrap {
-  return (
-    (v['config'] && isRole(v['config']))
-  );
+  return v['config'] && isRole(v['config']);
 }

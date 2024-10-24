@@ -8,9 +8,8 @@ describe('RemediationDetailDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RemediationDetailDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [RemediationDetailDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

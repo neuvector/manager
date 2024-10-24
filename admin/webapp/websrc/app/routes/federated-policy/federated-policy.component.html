@@ -14,8 +14,7 @@
             *ngIf="activeTabIndex === 0"
             [source]="navSource"
             [isScoreImprovement]="false"
-            [height]="height"
-          >
+            [height]="height">
           </app-groups>
         </mat-tab>
         <mat-tab label="{{ 'sidebar.nav.ADMISSION_CONTROL' | translate }}">
@@ -24,24 +23,20 @@
             [source]="navSource"></app-admission-rules>
         </mat-tab>
         <mat-tab label="{{ 'sidebar.nav.POLICY' | translate }}">
-          <app-network-rules
-            *ngIf="activeTabIndex === 2"
-            [source]="navSource">
+          <app-network-rules *ngIf="activeTabIndex === 2" [source]="navSource">
           </app-network-rules>
         </mat-tab>
         <mat-tab label="{{ 'service.PROCESS_PROFILE' | translate }}">
           <app-process-profile-rules
             *ngIf="activeTabIndex === 3"
             [source]="navSource"
-            [cfgType]="CFG_TYPE.FED"
-          ></app-process-profile-rules>
+            [cfgType]="CFG_TYPE.FED"></app-process-profile-rules>
         </mat-tab>
         <mat-tab label="{{ 'service.FILE_PROFILE' | translate }}">
           <app-file-access-rules
             *ngIf="activeTabIndex === 4"
             [source]="navSource"
-            [cfgType]="CFG_TYPE.FED"
-          ></app-file-access-rules>
+            [cfgType]="CFG_TYPE.FED"></app-file-access-rules>
         </mat-tab>
         <mat-tab label="{{ 'sidebar.nav.RESPONSE_POLICY' | translate }}">
           <app-response-rules
@@ -51,8 +46,7 @@
         <mat-tab label="{{ 'setting.WEBHOOKS' | translate }}">
           <app-federated-policy-configuration
             *ngIf="activeTabIndex === 6"
-            [source]="navSource"
-          ></app-federated-policy-configuration>
+            [source]="navSource"></app-federated-policy-configuration>
         </mat-tab>
       </mat-tab-group>
     </div>

@@ -1,27 +1,43 @@
 <div *ngIf="params.data.id > -1">
-  <div *ngIf="source === navSource.FED_POLICY; then onFed else notOnFed"></div>
+  <div *ngIf="source === navSource.FED_POLICY; then onFed; else notOnFed"></div>
 </div>
 
 <ng-template #onFed>
-  <div *ngIf="params.data.cfg_type === cfgType.GROUND; then readonlyRule else writableRule"></div>
+  <div
+    *ngIf="
+      params.data.cfg_type === cfgType.GROUND;
+      then readonlyRule;
+      else writableRule
+    "></div>
 </ng-template>
 
 <ng-template #notOnFed>
-  <div *ngIf="params.data.cfg_type === cfgType.GROUND || params.data.cfg_type === cfgType.FED || (params.data.disable && params.data.cfg_type === cfgType.FED); then readonlyRule else writableRule"></div>
+  <div
+    *ngIf="
+      params.data.cfg_type === cfgType.GROUND ||
+        params.data.cfg_type === cfgType.FED ||
+        (params.data.disable && params.data.cfg_type === cfgType.FED);
+      then readonlyRule;
+      else writableRule
+    "></div>
 </ng-template>
 
 <ng-template #writableRule>
-  <div *ngIf="params.value >= newIdSeed.NETWORK_RULE; then newRule else newRuleElse"></div>
+  <div
+    *ngIf="
+      params.value >= newIdSeed.NETWORK_RULE;
+      then newRule;
+      else newRuleElse
+    "></div>
 </ng-template>
 
 <ng-template #newRule>
   <div>
     <span
-      [ngClass]="{'policy-remove': params.data.remove}"
-      matTooltip="{{params.data.comment}}"
-      matTooltipPosition="above"
-    >
-      {{'New-' + (params.value - newIdSeed.NETWORK_RULE + 1)}}
+      [ngClass]="{ 'policy-remove': params.data.remove }"
+      matTooltip="{{ params.data.comment }}"
+      matTooltipPosition="above">
+      {{ 'New-' + (params.value - newIdSeed.NETWORK_RULE + 1) }}
     </span>
   </div>
 </ng-template>
@@ -29,11 +45,10 @@
 <ng-template #newRuleElse>
   <div>
     <span
-      [ngClass]="{'policy-remove': params.data.remove}"
-      matTooltip="{{params.data.comment}}"
-      matTooltipPosition="above"
-    >
-      {{params.value}}
+      [ngClass]="{ 'policy-remove': params.data.remove }"
+      matTooltip="{{ params.data.comment }}"
+      matTooltipPosition="above">
+      {{ params.value }}
     </span>
   </div>
 </ng-template>
@@ -41,11 +56,10 @@
 <ng-template #readonlyRule>
   <div>
     <span
-      [ngClass]="{'policy-remove': params.data.remove}"
-      matTooltip="{{params.data.comment}}"
-      matTooltipPosition="above"
-    >
-      {{params.value}}
+      [ngClass]="{ 'policy-remove': params.data.remove }"
+      matTooltip="{{ params.data.comment }}"
+      matTooltipPosition="above">
+      {{ params.value }}
     </span>
   </div>
 </ng-template>

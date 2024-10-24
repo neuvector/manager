@@ -7,18 +7,14 @@ import { MapConstant } from '@common/constants/map.constant';
 @Component({
   selector: 'app-matched-rule-list',
   templateUrl: './matched-rule-list.component.html',
-  styleUrls: ['./matched-rule-list.component.scss']
+  styleUrls: ['./matched-rule-list.component.scss'],
 })
 export class MatchedRuleListComponent implements ICellRendererAngularComp {
-
   params: ICellRendererParams;
   matchedRules: Array<MatchedRule>;
   colourMap: any = MapConstant.colourMap;
 
-  constructor(
-  ) {
-
-  }
+  constructor() {}
 
   agInit(params: ICellRendererParams): void {
     this.params = params;
@@ -28,6 +24,4 @@ export class MatchedRuleListComponent implements ICellRendererAngularComp {
   refresh(params: ICellRendererParams): boolean {
     return false;
   }
-
-
 }

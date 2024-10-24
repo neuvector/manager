@@ -268,7 +268,11 @@ export class ContainersGridComponent implements OnInit {
     this.gridApi = params.api;
     if (this.useQuickFilterService) {
       this.quickFilterService.textInput$.subscribe((value: string) => {
-        this.quickFilterService.onFilterChange(value, this.gridOptions, this.gridApi);
+        this.quickFilterService.onFilterChange(
+          value,
+          this.gridOptions,
+          this.gridApi
+        );
       });
     }
     this.gridApi.sizeColumnsToFit();

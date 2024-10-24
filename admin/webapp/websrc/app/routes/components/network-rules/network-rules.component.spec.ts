@@ -8,9 +8,8 @@ describe('NetworkRulesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NetworkRulesComponent ]
-    })
-    .compileComponents();
+      declarations: [NetworkRulesComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

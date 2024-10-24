@@ -7,7 +7,5 @@ export interface ServiceConfig {
 }
 
 export function isServiceConfig(v: any): v is ServiceConfig {
-  return (
-    (v['config'] && isServiceConfigParam(v['config']))
-  );
+  return v['config'] && isServiceConfigParam(v['config']);
 }

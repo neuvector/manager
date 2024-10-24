@@ -100,7 +100,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
       maxWidth: '700px',
       data: {
         message: message,
-        supplemental: supplemental
+        supplemental: supplemental,
       },
     });
     dialogRef.componentInstance.confirm

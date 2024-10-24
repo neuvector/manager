@@ -10,10 +10,7 @@ import { EmptyDataChartReplacementModule } from '@components/ui/empty-data-chart
 import { PanelInstructionCurtainModule } from '@components/ui/panel-instruction-curtain/panel-instruction-curtain.module';
 
 @NgModule({
-  declarations: [
-    ExposurePanelComponent,
-    ExposureChartComponent
-  ],
+  declarations: [ExposurePanelComponent, ExposureChartComponent],
   imports: [
     CommonModule,
     NvCommonModule,
@@ -21,11 +18,8 @@ import { PanelInstructionCurtainModule } from '@components/ui/panel-instruction-
     ExposureGridModule,
     LoadingButtonModule,
     EmptyDataChartReplacementModule,
-    PanelInstructionCurtainModule
+    PanelInstructionCurtainModule,
   ],
-  exports: [
-    ExposurePanelComponent,
-    ExposureChartComponent
-  ],
+  exports: [ExposurePanelComponent, ExposureChartComponent],
 })
 export class ExposurePanelModule {}

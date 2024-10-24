@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ChartConfiguration } from 'chart.js';
 
@@ -7,7 +7,7 @@ import { ChartConfiguration } from 'chart.js';
   templateUrl: './risk-reports-printable-report-pie-chart.component.html',
   styleUrls: ['./risk-reports-printable-report-pie-chart.component.scss'],
 })
-export class RiskReportsPrintableReportPieChartComponent implements OnInit {
+export class RiskReportsPrintableReportPieChartComponent {
   private _statisticData!: Map<string, number>;
   @Input() set statisticData(stats: Map<string, number>) {
     this._statisticData = stats;
@@ -19,8 +19,6 @@ export class RiskReportsPrintableReportPieChartComponent implements OnInit {
   pieChartData!: ChartConfiguration<'pie', number[], string[]>;
 
   constructor(private tr: TranslateService) {}
-
-  ngOnInit(): void {}
 
   genPieChart() {
     const TYPE_PIE = [

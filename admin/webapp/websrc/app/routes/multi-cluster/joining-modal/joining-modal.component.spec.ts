@@ -1,22 +1,26 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { JoiningModalComponent } from "./joining-modal.component";
-import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
-import {AgGridModule} from "ag-grid-angular";
-import {UtilsService} from "@common/utils/app.utils";
-import {MultiClusterService} from "@services/multi-cluster.service";
-import {SettingsService} from "@services/settings.service";
-import {RouterTestingModule} from "@angular/router/testing";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import { JoiningModalComponent } from './joining-modal.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
+import { AgGridModule } from 'ag-grid-angular';
+import { UtilsService } from '@common/utils/app.utils';
+import { MultiClusterService } from '@services/multi-cluster.service';
+import { SettingsService } from '@services/settings.service';
+import { RouterTestingModule } from '@angular/router/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-describe("JoiningModalComponent", () => {
+describe('JoiningModalComponent', () => {
   let component: JoiningModalComponent;
   let fixture: ComponentFixture<JoiningModalComponent>;
   const mockDialogRef = {
-    close: jasmine.createSpy('close')
+    close: jasmine.createSpy('close'),
   };
-
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -28,12 +32,12 @@ describe("JoiningModalComponent", () => {
         MatDialog,
         {
           provide: MatDialogRef,
-          useValue: mockDialogRef
+          useValue: mockDialogRef,
         },
         {
           provide: MAT_DIALOG_DATA,
-          useValue: {}
-        }
+          useValue: {},
+        },
       ],
       imports: [
         BrowserAnimationsModule,
@@ -41,7 +45,7 @@ describe("JoiningModalComponent", () => {
         MatDialogModule,
         RouterTestingModule.withRoutes([]),
         // AgGridModule.withComponents([])
-      ]
+      ],
     }).compileComponents();
   }));
 
@@ -51,7 +55,7 @@ describe("JoiningModalComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

@@ -23,20 +23,21 @@ export interface ConversationEndpoint {
 
 export function isConversationEndpoint(v: any): v is ConversationEndpoint {
   return (
-    ((typeof v['id']) === 'string') &&
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['display_name']) === 'string') &&
-    ((typeof v['state']) === 'string') &&
-    ((typeof v['kind']) === 'string') &&
-    (!v['platform_role'] || ((typeof v['platform_role']) === 'string')) &&
-    (!v['service_group'] || ((typeof v['service_group']) === 'string')) &&
-    ((typeof v['domain']) === 'string') &&
-    (!v['share_ns_with'] || ((typeof v['share_ns_with']) === 'string')) &&
-    (!v['policy_mode'] || ((typeof v['policy_mode']) === 'string')) &&
-    (!v['scan_summary'] || (v['scan_summary'] && isScanBrief(v['scan_summary']))) &&
-    ((typeof v['cap_quarantine']) === 'boolean') &&
-    ((typeof v['cap_change_mode']) === 'boolean') &&
-    ((typeof v['cap_sniff']) === 'boolean') &&
+    typeof v['id'] === 'string' &&
+    typeof v['name'] === 'string' &&
+    typeof v['display_name'] === 'string' &&
+    typeof v['state'] === 'string' &&
+    typeof v['kind'] === 'string' &&
+    (!v['platform_role'] || typeof v['platform_role'] === 'string') &&
+    (!v['service_group'] || typeof v['service_group'] === 'string') &&
+    typeof v['domain'] === 'string' &&
+    (!v['share_ns_with'] || typeof v['share_ns_with'] === 'string') &&
+    (!v['policy_mode'] || typeof v['policy_mode'] === 'string') &&
+    (!v['scan_summary'] ||
+      (v['scan_summary'] && isScanBrief(v['scan_summary']))) &&
+    typeof v['cap_quarantine'] === 'boolean' &&
+    typeof v['cap_change_mode'] === 'boolean' &&
+    typeof v['cap_sniff'] === 'boolean' &&
     (!v['children'] || (v['children'] && isArray(v['children'])))
   );
 }

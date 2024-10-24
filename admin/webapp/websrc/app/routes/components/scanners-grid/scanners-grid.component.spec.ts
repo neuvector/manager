@@ -8,9 +8,8 @@ describe('ScannersGridComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ScannersGridComponent ]
-    })
-    .compileComponents();
+      declarations: [ScannersGridComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

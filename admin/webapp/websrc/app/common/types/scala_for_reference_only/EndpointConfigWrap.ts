@@ -7,7 +7,5 @@ export interface EndpointConfigWrap {
 }
 
 export function isEndpointConfigWrap(v: any): v is EndpointConfigWrap {
-  return (
-    (v['config'] && isEndpointConfig(v['config']))
-  );
+  return v['config'] && isEndpointConfig(v['config']);
 }

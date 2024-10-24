@@ -9,7 +9,8 @@ export interface AuthRequest {
 
 export function isAuthRequest(v: any): v is AuthRequest {
   return (
-    (v['password'] && isPassword(v['password'])) &&
-    ((typeof v['client_ip']) === 'string')
+    v['password'] &&
+    isPassword(v['password']) &&
+    typeof v['client_ip'] === 'string'
   );
 }

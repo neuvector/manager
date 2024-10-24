@@ -5,7 +5,5 @@ export interface RedirectURL {
 }
 
 export function isRedirectURL(v: any): v is RedirectURL {
-  return (
-    ((typeof v['redirect_endpoint']) === 'string')
-  );
+  return typeof v['redirect_endpoint'] === 'string';
 }

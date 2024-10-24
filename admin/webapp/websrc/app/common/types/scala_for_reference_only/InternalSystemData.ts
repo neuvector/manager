@@ -12,9 +12,12 @@ export interface InternalSystemData {
 
 export function isInternalSystemData(v: any): v is InternalSystemData {
   return (
-    (v['metrics'] && isMetrics(v['metrics'])) &&
-    (v['ingress'] && isArray(v['ingress'])) &&
-    (v['egress'] && isArray(v['egress'])) &&
-    (!v['hasError'] || ((typeof v['hasError']) === 'boolean'))
+    v['metrics'] &&
+    isMetrics(v['metrics']) &&
+    v['ingress'] &&
+    isArray(v['ingress']) &&
+    v['egress'] &&
+    isArray(v['egress']) &&
+    (!v['hasError'] || typeof v['hasError'] === 'boolean')
   );
 }

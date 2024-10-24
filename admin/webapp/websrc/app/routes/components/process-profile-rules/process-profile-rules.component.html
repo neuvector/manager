@@ -3,14 +3,16 @@
     [ngClass]="{ panel: source === navSource['SELF'] }"
     *ngIf="source === navSource['FED_POLICY'] || groupName">
     <div [ngClass]="{ 'panel-body': source === navSource['SELF'] }">
-      <div class="clearfix" *ngIf="groupName !== globalConstant4Html.EXTERNAL && !useQuickFilterService">
+      <div
+        class="clearfix"
+        *ngIf="
+          groupName !== globalConstant4Html.EXTERNAL && !useQuickFilterService
+        ">
         <div class="pull-left">
-          <span
-            *ngIf="baselineProfile === 'zero-drift'"
-          >
+          <span *ngIf="baselineProfile === 'zero-drift'">
             <em class="eos-icons icon-18 mr-2">anchor</em>
             <label class="text-gray-label">
-              {{'group.ZERO_DRIFT' | translate}}
+              {{ 'group.ZERO_DRIFT' | translate }}
             </label>
           </span>
         </div>
@@ -25,21 +27,30 @@
         </app-quick-filter>
         <div
           class="pull-right margin-right-m hand"
-          [ngClass]="{'margin-top-l': !useQuickFilterService}"
-          *ngIf="selectedProcessProfileRules && isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized"
+          [ngClass]="{ 'margin-top-l': !useQuickFilterService }"
+          *ngIf="
+            selectedProcessProfileRules &&
+            isWriteGroupAuthorized &&
+            isWriteProcessProfileRuleAuthorized
+          "
           (click)="removeProfile(selectedProcessProfileRules)">
           <em class="eos-icons">delete</em>
         </div>
         <div
           class="pull-right margin-right-s hand"
-          [ngClass]="{'margin-top-l': !useQuickFilterService}"
-          *ngIf="selectedProcessProfileRules && selectedProcessProfileRules.length === 1 && isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized"
+          [ngClass]="{ 'margin-top-l': !useQuickFilterService }"
+          *ngIf="
+            selectedProcessProfileRules &&
+            selectedProcessProfileRules.length === 1 &&
+            isWriteGroupAuthorized &&
+            isWriteProcessProfileRuleAuthorized
+          "
           (click)="editProfile(selectedProcessProfileRules[0])">
           <em class="eos-icons">edit</em>
         </div>
         <div
           class="pull-right margin-right-s hand"
-          [ngClass]="{'margin-top-l': !useQuickFilterService}"
+          [ngClass]="{ 'margin-top-l': !useQuickFilterService }"
           *ngIf="isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized"
           (click)="addProfile()">
           <em class="eos-icons">add</em>
@@ -60,7 +71,6 @@
             </mat-option>
           </mat-select>
         </div>
-
       </div>
       <div class="mt-sm mb0">
         <ag-grid-angular

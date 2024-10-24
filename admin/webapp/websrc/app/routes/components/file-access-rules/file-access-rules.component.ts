@@ -5,7 +5,7 @@ import {
   OnChanges,
   OnInit,
   SimpleChanges,
-  EventEmitter
+  EventEmitter,
 } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { GridOptions, GridApi } from 'ag-grid-community';
@@ -84,7 +84,8 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
         (this.cfgType === GlobalConstant.CFG_TYPE.CUSTOMER ||
           this.cfgType === GlobalConstant.CFG_TYPE.LEARNED)) ||
       (this.source === GlobalConstant.NAV_SOURCE.FED_POLICY &&
-        this.cfgType === GlobalConstant.CFG_TYPE.FED &&  this.authUtilsService.getDisplayFlag('multi_cluster_w'));
+        this.cfgType === GlobalConstant.CFG_TYPE.FED &&
+        this.authUtilsService.getDisplayFlag('multi_cluster_w'));
     this.gridOptions = this.fileAccessRulesService.prepareGrid(
       this.isWriteGroupAuthorized,
       this.source,
@@ -99,7 +100,11 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
         if (params && params.api) {
           if (this.useQuickFilterService) {
             this.quickFilterService.textInput$.subscribe((value: string) => {
-              this.quickFilterService.onFilterChange(value, this.gridOptions, this.gridApi);
+              this.quickFilterService.onFilterChange(
+                value,
+                this.gridOptions,
+                this.gridApi
+              );
             });
           }
           params.api.sizeColumnsToFit();
@@ -181,15 +186,17 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
                     node.data.path === this.selectedFileAccessRules.path
                   ) {
                     node.setSelected(true);
-                    if (this.gridApi)
-                      this.gridApi.ensureNodeVisible(node);
-                    this.getSelectedFileAccessRules.emit(this.selectedFileAccessRules);
+                    if (this.gridApi) this.gridApi.ensureNodeVisible(node);
+                    this.getSelectedFileAccessRules.emit(
+                      this.selectedFileAccessRules
+                    );
                   }
                 } else if (index === 0) {
                   node.setSelected(true);
-                  if (this.gridApi)
-                    this.gridApi.ensureNodeVisible(node);
-                  this.getSelectedFileAccessRules.emit(this.selectedFileAccessRules);
+                  if (this.gridApi) this.gridApi.ensureNodeVisible(node);
+                  this.getSelectedFileAccessRules.emit(
+                    this.selectedFileAccessRules
+                  );
                 }
               });
               this.gridApi.sizeColumnsToFit();
@@ -241,7 +248,9 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
           return this.fileAccessRulesService.updateFileAccessRuleList(
             GlobalConstant.CRUD.D,
             this.selectedFileAccessRules,
-            this.source === GlobalConstant.NAV_SOURCE.FED_POLICY ? data.group : this.groupName
+            this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+              ? data.group
+              : this.groupName
           );
         })
       )
@@ -284,9 +293,9 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
         source: this.source,
         getFileAccessRules: this.getFileAccessRules,
         gridApi: this.gridApi!,
-        fileAccessRules: this.fileAccessRules
+        fileAccessRules: this.fileAccessRules,
       },
-      width: '70%'
+      width: '70%',
     });
     editDialogRef.afterClosed().subscribe(result => {
       this.isModalOpen = false;
@@ -303,9 +312,9 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
         source: this.source,
         getFileAccessRules: this.getFileAccessRules,
         gridApi: this.gridApi!,
-        fileAccessRules: this.fileAccessRules
+        fileAccessRules: this.fileAccessRules,
       },
-      width: '70%'
+      width: '70%',
     });
     addDialogRef.afterClosed().subscribe(result => {
       this.isModalOpen = false;

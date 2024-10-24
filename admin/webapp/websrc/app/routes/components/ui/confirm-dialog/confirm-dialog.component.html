@@ -1,6 +1,8 @@
 <div mat-dialog-content>
   <p class="overflow-auto pb-2">{{ data.message }}</p>
-  <p class="overflow-auto pb-2" *ngIf="data.supplemental">{{ data.supplemental }}</p>
+  <p class="overflow-auto pb-2" *ngIf="data.supplemental">
+    {{ data.supplemental }}
+  </p>
 </div>
 <div class="mt-4" mat-dialog-actions align="end">
   <button

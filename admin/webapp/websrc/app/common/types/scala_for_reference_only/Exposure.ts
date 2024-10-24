@@ -18,14 +18,14 @@ export interface Exposure {
 
 export function isExposure(v: any): v is Exposure {
   return (
-    ((typeof v['id']) === 'string') &&
-    ((typeof v['name']) === 'string') &&
-    ((typeof v['display_name']) === 'string') &&
-    ((typeof v['pod_name']) === 'string') &&
-    ((typeof v['service']) === 'string') &&
-    ((typeof v['severity']) === 'string') &&
-    ((typeof v['policy_mode']) === 'string') &&
-    ((typeof v['policy_action']) === 'string') &&
+    typeof v['id'] === 'string' &&
+    typeof v['name'] === 'string' &&
+    typeof v['display_name'] === 'string' &&
+    typeof v['pod_name'] === 'string' &&
+    typeof v['service'] === 'string' &&
+    typeof v['severity'] === 'string' &&
+    typeof v['policy_mode'] === 'string' &&
+    typeof v['policy_action'] === 'string' &&
     (!v['protocols'] || (v['protocols'] && isArray(v['protocols']))) &&
     (!v['applications'] || (v['applications'] && isArray(v['applications']))) &&
     (!v['ports'] || (v['ports'] && isArray(v['ports'])))

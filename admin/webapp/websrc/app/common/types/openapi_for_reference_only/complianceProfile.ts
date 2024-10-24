@@ -1,4 +1,4 @@
-import { ComplianceProfileEntry } from "./complianceProfileEntry";
+import { ComplianceProfileEntry } from './complianceProfileEntry';
 
 export interface ComplianceProfile {
   name: string;

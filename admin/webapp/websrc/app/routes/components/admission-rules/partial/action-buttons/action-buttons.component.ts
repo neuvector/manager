@@ -67,7 +67,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
               : GlobalConstant.SCOPE.LOCAL,
           rule4Edit: rule,
           admissionRules: this.params.context.componentParent.admissionRules,
-          gridApi: this.params.context.componentParent.gridApi!
+          gridApi: this.params.context.componentParent.gridApi!,
         },
       }
     );

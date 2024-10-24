@@ -81,7 +81,6 @@ export class EditWebhookTableControlsComponent
   submit(): void {
     this.form.markAllAsTouched();
     if (this.form.valid) {
-
       //enable this.form.value to include the name
       const field = this.field.parent?.fieldGroup?.find(
         item => item.key === 'name'

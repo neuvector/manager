@@ -8,9 +8,8 @@ describe('CspSupportFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CspSupportFormComponent ]
-    })
-    .compileComponents();
+      declarations: [CspSupportFormComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

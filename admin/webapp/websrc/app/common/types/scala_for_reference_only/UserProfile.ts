@@ -18,16 +18,23 @@ export interface UserProfile {
 
 export function isUserProfile(v: any): v is UserProfile {
   return (
-    ((typeof v['fullname']) === 'string') &&
-    ((typeof v['username']) === 'string') &&
-    (!v['email'] || ((typeof v['email']) === 'string')) &&
-    (!v['role'] || ((typeof v['role']) === 'string')) &&
-    (!v['password'] || ((typeof v['password']) === 'string')) &&
-    (!v['new_password'] || ((typeof v['new_password']) === 'string')) &&
-    (!v['timeout'] || ((typeof v['timeout']) === 'number')) &&
-    ((typeof v['locale']) === 'string') &&
-    ((typeof v['default_password']) === 'boolean') &&
-    ((typeof v['modify_password']) === 'boolean') &&
-    (!v['role_domains'] || ((typeof v['role_domains']) == 'object' && Object.keys(v['role_domains']).every(key => ((typeof key) === 'string') && (v['role_domains'][key] && isArray(v['role_domains'][key])))))
+    typeof v['fullname'] === 'string' &&
+    typeof v['username'] === 'string' &&
+    (!v['email'] || typeof v['email'] === 'string') &&
+    (!v['role'] || typeof v['role'] === 'string') &&
+    (!v['password'] || typeof v['password'] === 'string') &&
+    (!v['new_password'] || typeof v['new_password'] === 'string') &&
+    (!v['timeout'] || typeof v['timeout'] === 'number') &&
+    typeof v['locale'] === 'string' &&
+    typeof v['default_password'] === 'boolean' &&
+    typeof v['modify_password'] === 'boolean' &&
+    (!v['role_domains'] ||
+      (typeof v['role_domains'] == 'object' &&
+        Object.keys(v['role_domains']).every(
+          key =>
+            typeof key === 'string' &&
+            v['role_domains'][key] &&
+            isArray(v['role_domains'][key])
+        )))
   );
 }

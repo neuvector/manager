@@ -10,8 +10,9 @@ export interface Role {
 
 export function isRole(v: any): v is Role {
   return (
-    ((typeof v['name']) === 'string') &&
-    (!v['comment'] || ((typeof v['comment']) === 'string')) &&
-    (v['permissions'] && isArray(v['permissions']))
+    typeof v['name'] === 'string' &&
+    (!v['comment'] || typeof v['comment'] === 'string') &&
+    v['permissions'] &&
+    isArray(v['permissions'])
   );
 }

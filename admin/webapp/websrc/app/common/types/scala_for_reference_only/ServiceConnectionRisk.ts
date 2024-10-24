@@ -8,8 +8,8 @@ export interface ServiceConnectionRisk {
 
 export function isServiceConnectionRisk(v: any): v is ServiceConnectionRisk {
   return (
-    ((typeof v['discover']) === 'number') &&
-    ((typeof v['monitor']) === 'number') &&
-    ((typeof v['protect']) === 'number')
+    typeof v['discover'] === 'number' &&
+    typeof v['monitor'] === 'number' &&
+    typeof v['protect'] === 'number'
   );
 }

@@ -15,7 +15,7 @@ import { tap } from 'rxjs/operators';
   templateUrl: './vulnerabilities.component.html',
   styleUrls: ['./vulnerabilities.component.scss'],
 })
-export class VulnerabilitiesComponent {
+export class VulnerabilitiesComponent implements OnDestroy {
   @ViewChild(VulnerabilityDetailDialogComponent)
   vulDetails!: VulnerabilityDetailDialogComponent;
   @ViewChild('vulnerabilityViewReport') printableReportView!: ElementRef;
@@ -303,4 +303,11 @@ export class VulnerabilitiesComponent {
     dialogRef.componentInstance.onNoClick();
     this.vulnerabilitiesCsvService.downloadAssetsViewCsv(data);
   };
+
+  ngOnDestroy() {
+    this.vulnerabilitiesFilterService.vulQuerySubject$.next({
+      ...this.vulnerabilitiesFilterService.initVulQuery(),
+      viewType: this.displayViews[0],
+    });
+  }
 }

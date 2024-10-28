@@ -1,0 +1,74 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # write is needed for:
+      # - OIDC for cosign's use in ecm-distro-tools/publish-image.
+      # - Read vault secrets in rancher-eio/read-vault-secrets.
+      id-token: write
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Read secrets
+      env:
+        DOCKER_REPO: ${{ secrets.DOCKER_REPO }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        PRIME_REGISTRY: ${{ secrets.PRIME_REGISTRY }}
+        PRIME_REPO: ${{ secrets.PRIME_REPO }}
+        PRIME_REGISTRY_USERNAME: ${{ secrets.PRIME_REGISTRY_USERNAME }}
+        PRIME_REGISTRY_PASSWORD: ${{ secrets.PRIME_REGISTRY_PASSWORD }}
+      run: |
+        echo "DOCKER_REPO=$DOCKER_REPO" >> $GITHUB_ENV
+        echo "DOCKER_USERNAME=$DOCKER_USERNAME" >> $GITHUB_ENV
+        echo "DOCKER_PASSWORD=$DOCKER_PASSWORD" >> $GITHUB_ENV
+        echo "PRIME_REGISTRY=$PRIME_REGISTRY" >> $GITHUB_ENV
+        echo "PRIME_REPO=$PRIME_REPO" >> $GITHUB_ENV
+        echo "PRIME_REGISTRY_USERNAME=$PRIME_REGISTRY_USERNAME" >> $GITHUB_ENV
+        echo "PRIME_REGISTRY_PASSWORD=$PRIME_REGISTRY_PASSWORD" >> $GITHUB_ENV
+
+    - name: Publish manifest
+      uses: rancher/ecm-distro-tools/actions/publish-image@master
+      with:
+        image: manager
+        tag: ${{ github.ref_name }}
+        platforms: linux/amd64,linux/arm64
+
+        public-registry: docker.io
+        public-repo: ${{ env.DOCKER_REPO }}
+        public-username: ${{ env.DOCKER_USERNAME }}
+        public-password: ${{ env.DOCKER_PASSWORD }}
+
+        prime-registry: ${{ env.PRIME_REGISTRY }}
+        prime-repo: ${{ env.PRIME_REPO }}
+        prime-username: ${{ env.PRIME_REGISTRY_USERNAME }}
+        prime-password: ${{ env.PRIME_REGISTRY_PASSWORD }}
+
+    # TODO: For experiment only
+    - name: Login to registry [Public]
+      uses: docker/login-action@v3
+      with:
+        registry: docker.io
+        username: nickchungsuse
+        password: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Login to registry [Prime]
+      uses: docker/login-action@v3
+      with:
+        registry: docker.io
+        username: nickchungsuse
+        password: ${{ secrets.PRIME_REGISTRY_PASSWORD }}
+    - name: Retag
+      shell: bash
+      run: |
+        docker buildx imagetools create -t nickchungsuse/manager:latest nickchungsuse/manager:${{ github.ref_name }}
+        docker buildx imagetools create -t nickchungsuse/manager:1 nickchungsuse/manager:${{ github.ref_name }}

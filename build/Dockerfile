@@ -2,6 +2,7 @@
 FROM registry.suse.com/bci/openjdk:17 AS builder
 
 ARG VERSION
+ARG COMMIT
 ARG TARGETOS
 ARG TARGETARCH
 
@@ -28,7 +29,7 @@ RUN npm install -g @angular/cli@14 && \
 
 RUN bash build/build_manager.sh
 
-# # Manager unitest
+# Manager unitest
 RUN if [ "$ARCH" = "amd64" ]; then \
   zypper addrepo https://download.opensuse.org/repositories/M17N:fonts/15.6/M17N:fonts.repo && \
   zypper --non-interactive --gpg-auto-import-keys refresh && \
@@ -43,7 +44,9 @@ fi
 FROM registry.suse.com/bci/bci-micro:15.6 AS micro
 FROM registry.suse.com/bci/bci-base:15.6 AS base
 
+COPY --from=builder /src/build/requirements.txt /chroot/requirements.txt
 COPY --from=micro / /chroot/
+
 RUN zypper --installroot /chroot -n --gpg-auto-import-keys in --no-recommends \
     python312 python312-pip iproute2 lsof procps grep awk && \
     cp /etc/resolv.conf /chroot/etc/resolv.conf && \
@@ -52,32 +55,44 @@ RUN zypper --installroot /chroot -n --gpg-auto-import-keys in --no-recommends \
     zypper --installroot /chroot clean -a && \
     rm -rf /chroot/var/log/
 
+# Create proper symbolic links for Python and pip
+RUN ln -sf /usr/bin/python3.12 /chroot/usr/bin/python3 && \
+    ln -sf /usr/bin/python3.12 /chroot/usr/bin/python && \
+    ln -sf /usr/bin/pip3.12 /chroot/usr/bin/pip3 && \
+    ln -sf /usr/bin/pip3.12 /chroot/usr/bin/pip
+
+# Install requirements and clean up
+RUN chroot /chroot /bin/sh -c "pip install --no-cache-dir -r /requirements.txt && \
+    rm -rf /root/.cache /requirements.txt"
+    
+# Remove unnecessary binaries to reduce image size
+RUN cd /chroot/usr/bin/ && \
+    rm -rf basename chcon chgrp chmod chown chroot cksum dd df dircolors \
+    dirname du install install-info join locale localedef mkdir mkfifo \
+    mknod mktemp paste pathchk readlink realpath sync smidiff smidump \
+    smilink smiquery smistrip smixlate tee tiemout tload top truncate \
+    unlink watch
+
 FROM micro
 WORKDIR /
 COPY --from=base /chroot/ /
 COPY --from=base /usr/sbin/useradd /usr/sbin
 COPY --from=builder /src/stage /
-COPY --from=builder /src/build/requirements.txt /
+COPY --from=builder /usr/lib64/ /usr/lib64/
 
-ENV JAVA_VERSION=17.0.12_p8-r0 \
-    JAVA_HOME=/usr/lib/jvm/java-1.17-openjdk/jre \
-    PATH=$PATH:/usr/lib/jvm/java-1.17-openjdk/jre/bin:/usr/lib/jvm/java-1.17-openjdk/bin \
+ENV JAVA_HOME=/usr/lib64/jvm/java-17-openjdk-17 \
+    PATH=/usr/lib64/jvm/java-17-openjdk-17/bin:$PATH \
+    LD_LIBRARY_PATH=/usr/lib64 \
     LANG=C.UTF-8 \
     PYTHONUNBUFFERED=1
-    
-RUN ln -s /usr/bin/python3.12 /usr/bin/python && \
-    ln -s /usr/bin/python3.12 /usr/bin/python3  && \
-    pip3 install --no-cache-dir -r /requirements.txt && \
-    rm -r /root/.cache /requirements.txt
-RUN cd /usr/bin/ && rm -rf basename chcon chgrp chmod chown chroot cksum dd df dircolors dirname du install install-info join locale localedef mkdir mkfifo mknod mktemp paste pathchk readlink realpath sync smidiff smidump smilink smiquery smistrip smixlate tee tiemout tload top truncate unlink watch
 
 LABEL name="manager" \
-      vendor="NeuVector Inc." \
+      vendor="SUSE Security" \
       version=${VERSION} \
       release=${VERSION} \
       neuvector.image="neuvector/manager" \
       neuvector.role="manager" \
-      neuvector.rev="git.xxxx"
+      neuvector.rev="${COMMIT}"
 
 ARG user=manager
 RUN echo "$user:x:1000:1000::/nonexistent:/bin/bash" >> /etc/passwd && \

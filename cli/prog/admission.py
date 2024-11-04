@@ -95,7 +95,6 @@ NamesDisplay = {"cveHighCount": "High severity CVE count",
                 "memoryLimit": "memory limit",
                 "modules": "Image Modules/Packages",
                 "violatePssPolicy": "Violates Selected K8s Pod Security Standards Policy",
-                "imageVerifiers": "Image Sigstore Verifiers",
                 "storageClassName": "StorageClass Name",
                 }
 
@@ -454,16 +453,6 @@ def _list_predefined_risky_roles(data, criteria):
     columns = ("value","description")
     output.list(columns, mainCrit)
 
-def _list_sigstore_verifiers(data, verifiers):
-    click.echo(" ")
-    click.echo("Image Sigstore verifiers:")
-    sigstoreVerifiers=[]
-    for v in verifiers:
-        row = {"verifier": v, "": ""}
-        sigstoreVerifiers.append(row)
-    columns = ("verifier", "")
-    output.list(columns, sigstoreVerifiers)
-
 def _list_custompath_options(data, criteria):
     click.echo(" ")
     click.echo("Content for customPath options:")
@@ -497,8 +486,6 @@ def show_admission_rule_options(data):
             _list_admission_pss_collections(data, rest_admission_options["pss_collections"])
         if "predefined_risky_roles" in rest_admission_options:
             _list_predefined_risky_roles(data, rest_admission_options["predefined_risky_roles"])
-        if "sigstore_verifiers" in rest_admission_options:
-            _list_sigstore_verifiers(data, rest_admission_options["sigstore_verifiers"])
     else:
         click.echo("")
         click.echo("")

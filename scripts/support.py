@@ -52,7 +52,6 @@ support_global = [
     "/v1/response/rule",
     "/v1/conversation",
     "/v1/vulnerability/profile",
-    "/v1/scan/sigstore/root_of_trust?with_verifiers=true",
 
     "/v1/log/activity",
     "/v1/log/event",

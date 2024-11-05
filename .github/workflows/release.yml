@@ -29,18 +29,31 @@ jobs:
           secret/data/github/repo/${{ github.repository }}/rancher-prime-registry/credentials registry | PRIME_REGISTRY ;
           secret/data/github/repo/${{ github.repository }}/rancher-prime-registry/credentials username | PRIME_REGISTRY_USERNAME ;
           secret/data/github/repo/${{ github.repository }}/rancher-prime-registry/credentials password | PRIME_REGISTRY_PASSWORD
-
-    - name: Publish manifest
+    - name: Parse target tag
+      run: |
+        TARGET=${{ github.ref_name }}
+        echo "TAG=${TARGET#v}" >> $GITHUB_ENV
+    - name: Publish public manifest
       uses: rancher/ecm-distro-tools/actions/publish-image@master
       with:
-        image: registry-adapter
-        tag: ${{ github.ref_name }}
+        push-to-public: true
+        push-to-prime: false
+        image: manager
+        tag: ${{ env.TAG }}
         platforms: linux/amd64,linux/arm64
 
         public-registry: docker.io
         public-repo: neuvector
         public-username: ${{ env.DOCKER_USERNAME }}
         public-password: ${{ env.DOCKER_PASSWORD }}
+    - name: Publish prime manifest
+      uses: rancher/ecm-distro-tools/actions/publish-image@master
+      with:
+        push-to-public: false
+        push-to-prime: true
+        image: neuvector-manager
+        tag: ${{ env.TAG }}
+        platforms: linux/amd64,linux/arm64
 
         prime-registry: ${{ env.PRIME_REGISTRY }}
         prime-repo: rancher

@@ -1,7 +1,5 @@
 #!/bin/bash
 
-STAGE_DIR=stage
-
 export CHROME_BIN=/usr/bin/google-chrome
 
 rm -rf admin/target
@@ -47,11 +45,3 @@ popd
 env JAVA_OPTS="-Xms2g -Xmx3g" sbt admin/assembly
 zip -d admin/target/scala-3.3.4/admin-assembly-1.0.jar rest-management-private-classpath\*
 rm -rf admin/webapp/root/.sass-cache
-
-cp licenses/* ${STAGE_DIR}/licenses/
-cp cli/cli ${STAGE_DIR}/usr/local/bin/
-cp cli/cli.py ${STAGE_DIR}/usr/local/bin/
-cp -r cli/prog ${STAGE_DIR}/usr/local/bin/
-cp scripts/* ${STAGE_DIR}/usr/local/bin/
-cp java.security ${STAGE_DIR}/usr/lib/jvm/java-17-openjdk/lib/security/java.security
-cp admin/target/scala-3.3.4/admin-assembly-1.0.jar ${STAGE_DIR}/usr/local/bin/

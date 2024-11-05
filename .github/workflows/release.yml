@@ -33,7 +33,7 @@ jobs:
     - name: Publish manifest
       uses: rancher/ecm-distro-tools/actions/publish-image@master
       with:
-        image: registry-adapter
+        image: manager
         tag: ${{ github.ref_name }}
         platforms: linux/amd64,linux/arm64
 

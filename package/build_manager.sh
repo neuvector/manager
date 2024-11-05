@@ -48,6 +48,7 @@ env JAVA_OPTS="-Xms2g -Xmx3g" sbt admin/assembly
 zip -d admin/target/scala-3.3.4/admin-assembly-1.0.jar rest-management-private-classpath\*
 rm -rf admin/webapp/root/.sass-cache
 
+mkdir -p ${STAGE_DIR}/licenses/ ${STAGE_DIR}/usr/local/bin/ ${STAGE_DIR}/usr/lib/jvm/java-17-openjdk/lib/security/java.security
 cp licenses/* ${STAGE_DIR}/licenses/
 cp cli/cli ${STAGE_DIR}/usr/local/bin/
 cp cli/cli.py ${STAGE_DIR}/usr/local/bin/

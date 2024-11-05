@@ -84,8 +84,7 @@ export class RuleActionButtonsComponent implements ICellRendererAngularComp {
       )
       .subscribe(
         res => {
-          let gridApi =
-            this.params.context.componentParent.gridApi4Rules!;
+          let gridApi = this.params.context.componentParent.gridApi4Rules!;
           let rules = this.params.context.componentParent.selectedSensor.rules;
           gridApi.setRowData(rules);
           if (rules.length > 0) {

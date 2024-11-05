@@ -440,7 +440,8 @@ export class GroupsComponent implements OnInit, OnDestroy {
     } else if (mode === 'remote') {
       let payload = {
         groups: this.selectedGroups.map(group => group.name),
-        policy_mode: policyMode,
+        policy_mode: this.titleCasePipe.transform(policyMode),
+        profile_mode: this.titleCasePipe.transform(profileMode),
         remote_export_options: option,
       };
       this.groupsService.exportGroupsConfigData(payload).subscribe(

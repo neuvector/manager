@@ -36,21 +36,7 @@ jar:
 RUNNER := docker
 IMAGE_BUILDER := $(RUNNER) buildx
 MACHINE := neuvector
-BUILDX_ARGS ?= --sbom=true --attest type=provenance,mode=max --cache-to type=gha --cache-from type=gha
 DEFAULT_PLATFORMS := linux/amd64,linux/arm64,linux/x390s,linux/riscv64
-TARGET_PLATFORMS ?= linux/amd64
-
-CURRENT_OS := $(shell uname -s | tr '[:upper:]' '[:lower:]')
-CURRENT_ARCH := $(shell uname -m)
-
-# Convert architecture names to match Docker's convention
-ifeq ($(CURRENT_ARCH),x86_64)
-    CURRENT_ARCH := amd64
-else ifeq ($(CURRENT_ARCH),aarch64)
-    CURRENT_ARCH := arm64
-endif
-
-REPO ?= nickchungsuse
 
 COMMIT = $(shell git rev-parse --short HEAD)
 ifeq ($(VERSION),)
@@ -90,10 +76,34 @@ ifeq ($(TAG),)
 	endif
 endif
 
+TARGET_PLATFORMS ?= linux/amd64,linux/arm64
+STAGE_DIR=stage
+REPO ?= neuvector
+IMAGE = $(REPO)/manager:$(TAG)
+BUILD_ACTION = --load
+BUILDX_ARGS ?= --sbom=true --attest type=provenance,mode=max --cache-to type=gha --cache-from type=gha
+
+stage_init:
+	rm -rf ${STAGE_DIR}; mkdir -p ${STAGE_DIR}
+	mkdir -p ${STAGE_DIR}/usr/local/bin/
+	mkdir -p ${STAGE_DIR}/licenses/
+	mkdir -p ${STAGE_DIR}/usr/lib/jvm/java-17-openjdk/lib/security/
+
 buildx-machine:
 	docker buildx ls
 	@docker buildx ls | grep $(MACHINE) || \
 	docker buildx create --name=$(MACHINE) --platform=$(DEFAULT_PLATFORMS)
+
+test-image:
+	# Instead of loading image, target all platforms, effectivelly testing
+	# the build for the target architectures.
+	$(MAKE) build-image BUILD_ACTION="--platform=$(TARGET_PLATFORMS)"
+
+build-image: buildx-machine ## build (and load) the container image targeting the current platform.
+	$(IMAGE_BUILDER) build -f build/Dockerfile \
+		--builder $(MACHINE) $(IMAGE_ARGS) \
+		--build-arg VERSION=$(VERSION) -t "$(IMAGE)" $(BUILD_ACTION) .
+	@echo "Built $(IMAGE)"
 
 push-image: stage_init buildx-machine
 	$(IMAGE_BUILDER) build -f build/Dockerfile \

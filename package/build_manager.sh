@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 STAGE_DIR=stage
 
@@ -48,10 +49,12 @@ env JAVA_OPTS="-Xms2g -Xmx3g" sbt admin/assembly
 zip -d admin/target/scala-3.3.4/admin-assembly-1.0.jar rest-management-private-classpath\*
 rm -rf admin/webapp/root/.sass-cache
 
+mkdir -p ${STAGE_DIR}/licenses/ ${STAGE_DIR}/usr/local/bin/ ${STAGE_DIR}/usr/lib/jvm/java-17-openjdk/lib/security ${STAGE_DIR}/usr/lib64/jvm/java-17-openjdk-17/conf/security/
 cp licenses/* ${STAGE_DIR}/licenses/
 cp cli/cli ${STAGE_DIR}/usr/local/bin/
 cp cli/cli.py ${STAGE_DIR}/usr/local/bin/
 cp -r cli/prog ${STAGE_DIR}/usr/local/bin/
 cp scripts/* ${STAGE_DIR}/usr/local/bin/
-cp java.security ${STAGE_DIR}/usr/lib/jvm/java-17-openjdk/lib/security/java.security
+cp java.security ${STAGE_DIR}/usr/lib/jvm/java-17-openjdk/lib/security/
+cp java.security ${STAGE_DIR}/usr/lib64/jvm/java-17-openjdk-17/conf/security/
 cp admin/target/scala-3.3.4/admin-assembly-1.0.jar ${STAGE_DIR}/usr/local/bin/

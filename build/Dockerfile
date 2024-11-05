@@ -1,8 +1,6 @@
 # Builder image
 FROM registry.suse.com/bci/openjdk:17 AS builder
 
-ARG VERSION
-ARG COMMIT
 ARG TARGETOS
 ARG TARGETARCH
 
@@ -74,6 +72,8 @@ RUN cd /chroot/usr/bin/ && \
     unlink watch
 
 FROM micro
+ARG VERSION
+ARG COMMIT
 WORKDIR /
 COPY --from=base /chroot/ /
 COPY --from=base /usr/sbin/useradd /usr/sbin

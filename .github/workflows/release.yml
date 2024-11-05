@@ -24,23 +24,43 @@ jobs:
       uses: rancher-eio/read-vault-secrets@main
       with:
         secrets: |
+          secret/data/github/repo/${{ github.repository }}/dockerhub/rancher/credentials username | RANCHER_DOCKER_USERNAME ;
+          secret/data/github/repo/${{ github.repository }}/dockerhub/rancher/credentials password | RANCHER_DOCKER_PASSWORD ;
           secret/data/github/repo/${{ github.repository }}/dockerhub/neuvector/credentials username | DOCKER_USERNAME ;
           secret/data/github/repo/${{ github.repository }}/dockerhub/neuvector/credentials password | DOCKER_PASSWORD ;
           secret/data/github/repo/${{ github.repository }}/rancher-prime-registry/credentials registry | PRIME_REGISTRY ;
           secret/data/github/repo/${{ github.repository }}/rancher-prime-registry/credentials username | PRIME_REGISTRY_USERNAME ;
           secret/data/github/repo/${{ github.repository }}/rancher-prime-registry/credentials password | PRIME_REGISTRY_PASSWORD
-
-    - name: Publish manifest
+    - name: Parse target tag
+      run: |
+        TARGET=${{ github.ref_name }}
+        echo "TAG=${TARGET#v}" >> $GITHUB_ENV
+    - name: Publish neuvector manifest
       uses: rancher/ecm-distro-tools/actions/publish-image@master
       with:
-        image: registry-adapter
-        tag: ${{ github.ref_name }}
+        push-to-public: true
+        push-to-prime: false
+        image: manager
+        tag: ${{ env.TAG }}
         platforms: linux/amd64,linux/arm64
 
         public-registry: docker.io
         public-repo: neuvector
         public-username: ${{ env.DOCKER_USERNAME }}
         public-password: ${{ env.DOCKER_PASSWORD }}
+    - name: Publish rancher manifest
+      uses: rancher/ecm-distro-tools/actions/publish-image@master
+      env:
+        IMAGE_PREFIX: neuvector-
+      with:
+        image: neuvector-manager
+        tag: ${{ env.TAG }}
+        platforms: linux/amd64,linux/arm64
+
+        public-registry: docker.io
+        public-repo: rancher
+        public-username: ${{ env.RANCHER_DOCKER_USERNAME }}
+        public-password: ${{ env.RANCHER_DOCKER_PASSWORD }}
 
         prime-registry: ${{ env.PRIME_REGISTRY }}
         prime-repo: rancher

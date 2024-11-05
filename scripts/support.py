@@ -35,8 +35,6 @@ support_global = [
     "/v1/scan/platform",
     "/v1/scan/platform/platform",
     "/v1/scan/registry",
-    "/v1/admission/state",
-    "/v1/admission/rules",
 
     "/v1/domain",
     "/v1/service",
@@ -65,7 +63,6 @@ support_global = [
     "/v1/debug/controller/sync",
     "/v1/debug/system/stats",
     "/v1/debug/registry/image/openshift",
-    "/v1/debug/admission_stats",
 ]
 
 support_global_post = [

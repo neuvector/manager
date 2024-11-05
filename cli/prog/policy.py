@@ -404,8 +404,8 @@ def create_response(data):
 @create_response.command("rule")
 @click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=True,
               help="It's a local or federal rule")
-@click.option("--group", help="Group name that the rule is applied to. Not applicable for admission and event")
-@click.option("--event", help="event, cve-report, security-event, admission-control, compliance")
+@click.option("--group", help="Group name that the rule is applied to. Not applicable for event")
+@click.option("--event", help="event, cve-report, security-event, compliance")
 @click.option("--condition", multiple=True,
               help="type:value, type can be name, cve-high, cve-high-with-fix, cve-medium, level and process")
 @click.option("--action", default=None, multiple=True, help="quarantine, suppress-log, webhook")
@@ -479,7 +479,7 @@ def set_response(data):
 @click.option("--scope", default="local", type=click.Choice(['fed', 'local']), show_default=False, required=False,
               help="obsolete")
 @click.option("--group", "group")
-@click.option("--event", help="event, cve-report, security-event, benchmark, admission-control")
+@click.option("--event", help="event, cve-report, security-event, benchmark")
 @click.option("--condition", multiple=True,
               help="type:value, type can be name, cve-high, cve-high-with-fix, cve-medium, level and process")
 @click.option("--action", multiple=True, help="quarantine, suppress-log, webhook")

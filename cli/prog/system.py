@@ -1378,42 +1378,6 @@ def request_export_group(data, name, policy_mode, profile_mode, filename, remote
         click.echo(respData)
     return
 
-
-@request_export.command('admission')
-@click.option("--config", "-c", default=False, is_flag=True, help="Export admission control configuration")
-@click.option("--id", multiple=True, help="ID of admission control rule to export")
-@click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True), help="Local file path when export to local machine")
-@click.option("--remote_repository_nickname", default="default", help="Repository nickname when export to remote repository")
-@click.option("--remote_filepath", default="", help="File path on repository when export to remote repository")
-@click.option("--comment", default="", help="Comment for export to remote repository")
-@click.pass_obj
-def request_export_admission(data, config, id, filename, remote_repository_nickname, remote_filepath, comment):
-    """Export admission control configuration/rules."""
-
-    ids = []
-    for n in id:
-        ids.append(int(n))
-
-    payload = {"export_config": config, "ids": ids}
-    remote_export_options, useRemote, ok = validate_export_filepath(filename, remote_repository_nickname, remote_filepath)
-    if ok:
-        if useRemote:
-            payload["remote_export_options"] = remote_export_options
-    else:
-        return
-
-    respData = data.client.requestDownload("file", "admission", None, payload)
-    if filename and len(filename) > 0:
-        try:
-            with click.open_file(filename, 'w') as wfp:
-                wfp.write(respData)
-            click.echo("Wrote to %s" % click.format_filename(filename))
-        except IOError:
-            click.echo("Error: Failed to write to %s" % click.format_filename(filename))
-    else:
-        click.echo(respData)
-    return
-
 @request_export.command('dlp')
 @click.option("--name",  multiple=True, help="Name of DLP sensor to export")
 @click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True), help="Local file path when export to local machine")
@@ -1661,14 +1625,6 @@ def import_function(urlStr, data, filename, message):
 def import_group(data, filename):
     """Import group policy."""
     import_function("file/group/config", data, filename, "group policy")
-
-@request_import.command('admission')
-@click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))
-# @click.option("--raw", default=False, is_flag=True, help="Upload in raw format")
-@click.pass_obj
-def import_admission(data, filename):
-    """Import admission control configuration/rules."""
-    import_function("file/admission/config", data, filename, "admission control configuration/rules")
 
 @request_import.command('dlp')
 @click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))

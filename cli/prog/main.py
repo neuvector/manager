@@ -6,8 +6,6 @@ import sys
 from prog.client import Unauthorized
 from prog.client import RestException
 
-from prog import admission
-from prog import assessment
 from prog import auth
 from prog import bench
 from prog import cli
@@ -58,18 +56,6 @@ class InteractiveCLI(cmd2.Cmd, object):
         self._set_prompt('', '', ctx.server_ip)
 
         cmd2.Cmd.__init__(self)
-
-    def postparsing_precmd(self, args):
-        stop, statement = super(InteractiveCLI, self).postparsing_precmd(args)
-        if len(statement.parsed) > 2:
-            if statement.parsed[0] == "set" or statement.parsed[0] == "create":
-                if statement.parsed[1].find("admission rule ") >= 0:
-                    ops = [">", "<"]
-                    for idx in range(2, len(statement.parsed)):
-                        for op in ops:
-                            if statement.parsed[idx].find(op) >= 0:
-                                raise Exception(invalidArgMsg)
-        return stop, statement
 
     def _set_prompt(self, username, domain, server_ip):
         if not hasattr(sys.stdin, 'isatty') or sys.stdin.isatty():

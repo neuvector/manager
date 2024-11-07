@@ -2,7 +2,7 @@
 
 STAGE_DIR = stage
 BASE_IMAGE_TAG = latest
-BUILD_IMAGE_TAG = latest
+BUILD_IMAGE_TAG = v3
 
 copy_mgr:
 	cp manager/licenses/* ${STAGE_DIR}/licenses/

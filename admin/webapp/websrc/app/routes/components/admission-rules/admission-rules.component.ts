@@ -195,7 +195,7 @@ export class AdmissionRulesComponent implements OnInit {
             );
           }
           setTimeout(() => {
-            this.gridApi.setRowData(this.admissionRules);
+            this.gridApi.setGridOption('rowData', this.admissionRules);
           }, 200);
         },
         error => {

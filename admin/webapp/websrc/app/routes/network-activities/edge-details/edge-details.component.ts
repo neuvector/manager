@@ -188,7 +188,7 @@ export class EdgeDetailsComponent implements AfterViewInit, OnInit, OnChanges {
           return entry;
         }
       );
-      this.gridApi.setRowData(this._conversationDetail.entries);
+      this.gridApi.setGridOption('rowData', this._conversationDetail.entries);
     });
   }
   onGridReady(params: GridReadyEvent): void {

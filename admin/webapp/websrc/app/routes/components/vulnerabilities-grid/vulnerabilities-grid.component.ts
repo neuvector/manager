@@ -148,7 +148,7 @@ export class VulnerabilitiesGridComponent implements OnInit, OnChanges {
     }
     if (changes.rowData && this.gridApi) {
       console.log('row data changed');
-      this.gridApi.setRowData(changes.rowData.currentValue);
+      this.gridApi.setGridOption('rowData', changes.rowData.currentValue);
       if (this.preselect) {
         this.gridApi.forEachNode(node =>
           node.rowIndex ? 0 : node.setSelected(true)
@@ -181,7 +181,7 @@ export class VulnerabilitiesGridComponent implements OnInit, OnChanges {
       );
     }
     if (this.rowData) {
-      this.gridApi.setRowData(this.rowData);
+      this.gridApi.setGridOption('rowData', this.rowData);
     }
   }
 

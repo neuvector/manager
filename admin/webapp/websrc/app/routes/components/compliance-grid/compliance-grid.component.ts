@@ -72,7 +72,7 @@ export class ComplianceGridComponent implements OnInit {
   set rowData(rowData: Check[]) {
     this._rowData = rowData;
     this.displayData = this.formatRows(this.rowData);
-    if (this.gridApi) this.gridApi.setRowData(this.displayData);
+    if (this.gridApi) this.gridApi.setGridOption('rowData', this.displayData);
   }
   private _rowData!: Check[];
   displayData!: ComplianceRow[];

@@ -221,8 +221,8 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.gridApi && changes.rowData) {
-      this.gridApi.setRowData([]);
-      this.gridApi.setRowData(changes.rowData.currentValue);
+      this.gridApi.setGridOption('rowData', []);
+      this.gridApi.setGridOption('rowData', changes.rowData.currentValue);
 
       // if selected registry is not in the current page, select the first row
       if (changes.rowData.currentValue.length > 0) {

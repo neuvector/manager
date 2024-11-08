@@ -21,7 +21,7 @@ export class RemoteGridBindingDirective {
 
   @HostListener('gridReady', ['$event'])
   gridReady(event: GridReadyEvent) {
-    event.api.setDatasource(this.dataSource);
+    event.api.setGridOption('datasource', this.dataSource);
     this.remoteGridReady.emit(event);
   }
 

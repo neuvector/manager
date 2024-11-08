@@ -96,8 +96,8 @@ export class ModulesTableComponent implements OnInit, OnChanges {
   }
 
   onSelectionChanged(params: GridReadyEvent): void {
-    const data = params.api.getSelectedNodes()[0].data;
-    this.moduleSelected.emit(data);
+    const data = params.api.getSelectedNodes()[0]?.data;
+    if (data) this.moduleSelected.emit(data);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -105,7 +105,8 @@ export class ModulesTableComponent implements OnInit, OnChanges {
       this.gridApi.sizeColumnsToFit();
     }
     if (changes.hideSafeModules && this.gridApi) {
-      this.gridApi.setRowData(
+      this.gridApi.setGridOption(
+        'rowData',
         this.filterRows(this.rowData, changes.hideSafeModules.currentValue)
       );
     }
@@ -118,7 +119,7 @@ export class ModulesTableComponent implements OnInit, OnChanges {
   }
 
   onGridReady(params: GridReadyEvent): void {
-    params.columnApi.applyColumnState({
+    params.api.applyColumnState({
       state: [
         {
           colId: 'vulnerabilities',

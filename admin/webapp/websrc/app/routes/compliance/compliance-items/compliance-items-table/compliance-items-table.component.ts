@@ -162,7 +162,7 @@ export class ComplianceItemsTableComponent
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.gridApi && changes.rowData) {
-      this.gridApi.setRowData(changes.rowData.currentValue);
+      this.gridApi.setGridOption('rowData', changes.rowData.currentValue);
     }
   }
 
@@ -175,7 +175,7 @@ export class ComplianceItemsTableComponent
       return compliance;
     });
     setTimeout(() => {
-      this.gridApi.setRowData(this.rowData);
+      this.gridApi.setGridOption('rowData', this.rowData);
       this.gridApi.sizeColumnsToFit();
       this.gridApi.forEachNode(node =>
         node.rowIndex ? 0 : node.setSelected(true)

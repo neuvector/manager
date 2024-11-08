@@ -44,8 +44,8 @@ export class RegistryVulnerabilitiesComponent {
   @Output() showAcceptedVulnerability = new EventEmitter<boolean>();
   @Output() acceptVulnerability = new EventEmitter<Vulnerability>();
   @Input() acceptedVulnerabilityStatus!: boolean;
-  selectedLayer!: Layer;
-  selectedVulnerability!: Vulnerability;
+  selectedLayer!: Layer | null;
+  selectedVulnerability!: Vulnerability | null;
 
   constructor(private utilsService: UtilsService) {}
 
@@ -62,7 +62,8 @@ export class RegistryVulnerabilitiesComponent {
   }
 
   onAcceptVulnerability(): void {
-    this.acceptVulnerability.emit(this.selectedVulnerability);
+    if (this.selectedVulnerability)
+      this.acceptVulnerability.emit(this.selectedVulnerability);
   }
 
   isAccepted(vulnerability: Vulnerability): boolean {
@@ -98,7 +99,7 @@ export class RegistryVulnerabilitiesComponent {
 
   exportCVE(): void {
     if (
-      this.selectedLayer.vulnerabilities &&
+      this.selectedLayer?.vulnerabilities &&
       this.selectedLayer.vulnerabilities.length > 0
     ) {
       const title = `${this.path + this.repository} | Image ID: ${

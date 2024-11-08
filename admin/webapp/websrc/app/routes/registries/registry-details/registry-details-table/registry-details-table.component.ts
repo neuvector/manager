@@ -134,7 +134,7 @@ export class RegistryDetailsTableComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.gridApi && changes.rowData?.currentValue) {
-      this.gridApi.setRowData(changes.rowData.currentValue);
+      this.gridApi.setGridOption('rowData', changes.rowData.currentValue);
     }
   }
 

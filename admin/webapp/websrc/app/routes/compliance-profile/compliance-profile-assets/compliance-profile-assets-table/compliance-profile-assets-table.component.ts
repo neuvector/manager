@@ -134,7 +134,7 @@ export class ComplianceProfileAssetsTableComponent
   ngOnChanges(changes: SimpleChanges): void {
     if (this.gridApi) {
       if (changes.rowData) {
-        this.gridApi.setRowData(changes.rowData.currentValue);
+        this.gridApi.setGridOption('rowData', changes.rowData.currentValue);
       }
       if (changes.namespaceEnabled && this.gridOptions) {
         this.toggleNamespaceActions();
@@ -212,9 +212,9 @@ export class ComplianceProfileAssetsTableComponent
 
   toggleNamespaceActions() {
     if (this.namespaceEnabled && this.isWriteComplianceProfileAuthorized) {
-      this.gridApi?.setColumnVisible('action', true);
+      this.gridApi?.setColumnsVisible(['action'], true);
     } else {
-      this.gridApi?.setColumnVisible('action', false);
+      this.gridApi?.setColumnsVisible(['action'], false);
     }
     this.gridApi.sizeColumnsToFit();
     this.cd.markForCheck();

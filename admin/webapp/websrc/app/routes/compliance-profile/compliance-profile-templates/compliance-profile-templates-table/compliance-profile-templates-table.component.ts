@@ -196,7 +196,7 @@ export class ComplianceProfileTemplatesTableComponent
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.gridApi && changes.rowData) {
-      this.gridApi.setRowData(changes.rowData.currentValue);
+      this.gridApi.setGridOption('rowData', changes.rowData.currentValue);
     }
   }
 

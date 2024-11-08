@@ -17,7 +17,7 @@ export class QuickFilterService {
     gridApi: GridApi
   ): void {
     if (gridOptions && gridApi) {
-      gridApi.setQuickFilter(filterStr);
+      gridApi.setGridOption('quickFilterText', filterStr);
     }
   }
 }

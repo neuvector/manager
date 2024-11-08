@@ -34,7 +34,7 @@ export class RolesGridComponent implements OnInit {
   @Input() set rowData(value: Role[]) {
     this._rowData = value;
     if (this.gridApi) {
-      this.gridApi.setRowData(this.rowData);
+      this.gridApi.setGridOption('rowData', this.rowData);
       this.gridApi.sizeColumnsToFit();
     }
     this.refreshing$.next(false);

@@ -124,7 +124,7 @@ export class TestSettingsDialogComponent implements OnInit, OnDestroy {
       },
     };
     this.gridData = [];
-    this.gridApi.setRowData(this.gridData);
+    this.gridApi.setGridOption('rowData', this.gridData);
     this.testingSwitch = true;
     this.registriesService
       .testSettings({
@@ -163,7 +163,7 @@ export class TestSettingsDialogComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (r: any) => {
           this.gridData = r.body.steps;
-          this.gridApi.setRowData(this.gridData);
+          this.gridApi.setGridOption('rowData', this.gridData);
         },
         error: ({ error }: { error: ErrorResponse }) => {
           this.stopTest(error.message);
@@ -181,7 +181,7 @@ export class TestSettingsDialogComponent implements OnInit, OnDestroy {
       step_content: error ? error : 'Test was stopped.',
     };
     this.gridData = [...this.gridData, row];
-    this.gridApi.setRowData(this.gridData);
+    this.gridApi.setGridOption('rowData', this.gridData);
     this.testingSwitch = false;
     this.cd.markForCheck();
   }

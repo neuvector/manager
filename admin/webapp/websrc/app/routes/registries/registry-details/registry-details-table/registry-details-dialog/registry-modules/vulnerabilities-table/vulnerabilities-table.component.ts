@@ -75,7 +75,7 @@ export class VulnerabilitiesTableComponent implements OnInit, OnChanges {
       this.gridApi.sizeColumnsToFit();
     }
     if (changes.rowData && this.gridApi) {
-      this.gridApi.setRowData(changes.rowData.currentValue);
+      this.gridApi.setGridOption('rowData', changes.rowData.currentValue);
     }
   }
 

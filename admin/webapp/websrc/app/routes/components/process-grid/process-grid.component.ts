@@ -104,7 +104,7 @@ export class ProcessGridComponent implements OnInit, OnChanges {
       this.onResize();
     }
     if (changes.rowData && this.gridApi) {
-      this.gridApi.setRowData(changes.rowData.currentValue);
+      this.gridApi.setGridOption('rowData', changes.rowData.currentValue);
     }
   }
 
@@ -121,7 +121,7 @@ export class ProcessGridComponent implements OnInit, OnChanges {
     }
     this.gridApi.sizeColumnsToFit();
     if (this.rowData) {
-      this.gridApi.setRowData(this.rowData);
+      this.gridApi.setGridOption('rowData', this.rowData);
     }
   }
 

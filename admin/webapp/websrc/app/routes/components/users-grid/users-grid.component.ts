@@ -52,7 +52,7 @@ export class UsersGridComponent implements OnInit {
       this.domains = value.domains;
     }
     if (this.gridApi) {
-      this.gridApi.setRowData(this.rowData);
+      this.gridApi.setGridOption('rowData', this.rowData);
       this.gridApi.sizeColumnsToFit();
     }
     this.refreshing$.next(false);

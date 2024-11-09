@@ -418,9 +418,10 @@ export class UsersGridComponent implements OnInit {
         take(1),
         switchMap(() => this.settingsService.unlockUser(user)),
         finalize(() => {
+          let userInfo = this.rowData.filter(_user => _user.username === user)[0];
           updateGridData(
             this.rowData,
-            [{ username: user, blocked_for_failed_login: false }],
+            [{ ...userInfo, username: user, blocked_for_failed_login: false }],
             this.gridApi!,
             'username',
             'edit'
@@ -466,10 +467,12 @@ export class UsersGridComponent implements OnInit {
               this.tr.instant('user.resetPassword.RESET_OK')
             );
             resetDialogRef.componentInstance.onNoClick();
+            let userInfo = this.rowData.filter(user => user.username === userForm.username)[0];
             updateGridData(
               this.rowData,
               [
                 {
+                  ...userInfo,
                   username: userForm.username,
                   blocked_for_password_expired: false,
                 },

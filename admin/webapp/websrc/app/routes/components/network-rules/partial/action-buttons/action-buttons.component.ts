@@ -169,17 +169,17 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
         rule => rule.id === id
       );
     let row =
-      this.params.context.componentParent.gridOptions.api!.getDisplayedRowAtIndex(
+      this.params.context.componentParent.gridApi!.getRowNode(
         targetIndex
       );
     this.params.context.componentParent.networkRules[targetIndex].remove =
       isMaskOn;
-    this.params.context.componentParent.gridOptions.api!.redrawRows({
+    this.params.context.componentParent.gridApi!.redrawRows({
       rowNodes: [row],
     });
     this.networkRulesService.isNetworkRuleChanged = true;
     setTimeout(() => {
-      this.params.context.componentParent.gridOptions.api!.ensureIndexVisible(
+      this.params.context.componentParent.gridApi!.ensureIndexVisible(
         targetIndex,
         'top'
       );
@@ -197,17 +197,17 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
     this.params.context.componentParent.networkRules[indexAtCurr] = JSON.parse(
       JSON.stringify(this.networkRulesService.networkRuleBackup[indexAtBackup])
     );
-    this.params.context.componentParent.gridOptions.api!.setRowData(
+    this.params.context.componentParent.gridApi!.setRowData(
       this.params.context.componentParent.networkRules
     );
     this.networkRulesService.isNetworkRuleChanged = false;
     setTimeout(() => {
       let row =
-        this.params.context.componentParent.gridOptions.api!.getDisplayedRowAtIndex(
+        this.params.context.componentParent.gridApi!.getDisplayedRowAtIndex(
           indexAtCurr
         );
       row.setSelected(true);
-      this.params.context.componentParent.gridOptions.api!.ensureIndexVisible(
+      this.params.context.componentParent.gridApi!.ensureIndexVisible(
         indexAtCurr,
         'top'
       );
@@ -223,7 +223,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
     this.networkRulesService.promoteNetworkRulesData(payload).subscribe(
       res => {
         setTimeout(() => {
-          this.params.context.componentParent.gridOptions.api!.redrawRows();
+          this.params.context.componentParent.gridApi!.redrawRows();
         }, 2000);
       },
       err => {}

@@ -211,7 +211,7 @@ export class ApikeysGridComponent implements OnInit {
           updateGridData(
             this.rowData,
             [{ apikey_name: name }],
-            this.gridOptions.api!,
+            this.gridApi!,
             'apikey_name',
             'delete'
           );

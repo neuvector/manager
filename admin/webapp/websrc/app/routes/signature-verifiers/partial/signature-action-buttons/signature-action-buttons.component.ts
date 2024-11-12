@@ -50,8 +50,7 @@ export class SignatureActionButtonsComponent
           gridOptions4Signatures:
             this.params.context.componentParent.gridOptions4Signatures,
           index4Signature: this.params.context.componentParent.index4Signature,
-          gridApi:
-            this.params.context.componentParent.gridApi4Signatures!,
+          gridApi: this.params.context.componentParent.gridApi4Signatures!,
           sigstores: this.params.context.componentParent.signatures,
         },
       }

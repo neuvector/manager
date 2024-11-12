@@ -45,7 +45,6 @@ export class ComplianceItemsComponent {
       if (compliance.nodes.length) complianceDist.node += 1;
       if (compliance.workloads.length) complianceDist.container += 1;
     });
-    console.log('complianceDist',complianceDist)
     this.complianceDist = complianceDist;
   }
 }

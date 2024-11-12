@@ -65,6 +65,8 @@ export class RiskReportGridComponent implements OnInit {
     {
       headerName: this.tr.instant('general.LOCATION'),
       cellRenderer: 'locationCellRenderer',
+      comparator: (value1, value2, node1, node2) =>
+        node1.data.reported_at.localeCompare(node2.data.reported_at),
       width: 660,
     },
     {

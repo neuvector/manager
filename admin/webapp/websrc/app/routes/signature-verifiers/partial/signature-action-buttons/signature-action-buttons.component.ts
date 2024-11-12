@@ -51,7 +51,7 @@ export class SignatureActionButtonsComponent
             this.params.context.componentParent.gridOptions4Signatures,
           index4Signature: this.params.context.componentParent.index4Signature,
           gridApi:
-            this.params.context.componentParent.gridOptions4Signatures.api!,
+            this.params.context.componentParent.gridApi4Signatures!,
           sigstores: this.params.context.componentParent.signatures,
         },
       }
@@ -77,12 +77,12 @@ export class SignatureActionButtonsComponent
           updateGridData(
             this.params.context.componentParent.signatures,
             [data],
-            this.params.context.componentParent.gridOptions4Signatures.api!,
+            this.params.context.componentParent.gridApi4Signatures!,
             'name',
             'delete'
           );
           if (this.params.context.componentParent.signatures.length === 0)
-            this.params.context.componentParent.gridOptions4Verifiers.api!.setRowData(
+            this.params.context.componentParent.gridApi4Verifiers!.setRowData(
               []
             );
           this.params.context.componentParent.selectedSignature = null;

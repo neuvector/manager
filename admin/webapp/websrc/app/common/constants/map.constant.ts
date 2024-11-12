@@ -230,7 +230,7 @@ export class MapConstant {
     url: 'info',
     response: 'success',
     images: 'idle',
-    MANUAL: 'info',
+    MANUAL: 'manual',
   };
 
   public static responseRuleActionMap = {

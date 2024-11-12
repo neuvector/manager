@@ -1400,6 +1400,11 @@ ngx-avatar.userIcon img.avatar-content {
   background-color: #d9534f;
 }
 
+.badge-manual {
+  color: #fff;
+  background-color: $mdc-blue-900;
+}
+
 .hide {
   visibility: hidden;
   width: 0;

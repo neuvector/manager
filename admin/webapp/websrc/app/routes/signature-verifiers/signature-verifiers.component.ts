@@ -231,32 +231,34 @@ export class SignatureVerifiersComponent implements OnInit {
     this.selectedSignatures = this.gridApi4Signatures!.getSelectedRows();
     this.selectedSignature = this.selectedSignatures[0];
     this.index4Signature = this.signatures.findIndex(
-      signature => signature.name === this.selectedSignature.name
+      signature => signature.name === this.selectedSignature?.name
     );
-    this.getVeirfier(this.selectedSignature.name);
+    this.getVeirfier(this.selectedSignature?.name);
   };
   private onSelectionChanged4Verifier = () => {
     this.selectedVerifier = this.gridApi4Verifiers!.getSelectedRows()[0];
     this.index4Verifier = this.verifiers.findIndex(
-      verifier => verifier.name === this.selectedVerifier.name
+      verifier => verifier.name === this.selectedVerifier?.name
     );
   };
 
   private getVeirfier = (sigstoreName: string) => {
-    this.signaturesService.getVerifiersData(sigstoreName).subscribe(
-      (response: any) => {
-        setTimeout(() => {
-          this.verifiers = response.verifiers || [];
-          this.gridApi4Verifiers!.setRowData(this.verifiers);
-          if (this.verifiers.length > 0) {
-            let rowNode = this.gridApi4Verifiers!.getDisplayedRowAtIndex(0);
-            rowNode!.setSelected(true);
-            this.gridApi4Verifiers!.sizeColumnsToFit();
-          }
-        }, 200);
-      },
-      error => {}
-    );
+    if (sigstoreName) {
+      this.signaturesService.getVerifiersData(sigstoreName).subscribe(
+        (response: any) => {
+          setTimeout(() => {
+            this.verifiers = response.verifiers || [];
+            this.gridApi4Verifiers!.setRowData(this.verifiers);
+            if (this.verifiers.length > 0) {
+              let rowNode = this.gridApi4Verifiers!.getDisplayedRowAtIndex(0);
+              rowNode!.setSelected(true);
+              this.gridApi4Verifiers!.sizeColumnsToFit();
+            }
+          }, 200);
+        },
+        error => {}
+      );
+    }
   };
 
   private convertAPIResponse = (response: any): any[] => {

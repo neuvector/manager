@@ -66,7 +66,9 @@ export class VulnerabilitiesComponent implements OnDestroy {
       ...this.vulnerabilitiesFilterService.vulQuerySubject$.value,
       viewType: this.selectedView,
     });
-    this.refresh();
+    setTimeout(() => {
+      this.refresh();
+    }, 300);
   }
 
   refresh() {

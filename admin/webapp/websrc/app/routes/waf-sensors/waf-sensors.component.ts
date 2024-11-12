@@ -299,7 +299,7 @@ export class WafSensorsComponent implements OnInit {
     setTimeout(() => {
       this.gridApi4Rules!.setRowData(this.selectedSensor?.rules || []);
       this.gridApi4Patterns!.setRowData([]);
-      if (this.selectedSensor?.rules.length > 0) {
+      if (this.selectedSensor?.rules?.length > 0) {
         let rowNode = this.gridApi4Rules!.getDisplayedRowAtIndex(0);
         rowNode!.setSelected(true);
         this.gridApi4Rules!.sizeColumnsToFit();

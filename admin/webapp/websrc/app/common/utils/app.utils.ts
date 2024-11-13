@@ -453,6 +453,7 @@ export class UtilsService {
         .get('Content-Disposition')
         .split('=')[1]
         .trim()
+        .replace(/^"|"$/g, '')
         .split('.');
       return `${filename[0]}_${this.parseDatetimeStr(new Date())}.${
         filename[1]

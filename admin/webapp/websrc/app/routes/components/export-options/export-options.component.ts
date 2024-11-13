@@ -12,6 +12,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class ExportOptionsComponent implements OnInit {
   @Input() exportOptions: FormGroup | undefined;
   @Input() exportFileName: string | undefined;
+  @Input() source: string;
 
   exportOptionsForm!: FormGroup;
   remoteRepoEnabled = false;

@@ -22,6 +22,12 @@ import scala.concurrent.Future
 import scala.util.Failure
 import scala.util.Success
 
+case class HttpResponseException(
+  statusCode: Int,
+  reason: String,
+  response: HttpResponse
+) extends RuntimeException(s"Status: $statusCode, Reason: $reason, Response: $response")
+
 trait ClientSslConfig extends LazyLogging {
 
   implicit lazy val httpsContext: HttpsConnectionContext = ConnectionContext.httpsClient {
@@ -71,8 +77,16 @@ trait ClientSslConfig extends LazyLogging {
       .runWith(Sink.head)
       .flatMap {
         case (Success(response: HttpResponse), _) =>
-          logger.info(s"Received Response - Success\n$response")
-          Future.successful(response)
+          response.status match {
+            case status if status.isSuccess() || status.isRedirection =>
+              logger.info(s"Received Response - Success\n$response")
+              Future.successful(response)
+            case status                                               =>
+              logger.info(
+                s"Received Response - Failure\nStatusCode: ${status.intValue()} Reason: ${status.reason()}\n$response"
+              )
+              Future.failed(HttpResponseException(status.intValue(), status.reason(), response))
+          }
         case (Failure(exception), _)              =>
           logger.info(s"Received Response - Failure\n$exception")
           Future.failed(exception)

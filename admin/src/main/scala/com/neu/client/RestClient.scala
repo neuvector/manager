@@ -1,11 +1,9 @@
 package com.neu.client
 
-import com.neu.core.AuthenticationManager
-import com.neu.core.ClientSslConfig
 import com.neu.core.CommonSettings.*
+import com.neu.core.{ AuthenticationManager, ClientSslConfig }
 import com.neu.service.DefaultJsonFormats
-import com.neu.web.Rest.executionContext
-import com.neu.web.Rest.system
+import com.neu.web.Rest.{ executionContext, system }
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.http.scaladsl.coding.Coders
@@ -15,13 +13,10 @@ import org.apache.pekko.http.scaladsl.unmarshalling.*
 import org.apache.pekko.stream.Materializer
 import spray.json.*
 
-import java.io.PrintWriter
-import java.io.StringWriter
+import java.io.{ PrintWriter, StringWriter }
 import java.net.InetAddress
-import scala.concurrent.Await
-import scala.concurrent.ExecutionContext
-import scala.concurrent.Future
 import scala.concurrent.duration.*
+import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.util.control.NonFatal
 
 object Constant {
@@ -148,12 +143,9 @@ class RestClient()(using
     method: HttpMethod = HttpMethods.GET,
     data: String = "",
     suseToken: String = ""
-  ): Future[String] = {
-    val request =
-      createHttpRequest(uri, method, data).addHeader(RawHeader(X_SUSE_TOKEN, suseToken))
-    sendAndReceive(request).flatMap { response =>
-      response.entity.toStrict(5.seconds).map(_.data.utf8String)
-    }
+  ): Future[HttpResponse] = {
+    val request = createHttpRequest(uri, method, data).addHeader(RawHeader(X_SUSE_TOKEN, suseToken))
+    sendAndReceive(request)
   }
 
   def httpRequestWithHeader(

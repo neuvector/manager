@@ -3,7 +3,7 @@ package com.neu.service.authentication
 import com.neu.cache.paginationCacheManager
 import com.neu.client.RestClient
 import com.neu.client.RestClient.*
-import com.neu.core.AuthenticationManager
+import com.neu.core.{ AuthenticationManager, HttpResponseException }
 import com.neu.model.AuthTokenJsonProtocol.{ *, given }
 import com.neu.model.*
 import org.apache.pekko.actor.ActorSystem
@@ -27,6 +27,8 @@ class SuseAuthService()(implicit
   ec: ExecutionContext
 ) extends AuthService {
 
+  private val suseCookieName = "R_SESS"
+
   override def getResources(
     code: Option[String],
     state: Option[String],
@@ -46,7 +48,7 @@ class SuseAuthService()(implicit
     }
 
   override def login(ip: RemoteAddress, host: String, ctx: RequestContext): Route = {
-    val suseCookieOpt              = ctx.request.cookies.find(_.name == "session")
+    val suseCookieOpt              = ctx.request.cookies.find(_.name == suseCookieName)
     val bodyFuture: Future[String] = ctx.request.entity match {
       case HttpEntity.Strict(_, data) =>
         Future.successful(data.utf8String)
@@ -81,6 +83,7 @@ class SuseAuthService()(implicit
     } catch {
       case NonFatal(e)         =>
         logger.warn(e.getMessage)
+
         if (
           e.getMessage
             .contains("Status: 400") || e.getMessage.contains("Status: 401") || e.getMessage
@@ -207,22 +210,36 @@ class SuseAuthService()(implicit
         suseCookie
       )
     val response   = Await.result(result, RestClient.waitingLimit.seconds)
-    var authToken  = AuthenticationManager.parseToken(response)
-    authToken = UserTokenNew(
-      authToken.token,
-      authToken.emailHash,
-      authToken.roles,
-      authToken.login_timestamp,
-      authToken.need_to_reset_password,
-      suseCookie.nonEmpty
-    )
-    authToken.token match {
-      case Some(token) =>
-        AuthenticationManager.suseTokenMap += (token.token -> suseCookie)
-        logger.info("login with SUSE cookie")
-      case None        =>
-    }
 
-    complete(authToken)
+    response.status match {
+      case status if status.isSuccess =>
+        val successResponse = Await.result(
+          response.entity.toStrict(5.seconds).map(_.data.utf8String),
+          RestClient.waitingLimit.seconds
+        )
+        var authToken       = AuthenticationManager.parseToken(successResponse)
+        authToken = UserTokenNew(
+          authToken.token,
+          authToken.emailHash,
+          authToken.roles,
+          authToken.login_timestamp,
+          authToken.need_to_reset_password,
+          suseCookie.nonEmpty
+        )
+        authToken.token match {
+          case Some(token) =>
+            AuthenticationManager.suseTokenMap += (token.token -> suseCookie)
+            logger.info("login with SUSE cookie")
+          case None        =>
+        }
+
+        complete(authToken)
+      case status                     =>
+        throw HttpResponseException(
+          status.intValue,
+          status.reason(),
+          response
+        )
+    }
   }
 }

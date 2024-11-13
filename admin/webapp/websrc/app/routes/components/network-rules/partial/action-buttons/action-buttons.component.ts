@@ -169,9 +169,7 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
         rule => rule.id === id
       );
     let row =
-      this.params.context.componentParent.gridApi!.getRowNode(
-        targetIndex
-      );
+      this.params.context.componentParent.gridApi!.getRowNode(targetIndex);
     this.params.context.componentParent.networkRules[targetIndex].remove =
       isMaskOn;
     this.params.context.componentParent.gridApi!.redrawRows({

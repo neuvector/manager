@@ -10,8 +10,8 @@ import com.neu.api.policy.PolicyApi
 import com.neu.api.risk.RiskApi
 import com.neu.api.sigstore.SigstoreApi
 import com.neu.api.workload.WorkloadApi
-import com.neu.core.Core
-import com.neu.core.CoreActors
+import com.neu.client.RestClient.handleError
+import com.neu.core.{ Core, CoreActors, HttpResponseException }
 import com.neu.service.*
 import com.neu.service.authentication.AuthProvider
 import com.neu.service.authentication.AuthService
@@ -26,8 +26,8 @@ import com.neu.service.policy.PolicyService
 import com.neu.service.risk.RiskService
 import com.neu.service.sigstore.SigstoreService
 import com.neu.service.workload.WorkloadService
-import org.apache.pekko.http.scaladsl.server.Directives
-import org.apache.pekko.http.scaladsl.server.Route
+import org.apache.pekko.http.scaladsl.model.{ ContentTypes, HttpEntity, HttpResponse }
+import org.apache.pekko.http.scaladsl.server.{ Directives, ExceptionHandler, Route }
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -37,6 +37,30 @@ import scala.concurrent.ExecutionContext.Implicits.global
  * access to the top-level actors that make up the system.
  */
 trait Api extends Directives with CoreActors with Core {
+
+  private final val timeOutStatus              = "Status: 408"
+  private final val authenticationFailedStatus = "Status: 401"
+  private final val serverErrorStatus          = "Status: 503"
+
+  implicit def exceptionHandler: ExceptionHandler =
+    ExceptionHandler {
+      case e: HttpResponseException =>
+        complete(
+          HttpResponse(
+            status = e.statusCode,
+            entity = HttpEntity(ContentTypes.`application/json`, e.reason)
+          )
+        )
+      case e: Exception             =>
+        val (status, message) =
+          handleError(timeOutStatus, authenticationFailedStatus, serverErrorStatus, e)
+        complete(
+          HttpResponse(
+            status = status,
+            entity = HttpEntity(ContentTypes.`application/json`, message)
+          )
+        )
+    }
 
   private val authServiceFactory                 = new AuthServiceFactory()
   private val openIdAuthService: AuthService     =
@@ -66,7 +90,7 @@ trait Api extends Directives with CoreActors with Core {
   private val sigstoreApi       = new SigstoreApi(sigstoreService)
   private val workloadApi       = new WorkloadApi(workloadService)
 
-  val routes: Route =
+  val routes: Route = handleExceptions(exceptionHandler) {
     authenticationApi.route ~
     dashboardApi.route ~
     clusterApi.route ~
@@ -77,4 +101,5 @@ trait Api extends Directives with CoreActors with Core {
     riskApi.route ~
     sigstoreApi.route ~
     workloadApi.route
+  }
 }

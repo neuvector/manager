@@ -1,5 +1,5 @@
 <div class="mx-3 mt-3" [formGroup]="exportOptionsForm">
-  <div class="clearfix margin-top-m">
+  <div class="clearfix margin-top-m" *ngIf="source === 'group'">
     <label class="pull-left text-bold margin-right-m">{{
       'group.POLICY_MODE' | translate
     }}</label>
@@ -36,7 +36,7 @@
       }}</mat-radio-button>
     </mat-radio-group>
   </div>
-  <hr />
+  <hr *ngIf="source === 'group'"/>
   <mat-radio-group formControlName="export_mode" class="d-flex flex-column">
     <mat-radio-button value="local"
       >{{ 'setting.remote_repository.options.destination_local' | translate }}

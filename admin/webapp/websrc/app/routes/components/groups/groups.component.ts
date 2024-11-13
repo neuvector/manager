@@ -397,6 +397,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
       disableClose: true,
       data: {
         filename: GlobalConstant.REMOTE_EXPORT_FILENAME.GROUP,
+        source: 'group',
       },
     });
 

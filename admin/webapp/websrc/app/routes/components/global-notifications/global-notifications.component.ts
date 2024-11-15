@@ -202,10 +202,11 @@ export class GlobalNotificationsComponent implements OnInit {
       .getVersion()
       .pipe(
         map(version => {
-          if (version && version[0] === 'v') {
-            return version.substring(1);
+          let _version = version.replace(/^\"|\"$/g, "");
+          if (_version && _version[0] === 'v') {
+            return _version.substring(1);
           }
-          return version;
+          return _version;
         })
       )
       .subscribe({

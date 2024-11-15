@@ -325,8 +325,13 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   };
 
   private getServiceRules = () => {
-    this.groupsService
-      .getService(this.groupName)
+    let httpService = '';
+    if (this.groupName === 'nodes') {
+      httpService = 'getGroupInfo';
+    } else {
+      httpService = 'getService';
+    }
+    this.groupsService[httpService](this.groupName)
       .pipe(finalize(() => this.refreshing$.next(false)))
       .subscribe({
         next: service => {

@@ -62,7 +62,7 @@ export class CustomCheckActionButtonComponent
             updateGridData(
               this.params.context.componentParent.customCheckScripts,
               [data],
-              this.params.context.componentParent.gridOptions4CustomCheck.api!,
+              this.params.context.componentParent.gridApi!,
               'name',
               'delete'
             );

@@ -201,6 +201,9 @@ export class CustomCheckComponent implements OnInit {
         this.notificationService.open(
           this.translate.instant('group.script.msg.SCRIPT_OK')
         );
+        if (!this.customCheckScripts) {
+          this.customCheckScripts = [];
+        }
         updateGridData(
           this.customCheckScripts,
           payload.config[

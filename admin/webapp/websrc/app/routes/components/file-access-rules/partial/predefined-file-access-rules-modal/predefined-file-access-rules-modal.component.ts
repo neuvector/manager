@@ -1,10 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FileAccessRulesService } from '@services/file-access-rules.service';
-import { GridOptions } from 'ag-grid-community';
+import { GridOptions, GridApi } from 'ag-grid-community';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { UtilsService } from '@common/utils/app.utils';
 import { TranslateService } from '@ngx-translate/core';
+import { GlobalVariable } from '@common/variables/global.variable';
 
 @Component({
   selector: 'app-predefined-file-access-rules-modal',
@@ -15,6 +16,7 @@ export class PredefinedFileAccessRulesModalComponent implements OnInit {
   public gridOptions4PredefinedFileAccessRules: GridOptions;
   public predefinedFileAccessRules: [];
   public gridHeight: number = 300;
+  public gridApi: GridApi;
   constructor(
     public dialogRef: MatDialogRef<PredefinedFileAccessRulesModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -38,6 +40,24 @@ export class PredefinedFileAccessRulesModalComponent implements OnInit {
         false,
         this.data.source
       ).gridOptions4PredefinedFileAccessRules;
+    this.gridOptions4PredefinedFileAccessRules.onGridReady = params => {
+      const $win = $(GlobalVariable.window);
+      if (params && params.api) {
+        this.gridApi = params.api;
+      }
+      setTimeout(() => {
+        if (params && params.api) {
+          params.api.sizeColumnsToFit();
+        }
+      }, 300);
+      $win.on(GlobalConstant.AG_GRID_RESIZE, () => {
+        setTimeout(() => {
+          if (params && params.api) {
+            params.api.sizeColumnsToFit();
+          }
+        }, 100);
+      });
+    };
     this.getPredefinedFileAccessRules();
   }
 

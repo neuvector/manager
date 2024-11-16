@@ -64,7 +64,7 @@ export class OperationCellComponent implements ICellRendererAngularComp {
             this.params.context.componentParent.predefinedFileAccessRules,
             [predefinedRule],
             this.params.context.componentParent
-              .gridOptions4PredefinedFileAccessRules.api!,
+              .gridApi!,
             'filter',
             'delete'
           );

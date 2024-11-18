@@ -28,6 +28,11 @@ import scala.reflect.ClassTag
  */
 trait DefaultJsonFormats extends DefaultJsonProtocol {
 
+  implicit val stringMarshaller: ToEntityMarshaller[String] =
+    Marshaller.withFixedContentType(ContentTypes.`text/plain(UTF-8)`) { str =>
+      HttpEntity(ContentTypes.`text/plain(UTF-8)`, str)
+    }
+
   implicit val stringUnmarshaller: FromEntityUnmarshaller[String] = Unmarshaller.stringUnmarshaller
 
   // JSON marshalling and unmarshalling support

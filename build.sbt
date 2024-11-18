@@ -28,7 +28,7 @@ lazy val buildSettings = Seq(
     "-unchecked",            // warn about unchecked type parameters
     "-feature",              // warn about misused language features
     "-language:higherKinds", // allow higher kinded types without `import scala.language.higherKinds`
-    "-source:future",         // enable future language features
+    "-source:future",        // enable future language features
     "-Wunused:all"           // add required compiler option for RemoveUnused[1]
   ),
   Compile / console / scalacOptions --= Seq("-Ywarn-unused", "-Ywarn-unused-import")
@@ -56,6 +56,24 @@ lazy val commonDependencies = Seq(
   "org.apache.commons" % "commons-csv"        % "1.10.0"
 )
 
+lazy val commonSettings = Seq(
+  javaOptions ++= Seq(
+    "--add-opens=java.base/java.lang=ALL-UNNAMED",
+    "--add-opens=java.base/java.util=ALL-UNNAMED",
+    "--add-opens=java.base/java.io=ALL-UNNAMED"
+  ),
+  Test / javaOptions ++= Seq(
+    "--add-opens=java.base/java.lang=ALL-UNNAMED",
+    "--add-opens=java.base/java.util=ALL-UNNAMED",
+    "--add-opens=java.base/java.io=ALL-UNNAMED"
+  ),
+  run / javaOptions ++= Seq(
+    "--add-opens=java.base/java.lang=ALL-UNNAMED",
+    "--add-opens=java.base/java.util=ALL-UNNAMED",
+    "--add-opens=java.base/java.io=ALL-UNNAMED"
+  )
+)
+
 lazy val buil1dSettings = Defaults.coreDefaultSettings ++ Seq(
   scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-target:jvm-1.7"),
   libraryDependencies                        := Seq(scalaTest),
@@ -80,6 +98,7 @@ lazy val common = (project in file("common"))
   .settings(
     name        := "common",
     buildSettings,
+    commonSettings,
     promptTheme := ScalapenosTheme,
     libraryDependencies ++= commonDependencies
   )
@@ -89,6 +108,7 @@ lazy val admin = (project in file("admin"))
   .settings(
     name        := "admin",
     buildSettings,
+    commonSettings,
     promptTheme := ScalapenosTheme,
     libraryDependencies += pekkoHttp,
     libraryDependencies += pekkoJson,

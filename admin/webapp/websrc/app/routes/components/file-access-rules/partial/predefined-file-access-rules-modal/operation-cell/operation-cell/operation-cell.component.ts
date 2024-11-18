@@ -63,8 +63,7 @@ export class OperationCellComponent implements ICellRendererAngularComp {
           updateGridData(
             this.params.context.componentParent.predefinedFileAccessRules,
             [predefinedRule],
-            this.params.context.componentParent
-              .gridApi!,
+            this.params.context.componentParent.gridApi!,
             'filter',
             'delete'
           );

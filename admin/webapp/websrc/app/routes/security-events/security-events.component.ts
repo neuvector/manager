@@ -30,6 +30,7 @@ import {
 import { TranslateService } from '@ngx-translate/core';
 import { arrayToCsv } from '@common/utils/common.utils';
 import { saveAs } from 'file-saver';
+import _ from 'lodash';
 
 @Component({
   selector: 'app-security-events',
@@ -70,6 +71,8 @@ export class SecurityEventsComponent
   printableData: any[] = [];
   isPrinting: boolean = false;
   rowLimit4Report: number = MapConstant.REPORT_TABLE_ROW_LIMIT;
+  autoRefreshInterval;
+  AUTO_FREFRESH_INTERVAL = 60000;
 
   @ViewChild('securityEventsPrintableReport') printableReportView!: ElementRef;
 
@@ -146,6 +149,7 @@ export class SecurityEventsComponent
         byEventType: this.translate.instant('securityEvent.pdf.TYPEDIST'),
       },
     };
+    this.autoRefresh();
   }
 
   ngAfterViewInit() {
@@ -154,7 +158,14 @@ export class SecurityEventsComponent
 
   ngOnDestroy() {
     this.advancedFilterModalService.resetFilter();
+    clearInterval(this.autoRefreshInterval);
   }
+
+  autoRefresh = () => {
+    this.autoRefreshInterval = setInterval(() => {
+      this.preprocessSecurityEventsData();
+    }, this.AUTO_FREFRESH_INTERVAL);
+  };
 
   refresh = () => {
     this.isDataReady = false;
@@ -824,11 +835,11 @@ export class SecurityEventsComponent
           editSecEventTime - getIpGeoInfoTime
         );
 
-        this.securityEventsService.cachedSecurityEvents =
-          this.securityEventsService.cachedSecurityEvents
-            .concat(this.threatList)
-            .concat(this.violationList)
-            .concat(this.incidentList);
+        let mergedSecEvents = [].concat(this.threatList)
+          .concat(this.violationList)
+          .concat(this.incidentList);
+
+        this.securityEventsService.cachedSecurityEvents = _.cloneDeep(mergedSecEvents);
 
         let mergeSecEventTime = new Date().getTime();
         console.log(
@@ -871,9 +882,7 @@ export class SecurityEventsComponent
               )!
             );
           } else {
-            this.securityEventsService.displayedSecurityEvents = JSON.parse(
-              JSON.stringify(this.securityEventsService.cachedSecurityEvents)
-            );
+            this.securityEventsService.displayedSecurityEvents = _.cloneDeep(this.securityEventsService.cachedSecurityEvents);
             this.printableData = this.getPrintableData(
               this.securityEventsService.displayedSecurityEvents
             );

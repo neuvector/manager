@@ -835,11 +835,13 @@ export class SecurityEventsComponent
           editSecEventTime - getIpGeoInfoTime
         );
 
-        let mergedSecEvents = [].concat(this.threatList)
+        let mergedSecEvents = []
+          .concat(this.threatList)
           .concat(this.violationList)
           .concat(this.incidentList);
 
-        this.securityEventsService.cachedSecurityEvents = _.cloneDeep(mergedSecEvents);
+        this.securityEventsService.cachedSecurityEvents =
+          _.cloneDeep(mergedSecEvents);
 
         let mergeSecEventTime = new Date().getTime();
         console.log(
@@ -882,7 +884,9 @@ export class SecurityEventsComponent
               )!
             );
           } else {
-            this.securityEventsService.displayedSecurityEvents = _.cloneDeep(this.securityEventsService.cachedSecurityEvents);
+            this.securityEventsService.displayedSecurityEvents = _.cloneDeep(
+              this.securityEventsService.cachedSecurityEvents
+            );
             this.printableData = this.getPrintableData(
               this.securityEventsService.displayedSecurityEvents
             );

@@ -74,16 +74,16 @@ lazy val commonSettings = Seq(
   )
 )
 
-lazy val buil1dSettings = Defaults.coreDefaultSettings ++ Seq(
-  scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-target:jvm-1.7"),
-  libraryDependencies                        := Seq(scalaTest),
-  libraryDependencies += "javax.activation"   % "activation"         % "1.1.1",
-  libraryDependencies += "org.glassfish.jaxb" % "jaxb-runtime"       % "4.0.5",
-  libraryDependencies += "javax.xml.bind"     % "jaxb-api"           % "2.3.1",
-  libraryDependencies += "com.sun.xml.ws"     % "jaxws-ri"           % "4.0.2",
-  libraryDependencies += "javax.xml.soap"     % "javax.xml.soap-api" % "1.4.0",
-  libraryDependencies += "org.json4s"        %% "json4s-native"      % "4.0.7"
-)
+// lazy val buil1dSettings = Defaults.coreDefaultSettings ++ Seq(
+//   scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-target:jvm-1.7"),
+//   libraryDependencies                        := Seq(scalaTest),
+//   libraryDependencies += "javax.activation"   % "activation"         % "1.1.1",
+//   libraryDependencies += "org.glassfish.jaxb" % "jaxb-runtime"       % "4.0.5",
+//   libraryDependencies += "javax.xml.bind"     % "jaxb-api"           % "2.3.1",
+//   libraryDependencies += "com.sun.xml.ws"     % "jaxws-ri"           % "4.0.2",
+//   libraryDependencies += "javax.xml.soap"     % "javax.xml.soap-api" % "1.4.0",
+//   libraryDependencies += "org.json4s"        %% "json4s-native"      % "4.0.7"
+// )
 
 lazy val manager = (project in file("."))
   .aggregate(common, admin)

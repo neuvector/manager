@@ -119,17 +119,21 @@ def detail(data, name):
 
 
 @show_waf.group("sensor", invoke_without_command=True)
+@click.option('--scope', default='all', type=click.Choice(['fed', 'local', 'all']),
+              help="Show federal, local or all waf sensors")
 @click.option("--page", default=5, type=click.IntRange(1), help="list page size, default=5")
 @click.option('--sort_dir', type=click.Choice(['asc', 'desc']), default='asc',
               help="sort direction.")
 @click.pass_obj
 @click.pass_context
-def show_waf_sensor(ctx, data, page, sort_dir):
+def show_waf_sensor(ctx, data, scope, page, sort_dir):
     """Show waf sensors."""
     if ctx.invoked_subcommand is not None:
         return
 
     args = {'start': 0, 'limit': page}
+    if scope == 'fed' or scope == 'local':
+        args["scope"] = scope
     while True:
         drs = data.client.list("waf/sensor", "sensor", **args)
         for dr in drs:
@@ -261,12 +265,16 @@ def create_waf(data):
 @create_waf.group("sensor")
 @click.argument('name')
 @click.option("--comment", default="", help="Sensor comment")
+@click.option('--scope', default="local", type=click.Choice(['fed', 'local']), show_default=True,
+              help="It's a local or federal waf sensor")
 @click.pass_obj
-def create_waf_sensor(data, name, comment):
+def create_waf_sensor(data, name, comment, scope):
     """Create waf sensor."""
     data.id_or_name = name
     data.comment = comment
-
+    data.cfg_type = client.UserCreatedCfg
+    if scope == "fed":
+        data.cfg_type = client.FederalCfg
 
 @create_waf_sensor.command("rule")
 @click.argument('name')
@@ -288,7 +296,7 @@ def create_waf_sensor_rule(data, name, pattern, context):
         return
 
     rule = {"name": name, "patterns": pct}
-    cfg = {"name": data.id_or_name, "rules": [rule], "comment": data.comment}
+    cfg = {"name": data.id_or_name, "rules": [rule], "comment": data.comment, "cfg_type": data.cfg_type}
     data.client.create("waf/sensor", {"config": cfg})
 
 

@@ -43,7 +43,7 @@ trait ClientSslConfig extends LazyLogging {
     context
   }
 
-  private final val SENSITIVE_HEADER = Set("X-Auth-Token", "Authorization")
+  private final val SENSITIVE_HEADER = Set("X-R-Sess", "X-Auth-Token", "Authorization")
 
   def sendReceiver(using
     system: ActorSystem,

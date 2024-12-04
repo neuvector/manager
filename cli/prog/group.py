@@ -234,17 +234,21 @@ def _list_dlp_group_display_format(group):
 
 
 @show_group.group("dlp", invoke_without_command=True)
+@click.option('--scope', default='all', type=click.Choice(['fed', 'local', 'all']),
+              help="Show federal, local or all groups")
 @click.option("--page", default=5, type=click.IntRange(1), help="list page size, default=5")
 @click.option('--sort_dir', type=click.Choice(['asc', 'desc']), default='asc',
               help="sort direction.")
 @click.pass_obj
 @click.pass_context
-def show_group_dlp(ctx, data, page, sort_dir):
+def show_group_dlp(ctx, data, scope, page, sort_dir):
     """Show dlp groups."""
     if ctx.invoked_subcommand is not None:
         return
 
     args = {'start': 0, 'limit': page}
+    if scope == 'fed' or scope == 'local':
+        args["scope"] = scope
     while True:
         drs = data.client.list("dlp/group", "dlp_group", **args)
         if drs == None:
@@ -326,17 +330,21 @@ def _list_waf_group_display_format(group):
 
 
 @show_group.group("waf", invoke_without_command=True)
+@click.option('--scope', default='all', type=click.Choice(['fed', 'local', 'all']),
+              help="Show federal, local or all groups")
 @click.option("--page", default=5, type=click.IntRange(1), help="list page size, default=5")
 @click.option('--sort_dir', type=click.Choice(['asc', 'desc']), default='asc',
               help="sort direction.")
 @click.pass_obj
 @click.pass_context
-def show_group_waf(ctx, data, page, sort_dir):
+def show_group_waf(ctx, data, scope, page, sort_dir):
     """Show waf groups."""
     if ctx.invoked_subcommand is not None:
         return
 
     args = {'start': 0, 'limit': page}
+    if scope == 'fed' or scope == 'local':
+        args["scope"] = scope
     while True:
         drs = data.client.list("waf/group", "waf_group", **args)
         if drs == None:

@@ -3,6 +3,7 @@ ARG BASE_IMAGE_TAG
 FROM neuvector/${BASE_PREFIX}manager_base:${BASE_IMAGE_TAG}
 
 COPY stage /
+COPY stage/usr/lib/jvm/java-17-openjdk/lib/security/java.security /usr/lib64/jvm/java-17-openjdk-17/conf/security/java.security
 
 ARG NV_TAG
 LABEL name="manager" \

@@ -74,7 +74,8 @@ security.provider.6=sun.security.jgss.SunProvider
 security.provider.7=com.sun.security.sasl.Provider
 security.provider.8=org.jcp.xml.dsig.internal.dom.XMLDSigRI
 security.provider.9=sun.security.smartcardio.SunPCSC
-security.provider.10=sun.security.pkcs11.SunPKCS11 ${java.home}/lib/security/nss.cfg
+security.provider.10=sun.security.pkcs11.SunPKCS11 /usr/lib64/jvm/java-17-openjdk-17/conf/security/nss.fips.cfg
+security.provider.11=org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider
 
 #
 # Sun Provider SecureRandom seed source.

@@ -1,0 +1,57 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # write is needed for:
+      # - OIDC for cosign's use in ecm-distro-tools/publish-image.
+      # - Read vault secrets in rancher-eio/read-vault-secrets.
+      id-token: write
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Load Secrets from Vault
+      uses: rancher-eio/read-vault-secrets@main
+      with:
+        secrets: |
+          secret/data/github/repo/${{ github.repository }}/dockerhub/neuvector/credentials username | DOCKER_USERNAME ;
+          secret/data/github/repo/${{ github.repository }}/dockerhub/neuvector/credentials password | DOCKER_PASSWORD ;
+          secret/data/github/repo/${{ github.repository }}/rancher-prime-registry/credentials registry | PRIME_REGISTRY ;
+          secret/data/github/repo/${{ github.repository }}/rancher-prime-registry/credentials username | PRIME_REGISTRY_USERNAME ;
+          secret/data/github/repo/${{ github.repository }}/rancher-prime-registry/credentials password | PRIME_REGISTRY_PASSWORD
+
+    - name: Publish manifest
+      uses: rancher/ecm-distro-tools/actions/publish-image@master
+      with:
+        image: neuvector-manager
+        tag: ${{ github.ref_name }}
+        platforms: linux/amd64,linux/arm64
+
+        public-registry: docker.io
+        public-repo: rancher
+        public-username: ${{ env.DOCKER_USERNAME }}
+        public-password: ${{ env.DOCKER_PASSWORD }}
+
+        prime-registry: ${{ env.PRIME_REGISTRY }}
+        prime-repo: rancher
+        prime-username: ${{ env.PRIME_REGISTRY_USERNAME }}
+        prime-password: ${{ env.PRIME_REGISTRY_PASSWORD }}
+    - name: Login to registry
+      uses: docker/login-action@v3
+      with:
+        registry: docker.io
+        username: ${{ secrets.NV_DOCKER_USERNAME }}
+        password: ${{ secrets.NV_DOCKER_PASSWORD }}
+    - name: Publish neuvector
+      run: |
+        docker buildx imagetools create --tag docker.io/neuvector/manager:${{ github.ref_name }} docker.io/rancher/neuvector-manager:${{ github.ref_name }}

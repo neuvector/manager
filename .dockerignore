@@ -1,0 +1,68 @@
+*.class
+*.log
+apis.yaml
+docker-compose.yml
+
+# sbt specific
+.cache
+.history
+.lib/
+target/
+lib_managed/
+src_managed/
+project/boot/
+project/plugins/project/
+
+# Scala-IDE specific
+.scala_dependencies
+.worksheet
+*.sc
+
+#IntelliJ specific
+.idea
+
+# eclipse specific
+*.pydevproject
+.project
+.metadata
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
+.loadpath
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+# Downloaded dependencies
+
+*.DS_Store
+.DS_Store
+
+.sass-cache
+.sass-cache/*
+
+.vscode/
+admin/webapp/.bsp/
+admin/webapp/websrc/.bsp/
+token.json
+
+.metals
+admin/test/REST_API/output
+admin/webapp/root
+admin/webapp/.angular
+/.bsp/*
+/admin/.angular/
+/admin/webapp/websrc/assets/mockdata
+/admin/webapp/package-lock.json
+admin/webapp/websrc/assets/i18n/en.json
+admin/webapp/websrc/assets/i18n/zh_cn.json

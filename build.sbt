@@ -44,6 +44,8 @@ lazy val commonDependencies = Seq(
   "org.json4s"        %% "json4s-native"      % "4.0.7",
   "org.bouncycastle"   % "bcprov-jdk18on"     % "1.78.1",
   "org.bouncycastle"   % "bcpkix-jdk18on"     % "1.78.1",
+  "org.bouncycastle"   % "bctls-jdk18on"      % "1.78.1",
+  "org.bouncycastle"   % "bc-fips"            % "1.0.2.5",
   pekkoActor,
   typesafeConfig,
   joda,

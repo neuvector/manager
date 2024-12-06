@@ -7,6 +7,7 @@ import org.bouncycastle.asn1.x509.*
 import org.bouncycastle.asn1.{ ASN1InputStream, ASN1Integer, ASN1Sequence }
 import org.bouncycastle.cert.jcajce.{ JcaX509CertificateConverter, JcaX509v3CertificateBuilder }
 import org.bouncycastle.jce.provider.BouncyCastleProvider
+import org.bouncycastle.jsse.provider.BouncyCastleJsseProvider
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder
 import org.bouncycastle.util.io.pem.{ PemObject, PemWriter }
 
@@ -26,6 +27,11 @@ trait MySslConfiguration extends LazyLogging {
   // since we want non-default settings in this example we make a custom SSLContext available here
   lazy val sslContext: SSLContext = {
     logger.info("Import manager's certificate and private key to manager's keystore")
+
+    // Add Bouncy Castle and Bouncy Castle Jsse as security providers
+    Security.addProvider(new BouncyCastleProvider())
+    Security.addProvider(new BouncyCastleJsseProvider())
+
     val context     = SSLContext.getInstance("TLS")
     val fCert: File = new File(newCert)
     val fKey: File  = new File(newKey)
@@ -34,9 +40,6 @@ trait MySslConfiguration extends LazyLogging {
       loadCertificateAndKey(fCert, fKey, context)
     } else {
       logger.info("Certificate file is not existing, system is generating a dynamic certificate.")
-      // Add Bouncy Castle as a security provider
-      Security.addProvider(new BouncyCastleProvider())
-
       // Generate key pair
       val keyPair = generateKeyPair()
 
@@ -137,9 +140,9 @@ trait MySslConfiguration extends LazyLogging {
 
     val password               = Array('n', 'e', 'u', 'v', 'e', 'c', 't', 'o', 'r')
     val cf: CertificateFactory = CertificateFactory.getInstance("X.509")
-    val trustManagerFactory    = TrustManagerFactory.getInstance("SunX509")
-    val keyManagerFactory      = KeyManagerFactory.getInstance("SunX509")
-    val ks: KeyStore           = KeyStore.getInstance("jks")
+    val trustManagerFactory    = TrustManagerFactory.getInstance("PKIX")
+    val keyManagerFactory      = KeyManagerFactory.getInstance("PKIX")
+    val ks: KeyStore           = KeyStore.getInstance("PKCS12")
     val keyFactory: KeyFactory = KeyFactory.getInstance("RSA")
 
     var fisCert: FileInputStream     = null
@@ -225,9 +228,8 @@ trait MySslConfiguration extends LazyLogging {
           new KeyStore.PasswordProtection(password)
         )
 
-        val keyStore = KeyStore.getInstance("jks")
         keyManagerFactory.init(ks, password)
-        trustManagerFactory.init(keyStore)
+        trustManagerFactory.init(ks)
 
         context.init(
           keyManagerFactory.getKeyManagers,

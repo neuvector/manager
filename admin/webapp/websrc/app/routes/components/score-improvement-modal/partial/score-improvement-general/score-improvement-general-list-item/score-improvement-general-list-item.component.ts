@@ -13,11 +13,11 @@ export class ScoreImprovementGeneralListItemComponent {
     serviceRisk: false,
     exposure: false,
     runAsPrivileged: false,
-    runAsRoot: false,
+    run_as_root_score: false,
     admissionControl: false,
   };
   get rawScore() {
-    return this.scoreImprovementModalService.scoreInfo.score;
+    return this.scoreImprovementModalService.scoreInfo.security_scores;
   }
 
   constructor(
@@ -33,17 +33,18 @@ export class ScoreImprovementGeneralListItemComponent {
     switch (template) {
       case 'service-risk':
         return (
-          this.rawScore.serviceModeScore + this.rawScore.newServiceModeScore ===
+          this.rawScore.service_mode_score +
+            this.rawScore.new_service_mode_score ===
           0
         );
       case 'exposure':
-        return this.rawScore.exposureScore === 0;
+        return this.rawScore.exposure_score === 0;
       case 'run-as-privileged':
-        return this.rawScore.privilegedContainerScore === 0;
+        return this.rawScore.privileged_container_score === 0;
       case 'run-as-root':
-        return this.rawScore.runAsRoot === 0;
+        return this.rawScore.run_as_root_score === 0;
       case 'admission-control':
-        return this.rawScore.admissionRuleScore === 0;
+        return this.rawScore.admission_rule_score === 0;
       default:
         return true;
     }

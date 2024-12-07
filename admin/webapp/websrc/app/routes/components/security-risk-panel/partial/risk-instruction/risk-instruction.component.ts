@@ -40,7 +40,7 @@ export class RiskInstructionComponent implements OnInit, OnChanges {
       type: RiskType.Score,
       title: this.translate.instant(
         this.dashboardService.isGoodScore(
-          this.scoreInfo.score.securityRiskScore
+          this.scoreInfo.security_scores.security_risk_score
         )
           ? 'dashboard.heading.guideline.titles.MAIN_SCORE_GOOD'
           : 'dashboard.heading.guideline.titles.MAIN_SCORE_NOT_GOOD'

@@ -1,6 +1,6 @@
 <div
   *ngIf="
-    dashboardService.isGoodScore(scoreInfo.score.securityRiskScore);
+    dashboardService.isGoodScore(scoreInfo.security_scores.security_risk_score);
     then goodScore;
     else badScore
   "></div>

@@ -44,7 +44,7 @@ export class ScoreImprovementCompletedViewComponent implements OnInit {
     this.scoreImprovementModalService
       .getScores(this.isGlobalUser, null)
       .subscribe(scoreInfo => {
-        this.fixedScore = scoreInfo.score.securityRiskScore;
+        this.fixedScore = scoreInfo.security_scores.security_risk_score;
         const metrics = this.getGaugeMetrics(this.fixedScore);
         this.gaugeLabelFixed = metrics.gaugeLabel;
         this.gaugeLabelColorFixed = metrics.gaugeLabelColor;

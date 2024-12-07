@@ -121,7 +121,7 @@ export class GlobalConstant {
       KUBE: 'Kubernetes',
     },
     BOOLEAN_CRITERIA: {
-      TRUE: ['runAsRoot', 'runAsPrivileged'],
+      TRUE: ['run_as_root_score', 'runAsPrivileged'],
       FALSE: ['imageScanned', 'imageSigned'],
     },
     CRITERION_TYPE: {
@@ -211,7 +211,7 @@ export class GlobalConstant {
 
   public static CRITERIA_PATTERN = {
     NAME_ONLY: [
-      'runAsRoot',
+      'run_as_root_score',
       'runAsPrivileged',
       'allowPrivEscalation',
       'pspCompliance',

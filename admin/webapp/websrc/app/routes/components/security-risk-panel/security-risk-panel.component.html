@@ -4,7 +4,7 @@
       <div style="margin: 0 auto; width: 125px; height: 153px">
         <app-risk-score
           *ngIf="scoreInfo && summaryInfo"
-          [score]="scoreInfo.score.securityRiskScore"
+          [score]="scoreInfo.security_scores.security_risk_score"
           [nodesCnt]="summaryInfo.hosts"
           [podsCnt]="summaryInfo.running_pods"
           (mouseover)="mouseoverOnRiskScore()">

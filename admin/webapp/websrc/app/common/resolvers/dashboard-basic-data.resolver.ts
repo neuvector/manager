@@ -18,8 +18,9 @@ export class DashboardBasicDataResolver implements Resolve<any> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<any> {
-    return this.dashboardService.getBasicData(
-      GlobalVariable.user?.global_permissions.length > 0
+    return this.dashboardService.getScoreData(
+      GlobalVariable.user?.global_permissions.length > 0,
+      null
     );
   }
 }

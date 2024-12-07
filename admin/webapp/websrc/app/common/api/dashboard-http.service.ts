@@ -5,21 +5,17 @@ import {
   InternalSystemInfo,
   Metrics,
   Score,
+  PredictedScoreInfo,
 } from '@common/types';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { Observable } from 'rxjs';
 
 @Injectable()
 export class DashboardHttpService {
-  patchScores(
-    metrics: Metrics,
-    isGlobalUser: boolean,
-    totalRunningPods: number
-  ): Observable<Score> {
-    return GlobalVariable.http.patch<Score>(
+  patchScores(metrics: { metrics: Metrics }): Observable<PredictedScoreInfo> {
+    return GlobalVariable.http.post<PredictedScoreInfo>(
       PathConstant.DASHBOARD_SCORES_URL,
-      metrics,
-      { params: { isGlobalUser, totalRunningPods } }
+      metrics
     );
   }
 

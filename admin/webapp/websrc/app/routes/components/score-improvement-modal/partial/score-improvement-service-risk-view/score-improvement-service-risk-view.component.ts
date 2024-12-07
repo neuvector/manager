@@ -82,14 +82,9 @@ export class ScoreImprovementServiceRiskViewComponent implements OnInit {
     metrics.groups.profile_discover_groups = 0;
     metrics.groups.discover_groups_zero_drift = 0;
     this.scoreImprovementModalService
-      .calculateScoreData(
-        metrics,
-        this.isGlobalUser,
-        this.scoreImprovementModalService.scoreInfo.header_data.workloads
-          .running_pods
-      )
+      .calculateScoreData(metrics)
       .subscribe(scores => {
-        this.projectedScore = scores.securityRiskScore;
+        this.projectedScore = scores.security_scores.security_risk_score;
       });
   }
 

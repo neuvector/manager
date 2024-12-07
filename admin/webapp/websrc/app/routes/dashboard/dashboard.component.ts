@@ -26,7 +26,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   isGlobalUser: boolean = false;
   summaryInfo!: SystemSummaryDetails;
-  scoreInfo!: InternalSystemInfo;
+  scoreInfo!: InternalSystemInfo | null;
   isPrinting: boolean = false;
   iskube: boolean = false;
   reportDialog!: MatDialogRef<any>;
@@ -134,12 +134,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.handleBasicData(response);
     } else {
       this.dashboardService
-        .getBasicData(GlobalVariable.user?.global_permissions.length > 0)
-        .subscribe(this.handleBasicData);
+        .getScoreData(GlobalVariable.user?.global_permissions.length > 0, null)
+        .subscribe(this.handleBasicData.bind(this));
     }
   };
 
   private handleBasicData(response: InternalSystemInfo) {
+    this.scoreInfo = null;
     this.summaryInfo = GlobalVariable.summary as SystemSummaryDetails;
     this.scoreInfo = response as InternalSystemInfo;
 

@@ -43,27 +43,29 @@ export class SecurityRiskPanelComponent implements OnInit {
       factors: [
         {
           title: this.translate.instant('dashboard.body.panel_title.DISCOVER'),
-          amount: scoreInfo.header_data.groups.discover_groups.toString(),
+          amount: scoreInfo.metrics.groups.discover_groups.toString(),
           comment:
-            scoreInfo.header_data.groups.discover_groups_zero_drift.toString(),
+            scoreInfo.metrics.groups.discover_groups_zero_drift.toString(),
         },
         {
           title: this.translate.instant('dashboard.body.panel_title.MONITOR'),
-          amount: scoreInfo.header_data.groups.monitor_groups.toString(),
+          amount: scoreInfo.metrics.groups.monitor_groups.toString(),
           comment:
-            scoreInfo.header_data.groups.monitor_groups_zero_drift.toString(),
+            scoreInfo.metrics.groups.monitor_groups_zero_drift.toString(),
         },
         {
           title: this.translate.instant('dashboard.body.panel_title.PROTECT'),
-          amount: scoreInfo.header_data.groups.protect_groups.toString(),
+          amount: scoreInfo.metrics.groups.protect_groups.toString(),
           comment:
-            scoreInfo.header_data.groups.protect_groups_zero_drift.toString(),
+            scoreInfo.metrics.groups.protect_groups_zero_drift.toString(),
         },
       ],
       factorComment: [
         this.translate.instant('dashboard.heading.BASED_ON_POLICY_MODE'),
       ],
-      subScore: { height: `${95 - scoreInfo.score.serviceModeScoreBy100}%` },
+      subScore: {
+        height: `${95 - scoreInfo.security_scores.service_mode_score_by_100}%`,
+      },
       isFactorError: false,
     };
 
@@ -72,18 +74,20 @@ export class SecurityRiskPanelComponent implements OnInit {
       factors: [
         {
           title: this.translate.instant('dashboard.body.panel_title.DISCOVER'),
-          amount: scoreInfo.header_data.workloads.discover_ext_eps.toString(),
+          amount: scoreInfo.metrics.workloads.discover_ext_eps.toString(),
         },
         {
           title: this.translate.instant('dashboard.heading.THREATS'),
-          amount: scoreInfo.header_data.workloads.threat_ext_eps.toString(),
+          amount: scoreInfo.metrics.workloads.threat_ext_eps.toString(),
         },
         {
           title: this.translate.instant('dashboard.heading.VIOLATIONS'),
-          amount: scoreInfo.header_data.workloads.violate_ext_eps.toString(),
+          amount: scoreInfo.metrics.workloads.violate_ext_eps.toString(),
         },
       ],
-      subScore: { height: `${95 - scoreInfo.score.exposureScoreBy100}%` },
+      subScore: {
+        height: `${95 - scoreInfo.security_scores.exposure_score_by_100}%`,
+      },
       isFactorError: false,
     };
 
@@ -92,15 +96,15 @@ export class SecurityRiskPanelComponent implements OnInit {
       factors: [
         {
           title: this.translate.instant('dashboard.body.panel_title.DISCOVER'),
-          amount: scoreInfo.header_data.cves.discover_cves.toString(),
+          amount: scoreInfo.metrics.cves.discover_cves.toString(),
         },
         {
           title: this.translate.instant('dashboard.body.panel_title.MONITOR'),
-          amount: scoreInfo.header_data.cves.monitor_cves.toString(),
+          amount: scoreInfo.metrics.cves.monitor_cves.toString(),
         },
         {
           title: this.translate.instant('dashboard.body.panel_title.PROTECT'),
-          amount: scoreInfo.header_data.cves.protect_cves.toString(),
+          amount: scoreInfo.metrics.cves.protect_cves.toString(),
         },
       ],
       factorComment: [
@@ -112,7 +116,9 @@ export class SecurityRiskPanelComponent implements OnInit {
           'MMM dd, y'
         )})`,
       ],
-      subScore: { height: `${95 - scoreInfo.score.vulnerabilityScoreBy100}%` },
+      subScore: {
+        height: `${95 - scoreInfo.security_scores.vulnerability_score_by_100}%`,
+      },
       isFactorError: false,
     };
   };

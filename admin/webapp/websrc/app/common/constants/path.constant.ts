@@ -78,9 +78,9 @@ export class PathConstant {
   public static RESPONSE_RULE_URL = 'responseRule'; //policy
   public static GROUP_LIST_URL = 'group-list'; //policy
   public static AUDIT_URL = 'audit'; //events
-  public static DASHBOARD_SCORES_URL = 'dashboard/scores2'; //dashboard
+  public static DASHBOARD_SCORES_URL = 'dashboard/scores'; //dashboard
   public static DASHBOARD_DETAILS_URL = 'dashboard/details'; //dashboard
-  public static DASHBOARD_NOTIFICATIONS_URL = 'dashboard/notifications2'; //dashboard
+  public static DASHBOARD_NOTIFICATIONS_URL = 'dashboard/notifications'; //dashboard
   public static SECURITY_EVENTS_URL_2 = 'security-events2'; //events
   public static ADMISSION_URL = 'admission/rules'; //policy
   public static ADMISSION_SINGLE_URL = 'admission/rule'; //policy

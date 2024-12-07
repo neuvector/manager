@@ -512,7 +512,7 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
     const hasSummaryScore = !summary.score.hasError;
 
     if (hasSummaryScore) {
-      rowNode.data.score = summary.score.securityRiskScore.toString();
+      rowNode.data.score = summary.score.security_risk_score.toString();
     } else {
       rowNode.data.score = this.translate.instant(
         'multiCluster.messages.SCORE_UNAVAILIBlE'

@@ -90,14 +90,9 @@ export class ScoreImprovementRunAsPrivilegedContainersViewComponent
     );
     metrics.workloads.privileged_wls = 0;
     this.scoreImprovementModalService
-      .calculateScoreData(
-        metrics,
-        this.isGlobalUser,
-        this.scoreImprovementModalService.scoreInfo.header_data.workloads
-          .running_pods
-      )
+      .calculateScoreData(metrics)
       .subscribe(scores => {
-        this.projectedScore = scores.securityRiskScore;
+        this.projectedScore = scores.security_scores.security_risk_score;
       });
   }
 

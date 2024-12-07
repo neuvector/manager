@@ -716,6 +716,10 @@ case class RiskScoreMetricsCVE(
   host_cves: Int
 )
 
+case class MetricsWrap(
+  metrics: Metrics
+)
+
 case class Metrics(
   platform: String,
   kube_version: String,
@@ -763,7 +767,7 @@ case class InternalSystemData(
   egress: Array[Exposure],
   hasError: Option[Boolean]
 )
-
+//Deprecated
 case class Score(
   newServiceModeScore: Int,
   serviceModeScore: Int,
@@ -779,6 +783,28 @@ case class Score(
   hasError: Boolean
 )
 
+case class SecurityScores(
+  admission_rule_score: Int,
+  exposure_score: Int,
+  exposure_score_by_100: Int,
+  new_service_mode_score: Int,
+  privileged_container_score: Int,
+  run_as_root_score: Int,
+  security_risk_score: Int,
+  service_mode_score: Int,
+  service_mode_score_by_100: Int,
+  vulnerability_score: Int,
+  vulnerability_score_by_100: Int
+)
+
+case class SystemScore(
+  security_scores: SecurityScores,
+  metrics: Metrics,
+  ingress: Array[Exposure],
+  egress: Array[Exposure]
+)
+
+//Deprecated
 case class ScoreOutput2(
   score: Score,
   header_data: Metrics,
@@ -787,7 +813,7 @@ case class ScoreOutput2(
 )
 
 case class MultiClusterSummary(
-  score: Score,
+  score: SecurityScores,
   summaryJson: String
 )
 
@@ -1005,6 +1031,8 @@ object DashboardJsonProtocol extends DefaultJsonProtocol with LazyLogging {
   )
   given exposureFormat: RootJsonFormat[Exposure]                               = jsonFormat14(Exposure.apply)
   given scoreOutput2Format: RootJsonFormat[ScoreOutput2]                       = jsonFormat4(ScoreOutput2.apply)
+  given securityScoresFormat: RootJsonFormat[SecurityScores]                   = jsonFormat11(SecurityScores.apply)
+  given systemScoreFormat: RootJsonFormat[SystemScore]                         = jsonFormat4(SystemScore.apply)
   given internalSystemDataFormat: RootJsonFormat[InternalSystemData]           = jsonFormat4(
     InternalSystemData.apply
   )
@@ -1013,6 +1041,10 @@ object DashboardJsonProtocol extends DefaultJsonProtocol with LazyLogging {
   )
   given multiClusterSummaryFormat: RootJsonFormat[MultiClusterSummary]         = jsonFormat2(
     MultiClusterSummary.apply
+  )
+  MetricsWrap
+  given metricsWrapFormat: RootJsonFormat[MetricsWrap]                         = jsonFormat1(
+    MetricsWrap.apply
   )
 
   def jsonToViolationsEndpointData(endpointData: String): ViolationEndpointData =
@@ -1103,8 +1135,18 @@ object DashboardJsonProtocol extends DefaultJsonProtocol with LazyLogging {
     internalSystemData.parseJson
       .convertTo[InternalSystemData]
 
+  def jsonToSystemScoreDataToJson(systemScore: String): SystemScore =
+    systemScore.parseJson
+      .convertTo[SystemScore]
+
   def internalSystemDataToJson(internalSystemData: InternalSystemData): String =
     internalSystemData.toJson.compactPrint
+
+  def systemScoreDataToJson(systemScoreData: SystemScore): String =
+    systemScoreData.toJson.compactPrint
+
+  def metricsWrapDataToJson(metricsWraData: MetricsWrap): String =
+    metricsWraData.toJson.compactPrint
 
   def threatsToSecurityEvents: (Array[ThreatDetails], ThreatMajor, Int) => SecurityEvent =
     (threatDetails: Array[ThreatDetails], threatMajor: ThreatMajor, i: Int) => {

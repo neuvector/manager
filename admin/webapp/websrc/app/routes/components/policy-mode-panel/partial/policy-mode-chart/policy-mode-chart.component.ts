@@ -42,9 +42,9 @@ export class PolicyModeChartComponent implements OnInit {
 
     if (assetType === 'services') {
       assetsPolicyModeData = [
-        scoreInfo.header_data.groups.protect_groups,
-        scoreInfo.header_data.groups.monitor_groups,
-        scoreInfo.header_data.groups.discover_groups,
+        scoreInfo.metrics.groups.protect_groups,
+        scoreInfo.metrics.groups.monitor_groups,
+        scoreInfo.metrics.groups.discover_groups,
       ];
     } else {
       let containerStateCount = {

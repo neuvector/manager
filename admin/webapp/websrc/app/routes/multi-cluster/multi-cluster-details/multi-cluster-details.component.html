@@ -1,13 +1,13 @@
-<div class="panel mb0">
+<div class="panel mb0" *ngIf="selectedCluster">
   <div class="panel-heading panel-default clearfix">
     <div class="panel-title">
       <label class="panel-text-title margin-top-s margin-left-s subtitle"
-        >{{ selectedCluster.name }}
+        >{{ selectedCluster.name || '' }}
       </label>
     </div>
   </div>
   <div class="panel-body">
-    <div class="containers-detail-sec">
+    <div class="containers-detail-sec" *ngIf="summary">
       <div class="row w-100 mx-0">
         <div class="col-md-4 my-md-4 details-item">
           <mat-icon
@@ -20,7 +20,7 @@
           <div class="ml-3 overflow-hidden">
             <div>{{ 'nodes.detail.PLATFORM' | translate }}</div>
             <div class="text-muted text-truncate">
-              {{ summary.platform }}
+              {{ summary.platform || '' }}
             </div>
           </div>
         </div>
@@ -34,7 +34,7 @@
           <div class="ml-3 overflow-hidden">
             <div>{{ 'multiCluster.summary.DOMAINS' | translate }}</div>
             <div class="text-muted text-truncate">
-              {{ summary.domains }}
+              {{ summary.domains || '' }}
             </div>
           </div>
         </div>
@@ -48,7 +48,7 @@
           <div class="ml-3 overflow-hidden">
             <div>{{ 'dashboard.summary.SERVICE' | translate }}</div>
             <div class="text-muted text-truncate">
-              {{ summary.services }}
+              {{ summary.services || '' }}
             </div>
           </div>
         </div>
@@ -63,7 +63,7 @@
           <div class="ml-3 overflow-hidden">
             <div>{{ 'dashboard.summary.HOST' | translate }}</div>
             <div class="text-muted text-truncate">
-              {{ summary.hosts }}
+              {{ summary.hosts || '' }}
             </div>
           </div>
         </div>
@@ -80,7 +80,7 @@
               {{ 'multiCluster.summary.RUNNING_POD' | translate }}
             </div>
             <div class="text-muted text-truncate">
-              {{ summary.running_pods }}
+              {{ summary.running_pods || '' }}
             </div>
           </div>
         </div>
@@ -97,7 +97,7 @@
               {{ 'multiCluster.summary.TOTAL_WORKLOAD' | translate }}
             </div>
             <div class="text-muted text-truncate">
-              {{ summary.workloads }}
+              {{ summary.workloads || '' }}
             </div>
           </div>
         </div>
@@ -112,7 +112,7 @@
           <div class="ml-3 overflow-hidden">
             <div>{{ 'dashboard.summary.CONTROLLER' | translate }}</div>
             <div class="text-muted text-truncate">
-              {{ summary.controllers }}
+              {{ summary.controllers || '' }}
             </div>
           </div>
         </div>
@@ -127,7 +127,7 @@
           <div class="ml-3 overflow-hidden">
             <div>{{ 'dashboard.summary.ENFORCER' | translate }}</div>
             <div class="text-muted text-truncate">
-              {{ summary.enforcers }}
+              {{ summary.enforcers || '' }}
             </div>
           </div>
         </div>
@@ -142,7 +142,7 @@
           <div class="ml-3 overflow-hidden">
             <div>{{ 'sidebar.nav.SCANNERS' | translate }}</div>
             <div class="text-muted text-truncate">
-              {{ summary.scanners }}
+              {{ summary.scanners || '' }}
             </div>
           </div>
         </div>
@@ -157,7 +157,7 @@
           <div class="ml-3 overflow-hidden">
             <div>{{ 'audit.gridHeader.CVE_DB_VERSION' | translate }}</div>
             <div class="text-muted text-truncate">
-              {{ summary.cvedb_version }}
+              {{ summary.cvedb_version || '' }}
             </div>
           </div>
         </div>

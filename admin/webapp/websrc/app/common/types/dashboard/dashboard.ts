@@ -39,18 +39,18 @@ export interface UpgradeInfo {
 }
 
 export interface Score {
-  newServiceModeScore: number;
-  serviceModeScore: number;
-  serviceModeScoreBy100: number;
-  exposureScore: number;
-  exposureScoreBy100: number;
-  privilegedContainerScore: number;
-  runAsRoot: number;
-  admissionRuleScore: number;
-  vulnerabilityScore: number;
-  vulnerabilityScoreBy100: number;
-  securityRiskScore: number;
-  hasError: boolean;
+  new_service_mode_score: number;
+  service_mode_score: number;
+  service_mode_score_by_100: number;
+  exposure_score: number;
+  exposure_score_by_100: number;
+  privileged_container_score: number;
+  run_as_root_score: number;
+  admission_rule_score: number;
+  vulnerability_score: number;
+  vulnerability_score_by_100: number;
+  security_risk_score: number;
+  hasError?: boolean;
 }
 
 interface RiskScoreMetricsWL {
@@ -127,10 +127,15 @@ export interface Exposure {
 }
 
 export interface InternalSystemInfo {
-  header_data: Metrics;
-  score: Score;
+  metrics: Metrics;
+  security_scores: Score;
   egress: Exposure[];
   ingress: Exposure[];
+}
+
+export interface PredictedScoreInfo {
+  metrics: Metrics;
+  security_scores: Score;
 }
 
 export interface Factor {

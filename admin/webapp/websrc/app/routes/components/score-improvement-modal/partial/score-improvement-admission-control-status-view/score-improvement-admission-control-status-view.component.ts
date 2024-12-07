@@ -32,14 +32,9 @@ export class ScoreImprovementAdmissionControlStatusViewComponent
     );
     metrics.deny_adm_ctrl_rules = 1;
     this.scoreImprovementModalService
-      .calculateScoreData(
-        metrics,
-        this.isGlobalUser,
-        this.scoreImprovementModalService.scoreInfo.header_data.workloads
-          .running_pods
-      )
+      .calculateScoreData(metrics)
       .subscribe(scores => {
-        this.projectedScore = scores.securityRiskScore;
+        this.projectedScore = scores.security_scores.security_risk_score;
       });
   }
 }

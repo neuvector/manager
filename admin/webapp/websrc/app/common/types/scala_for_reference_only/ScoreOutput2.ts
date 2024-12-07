@@ -6,7 +6,7 @@ import { Score, isScore } from './Score';
 
 export interface ScoreOutput2 {
   score: Score;
-  header_data: Metrics;
+  metrics: Metrics;
   ingress: Array;
   egress: Array;
 }
@@ -15,8 +15,8 @@ export function isScoreOutput2(v: any): v is ScoreOutput2 {
   return (
     v['score'] &&
     isScore(v['score']) &&
-    v['header_data'] &&
-    isMetrics(v['header_data']) &&
+    v['metrics'] &&
+    isMetrics(v['metrics']) &&
     v['ingress'] &&
     isArray(v['ingress']) &&
     v['egress'] &&

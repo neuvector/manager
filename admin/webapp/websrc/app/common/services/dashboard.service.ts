@@ -53,14 +53,6 @@ export class DashboardService {
     return GlobalVariable.http.patch(PathConstant.IP_GEO_URL, ipList).pipe();
   };
 
-  getBasicData = (isGlobalUser: boolean) => {
-    if (!GlobalVariable.hasInitializedSummary) {
-      console.warn('Summary uninitialized');
-    }
-
-    return this.getScoreData(isGlobalUser, null);
-  };
-
   getDomainReportData = (isGlobalUser: boolean, domain: string) => {
     const scorePromise = this.getScoreData(isGlobalUser, domain);
     const dashboardSecurityEventPromise =

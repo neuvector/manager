@@ -72,7 +72,7 @@ export class ScoreImprovementRunAsRootContainersViewComponent
     this.containersService.getContainers().subscribe({
       next: workloads => {
         this.containers = workloads
-          .filter(this.runAsRootFilter)
+          .filter(this.run_as_root_scoreFilter)
           .filter(w => w.state !== 'exit' && !w.platform_role);
         this.containersService.displayContainers =
           this.containersService.formatScannedWorkloads(this.containers);
@@ -87,18 +87,13 @@ export class ScoreImprovementRunAsRootContainersViewComponent
     );
     metrics.workloads.root_wls = 0;
     this.scoreImprovementModalService
-      .calculateScoreData(
-        metrics,
-        this.isGlobalUser,
-        this.scoreImprovementModalService.scoreInfo.header_data.workloads
-          .running_pods
-      )
+      .calculateScoreData(metrics)
       .subscribe(scores => {
-        this.projectedScore = scores.securityRiskScore;
+        this.projectedScore = scores.security_scores.security_risk_score;
       });
   }
 
-  private runAsRootFilter = (w: Workload) => {
+  private run_as_root_scoreFilter = (w: Workload) => {
     return (
       w.children &&
       w.children.length > 0 &&

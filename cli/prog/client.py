@@ -526,49 +526,6 @@ class RestClient(object):
 
         return resp
 
-    def assess_admission_rules(self, path, filename, raw):
-        if not self._token():
-            raise Unauthorized()
-
-        url = "%s/v1/%s" % (
-        self.url, path)  # ex: "https://neuvector-svc-controller.neuvector:10443/v1/assess/admission/rule"
-        urlLocal = url
-        global RemoteCluster
-        if urlLocal.find(self.url) == 0:
-            uri = urlLocal[len(self.url):]  # ex: "/v1/assess/admission/rule"
-            if RemoteCluster["id"] != "":
-                # this is a request for remote cluster
-                url = "{}/v1/fed/cluster/{}{}".format(self.url, RemoteCluster["id"], uri)
-        headers = {"X-Auth-Token": self._token()}
-
-        if self.debug:
-            print("URL: POST " + url)
-
-        try:
-            # import pdb; pdb.set_trace()
-            if raw:
-                f = open(filename)
-                data = f.read()
-                f.close()
-                headers["Content-Type"] = "text/plain"
-                resp = requests.post(url, headers=headers, data=data, verify=False)
-                # status, _, _, data = self._request("POST", url, body=body)
-            else:
-                files = {'configuration': open(filename, 'rb')}
-                resp = requests.post(url, headers=headers, files=files, verify=False)
-        except requests.exceptions.ConnectionError:
-            raise ConnectionError()
-        except requests.exceptions.Timeout:
-            raise ConnectTimeout()
-        except requests.exceptions.RequestException:
-            raise RequestError()
-
-        if self.debug:
-            print("resp: {} {}".format(resp.status_code, resp.text))
-        if resp.status_code != requests.codes.ok:
-            self._handle_common_error(resp.status_code, resp.json())
-        return resp
-
     def importConfig(self, path, filename, raw, standalone, tid, iter, tempToken):
         # iter=0 means triggers import. iter>=1 means starting query import status
         if not self._token():

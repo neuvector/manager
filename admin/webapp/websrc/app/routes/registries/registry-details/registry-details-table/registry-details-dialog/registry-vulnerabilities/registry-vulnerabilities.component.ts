@@ -1,9 +1,11 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
   Output,
+  ViewChild,
 } from '@angular/core';
 import { Layer, Vulnerability } from '@common/types';
 import { UtilsService } from '@common/utils/app.utils';
@@ -11,6 +13,8 @@ import { cloneDeep } from 'lodash';
 import { saveAs } from 'file-saver';
 import { arrayToCsv, isVulAccepted } from '@common/utils/common.utils';
 import * as moment from 'moment';
+import { TranslateService } from '@ngx-translate/core';
+import { VulnerabilitiesGridComponent } from '@components/vulnerabilities-grid/vulnerabilities-grid.component';
 
 @Component({
   selector: 'app-registry-vulnerabilities',
@@ -35,6 +39,8 @@ export class RegistryVulnerabilitiesComponent {
         (l, index) => index > 0 && l.vulnerabilities.length > 0
       );
   }
+  @ViewChild(VulnerabilitiesGridComponent)
+  vulGrid!: VulnerabilitiesGridComponent;
   get layers() {
     return this._layers;
   }
@@ -46,8 +52,18 @@ export class RegistryVulnerabilitiesComponent {
   @Input() acceptedVulnerabilityStatus!: boolean;
   selectedLayer!: Layer | null;
   selectedVulnerability!: Vulnerability | null;
+  selectedVulScore: String = 'V3';
+  get activeScore() {
+    return this.selectedVulScore === 'V2'
+      ? this.tr.instant('scan.gridHeader.SCORE_V2')
+      : this.tr.instant('scan.gridHeader.SCORE_V3');
+  }
 
-  constructor(private utilsService: UtilsService) {}
+  constructor(
+    private utilsService: UtilsService,
+    private tr: TranslateService,
+    private cd: ChangeDetectorRef
+  ) {}
 
   toggleAcceptedVulnerability(): void {
     this.showAcceptedVulnerability.emit();
@@ -148,6 +164,18 @@ export class RegistryVulnerabilitiesComponent {
       }_${this.utilsService.parseDatetimeStr(new Date())}.csv`;
       saveAs(blob, filename);
     }
+  }
+  changeScoreView(val: string) {
+    this.selectedVulScore = val;
+    if (val === 'V2') {
+      this.vulGrid.gridApi?.setColumnsVisible(['score_v3'], false);
+      this.vulGrid.gridApi?.setColumnsVisible(['score'], true);
+    } else {
+      this.vulGrid.gridApi?.setColumnsVisible(['score'], false);
+      this.vulGrid.gridApi?.setColumnsVisible(['score_v3'], true);
+    }
+    this.vulGrid.gridApi.sizeColumnsToFit();
+    this.cd.markForCheck();
   }
 
   private prepareLayerCsvData(layerCves): any {

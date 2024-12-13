@@ -53,6 +53,7 @@ export class PlatformDetailsComponent implements OnInit {
   showAcceptedVuls: boolean = false;
   isVulsAuthorized!: boolean;
   isWriteVulsAuthorized!: boolean;
+  selectedVulScore: String = 'V3';
 
   constructor(
     public versionInfoService: VersionInfoService,
@@ -155,5 +156,24 @@ export class PlatformDetailsComponent implements OnInit {
     if (vulnerabilities4Csv.length) {
       this.utils.exportCVE(this.platform.platform, vulnerabilities4Csv);
     }
+  }
+
+  get activeScore() {
+    return this.selectedVulScore === 'V2'
+      ? this.tr.instant('scan.gridHeader.SCORE_V2')
+      : this.tr.instant('scan.gridHeader.SCORE_V3');
+  }
+
+  changeScoreView(val: string) {
+    this.selectedVulScore = val;
+    if (val === 'V2') {
+      this.vulGrid.gridApi?.setColumnsVisible(['score_v3'], false);
+      this.vulGrid.gridApi?.setColumnsVisible(['score'], true);
+    } else {
+      this.vulGrid.gridApi?.setColumnsVisible(['score'], false);
+      this.vulGrid.gridApi?.setColumnsVisible(['score_v3'], true);
+    }
+    this.vulGrid.gridApi.sizeColumnsToFit();
+    this.cd.markForCheck();
   }
 }

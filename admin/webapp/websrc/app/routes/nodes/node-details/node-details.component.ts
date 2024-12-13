@@ -76,6 +76,7 @@ export class NodeDetailsComponent implements OnInit {
   showSysContainers: boolean = false;
   isVulsAuthorized!: boolean;
   isWriteVulsAuthorized!: boolean;
+  selectedVulScore: String = 'V3';
   get sysContainersMsg() {
     return !this.showSysContainers
       ? this.tr.instant('nodes.containers.SHOW_SYS_NODE')
@@ -88,6 +89,11 @@ export class NodeDetailsComponent implements OnInit {
   }
   get activeTab(): string {
     return nodeDetailsTabs[this.activeTabIndex];
+  }
+  get activeScore() {
+    return this.selectedVulScore === 'V2'
+      ? this.tr.instant('scan.gridHeader.SCORE_V2')
+      : this.tr.instant('scan.gridHeader.SCORE_V3');
   }
 
   constructor(
@@ -247,5 +253,18 @@ export class NodeDetailsComponent implements OnInit {
     }
     if (![1, 2].includes(this.activeTabIndex))
       this.versionInfoService.setVersionInfo(null, '');
+  }
+
+  changeScoreView(val: string) {
+    this.selectedVulScore = val;
+    if (val === 'V2') {
+      this.vulGrid.gridApi?.setColumnsVisible(['score_v3'], false);
+      this.vulGrid.gridApi?.setColumnsVisible(['score'], true);
+    } else {
+      this.vulGrid.gridApi?.setColumnsVisible(['score'], false);
+      this.vulGrid.gridApi?.setColumnsVisible(['score_v3'], true);
+    }
+    this.vulGrid.gridApi.sizeColumnsToFit();
+    this.cd.markForCheck();
   }
 }

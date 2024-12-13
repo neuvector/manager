@@ -26,6 +26,20 @@
         [class.filter-view]="isVulsAuthorized && vulEmpty">
         <div class="mr-3 filter-actions">
           <button
+            [matMenuTriggerFor]="menu"
+            class="mx-2 d-flex align-items-center justify-content-center"
+            mat-button>
+            {{ activeScore }} <i class="eos-icons">arrow_drop_down</i>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button (click)="changeScoreView('V2')" mat-menu-item>
+              {{ 'scan.gridHeader.SCORE_V2' | translate }}
+            </button>
+            <button (click)="changeScoreView('V3')" mat-menu-item>
+              {{ 'scan.gridHeader.SCORE_V3' | translate }}
+            </button>
+          </mat-menu>
+          <button
             mat-button
             aria-label="Export vulnerabilities CSV"
             type="button"

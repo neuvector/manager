@@ -25,6 +25,7 @@ import {
   FEED_RATING_SORT_ORDER,
   capitalizeWord,
 } from '@common/utils/common.utils';
+import { VulnerabilityItemsTableScoreCellComponent } from '@routes/vulnerabilities/vulnerability-items/vulnerability-items-table/vulnerability-items-table-score-cell/vulnerability-items-table-score-cell.component';
 
 @Component({
   selector: 'app-vulnerabilities-grid',
@@ -63,9 +64,32 @@ export class VulnerabilitiesGridComponent implements OnInit, OnChanges {
     },
     {
       field: 'score',
-      valueFormatter: this.scoreFormatter,
-      headerValueGetter: () => this.translate.instant('scan.gridHeader.SCORE'),
-      width: 160,
+      hide: true,
+      sortable: true,
+      resizable: true,
+      cellRenderer: 'scoreCellRenderer',
+      cellRendererParams: {
+        type: 'V2',
+      },
+      headerValueGetter: () =>
+        this.translate.instant('scan.gridHeader.SCORE_V2'),
+      width: 140,
+      maxWidth: 140,
+      minWidth: 140,
+    },
+    {
+      field: 'score_v3',
+      sortable: true,
+      resizable: true,
+      cellRenderer: 'scoreCellRenderer',
+      cellRendererParams: {
+        type: 'V3',
+      },
+      headerValueGetter: () =>
+        this.translate.instant('scan.gridHeader.SCORE_V3'),
+      width: 140,
+      maxWidth: 140,
+      minWidth: 140,
     },
     {
       field: 'feed_rating',
@@ -133,6 +157,7 @@ export class VulnerabilitiesGridComponent implements OnInit, OnChanges {
       onSelectionChanged: event => this.onSelectionChanged(event),
       components: {
         severityCellRenderer: VulnerabilitiesGridSeverityCellComponent,
+        scoreCellRenderer: VulnerabilityItemsTableScoreCellComponent,
       },
     };
   }
@@ -187,12 +212,6 @@ export class VulnerabilitiesGridComponent implements OnInit, OnChanges {
 
   onResize(): void {
     this.gridApi.sizeColumnsToFit();
-  }
-
-  scoreFormatter(params: ValueFormatterParams): string {
-    const v2 = params.data.score;
-    const v3 = params.data.score_v3;
-    return `${v2}/${v3}`;
   }
 
   dateFormatter(params: ValueFormatterParams): string {

@@ -1,6 +1,6 @@
 .filter {
   position: relative;
-  left: calc(100% - 180px);
+  left: calc(100% - 320px);
   top: -4px;
   z-index: 10000;
   display: flex;
@@ -8,15 +8,15 @@
 }
 
 .filter-icon-1 {
-  left: calc(100% - 236px) !important;
+  left: calc(100% - 376px) !important;
 }
 
 .filter-icon-2 {
-  left: calc(100% - 292px) !important;
+  left: calc(100% - 432px) !important;
 }
 
 .filter-icon-3 {
-  left: calc(100% - 348px) !important;
+  left: calc(100% - 488px) !important;
 }
 
 .detail-tabs {

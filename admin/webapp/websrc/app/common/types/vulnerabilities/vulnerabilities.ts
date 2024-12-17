@@ -37,6 +37,7 @@ export interface VulnerabilityAsset {
   name: string;
   severity: string;
   description: string;
+  feed_rating: string;
   packages: VulnerabilityAssetPackages;
   link: string;
   score: number;

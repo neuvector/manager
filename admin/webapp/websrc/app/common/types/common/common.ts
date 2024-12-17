@@ -33,6 +33,7 @@ export type VulQueryOrderByColumnOption =
   | 'name'
   | 'score'
   | 'score_v3'
+  | 'feed_rating'
   | 'published_timestamp'
   | 'impact';
 

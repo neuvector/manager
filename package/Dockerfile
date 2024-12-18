@@ -18,7 +18,9 @@ COPY build.sbt .scalafix.conf .scalafmt.conf /src/
 WORKDIR /src
 
 RUN zypper refresh && \
-    zypper install -y ca-certificates wget curl zip git awk nodejs20 npm20
+    zypper install -y wget curl zip git awk nodejs20 npm20 && \
+    npm install -g npm@10.9.2 && \
+    hash -r
 
 ARG VERSION
 
@@ -92,7 +94,8 @@ ARG COMMIT
 WORKDIR /
 COPY --from=base /chroot/ /
 COPY --from=base /usr/sbin/useradd /usr/sbin
-COPY --from=builder /usr/lib64/ /usr/lib64/
+COPY --from=builder /usr/lib64/jvm /usr/lib64/jvm
+COPY --from=builder /usr/lib64/lib*.so* /usr/lib64/
 COPY --from=builder /src/stage /
 
 ENV JAVA_HOME=/usr/lib64/jvm/java-17-openjdk-17 \

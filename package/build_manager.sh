@@ -12,7 +12,6 @@ if [[ $# > 0 ]]; then
         -d)
         mkdir -p /root/.ivy2
         ln -s /prebuild/manager/cache /root/.ivy2/cache
-        # ln -s /prebuild/manager/node_modules node_modules
         ;;
         *)
         ;;
@@ -43,7 +42,6 @@ else
     echo ================================
     exit 1
 fi
-# npm run unittest
 popd
 env JAVA_OPTS="-Xms2g -Xmx3g" sbt admin/assembly
 zip -d admin/target/scala-3.3.4/admin-assembly-1.0.jar rest-management-private-classpath\*

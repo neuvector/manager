@@ -94,6 +94,7 @@ COPY --from=base /chroot/ /
 COPY --from=base /usr/sbin/useradd /usr/sbin
 COPY --from=builder /usr/lib64/ /usr/lib64/
 COPY --from=builder /src/stage /
+COPY EULA.pdf /licenses/
 
 ENV JAVA_HOME=/usr/lib64/jvm/java-17-openjdk-17 \
     PATH=/usr/lib64/jvm/java-17-openjdk-17/bin:$PATH \

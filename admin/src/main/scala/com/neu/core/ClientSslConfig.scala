@@ -7,6 +7,7 @@ import org.apache.pekko.http.scaladsl.Http
 import org.apache.pekko.http.scaladsl.HttpsConnectionContext
 import org.apache.pekko.http.scaladsl.model.*
 import org.apache.pekko.http.scaladsl.settings.ConnectionPoolSettings
+import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshal
 import org.apache.pekko.stream.Materializer
 import org.apache.pekko.stream.scaladsl.Sink
 import org.apache.pekko.stream.scaladsl.Source
@@ -83,7 +84,7 @@ trait ClientSslConfig extends LazyLogging {
               Future.successful(response)
             case status                                               =>
               logger.info(
-                s"Received Response - Failure\nStatusCode: ${status.intValue()} Reason: ${status.reason()}\n$response"
+                s"Received Response - Failure\nStatusCode: ${status.intValue()} Reason: ${status.reason()}\n Exception: ${Unmarshal(response.entity).to[String]}"
               )
               Future.failed(HttpResponseException(status.intValue(), status.reason(), response))
           }

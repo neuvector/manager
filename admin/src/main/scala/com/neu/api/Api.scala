@@ -48,10 +48,7 @@ trait Api extends Directives with CoreActors with Core {
         complete(
           HttpResponse(
             status = e.statusCode,
-            entity = HttpEntity(
-              e.response.entity.contentType.asInstanceOf[ContentType.NonBinary],
-              e.reason
-            )
+            entity = e.response.entity
           )
         )
       case e: Exception             =>

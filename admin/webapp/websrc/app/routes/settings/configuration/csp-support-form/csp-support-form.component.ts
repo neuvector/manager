@@ -5,9 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { UtilsService } from '@common/utils/app.utils';
 import { finalize } from 'rxjs/operators';
 import { saveAs } from 'file-saver';
-import { GlobalConstant } from '@common/constants/global.constant';
 import { NotificationService } from '@services/notification.service';
-import { ErrorResponse } from '@common/types';
 import * as moment from 'moment';
 
 @Component({

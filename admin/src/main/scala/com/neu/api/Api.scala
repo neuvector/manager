@@ -26,7 +26,7 @@ import com.neu.service.policy.PolicyService
 import com.neu.service.risk.RiskService
 import com.neu.service.sigstore.SigstoreService
 import com.neu.service.workload.WorkloadService
-import org.apache.pekko.http.scaladsl.model.{ ContentTypes, HttpEntity, HttpResponse }
+import org.apache.pekko.http.scaladsl.model.{ ContentType, ContentTypes, HttpEntity, HttpResponse }
 import org.apache.pekko.http.scaladsl.server.{ Directives, ExceptionHandler, Route }
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -48,7 +48,7 @@ trait Api extends Directives with CoreActors with Core {
         complete(
           HttpResponse(
             status = e.statusCode,
-            entity = HttpEntity(ContentTypes.`application/json`, e.reason)
+            entity = e.response.entity
           )
         )
       case e: Exception             =>

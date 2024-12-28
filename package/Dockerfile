@@ -79,7 +79,7 @@ RUN ln -sf /usr/bin/python3.12 /chroot/usr/bin/python3 && \
 # Install requirements and clean up
 RUN chroot /chroot /bin/sh -c "pip install --no-cache-dir -r /requirements.txt && \
     rm -rf /root/.cache /requirements.txt"
-    
+
 # Remove unnecessary binaries to reduce image size
 RUN cd /chroot/usr/bin/ && \
     rm -rf basename chcon chgrp chmod chown chroot cksum dd df dircolors \
@@ -122,4 +122,4 @@ RUN echo "$user:x:1000:1000::/nonexistent:/bin/bash" >> /etc/passwd && \
     echo "$user:x:1000:" >> /etc/group
 USER $user
 
-ENTRYPOINT ["java", "-Xms256m", "-Xmx2048m", "-Djdk.tls.rejectClientInitiatedRenegotiation=true", "-Dpekko.http.parsing.max-header-value-length=32k", "-jar", "/usr/local/bin/admin-assembly-1.0.jar"]
+ENTRYPOINT ["java", "-Xms256m", "-Xmx2048m", "-Djdk.tls.rejectClientInitiatedRenegotiation=true", "-Dpekko.http.parsing.max-header-value-length=32k", "--add-opens=java.base/java.lang=ALL-UNNAMED", "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED", "--add-opens=java.base/java.util=ALL-UNNAMED", "-jar", "/usr/local/bin/admin-assembly-1.0.jar"]

@@ -116,22 +116,21 @@
     </p>
   </mat-expansion-panel>
   <mat-expansion-panel
-    [(expanded)]="expanded.run_as_root_score"
+    [(expanded)]="expanded.runAsRoot"
     *appDisplayControl="'improve_score_on_runasroot'"
     class="mat-elevation-z0"
     hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
         {{
-          'dashboard.improveScoreModal.summary.run_as_root_score.brief_1'
-            | translate
+          'dashboard.improveScoreModal.summary.runAsRoot.brief_1' | translate
         }}
       </mat-panel-title>
       <mat-panel-description class="justify-content-end mr-0">
         <div class="row align-items-center improvement-item-actions">
           <div class="col">
             <mat-icon>
-              {{ expanded.run_as_root_score ? 'expand_less' : 'expand_more' }}
+              {{ expanded.runAsRoot ? 'expand_less' : 'expand_more' }}
             </mat-icon>
           </div>
           <div class="col d-flex justify-content-end">
@@ -147,10 +146,7 @@
       </mat-panel-description>
     </mat-expansion-panel-header>
     <p>
-      {{
-        'dashboard.improveScoreModal.summary.run_as_root_score.advice_1'
-          | translate
-      }}
+      {{ 'dashboard.improveScoreModal.summary.runAsRoot.advice_1' | translate }}
     </p>
   </mat-expansion-panel>
   <mat-expansion-panel

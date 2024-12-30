@@ -13,7 +13,7 @@ export class ScoreImprovementGeneralListItemComponent {
     serviceRisk: false,
     exposure: false,
     runAsPrivileged: false,
-    run_as_root_score: false,
+    runAsRoot: false,
     admissionControl: false,
   };
   get rawScore() {

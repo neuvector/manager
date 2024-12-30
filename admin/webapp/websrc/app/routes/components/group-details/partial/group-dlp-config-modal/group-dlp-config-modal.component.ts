@@ -66,7 +66,7 @@ export class GroupDlpConfigModalComponent implements OnInit {
   };
 
   refresh = () => {
-    this.groupsService.getDlpSensorData().subscribe(
+    this.groupsService.getDlpSensorData(this.data.source).subscribe(
       (response: any) => {
         this.dlpSensorOption = response;
         this.dlpSensorOption = this.dlpSensorOption.map(sensor => {

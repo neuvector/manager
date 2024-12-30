@@ -137,6 +137,7 @@ export class GroupDlpComponent implements OnInit, OnChanges {
           status: this.enabled,
           warning: warning,
           refresh: this.refresh,
+          source: this.source,
         },
       });
     }, 200);

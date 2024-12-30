@@ -38,6 +38,7 @@ import { ExportOptionsModalComponent } from '@components/export-options-modal/ex
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TitleCasePipe } from '@angular/common';
 import { GlobalVariable } from '@common/variables/global.variable';
+import { FederatedConfigurationService } from '@services/federated-configuration.service';
 import * as $ from 'jquery';
 
 @Component({
@@ -95,7 +96,8 @@ export class GroupsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private ruleDetailModalService: RuleDetailModalService,
     private domSanitizer: DomSanitizer,
-    private titleCasePipe: TitleCasePipe
+    private titleCasePipe: TitleCasePipe,
+    public federatedConfigurationService: FederatedConfigurationService
   ) {}
 
   ngOnInit(): void {
@@ -165,8 +167,13 @@ export class GroupsComponent implements OnInit, OnDestroy {
         )}: ${nonScorableGroups}`;
         let counts = this.getModeCounts();
         this.baselineProfile = this.getDefaultBaseline(counts.baselineCount);
-        this.groupsService.activeTabIndex =
-          this.groupsService.activeTabIndex || 0;
+        if (this.source === GlobalConstant.NAV_SOURCE.FED_POLICY) {
+          this.federatedConfigurationService.activeTabIndex4Group =
+            this.federatedConfigurationService.activeTabIndex4Group || 0;
+        } else {
+          this.groupsService.activeTabIndex =
+            this.groupsService.activeTabIndex || 0;
+        }
       }, 0);
     };
     if (this.isScoreImprovement) {

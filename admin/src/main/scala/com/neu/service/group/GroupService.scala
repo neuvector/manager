@@ -551,11 +551,11 @@ class GroupService extends BaseService with DefaultJsonFormats with LazyLogging 
     }
   }
 
-  def getDlpSensor(tokenId: String, name: Option[String]): Route = complete {
+  def getDlpSensor(tokenId: String, name: Option[String], scope: Option[String]): Route = complete {
     if (name.isEmpty) {
       logger.info("Getting sensors")
       RestClient.httpRequestWithHeader(
-        s"${baseClusterUri(tokenId)}/dlp/sensor",
+        s"${baseClusterUri(tokenId)}/dlp/sensor${if (scope.nonEmpty) s"?scope=${scope.get}" else ""}",
         GET,
         "",
         tokenId
@@ -691,11 +691,11 @@ class GroupService extends BaseService with DefaultJsonFormats with LazyLogging 
     )
   }
 
-  def getWafSensor(tokenId: String, name: Option[String]): Route = complete {
+  def getWafSensor(tokenId: String, name: Option[String], scope: Option[String]): Route = complete {
     if (name.isEmpty) {
       logger.info("Getting sensors")
       RestClient.httpRequestWithHeader(
-        s"${baseClusterUri(tokenId)}/waf/sensor",
+        s"${baseClusterUri(tokenId)}/waf/sensor${if (scope.nonEmpty) s"?scope=${scope.get}" else ""}",
         GET,
         "",
         tokenId

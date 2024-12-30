@@ -6,6 +6,7 @@ import { Webhook } from '@common/types';
 
 @Injectable()
 export class FederatedConfigurationService {
+  public activeTabIndex4Group: number = 0;
   constructor(private configHttpService: ConfigHttpService) {}
 
   getFederatedConfig() {

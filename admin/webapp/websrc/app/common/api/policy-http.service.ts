@@ -3,6 +3,7 @@ import { PathConstant } from '@common/constants/path.constant';
 import { Group, NetworkRule, ResponseRule, Service } from '@common/types';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { Observable } from 'rxjs';
+import { GlobalConstant } from '@common/constants/global.constant';
 import { pluck } from 'rxjs/operators';
 
 @Injectable()
@@ -124,9 +125,23 @@ export class PolicyHttpService {
     return GlobalVariable.http.patch(PathConstant.DLP_GROUPS_URL, payload);
   }
 
-  getDLPSensors() {
+  getDLPSensors(source) {
+    const options: any = [];
+    if (source === GlobalConstant.NAV_SOURCE.FED_POLICY) {
+      options.push({
+        params: {
+          scope: 'fed',
+        },
+      });
+    } else {
+      options.push({
+        params: {
+          scope: 'local',
+        },
+      });
+    }
     return GlobalVariable.http
-      .get(PathConstant.DLP_SENSORS_URL)
+      .get(PathConstant.DLP_SENSORS_URL, ...options)
       .pipe(pluck('sensors'));
   }
 
@@ -140,9 +155,23 @@ export class PolicyHttpService {
     return GlobalVariable.http.patch(PathConstant.WAF_GROUPS_URL, payload);
   }
 
-  getWAFSensors() {
+  getWAFSensors(source) {
+    const options: any = [];
+    if (source === GlobalConstant.NAV_SOURCE.FED_POLICY) {
+      options.push({
+        params: {
+          scope: 'fed',
+        },
+      });
+    } else {
+      options.push({
+        params: {
+          scope: 'local',
+        },
+      });
+    }
     return GlobalVariable.http
-      .get(PathConstant.WAF_SENSORS_URL)
+      .get(PathConstant.WAF_SENSORS_URL, ...options)
       .pipe(pluck('sensors'));
   }
 }

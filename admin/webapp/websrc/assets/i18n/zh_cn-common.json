@@ -2339,7 +2339,8 @@
       "ADD_PATTERN_NG": "正则形式的最大数量为16",
       "EXISTING_PATTERN_NG": "此正则形式已存在",
       "RECIPROCAL_PATTERN_NG": "在同一语境下有与添加的正则形式互逆的表达式",
-      "SENSOR_NAME_REQUIRED": "需填写检测器名称"
+      "SENSOR_NAME_REQUIRED": "需填写检测器名称",
+      "NAME_VALID": "检测器名前缀必须是: "
     },
     "TIP": {
       "EDIT_SENSOR": "编辑检测器",

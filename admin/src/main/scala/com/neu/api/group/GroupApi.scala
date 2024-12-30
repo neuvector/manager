@@ -212,9 +212,9 @@ class GroupApi(resourceService: GroupService) extends BaseApi {
                 }
               } ~
               get {
-                parameter(Symbol("name").?) { name =>
+                parameter(Symbol("name").?, Symbol("scope").?) { (name, scope) =>
                   Utils.respondWithWebServerHeaders() {
-                    resourceService.getDlpSensor(tokenId, name)
+                    resourceService.getDlpSensor(tokenId, name, scope)
                   }
                 }
               } ~
@@ -285,9 +285,9 @@ class GroupApi(resourceService: GroupService) extends BaseApi {
                 }
               } ~
               get {
-                parameter(Symbol("name").?) { name =>
+                parameter(Symbol("name").?, Symbol("scope").?) { (name, scope) =>
                   Utils.respondWithWebServerHeaders() {
-                    resourceService.getWafSensor(tokenId, name)
+                    resourceService.getWafSensor(tokenId, name, scope)
                   }
                 }
               } ~

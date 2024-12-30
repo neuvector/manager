@@ -2339,7 +2339,8 @@
       "ADD_PATTERN_NG": "Maximum amount of patterns is 16",
       "EXISTING_PATTERN_NG": "This pattern is existing!",
       "RECIPROCAL_PATTERN_NG": "There is reciprocal pattern against added pattern in the same context.",
-      "SENSOR_NAME_REQUIRED": "Sensor name is required!"
+      "SENSOR_NAME_REQUIRED": "Sensor name is required!",
+      "NAME_VALID": "Sensor name must start with: "
     },
     "TIP": {
       "EDIT_SENSOR": "Edit Sensor",

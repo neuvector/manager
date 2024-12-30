@@ -8,9 +8,9 @@ import { TranslateService } from '@ngx-translate/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UtilsService } from '@common/utils/app.utils';
 import { pluck } from 'rxjs/operators';
-import { SensorActionButtonsComponent } from '@routes/dlp-sensors/partial/sensor-action-buttons/sensor-action-buttons.component';
-import { RuleActionButtonsComponent } from '@routes/dlp-sensors/partial/rule-action-buttons/rule-action-buttons.component';
-import { PatternActionButtonsComponent } from '@routes/dlp-sensors/partial/pattern-action-buttons/pattern-action-buttons.component';
+import { SensorActionButtonsComponent } from '@components/dlp-sensors/partial/sensor-action-buttons/sensor-action-buttons.component';
+import { RuleActionButtonsComponent } from '@components/dlp-sensors/partial/rule-action-buttons/rule-action-buttons.component';
+import { PatternActionButtonsComponent } from '@components/dlp-sensors/partial/pattern-action-buttons/pattern-action-buttons.component';
 
 @Injectable({
   providedIn: 'root',
@@ -26,21 +26,17 @@ export class DlpSensorsService {
     this.$win = $(GlobalVariable.window);
   }
 
-  configGrids = (isWriteDLPSensorAuthorized: boolean) => {
+  configGrids = (isWriteDLPSensorAuthorized: boolean, source: string = '') => {
     const columnDefs4Sensor = [
       {
         headerName: this.translate.instant('dlp.gridHeader.SENSOR_NAME'),
         field: 'name',
-        headerCheckboxSelection: true,
-        headerCheckboxSelectionFilteredOnly: true,
-        checkboxSelection: params => {
-          if (params.data) return !params.data.predefine;
-          return false;
-        },
+        headerCheckboxSelection: params => params.context.componentParent.source !== GlobalConstant.NAV_SOURCE.FED_POLICY,
+        headerCheckboxSelectionFilteredOnly: params => params.context.componentParent.source !== GlobalConstant.NAV_SOURCE.FED_POLICY,
         cellRenderer: params => {
           if (params.value)
             return `<span class="${
-              params.data.predefine ? 'left-margin-32' : ''
+              params.data.predefine && params.context.componentParent.source !== GlobalConstant.NAV_SOURCE.FED_POLICY ? 'left-margin-32' : ''
             }">
                       ${params.value}
                     </span>`;
@@ -99,6 +95,14 @@ export class DlpSensorsService {
         maxWidth: 60,
       },
     ];
+
+    if (source !== GlobalConstant.NAV_SOURCE.FED_POLICY) {
+      columnDefs4Sensor[0]['checkboxSelection'] = params => {
+        if (params.data) return !params.data.predefine && ((params.context.componentParent.source !== GlobalConstant.NAV_SOURCE.FED_POLICY &&
+             params.data.cfg_type !== GlobalConstant.CFG_TYPE.FED));
+        return false;
+      };
+    }
 
     const columnDefs4Rules = [
       {
@@ -186,7 +190,7 @@ export class DlpSensorsService {
       ),
     };
 
-    grids.gridOptions.rowSelection = 'multiple';
+    grids.gridOptions.rowSelection = source !== GlobalConstant.NAV_SOURCE.FED_POLICY ? 'multiple' : 'single';
 
     grids.gridOptions.rowClassRules = {
       'disabled-row': params => {
@@ -204,9 +208,17 @@ export class DlpSensorsService {
     return grids;
   };
 
-  getDlpSensorsData = () => {
+  getDlpSensorsData = source => {
+    const options: any = [];
+    if (source === GlobalConstant.NAV_SOURCE.FED_POLICY) {
+      options.push({
+        params: {
+          scope: 'fed',
+        },
+      });
+    }
     return GlobalVariable.http
-      .get(PathConstant.DLP_SENSORS_URL)
+      .get(PathConstant.DLP_SENSORS_URL, ...options)
       .pipe(pluck('sensors'));
   };
 

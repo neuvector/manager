@@ -6,16 +6,16 @@ import { QuickFilterService } from '@components/quick-filter/quick-filter.servic
 import { tap } from 'rxjs/operators';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 
-export const groupDetailsTabs = {
-  0: 'member',
-  1: 'custom check',
-  2: 'process profile rules',
-  3: 'file access rules',
-  4: 'network rules',
-  5: 'response rules',
-  6: 'DLP',
-  7: 'WAF',
-};
+export const groupDetailsTabs = [
+  'member',
+  'custom check',
+  'process profile rules',
+  'file access rules',
+  'network rules',
+  'response rules',
+  'DLP',
+  'WAF',
+];
 
 @Component({
   selector: 'app-group-details',

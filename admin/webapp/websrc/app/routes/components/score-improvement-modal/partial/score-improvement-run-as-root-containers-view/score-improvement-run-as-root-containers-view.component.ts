@@ -72,7 +72,7 @@ export class ScoreImprovementRunAsRootContainersViewComponent
     this.containersService.getContainers().subscribe({
       next: workloads => {
         this.containers = workloads
-          .filter(this.run_as_root_scoreFilter)
+          .filter(this.runAsRootFilter)
           .filter(w => w.state !== 'exit' && !w.platform_role);
         this.containersService.displayContainers =
           this.containersService.formatScannedWorkloads(this.containers);
@@ -93,7 +93,7 @@ export class ScoreImprovementRunAsRootContainersViewComponent
       });
   }
 
-  private run_as_root_scoreFilter = (w: Workload) => {
+  private runAsRootFilter = (w: Workload) => {
     return (
       w.children &&
       w.children.length > 0 &&

@@ -9,6 +9,7 @@ import { finalize } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { GlobalVariable } from '@common/variables/global.variable';
+import { MapConstant } from '@common/constants/map.constant';
 
 @Component({
   selector: 'app-profile-form',
@@ -43,7 +44,7 @@ export class ProfileFormComponent implements OnInit {
     return this.user.server === '';
   }
   get isRancherSSO(): boolean {
-    return this.user.server === 'Rancher';
+    return this.user.server.toLowerCase().includes(MapConstant.AUTH_PROVIDER.RANCHER.toLowerCase());
   }
   get gravatarEnabled() {
     return GlobalVariable.gravatar;

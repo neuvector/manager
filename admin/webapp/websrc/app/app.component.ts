@@ -126,6 +126,10 @@ export class AppComponent implements OnInit {
             }
             if (!GlobalVariable.hasInitializedSummary) {
               this.summaryService.getSummary().subscribe(summaryInfo => {
+                GlobalVariable.isOpenShift =
+                  summaryInfo.summary.platform === GlobalConstant.OPENSHIFT ||
+                  summaryInfo.summary.platform === GlobalConstant.RANCHER;
+                GlobalVariable.summary = summaryInfo.summary;
                 this.isSummaryDone = true;
               });
             }

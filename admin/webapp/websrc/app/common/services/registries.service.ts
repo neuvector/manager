@@ -6,6 +6,7 @@ import {
   EntryPostBody,
   ImageGetResponse,
   LayerGetResponse,
+  RegistryTypeResponse,
   RegistryGetResponse,
   RegistryPatchBody,
   RegistryPostBody,
@@ -21,6 +22,12 @@ import { SortModelItem } from 'ag-grid-community';
 
 @Injectable()
 export class RegistriesService {
+  getRegistryTypes(): Observable<RegistryTypeResponse> {
+    return GlobalVariable.http.get<RegistryTypeResponse>(
+      PathConstant.REGISTRY_TYPE_URL
+    );
+  }
+
   getRegistries(): Observable<RegistryGetResponse> {
     return GlobalVariable.http.get<RegistryGetResponse>(
       PathConstant.REGISTRY_SCAN_URL

@@ -122,6 +122,14 @@ export interface Summary {
   isAllView?: boolean;
 }
 
+interface RegistryType {
+  registry_type: string[];
+}
+
+export interface RegistryTypeResponse {
+  list: RegistryType;
+}
+
 export interface RegistryGetResponse {
   summarys: Summary[];
 }

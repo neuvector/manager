@@ -62,7 +62,12 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
     private dialog: MatDialog,
     public dialogRef: MatDialogRef<RegistriesTableComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public data: { isEdit: boolean; editable: boolean; config: RegistryConfig },
+    public data: {
+      isEdit: boolean;
+      editable: boolean;
+      config: RegistryConfig;
+      registryTypes: string[];
+    },
     private registriesService: RegistriesService,
     private registriesCommunicationService: RegistriesCommunicationService,
     private notificationService: NotificationService,
@@ -199,6 +204,11 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
         this.options.formState.isProxyEnabled = true;
       }
     });
+    let registryTypeList = this.data.registryTypes
+      .map(registryType => {
+        return { value: registryType, viewValue: registryType };
+      })
+      .sort((a, b) => (a.value > b.value ? 1 : b.value > a.value ? -1 : 0));
     if (this.data.config) {
       const { schedule, aws_key, ...data } = this.data.config;
       const interval =
@@ -223,6 +233,8 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
       }
       this.model = {
         ...data,
+        defaultRegistryType: this.data.registryTypes[2],
+        registryTypes: registryTypeList,
         isEdit: this.data.isEdit,
         isRemote: GlobalVariable.isRemote,
         isFed: data.cfg_type === GlobalConstant.CFG_TYPE.FED,
@@ -235,6 +247,8 @@ export class AddRegistryDialogComponent implements OnInit, AfterViewChecked {
       };
     } else {
       this.model = {
+        defaultRegistryType: this.data.registryTypes[2],
+        registryTypes: registryTypeList,
         isEdit: this.data.isEdit,
         isRemote: GlobalVariable.isRemote,
       };

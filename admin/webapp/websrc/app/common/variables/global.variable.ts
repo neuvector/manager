@@ -27,4 +27,5 @@ export class GlobalVariable {
   public static customPageFooterColor: string;
   public static customPolicy: string;
   public static customLoginLogo: string;
+  public static registryType: string[];
 }

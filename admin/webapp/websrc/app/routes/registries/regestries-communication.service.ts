@@ -21,6 +21,7 @@ export interface RegistryDetails {
 
 @Injectable()
 export class RegistriesCommunicationService {
+  private refreshRegistryTypeSubject$ = new Subject();
   private refreshRegistriesSubject$ = new Subject();
   private refreshDetailsSubject$ = new Subject();
   private selectedRegistrySubject$ = new BehaviorSubject<Summary | undefined>(
@@ -73,6 +74,7 @@ export class RegistriesCommunicationService {
   private deletingSubject$ = new BehaviorSubject<boolean>(false);
   deleting$ = this.deletingSubject$.asObservable();
   private savingSubject$ = new BehaviorSubject<boolean>(false);
+  registryTypes$ = this.registriesService.getRegistryTypes().pipe();
   registries$ = this.registriesService.getRegistries().pipe(
     tap(({ summarys }) => {
       this.scan(summarys.some(summary => summary.status === 'scanning'));

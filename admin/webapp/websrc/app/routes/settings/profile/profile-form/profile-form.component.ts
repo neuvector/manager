@@ -44,7 +44,9 @@ export class ProfileFormComponent implements OnInit {
     return this.user.server === '';
   }
   get isRancherSSO(): boolean {
-    return this.user.server.toLowerCase().includes(MapConstant.AUTH_PROVIDER.RANCHER.toLowerCase());
+    return this.user.server
+      .toLowerCase()
+      .includes(MapConstant.AUTH_PROVIDER.RANCHER.toLowerCase());
   }
   get gravatarEnabled() {
     return GlobalVariable.gravatar;

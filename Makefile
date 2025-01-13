@@ -12,6 +12,7 @@ copy_mgr:
 	cp manager/scripts/* ${STAGE_DIR}/usr/local/bin/
 	cp manager/java.security ${STAGE_DIR}/usr/lib/jvm/java-17-openjdk/lib/security/java.security
 	cp manager/admin/target/scala-3.3.4/admin-assembly-1.0.jar ${STAGE_DIR}/usr/local/bin/
+	cp manager/package/entrypoint.sh ${STAGE_DIR}/entrypoint.sh
 
 stage_init:
 	rm -rf ${STAGE_DIR}; mkdir -p ${STAGE_DIR}
@@ -42,7 +43,7 @@ DEFAULT_PLATFORMS := linux/amd64,linux/arm64,linux/x390s,linux/riscv64
 COMMIT = $(shell git rev-parse --short HEAD)
 ifeq ($(VERSION),)
 	# Define VERSION, which is used for image tags or to bake it into the
-	# compiled binary to enable the printing of the application version, 
+	# compiled binary to enable the printing of the application version,
 	# via the --version flag.
 	CHANGES = $(shell git status --porcelain --untracked-files=no)
 	ifneq ($(CHANGES),)

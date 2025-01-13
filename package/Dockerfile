@@ -96,6 +96,7 @@ COPY --from=base /chroot/ /
 COPY --from=base /usr/sbin/useradd /usr/sbin
 COPY --from=builder /usr/lib64/jvm /usr/lib64/jvm
 COPY --from=builder /usr/lib64/lib*.so* /usr/lib64/
+COPY --from=builder /src/package/entrypoint.sh /entrypoint.sh
 COPY --from=builder /src/stage /
 
 ENV JAVA_HOME=/usr/lib64/jvm/java-17-openjdk-17 \
@@ -122,4 +123,4 @@ RUN echo "$user:x:1000:1000::/nonexistent:/bin/bash" >> /etc/passwd && \
     echo "$user:x:1000:" >> /etc/group
 USER $user
 
-ENTRYPOINT ["java", "-Xms256m", "-Xmx2048m", "-Djdk.tls.rejectClientInitiatedRenegotiation=true", "-Dpekko.http.parsing.max-header-value-length=32k", "--add-opens=java.base/java.lang=ALL-UNNAMED", "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED", "--add-opens=java.base/java.util=ALL-UNNAMED", "-jar", "/usr/local/bin/admin-assembly-1.0.jar"]
+ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]

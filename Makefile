@@ -12,6 +12,7 @@ copy_mgr:
 	cp manager/scripts/* ${STAGE_DIR}/usr/local/bin/
 	cp manager/java.security ${STAGE_DIR}/usr/lib/jvm/java-17-openjdk/lib/security/java.security
 	cp manager/admin/target/scala-3.3.4/admin-assembly-1.0.jar ${STAGE_DIR}/usr/local/bin/
+	cp manager/package/entrypoint.sh ${STAGE_DIR}/entrypoint.sh
 
 stage_init:
 	rm -rf ${STAGE_DIR}; mkdir -p ${STAGE_DIR}

@@ -3,7 +3,7 @@ ARG BASE_IMAGE_TAG
 FROM neuvector/${BASE_PREFIX}manager_base:${BASE_IMAGE_TAG}
 
 COPY stage /
-COPY stage/usr/lib/jvm/java-17-openjdk/lib/security/java.security /usr/lib64/jvm/java-17-openjdk-17/conf/security/java.security
+COPY stage/usr/lib/jvm/java-17-openjdk/lib/security/java.security /usr/lib64/jvm/java-17-openjdk-17/conf/security/java.security.fips
 
 ARG NV_TAG
 LABEL name="manager" \
@@ -19,4 +19,4 @@ RUN echo "$user:x:1000:1000::/nonexistent:/bin/bash" >> /etc/passwd && \
     echo "$user:x:1000:" >> /etc/group
 USER $user
 
-ENTRYPOINT ["java", "-Xms256m", "-Xmx2048m", "-Djdk.tls.rejectClientInitiatedRenegotiation=true", "-Dpekko.http.parsing.max-header-value-length=32k", "--add-opens=java.base/java.lang=ALL-UNNAMED", "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED", "--add-opens=java.base/java.util=ALL-UNNAMED", "-jar", "/usr/local/bin/admin-assembly-1.0.jar"]
+ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]

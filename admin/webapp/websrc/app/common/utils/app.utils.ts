@@ -186,6 +186,7 @@ export class UtilsService {
       rowData: null,
       animateRows: true,
       rowSelection: 'single',
+      includeHiddenColumnsInQuickFilter: true,
       icons: {
         sortAscending: '<em class="fa fa-sort-alpha-down"></em>',
         sortDescending: '<em class="fa fa-sort-alpha-up"></em>',

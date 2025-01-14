@@ -39,7 +39,9 @@ export const AddRegistryFieldConfig: FormlyFieldConfig[] = [
         },
         hooks: {
           onInit: field => {
-            field?.formControl?.setValue(field.model.registry_type || field.model.defaultRegistryType);
+            field?.formControl?.setValue(
+              field.model.registry_type || field.model.defaultRegistryType
+            );
           },
         },
       },

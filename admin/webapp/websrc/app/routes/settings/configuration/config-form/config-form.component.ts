@@ -45,9 +45,7 @@ export class ConfigFormComponent implements OnInit {
       },
       isOpenShift: () => GlobalVariable.isOpenShift,
       isRancherSSO: () =>
-        GlobalVariable.user.token.server
-          .toLowerCase()
-          .includes(MapConstant.AUTH_PROVIDER.RANCHER.toLowerCase()),
+        GlobalVariable.user.token.server.toLowerCase().includes(MapConstant.AUTH_PROVIDER.RANCHER.toLowerCase()),
       isOpenShiftSSO: () =>
         GlobalVariable.user.token.server ===
         MapConstant.AUTH_PROVIDER.OPENSHIFT,

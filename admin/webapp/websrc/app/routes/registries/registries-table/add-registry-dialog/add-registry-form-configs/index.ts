@@ -2,12 +2,12 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
 import {
   FedRegistryHideExpr,
   FilterField,
+  Registries,
   TestSettingsFilterField,
 } from './constants/constants';
 import { AmazonEcrRegistryConfig } from './configs/amazon-ecr-registry.config';
 import { AzureRegistryConfig } from './configs/azure-container-registry.config';
 import { DockerRegistryConfig } from './configs/docker-registry.config';
-import { HarborRegistryConfig } from './configs/harbor-registry.config';
 import { GitlabConfig } from './configs/gitlab.config';
 import { RedHatRegistryConfig } from './configs/red-hat-public-registry.config';
 import { SonatypeNexusConfig } from './configs/sonatype-nexus.config';
@@ -25,6 +25,7 @@ export const AddRegistryFieldConfig: FormlyFieldConfig[] = [
         className: 'col-12 col-md-6',
         key: 'registry_type',
         type: FormlyComponents.SELECT,
+        defaultValue: Registries.DOCKER_REGISTRY,
         templateOptions: {
           change: field => {
             field.options?.parentForm?.form.markAsPristine();
@@ -32,17 +33,16 @@ export const AddRegistryFieldConfig: FormlyFieldConfig[] = [
             field.options?.parentForm?.form.updateValueAndValidity();
           },
           label: 'registry.REGISTRY_TYPE',
+          items: Object.keys(Registries)
+            .map(key => {
+              return { value: Registries[key], viewValue: Registries[key] };
+            })
+            .sort((a, b) =>
+              a.value > b.value ? 1 : b.value > a.value ? -1 : 0
+            ),
         },
         expressionProperties: {
           'templateOptions.disabled': 'model.isEdit',
-          'templateOptions.items': 'model.registryTypes',
-        },
-        hooks: {
-          onInit: field => {
-            field?.formControl?.setValue(
-              field.model.registry_type || field.model.defaultRegistryType
-            );
-          },
         },
       },
       {
@@ -79,47 +79,43 @@ export const AddRegistryFieldConfig: FormlyFieldConfig[] = [
     ],
   },
   {
-    hideExpression: `model.registry_type !== model.registryTypes[0].value`,
+    hideExpression: `model.registry_type !== "${Registries.AMAZON_ECR_REGISTRY}"`,
     fieldGroup: [...AmazonEcrRegistryConfig],
   },
   {
-    hideExpression: `model.registry_type !== model.registryTypes[1].value`,
+    hideExpression: `model.registry_type !== "${Registries.AZURE_CONTAINER_REGISTRY}"`,
     fieldGroup: [...AzureRegistryConfig],
   },
   {
-    hideExpression: `model.registry_type !== model.registryTypes[2].value`,
+    hideExpression: `model.registry_type !== "${Registries.DOCKER_REGISTRY}"`,
     fieldGroup: [...DockerRegistryConfig],
   },
   {
-    hideExpression: `model.registry_type !== model.registryTypes[3].value`,
+    hideExpression: `model.registry_type !== "${Registries.GITLAB}"`,
     fieldGroup: [...GitlabConfig],
   },
   {
-    hideExpression: `model.registry_type !== model.registryTypes[4].value`,
+    hideExpression: `model.registry_type !== "${Registries.GOOGLE_CONTAINER_REGISTRY}"`,
     fieldGroup: [...GoogleContainerRegistryConfig],
   },
   {
-    hideExpression: `model.registry_type !== model.registryTypes[5].value`,
-    fieldGroup: [...HarborRegistryConfig],
-  },
-  {
-    hideExpression: `model.registry_type !== model.registryTypes[6].value`,
+    hideExpression: `model.registry_type !== "${Registries.IBM_CLOUD_CONTAINER_REGISTRY}"`,
     fieldGroup: [...IBMCloudContainerRegistryConfig],
   },
   {
-    hideExpression: `model.registry_type !== model.registryTypes[7].value`,
+    hideExpression: `model.registry_type !== "${Registries.JFROG_ARTIFACTORY}"`,
     fieldGroup: [...JFROgArtifactoryConfig],
   },
   {
-    hideExpression: `model.registry_type !== model.registryTypes[8].value`,
+    hideExpression: `model.registry_type !== "${Registries.OPENSHIFT_REGISTRY}"`,
     fieldGroup: [...OpenShiftRegistryConfig],
   },
   {
-    hideExpression: `model.registry_type !== model.registryTypes[9].value`,
+    hideExpression: `model.registry_type !== "${Registries.REDHAT_PUBLIC_REGISTRY}"`,
     fieldGroup: [...RedHatRegistryConfig],
   },
   {
-    hideExpression: `model.registry_type !== model.registryTypes[10].value`,
+    hideExpression: `model.registry_type !== "${Registries.SONATYPE_NEXUS}"`,
     fieldGroup: [...SonatypeNexusConfig],
   },
 ];

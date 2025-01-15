@@ -32,19 +32,6 @@ import { AuthUtilsService } from '@common/utils/auth.utils';
 import { catchError } from 'rxjs/operators';
 import { ConfigHttpService } from '@common/api/config-http.service';
 
-export const RegistryType = [
-  'Amazon ECR Registry',
-  'Azure Container Registry',
-  'Docker Registry',
-  'Gitlab',
-  'Google Container Registry',
-  'IBM Cloud Container Registry',
-  'OpenShift Registry',
-  'JFrog Artifactory',
-  'Red Hat Public Registry',
-  'Sonatype Nexus',
-];
-
 @Component({
   selector: 'app-registries-table',
   templateUrl: './registries-table.component.html',
@@ -172,8 +159,6 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
   ];
   startingScan$ = this.registriesCommunicationService.startingScan$;
   stoppingScan$ = this.registriesCommunicationService.stoppingScan$;
-  registryTypes$ = this.registriesCommunicationService.registryTypes$;
-  registryTypes: string[] = [];
   isRegistryScanAuthorized: boolean = false;
   get isFedRegistry() {
     let selectedRows = this.gridApi?.getSelectedNodes();
@@ -367,29 +352,18 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
   }
 
   openDialog(isEdit = false, data?: Summary, editable = true): void {
-    this.registryTypes$.subscribe({
-      next: value => (this.registryTypes = value.list.registry_type),
-      error: err => (this.registryTypes = RegistryType),
-      complete: () => {
-        const dialog = this.dialog.open(AddRegistryDialogComponent, {
-          width: '80%',
-          maxWidth: '1100px',
-          data: {
-            config: data,
-            isEdit: isEdit,
-            editable: editable,
-            registryTypes: this.registryTypes,
-          },
-        });
-        dialog.afterClosed().subscribe(change => {
-          if (change && isEdit) {
-            this.registriesCommunicationService.setSelectedRegistry(
-              this.gridApi.getSelectedNodes()[0].data
-            );
-          }
-          this.cd.markForCheck();
-        });
-      },
+    const dialog = this.dialog.open(AddRegistryDialogComponent, {
+      width: '80%',
+      maxWidth: '1100px',
+      data: { config: data, isEdit: isEdit, editable: editable },
+    });
+    dialog.afterClosed().subscribe(change => {
+      if (change && isEdit) {
+        this.registriesCommunicationService.setSelectedRegistry(
+          this.gridApi.getSelectedNodes()[0].data
+        );
+      }
+      this.cd.markForCheck();
     });
   }
 }

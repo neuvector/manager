@@ -1300,7 +1300,6 @@
     "JFROG_URL_HINT": "样本: https://docker-virtual.<10.1.7.122:8081> - 子域, https://<10.1.7.122:8081> - 镜像库或端口",
     "SONATYPE_URL_HINT": "样本: http://<10.1.7.121:8082>",
     "DOCKER_URL_HINT": "样本: https://registry.hub.docker.com/",
-    "HARBOR_URL_HINT": "样本: http://<10.1.7.121:8082>",
     "REDHAT_URL_HINT": "样本: https://registry.connect.redhat.com/",
     "OPENSHIFT_URL_HINT": "样本: OpenShift 4.x - https://image-registry.openshift-image-registry.svc:5000",
     "GOOGLE_URL_HINT": "样本: https://gcr.io",

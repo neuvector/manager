@@ -155,6 +155,19 @@ export const INTERVAL_STEP_VALUES = {
   },
 };
 
+export const Registries = {
+  AMAZON_ECR_REGISTRY: 'Amazon ECR Registry',
+  AZURE_CONTAINER_REGISTRY: 'Azure Container Registry',
+  DOCKER_REGISTRY: 'Docker Registry',
+  GITLAB: 'Gitlab',
+  GOOGLE_CONTAINER_REGISTRY: 'Google Container Registry',
+  IBM_CLOUD_CONTAINER_REGISTRY: 'IBM Cloud Container Registry',
+  OPENSHIFT_REGISTRY: 'OpenShift Registry',
+  JFROG_ARTIFACTORY: 'JFrog Artifactory',
+  REDHAT_PUBLIC_REGISTRY: 'Red Hat Public Registry',
+  SONATYPE_NEXUS: 'Sonatype Nexus',
+};
+
 export const FedRegistryHideExpr =
   '(!formState.isFedAdmin && !model.isEdit) || !formState.isMaster';
 

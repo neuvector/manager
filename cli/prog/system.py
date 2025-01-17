@@ -1338,6 +1338,7 @@ def export_config(data, section, raw, filename):
 
 @request_export.command('group')
 @click.option("--name", multiple=True, help="Name of group to export")
+@click.option("--use_name_referral", default='false', type=click.Choice(['true', 'false']), help="export group definition to separate yaml doc for group referral")
 @click.option('--policy_mode', default="", type=click.Choice(['discover', 'monitor', 'protect', '']), help="Network policy mode of the exported group")
 @click.option('--profile_mode', default="", type=click.Choice(['discover', 'monitor', 'protect', '']), help="Process/file profile mode of the exported group")
 @click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True), help="Local file path when export to local machine")
@@ -1345,7 +1346,7 @@ def export_config(data, section, raw, filename):
 @click.option("--remote_filepath", default="", help="File path on repository when export to remote repository")
 @click.option("--comment", default="", help="Comment for export to remote repository")
 @click.pass_obj
-def request_export_group(data, name, policy_mode, profile_mode, filename, remote_repository_nickname, remote_filepath, comment):
+def request_export_group(data, name, use_name_referral, policy_mode, profile_mode, filename, remote_repository_nickname, remote_filepath, comment):
     """Export group policies."""
 
     groups = []
@@ -1354,6 +1355,8 @@ def request_export_group(data, name, policy_mode, profile_mode, filename, remote
 
     modeOptions = {"discover": "Discover", "monitor": "Monitor", "protect": "Protect"}
     payload = {"groups": groups}
+    if use_name_referral == 'true':
+        payload["use_name_referral"] = True
     if policy_mode in modeOptions:
         payload["policy_mode"] = modeOptions[policy_mode]
     if profile_mode in modeOptions:

@@ -66,6 +66,7 @@ export class SwitchModeModalComponent implements OnInit {
     ) {
       this.zeroDriftHint = this.translate.instant('group.ZERO_DRIFT_HINT');
       this.mode = 'discover';
+      this.profileMode = 'discover';
     }
   };
 

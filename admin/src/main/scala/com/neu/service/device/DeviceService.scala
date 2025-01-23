@@ -262,7 +262,6 @@ class DeviceService extends Directives with DefaultJsonFormats with LazyLogging 
       val payload = remoteRepositoryToJson(
         remoteRepository
       )
-      logger.info("Create remote repository: {}", payload)
       RestClient.httpRequestWithHeader(
         s"${baseClusterUri(tokenId)}/system/config/remote_repository",
         HttpMethods.POST,

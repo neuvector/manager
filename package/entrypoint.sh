@@ -13,7 +13,6 @@ exec java \
   -Xms256m \
   -Xmx2048m \
   -Djdk.tls.rejectClientInitiatedRenegotiation=true \
-  -Dpekko.http.parsing.max-header-value-length=32k \
   --add-opens=java.base/java.lang=ALL-UNNAMED \
   --add-opens=java.base/java.lang.reflect=ALL-UNNAMED \
   --add-opens=java.base/java.util=ALL-UNNAMED \

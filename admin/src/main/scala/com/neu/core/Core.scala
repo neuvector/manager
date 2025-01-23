@@ -3,7 +3,7 @@ package com.neu.core
 import com.neu.api.Api
 import com.neu.core.CommonSettings.httpPort
 import com.neu.web.StaticResources
-import com.typesafe.config.Config
+import com.typesafe.config.{ Config, ConfigValueFactory }
 import com.typesafe.config.ConfigFactory.*
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.pekko.actor.ActorSystem
@@ -43,23 +43,38 @@ trait BootedCore
     configureSSLEngine(engine)
   }
 
-  // Use your existing configuration logic
-  private val useSSL: String    = sys.env.getOrElse("MANAGER_SSL", "on")
-  private val sslConfig: Config =
-    load.getConfig("ssl").withFallback(defaultReference(getClass.getClassLoader))
+  private val useSSL: String              = sys.env.getOrElse("MANAGER_SSL", "on")
+  private val httpMaxHeaderLength: String = sys.env.getOrElse("HTTP_MAX_HEADER_LENGTH", "32k")
+  private val config: Config              =
+    load
+      .getConfig(if (useSSL == "off") "noneSsl" else "ssl")
+      .withFallback(defaultReference(getClass.getClassLoader))
+      .withValue(
+        "pekko.http.server.parsing.max-header-value-length",
+        ConfigValueFactory.fromAnyRef(
+          httpMaxHeaderLength
+        )
+      )
+      .withValue(
+        "pekko.http.client.parsing.max-header-value-length",
+        ConfigValueFactory.fromAnyRef(
+          httpMaxHeaderLength
+        )
+      )
 
-  private val sslSettings = ServerSettings(sslConfig)
+  private val settings = ServerSettings(config)
 
   private val bindingFuture: Future[Http.ServerBinding] = useSSL match {
     case "off" =>
       Http()
         .newServerAt("0.0.0.0", httpPort.toInt)
+        .withSettings(settings)
         .bind(rootService)
     case _     =>
       Http()
         .newServerAt("0.0.0.0", httpPort.toInt)
         .enableHttps(https)
-        .withSettings(sslSettings)
+        .withSettings(settings)
         .bind(rootService)
   }
 

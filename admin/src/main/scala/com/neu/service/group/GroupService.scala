@@ -73,7 +73,7 @@ class GroupService extends BaseService with DefaultJsonFormats with LazyLogging 
     logger.info("Exporting groups: {}", payload)
     RestClient.httpRequestWithHeaderDecode(
       s"${baseClusterUri(tokenId)}/file/group",
-      GET,
+      POST,
       payload,
       tokenId
     )

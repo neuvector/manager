@@ -2128,6 +2128,8 @@
     "POLICY_MODE": "Network Policy Mode",
     "PROFILE_MODE": "Process Profile Mode",
     "ZERODRIFT_SETTING": "Baseline Profile Setting",
+    "DOWNLOAD_LOCATION": "Download location",
+    "NAME_REFERRAL": "Use Name Referral",
     "TIP": {
       "EDIT": "Edit Group",
       "DELETE": "Remove Group",

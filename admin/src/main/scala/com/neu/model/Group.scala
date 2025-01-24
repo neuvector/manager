@@ -142,6 +142,7 @@ case class Groups4Export(
   groups: Array[String],
   policy_mode: Option[String],
   profile_mode: Option[String],
+  use_name_referral: Boolean,
   remote_export_options: Option[RemoteExportOptions] = None
 )
 

@@ -2128,6 +2128,8 @@
     "POLICY_MODE": "网络策略模式",
     "PROFILE_MODE": "进程配置模式",
     "ZERODRIFT_SETTING": "基线配置设置",
+    "DOWNLOAD_LOCATION": "下载到",
+    "NAME_REFERRAL": "使用组名参照",
     "TIP": {
       "EDIT": "编辑组",
       "DELETE": "删除组",

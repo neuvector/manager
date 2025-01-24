@@ -98,10 +98,14 @@
           <div class="row margin-top-m">
             <div class="col-sm-3" style="position: relative">
               <button
-                *ngIf="!isPredefine && isWriteWAFSensorAuthorized && ((source !== navSource.FED_POLICY &&
-                     selectedSensor.cfg_type !== CFG_TYPE.FED) ||
-                     (source === navSource.FED_POLICY &&
-                       selectedSensor.cfg_type === CFG_TYPE.FED))"
+                *ngIf="
+                  !isPredefine &&
+                  isWriteWAFSensorAuthorized &&
+                  ((source !== navSource.FED_POLICY &&
+                    selectedSensor.cfg_type !== CFG_TYPE.FED) ||
+                    (source === navSource.FED_POLICY &&
+                      selectedSensor.cfg_type === CFG_TYPE.FED))
+                "
                 style="position: absolute; z-index: 10; right: 17px; top: 4px"
                 (click)="openAddWafRuleModal()">
                 <em

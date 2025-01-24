@@ -80,7 +80,7 @@ export class WafSensorsComponent implements OnInit {
       !this.authUtilsService.userPermission.isNamespaceUser;
     this.gridOptions = this.wafSensorsService.configGrids(
       this.isWriteWAFSensorAuthorized,
-      this.source,
+      this.source
     );
     this.gridOptions4Sensors = this.gridOptions.gridOptions;
     this.gridOptions4Sensors.onGridReady = params => {

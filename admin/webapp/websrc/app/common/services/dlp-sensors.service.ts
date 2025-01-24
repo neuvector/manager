@@ -31,12 +31,20 @@ export class DlpSensorsService {
       {
         headerName: this.translate.instant('dlp.gridHeader.SENSOR_NAME'),
         field: 'name',
-        headerCheckboxSelection: params => params.context.componentParent.source !== GlobalConstant.NAV_SOURCE.FED_POLICY,
-        headerCheckboxSelectionFilteredOnly: params => params.context.componentParent.source !== GlobalConstant.NAV_SOURCE.FED_POLICY,
+        headerCheckboxSelection: params =>
+          params.context.componentParent.source !==
+          GlobalConstant.NAV_SOURCE.FED_POLICY,
+        headerCheckboxSelectionFilteredOnly: params =>
+          params.context.componentParent.source !==
+          GlobalConstant.NAV_SOURCE.FED_POLICY,
         cellRenderer: params => {
           if (params.value)
             return `<span class="${
-              params.data.predefine && params.context.componentParent.source !== GlobalConstant.NAV_SOURCE.FED_POLICY ? 'left-margin-32' : ''
+              params.data.predefine &&
+              params.context.componentParent.source !==
+                GlobalConstant.NAV_SOURCE.FED_POLICY
+                ? 'left-margin-32'
+                : ''
             }">
                       ${params.value}
                     </span>`;
@@ -98,8 +106,13 @@ export class DlpSensorsService {
 
     if (source !== GlobalConstant.NAV_SOURCE.FED_POLICY) {
       columnDefs4Sensor[0]['checkboxSelection'] = params => {
-        if (params.data) return !params.data.predefine && ((params.context.componentParent.source !== GlobalConstant.NAV_SOURCE.FED_POLICY &&
-             params.data.cfg_type !== GlobalConstant.CFG_TYPE.FED));
+        if (params.data)
+          return (
+            !params.data.predefine &&
+            params.context.componentParent.source !==
+              GlobalConstant.NAV_SOURCE.FED_POLICY &&
+            params.data.cfg_type !== GlobalConstant.CFG_TYPE.FED
+          );
         return false;
       };
     }
@@ -190,7 +203,8 @@ export class DlpSensorsService {
       ),
     };
 
-    grids.gridOptions.rowSelection = source !== GlobalConstant.NAV_SOURCE.FED_POLICY ? 'multiple' : 'single';
+    grids.gridOptions.rowSelection =
+      source !== GlobalConstant.NAV_SOURCE.FED_POLICY ? 'multiple' : 'single';
 
     grids.gridOptions.rowClassRules = {
       'disabled-row': params => {

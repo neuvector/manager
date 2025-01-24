@@ -83,7 +83,7 @@ export class DlpSensorsComponent implements OnInit, OnDestroy {
       !this.authUtilsService.userPermission.isNamespaceUser;
     this.gridOptions = this.dlpSensorsService.configGrids(
       this.isWriteDLPSensorAuthorized,
-      this.source,
+      this.source
     );
     this.gridOptions4Sensors = this.gridOptions.gridOptions;
     this.gridOptions4Sensors.onGridReady = params => {

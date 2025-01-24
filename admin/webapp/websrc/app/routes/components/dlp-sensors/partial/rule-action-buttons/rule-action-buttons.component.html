@@ -1,4 +1,11 @@
-<div *ngIf="!isPredefine && (params.context.componentParent.source !== navSource.FED_POLICY && params.data.cfg_type !== CFG_TYPE.FED || params.context.componentParent.source === navSource.FED_POLICY && params.data.cfg_type === CFG_TYPE.FED)">
+<div
+  *ngIf="
+    !isPredefine &&
+    ((params.context.componentParent.source !== navSource.FED_POLICY &&
+      params.data.cfg_type !== CFG_TYPE.FED) ||
+      (params.context.componentParent.source === navSource.FED_POLICY &&
+        params.data.cfg_type === CFG_TYPE.FED))
+  ">
   <div class="rule-actions-expand fade-in-right">
     <em
       class="eos-icons icon-18 hand text-action"

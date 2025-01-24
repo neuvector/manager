@@ -410,9 +410,9 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((result: RemoteExportOptionsWrapper) => {
       if (result) {
-        const { policy_mode, profile_mode, export_mode, ...exportOptions } =
+        const { policy_mode, profile_mode, export_mode, use_name_referral, ...exportOptions } =
           result.export_options;
-        this.exportUtil(export_mode, exportOptions, policy_mode, profile_mode);
+        this.exportUtil(export_mode, exportOptions, policy_mode, profile_mode, use_name_referral);
       }
     });
   };
@@ -421,13 +421,15 @@ export class GroupsComponent implements OnInit, OnDestroy {
     mode: string,
     option: RemoteExportOptions,
     policyMode: string,
-    profileMode: string
+    profileMode: string,
+    useNameRef: boolean,
   ) {
     if (mode === 'local') {
       let payload = {
         groups: this.selectedGroups.map(group => group.name),
         policy_mode: this.titleCasePipe.transform(policyMode),
         profile_mode: this.titleCasePipe.transform(profileMode),
+        use_name_referral: useNameRef,
       };
       this.groupsService.exportGroupsConfigData(payload).subscribe(
         response => {
@@ -451,6 +453,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
         policy_mode: this.titleCasePipe.transform(policyMode),
         profile_mode: this.titleCasePipe.transform(profileMode),
         remote_export_options: option,
+        use_name_referral: useNameRef,
       };
       this.groupsService.exportGroupsConfigData(payload).subscribe(
         response => {

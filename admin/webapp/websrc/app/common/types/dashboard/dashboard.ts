@@ -107,6 +107,8 @@ export interface ConversationReportEntry {
   ip?: string;
   country_code?: string;
   country_name?: string;
+  last_seen_at: number;
+  pod: string;
 }
 
 export interface Exposure {
@@ -183,6 +185,8 @@ export interface ConversationReportEntryByService {
   policy_action: string;
   country_code: string;
   country_name: string;
+  last_seen_at: number;
+  pod: string;
 }
 
 export interface HierarchicalExposure {

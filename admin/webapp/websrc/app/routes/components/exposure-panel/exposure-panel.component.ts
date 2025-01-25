@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import {
   InternalSystemInfo,
   HierarchicalExposure,
@@ -30,6 +31,7 @@ export class ExposurePanelComponent implements OnInit {
     public dashboardExposureConversationsService: DashboardExposureConversationsService,
     private dashboardService: DashboardService,
     private utilsService: UtilsService,
+    private datePipe: DatePipe,
     private translate: TranslateService
   ) {}
 
@@ -139,7 +141,7 @@ export class ExposurePanelComponent implements OnInit {
         exposureReport.push({
           Direction: direction,
           Service: exposure.service,
-          Pod: exposure.pod_name,
+          Pod: exposure.display_name,
           'High Vuls': exposure.high,
           'Medium Vuls': exposure.medium,
           'Policy Mode': exposure.policy_mode,
@@ -152,6 +154,10 @@ export class ExposurePanelComponent implements OnInit {
           Applications: entry.application,
           Sessions: entry.sessions,
           Action: entry.policy_action,
+          'Session Time': this.datePipe.transform(
+            entry.last_seen_at * 1000,
+            'MMM dd, y HH:mm:ss'
+          ),
         });
       });
     });

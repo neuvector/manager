@@ -426,7 +426,8 @@
         "VUL_POD": "Vulnerable Pods",
         "VUL_NODE": "Vulnerable Nodes",
         "EXPO_CONV_RPT": "Exposure Conversation Report",
-        "SESSIONS": "Sessions"
+        "SESSIONS": "Sessions",
+        "SESSION_TIME": "Session Time"
       },
       "comments": {
         "SAFE": "Congrats! All your services are under policy protection perfectly! Please keep it.",

@@ -718,29 +718,30 @@ const summarizeEntries = exposedPods => {
   let entryMap = {};
   exposedPods.forEach(expsosedPod => {
     expsosedPod.entries.forEach(entry => {
-      if (entryMap[entry.ip]) {
+      if (entryMap[`${expsosedPod.display_name}-${entry.ip}`]) {
         if (entry.application) {
-          entryMap[entry.ip].applications = accumulateProtocols(
-            entryMap[entry.ip].applications,
+          entryMap[`${expsosedPod.display_name}-${entry.ip}`].applications = accumulateProtocols(
+            entryMap[`${expsosedPod.display_name}-${entry.ip}`].applications,
             entry.application
           );
         }
         if (entry.port) {
-          entryMap[entry.ip].applications = accumulateProtocols(
-            entryMap[entry.ip].applications,
+          entryMap[`${expsosedPod.display_name}-${entry.ip}`].applications = accumulateProtocols(
+            entryMap[`${expsosedPod.display_name}-${entry.ip}`].applications,
             entry.port
           );
         }
-        entryMap[entry.ip].applications = entryMap[
-          entry.ip
+        entryMap[`${expsosedPod.display_name}-${entry.ip}`].applications = entryMap[
+          `${expsosedPod.display_name}-${entry.ip}`
         ].applications.filter(app => !!app);
-        entryMap[entry.ip].sessions += entry.sessions;
-        entryMap[entry.ip].policy_action = accumulateActionLevel(
-          entryMap[entry.ip].action,
+        entryMap[`${expsosedPod.display_name}-${entry.ip}`].sessions += entry.sessions;
+        entryMap[`${expsosedPod.display_name}-${entry.ip}`].policy_action = accumulateActionLevel(
+          entryMap[`${expsosedPod.display_name}-${entry.ip}`].action,
           entry.policy_action
         );
       } else {
-        entryMap[entry.ip] = {
+        entryMap[`${expsosedPod.display_name}-${entry.ip}`] = {
+          pod: expsosedPod.display_name,
           applications: [entry.application],
           sessions: entry.sessions,
           policy_action: entry.policy_action,
@@ -748,6 +749,7 @@ const summarizeEntries = exposedPods => {
           fqdn: entry.fqdn || '',
           country_code: entry.country_code,
           country_name: entry.country_name,
+          last_seen_at: entry.last_seen_at,
         };
       }
     });

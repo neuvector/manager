@@ -426,7 +426,8 @@
         "VUL_POD": "有漏洞的Pod",
         "VUL_NODE": "有漏洞的主机",
         "EXPO_CONV_RPT": "暴露对话报告",
-        "SESSIONS": "会话"
+        "SESSIONS": "会话",
+        "SESSION_TIME": "会话时间"
       },
       "comments": {
         "SAFE": "您的服务已经被全部保护! ",

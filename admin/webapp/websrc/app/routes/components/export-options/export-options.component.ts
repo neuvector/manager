@@ -16,6 +16,7 @@ export class ExportOptionsComponent implements OnInit {
 
   exportOptionsForm!: FormGroup;
   remoteRepoEnabled = false;
+  useNameRef = false;
 
   constructor(
     private fb: FormBuilder,
@@ -27,6 +28,7 @@ export class ExportOptionsComponent implements OnInit {
       policy_mode: '',
       profile_mode: '',
       export_mode: ['local'],
+      use_name_referral: this.useNameRef,
       remote_repository_nickname: ['default'],
       file_path: [this.exportFileName],
       comment: [''],
@@ -47,5 +49,10 @@ export class ExportOptionsComponent implements OnInit {
           this.remoteRepoEnabled = false;
         }
       });
+  }
+
+  toggleNameRef(event): void {
+    this.useNameRef = !this.useNameRef;
+    this.exportOptionsForm.controls.use_name_referral.setValue(this.useNameRef);
   }
 }

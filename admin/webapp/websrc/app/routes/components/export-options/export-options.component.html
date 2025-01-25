@@ -36,8 +36,15 @@
       }}</mat-radio-button>
     </mat-radio-group>
   </div>
-  <hr *ngIf="source === 'group'" />
+  <hr class="my-2" *ngIf="source === 'group'" />
+  <mat-checkbox
+    [checked]="useNameRef"
+    (change)="toggleNameRef($event)"
+    class="mr-3 my-2">
+    {{ 'group.NAME_REFERRAL' | translate }}
+  </mat-checkbox>
   <mat-radio-group formControlName="export_mode" class="d-flex flex-column">
+    <label class="text-border">{{ 'group.DOWNLOAD_LOCATION' | translate }}</label>
     <mat-radio-button value="local"
       >{{ 'setting.remote_repository.options.destination_local' | translate }}
     </mat-radio-button>

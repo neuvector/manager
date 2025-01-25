@@ -21,7 +21,7 @@ object DlpJsonProtocol extends DefaultJsonProtocol {
   given dlpSensorFmt: RootJsonFormat[DlpSensor]                         = jsonFormat4(DlpSensor.apply)
   given dlpSensorDataFmt: RootJsonFormat[DlpSensorData]                 = jsonFormat1(DlpSensorData.apply)
   given dlpSensorsDataFmt: RootJsonFormat[DlpSensorsData]               = jsonFormat1(DlpSensorsData.apply)
-  given dlpSensorConfigFmt: RootJsonFormat[DlpSensorConfig]             = jsonFormat7(DlpSensorConfig.apply)
+  given dlpSensorConfigFmt: RootJsonFormat[DlpSensorConfig]             = jsonFormat8(DlpSensorConfig.apply)
   given dlpSensorConfigDataFmt: RootJsonFormat[DlpSensorConfigData]     = jsonFormat1(
     DlpSensorConfigData.apply
   )

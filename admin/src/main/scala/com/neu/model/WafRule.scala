@@ -35,6 +35,7 @@ case class WafSensorsData(sensors: Seq[WafSensor])
 case class WafSensorConfig(
   name: String,
   comment: Option[String],
+  cfg_type: Option[String],
   change: Option[Seq[WafRule]],
   delete: Option[Seq[WafRule]],
   rules: Option[Seq[WafRule]]

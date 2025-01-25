@@ -32,6 +32,7 @@ export interface RemoteExportOptionsWrapper {
 export interface RemoteExportOptionsConfig {
   policy_mode: string;
   profile_mode: string;
+  use_name_referral: boolean;
   remote_repository_nickname: string;
   export_mode: string;
   file_path?: string;

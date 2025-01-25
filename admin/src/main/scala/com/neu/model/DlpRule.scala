@@ -47,6 +47,7 @@ case class DlpSensorsData(sensors: Seq[DlpSensor])
 case class DlpSensorConfig(
   name: String,
   comment: Option[String],
+  cfg_type: Option[String],
   change: Option[Seq[DlpRule]],
   delete: Option[Seq[DlpRule]],
   rules: Option[Seq[DlpRule]],

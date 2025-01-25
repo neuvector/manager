@@ -38,6 +38,7 @@ import { ExportOptionsModalComponent } from '@components/export-options-modal/ex
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TitleCasePipe } from '@angular/common';
 import { GlobalVariable } from '@common/variables/global.variable';
+import { FederatedConfigurationService } from '@services/federated-configuration.service';
 import * as $ from 'jquery';
 
 @Component({
@@ -95,7 +96,8 @@ export class GroupsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private ruleDetailModalService: RuleDetailModalService,
     private domSanitizer: DomSanitizer,
-    private titleCasePipe: TitleCasePipe
+    private titleCasePipe: TitleCasePipe,
+    public federatedConfigurationService: FederatedConfigurationService
   ) {}
 
   ngOnInit(): void {
@@ -165,8 +167,13 @@ export class GroupsComponent implements OnInit, OnDestroy {
         )}: ${nonScorableGroups}`;
         let counts = this.getModeCounts();
         this.baselineProfile = this.getDefaultBaseline(counts.baselineCount);
-        this.groupsService.activeTabIndex =
-          this.groupsService.activeTabIndex || 0;
+        if (this.source === GlobalConstant.NAV_SOURCE.FED_POLICY) {
+          this.federatedConfigurationService.activeTabIndex4Group =
+            this.federatedConfigurationService.activeTabIndex4Group || 0;
+        } else {
+          this.groupsService.activeTabIndex =
+            this.groupsService.activeTabIndex || 0;
+        }
       }, 0);
     };
     if (this.isScoreImprovement) {
@@ -403,9 +410,9 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((result: RemoteExportOptionsWrapper) => {
       if (result) {
-        const { policy_mode, profile_mode, export_mode, ...exportOptions } =
+        const { policy_mode, profile_mode, export_mode, use_name_referral, ...exportOptions } =
           result.export_options;
-        this.exportUtil(export_mode, exportOptions, policy_mode, profile_mode);
+        this.exportUtil(export_mode, exportOptions, policy_mode, profile_mode, use_name_referral);
       }
     });
   };
@@ -414,13 +421,15 @@ export class GroupsComponent implements OnInit, OnDestroy {
     mode: string,
     option: RemoteExportOptions,
     policyMode: string,
-    profileMode: string
+    profileMode: string,
+    useNameRef: boolean,
   ) {
     if (mode === 'local') {
       let payload = {
         groups: this.selectedGroups.map(group => group.name),
         policy_mode: this.titleCasePipe.transform(policyMode),
         profile_mode: this.titleCasePipe.transform(profileMode),
+        use_name_referral: useNameRef,
       };
       this.groupsService.exportGroupsConfigData(payload).subscribe(
         response => {
@@ -444,6 +453,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
         policy_mode: this.titleCasePipe.transform(policyMode),
         profile_mode: this.titleCasePipe.transform(profileMode),
         remote_export_options: option,
+        use_name_referral: useNameRef,
       };
       this.groupsService.exportGroupsConfigData(payload).subscribe(
         response => {

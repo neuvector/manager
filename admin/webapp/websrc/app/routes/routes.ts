@@ -113,15 +113,15 @@ export const routes: Routes = [
       {
         path: 'dlp-sensors',
         loadChildren: () =>
-          import('./dlp-sensors/dlp-sensors.module').then(
-            m => m.DlpSensorsModule
+          import('./dlp-sensors-page/dlp-sensors-page.module').then(
+            m => m.DlpSensorsPageModule
           ),
       },
       {
         path: 'waf-sensors',
         loadChildren: () =>
-          import('./waf-sensors/waf-sensors.module').then(
-            m => m.WafSensorsModule
+          import('./waf-sensors-page/waf-sensors-page.module').then(
+            m => m.WafSensorsPageModule
           ),
       },
       {

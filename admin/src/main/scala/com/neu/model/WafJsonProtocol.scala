@@ -20,7 +20,7 @@ object WafJsonProtocol extends DefaultJsonProtocol {
   given wafSensorFmt: RootJsonFormat[WafSensor]                         = jsonFormat4(WafSensor.apply)
   given wafSensorDataFmt: RootJsonFormat[WafSensorData]                 = jsonFormat1(WafSensorData.apply)
   given wafSensorsDataFmt: RootJsonFormat[WafSensorsData]               = jsonFormat1(WafSensorsData.apply)
-  given wafSensorConfigFmt: RootJsonFormat[WafSensorConfig]             = jsonFormat5(WafSensorConfig.apply)
+  given wafSensorConfigFmt: RootJsonFormat[WafSensorConfig]             = jsonFormat6(WafSensorConfig.apply)
   given wafSensorConfigDataFmt: RootJsonFormat[WafSensorConfigData]     = jsonFormat1(
     WafSensorConfigData.apply
   )

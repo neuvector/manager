@@ -45,7 +45,7 @@ object GroupJsonProtocol extends DefaultJsonProtocol {
   given remoteExportOptionsFormat: RootJsonFormat[RemoteExportOptions]         = jsonFormat3(
     RemoteExportOptions.apply
   )
-  given groups4ExportFormat: RootJsonFormat[Groups4Export]                     = jsonFormat4(Groups4Export.apply)
+  given groups4ExportFormat: RootJsonFormat[Groups4Export]                     = jsonFormat5(Groups4Export.apply)
 
   given criteriaItemFormat: RootJsonFormat[CriteriaItem]               = jsonFormat1(CriteriaItem.apply)
   given groupConfigDTOFormat: RootJsonFormat[GroupConfigDTO]           = jsonFormat8(GroupConfigDTO.apply)

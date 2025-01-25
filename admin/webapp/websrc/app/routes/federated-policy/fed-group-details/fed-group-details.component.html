@@ -1,0 +1,312 @@
+<div style="position: relative">
+  <ng-container [ngSwitch]="activeTab">
+    <ng-container *ngSwitchCase="'member'">
+      <div class="filter" style="position: absolute; right: 20px; top: -10px">
+        <mat-form-field appearance="standard">
+          <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
+          <input [formControl]="filter" matInput />
+        </mat-form-field>
+      </div>
+    </ng-container>
+    <ng-container *ngSwitchCase="'process profile rules'">
+      <div
+        style="position: absolute; right: 20px; top: -10px; z-index: 100"
+        class="d-flex align-items-center justify-content-end">
+        <button
+          *ngIf="isWriteGroupAuthorized"
+          mat-button
+          class="mr-2 mt-1"
+          [matMenuTriggerFor]="menu"
+          aria-label="Action menu">
+          <mat-icon>more_vert</mat-icon>
+          {{ 'policy.ACTIONS' | translate }}
+        </button>
+        <mat-menu #menu="matMenu">
+          <div>
+            <button
+              mat-button
+              *ngIf="
+                selectedProcessProfileRules &&
+                selectedProcessProfileRules.length >= 1 &&
+                isWriteGroupAuthorized &&
+                !isIncludingGroundRule()
+              "
+              (click)="removeProfile(selectedProcessProfileRules)">
+              <em class="eos-icons">delete</em>
+              {{ 'service.DELETE_RULE' | translate }}
+            </button>
+          </div>
+          <div>
+            <button
+              mat-button
+              *ngIf="
+                selectedProcessProfileRules &&
+                selectedProcessProfileRules.length === 1 &&
+                isWriteGroupAuthorized &&
+                !isIncludingGroundRule()
+              "
+              (click)="editProfile(selectedProcessProfileRules)">
+              <em class="eos-icons">edit</em>
+              {{ 'service.EDIT_RULE' | translate }}
+            </button>
+          </div>
+          <div>
+            <button
+              mat-button
+              *ngIf="isWriteGroupAuthorized"
+              (click)="addProfile()">
+              <em class="eos-icons">add</em>
+              {{ 'service.ADD_RULE' | translate }}
+            </button>
+          </div>
+        </mat-menu>
+        <div class="filter">
+          <mat-form-field appearance="standard">
+            <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
+            <input [formControl]="filter" matInput />
+          </mat-form-field>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngSwitchCase="'file access rules'">
+      <div
+        style="position: absolute; right: 20px; top: -10px; z-index: 100"
+        class="d-flex align-items-center justify-content-end">
+        <button
+          *ngIf="isWriteGroupAuthorized"
+          mat-button
+          class="mr-2 mt-1"
+          [matMenuTriggerFor]="menu"
+          aria-label="Action menu">
+          <mat-icon>more_vert</mat-icon>
+          {{ 'policy.ACTIONS' | translate }}
+        </button>
+        <mat-menu #menu="matMenu">
+          <div>
+            <button
+              mat-button
+              *ngIf="selectedFileAccessRules && isWriteGroupAuthorized"
+              (click)="removeProfile(selectedFileAccessRules)">
+              <em class="eos-icons">delete</em>
+              {{ 'service.DELETE_RULE' | translate }}
+            </button>
+          </div>
+          <div>
+            <button
+              mat-button
+              *ngIf="selectedFileAccessRules && isWriteGroupAuthorized"
+              (click)="editProfile(selectedFileAccessRules)">
+              <em class="eos-icons">edit</em>
+              {{ 'service.EDIT_RULE' | translate }}
+            </button>
+          </div>
+          <div>
+            <button
+              mat-button
+              *ngIf="isWriteGroupAuthorized"
+              (click)="addProfile()">
+              <em class="eos-icons">add</em>
+              {{ 'service.ADD_RULE' | translate }}
+            </button>
+          </div>
+          <div>
+            <button mat-button (click)="showPredefinedRules()">
+              <em class="eos-icons">info</em>
+              <span class="text-plain">{{
+                'service.PREDEFINED_FILTERS' | translate
+              }}</span>
+            </button>
+          </div>
+        </mat-menu>
+        <div class="filter">
+          <mat-form-field appearance="standard">
+            <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
+            <input [formControl]="filter" matInput />
+          </mat-form-field>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngSwitchCase="'network rules'">
+      <div class="filter" style="position: absolute; right: 20px; top: -10px">
+        <mat-form-field appearance="standard">
+          <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
+          <input [formControl]="filter" matInput />
+        </mat-form-field>
+      </div>
+    </ng-container>
+    <ng-container *ngSwitchCase="'response rules'">
+      <div class="filter" style="position: absolute; right: 20px; top: -10px">
+        <mat-form-field appearance="standard">
+          <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
+          <input [formControl]="filter" matInput />
+        </mat-form-field>
+      </div>
+    </ng-container>
+    <ng-container *ngSwitchCase="'DLP'">
+      <div
+        style="position: absolute; right: 20px; top: -10px; z-index: 100"
+        class="d-flex align-items-center justify-content-end">
+        <button
+          mat-button
+          class="mr-2 mt-1"
+          [matMenuTriggerFor]="menu"
+          aria-label="Action menu">
+          <mat-icon>more_vert</mat-icon>
+          {{ 'policy.ACTIONS' | translate }}
+        </button>
+        <mat-menu #menu="matMenu">
+          <button
+            mat-button
+            *ngIf="isWriteDlpAuthorized"
+            class="hand"
+            (click)="editGroupSensorModal()">
+            <em class="eos-icons">edit</em>
+            {{ 'group.CONFIG' | translate }}
+          </button>
+        </mat-menu>
+        <div class="filter">
+          <mat-form-field appearance="standard">
+            <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
+            <input [formControl]="filter" matInput />
+          </mat-form-field>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngSwitchCase="'WAF'">
+      <div
+        style="position: absolute; right: 20px; top: -10px; z-index: 100"
+        class="d-flex align-items-center justify-content-end">
+        <button
+          mat-button
+          class="mr-2 mt-1"
+          [matMenuTriggerFor]="menu"
+          aria-label="Action menu">
+          <mat-icon>more_vert</mat-icon>
+          {{ 'policy.ACTIONS' | translate }}
+        </button>
+        <mat-menu #menu="matMenu">
+          <button
+            mat-button
+            *ngIf="isWriteWafAuthorized"
+            class="hand"
+            (click)="editGroupSensorModal()">
+            <em class="eos-icons">edit</em>
+            {{ 'group.CONFIG' | translate }}
+          </button>
+        </mat-menu>
+        <div class="filter">
+          <mat-form-field appearance="standard">
+            <mat-label>{{ 'enum.FILTER' | translate }}</mat-label>
+            <input [formControl]="filter" matInput />
+          </mat-form-field>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</div>
+<mat-tab-group
+  id="group-details"
+  *ngIf="groupName"
+  [selectedIndex]="federatedConfigurationService.activeTabIndex4Group"
+  (selectedTabChange)="activateTab4Group($event)"
+  animationDuration="0ms">
+  <mat-tab label="{{ 'group.gridHeader.MEMBERS' | translate }}">
+    <app-members
+      *ngIf="federatedConfigurationService.activeTabIndex4Group === 0"
+      [source]="navSource4Group"
+      [members]="members"
+      [kind]="kind"
+      [resizableHeight]="height"
+      [useQuickFilterService]="true">
+    </app-members>
+  </mat-tab>
+  <mat-tab
+    label="{{ 'service.PROCESS_PROFILE' | translate }}"
+    [labelClass]="kind === 'container' || kind === 'node' ? '' : 'hide'">
+    <app-process-profile-rules
+      *ngIf="
+        federatedConfigurationService.activeTabIndex4Group === 1 &&
+        (kind === 'container' || kind === 'node')
+      "
+      [source]="navSource4Group"
+      [groupName]="groupName"
+      [resizableHeight]="height"
+      [useQuickFilterService]="true"
+      (getSelectedFileAccessRules)="getSelectedFileAccessRules($event)"
+      (getRemoveProfile)="getRemoveProfile($event)"
+      (getEditProfile)="getEditProfile($event)"
+      (getAddProfile)="getAddProfile($event)"
+      (getShowPredefinedRules)="getShowPredefinedRules($event)"
+      [cfgType]="CFG_TYPE.FED"></app-process-profile-rules>
+  </mat-tab>
+  <mat-tab
+    label="{{ 'service.FILE_PROFILE' | translate }}"
+    [labelClass]="kind === 'container' ? '' : 'hide'">
+    <app-file-access-rules
+      *ngIf="
+        federatedConfigurationService.activeTabIndex4Group === 2 &&
+        kind === 'container'
+      "
+      [source]="navSource4Group"
+      [groupName]="groupName"
+      [resizableHeight]="height"
+      [useQuickFilterService]="true"
+      (getSelectedProcessProfileRules)="getSelectedProcessProfileRules($event)"
+      (getRemoveProfile)="getRemoveProfile($event)"
+      (getEditProfile)="getEditProfile($event)"
+      (getAddProfile)="getAddProfile($event)"
+      [cfgType]="CFG_TYPE.FED"></app-file-access-rules>
+  </mat-tab>
+  <mat-tab label="{{ 'service.POLICY_RULES' | translate }}">
+    <app-network-rules
+      *ngIf="federatedConfigurationService.activeTabIndex4Group === 3"
+      [source]="navSource4Group"
+      [groupName]="groupName"
+      [useQuickFilterService]="true"
+      [resizableHeight]="height">
+    </app-network-rules>
+  </mat-tab>
+  <mat-tab label="{{ 'group.RESPONSE_RULES' | translate }}">
+    <app-response-rules
+      *ngIf="federatedConfigurationService.activeTabIndex4Group === 4"
+      [source]="navSource4Group"
+      [groupName]="groupName"
+      [useQuickFilterService]="true"
+      [resizableHeight]="height">
+    </app-response-rules>
+  </mat-tab>
+  <mat-tab
+    label="{{ 'group.dlp.TITLE' | translate }}"
+    [labelClass]="kind === 'container' ? '' : 'hide'">
+    <app-group-dlp
+      *ngIf="
+        federatedConfigurationService.activeTabIndex4Group === 5 &&
+        kind === 'container'
+      "
+      (getEditGroupSensorModal)="getEditGroupSensorModal($event)"
+      (getToggleDLPConfigEnablement)="getToggleDLPConfigEnablement($event)"
+      (getStatus)="getStatus($event)"
+      [source]="navSource4Group"
+      [groupName]="groupName"
+      [useQuickFilterService]="true"
+      [resizableHeight]="height">
+    </app-group-dlp>
+  </mat-tab>
+  <mat-tab
+    label="{{ 'group.waf.TITLE' | translate }}"
+    [labelClass]="kind === 'container' ? '' : 'hide'">
+    <app-group-waf
+      *ngIf="
+        federatedConfigurationService.activeTabIndex4Group === 6 &&
+        kind === 'container'
+      "
+      (getEditGroupSensorModal)="getEditGroupSensorModal($event)"
+      (getToggleWAFConfigEnablement)="getToggleWAFConfigEnablement($event)"
+      (getStatus)="getStatus($event)"
+      [source]="navSource4Group"
+      [groupName]="groupName"
+      [useQuickFilterService]="true"
+      [resizableHeight]="height">
+    </app-group-waf>
+  </mat-tab>
+</mat-tab-group>

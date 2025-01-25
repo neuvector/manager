@@ -1,0 +1,72 @@
+<div class="nv-dialog">
+  <div class="d-flex justify-content-between align-items-center">
+    <h4 mat-dialog-title class="mb-2">
+      {{
+        (data.opType === opTypeOptions.ADD
+          ? 'waf.sensorModal.ADD_SENSOR'
+          : 'waf.sensorModal.EDIT_SENSOR'
+        ) | translate
+      }}
+    </h4>
+    <button
+      (click)="onCancel()"
+      class="mb-2"
+      aria-label="Close dialog"
+      mat-icon-button>
+      <i class="eos-icons">close</i>
+    </button>
+  </div>
+  <hr class="fancy" />
+  <div mat-dialog-content>
+    <form [formGroup]="addEditSensorForm">
+      <div class="row">
+        <mat-form-field class="col-sm-3" appearance="standard">
+          <mat-label>{{ 'waf.sensorModal.SENSOR_NAME' | translate }}</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="name"
+            [attr.maxlength]="255"
+            [readonly]="data.opType === opTypeOptions.EDIT" />
+          <mat-error
+            *ngIf="addEditSensorForm.controls.name.hasError('required')">
+            {{ 'waf.msg.SENSOR_NAME_REQUIRED' | translate }}
+          </mat-error>
+          <mat-error
+            *ngIf="addEditSensorForm.controls.name.hasError('fedName')">
+            {{ 'dlp.msg.NAME_VALID' | translate }} "fed."
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-sm-9" appearance="standard">
+          <mat-label>{{ 'waf.sensorModal.COMMENT' | translate }}</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="comment"
+            [attr.maxlength]="'general.FILTER_MAX_LEN' | translate" />
+        </mat-form-field>
+      </div>
+      <div class="d-flex justify-content-end align-items-center mt-2">
+        <button
+          mat-stroked-button
+          aria-label="cancel"
+          class="mr-2"
+          (click)="onCancel()">
+          {{ 'waf.sensorModal.CANCEL' | translate }}
+        </button>
+        <app-loading-button
+          [appearance]="'mat-raised-button'"
+          [color]="'primary'"
+          [loading]="submittingUpdate"
+          [text]="
+            (data.opType === opTypeOptions.EDIT
+              ? 'waf.sensorModal.UPDATE'
+              : 'waf.sensorModal.ADD'
+            ) | translate
+          "
+          (btnClick)="updateSensor()">
+        </app-loading-button>
+      </div>
+    </form>
+  </div>
+</div>

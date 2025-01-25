@@ -51,6 +51,11 @@ import { NodesGridModule } from '@components/nodes-grid/nodes-grid.module';
     //   GroupDlpConfigActionButtonComponent
     // ]),
   ],
-  exports: [MembersComponent, GroupDetailsComponent],
+  exports: [
+    MembersComponent,
+    GroupDetailsComponent,
+    GroupDlpComponent,
+    GroupWafComponent,
+  ],
 })
 export class GroupDetailsModule {}

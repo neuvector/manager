@@ -843,8 +843,8 @@ export class GroupsService {
     return this.policyHttpService.getDLPGroups(groupName);
   };
 
-  getDlpSensorData = () => {
-    return this.policyHttpService.getDLPSensors();
+  getDlpSensorData = source => {
+    return this.policyHttpService.getDLPSensors(source);
   };
 
   updateGroupDlpSensorData = payload => {
@@ -855,8 +855,8 @@ export class GroupsService {
     return this.policyHttpService.getWAFGroups(groupName);
   };
 
-  getWafSensorData = () => {
-    return this.policyHttpService.getWAFSensors();
+  getWafSensorData = getWAFSensors => {
+    return this.policyHttpService.getWAFSensors(getWAFSensors);
   };
 
   updateGroupWafSensorData = payload => {

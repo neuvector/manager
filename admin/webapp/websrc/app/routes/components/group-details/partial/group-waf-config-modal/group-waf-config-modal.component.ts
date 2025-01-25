@@ -66,7 +66,7 @@ export class GroupWafConfigModalComponent implements OnInit {
   };
 
   refresh = () => {
-    this.groupsService.getWafSensorData().subscribe(
+    this.groupsService.getWafSensorData(this.data.source).subscribe(
       (response: any) => {
         this.wafSensorOption = response;
         this.wafSensorOption = this.wafSensorOption.map(sensor => {

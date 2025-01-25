@@ -166,6 +166,7 @@
   </ng-container>
   <ng-container *ngSwitchCase="'DLP'">
     <div
+      *ngIf="isWriteGroupAuthorized && cfgType !== CFG_TYPE.FED"
       style="position: absolute; right: 20px; top: 5px"
       class="d-flex align-items-center justify-content-end">
       <button
@@ -196,6 +197,7 @@
   </ng-container>
   <ng-container *ngSwitchCase="'WAF'">
     <div
+      *ngIf="isWriteGroupAuthorized && cfgType !== CFG_TYPE.FED"
       style="position: absolute; right: 20px; top: 5px"
       class="d-flex align-items-center justify-content-end">
       <button
@@ -318,15 +320,9 @@
   </mat-tab>
   <mat-tab
     label="{{ 'group.dlp.TITLE' | translate }}"
-    [labelClass]="
-      kind === 'container' && cfgType !== CFG_TYPE.FED ? '' : 'hide'
-    ">
+    [labelClass]="kind === 'container' ? '' : 'hide'">
     <app-group-dlp
-      *ngIf="
-        groupsService.activeTabIndex === 6 &&
-        kind === 'container' &&
-        cfgType !== CFG_TYPE.FED
-      "
+      *ngIf="groupsService.activeTabIndex === 6 && kind === 'container'"
       (getEditGroupSensorModal)="getEditGroupSensorModal($event)"
       (getToggleDLPConfigEnablement)="getToggleDLPConfigEnablement($event)"
       (getStatus)="getStatus($event)"
@@ -339,15 +335,9 @@
   </mat-tab>
   <mat-tab
     label="{{ 'group.waf.TITLE' | translate }}"
-    [labelClass]="
-      kind === 'container' && cfgType !== CFG_TYPE.FED ? '' : 'hide'
-    ">
+    [labelClass]="kind === 'container' ? '' : 'hide'">
     <app-group-waf
-      *ngIf="
-        groupsService.activeTabIndex === 7 &&
-        kind === 'container' &&
-        cfgType !== CFG_TYPE.FED
-      "
+      *ngIf="groupsService.activeTabIndex === 7 && kind === 'container'"
       (getEditGroupSensorModal)="getEditGroupSensorModal($event)"
       (getToggleWAFConfigEnablement)="getToggleWAFConfigEnablement($event)"
       (getStatus)="getStatus($event)"

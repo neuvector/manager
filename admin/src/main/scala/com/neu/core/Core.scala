@@ -27,7 +27,6 @@ trait BootedCore
     with StaticResources
     with MySslConfiguration
     with LazyLogging {
-
   given system: ActorSystem                        = ActorSystem("manager-system")
   given materializer: Materializer                 = Materializer(system)
   given executionContext: ExecutionContextExecutor = system.dispatcher
@@ -37,11 +36,6 @@ trait BootedCore
   IpGeoManager
   CisNISTManager
   System.setProperty("net.sf.ehcache.enableShutdownHook", "true")
-
-  private lazy val https: HttpsConnectionContext = ConnectionContext.httpsServer { () =>
-    val engine = sslContext.createSSLEngine()
-    configureSSLEngine(engine)
-  }
 
   private val useSSL: String              = sys.env.getOrElse("MANAGER_SSL", "on")
   private val httpMaxHeaderLength: String = sys.env.getOrElse("HTTP_MAX_HEADER_LENGTH", "32k")
@@ -62,20 +56,39 @@ trait BootedCore
         )
       )
 
+  private lazy val https: Option[HttpsConnectionContext] = useSSL match {
+    case "off" => None
+    case _     =>
+      Some(ConnectionContext.httpsServer { () =>
+        val engine = sslContext.createSSLEngine()
+        configureSSLEngine(engine)
+      })
+  }
+
   private val settings = ServerSettings(config)
 
   private val bindingFuture: Future[Http.ServerBinding] = useSSL match {
     case "off" =>
+      logger.info("Starting server in HTTP mode (MANAGER_SSL=off).")
+      NoOperationSSLContext.init()
       Http()
         .newServerAt("0.0.0.0", httpPort.toInt)
         .withSettings(settings)
         .bind(rootService)
     case _     =>
-      Http()
-        .newServerAt("0.0.0.0", httpPort.toInt)
-        .enableHttps(https)
-        .withSettings(settings)
-        .bind(rootService)
+      https match {
+        case Some(httpsCtx) =>
+          logger.info("Starting server in HTTPS mode (MANAGER_SSL=on).")
+          Http()
+            .newServerAt("0.0.0.0", httpPort.toInt)
+            .enableHttps(httpsCtx)
+            .withSettings(settings)
+            .bind(rootService)
+        case None           =>
+          throw new IllegalStateException(
+            "SSL is enabled but HttpsConnectionContext is not configured"
+          )
+      }
   }
 
   bindingFuture.map { binding =>

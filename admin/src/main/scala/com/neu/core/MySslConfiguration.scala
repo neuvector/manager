@@ -18,8 +18,26 @@ import java.security.cert.{ Certificate, CertificateFactory, X509Certificate }
 import java.security.interfaces.RSAPrivateKey
 import java.security.spec.*
 import java.util.{ Base64, Date }
-import javax.net.ssl.{ KeyManagerFactory, SSLContext, SSLEngine, TrustManagerFactory }
+import javax.net.ssl.{
+  KeyManager,
+  KeyManagerFactory,
+  SSLContext,
+  SSLEngine,
+  TrustManager,
+  TrustManagerFactory
+}
 import scala.jdk.CollectionConverters.*
+
+object NoOperationSSLContext {
+  def init(): Unit = {
+    Security.addProvider(new BouncyCastleProvider())
+    Security.addProvider(new BouncyCastleJsseProvider())
+
+    val sslContext = SSLContext.getInstance("TLS")
+    sslContext.init(Array[KeyManager](), Array[TrustManager](), null)
+    SSLContext.setDefault(sslContext)
+  }
+}
 
 trait MySslConfiguration extends LazyLogging {
 

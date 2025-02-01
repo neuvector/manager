@@ -112,7 +112,7 @@
     "@angular-eslint/eslint-plugin-template": "14.4.0",
     "@angular-eslint/schematics": "14.4.0",
     "@angular-eslint/template-parser": "14.4.0",
-    "@angular/cli": "14.2.1",
+    "@angular/cli": "14.2.13",
     "@angular/compiler-cli": "14.2.12",
     "@types/codemirror": "0.0.67",
     "@types/file-saver": "^2.0.5",

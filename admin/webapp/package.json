@@ -114,7 +114,7 @@
     "@angular-eslint/template-parser": "14.4.0",
     "@angular/cli": "14.2.13",
     "@angular/compiler-cli": "14.2.12",
-    "@types/codemirror": "0.0.67",
+    "@types/codemirror": "0.0.109",
     "@types/file-saver": "^2.0.5",
     "@types/jasmine": "3.6.0",
     "@types/jasminewd2": "2.0.3",

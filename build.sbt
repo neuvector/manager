@@ -39,7 +39,7 @@ lazy val commonDependencies = Seq(
   "javax.activation"   % "activation"         % "1.1.1",
   "org.glassfish.jaxb" % "jaxb-runtime"       % "4.0.5",
   "javax.xml.bind"     % "jaxb-api"           % "2.3.1",
-  "com.sun.xml.ws"     % "jaxws-ri"           % "4.0.2",
+  "com.sun.xml.ws"     % "jaxws-ri"           % "4.0.3",
   "javax.xml.soap"     % "javax.xml.soap-api" % "1.4.0",
   "org.json4s"        %% "json4s-native"      % "4.0.7",
   "org.bouncycastle"   % "bcprov-jdk18on"     % "1.79",

@@ -1,3 +1,4 @@
 * @neuvector/nv-ui
 cli/ @neuvector/controller
+package/requirements.txt @neuvector/controller
 .github/ @neuvector/build 

@@ -27,7 +27,7 @@ object ExternalDependencies {
   val pekkoV = "1.0.3"
 
   val typesafeConfig = "com.typesafe"               % "config"         % "1.4.3"
-  val slf4jLog4j     = "org.slf4j"                  % "slf4j-log4j12"  % "2.0.13"
+  val slf4jLog4j     = "org.slf4j"                  % "slf4j-log4j12"  % "2.0.16"
   val scalaLogging   = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5"
 
   val joda = "joda-time" % "joda-time" % "2.13.1"

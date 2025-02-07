@@ -5,7 +5,7 @@ import sbt.Keys.*
 import sbt.*
 
 ThisBuild / version                  := "1.0"
-ThisBuild / scalaVersion             := "3.3.4"
+ThisBuild / scalaVersion             := "3.3.5"
 ThisBuild / organization             := "com.neuvector"
 ThisBuild / scalafmtOnCompile        := true
 ThisBuild / semanticdbEnabled        := true

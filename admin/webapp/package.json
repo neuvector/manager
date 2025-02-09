@@ -27,7 +27,7 @@
     "@angular/core": "14.2.10",
     "@angular/forms": "14.3.0",
     "@angular/material": "14.2.7",
-    "@angular/platform-browser": "14.2.10",
+    "@angular/platform-browser": "14.3.0",
     "@angular/platform-browser-dynamic": "14.2.10",
     "@angular/router": "14.2.10",
     "@antv/g6": "^4.8.9",

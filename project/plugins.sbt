@@ -4,7 +4,7 @@ addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "1.1.0")
 
 addSbtPlugin("com.scalapenos" % "sbt-prompt" % "1.0.2")
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.3.4")
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.8.1")
 
 addSbtPlugin("io.spray" % "sbt-revolver" % "0.9.1")
 

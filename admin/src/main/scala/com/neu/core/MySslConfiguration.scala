@@ -160,7 +160,7 @@ trait MySslConfiguration extends LazyLogging {
     val cf: CertificateFactory = CertificateFactory.getInstance("X.509")
     val trustManagerFactory    = TrustManagerFactory.getInstance("PKIX")
     val keyManagerFactory      = KeyManagerFactory.getInstance("PKIX")
-    val ks: KeyStore           = KeyStore.getInstance("PKCS12")
+    val ks: KeyStore           = getKeyStore()
     val keyFactory: KeyFactory = KeyFactory.getInstance("RSA")
 
     var fisCert: FileInputStream     = null
@@ -277,6 +277,13 @@ trait MySslConfiguration extends LazyLogging {
         bisKey.close()
       }
     }
+  }
+
+  private def getKeyStore(): KeyStore = {
+    val isFipsEnabled = new File("/proc/sys/crypto/fips_enabled")
+      .exists() && scala.io.Source.fromFile("/proc/sys/crypto/fips_enabled").mkString.trim == "1"
+    val keystoreType  = if (isFipsEnabled) "PKCS12" else "JKS"
+    KeyStore.getInstance(keystoreType)
   }
 
   def configureSSLEngine(engine: SSLEngine): SSLEngine = {

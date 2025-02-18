@@ -720,25 +720,30 @@ const summarizeEntries = exposedPods => {
     expsosedPod.entries.forEach(entry => {
       if (entryMap[`${expsosedPod.display_name}-${entry.ip}`]) {
         if (entry.application) {
-          entryMap[`${expsosedPod.display_name}-${entry.ip}`].applications = accumulateProtocols(
-            entryMap[`${expsosedPod.display_name}-${entry.ip}`].applications,
-            entry.application
-          );
+          entryMap[`${expsosedPod.display_name}-${entry.ip}`].applications =
+            accumulateProtocols(
+              entryMap[`${expsosedPod.display_name}-${entry.ip}`].applications,
+              entry.application
+            );
         }
         if (entry.port) {
-          entryMap[`${expsosedPod.display_name}-${entry.ip}`].applications = accumulateProtocols(
-            entryMap[`${expsosedPod.display_name}-${entry.ip}`].applications,
-            entry.port
-          );
+          entryMap[`${expsosedPod.display_name}-${entry.ip}`].applications =
+            accumulateProtocols(
+              entryMap[`${expsosedPod.display_name}-${entry.ip}`].applications,
+              entry.port
+            );
         }
-        entryMap[`${expsosedPod.display_name}-${entry.ip}`].applications = entryMap[
-          `${expsosedPod.display_name}-${entry.ip}`
-        ].applications.filter(app => !!app);
-        entryMap[`${expsosedPod.display_name}-${entry.ip}`].sessions += entry.sessions;
-        entryMap[`${expsosedPod.display_name}-${entry.ip}`].policy_action = accumulateActionLevel(
-          entryMap[`${expsosedPod.display_name}-${entry.ip}`].action,
-          entry.policy_action
-        );
+        entryMap[`${expsosedPod.display_name}-${entry.ip}`].applications =
+          entryMap[
+            `${expsosedPod.display_name}-${entry.ip}`
+          ].applications.filter(app => !!app);
+        entryMap[`${expsosedPod.display_name}-${entry.ip}`].sessions +=
+          entry.sessions;
+        entryMap[`${expsosedPod.display_name}-${entry.ip}`].policy_action =
+          accumulateActionLevel(
+            entryMap[`${expsosedPod.display_name}-${entry.ip}`].action,
+            entry.policy_action
+          );
       } else {
         entryMap[`${expsosedPod.display_name}-${entry.ip}`] = {
           pod: expsosedPod.display_name,

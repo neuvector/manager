@@ -43,7 +43,7 @@ lazy val commonDependencies = Seq(
   "javax.xml.soap"     % "javax.xml.soap-api" % "1.4.0",
   "org.json4s"        %% "json4s-native"      % "4.0.7",
   "org.bouncycastle"   % "bcprov-jdk18on"     % "1.79",
-  "org.bouncycastle"   % "bcpkix-jdk18on"     % "1.79",
+  "org.bouncycastle"   % "bcpkix-jdk18on"     % "1.80",
   "org.bouncycastle"   % "bctls-jdk18on"      % "1.79",
   pekkoActor,
   typesafeConfig,

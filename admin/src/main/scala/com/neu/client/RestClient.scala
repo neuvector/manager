@@ -203,7 +203,9 @@ class RestClient()(using
       method = method,
       uri = uri,
       entity = data.toEntity(java.util.UUID.randomUUID().toString)
-    ).addHeader(RawHeader(TOKEN_HEADER, token))
+    )
+      .addHeader(RawHeader(TOKEN_HEADER, token))
+      .addHeader(RawHeader(X_SUSE_TOKEN, AuthenticationManager.suseTokenMap.getOrElse(token, "")))
 
     // Add optional headers
     val requestWithTransactionId = transactionId.fold(baseRequest) { id =>

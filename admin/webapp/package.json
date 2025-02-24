@@ -60,7 +60,7 @@
     "core-js": "2.6.12",
     "country-flag-icons": "^1.5.5",
     "easy-pie-chart": "2.1.7",
-    "enhanced-resolve": "3.3.0",
+    "enhanced-resolve": "3.4.1",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "file-saver": "^2.0.5",

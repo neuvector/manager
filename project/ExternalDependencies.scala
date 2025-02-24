@@ -33,7 +33,7 @@ object ExternalDependencies {
   val joda = "joda-time" % "joda-time" % "2.13.1"
 
   val ehCache = "net.sf.ehcache"   % "ehcache" % "2.10.9.2"
-  val guava   = "com.google.guava" % "guava"   % "33.3.0-jre"
+  val guava   = "com.google.guava" % "guava"   % "33.4.0-jre"
 
   val pekkoActor  = "org.apache.pekko" %% "pekko-actor" % pekkoV pekkoExclude
   val pekkoHttp   = "org.apache.pekko" %% "pekko-http" % "1.0.1"

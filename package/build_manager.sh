@@ -54,4 +54,4 @@ cp cli/cli.py ${STAGE_DIR}/usr/local/bin/
 cp -r cli/prog ${STAGE_DIR}/usr/local/bin/
 cp scripts/* ${STAGE_DIR}/usr/local/bin/
 cp java.security ${STAGE_DIR}/usr/lib64/jvm/java-17-openjdk-17/conf/security/java.security.fips
-cp admin/target/scala-3.3.4/admin-assembly-1.0.jar ${STAGE_DIR}/usr/local/bin/
+cp admin/target/scala-3.3.5/admin-assembly-1.0.jar ${STAGE_DIR}/usr/local/bin/

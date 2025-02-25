@@ -24,7 +24,7 @@ object ExternalDependencies {
   }
 
   val sprayV = "1.3.3"
-  val pekkoV = "1.0.3"
+  val pekkoV = "1.1.3"
 
   val typesafeConfig = "com.typesafe"               % "config"         % "1.4.3"
   val slf4jLog4j     = "org.slf4j"                  % "slf4j-log4j12"  % "2.0.16"

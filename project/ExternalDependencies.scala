@@ -45,5 +45,5 @@ object ExternalDependencies {
   val sprayJson               = ioSpray %% "spray-json" % "1.3.6" exclude ("org.scala-lang", "scala-library")
 
   val scalaTest = "org.scalatest" %% "scalatest" % "3.2.19" % "test" scalaTestExclude
-  val spec2     = "org.specs2" %% "specs2" % "3.7" % "test"
+  val spec2     = "org.specs2" %% "specs2" % "3.8.9" % "test"
 }

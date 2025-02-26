@@ -8,6 +8,7 @@ import { AmazonEcrRegistryConfig } from './configs/amazon-ecr-registry.config';
 import { AzureRegistryConfig } from './configs/azure-container-registry.config';
 import { DockerRegistryConfig } from './configs/docker-registry.config';
 import { HarborRegistryConfig } from './configs/harbor-registry.config';
+import { GithubContainerRegistryConfig } from './configs/github-container-registry.config';
 import { GitlabConfig } from './configs/gitlab.config';
 import { RedHatRegistryConfig } from './configs/red-hat-public-registry.config';
 import { SonatypeNexusConfig } from './configs/sonatype-nexus.config';
@@ -92,34 +93,38 @@ export const AddRegistryFieldConfig: FormlyFieldConfig[] = [
   },
   {
     hideExpression: `model.registry_type !== model.registryTypes[3].value`,
-    fieldGroup: [...GitlabConfig],
+    fieldGroup: [...GithubContainerRegistryConfig],
   },
   {
     hideExpression: `model.registry_type !== model.registryTypes[4].value`,
-    fieldGroup: [...GoogleContainerRegistryConfig],
+    fieldGroup: [...GitlabConfig],
   },
   {
     hideExpression: `model.registry_type !== model.registryTypes[5].value`,
-    fieldGroup: [...HarborRegistryConfig],
+    fieldGroup: [...GoogleContainerRegistryConfig],
   },
   {
     hideExpression: `model.registry_type !== model.registryTypes[6].value`,
-    fieldGroup: [...IBMCloudContainerRegistryConfig],
+    fieldGroup: [...HarborRegistryConfig],
   },
   {
     hideExpression: `model.registry_type !== model.registryTypes[7].value`,
-    fieldGroup: [...JFROgArtifactoryConfig],
+    fieldGroup: [...IBMCloudContainerRegistryConfig],
   },
   {
     hideExpression: `model.registry_type !== model.registryTypes[8].value`,
-    fieldGroup: [...OpenShiftRegistryConfig],
+    fieldGroup: [...JFROgArtifactoryConfig],
   },
   {
     hideExpression: `model.registry_type !== model.registryTypes[9].value`,
-    fieldGroup: [...RedHatRegistryConfig],
+    fieldGroup: [...OpenShiftRegistryConfig],
   },
   {
     hideExpression: `model.registry_type !== model.registryTypes[10].value`,
+    fieldGroup: [...RedHatRegistryConfig],
+  },
+  {
+    hideExpression: `model.registry_type !== model.registryTypes[11].value`,
     fieldGroup: [...SonatypeNexusConfig],
   },
 ];

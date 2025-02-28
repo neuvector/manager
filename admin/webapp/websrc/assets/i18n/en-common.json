@@ -1296,7 +1296,7 @@
     "DELETE_REPO": "Delete registry",
     "REGISTRY_TYPE": "Registry type",
     "FILTER_HINT": "Sample: gliderlabs/dockerbox:latest, gliderlabs/*, gliderlabs/*:*, gliderlabs/n*:3*",
-    "GITHUB_CONTAINER_FILTER_HINT": "Filter '*' is not allowed, you need to specify your repository like 'myrepo/'",
+    "GITHUB_CONTAINER_FILTER_HINT": "Filter '*' is not allowed, the namespace must be specified (e.g. 'my_org/*' or 'my_user/*'",
     "AMAZON_URL_HINT": "Sample: https://<aws_account_id>.dkr.ecr.<region>.amazonaws.com",
     "AZURE_URL_HINT": "Sample: https://<companyname>.azurecr.io/",
     "JFROG_URL_HINT": "Sample: https://docker-virtual.<10.1.7.122:8081> for subdomain, https://<10.1.7.122:8081> for repository or port",

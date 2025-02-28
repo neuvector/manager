@@ -1282,7 +1282,8 @@
     },
     "message": {
       "CONFIG_ERR": "获取扫描配置时发生错误",
-      "OS_ERR": "无OS"
+      "OS_ERR": "无OS",
+      "DATA_PENDING": "控制器重启过程中, 正在准备数据, 请稍后按刷新按钮"
     }
   },
   "registry": {
@@ -1296,7 +1297,7 @@
     "DELETE_REPO": "删除镜像库",
     "REGISTRY_TYPE": "镜像库类型",
     "FILTER_HINT": "样本: gliderlabs/dockerbox:latest, gliderlabs/*, gliderlabs/*:*, gliderlabs/n*:3*",
-    "GITHUB_CONTAINER_FILTER_HINT": "过滤器 '*' 是不允许的, 您需要制定代码库 'myrepo/'",
+    "GITHUB_CONTAINER_FILTER_HINT": "过滤器 '*' 是不允许的, 命名空间需要被指定 (例如 'my_org/*' or 'my_user/*)",
     "AMAZON_URL_HINT": "样本: https://<aws_account_id>.dkr.ecr.<region>.amazonaws.com",
     "AZURE_URL_HINT": "样本: https://<companyname>.azurecr.io/",
     "JFROG_URL_HINT": "样本: https://docker-virtual.<10.1.7.122:8081> - 子域, https://<10.1.7.122:8081> - 镜像库或端口",

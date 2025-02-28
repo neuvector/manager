@@ -24,6 +24,7 @@ export class VulnerabilitiesService {
   activeCount!: number;
   sortModel: SortModelItem[];
   activeSummary!: VulnerabilitiesQuerySummary;
+  status: string;
   private activeSummarySubject$ = new Subject();
   activeSummary$ = this.activeSummarySubject$.asObservable();
   vulnerabilitiesData$ = this.vulnerabilitiesFilterService.vulQuery$.pipe(
@@ -39,6 +40,7 @@ export class VulnerabilitiesService {
               query_token: '',
               total_matched_records: 0,
               total_records: 0,
+              status: '',
               summary: {
                 count_distribution: {
                   high: 0,
@@ -63,6 +65,7 @@ export class VulnerabilitiesService {
     tap(queryData => {
       this.activeToken = queryData.query_token;
       this.activeSummary = queryData.summary;
+      this.status = queryData.status;
       this.activeSummarySubject$.next();
       this.vulnerabilitiesFilterService.filteredCount =
         queryData.total_matched_records;

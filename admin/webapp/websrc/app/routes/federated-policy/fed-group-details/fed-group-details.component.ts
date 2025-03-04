@@ -74,7 +74,7 @@ export class FedGroupDetailsComponent implements OnInit {
     this.isWriteDlpAuthorized =
       this.authUtilsService.getDisplayFlag('write_dlp_rule') &&
       this.authUtilsService.getDisplayFlag('multi_cluster_w');
-    this.navSource4Group = GlobalConstant.NAV_SOURCE.GROUP;
+    this.navSource4Group = GlobalConstant.NAV_SOURCE.FED_POLICY;
   }
 
   ngAfterViewInit() {

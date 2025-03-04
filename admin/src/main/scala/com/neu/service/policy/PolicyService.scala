@@ -480,7 +480,7 @@ class PolicyService() extends BaseService with DefaultJsonFormats with LazyLoggi
   }
 
   def setAutoScanConfig(tokenId: String, scanConfig: ScanConfigWrap): Route = complete {
-    logger.info("Set auto scan : {}", scanConfig.config.auto_scan)
+    logger.info("Set auto scan : {}", scanConfig.config)
     RestClient.httpRequestWithHeader(
       s"${baseClusterUri(tokenId)}/$scanConfigPath",
       PATCH,

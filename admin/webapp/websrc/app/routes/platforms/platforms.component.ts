@@ -46,17 +46,11 @@ export class PlatformsComponent implements OnInit, OnDestroy {
   refreshing$ = new Subject();
   error!: string;
   loaded = false;
-  autoScan = new FormControl(false);
-  autoScanAuthorized = false;
   isAutoScanAuthorized!: boolean;
-  stopFullScan$ = new Subject();
   stopPlatformScan$ = new Subject();
   selectedPlatform!: Platform;
   private _switchClusterSubscription;
 
-  get auto_scan() {
-    return this.autoScan.value;
-  }
   get platforms() {
     return this.platformsService.platforms;
   }
@@ -74,9 +68,6 @@ export class PlatformsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.isAutoScanAuthorized = this.authUtils.getDisplayFlag('runtime_scan');
     this.getPlatforms();
-    if (this.isAutoScanAuthorized) {
-      this.getScanConfig();
-    }
 
     //refresh the page when it switched to a remote cluster
     this._switchClusterSubscription =
@@ -87,7 +78,6 @@ export class PlatformsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.stopPlatformScan$.next(true);
-    this.stopFullScan$.next(true);
     if (this._switchClusterSubscription) {
       this._switchClusterSubscription.unsubscribe();
     }
@@ -119,42 +109,6 @@ export class PlatformsComponent implements OnInit, OnDestroy {
         },
         error: ({ error }: { error: ErrorResponse }) => {},
       });
-  }
-
-  getScanConfig() {
-    this.scanService.getScanConfig().subscribe({
-      next: (config: ScanConfig) => {
-        this.autoScan.setValue(config.auto_scan);
-        this.autoScanAuthorized = true;
-      },
-      error: (error: HttpErrorResponse) => {
-        if (error.status === MapConstant.ACC_FORBIDDEN) {
-          this.autoScanAuthorized = false;
-        } else {
-          this.notificationService.openError(
-            error.error,
-            this.tr.instant('scan.message.CONFIG_ERR')
-          );
-        }
-      },
-    });
-  }
-
-  configAutoScan(auto_scan: boolean) {
-    this.scanService.postScanConfig({ auto_scan }).subscribe(() => {
-      if (auto_scan) {
-        interval(8000)
-          .pipe(takeUntil(this.stopFullScan$))
-          .subscribe(() => {
-            this.refresh(platforms => {
-              if (this.scanService.isScanPlatformsFinished(platforms))
-                this.stopFullScan$.next(true);
-            });
-          });
-      } else {
-        this.stopFullScan$.next(true);
-      }
-    });
   }
 
   configScan(selectedPlatform: Platform) {

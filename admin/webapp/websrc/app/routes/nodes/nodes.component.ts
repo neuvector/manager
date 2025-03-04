@@ -110,7 +110,9 @@ export class NodesComponent implements OnInit, OnDestroy {
   getScanConfig() {
     this.scanService.getScanConfig().subscribe({
       next: (config: ScanConfig) => {
-        this.autoScan.setValue(config.auto_scan);
+        this.autoScan.setValue(
+          config.enable_auto_scan_host || (config.auto_scan as boolean)
+        );
         this.autoScanAuthorized = true;
       },
       error: (error: HttpErrorResponse) => {
@@ -127,20 +129,22 @@ export class NodesComponent implements OnInit, OnDestroy {
   }
 
   configAutoScan(auto_scan: boolean) {
-    this.scanService.postScanConfig({ auto_scan }).subscribe(() => {
-      if (auto_scan) {
-        interval(8000)
-          .pipe(takeUntil(this.stopFullScan$))
-          .subscribe(() => {
-            this.refresh(nodes => {
-              if (this.scanService.isScanNodesFinished(nodes))
-                this.stopFullScan$.next(true);
+    this.scanService
+      .postScanConfig({ enable_auto_scan_host: auto_scan })
+      .subscribe(() => {
+        if (auto_scan) {
+          interval(8000)
+            .pipe(takeUntil(this.stopFullScan$))
+            .subscribe(() => {
+              this.refresh(nodes => {
+                if (this.scanService.isScanNodesFinished(nodes))
+                  this.stopFullScan$.next(true);
+              });
             });
-          });
-      } else {
-        this.stopFullScan$.next(true);
-      }
-    });
+        } else {
+          this.stopFullScan$.next(true);
+        }
+      });
   }
 
   configScan(selectedNode: Host) {

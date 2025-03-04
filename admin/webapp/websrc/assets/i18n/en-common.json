@@ -1158,6 +1158,8 @@
     "SCAN": "Scan",
     "TRY_ME": "Add Vulnerability module",
     "AUTO_TIP": "Enabling auto scan will scan all running nodes & containers including newly started nodes or containers. Rescan is triggered by CVE DB updates or any package/library updates.",
+    "AUTO_TIP_HOST": "Enabling auto scan will scan all running nodes including newly started nodes. Rescan is triggered by CVE DB updates or any package/library updates.",
+    "AUTO_TIP_WORKLOAD": "Enabling auto scan will scan all running containers including newly started containers. Rescan is triggered by CVE DB updates or any package/library updates.",
     "START_SCAN": "Starting scan...",
     "FAILED_SCAN": "Failed to start scanning",
     "COUNT_NODE_POSTFIX": "nodes found",

@@ -90,7 +90,9 @@ export interface GlobalNotificationPayLoad {
 }
 
 export interface ScanConfig {
-  auto_scan: boolean;
+  auto_scan?: boolean;
+  enable_auto_scan_host?: boolean;
+  enable_auto_scan_workload?: boolean;
 }
 
 export interface ChartDataUpdate {

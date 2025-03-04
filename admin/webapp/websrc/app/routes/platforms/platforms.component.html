@@ -4,20 +4,6 @@
       {{ 'scan.PLATFORM' | translate }}
     </h1>
     <div class="d-flex align-items-center justify-content-end">
-      <ng-container *ngIf="!error">
-        <div class="mr-3" *ngIf="autoScanAuthorized && platforms.length > 0">
-          <mat-slide-toggle
-            [formControl]="autoScan"
-            (change)="configAutoScan(auto_scan || false)">
-            {{ 'scan.AUTO' | translate }}
-            <em
-              class="fa fa-info-circle"
-              matTooltip="{{ 'scan.AUTO_TIP' | translate }}"
-              matTooltipPosition="above">
-            </em>
-          </mat-slide-toggle>
-        </div>
-      </ng-container>
       <app-loading-button
         (btnClick)="refresh()"
         [appearance]="'mat-button'"

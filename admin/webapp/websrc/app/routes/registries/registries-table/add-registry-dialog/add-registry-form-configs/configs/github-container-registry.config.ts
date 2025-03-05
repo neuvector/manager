@@ -1,6 +1,6 @@
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import {
-  GithubFilterField,
+  FilterField,
   IntervalField,
   NameField,
   PasswordField,
@@ -11,11 +11,15 @@ import {
   UsernameField,
 } from '../constants/constants';
 import { cloneDeep } from 'lodash';
+import { FormlyValidators } from "@common/neuvector-formly/neuvector-formly.module";
 
 const GithubContainerRegistryField = cloneDeep(RegistryField);
 GithubContainerRegistryField.templateOptions.hint =
   'registry.GITHUB_CONTAINER_URL_HINT';
-const GithubContainerFilterField = cloneDeep(GithubFilterField);
+const GithubContainerFilterField = {
+  ...cloneDeep(FilterField),
+  validators: {validation: [FormlyValidators.RepositoryFilter]},
+};
 GithubContainerFilterField.templateOptions.hint =
   'registry.GITHUB_CONTAINER_FILTER_HINT';
 const GithubContainerPasswordField = cloneDeep(PasswordField);

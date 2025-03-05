@@ -2,7 +2,6 @@ import {
   FormlyComponents,
   FormlyValidators,
 } from '@common/neuvector-formly/neuvector-formly.module';
-import { FormlyFieldConfig } from '@ngx-formly/core';
 
 const min = 60;
 const hour = min * 60;
@@ -238,23 +237,6 @@ export const PasswordField = {
     type: 'password',
     icon: 'vpn_key',
     label: 'login.PASSWORD',
-  },
-};
-
-export const GithubFilterField = {
-  key: 'filters',
-  defaultValue: [],
-  type: FormlyComponents.CHIP_INPUT,
-  templateOptions: {
-    hint: 'registry.FILTER_HINT',
-    alwaysHint: true,
-    required: true,
-    label: 'registry.gridHeader.FILTER',
-    editTitle: 'registry.EDIT_FILTER',
-    placeholder: 'general.FILTER',
-  },
-  validators: {
-    validation: [FormlyValidators.RepositoryFilter],
   },
 };
 

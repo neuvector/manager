@@ -1,7 +1,6 @@
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import {
   FedRegistryHideExpr,
-  FilterField,
   TestSettingsFilterField,
 } from './constants/constants';
 import { AmazonEcrRegistryConfig } from './configs/amazon-ecr-registry.config';

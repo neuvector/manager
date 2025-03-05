@@ -35,7 +35,7 @@ RUN if [ "$TARGETARCH" = "amd64" ]; then \
   fi && \
     chmod +x cs && \
     export PATH="$PATH:/root/.local/share/coursier/bin" && \
-    ./cs install scala:3.3.4 sbt:1.10.2 --install-dir /usr/local/bin
+    ./cs install scala:3.3.5 sbt:1.10.2 --install-dir /usr/local/bin
 
 RUN npm install -g @angular/cli@14 && \
     npm install -g npm-force-resolutions

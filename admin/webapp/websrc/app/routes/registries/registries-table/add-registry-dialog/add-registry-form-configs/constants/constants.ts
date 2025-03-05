@@ -241,6 +241,23 @@ export const PasswordField = {
   },
 };
 
+export const GithubFilterField = {
+  key: 'filters',
+  defaultValue: [],
+  type: FormlyComponents.CHIP_INPUT,
+  templateOptions: {
+    hint: 'registry.FILTER_HINT',
+    alwaysHint: true,
+    required: true,
+    label: 'registry.gridHeader.FILTER',
+    editTitle: 'registry.EDIT_FILTER',
+    placeholder: 'general.FILTER',
+  },
+  validators: {
+    validation: [FormlyValidators.RepositoryFilter],
+  },
+};
+
 export const FilterField = {
   key: 'filters',
   defaultValue: [],

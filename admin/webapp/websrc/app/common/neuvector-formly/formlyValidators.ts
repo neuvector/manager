@@ -92,3 +92,18 @@ export function certificateValidator(
     return { invalidCertificate: true };
   }
 }
+
+export function repoFilterValidator(
+  control: AbstractControl
+): ValidationErrors | null {
+  const value = control.value;
+  const pattern = new RegExp(
+    /^(([a-z0-9](?:[._-]?[a-z0-9]+)*)\/)+([a-z0-9_.*:-]*)$/
+  );
+  if (!value) {
+    return null;
+  }
+  return value.every(str => pattern.test(str))
+    ? null
+    : { invalidRepoFilter: true };
+}

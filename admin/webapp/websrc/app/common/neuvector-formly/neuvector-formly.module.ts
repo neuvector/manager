@@ -10,6 +10,7 @@ import {
   fedNameValidator,
   objNameValidator,
   portRangeValidator,
+  repoFilterValidator,
   urlValidator,
   webhookUsernameValidator,
 } from '@common/neuvector-formly/formlyValidators';
@@ -63,6 +64,7 @@ export enum FormlyValidators {
   PortRange = 'invalidPortRange',
   EmailFormat = 'invalidEmail',
   Certificate = 'invalidCertificate',
+  RepositoryFilter = 'invalidRepositoryFilter',
 }
 
 export enum FormlyComponents {
@@ -171,6 +173,10 @@ export enum CardSeverity {
         {
           name: FormlyValidators.Certificate,
           validation: certificateValidator,
+        },
+        {
+          name: FormlyValidators.RepositoryFilter,
+          validation: repoFilterValidator,
         },
       ],
       types: [

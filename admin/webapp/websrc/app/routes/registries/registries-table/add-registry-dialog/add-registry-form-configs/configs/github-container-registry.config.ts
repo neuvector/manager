@@ -11,14 +11,14 @@ import {
   UsernameField,
 } from '../constants/constants';
 import { cloneDeep } from 'lodash';
-import { FormlyValidators } from "@common/neuvector-formly/neuvector-formly.module";
+import { FormlyValidators } from '@common/neuvector-formly/neuvector-formly.module';
 
 const GithubContainerRegistryField = cloneDeep(RegistryField);
 GithubContainerRegistryField.templateOptions.hint =
   'registry.GITHUB_CONTAINER_URL_HINT';
 const GithubContainerFilterField = {
   ...cloneDeep(FilterField),
-  validators: {validation: [FormlyValidators.RepositoryFilter]},
+  validators: { validation: [FormlyValidators.RepositoryFilter] },
 };
 GithubContainerFilterField.templateOptions.hint =
   'registry.GITHUB_CONTAINER_FILTER_HINT';

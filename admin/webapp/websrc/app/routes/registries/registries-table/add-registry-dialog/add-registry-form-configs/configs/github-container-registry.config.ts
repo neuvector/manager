@@ -1,6 +1,6 @@
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import {
-  FilterField,
+  GithubFilterField,
   IntervalField,
   NameField,
   PasswordField,
@@ -15,7 +15,7 @@ import { cloneDeep } from 'lodash';
 const GithubContainerRegistryField = cloneDeep(RegistryField);
 GithubContainerRegistryField.templateOptions.hint =
   'registry.GITHUB_CONTAINER_URL_HINT';
-const GithubContainerFilterField = cloneDeep(FilterField);
+const GithubContainerFilterField = cloneDeep(GithubFilterField);
 GithubContainerFilterField.templateOptions.hint =
   'registry.GITHUB_CONTAINER_FILTER_HINT';
 const GithubContainerPasswordField = cloneDeep(PasswordField);

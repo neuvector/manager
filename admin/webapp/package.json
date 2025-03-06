@@ -45,7 +45,7 @@
     "@ngx-translate/core": "11.0.1",
     "@ngx-translate/http-loader": "4.0.0",
     "@typescript-eslint/eslint-plugin": "^5.19.0",
-    "@typescript-eslint/parser": "^5.19.0",
+    "@typescript-eslint/parser": "^8.0.0",
     "ag-grid-angular": "^31.3.4",
     "ag-grid-community": "^31.3.4",
     "ang-jsoneditor": "^1.10.5",

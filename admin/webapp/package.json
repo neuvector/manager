@@ -48,7 +48,7 @@
     "@typescript-eslint/parser": "^5.19.0",
     "ag-grid-angular": "^31.3.4",
     "ag-grid-community": "^31.3.4",
-    "ang-jsoneditor": "^1.10.5",
+    "ang-jsoneditor": "^4.0.0",
     "angular-gauge": "^4.0.0",
     "angular-imask": "6.6.3",
     "angular-notifier": "^11.0.0",

@@ -1,6 +1,6 @@
 logLevel := Level.Warn
 
-addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "1.2.0")
+addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "2.3.1")
 
 addSbtPlugin("com.scalapenos" % "sbt-prompt" % "1.0.2")
 

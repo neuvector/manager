@@ -56,7 +56,7 @@
     "bootstrap": "5.3.3",
     "chart.js": "3.9.1",
     "classlist.js": "1.1.20150312",
-    "codemirror": "5.62.0",
+    "codemirror": "6.0.1",
     "core-js": "2.6.12",
     "country-flag-icons": "^1.5.5",
     "easy-pie-chart": "2.1.7",

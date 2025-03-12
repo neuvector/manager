@@ -288,4 +288,14 @@ export class GlobalConstant {
     PUBLIC: 'public',
     ROOTLESS_KEYPAIR_ONLY: 'rootless_keypairs_only',
   };
+
+  public static readonly PROVIDER_VALUES = {
+    GITHUB: 'github' as const,
+    AZURE_DEVOPS: 'azure devops' as const
+  }
+
+  public static REMOTE_REPOSITORY_PROVIDER_TYPES = [
+    { value: GlobalConstant.PROVIDER_VALUES.GITHUB, viewValue: 'Github'},
+    { value: GlobalConstant.PROVIDER_VALUES.AZURE_DEVOPS, viewValue: 'Azure Devops'}
+  ];
 }

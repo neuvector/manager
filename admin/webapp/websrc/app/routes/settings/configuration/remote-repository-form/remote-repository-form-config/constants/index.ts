@@ -1,1 +1,1 @@
-export * from './github.constant';
+export * from './constant';

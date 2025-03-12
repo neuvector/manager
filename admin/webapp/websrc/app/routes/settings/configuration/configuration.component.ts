@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   HostListener,
   OnDestroy,
@@ -54,7 +55,8 @@ export class ConfigurationComponent
     private settingsService: SettingsService,
     private authUtils: AuthUtilsService,
     private router: Router,
-    private tr: TranslateService
+    private tr: TranslateService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   @HostListener('window:beforeunload')
@@ -87,6 +89,9 @@ export class ConfigurationComponent
           },
         };
         this.multiClusterService.clusterName = value.misc.cluster_name;
+
+        //fix error ExpressionChangedAfterItHasBeenCheckedError
+        this.cdr.detectChanges();
       },
     });
     this._switchClusterSubscription =

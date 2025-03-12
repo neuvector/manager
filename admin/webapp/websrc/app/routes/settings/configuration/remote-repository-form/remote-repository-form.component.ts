@@ -1,15 +1,15 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormGroupDirective } from '@angular/forms';
-import { cloneDeep } from 'lodash';
-import { ErrorResponse, RemoteRepository } from '@common/types';
-import { RemoteRepoFormConfig } from './remote-repository-form-config';
-import { SettingsService } from '@services/settings.service';
-import { finalize } from 'rxjs/operators';
-import { NotificationService } from '@services/notification.service';
-import { TranslateService } from '@ngx-translate/core';
-import { GlobalConstant } from '@common/constants/global.constant';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { UtilsService } from '@common/utils/app.utils';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {FormGroup, FormGroupDirective} from '@angular/forms';
+import {cloneDeep} from 'lodash';
+import {ErrorResponse, RemoteRepository, RepositoryUpdateOptions} from '@common/types';
+import {RemoteRepoFormConfig} from './remote-repository-form-config';
+import {SettingsService} from '@services/settings.service';
+import {finalize} from 'rxjs/operators';
+import {NotificationService} from '@services/notification.service';
+import {TranslateService} from '@ngx-translate/core';
+import {GlobalConstant} from '@common/constants/global.constant';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import {UtilsService} from '@common/utils/app.utils';
 
 @Component({
   selector: 'app-remote-repository-form',
@@ -28,6 +28,7 @@ export class RemoteRepositoryFormComponent implements OnInit {
   @ViewChild(FormGroupDirective)
   formGroupDirective!: FormGroupDirective;
   @Input() remoteRepoData: RemoteRepository | undefined;
+  remoteRepositoryProvider: string | undefined;
 
   constructor(
     private settingsService: SettingsService,
@@ -38,16 +39,31 @@ export class RemoteRepositoryFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.isEdit = this.remoteRepoData ? true : false;
+    this.initializeEditMode();
+    this.remoteRepoModel.providerTypes = GlobalConstant.REMOTE_REPOSITORY_PROVIDER_TYPES;
+    this.remoteRepositoryProvider = this.remoteRepoData?.provider;
+  }
 
-    // If we are editing, we want to show the personal access token placeholder.
-    if (this.isEdit) {
-      this.remoteRepoModel = {
-        ...this.remoteRepoData,
-      };
+  private initializeEditMode(): void {
+    this.isEdit = !!this.remoteRepoData;
+    if ( !this.isEdit ) return;
+
+    this.remoteRepoModel = {
+      ...this.remoteRepoData,
+      github_configuration: {
+        ...(this.remoteRepoData?.github_configuration || {}),
+      },
+      azure_devops_configuration: {
+        ...(this.remoteRepoData?.azure_devops_configuration || {}),
+      }
+    }
+
+    if (this.remoteRepoModel.provider == GlobalConstant.PROVIDER_VALUES.GITHUB)
       this.remoteRepoModel.github_configuration.personal_access_token =
         this.personalAccessTokenPlaceholder;
-    }
+    if (this.remoteRepoModel.provider == GlobalConstant.PROVIDER_VALUES.AZURE_DEVOPS)
+      this.remoteRepoModel.azure_devops_configuration.personal_access_token = this.personalAccessTokenPlaceholder;
+
   }
 
   removeRemoteRepo(): void {
@@ -77,36 +93,37 @@ export class RemoteRepositoryFormComponent implements OnInit {
             this.serverErrorMessage
               ? this.translateService.instant('setting.REMOVE_ERROR')
               : this.utils.getAlertifyMsg(
-                  error,
-                  this.translateService.instant('setting.REMOVE_ERROR'),
-                  false
-                ),
+                error,
+                this.translateService.instant('setting.REMOVE_ERROR'),
+                false
+              ),
             GlobalConstant.NOTIFICATION_TYPE.ERROR
           );
         }
       );
   }
+
   submit(): void {
-    let payload: RemoteRepository = this.transformToPayload(
+    const payload: RemoteRepository = this.prepareRepositoryPayload(
       this.remoteRepoForm.value
     );
+    const updateOptions = this.getRepositoryUpdateOptions(payload);
+
     // If the user didn't change the personal access token, we don't want to send it to the server.
-    if (
-      this.isEdit &&
-      this.remoteRepoForm.get('github_configuration.personal_access_token')
-        ?.pristine
-    ) {
-      payload.github_configuration.personal_access_token = null as any;
+    if (this.isEdit) {
+      if( payload.provider == GlobalConstant.PROVIDER_VALUES.GITHUB && this.remoteRepoForm.get('github_configuration.personal_access_token')
+        ?.pristine)
+        payload.github_configuration.personal_access_token = null as any;
+      if(payload.provider == GlobalConstant.PROVIDER_VALUES.AZURE_DEVOPS && this.remoteRepoForm.get('azure_devops_configuration.personal_access_token')
+        ?.pristine)
+        payload.azure_devops_configuration.personal_access_token = null as any;
     }
 
     this.submittingForm = true;
     this.settingsService
-      .updateRemoteRepository(payload, this.isEdit)
+      .updateRemoteRepository(payload, updateOptions)
       .pipe(
-        finalize(() => {
-          this.submittingForm = false;
-          this.remoteRepoForm.markAsPristine();
-        })
+        finalize(() => this.handleSubmissionFinalization())
       )
       .subscribe(
         () => {
@@ -114,6 +131,7 @@ export class RemoteRepositoryFormComponent implements OnInit {
             this.translateService.instant('setting.SUBMIT_OK')
           );
           this.isEdit = true;
+          this.remoteRepositoryProvider = payload.provider;
         },
         (error: ErrorResponse) => {
           if (
@@ -129,21 +147,32 @@ export class RemoteRepositoryFormComponent implements OnInit {
             this.serverErrorMessage
               ? this.translateService.instant('setting.SUBMIT_FAILED')
               : this.utils.getAlertifyMsg(
-                  error,
-                  this.translateService.instant('setting.SUBMIT_FAILED'),
-                  false
-                ),
+                error,
+                this.translateService.instant('setting.SUBMIT_FAILED'),
+                false
+              ),
             GlobalConstant.NOTIFICATION_TYPE.ERROR
           );
         }
       );
   }
 
-  private transformToPayload(form: any): RemoteRepository {
+  private prepareRepositoryPayload(form: any): RemoteRepository {
     return {
       nickname: 'default',
-      provider: 'github',
       ...form,
     };
+  }
+
+  private getRepositoryUpdateOptions(payload: RemoteRepository): RepositoryUpdateOptions {
+    return {
+      isEdit: this.isEdit,
+      requiresRecreate: payload.provider !== this.remoteRepositoryProvider
+    }
+  }
+
+  private handleSubmissionFinalization(): void {
+    this.submittingForm = false;
+    this.remoteRepoForm.markAsPristine();
   }
 }

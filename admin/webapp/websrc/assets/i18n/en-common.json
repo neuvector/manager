@@ -3228,18 +3228,28 @@
         "comment": "Comment",
         "comment_hint": "",
         "enabled": "Enabled",
-        "owner": "Owner User Name",
-        "owner_hint": "The repository owner's GitHub user name (e.g. \"john_doe\" in \"https://github.com/john_doe/my_repo\").",
         "repository_name": "Repository Name",
-        "repository_name_hint": "The repository name (e.g. \"my-repo\" in \"https://github.com/john_doe/my_repo\").",
         "repository_branch": "Branch Name",
-        "repository_branch_hint": "The specific branch within the repository that contains the CRD files. The default branch is 'main'.",
         "personal_access_token": "Personal Access Token",
-        "personal_access_token_hint": "Obtain it from https://github.com/settings/tokens. Grant the \"repo\" scope to the token.",
-        "personal_access_token_committer_name": "Committer Name",
-        "personal_access_token_committer_name_hint": "The name of the committer associated with the personal access token",
-        "personal_access_token_email": "Email",
-        "personal_access_token_email_hint": "The email address associated with the committer"
+        "github": {
+          "owner": "Owner User Name",
+          "owner_hint": "The repository owner's GitHub user name (e.g. \"john_doe\" in \"https://github.com/john_doe/my_repo\").",
+          "repository_name_hint": "The repository name (e.g. \"my-repo\" in \"https://github.com/john_doe/my_repo\").",
+          "repository_branch_hint": "The specific branch within the repository that contains the CRD files. The default branch is 'main'.",
+          "personal_access_token_hint": "Obtain it from https://github.com/settings/tokens. Grant the \"repo\" scope to the token.",
+          "personal_access_token_committer_name": "Committer Name",
+          "personal_access_token_committer_name_hint": "The name of the committer associated with the personal access token",
+          "personal_access_token_email": "Email",
+          "personal_access_token_email_hint": "The email address associated with the committer"
+        },
+        "azure_devops": {
+          "organization": "Organization Name",
+          "organization_hint": "The name of your Azure DevOps organization (e.g., 'john_doe' in dev.azure.com/john_doe)",
+          "project": "Project Name",
+          "project_hint": "The Azure DevOps project that contains the repository. check your project URL: dev.azure.com/{organization}/{project}",
+          "repository_name_hint": "The name of the Git repository you want to connect to",
+          "personal_access_token_hint": "A token with Read & Write permissions for Code repositories. Generate it in Azure DevOps:\nhttps://dev.azure.com/{organization}/_usersSettings/tokens."
+        }
       }
     },
     "directory_type": {

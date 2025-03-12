@@ -4,6 +4,7 @@ export interface RemoteRepository {
   comment: string;
   enable: boolean;
   github_configuration: GithubConfiguration;
+  azure_devops_configuration: AzureDevopsConfiguration;
 }
 
 export interface GithubConfiguration {
@@ -13,6 +14,19 @@ export interface GithubConfiguration {
   personal_access_token_email: string;
   personal_access_token_committer_name: string;
   personal_access_token?: string;
+}
+
+export interface AzureDevopsConfiguration {
+  organization_name: string;
+  project_name: string;
+  repo_name: string;
+  branch_name: string;
+  personal_access_token?: string;
+}
+
+export interface RepositoryUpdateOptions {
+  isEdit: boolean;
+  requiresRecreate: boolean;
 }
 
 export interface RemoteRepositoryWrapper {

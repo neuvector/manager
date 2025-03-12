@@ -1,15 +1,7 @@
 import { FormlyFieldConfig } from '@ngx-formly/core';
-import {
-  CommentField,
-  PersonalAccessTokenCommitterNameField,
-  PersonalAccessTokenEmailField,
-  PersonalAccessTokenField,
-  ProviderField,
-  RepositoryBranchNameField,
-  RepositoryNameField,
-  RepositoryOwnerField,
-  EnabledField,
-} from './constants';
+import { CommentField, ProviderField, EnabledField } from './constants';
+import { AzureDevopsConfiguration } from '@routes/settings/configuration/remote-repository-form/remote-repository-form-config/configs/azure.config';
+import { GithubRemoteRepositoryFormConfig } from '@routes/settings/configuration/remote-repository-form/remote-repository-form-config/configs/github.config';
 
 export const RemoteRepoFormConfig: FormlyFieldConfig[] = [
   {
@@ -24,31 +16,17 @@ export const RemoteRepoFormConfig: FormlyFieldConfig[] = [
         ...CommentField,
       },
       {
-        className: 'col-12 col-md-6 mt-2',
-        ...RepositoryOwnerField,
+        hideExpression: `model.provider !== "azure devops"`,
+        className: 'col-12',
+        fieldGroup: [...AzureDevopsConfiguration],
       },
       {
-        className: 'col-12 col-md-6 mt-2',
-        ...RepositoryNameField,
+        hideExpression: `model.provider !== "github"`,
+        className: 'col-12',
+        fieldGroup: [...GithubRemoteRepositoryFormConfig],
       },
       {
-        className: 'col-12 col-md-6 mt-2',
-        ...RepositoryBranchNameField,
-      },
-      {
-        className: 'col-12 col-md-6 mt-2',
-        ...PersonalAccessTokenField,
-      },
-      {
-        className: 'col-12 col-md-6 mt-2',
-        ...PersonalAccessTokenCommitterNameField,
-      },
-      {
-        className: 'col-12 col-md-6 mt-2',
-        ...PersonalAccessTokenEmailField,
-      },
-      {
-        className: 'col-12 mt-3',
+        className: 'col-12 mt-4',
         ...EnabledField,
       },
     ],

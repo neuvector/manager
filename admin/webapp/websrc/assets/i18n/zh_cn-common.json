@@ -3228,18 +3228,28 @@
         "comment": "注释",
         "comment_hint": "",
         "enabled": "启用",
-        "owner": "所有者",
-        "owner_hint": "存储库所有者的用户名 (例如: \"https://github.com/john_doe/my-repo\")中的\"john_doe\" ",
         "repository_name": "存储库名称",
-        "repository_name_hint": "存储库名称 (例如: \"https://github.com/john_doe/my-repo\"中的\"my-repo\")",
         "repository_branch": "存储库分支",
-        "repository_branch_hint": "存储库中包含 CRD 文件的特定分支。 默认分支是 'main'.",
         "personal_access_token": "个人访问令牌",
-        "personal_access_token_hint": "从 https://github.com/settings/tokens 获取。 授予令牌\"repo\"范围",
-        "personal_access_token_committer_name": "提交者名称",
-        "personal_access_token_committer_name_hint": "与个人访问令牌关联的提交者的名称",
-        "personal_access_token_email": "提交者电子邮件",
-        "personal_access_token_email_hint": "与提交者关联的电子邮件地址"
+        "github": {
+          "owner": "所有者",
+          "owner_hint": "存储库所有者的用户名 (例如: \"https://github.com/john_doe/my-repo\")中的\"john_doe\" ",
+          "repository_name_hint": "存储库名称 (例如: \"https://github.com/john_doe/my-repo\"中的\"my-repo\")",
+          "repository_branch_hint": "存储库中包含 CRD 文件的特定分支。 默认分支是 'main'.",
+          "personal_access_token_hint": "从 https://github.com/settings/tokens 获取。 授予令牌\"repo\"范围",
+          "personal_access_token_committer_name": "提交者名称",
+          "personal_access_token_committer_name_hint": "与个人访问令牌关联的提交者的名称",
+          "personal_access_token_email": "提交者电子邮件",
+          "personal_access_token_email_hint": "与提交者关联的电子邮件地址"
+        },
+        "azure_devops": {
+          "organization": "组织名称",
+          "organization_hint": "您的 Azure DevOps 组织的名称（例如，dev.azure.com/john_doe 中的“john_doe”）",
+          "project": "项目名称",
+          "project_hint": "包含存储库的 Azure DevOps 项目。检查您的项目 URL：dev.azure.com/{organization}/{project}",
+          "repository_name_hint": "您要连接到的 Git 存储库的名称",
+          "personal_access_token_hint": "具有代码存储库读写权限的令牌。在 Azure DevOps 中生成:\nhttps://dev.azure.com/{organization}/_usersSettings/tokens"
+        }
       }
     },
     "directory_type": {

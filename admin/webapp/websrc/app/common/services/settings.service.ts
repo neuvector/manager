@@ -15,8 +15,10 @@ import {
   PolicyMode,
   Apikey,
   RemoteRepository,
+  RepositoryUpdateOptions,
 } from '@common/types';
 import { Subject } from 'rxjs';
+import { switchMap } from "rxjs/operators";
 
 @Injectable()
 export class SettingsService {
@@ -185,11 +187,19 @@ export class SettingsService {
     return this.configHttpService.getCspSupport();
   }
 
-  updateRemoteRepository(payload: RemoteRepository, isEdit: boolean) {
-    if (isEdit) {
-      return this.configHttpService.patchRemoteRepository({ config: payload });
+  updateRemoteRepository(payload: RemoteRepository, options: RepositoryUpdateOptions) {
+    if (options.isEdit) {
+      if (options.requiresRecreate) {
+        // delete -> create operation
+        return this.configHttpService.deleteRemoteRepositoryByName('default').pipe(
+          switchMap(
+            ()=> this.configHttpService.createRemoteRepository(payload)
+          )
+        );
+      }
+      return this.configHttpService.updateRemoteRepository({ config: payload });
     } else {
-      return this.configHttpService.postRemoteRepository(payload);
+      return this.configHttpService.createRemoteRepository(payload);
     }
   }
   deleteRemoteRepositoryByName(name: string) {

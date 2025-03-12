@@ -22,8 +22,11 @@ object SystemConfigJsonProtocol extends DefaultJsonProtocol {
   given githubConfigurationFormat: RootJsonFormat[GithubConfiguration]               = jsonFormat6(
     GithubConfiguration.apply
   )
+  given azureDevopsConfigurationFormat: RootJsonFormat[AzureDevopsConfiguration]     = jsonFormat5(
+    AzureDevopsConfiguration.apply
+  )
   given webhookFormat: RootJsonFormat[Webhook]                                       = jsonFormat6(Webhook.apply)
-  given remoteRepoFormat: RootJsonFormat[RemoteRepository]                           = jsonFormat5(RemoteRepository.apply)
+  given remoteRepoFormat: RootJsonFormat[RemoteRepository]                           = jsonFormat6(RemoteRepository.apply)
   given remoteRepositoryWrapFormat: RootJsonFormat[RemoteRepositoryWrap]             = jsonFormat1(
     RemoteRepositoryWrap.apply
   )

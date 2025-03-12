@@ -154,14 +154,14 @@ export class ConfigHttpService {
       );
   }
 
-  postRemoteRepository(payload: RemoteRepository): Observable<unknown> {
+  createRemoteRepository(payload: RemoteRepository): Observable<unknown> {
     return GlobalVariable.http.post<unknown>(
       PathConstant.REMOTE_REPO_URL,
       payload
     );
   }
 
-  patchRemoteRepository(payload: RemoteRepositoryWrapper): Observable<unknown> {
+  updateRemoteRepository(payload: RemoteRepositoryWrapper): Observable<unknown> {
     return GlobalVariable.http.patch<unknown>(
       PathConstant.REMOTE_REPO_URL,
       payload

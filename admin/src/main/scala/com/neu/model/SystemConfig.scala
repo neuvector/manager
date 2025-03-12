@@ -28,7 +28,8 @@ case class RemoteRepository(
   provider: String,
   comment: Option[String] = None,
   enable: Boolean,
-  github_configuration: Option[GithubConfiguration]
+  github_configuration: Option[GithubConfiguration],
+  azure_devops_configuration: Option[AzureDevopsConfiguration]
 )
 
 case class RemoteRepositoryWrap(
@@ -36,13 +37,22 @@ case class RemoteRepositoryWrap(
 )
 
 case class GithubConfiguration(
-  repository_owner_username: String,
-  repository_name: String,
+  repository_owner_username: Option[String] = None,
+  repository_name: Option[String] = None,
   repository_branch_name: Option[String] = None,
   personal_access_token: Option[String] = None,
   personal_access_token_committer_name: Option[String] = None,
   personal_access_token_email: Option[String] = None
 )
+
+case class AzureDevopsConfiguration(
+  organization_name: Option[String] = None,
+  project_name: Option[String] = None,
+  repo_name: Option[String] = None,
+  branch_name: Option[String] = None,
+  personal_access_token: Option[String] = None
+)
+
 case class SystemConfig(
   unused_group_aging: Option[Int] = None,
   syslog_ip: Option[String] = None,

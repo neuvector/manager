@@ -98,7 +98,7 @@ export function repoFilterValidator(
 ): ValidationErrors | null {
   const value = control.value;
   const pattern = new RegExp(
-    /^(([a-z0-9](?:[._-]?[a-z0-9]+)*)\/)+([a-z0-9_.*:-]*)$/
+    /^(([a-z0-9](?:[._-]?[a-z0-9]+)*)\/)+([a-z0-9_.*:-]+)$/
   );
   if (!value) {
     return null;

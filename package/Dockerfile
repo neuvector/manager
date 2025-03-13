@@ -40,7 +40,7 @@ RUN if [ "$TARGETARCH" = "amd64" ]; then \
 RUN npm install -g @angular/cli@14 && \
     npm install -g npm-force-resolutions
 
-RUN sed -i -e 's/interim.*xxxx/'"$VERSION"'/g' ./common/src/main/resources/application.conf
+RUN sed -i -e 's#interim.*xxxx#'"$VERSION"'#g' ./common/src/main/resources/application.conf
 RUN bash package/build_manager.sh
 
 # Manager unitest

@@ -56,7 +56,7 @@ RUN if [ "$ARCH" = "amd64" ]; then \
 fi
 
 # Base image
-FROM registry.suse.com/bci/bci-micro:15.6 AS micro
+FROM registry.suse.com/bci/bci-micro:15.7 AS micro
 FROM registry.suse.com/bci/bci-base:15.6 AS base
 
 COPY --from=builder /src/package/requirements.txt /chroot/requirements.txt

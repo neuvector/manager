@@ -121,7 +121,7 @@
     "@types/jquery": "3.5.32",
     "@types/lodash": "4.14.118",
     "@types/node": "12.20.55",
-    "@types/uuid": "^8.3.4",
+    "@types/uuid": "^10.0.0",
     "brotli-webpack-plugin": "^1.1.0",
     "compression-webpack-plugin": "^10.0.0",
     "eslint": "^8.12.0",

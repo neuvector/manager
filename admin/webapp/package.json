@@ -40,7 +40,7 @@
     "@fullcalendar/interaction": "4.4.2",
     "@fullcalendar/list": "4.4.2",
     "@fullcalendar/timegrid": "4.4.2",
-    "@ngx-formly/core": "^5.11.1",
+    "@ngx-formly/core": "^6.0.0",
     "@ngx-formly/material": "^5.11.1",
     "@ngx-translate/core": "11.0.1",
     "@ngx-translate/http-loader": "4.0.0",

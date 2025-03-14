@@ -80,7 +80,7 @@
     "ngx-avatar": "^4.1.0",
     "ngx-bootstrap": "5.6.2",
     "ngx-cookie-service": "13.1.2",
-    "ngx-infinite-scroll": "9.1.0",
+    "ngx-infinite-scroll": "19.0.0",
     "ngx-select-ex": "4.0.0",
     "ngx-toastr": "13.2.1",
     "ngx-webstorage-service": "^5.0.0",

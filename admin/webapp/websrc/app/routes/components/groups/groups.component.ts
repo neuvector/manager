@@ -139,7 +139,11 @@ export class GroupsComponent implements OnInit, OnDestroy {
       this.selectedGroups = [];
       setTimeout(() => {
         this.selectedGroups = this.gridApi!.getSelectedRows();
-        this.selectedGroups = this.groups.filter(group => this.selectedGroups.find(selectedGroup => selectedGroup.name === group.name));
+        this.selectedGroups = this.groups.filter(group =>
+          this.selectedGroups.find(
+            selectedGroup => selectedGroup.name === group.name
+          )
+        );
         this.gridApi!.redrawRows();
         this.highlightDisplayedGroup();
         this.selectedGroup.emit(

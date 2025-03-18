@@ -2,7 +2,7 @@ import {
   FormlyComponents,
   FormlyValidators,
 } from '@common/neuvector-formly/neuvector-formly.module';
-import { FormlyFieldConfig } from "@ngx-formly/core";
+import { FormlyFieldConfig } from '@ngx-formly/core';
 
 export const NickNameField = {
   key: 'nickname',
@@ -90,25 +90,25 @@ export const GithubRepositoryNameField = {
   },
 };
 
-export const GithubBranchNameField : FormlyFieldConfig = {
+export const GithubBranchNameField: FormlyFieldConfig = {
   key: 'github_configuration.repository_branch_name',
   type: FormlyComponents.ICON_INPUT,
   defaultValue: 'main',
   hooks: {
     onInit: (field: FormlyFieldConfig | undefined) => {
-      if(!field) return;
+      if (!field) return;
       const control = field.formControl;
-      if(!control?.value?.trim()){
-        control?.setValue('main',{emitEvent: false})
+      if (!control?.value?.trim()) {
+        control?.setValue('main', { emitEvent: false });
       }
-    }
+    },
   },
   templateOptions: {
     icon: 'branch',
     label: 'setting.remote_repository.details.repository_branch',
     hint: 'setting.remote_repository.details.github.repository_branch_hint',
     maxLength: 1000,
-    required: true
+    required: true,
   },
 };
 
@@ -149,7 +149,7 @@ export const GithubPersonalAccessTokenField = {
     label: 'setting.remote_repository.details.personal_access_token',
     hint: 'setting.remote_repository.details.github.personal_access_token_hint',
     maxLength: 1000,
-    required: true
+    required: true,
   },
 };
 
@@ -161,7 +161,7 @@ export const AzureOrganizationNameField = {
     label: 'setting.remote_repository.details.azure_devops.organization',
     hint: 'setting.remote_repository.details.azure_devops.organization_hint',
     maxLength: 1000,
-    required: true
+    required: true,
   },
 };
 
@@ -173,7 +173,7 @@ export const AzureProjectNameField = {
     label: 'setting.remote_repository.details.azure_devops.project',
     hint: 'setting.remote_repository.details.azure_devops.project_hint',
     maxLength: 1000,
-    required: true
+    required: true,
   },
 };
 
@@ -185,7 +185,7 @@ export const AzureRepositoryNameField = {
     label: 'setting.remote_repository.details.repository_name',
     hint: 'setting.remote_repository.details.azure_devops.repository_name_hint',
     maxLength: 1000,
-    required: true
+    required: true,
   },
 };
 
@@ -195,20 +195,20 @@ export const AzureBranchNameField = {
   defaultValue: 'main',
   hooks: {
     onInit: (field: FormlyFieldConfig | undefined) => {
-      if(!field) return;
+      if (!field) return;
       const control = field.formControl;
-      if(!control?.value?.trim()){
-        control?.setValue('main',{emitEvent: false})
+      if (!control?.value?.trim()) {
+        control?.setValue('main', { emitEvent: false });
       }
-    }
+    },
   },
   templateOptions: {
     icon: 'branch',
     label: 'setting.remote_repository.details.repository_branch',
     hint: 'setting.remote_repository.details.github.repository_branch_hint',
     maxLength: 1000,
-    required: true
-  }
+    required: true,
+  },
 };
 
 export const AzurePersonalAccessTokenField = {
@@ -221,6 +221,6 @@ export const AzurePersonalAccessTokenField = {
     label: 'setting.remote_repository.details.personal_access_token',
     hint: 'setting.remote_repository.details.azure_devops.personal_access_token_hint',
     maxLength: 1000,
-    required: true
+    required: true,
   },
 };

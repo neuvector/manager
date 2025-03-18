@@ -161,7 +161,9 @@ export class ConfigHttpService {
     );
   }
 
-  updateRemoteRepository(payload: RemoteRepositoryWrapper): Observable<unknown> {
+  updateRemoteRepository(
+    payload: RemoteRepositoryWrapper
+  ): Observable<unknown> {
     return GlobalVariable.http.patch<unknown>(
       PathConstant.REMOTE_REPO_URL,
       payload

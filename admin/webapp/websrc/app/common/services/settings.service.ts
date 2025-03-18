@@ -18,7 +18,7 @@ import {
   RepositoryUpdateOptions,
 } from '@common/types';
 import { Subject } from 'rxjs';
-import { switchMap } from "rxjs/operators";
+import { switchMap } from 'rxjs/operators';
 
 @Injectable()
 export class SettingsService {
@@ -187,15 +187,20 @@ export class SettingsService {
     return this.configHttpService.getCspSupport();
   }
 
-  updateRemoteRepository(payload: RemoteRepository, options: RepositoryUpdateOptions) {
+  updateRemoteRepository(
+    payload: RemoteRepository,
+    options: RepositoryUpdateOptions
+  ) {
     if (options.isEdit) {
       if (options.requiresRecreate) {
         // delete -> create operation
-        return this.configHttpService.deleteRemoteRepositoryByName('default').pipe(
-          switchMap(
-            ()=> this.configHttpService.createRemoteRepository(payload)
-          )
-        );
+        return this.configHttpService
+          .deleteRemoteRepositoryByName('default')
+          .pipe(
+            switchMap(() =>
+              this.configHttpService.createRemoteRepository(payload)
+            )
+          );
       }
       return this.configHttpService.updateRemoteRepository({ config: payload });
     } else {

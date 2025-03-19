@@ -7,8 +7,10 @@ import { GlobalConstant } from '@common/constants/global.constant';
 import { MapConstant } from '@common/constants/map.constant';
 import { UtilsService } from '@common/utils/app.utils';
 import { parseCamelStyle } from '@common/utils/common.utils';
-import { ActionButtonsComponent } from '@routes/components/groups/partial/action-buttons/action-buttons.component';
-import { ScorableHeaderComponent } from '@routes/components/groups/partial/scorable-header/scorable-header.component';
+import { ActionButtonsComponent } from '@components/groups/partial/action-buttons/action-buttons.component';
+import { ScorableHeaderComponent } from '@components/groups/partial/scorable-header/scorable-header.component';
+import { MonitorMetricHeaderComponent } from '@components/groups/partial/monitor-metric-header/monitor-metric-header.component';
+import { MonitorMetricSwitchComponent } from '@components/groups/partial/monitor-metric-switch/monitor-metric-switch.component';
 import { CustomCheckActionButtonComponent } from '@routes/components/group-details/partial/custom-check-action-button/custom-check-action-button.component';
 import { GroupDlpConfigActionButtonComponent } from '@routes/components/group-details/partial/group-dlp-config-action-button/group-dlp-config-action-button.component';
 import { GroupWafConfigActionButtonComponent } from '@routes/components/group-details/partial/group-waf-config-action-button/group-waf-config-action-button.component';
@@ -231,6 +233,15 @@ export class GroupsService {
         hide: isFed,
         sortable: false,
         width: 50,
+        minWidth: 50,
+        maxWidth: 50,
+      },
+      {
+        headerComponent: MonitorMetricHeaderComponent,
+        field: 'monitor_metric',
+        cellRenderer: MonitorMetricSwitchComponent,
+        width: 50,
+        sortable: false,
         minWidth: 50,
         maxWidth: 50,
       },

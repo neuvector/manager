@@ -19,6 +19,8 @@ import { RuleDetailModalService } from '@components/groups/partial/rule-detail-m
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ExportOptionsModalModule } from '@components/export-options-modal/export-options-modal.module';
 import { FederatedConfigurationService } from '@services/federated-configuration.service';
+import { MonitorMetricHeaderComponent } from './partial/monitor-metric-header/monitor-metric-header.component';
+import { MonitorMetricSwitchComponent } from './partial/monitor-metric-switch/monitor-metric-switch.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,8 @@ import { FederatedConfigurationService } from '@services/federated-configuration
     GroupResponseRulesComponent,
     GroupNetworkRulesComponent,
     RuleDetailModalComponent,
+    MonitorMetricHeaderComponent,
+    MonitorMetricSwitchComponent,
   ],
   imports: [
     CommonModule,

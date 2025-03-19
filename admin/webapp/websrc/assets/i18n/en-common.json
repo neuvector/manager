@@ -2139,7 +2139,9 @@
     "TIP": {
       "EDIT": "Edit Group",
       "DELETE": "Remove Group",
-      "VIEW": "View Group"
+      "VIEW": "View Group",
+      "ENABLE_MONITOR_METRIC": "Enabled DDoS Detection Threshold",
+      "DISABLE_MONITOR_METRIC": "Disabled DDoS Detection Threshold"
     },
     "gridHeader": {
       "NAME": "Name",

@@ -2139,7 +2139,9 @@
     "TIP": {
       "EDIT": "编辑组",
       "DELETE": "删除组",
-      "VIEW": "浏览组"
+      "VIEW": "浏览组",
+      "ENABLE_MONITOR_METRIC": "启用DDoS侦测阈值",
+      "DISABLE_MONITOR_METRIC": "禁用DDoS侦测阈值"
     },
     "gridHeader": {
       "NAME": "组名",

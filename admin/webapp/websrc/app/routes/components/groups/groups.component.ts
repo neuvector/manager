@@ -308,7 +308,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.groups = [];
     this.groupsService.getFedGroupsData().subscribe({
       next: groups => {
-        this.renderGroups(groups, true);
+        this.renderGroups(groups, { isHardReloaded: true });
       },
       error: ({ error }: { error: ErrorResponse }) => {},
       complete: () => {
@@ -509,9 +509,9 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.filtered = this.filteredCount !== this.groupsCount;
   }
 
-  private renderGroups = (data, options) => {
+  renderGroups = (data, options) => {
     this.eof = data.length < MapConstant.PAGE.GROUPS;
-    this.groups = this.groups.concat(data);
+    this.groups = options.isHardReloaded ? this.groups.concat(data) : data;
     if (!this.isShowingSystemGroups) {
       this.groups = this.groups.filter(function (item) {
         return !item.platform_role;
@@ -519,7 +519,9 @@ export class GroupsComponent implements OnInit, OnDestroy {
     }
     console.log('this.groups', this.groups);
     this.gridApi!.setRowData(this.groups);
-    this.filteredCount = this.groups.length;
+    this.filteredCount = options.isHardReloaded
+      ? this.groups.length
+      : this.filteredCount;
     if (this.eof) this.refreshing.emit(false);
     console.log('this.linkedGroup:', this.linkedGroup);
     setTimeout(() => {
@@ -564,7 +566,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
   private handleError = () => {
     this.groupsErr = true;
-    this.renderGroups([], true);
+    this.renderGroups([], { isHardReloaded: true });
   };
 
   private getModeCounts = () => {

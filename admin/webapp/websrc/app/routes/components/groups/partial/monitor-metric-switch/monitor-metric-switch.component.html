@@ -1,0 +1,34 @@
+<span *ngIf="showMonitorMetric">
+  <span
+    *ngIf="
+      !isReadonlyGroup &&
+      !isAddressGroupAndNamespaceUser &&
+      params.context.componentParent.isWriteGroupAuthorized
+    ">
+    <em
+      class="eos-icons hand text-action text-muted"
+      *ngIf="!params.value"
+      (click)="toggleMonitoMetric(true)">
+      toggle_off
+    </em>
+    <em
+      class="eos-icons hand text-action text-success"
+      *ngIf="params.value"
+      (click)="toggleMonitoMetric(false)">
+      toggle_on
+    </em>
+  </span>
+  <span
+    *ngIf="
+      isReadonlyGroup ||
+      isAddressGroupAndNamespaceUser ||
+      !params.context.componentParent.isWriteGroupAuthorized
+    ">
+    <em class="eos-icons text-action text-muted" *ngIf="!params.value">
+      toggle_off
+    </em>
+    <em class="eos-icons text-action text-success" *ngIf="params.value">
+      toggle_on
+    </em>
+  </span>
+</span>

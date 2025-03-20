@@ -54,7 +54,7 @@ lazy val commonDependencies = Seq(
   ehCache,
   guava,
   // https://mvnrepository.com/artifact/org.apache.commons/commons-csv
-  "org.apache.commons" % "commons-csv"        % "1.10.0"
+  "org.apache.commons" % "commons-csv"        % "1.14.0"
 )
 
 lazy val commonSettings = Seq(

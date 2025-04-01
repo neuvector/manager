@@ -30,7 +30,7 @@ export const fedGroupDetailsTabs = [
   templateUrl: './fed-group-details.component.html',
   styleUrls: ['./fed-group-details.component.scss'],
 })
-export class FedGroupDetailsComponent implements OnInit {
+export class FedGroupDetailsComponent implements OnInit, AfterViewInit {
   @Input() kind: string;
   @Input() groupName: string;
   @Input() members: any;

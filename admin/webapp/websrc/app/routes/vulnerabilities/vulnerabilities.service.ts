@@ -235,7 +235,7 @@ export class VulnerabilitiesService {
   getProfileType(): Observable<CfgType> {
     return this.risksHttpService.getCVEProfile().pipe(
       map(profile => {
-        return profile.profiles[0].cfg_type || '';
+        return profile.profiles[0]?.cfg_type || '';
       })
     );
   }

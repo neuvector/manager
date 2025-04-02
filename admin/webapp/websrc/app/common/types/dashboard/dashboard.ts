@@ -87,6 +87,8 @@ export interface Metrics {
   kube_version: string;
   openshift_version: string;
   new_service_policy_mode: string;
+  adm_mode: string;
+  enabled_deny_adm_ctrl_rules: number;
   deny_adm_ctrl_rules: number;
   hosts: number;
   workloads: RiskScoreMetricsWL;

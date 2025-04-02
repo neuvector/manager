@@ -727,6 +727,8 @@ case class Metrics(
   openshift_version: String,
   new_service_policy_mode: String,
   new_service_profile_mode: String,
+  adm_mode: String,
+  enabled_deny_adm_ctrl_rules: Int,
   deny_adm_ctrl_rules: Int,
   hosts: Int,
   workloads: RiskScoreMetricsWL,
@@ -1026,7 +1028,7 @@ object DashboardJsonProtocol extends DefaultJsonProtocol with LazyLogging {
   given riskScoreMetricsCVEFormat: RootJsonFormat[RiskScoreMetricsCVE]         = jsonFormat5(
     RiskScoreMetricsCVE.apply
   )
-  given metricsFormat: RootJsonFormat[Metrics]                                 = jsonFormat10(Metrics.apply)
+  given metricsFormat: RootJsonFormat[Metrics]                                 = jsonFormat12(Metrics.apply)
   given conversationReportEntryFormat: RootJsonFormat[ConversationReportEntry] = jsonFormat8(
     ConversationReportEntry.apply
   )
@@ -1043,7 +1045,6 @@ object DashboardJsonProtocol extends DefaultJsonProtocol with LazyLogging {
   given multiClusterSummaryFormat: RootJsonFormat[MultiClusterSummary]         = jsonFormat2(
     MultiClusterSummary.apply
   )
-  MetricsWrap
   given metricsWrapFormat: RootJsonFormat[MetricsWrap]                         = jsonFormat1(
     MetricsWrap.apply
   )

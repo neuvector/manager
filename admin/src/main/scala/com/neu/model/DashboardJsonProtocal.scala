@@ -491,6 +491,7 @@ case class ApplicationAnalysis(
 )
 
 case class AutoScan(
+  auto_scan: Option[Boolean],
   enable_auto_scan_workload: Option[Boolean],
   enable_auto_scan_host: Option[Boolean]
 )
@@ -958,7 +959,7 @@ object DashboardJsonProtocol extends DefaultJsonProtocol with LazyLogging {
   given applicationAnalysisFormat: RootJsonFormat[ApplicationAnalysis]                   = jsonFormat2(
     ApplicationAnalysis.apply
   )
-  given autoScanFormat: RootJsonFormat[AutoScan]                                         = jsonFormat2(AutoScan.apply)
+  given autoScanFormat: RootJsonFormat[AutoScan]                                         = jsonFormat3(AutoScan.apply)
   given autoScanConfigFormat: RootJsonFormat[AutoScanConfig]                             = jsonFormat2(AutoScanConfig.apply)
   given admissionRuleFormat: RootJsonFormat[AdmissionRule]                               = jsonFormat3(AdmissionRule.apply)
   given admissionRulesWrapFormat: RootJsonFormat[AdmissionRulesWrap]                     = jsonFormat2(

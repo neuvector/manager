@@ -30,6 +30,8 @@ export class ScoreImprovementAdmissionControlStatusViewComponent
     const metrics = JSON.parse(
       JSON.stringify(this.scoreImprovementModalService.newMetrics())
     );
+    metrics.adm_mode = 'protect';
+    metrics.enabled_deny_adm_ctrl_rules = 1;
     metrics.deny_adm_ctrl_rules = 1;
     this.scoreImprovementModalService
       .calculateScoreData(metrics)

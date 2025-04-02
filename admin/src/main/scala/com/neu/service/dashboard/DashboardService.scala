@@ -86,6 +86,8 @@ class DashboardService()(implicit executionContext: ExecutionContext)
                                    "",
                                    "",
                                    "",
+                                   "",
+                                   0,
                                    0,
                                    0,
                                    RiskScoreMetricsWL(0, 0, 0, 0, 0, 0, 0, 0),

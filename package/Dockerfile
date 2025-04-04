@@ -1,5 +1,5 @@
 # Builder image
-FROM registry.suse.com/bci/openjdk:17 AS builder
+FROM registry.suse.com/bci/openjdk:21 AS builder
 
 ARG TARGETOS
 ARG TARGETARCH

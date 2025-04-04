@@ -36,7 +36,7 @@
     "@fullcalendar/angular": "5.11.5",
     "@fullcalendar/bootstrap": "4.4.2",
     "@fullcalendar/core": "4.4.2",
-    "@fullcalendar/daygrid": "4.4.2",
+    "@fullcalendar/daygrid": "6.1.17",
     "@fullcalendar/interaction": "4.4.2",
     "@fullcalendar/list": "4.4.2",
     "@fullcalendar/timegrid": "4.4.2",

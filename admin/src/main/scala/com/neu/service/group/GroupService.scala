@@ -313,17 +313,24 @@ class GroupService extends BaseService with DefaultJsonFormats with LazyLogging 
     val criteria = groupConfigDTO.criteria.flatMap((criteriaItem: CriteriaItem) =>
       stringToCriteriaEntry(criteriaItem.name)
     )
+    val url      =
+      if (groupConfigDTO.cfg_type.getOrElse("user_created").equals("federal"))
+        s"$baseUri/group/${groupConfigDTO.name}"
+      else
+        s"${baseClusterUri(tokenId)}/group/${groupConfigDTO.name}"
+    val cfgtype  =
+      groupConfigDTO.cfg_type
+        .getOrElse("user_created")
     if (criteria.nonEmpty) {
       complete {
         RestClient.httpRequestWithHeader(
-          if (groupConfigDTO.cfg_type.getOrElse("").equals("federal"))
-            s"$baseUri/group/${groupConfigDTO.name}"
-          else s"${baseClusterUri(tokenId)}/group/${groupConfigDTO.name}",
+          url,
           PATCH,
           if (
-            groupConfigDTO.cfg_type
-              .getOrElse("user_created")
-              .equals("user_created")
+            cfgtype
+              .equals("user_created") ||
+            cfgtype
+              .equals("federal")
           )
             groupConfigWrapToJson(
               GroupConfigWrap(

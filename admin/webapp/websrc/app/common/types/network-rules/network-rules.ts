@@ -12,6 +12,8 @@ export interface NetworkRule {
   last_modified_timestamp: number;
   learned: boolean;
   priority: number;
+  match_counter: number;
+  last_match_timestamp: number;
   state?: string;
   remove?: boolean;
   selected?: boolean;

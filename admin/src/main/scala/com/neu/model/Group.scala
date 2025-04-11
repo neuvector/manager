@@ -39,7 +39,9 @@ case class Rule4Group(
   learned: Boolean,
   cfg_type: Option[String] = Some("user_created"),
   disable: Boolean,
-  last_modified_timestamp: Option[Long] = None
+  last_modified_timestamp: Option[Long] = None,
+  match_counter: Option[Int],
+  last_match_timestamp: Option[Int]
 )
 
 case class CLUSEventCondition4Group(

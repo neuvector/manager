@@ -278,7 +278,23 @@ export class NetworkRulesService {
           sortAscending: '<em class="fas fa-sort-numeric-up"/>',
           sortDescending: '<em class="fas fa-sort-numeric-down"/>',
         },
-        width: 200,
+        width: 180,
+      },
+      {
+        headerName: this.translate.instant('policy.gridHeader.MATCH_COUNTER'),
+        field: 'match_counter',
+        width: 120,
+      },
+      {
+        headerName: this.translate.instant('policy.gridHeader.MATCH_AT'),
+        field: 'last_match_timestamp',
+        cellRenderer: lastModifiedTimestampRenderFunc,
+        comparator: dateComparator,
+        icons: {
+          sortAscending: '<em class="fas fa-sort-numeric-up"/>',
+          sortDescending: '<em class="fas fa-sort-numeric-down"/>',
+        },
+        width: 180,
       },
       {
         cellRenderer: ActionButtonsComponent,

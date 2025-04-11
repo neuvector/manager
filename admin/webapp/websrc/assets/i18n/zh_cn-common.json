@@ -2553,7 +2553,9 @@
       "PORT": "端口",
       "TYPE": "类型",
       "UPDATE_AT": "更新于",
-      "ACTION": "动作"
+      "ACTION": "动作",
+      "MATCH_COUNTER": "匹配次数",
+      "MATCH_AT": "最后使用时间"
     },
     "action": {
       "DENY": "拒绝",

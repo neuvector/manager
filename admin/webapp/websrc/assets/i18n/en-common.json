@@ -2553,7 +2553,9 @@
       "PORT": "Ports",
       "TYPE": "Type",
       "UPDATE_AT": "Updated at",
-      "ACTION": "Action"
+      "ACTION": "Action",
+      "MATCH_COUNTER": "Match Counter",
+      "MATCH_AT": "Last used at"
     },
     "action": {
       "DENY": "Deny",

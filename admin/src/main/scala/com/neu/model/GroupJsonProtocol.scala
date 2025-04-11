@@ -19,7 +19,7 @@ object GroupJsonProtocol extends DefaultJsonProtocol {
   val notRegexSign     = "!regex"
   val ops: Seq[String] = Seq(equalOp, notEqualOp, containsOp, prefixOp, regexOp, notRegexOp)
 
-  given rule4GroupFormat: RootJsonFormat[Rule4Group]                             = jsonFormat11(Rule4Group.apply)
+  given rule4GroupFormat: RootJsonFormat[Rule4Group]                             = jsonFormat13(Rule4Group.apply)
   given CLUSEventCondition4GroupFormat: RootJsonFormat[CLUSEventCondition4Group] =
     jsonFormat2(CLUSEventCondition4Group.apply)
   given responseRule4GroupFormat: RootJsonFormat[ResponseRule4Group]             = jsonFormat8(

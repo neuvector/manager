@@ -169,7 +169,7 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
           let convertedRules = this.responseRulesService.destructConditions(
             response.response_rules
           );
-          this.gridApi!.setRowData(convertedRules);
+          this.gridApi!.setGridOption('rowData', convertedRules);
         },
         error => {}
       );

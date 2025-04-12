@@ -108,7 +108,10 @@ export class MultiClusterComponent implements OnInit, OnDestroy {
     this.isFederal = fedData.fed_role.length > 0;
     this.clusterData = fedData;
     if (this._clusterGrid && this._clusterGrid.gridApi) {
-      this._clusterGrid.gridApi.setRowData(this.clusterData.clusters!);
+      this._clusterGrid.gridApi.setGridOption(
+        'rowData',
+        this.clusterData.clusters!
+      );
       this._clusterGrid.gridApi.getDisplayedRowAtIndex(0)?.setSelected(true);
       setTimeout(() => {
         this._clusterGrid.updateSummaryForRows();

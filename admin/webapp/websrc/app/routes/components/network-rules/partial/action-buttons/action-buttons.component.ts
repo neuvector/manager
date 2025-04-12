@@ -195,7 +195,8 @@ export class ActionButtonsComponent implements ICellRendererAngularComp {
     this.params.context.componentParent.networkRules[indexAtCurr] = JSON.parse(
       JSON.stringify(this.networkRulesService.networkRuleBackup[indexAtBackup])
     );
-    this.params.context.componentParent.gridApi!.setRowData(
+    this.params.context.componentParent.gridApi!.setGridOption(
+      'rowData',
       this.params.context.componentParent.networkRules
     );
     this.networkRulesService.isNetworkRuleChanged = false;

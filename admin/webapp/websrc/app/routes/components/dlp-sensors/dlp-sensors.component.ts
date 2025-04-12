@@ -324,8 +324,11 @@ export class DlpSensorsComponent implements OnInit, OnDestroy {
     );
     this.isPredefine = this.selectedSensor?.predefine || false;
     setTimeout(() => {
-      this.gridApi4Rules!.setRowData(this.selectedSensor?.rules || []);
-      this.gridApi4Patterns!.setRowData([]);
+      this.gridApi4Rules!.setGridOption(
+        'rowData',
+        this.selectedSensor?.rules || []
+      );
+      this.gridApi4Patterns!.setGridOption('rowData', []);
       if (this.selectedSensor?.rules?.length > 0) {
         let rowNode = this.gridApi4Rules!.getDisplayedRowAtIndex(0);
         rowNode!.setSelected(true);
@@ -335,7 +338,10 @@ export class DlpSensorsComponent implements OnInit, OnDestroy {
   };
   private onSelectionChanged4Rule = () => {
     this.selectedRule = this.gridApi4Rules!.getSelectedRows()[0];
-    this.gridApi4Patterns!.setRowData(this.selectedRule?.patterns || []);
+    this.gridApi4Patterns!.setGridOption(
+      'rowData',
+      this.selectedRule?.patterns || []
+    );
     setTimeout(() => {
       this.gridApi4Patterns!.sizeColumnsToFit();
     }, 200);

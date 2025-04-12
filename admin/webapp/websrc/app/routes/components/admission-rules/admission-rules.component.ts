@@ -206,18 +206,18 @@ export class AdmissionRulesComponent implements OnInit {
             if (error.status === 404) {
               this.gridOptions.overlayNoRowsTemplate =
                 this.utils.getOverlayTemplateMsg(error);
-              this.gridApi!.setRowData([]);
+              this.gridApi!.setGridOption('rowData', []);
               this.stateWarning = this.translate.instant(
                 'admissionControl.NOT_BINDING'
               );
             } else if (error.status === 403) {
               this.gridOptions.overlayNoRowsTemplate =
                 this.translate.instant('general.NO_ROWS');
-              this.gridApi!.setRowData([]);
+              this.gridApi!.setGridOption('rowData', []);
             } else {
               this.gridOptions.overlayNoRowsTemplate =
                 this.utils.getOverlayTemplateMsg(error);
-              this.gridApi!.setRowData([]);
+              this.gridApi!.setGridOption('rowData', []);
             }
           }, 200);
         }

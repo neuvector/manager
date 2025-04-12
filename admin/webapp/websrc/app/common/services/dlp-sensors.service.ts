@@ -95,7 +95,7 @@ export class DlpSensorsService {
       },
       {
         cellClass: 'grid-right-align',
-        suppressSorting: true,
+        sortable: false,
         cellRenderer: SensorActionButtonsComponent,
         hide: !isWriteDLPSensorAuthorized,
         width: 60,
@@ -126,7 +126,7 @@ export class DlpSensorsService {
       },
       {
         cellClass: 'grid-right-align',
-        suppressSorting: true,
+        sortable: false,
         cellRenderer: RuleActionButtonsComponent,
         hide: !isWriteDLPSensorAuthorized,
         width: 60,
@@ -163,7 +163,7 @@ export class DlpSensorsService {
           }
           return '';
         },
-        suppressSorting: true,
+        sortable: false,
         width: 450,
         minWidth: 350,
       },

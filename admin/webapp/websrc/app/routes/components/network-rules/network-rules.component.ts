@@ -336,7 +336,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe({
         next: service => {
           this.ruleCount = service.policy_rules.length;
-          this.gridApi!.setRowData(service.policy_rules);
+          this.gridApi!.setGridOption('rowData', service.policy_rules);
         },
         error: err => {
           console.warn(err);
@@ -345,7 +345,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
               this.utils.getOverlayTemplateMsg(err);
           }
           this.ruleCount = 0;
-          this.gridApi!.setRowData([]);
+          this.gridApi!.setGridOption('rowData', []);
         },
       });
   };
@@ -357,7 +357,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(
         (response: any) => {
           this.ruleCount = response.policy_rules.length;
-          this.gridApi!.setRowData(response.policy_rules);
+          this.gridApi!.setGridOption('rowData', response.policy_rules);
         },
         error => {
           console.error(error);
@@ -517,7 +517,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
     });
     console.log('this.networkRules', this.networkRules);
     this.ruleCount = this.networkRules.length;
-    this.gridApi!.setRowData(this.networkRules);
+    this.gridApi!.setGridOption('rowData', this.networkRules);
   };
 
   private mergeRulesByWebWorkerClient = (rulesBlock: Array<any>) => {
@@ -551,7 +551,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       });
     }
     this.ruleCount = networkRules.length;
-    this.gridApi!.setRowData(networkRules);
+    this.gridApi!.setGridOption('rowData', networkRules);
     if (this.eof) this.refreshing$.next(false);
   };
 
@@ -563,7 +563,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
     this.networkRulesService.isNetworkRuleChanged = true;
     setTimeout(() => {
       this.ruleCount = this.networkRules.length;
-      this.gridApi!.setRowData(this.networkRules);
+      this.gridApi!.setGridOption('rowData', this.networkRules);
       // this.gridApi!.redrawRows();
       this.gridApi!.ensureIndexVisible(targetIndex, 'top');
     }, 500);
@@ -575,7 +575,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   ) => {
     this.networkRules.splice(targetIndex, 1, updatedNetworkRule);
     let row = this.gridApi!.getDisplayedRowAtIndex(targetIndex)!;
-    this.gridApi!.setRowData(this.networkRules);
+    this.gridApi!.setGridOption('rowData', this.networkRules);
     this.networkRulesService.isNetworkRuleChanged = true;
     setTimeout(() => {
       this.gridApi!.ensureIndexVisible(targetIndex, 'top');
@@ -599,7 +599,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
     }
     this.networkRules = networkRulesTmp;
     this.ruleCount = this.networkRules.length;
-    this.gridApi!.setRowData(this.networkRules);
+    this.gridApi!.setGridOption('rowData', this.networkRules);
     // this.gridApi!.redrawRows();
     this.networkRulesService.isNetworkRuleChanged = true;
     this.selectedNetworkRules = [];
@@ -615,7 +615,7 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
       return rule;
     });
     this.ruleCount = this.networkRules.length;
-    this.gridApi!.setRowData(this.networkRules);
+    this.gridApi!.setGridOption('rowData', this.networkRules);
     // this.gridApi!.redrawRows();
     this.networkRulesService.isNetworkRuleChanged = true;
   };

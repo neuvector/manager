@@ -926,7 +926,7 @@ export function updateGridData(
     }
   }
 
-  gridApi.setRowData(dataset);
+  gridApi.setGridOption('rowData', dataset);
   setTimeout(() => {
     if (op === 'delete') index = 0;
     let rowNode = gridApi.getDisplayedRowAtIndex(index);

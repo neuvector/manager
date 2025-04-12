@@ -106,7 +106,7 @@ export class AddEditRuleModalComponent implements OnInit {
     };
     this.gridOptions4EditPatterns.onSelectionChanged = this.onPatternChanged;
     setTimeout(() => {
-      this.gridApi4EditPatterns!.setRowData(this.patterns);
+      this.gridApi4EditPatterns!.setGridOption('rowData', this.patterns);
     }, 200);
   }
 
@@ -138,7 +138,7 @@ export class AddEditRuleModalComponent implements OnInit {
         } else {
           this.patterns.splice(indexOfExistingPattern, 1, this.pattern);
         }
-        this.gridApi4EditPatterns!.setRowData(this.patterns);
+        this.gridApi4EditPatterns!.setGridOption('rowData', this.patterns);
         this.patternErrorMsg = '';
         this.initializePattern();
       }
@@ -173,7 +173,7 @@ export class AddEditRuleModalComponent implements OnInit {
           this.notificationService.open(
             this.translate.instant('dlp.msg.UPDATE_RULE_OK')
           );
-          this.data.gridApi.setRowData(payload.config.rules);
+          this.data.gridApi.setGridOption('rowData', payload.config.rules);
           setTimeout(() => {
             let rowNode = this.data.gridApi.getDisplayedRowAtIndex(
               this.data.index

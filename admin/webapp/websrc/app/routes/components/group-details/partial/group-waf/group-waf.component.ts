@@ -118,7 +118,7 @@ export class GroupWafComponent implements OnInit, OnChanges {
           }
         }
         this.groupWafSensors = response.sensors;
-        this.gridApi!.setRowData(this.groupWafSensors);
+        this.gridApi!.setGridOption('rowData', this.groupWafSensors);
         this.enabled = response.status;
         this.getStatus.emit(this.enabled);
         this.filteredCount = this.groupWafSensors.length;

@@ -161,9 +161,9 @@ export class SignatureVerifiersComponent implements OnInit {
           this.signatures = signatureArray;
 
           // this.filteredCount = this.signatures.length;
-          this.gridApi4Signatures!.setRowData(this.signatures);
+          this.gridApi4Signatures!.setGridOption('rowData', this.signatures);
           if (!this.signatures || this.signatures.length === 0)
-            this.gridApi4Verifiers!.setRowData([]);
+            this.gridApi4Verifiers!.setGridOption('rowData', []);
           setTimeout(() => {
             let rowNode =
               this.gridApi4Signatures!.getDisplayedRowAtIndex(index);
@@ -248,7 +248,7 @@ export class SignatureVerifiersComponent implements OnInit {
         (response: any) => {
           setTimeout(() => {
             this.verifiers = response.verifiers || [];
-            this.gridApi4Verifiers!.setRowData(this.verifiers);
+            this.gridApi4Verifiers!.setGridOption('rowData', this.verifiers);
             if (this.verifiers.length > 0) {
               let rowNode = this.gridApi4Verifiers!.getDisplayedRowAtIndex(0);
               rowNode!.setSelected(true);

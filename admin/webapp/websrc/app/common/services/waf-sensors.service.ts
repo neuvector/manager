@@ -95,7 +95,7 @@ export class WafSensorsService {
       },
       {
         cellClass: 'grid-right-align',
-        suppressSorting: true,
+        sortable: false,
         cellRenderer: SensorActionButtonsComponent,
         hide: !isWriteWAFSensorAuthorized,
         width: 60,
@@ -126,7 +126,7 @@ export class WafSensorsService {
       },
       {
         cellClass: 'grid-right-align',
-        suppressSorting: true,
+        sortable: false,
         cellRenderer: RuleActionButtonsComponent,
         hide: !isWriteWAFSensorAuthorized,
         width: 60,
@@ -163,7 +163,7 @@ export class WafSensorsService {
           }
           return '';
         },
-        suppressSorting: true,
+        sortable: false,
         width: 450,
         minWidth: 350,
       },

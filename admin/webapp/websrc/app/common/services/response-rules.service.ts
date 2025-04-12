@@ -93,7 +93,7 @@ export class ResponseRulesService {
       {
         cellRenderer: ActionButtonsComponent,
         cellClass: 'grid-right-align',
-        suppressSorting: true,
+        sortable: false,
         width: 123,
         maxWidth: 123,
         minWidth: 123,

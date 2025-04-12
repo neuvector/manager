@@ -91,10 +91,13 @@ export class CustomCheckComponent implements OnInit {
                 );
               }
               if (response) {
-                this.gridApi!.setRowData(this.customCheckScripts || []);
+                this.gridApi!.setGridOption(
+                  'rowData',
+                  this.customCheckScripts || []
+                );
                 this.switch2Add();
               } else {
-                this.gridApi!.setRowData([]);
+                this.gridApi!.setGridOption('rowData', []);
               }
               setTimeout(() => {
                 params.api.sizeColumnsToFit();
@@ -133,7 +136,7 @@ export class CustomCheckComponent implements OnInit {
           }
           setTimeout(() => {
             if (params && params.api) {
-              this.gridApi!.setRowData([]);
+              this.gridApi!.setGridOption('rowData', []);
               setTimeout(() => {
                 params.api.sizeColumnsToFit();
               }, 100);

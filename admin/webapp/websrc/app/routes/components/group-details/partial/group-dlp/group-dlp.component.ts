@@ -118,7 +118,7 @@ export class GroupDlpComponent implements OnInit, OnChanges {
           }
         }
         this.groupDlpSensors = response.sensors;
-        this.gridApi!.setRowData(this.groupDlpSensors);
+        this.gridApi!.setGridOption('rowData', this.groupDlpSensors);
         this.enabled = response.status;
         this.getStatus.emit(this.enabled);
         this.filteredCount = this.groupDlpSensors.length;

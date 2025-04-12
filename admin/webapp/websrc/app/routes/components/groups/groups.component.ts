@@ -243,7 +243,10 @@ export class GroupsComponent implements OnInit, OnDestroy {
               service.policy_mode?.toLowerCase() !== 'protect' ||
               service.profile_mode?.toLowerCase() !== 'protect'
           ).length === 0;
-        this.gridApi!.setRowData(this.groups.filter(p => !p.platform_role));
+        this.gridApi!.setGridOption(
+          'rowData',
+          this.groups.filter(p => !p.platform_role)
+        );
         this.filteredCount = this.groups.length;
         this.setDefaultSelection();
       },
@@ -269,7 +272,10 @@ export class GroupsComponent implements OnInit, OnDestroy {
               service.policy_mode?.toLowerCase() !== 'protect' ||
               service.profile_mode?.toLowerCase() !== 'protect'
           ).length === 0;
-        this.gridApi!.setRowData(this.groups.filter(g => !g.platform_role));
+        this.gridApi!.setGridOption(
+          'rowData',
+          this.groups.filter(g => !g.platform_role)
+        );
         this.filteredCount = this.groups.length;
         this.setDefaultSelection();
       },
@@ -518,7 +524,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
       });
     }
     console.log('this.groups', this.groups);
-    this.gridApi!.setRowData(this.groups);
+    this.gridApi!.setGridOption('rowData', this.groups);
     this.filteredCount = options.isHardReloaded
       ? this.groups.length
       : this.filteredCount;

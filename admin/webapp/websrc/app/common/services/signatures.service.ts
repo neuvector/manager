@@ -98,7 +98,7 @@ export class SignaturesService {
       },
       {
         cellClass: 'grid-right-align',
-        suppressSorting: true,
+        sortable: false,
         cellRenderer: SignatureActionButtonsComponent,
         hide: !isWriteSignaturesAuthorized,
         width: 60,
@@ -163,7 +163,7 @@ export class SignaturesService {
       },
       {
         cellClass: 'grid-right-align',
-        suppressSorting: true,
+        sortable: false,
         cellRenderer: VerifierActionButtonsComponent,
         hide: !isWriteSignaturesAuthorized,
         width: 60,

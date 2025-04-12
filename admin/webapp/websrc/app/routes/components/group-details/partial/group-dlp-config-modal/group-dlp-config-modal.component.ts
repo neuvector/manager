@@ -72,7 +72,7 @@ export class GroupDlpConfigModalComponent implements OnInit {
         this.dlpSensorOption = this.dlpSensorOption.map(sensor => {
           return Object.assign(sensor, { isAllowed: false });
         });
-        this.gridApi!.setRowData(this.dlpSensorOption);
+        this.gridApi!.setGridOption('rowData', this.dlpSensorOption);
         setTimeout(() => {
           this.gridApi!.forEachNode((node, index) => {
             this.data.configuredSensors.forEach(configuredSensor => {

@@ -81,7 +81,8 @@ export class SignatureActionButtonsComponent
             'delete'
           );
           if (this.params.context.componentParent.signatures.length === 0)
-            this.params.context.componentParent.gridApi4Verifiers!.setRowData(
+            this.params.context.componentParent.gridApi4Verifiers!.setGridOption(
+              'rowData',
               []
             );
           this.params.context.componentParent.selectedSignature = null;

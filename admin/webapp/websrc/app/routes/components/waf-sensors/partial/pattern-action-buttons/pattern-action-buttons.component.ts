@@ -25,7 +25,8 @@ export class PatternActionButtonsComponent implements ICellRendererAngularComp {
       this.params.rowIndex,
       1
     );
-    this.params.context.componentParent.gridApi4EditPatterns!.setRowData(
+    this.params.context.componentParent.gridApi4EditPatterns!.setGridOption(
+      'rowData',
       this.params.context.componentParent.patterns
     );
   };

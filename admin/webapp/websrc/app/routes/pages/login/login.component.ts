@@ -64,6 +64,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private w: any;
   private _dialogSubscription;
   private _getRebrandCustomValuesSubscription;
+  private needsNewToken: boolean = true;
   public customLoginLogo: SafeHtml = '';
   public hasCustomHeader: boolean = false;
   public passwordReset = new Subject();
@@ -151,8 +152,14 @@ export class LoginComponent implements OnInit, OnDestroy {
         const userInfo = this.localStorage.get(
           GlobalConstant.LOCAL_STORAGE_TOKEN
         );
-        this.setUserInfo(userInfo);
-        this.getSummary(userInfo);
+        if (this.isFromSSO) {
+          console.log('SSO go to token validation');
+          this.needsNewToken = false;
+          this.localLogin();
+        } else {
+          this.setUserInfo(userInfo);
+          this.getSummary(userInfo);
+        }
       } catch (e) {
         console.error('Local storage token error.', (e as Error).message);
         this.clearLocalStorage();
@@ -243,7 +250,11 @@ export class LoginComponent implements OnInit, OnDestroy {
       value = value
         ? Object.assign({ isRancherSSOUrl: this.isFromSSO }, value)
         : { username: '', password: '', isRancherSSOUrl: this.isFromSSO };
-      this.authService.login(value).subscribe(
+      const loginFn =
+        this.needsNewToken
+          ? this.authService.login(value)
+          : this.authService.refreshToken(true);
+      loginFn.subscribe(
         (userInfo: any) => {
           if (userInfo.need_to_reset_password) {
             this.openResetPassword(value);

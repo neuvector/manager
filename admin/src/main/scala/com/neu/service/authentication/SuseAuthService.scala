@@ -144,6 +144,38 @@ class SuseAuthService()(implicit
     isOnNV: Option[String],
     isRancherSSOUrl: Option[String],
     suseCookieValue: String,
+    tokenId: String,
+    ip: RemoteAddress,
+    ctx: RequestContext
+  ): Route = {
+    val suseCookieOpt = ctx.request.cookies.find(_.name == suseCookieName)
+    suseCookieOpt match {
+      case Some(suseCookie) =>
+        if (suseCookie.value.equals(AuthenticationManager.suseTokenMap.getOrElse(tokenId, ""))) {
+          logger.info("Extend the token")
+          performGetSelf(isOnNV, isRancherSSOUrl, suseCookieValue, tokenId)
+        } else {
+          logger.info("New a token for new Rancher SSO cookies")
+          performLogin(
+            ip,
+            Password(
+              username = "",
+              password = "",
+              isRancherSSOUrl = isRancherSSOUrl.contains("true"),
+              new_password = None
+            ),
+            suseCookie.value
+          )
+        }
+      case None             =>
+        performGetSelf(isOnNV, isRancherSSOUrl, suseCookieValue, tokenId)
+    }
+  }
+
+  private def performGetSelf(
+    isOnNV: Option[String],
+    isRancherSSOUrl: Option[String],
+    suseCookieValue: String,
     tokenId: String
   ): Route =
     complete {

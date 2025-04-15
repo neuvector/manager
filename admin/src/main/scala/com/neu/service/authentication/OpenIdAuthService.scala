@@ -72,7 +72,9 @@ class OpenIdAuthService()(implicit
     isOnNV: Option[String],
     isRancherSSOUrl: Option[String],
     suseCookieValue: String,
-    tokenId: String
+    tokenId: String,
+    ip: RemoteAddress,
+    ctx: RequestContext
   ): Route = complete((StatusCodes.MethodNotAllowed, "Method not allowed."))
 
   private def handleEmptyResources(

@@ -40,18 +40,32 @@ class SuseAuthApi(
       } ~
       pathPrefix("self") {
         get {
-          parameter(Symbol("isOnNV").?, Symbol("isRancherSSOUrl").?) { (isOnNV, isRancherSSOUrl) =>
-            Utils.respondWithWebServerHeaders() {
-              optionalCookie(suseCookie) {
-                case Some(sCookie) =>
-                  authService.getSelf(
-                    isOnNV,
-                    isRancherSSOUrl,
-                    sCookie.value,
-                    tokenId
-                  )
-                case None          =>
-                  authService.getSelf(isOnNV, isRancherSSOUrl, "", tokenId)
+          extractClientIP { ip =>
+            extractRequestContext { ctx =>
+              parameter(Symbol("isOnNV").?, Symbol("isRancherSSOUrl").?) {
+                (isOnNV, isRancherSSOUrl) =>
+                  Utils.respondWithWebServerHeaders() {
+                    optionalCookie(suseCookie) {
+                      case Some(sCookie) =>
+                        authService.getSelf(
+                          isOnNV,
+                          isRancherSSOUrl,
+                          sCookie.value,
+                          tokenId,
+                          ip,
+                          ctx
+                        )
+                      case None          =>
+                        authService.getSelf(
+                          isOnNV,
+                          isRancherSSOUrl,
+                          "",
+                          tokenId,
+                          ip,
+                          ctx
+                        )
+                    }
+                  }
               }
             }
           }

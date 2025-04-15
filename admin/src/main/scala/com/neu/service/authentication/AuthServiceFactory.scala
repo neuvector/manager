@@ -34,7 +34,9 @@ trait AuthService extends BaseService with DefaultJsonFormats with LazyLogging {
     isOnNV: Option[String],
     isRancherSSOUrl: Option[String],
     suseCookieValue: String,
-    tokenId: String
+    tokenId: String,
+    ip: RemoteAddress,
+    ctx: RequestContext
   ): Route
 }
 

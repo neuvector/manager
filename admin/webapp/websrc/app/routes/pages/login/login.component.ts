@@ -250,10 +250,9 @@ export class LoginComponent implements OnInit, OnDestroy {
       value = value
         ? Object.assign({ isRancherSSOUrl: this.isFromSSO }, value)
         : { username: '', password: '', isRancherSSOUrl: this.isFromSSO };
-      const loginFn =
-        this.needsNewToken
-          ? this.authService.login(value)
-          : this.authService.refreshToken(true);
+      const loginFn = this.needsNewToken
+        ? this.authService.login(value)
+        : this.authService.refreshToken(true);
       loginFn.subscribe(
         (userInfo: any) => {
           if (userInfo.need_to_reset_password) {

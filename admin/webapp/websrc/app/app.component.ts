@@ -18,6 +18,9 @@ import { AuthService } from '@common/services/auth.service';
 import { SummaryService } from '@services/summary.service';
 import { CommonHttpService } from '@common/api/common-http.service';
 import { SettingsService } from '@services/settings.service';
+import { MultiClusterService } from '@services/multi-cluster.service';
+import { Cluster, ClusterData } from '@common/types';
+import { MapConstant } from '@common/constants/map.constant';
 
 @Component({
   selector: 'app-root',
@@ -37,7 +40,8 @@ export class AppComponent implements OnInit {
     private translatorService: TranslatorService,
     private summaryService: SummaryService,
     private authService: AuthService,
-    private commonHttpService: CommonHttpService
+    private commonHttpService: CommonHttpService,
+    private multiClusterService: MultiClusterService
   ) {
     this.win = GlobalVariable.window;
     this.initTimer = new Date().getTime();
@@ -85,6 +89,27 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.multiClusterService.getClusters().subscribe({
+      next: (data: ClusterData) => {
+        GlobalVariable.isMaster =
+          data.fed_role === MapConstant.FED_ROLES.MASTER;
+        GlobalVariable.isMember =
+          data.fed_role === MapConstant.FED_ROLES.MEMBER;
+        GlobalVariable.isStandAlone = data.fed_role === '';
+        //get the status of the chosen cluster
+        const sessionCluster = this.localStorage.get(
+          GlobalConstant.LOCAL_STORAGE_CLUSTER
+        );
+        const clusterInSession = sessionCluster
+          ? JSON.parse(sessionCluster)
+          : null;
+        if (clusterInSession) {
+          GlobalVariable.isRemote = clusterInSession.isRemote;
+        } else {
+          GlobalVariable.isRemote = false;
+        }
+      },
+    });
     document.addEventListener('click', e => {
       const target = e.target as HTMLElement;
       if (

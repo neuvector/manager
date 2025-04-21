@@ -259,4 +259,12 @@ export class RegistriesService {
       })
       .pipe();
   }
+
+  getFederatedRepoScanRegistrySummary(fedRepo: string) {
+    return GlobalVariable.http
+      .get<AllScannedImages>(PathConstant.SCANNED_FED_REPO, {
+        params: { fed_repo: fedRepo },
+      })
+      .pipe();
+  }
 }

@@ -6,6 +6,7 @@ import { PathConstant } from '@common/constants/path.constant';
 import { Router } from '@angular/router';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { Cluster, ClusterData, ClusterSummary } from '@common/types';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { TranslateService } from '@ngx-translate/core';
@@ -32,11 +33,13 @@ export interface Cluster2Join {
   master_port: string;
 }
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class MultiClusterService {
   public clusterName: string = '';
   public clusters: Cluster[] = [];
   public primaryClusterRestVersion: string = '';
+  private memberSubject = new BehaviorSubject<any>(null);
+  public member$: Observable<any> = this.memberSubject.asObservable();
   private _clusterSwitchedEvent = new Subject();
   private _clusterRefreshEvent = new Subject();
   private _manageClusterEvent = new Subject();
@@ -98,7 +101,9 @@ export class MultiClusterService {
   }
 
   getClusters(): Observable<any> {
-    return GlobalVariable.http.get(PathConstant.FED_MEMBER_URL);
+    return GlobalVariable.http
+      .get(PathConstant.FED_MEMBER_URL)
+      .pipe(tap(member => this.memberSubject.next(member)));
   }
 
   getRemoteSummary(id): Observable<any> {

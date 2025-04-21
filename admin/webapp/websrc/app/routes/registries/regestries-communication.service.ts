@@ -42,6 +42,7 @@ export class RegistriesCommunicationService {
             map(allScannedImagesSummary => ({
               selectedRegistry: summary,
               isAllView: true,
+              isFedRepo: false,
               allScannedImagesSummary,
             })),
             finalize(() => {
@@ -50,6 +51,22 @@ export class RegistriesCommunicationService {
               }
             })
           );
+        } else if (!!summary!.isFedRepo) {
+          return this.registriesService
+            .getFederatedRepoScanRegistrySummary(summary!.name)
+            .pipe(
+              map(repositories => ({
+                selectedRegistry: summary,
+                isAllView: false,
+                isFedRepo: true,
+                repositories,
+              })),
+              finalize(() => {
+                if (this.refreshingDetailsSubject$.value) {
+                  this.refreshingDetailsSubject$.next(false);
+                }
+              })
+            );
         } else {
           return this.registriesService.getRepo(summary!.name).pipe(
             map(repositories => ({

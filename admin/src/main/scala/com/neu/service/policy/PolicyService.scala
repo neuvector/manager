@@ -669,6 +669,16 @@ class PolicyService() extends BaseService with DefaultJsonFormats with LazyLoggi
     )
   }
 
+  def getFederatedRepoScanRegistrySummary(tokenId: String, fedRepo: String): Route = complete {
+    logger.info("Getting federated scan registry summary")
+    RestClient.httpRequestWithHeader(
+      s"${baseClusterUri(tokenId)}/$scanRegistryPath/$fedRepo/images",
+      GET,
+      "",
+      tokenId
+    )
+  }
+
   def getImageScanReport(
     tokenId: String,
     name: String,

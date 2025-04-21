@@ -6,12 +6,24 @@
   <div
     class="detail-header d-flex justify-content-start align-items-center px-1">
     <div class="h4 mb-0">
-      <span>{{ registryDetails.selectedRegistry.name }}&nbsp;</span>
-      <span *ngIf="!registryDetails.selectedRegistry.isAllView">
-        ({{ registryDetails.selectedRegistry.registry }})
+      <span
+        *ngIf="
+          registryDetails.selectedRegistry.isFedRepo;
+          else localRepoNameTemplate
+        ">
+        {{
+          'registry.' + registryDetails.selectedRegistry.name.toUpperCase()
+            | translate
+        }}
       </span>
     </div>
   </div>
+  <ng-template #localRepoNameTemplate>
+    <span>{{ registryDetails.selectedRegistry.name }}&nbsp;</span>
+    <span *ngIf="!registryDetails.selectedRegistry.isAllView">
+      ({{ registryDetails.selectedRegistry.registry }})
+    </span>
+  </ng-template>
 
   <ng-container [ngSwitch]="maTabGroup.selectedIndex">
     <ng-container *ngSwitchCase="0">

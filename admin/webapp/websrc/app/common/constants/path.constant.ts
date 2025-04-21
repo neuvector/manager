@@ -149,4 +149,5 @@ export class PathConstant {
   public static NOTIFICATION_PERSIST_URL = 'notification/accept';
   public static REMOTE_REPO_URL = 'remote_repository';
   public static SCANNED_ASSETS_URL = 'scanned-assets';
+  public static SCANNED_FED_REPO = 'scan/registry/fed-repo';
 }

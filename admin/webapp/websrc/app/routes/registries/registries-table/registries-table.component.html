@@ -6,7 +6,13 @@
         {{ filteredCount }}&nbsp;/
       </span>
       <span *ngIf="!filtered"> {{ 'enum.OUT_OF' | translate }}&nbsp; </span>
-      {{ rowData.length ? rowData.length - (!isVulAuthorized ? 0 : 1) : 0 }}
+      {{
+        rowData.length
+          ? rowData.length -
+            (isVulAuthorized && includesViewAll ? 1 : 0) -
+            (isMultiClusterAuthorized && includesFedRepo ? 1 : 0)
+          : 0
+      }}
     </span>
   </div>
   <div class="d-flex align-items-center justify-content-end">

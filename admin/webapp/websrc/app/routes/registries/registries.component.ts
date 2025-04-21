@@ -5,6 +5,7 @@ import { MultiClusterService } from '@services/multi-cluster.service';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthUtilsService } from '@common/utils/auth.utils';
+import { GlobalVariable } from '@common/variables/global.variable';
 
 @Component({
   selector: 'app-registries',
@@ -14,6 +15,8 @@ import { AuthUtilsService } from '@common/utils/auth.utils';
 export class RegistriesComponent implements OnInit, OnDestroy {
   error: unknown;
   isVulAuthorized: Boolean;
+  isMultiClusterAuthorized: boolean =
+    this.authUtilsService.getDisplayFlag('multi_cluster');
   registries$ = this.registriesCommunicationService.registries$.pipe(
     map(res => {
       const updatedSummaries = res.summarys.map(summary => ({
@@ -26,6 +29,44 @@ export class RegistriesComponent implements OnInit, OnDestroy {
         (sum, curr) => sum + curr.scanned,
         0
       );
+      const baseSummary = {
+        auth_token: '',
+        auth_with_token: false,
+        cvedb_create_time: '',
+        cvedb_version: '',
+        domains: '',
+        error_detail: '',
+        error_message: '',
+        failed: 0,
+        filters: [],
+        gitlab_external_url: '',
+        gitlab_private_token: '',
+        ibm_cloud_account: '',
+        ibm_cloud_token_url: '',
+        ignore_proxy: false,
+        jfrog_aql: false,
+        jfrog_mode: '',
+        password: '',
+        registry: '',
+        registry_type: '',
+        repo_limit: 0,
+        rescan_after_db_update: true,
+        scan_layers: true,
+        scanned: 0,
+        scanning: 0,
+        schedule: {
+          interval: 0,
+          schedule: '',
+        },
+        scheduled: 0,
+        started_at: '',
+        status: '',
+        tag_limit: 0,
+        username: '',
+        use_proxy: false,
+        isAllView: true,
+        isFedRepo: true,
+      };
       if (
         res.summarys &&
         res.summarys.length > 0 &&
@@ -33,42 +74,22 @@ export class RegistriesComponent implements OnInit, OnDestroy {
         this.isVulAuthorized
       ) {
         updatedSummaries.push({
-          auth_token: '',
-          auth_with_token: false,
-          cvedb_create_time: '',
-          cvedb_version: '',
-          domains: '',
-          error_detail: '',
-          error_message: '',
-          failed: 0,
-          filters: [],
-          gitlab_external_url: '',
-          gitlab_private_token: '',
-          ibm_cloud_account: '',
-          ibm_cloud_token_url: '',
-          ignore_proxy: false,
-          jfrog_aql: false,
-          jfrog_mode: '',
+          ...baseSummary,
           name: this.tr.instant('registry.VIEW_ALL_IMAGES'),
-          password: '',
-          registry: '',
-          registry_type: '',
-          repo_limit: 0,
-          rescan_after_db_update: true,
-          scan_layers: true,
-          scanned: 0,
-          scanning: 0,
-          schedule: {
-            interval: 0,
-            schedule: '',
-          },
-          scheduled: 0,
-          started_at: '',
-          status: '',
-          tag_limit: 0,
-          username: '',
-          use_proxy: false,
-          isAllView: true,
+          isFedRepo: false,
+        });
+      }
+
+      if (this.isMultiClusterAuthorized) {
+        updatedSummaries.push({
+          ...baseSummary,
+          name:
+            GlobalVariable.isMaster && !GlobalVariable.isRemote
+              ? '_repo_scan'
+              : GlobalVariable.isMaster && GlobalVariable.isRemote
+              ? 'fed._repo_scan'
+              : '',
+          isAllView: false,
         });
       }
       return { summarys: updatedSummaries };

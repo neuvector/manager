@@ -328,6 +328,15 @@ class PolicyApi(resourceService: PolicyService) extends BaseApi {
                 }
               }
             } ~
+            path("fed-repo") {
+              get {
+                parameter(Symbol("fed_repo")) { fedRepo =>
+                  Utils.respondWithWebServerHeaders() {
+                    resourceService.getFederatedRepoScanRegistrySummary(tokenId, fedRepo)
+                  }
+                }
+              }
+            } ~
             path("image") {
               get {
                 parameter(Symbol("name"), Symbol("imageId"), Symbol("show").?) {

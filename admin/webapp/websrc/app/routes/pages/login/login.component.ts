@@ -28,8 +28,12 @@ import { CommonHttpService } from '@common/api/common-http.service';
 import { isValidBased64 } from '@common/utils/common.utils';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ResetPasswordModalComponent } from '@routes/settings/common/reset-password-modal/reset-password-modal.component';
-import { Subject } from 'rxjs';
+import { Subject, forkJoin, of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { AlertComponent } from '@routes/pages/login/alert/alert.component';
+import { MultiClusterService } from '@services/multi-cluster.service';
+import { Cluster, ClusterData } from '@common/types';
+import { MapConstant } from '@common/constants/map.constant';
 
 interface ResetError extends ErrorResponse {
   password_profile_basic: PublicPasswordProfile;
@@ -83,7 +87,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private router: Router,
     private dialog: MatDialog,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private multiClusterService: MultiClusterService
   ) {
     this.loginForm = fb.group({
       username: [null, Validators.required],
@@ -451,39 +456,66 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   private getSummary(userInfo) {
-    this.getSum(userInfo.token.token).subscribe({
-      next: summaryInfo => {
-        GlobalVariable.isOpenShift =
-          summaryInfo.summary.platform === GlobalConstant.OPENSHIFT ||
-          summaryInfo.summary.platform === GlobalConstant.RANCHER;
-        GlobalVariable.summary = summaryInfo.summary;
+    forkJoin({
+      summaryInfo: this.getSum(userInfo.token.token),
+      clusterData: this.multiClusterService.getClusters(),
+    })
+      .pipe(
+        tap(({ summaryInfo, clusterData }) => {
+          // Handle summaryInfo
+          GlobalVariable.isOpenShift =
+            summaryInfo.summary.platform === GlobalConstant.OPENSHIFT ||
+            summaryInfo.summary.platform === GlobalConstant.RANCHER;
+          GlobalVariable.summary = summaryInfo.summary;
 
-        GlobalVariable.hasInitializedSummary = true;
-        this.setUserInfo(userInfo);
-        if (
-          this.originalUrl &&
-          !this.originalUrl.includes('login') &&
-          !this.originalUrl.includes('logout')
-        ) {
-          this.router.navigate([this.originalUrl]);
-        } else if (
-          this.linkedUrl &&
-          this.originalUrl &&
-          !this.linkedUrl.includes('login') &&
-          !this.originalUrl.includes('logout')
-        ) {
-          this.nav2LinkedUrl(this.linkedUrl);
-        } else {
-          this.router.navigate([GlobalConstant.PATH_DEFAULT]);
-        }
-        this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_EXTERNAL_REF);
-        this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_ORIGINAL_URL);
-      },
-      error: () => {
-        this.inProgress = false;
-        this.cookieService.delete('temp');
-      },
-    });
+          // Handle clusterData
+          GlobalVariable.isMaster =
+            clusterData.fed_role === MapConstant.FED_ROLES.MASTER;
+          GlobalVariable.isMember =
+            clusterData.fed_role === MapConstant.FED_ROLES.MEMBER;
+          GlobalVariable.isStandAlone = clusterData.fed_role === '';
+
+          const sessionCluster = this.localStorage.get(
+            GlobalConstant.LOCAL_STORAGE_CLUSTER
+          );
+          const clusterInSession = sessionCluster
+            ? JSON.parse(sessionCluster)
+            : null;
+          GlobalVariable.isRemote = clusterInSession
+            ? clusterInSession.isRemote
+            : false;
+
+          GlobalVariable.hasInitializedSummary = true;
+
+          // Navigate
+          this.setUserInfo(userInfo);
+          if (
+            this.originalUrl &&
+            !this.originalUrl.includes('login') &&
+            !this.originalUrl.includes('logout')
+          ) {
+            this.router.navigate([this.originalUrl]);
+          } else if (
+            this.linkedUrl &&
+            this.originalUrl &&
+            !this.linkedUrl.includes('login') &&
+            !this.linkedUrl.includes('logout')
+          ) {
+            this.nav2LinkedUrl(this.linkedUrl);
+          } else {
+            this.router.navigate([GlobalConstant.PATH_DEFAULT]);
+          }
+
+          this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_EXTERNAL_REF);
+          this.localStorage.remove(GlobalConstant.LOCAL_STORAGE_ORIGINAL_URL);
+        }),
+        catchError(err => {
+          this.inProgress = false;
+          this.cookieService.delete('temp');
+          return of(); // empty observable to complete
+        })
+      )
+      .subscribe();
   }
 
   private nav2LinkedUrl(url) {

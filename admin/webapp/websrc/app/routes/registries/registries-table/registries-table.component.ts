@@ -60,6 +60,10 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
   filteredCount!: number;
   isVulAuthorized: boolean =
     this.authUtilsService.getDisplayFlag('vuls_profile');
+  isMultiClusterAuthorized: boolean =
+    this.authUtilsService.getDisplayFlag('multi_cluster');
+  includesViewAll: boolean = false;
+  includesFedRepo: boolean = false;
   gridOptions!: GridOptions;
   gridApi!: GridApi;
   columnDefs: ColDef[] = [
@@ -70,6 +74,11 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
           if (!!params.data.isAllView) {
             return `<span class="text-info">${params.value}</span>`;
           }
+          if (!!params.data.isFedRepo) {
+            return `<span class="text-info">${this.translate.instant(
+              `registry.${params.value.toUpperCase()}`
+            )}</span>`;
+          }
           return params.value;
         }
         return '';
@@ -77,7 +86,10 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
       sortable: true,
       resizable: true,
       colSpan: function (params) {
-        if (params.data && !!params.data.isAllView) {
+        if (
+          params.data &&
+          (!!params.data.isAllView || !!params.data.isFedRepo)
+        ) {
           return 10;
         }
         return 1;
@@ -262,12 +274,22 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
   filterCountChanged(results: number) {
     let filteredRowNodes = this.gridApi.getRenderedNodes();
     let includesViewAll =
+      (filteredRowNodes.length > 2 &&
+        filteredRowNodes[filteredRowNodes.length - 2] &&
+        filteredRowNodes[filteredRowNodes.length - 2].data.isAllView) ||
+      (filteredRowNodes.length > 1 &&
+        filteredRowNodes[filteredRowNodes.length - 1] &&
+        filteredRowNodes[filteredRowNodes.length - 2].data.isAllView);
+    let includesFedRepo =
       filteredRowNodes.length > 0 &&
-      filteredRowNodes[filteredRowNodes.length - 1].data.isAllView;
-    this.filteredCount = results - (includesViewAll ? 1 : 0);
+      filteredRowNodes[filteredRowNodes.length - 1].data.isFedRepo;
+    this.filteredCount =
+      results - (includesViewAll ? 1 : 0) - (includesFedRepo ? 1 : 0);
     this.filtered =
       this.filteredCount !==
-      this.rowData.length - (!this.isVulAuthorized ? 0 : 1);
+      this.rowData.length -
+        (this.isVulAuthorized && includesViewAll ? 1 : 0) -
+        (this.isMultiClusterAuthorized && includesFedRepo ? 1 : 0);
   }
 
   deleteRegistry(event): void {
@@ -359,6 +381,15 @@ export class RegistriesTableComponent implements OnInit, OnChanges {
         this.gridApi.ensureNodeVisible(node, 'middle');
       }
     });
+    let filteredRowNodes = this.gridApi.getRenderedNodes();
+    this.includesViewAll =
+      (filteredRowNodes.length > 1 &&
+        filteredRowNodes[filteredRowNodes.length - 2].data.isAllView) ||
+      (filteredRowNodes.length > 0 &&
+        filteredRowNodes[filteredRowNodes.length - 1].data.isAllView);
+    this.includesFedRepo =
+      filteredRowNodes.length > 0 &&
+      filteredRowNodes[filteredRowNodes.length - 1].data.isFedRepo;
     this.cd.markForCheck();
   }
 

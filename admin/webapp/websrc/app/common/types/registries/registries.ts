@@ -120,6 +120,7 @@ export interface Summary {
   ignore_proxy: boolean;
   use_proxy: boolean;
   isAllView?: boolean;
+  isFedRepo?: boolean;
 }
 
 interface RegistryType {

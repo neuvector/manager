@@ -28,7 +28,7 @@ import { AuthUtilsService } from '@common/utils/auth.utils';
 import { CommonHttpService } from '@common/api/common-http.service';
 import { AuthService } from '@services/auth.service';
 import { SettingsService } from '@services/settings.service';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, take } from 'rxjs/operators';
 import { FrameService } from '../frame.service';
 
 @Component({
@@ -70,6 +70,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private _getRebrandCustomValuesSubscription;
   private _clusterNameSubScription;
   public isAuthReadConfig: boolean = false;
+  member$ = this.multiClusterService.member$;
 
   @ViewChild('fsbutton', { static: true }) fsbutton;
 
@@ -284,102 +285,98 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
   }
   getClusters() {
-    this.multiClusterService
-      .getClusters()
-      .pipe()
-      .subscribe({
-        next: (data: ClusterData) => {
-          this.clusters = data.clusters || [];
-          //get primary cluster's rest_version
-          const primaryCluster = this.clusters.find(
-            cluster =>
-              cluster.clusterType === GlobalConstant.CLUSTER_TYPES.MASTER
-          );
-          this.primaryClusterRestVersion = primaryCluster
-            ? primaryCluster.rest_version
-            : '';
-          this.multiClusterService.primaryClusterRestVersion =
-            this.primaryClusterRestVersion;
-          //init the cluster role
-          this.isMemberRole = data.fed_role === MapConstant.FED_ROLES.MEMBER;
-          this.isMasterRole = data.fed_role === MapConstant.FED_ROLES.MASTER;
-          this.isStandaloneRole = data.fed_role === '';
-          GlobalVariable.isMaster = this.isMasterRole;
-          GlobalVariable.isMember = this.isMemberRole;
-          GlobalVariable.isStandAlone = this.isStandaloneRole;
+    this.member$.pipe(take(1)).subscribe({
+      next: (data: ClusterData) => {
+        this.clusters = data.clusters || [];
+        //get primary cluster's rest_version
+        const primaryCluster = this.clusters.find(
+          cluster => cluster.clusterType === GlobalConstant.CLUSTER_TYPES.MASTER
+        );
+        this.primaryClusterRestVersion = primaryCluster
+          ? primaryCluster.rest_version
+          : '';
+        this.multiClusterService.primaryClusterRestVersion =
+          this.primaryClusterRestVersion;
+        //init the cluster role
+        this.isMemberRole = data.fed_role === MapConstant.FED_ROLES.MEMBER;
+        this.isMasterRole = data.fed_role === MapConstant.FED_ROLES.MASTER;
+        this.isStandaloneRole = data.fed_role === '';
+        GlobalVariable.isMaster = this.isMasterRole;
+        GlobalVariable.isMember = this.isMemberRole;
+        GlobalVariable.isStandAlone = this.isStandaloneRole;
 
-          const resource = {
-            multiClusterOp: {
-              global: 2,
-            },
-            manageAuth: {
-              global: 3,
-            },
-            multiClusterView: {
-              global: 1,
-            },
-          };
+        const resource = {
+          multiClusterOp: {
+            global: 2,
+          },
+          manageAuth: {
+            global: 3,
+          },
+          multiClusterView: {
+            global: 1,
+          },
+        };
 
-          this.isAllowedToRedirectMultiCluster =
+        this.isAllowedToRedirectMultiCluster =
+          this.authUtilsService.getGlobalPermissionDisplayFlag(
+            'multi_cluster'
+          ) ||
+          (isAuthorized(GlobalVariable.user.roles, resource.multiClusterOp) &&
+            data.fed_role !== MapConstant.FED_ROLES.MASTER);
+
+        //get the status of the chosen cluster
+        const sessionCluster = this.localStorage.get(
+          GlobalConstant.LOCAL_STORAGE_CLUSTER
+        );
+        const clusterInSession = sessionCluster
+          ? JSON.parse(sessionCluster)
+          : null;
+        if (clusterInSession) {
+          this.isOnRemoteCluster = clusterInSession.isRemote;
+          GlobalVariable.isRemote = clusterInSession.isRemote;
+        } else {
+          GlobalVariable.isRemote = false;
+        }
+
+        if (GlobalVariable.isMaster) {
+          this.isAllowedToOperateMultiCluster =
+            isAuthorized(GlobalVariable.user.roles, resource.manageAuth) ||
             this.authUtilsService.getGlobalPermissionDisplayFlag(
               'multi_cluster'
-            ) ||
-            (isAuthorized(GlobalVariable.user.roles, resource.multiClusterOp) &&
-              data.fed_role !== MapConstant.FED_ROLES.MASTER);
-
-          //get the status of the chosen cluster
-          const sessionCluster = this.localStorage.get(
-            GlobalConstant.LOCAL_STORAGE_CLUSTER
-          );
-          const clusterInSession = sessionCluster
-            ? JSON.parse(sessionCluster)
-            : null;
-          if (clusterInSession) {
-            this.isOnRemoteCluster = clusterInSession.isRemote;
-            GlobalVariable.isRemote = clusterInSession.isRemote;
+            );
+          if (clusterInSession !== null) {
+            this.selectedCluster = clusterInSession;
           } else {
-            GlobalVariable.isRemote = false;
-          }
-
-          if (GlobalVariable.isMaster) {
-            this.isAllowedToOperateMultiCluster =
-              isAuthorized(GlobalVariable.user.roles, resource.manageAuth) ||
-              this.authUtilsService.getGlobalPermissionDisplayFlag(
-                'multi_cluster'
-              );
-            if (clusterInSession !== null) {
-              this.selectedCluster = clusterInSession;
-            } else {
-              this.selectedCluster = this.clusters.find(cluster => {
-                return cluster.clusterType === MapConstant.FED_ROLES.MASTER;
-              });
-            }
-          }
-
-          if (GlobalVariable.isMember) {
-            this.isAllowedToOperateMultiCluster =
-              isAuthorized(
-                GlobalVariable.user.roles,
-                resource.multiClusterView
-              ) ||
-              this.authUtilsService.getGlobalPermissionDisplayFlag(
-                'multi_cluster'
-              );
-            this.clusters.forEach(cluster => {
-              if (cluster.clusterType === MapConstant.FED_ROLES.MASTER) {
-                this.primaryMasterName = cluster.name;
-              } else {
-                this.managedClusterName = cluster.name;
-              }
+            this.selectedCluster = this.clusters.find(cluster => {
+              return cluster.clusterType === MapConstant.FED_ROLES.MASTER;
             });
           }
+        }
 
-          this.multiClusterService.dispatchGetClustersFinishEvent();
-        },
-        error: error => {
-          this.clustersError = true;
-        },
-      });
+        if (GlobalVariable.isMember) {
+          this.isAllowedToOperateMultiCluster =
+            isAuthorized(
+              GlobalVariable.user.roles,
+              resource.multiClusterView
+            ) ||
+            this.authUtilsService.getGlobalPermissionDisplayFlag(
+              'multi_cluster'
+            );
+          this.clusters.forEach(cluster => {
+            if (cluster.clusterType === MapConstant.FED_ROLES.MASTER) {
+              this.primaryMasterName = cluster.name;
+            } else {
+              this.managedClusterName = cluster.name;
+            }
+          });
+        }
+
+        this.multiClusterService.dispatchGetClustersFinishEvent();
+      },
+      error: error => {
+        this.clustersError = true;
+      },
+    });
   }
 
   redirectCluster(cluster: Cluster) {

@@ -2265,7 +2265,8 @@
     },
     "export": {
       "TITLE": "Export Group Policy",
-      "EXPORT": "Export"
+      "EXPORT": "Export",
+      "INFO": "In addition to the selected group(s), all 'linked' groups will also be exported. A linked group is any other group that a selected group will connect to or from as allowed by a network rule."
     },
     "script": {
       "TITLE": "Custom Check",

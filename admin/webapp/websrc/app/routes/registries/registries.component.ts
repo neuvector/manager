@@ -86,7 +86,8 @@ export class RegistriesComponent implements OnInit, OnDestroy {
           name:
             GlobalVariable.isMaster && !GlobalVariable.isRemote
               ? '_repo_scan'
-              : GlobalVariable.isMaster && GlobalVariable.isRemote || GlobalVariable.isMember
+              : (GlobalVariable.isMaster && GlobalVariable.isRemote) ||
+                GlobalVariable.isMember
               ? 'fed._repo_scan'
               : '',
           isAllView: false,

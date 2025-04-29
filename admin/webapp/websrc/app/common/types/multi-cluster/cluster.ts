@@ -10,4 +10,5 @@ export interface Cluster {
   rest_version: string;
   clusterType: string;
   proxy_required: boolean;
+  component_versions: string[];
 }

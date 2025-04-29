@@ -2897,6 +2897,7 @@
     "USE_HTTP_PROXY": "Use http proxy configured in Settings > Configuration page",
     "USE_HTTPS_PROXY": "Use https proxy configured in Settings > Configuration page",
     "NO_PROXY": "Does not use any proxy",
+    "HAS_INCOMPATIBLE_VERSION": "Incompatible cluster versions were found. Please ensure all clusters are using the same version.",
     "fed_sync_repository": "Sync CI/CD image scan results to managed clusters",
     "tips": {
       "policy": "Manage Federated Policy",

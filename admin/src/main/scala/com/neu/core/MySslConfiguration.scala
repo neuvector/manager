@@ -27,6 +27,7 @@ import javax.net.ssl.{
   TrustManagerFactory
 }
 import scala.jdk.CollectionConverters.*
+import java.security.SecureRandom
 
 object NoOperationSSLContext {
   def init(): Unit = {
@@ -156,7 +157,11 @@ trait MySslConfiguration extends LazyLogging {
 
   private def loadCertificateAndKey(fCert: File, fKey: File, context: SSLContext): SSLContext = {
 
-    val password               = Array('n', 'e', 'u', 'v', 'e', 'c', 't', 'o', 'r')
+    val secureRandom           = new SecureRandom()
+    val randomBytes            = new Array[Byte](20)
+    secureRandom.nextBytes(randomBytes)
+    val encoded                = Base64.getEncoder.encodeToString(randomBytes)
+    val password: Array[Char]  = encoded.toCharArray
     val cf: CertificateFactory = CertificateFactory.getInstance("X.509")
     val trustManagerFactory    = TrustManagerFactory.getInstance("PKIX")
     val keyManagerFactory      = KeyManagerFactory.getInstance("PKIX")

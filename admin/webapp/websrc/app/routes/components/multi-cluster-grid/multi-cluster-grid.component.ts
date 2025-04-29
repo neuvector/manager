@@ -27,6 +27,7 @@ import { MultiClusterGridActionCellComponent } from '@components/multi-cluster-g
 import { finalize, takeWhile } from 'rxjs/operators';
 import { interval } from 'rxjs';
 import { GlobalConstant } from '@common/constants/global.constant';
+import { NotificationService } from '@services/notification.service';
 
 type Task = {
   index: number;
@@ -43,7 +44,9 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
   private readonly $win;
   private _activeTaskNum: number = 0;
   private _taskQueue: Task[] = [];
+  private _finishedNum: number = 0;
   private _getSummarySubscription;
+  private rowData: Cluster[] = [];
   @Input() clusterData!: ClusterData;
   @Input() gridHeight: number = 200;
   isMasterRole;
@@ -135,6 +138,11 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
       },
       width: 90,
     },
+    {
+      headerName: '',
+      field: 'component_versions',
+      hide: true,
+    },
   ];
 
   statusColumn = [
@@ -165,15 +173,46 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
   filtered: boolean = false;
   filteredCount: number = 0;
   context;
+  hasDiffManager: boolean = false;
 
   get clusterCount() {
     return this.clusterData.clusters!.length;
   }
+
+  get taskQueue(): Task[] {
+    return this._taskQueue;
+  }
+
+  set taskQueue(value: Task[]) {
+    this._taskQueue = value;
+  }
+
+  get finishedNum(): number {
+    return this._finishedNum;
+  }
+
+  set finishedNum(value: number) {
+    if (value === this.clusterCount && this.taskQueue.length === 0) {
+      let componentVersions = this.rowData.map(data => {
+        data.component_versions;
+      });
+      this.hasDiffManager = componentVersions.some((ver) => ver !== componentVersions[0]);
+      if (this.hasDiffManager) {
+        this.notificationService.open(
+          this.translate.instant('multiCluster.HAS_INCOMPATIBLE_VERSION'),
+          GlobalConstant.NOTIFICATION_TYPE.ERROR
+        );
+      }
+    }
+    this._finishedNum = value;
+  }
+
   constructor(
     public multiClusterService: MultiClusterService,
     private translate: TranslateService,
     private utils: UtilsService,
     private sanitizer: DomSanitizer,
+    private notificationService: NotificationService,
     private cd: ChangeDetectorRef
   ) {
     this.$win = $(GlobalVariable.window);
@@ -213,7 +252,9 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
       this.columnDefs.push(this.actionColumn);
     }
 
-    this.context = { componentParent: this };
+    this.context = {
+      componentParent: this,
+    };
 
     this.gridOptions = this.utils.createGridOptions(this.columnDefs, this.$win);
 
@@ -225,6 +266,9 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
       onGridReady: event => this.onGridReady(event),
       onRowSelected: event => this.onRowSelected(event),
     };
+
+    this._activeTaskNum = 0;
+    this.finishedNum = 0;
   }
 
   updateSummaryForRow(rowNode: IRowNode, cluster: Cluster, index: number) {
@@ -270,6 +314,7 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
             cluster: cluster,
           };
           this._taskQueue.push(task);
+          this.taskQueue = this._taskQueue;
         }
       }
     });
@@ -279,12 +324,13 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
     this._getSummarySubscription = interval(500)
       .pipe(
         takeWhile(() => {
-          return this._taskQueue.length > 0;
+          return this.taskQueue.length > 0;
         })
       )
       .subscribe(() => {
-        while (this._activeTaskNum < limit && this._taskQueue.length > 0) {
-          const task = this._taskQueue.shift();
+        while (this._activeTaskNum < limit && this.taskQueue.length > 0) {
+          const task = this.taskQueue.shift();
+          this.taskQueue = this._taskQueue;
           if (task) {
             this._activeTaskNum++;
             this.updateSummaryForRow(task.rowNode, task.cluster, task.index);
@@ -497,6 +543,7 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
       rowNode.data.hosts = summaryDetail.hosts;
       rowNode.data.running_pods = summaryDetail.running_pods.toString();
       rowNode.data.cvedb_version = summaryDetail.cvedb_version;
+      rowNode.data.component_versions = summaryDetail.component_versions;
     } else {
       rowNode.data.hosts = this.translate.instant(
         'multiCluster.messages.SCORE_UNAVAILIBlE'
@@ -519,8 +566,11 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
       );
     }
 
+    this.rowData.push(rowNode.data);
+
     if (this.gridOptions && this.gridApi) {
       this.gridApi!.redrawRows({ rowNodes: [rowNode] });
+      this.finishedNum++;
     }
   }
 

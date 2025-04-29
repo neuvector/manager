@@ -1179,6 +1179,7 @@
     "PUBLISHED_TYPE": "Published Type",
     "WITH_FIX": "With Fix",
     "WITHOUT_FIX": "Without Fix",
+    "WITH_FIX_ALL": "With All Fixed",
     "INVALID_DATE": "Please input valid date.",
     "INVALID_DATE_RANGE": "Please input valid date range.",
     "CONDITION_HINT": "Sample: on Service use redis-pod.demo,nv.nvlab:node to matchredis-pod.demo or nv.nvlab:node service, same for the other criteria.",

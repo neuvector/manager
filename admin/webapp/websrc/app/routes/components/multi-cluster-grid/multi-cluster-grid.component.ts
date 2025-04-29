@@ -174,6 +174,7 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
   filteredCount: number = 0;
   context;
   hasDiffManager: boolean = false;
+  pendingTaskNum: number = 0;
 
   get clusterCount() {
     return this.clusterData.clusters!.length;
@@ -192,15 +193,17 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
   }
 
   set finishedNum(value: number) {
-    if (value === this.clusterCount && this.taskQueue.length === 0) {
-      let componentVersions = this.rowData.map(data => {
-        data.component_versions;
-      });
-      this.hasDiffManager = componentVersions.some((ver) => ver !== componentVersions[0]);
+    if (value === this.clusterCount && this.pendingTaskNum === 0) {
+      let componentVersions = this.rowData
+        .map(data => data.component_versions)
+        .flatMap(data => data);
+      this.hasDiffManager = componentVersions.some(
+        ver => ver !== componentVersions[0]
+      );
       if (this.hasDiffManager) {
         this.notificationService.open(
           this.translate.instant('multiCluster.HAS_INCOMPATIBLE_VERSION'),
-          GlobalConstant.NOTIFICATION_TYPE.ERROR
+          GlobalConstant.NOTIFICATION_TYPE.WARNING
         );
       }
     }
@@ -268,6 +271,7 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
     };
 
     this._activeTaskNum = 0;
+    this.pendingTaskNum = 0;
     this.finishedNum = 0;
   }
 
@@ -280,6 +284,8 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
     ) {
       this.updateRow4Error(rowNode, '');
       this._activeTaskNum--;
+      this.pendingTaskNum--;
+      this.finishedNum++;
     } else {
       const params =
         cluster.clusterType === MapConstant.FED_ROLES.MASTER
@@ -290,6 +296,8 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
         res => {
           this.updateRow4Success(index, rowNode, res);
           this._activeTaskNum--;
+          this.pendingTaskNum--;
+          this.finishedNum++;
         },
         error => {
           console.error(error);
@@ -298,6 +306,8 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
             this.translate.instant('multiCluster.messages.SCORE_UNAVAILIBlE')
           );
           this._activeTaskNum--;
+          this.pendingTaskNum--;
+          this.finishedNum++;
         }
       );
     }
@@ -333,6 +343,7 @@ export class MultiClusterGridComponent implements OnInit, OnDestroy {
           this.taskQueue = this._taskQueue;
           if (task) {
             this._activeTaskNum++;
+            this.pendingTaskNum++;
             this.updateSummaryForRow(task.rowNode, task.cluster, task.index);
           }
         }

@@ -21,7 +21,11 @@ export type DataOps = 'add' | 'edit' | 'delete';
 
 export type VulQueryPublishedTimeOption = 'all' | 'before' | 'after';
 
-export type VulQueryPackageTypeOption = 'all' | 'withfix' | 'withoutfix';
+export type VulQueryPackageTypeOption =
+  | 'all'
+  | 'withFix'
+  | 'withoutFix'
+  | 'withFixAll';
 
 export type VulQuerySeverityTypeOption = 'all' | 'high' | 'medium' | 'low';
 

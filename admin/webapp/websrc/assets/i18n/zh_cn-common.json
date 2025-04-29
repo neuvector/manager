@@ -1179,6 +1179,7 @@
     "PUBLISHED_TYPE": "发布类型",
     "WITH_FIX": "修复",
     "WITHOUT_FIX": "未修复",
+    "WITH_FIX_ALL": "完全修复",
     "INVALID_DATE": "请输入有效的日期",
     "INVALID_DATE_RANGE": "请输入有效的日期范围",
     "CONDITION_HINT": "样本: 对于Namespace用redis-pod.demo,nv.nvlab:node去匹配matchredis-pod.demo或nv.nvlab:node服务, 其余同理",

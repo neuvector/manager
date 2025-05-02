@@ -54,7 +54,7 @@
     "angular-notifier": "^11.0.0",
     "axe-core": "^4.4.1",
     "bootstrap": "5.3.3",
-    "chart.js": "3.9.1",
+    "chart.js": "4.4.9",
     "classlist.js": "1.1.20150312",
     "codemirror": "5.62.0",
     "core-js": "2.6.12",

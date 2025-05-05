@@ -1,6 +1,6 @@
 click==8.1.8
 cmd2==2.3.3
-prettytable==2.5.0
+prettytable==3.16.0
 requests==2.32.0
 six==1.11.0
 supervisor==4.2.5

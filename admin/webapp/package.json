@@ -126,7 +126,7 @@
     "compression-webpack-plugin": "^10.0.0",
     "eslint": "^8.12.0",
     "eslint-plugin-angular-data-test-id": "^1.0.0",
-    "husky": "^7.0.4",
+    "husky": "^9.0.0",
     "jasmine-core": "3.99.1",
     "jasmine-spec-reporter": "5.0.2",
     "karma": "6.4.4",

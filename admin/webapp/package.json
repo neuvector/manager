@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@angular-slider/ngx-slider": "^2.0.4",
-    "@angular/animations": "14.3.0",
+    "@angular/animations": "19.2.10",
     "@angular/cdk": "14.2.7",
     "@angular/common": "14.3.0",
     "@angular/compiler": "14.3.0",

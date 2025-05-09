@@ -4,6 +4,7 @@ import {
   Component,
   Inject,
   OnInit,
+  OnDestroy,
   ViewChild,
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -39,7 +40,7 @@ export interface RegistryDetailsDialogData {
   styleUrls: ['./registry-details-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RegistryDetailsDialogComponent implements OnInit {
+export class RegistryDetailsDialogComponent implements OnInit, OnDestroy {
   acceptedVulnerabilityStatus = false;
   resize = true;
   refreshing = false;
@@ -179,4 +180,9 @@ export class RegistryDetailsDialogComponent implements OnInit {
     this.selectedRemediation = data;
     this.remediationDetails.show();
   }
+
+  ngOnDestroy() {
+    this.filter.setValue('');
+  }
+
 }

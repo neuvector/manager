@@ -30,7 +30,7 @@ object ExternalDependencies {
   val slf4jLog4j     = "org.slf4j"                  % "slf4j-log4j12"  % "2.0.16"
   val scalaLogging   = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5"
 
-  val joda = "joda-time" % "joda-time" % "2.13.1"
+  val joda = "joda-time" % "joda-time" % "2.14.0"
 
   val ehCache = "net.sf.ehcache"   % "ehcache" % "2.10.9.2"
   val guava   = "com.google.guava" % "guava"   % "33.4.0-jre"

@@ -1,4 +1,4 @@
-click==8.1.8
+click==8.2.0
 cmd2==2.3.3
 prettytable==2.5.0
 requests==2.32.0

@@ -184,5 +184,4 @@ export class RegistryDetailsDialogComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.filter.setValue('');
   }
-
 }

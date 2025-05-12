@@ -5,15 +5,14 @@ import { HttpClient } from '@angular/common/http';
 import { PathConstant } from '@common/constants/path.constant';
 import { Router } from '@angular/router';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject, of } from 'rxjs';
 import { Cluster, ClusterData, ClusterSummary } from '@common/types';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { TranslateService } from '@ngx-translate/core';
 import { UtilsService } from '@common/utils/app.utils';
 import { MultiClusterSummary } from '@common/types/scala_for_reference_only/MultiClusterSummary';
 import { ConfigHttpService } from '@common/api/config-http.service';
-import { map } from 'rxjs/operators';
+import { tap, map, catchError } from 'rxjs/operators';
 import { CommonHttpService } from '@common/api/common-http.service';
 import { GlobalConstant } from '@common/constants/global.constant';
 import { SummaryService } from './summary.service';
@@ -101,9 +100,12 @@ export class MultiClusterService {
   }
 
   getClusters(): Observable<any> {
-    return GlobalVariable.http
-      .get(PathConstant.FED_MEMBER_URL)
-      .pipe(tap(member => this.memberSubject.next(member)));
+    return GlobalVariable.http.get(PathConstant.FED_MEMBER_URL).pipe(
+      tap(member => this.memberSubject.next(member)),
+      catchError(error => {
+        return of(null);
+      })
+    );
   }
 
   getRemoteSummary(id): Observable<any> {

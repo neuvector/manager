@@ -469,21 +469,23 @@ export class LoginComponent implements OnInit, OnDestroy {
           GlobalVariable.summary = summaryInfo.summary;
 
           // Handle clusterData
-          GlobalVariable.isMaster =
-            clusterData.fed_role === MapConstant.FED_ROLES.MASTER;
-          GlobalVariable.isMember =
-            clusterData.fed_role === MapConstant.FED_ROLES.MEMBER;
-          GlobalVariable.isStandAlone = clusterData.fed_role === '';
+          if (clusterData) {
+            GlobalVariable.isMaster =
+              clusterData.fed_role === MapConstant.FED_ROLES.MASTER;
+            GlobalVariable.isMember =
+              clusterData.fed_role === MapConstant.FED_ROLES.MEMBER;
+            GlobalVariable.isStandAlone = clusterData.fed_role === '';
 
-          const sessionCluster = this.localStorage.get(
-            GlobalConstant.LOCAL_STORAGE_CLUSTER
-          );
-          const clusterInSession = sessionCluster
-            ? JSON.parse(sessionCluster)
-            : null;
-          GlobalVariable.isRemote = clusterInSession
-            ? clusterInSession.isRemote
-            : false;
+            const sessionCluster = this.localStorage.get(
+              GlobalConstant.LOCAL_STORAGE_CLUSTER
+            );
+            const clusterInSession = sessionCluster
+              ? JSON.parse(sessionCluster)
+              : null;
+            GlobalVariable.isRemote = clusterInSession
+              ? clusterInSession.isRemote
+              : false;
+          }
 
           GlobalVariable.hasInitializedSummary = true;
 

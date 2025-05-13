@@ -144,16 +144,16 @@
   },
   "overrides": {
     "@angular/cli": {
-      "semver": "7.7.1"
+      "semver": "7.7.2"
     },
     "@angular-eslint/schematics": {
-      "semver": "7.7.1"
+      "semver": "7.7.2"
     },
     "@nrwl/devkit": {
-      "semver": "7.7.1"
+      "semver": "7.7.2"
     },
     "@nrwl/cli": {
-      "semver": "7.7.1"
+      "semver": "7.7.2"
     }
   }
 }

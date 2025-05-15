@@ -5,5 +5,17 @@
   "baseBranches": [
     "main"
   ],
-  "prHourlyLimit": 2
+  "prHourlyLimit": 2,
+  "vulnerabilityAlerts": {
+    "enabled": true
+  },
+  "osvVulnerabilityAlerts": true,
+  "packageRules": [
+    {
+      "enabled": false,
+      "matchPackageNames": [
+        "*"
+      ]
+    }
+  ]
 }

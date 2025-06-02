@@ -422,8 +422,12 @@ export class LoginComponent implements OnInit, OnDestroy {
         let eula = eulaInfo.eula;
         if (eulaInfo.k8s_rbac_alert_message) {
           this.rbacAlertMessage = eulaInfo.k8s_rbac_alert_message;
+        }
+
+        if(eulaInfo.bootstrap_password_command) {
           this.bootstrapPasswordCommand = eulaInfo.bootstrap_password_command;
         }
+
         if (eula && eula.accepted) {
           this.isEulaAccepted = true;
         } else {

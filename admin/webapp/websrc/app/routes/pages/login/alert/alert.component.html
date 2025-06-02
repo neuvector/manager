@@ -12,7 +12,7 @@
     </div>
 
     <!-- Second Section: RBAC Alerts -->
-    <div>
+    <div *ngI="k8s_rbac_alert_message">
       <h4>{{ 'login.RBAC_ALERT.TITLE_RBAC_ERROR' | translate }}</h4>
       <p>{{ 'login.RBAC_ALERT.CONTENT_RBAC_ERROR' | translate }}</p>
       <p class="alert-message">{{ k8s_rbac_alert_message }}</p>

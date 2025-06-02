@@ -239,6 +239,7 @@
     "CVE_DB_OLD": "CVE Database has not been updated for {{day}} days",
     "UPGRADE_AVAILABLE": "NeuVector is running {{currentVersion}} and can be upgraded to {{newVersion}}",
     "RBAC_ALERT": {
+      "RETRIVE_BOOTSTRAP_PASSWORD": "To retrieve the bootstrap password from Kubernetes Secret.",
       "PASSWORD_RETRIEVAL_ERROR": "Unable to get password from K8s Secret ",
       "ROLEBINDING_DETAILS_LINK": "(role/rolebinding error)",
       "TITLE_GET_BOOTSTRAP_PASSWORD": "Get Bootstrap Password",

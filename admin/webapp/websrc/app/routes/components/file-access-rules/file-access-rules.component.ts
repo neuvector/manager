@@ -248,9 +248,7 @@ export class FileAccessRulesComponent implements OnInit, OnChanges {
           return this.fileAccessRulesService.updateFileAccessRuleList(
             GlobalConstant.CRUD.D,
             this.selectedFileAccessRules,
-            this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-              ? data.group
-              : this.groupName
+            this.groupName
           );
         })
       )

@@ -37,21 +37,6 @@ export class FileAccessRulesService {
       },
     ];
     const filterPrefix = [
-      {
-        headerName: this.translate.instant('group.GROUP'),
-        // headerCheckboxSelection: function(params) {
-        //     console.log("Header: ", $scope.selectedGroup, params);
-        //     return $scope.isWriteRuleAuthorized && $scope.selectedGroup;
-        // },
-        // headerCheckboxSelectionFilteredOnly: true,
-        // checkboxSelection: function(params) {
-        //     console.log("Rows: ", $scope.selectedGroup);
-        //     return $scope.isWriteRuleAuthorized && $scope.selectedGroup;
-        // },
-        field: 'group',
-        filter: 'agTextColumnFilter',
-        hide: source === GlobalConstant.NAV_SOURCE.GROUP,
-      },
       ...filterColumn,
       {
         headerName: this.translate.instant('service.gridHeader.RECURSIVE'),

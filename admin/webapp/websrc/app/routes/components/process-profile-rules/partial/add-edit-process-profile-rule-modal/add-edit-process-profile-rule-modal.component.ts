@@ -79,10 +79,7 @@ export class AddEditProcessProfileRuleModalComponent implements OnInit {
     if (this.type === GlobalConstant.MODAL_OP.ADD) {
       this.processProfileRuleForm.reset();
     } else {
-      this.oldData =
-        this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-          ? this.data.oldData
-          : this.data.oldData[0];
+      this.oldData = this.data.oldData[0];
       Object.keys(this.oldData).forEach((key: string) => {
         if (this.processProfileRuleForm.get(key)) {
           this.processProfileRuleForm

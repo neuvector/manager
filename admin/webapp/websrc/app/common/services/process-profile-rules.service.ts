@@ -31,13 +31,13 @@ export class ProcessProfileRulesService {
     source: string,
     isScoreImprovement: boolean = false
   ) {
+    const groupConfigurableCfgTypes = source === GlobalConstant.NAV_SOURCE.GROUP?
+    [
+      GlobalConstant.CFG_TYPE.CUSTOMER,
+      GlobalConstant.CFG_TYPE.LEARNED,
+    ] :
+    [GlobalConstant.CFG_TYPE.FED];
     let columnDefs = [
-      {
-        headerName: this.translate.instant('group.GROUP'),
-        field: 'group',
-        filter: 'agTextColumnFilter',
-        hide: source === GlobalConstant.NAV_SOURCE.GROUP,
-      },
       {
         headerComponent: ProcessProfileRuleNameHeaderComponent,
         headerCheckboxSelection: params => {
@@ -48,26 +48,14 @@ export class ProcessProfileRulesService {
           return (
             isWriteGroupAuthorized &&
             isWriteProcessProfileRuleAuthorized &&
-            [
-              GlobalConstant.CFG_TYPE.CUSTOMER,
-              GlobalConstant.CFG_TYPE.LEARNED,
-            ].includes(params.data.cfg_type)
+            groupConfigurableCfgTypes.includes(params.data.cfg_type)
           );
         },
         field: 'name',
         hide: !(
-          source === GlobalConstant.NAV_SOURCE.GROUP &&
           isWriteGroupAuthorized &&
           isWriteProcessProfileRuleAuthorized
         ),
-      },
-      {
-        headerComponent: ProcessProfileRuleNameHeaderComponent,
-        field: 'name',
-        hide:
-          source === GlobalConstant.NAV_SOURCE.GROUP &&
-          isWriteGroupAuthorized &&
-          isWriteProcessProfileRuleAuthorized,
       },
       {
         headerName: this.translate.instant('service.gridHeader.PATH'),

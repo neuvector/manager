@@ -305,7 +305,8 @@ export class GroupsComponent implements OnInit, OnDestroy {
       this.handleError,
       () => {
         this.refreshing.emit(false);
-      }
+      },
+      { isHardReloaded: true }
     );
   };
 

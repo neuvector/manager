@@ -325,7 +325,7 @@ export class UtilsService {
         cb(data, options);
         if (length === params.limit) {
           params.start += params.limit;
-          this.loadPagedData(url, params, arrayName, cb, options);
+          this.loadPagedData(url, params, arrayName, cb, handleError, options);
         }
       },
       e => {
@@ -350,7 +350,7 @@ export class UtilsService {
         cb(data, options);
         if (length === params.limit) {
           params.start += params.limit;
-          this.loadPagedData(url, params, arrayName, cb, options);
+          this.loadPagedData(url, params, arrayName, cb, handleError, options);
         } else {
           finalize_cb();
         }

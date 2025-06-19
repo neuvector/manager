@@ -4,5 +4,5 @@ prettytable==2.5.0
 requests==2.32.4
 six==1.11.0
 supervisor==4.2.5
-urllib3==1.26.19
+urllib3==2.5.0
 

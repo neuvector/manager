@@ -18,7 +18,7 @@ COPY build.sbt .scalafix.conf .scalafmt.conf /src/
 WORKDIR /src
 
 RUN zypper refresh && \
-    zypper install -y wget curl zip git awk nodejs20 npm20 && \
+    zypper install -y wget curl zip git awk nodejs22 npm22 && \
     npm install -g npm@10.9.2 && \
     hash -r
 
@@ -45,8 +45,8 @@ RUN bash package/build_manager.sh
 
 # Manager unitest
 RUN if [ "$ARCH" = "amd64" ]; then \
-  zypper addrepo https://download.opensuse.org/repositories/M17N:fonts/15.6/M17N:fonts.repo && \
-  rpm --import https://download.opensuse.org/repositories/M17N/15.6/repodata/repomd.xml.key && \
+  zypper addrepo https://download.opensuse.org/repositories/M17N:fonts/15.7/M17N:fonts.repo && \
+  rpm --import https://download.opensuse.org/repositories/M17N/15.7/repodata/repomd.xml.key && \
   zypper --non-interactive refresh && \
   zypper install -y liberation-fonts && \
   wget https://dl.google.com/${OS}/direct/google-chrome-stable_current_${ARCH}.rpm && \
@@ -56,25 +56,24 @@ RUN if [ "$ARCH" = "amd64" ]; then \
 fi
 
 # Base image
-FROM registry.suse.com/bci/bci-micro:15.6 AS micro
-FROM registry.suse.com/bci/bci-base:15.6 AS base
+FROM registry.suse.com/bci/bci-micro:15.7 AS micro
+FROM registry.suse.com/bci/bci-base:15.7 AS base
 
 COPY --from=builder /src/package/requirements.txt /chroot/requirements.txt
 COPY --from=micro / /chroot/
 
 RUN zypper refresh && zypper --installroot /chroot -n in --no-recommends \
-    python312 python312-pip iproute2 lsof procps grep awk && \
+    python313 python313-pip iproute2 lsof procps grep awk && \
     cp /etc/resolv.conf /chroot/etc/resolv.conf && \
-    chroot /chroot /usr/bin/python3.12 -m pip install --upgrade pip setuptools && \
-    rm /chroot/usr/lib/python3.12/site-packages/distutils-precedence.pth && \
+    chroot /chroot /usr/bin/python3.13 -m pip install --upgrade pip setuptools && \
     zypper --installroot /chroot clean -a && \
     rm -rf /chroot/var/log/
 
 # Create proper symbolic links for Python and pip
-RUN ln -sf /usr/bin/python3.12 /chroot/usr/bin/python3 && \
-    ln -sf /usr/bin/python3.12 /chroot/usr/bin/python && \
-    ln -sf /usr/bin/pip3.12 /chroot/usr/bin/pip3 && \
-    ln -sf /usr/bin/pip3.12 /chroot/usr/bin/pip
+RUN ln -sf /usr/bin/python3.13 /chroot/usr/bin/python3 && \
+    ln -sf /usr/bin/python3.13 /chroot/usr/bin/python && \
+    ln -sf /usr/bin/pip3.13 /chroot/usr/bin/pip3 && \
+    ln -sf /usr/bin/pip3.13 /chroot/usr/bin/pip
 
 # Install requirements and clean up
 RUN chroot /chroot /bin/sh -c "pip install --no-cache-dir -r /requirements.txt && \

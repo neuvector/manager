@@ -31,12 +31,10 @@ export class ProcessProfileRulesService {
     source: string,
     isScoreImprovement: boolean = false
   ) {
-    const groupConfigurableCfgTypes = source === GlobalConstant.NAV_SOURCE.GROUP?
-    [
-      GlobalConstant.CFG_TYPE.CUSTOMER,
-      GlobalConstant.CFG_TYPE.LEARNED,
-    ] :
-    [GlobalConstant.CFG_TYPE.FED];
+    const groupConfigurableCfgTypes =
+      source === GlobalConstant.NAV_SOURCE.GROUP
+        ? [GlobalConstant.CFG_TYPE.CUSTOMER, GlobalConstant.CFG_TYPE.LEARNED]
+        : [GlobalConstant.CFG_TYPE.FED];
     let columnDefs = [
       {
         headerComponent: ProcessProfileRuleNameHeaderComponent,
@@ -52,10 +50,7 @@ export class ProcessProfileRulesService {
           );
         },
         field: 'name',
-        hide: !(
-          isWriteGroupAuthorized &&
-          isWriteProcessProfileRuleAuthorized
-        ),
+        hide: !(isWriteGroupAuthorized && isWriteProcessProfileRuleAuthorized),
       },
       {
         headerName: this.translate.instant('service.gridHeader.PATH'),

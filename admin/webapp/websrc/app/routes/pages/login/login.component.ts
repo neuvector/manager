@@ -424,7 +424,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.rbacAlertMessage = eulaInfo.k8s_rbac_alert_message;
         }
 
-        if(eulaInfo.bootstrap_password_command) {
+        if (eulaInfo.bootstrap_password_command) {
           this.bootstrapPasswordCommand = eulaInfo.bootstrap_password_command;
         }
 

@@ -151,7 +151,11 @@ class SuseAuthService()(implicit
     val suseCookieOpt = ctx.request.cookies.find(_.name == suseCookieName)
     suseCookieOpt match {
       case Some(suseCookie) =>
-        if (suseCookie.value.equals(AuthenticationManager.suseTokenMap.getOrElse(tokenId, ""))) {
+        if (
+          suseCookie.value.equals(
+            AuthenticationManager.suseTokenMap.getOrElse(tokenId, "")
+          ) || !isRancherSSOUrl.contains("true")
+        ) {
           logger.info("Extend the token")
           performGetSelf(isOnNV, isRancherSSOUrl, suseCookieValue, tokenId)
         } else {

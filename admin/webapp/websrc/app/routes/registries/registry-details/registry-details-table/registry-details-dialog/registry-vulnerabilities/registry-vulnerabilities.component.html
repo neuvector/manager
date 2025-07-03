@@ -17,12 +17,12 @@
   </div>
   <div class="d-flex flex-row justify-content-center align-items-center">
     <button
-      [matMenuTriggerFor]="menu"
+      [matMenuTriggerFor]="scoreMenu"
       class="mx-2 d-flex align-items-center justify-content-center"
       mat-button>
       {{ activeScore }} <i class="eos-icons">arrow_drop_down</i>
     </button>
-    <mat-menu #menu="matMenu">
+    <mat-menu #scoreMenu="matMenu">
       <button (click)="changeScoreView('V2')" mat-menu-item>
         {{ 'scan.gridHeader.SCORE_V2' | translate }}
       </button>
@@ -30,11 +30,11 @@
         {{ 'scan.gridHeader.SCORE_V3' | translate }}
       </button>
     </mat-menu>
-    <button [matMenuTriggerFor]="menu" class="p-2" mat-button>
+    <button [matMenuTriggerFor]="viewMenu" class="p-2" mat-button>
       {{ 'network.SETTING' | translate }}
       <i class="eos-icons mb-1">arrow_drop_down</i>
     </button>
-    <mat-menu #menu="matMenu">
+    <mat-menu #viewMenu="matMenu">
       <button
         (click)="toggleAcceptedVulnerability()"
         *ngIf="acceptedVulnerabilityStatus"

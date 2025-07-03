@@ -16,5 +16,5 @@ exec java \
   --add-opens=java.base/java.lang=ALL-UNNAMED \
   --add-opens=java.base/java.lang.reflect=ALL-UNNAMED \
   --add-opens=java.base/java.util=ALL-UNNAMED \
-  -Djava.security.properties=="$JAVA_SECURITY_FILE" \
+  -Djava.security.properties="$JAVA_SECURITY_FILE" \
   -jar /usr/local/bin/admin-assembly-1.0.jar

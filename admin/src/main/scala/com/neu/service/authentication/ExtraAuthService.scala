@@ -168,7 +168,6 @@ class ExtraAuthService() extends BaseService with DefaultJsonFormats with LazyLo
         val userWrap  =
           jsonToUserWrap(Await.result(result, RestClient.waitingLimit.seconds))
         val user      = userWrap.user
-        logger.info("user: {}", user)
         val token1    = TokenWrap(
           None,
           None,
@@ -188,7 +187,6 @@ class ExtraAuthService() extends BaseService with DefaultJsonFormats with LazyLo
             )
           )
         )
-        logger.info("user token: {}", token1)
         val authToken = AuthenticationManager.parseToken(tokenWrapToJson(token1))
         authToken
       } catch {

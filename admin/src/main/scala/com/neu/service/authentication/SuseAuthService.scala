@@ -197,7 +197,6 @@ class SuseAuthService()(implicit
         val selfWrap   =
           jsonToSelfWrap(Await.result(result, RestClient.waitingLimit.seconds))
         val user       = selfWrap.user
-        logger.info("user: {}", user)
         val token1     = TokenWrap(
           selfWrap.password_days_until_expire,
           None,

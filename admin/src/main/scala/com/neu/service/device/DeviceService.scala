@@ -177,7 +177,7 @@ class DeviceService extends Directives with DefaultJsonFormats with LazyLogging 
           systemConfigWrapToJson(
             SystemConfigWrap(Some(systemConfig), None, None, None, None)
           )
-        logger.info("Updating config: {}", payload)
+        logger.info("Updating config")
         RestClient.httpRequestWithHeader(
           s"${baseClusterUri(tokenId)}/system/config",
           HttpMethods.PATCH,
@@ -189,7 +189,7 @@ class DeviceService extends Directives with DefaultJsonFormats with LazyLogging 
           systemConfigWrapToJson(
             SystemConfigWrap(None, None, Some(systemConfig), None, None)
           )
-        logger.info("Updating fed config: {}", fedPayload)
+        logger.info("Updating fed config")
         RestClient.httpRequestWithHeader(
           s"${baseClusterUri(tokenId)}/system/config?scope=$scope",
           HttpMethods.PATCH,
@@ -276,7 +276,7 @@ class DeviceService extends Directives with DefaultJsonFormats with LazyLogging 
         remoteRepositoryWrap
       )
       val name    = remoteRepositoryWrap.config.nickname
-      logger.info("Update remote repository: {}", payload)
+      logger.info("Update remote repository")
       RestClient.httpRequestWithHeader(
         s"${baseClusterUri(tokenId)}/system/config/remote_repository/${UrlEscapers.urlFragmentEscaper().escape(name)}",
         HttpMethods.PATCH,

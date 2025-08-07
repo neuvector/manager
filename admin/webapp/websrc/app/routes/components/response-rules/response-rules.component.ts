@@ -14,6 +14,14 @@ import { MultiClusterService } from '@services/multi-cluster.service';
 import { Subject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { QuickFilterService } from '@components/quick-filter/quick-filter.service';
+import { saveAs } from 'file-saver';
+import { PathConstant } from '@common/constants/path.constant';
+import { ImportFileModalComponent } from '@components/ui/import-file-modal/import-file-modal.component';
+import { RemoteExportOptionsWrapper, RemoteExportOptions } from '@common/types';
+import { ExportOptionsModalComponent } from '@components/export-options-modal/export-options-modal.component';
+import { NotificationService } from '@services/notification.service';
+import { MapConstant } from '@common/constants/map.constant';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-response-rules',
@@ -33,11 +41,13 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
   public gridHeight: number = 0;
   public filtered: boolean = false;
   public filteredCount: number = 0;
+  public selectedRules: any[];
   public context;
   public navSource = GlobalConstant.NAV_SOURCE;
   public isWriteResponseRuleAuthorized: boolean = false;
   private w: any;
   private switchClusterSubscription;
+  private serverErrorMessage: SafeHtml = '';
 
   constructor(
     public responseRulesService: ResponseRulesService,
@@ -47,6 +57,8 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
     private utils: UtilsService,
     private multiClusterService: MultiClusterService,
     private quickFilterService: QuickFilterService,
+    private notificationService: NotificationService,
+    private domSanitizer: DomSanitizer,
     public dialog: MatDialog
   ) {
     this.w = GlobalVariable.window;
@@ -64,6 +76,8 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
       this.isWriteResponseRuleAuthorized,
       this.source
     );
+    this.gridOptions.onSelectionChanged =
+      this.onSelectionChanged4ResponseRules;
     this.gridOptions.onGridReady = params => {
       const $win = $(GlobalVariable.window);
       if (params && params.api) {
@@ -123,6 +137,10 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
       this.filteredCount !== this.responseRulesService.responseRules.length;
   }
 
+  private onSelectionChanged4ResponseRules = () => {
+    this.selectedRules = this.gridApi!.getSelectedRows();
+  };
+
   getResponseRules = (): void => {
     this.responsePolicyErr = false;
     this.responseRulesService
@@ -159,6 +177,106 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
       this.isModalOpen = true;
     }
   };
+
+  openImportResponseRulesModal = () => {
+    const importDialogRef = this.dialog.open(ImportFileModalComponent, {
+      data: {
+        importUrl: PathConstant.RESPONSE_RULE_IMPORT_URL,
+        importMsg: {
+          success: this.translate.instant('waf.msg.IMPORT_FINISH'),
+          error: this.translate.instant('waf.msg.IMPORT_FAILED'),
+        },
+      },
+    });
+    importDialogRef.afterClosed().subscribe(result => {
+      setTimeout(() => {
+        this.refresh();
+      }, 500);
+    });
+  };
+
+  exportResponseRules = () => {
+    const dialogRef = this.dialog.open(ExportOptionsModalComponent, {
+      width: '50%',
+      disableClose: true,
+      data: {
+        filename: GlobalConstant.REMOTE_EXPORT_FILENAME.RESPONSE_RULES,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result: RemoteExportOptionsWrapper) => {
+      if (result) {
+        const { export_mode, ...exportOptions } = result.export_options;
+        this.exportUtil(export_mode, exportOptions);
+      }
+    });
+  };
+
+  private exportUtil(mode: string, option: RemoteExportOptions) {
+    if (mode === 'local') {
+      let payload = {
+        ids: this.selectedRules.map(rule => rule.id),
+      };
+      this.responseRulesService
+        .getResponseRuleConfigFileData(payload)
+        .subscribe(
+          response => {
+            let fileName = this.utils.getExportedFileName(response);
+            let blob = new Blob([response.body || ''], {
+              type: 'text/plain;charset=utf-8',
+            });
+            saveAs(blob, fileName);
+            this.notificationService.open(
+              this.translate.instant('responsePolicy.message.EXPORT_OK')
+            );
+          },
+          error => {
+            if (MapConstant.USER_TIMEOUT.includes(error.status)) {
+              this.notificationService.open(
+                this.utils.getAlertifyMsg(
+                  error.error,
+                  this.translate.instant('responsePolicy.message.EXPORT_NG'),
+                  false
+                ),
+                GlobalConstant.NOTIFICATION_TYPE.ERROR
+              );
+            }
+          }
+        );
+    } else if (mode === 'remote') {
+      let payload = {
+        names: this.selectedRules.map(rule => rule.id),
+        remote_export_options: option,
+      };
+      this.responseRulesService
+        .getResponseRuleConfigFileData(payload)
+        .subscribe(
+          response => {
+            this.notificationService.open(
+              this.translate.instant('responsePolicy.message.EXPORT_OK')
+            );
+          },
+          error => {
+            if (
+              error.message &&
+              error.message.length > GlobalConstant.MAX_ERROR_MESSAGE_LENGTH
+            ) {
+              this.serverErrorMessage =
+                this.domSanitizer.bypassSecurityTrustHtml(error.message);
+            }
+
+            this.notificationService.open(
+              this.serverErrorMessage
+                ? this.translate.instant('responsePolicy.message.EXPORT_NG')
+                : this.utils.getAlertifyMsg(error, '', false),
+              GlobalConstant.NOTIFICATION_TYPE.ERROR
+            );
+          }
+        );
+    } else {
+      return;
+    }
+  }
 
   private getGroupPolicy = () => {
     this.groupsService

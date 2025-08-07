@@ -355,3 +355,8 @@ case class WorkloadV2(
 case class WorkloadsWrapV2(
   workloads: Array[WorkloadV2]
 )
+
+case class ExportedResponseRuleList(
+  ids: Array[Int],
+  remote_export_options: Option[RemoteExportOptions] = None
+)

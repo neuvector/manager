@@ -73,6 +73,8 @@ export class PathConstant {
   public static SNIFF_URL = 'sniffer'; //graph
   public static SNIFF_PCAP_URL = 'sniffer/pcap'; //graph
   public static RESPONSE_POLICY_URL = 'responsePolicy'; //policy
+  public static RESPONSE_RULE_IMPORT_URL = 'responsePolicy/import';
+  public static RESPONSE_RULE_EXPORT_URL = 'responsePolicy/export';
   public static UNQUARANTINE_URL = 'unquarantine'; //policy
   public static CONDITION_OPTION_URL = 'conditionOption'; //policy
   public static RESPONSE_RULE_URL = 'responseRule'; //policy

@@ -2619,7 +2619,9 @@
     },
     "message": {
       "ADD_CRITERIA_VALUE": "添加适当的条件值",
-      "ADD_CRITERIA": "添加条件"
+      "ADD_CRITERIA": "添加条件",
+      "EXPORT_OK": "应对规则导出成功!",
+      "EXPORT_NG": "应对规则导出失败!"
     },
     "dialog": {
       "content": {

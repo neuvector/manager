@@ -168,6 +168,76 @@ class PolicyService() extends BaseService with DefaultJsonFormats with LazyLoggi
       )
     }
 
+  def exportResponseRuleConfig(
+    tokenId: String,
+    exportedResponseRuleList: ExportedResponseRuleList
+  ): Route = {
+    logger.info("Export sensors")
+    complete {
+      RestClient.httpRequestWithHeader(
+        s"${baseClusterUri(tokenId)}/file/dlp",
+        POST,
+        exportedResponseRuleToJson(exportedResponseRuleList),
+        tokenId
+      )
+    }
+  }
+
+  def importResponseRuleConfig(tokenId: String, transactionId: String): Route =
+    complete {
+      try {
+        val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
+        val baseUrl       = cachedBaseUrl.fold {
+          baseClusterUri(tokenId)
+        }(cachedBaseUrl => cachedBaseUrl)
+        AuthenticationManager.setBaseUrl(tokenId, baseUrl)
+        logger.info("test baseUrl: {}", baseUrl)
+        logger.info("Transaction ID(Post): {}", transactionId)
+        RestClient.httpRequestWithHeader(
+          s"$baseUrl/file/response/rule/config",
+          POST,
+          "",
+          tokenId,
+          Some(transactionId)
+        )
+      } catch {
+        case NonFatal(e) =>
+          RestClient.handleError(
+            timeOutStatus,
+            authenticationFailedStatus,
+            serverErrorStatus,
+            e
+          )
+      }
+    }
+
+  def importResponseRuleConfigByFormData(tokenId: String, formData: String): Route =
+    complete {
+      try {
+        val baseUrl              = baseClusterUri(tokenId)
+        AuthenticationManager.setBaseUrl(tokenId, baseUrl)
+        logger.info("test baseUrl: {}", baseUrl)
+        logger.info("No Transaction ID(Post)")
+        val lines: Array[String] = formData.split("\n")
+        val contentLines         = lines.slice(4, lines.length - 1)
+        val bodyData             = contentLines.mkString("\n")
+        RestClient.httpRequestWithHeader(
+          s"$baseUrl/file/response/rule/config",
+          POST,
+          bodyData,
+          tokenId
+        )
+      } catch {
+        case NonFatal(e) =>
+          RestClient.handleError(
+            timeOutStatus,
+            authenticationFailedStatus,
+            serverErrorStatus,
+            e
+          )
+      }
+    }
+
   def getPolicy(
     tokenId: String,
     scope: Option[String],

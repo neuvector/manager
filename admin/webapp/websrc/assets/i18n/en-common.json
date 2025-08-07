@@ -2620,7 +2620,9 @@
     },
     "message": {
       "ADD_CRITERIA_VALUE": "Enter certain value of criteria",
-      "ADD_CRITERIA": "Add Criteria"
+      "ADD_CRITERIA": "Add Criteria",
+      "EXPORT_OK": "Respnose rules is exported successfully!",
+      "EXPORT_NG": "Respnose rules exporting failed!"
     },
     "dialog": {
       "content": {

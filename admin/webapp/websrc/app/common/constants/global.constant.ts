@@ -281,6 +281,7 @@ export class GlobalConstant {
     WAF: 'cfgWafExport.yaml',
     COMPLIANCE_PROFILE: 'cfgComplianceProfileExport.yaml',
     VUL_PROFILE: 'cfgVulProfileExport.yaml',
+    RESPONSE_RULES: 'cfgReponseRulesExport.yaml',
   };
 
   public static SIGSTORE_ATTRIBUTE = {

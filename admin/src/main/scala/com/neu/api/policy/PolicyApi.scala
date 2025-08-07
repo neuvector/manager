@@ -53,36 +53,61 @@ class PolicyApi(resourceService: PolicyService) extends BaseApi {
             }
           }
         } ~
-        path("responsePolicy") {
-          get {
-            parameter(Symbol("scope").?) { scope =>
-              Utils.respondWithWebServerHeaders() {
-                resourceService.getResponsePolicy(tokenId, scope)
+        pathPrefix("responsePolicy") {
+          pathEnd {
+            get {
+              parameter(Symbol("scope").?) { scope =>
+                Utils.respondWithWebServerHeaders() {
+                  resourceService.getResponsePolicy(tokenId, scope)
+                }
+              }
+            } ~
+            post {
+              entity(as[ResponseRulesWrap]) { responseRulesWrap =>
+                Utils.respondWithWebServerHeaders() {
+                  resourceService.insertResponseRules(tokenId, responseRulesWrap)
+                }
+              }
+            } ~
+            patch {
+              entity(as[ResponseRuleConfig]) { responseRuleConfig =>
+                Utils.respondWithWebServerHeaders() {
+                  resourceService.updateResponsePolicy(tokenId, responseRuleConfig)
+                }
+              }
+            } ~
+            delete {
+              parameter(Symbol("scope").?, Symbol("id").?) { (scope, id) =>
+                Utils.respondWithWebServerHeaders() {
+                  resourceService.deleteResponseRule(
+                    tokenId,
+                    scope,
+                    id
+                  )
+                }
               }
             }
           } ~
-          post {
-            entity(as[ResponseRulesWrap]) { responseRulesWrap =>
-              Utils.respondWithWebServerHeaders() {
-                resourceService.insertResponseRules(tokenId, responseRulesWrap)
+          path("export") {
+            post {
+              entity(as[ExportedResponseRuleList]) { exportedResponseRuleList =>
+                Utils.respondWithWebServerHeaders() {
+                  resourceService.exportResponseRuleConfig(tokenId, exportedResponseRuleList)
+                }
               }
             }
           } ~
-          patch {
-            entity(as[ResponseRuleConfig]) { responseRuleConfig =>
-              Utils.respondWithWebServerHeaders() {
-                resourceService.updateResponsePolicy(tokenId, responseRuleConfig)
-              }
-            }
-          } ~
-          delete {
-            parameter(Symbol("scope").?, Symbol("id").?) { (scope, id) =>
-              Utils.respondWithWebServerHeaders() {
-                resourceService.deleteResponseRule(
-                  tokenId,
-                  scope,
-                  id
-                )
+          path("import") {
+            post {
+              headerValueByName("X-Transaction-Id") { transactionId =>
+                Utils.respondWithWebServerHeaders() {
+                  resourceService.importResponseRuleConfig(tokenId, transactionId)
+                }
+              } ~
+              entity(as[String]) { formData =>
+                Utils.respondWithWebServerHeaders() {
+                  resourceService.importResponseRuleConfigByFormData(tokenId, formData)
+                }
               }
             }
           }

@@ -6,19 +6,38 @@
       {{ 'responsePolicy.head.TITLE' | translate }}
     </h1>
   </div>
-  <app-loading-button
-    (btnClick)="refresh()"
-    [disabled]="!!(refreshing$ | async)"
-    [appearance]="'mat-button'"
-    [buttonClasses]="'d-flex justify-content-center align-items-center'"
-    [disabled]="false"
-    [iconClasses]="'eos-icons icon-18'"
-    [iconName]="'refresh'"
-    [id]="'response-rule-refresh-button'"
-    [loading]="!!(refreshing$ | async)"
-    [text]="'network.REFRESH' | translate"
-    [type]="'button'">
-  </app-loading-button>
+  <div class="d-flex align-items-center justify-content-end">
+    <button
+      mat-button
+      aria-label="export WAF SENSORS"
+      *appDisplayControl="'review_rule'"
+      [disabled]="!selectedRules || selectedRules.length === 0"
+      (click)="exportResponseRules()">
+      <em class="eos-icons icon-18">download</em>
+      {{ 'admissionControl.EXPORT' | translate }}
+    </button>
+    <button
+      mat-button
+      aria-label="import WAF SENSORS"
+      (click)="openImportResponseRulesModal()"
+      *appDisplayControl="'write_dlp_rule'">
+      <em class="eos-icons icon-18">upload</em>
+      {{ 'admissionControl.IMPORT' | translate }}
+    </button>
+    <app-loading-button
+      (btnClick)="refresh()"
+      [disabled]="!!(refreshing$ | async)"
+      [appearance]="'mat-button'"
+      [buttonClasses]="'d-flex justify-content-center align-items-center'"
+      [disabled]="false"
+      [iconClasses]="'eos-icons icon-18'"
+      [iconName]="'refresh'"
+      [id]="'response-rule-refresh-button'"
+      [loading]="!!(refreshing$ | async)"
+      [text]="'network.REFRESH' | translate"
+      [type]="'button'">
+    </app-loading-button>
+  </div>
 </div>
 <div>
   <div

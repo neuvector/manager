@@ -72,20 +72,26 @@ object PolicyJsonProtocol extends DefaultJsonProtocol with LazyLogging {
   given ruleIdsFormat: RootJsonFormat[RuleIds]                                   = jsonFormat1(RuleIds.apply)
   given promoteConfigFormat: RootJsonFormat[PromoteConfig]                       = jsonFormat1(PromoteConfig.apply)
 
-  given workloadBriefV2Format: RootJsonFormat[WorkloadBriefV2]           = jsonFormat14(
+  given workloadBriefV2Format: RootJsonFormat[WorkloadBriefV2]                = jsonFormat14(
     WorkloadBriefV2.apply
   )
-  given workloadSecurityV2Format: RootJsonFormat[WorkloadSecurityV2]     = jsonFormat10(
+  given workloadSecurityV2Format: RootJsonFormat[WorkloadSecurityV2]          = jsonFormat10(
     WorkloadSecurityV2.apply
   )
-  given workloadRtAttribesV2Format: RootJsonFormat[WorkloadRtAttribesV2] = jsonFormat12(
+  given workloadRtAttribesV2Format: RootJsonFormat[WorkloadRtAttribesV2]      = jsonFormat12(
     WorkloadRtAttribesV2.apply
   )
-  given workloadV2ChildFormat: RootJsonFormat[WorkloadV2Child]           = jsonFormat12(
+  given workloadV2ChildFormat: RootJsonFormat[WorkloadV2Child]                = jsonFormat12(
     WorkloadV2Child.apply
   )
-  given workloadV2Format: RootJsonFormat[WorkloadV2]                     = jsonFormat13(WorkloadV2.apply)
-  given workloadsWrapV2Format: RootJsonFormat[WorkloadsWrapV2]           = jsonFormat1(WorkloadsWrapV2.apply)
+  given workloadV2Format: RootJsonFormat[WorkloadV2]                          = jsonFormat13(WorkloadV2.apply)
+  given workloadsWrapV2Format: RootJsonFormat[WorkloadsWrapV2]                = jsonFormat1(WorkloadsWrapV2.apply)
+  given remoteExportOptionsFormat: RootJsonFormat[RemoteExportOptions]        = jsonFormat3(
+    RemoteExportOptions.apply
+  )
+  given exportedResponseRuleListFmt: RootJsonFormat[ExportedResponseRuleList] = jsonFormat2(
+    ExportedResponseRuleList.apply
+  )
 
   def policyToJson(policy: Policy): String                                     = policy.toJson.compactPrint
   def policy2ToJson(policy2: Policy2): String                                  = policy2.toJson.compactPrint
@@ -117,6 +123,9 @@ object PolicyJsonProtocol extends DefaultJsonProtocol with LazyLogging {
 
   def jsonToWorkloadsWrapV2(response: String): WorkloadsWrapV2 =
     response.parseJson.convertTo[WorkloadsWrapV2]
+
+  def exportedResponseRuleToJson(list: ExportedResponseRuleList): String =
+    list.toJson.compactPrint
 
   def groupToNode(group: Group): Node =
     Node(

@@ -1417,6 +1417,40 @@ def request_export_admission(data, config, id, filename, remote_repository_nickn
         click.echo(respData)
     return
 
+@request_export.command('response')
+@click.option("--id", multiple=True, help="ID of response rule to export")
+@click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True), help="Local file path when export to local machine")
+@click.option("--remote_repository_nickname", default="default", help="Repository nickname when export to remote repository")
+@click.option("--remote_filepath", default="", help="File path on repository when export to remote repository")
+@click.option("--comment", default="", help="Comment for export to remote repository")
+@click.pass_obj
+def request_export_response(data, id, filename, remote_repository_nickname, remote_filepath, comment):
+    """Export non-group-dependent response rules."""
+
+    ids = []
+    for n in id:
+        ids.append(int(n))
+
+    payload = {"ids": ids}
+    remote_export_options, useRemote, ok = validate_export_filepath(filename, remote_repository_nickname, remote_filepath)
+    if ok:
+        if useRemote:
+            payload["remote_export_options"] = remote_export_options
+    else:
+        return
+
+    respData = data.client.requestDownload("file", "response/rule", None, payload)
+    if filename and len(filename) > 0:
+        try:
+            with click.open_file(filename, 'w') as wfp:
+                wfp.write(respData)
+            click.echo("Wrote to %s" % click.format_filename(filename))
+        except IOError:
+            click.echo("Error: Failed to write to %s" % click.format_filename(filename))
+    else:
+        click.echo(respData)
+    return
+
 @request_export.command('dlp')
 @click.option("--name",  multiple=True, help="Name of DLP sensor to export")
 @click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True), help="Local file path when export to local machine")
@@ -1672,6 +1706,14 @@ def import_group(data, filename):
 def import_admission(data, filename):
     """Import admission control configuration/rules."""
     import_function("file/admission/config", data, filename, "admission control configuration/rules")
+
+@request_import.command('response')
+@click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))
+# @click.option("--raw", default=False, is_flag=True, help="Upload in raw format")
+@click.pass_obj
+def import_response(data, filename):
+    """Import non-group-dependent response rules."""
+    import_function("file/response/rule/config", data, filename, "non-group-dependent response rules")
 
 @request_import.command('dlp')
 @click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))

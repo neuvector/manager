@@ -41,17 +41,14 @@ export class ResponseRulesService {
         headerName: this.translate.instant('responsePolicy.gridHeader.ID'),
         field: 'id',
         headerCheckboxSelection: params =>
-        source ===
-        GlobalConstant.NAV_SOURCE.SELF,
+          source === GlobalConstant.NAV_SOURCE.SELF,
         headerCheckboxSelectionFilteredOnly: params =>
-        params.context.componentParent.source ===
-        GlobalConstant.NAV_SOURCE.SELF,
+          params.context.componentParent.source ===
+          GlobalConstant.NAV_SOURCE.SELF,
         cellRenderer: params => {
           if (params.value)
             return `<span class="${
-              source === GlobalConstant.NAV_SOURCE.SELF
-                ? 'left-margin-32'
-                : ''
+              source === GlobalConstant.NAV_SOURCE.SELF ? 'left-margin-32' : ''
             }">
                       ${params.value}
                     </span>`;

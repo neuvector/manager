@@ -175,7 +175,7 @@ class PolicyService() extends BaseService with DefaultJsonFormats with LazyLoggi
     logger.info("Export sensors")
     complete {
       RestClient.httpRequestWithHeader(
-        s"${baseClusterUri(tokenId)}/file/dlp",
+        s"${baseClusterUri(tokenId)}/file/response/rule",
         POST,
         exportedResponseRuleToJson(exportedResponseRuleList),
         tokenId

@@ -42,6 +42,7 @@
   </div>
   <hr class="my-2" *ngIf="source === 'group'" />
   <mat-checkbox
+    *ngIf="isShowingUserRef"
     [checked]="useNameRef"
     (change)="toggleNameRef($event)"
     class="mr-3 my-2">

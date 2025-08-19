@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { SettingsService } from '@services/settings.service';
 import { map } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
+import { GlobalConstant } from '@common/constants/global.constant';
 
 @Component({
   selector: 'app-export-options',
@@ -16,6 +17,7 @@ export class ExportOptionsComponent implements OnInit {
 
   exportOptionsForm!: FormGroup;
   remoteRepoEnabled = false;
+  isShowingUserRef = true;
   useNameRef = false;
 
   constructor(
@@ -33,7 +35,9 @@ export class ExportOptionsComponent implements OnInit {
       file_path: [this.exportFileName],
       comment: [''],
     });
-
+    this.isShowingUserRef =
+      this.exportFileName !==
+      GlobalConstant.REMOTE_EXPORT_FILENAME.RESPONSE_RULES;
     this.exportOptions?.addControl('export_options', this.exportOptionsForm);
     this.getRemoteRepositories();
   }

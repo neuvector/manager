@@ -76,8 +76,7 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
       this.isWriteResponseRuleAuthorized,
       this.source
     );
-    this.gridOptions.onSelectionChanged =
-      this.onSelectionChanged4ResponseRules;
+    this.gridOptions.onSelectionChanged = this.onSelectionChanged4ResponseRules;
     this.gridOptions.onGridReady = params => {
       const $win = $(GlobalVariable.window);
       if (params && params.api) {
@@ -183,8 +182,8 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
       data: {
         importUrl: PathConstant.RESPONSE_RULE_IMPORT_URL,
         importMsg: {
-          success: this.translate.instant('waf.msg.IMPORT_FINISH'),
-          error: this.translate.instant('waf.msg.IMPORT_FAILED'),
+          success: this.translate.instant('responsePolicy.message.IMPORT_OK'),
+          error: this.translate.instant('responsePolicy.message.IMPORT_NG'),
         },
       },
     });

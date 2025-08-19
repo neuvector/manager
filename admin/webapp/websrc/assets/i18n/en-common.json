@@ -2622,7 +2622,9 @@
       "ADD_CRITERIA_VALUE": "Enter certain value of criteria",
       "ADD_CRITERIA": "Add Criteria",
       "EXPORT_OK": "Respnose rules is exported successfully!",
-      "EXPORT_NG": "Respnose rules exporting failed!"
+      "EXPORT_NG": "Respnose rules exporting failed!",
+      "IMPORT_OK": "Respnose rules is imported successfully!",
+      "IMPORT_NG": "Respnose rules importing failed!"
     },
     "dialog": {
       "content": {

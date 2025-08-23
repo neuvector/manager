@@ -676,12 +676,9 @@ export class LoginComponent implements OnInit, OnDestroy {
             dialogRef.componentInstance.onClose();
           },
           ({ error }) => {
-            let resetError: ResetError = JSON.parse(
-              error.split('Body:')[1].trim()
-            );
             dialogRef.componentInstance.pwdProfile =
-              resetError.password_profile_basic;
-            dialogRef.componentInstance.resetError = resetError.message;
+              error.password_profile_basic;
+            dialogRef.componentInstance.resetError = error.message;
           }
         );
     });

@@ -13,6 +13,7 @@ import org.apache.pekko.http.scaladsl.server.Directives
 import org.apache.pekko.http.scaladsl.server.StandardRoute
 import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshaller
 import spray.json.*
+import com.neu.core.HttpResponseException
 
 import java.io.PrintWriter
 import java.io.StringWriter
@@ -57,14 +58,14 @@ open class BaseService extends Directives with LazyLogging {
     }
   }
 
-  protected def onUnauthorized(e: Throwable): StandardRoute =
-    if (e.getMessage.contains("\"code\":14")) {
-      complete((StatusCodes.BadRequest, e.getMessage))
-    } else if (e.getMessage.contains("\"code\":47")) {
+  protected def onUnauthorized(e: HttpResponseException, res: String): StandardRoute =
+    if (res.contains("\"code\":14")) {
+      complete((StatusCodes.BadRequest, res))
+    } else if (res.contains("\"code\":47")) {
       complete((StatusCodes.Unauthorized, blocked))
-    } else if (e.getMessage.contains("\"code\":48")) {
+    } else if (res.contains("\"code\":48")) {
       complete((StatusCodes.Unauthorized, passwordExpired))
-    } else if (e.getMessage.contains("\"code\":50")) {
+    } else if (res.contains("\"code\":50")) {
       complete(StatusCodes.Unauthorized, authSSODisabledError)
     } else {
       complete((StatusCodes.Unauthorized, authError))

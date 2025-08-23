@@ -81,15 +81,17 @@ class SuseAuthService()(implicit
       logger.info("post path auth")
       processSuseLoginRequest(ip, userPwd, suseCookieValue)
     } catch {
-      case NonFatal(e)         =>
-        logger.warn(e.getMessage)
-
+      case NonFatal(e: HttpResponseException) =>
+        val response = Await.result(
+          e.response.entity.toStrict(5.seconds).map(_.data.utf8String),
+          RestClient.waitingLimit.seconds
+        )
         if (
           e.getMessage
             .contains("Status: 400") || e.getMessage.contains("Status: 401") || e.getMessage
             .contains("Status: 403")
         ) {
-          onUnauthorized(e)
+          onUnauthorized(e, response)
         } else if (e.getMessage.contains("Status: 410")) {
           complete((StatusCodes.Gone, "Please logout and then login from Rancher again!"))
         } else {
@@ -107,7 +109,7 @@ class SuseAuthService()(implicit
                     "Status: 403"
                   )
               ) {
-                onUnauthorized(e)
+                onUnauthorized(e, response)
               } else if (e.getMessage.contains("Status: 410")) {
                 complete(
                   (StatusCodes.Gone, "Please logout and then login from Rancher again!")
@@ -120,7 +122,7 @@ class SuseAuthService()(implicit
               complete((StatusCodes.NetworkConnectTimeout, "Network connect timeout error"))
           }
         }
-      case e: TimeoutException =>
+      case e: TimeoutException                =>
         logger.warn(e.getMessage)
 
         complete((StatusCodes.NetworkConnectTimeout, "Network connect timeout error"))

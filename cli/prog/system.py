@@ -298,6 +298,9 @@ def showLocalSystemConfig(data, scope):
     else:
         conf["telemetry"] = not conf["no_telemetry_report"]
     column_map += (("telemetry", "Send telemetry data(non-PII under GDPR) to SUSE"),)
+    if "allow_ns_user_export_net_policy" not in conf:
+        conf["allow_ns_user_export_net_policy"] = False
+    column_map += (("allow_ns_user_export_net_policy", "Allow namespace user to export all network policies of a group that the user has read permission"),)
 
     scannerAutoscaleStrategy = "Disabled"
     minScanners = 0
@@ -981,6 +984,12 @@ def set_system_telemetry(data, status):
     else:
         data.client.config_system(no_telemetry_report=noTelemetry)
 
+@set_system.command("allow_ns_user_export_net_policy")
+@click.option("--enable/--disable", default=False, is_flag=True, help="Allow namespace user to export all network policies of a group that the user has read permission")
+@click.pass_obj
+def set_system_allow_ns_user_export_net_policy(data, enable):
+    """Allow namespace user to export all network policies of a group that the user has read permission"""
+    data.client.config_system(allow_ns_user_export_net_policy=enable)
 
 @set_system.group("monitor_service_mesh")
 @click.pass_obj

@@ -41,8 +41,15 @@ export class AuthService {
       .pipe();
   }
 
-  getEula() {
-    return GlobalVariable.http.get(PathConstant.EULA_URL).pipe();
+  getEula(isFromSSO: Boolean = false) {
+    return GlobalVariable.http.get(
+      PathConstant.EULA_URL,
+      {
+        params: {
+          isSSO: isFromSSO ? "true" : "false"
+        }
+      }
+    ).pipe();
   }
 
   updateEula() {

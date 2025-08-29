@@ -170,7 +170,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.clearLocalStorage();
       }
     } else if (this.isFromSSO) {
-      this.authService.getEula().subscribe(
+      this.authService.getEula(this.isFromSSO).subscribe(
         (eulaInfo: any) => {
           let eula = eulaInfo.eula;
           if (eula && eula.accepted) {

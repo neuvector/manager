@@ -24,12 +24,12 @@ class ExtraAuthService() extends BaseService with DefaultJsonFormats with LazyLo
 
   def getGravatar: Route = complete(gravatarEnabled)
 
-  def getEula: Route = complete {
+  def getEula(isSSO: Option[String]): Route = complete {
     logger.info("Getting EULA")
     if ("true".equalsIgnoreCase(eulaOEMAppSafe)) {
       eulaWrapToJson(EulaWrap(Eula(true)))
     } else {
-      RestClient.httpRequest(s"$baseUri/eula", HttpMethods.GET)
+      RestClient.httpRequest(s"$baseUri/eula", HttpMethods.GET, "", isSSO)
     }
   }
 

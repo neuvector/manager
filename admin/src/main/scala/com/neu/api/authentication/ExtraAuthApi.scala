@@ -22,8 +22,10 @@ class ExtraAuthApi(
     } ~
     path("eula") {
       get {
-        Utils.respondWithWebServerHeaders() {
-          authService.getEula
+        parameter(Symbol("isSSO").?) { isSSO =>
+          Utils.respondWithWebServerHeaders() {
+            authService.getEula(isSSO)
+          }
         }
       }
     } ~

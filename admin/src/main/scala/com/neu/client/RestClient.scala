@@ -77,6 +77,7 @@ class RestClient()(using
   private val X_TRN_ID: String        = "X-Transaction-Id"
   private val X_AS_STANDALONE: String = "X-As-Standalone"
   private val X_SUSE_TOKEN: String    = "X-R-Sess"
+  private val X_R_SSO: String         = "X-R-SSO"
 
   private def sendAndReceive: HttpRequest => Future[HttpResponse] =
     sendReceiver(using system, mat, ec)
@@ -96,18 +97,21 @@ class RestClient()(using
    *
    * @param uri
    *   The request uri
-   * @param data
-   *   The payload
    * @param method
    *   The method of the request
+   * @param data
+   *   The payload
+   * @param isSSO
+   *   The source of the request is from Rancher SSO
    * @return
    */
   def httpRequest(
     uri: String,
     method: HttpMethod = HttpMethods.GET,
-    data: String = ""
+    data: String = "",
+    isSSO: Option[String] = Some("false")
   ): Future[JsValue] = {
-    val request = createHttpRequest(uri, method, data)
+    val request = createHttpRequest(uri, method, data).addHeader(RawHeader(X_R_SSO, isSSO.get))
     sendAndReceive(request).flatMap { response =>
       response.entity.toStrict(5.seconds).map(_.data.utf8String)
     }.map(_.parseJson)

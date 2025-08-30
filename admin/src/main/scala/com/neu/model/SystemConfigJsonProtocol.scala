@@ -70,7 +70,7 @@ object SystemConfigJsonProtocol extends DefaultJsonProtocol {
   )
   given systemConfigAutoscaleConfigFormat: RootJsonFormat[SystemConfigAutoscaleConfig] =
     jsonFormat3(SystemConfigAutoscaleConfig.apply)
-  given systemConfigMiscCfgV2Format: RootJsonFormat[SystemConfigMiscCfgV2]             = jsonFormat7(
+  given systemConfigMiscCfgV2Format: RootJsonFormat[SystemConfigMiscCfgV2]             = jsonFormat8(
     SystemConfigMiscCfgV2.apply
   )
   given systemConfigTlsCfgFormat: RootJsonFormat[SystemConfigTlsCfg]                   = jsonFormat2(

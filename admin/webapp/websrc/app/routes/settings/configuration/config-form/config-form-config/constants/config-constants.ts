@@ -437,6 +437,18 @@ export const DisableNetworkPolicyToggleBoolField = {
   },
 };
 
+export const NsUserExportNetworkRuleToggleField = {
+  key: 'misc.allow_ns_user_export_net_policy',
+  type: FormlyComponents.TOGGLE,
+  templateOptions: {
+    ariaLabelledBy: 'setting.NS_USER_EXPORT_NET_POLICY',
+  },
+  expressionProperties: {
+    'templateOptions.disabled':
+      '!formState.permissions.isNsUserExportNetworkRuleAuthorized',
+  },
+};
+
 export const DisableNetworkPolicyToggleField = {
   key: 'net_svc.disable_net_policy',
 };

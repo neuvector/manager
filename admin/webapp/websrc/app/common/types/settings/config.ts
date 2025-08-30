@@ -105,6 +105,7 @@ export interface MiscConfig extends ConfigDebug {
   xff_enabled: boolean;
   no_telemetry_report: boolean;
   csp_type?: string;
+  allow_ns_user_export_net_policy: boolean;
 }
 
 export interface ConfigDebug {

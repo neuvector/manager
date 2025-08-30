@@ -151,7 +151,8 @@ case class SystemConfigMiscCfgV2(
   monitor_service_mesh: Option[Boolean] = None,
   xff_enabled: Option[Boolean] = None,
   no_telemetry_report: Option[Boolean] = None,
-  csp_type: Option[String] = None
+  csp_type: Option[String] = None,
+  allow_ns_user_export_net_policy: Option[Boolean] = None
 )
 
 case class SystemConfigTlsCfg(

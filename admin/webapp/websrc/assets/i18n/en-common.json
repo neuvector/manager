@@ -3129,6 +3129,8 @@
     "TELEMETRY_HINT": "The controller will report cluster data anonymously to help SUSE NeuVector teams with usage information.",
     "DISABLE_NET_POLICY": "Network Policy Enforcement",
     "DISABLE_NET_POLICY_HINT": "To only use WAF/DLP for network protection please disable network policy enforcement. When it is disabled no network rule can be learned.",
+    "NS_USER_EXPORT_NET_POLICY": "Network Policy Export by Namespace user",
+    "NS_USER_EXPORT_NET_POLICY_HINT": "Allow namespace user to export all network policies of a group that the user has read permission",
     "USERNAME": "Username",
     "PASSWORD": "Password",
     "IBM_INTEGRATE": "Integrate with IBM Security Advisor",

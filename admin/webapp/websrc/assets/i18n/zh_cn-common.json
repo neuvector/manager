@@ -3126,6 +3126,8 @@
     "TELEMETRY_HINT": "控制器将匿名报告集群数据，以帮助 SUSE NeuVector 团队了解使用信息。",
     "DISABLE_NET_POLICY": "网络策略实施",
     "DISABLE_NET_POLICY_HINT": "若只使用WAF/DLP做网络保护，请禁用强制的网络策略。当它被禁用时网络规则不能被学习。",
+    "NS_USER_EXPORT_NET_POLICY": "命名空间用户导出网络策略",
+    "NS_USER_EXPORT_NET_POLICY_HINT": "允许命名空间用户导出所在组内已获读权限的全部网络策略",
     "USERNAME": "用户名",
     "PASSWORD": "密码",
     "IBM_INTEGRATE": "同IBM Security Advisor整合",

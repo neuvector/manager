@@ -53,6 +53,7 @@ import {
   SyslogTLSCertificate,
   SyslogCVELayersField,
   EventReportLoggingToggleField,
+  NsUserExportNetworkRuleToggleField,
 } from './constants';
 import {
   EnableTlsVerificationToggleField,
@@ -181,6 +182,16 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
         fieldGroup: [XFFToggleField],
         templateOptions: {
           label: 'setting.XFF_MATCH',
+          inline: true,
+          divider: false,
+        },
+      },
+      {
+        wrappers: [FormlyComponents.SECTION_WRAPPER],
+        fieldGroup: [NsUserExportNetworkRuleToggleField],
+        templateOptions: {
+          label: 'setting.NS_USER_EXPORT_NET_POLICY',
+          comment: 'setting.NS_USER_EXPORT_NET_POLICY_HINT',
           inline: true,
           divider: false,
         },

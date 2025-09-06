@@ -272,7 +272,8 @@ export class ConfigFormComponent implements OnInit {
           monitor_service_mesh: base_config.misc.monitor_service_mesh,
           xff_enabled: base_config.misc.xff_enabled,
           no_telemetry_report: base_config.misc.no_telemetry_report,
-          allow_ns_user_export_net_policy: base_config.misc.allow_ns_user_export_net_policy,
+          allow_ns_user_export_net_policy:
+            base_config.misc.allow_ns_user_export_net_policy,
         },
         tls_cfg: {
           enable_tls_verification: base_config.tls['enable_tls_verification'],

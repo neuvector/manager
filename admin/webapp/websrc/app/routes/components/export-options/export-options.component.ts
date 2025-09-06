@@ -36,8 +36,11 @@ export class ExportOptionsComponent implements OnInit {
       comment: [''],
     });
     this.isShowingUserRef =
-      this.exportFileName !==
-      GlobalConstant.REMOTE_EXPORT_FILENAME.RESPONSE_RULES;
+      !this.exportFileName ||
+      ![
+        GlobalConstant.REMOTE_EXPORT_FILENAME.RESPONSE_RULES,
+        GlobalConstant.REMOTE_EXPORT_FILENAME.ADMISSION_RULES,
+      ].includes(this.exportFileName);
     this.exportOptions?.addControl('export_options', this.exportOptionsForm);
     this.getRemoteRepositories();
   }

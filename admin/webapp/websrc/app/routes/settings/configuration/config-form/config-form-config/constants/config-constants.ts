@@ -149,6 +149,18 @@ export const NetworkServiceModeField = {
   },
 };
 
+export const RestrictGroupModeField = {
+  key: 'net_svc.strict_group_mode',
+  type: FormlyComponents.TOGGLE,
+  templateOptions: {
+    ariaLabelledBy: 'setting.STRICT_GROUP_MODE',
+  },
+  expressionProperties: {
+    'templateOptions.disabled':
+      '!formState.permissions.isNewServiceModeAuthorized',
+  },
+};
+
 export const ScannerAutoscaleField = {
   key: 'scanner_autoscale.strategy',
   type: FormlyComponents.RADIO,

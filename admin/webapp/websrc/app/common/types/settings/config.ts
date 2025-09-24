@@ -123,6 +123,7 @@ export interface NetConfig {
   net_service_policy_mode: PolicyMode;
   net_service_status: boolean;
   disable_net_policy: boolean;
+  strict_group_mode: boolean;
 }
 
 export interface TlsConfig {

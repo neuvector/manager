@@ -200,6 +200,7 @@ export class ConfigFormComponent implements OnInit {
         net_service_policy_mode: base_config.net_svc.net_service_policy_mode,
         net_service_status: base_config.net_svc.net_service_status,
         disable_net_policy: base_config.net_svc.disable_net_policy,
+        strict_group_mode: base_config.net_svc.strict_group_mode,
       },
       config_v2: {
         svc_cfg: {

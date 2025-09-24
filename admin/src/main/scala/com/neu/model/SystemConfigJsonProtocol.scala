@@ -31,7 +31,7 @@ object SystemConfigJsonProtocol extends DefaultJsonProtocol {
     RemoteRepositoryWrap.apply
   )
   given systemConfigFormat: RootJsonFormat[SystemConfig]                             = jsonFormat22(SystemConfig.apply)
-  given systemNetConfigFormat: RootJsonFormat[SystemNetConfig]                       = jsonFormat3(SystemNetConfig.apply)
+  given systemNetConfigFormat: RootJsonFormat[SystemNetConfig]                       = jsonFormat4(SystemNetConfig.apply)
   given systemAtmoConfigFormat: RootJsonFormat[SystemAtmoConfig]                     = jsonFormat4(
     SystemAtmoConfig.apply
   )

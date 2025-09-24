@@ -54,6 +54,7 @@ import {
   SyslogCVELayersField,
   EventReportLoggingToggleField,
   NsUserExportNetworkRuleToggleField,
+  RestrictGroupModeField,
 } from './constants';
 import {
   EnableTlsVerificationToggleField,
@@ -161,6 +162,16 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
         templateOptions: {
           label: 'setting.UNUSED_GROUP_AGE',
           comment: 'setting.UNUSED_GROUP_HINT',
+          divider: false,
+        },
+      },
+      {
+        wrappers: [FormlyComponents.SECTION_WRAPPER],
+        fieldGroup: [RestrictGroupModeField],
+        templateOptions: {
+          label: 'setting.STRICT_GROUP_MODE',
+          comment: 'setting.STRICT_GROUP_MODE_HINT',
+          inline: true,
           divider: false,
         },
       },

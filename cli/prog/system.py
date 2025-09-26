@@ -287,6 +287,8 @@ def showLocalSystemConfig(data, scope):
         column_map += (("disable_net_policy", "Disable Network Policy"),)
     if "detect_unmanaged_wl" in conf:
         column_map += (("detect_unmanaged_wl", "Detect unmanaged container"),)
+    if "strict_group_mode" in conf:
+        column_map += (("strict_group_mode", "Strict Group Mode"),)
     if "mode_auto_d2m" in conf:
         column_map += (("mode_auto_d2m", "Auto Mode Upgrader: Discover -> Monitor"),
                    ("mode_auto_d2m_duration", "       Duration"),)
@@ -1060,6 +1062,21 @@ def set_system_disable_net_policy_status(data, status):
         data.client.config_system_net(disable_net_policy=True)
     else:
         data.client.config_system_net(disable_net_policy=False)
+
+@set_system.group('strict_group_mode')
+@click.pass_obj
+def set_system_strict_group_mode(data):
+    """Strict group mode"""
+
+@set_system_strict_group_mode.command("status")
+@click.argument('status', type=click.Choice(['true', 'false']))
+@click.pass_obj
+def set_system_strict_group_mode_status(data, status):
+    """Enable/disable Strict group mode"""
+    if status == 'true':
+        data.client.config_system_net(strict_group_mode=True)
+    else:
+        data.client.config_system_net(strict_group_mode=False)
 
 @set_system.group('detect_unmanaged_wl')
 @click.pass_obj

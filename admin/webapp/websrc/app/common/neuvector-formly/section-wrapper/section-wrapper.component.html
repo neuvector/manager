@@ -16,8 +16,17 @@
         <ng-container #fieldComponent></ng-container>
       </div>
     </div>
-    <div class="text-muted my-md-2" *ngIf="to.comment">
+    <div
+      class="text-muted my-md-2"
+      *ngIf="to.comment && !Array.isArray(to.comment)">
       {{ to.comment | translate }}
+    </div>
+    <div
+      class="text-muted my-md-2"
+      *ngIf="to.comment && Array.isArray(to.comment)">
+      <div *ngFor="let comment of to.comment">
+        {{ comment | translate }}
+      </div>
     </div>
     <div class="mx-3 my-md-2" *ngIf="!to.inline">
       <ng-container #fieldComponent></ng-container>
@@ -35,8 +44,17 @@
         <ng-container #fieldComponent></ng-container>
       </div>
     </div>
-    <div class="text-muted my-md-2" *ngIf="to.comment">
+    <div
+      class="text-muted my-md-2"
+      *ngIf="to.comment && !Array.isArray(to.comment)">
       {{ to.comment | translate }}
+    </div>
+    <div
+      class="text-muted my-md-2"
+      *ngIf="to.comment && Array.isArray(to.comment)">
+      <div *ngFor="let comment of to.comment">
+        {{ comment | translate }}
+      </div>
     </div>
     <div class="mx-3 my-md-2" *ngIf="!to.inline">
       <ng-container #fieldComponent></ng-container>

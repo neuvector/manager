@@ -170,7 +170,11 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
         fieldGroup: [RestrictGroupModeField],
         templateOptions: {
           label: 'setting.STRICT_GROUP_MODE',
-          comment: 'setting.STRICT_GROUP_MODE_HINT',
+          comment: [
+            'setting.STRICT_GROUP_MODE_HINT_1',
+            'setting.STRICT_GROUP_MODE_HINT_2',
+            'setting.STRICT_GROUP_MODE_HINT_3',
+          ],
           inline: true,
           divider: false,
         },

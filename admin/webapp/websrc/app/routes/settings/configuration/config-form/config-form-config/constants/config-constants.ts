@@ -16,6 +16,11 @@ export const ScannerAutoscaleStrategy = [
   { value: '', viewValue: 'setting.DISABLED' },
 ];
 
+export const StrictGroupMode = [
+  { value: false, viewValue: 'setting.strict_group_mode.BASIC' },
+  { value: true, viewValue: 'setting.strict_group_mode.RESTRICTIVE' },
+];
+
 export const ScannerAutoscaleHideExpr =
   'model.scanner_autoscale.strategy === "n/a"';
 
@@ -151,9 +156,10 @@ export const NetworkServiceModeField = {
 
 export const RestrictGroupModeField = {
   key: 'net_svc.strict_group_mode',
-  type: FormlyComponents.TOGGLE,
+  type: FormlyComponents.RADIO,
   templateOptions: {
-    ariaLabelledBy: 'setting.STRICT_GROUP_MODE',
+    items: StrictGroupMode,
+    fieldClass: 'col-md-4',
   },
   expressionProperties: {
     'templateOptions.disabled':

@@ -3110,7 +3110,7 @@
     "NEW_SERVICE": "New Services Mode",
     "NEW_SERVICE_COMMENT": "The default policy mode for new groups that have not been previously detected.",
     "NET_SERVICE_POLICY_MODE": "Network Security Policy Mode",
-    "STRICT_GROUP_MODE": "Restrict group mode",
+    "STRICT_GROUP_MODE": "Group Mode Contention Resolution",
     "MODE_AUTO_SWITCH": "Service Group Mode Automation",
     "MODE_AUTO_SWITCH_HINT": "Promote groups' policy mode automatically. This does not affect CRD created groups.",
     "D2M": "Discover to Monitor",
@@ -3132,8 +3132,8 @@
     "DISABLE_NET_POLICY_HINT": "To only use WAF/DLP for network protection please disable network policy enforcement. When it is disabled no network rule can be learned.",
     "NS_USER_EXPORT_NET_POLICY": "Network Policy Export by Namespace user",
     "STRICT_GROUP_MODE_HINT_1": "For connections between containers in different service groups:",
-    "STRICT_GROUP_MODE_HINT_2": "When \"Restrict Group Mode\" is off, the effective mode defaults to the least restrictive of the two policy modes.",
-    "STRICT_GROUP_MODE_HINT_3": "When \"Restrict Group Mode\" is on, each container follows its own policy mode.",
+    "STRICT_GROUP_MODE_HINT_2": "When selecting basic mode, the effective mode defaults to the least restrictive of the two policy modes.",
+    "STRICT_GROUP_MODE_HINT_3": "When selecting restrictive mode, each container follows its own policy mode.",
     "NS_USER_EXPORT_NET_POLICY_HINT": "Allow namespace user to export all network policies of a group that the user has read permission",
     "USERNAME": "Username",
     "PASSWORD": "Password",
@@ -3165,6 +3165,10 @@
     "NOTICE": "Notice",
     "ENABLE_TLS_VERIFICATION": "Enable TLS verification",
     "TLS_SELF_SIGNED_CERTIFICATION_CONTEXT": "TLS self-signed certificate context",
+    "strict_group_mode": {
+      "BASIC": "Basic",
+      "RESTRICTIVE": "Restrictive"
+    },
     "cloud_type": {
       "AWS": "AWS",
       "AZURE": "Azure",

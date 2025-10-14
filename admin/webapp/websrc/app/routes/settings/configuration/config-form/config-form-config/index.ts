@@ -167,7 +167,13 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
       },
       {
         wrappers: [FormlyComponents.SECTION_WRAPPER],
-        fieldGroup: [RestrictGroupModeField],
+        fieldGroupClassName: 'row',
+        fieldGroup: [
+          {
+            className: 'col-12 my-md-2',
+            ...RestrictGroupModeField,
+          },
+        ],
         templateOptions: {
           label: 'setting.STRICT_GROUP_MODE',
           comment: [
@@ -175,7 +181,6 @@ export const ConfigFormConfig: FormlyFieldConfig[] = [
             'setting.STRICT_GROUP_MODE_HINT_2',
             'setting.STRICT_GROUP_MODE_HINT_3',
           ],
-          inline: true,
           divider: false,
         },
       },

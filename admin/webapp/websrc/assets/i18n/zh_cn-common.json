@@ -3107,7 +3107,7 @@
     "NEW_SERVICE": "新增服务",
     "NEW_SERVICE_COMMENT": "新建组的默认策略模式没有被提前监测到.",
     "NET_SERVICE_POLICY_MODE": "网络安全策略模式",
-    "STRICT_GROUP_MODE": "严格组模式",
+    "STRICT_GROUP_MODE": "组模式冲突解决方案",
     "MODE_AUTO_SWITCH": "服务组模式自动化",
     "MODE_AUTO_SWITCH_HINT": "自动升级组的策略模式. 这不会影响CRD创建的组.",
     "D2M": "学习模式到监视模式",
@@ -3130,8 +3130,8 @@
     "NS_USER_EXPORT_NET_POLICY": "命名空间用户导出网络策略",
     "NS_USER_EXPORT_NET_POLICY_HINT": "允许命名空间用户导出所在组内已获读权限的全部网络策略",
     "STRICT_GROUP_MODE_HINT_1": "对于不同服务组中容器之间的连接：",
-    "STRICT_GROUP_MODE_HINT_2": "当“限制组模式”关闭时，实际模式将默认为两个策略模式中限制最少的那个。",
-    "STRICT_GROUP_MODE_HINT_3": "当“限制组模式”开启时，每个容器都会遵循其自身的策略模式。",
+    "STRICT_GROUP_MODE_HINT_2": "当选择基本模式时，实际模式将默认为两个策略模式中限制最少的那个。",
+    "STRICT_GROUP_MODE_HINT_3": "当选择严格模式时，每个容器都会遵循其自身的策略模式。",
     "USERNAME": "用户名",
     "PASSWORD": "密码",
     "IBM_INTEGRATE": "同IBM Security Advisor整合",
@@ -3162,6 +3162,10 @@
     "NOTICE": "注意",
     "ENABLE_TLS_VERIFICATION": "启用TLS验证",
     "TLS_SELF_SIGNED_CERTIFICATION_CONTEXT": "TLS自签名证书內文",
+    "strict_group_mode": {
+      "BASIC": "基本模式",
+      "RESTRICTIVE": "严格模式"
+    },
     "cloud_type": {
       "AWS": "AWS",
       "AZURE": "Azure",

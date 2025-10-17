@@ -65,7 +65,7 @@ COPY --from=micro / /chroot/
 RUN zypper refresh && zypper --installroot /chroot -n in --no-recommends \
     python313 python313-pip iproute2 lsof procps grep awk && \
     cp /etc/resolv.conf /chroot/etc/resolv.conf && \
-    chroot /chroot /usr/bin/python3.13 -m pip install --upgrade pip setuptools && \
+    chroot /chroot /usr/bin/python3.13 -m pip install --upgrade setuptools && \
     zypper --installroot /chroot clean -a && \
     rm -rf /chroot/var/log/
 

@@ -1,8 +1,8 @@
 .PHONY: jar
 
 STAGE_DIR = stage
-BASE_IMAGE_TAG = alpine
-BUILD_IMAGE_TAG = latest
+BASE_IMAGE_TAG = 5.3
+BUILD_IMAGE_TAG = 5.3
 
 copy_mgr:
 	cp manager/licenses/* ${STAGE_DIR}/licenses/

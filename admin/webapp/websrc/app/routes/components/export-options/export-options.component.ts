@@ -40,6 +40,8 @@ export class ExportOptionsComponent implements OnInit {
       ![
         GlobalConstant.REMOTE_EXPORT_FILENAME.RESPONSE_RULES,
         GlobalConstant.REMOTE_EXPORT_FILENAME.ADMISSION_RULES,
+        GlobalConstant.REMOTE_EXPORT_FILENAME.DLP,
+        GlobalConstant.REMOTE_EXPORT_FILENAME.WAF,
       ].includes(this.exportFileName);
     this.exportOptions?.addControl('export_options', this.exportOptionsForm);
     this.getRemoteRepositories();

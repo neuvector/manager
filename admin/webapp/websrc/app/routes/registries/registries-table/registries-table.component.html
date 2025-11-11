@@ -41,7 +41,10 @@
 </ag-grid-angular>
 <div
   class="d-flex align-items-center justify-content-end mt-2"
-  *ngIf="!registriesCommunicationService.selectedRegistry?.isAllView">
+  *ngIf="
+    !registriesCommunicationService.selectedRegistry?.isAllView &&
+    !registriesCommunicationService.selectedRegistry?.isFedRepo
+  ">
   <app-loading-button
     (btnClick)="startScan()"
     [appearance]="'mat-stroked-button'"

@@ -70,6 +70,10 @@ export class AddEditSensorModalComponent implements OnInit {
     let payload = {
       config: this.addEditSensorForm.value,
     };
+    payload.config.cfg_type =
+      this.data.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+        ? GlobalConstant.CFG_TYPE.FED
+        : GlobalConstant.CFG_TYPE.CUSTOMER;
     this.wafSensorsService
       .updateWafSensorData(payload, this.data.opType)
       .subscribe(

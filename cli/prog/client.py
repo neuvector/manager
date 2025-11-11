@@ -447,17 +447,21 @@ class RestClient(object):
 
         self._handle_common_error(status, data)
 
-    def requestDownload(self, path, obj, obj_id, body):
+    def requestDownload(self, path, obj, scope, obj_id, body):
         if not self._token():
             raise Unauthorized()
 
+        params = ""
+        if scope != None:
+            params = "?scope={}".format(scope)
+
         if obj_id == None:
             status, _, text, data = self._request("POST",
-                                                  "%s/v1/%s/%s" % (self.url, path, obj),
+                                                  "%s/v1/%s/%s%s" % (self.url, path, obj, params),
                                                   body=body)
         else:
             status, _, text, data = self._request("POST",
-                                                  "%s/v1/%s/%s/%s" % (self.url, path, obj, obj_id),
+                                                  "%s/v1/%s/%s/%s%s" % (self.url, path, obj, obj_id, params),
                                                   body=body)
         if status == requests.codes.ok:
             return text

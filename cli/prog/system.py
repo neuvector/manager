@@ -1309,6 +1309,35 @@ def _write_part(part, filename):
 def request_export(data):
     """Export"""
 
+@request_export.command('fed_config')
+@click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True), help="Local file path when export to local machine")
+@click.option("--remote_repository_nickname", default="default", help="Repository nickname when export to remote repository")
+@click.option("--remote_filepath", default="", help="File path on repository when export to remote repository")
+@click.option("--comment", default="", help="Comment for export to remote repository")
+@click.pass_obj
+def request_export_fed_config(data, filename, remote_repository_nickname, remote_filepath, comment):
+    """Export federal webooks."""
+
+    payload = {"remote_export_options": None}
+    remote_export_options, useRemote, ok = validate_export_filepath(filename, remote_repository_nickname, remote_filepath)
+    if ok:
+        if useRemote:
+            payload["remote_export_options"] = remote_export_options
+    else:
+        return
+
+    respData = data.client.requestDownload("file", "fed_config", None, None, payload)
+    if filename and len(filename) > 0:
+        try:
+            with click.open_file(filename, 'w') as wfp:
+                wfp.write(respData)
+            click.echo("Wrote to %s" % click.format_filename(filename))
+        except IOError:
+            click.echo("Error: Failed to write to %s" % click.format_filename(filename))
+    else:
+        click.echo(respData)
+    return
+
 
 @request_export.command("config")
 @click.option('--section', '-s', multiple=True, type=click.Choice(['user', 'policy']))
@@ -1363,6 +1392,7 @@ def export_config(data, section, raw, filename):
 
 
 @request_export.command('group')
+@click.option("--scope", default="local", help="scope of the exported groups", type=click.Choice(['fed', 'local']))
 @click.option("--name", multiple=True, help="Name of group to export")
 @click.option("--use_name_referral", default='false', type=click.Choice(['true', 'false']), help="export group definition to separate yaml doc for group referral")
 @click.option('--policy_mode', default="", type=click.Choice(['discover', 'monitor', 'protect', '']), help="Network policy mode of the exported group")
@@ -1372,7 +1402,7 @@ def export_config(data, section, raw, filename):
 @click.option("--remote_filepath", default="", help="File path on repository when export to remote repository")
 @click.option("--comment", default="", help="Comment for export to remote repository")
 @click.pass_obj
-def request_export_group(data, name, use_name_referral, policy_mode, profile_mode, filename, remote_repository_nickname, remote_filepath, comment):
+def request_export_group(data, scope, name, use_name_referral, policy_mode, profile_mode, filename, remote_repository_nickname, remote_filepath, comment):
     """Export group policies."""
 
     groups = []
@@ -1395,7 +1425,7 @@ def request_export_group(data, name, use_name_referral, policy_mode, profile_mod
     else:
         return
 
-    respData = data.client.requestDownload("file", "group", None, payload)
+    respData = data.client.requestDownload("file", "group", scope, None, payload)
     if filename and len(filename) > 0:
         try:
             with click.open_file(filename, 'w') as wfp:
@@ -1409,6 +1439,7 @@ def request_export_group(data, name, use_name_referral, policy_mode, profile_mod
 
 
 @request_export.command('admission')
+@click.option("--scope", default="local", help="scope of the exported rules", type=click.Choice(['fed', 'local']))
 @click.option("--config", "-c", default=False, is_flag=True, help="Export admission control configuration")
 @click.option("--id", multiple=True, help="ID of admission control rule to export")
 @click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True), help="Local file path when export to local machine")
@@ -1416,7 +1447,7 @@ def request_export_group(data, name, use_name_referral, policy_mode, profile_mod
 @click.option("--remote_filepath", default="", help="File path on repository when export to remote repository")
 @click.option("--comment", default="", help="Comment for export to remote repository")
 @click.pass_obj
-def request_export_admission(data, config, id, filename, remote_repository_nickname, remote_filepath, comment):
+def request_export_admission(data, scope, config, id, filename, remote_repository_nickname, remote_filepath, comment):
     """Export admission control configuration/rules."""
 
     ids = []
@@ -1431,7 +1462,7 @@ def request_export_admission(data, config, id, filename, remote_repository_nickn
     else:
         return
 
-    respData = data.client.requestDownload("file", "admission", None, payload)
+    respData = data.client.requestDownload("file", "admission", scope, None, payload)
     if filename and len(filename) > 0:
         try:
             with click.open_file(filename, 'w') as wfp:
@@ -1444,13 +1475,14 @@ def request_export_admission(data, config, id, filename, remote_repository_nickn
     return
 
 @request_export.command('response')
+@click.option("--scope", default="local", help="scope of the exported rules", type=click.Choice(['fed', 'local']))
 @click.option("--id", multiple=True, help="ID of response rule to export")
 @click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True), help="Local file path when export to local machine")
 @click.option("--remote_repository_nickname", default="default", help="Repository nickname when export to remote repository")
 @click.option("--remote_filepath", default="", help="File path on repository when export to remote repository")
 @click.option("--comment", default="", help="Comment for export to remote repository")
 @click.pass_obj
-def request_export_response(data, id, filename, remote_repository_nickname, remote_filepath, comment):
+def request_export_response(data, scope, id, filename, remote_repository_nickname, remote_filepath, comment):
     """Export non-group-dependent response rules."""
 
     ids = []
@@ -1465,7 +1497,7 @@ def request_export_response(data, id, filename, remote_repository_nickname, remo
     else:
         return
 
-    respData = data.client.requestDownload("file", "response/rule", None, payload)
+    respData = data.client.requestDownload("file", "response/rule", scope, None, payload)
     if filename and len(filename) > 0:
         try:
             with click.open_file(filename, 'w') as wfp:
@@ -1478,13 +1510,14 @@ def request_export_response(data, id, filename, remote_repository_nickname, remo
     return
 
 @request_export.command('dlp')
+@click.option("--scope", default="local", help="scope of the exported sensors", type=click.Choice(['fed', 'local']))
 @click.option("--name",  multiple=True, help="Name of DLP sensor to export")
 @click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True), help="Local file path when export to local machine")
 @click.option("--remote_repository_nickname", default="default", help="Repository nickname when export to remote repository")
 @click.option("--remote_filepath", default="", help="File path on repository when export to remote repository")
 @click.option("--comment", default="", help="Comment for export to remote repository")
 @click.pass_obj
-def request_export_dlp(data, name, filename, remote_repository_nickname, remote_filepath, comment):
+def request_export_dlp(data, scope, name, filename, remote_repository_nickname, remote_filepath, comment):
     """Export DLP sensors/rules."""
 
     names = []
@@ -1499,7 +1532,7 @@ def request_export_dlp(data, name, filename, remote_repository_nickname, remote_
     else:
         return
 
-    respData = data.client.requestDownload("file", "dlp", None, payload)
+    respData = data.client.requestDownload("file", "dlp", scope, None, payload)
     if filename and len(filename) > 0:
         try:
             with click.open_file(filename, 'w') as wfp:
@@ -1512,13 +1545,14 @@ def request_export_dlp(data, name, filename, remote_repository_nickname, remote_
     return
 
 @request_export.command('waf')
+@click.option("--scope", default="local", help="scope of the exported sensors", type=click.Choice(['fed', 'local']))
 @click.option("--name", multiple=True, help="Name of WAF sensor to export")
 @click.option("--filename", "-f", type=click.Path(dir_okay=False, writable=True, resolve_path=True), help="Local file path when export to local machine")
 @click.option("--remote_repository_nickname", default="default", help="Repository nickname when export to remote repository")
 @click.option("--remote_filepath", default="", help="File path on repository when export to remote repository")
 @click.option("--comment", default="", help="Comment for export to remote repository")
 @click.pass_obj
-def request_export_waf(data, name, filename, remote_repository_nickname, remote_filepath, comment):
+def request_export_waf(data, scope, name, filename, remote_repository_nickname, remote_filepath, comment):
     """Export WAF sensors/rules."""
 
     names = []
@@ -1533,7 +1567,7 @@ def request_export_waf(data, name, filename, remote_repository_nickname, remote_
     else:
         return
 
-    respData = data.client.requestDownload("file", "waf", None, payload)
+    respData = data.client.requestDownload("file", "waf", scope, None, payload)
     if filename and len(filename) > 0:
         try:
             with click.open_file(filename, 'w') as wfp:
@@ -1567,7 +1601,7 @@ def request_export_vul_profile(data, filename, remote_repository_nickname, remot
     else:
         return
 
-    respData = data.client.requestDownload("file", "vulnerability/profile", None, payload)
+    respData = data.client.requestDownload("file", "vulnerability/profile", "local", None, payload)
     if filename and len(filename) > 0:
         try:
             with click.open_file(filename, 'w') as wfp:
@@ -1601,7 +1635,7 @@ def request_export_compliance_profile(data, filename, remote_repository_nickname
     else:
         return
 
-    respData = data.client.requestDownload("file", "compliance/profile", None, payload)
+    respData = data.client.requestDownload("file", "compliance/profile", "local", None, payload)
     if filename and len(filename) > 0:
         try:
             with click.open_file(filename, 'w') as wfp:
@@ -1618,6 +1652,12 @@ def request_export_compliance_profile(data, filename, remote_repository_nickname
 def request_import(data):
     """Import"""
 
+@request_import.command('fed_config')
+@click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))
+@click.pass_obj
+def import_fed_config(data, filename):
+    """Import federal configuration(webhooks)."""
+    import_function("file/config", "fed", data, filename, "Federal configurations")
 
 @request_import.command("config")
 @click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))
@@ -1673,10 +1713,11 @@ def import_config(data, filename, raw, ignoreFed):
         click.echo("[2] Error: Failed to upload configuration file %s" % click.format_filename(filename))
     click.echo("")
 
-def import_function(urlStr, data, filename, message):
+def import_function(urlStr, scope, data, filename, message):
+    urlPath = "{}?scope={}".format(urlStr, scope)
     try:
         tid = ""
-        resp = data.client.importConfig(urlStr, filename, True, None, tid, 0, "")
+        resp = data.client.importConfig(urlPath, filename, True, None, tid, 0, "")
         if tid == "":
             if resp.status_code == requests.codes.partial:
                 respJson = resp.json()
@@ -1690,7 +1731,7 @@ def import_function(urlStr, data, filename, message):
             # click.echo("Info: import task transaction id is {}".format(tid))
             while resp.status_code == requests.codes.partial:
                 time.sleep(2)
-                resp = data.client.importConfig(urlStr, filename, True, None, tid, i, "")
+                resp = data.client.importConfig(urlPath, filename, True, None, tid, i, "")
                 respJson = resp.json()
                 if "data" in respJson:
                     respData = respJson["data"]
@@ -1719,41 +1760,46 @@ def import_function(urlStr, data, filename, message):
 
 @request_import.command("group")
 @click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))
+@click.option("--scope", default="local", help="scope of the imported rules", type=click.Choice(['fed', 'local']))
 # @click.option("--raw", default=False, is_flag=True, help="Upload in raw format")
 @click.pass_obj
-def import_group(data, filename):
+def import_group(data, filename, scope):
     """Import group policy."""
-    import_function("file/group/config", data, filename, "group policy")
+    import_function("file/group/config", scope, data, filename, "group policy")
 
 @request_import.command('admission')
 @click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))
+@click.option("--scope", default="local", help="scope of the imported rules", type=click.Choice(['fed', 'local']))
 # @click.option("--raw", default=False, is_flag=True, help="Upload in raw format")
 @click.pass_obj
-def import_admission(data, filename):
+def import_admission(data, filename, scope):
     """Import admission control configuration/rules."""
-    import_function("file/admission/config", data, filename, "admission control configuration/rules")
+    import_function("file/admission/config", scope, data, filename, "admission control configuration/rules")
 
 @request_import.command('response')
 @click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))
+@click.option("--scope", default="local", help="scope of the imported rules", type=click.Choice(['fed', 'local']))
 # @click.option("--raw", default=False, is_flag=True, help="Upload in raw format")
 @click.pass_obj
-def import_response(data, filename):
+def import_response(data, filename, scope):
     """Import non-group-dependent response rules."""
-    import_function("file/response/rule/config", data, filename, "non-group-dependent response rules")
+    import_function("file/response/rule/config", scope, data, filename, "non-group-dependent response rules")
 
 @request_import.command('dlp')
 @click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))
+@click.option("--scope", default="local", help="scope of the imported rules", type=click.Choice(['fed', 'local']))
 @click.pass_obj
-def import_dlp(data, filename):
+def import_dlp(data, filename, scope):
     """Import DLP sensors/rules."""
-    import_function("file/dlp/config", data, filename, "DLP sensors/rules")
+    import_function("file/dlp/config", scope, data, filename, "DLP sensors/rules")
 
 @request_import.command('waf')
 @click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))
+@click.option("--scope", default="local", help="scope of the imported rules", type=click.Choice(['fed', 'local']))
 @click.pass_obj
-def import_waf(data, filename):
+def import_waf(data, filename, scope):
     """Import WAF sensors/rules."""
-    import_function("file/waf/config", data, filename, "WAF sensors/rules")
+    import_function("file/waf/config", scope, data, filename, "WAF sensors/rules")
 
 @request_import.command('vulnerability_profile')
 @click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))
@@ -1761,14 +1807,14 @@ def import_waf(data, filename):
 @click.pass_obj
 def import_vul_profile(data, filename, option):
     """Import vulnerability profile configuration."""
-    import_function("file/vulnerability/profile/config?option={}".format(option), data, filename, "vulnerability profile configuration")
+    import_function("file/vulnerability/profile/config?option={}".format(option), "local", data, filename, "vulnerability profile configuration")
 
 @request_import.command('compliance_profile')
 @click.argument('filename', type=click.Path(dir_okay=False, exists=True, resolve_path=True))
 @click.pass_obj
 def import_compliance_profile(data, filename):
     """Import compliance profile configuration."""
-    import_function("file/compliance/profile/config", data, filename, "compliance profile configuration")
+    import_function("file/compliance/profile/config", "local", data, filename, "compliance profile configuration")
 
 
 @request_export.command()

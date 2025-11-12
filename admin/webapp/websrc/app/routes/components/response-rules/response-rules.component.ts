@@ -177,10 +177,10 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
     }
   };
 
-  openImportResponseRulesModal = () => {
+  openImportResponseRulesModal = (scope = GlobalConstant.NAV_SOURCE.SELF) => {
     const importDialogRef = this.dialog.open(ImportFileModalComponent, {
       data: {
-        importUrl: PathConstant.RESPONSE_RULE_IMPORT_URL,
+        importUrl: scope === GlobalConstant.NAV_SOURCE.FED_POLICY ? PathConstant.RESPONSE_RULE_IMPORT_FED_URL : PathConstant.RESPONSE_RULE_IMPORT_URL,
         importMsg: {
           success: this.translate.instant('responsePolicy.message.IMPORT_OK'),
           error: this.translate.instant('responsePolicy.message.IMPORT_NG'),
@@ -195,29 +195,33 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
   };
 
   exportResponseRules = () => {
-    const dialogRef = this.dialog.open(ExportOptionsModalComponent, {
-      width: '50%',
-      disableClose: true,
-      data: {
-        filename: GlobalConstant.REMOTE_EXPORT_FILENAME.RESPONSE_RULES,
-      },
-    });
+    if ( this.source === GlobalConstant.NAV_SOURCE.FED_POLICY) {
+      this.exportUtil('local', null);
+    } else {
+      const dialogRef = this.dialog.open(ExportOptionsModalComponent, {
+        width: '50%',
+        disableClose: true,
+        data: {
+          filename: GlobalConstant.REMOTE_EXPORT_FILENAME.RESPONSE_RULES,
+        },
+      });
 
-    dialogRef.afterClosed().subscribe((result: RemoteExportOptionsWrapper) => {
-      if (result) {
-        const { export_mode, ...exportOptions } = result.export_options;
-        this.exportUtil(export_mode, exportOptions);
-      }
-    });
+      dialogRef.afterClosed().subscribe((result: RemoteExportOptionsWrapper) => {
+        if (result) {
+          const { export_mode, ...exportOptions } = result.export_options;
+          this.exportUtil(export_mode, exportOptions);
+        }
+      });
+    }
   };
 
-  private exportUtil(mode: string, option: RemoteExportOptions) {
+  private exportUtil(mode: string, option: RemoteExportOptions | null) {
     if (mode === 'local') {
       let payload = {
         ids: this.selectedRules.map(rule => rule.id),
       };
       this.responseRulesService
-        .getResponseRuleConfigFileData(payload)
+        .getResponseRuleConfigFileData(payload, this.source)
         .subscribe(
           response => {
             let fileName = this.utils.getExportedFileName(response);
@@ -248,7 +252,7 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
         remote_export_options: option,
       };
       this.responseRulesService
-        .getResponseRuleConfigFileData(payload)
+        .getResponseRuleConfigFileData(payload, this.source)
         .subscribe(
           response => {
             this.notificationService.open(

@@ -40,20 +40,8 @@ export class ResponseRulesService {
       {
         headerName: this.translate.instant('responsePolicy.gridHeader.ID'),
         field: 'id',
-        headerCheckboxSelection: params =>
-          source === GlobalConstant.NAV_SOURCE.SELF,
-        headerCheckboxSelectionFilteredOnly: params =>
-          params.context.componentParent.source ===
-          GlobalConstant.NAV_SOURCE.SELF,
-        cellRenderer: params => {
-          if (params.value)
-            return `<span class="${
-              source === GlobalConstant.NAV_SOURCE.SELF ? 'left-margin-32' : ''
-            }">
-                      ${params.value}
-                    </span>`;
-          return false;
-        },
+        headerCheckboxSelection: true,
+        headerCheckboxSelectionFilteredOnly: true,
         width: 100,
         minWidth: 100,
         maxWidth: 180,
@@ -115,17 +103,18 @@ export class ResponseRulesService {
       },
     ];
 
-    if (source === GlobalConstant.NAV_SOURCE.SELF) {
-      columnDefs[0]['checkboxSelection'] = params => {
-        if (params.data)
-          return (
-            params.context.componentParent.source ===
-              GlobalConstant.NAV_SOURCE.SELF &&
-            params.data.cfg_type !== GlobalConstant.CFG_TYPE.FED
-          );
-        return false;
-      };
-    }
+    columnDefs[0]['checkboxSelection'] = params => {
+      if (params.data)
+        return (
+          ( source ===
+            GlobalConstant.NAV_SOURCE.SELF &&
+          params.data.cfg_type !== GlobalConstant.CFG_TYPE.FED ) ||
+          ( source ===
+            GlobalConstant.NAV_SOURCE.FED_POLICY &&
+            params.data.cfg_type === GlobalConstant.CFG_TYPE.FED )
+        );
+      return false;
+    };
 
     let gridOptions = this.utils.createGridOptions(columnDefs, this.$win);
     gridOptions.rowClassRules = {
@@ -134,8 +123,7 @@ export class ResponseRulesService {
         return !!params.data.disable;
       },
     };
-    gridOptions.rowSelection =
-      source === GlobalConstant.NAV_SOURCE.SELF ? 'multiple' : 'single';
+    gridOptions.rowSelection = 'multiple';
     return gridOptions;
   }
 
@@ -431,9 +419,9 @@ export class ResponseRulesService {
     return forkJoin([unquarantineReq, removeReq]).pipe();
   }
 
-  getResponseRuleConfigFileData(payload) {
+  getResponseRuleConfigFileData(payload, scope) {
     return GlobalVariable.http
-      .post(PathConstant.RESPONSE_RULE_EXPORT_URL, payload, {
+      .post(scope === GlobalConstant.NAV_SOURCE.FED_POLICY ? PathConstant.RESPONSE_RULE_EXPORT_FED_URL : PathConstant.RESPONSE_RULE_EXPORT_URL, payload, {
         observe: 'response',
         responseType: 'text',
       })

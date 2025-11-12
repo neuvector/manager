@@ -110,6 +110,29 @@ class PolicyApi(resourceService: PolicyService) extends BaseApi {
                 }
               }
             }
+          } ~
+          path("export-fed") {
+            post {
+              entity(as[ExportedResponseRuleList]) { exportedResponseRuleList =>
+                Utils.respondWithWebServerHeaders() {
+                  resourceService.exportResponseRuleConfig(tokenId, exportedResponseRuleList, "fed")
+                }
+              }
+            }
+          } ~
+          path("import-fed") {
+            post {
+              headerValueByName("X-Transaction-Id") { transactionId =>
+                Utils.respondWithWebServerHeaders() {
+                  resourceService.importResponseRuleConfig(tokenId, transactionId, "fed")
+                }
+              } ~
+              entity(as[String]) { formData =>
+                Utils.respondWithWebServerHeaders() {
+                  resourceService.importResponseRuleConfigByFormData(tokenId, formData, "fed")
+                }
+              }
+            }
           }
         } ~
         pathPrefix("policy") {

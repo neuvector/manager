@@ -170,12 +170,13 @@ class PolicyService() extends BaseService with DefaultJsonFormats with LazyLoggi
 
   def exportResponseRuleConfig(
     tokenId: String,
-    exportedResponseRuleList: ExportedResponseRuleList
+    exportedResponseRuleList: ExportedResponseRuleList,
+    scope: String = "local"
   ): Route = {
     logger.info("Export sensors")
     complete {
       RestClient.httpRequestWithHeader(
-        s"${baseClusterUri(tokenId)}/file/response/rule",
+        s"${baseClusterUri(tokenId)}/file/response/rule?scope=$scope",
         POST,
         exportedResponseRuleToJson(exportedResponseRuleList),
         tokenId
@@ -183,7 +184,11 @@ class PolicyService() extends BaseService with DefaultJsonFormats with LazyLoggi
     }
   }
 
-  def importResponseRuleConfig(tokenId: String, transactionId: String): Route =
+  def importResponseRuleConfig(
+    tokenId: String,
+    transactionId: String,
+    scope: String = "local"
+  ): Route =
     complete {
       try {
         val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
@@ -194,7 +199,7 @@ class PolicyService() extends BaseService with DefaultJsonFormats with LazyLoggi
         logger.info("test baseUrl: {}", baseUrl)
         logger.info("Transaction ID(Post): {}", transactionId)
         RestClient.httpRequestWithHeader(
-          s"$baseUrl/file/response/rule/config",
+          s"$baseUrl/file/response/rule/config?scope=$scope",
           POST,
           "",
           tokenId,
@@ -211,7 +216,11 @@ class PolicyService() extends BaseService with DefaultJsonFormats with LazyLoggi
       }
     }
 
-  def importResponseRuleConfigByFormData(tokenId: String, formData: String): Route =
+  def importResponseRuleConfigByFormData(
+    tokenId: String,
+    formData: String,
+    scope: String = "local"
+  ): Route =
     complete {
       try {
         val baseUrl              = baseClusterUri(tokenId)
@@ -222,7 +231,7 @@ class PolicyService() extends BaseService with DefaultJsonFormats with LazyLoggi
         val contentLines         = lines.slice(4, lines.length - 1)
         val bodyData             = contentLines.mkString("\n")
         RestClient.httpRequestWithHeader(
-          s"$baseUrl/file/response/rule/config",
+          s"$baseUrl/file/response/rule/config?scope=$scope",
           POST,
           bodyData,
           tokenId

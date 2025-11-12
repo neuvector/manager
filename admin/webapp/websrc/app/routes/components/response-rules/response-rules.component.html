@@ -63,6 +63,25 @@
         </div>
         <div class="d-flex justify-content-end align-items-center">
           <ng-container *ngIf="!responsePolicyErr">
+            <div *ngIf="source === navSource['FED_POLICY']">
+              <button
+                mat-button
+                aria-label="export WAF SENSORS"
+                *appDisplayControl="'review_rule'"
+                [disabled]="!selectedRules || selectedRules.length === 0"
+                (click)="exportResponseRules()">
+                <em class="eos-icons icon-18">download</em>
+                {{ 'admissionControl.EXPORT' | translate }}
+              </button>
+              <button
+                mat-button
+                aria-label="import WAF SENSORS"
+                (click)="openImportResponseRulesModal()"
+                *appDisplayControl="'write_dlp_rule'">
+                <em class="eos-icons icon-18">upload</em>
+                {{ 'admissionControl.IMPORT' | translate }}
+              </button>
+            </div>
             <button
               mat-stroked-button
               aria-Label="add rule"

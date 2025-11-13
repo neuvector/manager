@@ -106,6 +106,8 @@ export class PathConstant {
   public static DLP_SENSORS_URL = 'dlp/sensor'; //policy
   public static DLP_SENSORS_EXPORT_URL = 'dlp/sensor/export'; //policy
   public static DLP_SENSORS_IMPORT_URL = 'dlp/sensor/import'; //policy
+  public static DLP_SENSORS_EXPORT_FED_URL = 'dlp/sensor/export-fed'; //policy
+  public static DLP_SENSORS_IMPORT_FED_URL = 'dlp/sensor/import-fed'; //policy
   public static DLP_GROUPS_URL = 'dlp/group'; //policy
   public static WAF_SENSORS_URL = 'waf/sensor'; //policy
   public static WAF_SENSORS_EXPORT_URL = 'waf/sensor/export'; //policy

@@ -601,12 +601,13 @@ class GroupService extends BaseService with DefaultJsonFormats with LazyLogging 
 
   def exportDlpSensorConfig(
     tokenId: String,
-    exportedDlpSensorList: ExportedDlpSensorList
+    exportedDlpSensorList: ExportedDlpSensorList,
+    scope: String = "local"
   ): Route = {
     logger.info("Export sensors")
     complete {
       RestClient.httpRequestWithHeader(
-        s"${baseClusterUri(tokenId)}/file/dlp",
+        s"${baseClusterUri(tokenId)}/file/dlp?scope=$scope",
         POST,
         exportedDlpSensorListToJson(exportedDlpSensorList),
         tokenId
@@ -614,7 +615,11 @@ class GroupService extends BaseService with DefaultJsonFormats with LazyLogging 
     }
   }
 
-  def importDlpSensorConfig(tokenId: String, transactionId: String): Route = complete {
+  def importDlpSensorConfig(
+    tokenId: String,
+    transactionId: String,
+    scope: String = "local"
+  ): Route = complete {
     try {
       val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
       val baseUrl       = cachedBaseUrl.fold {
@@ -624,7 +629,7 @@ class GroupService extends BaseService with DefaultJsonFormats with LazyLogging 
       logger.info("test baseUrl: {}", baseUrl)
       logger.info("Transaction ID(Post): {}", transactionId)
       RestClient.httpRequestWithHeader(
-        s"$baseUrl/file/dlp/config",
+        s"$baseUrl/file/dlp/config?scope=$scope",
         POST,
         "",
         tokenId,
@@ -641,7 +646,11 @@ class GroupService extends BaseService with DefaultJsonFormats with LazyLogging 
     }
   }
 
-  def importDlpSensorConfigByFormData(tokenId: String, formData: String): Route = complete {
+  def importDlpSensorConfigByFormData(
+    tokenId: String,
+    formData: String,
+    scope: String = "local"
+  ): Route = complete {
     try {
       val baseUrl              = baseClusterUri(tokenId)
       AuthenticationManager.setBaseUrl(tokenId, baseUrl)
@@ -651,7 +660,7 @@ class GroupService extends BaseService with DefaultJsonFormats with LazyLogging 
       val contentLines         = lines.slice(4, lines.length - 1)
       val bodyData             = contentLines.mkString("\n")
       RestClient.httpRequestWithHeader(
-        s"$baseUrl/file/dlp/config",
+        s"$baseUrl/file/dlp/config?scope=$scope",
         POST,
         bodyData,
         tokenId

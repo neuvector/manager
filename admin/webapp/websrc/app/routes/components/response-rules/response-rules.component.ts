@@ -177,10 +177,10 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
     }
   };
 
-  openImportResponseRulesModal = (scope = GlobalConstant.NAV_SOURCE.SELF) => {
+  openImportResponseRulesModal = () => {
     const importDialogRef = this.dialog.open(ImportFileModalComponent, {
       data: {
-        importUrl: scope === GlobalConstant.NAV_SOURCE.FED_POLICY ? PathConstant.RESPONSE_RULE_IMPORT_FED_URL : PathConstant.RESPONSE_RULE_IMPORT_URL,
+        importUrl: this.source === GlobalConstant.NAV_SOURCE.FED_POLICY ? PathConstant.RESPONSE_RULE_IMPORT_FED_URL : PathConstant.RESPONSE_RULE_IMPORT_URL,
         importMsg: {
           success: this.translate.instant('responsePolicy.message.IMPORT_OK'),
           error: this.translate.instant('responsePolicy.message.IMPORT_NG'),

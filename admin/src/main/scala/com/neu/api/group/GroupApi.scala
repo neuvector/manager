@@ -255,6 +255,29 @@ class GroupApi(resourceService: GroupService) extends BaseApi {
                   }
                 }
               }
+            } ~
+            path("export-fed") {
+              post {
+                entity(as[ExportedDlpSensorList]) { exportedDlpSensorList =>
+                  Utils.respondWithWebServerHeaders() {
+                    resourceService.exportDlpSensorConfig(tokenId, exportedDlpSensorList, "fed")
+                  }
+                }
+              }
+            } ~
+            path("import-fed") {
+              post {
+                headerValueByName("X-Transaction-Id") { transactionId =>
+                  Utils.respondWithWebServerHeaders() {
+                    resourceService.importDlpSensorConfig(tokenId, transactionId, "fed")
+                  }
+                } ~
+                entity(as[String]) { formData =>
+                  Utils.respondWithWebServerHeaders() {
+                    resourceService.importDlpSensorConfigByFormData(tokenId, formData, "fed")
+                  }
+                }
+              }
             }
           } ~
           path("group") {

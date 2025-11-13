@@ -31,25 +31,8 @@ export class DlpSensorsService {
       {
         headerName: this.translate.instant('dlp.gridHeader.SENSOR_NAME'),
         field: 'name',
-        headerCheckboxSelection: params =>
-          params.context.componentParent.source !==
-          GlobalConstant.NAV_SOURCE.FED_POLICY,
-        headerCheckboxSelectionFilteredOnly: params =>
-          params.context.componentParent.source !==
-          GlobalConstant.NAV_SOURCE.FED_POLICY,
-        cellRenderer: params => {
-          if (params.value)
-            return `<span class="${
-              params.data.predefine &&
-              params.context.componentParent.source !==
-                GlobalConstant.NAV_SOURCE.FED_POLICY
-                ? 'left-margin-32'
-                : ''
-            }">
-                      ${params.value}
-                    </span>`;
-          return false;
-        },
+        headerCheckboxSelection: true,
+        headerCheckboxSelectionFilteredOnly: true,
         width: 100,
         minWidth: 100,
       },
@@ -104,18 +87,19 @@ export class DlpSensorsService {
       },
     ];
 
-    if (source !== GlobalConstant.NAV_SOURCE.FED_POLICY) {
-      columnDefs4Sensor[0]['checkboxSelection'] = params => {
-        if (params.data)
-          return (
-            !params.data.predefine &&
-            params.context.componentParent.source !==
-              GlobalConstant.NAV_SOURCE.FED_POLICY &&
-            params.data.cfg_type !== GlobalConstant.CFG_TYPE.FED
-          );
-        return false;
-      };
-    }
+    columnDefs4Sensor[0]['checkboxSelection'] = params => {
+      if (params.data)
+      return (
+        !params.data.predefine &&
+        (( source !==
+          GlobalConstant.NAV_SOURCE.FED_POLICY &&
+        params.data.cfg_type !== GlobalConstant.CFG_TYPE.FED ) ||
+        ( source ===
+          GlobalConstant.NAV_SOURCE.FED_POLICY &&
+          params.data.cfg_type === GlobalConstant.CFG_TYPE.FED ))
+      );
+      return false;
+    };
 
     const columnDefs4Rules = [
       {
@@ -203,8 +187,7 @@ export class DlpSensorsService {
       ),
     };
 
-    grids.gridOptions.rowSelection =
-      source !== GlobalConstant.NAV_SOURCE.FED_POLICY ? 'multiple' : 'single';
+    grids.gridOptions.rowSelection = 'multiple';
 
     grids.gridOptions.rowClassRules = {
       'disabled-row': params => {
@@ -253,9 +236,9 @@ export class DlpSensorsService {
       .pipe();
   };
 
-  getDlpSensorConfigFileData = payload => {
+  getDlpSensorConfigFileData = (payload, scope) => {
     return GlobalVariable.http
-      .post(PathConstant.DLP_SENSORS_EXPORT_URL, payload, {
+      .post(scope === GlobalConstant.NAV_SOURCE.FED_POLICY ? PathConstant.DLP_SENSORS_EXPORT_FED_URL : PathConstant.DLP_SENSORS_EXPORT_URL, payload, {
         observe: 'response',
         responseType: 'text',
       })

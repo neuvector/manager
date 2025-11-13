@@ -195,7 +195,7 @@ export class DlpSensorsComponent implements OnInit, OnDestroy {
   openImportDlpSensorsModal = () => {
     const importDialogRef = this.dialog.open(ImportFileModalComponent, {
       data: {
-        importUrl: PathConstant.DLP_SENSORS_IMPORT_URL,
+        importUrl: this.source === GlobalConstant.NAV_SOURCE.FED_POLICY ? PathConstant.DLP_SENSORS_IMPORT_FED_URL : PathConstant.DLP_SENSORS_IMPORT_URL,
         importMsg: {
           success: this.translate.instant('waf.msg.IMPORT_FINISH'),
           error: this.translate.instant('waf.msg.IMPORT_FAILED'),
@@ -210,28 +210,32 @@ export class DlpSensorsComponent implements OnInit, OnDestroy {
   };
 
   exportDlpSensors = () => {
-    const dialogRef = this.dialog.open(ExportOptionsModalComponent, {
-      width: '50%',
-      disableClose: true,
-      data: {
-        filename: GlobalConstant.REMOTE_EXPORT_FILENAME.DLP,
-      },
-    });
+    if (this.source === GlobalConstant.NAV_SOURCE.FED_POLICY) {
+      this.exportUtil('local', null);
+    } else {
+      const dialogRef = this.dialog.open(ExportOptionsModalComponent, {
+        width: '50%',
+        disableClose: true,
+        data: {
+          filename: GlobalConstant.REMOTE_EXPORT_FILENAME.DLP,
+        },
+      });
 
-    dialogRef.afterClosed().subscribe((result: RemoteExportOptionsWrapper) => {
-      if (result) {
-        const { export_mode, ...exportOptions } = result.export_options;
-        this.exportUtil(export_mode, exportOptions);
-      }
-    });
+      dialogRef.afterClosed().subscribe((result: RemoteExportOptionsWrapper) => {
+        if (result) {
+          const { export_mode, ...exportOptions } = result.export_options;
+          this.exportUtil(export_mode, exportOptions);
+        }
+      });
+    }
   };
 
-  exportUtil(mode: string, option: RemoteExportOptions) {
+  exportUtil(mode: string, option: RemoteExportOptions | null) {
     if (mode === 'local') {
       let payload = {
         names: this.selectedSensors.map(sensor => sensor.name),
       };
-      this.dlpSensorsService.getDlpSensorConfigFileData(payload).subscribe(
+      this.dlpSensorsService.getDlpSensorConfigFileData(payload, this.source).subscribe(
         response => {
           let fileName = this.utilsService.getExportedFileName(response);
           let blob = new Blob([response.body || ''], {
@@ -260,7 +264,7 @@ export class DlpSensorsComponent implements OnInit, OnDestroy {
         names: this.selectedSensors.map(sensor => sensor.name),
         remote_export_options: option,
       };
-      this.dlpSensorsService.getDlpSensorConfigFileData(payload).subscribe(
+      this.dlpSensorsService.getDlpSensorConfigFileData(payload, this.source).subscribe(
         response => {
           this.notificationService.open(
             this.translate.instant('dlp.msg.EXPORT_SENSOR_OK')

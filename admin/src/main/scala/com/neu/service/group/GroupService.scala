@@ -747,18 +747,26 @@ class GroupService extends BaseService with DefaultJsonFormats with LazyLogging 
     )
   }
 
-  def exportWafSensors(tokenId: String, exportedWafSensorList: ExportedWafSensorList): Route =
+  def exportWafSensors(
+    tokenId: String,
+    exportedWafSensorList: ExportedWafSensorList,
+    scope: String = "local"
+  ): Route =
     complete {
       logger.info("Export sensors")
       RestClient.httpRequestWithHeader(
-        s"${baseClusterUri(tokenId)}/file/waf",
+        s"${baseClusterUri(tokenId)}/file/waf?scope=$scope",
         POST,
         exportedWafSensorListToJson(exportedWafSensorList),
         tokenId
       )
     }
 
-  def importWafSensorConfig(tokenId: String, transactionId: String): Route = complete {
+  def importWafSensorConfig(
+    tokenId: String,
+    transactionId: String,
+    scope: String = "local"
+  ): Route = complete {
     try {
       val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
       val baseUrl       = cachedBaseUrl.fold {
@@ -768,7 +776,7 @@ class GroupService extends BaseService with DefaultJsonFormats with LazyLogging 
       logger.info("test baseUrl: {}", baseUrl)
       logger.info("Transaction ID(Post): {}", transactionId)
       RestClient.httpRequestWithHeader(
-        s"$baseUrl/file/waf/config",
+        s"$baseUrl/file/waf/config?scope=$scope",
         POST,
         "",
         tokenId,
@@ -785,7 +793,11 @@ class GroupService extends BaseService with DefaultJsonFormats with LazyLogging 
     }
   }
 
-  def importWafSensorConfigByFormData(tokenId: String, formData: String): Route = complete {
+  def importWafSensorConfigByFormData(
+    tokenId: String,
+    formData: String,
+    scope: String = "local"
+  ): Route = complete {
     try {
       val baseUrl              = baseClusterUri(tokenId)
       AuthenticationManager.setBaseUrl(tokenId, baseUrl)
@@ -795,7 +807,7 @@ class GroupService extends BaseService with DefaultJsonFormats with LazyLogging 
       val contentLines         = lines.slice(4, lines.length - 1)
       val bodyData             = contentLines.mkString("\n")
       RestClient.httpRequestWithHeader(
-        s"$baseUrl/file/waf/config",
+        s"$baseUrl/file/waf/config?scope=$scope",
         POST,
         bodyData,
         tokenId

@@ -351,6 +351,29 @@ class GroupApi(resourceService: GroupService) extends BaseApi {
                   }
                 }
               }
+            } ~
+            path("export-fed") {
+              post {
+                entity(as[ExportedWafSensorList]) { exportedWafSensorList =>
+                  Utils.respondWithWebServerHeaders() {
+                    resourceService.exportWafSensors(tokenId, exportedWafSensorList, "fed")
+                  }
+                }
+              }
+            } ~
+            path("import-fed") {
+              post {
+                headerValueByName("X-Transaction-Id") { transactionId =>
+                  Utils.respondWithWebServerHeaders() {
+                    resourceService.importWafSensorConfig(tokenId, transactionId, "fed")
+                  }
+                } ~
+                entity(as[String]) { formData =>
+                  Utils.respondWithWebServerHeaders() {
+                    resourceService.importWafSensorConfigByFormData(tokenId, formData, "fed")
+                  }
+                }
+              }
             }
           } ~
           path("group") {

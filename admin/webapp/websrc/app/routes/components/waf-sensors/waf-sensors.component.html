@@ -57,6 +57,23 @@
               </span>
             </div>
             <div class="d-flex justify-content-end align-items-center">
+              <div *ngIf="source === navSource['FED_POLICY']">
+                <button
+                  mat-button
+                  aria-label="export WAF SENSORS"
+                  *appDisplayControl="'review_rule'"
+                  (click)="exportWafSensors()">
+                  <em class="eos-icons icon-18 mr-1">download</em>
+                  {{ 'admissionControl.EXPORT' | translate }}
+                </button>
+                <button
+                  mat-button
+                  aria-label="import WAF SENSORS"
+                  (click)="openImportWafSensorsModal()"
+                  *appDisplayControl="'write_waf_rule'">
+                  <em class="eos-icons icon-18 mr-1">upload</em>
+                  {{ 'admissionControl.IMPORT' | translate }}
+                </button></div>
               <button
                 mat-stroked-button
                 aria-label="add sensor"

@@ -179,7 +179,7 @@ export class WafSensorsComponent implements OnInit {
   openImportWafSensorsModal = () => {
     const importDialogRef = this.dialog.open(ImportFileModalComponent, {
       data: {
-        importUrl: PathConstant.WAF_SENSORS_IMPORT_URL,
+        importUrl: this.source === GlobalConstant.NAV_SOURCE.FED_POLICY ? PathConstant.WAF_SENSORS_IMPORT_FED_URL : PathConstant.WAF_SENSORS_IMPORT_URL,
         importMsg: {
           success: this.translate.instant('waf.msg.IMPORT_FINISH'),
           error: this.translate.instant('waf.msg.IMPORT_FAILED'),
@@ -194,28 +194,32 @@ export class WafSensorsComponent implements OnInit {
   };
 
   exportWafSensors = () => {
-    const dialogRef = this.dialog.open(ExportOptionsModalComponent, {
-      width: '50%',
-      disableClose: true,
-      data: {
-        filename: GlobalConstant.REMOTE_EXPORT_FILENAME.WAF,
-      },
-    });
+    if (this.source === GlobalConstant.NAV_SOURCE.FED_POLICY) {
+      this.exportUtils("local", null);
+    } else {
+      const dialogRef = this.dialog.open(ExportOptionsModalComponent, {
+        width: '50%',
+        disableClose: true,
+        data: {
+          filename: GlobalConstant.REMOTE_EXPORT_FILENAME.WAF,
+        },
+      });
 
-    dialogRef.afterClosed().subscribe((result: RemoteExportOptionsWrapper) => {
-      if (result) {
-        const { export_mode, ...exportOptions } = result.export_options;
-        this.exportUtils(export_mode, exportOptions);
-      }
-    });
+      dialogRef.afterClosed().subscribe((result: RemoteExportOptionsWrapper) => {
+        if (result) {
+          const { export_mode, ...exportOptions } = result.export_options;
+          this.exportUtils(export_mode, exportOptions);
+        }
+      });
+    }
   };
 
-  exportUtils(mode: string, option: RemoteExportOptions) {
+  exportUtils(mode: string, option: RemoteExportOptions | null) {
     if (mode === 'local') {
       let payload = {
         names: this.selectedSensors.map(sensor => sensor.name),
       };
-      this.wafSensorsService.getWafSensorConfigFileData(payload).subscribe(
+      this.wafSensorsService.getWafSensorConfigFileData(payload, this.source).subscribe(
         response => {
           let fileName = this.utilsService.getExportedFileName(response);
           let blob = new Blob([response.body || ''], {
@@ -244,7 +248,7 @@ export class WafSensorsComponent implements OnInit {
         names: this.selectedSensors.map(sensor => sensor.name),
         remote_export_options: option,
       };
-      this.wafSensorsService.getWafSensorConfigFileData(payload).subscribe(
+      this.wafSensorsService.getWafSensorConfigFileData(payload, this.source).subscribe(
         response => {
           this.notificationService.open(
             this.translate.instant('waf.msg.EXPORT_SENSOR_OK')

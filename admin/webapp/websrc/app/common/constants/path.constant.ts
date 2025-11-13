@@ -112,6 +112,8 @@ export class PathConstant {
   public static WAF_SENSORS_URL = 'waf/sensor'; //policy
   public static WAF_SENSORS_EXPORT_URL = 'waf/sensor/export'; //policy
   public static WAF_SENSORS_IMPORT_URL = 'waf/sensor/import'; //policy
+  public static WAF_SENSORS_EXPORT_FED_URL = 'waf/sensor/export-fed'; //policy
+  public static WAF_SENSORS_IMPORT_FED_URL = 'waf/sensor/import-fed'; //policy
   public static WAF_GROUPS_URL = 'waf/group'; //policy
   public static GROUP_EXPORT_URL = 'group/export'; //policy
   public static GROUP_SCRIPT_URL = 'group/custom_check'; //policy

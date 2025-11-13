@@ -136,6 +136,8 @@ export class PathConstant {
   public static GRAVATAR = 'gravatar'; //common
   public static EXPORT_ADM_CTRL = 'admission/export'; //policy
   public static IMPORT_ADM_CTRL = 'admission/import'; //policy
+  public static EXPORT_ADM_FED_CTRL = 'admission/export-fed'; //policy
+  public static IMPORT_ADM_FED_CTRL = 'admission/import-fed'; //policy
   public static PROMOTE_NETWORK_RULE = 'policy/promote'; //policy
   public static PROMOTE_ADMISSION_RULE = 'admission/promote'; //policy
   public static CVE_PROFILE = 'risk/cve/profile'; //risks

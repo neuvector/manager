@@ -105,8 +105,8 @@ export class AdmissionRulesService {
       {
         headerName: this.translate.instant('policy.gridHeader.ID'),
         field: 'id',
-        headerCheckboxSelection: authorized,
-        headerCheckboxSelectionFilteredOnly: authorized,
+        headerCheckboxSelection: true,
+        headerCheckboxSelectionFilteredOnly: true,
         checkboxSelection: params => {
           return this.idSelectionFunc(params, authorized);
         },
@@ -669,7 +669,8 @@ export class AdmissionRulesService {
   exportAdmissionRules = (
     rules: Array<AdmissionRule> = [],
     isConfigSelected: boolean,
-    exportOption?: RemoteExportOptions | null
+    exportOption?: RemoteExportOptions | null,
+    scope?: String | null,
   ) => {
     let payload = exportOption
       ? {
@@ -682,7 +683,7 @@ export class AdmissionRulesService {
           export_config: isConfigSelected,
         };
     return GlobalVariable.http
-      .post(PathConstant.EXPORT_ADM_CTRL, payload, {
+      .post(scope === GlobalConstant.NAV_SOURCE.FED_POLICY ? PathConstant.EXPORT_ADM_FED_CTRL : PathConstant.EXPORT_ADM_CTRL, payload, {
         observe: 'response',
         responseType: 'text',
       })

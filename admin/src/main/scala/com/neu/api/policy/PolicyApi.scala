@@ -529,6 +529,33 @@ class PolicyApi(resourceService: PolicyService) extends BaseApi {
               }
             }
           } ~
+          path("export-fed") {
+            post {
+              entity(as[AdmExport]) { admExport =>
+                Utils.respondWithWebServerHeaders() {
+                  resourceService.exportAdmission(tokenId, admExport, "fed")
+                }
+              }
+            }
+          } ~
+          path("import-fed") {
+            post {
+              headerValueByName("X-Transaction-Id") { transactionId =>
+                Utils.respondWithWebServerHeaders() {
+                  resourceService.importAdmission(
+                    tokenId,
+                    transactionId,
+                    "fed"
+                  )
+                }
+              } ~
+              entity(as[String]) { formData =>
+                Utils.respondWithWebServerHeaders() {
+                  resourceService.importAdmissionByFormData(tokenId, formData, "fed")
+                }
+              }
+            }
+          } ~
           path("promote") {
             post {
               entity(as[PromoteConfig]) { promoteConfig =>

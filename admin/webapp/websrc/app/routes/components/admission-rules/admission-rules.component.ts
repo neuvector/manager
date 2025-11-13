@@ -22,6 +22,7 @@ import { MapConstant } from '@common/constants/map.constant';
 import { Subject } from 'rxjs';
 import { finalize, switchMap } from 'rxjs/operators';
 import { ConfirmDialogComponent } from '@components/ui/confirm-dialog/confirm-dialog.component';
+import { saveAs } from 'file-saver';
 import * as $ from 'jquery';
 
 @Component({
@@ -265,20 +266,51 @@ export class AdmissionRulesComponent implements OnInit {
   };
 
   openExportPopup = () => {
-    this.dialog.open(ExportAdmissionRulesModalComponent, {
-      width: '50%',
-      disableClose: true,
-      data: {
-        selectedAdmissionRules: this.selectedAdmissionRules,
-      },
-    });
+    if (this.source === GlobalConstant.NAV_SOURCE.FED_POLICY) {
+      this.admissionRulesService
+        .exportAdmissionRules(
+          this.selectedAdmissionRules,
+          false,
+          null,
+          this.source
+        )
+        .subscribe(
+          response => {
+            let filename = this.utils.getExportedFileName(response);
+            let blob = new Blob([response.body || ''], {
+              type: 'text/plain;charset=utf-8',
+            });
+            saveAs(blob, filename);
+            this.notificationService.open(
+              this.translate.instant('admissionControl.msg.EXPORT_OK')
+            );
+          },
+          error => {
+            if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
+              this.notificationService.open(
+                this.utils.getAlertifyMsg(error.error, '', false),
+                GlobalConstant.NOTIFICATION_TYPE.ERROR
+              );
+            }
+          }
+        );
+    } else {
+      this.dialog.open(ExportAdmissionRulesModalComponent, {
+        width: '50%',
+        disableClose: true,
+        data: {
+          selectedAdmissionRules: this.selectedAdmissionRules,
+          source: this.source,
+        },
+      });
+    }
   };
 
   openImportPopup = () => {
     this.isModalOpen = true;
     const importDialogRef = this.dialog.open(ImportFileModalComponent, {
       data: {
-        importUrl: PathConstant.IMPORT_ADM_CTRL,
+        importUrl: this.source === GlobalConstant.NAV_SOURCE.FED_POLICY ? PathConstant.IMPORT_ADM_FED_CTRL : PathConstant.IMPORT_ADM_CTRL,
         importMsg: {
           success: this.translate.instant('admissionControl.msg.IMPORT_FINISH'),
           error: this.translate.instant('admissionControl.msg.IMPORT_FAILED'),

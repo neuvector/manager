@@ -179,7 +179,10 @@ export class WafSensorsComponent implements OnInit {
   openImportWafSensorsModal = () => {
     const importDialogRef = this.dialog.open(ImportFileModalComponent, {
       data: {
-        importUrl: this.source === GlobalConstant.NAV_SOURCE.FED_POLICY ? PathConstant.WAF_SENSORS_IMPORT_FED_URL : PathConstant.WAF_SENSORS_IMPORT_URL,
+        importUrl:
+          this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+            ? PathConstant.WAF_SENSORS_IMPORT_FED_URL
+            : PathConstant.WAF_SENSORS_IMPORT_URL,
         importMsg: {
           success: this.translate.instant('waf.msg.IMPORT_FINISH'),
           error: this.translate.instant('waf.msg.IMPORT_FAILED'),
@@ -195,7 +198,7 @@ export class WafSensorsComponent implements OnInit {
 
   exportWafSensors = () => {
     if (this.source === GlobalConstant.NAV_SOURCE.FED_POLICY) {
-      this.exportUtils("local", null);
+      this.exportUtils('local', null);
     } else {
       const dialogRef = this.dialog.open(ExportOptionsModalComponent, {
         width: '50%',
@@ -205,12 +208,14 @@ export class WafSensorsComponent implements OnInit {
         },
       });
 
-      dialogRef.afterClosed().subscribe((result: RemoteExportOptionsWrapper) => {
-        if (result) {
-          const { export_mode, ...exportOptions } = result.export_options;
-          this.exportUtils(export_mode, exportOptions);
-        }
-      });
+      dialogRef
+        .afterClosed()
+        .subscribe((result: RemoteExportOptionsWrapper) => {
+          if (result) {
+            const { export_mode, ...exportOptions } = result.export_options;
+            this.exportUtils(export_mode, exportOptions);
+          }
+        });
     }
   };
 
@@ -219,59 +224,62 @@ export class WafSensorsComponent implements OnInit {
       let payload = {
         names: this.selectedSensors.map(sensor => sensor.name),
       };
-      this.wafSensorsService.getWafSensorConfigFileData(payload, this.source).subscribe(
-        response => {
-          let fileName = this.utilsService.getExportedFileName(response);
-          let blob = new Blob([response.body || ''], {
-            type: 'text/plain;charset=utf-8',
-          });
-          saveAs(blob, fileName);
-          this.notificationService.open(
-            this.translate.instant('waf.msg.EXPORT_SENSOR_OK')
-          );
-        },
-        error => {
-          if (MapConstant.USER_TIMEOUT.includes(error.status)) {
+      this.wafSensorsService
+        .getWafSensorConfigFileData(payload, this.source)
+        .subscribe(
+          response => {
+            let fileName = this.utilsService.getExportedFileName(response);
+            let blob = new Blob([response.body || ''], {
+              type: 'text/plain;charset=utf-8',
+            });
+            saveAs(blob, fileName);
             this.notificationService.open(
-              this.utilsService.getAlertifyMsg(
-                error.error,
-                this.translate.instant('waf.msg.EXPORT_SENSOR_NG'),
-                false
-              ),
-              GlobalConstant.NOTIFICATION_TYPE.ERROR
+              this.translate.instant('waf.msg.EXPORT_SENSOR_OK')
             );
+          },
+          error => {
+            if (MapConstant.USER_TIMEOUT.includes(error.status)) {
+              this.notificationService.open(
+                this.utilsService.getAlertifyMsg(
+                  error.error,
+                  this.translate.instant('waf.msg.EXPORT_SENSOR_NG'),
+                  false
+                ),
+                GlobalConstant.NOTIFICATION_TYPE.ERROR
+              );
+            }
           }
-        }
-      );
+        );
     } else if (mode === 'remote') {
       let payload = {
         names: this.selectedSensors.map(sensor => sensor.name),
         remote_export_options: option,
       };
-      this.wafSensorsService.getWafSensorConfigFileData(payload, this.source).subscribe(
-        response => {
-          this.notificationService.open(
-            this.translate.instant('waf.msg.EXPORT_SENSOR_OK')
-          );
-        },
-        error => {
-          if (
-            error.message &&
-            error.message.length > GlobalConstant.MAX_ERROR_MESSAGE_LENGTH
-          ) {
-            this.serverErrorMessage = this.domSanitizer.bypassSecurityTrustHtml(
-              error.message
+      this.wafSensorsService
+        .getWafSensorConfigFileData(payload, this.source)
+        .subscribe(
+          response => {
+            this.notificationService.open(
+              this.translate.instant('waf.msg.EXPORT_SENSOR_OK')
+            );
+          },
+          error => {
+            if (
+              error.message &&
+              error.message.length > GlobalConstant.MAX_ERROR_MESSAGE_LENGTH
+            ) {
+              this.serverErrorMessage =
+                this.domSanitizer.bypassSecurityTrustHtml(error.message);
+            }
+
+            this.notificationService.open(
+              this.serverErrorMessage
+                ? this.translate.instant('waf.msg.EXPORT_SENSOR_NG')
+                : this.utilsService.getAlertifyMsg(error, '', false),
+              GlobalConstant.NOTIFICATION_TYPE.ERROR
             );
           }
-
-          this.notificationService.open(
-            this.serverErrorMessage
-              ? this.translate.instant('waf.msg.EXPORT_SENSOR_NG')
-              : this.utilsService.getAlertifyMsg(error, '', false),
-            GlobalConstant.NOTIFICATION_TYPE.ERROR
-          );
-        }
-      );
+        );
     } else {
       return;
     }

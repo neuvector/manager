@@ -3165,6 +3165,7 @@
     "NOTICE": "Notice",
     "ENABLE_TLS_VERIFICATION": "Enable TLS verification",
     "TLS_SELF_SIGNED_CERTIFICATION_CONTEXT": "TLS self-signed certificate context",
+    "EXPORT_FED_CONFIG_HINT": "Export federaded system configurations data as a YAML file",
     "strict_group_mode": {
       "BASIC": "Basic",
       "RESTRICTIVE": "Restrictive"
@@ -3303,7 +3304,8 @@
       "URL_REQUIRED": "You must specify url.",
       "URL_INVALID": "That doesn't look like a valid url.",
       "GET_SYS_LOG_ERR": "Error happened when getting system settings",
-      "UPLOAD_FINISH": "File uploaded successfully. Please wait for a moment when system is importing the data. System will logout automatically. please login again after it finished."
+      "UPLOAD_FINISH": "File uploaded successfully. System will logout automatically. please login again after it finished.",
+      "UPLOAD_FINISH_FED": "File uploaded successfully."
     },
     "description": {
       "PROFILE": "Update information about you.",

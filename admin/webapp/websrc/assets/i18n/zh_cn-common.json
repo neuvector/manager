@@ -3162,6 +3162,7 @@
     "NOTICE": "注意",
     "ENABLE_TLS_VERIFICATION": "启用TLS验证",
     "TLS_SELF_SIGNED_CERTIFICATION_CONTEXT": "TLS自签名证书內文",
+    "EXPORT_FED_CONFIG_HINT": "将集群系统的配置数据导出为 YAML 文件",
     "strict_group_mode": {
       "BASIC": "基本模式",
       "RESTRICTIVE": "严格模式"
@@ -3299,7 +3300,8 @@
       "URL_REQUIRED": "您必须指定网址.",
       "URL_INVALID": "这看起来不是一个有效的网址.",
       "GET_SYS_LOG_ERR": "获取系统设置时发生错误",
-      "UPLOAD_FINISH": "文件上传成功. 请在数据导入的时候稍侯片刻. 系统将自动登出. 请在数据导入完成后再次登录."
+      "UPLOAD_FINISH": "文件上传成功. 系统将自动登出. 请在数据导入完成后再次登录.",
+      "UPLOAD_FINISH_FED": "文件上传成功."
     },
     "description": {
       "PROFILE": "请更新您的个人资料.",

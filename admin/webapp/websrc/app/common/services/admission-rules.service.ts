@@ -670,7 +670,7 @@ export class AdmissionRulesService {
     rules: Array<AdmissionRule> = [],
     isConfigSelected: boolean,
     exportOption?: RemoteExportOptions | null,
-    scope?: String | null,
+    scope?: String | null
   ) => {
     let payload = exportOption
       ? {
@@ -683,10 +683,16 @@ export class AdmissionRulesService {
           export_config: isConfigSelected,
         };
     return GlobalVariable.http
-      .post(scope === GlobalConstant.NAV_SOURCE.FED_POLICY ? PathConstant.EXPORT_ADM_FED_CTRL : PathConstant.EXPORT_ADM_CTRL, payload, {
-        observe: 'response',
-        responseType: 'text',
-      })
+      .post(
+        scope === GlobalConstant.NAV_SOURCE.FED_POLICY
+          ? PathConstant.EXPORT_ADM_FED_CTRL
+          : PathConstant.EXPORT_ADM_CTRL,
+        payload,
+        {
+          observe: 'response',
+          responseType: 'text',
+        }
+      )
       .pipe();
   };
 

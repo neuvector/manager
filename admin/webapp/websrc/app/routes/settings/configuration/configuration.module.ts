@@ -19,7 +19,6 @@ import { NeuVectorFormlyModule } from '@common/neuvector-formly/neuvector-formly
 import { ObserveModule } from '@common/directives/observe/observe.module';
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
 import { LoadingTemplateModule } from '@components/ui/loading-template/loading-template.module';
-import { ExportFormComponent } from './export-form/export-form.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ImportFileModule } from '@components/ui/import-file/import-file.module';
 import { SupportFormComponent } from './support-form/support-form.component';
@@ -28,6 +27,7 @@ import { PendingChangesGuard } from '@common/guards/pending-changes.guard';
 import { NvCommonModule } from '@common/nvCommon.module';
 import { CspSupportFormComponent } from './csp-support-form/csp-support-form.component';
 import { RemoteRepositoryFormComponent } from './remote-repository-form/remote-repository-form.component';
+import { ExportFormModule } from '@routes/settings/configuration/export-form/export-form.module';
 
 const routes: Routes = [
   {
@@ -42,7 +42,6 @@ const routes: Routes = [
   declarations: [
     ConfigurationComponent,
     ConfigFormComponent,
-    ExportFormComponent,
     SupportFormComponent,
     CspSupportFormComponent,
     RemoteRepositoryFormComponent,
@@ -70,6 +69,7 @@ const routes: Routes = [
     ImportFileModule,
     ObserveModule,
     EnforcersGridModule,
+    ExportFormModule,
   ],
   providers: [SettingsService],
 })

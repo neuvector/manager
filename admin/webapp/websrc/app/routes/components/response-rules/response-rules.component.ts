@@ -180,7 +180,10 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
   openImportResponseRulesModal = () => {
     const importDialogRef = this.dialog.open(ImportFileModalComponent, {
       data: {
-        importUrl: this.source === GlobalConstant.NAV_SOURCE.FED_POLICY ? PathConstant.RESPONSE_RULE_IMPORT_FED_URL : PathConstant.RESPONSE_RULE_IMPORT_URL,
+        importUrl:
+          this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+            ? PathConstant.RESPONSE_RULE_IMPORT_FED_URL
+            : PathConstant.RESPONSE_RULE_IMPORT_URL,
         importMsg: {
           success: this.translate.instant('responsePolicy.message.IMPORT_OK'),
           error: this.translate.instant('responsePolicy.message.IMPORT_NG'),
@@ -195,7 +198,7 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
   };
 
   exportResponseRules = () => {
-    if ( this.source === GlobalConstant.NAV_SOURCE.FED_POLICY) {
+    if (this.source === GlobalConstant.NAV_SOURCE.FED_POLICY) {
       this.exportUtil('local', null);
     } else {
       const dialogRef = this.dialog.open(ExportOptionsModalComponent, {
@@ -206,12 +209,14 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
         },
       });
 
-      dialogRef.afterClosed().subscribe((result: RemoteExportOptionsWrapper) => {
-        if (result) {
-          const { export_mode, ...exportOptions } = result.export_options;
-          this.exportUtil(export_mode, exportOptions);
-        }
-      });
+      dialogRef
+        .afterClosed()
+        .subscribe((result: RemoteExportOptionsWrapper) => {
+          if (result) {
+            const { export_mode, ...exportOptions } = result.export_options;
+            this.exportUtil(export_mode, exportOptions);
+          }
+        });
     }
   };
 

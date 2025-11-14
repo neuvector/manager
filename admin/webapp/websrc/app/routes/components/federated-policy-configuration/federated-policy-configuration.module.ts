@@ -8,6 +8,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { NeuVectorFormlyModule } from '@common/neuvector-formly/neuvector-formly.module';
 import { FederatedConfigurationService } from '@services/federated-configuration.service';
+import { MatCardModule } from '@angular/material/card';
+import { ImportFileModule } from '@components/ui/import-file/import-file.module';
+import { ExportFormModule } from '@routes/settings/configuration/export-form/export-form.module';
 
 @NgModule({
   declarations: [
@@ -23,6 +26,9 @@ import { FederatedConfigurationService } from '@services/federated-configuration
     LoadingButtonModule,
     LoadingTemplateModule,
     NeuVectorFormlyModule,
+    MatCardModule,
+    ImportFileModule,
+    ExportFormModule,
   ],
   providers: [FederatedConfigurationService],
 })

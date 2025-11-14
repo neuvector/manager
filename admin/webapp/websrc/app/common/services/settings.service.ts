@@ -77,6 +77,10 @@ export class SettingsService {
     return this.configHttpService.getSystemConfig(exportMode);
   }
 
+  getFedSystemConfig() {
+    return this.configHttpService.getFedSystemConfig();
+  }
+
   getServer() {
     return this.authHttpService.getServer();
   }

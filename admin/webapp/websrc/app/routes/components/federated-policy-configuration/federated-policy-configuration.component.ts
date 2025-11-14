@@ -12,6 +12,10 @@ import { ComponentCanDeactivate } from '@common/guards/pending-changes.guard';
 import { FederatedConfigFormComponent } from '@components/federated-policy-configuration/federated-config-form/federated-config-form.component';
 import { FederatedConfiguration } from '@common/types';
 import { FederatedConfigurationService } from '@services/federated-configuration.service';
+import { MapConstant } from '@common/constants/map.constant';
+import { GlobalVariable } from '@common/variables/global.variable';
+import { AuthUtilsService } from '@common/utils/auth.utils';
+import { GlobalConstant } from '@common/constants/global.constant';
 
 @Component({
   selector: 'app-federated-policy-configuration',
@@ -25,15 +29,24 @@ export class FederatedPolicyConfigurationComponent
   refreshConfig$ = new Subject();
   @ViewChild(FederatedConfigFormComponent)
   fedConfigForm!: FederatedConfigFormComponent;
+  isConfigAuthorized!: boolean;
+  isImportAuthorized!: boolean;
+  GlobalConstant = GlobalConstant;
 
   @Input() source!: string;
 
   constructor(
     private federatedConfigurationService: FederatedConfigurationService,
-    private tr: TranslateService
+    private tr: TranslateService,
+    private authUtils: AuthUtilsService
   ) {}
 
   ngOnInit(): void {
+    this.isConfigAuthorized = this.authUtils.getDisplayFlag('write_config');
+    this.isImportAuthorized =
+      GlobalVariable.user.token.role === MapConstant.FED_ROLES.FEDADMIN ||
+      (GlobalVariable.user.token.role === MapConstant.FED_ROLES.ADMIN &&
+        (GlobalVariable.isStandAlone || GlobalVariable.isMember));
     this.federatedConfigurationService
       .getFederatedConfig()
       .pipe(repeatWhen(() => this.refreshConfig$))

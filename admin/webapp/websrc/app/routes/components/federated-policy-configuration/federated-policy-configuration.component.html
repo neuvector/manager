@@ -1,9 +1,15 @@
 <ng-container *ngIf="config; else loadingTemplate">
-  <div class="mt-sm mb0">
+  <mat-card>
     <app-federated-config-form
       [config]="config"
-      (refreshConfig)="refreshConfig()"></app-federated-config-form>
-  </div>
+      (refreshConfig)="refreshConfig()">
+    </app-federated-config-form>
+  </mat-card>
+  <br />
+  <mat-card *ngIf="isConfigAuthorized || isImportAuthorized">
+    <app-export-form
+      [source]="GlobalConstant['NAV_SOURCE']['FED_POLICY']"></app-export-form>
+  </mat-card>
 </ng-container>
 <ng-template #errorTemplate let-error>
   {{ error | json }}

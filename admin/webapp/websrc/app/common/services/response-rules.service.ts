@@ -106,12 +106,10 @@ export class ResponseRulesService {
     columnDefs[0]['checkboxSelection'] = params => {
       if (params.data)
         return (
-          ( source ===
-            GlobalConstant.NAV_SOURCE.SELF &&
-          params.data.cfg_type !== GlobalConstant.CFG_TYPE.FED ) ||
-          ( source ===
-            GlobalConstant.NAV_SOURCE.FED_POLICY &&
-            params.data.cfg_type === GlobalConstant.CFG_TYPE.FED )
+          (source === GlobalConstant.NAV_SOURCE.SELF &&
+            params.data.cfg_type !== GlobalConstant.CFG_TYPE.FED) ||
+          (source === GlobalConstant.NAV_SOURCE.FED_POLICY &&
+            params.data.cfg_type === GlobalConstant.CFG_TYPE.FED)
         );
       return false;
     };
@@ -421,10 +419,16 @@ export class ResponseRulesService {
 
   getResponseRuleConfigFileData(payload, scope) {
     return GlobalVariable.http
-      .post(scope === GlobalConstant.NAV_SOURCE.FED_POLICY ? PathConstant.RESPONSE_RULE_EXPORT_FED_URL : PathConstant.RESPONSE_RULE_EXPORT_URL, payload, {
-        observe: 'response',
-        responseType: 'text',
-      })
+      .post(
+        scope === GlobalConstant.NAV_SOURCE.FED_POLICY
+          ? PathConstant.RESPONSE_RULE_EXPORT_FED_URL
+          : PathConstant.RESPONSE_RULE_EXPORT_URL,
+        payload,
+        {
+          observe: 'response',
+          responseType: 'text',
+        }
+      )
       .pipe();
   }
 }

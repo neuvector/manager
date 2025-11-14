@@ -75,6 +75,29 @@ export class ConfigHttpService {
       );
   }
 
+  getFedSystemConfig() {
+    return GlobalVariable.http
+      .post(
+        PathConstant.EXPORT_SYSTEM_CONFIG_FED_URL,
+        {},
+        {
+          observe: 'response',
+          responseType: 'text',
+        }
+      )
+      .pipe(
+        catchError(error => {
+          const textDecoder = new TextDecoder();
+          let errorRes = textDecoder.decode(error.error);
+          error.error =
+            error.headers.get('Content-type') === 'application/json'
+              ? JSON.parse(errorRes).message
+              : errorRes;
+          return throwError(error);
+        })
+      );
+  }
+
   getUsageReport(): Observable<UsageReport> {
     return GlobalVariable.http.get<UsageReport>(PathConstant.USAGE_REPORT_URL);
   }

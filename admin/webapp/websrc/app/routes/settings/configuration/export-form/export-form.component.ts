@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ErrorResponse } from '@common/types';
 import { UtilsService } from '@common/utils/app.utils';
@@ -19,6 +19,8 @@ import { GlobalConstant } from '@common/constants/global.constant';
   styleUrls: ['./export-form.component.scss'],
 })
 export class ExportFormComponent implements OnInit {
+  @Input() source = GlobalConstant.NAV_SOURCE.SELF;
+  GlobalConstant = GlobalConstant;
   submittingForm = false;
   errorMsg: string = '';
   exportForm = new FormGroup({
@@ -27,7 +29,10 @@ export class ExportFormComponent implements OnInit {
   });
   isExportAuthorized!: boolean;
   importMsg = {
-    success: this.tr.instant('setting.message.UPLOAD_FINISH'),
+    success:
+      this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+        ? this.tr.instant('setting.message.UPLOAD_FINISH_FED')
+        : this.tr.instant('setting.message.UPLOAD_FINISH'),
     error: this.tr.instant('setting.IMPORT_FAILED'),
   };
   get isImportAuthorized() {
@@ -47,7 +52,9 @@ export class ExportFormComponent implements OnInit {
   ) {}
 
   get importUrl(): string {
-    return PathConstant.SYSTEM_CONFIG_URL;
+    return this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+      ? PathConstant.SYSTEM_CONFIG_FED_URL
+      : PathConstant.SYSTEM_CONFIG_URL;
   }
 
   get as_standalone(): boolean {
@@ -63,29 +70,42 @@ export class ExportFormComponent implements OnInit {
     const exportMode: string = this.exportForm.get('export')?.value || '';
     this.submittingForm = true;
     this.errorMsg = '';
-    this.settingsService
-      .getSystemConfig(exportMode)
-      .pipe(
-        finalize(() => {
-          this.submittingForm = false;
-        })
-      )
-      .subscribe(
-        data => {
-          let exportUrl = new Blob([data], {
-            type: 'application/zip',
-          });
-          let fileName =
-            exportMode && exportMode.toLowerCase() === 'all'
-              ? `NV${this.utils.parseDatetimeStr(new Date())}.conf.gz`
-              : `NV${this.utils.parseDatetimeStr(new Date())}_policy.conf.gz`;
-          saveAs(exportUrl, fileName);
-          this.notificationService.open(this.tr.instant('setting.EXPORT_OK'));
-        },
-        error => {
-          console.warn(error);
-          this.errorMsg = error.error;
-        }
-      );
+    if (this.source === GlobalConstant.NAV_SOURCE.FED_POLICY) {
+      this.settingsService.getFedSystemConfig().subscribe(response => {
+        let fileName = this.utils.getExportedFileName(response);
+        let blob = new Blob([response.body || ''], {
+          type: 'text/plain;charset=utf-8',
+        });
+        saveAs(blob, fileName);
+        this.notificationService.open(
+          this.tr.instant('waf.msg.EXPORT_SENSOR_OK')
+        );
+      });
+    } else {
+      this.settingsService
+        .getSystemConfig(exportMode)
+        .pipe(
+          finalize(() => {
+            this.submittingForm = false;
+          })
+        )
+        .subscribe(
+          data => {
+            let exportUrl = new Blob([data], {
+              type: 'application/zip',
+            });
+            let fileName =
+              exportMode && exportMode.toLowerCase() === 'all'
+                ? `NV${this.utils.parseDatetimeStr(new Date())}.conf.gz`
+                : `NV${this.utils.parseDatetimeStr(new Date())}_policy.conf.gz`;
+            saveAs(exportUrl, fileName);
+            this.notificationService.open(this.tr.instant('setting.EXPORT_OK'));
+          },
+          error => {
+            console.warn(error);
+            this.errorMsg = error.error;
+          }
+        );
+    }
   }
 }

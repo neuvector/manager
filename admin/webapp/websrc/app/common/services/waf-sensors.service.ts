@@ -90,18 +90,14 @@ export class WafSensorsService {
     columnDefs4Sensor[0]['checkboxSelection'] = params => {
       if (params.data)
         return (
-          !params.data.predefine && (
-            ( source !==
-              GlobalConstant.NAV_SOURCE.FED_POLICY &&
-            params.data.cfg_type !== GlobalConstant.CFG_TYPE.FED ) ||
-            ( source ===
-              GlobalConstant.NAV_SOURCE.FED_POLICY &&
-              params.data.cfg_type === GlobalConstant.CFG_TYPE.FED )
-          )
-
+          !params.data.predefine &&
+          ((source !== GlobalConstant.NAV_SOURCE.FED_POLICY &&
+            params.data.cfg_type !== GlobalConstant.CFG_TYPE.FED) ||
+            (source === GlobalConstant.NAV_SOURCE.FED_POLICY &&
+              params.data.cfg_type === GlobalConstant.CFG_TYPE.FED))
         );
       return false;
-    }
+    };
 
     const columnDefs4Rules = [
       {
@@ -240,10 +236,16 @@ export class WafSensorsService {
 
   getWafSensorConfigFileData = (payload, scope) => {
     return GlobalVariable.http
-      .post(scope === GlobalConstant.NAV_SOURCE.FED_POLICY ? PathConstant.WAF_SENSORS_EXPORT_FED_URL : PathConstant.WAF_SENSORS_EXPORT_URL, payload, {
-        observe: 'response',
-        responseType: 'text',
-      })
+      .post(
+        scope === GlobalConstant.NAV_SOURCE.FED_POLICY
+          ? PathConstant.WAF_SENSORS_EXPORT_FED_URL
+          : PathConstant.WAF_SENSORS_EXPORT_URL,
+        payload,
+        {
+          observe: 'response',
+          responseType: 'text',
+        }
+      )
       .pipe();
   };
 }

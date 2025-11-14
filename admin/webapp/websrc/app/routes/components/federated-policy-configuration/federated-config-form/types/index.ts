@@ -4,8 +4,18 @@ import { WebhookTableField } from './constants';
 
 export const FederatedConfigFormConfig: FormlyFieldConfig[] = [
   {
-    wrappers: [FormlyComponents.SECTION_WRAPPER],
-    fieldGroup: [WebhookTableField],
-    templateOptions: { label: 'setting.WEBHOOKS', divider: true },
+    wrappers: [FormlyComponents.PANEL_WRAPPER],
+    templateOptions: {
+      label: 'setting.category.label.notification',
+      description: 'setting.category.description.notification',
+      expanded: true,
+    },
+    fieldGroup: [
+      {
+        wrappers: [FormlyComponents.SECTION_WRAPPER],
+        fieldGroup: [WebhookTableField],
+        templateOptions: { label: 'setting.WEBHOOKS', divider: false },
+      },
+    ],
   },
 ];

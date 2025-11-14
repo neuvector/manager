@@ -310,7 +310,10 @@ export class AdmissionRulesComponent implements OnInit {
     this.isModalOpen = true;
     const importDialogRef = this.dialog.open(ImportFileModalComponent, {
       data: {
-        importUrl: this.source === GlobalConstant.NAV_SOURCE.FED_POLICY ? PathConstant.IMPORT_ADM_FED_CTRL : PathConstant.IMPORT_ADM_CTRL,
+        importUrl:
+          this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+            ? PathConstant.IMPORT_ADM_FED_CTRL
+            : PathConstant.IMPORT_ADM_CTRL,
         importMsg: {
           success: this.translate.instant('admissionControl.msg.IMPORT_FINISH'),
           error: this.translate.instant('admissionControl.msg.IMPORT_FAILED'),

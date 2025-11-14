@@ -68,6 +68,8 @@ export class PathConstant {
   public static CONVERSATION_SNAPSHOT_URL = 'network/conversation'; //graph
   public static CONVERSATION_ENDPOINT_URL = 'network/endpoint'; //graph
   public static SYSTEM_CONFIG_URL = 'file/config'; //config
+  public static EXPORT_SYSTEM_CONFIG_FED_URL = 'file/export-config-fed'; //config
+  public static SYSTEM_CONFIG_FED_URL = 'file/config-fed'; //config
   public static SYSTEM_DEBUG_URL = 'file/debug'; //config
   public static DEBUG_CHECK_URL = 'file/debug/check'; //config
   public static SNIFF_URL = 'sniffer'; //graph

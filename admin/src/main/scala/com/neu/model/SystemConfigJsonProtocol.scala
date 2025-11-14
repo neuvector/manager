@@ -82,6 +82,15 @@ object SystemConfigJsonProtocol extends DefaultJsonProtocol {
     SystemConfigWrap.apply
   )
 
+  given remoteExportOptionsFormat: RootJsonFormat[RemoteExportOptions] = jsonFormat3(
+    RemoteExportOptions.apply
+  )
+
+  given exportedFedSystemConfigFormat: RootJsonFormat[ExportedFedSystemConfig] =
+    jsonFormat1(
+      ExportedFedSystemConfig.apply
+    )
+
   def systemConfigWrapToJson(systemConfigWrap: SystemConfigWrap): String =
     systemConfigWrap.toJson.compactPrint
 
@@ -100,6 +109,9 @@ object SystemConfigJsonProtocol extends DefaultJsonProtocol {
 
   def remoteRepositoryWrapToJson(remoteRepositoryWrap: RemoteRepositoryWrap): String =
     remoteRepositoryWrap.toJson.compactPrint
+
+  def exportedFedSystemConfigToJson(exportedFedSystemConfig: ExportedFedSystemConfig): String =
+    exportedFedSystemConfig.toJson.compactPrint
 
   def jsonToSystemConfigWrap(systemConfigWrap: String): SystemConfigWrap =
     systemConfigWrap.parseJson.convertTo[SystemConfigWrap]

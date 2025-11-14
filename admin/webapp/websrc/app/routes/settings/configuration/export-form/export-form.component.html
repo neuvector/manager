@@ -4,6 +4,7 @@
       <h1 class="h4 font-weight-normal">{{ 'setting.EXPORT' | translate }}</h1>
       <div class="ml-3 my-md-2 d-flex align-items-center">
         <mat-radio-group
+          *ngIf="source !== GlobalConstant['NAV_SOURCE']['FED_POLICY']"
           class="mx-3"
           aria-label="Export Type"
           formControlName="export">
@@ -14,11 +15,22 @@
             'setting.POLICY' | translate
           }}</mat-radio-button>
         </mat-radio-group>
+        <div
+          *ngIf="source === GlobalConstant['NAV_SOURCE']['FED_POLICY']"
+          class="text-muted">
+          {{ 'setting.EXPORT_FED_CONFIG_HINT' | translate }}
+        </div>
         <app-loading-button
           [appearance]="'mat-raised-button'"
           [color]="'primary'"
-          [disabled]="!exportForm.valid || submittingForm"
-          [loading]="submittingForm"
+          [disabled]="
+            source !== GlobalConstant['NAV_SOURCE']['FED_POLICY'] &&
+            (!exportForm.valid || submittingForm)
+          "
+          [loading]="
+            source !== GlobalConstant['NAV_SOURCE']['FED_POLICY'] &&
+            submittingForm
+          "
           [text]="'setting.SUBMIT' | translate"
           [type]="'submit'"
           class="ml-auto">
@@ -40,9 +52,11 @@
         [isStandAlone]="as_standalone"
         [alias]="'configuration'"
         [msg]="importMsg"></app-import-file>
-      <span class="mat-small text-muted">{{
-        'setting.IMPORT_NOTICE' | translate
-      }}</span>
+      <span
+        *ngIf="source !== GlobalConstant['NAV_SOURCE']['FED_POLICY']"
+        class="mat-small text-muted"
+        >{{ 'setting.IMPORT_NOTICE' | translate }}</span
+      >
     </div>
   </div>
 </form>

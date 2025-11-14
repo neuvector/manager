@@ -350,11 +350,24 @@ class DeviceService extends Directives with DefaultJsonFormats with LazyLogging 
     }
   }
 
+  def exportFedSystemConfig(
+    tokenId: String,
+    exportedFedSystemConfig: ExportedFedSystemConfig
+  ): Route = complete {
+    RestClient.httpRequestWithHeader(
+      s"${baseClusterUri(tokenId)}/file/fed_config",
+      HttpMethods.POST,
+      exportedFedSystemConfigToJson(exportedFedSystemConfig),
+      tokenId
+    )
+  }
+
   def createFileConfig(
     tokenId: String,
     tempToken: String,
     transactionId: String,
-    asStandalone: String
+    asStandalone: String,
+    scope: String = "local"
   ): Route = complete {
     try {
       setBaseUrl(tokenId, transactionId)
@@ -396,7 +409,8 @@ class DeviceService extends Directives with DefaultJsonFormats with LazyLogging 
   def createMultiPartFileConfig(
     tokenId: String,
     asStandalone: String,
-    formData: Multipart.FormData
+    formData: Multipart.FormData,
+    scope: String = "local"
   ): Route = complete {
     try {
       val baseUrl = baseClusterUri(tokenId)
@@ -411,6 +425,65 @@ class DeviceService extends Directives with DefaultJsonFormats with LazyLogging 
         tokenId,
         None,
         Some(asStandalone)
+      )
+    } catch {
+      case NonFatal(e) =>
+        RestClient.handleError(
+          timeOutStatus,
+          authenticationFailedStatus,
+          serverErrorStatus,
+          e
+        )
+    }
+  }
+
+  def importFedSystemConfig(
+    tokenId: String,
+    transactionId: String
+  ): Route = complete {
+    try {
+      val cachedBaseUrl = AuthenticationManager.getBaseUrl(tokenId)
+      val baseUrl       = cachedBaseUrl.fold {
+        baseClusterUri(tokenId)
+      }(cachedBaseUrl => cachedBaseUrl)
+      AuthenticationManager.setBaseUrl(tokenId, baseUrl)
+      logger.info("test baseUrl: {}", baseUrl)
+      logger.info("Transaction ID(Post): {}", transactionId)
+      RestClient.httpRequestWithHeader(
+        s"$baseUrl/file/config?scope=fed",
+        HttpMethods.POST,
+        "",
+        tokenId,
+        Some(transactionId)
+      )
+    } catch {
+      case NonFatal(e) =>
+        RestClient.handleError(
+          timeOutStatus,
+          authenticationFailedStatus,
+          serverErrorStatus,
+          e
+        )
+    }
+  }
+
+  def importFedSystemConfigByFormData(
+    tokenId: String,
+    formData: String
+  ): Route = complete {
+    try {
+      val baseUrl              = baseClusterUri(tokenId)
+      AuthenticationManager.setBaseUrl(tokenId, baseUrl)
+      logger.info("test baseUrl: {}", baseUrl)
+      logger.info("No Transaction ID(Post)")
+      val lines: Array[String] = formData.split("\n")
+      val contentLines         = lines.slice(4, lines.length - 1)
+      val bodyData             = contentLines.mkString("\n")
+      RestClient.httpRequestWithHeader(
+        s"$baseUrl/file/config?scope=fed",
+        HttpMethods.POST,
+        bodyData,
+        tokenId
       )
     } catch {
       case NonFatal(e) =>

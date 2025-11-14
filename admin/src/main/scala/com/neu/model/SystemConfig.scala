@@ -214,3 +214,7 @@ case class RemoteExportOptions(
 case class ServiceConfig(config: ServiceConfigParam)
 
 case class SystemRequest(request: SystemRequestContent)
+
+case class ExportedFedSystemConfig(
+  remote_export_options: Option[RemoteExportOptions] = None
+)

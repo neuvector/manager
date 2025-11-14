@@ -215,6 +215,37 @@ class DeviceApi(resourceService: DeviceService) extends BaseApi {
               }
             }
           } ~
+          path("export-config-fed") {
+            post {
+              post {
+                entity(as[ExportedFedSystemConfig]) { exportedFedSystemConfig =>
+                  Utils.respondWithWebServerHeaders() {
+                    resourceService.exportFedSystemConfig(tokenId, exportedFedSystemConfig)
+                  }
+                }
+              }
+            }
+          } ~
+          path("config-fed") {
+            post {
+              headerValueByName("X-Transaction-Id") { transactionId =>
+                Utils.respondWithWebServerHeaders() {
+                  resourceService.importFedSystemConfig(
+                    tokenId,
+                    transactionId
+                  )
+                }
+              } ~
+              entity(as[String]) { formData =>
+                Utils.respondWithWebServerHeaders() {
+                  resourceService.importFedSystemConfigByFormData(
+                    tokenId,
+                    formData
+                  )
+                }
+              }
+            }
+          } ~
           pathPrefix("debug") {
             pathEnd {
               get {

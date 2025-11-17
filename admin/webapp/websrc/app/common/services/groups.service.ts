@@ -121,9 +121,9 @@ export class GroupsService {
     let columnDefs4Groups: ColDef[] = [
       {
         headerName: this.translate.instant('group.gridHeader.NAME'),
-        headerCheckboxSelection: !isFed,
-        headerCheckboxSelectionFilteredOnly: !isFed,
-        checkboxSelection: !isFed,
+        headerCheckboxSelection: true,
+        headerCheckboxSelectionFilteredOnly: true,
+        checkboxSelection: true,
         field: 'name',
         cellRenderer: idRendererFunc,
       },
@@ -334,7 +334,7 @@ export class GroupsService {
       this.$win
     );
 
-    if (!isFed) gridOptions4Groups.rowSelection = 'multiple';
+    gridOptions4Groups.rowSelection = 'multiple';
 
     return gridOptions4Groups;
   };
@@ -838,8 +838,8 @@ export class GroupsService {
     return this.policyHttpService.patchServiceAll(payload);
   };
 
-  exportGroupsConfigData = payload => {
-    return this.policyHttpService.postGroupExport(payload);
+  exportGroupsConfigData = (payload, source) => {
+    return this.policyHttpService.postGroupExport(payload, source);
   };
 
   getCustomCheckData = groupName => {

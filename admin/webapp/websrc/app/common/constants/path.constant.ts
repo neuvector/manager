@@ -118,6 +118,7 @@ export class PathConstant {
   public static WAF_SENSORS_IMPORT_FED_URL = 'waf/sensor/import-fed'; //policy
   public static WAF_GROUPS_URL = 'waf/group'; //policy
   public static GROUP_EXPORT_URL = 'group/export'; //policy
+  public static GROUP_EXPORT_FED_URL = 'group/export-fed'; //policy
   public static GROUP_SCRIPT_URL = 'group/custom_check'; //policy
   public static IP_GEO_URL = 'ip-geo'; //common
   public static IBM_SETUP_URL = 'ibmsa_setup'; //config
@@ -133,6 +134,7 @@ export class PathConstant {
   public static SELF_URL = 'self'; //auth
   public static WEBHOOK = 'webhook'; //config
   public static IMPORT_GROUP_URL = 'group/import'; //policy
+  public static IMPORT_GROUP_FED_URL = 'group/import-fed'; //policy
   public static ADMISSION_TEST_URL = 'admission/matching-test'; //policy
   public static MGR_VERSION = 'version'; //common
   public static GRAVATAR = 'gravatar'; //common

@@ -68,36 +68,42 @@ class GroupService extends BaseService with DefaultJsonFormats with LazyLogging 
       )
     }
 
-  def exportGroups(tokenId: String, groups4Export: Groups4Export): Route = complete {
-    val payload = groups4ExportToJson(groups4Export)
-    logger.info("Exporting groups: {}", payload)
-    RestClient.httpRequestWithHeaderDecode(
-      s"${baseClusterUri(tokenId)}/file/group",
-      POST,
-      payload,
-      tokenId
-    )
-  }
+  def exportGroups(tokenId: String, groups4Export: Groups4Export, scope: String = "local"): Route =
+    complete {
+      val payload = groups4ExportToJson(groups4Export)
+      logger.info("Exporting groups: {}", payload)
+      RestClient.httpRequestWithHeaderDecode(
+        s"${baseClusterUri(tokenId)}/file/group?scope=$scope",
+        POST,
+        payload,
+        tokenId
+      )
+    }
 
-  def importGroupConfig(tokenId: String, transactionId: String): Route = complete {
-    Thread.sleep(1000)
-    RestClient.httpRequestWithHeader(
-      s"${baseClusterUri(tokenId)}/file/group/config",
-      POST,
-      "",
-      tokenId,
-      Some(transactionId)
-    )
-  }
+  def importGroupConfig(tokenId: String, transactionId: String, scope: String = "local"): Route =
+    complete {
+      Thread.sleep(1000)
+      RestClient.httpRequestWithHeader(
+        s"${baseClusterUri(tokenId)}/file/group/config?scope=$scope",
+        POST,
+        "",
+        tokenId,
+        Some(transactionId)
+      )
+    }
 
-  def importGroupConfigByFormData(tokenId: String, formData: String): Route =
+  def importGroupConfigByFormData(
+    tokenId: String,
+    formData: String,
+    scope: String = "local"
+  ): Route =
     complete {
       val lines: Array[String] = formData.split("\n")
       val contentLines         = lines.slice(4, lines.length - 1)
       val bodyData             = contentLines.mkString("\n")
       logger.info("Importing groups")
       RestClient.httpRequestWithHeader(
-        s"${baseClusterUri(tokenId)}/file/group/config",
+        s"${baseClusterUri(tokenId)}/file/group/config?scope=$scope",
         POST,
         bodyData,
         tokenId

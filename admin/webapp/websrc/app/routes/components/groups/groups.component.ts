@@ -39,6 +39,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TitleCasePipe } from '@angular/common';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { FederatedConfigurationService } from '@services/federated-configuration.service';
+import { ImportFileModalComponent } from '@components/ui/import-file-modal/import-file-modal.component';
 import * as $ from 'jquery';
 
 @Component({
@@ -416,7 +417,8 @@ export class GroupsComponent implements OnInit, OnDestroy {
       disableClose: true,
       data: {
         filename: GlobalConstant.REMOTE_EXPORT_FILENAME.GROUP,
-        source: 'group',
+        page: 'group',
+        source: this.source,
       },
     });
 
@@ -454,7 +456,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
         profile_mode: this.titleCasePipe.transform(profileMode),
         use_name_referral: useNameRef,
       };
-      this.groupsService.exportGroupsConfigData(payload).subscribe(
+      this.groupsService.exportGroupsConfigData(payload, this.source).subscribe(
         response => {
           let fileName = this.utilsService.getExportedFileName(response);
           let blob = new Blob([response.body || ''], {
@@ -478,7 +480,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
         remote_export_options: option,
         use_name_referral: useNameRef,
       };
-      this.groupsService.exportGroupsConfigData(payload).subscribe(
+      this.groupsService.exportGroupsConfigData(payload, this.source).subscribe(
         response => {
           this.notificationService.open(
             this.translate.instant('group.dlp.msg.EXPORT_OK')
@@ -506,6 +508,23 @@ export class GroupsComponent implements OnInit, OnDestroy {
       return;
     }
   }
+
+  openImportFedGroupsDialog = () => {
+    const importDialogRef = this.dialog.open(ImportFileModalComponent, {
+      data: {
+        importUrl: PathConstant.IMPORT_GROUP_FED_URL,
+        importMsg: {
+          success: this.translate.instant('group.IMPORT_OK'),
+          error: this.translate.instant('setting.IMPORT_FAILED'),
+        },
+      },
+    });
+    importDialogRef.afterClosed().subscribe(result => {
+      setTimeout(() => {
+        this.getFedGroups();
+      }, 500);
+    });
+  };
 
   onResize(): void {
     this.gridApi!.sizeColumnsToFit();

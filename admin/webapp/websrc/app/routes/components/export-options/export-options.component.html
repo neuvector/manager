@@ -1,5 +1,5 @@
 <div class="mx-3 mt-3" [formGroup]="exportOptionsForm">
-  <div class="clearfix margin-top-m" *ngIf="source === 'group'">
+  <div class="clearfix margin-top-m" *ngIf="page === 'group'">
     <div class="text-muted text-small mb-2">
       <em class="eos-icons icon-18 text-info mr-2">info</em
       >{{ 'group.export.INFO' | translate }}
@@ -40,7 +40,7 @@
       }}</mat-radio-button>
     </mat-radio-group>
   </div>
-  <hr class="my-2" *ngIf="source === 'group'" />
+  <hr class="my-2" *ngIf="page === 'group'" />
   <mat-checkbox
     *ngIf="isShowingUserRef"
     [checked]="useNameRef"
@@ -48,7 +48,10 @@
     class="mr-3 my-2">
     {{ 'group.NAME_REFERRAL' | translate }}
   </mat-checkbox>
-  <mat-radio-group formControlName="export_mode" class="d-flex flex-column">
+  <mat-radio-group
+    *ngIf="source !== GlobalConstant['NAV_SOURCE']['FED_POLICY']"
+    formControlName="export_mode"
+    class="d-flex flex-column">
     <label class="text-border">{{
       'group.DOWNLOAD_LOCATION' | translate
     }}</label>

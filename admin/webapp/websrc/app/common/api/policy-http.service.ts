@@ -98,11 +98,17 @@ export class PolicyHttpService {
     return GlobalVariable.http.patch(PathConstant.SERVICE_ALL, payload);
   }
 
-  postGroupExport(payload) {
-    return GlobalVariable.http.post(PathConstant.GROUP_EXPORT_URL, payload, {
-      observe: 'response',
-      responseType: 'text',
-    });
+  postGroupExport(payload, source) {
+    return GlobalVariable.http.post(
+      source === GlobalConstant.NAV_SOURCE.FED_POLICY
+        ? PathConstant.GROUP_EXPORT_FED_URL
+        : PathConstant.GROUP_EXPORT_URL,
+      payload,
+      {
+        observe: 'response',
+        responseType: 'text',
+      }
+    );
   }
 
   getGroupScript(name: string) {

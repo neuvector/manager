@@ -71,6 +71,29 @@ class GroupApi(resourceService: GroupService) extends BaseApi {
               }
             }
           } ~
+          path("export-fed") {
+            post {
+              entity(as[Groups4Export]) { groups4Export =>
+                Utils.respondWithWebServerHeaders() {
+                  resourceService.exportGroups(tokenId, groups4Export, "fed")
+                }
+              }
+            }
+          } ~
+          path("import-fed") {
+            post {
+              headerValueByName("X-Transaction-Id") { transactionId =>
+                Utils.respondWithWebServerHeaders() {
+                  resourceService.importGroupConfig(tokenId, transactionId, "fed")
+                }
+              } ~
+              entity(as[String]) { formData =>
+                Utils.respondWithWebServerHeaders() {
+                  resourceService.importGroupConfigByFormData(tokenId, formData, "fed")
+                }
+              }
+            }
+          } ~
           pathEnd {
             post {
               entity(as[GroupConfigDTO]) { groupConfigDTO =>

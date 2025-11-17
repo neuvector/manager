@@ -13,12 +13,14 @@ import { GlobalConstant } from '@common/constants/global.constant';
 export class ExportOptionsComponent implements OnInit {
   @Input() exportOptions: FormGroup | undefined;
   @Input() exportFileName: string | undefined;
+  @Input() page: string;
   @Input() source: string;
 
   exportOptionsForm!: FormGroup;
   remoteRepoEnabled = false;
   isShowingUserRef = true;
   useNameRef = false;
+  GlobalConstant = GlobalConstant;
 
   constructor(
     private fb: FormBuilder,

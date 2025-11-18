@@ -123,7 +123,15 @@ export class GroupsService {
         headerName: this.translate.instant('group.gridHeader.NAME'),
         headerCheckboxSelection: true,
         headerCheckboxSelectionFilteredOnly: true,
-        checkboxSelection: true,
+        checkboxSelection: params => {
+          if (params && params.data) {
+            return (
+              isFed ||
+              (!isFed && params.data.cfg_type !== GlobalConstant.CFG_TYPE.FED)
+            );
+          }
+          return false;
+        },
         field: 'name',
         cellRenderer: idRendererFunc,
       },

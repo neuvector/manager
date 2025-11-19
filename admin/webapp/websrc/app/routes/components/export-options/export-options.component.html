@@ -1,5 +1,5 @@
 <div class="mx-3 mt-3" [formGroup]="exportOptionsForm">
-  <div class="clearfix margin-top-m" *ngIf="page === 'group'">
+  <div class="clearfix margin-top-m" *ngIf="page === 'group' && source !== GlobalConstant['NAV_SOURCE']['FED_POLICY']">
     <div class="text-muted text-small mb-2">
       <em class="eos-icons icon-18 text-info mr-2">info</em
       >{{ 'group.export.INFO' | translate }}

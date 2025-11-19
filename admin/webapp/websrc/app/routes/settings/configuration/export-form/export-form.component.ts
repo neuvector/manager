@@ -29,11 +29,8 @@ export class ExportFormComponent implements OnInit {
   });
   isExportAuthorized!: boolean;
   importMsg = {
-    success:
-      this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
-        ? this.tr.instant('setting.message.UPLOAD_FINISH_FED')
-        : this.tr.instant('setting.message.UPLOAD_FINISH'),
-    error: this.tr.instant('setting.IMPORT_FAILED'),
+    success: '',
+    error: '',
   };
   get isImportAuthorized() {
     return (
@@ -64,6 +61,13 @@ export class ExportFormComponent implements OnInit {
   ngOnInit(): void {
     this.isExportAuthorized =
       this.authUtilsService.getDisplayFlag('write_config');
+    this.importMsg = {
+      success:
+        this.source === GlobalConstant.NAV_SOURCE.FED_POLICY
+          ? this.tr.instant('setting.message.UPLOAD_FINISH_FED')
+          : this.tr.instant('setting.message.UPLOAD_FINISH'),
+      error: this.tr.instant('setting.IMPORT_FAILED'),
+    };
   }
 
   submitExport(): void {

@@ -175,6 +175,7 @@ export class ImportFileComponent implements OnInit, OnChanges {
     this.status = res.data.status;
 
     if (this.status === 'done') {
+      console.log(this.importUrl);
       if (this.importUrl === PathConstant.SYSTEM_CONFIG_URL) {
         this.notificationService.open(
           this.translate.instant('setting.message.UPLOAD_FINISH')

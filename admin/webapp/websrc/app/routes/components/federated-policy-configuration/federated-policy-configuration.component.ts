@@ -4,6 +4,7 @@ import {
   Input,
   OnInit,
   ViewChild,
+  EventEmitter,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, Subject } from 'rxjs';
@@ -26,7 +27,7 @@ export class FederatedPolicyConfigurationComponent
   implements OnInit, ComponentCanDeactivate
 {
   config!: FederatedConfiguration;
-  refreshConfig$ = new Subject();
+  refreshing = new EventEmitter<boolean>();
   @ViewChild(FederatedConfigFormComponent)
   fedConfigForm!: FederatedConfigFormComponent;
   isConfigAuthorized!: boolean;
@@ -47,14 +48,7 @@ export class FederatedPolicyConfigurationComponent
       GlobalVariable.user.token.role === MapConstant.FED_ROLES.FEDADMIN ||
       (GlobalVariable.user.token.role === MapConstant.FED_ROLES.ADMIN &&
         (GlobalVariable.isStandAlone || GlobalVariable.isMember));
-    this.federatedConfigurationService
-      .getFederatedConfig()
-      .pipe(repeatWhen(() => this.refreshConfig$))
-      .subscribe({
-        next: value => {
-          this.config = value.fed_config;
-        },
-      });
+    this.refresh();
   }
 
   @HostListener('window:beforeunload')
@@ -64,7 +58,13 @@ export class FederatedPolicyConfigurationComponent
       : true;
   }
 
-  refreshConfig(): void {
-    this.refreshConfig$.next(true);
+  refresh(): void {
+    this.refreshing.emit(true);
+    this.federatedConfigurationService.getFederatedConfig().subscribe({
+      next: value => {
+        this.refreshing.emit(false);
+        this.config = value.fed_config;
+      },
+    });
   }
 }

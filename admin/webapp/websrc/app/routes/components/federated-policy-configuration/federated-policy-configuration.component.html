@@ -1,9 +1,20 @@
 <ng-container *ngIf="config; else loadingTemplate">
+  <div class="d-flex align-items-center justify-content-end">
+    <app-loading-button
+      (btnClick)="refresh()"
+      [appearance]="'mat-button'"
+      [buttonClasses]="'d-flex justify-content-center align-items-center'"
+      [disabled]="!!(refreshing | async)"
+      [iconClasses]="'eos-icons icon-18'"
+      [iconName]="'refresh'"
+      [id]="'groups-refresh-button'"
+      [loading]="!!(refreshing | async)"
+      [text]="'network.REFRESH' | translate"
+      [type]="'button'">
+    </app-loading-button>
+  </div>
   <mat-card>
-    <app-federated-config-form
-      [config]="config"
-      (refreshConfig)="refreshConfig()">
-    </app-federated-config-form>
+    <app-federated-config-form [config]="config"> </app-federated-config-form>
   </mat-card>
   <br />
   <mat-card *ngIf="isConfigAuthorized || isImportAuthorized">

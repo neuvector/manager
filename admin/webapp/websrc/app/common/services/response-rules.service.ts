@@ -106,10 +106,11 @@ export class ResponseRulesService {
     columnDefs[0]['checkboxSelection'] = params => {
       if (params.data)
         return (
-          (source === GlobalConstant.NAV_SOURCE.SELF &&
+          ((source === GlobalConstant.NAV_SOURCE.SELF &&
             params.data.cfg_type !== GlobalConstant.CFG_TYPE.FED) ||
-          (source === GlobalConstant.NAV_SOURCE.FED_POLICY &&
-            params.data.cfg_type === GlobalConstant.CFG_TYPE.FED)
+            (source === GlobalConstant.NAV_SOURCE.FED_POLICY &&
+              params.data.cfg_type === GlobalConstant.CFG_TYPE.FED)) &&
+          !params.data.group
         );
       return false;
     };

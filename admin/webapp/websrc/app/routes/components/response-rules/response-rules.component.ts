@@ -123,7 +123,10 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
 
   refresh() {
     this.refreshing$.next(true);
-    if (this.source === GlobalConstant.NAV_SOURCE.GROUP) {
+    if (
+      this.source === GlobalConstant.NAV_SOURCE.GROUP ||
+      this.source === GlobalConstant.NAV_SOURCE.FED_GROUP
+    ) {
       this.getGroupPolicy();
     } else {
       this.getResponseRules();

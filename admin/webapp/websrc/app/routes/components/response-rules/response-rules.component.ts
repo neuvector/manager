@@ -201,26 +201,20 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
   };
 
   exportResponseRules = () => {
-    if (this.source === GlobalConstant.NAV_SOURCE.FED_POLICY) {
-      this.exportUtil('local', null);
-    } else {
-      const dialogRef = this.dialog.open(ExportOptionsModalComponent, {
-        width: '50%',
-        disableClose: true,
-        data: {
-          filename: GlobalConstant.REMOTE_EXPORT_FILENAME.RESPONSE_RULES,
-        },
-      });
+    const dialogRef = this.dialog.open(ExportOptionsModalComponent, {
+      width: '50%',
+      disableClose: true,
+      data: {
+        filename: GlobalConstant.REMOTE_EXPORT_FILENAME.RESPONSE_RULES,
+      },
+    });
 
-      dialogRef
-        .afterClosed()
-        .subscribe((result: RemoteExportOptionsWrapper) => {
-          if (result) {
-            const { export_mode, ...exportOptions } = result.export_options;
-            this.exportUtil(export_mode, exportOptions);
-          }
-        });
-    }
+    dialogRef.afterClosed().subscribe((result: RemoteExportOptionsWrapper) => {
+      if (result) {
+        const { export_mode, ...exportOptions } = result.export_options;
+        this.exportUtil(export_mode, exportOptions);
+      }
+    });
   };
 
   private exportUtil(mode: string, option: RemoteExportOptions | null) {

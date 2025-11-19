@@ -197,26 +197,20 @@ export class WafSensorsComponent implements OnInit {
   };
 
   exportWafSensors = () => {
-    if (this.source === GlobalConstant.NAV_SOURCE.FED_POLICY) {
-      this.exportUtils('local', null);
-    } else {
-      const dialogRef = this.dialog.open(ExportOptionsModalComponent, {
-        width: '50%',
-        disableClose: true,
-        data: {
-          filename: GlobalConstant.REMOTE_EXPORT_FILENAME.WAF,
-        },
-      });
+    const dialogRef = this.dialog.open(ExportOptionsModalComponent, {
+      width: '50%',
+      disableClose: true,
+      data: {
+        filename: GlobalConstant.REMOTE_EXPORT_FILENAME.WAF,
+      },
+    });
 
-      dialogRef
-        .afterClosed()
-        .subscribe((result: RemoteExportOptionsWrapper) => {
-          if (result) {
-            const { export_mode, ...exportOptions } = result.export_options;
-            this.exportUtils(export_mode, exportOptions);
-          }
-        });
-    }
+    dialogRef.afterClosed().subscribe((result: RemoteExportOptionsWrapper) => {
+      if (result) {
+        const { export_mode, ...exportOptions } = result.export_options;
+        this.exportUtils(export_mode, exportOptions);
+      }
+    });
   };
 
   exportUtils(mode: string, option: RemoteExportOptions | null) {

@@ -266,44 +266,14 @@ export class AdmissionRulesComponent implements OnInit {
   };
 
   openExportPopup = () => {
-    if (this.source === GlobalConstant.NAV_SOURCE.FED_POLICY) {
-      this.admissionRulesService
-        .exportAdmissionRules(
-          this.selectedAdmissionRules,
-          false,
-          null,
-          this.source
-        )
-        .subscribe(
-          response => {
-            let filename = this.utils.getExportedFileName(response);
-            let blob = new Blob([response.body || ''], {
-              type: 'text/plain;charset=utf-8',
-            });
-            saveAs(blob, filename);
-            this.notificationService.open(
-              this.translate.instant('admissionControl.msg.EXPORT_OK')
-            );
-          },
-          error => {
-            if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
-              this.notificationService.open(
-                this.utils.getAlertifyMsg(error.error, '', false),
-                GlobalConstant.NOTIFICATION_TYPE.ERROR
-              );
-            }
-          }
-        );
-    } else {
-      this.dialog.open(ExportAdmissionRulesModalComponent, {
-        width: '50%',
-        disableClose: true,
-        data: {
-          selectedAdmissionRules: this.selectedAdmissionRules,
-          source: this.source,
-        },
-      });
-    }
+    this.dialog.open(ExportAdmissionRulesModalComponent, {
+      width: '50%',
+      disableClose: true,
+      data: {
+        selectedAdmissionRules: this.selectedAdmissionRules,
+        source: this.source,
+      },
+    });
   };
 
   openImportPopup = () => {

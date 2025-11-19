@@ -52,10 +52,7 @@
     class="mr-3 my-2">
     {{ 'group.NAME_REFERRAL' | translate }}
   </mat-checkbox>
-  <mat-radio-group
-    *ngIf="source !== GlobalConstant['NAV_SOURCE']['FED_POLICY']"
-    formControlName="export_mode"
-    class="d-flex flex-column">
+  <mat-radio-group formControlName="export_mode" class="d-flex flex-column">
     <label class="text-border">{{
       'group.DOWNLOAD_LOCATION' | translate
     }}</label>

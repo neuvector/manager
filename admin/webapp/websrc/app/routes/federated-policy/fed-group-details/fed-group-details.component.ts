@@ -37,6 +37,7 @@ export class FedGroupDetailsComponent implements OnInit, AfterViewInit {
   @Input() height: number;
   public CFG_TYPE: any = GlobalConstant.CFG_TYPE;
   public navSource4Group: string = '';
+  public groupScope: string = '';
   public showPredefinedRules: any;
   public enabled: boolean;
   public editGroupSensorModal: any;
@@ -75,6 +76,7 @@ export class FedGroupDetailsComponent implements OnInit, AfterViewInit {
       this.authUtilsService.getDisplayFlag('write_dlp_rule') &&
       this.authUtilsService.getDisplayFlag('multi_cluster_w');
     this.navSource4Group = GlobalConstant.NAV_SOURCE.FED_POLICY;
+    this.groupScope = GlobalConstant.NAV_SOURCE.FED_GROUP;
   }
 
   ngAfterViewInit() {

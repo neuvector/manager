@@ -48,7 +48,9 @@
     <div [ngClass]="{ 'panel-body': source === navSource['SELF'] }">
       <div
         class="d-flex justify-content-between align-items-center"
-        *ngIf="source !== navSource['GROUP']">
+        *ngIf="
+          source !== navSource['GROUP'] && source !== navSource['FED_GROUP']
+        ">
         <div class="d-flex justify-content-start align-items-center">
           <span class="font-weight-bold text-info">
             <span *ngIf="filtered">
@@ -100,7 +102,11 @@
           </app-quick-filter>
         </div>
       </div>
-      <div *ngIf="source === navSource['GROUP']" class="clearfix">
+      <div
+        *ngIf="
+          source === navSource['GROUP'] || source === navSource['FED_GROUP']
+        "
+        class="clearfix">
         <app-quick-filter
           *ngIf="!useQuickFilterService"
           class="pull-right"
@@ -115,7 +121,7 @@
         style="width: 100%"
         [ngStyle]="{
           height:
-            (source === navSource['GROUP']
+            (source === navSource['GROUP'] || source === navSource['FED_GROUP']
               ? resizableHeight - 90
               : gridHeight) + 'px'
         }"

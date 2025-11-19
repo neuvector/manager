@@ -132,6 +132,7 @@ export class GlobalConstant {
 
   public static NAV_SOURCE = {
     FED_POLICY: 'federal-policy',
+    FED_GROUP: 'fed-group',
     GROUP: 'group',
     SELF: 'self',
   };

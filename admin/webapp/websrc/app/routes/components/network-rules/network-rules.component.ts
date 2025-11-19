@@ -205,7 +205,10 @@ export class NetworkRulesComponent implements OnInit, OnChanges, OnDestroy {
   refresh = () => {
     this.refreshing$.next(true);
     this.selectedNetworkRules = [];
-    if (this.source === GlobalConstant.NAV_SOURCE.GROUP) {
+    if (
+      this.source === GlobalConstant.NAV_SOURCE.GROUP ||
+      this.source === GlobalConstant.NAV_SOURCE.FED_GROUP
+    ) {
       if (this.isScoreImprovement) this.getServiceRules();
       else this.getGroupPolicy();
     } else {

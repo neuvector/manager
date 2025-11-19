@@ -260,7 +260,7 @@
   <mat-tab label="{{ 'service.POLICY_RULES' | translate }}">
     <app-network-rules
       *ngIf="federatedConfigurationService.activeTabIndex4Group === 3"
-      [source]="navSource4Group"
+      [source]="groupScope"
       [groupName]="groupName"
       [useQuickFilterService]="true"
       [resizableHeight]="height">
@@ -269,7 +269,7 @@
   <mat-tab label="{{ 'group.RESPONSE_RULES' | translate }}">
     <app-response-rules
       *ngIf="federatedConfigurationService.activeTabIndex4Group === 4"
-      [source]="navSource4Group"
+      [source]="groupScope"
       [groupName]="groupName"
       [useQuickFilterService]="true"
       [resizableHeight]="height">

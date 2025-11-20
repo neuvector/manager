@@ -62,8 +62,8 @@ export class FederatedPolicyConfigurationComponent
     this.refreshing.emit(true);
     this.federatedConfigurationService.getFederatedConfig().subscribe({
       next: value => {
-        this.refreshing.emit(false);
         this.config = value.fed_config;
+        this.refreshing.emit(false);
       },
     });
   }

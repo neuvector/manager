@@ -13,14 +13,16 @@
       [type]="'button'">
     </app-loading-button>
   </div>
-  <mat-card>
-    <app-federated-config-form [config]="config"> </app-federated-config-form>
-  </mat-card>
-  <br />
-  <mat-card *ngIf="isConfigAuthorized || isImportAuthorized">
-    <app-export-form
-      [source]="GlobalConstant['NAV_SOURCE']['FED_POLICY']"></app-export-form>
-  </mat-card>
+  <div *ngIf="!!!(refreshing | async); else loadingTemplate">
+    <mat-card>
+      <app-federated-config-form [config]="config"> </app-federated-config-form>
+    </mat-card>
+    <br />
+    <mat-card *ngIf="isConfigAuthorized || isImportAuthorized">
+      <app-export-form
+        [source]="GlobalConstant['NAV_SOURCE']['FED_POLICY']"></app-export-form>
+    </mat-card>
+  </div>
 </ng-container>
 <ng-template #errorTemplate let-error>
   {{ error | json }}

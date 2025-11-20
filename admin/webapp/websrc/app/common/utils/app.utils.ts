@@ -88,7 +88,7 @@ export class UtilsService {
       } else if (contentType.includes('application/json')) {
         let message = '';
         try {
-          message = JSON.parse(err.error).message;
+          message = this.isJsonString(err.error) ? JSON.parse(err.error).message : err.error.message;
         } catch (e) {
           message = this.translate.instant('general.UNFORMATTED_ERR');
         }
@@ -571,5 +571,14 @@ export class UtilsService {
       );
     }
     return units.slice(0, precision).join(', ');
+  }
+
+  isJsonString(str) {
+    try {
+      JSON.parse(str);
+      return true;
+    } catch {
+      return false;
+    }
   }
 }

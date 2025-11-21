@@ -150,6 +150,7 @@ export class AddEditRuleModalComponent implements OnInit {
       this.data.sensor.rules.push({
         name: this.addEditRuleForm.controls.ruleName.value,
         patterns: this.patterns,
+        cfg_type: this.data.cfgType,
       });
     } else {
       this.data.sensor.rules.splice(this.data.index, 1, {

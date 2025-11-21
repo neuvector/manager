@@ -172,6 +172,7 @@ export class WafSensorsComponent implements OnInit {
         gridOptions4EditPatterns: this.gridOptions4EditPatterns,
         index4Sensor: this.index4Sensor,
         gridApi: this.gridApi4Rules!,
+        cfgType: this.source === GlobalConstant.NAV_SOURCE.FED_POLICY ? GlobalConstant.CFG_TYPE.FED : GlobalConstant.CFG_TYPE.CUSTOMER,
       },
     });
   };

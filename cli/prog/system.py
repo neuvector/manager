@@ -15,7 +15,7 @@ from prog import multipart
 from prog import output
 from prog import utils
 
-def validate_export_filepath(filename, remote_repository_nickname, remote_filepath):
+def validate_export_filepath(filename, remote_repository_nickname, remote_filepath, comment):
     """Validate export file path."""
     remote_export_options = {}
     useRemote = False
@@ -1319,7 +1319,7 @@ def request_export_fed_config(data, filename, remote_repository_nickname, remote
     """Export federal webooks."""
 
     payload = {"remote_export_options": None}
-    remote_export_options, useRemote, ok = validate_export_filepath(filename, remote_repository_nickname, remote_filepath)
+    remote_export_options, useRemote, ok = validate_export_filepath(filename, remote_repository_nickname, remote_filepath, comment)
     if ok:
         if useRemote:
             payload["remote_export_options"] = remote_export_options
@@ -1418,7 +1418,7 @@ def request_export_group(data, scope, name, use_name_referral, policy_mode, prof
     if profile_mode in modeOptions:
         payload["profile_mode"] = modeOptions[profile_mode]
 
-    remote_export_options, useRemote, ok = validate_export_filepath(filename, remote_repository_nickname, remote_filepath)
+    remote_export_options, useRemote, ok = validate_export_filepath(filename, remote_repository_nickname, remote_filepath, comment)
     if ok:
         if useRemote:
             payload["remote_export_options"] = remote_export_options
@@ -1455,7 +1455,7 @@ def request_export_admission(data, scope, config, id, filename, remote_repositor
         ids.append(int(n))
 
     payload = {"export_config": config, "ids": ids}
-    remote_export_options, useRemote, ok = validate_export_filepath(filename, remote_repository_nickname, remote_filepath)
+    remote_export_options, useRemote, ok = validate_export_filepath(filename, remote_repository_nickname, remote_filepath, comment)
     if ok:
         if useRemote:
             payload["remote_export_options"] = remote_export_options
@@ -1490,7 +1490,7 @@ def request_export_response(data, scope, id, filename, remote_repository_nicknam
         ids.append(int(n))
 
     payload = {"ids": ids}
-    remote_export_options, useRemote, ok = validate_export_filepath(filename, remote_repository_nickname, remote_filepath)
+    remote_export_options, useRemote, ok = validate_export_filepath(filename, remote_repository_nickname, remote_filepath, comment)
     if ok:
         if useRemote:
             payload["remote_export_options"] = remote_export_options
@@ -1525,7 +1525,7 @@ def request_export_dlp(data, scope, name, filename, remote_repository_nickname, 
         names.append(n)
 
     payload = {"names": names}
-    remote_export_options, useRemote, ok = validate_export_filepath(filename, remote_repository_nickname, remote_filepath)
+    remote_export_options, useRemote, ok = validate_export_filepath(filename, remote_repository_nickname, remote_filepath, comment)
     if ok:
         if useRemote:
             payload["remote_export_options"] = remote_export_options
@@ -1560,7 +1560,7 @@ def request_export_waf(data, scope, name, filename, remote_repository_nickname, 
         names.append(n)
 
     payload = {"names": names}
-    remote_export_options, useRemote, ok = validate_export_filepath(filename, remote_repository_nickname, remote_filepath)
+    remote_export_options, useRemote, ok = validate_export_filepath(filename, remote_repository_nickname, remote_filepath, comment)
     if ok:
         if useRemote:
             payload["remote_export_options"] = remote_export_options
@@ -1594,7 +1594,7 @@ def request_export_vul_profile(data, filename, remote_repository_nickname, remot
     if len(names) > 0:
         payload["profiles"] = names
 
-    remote_export_options, useRemote, ok = validate_export_filepath(filename, remote_repository_nickname, remote_filepath)
+    remote_export_options, useRemote, ok = validate_export_filepath(filename, remote_repository_nickname, remote_filepath, comment)
     if ok:
         if useRemote:
             payload["remote_export_options"] = remote_export_options
@@ -1628,7 +1628,7 @@ def request_export_compliance_profile(data, filename, remote_repository_nickname
     if len(names) > 0:
         payload["profiles"] = names
 
-    remote_export_options, useRemote, ok = validate_export_filepath(filename, remote_repository_nickname, remote_filepath)
+    remote_export_options, useRemote, ok = validate_export_filepath(filename, remote_repository_nickname, remote_filepath, comment)
     if ok:
         if useRemote:
             payload["remote_export_options"] = remote_export_options

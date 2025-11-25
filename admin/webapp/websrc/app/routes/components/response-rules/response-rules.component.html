@@ -11,7 +11,9 @@
       mat-button
       aria-label="export response rules"
       *appDisplayControl="'review_rule'"
-      [disabled]="!selectedRules || selectedRules.length === 0"
+      [disabled]="
+        !selectedExportableRules || selectedExportableRules.length === 0
+      "
       (click)="exportResponseRules()">
       <em class="eos-icons icon-18">download</em>
       {{ 'admissionControl.EXPORT' | translate }}
@@ -70,7 +72,10 @@
                 mat-button
                 aria-label="export fed response rules"
                 *appDisplayControl="'review_rule'"
-                [disabled]="!selectedRules || selectedRules.length === 0"
+                [disabled]="
+                  !selectedExportableRules ||
+                  selectedExportableRules.length === 0
+                "
                 (click)="exportResponseRules()">
                 <em class="eos-icons icon-18">download</em>
                 {{ 'admissionControl.EXPORT' | translate }}

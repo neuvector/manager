@@ -52,7 +52,9 @@ export class ExportAdmissionRulesModalComponent implements OnInit {
       this.admissionRulesService
         .exportAdmissionRules(
           this.data.selectedAdmissionRules,
-          this.exportForm.controls.isIncludingConfig.value
+          this.exportForm.controls.isIncludingConfig.value,
+          null,
+          this.data.source
         )
         .pipe(
           finalize(() => {
@@ -84,7 +86,8 @@ export class ExportAdmissionRulesModalComponent implements OnInit {
         .exportAdmissionRules(
           this.data.selectedAdmissionRules,
           this.exportForm.controls.isIncludingConfig.value,
-          exportOptions
+          exportOptions,
+          this.data.source
         )
         .pipe(
           finalize(() => {

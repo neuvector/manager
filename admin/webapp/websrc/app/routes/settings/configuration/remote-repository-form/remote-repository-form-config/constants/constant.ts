@@ -121,6 +121,7 @@ export const GithubPersonalAccessTokenEmailField = {
       'setting.remote_repository.details.github.personal_access_token_email',
     hint: 'setting.remote_repository.details.github.personal_access_token_email_hint',
     maxLength: 1000,
+    required: true,
   },
   validators: {
     validation: [FormlyValidators.EmailFormat],
@@ -136,6 +137,7 @@ export const GithubPersonalAccessTokenCommitterNameField = {
       'setting.remote_repository.details.github.personal_access_token_committer_name',
     hint: 'setting.remote_repository.details.github.personal_access_token_committer_name_hint',
     maxLength: 1000,
+    required: true,
   },
 };
 

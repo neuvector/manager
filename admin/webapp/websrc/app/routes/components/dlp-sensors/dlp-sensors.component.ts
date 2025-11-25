@@ -252,7 +252,7 @@ export class DlpSensorsComponent implements OnInit, OnDestroy {
             );
           },
           error => {
-            if (MapConstant.USER_TIMEOUT.includes(error.status)) {
+            if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
               this.notificationService.open(
                 this.utilsService.getAlertifyMsg(
                   error.error,

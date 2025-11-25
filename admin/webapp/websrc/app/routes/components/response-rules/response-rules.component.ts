@@ -42,6 +42,7 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
   public filtered: boolean = false;
   public filteredCount: number = 0;
   public selectedRules: any[];
+  public selectedExportableRules: any[];
   public context;
   public navSource = GlobalConstant.NAV_SOURCE;
   public isWriteResponseRuleAuthorized: boolean = false;
@@ -141,6 +142,9 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
 
   private onSelectionChanged4ResponseRules = () => {
     this.selectedRules = this.gridApi!.getSelectedRows();
+    this.selectedExportableRules = this.selectedRules.filter(
+      rule => !rule.group
+    );
   };
 
   getResponseRules = (): void => {
@@ -220,7 +224,7 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
   private exportUtil(mode: string, option: RemoteExportOptions | null) {
     if (mode === 'local') {
       let payload = {
-        ids: this.selectedRules.map(rule => rule.id),
+        ids: this.selectedExportableRules.map(rule => rule.id),
       };
       this.responseRulesService
         .getResponseRuleConfigFileData(payload, this.source)
@@ -236,7 +240,7 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
             );
           },
           error => {
-            if (MapConstant.USER_TIMEOUT.includes(error.status)) {
+            if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
               this.notificationService.open(
                 this.utils.getAlertifyMsg(
                   error.error,
@@ -250,7 +254,7 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
         );
     } else if (mode === 'remote') {
       let payload = {
-        names: this.selectedRules.map(rule => rule.id),
+        names: this.selectedExportableRules.map(rule => rule.id),
         remote_export_options: option,
       };
       this.responseRulesService

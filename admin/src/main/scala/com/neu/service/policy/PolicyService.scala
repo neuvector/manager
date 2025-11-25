@@ -173,7 +173,7 @@ class PolicyService() extends BaseService with DefaultJsonFormats with LazyLoggi
     exportedResponseRuleList: ExportedResponseRuleList,
     scope: String = "local"
   ): Route = {
-    logger.info("Export sensors")
+    logger.info("Export response rules, {}", exportedResponseRuleToJson(exportedResponseRuleList))
     complete {
       RestClient.httpRequestWithHeader(
         s"${baseClusterUri(tokenId)}/file/response/rule?scope=$scope",

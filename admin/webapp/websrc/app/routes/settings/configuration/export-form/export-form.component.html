@@ -2,39 +2,50 @@
   <ng-container *ngIf="isExportAuthorized">
     <div class="ml-3 my-md-4">
       <h1 class="h4 font-weight-normal">{{ 'setting.EXPORT' | translate }}</h1>
-      <div class="ml-3 my-md-2 d-flex align-items-center">
+      <div class="ml-3 my-md-2 d-flex flex-column">
         <mat-radio-group
           *ngIf="source !== GlobalConstant['NAV_SOURCE']['FED_POLICY']"
-          class="mx-3"
+          class="mb-3"
           aria-label="Export Type"
           formControlName="export">
-          <mat-radio-button value="all">{{
+          <mat-radio-button value="all" class="mr-3">{{
             'setting.ALL' | translate
           }}</mat-radio-button>
           <mat-radio-button value="policy">{{
             'setting.POLICY' | translate
           }}</mat-radio-button>
         </mat-radio-group>
+
         <div
           *ngIf="source === GlobalConstant['NAV_SOURCE']['FED_POLICY']"
-          class="text-muted">
-          {{ 'setting.EXPORT_FED_CONFIG_HINT' | translate }}
+          class="mb-3">
+          <div class="text-muted mb-2">
+            {{ 'setting.EXPORT_FED_CONFIG_HINT' | translate }}
+          </div>
+
+          <app-export-options
+            [exportOptions]="exportForm"
+            [exportFileName]="exportFileName"
+            [page]="'system_fed_config'"
+            [source]="source">
+          </app-export-options>
         </div>
-        <app-loading-button
-          [appearance]="'mat-raised-button'"
-          [color]="'primary'"
-          [disabled]="
-            source !== GlobalConstant['NAV_SOURCE']['FED_POLICY'] &&
-            (!exportForm.valid || submittingForm)
-          "
-          [loading]="
-            source !== GlobalConstant['NAV_SOURCE']['FED_POLICY'] &&
-            submittingForm
-          "
-          [text]="'setting.SUBMIT' | translate"
-          [type]="'submit'"
-          class="ml-auto">
-        </app-loading-button>
+        <div class="mt-2 d-flex justify-content-end">
+          <app-loading-button
+            [appearance]="'mat-raised-button'"
+            [color]="'primary'"
+            [disabled]="
+              source !== GlobalConstant['NAV_SOURCE']['FED_POLICY'] &&
+              (!exportForm.valid || submittingForm)
+            "
+            [loading]="
+              source !== GlobalConstant['NAV_SOURCE']['FED_POLICY'] &&
+              submittingForm
+            "
+            [text]="'setting.SUBMIT' | translate"
+            [type]="'submit'">
+          </app-loading-button>
+        </div>
       </div>
       <div *ngIf="errorMsg" class="ml-4 text-danger">{{ errorMsg }}</div>
     </div>

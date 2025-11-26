@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ErrorResponse } from '@common/types';
 import { UtilsService } from '@common/utils/app.utils';
 import { NotificationService } from '@services/notification.service';
 import { SettingsService } from '@services/settings.service';
@@ -12,6 +11,7 @@ import { GlobalVariable } from '@common/variables/global.variable';
 import { MapConstant } from '@common/constants/map.constant';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { GlobalConstant } from '@common/constants/global.constant';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-export-form',
@@ -20,9 +20,11 @@ import { GlobalConstant } from '@common/constants/global.constant';
 })
 export class ExportFormComponent implements OnInit {
   @Input() source = GlobalConstant.NAV_SOURCE.SELF;
+  serverErrorMessage: SafeHtml = '';
   GlobalConstant = GlobalConstant;
   submittingForm = false;
   errorMsg: string = '';
+  exportFileName: string = '';
   exportForm = new FormGroup({
     export: new FormControl(null, Validators.required),
     as_standalone: new FormControl(false),
@@ -45,7 +47,8 @@ export class ExportFormComponent implements OnInit {
     private tr: TranslateService,
     private utils: UtilsService,
     private authUtilsService: AuthUtilsService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private domSanitizer: DomSanitizer
   ) {}
 
   get importUrl(): string {
@@ -68,26 +71,21 @@ export class ExportFormComponent implements OnInit {
           : this.tr.instant('setting.message.UPLOAD_FINISH'),
       error: this.tr.instant('setting.IMPORT_FAILED'),
     };
+    if (this.source === GlobalConstant.NAV_SOURCE.FED_POLICY) {
+      this.exportFileName =
+        GlobalConstant.REMOTE_EXPORT_FILENAME.FED_SYSTEM_CONFIG;
+    }
   }
 
   submitExport(): void {
-    const exportMode: string = this.exportForm.get('export')?.value || '';
     this.submittingForm = true;
     this.errorMsg = '';
-    if (this.source === GlobalConstant.NAV_SOURCE.FED_POLICY) {
-      this.settingsService.getFedSystemConfig().subscribe(response => {
-        let fileName = this.utils.getExportedFileName(response);
-        let blob = new Blob([response.body || ''], {
-          type: 'text/plain;charset=utf-8',
-        });
-        saveAs(blob, fileName);
-        this.notificationService.open(
-          this.tr.instant('waf.msg.EXPORT_SENSOR_OK')
-        );
-      });
-    } else {
+
+    if (this.source !== GlobalConstant.NAV_SOURCE.FED_POLICY) {
+      const exportType: string = this.exportForm.get('export')?.value || '';
+
       this.settingsService
-        .getSystemConfig(exportMode)
+        .getSystemConfig(exportType)
         .pipe(
           finalize(() => {
             this.submittingForm = false;
@@ -99,7 +97,7 @@ export class ExportFormComponent implements OnInit {
               type: 'application/zip',
             });
             let fileName =
-              exportMode && exportMode.toLowerCase() === 'all'
+              exportType && exportType.toLowerCase() === 'all'
                 ? `NV${this.utils.parseDatetimeStr(new Date())}.conf.gz`
                 : `NV${this.utils.parseDatetimeStr(new Date())}_policy.conf.gz`;
             saveAs(exportUrl, fileName);
@@ -110,6 +108,65 @@ export class ExportFormComponent implements OnInit {
             this.errorMsg = error.error;
           }
         );
+    } else {
+      const exportOptions: any =
+        this.exportForm.get('export_options')?.value || {};
+      const isRemote = exportOptions.export_mode === 'remote';
+
+      let payload = {};
+
+      if (isRemote) {
+        payload = {
+          remote_export_options: exportOptions,
+        };
+        this.settingsService.getFedSystemConfig(payload).subscribe(
+          response => {
+            this.notificationService.open(
+              this.tr.instant('setting.message.EXPORT_OK')
+            );
+          },
+          error => {
+            if (
+              error.message &&
+              error.message.length > GlobalConstant.MAX_ERROR_MESSAGE_LENGTH
+            ) {
+              this.serverErrorMessage =
+                this.domSanitizer.bypassSecurityTrustHtml(error.message);
+            }
+            this.notificationService.open(
+              this.serverErrorMessage
+                ? this.tr.instant('setting.message.EXPORT_NG')
+                : this.utils.getAlertifyMsg(error, '', false),
+              GlobalConstant.NOTIFICATION_TYPE.ERROR
+            );
+          }
+        );
+      } else {
+        this.settingsService.getFedSystemConfig(payload).subscribe(
+          response => {
+            let fileName = this.utils.getExportedFileName(response);
+            let blob = new Blob([response.body || ''], {
+              type: 'text/plain;charset=utf-8',
+            });
+            saveAs(blob, fileName);
+            this.notificationService.open(
+              this.tr.instant('setting.message.EXPORT_OK')
+            );
+          },
+          error => {
+            if (!MapConstant.USER_TIMEOUT.includes(error.status)) {
+              this.notificationService.open(
+                this.utils.getAlertifyMsg(
+                  error.error,
+                  this.tr.instant('setting.message.EXPORT_NG'),
+                  false
+                ),
+                GlobalConstant.NOTIFICATION_TYPE.ERROR
+              );
+            }
+          }
+        );
+      }
     }
   }
 }

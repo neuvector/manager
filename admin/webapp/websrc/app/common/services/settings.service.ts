@@ -77,8 +77,8 @@ export class SettingsService {
     return this.configHttpService.getSystemConfig(exportMode);
   }
 
-  getFedSystemConfig() {
-    return this.configHttpService.getFedSystemConfig();
+  getFedSystemConfig(payload) {
+    return this.configHttpService.getFedSystemConfig(payload);
   }
 
   getServer() {

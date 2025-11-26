@@ -283,6 +283,7 @@ export class GlobalConstant {
     COMPLIANCE_PROFILE: 'cfgComplianceProfileExport.yaml',
     VUL_PROFILE: 'cfgVulProfileExport.yaml',
     RESPONSE_RULES: 'cfgReponseRulesExport.yaml',
+    FED_SYSTEM_CONFIG: 'cfgFedSystemConfigExport.yaml',
   };
 
   public static SIGSTORE_ATTRIBUTE = {

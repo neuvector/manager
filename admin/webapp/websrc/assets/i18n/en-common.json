@@ -3305,7 +3305,9 @@
       "URL_INVALID": "That doesn't look like a valid url.",
       "GET_SYS_LOG_ERR": "Error happened when getting system settings",
       "UPLOAD_FINISH": "File uploaded successfully. System will logout automatically. please login again after it finished.",
-      "UPLOAD_FINISH_FED": "File uploaded successfully."
+      "UPLOAD_FINISH_FED": "File uploaded successfully.",
+      "EXPORT_OK": "System configurations file is exported successfully.",
+      "EXPORT_NG": "Error happens when exporting system configuration file."
     },
     "description": {
       "PROFILE": "Update information about you.",

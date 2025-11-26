@@ -88,7 +88,9 @@ export class UtilsService {
       } else if (contentType.includes('application/json')) {
         let message = '';
         try {
-          message = this.isJsonString(err.error) ? JSON.parse(err.error).message : err.error.message;
+          message = this.isJsonString(err.error)
+            ? JSON.parse(err.error).message
+            : err.error.message;
         } catch (e) {
           message = this.translate.instant('general.UNFORMATTED_ERR');
         }

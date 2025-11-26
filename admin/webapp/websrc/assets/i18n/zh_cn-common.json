@@ -3301,7 +3301,9 @@
       "URL_INVALID": "这看起来不是一个有效的网址.",
       "GET_SYS_LOG_ERR": "获取系统设置时发生错误",
       "UPLOAD_FINISH": "文件上传成功. 系统将自动登出. 请在数据导入完成后再次登录.",
-      "UPLOAD_FINISH_FED": "文件上传成功."
+      "UPLOAD_FINISH_FED": "文件上传成功.",
+      "EXPORT_OK": "系统配置文件已成功导出。",
+      "EXPORT_NG": "导出系统配置文件时发生错误。"
     },
     "description": {
       "PROFILE": "请更新您的个人资料.",

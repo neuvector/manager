@@ -10,6 +10,7 @@ import { ImportFileModule } from '@components/ui/import-file/import-file.module'
 import { NvCommonModule } from '@common/nvCommon.module';
 import { LoadingButtonModule } from '@components/ui/loading-button/loading-button.module';
 import { LoadingTemplateModule } from '@components/ui/loading-template/loading-template.module';
+import { ExportOptionsModule } from '@components/export-options/export-options.module';
 
 @NgModule({
   declarations: [ExportFormComponent],
@@ -25,6 +26,7 @@ import { LoadingTemplateModule } from '@components/ui/loading-template/loading-t
     MatCheckboxModule,
     LoadingButtonModule,
     LoadingTemplateModule,
+    ExportOptionsModule,
   ],
   exports: [ExportFormComponent],
 })

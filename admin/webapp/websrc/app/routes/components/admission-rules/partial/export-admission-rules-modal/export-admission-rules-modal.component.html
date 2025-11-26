@@ -13,7 +13,7 @@
   </div>
   <hr class="fancy mb-2" />
   <form (ngSubmit)="submitExport()" [formGroup]="exportForm">
-    <div>
+    <div *ngIf="data.source !== GlobalConstant['NAV_SOURCE']['FED_POLICY']">
       <mat-checkbox class="mx-3" formControlName="isIncludingConfig">
         {{ 'admissionControl.CONFIG' | translate }}
       </mat-checkbox>

@@ -17,6 +17,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
   styleUrls: ['./export-admission-rules-modal.component.scss'],
 })
 export class ExportAdmissionRulesModalComponent implements OnInit {
+  GlobalConstant = GlobalConstant;
   submittingForm = false;
   exportForm: FormGroup;
   exportFileName = GlobalConstant.REMOTE_EXPORT_FILENAME.ADMISSION_RULES;
@@ -52,7 +53,9 @@ export class ExportAdmissionRulesModalComponent implements OnInit {
       this.admissionRulesService
         .exportAdmissionRules(
           this.data.selectedAdmissionRules,
-          this.exportForm.controls.isIncludingConfig.value
+          this.exportForm.controls.isIncludingConfig.value,
+          null,
+          this.data.source
         )
         .pipe(
           finalize(() => {
@@ -84,7 +87,8 @@ export class ExportAdmissionRulesModalComponent implements OnInit {
         .exportAdmissionRules(
           this.data.selectedAdmissionRules,
           this.exportForm.controls.isIncludingConfig.value,
-          exportOptions
+          exportOptions,
+          this.data.source
         )
         .pipe(
           finalize(() => {

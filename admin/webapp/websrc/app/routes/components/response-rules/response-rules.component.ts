@@ -261,7 +261,11 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
           response => {
             const responseObj = JSON.parse(response.body as string);
             this.notificationService.open(
-              `${this.translate.instant('responsePolicy.message.EXPORT_OK')} ${this.translate.instant('general.EXPORT_FILE')} ${responseObj.file_path}`
+              `${this.translate.instant(
+                'responsePolicy.message.EXPORT_OK'
+              )} ${this.translate.instant('general.EXPORT_FILE')} ${
+                responseObj.file_path
+              }`
             );
           },
           error => {

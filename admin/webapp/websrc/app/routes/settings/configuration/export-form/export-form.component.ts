@@ -118,7 +118,11 @@ export class ExportFormComponent implements OnInit {
           response => {
             const responseObj = JSON.parse(response.body as string);
             this.notificationService.open(
-              `${this.tr.instant('setting.message.EXPORT_OK')} ${this.tr.instant('general.EXPORT_FILE')} ${responseObj.file_path}`
+              `${this.tr.instant(
+                'setting.message.EXPORT_OK'
+              )} ${this.tr.instant('general.EXPORT_FILE')} ${
+                responseObj.file_path
+              }`
             );
           },
           error => {

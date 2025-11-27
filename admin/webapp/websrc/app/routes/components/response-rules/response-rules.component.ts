@@ -252,7 +252,7 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
         );
     } else if (mode === 'remote') {
       let payload = {
-        names: this.selectedExportableRules.map(rule => rule.id),
+        ids: this.selectedExportableRules.map(rule => rule.id),
         remote_export_options: option,
       };
       this.responseRulesService

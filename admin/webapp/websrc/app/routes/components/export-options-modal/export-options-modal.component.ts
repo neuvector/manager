@@ -9,7 +9,6 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class ExportOptionsModalComponent implements OnInit {
   exportForm!: FormGroup;
-  exportFileName!: string;
   constructor(
     public dialogRef: MatDialogRef<ExportOptionsModalComponent>,
     public fb: FormBuilder,
@@ -17,7 +16,6 @@ export class ExportOptionsModalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.exportFileName = this.data.filename;
     this.exportForm = this.fb.group({});
   }
 

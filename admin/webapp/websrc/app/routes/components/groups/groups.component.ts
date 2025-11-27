@@ -416,7 +416,6 @@ export class GroupsComponent implements OnInit, OnDestroy {
       width: '50%',
       disableClose: true,
       data: {
-        filename: GlobalConstant.REMOTE_EXPORT_FILENAME.GROUP,
         page: 'group',
         source: this.source,
       },
@@ -482,8 +481,9 @@ export class GroupsComponent implements OnInit, OnDestroy {
       };
       this.groupsService.exportGroupsConfigData(payload, this.source).subscribe(
         response => {
+          const responseObj = JSON.parse(response.body as string);
           this.notificationService.open(
-            this.translate.instant('group.dlp.msg.EXPORT_OK')
+            `${this.translate.instant('group.dlp.msg.EXPORT_OK')} ${this.translate.instant('general.EXPORT_FILE')} ${responseObj.file_path}`
           );
         },
         error => {

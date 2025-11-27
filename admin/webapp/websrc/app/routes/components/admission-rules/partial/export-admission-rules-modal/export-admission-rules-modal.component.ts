@@ -20,7 +20,6 @@ export class ExportAdmissionRulesModalComponent implements OnInit {
   GlobalConstant = GlobalConstant;
   submittingForm = false;
   exportForm: FormGroup;
-  exportFileName = GlobalConstant.REMOTE_EXPORT_FILENAME.ADMISSION_RULES;
   serverErrorMessage: SafeHtml = '';
 
   constructor(
@@ -97,8 +96,9 @@ export class ExportAdmissionRulesModalComponent implements OnInit {
         )
         .subscribe(
           response => {
+            const responseObj = JSON.parse(response.body as string);
             this.notificationService.open(
-              this.translate.instant('admissionControl.msg.EXPORT_OK')
+              `${this.translate.instant('admissionControl.msg.EXPORT_OK')} ${this.translate.instant('general.EXPORT_FILE')} ${responseObj.file_path}`
             );
           },
           error => {

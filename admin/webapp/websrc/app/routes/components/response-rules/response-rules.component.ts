@@ -208,9 +208,7 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(ExportOptionsModalComponent, {
       width: '50%',
       disableClose: true,
-      data: {
-        filename: GlobalConstant.REMOTE_EXPORT_FILENAME.RESPONSE_RULES,
-      },
+      data: {},
     });
 
     dialogRef.afterClosed().subscribe((result: RemoteExportOptionsWrapper) => {
@@ -261,8 +259,9 @@ export class ResponseRulesComponent implements OnInit, OnDestroy {
         .getResponseRuleConfigFileData(payload, this.source)
         .subscribe(
           response => {
+            const responseObj = JSON.parse(response.body as string);
             this.notificationService.open(
-              this.translate.instant('responsePolicy.message.EXPORT_OK')
+              `${this.translate.instant('responsePolicy.message.EXPORT_OK')} ${this.translate.instant('general.EXPORT_FILE')} ${responseObj.file_path}`
             );
           },
           error => {

@@ -24,7 +24,6 @@ export class ExportFormComponent implements OnInit {
   GlobalConstant = GlobalConstant;
   submittingForm = false;
   errorMsg: string = '';
-  exportFileName: string = '';
   exportForm = new FormGroup({
     export: new FormControl(null, Validators.required),
     as_standalone: new FormControl(false),
@@ -71,10 +70,6 @@ export class ExportFormComponent implements OnInit {
           : this.tr.instant('setting.message.UPLOAD_FINISH'),
       error: this.tr.instant('setting.IMPORT_FAILED'),
     };
-    if (this.source === GlobalConstant.NAV_SOURCE.FED_POLICY) {
-      this.exportFileName =
-        GlobalConstant.REMOTE_EXPORT_FILENAME.FED_SYSTEM_CONFIG;
-    }
   }
 
   submitExport(): void {
@@ -121,8 +116,9 @@ export class ExportFormComponent implements OnInit {
         };
         this.settingsService.getFedSystemConfig(payload).subscribe(
           response => {
+            const responseObj = JSON.parse(response.body as string);
             this.notificationService.open(
-              this.tr.instant('setting.message.EXPORT_OK')
+              `${this.tr.instant('setting.message.EXPORT_OK')} ${this.tr.instant('general.EXPORT_FILE')} ${responseObj.file_path}`
             );
           },
           error => {

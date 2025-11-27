@@ -342,9 +342,7 @@ export class ComplianceProfileTemplatesTableComponent
     const dialogRef = this.dialog.open(ExportOptionsModalComponent, {
       width: '50%',
       disableClose: true,
-      data: {
-        filename: GlobalConstant.REMOTE_EXPORT_FILENAME.COMPLIANCE_PROFILE,
-      },
+      data: {},
     });
 
     dialogRef.afterClosed().subscribe((result: RemoteExportOptionsWrapper) => {
@@ -385,8 +383,9 @@ export class ComplianceProfileTemplatesTableComponent
       };
       this.complianceProfileService.exportProfile(payload).subscribe(
         response => {
+          const responseObj = JSON.parse(response.body as string);
           this.notificationService.open(
-            this.translate.instant('cis.profile.msg.EXPORT_PROFILE_OK')
+            `${this.translate.instant('cis.profile.msg.EXPORT_PROFILE_OK')} ${this.translate.instant('general.EXPORT_FILE')} ${responseObj.file_path}`
           );
         },
         error => {

@@ -60,7 +60,8 @@
     "NEED_RESCAN": "您需要重新扫描取得详细内容",
     "VIEW_MORE": "全部浏览",
     "VIEW_LESS": "简略浏览",
-    "SAMPLE": "范例"
+    "SAMPLE": "范例",
+    "EXPORT_FILE": "导出的文件名: "
   },
   "enum": {
     "FEDADMIN": "集群全局管理员",

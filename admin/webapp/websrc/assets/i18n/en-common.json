@@ -60,7 +60,8 @@
     "NEED_RESCAN": "You need to rescan for getting details",
     "VIEW_MORE": "View More",
     "VIEW_LESS": "View Less",
-    "SAMPLE": "Sample"
+    "SAMPLE": "Sample",
+    "EXPORT_FILE": "Exported file: "
   },
   "enum": {
     "FEDADMIN": "Federated Administrator",

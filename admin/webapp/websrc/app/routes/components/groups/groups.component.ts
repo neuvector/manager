@@ -483,7 +483,11 @@ export class GroupsComponent implements OnInit, OnDestroy {
         response => {
           const responseObj = JSON.parse(response.body as string);
           this.notificationService.open(
-            `${this.translate.instant('group.dlp.msg.EXPORT_OK')} ${this.translate.instant('general.EXPORT_FILE')} ${responseObj.file_path}`
+            `${this.translate.instant(
+              'group.dlp.msg.EXPORT_OK'
+            )} ${this.translate.instant('general.EXPORT_FILE')} ${
+              responseObj.file_path
+            }`
           );
         },
         error => {

@@ -273,7 +273,11 @@ export class DlpSensorsComponent implements OnInit, OnDestroy {
           response => {
             const responseObj = JSON.parse(response.body as string);
             this.notificationService.open(
-              `${this.translate.instant('dlp.msg.EXPORT_SENSOR_OK')} ${this.translate.instant('general.EXPORT_FILE')} ${responseObj.file_path}`
+              `${this.translate.instant(
+                'dlp.msg.EXPORT_SENSOR_OK'
+              )} ${this.translate.instant('general.EXPORT_FILE')} ${
+                responseObj.file_path
+              }`
             );
           },
           error => {

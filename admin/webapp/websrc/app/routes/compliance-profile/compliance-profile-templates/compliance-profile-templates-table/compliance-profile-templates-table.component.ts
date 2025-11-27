@@ -385,7 +385,11 @@ export class ComplianceProfileTemplatesTableComponent
         response => {
           const responseObj = JSON.parse(response.body as string);
           this.notificationService.open(
-            `${this.translate.instant('cis.profile.msg.EXPORT_PROFILE_OK')} ${this.translate.instant('general.EXPORT_FILE')} ${responseObj.file_path}`
+            `${this.translate.instant(
+              'cis.profile.msg.EXPORT_PROFILE_OK'
+            )} ${this.translate.instant('general.EXPORT_FILE')} ${
+              responseObj.file_path
+            }`
           );
         },
         error => {

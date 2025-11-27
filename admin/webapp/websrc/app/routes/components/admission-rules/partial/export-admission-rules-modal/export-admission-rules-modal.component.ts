@@ -98,7 +98,11 @@ export class ExportAdmissionRulesModalComponent implements OnInit {
           response => {
             const responseObj = JSON.parse(response.body as string);
             this.notificationService.open(
-              `${this.translate.instant('admissionControl.msg.EXPORT_OK')} ${this.translate.instant('general.EXPORT_FILE')} ${responseObj.file_path}`
+              `${this.translate.instant(
+                'admissionControl.msg.EXPORT_OK'
+              )} ${this.translate.instant('general.EXPORT_FILE')} ${
+                responseObj.file_path
+              }`
             );
           },
           error => {

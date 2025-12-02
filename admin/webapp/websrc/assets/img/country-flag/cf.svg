@@ -1,15 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" id="flag-icon-css-cf" viewBox="0 0 640 480">
-  <defs>
-    <clipPath id="a">
-      <path fill-opacity=".7" d="M-12.4 32h640v480h-640z"/>
-    </clipPath>
-  </defs>
-  <g fill-rule="evenodd" clip-path="url(#a)" transform="translate(12.4 -32)">
-    <path fill="#00f" d="M-52 32h719.3v119H-52z"/>
-    <path fill="#ff0" d="M-52 391.6h719.3V512H-52z"/>
-    <path fill="#009a00" d="M-52 271.3h719.3v120.3H-52z"/>
-    <path fill="#fff" d="M-52 151h719.3v120.3H-52z"/>
-    <path fill="red" d="M247.7 32.5h119.9V512H247.7z"/>
-    <path fill="#ff0" d="M99.3 137.7l-31.5-21.8-31.3 22L47.4 101 16.9 78l38.2-1 12.5-36.3L80.3 77l38.1.7L88.2 101"/>
-  </g>
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 513 342">
+<rect fill="#d21034" width="513" height="342"/>
+<g fill="#3a9927">
+	<rect y="171" width="211.5" height="85.3"/>
+	<rect x="300.5" y="171" width="211.5" height="85.3"/>
+</g>
+<polygon fill="#003082" points="0,0 0,0 0,85.3 211.5,85.3 211.5,0 300.5,0 300.5,85.3 513,85.3 513,0 513,0 "/>
+<g fill="#FFFFFF">
+	<rect x="300.5" y="85.3" width="211.5" height="85.3"/>
+	<rect y="85.3" width="211.5" height="85.3"/>
+</g>
+<g fill="#ffce00">
+	<polygon points="300.5,342 211.5,342 211.5,256 0,256 0,342 0,342 513,342 513,342 513,256 300.5,256 	"/>
+	<polygon points="105.7,8.6 114.3,34.8 141.8,34.8 119.5,51 128.1,77.2 105.7,61 83.4,77.2 91.9,51 69.6,34.8
+		97.2,34.8 	"/>
+</g>
 </svg>

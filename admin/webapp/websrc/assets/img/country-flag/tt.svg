@@ -1,5 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" id="flag-icon-css-tt" viewBox="0 0 640 480">
-  <path fill="#fff" d="M0 0h640v480H0z"/>
-  <path fill="#e00000" fill-rule="evenodd" d="M463.7 480L0 1v478.8l463.7.2zM176.3 0L640 479V.2L176.3 0z"/>
-  <path fill-rule="evenodd" d="M27.7.2h118.6l468.2 479.3H492.2L27.7.2z"/>
+<?xml version="1.0" encoding="UTF-8"?>
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 85.333 512 341.333">
+<rect y="85.337" fill="#D80027" width="512" height="341.326"/>
+<polygon fill="#FFFFFF" points="6.066,85.337 214.027,297.973 345.611,426.663 505.934,426.663 297.973,214.027   166.389,85.337 "/>
+<polygon fill="#000" points="43.364,85.337 384.69,426.663 468.636,426.663 127.31,85.337 "/>
 </svg>

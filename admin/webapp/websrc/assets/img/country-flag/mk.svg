@@ -1,5 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" id="flag-icon-css-mk" viewBox="0 0 640 480">
-  <path fill="#d20000" d="M0 0h640v480H0z"/>
-  <path fill="#ffe600" d="M0 0h96l224 231.4L544 0h96L0 480h96l224-231.4L544 480h96zm640 192v96L0 192v96zM280 0l40 205.7L360 0zm0 480l40-205.7L360 480z"/>
-  <circle cx="320" cy="240" r="77.1" fill="#ffe600" stroke="#d20000" stroke-width="17.1"/>
+<?xml version="1.0" encoding="UTF-8"?>
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 513 342">
+	<rect fill="#FFDA44" width="513" height="342"/>
+	<g fill="#D80027">
+		<polygon points="384.6,342 256.5,167.3 283.4,342 	"/>
+		<polygon points="133.8,0 256.5,167.3 230.8,0 	"/>
+		<polygon points="229.6,342 256.5,167.3 128.4,342 	"/>
+		<polygon points="0,0 0,127.8 256.5,167.3 28.4,0 	"/>
+		<polygon points="0,342 18.2,342 256.5,167.3 0,206.7 	"/>
+		<polygon points="256.5,167.3 513,127.8 513,0 484.6,0 	"/>
+		<polygon points="282.2,0 256.5,167.3 379.2,0 	"/>
+		<polygon points="513,342 513,206.7 256.5,167.3 494.8,342 	"/>
+		<circle cx="256.5" cy="171" r="59.5"/>
+	</g>
+	<circle fill="#FFDA44" cx="256.5" cy="171" r="44.5"/>
 </svg>

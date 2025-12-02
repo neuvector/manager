@@ -1,9 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" id="flag-icon-css-ch" viewBox="0 0 640 480">
-  <g fill-rule="evenodd" stroke-width="1pt">
-    <path fill="#d52b1e" d="M0 0h640v480H0z"/>
-    <g fill="#fff">
-      <path d="M170 195h300v90H170z"/>
-      <path d="M275 90h90v300h-90z"/>
-    </g>
-  </g>
+<?xml version="1.0" encoding="UTF-8"?>
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 85.333 513 342">
+<rect y="85.337" fill="#ff0000" width="513" height="342"/>
+<polygon fill="#FFFFFF" points="356.174,222.609 289.391,222.609 289.391,155.826 222.609,155.826 222.609,222.609   155.826,222.609 155.826,289.391 222.609,289.391 222.609,356.174 289.391,356.174 289.391,289.391 356.174,289.391 "/>
 </svg>

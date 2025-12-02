@@ -1,14 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" id="flag-icon-css-sc" viewBox="0 0 640 480">
-  <defs>
-    <clipPath id="a">
-      <path fill-opacity=".7" d="M0 0h682.7v512H0z"/>
-    </clipPath>
-  </defs>
-  <g fill-rule="evenodd" stroke-width="1pt" clip-path="url(#a)" transform="scale(.9375)">
-    <path fill="red" d="M0 0h992.1v512H0z"/>
-    <path fill="#090" d="M0 512l992.1-170.7V512H0z"/>
-    <path fill="#fff" d="M0 512l992.1-341.3v170.6L0 512z"/>
-    <path fill="#009" d="M0 512V0h330.7L0 512z"/>
-    <path fill="#ff0" d="M0 512L330.7 0h330.7L0 512z"/>
-  </g>
+<?xml version="1.0" encoding="UTF-8"?>
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 85.333 512 341.333">
+<rect y="85.337" fill="#FFFFFF" width="512" height="341.326"/>
+<polygon fill="#FFDA44" points="235.454,85.337 0,426.663 427.345,85.337 "/>
+<polygon fill="#6DA544" points="512,329.393 0,426.663 512,426.663 "/>
+<polygon fill="#D80027" points="512,85.337 427.345,85.337 0,426.663 512,222.151 "/>
+<polygon fill="#0052B4" points="0,85.337 0,426.663 235.454,85.337 "/>
 </svg>

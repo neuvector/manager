@@ -1,13 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" id="flag-icon-css-cl" viewBox="0 0 640 480">
-  <defs>
-    <clipPath id="a">
-      <path fill-opacity=".7" d="M0 0h682.7v512H0z"/>
-    </clipPath>
-  </defs>
-  <g fill-rule="evenodd" clip-path="url(#a)" transform="scale(.9375)">
-    <path fill="#fff" d="M256 0h512v256H256z"/>
-    <path fill="#0039a6" d="M0 0h256v256H0z"/>
-    <path fill="#fff" d="M167.8 191.7L128.2 162l-39.5 30 14.7-48.8L64 113.1l48.7-.5L127.8 64l15.5 48.5 48.7.1-39.2 30.4 15 48.7z"/>
-    <path fill="#d52b1e" d="M0 256h768v256H0z"/>
-  </g>
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 513 342">
+<rect y="0" fill="#D80027" width="513" height="342"/>
+<rect x="196" y="0" fill="#FFFFFF" width="317" height="171"/>
+<rect y="0" fill="#0037A1" width="196" height="171"/>
+<polygon fill="#FFFFFF" points="98,24.5 113.1,71 162,71 122.4,99.7 137.6,146.2 98,117.5 58.4,146.2 73.6,99.7 34,71 82.9,71 "/>
 </svg>

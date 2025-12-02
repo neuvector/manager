@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" id="flag-icon-css-mg" viewBox="0 0 640 480">
-  <g fill-rule="evenodd" stroke-width="1pt">
-    <path fill="#ff3319" d="M213.3 0H640v240H213.3z"/>
-    <path fill="#00cc28" d="M213.3 240H640v240H213.3z"/>
-    <path fill="#fff" d="M0 0h213.3v480H0z"/>
-  </g>
+<?xml version="1.0" encoding="UTF-8"?>
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 513 342">
+<rect width="513" height="171" fill="#f9423a"/>
+<rect y="171" width="513" height="171" fill="#00843d"/>
+<rect fill="#FFFFFF" width="171" height="342"/>
 </svg>

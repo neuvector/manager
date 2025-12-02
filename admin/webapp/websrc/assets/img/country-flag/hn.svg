@@ -1,18 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="flag-icon-css-hn" viewBox="0 0 640 480">
-  <path fill="#0073cf" d="M0 0h640v480H0z"/>
-  <path fill="#fff" d="M0 160h640v160H0z"/>
-  <g id="c" fill="#0073cf" transform="translate(320 240) scale(26.66665)">
-    <g id="b">
-      <path id="a" d="M-.3 0l.5.1L0-1z"/>
-      <use width="100%" height="100%" transform="scale(-1 1)" xlink:href="#a"/>
-    </g>
-    <use width="100%" height="100%" transform="rotate(72)" xlink:href="#b"/>
-    <use width="100%" height="100%" transform="rotate(-72)" xlink:href="#b"/>
-    <use width="100%" height="100%" transform="rotate(144)" xlink:href="#b"/>
-    <use width="100%" height="100%" transform="rotate(-144)" xlink:href="#b"/>
-  </g>
-  <use width="100%" height="100%" transform="translate(133.3 -42.7)" xlink:href="#c"/>
-  <use width="100%" height="100%" transform="translate(133.3 37.3)" xlink:href="#c"/>
-  <use width="100%" height="100%" transform="translate(-133.3 -42.7)" xlink:href="#c"/>
-  <use width="100%" height="100%" transform="translate(-133.3 37.3)" xlink:href="#c"/>
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 513 342">
+<rect y="0" fill="#FFFFFF" width="513" height="342"/>
+<g fill="#338AF3">
+	<rect y="0" width="513" height="114"/>
+	<rect y="228" width="513" height="114"/>
+	<polygon points="203.5,117.9 210.2,134.5 227.8,135.5 213.8,146.4 218.5,164.1 203.5,154.2 188.5,164.1 193.2,146.4
+		179.2,135.5 196.8,134.5 	"/>
+	<polygon points="308.5,117.9 315.2,134.5 332.8,135.5 318.8,146.4 323.5,164.1 308.5,154.2 293.5,164.1 298.2,146.4
+		284.2,135.5 301.8,134.5 	"/>
+	<polygon points="256,147.6 262.7,164.2 280.3,165.2 266.3,176.1 271,193.8 256,183.9 241,193.8 245.7,176.1
+		231.7,165.2 249.3,164.2 	"/>
+	<polygon points="203.5,177.3 210.2,193.9 227.8,194.9 213.8,205.8 218.5,223.4 203.5,213.5 188.5,223.4 193.2,205.8
+		179.2,194.9 196.8,193.9 	"/>
+	<polygon points="308.5,177.3 315.2,193.9 332.8,194.9 318.8,205.8 323.5,223.4 308.5,213.5 293.5,223.4 298.2,205.8
+		284.2,194.9 301.8,193.9 	"/>
+</g>
 </svg>

@@ -1,6 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" id="flag-icon-css-sr" viewBox="0 0 640 480">
-  <path fill="#377e3f" d="M.1 0h640v480H.1z"/>
-  <path fill="#fff" d="M.1 96h640v288H.1z"/>
-  <path fill="#b40a2d" d="M.1 144h640v192H.1z"/>
-  <path fill="#ecc81d" d="M320 153.2l56.4 173.6-147.7-107.3h182.6L263.6 326.8z"/>
+<?xml version="1.0" encoding="UTF-8"?>
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 85.333 512 341.333">
+<rect y="85.331" fill="#FFFFFF" width="512" height="341.337"/>
+<rect y="196.636" fill="#A2001D" width="512" height="118.728"/>
+<g>
+	<rect y="352.462" fill="#6DA544" width="512" height="74.207"/>
+	<rect y="85.331" fill="#6DA544" width="512" height="74.207"/>
+</g>
+<polygon fill="#FFDA44" points="256.742,218.003 266.172,247.024 296.69,247.024 272,264.963 281.431,293.986   256.742,276.049 232.053,293.986 241.484,264.963 216.794,247.024 247.312,247.024 "/>
 </svg>

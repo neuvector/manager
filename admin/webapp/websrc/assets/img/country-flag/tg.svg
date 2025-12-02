@@ -1,14 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" id="flag-icon-css-tg" viewBox="0 0 640 480">
-  <defs>
-    <clipPath id="a">
-      <path fill-opacity=".7" d="M0 0h682.7v512H0z"/>
-    </clipPath>
-  </defs>
-  <g fill-rule="evenodd" clip-path="url(#a)" transform="scale(.9375)">
-    <path fill="#ffe300" d="M0 0h767.6v512H0z"/>
-    <path fill="#118600" d="M0 208.1h767.6V311H0zM0 .2h767.6v102.9H0z"/>
-    <path fill="#d80000" d="M0 .3h306.5v310.6H0z"/>
-    <path fill="#fff" d="M134.4 128.4c0-.8 18.9-53 18.9-53l17 52.2s57.4 1.7 57.4.8-45.3 34.3-45.3 34.3 21.4 60 20.5 58.2c-.8-1.7-49.6-36-49.6-36s-49.7 34.3-48.8 34.3c.8 0 18.8-56.5 18.8-56.5l-44.5-33.4 55.6-.9z"/>
-    <path fill="#118600" d="M0 409.2h767.6V512H0z"/>
-  </g>
+<?xml version="1.0" encoding="UTF-8"?>
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 85.333 512 341.333">
+<rect y="85.337" fill="#FFDA44" width="512" height="341.326"/>
+<g>
+	<rect y="85.337" fill="#496E2D" width="512" height="68.263"/>
+	<rect y="358.4" fill="#496E2D" width="512" height="68.263"/>
+	<rect y="221.863" fill="#496E2D" width="512" height="68.263"/>
+</g>
+<rect y="85.337" fill="#D80027" width="204.054" height="204.054"/>
+<polygon fill="#FFFFFF" points="102.026,133.938 115.286,174.75 158.202,174.75 123.484,199.976 136.744,240.79   102.026,215.566 67.307,240.79 80.57,199.976 45.852,174.75 88.765,174.75 "/>
 </svg>

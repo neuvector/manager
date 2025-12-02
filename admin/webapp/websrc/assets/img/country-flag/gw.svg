@@ -1,13 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="flag-icon-css-gw" viewBox="0 0 640 480">
-  <path fill="#ce1126" d="M0 0h220v480H0z"/>
-  <path fill="#fcd116" d="M220 0h420v240H220z"/>
-  <path fill="#009e49" d="M220 240h420v240H220z"/>
-  <g id="b" transform="matrix(80 0 0 80 110 240)">
-    <path id="a" d="M0-1v1h.5" transform="rotate(18 0 -1)"/>
-    <use width="100%" height="100%" transform="scale(-1 1)" xlink:href="#a"/>
-  </g>
-  <use width="100%" height="100%" transform="rotate(72 110 240)" xlink:href="#b"/>
-  <use width="100%" height="100%" transform="rotate(144 110 240)" xlink:href="#b"/>
-  <use width="100%" height="100%" transform="rotate(-144 110 240)" xlink:href="#b"/>
-  <use width="100%" height="100%" transform="rotate(-72 110 240)" xlink:href="#b"/>
+<?xml version="1.0" encoding="UTF-8"?>
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 513 342">
+<rect y="0" fill="#6DA544" width="512" height="342"/>
+<rect y="0" fill="#FFDA44" width="512" height="171"/>
+<rect y="0" fill="#D80027" width="182" height="342"/>
+<polygon fill="#000" points="98.3,109.8 113.4,156.3 162.3,156.3 122.8,185 137.9,231.5 98.3,202.8 58.8,231.5 73.9,185 34.3,156.3 83.2,156.3
+	"/>
 </svg>
+

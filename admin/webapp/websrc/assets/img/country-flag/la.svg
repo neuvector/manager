@@ -1,12 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" id="flag-icon-css-la" viewBox="0 0 640 480">
-  <defs>
-    <clipPath id="a">
-      <path fill-opacity=".7" d="M0 0h640v480H0z"/>
-    </clipPath>
-  </defs>
-  <g fill-rule="evenodd" clip-path="url(#a)">
-    <path fill="#ce1126" d="M-40 0h720v480H-40z"/>
-    <path fill="#002868" d="M-40 119.3h720v241.4H-40z"/>
-    <path fill="#fff" d="M423.4 240a103.4 103.4 0 1 1-206.8 0 103.4 103.4 0 1 1 206.8 0z"/>
-  </g>
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 513 342">
+<rect y="0" fill="#0052B4" width="513" height="342"/>
+<g fill="#D80027">
+	<rect y="0.1" width="513" height="90.7"/>
+	<rect x="0" y="251.3" width="513" height="90.7"/>
+</g>
+<circle fill="#FFFFFF" cx="256.5" cy="171" r="65.9"/>
 </svg>

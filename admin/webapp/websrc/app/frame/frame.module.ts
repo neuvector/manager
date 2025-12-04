@@ -10,8 +10,8 @@ import { FooterComponent } from './footer/footer.component';
 import { NvCommonModule } from '@common/nvCommon.module';
 import { GlobalNotificationsModule } from '@components/global-notifications/global-notifications.module';
 
-import { HttpClientModule } from '@angular/common/http';
-import { AvatarModule } from 'ngx-avatar';
+import { provideHttpClient } from '@angular/common/http';
+import { AvatarModule } from 'ngx-avatars';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
 import { PipeModule } from '@common/pipes/pipe.module';
 import { CustomFooterComponent } from './custom-footer/custom-footer.component';
@@ -63,12 +63,13 @@ const customNotifierOptions: NotifierOptions = {
     NvCommonModule,
     MatDividerModule,
     GlobalNotificationsModule,
-    HttpClientModule,
     AvatarModule,
     NotifierModule.withConfig(customNotifierOptions),
     PipeModule,
   ],
-  providers: [],
+  providers: [
+    provideHttpClient()
+  ],
   declarations: [
     FrameComponent,
     SidebarComponent,

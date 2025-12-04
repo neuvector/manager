@@ -25,10 +25,13 @@ import { NotificationService } from '@services/notification.service';
 import { ExportOptionsModalComponent } from '@components/export-options-modal/export-options-modal.component';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
+
 @Component({
+  standalone: false,
   selector: 'app-waf-sensors',
   templateUrl: './waf-sensors.component.html',
   styleUrls: ['./waf-sensors.component.scss'],
+  
 })
 export class WafSensorsComponent implements OnInit {
   @Input() source: string;

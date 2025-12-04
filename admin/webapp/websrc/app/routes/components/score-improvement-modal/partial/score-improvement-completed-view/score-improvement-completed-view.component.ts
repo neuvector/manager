@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ScoreImprovementModalService } from '@services/score-improvement-modal.service';
 
 @Component({
+  standalone: false,
   selector: 'app-score-improvement-completed-view',
   templateUrl: './score-improvement-completed-view.component.html',
   styleUrls: ['./score-improvement-completed-view.component.scss'],
@@ -21,6 +22,7 @@ export class ScoreImprovementCompletedViewComponent implements OnInit {
   fixedScore!: number;
   gaugeLabel = '';
   gaugeLabelColor = '';
+  gaugeColor = '';
   gaugeLabelFixed = '';
   gaugeLabelColorFixed = '';
   title!: string;
@@ -35,6 +37,7 @@ export class ScoreImprovementCompletedViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.getFixedScores();
+    this.gaugeColor = this.getGaugeMetrics(this.score).gaugeLabelColor;
   }
 
   getFixedScores() {
@@ -84,9 +87,5 @@ export class ScoreImprovementCompletedViewComponent implements OnInit {
   getGaugeMetrics = (score: number) => {
     let gaugeMetrics = this.utils.getGaugeMetrics(score);
     return gaugeMetrics;
-  };
-
-  getGaugeColor = (score: number) => {
-    return this.getGaugeMetrics(score).gaugeLabelColor;
   };
 }

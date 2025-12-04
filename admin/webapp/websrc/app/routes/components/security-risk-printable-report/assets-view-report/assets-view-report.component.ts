@@ -1,10 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MapConstant } from '@common/constants/map.constant';
 
+
 @Component({
+  standalone: false,
   selector: 'app-assets-view-report',
   templateUrl: './assets-view-report.component.html',
   styleUrls: ['./assets-view-report.component.scss'],
+  
 })
 export class AssetsViewReportComponent implements OnInit {
   @Input() reportPage: string;

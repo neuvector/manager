@@ -12,10 +12,13 @@ import { QuickFilterService } from '@components/quick-filter/quick-filter.servic
 import { updateGridData } from '@common/utils/common.utils';
 import * as $ from 'jquery';
 
+
 @Component({
+  standalone: false,
   selector: 'app-custom-check',
   templateUrl: './custom-check.component.html',
   styleUrls: ['./custom-check.component.scss'],
+  
 })
 export class CustomCheckComponent implements OnInit {
   @Input() source: string;

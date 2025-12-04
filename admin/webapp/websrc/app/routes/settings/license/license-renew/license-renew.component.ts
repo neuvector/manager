@@ -4,10 +4,13 @@ import { SettingsService } from '@services/settings.service';
 import { finalize } from 'rxjs/operators';
 import { ErrorResponse } from '@common/types';
 
+
 @Component({
+  standalone: false,
   selector: 'app-license-renew',
   templateUrl: './license-renew.component.html',
   styleUrls: ['./license-renew.component.scss'],
+  
 })
 export class LicenseRenewComponent {
   @Output() cancel = new EventEmitter();

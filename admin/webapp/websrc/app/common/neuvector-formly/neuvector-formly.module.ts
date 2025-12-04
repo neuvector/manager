@@ -15,7 +15,7 @@ import {
   webhookUsernameValidator,
 } from '@common/neuvector-formly/formlyValidators';
 
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ToggleComponent } from './toggle/toggle.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -54,6 +54,12 @@ import { PanelWrapperComponent } from './panel-wrapper/panel-wrapper.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { CardComponent } from './card/card.component';
 import { MatCardModule } from '@angular/material/card';
+import { HttpClient } from '@angular/common/http';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 export enum FormlyValidators {
   REQUIRED = 'required',
@@ -100,11 +106,6 @@ export enum CardSeverity {
   declarations: [
     IconInputComponent,
     ToggleComponent,
-    SliderComponent,
-    ChipsInputComponent,
-    MaskInputDirective,
-    FormlyErrorsComponent,
-    TextAreaComponent,
     SelectComponent,
     RadioComponent,
     SectionWrapperComponent,
@@ -114,11 +115,16 @@ export enum CardSeverity {
     HintWrapperComponent,
     CheckboxComponent,
     ButtonComponent,
+    SliderComponent,
     NgxSliderComponent,
     MulticheckboxComponent,
     EditWebhookTableControlsComponent,
     PanelWrapperComponent,
     CardComponent,
+    ChipsInputComponent,
+    FormlyErrorsComponent,
+    TextAreaComponent,
+    MaskInputDirective,
   ],
   imports: [
     FormlySelectModule,
@@ -126,7 +132,13 @@ export enum CardSeverity {
     ReactiveFormsModule,
     MatChipsModule,
     MatInputModule,
-    TranslateModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: createTranslateLoader,
+        deps: [HttpClient],
+      },
+    }),
     MatIconModule,
     MatSliderModule,
     MatButtonModule,

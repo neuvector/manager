@@ -9,6 +9,7 @@ import { ICellRendererParams } from 'ag-grid-community';
 import { MIN_UNIT64 } from '../events-grid.component';
 
 @Component({
+  standalone: false,
   selector: 'app-events-grid-message-cell',
   templateUrl: './events-grid-message-cell.component.html',
   styleUrls: ['./events-grid-message-cell.component.scss'],

@@ -1,16 +1,24 @@
-/* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also forward other style files */
 
-//== Vendor
-@import '~@fortawesome/fontawesome-free/css/brands.css';
-@import '~@fortawesome/fontawesome-free/css/regular.css';
-@import '~@fortawesome/fontawesome-free/css/solid.css';
-@import '~@fortawesome/fontawesome-free/css/fontawesome.css';
-@import '~simple-line-icons/css/simple-line-icons.css';
-@import "~angular-notifier/styles.css";
 
+@use "./material-theme";
 //== Bootstrap
-@import "./app/common/styles/bootstrap.scss";
+@forward "bootstrap/scss/_functions.scss";
+// Override bootstrap variables
+@forward "./app/common/styles/app/variables";
+// @forward "bootstrap/scss/_variables.scss";
+// @forward "bootstrap/scss/maps.scss";
+// @forward "bootstrap/scss/_mixins.scss";
+@use "bootstrap" as *;
 //== Application
 @import "./app/common/styles/app.scss";
 
-@import "material-theme";
+
+//== Vendor
+// @import '@fortawesome/fontawesome-free/css/brands.css';
+// @import '@fortawesome/fontawesome-free/css/regular.css';
+// @import '@fortawesome/fontawesome-free/css/solid.css';
+// @import '@fortawesome/fontawesome-free/css/fontawesome.css';
+@import "~simple-line-icons/css/simple-line-icons.css";
+@import "ngx-toastr/toastr";
+@import "@fortawesome/fontawesome-free/css/all.css";

@@ -10,10 +10,13 @@ import { PodDetails } from '@common/types/network-activities/podDetails';
 import { Observable, forkJoin } from 'rxjs';
 import { ScanService } from '@services/scan.service';
 
+
 @Component({
+  standalone: false,
   selector: 'app-pod-info',
   templateUrl: './pod-info.component.html',
   styleUrls: ['./pod-info.component.scss'],
+  
 })
 export class PodInfoComponent implements OnInit {
   private _pod!: PodDetails;

@@ -123,15 +123,15 @@
 
       <div class="d-flex justify-content-start align-items-start mt-2">
         <mat-form-field appearance="fill" class="flex-grow-1">
-          <mat-chip-list #chipList aria-label="Apps selection">
-            <mat-chip
+          <mat-chip-grid #chipList aria-label="Apps selection">
+            <mat-chip-row
               *ngFor="let app of applicationChipsArray"
-              [selectable]="true"
+              [disabled]="false"
               [removable]="true"
               (removed)="removeAppFromChip(app)">
               {{ app }}
               <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
-            </mat-chip>
+            </mat-chip-row>
             <input
               matInput
               placeholder="{{ 'service.gridHeader.APPLICATIONS' | translate }}"
@@ -143,7 +143,7 @@
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               [matChipInputAddOnBlur]="true"
               (matChipInputTokenEnd)="addAppIntoChip($event)" />
-          </mat-chip-list>
+          </mat-chip-grid>
           <em matSuffix class="icon-puzzle input-icon"></em>
           <mat-error>Criterion is required!</mat-error>
         </mat-form-field>

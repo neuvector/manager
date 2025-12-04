@@ -12,8 +12,8 @@ import {
   filterExitWorkloadsV2,
   workloadToV2,
 } from '@common/utils/common.utils';
-import { Observable, range } from 'rxjs';
-import { concatMap, delay, map, repeatWhen, takeWhile } from 'rxjs/operators';
+import { Observable, range, timer } from 'rxjs';
+import { concatMap, map, takeWhile, switchMap } from 'rxjs/operators';
 
 export type WorkloadRow = WorkloadChildV2 & {
   parent_id?: string;
@@ -84,9 +84,8 @@ export class ContainersService {
   }
 
   startContainerStats(id: string) {
-    return this.assetsHttpService.getContainerStats(id).pipe(
-      map(statsData => this.utils.parseContainerStats(statsData)),
-      repeatWhen(res => res.pipe(delay(5000)))
+    return timer(0, 5000).pipe(
+      switchMap(() => this.assetsHttpService.getContainerStats(id))
     );
   }
 

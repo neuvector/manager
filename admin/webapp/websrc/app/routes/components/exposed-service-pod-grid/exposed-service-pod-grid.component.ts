@@ -19,6 +19,7 @@ import { GraphHttpService } from '@common/api/graph-http.service';
 import { NotificationService } from '@services/notification.service';
 
 @Component({
+  standalone: false,
   selector: 'app-exposed-service-pod-grid',
   templateUrl: './exposed-service-pod-grid.component.html',
   styleUrls: ['./exposed-service-pod-grid.component.scss'],

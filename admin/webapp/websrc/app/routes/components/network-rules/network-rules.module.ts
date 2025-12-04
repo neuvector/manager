@@ -47,7 +47,6 @@ import { ConfirmDialogModule } from '@components/ui/confirm-dialog/confirm-dialo
     //   PortsCellComponent
     // ]),
   ],
-  entryComponents: [],
   exports: [NetworkRulesComponent],
 })
 export class NetworkRulesModule {}

@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FieldWrapper } from '@ngx-formly/core';
 
 @Component({
+  standalone: false,
   selector: 'app-readonly-wrapper',
   templateUrl: './readonly-wrapper.component.html',
   styleUrls: ['./readonly-wrapper.component.scss'],
+  
 })
 export class ReadonlyWrapperComponent extends FieldWrapper {
   get template() {

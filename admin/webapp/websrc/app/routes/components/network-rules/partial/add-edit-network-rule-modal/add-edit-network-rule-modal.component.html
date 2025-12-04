@@ -21,14 +21,12 @@
     <form [formGroup]="addEditNetworkRuleForm">
       <div class="row">
         <mat-form-field
-          appearance="standard"
           class="col-2 col-md-2"
           *ngIf="data.opType !== modalOp.ADD">
           <mat-label>{{ 'policy.editPolicy.POLICY_ID' | translate }}</mat-label>
           <input matInput formControlName="id" [readonly]="'true'" />
         </mat-form-field>
         <mat-form-field
-          appearance="standard"
           [ngClass]="{
             'col-12 col-md-12': data.opType === modalOp.ADD,
             'col-10 col-md-10': data.opType !== modalOp.ADD
@@ -41,7 +39,7 @@
         </mat-form-field>
       </div>
       <div class="row">
-        <mat-form-field class="col-6 col-md-6" appearance="standard">
+        <mat-form-field class="col-6 col-md-6">
           <mat-label>{{ 'policy.addPolicy.FROM' | translate }}</mat-label>
           <input
             type="text"
@@ -58,7 +56,7 @@
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
-        <mat-form-field class="col-6 col-md-6" appearance="standard">
+        <mat-form-field class="col-6 col-md-6">
           <mat-label>{{ 'policy.addPolicy.TO' | translate }}</mat-label>
           <input
             type="text"
@@ -77,17 +75,17 @@
         </mat-form-field>
       </div>
       <div class="row">
-        <mat-form-field class="col-12 col-md-12" appearance="standard">
+        <mat-form-field class="col-12 col-md-12">
           <mat-label>{{ 'policy.addPolicy.APP' | translate }}</mat-label>
-          <mat-chip-list #chipList aria-label="From">
-            <mat-chip
+          <mat-chip-grid #chipList aria-label="From">
+            <mat-chip-row
               *ngFor="let app of applications"
               (removed)="removeApp(app)">
               {{ app }}
               <button matChipRemove>
                 <mat-icon class="eos-icons icon-18">cancel</mat-icon>
               </button>
-            </mat-chip>
+            </mat-chip-row>
             <input
               placeholder="{{ 'policy.message.ADD_APP' | translate }}"
               #applicationsInput
@@ -96,7 +94,7 @@
               [matAutocomplete]="autoApp"
               [matChipInputFor]="chipList"
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes" />
-          </mat-chip-list>
+          </mat-chip-grid>
           <mat-autocomplete
             #autoApp="matAutocomplete"
             (optionSelected)="selected($event)">
@@ -110,7 +108,6 @@
       </div>
       <div class="row">
         <mat-form-field
-          appearance="standard"
           [ngClass]="{
             'col-10 col-md-9': data.opType === modalOp.ADD,
             'col-8 col-md-6': data.opType !== modalOp.ADD

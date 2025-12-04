@@ -16,6 +16,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { UtilsService } from '@common/utils/app.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-remote-repository-form',
   templateUrl: './remote-repository-form.component.html',
   styleUrls: ['./remote-repository-form.component.scss'],

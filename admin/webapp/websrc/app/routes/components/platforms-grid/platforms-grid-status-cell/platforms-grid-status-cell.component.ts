@@ -4,11 +4,14 @@ import { UtilsService } from '@common/utils/app.utils';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
+
 @Component({
+  standalone: false,
   selector: 'app-platforms-grid-status-cell',
   templateUrl: './platforms-grid-status-cell.component.html',
   styleUrls: ['./platforms-grid-status-cell.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  
 })
 export class PlatformsGridStatusCellComponent
   implements ICellRendererAngularComp

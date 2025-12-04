@@ -4,10 +4,13 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UpdateType } from '@common/types/network-rules/enum';
 import { GlobalConstant } from '@common/constants/global.constant';
 
+
 @Component({
+  standalone: false,
   selector: 'app-move-network-rules-modal',
   templateUrl: './move-network-rules-modal.component.html',
   styleUrls: ['./move-network-rules-modal.component.scss'],
+  
 })
 export class MoveNetworkRulesModalComponent implements OnInit {
   movingPosition: UpdateType;

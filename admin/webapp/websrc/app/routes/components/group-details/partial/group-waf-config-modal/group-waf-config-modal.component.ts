@@ -9,10 +9,13 @@ import { GlobalVariable } from '@common/variables/global.variable';
 import { GlobalConstant } from '@common/constants/global.constant';
 import * as $ from 'jquery';
 
+
 @Component({
+  standalone: false,
   selector: 'app-group-waf-config-modal',
   templateUrl: './group-waf-config-modal.component.html',
   styleUrls: ['./group-waf-config-modal.component.scss'],
+  
 })
 export class GroupWafConfigModalComponent implements OnInit {
   gridOptions4WafSensorOption: GridOptions;

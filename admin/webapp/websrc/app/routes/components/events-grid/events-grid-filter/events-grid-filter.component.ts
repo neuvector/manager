@@ -18,10 +18,13 @@ import { DateFilterFn } from '@angular/material/datepicker';
 import { autocompleteValidator } from '@common/validators';
 import { UtilsService } from '@common/utils/app.utils';
 
+
 @Component({
+  standalone: false,
   selector: 'app-events-grid-filter',
   templateUrl: './events-grid-filter.component.html',
   styleUrls: ['./events-grid-filter.component.scss'],
+  
 })
 export class EventsGridFilterComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];

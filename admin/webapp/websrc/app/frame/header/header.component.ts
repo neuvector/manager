@@ -32,6 +32,7 @@ import { switchMap, take } from 'rxjs/operators';
 import { FrameService } from '../frame.service';
 
 @Component({
+  standalone: false,
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],

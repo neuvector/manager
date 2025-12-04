@@ -14,6 +14,7 @@ const CVE_ST = {
 };
 
 @Component({
+  standalone: false,
   selector: 'app-registry-modules',
   templateUrl: './registry-modules.component.html',
   styleUrls: ['./registry-modules.component.scss'],

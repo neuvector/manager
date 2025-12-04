@@ -29,12 +29,15 @@ import {
   FilterLevel,
 } from './events-grid.filter.service';
 
+
 export const MIN_UNIT64 = 0;
 
 @Component({
+  standalone: false,
   selector: 'app-events-grid',
   templateUrl: './events-grid.component.html',
   styleUrls: ['./events-grid.component.scss'],
+  
 })
 export class EventsGridComponent implements OnInit {
   private readonly $win;

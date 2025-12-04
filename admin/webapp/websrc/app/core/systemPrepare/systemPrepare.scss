@@ -1,7 +1,8 @@
-@import "../../common/styles/bootstrap/_functions.scss";
-@import "../../common/styles/bootstrap/_variables.scss";
-@import "../../common/styles/bootstrap/_mixins";
-@import "../../common/styles/app/variables";
+// @use "bootstrap/scss/_functions.scss";
+// @use "bootstrap/scss/_variables.scss";
+// @use "bootstrap/scss/_mixins.scss";
+@use "bootstrap" as *;
+@use "../../common/styles/app/variables";
 
 $system-prepare-bg: $dark;
 $system-prepare-wd: 100px;

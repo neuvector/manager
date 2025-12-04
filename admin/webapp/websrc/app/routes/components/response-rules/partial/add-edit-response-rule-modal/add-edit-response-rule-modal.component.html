@@ -85,18 +85,18 @@
       </div>
       <div class="d-flex justify-content-start align-items-start">
         <mat-form-field appearance="fill" class="flex-grow-1">
-          <mat-chip-list
+          <mat-chip-grid
             #chipList
             aria-label="Criteria selection"
             [disabled]="data.isReadonly">
-            <mat-chip
+            <mat-chip-row
               *ngFor="let criterion of responseRule.criteria"
-              [selectable]="true"
+              [disabled]="false"
               [removable]="true"
               (removed)="removeCriterionFromChip(criterion)">
               {{ criterion }}
               <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
-            </mat-chip>
+            </mat-chip-row>
             <input
               tabindex="-1"
               matInput
@@ -113,7 +113,7 @@
               [matChipInputAddOnBlur]="true"
               (matChipInputTokenEnd)="addCriterionIntoChip($event)"
               required />
-          </mat-chip-list>
+          </mat-chip-grid>
           <mat-autocomplete
             #autoCriteria="matAutocomplete"
             (optionSelected)="criterionSelectedInChip($event)">

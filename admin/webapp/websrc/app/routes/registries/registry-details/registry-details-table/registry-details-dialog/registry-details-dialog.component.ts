@@ -35,6 +35,7 @@ export interface RegistryDetailsDialogData {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-registry-details-dialog',
   templateUrl: './registry-details-dialog.component.html',
   styleUrls: ['./registry-details-dialog.component.scss'],

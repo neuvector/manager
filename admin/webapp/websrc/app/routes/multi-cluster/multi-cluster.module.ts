@@ -36,10 +36,5 @@ const routes: Routes = [{ path: '', component: MultiClusterComponent }];
   ],
   exports: [MultiClusterComponent],
   providers: [SettingsService],
-  entryComponents: [
-    PromotionModalComponent,
-    JoiningModalComponent,
-    TokenModalComponent,
-  ],
 })
 export class MultiClusterModule {}

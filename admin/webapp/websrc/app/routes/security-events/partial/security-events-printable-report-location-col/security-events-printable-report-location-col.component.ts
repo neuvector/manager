@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-security-events-printable-report-location-col',
   templateUrl: './security-events-printable-report-location-col.component.html',
   styleUrls: ['./security-events-printable-report-location-col.component.scss'],

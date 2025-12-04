@@ -54,7 +54,6 @@ import { TimepickerModule } from 'ngx-bootstrap/timepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
-import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { CookieService } from 'ngx-cookie-service';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ColorsService } from './colors/colors.service';
@@ -79,8 +78,7 @@ import { DashboardService } from '@services/dashboard.service';
 import { SignaturesService } from '@services/signatures.service';
 
 import { DisplayControlDirective } from '@common/directives/displayControl.directive';
-
-import { TimeAgoPipe } from 'time-ago-pipe';
+import { TimeagoModule } from 'ngx-timeago';
 import { BytesPipe } from '@common/pipes/app.pipes';
 import { ShortenFromMiddlePipe } from '@common/pipes/app.pipes';
 import { CapitalizePipe } from '@common/pipes/app.pipes';
@@ -122,7 +120,6 @@ import { RemoteGridBindingDirective } from './directives/remote-grid-binding.dir
     ButtonsModule.forRoot(),
     CarouselModule.forRoot(),
     CollapseModule.forRoot(),
-    DatepickerModule.forRoot(),
     BsDatepickerModule.forRoot(),
     BsDropdownModule.forRoot(),
     ModalModule.forRoot(),
@@ -170,6 +167,7 @@ import { RemoteGridBindingDirective } from './directives/remote-grid-binding.dir
     MatStepperModule,
     MatBadgeModule,
     EnforcerBriefModule,
+    TimeagoModule.forRoot(), 
   ],
   providers: [
     PendingChangesGuard,
@@ -215,7 +213,6 @@ import { RemoteGridBindingDirective } from './directives/remote-grid-binding.dir
     PolicyHttpService,
     RisksHttpService,
     SecurityEventsService,
-    TimeAgoPipe,
     GraphHttpService,
     SignaturesService,
   ],
@@ -235,7 +232,6 @@ import { RemoteGridBindingDirective } from './directives/remote-grid-binding.dir
     ButtonsModule,
     CarouselModule,
     CollapseModule,
-    DatepickerModule,
     BsDatepickerModule,
     BsDropdownModule,
     ModalModule,
@@ -288,7 +284,6 @@ import { RemoteGridBindingDirective } from './directives/remote-grid-binding.dir
   ],
 })
 
-// https://github.com/ocombe/ng2-translate/issues/209
 export class NvCommonModule {
   static forRoot(): ModuleWithProviders<NvCommonModule> {
     return {

@@ -18,10 +18,13 @@ import {
 } from 'ag-grid-community';
 import { updateGridData } from '@common/utils/common.utils';
 
+
 @Component({
+  standalone: false,
   selector: 'app-add-edit-signature-verifiers-modal',
   templateUrl: './add-edit-signature-verifiers-modal.component.html',
   styleUrls: ['./add-edit-signature-verifiers-modal.component.scss'],
+  
 })
 export class AddEditSignatureVerifiersModalComponent implements OnInit {
   addEditSignatureForm: FormGroup;

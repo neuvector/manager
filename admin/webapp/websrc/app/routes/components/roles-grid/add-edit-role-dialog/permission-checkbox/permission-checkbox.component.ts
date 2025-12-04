@@ -4,6 +4,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { PermissionOption } from '@common/types';
 
 @Component({
+  standalone: false,
   selector: 'app-permission-checkbox',
   templateUrl: './permission-checkbox.component.html',
   styleUrls: ['./permission-checkbox.component.scss'],

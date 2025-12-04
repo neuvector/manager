@@ -3,6 +3,7 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
 
 @Component({
+  standalone: false,
   selector: 'app-test-connection-dialog-type-cell',
   templateUrl: './test-connection-dialog-type-cell.component.html',
   styleUrls: ['./test-connection-dialog-type-cell.component.scss'],

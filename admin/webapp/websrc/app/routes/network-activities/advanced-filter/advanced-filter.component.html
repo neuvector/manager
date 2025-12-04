@@ -20,13 +20,13 @@
         <label class="col-2 font-weight-normal mb-0 mr-2" for="domainInput">{{
           'ldap.gridHeader.DOMAINS' | translate
         }}</label>
-        <mat-form-field appearance="standard" class="col pl-0">
-          <mat-chip-list
+        <mat-form-field class="col pl-0">
+          <mat-chip-grid
             #domainChips
             aria-label="Namespace selection"
             formControlName="domains"
             id="domainInput">
-            <mat-chip
+            <mat-chip-row
               (mouseover)="showButton[i] = true"
               (mouseleave)="showButton[i] = false"
               (removed)="remove(domainChip, i)"
@@ -41,7 +41,7 @@
               <button matChipRemove *ngIf="showButton[i]">
                 <mat-icon>cancel</mat-icon>
               </button>
-            </mat-chip>
+            </mat-chip-row>
             <input
               #domainInput
               (matChipInputTokenEnd)="add($event)"
@@ -50,7 +50,7 @@
               [matChipInputFor]="domainChips"
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               [placeholder]="'ldap.ADD_DOMAIN' | translate" />
-          </mat-chip-list>
+          </mat-chip-grid>
           <mat-autocomplete
             #auto="matAutocomplete"
             (optionSelected)="selected($event)">
@@ -66,13 +66,13 @@
         <label class="col-2 font-weight-normal mb-0 mr-2" for="groupInput">{{
           'dlp.gridHeader.GROUPS' | translate
         }}</label>
-        <mat-form-field appearance="standard" class="col pl-0">
-          <mat-chip-list
+        <mat-form-field class="col pl-0">
+          <mat-chip-grid
             #groupChipList
             aria-label="Group selection"
             formControlName="selectedGroups"
             id="groupInput">
-            <mat-chip
+            <mat-chip-row
               (mouseover)="showGrpButton[i] = true"
               (mouseleave)="showGrpButton[i] = false"
               (removed)="removeGroup(groupChip, i)"
@@ -87,7 +87,7 @@
               <button matChipRemove *ngIf="showGrpButton[i]">
                 <mat-icon>cancel</mat-icon>
               </button>
-            </mat-chip>
+            </mat-chip-row>
             <input
               #groupInput
               (matChipInputTokenEnd)="addGroup($event)"
@@ -96,7 +96,7 @@
               [matChipInputFor]="groupChipList"
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               [placeholder]="'ldap.ADD_GROUP' | translate" />
-          </mat-chip-list>
+          </mat-chip-grid>
           <mat-autocomplete
             #groupAuto="matAutocomplete"
             (optionSelected)="groupSelected($event)">

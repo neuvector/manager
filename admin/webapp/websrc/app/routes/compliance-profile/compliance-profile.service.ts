@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { RisksHttpService } from '@common/api/risks-http.service';
 import { BehaviorSubject, combineLatest, Observable, of, Subject } from 'rxjs';
-import { catchError, map, repeatWhen, tap } from 'rxjs/operators';
+import { catchError, map, startWith, switchMap, tap } from 'rxjs/operators';
 import { AssetsHttpService } from '@common/api/assets-http.service';
 import {
   ComplianceAvailableFilters,
@@ -23,7 +23,7 @@ export interface DomainResponse extends DomainGetResponse {
 export class ComplianceProfileService {
   private resizeSubject$ = new BehaviorSubject<boolean>(true);
   resize$ = this.resizeSubject$.asObservable();
-  private refreshSubject$ = new Subject();
+  private refreshSubject$ = new Subject<void>();
   lastEntries!: complianceProfileEntries[];
 
   constructor(
@@ -39,34 +39,38 @@ export class ComplianceProfileService {
   }
 
   initComplianceProfile() {
-    return combineLatest([
-      this.getTemplate(),
-      this.getProfile(),
-      this.getDomain(),
-      this.getAvailableFilters(),
-    ]).pipe(
-      map(([template, profile, domains, filters]) => {
-        return {
-          template,
-          profile,
-          domains,
-          filters,
-        };
-      }),
-      tap(({ profile }) => {
-        this.lastEntries = profile.profiles[0]?.entries || [];
-      }),
-      map(res => {
-        res.profile.profiles[0]?.entries.forEach(p => {
-          res.template.list.compliance.forEach(e => {
-            if (e.test_number === p.test_number) {
-              e.tags = p.tags;
-            }
-          });
-        });
-        return res;
-      }),
-      repeatWhen(() => this.refreshSubject$)
+    return this.refreshSubject$.pipe(
+      startWith(null),
+      switchMap(() =>
+        combineLatest([
+          this.getTemplate(),
+          this.getProfile(),
+          this.getDomain(),
+          this.getAvailableFilters(),
+        ]).pipe(
+          map(([template, profile, domains, filters]) => ({
+            template,
+            profile,
+            domains,
+            filters,
+          })),
+
+          tap(({ profile }) => {
+            this.lastEntries = profile.profiles[0]?.entries || [];
+          }),
+
+          map(res => {
+            res.profile.profiles[0]?.entries.forEach(p => {
+              res.template.list.compliance.forEach(e => {
+                if (e.test_number === p.test_number) {
+                  e.tags = p.tags;
+                }
+              });
+            });
+            return res;
+          })
+        )
+      )
     );
   }
 

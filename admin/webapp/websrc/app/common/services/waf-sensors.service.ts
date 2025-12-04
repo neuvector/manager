@@ -7,10 +7,14 @@ import { MapConstant } from '@common/constants/map.constant';
 import { TranslateService } from '@ngx-translate/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UtilsService } from '@common/utils/app.utils';
-import { pluck } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { SensorActionButtonsComponent } from '@components/waf-sensors/partial/sensor-action-buttons/sensor-action-buttons.component';
 import { RuleActionButtonsComponent } from '@components/waf-sensors/partial/rule-action-buttons/rule-action-buttons.component';
 import { PatternActionButtonsComponent } from '@components/waf-sensors/partial/pattern-action-buttons/pattern-action-buttons.component';
+
+interface sensorsResponse {
+  sensors: any[];
+}
 
 @Injectable({
   providedIn: 'root',
@@ -213,8 +217,8 @@ export class WafSensorsService {
       });
     }
     return GlobalVariable.http
-      .get(PathConstant.WAF_SENSORS_URL, ...options)
-      .pipe(pluck('sensors'));
+      .get<sensorsResponse>(PathConstant.WAF_SENSORS_URL, ...options)
+      .pipe(map(r => r.sensors));
   };
 
   updateWafSensorData = (payload, opType) => {

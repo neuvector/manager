@@ -4,6 +4,7 @@ import { ICellRendererParams } from 'ag-grid-community';
 import { UtilsService } from '@common/utils/app.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-vulnerabilities-grid-severity-cell',
   templateUrl: './vulnerabilities-grid-severity-cell.component.html',
   styleUrls: ['./vulnerabilities-grid-severity-cell.component.scss'],

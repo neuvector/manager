@@ -1,10 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
+
 @Component({
+  standalone: false,
   selector: 'app-top-vulnerable-assets-panel',
   templateUrl: './top-vulnerable-assets-panel.component.html',
   styleUrls: ['./top-vulnerable-assets-panel.component.scss'],
+  
 })
 export class TopVulnerableAssetsPanelComponent implements OnInit {
   @Input() details: any;

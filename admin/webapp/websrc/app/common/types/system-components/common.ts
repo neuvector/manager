@@ -1,11 +1,15 @@
 export * from './controllers';
 export * from './enforcers';
 export * from './scanners';
+import { ChartDataUpdate } from '../common/common';
 
 export interface SystemStatsData {
   id: string;
   read_at: string;
   stats: Stats;
+  cpu: ChartDataUpdate;
+  byte: ChartDataUpdate;
+  session: ChartDataUpdate;
 }
 
 export interface Stats {

@@ -3,9 +3,11 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { FieldType, FieldTypeConfig } from '@ngx-formly/core';
 
 @Component({
+  standalone: false,
   selector: 'app-edit-table-controls',
   templateUrl: './edit-table-controls.component.html',
   styleUrls: ['./edit-table-controls.component.scss'],
+  
 })
 export class EditTableControlsComponent
   extends FieldType<FieldTypeConfig>

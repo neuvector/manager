@@ -25,10 +25,13 @@ import { ControllersGridStatusCellComponent } from './controllers-grid-status-ce
 import { MultiClusterService } from '@services/multi-cluster.service';
 import { finalize, map } from 'rxjs/operators';
 
+
 @Component({
+  standalone: false,
   selector: 'app-controllers-grid',
   templateUrl: './controllers-grid.component.html',
   styleUrls: ['./controllers-grid.component.scss'],
+  
 })
 export class ControllersGridComponent implements OnInit, OnChanges, OnDestroy {
   private readonly $win;

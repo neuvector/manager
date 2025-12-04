@@ -9,6 +9,7 @@ import { ChartConfiguration } from 'chart.js';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
+  standalone: false,
   selector: 'app-compliance-items-charts',
   templateUrl: './compliance-items-charts.component.html',
   styleUrls: ['./compliance-items-charts.component.scss'],

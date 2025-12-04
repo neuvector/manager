@@ -9,6 +9,7 @@ import {
 } from 'ag-grid-community';
 
 @Component({
+  standalone: false,
   selector: 'app-compliance-regulation-grid',
   templateUrl: './compliance-regulation-grid.component.html',
   styleUrls: ['./compliance-regulation-grid.component.scss'],

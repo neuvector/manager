@@ -6,6 +6,7 @@ import { passwordValidator } from '@common/validators';
 import { Subject } from 'rxjs';
 
 @Component({
+  standalone: false,
   selector: 'app-reset-password-modal',
   templateUrl: './reset-password-modal.component.html',
   styleUrls: ['./reset-password-modal.component.scss'],

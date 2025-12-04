@@ -12,7 +12,11 @@ import {
 } from '@common/types';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { pluck, catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
+
+interface ConfigResponse {
+  config: ConfigV2Response;
+}
 
 @Injectable()
 export class ConfigHttpService {
@@ -29,8 +33,8 @@ export class ConfigHttpService {
     if (source)
       options = Object.assign(options, { params: { source: source } });
     return GlobalVariable.http
-      .get<ConfigV2Response>(PathConstant.CONFIG_V2_URL, options)
-      .pipe(pluck('config'));
+      .get<ConfigResponse>(PathConstant.CONFIG_V2_URL, options)
+      .pipe(map(r=> r.config));
   }
 
   getFedConfig(): Observable<any> {
@@ -57,7 +61,6 @@ export class ConfigHttpService {
     const options = {
       params: { id: exportMode },
       responseType: 'arraybuffer' as any,
-      cache: false,
       headers: { 'Cache-Control': 'no-store' },
     };
     return GlobalVariable.http
@@ -138,7 +141,6 @@ export class ConfigHttpService {
   getCspSupport() {
     const options = {
       responseType: 'arraybuffer' as any,
-      cache: false,
       headers: { 'Cache-Control': 'no-store' },
       observe: 'response' as any,
     };

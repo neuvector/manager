@@ -20,7 +20,7 @@
       fontSet="fa"
       fontIcon="fa-calendar-times">
     </mat-icon>
-    <mat-form-field appearance="standard">
+    <mat-form-field>
       <mat-label>{{ 'scan.LAST_MODIFIED' | translate }}</mat-label>
       <mat-select
         formControlName="dateOption"
@@ -35,7 +35,7 @@
       </mat-select>
     </mat-form-field>
     <ng-container *ngIf="selectedDateOption === 'custom'">
-      <mat-form-field appearance="standard" class="ml-2">
+      <mat-form-field class="ml-2">
         <input matInput [matDatepicker]="picker" formControlName="customDate" />
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>

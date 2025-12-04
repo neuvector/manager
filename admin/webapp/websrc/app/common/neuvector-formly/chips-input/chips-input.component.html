@@ -1,10 +1,10 @@
-<mat-form-field appearance="standard" class="w-100">
-  <mat-label>{{ field.templateOptions.label || '' | translate }}</mat-label>
-  <mat-chip-list
+<mat-form-field class="w-100">
+  <mat-label>{{ field.templateOptions?.label ?? '' | translate }}</mat-label>
+  <mat-chip-grid
     #chipList
     [formControl]="formControl"
     aria-label="Filter selection">
-    <mat-chip
+    <mat-chip-row
       (click)="edit(chip)"
       (removed)="remove(chip)"
       *ngFor="let chip of formControl.value">
@@ -12,24 +12,24 @@
       <button matChipRemove>
         <mat-icon>cancel</mat-icon>
       </button>
-    </mat-chip>
+    </mat-chip-row>
     <input
       (matChipInputTokenEnd)="add($event)"
       [formlyAttributes]="field"
       [matChipInputAddOnBlur]="addOnBlur"
       [matChipInputFor]="chipList"
       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-      [placeholder]="field.templateOptions.placeholder || '' | translate"
-      [required]="field.templateOptions.required" />
-  </mat-chip-list>
+      [placeholder]="field.templateOptions?.placeholder ?? '' | translate"
+      [required]="field.templateOptions?.required" />
+  </mat-chip-grid>
   <mat-error *ngIf="formControl.invalid">
     <app-formly-errors [field]="field"></app-formly-errors>
     <mat-hint
-      *ngIf="field.templateOptions.hint && field.templateOptions?.alwaysHint"
+      *ngIf="field.templateOptions?.hint && field.templateOptions?.alwaysHint"
       class="float-right"
       align="end">
-      {{ field.templateOptions.hint | translate }}
+      {{ field.templateOptions?.hint ?? '' | translate }}
     </mat-hint>
   </mat-error>
-  <mat-hint>{{ field.templateOptions.hint || '' | translate }}</mat-hint>
+  <mat-hint>{{ field.templateOptions?.hint ?? '' | translate }}</mat-hint>
 </mat-form-field>

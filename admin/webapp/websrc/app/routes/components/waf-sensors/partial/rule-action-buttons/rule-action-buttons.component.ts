@@ -12,10 +12,13 @@ import { NotificationService } from '@services/notification.service';
 import { MapConstant } from '@common/constants/map.constant';
 import { UtilsService } from '@common/utils/app.utils';
 
+
 @Component({
+  standalone: false,
   selector: 'app-rule-action-buttons',
   templateUrl: './rule-action-buttons.component.html',
   styleUrls: ['./rule-action-buttons.component.scss'],
+  
 })
 export class RuleActionButtonsComponent implements ICellRendererAngularComp {
   params!: ICellRendererParams;

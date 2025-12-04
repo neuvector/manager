@@ -9,6 +9,7 @@ import { NotificationService } from '@services/notification.service';
 import { updateGridData } from '@common/utils/common.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-custom-check-action-button',
   templateUrl: './custom-check-action-button.component.html',
   styleUrls: ['./custom-check-action-button.component.scss'],

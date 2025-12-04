@@ -44,10 +44,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { SwitchersService } from '@core/switchers/switchers.service';
 import { FrameService } from '../../frame/frame.service';
 
+
 @Component({
+  standalone: false,
   selector: 'app-network-activities',
   templateUrl: './network-activities.component.html',
   styleUrls: ['./network-activities.component.scss'],
+  
 })
 export class NetworkActivitiesComponent implements OnInit, OnDestroy {
   private _switchClusterSubscription;

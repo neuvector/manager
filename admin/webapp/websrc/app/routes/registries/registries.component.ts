@@ -7,10 +7,13 @@ import { TranslateService } from '@ngx-translate/core';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 import { GlobalVariable } from '@common/variables/global.variable';
 
+
 @Component({
+  standalone: false,
   selector: 'app-registries',
   templateUrl: './registries.component.html',
   styleUrls: ['./registries.component.scss'],
+  
 })
 export class RegistriesComponent implements OnInit, OnDestroy {
   error: unknown;

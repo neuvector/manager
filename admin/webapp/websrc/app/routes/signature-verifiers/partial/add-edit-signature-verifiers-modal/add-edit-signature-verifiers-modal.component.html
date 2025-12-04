@@ -20,7 +20,7 @@
   <div mat-dialog-content>
     <form [formGroup]="addEditSignatureForm">
       <div class="d-flex justify-content-start align-items-center">
-        <mat-form-field appearance="standard" class="mr-4">
+        <mat-form-field class="mr-4">
           <mat-label>{{ 'signatures.gridHeader.NAME' | translate }}</mat-label>
           <input
             type="text"
@@ -32,7 +32,7 @@
             {{ 'general.REQUIRED' | translate }}
           </mat-error>
         </mat-form-field>
-        <mat-form-field class="flex-grow-1" appearance="standard">
+        <mat-form-field class="flex-grow-1">
           <mat-label>{{
             'signatures.gridHeader.COMMENT' | translate
           }}</mat-label>
@@ -69,7 +69,7 @@
       <div
         class="row mx-0"
         *ngIf="addEditSignatureForm.controls.attribute.value === 'private'">
-        <mat-form-field appearance="standard" class="w-100">
+        <mat-form-field class="w-100">
           <mat-label>{{
             'signatures.gridHeader.REKOR_PUBLIC_KEY' | translate
           }}</mat-label>
@@ -83,7 +83,7 @@
       <div
         class="row mx-0"
         *ngIf="addEditSignatureForm.controls.attribute.value === 'private'">
-        <mat-form-field appearance="standard" class="w-100">
+        <mat-form-field class="w-100">
           <mat-label>{{
             'signatures.gridHeader.ROOT_CERT' | translate
           }}</mat-label>
@@ -103,7 +103,7 @@
       <div
         class="row mx-0"
         *ngIf="addEditSignatureForm.controls.attribute.value === 'private'">
-        <mat-form-field appearance="standard" class="w-100">
+        <mat-form-field class="w-100">
           <mat-label
             >{{
               'signatures.gridHeader.SCT_PUBLIC_KEY' | translate

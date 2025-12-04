@@ -20,7 +20,6 @@ import { TranslateService } from '@ngx-translate/core';
 import {
   JsonEditorComponent,
   JsonEditorOptions,
-  JsonEditorTreeNode,
 } from 'ang-jsoneditor';
 import {
   getValueType4Text,
@@ -31,10 +30,13 @@ import { NotificationService } from '@services/notification.service';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { UtilsService } from '@common/utils/app.utils';
 
+
 @Component({
+  standalone: false,
   selector: 'app-add-edit-admission-rule-modal',
   templateUrl: './add-edit-admission-rule-modal.component.html',
   styleUrls: ['./add-edit-admission-rule-modal.component.scss'],
+  
 })
 export class AddEditAdmissionRuleModalComponent implements OnInit {
   modalOp: any;

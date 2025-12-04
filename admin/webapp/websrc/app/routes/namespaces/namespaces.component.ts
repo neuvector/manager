@@ -5,10 +5,13 @@ import { NamespacesService } from '@services/namespaces.service';
 import { Subject } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
+
 @Component({
+  standalone: false,
   selector: 'app-namespaces',
   templateUrl: './namespaces.component.html',
   styleUrls: ['./namespaces.component.scss'],
+  
 })
 export class NamespacesComponent implements OnInit {
   _namespacesGrid!: NamespacesGridComponent;

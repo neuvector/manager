@@ -20,20 +20,50 @@ import {
 } from '@common/types';
 import { GlobalVariable } from '@common/variables/global.variable';
 import { Observable } from 'rxjs';
-import { map, pluck } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
+
+
+interface SsoServerResponse {
+  redirect: SsoServer;
+}
+
+interface LicenseResponse {
+  license: LicenseGetResponse;
+}
+
+interface PublicPasswordProfileResponse {
+  pwd_profiles: PublicPasswordProfile;
+}
+
+interface RoleResponse {
+  roles: Role[];
+}
+
+interface ApikeyResponse {
+  apikey: Apikey;
+}
+
+interface ApikeyInitResponse {
+  apikey: ApikeyInit;
+}
+
+interface PermissionOptionsResponse {
+  options: PermissionOptionResponse;
+}
+
 
 @Injectable()
 export class AuthHttpService {
   getSamlSLOServer(): Observable<SsoServer> {
     return GlobalVariable.http
-      .get<SsoServer>(PathConstant.SAML_SLO_URL)
-      .pipe(pluck('redirect'));
+      .get<SsoServerResponse>(PathConstant.SAML_SLO_URL)
+      .pipe(map(r => r.redirect));
   }
 
   getLicense(): Observable<LicenseGetResponse> {
     return GlobalVariable.http
-      .get<LicenseGetResponse>(PathConstant.LICENSE_URL)
-      .pipe(pluck('license'));
+      .get<LicenseResponse>(PathConstant.LICENSE_URL)
+      .pipe(map(r => r.license));
   }
 
   postLicense(body: RenewLicensePostBody): Observable<unknown> {
@@ -89,8 +119,8 @@ export class AuthHttpService {
 
   getRoles(): Observable<Role[]> {
     return GlobalVariable.http
-      .get<Role[]>(PathConstant.ROLES)
-      .pipe(pluck('roles'));
+      .get<RoleResponse>(PathConstant.ROLES)
+      .pipe(map(r => r.roles));
   }
 
   addRole(role: Role): Observable<unknown> {
@@ -117,18 +147,18 @@ export class AuthHttpService {
 
   getApikey(name: string): Observable<Apikey> {
     return GlobalVariable.http
-      .get<Apikey>(PathConstant.APIKEY_URL, {
+      .get<ApikeyResponse>(PathConstant.APIKEY_URL, {
         params: { name },
       })
-      .pipe(pluck('apikey'));
+      .pipe(map(r => r.apikey));
   }
 
   postApikey(apikey: Apikey): Observable<ApikeyInit> {
     return GlobalVariable.http
-      .post<ApikeyInit>(PathConstant.APIKEY_URL, {
+      .post<ApikeyInitResponse>(PathConstant.APIKEY_URL, {
         apikey,
       })
-      .pipe(pluck('apikey'));
+      .pipe(map(r => r.apikey));
   }
 
   deleteApikey(name: string): Observable<unknown> {
@@ -161,8 +191,8 @@ export class AuthHttpService {
 
   getPermissionOptions(): Observable<PermissionOptionResponse> {
     return GlobalVariable.http
-      .get<PermissionOptionResponse>(PathConstant.PERMISSION_OPTIONS)
-      .pipe(pluck('options'));
+      .get<PermissionOptionsResponse>(PathConstant.PERMISSION_OPTIONS)
+      .pipe(map(r => r.options));
   }
 
   getPwdProfile(): Observable<PasswordProfile> {
@@ -183,8 +213,8 @@ export class AuthHttpService {
 
   getPublicPwdProfile(): Observable<PublicPasswordProfile> {
     return GlobalVariable.http
-      .get<PublicPasswordProfile>(PathConstant.PUBLIC_PASSWORD_PROFILE)
-      .pipe(pluck('pwd_profile'));
+      .get<PublicPasswordProfileResponse>(PathConstant.PUBLIC_PASSWORD_PROFILE)
+      .pipe(map(r => r.pwd_profiles));
   }
 
   patchPwdProfile(profile: PasswordProfile): Observable<unknown> {

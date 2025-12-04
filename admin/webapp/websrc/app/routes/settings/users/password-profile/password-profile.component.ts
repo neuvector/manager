@@ -12,6 +12,7 @@ import { PwdProfileFormConfig } from './password-profile-config';
 import { AuthUtilsService } from '@common/utils/auth.utils';
 
 @Component({
+  standalone: false,
   selector: 'app-password-profile',
   templateUrl: './password-profile.component.html',
   styleUrls: ['./password-profile.component.scss'],

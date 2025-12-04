@@ -9,6 +9,7 @@ import { RuleDetailModalComponent } from '@components/groups/partial/rule-detail
 import { RuleDetailModalService } from '@components/groups/partial/rule-detail-modal/rule-detail-modal.service';
 
 @Component({
+  standalone: false,
   selector: 'app-group-network-rules',
   templateUrl: './group-network-rules.component.html',
   styleUrls: ['./group-network-rules.component.scss'],

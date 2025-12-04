@@ -2,10 +2,13 @@ import { Component, OnInit, Input } from '@angular/core';
 import { UtilsService } from '@common/utils/app.utils';
 import { ScoreImprovementModalService } from '@services/score-improvement-modal.service';
 
+
 @Component({
+  standalone: false,
   selector: 'app-score-improvement-general-header',
   templateUrl: './score-improvement-general-header.component.html',
   styleUrls: ['./score-improvement-general-header.component.scss'],
+  
 })
 export class ScoreImprovementGeneralHeaderComponent implements OnInit {
   get score() {
@@ -13,6 +16,7 @@ export class ScoreImprovementGeneralHeaderComponent implements OnInit {
   }
   gaugeLabel = '';
   gaugeLabelColor = '';
+  gaugeColor = '';
 
   constructor(
     private scoreImprovementModalService: ScoreImprovementModalService,
@@ -20,13 +24,9 @@ export class ScoreImprovementGeneralHeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getGaugeColor(this.score);
-  }
-
-  getGaugeColor = (score: number) => {
-    let gaugeMetrics = this.utils.getGaugeMetrics(score);
+    let gaugeMetrics = this.utils.getGaugeMetrics(this.score);
     this.gaugeLabel = gaugeMetrics.gaugeLabel;
     this.gaugeLabelColor = gaugeMetrics.gaugeLabelColor;
-    return gaugeMetrics.gaugeLabelColor;
-  };
+    this.gaugeColor = gaugeMetrics.gaugeLabelColor;
+  }
 }

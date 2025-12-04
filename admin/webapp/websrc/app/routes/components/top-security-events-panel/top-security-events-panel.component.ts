@@ -1,10 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
+
 @Component({
+  standalone: false,
   selector: 'app-top-security-events-panel',
   templateUrl: './top-security-events-panel.component.html',
   styleUrls: ['./top-security-events-panel.component.scss'],
+  
 })
 export class TopSecurityEventsPanelComponent implements OnInit {
   @Input() securityEvents: any;

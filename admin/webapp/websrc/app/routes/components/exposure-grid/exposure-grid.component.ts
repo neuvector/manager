@@ -2,10 +2,13 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ExposedServicePodGridComponent } from '@components/exposed-service-pod-grid/exposed-service-pod-grid.component';
 
+
 @Component({
+  standalone: false,
   selector: 'app-exposure-grid',
   templateUrl: './exposure-grid.component.html',
   styleUrls: ['./exposure-grid.component.scss'],
+  
 })
 export class ExposureGridComponent {
   @ViewChild('ingressGrid') ingressGrid!: ExposedServicePodGridComponent;

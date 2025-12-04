@@ -23,7 +23,9 @@ import { Cluster, ClusterData } from '@common/types';
 import { MapConstant } from '@common/constants/map.constant';
 
 @Component({
+  standalone: false,
   selector: 'app-root',
+  
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })

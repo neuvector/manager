@@ -17,10 +17,13 @@ import {
 } from 'ag-grid-community';
 import { GlobalVariable } from '@common/variables/global.variable';
 
+
 @Component({
+  standalone: false,
   selector: 'app-add-edit-rule-modal',
   templateUrl: './add-edit-rule-modal.component.html',
   styleUrls: ['./add-edit-rule-modal.component.scss'],
+  
 })
 export class AddEditRuleModalComponent implements OnInit {
   opTypeOptions = GlobalConstant.MODAL_OP;

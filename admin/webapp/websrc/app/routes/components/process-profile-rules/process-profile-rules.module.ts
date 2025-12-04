@@ -20,7 +20,6 @@ import { ProcessProfileRuleNameHeaderComponent } from './partial/process-profile
     AgGridModule,
     // AgGridModule.withComponents([]),
   ],
-  entryComponents: [AddEditProcessProfileRuleModalComponent],
   exports: [ProcessProfileRulesComponent],
 })
 export class ProcessProfileRulesModule {}

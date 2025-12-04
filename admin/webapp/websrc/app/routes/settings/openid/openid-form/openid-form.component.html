@@ -15,7 +15,7 @@
   <div class="row align-items-center my-0 my-md-4">
     <div class="col-12 col-md-6 d-flex align-items-center my-2">
       <i class="eos-icons mr-3 text-primary">account_box</i>
-      <mat-form-field appearance="standard" class="w-100">
+      <mat-form-field class="w-100">
         <mat-label>{{ 'openId.ISSUER' | translate }}</mat-label>
         <input
           formControlName="issuer"
@@ -33,7 +33,7 @@
       class="col-12 col-md-6 d-flex align-items-center my-2"
       *ngIf="isCreated">
       <i class="eos-icons mr-3 text-primary">assignment_ind</i>
-      <mat-form-field appearance="standard" class="w-100">
+      <mat-form-field class="w-100">
         <mat-label>{{ 'openId.AUTHORIZATION_ENDPOINT' | translate }}</mat-label>
         <input
           formControlName="authorization_endpoint"
@@ -45,7 +45,7 @@
       class="col-12 col-md-6 d-flex align-items-center my-2"
       *ngIf="isCreated">
       <i class="eos-icons mr-3 text-primary">assignment_ind</i>
-      <mat-form-field appearance="standard" class="w-100">
+      <mat-form-field class="w-100">
         <mat-label>{{ 'openId.TOKEN_ENDPOINT' | translate }}</mat-label>
         <input
           formControlName="token_endpoint"
@@ -57,7 +57,7 @@
       class="col-12 col-md-6 d-flex align-items-center my-2"
       *ngIf="isCreated">
       <i class="eos-icons mr-3 text-primary">assignment_ind</i>
-      <mat-form-field appearance="standard" class="w-100">
+      <mat-form-field class="w-100">
         <mat-label>{{ 'openId.USER_INFO_ENDPOINT' | translate }}</mat-label>
         <input
           formControlName="user_info_endpoint"
@@ -67,7 +67,7 @@
     </div>
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
       <i class="eos-icons mr-3 text-primary">person</i>
-      <mat-form-field appearance="standard" class="w-100">
+      <mat-form-field class="w-100">
         <mat-label>{{ 'openId.CLIENT_ID' | translate }}</mat-label>
         <input
           formControlName="client_id"
@@ -81,7 +81,6 @@
     <div class="col-12 col-md-6 d-flex align-items-center my-2 my-md-0">
       <i class="eos-icons mr-3 text-primary">vpn_key</i>
       <mat-form-field
-        appearance="standard"
         class="w-100"
         [floatLabel]="isCreated ? 'always' : 'auto'">
         <mat-label>{{ 'openId.CLIENT_SECRET' | translate }}</mat-label>
@@ -107,18 +106,18 @@
       </button>
     </div>
     <div class="col-12 d-flex align-items-center my-2">
-      <mat-form-field appearance="standard" class="w-100">
+      <mat-form-field class="w-100">
         <mat-label>{{ 'openId.SCOPES' | translate }}</mat-label>
-        <mat-chip-list
+        <mat-chip-grid
           #chipList
           [disabled]="!isWriteOidcAuthorized"
           aria-label="Scopes">
-          <mat-chip (removed)="remove(scope)" *ngFor="let scope of scopes">
+          <mat-chip-row (removed)="remove(scope)" *ngFor="let scope of scopes">
             {{ scope }}
             <button matChipRemove *ngIf="removable(scope)">
               <mat-icon>cancel</mat-icon>
             </button>
-          </mat-chip>
+          </mat-chip-row>
           <input
             (matChipInputTokenEnd)="add($event)"
             [matChipInputAddOnBlur]="addOnBlur"
@@ -126,12 +125,12 @@
             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
             [attr.maxlength]="'general.FILTER_MAX_LEN' | translate"
             [placeholder]="'cveProfile.TAGS_INPUT_TIP' | translate" />
-        </mat-chip-list>
+        </mat-chip-grid>
       </mat-form-field>
     </div>
     <div class="col-12 d-flex align-items-center">
       <i class="eos-icons mr-3 text-primary">groups</i>
-      <mat-form-field appearance="standard" class="w-100">
+      <mat-form-field class="w-100">
         <mat-label> {{ 'okta.GROUP_CLAIM' | translate }}</mat-label>
         <input
           formControlName="group_claim"
@@ -140,7 +139,7 @@
       </mat-form-field>
     </div>
   </div>
-  <mat-form-field appearance="standard">
+  <mat-form-field>
     <mat-label>{{ 'ldap.DEFAULT_ROLE' | translate }}</mat-label>
     <mat-select formControlName="default_role">
       <mat-option
